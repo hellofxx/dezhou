@@ -37,6 +37,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # 类型检查门禁：tsc --noEmit，与 AGENTS.md 质量门禁序列一致（类型检查 → Lint → 测试 → 构建）
+      - name: Typecheck
+        run: pnpm typecheck
+
       # Lint 门禁：模块隔离（no-restricted-imports）与禁 any（no-explicit-any）
       - name: Lint
         run: pnpm lint
