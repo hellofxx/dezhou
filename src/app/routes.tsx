@@ -88,4 +88,7 @@ export const router = createBrowserRouter([
       { path: 'hand-history/:handId', element: <LazyWrapper><HandReplayPage /></LazyWrapper> },
     ],
   },
-]);
+], {
+  // GitHub Pages 部署在 /dezhou/ 子路径，复用 Vite base 自动适配 dev('/') 与生产('/dezhou/')
+  basename: import.meta.env.BASE_URL,
+});
