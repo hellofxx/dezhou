@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react';
+import i18n from '@/i18n/config';
 
 interface Props {
   children: ReactNode;
@@ -32,6 +33,8 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
 
+      const t = i18n.t.bind(i18n);
+
       return (
         <div
           style={{
@@ -57,10 +60,10 @@ export class ErrorBoundary extends Component<Props, State> {
             }}
           >
             <h1 style={{ fontSize: '1.25rem', marginBottom: '0.75rem', fontWeight: 600 }}>
-              页面渲染出错
+              {t('common.errorBoundary.title')}
             </h1>
             <p style={{ fontSize: '0.875rem', color: 'var(--ivory-dim, #cabf9f)', marginBottom: '1rem', lineHeight: 1.6 }}>
-              应用遇到了未预期的错误。请尝试刷新页面，或清除浏览器缓存后重试。
+              {t('common.errorBoundary.description')}
             </p>
             {this.state.error && (
               <pre
@@ -92,7 +95,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   fontSize: '0.875rem',
                 }}
               >
-                重试
+                {t('common.errorBoundary.retry')}
               </button>
               <button
                 onClick={() => window.location.reload()}
@@ -107,7 +110,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   fontWeight: 600,
                 }}
               >
-                刷新页面
+                {t('common.errorBoundary.reload')}
               </button>
             </div>
           </div>

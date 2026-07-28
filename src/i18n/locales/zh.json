@@ -255,7 +255,13 @@
     "save": "保存",
     "delete": "删除",
     "retry": "再来一次",
-    "backHome": "返回首页"
+    "backHome": "返回首页",
+    "errorBoundary": {
+      "title": "页面渲染出错",
+      "description": "应用遇到了未预期的错误。请尝试刷新页面，或清除浏览器缓存后重试。",
+      "retry": "重试",
+      "reload": "刷新页面"
+    }
   },
   "academy": {
     "title": "策略学院",
@@ -607,6 +613,11 @@
       "worstDecision": "最差决策",
       "loading": "分析中...",
       "noData": "暂无偏差数据"
+    },
+    "dbError": {
+      "unavailable": "存储不可用，请检查浏览器设置或隐私模式",
+      "quotaExceeded": "存储空间已满，请清理部分牌局数据",
+      "generic": "数据读写失败，请稍后重试"
     }
   },
   "feedback": {
@@ -957,7 +968,8 @@
       "exit": "退出",
       "correct": "答对",
       "wrong": "答错",
-      "backHome": "返回首页"
+      "backHome": "返回首页",
+      "downshiftHint": "检测到连续答错，建议放慢节奏，先复习基础课程再继续训练。"
     }
   },
   "achievements": {

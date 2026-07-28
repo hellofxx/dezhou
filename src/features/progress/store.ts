@@ -264,9 +264,11 @@ export const useProgressStore = create<ProgressStore>()(
       records: [],
 
       addRecord: (record) =>
-        set((state) => ({
-          records: [...state.records, record],
-        })),
+        set((state) => {
+          // 去重：相同 id 的记录不重复添加（防止事件总线重复 emit）
+          if (state.records.some((r) => r.id === record.id)) return state;
+          return { records: [...state.records, record] };
+        }),
 
       deleteRecord: (id) =>
         set((state) => ({

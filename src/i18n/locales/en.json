@@ -255,7 +255,13 @@
     "save": "Save",
     "delete": "Delete",
     "retry": "Try Again",
-    "backHome": "Back to Home"
+    "backHome": "Back to Home",
+    "errorBoundary": {
+      "title": "Rendering Error",
+      "description": "An unexpected error occurred. Please try refreshing the page or clearing your browser cache.",
+      "retry": "Retry",
+      "reload": "Reload Page"
+    }
   },
   "academy": {
     "title": "Strategy Academy",
@@ -607,6 +613,11 @@
       "worstDecision": "Worst Decision",
       "loading": "Analyzing...",
       "noData": "No deviation data"
+    },
+    "dbError": {
+      "unavailable": "Storage unavailable, please check browser settings or private mode",
+      "quotaExceeded": "Storage quota exceeded, please clear some hand data",
+      "generic": "Data read/write failed, please try again later"
     }
   },
   "feedback": {
@@ -957,7 +968,8 @@
       "exit": "Exit",
       "correct": "Correct",
       "wrong": "Wrong",
-      "backHome": "Back Home"
+      "backHome": "Back Home",
+      "downshiftHint": "Multiple wrong answers detected. Consider reviewing fundamentals before continuing."
     }
   },
   "achievements": {

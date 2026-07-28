@@ -68,8 +68,7 @@ export default function AccuracyChart({ dailyStats }: AccuracyChartProps) {
                     color: 'var(--ivory)',
                     fontSize: '12px',
                   }}
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  formatter={(value: any) => [value != null ? `${value}%` : 'N/A', '正确率']}
+                  formatter={(value) => [value != null ? `${value}%` : 'N/A', '正确率']}
                 />
                 <Line
                   type="monotone"

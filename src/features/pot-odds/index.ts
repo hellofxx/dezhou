@@ -1,3 +1,12 @@
 export { OddsCalculator } from './components/OddsCalculator';
 export { EVCalculator } from './components/EVCalculator';
+export { OddsDisplay } from './components/OddsDisplay';
+export { EquityChart } from './components/EquityChart';
+export { DrawsReference } from './components/DrawsReference';
+export { PotSizeInput } from './components/PotSizeInput';
+export { default as PotOddsPage } from './components/PotOddsPage';
+export { default as PotOddsQuizPage } from './components/PotOddsQuizPage';
+export { useOddsCalculation, useOddsEloRecorder, useOddsSrsRecorder, useOddsEmotionRecorder, getEasyOddsQuestion, buildOddsFeedback } from './hooks/useOddsCalculation';
+export { useEquityEstimate } from './hooks/useEquityEstimate';
+export { COMMON_DRAWS, DEFAULT_ODDS_STATE, DEFAULT_EV_STATE } from './constants';
 export type { OddsCalculatorState, EVCalculatorState, OddsResult } from './types';

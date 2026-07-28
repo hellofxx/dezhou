@@ -137,7 +137,7 @@ export const useAcademyStore = create<AcademyStore>()(
             createdAt: Date.now(),
           });
           return {
-            practiceResults: [...state.practiceResults, result],
+            practiceResults: [...state.practiceResults, result].slice(-200),
             progress: {
               ...state.progress,
               quizScores: {
@@ -338,7 +338,7 @@ export const useAcademyStore = create<AcademyStore>()(
     }),
     {
       name: 'strategy-academy-progress',
-      version: 1,
+      version: 2,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<AcademyStore>;
         // v0 → v1：注入进步回放得分记录默认值
@@ -348,6 +348,12 @@ export const useAcademyStore = create<AcademyStore>()(
           }
           if (!next.lastAttemptScores) {
             next.lastAttemptScores = {};
+          }
+        }
+        // v1 → v2：裁剪 practiceResults 至最近 200 条
+        if (fromVersion < 2) {
+          if (Array.isArray(next.practiceResults) && next.practiceResults.length > 200) {
+            next.practiceResults = next.practiceResults.slice(-200);
           }
         }
         return next as AcademyStore;

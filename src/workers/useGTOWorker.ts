@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, useState } from 'react';
 
 interface WorkerMessage {
   type: string;
@@ -45,16 +45,42 @@ let workerIdCounter = 0;
 /**
  * Hook to use GTO Web Worker with async API.
  * Falls back to main-thread computation if Worker is unavailable.
+ *
+ * Health check:
+ * - Worker `onerror` marks it as dead → subsequent calls use fallback.
+ * - 10 s timeout also marks it dead and attempts a one-time rebuild.
+ * - If rebuild also fails, fallback is used permanently for this mount.
  */
 export function useGTOWorker() {
   const workerRef = useRef<Worker | null>(null);
   const pendingRef = useRef<Map<number, (result: unknown) => void>>(new Map());
+  const workerDeadRef = useRef(false);
+  const rebuildAttemptedRef = useRef(false);
+  const [isWorkerAvailable, setIsWorkerAvailable] = useState(true);
 
-  useEffect(() => {
-    let worker: Worker | null = null;
+  /** Terminate current worker (if any) and null out the ref. */
+  const terminateWorker = useCallback(() => {
+    workerRef.current?.terminate();
+    workerRef.current = null;
+  }, []);
+
+  /** Mark worker as dead, update reactive state. */
+  const markDead = useCallback(() => {
+    if (!workerDeadRef.current) {
+      workerDeadRef.current = true;
+      setIsWorkerAvailable(false);
+    }
+  }, []);
+
+  /** Try to rebuild the worker after a failure. Returns true on success. */
+  const rebuildWorker = useCallback(() => {
+    if (rebuildAttemptedRef.current) return false;
+    rebuildAttemptedRef.current = true;
+    terminateWorker();
+
     try {
-      // Create worker from the bundled worker file
-      worker = new Worker(new URL('../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
+      const worker = new Worker(new URL('../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
+
       worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
         const { id, result } = e.data;
         const resolve = pendingRef.current.get(id);
@@ -63,32 +89,72 @@ export function useGTOWorker() {
           pendingRef.current.delete(id);
         }
       };
+
+      worker.onerror = () => {
+        markDead();
+        terminateWorker();
+      };
+
+      workerRef.current = worker;
+      workerDeadRef.current = false;
+      setIsWorkerAvailable(true);
+      return true;
+    } catch {
+      return false;
+    }
+  }, [markDead, terminateWorker]);
+
+  useEffect(() => {
+    try {
+      const worker = new Worker(new URL('../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
+
+      worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
+        const { id, result } = e.data;
+        const resolve = pendingRef.current.get(id);
+        if (resolve) {
+          resolve(result);
+          pendingRef.current.delete(id);
+        }
+      };
+
+      worker.onerror = () => {
+        markDead();
+        terminateWorker();
+      };
+
       workerRef.current = worker;
     } catch {
-      // Worker not available, will use fallback
-      workerRef.current = null;
+      // Worker not available at all — mark dead immediately
+      markDead();
     }
 
     return () => {
-      worker?.terminate();
+      terminateWorker();
       pendingRef.current.clear();
     };
-  }, []);
+  }, [markDead, terminateWorker]);
 
   const sendMessage = useCallback(<T>(type: string, payload: unknown): Promise<T> => {
-    return new Promise((resolve, reject) => {
+    return new Promise<T>((resolve) => {
       const id = ++workerIdCounter;
 
-      if (workerRef.current) {
+      if (workerRef.current && !workerDeadRef.current) {
         pendingRef.current.set(id, resolve as (result: unknown) => void);
         const msg: WorkerMessage = { type, payload, id };
         workerRef.current.postMessage(msg);
 
-        // Timeout after 10s
+        // Timeout after 10 s → mark dead, try rebuild, fallback for this request
         setTimeout(() => {
           if (pendingRef.current.has(id)) {
             pendingRef.current.delete(id);
-            reject(new Error('Worker timeout'));
+            markDead();
+            terminateWorker();
+
+            // Attempt one-time rebuild for future requests
+            rebuildWorker();
+
+            // This request is lost on the worker — resolve via fallback
+            resolve(computeFallback(type, payload) as T);
           }
         }, 10000);
       } else {
@@ -96,7 +162,7 @@ export function useGTOWorker() {
         resolve(computeFallback(type, payload) as T);
       }
     });
-  }, []);
+  }, [markDead, terminateWorker, rebuildWorker]);
 
   const lookupStrategy = useCallback((hand: string, position: string, scenario?: string): Promise<HandStrategy> => {
     return sendMessage<HandStrategy>('lookupStrategy', { hand, position, scenario });
@@ -114,7 +180,7 @@ export function useGTOWorker() {
     lookupStrategy,
     calculateEV,
     batchAnalyze,
-    isWorkerAvailable: workerRef.current !== null,
+    isWorkerAvailable,
   };
 }
 

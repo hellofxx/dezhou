@@ -22,6 +22,8 @@ import { RUSH_DURATIONS } from '../data/rushQuestions';
 import { usePuzzleStore } from '../store';
 import type { PuzzleResult as PuzzleResultType } from '../types';
 import { useProgressStore } from '@/features/progress/store';
+import { trainingEvents } from '@/shared/stores/trainingEvents';
+import type { TrainingResult } from '@/shared/types/common';
 
 export default function PuzzleRush() {
   const { t } = useTranslation();
@@ -41,6 +43,8 @@ export default function PuzzleRush() {
   const engine = usePuzzleEngine({ mode: 'rush', duration: durationMs });
   const submitResult = usePuzzleStore((s) => s.submitResult);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+  const recordAnswer = useProgressStore((s) => s.recordAnswer);
+  const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
 
   // 完成后的结果（在组件内显示，避免路由跳转的瞬时白屏）
   const [finalResult, setFinalResult] = useState<PuzzleResultType | null>(null);
@@ -53,6 +57,16 @@ export default function PuzzleRush() {
     setSelectedOptionId(null);
   }, [engine.state.currentIndex]);
 
+  // 记录答题到 progress store（用于自适应难度判定）
+  useEffect(() => {
+    if (engine.state.answers.length > 0) {
+      const lastAnswer = engine.state.answers[engine.state.answers.length - 1];
+      if (lastAnswer) {
+        recordAnswer(lastAnswer.isCorrect);
+      }
+    }
+  }, [engine.state.answers.length]);
+
   // 引擎结束时构建结果并提交
   useEffect(() => {
     if (engine.state.status !== 'playing' && !finalResult) {
@@ -61,6 +75,8 @@ export default function PuzzleRush() {
       // 计入 Streak（一次完整 Puzzle Rush 算一次训练）
       recordTrainingDay();
       setFinalResult({ ...result, _isNewRecord: submitRes.isNewRecord } as PuzzleResultType & { _isNewRecord: boolean });
+      // 发布训练事件到 progress store
+      trainingEvents.emit(puzzleResultToTrainingRecord(result));
     }
   }, [engine.state.status, engine, finalResult, submitResult, recordTrainingDay]);
 
@@ -156,6 +172,13 @@ export default function PuzzleRush() {
           )}
         />
 
+        {/* 连续答错降级提示 */}
+        {shouldDownshiftDifficulty() && (
+          <div className="px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+            {t('puzzle.common.downshiftHint')}
+          </div>
+        )}
+
         {/* 题目卡片 */}
         <PuzzleCard
           question={engine.currentQuestion}
@@ -194,4 +217,31 @@ export default function PuzzleRush() {
 /** 简易 cn 内联（避免循环导入问题，仅用于此处动态拼接） */
 function cnInline(...classes: (string | false | undefined | null)[]): string {
   return classes.filter(Boolean).join(' ');
+}
+
+/** 将 PuzzleResult 转换为 TrainingRecord 用于 trainingEvents.emit */
+function puzzleResultToTrainingRecord(result: PuzzleResultType) {
+  const trainingResult: TrainingResult = {
+    sessionId: result.sessionId,
+    module: 'puzzle-trainer',
+    totalQuestions: result.totalQuestions,
+    correctAnswers: result.correctCount,
+    accuracy: result.accuracy,
+    averageTime: result.averageTime / 1000, // 转换为秒
+    timestamp: result.timestamp,
+    details: result.answers.map((a) => ({
+      question: a.questionId,
+      isCorrect: a.isCorrect,
+      timeTaken: a.timeTaken,
+      userAnswer: a.selectedOptionId,
+      correctAnswer: '',
+    })),
+  };
+  return {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+    module: 'puzzle-trainer' as const,
+    mode: result.mode,
+    result: trainingResult,
+    createdAt: Date.now(),
+  };
 }

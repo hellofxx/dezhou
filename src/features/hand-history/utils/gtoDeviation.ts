@@ -26,6 +26,14 @@ export interface DeviationSummary {
   worstDecision: { street: string; evLoss: number } | null;
 }
 
+/** Worker 单条分析结果 */
+export interface WorkerAnalyzeResult {
+  id: string;
+  gtoAction: string;
+  evLoss: number;
+  grade: string;
+}
+
 // ─── Cache ────────────────────────────────────────────────
 
 const analysisCache = new Map<string, DeviationResult>();
@@ -157,8 +165,7 @@ function sendToWorker<T>(type: string, payload: unknown): Promise<T> {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function fallbackAnalyze(payload: unknown): any[] {
+function fallbackAnalyze(payload: unknown): WorkerAnalyzeResult[] {
   const hands = payload as Array<{ id: string }>;
   return hands.map(h => ({ id: h.id, gtoAction: 'call', evLoss: 0, grade: 'optimal' }));
 }

@@ -3,7 +3,7 @@ import type { TrainingResult } from '@/shared/types/common';
 // 训练记录（持久化存储）
 export interface TrainingRecord {
   id: string;
-  module: 'range-trainer' | 'pot-odds' | 'gto-simulator' | 'strategy-academy';
+  module: 'range-trainer' | 'pot-odds' | 'gto-simulator' | 'strategy-academy' | 'puzzle-trainer' | 'hand-history';
   mode: string;              // 'quiz', 'practice', etc.
   result: TrainingResult;
   createdAt: number;         // timestamp

@@ -118,9 +118,8 @@ export default function WeaknessAnalysis() {
                     color: 'var(--ivory)',
                     fontSize: '12px',
                   }}
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  formatter={(value: any) => [
-                    `${value} ${t('elo.unit')}`,
+                  formatter={(value) => [
+                    `${value ?? 0} ${t('elo.unit')}`,
                     t('elo.radar.scoreLabel'),
                   ]}
                 />

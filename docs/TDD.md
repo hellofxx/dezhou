@@ -2,10 +2,10 @@
 
 | 字段 | 内容 |
 |------|------|
-| 文档版本 | v2.1 |
+| 文档版本 | v2.2 |
 | 作者 | 开发团队 |
 | 最后更新 | 2026-07-28 |
-| 状态 | v2.1 文档同步更新（levels/目录、成就系统、冻结卡碎片、persist v8） |
+| 状态 | v2.2 文档同步更新（审计修复：IndexedDB 单例、persist v2、Worker 健康检查、trainingEvents 合规、测试覆盖扩展） |
 
 > **文档职责**：本文件描述技术实现细节（How）。产品规格见 `PRD.md`，版本演进与执行历史见 `CHANGELOG.md`。
 
@@ -181,7 +181,7 @@ src/
 │   │   ├── hooks/
 │   │   ├── utils/
 │   │   ├── index.ts
-│   │   ├── store.ts
+│   │   ├── store.ts               # persist v2
 │   │   └── types.ts
 │
 ├── shared/                       # 共享层
@@ -671,6 +671,10 @@ interface DailyRecommendation {
    - `PotOddsQuizPage` 接入 `buildOddsFeedback`，输出 `DecisionFeedback`，按五级评级渲染（best/correct/inaccuracy/wrong/blunder）
    - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty('pot-odds')`，显示降级提示 banner
 
+6. **trainingEvents.emit 合规**（v2.0 新增）：
+   - `PotOddsQuizPage` 完成测验后调用 `trainingEvents.emit(record)`，progress store 自动收集训练记录
+   - `relatedLessonId` 反馈闭环已确认合规（`useOddsCalculation.ts` 调用 `buildOddsFeedback` 时携带 `relatedLessonId`）
+
 ### 5.3 GTO Simulator（GTO 模拟器）
 
 **模块职责**：模拟真实牌局场景，将玩家决策与 GTO 最优策略比较，计算 EV 损失。
@@ -754,7 +758,7 @@ interface DailyRecommendation {
 | components | HandHistoryList, HandReplayer, AnnotationPanel 等 10 个 | 列表、回放、标注 UI |
 | hooks | useHandReplay | 回放控制 hook |
 | parsers | common.ts, pokerstars.ts, gg-poker.ts | 多格式解析器 |
-| store | store.ts | IndexedDB 持久化 + 回放状态 |
+| store | store.ts | IndexedDB 持久化（getDB 单例） + 回放状态 + dbError 错误状态 |
 
 **关键算法**：
 
@@ -769,15 +773,18 @@ interface DailyRecommendation {
    - `common.ts` 提供 `parseCardString("Ah")` → `{suit: Hearts, rank: Ace}`
    - `detectFormat()` 使用正则匹配区分平台格式
 
-2. **IndexedDB 持久化方案**：
+2. **IndexedDB 持久化方案**（v2.0 重构为单例模式）：
    ```typescript
    // DB: hand-history-db v1, Store: hands, keyPath: id
-   function openDB(): Promise<IDBDatabase>
+   // v2.0：openDB() 重构为 getDB() 单例模式，缓存已打开的数据库连接
+   let cachedDB: IDBDatabase | null = null;
+   function getDB(): Promise<IDBDatabase>
    async function dbGetAll(): Promise<HandHistory[]>
    async function dbPut(hands: HandHistory[]): Promise<void>
    async function dbDelete(id: string): Promise<void>
    async function dbClear(): Promise<void>
    ```
+   - **错误处理**（v2.0 新增）：`classifyDBError(err)` 分类 IndexedDB 异常（QuotaExceededError → 配额超限 / 连接失败 → 不可用 / 其他 → 通用错误），store 持有 `dbError: string | null` 字段，错误消息通过 i18n 国际化（`handHistory.dbError.quotaExceeded` / `.unavailable` / `.generic`）
 
 3. **回放引擎状态机**：
    ```
@@ -819,6 +826,10 @@ interface DailyRecommendation {
    });
    ```
    各 feature 模块训练完成后调用 `trainingEvents.emit(record)`，progress store 自动收集。
+
+   **emit 合规状态**（v2.0 更新）：range-trainer / gto-simulator / strategy-academy / pot-odds / puzzle-trainer 均已合规 emit；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免。
+
+   **addRecord 去重**（v2.0 新增）：`addRecord` 内部检查 `state.records.some(r => r.id === record.id)`，相同 id 的记录不重复添加，防止事件总线重复 emit 导致训练记录膨胀。
 
 2. **统计聚合算法** (`statsAggregator.ts`)：
    - `aggregateStats(records)` → 总会话数、总题数、总正确率、平均用时、连续天数
@@ -944,6 +955,14 @@ interface DailyRecommendation {
    - `PuzzleAnswerRecord` 类型新增 `relatedLessonId?: string` 字段
    - `PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接，跳转对应课程
 
+9. **trainingEvents.emit 合规**（v2.0 新增）：
+   - `PuzzleRush` / `DailyPuzzle` / `ThemeDrill` 三种模式完成后均调用 `trainingEvents.emit(record)`，progress store 自动收集训练记录
+   - emit 的 `record.module` 为 `'puzzle-trainer'`
+
+10. **自适应难度接入**（v2.0 新增）：
+    - 三种模式（Rush / Daily / ThemeDrill）均调用 `progress.shouldDownshiftDifficulty('puzzle-trainer')` 检查是否需要降级
+    - 连续答错 ≥3 次时显示降级提示 banner（i18n key: `puzzle.common.downshiftHint`）
+
 ### 5.8 Strategy Academy（策略学院）
 
 **模块职责**：提供结构化课程、知识图谱、学习路径、实践 Drill 与等级认证，构建从零基础到进阶的系统学习体系。
@@ -1034,7 +1053,7 @@ interface DailyRecommendation {
 **反馈闭环系统**（v2.1 新增）
 
 正向反馈（训练→课程）：
-- 所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer）的答题反馈必须携带 `relatedLessonId`
+- 所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer）的答题反馈必须携带 `relatedLessonId`（v2.0 确认 pot-odds 已合规）
 - 工具函数：
   - `inferRelatedLessonId(position, actionType)` — range-trainer 用
   - GTO `GTOSessionPage` 根据 `scenario.street` 推导：preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`
@@ -1044,7 +1063,7 @@ interface DailyRecommendation {
 反向反馈（数据→难度）：
 - `progress.shouldDownshiftDifficulty(moduleType): boolean` 是自适应难度的**唯一入口**
 - 数据源：`consecutiveWrongByModule: Record<ModuleType, number>`
-- 调用方：所有训练模块的会话页面（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）
+- 调用方：所有训练模块的会话页面（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）（v2.0 确认 puzzle-trainer 已接入）
 - 行为：连续答错 ≥3 次显示降级提示 banner；QuickDrill 自动降级难度（不低于 beginner）
 
 **位置渐进解锁系统**（v2.1 新增）
@@ -1194,11 +1213,13 @@ persist(
 │ Range Trainer  │──────────────▶│                 │◀──────────────────│ Progress     │
 │ Pot Odds       │──────────────▶│ trainingEvents  │                   │ Store        │
 │ GTO Simulator  │──────────────▶│ (事件总线)       │──────────────────▶│ (自动写入)    │
+│ Puzzle Trainer │──────────────▶│                 │                   │              │
+│ Strategy Acad  │──────────────▶│                 │                   │              │
 └────────────────┘               └─────────────────┘                   └──────────────┘
 ```
 
-- **发布方**：各训练模块在会话结束时创建 `TrainingRecord` 并 `emit`
-- **订阅方**：progress store 在模块加载时 `subscribe`，自动 `addRecord`
+- **发布方**（v2.0 更新）：range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy 五个模块在会话结束时创建 `TrainingRecord` 并 `emit`；hand-history 为复盘工具，合理豁免
+- **订阅方**：progress store 在模块加载时 `subscribe`，自动 `addRecord`（v2.0 新增 id 去重）
 
 ### 6.4 各 Store 数据结构
 
@@ -1210,7 +1231,7 @@ persist(
 | `useHandHistoryStore` | `hands[]` + `currentHand` + `replayState` + `filter` | IndexedDB |
 | `useProgressStore` | `records[]` + `settings` + `onboarding` + `streak` + `elo` + `quickDrillStreak` + `mentorStyle` + `emotion` + `unlockedAchievements` + `achievementUnlockDates` + `freezeCardFragments` + `lastFragmentDate` + `fragmentsEarnedToday` | localStorage (persist v8) |
 | `usePuzzleTrainerStore` | `rushBest` + `dailyBest` + `themeBest` + `dailyCompleted` + `quickDrillBest` + `history` | localStorage (persist v2) |
-| `useStrategyAcademyStore` | `progress` + `practiceResults` + `basicsProgress` + `abilityAssessment` + `adaptiveConfig` + `dailyPlan` + `certifications` + `activeTrackId` | localStorage (persist 无 version) |
+| `useStrategyAcademyStore` | `progress` + `practiceResults`（cap 200） + `basicsProgress` + `abilityAssessment` + `adaptiveConfig` + `recentPracticeResults` + `dailyPlan` + `certifications` + `activeTrackId` + `firstAttemptScores` + `lastAttemptScores` | localStorage (persist v2) |
 
 ---
 
@@ -1300,6 +1321,14 @@ self.onmessage = (e) => {
 - 带 10 秒超时保护
 - Worker 不可用时自动降级到主线程计算（`computeFallback`）
 
+**健康检查与一次性重建**（v2.0 新增）：
+
+`useGTOWorker` hook 新增 Worker 生命周期管理：
+- **`onerror` 监听**：Worker 脚本报错时立即标记为 dead，后续调用直接使用 fallback
+- **10 秒超时降级**：请求发送后 10 秒未收到响应，标记 Worker 为 dead
+- **一次性重建**（`rebuildWorker`）：超时后尝试重新创建 Worker 实例（通过 `rebuildAttemptedRef` 保证仅尝试一次）；重建成功则后续请求使用新 Worker，重建失败则永久使用 fallback
+- 设计目标：避免 Worker 静默死亡导致全部请求超时，同时防止无限重建循环
+
 **`batchAnalyze` 消息类型**（v2.1 新增）：
 
 除 `lookupStrategy` 和 `calculateEV` 外，Worker 还支持 `batchAnalyze` 消息类型，用于批量分析多个手牌策略：
@@ -1370,7 +1399,7 @@ manualChunks: {
 |--------|------|-------------|---------|------|
 | `hand-history-db` | 1 | `hands` | `id` | 完整 HandHistory 对象 |
 
-操作封装为 4 个函数：`dbGetAll`、`dbPut`、`dbDelete`、`dbClear`。
+操作封装为 4 个函数：`dbGetAll`、`dbPut`、`dbDelete`、`dbClear`。v2.0 重构为 `getDB()` 单例模式（缓存已打开的数据库连接，避免重复 `openDB`），并新增 `classifyDBError` 错误分类与 `dbError` 状态字段。
 
 ### 9.3 Zustand persist 中间件配置
 
@@ -1393,7 +1422,7 @@ persist(
 |---|---|---|---|
 | progress | `poker-training-progress` | 8 | records / settings / onboarding / streak / elo / quickDrillStreak / mentorStyle / emotion / consecutiveWrongByModule / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
 | puzzle-trainer | `puzzle-trainer-store` | 2 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted |
-| strategy-academy | `strategy-academy-progress` | —（无 version） | progress / practiceResults / abilityAssessment / dailyPlan / certifications（依赖默认合并，新增字段时老用户数据不会自动注入默认值，已知风险） |
+| strategy-academy | `strategy-academy-progress` | 2 | progress / practiceResults（cap 200） / abilityAssessment / dailyPlan / certifications / firstAttemptScores / lastAttemptScores |
 
 > v2.1 说明：progress store 新增 `consecutiveWrongByModule: Record<ModuleType, number>` 字段用于自适应难度判定。该字段为运行时累加值（每次答错 +1，答对重置为 0），首次加载时通过防御性合并默认值 `{}` 注入。
 
@@ -1403,6 +1432,8 @@ persist(
 |------|------|
 | v6 → v7 | 成就系统迁移：注入 `unlockedAchievements: []` 和 `achievementUnlockDates: {}` 默认值 |
 | v7 → v8 | 冻结卡碎片系统迁移：注入 `freezeCardFragments: 0`、`lastFragmentDate: ''`、`fragmentsEarnedToday: 0` 默认值 |
+| strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值 |
+| strategy-academy v1 → v2 | practiceResults 裁剪：对超过 200 条的老数据执行 `.slice(-200)` 保留最近记录 |
 
 ---
 
@@ -1434,17 +1465,24 @@ persist(
 
 ### 11.1 单元测试（Vitest）
 
-覆盖纯函数和工具函数：
+覆盖纯函数和工具函数（v2.0：18 文件 124 用例）：
 
 | 测试目标 | 文件 | 关键用例 |
 |----------|------|----------|
 | `pokerMath.ts` | pokerMath.test.ts | 赔率计算、EV 计算、权益估算 |
-| `strategyCompare.ts` | strategyCompare.test.ts | 最优判定、EV 损失精度 |
-| `statsAggregator.ts` | statsAggregator.test.ts | 聚合正确性、空记录处理 |
-| `streakCalc.ts` | streakCalc.test.ts | 连击天数计算 |
-| `parsers/common.ts` | common.test.ts | 牌面字符串解析、格式检测 |
-| `handClassifier.ts` | handClassifier.test.ts | 169 种手牌分类 |
-| `deck.ts` | deck.test.ts | 牌组生成、洗牌 |
+| `elo.ts` | elo.test.ts | ELO 变化、段位、K 因子、升级 |
+| `decisionFeedback.ts` | decisionFeedback.test.ts | GRADE_THRESHOLDS、calculateGrade 边界 |
+| `strategyCompare.ts` | strategyCompare.test.ts | 最优判定、EV 损失精度（v2.0 新增） |
+| `statsAggregator.ts` | statsAggregator.test.ts | 聚合正确性、空记录处理（v2.0 新增） |
+| `streakCalc.ts` | streakCalc.test.ts | 连击天数计算（v2.0 新增） |
+| `parsers/common.ts` | common.test.ts | 牌面字符串解析、格式检测（v2.0 新增） |
+| `handClassifier.ts` | handClassifier.test.ts | 169 种手牌分类（v2.0 新增） |
+| `deck.ts` | deck.test.ts | 牌组生成、洗牌（v2.0 新增） |
+| store migrate | store.migrate.test.ts ×3 | progress / puzzle-trainer / strategy-academy 迁移链路 |
+| store persist shape | store.persist-shape.test.ts ×3 | 各 store 持久化 shape 校验 |
+| i18n | localeParity.test.ts | zh/en 键集对称性 |
+| eslint | eslintCrossImports.test.ts | 跨模块导入白名单守卫 |
+| opponentScoring | opponentScoring.test.ts | 对手画像评分逻辑 |
 
 ### 11.2 组件测试（Testing Library）
 

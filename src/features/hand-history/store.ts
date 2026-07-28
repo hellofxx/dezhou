@@ -1,12 +1,18 @@
 import { create } from 'zustand';
+import i18n from '@/i18n/config';
 import type { HandHistory, ReplayState, HandFilter } from './types';
+
+// ─── trainingEvents.emit 说明 ─────────────────────────────
+// hand-history 是手牌复盘分析工具（导入/回放/统计），非答题训练模块，
+// 没有 quiz/practice 形式的训练结果，因此不适合 emit TrainingRecord。
+// AGENTS.md 中标注的"存量缺口"在此说明：hand-history 属于豁免模块。
 
 // ─── IndexedDB Helper ────────────────────────────────────
 const DB_NAME = 'hand-history-db';
 const DB_VERSION = 1;
 const STORE_NAME = 'hands';
 
-function openDB(): Promise<IDBDatabase> {
+function createDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = () => {
@@ -20,8 +26,27 @@ function openDB(): Promise<IDBDatabase> {
   });
 }
 
+let _db: IDBDatabase | null = null;
+let _dbPromise: Promise<IDBDatabase> | null = null;
+
+function getDB(): Promise<IDBDatabase> {
+  if (_db) return Promise.resolve(_db);
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = createDB().then((db) => {
+    db.onclose = () => { _db = null; _dbPromise = null; };
+    db.onversionchange = () => { db.close(); _db = null; _dbPromise = null; };
+    _db = db;
+    _dbPromise = null;
+    return db;
+  }).catch((err: unknown) => {
+    _dbPromise = null;
+    throw err;
+  });
+  return _dbPromise;
+}
+
 async function dbGetAll(): Promise<HandHistory[]> {
-  const db = await openDB();
+  const db = await getDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, 'readonly');
     const store = tx.objectStore(STORE_NAME);
@@ -32,7 +57,7 @@ async function dbGetAll(): Promise<HandHistory[]> {
 }
 
 async function dbPut(hands: HandHistory[]): Promise<void> {
-  const db = await openDB();
+  const db = await getDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, 'readwrite');
     const store = tx.objectStore(STORE_NAME);
@@ -45,7 +70,7 @@ async function dbPut(hands: HandHistory[]): Promise<void> {
 }
 
 async function dbDelete(id: string): Promise<void> {
-  const db = await openDB();
+  const db = await getDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, 'readwrite');
     const store = tx.objectStore(STORE_NAME);
@@ -56,7 +81,7 @@ async function dbDelete(id: string): Promise<void> {
 }
 
 async function dbClear(): Promise<void> {
-  const db = await openDB();
+  const db = await getDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, 'readwrite');
     const store = tx.objectStore(STORE_NAME);
@@ -66,6 +91,21 @@ async function dbClear(): Promise<void> {
   });
 }
 
+function classifyDBError(err: unknown): string {
+  const msg = err instanceof DOMException ? err.message : '';
+  const name = err instanceof DOMException ? err.name : '';
+  if (name === 'QuotaExceededError' || msg.includes('quota')) {
+    return i18n.t('handHistory.dbError.quotaExceeded');
+  }
+  if (name === 'InvalidStateError' || name === 'AbortError') {
+    return i18n.t('handHistory.dbError.unavailable');
+  }
+  if (err instanceof TypeError || name === 'SecurityError') {
+    return i18n.t('handHistory.dbError.unavailable');
+  }
+  return i18n.t('handHistory.dbError.generic');
+}
+
 // ─── Store ────────────────────────────────────────────────
 interface HandHistoryStore {
   hands: HandHistory[];
@@ -73,6 +113,7 @@ interface HandHistoryStore {
   replayState: ReplayState;
   filter: HandFilter;
   loaded: boolean;
+  dbError: string | null;
 
   // Data management
   loadFromDB: () => Promise<void>;
@@ -203,29 +244,42 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
   replayState: { ...INITIAL_REPLAY },
   filter: { search: '', sortBy: 'date' },
   loaded: false,
+  dbError: null,
 
   loadFromDB: async () => {
     try {
       const hands = await dbGetAll();
-      set({ hands, loaded: true });
-    } catch {
-      set({ loaded: true });
+      set({ hands, loaded: true, dbError: null });
+    } catch (err: unknown) {
+      set({ loaded: true, dbError: classifyDBError(err) });
     }
   },
 
   addHands: async (hands) => {
-    await dbPut(hands);
-    set((state) => ({ hands: [...state.hands, ...hands] }));
+    try {
+      await dbPut(hands);
+      set((state) => ({ hands: [...state.hands, ...hands], dbError: null }));
+    } catch (err: unknown) {
+      set({ dbError: classifyDBError(err) });
+    }
   },
 
   deleteHand: async (id) => {
-    await dbDelete(id);
-    set((state) => ({ hands: state.hands.filter(h => h.id !== id) }));
+    try {
+      await dbDelete(id);
+      set((state) => ({ hands: state.hands.filter(h => h.id !== id), dbError: null }));
+    } catch (err: unknown) {
+      set({ dbError: classifyDBError(err) });
+    }
   },
 
   clearAll: async () => {
-    await dbClear();
-    set({ hands: [] });
+    try {
+      await dbClear();
+      set({ hands: [], dbError: null });
+    } catch (err: unknown) {
+      set({ dbError: classifyDBError(err) });
+    }
   },
 
   setCurrentHand: (hand) => {
@@ -319,11 +373,16 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
     const hand = get().hands.find(h => h.id === handId);
     if (!hand) return;
     const updated = { ...hand, annotations: { ...hand.annotations, [key]: note } };
-    await dbPut([updated]);
-    set((state) => ({
-      hands: state.hands.map(h => h.id === handId ? updated : h),
-      currentHand: state.currentHand?.id === handId ? updated : state.currentHand,
-    }));
+    try {
+      await dbPut([updated]);
+      set((state) => ({
+        hands: state.hands.map(h => h.id === handId ? updated : h),
+        currentHand: state.currentHand?.id === handId ? updated : state.currentHand,
+        dbError: null,
+      }));
+    } catch (err: unknown) {
+      set({ dbError: classifyDBError(err) });
+    }
   },
 
   setFilter: (filter) => {

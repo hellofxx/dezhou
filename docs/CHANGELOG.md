@@ -5,6 +5,67 @@
 
 ---
 
+## 待办（Backlog）
+
+- **trainingEvents.emit 存量缺口（部分完成）**（登记于 2026-07-28）：pot-odds / puzzle-trainer 已在 v2.0 补全 emit；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免，无需 emit。剩余缺口已清零。
+
+---
+
+## v2.0 — 2026-07-28（全面功能排查与质量保证修复）
+
+> 对全平台进行系统性功能排查，修复跨模块集成缺口、状态管理缺陷、类型安全问题、UI/UX 硬编码残留，并补全测试覆盖。
+
+### 跨模块集成修复
+
+- **trainingEvents.emit 合规补全**：pot-odds（`PotOddsQuizPage`）和 puzzle-trainer（`PuzzleRush` / `DailyPuzzle` / `ThemeDrill`）补全 `trainingEvents.emit` 调用；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免
+- **shouldDownshiftDifficulty 接入**：puzzle-trainer 三种模式（Rush / Daily / ThemeDrill）接入自适应难度降级 API，连续答错 ≥3 次显示降级提示（`puzzle.common.downshiftHint` i18n key）
+- **relatedLessonId 反馈闭环确认**：pot-odds 已合规（`useOddsCalculation.ts` 调用 `buildOddsFeedback` 时携带 `relatedLessonId`）
+
+### 状态管理修复
+
+- **IndexedDB 单例重构**（hand-history）：`openDB()` 重构为 `getDB()` 单例模式，避免重复打开数据库连接；添加 try-catch 错误分类 + `dbError` 字段 + i18n 错误消息（`handHistory.dbError.quotaExceeded` / `.unavailable` / `.generic`）
+- **strategy-academy persist v1→v2**：`practiceResults` 添加 cap 200 限制（`.slice(-200)`），migrate 函数对老数据执行裁剪；同时补齐 v0→v1 迁移（`firstAttemptScores` / `lastAttemptScores` 默认值注入）
+- **progress store addRecord 去重**：添加 `record.id` 去重检查，防止事件总线重复 emit 导致训练记录重复
+
+### 类型安全
+
+- **消除全部 any 类型**：4 处 any 已替换——`gtoDeviation.ts` Worker 分析结果定义 `WorkerAnalyzeResult` 接口替代 any；3 个 Recharts formatter 回调通过类型推断消除 any
+
+### 测试覆盖
+
+- **新增 6 个纯函数测试文件**：`strategyCompare.test.ts` / `statsAggregator.test.ts` / `streakCalc.test.ts` / `parsers/common.test.ts` / `deck.test.ts` / `handClassifier.test.ts`，共 73 个测试用例
+- 总测试从 14 文件 51 用例增至 18 文件 124 用例
+
+### UI/UX 修复
+
+- **模块级 ErrorBoundary**：Dashboard / AcademyHome / GTOSimulatorHome 三个核心路由包裹 ErrorBoundary，文案 i18n 化（`common.errorBoundary.*` keys）
+- **HandStatsPanel memo 优化**：`chartData` 和 `feedbacks` 使用 `useMemo`，避免不必要的重渲染
+- **manifest.json 色彩修正**：`theme_color` 改为 `#15301f`（--felt），`background_color` 改为 `#0e1a14`（--felt-deep），与 CSS 变量保持一致
+- **globals.css 去硬编码**：组件类区域 60+ 处硬编码 HEX 色值替换为 CSS 变量引用，消除主题色泄漏
+
+### i18n 新增 keys
+
+- `common.errorBoundary.*`（title / subtitle / reset）
+- `handHistory.dbError.*`（quotaExceeded / unavailable / generic）
+- `puzzle.common.downshiftHint`
+
+### 基础设施
+
+- **GTO Worker 健康检查**：`useGTOWorker` 新增 `onerror` 监听 + 10 秒超时降级标记 dead + 一次性重建机制（`rebuildWorker`）；重建失败后永久使用 fallback，避免无限重试
+- **pot-odds index.ts 导出补全**：从 3 项扩展为完整公共导出
+- **TrainingRecord.module 类型扩展**：新增 `'puzzle-trainer'`（已合入）；`'hand-history'` 待后续补入（当前 hand-history 为复盘工具，不产生 TrainingRecord）
+
+### 已知遗留
+
+- `TrainingRecord.module` 联合类型尚未包含 `'hand-history'`，待 hand-history 模块产生训练记录时补入
+
+### 数据迁移
+
+- strategy-academy store persist version 升级 **v1 → v2**（practiceResults cap 200 裁剪）
+- progress store persist version 无变更（addRecord 去重为运行时逻辑，不影响持久化 shape）
+
+---
+
 ## v1.9.3 — 2026-07-28（AGENTS.md 硬性规则接入执行面）
 
 > 模块隔离 / i18n 双语 / 禁 any 三条硬性规则此前仅靠自觉，本次接入 lint 与测试执行面。
@@ -564,6 +625,7 @@
 | 2026-07-25 | puzzle-trainer | 1 → 2 | P1-4 快速训练 Best Record（quickDrillBest，name=`puzzle-trainer-store`） |
 | 2026-07-28 | progress | 6 → 7 | v1.9 成就系统（achievements） |
 | 2026-07-28 | progress | 7 → 8 | v1.9 冻结卡碎片（freezeFragments） |
+| 2026-07-28 | strategy-academy | 1 → 2 | v2.0 practiceResults cap 200 裁剪 + v0→v1 进步回放得分默认值 |
 
 ---
 
