@@ -1,6 +1,17 @@
 ---
 name: gto-simulator-dev
 description: GTO 模拟器模块开发代理，负责 src/features/gto-simulator/ 内的所有变更。当涉及 GTO 策略数据、场景引擎、EV 损失计算、Web Worker、策略矩阵、翻前/翻后范围或 Spot 训练时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于 GTO 决策情景模拟器模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/gto-simulator/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Web Worker + Tailwind CSS 4 + framer-motion 12
 
@@ -64,26 +75,13 @@ additionalPrompt: ""
 - **多步场景规则**：SRS/Emotion 仅在首决策节点记录，避免多步场景重复计数；ELO 同样仅在首决策节点触发。
 
 ## Key Files
-- src/features/gto-simulator/types.ts
-- src/features/gto-simulator/store.ts
-- src/features/gto-simulator/data/preflop-ranges.json（翻前 GTO 数据）
-- src/features/gto-simulator/data/postflop-ranges.json（翻后 GTO 数据）
-- src/features/gto-simulator/utils/strategyCompare.ts
-- src/features/gto-simulator/utils/boardGenerator.ts
-- src/features/gto-simulator/hooks/useScenarioEngine.ts（场景生成 + 末题简单）
-- src/features/gto-simulator/hooks/useGTOComparison.ts（策略比较 + ELO/SRS/Emotion 记录器 colocated）
-- src/features/gto-simulator/components/ActionSelector.tsx
-- src/features/gto-simulator/components/DecisionTree.tsx
-- src/features/gto-simulator/components/GTOFeedback.tsx（五级反馈 + 导师文案渲染入口）
-- src/features/gto-simulator/components/GTOResultPage.tsx
-- src/features/gto-simulator/components/GTOSessionPage.tsx
-- src/features/gto-simulator/components/GTOSimulatorHome.tsx
-- src/features/gto-simulator/components/ScenarioSetup.tsx
-- src/features/gto-simulator/components/SpotTrainer.tsx
-- src/features/gto-simulator/components/StrategyMatrix.tsx
-- src/features/gto-simulator/index.ts
-- src/workers/gtoWorker.ts
-- src/workers/useGTOWorker.ts
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
+- src/features/gto-simulator/ — 模块根（types.ts / store.ts / index.ts）
+- src/features/gto-simulator/data/ — GTO 预计算数据（preflop-ranges.json 为翻前权威数据源；postflop-ranges.json 翻后数据）
+- src/features/gto-simulator/utils/ — 策略比较与牌面生成工具（strategyCompare.ts 含 PREFLOP_EQUITY 表）
+- src/features/gto-simulator/hooks/ — 场景引擎与策略比较（useScenarioEngine.ts 场景生成 + 末题简单；useGTOComparison.ts 含 ELO/SRS/Emotion 记录器 colocated）
+- src/features/gto-simulator/components/ — 训练页面与展示组件（GTOFeedback.tsx 为五级反馈 + 导师文案渲染入口）
+- src/workers/ — Web Worker 计算卸载（gtoWorker.ts / useGTOWorker.ts）
 
 ## Workflows
 1. 添加翻后场景时：扩展 postflop-ranges.json

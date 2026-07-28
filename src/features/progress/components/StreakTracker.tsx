@@ -51,7 +51,6 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
       setCelebrationOpen(true);
     }
     // 仅挂载时执行一次（checkMilestone 是幂等的 zustand action）
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 生成最近 30 天的日期网格

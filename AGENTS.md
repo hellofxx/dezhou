@@ -206,9 +206,13 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ## 质量门禁
 
 - **类型检查**：`pnpm typecheck`（即 `node node_modules/typescript/bin/tsc --noEmit`）必须 exit code 0
-- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行
+- **Lint**：`pnpm lint`（即 `eslint src`）必须 exit code 0，仅启用两条规则：
+  - `no-restricted-imports`：锁定 features 模块间直接引用，允许边清单以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（收紧时只删不加）
+  - `@typescript-eslint/no-explicit-any`：禁止 any
+  - 注：lint 工具链通过 `.pnpmfile.cjs` 侧载 TS 6 API（typescript-eslint 尚不支持 TS 7.0），不影响 typecheck/build 使用的 TS 7
+- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖
 - **构建验证**：`pnpm build` 成功产出 `dist/`
-- 每次代码变更后必须运行类型检查与 `pnpm test`
+- 每次代码变更后必须运行类型检查、`pnpm lint` 与 `pnpm test`
 
 ## Agent 协作
 

@@ -5,6 +5,32 @@
 
 ---
 
+## v1.9.3 — 2026-07-28（AGENTS.md 硬性规则接入执行面）
+
+> 模块隔离 / i18n 双语 / 禁 any 三条硬性规则此前仅靠自觉，本次接入 lint 与测试执行面。
+
+### Lint 门禁（最小可行集）
+
+- 新增 `eslint.config.js`（flat config），仅启用两条规则：`no-restricted-imports`（features 模块隔离，别名 + 相对路径双形式拦截）与 `@typescript-eslint/no-explicit-any`
+- 当前模块间依赖图快照固化为 `ALLOWED_CROSS_IMPORTS` 允许边清单（progress 中枢属设计内，其余 peer 边为存量债务，收紧时只删不加），新增跨模块边一律变红
+- 新增 `pnpm lint` script；接入部署工作流（构建前强制）与 pre-commit 钩子
+- 依赖：`eslint` + `typescript-eslint`（仅 devDependencies，零 bundle 影响）；typescript-eslint 尚不支持 TS 7.0，通过 `.pnpmfile.cjs` 为 lint 工具链侧载 TS 6.0.3（官方并行方案，不影响 typecheck/build 的 TS 7）
+
+### i18n 双语对称测试
+
+- 新增 `src/i18n/localeParity.test.ts`：比对 zh.json 与 en.json 扁平化键集合，任一侧缺键即失败，随 `pnpm test` 执行
+
+### 附带修复（lint 基线清零）
+
+- `HandRankingDrill.tsx`：`t: (key, opts?: any)` 改为 `TFunction`（真实 any，原 disable 注释错位未生效）
+- `gtoWorker.ts` / `StreakTracker.tsx`：移除失效的 eslint-disable 注释（分别为无 any 可压、引用未安装的 react-hooks 插件规则）
+
+### 数据迁移
+
+- 无 persist version 变更
+
+---
+
 ## v1.9.2 — 2026-07-28（课程引用修复与对手画像 Drill 落地）
 
 > 修复学习路径与概念图中的悬空课程 ID 引用，并完成 P2-1.8 对手画像 Drill 的组件落地（此前仅有题库无课程/组件，本土路径无法 100% 完成）。

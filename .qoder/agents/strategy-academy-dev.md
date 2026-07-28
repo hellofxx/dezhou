@@ -1,6 +1,17 @@
 ---
 name: strategy-academy-dev
 description: 策略学院模块开发代理，负责 src/features/strategy-academy/ 内的所有变更。当涉及课程内容、Drill 练习、QuickDrill、三段式互动教学、学习进度、8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）或教学场景演示时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于策略学院（Strategy Academy）模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/strategy-academy/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
 - 路由：`/academy` / `/academy/basics` / `/academy/concept-graph` / `/academy/tracks` / `/academy/quick-drill` / `/academy/certification/:level` / `/academy/lesson/:lessonId`
@@ -79,69 +90,15 @@ additionalPrompt: ""
 - `src/shared/types/decisionFeedback.ts`（五级反馈 DecisionGrade / calculateGrade）
 
 ## Key Files
-
-### 模块根（3 个）
-- src/features/strategy-academy/types.ts（Lesson / LevelInfo / AbilityAssessment / OpponentProfile / HandExample / PracticeQuestion / DailyPlan / LearningTrack / ConceptNode / LevelCertification）
-- src/features/strategy-academy/store.ts（academy store，含 progress / practiceResults / basicsProgress / abilityAssessment / adaptiveConfig / dailyPlan / certifications / activeTrackId）
-- src/features/strategy-academy/index.ts
-
-### data/（7 个 + levels/ 子目录 10 个）
-- src/features/strategy-academy/data/courses.ts（re-export 兼容层，实际数据已拆分至 levels/）
-- src/features/strategy-academy/data/levels/（10 个文件：l1.ts ~ l8.ts + l4a.ts + l4b.ts + index.ts barrel 导出）
-- src/features/strategy-academy/data/basicsContent.ts（基础入门步骤）
-- src/features/strategy-academy/data/conceptNodes.ts（概念图谱节点）
-- src/features/strategy-academy/data/learningTracks.ts（学习轨道元数据，含 relatedTrackIds 横向推荐）
-- src/features/strategy-academy/data/localTrack.ts（本土低级别盈利路径 P2-1，prerequisiteLevelIds 前置条件）
-- src/features/strategy-academy/data/opponentProfiles.ts（对手形象）
-
-### data/localLessons/（7 个）
-- src/features/strategy-academy/data/localLessons/index.ts
-- src/features/strategy-academy/data/localLessons/limp.ts
-- src/features/strategy-academy/data/localLessons/straddle.ts
-- src/features/strategy-academy/data/localLessons/deepStack.ts
-- src/features/strategy-academy/data/localLessons/exploit.ts
-- src/features/strategy-academy/data/localLessons/gtoBalance.ts
-- src/features/strategy-academy/data/localLessons/mental.ts
-
-### utils/（4 个）
-- src/features/strategy-academy/utils/adaptiveDifficulty.ts（updateAbilityScore / DEFAULT_ADAPTIVE_CONFIG）
-- src/features/strategy-academy/utils/courseProgress.ts
-- src/features/strategy-academy/utils/dailyPlan.ts（generateDailyPlan / isDailyPlanFresh）
-- src/features/strategy-academy/utils/quickDrill.ts（快速训练工具函数）
-
-### hooks/（1 个）
-- src/features/strategy-academy/hooks/useAcademy.ts
-
-### components/（16 个）
-- src/features/strategy-academy/components/AcademyHome.tsx（首页：等级 + 学习轨道入口）
-- src/features/strategy-academy/components/BasicsIntro.tsx（基础入门引导）
-- src/features/strategy-academy/components/ConceptGraph.tsx
-- src/features/strategy-academy/components/ConceptGraphView.tsx（概念图谱视图）
-- src/features/strategy-academy/components/CourseView.tsx（课程详情 + Drill 路由）
-- src/features/strategy-academy/components/DailyPlanCard.tsx（每日训练计划卡片）
-- src/features/strategy-academy/components/HandExample.tsx（实例演示）
-- src/features/strategy-academy/components/LearningTracksView.tsx（学习轨道选择）
-- src/features/strategy-academy/components/LessonContent.tsx（三段式内容渲染）
-- src/features/strategy-academy/components/LessonQuiz.tsx（课后测验）
-- src/features/strategy-academy/components/LevelCard.tsx
-- src/features/strategy-academy/components/LevelCertification.tsx（等级认证）
-- src/features/strategy-academy/components/PracticeDrill.tsx（实践测验）
-- src/features/strategy-academy/components/ProTip.tsx
-- src/features/strategy-academy/components/ProgressBar.tsx
-- src/features/strategy-academy/components/QuickDrill.tsx（3 分钟快速训练，含 SRS 混合）
-
-### components/drills/（11 个）
-- src/features/strategy-academy/components/drills/DrillLessonRouter.tsx（React.lazy 路由 4 个 Drill）
-- src/features/strategy-academy/components/drills/ChoiceDrillRenderer.tsx（通用 Drill 类型渲染组件）
-- src/features/strategy-academy/components/drills/HandRankingDrill.tsx
-- src/features/strategy-academy/components/drills/OutsDrill.tsx
-- src/features/strategy-academy/components/drills/PositionDrill.tsx
-- src/features/strategy-academy/components/drills/PotOddsDrill.tsx
-- src/features/strategy-academy/components/drills/handRankingQuestions.ts
-- src/features/strategy-academy/components/drills/outsQuestions.ts
-- src/features/strategy-academy/components/drills/positionQuestions.ts
-- src/features/strategy-academy/components/drills/potOddsQuestions.ts
-- src/features/strategy-academy/components/drills/types.ts（DrillProps / DrillResult）
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
+- src/features/strategy-academy/ — 模块根（types.ts 含 Lesson / LevelInfo / LearningTrack 等类型；store.ts academy store，persist version 以该文件配置为准；index.ts）
+- src/features/strategy-academy/data/ — 静态课程与元数据（courses.ts 为 re-export 兼容层，实际课程已拆分至 levels/ 子目录；另含基础入门 / 概念图谱 / 学习轨道 / 本土化路径 / 对手形象数据）
+- src/features/strategy-academy/data/levels/ — 分级课程数据（l1 ~ l8，L4 拆分为 l4a/l4b，含 index.ts barrel）
+- src/features/strategy-academy/data/localLessons/ — 本土低级别盈利路径课程内容
+- src/features/strategy-academy/utils/ — 难度自适应（adaptiveDifficulty.ts）/ 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具
+- src/features/strategy-academy/hooks/ — useAcademy 等消费 hook
+- src/features/strategy-academy/components/ — 首页 / 课程视图（CourseView.tsx 含双层门禁 + Drill 路由）/ 三段式内容 / 测验 / 认证 / QuickDrill 等页面组件
+- src/features/strategy-academy/components/drills/ — Drill 组件与题库（DrillLessonRouter.tsx 统一 lazy 路由；ChoiceDrillRenderer.tsx 通用选择题渲染；types.ts 定义 DrillProps / DrillResult）
 
 ## Workflows
 1. 添加新课程时：编辑 courses.ts 的对应 Level.lessons → 提供完整 content/quiz → CourseView 自动渲染

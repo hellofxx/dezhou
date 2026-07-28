@@ -1,6 +1,17 @@
 ---
 name: platform-dev
 description: 平台级全栈开发代理，负责跨模块集成、脚手架、布局、路由、shared 共享层和全局基础设施。当涉及项目配置、路由变更、共享组件、事件总线、persist 升级协调或跨模块变更时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 平台级全栈开发 Agent，负责跨模块集成、基础设施和全局功能。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 技术栈：React 19 + Vite 8 + TypeScript 7 + Tailwind CSS 4 + shadcn/ui + Zustand 5 + React Router v7 + i18next 26
 - Feature 模块（8 个）：range-trainer / pot-odds / gto-simulator / hand-history / progress / onboarding / puzzle-trainer / strategy-academy
 
@@ -68,85 +79,26 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 - feature 模块完成训练后必须 `trainingEvents.emit(event)`，由 progress store 自动累积统计
 - Streak / ELO / SRS / Emotion / Mentor 的"记录"action 在答题时同步调用（不走事件总线）
 
-### shared 层文件清单
-- **types/**（8 个）：跨模块领域类型定义
-- **components/**（12 个 + ui/ 9 个 shadcn 组件）：跨模块复用组件
-- **utils/**（9 个）：纯函数工具集
-- **constants/**（3 个）：跨模块常量与模板
+### shared 层目录划分
+具体文件以各目录实际内容为事实源（不维护数量副本）：
+- **types/**：跨模块领域类型定义
+- **components/**（含 ui/ shadcn 子目录）：跨模块复用组件
+- **utils/**：纯函数工具集
+- **constants/**：跨模块常量与模板
 - **stores/trainingEvents.ts**：事件总线
 
 ## Key Files
-
-### src/shared/types/（8 个）
-- src/shared/types/action.ts（行动类型）
-- src/shared/types/common.ts（通用类型）
-- src/shared/types/decisionFeedback.ts（五级反馈类型 + calculateGrade）
-- src/shared/types/elo.ts（ELO 五维评分类型）
-- src/shared/types/index.ts（类型聚合导出）
-- src/shared/types/mentor.ts（导师风格类型）
-- src/shared/types/poker.ts（核心领域类型）
-- src/shared/types/position.ts（位置类型）
-
-### src/shared/components/（12 个业务组件）
-- src/shared/components/Card.tsx
-- src/shared/components/CardBack.tsx
-- src/shared/components/CardSVG.tsx
-- src/shared/components/Chip.tsx
-- src/shared/components/EmptyState.tsx
-- src/shared/components/ErrorBoundary.tsx
-- src/shared/components/GameVariantSelector.tsx
-- src/shared/components/HandDisplay.tsx
-- src/shared/components/LoadingState.tsx
-- src/shared/components/PositionBadge.tsx
-- src/shared/components/ResultSummary.tsx
-- src/shared/components/SuitIcon.tsx
-
-### src/shared/components/ui/（9 个 shadcn 组件）
-- src/shared/components/ui/button.tsx
-- src/shared/components/ui/card.tsx
-- src/shared/components/ui/dialog.tsx
-- src/shared/components/ui/input.tsx
-- src/shared/components/ui/progress.tsx
-- src/shared/components/ui/select.tsx
-- src/shared/components/ui/tabs.tsx
-- src/shared/components/ui/toast.tsx
-- src/shared/components/ui/tooltip.tsx
-
-### src/shared/utils/（9 个）
-- src/shared/utils/cn.ts（className 合并）
-- src/shared/utils/deck.ts（牌堆生成与洗牌）
-- src/shared/utils/elo.ts（ELO 算法）
-- src/shared/utils/formatters.ts（格式化工具）
-- src/shared/utils/handRanking.ts（手牌排名）
-- src/shared/utils/index.ts（工具聚合导出）
-- src/shared/utils/pokerMath.ts（扑克数学计算）
-- src/shared/utils/shareCard.ts（分享卡片生成）
-- src/shared/utils/soundManager.ts（音效管理）
-
-### src/shared/constants/（3 个）
-- src/shared/constants/app.ts（应用级常量）
-- src/shared/constants/mentorStyles.ts（导师文案模板 MENTOR_FEEDBACK_TEMPLATES）
-- src/shared/constants/poker.ts（扑克常量）
-
-### src/shared/stores/
-- src/shared/stores/trainingEvents.ts（事件总线）
-
-### src/layouts/
-- src/layouts/AppLayout.tsx
-- src/layouts/BlankLayout.tsx
-- src/layouts/MobileNav.tsx
-
-### src/app/
-- src/app/routes.tsx（路由配置）
-
-### src/i18n/
-- src/i18n/config.ts
-- src/i18n/locales/zh.json
-- src/i18n/locales/en.json
-
-### 项目配置
-- vite.config.ts
-- tsconfig.json
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
+- src/shared/types/ — 跨模块领域类型（关键：decisionFeedback.ts 五级反馈 + calculateGrade；elo.ts ELO 五维评分类型；poker.ts 核心领域类型）
+- src/shared/components/ — 跨模块业务组件（Card / Chip / EmptyState / LoadingState / ResultSummary 等）
+- src/shared/components/ui/ — shadcn 基础组件
+- src/shared/utils/ — 纯函数工具（关键：pokerMath.ts 扑克数学计算；elo.ts ELO 算法；deck.ts 牌堆操作）
+- src/shared/constants/ — 跨模块常量（关键：mentorStyles.ts 导师文案模板 MENTOR_FEEDBACK_TEMPLATES）
+- src/shared/stores/ — 事件总线（trainingEvents.ts）
+- src/layouts/ — AppLayout / BlankLayout / MobileNav
+- src/app/ — 路由配置（routes.tsx）
+- src/i18n/ — config.ts + locales/zh.json + locales/en.json
+- 项目配置 — vite.config.ts / tsconfig.json
 
 ## Workflows
 1. 添加新 feature 模块时：创建 features/<name>/ 目录结构 → 在 routes.tsx 注册路由 → 在 AppLayout 侧边栏添加导航项

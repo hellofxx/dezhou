@@ -1,6 +1,17 @@
 ---
 name: progress-dev
 description: 进度追踪与统计模块开发代理，负责 src/features/progress/ 内的所有变更。当涉及 Dashboard、统计图表、Streak/ELO/SRS/Emotion/Mentor 五大系统、跨模块状态中枢、训练日历或数据可视化时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于进度追踪与数据统计模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/progress/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Recharts 3 + Tailwind CSS 4 + framer-motion 12
 - persist version：以 `src/features/progress/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本），管理全部跨模块状态
@@ -91,52 +102,16 @@ progress store 在初始化时调用 `trainingEvents.subscribe((record) => addRe
 - `src/shared/stores/trainingEvents.ts`（事件总线 emit / subscribe 接口）
 
 ## Key Files
-### 模块入口与状态
-- src/features/progress/types.ts（含 OnboardingState / StreakState / EmotionState / DEFAULT_* 常量）
-- src/features/progress/store.ts（persist version 以本文件配置为准，含 records/settings/onboarding/streak/elo/quickDrillStreak/mentorStyle/emotion）
-- src/features/progress/hooks/useProgress.ts
-- src/features/progress/index.ts
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 
-### utils/（6 个）
-- src/features/progress/utils/statsAggregator.ts（按日/周/月/模块聚合）
-- src/features/progress/utils/streakCalc.ts（Streak 算法：updateStreak / checkNewMilestone / isEarnBackActive）
-- src/features/progress/utils/spacedRepetition.ts（SM-2 算法 + ReviewItemMetadata）
-- src/features/progress/utils/dailyTrainingMix.ts（每日混合比例 composeDailyMix）
-- src/features/progress/utils/dailyTrainingPlan.ts（每日训练计划生成）
-- src/features/progress/utils/indexedDB.ts（牌局大数据存储）
+模块内：
+- src/features/progress/ — 模块根（types.ts 含 OnboardingState / StreakState / EmotionState / DEFAULT_* 常量；store.ts 跨模块状态中枢，persist version 以该文件配置为准；index.ts）
+- src/features/progress/hooks/ — useProgress 等消费 hook
+- src/features/progress/utils/ — 统计聚合 / Streak 算法（streakCalc.ts）/ SM-2 间隔重复（spacedRepetition.ts）/ 每日混合比例（dailyTrainingMix.ts）/ 每日训练计划 / IndexedDB 封装
+- src/features/progress/components/ — Dashboard / 统计图表 / Streak / 段位庆祝 / SRS 复习 / 情绪管理（TiltWarning / SessionLimitGuard / DownswingAlert / MoodTracker）/ 设置 / OnboardingGate 门禁等页面与组件
 
-### components/（24 个）
-- src/features/progress/components/Dashboard.tsx（含段位徽章 / 快速训练 CTA / 情绪组件渲染）
-- src/features/progress/components/ProgressPage.tsx（进度页主入口）
-- src/features/progress/components/StatsOverview.tsx（统计概览）
-- src/features/progress/components/AccuracyChart.tsx（正确率折线图）
-- src/features/progress/components/WeaknessAnalysis.tsx（五维 ELO 雷达图）
-- src/features/progress/components/AchievementBadges.tsx（成就徽章）
-- src/features/progress/components/StreakTracker.tsx（连续打卡追踪）
-- src/features/progress/components/StreakCelebration.tsx（连续打卡庆祝）
-- src/features/progress/components/RankUpCelebration.tsx（段位升级庆祝）
-- src/features/progress/components/SpacedRepetitionPanel.tsx（复习入口 + 进度条）
-- src/features/progress/components/ReviewSession.tsx（Dialog-based 复习模式）
-- src/features/progress/components/DailyChallenge.tsx（每日挑战）
-- src/features/progress/components/DailyTrainingPlan.tsx（每日训练计划）
-- src/features/progress/components/DifficultyIndicator.tsx（难度指示器）
-- src/features/progress/components/TiltWarning.tsx（Tilt 警告）
-- src/features/progress/components/SessionLimitGuard.tsx（题量上限守卫）
-- src/features/progress/components/DownswingAlert.tsx（下风期警报）
-- src/features/progress/components/MoodTracker.tsx（情绪追踪）
-- src/features/progress/components/SettingsPage.tsx（含教练风格切换 / 每日题量上限）
-- src/features/progress/components/OnboardingGate.tsx（新手引导门禁）
-- src/features/progress/components/Leaderboard.tsx（排行榜）
-- src/features/progress/components/RangeStatsPage.tsx（范围训练统计页）
-- src/features/progress/components/GTOStatsPage.tsx（GTO 训练统计页）
-- src/features/progress/components/ModuleStatsPage.tsx（模块统计页）
-
-### shared/ 依赖（5 个）
-- src/shared/types/elo.ts
-- src/shared/utils/elo.ts
-- src/shared/types/mentor.ts
-- src/shared/constants/mentorStyles.ts
-- src/shared/stores/trainingEvents.ts
+shared/ 依赖（维护职责见 Authority）：
+- src/shared/types/elo.ts / src/shared/utils/elo.ts / src/shared/types/mentor.ts / src/shared/constants/mentorStyles.ts / src/shared/stores/trainingEvents.ts
 
 ## Workflows
 1. 添加新成就时：编辑 AchievementBadges.tsx 的成就列表 + 判定逻辑

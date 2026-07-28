@@ -1,6 +1,5 @@
 // Web Worker for GTO strategy lookup and EV calculations
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const _self = self as unknown as {
   onmessage: ((e: MessageEvent) => void) | null;
   postMessage: (msg: unknown) => void;

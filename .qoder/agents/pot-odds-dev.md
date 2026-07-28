@@ -1,6 +1,17 @@
 ---
 name: pot-odds-dev
 description: 赔率计算器模块开发代理，负责 src/features/pot-odds/ 内的所有变更。当涉及底池赔率计算、赔率测验、赔率可视化、outs 计算或胜率估算时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于底池赔率与 EV 计算器模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/pot-odds/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Recharts 3 + Tailwind CSS 4
 
@@ -64,20 +75,10 @@ additionalPrompt: ""
 - `src/shared/utils/formatters.ts`：`formatPercentage` / `formatBB` 等格式化输出
 
 ## Key Files
-- src/features/pot-odds/types.ts
-- src/features/pot-odds/store.ts
-- src/features/pot-odds/constants.ts（常见听牌数据）
-- src/features/pot-odds/hooks/useOddsCalculation.ts（计算逻辑 + ELO/SRS/Emotion 记录器 colocated）
-- src/features/pot-odds/hooks/useEquityEstimate.ts
-- src/features/pot-odds/components/DrawsReference.tsx
-- src/features/pot-odds/components/EVCalculator.tsx
-- src/features/pot-odds/components/EquityChart.tsx
-- src/features/pot-odds/components/OddsCalculator.tsx
-- src/features/pot-odds/components/OddsDisplay.tsx
-- src/features/pot-odds/components/PotOddsPage.tsx
-- src/features/pot-odds/components/PotOddsQuizPage.tsx（测验页 + 末题简单 + Session 止损守卫）
-- src/features/pot-odds/components/PotSizeInput.tsx
-- src/features/pot-odds/index.ts
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
+- src/features/pot-odds/ — 模块根（types.ts / store.ts / constants.ts 常见听牌数据 / index.ts）
+- src/features/pot-odds/hooks/ — 计算逻辑（useOddsCalculation.ts 含 ELO/SRS/Emotion 记录器 colocated；useEquityEstimate.ts）
+- src/features/pot-odds/components/ — 计算器 / 图表 / 测验页组件（PotOddsQuizPage.tsx 含末题简单 + Session 止损守卫）
 
 ## Workflows
 1. 添加新的听牌类型时：编辑 constants.ts 的 COMMON_DRAWS

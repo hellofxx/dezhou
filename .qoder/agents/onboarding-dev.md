@@ -1,6 +1,17 @@
 ---
 name: onboarding-dev
 description: 新手引导流程开发代理，负责 src/features/onboarding/ 内的所有变更。当涉及引导步骤、用户偏好采集、OnboardingGate、新手教程、多步表单或首次使用体验时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于新手引导流程（Onboarding）模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/onboarding/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
 - 路由：`/onboarding`（BlankLayout，无主导航）
@@ -53,22 +64,16 @@ additionalPrompt: ""
   - `shared/types/position.ts`（`Position` 枚举）
 
 ## Key Files
-模块内文件（9）：
-- src/features/onboarding/types.ts
-- src/features/onboarding/index.ts
-- src/features/onboarding/data/placementQuestions.ts（5 道定位题 + explanation）
-- src/features/onboarding/components/OnboardingFlow.tsx（5 步流程容器）
-- src/features/onboarding/components/WelcomeStep.tsx（步骤 0：欢迎页，新手/有基础选择 + 跳过）
-- src/features/onboarding/components/PlacementTestStep.tsx（步骤 1：定位测试，正确率 → initialAbility）
-- src/features/onboarding/components/FirstDrillStep.tsx（步骤 2：首次微训练，末题简单 + 补救题）
-- src/features/onboarding/components/CelebrationStep.tsx（步骤 3：首胜庆祝，触发 recordTrainingDay）
-- src/features/onboarding/components/GoalSettingStep.tsx（步骤 4：目标设定，写入 dailyGoalMinutes）
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 
-跨模块依赖文件（4）：
-- src/features/progress/components/OnboardingGate.tsx（门禁组件，包裹 AppLayout 的 `<Outlet />`）
-- src/features/progress/store.ts（onboarding 状态 + completeOnboardingStep / skipOnboarding / resetOnboarding / recordTrainingDay actions）
-- src/features/progress/types.ts（OnboardingState 接口 + DEFAULT_ONBOARDING 常量）
-- src/features/range-trainer/components/QuizCard.tsx（复用首次微训练答题组件，不修改本体）
+模块内：
+- src/features/onboarding/ — 模块根（types.ts / index.ts）
+- src/features/onboarding/data/ — 定位测试题库（placementQuestions.ts，5 题覆盖 4 维度 + explanation）
+- src/features/onboarding/components/ — 5 步流程容器（OnboardingFlow.tsx）+ 各步骤组件（Welcome → PlacementTest → FirstDrill → Celebration → GoalSetting）
+
+跨模块依赖（只读消费，不修改本体）：
+- src/features/progress/ — OnboardingGate 门禁组件 / store.ts 的 onboarding 相关 actions / types.ts 的 OnboardingState
+- src/features/range-trainer/components/QuizCard.tsx — 复用首次微训练答题组件（仅通过 props 传入）
 
 ## Workflows
 1. 修改定位测试题时：编辑 placementQuestions.ts → 确保 5 题覆盖 4 个维度 + 每题含 explanation

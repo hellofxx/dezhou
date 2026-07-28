@@ -4,6 +4,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
 import { PokerCard } from '@/shared/components/Card';
 import { stringToCard } from '@/shared/utils/deck';
@@ -284,9 +285,8 @@ function SimpleLabel({ label }: { label: string }) {
 
 // ===== 工具：解析选项文本 =====
 // simple-compare 题型使用 labelA/labelB 内联数据；其它题型直接走 i18n。
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function resolveOptionText(
-  t: (key: string, opts?: any) => string,
+  t: TFunction,
   q: typeof HAND_RANKING_QUESTIONS[number],
   optKey: string,
   idx: number,

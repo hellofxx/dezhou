@@ -1,6 +1,17 @@
 ---
 name: hand-history-dev
 description: 牌局复盘模块开发代理，负责 src/features/hand-history/ 内的所有变更。当涉及牌局导入解析、手牌回放、复盘分析、IndexedDB 存储、PokerStars/GGPoker 格式或决策标注时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于历史牌局复盘分析模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/hand-history/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + IndexedDB + framer-motion 12
 
@@ -46,27 +57,12 @@ additionalPrompt: ""
 - **shared/ 层依赖**：poker.ts / formatters.ts / handRanking.ts
 
 ## Key Files
-- src/features/hand-history/types.ts
-- src/features/hand-history/store.ts（含 IndexedDB 封装）
-- src/features/hand-history/index.ts
-- src/features/hand-history/parsers/common.ts（格式检测 + 公共工具）
-- src/features/hand-history/parsers/pokerstars.ts
-- src/features/hand-history/parsers/gg-poker.ts
-- src/features/hand-history/parsers/partypoker.ts
-- src/features/hand-history/hooks/useHandReplay.ts
-- src/features/hand-history/utils/handNotation.ts
-- src/features/hand-history/utils/handStats.ts
-- src/features/hand-history/components/ActionLog.tsx
-- src/features/hand-history/components/AnnotationPanel.tsx
-- src/features/hand-history/components/BoardDisplay.tsx
-- src/features/hand-history/components/HandHistoryList.tsx
-- src/features/hand-history/components/HandImportPage.tsx
-- src/features/hand-history/components/HandImporter.tsx
-- src/features/hand-history/components/HandReplayPage.tsx
-- src/features/hand-history/components/HandReplayer.tsx
-- src/features/hand-history/components/HandStatsPanel.tsx
-- src/features/hand-history/components/PlayerSeats.tsx
-- src/features/hand-history/components/StreetTimeline.tsx
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
+- src/features/hand-history/ — 模块根（types.ts / store.ts 含 IndexedDB 封装 / index.ts）
+- src/features/hand-history/parsers/ — 多平台手牌历史解析器（common.ts 为格式检测 + 公共工具，其余按平台一文件）
+- src/features/hand-history/hooks/ — 回放引擎（useHandReplay.ts）
+- src/features/hand-history/utils/ — 牌局记法与统计工具
+- src/features/hand-history/components/ — 导入 / 回放 / 标注 / 统计展示组件
 
 ## Workflows
 1. 添加新平台解析器时：创建 parsers/new-site.ts → 实现 parse 函数 → 在 common.ts detectFormat 中注册

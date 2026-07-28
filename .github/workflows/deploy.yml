@@ -37,7 +37,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 测试门禁：persist 迁移等回归测试必须通过才允许构建部署
+      # Lint 门禁：模块隔离（no-restricted-imports）与禁 any（no-explicit-any）
+      - name: Lint
+        run: pnpm lint
+
+      # 测试门禁：persist 迁移、i18n 双语对称等回归测试必须通过才允许构建部署
       - name: Test
         run: pnpm test
 

@@ -1,6 +1,17 @@
 ---
 name: range-trainer-dev
 description: 范围训练模块开发代理，负责 src/features/range-trainer/ 内的所有变更。当涉及范围解析、13×13 范围网格、位置训练、范围测验、翻前范围或范围可视化组件时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于手牌范围训练模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/range-trainer/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
 
@@ -63,25 +74,11 @@ additionalPrompt: ""
 - `shared/stores/trainingEvents.ts`：事件总线实现。
 
 ## Key Files
-- src/features/range-trainer/types.ts
-- src/features/range-trainer/store.ts
-- src/features/range-trainer/constants.ts（预置范围数据）
-- src/features/range-trainer/utils/rangeParser.ts
-- src/features/range-trainer/utils/handClassifier.ts
-- src/features/range-trainer/hooks/useQuizEngine.ts（测验引擎 + ELO/SRS/Emotion 记录器）
-- src/features/range-trainer/hooks/useTimer.ts
-- src/features/range-trainer/components/QuizCard.tsx（五级反馈 + 导师文案渲染入口）
-- src/features/range-trainer/components/QuizTimer.tsx
-- src/features/range-trainer/components/RangeGrid.tsx
-- src/features/range-trainer/components/RangeInfo.tsx
-- src/features/range-trainer/components/RangeLearnPage.tsx
-- src/features/range-trainer/components/RangeQuizPage.tsx
-- src/features/range-trainer/components/RangeSelector.tsx
-- src/features/range-trainer/components/RangeTrainerHome.tsx
-- src/features/range-trainer/components/SessionResult.tsx
-- src/features/range-trainer/components/SessionResultPage.tsx
-- src/features/range-trainer/components/TrainingSession.tsx
-- src/features/range-trainer/index.ts
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
+- src/features/range-trainer/ — 模块根（types.ts / store.ts / constants.ts 预置范围数据 + POSITION_UNLOCK_THRESHOLDS / index.ts）
+- src/features/range-trainer/utils/ — 范围解析器（rangeParser.ts）与手牌分类器（handClassifier.ts）
+- src/features/range-trainer/hooks/ — 测验引擎（useQuizEngine.ts 含 ELO/SRS/Emotion 记录器）与计时器
+- src/features/range-trainer/components/ — 13×13 范围网格 / 测验页 / 学习页 / 会话结果等组件（QuizCard.tsx 为五级反馈 + 导师文案渲染入口；RangeSelector 负责位置解锁过滤）
 
 ## Workflows
 1. 修改范围数据时：编辑 constants.ts → 更新预置范围列表

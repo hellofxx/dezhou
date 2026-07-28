@@ -1,6 +1,17 @@
 ---
 name: puzzle-trainer-dev
 description: 谜题训练模块开发代理，负责 src/features/puzzle-trainer/ 内的所有变更。当涉及谜题三模式、快速训练、冻结卡、谜题生成逻辑、QuickDrill 或连续答题机制时使用。
+tools:
+  - Read
+  - Glob
+  - Grep
+  - LSP
+  - GetProblems
+  - SearchReplace
+  - Write
+  - DeleteFile
+  - Bash
+  - GetTerminalOutput
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -12,7 +23,7 @@ additionalPrompt: ""
 专注于扑克谜题（Puzzle）模式模块的前端开发 Agent。
 
 ## Context
-- 项目路径：c:\Users\24533\Desktop\dezhou
+- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/puzzle-trainer/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
 - 路由：`/puzzle` / `/puzzle/rush` / `/puzzle/daily` / `/puzzle/theme/:themeId`（均用 LazyWrapper 包裹）
@@ -58,25 +69,17 @@ additionalPrompt: ""
 - `shared/types/decisionFeedback.ts`：`DecisionGrade` 类型与 `calculateGrade(evLoss)` 评级函数（五级反馈统一入口）
 
 ## Key Files
+> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 
-### 模块内文件
-- src/features/puzzle-trainer/types.ts（PuzzleTheme / PuzzleQuestion / PuzzleResult / PuzzleBestRecord / QuickDrillBestRecord / DailyCompletionMap）
-- src/features/puzzle-trainer/store.ts（persist version 以本文件配置为准，含 rushBest / dailyBest / themeBest / dailyCompleted / quickDrillBest / history）
-- src/features/puzzle-trainer/index.ts
-- src/features/puzzle-trainer/data/puzzleBank.ts（全题库，按主题组织）
-- src/features/puzzle-trainer/data/rushQuestions.ts（Rush 模式题目池，按难度分级）
-- src/features/puzzle-trainer/data/dailyPuzzles.ts（Daily 模式题库）
-- src/features/puzzle-trainer/utils/dateSeed.ts（Mulberry32 日期种子算法）
-- src/features/puzzle-trainer/hooks/usePuzzleEngine.ts（统一管理三种模式的题目流 / 计时 / 命 / 连对奖励）
-- src/features/puzzle-trainer/components/PuzzleHome.tsx（首页：模式选择 + 最佳记录展示）
-- src/features/puzzle-trainer/components/PuzzleRush.tsx（Rush 模式容器）
-- src/features/puzzle-trainer/components/DailyPuzzle.tsx（Daily 模式容器）
-- src/features/puzzle-trainer/components/ThemeDrill.tsx（Theme 模式容器）
-- src/features/puzzle-trainer/components/PuzzleCard.tsx（题目渲染 + 五级反馈）
-- src/features/puzzle-trainer/components/PuzzleResult.tsx（结果页：分数 / 正确率 / 破纪录提示 / 冻结卡奖励）
+模块内：
+- src/features/puzzle-trainer/ — 模块根（types.ts 含 PuzzleTheme / PuzzleQuestion / Best Record 等类型；store.ts 独立 persist store，version 以该文件配置为准；index.ts）
+- src/features/puzzle-trainer/data/ — 静态题库（puzzleBank 按主题 / rushQuestions 按难度 / dailyPuzzles）
+- src/features/puzzle-trainer/utils/ — 日期种子算法（dateSeed.ts，Mulberry32）
+- src/features/puzzle-trainer/hooks/ — 题目流引擎（usePuzzleEngine.ts，统一管理三模式的计时 / 命 / 连对奖励）
+- src/features/puzzle-trainer/components/ — 三模式容器（Rush / Daily / ThemeDrill）+ 首页 / 题目卡 / 结果页
 
-### 跨模块依赖文件
-- src/shared/types/decisionFeedback.ts（五级反馈类型与 calculateGrade 评级函数）
+跨模块依赖：
+- src/shared/types/decisionFeedback.ts — 五级反馈类型与 calculateGrade 评级函数
 
 > 注：`composeDailyMix` / `quickDrillStreak` / `awardStreakFreeze` 等快速训练集成实际由 strategy-academy/QuickDrill 实现，不在本模块。
 
