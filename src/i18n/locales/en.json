@@ -1,0 +1,1056 @@
+{
+  "app": {
+    "name": "Poker Training Platform",
+    "version": "0.1.0"
+  },
+  "nav": {
+    "overview": "Overview",
+    "training": "Training",
+    "study": "Study",
+    "tools": "Tools",
+    "data": "Data",
+    "settingsGroup": "Settings",
+    "academy": "Strategy Academy",
+    "rangeTrainer": "Range Trainer",
+    "potOdds": "Pot Odds Calculator",
+    "gtoSimulator": "GTO Simulator",
+    "handHistory": "Hand History",
+    "progress": "Progress",
+    "settings": "Settings",
+    "dailyChallenge": "Daily Challenge",
+    "leaderboard": "Leaderboard",
+    "basics": "Basics",
+    "puzzle": "Poker Puzzles"
+  },
+  "rangeTrainer": {
+    "title": "Range Trainer",
+    "learn": "Learn Mode",
+    "quiz": "Quiz Mode",
+    "startQuiz": "Start Training",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "timeRemaining": "Time Remaining"
+  },
+  "potOdds": {
+    "title": "Pot Odds Calculator",
+    "potSize": "Pot Size",
+    "betSize": "Bet Size",
+    "outs": "Outs",
+    "profitable": "Call is profitable",
+    "notProfitable": "Call is not profitable"
+  },
+  "gto": {
+    "title": "GTO Simulator",
+    "startSession": "Start Session",
+    "optimal": "Optimal Play",
+    "evLoss": "EV Loss"
+  },
+  "progress": {
+    "title": "Progress",
+    "totalSessions": "Total Sessions",
+    "accuracy": "Accuracy",
+    "streak": "Streak",
+    "achievements": "Achievements",
+    "welcome": "Poker Training Platform",
+    "welcomeBack": "{{count}} sessions completed, keep going!",
+    "firstTraining": "Start your first training session!",
+    "totalTraining": "Total",
+    "weekSessions": "This Week",
+    "recentSessions": "Recent Sessions",
+    "viewAll": "View All",
+    "noRecords": "No training records yet",
+    "firstVisitWelcome": "Welcome to the Poker Training Platform! We recommend starting with the basics to begin your learning journey.",
+    "startLearning": "Start Learning",
+    "replay": {
+      "title": "Your Progress",
+      "subtitle": "See how much you've improved",
+      "firstAttempt": "First",
+      "lastAttempt": "Latest",
+      "improvement": "+{score} improvement",
+      "noData": "Complete more lessons to see your progress"
+    }
+  },
+  "dashboard": {
+    "title": "Training Dashboard",
+    "quickStart": {
+      "title": "3-Minute Quick Drill",
+      "subtitle": "5 questions a day, keep your edge",
+      "range": "Range Practice",
+      "odds": "Odds Calc",
+      "mixed": "Mixed Drill",
+      "completedToday": "Done today"
+    },
+    "puzzleDesc": "Rush / Daily / Theme drills — fun scenario-based decision training",
+    "feltArena": {
+      "todaySession": "Today's Session · Day {{day}}",
+      "welcome": "Welcome Back to the Table",
+      "motto": "Know the way, master the game",
+      "totalHands": "Total Hands",
+      "totalHandsWeek": "+{{count}} this week",
+      "accuracy": "Overall Accuracy",
+      "accuracyLevel": "Intermediate",
+      "todayChallenge": "Today's Challenge",
+      "ready": "Today's practice is ready for you.",
+      "todayProgress": "Today"
+    },
+    "streakRail": {
+      "consecutiveDays": "Day Streak",
+      "freezeCard": "Freeze Card",
+      "todayAccuracy": "Today's Accuracy",
+      "weekDays": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      },
+      "rest": "Rest",
+      "today": "Today"
+    },
+    "quickDrill": {
+      "title": "3-Minute Quick Drill",
+      "subtitle": "Smart recommendations based on your weaknesses",
+      "completed": "✓ Completed Today",
+      "range": "Range",
+      "odds": "Odds",
+      "mixed": "Mixed"
+    },
+    "training": {
+      "todayQuestion": "Today's Practice · Q{{current}} / {{total}}",
+      "difficulty": "Difficulty",
+      "yourDecision": "Your Decision",
+      "nextQuestion": "Next Question",
+      "nextTopic": "Next: {{topic}}",
+      "srs": "Spaced Repetition",
+      "srsDescription": "{{count}} items due for review today",
+      "startReview": "Start Review · {{count}} items",
+      "todayProgress": "Today's Progress",
+      "pending": "Pending",
+      "mastered": "Mastered",
+      "dueRate": "Due Rate"
+    },
+    "trainingGrounds": {
+      "title": "Training Grounds",
+      "subtitle": "Six Core Modules",
+      "rangeDesc": "Memorize and test opening ranges by position",
+      "oddsDesc": "Pot odds, EV and outs calculation",
+      "gtoDesc": "Optimal decision training in real scenarios",
+      "academyDesc": "Systematic courses from beginner to pro",
+      "puzzleDesc": "Daily puzzles, Rush mode and theme drills",
+      "reviewDesc": "Import hand histories for deep analysis"
+    },
+    "dataPlan": {
+      "accuracyTrend": "Accuracy Trend",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year",
+      "todayRecommend": "Today's Recommendations",
+      "recommendCount": "{{count}} items",
+      "recommendDescription": "Generated from your weaknesses and SRS",
+      "viewFullPlan": "View Full Plan",
+      "tagWeakness": "Weakness",
+      "tagSrs": "SRS",
+      "tagCourse": "Course"
+    }
+  },
+  "elo": {
+    "unit": "pts",
+    "rankBadge": {
+      "aria": "Current rank {{rank}}, score {{score}}. Click to view the five-dimension radar chart."
+    },
+    "radar": {
+      "title": "Five-Dimension Ability Radar",
+      "subtitle": "Based on ELO ratings (0-3000). {{games}} answers played.",
+      "empty": "No ELO data yet. Complete a training drill to generate the ability analysis.",
+      "scoreLabel": "ELO Score"
+    }
+  },
+  "rankUp": {
+    "title": "Rank Up!",
+    "subtitle": "Your skill reached a new level.",
+    "continue": "Continue"
+  },
+  "quickDrill": {
+    "title": "5-Minute Drill",
+    "subtitle": "Hand-picked questions from the global bank, targeting your weak spots",
+    "quickTitle": "3-Minute Quick Drill",
+    "quickSubtitle": "{{count}} questions a day, keep your edge — {{mode}}",
+    "back": "Back to Academy",
+    "backAcademy": "Back to Academy",
+    "backHome": "Back to Home",
+    "again": "One more round",
+    "selectDifficulty": "Select difficulty",
+    "adaptiveDifficulty": "Adaptive difficulty",
+    "weakAreasHint": "Questions will be prioritized from your weak areas",
+    "modeHint": "Current mode: {{mode}}. Completing today's drill will count toward your streak.",
+    "questionCount": "This drill",
+    "questions": "questions",
+    "start": "Start Drill",
+    "noQuestions": "No questions available",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "mode": {
+      "range": "Range Practice",
+      "odds": "Odds Calc",
+      "mixed": "Mixed Drill"
+    },
+    "result": {
+      "title": "Drill Complete",
+      "accuracy": "Accuracy",
+      "time": "Avg Time",
+      "xp": "XP Earned",
+      "allCorrectBonus": "All correct +20 XP bonus",
+      "streakRecorded": "Counted toward your streak ✓",
+      "reviewIncluded": "Includes {{count}} review questions"
+    },
+    "reviewQueueHint": "Today you have {{count}} review questions; 30% will be mixed into this drill automatically",
+    "newRecord": "🎉 New quick drill record!",
+    "freezeReward": "🎁 7-day quick drill streak reward: 1 freeze card!",
+    "streak": {
+      "current": "Quick drill streak: {{count}} day(s)",
+      "rewarded": "1 freeze card rewarded",
+      "broken": "Quick drill streak broken, reset"
+    }
+  },
+  "dailyChallenge": {
+    "title": "Daily Challenge",
+    "rangeChallenge": "Complete {{count}} range training questions with >{{accuracy}}% accuracy",
+    "potOddsChallenge": "Complete {{count}} pot odds questions with >{{accuracy}}% accuracy",
+    "gtoChallenge": "Complete {{count}} GTO simulation questions with >{{accuracy}}% accuracy",
+    "completed": "Completed",
+    "notCompleted": "Not Completed",
+    "consecutiveDays": "Consecutive Days",
+    "startChallenge": "Start Challenge",
+    "reward": "Reward"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "totalScore": "Score",
+    "accuracy": "Accuracy",
+    "sessions": "Sessions",
+    "rank": "Rank",
+    "name": "Player",
+    "score": "Score",
+    "you": "You"
+  },
+  "common": {
+    "fold": "Fold",
+    "call": "Call",
+    "raise": "Raise",
+    "allIn": "All-In",
+    "start": "Start",
+    "pause": "Pause",
+    "reset": "Reset",
+    "back": "Back",
+    "next": "Next",
+    "comingSoon": "Coming Soon",
+    "loading": "Loading...",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "retry": "Try Again",
+    "backHome": "Back to Home"
+  },
+  "academy": {
+    "title": "Strategy Academy",
+    "subtitle": "Systematically learn poker strategy from basics to professional thinking",
+    "basics": "Poker Basics",
+    "basicsDesc": "Game rules, hand rankings, positions, and terminology",
+    "startHere": "Start Here",
+    "startLearning": "Start Learning",
+    "completed": "Completed",
+    "clickToReview": "Click to review",
+    "conceptGraph": "Concept Graph",
+    "conceptGraphDesc": "Visualize knowledge dependencies and learning paths",
+    "enter": "Enter",
+    "lessons": "lessons",
+    "level": "Level",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "quizResult": "Quiz Result",
+    "correctRate": "Accuracy",
+    "totalQuestions": "Total",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "avgTime": "Avg Time",
+    "pathBanner": {
+      "title": "Local Low-Stakes Profit Path",
+      "subtitle": "{{modules}} modules {{lessons}} lessons · ~{{hours}} hours · {{progress}}% complete",
+      "continue": "Continue Learning"
+    },
+    "currentlyLearning": "Currently Learning",
+    "recommendedCourses": "Recommended Courses",
+    "knowledgeGraph": "Knowledge Graph",
+    "opponentProfile": "Opponent Profile",
+    "dailyDrill": "Daily Drill",
+    "legend": {
+      "learned": "Mastered",
+      "learning": "Learning",
+      "locked": "Locked"
+    },
+    "lessons_new": {
+      "l3-3bet-postflop": "3-Bet Pot Postflop Strategy",
+      "l3-3bet-postflop-desc": "Lower SPR, narrower ranges, more critical decisions",
+      "l5-tools": "Poker Analysis Tools Introduction",
+      "l5-tools-desc": "Use tools to accelerate learning, but don't become dependent",
+      "l5-online-vs-live": "Online vs Live Poker Differences",
+      "l5-online-vs-live-desc": "Adapt to different environments, become a well-rounded player",
+      "l7-hu": "Heads-Up Strategy Basics",
+      "l7-hu-desc": "Greater position value, wider ranges, more frequent decisions"
+    }
+  },
+  "opponent": {
+    "title": "Opponent Profiles",
+    "profiles": "Player Types",
+    "tight": "Tight",
+    "loose": "Loose",
+    "aggressive": "Aggressive",
+    "passive": "Passive",
+    "tag": "TAG (Tight-Aggressive)",
+    "lag": "LAG (Loose-Aggressive)",
+    "nit": "NIT (Ultra-Tight)",
+    "callingStation": "Calling Station",
+    "vpip": "VPIP",
+    "pfr": "PFR",
+    "af": "Aggression Factor",
+    "readOpponent": "Read Opponent",
+    "adjustStrategy": "Adjust Strategy"
+  },
+  "localTrack": {
+    "title": "Local Low-Stakes Profit Path",
+    "subtitle": "Strategies for common Chinese Limp/Straddle/Deep-Stack/Calling-Station games",
+    "targetAudience": "Players active in Chinese low-stakes games",
+    "duration": "8-10 hours",
+    "module1": "Module 1: Limp Game Response",
+    "module2": "Module 2: Ante / Straddle",
+    "module3": "Module 3: Deep Stack Adjustments",
+    "module4": "Module 4: Player Type Exploitation",
+    "module5": "Module 5: GTO vs Exploitative Balance",
+    "module6": "Module 6: Mental Game",
+    "limpIntro": "Limp Game Characteristics & Challenges",
+    "limpIsolate": "Isolation Raise Strategy",
+    "limpMultiway": "Multiway Limp Pot Postflop Play",
+    "straddle": "Straddle Game Strategy",
+    "ante": "Ante Structure Preflop Adjustments",
+    "deepImpliedOdds": "Deep Stack Implied Odds",
+    "deepSuitedConnectors": "Suited Connectors in Deep Stack",
+    "exploitCallingStation": "Exploiting Calling Stations",
+    "exploitManiac": "Dealing with Maniacs",
+    "exploitNit": "Exploiting Nits",
+    "exploitLag": "Dealing with LAGs",
+    "gtoVsExploit": "GTO vs Exploitative: Decision Framework",
+    "whenToDeviate": "When to Deviate from GTO",
+    "tiltRecognition": "Tilt Recognition & Response",
+    "stopLoss": "Stop-Loss Discipline",
+    "sessionManagement": "Session Management & Long-Term Profit"
+  },
+  "opponentDrill": {
+    "title": "Opponent Profile Drill",
+    "subtitle": "Identify opponent type from stats and choose counter-strategy",
+    "scenario": "Scenario",
+    "stats": "Statistics",
+    "sampleSize": "Sample Size",
+    "recentActions": "Recent Actions",
+    "questionType": "Which type does this opponent belong to?",
+    "questionStrategy": "What is the best counter-strategy against this opponent?",
+    "correct": "Correct",
+    "wrong": "Incorrect",
+    "explanation": "Explanation",
+    "nextQuestion": "Next Question",
+    "finish": "Finish Drill",
+    "result": "Drill Result",
+    "accuracy": "Accuracy"
+  },
+  "dailyPlan": {
+    "title": "Daily Training Plan",
+    "todayPlan": "Today's Recommendations",
+    "dismiss": "Dismiss",
+    "startTask": "Start Task",
+    "completed": "Completed",
+    "streak": "Streak"
+  },
+  "spacedRepetition": {
+    "title": "🔄 Today's Review",
+    "todayReview": "Today's Review",
+    "items": "items",
+    "startReview": "Start Review",
+    "allDone": "Done",
+    "allDoneMessage": "✅ Today's review complete — keep the rhythm!",
+    "emptyToday": "Nothing to review today. Complete a drill and items will be queued automatically.",
+    "progressLabel": "Today's Progress",
+    "lastReview": "Last reviewed {{days}} days ago",
+    "moreItems": "{{count}} more to review",
+    "totalItems": "Total Items",
+    "review": "Review",
+    "nextReview": "Next Review",
+    "mastered": "Mastered",
+    "learning": "Learning"
+  },
+  "review": {
+    "title": "Today's Review",
+    "subtitle": "Mixed categories — reinforce long-term memory",
+    "defaultFront": "Recall the key points of this item, then click \"Show Answer\" to self-rate.",
+    "answerLabel": "Answer",
+    "showAnswer": "Show Answer",
+    "remembered": "Remembered",
+    "forgot": "Forgot",
+    "minimalHint": "Recall the key points of this item and self-rate.",
+    "next": "Next",
+    "finish": "Finish Review",
+    "empty": {
+      "title": "Today's review complete ✓",
+      "subtitle": "Nothing to review today. Come back after your next drill!"
+    },
+    "complete": {
+      "title": "Today's review complete ✓",
+      "subtitle": "Keep the rhythm — memory gets stronger",
+      "total": "Total",
+      "correct": "Correct",
+      "accuracy": "Accuracy",
+      "duration": "Took {{sec}} sec"
+    }
+  },
+  "adaptive": {
+    "title": "Adaptive Difficulty",
+    "currentLevel": "Current Level",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "adjusting": "Adjusting difficulty...",
+    "levelUp": "Level Up!",
+    "levelDown": "Level Down"
+  },
+  "toast": {
+    "trainingComplete": "Training Complete!",
+    "importSuccess": "Import Successful",
+    "importError": "Import Failed",
+    "settingsSaved": "Settings Saved",
+    "reviewComplete": "Review Complete!",
+    "achievementUnlocked": "Achievement Unlocked!"
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "fold": "Fold",
+    "call": "Call",
+    "raise": "Raise",
+    "confirm": "Confirm / Next",
+    "exit": "Exit Training",
+    "toggle": "Toggle Shortcuts"
+  },
+  "gameVariant": {
+    "title": "Game Variant",
+    "standard": "Standard Hold'em",
+    "shortDeck": "Short Deck (6+)",
+    "headsUp": "Heads-Up",
+    "switchHint": "Switching variants will automatically adjust training data and rules"
+  },
+  "mentor": {
+    "settings": {
+      "title": "Coach Style",
+      "hint": "Pick your personal coach — feedback wording changes with coach style",
+      "voiceToneLabel": "Tone",
+      "selected": "Selected"
+    },
+    "profiles": {
+      "strict-math": {
+        "name": "Strict Math",
+        "description": "GTO-oriented, EV-driven",
+        "voiceTone": "Calm, objective, data-driven"
+      },
+      "old-school": {
+        "name": "Old School",
+        "description": "Experience-oriented, hand-reading focus",
+        "voiceTone": "Direct, sharp, sometimes blunt"
+      },
+      "encouraging": {
+        "name": "Encouraging",
+        "description": "Positive reinforcement, mental game focus",
+        "voiceTone": "Warm, encouraging, constructive"
+      }
+    }
+  },
+  "shortDeck": {
+    "ruleChanges": "Rule Changes",
+    "deckInfo": "36 cards (6-A), removing 2-5",
+    "straightBeatsTrips": "Straight > Trips",
+    "flushBeatsFullHouse": "Flush > Full House"
+  },
+  "tilt": {
+    "title": "Take a break?",
+    "message": "Consecutive wrong answers may signal fatigue. A short break helps long-term progress.",
+    "continue": "Keep Training",
+    "rest": "Take a Break"
+  },
+  "sessionLimit": {
+    "title": "Daily Limit Reached",
+    "message": "You've answered {{answered}} / {{limit}} questions today. Consider resting — long-term progress matters more than short-term sprints.",
+    "backHome": "Back to Dashboard",
+    "settingLabel": "Daily Question Limit",
+    "settingHint": "Training will be blocked when the limit is reached. 0 = unlimited",
+    "unlimited": "Unlimited"
+  },
+  "downswing": {
+    "title": "Downswing Detected",
+    "message": "Accuracy has been declining for 3 consecutive days. This may signal fatigue or mindset fluctuation. Consider a short break or review the mental-game lesson.",
+    "viewLesson": "View Guide"
+  },
+  "mood": {
+    "title": "Today's Mood",
+    "good": "Good",
+    "neutral": "Neutral",
+    "bad": "Bad",
+    "todayAccuracy": "Today's Accuracy",
+    "noData": "No data yet",
+    "correlationGoodHigh": "Feeling good and accuracy is high — keep it up!",
+    "correlationBadLow": "Mood is low and accuracy is below 50% — consider taking a break.",
+    "correlationBadHigh": "Accuracy is OK despite low mood — watch out for accumulating fatigue.",
+    "correlationNeutral": "Keep logging to discover the correlation between mood and accuracy."
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "Welcome",
+      "placement": "Placement Test",
+      "drill": "First Drill",
+      "celebration": "Celebration",
+      "goal": "Goal Setting"
+    },
+    "welcome": {
+      "title": "Welcome to Poker Training Platform",
+      "subtitle": "Let's take a few minutes to customize your learning path",
+      "beginnerTitle": "I'm New",
+      "beginnerDesc": "New to Texas Hold'em, want to start from rules and hand rankings",
+      "beginnerCta": "Start with placement test",
+      "experiencedTitle": "I Have Experience",
+      "experiencedDesc": "Already know the basics, want to skip placement and start training",
+      "experiencedCta": "Go straight to training",
+      "skip": "Skip onboarding"
+    },
+    "placement": {
+      "questionOf": "Question {{current}} / {{total}}",
+      "explanation": "Explanation",
+      "next": "Next",
+      "finish": "Finish Test"
+    },
+    "drill": {
+      "title": "First Drill",
+      "questionOf": "Question {{current}} / {{total}}",
+      "next": "Next",
+      "finish": "Finish Drill",
+      "rescueHint": "Don't worry, try one more simple question"
+    },
+    "celebration": {
+      "title": "Congratulations on your first training!",
+      "subtitle": "You've taken the first step to becoming a great player. Keep going!",
+      "streakStarted": "Day 1 Streak Started",
+      "continue": "Continue to goal setting"
+    },
+    "goal": {
+      "title": "Set Your Daily Training Goal",
+      "subtitle": "Choose a sustainable daily duration. Building a habit matters more than intensity.",
+      "minutes": "min",
+      "hint": "You can adjust this anytime in settings. Beginners should start with 10 minutes.",
+      "confirm": "Confirm Goal"
+    }
+  },
+  "streak": {
+    "freeze": {
+      "label": "Freeze Cards",
+      "used": "Freeze card used today",
+      "awarded": "Earned {{count}} freeze cards",
+      "empty": "Not enough freeze cards"
+    },
+    "celebration": {
+      "hiddenTitle": "Streak Milestone: {{days}} Days",
+      "hiddenDesc": "You've reached a {{days}}-day training streak milestone",
+      "bronzeTitle": "Bronze Badge!",
+      "bronzeSubtitle": "3-day streak — the habit is forming",
+      "flameTitle": "Golden Flame!",
+      "flameSubtitle": "7-day streak — you're in the zone",
+      "trophyTitle": "Trophy Earned!",
+      "trophySubtitle": "30-day streak — you're a serious player",
+      "diamondTitle": "Diamond Badge!",
+      "diamondSubtitle": "100-day streak — rare territory",
+      "legendTitle": "Legendary!",
+      "legendSubtitle": "365-day streak — you are a legend",
+      "congrats": "Congratulations! You've trained {{days}} days in a row!",
+      "freezeReward": "Earned {{count}} freeze cards",
+      "share": "Share with friends",
+      "sharing": "Generating...",
+      "continue": "Keep Training"
+    },
+    "earnBack": {
+      "windowHint": "Earn Back Window",
+      "restored": "Streak restored!",
+      "expired": "Earn Back window expired, streak has been reset"
+    },
+    "endingSoon": "Your streak is about to fade — train now to keep it alive!",
+    "fragment": {
+      "title": "Freeze Card Fragments",
+      "progress": "{current}/5",
+      "earned": "Earned 1 fragment!",
+      "synthesized": "Fragments synthesized into a freeze card!",
+      "dailyLimit": "Daily fragment limit reached"
+    }
+  },
+  "handHistory": {
+    "deviation": {
+      "title": "GTO Deviation Analysis",
+      "decisions": "Decisions",
+      "optimal": "Optimal Rate",
+      "avgEvLoss": "Avg EV Loss",
+      "worstDecision": "Worst Decision",
+      "loading": "Analyzing...",
+      "noData": "No deviation data"
+    }
+  },
+  "feedback": {
+    "grade": {
+      "best": "Best!",
+      "correct": "Correct",
+      "inaccuracy": "Inaccuracy",
+      "wrong": "Mistake",
+      "blunder": "Blunder",
+      "optimal": "[deprecated] Optimal!",
+      "acceptable": "[deprecated] Acceptable",
+      "error": "[deprecated] Mistake"
+    },
+    "message": {
+      "best": "Optimal decision! 🌟",
+      "correct": "Correct! This decision is reasonable",
+      "inaccuracy": "Not quite precise — a better option exists",
+      "wrong": "This decision cost {{evLoss}} BB",
+      "blunder": "Blunder! Lost {{evLoss}} BB",
+      "optimal": "[deprecated] Optimal decision!",
+      "acceptable": "[deprecated] Decent, but a better option exists",
+      "error": "[deprecated] This decision cost {{evLoss}} BB"
+    },
+    "evLossLabel": "EV Loss",
+    "correctAction": "Optimal Action",
+    "goReview": "Review →"
+  },
+  "drills": {
+    "common": {
+      "complete": "Drill Complete!",
+      "accuracyLabel": "Accuracy",
+      "timeLabel": "Time",
+      "correctLabel": "Correct",
+      "finish": "Finish Drill",
+      "exit": "Exit",
+      "progress": "Question {{current}} / {{total}}",
+      "runningAccuracy": "Current accuracy {{correct}}/{{answered}}",
+      "correctFeedback": "Correct!",
+      "wrongFeedback": "Incorrect",
+      "correctAnswerPrefix": "Correct answer: {{answer}}",
+      "viewResult": "View Result",
+      "next": "Next"
+    },
+    "handRanking": {
+      "title": "Hand Ranking Blitz",
+      "subtitle": "Quickly identify the 9 hand rankings and compare two hands",
+      "comparePrompt": "Which hand is stronger?",
+      "identifyPrompt": "Identify the hand rank of these 5 cards:",
+      "simpleComparePrompt": "Which starting hand is stronger?",
+      "options": {
+        "handA": "Hand A",
+        "handB": "Hand B",
+        "tie": "Tie",
+        "labelA": "Hand A",
+        "labelB": "Hand B",
+        "royalFlush": "Royal Flush",
+        "straightFlush": "Straight Flush",
+        "fourOfAKind": "Four of a Kind",
+        "fullHouse": "Full House",
+        "flush": "Flush",
+        "straight": "Straight",
+        "threeOfAKind": "Three of a Kind",
+        "twoPair": "Two Pair",
+        "onePair": "One Pair",
+        "highCard": "High Card"
+      },
+      "questions": {
+        "q1": {
+          "explanation": "Hand B is AKQJT suited (Royal Flush), the strongest hand in Texas Hold'em, beating the plain AKQJT straight."
+        },
+        "q2": {
+          "explanation": "Hand B is AAKKK full house (trip Kings + pair Aces), which beats trip 9s."
+        },
+        "q3": {
+          "explanation": "Hand A is a flush (5 hearts), Hand B is a straight. Flush > Straight."
+        },
+        "q4": {
+          "explanation": "AKQJT all spades — Royal Flush, the strongest hand in Texas Hold'em."
+        },
+        "q5": {
+          "explanation": "98765 all hearts — Straight Flush (not royal, since not AKQJT)."
+        },
+        "q6": {
+          "explanation": "KKK99 is trip Kings + pair 9s = Full House. Don't confuse with two pair or trips."
+        },
+        "q7": {
+          "explanation": "T9876 is 5 consecutive cards = Straight (note: not all same suit)."
+        },
+        "q8": {
+          "explanation": "AAAQ2 is Three of a Kind Aces (three same rank + two kickers)."
+        },
+        "q9": {
+          "explanation": "AA is the strongest starting hand, far stronger than 22. Higher pocket pair wins."
+        },
+        "q10": {
+          "explanation": "AKs (suited AK) is a strong starting hand, far better than 72o (offsuit 72), one of the weakest."
+        }
+      }
+    },
+    "position": {
+      "title": "Position Awareness",
+      "subtitle": "Identify positions on a 6-max table and understand position advantage",
+      "questions": {
+        "q1": {
+          "prompt": "Which position acts last preflop and is considered the best? (Dealer)",
+          "explanation": "BTN (Button) acts last preflop, giving the most information before deciding."
+        },
+        "q2": {
+          "prompt": "Which position acts first preflop?",
+          "explanation": "UTG (Under The Gun) acts first preflop with the least information — play only strong hands."
+        },
+        "q3": {
+          "prompt": "Which position acts last both preflop and postflop, called the 'best position'?",
+          "explanation": "BTN acts last both preflop and postflop — the most profitable position at the table."
+        },
+        "q4": {
+          "prompt": "In 6-max, the position to the left of the button (posts small blind) is?",
+          "explanation": "SB (Small Blind) sits left of BTN, posts 0.5BB forced bet, out of position postflop."
+        },
+        "q5": {
+          "prompt": "Which position posts the big blind?",
+          "explanation": "BB (Big Blind) sits left of SB, posts 1BB forced bet, last blind to act preflop."
+        },
+        "q6": {
+          "prompt": "After a UTG raise preflop, which blind position acts last (closes action)?",
+          "explanation": "BB is the last to act preflop (among blinds), closing action — a positional advantage."
+        },
+        "q7": {
+          "prompt": "From which position should you raise to steal blinds most often?",
+          "explanation": "BTN is the best steal position — only SB and BB left to act, high success rate."
+        },
+        "q8": {
+          "prompt": "In 6-max, the position immediately after UTG is?",
+          "explanation": "MP (Middle Position) follows UTG, slightly better than UTG but still requires tight ranges."
+        }
+      }
+    },
+    "outs": {
+      "title": "Outs Calculation Drill",
+      "subtitle": "Identify drawing hands and quickly count Outs, master the Rule of 2 and 4",
+      "boardLabel": "Board",
+      "heroLabel": "Your Hand",
+      "rulePrompt": "Calculate your current number of Outs",
+      "options": {
+        "count2": "2 outs",
+        "count3": "3 outs",
+        "count4": "4 outs",
+        "count6": "6 outs",
+        "count8": "8 outs",
+        "count9": "9 outs",
+        "count12": "12 outs",
+        "count15": "15 outs",
+        "equity8": "~8%",
+        "equity16": "~16%",
+        "equity32": "~32%",
+        "equity36": "~36%"
+      },
+      "questions": {
+        "q1": {
+          "prompt": "You hold suited AK, flop shows 2 of your suit. How many Outs?",
+          "explanation": "Flush draw: 13 suited cards - 4 visible = 9 outs."
+        },
+        "q2": {
+          "prompt": "You hold suited 89, flop has 2 of your suit. How many Outs?",
+          "explanation": "Flush draw = 9 outs (13-4=9), the most common strong draw."
+        },
+        "q3": {
+          "prompt": "You hold 89, board is 7TJ. How many Outs for your OESD (open-ended straight draw)?",
+          "explanation": "OESD: any 6 or Q completes the straight = 8 outs."
+        },
+        "q4": {
+          "prompt": "You hold 56, board is 479. How many Outs for your OESD?",
+          "explanation": "OESD: any 3 or 8 completes the straight = 8 outs."
+        },
+        "q5": {
+          "prompt": "You hold 79, board is 56K. How many Outs for your Gutshot?",
+          "explanation": "Gutshot (inside straight): only an 8 completes = 4 outs."
+        },
+        "q6": {
+          "prompt": "You hold TJ, board is 792. How many Outs for your Gutshot?",
+          "explanation": "Gutshot: only an 8 completes = 4 outs."
+        },
+        "q7": {
+          "prompt": "8 Outs from turn→river equals approximately what equity? (Rule of 2 and 4)",
+          "explanation": "Rule of 2: 8 outs × 2 ≈ 16% equity (turn→river single street)."
+        },
+        "q8": {
+          "prompt": "You hold AK high, board has no A or K. How many Outs to hit top pair?",
+          "explanation": "AK high drawing to top pair: 3 Aces + 3 Kings = 6 outs."
+        }
+      }
+    },
+    "potOdds": {
+      "title": "Pot Odds Intuition",
+      "subtitle": "Visual pot odds training, master call/fold decisions",
+      "potLabel": "Pot",
+      "betLabel": "Bet",
+      "callLabel": "Call",
+      "equityLabel": "Equity",
+      "positiveEv": "+EV Call",
+      "ratioHint": "Pot {{pot}} : Call {{call}}",
+      "options": {
+        "potOdds20": "20%",
+        "potOdds25": "25%",
+        "potOdds33": "33%",
+        "potOdds50": "50%",
+        "call": "Call",
+        "fold": "Fold"
+      },
+      "questions": {
+        "q1": {
+          "prompt": "Pot 100, opponent bets 50, you call 50. What's the pot odds?",
+          "explanation": "Call 50 to win final pot 200 (100+50+50), odds = 50/200 = 25%."
+        },
+        "q2": {
+          "prompt": "Pot 80, opponent bets 40, you call 40. What's the pot odds?",
+          "explanation": "Call 40 to win 160 (80+40+40), odds = 40/160 = 25%."
+        },
+        "q3": {
+          "prompt": "Pot 100, opponent bets 50, you call 50. Your equity is 36%, should you?",
+          "explanation": "Pot odds 25%, equity 36% > 25%, +EV call."
+        },
+        "q4": {
+          "prompt": "Pot 100, opponent bets 50, you call 50. Your equity is 16%, should you?",
+          "explanation": "Pot odds 25%, equity 16% < 25%, -EV call, fold."
+        },
+        "q5": {
+          "prompt": "Pot 120, opponent bets 60, you call 60. What's the pot odds?",
+          "explanation": "Call 60 to win 240 (120+60+60), odds = 60/240 = 25%."
+        },
+        "q6": {
+          "prompt": "Your equity is 40%, pot odds 25%, should you?",
+          "explanation": "Equity 40% well above pot odds 25%, clearly +EV call."
+        }
+      }
+    }
+  },
+  "puzzle": {
+    "rushTitle": "Puzzle Rush",
+    "rushDesc": "3-5 min timed sprint, 3 lives, streak bonuses, push your high score.",
+    "dailyTitle": "Daily Puzzle",
+    "dailyDesc": "8 curated questions daily, global leaderboard.",
+    "themeDrillTitle": "Theme Drill",
+    "themeDrillDesc": "Focused training on 10 themes from preflop to river.",
+    "themes": {
+      "preflop-rfi": "Preflop RFI",
+      "big-blind-defense": "Big Blind Defense",
+      "three-bet": "3-Bet Strategy",
+      "c-bet": "C-Bet",
+      "flush-draw": "Flush Draw",
+      "river-value": "River Value Betting",
+      "bluff": "Bluffing Spots",
+      "short-stack": "Short Stack Strategy",
+      "icm": "ICM Basics",
+      "multiway": "Multiway Pots"
+    },
+    "categories": {
+      "preflop": "Preflop",
+      "postflop": "Postflop",
+      "river": "River",
+      "tournament": "Tournament"
+    },
+    "home": {
+      "title": "Poker Puzzles",
+      "subtitle": "Train your decisions through scenario-based puzzles covering 10 themes: preflop RFI, BB defense, 3-bet, c-bet, flush draws, river value, bluffing, short stack, ICM, and multiway pots.",
+      "rushTitle": "Puzzle Rush",
+      "rushDesc": "3 or 5 minute timed run, 3 lives, +10s bonus every 5-streak. Increasing difficulty.",
+      "dailyTitle": "Daily Puzzle",
+      "dailyDesc": "8 fixed questions per day, mixed themes, full explanations after each question.",
+      "themeTitle": "Theme Drill",
+      "themeDesc": "Deep-dive a single theme with {{count}} questions to master specific skills.",
+      "themesTitle": "Train by Theme",
+      "questionsUnit": "Q",
+      "themesUnit": "themes",
+      "difficulty": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "minutes": "min",
+      "startDaily": "Start Today's Puzzle",
+      "reviewToday": "View Today's Puzzle",
+      "todayDone": "Done today ✓",
+      "startTheme": "Pick a Theme",
+      "bestRecord": "Best {{score}}",
+      "bestAccuracy": "Best accuracy {{percent}}%",
+      "bestAccuracyShort": "Best {{percent}}%"
+    },
+    "card": {
+      "progress": "Q {{current}} / {{total}}",
+      "handLabel": "Hand",
+      "positionLabel": "Pos",
+      "boardLabel": "Board",
+      "potLabel": "Pot",
+      "betLabel": "Bet",
+      "stackLabel": "Stack",
+      "fullExplanation": "Full Explanation",
+      "correctAnswerPrefix": "Correct answer: {{answer}}",
+      "nextQuestion": "Next",
+      "viewResult": "View Result"
+    },
+    "rush": {
+      "title": "{{minutes}}-Minute Rush",
+      "noQuestions": "No questions available",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "streak": "Streak"
+    },
+    "daily": {
+      "title": "Daily Puzzle",
+      "noQuestions": "No puzzle for today",
+      "completionCount": "{{count}} people finished today",
+      "alreadyCompleted": "Done today ✓",
+      "fixedHint": "Today's puzzle is fixed — everyone sees the same questions."
+    },
+    "theme": {
+      "unknownTheme": "Unknown theme",
+      "noQuestions": "No questions for this theme"
+    },
+    "result": {
+      "title": "Session Complete",
+      "rushTitle": "Rush Complete",
+      "newRecord": "🎉 New Record!",
+      "score": "Score",
+      "correctRate": "Accuracy",
+      "correctCount": "Correct",
+      "duration": "Duration",
+      "avgTime": "Avg Time",
+      "minutes": "{{min}}m {{sec}}s",
+      "wrongList": "{{count}} wrong",
+      "yourAnswer": "Your pick",
+      "correctAnswer": "Correct",
+      "retry": "Try Again",
+      "backHome": "Back Home"
+    },
+    "common": {
+      "exit": "Exit",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "backHome": "Back Home"
+    }
+  },
+  "achievements": {
+    "title": "Achievements",
+    "wall": "Achievement Wall",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "progress": "{{current}}/{{total}} Unlocked",
+    "newUnlock": "New Achievement!",
+    "categories": {
+      "learning": "Learning",
+      "streak": "Streak",
+      "skill": "Skill",
+      "milestone": "Milestone"
+    },
+    "items": {
+      "firstTraining": {
+        "title": "First Steps",
+        "description": "Complete your first training session"
+      },
+      "completeLevel1": {
+        "title": "Level 1 Graduate",
+        "description": "Complete all Level 1 lessons"
+      },
+      "completeLevel2": {
+        "title": "Level 2 Graduate",
+        "description": "Complete all Level 2 lessons"
+      },
+      "completeLevel3": {
+        "title": "Level 3 Graduate",
+        "description": "Complete all Level 3 lessons"
+      },
+      "certificationAny": {
+        "title": "Certified",
+        "description": "Complete any level certification"
+      },
+      "certificationAll": {
+        "title": "Master of All",
+        "description": "Complete all level certifications"
+      },
+      "streak3": {
+        "title": "3-Day Streak",
+        "description": "Train for 3 consecutive days"
+      },
+      "streak7": {
+        "title": "Weekly Warrior",
+        "description": "Train for 7 consecutive days"
+      },
+      "streak30": {
+        "title": "Monthly Master",
+        "description": "Train for 30 consecutive days"
+      },
+      "streak100": {
+        "title": "Century Legend",
+        "description": "Train for 100 consecutive days"
+      },
+      "quickDrill7": {
+        "title": "Lightning Streak",
+        "description": "Quick drill for 7 consecutive days"
+      },
+      "perfect10": {
+        "title": "Sharpshooter",
+        "description": "100% accuracy in a single session (≥10 questions)"
+      },
+      "perfect20": {
+        "title": "Flawless",
+        "description": "100% accuracy in a single session (≥20 questions)"
+      },
+      "eloBeginner": {
+        "title": "Beginner Player",
+        "description": "Reach ELO 500+"
+      },
+      "eloIntermediate": {
+        "title": "Intermediate Player",
+        "description": "Reach ELO 800+"
+      },
+      "eloAdvanced": {
+        "title": "Advanced Player",
+        "description": "Reach ELO 1200+"
+      },
+      "eloExpert": {
+        "title": "Expert Player",
+        "description": "Reach ELO 2000+"
+      },
+      "firstPuzzle": {
+        "title": "Puzzle Novice",
+        "description": "Complete your first puzzle"
+      },
+      "firstDailyPuzzle": {
+        "title": "Daily Challenger",
+        "description": "Complete your first daily puzzle"
+      },
+      "completeTrackAny": {
+        "title": "Path Explorer",
+        "description": "Complete any learning track"
+      },
+      "completeTrackLocal": {
+        "title": "Local Pioneer",
+        "description": "Complete the localization track"
+      },
+      "allAchievements": {
+        "title": "Achievement Hunter",
+        "description": "Unlock all achievements"
+      }
+    }
+  }
+}

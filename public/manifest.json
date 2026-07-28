@@ -1,0 +1,14 @@
+{
+  "name": "德州扑克训练平台",
+  "short_name": "扑克训练",
+  "description": "系统性地提升德州扑克技巧的训练工具",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#10b981",
+  "icons": [
+    { "src": "./icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "./icons/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml" }
+  ]
+}

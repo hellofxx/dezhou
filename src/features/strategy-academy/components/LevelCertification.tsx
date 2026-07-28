@@ -1,0 +1,298 @@
+import { useState, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
+import { cn } from '@/shared/utils/cn';
+import { useAcademyStore } from '../store';
+import { LEVELS } from '../data/courses';
+import type { QuizQuestion } from '../types';
+
+export default function LevelCertification() {
+  const { level: levelParam } = useParams<{ level: string }>();
+  const navigate = useNavigate();
+  const { certifications, attemptCertification, progress } = useAcademyStore();
+  const level = parseInt(levelParam ?? '1', 10);
+  const levelInfo = LEVELS.find((l) => l.level === level);
+
+  const [started, setStarted] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [finished, setFinished] = useState(false);
+
+  const certification = certifications[level];
+  const isCertified = !!certification?.certifiedAt;
+  const requiredAccuracy = 80;
+
+  // 从该级别所有课程中收集测验题
+  const allQuestions = useMemo<QuizQuestion[]>(() => {
+    if (!levelInfo) return [];
+    const questions: QuizQuestion[] = [];
+    for (const lesson of levelInfo.lessons) {
+      questions.push(...lesson.quiz);
+    }
+    // 洗牌取最多 20 题
+    return shuffleArray(questions).slice(0, 20);
+  }, [levelInfo]);
+
+  if (!levelInfo) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-4">
+        <p className="text-[var(--ivory-muted)]">级别未找到</p>
+        <button onClick={() => navigate('/academy')} className="text-sm text-[var(--brass-bright)] hover:underline">
+          返回学院
+        </button>
+      </div>
+    );
+  }
+
+  const question = allQuestions[currentIndex];
+
+  const handleSelect = (index: number) => {
+    if (showExplanation) return;
+    setSelectedIndex(index);
+    setShowExplanation(true);
+    if (question && index === question.correctIndex) {
+      setCorrectCount((c) => c + 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < allQuestions.length - 1) {
+      setCurrentIndex((i) => i + 1);
+      setSelectedIndex(null);
+      setShowExplanation(false);
+    } else {
+      const score = Math.round((correctCount / allQuestions.length) * 100);
+      attemptCertification(level, score);
+      setFinished(true);
+    }
+  };
+
+  const handleRetry = () => {
+    setStarted(false);
+    setCurrentIndex(0);
+    setSelectedIndex(null);
+    setShowExplanation(false);
+    setCorrectCount(0);
+    setFinished(false);
+  };
+
+  // 完成页面
+  if (finished) {
+    const score = Math.round((correctCount / allQuestions.length) * 100);
+    const passed = score >= requiredAccuracy;
+
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-8 text-center"
+        >
+          <div className="text-6xl mb-4">{passed ? '🎉' : '📚'}</div>
+          <h2 className="font-display text-2xl text-[var(--ivory)] mb-2">
+            {passed ? `Level ${level} 认证通过！` : '再接再厉！'}
+          </h2>
+          <p className="text-[var(--ivory-dim)] mb-1">
+            答对 {correctCount}/{allQuestions.length} 题
+          </p>
+          <p className="font-numeric text-4xl text-[var(--brass-bright)] mb-2">{score}分</p>
+          <p className="text-xs text-[var(--ivory-muted)] mb-6">
+            {passed ? '恭喜！你已掌握本级别核心知识' : `需要 ${requiredAccuracy}% 以上才能通过`}
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <button
+              onClick={() => navigate('/academy')}
+              className="px-5 py-2.5 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80"
+            >
+              返回学院
+            </button>
+            {!passed && (
+              <button
+                onClick={handleRetry}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90"
+              >
+                <RotateCcw className="w-4 h-4" />
+                重新挑战
+              </button>
+            )}
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // 开始前的介绍页面
+  if (!started) {
+    const levelProgress = levelInfo.lessons.filter((l) => progress.completedLessons.includes(l.id)).length;
+    const allCompleted = levelProgress === levelInfo.lessons.length;
+
+    return (
+      <div className="h-full overflow-auto">
+        <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+          <motion.section
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-5 md:p-6"
+          >
+            <button
+              onClick={() => navigate('/academy')}
+              className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              返回策略学院
+            </button>
+
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 rounded-lg bg-[var(--brass-bright)]/10 flex items-center justify-center">
+                <Award className="w-7 h-7 text-[var(--brass-bright)]" />
+              </div>
+              <div>
+                <h1 className="font-display text-2xl text-[var(--ivory)]">
+                  Level {level} 认证测验
+                </h1>
+                <p className="text-sm text-[var(--ivory-dim)] mt-0.5">{levelInfo.title}</p>
+              </div>
+            </div>
+
+            {/* Certification info */}
+            <div className="space-y-3 mb-6">
+              <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
+                <span className="w-2 h-2 rounded-full bg-[var(--brass-bright)]" />
+                题目数量：{allQuestions.length} 题（从本级别所有课程测验中抽取）
+              </div>
+              <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
+                <span className="w-2 h-2 rounded-full bg-[var(--brass-bright)]" />
+                通过标准：正确率 ≥ {requiredAccuracy}%
+              </div>
+              {certification && (
+                <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
+                  <span className="w-2 h-2 rounded-full bg-[var(--info)]" />
+                  历史尝试：{certification.attempts} 次 · 最高分 {certification.bestScore ?? 0}%
+                </div>
+              )}
+              {isCertified && (
+                <div className="flex items-center gap-2 text-xs text-green-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  已通过认证（{new Date(certification!.certifiedAt!).toLocaleDateString()}）
+                </div>
+              )}
+            </div>
+
+            {/* Prerequisites check */}
+            {!allCompleted && (
+              <div className="rounded-lg bg-[var(--warning)]/10 border border-[var(--warning)]/30 p-3 mb-6 text-xs text-[var(--warning)]">
+                建议先完成本级别所有课程再参加认证测验（当前进度：{levelProgress}/{levelInfo.lessons.length}）
+              </div>
+            )}
+
+            <button
+              onClick={() => setStarted(true)}
+              disabled={allQuestions.length === 0}
+              className="w-full py-3 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 disabled:opacity-50"
+            >
+              {isCertified ? '重新挑战' : '开始认证'}
+            </button>
+          </motion.section>
+        </div>
+      </div>
+    );
+  }
+
+  // 答题界面
+  if (!question) return null;
+  const isCorrect = selectedIndex === question.correctIndex;
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
+        {/* Progress */}
+        <div className="flex items-center gap-1.5 mb-6">
+          {allQuestions.map((_, i) => (
+            <div
+              key={i}
+              className={cn(
+                'h-1.5 flex-1 rounded-full transition-colors',
+                i < currentIndex ? 'bg-[var(--brass-bright)]' : i === currentIndex ? 'bg-[var(--brass)]' : 'bg-[var(--walnut-raised)]'
+              )}
+            />
+          ))}
+        </div>
+
+        <p className="text-xs text-[var(--ivory-muted)] mb-2 font-numeric">
+          第 {currentIndex + 1} / {allQuestions.length} 题
+        </p>
+        <h3 className="font-display text-[17px] text-[var(--ivory)] mb-5 leading-snug">
+          {question.question}
+        </h3>
+
+        <div className="space-y-2.5">
+          {question.options.map((option, index) => {
+            const isSelected = selectedIndex === index;
+            const isCorrectOption = index === question.correctIndex;
+            return (
+              <button
+                key={index}
+                onClick={() => handleSelect(index)}
+                disabled={showExplanation}
+                className={cn(
+                  'w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
+                  !showExplanation && 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 text-[var(--ivory-dim)]',
+                  showExplanation && isCorrectOption && 'border-green-500/50 bg-green-500/10 text-green-300',
+                  showExplanation && isSelected && !isCorrectOption && 'border-red-500/50 bg-red-500/10 text-red-300',
+                  showExplanation && !isSelected && !isCorrectOption && 'opacity-40'
+                )}
+              >
+                <span className="flex items-center gap-3">
+                  <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[10px] shrink-0 font-numeric">
+                    {String.fromCharCode(65 + index)}
+                  </span>
+                  {option}
+                  {showExplanation && isCorrectOption && <CheckCircle2 className="w-4 h-4 ml-auto shrink-0" />}
+                  {showExplanation && isSelected && !isCorrectOption && <XCircle className="w-4 h-4 ml-auto shrink-0" />}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {showExplanation && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={cn(
+              'mt-4 rounded-lg p-4 text-sm leading-relaxed',
+              isCorrect ? 'bg-green-500/10 border border-green-500/30 text-green-200/90' : 'bg-red-500/10 border border-red-500/30 text-red-200/90'
+            )}
+          >
+            <p className="font-semibold mb-1">{isCorrect ? '✓ 正确！' : '✗ 错误'}</p>
+            <p>{question.explanation}</p>
+          </motion.div>
+        )}
+
+        {showExplanation && (
+          <div className="mt-5 flex justify-end">
+            <button
+              onClick={handleNext}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90"
+            >
+              {currentIndex < allQuestions.length - 1 ? '下一题' : '查看结果'}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
+  }
+  return shuffled;
+}

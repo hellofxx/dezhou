@@ -1,0 +1,31 @@
+{
+  "data": [
+    {
+      "id": "page-index",
+      "title": "PokerLab 训练平台主界面",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1753454400000,
+      "canvasData": {
+        "x": 108,
+        "y": 0,
+        "group": 0,
+        "deviceType": "freeSize",
+        "windowSize": {
+          "width": 1358,
+          "height": 1313
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/index.html",
+        "interactions": []
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": false,
+    "deviceType": "desktop",
+    "projectName": "PokerLab 德州扑克训练平台",
+    "visualEditorEnabled": false
+  }
+}

@@ -1,0 +1,90 @@
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Flame } from 'lucide-react';
+import { Button } from '@/shared/components/ui/button';
+import { useProgressStore } from '@/features/progress/store';
+
+// 首胜庆祝动画 — 纯 CSS，不引入 framer-motion
+export default function CelebrationStep() {
+  const { t } = useTranslation();
+  const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
+  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+  const [recorded, setRecorded] = useState(false);
+
+  // 进入庆祝页时启动 Day 1 Streak（recordTrainingDay 在 P0-2 会扩展为完整 Streak 机制）
+  useEffect(() => {
+    if (!recorded) {
+      recordTrainingDay();
+      setRecorded(true);
+    }
+  }, [recorded, recordTrainingDay]);
+
+  const handleContinue = () => completeOnboardingStep(4);
+
+  return (
+    <div className="relative flex flex-col items-center justify-center min-h-full px-6 py-10 max-w-2xl mx-auto overflow-hidden">
+      {/* 背景光晕（pulse 动画） */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[var(--brass)]/20 blur-3xl animate-pulse pointer-events-none"
+        aria-hidden
+      />
+
+      {/* 撒花粒子（CSS keyframe 动画） */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+        {Array.from({ length: 12 }).map((_, i) => (
+          <span
+            key={i}
+            className="absolute text-2xl"
+            style={{
+              left: `${(i * 8 + 5) % 100}%`,
+              top: '-10%',
+              animation: `onboarding-fall ${2 + (i % 3) * 0.4}s linear ${i * 0.15}s infinite`,
+            }}
+          >
+            {['🎉', '✨', '⭐', '🎊'][i % 4]}
+          </span>
+        ))}
+      </div>
+
+      <style>{`
+        @keyframes onboarding-fall {
+          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+          10% { opacity: 1; }
+          100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        @keyframes onboarding-pop {
+          0% { transform: scale(0.5); opacity: 0; }
+          60% { transform: scale(1.15); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
+
+      {/* 主体内容 */}
+      <div
+        className="relative z-10 flex flex-col items-center text-center"
+        style={{ animation: 'onboarding-pop 0.6s ease-out' }}
+      >
+        <div className="text-6xl mb-4 animate-bounce">🏆</div>
+
+        <h2 className="font-display text-3xl md:text-4xl text-[var(--ivory)] mb-3">
+          {t('onboarding.celebration.title')}
+        </h2>
+        <p className="text-[var(--ivory-muted)] mb-6 max-w-md">
+          {t('onboarding.celebration.subtitle')}
+        </p>
+
+        {/* Day 1 Streak 徽章 */}
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--clay)]/15 border border-[var(--clay)]/40 mb-8">
+          <Flame size={18} className="text-[var(--clay)] animate-pulse" />
+          <span className="text-sm text-[var(--ivory)] font-medium">
+            {t('onboarding.celebration.streakStarted')}
+          </span>
+        </div>
+
+        <Button onClick={handleContinue} size="lg" className="min-w-40">
+          {t('onboarding.celebration.continue')}
+        </Button>
+      </div>
+    </div>
+  );
+}

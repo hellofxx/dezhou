@@ -1,0 +1,1056 @@
+{
+  "app": {
+    "name": "德州扑克训练平台",
+    "version": "0.1.0"
+  },
+  "nav": {
+    "overview": "概览",
+    "training": "训练",
+    "study": "研习",
+    "tools": "工具区",
+    "data": "数据",
+    "settingsGroup": "设置",
+    "academy": "策略学院",
+    "rangeTrainer": "手牌范围训练",
+    "potOdds": "赔率计算器",
+    "gtoSimulator": "GTO 模拟器",
+    "handHistory": "牌局复盘",
+    "progress": "进度统计",
+    "settings": "设置",
+    "dailyChallenge": "每日挑战",
+    "leaderboard": "排行榜",
+    "basics": "基础入门",
+    "puzzle": "扑克谜题"
+  },
+  "rangeTrainer": {
+    "title": "手牌范围训练",
+    "learn": "学习模式",
+    "quiz": "测验模式",
+    "startQuiz": "开始训练",
+    "correct": "正确",
+    "wrong": "错误",
+    "timeRemaining": "剩余时间"
+  },
+  "potOdds": {
+    "title": "底池赔率计算器",
+    "potSize": "底池大小",
+    "betSize": "下注金额",
+    "outs": "Outs 数量",
+    "profitable": "跟注有利可图",
+    "notProfitable": "不建议跟注"
+  },
+  "gto": {
+    "title": "GTO 模拟器",
+    "startSession": "开始训练",
+    "optimal": "最优决策",
+    "evLoss": "EV 损失"
+  },
+  "progress": {
+    "title": "进度统计",
+    "totalSessions": "总训练次数",
+    "accuracy": "正确率",
+    "streak": "连续天数",
+    "achievements": "成就",
+    "welcome": "德州扑克训练平台",
+    "welcomeBack": "已完成 {{count}} 次训练，继续加油！",
+    "firstTraining": "开始你的第一次训练吧！",
+    "totalTraining": "总训练",
+    "weekSessions": "本周训练",
+    "recentSessions": "最近训练",
+    "viewAll": "查看全部",
+    "noRecords": "暂无训练记录",
+    "firstVisitWelcome": "欢迎来到德州扑克训练平台！建议从基础入门开始你的学习之旅。",
+    "startLearning": "开始学习",
+    "replay": {
+      "title": "回放你的进步",
+      "subtitle": "看看你提升了多少",
+      "firstAttempt": "首次",
+      "lastAttempt": "最近",
+      "improvement": "+{score} 提升",
+      "noData": "完成更多课程后将显示你的进步轨迹"
+    }
+  },
+  "dashboard": {
+    "title": "训练仪表盘",
+    "quickStart": {
+      "title": "3 分钟快速训练",
+      "subtitle": "每天 5 题，保持牌感",
+      "range": "范围练习",
+      "odds": "赔率速算",
+      "mixed": "混合训练",
+      "completedToday": "今日已完成"
+    },
+    "puzzleDesc": "谜题冲刺 / 每日挑战 / 主题专攻，趣味训练决策",
+    "feltArena": {
+      "todaySession": "今日牌局 · Day {{day}}",
+      "welcome": "欢迎回到牌桌",
+      "motto": "知其道者 · 不惑于局",
+      "totalHands": "训练总手",
+      "totalHandsWeek": "+{{count}} 本周",
+      "accuracy": "综合正确率",
+      "accuracyLevel": "中级水平",
+      "todayChallenge": "今日挑战",
+      "ready": "今天的练习已为你准备好。",
+      "todayProgress": "今日"
+    },
+    "streakRail": {
+      "consecutiveDays": "连续天数",
+      "freezeCard": "冻结卡",
+      "todayAccuracy": "今日正确率",
+      "weekDays": {
+        "mon": "一",
+        "tue": "二",
+        "wed": "三",
+        "thu": "四",
+        "fri": "五",
+        "sat": "六",
+        "sun": "日"
+      },
+      "rest": "休",
+      "today": "今天"
+    },
+    "quickDrill": {
+      "title": "3 分钟快速训练",
+      "subtitle": "根据你的弱项智能推荐 · Range / Odds / Mixed",
+      "completed": "✓ 今日已完成",
+      "range": "范围",
+      "odds": "赔率",
+      "mixed": "混合"
+    },
+    "training": {
+      "todayQuestion": "今日训练 · 第 {{current}} 题 / 共 {{total}}",
+      "difficulty": "难度",
+      "yourDecision": "你的决策",
+      "nextQuestion": "下一题",
+      "nextTopic": "下一题：{{topic}}",
+      "srs": "间隔复习",
+      "srsDescription": "基于艾宾浩斯曲线，{{count}} 题待今日复习",
+      "startReview": "开始复习 · {{count}} 题",
+      "todayProgress": "今日进度",
+      "pending": "待复习",
+      "mastered": "已掌握",
+      "dueRate": "到期率"
+    },
+    "trainingGrounds": {
+      "title": "训练场",
+      "subtitle": "六大核心模块",
+      "rangeDesc": "各位置开牌范围记忆与测试",
+      "oddsDesc": "赔率、期望值与补牌速算",
+      "gtoDesc": "真实场景下的最优决策训练",
+      "academyDesc": "零基础到职业思维系统化课程",
+      "puzzleDesc": "每日谜题、Rush 闯关与主题训练",
+      "reviewDesc": "导入牌谱，逐街深度分析"
+    },
+    "dataPlan": {
+      "accuracyTrend": "正确率趋势",
+      "week": "周",
+      "month": "月",
+      "year": "年",
+      "todayRecommend": "今日推荐",
+      "recommendCount": "{{count}} 项",
+      "recommendDescription": "根据你的弱项与 SRS 智能生成",
+      "viewFullPlan": "查看全部计划",
+      "tagWeakness": "弱项",
+      "tagSrs": "SRS",
+      "tagCourse": "课程"
+    }
+  },
+  "elo": {
+    "unit": "分",
+    "rankBadge": {
+      "aria": "当前段位 {{rank}}，分数 {{score}}，点击查看五维能力雷达图"
+    },
+    "radar": {
+      "title": "五维能力雷达图",
+      "subtitle": "基于 ELO 评分（0-3000），累计答题 {{games}} 次",
+      "empty": "暂无 ELO 数据，完成一次训练后即可生成能力分析",
+      "scoreLabel": "ELO 分数"
+    }
+  },
+  "rankUp": {
+    "title": "段位升级！",
+    "subtitle": "你的能力达到了新的高度",
+    "continue": "继续训练"
+  },
+  "quickDrill": {
+    "title": "5 分钟速训",
+    "subtitle": "从全局题库精选题目，针对弱点快速强化",
+    "quickTitle": "3 分钟快速训练",
+    "quickSubtitle": "每天 {{count}} 题，保持牌感 — {{mode}}",
+    "back": "返回学院",
+    "backAcademy": "返回策略学院",
+    "backHome": "返回首页",
+    "again": "再来一轮",
+    "selectDifficulty": "选择难度",
+    "adaptiveDifficulty": "自适应难度",
+    "weakAreasHint": "将优先从你的薄弱领域抽取题目",
+    "modeHint": "当前模式：{{mode}}，已完成今日训练将自动计入连续天数",
+    "questionCount": "本次速训",
+    "questions": "道题目",
+    "start": "开始速训",
+    "noQuestions": "暂无可用题目",
+    "difficulty": {
+      "beginner": "基础",
+      "intermediate": "进阶",
+      "advanced": "高级"
+    },
+    "mode": {
+      "range": "范围练习",
+      "odds": "赔率速算",
+      "mixed": "混合训练"
+    },
+    "result": {
+      "title": "训练完成",
+      "accuracy": "正确率",
+      "time": "平均用时",
+      "xp": "XP 获得",
+      "allCorrectBonus": "全对 +20 XP 奖励",
+      "streakRecorded": "已计入连续训练 ✓",
+      "reviewIncluded": "本次包含 {{count}} 道复习题"
+    },
+    "reviewQueueHint": "今日有 {{count}} 道待复习题，将自动混合 30% 进入本次训练",
+    "newRecord": "🎉 快速训练新纪录！",
+    "freezeReward": "🎁 连续 7 天快速训练奖励 1 张冻结卡！",
+    "streak": {
+      "current": "快速训练连续 {{count}} 天",
+      "rewarded": "已奖励 1 张冻结卡",
+      "broken": "快速训练连续中断，已重置"
+    }
+  },
+  "dailyChallenge": {
+    "title": "今日挑战",
+    "rangeChallenge": "完成 {{count}} 题手牌范围训练，正确率 > {{accuracy}}%",
+    "potOddsChallenge": "完成 {{count}} 题赔率计算训练，正确率 > {{accuracy}}%",
+    "gtoChallenge": "完成 {{count}} 题 GTO 模拟训练，正确率 > {{accuracy}}%",
+    "completed": "已完成",
+    "notCompleted": "未完成",
+    "consecutiveDays": "连续完成天数",
+    "startChallenge": "开始挑战",
+    "reward": "奖励"
+  },
+  "leaderboard": {
+    "title": "排行榜",
+    "totalScore": "总分",
+    "accuracy": "正确率",
+    "sessions": "训练量",
+    "rank": "排名",
+    "name": "玩家",
+    "score": "分数",
+    "you": "你"
+  },
+  "common": {
+    "fold": "弃牌",
+    "call": "跟注",
+    "raise": "加注",
+    "allIn": "全下",
+    "start": "开始",
+    "pause": "暂停",
+    "reset": "重置",
+    "back": "返回",
+    "next": "下一步",
+    "comingSoon": "即将推出",
+    "loading": "加载中...",
+    "confirm": "确认",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "retry": "再来一次",
+    "backHome": "返回首页"
+  },
+  "academy": {
+    "title": "策略学院",
+    "subtitle": "从零基础到职业思维，系统化学习德州扑克策略",
+    "basics": "德扑基础入门",
+    "basicsDesc": "游戏规则、牌型、位置、术语快速入门",
+    "startHere": "从这里开始",
+    "startLearning": "开始学习",
+    "completed": "已完成",
+    "clickToReview": "点击重新查看",
+    "conceptGraph": "知识图谱",
+    "conceptGraphDesc": "可视化课程知识依赖关系，了解学习路径",
+    "enter": "进入",
+    "lessons": "课时",
+    "level": "等级",
+    "locked": "未解锁",
+    "unlocked": "已解锁",
+    "quizResult": "测验结果",
+    "correctRate": "正确率",
+    "totalQuestions": "总题数",
+    "correct": "正确",
+    "wrong": "错误",
+    "avgTime": "平均用时",
+    "pathBanner": {
+      "title": "本土低级别盈利路径",
+      "subtitle": "{{modules}} 模块 {{lessons}} 课 · 预计 {{hours}} 小时 · 当前进度 {{progress}}%",
+      "continue": "继续学习"
+    },
+    "currentlyLearning": "正在学习",
+    "recommendedCourses": "推荐课程",
+    "knowledgeGraph": "知识图谱",
+    "opponentProfile": "对手画像",
+    "dailyDrill": "每日 Drill",
+    "legend": {
+      "learned": "已掌握",
+      "learning": "学习中",
+      "locked": "未解锁"
+    },
+    "lessons_new": {
+      "l3-3bet-postflop": "3-Bet 底池的翻后策略",
+      "l3-3bet-postflop-desc": "SPR 更低、范围更窄、每个决策更关键",
+      "l5-tools": "扑克分析工具入门",
+      "l5-tools-desc": "善用工具加速学习，但不要被工具绑架",
+      "l5-online-vs-live": "线上与线下扑克差异",
+      "l5-online-vs-live-desc": "适应不同环境，成为全能型牌手",
+      "l7-hu": "单挑策略基础",
+      "l7-hu-desc": "位置价值更大、范围更宽、决策更频繁"
+    }
+  },
+  "opponent": {
+    "title": "对手形象",
+    "profiles": "对手画像",
+    "tight": "紧手型",
+    "loose": "松手型",
+    "aggressive": "激进型",
+    "passive": "被动型",
+    "tag": "TAG（紧凶）",
+    "lag": "LAG（松凶）",
+    "nit": "NIT（极紧）",
+    "callingStation": "跟注站",
+    "vpip": "VPIP",
+    "pfr": "PFR",
+    "af": "激进度",
+    "readOpponent": "阅读对手",
+    "adjustStrategy": "调整策略"
+  },
+  "localTrack": {
+    "title": "本土低级别盈利路径",
+    "subtitle": "针对国内常见 Limp 局 / Straddle / 深筹 / 跟注站的实战策略",
+    "targetAudience": "活跃在国内低级别局的玩家",
+    "duration": "8-10 小时",
+    "module1": "模块 1：Limp 局应对",
+    "module2": "模块 2：Ante / Straddle",
+    "module3": "模块 3：深筹码调整",
+    "module4": "模块 4：玩家类型剥削",
+    "module5": "模块 5：GTO 与剥削平衡",
+    "module6": "模块 6：情绪管理",
+    "limpIntro": "Limp 局的特点与挑战",
+    "limpIsolate": "隔离加注策略",
+    "limpMultiway": "多人 Limp 底池的翻后应对",
+    "straddle": "Straddle 局策略",
+    "ante": "Ante 结构的翻前调整",
+    "deepImpliedOdds": "深筹码的隐含赔率",
+    "deepSuitedConnectors": "同花连牌的深筹策略",
+    "exploitCallingStation": "剥削跟注站",
+    "exploitManiac": "应对 Maniac（疯狂玩家）",
+    "exploitNit": "剥削 Nit（超紧玩家）",
+    "exploitLag": "应对 LAG（松凶玩家）",
+    "gtoVsExploit": "GTO 与剥削：抉择框架",
+    "whenToDeviate": "何时偏离 GTO",
+    "tiltRecognition": "Tilt 识别与应对",
+    "stopLoss": "止损纪律",
+    "sessionManagement": "Session 管理与长期盈利"
+  },
+  "opponentDrill": {
+    "title": "对手画像训练",
+    "subtitle": "根据统计数据判断对手类型并选择应对策略",
+    "scenario": "场景",
+    "stats": "统计数据",
+    "sampleSize": "样本手数",
+    "recentActions": "近期行为",
+    "questionType": "这位对手属于哪种类型？",
+    "questionStrategy": "面对这位对手，最佳应对策略是？",
+    "correct": "回答正确",
+    "wrong": "回答错误",
+    "explanation": "解析",
+    "nextQuestion": "下一题",
+    "finish": "完成训练",
+    "result": "训练结果",
+    "accuracy": "正确率"
+  },
+  "dailyPlan": {
+    "title": "每日训练计划",
+    "todayPlan": "今日推荐",
+    "dismiss": "跳过",
+    "startTask": "开始任务",
+    "completed": "已完成",
+    "streak": "连续天数"
+  },
+  "spacedRepetition": {
+    "title": "🔄 今日待复习",
+    "todayReview": "今日待复习",
+    "items": "个知识点",
+    "startReview": "开始复习",
+    "allDone": "已完成",
+    "allDoneMessage": "✅ 今日复习已完成，继续保持节奏！",
+    "emptyToday": "今天没有待复习的内容，完成训练后会自动加入复习队列",
+    "progressLabel": "今日进度",
+    "lastReview": "上次复习 {{days}} 天前",
+    "moreItems": "还有 {{count}} 项待复习",
+    "totalItems": "总知识点",
+    "review": "复习",
+    "nextReview": "下次复习",
+    "mastered": "已掌握",
+    "learning": "学习中"
+  },
+  "review": {
+    "title": "今日复习",
+    "subtitle": "按类别混合复习，巩固长期记忆",
+    "defaultFront": "请回忆该知识点的关键内容，然后点击\"显示答案\"自评。",
+    "answerLabel": "答案",
+    "showAnswer": "显示答案",
+    "remembered": "记得",
+    "forgot": "不记得",
+    "minimalHint": "请回忆该知识点的关键内容，自评是否记得。",
+    "next": "下一题",
+    "finish": "完成复习",
+    "empty": {
+      "title": "今日复习已完成 ✓",
+      "subtitle": "今天没有待复习的内容，下次训练后再来吧！"
+    },
+    "complete": {
+      "title": "今日复习已完成 ✓",
+      "subtitle": "保持节奏，记忆会更牢固",
+      "total": "总题数",
+      "correct": "答对",
+      "accuracy": "正确率",
+      "duration": "用时 {{sec}} 秒"
+    }
+  },
+  "adaptive": {
+    "title": "难度自适应",
+    "currentLevel": "当前难度",
+    "easy": "简单",
+    "medium": "中等",
+    "hard": "困难",
+    "adjusting": "正在调整难度...",
+    "levelUp": "难度提升！",
+    "levelDown": "难度降低"
+  },
+  "toast": {
+    "trainingComplete": "训练完成！",
+    "importSuccess": "导入成功",
+    "importError": "导入失败",
+    "settingsSaved": "设置已保存",
+    "reviewComplete": "复习完成！",
+    "achievementUnlocked": "成就解锁！"
+  },
+  "shortcuts": {
+    "title": "键盘快捷键",
+    "fold": "弃牌",
+    "call": "跟注",
+    "raise": "加注",
+    "confirm": "确认 / 下一题",
+    "exit": "退出训练",
+    "toggle": "显示/隐藏快捷键"
+  },
+  "gameVariant": {
+    "title": "游戏变体",
+    "standard": "标准德州",
+    "shortDeck": "短牌德州 (6+)",
+    "headsUp": "单挑德州",
+    "switchHint": "切换变体后，训练模块的数据和规则将自动调整"
+  },
+  "mentor": {
+    "settings": {
+      "title": "教练风格",
+      "hint": "选择你的专属教练，反馈文案将随教练风格变化",
+      "voiceToneLabel": "语气",
+      "selected": "已选中"
+    },
+    "profiles": {
+      "strict-math": {
+        "name": "严谨数学派",
+        "description": "GTO 导向，注重 EV 计算",
+        "voiceTone": "冷静、客观、数据驱动"
+      },
+      "old-school": {
+        "name": "老派牌手",
+        "description": "经验导向，强调实战读牌",
+        "voiceTone": "直接、犀利、有时粗鲁"
+      },
+      "encouraging": {
+        "name": "鼓励型教练",
+        "description": "正向激励，注重心理建设",
+        "voiceTone": "温暖、鼓励、建设性"
+      }
+    }
+  },
+  "shortDeck": {
+    "ruleChanges": "规则变化",
+    "deckInfo": "36张牌（6-A），移除2-5",
+    "straightBeatsTrips": "顺子 > 三条",
+    "flushBeatsFullHouse": "同花 > 葫芦"
+  },
+  "tilt": {
+    "title": "要不要休息一下？",
+    "message": "连续答错可能是疲劳的信号。短暂休息能帮你保持长期进步。",
+    "continue": "继续训练",
+    "rest": "休息一下"
+  },
+  "sessionLimit": {
+    "title": "今日已达题量上限",
+    "message": "你今天已经答了 {{answered}} / {{limit}} 题。建议休息一下，明天再继续 — 长期进步比短期冲刺更重要。",
+    "backHome": "返回 Dashboard",
+    "settingLabel": "每日题量上限",
+    "settingHint": "达到上限后将禁止继续训练，0 = 无限",
+    "unlimited": "无限"
+  },
+  "downswing": {
+    "title": "检测到下风期",
+    "message": "最近 3 天正确率持续下降，这可能是疲劳或心态波动的信号。建议短暂休息或复习情绪管理课程。",
+    "viewLesson": "查看应对指南"
+  },
+  "mood": {
+    "title": "今日情绪",
+    "good": "好",
+    "neutral": "一般",
+    "bad": "差",
+    "todayAccuracy": "今日正确率",
+    "noData": "暂无数据",
+    "correlationGoodHigh": "状态不错，正确率也高 — 保持节奏！",
+    "correlationBadLow": "状态差且正确率偏低，建议休息一下。",
+    "correlationBadHigh": "虽然状态不佳但正确率尚可，注意疲劳累积。",
+    "correlationNeutral": "记录持续累积后可发现情绪与正确率的关联。"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "欢迎",
+      "placement": "定位测试",
+      "drill": "首次训练",
+      "celebration": "首胜庆祝",
+      "goal": "目标设定"
+    },
+    "welcome": {
+      "title": "欢迎来到德州扑克训练平台",
+      "subtitle": "让我们用几分钟时间为你定制专属学习路径",
+      "beginnerTitle": "我是新手",
+      "beginnerDesc": "刚接触德州扑克，希望从基础规则与牌型开始系统学习",
+      "beginnerCta": "从定位测试开始",
+      "experiencedTitle": "我有基础",
+      "experiencedDesc": "已掌握基本规则，希望跳过定位直接体验训练流程",
+      "experiencedCta": "直接进入训练",
+      "skip": "跳过引导"
+    },
+    "placement": {
+      "questionOf": "第 {{current}} / {{total}} 题",
+      "explanation": "解析",
+      "next": "下一题",
+      "finish": "完成测试"
+    },
+    "drill": {
+      "title": "首次微训练",
+      "questionOf": "第 {{current}} / {{total}} 题",
+      "next": "下一题",
+      "finish": "完成训练",
+      "rescueHint": "别灰心，再来一道简单题练练手"
+    },
+    "celebration": {
+      "title": "恭喜完成首次训练！",
+      "subtitle": "你已经迈出成为优秀玩家的第一步，继续保持！",
+      "streakStarted": "Day 1 Streak 已启动",
+      "continue": "继续设定目标"
+    },
+    "goal": {
+      "title": "设定每日训练目标",
+      "subtitle": "选择一个可持续的每日训练时长，养成习惯比强度更重要",
+      "minutes": "分钟",
+      "hint": "随时可以在设置中调整目标。建议新手从 10 分钟开始。",
+      "confirm": "确认目标"
+    }
+  },
+  "streak": {
+    "freeze": {
+      "label": "冻结卡",
+      "used": "今日已使用冻结卡",
+      "awarded": "获得 {{count}} 张冻结卡",
+      "empty": "冻结卡不足"
+    },
+    "celebration": {
+      "hiddenTitle": "Streak 里程碑庆典：{{days}} 天",
+      "hiddenDesc": "你已达成连续训练 {{days}} 天的里程碑",
+      "bronzeTitle": "铜徽章达成！",
+      "bronzeSubtitle": "3 天连续训练，习惯正在养成",
+      "flameTitle": "金色火焰！",
+      "flameSubtitle": "7 天连续训练，你已经进入状态",
+      "trophyTitle": "奖杯到手！",
+      "trophySubtitle": "30 天连续训练，你已是认真玩家",
+      "diamondTitle": "钻石徽章！",
+      "diamondSubtitle": "100 天连续训练，少数人的领域",
+      "legendTitle": "传奇达成！",
+      "legendSubtitle": "365 天连续训练，你已是传奇",
+      "congrats": "恭喜！你已连续训练 {{days}} 天！",
+      "freezeReward": "获得 {{count}} 张冻结卡",
+      "share": "分享给好友",
+      "sharing": "生成中...",
+      "continue": "继续训练"
+    },
+    "earnBack": {
+      "windowHint": "Earn Back 窗口期",
+      "restored": "Streak 已恢复！",
+      "expired": "Earn Back 窗口已过期，Streak 已重置"
+    },
+    "endingSoon": "你的 Streak 即将熄灭，快来训练保住它！",
+    "fragment": {
+      "title": "冻结卡碎片",
+      "progress": "{current}/5",
+      "earned": "获得 1 个碎片！",
+      "synthesized": "碎片合成了一张冻结卡！",
+      "dailyLimit": "今日碎片已达上限"
+    }
+  },
+  "handHistory": {
+    "deviation": {
+      "title": "GTO 偏差分析",
+      "decisions": "决策数",
+      "optimal": "最优率",
+      "avgEvLoss": "平均 EV 损失",
+      "worstDecision": "最差决策",
+      "loading": "分析中...",
+      "noData": "暂无偏差数据"
+    }
+  },
+  "feedback": {
+    "grade": {
+      "best": "最优决策！",
+      "correct": "正确决策",
+      "inaccuracy": "不够精确",
+      "wrong": "决策错误",
+      "blunder": "严重错误",
+      "optimal": "[deprecated] 最优决策！",
+      "acceptable": "[deprecated] 可接受决策",
+      "error": "[deprecated] 决策错误"
+    },
+    "message": {
+      "best": "最优决策！🌟",
+      "correct": "正确！这个决策是合理的",
+      "inaccuracy": "不太精确，还有更好的选择",
+      "wrong": "这个决策损失了 {{evLoss}} BB",
+      "blunder": "严重错误！损失了 {{evLoss}} BB",
+      "optimal": "[deprecated] 最优决策！",
+      "acceptable": "[deprecated] 不错，但还有更好的选择",
+      "error": "[deprecated] 这个决策损失了 {{evLoss}} BB"
+    },
+    "evLossLabel": "EV 损失",
+    "correctAction": "最优动作",
+    "goReview": "去复习 →"
+  },
+  "drills": {
+    "common": {
+      "complete": "训练完成！",
+      "accuracyLabel": "正确率",
+      "timeLabel": "用时",
+      "correctLabel": "正确题数",
+      "finish": "完成训练",
+      "exit": "退出",
+      "progress": "第 {{current}} / {{total}} 题",
+      "runningAccuracy": "当前正确率 {{correct}}/{{answered}}",
+      "correctFeedback": "回答正确！",
+      "wrongFeedback": "回答错误",
+      "correctAnswerPrefix": "正确答案：{{answer}}",
+      "viewResult": "查看结果",
+      "next": "下一题"
+    },
+    "handRanking": {
+      "title": "牌力排名闪电战",
+      "subtitle": "快速识别德州扑克 9 种牌型，并比较两手牌的大小",
+      "comparePrompt": "以下两手牌，哪手更大？",
+      "identifyPrompt": "请判断以下 5 张牌组成的牌型：",
+      "simpleComparePrompt": "以下两组起手牌，哪组更强？",
+      "options": {
+        "handA": "左手牌",
+        "handB": "右手牌",
+        "tie": "平手",
+        "labelA": "牌组 A",
+        "labelB": "牌组 B",
+        "royalFlush": "皇家同花顺",
+        "straightFlush": "同花顺",
+        "fourOfAKind": "四条",
+        "fullHouse": "葫芦",
+        "flush": "同花",
+        "straight": "顺子",
+        "threeOfAKind": "三条",
+        "twoPair": "两对",
+        "onePair": "一对",
+        "highCard": "高牌"
+      },
+      "questions": {
+        "q1": {
+          "explanation": "右手牌是 AKQJT 同花顺（皇家同花顺），是德州扑克中最强的牌型，胜过普通的 AKQJT 顺子。"
+        },
+        "q2": {
+          "explanation": "右手牌是 AAKKK 葫芦（三条 K + 一对 A），葫芦胜过三条 9。"
+        },
+        "q3": {
+          "explanation": "左手牌是同花（5 张红桃），右手牌是顺子。同花 > 顺子。"
+        },
+        "q4": {
+          "explanation": "AKQJT 全部黑桃，是皇家同花顺——德州扑克最强牌型。"
+        },
+        "q5": {
+          "explanation": "98765 全部红桃，是同花顺（不是皇家，因为不是 AKQJT）。"
+        },
+        "q6": {
+          "explanation": "KKK99 是三条 K + 一对 9，组成葫芦。注意不要与两对或三条混淆。"
+        },
+        "q7": {
+          "explanation": "T9876 是 5 张连续牌，组成顺子（注意并非全部同花）。"
+        },
+        "q8": {
+          "explanation": "AAAQ2 是三条 A（三个相同点子 + 两张散牌）。"
+        },
+        "q9": {
+          "explanation": "AA 是最强的起手牌，远强于 22。口袋对越大越强。"
+        },
+        "q10": {
+          "explanation": "AKs（同花 AK）是强起手牌，远胜 72o（不同花 72）这种最弱的起手牌之一。"
+        }
+      }
+    },
+    "position": {
+      "title": "位置认知训练",
+      "subtitle": "在 6-max 牌桌上识别各位置，理解位置优势",
+      "questions": {
+        "q1": {
+          "prompt": "翻牌前最后行动的最佳位置是哪个？（庄家位）",
+          "explanation": "BTN（Button，庄家位）是翻前最后行动的位置，能获取最多信息后再做决策。"
+        },
+        "q2": {
+          "prompt": "翻牌前最早行动的位置是哪个？",
+          "explanation": "UTG（Under The Gun）是翻前第一个行动的位置，信息最少，应只玩强牌。"
+        },
+        "q3": {
+          "prompt": "哪个位置在翻前和翻后都最后行动，被称为「最佳位置」？",
+          "explanation": "BTN 在翻前和翻后都是最后行动，是全桌最有利的位置。"
+        },
+        "q4": {
+          "prompt": "在 6-max 中，庄家左手第一个位置（负责下小盲注）是？",
+          "explanation": "SB（Small Blind，小盲注）位于 BTN 左侧，翻前已强制下注 0.5BB，翻后处于不利位置。"
+        },
+        "q5": {
+          "prompt": "负责下大盲注的位置是？",
+          "explanation": "BB（Big Blind，大盲注）位于 SB 左侧，翻前已强制下注 1BB，是翻前最后一个行动的盲注位。"
+        },
+        "q6": {
+          "prompt": "翻前 UTG 加注后，最后一个能跟注或 3bet 的盲注位置是？",
+          "explanation": "BB 是翻前最后一个行动的位置（盲注位），能关闭行动，获得「关掉行动」的位置优势。"
+        },
+        "q7": {
+          "prompt": "想要最多偷盲机会时，应该从哪个位置加注？",
+          "explanation": "BTN 是偷盲最佳位置，因为只有 SB / BB 两位玩家在后面，偷盲成功率高。"
+        },
+        "q8": {
+          "prompt": "6-max 中 UTG 之后的下一个位置是？",
+          "explanation": "MP（Middle Position）位于 UTG 之后，比 UTG 稍有位置优势，但仍需谨慎选择起手牌。"
+        }
+      }
+    },
+    "outs": {
+      "title": "Outs 速算训练",
+      "subtitle": "识别听牌并快速计算 Outs 数量，掌握二四法则",
+      "boardLabel": "公共牌",
+      "heroLabel": "你的底牌",
+      "rulePrompt": "请计算你目前的 Outs 数量",
+      "options": {
+        "count2": "2 outs",
+        "count3": "3 outs",
+        "count4": "4 outs",
+        "count6": "6 outs",
+        "count8": "8 outs",
+        "count9": "9 outs",
+        "count12": "12 outs",
+        "count15": "15 outs",
+        "equity8": "约 8%",
+        "equity16": "约 16%",
+        "equity32": "约 32%",
+        "equity36": "约 36%"
+      },
+      "questions": {
+        "q1": {
+          "prompt": "你持有 AK 同花，翻牌出现 2 张同花，Outs 是多少？",
+          "explanation": "同花听牌：13 张同花 - 4 张已出现 = 9 outs。"
+        },
+        "q2": {
+          "prompt": "你持有 89 同花，翻牌有 2 张同花，Outs 是多少？",
+          "explanation": "同花听牌共 9 outs（13-4=9），是最常见的强听牌。"
+        },
+        "q3": {
+          "prompt": "你持有 89，牌面 7TJ，你的 OESD（两端顺子听牌）有多少 Outs？",
+          "explanation": "OESD 两端顺子听牌：6 或 Q 完成顺子，共 8 outs。"
+        },
+        "q4": {
+          "prompt": "你持有 56，牌面 479，你的 OESD 有多少 Outs？",
+          "explanation": "OESD：3 或 8 完成顺子，共 8 outs。"
+        },
+        "q5": {
+          "prompt": "你持有 79，牌面 56K，你的 Gutshot（卡顺）有多少 Outs？",
+          "explanation": "Gutshot 卡顺听牌：仅 8 完成顺子，共 4 outs。"
+        },
+        "q6": {
+          "prompt": "你持有 TJ，牌面 792，你的 Gutshot 有多少 Outs？",
+          "explanation": "Gutshot 卡顺：仅 8 完成顺子，共 4 outs。"
+        },
+        "q7": {
+          "prompt": "8 Outs 在 turn→river 的胜率约为多少？（二四法则）",
+          "explanation": "二四法则：8 outs × 2 ≈ 16% 胜率（turn→river 单街）。"
+        },
+        "q8": {
+          "prompt": "你持有 AK 高牌，牌面无 A 无 K，命中顶对的 Outs 是？",
+          "explanation": "AK 高牌听顶对：3 张 A + 3 张 K = 6 outs。"
+        }
+      }
+    },
+    "potOdds": {
+      "title": "底池赔率直觉",
+      "subtitle": "图形化训练底池赔率计算，掌握跟注决策",
+      "potLabel": "底池",
+      "betLabel": "下注",
+      "callLabel": "跟注",
+      "equityLabel": "胜率",
+      "positiveEv": "+EV 跟注",
+      "ratioHint": "底池 {{pot}} : 跟注 {{call}}",
+      "options": {
+        "potOdds20": "20%",
+        "potOdds25": "25%",
+        "potOdds33": "33%",
+        "potOdds50": "50%",
+        "call": "跟注",
+        "fold": "弃牌"
+      },
+      "questions": {
+        "q1": {
+          "prompt": "底池 100，对手下注 50，你需要跟注 50。底池赔率是多少？",
+          "explanation": "跟注 50 赢取最终底池 200（100+50+50），赔率 = 50/200 = 25%。"
+        },
+        "q2": {
+          "prompt": "底池 80，对手下注 40，你需要跟注 40。底池赔率是多少？",
+          "explanation": "跟注 40 赢取 160（80+40+40），赔率 = 40/160 = 25%。"
+        },
+        "q3": {
+          "prompt": "底池 100，对手下注 50，你跟注 50。你的胜率 36%，应该？",
+          "explanation": "底池赔率 25%，胜率 36% > 25%，跟注 +EV，应跟注。"
+        },
+        "q4": {
+          "prompt": "底池 100，对手下注 50，你跟注 50。你的胜率 16%，应该？",
+          "explanation": "底池赔率 25%，胜率 16% < 25%，跟注 -EV，应弃牌。"
+        },
+        "q5": {
+          "prompt": "底池 120，对手下注 60，你跟注 60。底池赔率是多少？",
+          "explanation": "跟注 60 赢取 240（120+60+60），赔率 = 60/240 = 25%。"
+        },
+        "q6": {
+          "prompt": "你的胜率 40%，底池赔率 25%，应该？",
+          "explanation": "胜率 40% 远高于底池赔率 25%，明显 +EV 跟注。"
+        }
+      }
+    }
+  },
+  "puzzle": {
+    "rushTitle": "Puzzle Rush",
+    "rushDesc": "3-5 分钟限时冲刺，3 条命，连对奖励额外时间，答错扣命，冲击你的最高分。",
+    "dailyTitle": "每日谜题",
+    "dailyDesc": "每天 8 道精选题目，全球玩家同一天挑战，完成后查看全球排名与正确率分布。",
+    "themeDrillTitle": "Theme Drill",
+    "themeDrillDesc": "针对特定场景的集中训练，10 大主题覆盖翻前到河牌，弱项定向突破。",
+    "themes": {
+      "preflop-rfi": "翻前 RFI",
+      "big-blind-defense": "大盲防守",
+      "three-bet": "3Bet 策略",
+      "c-bet": "C-Bet 持续下注",
+      "flush-draw": "同花听牌",
+      "river-value": "河牌价值下注",
+      "bluff": "诈唬时机",
+      "short-stack": "短筹码策略",
+      "icm": "ICM 基础",
+      "multiway": "多人底池"
+    },
+    "categories": {
+      "preflop": "翻前",
+      "postflop": "翻后",
+      "river": "河牌",
+      "tournament": "锦标赛"
+    },
+    "home": {
+      "title": "扑克谜题",
+      "subtitle": "通过趣味谜题场景训练决策能力，覆盖翻前 RFI、大盲防守、3Bet、C-Bet、同花听牌、河牌价值、诈唬、短筹码、ICM、多人底池 10 大主题。",
+      "rushTitle": "限时冲刺",
+      "rushDesc": "3 或 5 分钟限时，3 条命，连对 5 题奖励 +10 秒。难度递增。",
+      "dailyTitle": "每日谜题",
+      "dailyDesc": "每天 8 道固定题目，混合主题，完成后显示详细解析。",
+      "themeTitle": "主题训练",
+      "themeDesc": "针对单一主题完成 {{count}} 题深度训练，巩固专项技能。",
+      "themesTitle": "按主题训练",
+      "questionsUnit": "题",
+      "themesUnit": "个主题",
+      "difficulty": {
+        "beginner": "初级",
+        "intermediate": "中级",
+        "advanced": "高级"
+      },
+      "minutes": "分钟",
+      "startDaily": "开始今日谜题",
+      "reviewToday": "查看今日题目",
+      "todayDone": "今日已完成 ✓",
+      "startTheme": "选择主题",
+      "bestRecord": "最高分 {{score}}",
+      "bestAccuracy": "最佳正确率 {{percent}}%",
+      "bestAccuracyShort": "最佳 {{percent}}%"
+    },
+    "card": {
+      "progress": "第 {{current}} / {{total}} 题",
+      "handLabel": "手牌",
+      "positionLabel": "位置",
+      "boardLabel": "公共牌",
+      "potLabel": "底池",
+      "betLabel": "下注",
+      "stackLabel": "筹码",
+      "fullExplanation": "完整解析",
+      "correctAnswerPrefix": "正确答案：{{answer}}",
+      "nextQuestion": "下一题",
+      "viewResult": "查看结果"
+    },
+    "rush": {
+      "title": "{{minutes}} 分钟限时冲刺",
+      "noQuestions": "暂无可用题目",
+      "correct": "答对",
+      "wrong": "答错",
+      "streak": "连对"
+    },
+    "daily": {
+      "title": "每日谜题",
+      "noQuestions": "今日暂无题目",
+      "completionCount": "今日已有 {{count}} 人完成",
+      "alreadyCompleted": "今日已完成 ✓",
+      "fixedHint": "今日题目固定，所有人看到的题目相同"
+    },
+    "theme": {
+      "unknownTheme": "未知主题",
+      "noQuestions": "该主题暂无题目"
+    },
+    "result": {
+      "title": "训练完成",
+      "rushTitle": "冲刺结束",
+      "newRecord": "🎉 新纪录！",
+      "score": "分数",
+      "correctRate": "正确率",
+      "correctCount": "答对题数",
+      "duration": "用时",
+      "avgTime": "平均用时",
+      "minutes": "{{min}}分{{sec}}秒",
+      "wrongList": "答错 {{count}} 题",
+      "yourAnswer": "你的选择",
+      "correctAnswer": "正确答案",
+      "retry": "再试一次",
+      "backHome": "返回首页"
+    },
+    "common": {
+      "exit": "退出",
+      "correct": "答对",
+      "wrong": "答错",
+      "backHome": "返回首页"
+    }
+  },
+  "achievements": {
+    "title": "成就",
+    "wall": "成就墙",
+    "locked": "未解锁",
+    "unlocked": "已解锁",
+    "progress": "{{current}}/{{total}} 已解锁",
+    "newUnlock": "新成就解锁！",
+    "categories": {
+      "learning": "学习",
+      "streak": "连续",
+      "skill": "技能",
+      "milestone": "里程碑"
+    },
+    "items": {
+      "firstTraining": {
+        "title": "初出茅庐",
+        "description": "完成首次训练"
+      },
+      "completeLevel1": {
+        "title": "入门弟子",
+        "description": "完成 Level 1 全部课程"
+      },
+      "completeLevel2": {
+        "title": "进阶学徒",
+        "description": "完成 Level 2 全部课程"
+      },
+      "completeLevel3": {
+        "title": "策略新星",
+        "description": "完成 Level 3 全部课程"
+      },
+      "certificationAny": {
+        "title": "持证上岗",
+        "description": "完成任意 Level 认证"
+      },
+      "certificationAll": {
+        "title": "全栈大师",
+        "description": "完成所有 Level 认证"
+      },
+      "streak3": {
+        "title": "三日坚持",
+        "description": "连续训练 3 天"
+      },
+      "streak7": {
+        "title": "一周之约",
+        "description": "连续训练 7 天"
+      },
+      "streak30": {
+        "title": "月度勇士",
+        "description": "连续训练 30 天"
+      },
+      "streak100": {
+        "title": "百日传奇",
+        "description": "连续训练 100 天"
+      },
+      "quickDrill7": {
+        "title": "闪电连续",
+        "description": "快速训练连续 7 天"
+      },
+      "perfect10": {
+        "title": "小试牛刀",
+        "description": "单次训练 100% 正确率（≥10题）"
+      },
+      "perfect20": {
+        "title": "完美无瑕",
+        "description": "单次训练 100% 正确率（≥20题）"
+      },
+      "eloBeginner": {
+        "title": "入门棋手",
+        "description": "ELO 达到 500+"
+      },
+      "eloIntermediate": {
+        "title": "进阶棋手",
+        "description": "ELO 达到 800+"
+      },
+      "eloAdvanced": {
+        "title": "中级棋手",
+        "description": "ELO 达到 1200+"
+      },
+      "eloExpert": {
+        "title": "专家棋手",
+        "description": "ELO 达到 2000+"
+      },
+      "firstPuzzle": {
+        "title": "谜题新手",
+        "description": "完成首次谜题"
+      },
+      "firstDailyPuzzle": {
+        "title": "每日挑战",
+        "description": "完成首次每日谜题"
+      },
+      "completeTrackAny": {
+        "title": "路径探索者",
+        "description": "完成任意学习路径"
+      },
+      "completeTrackLocal": {
+        "title": "本土化先锋",
+        "description": "完成本土化路径"
+      },
+      "allAchievements": {
+        "title": "成就猎手",
+        "description": "解锁所有成就"
+      }
+    }
+  }
+}

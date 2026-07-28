@@ -1,0 +1,111 @@
+/* ==========================================================================
+   Poker Training Platform — Card-Room Design Tokens
+   Brand prefix: poker
+   Palette: Felt green · Walnut rail · Ivory cards · Brass accent
+
+   §11.1 Single source of truth: src/styles/globals.css :root
+   This file mirrors globals.css values for the apply-html-head-contract
+   script and standalone demo pages. Do NOT diverge — update globals.css
+   first, then sync here.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ---- Felt (page background & surfaces) — aligned with globals.css ---- */
+  --poker-felt-deep: #0e1a14;
+  --poker-felt: #15301f;
+  --poker-felt-raised: #1d4029;
+  --poker-felt-light: #245035;
+  --poker-felt-center: #1f5233;
+  --poker-felt-glow: rgba(232,201,126,0.07);
+
+  /* ---- Walnut (sidebar, rails, panels) ---- */
+  --poker-walnut: #241a10;
+  --poker-walnut-raised: #3a2a18;
+  --poker-walnut-border: #4a3825;
+  --poker-walnut-light: #4d3a24;
+
+  /* ---- Ivory (text & "card" faces) ---- */
+  --poker-ivory: #f3ebd9;
+  --poker-ivory-dim: #cabf9f;
+  --poker-ivory-muted: #8a8068;
+
+  /* ---- Brass (the single accent — hairline, active states, CTA glow) ---- */
+  --poker-brass: #c9a25e;
+  --poker-brass-bright: #e8c97e;
+  --poker-brass-deep: #a07d3d;
+  --poker-brass-dark: #8a6b30;
+  --poker-brass-glow: rgba(232,201,126,0.12);
+
+  /* ---- Semantic feedback (§2.2 low-saturation card-room, NOT neon) ---- */
+  --poker-success: #7fb883;
+  --poker-success-bg: rgba(127,184,131,0.12);
+  --poker-danger: #c25a4c;
+  --poker-danger-bg: rgba(194,90,76,0.12);
+  --poker-warning: #c9a25e;
+  --poker-warning-bg: rgba(201,162,94,0.14);
+  --poker-info: #8ba59b;
+  --poker-info-bg: rgba(139,165,155,0.12);
+
+  /* ---- Frost (freeze chip, non-CTA) ---- */
+  --poker-frost: #a8c4cf;
+  --poker-frost-deep: #5e8796;
+  --poker-frost-bg: rgba(168,196,207,0.12);
+
+  /* ---- Suits (clubs/spades are ivory for dark-felt visibility) ---- */
+  --poker-heart: #d04545;
+  --poker-diamond: #d04545;
+  --poker-club: #f3ebd9;
+  --poker-spade: #f3ebd9;
+
+  /* ---- Functional decorative ---- */
+  --poker-gold: #d4a84b;
+  --poker-clay: #a83838;
+  --poker-sage: #6b8e7a;
+  --poker-indigo: #4a5a7a;
+  --poker-terra: #965a3e;
+  --poker-moss: #6a8a5a;
+  --poker-leather: #c08a5a;
+
+  /* ---- Semantic token aliases (for apply-html-head-contract) ---- */
+  --poker-background: var(--poker-felt-deep);
+  --poker-foreground: var(--poker-ivory);
+  --poker-card: var(--poker-felt);
+  --poker-card-foreground: var(--poker-ivory);
+  --poker-popover: var(--poker-felt);
+  --poker-popover-foreground: var(--poker-ivory);
+  --poker-primary: var(--poker-brass);
+  --poker-primary-foreground: #1a1612;
+  --poker-muted: var(--poker-walnut-raised);
+  --poker-muted-foreground: var(--poker-ivory-muted);
+  --poker-border: var(--poker-walnut-border);
+  --poker-input: var(--poker-walnut-border);
+  --poker-ring: var(--poker-brass);
+  --poker-destructive: var(--poker-danger);
+  --poker-destructive-foreground: var(--poker-ivory);
+  --poker-accent: var(--poker-walnut-raised);
+  --poker-accent-foreground: var(--poker-ivory);
+
+  /* ---- Radius scale (§4.1 four-tier) ---- */
+  --poker-radius-sm: 4px;
+  --poker-radius-md: 8px;
+  --poker-radius-lg: 12px;
+  --poker-radius-xl: 16px;
+
+  /* ---- Shadows (§4.2) ---- */
+  --poker-shadow-sm: 0 1px 3px rgba(0,0,0,0.35);
+  --poker-shadow: 0 4px 14px rgba(0,0,0,0.45);
+  --poker-shadow-lg: 0 12px 40px rgba(0,0,0,0.55);
+  --poker-shadow-brass: 0 4px 20px rgba(201,162,94,0.15);
+
+  /* ---- Typography ---- */
+  --poker-font-display: 'Fraunces', 'Source Han Serif SC', 'Songti SC', serif;
+  --poker-font-sans: 'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif;
+  --poker-font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+}
+
+/* Dark-mode html class for the head-contract script */
+html.dark {
+  color-scheme: dark;
+}
