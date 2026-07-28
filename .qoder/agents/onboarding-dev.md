@@ -1,6 +1,5 @@
 ---
 name: onboarding-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 新手引导流程开发代理，负责 src/features/onboarding/ 内的所有变更。当涉及引导步骤、用户偏好采集、OnboardingGate、新手教程、多步表单或首次使用体验时使用。
 skills: []
 mcpServers: []

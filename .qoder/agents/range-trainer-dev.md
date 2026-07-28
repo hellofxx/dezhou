@@ -1,6 +1,5 @@
 ---
 name: range-trainer-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 范围训练模块开发代理，负责 src/features/range-trainer/ 内的所有变更。当涉及范围解析、13×13 范围网格、位置训练、范围测验、翻前范围或范围可视化组件时使用。
 skills: []
 mcpServers: []

@@ -1,6 +1,5 @@
 ---
 name: platform-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 平台级全栈开发代理，负责跨模块集成、脚手架、布局、路由、shared 共享层和全局基础设施。当涉及项目配置、路由变更、共享组件、事件总线、persist 升级协调或跨模块变更时使用。
 skills: []
 mcpServers: []

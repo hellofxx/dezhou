@@ -1,6 +1,5 @@
 ---
 name: puzzle-trainer-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 谜题训练模块开发代理，负责 src/features/puzzle-trainer/ 内的所有变更。当涉及谜题三模式、快速训练、冻结卡、谜题生成逻辑、QuickDrill 或连续答题机制时使用。
 skills: []
 mcpServers: []

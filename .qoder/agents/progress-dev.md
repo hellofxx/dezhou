@@ -1,6 +1,5 @@
 ---
 name: progress-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 进度追踪与统计模块开发代理，负责 src/features/progress/ 内的所有变更。当涉及 Dashboard、统计图表、Streak/ELO/SRS/Emotion/Mentor 五大系统、跨模块状态中枢、训练日历或数据可视化时使用。
 skills: []
 mcpServers: []

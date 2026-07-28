@@ -1,6 +1,5 @@
 ---
 name: strategy-academy-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 策略学院模块开发代理，负责 src/features/strategy-academy/ 内的所有变更。当涉及课程内容、Drill 练习、QuickDrill、三段式互动教学、学习进度、8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）或教学场景演示时使用。
 skills: []
 mcpServers: []

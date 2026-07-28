@@ -1,6 +1,5 @@
 ---
 name: gto-simulator-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: GTO 模拟器模块开发代理，负责 src/features/gto-simulator/ 内的所有变更。当涉及 GTO 策略数据、场景引擎、EV 损失计算、Web Worker、策略矩阵、翻前/翻后范围或 Spot 训练时使用。
 skills: []
 mcpServers: []

@@ -1,6 +1,5 @@
 ---
 name: hand-history-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 牌局复盘模块开发代理，负责 src/features/hand-history/ 内的所有变更。当涉及牌局导入解析、手牌回放、复盘分析、IndexedDB 存储、PokerStars/GGPoker 格式或决策标注时使用。
 skills: []
 mcpServers: []

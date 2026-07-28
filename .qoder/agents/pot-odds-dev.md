@@ -1,6 +1,5 @@
 ---
 name: pot-odds-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: 赔率计算器模块开发代理，负责 src/features/pot-odds/ 内的所有变更。当涉及底池赔率计算、赔率测验、赔率可视化、outs 计算或胜率估算时使用。
 skills: []
 mcpServers: []

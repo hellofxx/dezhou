@@ -1,10 +1,10 @@
 ---
 name: ui-ux-dev
-model: "[Qwen3.8-Max-Preview](qmodel_preview)"
 description: UI/UX 设计守护代理，负责视觉一致性、设计语言落地、组件质感、响应式布局和可访问性。当涉及全局样式、主题色、共享组件视觉、布局调整、设计审查、CSS 变量、暗色主题、移动端适配或 WCAG 无障碍时使用。
-skills: []
-mcpServers: []
 additionalPrompt: ""
+skills:
+  - frontend-design
+  - theme-factory
 ---
 
 # PokerLab UI/UX Designer
