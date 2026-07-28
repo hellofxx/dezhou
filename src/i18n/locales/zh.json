@@ -650,6 +650,17 @@
       "viewResult": "查看结果",
       "next": "下一题"
     },
+    "opponent": {
+      "title": "对手画像识别",
+      "subtitle": "根据统计数据判断对手类型，并选择最优剥削策略",
+      "typePrompt": "第 1 问：这是哪种对手类型？",
+      "strategyPrompt": "第 2 问：最佳应对策略是？",
+      "sampleSize": "样本 {{count}} 手",
+      "recentActions": "最近行为",
+      "typeLabel": "类型判断",
+      "strategyLabel": "策略选择",
+      "scoringNote": "两问全对才计为答对"
+    },
     "handRanking": {
       "title": "牌力排名闪电战",
       "subtitle": "快速识别德州扑克 9 种牌型，并比较两手牌的大小",

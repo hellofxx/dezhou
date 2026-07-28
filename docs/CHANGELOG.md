@@ -5,6 +5,28 @@
 
 ---
 
+## v1.9.2 — 2026-07-28（课程引用修复与对手画像 Drill 落地）
+
+> 修复学习路径与概念图中的悬空课程 ID 引用，并完成 P2-1.8 对手画像 Drill 的组件落地（此前仅有题库无课程/组件，本土路径无法 100% 完成）。
+
+### 悬空引用修复
+
+- **learningTracks.ts**（track-cash-game / track-tournament / track-gto）：`l2-3bet`→`l2-3bet-basics`、`l2-4bet`→`l2-4bet-strategy`、`l3-check-raise`→`l3-checkraise`、`l7-deep-stack`→`l7-deepstack`、`l4-range-reading`→`l4-range-thinking`、`l6-push-fold`→`l6-pushfold`、`l4-opponent-exploit`→`l4-opponent-reading`；不存在的 `l4-mental-game` 映射为 `l5-tilt`
+- **conceptNodes.ts**：同系列 ID 同步修正；不存在的 `l5-discipline` 映射为 `mental-tilt-recognition`
+- 影响：修复前这些课程永远无法计入路径完成度，「继续学习」与概念卡片会导航到不存在的课程页
+
+### 对手画像 Drill（P2-1.8 落地）
+
+- 新增课程 `opp-drill`（`data/localLessons/oppDrill.ts`，并入 LOCAL_LESSONS，本土路径 16→17 课），修复 localTrack 中的悬空引用
+- 新增 `OpponentDrill` 组件（+ `OpponentStatsPanel` / `OpponentDrillResult` 子组件）：消费既有 `OPPONENT_DRILL_QUESTIONS` 8 题，两阶段作答（先判对手类型再选剥削策略），两问全对才计答对
+- `DrillComponentName` 联合类型新增 `'OpponentDrill'`，`DrillLessonRouter` 注册懒加载分支；i18n 新增 `drills.opponent.*`（zh/en 同步）
+
+### 数据迁移
+
+- 无 persist version 变更（旧悬空 ID 从未可完成，completedLessons 中不存在历史脏数据，无需迁移）
+
+---
+
 ## v1.9.1 — 2026-07-28（质量门禁机械化）
 
 > 补齐验证层：引入最小测试框架 + 首批冒烟测试 + typecheck 机械触发点，结束“零测试、零机械执行”状态。

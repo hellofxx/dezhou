@@ -650,6 +650,17 @@
       "viewResult": "View Result",
       "next": "Next"
     },
+    "opponent": {
+      "title": "Opponent Profiling",
+      "subtitle": "Read the stats, identify the player type, then pick the best exploit",
+      "typePrompt": "Q1: What player type is this?",
+      "strategyPrompt": "Q2: What is the best adjustment?",
+      "sampleSize": "{{count}} hands sample",
+      "recentActions": "Recent behavior",
+      "typeLabel": "Type read",
+      "strategyLabel": "Strategy",
+      "scoringNote": "Both answers must be correct to score"
+    },
     "handRanking": {
       "title": "Hand Ranking Blitz",
       "subtitle": "Quickly identify the 9 hand rankings and compare two hands",

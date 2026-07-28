@@ -12,6 +12,7 @@ const PositionDrill = lazy(() => import('./PositionDrill'));
 const OutsDrill = lazy(() => import('./OutsDrill'));
 const PotOddsDrill = lazy(() => import('./PotOddsDrill'));
 const ChoiceDrillRenderer = lazy(() => import('./ChoiceDrillRenderer'));
+const OpponentDrill = lazy(() => import('./OpponentDrill'));
 
 interface DrillLessonRouterProps extends DrillProps {
   lesson: Lesson;
@@ -32,6 +33,8 @@ export function DrillLessonRouter({ lesson, onComplete, onExit }: DrillLessonRou
         return <PotOddsDrill {...props} />;
       case 'ChoiceDrill':
         return <ChoiceDrillRenderer {...props} lesson={lesson} />;
+      case 'OpponentDrill':
+        return <OpponentDrill {...props} />;
       default:
         return (
           <div className="text-center py-8 text-[var(--ivory-muted)]">

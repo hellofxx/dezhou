@@ -3,17 +3,18 @@ import { LIMP_LESSONS } from './limp';
 import { STRADDLE_LESSONS } from './straddle';
 import { DEEP_STACK_LESSONS } from './deepStack';
 import { EXPLOIT_LESSONS } from './exploit';
+import { OPP_DRILL_LESSONS } from './oppDrill';
 import { GTO_BALANCE_LESSONS } from './gtoBalance';
 import { MENTAL_LESSONS } from './mental';
 
 /**
- * P2-1.2 ~ P2-1.7：本土低级别盈利路径的 16 课内容
+ * P2-1.2 ~ P2-1.8：本土低级别盈利路径的 17 课内容
  *
  * 共 6 个模块：
  * 1. Limp 局应对（3 课）
  * 2. Ante / Straddle（2 课）
  * 3. 深筹码调整（2 课）
- * 4. 玩家类型剥削（4 课）
+ * 4. 玩家类型剥削（4 课）+ 对手画像 Drill（1 课，模块 4.5）
  * 5. GTO 与剥削平衡（2 课）
  * 6. 情绪管理（3 课）
  */
@@ -22,6 +23,7 @@ export const LOCAL_LESSONS: Lesson[] = [
   ...STRADDLE_LESSONS,
   ...DEEP_STACK_LESSONS,
   ...EXPLOIT_LESSONS,
+  ...OPP_DRILL_LESSONS,
   ...GTO_BALANCE_LESSONS,
   ...MENTAL_LESSONS,
 ];

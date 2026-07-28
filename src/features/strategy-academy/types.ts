@@ -171,7 +171,8 @@ export type DrillComponentName =
   | 'PositionDrill'
   | 'OutsDrill'
   | 'PotOddsDrill'
-  | 'ChoiceDrill';
+  | 'ChoiceDrill'
+  | 'OpponentDrill';
 
 // Drill 选择题题目（用于 ChoiceDrill 类型课程）
 export interface DrillQuestion {

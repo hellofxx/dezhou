@@ -4,7 +4,7 @@ import type { LearningTrack } from '../types';
  * P2-1.1: 本土低级别盈利路径
  *
  * 针对国内常见 Limp 局 / Straddle / 深筹 / 跟注站 等本土场景的实战策略学习路径。
- * 共 6 个模块、16 节课，预计 8-10 小时。
+ * 共 6 个模块（含模块 4.5 对手画像 Drill）、17 节课，预计 8-10 小时。
  */
 export const LOCAL_TRACK: LearningTrack = {
   id: 'track-local-cn',
