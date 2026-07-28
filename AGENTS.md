@@ -206,8 +206,9 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ## 质量门禁
 
 - **类型检查**：`pnpm typecheck`（即 `node node_modules/typescript/bin/tsc --noEmit`）必须 exit code 0
+- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行
 - **构建验证**：`pnpm build` 成功产出 `dist/`
-- 每次代码变更后必须运行类型检查
+- 每次代码变更后必须运行类型检查与 `pnpm test`
 
 ## Agent 协作
 
