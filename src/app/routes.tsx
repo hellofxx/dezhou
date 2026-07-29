@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import AppLayout from '@/layouts/AppLayout';
 import BlankLayout from '@/layouts/BlankLayout';
 import { PageSkeleton } from '@/shared/components/LoadingState';
+import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
 
 // Lazy-loaded pages
 const Dashboard = lazy(() => import('@/features/progress/components/Dashboard'));
@@ -50,11 +51,11 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <LazyWrapper><Dashboard /></LazyWrapper> },
+      { index: true, element: <LazyWrapper><ErrorBoundary><Dashboard /></ErrorBoundary></LazyWrapper> },
       { path: 'range-trainer', element: <LazyWrapper><RangeTrainerHome /></LazyWrapper> },
       { path: 'range-trainer/result/:sessionId', element: <LazyWrapper><SessionResultPage /></LazyWrapper> },
       { path: 'pot-odds', element: <LazyWrapper><PotOddsPage /></LazyWrapper> },
-      { path: 'gto-simulator', element: <LazyWrapper><GTOSimulatorHome /></LazyWrapper> },
+      { path: 'gto-simulator', element: <LazyWrapper><ErrorBoundary><GTOSimulatorHome /></ErrorBoundary></LazyWrapper> },
       { path: 'gto-simulator/result/:sessionId', element: <LazyWrapper><GTOResultPage /></LazyWrapper> },
       { path: 'hand-history', element: <LazyWrapper><HandHistoryList /></LazyWrapper> },
       { path: 'hand-history/import', element: <LazyWrapper><HandImportPage /></LazyWrapper> },
@@ -64,7 +65,7 @@ export const router = createBrowserRouter([
       { path: 'daily-challenge', element: <LazyWrapper><DailyChallengePage /></LazyWrapper> },
       { path: 'leaderboard', element: <LazyWrapper><LeaderboardPage /></LazyWrapper> },
       { path: 'settings', element: <LazyWrapper><SettingsPage /></LazyWrapper> },
-      { path: 'academy', element: <LazyWrapper><AcademyHome /></LazyWrapper> },
+      { path: 'academy', element: <LazyWrapper><ErrorBoundary><AcademyHome /></ErrorBoundary></LazyWrapper> },
       { path: 'academy/basics', element: <LazyWrapper><BasicsIntro /></LazyWrapper> },
       { path: 'academy/concept-graph', element: <LazyWrapper><ConceptGraphView /></LazyWrapper> },
       { path: 'academy/tracks', element: <LazyWrapper><LearningTracksView /></LazyWrapper> },
