@@ -1,21 +1,23 @@
 // P0-3.3: HandRankingDrill — 牌力排名闪电战
 // 10 道题，最后 2 题简单题，复用 PokerCard 渲染牌面
 // 所有用户可见文案均通过 useTranslation 引用 i18n key
+// 答案位置偏差治理：选项经解析后用 orderResolvedOptions 按 id 种子洗牌（牌型名为文字选项）
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
 import { PokerCard } from '@/shared/components/Card';
 import { stringToCard } from '@/shared/utils/deck';
 import { cn } from '@/shared/utils/cn';
+import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { HAND_RANKING_QUESTIONS } from './handRankingQuestions';
 import type { DrillProps, DrillResult } from './types';
 
 const TOTAL = HAND_RANKING_QUESTIONS.length;
 
 export default function HandRankingDrill({ onComplete, onExit }: DrillProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -24,7 +26,17 @@ export default function HandRankingDrill({ onComplete, onExit }: DrillProps) {
   const startTimeRef = useRef<number>(Date.now());
   const overallStartRef = useRef<number>(Date.now());
 
-  const current = HAND_RANKING_QUESTIONS[currentIndex]!;
+  const raw = HAND_RANKING_QUESTIONS[currentIndex]!;
+  const language = i18n.language;
+  // 渲染前重排：选项文本（含 simple-compare 的内联 label）解析后按 id 种子洗牌，
+  // correctIndex 同步重映射。依赖 language：语言切换时重算（种子只依赖 id，顺序跨语言一致）。
+  const current = useMemo(() => {
+    void language;
+    const ordered = orderResolvedOptions(raw.id, raw.optionsKeys, raw.correctIndex, (key) =>
+      resolveOptionText(t, raw, key),
+    );
+    return { ...raw, optionsKeys: ordered.options, correctIndex: ordered.correctIndex };
+  }, [raw, t, language]);
 
   const handleSelect = useCallback(
     (idx: number) => {
@@ -183,7 +195,7 @@ export default function HandRankingDrill({ onComplete, onExit }: DrillProps) {
         )}
       >
         {current.optionsKeys.map((optKey, i) => {
-          const optionText = resolveOptionText(t, current, optKey, i);
+          const optionText = resolveOptionText(t, current, optKey);
           const isSelected = selectedIndex === i;
           const showCorrect = isAnswered && i === current.correctIndex;
           const showWrong = isAnswered && isSelected && i !== current.correctIndex;
@@ -234,7 +246,7 @@ export default function HandRankingDrill({ onComplete, onExit }: DrillProps) {
                 </span>
                 <span className="text-xs text-[var(--ivory-muted)] ml-2">
                   {t('drills.common.correctAnswerPrefix', {
-                    answer: resolveOptionText(t, current, current.optionsKeys[current.correctIndex]!, current.correctIndex),
+                    answer: resolveOptionText(t, current, current.optionsKeys[current.correctIndex]!),
                   })}
                 </span>
               </>
@@ -285,16 +297,15 @@ function SimpleLabel({ label }: { label: string }) {
 
 // ===== 工具：解析选项文本 =====
 // simple-compare 题型使用 labelA/labelB 内联数据；其它题型直接走 i18n。
+// 按 key 而非按位置匹配：选项重排后位置会变，key 是唯一稳定标识。
 function resolveOptionText(
   t: TFunction,
   q: typeof HAND_RANKING_QUESTIONS[number],
   optKey: string,
-  idx: number,
 ): string {
   if (q.type === 'simple-compare') {
-    if (idx === 0 && q.labelA) return q.labelA;
-    if (idx === 1 && q.labelB) return q.labelB;
-    if (idx === 2) return t('drills.handRanking.options.tie');
+    if (optKey === 'drills.handRanking.options.labelA' && q.labelA) return q.labelA;
+    if (optKey === 'drills.handRanking.options.labelB' && q.labelB) return q.labelB;
   }
   return t(optKey);
 }

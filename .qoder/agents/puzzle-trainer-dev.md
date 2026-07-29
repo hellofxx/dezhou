@@ -32,8 +32,9 @@ additionalPrompt: ""
 ## Authority
 **可决策范围**：
 - Puzzle 三模式（Rush / Daily / Theme Drill）的题目流、计时、命、连对奖励逻辑
-- 日期种子算法（Mulberry32）的实现与维护
-- 独立 store（`puzzle-trainer-store` v2）的 schema 演进、persist migrate 与 Best Record 持久化
+- 日期种子算法的模块内维护（dateSeed.ts；底层 seededRandom / shuffleBySeed / hashStringToSeed 已上移至 `shared/utils/seededShuffle.ts`，变更须通过 platform-dev）
+- 选项语义排序（utils/optionOrder.ts）的解析规则与题库出口接入
+- 独立 store（`puzzle-trainer-store`，persist version 以 store.ts 配置为准）的 schema 演进、persist migrate 与 Best Record 持久化
 - 题目数据（puzzleBank / rushQuestions / dailyPuzzles）的结构与分类
 - PuzzleHome / PuzzleRush / DailyPuzzle / ThemeDrill / PuzzleCard / PuzzleResult 的 UI 与交互
 
@@ -49,7 +50,8 @@ additionalPrompt: ""
   - **Daily Puzzle**（每日谜题）：基于日期种子（YYYYMMDD）从全题库抽取 8 题，所有人当天看到相同
   - **Theme Drill**（主题训练）：单主题 15 题专攻
 - Rush 分数公式：`correctCount × 100 + floor(timeRemaining/1000) × 10 + lives × 200`
-- 日期种子算法（Mulberry32）：`getDateSeed` / `seededRandom` / `pickBySeed` / `shuffleBySeed` / `getDailyCompletionCount` / `getDailyKey`
+- 日期种子算法：`getDateSeed` / `pickBySeed` / `getDailyCompletionCount` / `getDailyKey`（dateSeed.ts；seededRandom / shuffleBySeed / hashStringToSeed 已上移至 `shared/utils/seededShuffle.ts` 并由 dateSeed.ts re-export）
+- 选项语义排序（utils/optionOrder.ts）：`parseOptionSortKey` 解析动作类别与尺度（消极→激进、同类按 BB 升序），`sortOptionsCanonically` 在题库出口逐题应用，消除正确答案位置固定问题
 - 独立 zustand store（`puzzle-trainer-store`），与 progress store 解耦
 - 五级反馈复用（根据 EV 损失自动评级 best/correct/inaccuracy/wrong/blunder）
 - P1-4.1 快速训练 Best Record 持久化（quickDrillBest，综合分数 `accuracy * 100 + 时间奖励`）
@@ -63,10 +65,11 @@ additionalPrompt: ""
 - 当前无直接调用（puzzle-trainer 模块使用独立 store，未触发 progress store 的 quickDrillStreak / awardStreakFreeze / composeDailyMix；这些集成实际由 strategy-academy/QuickDrill 实现）
 
 ### trainingEvents（事件总线）
-- 当前未实现（puzzle-trainer 模块未调用 `trainingEvents.emit`，已知待补全）
+- 已实现（v2.0）：PuzzleRush / DailyPuzzle / ThemeDrill 三模式完成后均通过 `puzzleResultToTrainingRecord` 转换并 `trainingEvents.emit`（`record.module` 为 `'puzzle-trainer'`）
 
 ### shared/ 层依赖
 - `shared/types/decisionFeedback.ts`：`DecisionGrade` 类型与 `calculateGrade(evLoss)` 评级函数（五级反馈统一入口）
+- `shared/utils/seededShuffle.ts`：种子随机 / 洗牌 / 字符串哈希基础设施（由 dateSeed.ts re-export，变更归 platform-dev）
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
@@ -74,7 +77,7 @@ additionalPrompt: ""
 模块内：
 - src/features/puzzle-trainer/ — 模块根（types.ts 含 PuzzleTheme / PuzzleQuestion / Best Record 等类型；store.ts 独立 persist store，version 以该文件配置为准；index.ts）
 - src/features/puzzle-trainer/data/ — 静态题库（puzzleBank 按主题 / rushQuestions 按难度 / dailyPuzzles）
-- src/features/puzzle-trainer/utils/ — 日期种子算法（dateSeed.ts，Mulberry32）
+- src/features/puzzle-trainer/utils/ — 日期种子（dateSeed.ts，底层已上移 shared 并 re-export）+ 选项语义排序（optionOrder.ts）
 - src/features/puzzle-trainer/hooks/ — 题目流引擎（usePuzzleEngine.ts，统一管理三模式的计时 / 命 / 连对奖励）
 - src/features/puzzle-trainer/components/ — 三模式容器（Rush / Daily / ThemeDrill）+ 首页 / 题目卡 / 结果页
 
@@ -85,11 +88,12 @@ additionalPrompt: ""
 
 ## Workflows
 1. 添加新主题时：在 types.ts 的 `PuzzleTheme` 添加值 → puzzleBank.ts 添加题目 → PuzzleHome 主题卡片自动渲染
-2. 添加新 Rush 题目时：编辑 rushQuestions.ts（按 difficulty 1/2/3 分级）
-3. 调整 Daily 题数时：修改 DailyPuzzle.tsx 的 `questionCount` 默认值（8 题）
-4. 修改 Rush 分数公式时：编辑 usePuzzleEngine.ts 的计算逻辑 + PuzzleResult.tsx 展示
-5. 调整日期种子算法时：编辑 dateSeed.ts（保持 Mulberry32 一致性，避免 Daily 题目漂移）
-6. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate 函数（仅注入新字段默认值）
+2. 添加新题目时：选项书写顺序不限（出口自动语义排序），但选项文本必须能被 `parseOptionSortKey` 解析出类别（puzzleBank.optionOrder.test.ts 的全量可解析守卫会拦截新文本模式）
+3. 调整选项排序规则时：编辑 utils/optionOrder.ts（需同步更新排序测试与 TDD 5.9）
+4. 调整 Daily 题数时：修改 DailyPuzzle.tsx 的 `questionCount` 默认值（8 题）
+5. 修改 Rush 分数公式时：编辑 usePuzzleEngine.ts 的计算逻辑 + PuzzleResult.tsx 展示
+6. 调整日期种子算法时：编辑 dateSeed.ts（保持种子一致性，避免 Daily 题目漂移；底层洗牌函数变更需经 platform-dev）
+7. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate 函数（仅注入新字段默认值）
 
 ## Constraints
 继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
@@ -102,6 +106,8 @@ additionalPrompt: ""
 - `markDailyCompleted()` 必须幂等（同一 dateKey 重复调用不重复标记）
 - Rush 模式连对 5 题奖励 +10 秒，难度递增（每 5 题升一级）
 - 题目数据为静态 JSON（puzzleBank.ts / rushQuestions.ts / dailyPuzzles.ts），不引入运行时网络请求
+- **选项语义排序（答题选项排序治理，见 AGENTS.md 同名章节）**：题库出口 `getAllPuzzles()` / `getPuzzlesByTheme()` 必须逐题应用 `sortOptionsCanonically`（消极→激进、同类按尺度升序）；禁止按题库数据原序直接渲染选项；源题库静态数据不手改重排
+- **barrel 收紧**：`index.ts` 禁止导出原始 `PUZZLE_BANK` 常量（防绕过排序出口），消费方只能通过出口 getter 取题
 - **反馈闭环 relatedLessonId**（v1.8 新增）：`usePuzzleEngine` 必须调用 `inferPuzzleLessonId(theme)` 推导课程 ID，将 10 个主题映射到对应课程；`PuzzleAnswerRecord` 类型必须包含 `relatedLessonId?: string` 字段；`PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接
 - **主题映射覆盖**（v1.8 新增）：10 个主题（preflop-rfi / big-blind-defense / three-bet / c-bet / flush-draw / multiway / river-value / bluff / short-stack / icm）必须全部映射到有效的课程 ID
 - **五级反馈复用**（v1.8 新增）：复用 `DecisionFeedback` 与 `GRADE_DISPLAY_CONFIG`，根据 EV 损失自动评级；禁止自定义评级
@@ -111,11 +117,13 @@ additionalPrompt: ""
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
 - [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `puzzle.*`）
 - [ ] markDailyCompleted 幂等（同一 dateKey 重复调用不重复标记）
-- [ ] 日期种子算法一致（Mulberry32，所有用户当天看到相同 Daily 题目）
+- [ ] 日期种子算法一致（所有用户当天看到相同 Daily 题目与相同选项顺序）
+- [ ] 题库出口已应用语义排序（puzzleBank.optionOrder.test.ts 全部通过：全量可解析 / 尺度升序 / 分布守卫）
+- [ ] index.ts barrel 未导出原始 PUZZLE_BANK
 - [ ] 题目 ID 跨模块唯一（`puzzle:{theme}:{questionId}`）
 - [ ] submitQuickDrillResult 正确判定破纪录（score > previousBest.bestScore）
 - [ ] 五级反馈复用 calculateGrade（不自定义评级）
-- [ ] trainingEvents.emit 待补全（当前未实现，已知技术债）
+- [ ] 三模式（Rush / Daily / ThemeDrill）完成后均已 trainingEvents.emit（module: 'puzzle-trainer'）
 - [ ] PuzzleCard 在 wrong/blunder 级别显示"去复习"链接
 - [ ] inferPuzzleLessonId 覆盖全部 10 个主题
 - [ ] PuzzleAnswerRecord 包含 relatedLessonId 字段

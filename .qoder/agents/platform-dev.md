@@ -44,7 +44,7 @@ additionalPrompt: ""
 ### 不可越界事项
 - 不修改 feature 模块内部业务逻辑（如 range-trainer 的范围解析、gto-simulator 的求解逻辑等），需变更时通过对应 feature-dev 代理
 - 不直接调整 feature 模块内部的 store 字段（除 progress store 作为跨模块状态中枢外）
-- 不绕过 ui-ux-dev 修改全局设计语言（DESIGN_LANGUAGE v1.3 质量清单归 ui-ux-dev 守护）
+- 不绕过 ui-ux-dev 修改全局设计语言（质量清单以 poker-ui-demo/DESIGN_LANGUAGE.md 当前版本为准，归 ui-ux-dev 守护）
 - 不引入新依赖除非确有必要，且必须评估 bundle 体积影响
 
 ## Capabilities
@@ -87,12 +87,17 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 - **constants/**：跨模块常量与模板
 - **stores/trainingEvents.ts**：事件总线
 
+### 答题选项排序治理（见 AGENTS.md 同名章节与 TDD 5.9）
+- 共享基础设施 `shared/utils/seededShuffle.ts`（seededRandom / shuffleBySeed / hashStringToSeed / isNumericOptionSet / sortByNumericValue）由 platform-dev 守护，判定与排序规则以该文件实现为唯一事实源
+- 消费方：puzzle-trainer（utils/optionOrder.ts 及 dateSeed.ts re-export）/ strategy-academy（utils/quizShuffle.ts）/ pot-odds（utils/quizOrder.ts）；变更 seededShuffle.ts 必须评估三个消费模块的影响并通知对应 feature-dev 代理
+- 分流规则（动作语义排序 / 数值单调 / 文字种子洗牌 / 认证会话随机）属跨模块规范，规则变更需同步更新 AGENTS.md / PRD 5.26 / TDD 5.9 并走跨模块变更协作流程
+
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 - src/shared/types/ — 跨模块领域类型（关键：decisionFeedback.ts 五级反馈 + calculateGrade；elo.ts ELO 五维评分类型；poker.ts 核心领域类型）
 - src/shared/components/ — 跨模块业务组件（Card / Chip / EmptyState / LoadingState / ResultSummary 等）
 - src/shared/components/ui/ — shadcn 基础组件
-- src/shared/utils/ — 纯函数工具（关键：pokerMath.ts 扑克数学计算；elo.ts ELO 算法；deck.ts 牌堆操作）
+- src/shared/utils/ — 纯函数工具（关键：pokerMath.ts 扑克数学计算；elo.ts ELO 算法；deck.ts 牌堆操作；seededShuffle.ts 选项排序治理基础设施）
 - src/shared/constants/ — 跨模块常量（关键：mentorStyles.ts 导师文案模板 MENTOR_FEEDBACK_TEMPLATES）
 - src/shared/stores/ — 事件总线（trainingEvents.ts）
 - src/layouts/ — AppLayout / BlankLayout / MobileNav
@@ -109,16 +114,17 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 6. 新增跨模块系统时：在 progress store 添加状态字段 + 升级 persist version + 编写 migrate 函数
 
 ## Constraints
-继承 AGENTS.md 全局约束（包括模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
+继承 AGENTS.md 全局约束（包括模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，本文件不复制其内容。
 
 仅保留 platform-dev 特有约束：
 - shared/ 层仅存放被多模块使用的代码（≥2 模块引用准入门槛）
 - 新增路由必须使用 React.lazy + LazyWrapper 实现代码分割
 - i18n 翻译 key 使用 camelCase + 模块前缀
 - 所有新组件必须支持暗色主题
-- 移动端断点：< 768px 显示底部 Tab 导航，侧边栏隐藏；训练场模块网格强制 2 列；等高布局（grid-auto-rows:1fr + h-full）仅在桌面/平板生效，手机端单列必须取消等高（`height:auto` + `mt-auto:12px`）；streak-rail 放在 arena 下方（非页面底部）；媒体查询内覆盖 Tailwind md:/lg: 断点类时必须加 `!important`（参见 DESIGN_LANGUAGE §10.5 特异性规则）
-- progress store persist version 以 `src/features/progress/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本），升级时必须编写 migrate 函数保证老用户数据不丢失
+- 移动端断点 < 768px 显示底部 MobileNav、侧边栏隐藏（布局切换归平台层）；移动端像素级细节（训练场 2 列 / 等高取消 / streak-rail 位置 / `!important` 特异性等）以 `poker-ui-demo/DESIGN_LANGUAGE.md` §6.3（移动 <768px）与 §10.5（CSS 特异性规则）为唯一事实源，本文件不维护副本
+- progress store persist version 以 `src/features/progress/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）
 - 跨模块状态（Streak / ELO / SRS / Emotion / Mentor）统一由 progress store 管理，不分散到各 feature store
+- `shared/utils/seededShuffle.ts` 为答题选项排序治理的共享事实源（见 AGENTS.md《答题选项排序治理》）：变更须评估 puzzle-trainer / strategy-academy / pot-odds 三个消费模块影响并通知对应代理；分流规则变更需同步 AGENTS.md / PRD 5.26 / TDD 5.9
 
 ## Quality Checklist
 基础层交付前必过项：

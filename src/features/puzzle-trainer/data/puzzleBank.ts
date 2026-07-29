@@ -7,6 +7,7 @@
  *  - 所有解析使用中文，符合"中文优先"原则
  */
 import type { PuzzleQuestion, PuzzleTheme, PuzzleThemeCategory } from '../types';
+import { sortOptionsCanonically } from '../utils/optionOrder';
 
 /** 主题元数据：用于 PuzzleHome 展示 */
 export interface PuzzleThemeMeta {
@@ -3596,14 +3597,32 @@ export const PUZZLE_BANK: Record<PuzzleTheme, PuzzleQuestion[]> = {
   multiway: MULTIWAY,
 };
 
-/** 获取所有题目（扁平化） */
-export function getAllPuzzles(): PuzzleQuestion[] {
-  return Object.values(PUZZLE_BANK).flat();
+/**
+ * 将单题选项按语义固定顺序排列（纯函数，不修改原题）。
+ *
+ * 教学决策：选项按动作激进程度从消极到激进排列
+ * （Fold → Check → Call → Limp → Bet → Raise → 全下），与真实扑克客户端一致。
+ * 正确答案位置由动作语义自然决定，与题库书写顺序解耦（消除"总选第一个"作弊），
+ * 且顺序 100% 确定，跨日期、跨用户完全一致。
+ */
+function withCanonicalOptions(q: PuzzleQuestion): PuzzleQuestion {
+  return { ...q, options: sortOptionsCanonically(q.options) };
 }
 
-/** 获取指定主题题目 */
+/**
+ * 获取所有题目（扁平化）。
+ * 每题选项按语义固定排序（消极→激进），结果完全确定。
+ */
+export function getAllPuzzles(): PuzzleQuestion[] {
+  return Object.values(PUZZLE_BANK).flat().map(withCanonicalOptions);
+}
+
+/**
+ * 获取指定主题题目。
+ * 每题选项按语义固定排序（消极→激进），结果完全确定。
+ */
 export function getPuzzlesByTheme(theme: PuzzleTheme): PuzzleQuestion[] {
-  return PUZZLE_BANK[theme] ?? [];
+  return (PUZZLE_BANK[theme] ?? []).map(withCanonicalOptions);
 }
 
 /** 获取主题元数据 */

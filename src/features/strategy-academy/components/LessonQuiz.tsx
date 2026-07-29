@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { orderQuizQuestion } from '../utils/quizShuffle';
 import type { QuizQuestion } from '../types';
 
 interface LessonQuizProps {
@@ -10,13 +11,18 @@ interface LessonQuizProps {
 }
 
 export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
+  // 答案位置偏差治理：渲染前重排选项（数值升序 / id 稳定种子洗牌），源数据不变
+  const orderedQuestions = useMemo(
+    () => questions.map((q) => orderQuizQuestion(q)),
+    [questions],
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  const question = questions[currentIndex];
+  const question = orderedQuestions[currentIndex];
 
   if (!question) return null;
 
@@ -32,12 +38,12 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
   };
 
   const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
+    if (currentIndex < orderedQuestions.length - 1) {
       setCurrentIndex((i) => i + 1);
       setSelectedIndex(null);
       setShowExplanation(false);
     } else {
-      const score = Math.round((correctCount / questions.length) * 100);
+      const score = Math.round((correctCount / orderedQuestions.length) * 100);
       setFinished(true);
       onComplete(score);
     }
@@ -52,7 +58,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
   };
 
   if (finished) {
-    const score = Math.round((correctCount / questions.length) * 100);
+    const score = Math.round((correctCount / orderedQuestions.length) * 100);
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -64,7 +70,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
           {score >= 70 ? '测验通过！' : '继续加油！'}
         </h3>
         <p className="text-[var(--ivory-dim)] mb-1">
-          答对 {correctCount}/{questions.length} 题
+          答对 {correctCount}/{orderedQuestions.length} 题
         </p>
         <p className="font-numeric text-3xl text-[var(--brass-bright)] mb-6">{score}分</p>
         {score < 70 && (
@@ -84,7 +90,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
     <div className="space-y-6">
       {/* Progress dots */}
       <div className="flex items-center gap-1.5">
-        {questions.map((_, i) => (
+        {orderedQuestions.map((_, i) => (
           <div
             key={i}
             className={cn(
@@ -108,7 +114,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
           transition={{ duration: 0.2 }}
         >
           <p className="text-xs text-[var(--ivory-muted)] mb-2 font-numeric">
-            第 {currentIndex + 1} / {questions.length} 题
+            第 {currentIndex + 1} / {orderedQuestions.length} 题
           </p>
           <h3 className="font-display text-[17px] text-[var(--ivory)] mb-5 leading-snug">
             {question.question}
@@ -180,7 +186,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
                 onClick={handleNext}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
               >
-                {currentIndex < questions.length - 1 ? '下一题' : '查看结果'}
+                {currentIndex < orderedQuestions.length - 1 ? '下一题' : '查看结果'}
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

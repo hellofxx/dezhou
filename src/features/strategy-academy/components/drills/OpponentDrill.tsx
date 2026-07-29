@@ -2,13 +2,16 @@
 // 两阶段作答：第 1 问判断对手类型，第 2 问选择剥削策略；两问全对才计为答对
 // 判分逻辑：utils/opponentScoring.ts 的 scoreOpponentAnswer（本组件仅渲染与状态编排）
 // 题库：data/opponentProfiles.ts 的 OPPONENT_DRILL_QUESTIONS（8 题）
+// 答案位置偏差治理：第 2 问策略选项用 orderResolvedOptions 按 id 种子洗牌，
+// correctStrategyIndex 同步重映射（第 1 问按 profile id 判定，非位置型，不处理）
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { OPPONENT_DRILL_QUESTIONS, getOpponentProfile } from '../../data/opponentProfiles';
 import { scoreOpponentAnswer } from '../../utils/opponentScoring';
+import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { OpponentStatsPanel } from './OpponentStatsPanel';
 import { OpponentDrillResult } from './OpponentDrillResult';
 import type { DrillProps, DrillResult } from './types';
@@ -24,7 +27,18 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
   const [finished, setFinished] = useState(false);
   const overallStartRef = useRef<number>(Date.now());
 
-  const current = OPPONENT_DRILL_QUESTIONS[currentIndex]!;
+  const raw = OPPONENT_DRILL_QUESTIONS[currentIndex]!;
+  // 渲染前重排第 2 问策略选项（内联文本，getText 为恒等），重排后的题目对象
+  // 作为判分（scoreOpponentAnswer）与渲染的唯一事实源，判定链路自洽。
+  const current = useMemo(() => {
+    const ordered = orderResolvedOptions(
+      raw.id,
+      raw.strategyOptions,
+      raw.correctStrategyIndex,
+      (option) => option,
+    );
+    return { ...raw, strategyOptions: ordered.options, correctStrategyIndex: ordered.correctIndex };
+  }, [raw]);
   const isAnswered = selectedStrategy !== null;
   const { typeCorrect, strategyCorrect } = scoreOpponentAnswer(current, selectedType, selectedStrategy);
 

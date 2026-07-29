@@ -928,8 +928,8 @@ interface DailyRecommendation {
 
 1. **日期种子算法**（`utils/dateSeed.ts`）：
    - `getDateSeed(date)` — 将 `Date` 转为 YYYYMMDD 数字（例：2026-07-25 → 20260725）
-   - `seededRandom(seed)` — 基于 **Mulberry32** 算法的伪随机数生成器，同一种子始终产生相同序列
-   - `pickBySeed<T>(arr, count, seed)` / `shuffleBySeed<T>(arr, seed)` — 基于种子的 Fisher–Yates 洗牌
+   - `seededRandom(seed)`（Mulberry32）/ `shuffleBySeed(arr, seed)`（Fisher–Yates）/ `hashStringToSeed(str)`（FNV-1a）已上移至 `shared/utils/seededShuffle.ts`（供多模块复用），本文件 re-export 保持模块内 import 路径不变
+   - `pickBySeed<T>(arr, count, seed)` — 基于种子抽取 N 个不重复元素
    - `getDailyCompletionCount(date)` — 基于种子生成 100-999 之间整数（本地模拟完成人数）
    - `getDailyKey(date)` — 返回 YYYY-MM-DD 字符串，作为 `dailyCompleted` map 的 key
 
@@ -950,16 +950,18 @@ interface DailyRecommendation {
 
 7. **独立 Store**：独立 zustand store（不触碰 progress store 的 elo 字段），persist name: `puzzle-trainer-store`；任一模式完成时调用 `progressStore.recordTrainingDay()` 计入 Streak。
 
-8. **课程联动反馈**（v2.1 新增）：
+8. **选项语义排序**（`utils/optionOrder.ts`）：`parseOptionSortKey(text)` 从选项文本解析（动作类别, 尺度），类别优先级 Fold < Check < Call < Limp < Bet/C-bet < Raise/3bet/4bet/5bet < 全下类，同类按 BB 数值升序；`sortOptionsCanonically(options)` 稳定排序。题库出口 `getAllPuzzles()` / `getPuzzlesByTheme()` 逐题应用（源题库静态数据不重排），详见 5.9 选项排序治理系统。
+
+9. **课程联动反馈**（v2.1 新增）：
    - `usePuzzleEngine` 新增 `inferPuzzleLessonId(theme)` 工具函数，将 10 个主题映射到课程 ID（如 `preflop-rfi` → `l2-rfi-basics`）
    - `PuzzleAnswerRecord` 类型新增 `relatedLessonId?: string` 字段
    - `PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接，跳转对应课程
 
-9. **trainingEvents.emit 合规**（v2.0 新增）：
+10. **trainingEvents.emit 合规**（v2.0 新增）：
    - `PuzzleRush` / `DailyPuzzle` / `ThemeDrill` 三种模式完成后均调用 `trainingEvents.emit(record)`，progress store 自动收集训练记录
    - emit 的 `record.module` 为 `'puzzle-trainer'`
 
-10. **自适应难度接入**（v2.0 新增）：
+11. **自适应难度接入**（v2.0 新增）：
     - 三种模式（Rush / Daily / ThemeDrill）均调用 `progress.shouldDownshiftDifficulty('puzzle-trainer')` 检查是否需要降级
     - 连续答错 ≥3 次时显示降级提示 banner（i18n key: `puzzle.common.downshiftHint`）
 
@@ -1048,7 +1050,31 @@ interface DailyRecommendation {
 
 ### 5.9 跨模块系统设计
 
-> 本节汇总 Streak / ELO / SRS / Emotion / Mentor 五大跨模块系统，以及 v2.1 新增的反馈闭环 / 位置渐进解锁 / 自适应难度三大系统的技术设计。这些系统横切多个 feature 模块，状态统一收敛在 `progress` store，通过 persist 持久化。
+> 本节汇总 Streak / ELO / SRS / Emotion / Mentor 五大跨模块系统，以及 v2.1 新增的反馈闭环 / 位置渐进解锁 / 自适应难度三大系统、选项排序治理系统的技术设计。这些系统横切多个 feature 模块，状态统一收敛在 `progress` store，通过 persist 持久化。
+
+**选项排序治理系统**（2026-07 新增，产品规格见 PRD 5.26）
+
+消除题库静态数据"正确答案位置固定"的可作弊模式，选项顺序处理全部在出口/渲染前由纯函数完成，源题库数据零重排。
+
+共享基础设施 `shared/utils/seededShuffle.ts`（判定规则以该文件实现为事实源）：
+- `seededRandom`（Mulberry32）/ `shuffleBySeed`（Fisher–Yates，不修改原数组）/ `hashStringToSeed`（FNV-1a，uint32）
+- `isNumericOptionSet(texts)` 与 `sortByNumericValue(items, getText)` — 纯数值选项集判定与升序排列
+
+分流规则：动作类选项语义固定排序（消极→激进）；纯数值选项单调排列；文字陈述类按 `hash(题目id)` 种子洗牌（跨会话稳定）；认证考试用会话随机种子。
+
+各模块实现：
+
+| 模块 | 实现 | 接入点 |
+|---|---|---|
+| puzzle-trainer | `utils/optionOrder.ts` | 题库出口 getter（`withCanonicalOptions`），barrel 不再导出原始 `PUZZLE_BANK` |
+| strategy-academy | `utils/quizShuffle.ts`（`orderQuizQuestion` / `orderDrillOptions` / `orderResolvedOptions`） | LessonQuiz（id 稳定种子）/ LevelCertification（会话随机）/ ChoiceDrillRenderer / OutsDrill 等 4 个 i18n-key Drill（`t()` 解析后 useMemo 重排） |
+| pot-odds | `utils/quizOrder.ts`（`orderQuizOptions`） | `data/quizQuestions.ts` 模块顶层 map + `getEasyOddsQuestion` |
+
+设计要点：
+- i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）须在 `t()` 解析后重排；数值判定在模块内放宽为"文本含数字"（`isDigitBearingOptionSet`）以兼容 zh/en 文案；洗牌种子只依赖题目 id，双语顺序天然一致
+- Drill 数值题源数据本已升序，"一律升序"无治理效果，采用"数值单调 + 升/降序方向由 `hash(id)` 奇偶决定"（决策记录于 CHANGELOG 2026-07-28）；课后测验的数值题仍一律升序
+- 重排同步重映射 `correctIndex`，判分与 ELO/SRS/训练事件链路以重排后对象为唯一事实源
+- 各模块测试内置分布守卫（正确答案索引占比上限断言），防未来题库扩充时偏差回归
 
 **反馈闭环系统**（v2.1 新增）
 

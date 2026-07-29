@@ -1,20 +1,22 @@
 // P0-3.5: OutsDrill — Outs 速算
 // 8 道题，覆盖同花听牌 / OESD / Gutshot / 二四法则 / 高牌听牌
 // 图形化显示 hero 底牌 + 公共牌
+// 答案位置偏差治理：选项经 t() 解析后用 orderResolvedOptions 重排（数值题按 id 哈希定向单调排列）
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
 import { PokerCard } from '@/shared/components/Card';
 import { stringToCard } from '@/shared/utils/deck';
 import { cn } from '@/shared/utils/cn';
+import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { OUTS_QUESTIONS } from './outsQuestions';
 import type { DrillProps, DrillResult } from './types';
 
 const TOTAL = OUTS_QUESTIONS.length;
 
 export default function OutsDrill({ onComplete, onExit }: DrillProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -22,7 +24,17 @@ export default function OutsDrill({ onComplete, onExit }: DrillProps) {
   const [finished, setFinished] = useState(false);
   const overallStartRef = useRef<number>(Date.now());
 
-  const current = OUTS_QUESTIONS[currentIndex]!;
+  const raw = OUTS_QUESTIONS[currentIndex]!;
+  const language = i18n.language;
+  // 渲染前重排：t() 解析后按数值定向单调排列 / 种子洗牌，correctIndex 同步重映射。
+  // 依赖 language：语言切换时用新文本重算（种子只依赖题目 id，同题顺序跨语言一致）。
+  const current = useMemo(() => {
+    void language;
+    const ordered = orderResolvedOptions(raw.id, raw.optionsKeys, raw.correctIndex, (key) =>
+      t(key),
+    );
+    return { ...raw, optionsKeys: ordered.options, correctIndex: ordered.correctIndex };
+  }, [raw, t, language]);
 
   const handleSelect = useCallback(
     (idx: number) => {

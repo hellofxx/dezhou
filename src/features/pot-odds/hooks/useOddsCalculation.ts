@@ -12,33 +12,41 @@ import {
 // P2-2.3: 五级反馈
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { buildDecisionFeedback } from '@/shared/types/decisionFeedback';
+// 答案位置偏差治理：选项顺序统一由 orderQuizOptions 处理
+import { orderQuizOptions } from '../utils/quizOrder';
 
 /**
  * 返回最简单的赔率题：底池 100，下注 0，跟注 0，胜率 0% 即可盈利，应该跟注吗？答案=是。
  * 用于"最后一题简单"策略：让用户以正确结束训练。
  *
+ * 选项顺序：与题库一致经 orderQuizOptions 确定性洗牌。因本题 id 为 0 占位
+ * 且调用方会改写 id，洗牌种子使用固定字符串 'easy-odds'，与最终 id 无关。
+ *
  * 注：useOddsCalculation 本身只做数值计算，不管理题目流；
  * 调用方组件（PotOddsQuizPage）使用本辅助函数实现"最后一题简单 + 补救"逻辑。
  */
 export function getEasyOddsQuestion(): PotOddsQuizQuestion {
-  return {
-    id: 0, // 调用方负责改写 id 以避免与现有题目冲突
-    category: 'odds-judgment',
-    scenario: '底池 100，对手过牌（下注 0），你跟注 0 即可看到下一张牌。',
-    question: '此时跟注是否盈利？',
-    options: [
-      {
-        text: '是，免费看牌永远盈利',
-        isCorrect: true,
-        explanation: '跟注金额为 0，所需胜率 = 0/(100+0+0) = 0%。任何手牌都满足，跟注（实际为过牌）永远是 +EV。',
-      },
-      {
-        text: '否，应该弃牌',
-        isCorrect: false,
-        explanation: '跟注 0 不需要任何胜率，弃牌反而放弃了免费看牌的机会。',
-      },
-    ],
-  };
+  return orderQuizOptions(
+    {
+      id: 0, // 调用方负责改写 id 以避免与现有题目冲突
+      category: 'odds-judgment',
+      scenario: '底池 100，对手过牌（下注 0），你跟注 0 即可看到下一张牌。',
+      question: '此时跟注是否盈利？',
+      options: [
+        {
+          text: '是，免费看牌永远盈利',
+          isCorrect: true,
+          explanation: '跟注金额为 0，所需胜率 = 0/(100+0+0) = 0%。任何手牌都满足，跟注（实际为过牌）永远是 +EV。',
+        },
+        {
+          text: '否，应该弃牌',
+          isCorrect: false,
+          explanation: '跟注 0 不需要任何胜率，弃牌反而放弃了免费看牌的机会。',
+        },
+      ],
+    },
+    'easy-odds',
+  );
 }
 
 export function useOddsCalculation(): OddsResult {

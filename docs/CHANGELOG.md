@@ -8,6 +8,77 @@
 ## 待办（Backlog）
 
 - **trainingEvents.emit 存量缺口（部分完成）**（登记于 2026-07-28）：pot-odds / puzzle-trainer 已在 v2.0 补全 emit；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免，无需 emit。剩余缺口已清零。
+- **strategy-academy Drill 题库位置偏差（i18n-key 型）（已完成）**（登记于 2026-07-28，同日治理完成）：`outsQuestions` / `potOddsQuestions` / `OPPONENT_DRILL_QUESTIONS` 的位置偏差已通过组件内 i18n 解析后重排治理，见下方 fix(strategy-academy) 条目。
+
+---
+
+## fix(strategy-academy) — 2026-07-28（i18n-key 型 Drill 题库位置偏差治理）
+
+> 承接"答案位置偏差系统性治理"的遗留待办：outs / potOdds / opponent 三处 i18n-key 型 Drill 题库的选项文本存于 locale 文件，需在组件 `t()` 解析后重排。
+
+- **新增纯函数**（`utils/quizShuffle.ts`）：`orderResolvedOptions(id, options, correctIndex, getText, seed?)`，解析后重排并同步重映射正确索引；模块内放宽数值判定 `isDigitBearingOptionSet`（`/\d/`，兼容 zh"约 16%"与 en"~16%"），不动 shared 的 `isNumericOptionSet` 语义
+- **规则偏离说明（数值题方向哈希）**：outs / potOdds 源数据的数值选项本已升序，若按既定"一律升序"规则重排等于不重排（outs 正确答案仍 75% 集中）。改为**数值单调排列、升/降序方向由 `hash(id + '@v2')` 奇偶决定**——保留单调可扫读性，同时打散位置集中；方向只依赖题目 id，跨语言/跨会话稳定。课后测验的 `orderQuizQuestion`（一律升序）未改动
+- **组件接入**：OutsDrill / PotOddsDrill / HandRankingDrill / OpponentDrill（第 2 问）在 `t()` 解析后用 `useMemo` 重排（deps 含 `i18n.language`）；HandRankingDrill 的 `resolveOptionText` 从按位置匹配改为按 key 匹配；判分与 ELO/SRS/训练事件链路自洽（只消费聚合 DrillResult）
+- **实测分布**：outs B75% → B50/C50；potOdds B66.7% → A/B/C 各 33.3%；opponent 第 2 问 A75% → A25/B37.5/C12.5/D25；handRanking（一致性接入）最大 40%
+- **测试**：新增 `utils/drillOptionOrder.test.ts`（13 用例），含 zh/en 双语全量对照断言、重映射正确性、分布守卫；全量 25 文件 / 178 用例三项门禁全绿
+- 数据文件与 locales 零改动；`positionQuestions`（座位点击型）无此问题不处理
+
+---
+
+## 答案位置偏差系统性治理 — 2026-07-28（选项语义排序与跨模块防作弊）
+
+> 承接同日早前的 puzzle-trainer 种子洗牌修复，对全仓做同类排查，发现 strategy-academy（课程测验 B+C 占 95%）与 pot-odds（正确答案 71% 在首位）存在相同的"正确答案位置固定"缺陷。本次统一治理，并按教学目标将 puzzle-trainer 的临时种子洗牌方案升级为语义固定排序。
+
+### 治理原则（按选项类型分流）
+
+- **动作类选项**（Fold/Check/Call/Bet…）→ 语义固定排序：消极→激进、同类按尺度升序，与真实扑克客户端一致，选项位置本身成为"动作光谱"教具
+- **纯数值选项**（outs 数 / 胜率百分比）→ 数值升序排列，位置由数值天然决定，便于心算对比
+- **文字陈述类选项** → 按 `hash(题目id)` 种子确定性洗牌：每题独立、跨会话稳定（复习顺序不变），打破"总选某位"模式
+- **认证考试例外**：LevelCertification 每次进入用会话随机种子洗牌（评估场景，防重考背位置）
+
+### shared 层（洗牌工具上移）
+
+- 新建 `src/shared/utils/seededShuffle.ts`：自 `puzzle-trainer/utils/dateSeed.ts` 迁移 `seededRandom` / `shuffleBySeed` / `hashStringToSeed`（满足 ≥2 模块复用准入）；新增 `isNumericOptionSet(texts)`（全部文本匹配 `/^约?\s*\d/` 才为纯数值集）与 `sortByNumericValue(items, getText)`（按首个数字升序、稳定、不改原数组）
+- `dateSeed.ts` 改为 re-export 洗牌函数并保留 `getDateSeed` / `pickBySeed` / `getDailyCompletionCount`，模块内既有 import 路径零变更
+
+### refactor(puzzle-trainer)：种子洗牌 → 语义排序
+
+- 新建 `utils/optionOrder.ts`：`parseOptionSortKey(text)` 解析（类别, 尺度）——Fold(0) < Check(1) < Call(2) < Limp(3) < Bet/C-bet(4) < Raise/3bet/4bet/5bet(5) < 全下类(6)，同类按正则提取的 BB 数值升序；`sortOptionsCanonically(options)` 稳定排序
+- `getAllPuzzles()` / `getPuzzlesByTheme()` 移除 `date` 参数，`withShuffledOptions` 替换为 `withCanonicalOptions`；`dailyPuzzles.ts` / `rushQuestions.ts` 回退 date 透传（抽题与题序仍由日期种子驱动，契约不变）；`index.ts` barrel 移除 `PUZZLE_BANK` 原始常量导出
+- 实测分布（205 题）：索引 0 占 18.5%、索引 1 占 30.2%、索引 2 占 51.2%（源数据激进选项多为正确答案，语义排序下自然靠后；任一 <60%）
+- 测试：删除 `puzzleBank.shuffle.test.ts`，新建 `puzzleBank.optionOrder.test.ts`（6 用例：唯一正确选项 & evLoss / 确定性 / 615 选项全可解析类别 / 类别与尺度升序 / 选项集合不丢失 / 分布守卫）
+
+### fix(strategy-academy)：测验与 Drill 选项分流排序
+
+- 新建 `utils/quizShuffle.ts`：`orderQuizQuestion(q, seed?)`（数值集升序，否则种子洗牌并同步重映射 `correctIndex`）、`orderDrillOptions(q, seed?)`
+- 渲染前接入（不改数据文件）：`LessonQuiz`（id 稳定种子）、`LevelCertification`（抽 20 题后逐题用会话随机 `sessionSeed + index` 洗牌，题序洗牌保留）、`ChoiceDrillRenderer`（`DrillQuestion` 唯一渲染点，id 稳定种子）
+- 实测分布（levels + localLessons 共 326 题）：A 21.5% / B 27.3% / C 31.9% / D 19.3%（治理前 B+C ≈ 95%，任一 <50%）
+- 测试：新建 `quizShuffle.test.ts`（10 用例，含重映射正确性与分布守卫）
+
+### feat(pot-odds)：新增平衡题 + 选项排序
+
+- 题库自组件内嵌抽离至 `data/quizQuestions.ts`，14→19 题：新增 5 道正确答案为"否/应弃牌"的场景题（id 15-19，覆盖 odds-judgment / implied-odds / reverse-implied），补齐"识别 -EV 跟注"训练维度；正确选项含"否/弃牌"的题目 1→6 题
+- 新建 `utils/quizOrder.ts`：`orderQuizOptions(q, seedKey?)`（数值集升序，否则 `hash(id)` 洗牌），模块顶层一次性 map 处理；`getEasyOddsQuestion` 补救题用固定种子 `'easy-odds'` 处理
+- 实测分布（19 题）：索引 0 占 47.4%、索引 1 占 36.8%、索引 2 占 5.3%、索引 3 占 10.5%（治理前索引 0 占 71.4%）
+- 测试：新建 `quizOrder.test.ts`（7 用例，含内容平衡守卫与数值题升序验证）
+
+### 质量门禁
+
+- `pnpm typecheck` / `pnpm lint` / `pnpm test` 全绿；测试总量增至 24 文件 166 用例
+- 未处理项：onboarding 定位题（刻意设计 + 一次性）、range-trainer / gto-simulator（固定按钮天然免疫）、PracticeOption（已语义序）
+
+---
+
+## fix(puzzle-trainer) — 2026-07-28（题库正确答案位置偏差修复）
+
+> 缺陷：`puzzleBank.ts` 全题库 205 题中 179 题的正确答案（`isCorrect: true`）位于 options 数组第一位（id 'a'），用户总选第一个选项即可答对，训练价值失效。
+
+- **种子化选项洗牌**：`getAllPuzzles()` / `getPuzzlesByTheme()` 新增可选 `date: Date = new Date()` 参数，内部对每题调用 `withShuffledOptions`——以 `(daySeed ^ hashStringToSeed(q.id)) >>> 0` 为种子用 `shuffleBySeed`（Fisher–Yates）确定性打乱选项顺序；原始 `PUZZLE_BANK` 静态数据零改动
+- **`hashStringToSeed` 新增**（`utils/dateSeed.ts`）：FNV-1a 字符串哈希（返回 uint32）纯函数，将题目 id 混入日期种子，使每题洗牌互不相同且确定
+- **契约保持**：同一天所有用户看到相同题目、相同选项顺序（每日谜题契约不变）；不同日期选项顺序变化，避免背位置；`dailyPuzzles.ts` / `rushQuestions.ts` 已透传 date 给 `getAllPuzzles(date)` 保证同一 date 输入完全确定
+- **实测分布**（固定日期 2026-07-28，205 题）：索引 0 占 35.1%、索引 1 占 36.1%、索引 2 占 28.8%，不再集中于第一位
+- **测试**：新增 `puzzleBank.shuffle.test.ts`（5 用例）——唯一正确选项 & evLoss 校验 / 同日两次调用确定性 / 索引分布任一 < 60% / 跨日期顺序变化 / 洗牌不丢失选项
+- 消费方 `usePuzzleEngine` / `PuzzleCard` / `DailyPuzzle` 均按 optionId 与 `isCorrect` 工作，与位置无关，无需改动
 
 ---
 
@@ -53,11 +124,7 @@
 
 - **GTO Worker 健康检查**：`useGTOWorker` 新增 `onerror` 监听 + 10 秒超时降级标记 dead + 一次性重建机制（`rebuildWorker`）；重建失败后永久使用 fallback，避免无限重试
 - **pot-odds index.ts 导出补全**：从 3 项扩展为完整公共导出
-- **TrainingRecord.module 类型扩展**：新增 `'puzzle-trainer'`（已合入）；`'hand-history'` 待后续补入（当前 hand-history 为复盘工具，不产生 TrainingRecord）
-
-### 已知遗留
-
-- `TrainingRecord.module` 联合类型尚未包含 `'hand-history'`，待 hand-history 模块产生训练记录时补入
+- **TrainingRecord.module 类型扩展**：新增 `'puzzle-trainer'` 与 `'hand-history'`，联合类型现已覆盖全部六个训练模块
 
 ### 数据迁移
 

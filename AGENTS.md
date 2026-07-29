@@ -178,6 +178,14 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - 调用方：`RangeSelector` 组件渲染时过滤锁定位置
 - 阈值变更规则：调整时在 `docs/CHANGELOG.md` 记录（子代理文件不维护数值副本，无需同步数值）
 
+### 答题选项排序治理（2026-07 新增）
+
+- 所有选择题型训练的选项呈现顺序必须经过统一排序处理，禁止按题库数据原序直接渲染（防"正确答案位置固定"作弊）
+- 分流规则（产品规格见 `docs/PRD.md` 5.26，技术设计见 `docs/TDD.md` 5.9）：动作类选项语义固定排序（消极→激进）；纯数值选项单调排列；文字陈述类按 `hash(题目id)` 种子洗牌；认证考试用会话随机种子
+- 共享工具：`shared/utils/seededShuffle.ts`（判定与排序规则以该文件实现为唯一事实源）；各模块接入实现：puzzle-trainer `utils/optionOrder.ts`、strategy-academy `utils/quizShuffle.ts`、pot-odds `utils/quizOrder.ts`
+- 硬性约束：源题库静态数据不手改重排，顺序处理在出口/渲染前用纯函数完成；i18n-key 型题库须在 `t()` 解析后重排，且顺序不得随语言变化；重排必须同步重映射正确答案标识；新增/扩充题库时必须经由所在模块的排序出口，并确保分布守卫测试（正确答案索引占比上限断言）覆盖新题
+- 每日谜题契约不变：同一天所有用户看到相同题目与相同选项顺序
+
 ### 导师人格化
 
 - 三种风格：`strict-math` / `old-school` / `encouraging`
@@ -188,7 +196,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ### 事件总线
 
 - 实现：`src/shared/stores/trainingEvents.ts`
-- feature 模块完成训练后必须 `trainingEvents.emit(event)`，progress store 自动订阅更新统计
+- feature 模块完成训练后必须 `trainingEvents.emit(event)`，progress store 自动订阅更新统计（v2.0 已全量合规：pot-odds / puzzle-trainer 已补全 emit；hand-history 为复盘分析工具而非交互式训练，属合理豁免，见其 store.ts 顶部说明与 `docs/CHANGELOG.md`）
 - Streak / ELO / SRS / Emotion 的"记录"action 在答题时同步调用（不走事件总线）
 
 ## 文档维护（三层职责分离）
@@ -213,6 +221,13 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖
 - **构建验证**：`pnpm build` 成功产出 `dist/`
 - 每次代码变更后必须运行类型检查、`pnpm lint` 与 `pnpm test`
+
+## 提交粒度
+
+- **逻辑单元独立提交**：每个逻辑单元（单一 feature 变更 / 单一修复 / 单一文档同步）独立成 commit，禁止将多模块批量变更合入单个 commit
+- **提交信息注明模块前缀**：采用 `type(scope): description` 格式，scope 为所属模块目录名（如 `feat(strategy-academy): ...`、`fix(range-trainer): ...`、`docs(agents): ...`）
+- **仅约束新提交**：本指引不追溯已有提交，禁止为满足粒度要求重写已有 git 历史
+- 本节是「Surgical Changes」原则在版本控制层面的延伸：改动范围最小化，提交范围同样最小化
 
 ## Agent 协作
 
@@ -253,7 +268,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 2. 更新 `docs/TDD.md` 的架构图与跨模块系统章节
 3. 升级 progress store persist version + 编写 migrate（如涉及状态变更）
 4. 通知受影响 feature 模块的子代理更新其文件
-5. 涉及全局样式/共享组件/布局/导航/主题色变更时，通知 `ui-ux-dev` 做视觉一致性复核（参照 DESIGN_LANGUAGE v1.2 质量清单）
+5. 涉及全局样式/共享组件/布局/导航/主题色变更时，通知 `ui-ux-dev` 做视觉一致性复核（质量清单以 `poker-ui-demo/DESIGN_LANGUAGE.md` 当前版本为准）
 6. 更新 `docs/CHANGELOG.md`
 7. 运行 `pnpm typecheck` 验证
 

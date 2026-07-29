@@ -11,7 +11,6 @@ export { usePuzzleEngine } from './hooks/usePuzzleEngine';
 export { usePuzzleStore, getBestRecord } from './store';
 
 export {
-  PUZZLE_BANK,
   PUZZLE_THEMES,
   getAllPuzzles,
   getPuzzlesByTheme,

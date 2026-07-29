@@ -71,6 +71,7 @@ additionalPrompt: ""
 - **ChoiceDrill 通用 Drill 类型**：`ChoiceDrillRenderer.tsx` 支持任意选择题型 Drill 渲染，L2-L8 每级新增 2 个 Drill（共 16 个）
 - **学习路径横向推荐**：`LearningTrack` 新增 `relatedTrackIds` 字段，支持跨路径推荐
 - **本土化路径前置条件**：`LearningTrack` 新增 `prerequisiteLevelIds` 字段，本土化路径需完成 L1-L3
+- **选项排序治理**（utils/quizShuffle.ts）：`orderQuizQuestion`（测验题，数值集升序 / 文字题种子洗牌并重映射 correctIndex）/ `orderDrillOptions`（DrillQuestion）/ `orderResolvedOptions`（i18n-key 型题库 `t()` 解析后重排，数值题单调 + 方向哈希）；接入 LessonQuiz（id 稳定种子）/ LevelCertification（会话随机种子）/ ChoiceDrillRenderer / OutsDrill 等 4 个 i18n-key Drill
 
 ## Cross-Module Touchpoints
 
@@ -88,6 +89,7 @@ additionalPrompt: ""
 - `src/shared/stores/trainingEvents.ts`（事件总线）
 - `src/shared/types/poker.ts`（Card / Hand / HandRank 等基础类型）
 - `src/shared/types/decisionFeedback.ts`（五级反馈 DecisionGrade / calculateGrade）
+- `src/shared/utils/seededShuffle.ts`（选项排序治理基础设施：shuffleBySeed / hashStringToSeed / isNumericOptionSet / sortByNumericValue，变更归 platform-dev）
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
@@ -95,7 +97,7 @@ additionalPrompt: ""
 - src/features/strategy-academy/data/ — 静态课程与元数据（courses.ts 为 re-export 兼容层，实际课程已拆分至 levels/ 子目录；另含基础入门 / 概念图谱 / 学习轨道 / 本土化路径 / 对手形象数据）
 - src/features/strategy-academy/data/levels/ — 分级课程数据（l1 ~ l8，L4 拆分为 l4a/l4b，含 index.ts barrel）
 - src/features/strategy-academy/data/localLessons/ — 本土低级别盈利路径课程内容
-- src/features/strategy-academy/utils/ — 难度自适应（adaptiveDifficulty.ts）/ 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具
+- src/features/strategy-academy/utils/ — 难度自适应（adaptiveDifficulty.ts）/ 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具 / 选项排序治理（quizShuffle.ts）
 - src/features/strategy-academy/hooks/ — useAcademy 等消费 hook
 - src/features/strategy-academy/components/ — 首页 / 课程视图（CourseView.tsx 含双层门禁 + Drill 路由）/ 三段式内容 / 测验 / 认证 / QuickDrill 等页面组件
 - src/features/strategy-academy/components/drills/ — Drill 组件与题库（DrillLessonRouter.tsx 统一 lazy 路由；ChoiceDrillRenderer.tsx 通用选择题渲染；types.ts 定义 DrillProps / DrillResult）
@@ -108,6 +110,8 @@ additionalPrompt: ""
 5. 修改每日计划生成逻辑时：编辑 utils/dailyPlan.ts（reviewQueue 由 SRS 系统提供）
 6. 修改等级解锁规则时：编辑 store.ts 的 isLevelUnlocked（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 7. 修改快速训练 SRS 混合时：编辑 QuickDrill.tsx 调用 `composeDailyMix` 的参数
+8. 新增测验题 / Drill 题时：选项与 correctIndex 书写顺序不限（渲染前自动重排），但需确认分布守卫测试（quizShuffle.test.ts / drillOptionOrder.test.ts）覆盖新题且通过
+9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
 
 ## Constraints
 继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / i18n 双语同步等；课程内容数据文件可适当放宽行数限制）。
@@ -118,7 +122,7 @@ additionalPrompt: ""
 - 能力评估（abilityAssessment）初始值默认 50，仅 `gamesPlayed === 0` 时通过 `abilityToElo` 同步至 ELO
 - 快速训练完成时必须调用 `recordTrainingDay`（启动 Streak）+ `recordQuickDrillCompletion`（更新 quickDrillStreak，幂等）
 - 等级解锁依赖前置等级所有课程完成（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
-- strategy-academy store persist version 为 1（v0 → v1 注入进步回放得分记录默认值）；新增持久化字段时必须递增 version 并在 migrate 中防御性合并默认值
+- strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》
 - **课程双层门禁**（v1.8 新增）：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（用户当前 `level` ≥ 课程所在等级）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）
 - **mental-tilt-recognition 例外**（v1.8 新增）：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
 - **Lesson.prerequisites 字段**（v1.8 新增）：`Lesson` 类型已新增 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）；声明 prerequisite 时必须确保引用的课程 ID 存在
@@ -126,6 +130,7 @@ additionalPrompt: ""
 - **ABILITY_LESSON_MAP 正确性**（v1.8 新增）：`dailyPlan.ts` 中的 `ABILITY_LESSON_MAP` 必须引用真实存在的 lesson ID（如 `l2-3bet-basics` 而非 `l2-3bet`）；修改时必须验证 ID 有效性
 - **dailyPlan 职责区分**（v1.8 新增）：项目中存在两个 `generateDailyPlan` 函数：`strategy-academy/utils/dailyPlan.ts`（学院焦点课程计划）与 progress 模块中的（跨模块推荐计划）。两者职责不同，禁止混淆
 - **TiltWarning 三选项**（v1.8 新增）：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）
+- **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节与 TDD 5.9）**：测验与 Drill 选项禁止按题库数据原序直接渲染；课后测验/复习用 id 稳定种子（跨会话顺序不变），认证考试（LevelCertification）用会话随机种子；i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）必须在 `t()` 解析后用 `orderResolvedOptions` 重排，且顺序不得随语言变化；重排必须同步重映射 correctIndex / correctStrategyIndex，判分与结果记录以重排后对象为唯一事实源；源题库数据不手改重排；新增/扩充题库必须被分布守卫测试覆盖
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
@@ -142,3 +147,5 @@ additionalPrompt: ""
 - [ ] QuickDrill 连续答错 3 次自动降级（不低于 beginner）
 - [ ] ABILITY_LESSON_MAP 引用的 lesson ID 全部存在
 - [ ] TiltWarning 提供三选项（"我知道了" / "学习情绪管理" / "休息一下"）
+- [ ] 测验/Drill 选项已经过排序处理（LessonQuiz / LevelCertification / ChoiceDrillRenderer / 4 个 i18n-key Drill 均接入，非原序渲染）
+- [ ] 选项重排后 correctIndex 正确重映射，zh/en 双语顺序一致（quizShuffle.test.ts / drillOptionOrder.test.ts 分布守卫通过）

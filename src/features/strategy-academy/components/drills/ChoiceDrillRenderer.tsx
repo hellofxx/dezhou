@@ -1,9 +1,10 @@
 // ChoiceDrillRenderer — 通用选择题 Drill 渲染器
 // 用于 L2-L8 的 ChoiceDrill 类型课程，数据来自 lesson.drillData
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { orderDrillOptions } from '../../utils/quizShuffle';
 import type { DrillProps, DrillResult } from './types';
 import type { Lesson } from '../../types';
 
@@ -12,7 +13,11 @@ interface ChoiceDrillRendererProps extends DrillProps {
 }
 
 export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: ChoiceDrillRendererProps) {
-  const questions = lesson.drillData?.questions ?? [];
+  // 答案位置偏差治理：渲染前重排选项（数值升序 / id 稳定种子洗牌），源数据不变
+  const questions = useMemo(
+    () => (lesson.drillData?.questions ?? []).map((q) => orderDrillOptions(q)),
+    [lesson],
+  );
   const TOTAL = questions.length;
 
   const [currentIndex, setCurrentIndex] = useState(0);

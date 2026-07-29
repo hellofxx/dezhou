@@ -5,6 +5,7 @@ import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from '
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
+import { orderQuizQuestion } from '../utils/quizShuffle';
 import type { QuizQuestion } from '../types';
 
 export default function LevelCertification() {
@@ -20,6 +21,8 @@ export default function LevelCertification() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
+  // 会话随机种子：每次进入考试选项顺序不同，考试过程中保持稳定（防背位置应试）
+  const [sessionSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
 
   const certification = certifications[level];
   const isCertified = !!certification?.certifiedAt;
@@ -32,9 +35,11 @@ export default function LevelCertification() {
     for (const lesson of levelInfo.lessons) {
       questions.push(...lesson.quiz);
     }
-    // 洗牌取最多 20 题
-    return shuffleArray(questions).slice(0, 20);
-  }, [levelInfo]);
+    // 洗牌取最多 20 题；再对每题用会话种子重排选项（答案位置偏差治理）
+    return shuffleArray(questions)
+      .slice(0, 20)
+      .map((q, index) => orderQuizQuestion(q, sessionSeed + index));
+  }, [levelInfo, sessionSeed]);
 
   if (!levelInfo) {
     return (

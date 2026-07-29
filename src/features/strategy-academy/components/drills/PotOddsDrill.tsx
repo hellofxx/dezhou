@@ -1,18 +1,21 @@
 // P0-3.6: PotOddsDrill — 底池赔率直觉
 // 6 道题，图形化赔率计算与跟注/弃牌决策
+// 答案位置偏差治理：选项经 t() 解析后用 orderResolvedOptions 重排
+// （百分比题按 id 哈希定向单调排列；跟注/弃牌文字题按 id 种子洗牌）
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { POT_ODDS_QUESTIONS } from './potOddsQuestions';
 import type { DrillProps, DrillResult } from './types';
 
 const TOTAL = POT_ODDS_QUESTIONS.length;
 
 export default function PotOddsDrill({ onComplete, onExit }: DrillProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -20,7 +23,17 @@ export default function PotOddsDrill({ onComplete, onExit }: DrillProps) {
   const [finished, setFinished] = useState(false);
   const overallStartRef = useRef<number>(Date.now());
 
-  const current = POT_ODDS_QUESTIONS[currentIndex]!;
+  const raw = POT_ODDS_QUESTIONS[currentIndex]!;
+  const language = i18n.language;
+  // 渲染前重排：t() 解析后按数值定向单调排列 / 种子洗牌，correctIndex 同步重映射。
+  // 依赖 language：语言切换时用新文本重算（种子只依赖题目 id，同题顺序跨语言一致）。
+  const current = useMemo(() => {
+    void language;
+    const ordered = orderResolvedOptions(raw.id, raw.optionsKeys, raw.correctIndex, (key) =>
+      t(key),
+    );
+    return { ...raw, optionsKeys: ordered.options, correctIndex: ordered.correctIndex };
+  }, [raw, t, language]);
 
   const handleSelect = useCallback(
     (idx: number) => {
