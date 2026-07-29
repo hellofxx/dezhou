@@ -1001,40 +1001,6 @@ export const LEVEL_6_LESSONS: Lesson[] = [
         },
       },
       {
-        id: 'l6-final-table',
-        level: 6,
-        order: 4,
-        title: 'Final Table 动态',
-        subtitle: '掌握决赛桌的特殊策略调整',
-        duration: '10 min',
-        content: [
-          { type: 'heading', content: 'Final Table 与普通桌的差异' },
-          { type: 'text', content: '决赛桌是锦标赛中ICM压力最大的时刻。每消除一个玩家都意味着剩余玩家的奖金跳升，这使得策略必须大幅调整。' },
-          { type: 'key-point', content: 'Final Table 核心原则：筹码原来越多越可以激进，但要避免在奖金跳升前与同等或更大筹码对抗。「生存」本身就有价值。' },
-          { type: 'heading', content: '尾数人局（Short-Handed）调整' },
-          { type: 'text', content: '决赛桌人数不断减少：\n• 6人：接近6-max策略，ICM压力中等\n• 4人：显著放宽范围，盲注战争加剧\n• 3人：可以非常激进，尤其是大筹码\n• 单挑：纯博弈，范围极宽，位置优势极大' },
-          { type: 'highlight', content: '「Pay Jump」是关键概念。当下一个淘汰意味着赚更多钱时，你应该更保守；当你是短筹码且无得无失时，可以更激进。' },
-          { type: 'pro-tip', content: 'ICM Deal（分奖协议）是关键技能。当你是短筹码时，主动提议 Deal 可能比继续打更有利。' },
-        ],
-        quiz: [
-          { id: 'l6-ft-q1', question: 'Final Table 中“Pay Jump”意味着什么？', options: ['跳入底池', '每淘汰一人奖金跳升', '加注尺度', '筹码增加'], correctIndex: 1, explanation: 'Pay Jump指每当一个玩家被淘汰，剩余玩家的保底奖金都会跳升。' },
-          { id: 'l6-ft-q2', question: '决赛桌只剩 3 人时应该怎样调整？', options: ['更保守', '非常激进，尤其大筹码', '和满桌一样', '只打AA'], correctIndex: 1, explanation: '3人时范围应显著放宽，大筹码可以非常激进地施压。' },
-        
-          { id: 'l6-ft-q3', question: 'ICM Deal时短筹码应该？', options: ['拒绝Deal', '主动提议Deal', '要求最多份额', '退出比赛'], correctIndex: 1, explanation: '短筹码主动提议Deal可能比继续打更有利。' },
-          { id: 'l6-ft-q4', question: '决赛桌4人时应该？', options: ['更保守', '显著放宽范围', '和满桌一样', '只打AA'], correctIndex: 1, explanation: '4人时范围显著放宽，盲注战争加剧。' },
-          { id: 'l6-ft-q5', question: '6人决赛桌的策略接近？', options: ['满桌策略', '6-max策略', '单挑策略', '现金桌策略'], correctIndex: 1, explanation: '6人接近6-max策略，ICM压力中等。' },],
-        practice: {
-          id: 'l6-ft-practice',
-          questions: [
-            { id: 'l6-ft-p1', difficulty: 'intermediate', scenario: { heroHand: ['Ah', 'Qh'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'fold' }, { player: 'MP', action: 'fold' }, { player: 'CO', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 20, gameContext: { gameType: 'mtt', icmPressure: 'high', tableDescription: '决赛桌4人', stackDistribution: '你20BB，SB 15BB，BB 18BB' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AQs在4人决赛桌是强牌。应该激进。', evImpact: '-1.5BB' }, { action: 'Raise 2.2BB', isCorrect: true, explanation: 'AQs在4人决赛桌是强牌，min-raise施压。', evImpact: '+2BB' }, { action: 'Push all-in', isCorrect: false, explanation: '20BB不需要全下，min-raise更好。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-final-table' },
-            { id: 'l6-ft-p2', difficulty: 'advanced', scenario: { heroHand: ['Ks', 'Ts'], heroPosition: 'SB', previousActions: [{ player: 'BTN', action: 'raise 2.2BB' }], street: 'preflop', potSize: 3.2, effectiveStack: 12, gameContext: { gameType: 'mtt', tableDescription: '决赛桌，BTN偷盲', stackDistribution: '你12BB，BTN 30BB' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'KTs在SB 12BB面对BTN open是强牌。应该re-steal。', evImpact: '-1.5BB' }, { action: 'Re-raise all-in', isCorrect: true, explanation: 'KTs有不错的胜率，12BB是re-steal理想筹码量。BTN范围宽。', evImpact: '+2.5BB' }, { action: 'Call', isCorrect: false, explanation: '12BB call翻后无位置。直接re-steal更好。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-final-table' },
-            { id: 'l6-ft-p3', difficulty: 'advanced', scenario: { heroHand: ['9s', '8s'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'fold' }, { player: 'MP', action: 'fold' }, { player: 'CO', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 35, gameContext: { gameType: 'mtt', tableDescription: '决赛桌，你是大筹码', stackDistribution: '你35BB，SB 15BB，BB 12BB' } }, options: [{ action: 'Fold', isCorrect: false, explanation: '98s有翻后可玩性。大筹码应该用宽范围施压。', evImpact: '-1BB' }, { action: 'Raise 2.2BB', isCorrect: true, explanation: '大筹码用宽范围min-raise。98s有翻后潜力，盲注位置ICM压力大。', evImpact: '+1.5BB' }, { action: 'Push all-in', isCorrect: false, explanation: '35BB不需要用98s全下。min-raise就够了。', evImpact: '+0.3BB' }], relatedLessonId: 'l6-final-table' },
-            { id: 'l6-ft-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ac', 'Tc'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'fold' }, { player: 'MP', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 18, gameContext: { gameType: 'mtt', tableDescription: '决赛桌6人', } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'ATs在CO 18BB是强牌。应该open。', evImpact: '-1BB' }, { action: 'Raise 2.2BB', isCorrect: true, explanation: 'ATs在CO是标准open。18BB可以min-raise保持翻后可玩性。', evImpact: '+1.5BB' }, { action: 'Push all-in', isCorrect: false, explanation: '18BB时ATs不需要全下。min-raise更好。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-final-table' },
-            { id: 'l6-ft-p5', difficulty: 'advanced', scenario: { heroHand: ['Qh', 'Jh'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.2BB' }, { player: 'SB', action: 'fold' }], street: 'preflop', potSize: 4.7, effectiveStack: 22, gameContext: { gameType: 'mtt', tableDescription: '决赛桌，BTN频繁偷盲', stackDistribution: '你22BB，BTN 30BB' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'QJs在BB面对BTN open是强牌。应该defend。', evImpact: '-1.5BB' }, { action: 'Re-raise all-in', isCorrect: true, explanation: 'QJs有不错的胜率，22BB是re-steal理想筹码量。BTN范围宽。', evImpact: '+2.5BB' }, { action: 'Call', isCorrect: false, explanation: 'Call翻后无位置。re-steal all-in更好。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-final-table' },
-          ],
-        },
-      },
-      {
         id: 'l6-bounty',
         level: 6,
         order: 5,

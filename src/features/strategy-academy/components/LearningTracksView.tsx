@@ -3,11 +3,14 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Users, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 import { LEARNING_TRACKS, isTrackPrerequisiteMet, getPrerequisiteHint } from '../data/learningTracks';
 import { useAcademyStore } from '../store';
+import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { ProgressBar } from './ProgressBar';
 
 export default function LearningTracksView() {
   const navigate = useNavigate();
   const { progress, activeTrackId, setActiveTrack, certifications } = useAcademyStore();
+  // 调试解锁：解除全部轨道前置
+  const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
   // 构建已认证 Level 集合，用于前置条件检查
   const certifiedLevels = new Set<number>(
@@ -52,8 +55,8 @@ export default function LearningTracksView() {
             const progressPercent = totalInTrack > 0 ? Math.round((completedInTrack / totalInTrack) * 100) : 0;
             const isLeakFix = track.id === 'track-leak-fix';
 
-            // 前置条件检查
-            const prereqMet = isTrackPrerequisiteMet(track, certifiedLevels);
+            // 前置条件检查（调试解锁时直接放行）
+            const prereqMet = debugUnlock || isTrackPrerequisiteMet(track, certifiedLevels);
             const prereqHint = !prereqMet && track.prerequisiteLevelIds
               ? getPrerequisiteHint(track.prerequisiteLevelIds)
               : null;

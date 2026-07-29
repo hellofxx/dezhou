@@ -13,7 +13,9 @@ export default function LevelCertification() {
   const navigate = useNavigate();
   const { certifications, attemptCertification, progress } = useAcademyStore();
   const level = parseInt(levelParam ?? '1', 10);
-  const levelInfo = LEVELS.find((l) => l.level === level);
+  // 审计 1.2：合并同 level 的全部条目（如 Level 4 = 4A + 4B），题池与进度均按合并口径
+  const levelEntries = useMemo(() => LEVELS.filter((l) => l.level === level), [level]);
+  const mergedLessons = useMemo(() => levelEntries.flatMap((e) => e.lessons), [levelEntries]);
 
   const [started, setStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,20 +30,20 @@ export default function LevelCertification() {
   const isCertified = !!certification?.certifiedAt;
   const requiredAccuracy = 80;
 
-  // 从该级别所有课程中收集测验题
+  // 从该级别全部条目的所有课程中收集测验题
   const allQuestions = useMemo<QuizQuestion[]>(() => {
-    if (!levelInfo) return [];
+    if (mergedLessons.length === 0) return [];
     const questions: QuizQuestion[] = [];
-    for (const lesson of levelInfo.lessons) {
+    for (const lesson of mergedLessons) {
       questions.push(...lesson.quiz);
     }
     // 洗牌取最多 20 题；再对每题用会话种子重排选项（答案位置偏差治理）
     return shuffleArray(questions)
       .slice(0, 20)
       .map((q, index) => orderQuizQuestion(q, sessionSeed + index));
-  }, [levelInfo, sessionSeed]);
+  }, [mergedLessons, sessionSeed]);
 
-  if (!levelInfo) {
+  if (levelEntries.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4">
         <p className="text-[var(--ivory-muted)]">级别未找到</p>
@@ -131,8 +133,8 @@ export default function LevelCertification() {
 
   // 开始前的介绍页面
   if (!started) {
-    const levelProgress = levelInfo.lessons.filter((l) => progress.completedLessons.includes(l.id)).length;
-    const allCompleted = levelProgress === levelInfo.lessons.length;
+    const levelProgress = mergedLessons.filter((l) => progress.completedLessons.includes(l.id)).length;
+    const allCompleted = levelProgress === mergedLessons.length;
 
     return (
       <div className="h-full overflow-auto">
@@ -158,7 +160,9 @@ export default function LevelCertification() {
                 <h1 className="font-display text-2xl text-[var(--ivory)]">
                   Level {level} 认证测验
                 </h1>
-                <p className="text-sm text-[var(--ivory-dim)] mt-0.5">{levelInfo.title}</p>
+                <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
+                  {levelEntries.map((e) => e.title).join(' · ')}
+                </p>
               </div>
             </div>
 
@@ -189,7 +193,7 @@ export default function LevelCertification() {
             {/* Prerequisites check */}
             {!allCompleted && (
               <div className="rounded-lg bg-[var(--warning)]/10 border border-[var(--warning)]/30 p-3 mb-6 text-xs text-[var(--warning)]">
-                建议先完成本级别所有课程再参加认证测验（当前进度：{levelProgress}/{levelInfo.lessons.length}）
+                建议先完成本级别所有课程再参加认证测验（当前进度：{levelProgress}/{mergedLessons.length}）
               </div>
             )}
 

@@ -99,7 +99,7 @@ export const LEARNING_TRACKS: LearningTrack[] = [
       'l6-icm',
       'l6-pushfold',
       'l6-bubble',
-      'l6-final-table',
+      'l6-finaltable',
       'l6-bounty',
       'l5-online-vs-live',
     ],

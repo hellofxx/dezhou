@@ -796,8 +796,8 @@
           "explanation": "Flush draw = 9 outs (13-4=9), the most common strong draw."
         },
         "q3": {
-          "prompt": "You hold 89, board is 7TJ. How many Outs for your OESD (open-ended straight draw)?",
-          "explanation": "OESD: any 6 or Q completes the straight = 8 outs."
+          "prompt": "You hold 89, board is 7T2. How many Outs for your OESD (open-ended straight draw)?",
+          "explanation": "OESD: any 6 or J completes the straight = 8 outs."
         },
         "q4": {
           "prompt": "You hold 56, board is 479. How many Outs for your OESD?",

@@ -5,7 +5,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
       {
         id: 'l4-gto-basics',
         level: 4,
-        order: 3,
+        order: 1,
         title: 'GTO 基础入门',
         subtitle: '理解博弈论最优策略的核心思想',
         duration: '12 min',
@@ -27,7 +27,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { id: 'l4-gto-q2', question: '在低级别游戏中，应该主要使用什么策略？', options: ['纯GTO', '剥削策略为主', '随机策略', '只看底池大小'], correctIndex: 1, explanation: '低级别对手错误很多，剥削策略比GTO更赚钱。但要理解GTO作为基准。' },
           { id: 'l4-gto-q3', question: 'GTO 矩阵中深绿色代表什么？', options: ['Fold', 'Call', '高频率Raise', 'All-in'], correctIndex: 2, explanation: '深绿色代表高频率（或100%）的Raise行动。' },
         
-          { id: 'l4-gto-q4', question: 'GTO策略的核心假设是什么？', options: ['对手会犯错', '双方都完美.play', '运气决定一切', '应该总是诈唬'], correctIndex: 1, explanation: 'GTO假设双方都完美游戏，任何偏离GTO的策略都会被对手利用。' },
+          { id: 'l4-gto-q4', question: 'GTO策略的核心假设是什么？', options: ['对手会犯错', '双方都完美游戏', '运气决定一切', '应该总是诈唬'], correctIndex: 1, explanation: 'GTO假设双方都完美游戏，任何偏离GTO的策略都会被对手利用。' },
           { id: 'l4-gto-q5', question: 'GTO策略在低级别的主要优势是什么？', options: ['最大化赢钱', '不被剥削', '看起来专业', '规则要求'], correctIndex: 1, explanation: 'GTO策略确保你不会被对手剥削。在低级别，对手不会很好利用你的偏离，所以GTO是安全的基础。' },],
         examples: [
           {
@@ -189,7 +189,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
       {
         id: 'l4-game-tree',
         level: 4,
-        order: 5,
+        order: 2,
         title: '博弈树思维',
         subtitle: '用博弈树的视角理解每个决策点',
         duration: '11 min',
@@ -224,7 +224,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
       {
         id: 'l4-frequency-balance',
         level: 4,
-        order: 6,
+        order: 3,
         title: '频率平衡',
         subtitle: '理解为什么“不可预测”是最好的防御',
         duration: '10 min',
@@ -259,7 +259,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
       {
         id: 'l4-mdf',
         level: 4,
-        order: 6,
+        order: 4,
         title: '最小防御频率 (MDF)',
         subtitle: '防止对手无限诈唬的数学基础',
         duration: '8 min',
@@ -433,7 +433,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
       {
         id: 'l4-overbet',
         level: 4,
-        order: 7,
+        order: 5,
         title: 'Overbet 策略',
         subtitle: '现代 GTO 中最具威力的武器',
         duration: '10 min',
@@ -606,13 +606,13 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
             },
           
             { id: 'l4-overbet-p4', difficulty: 'advanced', scenario: { heroHand: ['As', 'Ks'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kh', '9h', '4c', '2d', '7h'], street: 'river', potSize: 25, effectiveStack: 75, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Overbet 40BB', isCorrect: true, explanation: 'AK同花坚果，BB范围封顶。Overbet给最大压力。', evImpact: '+2.5 BB/100' }, { action: 'Bet 15BB', isCorrect: false, explanation: '坚果应该Overbet获取最大价值。', evImpact: '+0.5 BB/100' }, { action: 'Check', isCorrect: false, explanation: '坚果应该价值下注。', evImpact: '-2.0 BB/100' }], relatedLessonId: 'l4-overbet' },
-            { id: 'l4-overbet-p5', difficulty: 'advanced', scenario: { heroHand: ['Qd', 'Jd'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kc', '8c', '3h', '2d', '7d'], street: 'river', potSize: 25, effectiveStack: 75, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Bet 15BB', isCorrect: true, explanation: 'QJ在K-8-3-2-7面只有Q高，但NIT范围封顶。标准价值下注。', evImpact: '+0.8 BB/100' }, { action: 'Overbet 40BB', isCorrect: false, explanation: 'Q高不是坚果，Overbet过度。', evImpact: '-1.5 BB/100' }, { action: 'Check', isCorrect: false, explanation: 'NIT范围封顶，可以薄价值下注。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-overbet' },],
+            { id: 'l4-overbet-p5', difficulty: 'advanced', scenario: { heroHand: ['Kd', 'Qh'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kc', '8c', '3h', '2d', '7d'], street: 'river', potSize: 25, effectiveStack: 75, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Bet 15BB', isCorrect: true, explanation: 'KQ 顶对好踢脚，NIT 范围封顶（很少慢打两对以上）。标准尺度薄价值下注，能被更差的 Kx 和顽固对子跟注。', evImpact: '+0.8 BB/100' }, { action: 'Overbet 40BB', isCorrect: false, explanation: '顶对非坚果，Overbet 只会被更强牌跟注，把薄价值牌打成了诈唬。', evImpact: '-1.5 BB/100' }, { action: 'Check', isCorrect: false, explanation: 'NIT 范围封顶，放弃薄价值下注损失 EV。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-overbet' },],
         },
       },
       {
         id: 'l4-range-construction',
         level: 4,
-        order: 8,
+        order: 6,
         title: '范围建构：极化 vs 合并',
         subtitle: '理解不同场景下的最优范围形状',
         duration: '12 min',
@@ -632,15 +632,15 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: '实战简化：小注打宽（合并），大注打窄（极化）。翻前 3-bet 用极化范围，翻前 open 用合并范围。记住这个原则就够用了。' },
         ],
         quiz: [
-          { id: 'l4-range-q1', question: '以下哪个场景最适合使用极化范围？', options: ['Flop 小注 C-Bet', '翻前 Open Raise', 'River Overbet', '跟注对手 open'], correctIndex: 2, explanation: 'River Overbet 是典型的极化范围场景：只有坚果级别的 value 和有 blocker 的 bluff，不包含中等牌力。' },
-          { id: 'l4-range-q2', question: 'BTN 3-Bet 范围中，以下哪手牌属于 bluff 部分？', options: ['AA', 'AKs', 'A5s', 'QQ'], correctIndex: 2, explanation: 'A5s 是经典的 3-Bet bluff：有 A blocker + 同花潜力，但牌力不够强到直接 value 3-bet。AA/AKs/QQ 属于 value 部分。' },
-          { id: 'l4-range-q3', question: '面对 Calling Station，你的下注范围应该？', options: ['更极化（更多 bluff）', '更合并（更多 value，少 bluff）', '完全不变', '只 bluff'], correctIndex: 1, explanation: 'Calling Station 很少弃牌，bluff 无效。应该用更合并的范围：增加 value 下注的频率和范围，减少 bluff。' },
-          { id: 'l4-range-q4', question: '面对 100% pot 的下注，理想的 value:bluff 比例约为？', options: ['1:1', '2:1', '3:1', '4:1'], correctIndex: 1, explanation: '面对满池下注，MDF = 50%。为了让对手 indifferent，value:bluff 比例约为 2:1（67% value, 33% bluff）。' },
+          { id: 'l4-rc-q1', question: '以下哪个场景最适合使用极化范围？', options: ['Flop 小注 C-Bet', '翻前 Open Raise', 'River Overbet', '跟注对手 open'], correctIndex: 2, explanation: 'River Overbet 是典型的极化范围场景：只有坚果级别的 value 和有 blocker 的 bluff，不包含中等牌力。' },
+          { id: 'l4-rc-q2', question: 'BTN 3-Bet 范围中，以下哪手牌属于 bluff 部分？', options: ['AA', 'AKs', 'A5s', 'QQ'], correctIndex: 2, explanation: 'A5s 是经典的 3-Bet bluff：有 A blocker + 同花潜力，但牌力不够强到直接 value 3-bet。AA/AKs/QQ 属于 value 部分。' },
+          { id: 'l4-rc-q3', question: '面对 Calling Station，你的下注范围应该？', options: ['更极化（更多 bluff）', '更合并（更多 value，少 bluff）', '完全不变', '只 bluff'], correctIndex: 1, explanation: 'Calling Station 很少弃牌，bluff 无效。应该用更合并的范围：增加 value 下注的频率和范围，减少 bluff。' },
+          { id: 'l4-rc-q4', question: '面对 100% pot 的下注，理想的 value:bluff 比例约为？', options: ['1:1', '2:1', '3:1', '4:1'], correctIndex: 1, explanation: '面对满池下注，MDF = 50%。为了让对手 indifferent，value:bluff 比例约为 2:1（67% value, 33% bluff）。' },
         
-          { id: 'l4-range-q5', question: '构建范围时应该考虑什么？', options: ['只看自己的牌', '牌面结构+对手倾向+位置', '随机选择', '只看底池大小'], correctIndex: 1, explanation: '构建范围需要综合考虑牌面结构、对手倾向和位置。' },],
+          { id: 'l4-rc-q5', question: '构建范围时应该考虑什么？', options: ['只看自己的牌', '牌面结构+对手倾向+位置', '随机选择', '只看底池大小'], correctIndex: 1, explanation: '构建范围需要综合考虑牌面结构、对手倾向和位置。' },],
         examples: [
           {
-            id: 'l4-range-ex1',
+            id: 'l4-rc-ex1',
             title: '极化范围实战：River 3-Bet',
             heroHand: ['As', '5s'],
             heroPosition: 'BTN',
@@ -670,7 +670,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash' },
           },
           {
-            id: 'l4-range-ex2',
+            id: 'l4-rc-ex2',
             title: '合并范围实战：Flop C-Bet',
             heroHand: ['Kh', 'Qh'],
             heroPosition: 'BTN',
@@ -704,10 +704,10 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           },
         ],
         practice: {
-          id: 'l4-range-practice',
+          id: 'l4-rc-practice',
           questions: [
             {
-              id: 'l4-range-p1',
+              id: 'l4-rc-p1',
               scenario: {
                 heroHand: ['Th', 'Td'],
                 heroPosition: 'BTN',
@@ -726,7 +726,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
               ],
             },
             {
-              id: 'l4-range-p2',
+              id: 'l4-rc-p2',
               scenario: {
                 heroHand: ['Ah', 'Kh'],
                 heroPosition: 'BB',
@@ -747,7 +747,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
               ],
             },
             {
-              id: 'l4-range-p3',
+              id: 'l4-rc-p3',
               scenario: {
                 heroHand: ['9h', '8h'],
                 heroPosition: 'BTN',
@@ -768,14 +768,14 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
               ],
             },
           
-            { id: 'l4-range-p4', difficulty: 'advanced', scenario: { heroHand: ['Ac', 'Kc'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['Jh', 'Th', '9c'], street: 'flop', potSize: 6.5, effectiveStack: 97, opponent: OPPONENT_PROFILES['lag'] }, options: [{ action: 'Check', isCorrect: true, explanation: 'AK在JT9两花面没有对子，对手范围很有利。Check控制底池。', evImpact: '+0.5 BB/100' }, { action: 'Bet 5BB', isCorrect: false, explanation: '湿润面对手范围有利，大注C-Bet风险高。', evImpact: '-1.0 BB/100' }, { action: 'Bet 2BB', isCorrect: false, explanation: '即使小注在这个面也不太好。Check更好。', evImpact: '-0.3 BB/100' }], relatedLessonId: 'l4-range-construction' },
-            { id: 'l4-range-p5', difficulty: 'advanced', scenario: { heroHand: ['9s', '8s'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['7s', '6d', '2h', 'Kd', '3c'], street: 'river', potSize: 13, effectiveStack: 85, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Check', isCorrect: false, explanation: '98顺子成牌，River应该价值下注。', evImpact: '-1.0 BB/100' }, { action: 'Bet 10BB', isCorrect: true, explanation: '98顺子成牌，River标准价值下注。TAG有很多弱牌会Call。', evImpact: '+1.5 BB/100' }, { action: 'All-in', isCorrect: false, explanation: '顺子但非坚果，All-in过度。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-range-construction' },],
+            { id: 'l4-rc-p4', difficulty: 'advanced', scenario: { heroHand: ['Ac', 'Kc'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['Jh', 'Th', '9c'], street: 'flop', potSize: 6.5, effectiveStack: 97, opponent: OPPONENT_PROFILES['lag'] }, options: [{ action: 'Check', isCorrect: true, explanation: 'AK在JT9两花面没有对子，对手范围很有利。Check控制底池。', evImpact: '+0.5 BB/100' }, { action: 'Bet 5BB', isCorrect: false, explanation: '湿润面对手范围有利，大注C-Bet风险高。', evImpact: '-1.0 BB/100' }, { action: 'Bet 2BB', isCorrect: false, explanation: '即使小注在这个面也不太好。Check更好。', evImpact: '-0.3 BB/100' }], relatedLessonId: 'l4-range-construction' },
+            { id: 'l4-rc-p5', difficulty: 'advanced', scenario: { heroHand: ['9s', '8s'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['7s', '6d', '2h', 'Kd', '3c'], street: 'river', potSize: 13, effectiveStack: 85, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Check', isCorrect: false, explanation: '98顺子成牌，River应该价值下注。', evImpact: '-1.0 BB/100' }, { action: 'Bet 10BB', isCorrect: true, explanation: '98顺子成牌，River标准价值下注。TAG有很多弱牌会Call。', evImpact: '+1.5 BB/100' }, { action: 'All-in', isCorrect: false, explanation: '顺子但非坚果，All-in过度。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-range-construction' },],
         },
       },
       {
         id: 'l4-bluffcatching',
         level: 4,
-        order: 9,
+        order: 7,
         title: 'Bluff Catching 与 Hero Call',
         subtitle: '学会在正确的时机做出勇敢的跟注',
         duration: '10 min',

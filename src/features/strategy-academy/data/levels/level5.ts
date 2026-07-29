@@ -551,7 +551,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
         },
       },
       {
-        id: 'bonus-short-deck',
+        id: 'l5-short-deck',
         level: 5,
         order: 4,
         title: '短牌德州入门 (6+ Hold\'em)',
@@ -723,7 +723,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
                   evImpact: '+2.5 ante',
                 },
               ],
-              relatedLessonId: 'bonus-short-deck',
+              relatedLessonId: 'l5-short-deck',
             },
             {
               id: 'sd-p2',
@@ -759,7 +759,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
                   evImpact: '+0.5 ante',
                 },
               ],
-              relatedLessonId: 'bonus-short-deck',
+              relatedLessonId: 'l5-short-deck',
             },
             {
               id: 'sd-p3',
@@ -795,11 +795,11 @@ export const LEVEL_5_LESSONS: Lesson[] = [
                   evImpact: '-4.0 ante',
                 },
               ],
-              relatedLessonId: 'bonus-short-deck',
+              relatedLessonId: 'l5-short-deck',
             },
           
-            { id: 'sd-p4', scenario: { heroHand: ['Ks', 'Kc'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2 ante' }], street: 'preflop', potSize: 5, effectiveStack: 100 }, options: [{ action: 'Fold', isCorrect: false, explanation: 'KK在短牌中是顶级强牌，不能弃牌。', evImpact: '-3.0 ante' }, { action: 'Raise 6 ante', isCorrect: true, explanation: 'KK在短牌中是顶级强牌，3-Bet获取价值。', evImpact: '+2.5 ante' }, { action: 'Call', isCorrect: false, explanation: 'KK足够强做3-Bet，Call太被动。', evImpact: '+1.0 ante' }], relatedLessonId: 'bonus-short-deck' },
-            { id: 'sd-p5', scenario: { heroHand: ['6s', '6c'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 2 ante' }], street: 'flop', board: ['6h', '9h', 'Th'], potSize: 8, effectiveStack: 96 }, options: [{ action: 'Check', isCorrect: false, explanation: '中了set应该下注保护，听牌很多。', evImpact: '-1.5 ante' }, { action: 'Raise 5 ante', isCorrect: true, explanation: 'Set需要下注保护。短牌中顺子beats三条，但对手有听牌。', evImpact: '+2.0 ante' }, { action: 'Fold', isCorrect: false, explanation: '中了set绝不能弃牌。', evImpact: '-4.0 ante' }], relatedLessonId: 'bonus-short-deck' },],
+            { id: 'sd-p4', scenario: { heroHand: ['Ks', 'Kc'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2 ante' }], street: 'preflop', potSize: 5, effectiveStack: 100 }, options: [{ action: 'Fold', isCorrect: false, explanation: 'KK在短牌中是顶级强牌，不能弃牌。', evImpact: '-3.0 ante' }, { action: 'Raise 6 ante', isCorrect: true, explanation: 'KK在短牌中是顶级强牌，3-Bet获取价值。', evImpact: '+2.5 ante' }, { action: 'Call', isCorrect: false, explanation: 'KK足够强做3-Bet，Call太被动。', evImpact: '+1.0 ante' }], relatedLessonId: 'l5-short-deck' },
+            { id: 'sd-p5', scenario: { heroHand: ['6s', '6c'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 2 ante' }], street: 'flop', board: ['6h', '9h', 'Th'], potSize: 8, effectiveStack: 96 }, options: [{ action: 'Check', isCorrect: false, explanation: '中了set应该下注保护，听牌很多。', evImpact: '-1.5 ante' }, { action: 'Raise 5 ante', isCorrect: true, explanation: 'Set需要下注保护。短牌中顺子beats三条，但对手有听牌。', evImpact: '+2.0 ante' }, { action: 'Fold', isCorrect: false, explanation: '中了set绝不能弃牌。', evImpact: '-4.0 ante' }], relatedLessonId: 'l5-short-deck' },],
         },
       },
       {
@@ -872,7 +872,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'drill-l5-tilt',
         level: 5,
-        order: 6,
+        order: 7,
         title: '情绪识别 Drill',
         subtitle: '识别 Tilt 前兆',
         duration: '3分钟',
@@ -985,7 +985,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'l5-tools',
         level: 5,
-        order: 7,
+        order: 8,
         title: '扑克分析工具入门',
         subtitle: '善用工具加速学习，但不要被工具绑架',
         duration: '8分钟',
@@ -1198,7 +1198,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'l5-online-vs-live',
         level: 5,
-        order: 8,
+        order: 9,
         title: '线上与线下扑克差异',
         subtitle: '适应不同环境，成为全能型牌手',
         duration: '8分钟',
@@ -1429,7 +1429,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'drill-l5-session',
         level: 5,
-        order: 11,
+        order: 10,
         title: 'Session 管理 Drill',
         subtitle: '游戏选择、止损与 Session 规划',
         duration: '3分钟',

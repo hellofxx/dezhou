@@ -8,6 +8,8 @@ interface GraphNode {
   label: string;
   fullTitle: string;
   level: number;
+  /** 所属 LevelInfo 条目 id（如 'l4a'/'l4b'），区分同 level 数字的多条目 */
+  levelId: string;
   order: number;
   x: number;
   y: number;
@@ -53,6 +55,7 @@ function buildGraph() {
         label: truncateLabel(lesson.title),
         fullTitle: lesson.title,
         level: levelInfo.level,
+        levelId: levelInfo.id ?? String(levelInfo.level),
         order: lesson.order,
         x,
         y: levelY,
@@ -113,7 +116,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
   const panStart = useRef({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
 
-  const { progress, isLevelUnlocked } = useAcademyStore();
+  const { progress, isLevelEntryUnlocked } = useAcademyStore();
   const completedLessons = progress.completedLessons;
 
   const { nodes, edges } = useMemo(() => buildGraph(), []);
@@ -160,13 +163,13 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
     return related;
   }, [hoveredNode, edges]);
 
-  // 判断节点状态
+  // 判断节点状态（审计 1.1：按所属 LevelInfo 条目判定，区分 l4a/l4b）
   const getNodeStatus = useCallback(
     (node: GraphNode): 'completed' | 'current' | 'locked' | 'available' => {
       if (completedLessons.includes(node.id)) return 'completed';
-      if (!isLevelUnlocked(node.level)) return 'locked';
-      // 当前进行中：该 level 已解锁，该课程未完成，且前一课已完成（或为第一课）
-      const levelInfo = LEVELS.find((l) => l.level === node.level);
+      if (!isLevelEntryUnlocked(node.levelId)) return 'locked';
+      // 当前进行中：该条目已解锁，该课程未完成，且前一课已完成（或为第一课）
+      const levelInfo = LEVELS.find((l) => l.id === node.levelId);
       if (levelInfo) {
         const lessons = [...levelInfo.lessons].sort((a, b) => a.order - b.order);
         const idx = lessons.findIndex((l) => l.id === node.id);
@@ -176,7 +179,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       }
       return 'available';
     },
-    [completedLessons, isLevelUnlocked]
+    [completedLessons, isLevelEntryUnlocked]
   );
 
   // 缩放
@@ -229,9 +232,9 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       <div className="space-y-4">
         {LEVELS.map((levelInfo) => {
           const lessons = [...levelInfo.lessons].sort((a, b) => a.order - b.order);
-          const unlocked = isLevelUnlocked(levelInfo.level);
+          const unlocked = isLevelEntryUnlocked(levelInfo.id ?? String(levelInfo.level));
           return (
-            <div key={levelInfo.level} className="rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)] p-3">
+            <div key={levelInfo.id ?? levelInfo.level} className="rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)] p-3">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm">{levelInfo.icon}</span>
                 <span className="text-xs font-semibold text-[var(--ivory)]">
@@ -386,7 +389,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
           {nodes.map((node) => {
             const status = getNodeStatus(node);
             const isHovered = hoveredNode === node.id;
-            const levelInfo = LEVELS.find((l) => l.level === node.level);
+            const levelInfo = LEVELS.find((l) => l.id === node.levelId);
 
             // 样式
             let fill: string;

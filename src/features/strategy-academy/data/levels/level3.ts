@@ -959,11 +959,11 @@ export const LEVEL_3_LESSONS: Lesson[] = [
             },
             {
               id: 'l3-bluff-p5',
-              scenario: { heroHand: ['Kd', 'Qd'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }, { player: 'CO', action: 'bet 4BB' }, { player: 'BTN', action: 'call' }], board: ['Ac', '8s', '3h', 'Kd'], street: 'turn', potSize: 13.5, effectiveStack: 85, opponent: OPPONENT_PROFILES['nit'] },
+              scenario: { heroHand: ['Qd', 'Jd'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }, { player: 'CO', action: 'bet 4BB' }, { player: 'BTN', action: 'call' }], board: ['Ac', '8s', '3h', 'Kh'], street: 'turn', potSize: 13.5, effectiveStack: 85, opponent: OPPONENT_PROFILES['nit'] },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'KQ顶对好踢脚，Turn K来增强牌力。应该继续Barrel获取价值。', evImpact: '-1.0 BB/100' },
-                { action: 'Bet', amount: '9BB', isCorrect: true, explanation: 'KQ顶对好踢脚，Turn K来增强牌力。NIT有很多弱Ax会Call，应该Barrel获取价值。', evImpact: '+1.5 BB/100' },
-                { action: 'All-in', isCorrect: false, explanation: '顶对Turn All-in过度。标准尺度获取价值即可。', evImpact: '-0.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'QJ 无摊牌价值，Check 放弃了让中小对子弃牌的机会。卡顺听牌更适合半诈唬。', evImpact: '-0.8 BB/100' },
+                { action: 'Bet', amount: '9BB', isCorrect: true, explanation: 'QJ 在 A-8-3-K 面有卡顺听牌（T 成坚果顺），双飞代表 Ax/Kx，NIT 的中小对子弃牌率极高，是标准半诈唬。', evImpact: '+1.2 BB/100' },
+                { action: 'All-in', isCorrect: false, explanation: '半诈唬无需 All-in，过度下注只会被 Ax 以上跟注。', evImpact: '-2.0 BB/100' },
               ],
               relatedLessonId: 'l3-bluffing',
             },
@@ -1074,9 +1074,9 @@ export const LEVEL_3_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: '在不利位置（OOP）时，你的过牌范围应该比有利位置（IP）时更宽，因为你得在不知道对手行动的情况下做决策。' },
         ],
         quiz: [
-          { id: 'l3-cr-q1', question: '过牌范围应该包含哪些牌？', options: ['只有弱牌', '只有强牌', '强牌+中等牌+弱牌的混合', '只有听牌'], correctIndex: 2, explanation: '平衡的过牌范围应包含各种牌力的混合，让对手无法轻松读取你的策略。' },
-          { id: 'l3-cr-q2', question: '以下哪种情况不适合过牌？', options: ['没有范围优势的低张牌面', '多人底池', '有位置且牌面范围优势明显', '计划Check-Raise'], correctIndex: 2, explanation: '有位置且范围优势明显时，应该主动下注获取价值，而不是过牌给对手免费看牌。' },
-          { id: 'l3-cr-q3', question: '不利位置（OOP）的过牌范围应该怎样？', options: ['比IP更窄', '比IP更宽', '与IP相同', '不应该过牌'], correctIndex: 1, explanation: 'OOP缺乏信息，需要更宽的过牌范围来平衡策略，避免被读穿。' },
+          { id: 'l3-check-range-q1', question: '过牌范围应该包含哪些牌？', options: ['只有弱牌', '只有强牌', '强牌+中等牌+弱牌的混合', '只有听牌'], correctIndex: 2, explanation: '平衡的过牌范围应包含各种牌力的混合，让对手无法轻松读取你的策略。' },
+          { id: 'l3-check-range-q2', question: '以下哪种情况不适合过牌？', options: ['没有范围优势的低张牌面', '多人底池', '有位置且牌面范围优势明显', '计划Check-Raise'], correctIndex: 2, explanation: '有位置且范围优势明显时，应该主动下注获取价值，而不是过牌给对手免费看牌。' },
+          { id: 'l3-check-range-q3', question: '不利位置（OOP）的过牌范围应该怎样？', options: ['比IP更窄', '比IP更宽', '与IP相同', '不应该过牌'], correctIndex: 1, explanation: 'OOP缺乏信息，需要更宽的过牌范围来平衡策略，避免被读穿。' },
           { id: 'l3-check-range-q4', question: '过牌范围中强牌的用途是什么？', options: ['没有用途', '用于Check-Raise或慢打', '用于弃牌', '用于下注'], correctIndex: 1, explanation: '过牌范围中的强牌用于Check-Raise陷阱或慢打，让对手无法轻松读取你的策略。' },
           { id: 'l3-check-range-q5', question: '什么时候应该主动下注而不是过牌？', options: ['没有范围优势时', '多人底池时', '有位置且范围优势明显时', '计划Check-Raise时'], correctIndex: 2, explanation: '有位置且范围优势明显时，应该主动下注获取价值，而不是过牌给对手免费看牌。' },
         ],

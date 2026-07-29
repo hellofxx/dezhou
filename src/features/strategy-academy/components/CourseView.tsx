@@ -6,6 +6,8 @@ import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyStore } from '../store';
 import { findLessonById, getNextLesson, getAllLessons } from '../utils/courseProgress';
 import { LEVELS } from '../data/courses';
+import { LOCAL_LESSONS } from '../data/localLessons';
+import { LOCAL_TRACK } from '../data/localTrack';
 import { LEARNING_TRACKS } from '../data/learningTracks';
 import { LessonContent } from './LessonContent';
 import { LessonQuiz } from './LessonQuiz';
@@ -13,10 +15,14 @@ import { ProgressBar } from './ProgressBar';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import type { DrillResult } from './drills/types';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
+import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useProgressStore, createReviewItem } from '@/features/progress';
 import type { PracticeResult } from '../types';
 
 type Phase = 'reading' | 'quiz' | 'done';
+
+// P1 修复（审计 2.1）：本土课 ID 集合，门禁按 LOCAL_TRACK 前置口径单独判定
+const LOCAL_LESSON_IDS = new Set(LOCAL_LESSONS.map((l) => l.id));
 
 export default function CourseView() {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -34,17 +40,45 @@ export default function CourseView() {
   const progressPercent = allLessons.length > 0 ? ((lessonIndex + 1) / allLessons.length) * 100 : 0;
   const isDrill = lesson?.type === 'drill';
 
-  // P4 修复（4.1-P1-1）：检查 Level 解锁门禁，防止通过 URL 绕过
-  // 注：mental-tilt-recognition 是 DownswingAlert 的目标课程，允许在 Level 7 未解锁时访问
+  // P4 修复（4.1-P1-1）+ 审计 1.1/2.1：按 lesson 所属 LevelInfo 条目判门禁，防止通过 URL 绕过；
+  // 同时消除 l4a/l4b 同为 level:4 导致的 4B 解锁旁路。
+  // 注：mental-tilt-recognition 是 DownswingAlert 的目标课程，允许在未解锁时访问
   const isLevelUnlocked = useAcademyStore((s) => s.isLevelUnlocked);
+  const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
   const completedLessons = useAcademyStore((s) => s.progress.completedLessons);
+  // 调试解锁：解除本土课与课程级门禁（URL 直达）
+  const debugUnlock = useDebugModeStore((s) => s.unlockAll);
+
+  // lesson 所属的 LevelInfo 条目（本土课已并入 l7，但门禁下方单独处理）
+  const levelEntry = lesson
+    ? LEVELS.find((l) => l.lessons.some((x) => x.id === lesson.id))
+    : undefined;
+  const isLocalLesson = !!lesson && LOCAL_LESSON_IDS.has(lesson.id);
+
+  // 本土课门禁：按 LOCAL_TRACK 前置（l1-l3 全部完成）放行，不继承 l7 的 l3+l5 硬门禁
+  const isEntryCompleted = (levelId: string): boolean => {
+    const entry = LEVELS.find((l) => l.id === levelId);
+    return !!entry && entry.lessons.every((x) => completedLessons.includes(x.id));
+  };
+  const localPrereqIds = LOCAL_TRACK.prerequisiteLevelIds ?? [];
+  const isLessonLevelUnlocked = !lesson
+    ? true
+    : debugUnlock
+      ? true
+      : isLocalLesson
+        ? localPrereqIds.every(isEntryCompleted)
+        : levelEntry?.id
+          ? isLevelEntryUnlocked(levelEntry.id)
+          : isLevelUnlocked(lesson.level);
 
   // P4 修复（4.1-P2-1）：检查细粒度 prerequisite（如果课程声明了 prerequisites 字段）
-  const isPrerequisiteMet = lesson?.prerequisites?.every((id) => completedLessons.includes(id)) ?? true;
+  const isPrerequisiteMet = debugUnlock
+    ? true
+    : lesson?.prerequisites?.every((id) => completedLessons.includes(id)) ?? true;
 
   const isLocked = lesson
     && lesson.id !== 'mental-tilt-recognition'
-    && (!isLevelUnlocked(lesson.level) || !isPrerequisiteMet);
+    && (!isLessonLevelUnlocked || !isPrerequisiteMet);
 
   useEffect(() => {
     if (lessonId) startLesson(lessonId);
@@ -163,19 +197,20 @@ export default function CourseView() {
     );
   }
 
-  // P4 修复（4.1-P1-1 + 4.1-P2-1）：未解锁的课程显示锁定提示
+  // P4 修复（4.1-P1-1 + 4.1-P2-1）+ 审计 1.1：未解锁的课程显示锁定提示（按所属条目取前置）
   if (isLocked) {
-    const levelLocked = lesson && !isLevelUnlocked(lesson.level);
-    // 从 LEVELS 数据中查找实际前置 Level（取代硬编码）
-    const levelEntry = LEVELS.find((l) => l.level === lesson?.level);
-    const prereqIds = levelEntry?.prerequisiteLevelIds ?? [];
+    const levelLocked = !isLessonLevelUnlocked;
+    // 本土课显示 LOCAL_TRACK 前置；其余按所属 LevelInfo 条目的 prerequisiteLevelIds
+    const prereqIds = isLocalLesson ? localPrereqIds : (levelEntry?.prerequisiteLevelIds ?? []);
     const prereqTitles = prereqIds
       .map((id) => LEVELS.find((l) => l.id === id)?.title)
       .filter(Boolean);
-    const fallbackRequired = (lesson?.level ?? 1) - 1;
+    // 无显式前置时回退到前一个条目标题（如 l4b → “进阶思维·范围与EV”）
+    const entryIdx = levelEntry ? LEVELS.indexOf(levelEntry) : -1;
+    const fallbackTitle = entryIdx > 0 ? LEVELS[entryIdx - 1]?.title : undefined;
     const requiredLevelText = prereqTitles.length > 0
       ? prereqTitles.join('、')
-      : `Level ${fallbackRequired}`;
+      : (fallbackTitle ?? `Level ${(lesson?.level ?? 1) - 1}`);
     const missingPrereqs = lesson?.prerequisites?.filter((id) => !completedLessons.includes(id)) ?? [];
 
     return (

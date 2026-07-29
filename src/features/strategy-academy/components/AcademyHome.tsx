@@ -4,13 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LEVELS } from '../data/courses';
 import { useAcademy } from '../hooks/useAcademy';
+import { useAcademyStore } from '../store';
 import { getTotalLessonCount } from '../utils/courseProgress';
 import { LevelCard } from './LevelCard';
 import { DailyPlanCard } from './DailyPlanCard';
 
 export default function AcademyHome() {
   const { t } = useTranslation();
-  const { progress, isLevelUnlocked, getLevelProgress, getTotalProgress, basicsProgress } = useAcademy();
+  const { progress, getLevelProgress, getTotalProgress, basicsProgress } = useAcademy();
+  // 审计 1.1：卡片解锁按 LevelInfo 条目判定，与 CourseView 门禁口径一致（区分 l4a/l4b）
+  const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
   const navigate = useNavigate();
 
   const totalProgress = getTotalProgress();
@@ -167,9 +170,9 @@ export default function AcademyHome() {
         <div className="space-y-3">
           {LEVELS.map((level, index) => (
             <LevelCard
-              key={level.level}
+              key={level.id ?? level.level}
               level={level}
-              unlocked={isLevelUnlocked(level.level)}
+              unlocked={isLevelEntryUnlocked(level.id ?? String(level.level))}
               progress={getLevelProgress(level.level)}
               completedLessons={progress.completedLessons}
               index={index}

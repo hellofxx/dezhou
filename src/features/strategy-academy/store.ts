@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { AcademyProgress, BasicsProgress, PracticeResult, AbilityAssessment, AdaptiveConfig, QuestionDifficulty, DailyPlan, LevelCertification } from './types';
 import { LEVELS } from './data/courses';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
+import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import { DEFAULT_ADAPTIVE_CONFIG, updateAbilityScore } from './utils/adaptiveDifficulty';
 import { generateDailyPlan, isDailyPlanFresh } from './utils/dailyPlan';
 
@@ -53,6 +54,8 @@ interface AcademyStore {
   recordPracticeScore: (result: PracticeResult) => void;
   resetProgress: () => void;
   isLevelUnlocked: (level: number) => boolean;
+  /** 按 LevelInfo.id（如 'l4a'/'l4b'）判断单个 Level 条目是否解锁，区分同 level 数字的 4A/4B */
+  isLevelEntryUnlocked: (levelId: string) => boolean;
   getLevelProgress: (level: number) => number;
   getTotalProgress: () => number;
   isCompleted: (lessonId: string) => boolean;
@@ -151,6 +154,7 @@ export const useAcademyStore = create<AcademyStore>()(
       resetProgress: () => set({ progress: { ...initialProgress } }),
 
       isLevelUnlocked: (level) => {
+        if (isDebugUnlockActive()) return true; // 调试解锁：解除全部 Level 门禁
         if (level <= 1) return get().basicsProgress.completed;
         const { completedLessons } = get().progress;
 
@@ -181,6 +185,29 @@ export const useAcademyStore = create<AcademyStore>()(
           }
         }
         return false;
+      },
+
+      // P0 修复（审计 1.1）：按 LevelInfo 条目判定解锁，消除 l4a/l4b 同为 level:4 时
+      // isLevelUnlocked(4) “任一条目满足即解锁”导致的 4B 门禁旁路
+      isLevelEntryUnlocked: (levelId) => {
+        if (isDebugUnlockActive()) return true; // 调试解锁：解除全部 Level 条目门禁
+        const idx = LEVELS.findIndex((l) => l.id === levelId);
+        const levelInfo = idx >= 0 ? LEVELS[idx] : undefined;
+        if (!levelInfo) return false;
+        if (levelInfo.level <= 1) return get().basicsProgress.completed;
+        const { completedLessons } = get().progress;
+
+        if (levelInfo.prerequisiteLevelIds && levelInfo.prerequisiteLevelIds.length > 0) {
+          return levelInfo.prerequisiteLevelIds.every((prereqId) => {
+            const prereqLevel = LEVELS.find((l) => l.id === prereqId);
+            if (!prereqLevel) return false;
+            return prereqLevel.lessons.every((l) => completedLessons.includes(l.id));
+          });
+        }
+        // 回退：依赖前一个 LEVELS 条目全部完成
+        return idx === 0
+          ? get().basicsProgress.completed
+          : LEVELS[idx - 1]?.lessons.every((l) => completedLessons.includes(l.id)) ?? false;
       },
 
       getLevelProgress: (level) => {
@@ -289,9 +316,13 @@ export const useAcademyStore = create<AcademyStore>()(
         set((state) => {
           const existing = state.certifications[level];
           const levelEntries = LEVELS.filter((l) => l.level === level);
-          const totalLessons = levelEntries.reduce((sum, e) => sum + e.lessons.length, 0);
+          // P1 修复（审计 1.2）：questionCount 与认证页实考口径统一：min(合并题池, 20)
+          const totalQuizQuestions = levelEntries.reduce(
+            (sum, e) => sum + e.lessons.reduce((s, l) => s + l.quiz.length, 0),
+            0
+          );
           const requiredAccuracy = 80;
-          const questionCount = levelEntries.length > 0 ? Math.min(totalLessons * 3, 20) : 15;
+          const questionCount = levelEntries.length > 0 ? Math.min(totalQuizQuestions, 20) : 15;
 
           const cert: LevelCertification = {
             level,

@@ -47,7 +47,7 @@ function inferPuzzleLessonId(theme: string): string | undefined {
     case 'river-value': return 'l3-bet-sizing';
     case 'bluff': return 'l3-bluffing';
     case 'short-stack': return 'l2-short-stack';
-    case 'icm': return 'l2-short-stack';
+    case 'icm': return 'l6-icm';
     case 'multiway': return 'l3-multistreet';
     default: return undefined;
   }

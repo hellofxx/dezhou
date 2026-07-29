@@ -31,7 +31,7 @@ export const HAND_RANKING_QUESTIONS: HandRankingQuestion[] = [
     id: 'hr-q1',
     type: 'compare-hands',
     promptKey: 'drills.handRanking.comparePrompt',
-    handA: ['As', 'Ks', 'Qh', 'Jd', 'Tc'], // AKQJT 顺子
+    handA: ['As', 'Ks', 'Qd', 'Jd', 'Tc'], // AKQJT 顺子
     handB: ['Ah', 'Kh', 'Qh', 'Jh', 'Th'], // 皇家同花顺
     optionsKeys: [
       'drills.handRanking.options.handA',
@@ -45,7 +45,7 @@ export const HAND_RANKING_QUESTIONS: HandRankingQuestion[] = [
     id: 'hr-q2',
     type: 'compare-hands',
     promptKey: 'drills.handRanking.comparePrompt',
-    handA: ['9h', '9d', '9c', 'As', 'Ks'], // 三条 9
+    handA: ['9h', '9d', '9c', 'Ac', 'Ks'], // 三条 9
     handB: ['As', 'Ah', 'Kd', 'Kh', 'Kc'], // 葫芦 AKK
     optionsKeys: [
       'drills.handRanking.options.handA',
@@ -60,7 +60,7 @@ export const HAND_RANKING_QUESTIONS: HandRankingQuestion[] = [
     type: 'compare-hands',
     promptKey: 'drills.handRanking.comparePrompt',
     handA: ['2h', '3h', '4h', '5h', '7h'], // 同花
-    handB: ['3c', '4d', '5h', '6s', '7c'], // 顺子（混合花色）
+    handB: ['3c', '4d', '5d', '6s', '7c'], // 顺子（混合花色）
     optionsKeys: [
       'drills.handRanking.options.handA',
       'drills.handRanking.options.handB',

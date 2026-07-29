@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, CheckCircle2, PlayCircle, ChevronRight } from 'lucide-react';
+import { Lock, CheckCircle2, PlayCircle, ChevronRight, Award } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import type { LevelInfo } from '../types';
 import { ProgressBar } from './ProgressBar';
@@ -24,6 +24,13 @@ export function LevelCard({ level, unlocked, progress, completedLessons, index }
     if (unlocked && targetLesson) {
       navigate(`/academy/lesson/${targetLesson.id}`);
     }
+  };
+
+  // 审计 1.2：级别全部完成后提供认证入口（激活 /academy/certification/:level 死路由）
+  const goCertification = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    navigate(`/academy/certification/${level.level}`);
   };
 
   return (
@@ -76,6 +83,21 @@ export function LevelCard({ level, unlocked, progress, completedLessons, index }
                   <span className="font-numeric text-[var(--brass-bright)]">{progress}%</span>
                 </div>
                 <ProgressBar value={progress} size="sm" />
+                {allCompleted && (
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`参加 Level ${level.level} 认证测验`}
+                    onClick={goCertification}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') goCertification(e);
+                    }}
+                    className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
+                  >
+                    <Award className="w-3.5 h-3.5" />
+                    参加 Level {level.level} 认证测验
+                  </span>
+                )}
               </div>
             ) : (
               <p className="text-xs text-[var(--ivory-muted)] flex items-center gap-1.5">

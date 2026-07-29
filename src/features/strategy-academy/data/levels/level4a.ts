@@ -381,7 +381,7 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
                 ],
                 street: 'preflop',
                 potSize: 105,
-                effectiveStack: 0,
+                effectiveStack: 89.5,
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'AKs 面对CO的4-Bet All-in，底池赔率极好。你需要约 40% 胜率，AKs对CO的4-Bet范围通常有 40%+。', evImpact: '-5.0 BB/100' },
@@ -417,7 +417,7 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
       {
         id: 'l4-opponent-reading',
         level: 4,
-        order: 4,
+        order: 3,
         title: '对手阅读与剥削策略',
         subtitle: '学会识别对手类型并制定针对性策略',
         duration: '15 min',
@@ -609,7 +609,7 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
       {
         id: 'l4-blockers',
         level: 4,
-        order: 5,
+        order: 4,
         title: 'Blocker 效应',
         subtitle: '利用手牌阻断对手范围的关键概念',
         duration: '10 min',

@@ -51,7 +51,7 @@ export const OUTS_QUESTIONS: OutsQuestion[] = [
     id: 'outs-q3',
     promptKey: 'drills.outs.questions.q3.prompt',
     heroHand: ['8c', '9d'],
-    board: ['7h', 'Tc', 'Js'],
+    board: ['7h', 'Tc', '2s'],
     optionsKeys: [
       'drills.outs.options.count4',
       'drills.outs.options.count6',

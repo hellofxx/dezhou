@@ -796,8 +796,8 @@
           "explanation": "同花听牌共 9 outs（13-4=9），是最常见的强听牌。"
         },
         "q3": {
-          "prompt": "你持有 89，牌面 7TJ，你的 OESD（两端顺子听牌）有多少 Outs？",
-          "explanation": "OESD 两端顺子听牌：6 或 Q 完成顺子，共 8 outs。"
+          "prompt": "你持有 89，牌面 7T2，你的 OESD（两端顺子听牌）有多少 Outs？",
+          "explanation": "OESD 两端顺子听牌：6 或 J 完成顺子，共 8 outs。"
         },
         "q4": {
           "prompt": "你持有 56，牌面 479，你的 OESD 有多少 Outs？",
