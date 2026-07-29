@@ -79,6 +79,14 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 - feature 模块完成训练后必须 `trainingEvents.emit(event)`，由 progress store 自动累积统计
 - Streak / ELO / SRS / Emotion / Mentor 的"记录"action 在答题时同步调用（不走事件总线）
 
+### 调试解锁系统（开发者选项，见 TDD 5.9）
+- 实现位置：`src/shared/stores/debugMode.ts`（独立 persist store，name=`poker-debug-mode`；不并入 progress store 以免连带 persist 形状/版本变更）；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（本文件不维护数值副本）
+- 解锁点短路共 5 处：strategy-academy store（`isLevelUnlocked`/`isLevelEntryUnlocked`）/ CourseView / range-trainer RangeSelector / strategy-academy LearningTracksView / progress SessionLimitGuard；新增门禁时应同步接入 `isDebugUnlockActive()` 短路并通知对应 feature 代理
+- UI 入口：SettingsPage「开发者选项」（归 progress-dev）
+
+### 策略学院等级解锁（区分 4A/4B）
+- store 提供 `isLevelUnlocked(level)` 与 `isLevelEntryUnlocked(levelId)` 两方法；UI 门禁统一用后者按 `LevelInfo.id` 判定，避免同 level 数字的 4A/4B 旁路（实现属 strategy-academy，跨模块语义在此登记）
+
 ### shared 层目录划分
 具体文件以各目录实际内容为事实源（不维护数量副本）：
 - **types/**：跨模块领域类型定义
@@ -86,6 +94,7 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 - **utils/**：纯函数工具集
 - **constants/**：跨模块常量与模板
 - **stores/trainingEvents.ts**：事件总线
+- **stores/debugMode.ts**：调试解锁开发者选项（全局门禁旁路；unlockAll / activateWithCode / deactivate / isDebugUnlockActive；激活码常量以该文件为唯一事实源）
 
 ### 答题选项排序治理（见 AGENTS.md 同名章节与 TDD 5.9）
 - 共享基础设施 `shared/utils/seededShuffle.ts`（seededRandom / shuffleBySeed / hashStringToSeed / isNumericOptionSet / sortByNumericValue）由 platform-dev 守护，判定与排序规则以该文件实现为唯一事实源
@@ -99,7 +108,7 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 - src/shared/components/ui/ — shadcn 基础组件
 - src/shared/utils/ — 纯函数工具（关键：pokerMath.ts 扑克数学计算；elo.ts ELO 算法；deck.ts 牌堆操作；seededShuffle.ts 选项排序治理基础设施）
 - src/shared/constants/ — 跨模块常量（关键：mentorStyles.ts 导师文案模板 MENTOR_FEEDBACK_TEMPLATES）
-- src/shared/stores/ — 事件总线（trainingEvents.ts）
+- src/shared/stores/ — 事件总线（trainingEvents.ts）、调试解锁（debugMode.ts）
 - src/layouts/ — AppLayout / BlankLayout / MobileNav
 - src/app/ — 路由配置（routes.tsx）
 - src/i18n/ — config.ts + locales/zh.json + locales/en.json

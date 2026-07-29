@@ -95,7 +95,7 @@ additionalPrompt: ""
 - **末题简单 + 补救机制**：最后一题必须强制为简单题（`getEasyQuestion` 返回 AA@BTN raise），并通过 `rescueUsed` 标志位保证补救机制仅触发一次，避免无限循环。
 - **范围数据静态化**：预置范围数据为静态常量，集中存放在 `constants.ts`，禁止引入运行时网络请求或动态导入；新增范围数据须同时补齐 i18n key。
 - **i18n 双语同步**：新增 `range.*` 前缀的 i18n key 时必须同时更新 zh.json 与 en.json，缺一不可。
-- **位置渐进解锁**（v1.8 新增）：`POSITION_UNLOCK_THRESHOLDS` 定义于 `constants.ts`，阈值数值（UTG / HJ / CO / BTN / SB / BB）以该常量定义为唯一事实源（本文件不维护数值副本）；`RangeSelector` 必须调用 `isPositionUnlocked(position, preflopElo)` 过滤锁定位置。调整阈值时在 `docs/CHANGELOG.md` 记录。
+- **位置渐进解锁**（v1.8 新增）：`POSITION_UNLOCK_THRESHOLDS` 定义于 `constants.ts`，阈值数值（UTG / HJ / CO / BTN / SB / BB）以该常量定义为唯一事实源（本文件不维护数值副本）；`RangeSelector` 必须调用 `isPositionUnlocked(position, preflopElo)` 过滤锁定位置。调整阈值时在 `docs/CHANGELOG.md` 记录。调试解锁激活时（`shared/stores/debugMode.ts` 的 `unlockAll`）`RangeSelector` 跳过位置门禁，全部位置可选。
 - **反馈闭环 relatedLessonId**（v1.8 新增）：`buildRangeFeedback` 调用时必须传入 `relatedLessonId`，由 `inferRelatedLessonId(position, actionType)` 推导；wrong/blunder 级别在 QuizCard 显示"去复习"链接，跳转对应课程。
 - **自适应难度**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty('range-trainer')` 判定，阈值以 progress store 实现为准），`TrainingSession` 显示降级提示 banner；禁止自行判定降级条件。
 - **范围嵌套关系**（v1.8 修正）：预置范围必须满足位置嵌套关系 UTG ⊂ HJ ⊂ CO ⊂ BTN（Open Raise 场景）。修改任一位置范围时必须验证嵌套关系不被破坏。

@@ -9,6 +9,63 @@
 
 - **trainingEvents.emit 存量缺口（部分完成）**（登记于 2026-07-28）：pot-odds / puzzle-trainer 已在 v2.0 补全 emit；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免，无需 emit。剩余缺口已清零。
 - **strategy-academy Drill 题库位置偏差（i18n-key 型）（已完成）**（登记于 2026-07-28，同日治理完成）：`outsQuestions` / `potOddsQuestions` / `OPPONENT_DRILL_QUESTIONS` 的位置偏差已通过组件内 i18n 解析后重排治理，见下方 fix(strategy-academy) 条目。
+- **策略学院逐级审计任务系列 git commit 范围决策（2026-07-29，用户确认）**：本审计任务系列（逐级审计修复 + 调试解锁 + 规范债务）不含 git commit 步骤——提交时机与粒度由用户另行决定；项目通用提交约定仍以 AGENTS.md「提交粒度」章节为准，不受此决策影响。
+
+---
+
+## feat(progress) + chore(strategy-academy) — 2026-07-29（调试解锁开发者选项 + 低优先规范债务）
+
+> 审计收尾：实现设置页“开发者选项”调试解锁，并清理 Spec 批次 5 中风险可控的规范债务。
+
+### feat(progress): 调试解锁（开发者选项）
+
+- 新增 `src/shared/stores/debugMode.ts`（独立 persist store，name=poker-debug-mode，version 1）：`unlockAll` 状态 + `activateWithCode(code)` + `deactivate()`；激活码常量 `DEBUG_UNLOCK_CODE = '1337'`（唯一事实源，改码仅改一行）；提供非响应式 `isDebugUnlockActive()` 供 store 方法短路
+- 解锁点短路（激活后全部放行）：strategy-academy store 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、CourseView 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard` 每日题量上限
+- SettingsPage 新增“开发者选项”分区：数字输入框 + “激活”按钮（错误码提示“调试码不正确”）；激活后显示“调试解锁已开启”与“关闭调试解锁”按钮
+- 范围说明：onboarding 不纳入解锁（未完成引导无法进入设置页，纳入无意义）；状态独立持久化，不影响 progress store persist 形状/版本
+- 浏览器实测：新用户 Academy 9 张 Level 卡 8 锁 0 解→设置页输入 1337 激活→Academy 9/9 全解锁；SettingsPage 开发者分区渲染为激活态
+
+### chore(strategy-academy): 低优先规范债务（Spec 批次 5 安全子集）
+
+- **命名统一**：`bonus-short-deck` → `l5-short-deck`（与同级 `l5-*` 命名对齐，引用仅 level5.ts 内部 1 处 id + 4 处 relatedLessonId，同步改完）
+- **order 重排**：消除 native 课程 order 重复（l4a、l4b、l5 共 13 处重新编号为递增序），修正 ConceptGraph 排序歧义
+- **守卫测试扩展**：`curriculumIntegrity.test.ts` 新增“native 课程 order 无重复”用例（排除本土课——其有意共享 order 保稳定展示顺序）
+- **不做项及理由**：drill 命名（`drill-hand-ranking` 专用组件型 vs `drill-l2-*` ChoiceDrill型、`drill-l4b-*` 区分 4A/4B）为有意义语义区分，强行统一会破坏语义并需改 learningTracks 引用，按 Surgical Changes 保留；超 200 行大组件拆分（PracticeDrill 811 / ConceptGraph 552 / QuickDrill 529）回归面过大，Spec 已标注“另开任务”，本轮不做
+- 门禁：`pnpm typecheck` / `pnpm lint` / `pnpm test`（26 文件 186 用例）全绿
+
+---
+
+## fix(strategy-academy) — 2026-07-29（课程逐级审计修复：解锁门禁 / 认证系统 / 数据完整性）
+
+> 两轮课程审计（逐级排查 + 系统性深挖）确认 5 大缺陷模式后的集中修复。根因：4A/4B 拆分后消费方仍按 level 数字索引、认证功能半集成、本土课并入 L7 的门禁副作用、课程数据无 schema 守卫。
+
+### P0 功能修复
+
+- **level 数字索引根治（8 处）**：store 新增 `isLevelEntryUnlocked(levelId)`（按 LevelInfo 条目判定，l4b 需 l4a 全完成）；CourseView 门禁与锁定提示改按所属条目（堵住“完成 L3 即可直学 4B”旁路）；ConceptGraph 节点状态/归属/key、AcademyHome 卡片解锁与 key 全部改按 `level.id`（消除 l4a/l4b 同 key=4 的 React key 冲突）
+- **认证系统接通**：LevelCard 在级别全部完成后显示“参加认证”入口（此前 `/academy/certification/:level` 无任何 UI 入口，连带轨道前置提示与 certification-any/All 成就死锁）；LevelCertification 题池改为合并同 level 全部条目（Level 4 = 4A+4B，此前 4B 的 33 题永不入池）；`attemptCertification.questionCount` 与实考口径统一为 min(合并题池, 20)
+- **非法数据**：`l3-bluff-p5` 手牌与 turn 牌重复（Kd 出现两次）且课程定位错位，改写为 QJ 卡顺半诈唬场景；`l4-ev-p3` effectiveStack 0→89.5
+
+### P1 一致性修复
+
+- **本土课门禁对齐**：CourseView 对 LOCAL_LESSONS 改按 LOCAL_TRACK 前置（l1-l3 全完成）放行，不再继承 l7 的 l3+l5 硬门禁（mental-tilt-recognition 白名单保留）
+- **l6 重复课下架**：删除 `l6-final-table`（Final Table 动态，与 `l6-finaltable` 主题重复、同 order），保留含 examples 的 `l6-finaltable`；track-tournament 引用同步改指
+- **子 ID 撞车改名（16 组）**：`l4-range-construction` 的 quiz/examples/practice 子 id `l4-range-*` → `l4-rc-*`（与 l4a `l4-range-thinking` 全套撞车）；`l3-check-range` 的 `l3-cr-q1~q3` → `l3-check-range-q1~q3`（与 `l3-checkraise` 撞车，对齐本课 q4/q5 既有前缀）
+- **fix(puzzle-trainer)**：`inferPuzzleLessonId` 的 icm 主题映射 `l2-short-stack` → `l6-icm`
+
+### P2 教学内容修正（zh/en 同步）
+
+- `outs-q3` 成顺误标听牌：牌面 7TJ（手持 89 已成顺）→ 7T2（真 OESD，6/J 完成），zh/en prompt+explanation 同步
+- `hr-q1/q2/q3` 比大小题两手牌共牌（Qh/As/5h）：换牌消除，牌型结论不变
+- `l4-overbet-p5` Q 高“价值下注”教学错误：改为 KQ 顶对薄价值场景；`local-deep-sc-q4` 15-outs 概率标反（54%/80% → 32%/54%），deepStack 课程正文（content）与示例（example）中同源的 15-outs 概率、`54s-9Ts`→`54s-T9s` 写法一并修正；`l4-gto-q4` 脏文本“完美.play”→“完美游戏”
+
+### 防回归（数据守卫）
+
+- 新增 `data/curriculumIntegrity.test.ts`（6 用例）：lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法（格式/无重复卡/street-board 匹配/数值为正）、轨道-概念节点-prerequisites-relatedLessonId-跨模块引用无悬空、Drill 接线完整，随 `pnpm test` 常驻门禁
+
+### 数据迁移
+
+- 无 persist 字段形状变更，version 不升级：completedLessons 中残留的 `l6-final-table` 旧 id 为无害冗余（数组包含判定，不影响进度/解锁）；子题 id 改名不影响持久化（quizScores 按 lessonId 记录）
+- 门禁：`pnpm typecheck` / `pnpm lint` / `pnpm test`（26 文件 185 用例）全绿
 
 ---
 

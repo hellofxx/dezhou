@@ -1010,6 +1010,8 @@ interface DailyRecommendation {
    - L8（综合实战）需完成 L4B
    - 本土低级别盈利路径需完成 L1-L3
 
+   **等级解锁判定（区分 4A/4B）**：store 提供两个方法——`isLevelUnlocked(level: number)`（按 level 数字，同 level 数字任一条目满足即解锁，用于兼容旧调用）与 `isLevelEntryUnlocked(levelId: string)`（按 `LevelInfo.id` 精确判定，如 `l4a`/`l4b`）。UI 门禁（`CourseView` / `ConceptGraph` / `AcademyHome` / `LevelCard`）统一使用 `isLevelEntryUnlocked`，消除 L4A/L4B 同为 `level:4` 时 L4B 门禁被旁路的缺陷。`CourseView` 对本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定。级别认证（`LevelCertification`）题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），`attemptCertification` 的 questionCount 与实考口径统一为 `min(合并题池, 20)`。
+
 4. **知识图谱**（ConceptGraphView）：
    - 使用 SVG + framer-motion 渲染节点和边
    - 节点状态：已掌握（绿色）、学习中（金色）、未解锁（灰色）
@@ -1101,6 +1103,15 @@ interface DailyRecommendation {
   - 已配置阈值的位置：`preflopElo >= threshold` 时解锁
 - 调用方：`RangeSelector` 组件渲染时过滤锁定位置，悬停提示解锁所需 ELO
 - 阈值变更规则：调整阈值时必须同步更新 `docs/CHANGELOG.md`，并在 `range-trainer-dev.md` 子代理文件中记录
+
+**调试解锁系统（开发者选项）**（2026-07 新增，产品规格见 PRD）
+
+面向开发与演示的全局门禁旁路，激活后一次性解除所有功能锁。
+
+- 独立 store `shared/stores/debugMode.ts`（persist name=`poker-debug-mode`，version 1，不并入 progress store 以免连带 persist 形状/版本变更）：`unlockAll` 状态 + `activateWithCode(code)` + `deactivate()`；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（本文档不维护数值副本）；导出非响应式 `isDebugUnlockActive()` 供 store 方法/纯逻辑短路
+- 解锁点短路（激活后全部放行，共 5 处）：strategy-academy store 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、`CourseView` 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard`（`useSessionLimitReached`）每日题量上限
+- UI 入口：`SettingsPage`「开发者选项」分区（数字输入框 + 激活/关闭）
+- 范围边界：onboarding 不纳入（未完成引导无法进入设置页，纳入无意义）；成就与统计数据不受影响
 
 **Streak 系统（连击与冻结卡）**
 

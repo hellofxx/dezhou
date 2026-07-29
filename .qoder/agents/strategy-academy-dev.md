@@ -64,7 +64,7 @@ additionalPrompt: ""
 - **学习轨道**（Learning Tracks）：按顺序引用现有课程 ID，包括零基础快速入门 + 本土低级别盈利路径（P2-1）
 - **难度自适应**：SM-2 算法简化版，根据正确率动态调整训练难度（85% 升级 / 60% 降级）
 - **每日训练计划**：基于 spaced repetition 生成 reviewLessons + newLesson + practiceSpots
-- **级别认证**：综合测验，80% 正确率通过，最多 20 题
+- **级别认证**：综合测验，80% 正确率通过，最多 20 题；题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），questionCount 与实考口径统一为 `min(合并题池, 20)`
 - **对手形象系统**：TAG / LAG / NIT / Calling Station / Maniac / Unknown 六类，VPIP / PFR / AF 等统计可视化
 - **概念图谱**：跨模块关联（pot-odds / range-trainer / gto-simulator / hand-history）
 - **筹码量与下注尺度系统**：20BB / 50BB / 100BB 三档，覆盖 1/3 pot 到 overbet
@@ -87,6 +87,7 @@ additionalPrompt: ""
 
 ### shared/ 层依赖
 - `src/shared/stores/trainingEvents.ts`（事件总线）
+- `src/shared/stores/debugMode.ts`（调试解锁：`isLevelUnlocked`/`isLevelEntryUnlocked` 在 `isDebugUnlockActive()` 为真时短路放行；变更归 platform-dev）
 - `src/shared/types/poker.ts`（Card / Hand / HandRank 等基础类型）
 - `src/shared/types/decisionFeedback.ts`（五级反馈 DecisionGrade / calculateGrade）
 - `src/shared/utils/seededShuffle.ts`（选项排序治理基础设施：shuffleBySeed / hashStringToSeed / isNumericOptionSet / sortByNumericValue，变更归 platform-dev）
@@ -108,7 +109,7 @@ additionalPrompt: ""
 3. 添加新学习轨道时：编辑 learningTracks.ts（或 localTrack.ts）→ 引用现有 lessonIds → LearningTracksView 自动渲染
 4. 修改难度自适应阈值时：编辑 utils/adaptiveDifficulty.ts 的 DEFAULT_ADAPTIVE_CONFIG
 5. 修改每日计划生成逻辑时：编辑 utils/dailyPlan.ts（reviewQueue 由 SRS 系统提供）
-6. 修改等级解锁规则时：编辑 store.ts 的 isLevelUnlocked（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
+6. 修改等级解锁规则时：编辑 store.ts 的 `isLevelUnlocked`（按 level 数字，兼容旧调用）与 `isLevelEntryUnlocked`（按 `LevelInfo.id` 精确判定，区分 l4a/l4b；UI 门禁统一调用此方法）（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 7. 修改快速训练 SRS 混合时：编辑 QuickDrill.tsx 调用 `composeDailyMix` 的参数
 8. 新增测验题 / Drill 题时：选项与 correctIndex 书写顺序不限（渲染前自动重排），但需确认分布守卫测试（quizShuffle.test.ts / drillOptionOrder.test.ts）覆盖新题且通过
 9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
@@ -123,7 +124,8 @@ additionalPrompt: ""
 - 快速训练完成时必须调用 `recordTrainingDay`（启动 Streak）+ `recordQuickDrillCompletion`（更新 quickDrillStreak，幂等）
 - 等级解锁依赖前置等级所有课程完成（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 - strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》
-- **课程双层门禁**（v1.8 新增）：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（用户当前 `level` ≥ 课程所在等级）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）
+- **课程双层门禁**（v1.8 新增，2026-07 重构）：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（按 lesson 所属 `LevelInfo` 条目调用 `isLevelEntryUnlocked`，区分 l4a/l4b；本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）；调试解锁激活时（`shared/stores/debugMode.ts`）两道门禁均放行
+- **课程数据完整性守卫**（2026-07 新增）：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；新增/改名课程后此测试必须全绿
 - **mental-tilt-recognition 例外**（v1.8 新增）：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
 - **Lesson.prerequisites 字段**（v1.8 新增）：`Lesson` 类型已新增 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）；声明 prerequisite 时必须确保引用的课程 ID 存在
 - **QuickDrill 自动降级**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty('strategy-academy')` 判定，阈值以 progress store 实现为准）自动降级难度（不低于 beginner）
@@ -140,7 +142,8 @@ additionalPrompt: ""
 - [ ] 快速训练完成时 recordTrainingDay + recordQuickDrillCompletion 已调用
 - [ ] abilityToElo 仅在 gamesPlayed === 0 时同步（一次性）
 - [ ] DrillLessonRouter 已注册新 Drill（React.lazy）
-- [ ] 等级解锁规则生效（Level 7 需 L3+L5，Level 8 需 L4B）
+- [ ] 等级解锁规则生效（Level 7 需 L3+L5，Level 8 需 L4B；UI 门禁走 isLevelEntryUnlocked 区分 l4a/l4b）
+- [ ] 课程数据守卫测试全绿（curriculumIntegrity.test.ts：id 唯一 / 牌面合法 / 引用无悬空 / native order 无重复）
 - [ ] CourseView 双层门禁生效（Level + prerequisite）
 - [ ] mental-tilt-recognition 课程可随时访问（无前置依赖）
 - [ ] Lesson.prerequisites 引用的课程 ID 全部存在

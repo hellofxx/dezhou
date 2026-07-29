@@ -108,10 +108,11 @@ progress store 在初始化时调用 `trainingEvents.subscribe((record) => addRe
 - src/features/progress/ — 模块根（types.ts 含 OnboardingState / StreakState / EmotionState / DEFAULT_* 常量；store.ts 跨模块状态中枢，persist version 以该文件配置为准；index.ts）
 - src/features/progress/hooks/ — useProgress 等消费 hook
 - src/features/progress/utils/ — 统计聚合 / Streak 算法（streakCalc.ts）/ SM-2 间隔重复（spacedRepetition.ts）/ 每日混合比例（dailyTrainingMix.ts）/ 每日训练计划 / IndexedDB 封装
-- src/features/progress/components/ — Dashboard / 统计图表 / Streak / 段位庆祝 / SRS 复习 / 情绪管理（TiltWarning / SessionLimitGuard / DownswingAlert / MoodTracker）/ 设置 / OnboardingGate 门禁等页面与组件
+- src/features/progress/components/ — Dashboard / 统计图表 / Streak / 段位庆祝 / SRS 复习 / 情绪管理（TiltWarning / SessionLimitGuard / DownswingAlert / MoodTracker）/ 设置（SettingsPage 含「开发者选项」调试解锁入口）/ OnboardingGate 门禁等页面与组件
 
 shared/ 依赖（维护职责见 Authority）：
 - src/shared/types/elo.ts / src/shared/utils/elo.ts / src/shared/types/mentor.ts / src/shared/constants/mentorStyles.ts / src/shared/stores/trainingEvents.ts
+- src/shared/stores/debugMode.ts（调试解锁：SettingsPage「开发者选项」读写 unlockAll / activateWithCode / deactivate；`SessionLimitGuard.useSessionLimitReached` 在调试解锁激活时返回 false 旁路每日题量上限；存储层变更归 platform-dev）
 
 ## Workflows
 1. 添加新成就时：编辑 AchievementBadges.tsx 的成就列表 + 判定逻辑
@@ -124,19 +125,16 @@ shared/ 依赖（维护职责见 Authority）：
 8. 修改 SRS 比例时：编辑 dailyTrainingMix.ts 的 composeDailyMix 阈值
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则 / 跨模块状态集中管理等）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，"记录完成"action 幂等要求见 AGENTS.md《状态管理 → 幂等性》，本文件不复制其内容。
 
 模块特有约束：
 - 成就判定逻辑要考虑边界条件（首次训练、零数据）
-- persist version 升级时必须编写 migrate 函数（防御性合并默认值 `{ ...DEFAULT_X, ...persisted.x }`）
 - ELO 雷达图数据源为 ELO 五维分数（0-3000 量纲），不是训练记录正确率
 - 情绪记录器由各训练模块的 quiz hook 调用，progress store 仅负责状态管理
-- recordTrainingDay / recordQuickDrillCompletion / markDailyCompleted 必须**幂等**（同一日重复调用不重复计数）
 - accuracyHistory 仅保留最近 7 天（滚动窗口）
 - **shouldDownshiftDifficulty 唯一入口**（v1.8 新增）：`progress.shouldDownshiftDifficulty(moduleType): boolean` 是自适应难度的**唯一入口**，所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）必须通过此 API 判定降级条件，禁止各模块自行实现
 - **数据源**（v1.8 新增）：`consecutiveWrongByModule: Record<ModuleType, number>` 字段（每次答错 +1，答对重置为 0），触发阈值以 store.ts 的 `shouldDownshiftDifficulty` 实现为准
 - **字段持久化策略**（v1.8 新增）：`consecutiveWrongByModule` 为运行时累加值，通过防御性合并默认值 `{}` 注入，未触发 persist version 升级。如未来需要持久化更复杂的自适应难度状态，须递增 version 并编写 migrate 函数
-- **幂等性**（v1.8 新增）：`recordTrainingDay()` / `recordQuickDrillCompletion()` / `markDailyCompleted()` 等"记录完成"action 必须幂等（同一日重复调用不重复计数）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
@@ -145,7 +143,6 @@ shared/ 依赖（维护职责见 Authority）：
 - [ ] 跨模块状态字段未分散到 feature store（Streak/ELO/SRS/Emotion/Mentor 集中在 progress store）
 - [ ] ELO 雷达图数据源为 ELO 五维分数（0-3000 量纲）
 - [ ] trainingEvents 订阅在 store 初始化时自动注册
-- [ ] recordTrainingDay / recordQuickDrillCompletion 幂等（同一日重复调用不重复计数）
+- [ ] recordTrainingDay / recordQuickDrillCompletion / markDailyCompleted 幂等（同一日重复调用不重复计数）
 - [ ] shouldDownshiftDifficulty API 可被各训练模块正确调用
 - [ ] consecutiveWrongByModule 字段在答错时累加，答对时重置
-- [ ] recordTrainingDay / recordQuickDrillCompletion / markDailyCompleted 幂等

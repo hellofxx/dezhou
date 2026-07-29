@@ -109,7 +109,7 @@ additionalPrompt: ""
 - **选项语义排序（答题选项排序治理，见 AGENTS.md 同名章节）**：题库出口 `getAllPuzzles()` / `getPuzzlesByTheme()` 必须逐题应用 `sortOptionsCanonically`（消极→激进、同类按尺度升序）；禁止按题库数据原序直接渲染选项；源题库静态数据不手改重排
 - **barrel 收紧**：`index.ts` 禁止导出原始 `PUZZLE_BANK` 常量（防绕过排序出口），消费方只能通过出口 getter 取题
 - **反馈闭环 relatedLessonId**（v1.8 新增）：`usePuzzleEngine` 必须调用 `inferPuzzleLessonId(theme)` 推导课程 ID，将 10 个主题映射到对应课程；`PuzzleAnswerRecord` 类型必须包含 `relatedLessonId?: string` 字段；`PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接
-- **主题映射覆盖**（v1.8 新增）：10 个主题（preflop-rfi / big-blind-defense / three-bet / c-bet / flush-draw / multiway / river-value / bluff / short-stack / icm）必须全部映射到有效的课程 ID
+- **主题映射覆盖**（v1.8 新增，2026-07 强化）：10 个主题（preflop-rfi / big-blind-defense / three-bet / c-bet / flush-draw / multiway / river-value / bluff / short-stack / icm）必须全部映射到有效**且语义相关**的课程 ID——不仅要 ID 存在，还须主题与课程内容对应（如 `icm` → `l6-icm` 而非泛化到 `l2-short-stack`）；具体映射表以 `usePuzzleEngine.ts` 的 `inferPuzzleLessonId` 为唯一事实源（本文件不维护映射副本）
 - **五级反馈复用**（v1.8 新增）：复用 `DecisionFeedback` 与 `GRADE_DISPLAY_CONFIG`，根据 EV 损失自动评级；禁止自定义评级
 - **自适应难度**（v1.8 新增，可选）：达到降级条件时（由 `progress.shouldDownshiftDifficulty('puzzle-trainer')` 判定，阈值以 progress store 实现为准）可显示降级提示（puzzle 模式本身有难度递增机制，该提示为辅助）
 

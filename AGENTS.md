@@ -55,7 +55,7 @@ src/
 │   ├── components/  # Card / EmptyState / LoadingState / ResultSummary
 │   ├── utils/     # pokerMath / deck / elo / shareCard（纯函数）
 │   ├── constants/ # mentorStyles
-│   └── stores/    # trainingEvents（事件总线）
+│   └── stores/    # trainingEvents（事件总线）/ debugMode（调试解锁开发者选项）
 ├── i18n/          # config.ts + locales/zh.json + locales/en.json
 └── styles/        # globals.css（CSS 变量）
 ```
@@ -199,6 +199,12 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - feature 模块完成训练后必须 `trainingEvents.emit(event)`，progress store 自动订阅更新统计（v2.0 已全量合规：pot-odds / puzzle-trainer 已补全 emit；hand-history 为复盘分析工具而非交互式训练，属合理豁免，见其 store.ts 顶部说明与 `docs/CHANGELOG.md`）
 - Streak / ELO / SRS / Emotion 的"记录"action 在答题时同步调用（不走事件总线）
 
+### 调试解锁（开发者选项，2026-07 新增）
+
+- 实现：`src/shared/stores/debugMode.ts`（独立 persist store，不并入 progress store）；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（文档与子代理文件不维护数值副本）
+- 激活后全局旁路门禁（共 5 处）：strategy-academy 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、CourseView 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard` 每日题量上限；新增门禁时应同步接入 `isDebugUnlockActive()` 短路
+- 产品规格见 `docs/PRD.md` 5.6.6，技术设计见 `docs/TDD.md` 5.9；onboarding 不纳入解锁范围
+
 ## 文档维护（三层职责分离）
 
 | 文档 | 职责 | 更新时机 |
@@ -218,7 +224,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
   - `no-restricted-imports`：锁定 features 模块间直接引用，允许边清单以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（收紧时只删不加）
   - `@typescript-eslint/no-explicit-any`：禁止 any
   - 注：lint 工具链通过 `.pnpmfile.cjs` 侧载 TS 6 API（typescript-eslint 尚不支持 TS 7.0），不影响 typecheck/build 使用的 TS 7
-- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖
+- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖；策略学院课程数据完整性（id 唯一 / 牌面合法 / 引用无悬空 / native order 无重复 / Drill 接线）由 `src/features/strategy-academy/data/curriculumIntegrity.test.ts` 覆盖
 - **构建验证**：`pnpm build` 成功产出 `dist/`
 - 每次代码变更后必须运行类型检查、`pnpm lint` 与 `pnpm test`
 
