@@ -17,8 +17,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog';
-import { Settings, Volume2, VolumeX, Clock, Hash, Download, Upload, Trash2, Info, Gamepad2, GraduationCap, ShieldAlert } from 'lucide-react';
+import { Settings, Volume2, VolumeX, Clock, Hash, Download, Upload, Trash2, Info, Gamepad2, GraduationCap, ShieldAlert, Bug, Unlock, Lock } from 'lucide-react';
 import { useProgressStore } from '../store';
+import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { APP_VERSION } from '@/shared/constants/app';
 import type { TrainingRecord } from '../types';
 import { GameVariantSelector } from '@/shared/components/GameVariantSelector';
@@ -48,6 +49,19 @@ export default function SettingsPage() {
   // P2-5.4: 每日题量上限（Session 止损）
   const dailyQuestionLimit = useProgressStore((s) => s.emotion.dailyQuestionLimit);
   const setDailyQuestionLimit = useProgressStore((s) => s.setDailyQuestionLimit);
+
+  // 开发者选项：调试解锁
+  const debugUnlockAll = useDebugModeStore((s) => s.unlockAll);
+  const activateDebug = useDebugModeStore((s) => s.activateWithCode);
+  const deactivateDebug = useDebugModeStore((s) => s.deactivate);
+  const [debugCodeInput, setDebugCodeInput] = useState('');
+  const [debugError, setDebugError] = useState(false);
+
+  const handleDebugActivate = () => {
+    const ok = activateDebug(debugCodeInput);
+    setDebugError(!ok);
+    if (ok) setDebugCodeInput('');
+  };
 
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
@@ -390,6 +404,74 @@ export default function SettingsPage() {
                 <p className="text-xs text-[var(--ivory-dim)]">
                   当前共 {records.length} 条训练记录
                 </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* 开发者选项 */}
+          <motion.div variants={item}>
+            <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-[var(--ivory-muted)] flex items-center gap-2">
+                  <Bug className="w-4 h-4" />
+                  开发者选项
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {debugUnlockAll ? (
+                  <>
+                    <div className="flex items-center gap-2 text-sm text-[var(--brass-bright)] bg-[var(--brass)]/10 rounded-lg px-3 py-2">
+                      <Unlock className="w-4 h-4" />
+                      调试解锁已开启 · 全部功能已解锁
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={deactivateDebug}
+                      className="gap-1"
+                    >
+                      <Lock className="w-4 h-4" />
+                      关闭调试解锁
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs text-[var(--ivory-dim)]">
+                      输入调试码解锁全部功能（所有课程等级、位置、学习轨道与每日题量上限）。
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        value={debugCodeInput}
+                        onChange={(e) => {
+                          setDebugCodeInput(e.target.value);
+                          if (debugError) setDebugError(false);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleDebugActivate();
+                        }}
+                        placeholder="输入调试码"
+                        aria-label="调试码"
+                        aria-invalid={debugError}
+                        className="w-[140px] rounded-md border border-[var(--walnut-border)] bg-[var(--background)] px-3 py-1.5 text-sm text-[var(--ivory)] outline-none focus:border-[var(--brass)]"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDebugActivate}
+                        disabled={!debugCodeInput.trim()}
+                        className="gap-1"
+                      >
+                        <Unlock className="w-4 h-4" />
+                        激活
+                      </Button>
+                    </div>
+                    {debugError && (
+                      <p className="text-xs text-[var(--danger)]">调试码不正确</p>
+                    )}
+                  </>
+                )}
               </CardContent>
             </Card>
           </motion.div>

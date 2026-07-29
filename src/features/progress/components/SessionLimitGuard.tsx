@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { useProgressStore } from '../store';
 import { getTodayString } from '../utils/spacedRepetition';
+import { useDebugModeStore } from '@/shared/stores/debugMode';
 
 /**
  * P2-5.4: Session 止损守卫组件。
@@ -24,7 +25,10 @@ export function useSessionLimitReached(): boolean {
   const limit = useProgressStore((s) => s.emotion.dailyQuestionLimit);
   const answered = useProgressStore((s) => s.emotion.dailyQuestionsAnswered);
   const date = useProgressStore((s) => s.emotion.dailyQuestionsDate);
+  const debugUnlock = useDebugModeStore((s) => s.unlockAll);
   const today = getTodayString();
+  // 调试解锁：解除每日题量上限
+  if (debugUnlock) return false;
   // 跨日重置：如果记录的日期不是今天，视为 0
   const effectiveAnswered = date === today ? answered : 0;
   return limit > 0 && effectiveAnswered >= limit;

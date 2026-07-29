@@ -12,6 +12,7 @@ import type { Position } from '@/shared/types/position';
 import type { RangePreset } from '../types';
 import { SIX_MAX_POSITIONS, ACTION_TYPES, POSITION_UNLOCK_THRESHOLDS, isPositionUnlocked } from '../constants';
 import { useProgressStore } from '@/features/progress/store';
+import { useDebugModeStore } from '@/shared/stores/debugMode';
 
 interface RangeSelectorProps {
   selectedPosition: Position;
@@ -34,6 +35,8 @@ export function RangeSelector({
 }: RangeSelectorProps) {
   // P4 修复（4.4-P1-1）：基于 preflop ELO 的位置渐进解锁
   const preflopElo = useProgressStore((s) => s.elo.preflop);
+  // 调试解锁：解除全部位置门禁
+  const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
   // 过滤当前位置+动作类型的预设
   const filteredPresets = presets.filter(
@@ -49,7 +52,7 @@ export function RangeSelector({
         <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">位置</h3>
         <div className="flex flex-wrap gap-1.5">
           {displayPositions.map((pos) => {
-            const unlocked = isPositionUnlocked(pos, preflopElo);
+            const unlocked = debugUnlock || isPositionUnlocked(pos, preflopElo);
             const threshold = POSITION_UNLOCK_THRESHOLDS[pos];
             return (
               <Button
