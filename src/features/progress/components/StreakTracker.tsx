@@ -82,10 +82,10 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
   // 火焰样式：正常 gold；晚间未训练变红闪烁
   const flameClass = isEndingSoon
     ? 'w-5 h-5 text-red-500 animate-pulse'
-    : 'w-5 h-5 text-[var(--gold)]';
+    : 'w-5 h-5 text-[var(--brass-bright)]';
   const streakNumClass = isEndingSoon
     ? 'text-3xl font-bold font-numeric text-red-500 animate-pulse'
-    : 'text-3xl font-bold font-numeric text-[var(--gold)]';
+    : 'text-3xl font-bold font-numeric text-[var(--brass-bright)]';
 
   return (
     <motion.div
@@ -175,8 +175,8 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
             <div className="w-px h-10 bg-[var(--walnut-border)]" />
             <div className="text-center">
               <div className="flex items-center justify-center gap-1">
-                <Trophy className="w-5 h-5 text-[var(--gold)]" />
-                <span className="text-3xl font-bold font-numeric text-[var(--gold)]">
+                <Trophy className="w-5 h-5 text-[var(--brass-bright)]" />
+                <span className="text-3xl font-bold font-numeric text-[var(--brass-bright)]">
                   {longestStreak}
                 </span>
               </div>

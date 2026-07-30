@@ -175,8 +175,8 @@ export function ActionSelector({
         disabled={disabled}
         className={cn(
           'relative w-full py-3 rounded-md font-display font-semibold text-lg transition-all',
-          'bg-gradient-to-r from-[var(--clay)]/35 to-[var(--gold)]/35 text-[var(--gold)] border border-[var(--gold)]/40',
-          'hover:from-[var(--clay)]/45 hover:to-[var(--gold)]/45',
+          'bg-gradient-to-r from-[var(--clay)]/35 to-[var(--brass)]/35 text-[var(--brass-bright)] border border-[var(--brass)]/40',
+          'hover:from-[var(--clay)]/45 hover:to-[var(--brass)]/45',
           'active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed'
         )}
       >

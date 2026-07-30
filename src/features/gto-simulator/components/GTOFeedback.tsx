@@ -51,7 +51,7 @@ export function GTOFeedback({
     ? 'text-[var(--sage)] border-[var(--sage)]/40 bg-[var(--sage)]/10'
     : evLoss > 3
       ? 'text-[var(--clay)] border-[var(--clay)]/40 bg-[var(--clay)]/10'
-      : 'text-[var(--gold)] border-[var(--gold)]/40 bg-[var(--gold)]/10';
+      : 'text-[var(--brass-bright)] border-[var(--brass)]/40 bg-[var(--brass)]/10';
   const legacyStatusIcon = isOptimal ? '✓' : evLoss > 3 ? '✗' : '△';
   const legacyStatusLabel = isOptimal ? '最优决策' : evLoss > 3 ? '严重错误' : '次优决策';
 

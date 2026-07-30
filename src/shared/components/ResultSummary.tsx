@@ -23,9 +23,9 @@ interface ResultSummaryProps {
 }
 
 function getAccuracyColor(accuracy: number): string {
-  if (accuracy >= 0.9) return 'text-[var(--gold)]';
+  if (accuracy >= 0.9) return 'text-[var(--brass-bright)]';
   if (accuracy >= 0.7) return 'text-[var(--sage)]';
-  if (accuracy >= 0.5) return 'text-[var(--brass-bright)]';
+  if (accuracy >= 0.5) return 'text-[var(--brass)]';
   return 'text-[var(--clay)]';
 }
 
@@ -67,7 +67,7 @@ export function ResultSummary({
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center justify-center gap-2">
-            <Trophy className="w-6 h-6 text-[var(--gold)]" />
+            <Trophy className="w-6 h-6 text-[var(--brass-bright)]" />
             <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{title}</h1>
           </div>
           <p className="text-sm text-[var(--ivory-muted)]">{subtitle ?? accLabel}</p>

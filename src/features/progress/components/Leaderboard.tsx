@@ -81,7 +81,7 @@ export default function Leaderboard() {
   ];
 
   const getRankIcon = (rank: number) => {
-    if (rank === 1) return <Trophy className="w-4 h-4 text-[var(--gold)]" />;
+    if (rank === 1) return <Trophy className="w-4 h-4 text-[var(--brass-bright)]" />;
     if (rank === 2) return <Medal className="w-4 h-4 text-[var(--ivory-dim)]" />;
     if (rank === 3) return <Award className="w-4 h-4 text-[var(--brass-deep)]" />;
     return <span className="text-xs text-[var(--ivory-muted)] w-4 text-center font-numeric">{rank}</span>;

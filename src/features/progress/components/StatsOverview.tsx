@@ -46,7 +46,7 @@ export default function StatsOverview({ stats, moduleStats }: StatsOverviewProps
         </motion.div>
         <motion.div variants={item}>
           <StatCard
-            icon={<Zap className="w-5 h-5 text-[var(--gold)]" />}
+            icon={<Zap className="w-5 h-5 text-[var(--brass-bright)]" />}
             label="连续天数"
             value={`${stats.currentStreak} 🔥`}
           />

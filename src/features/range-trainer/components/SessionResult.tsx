@@ -11,11 +11,11 @@ interface SessionResultProps {
   onBackToHome: () => void;
 }
 
-/** 根据正确率返回颜色和评价 — uses card-room palette (gold/sage/brass/clay) */
+/** 根据正确率返回颜色和评价 — uses card-room palette (brass/sage/clay) */
 function getAccuracyInfo(accuracy: number): { color: string; label: string } {
-  if (accuracy >= 0.9) return { color: 'text-[var(--gold)]', label: '优秀！' };
+  if (accuracy >= 0.9) return { color: 'text-[var(--brass-bright)]', label: '优秀！' };
   if (accuracy >= 0.7) return { color: 'text-[var(--sage)]', label: '良好' };
-  if (accuracy >= 0.5) return { color: 'text-[var(--brass-bright)]', label: '继续加油' };
+  if (accuracy >= 0.5) return { color: 'text-[var(--brass)]', label: '继续加油' };
   return { color: 'text-[var(--clay)]', label: '需要更多练习' };
 }
 
@@ -64,7 +64,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center justify-center gap-2">
-            <Trophy className="w-6 h-6 text-[var(--gold)]" />
+            <Trophy className="w-6 h-6 text-[var(--brass-bright)]" />
             <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">训练完成！</h1>
           </div>
           <p className="text-sm text-[var(--ivory-muted)]">{accLabel}</p>
@@ -131,7 +131,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
             <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
               <CardHeader className="pb-2">
                 <CardTitle className="font-display text-[17px] text-[var(--ivory)] flex items-center gap-2 tracking-wide">
-                  <AlertTriangle className="w-4 h-4 text-[var(--gold)]" />
+                  <AlertTriangle className="w-4 h-4 text-[var(--brass-bright)]" />
                   薄弱手牌
                 </CardTitle>
               </CardHeader>

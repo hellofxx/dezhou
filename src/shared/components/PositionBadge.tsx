@@ -29,8 +29,8 @@ const GROUP_COLORS: Record<string, { base: string; active: string }> = {
     active: 'bg-[var(--sage)] text-[var(--ivory)] border-[var(--sage)] shadow-[0_0_8px_rgba(107,142,122,0.5)]',
   },
   blinds: {
-    base: 'bg-[var(--gold)]/15 text-[var(--gold)] border-[var(--gold)]/30',
-    active: 'bg-[var(--gold)] text-[var(--primary-foreground)] border-[var(--gold)] shadow-[0_0_8px_rgba(212,168,75,0.5)]',
+    base: 'bg-[var(--brass)]/15 text-[var(--brass-bright)] border-[var(--brass)]/30',
+    active: 'bg-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass)] shadow-[0_0_8px_rgba(201,162,94,0.5)]',
   },
 };
 

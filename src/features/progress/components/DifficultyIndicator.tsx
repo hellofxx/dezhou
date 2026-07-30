@@ -12,7 +12,7 @@ interface DifficultyIndicatorProps {
 // Avoids traffic-light green/yellow/red — fits the card-room palette.
 const DIFFICULTY_CONFIG = {
   beginner: { label: '初级', color: 'text-[var(--sage)]', bg: 'bg-[var(--sage)]/12', border: 'border-[var(--sage)]/30' },
-  intermediate: { label: '中级', color: 'text-[var(--gold)]', bg: 'bg-[var(--gold)]/12', border: 'border-[var(--gold)]/30' },
+  intermediate: { label: '中级', color: 'text-[var(--brass-bright)]', bg: 'bg-[var(--brass)]/12', border: 'border-[var(--brass)]/30' },
   advanced: { label: '高级', color: 'text-[var(--clay)]', bg: 'bg-[var(--clay)]/12', border: 'border-[var(--clay)]/30' },
 };
 
@@ -71,7 +71,7 @@ function getSuggestion(accuracy: number, sessionsCount: number) {
   if (accuracy < 0.5) {
     return {
       text: '建议降低难度巩固基础',
-      icon: <ArrowDownCircle className="w-3 h-3 text-[var(--gold)]" />,
+      icon: <ArrowDownCircle className="w-3 h-3 text-[var(--brass-bright)]" />,
     };
   }
   return {

@@ -53,9 +53,9 @@ export default function GTOResultPage() {
         transition={{ delay: 0.8 }}
         className="flex items-center justify-center gap-2 p-3 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)]"
       >
-        <TrendingDown className="w-4 h-4 text-[var(--gold)]" />
+        <TrendingDown className="w-4 h-4 text-[var(--brass-bright)]" />
         <span className="text-sm text-[var(--ivory-dim)]">平均 EV 损失：</span>
-        <span className="font-bold font-numeric text-[var(--gold)]">{lastResult.averageEVLoss.toFixed(1)} BB</span>
+        <span className="font-bold font-numeric text-[var(--brass-bright)]">{lastResult.averageEVLoss.toFixed(1)} BB</span>
       </motion.div>
 
       {/* Worst spots */}
@@ -68,7 +68,7 @@ export default function GTOResultPage() {
           <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
             <CardHeader className="pb-2">
               <CardTitle className="font-display text-[17px] text-[var(--ivory)] flex items-center gap-2 tracking-wide">
-                <AlertTriangle className="w-4 h-4 text-[var(--gold)]" />
+                <AlertTriangle className="w-4 h-4 text-[var(--brass-bright)]" />
                 最需要改进的 Spots
               </CardTitle>
             </CardHeader>
