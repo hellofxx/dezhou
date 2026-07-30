@@ -3,8 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/shared/components/ui/card';
-import { Trophy, Flame, ArrowRight, CheckCircle2, Circle } from 'lucide-react';
+import { Trophy, Flame, ArrowRight, CheckCircle2, Circle, Puzzle } from 'lucide-react';
 import { useProgress } from '../hooks/useProgress';
+import { useProgressStore } from '../store';
+// 今日任务卡：合并每日挑战（训练器引导）与每日谜题入口；streak 统一读 progress store（ALLOWED_CROSS_IMPORTS 已含 progress→puzzle-trainer）
+import { usePuzzleStore } from '@/features/puzzle-trainer/store';
+import { getDailyKey } from '@/features/puzzle-trainer/data/dailyPuzzles';
 
 interface DailyChallenge {
   id: string;
@@ -49,45 +53,19 @@ function generateDailyChallenge(dateStr: string, dayOfYear: number): DailyChalle
   };
 }
 
-/** 获取连续完成每日挑战的天数 */
-function getConsecutiveChallengeDays(records: { createdAt: number; result: { accuracy: number }; module: string }[]): number {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  let streak = 0;
-
-  for (let i = 1; i <= 365; i++) {
-    const checkDate = new Date(today.getTime() - i * 24 * 60 * 60 * 1000);
-    const dayOfYear = getDayOfYear(checkDate);
-    const types: string[] = ['range-trainer', 'pot-odds', 'gto-simulator'];
-    const expectedModule = types[dayOfYear % 3];
-    const dateStr = checkDate.toISOString().split('T')[0]!;
-
-    const dayRecords = records.filter((r) => {
-      const d = new Date(r.createdAt);
-      return d.toISOString().split('T')[0] === dateStr && r.module === expectedModule;
-    });
-
-    if (dayRecords.length > 0) {
-      streak++;
-    } else {
-      break;
-    }
-  }
-
-  return streak;
-}
-
 export default function DailyChallenge() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { records } = useProgress();
+  // streak 展示统一读 progress store（全局唯一事实源，不再私有计算）
+  const currentStreak = useProgressStore((s) => s.streak.currentStreak);
+  const dailyKey = getDailyKey();
+  const puzzleDone = usePuzzleStore((s) => Boolean(s.dailyCompleted[dailyKey]));
 
   const today = new Date();
   const dateStr = today.toISOString().split('T')[0]!;
   const dayOfYear = getDayOfYear(today);
   const challenge = useMemo(() => generateDailyChallenge(dateStr, dayOfYear), [dateStr, dayOfYear]);
-
-  const consecutiveDays = useMemo(() => getConsecutiveChallengeDays(records), [records]);
 
   // Check if today's challenge is completed
   const todayCompleted = useMemo(() => {
@@ -115,13 +93,13 @@ export default function DailyChallenge() {
     <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-3">
-          <Trophy className="w-5 h-5 text-[var(--gold)]" />
+          <Trophy className="w-5 h-5 text-[var(--brass-bright)]" />
           <h2 className="font-display text-[17px] text-[var(--ivory)] tracking-wide">
             {t('dailyChallenge.title')}
           </h2>
-          <div className="ml-auto flex items-center gap-1 text-xs text-[var(--gold)]">
+          <div className="ml-auto flex items-center gap-1 text-xs text-[var(--brass-bright)]">
             <Flame className="w-3.5 h-3.5" />
-            <span className="font-numeric">{consecutiveDays}</span>
+            <span className="font-numeric">{currentStreak}</span>
             <span className="text-[var(--ivory-muted)]">{t('dailyChallenge.consecutiveDays')}</span>
           </div>
         </div>
@@ -159,6 +137,24 @@ export default function DailyChallenge() {
               <ArrowRight className="w-4 h-4" />
             </motion.button>
           )}
+
+          {/* 每日谜题入口行：与每日挑战统一为今日任务 */}
+          <button
+            onClick={() => navigate('/puzzle/daily')}
+            className="w-full flex items-center gap-2 pt-3 border-t border-[var(--walnut-border)]/60 text-left group"
+          >
+            {puzzleDone ? (
+              <CheckCircle2 className="w-5 h-5 text-[var(--brass-bright)] shrink-0" />
+            ) : (
+              <Circle className="w-5 h-5 text-[var(--ivory-muted)] shrink-0" />
+            )}
+            <Puzzle className="w-4 h-4 text-[var(--ivory-dim)] shrink-0" />
+            <span className="flex-1 text-sm text-[var(--ivory)]">{t('dailyChallenge.dailyPuzzle')}</span>
+            <span className={`text-xs font-medium ${puzzleDone ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory-muted)]'}`}>
+              {puzzleDone ? t('dailyChallenge.completed') : t('dailyChallenge.notCompleted')}
+            </span>
+            <ArrowRight className="w-4 h-4 text-[var(--ivory-muted)] group-hover:text-[var(--brass-bright)] transition-colors" />
+          </button>
         </div>
       </CardContent>
     </Card>

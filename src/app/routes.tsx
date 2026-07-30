@@ -23,7 +23,6 @@ const ProgressPage = lazy(() => import('@/features/progress/components/ProgressP
 const SettingsPage = lazy(() => import('@/features/progress/components/SettingsPage'));
 const RangeStatsPage = lazy(() => import('@/features/progress/components/RangeStatsPage'));
 const GTOStatsPage = lazy(() => import('@/features/progress/components/GTOStatsPage'));
-const DailyChallengePage = lazy(() => import('@/features/progress/components/DailyChallenge'));
 const LeaderboardPage = lazy(() => import('@/features/progress/components/Leaderboard'));
 const AcademyHome = lazy(() => import('@/features/strategy-academy/components/AcademyHome'));
 const CourseView = lazy(() => import('@/features/strategy-academy/components/CourseView'));
@@ -64,7 +63,6 @@ export const router = createBrowserRouter([
       { path: 'progress', element: <LazyWrapper><ProgressPage /></LazyWrapper> },
       { path: 'progress/range', element: <LazyWrapper><RangeStatsPage /></LazyWrapper> },
       { path: 'progress/gto', element: <LazyWrapper><GTOStatsPage /></LazyWrapper> },
-      { path: 'daily-challenge', element: <LazyWrapper><DailyChallengePage /></LazyWrapper> },
       { path: 'leaderboard', element: <LazyWrapper><LeaderboardPage /></LazyWrapper> },
       { path: 'settings', element: <LazyWrapper><SettingsPage /></LazyWrapper> },
       { path: 'academy', element: <LazyWrapper><ErrorBoundary><AcademyHome /></ErrorBoundary></LazyWrapper> },
