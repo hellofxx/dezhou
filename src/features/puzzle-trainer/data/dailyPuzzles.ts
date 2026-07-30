@@ -7,6 +7,9 @@ import type { PuzzleQuestion } from '../types';
 import { getAllPuzzles } from './puzzleBank';
 import { getDateSeed, pickBySeed } from '../utils/dateSeed';
 
+// getDailyKey 已迁至 utils/dateSeed（纯日期函数，不应携带题库依赖），此处 re-export 保持既有 import 路径兼容
+export { getDailyKey } from '../utils/dateSeed';
+
 /** 每日谜题数量 */
 export const DAILY_PUZZLE_COUNT = 8;
 
@@ -18,14 +21,4 @@ export function getDailyPuzzles(date: Date = new Date()): PuzzleQuestion[] {
   const seed = getDateSeed(date);
   const allQuestions = getAllPuzzles();
   return pickBySeed(allQuestions, DAILY_PUZZLE_COUNT, seed);
-}
-
-/**
- * 获取今日日期 key（YYYY-MM-DD），用于持久化完成状态。
- */
-export function getDailyKey(date: Date = new Date()): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
 }

@@ -8,7 +8,8 @@ import { useProgress } from '../hooks/useProgress';
 import { useProgressStore } from '../store';
 // 今日任务卡：合并每日挑战（训练器引导）与每日谜题入口；streak 统一读 progress store（ALLOWED_CROSS_IMPORTS 已含 progress→puzzle-trainer）
 import { usePuzzleStore } from '@/features/puzzle-trainer/store';
-import { getDailyKey } from '@/features/puzzle-trainer/data/dailyPuzzles';
+// 从 utils/dateSeed 引入纯日期函数，避免经 data/dailyPuzzles 拉入 puzzleBank 题库 chunk
+import { getDailyKey } from '@/features/puzzle-trainer/utils/dateSeed';
 
 interface DailyChallenge {
   id: string;
@@ -63,7 +64,8 @@ export default function DailyChallenge() {
   const puzzleDone = usePuzzleStore((s) => Boolean(s.dailyCompleted[dailyKey]));
 
   const today = new Date();
-  const dateStr = today.toISOString().split('T')[0]!;
+  // R3: 与每日谜题行统一用本地时区日期（原 toISOString 为 UTC，同卡双口径会在 00:00–08:00 错位）
+  const dateStr = dailyKey;
   const dayOfYear = getDayOfYear(today);
   const challenge = useMemo(() => generateDailyChallenge(dateStr, dayOfYear), [dateStr, dayOfYear]);
 
@@ -72,8 +74,7 @@ export default function DailyChallenge() {
     const types: string[] = ['range-trainer', 'pot-odds', 'gto-simulator'];
     const expectedModule = types[dayOfYear % 3];
     return records.some((r) => {
-      const d = new Date(r.createdAt);
-      return d.toISOString().split('T')[0] === dateStr && r.module === expectedModule;
+      return getDailyKey(new Date(r.createdAt)) === dateStr && r.module === expectedModule;
     });
   }, [records, dateStr, dayOfYear]);
 

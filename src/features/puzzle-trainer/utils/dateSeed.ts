@@ -27,6 +27,18 @@ export function getDateSeed(date: Date = new Date()): number {
 }
 
 /**
+ * 获取日期 key（YYYY-MM-DD，本地时区），用于每日完成状态持久化。
+ * 从 data/dailyPuzzles 迁入：纯日期函数不应携带题库静态依赖，
+ * 供跨模块（progress 今日任务卡）引用时不拉入 puzzleBank chunk。
+ */
+export function getDailyKey(date: Date = new Date()): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+/**
  * 基于种子从数组中抽取 N 个不重复元素。
  * 若 count 大于数组长度，返回打乱后的全数组。
  */
