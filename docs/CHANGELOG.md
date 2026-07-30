@@ -5,6 +5,41 @@
 
 ---
 
+## feat(platform) — 2026-07-30（导航系统全量优化：IA 重构 + 今日任务合并 + 交互合规 + 视觉打磨）
+
+> 基于 ui-ux-dev 导航系统设计审查（P0/P1/P2）的全量落地：信息架构层消除冗余入口与标签混淆，对齐 DESIGN_LANGUAGE §5.7 分组规范。
+
+### feat(platform): P0 信息架构与标签统一
+
+- 侧边栏 13→10 项，分组重构为“概览（仪表盘）/ 训练（范围·赔率·GTO·谜题）/ 研习（策略学院·理论学院·牌局复盘）/ 数据 / 设置”；移除 `/academy/basics` 与 `/daily-challenge` 两个一级导航项（basics 路由保留，入口收敛到学院首页卡片与首访引导）
+- 新增 `nav.dashboard` 键，三端统一：`/` = 仪表盘、`/progress` = 进度统计，消除“两个进度统计”双重标签与落地页标题断裂
+- MobileNav 第 2 项修复 label/图标/目的地三重矛盾：`nav.training`+Target → `nav.academy`+GraduationCap
+
+### feat(progress): 每日体系统一（今日任务）
+
+- 每日挑战卡改造为“今日任务”卡（仪表盘内嵌）：新增每日谜题入口行（读 puzzle store `dailyCompleted` 完成态，跳转 `/puzzle/daily`）；删除私有 `getConsecutiveChallengeDays` 计算，streak 展示统一读 `progressStore.streak.currentStreak`（消灭三套并行火焰计数）
+- 删除 `/daily-challenge` 路由与 `nav.dailyChallenge` 键（zh/en 同删）；`dailyChallenge.*` 文案键保留复用，title 改“今日任务 / Today's Tasks”
+- **数据迁移**：无 persist 字段变更，不需升版（`dailyCompleted` 仍留 puzzle store，streak 事实源本就在 progress store）
+
+### fix(platform): P1 交互与合规
+
+- 折叠态 NavLink 接入 Radix Tooltip（右侧展示 label）+ 全量 `aria-label`；庄码 D 徽章折叠态降级为图标下方 3px 黄铜圆点（避免与图标重叠），展开态改斜体 Fraunces + `aria-hidden`（DESIGN_LANGUAGE §5.3）
+- 用户区硬编码中文 i18n 化：`nav.playerDefault` / `nav.appSubtitle` / `nav.toggleLanguage`（zh/en 同步）
+- 金色 token 收敛：全局 29 处 `--gold` 用点统一收敛到 brass 家族（text→brass-bright、border/bg→brass），正确率阶梯 0.5 档改 `--brass` 避免与 0.9 档撞色；`--gold` 变量已从 globals.css 删除
+- pageTitle 补全 `/academy/basics` 精确映射 + 带参数子路由前缀兑底（不再断档到 APP_NAME）
+- 顶栏移动端语言按钮补 `aria-label` 并扩至 ≥44px 触控区；组标题对比度 `--ivory-muted`→`--ivory-dim`
+
+### style: P2 视觉打磨
+
+- 删除与顶栏 H1 重复的内容区大标题：ProgressPage / AcademyHome / TheoryHome（反模式清单）
+- 双学院定位区分：新增 `academy.positioning`（课程与实战练习）/ `theory.positioning`（理论手册与章节阅读），eyebrow 与侧边栏 title 提示同步携带
+- 硬编码色值清理：AcademyHome 路径横幅按钮（#1a1308/#e8c97e/#2a1c0a → walnut/brass 变量）、Dashboard 记录分隔线（#2d2214 → `--walnut-border`）
+- ProgressPage 排版 token 对齐：`font-mono`→`.font-numeric`、`rounded-xl`→`rounded-[var(--radius)]`
+
+验证：typecheck / lint / test（29 文件 198 用例）/ build 全部 exit 0。
+
+---
+
 ## fix(platform) — 2026-07-30（理论学院移动端入口）
 
 > 代码审查（提交 44c3952）发现的严重问题修复：侧边栏在移动端隐藏且 MobileNav 无 /theory 项，导致移动端用户完全无法到达理论学院。
