@@ -31,7 +31,7 @@ additionalPrompt: ""
 决策范围（可直接修改）：
 - GTO 策略数据文件（preflop-ranges.json / postflop-ranges.json）
 - 场景引擎（useScenarioEngine.ts，含末题简单 + 补救机制）
-- EV 损失计算与策略比较（strategyCompare.ts，含 GRADE_THRESHOLDS 常量）
+- EV 损失计算与策略比较（strategyCompare.ts，含 PREFLOP_EQUITY 表；评级阈值 GRADE_THRESHOLDS 属 shared 层，不在本模块）
 - Web Worker 计算卸载（gtoWorker.ts / useGTOWorker.ts，含主线程 fallback）
 - 模块内组件 / hooks / store / types
 
@@ -85,7 +85,7 @@ additionalPrompt: ""
 
 ## Workflows
 1. 添加翻后场景时：扩展 postflop-ranges.json
-2. 调整 EV 损失容差时：修改 strategyCompare.ts 的评级阈值（GRADE_THRESHOLDS）
+2. 调整 EV 损失容差时：评级阈值 `GRADE_THRESHOLDS` 定义于 `shared/types/decisionFeedback.ts`，必须通过 platform-dev 协调（影响所有训练模块）；模块内只可调整 strategyCompare.ts 的策略比较逻辑
 3. 添加新位置数据时：在 JSON 中添加对应位置的策略映射
 4. 优化 Worker 性能时：修改 gtoWorker.ts 的消息处理逻辑
 5. 答题后集成跨模块系统：调用 ELO/SRS/Emotion 记录器（仅首决策节点避免多步场景重复计数）
@@ -105,7 +105,7 @@ additionalPrompt: ""
 - **手牌难度分类 169 全覆盖**（v1.8 新增）：`useScenarioEngine` 的手牌难度分类必须覆盖 169 手（STRONG 15 + INTERMEDIATE 54 + ADVANCED 100，三类互斥无重复）
 - **resolveSpotKey 防御性返回**（v1.8 新增）：`useGTOComparison.resolveSpotKey` 在未覆盖场景必须返回 `null`，禁止错误降级为 `open`
 - **反馈闭环 relatedLessonId**（v1.8 新增）：`GTOSessionPage` 必须根据 `scenario.street` 推导 `relatedLessonId`（preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`），调用 `buildGtoFeedback` 时传入；wrong/blunder 显示"去复习"链接
-- **自适应难度**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty('gto-simulator')` 判定，阈值以 progress store 实现为准）显示降级提示 banner；禁止自行判定降级条件
+- **自适应难度**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，数据源与阈值以 progress store 实现为准）显示降级提示 banner；禁止自行判定降级条件
 - **范围与 GTO 频率表一致性**（v1.8 新增）：`preflop-ranges.json` 是权威数据源，`range-trainer/constants.ts` 必须与之对齐；修改频率表时必须同步通知 `range-trainer-dev`
 
 ## Quality Checklist

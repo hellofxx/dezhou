@@ -92,7 +92,10 @@ progress store 在初始化时调用 `trainingEvents.subscribe((record) => addRe
 - `range-trainer`（mode: `'quiz'`，由 `RangeQuizPage.tsx` 发出）
 - `gto-simulator`（mode: `'scenario'`，由 `GTOSessionPage.tsx` 发出）
 - `strategy-academy`（mode: `'practice'` / `'basics'` / `'quiz'` / `'drill'`，由 `store.ts` 与 `CourseView.tsx` 发出）
-- `pot-odds` / `hand-history` / `puzzle-trainer`（当前未实现 emit，已知待补全）
+- `pot-odds`（mode: `'quiz'`，由 `PotOddsQuizPage.tsx` 发出，v2.0 已补全）
+- `puzzle-trainer`（mode 为三模式各自的 `result.mode`，由 PuzzleRush / DailyPuzzle / ThemeDrill 经 `puzzleResultToTrainingRecord` 发出，v2.0 已补全）
+- `theory-academy`（mode: `'quiz'`，由 `store.ts` 的 `completeChapter` 发出）
+- `hand-history` 为合理豁免（复盘分析工具而非交互式训练，见其 store.ts 顶部说明与 `docs/CHANGELOG.md`）
 
 ### shared/ 层依赖
 - `src/shared/types/elo.ts`（EloRating / Rank / RANKS / DEFAULT_ELO / RankUpEvent）
@@ -132,9 +135,9 @@ shared/ 依赖（维护职责见 Authority）：
 - ELO 雷达图数据源为 ELO 五维分数（0-3000 量纲），不是训练记录正确率
 - 情绪记录器由各训练模块的 quiz hook 调用，progress store 仅负责状态管理
 - accuracyHistory 仅保留最近 7 天（滚动窗口）
-- **shouldDownshiftDifficulty 唯一入口**（v1.8 新增）：`progress.shouldDownshiftDifficulty(moduleType): boolean` 是自适应难度的**唯一入口**，所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）必须通过此 API 判定降级条件，禁止各模块自行实现
-- **数据源**（v1.8 新增）：`consecutiveWrongByModule: Record<ModuleType, number>` 字段（每次答错 +1，答对重置为 0），触发阈值以 store.ts 的 `shouldDownshiftDifficulty` 实现为准
-- **字段持久化策略**（v1.8 新增）：`consecutiveWrongByModule` 为运行时累加值，通过防御性合并默认值 `{}` 注入，未触发 persist version 升级。如未来需要持久化更复杂的自适应难度状态，须递增 version 并编写 migrate 函数
+- **shouldDownshiftDifficulty 唯一入口**（v1.8 新增）：`progress.shouldDownshiftDifficulty(): boolean`（无参调用）是自适应难度的**唯一入口**，所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）必须通过此 API 判定降级条件，禁止各模块自行实现
+- **数据源**（v1.8 新增）：`emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护：答错 +1，答对重置为 0，全局计数不分模块），触发阈值以 store.ts 的 `shouldDownshiftDifficulty` 实现为准（当前与 TiltWarning 阈值一致）
+- **演进约束**：如未来需要按模块维度的自适应难度状态（如分模块连错计数）并持久化，须递增 persist version 并编写 migrate 函数
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
@@ -144,5 +147,5 @@ shared/ 依赖（维护职责见 Authority）：
 - [ ] ELO 雷达图数据源为 ELO 五维分数（0-3000 量纲）
 - [ ] trainingEvents 订阅在 store 初始化时自动注册
 - [ ] recordTrainingDay / recordQuickDrillCompletion / markDailyCompleted 幂等（同一日重复调用不重复计数）
-- [ ] shouldDownshiftDifficulty API 可被各训练模块正确调用
-- [ ] consecutiveWrongByModule 字段在答错时累加，答对时重置
+- [ ] shouldDownshiftDifficulty API（无参）可被各训练模块正确调用
+- [ ] emotion.consecutiveWrongCount 在答错时累加，答对时重置（由 recordAnswer 维护）

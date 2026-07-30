@@ -53,7 +53,7 @@ additionalPrompt: ""
 
 ## Cross-Module Touchpoints
 - **progress store**：无直接调用（复盘无答题评分，不触发 ELO / SRS / Emotion 系统）
-- **trainingEvents**：当前未实现（hand-history 模块未调用 `trainingEvents.emit`，已知待补全）
+- **trainingEvents**：合理豁免（v2.0 确认）——hand-history 是复盘分析工具而非答题训练模块，无 quiz/practice 形式的训练结果，不适合 emit TrainingRecord；豁免依据见 `store.ts` 顶部说明与 `docs/CHANGELOG.md`，禁止为凑合规范而伪造 emit
 - **shared/ 层依赖**：poker.ts / formatters.ts / handRanking.ts
 
 ## Key Files
@@ -84,7 +84,7 @@ additionalPrompt: ""
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
 - [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `handHistory.*`）
-- [ ] trainingEvents.emit 当前未实现（已知待补全：导入完成 / 标注完成时应 emit `{ module: 'hand-history', mode: 'imported'/'annotated', result, createdAt }`）
+- [ ] trainingEvents 豁免口径未被破坏（不新增伪训练 emit；若未来新增交互式训练玩法，须先经 platform-dev 评估后再接入事件总线）
 - [ ] 解析器异常不崩溃（返回错误信息）
 - [ ] IndexedDB 操作 Promise 化（不阻塞主线程）
 - [ ] 回放步进/回退/自动播放/速度控制正确

@@ -128,7 +128,7 @@ additionalPrompt: ""
 - **课程数据完整性守卫**（2026-07 新增）：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；新增/改名课程后此测试必须全绿
 - **mental-tilt-recognition 例外**（v1.8 新增）：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
 - **Lesson.prerequisites 字段**（v1.8 新增）：`Lesson` 类型已新增 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）；声明 prerequisite 时必须确保引用的课程 ID 存在
-- **QuickDrill 自动降级**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty('strategy-academy')` 判定，阈值以 progress store 实现为准）自动降级难度（不低于 beginner）
+- **QuickDrill 自动降级**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准）自动降级难度（不低于 beginner）
 - **ABILITY_LESSON_MAP 正确性**（v1.8 新增）：`dailyPlan.ts` 中的 `ABILITY_LESSON_MAP` 必须引用真实存在的 lesson ID（如 `l2-3bet-basics` 而非 `l2-3bet`）；修改时必须验证 ID 有效性
 - **dailyPlan 职责区分**（v1.8 新增）：项目中存在两个 `generateDailyPlan` 函数：`strategy-academy/utils/dailyPlan.ts`（学院焦点课程计划）与 progress 模块中的（跨模块推荐计划）。两者职责不同，禁止混淆
 - **TiltWarning 三选项**（v1.8 新增）：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）

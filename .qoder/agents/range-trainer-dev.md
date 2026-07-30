@@ -97,7 +97,7 @@ additionalPrompt: ""
 - **i18n 双语同步**：新增 `range.*` 前缀的 i18n key 时必须同时更新 zh.json 与 en.json，缺一不可。
 - **位置渐进解锁**（v1.8 新增）：`POSITION_UNLOCK_THRESHOLDS` 定义于 `constants.ts`，阈值数值（UTG / HJ / CO / BTN / SB / BB）以该常量定义为唯一事实源（本文件不维护数值副本）；`RangeSelector` 必须调用 `isPositionUnlocked(position, preflopElo)` 过滤锁定位置。调整阈值时在 `docs/CHANGELOG.md` 记录。调试解锁激活时（`shared/stores/debugMode.ts` 的 `unlockAll`）`RangeSelector` 跳过位置门禁，全部位置可选。
 - **反馈闭环 relatedLessonId**（v1.8 新增）：`buildRangeFeedback` 调用时必须传入 `relatedLessonId`，由 `inferRelatedLessonId(position, actionType)` 推导；wrong/blunder 级别在 QuizCard 显示"去复习"链接，跳转对应课程。
-- **自适应难度**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty('range-trainer')` 判定，阈值以 progress store 实现为准），`TrainingSession` 显示降级提示 banner；禁止自行判定降级条件。
+- **自适应难度**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准），`TrainingSession` 显示降级提示 banner；禁止自行判定降级条件。
 - **范围嵌套关系**（v1.8 修正）：预置范围必须满足位置嵌套关系 UTG ⊂ HJ ⊂ CO ⊂ BTN（Open Raise 场景）。修改任一位置范围时必须验证嵌套关系不被破坏。
 - **范围与 GTO 频率表一致性**（v1.8 修正）：`constants.ts` 中的预置范围必须与 `gto-simulator/data/preflop-ranges.json` 一致，以 JSON 为权威数据源。
 

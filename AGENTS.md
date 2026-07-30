@@ -68,7 +68,7 @@ src/
 - **模块间禁止直接引用**：必须通过 `shared/` 层或 `trainingEvents` 事件总线
 - **shared/ 层准入门槛**：被 ≥2 个模块使用才可放入；单模块使用的代码留在模块内
 - **跨模块状态集中管理**：Streak / ELO / SRS / Emotion / Mentor 五大系统统一在 `src/features/progress/store.ts`（persist version 以该文件配置为准），禁止分散到各 feature store
-- **唯一例外**：puzzle-trainer store 持有 `quickDrillStreak`（独立子计数器），但触发冻结卡仍调用 progress store 的 `awardStreakFreeze(1)`
+- **唯一例外**：puzzle-trainer store 持有 `quickDrillBest`（快速训练最佳记录，独立持久化）；`quickDrillStreak` 连续天数计数器位于 progress store，由 `recordQuickDrillCompletion()` 维护并在连续 7 天时触发 `awardStreakFreeze(1)`
 
 ## 编码规范
 
@@ -169,8 +169,8 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
   - range-trainer：`inferRelatedLessonId(position, actionType)`
   - GTO：根据 `scenario.street` 推导（preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`）
   - puzzle-trainer：`inferPuzzleLessonId(theme)`
-- **反向反馈（数据→难度）**：`progress.shouldDownshiftDifficulty(moduleType)` 是自适应难度的**唯一入口**，禁止各模块自行判定
-- 数据源：`progress.consecutiveWrongByModule: Record<ModuleType, number>`（触发阈值以 `progress/store.ts` 的 `shouldDownshiftDifficulty` 实现为准）
+- **反向反馈（数据→难度）**：`progress.shouldDownshiftDifficulty()`（无参调用）是自适应难度的**唯一入口**，禁止各模块自行判定
+- 数据源：`progress.emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护，全局计数；触发阈值以 `progress/store.ts` 的 `shouldDownshiftDifficulty` 实现为准）
 
 ### 位置渐进解锁（v1.8 新增）
 

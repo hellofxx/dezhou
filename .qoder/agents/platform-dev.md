@@ -25,7 +25,7 @@ additionalPrompt: ""
 ## Context
 - 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 技术栈：React 19 + Vite 8 + TypeScript 7 + Tailwind CSS 4 + shadcn/ui + Zustand 5 + React Router v7 + i18next 26
-- Feature 模块（8 个）：range-trainer / pot-odds / gto-simulator / hand-history / progress / onboarding / puzzle-trainer / strategy-academy
+- Feature 模块（9 个）：range-trainer / pot-odds / gto-simulator / hand-history / progress / onboarding / puzzle-trainer / strategy-academy / theory-academy
 
 ## Authority
 平台基础层 Agent，决策范围与边界如下：
@@ -50,7 +50,7 @@ additionalPrompt: ""
 ## Capabilities
 - 项目脚手架与构建配置（Vite + TypeScript）
 - 全局布局系统（AppLayout + BlankLayout + MobileNav + OnboardingGate）
-- 路由管理与代码分割（React Router v7 + lazy loading，31 个路由页面）
+- 路由管理与代码分割（React Router v7 + lazy loading，路由清单以 src/app/routes.tsx 实际内容为事实源）
 - 共享类型系统设计（poker.ts / position.ts / action.ts / elo.ts / mentor.ts / decisionFeedback.ts）
 - 共享组件库（Card, Chip, SuitIcon, PositionBadge, EmptyState, LoadingState, ResultSummary）
 - 事件总线（trainingEvents 跨模块通信）
@@ -71,7 +71,10 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 - **Emotion 系统**：训练情绪状态记录
 - **Mentor 系统**：导师风格切换与反馈模板渲染（strict-math / old-school / encouraging）
 
-> 唯一例外：puzzle-trainer store 持有 `quickDrillStreak`（独立子计数器），但触发冻结卡仍调用 progress store 的 `awardStreakFreeze(1)`
+> 唯一例外：puzzle-trainer store 持有 `quickDrillBest`（快速训练最佳记录，独立持久化）；`quickDrillStreak` 连续天数计数器本身位于 progress store，由 `recordQuickDrillCompletion()` 维护并在连续 7 天时触发 `awardStreakFreeze(1)`
+
+### persist store 升级协调范围
+全局共四个 persist store（清单与 name 以 AGENTS.md《状态管理》表格为准）：progress / puzzle-trainer / strategy-academy / theory-academy，version 均以各自 `store.ts` 的 persist 配置为唯一事实源；另有 `shared/stores/debugMode.ts` 独立 persist store。跨模块 persist 升级由 platform-dev 协调。
 
 ### trainingEvents 事件总线
 - 实现位置：`src/shared/stores/trainingEvents.ts`

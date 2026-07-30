@@ -62,7 +62,11 @@ additionalPrompt: ""
 ## Cross-Module Touchpoints
 
 ### progress store
-- 当前无直接调用（puzzle-trainer 模块使用独立 store，未触发 progress store 的 quickDrillStreak / awardStreakFreeze / composeDailyMix；这些集成实际由 strategy-academy/QuickDrill 实现）
+- 三模式组件（PuzzleRush / DailyPuzzle / ThemeDrill）作为消费方调用其公开 action：
+  - `recordTrainingDay()`：会话完成时计入 Streak（幂等）
+  - `recordAnswer(isCorrect)`：每题作答时更新情绪/连错计数
+  - `shouldDownshiftDifficulty()`：无参调用，达标时显示降级提示
+- 不直接写 progress store 的 `elo` 字段；`quickDrillStreak` / `awardStreakFreeze` / `composeDailyMix` 等快速训练集成实际由 strategy-academy/QuickDrill 触发，不在本模块
 
 ### trainingEvents（事件总线）
 - 已实现（v2.0）：PuzzleRush / DailyPuzzle / ThemeDrill 三模式完成后均通过 `puzzleResultToTrainingRecord` 转换并 `trainingEvents.emit`（`record.module` 为 `'puzzle-trainer'`）
@@ -111,7 +115,7 @@ additionalPrompt: ""
 - **反馈闭环 relatedLessonId**（v1.8 新增）：`usePuzzleEngine` 必须调用 `inferPuzzleLessonId(theme)` 推导课程 ID，将 10 个主题映射到对应课程；`PuzzleAnswerRecord` 类型必须包含 `relatedLessonId?: string` 字段；`PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接
 - **主题映射覆盖**（v1.8 新增，2026-07 强化）：10 个主题（preflop-rfi / big-blind-defense / three-bet / c-bet / flush-draw / multiway / river-value / bluff / short-stack / icm）必须全部映射到有效**且语义相关**的课程 ID——不仅要 ID 存在，还须主题与课程内容对应（如 `icm` → `l6-icm` 而非泛化到 `l2-short-stack`）；具体映射表以 `usePuzzleEngine.ts` 的 `inferPuzzleLessonId` 为唯一事实源（本文件不维护映射副本）
 - **五级反馈复用**（v1.8 新增）：复用 `DecisionFeedback` 与 `GRADE_DISPLAY_CONFIG`，根据 EV 损失自动评级；禁止自定义评级
-- **自适应难度**（v1.8 新增，可选）：达到降级条件时（由 `progress.shouldDownshiftDifficulty('puzzle-trainer')` 判定，阈值以 progress store 实现为准）可显示降级提示（puzzle 模式本身有难度递增机制，该提示为辅助）
+- **自适应难度**（v1.8 新增，可选）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准）可显示降级提示（puzzle 模式本身有难度递增机制，该提示为辅助）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
@@ -124,6 +128,7 @@ additionalPrompt: ""
 - [ ] submitQuickDrillResult 正确判定破纪录（score > previousBest.bestScore）
 - [ ] 五级反馈复用 calculateGrade（不自定义评级）
 - [ ] 三模式（Rush / Daily / ThemeDrill）完成后均已 trainingEvents.emit（module: 'puzzle-trainer'）
+- [ ] 会话完成时已调用 recordTrainingDay，每题作答已调用 recordAnswer（消费 progress 公开 action）
 - [ ] PuzzleCard 在 wrong/blunder 级别显示"去复习"链接
 - [ ] inferPuzzleLessonId 覆盖全部 10 个主题
 - [ ] PuzzleAnswerRecord 包含 relatedLessonId 字段

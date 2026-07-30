@@ -14,7 +14,6 @@ tools:
   - GetTerminalOutput
 skills:
   - frontend-design
-  - theme-factory
 ---
 
 # PokerLab UI/UX Designer
