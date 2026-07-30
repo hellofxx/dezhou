@@ -215,13 +215,13 @@ export function generateDailyPlan(
 export function getReasonColor(reason: string): string {
   switch (reason) {
     case '待复习':
-      return 'text-orange-400 bg-orange-400/10';
+      return 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15';
     case '下一课':
-      return 'text-blue-400 bg-blue-400/10';
+      return 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]';
     case '薄弱环节':
-      return 'text-red-400 bg-red-400/10';
+      return 'text-[var(--poker-danger)] bg-[var(--poker-danger-bg)]';
     case '连续奖励':
-      return 'text-yellow-400 bg-yellow-400/10';
+      return 'text-[var(--brass-bright)] bg-[var(--poker-warning-bg)]';
     default:
       return 'text-[var(--ivory-muted)] bg-[var(--walnut-raised)]/50';
   }

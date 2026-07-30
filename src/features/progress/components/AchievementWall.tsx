@@ -29,11 +29,12 @@ const CATEGORY_TABS: { key: AchievementCategory; icon: string }[] = [
   { key: 'milestone', icon: '🏆' },
 ];
 
+// 四档徽章色对齐牌室色板（DESIGN_LANGUAGE §2.4）：金/铜用 token，银用暖银象牙，钻石用霜钢蓝
 const TIER_COLORS: Record<AchievementTier, string> = {
-  bronze: '#cd7f32',
-  silver: '#c0c0c0',
-  gold: '#ffd700',
-  diamond: '#b9f2ff',
+  bronze: 'var(--poker-bronze)',
+  silver: 'var(--ivory-dim)',
+  gold: 'var(--poker-gold)',
+  diamond: 'var(--poker-frost)',
 };
 
 export default function AchievementWall({ open, onOpenChange }: AchievementWallProps) {

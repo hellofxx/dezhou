@@ -38,10 +38,10 @@ interface ReviewSessionProps {
 
 /** 分类标签颜色 */
 const CATEGORY_COLORS: Record<string, string> = {
-  strategy: 'text-purple-400 bg-purple-400/10',
-  range: 'text-blue-400 bg-blue-400/10',
-  odds: 'text-green-400 bg-green-400/10',
-  gto: 'text-orange-400 bg-orange-400/10',
+  strategy: 'text-[var(--poker-indigo-bright)] bg-[var(--poker-indigo)]/15',
+  range: 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]',
+  odds: 'text-[var(--poker-success)] bg-[var(--poker-success-bg)]',
+  gto: 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15',
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -177,7 +177,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
         <DialogContent className="bg-[var(--felt)] border-[var(--walnut-border)] text-[var(--ivory)]">
           <DialogHeader>
             <DialogTitle className="text-[var(--ivory)] flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-400" />
+              <CheckCircle2 className="w-5 h-5 text-[var(--poker-success)]" />
               {t('review.empty.title', { defaultValue: '今日复习已完成 ✓' })}
             </DialogTitle>
             <DialogDescription className="text-[var(--ivory-muted)]">
@@ -325,9 +325,9 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                       'border-[var(--walnut-border)] bg-[var(--walnut-raised)]/40 hover:bg-[var(--walnut-raised)]/70 hover:border-[var(--brass-muted)]/60';
                     if (showFeedback) {
                       if (isCorrectOpt) {
-                        optionClass = 'border-green-500/60 bg-green-500/15 text-green-300';
+                        optionClass = 'border-[var(--poker-success)]/60 bg-[var(--poker-success)]/15 text-[var(--poker-success)]';
                       } else if (isSelected) {
-                        optionClass = 'border-red-500/60 bg-red-500/15 text-red-300';
+                        optionClass = 'border-[var(--poker-danger)]/60 bg-[var(--poker-danger)]/15 text-[var(--poker-danger)]';
                       } else {
                         optionClass = 'border-[var(--walnut-border)]/40 bg-[var(--walnut-raised)]/20 opacity-60';
                       }
@@ -341,10 +341,10 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                       >
                         <span className="text-[var(--ivory)]">{opt.text}</span>
                         {showFeedback && isCorrectOpt && (
-                          <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
+                          <CheckCircle2 className="w-4 h-4 text-[var(--poker-success)] shrink-0" />
                         )}
                         {showFeedback && isSelected && !isCorrectOpt && (
-                          <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+                          <XCircle className="w-4 h-4 text-[var(--poker-danger)] shrink-0" />
                         )}
                       </button>
                     );
@@ -390,14 +390,14 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => handleSelfEval(false)}
-                        className="px-3 py-2.5 rounded-md border border-red-500/40 bg-red-500/10 hover:bg-red-500/20 text-sm text-red-300 font-medium transition-all"
+                        className="px-3 py-2.5 rounded-md border border-[var(--poker-danger)]/40 bg-[var(--poker-danger-bg)] hover:bg-[var(--poker-danger)]/20 text-sm text-[var(--poker-danger)] font-medium transition-all"
                       >
                         <XCircle className="w-4 h-4 inline mr-1" />
                         {t('review.forgot', { defaultValue: '不记得' })}
                       </button>
                       <button
                         onClick={() => handleSelfEval(true)}
-                        className="px-3 py-2.5 rounded-md border border-green-500/40 bg-green-500/10 hover:bg-green-500/20 text-sm text-green-300 font-medium transition-all"
+                        className="px-3 py-2.5 rounded-md border border-[var(--poker-success)]/40 bg-[var(--poker-success-bg)] hover:bg-[var(--poker-success)]/20 text-sm text-[var(--poker-success)] font-medium transition-all"
                       >
                         <CheckCircle2 className="w-4 h-4 inline mr-1" />
                         {t('review.remembered', { defaultValue: '记得' })}
@@ -431,13 +431,13 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => handleSelfEval(false)}
-                        className="px-3 py-2.5 rounded-md border border-red-500/40 bg-red-500/10 hover:bg-red-500/20 text-sm text-red-300 font-medium"
+                        className="px-3 py-2.5 rounded-md border border-[var(--poker-danger)]/40 bg-[var(--poker-danger-bg)] hover:bg-[var(--poker-danger)]/20 text-sm text-[var(--poker-danger)] font-medium"
                       >
                         {t('review.forgot', { defaultValue: '不记得' })}
                       </button>
                       <button
                         onClick={() => handleSelfEval(true)}
-                        className="px-3 py-2.5 rounded-md border border-green-500/40 bg-green-500/10 hover:bg-green-500/20 text-sm text-green-300 font-medium"
+                        className="px-3 py-2.5 rounded-md border border-[var(--poker-success)]/40 bg-[var(--poker-success-bg)] hover:bg-[var(--poker-success)]/20 text-sm text-[var(--poker-success)] font-medium"
                       >
                         {t('review.remembered', { defaultValue: '记得' })}
                       </button>
@@ -478,7 +478,7 @@ function SummaryStat({
 }) {
   const valueColor =
     accent === 'green'
-      ? 'text-green-400'
+      ? 'text-[var(--poker-success)]'
       : accent === 'brass'
         ? 'text-[var(--brass-bright)]'
         : 'text-[var(--ivory)]';

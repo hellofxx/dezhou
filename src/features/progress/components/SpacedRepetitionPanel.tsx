@@ -15,10 +15,10 @@ interface SpacedRepetitionPanelProps {
 
 // 分类标签颜色
 const CATEGORY_COLORS: Record<string, string> = {
-  strategy: 'text-purple-400 bg-purple-400/10',
-  range: 'text-blue-400 bg-blue-400/10',
-  odds: 'text-green-400 bg-green-400/10',
-  gto: 'text-orange-400 bg-orange-400/10',
+  strategy: 'text-[var(--poker-indigo-bright)] bg-[var(--poker-indigo)]/15',
+  range: 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]',
+  odds: 'text-[var(--poker-success)] bg-[var(--poker-success-bg)]',
+  gto: 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15',
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -64,12 +64,12 @@ export default function SpacedRepetitionPanel({
             {t('spacedRepetition.title', { defaultValue: '🔄 今日待复习' })}
           </h2>
           {!allDone && (
-            <span className="ml-1 px-2 py-0.5 text-xs font-medium rounded-full bg-orange-500/20 text-orange-400">
+            <span className="ml-1 px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--poker-terra)]/25 text-[var(--poker-terra-bright)]">
               {todayItems.length}
             </span>
           )}
           {allDone && totalDueToday > 0 && (
-            <span className="ml-1 px-2 py-0.5 text-xs font-medium rounded-full bg-green-500/20 text-green-400 flex items-center gap-1">
+            <span className="ml-1 px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--poker-success)]/20 text-[var(--poker-success)] flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3" />
               {t('spacedRepetition.allDone', { defaultValue: '已完成' })}
             </span>
@@ -118,7 +118,7 @@ export default function SpacedRepetitionPanel({
         {/* 全部完成提示：仅当今日确实有待复习项且已全部完成时显示 */}
         {allDone && totalDueToday > 0 && (
           <div className="py-4 text-center mb-3">
-            <CheckCircle2 className="w-8 h-8 text-green-400 mx-auto mb-2" />
+            <CheckCircle2 className="w-8 h-8 text-[var(--poker-success)] mx-auto mb-2" />
             <p className="text-sm text-[var(--ivory-dim)]">
               {t('spacedRepetition.allDoneMessage', {
                 defaultValue: '✅ 今日复习已完成，继续保持节奏！',
@@ -199,11 +199,11 @@ export default function SpacedRepetitionPanel({
             <span className="font-numeric text-[var(--ivory)]">{stats.total}</span>
           </div>
           <div className="flex items-center gap-3 text-xs">
-            <span className="text-green-400">
+            <span className="text-[var(--poker-success)]">
               {t('spacedRepetition.mastered', { defaultValue: '已掌握' })}{' '}
               <span className="font-numeric">{stats.mastered}</span>
             </span>
-            <span className="text-blue-400">
+            <span className="text-[var(--poker-info)]">
               {t('spacedRepetition.learning', { defaultValue: '学习中' })}{' '}
               <span className="font-numeric">{stats.learning}</span>
             </span>

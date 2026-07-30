@@ -79,12 +79,12 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
   // Earn Back 窗口期判断
   const isEarnBack = isEarnBackActive(streak.streakBrokenAt);
 
-  // 火焰样式：正常 gold；晚间未训练变红闪烁
+  // 火焰样式：正常 gold；晚间未训练变陶土红闪烁
   const flameClass = isEndingSoon
-    ? 'w-5 h-5 text-red-500 animate-pulse'
+    ? 'w-5 h-5 text-[var(--poker-danger)] animate-pulse'
     : 'w-5 h-5 text-[var(--brass-bright)]';
   const streakNumClass = isEndingSoon
-    ? 'text-3xl font-bold font-numeric text-red-500 animate-pulse'
+    ? 'text-3xl font-bold font-numeric text-[var(--poker-danger)] animate-pulse'
     : 'text-3xl font-bold font-numeric text-[var(--brass-bright)]';
 
   return (
@@ -156,7 +156,7 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
 
           {/* "即将熄灭" 提示（晚间 20:00 后未训练） */}
           {isEndingSoon && (
-            <div className="text-[11px] text-red-400 text-center animate-pulse">
+            <div className="text-[11px] text-[var(--poker-danger)] text-center animate-pulse">
               {t('streak.endingSoon')}
             </div>
           )}
