@@ -5,6 +5,33 @@
 
 ---
 
+## fix(platform) — 2026-07-30（理论学院移动端入口）
+
+> 代码审查（提交 44c3952）发现的严重问题修复：侧边栏在移动端隐藏且 MobileNav 无 /theory 项，导致移动端用户完全无法到达理论学院。
+
+- `MobileNav.tsx` 底部导航 5→6 项：在“训练”后新增“理论学院”（Library 图标，`nav.theory`）；6×44px 最小触控宽度在 320px 最窄屏亦可容纳
+- 修正下方 feat(theory-academy) 条目中“MobileNav 保持 5 项不变”的假设：该假设使需求 1（导航入口）与需求 7（响应式体验一致）仅在桌面端交付，现已补齐
+
+### fix: 代码审查警告级问题（W2-W8）
+
+- **W2 Session 止损契约**：`TheoryChapterView` 进入小测阶段接入 `useSessionLimitReached` + `SessionLimitGuard`（与 pot-odds/gto/range/quick-drill 口径一致）——理论小测 `recordAnswer` 消耗每日题量预算，不能“只写不守”；阅读仍不受限
+- **W3 陈旧 UI 闪现**：`TheoryChapterView` 章节切换改为渲染期同步重置 phase/result（trackedChapterId 比较），消除 useEffect 迟滞导致的“新章标题挂上一章得分卡”闪现
+- **W4 选项排序**：`t1-variance-q2` 选项统一为纯数字单位（`10000 手`/`50000 手以上`），修正“万”缩写被升序排序器误解导致的量级乱序
+- **W5 性能**：progress `checkCondition` 的 `theoryChapters`/`theoryLevel` 加廉价短路（`records.some(r => r.module === 'theory-academy')`），仅理论模块有记录时才动态加载理论内容 chunk
+- **W6 成就阈值**：`allAchievements` 改为从 `ACHIEVEMENTS` 数据源派生非 meta 总数（不再硬编码 `>=20`），“成就猎手”回归“真正解锁全部”语义
+- **W7 导航并列**：理论学院从“研习”分组移入“训练”分组紧邻策略学院，真正“并列显示”（PRD 5.27 验收 1 / TDD 5.8b 同步）
+- **W8 实践入口持久化**：`TheoryLevelCard` 完成态新增常驻“去实践应用”链接（复用 practiceRecommendations，role=button + stopPropagation），不再仅限完成当次会话可见
+
+### fix: 代码审查建议级问题（S9-S13）
+
+- **S9 双向推荐**：`track-beginner` / `track-gto` 的 `relatedTrackIds` 回指 `track-theory-bridge`，与 bridge 自身指向形成双向横向推荐
+- **S10 副作用出 updater**：theory-academy `completeChapter` 的 `trainingEvents.emit` 移至 `set` 提交之后（不再在 zustand set updater 内做副作用），避免订阅方同步读取旧状态与 updater 重放重发
+- **S11 文档口径**：PRD 5.27 将“入口与界面 chrome 支持 zh/en”收窄为“导航入口与主页 chrome”，明确模块内 chrome 与策略学院一致为内联中文
+- **S12 空题库防御**：`TheoryQuiz` 空题库时用 useEffect 自动按完成处理（非渲染期调用父 setState），避免卡死空白小测页
+- **S13 反向包含守卫**：`theoryIntegrity.test.ts` 新增实践推荐引用 ID 白名单镜像守卫（fail-loud），新增/删除引用即变红，提醒同步 curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS
+
+---
+
 ## feat(theory-academy) — 2026-07-29（新增理论学院模块）
 
 > 新增与策略学院并列的独立理论学习模块（产品规格 PRD 5.27，技术设计 TDD 5.8b），承载权威德扑理论体系，与策略学院形成“理论学习→实践应用→复习巩固”闭环。策略学院代码结构零改动，仅定位调整为“实践应用与技能训练”。
@@ -20,7 +47,7 @@
 ### feat(theory-academy): 路由与导航
 
 - `routes.tsx` 新增 `/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView），均 lazy + LazyWrapper
-- `AppLayout` “研习”分组新增“理论学院”入口（Library 图标），与“策略学院”并列；pageTitle 同步；MobileNav 保持 5 项不变
+- `AppLayout` “研习”分组新增“理论学院”入口（Library 图标），与“策略学院”并列；pageTitle 同步；MobileNav 保持 5 项不变（注：此假设已于 2026-07-30 fix(platform) 修正，移动端入口已补齐）
 - i18n：`nav.theory` + `theory.*` 命名空间（zh/en 同步，localeParity 守卫通过）
 
 ### feat(theory-academy): progress 中枢集成

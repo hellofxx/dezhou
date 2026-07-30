@@ -63,6 +63,7 @@ export default function AppLayout() {
       i18nKey: 'nav.training',
       items: [
         { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={20} />, i18nKey: 'nav.academy' },
+        { label: t('nav.theory'), path: '/theory', icon: <Library size={20} />, i18nKey: 'nav.theory' },
         { label: t('nav.basics'), path: '/academy/basics', icon: <BookOpen size={20} />, i18nKey: 'nav.basics' },
         { label: t('nav.rangeTrainer'), path: '/range-trainer', icon: <Target size={20} />, i18nKey: 'nav.rangeTrainer' },
         { label: t('nav.potOdds'), path: '/pot-odds', icon: <Calculator size={20} />, i18nKey: 'nav.potOdds' },
@@ -75,7 +76,6 @@ export default function AppLayout() {
       title: t('nav.study'),
       i18nKey: 'nav.study',
       items: [
-        { label: t('nav.theory'), path: '/theory', icon: <Library size={20} />, i18nKey: 'nav.theory' },
         { label: t('nav.handHistory'), path: '/hand-history', icon: <ClipboardList size={20} />, i18nKey: 'nav.handHistory' },
       ],
     },

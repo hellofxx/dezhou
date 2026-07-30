@@ -4,6 +4,7 @@ import { cn } from '@/shared/utils/cn';
 import {
   Home,
   Target,
+  Library,
   BarChart3,
   Settings,
   Puzzle,
@@ -21,6 +22,7 @@ export default function MobileNav() {
   const items: MobileNavItem[] = [
     { label: t('progress.title'), path: '/', icon: <Home size={20} /> },
     { label: t('nav.training'), path: '/academy', icon: <Target size={20} /> },
+    { label: t('nav.theory'), path: '/theory', icon: <Library size={20} /> },
     { label: t('nav.puzzle'), path: '/puzzle', icon: <Puzzle size={20} /> },
     { label: t('nav.data'), path: '/progress', icon: <BarChart3 size={20} /> },
     { label: t('nav.settings'), path: '/settings', icon: <Settings size={20} /> },

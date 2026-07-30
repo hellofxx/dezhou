@@ -3,6 +3,7 @@ import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Clock, CheckCircle2 } from 'lucide-react';
 import { useProgressStore } from '@/features/progress/store';
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import { findChapterById, findLevelByChapterId, getNextChapter, isLevelFullyCompleted } from '../utils/theoryProgress';
@@ -23,15 +24,23 @@ export default function TheoryChapterView() {
   const completeChapter = useTheoryStore((s) => s.completeChapter);
   const completedChapters = useTheoryStore((s) => s.progress.completedChapters);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+  // Session 止损：小测消耗每日题量预算（recordAnswer），达上限时禁止进入小测
+  const sessionLimitReached = useSessionLimitReached();
 
   const chapter = useMemo(() => (chapterId ? findChapterById(chapterId) : undefined), [chapterId]);
   const level = useMemo(() => (chapterId ? findLevelByChapterId(chapterId) : undefined), [chapterId]);
   const [phase, setPhase] = useState<'reading' | 'quiz' | 'done'>('reading');
   const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null);
-
-  useEffect(() => {
+  // 章节切换时在渲染期同步重置阶段状态（早于绘制），消除 useEffect 迟滞导致的
+  // 「新章标题下挂着上一章得分卡」的陈旧 UI 闪现
+  const [trackedChapterId, setTrackedChapterId] = useState(chapterId);
+  if (chapterId !== trackedChapterId) {
+    setTrackedChapterId(chapterId);
     setPhase('reading');
     setResult(null);
+  }
+
+  useEffect(() => {
     if (chapter) startChapter(chapter.id);
   }, [chapter, startChapter]);
 
@@ -40,6 +49,8 @@ export default function TheoryChapterView() {
   if (!debugUnlocked && !isTheoryLevelUnlocked(level.id)) {
     return <Navigate to="/theory" replace />;
   }
+  // 达每日题量上限时，进入小测阶段渲染止损守卫（阅读仍可进行，与其他训练模块口径一致）
+  if (phase === 'quiz' && sessionLimitReached) return <SessionLimitGuard />;
 
   const nextChapter = getNextChapter(chapter.id);
   const levelCompleted = isLevelFullyCompleted(level.id, completedChapters);

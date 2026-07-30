@@ -42,38 +42,39 @@ export const useTheoryStore = create<TheoryStore>()(
           },
         })),
 
-      completeChapter: (chapterId, score, totalQuestions, correctAnswers) =>
-        set((state) => {
-          const alreadyCompleted = state.progress.completedChapters.includes(chapterId);
-          trainingEvents.emit({
-            id: `theory-quiz-${chapterId}-${Date.now()}`,
+      completeChapter: (chapterId, score, totalQuestions, correctAnswers) => {
+        // 先同步提交状态（纯状态归约，不在 updater 内做副作用）
+        set((state) => ({
+          progress: {
+            ...state.progress,
+            completedChapters: state.progress.completedChapters.includes(chapterId)
+              ? state.progress.completedChapters
+              : [...state.progress.completedChapters, chapterId],
+            quizScores: {
+              ...state.progress.quizScores,
+              [chapterId]: Math.max(state.progress.quizScores[chapterId] ?? 0, score),
+            },
+          },
+        }));
+        // 状态提交后再发事件：确保订阅方（progress addRecord / 成就检查）同步读取时
+        // 看到的是含本章的最新 completedChapters，也避免 updater 被重放导致重复发事件
+        trainingEvents.emit({
+          id: `theory-quiz-${chapterId}-${Date.now()}`,
+          module: 'theory-academy',
+          mode: 'quiz',
+          result: {
+            sessionId: `theory-quiz-${chapterId}`,
             module: 'theory-academy',
-            mode: 'quiz',
-            result: {
-              sessionId: `theory-quiz-${chapterId}`,
-              module: 'theory-academy',
-              totalQuestions,
-              correctAnswers,
-              accuracy: totalQuestions > 0 ? correctAnswers / totalQuestions : 0,
-              averageTime: 0,
-              timestamp: Date.now(),
-              details: [],
-            },
-            createdAt: Date.now(),
-          });
-          return {
-            progress: {
-              ...state.progress,
-              completedChapters: alreadyCompleted
-                ? state.progress.completedChapters
-                : [...state.progress.completedChapters, chapterId],
-              quizScores: {
-                ...state.progress.quizScores,
-                [chapterId]: Math.max(state.progress.quizScores[chapterId] ?? 0, score),
-              },
-            },
-          };
-        }),
+            totalQuestions,
+            correctAnswers,
+            accuracy: totalQuestions > 0 ? correctAnswers / totalQuestions : 0,
+            averageTime: 0,
+            timestamp: Date.now(),
+            details: [],
+          },
+          createdAt: Date.now(),
+        });
+      },
 
       isChapterCompleted: (chapterId) => get().progress.completedChapters.includes(chapterId),
 

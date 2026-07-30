@@ -896,6 +896,9 @@ async function checkCondition(
 
     // 理论学院（2026-07）：完成章节数达标
     case 'theoryChapters': {
+      // 廉价短路：仅在理论模块产生过训练记录时才动态加载理论内容 chunk，
+      // 避免任意模块训练完成后的成就检查都下载全量理论数据
+      if (!state.records.some((r) => r.module === 'theory-academy')) return false;
       try {
         const theory = await getTheoryStore();
         const completed = theory.store.useTheoryStore.getState().progress.completedChapters;
@@ -907,6 +910,8 @@ async function checkCondition(
 
     // 理论学院（2026-07）：前 N 个 Level（t1..tN）全部章节完成
     case 'theoryLevel': {
+      // 廉价短路：同 theoryChapters，理论模块无记录时直接返回 false
+      if (!state.records.some((r) => r.module === 'theory-academy')) return false;
       try {
         const theory = await getTheoryStore();
         const completed = theory.store.useTheoryStore.getState().progress.completedChapters;
@@ -920,8 +925,10 @@ async function checkCondition(
     }
 
     case 'allAchievements': {
-      const totalNonMeta = state.unlockedAchievements.filter((id) => id !== 'all-achievements');
-      return totalNonMeta.length >= 20;
+      // 从成就数据源派生非 meta 总数，避免硬编码阈值随成就增减而漂移
+      const nonMetaTotal = ACHIEVEMENTS.filter((a) => a.id !== 'all-achievements').length;
+      const unlockedNonMeta = state.unlockedAchievements.filter((id) => id !== 'all-achievements');
+      return unlockedNonMeta.length >= nonMetaTotal;
     }
 
     default:

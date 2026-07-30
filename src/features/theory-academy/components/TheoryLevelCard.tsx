@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, CheckCircle2, PlayCircle, ChevronRight } from 'lucide-react';
+import { Lock, CheckCircle2, PlayCircle, ChevronRight, Swords } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import type { TheoryLevelInfo } from '../types';
 
@@ -25,6 +25,21 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
     if (unlocked && targetChapter) {
       navigate(`/theory/chapter/${targetChapter.id}`);
     }
+  };
+
+  // Level 全部完成后的常驻“去实践”入口（复用 practiceRecommendations，不依赖完成当次会话）：
+  // 有推荐轨道则跳学习轨道页，否则跳到首个推荐实践课程
+  const rec = level.practiceRecommendations;
+  const practiceTarget = rec.trackId
+    ? '/academy/tracks'
+    : rec.lessons[0]
+      ? `/academy/lesson/${rec.lessons[0].id}`
+      : null;
+
+  const goPractice = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (practiceTarget) navigate(practiceTarget);
   };
 
   return (
@@ -78,6 +93,21 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                     style={{ width: `${progress}%` }}
                   />
                 </div>
+                {allCompleted && practiceTarget && (
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${level.title} 已完成，去实践应用`}
+                    onClick={goPractice}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') goPractice(e);
+                    }}
+                    className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
+                  >
+                    <Swords className="w-3.5 h-3.5" />
+                    去实践应用
+                  </span>
+                )}
               </div>
             ) : (
               <p className="text-xs text-[var(--ivory-muted)] flex items-center gap-1.5">

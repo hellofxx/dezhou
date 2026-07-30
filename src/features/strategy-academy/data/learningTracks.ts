@@ -44,7 +44,7 @@ export const LEARNING_TRACKS: LearningTrack[] = [
       'l2-raise-sizing',         // 进阶：加注尺度
     ],
     color: '#7fb883',
-    relatedTrackIds: ['track-cash-game', 'track-gto'],
+    relatedTrackIds: ['track-cash-game', 'track-gto', 'track-theory-bridge'],
   },
   {
     id: 'track-cash-game',
@@ -129,7 +129,7 @@ export const LEARNING_TRACKS: LearningTrack[] = [
       'l8-exploitative-adjustments',
     ],
     color: '#a8c4cf',
-    relatedTrackIds: ['track-cash-game', 'track-tournament'],
+    relatedTrackIds: ['track-cash-game', 'track-tournament', 'track-theory-bridge'],
   },
   {
     id: 'track-leak-fix',

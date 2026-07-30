@@ -99,4 +99,26 @@ describe('theory integrity: 实践推荐结构合法性', () => {
     }
     expect(bad).toEqual([]);
   });
+
+  // 反向包含守卫（fail-loud 触发器）：实践推荐引用的课程 ID 集必须等于下方白名单。
+  // 任何新增/删除实践引用都会使本测试变红，提醒作者同步更新 strategy-academy
+  // curriculumIntegrity.test.ts 的 CROSS_MODULE_LESSON_IDS（悬空引用的最终守卫），
+  // 避免未来新增推荐后忘记登记导致 PracticeBridgeCard 无拦截的悬空跳转。
+  // （因模块隔离，theory-academy 测试不能直接 import strategy-academy 数据，故用白名单镜像式守卫）
+  it('实践推荐引用的课程 ID 集与白名单一致（变化时需同步 curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS）', () => {
+    const EXPECTED_PRACTICE_LESSON_IDS = [
+      'l1-basics', 'l1-hand-selection', 'l1-position', 'l2-raise-sizing',
+      'l3-draws', 'l4-ev-thinking', 'l4-range-thinking', 'l4-range-construction',
+      'l4-blockers', 'l4-gto-basics', 'l4-mdf', 'l4-frequency-balance',
+      'l3-bet-sizing', 'l3-cbet', 'l4-overbet', 'l4-opponent-reading',
+      'l8-exploitative-adjustments', 'l5-tilt', 'l5-bankroll', 'l5-session-review',
+      'l6-icm', 'l7-multiway', 'l8-pool-tendencies',
+    ].sort();
+    const actual = [
+      ...new Set(
+        THEORY_LEVELS.flatMap((level) => level.practiceRecommendations.lessons.map((l) => l.id))
+      ),
+    ].sort();
+    expect(actual).toEqual(EXPECTED_PRACTICE_LESSON_IDS);
+  });
 });

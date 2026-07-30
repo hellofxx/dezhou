@@ -248,7 +248,7 @@ export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
       {
         id: 't1-variance-q2',
         question: '要让技术优势稳定压过运气波动，现金桌通常需要的样本量约为：',
-        options: ['1000 手', '5000 手', '1 万手', '5 万手以上'],
+        options: ['1000 手', '5000 手', '10000 手', '50000 手以上'],
         correctIndex: 3,
         explanation: '以典型胜率与标准差估算，1 万手内输赢仍高度受运气支配，通常需要 5 万-10 万手以上才能可靠反映真实水平。',
       },

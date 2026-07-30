@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -29,6 +29,14 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+
+  // 防御：空题库（理论章节无小测）时自动按完成处理，避免 onComplete 永不触发导致卡死在空白小测页。
+  // 用 effect 触发（而非渲染期调用父 setState）；完成后父组件切至 done 会卸载本组件，不会循环。
+  // 正常由 theoryIntegrity 测试保证每章 3-5 题，此为防御性兜底。
+  const isEmpty = orderedQuestions.length === 0;
+  useEffect(() => {
+    if (isEmpty) onComplete(100, 0, 0);
+  }, [isEmpty, onComplete]);
 
   const question = orderedQuestions[currentIndex];
   if (!question) return null;
