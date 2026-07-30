@@ -15,6 +15,7 @@
     "potOdds": "Pot Odds Calculator",
     "gtoSimulator": "GTO Simulator",
     "handHistory": "Hand History",
+    "theory": "Theory Academy",
     "progress": "Progress",
     "settings": "Settings",
     "dailyChallenge": "Daily Challenge",
@@ -604,6 +605,14 @@
       "dailyLimit": "Daily fragment limit reached"
     }
   },
+  "theory": {
+    "title": "Theory Academy",
+    "subtitle": "Study authoritative poker theory systematically and build a complete knowledge framework",
+    "chapters": "chapters",
+    "tierBasic": "Basic T1-T3",
+    "tierIntermediate": "Intermediate T4-T6",
+    "tierAdvanced": "Advanced T7-T9"
+  },
   "handHistory": {
     "deviation": {
       "title": "GTO Deviation Analysis",
@@ -1073,6 +1082,22 @@
       "allAchievements": {
         "title": "Achievement Hunter",
         "description": "Unlock all achievements"
+      },
+      "firstTheoryChapter": {
+        "title": "Theory Initiate",
+        "description": "Complete your first theory chapter"
+      },
+      "theoryBasics": {
+        "title": "Math Foundation",
+        "description": "Complete all Basic tier (T1-T3) theory chapters"
+      },
+      "theoryIntermediate": {
+        "title": "Game Theorist",
+        "description": "Complete all Intermediate tier (T4-T6) theory chapters"
+      },
+      "theoryMaster": {
+        "title": "Theory Master",
+        "description": "Complete all 9 levels of the Theory Academy"
       }
     }
   }

@@ -17,6 +17,7 @@ const MODULE_LABELS: Record<string, string> = {
   'range-trainer': '手牌范围训练',
   'pot-odds': '赔率计算器',
   'gto-simulator': 'GTO 模拟器',
+  'theory-academy': '理论学院',
 };
 
 export default function ProgressPage() {

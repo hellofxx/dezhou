@@ -37,6 +37,8 @@ const PuzzleHome = lazy(() => import('@/features/puzzle-trainer/components/Puzzl
 const PuzzleRush = lazy(() => import('@/features/puzzle-trainer/components/PuzzleRush'));
 const DailyPuzzle = lazy(() => import('@/features/puzzle-trainer/components/DailyPuzzle'));
 const ThemeDrill = lazy(() => import('@/features/puzzle-trainer/components/ThemeDrill'));
+const TheoryHome = lazy(() => import('@/features/theory-academy/components/TheoryHome'));
+const TheoryChapterView = lazy(() => import('@/features/theory-academy/components/TheoryChapterView'));
 
 function LazyWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -72,6 +74,8 @@ export const router = createBrowserRouter([
       { path: 'academy/quick-drill', element: <LazyWrapper><QuickDrill /></LazyWrapper> },
       { path: 'academy/certification/:level', element: <LazyWrapper><LevelCertification /></LazyWrapper> },
       { path: 'academy/lesson/:lessonId', element: <LazyWrapper><CourseView /></LazyWrapper> },
+      { path: 'theory', element: <LazyWrapper><ErrorBoundary><TheoryHome /></ErrorBoundary></LazyWrapper> },
+      { path: 'theory/chapter/:chapterId', element: <LazyWrapper><TheoryChapterView /></LazyWrapper> },
       { path: 'puzzle', element: <LazyWrapper><PuzzleHome /></LazyWrapper> },
       { path: 'puzzle/rush', element: <LazyWrapper><PuzzleRush /></LazyWrapper> },
       { path: 'puzzle/daily', element: <LazyWrapper><DailyPuzzle /></LazyWrapper> },

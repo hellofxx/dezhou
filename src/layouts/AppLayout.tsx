@@ -25,6 +25,7 @@ import {
   Globe,
   GraduationCap,
   BookOpen,
+  Library,
   Puzzle,
   Flame,
   Spade,
@@ -74,6 +75,7 @@ export default function AppLayout() {
       title: t('nav.study'),
       i18nKey: 'nav.study',
       items: [
+        { label: t('nav.theory'), path: '/theory', icon: <Library size={20} />, i18nKey: 'nav.theory' },
         { label: t('nav.handHistory'), path: '/hand-history', icon: <ClipboardList size={20} />, i18nKey: 'nav.handHistory' },
       ],
     },
@@ -97,6 +99,7 @@ export default function AppLayout() {
   const pageTitle: Record<string, string> = {
     '/': t('dashboard.title', '训练仪表盘'),
     '/academy': t('nav.academy'),
+    '/theory': t('nav.theory'),
     '/range-trainer': t('nav.rangeTrainer'),
     '/pot-odds': t('nav.potOdds'),
     '/gto-simulator': t('nav.gtoSimulator'),

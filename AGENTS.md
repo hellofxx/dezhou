@@ -41,7 +41,7 @@ React 19 + Vite 8 + TypeScript 7（strict）+ Tailwind CSS 4 + shadcn/ui + Zusta
 src/
 ├── app/           # 路由配置（routes.tsx）
 ├── layouts/       # AppLayout / BlankLayout / MobileNav
-├── features/      # 8 个业务模块（自包含）
+├── features/      # 9 个业务模块（自包含）
 │   ├── range-trainer/
 │   ├── pot-odds/
 │   ├── gto-simulator/
@@ -49,7 +49,8 @@ src/
 │   ├── progress/        # 跨模块状态中枢
 │   ├── onboarding/
 │   ├── puzzle-trainer/
-│   └── strategy-academy/
+│   ├── strategy-academy/
+│   └── theory-academy/  # 理论学习（与 strategy-academy 并列，理论→实践闭环）
 ├── shared/        # 跨模块共享层（≥2 模块使用才放入）
 │   ├── types/     # poker / position / action / elo / mentor / decisionFeedback
 │   ├── components/  # Card / EmptyState / LoadingState / ResultSummary
@@ -113,6 +114,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 | progress | `src/features/progress/store.ts` | poker-training-progress |
 | puzzle-trainer | `src/features/puzzle-trainer/store.ts` | puzzle-trainer-store |
 | strategy-academy | `src/features/strategy-academy/store.ts` | strategy-academy-progress |
+| theory-academy | `src/features/theory-academy/store.ts` | theory-academy-progress |
 
 ### Persist Version 升级硬性规则
 
@@ -261,6 +263,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 | `onboarding-dev` | Feature | 新手引导流程 |
 | `puzzle-trainer-dev` | Feature | Puzzle 三模式 |
 | `strategy-academy-dev` | Feature | 课程 / Drill / QuickDrill |
+| `theory-academy-dev` | Feature | 理论学院课程 / 章末小测 / 理论→实践桥接 |
 
 ### 边界约束
 

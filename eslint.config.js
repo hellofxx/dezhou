@@ -14,6 +14,7 @@ const FEATURES = [
   'puzzle-trainer',
   'range-trainer',
   'strategy-academy',
+  'theory-academy',
 ];
 
 // 模块间允许的直接引用边（当前依赖图快照，收紧时只删不加）。
@@ -25,10 +26,11 @@ export const ALLOWED_CROSS_IMPORTS = {
   'hand-history': [],
   onboarding: ['progress', 'range-trainer'],
   'pot-odds': ['progress'],
-  progress: ['puzzle-trainer', 'strategy-academy'],
+  progress: ['puzzle-trainer', 'strategy-academy', 'theory-academy'],
   'puzzle-trainer': ['progress'],
   'range-trainer': ['progress'],
   'strategy-academy': ['progress', 'puzzle-trainer'],
+  'theory-academy': ['progress'],
 };
 
 const featureIsolationBlocks = FEATURES.map((feature) => {

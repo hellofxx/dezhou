@@ -15,17 +15,20 @@ async function loadAllowedCrossImports(): Promise<CrossImportMap> {
   return mod.ALLOWED_CROSS_IMPORTS;
 }
 
-// 当前依赖图精确快照（8 个模块键）：
+// 当前依赖图精确快照（9 个模块键）：
 // progress 边为 AGENTS.md 设计内的跨模块状态中枢引用，其余 peer 边为存量债务。
+// theory-academy 为 2026-07 新增模块：它引用 progress（中枢）；
+// progress → theory-academy 为成就检查的动态 import（与 strategy-academy 同模式）。
 const EXPECTED_SNAPSHOT: CrossImportMap = {
   'gto-simulator': ['progress', 'range-trainer', 'strategy-academy'],
   'hand-history': [],
   onboarding: ['progress', 'range-trainer'],
   'pot-odds': ['progress'],
-  progress: ['puzzle-trainer', 'strategy-academy'],
+  progress: ['puzzle-trainer', 'strategy-academy', 'theory-academy'],
   'puzzle-trainer': ['progress'],
   'range-trainer': ['progress'],
   'strategy-academy': ['progress', 'puzzle-trainer'],
+  'theory-academy': ['progress'],
 };
 
 describe('eslint ALLOWED_CROSS_IMPORTS 快照守卫', () => {

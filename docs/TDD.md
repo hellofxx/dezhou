@@ -183,6 +183,15 @@ src/
 │   │   ├── index.ts
 │   │   ├── store.ts               # persist v2
 │   │   └── types.ts
+│   │
+│   ├── theory-academy/            # 理论学院模块（2026-07 新增，设计见 5.10）
+│   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLevelCard / PracticeBridgeCard 等
+│   │   ├── data/                  # levels/（index.ts + theoryLevel1.ts ~ theoryLevel9.ts）+ theoryIntegrity.test.ts
+│   │   ├── hooks/                 # useTheory
+│   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序出口）
+│   │   ├── index.ts
+│   │   ├── store.ts               # persist v1（theory-academy-progress）
+│   │   └── types.ts
 │
 ├── shared/                       # 共享层
 │   ├── components/               # 通用组件
@@ -431,7 +440,7 @@ export interface QuestionResult {
 // 训练记录（持久化）
 export interface TrainingRecord {
   id: string;
-  module: 'range-trainer' | 'pot-odds' | 'gto-simulator' | 'strategy-academy' | 'puzzle-trainer';
+  module: 'range-trainer' | 'pot-odds' | 'gto-simulator' | 'strategy-academy' | 'puzzle-trainer' | 'theory-academy';
   mode: string;
   result: TrainingResult;
   createdAt: number;
@@ -827,7 +836,7 @@ interface DailyRecommendation {
    ```
    各 feature 模块训练完成后调用 `trainingEvents.emit(record)`，progress store 自动收集。
 
-   **emit 合规状态**（v2.0 更新）：range-trainer / gto-simulator / strategy-academy / pot-odds / puzzle-trainer 均已合规 emit；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免。
+   **emit 合规状态**（v2.0 更新）：range-trainer / gto-simulator / strategy-academy / pot-odds / puzzle-trainer 均已合规 emit；theory-academy（2026-07 新增）章末小测完成时 emit；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免。
 
    **addRecord 去重**（v2.0 新增）：`addRecord` 内部检查 `state.records.some(r => r.id === record.id)`，相同 id 的记录不重复添加，防止事件总线重复 emit 导致训练记录膨胀。
 
@@ -1050,6 +1059,36 @@ interface DailyRecommendation {
     - `l5-tools`：扑克工具使用指南
     - `l5-online-vs-live`：线上 vs 线下差异与调整
 
+### 5.8b Theory Academy（理论学院，2026-07 新增）
+
+与 strategy-academy 并列的独立理论学习模块（产品规格见 PRD 5.27）：理论学院负责知识构建，策略学院负责实践应用，两者形成“理论→实践”闭环。架构完全复刻 strategy-academy 成熟模式。
+
+1. **数据模型**（`theory-academy/types.ts`）：
+   - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
+   - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）
+   - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point）+ content（内联中文，与策略学院课程正文口径一致，不进 i18n）
+   - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
+
+2. **内容体系**：9 Level 共 31 章、124 道章末小测，数据按 Level 拆分为 `data/levels/theoryLevel1.ts ~ theoryLevel9.ts`（课程内容数据文件放宽 200 行限制），`data/levels/index.ts` 聚合为 `THEORY_LEVELS`。
+
+3. **Store**（`store.ts`，persist name `theory-academy-progress`，version 1）：
+   - 状态：`progress: { completedChapters / quizScores / currentChapter / startedAt }`
+   - `completeChapter(id, score, total, correct)`：幂等（重复不重复计数），quizScores 取历史最高分，内部 `trainingEvents.emit`（module `'theory-academy'`）
+   - `isTheoryLevelUnlocked(levelId)`：首行 `isDebugUnlockActive()` 短路；T1 默认解锁，Tn 需 T(n-1) 全部章节完成
+   - `getLevelProgress` / `getTotalProgress` / `resetProgress`
+
+4. **ELO 集成**：`TheoryQuiz` 每题作答时调用 `progress.updateElo(chapter.eloDimension, isCorrect, getChapterDifficulty(level))` + `progress.recordAnswer(isCorrect)`（难度映射：T1≈0.2 递增至 T9≈0.8）；章节完成调 `progress.recordTrainingDay()`。
+
+5. **选项排序治理**：`utils/quizOrder.ts` 的 `orderTheoryQuizQuestion` 复用 `shared/utils/seededShuffle`（数值升序 / id 哈希种子洗牌 + correctIndex 重映射），接入 5.9 选项排序治理。
+
+6. **成就集成**：`achievements.ts` 新增 `theoryChapters` / `theoryLevel` 两个 condition type 与 4 项成就；progress store `checkCondition` 通过动态 import `getTheoryStore()`（复刻 `getAcademyStore` 缓存模式）读取进度。
+
+7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁），均 lazy + LazyWrapper；侧边栏“研习”分组新增入口（`nav.theory`，Library 图标）。
+
+8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫。
+
+9. **理论→实践桥接**：每 Level 完成后 `PracticeBridgeCard` 展示推荐课程/轨道（路由字符串跳转）；strategy-academy `learningTracks.ts` 新增 `track-theory-bridge`（“理论到实践”轨道）承接 9 个理论支柱。
+
 ### 5.9 跨模块系统设计
 
 > 本节汇总 Streak / ELO / SRS / Emotion / Mentor 五大跨模块系统，以及 v2.1 新增的反馈闭环 / 位置渐进解锁 / 自适应难度三大系统、选项排序治理系统的技术设计。这些系统横切多个 feature 模块，状态统一收敛在 `progress` store，通过 persist 持久化。
@@ -1109,7 +1148,7 @@ interface DailyRecommendation {
 面向开发与演示的全局门禁旁路，激活后一次性解除所有功能锁。
 
 - 独立 store `shared/stores/debugMode.ts`（persist name=`poker-debug-mode`，version 1，不并入 progress store 以免连带 persist 形状/版本变更）：`unlockAll` 状态 + `activateWithCode(code)` + `deactivate()`；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（本文档不维护数值副本）；导出非响应式 `isDebugUnlockActive()` 供 store 方法/纯逻辑短路
-- 解锁点短路（激活后全部放行，共 5 处）：strategy-academy store 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、`CourseView` 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard`（`useSessionLimitReached`）每日题量上限
+- 解锁点短路（激活后全部放行，共 7 处）：strategy-academy store 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、`CourseView` 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard`（`useSessionLimitReached`）每日题量上限、theory-academy store 的 `isTheoryLevelUnlocked`、theory-academy `TheoryChapterView` 章节 URL 直达门禁
 - UI 入口：`SettingsPage`「开发者选项」分区（数字输入框 + 激活/关闭）
 - 范围边界：onboarding 不纳入（未完成引导无法进入设置页，纳入无意义）；成就与统计数据不受影响
 
@@ -1144,6 +1183,7 @@ interface DailyRecommendation {
 | range-trainer | `useQuizEngine` 的 `recordEloForAnswer` | preflop | 答题后 / 超时 |
 | pot-odds | `useOddsEloRecorder` | math | 答题后 |
 | gto-simulator | `useGtoEloRecorder` | postflop | 决策提交后 |
+| theory-academy | `TheoryQuiz` 直接调用 `updateElo` | 按章节 `eloDimension` 声明（五维之一） | 章末小测每题作答后 |
 
 UI 组件：`Dashboard` 段位徽章按钮、`WeaknessAnalysis` 五维雷达图（数据源为 ELO 五维分数 0-3000）、`RankUpCelebration` 全屏升段 Dialog。
 
@@ -1255,7 +1295,7 @@ persist(
 └────────────────┘               └─────────────────┘                   └──────────────┘
 ```
 
-- **发布方**（v2.0 更新）：range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy 五个模块在会话结束时创建 `TrainingRecord` 并 `emit`；hand-history 为复盘工具，合理豁免
+- **发布方**（v2.0 更新）：range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy 五个模块在会话结束时创建 `TrainingRecord` 并 `emit`；theory-academy（2026-07）在章末小测完成时 emit；hand-history 为复盘工具，合理豁免
 - **订阅方**：progress store 在模块加载时 `subscribe`，自动 `addRecord`（v2.0 新增 id 去重）
 
 ### 6.4 各 Store 数据结构
@@ -1460,6 +1500,7 @@ persist(
 | progress | `poker-training-progress` | 8 | records / settings / onboarding / streak / elo / quickDrillStreak / mentorStyle / emotion / consecutiveWrongByModule / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
 | puzzle-trainer | `puzzle-trainer-store` | 2 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted |
 | strategy-academy | `strategy-academy-progress` | 2 | progress / practiceResults（cap 200） / abilityAssessment / dailyPlan / certifications / firstAttemptScores / lastAttemptScores |
+| theory-academy | `theory-academy-progress` | 1 | progress（completedChapters / quizScores / currentChapter / startedAt） |
 
 > v2.1 说明：progress store 新增 `consecutiveWrongByModule: Record<ModuleType, number>` 字段用于自适应难度判定。该字段为运行时累加值（每次答错 +1，答对重置为 0），首次加载时通过防御性合并默认值 `{}` 注入。
 
@@ -1471,6 +1512,7 @@ persist(
 | v7 → v8 | 冻结卡碎片系统迁移：注入 `freezeCardFragments: 0`、`lastFragmentDate: ''`、`fragmentsEarnedToday: 0` 默认值 |
 | strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值 |
 | strategy-academy v1 → v2 | practiceResults 裁剪：对超过 200 条的老数据执行 `.slice(-200)` 保留最近记录 |
+| theory-academy v0 → v1 | 首版兜底：防御性合并 progress 默认值（新 store，无存量迁移负担） |
 
 ---
 

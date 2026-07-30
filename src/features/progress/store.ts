@@ -47,6 +47,24 @@ async function getAcademyStore() {
   return _academyModule;
 }
 
+// theory-academy（2026-07）：同模式的动态导入（避免静态循环依赖）
+let _theoryModule: {
+  store: typeof import('@/features/theory-academy/store');
+  utils: typeof import('@/features/theory-academy/utils/theoryProgress');
+} | null = null;
+
+/** 获取 theory-academy store 与进度工具模块（首次调用时动态加载，后续复用缓存） */
+async function getTheoryStore() {
+  if (!_theoryModule) {
+    const [store, utils] = await Promise.all([
+      import('@/features/theory-academy/store'),
+      import('@/features/theory-academy/utils/theoryProgress'),
+    ]);
+    _theoryModule = { store, utils };
+  }
+  return _theoryModule;
+}
+
 // onboarding 默认状态（migrate 与初始化共用）
 export const DEFAULT_ONBOARDING: OnboardingState = {
   completed: false,
@@ -871,6 +889,31 @@ async function checkCondition(
       try {
         const dailyCompleted = usePuzzleStore.getState().dailyCompleted;
         return Object.keys(dailyCompleted).length > 0;
+      } catch {
+        return false;
+      }
+    }
+
+    // 理论学院（2026-07）：完成章节数达标
+    case 'theoryChapters': {
+      try {
+        const theory = await getTheoryStore();
+        const completed = theory.store.useTheoryStore.getState().progress.completedChapters;
+        return completed.length >= condition.count;
+      } catch {
+        return false;
+      }
+    }
+
+    // 理论学院（2026-07）：前 N 个 Level（t1..tN）全部章节完成
+    case 'theoryLevel': {
+      try {
+        const theory = await getTheoryStore();
+        const completed = theory.store.useTheoryStore.getState().progress.completedChapters;
+        for (let lv = 1; lv <= condition.level; lv++) {
+          if (!theory.utils.isLevelFullyCompleted(`t${lv}`, completed)) return false;
+        }
+        return true;
       } catch {
         return false;
       }

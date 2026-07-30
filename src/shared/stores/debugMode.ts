@@ -6,6 +6,7 @@ import { persist } from 'zustand/middleware';
  *
  * 在设置页「开发者选项」输入激活码后 `unlockAll` 置真，全局解除以下门禁：
  *   - 策略学院 Level 解锁（isLevelUnlocked / isLevelEntryUnlocked）
+ *   - 理论学院 Level 解锁与章节 URL 直达门禁（isTheoryLevelUnlocked / TheoryChapterView）
  *   - range-trainer 位置渐进解锁（RangeSelector）
  *   - 学习轨道前置（LearningTracksView）
  *   - 课程 URL 直达门禁（CourseView）

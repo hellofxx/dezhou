@@ -32,6 +32,12 @@ const CROSS_MODULE_LESSON_IDS = [
   'l1-hand-selection', 'l2-bb-defense', 'l2-3bet-basics', 'l2-4bet-strategy',
   'l2-short-stack', 'l3-cbet', 'l3-draws', 'l3-bet-sizing', 'l3-bluffing',
   'l3-multistreet', 'l4-gto-basics', 'l6-icm',
+  // theory-academy 实践推荐引用（事实源：theory-academy/data/levels/index.ts 的 practiceRecommendations）
+  'l1-basics', 'l1-position', 'l2-raise-sizing', 'l4-ev-thinking',
+  'l4-range-thinking', 'l4-range-construction', 'l4-blockers',
+  'l4-mdf', 'l4-frequency-balance', 'l4-overbet', 'l4-opponent-reading',
+  'l5-tilt', 'l5-bankroll', 'l5-session-review',
+  'l7-multiway', 'l8-exploitative-adjustments', 'l8-pool-tendencies',
 ];
 
 const allLessons: Lesson[] = LEVELS.flatMap((level) => level.lessons);

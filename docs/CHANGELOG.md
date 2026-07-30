@@ -5,6 +5,52 @@
 
 ---
 
+## feat(theory-academy) — 2026-07-29（新增理论学院模块）
+
+> 新增与策略学院并列的独立理论学习模块（产品规格 PRD 5.27，技术设计 TDD 5.8b），承载权威德扑理论体系，与策略学院形成“理论学习→实践应用→复习巩固”闭环。策略学院代码结构零改动，仅定位调整为“实践应用与技能训练”。
+
+### feat(theory-academy): 模块与内容
+
+- 新增 `src/features/theory-academy/`（types / store / utils / hooks / components / data），架构复刻 strategy-academy 成熟模式
+- 全量 9 个理论 Level、共 31 章，每章 3-5 道章末小测（共 124 题），三段分级（基础 T1-T3 / 中级 T4-T6 / 高级 T7-T9）：
+  - T1 概率论基础 / T2 期望值与赔率 / T3 位置与起手牌 / T4 范围理论 / T5 博弈论基础 / T6 下注理论 / T7 对手分析 / T8 扑克心理学 / T9 经典理论综合
+- 章节内容为原创中文（内联文本，与策略学院课程正文口径一致），基于业界公认理论（概率/EV/GTO/MDF/统计指标/心理学），不逐字复制受版权保护教材
+- 章节 ID 前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离，保证全局唯一
+
+### feat(theory-academy): 路由与导航
+
+- `routes.tsx` 新增 `/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView），均 lazy + LazyWrapper
+- `AppLayout` “研习”分组新增“理论学院”入口（Library 图标），与“策略学院”并列；pageTitle 同步；MobileNav 保持 5 项不变
+- i18n：`nav.theory` + `theory.*` 命名空间（zh/en 同步，localeParity 守卫通过）
+
+### feat(theory-academy): progress 中枢集成
+
+- `TrainingRecord.module` 联合类型新增 `'theory-academy'`；Dashboard / ProgressPage / StatsOverview 的 MODULE_LABELS 补“理论学院”标签
+- 章末小测每题作答调用 `progress.updateElo`（按章节 eloDimension）+ `recordAnswer`；完成调 `recordTrainingDay`；完成发射 `trainingEvents.emit`（module `'theory-academy'`）
+- `achievements.ts` 新增 `theoryChapters` / `theoryLevel` 两个 condition type 与 4 项成就（首章/基础段/中级段/全 9 Level，末项奖励 3 张冻结卡）；progress store `checkCondition` 新增 `getTheoryStore()` 动态 import（避免循环依赖）
+- 调试解锁：debugMode 注释门禁清单由 5 处扩至 7 处（新增理论 Level 解锁与章节 URL 直达门禁）
+
+### feat(theory-academy): 理论→实践桥接
+
+- 每 Level 完成后 `PracticeBridgeCard` 展示对应策略学院课程/轨道（路由字符串跳转，不产生模块 import）
+- strategy-academy `learningTracks.ts` 新增 `track-theory-bridge`（“理论到实践”轨道）承接 9 个理论支柱；curriculumIntegrity 的 `CROSS_MODULE_LESSON_IDS` 补入理论实践推荐引用的课程 ID
+
+### chore: 模块隔离与守卫测试
+
+- `eslint.config.js` FEATURES 8→9，`ALLOWED_CROSS_IMPORTS` 新增 `'theory-academy': ['progress']` 与 `progress` → `theory-academy`（成就检查动态 import）；`eslintCrossImports.test.ts` 快照同步为 9 键
+- 新增 `theoryIntegrity.test.ts` / `quizOrder.test.ts`（分布守卫：A 17.7% / B 29.8% / C 20.2% / D 32.3%，均 <50%）/ `store.persist-shape.test.ts`
+
+### 数据迁移
+
+- theory-academy 为全新 store（`theory-academy-progress`，persist version 1），无存量用户数据，无迁移负担；migrate 仅做 `fromVersion<1` 防御性默认值合并兜底
+- progress store **不** bump persist version：本次仅扩宽 `TrainingRecord.module` 联合类型、新增静态成就数据与 checkCondition 分支，持久化键形状不变（persist-shape 测试验证）
+
+### 质量门禁
+
+- `pnpm typecheck` / `pnpm lint` / `pnpm test`（29 文件 197 用例）/ `pnpm build` 全绿
+
+---
+
 ## 待办（Backlog）
 
 - **trainingEvents.emit 存量缺口（部分完成）**（登记于 2026-07-28）：pot-odds / puzzle-trainer 已在 v2.0 补全 emit；hand-history 经评估为复盘分析工具（非交互式训练），标注为合理豁免，无需 emit。剩余缺口已清零。

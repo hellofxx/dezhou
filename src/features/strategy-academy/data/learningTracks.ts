@@ -142,6 +142,32 @@ export const LEARNING_TRACKS: LearningTrack[] = [
     color: '#c25a4c',
     relatedTrackIds: ['track-beginner'],
   },
+  // 理论学院（2026-07）：理论→实践衔接轨道，与 theory-academy 各 Level 的
+  // practiceRecommendations 对应（事实源：theory-academy/data/levels/index.ts）
+  {
+    id: 'track-theory-bridge',
+    name: '理论到实践',
+    description: '完成理论学院对应 Level 后，按理论支柱顺序将知识转化为实战决策能力',
+    icon: '📖',
+    targetAudience: '在理论学院完成了系统学习、需要落地实践的玩家',
+    estimatedDuration: '10-15 小时',
+    lessonIds: [
+      'l1-basics',            // T1 概率论 → 规则与牌型
+      'l1-position',          // T3 位置理论 → 位置的力量
+      'l2-raise-sizing',      // T3 起手牌理论 → 加注尺度
+      'l3-draws',             // T2 赔率体系 → 听牌处理
+      'l4-ev-thinking',       // T2 期望值 → EV 思维
+      'l4-range-thinking',    // T4 范围理论 → 范围思维
+      'l4-gto-basics',        // T5 博弈论 → GTO 基础
+      'l4-mdf',               // T5 MDF → 最小防御频率
+      'l3-bet-sizing',        // T6 下注理论 → 下注尺度
+      'l4-opponent-reading',  // T7 对手分析 → 对手阅读
+      'l5-tilt',              // T8 心理学 → 情绪管理
+      'l6-icm',               // T9 经典综合 → ICM 基础
+    ],
+    color: '#8ba59b',
+    relatedTrackIds: ['track-gto', 'track-beginner'],
+  },
   // P2-1.9: 本土低级别盈利路径
   LOCAL_TRACK,
 ];

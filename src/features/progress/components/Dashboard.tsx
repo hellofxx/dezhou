@@ -36,6 +36,7 @@ const MODULE_LABELS: Record<string, string> = {
   'gto-simulator': 'GTO 模拟器',
   'hand-history': '牌局复盘',
   'strategy-academy': '策略学院',
+  'theory-academy': '理论学院',
 };
 
 export default function Dashboard() {

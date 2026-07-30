@@ -32,7 +32,10 @@ export type AchievementCondition =
   | { type: 'firstPuzzle' }
   | { type: 'firstDailyPuzzle' }
   | { type: 'quickDrillStreak'; days: number }
-  | { type: 'allAchievements' };
+  | { type: 'allAchievements' }
+  // 理论学院（2026-07）：完成章节数 / 完成前 N 个理论 Level（判定见 progress/store.ts checkCondition）
+  | { type: 'theoryChapters'; count: number }
+  | { type: 'theoryLevel'; level: number };
 
 /** 全部成就定义 */
 export const ACHIEVEMENTS: Achievement[] = [
@@ -92,6 +95,45 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '🏆',
     condition: { type: 'allCertifications' },
     reward: { freezeCards: 5 },
+  },
+  // ===== 理论学院（2026-07）=====
+  {
+    id: 'first-theory-chapter',
+    category: 'learning',
+    tier: 'bronze',
+    title: 'achievements.items.firstTheoryChapter.title',
+    description: 'achievements.items.firstTheoryChapter.description',
+    icon: '📖',
+    condition: { type: 'theoryChapters', count: 1 },
+    reward: { xp: 5 },
+  },
+  {
+    id: 'theory-basics',
+    category: 'learning',
+    tier: 'silver',
+    title: 'achievements.items.theoryBasics.title',
+    description: 'achievements.items.theoryBasics.description',
+    icon: '🎲',
+    condition: { type: 'theoryLevel', level: 3 },
+  },
+  {
+    id: 'theory-intermediate',
+    category: 'learning',
+    tier: 'gold',
+    title: 'achievements.items.theoryIntermediate.title',
+    description: 'achievements.items.theoryIntermediate.description',
+    icon: '♟️',
+    condition: { type: 'theoryLevel', level: 6 },
+  },
+  {
+    id: 'theory-master',
+    category: 'learning',
+    tier: 'diamond',
+    title: 'achievements.items.theoryMaster.title',
+    description: 'achievements.items.theoryMaster.description',
+    icon: '🏛️',
+    condition: { type: 'theoryLevel', level: 9 },
+    reward: { freezeCards: 3 },
   },
 
   // ===== 连续类 =====

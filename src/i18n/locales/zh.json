@@ -15,6 +15,7 @@
     "potOdds": "赔率计算器",
     "gtoSimulator": "GTO 模拟器",
     "handHistory": "牌局复盘",
+    "theory": "理论学院",
     "progress": "进度统计",
     "settings": "设置",
     "dailyChallenge": "每日挑战",
@@ -604,6 +605,14 @@
       "dailyLimit": "今日碎片已达上限"
     }
   },
+  "theory": {
+    "title": "理论学院",
+    "subtitle": "系统研习业界权威德扑理论，构建完整知识框架",
+    "chapters": "章节",
+    "tierBasic": "基础 T1-T3",
+    "tierIntermediate": "中级 T4-T6",
+    "tierAdvanced": "高级 T7-T9"
+  },
   "handHistory": {
     "deviation": {
       "title": "GTO 偏差分析",
@@ -1073,6 +1082,22 @@
       "allAchievements": {
         "title": "成就猎手",
         "description": "解锁所有成就"
+      },
+      "firstTheoryChapter": {
+        "title": "理论启蒙",
+        "description": "完成首个理论章节"
+      },
+      "theoryBasics": {
+        "title": "数学地基",
+        "description": "完成理论学院基础段（T1-T3）全部章节"
+      },
+      "theoryIntermediate": {
+        "title": "博弈思想家",
+        "description": "完成理论学院中级段（T4-T6）全部章节"
+      },
+      "theoryMaster": {
+        "title": "理论宗师",
+        "description": "完成理论学院全部 9 个 Level"
       }
     }
   }
