@@ -29,6 +29,10 @@ export const THEORY_LEVEL_7_CHAPTERS: TheoryChapter[] = [
           'AF（Aggression Factor）=（下注+加注次数）÷ 跟注次数，度量翻后风格：<1.5 被动，2-3 标准凶，>4 高压型。WTSD（Went To Showdown）：看到河牌摊牌的比例，度量"黏度"：>32% 是跟注站信号（诈唬他=烧钱，价值下注要下薄下厚）；<22% 弃牌过多（诈唬的黄金靶子）。',
       },
       {
+        type: 'formula',
+        content: 'VPIP = 主动投钱入池手数 ÷ 总手数（<18% 紧 / 22-28% 标准 / >32% 松）\nPFR = 翻前加注手数 ÷ 总手数；VPIP−PFR 差值 = 被动平跟频率\nAF = (下注次数 + 加注次数) ÷ 跟注次数；WTSD = 看到摊牌手数 ÷ 看到翻牌手数',
+      },
+      {
         type: 'key-point',
         content: '指标必须组合解读+样本量意识：VPIP/PFR 几十手即基本可信，AF/WTSD 需要数百手。样本不足时，指标只是假设，不是结论。',
       },
