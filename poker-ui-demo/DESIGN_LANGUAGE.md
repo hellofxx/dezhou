@@ -1,8 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.3
+> 德州扑克训练平台 UI/UX 设计规范 v1.3.2
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.3.2 更新：实现层合规修复（五级反馈牌室化、霓虹色板清零、牌背胡桃化）、新增 §5.21 交互状态矩阵、§2.2 语义色 hover 变体规则、token 登记（gold/bronze/indigo-bright/terra-bright）、设计 token 守卫测试机制
 > v1.3 更新：移动端响应式重构（streak-rail 上移至 arena 下方、训练场二列、arena 紧凑三分区、纵向压缩）、CSS `!important` 特异性规则
 > v1.2 更新：导航权威统一（侧边栏单一导航）、仪表盘 5 段叙事、训练场模块网格、今日推荐/场景卡/live 呼吸点等新组件、底部黄铜打卡条
 > v1.1 更新：语义色低饱和化、跨 Tab 桌沿签名元素、黄铜雕刻铭文、组件质感统一
@@ -81,6 +82,8 @@
 - 语义色仅用于反馈/状态，绝不可做主 CTA 或导航高亮
 - 反馈条用 `linear-gradient(90deg, semantic-bg, transparent)` 横向渐变
 - 图标跟随语义色（对勾=success、叉=danger、i=info、雪花=freeze）
+- **hover/active 变体规则（v1.3.2）**：语义色可交互元素 hover 时底色透明度由 12% 提升至 18–20%（如 `success-bg` → `rgba(success, 0.18)`），文字色不变；active/选中态可叠加 1px 同色边框（40–60% 透明）；禁止 hover 切换为更高饱和的异色，禁止各模块自造 hover 色值
+- **暗底文字亮阶（v1.3.2）**：`--poker-indigo` / `--poker-terra` 作大面积底色时文字用对应亮阶 token（`--poker-indigo-bright` / `--poker-terra-bright`），保证暗底对比度
 
 ### 2.3 花色
 | Token | 颜色 | 花色 |
@@ -93,9 +96,12 @@
 ### 2.4 功能装饰色（慎用）
 | Token | HEX | 用途 |
 |---|---|---|
-| `--poker-gold` | `#d4a84b` | 金牌/成就徽章 |
+| `--poker-gold` | `#d4a84b` | 金牌/成就徽章（v1.3.2 已落地 globals.css） |
+| `--poker-bronze` | `#cd7f32` | 铜牌徽章（v1.3.2 新增；银牌用 `--poker-ivory-dim` 暖银、钻石用 `--poker-frost`） |
 | `--poker-clay` | `#a83838` | 红色筹码（黏土红） |
 | `--poker-sage` | `#6b8e7a` | 辅助图表（已被 --poker-info 取代，保留兼容） |
+| `--poker-indigo` / `--poker-indigo-bright` | `#4a5a7a` / `#8ea4c4` | 石板靛（策略/进阶类标签底 / 暗底文字亮阶，v1.3.2） |
+| `--poker-terra` / `--poker-terra-bright` | `#965a3e` / `#c98a63` | 陶土赭（心理/弱项类标签底 / 暗底文字亮阶，v1.3.2） |
 | `--poker-frost` / `--poker-freeze` | `#a8c4cf` | 霜钢蓝（冻结卡） |
 | `--poker-moss` / `--poker-success` | `#7fb883` | 苔藓绿（成功态） |
 | `--poker-terracotta` / `--poker-danger` | `#c25a4c` | 陶土红（危险态） |
@@ -333,6 +339,22 @@
 - 动画：`live-pulse` 1.8s ease-out 无限（box-shadow 0→8px brass 透明扩散）
 - 与 `.panel-live` 顶部黄铜发线配合使用，标示"进行中/待办"状态
 
+### 5.21 交互状态矩阵（v1.3.2）
+
+全局交互状态的统一规范（实现权威：`src/styles/globals.css`）：
+
+| 状态 | 规范 | 实现 |
+|---|---|---|
+| focus-visible | 黄铜 2px outline + 2px offset，禁止浏览器默认蓝 | `*:focus-visible { outline: 2px solid var(--brass) }` |
+| hover（中性元素） | 底色 `rgba(255,255,255,0.03–0.04)` 或边框亮化为黄铜 30% | `.pill:hover` / `.nav-item` hover |
+| hover（语义色元素） | 底色透明度 12%→18–20%，文字色不变（§2.2） | quiz 选项 / 自评按钮 |
+| active/选中 | 黄铜渐变底 + 深色文字（`.pill.active`）或黄铜边框 + glow | `.mentor-card.active` |
+| disabled | `opacity 40–60%` + `cursor-not-allowed`，锁定类附锁图标 | 位置解锁按钮 / 答题后选项 |
+| loading | 骨架用 `--walnut-raised` 底 + 呼吸动画；等待用 `.card-wait` / `.live-dot` | LoadingState 组件 |
+| **五级反馈** | 唯一样式事实源为 `.grade-best`~`.grade-blunder`（苔藓绿/黄铜/陶土红低透底+左侧色条）；`GRADE_DISPLAY_CONFIG` 引用这些类，禁止霓虹类 | `shared/types/decisionFeedback.ts` |
+
+**守卫机制（v1.3.2）**：`src/designTokenGuard.test.ts` 在 `pnpm test` 中强制断言 src 内零 Tailwind 霓虹调色板类、零纯黑白类与 hex 字面量；豁免白名单只删不加，新增豁免须先在本文档登记设计依据。
+
 ---
 
 ## 6. 布局系统
@@ -566,6 +588,16 @@ poker-ui-demo/
 
 未来多页扩展时，将 `<style id="theme-vars">` 与 `<style id="custom-styles">` 抽离为 `poker-theme.css` / `poker-components.css`，所有页面共用。
 
+### 12.1 React 应用落地形态（v1.3.2）
+
+正式产品为 React 应用（`src/`），与本 demo 单页并行存在，样式采用双轨制：
+
+- **Token 层**：`src/styles/globals.css` 的 `:root` 为色彩 token 唯一实现权威（附录 E 声明）；Tailwind v4 通过 `@theme inline` 将 token 映射为 shadcn 语义类
+- **组件类轨**：§5 组件样式（`.panel` / `.table-rail` / `.grade-*` / `.streak-rail` 等）已抽取至 globals.css，React 组件直接引用类名
+- **原子类轨**：布局与一次性样式用 Tailwind 任意值 token 类（如 `bg-[var(--poker-success-bg)]`、`text-[var(--brass-bright)]`），禁止绕开 token 写字面色值
+- **签名元素组件化对应**：`.table-rail` → `shared/components/TableRail.tsx`；`.motto-engraved` → `shared/components/MottoEngraved.tsx`；牌背（§5.1）→ `shared/components/CardBack.tsx`（胡桃底+45°条纹+2px 黄铜边+内描金，SVG 描边直接引用 `var(--brass)`）
+- **SVG 例外**：渐变 stop 无法引用 CSS 变量时允许字面值，但必须注释标注对应 token；独立 SVG 资产（`public/cards/back.svg`）同样以注释锚定 token
+
 ---
 
 ## 附录 A：Token 速查
@@ -654,6 +686,20 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **新增 token 登记**：§2.4 补 `--poker-leather #c08a5a`（hand-history 模块主题色，§5.18）。
 - **渐变/组件示例对齐**：§2.5 暗角 rgba 与胡桃面板渐变、§4.3 边框、§5.4 铭牌、§5.5 pill、§5.6 面板——所有硬编码示例色值同步对齐新色板。
 - **权威源声明**：`src/styles/globals.css` :root 为色彩 token 唯一实现权威；本规范 §2 为设计定义权威；`poker-ui-demo/colors_and_type.css` 为 demo 单页 token，须与 globals.css 保持一致。三者任一变更须同步其余两处。
+
+---
+
+## 附录 F：v1.3.2 变更摘要（实现层合规修复）
+
+- **背景**：Design QA 审查（2026-07-30）发现实现层 156 处 Tailwind 霓虹调色板类（21 文件）违反 §1.3，五级反馈事实源 `GRADE_DISPLAY_CONFIG` 使用 `bg-emerald-600`/`text-white` 等违规类。本次全量修复并建立防回流机制。
+- **五级反馈牌室化**：`GRADE_DISPLAY_CONFIG.color` 改为引用 globals.css `.grade-best`~`.grade-blunder` 类（样式单一事实源）；`textColor` 改为 token 文字色；range-trainer / gto-simulator / puzzle-trainer 三消费方零改动生效。
+- **霓虹色板清零**：strategy-academy / theory-academy / progress / range-trainer 全量替换为 `--poker-*` token 类；映射规则：green/emerald→success、red→danger、yellow/amber→brass/warning、orange→terra、blue→info、purple→indigo。
+- **测验按钮色阶对齐 §5.5**：range-trainer QuizCard fold=陶土 12% 透底 / call=深胡桃半透 / raise=黄铜渐变（原为 clay/sage 实底）。
+- **牌背胡桃化**：`CardBack.tsx` 与 `public/cards/back.svg` 由酒红菱格改为 §5.1 规定的胡桃底+45°黄铜条纹+2px 黄铜边+内描金；SVG 描边直接引用 `var(--brass)` 消除 `#c8a456` 漂移。
+- **Token 登记**：新增 `--poker-bronze #cd7f32`、`--poker-indigo-bright #8ea4c4`、`--poker-terra-bright #c98a63`；`--poker-gold #d4a84b` 落地 globals.css（此前仅存在于文档与 demo 镜像）。
+- **杂项修复**：成就墙四档徽章 token 化（金/铜/暖银/霜钢）；`var(--clay-bright)` 失效引用修复（2 处）；CardSVG 近黑描边改胡桃调；范围网格文案"绿色"→"金色"（对齐 §5.11 黄铜色阶实现）。
+- **新章节**：§5.21 交互状态矩阵、§2.2 hover/active 变体规则与暗底文字亮阶、§12.1 React 落地形态。
+- **守卫机制**：新增 `src/designTokenGuard.test.ts`（vitest 门禁），断言 src 零霓虹类/零纯黑白类与 hex；豁免白名单只删不加。
 
 ---
 
