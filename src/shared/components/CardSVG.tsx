@@ -52,7 +52,7 @@ export function CardSVG({ suit, rank, width = 80, height = 112 }: CardSVGProps) 
       </defs>
 
       {/* Ivory card face with paper texture — §5.1 rx=7 */}
-      <rect x="0.75" y="0.75" width="78.5" height="110.5" rx="7" fill={`url(#${gradientId})`} stroke="#1a1a1a" strokeOpacity="0.15" strokeWidth="1" />
+      <rect x="0.75" y="0.75" width="78.5" height="110.5" rx="7" fill={`url(#${gradientId})`} stroke="rgba(26,19,8,0.15)" strokeWidth="1" />
       {/* Paper grain overlay */}
       <rect x="0.75" y="0.75" width="78.5" height="110.5" rx="7" fill={`url(#${paperId})`} />
       {/* Subtle inner highlight — reads as "pressed paper"; use ivory not pure white */}

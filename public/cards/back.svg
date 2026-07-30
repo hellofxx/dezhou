@@ -1,29 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="80" height="112" viewBox="0 0 80 112">
+  <!-- DESIGN_LANGUAGE §5.1 walnut card back: #241a10 = --walnut, #c9a25e = --brass, #e8c97e = --brass-bright -->
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e3a5f"/>
-      <stop offset="100%" stop-color="#0f1d32"/>
+      <stop offset="0%" stop-color="#2a1e12"/>
+      <stop offset="50%" stop-color="#241a10"/>
+      <stop offset="100%" stop-color="#1a1308"/>
     </linearGradient>
-    <pattern id="diamonds" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width="16" height="16" fill="none"/>
-      <rect x="4" y="4" width="8" height="8" fill="none" stroke="#2a5580" stroke-width="0.5" rx="1"/>
+    <pattern id="stripes" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="none"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(201,162,94,0.22)" stroke-width="1.5"/>
     </pattern>
   </defs>
-  <!-- Card background -->
-  <rect x="0.5" y="0.5" width="79" height="111" rx="6" fill="url(#bg)" stroke="#ffffff" stroke-width="1"/>
-  <!-- Inner border -->
-  <rect x="5" y="5" width="70" height="102" rx="4" fill="none" stroke="#3b6fa0" stroke-width="0.75"/>
-  <!-- Pattern overlay -->
-  <rect x="6" y="6" width="68" height="100" rx="3" fill="url(#diamonds)" opacity="0.6"/>
-  <!-- Center diamond decoration -->
+  <!-- Card base with 2px brass border -->
+  <rect x="1" y="1" width="78" height="110" rx="6" fill="url(#bg)" stroke="#c9a25e" stroke-width="2"/>
+  <!-- Inner gold hairline -->
+  <rect x="4.5" y="4.5" width="71" height="103" rx="4" fill="none" stroke="#e8c97e" stroke-width="0.75" stroke-opacity="0.6"/>
+  <!-- 45deg stripe fill -->
+  <rect x="6" y="6" width="68" height="100" rx="3" fill="url(#stripes)"/>
+  <!-- Center crest: brass diamond with rivet core -->
   <g transform="translate(40,56)">
-    <rect x="-16" y="-16" width="32" height="32" rx="2" transform="rotate(45)" fill="none" stroke="#5b9bd5" stroke-width="1.5"/>
-    <rect x="-10" y="-10" width="20" height="20" rx="1" transform="rotate(45)" fill="#1e3a5f" stroke="#7bb8e8" stroke-width="1"/>
-    <circle cx="0" cy="0" r="4" fill="#5b9bd5" opacity="0.8"/>
+    <rect x="-18" y="-18" width="36" height="36" rx="2" transform="rotate(45)" fill="none" stroke="#e8c97e" stroke-width="1.5" stroke-opacity="0.85"/>
+    <rect x="-12" y="-12" width="24" height="24" rx="1" transform="rotate(45)" fill="#1a1308" stroke="#c9a25e" stroke-width="1"/>
+    <circle cx="0" cy="0" r="5" fill="#c9a25e" opacity="0.9"/>
+    <circle cx="0" cy="0" r="2.5" fill="#e8c97e"/>
   </g>
-  <!-- Corner decorations -->
-  <circle cx="12" cy="12" r="3" fill="none" stroke="#3b6fa0" stroke-width="0.75"/>
-  <circle cx="68" cy="12" r="3" fill="none" stroke="#3b6fa0" stroke-width="0.75"/>
-  <circle cx="12" cy="100" r="3" fill="none" stroke="#3b6fa0" stroke-width="0.75"/>
-  <circle cx="68" cy="100" r="3" fill="none" stroke="#3b6fa0" stroke-width="0.75"/>
+  <!-- Corner ornaments: brass studs -->
+  <circle cx="12" cy="12" r="3" fill="none" stroke="#c9a25e" stroke-width="0.75" opacity="0.7"/>
+  <circle cx="68" cy="12" r="3" fill="none" stroke="#c9a25e" stroke-width="0.75" opacity="0.7"/>
+  <circle cx="12" cy="100" r="3" fill="none" stroke="#c9a25e" stroke-width="0.75" opacity="0.7"/>
+  <circle cx="68" cy="100" r="3" fill="none" stroke="#c9a25e" stroke-width="0.75" opacity="0.7"/>
 </svg>

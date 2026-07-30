@@ -18,7 +18,7 @@ const GRADE_CONFIG: Record<string, { label: string; color: string; icon: typeof 
   optimal:       { label: '最优',   color: 'text-[var(--sage)]',         icon: CheckCircle2 },
   minor_mistake: { label: '小失误', color: 'text-[var(--brass-bright)]', icon: AlertTriangle },
   mistake:       { label: '失误',   color: 'text-[var(--clay)]',         icon: AlertTriangle },
-  blunder:       { label: '严重失误', color: 'text-[var(--clay-bright,#c0392b)]', icon: XCircle },
+  blunder:       { label: '严重失误', color: 'text-[var(--poker-danger)]', icon: XCircle },
 };
 
 const DEFAULT_GRADE = GRADE_CONFIG.optimal!;

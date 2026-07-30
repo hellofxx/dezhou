@@ -13,8 +13,9 @@ const SIZE_MAP = {
 
 /**
  * Card back component using inline SVG.
- * Renders a classic card back: deep red ground with diamond lattice
- * and a centered gold crest. Gold border frames the design.
+ * DESIGN_LANGUAGE §5.1：胡桃底 + 45° 条纹 + 2px 黄铜边 + 内描金。
+ * 描边/填充直接引用 CSS token（var(--brass) 等）；渐变 stop 需字面值，
+ * 注释标注对应 token（#241a10 = --walnut / #1a1308 = walnut 暗阶）。
  */
 export function CardBack({ size = 'md', className }: CardBackProps) {
   const { width, height } = SIZE_MAP[size];
@@ -28,36 +29,36 @@ export function CardBack({ size = 'md', className }: CardBackProps) {
       className={cn('block rounded-[var(--radius)]', className)}
     >
       <defs>
-        {/* Deep red gradient background */}
+        {/* Walnut gradient background — #241a10 = --walnut, #1a1308 = walnut dark stop */}
         <linearGradient id={`cb-bg-${size}`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#8b1a1a" />
-          <stop offset="50%" stopColor="#6b1414" />
-          <stop offset="100%" stopColor="#4a0e0e" />
+          <stop offset="0%" stopColor="#2a1e12" />
+          <stop offset="50%" stopColor="#241a10" />
+          <stop offset="100%" stopColor="#1a1308" />
         </linearGradient>
-        {/* Classic diamond lattice pattern */}
-        <pattern id={`cb-pat-${size}`} x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <rect width="12" height="12" fill="none" />
-          <rect x="3" y="3" width="6" height="6" fill="none" stroke="#c8a456" strokeWidth="0.6" rx="0.5" />
+        {/* 45° brass stripe pattern（§5.1 牌背条纹） */}
+        <pattern id={`cb-pat-${size}`} x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill="none" />
+          <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(201,162,94,0.22)" strokeWidth="1.5" />
         </pattern>
       </defs>
-      {/* Card base with gold border */}
-      <rect x="0.5" y="0.5" width="79" height="111" rx="6" fill={`url(#cb-bg-${size})`} stroke="#c8a456" strokeWidth="1.5" />
-      {/* Inner frame line */}
-      <rect x="4" y="4" width="72" height="104" rx="4" fill="none" stroke="#e8c86e" strokeWidth="0.75" strokeOpacity="0.6" />
-      {/* Diamond lattice pattern */}
-      <rect x="5" y="5" width="70" height="102" rx="3" fill={`url(#cb-pat-${size})`} opacity="0.7" />
-      {/* Center crest — gold diamond with inner detail */}
+      {/* Card base with 2px brass border */}
+      <rect x="1" y="1" width="78" height="110" rx="6" fill={`url(#cb-bg-${size})`} stroke="var(--brass)" strokeWidth="2" />
+      {/* Inner gold hairline（内描金） */}
+      <rect x="4.5" y="4.5" width="71" height="103" rx="4" fill="none" stroke="var(--brass-bright)" strokeWidth="0.75" strokeOpacity="0.6" />
+      {/* 45° stripe fill */}
+      <rect x="6" y="6" width="68" height="100" rx="3" fill={`url(#cb-pat-${size})`} />
+      {/* Center crest — brass diamond with rivet core（黄铜菱形嵌铆钉） */}
       <g transform="translate(40,56)">
-        <rect x="-18" y="-18" width="36" height="36" rx="2" transform="rotate(45)" fill="none" stroke="#e8c86e" strokeWidth="1.5" />
-        <rect x="-12" y="-12" width="24" height="24" rx="1" transform="rotate(45)" fill="#4a0e0e" stroke="#c8a456" strokeWidth="1" />
-        <circle cx="0" cy="0" r="5" fill="#c8a456" opacity="0.9" />
-        <circle cx="0" cy="0" r="2.5" fill="#e8c86e" />
+        <rect x="-18" y="-18" width="36" height="36" rx="2" transform="rotate(45)" fill="none" stroke="var(--brass-bright)" strokeWidth="1.5" strokeOpacity="0.85" />
+        <rect x="-12" y="-12" width="24" height="24" rx="1" transform="rotate(45)" fill="#1a1308" stroke="var(--brass)" strokeWidth="1" />
+        <circle cx="0" cy="0" r="5" fill="var(--brass)" opacity="0.9" />
+        <circle cx="0" cy="0" r="2.5" fill="var(--brass-bright)" />
       </g>
-      {/* Corner ornaments */}
-      <circle cx="12" cy="12" r="3" fill="none" stroke="#c8a456" strokeWidth="0.75" opacity="0.7" />
-      <circle cx="68" cy="12" r="3" fill="none" stroke="#c8a456" strokeWidth="0.75" opacity="0.7" />
-      <circle cx="12" cy="100" r="3" fill="none" stroke="#c8a456" strokeWidth="0.75" opacity="0.7" />
-      <circle cx="68" cy="100" r="3" fill="none" stroke="#c8a456" strokeWidth="0.75" opacity="0.7" />
+      {/* Corner ornaments — brass studs */}
+      <circle cx="12" cy="12" r="3" fill="none" stroke="var(--brass)" strokeWidth="0.75" opacity="0.7" />
+      <circle cx="68" cy="12" r="3" fill="none" stroke="var(--brass)" strokeWidth="0.75" opacity="0.7" />
+      <circle cx="12" cy="100" r="3" fill="none" stroke="var(--brass)" strokeWidth="0.75" opacity="0.7" />
+      <circle cx="68" cy="100" r="3" fill="none" stroke="var(--brass)" strokeWidth="0.75" opacity="0.7" />
     </svg>
   );
 }
