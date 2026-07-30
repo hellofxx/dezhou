@@ -113,8 +113,8 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                     'w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
                     !showExplanation &&
                       'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 text-[var(--ivory-dim)]',
-                    showExplanation && isCorrectOption && 'border-green-500/50 bg-green-500/10 text-green-300',
-                    showExplanation && isSelected && !isCorrectOption && 'border-red-500/50 bg-red-500/10 text-red-300',
+                    showExplanation && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
+                    showExplanation && isSelected && !isCorrectOption && 'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]',
                     showExplanation && !isSelected && !isCorrectOption &&
                       'border-[var(--walnut-border)]/50 bg-[var(--felt)]/50 text-[var(--ivory-muted)] opacity-60'
                   )}
@@ -139,8 +139,8 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
               className={cn(
                 'mt-4 rounded-lg p-4 text-sm leading-relaxed',
                 isCorrect
-                  ? 'bg-green-500/10 border border-green-500/30 text-green-200/90'
-                  : 'bg-red-500/10 border border-red-500/30 text-red-200/90'
+                  ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90'
+                  : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
               )}
             >
               <p className="font-semibold mb-1">{isCorrect ? '✓ 正确！' : '✗ 错误'}</p>
