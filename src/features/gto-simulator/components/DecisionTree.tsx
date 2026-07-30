@@ -31,7 +31,7 @@ function actionColor(action: ActionType): string {
     case ActionType.Check: return 'text-[var(--ivory-muted)]';
     case ActionType.Call: return 'text-[var(--sage)]';
     case ActionType.Raise: return 'text-[var(--brass-bright)]';
-    case ActionType.AllIn: return 'text-[var(--brass-bright)]';
+    case ActionType.AllIn: return 'text-[var(--brass)]';
   }
 }
 

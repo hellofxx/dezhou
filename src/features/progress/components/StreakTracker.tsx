@@ -243,6 +243,6 @@ function getCellColor(count: number): string {
   if (count === 0) return 'var(--walnut-raised)';
   if (count === 1) return 'rgba(201, 162, 94, 0.25)';
   if (count === 2) return 'rgba(201, 162, 94, 0.45)';
-  if (count <= 4) return 'rgba(212, 168, 75, 0.7)';
-  return 'rgba(212, 168, 75, 0.92)';
+  if (count <= 4) return 'rgba(201, 162, 94, 0.7)';
+  return 'rgba(201, 162, 94, 0.92)';
 }

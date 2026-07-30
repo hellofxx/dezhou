@@ -23,7 +23,7 @@ export interface ShareCardStats {
 const FELT_TOP = '#0a5c36';
 const FELT_BOTTOM = '#064426';
 /** 黄铜金（数字与边框装饰） */
-const BRASS = '#d4a84b';
+const BRASS = '#c9a25e';
 
 /**
  * 生成 Streak 分享图片
