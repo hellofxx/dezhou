@@ -102,7 +102,7 @@ export default function RangeLearnPage() {
             <CardHeader className="pb-3">
               <CardTitle className="text-base">13×13 范围矩阵</CardTitle>
               <CardDescription>
-                对角线=对子 | 上三角=同花 | 下三角=非同花 | 绿色=在范围内
+                对角线=对子 | 上三角=同花 | 下三角=非同花 | 金色=在范围内
               </CardDescription>
             </CardHeader>
             <CardContent>

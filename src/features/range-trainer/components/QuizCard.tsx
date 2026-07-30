@@ -88,12 +88,12 @@ function getSuitedColor(suited: string): string {
   return 'text-[var(--ivory-muted)]';
 }
 
-// Action palette matches the card-room semantics:
-// Fold = clay (loss), Call = sage (neutral), Raise = brass (aggression).
+// Action palette per DESIGN_LANGUAGE §5.5 risk ladder:
+// Fold = terracotta 12% tint, Call = deep-walnut translucent, Raise = brass gradient.
 const ACTION_BUTTONS: { action: RangeAction; label: string; shortcut: string; colorClass: string }[] = [
-  { action: 'fold', label: 'Fold', shortcut: '1', colorClass: 'bg-[var(--clay)] hover:brightness-110 border-[var(--clay)]/60' },
-  { action: 'call', label: 'Call', shortcut: '2', colorClass: 'bg-[var(--sage)] hover:brightness-110 border-[var(--sage)]/60' },
-  { action: 'raise', label: 'Raise', shortcut: '3', colorClass: 'bg-[var(--brass)] hover:brightness-110 border-[var(--brass)]/60' },
+  { action: 'fold', label: 'Fold', shortcut: '1', colorClass: 'bg-[var(--poker-danger-bg)] text-[var(--poker-danger)] border-[rgba(194,90,76,0.25)] hover:bg-[rgba(194,90,76,0.18)]' },
+  { action: 'call', label: 'Call', shortcut: '2', colorClass: 'bg-[rgba(58,44,28,0.6)] text-[var(--ivory-dim)] border-[rgba(58,44,28,0.9)] hover:bg-[rgba(58,44,28,0.85)] hover:text-[var(--ivory)]' },
+  { action: 'raise', label: 'Raise', shortcut: '3', colorClass: 'bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass-dark)] hover:brightness-105' },
 ];
 
 export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disabled }: QuizCardProps) {
@@ -204,23 +204,19 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
         {/* 提示文字 */}
         <p className="text-sm text-[var(--ivory-muted)] text-center">
           这手牌应该 <span className="text-[var(--brass-bright)] font-medium">Raise</span>、
-          <span className="text-[var(--sage)] font-medium">Call</span> 还是
-          <span className="text-[var(--clay)] font-medium">Fold</span>？
+          <span className="text-[var(--ivory-dim)] font-medium">Call</span> 还是
+          <span className="text-[var(--poker-danger)] font-medium">Fold</span>？
         </p>
 
-        {/* 动作按钮 — brass/sage/clay with ink/ivory text for legibility */}
+        {/* 动作按钮 — §5.5 风险色阶：fold 陶土透底 / call 深胡桃 / raise 黄铜渐变 */}
         <div className="flex gap-4 w-full">
           {ACTION_BUTTONS.map(({ action, label, shortcut, colorClass }) => {
-            // Brass button needs ink text; clay/sage need ivory text
-            const textColor = action === 'raise'
-              ? 'text-[var(--primary-foreground)]'
-              : 'text-[var(--ivory)]';
             return (
               <motion.button
                 key={action}
                 onClick={() => onAnswer(action)}
                 disabled={disabled}
-                className={`flex-1 py-4 rounded-md border ${textColor} font-display font-semibold text-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed ${colorClass}`}
+                className={`flex-1 py-4 rounded-md border font-display font-semibold text-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed ${colorClass}`}
                 whileHover={{ scale: disabled ? 1 : 1.04 }}
                 whileTap={{ scale: disabled ? 1 : 0.96 }}
               >

@@ -253,7 +253,7 @@ export function TrainingSession({
           <span>检测到连续答错，建议返回选择更基础的位置或动作类型进行训练</span>
           <button
             onClick={onExit}
-            className="text-[var(--clay)] underline hover:text-[var(--clay-bright)] transition-colors"
+            className="text-[var(--clay)] underline hover:opacity-75 transition-opacity"
           >
             切换训练
           </button>

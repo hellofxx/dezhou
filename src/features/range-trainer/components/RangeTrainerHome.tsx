@@ -188,7 +188,7 @@ export default function RangeTrainerHome() {
               )}
             </div>
             <p className="text-xs text-[var(--ivory-muted)] mb-3">
-              对角线=对子 | 上三角=同花 | 下三角=非同花 | 绿色=在范围内
+              对角线=对子 | 上三角=同花 | 下三角=非同花 | 金色=在范围内
             </p>
             <RangeGrid
               selectedHands={selectedHands}
@@ -206,7 +206,7 @@ export default function RangeTrainerHome() {
             以上范围基于 6-max 现金局近似 GTO 策略，实际范围会根据对手倾向和筹码深度有所调整。
           </p>
           <p className="mt-1">
-            悬停网格中的格子可查看手牌详情，绿色表示该手牌在当前范围中。
+            悬停网格中的格子可查看手牌详情，金色表示该手牌在当前范围中。
           </p>
         </div>
       </div>
