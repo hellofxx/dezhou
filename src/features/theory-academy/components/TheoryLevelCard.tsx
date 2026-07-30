@@ -1,20 +1,28 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, CheckCircle2, PlayCircle, ChevronRight, Swords } from 'lucide-react';
+import { Lock, CheckCircle2, PlayCircle, ChevronDown, ChevronUp, Swords } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import type { TheoryLevelInfo } from '../types';
+import { TheoryChapterList } from './TheoryChapterList';
 
 interface TheoryLevelCardProps {
   level: TheoryLevelInfo;
   unlocked: boolean;
   progress: number; // 0-100
   completedChapters: string[];
+  quizScores: Record<string, number>;
   index: number;
 }
 
-/** 理论 Level 卡片：进度、锁定态与继续学习入口（视觉与 strategy-academy LevelCard 对齐） */
-export function TheoryLevelCard({ level, unlocked, progress, completedChapters, index }: TheoryLevelCardProps) {
+/**
+ * 理论 Level 卡片：进度、锁定态与继续学习入口（视觉与 strategy-academy LevelCard 对齐）。
+ * 已解锁 Level 可展开章节列表，支持已完成章节的自由回访复习。
+ * 外层为 div role="button"（而非原生 button），以保证内部展开切换/章节行按钮的 HTML 合法性。
+ */
+export function TheoryLevelCard({ level, unlocked, progress, completedChapters, quizScores, index }: TheoryLevelCardProps) {
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(false);
 
   const firstIncomplete = level.chapters.find((c) => !completedChapters.includes(c.id));
   const targetChapter = firstIncomplete ?? level.chapters[0];
@@ -48,9 +56,19 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.06 }}
     >
-      <button
+      <div
+        role="button"
+        tabIndex={unlocked ? 0 : -1}
+        aria-disabled={!unlocked}
         onClick={handleClick}
-        disabled={!unlocked}
+        onKeyDown={(e) => {
+          // 仅响应卡片自身的键盘事件，忽略内部按钮（展开切换/章节行）冒泡
+          if (e.target !== e.currentTarget) return;
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
         aria-label={`理论 Level ${level.level}：${level.title}${unlocked ? '' : '（未解锁）'}`}
         className={cn(
           'w-full text-left rounded-lg border p-5 transition-all duration-200',
@@ -74,7 +92,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
               <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--brass-deep)] font-medium">
                 Theory {level.id.toUpperCase()}
               </span>
-              {allCompleted && <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />}
+              {allCompleted && <CheckCircle2 className="w-3.5 h-3.5 text-[var(--poker-success)]" />}
             </div>
             <h3 className="font-display text-[16px] text-[var(--ivory)] mb-0.5">{level.title}</h3>
             <p className="text-xs text-[var(--ivory-muted)] mb-3">{level.description}</p>
@@ -118,16 +136,32 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
           </div>
 
           {unlocked && (
-            <div className="shrink-0 self-center">
-              {allCompleted ? (
-                <ChevronRight className="w-5 h-5 text-[var(--ivory-muted)]" />
-              ) : (
-                <PlayCircle className="w-6 h-6 text-[var(--brass-bright)]" />
-              )}
+            <div className="shrink-0 self-center flex items-center gap-1.5">
+              {!allCompleted && <PlayCircle className="w-6 h-6 text-[var(--brass-bright)]" />}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpanded((v) => !v);
+                }}
+                aria-label={expanded ? `收起 ${level.title} 章节列表` : `展开 ${level.title} 章节列表`}
+                aria-expanded={expanded}
+                className="p-1.5 rounded-md text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
+              >
+                {expanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+              </button>
             </div>
           )}
         </div>
-      </button>
+
+        {/* 章节列表：展开后任意章节可直达（已完成章节回访复习） */}
+        {unlocked && expanded && (
+          <TheoryChapterList
+            chapters={level.chapters}
+            completedChapters={completedChapters}
+            quizScores={quizScores}
+          />
+        )}
+      </div>
     </motion.div>
   );
 }

@@ -88,11 +88,13 @@ function getSuitedColor(suited: string): string {
   return 'text-[var(--ivory-muted)]';
 }
 
-// Action palette per DESIGN_LANGUAGE §5.5 risk ladder:
-// Fold = terracotta 12% tint, Call = deep-walnut translucent, Raise = brass gradient.
+// Action palette per DESIGN_LANGUAGE §5.5 risk ladder, tuned for three equal-weight
+// answer options (not one CTA + two muted): each button keeps its card-room hue
+// (fold=terracotta / call=neutral walnut / raise=brass) and sits clearly above the
+// felt background so all three read distinctly.
 const ACTION_BUTTONS: { action: RangeAction; label: string; shortcut: string; colorClass: string }[] = [
-  { action: 'fold', label: 'Fold', shortcut: '1', colorClass: 'bg-[var(--poker-danger-bg)] text-[var(--poker-danger)] border-[rgba(194,90,76,0.25)] hover:bg-[rgba(194,90,76,0.18)]' },
-  { action: 'call', label: 'Call', shortcut: '2', colorClass: 'bg-[rgba(58,44,28,0.6)] text-[var(--ivory-dim)] border-[rgba(58,44,28,0.9)] hover:bg-[rgba(58,44,28,0.85)] hover:text-[var(--ivory)]' },
+  { action: 'fold', label: 'Fold', shortcut: '1', colorClass: 'bg-[rgba(194,90,76,0.16)] text-[var(--poker-danger)] border-[rgba(194,90,76,0.55)] hover:bg-[rgba(194,90,76,0.26)]' },
+  { action: 'call', label: 'Call', shortcut: '2', colorClass: 'bg-[var(--walnut-raised)] text-[var(--ivory-dim)] border-[var(--walnut-light)] hover:bg-[var(--walnut-light)] hover:text-[var(--ivory)]' },
   { action: 'raise', label: 'Raise', shortcut: '3', colorClass: 'bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass-dark)] hover:brightness-105' },
 ];
 

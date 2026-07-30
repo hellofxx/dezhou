@@ -66,6 +66,7 @@ export default function TheoryHome() {
                   unlocked={isTheoryLevelUnlocked(level.id)}
                   progress={getLevelProgress(level.id)}
                   completedChapters={progress.completedChapters}
+                  quizScores={progress.quizScores}
                   index={index}
                 />
               ))}

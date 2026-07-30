@@ -23,6 +23,7 @@ export default function TheoryChapterView() {
   const startChapter = useTheoryStore((s) => s.startChapter);
   const completeChapter = useTheoryStore((s) => s.completeChapter);
   const completedChapters = useTheoryStore((s) => s.progress.completedChapters);
+  const quizScores = useTheoryStore((s) => s.progress.quizScores);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
   // Session 止损：小测消耗每日题量预算（recordAnswer），达上限时禁止进入小测
   const sessionLimitReached = useSessionLimitReached();
@@ -54,6 +55,9 @@ export default function TheoryChapterView() {
 
   const nextChapter = getNextChapter(chapter.id);
   const levelCompleted = isLevelFullyCompleted(level.id, completedChapters);
+  // 已完成章节回访复习：阅读页提供免重考导航（返回目录/下一章），重考取历史最高分无数据风险
+  const chapterCompleted = completedChapters.includes(chapter.id);
+  const bestScore = quizScores[chapter.id];
 
   const handleQuizComplete = (score: number, correctAnswers: number, totalQuestions: number) => {
     completeChapter(chapter.id, score, totalQuestions, correctAnswers);
@@ -84,10 +88,13 @@ export default function TheoryChapterView() {
           <p className="text-sm text-[var(--ivory-dim)]">{chapter.subtitle}</p>
           <div className="mt-3 flex items-center gap-3 text-xs text-[var(--ivory-muted)]">
             <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{chapter.duration}</span>
-            {completedChapters.includes(chapter.id) && (
-              <span className="inline-flex items-center gap-1 text-green-400">
+            {chapterCompleted && (
+              <span className="inline-flex items-center gap-1 text-[var(--poker-success)]">
                 <CheckCircle2 className="w-3.5 h-3.5" />已完成
               </span>
+            )}
+            {chapterCompleted && typeof bestScore === 'number' && (
+              <span className="font-numeric text-[var(--brass-bright)]">最高 {bestScore}分</span>
             )}
           </div>
         </motion.div>
@@ -97,15 +104,45 @@ export default function TheoryChapterView() {
             {chapter.content.map((section, index) => (
               <TheorySectionRenderer key={index} section={section} />
             ))}
-            <div className="pt-2 flex justify-end">
-              <button
-                onClick={() => setPhase('quiz')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-              >
-                进入章末小测
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+            {chapterCompleted ? (
+              // 已完成章节：免重考复习导航（返回目录/下一章）+ 可选重考（幂等，取历史最高分）
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+                <button
+                  onClick={() => navigate('/theory')}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  返回目录
+                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => setPhase('quiz')}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors"
+                  >
+                    重新挑战小测
+                  </button>
+                  {nextChapter && (
+                    <button
+                      onClick={() => navigate(`/theory/chapter/${nextChapter.id}`)}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+                    >
+                      下一章：{nextChapter.title}
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="pt-2 flex justify-end">
+                <button
+                  onClick={() => setPhase('quiz')}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+                >
+                  进入章末小测
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
 

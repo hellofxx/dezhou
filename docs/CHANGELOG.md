@@ -5,6 +5,37 @@
 
 ---
 
+## fix(design-system) — 2026-07-30（设计系统合规修复：霓虹色板清零 + 五级反馈牌室化 + 守卫测试，DESIGN_LANGUAGE v1.3.2）
+
+> Design QA 全面审查发现实现层 156 处 Tailwind 霓虹调色板类（21 文件）违反 DESIGN_LANGUAGE §1.3 反 SaaS 饱和色禁令，五级反馈事实源使用 `bg-emerald-600`/`text-white` 等违规类且被 3 个训练模块消费。本次全量修复并建立防回流门禁。
+
+- **fix(shared)**：`GRADE_DISPLAY_CONFIG` 牌室化——`color` 改为引用 globals.css `.grade-best`~`.grade-blunder`（样式单一事实源），`textColor` 改 token 文字色；QuizCard / GTOFeedback / PuzzleCard 三消费方零改动生效
+- **feat(shared)**：新增色彩 token `--poker-gold #d4a84b`（落地 globals.css）、`--poker-bronze #cd7f32`、`--poker-indigo-bright #8ea4c4`、`--poker-terra-bright #c98a63`（暗底文字亮阶）；`colors_and_type.css` 镜像同步
+- **fix(strategy-academy / theory-academy / progress)**：霓虹色板全量替换为 `--poker-*` token 类（quiz 正误反馈、SRS 分类标签、每日计划、概念图谱、成就墙四档徽章等）；映射：green/emerald→success、red→danger、yellow/amber→brass、orange→terra、blue→info、purple→indigo
+- **fix(range-trainer)**：测验行动按钮色阶对齐 §5.5（fold=陶土 12% 透底 / call=深胡桃半透 / raise=黄铜渐变，替换原 clay/sage 实底）；范围网格文案"绿色"→"金色"（对齐黄铜三档实现）；`--clay-bright` 失效引用修复
+- **fix(shared)**：牌背胡桃化——`CardBack.tsx` 与 `public/cards/back.svg` 由酒红/遗留蓝改为 §5.1 胡桃底+45°黄铜条纹+2px 黄铜边+内描金，SVG 描边直引 `var(--brass)` 消除 `#c8a456` 漂移；CardSVG 近黑描边改胡桃调；hand-history `--clay-bright` 失效引用修复
+- **test(shared)**：新增 `src/designTokenGuard.test.ts` 守卫（vitest 门禁）：断言 src 零霓虹调色板类、零纯黑白类（`bg-black/NN` 压暗层豁免）、零纯黑白 hex；豁免白名单只删不加
+- **docs(design)**：DESIGN_LANGUAGE.md 升版 v1.3.2——新增 §5.21 交互状态矩阵、§2.2 hover/active 变体与暗底文字亮阶规则、§2.4 token 登记、§12.1 React 落地形态（样式双轨制）、附录 F 变更摘要
+- **数据迁移**：无 persist 字段变更，不需升版
+
+验证：typecheck / lint / test（30 文件 201 用例，含新守卫 4 断言）全部 exit 0。
+
+---
+
+## feat(theory-academy) — 2026-07-30（章节复习导航：已完成章节自由回访）
+
+> 补齐“已完成章节可自由回访复习”的导航入口：此前 Level 卡片整卡只跳首个未完成章、章节阅读页唯一出口是进入小测，复习被迫重考（数据层本已安全：completeChapter 幂等 + quizScores 取历史最高分，本次零 store/persist 变更）。
+
+- `TheoryLevelCard`：外层 `<button>` 重构为 `div role="button"`（tabIndex/aria-disabled/Enter+Space 键盘激活，仅响应卡片自身键盘事件避免内部按钮冒泡误触发），解决嵌套交互的 HTML 合法性；右侧新增展开/收起章节列表切换（ChevronDown/Up，`aria-expanded` + `aria-label`，stopPropagation），整卡点击 = 继续学习保持不变
+- 新增 `TheoryChapterList` 子组件：章节行显示序号/标题/时长，已完成章节显示绿色 CheckCircle2 + 历史最高分（font-numeric），点击直达章节页（Level 已解锁即全部章节可点，与既有 URL 门禁口径一致，不新增章节级门禁）
+- `TheoryHome`：向卡片透传 `progress.quizScores`（沿用 completedChapters 的 props 传递风格）
+- `TheoryChapterView`：已完成章节的 reading 阶段新增免重考导航——返回目录 + 下一章（`getNextChapter` 跨 Level 顺延）直接跳转；小测入口降级为次要按钮并改文案“重新挑战小测”；头部“已完成”徽标旁追加历史最高分。未完成章节 reading 阶段与 quiz/done 阶段逻辑不变
+- 文案沿用组件内硬编码中文口径，不新增 i18n key；视觉全部使用设计变量（felt/walnut/brass/ivory）
+
+验证：typecheck / lint / test 全部 exit 0。
+
+---
+
 ## feat(platform) — 2026-07-30（导航系统全量优化：IA 重构 + 今日任务合并 + 交互合规 + 视觉打磨）
 
 > 基于 ui-ux-dev 导航系统设计审查（P0/P1/P2）的全量落地：信息架构层消除冗余入口与标签混淆，对齐 DESIGN_LANGUAGE §5.7 分组规范。
