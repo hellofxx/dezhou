@@ -117,6 +117,7 @@ export default function AppLayout() {
     ['/puzzle', t('nav.puzzle')],
     ['/progress', t('nav.progress')],
     ['/range-trainer', t('nav.rangeTrainer')],
+    ['/pot-odds', t('nav.potOdds')],
     ['/gto-simulator', t('nav.gtoSimulator')],
     ['/hand-history', t('nav.handHistory')],
   ];
@@ -178,37 +179,35 @@ export default function AppLayout() {
                 )}
                 <ul className="space-y-0.5">
                   {group.items.map((item) => {
+                    // R1: 不用函数式 className/children —— TooltipTrigger asChild 的 Radix Slot 会把函数 className 字符串化，导致激活态失效
+                    const active = item.path === '/'
+                      ? location.pathname === '/'
+                      : location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
                     const link = (
                       <NavLink
                         to={item.path}
                         aria-label={item.label}
-                        title={item.hint}
-                        className={({ isActive }) =>
-                          cn(
-                            'flex items-center gap-3 px-3 py-2 rounded-[var(--radius-sm)] text-sm transition-colors relative',
-                            isActive
-                              ? 'text-[var(--brass-bright)] bg-[rgba(201,162,94,0.08)]'
-                              : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/60'
-                          )
-                        }
+                        title={collapsed ? undefined : item.hint}
+                        className={cn(
+                          'flex items-center gap-3 px-3 py-2 rounded-[var(--radius-sm)] text-sm transition-colors relative',
+                          active
+                            ? 'text-[var(--brass-bright)] bg-[rgba(201,162,94,0.08)]'
+                            : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/60'
+                        )}
                       >
-                        {({ isActive }) => (
-                          <>
-                            {isActive && (
-                              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[var(--brass)] rounded-r" />
-                            )}
-                            <span className="shrink-0">{item.icon}</span>
-                            {!collapsed && <span className="truncate">{item.label}</span>}
-                            {/* 庄码 D（DESIGN_LANGUAGE §5.3）：展开态斜体 Fraunces；折叠态降级为黄铜小圆点避免与图标重叠 */}
-                            {isActive && !collapsed && (
-                              <span aria-hidden="true" className="absolute right-2 w-[22px] h-[22px] rounded-full bg-gradient-to-br from-[var(--brass-bright)] to-[var(--brass)] flex items-center justify-center text-[10px] font-display font-bold italic text-[var(--primary-foreground)]">
-                                D
-                              </span>
-                            )}
-                            {isActive && collapsed && (
-                              <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-[var(--brass)]" />
-                            )}
-                          </>
+                        {active && (
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[var(--brass)] rounded-r" />
+                        )}
+                        <span className="shrink-0">{item.icon}</span>
+                        {!collapsed && <span className="truncate">{item.label}</span>}
+                        {/* 庄码 D（DESIGN_LANGUAGE §5.3）：展开态斜体 Fraunces；折叠态降级为黄铜小圆点避免与图标重叠 */}
+                        {active && !collapsed && (
+                          <span aria-hidden="true" className="absolute right-2 w-[22px] h-[22px] rounded-full bg-gradient-to-br from-[var(--brass-bright)] to-[var(--brass)] flex items-center justify-center text-[10px] font-display font-bold italic text-[var(--primary-foreground)]">
+                            D
+                          </span>
+                        )}
+                        {active && collapsed && (
+                          <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-[var(--brass)]" />
                         )}
                       </NavLink>
                     );
