@@ -38,7 +38,7 @@ export default function AcademyHome() {
           </div>
           <button
             onClick={() => navigate('/academy/tracks')}
-            className="shrink-0 px-4 py-2 rounded-md text-sm font-semibold bg-[#1a1308] text-[#e8c97e] border border-[#1a1308] hover:bg-[#2a1c0a] transition-colors"
+            className="shrink-0 px-4 py-2 rounded-md text-sm font-semibold bg-[var(--walnut)] text-[var(--brass-bright)] border border-[var(--walnut)] hover:bg-[var(--walnut-raised)] transition-colors"
           >
             {t('academy.pathBanner.continue')}
           </button>
@@ -53,12 +53,10 @@ export default function AcademyHome() {
         >
           <div className="flex items-center gap-6">
             <div className="flex-1">
+              {/* 顶栏 H1 已显示页名，内容区不重复大标题；eyebrow 携带与理论学院的定位区分 */}
               <p className="section-eyebrow mb-2">
-                Strategy Academy
+                Strategy Academy · {t('academy.positioning')}
               </p>
-              <h1 className="font-display text-[26px] md:text-[30px] leading-tight text-[var(--ivory)] mb-1.5">
-                {t('academy.title')}
-              </h1>
               <p className="text-sm text-[var(--ivory-dim)] max-w-sm">
                 {t('academy.subtitle')}
               </p>

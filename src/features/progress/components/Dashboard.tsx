@@ -252,7 +252,7 @@ export default function Dashboard() {
                     {recentRecords.slice(0, 5).map((record) => (
                       <div
                         key={record.id}
-                        className="flex items-center justify-between py-2 border-b border-[#2d2214]/40 last:border-0"
+                        className="flex items-center justify-between py-2 border-b border-[var(--walnut-border)]/40 last:border-0"
                       >
                         <div className="flex items-center gap-2">
                           <div className="w-7 h-7 rounded bg-[var(--walnut-light)]/50 flex items-center justify-center">

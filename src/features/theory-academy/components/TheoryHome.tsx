@@ -36,10 +36,8 @@ export default function TheoryHome() {
         >
           <div className="flex items-center gap-6">
             <div className="flex-1">
-              <p className="section-eyebrow mb-2">Theory Academy</p>
-              <h1 className="font-display text-[26px] md:text-[30px] leading-tight text-[var(--ivory)] mb-1.5">
-                {t('theory.title')}
-              </h1>
+              {/* 顶栏 H1 已显示页名，内容区不重复大标题；eyebrow 携带与策略学院的定位区分 */}
+              <p className="section-eyebrow mb-2">Theory Academy · {t('theory.positioning')}</p>
               <p className="text-sm text-[var(--ivory-dim)] max-w-sm">
                 {t('theory.subtitle')}
               </p>

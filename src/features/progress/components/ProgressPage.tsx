@@ -42,17 +42,13 @@ export default function ProgressPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
-        {/* 标题 */}
+        {/* 顶栏 H1 已显示页名，内容区不重复大标题，仅保留副标语 */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <h1 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">
-                      进度统计
-                      <span className="text-sm tracking-widest text-[var(--brass)]/60">♠♥♦♣</span>
-                    </h1>
-          <p className="text-sm text-[var(--ivory-dim)] mt-1">追踪你的训练进度与成长</p>
+          <p className="text-sm text-[var(--ivory-dim)]">追踪你的训练进度与成长</p>
         </motion.div>
 
         {/* 难度指示 + 统计卡片 */}
@@ -95,7 +91,7 @@ export default function ProgressPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <button
               onClick={() => navigate('/progress/range')}
-              className="w-full text-left rounded-xl border border-[var(--walnut-border)] bg-[var(--surface)] p-4 hover:border-[var(--brass)]/30 hover:bg-[var(--walnut-border)]/50 transition-colors cursor-pointer"
+              className="w-full text-left rounded-[var(--radius)] border border-[var(--walnut-border)] bg-[var(--surface)] p-4 hover:border-[var(--brass)]/30 hover:bg-[var(--walnut-border)]/50 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[var(--brass)]/10 flex items-center justify-center shrink-0">
@@ -110,7 +106,7 @@ export default function ProgressPage() {
             </button>
             <button
               onClick={() => navigate('/progress/gto')}
-              className="w-full text-left rounded-xl border border-[var(--walnut-border)] bg-[var(--surface)] p-4 hover:border-[var(--brass)]/30 hover:bg-[var(--walnut-border)]/50 transition-colors cursor-pointer"
+              className="w-full text-left rounded-[var(--radius)] border border-[var(--walnut-border)] bg-[var(--surface)] p-4 hover:border-[var(--brass)]/30 hover:bg-[var(--walnut-border)]/50 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[var(--ivory-dim)]/10 flex items-center justify-center shrink-0">
@@ -170,10 +166,10 @@ export default function ProgressPage() {
                           <td className="py-2 px-2 text-[var(--ivory-muted)] capitalize">
                             {record.mode}
                           </td>
-                          <td className="py-2 px-2 text-right font-mono text-[var(--brass)]">
+                          <td className="py-2 px-2 text-right font-numeric text-[var(--brass)]">
                             {(record.result.accuracy * 100).toFixed(1)}%
                           </td>
-                          <td className="py-2 px-2 text-right font-mono text-[var(--ivory-muted)]">
+                          <td className="py-2 px-2 text-right font-numeric text-[var(--ivory-muted)]">
                             {(record.result.averageTime / 1000).toFixed(1)}s
                           </td>
                           <td className="py-2 px-2 text-right text-[var(--ivory-dim)]">
