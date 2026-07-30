@@ -21,15 +21,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
+      # 不显式指定 version，由 package.json 的 packageManager 字段决定（唯一事实源），
+      # 否则与 packageManager pin 冲突会导致 "Multiple versions of pnpm specified" 报错
+      # v6 起运行于 Node 24 runtime，消除 Node 20 deprecation 警告
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 11
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: pnpm
