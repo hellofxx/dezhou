@@ -251,7 +251,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
                       onClick={() => onNodeClick(lesson.id)}
                       className={`w-full text-left px-3 py-2 rounded-md text-xs transition-colors ${
                         isCompleted
-                          ? 'bg-green-500/10 text-green-400 border border-green-500/30'
+                          ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)] border border-[var(--poker-success)]/30'
                           : unlocked
                             ? 'bg-[var(--surface-raised)] text-[var(--ivory)] border border-[var(--walnut-border)] hover:border-[var(--brass)]'
                             : 'bg-transparent text-[var(--ivory-dim)] border border-dashed border-[var(--walnut-border)] opacity-60'
@@ -525,7 +525,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       {/* 图例 */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 justify-center">
         <div className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-green-500/20 border border-green-500" />
+          <span className="w-3 h-3 rounded-sm bg-[var(--poker-success)]/20 border border-[var(--poker-success)]" />
           <span className="text-[10px] text-[var(--ivory-muted)]">已完成</span>
         </div>
         <div className="flex items-center gap-1.5">

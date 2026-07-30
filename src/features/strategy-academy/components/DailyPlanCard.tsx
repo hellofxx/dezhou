@@ -67,8 +67,8 @@ export function DailyPlanCard() {
         {/* 复习课程 */}
         {reviewLessons.length > 0 && (
           <div className="flex items-start gap-2.5">
-            <div className="w-5 h-5 rounded bg-blue-500/20 flex items-center justify-center shrink-0 mt-0.5">
-              <RefreshCw className="w-3 h-3 text-blue-400" />
+            <div className="w-5 h-5 rounded bg-[var(--poker-info)]/20 flex items-center justify-center shrink-0 mt-0.5">
+              <RefreshCw className="w-3 h-3 text-[var(--poker-info)]" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-[var(--ivory-dim)]">
@@ -84,8 +84,8 @@ export function DailyPlanCard() {
             onClick={() => navigate(`/academy/lesson/${newLesson}`)}
             className="w-full flex items-start gap-2.5 text-left group"
           >
-            <div className="w-5 h-5 rounded bg-green-500/20 flex items-center justify-center shrink-0 mt-0.5">
-              <BookOpen className="w-3 h-3 text-green-400" />
+            <div className="w-5 h-5 rounded bg-[var(--poker-success)]/20 flex items-center justify-center shrink-0 mt-0.5">
+              <BookOpen className="w-3 h-3 text-[var(--poker-success)]" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-[var(--ivory)] group-hover:text-[var(--brass-bright)] transition-colors">
@@ -102,8 +102,8 @@ export function DailyPlanCard() {
             onClick={() => navigate('/academy/quick-drill')}
             className="w-full flex items-start gap-2.5 text-left group"
           >
-            <div className="w-5 h-5 rounded bg-orange-500/20 flex items-center justify-center shrink-0 mt-0.5">
-              <Target className="w-3 h-3 text-orange-400" />
+            <div className="w-5 h-5 rounded bg-[var(--poker-terra)]/25 flex items-center justify-center shrink-0 mt-0.5">
+              <Target className="w-3 h-3 text-[var(--poker-terra-bright)]" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-[var(--ivory)] group-hover:text-[var(--brass-bright)] transition-colors">

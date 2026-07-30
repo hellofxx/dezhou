@@ -657,11 +657,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           {/* Game Context Tags */}
           {scenario.gameContext && (
             <div className="flex flex-wrap items-center justify-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-300">
+              <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
                 {scenario.gameContext.gameType === 'cash' ? '💰 现金桌' : scenario.gameContext.gameType === 'mtt' ? '🏆 锦标赛' : '🎰 SNG'}
               </span>
               {scenario.gameContext.icmPressure && scenario.gameContext.icmPressure !== 'low' && (
-                <span className="px-1.5 py-0.5 rounded text-[10px] bg-red-500/20 text-red-300">
+                <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--poker-danger)]/20 text-[var(--poker-danger)]">
                   ICM压力: {scenario.gameContext.icmPressure === 'high' ? '高' : '中'}
                 </span>
               )}

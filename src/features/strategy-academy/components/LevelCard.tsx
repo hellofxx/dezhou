@@ -67,7 +67,7 @@ export function LevelCard({ level, unlocked, progress, completedLessons, index }
                 Level {level.level}
               </span>
               {allCompleted && (
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[var(--poker-success)]" />
               )}
             </div>
             <h3 className="font-display text-[16px] text-[var(--ivory)] mb-0.5">{level.title}</h3>

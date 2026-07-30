@@ -183,7 +183,7 @@ export default function LevelCertification() {
                 </div>
               )}
               {isCertified && (
-                <div className="flex items-center gap-2 text-xs text-green-400">
+                <div className="flex items-center gap-2 text-xs text-[var(--poker-success)]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   已通过认证（{new Date(certification!.certifiedAt!).toLocaleDateString()}）
                 </div>
@@ -249,8 +249,8 @@ export default function LevelCertification() {
                 className={cn(
                   'w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
                   !showExplanation && 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 text-[var(--ivory-dim)]',
-                  showExplanation && isCorrectOption && 'border-green-500/50 bg-green-500/10 text-green-300',
-                  showExplanation && isSelected && !isCorrectOption && 'border-red-500/50 bg-red-500/10 text-red-300',
+                  showExplanation && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
+                  showExplanation && isSelected && !isCorrectOption && 'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]',
                   showExplanation && !isSelected && !isCorrectOption && 'opacity-40'
                 )}
               >
@@ -273,7 +273,7 @@ export default function LevelCertification() {
             animate={{ opacity: 1, y: 0 }}
             className={cn(
               'mt-4 rounded-lg p-4 text-sm leading-relaxed',
-              isCorrect ? 'bg-green-500/10 border border-green-500/30 text-green-200/90' : 'bg-red-500/10 border border-red-500/30 text-red-200/90'
+              isCorrect ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90' : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
             )}
           >
             <p className="font-semibold mb-1">{isCorrect ? '✓ 正确！' : '✗ 错误'}</p>

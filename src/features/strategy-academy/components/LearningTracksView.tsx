@@ -97,14 +97,14 @@ export default function LearningTracksView() {
                         </span>
                       )}
                       {progressPercent === 100 && (
-                        <CheckCircle2 className="w-4 h-4 text-green-400" />
+                        <CheckCircle2 className="w-4 h-4 text-[var(--poker-success)]" />
                       )}
                     </div>
                     <p className="text-xs text-[var(--ivory-muted)] mb-3">{track.description}</p>
 
                     {/* 前置条件提示 */}
                     {prereqHint && (
-                      <div className="flex items-center gap-1.5 mb-3 text-xs text-amber-400/90 bg-amber-400/10 rounded px-2.5 py-1.5">
+                      <div className="flex items-center gap-1.5 mb-3 text-xs text-[var(--brass-bright)]/90 bg-[var(--poker-warning-bg)] rounded px-2.5 py-1.5">
                         <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                         <span>{prereqHint}</span>
                       </div>

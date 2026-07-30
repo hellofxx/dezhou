@@ -236,7 +236,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
       );
     case 'pro-tip':
       return (
-        <div className="rounded-md bg-emerald-900/20 border border-emerald-700/30 px-4 py-3 text-sm text-emerald-200/90">
+        <div className="rounded-md bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 px-4 py-3 text-sm text-[var(--poker-success)]/90">
           🎯 {section.content}
         </div>
       );

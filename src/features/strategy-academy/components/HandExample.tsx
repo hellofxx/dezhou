@@ -51,16 +51,16 @@ export function HandExampleComponent({ example, index }: HandExampleProps) {
       {/* Game Context Tags */}
       {example.gameContext && (
         <div className="flex flex-wrap gap-2 items-center">
-          <span className="px-2 py-0.5 rounded text-xs bg-purple-500/20 text-purple-300">
+          <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
             {example.gameContext.gameType === 'cash' ? '💰 现金桌' : example.gameContext.gameType === 'mtt' ? '🏆 锦标赛' : '🎰 SNG'}
           </span>
           {example.gameContext.icmPressure && example.gameContext.icmPressure !== 'low' && (
-            <span className="px-2 py-0.5 rounded text-xs bg-red-500/20 text-red-300">
+            <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-danger)]/20 text-[var(--poker-danger)]">
               ICM压力: {example.gameContext.icmPressure === 'high' ? '高' : '中'}
             </span>
           )}
           {example.gameContext.bubbleFactor && (
-            <span className="px-2 py-0.5 rounded text-xs bg-orange-500/20 text-orange-300">
+            <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-terra)]/25 text-[var(--poker-terra-bright)]">
               🫧 泡沫期
             </span>
           )}

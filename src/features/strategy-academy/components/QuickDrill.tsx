@@ -401,8 +401,8 @@ export default function QuickDrill() {
                 : t('quickDrill.backAcademy', { defaultValue: '返回策略学院' })}
             </button>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                <Zap className="w-6 h-6 text-orange-400" />
+              <div className="w-12 h-12 rounded-lg bg-[var(--brass)]/10 flex items-center justify-center">
+                <Zap className="w-6 h-6 text-[var(--brass)]" />
               </div>
               <div>
                 <h1 className="font-display text-2xl text-[var(--ivory)]">
@@ -471,7 +471,7 @@ export default function QuickDrill() {
           {/* Weak areas info */}
           {!isQuickMode && weakAreas.length > 0 && (
             <div className="flex items-start gap-2 text-xs text-[var(--ivory-muted)]">
-              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-orange-400" />
+              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--brass)]" />
               <span>{t('quickDrill.weakAreasHint', { defaultValue: '将优先从你的薄弱领域抽取题目' })}</span>
             </div>
           )}
@@ -479,7 +479,7 @@ export default function QuickDrill() {
           {/* P0-5: 快速模式下显示 mode 信息 */}
           {isQuickMode && (
             <div className="flex items-start gap-2 text-xs text-[var(--ivory-muted)]">
-              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-orange-400" />
+              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--brass)]" />
               <span>
                 {t('quickDrill.modeHint', {
                   defaultValue: '当前模式：{{mode}}，已完成今日训练将自动计入连续天数',

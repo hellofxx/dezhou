@@ -60,8 +60,8 @@ export default function ConceptGraphView() {
         >
           <div className="rounded-lg bg-[var(--walnut-raised)] border border-[var(--walnut-border)] p-4 text-center">
             <div className="flex items-center justify-center gap-1.5 mb-1">
-              <BookOpen className="w-4 h-4 text-green-400" />
-              <span className="font-numeric text-2xl text-green-400">{completedCount}</span>
+              <BookOpen className="w-4 h-4 text-[var(--poker-success)]" />
+              <span className="font-numeric text-2xl text-[var(--poker-success)]">{completedCount}</span>
             </div>
             <p className="text-xs text-[var(--ivory-muted)]">已学习</p>
           </div>
@@ -118,10 +118,10 @@ export default function ConceptGraphView() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {CONCEPT_NODES.map((concept) => {
               const categoryColors: Record<string, string> = {
-                fundamental: 'bg-green-500/10 border-green-500/30 text-green-400',
-                mathematical: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
-                strategic: 'bg-purple-500/10 border-purple-500/30 text-purple-400',
-                psychological: 'bg-orange-500/10 border-orange-500/30 text-orange-400',
+                fundamental: 'bg-[var(--poker-success-bg)] border-[var(--poker-success)]/30 text-[var(--poker-success)]',
+                mathematical: 'bg-[var(--poker-info-bg)] border-[var(--poker-info)]/30 text-[var(--poker-info)]',
+                strategic: 'bg-[var(--poker-indigo)]/15 border-[var(--poker-indigo)]/40 text-[var(--poker-indigo-bright)]',
+                psychological: 'bg-[var(--poker-terra)]/15 border-[var(--poker-terra)]/40 text-[var(--poker-terra-bright)]',
               };
               const colorClass = categoryColors[concept.category] ?? categoryColors.fundamental;
               const relatedLessonExists = concept.relatedLessons[0];

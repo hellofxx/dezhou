@@ -291,7 +291,7 @@ function InfoChip({
     green: 'bg-[var(--success)]/15 text-[var(--success)] border-[var(--success)]/30',
     orange: 'bg-[var(--warning)]/15 text-[var(--warning)] border-[var(--warning)]/30',
     blue: 'bg-[var(--info)]/15 text-[var(--info)] border-[var(--info)]/30',
-    purple: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+    purple: 'bg-[var(--poker-indigo)]/15 text-[var(--poker-indigo-bright)] border-[var(--poker-indigo)]/30',
   }[color];
   return (
     <div className={cn('inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1', colorClass)}>
