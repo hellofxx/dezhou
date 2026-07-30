@@ -53,17 +53,19 @@ export function calculateGrade(evLoss: number): DecisionGrade {
 }
 
 // 各级别显示配置
+// 颜色以 globals.css 的 .grade-* 组件类为唯一样式事实源（DESIGN_LANGUAGE §2.2 低饱和牌室化语义色）：
+// 苔藓绿/黄铜/陶土红低透底 + 左侧色条，禁止 Tailwind 霓虹色板类（§1.3 反 SaaS 饱和色禁令）与纯白文字（§1.2）。
 export const GRADE_DISPLAY_CONFIG: Record<DecisionGrade, {
-  color: string;       // Tailwind 类（如 'bg-emerald-600'）
-  textColor: string;
+  color: string;       // globals.css .grade-* 类（背景 + 左侧色条 + 基础文字色）
+  textColor: string;   // token 文字色类（供单独消费 textColor 的场景，如 PuzzleCard）
   icon: string;        // emoji
   titleKey: string;    // i18n key
 }> = {
-  best:        { color: 'bg-emerald-600', textColor: 'text-white',      icon: '🌟', titleKey: 'feedback.grade.best' },
-  correct:     { color: 'bg-green-500',   textColor: 'text-white',      icon: '✅', titleKey: 'feedback.grade.correct' },
-  inaccuracy:  { color: 'bg-yellow-400',  textColor: 'text-yellow-900', icon: '🟡', titleKey: 'feedback.grade.inaccuracy' },
-  wrong:       { color: 'bg-orange-500',  textColor: 'text-white',      icon: '🟠', titleKey: 'feedback.grade.wrong' },
-  blunder:     { color: 'bg-red-600',     textColor: 'text-white',      icon: '🔴', titleKey: 'feedback.grade.blunder' },
+  best:        { color: 'grade-best',       textColor: 'text-[var(--poker-success)]', icon: '🌟', titleKey: 'feedback.grade.best' },
+  correct:     { color: 'grade-correct',    textColor: 'text-[var(--poker-success)]', icon: '✅', titleKey: 'feedback.grade.correct' },
+  inaccuracy:  { color: 'grade-inaccuracy', textColor: 'text-[var(--brass-bright)]',  icon: '🟡', titleKey: 'feedback.grade.inaccuracy' },
+  wrong:       { color: 'grade-wrong',      textColor: 'text-[var(--poker-danger)]',  icon: '🟠', titleKey: 'feedback.grade.wrong' },
+  blunder:     { color: 'grade-blunder',    textColor: 'text-[var(--poker-danger)]',  icon: '🔴', titleKey: 'feedback.grade.blunder' },
 };
 
 /**
