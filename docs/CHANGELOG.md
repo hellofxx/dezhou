@@ -11,7 +11,7 @@
 
 ### feat(platform): P0 信息架构与标签统一
 
-- 侧边栏 13→10 项，分组重构为“概览（仪表盘）/ 训练（范围·赔率·GTO·谜题）/ 研习（策略学院·理论学院·牌局复盘）/ 数据 / 设置”；移除 `/academy/basics` 与 `/daily-challenge` 两个一级导航项（basics 路由保留，入口收敛到学院首页卡片与首访引导）
+- 侧边栏 13→11 项，分组重构为“概览（仪表盘）/ 训练（范围·赔率·GTO·谜题）/ 研习（策略学院·理论学院·牌局复盘）/ 数据 / 设置”；移除 `/academy/basics` 与 `/daily-challenge` 两个一级导航项（basics 路由保留，入口收敛到学院首页卡片与首访引导）
 - 新增 `nav.dashboard` 键，三端统一：`/` = 仪表盘、`/progress` = 进度统计，消除“两个进度统计”双重标签与落地页标题断裂
 - MobileNav 第 2 项修复 label/图标/目的地三重矛盾：`nav.training`+Target → `nav.academy`+GraduationCap
 
@@ -37,6 +37,18 @@
 - ProgressPage 排版 token 对齐：`font-mono`→`.font-numeric`、`rounded-xl`→`rounded-[var(--radius)]`
 
 验证：typecheck / lint / test（29 文件 198 用例）/ build 全部 exit 0。
+
+### fix: 代码评审问题修复（R1–R9，三视角评审 b37c8a5..d3b5985）
+
+- **R1 Critical**：折叠态 `TooltipTrigger asChild` 会把 NavLink 函数式 `className` 字符串化（Radix Slot 无条件 join）致激活态失效——AppLayout 改为渲染前自行计算 `active`（根路径精确匹配，其余前缀匹配），传静态 className 与普通 JSX children
+- **R2**：`getDailyKey` 从 `puzzle-trainer/data/dailyPuzzles` 迁至 `utils/dateSeed`（data 侧 re-export 兼容），切断今日任务卡→puzzleBank（约 181KB）的静态链，首页 chunk 不再拉入题库
+- **R3**：今日任务卡挑战行日期基准由 UTC（toISOString）改为本地时区 `getDailyKey()`，与每日谜题行同口径，消除 00:00–08:00 窗口的同卡双自然日错位
+- **R4**：pageTitle 前缀兑底补 `/pot-odds`
+- **R5**：双学院导航项折叠态不再设原生 `title`，避免与 Radix Tooltip 双提示
+- **R6**：DecisionTree AllIn 改 `--brass` 与 Raise（`--brass-bright`）恢复区分
+- **R7**：旧金色字面量收敛：StreakTracker 热力格与 StreakCelebration 动画 `rgba(212,168,75,α)`→`rgba(201,162,94,α)`，shareCard `BRASS #d4a84b`→`#c9a25e`
+- **R8**：本条目导航项计数修正为 13→11
+- **R9**：DESIGN_LANGUAGE §5.3 登记庄码折叠态降级例外（3px 黄铜圆点）
 
 ---
 
