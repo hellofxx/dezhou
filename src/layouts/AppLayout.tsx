@@ -10,6 +10,7 @@ import OnboardingGate from '@/features/progress/components/OnboardingGate';
 import TiltWarning from '@/features/progress/components/TiltWarning';
 import MobileNav from './MobileNav';
 import TableRail from '@/shared/components/TableRail';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
 import { useProgressStore } from '@/features/progress/store';
 import {
   ChevronLeft,
@@ -21,10 +22,8 @@ import {
   BarChart3,
   Settings,
   Trophy,
-  Zap,
   Globe,
   GraduationCap,
-  BookOpen,
   Library,
   Puzzle,
   Flame,
@@ -36,6 +35,8 @@ interface NavItem {
   path: string;
   icon: React.ReactNode;
   i18nKey: string;
+  /** 悬停提示（用于双学院定位区分等需要副文案的导航项） */
+  hint?: string;
 }
 
 interface NavGroup {
@@ -55,20 +56,16 @@ export default function AppLayout() {
       title: t('nav.overview'),
       i18nKey: 'nav.overview',
       items: [
-        { label: t('progress.title'), path: '/', icon: <Home size={20} />, i18nKey: 'progress.title' },
+        { label: t('nav.dashboard'), path: '/', icon: <Home size={20} />, i18nKey: 'nav.dashboard' },
       ],
     },
     {
       title: t('nav.training'),
       i18nKey: 'nav.training',
       items: [
-        { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={20} />, i18nKey: 'nav.academy' },
-        { label: t('nav.theory'), path: '/theory', icon: <Library size={20} />, i18nKey: 'nav.theory' },
-        { label: t('nav.basics'), path: '/academy/basics', icon: <BookOpen size={20} />, i18nKey: 'nav.basics' },
         { label: t('nav.rangeTrainer'), path: '/range-trainer', icon: <Target size={20} />, i18nKey: 'nav.rangeTrainer' },
         { label: t('nav.potOdds'), path: '/pot-odds', icon: <Calculator size={20} />, i18nKey: 'nav.potOdds' },
         { label: t('nav.gtoSimulator'), path: '/gto-simulator', icon: <Bot size={20} />, i18nKey: 'nav.gtoSimulator' },
-        { label: t('nav.dailyChallenge'), path: '/daily-challenge', icon: <Zap size={20} />, i18nKey: 'nav.dailyChallenge' },
         { label: t('nav.puzzle'), path: '/puzzle', icon: <Puzzle size={20} />, i18nKey: 'nav.puzzle' },
       ],
     },
@@ -76,6 +73,8 @@ export default function AppLayout() {
       title: t('nav.study'),
       i18nKey: 'nav.study',
       items: [
+        { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={20} />, i18nKey: 'nav.academy', hint: t('academy.positioning') },
+        { label: t('nav.theory'), path: '/theory', icon: <Library size={20} />, i18nKey: 'nav.theory', hint: t('theory.positioning') },
         { label: t('nav.handHistory'), path: '/hand-history', icon: <ClipboardList size={20} />, i18nKey: 'nav.handHistory' },
       ],
     },
@@ -99,6 +98,7 @@ export default function AppLayout() {
   const pageTitle: Record<string, string> = {
     '/': t('dashboard.title', '训练仪表盘'),
     '/academy': t('nav.academy'),
+    '/academy/basics': t('nav.basics'),
     '/theory': t('nav.theory'),
     '/range-trainer': t('nav.rangeTrainer'),
     '/pot-odds': t('nav.potOdds'),
@@ -106,12 +106,25 @@ export default function AppLayout() {
     '/hand-history': t('nav.handHistory'),
     '/progress': t('nav.progress'),
     '/settings': t('nav.settings'),
-    '/daily-challenge': t('nav.dailyChallenge'),
     '/leaderboard': t('nav.leaderboard'),
     '/puzzle': t('nav.puzzle'),
   };
 
-  const currentPageTitle = pageTitle[location.pathname] || APP_NAME;
+  // 子路由前缀兑底（带参数路由如 /academy/lesson/:id 回退到模块名，避免页名断档到 APP_NAME）
+  const prefixTitles: [string, string][] = [
+    ['/academy', t('nav.academy')],
+    ['/theory', t('nav.theory')],
+    ['/puzzle', t('nav.puzzle')],
+    ['/progress', t('nav.progress')],
+    ['/range-trainer', t('nav.rangeTrainer')],
+    ['/gto-simulator', t('nav.gtoSimulator')],
+    ['/hand-history', t('nav.handHistory')],
+  ];
+
+  const currentPageTitle =
+    pageTitle[location.pathname] ??
+    prefixTitles.find(([prefix]) => location.pathname.startsWith(`${prefix}/`))?.[1] ??
+    APP_NAME;
 
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === 'zh' ? 'en' : 'zh');
@@ -136,7 +149,7 @@ export default function AppLayout() {
                   PokerLab
                 </span>
                 <span className="text-[10px] text-[var(--ivory-muted)] truncate block">
-                  德州扑克训练平台
+                  {t('nav.appSubtitle')}
                 </span>
               </div>
             )}
@@ -155,47 +168,67 @@ export default function AppLayout() {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-5">
-          {navGroups.map((group) => (
-            <div key={group.i18nKey}>
-              {!collapsed && (
-                <p className="text-[9px] uppercase tracking-[0.2em] text-[var(--ivory-muted)] px-3 mb-2 font-medium">
-                  {group.title}
-                </p>
-              )}
-              <ul className="space-y-0.5">
-                {group.items.map((item) => (
-                  <li key={item.path}>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) =>
-                        cn(
-                          'flex items-center gap-3 px-3 py-2 rounded-[var(--radius-sm)] text-sm transition-colors relative',
-                          isActive
-                            ? 'text-[var(--brass-bright)] bg-[rgba(201,162,94,0.08)]'
-                            : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/60'
-                        )
-                      }
-                    >
-                      {({ isActive }) => (
-                        <>
-                          {isActive && (
-                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[var(--brass)] rounded-r" />
-                          )}
-                          <span className="shrink-0">{item.icon}</span>
-                          {!collapsed && <span className="truncate">{item.label}</span>}
-                          {isActive && (
-                            <span className="absolute right-2 w-[22px] h-[22px] rounded-full bg-gradient-to-br from-[var(--brass-bright)] to-[var(--brass)] flex items-center justify-center text-[10px] font-display font-bold text-[var(--primary-foreground)]">
-                              D
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <TooltipProvider delayDuration={200}>
+            {navGroups.map((group) => (
+              <div key={group.i18nKey}>
+                {!collapsed && (
+                  <p className="text-[9px] uppercase tracking-[0.2em] text-[var(--ivory-dim)] px-3 mb-2 font-medium">
+                    {group.title}
+                  </p>
+                )}
+                <ul className="space-y-0.5">
+                  {group.items.map((item) => {
+                    const link = (
+                      <NavLink
+                        to={item.path}
+                        aria-label={item.label}
+                        title={item.hint}
+                        className={({ isActive }) =>
+                          cn(
+                            'flex items-center gap-3 px-3 py-2 rounded-[var(--radius-sm)] text-sm transition-colors relative',
+                            isActive
+                              ? 'text-[var(--brass-bright)] bg-[rgba(201,162,94,0.08)]'
+                              : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/60'
+                          )
+                        }
+                      >
+                        {({ isActive }) => (
+                          <>
+                            {isActive && (
+                              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[var(--brass)] rounded-r" />
+                            )}
+                            <span className="shrink-0">{item.icon}</span>
+                            {!collapsed && <span className="truncate">{item.label}</span>}
+                            {/* 庄码 D（DESIGN_LANGUAGE §5.3）：展开态斜体 Fraunces；折叠态降级为黄铜小圆点避免与图标重叠 */}
+                            {isActive && !collapsed && (
+                              <span aria-hidden="true" className="absolute right-2 w-[22px] h-[22px] rounded-full bg-gradient-to-br from-[var(--brass-bright)] to-[var(--brass)] flex items-center justify-center text-[10px] font-display font-bold italic text-[var(--primary-foreground)]">
+                                D
+                              </span>
+                            )}
+                            {isActive && collapsed && (
+                              <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-[var(--brass)]" />
+                            )}
+                          </>
+                        )}
+                      </NavLink>
+                    );
+                    return (
+                      <li key={item.path}>
+                        {collapsed ? (
+                          <Tooltip>
+                            <TooltipTrigger asChild>{link}</TooltipTrigger>
+                            <TooltipContent side="right">{item.label}</TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          link
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </TooltipProvider>
         </nav>
 
         {/* Sidebar footer */}
@@ -204,16 +237,16 @@ export default function AppLayout() {
             <div className="flex items-center gap-3">
               {/* User avatar chip */}
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[var(--brass)] to-[var(--brass-deep)] flex items-center justify-center text-[11px] font-display font-bold text-[var(--primary-foreground)] shrink-0">
-                玩
+                {t('nav.playerDefault').charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-[var(--ivory)] truncate">玩家</div>
+                <div className="text-sm font-medium text-[var(--ivory)] truncate">{t('nav.playerDefault')}</div>
                 <div className="text-[10px] text-[var(--ivory-muted)] font-numeric">v{APP_VERSION}</div>
               </div>
               <button
                 onClick={toggleLanguage}
                 className="flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] hover:bg-[var(--walnut-light)] transition-colors"
-                title="Toggle Language"
+                aria-label={t('nav.toggleLanguage')}
               >
                 <Globe size={14} />
                 <span className="font-numeric">{i18n.language === 'zh' ? 'EN' : '中'}</span>
@@ -224,7 +257,7 @@ export default function AppLayout() {
               <button
                 onClick={toggleLanguage}
                 className="flex items-center justify-center w-full py-1 text-[10px] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
-                aria-label="Toggle language"
+                aria-label={t('nav.toggleLanguage')}
               >
                 <Globe size={14} />
               </button>
@@ -250,7 +283,8 @@ export default function AppLayout() {
           {/* Mobile language toggle */}
           <button
             onClick={toggleLanguage}
-            className="md:hidden flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
+            aria-label={t('nav.toggleLanguage')}
+            className="md:hidden flex items-center justify-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
           >
             <Globe size={14} />
             <span className="font-numeric">{i18n.language === 'zh' ? 'EN' : '中'}</span>

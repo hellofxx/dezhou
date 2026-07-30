@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import {
   Home,
-  Target,
   Library,
   BarChart3,
   Settings,
   Puzzle,
+  GraduationCap,
 } from 'lucide-react';
 
 interface MobileNavItem {
@@ -20,11 +20,11 @@ export default function MobileNav() {
   const { t } = useTranslation();
 
   const items: MobileNavItem[] = [
-    { label: t('progress.title'), path: '/', icon: <Home size={20} /> },
-    { label: t('nav.training'), path: '/academy', icon: <Target size={20} /> },
+    { label: t('nav.dashboard'), path: '/', icon: <Home size={20} /> },
+    { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={20} /> },
     { label: t('nav.theory'), path: '/theory', icon: <Library size={20} /> },
     { label: t('nav.puzzle'), path: '/puzzle', icon: <Puzzle size={20} /> },
-    { label: t('nav.data'), path: '/progress', icon: <BarChart3 size={20} /> },
+    { label: t('nav.progress'), path: '/progress', icon: <BarChart3 size={20} /> },
     { label: t('nav.settings'), path: '/settings', icon: <Settings size={20} /> },
   ];
 

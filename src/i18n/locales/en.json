@@ -5,6 +5,7 @@
   },
   "nav": {
     "overview": "Overview",
+    "dashboard": "Dashboard",
     "training": "Training",
     "study": "Study",
     "tools": "Tools",
@@ -18,10 +19,12 @@
     "theory": "Theory Academy",
     "progress": "Progress",
     "settings": "Settings",
-    "dailyChallenge": "Daily Challenge",
     "leaderboard": "Leaderboard",
     "basics": "Basics",
-    "puzzle": "Poker Puzzles"
+    "puzzle": "Poker Puzzles",
+    "appSubtitle": "Texas Hold'em Training Platform",
+    "playerDefault": "Player",
+    "toggleLanguage": "Toggle language"
   },
   "rangeTrainer": {
     "title": "Range Trainer",
@@ -219,15 +222,16 @@
     }
   },
   "dailyChallenge": {
-    "title": "Daily Challenge",
+    "title": "Today's Tasks",
     "rangeChallenge": "Complete {{count}} range training questions with >{{accuracy}}% accuracy",
     "potOddsChallenge": "Complete {{count}} pot odds questions with >{{accuracy}}% accuracy",
     "gtoChallenge": "Complete {{count}} GTO simulation questions with >{{accuracy}}% accuracy",
     "completed": "Completed",
     "notCompleted": "Not Completed",
-    "consecutiveDays": "Consecutive Days",
+    "consecutiveDays": "Day Streak",
     "startChallenge": "Start Challenge",
-    "reward": "Reward"
+    "reward": "Reward",
+    "dailyPuzzle": "Daily Puzzle"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -266,6 +270,7 @@
   },
   "academy": {
     "title": "Strategy Academy",
+    "positioning": "Courses & Practice Drills",
     "subtitle": "Systematically learn poker strategy from basics to professional thinking",
     "basics": "Poker Basics",
     "basicsDesc": "Game rules, hand rankings, positions, and terminology",
@@ -607,6 +612,7 @@
   },
   "theory": {
     "title": "Theory Academy",
+    "positioning": "Theory Handbook & Chapter Reading",
     "subtitle": "Study authoritative poker theory systematically and build a complete knowledge framework",
     "chapters": "chapters",
     "tierBasic": "Basic T1-T3",

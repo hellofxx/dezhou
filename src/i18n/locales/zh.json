@@ -5,6 +5,7 @@
   },
   "nav": {
     "overview": "概览",
+    "dashboard": "仪表盘",
     "training": "训练",
     "study": "研习",
     "tools": "工具区",
@@ -18,10 +19,12 @@
     "theory": "理论学院",
     "progress": "进度统计",
     "settings": "设置",
-    "dailyChallenge": "每日挑战",
     "leaderboard": "排行榜",
     "basics": "基础入门",
-    "puzzle": "扑克谜题"
+    "puzzle": "扑克谜题",
+    "appSubtitle": "德州扑克训练平台",
+    "playerDefault": "玩家",
+    "toggleLanguage": "切换语言"
   },
   "rangeTrainer": {
     "title": "手牌范围训练",
@@ -219,15 +222,16 @@
     }
   },
   "dailyChallenge": {
-    "title": "今日挑战",
+    "title": "今日任务",
     "rangeChallenge": "完成 {{count}} 题手牌范围训练，正确率 > {{accuracy}}%",
     "potOddsChallenge": "完成 {{count}} 题赔率计算训练，正确率 > {{accuracy}}%",
     "gtoChallenge": "完成 {{count}} 题 GTO 模拟训练，正确率 > {{accuracy}}%",
     "completed": "已完成",
     "notCompleted": "未完成",
-    "consecutiveDays": "连续完成天数",
+    "consecutiveDays": "连续训练天数",
     "startChallenge": "开始挑战",
-    "reward": "奖励"
+    "reward": "奖励",
+    "dailyPuzzle": "每日谜题"
   },
   "leaderboard": {
     "title": "排行榜",
@@ -266,6 +270,7 @@
   },
   "academy": {
     "title": "策略学院",
+    "positioning": "课程与实战练习",
     "subtitle": "从零基础到职业思维，系统化学习德州扑克策略",
     "basics": "德扑基础入门",
     "basicsDesc": "游戏规则、牌型、位置、术语快速入门",
@@ -607,6 +612,7 @@
   },
   "theory": {
     "title": "理论学院",
+    "positioning": "理论手册与章节阅读",
     "subtitle": "系统研习业界权威德扑理论，构建完整知识框架",
     "chapters": "章节",
     "tierBasic": "基础 T1-T3",
