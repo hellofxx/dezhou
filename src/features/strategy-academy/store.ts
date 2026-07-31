@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { AcademyProgress, BasicsProgress, PracticeResult, AbilityAssessment, AdaptiveConfig, QuestionDifficulty, DailyPlan, LevelCertification } from './types';
 import { LEVELS } from './data/courses';
+import { LEARNING_TRACKS } from './data/learningTracks';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import { DEFAULT_ADAPTIVE_CONFIG, updateAbilityScore } from './utils/adaptiveDifficulty';
@@ -70,6 +71,12 @@ interface AcademyStore {
   // 新增：级别认证
   attemptCertification: (level: number, score: number) => void;
   isCertified: (level: number) => boolean;
+  /** 某 level 数字的全部课程是否已完成（L4 含 4A/4B 两个节点；供成就系统判定） */
+  isLevelLessonsCompleted: (level: number) => boolean;
+  /** 全部等级是否均已认证（供"全部等级认证"成就判定） */
+  areAllLevelsCertified: () => boolean;
+  /** 学习轨道是否全部课程完成；'any' 表示任一非空轨道完成（供成就系统判定） */
+  isTrackCompleted: (trackId: string) => boolean;
   // 新增：学习轨道
   setActiveTrack: (trackId: string | null) => void;
   /** 记录课程尝试得分（首次写入 firstAttemptScores，始终更新 lastAttemptScores） */
@@ -341,6 +348,32 @@ export const useAcademyStore = create<AcademyStore>()(
       isCertified: (level) => {
         const cert = get().certifications[level];
         return !!cert?.certifiedAt;
+      },
+
+      isLevelLessonsCompleted: (level) => {
+        const completed = new Set(get().progress.completedLessons);
+        // 同 level 数字可能对应多个节点（如 L4 拆为 4A/4B），全部课程都须完成
+        const lessons = LEVELS.filter((l) => l.level === level).flatMap((l) => l.lessons);
+        if (lessons.length === 0) return false;
+        return lessons.every((lesson) => completed.has(lesson.id));
+      },
+
+      areAllLevelsCertified: () => {
+        const certs = get().certifications;
+        const levelNumbers = [...new Set(LEVELS.map((l) => l.level))];
+        return levelNumbers.every((lv) => !!certs[lv]?.certifiedAt);
+      },
+
+      isTrackCompleted: (trackId) => {
+        const completed = new Set(get().progress.completedLessons);
+        const isDone = (ids: readonly string[]): boolean =>
+          ids.length > 0 && ids.every((id) => completed.has(id));
+        if (trackId === 'any') {
+          // 任一非空轨道全部完成（排除 lessonIds 为空的动态轨道）
+          return LEARNING_TRACKS.some((t) => isDone(t.lessonIds));
+        }
+        const track = LEARNING_TRACKS.find((t) => t.id === trackId);
+        return track ? isDone(track.lessonIds) : false;
       },
 
       // ===== 学习轨道 =====

@@ -8,6 +8,7 @@ import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
 import OnboardingGate from '@/features/progress/components/OnboardingGate';
 // P2-5.3: 全局 Tilt 提示组件（监听连续答错数）
 import TiltWarning from '@/features/progress/components/TiltWarning';
+import MilestoneCelebrationHost from '@/features/progress/components/MilestoneCelebrationHost';
 import MobileNav from './MobileNav';
 import TableRail from '@/shared/components/TableRail';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
@@ -318,6 +319,9 @@ export default function AppLayout() {
 
       {/* P2-5.3: 全局 Tilt 提示 Dialog — 监听 emotion.consecutiveWrongCount */}
       <TiltWarning />
+
+      {/* 里程碑庆典全局 Host — 监听 pendingMilestone */}
+      <MilestoneCelebrationHost />
 
       {/* Mobile bottom navigation */}
       <MobileNav />

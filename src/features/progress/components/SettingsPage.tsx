@@ -17,8 +17,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog';
-import { Settings, Volume2, VolumeX, Clock, Hash, Download, Upload, Trash2, Info, Gamepad2, GraduationCap, ShieldAlert, Bug, Unlock, Lock } from 'lucide-react';
+import { Settings, Volume2, VolumeX, Clock, Hash, Download, Upload, Trash2, Info, Gamepad2, GraduationCap, ShieldAlert, Bug, Unlock, Lock, Snowflake } from 'lucide-react';
 import { useProgressStore } from '../store';
+import { getTodayString } from '../utils/streakCalc';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { APP_VERSION } from '@/shared/constants/app';
 import type { TrainingRecord } from '../types';
@@ -49,6 +50,21 @@ export default function SettingsPage() {
   // P2-5.4: 每日题量上限（Session 止损）
   const dailyQuestionLimit = useProgressStore((s) => s.emotion.dailyQuestionLimit);
   const setDailyQuestionLimit = useProgressStore((s) => s.setDailyQuestionLimit);
+
+  // P0-2: 手动使用冻结卡（PRD 5.8：设置页一键"为今天请假"，反馈成功/失败）
+  const streakFreezes = useProgressStore((s) => s.streak.streakFreezes);
+  const streakFreezeUsedToday = useProgressStore((s) => s.streak.streakFreezeUsedToday);
+  const lastTrainingDate = useProgressStore((s) => s.streak.lastTrainingDate);
+  const useStreakFreezeAction = useProgressStore((s) => s.useStreakFreeze);
+  const [freezeStatus, setFreezeStatus] = useState<'success' | 'fail' | null>(null);
+  // 今日已训练时无需保护（与 streak 同为本地时区口径）
+  const trainedToday = lastTrainingDate === getTodayString();
+
+  const handleUseFreeze = () => {
+    const ok = useStreakFreezeAction();
+    setFreezeStatus(ok ? 'success' : 'fail');
+    setTimeout(() => setFreezeStatus(null), 3000);
+  };
 
   // 开发者选项：调试解锁
   const debugUnlockAll = useDebugModeStore((s) => s.unlockAll);
@@ -331,6 +347,39 @@ export default function SettingsPage() {
                       <SelectItem value="200">200 题</SelectItem>
                     </SelectContent>
                   </Select>
+                </SettingRow>
+
+                {/* P0-2: 手动使用冻结卡（"为今天请假"保住连续性；每日限 1 张） */}
+                <SettingRow
+                  label={t('streak.freeze.settingLabel', { defaultValue: '冻结卡' })}
+                  description={t('streak.freeze.settingHint', {
+                    defaultValue: '今天没空训练？用 1 张冻结卡为今天请假，保住连续训练（每日限 1 张），当前剩余 {{count}} 张',
+                    count: streakFreezes,
+                  })}
+                  icon={<Snowflake className="w-4 h-4 text-[var(--info)]" />}
+                >
+                  <div className="flex items-center gap-2">
+                    {freezeStatus === 'success' && (
+                      <span className="text-xs text-[var(--poker-success)]">
+                        {t('streak.freeze.useSuccess', { defaultValue: '已使用 1 张，今日连续性已保护 ✓' })}
+                      </span>
+                    )}
+                    {freezeStatus === 'fail' && (
+                      <span className="text-xs text-[var(--danger)]">
+                        {t('streak.freeze.useFail', { defaultValue: '不可用（今日已训/已用、无卡或无可保护连续）' })}
+                      </span>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleUseFreeze}
+                      disabled={streakFreezes <= 0 || streakFreezeUsedToday || trainedToday}
+                      className="gap-1"
+                    >
+                      <Snowflake className="w-4 h-4" />
+                      {t('streak.freeze.useNow', { defaultValue: '使用冻结卡' })}
+                    </Button>
+                  </div>
                 </SettingRow>
 
                 <SettingRow

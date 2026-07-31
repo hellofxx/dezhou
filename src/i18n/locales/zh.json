@@ -496,7 +496,8 @@
   "tilt": {
     "title": "要不要休息一下？",
     "message": "连续答错可能是疲劳的信号。短暂休息能帮你保持长期进步。",
-    "continue": "继续训练",
+    "dismiss": "我知道了",
+    "continue": "学习情绪管理",
     "rest": "休息一下"
   },
   "sessionLimit": {
@@ -579,7 +580,12 @@
       "label": "冻结卡",
       "used": "今日已使用冻结卡",
       "awarded": "获得 {{count}} 张冻结卡",
-      "empty": "冻结卡不足"
+      "empty": "冻结卡不足",
+      "settingLabel": "冻结卡",
+      "settingHint": "今天没空训练？用 1 张冻结卡为今天请假，保住连续训练（每日限 1 张），当前剩余 {{count}} 张",
+      "useNow": "使用冻结卡",
+      "useSuccess": "已使用 1 张，今日连续性已保护 ✓",
+      "useFail": "不可用（今日已训/已用、无卡或无可保护连续）"
     },
     "celebration": {
       "hiddenTitle": "Streak 里程碑庆典：{{days}} 天",

@@ -1,11 +1,10 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Flame, Trophy, Snowflake } from 'lucide-react';
 import { useProgressStore } from '../store';
 import { isEarnBackActive, getTodayString } from '../utils/streakCalc';
-import StreakCelebration from './StreakCelebration';
 
 interface StreakTrackerProps {
   currentStreak: number;
@@ -17,6 +16,7 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
   const { t } = useTranslation();
   const streak = useProgressStore((s) => s.streak);
   const checkMilestone = useProgressStore((s) => s.checkMilestone);
+  const detectStreakBreak = useProgressStore((s) => s.detectStreakBreak);
   const freezeCardFragments = useProgressStore((s) => s.freezeCardFragments);
 
   // 碎片合成动画
@@ -30,27 +30,22 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
     }
   }, [freezeCardFragments, showSynthesize]);
 
-  // 监听碎片从4变为0（合成触发）
-  const prevFragments = useMemo(() => ({ current: freezeCardFragments }), [freezeCardFragments]);
+  // 监听碎片从 4 变为 0（合成触发）：用 ref 保存上一次值（usePrevious 模式）
+  const prevFragmentsRef = useRef(freezeCardFragments);
   useEffect(() => {
-    if (prevFragments.current === 4 && freezeCardFragments === 0) {
+    if (prevFragmentsRef.current === 4 && freezeCardFragments === 0) {
       setShowSynthesize(true);
     }
-    prevFragments.current = freezeCardFragments;
-  }, [freezeCardFragments, prevFragments]);
+    prevFragmentsRef.current = freezeCardFragments;
+  }, [freezeCardFragments]);
 
-  // 里程碑庆典 Dialog 状态
-  const [celebrationDay, setCelebrationDay] = useState<number | null>(null);
-  const [celebrationOpen, setCelebrationOpen] = useState(false);
-
-  // 挂载时检查未庆祝的里程碑，有则触发庆典 Dialog
+  // 挂载时补检未庆祝的里程碑（庆典弹窗由全局 MilestoneCelebrationHost 监听
+  // pendingMilestone 统一展示，checkMilestone 幂等且达成时即发奖励）
   useEffect(() => {
-    const day = checkMilestone();
-    if (day !== null) {
-      setCelebrationDay(day);
-      setCelebrationOpen(true);
-    }
-    // 仅挂载时执行一次（checkMilestone 是幂等的 zustand action）
+    checkMilestone();
+    // 断裂发现检测：昨日漏训且无卡自动保护 → 标记 Earn Back 窗口（幂等）
+    detectStreakBreak();
+    // 仅挂载时执行一次（两个 action 均为幂等的 zustand action）
   }, []);
 
   // 生成最近 30 天的日期网格
@@ -221,15 +216,6 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
           </div>
         </CardContent>
       </Card>
-
-      {/* 里程碑庆典 Dialog */}
-      {celebrationDay !== null && (
-        <StreakCelebration
-          days={celebrationDay}
-          open={celebrationOpen}
-          onClose={() => setCelebrationOpen(false)}
-        />
-      )}
     </motion.div>
   );
 }

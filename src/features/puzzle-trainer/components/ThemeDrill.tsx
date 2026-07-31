@@ -16,6 +16,8 @@ import { usePuzzleEngine } from '../hooks/usePuzzleEngine';
 import { PUZZLE_THEMES, getThemeMeta } from '../data/puzzleBank';
 import { usePuzzleStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
+// P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { TrainingResult } from '@/shared/types/common';
 import type { PuzzleResult as PuzzleResultType, PuzzleTheme } from '../types';
@@ -42,6 +44,8 @@ export default function ThemeDrill() {
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
   const recordAnswer = useProgressStore((s) => s.recordAnswer);
   const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
+  // P2-5.4: 每日题量上限（早退在全部 hooks 之后，见下）
+  const sessionLimitReached = useSessionLimitReached();
 
   const [finalResult, setFinalResult] = useState<PuzzleResultType | null>(null);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
@@ -80,6 +84,12 @@ export default function ThemeDrill() {
   const handleNext = () => {
     engine.next();
   };
+
+  // 每日题量上限：未完局时拦截继续答题（已完局的结果页不拦）；
+  // 早退位于全部 hooks 之后，避免守卫翻转触发 hooks 数量变化崩溃
+  if (!finalResult && sessionLimitReached) {
+    return <SessionLimitGuard />;
+  }
 
   if (!theme) {
     return (

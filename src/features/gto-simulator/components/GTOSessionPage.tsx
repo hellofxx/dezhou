@@ -52,11 +52,11 @@ export default function GTOSessionPage() {
   const scenario = getCurrentScenario();
   const progress = getProgress();
 
-  // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练
+  // Streak 记账：训练完成时计入每日连续训练（recordTrainingDay 内部幂等并检查里程碑）
+  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+
+  // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
-  if (sessionLimitReached) {
-    return <SessionLimitGuard />;
-  }
 
   // P4 修复（4.5-P1-2）：连续答错降级提示
   const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
@@ -145,10 +145,18 @@ export default function GTOSessionPage() {
           createdAt: Date.now(),
         };
         trainingEvents.emit(record);
+        // 计入每日连续训练（与 puzzle / theory 模块同模式：完成时同步调用，不走事件总线）
+        recordTrainingDay();
         navigate(`/gto-simulator/result/${result.sessionId}`);
       }
     }
-  }, [continueNext, navigate]);
+  }, [continueNext, navigate, recordTrainingDay]);
+
+  // 止损早退必须位于全部 hooks 之后：守卫状态在挂载期间翻转（答题中达上限/
+  // 调试开关切换）时，hooks 数量变化会触发 "Rendered fewer hooks" 崩溃
+  if (sessionLimitReached) {
+    return <SessionLimitGuard />;
+  }
 
   if (!session) {
     return (

@@ -5,6 +5,53 @@
 
 ---
 
+## fix(progress) — 2026-07-31（P0-A 排查 18 项 bug 全量修复：Streak 记账链路 / 里程碑庆典 / 时区统一 / 成就判定 / Hooks 崩溃）
+
+> 基于 P0-A 逐功能排查（progress store 跨模块状态中枢）确认的 18 项 bug 的整批修复。修复原则：Streak 事实源唯一化、奖励发放与弹窗展示解耦、日期口径统一本地时区、成就判定收敛到数据所属模块。
+
+### 代码变更
+
+- **fix(range-trainer / pot-odds / gto-simulator)**：三大核心训练模块完成训练时补调 `recordTrainingDay()`（与 puzzle / theory 同模式：完成时同步调用，不走事件总线），修复训练不计入 Streak / 不触发里程碑 / 不掉碎片（BUG-01）
+- **fix(progress)**：重写 `updateStreak` 分支语义（BUG-02/03）——首次训练直接启动 Day 1（原先误入"断裂"态导致 streak 停留 0）；漏训 1 天（gap=2）无冻结卡时按 Earn Back 恢复原天数 +1（断裂时刻按"漏训首日结束"起算）；断签 ≥2 天重置为 1 且回归首训即时计入（消除"被吞掉的训练"与"任意长度断签同日两训可恢复"漏洞）；保留旧版 `streakBrokenAt` 历史状态兼容分支；新增 `updateStreak` 单元测试 9 例
+- **fix(progress)**：里程碑庆典可达性修复（BUG-04）——`checkMilestone` 达成时**即时发放**冻结卡奖励（不再依赖弹窗关闭，刷新/导航不丢奖励）并设置 `pendingMilestone`；新增全局 `MilestoneCelebrationHost` 挂载于 AppLayout 与 BlankLayout，监听 `pendingMilestone` 统一弹出 `StreakCelebration`（组件自身移除发奖逻辑，仅展示）；StreakTracker 移除本地庆典弹窗（挂载补检保留）
+- **fix(platform)**：`TiltWarning` 与 `MilestoneCelebrationHost` 补挂 BlankLayout，覆盖范围测验 / 赔率测验 / GTO 会话等训练页（BUG-05：原 Tilt 弹窗仅 AppLayout 渲染，主训练页连错 3 题无提醒）
+- **fix(puzzle-trainer)**：Rush / Daily / Theme 三模式接入 `SessionLimitGuard` 每日题量止损（未完局拦截、已完局结果页放行），补齐 PRD 5.19"所有训练页面开头检查"（BUG-06）
+- **fix(progress)**：`updateElo` 仅在发生升段时覆盖 `eloRankUp` 事件，未升段保留现值，修复会话中后续答题把未展示的升段庆祝清零（BUG-07）
+- **feat(progress)**：设置页"训练设置"新增冻结卡行——显示剩余数量 + "使用冻结卡"按钮（调 `useStreakFreeze()`，成功/失败即时反馈，数量不足或今日已用时禁用），落地 PRD 5.8 手动使用冻结卡（BUG-08）；i18n 新增 `streak.freeze.settingLabel/settingHint/useNow/useSuccess/useFail`（zh/en）
+- **fix(progress)**：`spacedRepetition.getTodayString` / `getDateAfterDays` 由 UTC（`toISOString`）改为本地时区格式化，与 `streakCalc` 统一口径，修复 UTC+8 凌晨 00:00-08:00 的跨日判定错位（Dashboard 今日完成态 / SessionLimitGuard 止损 / MoodTracker 选中态）（BUG-09）
+- **fix(progress)**：`recordAnswer` 跨日重置补充 `consecutiveWrongCount`（昨日连错不延续到今天）；`resetDailyCounters` 同步补重置（BUG-10）
+- **fix(progress / strategy-academy)**：成就判定修正（BUG-11/12/13）——strategy-academy store 新增 `isLevelLessonsCompleted(level)` / `areAllLevelsCertified()` / `isTrackCompleted(trackId)` 三个查询（课程/认证/轨道数据判定收敛在其所属模块）；progress `checkCondition` 相应改造："完成 Level N"需该级全部课程（含 L4A/4B）、"全部等级认证"需全部 level 认证（原 `some` 任一认证即解锁）、"完成轨道"按 trackId 精确判定（原"完成 10 课即算"）
+- **fix(progress)**：Streak 展示统一事实源（BUG-14）——`useProgress().summary` 在汇总层用 `store.streak` 覆盖 records 派生的 currentStreak/longestStreak（派生值不感知冻结卡续接与 Earn Back），StatsOverview / StreakTracker / 分享卡等消费方一次收敛
+- **fix(progress)**：`StreakRail` 今日正确率补 `dailyQuestionsDate === today` 校验，修复昨日数据被当作今日展示（BUG-15）；`StreakTracker` 碎片合成动画改用 `useRef` usePrevious 模式（原 `useMemo` 误用导致 4→0 变化检测永假、动画永不显示）（BUG-16）
+- **fix(i18n)**：`tilt.continue` 文案修正"继续训练"→"学习情绪管理"（与实际跳转 `mental-tilt-recognition` 课程的行为一致），补齐 `tilt.dismiss`（zh/en）（BUG-17）
+- **fix(range-trainer / pot-odds / gto-simulator / strategy-academy)**：四个训练页的 `SessionLimitGuard` 早退移至全部 hooks 之后（BUG-18：早退在 hooks 之前，守卫状态在挂载期间翻转——答题中达上限 / 调试开关切换——触发 `Rendered fewer hooks` 整页白屏崩溃；正确写法参照 TheoryChapterView）
+
+### 数据迁移
+
+- progress store persist version 升级 **v8 → v9**：migrate 注入 `pendingMilestone: null`（待展示里程碑庆典，全局 host 消费）；`store.persist-shape.test.ts` 快照与 `store.migrate.test.ts` 断言同步更新
+- 其余 store（strategy-academy / puzzle-trainer / theory-academy / debugMode）无形状变更，不升版（academy 仅新增只读查询方法）
+
+### 验证
+
+- `pnpm typecheck` / `pnpm lint` / `pnpm test`（31 文件 212 用例，含新增 updateStreak 9 例）/ `pnpm build` 全部 exit 0
+- 真实浏览器端到端抽验：首训 Day 1 启动、断签 30 天重置且同日两训不恢复、gap=2 无卡 Earn Back +1、v8→v9 迁移、里程碑达成即发 2 张冻结卡 + 全屏庆典弹出/关闭清除、训练页 Tilt 弹窗三按钮、止损翻转不崩溃且守卫响应式恢复、PuzzleRush 止损拦截、设置页冻结卡使用成功落盘、升段事件在后续答题后保留
+
+### 已知遗留（产品语义层，非本次修复范围）
+
+- PRD 5.8 中"冻结卡自动扣减"与"Earn Back 恢复"在 gap=2 场景结果重叠（有卡扣卡 / 无卡也可恢复 +1），冻结卡在该场景的价值弱化，建议产品层澄清两机制边界
+- StreakTracker 的"⚡ Earn Back 窗口期"提示依赖旧版 `streakBrokenAt` 字段，新逻辑下断裂即时结算、该提示基本退役（纯前端无后台任务，无法在未打开应用时标记断裂）
+
+### 遗留决策点后续修复（同日追加）
+
+> 上述两项遗留已于同日闭环，两机制边界澄清为：**冻结卡 = 第一道防线**（自动扣减无感兑底 + 手动"请假"主动保护）；**Earn Back = 无卡时的最后兑底**（仅漏训 1 天可救，窗口为漏训次日全天）。
+
+- **feat(progress)**：手动使用冻结卡赋予真实保护语义（原 `useStreakFreeze` 只扣卡+标记，无任何保护效果，纯亏一张卡）——新语义"为今天请假"：今日未训且连续性可救（昨日已训或恰漏 1 天）时，扣 1 卡将 `lastTrainingDate` 置为今天（currentStreak 不 +1，避免用卡与训练等价），明日训练按"昨日已训"续接；判定收敛在纯函数 `applyManualFreeze`（streakCalc.ts，+6 测试）；设置页禁用条件补"今日已训练"，提示文案同步新语义（zh/en）
+- **feat(progress)**："⚡ Earn Back 窗口期"提示复活——新增纯函数 `computeStreakBrokenAt`（+4 测试）与 store action `detectStreakBreak()`：首页/进度页挂载时检测"昨日漏训（gap=2）且无卡可自动保护"，标记 `streakBrokenAt` 为**今日 0 点**（=漏训日结束时刻）；窗口语义与 updateStreak 结算严格一致：今天全天训练可恢复 +1，明天必过期重置（不重新引入"任意断签可恢复"漏洞）；接线 StreakRail 与 StreakTracker 挂载检测（幂等）；有卡时不标记（自动扣减兑底，无需焦虑提示）
+- 验证：typecheck / lint / test（31 文件 222 用例，新增 10 例）全绿；浏览器端：gap=2 无卡刷新后 brokenAt=今日 0 点落盘、进度页显示"⚡ Earn Back 窗口期"；设置页用卡后 lastTrainingDate=今天、streak 不变、扣 1 卡、按钮禁用
+- 数据迁移：无 persist 形状变更（复用既有 `streakBrokenAt` / `streakFreezeUsedToday` 字段），不升版
+
+---
+
 ## chore(platform) — 2026-07-31（优化建议落地：语言切换接通 + theory 迁移测试 + 组件测试 i18n + PRD/TDD 职责分离全量清理）
 
 > 落地上轮文档审计提出的 5 项优化建议：代码修复（语言切换 / 测试补全 / i18n 初始化）+ 文档职责分离（PRD → v2.3、TDD → v2.4）。

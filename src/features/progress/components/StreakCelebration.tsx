@@ -64,31 +64,25 @@ const MILESTONE_META: Record<
 /**
  * Streak 里程碑全屏庆典 Dialog（P0-2.4）
  *
- * - 不同天数对应不同徽章与冻结卡奖励
+ * - 不同天数对应不同徽章与冻结卡奖励展示
  * - CSS keyframes 动画（不引入 framer-motion）
  * - 30 天及以上显示"分享"按钮，点击生成并下载分享卡片
- * - 关闭时调用 awardStreakFreeze 奖励对应数量（幂等：仅奖励一次）
+ * - 冻结卡奖励由 store checkMilestone 达成时即时发放（本组件仅展示，
+ *   避免"关闭弹窗才发奖"导致刷新/导航丢失奖励）
  */
 export default function StreakCelebration({ days, open, onClose }: StreakCelebrationProps) {
   const { t } = useTranslation();
-  const awardStreakFreeze = useProgressStore((s) => s.awardStreakFreeze);
   const streak = useProgressStore((s) => s.streak);
   const { summary } = useProgress();
   const [sharing, setSharing] = useState(false);
-  const [awarded, setAwarded] = useState(false);
 
   const meta = MILESTONE_META[days] ?? MILESTONE_META[3]!;
   const reward = MILESTONE_FREEZE_REWARDS[days] ?? 1;
   const showShareButton = days >= 30;
 
   const handleClose = useCallback(() => {
-    // 关闭时奖励冻结卡（幂等：同一组件实例仅奖励一次）
-    if (!awarded) {
-      awardStreakFreeze(reward);
-      setAwarded(true);
-    }
     onClose();
-  }, [awarded, awardStreakFreeze, reward, onClose]);
+  }, [onClose]);
 
   const handleShare = useCallback(async () => {
     setSharing(true);

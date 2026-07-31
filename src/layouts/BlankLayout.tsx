@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Keyboard, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+// 全局训练伴生 Dialog：Tilt 提醒与里程碑庆典（覆盖 BlankLayout 下的训练页，
+// 与 AppLayout 同策略，修复"主训练页连错 3 题无 Tilt 弹窗"的覆盖缺口）
+import TiltWarning from '@/features/progress/components/TiltWarning';
+import MilestoneCelebrationHost from '@/features/progress/components/MilestoneCelebrationHost';
 
 const SHORTCUTS = [
   { key: '1', action: 'Fold（弃牌）' },
@@ -56,6 +60,12 @@ export default function BlankLayout() {
       <div className="h-full">
         <Outlet />
       </div>
+
+      {/* P2-5.3: 全局 Tilt 提示 Dialog — 训练页（范围测验/赔率测验/GTO 会话）均在本布局下 */}
+      <TiltWarning />
+
+      {/* 里程碑庆典全局 Host — 训练完成触发里程碑时就地展示 */}
+      <MilestoneCelebrationHost />
 
       {/* Shortcuts overlay */}
       <AnimatePresence>

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState } from './types';
-import { DEFAULT_EMOTION_STATE } from './types';
+import { DEFAULT_EMOTION_STATE, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { ReviewItem } from './utils/spacedRepetition';
@@ -10,6 +10,8 @@ import {
   updateStreak,
   checkNewMilestone,
   isEarnBackActive,
+  applyManualFreeze,
+  computeStreakBrokenAt,
   getTodayString as getTodayStringFromStreak,
   getYesterdayString as getYesterdayStringFromStreak,
 } from './utils/streakCalc';
@@ -189,10 +191,19 @@ interface ProgressStore {
   streak: StreakState;
   /** 记录今日训练，调用 updateStreak 更新状态（含 Earn Back / 冻结卡自动扣减） */
   recordTrainingDay: () => void;
-  /** 手动使用一张冻结卡，返回是否成功（数量不足或今日已用过则失败） */
+  /** 手动使用一张冻结卡"为今天请假"（lastTrainingDate 置为今天保住连续性），
+   * 返回是否成功（今日已训/无卡/今日已用/无可保护 streak 则失败） */
   useStreakFreeze: () => boolean;
-  /** 检查并标记新达成的里程碑，返回新里程碑天数（无则 null） */
+  /** 断裂发现检测（首页挂载时调用）：昨日漏训且无卡可自动保护时标记
+   * streakBrokenAt（今日 0 点），驱动"⚡ Earn Back 窗口期"提示 */
+  detectStreakBreak: () => void;
+  /** 检查并标记新达成的里程碑，返回新里程碑天数（无则 null）；
+   * 达成时立即发放冻结卡奖励并设置 pendingMilestone（全局庆典 host 监听展示） */
   checkMilestone: () => number | null;
+  /** 待展示的里程碑庆典（非 null 表示刚达成，全局 host 弹窗展示后清除） */
+  pendingMilestone: number | null;
+  /** 清除待展示里程碑（庆典弹窗关闭后调用） */
+  clearPendingMilestone: () => void;
   /** 奖励冻结卡（默认 +1，可指定数量） */
   awardStreakFreeze: (count?: number) => void;
   /** 判断是否处于 Earn Back 窗口期（streakBrokenAt 在 24h 内） */
@@ -396,16 +407,17 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       useStreakFreeze: () => {
-        const streak = get().streak;
-        if (streak.streakFreezes <= 0 || streak.streakFreezeUsedToday) return false;
-        set({
-          streak: {
-            ...streak,
-            streakFreezes: streak.streakFreezes - 1,
-            streakFreezeUsedToday: true,
-          },
-        });
+        // 语义：为"今天"补出勤（主动请假），判定与状态变更收敛在纯函数 applyManualFreeze
+        const next = applyManualFreeze(get().streak);
+        if (next === null) return false;
+        set({ streak: next });
         return true;
+      },
+
+      detectStreakBreak: () => {
+        const brokenAt = computeStreakBrokenAt(get().streak);
+        if (brokenAt === null) return;
+        set((state) => ({ streak: { ...state.streak, streakBrokenAt: brokenAt } }));
       },
 
       checkMilestone: () => {
@@ -419,9 +431,16 @@ export const useProgressStore = create<ProgressStore>()(
             milestones: { ...streak.milestones, [key]: true },
             lastMilestoneCelebrated: newDay,
           },
+          // 设置待展示庆典（全局 host 监听弹窗；不依赖弹窗关闭发奖，避免奖励丢失）
+          pendingMilestone: newDay,
         });
+        // 达成即发放冻结卡奖励（与弹窗展示解耦，刷新/导航不丢奖励）
+        get().awardStreakFreeze(MILESTONE_FREEZE_REWARDS[newDay] ?? 1);
         return newDay;
       },
+
+      pendingMilestone: null,
+      clearPendingMilestone: () => set({ pendingMilestone: null }),
 
       awardStreakFreeze: (count = 1) =>
         set((state) => ({
@@ -458,9 +477,11 @@ export const useProgressStore = create<ProgressStore>()(
         const rankUp = checkRankUp(oldOverall, newElo.overall);
         set({
           elo: newElo,
+          // 仅在发生升段时覆盖事件；未升段保留现值，避免会话中后续答题
+          // 把尚未展示的升段庆祝事件清零（由 clearEloRankUp 在弹窗关闭后清除）
           eloRankUp: rankUp.isUp
             ? { from: getRankForScore(oldOverall), to: rankUp.newRank! }
-            : null,
+            : get().eloRankUp,
         });
       },
 
@@ -531,14 +552,16 @@ export const useProgressStore = create<ProgressStore>()(
         const today = getTodayStringFromStreak();
         const prev = get().emotion;
 
-        // 跨日重置：如果 dailyQuestionsDate 不是今天，先重置计数器
+        // 跨日重置：如果 dailyQuestionsDate 不是今天，先重置计数器（含连续答错数）
         let dailyCorrect = prev.dailyCorrect;
         let dailyTotal = prev.dailyTotal;
         let dailyQuestionsAnswered = prev.dailyQuestionsAnswered;
+        let prevConsecutiveWrong = prev.consecutiveWrongCount;
         if (prev.dailyQuestionsDate !== today) {
           dailyCorrect = 0;
           dailyTotal = 0;
           dailyQuestionsAnswered = 0;
+          prevConsecutiveWrong = 0;
         }
 
         // 更新计数器
@@ -548,8 +571,8 @@ export const useProgressStore = create<ProgressStore>()(
           dailyCorrect += 1;
         }
 
-        // 更新连续答错数
-        const consecutiveWrongCount = isCorrect ? 0 : prev.consecutiveWrongCount + 1;
+        // 更新连续答错数（跨日从 0 起算，昨日的连错不延续到今天）
+        const consecutiveWrongCount = isCorrect ? 0 : prevConsecutiveWrong + 1;
 
         // 更新 accuracyHistory（保留最近 7 天）
         const accuracy = dailyTotal > 0 ? dailyCorrect / dailyTotal : 0;
@@ -619,6 +642,7 @@ export const useProgressStore = create<ProgressStore>()(
             dailyQuestionsDate: today,
             dailyCorrect: 0,
             dailyTotal: 0,
+            consecutiveWrongCount: 0,
           },
         }));
       },
@@ -692,7 +716,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 8,
+      version: 9,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak
         const next = (persistedState ?? {}) as Partial<ProgressStore> & {
@@ -778,6 +802,12 @@ export const useProgressStore = create<ProgressStore>()(
             next.fragmentsEarnedToday = 0;
           }
         }
+        // v8 → v9：注入待展示里程碑庆典默认值（全局庆典 host）
+        if (fromVersion < 9) {
+          if (next.pendingMilestone === undefined) {
+            next.pendingMilestone = null;
+          }
+        }
         return next as ProgressStore;
       },
     }
@@ -816,10 +846,9 @@ async function checkCondition(
       if (condition.level === undefined) return false;
       try {
         const academy = await getAcademyStore();
-        const completed = academy.useAcademyStore.getState().progress.completedLessons;
-        const prefix = `l${condition.level}-`;
-        const levelLessons = completed.filter((id) => id.startsWith(prefix));
-        return levelLessons.length > 0;
+        // “完成 Level N”成就：该级全部课程完成（含 L4 拆分后的 4A/4B 节点），
+        // 而非仅完成 1 课；判定逻辑收敛在 academy store（课程数据属其模块内部）
+        return academy.useAcademyStore.getState().isLevelLessonsCompleted(condition.level);
       } catch {
         return false;
       }
@@ -858,8 +887,8 @@ async function checkCondition(
     case 'allCertifications': {
       try {
         const academy = await getAcademyStore();
-        const certs = academy.useAcademyStore.getState().certifications;
-        return Object.values(certs).some((c) => c.certifiedAt);
+        // 全部等级均需认证（区别于 certification level=0 的“任意认证”）
+        return academy.useAcademyStore.getState().areAllLevelsCertified();
       } catch {
         return false;
       }
@@ -868,9 +897,9 @@ async function checkCondition(
     case 'completeTrack': {
       try {
         const academy = await getAcademyStore();
-        const completed = new Set(academy.useAcademyStore.getState().progress.completedLessons);
-        // 简化判断：完成了 10+ 课程认为可能完成了一个 track
-        return completed.size >= 10;
+        // 按 trackId 精确判定轨道全部课程完成（'any' = 任一非空轨道），
+        // 替代旧版“完成 10 课即算”的粗糙估算
+        return academy.useAcademyStore.getState().isTrackCompleted(condition.trackId);
       } catch {
         return false;
       }

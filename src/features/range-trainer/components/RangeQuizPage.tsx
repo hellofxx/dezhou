@@ -13,6 +13,7 @@ import {
 } from '@/shared/components/ui/select';
 import { HelpCircle, Zap, Clock, Hash } from 'lucide-react';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
+import { useProgressStore } from '@/features/progress/store';
 import { TrainingSession } from './TrainingSession';
 import { SessionResult } from './SessionResult';
 import { useRangeTrainerStore } from '../store';
@@ -51,11 +52,11 @@ export default function RangeQuizPage() {
   const [timeLimit, setTimeLimit] = useState(10);
   const [questionCount, setQuestionCount] = useState(20);
 
+  // Streak 记账：训练完成时计入每日连续训练（recordTrainingDay 内部幂等并检查里程碑）
+  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练
   const sessionLimitReached = useSessionLimitReached();
-  if (sessionLimitReached) {
-    return <SessionLimitGuard />;
-  }
 
   const handleStart = useCallback(() => {
     startQuiz(position, actionType, timeLimit, questionCount);
@@ -73,7 +74,9 @@ export default function RangeQuizPage() {
       result: r,
       createdAt: Date.now(),
     });
-  }, []);
+    // 计入每日连续训练（与 puzzle / theory 模块同模式：完成时同步调用，不走事件总线）
+    recordTrainingDay();
+  }, [recordTrainingDay]);
 
   const handleRetry = useCallback(() => {
     resetQuiz();
@@ -91,6 +94,12 @@ export default function RangeQuizPage() {
     resetQuiz();
     setPhase('config');
   }, [resetQuiz]);
+
+  // 止损早退必须位于全部 hooks 之后：守卫状态在挂载期间翻转（答题中达上限/
+  // 调试开关切换）时，hooks 数量变化会触发 "Rendered fewer hooks" 崩溃
+  if (sessionLimitReached) {
+    return <SessionLimitGuard />;
+  }
 
   // ─── 训练阶段 ────────────────────────────────────────
   if (phase === 'training') {

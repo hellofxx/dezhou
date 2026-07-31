@@ -84,11 +84,8 @@ export default function QuickDrill() {
   // P1-4.1: Puzzle store 快速训练 Best Record
   const submitQuickDrillResult = usePuzzleStore((s) => s.submitQuickDrillResult);
 
-  // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练
+  // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
-  if (sessionLimitReached) {
-    return <SessionLimitGuard />;
-  }
 
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -238,6 +235,12 @@ export default function QuickDrill() {
     setFreezeRewarded(false);
     setCurrentQuickDrillStreak(0);
   };
+
+  // 止损早退必须位于全部 hooks 之后：守卫状态在挂载期间翻转（答题中达上限/
+  // 调试开关切换）时，hooks 数量变化会触发 "Rendered fewer hooks" 崩溃
+  if (sessionLimitReached) {
+    return <SessionLimitGuard />;
+  }
 
   if (isStarted && drill.questions.length > 0) {
     const earnedXp = finalResult ? computeXp(finalResult) : 0;

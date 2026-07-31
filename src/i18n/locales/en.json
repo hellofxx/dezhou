@@ -496,7 +496,8 @@
   "tilt": {
     "title": "Take a break?",
     "message": "Consecutive wrong answers may signal fatigue. A short break helps long-term progress.",
-    "continue": "Keep Training",
+    "dismiss": "Got it",
+    "continue": "Learn Tilt Control",
     "rest": "Take a Break"
   },
   "sessionLimit": {
@@ -579,7 +580,12 @@
       "label": "Freeze Cards",
       "used": "Freeze card used today",
       "awarded": "Earned {{count}} freeze cards",
-      "empty": "Not enough freeze cards"
+      "empty": "Not enough freeze cards",
+      "settingLabel": "Freeze Cards",
+      "settingHint": "No time to train today? Use 1 freeze card to take the day off and keep your streak (1 per day), {{count}} remaining",
+      "useNow": "Use Freeze Card",
+      "useSuccess": "1 card used, today's streak protected ✓",
+      "useFail": "Unavailable (trained/used today, no cards, or no streak to protect)"
     },
     "celebration": {
       "hiddenTitle": "Streak Milestone: {{days}} Days",

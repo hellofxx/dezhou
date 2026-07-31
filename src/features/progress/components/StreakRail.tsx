@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flame } from 'lucide-react';
 import FreezeChip from '@/shared/components/FreezeChip';
 import { useProgressStore } from '../store';
+import { getTodayString } from '../utils/streakCalc';
 
 /**
  * StreakRail — 周连续训练轨道条。
@@ -13,6 +14,12 @@ export default function StreakRail() {
   const streak = useProgressStore((s) => s.streak);
   const emotion = useProgressStore((s) => s.emotion);
   const records = useProgressStore((s) => s.records);
+  const detectStreakBreak = useProgressStore((s) => s.detectStreakBreak);
+
+  // 挂载时检测断裂（昨日漏训且无卡自动保护 → 标记 Earn Back 窗口，幂等）
+  useEffect(() => {
+    detectStreakBreak();
+  }, [detectStreakBreak]);
 
   // Week day labels (Mon-Sun)
   const weekDayLabels = ['一', '二', '三', '四', '五', '六', '日'];
@@ -48,8 +55,10 @@ export default function StreakRail() {
   }, [records]);
 
   // Today's accuracy from emotion state
+  // 防御：dailyQuestionsDate 必须是今天，否则昨日数据会被当作"今日正确率"展示
+  const isTodayData = emotion.dailyQuestionsDate === getTodayString();
   const todayAccuracy =
-    emotion.dailyTotal > 0
+    isTodayData && emotion.dailyTotal > 0
       ? Math.round((emotion.dailyCorrect / emotion.dailyTotal) * 100)
       : null;
 
