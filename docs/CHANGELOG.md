@@ -5,6 +5,54 @@
 
 ---
 
+## P2-A 修复批次（新手引导 onboarding） — 2026-07-31
+
+> P2-A 排查确认 5 项 bug：本批修复模块内 4 项（P2A-02/03/04/05）；P2A-01（OnboardingGate
+> 未覆盖 BlankLayout 路由，根因在平台层）挂起专批 D 待 platform-dev 认领，见
+> BUG_HUNT_BACKLOG《P2 跨模块专批挂起清单（专批 D）》。
+> **persist 无变更**：未给 onboarding 持久状态加字段、未升 version（P2A-02 采用不加字段方案）。
+> 门禁：`pnpm typecheck` / `pnpm lint` / `pnpm test` 均 exit 0（371/371 通过，基线 359 +
+> 本批新增 3 个测试文件 12 例）。
+
+### fix(onboarding) — 首胜记训练日时机移至微训练完成动作（P2A-02）
+
+- 旧实现 `recordTrainingDay()` 绑在 CelebrationStep 挂载 effect：跨日卡在庆祝页重新挂载会
+  重复记训练日（幂等仅防同日），可白嫖 streak
+- 修复：调用移至 FirstDrillStep 微训练完成动作（`completeOnboardingStep(3)` 之前一次）；
+  首胜完成 → 记 Day 1（保留 P0-A BUG-02 正向功能）；庆祝页只做展示，跨日重挂载不再重复记；
+  幂等仍防同日重复。**不加持久字段、不升 persist version**
+- 回归测试：`FirstDrillStep.test.tsx`（2 例，jsdom）——完成微训练 recordTrainingDay 恰好一次
+  且先于 completeOnboardingStep(3)；`CelebrationStep.test.tsx`（1 例）——StrictMode 挂载→卸载→
+  重挂载（模拟跨日重开）recordTrainingDay 始终 0 次
+
+### fix(onboarding) — 补救机制重构为 drillFlow 纯状态机（P2A-03/04/05 统一治本）
+
+- **P2A-03 rescueHint 永不显示**：旧提示条件依赖 `isLast`，append 补救题与 setFeedback 同批
+  flush 后 questions.length=5 使 isLast 立即变 false，条件恒 false → 改按**原题库末题**判定
+  （`currentIdx === DRILL_QUESTIONS.length - 1 && 答错`），末题答错时提示正确显示，
+  `onboarding.drill.rescueHint` 死文案复活（key 既存，无新增 i18n）
+- **P2A-04 补救题再答错再 append**：旧 `if (isLast)` 块对补救题同样生效，会追加第 6 题造成
+  「第 5 题/共 6 题」与完成按钮矛盾 → append 加双守卫（原题库末题 + `!rescueUsed`），
+  补救仅追加一次，补救题对错均以完成收尾
+- **P2A-05 handleNext 死分支**：`isLast && !lastAnswerCorrect` 不可达 → 引入显式 `rescueUsed`
+  状态替代 isLast/lastAnswerCorrect 推断式判定，前进逻辑简化为「有下一题则推进，否则完成」，
+  死分支随重构消除
+- 实现：新增 `utils/drillFlow.ts` 纯状态机（createDrillState / answerCurrentQuestion /
+  advanceDrill / shouldShowRescueHint，题目编排一并下沉）；FirstDrillStep.tsx 改为消费状态机
+  （125→85 行）；全部文件 ≤200 行
+- 回归测试：`utils/drillFlow.test.ts`（9 例，纯函数）——全对流程/中间题答错不追加/末题答错
+  显示提示且追加为 5 题/补救题再答错不再追加（不出现 5/6）/补救题对错均收尾/rescueUsed
+  单调不复位；组件测试补救路径断言 rescueHint 真实可见（zh 文案）与题号「第 4/5、第 5/5 题」
+
+### 挂起登记（本批不修）
+
+- **P2A-01**：OnboardingGate 未覆盖 BlankLayout 路由（清空 localStorage 可直达
+  /range-trainer/quiz 等 5 条全屏训练路由绕过引导）——根因在 src/app/routes.tsx +
+  src/layouts/BlankLayout.tsx（平台层）+ OnboardingGate 本体（progress），挂起专批 D
+  供 platform-dev 认领（BUG_HUNT_BACKLOG 已建《P2 跨模块专批挂起清单（专批 D）》）
+
+---
+
 ## 跨模块专批 C（数据一致性） — 2026-07-31
 
 > 处理《跨模块专批挂起清单》最后 3 项（platform-dev 执行）：P1A-06 / P1A-08 range preset ↔ GTO JSON

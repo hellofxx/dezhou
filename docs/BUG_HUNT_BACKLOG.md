@@ -390,14 +390,48 @@
 ## P2-A：新手引导（src/features/onboarding/）
 
 **步骤**：
-1. 清空 localStorage → 任意路由重定向 /onboarding（OnboardingGate）；全屏无主导航
-2. 三路径：新手（定位测试 5 题 4 维度含解析）/ 有基础（跳过定位）/ 跳过引导
-3. 能力评估映射 30-70、GTO 默认 50、写入 progress
-4. 微训练末题简单、答错补救（只一次）
-5. 首胜庆祝 + Day 1 streak 启动（**P0-A 已修 BUG-02，验证 CelebrationStep 现在真正启动 Day 1**）
-6. 目标设定三档记录；完成后刷新不再重定向；调试解锁**不**旁路 onboarding
+- [x] 1. 清空 localStorage → 任意主导航路由重定向 /onboarding（OnboardingGate）；全屏无主导航——BlankLayout 5 条全屏训练路由未被门禁覆盖 → **P2A-01 挂起专批 D**
+- [x] 2. 三路径：新手（定位测试 5 题 4 维度含解析）/ 有基础（跳过定位）/ 跳过引导——均正常（skipOnboarding 直标 completed）
+- [x] 3. 能力评估映射 30-70、GTO 默认 50、写入 progress——专项验证通过（见下方三专项结论）
+- [x] 4. 微训练末题简单、答错补救（只一次）——**P2A-03/04/05 已修复 + CHANGELOG 2026-07-31**（drillFlow 纯状态机统一治本）
+- [x] 5. 首胜庆祝 + Day 1 streak 启动（P0-A BUG-02 正向功能回归通过）——**P2A-02 已修复 + CHANGELOG 2026-07-31**（recordTrainingDay 移至 FirstDrillStep 完成动作，跨日卡庆祝页重挂载不再白嫖）
+- [x] 6. 目标设定三档记录；完成后刷新不再重定向；调试解锁**不**旁路 onboarding——专项验证通过
 
-**边界**：引导中途刷新（恢复当前步骤或安全回退）、引导期间 URL 直达其他路由
+**边界**：
+- [x] 引导中途刷新（persist 恢复当前步骤，正常）
+- [x] 引导期间 URL 直达其他路由——主导航路由被拦；BlankLayout 全屏路由可绕过 → **P2A-01 挂起专批 D**
+
+### P2-A 排查结论（2026-07-31）
+
+**5 条 bug 简表**（4 项已修复 + CHANGELOG 2026-07-31；P2A-01 → 挂起专批 D）：
+
+| 编号 | 一句话描述 | 严重级 | 处置 |
+|---|---|---|---|
+| P2A-01 | OnboardingGate 未覆盖 BlankLayout 路由：清空 localStorage 可直达 /range-trainer/quiz 等 5 条全屏训练路由绕过引导 | 逻辑错误（门禁绕过，最重） | 挂起专批 D（根因在 src/app/routes.tsx + BlankLayout（平台层）+ OnboardingGate 本体（progress），归 platform-dev） |
+| P2A-02 | CelebrationStep 挂载 effect 即记训练日，跨日卡庆祝页重挂载重复记（recordTrainingDay 幂等仅防同日） | 逻辑错误（streak 白嫖） | 已修复 + CHANGELOG 2026-07-31（调用移至 FirstDrillStep 完成动作，庆祝页只展示；不加持久字段/不升 version） |
+| P2A-03 | rescueHint 永不显示：append 补救题与 setFeedback 同批 flush 后 isLast 立即变 false，提示条件恒 false（死文案） | 显示问题 | 已修复 + CHANGELOG 2026-07-31（改按原题库末题判定） |
+| P2A-04 | 补救题再答错再 append 第 6 题，题号「第 5 题/共 6 题」与完成按钮矛盾（行为上补救仍一次，状态污染+显示矛盾） | 逻辑错误 | 已修复 + CHANGELOG 2026-07-31（rescueUsed + 原题库末题双守卫，补救仅追加一次） |
+| P2A-05 | handleNext `isLast && !lastAnswerCorrect` 分支不可达（末题答错后 isLast 已变 false） | 死代码 | 已修复 + CHANGELOG 2026-07-31（随 P2A-03/04 统一重构为 drillFlow 纯状态机，显式 rescueUsed 替代推断式判定） |
+
+**三专项结论**：
+
+- **P0-A BUG-02 回归**：首胜仍真正启动 Day 1 Streak——P2A-02 修复后 recordTrainingDay 在 FirstDrillStep 微训练完成动作里调用（completeOnboardingStep(3) 之前），正向功能保留；组件回归测试锁定「完成记一次 + 庆祝页重挂载 0 次」
+- **调试解锁不旁路 onboarding**：debugMode 仅旁路位置/课程等 7 处训练门禁，OnboardingGate 不读 debugMode，未完成引导时仍重定向（验证通过）
+- **能力评估 30-70 边界**：定位测试正确率 → initialAbility 映射锁定在 [30, 70] 区间（0 分 → 30，满分 → 70，GTO 维默认 50），写入 progress.onboarding.initialAbility（验证通过）
+
+**结论沉淀（P2-A 期间确认、后续层免重复排查 / 观察项）**：
+
+- **onboarding 不写 ELO、不 emit 训练事件、不注册 SRS**：首次微训练与定位测试均不进入全局统计/ELO/SRS 链路（设计如此，避免引导样本污染正式数据），P2-C 排查 SRS/统计时 onboarding 不在注册方/emit 方清单内，免查
+- **dailyGoalMinutes 零消费方**：GoalSettingStep 写入的 dailyGoalMinutes 全仓无读取方（今日任务/Dashboard 均未消费），待 P2-C 统计层排查时定性（接线 or 死字段）
+- **onboarding 模块 i18n 硬编码**（如 QuizCard 复用链路上的中文提示文案属 range-trainer 本体）归 P2-D i18n 走查收口，本批未新增硬编码
+
+### P2 跨模块专批挂起清单（专批 D，供 platform-dev 认领）
+
+> 原《跨模块专批挂起清单》（专批 A/B/C）已于 2026-07-31 全部清空；本表为 P2 层新增挂起项。
+
+| # | 描述 | 来源 | 负责方 | 状态 |
+|---|---|---|---|---|
+| 1 | **P2A-01** OnboardingGate 未覆盖 BlankLayout 路由：清空 localStorage 后可直达 /range-trainer/quiz 等 5 条全屏训练路由绕过引导（根因：src/app/routes.tsx 路由结构 + src/layouts/BlankLayout.tsx 未包 OnboardingGate + 门禁本体属 progress 模块） | P2-A 排查 | platform-dev | 挂起，待认领 |
 
 ---
 
