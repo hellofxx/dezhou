@@ -127,15 +127,18 @@ export function isEarnBackActive(streakBrokenAt: number | null, now: number = Da
  *
  * 规则：
  * 1. 如果今天已训练（lastTrainingDate === today），不重复计算，返回原状态
- * 2. 如果处于 Earn Back 窗口期（streakBrokenAt 在 24h 内）→ 恢复 streak：currentStreak + 1，清除 streakBrokenAt
- * 3. 如果 Earn Back 窗口已过期 → 重置 streak = 1，清除 streakBrokenAt，重置 streakStartDate
+ * 2. 历史断裂状态（streakBrokenAt 非空，旧版本产生）：24h 内 → Earn Back 恢复 +1；过期 → 重置为 1
+ * 3. 首次训练（lastTrainingDate === null）→ 直接启动 Day 1：currentStreak = 1
  * 4. 如果昨天训练过 → currentStreak + 1
- * 5. 如果前天训练过但昨天没训练 → 有冻结卡且今日未用过 → 自动使用冻结卡，streak + 1
- * 6. 其他情况（更久之前 / 首次训练）→ 进入断裂状态：保留 currentStreak 旧值，记录 streakBrokenAt
- *    （不立即重置，给用户 24h Earn Back 窗口；若窗口过期再训练则重置为 1）
+ * 5. 前天训练过但昨天没训练（gap=2）：
+ *    - 有冻结卡且今日未用过 → 自动使用冻结卡，streak + 1
+ *    - 无冻结卡 → Earn Back 恢复：streak 断裂于今日 0 点，仍在 24h 窗口内，恢复为原天数 + 1
+ * 6. 断签 ≥ 2 天（gap ≥ 3）→ 断裂时刻（漏训首日 24 点）距今已超 24h → 重置为 1
  *
- * 设计说明：spec 中"重置为 1，记录 streakBrokenAt"在语义上存在矛盾（已重置则无需 Earn Back）。
- * 本实现采用"保留旧 currentStreak + 设置 streakBrokenAt"，使 Earn Back 恢复有意义。
+ * 设计说明：纯前端无后台任务，断裂只能在下一次训练时被发现。Earn Back 窗口以
+ * “断裂发生时刻（漏训首日结束）”起算而非“发现时刻”：漏训 1 天后的次日全天均在
+ * 24h 窗口内可恢复；漏训 ≥ 2 天则窗口必已过期，直接重置。回归后的首次训练即时
+ * 生效（计入 lastTrainingDate），不再存在“被吞掉的训练”。
  *
  * @param state 当前 streak 状态
  * @returns 更新后的 streak 状态（不修改 milestones / lastMilestoneCelebrated，由 checkNewMilestone 处理）
@@ -151,7 +154,7 @@ export function updateStreak(state: StreakState): StreakState {
 
   const todayTime = Date.now();
 
-  // 2. 处于 Earn Back 窗口期或窗口已过期
+  // 2. 历史断裂状态兼容（旧版在断签首训时写入 streakBrokenAt）
   if (state.streakBrokenAt !== null) {
     if (isEarnBackActive(state.streakBrokenAt, todayTime)) {
       // Earn Back 恢复：旧 streak + 1
@@ -169,7 +172,7 @@ export function updateStreak(state: StreakState): StreakState {
     return {
       ...state,
       currentStreak: 1,
-      longestStreak: state.longestStreak,
+      longestStreak: Math.max(state.longestStreak, 1),
       streakBrokenAt: null,
       streakStartDate: today,
       lastTrainingDate: today,
@@ -177,7 +180,19 @@ export function updateStreak(state: StreakState): StreakState {
     };
   }
 
-  // 3. 昨天训练过 → streak + 1
+  // 3. 首次训练 → 启动 Day 1
+  if (state.lastTrainingDate === null) {
+    return {
+      ...state,
+      currentStreak: 1,
+      longestStreak: Math.max(state.longestStreak, 1),
+      streakStartDate: today,
+      lastTrainingDate: today,
+      streakFreezeUsedToday: false,
+    };
+  }
+
+  // 4. 昨天训练过 → streak + 1
   if (state.lastTrainingDate === yesterday) {
     const newStreak = state.currentStreak + 1;
     return {
@@ -189,10 +204,12 @@ export function updateStreak(state: StreakState): StreakState {
     };
   }
 
-  // 4. 前天训练过但昨天没训练 → 冻结卡保护
-  if (state.lastTrainingDate !== null) {
-    const gap = daysBetween(state.lastTrainingDate, today);
-    if (gap === 2 && state.streakFreezes > 0 && !state.streakFreezeUsedToday) {
+  const gap = daysBetween(state.lastTrainingDate, today);
+
+  // 5. 前天训练过但昨天没训练（gap=2，漏训 1 天）
+  if (gap === 2) {
+    if (state.streakFreezes > 0 && !state.streakFreezeUsedToday) {
+      // 冻结卡保护：无感续接
       const newStreak = state.currentStreak + 1;
       return {
         ...state,
@@ -203,13 +220,27 @@ export function updateStreak(state: StreakState): StreakState {
         lastTrainingDate: today,
       };
     }
+    // 无冻结卡：断裂发生于今日 0 点，仍在 24h Earn Back 窗口内 → 恢复为原天数 + 1
+    const newStreak = state.currentStreak + 1;
+    return {
+      ...state,
+      currentStreak: newStreak,
+      longestStreak: Math.max(state.longestStreak, newStreak),
+      streakBrokenAt: null,
+      lastTrainingDate: today,
+      streakFreezeUsedToday: false,
+    };
   }
 
-  // 5. 进入断裂状态：保留旧 currentStreak，设置 streakBrokenAt，不更新 lastTrainingDate
-  //    （下次训练时若窗口未过期则 Earn Back 恢复，否则重置为 1）
+  // 6. 断签 ≥ 2 天（gap ≥ 3）：Earn Back 窗口必已过期 → 重置为 1
   return {
     ...state,
-    streakBrokenAt: todayTime,
+    currentStreak: 1,
+    longestStreak: Math.max(state.longestStreak, 1),
+    streakBrokenAt: null,
+    streakStartDate: today,
+    lastTrainingDate: today,
+    streakFreezeUsedToday: false,
   };
 }
 
@@ -232,4 +263,55 @@ export function checkNewMilestone(
     }
   }
   return newMilestone;
+}
+
+/**
+ * 手动使用冻结卡：为"今天"补一张出勤卡（主动请假）。
+ *
+ * 与自动扣减（updateStreak 的 gap=2 分支，事后补救昨天）不同，手动使用的语义是
+ * "今天不想/没空训练，提前花 1 张卡保住连续性"：将 lastTrainingDate 置为今天
+ * （currentStreak 不 +1，避免用卡与训练等价），明日训练即按"昨日已训"续接 +1。
+ *
+ * 失败情形（返回 null）：今日已训练（无需保护）/ 无卡 / 今日已用过 /
+ * 无可保护的 streak（从未训练或已断签 ≥ 2 天）。
+ */
+export function applyManualFreeze(state: StreakState): StreakState | null {
+  const today = getTodayString();
+  const yesterday = getYesterdayString();
+  if (state.lastTrainingDate === today) return null;          // 今日已训练，无需保护
+  if (state.streakFreezes <= 0 || state.streakFreezeUsedToday) return null;
+  if (state.lastTrainingDate === null || state.currentStreak <= 0) return null; // 无 streak 可保护
+  const gap = daysBetween(state.lastTrainingDate, today);
+  // 仅当连续性仍可救（昨日已训或恰漏训 1 天）时可用；断签 ≥ 2 天已无可保护
+  if (state.lastTrainingDate !== yesterday && gap !== 2) return null;
+  return {
+    ...state,
+    streakFreezes: state.streakFreezes - 1,
+    streakFreezeUsedToday: true,
+    lastTrainingDate: today,
+    streakBrokenAt: null,
+  };
+}
+
+/**
+ * 断裂发现检测（应用打开 / 首页挂载时调用）：
+ * 昨日漏训（gap=2）且无冻结卡可自动保护时，返回断裂时刻（今日 0 点 =
+ * 漏训日结束时刻）供写入 streakBrokenAt，驱动 UI 展示"⚡ Earn Back 窗口期"提示。
+ *
+ * 窗口语义与 updateStreak 严格一致：今天全天（距今日 0 点 < 24h）训练可恢复；
+ * 明天（gap=3）则窗口必已过期、重置为 1。有冻结卡时不标记（自动扣减会无感兑底）。
+ *
+ * @returns 断裂时刻时间戳；无需标记时返回 null
+ */
+export function computeStreakBrokenAt(state: StreakState): number | null {
+  const today = getTodayString();
+  if (state.streakBrokenAt !== null) return null;              // 已标记
+  if (state.currentStreak <= 0 || state.lastTrainingDate === null) return null;
+  if (state.lastTrainingDate === today) return null;           // 今日已训
+  if (state.streakFreezes > 0 && !state.streakFreezeUsedToday) return null; // 有卡，自动保护兑底
+  const gap = daysBetween(state.lastTrainingDate, today);
+  if (gap !== 2) return null;                                  // 仅漏训 1 天的挡救窗口
+  const midnight = new Date();
+  midnight.setHours(0, 0, 0, 0);
+  return midnight.getTime();
 }
