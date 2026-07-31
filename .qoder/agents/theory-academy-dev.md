@@ -95,7 +95,7 @@ additionalPrompt: ""
 1. 新增章节时：在对应 theoryLevelN.ts 添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验
 2. 新增 Level 时：新建 theoryLevelN.ts → 在 levels/index.ts 注册（含 practiceRecommendations）→ 更新 unlockRequirement 链
 3. 调整实践推荐时：编辑 levels/index.ts 的 practiceRecommendations → 同步 strategy-academy curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS（须经 platform-dev）
-4. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate（仅注入新字段默认值）+ 更新 store.persist-shape.test.ts 快照
+4. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate（仅注入新字段默认值）+ 更新 store.persist-shape.test.ts 快照与 store.migrate.test.ts 迁移用例
 5. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `theory.*` 命名空间
 
 ## Constraints
@@ -117,7 +117,7 @@ additionalPrompt: ""
 - [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `theory.*` / `nav.theory` / `achievements.items.theory*`）
 - [ ] theoryIntegrity.test.ts 全部通过（ID 唯一与前缀 / 小测合法性 / eloDimension / 实践推荐结构）
 - [ ] quizOrder.test.ts 全部通过（correctIndex 重映射 / 确定性 / 分布守卫 <50%）
-- [ ] store.persist-shape.test.ts 快照一致（变更持久化形状须 bump version + migrate）
+- [ ] store.persist-shape.test.ts 快照一致（变更持久化形状须 bump version + migrate）；升版时 store.migrate.test.ts 覆盖 vN-1→vN 链路
 - [ ] completeChapter 幂等（同一 chapterId 重复完成不重复计数）
 - [ ] 章末小测选项已经 orderTheoryQuizQuestion 出口处理
 - [ ] Level 与章节门禁已接入 isDebugUnlockActive() 短路

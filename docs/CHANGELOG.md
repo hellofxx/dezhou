@@ -5,6 +5,37 @@
 
 ---
 
+## chore(platform) — 2026-07-31（优化建议落地：语言切换接通 + theory 迁移测试 + 组件测试 i18n + PRD/TDD 职责分离全量清理）
+
+> 落地上轮文档审计提出的 5 项优化建议：代码修复（语言切换 / 测试补全 / i18n 初始化）+ 文档职责分离（PRD → v2.3、TDD → v2.4）。
+
+### 代码变更
+
+- **feat(progress)**：设置页语言选择器接通——移除 `disabled`，切换时同步 `updateSettings({ language })` + `i18n.changeLanguage()`；硬编码中文改为 `settings.languageLabel` / `settings.languageHint` （zh/en 双语新增）
+- **fix(platform)**：`AppLayout` 顶栏语言切换同步写入 `settings.language`（消除顶栏与设置页双事实源）；`providers.tsx` 启动时从持久化语言偏好恢复 `i18n` 语言（跨刷新生效，兑现 PRD「可切换双语」承诺）
+- **test(theory-academy)**：新增 `store.migrate.test.ts`（v0→v1 防御性合并默认值，已有字段不被触碰），补齐四个 persist store 的迁移测试
+- **test(platform)**：`setupTests.components.ts` 初始化 i18n 实例（`import '@/i18n/config'`），消除组件测试 `NO_I18NEXT_INSTANCE` 警告
+- 测试文件 30 → 31，全部 exit 0
+
+### 文档变更
+
+- **PRD v2.3**：职责分离全量清理——逐节移除文件路径 / store action 名 / 组件名 / 类型定义 / i18n key 清单（涉 5.7-5.24，含 5.8 核心 Actions 表、5.9 模块实现表、5.11/5.13 组件表、5.13 ELO 公式 / Actions、5.14 API 与组件表等）；行为规格与数值规则（阈值/题量/概率/路由/课程标识）保留并产品化改写，验收标准同步去 API 化
+- **TDD v2.4**：承接 PRD 迁出的实现细节——§5.9 补 Streak 核心 actions 表 / ELO store actions / SRS 记录器名 / “末题简单+补救”三模块实现表，§5.8 补 4 个 Drill 题库文件名与 i18n-key 驱动说明；结构修正：补 §1 文档信息章节（原从 §2 开始）、修项目结构中 stale 引用“理论学院 设计见 5.10”→“5.8b”；测试清单 30→31
+- **数据迁移**：无 persist 形状变更（`settings.language` 字段已存在），不需升版
+
+---
+
+## docs(sync) — 2026-07-31（PRD/TDD 文档一致性审计：与代码实现全量对齐）
+
+> 对 PRD.md（→v2.2）与 TDD.md（→v2.3）做了一次代码级一致性审计（逐项核对 store/路由/共享层/题库/测试实现），修正文档中的过时与错误描述；代码零变更。
+
+- **PRD v2.2**：功能模块数 25→27（补 5.26/5.27 目录行）、feature 目录数 8→9；策略学院 L5-L8 主题修正为职业素养/锦标赛策略/现金桌专项/高级剥削策略（与 `data/levels/index.ts` 对齐）；成就系统 22→26 个（含 4 项理论成就，类别分布 10/5/6/5，“每成就 4 等级”更正为四档归属）；冻结卡碎片每日上限 3→2 片；难度指示器阈值 55%/80% 更正为 <50% 降级 / >85% 且 >20 次升级；牌局解析补 PartyPoker；语言切换入口更正为顶部导航（设置页为只读）；`--brass-bright` 色值 #e0bd75→#e8c97e；学习目标位置补 BB；移除成就数据文件路径等技术细节（职责分离）
+- **TDD v2.3**：架构图 Feature Modules 8→9（补 Theory Academy）；`shouldDownshiftDifficulty()` 更正为无参调用，数据源更正为 `emotion.consecutiveWrongCount` 全局计数（删除不存在的 `consecutiveWrongByModule` 描述，共 3 处）；persist 清单更正为 5 个 store（补 theory-academy/debugMode 行与 localStorage key 表，删除未接入的 `i18nextLng`）；迁移记录表补 progress v1→v6 链路与 puzzle v1→v2；TrainingRecord.module 联合补 `'hand-history'`；HandHistory.site 联合与解析器目录补 `partypoker`；导师风格更正为 strict-math/old-school/encouraging（模板事实源 `mentorStyles.ts` 而非 i18n）；路由表补 `/theory` 两条；manualChunks 代码块更正为实际函数式实现；谜题题库文件名/Theme 题量 15-30/store 字段补齐；成就 26 个与碎片每日 2 片同步；测试章节重写为双项目划分 + 30 文件实录（删除不存在的 RangeGrid 等组件测试描述，E2E 标注未落地）；pnpm 版本改为引用 `packageManager` 事实源
+- **AGENTS.md**：调试解锁旁路门禁 5→7 处（补 theory-academy store 门禁与 TheoryChapterView URL 门禁）
+- **数据迁移**：无 persist 字段变更，不需升版（纯文档变更）
+
+---
+
 ## fix(design-system) — 2026-07-30（设计系统合规修复：霓虹色板清零 + 五级反馈牌室化 + 守卫测试，DESIGN_LANGUAGE v1.3.2）
 
 > Design QA 全面审查发现实现层 156 处 Tailwind 霓虹调色板类（21 文件）违反 DESIGN_LANGUAGE §1.3 反 SaaS 饱和色禁令，五级反馈事实源使用 `bg-emerald-600`/`text-white` 等违规类且被 3 个训练模块消费。本次全量修复并建立防回流门禁。
@@ -13,12 +44,14 @@
 - **feat(shared)**：新增色彩 token `--poker-gold #d4a84b`（落地 globals.css）、`--poker-bronze #cd7f32`、`--poker-indigo-bright #8ea4c4`、`--poker-terra-bright #c98a63`（暗底文字亮阶）；`colors_and_type.css` 镜像同步
 - **fix(strategy-academy / theory-academy / progress)**：霓虹色板全量替换为 `--poker-*` token 类（quiz 正误反馈、SRS 分类标签、每日计划、概念图谱、成就墙四档徽章等）；映射：green/emerald→success、red→danger、yellow/amber→brass、orange→terra、blue→info、purple→indigo
 - **fix(range-trainer)**：测验行动按钮色阶对齐 §5.5（fold=陶土 12% 透底 / call=深胡桃半透 / raise=黄铜渐变，替换原 clay/sage 实底）；范围网格文案"绿色"→"金色"（对齐黄铜三档实现）；`--clay-bright` 失效引用修复
+  - **后续修订（三按钮区分度）**：用户反馈 fold（陶土透底）与 call（半透明沉底）在墨绿背景上都成暗棕调、糊在一起。改为三色相并立且都浮于呢面：fold 保持陶土红透底但加**红字+红边 0.55**、call 由半透明改为**胡桃木不透明实色 `--walnut-raised`**+象牙字、raise 黄铜渐变不变（计算样式实测三按钮 bg/color/border 各异）
 - **fix(shared)**：牌背胡桃化——`CardBack.tsx` 与 `public/cards/back.svg` 由酒红/遗留蓝改为 §5.1 胡桃底+45°黄铜条纹+2px 黄铜边+内描金，SVG 描边直引 `var(--brass)` 消除 `#c8a456` 漂移；CardSVG 近黑描边改胡桃调；hand-history `--clay-bright` 失效引用修复
 - **test(shared)**：新增 `src/designTokenGuard.test.ts` 守卫（vitest 门禁）：断言 src 零霓虹调色板类、零纯黑白类（`bg-black/NN` 压暗层豁免）、零纯黑白 hex；豁免白名单只删不加
 - **docs(design)**：DESIGN_LANGUAGE.md 升版 v1.3.2——新增 §5.21 交互状态矩阵、§2.2 hover/active 变体与暗底文字亮阶规则、§2.4 token 登记、§12.1 React 落地形态（样式双轨制）、附录 F 变更摘要
+- **docs(sync)**：三层文档与子代理同步——TDD §14.7「UI 颜色实现规范与守卫」+ §14 色值表补 4 token + 按钮色阶约定；AGENTS.md 质量门禁补守卫测试项 + UI/UX 章节反霓虹硬约束；ui-ux-dev（Color System 改为引用权威源、消除过时色值副本）/ puzzle-trainer-dev / range-trainer-dev 三子代理补规范
 - **数据迁移**：无 persist 字段变更，不需升版
 
-验证：typecheck / lint / test（30 文件 201 用例，含新守卫 4 断言）全部 exit 0。
+验证：typecheck / lint / test（30 文件 202 用例，含新守卫 4 断言）全部 exit 0。
 
 ---
 

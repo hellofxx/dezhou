@@ -75,16 +75,21 @@ skills:
 - `src/i18n/locales/zh.json` / `en.json` — 文案（所有界面文字必须双语）
 
 ## Color System (Enforced)
-四大主色家族（CSS 变量前缀 `--`）：
-- **Felt 绿呢**：`--felt-deep #060d09` / `--felt #0f2418` / `--felt-raised #163825` / `--felt-light #1f4a30` / `--felt-center #1f5233`
-- **Walnut 胡桃**：`--walnut #17110a` / `--walnut-raised #241a0f` / `--walnut-border #3a2c1c` / `--walnut-light #483622`
-- **Ivory 象牙**：`--ivory #f5eedc` / `--ivory-dim #bfb38e` / `--ivory-muted #6e6553`
-- **Brass 黄铜**：`--brass #c9a25e` / `--brass-bright #e8c97e` / `--brass-deep #9a7532` / `--brass-dark #7a5a24`
+> 色值以 `src/styles/globals.css` 的 `:root` 为实现唯一权威，设计定义以 `poker-ui-demo/DESIGN_LANGUAGE.md` §2 当前版本为准；本文件不维护色值副本（避免三份分歧，参见 DESIGN_LANGUAGE 附录 E 反向对齐记录）。
 
-语义色（低饱和牌室化，禁止高饱和霓虹）：
-- Success 苔藓绿 `#7fb883` / Danger 陶土红 `#c25a4c` / Warning=黄铜 / Info 鼠尾草灰绿 `#8ba59b` / Freeze 霜钢蓝 `#a8c4cf`
+四大主色家族（CSS 变量前缀 `--`，具体 HEX 见 globals.css）：
+- **Felt 绿呢**：`--felt-deep` / `--felt` / `--felt-raised` / `--felt-light` / `--poker-felt-center`
+- **Walnut 胡桃**：`--walnut` / `--walnut-raised` / `--walnut-border` / `--walnut-light`
+- **Ivory 象牙**：`--ivory` / `--ivory-dim` / `--ivory-muted`
+- **Brass 黄铜**：`--brass` / `--brass-bright` / `--brass-deep` / `--brass-dark` / `--brass-muted`
 
-花色：♥♦ 酒红 `#c93535`；♣♠ 深棕近黑 `#1a1308`。
+语义色（低饱和牌室化，禁止高饱和霓虹）：Success 苔藓绿 / Danger 陶土红 / Warning=黄铜 / Info 鼠尾草灰绿 / Freeze 霜钢蓝，均以 `--poker-*` token 为准。
+
+装饰/徽章色（v1.3.2）：`--poker-gold`（金牌）/ `--poker-bronze`（铜牌）/ `--poker-indigo(-bright)`（石板靛）/ `--poker-terra(-bright)`（陶土赭）；成就墙四档=金/铜/`--ivory-dim`(银)/`--poker-frost`(钻)。
+
+花色：♥♦ 酒红 `--suit-heart/--suit-diamond`；♣♠ **象牙白** `--suit-club/--suit-spade`（v1.3.1 起由深棕改象牙白，暗底可见性优先，对比度 ≥7:1；亮底分享卡另行覆盖为深色）。
+
+**反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|...)-\d{2,3}`）、纯白/纯黑文字类、纯黑白 hex；语义反馈映射规则见 `docs/TDD.md` §14.7。由 `src/designTokenGuard.test.ts` 守卫（`pnpm test` 强制，全量扫描 src）。五级反馈样式以 globals.css `.grade-best`~`.grade-blunder` 为唯一事实源，`GRADE_DISPLAY_CONFIG.color` 引用之。
 
 ## Typography
 - **Display**：Fraunces（opsz=144, SOFT=30, WONK=1）— 标题/品牌/大数字/铭牌
@@ -176,9 +181,10 @@ skills:
 - [ ] 所有 CTA 按钮是 `.btn-brass`，无"幽灵主按钮"
 - [ ] 同行双列面板等高（桌面/平板底部对齐；手机端取消等高按内容自适应）
 - [ ] 存在 `.table-rail` 桌沿铜钉
-- [ ] 中文无 italic；无纯黑/纯白；无高饱和霓虹
+- [ ] 中文无 italic；无纯黑/纯白；无高饱和霓虹（`pnpm test` 的 `designTokenGuard.test.ts` 守卫强制：零霓虹调色板类/纯黑白类/纯黑白 hex）
 - [ ] 交互元素有 `aria-label` 和可见焦点态
 - [ ] hover/active/active 状态有明确视觉反馈
+- [ ] 平权答题选项按钮（如 QuizCard fold/call/raise）三色相并立、都浮于呢面之上，不套「一亮 CTA + 两沉底」CTA 色阶
 - [ ] 移动端 <768px 侧边栏隐藏、mobile-nav 显示、无横向滚动、训练场 2 列、streak-rail 在 arena 下方首屏可见
 - [ ] 桌面端无冗余导航（侧边栏唯一）
 - [ ] 手机端媒体查询内覆盖 Tailwind 断点类时加了 `!important`

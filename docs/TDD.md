@@ -1,11 +1,13 @@
 # 德州扑克训练平台 — 技术设计文档 (TDD)
 
+## 1. 文档信息
+
 | 字段 | 内容 |
 |------|------|
-| 文档版本 | v2.2 |
+| 文档版本 | v2.4 |
 | 作者 | 开发团队 |
-| 最后更新 | 2026-07-28 |
-| 状态 | v2.2 文档同步更新（审计修复：IndexedDB 单例、persist v2、Worker 健康检查、trainingEvents 合规、测试覆盖扩展） |
+| 最后更新 | 2026-07-31 |
+| 状态 | v2.4 承接 PRD 职责分离回归（从 PRD 迁入 Streak/ELO/SRS/反馈补救/Drill 题库等技术实现细节；补 §1 文档信息章节） |
 
 > **文档职责**：本文件描述技术实现细节（How）。产品规格见 `PRD.md`，版本演进与执行历史见 `CHANGELOG.md`。
 
@@ -40,7 +42,7 @@
 │        │                                      │              │
 │        ▼                                      ▼              │
 │  ┌─────────────────────────────────────────────────────┐     │
-│  │              Feature Modules (8 个)                  │     │
+│  │              Feature Modules (9 个)                  │     │
 │  │  ┌───────────┐ ┌──────────┐ ┌───────────────┐      │     │
 │  │  │ Range     │ │ Pot Odds │ │ GTO Simulator │      │     │
 │  │  │ Trainer   │ │ Calc     │ │               │      │     │
@@ -51,11 +53,12 @@
 │  │  └───────────┘ └──────────────────────┘            │     │
 │  │  ┌───────────────┐ ┌────────────────┐              │     │
 │  │  │ Strategy      │ │ Puzzle Trainer │              │     │
-│  │  │ Academy (新增) │ │ (新增)         │              │     │
+│  │  │ Academy       │ │                │              │     │
 │  │  └───────────────┘ └────────────────┘              │     │
-│  │  ┌──────────────────────┐                          │     │
-│  │  │ Onboarding (新增)     │                          │     │
-│  │  └──────────────────────┘                          │     │
+│  │  ┌───────────────┐ ┌────────────────┐              │     │
+│  │  │ Theory        │ │ Onboarding     │              │     │
+│  │  │ Academy       │ │                │              │     │
+│  │  └───────────────┘ └────────────────┘              │     │
 │  └─────────────────────────────────────────────────────┘     │
 │        │                                                       │
 │        ▼                                                       │
@@ -93,7 +96,7 @@
 | Framer Motion | ^12.42.2 | 声明式动画库，页面切换动效 |
 | i18next | ^26.3.6 | 国际化方案，支持中英文切换 |
 | Lucide React | ^1.25.0 | 轻量图标库，tree-shakable |
-| pnpm | ^11.12.0 | 快速、磁盘友好的包管理器 |
+| pnpm | 以 `package.json` 的 `packageManager` 字段为准 | 快速、磁盘友好的包管理器 |
 
 ---
 
@@ -136,11 +139,12 @@ src/
 │   │   └── types.ts
 │   │
 │   ├── hand-history/             # 手牌历史模块
-│   │   ├── components/           # UI 组件（10个）
+│   │   ├── components/           # UI 组件（12个）
 │   │   ├── hooks/                # 回放 hook
 │   │   ├── parsers/              # 多格式解析器
-│   │   │   ├── common.ts         # 公共解析工具
+│   │   │   ├── common.ts         # 公共解析工具（detectFormat / parseCardString）
 │   │   │   ├── gg-poker.ts       # GGPoker 格式
+│   │   │   ├── partypoker.ts     # PartyPoker 格式
 │   │   │   └── pokerstars.ts     # PokerStars 格式
 │   │   ├── utils/                # 手牌标记工具
 │   │   ├── index.ts
@@ -148,13 +152,15 @@ src/
 │   │   └── types.ts
 │   │
 │   └── progress/                 # 进度追踪模块
-│       ├── components/           # UI 组件（含 AchievementWall / ProgressReplay 等）
+│       ├── components/           # UI 组件（29 个，含 AchievementWall / ProgressReplay / OnboardingGate / SessionLimitGuard 等）
 │       ├── data/
-│       │   └── achievements.ts   # 成就定义数据（22 个成就）
+│       │   └── achievements.ts   # 成就定义数据（26 个成就）
 │       ├── hooks/                # 统计 hooks
-│       ├── utils/                # 聚合/连击计算
+│       ├── utils/                # 聚合/连击/SRS/每日计划（共 8 个，含测试）
 │       │   ├── statsAggregator.ts
-│       │   └── streakCalc.ts
+│       │   ├── streakCalc.ts
+│       │   ├── spacedRepetition.ts   # SM-2 间隔重复
+│       │   └── dailyTrainingMix.ts   # 每日复习/新题混合
 │       ├── index.ts
 │       ├── store.ts              # persist v8 持久化 store
 │       └── types.ts
@@ -167,9 +173,9 @@ src/
 │   │
 │   ├── puzzle-trainer/            # 扑克谜题模块
 │   │   ├── components/            # 6 个组件
-│   │   ├── data/                  # 题库（3 个）
+│   │   ├── data/                  # 题库（dailyPuzzles / puzzleBank / rushQuestions）
 │   │   ├── hooks/                 # usePuzzleEngine
-│   │   ├── utils/                 # dateSeed
+│   │   ├── utils/                 # dateSeed / optionOrder
 │   │   ├── index.ts
 │   │   ├── store.ts               # persist v2
 │   │   └── types.ts
@@ -184,7 +190,7 @@ src/
 │   │   ├── store.ts               # persist v2
 │   │   └── types.ts
 │   │
-│   ├── theory-academy/            # 理论学院模块（2026-07 新增，设计见 5.10）
+│   ├── theory-academy/            # 理论学院模块（2026-07 新增，设计见 5.8b）
 │   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLevelCard / PracticeBridgeCard 等
 │   │   ├── data/                  # levels/（index.ts + theoryLevel1.ts ~ theoryLevel9.ts）+ theoryIntegrity.test.ts
 │   │   ├── hooks/                 # useTheory
@@ -194,26 +200,33 @@ src/
 │   │   └── types.ts
 │
 ├── shared/                       # 共享层
-│   ├── components/               # 通用组件
+│   ├── components/               # 通用组件（18 个 + ui 子目录）
 │   │   ├── ui/                   # shadcn/ui 基础组件（9个：button/card/dialog/input/progress/select/tabs/toast/tooltip）
 │   │   ├── Card.tsx              # 扑克牌组件
 │   │   ├── CardBack.tsx          # 牌背
 │   │   ├── CardSVG.tsx           # SVG 牌面
+│   │   ├── CasinoPlaque.tsx      # 牌室铭牌装饰
 │   │   ├── Chip.tsx              # 筹码
 │   │   ├── EmptyState.tsx        # 空状态组件
 │   │   ├── ErrorBoundary.tsx     # 错误边界
+│   │   ├── FeedbackGrade.tsx     # 五级反馈展示
+│   │   ├── FreezeChip.tsx        # 冻结卡筹码
 │   │   ├── GameVariantSelector.tsx  # 游戏变体选择器
 │   │   ├── HandDisplay.tsx       # 手牌展示
+│   │   ├── LiveDot.tsx           # 实时状态指示点
 │   │   ├── LoadingState.tsx      # 加载骨架屏
+│   │   ├── MottoEngraved.tsx     # 雕刻铭文装饰
 │   │   ├── PositionBadge.tsx     # 位置徽章
 │   │   ├── ResultSummary.tsx     # 训练结果摘要
-│   │   └── SuitIcon.tsx          # 花色图标
+│   │   ├── SuitIcon.tsx          # 花色图标
+│   │   └── TableRail.tsx         # 牌桌栏杯装饰
 │   ├── constants/
 │   │   ├── app.ts                # 应用常量
 │   │   ├── mentorStyles.ts       # 导师文案模板（MENTOR_FEEDBACK_TEMPLATES / renderMentorFeedback）
 │   │   └── poker.ts              # 扑克常量（花色/牌面/总数）
 │   ├── hooks/                    # 共享 hooks
 │   ├── stores/
+│   │   ├── debugMode.ts          # 调试解锁 store（persist name=poker-debug-mode）
 │   │   └── trainingEvents.ts     # 训练事件总线
 │   ├── types/
 │   │   ├── action.ts             # 动作类型
@@ -231,7 +244,10 @@ src/
 │       ├── formatters.ts         # 格式化工具
 │       ├── handRanking.ts        # 牌型判定工具
 │       ├── index.ts              # barrel 导出
+│       ├── localStorageStub.ts   # Node 环境测试用 localStorage 桩
+│       ├── persistShape.ts       # persist 形状测试助手
 │       ├── pokerMath.ts          # 扑克数学计算
+│       ├── seededShuffle.ts      # 种子洗牌（Mulberry32 / FNV-1a / 数值选项判定）
 │       ├── shareCard.ts          # Streak 分享卡片生成（generateStreakShareCanvas）
 │       └── soundManager.ts       # 音效管理
 │
@@ -398,7 +414,10 @@ export interface DecisionFeedback {
 //     · evLoss <= 2 → 'inaccuracy'   （旧版 <2 已修正为 ≤2）
 //     · evLoss <= 5 → 'wrong'         （旧版 <5 已修正为 ≤5）
 //     · evLoss > 5 → 'blunder'
-// - GRADE_DISPLAY_CONFIG：五级显示配置（颜色 / 图标 / i18n titleKey）
+// - GRADE_DISPLAY_CONFIG：五级显示配置（color / textColor / 图标 / i18n titleKey）
+//     · v1.3.2 牌室化：color 字段引用 globals.css 的 `.grade-best`~`.grade-blunder` 类（样式唯一事实源，
+//       苔藓绿/黄铜/陶土红低透底 + 左侧色条），textColor 为 --poker-* token 文字色；
+//       禁止 Tailwind 霓虹调色板类（§14.4 反 SaaS 饱和色禁令）与纯白文字
 // - migrateGrade(oldGrade)：将旧三级值（optimal/acceptable/error）映射为新五级值
 // - buildDecisionFeedback({ isCorrect, evLoss?, correctAction, explanation?, relatedLessonId? })：构造助手
 //     · v2.1 修正：内部统一调用 calculateGrade(evLoss) 分级，避免 isCorrect 掩盖真实 EV 损失
@@ -440,7 +459,7 @@ export interface QuestionResult {
 // 训练记录（持久化）
 export interface TrainingRecord {
   id: string;
-  module: 'range-trainer' | 'pot-odds' | 'gto-simulator' | 'strategy-academy' | 'puzzle-trainer' | 'theory-academy';
+  module: 'range-trainer' | 'pot-odds' | 'gto-simulator' | 'strategy-academy' | 'puzzle-trainer' | 'hand-history' | 'theory-academy';
   mode: string;
   result: TrainingResult;
   createdAt: number;
@@ -509,7 +528,7 @@ export interface Player {
 // 完整牌局历史
 export interface HandHistory {
   id: string;
-  site: 'pokerstars' | 'ggpoker' | 'manual';
+  site: 'pokerstars' | 'ggpoker' | 'partypoker' | 'manual';
   handNumber: string;
   timestamp: number;
   gameType: string;
@@ -764,9 +783,9 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | HandHistoryList, HandReplayer, AnnotationPanel 等 10 个 | 列表、回放、标注 UI |
+| components | HandHistoryList, HandReplayer, AnnotationPanel 等 12 个 | 列表、回放、标注 UI |
 | hooks | useHandReplay | 回放控制 hook |
-| parsers | common.ts, pokerstars.ts, gg-poker.ts | 多格式解析器 |
+| parsers | common.ts, pokerstars.ts, gg-poker.ts, partypoker.ts | 多格式解析器 |
 | store | store.ts | IndexedDB 持久化（getDB 单例） + 回放状态 + dbError 错误状态 |
 
 **关键算法**：
@@ -777,6 +796,7 @@ interface DailyRecommendation {
                     │
                     ├─ PokerStars parser
                     ├─ GGPoker parser
+                    ├─ PartyPoker parser
                     └─ 'unknown' → 提示不支持
    ```
    - `common.ts` 提供 `parseCardString("Ah")` → `{suit: Hearts, rank: Ace}`
@@ -814,7 +834,7 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | Dashboard, ProgressPage, AccuracyChart, AchievementBadges 等 13 个 | 仪表盘、图表、成就 |
+| components | Dashboard, ProgressPage, AccuracyChart, AchievementWall, SessionLimitGuard, OnboardingGate 等 29 个 | 仪表盘、图表、成就、门禁 |
 | hooks | useProgress | 数据查询 hook |
 | utils | statsAggregator.ts, streakCalc.ts | 统计聚合、连击计算 |
 | store | store.ts | persist 持久化 + 事件订阅 |
@@ -860,26 +880,26 @@ interface DailyRecommendation {
    - 难度递进：beginner → intermediate → advanced
 
 5. **自适应难度 API**（v2.1 新增）：
-   - `shouldDownshiftDifficulty(moduleType: ModuleType): boolean` 定义于 progress store
-   - 判定逻辑：连续答错 ≥3 次返回 true，否则 false
+   - `shouldDownshiftDifficulty(): boolean` 定义于 progress store（无参调用）
+   - 判定逻辑：`emotion.consecutiveWrongCount >= 3` 时返回 true，否则 false
    - 调用方（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）根据返回值显示降级提示 banner，或自动降级难度（QuickDrill 不低于 beginner）
-   - 数据源：progress store 持有的 `consecutiveWrongByModule: Record<ModuleType, number>`
+   - 数据源：`emotion.consecutiveWrongCount`（全局计数，由 `recordAnswer(isCorrect)` 维护：答错 +1，答对归零）
    - 该 API 是自适应难度的**唯一入口**，禁止各模块自行判定
 
 6. **`recordTrainingDay()` / `recordQuickDrillCompletion()` / `markDailyCompleted()` 幂等性**：
    - 同一日重复调用不重复计数
    - 实现方式：内部检查 `lastTrainingDate === today` 或 `dailyCompleted[dateKey] === true`
 
-7. **成就系统**（v2.1 新增）：
-   - 共 22 个成就，分 4 个类别：学习（Learning）/ 连续（Streak）/ 技能（Skill）/ 里程碑（Milestone）
-   - 每个成就 4 个等级：bronze / silver / gold / diamond
+7. **成就系统**（v2.1 新增，2026-07 理论学院扩充）：
+   - 共 26 个成就，分 4 个类别：学习（Learning，10 个，含 4 项理论学院成就）/ 连续（Streak，5 个）/ 技能（Skill，6 个）/ 里程碑（Milestone，5 个）
+   - 每个成就归属四档等级体系（bronze / silver / gold / diamond）中的一档
    - 成就定义数据存储在 `progress/data/achievements.ts`
    - `AchievementWall` 组件展示成就墙，已解锁成就高亮，未解锁显示解锁条件
    - Store 字段：`unlockedAchievements: string[]`、`achievementUnlockDates: Record<string, number>`
 
 8. **冻结卡碎片系统**（v2.1 新增）：
    - `freezeCardFragments: number` 记录当前碎片数量，5 片碎片可合成 1 张冻结卡
-   - 碎片掉落概率：训练模式 30%、速训模式 20%
+   - 碎片掉落概率：训练模式 30%、速训模式 20%；每日最多获得 2 片（`tryEarnFragment` 内部限制，跨日自动重置计数）
    - `lastFragmentDate: string` 记录上次掉落日期，`fragmentsEarnedToday: number` 记录今日已获碎片数
    - 合成时调用 `synthesizeFreezeCard()` 扣减 5 碎片、增加 1 张冻结卡
 
@@ -919,10 +939,10 @@ interface DailyRecommendation {
 | 层 | 文件 | 职责 |
 |----|------|------|
 | components | 6 个组件 | PuzzleHome / PuzzleCard / PuzzleResult 等 |
-| data | 3 个题库 | rushPuzzles / dailyPuzzles / themePuzzles |
+| data | 3 个题库 | rushQuestions / dailyPuzzles / puzzleBank（主题题库） |
 | hooks | usePuzzleEngine | 统一管理三种模式的题目流 / 计时 / 命 / 连对奖励 |
 | utils | dateSeed | 日期种子算法（Mulberry32 + Fisher–Yates） |
-| store | store.ts | persist v2 持久化（rushBest / dailyBest / themeBest / dailyCompleted） |
+| store | store.ts | persist v2 持久化（rushBest / dailyBest / themeBest / dailyCompleted / quickDrillBest / history） |
 | types.ts | 类型定义 | PuzzleTheme / PuzzleResult / PuzzleBestRecord 等 |
 
 **三种模式**：
@@ -931,7 +951,7 @@ interface DailyRecommendation {
 |------|------|----------|---------|
 | Puzzle Rush | `/puzzle/rush?duration=3\|5` | 3 或 5 分钟 | 3 条命耗尽或时间到 |
 | Daily Puzzle | `/puzzle/daily` | 8 题（日期种子） | 全部答完 |
-| Theme Drill | `/puzzle/theme/:themeId` | 单主题 15 题 | 全部答完 |
+| Theme Drill | `/puzzle/theme/:themeId` | 单主题 15-30 题 | 全部答完 |
 
 **关键算法**：
 
@@ -997,14 +1017,14 @@ interface DailyRecommendation {
    - **L4B（GTO与博弈论）**：覆盖 Nash 均衡、MDF、最小防御频率等博弈论概念
 
 2. **基础 Drill 集合**（`components/drills/`）：
-   | Drill | 题量 | 覆盖维度 |
-   |------|------|--------|
-   | HandRankingDrill | 10 题 | 牌型识别 |
-   | PositionDrill | 8 题 | 位置意识 |
-   | OutsDrill | 8 题 | 听牌计数 |
-   | PotOddsDrill | 6 题 | 赔率计算 |
+   | Drill | 题量 | 题库文件 | 覆盖维度 |
+   |------|------|------|--------|
+   | HandRankingDrill | 10 题 | `handRankingQuestions.ts` | 牌型识别（末 2 题简单起手牌比较） |
+   | PositionDrill | 8 题 | `positionQuestions.ts` | 位置意识（6-max 牌桌点击） |
+   | OutsDrill | 8 题 | `outsQuestions.ts` | 听牌计数（同花/OESD/Gutshot/二四法则） |
+   | PotOddsDrill | 6 题 | `potOddsQuestions.ts` | 赔率计算（含图形化可视化） |
 
-   统一 `DrillProps` 接口：`onComplete(result)` / `onExit()`，复用现有 CardSVG / HandDisplay 组件。
+   统一 `DrillProps` 接口：`onComplete(result)` / `onExit()`，复用现有 CardSVG / HandDisplay 组件。题库均以 `promptKey` / `optionsKeys` / `explanationKey` 引用 i18n key（多语言驱动）。
 
    **ChoiceDrillRenderer 通用组件**（`components/drills/ChoiceDrillRenderer.tsx`）：通用选择题 Drill 渲染器，接受题库数据与配置参数，支持自定义题目数量、随机抽取、五级反馈接入，L2-L8 每级新增的 2 个 Drill 均通过此组件渲染。
 
@@ -1015,8 +1035,8 @@ interface DailyRecommendation {
    **学习路径横向推荐**：每个 LearningTrack 新增 `relatedTrackIds?: string[]` 字段，完成当前课程路径后推荐关联路径，形成学习网络。
 
    **前置条件**：`LevelInfo` 类型新增 `id?: string` 和 `prerequisiteLevelIds?: string[]` 字段，支持跨等级解锁规则：
-   - L7（高级策略）需完成 L3 + L5
-   - L8（综合实战）需完成 L4B
+   - L7（现金桌专项）需完成 L3 + L5
+   - L8（高级剥削策略）需完成 L4B
    - 本土低级别盈利路径需完成 L1-L3
 
    **等级解锁判定（区分 4A/4B）**：store 提供两个方法——`isLevelUnlocked(level: number)`（按 level 数字，同 level 数字任一条目满足即解锁，用于兼容旧调用）与 `isLevelEntryUnlocked(levelId: string)`（按 `LevelInfo.id` 精确判定，如 `l4a`/`l4b`）。UI 门禁（`CourseView` / `ConceptGraph` / `AcademyHome` / `LevelCard`）统一使用 `isLevelEntryUnlocked`，消除 L4A/L4B 同为 `level:4` 时 L4B 门禁被旁路的缺陷。`CourseView` 对本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定。级别认证（`LevelCertification`）题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），`attemptCertification` 的 questionCount 与实考口径统一为 `min(合并题池, 20)`。
@@ -1128,10 +1148,21 @@ interface DailyRecommendation {
 - 渲染：`QuizCard` / `GTOFeedback` / `PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接
 
 反向反馈（数据→难度）：
-- `progress.shouldDownshiftDifficulty(moduleType): boolean` 是自适应难度的**唯一入口**
-- 数据源：`consecutiveWrongByModule: Record<ModuleType, number>`
+- `progress.shouldDownshiftDifficulty(): boolean`（无参调用）是自适应难度的**唯一入口**
+- 数据源：`emotion.consecutiveWrongCount`（全局计数，由 `recordAnswer(isCorrect)` 维护）
 - 调用方：所有训练模块的会话页面（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）（v2.0 确认 puzzle-trainer 已接入）
 - 行为：连续答错 ≥3 次显示降级提示 banner；QuickDrill 自动降级难度（不低于 beginner）
+
+“最后一题简单 + 补救机制”实现（从 PRD 5.9 迁入）：
+
+| 模块 | 最后一题简单辅助函数 | 调用方 |
+|---|---|---|
+| range-trainer | `getEasyQuestion()` → QuizQuestion（AA@BTN raise） | `useQuizEngine` / `store.ts` 的 `startQuiz` + `nextQuestion` |
+| pot-odds | `getEasyOddsQuestion()` → PotOddsQuizQuestion（底池 100 / 下注 0 / 跟注 +EV） | `PotOddsQuizPage` 的 `effectiveQuestions` memo + `handleNext` |
+| gto-simulator | `getEasyGTOScenario(index)` → Scenario（BTN AA open，GTO 100% raise） | `useScenarioEngine.generateScenarios` + store `nextScenario` |
+
+- 末题答错且未用过补救时追加一道简单题，以 `rescueUsed: boolean` 状态避免无限循环；`TrainingResult.lastQuestionCorrect` 记录最终题（含补救题）是否答对
+- 五级反馈类型与阈值事实源：`shared/types/decisionFeedback.ts`（`GRADE_THRESHOLDS` / `calculateGrade` / `GRADE_DISPLAY_CONFIG` / `migrateGrade` / `buildDecisionFeedback`，详见 §4.2）
 
 **位置渐进解锁系统**（v2.1 新增）
 
@@ -1163,6 +1194,17 @@ interface DailyRecommendation {
 - **提醒动效**：`StreakTracker` 在 20:00 后未训练时火焰变红闪烁
 - **庆典与分享**：`StreakCelebration.tsx` 全屏 Dialog（CSS keyframes 彩屑 / 烟花 / 光晕）；30 天及以上显示"分享"按钮，调用 `generateStreakShareCanvas` 生成 1080×1080 PNG
 
+核心 Actions（从 PRD 5.8 迁入）：
+
+| Action | 描述 |
+|---|---|
+| `recordTrainingDay()` | 更新 streak（含 Earn Back / 冻结卡自动扣减），今日成功记录时触发 `checkMilestone`（幂等） |
+| `useStreakFreeze()` | 手动使用一张冻结卡，返回布尔值 |
+| `checkMilestone()` | 检查并标记新达成的里程碑，返回里程碑天数或 null |
+| `awardStreakFreeze(count?)` | 奖励指定数量冻结卡（默认 1） |
+| `canEarnBack()` | 判断是否处于 Earn Back 24 小时窗口期 |
+| `earnBackStreak(previousStreak)` | 恢复 streak 为 previousStreak + 1，清除 `streakBrokenAt` |
+
 **ELO 能力分级（五维评分 / 六段位 / 动态 K 因子）**
 
 类型定义（`shared/types/elo.ts`）：
@@ -1175,6 +1217,12 @@ interface DailyRecommendation {
 - `getDynamicKFactor(gamesPlayed, overall)` — 动态 K 因子：新手 48 / 默认 32 / 高分 24
 - `abilityToElo(ability)` — 0-100 → 300-1500 映射（用于 strategy-academy 迁移）
 - `applyEloChange(current, dimension, isCorrect, difficulty)` — 钳制 + 重算 overall / kFactor / gamesPlayed
+
+Progress Store Actions（从 PRD 5.13 迁入）：
+- `updateElo(dimension, isCorrect, difficulty)` — 应用 ELO 变化到指定维度，重算 overall/kFactor/gamesPlayed，自动检测段位升级并设 `eloRankUp`
+- `resetElo()` — 重置 ELO 为默认值（用于设置页“重置能力评分”）
+- `clearEloRankUp()` — 关闭升段庆祝后清空 `eloRankUp`
+- `syncEloFromAcademyAbility(aa)` — 从 strategy-academy abilityAssessment 同步初始 ELO，仅 `gamesPlayed===0` 时生效
 
 训练模块维度映射：
 
@@ -1193,6 +1241,7 @@ UI 组件：`Dashboard` 段位徽章按钮、`WeaknessAnalysis` 五维雷达图�
 - `ReviewItemMetadata`：元数据接口（`front` / `back` / `options` / `source` / `scenario`，全部可选）
 - `ReviewItem` 接口扩展：新增 `metadata?: ReviewItemMetadata`
 - 核心函数：`processReview` / `getTodayReviewItems` / `getReviewStats` / `getDaysSinceLastReview`
+- 训练模块记录器（答题后注册/更新复习项）：range-trainer `useQuizEngine.recordSrsForAnswer` / pot-odds `useOddsSrsRecorder` / gto-simulator `useGtoSrsRecorder`；题目 ID 规范 `range:{position}:{hand}` / `odds:{questionId}` / `gto:{scenarioId}`
 
 Quality 评分映射：答对 + 用时 < 5 秒 → 5；答对 → 4；答错 → 1（自评"记得" → 5；"不记得" → 1）。
 
@@ -1233,12 +1282,12 @@ UI 组件：
 
 **Mentor 导师人格化（三种风格 / 文案模板）**
 
-导师风格（`progress.mentorStyle`）：
-- **严厉教练**（Strict）— 直接指出错误，强调纪律性
-- **鼓励伙伴**（Encouraging）— 正向强化，关注进步
-- **冷静分析师**（Analytical）— 数据驱动，客观陈述
+导师风格（`progress.mentorStyle`，类型定义于 `shared/types/mentor.ts`）：
+- **严谨数学派**（`strict-math`）— GTO/EV 导向，数据驱动客观陈述
+- **老派牌手**（`old-school`）— 经验导向，犀利直接指出问题
+- **鼓励型教练**（`encouraging`）— 正向强化，关注进步
 
-文案模板：各训练模块的 `DecisionFeedback.explanation` 根据当前 `mentorStyle` 选择对应文案模板；Streak 里程碑庆典、ELO 升段庆祝等场景同样按风格差异化渲染；模板存储在 i18n 资源中（`mentor.*` 命名空间），zh / en 双语齐全。
+文案模板：模板存储在 `shared/constants/mentorStyles.ts`（`MENTOR_FEEDBACK_TEMPLATES`，三种风格 × 五个评级），由 `renderMentorFeedback(mentorStyle, grade, params)` 渲染（支持 EV 损失与正确动作占位符）；QuizCard / GTOFeedback 优先调用，模板缺省时降级到通用 i18n 文案；反馈颜色与图标不随风格变化（统一由 `GRADE_DISPLAY_CONFIG` 控制）。
 
 ---
 
@@ -1270,7 +1319,7 @@ export const useFeatureStore = create<FeatureStore>((set, get) => ({
 
 ### 6.2 persist 中间件使用
 
-仅 `progress` store 使用 persist 中间件，将训练记录和用户设置持久化到 localStorage：
+共 5 个 store 使用 persist 中间件持久化到 localStorage：progress（训练记录与跨模块状态中枢）、puzzle-trainer、strategy-academy、theory-academy、debugMode（调试解锁）；range-trainer / pot-odds / gto-simulator 为纯内存 store；hand-history 用 IndexedDB：
 
 ```typescript
 persist(
@@ -1279,7 +1328,7 @@ persist(
     settings: { theme: 'dark', language: 'zh', ... },
     // ...
   }),
-  { name: 'poker-training-progress' }  // localStorage key
+  { name: 'poker-training-progress', version: 8, migrate }  // localStorage key
 )
 ```
 
@@ -1309,6 +1358,8 @@ persist(
 | `useProgressStore` | `records[]` + `settings` + `onboarding` + `streak` + `elo` + `quickDrillStreak` + `mentorStyle` + `emotion` + `unlockedAchievements` + `achievementUnlockDates` + `freezeCardFragments` + `lastFragmentDate` + `fragmentsEarnedToday` | localStorage (persist v8) |
 | `usePuzzleTrainerStore` | `rushBest` + `dailyBest` + `themeBest` + `dailyCompleted` + `quickDrillBest` + `history` | localStorage (persist v2) |
 | `useStrategyAcademyStore` | `progress` + `practiceResults`（cap 200） + `basicsProgress` + `abilityAssessment` + `adaptiveConfig` + `recentPracticeResults` + `dailyPlan` + `certifications` + `activeTrackId` + `firstAttemptScores` + `lastAttemptScores` | localStorage (persist v2) |
+| `useTheoryAcademyStore` | `progress`（completedChapters / quizScores / currentChapter / startedAt） | localStorage (persist v1) |
+| `useDebugModeStore` | `unlockAll` | localStorage (persist v1) |
 
 ---
 
@@ -1350,6 +1401,8 @@ persist(
 | `/academy/quick-drill` | QuickDrill | AppLayout |
 | `/academy/certification/:level` | LevelCertification | AppLayout |
 | `/academy/lesson/:lessonId` | CourseView | AppLayout |
+| `/theory` | TheoryHome | AppLayout |
+| `/theory/chapter/:chapterId` | TheoryChapterView | AppLayout |
 | `/leaderboard` | LeaderboardPage | AppLayout |
 | `/settings` | SettingsPage | AppLayout |
 
@@ -1429,27 +1482,31 @@ Zustand v5 内置 selector 机制，仅当选中字段变化时触发组件重�
 
 ### 8.3 路由级代码分割
 
-每个路由页面为独立 chunk，首屏仅加载当前页面代码。31 个路由页面被分割为 31 个独立 JS chunk。
+每个路由页面为独立 chunk，首屏仅加载当前页面代码（路由清单以 `src/app/routes.tsx` 为准，Vite 自动按路由边界生成独立 JS chunk）。
 
 **`manualChunks` 分包策略**（v2.1 新增）：
 
-`vite.config.ts` 配置 `rollupOptions.output.manualChunks`，按功能模块自动分包，避免单个 chunk 体积过大：
+`vite.config.ts` 配置 `rollupOptions.output.manualChunks`（函数形式），对大型数据文件与 vendor 库独立分包，避免单个 chunk 体积过大：
 
 ```typescript
-manualChunks: {
-  'vendor-recharts': ['recharts'],
-  'vendor-motion': ['framer-motion'],
-  'vendor-router': ['react-router'],
-  'feature-range': findFiles('src/features/range-trainer'),
-  'feature-gto': findFiles('src/features/gto-simulator'),
-  'feature-progress': findFiles('src/features/progress'),
-  'feature-academy': findFiles('src/features/strategy-academy'),
-  // ...
+manualChunks(id) {
+  // 大型数据文件独立分包
+  if (id.includes('/strategy-academy/data/levels/')) {
+    return id.match(/level[1-4]/) ? 'academy-levels-early' : 'academy-levels-late';
+  }
+  if (id.includes('/strategy-academy/data/')) return 'strategy-academy-data';
+  if (id.includes('/puzzle-trainer/data/puzzleBank')) return 'puzzle-data';
+  // Vendor 库分包
+  if (id.includes('node_modules')) {
+    if (id.includes('recharts') || id.includes('d3-')) return 'vendor-recharts';
+    if (id.includes('framer-motion')) return 'vendor-framer';
+    if (id.includes('react-dom')) return 'vendor-react-dom';
+  }
 }
 ```
 
-- 主 chunk 从 1204 kB 降至 291 kB，最大 vendor chunk（recharts）为 418 kB
-- 各 feature 模块独立 chunk，按需加载
+- 主 chunk 从 1204 kB 降至约 291 kB，最大 vendor chunk（recharts）约 418 kB
+- 课程/题库大数据文件独立 chunk，按需加载
 
 ### 8.4 IndexedDB 大容量存储
 
@@ -1466,8 +1523,13 @@ manualChunks: {
 
 | 存储 Key | 内容 | 来源 |
 |-----------|------|------|
-| `poker-training-progress` | 训练记录数组 + 用户设置 | Zustand persist 自动序列化 |
-| `i18nextLng` | 当前语言偏好 | i18next |
+| `poker-training-progress` | 训练记录 + 用户设置 + Streak/ELO/SRS/Emotion/Mentor 跨模块状态 | Zustand persist（progress store） |
+| `puzzle-trainer-store` | 谜题 Best Record / 每日完成态 / 历史记录 | Zustand persist（puzzle-trainer store） |
+| `strategy-academy-progress` | 课程进度 / 能力评估 / 认证记录 | Zustand persist（strategy-academy store） |
+| `theory-academy-progress` | 理论章节完成态 / 小测得分 | Zustand persist（theory-academy store） |
+| `poker-debug-mode` | 调试解锁状态 | Zustand persist（debugMode store） |
+
+> 语言切换通过顶部导航的 `i18n.changeLanguage` 实现（未接入 LanguageDetector，默认 zh）；用户语言偏好字段 `settings.language` 随 progress store 持久化。
 
 ### 9.2 IndexedDB
 
@@ -1496,19 +1558,22 @@ persist(
 
 | Store | persist name | version | 关键字段 |
 |---|---|---|---|
-| progress | `poker-training-progress` | 8 | records / settings / onboarding / streak / elo / quickDrillStreak / mentorStyle / emotion / consecutiveWrongByModule / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
-| puzzle-trainer | `puzzle-trainer-store` | 2 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted |
+| progress | `poker-training-progress` | 8 | records / settings / onboarding / streak / elo / quickDrillStreak / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
+| puzzle-trainer | `puzzle-trainer-store` | 2 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted / history（上限 50 条） |
 | strategy-academy | `strategy-academy-progress` | 2 | progress / practiceResults（cap 200） / abilityAssessment / dailyPlan / certifications / firstAttemptScores / lastAttemptScores |
 | theory-academy | `theory-academy-progress` | 1 | progress（completedChapters / quizScores / currentChapter / startedAt） |
+| debugMode | `poker-debug-mode` | 1 | unlockAll |
 
-> v2.1 说明：progress store 新增 `consecutiveWrongByModule: Record<ModuleType, number>` 字段用于自适应难度判定。该字段为运行时累加值（每次答错 +1，答对重置为 0），首次加载时通过防御性合并默认值 `{}` 注入。
+> 自适应难度的连续答错计数使用 `emotion.consecutiveWrongCount`（v6 情绪系统字段，全局计数），不存在按模块拆分的计数字段。
 
 **Persist 版本迁移记录**：
 
 | 迁移 | 描述 |
 |------|------|
+| progress v1 → v6 | 历次防御性注入：v1 onboarding / v2 streak（补发 2 张冻结卡） / v3 elo / v4 quickDrill 字段 / v5 mentorStyle / v6 emotion |
 | v6 → v7 | 成就系统迁移：注入 `unlockedAchievements: []` 和 `achievementUnlockDates: {}` 默认值 |
 | v7 → v8 | 冻结卡碎片系统迁移：注入 `freezeCardFragments: 0`、`lastFragmentDate: ''`、`fragmentsEarnedToday: 0` 默认值 |
+| puzzle-trainer v1 → v2 | 快速训练 Best Record：注入 `quickDrillBest: null` 默认值 |
 | strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值 |
 | strategy-academy v1 → v2 | practiceResults 裁剪：对超过 200 条的老数据执行 `.slice(-200)` 保留最近记录 |
 | theory-academy v0 → v1 | 首版兜底：防御性合并 progress 默认值（新 store，无存量迁移负担） |
@@ -1541,39 +1606,38 @@ persist(
 
 ## 11. 测试策略
 
-### 11.1 单元测试（Vitest）
+### 11.1 测试双项目划分（Vitest）
 
-覆盖纯函数和工具函数（v2.0：18 文件 124 用例）：
+`vitest.config.ts` 定义两个项目：`unit` 项目在 Node 环境运行 `src/**/*.test.ts`（纯函数 / store migrate，Node 环境测 zustand persist migrate 需 stub `window.localStorage`）；`component` 项目在 jsdom 环境运行 `src/**/*.test.tsx`（组件冒烟，setup 为 `src/setupTests.components.ts`）。
+
+当前共 31 个测试文件（清单以 `src/**/*.test.ts(x)` 实际文件为准）：
 
 | 测试目标 | 文件 | 关键用例 |
 |----------|------|----------|
-| `pokerMath.ts` | pokerMath.test.ts | 赔率计算、EV 计算、权益估算 |
-| `elo.ts` | elo.test.ts | ELO 变化、段位、K 因子、升级 |
-| `decisionFeedback.ts` | decisionFeedback.test.ts | GRADE_THRESHOLDS、calculateGrade 边界 |
-| `strategyCompare.ts` | strategyCompare.test.ts | 最优判定、EV 损失精度（v2.0 新增） |
-| `statsAggregator.ts` | statsAggregator.test.ts | 聚合正确性、空记录处理（v2.0 新增） |
-| `streakCalc.ts` | streakCalc.test.ts | 连击天数计算（v2.0 新增） |
-| `parsers/common.ts` | common.test.ts | 牌面字符串解析、格式检测（v2.0 新增） |
-| `handClassifier.ts` | handClassifier.test.ts | 169 种手牌分类（v2.0 新增） |
-| `deck.ts` | deck.test.ts | 牌组生成、洗牌（v2.0 新增） |
-| store migrate | store.migrate.test.ts ×3 | progress / puzzle-trainer / strategy-academy 迁移链路 |
-| store persist shape | store.persist-shape.test.ts ×3 | 各 store 持久化 shape 校验 |
+| 全局守卫 | designTokenGuard.test.ts / eslintCrossImports.test.ts | UI 颜色合规全量扫描 / 跨模块导入白名单 |
 | i18n | localeParity.test.ts | zh/en 键集对称性 |
-| eslint | eslintCrossImports.test.ts | 跨模块导入白名单守卫 |
-| opponentScoring | opponentScoring.test.ts | 对手画像评分逻辑 |
+| 共享层 | pokerMath / elo / deck / seededShuffle / decisionFeedback 各 .test.ts | 赔率与 EV 计算、ELO 变化与段位、牌组生成、种子洗牌、GRADE_THRESHOLDS 边界 |
+| gto-simulator | strategyCompare.test.ts | 最优判定、EV 损失精度 |
+| hand-history | parsers/common.test.ts | 牌面解析、三平台格式检测（含 partypoker） |
+| range-trainer | handClassifier.test.ts | 169 种手牌分类 |
+| pot-odds | quizOrder.test.ts | 选项排序与分布守卫 |
+| progress | statsAggregator / streakCalc / store.migrate / store.persist-shape 各 .test.ts，StreakTracker.test.tsx | 聚合、连击、迁移链路、persist 形状、组件冒烟 |
+| puzzle-trainer | puzzleBank.optionOrder.test.ts / store.migrate / store.persist-shape | 选项语义排序、迁移、persist 形状 |
+| strategy-academy | curriculumIntegrity / quizShuffle / drillOptionOrder / opponentScoring / store.migrate / store.persist-shape 各 .test.ts，DrillLessonRouter.test.tsx | 课程数据完整性、选项洗牌、对手评分、Drill 路由冒烟 |
+| theory-academy | theoryIntegrity / quizOrder / store.migrate / store.persist-shape 各 .test.ts | 理论数据完整性、选项重映射与分布守卫、v0→v1 迁移、persist 形状 |
 
-### 11.2 组件测试（Testing Library）
+### 11.2 组件测试（jsdom 冒烟）
 
-覆盖交互组件：
+当前已落地的组件测试（`component` 项目）：
 
-- `RangeGrid` — 点击格子触发高亮、颜色映射正确
-- `OddsCalculator` — 输入变化后结果实时更新
-- `SpotTrainer` — 提交决策后显示反馈
-- `HandReplayer` — next/prev 按钮正确推进/回退
+- `StreakTracker.test.tsx` — 连击追踪展示与晚间提醒态冒烟
+- `DrillLessonRouter.test.tsx` — Drill 懒加载路由接线冒烟
 
-### 11.3 E2E 测试（Playwright）
+新增交互组件测试时按内容选择 `.test.tsx` 后缀并入 `component` 项目。
 
-覆盖关键用户流程：
+### 11.3 E2E 测试（规划中，未落地）
+
+项目尚未引入 Playwright 等 E2E 框架。若后续引入，优先覆盖以下关键用户流程：
 
 1. **范围训练流程**：首页 → 选择位置 → 开始测验 → 答题 → 查看结果
 2. **GTO 训练流程**：配置场景 → 生成场景 → 提交决策 → 查看反馈 → 完成会话
@@ -1702,6 +1766,10 @@ interface TrainingModule {
 | | --danger / --danger-bg | #c25a4c / rgba(194,90,76,0.12) | 错误反馈、亏损 |
 | | --warning / --warning-bg | #c9a25e / rgba(201,162,94,0.14) | 警告提示 |
 | | --info / --info-bg | #8ba59b / rgba(139,165,155,0.12) | 信息提示 |
+| 装饰/徽章（v1.3.2） | --poker-gold | #d4a84b | 金牌成就徽章 |
+| | --poker-bronze | #cd7f32 | 铜牌徽章（银=--ivory-dim、钻=--poker-frost） |
+| | --poker-indigo / --poker-indigo-bright | #4a5a7a / #8ea4c4 | 石板靛（策略/进阶标签底 / 暗底文字亮阶） |
+| | --poker-terra / --poker-terra-bright | #965a3e / #c98a63 | 陶土赭（心理/弱项标签底 / 暗底文字亮阶） |
 | 花色 | --suit-heart / --suit-diamond | #d04545 | 红心/方块（深红） |
 | | --suit-club / --suit-spade | #f3ebd9 | 梅花/黑桃（象牙白，深色背景可见） |
 
@@ -1775,6 +1843,7 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 设计约束：
 - Brass 仅用作 1px 发丝线和激活状态，不作为按钮或大表面的填充色
 - 语义色始终使用固定色值，不引用装饰色变量（--gold/--clay/--sage）
+- **答题选项按钮**（range-trainer QuizCard 等三选一场景）为平权选项，须三色相并立且都明显浮于呢面背景：fold=陶土红透底+红字+红边、call=胡桃木不透明实色 `--walnut-raised`+象牙字、raise=黄铜渐变；不套用「一亮 CTA + 两沉底次要」的 CTA 色阶（会导致暗按钮糊在一起、区分度不足）
 
 ### 14.5 组件主题适配
 
@@ -1791,6 +1860,19 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 - 缓动函数：ease（默认）
 - 翻牌动画：CSS 3D transform + perspective，300ms
 - 支持 `prefers-reduced-motion` 媒体查询，尊重用户减少动画偏好
+
+### 14.7 UI 颜色实现规范与守卫（v1.3.2）
+
+设计契约权威源为 `poker-ui-demo/DESIGN_LANGUAGE.md`（v1.3.2）；色彩 token 实现权威为 `src/styles/globals.css` 的 `:root`。二者之外的 `poker-ui-demo/colors_and_type.css` 为 demo 单页镜像，三者任一变更须同步。
+
+强制规范（DESIGN_LANGUAGE §1.2 三不原则 / §1.3 反 SaaS 饱和色禁令）：
+
+1. **禁止 Tailwind 霓虹调色板类**：`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-\d{2,3}`，语义反馈一律用 `--poker-*` / `--success|danger|warning|info` token（映射：green/emerald→success、red→danger、yellow/amber→brass、orange→terra、blue→info、purple→indigo）
+2. **禁止纯白/纯黑文字与实底类**：`text-white`/`bg-white`/`text-black`/`bg-black`（`bg-black/NN` 半透明压暗层按 §4.2 阴影黑调豁免）
+3. **禁止纯黑/纯白 hex 字面量**：`#000`/`#fff` 系
+4. **SVG 例外**：渐变 stop 无法引用 CSS 变量时允许字面值，但必须注释标注对应 token（如 CardBack.tsx / public/cards/back.svg 的胡桃底 stop）
+
+守卫机制：`src/designTokenGuard.test.ts`（vitest，随 `pnpm test` 强制执行）通过 `import.meta.glob('?raw')` 全量扫描 src 源码，断言上述三类零匹配；豁免白名单 `EXEMPT_FILES` 遵循「只删不加」，新增豁免须先在 DESIGN_LANGUAGE.md 登记设计依据。
 
 ---
 

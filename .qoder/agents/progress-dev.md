@@ -60,6 +60,7 @@ additionalPrompt: ""
 - **Mentor 导师人格化**：三种教练风格 / 文案模板 / 偏好持久化
 - 快速训练连续打卡（quickDrillStreak，独立于 streak）
 - 新手引导状态管理（onboarding）
+- 用户设置（SettingsPage 读写 `settings` 状态）：语言偏好 `settings.language` 为唯一事实源，切换时同步 `i18n.changeLanguage`（顶栏切换由 AppLayout 同步写回，应用启动由 `src/app/providers.tsx` 从持久化偏好恢复；i18n 基础设施本身归 platform-dev）
 
 ## Cross-Module Touchpoints
 作为跨模块系统中枢，progress store 对外暴露五大系统的状态与 actions，并自动订阅 trainingEvents 事件总线。

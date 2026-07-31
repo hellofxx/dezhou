@@ -100,6 +100,7 @@ additionalPrompt: ""
 - **自适应难度**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准），`TrainingSession` 显示降级提示 banner；禁止自行判定降级条件。
 - **范围嵌套关系**（v1.8 修正）：预置范围必须满足位置嵌套关系 UTG ⊂ HJ ⊂ CO ⊂ BTN（Open Raise 场景）。修改任一位置范围时必须验证嵌套关系不被破坏。
 - **范围与 GTO 频率表一致性**（v1.8 修正）：`constants.ts` 中的预置范围必须与 `gto-simulator/data/preflop-ranges.json` 一致，以 JSON 为权威数据源。
+- **答题按钮色阶**（v1.3.2）：`QuizCard` 的 fold/call/raise 为三平权选项，须三色相并立且都明显浮于呢面：fold=陶土红透底+红字+红边、call=胡桃木不透明实色 `--walnut-raised`+象牙字、raise=黄铜渐变；不套「一亮 CTA+两沉底」CTA 色阶（否则暗按钮糊在一起）。反馈样式与 hex 合规由 `designTokenGuard.test.ts` 守卫，禁止 Tailwind 霓虹类。
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

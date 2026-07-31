@@ -4,10 +4,10 @@
 
 | 项目 | 内容 |
 |---|---|
-| 文档版本 | v2.1 |
+| 文档版本 | v2.3 |
 | 作者 | 产品团队 |
 | 创建日期 | 2026-07-20 |
-| 最后更新 | 2026-07-28 |
+| 最后更新 | 2026-07-31 |
 | 文档目的 | 全面描述德州扑克训练平台的产品定位、用户需求、功能规格与非功能需求，作为设计、开发与测试的基准参考文档 |
 
 > **文档职责**：本文件仅描述产品规格（What / Why），不涉及技术实现细节（How）。技术设计见 `TDD.md`，版本演进与执行历史见 `CHANGELOG.md`。
@@ -60,7 +60,7 @@
 
 ### 2.1 用户学习目标
 
-1. 掌握 6-max 各位置的标准翻前开牌范围（UTG/HJ/CO/BTN/SB）
+1. 掌握 6-max 各位置的标准翻前开牌范围（UTG/HJ/CO/BTN/SB/BB）
 2. 熟练计算底池赔率与期望值（EV），做出 +EV 的跟注/弃牌决策
 3. 理解 GTO（博弈论最优）策略的基本原则并应用于实战场景
 4. 能够独立复盘历史牌局，识别关键决策点的失误
@@ -139,7 +139,7 @@
 | GTO 决策模拟训练 | ✅ | ❌ | ❌ | ✅ |
 | Spot 练习 | ✅ | ❌ | ❌ | ✅ |
 | 历史牌局导入与回放 | ✅ | ✅ | ❌ | ✅（Leak Finder） |
-| 多平台牌局解析 | ✅（PokerStars/GGPoker） | ✅（多平台） | ❌ | ✅ |
+| 多平台牌局解析 | ✅（PokerStars/GGPoker/PartyPoker） | ✅（多平台） | ❌ | ✅ |
 | 实时 HUD 显示 | ❌ | ✅ | ❌ | ❌ |
 | 训练进度追踪 | ✅ | ✅（资金追踪） | ❌ | 部分 |
 | 正确率趋势图表 | ✅ | ✅ | ❌ | ❌ |
@@ -227,7 +227,7 @@
 
 ## 5. 功能需求
 
-平台功能按职责划分为 **训练核心**、**学习路径**、**留存激励**、**反馈教练**、**平台能力** 五大类，共计 25 个功能模块（产品视角拆分，对应代码层面的 8 个 feature 目录，跨模块系统集中在 progress store）。
+平台功能按职责划分为 **训练核心**、**学习路径**、**留存激励**、**反馈教练**、**平台能力** 五大类，共计 27 个功能模块（产品视角拆分，对应代码层面的 9 个 feature 目录，跨模块系统集中在 progress store）。
 
 | 类别 | 模块 | 节 |
 |---|---|---|
@@ -256,6 +256,8 @@
 | 反馈教练 | GTO 偏差检测 | 5.23 |
 | 学习路径 | 学习路径横向推荐 | 5.24 |
 | 学习路径 | 本土化路径前置条件 | 5.25 |
+| 反馈教练 | 答题选项呈现策略（防位置作弊） | 5.26 |
+| 学习路径 | 理论学院（Theory Academy） | 5.27 |
 
 > **说明**：各模块的验收标准聚焦产品行为，不涉及技术实现细节（文件路径、store actions、persist version 等），这些见 `TDD.md`。
 
@@ -275,7 +277,7 @@
 | 范围网格 | 13×13 矩阵展示，对角线=对子，上三角=同花，下三角=非同花 |
 | 位置选择 | 支持 6-max 全部位置：UTG、HJ、CO、BTN、SB、BB |
 | 动作类型 | Open Raise、3-Bet、4-Bet、Call vs Raise |
-| 范围预设 | 基于近似 GTO 策略的预设范围数据（`preflop-ranges.json`） |
+| 范围预设 | 基于近似 GTO 策略的预设范围数据 |
 | 学习模式 | 浏览范围网格，高亮显示范围内手牌，悬停查看详情 |
 | 测验模式 | 随机发牌判断是否在范围内，计时统计正确率与平均用时 |
 | 范围信息面板 | 显示当前范围的统计信息（手牌数量、占比等） |
@@ -365,7 +367,7 @@
 **功能描述**：支持从主流扑克平台导入历史牌局文件，通过逐步回放和街道时间轴进行结构化复盘分析。
 
 **用户故事**：
-- 作为一名线上玩家，我希望导入 PokerStars/GGPoker 的牌局记录，以便系统化回顾自己的实战表现
+- 作为一名线上玩家，我希望导入 PokerStars/GGPoker/PartyPoker 的牌局记录，以便系统化回顾自己的实战表现
 - 作为一名进阶玩家，我希望通过逐步回放功能检视每个决策点，以便发现实战中的思维盲点
 - 作为一名玩家，我希望在关键牌局上添加标注笔记，以便日后回顾时快速定位重要决策
 
@@ -373,7 +375,7 @@
 
 | 规格项 | 描述 |
 |---|---|
-| 多平台导入 | 支持 PokerStars、GGPoker 牌局文件格式解析 |
+| 多平台导入 | 支持 PokerStars、GGPoker、PartyPoker 牌局文件格式解析 |
 | 牌局列表 | 按日期/底池/平台筛选和排序已导入牌局 |
 | 逐步回放 | 按决策点逐步播放牌局过程，展示每个街道的行动 |
 | 街道时间轴 | 可视化展示 Pre-Flop → Flop → Turn → River 的进程 |
@@ -384,7 +386,7 @@
 | 批量管理 | 支持单条删除和清空全部操作 |
 
 **验收标准**：
-1. 可成功导入 PokerStars 和 GGPoker 格式的牌局文件
+1. 可成功导入 PokerStars、GGPoker 与 PartyPoker 格式的牌局文件
 2. 导入后牌局列表正确显示牌局号、盲注级别、玩家数等元信息
 3. 逐步回放可正确展示每个街道的行动序列
 4. 标注内容可保存并在后续查看时显示
@@ -410,7 +412,7 @@
 | 正确率趋势图 | 14 天正确率折线图，按日聚合 |
 | 打卡日历 | 月度训练日历，可视化每日训练状态 |
 | 连续天数追踪 | 当前连续天数与最长连续天数 |
-| 难度指示器 | 基于正确率自动评估当前水平（初级/中级/高级） |
+| 难度指示器 | 展示当前难度档位（初级/中级/高级），并给出升/降级建议：正确率 >85% 且训练 >20 次建议升级，正确率 <50% 建议降级，训练 <5 次时不给建议 |
 | 统计总览 | 各模块独立统计数据（训练次数、正确率、平均用时） |
 | 五维能力雷达图 | 综合评估范围记忆、赔率计算、GTO 决策等多维能力 |
 | 薄弱点分析 | 基于数据自动识别用户最需改进的领域 |
@@ -421,25 +423,23 @@
 1. Dashboard 正确显示 4 项快速统计数据
 2. 正确率趋势图按日聚合数据并正确绘制折线
 3. 打卡日历高亮显示有训练记录的日期
-4. 难度指示器根据正确率阈值（55%/80%）正确分级
+4. 难度指示器根据正确率与训练次数阈值（<50% 降级 / >85% 且 >20 次升级）正确给出建议
 5. 所有数据从本地存储读取，无网络请求
 
 ### 5.6 高级功能
 
 #### 5.6.1 成就系统
 
-共 **22 个成就**，分 **4 个类别**，每个成就 **4 个等级**（bronze / silver / gold / diamond）。
+共 **26 个成就**，分 **4 个类别**，每个成就归属四档等级体系（bronze / silver / gold / diamond）中的一档。
 
 | 类别 | 成就数 | 示例成就 |
 |------|--------|----------|
-| 学习（Learning） | 6 | 初出茅庐、百炼成钢、全能选手、神射手、速度之王、完美主义 |
-| 连续（Streak） | 6 | 连续 7 天、连续 30 天、连续 100 天、连续 365 天、冻结卡首次使用、Earn Back 成功 |
-| 技能（Skill） | 5 | GTO 大师、赔率达人、范围专家、谜题达人、学院毕业生 |
-| 里程碑（Milestone） | 5 | 首次训练、100 次训练、500 次训练、1000 次训练、全模块完成 |
+| 学习（Learning） | 10 | 首次训练、完成 Level 1/2/3、任意/全部等级认证，及 4 项理论学院成就（首章完成 / 基础段 / 中级段 / 全部 9 Level 完成） |
+| 连续（Streak） | 5 | 连续 3 天、连续 7 天、连续 30 天、连续 100 天、连续 7 天快速训练 |
+| 技能（Skill） | 6 | 10/20 题全对、ELO 达到入门/进阶/高级/专家段位 |
+| 里程碑（Milestone） | 5 | 首次谜题、首次每日谜题、完成任意学习轨道、完成本土化轨道、全成就达成 |
 
-成就展示组件：`AchievementWall` 成就墙，已解锁成就高亮显示解锁日期，未解锁成就显示解锁条件与进度。
-
-成就定义数据存储在 `src/features/progress/data/achievements.ts`。
+成就墙展示：已解锁成就高亮显示解锁日期，未解锁成就显示解锁条件与进度（技术实现见 TDD）。
 
 #### 5.6.2 今日任务（原每日挑战）
 
@@ -463,7 +463,7 @@
 
 - 支持中文（zh）和英文（en）双语界面
 - 基于 i18next + react-i18next 实现
-- 默认语言为中文，可在设置中切换
+- 默认语言为中文，可通过顶部导航栏的语言切换按钮切换（设置页语言项暂为只读展示）
 
 #### 5.6.6 开发者选项（调试解锁）
 
@@ -483,27 +483,27 @@
 
 | 规格项 | 描述 |
 |---|---|
-| 首次访问检测 | `OnboardingGate` 组件在 `AppLayout` 中包裹 `<Outlet />`，未完成 onboarding 时自动重定向到 `/onboarding` |
-| 路由设计 | `/onboarding` 路由放在 `BlankLayout` 下，使用 `LazyWrapper` 懒加载，不渲染主导航 |
+| 首次访问检测 | 新用户未完成引导时，访问任意页面自动重定向到引导流程页（`/onboarding`） |
+| 页面形态 | 引导页为全屏布局，不渲染主导航，避免分散注意力 |
 | 5 步流程 | 步骤0 欢迎页 → 步骤1 定位测试 → 步骤2 首次微训练 → 步骤3 首胜庆祝 → 步骤4 目标设定 → 完成 |
 | 欢迎页选择 | "我是新手" 进入定位测试；"我有基础" 跳过定位直接进入首次微训练；可点击"跳过引导"立即结束 |
-| 定位测试 | 5 道单选题覆盖 4 个维度：handRanking(2题) / position(1题) / odds(1题) / range(1题)，每题含解析 |
-| 能力评估 | 答题正确率映射到 30-70 区间写入 `onboarding.initialAbility`（rangeKnowledge / oddsCalculation / positionalPlay），gtoUnderstanding 默认 50 |
-| 首次微训练 | 3-5 道简单范围题复用 `QuizCard` 组件，最后一题必须是简单题（如 AA in CO 应开池）确保成功收尾 |
+| 定位测试 | 5 道单选题覆盖 4 个维度：牌型认知(2题) / 位置理解(1题) / 赔率计算(1题) / 范围知识(1题)，每题含解析 |
+| 能力评估 | 答题正确率映射到 30-70 区间作为初始能力基线（范围知识 / 赔率计算 / 位置理解三维；GTO 理解默认 50） |
+| 首次微训练 | 3-5 道简单范围题，最后一题必须是简单题（如 AA in CO 应开池）确保成功收尾 |
 | 补救机制 | 最后一题答错时追加一道更简单的补救题（如 AA in BTN 应开池） |
-| 首胜庆祝 | CSS 动画（撒花粒子+弹出+脉冲）展示"恭喜完成首次训练！"，调用 `progressStore.recordTrainingDay()` 启动 Day 1 Streak |
-| 目标设定 | 5 / 10 / 20 分钟三档可选，确认后写入 `onboarding.dailyGoalMinutes` 与 `completedAt` |
-| 状态持久化 | 状态通过 progress store 持久化（技术细节见 TDD） |
-| 跳过引导 | `skipOnboarding` action 直接标记 `completed=true`，不再被门禁拦截 |
+| 首胜庆祝 | 动画庆祝（撒花粒子+弹出+脉冲）展示"恭喜完成首次训练！"，自动启动 Day 1 连续训练计数 |
+| 目标设定 | 5 / 10 / 20 分钟三档可选，确认后记录每日目标与完成时间 |
+| 状态持久化 | 引导状态与定位结果持久化保存，避免重复引导（技术细节见 TDD） |
+| 跳过引导 | 点击跳过后直接标记引导完成，不再被门禁拦截 |
 
 **验收标准**：
-1. 新用户首次访问任意非 `/onboarding` 路由时被重定向到 `/onboarding`
-2. OnboardingFlow 包含 5 步：Welcome / PlacementTest / FirstDrill / Celebration / GoalSetting
-3. 定位测试 5 道题覆盖 4 个维度，每题含 explanation
-4. 定位测试完成后 `progress.onboarding.initialAbility` 被写入
+1. 新用户首次访问任意非引导路由时被重定向到 `/onboarding`
+2. 引导流程包含 5 步：欢迎 → 定位测试 → 首次微训练 → 首胜庆祝 → 目标设定
+3. 定位测试 5 道题覆盖 4 个维度，每题含解析
+4. 定位测试完成后初始能力评估被记录
 5. 首次微训练最后一题从简单题库抽取，答错追加补救题
-6. 首胜庆祝动画展示，Day 1 Streak 启动
-7. Onboarding 完成后 `onboarding.completed = true`，不再被重定向
+6. 首胜庆祝动画展示，Day 1 连续训练计数启动
+7. 引导完成后不再被重定向
 8. 老用户数据自动迁移，不丢失（技术细节见 TDD）
 
 ### 5.8 Streak 深度机制（冻结卡 / 里程碑 / Earn Back / 分享卡片）
@@ -520,43 +520,32 @@
 
 | 规格项 | 描述 |
 |---|---|
-| Streak 状态 | `progress.streak: StreakState` 包含 currentStreak / longestStreak / lastTrainingDate(YYYY-MM-DD) / streakFreezes / streakFreezeUsedToday / milestones / lastMilestoneCelebrated / streakStartDate / streakBrokenAt |
-| 初始赠送 | 新用户初始化时获得 2 张冻结卡；老用户首次升级到 v2 migrate 时同样补发 2 张 |
-| 冻结卡保护 | gap=2 天（前天训练昨日未训）且冻结卡 >0 且今日未用过 → 自动扣减 1 张，streak 继续 +1；同一天仅生效一次（`streakFreezeUsedToday`） |
-| 手动使用冻结卡 | `useStreakFreeze()` action 供用户主动操作（如设置页一键使用），返回是否成功 |
-| 里程碑奖励 | 达成 3/7/30/100/365 天分别奖励 1/2/3/5/10 张冻结卡（`MILESTONE_FREEZE_REWARDS` 映射） |
-| 里程碑庆典 | `StreakCelebration.tsx` 全屏 Dialog，不同天数对应徽章（🥉/🔥/🏆/💎/👑）+ CSS keyframes 动画（彩屑/烟花/光晕），关闭时调用 `awardStreakFreeze` 奖励对应数量 |
-| 分享卡片 | 30 天及以上的庆典显示"分享"按钮，调用 `generateStreakShareCanvas` 生成 1080x1080 PNG（牌桌绿呢面背景）并下载 |
-| Earn Back 机制 | streak 断裂时记录 `streakBrokenAt` 时间戳（保留旧 currentStreak 不立即重置）；24 小时内完成训练 → `currentStreak + 1` 恢复并清除 streakBrokenAt；超过 24 小时则重置为 1 |
-| 晚间紧迫感 | `StreakTracker` 在 20:00 后且今日未训练时，火焰图标与 streak 数字变红闪烁，显示"你的 Streak 即将熄灭，快来训练保住它！" |
-| Earn Back 提示 | `canEarnBack()` 返回 true 时，`StreakTracker` 顶部显示"⚡ Earn Back 窗口期"标记 |
+| 连续训练状态 | 记录当前/最长连续天数、最近训练日期、冻结卡数量与当日使用标记、已达成里程碑、连续起始日期与断裂时间 |
+| 初始赠送 | 新用户初始化时获得 2 张冻结卡；老用户首次升级自动补发 2 张 |
+| 冻结卡保护 | 前天训练昨日未训且冻结卡 >0 且今日未用过 → 自动扣减 1 张，streak 继续 +1；同一天仅生效一次 |
+| 手动使用冻结卡 | 支持用户主动使用冻结卡（如设置页一键使用），并反馈是否成功 |
+| 里程碑奖励 | 达成 3/7/30/100/365 天分别奖励 1/2/3/5/10 张冻结卡 |
+| 里程碑庆典 | 全屏庆典弹窗，不同天数对应徽章（🥉/🔥/🏆/💎/👑）与彩屑/烟花/光晕动画，关闭时发放对应数量冻结卡 |
+| 分享卡片 | 30 天及以上的庆典显示"分享"按钮，生成 1080x1080 PNG 分享图（牌桌绿呢面背景）并下载 |
+| Earn Back 机制 | streak 断裂时保留原连续天数并记录断裂时间；24 小时内完成训练 → 恢复为原天数 +1；超过 24 小时则重置为 1 |
+| 晚间紧迫感 | 20:00 后且今日未训练时，连续训练卡片的火焰图标与天数变红闪烁，显示"你的 Streak 即将熄灭，快来训练保住它！" |
+| Earn Back 提示 | 处于恢复窗口期时，连续训练卡片顶部显示"⚡ Earn Back 窗口期"标记 |
 | 数据迁移 | 老用户数据自动迁移（技术细节见 TDD） |
 
-**核心 Actions**：
-
-| Action | 描述 |
-|---|---|
-| `recordTrainingDay()` | 调用 `updateStreak` 更新 streak（含 Earn Back / 冻结卡自动扣减），今日成功记录时触发 `checkMilestone` |
-| `useStreakFreeze()` | 手动使用一张冻结卡，返回布尔值 |
-| `checkMilestone()` | 检查并标记新达成的里程碑，返回里程碑天数或 null |
-| `awardStreakFreeze(count?)` | 奖励指定数量冻结卡（默认 1） |
-| `canEarnBack()` | 判断是否处于 Earn Back 24 小时窗口期 |
-| `earnBackStreak(previousStreak)` | 恢复 streak 为 previousStreak + 1，清除 streakBrokenAt |
-
 **验收标准**：
-1. `StreakState` 包含 streakFreezes / milestones / streakBrokenAt 等新字段
+1. 连续训练状态包含冻结卡 / 里程碑 / 断裂时间等信息
 2. 新用户初始赠送 2 张冻结卡
 3. 昨天训练今日未训练且冻结卡 > 0 时自动扣减冻结卡，streak 不重置
-4. streak 达到 3/7/30/100/365 天时弹出全屏庆典 Dialog 并奖励对应冻结卡
-5. StreakTracker 显示冻结卡数量
-6. 晚间 20:00 后未训练时 StreakTracker 火焰变红并显示"即将熄灭"提示
+4. streak 达到 3/7/30/100/365 天时弹出全屏庆典弹窗并奖励对应冻结卡
+5. 连续训练卡片显示冻结卡数量
+6. 晚间 20:00 后未训练时火焰变红并显示"即将熄灭"提示
 7. Earn Back 机制：streak 断裂 24 小时内完成训练可恢复 streak
-8. `shareCard.ts` 的 `generateStreakShareCanvas` 返回 Blob
+8. 30 天及以上庆典可生成并下载分享图片
 9. 老用户数据自动迁移，不丢失（技术细节见 TDD）
 
 ### 5.9 反馈机制五级分类与"最后一题简单"成功收尾
 
-**功能描述**：将训练决策反馈从二元对错升级为五级分类（best / correct / inaccuracy / wrong / blunder，对标 GTO Wizard），并实现"最后一题简单 + 补救机制"的成功收尾策略，让用户以正确结束训练，提升信心与留存。P0-4 阶段先实现三级（optimal / acceptable / error），P2-2 阶段升级为五级（新增 best / inaccuracy / blunder，重命名 optimal→best、acceptable→correct、error→wrong），并保留 `migrateGrade` 函数向后兼容旧三级值。
+**功能描述**：将训练决策反馈从二元对错升级为五级分类（best / correct / inaccuracy / wrong / blunder，对标 GTO Wizard），并实现"最后一题简单 + 补救机制"的成功收尾策略，让用户以正确结束训练，提升信心与留存。P0-4 阶段先实现三级（optimal / acceptable / error），P2-2 阶段升级为五级，旧三级值自动映射到新体系保持向后兼容。
 
 **用户故事**：
 - 作为一名 GTO 训练用户，我希望反馈不仅告诉我对错，还能区分"次优可接受"和"明显错误"，以便我合理分配学习精力
@@ -567,38 +556,23 @@
 
 | 规格项 | 描述 |
 |---|---|
-| 五级评级类型 | `DecisionGrade = 'best' \| 'correct' \| 'inaccuracy' \| 'wrong' \| 'blunder'`，定义于 `src/shared/types/decisionFeedback.ts` |
-| 评级阈值 | `GRADE_THRESHOLDS`：best = 0 EV 损失、correct = 0.5BB、inaccuracy = 2BB、wrong = 5BB、blunder = Infinity；`calculateGrade` 边界归入更严重等级（`≤2` 为 inaccuracy，`≤5` 为 wrong，`>5` 为 blunder） |
-| 反馈接口 | `DecisionFeedback { grade; evLoss; correctAction; explanation; relatedLessonId? }`，wrong / blunder 级别建议填写 relatedLessonId |
-| 显示配置 | `GRADE_DISPLAY_CONFIG`：best 深绿 🌟、correct 浅绿 ✅、inaccuracy 黄 🟡、wrong 橙 🟠、blunder 红 🔴，每级对应 i18n titleKey |
-| 向后兼容 | `migrateGrade(oldGrade)` 将旧三级 'optimal' / 'acceptable' / 'error' 映射为 'best' / 'correct' / 'wrong'；旧 i18n key 保留并标记 deprecated |
-| 构造助手 | `buildDecisionFeedback({ isCorrect, evLoss?, correctAction, explanation?, relatedLessonId? })` 用于不持有 evLoss 的调用方 |
-| GTO 反馈 | `GTOFeedback.tsx` 新增 `feedback?: DecisionFeedback \| null` 可选 props；提供时优先使用五级显示，否则降级为旧二元显示 |
-| Range 反馈 | `QuizCard.tsx` 新增 `decisionFeedback?: DecisionFeedback \| null` 可选 props；五级反馈样式与 GTOFeedback 一致 |
-| 最后一题简单 | range-trainer / pot-odds / gto-simulator 三个模块均在题目序列生成时将末题替换为最简单题（AA@BTN open / 0 注免费看牌 / BTN AA open 场景） |
-| 补救机制 | 末题答错且未用过补救时追加一道简单题；通过 `rescueUsed: boolean` 状态避免无限循环 |
-| 结果记录 | `TrainingResult.lastQuestionCorrect` 记录最终题是否答对（含补救题） |
-| i18n 文案 | `feedback.grade.*` / `feedback.message.*` / `feedback.evLossLabel` / `feedback.correctAction` / `feedback.goReview`，zh/en 双语 |
-
-**模块实现**：
-
-| 模块 | 最后一题简单辅助函数 | 调用方 |
-|---|---|---|
-| range-trainer | `getEasyQuestion()` → QuizQuestion（AA@BTN raise） | `useQuizEngine` / `store.ts` 的 `startQuiz` + `nextQuestion` |
-| pot-odds | `getEasyOddsQuestion()` → PotOddsQuizQuestion（底池 100 / 下注 0 / 跟注 +EV） | `PotOddsQuizPage.tsx` 的 `effectiveQuestions` memo + `handleNext` |
-| gto-simulator | `getEasyGTOScenario(index)` → Scenario（BTN AA open，GTO 100% raise） | `useScenarioEngine.generateScenarios` + `useGTOSimulatorStore.nextScenario` |
+| 五级评级 | 反馈分为 best（最优）/ correct（正确）/ inaccuracy（不精确）/ wrong（错误）/ blunder（严重错误）五级 |
+| 评级阈值 | 按 EV 损失（BB）分级：≤0 为 best；<0.5 为 correct；≤2 为 inaccuracy；≤5 为 wrong；>5 为 blunder（边界归入更严重等级） |
+| 反馈内容 | 每条反馈包含评级、EV 损失、正确动作与解析文案；wrong / blunder 级别附带关联课程链接 |
+| 显示样式 | 五级各有专属颜色与图标（best 深绿 🌟 / correct 浅绿 ✅ / inaccuracy 黄 🟡 / wrong 橙 🟠 / blunder 红 🔴），全平台统一 |
+| 向后兼容 | 旧三级评级（optimal / acceptable / error）自动映射为新五级（best / correct / wrong），旧数据不失效 |
+| 最后一题简单 | 范围训练 / 赔率计算 / GTO 模拟三个模块均在题目序列末尾放置最简单题（如 BTN 拿 AA 应开池 / 0 注免费看牌） |
+| 补救机制 | 末题答错且未用过补救时追加一道简单题，补救只触发一次，避免无限循环 |
+| 结果记录 | 训练结果记录最终题是否答对（含补救题） |
 
 **验收标准**：
-1. `decisionFeedback.ts` 定义 `DecisionGrade` / `DecisionFeedback` / `GRADE_THRESHOLDS` / `calculateGrade` / `GRADE_DISPLAY_CONFIG` / `migrateGrade` / `buildDecisionFeedback`
-2. `GTOFeedback` 根据 grade 显示五套样式（深绿 best / 浅绿 correct / 黄 inaccuracy / 橙 wrong / 红 blunder）
-3. wrong / blunder 级反馈附带 EV 损失数值与"去复习"链接（指向 `relatedLessonId`）
-4. `QuizCard` 同步五级反馈样式，与 GTOFeedback 视觉一致
-5. range-trainer / pot-odds / gto-simulator 三个模块均实现"末题替换为简单题"
-6. 末题答错时三个模块均能追加一道简单题作为补救，且补救只触发一次
-7. `TrainingResult.lastQuestionCorrect` 正确反映最终题答题状态
-8. i18n zh.json / en.json 包含 `feedback.grade.{best,correct,inaccuracy,wrong,blunder}` 与 `feedback.message.*` 全部 key；旧 `optimal/acceptable/error` key 保留并标记 deprecated，缺失时回退到 `defaultValue`
-9. 旧的二元反馈接口（`isOptimal` / `feedback?: QuestionFeedback`）仍可正常使用，保证向后兼容
-10. `migrateGrade` 函数将旧三级值正确映射到新五级，老代码过渡期可用
+1. 反馈按五级分类展示，颜色与图标区分明显
+2. wrong / blunder 级反馈附带 EV 损失数值与"去复习"链接（跳转关联课程）
+3. GTO 模拟器与范围训练的五级反馈样式视觉一致
+4. 范围训练 / 赔率计算 / GTO 模拟三个模块均实现"末题替换为简单题"
+5. 末题答错时三个模块均能追加一道简单题作为补救，且补救只触发一次
+6. 训练结果正确反映最终题答题状态
+7. 中英文反馈文案齐全；旧版二元反馈与旧三级数据仍可正常显示（向后兼容）
 
 ---
 
@@ -616,43 +590,29 @@
 
 | 规格项 | 描述 |
 |---|---|
-| Drill 目录 | `src/features/strategy-academy/components/drills/`，包含 4 个组件 + 4 个题库 + `types.ts` + `DrillLessonRouter.tsx` + `ChoiceDrillRenderer.tsx` |
-| 统一接口 | `DrillProps { onComplete(result: DrillResult); onExit() }`；`DrillResult { correct; total; timeTaken }` |
-| 牌力排名闪电战 | `HandRankingDrill.tsx`，10 题，3 种题型（compare-hands / identify-rank / simple-compare），最后 2 题为简单起手牌比较 |
-| 位置认知训练 | `PositionDrill.tsx`，8 题，交互式 6-max 椭圆牌桌点击，`SEAT_LAYOUT` 百分比坐标定位 |
-| Outs 速算 | `OutsDrill.tsx`，8 题，覆盖同花听牌 9 outs / OESD 8 outs / Gutshot 4 outs / 二四法则 / 高牌听顶对 6 outs |
-| 底池赔率直觉 | `PotOddsDrill.tsx`，6 题，含 `PotVisualization` 图形化 progress bar 可视化底池/跟注比例 |
-| 题库 i18n 驱动 | 4 个题库文件均使用 `promptKey` / `optionsKeys` / `explanationKey` 引用 i18n key，便于多语言切换 |
-| 路由集成 | `DrillLessonRouter.tsx` 使用 `React.lazy` 懒加载 4 个 Drill 组件，依据 `lesson.drillComponent` 路由 |
-| 课程集成 | `courses.ts` 在 Level 1 注册 4 个 `type: 'drill'` lesson（`drill-hand-ranking` / `drill-position` / `drill-outs` / `drill-pot-odds`），扩展 `Lesson` 类型新增 `drillComponent?` 字段 |
-| ChoiceDrillRenderer | 通用选择题 Drill 渲染器，接受题库数据与配置参数，支持自定义题目数量、随机抽取、五级反馈接入；L2-L8 每级新增的 2 个 Drill 均通过此组件渲染 |
-| L2-L8 新增 Drill | 每级 2 个新 Drill（共 16 个），通过 ChoiceDrillRenderer 渲染，覆盖各级课程核心概念 |
-| 学习路径集成 | `learningTracks.ts` 在零基础快速入门 track 中按顺序插入 4 个 drill，保留原有课程顺序 |
-| CourseView 集成 | `CourseView.tsx` 处理 `type === 'drill'` 的 phase 流程：跳过 quiz，drill 完成后直接进入 done 阶段并展示训练成绩（正确数 / 用时 / 正确率） |
-| i18n 文案 | `drills.common.*` / `drills.handRanking.*` / `drills.position.*` / `drills.outs.*` / `drills.potOdds.*`，zh/en 双语 |
-
-**模块实现**：
-
-| Drill | 题库文件 | 题量 | 题型分布 |
-|---|---|---|---|
-| 牌力排名 | `handRankingQuestions.ts` | 10 | q1-3 compare-hands / q4-8 identify-rank / q9-10 simple-compare（简单题） |
-| 位置认知 | `positionQuestions.ts` | 8 | q1-8 点击 6-max 牌桌上的指定位置（BTN/UTG/MP/CO/SB/BB） |
-| Outs 速算 | `outsQuestions.ts` | 8 | q1-2 同花听牌 9 / q3-4 OESD 8 / q5-6 Gutshot 4 / q7 二四法则 / q8 高牌听顶对 6（简单题） |
-| 底池赔率 | `potOddsQuestions.ts` | 6 | q1-2 基础赔率 / q3-4 胜率 vs 赔率决策 / q5 图形化 / q6 简单题 |
+| 统一交互形式 | 每个 Drill 完成后回传统一结果（正确数 / 总题数 / 用时），支持中途退出 |
+| 牌力排名闪电战 | 10 题，3 种题型（比较牌力 / 识别牌型 / 简单起手牌比较），最后 2 题为简单起手牌比较 |
+| 位置认知训练 | 8 题，交互式 6-max 椭圆牌桌点击定位 |
+| Outs 速算 | 8 题，覆盖同花听牌 9 outs / OESD 8 outs / Gutshot 4 outs / 二四法则 / 高牌听顶对 6 outs |
+| 底池赔率直觉 | 6 题，含图形化进度条可视化底池/跟注比例 |
+| 多语言驱动 | 4 个题库均支持中英双语切换 |
+| 课程集成 | Level 1 注册 4 个 Drill 课时（牌力排名 / 位置认知 / Outs 速算 / 底池赔率） |
+| 通用选择题渲染器 | 支持自定义题目数量、随机抽取、五级反馈接入；L2-L8 每级新增的 2 个 Drill（共 16 个）均通过它渲染，覆盖各级课程核心概念 |
+| 学习路径集成 | 零基础快速入门轨道中按顺序插入 4 个 Drill，保留原有课程顺序 |
+| 课程视图集成 | Drill 课时跳过测验阶段，完成后直接展示训练成绩（正确数 / 用时 / 正确率） |
+| 多语言文案 | 所有 Drill 文案中英双语齐全 |
 
 **验收标准**：
-1. `drills/` 目录下存在 4 个 Drill 组件，全部实现 `DrillProps` 接口（`onComplete` / `onExit`）
-2. HandRankingDrill 10 题，最后 2 题为简单起手牌比较
-3. PositionDrill 8 题，含交互式 6-max 牌桌点击
-4. OutsDrill 8 题，覆盖同花 / OESD / Gutshot / 二四法则 / 高牌
-5. PotOddsDrill 6 题，含图形化 progress bar 可视化
-6. `courses.ts` 注册 4 个 drill 类型 lesson，`Lesson` 类型新增 `drillComponent` 字段
-7. `learningTracks.ts` 零基础快速入门 track 已按顺序插入 4 个 drill
-8. `CourseView.tsx` 正确处理 drill 类型 lesson（跳过 quiz，直接进入 done 阶段）
-9. `DrillLessonRouter.tsx` 使用 `React.lazy` 懒加载 4 个 Drill 组件
-10. i18n zh.json / en.json 包含 `drills.*` 全部 key
-11. 复用现有 `CardSVG` 组件，未引入新依赖
-12. ChoiceDrillRenderer 通用组件可渲染任意选择题题库，L2-L8 共 16 个新 Drill 均通过此组件渲染
+1. 存在 4 个基础 Drill，均支持完成回调与退出
+2. 牌力排名 Drill 10 题，最后 2 题为简单起手牌比较
+3. 位置认知 Drill 8 题，含交互式 6-max 牌桌点击
+4. Outs 速算 Drill 8 题，覆盖同花 / OESD / Gutshot / 二四法则 / 高牌
+5. 底池赔率 Drill 6 题，含图形化可视化
+6. Level 1 注册 4 个 Drill 课时
+7. 零基础快速入门轨道已按顺序插入 4 个 Drill
+8. Drill 课时正确跳过测验、直接展示成绩
+9. 中英双语文案齐全
+10. 通用选择题渲染器可渲染任意选择题题库，L2-L8 共 16 个新 Drill 均通过它渲染
 
 ---
 
@@ -679,28 +639,20 @@
 | 模式映射 | range → 筛选 preflop 题目（rangeKnowledge 维度）；odds → 筛选 flop/turn 题目（oddsCalculation 维度）；mixed → 不限维度 |
 | 结果展示 | 完成后显示简洁结果面板：正确率 / 平均用时 / XP 获得，全对额外 +20 XP 提示，"已计入连续训练 ✓" 提示 |
 | XP 计算 | 每题答对 +10 XP，全对额外 +20 XP 奖励（显示用，未持久化为独立 XP 字段） |
-| Streak 计入 | 快速模式完成时调用 `progressStore.recordTrainingDay()`，内部已自动调用 `checkMilestone`，无需重复调用 |
-| i18n 文案 | `dashboard.quickStart.*`（title / subtitle / range / odds / mixed / completedToday）与 `quickDrill.*`（quickTitle / quickSubtitle / mode.* / result.* / adaptiveDifficulty 等），zh/en 双语 |
-
-**模块实现**：
-
-| 文件 | 改动 |
-|---|---|
-| `src/features/progress/components/Dashboard.tsx` | 新增 streak state、startQuickDrill(mode) 函数、todayCompleted 判断、渐变 CTA 卡片（含 3 个 Button + 完成标记） |
-| `src/features/strategy-academy/components/QuickDrill.tsx` | 新增 useSearchParams 读取 mode/quick 参数、autoDifficulty 自适应难度、modeWeakAreas 模式过滤、questionCount 快速 5 题、XP 计算与结果面板、recordTrainingDay 调用 |
-| `src/i18n/locales/zh.json` / `en.json` | 新增 `dashboard.quickStart.*` 与 `quickDrill.*` 全部 i18n key |
+| Streak 计入 | 快速模式完成时计入每日连续训练（含里程碑检查） |
+| 多语言 | 速训卡片与快速训练文案中英双语齐全 |
 
 **验收标准**：
 1. Dashboard 顶部欢迎区下方存在"3 分钟快速训练"渐变卡片
-2. 卡片含范围练习 / 赔率速算 / 混合训练三个 Button，点击跳转对应 URL
+2. 卡片含范围练习 / 赔率速算 / 混合训练三个入口，点击跳转对应模式
 3. 今日已完成训练时卡片显示 "✓ 今日已完成" 徽章
-4. QuickDrill 接收 `quick=true` 参数进入快速模式，固定 5 题
-5. 快速模式难度根据 onboarding.initialAbility 与 streak 自适应，隐藏难度选择器
-6. 支持 `mode=range|odds|mixed` 三种模式，按维度过滤题目
+4. 快速模式固定 5 题（普通模式 8 题）
+5. 快速模式难度根据初始能力与连续天数自适应，隐藏难度选择器
+6. 支持范围 / 赔率 / 混合三种模式，按维度过滤题目
 7. 完成后显示正确率 + 用时 + XP 结果面板
 8. 全对时显示 +20 XP 奖励提示
-9. 快速模式完成时调用 `recordTrainingDay` 计入 Streak
-10. 所有用户可见文案通过 useTranslation 引用 i18n key，zh/en 双语齐全
+9. 快速模式完成时计入连续训练
+10. 所有用户可见文案中英双语齐全
 
 ### 5.12 扑克谜题（Puzzle）模式
 
@@ -716,28 +668,27 @@
 
 | 规格项 | 描述 |
 |---|---|
-| 模块位置 | 独立 feature 模块 `src/features/puzzle-trainer/`，路由 `/puzzle` 系列 |
+| 模块位置 | 独立训练模块，路由 `/puzzle` 系列 |
 | 三种模式 | Rush（限时冲刺）/ Daily（每日谜题）/ Theme（主题训练） |
 | Rush 时长 | 3 分钟（180s）或 5 分钟（300s）可选，URL 参数 `?duration=3\|5` |
 | Rush 规则 | 3 条命，答错扣 1 命，连对 5 题奖励 +10 秒，命耗尽或时间到结束 |
-| Rush 难度递增 | 前 5 题 difficulty=1，中间 difficulty=2，后面 difficulty=3 |
+| Rush 难度递增 | 前 5 题难度 1，中间难度 2，后面难度 3 |
 | Rush 分数 | 答对 × 100 + 剩余时间(秒) × 10 + 剩余命 × 200 |
 | Daily 题目 | 基于日期种子（YYYYMMDD）从全题库抽取 8 题，所有人当天看到相同 |
-| Daily 完成状态 | `dailyCompleted[dateKey] = true` 持久化，幂等，当日重复做不改变状态 |
+| Daily 完成状态 | 持久化且幂等，当日重复做不改变状态 |
 | Daily 完成人数 | 基于日期种子生成 100-999 之间的固定数字（本地模拟） |
 | Theme 主题 | P1 阶段实现 5 主题（每主题 15 题），P2-3 扩展至 10 主题（共 205 题） |
-| 主题分类 | PuzzleHome 按 4 类分组展示：翻前 / 翻后 / 河牌 / 锦标赛 |
+| 主题分类 | 按 4 类分组展示：翻前 / 翻后 / 河牌 / 锦标赛 |
 | 主题列表 | 翻前 RFI(30) / 大盲防守(25) / 3Bet 策略(20) / C-Bet 持续下注(20) / 同花听牌(20) / 河牌价值下注(20) / 诈唬时机(15) / 短筹码策略(20) / ICM 基础(15) / 多人底池(20) |
 | 主题分组映射 | 翻前：preflop-rfi / big-blind-defense / three-bet；翻后：c-bet / flush-draw / multiway；河牌：river-value / bluff；锦标赛：short-stack / icm |
 | 难度标识 | 每个主题卡片基于题目难度分布显示初级 / 中级 / 高级标识 |
-| 五级反馈 | 复用 `DecisionFeedback` 与 `GRADE_DISPLAY_CONFIG`，根据 EV 损失自动评级（best/correct/inaccuracy/wrong/blunder） |
-| 课程联动反馈 | PuzzleCard 显示"去复习"链接，`inferPuzzleLessonId` 将 10 个主题映射到对应课程 ID |
-| Best Record | 在 puzzle-trainer 自己的 store 中持久化（不触碰 progress store 的 elo 字段） |
-| 计入 Streak | 任一模式完成时调用 `recordTrainingDay` 计入每日训练 |
-| 路由 | `/puzzle`、`/puzzle/rush`、`/puzzle/daily`、`/puzzle/theme/:themeId`，均用 LazyWrapper 包裹 |
+| 五级反馈 | 复用全局五级反馈系统，根据 EV 损失自动评级 |
+| 课程联动反馈 | wrong/blunder 级别显示"去复习"链接，将 10 个主题映射到对应课程 |
+| Best Record | 谜题最佳记录独立持久化（不影响全局 ELO 评分） |
+| 计入连续训练 | 任一模式完成时计入每日训练 |
+| 路由 | `/puzzle`、`/puzzle/rush`、`/puzzle/daily`、`/puzzle/theme/:themeId` |
 | 入口位置 | 侧边栏训练区、移动端底部导航、Dashboard 快速入口卡片网格 |
-| i18n | `puzzle.*` 完整 i18n 树，zh/en 双语齐全 |
-| 不引入新依赖 | 仅复用 framer-motion（已在项目内）+ shadcn/ui + 现有工具 |
+| 多语言 | 扑克谜题文案中英双语齐全 |
 
 ### 5.13 ELO 能力分级体系
 
@@ -753,40 +704,30 @@
 
 | 规格项 | 描述 |
 |---|---|
-| 类型定义 | `src/shared/types/elo.ts` 定义 `EloRating`（overall / preflop / postflop / math / handReading / mental / kFactor / gamesPlayed / lastUpdated）、`Rank` 接口、`RANKS` 六段位常量、`DEFAULT_ELO`（500 起始分）、`RankUpEvent` |
+| 五维能力 | 翻前 / 翻后 / 赔率数学 / 牌局阅读 / 心态一致性五个维度，另有综合分（五维平均） |
 | 六段位 | 新手 🌱 (0-500) / 入门 🎯 (500-800) / 进阶 ♠️ (800-1200) / 中级 ♥️ (1200-1600) / 高级 ♦️ (1600-2000) / 专家 ♣️ (2000-3000) |
-| ELO 算法 | `src/shared/utils/elo.ts` 实现简化 ELO 公式 `E = 1 / (1 + 10^((diff*800 - rating + 400) / 400))`，`delta = K * (S - E)` |
-| 动态 K 因子 | 新手 (<50 局) K=48 / 默认 K=32 / 高分 (>200 局且 overall>1600) K=24 |
-| 维度对应 | preflop ← range-trainer；math ← pot-odds；postflop ← gto-simulator；handReading / mental 暂用映射占位（P2 阶段补足数据源） |
-| 状态集成 | 集成到 progress store，包含 ELO 五维评分与段位升级事件（技术细节见 TDD） |
-| 数据迁移 | 老用户数据自动迁移，首次加载时从 strategy-academy 同步初始 ELO（技术细节见 TDD） |
-| 训练集成 | range-trainer / pot-odds / gto-simulator 三个 quiz hook 分别暴露 `recordEloForAnswer` 记录器，对应答题后更新 preflop / math / postflop 维度 |
-| Dashboard 显示 | 欢迎区下方新增段位徽章按钮（icon + 名称 + overall 分数 + Trophy 图标），边框色随段位变化，点击跳转 `/progress` 查看五维雷达图 |
-| 五维雷达图升级 | `WeaknessAnalysis.tsx` 数据源从训练记录（0-100 正确率）切换为 ELO 五维分数（0-3000）；维度标签更新为翻前 / 翻后 / 赔率数学 / 牌局阅读 / 心态一致性；雷达图边框/填充色随当前段位颜色变化；右上角同步展示段位徽章；`gamesPlayed===0` 时显示空状态 |
-| 段位升级庆祝 | `RankUpCelebration.tsx` 全屏 Dialog，含 emoji 大徽章 + 旧段位→新段位过渡展示 + CSS 彩纸粒子动画（framer-motion，已在项目内）；5 秒后自动关闭，关闭时调用 `clearEloRankUp` |
-| i18n | `elo.*`（unit / rankBadge.aria / radar.*）与 `rankUp.*`（title / subtitle / continue）键，zh/en 双语齐全 |
-| 不引入新依赖 | 仅复用 framer-motion（已在项目内）+ recharts（已在项目内）+ shadcn/ui Dialog |
-
-**核心 Actions**：
-
-| Action | 描述 |
-|---|---|
-| `updateElo(dimension, isCorrect, difficulty)` | 应用 ELO 变化到指定维度，重算 overall/kFactor/gamesPlayed，自动检测段位升级并设置 `eloRankUp` |
-| `resetElo()` | 重置 ELO 为默认值（gamesPlayed 清零），用于设置页"重置能力评分" |
-| `clearEloRankUp()` | 关闭庆祝 Dialog 后清空 `eloRankUp` 状态 |
-| `syncEloFromAcademyAbility(aa)` | 从 strategy-academy 的 abilityAssessment 同步初始 ELO，仅当 `gamesPlayed===0` 时生效（避免覆盖已累积进度） |
+| 初始分 | 新用户起始 500 分 |
+| 动态难度调节 | 新手阶段 ELO 变化幅度更大（快速定位），高分阶段变化更小（稳定） |
+| 维度对应 | 翻前 ← 范围训练；赔率数学 ← 赔率计算；翻后 ← GTO 模拟；牌局阅读 / 心态一致性由理论学院等场景按章节声明维度补充 |
+| 状态集成 | 集成到跨模块状态中枢，包含 ELO 五维评分与段位升级事件（技术细节见 TDD） |
+| 数据迁移 | 老用户数据自动迁移，首次加载时从策略学院能力评估同步初始 ELO（技术细节见 TDD） |
+| 训练集成 | 范围训练 / 赔率计算 / GTO 模拟答题后对应更新 翻前 / 赔率数学 / 翻后 维度 |
+| Dashboard 显示 | 欢迎区下方段位徽章按钮（图标 + 名称 + 综合分），边框色随段位变化，点击跳转进度页查看五维雷达图 |
+| 五维雷达图 | 薄弱点分析采用 ELO 五维分数（量纲 0-3000），维度标签为翻前 / 翻后 / 赔率数学 / 牌局阅读 / 心态一致性；雷达图色随当前段位变化；无训练时显示空状态 |
+| 段位升级庆祝 | 全屏升段弹窗，含大徽章 + 旧段位→新段位过渡展示 + 彩纸粒子动画；数秒后自动关闭 |
+| 多语言 | ELO 与升段庆祝文案中英双语齐全 |
 
 **验收标准**：
-1. `elo.ts` 定义 `EloRating` / `Rank` / `RANKS`（六段位）/ `DEFAULT_ELO` / `RankUpEvent`
-2. `calculateEloChange` 含动态 K 因子（新手 48 / 默认 32 / 高分 24）
-3. `getRankForScore` 正确返回对应段位
-4. progress store 添加 `elo` 字段（技术细节见 TDD）
+1. 定义六段位与五维 ELO 评分体系
+2. 含动态难度调节（新手变化大 / 默认 / 高分变化小）
+3. 根据分数正确返回对应段位
+4. 跨模块状态中枢记录 ELO 分数（技术细节见 TDD）
 5. 老用户数据自动迁移，不丢失（技术细节见 TDD）
-6. range-trainer / pot-odds / gto-simulator 训练答题后对应维度 ELO 更新
-7. Dashboard 顶部显示段位徽章 + 名称 + overall 分数
+6. 范围训练 / 赔率计算 / GTO 模拟答题后对应维度 ELO 更新
+7. Dashboard 顶部显示段位徽章 + 名称 + 综合分
 8. 五维雷达图使用 ELO 分数（0-3000 量纲），维度标签为翻前 / 翻后 / 赔率数学 / 牌局阅读 / 心态一致性
-9. 段位升级触发庆祝动画（全屏 Dialog，含旧段位→新段位过渡）
-10. 所有用户可见文案通过 useTranslation 引用 i18n key，zh/en 双语齐全
+9. 段位升级触发庆祝动画（全屏弹窗，含旧段位→新段位过渡）
+10. 所有用户可见文案中英双语齐全
 
 ### 5.14 间隔重复系统（SRS）落地
 
@@ -802,81 +743,68 @@
 
 | 规格项 | 描述 |
 |---|---|
-| SRS 算法 | 复用 `features/progress/utils/spacedRepetition.ts` 的 SM-2 简化实现（间隔序列 1→3→7→14→30 天，easeFactor 动态调整） |
-| ReviewItem 元数据扩展 | 新增 `ReviewItemMetadata` 接口（front / back / options / source / scenario），复习模式据此渲染原题内容 |
-| 训练模块集成 | range-trainer `useQuizEngine.recordSrsForAnswer` / pot-odds `useOddsSrsRecorder` / gto-simulator `useGtoSrsRecorder` 三个 hook 暴露记录器，答题后调用 `processReview` 更新复习项 |
-| 题目 ID 规范 | `range:{position}:{hand}` / `odds:{questionId}` / `gto:{scenarioId}`，确保跨模块唯一 |
+| SRS 算法 | 复用 SM-2 简化实现（间隔序列 1→3→7→14→30 天，难度因子动态调整） |
+| 复习项元数据扩展 | 复习项可携带原题元数据（题干 / 答案 / 选项 / 来源 / 场景），复习模式据此渲染原题内容 |
+| 训练模块集成 | 范围训练 / 赔率计算 / GTO 模拟答题后自动注册/更新复习项 |
+| 题目 ID 规范 | 按模块 + 位置/题号/场景生成唯一标识，确保跨模块不重复 |
 | Quality 评分 | 答对+用时<5秒→5；答对→4；答错→1（自评"记得"→5；"不记得"→1） |
-| 每日混合比例 | `composeDailyMix(newQuestions, reviewItems, totalCount, userAccuracy)`：默认 30% 复习 + 70% 新题；正确率 < 0.6 → 50% / 0.4 → 70%；今日复习队列为空 → 全部用新题 |
-| SpacedRepetitionPanel 升级 | 新增"开始复习"主 CTA（brass 色，含 PlayCircle 图标 + 剩余数量徽章）、今日进度条（已复习/总数）、"已完成" / "今天没有待复习的内容"双状态、底部统计保留 |
-| ReviewSession 组件 | Dialog-based，支持三种渲染模式：多选题（metadata.options 存在）/ 自评（metadata.front/back 存在）/ 退化自评（无 metadata）；每题答完调用 `processReview`；完成后显示总结页（总题数 / 答对 / 正确率 / 用时） |
-| 复习完成检测 | "今日已复习数"基于 `lastReviewedAt` 落在今日的项数；"今日待复习总数" = 已复习数 + 当前仍待复习数；用户完成所有复习后显示 "✅ 今日复习已完成" |
-| Dashboard 集成 | 新增 `reviewSessionOpen` 本地状态，通过 `onStartReview` 回调传递给 SpacedRepetitionPanel，渲染 `<ReviewSession>` Dialog |
-| i18n | `spacedRepetition.*` 扩展 9 个新键（title / allDone / allDoneMessage / emptyToday / progressLabel / lastReview / moreItems / totalItems / review）；新增 `review.*` 命名空间（title / subtitle / showAnswer / remembered / forgot / next / finish / complete.* / empty.* 等 16 个键），zh/en 双语齐全 |
-| 计入 Streak | 复习完成不直接调用 `recordTrainingDay`（复习属于巩固而非首次训练，Streak 由训练模块自身记录） |
-
-**API 与组件**：
-
-| 组件 / 函数 | 路径 | 职责 |
-|---|---|---|
-| `ReviewItemMetadata` | `features/progress/utils/spacedRepetition.ts` | 复习项附加元数据接口（front / back / options / source / scenario） |
-| `createReviewItem(id, label, category, metadata?)` | `features/progress/utils/spacedRepetition.ts` | 创建新复习项，支持可选 metadata |
-| `recordSrsForAnswer` | `features/range-trainer/hooks/useQuizEngine.ts` | range-trainer 答题后注册/更新 SRS |
-| `useOddsSrsRecorder` | `features/pot-odds/hooks/useOddsCalculation.ts` | pot-odds 答题后注册/更新 SRS |
-| `useGtoSrsRecorder` | `features/gto-simulator/hooks/useGTOComparison.ts` | gto-simulator 决策后注册/更新 SRS |
-| `composeDailyMix` / `getReviewRatio` | `features/progress/utils/dailyTrainingMix.ts` | 每日训练题目组成逻辑（30%/50%/70% 动态复习比例） |
-| `SpacedRepetitionPanel` | `features/progress/components/SpacedRepetitionPanel.tsx` | 升级后的复习面板（CTA + 进度 + 列表 + 统计） |
-| `ReviewSession` | `features/progress/components/ReviewSession.tsx` | Dialog-based 复习模式（多选 / 自评 / 退化自评三模式 + 总结页） |
+| 每日混合比例 | 默认 30% 复习 + 70% 新题；正确率 < 0.6 → 50%；< 0.4 → 70%；今日复习队列为空 → 全部用新题 |
+| 复习面板升级 | 新增"开始复习"主入口（含剩余数量徽章）、今日进度条（已复习/总数）、"已完成" / "今天没有待复习的内容"双状态、底部统计 |
+| 复习会话 | 弹窗式复习，支持三种渲染模式：多选题（自动判分）/ 自评（用户自评"记得/不记得"）/ 退化自评（无附加内容）；完成后显示总结页（总题数 / 答对 / 正确率 / 用时） |
+| 复习完成检测 | 基于今日已复习数与仍待复习数判定；全部完成后显示 "✅ 今日复习已完成" |
+| Dashboard 集成 | 复习面板嵌入 Dashboard，点击"开始复习"弹出复习会话 |
+| 多语言 | 复习面板与复习会话文案中英双语齐全 |
+| 计入连续训练 | 复习属于巩固而非首次训练，不单独计入连续训练（由训练模块自身记录） |
 
 **验收标准**：
 
-1. range-trainer / pot-odds / gto-simulator 答题后自动调用对应 SRS 记录器
-2. ReviewItem.metadata 包含 front / back / options / source / scenario 等字段
+1. 范围训练 / 赔率计算 / GTO 模拟答题后自动注册/更新复习项
+2. 复习项可携带原题内容（题干 / 答案 / 选项 / 来源），供复习模式渲染
 3. 每日训练混合比例：默认 30% 复习 + 70% 新题；正确率 < 0.6 → 50%；< 0.4 → 70%
-4. SpacedRepetitionPanel 显示"今日待复习 N 题"，含主 CTA"开始复习"按钮
-5. 点击"开始复习"打开 ReviewSession Dialog，按类别混合渲染今日待复习项
-6. ReviewSession 支持 metadata.options 多选题模式（自动判分）、metadata.front/back 自评模式（用户自评"记得/不记得"）、无 metadata 退化自评模式
+4. 复习面板显示"今日待复习 N 题"，含主入口"开始复习"按钮
+5. 点击"开始复习"打开复习会话，按类别混合渲染今日待复习项
+6. 复习会话支持多选题、自评、退化自评三种模式
 7. 复习完成后显示"今日复习已完成 ✓"总结页（总题数 / 答对 / 正确率 / 用时）
-8. 进度条根据 `lastReviewedAt` 落在今日的项数动态更新
-9. 所有用户可见文案通过 useTranslation 引用 i18n key，zh/en 双语齐全
+8. 进度条根据今日已复习项数动态更新
+9. 所有用户可见文案中英双语齐全
 
 ### 5.15 3 分钟快速训练扩展（P1-4）
 
-**功能描述**：在 P0-5 首页"3 分钟快速训练"入口的基础上扩展三大能力——快速训练完成后将综合分数计入 Puzzle Rush 风格的 Best Record（独立于 puzzle-trainer 既有的 rushBest / dailyBest / themeBest，避免污染既有指标）；快速训练题目与 SRS 复习队列打通，复用 P1-3 的 `composeDailyMix` 与 `getTodayReviewItems`，按 30% 比例将今日待复习的选择题混合进入本次训练（复习题前置作为热身）；连续 7 天完成快速训练额外奖励 1 张冻结卡（与 `streak` 子计数器独立，触发 7 / 14 / 21 … 倍数时调用 `awardStreakFreeze(1)`）。
+**功能描述**：在首页"3 分钟快速训练"入口基础上扩展三大能力——快速训练完成后将综合分数计入独立的快速训练最佳记录（与谜题模块的冲刺/每日/主题记录解耦）；快速训练题目与 SRS 复习队列打通，按 30% 比例将今日待复习的选择题混合进入本次训练（复习题前置作为热身）；连续 7 天完成快速训练额外奖励 1 张冻结卡（与主连续训练计数器独立，触发 7 / 14 / 21 … 倍数时奖励）。
 
 **用户故事**：
-- 作为一名希望快速训练有积累感的用户，我希望每次完成 3 分钟训练后，综合分数（正确率 + 时间奖励）能保留 Best Record，下次打破纪录时有醒目提示
+- 作为一名希望快速训练有积累感的用户，我希望每次完成 3 分钟训练后，综合分数（正确率 + 时间奖励）能保留最佳记录，下次打破纪录时有醒目提示
 - 作为一名需要长期记忆训练内容的用户，我希望快速训练也自动混合今日的 SRS 复习题，而不是只做新题
-- 作为一名坚持每天训练的用户，我希望连续 7 天完成快速训练能额外奖励 1 张冻结卡，为长 streak 兜底
+- 作为一名坚持每天训练的用户，我希望连续 7 天完成快速训练能额外奖励 1 张冻结卡，为长连续训练兜底
 - 作为一名同日多次训练的用户，我希望"今日已计入"幂等，不会因为重复训练刷掉连续天数
 
 **功能规格**：
 
 | 规格项 | 描述 |
 |---|---|
-| 综合分数公式 | `accuracy * 100 + 时间奖励`；时间奖励 = `max(0, round((10 - averageTime) * 3))`，每比 10s/题 快 1s 得 3 分，最高 30 分 |
-| Best Record 存储 | puzzle-trainer store 新增 `quickDrillBest: QuickDrillBestRecord \| null`（bestScore / bestAccuracy / bestTime / achievedAt），与 `rushBest / dailyBest / themeBest` 解耦（技术细节见 TDD） |
-| 提交动作 | `submitQuickDrillResult({ score, accuracy, timeTaken })` 返回 `{ isNewRecord, previousBest }`，仅当 `score > previousBest.bestScore` 时更新 |
-| SRS 复习混合 | 仅在 quick 模式下：调用 `composeDailyMix(newQuestions, todayReviewItems, questionCount, userAccuracy)` 决定复习题/新题比例；复习题通过 `reviewItemToPracticeQuestion` 转换（仅保留 `metadata.options` 选择题，占位场景 `BTN / preflop`），放在新题之前作为热身 |
-| 入口提示 | Dashboard 速训卡片下方显示"今日有 N 道待复习题，将自动混合 30% 进入本次训练"（仅 `todayReviewItems.length > 0` 时显示） |
-| 连续打卡 | progress store 新增 `quickDrillStreak: number` 与 `lastQuickDrillDate: string \| null`，与 `streak` 子计数器独立（技术细节见 TDD） |
-| 幂等性 | `recordQuickDrillCompletion()` 在 `lastQuickDrillDate === today` 时直接返回当前状态，不重复 +1 |
-| 连续判断 | `lastQuickDrillDate === yesterday` → `quickDrillStreak + 1`；否则重置为 1（首次或断签） |
-| 冻结卡奖励 | `newStreak % 7 === 0` 时调用 `awardStreakFreeze(1)`，返回 `newBadge: true`；UI 在结果面板显示"🎁 连续 7 天快速训练奖励 1 张冻结卡！" |
-| 结果面板扩展 | 在原有"正确率 / 用时 / XP"基础上，按状态显示：复习题数量（Sparkles 蓝色）→ 新纪录（Trophy 金色，仅 isNewRecord）→ 冻结卡奖励（Gift 绿色，仅 freezeRewarded）→ 当前连续天数（Zap 灰色，非奖励轮次显示）→ Streak 计入 ✓ |
-| i18n | zh/en 双语：`quickDrill.result.reviewIncluded` / `quickDrill.reviewQueueHint` / `quickDrill.newRecord` / `quickDrill.freezeReward` / `quickDrill.streak.{current, rewarded, broken}` |
+| 综合分数公式 | 正确率 × 100 + 时间奖励；时间奖励每比 10s/题 快 1s 得 3 分，最高 30 分 |
+| 最佳记录存储 | 快速训练最佳记录（最高分 / 最佳正确率 / 最佳用时 / 达成时间）独立存储，与谜题模块既有记录解耦（技术细节见 TDD） |
+| 记录更新规则 | 仅当新分高于历史最高分时更新，同分不更新 |
+| SRS 复习混合 | 仅在快速模式下按比例混合今日复习题（仅选择题类复习项），放在新题之前作为热身 |
+| 入口提示 | Dashboard 速训卡片下方显示"今日有 N 道待复习题，将自动混合 30% 进入本次训练"（仅有待复习题时显示） |
+| 连续打卡 | 快速训练连续天数与主连续训练计数器独立（技术细节见 TDD） |
+| 幂等性 | 同日重复完成快速训练不重复计数（当日连续天数不变） |
+| 连续判断 | 昨日已完成 → 连续 +1；否则重置为 1（首次或断签） |
+| 冻结卡奖励 | 连续天数为 7 的倍数时奖励 1 张冻结卡，结果面板显示"🎁 连续 7 天快速训练奖励 1 张冻结卡！" |
+| 结果面板扩展 | 在原有"正确率 / 用时 / XP"基础上，按状态显示：复习题数量 → 新纪录 → 冻结卡奖励 → 当前连续天数 → 计入连续训练 ✓ |
+| 多语言 | 复习混入、新纪录、冻结卡奖励、连续状态等文案中英双语齐全 |
 
 **验收要点**：
 
-1. 快速训练完成时调用 `submitQuickDrillResult`，Best Record 写入 puzzle-trainer store（与 progress store 的 elo 字段解耦）
+1. 快速训练完成时写入快速训练最佳记录（与全局 ELO 解耦）
 2. 同一用户多次打破纪录时只更新最高分；同分不更新
-3. 快速模式下 `todayReviewItems.length > 0` 时按 `composeDailyMix` 比例混合复习题；为 0 时全用新题（保持原有行为）
-4. 仅 `metadata.options` 选择题复习项会进入快速训练（自评/退化自评项被过滤）
-5. 同日多次完成快速训练：`quickDrillStreak` 与 `lastQuickDrillDate` 不变，幂等返回
-6. 连续第 7 / 14 / 21 … 天触发 `awardStreakFreeze(1)`，并显示绿色 Gift 提示
-7. 第 1 天或断签后第一天完成：`quickDrillStreak` 重置为 1，不触发奖励
-8. 结果面板四类提示按状态优先级正确显示（新纪录 → 冻结卡奖励 → 当前连续天数）
-9. 所有用户可见文案通过 useTranslation 引用 i18n key，zh/en 双语齐全
+3. 快速模式下有待复习题时按比例混合复习题；无待复习题时全用新题（保持原有行为）
+4. 仅选择题类复习项会进入快速训练（自评/退化自评项被过滤）
+5. 同日多次完成快速训练：连续天数幂等不变
+6. 连续第 7 / 14 / 21 … 天触发冻结卡奖励，并显示奖励提示
+7. 第 1 天或断签后第一天完成：连续天数重置为 1，不触发奖励
+8. 结果面板提示按状态优先级正确显示（新纪录 → 冻结卡奖励 → 当前连续天数）
+9. 所有用户可见文案中英双语齐全
 
 ### 5.16 策略学院（Strategy Academy）
 
@@ -891,10 +819,10 @@
 | L3 | 翻后基础 | C-Bet、持续下注、多街玩法、3Bet 翻后策略 |
 | L4A | 范围与EV思维 | 翻前范围构造、EV 计算与应用 |
 | L4B | GTO与博弈论 | Nash 均衡、MDF、最小防御频率 |
-| L5 | 中级策略 | 对手阅读、工具使用、线上 vs 线下 |
-| L6 | 高级翻后 | 复杂翻后场景、剥削策略 |
-| L7 | 高级策略 | 单挑(Heads-Up)策略、高级场景 |
-| L8 | 综合实战 | 综合应用、实战模拟 |
+| L5 | 职业素养 | 资金管理、Tilt 控制、选桌、工具使用、线上 vs 线下 |
+| L6 | 锦标赛策略 | ICM、Push/Fold、泡沫期打法 |
+| L7 | 现金桌专项 | 深筹码、多人底池、Straddle、单挑（Heads-Up）策略 |
+| L8 | 高级剥削策略 | 针对特定玩家池与对手类型的剥削调整 |
 
 **解锁规则**：
 - 默认顺序解锁：完成当前 Level 后解锁下一个
@@ -919,13 +847,13 @@
 | 对手形象系统 | 四种典型对手形象分类，含 VPIP/PFR/AF 等核心统计指标可视化与针对性策略建议 |
 | 知识图谱 | 可视化课程知识依赖关系（DAG），节点状态：已掌握 / 学习中 / 未解锁，支持点击跳转 |
 | 等级解锁 | 完成当前等级课程后自动解锁下一等级内容 |
-| 课程双层门禁 | CourseView 同时检查 Level 解锁与 prerequisite 解锁，防止 URL 绕过；`mental-tilt-recognition` 例外（无前置依赖） |
+| 课程双层门禁 | 同时检查 Level 解锁与前置课程解锁，防止 URL 绕过；情绪管理课（无前置依赖）例外，可随时访问 |
 | 每日训练计划 | 基于用户进度和弱项智能推荐每日训练任务 |
-| 难度自适应 | 根据正确率动态调整训练难度，保持最佳学习区间；QuickDrill 连续答错 ≥3 次自动降级（不低于 beginner） |
+| 难度自适应 | 根据正确率动态调整训练难度，保持最佳学习区间；快速训练连续答错 ≥3 次自动降级（不低于初级） |
 | 筹码量与下注尺度 | 支持不同有效筹码量（20BB/50BB/100BB）的场景训练，覆盖 1/3 pot、1/2 pot、3/4 pot、pot、overbet 等常见尺度 |
-| 学习路径横向推荐 | 完成课程路径后推荐关联学习路径（relatedTrackIds），形成学习网络 |
+| 学习路径横向推荐 | 完成课程路径后推荐关联学习路径，形成学习网络 |
 | L4 拆分 | 原 L4（GTO 与博弈论基础）拆分为 L4A（范围与EV思维）和 L4B（GTO与博弈论），降低单级内容负荷 |
-| 4 门新课程 | l3-3bet-postflop（3Bet翻后策略）、l7-hu（单挑策略）、l5-tools（扑克工具指南）、l5-online-vs-live（线上vs线下差异） |
+| 4 门新课程 | 3Bet 翻后策略、单挑（Heads-Up）策略、扑克工具指南、线上 vs 线下差异 |
 
 **验收标准**：
 1. 学院主页展示 9 个 Level 节点（8 级，L4 拆为 L4A/L4B 两个子节点）的等级列表与进度环
@@ -934,9 +862,9 @@
 4. 完成当前等级课程后自动解锁下一等级（L7 需完成 L3+L5，L8 需完成 L4B）
 5. 对手形象系统展示四种典型分类及对应策略建议
 6. 每日训练计划基于用户进度生成推荐
-7. 未达 Level 或未完成 prerequisite 的课程以锁定状态显示，无法通过 URL 直接访问（`mental-tilt-recognition` 除外）
-8. QuickDrill 连续答错 3 次后自动降级到更低难度
-9. 4 门新课程（l3-3bet-postflop / l7-hu / l5-tools / l5-online-vs-live）可正常访问
+7. 未达 Level 或未完成前置的课程以锁定状态显示，无法通过 URL 直接访问（情绪管理课除外）
+8. 快速训练连续答错 3 次后自动降级到更低难度
+9. 4 门新课程（3Bet 翻后 / 单挑策略 / 扑克工具指南 / 线上 vs 线下）可正常访问
 10. 完成课程路径后显示关联学习路径推荐
 
 ### 5.17 本土低级别盈利路径
@@ -1036,7 +964,7 @@
 | 规格项 | 描述 |
 |---|---|
 | PWA 离线模式 | Service Worker 缓存核心资源，支持离线访问；Web App Manifest 配置，支持"添加到主屏幕"；离线时训练数据本地保存 |
-| 国际化 | 支持中文（zh）和英文（en）双语界面，默认中文，可在设置中切换 |
+| 国际化 | 支持中文（zh）和英文（en）双语界面，默认中文，可通过顶部导航栏语言切换按钮切换 |
 | 跨模块一致性 | 全局 Toast 提示系统（success/error/info/warning）、统一空状态组件、统一加载骨架屏、统一训练结果页布局、键盘快捷键面板 |
 
 **验收标准**：
@@ -1058,23 +986,22 @@
 
 | 规格项 | 描述 |
 |---|---|
-| 碎片掉落概率 | 训练模式（范围/GTO/赔率等常规训练）30%、速训模式（QuickDrill）20% |
-| 碎片合成 | 5 片碎片合成 1 张冻结卡，调用 `synthesizeFreezeCard()` 扣减 5 碎片、增加 1 张冻结卡 |
-| 每日上限 | 每日最多获得 3 片碎片，避免刷碎片行为 |
+| 碎片掉落概率 | 训练模式（范围/GTO/赔率等常规训练）30%、速训模式（快速训练）20% |
+| 碎片合成 | 5 片碎片合成 1 张冻结卡 |
+| 每日上限 | 每日最多获得 2 片碎片，避免刷碎片行为 |
 | 掉落提示 | 获得碎片时显示动画提示“🧩 获得 1 片冻结卡碎片！(N/5)” |
 | 合成提示 | 碎片满 5 片时自动弹出合成确认，合成成功后显示“✅ 合成 1 张冻结卡！” |
-| Store 字段 | `freezeCardFragments` / `lastFragmentDate` / `fragmentsEarnedToday` |
 
 **验收标准**：
 1. 训练模式完成时有 30% 概率掉落碎片，速训模式 20%
 2. 5 片碎片可合成 1 张冻结卡
-3. 每日最多获得 3 片碎片
+3. 每日最多获得 2 片碎片
 4. 获得碎片时显示动画提示
-5. 老用户数据自动迁移（`freezeCardFragments: 0`）
+5. 老用户数据自动迁移（初始碎片为 0）
 
 ### 5.22 进步回放
 
-**功能描述**：通过 `ProgressReplay` 组件对比用户首次尝试与最近一次的表现，可视化展示各维度进步幅度，让用户直观看到自己的成长轨迹。
+**功能描述**：对比用户首次尝试与最近一次的表现，可视化展示各维度进步幅度，让用户直观看到自己的成长轨迹。
 
 **用户故事**：
 - 作为一名持续训练的用户，我希望看到自己从首次训练到现在的进步幅度，增强训练动力
@@ -1084,19 +1011,19 @@
 
 | 规格项 | 描述 |
 |---|---|
-| 对比数据 | `firstAttemptScores`（首次尝试分数）vs `lastAttemptScores`（最近一次分数） |
+| 对比数据 | 首次尝试分数 vs 最近一次分数 |
 | 展示维度 | 各训练模块的正确率、用时、ELO 分数变化 |
-| 可视化 | 柱状图/折线图对比首次 vs 最近表现，进步用绿色、退步用红色 |
+| 可视化 | 图表对比首次 vs 最近表现，进步与退步以语义色区分 |
 | 入口 | 进度追踪页面顶部“查看我的进步”卡片 |
 
 **验收标准**：
-1. ProgressReplay 组件正确对比首次与最近表现
+1. 进步回放正确对比首次与最近表现
 2. 各维度进步幅度可视化展示
-3. 进步用绿色、退步用红色区分
+3. 进步与退步以语义色区分
 
 ### 5.23 GTO 偏差检测
 
-**功能描述**：在 hand-history 模块集成 GTO 偏差分析面板，对导入的历史牌局进行自动 GTO 对比，识别关键决策点的偏差，帮助用户发现实战中的策略漏洞。
+**功能描述**：在牌局复盘模块集成 GTO 偏差分析面板，对导入的历史牌局进行自动 GTO 对比，识别关键决策点的偏差，帮助用户发现实战中的策略漏洞。
 
 **用户故事**：
 - 作为一名进阶玩家，我希望在复盘牌局时能看到每个决策点与 GTO 的偏差，快速定位策略漏洞
@@ -1118,7 +1045,7 @@
 
 ### 5.24 学习路径横向推荐
 
-**功能描述**：用户完成某个学习路径后，系统根据 `relatedTrackIds` 推荐关联的学习路径，形成学习网络，帮助用户发现相关但不一定直接依赖的课程内容。
+**功能描述**：用户完成某个学习路径后，系统根据预设的关联关系推荐相关学习路径，形成学习网络，帮助用户发现相关但不一定直接依赖的课程内容。
 
 **用户故事**：
 - 作为一名完成某路径的用户，我希望系统推荐相关路径，继续扩展知识面
@@ -1129,7 +1056,7 @@
 | 规格项 | 描述 |
 |---|---|
 | 推荐时机 | 完成学习路径全部课程后显示推荐卡片 |
-| 推荐数据 | 每个 LearningTrack 的 `relatedTrackIds` 字段定义关联路径 |
+| 推荐数据 | 每个学习路径预设关联路径定义 |
 | 推荐展示 | 卡片式展示关联路径名称、简介、课程数、难度等级 |
 
 **验收标准**：
@@ -1344,7 +1271,7 @@
 |------|--------|------|------|
 | 牌桌绿呢面 | --felt-deep / --felt / --felt-raised | #0e1a14 / #15301f / #1d4029 | 页面背景、主表面、悬停抬升 |
 | 象牙白 | --ivory / --ivory-dim / --ivory-muted | #f3ebd9 / #cabf9f / #8a8068 | 文字层级（主/次/弱） |
-| 黄铜金 | --brass / --brass-bright / --brass-deep | #c9a25e / #e0bd75 / #a07d3d | 唯一强调色、发丝线、激活态 |
+| 黄铜金 | --brass / --brass-bright / --brass-deep | #c9a25e / #e8c97e / #a07d3d | 唯一强调色、发丝线、激活态 |
 | 胡桃木 | --walnut / --walnut-raised / --walnut-border | #241a10 / #3a2a18 / #4a3825 | 侧边栏、面板、边框结构 |
 
 #### 语义色
@@ -1399,12 +1326,12 @@
 
 ### 9.1 当前版本（v2.1）
 
-平台已完成全部核心功能模块的开发，覆盖训练核心、学习路径、留存激励、反馈教练、平台能力五大类共 25 个功能模块。v2.1 在 v2.0 基础上完成排组打法逻辑系统性排查与修复（详见 `CHANGELOG.md` v1.8），建立规范的初学者入门训练体系，新增位置渐进解锁、反馈闭环（relatedLessonId）、自适应难度、课程双层门禁、冻结卡碎片系统、进步回放、GTO 偏差检测、学习路径横向推荐等能力。
+平台已完成全部核心功能模块的开发，覆盖训练核心、学习路径、留存激励、反馈教练、平台能力五大类共 27 个功能模块。v2.1 在 v2.0 基础上完成排组打法逻辑系统性排查与修复（详见 `CHANGELOG.md` v1.8），建立规范的初学者入门训练体系，新增位置渐进解锁、反馈闭环（relatedLessonId）、自适应难度、课程双层门禁、冻结卡碎片系统、进步回放、GTO 偏差检测、学习路径横向推荐等能力。
 
 | 类别 | 已交付模块 |
 |---|---|
 | 训练核心 | 手牌范围训练 / 底池赔率计算器 / GTO 决策模拟器 / 历史牌局复盘 / 扑克谜题 |
-| 学习路径 | 策略学院 / 新手引导 / 3 分钟快速训练 / 基础 Drill / 本土低级别盈利路径 / 学习路径横向推荐 / 本土化路径前置条件 |
+| 学习路径 | 策略学院 / 理论学院 / 新手引导 / 3 分钟快速训练 / 基础 Drill / 本土低级别盈利路径 / 学习路径横向推荐 / 本土化路径前置条件 |
 | 留存激励 | 进度追踪 / Streak 深度机制 / ELO 能力分级 / 间隔重复系统 / 冻结卡碎片系统 / 进步回放 |
 | 反馈教练 | 五级反馈分类 / 导师角色人格化 / 情绪管理 / GTO 偏差检测 |
 | 平台能力 | 成就系统 / 每日挑战 / 排行榜 / PWA 离线 / 国际化（中/英） |

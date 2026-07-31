@@ -507,6 +507,10 @@
     "settingHint": "Training will be blocked when the limit is reached. 0 = unlimited",
     "unlimited": "Unlimited"
   },
+  "settings": {
+    "languageLabel": "Language",
+    "languageHint": "Interface language, applies immediately"
+  },
   "downswing": {
     "title": "Downswing Detected",
     "message": "Accuracy has been declining for 3 consecutive days. This may signal fatigue or mindset fluctuation. Consider a short break or review the mental-game lesson.",

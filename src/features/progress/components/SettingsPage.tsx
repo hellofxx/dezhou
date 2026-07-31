@@ -38,7 +38,7 @@ const item = {
 };
 
 export default function SettingsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const settings = useProgressStore((s) => s.settings);
   const updateSettings = useProgressStore((s) => s.updateSettings);
   const records = useProgressStore((s) => s.records);
@@ -334,10 +334,18 @@ export default function SettingsPage() {
                 </SettingRow>
 
                 <SettingRow
-                  label="语言"
-                  description="界面语言（即将推出）"
+                  label={t('settings.languageLabel', { defaultValue: '语言' })}
+                  description={t('settings.languageHint', { defaultValue: '界面语言，切换后立即生效' })}
                 >
-                  <Select value={settings.language} disabled>
+                  <Select
+                    value={settings.language}
+                    onValueChange={(v) => {
+                      const lang = v as 'zh' | 'en';
+                      // 语言偏好事实源：progress store settings.language（persist），同步切换 i18n 实例
+                      updateSettings({ language: lang });
+                      i18n.changeLanguage(lang);
+                    }}
+                  >
                     <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
                       <SelectValue />
                     </SelectTrigger>

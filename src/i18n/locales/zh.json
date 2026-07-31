@@ -507,6 +507,10 @@
     "settingHint": "达到上限后将禁止继续训练，0 = 无限",
     "unlimited": "无限"
   },
+  "settings": {
+    "languageLabel": "语言",
+    "languageHint": "界面语言，切换后立即生效"
+  },
   "downswing": {
     "title": "检测到下风期",
     "message": "最近 3 天正确率持续下降，这可能是疲劳或心态波动的信号。建议短暂休息或复习情绪管理课程。",

@@ -230,6 +230,12 @@
 
 **行动按钮色阶**：fold=陶土红 → call=深胡桃 → raise=黄铜 → all-in=深胡桃嵌黄铜，按风险递增排列。
 
+**平权答题选项按钮（v1.3.2）**：range-trainer QuizCard 等「三选一」答题场景中，fold/call/raise 是三个**平权选项**（非一个主 CTA + 两个次要动作），须保证三者视觉权重相当且互相可区分——三色相并立、都明显浮于呢面背景之上：
+- fold：陶土红透底 `rgba(194,90,76,0.16)` + 陶土红字 `--poker-danger` + **陶土红边 0.55**（红调明确）
+- call：**胡桃木不透明实色** `--walnut-raised`（不可用半透明沉底，否则墨绿背景透上来会与 fold 糊成一团暗棕）+ 象牙字 `--ivory-dim`
+- raise：黄铜渐变 `--brass-bright→--brass` + 深墨字
+- 反模式：直接套用「一亮 CTA + 两沉底次要」的 CTA 色阶（导致两个暗按钮低对比、区分度不足）
+
 ### 5.6 面板 `.panel`
 - 胡桃渐变 `#241a10→#1a1308`，边框 `1px solid #4a3825`，圆角 8px，padding 20px
 - 标题 `.panel-title`：Fraunces 15px 600，前带 15px Lucide 图标（brass 70%）

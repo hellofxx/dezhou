@@ -128,7 +128,10 @@ export default function AppLayout() {
     APP_NAME;
 
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'zh' ? 'en' : 'zh');
+    const next = i18n.language === 'zh' ? 'en' : 'zh';
+    i18n.changeLanguage(next);
+    // 语言偏好事实源：progress store settings.language，顶栏切换同步写入以便跨刷新恢复
+    useProgressStore.getState().updateSettings({ language: next });
   };
 
   return (

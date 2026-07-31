@@ -1,5 +1,7 @@
 # AGENTS.md
 
+This file provides guidance to Qoder (qoder.com) when working with code in this repository.
+
 > 项目级 AI 代理指导文件。本文件在会话开始时自动加载，约束所有 AI 代理在本仓库内的行为。
 > 子代理配置位于 `.qoder/agents/`，详细产品规格见 `docs/PRD.md`，技术设计见 `docs/TDD.md`，版本演进见 `docs/CHANGELOG.md`。
 
@@ -13,8 +15,8 @@
 
 - **操作系统**：Windows
 - **Shell**：PowerShell 7.x（禁止输出 bash/sh/zsh 语法；路径用反斜杠 `\`；环境变量 `$env:VAR`；命令串联用 `;` 或 `&&`）
-- **包管理器**：pnpm（`package.json` 的 `devEngines.packageManager` 已锁定，禁止改用 npm/yarn）
-- **Node 版本**：见 `.nvmrc` 或 `package.json` engines（如无则使用 LTS）
+- **包管理器**：pnpm（`package.json` 的 `devEngines.packageManager` 已锁定，禁止改用 npm/yarn；pnpm 具体版本以 `package.json` 的 `packageManager` 字段为唯一事实源）
+- **Node 版本**：以 `.nvmrc` 为唯一事实源
 
 常用命令：
 
@@ -23,6 +25,16 @@ pnpm dev            # 启动开发服务器
 pnpm build          # tsc -b && vite build
 pnpm preview        # 预览生产构建
 pnpm typecheck      # 仅类型检查（CI 门禁，等价于 node node_modules/typescript/bin/tsc --noEmit）
+pnpm lint           # eslint src（规则清单见「质量门禁」）
+pnpm test           # vitest run（全部单元测试）
+```
+
+运行部分测试：
+
+```powershell
+pnpm test src/i18n/localeParity.test.ts   # 运行单个测试文件（路径过滤）
+pnpm test --project unit                  # 仅 Node 环境测试（src/**/*.test.ts）
+pnpm test --project component             # 仅 jsdom 组件测试（src/**/*.test.tsx）
 ```
 
 > 注：`pnpm tsc` 因 `devEngines` 校验可能失败，`typecheck` script 已直接调用 `node node_modules/typescript/bin/tsc`。
@@ -145,11 +157,13 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 ## UI/UX 设计系统
 
-- **色彩**：四层架构（牌桌绿 `--felt-*` / 象牙白 `--ivory-*` / 黄铜金 `--brass-*` / 胡桃木 `--walnut-*`），通过 CSS 变量定义于 `src/styles/globals.css`
+- **色彩**：四层架构（牌桌绿 `--felt-*` / 象牙白 `--ivory-*` / 黄铜金 `--brass-*` / 胡桃木 `--walnut-*`），通过 CSS 变量定义于 `src/styles/globals.css`（色彩 token 实现唯一权威）
 - **字体**：Fraunces（serif 标题）/ Inter Tight（sans 正文）/ JetBrains Mono（mono 数字）
 - **主题**：暗色为默认，禁止硬编码颜色值
 - **响应式**：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
 - **可访问性**：遵循 WCAG 2.1 AA，交互元素必须有 `aria-label`，对比度 ≥4.5:1
+- **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-\d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `poker-ui-demo/DESIGN_LANGUAGE.md`（当前 v1.3.2）
+- **五级反馈样式**：`GRADE_DISPLAY_CONFIG` 的 color 字段引用 globals.css `.grade-best`~`.grade-blunder` 类（样式唯一事实源），禁止内联霓虹类
 
 ## 跨模块复用系统
 
@@ -204,7 +218,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ### 调试解锁（开发者选项，2026-07 新增）
 
 - 实现：`src/shared/stores/debugMode.ts`（独立 persist store，不并入 progress store）；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（文档与子代理文件不维护数值副本）
-- 激活后全局旁路门禁（共 5 处）：strategy-academy 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、CourseView 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard` 每日题量上限；新增门禁时应同步接入 `isDebugUnlockActive()` 短路
+- 激活后全局旁路门禁（共 7 处）：strategy-academy 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、CourseView 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard` 每日题量上限、theory-academy store 的 `isTheoryLevelUnlocked`、theory-academy `TheoryChapterView` 章节 URL 直达门禁；新增门禁时应同步接入 `isDebugUnlockActive()` 短路
 - 产品规格见 `docs/PRD.md` 5.6.6，技术设计见 `docs/TDD.md` 5.9；onboarding 不纳入解锁范围
 
 ## 文档维护（三层职责分离）
@@ -226,8 +240,9 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
   - `no-restricted-imports`：锁定 features 模块间直接引用，允许边清单以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（收紧时只删不加）
   - `@typescript-eslint/no-explicit-any`：禁止 any
   - 注：lint 工具链通过 `.pnpmfile.cjs` 侧载 TS 6 API（typescript-eslint 尚不支持 TS 7.0），不影响 typecheck/build 使用的 TS 7
-- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖；策略学院课程数据完整性（id 唯一 / 牌面合法 / 引用无悬空 / native order 无重复 / Drill 接线）由 `src/features/strategy-academy/data/curriculumIntegrity.test.ts` 覆盖
+- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖；策略学院课程数据完整性（id 唯一 / 牌面合法 / 引用无悬空 / native order 无重复 / Drill 接线）由 `src/features/strategy-academy/data/curriculumIntegrity.test.ts` 覆盖；UI 颜色合规（禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）由 `src/designTokenGuard.test.ts` 全量扫描 src 守卫
 - **构建验证**：`pnpm build` 成功产出 `dist/`
+- **测试双项目划分**（`vitest.config.ts`）：`unit` 项目在 Node 环境运行 `src/**/*.test.ts`（纯函数 / store migrate）；`component` 项目在 jsdom 环境运行 `src/**/*.test.tsx`（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
 - 每次代码变更后必须运行类型检查、`pnpm lint` 与 `pnpm test`
 
 ## 提交粒度
