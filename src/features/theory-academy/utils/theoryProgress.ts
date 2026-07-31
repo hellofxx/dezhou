@@ -37,6 +37,20 @@ export function getChapterDifficulty(level: number): number {
   return Math.min(0.8, Math.max(0.2, 0.2 + (level - 1) * 0.075));
 }
 
+/**
+ * 判断 Level 是否按顺序解锁（纯函数：T1 恒解锁，Tn 需 T(n-1) 全部章节完成）。
+ * store.isTheoryLevelUnlocked 委托本函数（另加调试解锁旁路）；
+ * TheoryChapterView 的「下一章」导航渲染前校验（P1F-02）亦复用，避免口径分叉。
+ */
+export function isLevelUnlockedByCompleted(levelId: string, completedChapters: string[]): boolean {
+  const idx = THEORY_LEVELS.findIndex((l) => l.id === levelId);
+  if (idx < 0) return false;
+  if (idx === 0) return true;
+  const prev = THEORY_LEVELS[idx - 1];
+  if (!prev) return false;
+  return prev.chapters.every((c) => completedChapters.includes(c.id));
+}
+
 /** 判断某 Level 是否全部章节完成 */
 export function isLevelFullyCompleted(levelId: string, completedChapters: string[]): boolean {
   const level = THEORY_LEVELS.find((l) => l.id === levelId);

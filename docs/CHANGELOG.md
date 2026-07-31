@@ -5,6 +5,410 @@
 
 ---
 
+## 跨模块专批 C（数据一致性） — 2026-07-31
+
+> 处理《跨模块专批挂起清单》最后 3 项（platform-dev 执行）：P1A-06 / P1A-08 range preset ↔ GTO JSON
+> 一致性 · P1D-11 puzzle 题目 id 前缀规范。**至此挂起清单全部清空，跨模块专批（A/B/C）全部完成。**
+> **persist 变更**：无（组2 走路径 A 零迁移，未触碰任何 persist store 的 shape/version）。
+> **GTO 数据红线确认**：全程**未臆造**任何求解器频率数据——preset 重生成均为从既有
+> `preflop-ranges.json` 频率表按阈值抄录离散化；JSON 文件本身零改动（只读核验）。
+> 门禁：`pnpm typecheck` / `pnpm lint` / `pnpm test` 均 exit 0（359/359 通过，含本批新增 2 个测试文件 13 例）。
+
+### fix(range-trainer) — open/call 类 preset 以 GTO JSON 为源重生成 + 数据源定性（P1A-06，组1）
+
+- **数据源定性（P1-C 结论固化）**：gto-simulator `data/preflop-ranges.json`（6max_100bb_preflop）是
+  open / facing-open 场景的权威频率源；range-trainer open/call 类 preset 按「频率 ≥ 0.5」离散化生成
+- **执行偏差说明**：任务前提称「P1-A 修复批次已重生成并建守卫」，经排查**守卫测试不存在**且
+  open/call preset 与 JSON 存在实际漂移（utg-open 缺 8 手、btn-open 多 17 手等）——本批按
+  「若未建或覆盖不全，补齐」条款一并补齐
+- `constants.ts` 重生成 6 个 preset（以 JSON ≥0.5 为源）：utg-open 34→42 手、hj-open 48→47 手、
+  co-open 58→66 手、btn-open 93→76 手、sb-open 72→75 手、bb-call-vs-btn 59→60 手；
+  bb-3bet-vs-btn 与 JSON `bb_vs_btn_open.raise≥0.5` 已一致（10 手，零改动）
+- **「发起 3-bet」类不臆造数据**：JSON 的 `btn_vs_co_3bet` / `co_vs_hj_3bet` 语义是「Hero open 后
+  **面对** 3-bet 的响应」，与 range-trainer「面对 open **发起** 3-bet」是**不同 spot，不得互相校验**；
+  `btn-3bet-vs-co` / `co-3bet-vs-hj` / `4bet-range` 三个 preset 定性为**模块自身权威源**（教学参考范围），
+  constants.ts ADVANCED 段头注释固化该定性与「严禁为对齐而臆造 JSON 频率数据」红线
+- 新增跨模块守卫 `src/rangePresetGtoConsistency.test.ts`（置于 src 根，同 eslintCrossImports.test.ts
+  先例——range-trainer 依 ESLint 模块隔离不得引用 gto-simulator）：7 对映射断言 preset ↔ JSON ≥0.5
+  集合全等；3 个排除项显式登记（注释排除原因）；守卫映射+排除项恰好覆盖全部 ADVANCED preset
+  （新增 preset 必须显式归类）；另设 JSON 语义提示测试防 `btn_vs_co_3bet` 表语义漂移
+
+### fix(range-trainer) — preset 名称百分比标注按组合占比重算（P1A-08，组1）
+
+- 所有 `(~N%)` 标注按组合数加权占比（对子 6 / 同花 4 / offsuit 12，P1A-07 口径）重算：
+  utg ~19% · hj ~22% · co ~32% · btn ~39% · sb ~38% · bb-call ~33%；3-bet/4-bet 类补标注
+  （btn-3bet ~6% · co-3bet ~5% · bb-3bet ~5% · 4bet ~4%）；HU BTN 标注 ~75%→~62%（原标注失真）
+- 守卫测试断言：全部带标注 preset 的标注值与 `getRangeComboPercentage` 实际占比偏差 ≤ 1pp
+
+### chore(puzzle-trainer) — 题目 id 前缀规范定性（P1D-11 路径 A，组2，零迁移）
+
+- **核查结论（路径 A 成立，比预期更强）**：puzzle-trainer **完全不注册 SRS ReviewItem**
+  （全模块 0 处 `addReviewItem` / `processReview` 调用；`inferPuzzleLessonId` 仅用于
+  relatedLessonId 反馈链接），题库短 id（`rfi-001` 式）从不进入 progress SRS 键空间，
+  与 `range:` / `odds:` / `gto:` 前缀键无碰撞可能
+- 处置：**不改题库数据、不做存量迁移**；`puzzle:{theme}:{questionId}` 规范修订为仅约束
+  「未来接入 SRS 时**注册处**的 key 拼接」（题库静态数据保持短 id）
+- 规范表述修订：`.qoder/agents/puzzle-trainer-dev.md`（题目 ID 口径 + Quality Checklist）、
+  `docs/TDD.md` SRS 章节补「puzzle-trainer 不注册 SRS」定性说明
+- 新增守卫 `data/puzzleBank.ids.test.ts`（3 例）：全库 id 唯一（跨 10 主题）、205 题/10 主题
+  规模锁定、id 不含 `puzzle:` 前缀（前缀仅在未来 SRS 注册处拼接）
+
+### docs — TDD 数据源规范落盘
+
+- `docs/TDD.md` range-trainer 章节新增「预置范围数据源」段落：open/call 类以 JSON 为源 ≥0.5
+  离散化 + 守卫位置；发起 3-bet / 4-bet 类为模块自身权威源，严禁臆造求解器数据
+
+---
+
+## 跨模块专批 B（progress 中枢口径） — 2026-07-31
+
+> 处理《跨模块专批挂起清单》中涉及 progress store 跨模块中枢的口径统一 4 组（platform-dev 执行）：
+> P1A-04/P1F-03 兜底 · P1D-06/P1F-01 SessionLimitGuard 家族 · P1E-07 streak 口径 · P1E-05 SRS 回写。
+> **persist 变更**：无。四组均未触碰任何 persist store 的 shape/version：
+> 组1 仅 action 内判定逻辑；组2 仅 hook 判定时机（既有字段结构不变）；组3 仅补调既有幂等 action；
+> 组4 复用既有 processReview/updateReviewItem（ReviewItem 已含全部 SM-2 字段），新增的 PracticeResult.answers
+> 逐题明细在 academy store 入库前剥离，practiceResults 持久化负载形状不变（persist-shape 快照测试未动，全绿）。
+> 门禁：`pnpm typecheck` / `pnpm lint` / `pnpm test` 均 exit 0（346/346 通过，含本批新增 3 个测试文件 11 例）。
+
+### fix(progress) — addRecord 空会话拒收兜底（P1A-04 + P1F-03，组1）
+
+- `features/progress/store.ts` `addRecord`：`totalQuestions <= 0`（或 result 缺失）的训练记录不入账（不计 records、不影响统计/streak 链路）
+- 定位：中枢纵深防御——模块侧（range-trainer 空会话入口 / theory 空题库 effect）已各自阻断，此处防止未来任何模块发空会话污染统计
+- 回归：新增 `store.addRecord.test.ts`（拒收 0/负数 · 正常入账 · 重复 id 去重 · 统计口径不受污染）
+
+### fix(progress) — SessionLimitGuard 开局判定口径统一（P1D-06 家族 + P1F-01，组2）
+
+- `useSessionLimitReached()` 由响应式 `dailyQuestionsAnswered >= limit` 改为**开局判定**：挂载时一次性快照额度并用 ref 冻结
+  - 开局已达上限 → 拦在训练开始前（提示「今日已达题量上限」）
+  - 会话进行中额度耗尽 → 不再中途翻转拦断（原口径会整体卸载进行中会话：无结算、无 emit 直接丢弃），允许走完结算；下次进入训练页（新挂载）再拦
+  - 调试解锁旁路保留响应式（激活即放行；激活期间不冻结快照，关闭后按开局口径重新判定）
+- hook 层单点修复，覆盖全部 “同款” 调用点：puzzle Rush/Daily/Theme 三模式、strategy QuickDrill、theory 章末小测（TheoryChapterView）——调用点零逻辑改动（仅注释同步）
+- 已知边界（已写入注释）：同一挂载内的「再来一轮/重考」沿用挂载时快照，直到重新进入页面才重新判定
+- 回归：新增 `components/SessionLimitGuard.test.tsx` 4 例（中途耗尽不翻转 · 开局已达即拦 · limit=0 放行 · debug 旁路）
+
+### fix(strategy-academy) — 训练日 streak 口径跨模块统一（P1E-07，组3）
+
+- 口径：**任何一次实质训练完成都计入训练日 streak**（与 theory/puzzle/其他训练模块归口）
+- `CourseView.tsx`：课程测验完成（handleQuizComplete）与 Drill 完成（handleDrillComplete）补调 `recordTrainingDay()`
+- `QuickDrill.tsx`：`recordTrainingDay()` 移出 `isQuickMode` 块，普通模式完成同样计入
+- progress store 的 action 未改（recordTrainingDay 幂等性 P0-A 已验证，同日重复调用安全），仅跨模块调用点补齐
+
+### fix(strategy-academy) — QuickDrill 复习题 SRS 回写闭环（P1E-05，组4）
+
+- 核查结论：progress 已有完整公开 API（`processReview` SM-2 纯函数 + `updateReviewItem` action），**无需新增 action**，本批建立完整回写闭环（非降级为 API 骨架）
+- 链路：`types.ts` 新增 `PracticeAnswerDetail` + `PracticeResult.answers?`（逐题明细，仅供完成回调侧消费）→ `PracticeDrill.tsx` 用 answersRef 记录逐题 `{questionId, isCorrect, timeTaken}` 随 result 上报 → 新建 `utils/quickDrillSrs.ts` 纯函数（quality 映射：对+快(<5s)→5 / 对→4 / 错→1，对齐 TDD 既有口径；非 review-* 忽略；复习项已清理静默跳过） → `QuickDrill.tsx` handleComplete 逐项 `updateReviewItem` 回写（间隔推进 1→3→7→14→30，答错重置 1 天）
+- persist 不变：`academy store.recordPracticeScore` 入库前剥离 `answers`，practiceResults 持久化负载与历史形状一致；ReviewItem 既有字段（easeFactor/interval/repetitions/nextReviewDate）足够，未动 progress shape
+- 边界：本批仅建立「QuickDrill 复习题回写」闭环；SRS 其余方面（复习会话/队列管理/其他消费方）由 P2-C 专项全面排查
+- 回归：新增 `utils/quickDrillSrs.test.ts` 6 例（quality 映射 · 答对推进 nextReviewDate · 间隔进档 1→3 · 答错重置 · 非 review-*/失配跳过）
+
+---
+
+## 跨模块专批 A（清理类） — 2026-07-31
+
+> P1 全阶段排查修复完成后，处理《跨模块专批挂起清单》中零状态风险的清理/防御类 7 项（platform-dev 执行）。
+> **persist 变更**：无。未改任何 persist store 的 version/shape（纯函数 / 路由 / 测试配置 / 注释 / 死代码删除）。
+> 门禁：`pnpm typecheck` / `pnpm lint` / `pnpm test` 均 exit 0（335/335 通过；eslintCrossImports 全量并发实测 3.7s，已在新上限内）。
+
+### fix(shared) — pokerMath 边界防御 + 死函数删除 + JSDoc 口径澄清
+
+| 项 | 描述 | 文件 |
+|---|---|---|
+| P1B-10 | 全函数边界防御：新增 `sanitizeNonNegative`（金额/outs：NaN/±Infinity 归 0、负值 clamp 0）与 `sanitizeRate`（胜率 clamp [0,1]）入口守卫；`estimateEquity` 结果 clamp [0,1]、`estimateEquityShortDeck` 单街概率 clamp [0,1] 后结果 clamp [0,100]（修复 outs>31 互补概率溢出为负，历史缺陷 outs=100 → -419%）；`calculatePotOdds` 负 bet 不再返 -1；`isProfitableCall` 非法入参保守返 false。clamp 仅作用于非法边界输入，正常值语义不变（calculateEV 结果保留可负） | `shared/utils/pokerMath.ts` |
+| calculateImpliedOdds 处置 | grep 确认全仓零运行时调用（仅本体 + 自身测试 + oddsMath.ts 注释提及）后删除函数及其测试；其「potOdds + gain」方向本身错误（P1B-02 已在 pot-odds 侧以「收益并入底池」口径替代）；shared/utils/index.ts barrel 未导出 pokerMath（仅注释提示直接 import），无需清理 | `shared/utils/pokerMath.ts` / `pokerMath.test.ts` |
+| JSDoc 口径澄清 | `calculatePotOdds` 明确 potSize 为「已含对手本次下注的底池总额」，分开维护时需调用方自行并入（bet/(pot+bet+bet) 权威三项式示例）；`calculateEV` 明确 winAmount 应含对手本次下注——均对齐 pot-odds `utils/oddsMath.ts` 头注口径，标注 P1B-01/03 历史缺陷根因防再误用；oddsMath.ts 头注同步删除「挂起 platform-dev」过期表述 | `shared/utils/pokerMath.ts` / `pot-odds/utils/oddsMath.ts`（仅注释） |
+
+回归测试：`pokerMath.test.ts` 由 8 例扩至 21 例（负值 / NaN / Infinity / 溢出封顶 / 胜率越界 / EV 可负语义保留全覆盖）。
+
+### chore(workers) — 删除 useGTOWorker.ts 死代码 hook（P1-C 定性 B）
+
+- grep 确认：`useGTOWorker` 全仓零外部引用（仅自身文件定义）；`gtoWorker.ts` 仍被 `hand-history/utils/gtoDeviation.ts` L133 消费 → **只删 `src/workers/useGTOWorker.ts`，保留 `gtoWorker.ts`**，删除后无 import 悬空
+- gtoWorker.ts 伪造 evLoss/旧四级评级问题维持移交 P2-B（本批不处理）
+- TDD 同步：目录树删 useGTOWorker.ts 行；§8.1 改写为 gtoDeviation.ts 消费口径，删除 hook 健康检查/一次性重建段落
+
+### fix(app) — 删除 `/range-trainer/result/:sessionId` 死路由（P1A-13）
+
+- grep 确认全项目无 navigate 指向该路由；`SessionResultPage` 仅 routes.tsx 引用（占位页，store 无 persist 直接刷新必空白）
+- 删除：routes.tsx 路由注册 + lazy import、`range-trainer/components/SessionResultPage.tsx`、`app/pages/placeholder.tsx`（createPlaceholder 工厂仅被 SessionResultPage 消费，连带成为死代码一并删除）
+- TDD 同步：路由表删该行；目录树删 `app/pages/placeholder.tsx` 行
+
+### test(platform) — eslintCrossImports testTimeout（挂起清单 #11）
+
+- `src/eslintCrossImports.test.ts` 动态 import `eslint.config.js` 连带加载 eslint 插件链，全量 `pnpm test` 并发下与其他测试竞争资源偶发超过默认 5000ms（单跑 1.4s 稳定绿）
+- 修复：仅该 it 传入 `{ timeout: 30000 }`，不动全局默认 timeout（vitest.config.ts 未改）；本批全量实测该用例 3689ms 通过
+
+### docs(strategy-academy) — track-theory-bridge 孤岛定性注释修正（P1F-05）
+
+- **裁决：维持数据现状不补引用，修正注释口径**。理由：theory-academy 9 个 Level 的 practiceRecommendations 定向推荐均指向 track-beginner/track-gto/track-cash-game，补引用需改 theory 数据且属臆测产品意图，风险更高；轨道本身经 `/academy/tracks` 泛浏览可达，非不可达孤岛，仅注释与实现矛盾
+- `learningTracks.ts` 注释改为：通用「理论→实践」入口轨道，经泛浏览发现，非各 Level 定向推荐目标；TDD 5.8 第 9 条同步同口径
+
+### 落盘同步
+
+- `docs/BUG_HUNT_BACKLOG.md`：《跨模块专批挂起清单》增状态列，本批 7 项标「已修复 + CHANGELOG 2026-07-31（专批 A）」，专批 B/C 项保留挂起；P1-A/P1-B/P1-C/P1-F 各分散登记点同步
+- `docs/TDD.md`：目录树（workers / app/pages）、路由表、§8.1 Web Worker、§5.8 理论→实践桥接四处同步
+
+---
+
+## fix(theory-academy) — 2026-07-31（P1-F 排查 5 项：3 项修复 + 2 项挂起）
+
+> 基于 P1-F（理论学院 theory-academy）排查确认的 5 项问题：本批修复 3 项（均在 `src/features/theory-academy/` 内闭环），P1F-01（SessionLimitGuard 小测中途拦，并入 P1D-06 家族专批扩围）与 P1F-05（track-theory-bridge 孤岛定性，双模块数据协调）挂起 platform-dev 专批；P1F-03 的 progress 侧 totalQuestions=0 拒收兜底并入 P1A-04 兜底专批。排查结论已落盘 `docs/BUG_HUNT_BACKLOG.md`《P1-F 排查结论（2026-07-31）》。
+> **persist 变更**：无。未改 theory-academy-progress store 的 persist version（v1）与 shape，无迁移需求。
+
+### 修复明细
+
+| 编号 | 描述 | 文件 |
+|---|---|---|
+| P1F-02 | "下一章"跨 Level 顺延指向未解锁 Level，点击被章节页门禁 Navigate 静默弹回 /theory → 渲染前用目标章节所属 Level 解锁态校验（含调试解锁旁路），未解锁降级为不可点击提示文案“完成本级剩余章节后解锁：…”；新增 `isLevelUnlockedByCompleted` 纯函数，store.isTheoryLevelUnlocked 委托同一实现（单源防口径分叉）；两处“下一章”按钮（回访阅读页 / done 页）抽取 NextChapterNav 统一接入 | utils/theoryProgress.ts / store.ts / components/NextChapterNav.tsx (new) / TheoryChapterView.tsx |
+| P1F-03 | 空题库防御 effect（`if (isEmpty) onComplete(100,0,0)`）无一次性守卫，StrictMode 双跑 → completeChapter 双调、训练事件双 emit → 加 `completedRef` 一次性守卫（对齐 range-trainer TrainingSession 防重入模式） | components/TheoryQuiz.tsx |
+| P1F-04 | 桥接跳转丢失 track 参数：`navigate('/academy/tracks')` 不带 `?track=`，P1E-01 建好的 LearningTracksView 消费方（滚动高亮）收不到 → 两处改 `navigate(\`/academy/tracks?track=${rec.trackId}\`)`（track-beginner/track-gto/track-cash-game） | components/PracticeBridgeCard.tsx / TheoryLevelCard.tsx |
+
+### 挂起项
+
+| 编号 | 描述 | 归口 |
+|---|---|---|
+| P1F-01 | SessionLimitGuard theory 小测中途拦（quiz 阶段中途翻转丢弃作答进度） | platform-dev（并入 P1D-06 开局拦/中途拦口径家族专批扩围） |
+| P1F-03 兜底 | progress 侧 totalQuestions=0 训练结果拒收防御 | platform-dev（并入 P1A-04 兜底专批） |
+| P1F-05 | track-theory-bridge 轨道孤岛定性（裁决补引用 or 修正注释） | platform-dev + 双模块 |
+
+### 回归测试新增
+
+- `utils/theoryProgress.test.ts` (8 tests)— P1F-02 跨 Level 顺延/解锁判定/未解锁复现路径/顺序学习流不变式
+- `components/TheoryQuiz.test.tsx` (2 tests)— P1F-03 StrictMode 空题库 onComplete 单发 / 非空题库不自动完成
+
+---
+
+## fix(strategy-academy) — 2026-07-31（P1-E 排查 13 项：11 项修复 + 2 项挂起）
+
+> 基于 P1-E（策略学院 strategy-academy）排查确认的 13 项问题：本批修复 11 项（均在 `src/features/strategy-academy/` 内闭环），P1E-05（QuickDrill SRS 复习回写）与 P1E-07（训练日 streak 口径统一）挂起 platform-dev + P2-C 专批。
+> **persist 变更**：无。未改 strategy-academy-progress store 的 persist version（v2）与 shape，无迁移需求。
+
+### 修复明细
+
+| 编号 | 描述 | 文件 |
+|---|---|---|
+| P1E-01 | track 跳转参数无消费方 → 改跳 `/academy/tracks?track=<id>`；LearningTracksView 消费 `?track=` 滚动高亮 | CourseView.tsx / LearningTracksView.tsx |
+| P1E-02 | 轨道前置判定认证口径→课程完成口径（统一 CourseView 本土课门禁） | learningTracks.ts / LearningTracksView.tsx |
+| P1E-03 | LearningTracksView 前置未满足按钮不禁用 → disabled + 跳转链接 | LearningTracksView.tsx |
+| P1E-04 | QuickDrill 复习题混入总题数缩水 → 缺口回填保证题数契约 | quickDrillMix.ts (new) / QuickDrill.tsx |
+| P1E-06 | PracticeDrill adaptive 重排破坏复习题前置顺序 → QuickDrill 传 `adaptive={false}` | QuickDrill.tsx |
+| P1E-08 | LevelCard l4a/l4b 进度环口径错位 → 改用条目自身口径 | LevelCard.tsx / AcademyHome.tsx |
+| P1E-09 | 认证重试不重洗 → handleRetry 重置 sessionSeed；题池洗牌改 shuffleBySeed | LevelCertification.tsx / certificationExam.ts (new) |
+| P1E-10 | 冻结卡文案硬编码“7 天”→ {{count}} 插值实际 quickDrillStreak | QuickDrill.tsx / zh.json / en.json |
+| P1E-11 | QuickDrill 正确率零值边界 → totalQuestions>0 判别无数据 | QuickDrill.tsx |
+| P1E-12 | ConceptGraph 本土课节点锁定口径 → 按 LOCAL_TRACK.prerequisiteLevelIds 判定 | ConceptGraph.tsx |
+| P1E-13 | PracticeDrill 超时判 Fold 对 → 超时强制 isCorrect=false（对齐 P1A-02） | PracticeDrill.tsx / practiceGrading.ts (new) |
+
+### 挂起项
+
+| 编号 | 描述 | 归口 |
+|---|---|---|
+| P1E-05 | QuickDrill 复习题答完 SRS 不消化（需 progress 复习回写 API） | platform-dev + P2-C |
+| P1E-07 | 训练日 streak 口径跨模块统一（strategy 课程/Drill 不计 streak） | platform-dev（与 P1-F theory 同款归口） |
+
+### 回归测试新增
+
+- `data/learningTracks.test.ts` (6 tests)— P1E-02 前置口径
+- `utils/quickDrillMix.test.ts` (6 tests)— P1E-04 题数回填
+- `utils/certificationExam.test.ts` (6 tests)— P1E-09 重试重洗
+- `utils/practiceGrading.test.ts` (7 tests)— P1E-13 超时判错
+
+---
+
+## fix(puzzle-trainer) — 2026-07-31（P1-D 排查 12 项：10 项修复 + 2 项挂起：Rush 难度递增 / failed 计分口径 / 计时后台漂移 / 命耗尽状态边界 / 统计污染 / Daily 跨日标记）
+
+> 基于 P1-D（扑克谜题 puzzle-trainer）排查确认的 12 项问题：本批修复 10 项（均在 `src/features/puzzle-trainer/` 内闭环），P1D-06（SessionLimitGuard 口径，P1-E QuickDrill 同款）与 P1D-11（题目 ID `puzzle:` 前缀，涉 SRS 存量迁移）挂起 platform-dev 专批。排查结论已落盘 `docs/BUG_HUNT_BACKLOG.md`《P1-D 排查结论（2026-07-31）》。
+> **persist 变更**：无。未改 puzzle-trainer-store 的 persist version（v2）与 shape，无迁移需求。
+> **P1D-10 甄别结论**：4 个单主题正确答案位置超 60% 经甄别为动作类选项语义固定排序（消极→激进）的自然结果（全库 615 选项 100% 动作类），**不算 bug**：不改题库、不强制单主题 ≤60%，守卫测试改为分型断言（动作类验语义排序正确性，文字陈述类断言 ≤60%）。
+
+### 代码变更
+
+**组一：引擎正确性（Rush 计分 / 计时 / 状态机）**
+- **fix**（P1D-01）：`data/rushQuestions.ts` 分段配比切片（easy/medium/hard 各 ⌈count/3⌉，不足从剩余题补齐，末尾稳定排序保难度非降序），修复旧 `slice(0,30)` 导致 30 题全难度 1、难度递增失效；新增 `rushQuestions.test.ts`（5 例：10/10/10 配比 / 非降序 / 同日确定性 / id 无重复 / count=12）
+- **fix**（P1D-02）：新建 `hooks/puzzleEngineCore.ts`（纯函数层），`computeSessionScore` 在 `status==='failed'`（命耗尽）时剩余时间分归 0（只计对题分+命分），修复“快速送命比打满分高且可刷 rushBest”的激励反常
+- **fix**（P1D-03）：`hooks/usePuzzleEngine.ts` 倒计时改 Date.now() 段式基准（对齐 range-trainer P1A-12 useTimer 口径）：剩余 = 总时长 + 累计连对奖励(bonusAwarded) − 墙钟耗时，250ms tick，后台节流恢复后一次性追平，不可再切后台作弊
+- **fix**（P1D-04）：`next()` 命耗尽判定前置于“无下一题”（末题命耗尽不再误判 completed）；倒计时归零分支区分 `lives===0 → failed`
+- **fix**（P1D-05）：`buildPuzzleResult` 中 rush 未答完时 `totalQuestions` 取 `answers.length`（已答数），修复 emit 恒=30 稀释全局正确率/题数虚增、结果页 “10/30” 与 accuracy 自相矛盾；buildResult / trainingEvents.emit / 结果页三处单源同口径；新增 `puzzleEngineCore.test.ts`（10 例：failed 不计时间分 / totalQuestions=已答数 / 连对奖励 / 重复作答幂等）
+- **fix**（P1D-12）：删除 `end()` 死代码（无调用方）与空 effect `if(answered){}`；顺手修正 `types.ts` / `PuzzleCard.tsx` 头注过时的“三级反馈/评级”注释为五级
+
+**组二：三模式交互**
+- **fix**（P1D-07）：`DailyPuzzle.tsx` 完成时实时计算 `getDailyKey(new Date())`（不用 mount 冻结值），retry 时 `setToday(new Date())` 同步刷新，修复跨午夜 retry 抽今天题却 `markDailyCompleted(昨天)` 的错日标记
+- **fix**（P1D-08）：`PuzzleHome.tsx` Rush 卡片新增 3/5 分钟双按钮入口（`?duration=3|5`，stopPropagation 防卡片点击冲突；文案 “3 min/5 min” 语言中立，不扩大 i18n 硬编码面）
+- **fix**（P1D-09）：`PuzzleHome.tsx` themeBest 改 `usePuzzleStore((s) => s.themeBest)` 响应式订阅（旧 render 中 `getState()` 非响应式）
+
+**组三：守卫与行数治理**
+- **test**（P1D-10）：`puzzleBank.optionOrder.test.ts` 新增分主题分布守卫：动作类逐题验语义排序正确性（输出分布供监控），文字陈述类断言 ≤60%，并硬断言当前题库 100% 动作类
+- **refactor**（≤200 行治理）：新建 `hooks/usePuzzleSession.ts`（三模式会话接线去重：选中项/recordAnswer/完成提交/emit 单源）、`utils/trainingRecord.ts`（puzzleResultToTrainingRecord 下沉）、`components/PuzzleCardFeedback.tsx`（五级反馈面板）、`components/PuzzleCardChrome.tsx`（RushStatusBar/InfoChip）、`components/PuzzleResultParts.tsx`（StatCard/WrongAnswerList）；除静态题库数据 `data/puzzleBank.ts` 外全部文件 ≤200 行
+
+### 挂起登记（跨模块专批，见 BUG_HUNT_BACKLOG 挂起清单第 5/6 项）
+- **P1D-06**：SessionLimitGuard 开局拦 vs 中途拦口径统一（P1-E QuickDrill 同款需一并处理）——platform-dev
+- **P1D-11**：题目 ID 加 `puzzle:` 前缀规范化（涉 SRS 存量 ReviewItem 键迁移）——platform-dev 评估
+
+---
+
+## fix(gto-simulator) — 2026-07-31（P1-C 排查 27 项：24 项修复 + 3 项挂起/移交：判分正确性 / 发牌唯一性 / 翻后策略接入 / EV 单位统一 / 多步底池计算）
+
+> 基于 P1-C（GTO 模拟器 gto-simulator）排查确认的 27 项问题：本批修复 24 项（均在 `src/features/gto-simulator/` 内闭环），useGTOWorker 删除挂起 platform-dev，gtoWorker 移交 P2-B，i18n 移交 P2-D。排查结论已落盘 `docs/BUG_HUNT_BACKLOG.md`《P1-C 排查结论（2026-07-31）》。
+> **persist 变更**：无。store 未使用 persist 中间件，无版本迁移需求。
+> **SRS id 历史数据说明**：P1C-07 将 SRS ReviewItem id 从 `gto:${scenario.id}`（含时间戳）改为稳定语义键 `gto:${spotKey}:${handNotation}`。旧 id 的 ReviewItem 不迁移，自然淡出；重复训练同 spot+hand 时新键生效。
+
+### 代码变更
+
+**组一：判分正确性**
+- **fix**（P1C-01/26）：`boardGenerator.ts` 重写为牌堆抽取模式，新增 `excludeCards` 参数，确保 hero 2张 + board 5张全局唯一
+- **fix**（P1C-02）：`strategyCompare.ts` evLoss 恒 `Math.max(0, ...)` + 超注惩罚模型（all-in 不再判 best）
+- **fix**（P1C-03）：`store.ts` 删除局部 `determineSpotKey`，复用 `utils/spotKey.ts` 的 `resolveSpotKey`（null 显式 fallback）
+- **fix**（P1C-04/23）：新建 `utils/postflopStrategy.ts`，接入 postflop-ranges.json texture_strategy + classifyHandStrength 含 weak_hand + cbet_frequencies sizing
+- **fix**（P1C-05）：多步首节点改用 `getPreflopHandStrategy` 查表（不再硬编码 {0.2,0.3,0.5}）
+- **fix**（P1C-06）：ELO 移入 `currentNodeIndex===0` 块内（对齐 SRS/Emotion 仅首决策节点）
+- **fix**（P1C-07）：SRS id 改稳定语义键 `gto:${spotKey}:${handNotation}`
+- **fix**（P1C-08）：新建 `utils/handDifficulty.ts`（169 全覆盖，A2s 补入 ADVANCED）
+- **fix**（P1C-09）：`GTOSessionPage` relatedLessonId 改用 activeStreet
+- **fix**（P1C-10）：`strategyCompare.ts` isOptimal 改为 `evLoss < GRADE_THRESHOLDS.correct`（引用 shared 常量，只读不改）
+
+**组二：功能/显示**
+- **fix**（P1C-11）：types.ts 新增 `evLossBB100` 字段，统一 BB/100 口径（结果页/首页显示 BB/100）
+- **fix**（P1C-12）：`GTOSessionPage` 传入真实 callAmount（preflop=lastRaise / postflop=pot×sizing）
+- **fix**（P1C-13）：`GTOFeedback.tsx` 显示 `Math.max(0, evLoss)` 防御
+- **fix**（P1C-14）：`GTOResultPage` 矩阵按会话 spotKey，无数据渲染占位
+- **fix**（P1C-15）：`SpotTrainer` BB 从位置选项剔除
+- **fix**（P1C-16）：`GTOSessionPage` 透传 exploitMode/exploitStrategy/selectedOpponent 给 GTOFeedback
+- **fix**（P1C-17）：`DecisionTree` 未来节点牌面渲染卡背 "?"
+- **fix**（P1C-18）：`GTOSessionPage` userDecisions 取结构化 userAction 字段
+
+**组三：数据/状态**
+- **fix**（P1C-19）：store 新增 `decisionStartAt` 每题重置（timeTaken 不再累计）
+- **fix**（P1C-20）：`scenarioGenerator.ts` 多步 potSize 由 previousActions 累加真实底池
+- **fix**（P1C-21）：`scenarioGenerator.ts` turn/river 重算 classifyBoardTexture
+- **fix**（P1C-22）：store 删除无消费者死状态 selectedSpotKey/highlightedHand
+- **fix**（P1C-24）：`GTOResultPage` 除零防御 `|| 1`
+- **fix**（P1C-25）：3-bet 场景 previousActions 含 hero open + 后位 3-bet（语境完整）
+
+**架构重构**
+- `useScenarioEngine.ts` 从 598→62 行（逻辑抽至 utils/scenarioGenerator.ts、handDifficulty.ts、postflopStrategy.ts、spotKey.ts）
+- `store.ts` 从 361→193 行（删除局部 helpers，复用 utils）
+
+### 测试新增
+- `boardGenerator.test.ts`（4 测试：发牌唯一性 P1C-01/26）
+- `handDifficulty.test.ts`（5 测试：169 全覆盖守卫 P1C-08）
+- `postflopStrategy.test.ts`（7 测试：翻后策略随牌力变化 P1C-04）
+- `strategyCompare.test.ts` 增补4 测试（All-In 不再 best P1C-02；isOptimal 边界 P1C-10）
+
+### 挂起/移交
+- useGTOWorker.ts + gtoWorker.ts 删除 → 挂起 platform-dev 专批
+- P1A-06 发起 3-bet spot 数据补齐 + range-trainer 对齐 → 挂起专批
+- gtoWorker.ts 伪造 evLoss/旧四级评级 → 移交 P2-B
+- P1C-27 i18n 硬编码 → 移交 P2-D
+
+---
+
+## fix(pot-odds) — 2026-07-31（P1-B 排查 11 项：10 项修复 + 3 项挂起：赔率核心口径 / 隐含赔率方向 / EV 漏算 / SRS 去重 / 评级展示 / 输入边界）
+
+> 基于 P1-B（底池赔率 pot-odds）排查确认的 11 项问题：本批修复 P1B-01～09/11 共 10 项（均在 pot-odds 模块内闭环），P1B-10 等 3 项挂起 platform-dev 专批（见下）。排查结论、挂起清单与观察项已落盘 `docs/BUG_HUNT_BACKLOG.md`《P1-B 排查结论（2026-07-31）》。
+> **关键口径裁决（已确认）**：底池赔率所需胜率以题库三项式为权威——所需胜率 = 跟注额 / (当前底池 + 对手下注 + 我方跟注额) = `bet / (pot + bet + bet)`（pot=100, bet=50 → 25%）；计算器 UI 将"底池"与"对手下注"分开输入，故在模块内 hook/util 层把对手下注并入底池后再调 shared 纯函数，**未修改 `shared/utils/pokerMath.ts` 本体**。
+
+### 代码变更
+
+- **fix(pot-odds)**（P1B-01，最重 + P1B-02/03 同批）：口径计算抽为纯函数 `utils/oddsMath.ts` 的 `computeOddsResult`（useOddsCalculation 变转发层，可直接单测）：
+  - **P1B-01 底池赔率**：`calculatePotOdds(potSize, betSize)` → `calculatePotOdds(potSize + betSize, betSize)`，对手下注并入底池参数，输出与题库三项式一致（pot=100/bet=50：33.3% → 25%）
+  - **P1B-02 隐含赔率方向修正**：弃用 shared `calculateImpliedOdds`（方向相反：收益越大所需胜率越高，gain 够大时 >100%），改用 `calculatePotOdds(potSize + betSize + impliedOddsGain, betSize)` 组合实现——所需胜率 = `bet / (pot + bet + bet + gain)`，隐含收益并入底池，收益越大所需胜率越低
+  - **P1B-03 EV 漏算对手下注**：`calculateEV(eq, potSize, betSize)` → `calculateEV(eq, potSize + betSize, betSize)`（赢时获得 = 底池 + 对手下注）；与 P1B-01 同批修复，消除两处"错得自洽"，isProfitable 与 EV 符号保持一致
+- **fix(pot-odds)**（P1B-04）：补救题 id 由 `10000 + Date.now()` 改为固定常量 `RESCUE_QUESTION_ID = 9998`（constants.ts 新增，与末题 `EASY_LAST_QUESTION_ID = 9999` 错开、与题库 1-19 错开）：SRS 复习项 `odds:9998` 可正常去重更新，不再每轮补救新增内容相同但 id 不同的 ReviewItem；顺带补齐补救分支遗漏的 `setDecisionFeedback(null)` 重置
+- **fix(pot-odds)**（P1B-05，=P0B-04 分流项）：PotOddsQuizPage 评级展示改用 `GRADE_DISPLAY_CONFIG[grade]` 的 `icon + t(titleKey)`（`feedback.grade.*` zh/en 均已存在，无需补 key）+ `.grade-*` 容器类（color+textColor），对齐 QuizCard/GTOFeedback；**答对也展示评级徽章**（best/correct），不再仅答错时渲染；"去复习"链接仍仅答错且有 relatedLessonId 时显示。注：真实 evLoss 分级（inaccuracy/blunder）需题库补 evLossBB 数据，本批不做数据标注，evLoss 维持兜底（答对=0，答错=3），已登记观察项
+- **fix(pot-odds)**（P1B-06）：PotSizeInput 引入本地字符串草稿态（`draft`）：输入中显示草稿原文，失焦丢弃草稿回填 state 值——清空/非法输入不再出现"DOM 空白但计算用旧值"的显示与计算脱节
+- **fix(pot-odds)**（P1B-07）：PotSizeInput 统一 `clamp(v) = Math.max(min, Math.min(max, v))`：快捷按钮（含 OddsCalculator 的 1/2 Pot～2x Pot）、数字输入、滑块三入口均走 clamp，高亮判定同步改 `value === clamp(btn.value)`；不再产生 betSize=20000（>max）或 <min 值
+- **fix(pot-odds)**（P1B-08）：EVCalculator 盈亏平衡提示增加相等分支：胜率=平衡点时显示 `=` 与"盈亏平衡"（三分支 >盈利 / =盈亏平衡 / <亏损），消除"50% < 50.0% → 盈利"符号与结论矛盾
+- **fix(pot-odds)**（P1B-09）：EquityChart 由 EV 分析 tab 移入底池赔率 tab（OddsCalculator 与 DrawsReference 之间）。方案理由：该图表渲染"需要胜率 vs 估算胜率"，数据源 useOddsCalculation 正是 odds tab 的输入态（底池/下注/Outs）；而 EV tab 持独立 evState（winRate/callAmount）且已有自己的 EV-胜率曲线图，旧布局导致"调 EV tab 滑块图表不动"的错位，按信息架构归位比换数据源更合理
+- **chore(pot-odds)**（P1B-11）：删除死代码 `hooks/useEquityEstimate.ts`（全仓确认无组件消费，仅 index.ts re-export）及其 index.ts 导出；index.ts 改导出 `computeOddsResult`；TDD 5.x pot-odds hooks 表格同步
+
+### 回归测试（新增 11 例，`utils/oddsMath.test.ts`）
+
+- P1B-01（3 例）：100/50→25%、80/80→33.3%、150/37.5→16.7%
+- P1B-02（3 例）：gain 0→50→200 所需胜率严格递减；公式核对 gain=50→20%；超大 gain 不产生 >100%
+- P1B-03（3 例）：排查计划口径 eq=0.35/pot+bet=150/r=50→+20；面板组合 9 outs flop（36%）→+22 且 isProfitable 与 EV 符号一致；反例 4 outs turn→-34 且 isProfitable=false
+- P1B-04（2 例）：末题/补救题固定 id 常量互不冲突且与题库错开；两轮补救构造 SRS key `odds:9998` 完全一致可去重（含选项顺序确定性）
+
+### 挂起决策（3 项，platform-dev 专批，已登记 BUG_HUNT_BACKLOG 挂起清单第 5-7 项）
+
+- **P1B-10**：`shared/utils/pokerMath.ts` 全函数边界防御（estimateEquity 负 outs 返负值、shortDeck 溢出 -419%、NaN/Infinity 直通等 clamp）
+- **calculateImpliedOdds 处置**：P1B-02 后其唯一调用方已绕开，现为无调用方死代码，语义修正或废弃由专批裁决
+- **pokerMath JSDoc 口径澄清**：`calculatePotOdds`/`calculateEV` 的 potSize 是否含对手下注（pot-odds 模块已在 utils/oddsMath.ts 头注自文档化）
+
+### 数据迁移
+
+- 无 persist 形状/版本变更（pot-odds store 不持久化；四个 persist store 均不升版；P1B-04 仅改变后续新增 ReviewItem 的 id 取值，存量时间戳 id 的旧 ReviewItem 不做迁移清理，随 SRS 自然淡出）
+
+### 验证
+
+- `pnpm typecheck` / `pnpm lint` / `pnpm test`（含新增 11 例回归，共 255 例）全部 exit 0
+
+---
+
+## fix(range-trainer) — 2026-07-31（P1-A 排查 14 项：11 项修复 + 4 项挂起：白屏入口 / 超时判分 / 计时链路 / 门禁绕过 / 变体适配）
+
+> 基于 P1-A（范围训练 range-trainer）排查确认的 14 项问题：本批修复 P1A-01/02/03/04(模块内)/05/07/09/10/11/12/14 共 11 项，其余 4 项挂起跨模块专批（见下）。排查结论、挂起清单与"后续层免重复排查事项"已落盘 `docs/BUG_HUNT_BACKLOG.md`《P1-A 排查结论（2026-07-31）》。
+
+### 代码变更
+
+- **fix(range-trainer)**（P1A-01，最重 + P1A-10 协同）：无题库组合开始测验白屏卡死修复——题目生成抽出纯函数 `utils/questionGenerator.ts` 并 **presets 参数化**（消除硬编码 6-max，透传 store 变体化 presets，HU/短牌/4-max 同样成立）；`startQuiz` 改返回 boolean，生成 0 题时不置 running 停留配置页；新拆 `components/QuizConfig.tsx` 配置卡，位置/动作类型选项按当前变体 presets 实际存在的组合过滤（治本）+ 变体切换后失效选择自动回退 + "该组合暂无题库"防御提示（过滤后理论不可达）
+- **fix(range-trainer)**（P1A-02）：超时不再伪装成选择 fold——新增 `QuizAnswer = RangeAction | 'timeout'` 类型，TrainingSession 超时路径改调 `answerQuestion('timeout')`，store 判对条件改为 `action !== 'timeout' && action === correctAction`：正确答案为 fold 的题超时也恒判错，正确率/handWeights 加权/错题列表/ELO/SRS/情绪记录全链路"答错"口径一致
+- **fix(range-trainer)**（P1A-03）：暂停→恢复后倒计时冻结修复——handleResume 与 Esc 恢复路径均补调 `startTimer()` 重启倒计时
+- **fix(range-trainer)**（P1A-04 模块内部分）：X 按钮不再 `endQuiz()` 全量入账——改为打开暂停遮罩作确认层（复用现有"继续训练/退出训练"双按钮，零新增文案），退出走 onExit→`resetQuiz`：不入账、不 emit、不计 streak；progress 拒收 totalQuestions:0 的纵深兜底挂起跨模块专批
+- **fix(range-trainer)**（P1A-05）：测验配置页位置选项接入位置渐进解锁门禁——复用 `isPositionUnlocked(pos, preflopElo)` + `useDebugModeStore.unlockAll` 旁路（对齐 RangeSelector 行为），锁定位置 SelectItem 禁用 + Lock 图标 + "需 preflop ELO ≥ 阈值 解锁"提示，开始按钮同步禁用
+- **fix(range-trainer)**（P1A-07）：RangeInfo 占比改按组合数加权——新增纯函数 `utils/rangeCombos.ts`（对子 6 / 同花 4 / offsuit 12，总数标准 1326、短牌 630，复用 shared `TOTAL_COMBOS`/`SHORT_DECK_TOTAL_COMBOS` 常量），RangeInfo 新增 `variant` prop 并由学习页透传，取代旧算法手牌数/169
+- **fix(range-trainer)**（P1A-09）：`resetQuiz` 保留 `handWeights`（`{ ...INITIAL_QUIZ_STATE, handWeights: state.quizState.handWeights }`），"再练一次"路径保住间隔重复加权
+- **fix(range-trainer)**（P1A-11）：学习页 `RangeLearnPage` 改用 store 变体化 `presets` 自动匹配（含 ADVANCED，不再直接 `PRESET_RANGES.find` 只认 6-max 基础范围），并把 `variant` 透传给 RangeGrid 与 RangeInfo
+- **fix(range-trainer)**（P1A-12）：`useTimer` 重写为 Date.now() 墙钟段式基准（accumulatedRef 已完成段累计 + segmentStartRef 当前段起点，消除后台 100ms tick 节流累积误差，与 store 的 Date.now() 记时口径对齐）；time-up 的 `setTimeout(...,0)` 句柄存入 ref 并在 cleanup/卸载时清理，消除泄漏
+- **fix(range-trainer)**（P1A-14）：暂停前已耗时不再丢弃——`QuizSessionState` 新增 `pausedElapsed` 字段：`pauseQuiz` 把已耗时累计入 `pausedElapsed`，`resumeQuiz` 仅重置段起点，`answerQuestion`/超时路径耗时 = `pausedElapsed + (Date.now() - questionStartTime)`，切题归零（与 P1A-12 时间戳基准协同，无 tick 二次误差）
+- **refactor(range-trainer)**：为满足单文件 ≤200 行，`store.ts`（383→97 行）拆出 quiz 状态切片 `storeQuizSlice.ts`（Zustand StateCreator 组合，QuizSlice 接口定义入 types.ts）与题目生成纯函数 `utils/questionGenerator.ts`；`RangeQuizPage.tsx` 拆出 `QuizConfig.tsx`；对外行为除上述修复外不变
+
+### 回归测试（新增 14 例）
+
+- `storeQuizSlice.test.ts`（7 例）：P1A-01（无题库组合返回 false 停留 idle / 有效组合进 running 且末题 AA@BTN raise）、P1A-02（'timeout' 对 fold 题恒判错且权重升 2；主动 fold 判对权重 1）、P1A-09（resetQuiz 保留 handWeights）、P1A-14（vi.spyOn(Date,'now') 确定性验证：暂停累计 5000ms、恢复后续算总耗时 6000ms、暂停期 4s 不计入、切题归零）
+- `utils/rangeCombos.test.ts`（7 例）：P1A-07（单类组合数 6/4/12 / 混合求和 / 空范围 / 总数 1326与630 / 标准与短牌占比 / 全 169 手牌=1326 组合=100%）
+
+### 挂起决策（4 项，跨模块专批，已登记 BUG_HUNT_BACKLOG 挂起清单供 platform-dev 认领）
+
+- **P1A-04 兜底**：progress store 拒收 `totalQuestions === 0` 训练结果的纵深防御（涉及 progress store）
+- **P1A-06**：range-trainer 预置范围 ↔ gto-simulator preflop-ranges.json 一致性（JSON 3-bet 场景语义待 P1-C 定性后裁决权威源）
+- **P1A-08**：preset 百分比标注修正（依赖 P1A-06 定性结论）
+- **P1A-13**：删除 `/range-trainer/result/:sessionId` 死路由（src/app/routes.tsx 越界）
+
+### 数据迁移
+
+- 无 persist 形状/版本变更（range-trainer store 不持久化；`pausedElapsed` 为内存态会话字段，四个 persist store 均不升版）
+
+### 验证
+
+- `pnpm typecheck` / `pnpm lint` / `pnpm test`（含新增 14 例回归，共 244 例）全部 exit 0
+
+---
+
+## fix(strategy-academy / shared / progress) — 2026-07-31（P0-B 排查 7 项：4 项修复 + 3 项分流：选项排序出口 / 事件时序 / SRS 时区遗漏 / 导师反馈防御）
+
+> 基于 P0-B（事件总线与判分核心）排查确认的 7 项问题：本批修复 P0B-01/02/03/06，其余 3 项分流（见下）。排查结论与"后续层免重复排查事项"已落盘 `docs/BUG_HUNT_BACKLOG.md`《P0-B 排查结论（2026-07-31）》。
+
+### 代码变更
+
+- **fix(strategy-academy)**（P0B-01，最重）：PracticeDrill（含 QuickDrill 消费路径）新增选项排序出口 `utils/practiceOptionOrder.ts`（纯函数）——修复 259 题 practice 题库按原序渲染、正确答案 55.2% 集中 index 1 的治理红线违规：动作类选项集按"消极→激进"canonical 固定排序（Fold→Check→Call→Limp→Bet/C-Bet/Donk→Raise/3-Bet/4-Bet/5-Bet→All-in/全下，同类按尺度升序，口径对齐 puzzle-trainer optionOrder）/ 数值类单调升序 / 文字陈述类 `hash(题目id + '@practice-v1')` 加盐种子洗牌（盐值与 quizShuffle 裸 hash(id) / DRILL_OPTION_SALT '@v2' 隔离种子空间）；PracticeDrill `questions` memo 三分支（压力循环 / 非自适应 / 自适应选题）渲染前统一重排；正确答案标识 isCorrect 随选项对象整体移动无需索引重映射；选项为静态中文文本无 t() 时序问题；源题库静态数据零改动。新增分布守卫 `practiceOptionOrder.test.ts`（Node 环境 5 例：全量题库重排后正确答案任一位置占比 ≤60% / 同题两次排序结果一致含引用级 / 源对象不被修改 / 正确选项保留唯一 / 每题恰有一个正确选项）
+- **fix(strategy-academy)**（P0B-02）：store `recordPracticeScore` 与 `completeBasics` 的 `trainingEvents.emit` 移出 `set()` updater，改为状态提交后再发事件，完全对齐 theory-academy store 防御模式并添加同款防御注释（避免 StrictMode 等 updater 重放导致重复发事件）；事件负载仅依赖入参与 Date.now()，与修复前完全一致
+- **fix(strategy-academy / progress)**（P0B-03）：CourseView 两处（Drill 完成 / Quiz 完成高分分支）`nextReviewDate` 计算由 `date.toISOString().split('T')[0]` 改用 progress `toLocalDateString()`（自 spacedRepetition.ts 导出并经 feature barrel re-export，沿用既有 strategy-academy→progress 允许边，未新增跨模块依赖），消除 UTC+8 凌晨 00:00-08:00 SRS 首次复习日期晚一天（P0-A BUG-09 同源遗漏点）
+- **fix(shared)**（P0B-06）：`renderMentorFeedback` 对非法/未知 mentorStyle 防御性回退 `'encouraging'` 风格模板（函数签名与返回类型不变，UI 调用方零改动）；新增纯函数测试 `mentorStyles.test.ts`（Node 环境 3 例：非法风格不 throw 且等于 encouraging 渲染结果 / undefined 脏数据形态同样回退 / 三风格×五评级模板齐全且占位符替换）
+
+### 分流决策（3 项，本批不修）
+
+- **P0B-04 → 分流 P1-B**：PotOddsQuizPage 直接内插裸英文 grade 枚举（「评级：wrong」），未走 GRADE_DISPLAY_CONFIG + `.grade-*` 统一评级展示，在 P1-B 修复批处理
+- **P0B-05 → 分流 P1-F（已定性设计豁免并登记）**：theory-academy 章末小测为概念判断题、无 EV 语义，暂不接入五级判分体系（与 hand-history 不 emit 的豁免模式并列）；已登记 TDD 5.9 反馈闭环系统 + TheoryQuiz.tsx 头注
+- **P0B-07 → 移交 P2-D**：导师模板 15 套及“去复习”等反馈文案硬编码中文（mentorStyles.ts / PuzzleCard / PotOddsQuizPage），en 界面不翻译，并入 P2-D i18n 走查
+
+### 数据迁移
+
+- 无 persist 形状/版本变更（四个 persist store 均不升版；修复均为渲染前重排/事件时序/日期格式化/只读回退，不触碰存储形状）
+
+### 验证
+
+- `pnpm typecheck` / `pnpm lint` / `pnpm test`（含新增 practiceOptionOrder 分布守卫 5 例 + mentorStyles 防御回退 3 例）全部 exit 0
+
+---
+
 ## fix(progress) — 2026-07-31（P0-A 排查 18 项 bug 全量修复：Streak 记账链路 / 里程碑庆典 / 时区统一 / 成就判定 / Hooks 崩溃）
 
 > 基于 P0-A 逐功能排查（progress store 跨模块状态中枢）确认的 18 项 bug 的整批修复。修复原则：Streak 事实源唯一化、奖励发放与弹窗展示解耦、日期口径统一本地时区、成就判定收敛到数据所属模块。

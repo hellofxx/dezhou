@@ -36,10 +36,15 @@ export default function PotOddsPage() {
         </button>
       </div>
 
-      {/* Tab 1: Pot Odds */}
+      {/* Tab 1: Pot Odds（P1B-09：EquityChart 移入 odds tab——其数据源 useOddsCalculation 正是本 tab
+          的输入态（底池/下注/Outs），而 EV tab 有独立的 evState 与自己的 EV 曲线图，
+          旧布局导致调 EV tab 滑块图表不动的错位） */}
       {activeTab === 'odds' && (
         <div className="space-y-6">
           <OddsCalculator />
+          <div className="max-w-lg">
+            <EquityChart potOdds={result.requiredEquity} estimatedEquity={result.estimatedEquity} />
+          </div>
           <DrawsReference />
         </div>
       )}
@@ -48,9 +53,6 @@ export default function PotOddsPage() {
       {activeTab === 'ev' && (
         <div className="space-y-6">
           <EVCalculator />
-          <div className="max-w-lg">
-            <EquityChart potOdds={result.requiredEquity} estimatedEquity={result.estimatedEquity} />
-          </div>
         </div>
       )}
     </div>

@@ -154,6 +154,13 @@ export interface PracticeOption {
   evImpact?: string;
 }
 
+// P1E-05（专批 B）：单题作答明细（QuickDrill review-* 复习题 SRS 回写等消费）
+export interface PracticeAnswerDetail {
+  questionId: string;   // PracticeQuestion.id（复习题带 review- 前缀）
+  isCorrect: boolean;   // 判分口径：超时恒判错（gradePracticeSelection）
+  timeTaken: number;    // 本题用时（秒）
+}
+
 // 实战练习结果
 export interface PracticeResult {
   lessonId: string;
@@ -163,6 +170,8 @@ export interface PracticeResult {
   averageTime: number;
   weakPoints: string[];
   timestamp: number;
+  /** P1E-05: 逐题作答明细（可选；仅供完成回调侧消费，不入 academy persist） */
+  answers?: PracticeAnswerDetail[];
 }
 
 // Drill 组件名（用于 lesson.drillComponent 路由）

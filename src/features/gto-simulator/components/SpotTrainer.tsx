@@ -12,7 +12,8 @@ interface SpotTrainerProps {
 export function SpotTrainer({ onClose }: SpotTrainerProps) {
   const [selectedPosition, setSelectedPosition] = useState<Position>(Position.BTN);
   const [selectedHand, setSelectedHand] = useState<HandNotation | null>(null);
-  const positions = getPositionsForPlayerCount(6);
+  // P1C-15: BB 无 open 场景，剩余 GTO 表仅有 bb_vs_X_open，从位置选择中剔除 BB
+  const positions = getPositionsForPlayerCount(6).filter((p) => p !== Position.BB);
 
   const { allStrategies } = useGTOComparison(null, selectedPosition);
 

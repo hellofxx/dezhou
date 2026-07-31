@@ -4,6 +4,7 @@ import type { TheoryProgress } from './types';
 import { THEORY_LEVELS } from './data/levels';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
+import { isLevelUnlockedByCompleted } from './utils/theoryProgress';
 
 const initialProgress: TheoryProgress = {
   completedChapters: [],
@@ -80,13 +81,8 @@ export const useTheoryStore = create<TheoryStore>()(
 
       isTheoryLevelUnlocked: (levelId) => {
         if (isDebugUnlockActive()) return true; // 调试解锁：解除全部理论 Level 门禁
-        const idx = THEORY_LEVELS.findIndex((l) => l.id === levelId);
-        if (idx < 0) return false;
-        if (idx === 0) return true;
-        const prev = THEORY_LEVELS[idx - 1];
-        if (!prev) return false;
-        const { completedChapters } = get().progress;
-        return prev.chapters.every((c) => completedChapters.includes(c.id));
+        // 解锁判定委托 utils 纯函数（单源），与「下一章」导航校验（P1F-02）口径一致
+        return isLevelUnlockedByCompleted(levelId, get().progress.completedChapters);
       },
 
       getLevelProgress: (levelId) => {

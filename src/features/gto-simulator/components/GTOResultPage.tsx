@@ -3,15 +3,31 @@ import { motion } from 'framer-motion';
 import { Target, Clock, TrendingDown, AlertTriangle } from 'lucide-react';
 import { useGTOSimulatorStore } from '../store';
 import { StrategyMatrix } from './StrategyMatrix';
-import { useGTOComparison } from '../hooks/useGTOComparison';
+import { resolveSpotKey, getStrategiesForSpot } from '../utils/spotKey';
 import { PositionBadge } from '@/shared/components/PositionBadge';
 import { ResultSummary } from '@/shared/components/ResultSummary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 
 export default function GTOResultPage() {
   const navigate = useNavigate();
-  const { lastResult, config } = useGTOSimulatorStore();
-  const { allStrategies } = useGTOComparison(null, config.position);
+  const { lastResult, config, session } = useGTOSimulatorStore();
+
+  // P1C-14: 按会话实际 spotKey 展示矩阵（不再固定 pos_open）
+  const sessionSpotKey = (() => {
+    if (!session) return resolveSpotKey(config.position);
+    const preflops = session.scenarios.filter((s) => s.street === 'preflop');
+    if (preflops.length === 0) return resolveSpotKey(config.position);
+    // 取频率最高的 spotKey
+    const freq = new Map<string, number>();
+    for (const s of preflops) {
+      const k = resolveSpotKey(s.position, s.previousActions);
+      if (k) freq.set(k, (freq.get(k) ?? 0) + 1);
+    }
+    let best: string | null = null; let max = 0;
+    for (const [k, v] of freq) { if (v > max) { max = v; best = k; } }
+    return best;
+  })();
+  const allStrategies = getStrategiesForSpot(sessionSpotKey);
 
   if (!lastResult) {
     return (
@@ -28,7 +44,8 @@ export default function GTOResultPage() {
   }
 
   const timeSeconds = Math.round(lastResult.totalTime / 1000);
-  const avgTimePerDecision = Math.round(timeSeconds / lastResult.scenarios);
+  // P1C-24: 除零防御
+  const avgTimePerDecision = Math.round(timeSeconds / (lastResult.scenarios || 1));
 
   return (
     <ResultSummary
@@ -54,8 +71,8 @@ export default function GTOResultPage() {
         className="flex items-center justify-center gap-2 p-3 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)]"
       >
         <TrendingDown className="w-4 h-4 text-[var(--brass-bright)]" />
-        <span className="text-sm text-[var(--ivory-dim)]">平均 EV 损失：</span>
-        <span className="font-bold font-numeric text-[var(--brass-bright)]">{lastResult.averageEVLoss.toFixed(1)} BB</span>
+        <span className="text-sm text-[var(--ivory-dim)]">EV 损失率：</span>
+        <span className="font-bold font-numeric text-[var(--brass-bright)]">{lastResult.evLossBB100.toFixed(1)} BB/100</span>
       </motion.div>
 
       {/* Worst spots */}
@@ -102,9 +119,15 @@ export default function GTOResultPage() {
         className="space-y-3"
       >
         <h2 className="font-display text-sm font-semibold text-[var(--ivory-dim)] tracking-wide">
-          {config.position} GTO 策略矩阵
+          {sessionSpotKey ? `${config.position} GTO 策略矩阵 (${sessionSpotKey})` : `${config.position} GTO 策略矩阵`}
         </h2>
-        <StrategyMatrix strategies={allStrategies} />
+        {allStrategies ? (
+          <StrategyMatrix strategies={allStrategies} />
+        ) : (
+          <div className="p-4 text-center text-sm text-[var(--ivory-muted)] border border-dashed border-[var(--walnut-border)] rounded-lg">
+            该 spot 无 GTO 数据
+          </div>
+        )}
       </motion.div>
     </ResultSummary>
   );

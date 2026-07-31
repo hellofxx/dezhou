@@ -85,7 +85,7 @@ describe('puzzleBank 选项语义固定排序', () => {
     }
   });
 
-  it('正确答案索引分布：任一索引占比 < 60%', () => {
+  it('正确答案索引分布：全库任一索引占比 < 60%', () => {
     const puzzles = getAllPuzzles();
     const counts = new Map<number, number>();
     for (const q of puzzles) {
@@ -103,5 +103,72 @@ describe('puzzleBank 选项语义固定排序', () => {
     for (const [idx, n] of counts) {
       expect(n / puzzles.length, `索引 ${idx} 占比过高`).toBeLessThan(0.6);
     }
+  });
+
+  /**
+   * P1D-10 分主题分布守卫（选项类型甄别后的处置）：
+   *
+   * 甄别结论：本题库 615 个选项全部为**动作类**（Fold/Check/Call/Limp/Bet/Raise/全下，
+   * 由上方"全量可解析"用例硬性守卫），不存在文字陈述类选项。
+   *
+   * 动作类选项按语义固定排序（消极→激进）后，单主题内正确答案位置的集中
+   * （如 preflop-rfi 索引 2 占比较高）是题目正确动作激进度分布的自然结果
+   * （RFI 主题正确答案多为 Raise），**不是 bug**：用户无法靠"猜固定位置"作弊，
+   * 因为不同题的正确动作不同（Fold 题目答案在前、Raise 题目答案在后），
+   * 盲选任一位置的期望正确率由全库分布（上方 <60% 守卫）锁定。
+   * 因此动作类**不强制单主题 ≤60%**，只断言排序正确性（见上方排序用例）；
+   * 若未来引入文字陈述类选项（seed 洗牌题型），则对其按单主题 ≤60% 分布守卫。
+   */
+  it('P1D-10 分主题分布：动作类只验语义排序（输出分布供监控），文字类断言 ≤60%', () => {
+    const puzzles = getAllPuzzles();
+    const byTheme = new Map<string, typeof puzzles>();
+    for (const q of puzzles) {
+      const list = byTheme.get(q.theme) ?? [];
+      list.push(q);
+      byTheme.set(q.theme, list);
+    }
+
+    for (const [theme, themePuzzles] of byTheme) {
+      // 题目分型：全部选项可解析 = 动作类；含未知类别选项 = 文字陈述类
+      const textType = themePuzzles.filter((q) =>
+        q.options.some((o) => parseOptionSortKey(o.text).category === UNKNOWN_CATEGORY)
+      );
+      const actionType = themePuzzles.filter((q) => !textType.includes(q));
+
+      // 动作类：仅输出分布供监控（集中属语义排序自然结果，不设阈值）
+      const counts = new Map<number, number>();
+      for (const q of actionType) {
+        const idx = q.options.findIndex((o) => o.isCorrect);
+        counts.set(idx, (counts.get(idx) ?? 0) + 1);
+      }
+      const dist = [...counts.entries()]
+        .sort(([a], [b]) => a - b)
+        .map(([idx, n]) => `idx${idx}=${((n / actionType.length) * 100).toFixed(0)}%`)
+        .join(' ');
+
+      console.log(`[P1D-10] ${theme}: 动作类 ${actionType.length} 题 (${dist})，文字类 ${textType.length} 题`);
+
+      // 文字陈述类（当前为 0 题）：若未来出现，单主题任一索引占比必须 ≤60%
+      if (textType.length > 0) {
+        const textCounts = new Map<number, number>();
+        for (const q of textType) {
+          const idx = q.options.findIndex((o) => o.isCorrect);
+          textCounts.set(idx, (textCounts.get(idx) ?? 0) + 1);
+        }
+        for (const [idx, n] of textCounts) {
+          expect(
+            n / textType.length,
+            `主题 ${theme} 文字类题目索引 ${idx} 占比超标（seed 洗牌失效？）`
+          ).toBeLessThanOrEqual(0.6);
+        }
+      }
+    }
+
+    // 甄别结论的硬断言：当前题库应 100% 为动作类（若新增文字类题目，
+    // 上方"全量可解析"用例会先拦截，需同步评估排序/洗牌策略）
+    const anyText = puzzles.some((q) =>
+      q.options.some((o) => parseOptionSortKey(o.text).category === UNKNOWN_CATEGORY)
+    );
+    expect(anyText, '题库出现文字陈述类选项，需重新评估分布守卫策略').toBe(false);
   });
 });

@@ -6,7 +6,7 @@
  * - 当日重复做不改变完成状态（已完成时显示"今日已完成 ✓"但仍可查看题目）
  * - 显示"今日已有 XXX 人完成"（基于 dateSeed 生成 100-999 之间）
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -17,92 +17,62 @@ import { Progress } from '@/shared/components/ui/progress';
 import { PuzzleCard } from './PuzzleCard';
 import { PuzzleResult } from './PuzzleResult';
 import { usePuzzleEngine } from '../hooks/usePuzzleEngine';
+// 会话接线（选中项 / recordAnswer / 完成提交 / emit）下沉至 usePuzzleSession
+import { usePuzzleSession } from '../hooks/usePuzzleSession';
 import { getDailyKey } from '../data/dailyPuzzles';
 import { getDailyCompletionCount } from '../utils/dateSeed';
 import { usePuzzleStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
 // P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
-import { trainingEvents } from '@/shared/stores/trainingEvents';
-import type { TrainingResult } from '@/shared/types/common';
-import type { PuzzleResult as PuzzleResultType } from '../types';
 
 export default function DailyPuzzle() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   // 获取今日题目（用于引擎初始化前显示日期信息）
-  const today = useMemo(() => new Date(), []);
+  // P1D-07 修复：today/dateKey 改为 state，重试时刷新；旧实现 mount 时冻结，
+  // 跨午夜 retry 会抽今天的题却 markDailyCompleted(昨天)
+  const [today, setToday] = useState(() => new Date());
   const dateKey = useMemo(() => getDailyKey(today), [today]);
   const completionCount = useMemo(() => getDailyCompletionCount(today), [today]);
 
   const engine = usePuzzleEngine({ mode: 'daily' });
   const isDailyCompleted = usePuzzleStore((s) => s.isDailyCompleted);
   const markDailyCompleted = usePuzzleStore((s) => s.markDailyCompleted);
-  const submitResult = usePuzzleStore((s) => s.submitResult);
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
   const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
   // P2-5.4: 每日题量上限（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
 
   const alreadyCompleted = isDailyCompleted(dateKey);
-  const [finalResult, setFinalResult] = useState<PuzzleResultType | null>(null);
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
 
-  useEffect(() => {
-    setSelectedOptionId(null);
-  }, [engine.state.currentIndex]);
-
-  // 记录答题到 progress store（用于自适应难度判定）
-  useEffect(() => {
-    if (engine.state.answers.length > 0) {
-      const lastAnswer = engine.state.answers[engine.state.answers.length - 1];
-      if (lastAnswer) {
-        recordAnswer(lastAnswer.isCorrect);
-      }
-    }
-  }, [engine.state.answers.length]);
-
-  // 引擎结束时构建结果并提交
-  useEffect(() => {
-    if (engine.state.status !== 'playing' && !finalResult) {
-      const result = engine.buildResult();
-      const submitRes = submitResult(result);
-      markDailyCompleted(dateKey); // 标记今日已完成（幂等）
-      recordTrainingDay();
-      setFinalResult({ ...result, _isNewRecord: submitRes.isNewRecord } as PuzzleResultType & { _isNewRecord: boolean });
-      // 发布训练事件到 progress store
-      trainingEvents.emit(puzzleResultToTrainingRecord(result));
-    }
-  }, [engine.state.status, engine, finalResult, submitResult, markDailyCompleted, dateKey, recordTrainingDay]);
-
-  const handleSelect = (optionId: string) => {
-    if (engine.isCurrentAnswered) return;
-    setSelectedOptionId(optionId);
-    engine.answer(optionId);
-  };
+  // 会话接线：选中状态 / recordAnswer / 完成提交（submitResult + recordTrainingDay + emit）
+  const { finalResult, selectedOptionId, handleSelect, handleRetry } = usePuzzleSession(engine, {
+    // P1D-07 修复：完成时实时计算 dateKey（不用 mount 时冻结值），
+    // 避免跨午夜会话把完成标记写到错误日期；标记本身幂等
+    onComplete: () => markDailyCompleted(getDailyKey(new Date())),
+    // P1D-07 修复：重试时同步刷新 today/dateKey，与 engine.reset()
+    // 重抽的题目（内部用 new Date()）保持同一天
+    onRetry: () => setToday(new Date()),
+  });
 
   const handleNext = () => {
     engine.next();
   };
 
-  // 每日题量上限：未完局时拦截继续答题（已完局的结果页不拦）；
+  // 每日题量上限（P1D-06 专批 B：开局判定）：挂载时已达上限则拦在开始前；
+  // 进行中会话不再中途拦断（hook 内 mount 快照冻结），走完结算后下次进入再拦；
   // 早退位于全部 hooks 之后，避免守卫翻转触发 hooks 数量变化崩溃
   if (!finalResult && sessionLimitReached) {
     return <SessionLimitGuard />;
   }
 
   if (finalResult) {
-    const enriched = finalResult as PuzzleResultType & { _isNewRecord?: boolean };
     return (
       <PuzzleResult
-        result={enriched}
-        isNewRecord={Boolean(enriched._isNewRecord)}
-        onRetry={() => {
-          setFinalResult(null);
-          engine.reset();
-        }}
+        result={finalResult}
+        isNewRecord={Boolean(finalResult._isNewRecord)}
+        onRetry={handleRetry}
         onBackHome={() => navigate('/puzzle')}
       />
     );
@@ -207,31 +177,4 @@ export default function DailyPuzzle() {
       </div>
     </div>
   );
-}
-
-/** 将 PuzzleResult 转换为 TrainingRecord 用于 trainingEvents.emit */
-function puzzleResultToTrainingRecord(result: PuzzleResultType) {
-  const trainingResult: TrainingResult = {
-    sessionId: result.sessionId,
-    module: 'puzzle-trainer',
-    totalQuestions: result.totalQuestions,
-    correctAnswers: result.correctCount,
-    accuracy: result.accuracy,
-    averageTime: result.averageTime / 1000, // 转换为秒
-    timestamp: result.timestamp,
-    details: result.answers.map((a) => ({
-      question: a.questionId,
-      isCorrect: a.isCorrect,
-      timeTaken: a.timeTaken,
-      userAnswer: a.selectedOptionId,
-      correctAnswer: '',
-    })),
-  };
-  return {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-    module: 'puzzle-trainer' as const,
-    mode: result.mode,
-    result: trainingResult,
-    createdAt: Date.now(),
-  };
 }

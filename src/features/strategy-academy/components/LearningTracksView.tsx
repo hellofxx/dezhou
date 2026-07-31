@@ -1,23 +1,29 @@
-import { useNavigate } from 'react-router-dom';
+import { useRef, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Users, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Users, Clock, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
 import { LEARNING_TRACKS, isTrackPrerequisiteMet, getPrerequisiteHint } from '../data/learningTracks';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { ProgressBar } from './ProgressBar';
-
 export default function LearningTracksView() {
   const navigate = useNavigate();
-  const { progress, activeTrackId, setActiveTrack, certifications } = useAcademyStore();
+  // P1E-01: 消费 ?track= 参数（滚动/高亮）
+  const [searchParams] = useSearchParams();
+  const highlightTrackId = searchParams.get('track');
+  const trackRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const { progress, activeTrackId, setActiveTrack } = useAcademyStore();
   // 调试解锁：解除全部轨道前置
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
-  // 构建已认证 Level 集合，用于前置条件检查
-  const certifiedLevels = new Set<number>(
-    Object.entries(certifications)
-      .filter(([, cert]) => !!cert?.certifiedAt)
-      .map(([level]) => Number(level))
-  );
+  // P1E-01: ?track= 存在时滚动到目标轨道
+  useEffect(() => {
+    if (!highlightTrackId) return;
+    const el = trackRefs.current[highlightTrackId];
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [highlightTrackId]);
 
   return (
     <div className="h-full overflow-auto">
@@ -55,8 +61,8 @@ export default function LearningTracksView() {
             const progressPercent = totalInTrack > 0 ? Math.round((completedInTrack / totalInTrack) * 100) : 0;
             const isLeakFix = track.id === 'track-leak-fix';
 
-            // 前置条件检查（调试解锁时直接放行）
-            const prereqMet = debugUnlock || isTrackPrerequisiteMet(track, certifiedLevels);
+            // P1E-02: 前置条件检查改用课程完成口径（调试解锁时直接放行）
+            const prereqMet = debugUnlock || isTrackPrerequisiteMet(track, progress.completedLessons);
             const prereqHint = !prereqMet && track.prerequisiteLevelIds
               ? getPrerequisiteHint(track.prerequisiteLevelIds)
               : null;
@@ -66,16 +72,22 @@ export default function LearningTracksView() {
               (id) => !progress.completedLessons.includes(id)
             );
 
+            // P1E-01: 高亮被 ?track= 参数引用的轨道
+            const isHighlighted = highlightTrackId === track.id;
+
             return (
               <motion.div
                 key={track.id}
+                ref={(el) => { trackRefs.current[track.id] = el; }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.08 }}
                 className={`rounded-lg border p-5 transition-all ${
-                  isActive
-                    ? 'border-[var(--brass-bright)]/60 bg-[var(--brass-bright)]/5'
-                    : 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/40'
+                  isHighlighted
+                    ? 'border-[var(--brass-bright)] bg-[var(--brass-bright)]/8 ring-1 ring-[var(--brass-bright)]/40'
+                    : isActive
+                      ? 'border-[var(--brass-bright)]/60 bg-[var(--brass-bright)]/5'
+                      : 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/40'
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -102,11 +114,17 @@ export default function LearningTracksView() {
                     </div>
                     <p className="text-xs text-[var(--ivory-muted)] mb-3">{track.description}</p>
 
-                    {/* 前置条件提示 */}
+                    {/* P1E-03: 前置条件提示（附跳转链接） */}
                     {prereqHint && (
                       <div className="flex items-center gap-1.5 mb-3 text-xs text-[var(--brass-bright)]/90 bg-[var(--poker-warning-bg)] rounded px-2.5 py-1.5">
                         <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                         <span>{prereqHint}</span>
+                        <button
+                          onClick={() => navigate('/academy/basics')}
+                          className="ml-auto text-[var(--brass-bright)] underline underline-offset-2 whitespace-nowrap"
+                        >
+                          去学习 →
+                        </button>
                       </div>
                     )}
 
@@ -141,22 +159,31 @@ export default function LearningTracksView() {
                       </p>
                     )}
 
-                    {/* Actions */}
+                    {/* Actions — P1E-03: prereqMet=false 时禁用按钮 */}
                     <div className="flex items-center gap-2 mt-4">
                       <button
                         onClick={() => setActiveTrack(isActive ? null : track.id)}
+                        disabled={!prereqMet}
                         className={`text-xs px-3 py-1.5 rounded-md transition-colors ${
-                          isActive
-                            ? 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
-                            : 'bg-[var(--brass-bright)] text-[var(--felt-deep)] font-medium hover:opacity-90'
+                          !prereqMet
+                            ? 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] opacity-50 cursor-not-allowed'
+                            : isActive
+                              ? 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
+                              : 'bg-[var(--brass-bright)] text-[var(--felt-deep)] font-medium hover:opacity-90'
                         }`}
                       >
+                        {!prereqMet && <Lock className="inline w-3 h-3 mr-1" />}
                         {isActive ? '取消选择' : '选择此轨道'}
                       </button>
                       {nextLesson && !isLeakFix && (
                         <button
                           onClick={() => navigate(`/academy/lesson/${nextLesson}`)}
-                          className="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-md bg-[var(--walnut-raised)] text-[var(--ivory)] hover:text-[var(--brass-bright)] transition-colors"
+                          disabled={!prereqMet}
+                          className={`inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-md transition-colors ${
+                            !prereqMet
+                              ? 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] opacity-50 cursor-not-allowed'
+                              : 'bg-[var(--walnut-raised)] text-[var(--ivory)] hover:text-[var(--brass-bright)]'
+                          }`}
                         >
                           继续学习
                           <ArrowRight className="w-3 h-3" />

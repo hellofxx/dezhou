@@ -5,8 +5,8 @@ import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from '
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
-import { orderQuizQuestion } from '../utils/quizShuffle';
-import type { QuizQuestion } from '../types';
+// P1E-09: 题目集构建抽出为种子化纯函数（重试重置种子即重洗）
+import { buildCertificationExam } from '../utils/certificationExam';
 
 export default function LevelCertification() {
   const { level: levelParam } = useParams<{ level: string }>();
@@ -23,25 +23,19 @@ export default function LevelCertification() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
-  // 会话随机种子：每次进入考试选项顺序不同，考试过程中保持稳定（防背位置应试）
-  const [sessionSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
+  // 会话随机种子：每次进入考试题序/选项顺序不同，考试过程中保持稳定（防背位置应试）
+  // P1E-09: 重试时通过 setSessionSeed 重置种子 → 题目集/题序/选项全部重洗
+  const [sessionSeed, setSessionSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
 
   const certification = certifications[level];
   const isCertified = !!certification?.certifiedAt;
   const requiredAccuracy = 80;
 
-  // 从该级别全部条目的所有课程中收集测验题
-  const allQuestions = useMemo<QuizQuestion[]>(() => {
-    if (mergedLessons.length === 0) return [];
-    const questions: QuizQuestion[] = [];
-    for (const lesson of mergedLessons) {
-      questions.push(...lesson.quiz);
-    }
-    // 洗牌取最多 20 题；再对每题用会话种子重排选项（答案位置偏差治理）
-    return shuffleArray(questions)
-      .slice(0, 20)
-      .map((q, index) => orderQuizQuestion(q, sessionSeed + index));
-  }, [mergedLessons, sessionSeed]);
+  // 从该级别全部条目的所有课程中收集测验题（种子化洗牌取最多 20 题 + 选项重排）
+  const allQuestions = useMemo(
+    () => buildCertificationExam(mergedLessons, sessionSeed),
+    [mergedLessons, sessionSeed]
+  );
 
   if (levelEntries.length === 0) {
     return (
@@ -84,6 +78,8 @@ export default function LevelCertification() {
     setShowExplanation(false);
     setCorrectCount(0);
     setFinished(false);
+    // P1E-09: 重置会话种子，使题目集/题序/选项顺序重新洗牌（防背题应试）
+    setSessionSeed(Math.floor(Math.random() * 2 ** 31));
   };
 
   // 完成页面
@@ -295,13 +291,4 @@ export default function LevelCertification() {
       </div>
     </div>
   );
-}
-
-function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
-  }
-  return shuffled;
 }

@@ -214,7 +214,7 @@
     },
     "reviewQueueHint": "Today you have {{count}} review questions; 30% will be mixed into this drill automatically",
     "newRecord": "🎉 New quick drill record!",
-    "freezeReward": "🎁 7-day quick drill streak reward: 1 freeze card!",
+    "freezeReward": "🎁 {{count}}-day quick drill streak reward: 1 freeze card!",
     "streak": {
       "current": "Quick drill streak: {{count}} day(s)",
       "rewarded": "1 freeze card rewarded",

@@ -42,7 +42,8 @@ export function PracticeBridgeCard({ recommendations }: PracticeBridgeCardProps)
         ))}
         {recommendations.trackId && (
           <button
-            onClick={() => navigate('/academy/tracks')}
+            // P1F-04：携带 ?track= 参数，LearningTracksView（P1E-01）消费后滚动高亮目标轨道
+            onClick={() => navigate(`/academy/tracks?track=${recommendations.trackId}`)}
             aria-label="前往推荐学习轨道"
             className="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
           >

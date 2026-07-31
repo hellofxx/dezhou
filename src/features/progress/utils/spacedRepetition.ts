@@ -39,8 +39,10 @@ const MIN_EASE_FACTOR = 1.3;
 
 /** 本地时区日期格式化 YYYY-MM-DD（与 streakCalc 统一口径，
  * 禁用 toISOString：UTC 日期在 UTC+8 的 00:00-08:00 会比本地日期晚一天，
- * 导致跨日判定错位（今日完成态/每日题量上限/情绪标记选中态）） */
-function toLocalDateString(d: Date): string {
+ * 导致跨日判定错位（今日完成态/每日题量上限/情绪标记选中态））
+ * P0B-03：导出供消费方（如 strategy-academy CourseView 计算 nextReviewDate）复用，
+ * 避免各处自行 toISOString 造成时区遗漏 */
+export function toLocalDateString(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');

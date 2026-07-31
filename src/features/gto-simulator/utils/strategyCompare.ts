@@ -3,6 +3,8 @@ import type { Decision } from '@/shared/types/action';
 import { ActionType } from '@/shared/types/action';
 import type { HandStrategy, Scenario } from '../types';
 import { getOpponentProfile } from '@/features/strategy-academy/data/opponentProfiles';
+// P1C-10：isOptimal 边界与五级反馈阈值统一（只读引用 shared 常量，不修改 shared）
+import { GRADE_THRESHOLDS } from '@/shared/types/decisionFeedback';
 
 // ─── Equity 估算 ───────────────────────────────
 
@@ -208,16 +210,43 @@ export function calculateEVFromAction(
 }
 
 /**
- * 计算 EV 损失（BB）：最优策略 EV − 用户动作 EV，正值表示用户有损失
+ * P1C-02：用户 raise/all-in 的 EV（含超注尺寸惩罚）。
+ *
+ * 基础 EV 公式在 equity > 0.5 时随加注尺寸单调放大（模型假设对手恒跟注且
+ * hero equity 不变），导致强牌 all-in 的 EV 恒大于 GTO 尺寸 → evLoss 为负
+ * → 永远评为 best（剥削漏洞）。
+ *
+ * 修正模型：超过 GTO 建议尺寸的部分，对手只会用更强的范围继续，
+ * 超注的每 1BB 边际 EV 为 -(1 - equity)（额外筹码只在落后时被跟注）。
+ *   - userAmount ≤ gtoAmount：直接按标准公式计算
+ *   - userAmount > gtoAmount：EV(gtoAmount) - overshoot × (1 - equity)
  */
-export function calculateEVLoss(
+function calculateUserRaiseEV(
+  heroEquity: number,
+  potSize: number,
+  callAmount: number,
+  userAmount: number | undefined,
+  gtoStrategy: HandStrategy
+): number {
+  const gtoAmount = gtoStrategy.raiseAmount ?? callAmount * 3;
+  const rA = userAmount ?? gtoAmount;
+  if (rA <= gtoAmount) {
+    return calculateEVFromAction('raise', heroEquity, potSize, callAmount, rA);
+  }
+  const evAtGto = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoAmount);
+  const overshoot = rA - gtoAmount;
+  return evAtGto - overshoot * (1 - heroEquity);
+}
+
+/** 统一的 EV 对比核心：userEV / optimalEV / evLoss（clamp ≥ 0，P1C-02） */
+function computeDecisionEVs(
   userAction: string,
   userAmount: number | undefined,
   gtoStrategy: HandStrategy,
   heroEquity: number,
   potSize: number,
   callAmount: number
-): number {
+): { userEV: number; optimalEV: number; evLoss: number } {
   const evFold = 0;
   const evCall = calculateEVFromAction('call', heroEquity, potSize, callAmount);
   const evRaise = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoStrategy.raiseAmount ?? callAmount * 3);
@@ -229,11 +258,30 @@ export function calculateEVLoss(
     case 'call':
     case 'check': userEV = evCall; break;
     case 'raise':
-    case 'allin': userEV = calculateEVFromAction('raise', heroEquity, potSize, callAmount, userAmount); break;
+    case 'allin':
+    case 'all-in': userEV = calculateUserRaiseEV(heroEquity, potSize, callAmount, userAmount, gtoStrategy); break;
     default: userEV = evFold;
   }
 
-  return Math.round((optimalEV - userEV) * 1000) / 1000;
+  // P1C-02：clamp ≥ 0——简化 EV 模型下用户动作 EV 可能略高于混合策略均值，
+  // 负损失会被 calculateGrade 判为 best，形成"越激进越优"的剥削通道
+  const evLoss = Math.max(0, Math.round((optimalEV - userEV) * 1000) / 1000);
+  return { userEV, optimalEV, evLoss };
+}
+
+/**
+ * 计算 EV 损失（BB）：最优策略 EV − 用户动作 EV。
+ * P1C-02：结果 clamp ≥ 0，且超注（>GTO 尺寸）按边际惩罚折价，见 calculateUserRaiseEV。
+ */
+export function calculateEVLoss(
+  userAction: string,
+  userAmount: number | undefined,
+  gtoStrategy: HandStrategy,
+  heroEquity: number,
+  potSize: number,
+  callAmount: number
+): number {
+  return computeDecisionEVs(userAction, userAmount, gtoStrategy, heroEquity, potSize, callAmount).evLoss;
 }
 
 // ─── 决策对比 ───────────────────────────────────
@@ -257,26 +305,13 @@ export function compareDecision(
   heroEquity: number = 0.5,
   callAmount: number = 1
 ): CompareResult {
-  const evFold = 0;
-  const evCall = calculateEVFromAction('call', heroEquity, potSize, callAmount);
-  const evRaise = calculateEVFromAction('raise', heroEquity, potSize, callAmount, gtoStrategy.raiseAmount ?? callAmount * 3);
-  const optimalEV = gtoStrategy.fold * evFold + gtoStrategy.call * evCall + gtoStrategy.raise * evRaise;
+  const { userEV, optimalEV, evLoss } = computeDecisionEVs(
+    userAction.action, userAction.amount, gtoStrategy, heroEquity, potSize, callAmount
+  );
 
-  let userEV: number;
-  switch (userAction.action) {
-    case ActionType.Fold: userEV = evFold; break;
-    case ActionType.Call:
-    case ActionType.Check: userEV = evCall; break;
-    case ActionType.Raise:
-    case ActionType.AllIn:
-      userEV = calculateEVFromAction('raise', heroEquity, potSize, callAmount, userAction.amount);
-      break;
-    default: userEV = evFold;
-  }
-
-  const evLoss = Math.round((optimalEV - userEV) * 1000) / 1000;
-  // 与五级反馈的 'correct' 阈值一致：< 0.5 BB 视为最优/可接受
-  const isOptimal = evLoss <= 0.5;
+  // P1C-10：与五级反馈 GRADE_THRESHOLDS 对齐——evLoss < correct(0.5) 视为最优/可接受
+  // （calculateGrade 中 0.5 归 inaccuracy，此处同口径用严格小于）
+  const isOptimal = evLoss < GRADE_THRESHOLDS.correct;
   const optimal = getOptimalAction(gtoStrategy);
   const explanation = generateExplanation(userAction, gtoStrategy, optimal, isOptimal, evLoss);
 

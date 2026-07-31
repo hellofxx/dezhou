@@ -81,3 +81,57 @@ describe('getOptimalAction / isPureStrategy / getDominantAction', () => {
     expect(getDominantAction(mixed)).toBeNull();
   });
 });
+
+describe('P1C-02: All-In EV 剥削漏洞 - evLoss 恒 >= 0', () => {
+  it('BTN AA all-in 不为 best（evLoss > 0 或不为最优）', () => {
+    // AA 的 equity ~ 0.85，当 GTO 建议 raise 2.5BB 时 all-in 100BB 应产生 EV 损失
+    const gtoStrategy: HandStrategy = { fold: 0, call: 0, raise: 1, raiseAmount: 2.5 };
+    const result = compareDecision(
+      { action: ActionType.AllIn, amount: 100 },
+      gtoStrategy,
+      1.5,    // pot
+      0.85,   // hero equity
+      1       // callAmount
+    );
+    // evLoss 必须 >= 0（clamp）
+    expect(result.evLoss).toBeGreaterThanOrEqual(0);
+    // All-in 应产生非零损失（超注惩罚）
+    expect(result.evLoss).toBeGreaterThan(0);
+    // 因此不为 best（isOptimal 仅在 evLoss < 0.5 时为 true）
+    expect(result.isOptimal).toBe(false);
+  });
+
+  it('evLoss 永远不为负值（各种动作）', () => {
+    const strats: HandStrategy[] = [
+      { fold: 0.3, call: 0.5, raise: 0.2, raiseAmount: 3 },
+      { fold: 0, call: 0.1, raise: 0.9, raiseAmount: 6 },
+    ];
+    const actions = [
+      { action: ActionType.Fold },
+      { action: ActionType.Call },
+      { action: ActionType.Raise, amount: 10 },
+      { action: ActionType.AllIn, amount: 100 },
+    ];
+    for (const strat of strats) {
+      for (const act of actions) {
+        const r = compareDecision(act, strat, 10, 0.6, 3);
+        expect(r.evLoss).toBeGreaterThanOrEqual(0);
+      }
+    }
+  });
+});
+
+describe('P1C-10: isOptimal 边界对齐 GRADE_THRESHOLDS', () => {
+  it('evLoss = 0 → isOptimal = true', () => {
+    const result = compareDecision({ action: ActionType.Call }, pureCall, 10, 0.5, 2);
+    expect(result.evLoss).toBe(0);
+    expect(result.isOptimal).toBe(true);
+  });
+
+  it('evLoss 略大于 0.5 → isOptimal = false', () => {
+    // fold 对 pure-call 场景，应产生 >0.5 损失
+    const result = compareDecision({ action: ActionType.Fold }, pureCall, 10, 0.5, 2);
+    expect(result.evLoss).toBeGreaterThan(0.5);
+    expect(result.isOptimal).toBe(false);
+  });
+});

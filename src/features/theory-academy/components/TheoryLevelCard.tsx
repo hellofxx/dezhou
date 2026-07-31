@@ -36,10 +36,11 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
   };
 
   // Level 全部完成后的常驻“去实践”入口（复用 practiceRecommendations，不依赖完成当次会话）：
-  // 有推荐轨道则跳学习轨道页，否则跳到首个推荐实践课程
+  // 有推荐轨道则携带 ?track= 跳学习轨道页（P1F-04，供 LearningTracksView 滚动高亮），
+  // 否则跳到首个推荐实践课程
   const rec = level.practiceRecommendations;
   const practiceTarget = rec.trackId
-    ? '/academy/tracks'
+    ? `/academy/tracks?track=${rec.trackId}`
     : rec.lessons[0]
       ? `/academy/lesson/${rec.lessons[0].id}`
       : null;

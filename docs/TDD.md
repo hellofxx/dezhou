@@ -105,7 +105,6 @@
 ```
 src/
 ├── app/                          # 应用层
-│   ├── pages/placeholder.tsx     # 占位页面
 │   ├── providers.tsx             # 全局 Provider 组合
 │   └── routes.tsx                # 路由配置（React Router v7）
 │
@@ -266,8 +265,7 @@ src/
 │   └── globals.css               # 全局样式 + CSS 变量
 │
 ├── workers/                      # Web Worker
-│   ├── gtoWorker.ts              # GTO 策略计算 Worker
-│   └── useGTOWorker.ts           # Worker Hook 封装
+│   └── gtoWorker.ts              # GTO 策略计算 Worker（消费方：hand-history/utils/gtoDeviation.ts）
 │
 ├── App.tsx                       # 根组件
 ├── main.tsx                      # 入口文件
@@ -624,7 +622,14 @@ interface DailyRecommendation {
 | hooks | useQuizEngine / useTimer 2 个 | 测验引擎 / 计时器 |
 | utils | handClassifier 等 2 个 | 手牌分类、格式转换 |
 | store | store.ts | 学习状态 + 测验状态管理 |
-| constants | constants.ts | `PRESET_RANGES` 预设范围数据 |
+| constants | constants.ts | `PRESET_RANGES` 预设范围数据（数据源定性见下方「预置范围数据源」） |
+
+**预置范围数据源（2026-07-31 跨模块专批 C，P1A-06/P1A-08 定性）**：
+
+- **open / call 类 preset**（utg/hj/co/btn/sb-open、bb-call-vs-btn）与 **bb-3bet-vs-btn**（BB 面对 BTN open 时 raise 即发起 3-bet，JSON 有覆盖）：以 gto-simulator `data/preflop-ranges.json`（6max_100bb_preflop）为权威源，按「频率 ≥ 0.5」离散化生成；一致性由 `src/rangePresetGtoConsistency.test.ts`（src 根，平台级跨模块守卫，同 eslintCrossImports 先例）锁定
+- **发起 3-bet 类 preset**（btn-3bet-vs-co / co-3bet-vs-hj）与 **4bet-range**：JSON **无**对应频率表（JSON 的 `btn_vs_co_3bet` / `co_vs_hj_3bet` 语义为「Hero open 后面对 3-bet 的响应」，与「发起 3-bet」是不同 spot），这三个 preset 以 range-trainer 模块自身为权威源，**不参与** JSON 一致性校验；严禁为对齐而臆造求解器频率数据
+- **变体 preset**（短牌 / HU / 4-Max）：JSON 口径仅 6-max 100bb，无对应表，模块自身权威源
+- **百分比标注**：preset 名称中的 `(~N%)` 按组合数加权占比（P1A-07 口径，`getRangeComboPercentage`）标注，守卫断言偏差 ≤ 1 个百分点
 
 **关键算法**：
 
@@ -665,7 +670,7 @@ interface DailyRecommendation {
 | 层 | 文件 | 职责 |
 |----|------|------|
 | components | PotOddsPage, OddsCalculator, EVCalculator, EquityChart 等 8 个 | 计算器 UI、图表展示 |
-| hooks | useOddsCalculation, useEquityEstimate | 计算逻辑封装 |
+| hooks | useOddsCalculation | 计算逻辑封装（useEquityEstimate 已于 2026-07-31 P1-B 作为死代码删除） |
 | store | store.ts | 输入状态管理（非持久化） |
 
 **关键算法**：
@@ -1107,7 +1112,7 @@ interface DailyRecommendation {
 
 8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫。
 
-9. **理论→实践桥接**：每 Level 完成后 `PracticeBridgeCard` 展示推荐课程/轨道（路由字符串跳转）；strategy-academy `learningTracks.ts` 新增 `track-theory-bridge`（“理论到实践”轨道）承接 9 个理论支柱。
+9. **理论→实践桥接**：每 Level 完成后 `PracticeBridgeCard` 展示推荐课程/轨道（路由字符串跳转），各 Level 的 practiceRecommendations 定向推荐仅指向 track-beginner / track-gto / track-cash-game；strategy-academy `learningTracks.ts` 的 `track-theory-bridge`（“理论到实践”轨道）为经 `/academy/tracks` 泛浏览发现的通用衔接入口（按理论支柱顺序串联实战课程），不是各 Level 的定向推荐目标（P1F-05 定性，专批 A 2026-07-31）。
 
 ### 5.9 跨模块系统设计
 
@@ -1146,6 +1151,7 @@ interface DailyRecommendation {
   - GTO `GTOSessionPage` 根据 `scenario.street` 推导：preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`
   - `inferPuzzleLessonId(theme)` — puzzle-trainer 用，10 主题映射到课程 ID
 - 渲染：`QuizCard` / `GTOFeedback` / `PuzzleCard` 在 wrong/blunder 级别显示"去复习"链接
+- 设计豁免（2026-07-31 P0-B 定性）：theory-academy 章末小测为概念判断题、无 EV 语义，暂不接入五级判分体系（沿用二元对错 + 解析渲染，见 TheoryQuiz.tsx 头注），与 hand-history 不 emit 训练事件的豁免同为登记在案的设计豁免
 
 反向反馈（数据→难度）：
 - `progress.shouldDownshiftDifficulty(): boolean`（无参调用）是自适应难度的**唯一入口**
@@ -1198,7 +1204,7 @@ interface DailyRecommendation {
 
 | Action | 描述 |
 |---|---|
-| `recordTrainingDay()` | 更新 streak（含 Earn Back / 冻结卡自动扣减），今日成功记录时触发 `checkMilestone`（幂等） |
+| `recordTrainingDay()` | 更新 streak（含 Earn Back / 冻结卡自动扣减），今日成功记录时触发 `checkMilestone`（幂等）。计入口径（专批 B 统一）：**任何一次实质训练完成都计入训练日**——含各训练模块会话结算、theory 章节完成、strategy 课程测验/Drill 完成（CourseView）、QuickDrill 快速/普通模式完成 |
 | `useStreakFreeze()` | 手动使用一张冻结卡，返回布尔值 |
 | `checkMilestone()` | 检查并标记新达成的里程碑，返回里程碑天数或 null |
 | `awardStreakFreeze(count?)` | 奖励指定数量冻结卡（默认 1） |
@@ -1242,6 +1248,8 @@ UI 组件：`Dashboard` 段位徽章按钮、`WeaknessAnalysis` 五维雷达图�
 - `ReviewItem` 接口扩展：新增 `metadata?: ReviewItemMetadata`
 - 核心函数：`processReview` / `getTodayReviewItems` / `getReviewStats` / `getDaysSinceLastReview`
 - 训练模块记录器（答题后注册/更新复习项）：range-trainer `useQuizEngine.recordSrsForAnswer` / pot-odds `useOddsSrsRecorder` / gto-simulator `useGtoSrsRecorder`；题目 ID 规范 `range:{position}:{hand}` / `odds:{questionId}` / `gto:{scenarioId}`
+- puzzle-trainer 不注册 SRS（2026-07-31 专批 C 定性，P1D-11）：题库短 id（如 `rfi-001`）仅为模块内部标识（全库唯一由 `data/puzzleBank.ids.test.ts` 守卫），不进入 SRS 键空间，无跨模块碰撞风险；若未来接入 SRS，在**注册处**拼接 `puzzle:{theme}:{questionId}` 作为 key，题库静态数据不改 id、存量 ReviewItem 零迁移
+- QuickDrill 复习题回写闭环（专批 B，P1E-05）：快速训练混入的 `review-*` 复习题答完后，由 `strategy-academy/utils/quickDrillSrs.ts` 纯函数（`computeReviewWriteBacks`）按逐题作答明细（`PracticeResult.answers`，不入 persist）调用 `processReview` 推进 ReviewItem，再逐项 `updateReviewItem` 回写 progress store（quality 映射同下表；非 review-* 忽略，复习项已清理静默跳过）
 
 Quality 评分映射：答对 + 用时 < 5 秒 → 5；答对 → 4；答错 → 1（自评"记得" → 5；"不记得" → 1）。
 
@@ -1275,7 +1283,7 @@ Progress Store Actions：
 
 UI 组件：
 - `TiltWarning.tsx` — 监听 `consecutiveWrongCount`，仅在"从 < 3 跨越到 >= 3"时弹出 Dialog 一次
-- `SessionLimitGuard.tsx` — 每日题量上限守卫，导出 `useSessionLimitReached()` / `useSessionLimitStatus()` hook
+- `SessionLimitGuard.tsx` — 每日题量上限守卫，导出 `useSessionLimitReached()` / `useSessionLimitStatus()` hook。`useSessionLimitReached` 采用**开局判定**口径（专批 B，P1D-06/P1F-01）：挂载时一次性快照额度并用 ref 冻结——开局已达上限拦在开始前，会话进行中额度耗尽不中途拦断（避免卸载进行中会话导致无结算丢弃）；调试解锁旁路保留响应式（激活期间不冻结快照）；调用点：puzzle 三模式 / QuickDrill / TheoryChapterView。`useSessionLimitStatus` 保持响应式（仅展示用）
 - `DownswingAlert.tsx` — 仅当 `isDownswing === true` 时渲染，展示 3 天正确率下降趋势
 - `MoodTracker.tsx` — 三档情绪按钮（Smile/Meh/Frown）+ 今日正确率 + 4 种情绪关联文案
 - `SettingsPage.tsx` — "每日题量上限"设置（0 无限 / 50 / 100 / 200）
@@ -1378,7 +1386,6 @@ persist(
 | `/range-trainer` | RangeTrainerHome | AppLayout |
 | `/range-trainer/learn` | RangeLearnPage | **BlankLayout** |
 | `/range-trainer/quiz` | RangeQuizPage | **BlankLayout** |
-| `/range-trainer/result/:sessionId` | SessionResultPage | AppLayout |
 | `/pot-odds` | PotOddsPage | AppLayout |
 | `/pot-odds/quiz` | PotOddsQuizPage | **BlankLayout** |
 | `/gto-simulator` | GTOSimulatorHome | AppLayout |
@@ -1430,12 +1437,11 @@ function LazyWrapper({ children }: { children: React.ReactNode }) {
 
 ### 8.1 Web Worker（GTO 计算卸载）
 
-`gtoWorker.ts` 在独立线程中运行，避免策略查找和 EV 计算阻塞 UI：
+`gtoWorker.ts` 在独立线程中运行，避免策略查找和 EV 计算阻塞 UI。当前唯一消费方为 hand-history 的 `utils/gtoDeviation.ts`（模块级单例 Worker + 消息 id 映射 + 10 秒超时降级 fallback）；原 `useGTOWorker.ts` hook 封装（健康检查 / 一次性重建）为零调用方死代码，已于 2026-07-31 专批 A 删除。
 
 ```typescript
-// 主线程通过 useGTOWorker hook 发送消息
-const { lookupStrategy, calculateEV } = useGTOWorker();
-const result = await lookupStrategy('AKs', 'BTN');
+// 主线程（gtoDeviation.ts）通过消息协议发送请求
+worker.postMessage({ type: 'batchAnalyze', payload, id });
 
 // Worker 接收并响应
 self.onmessage = (e) => {
@@ -1448,15 +1454,7 @@ self.onmessage = (e) => {
 ```
 
 - 带 10 秒超时保护
-- Worker 不可用时自动降级到主线程计算（`computeFallback`）
-
-**健康检查与一次性重建**（v2.0 新增）：
-
-`useGTOWorker` hook 新增 Worker 生命周期管理：
-- **`onerror` 监听**：Worker 脚本报错时立即标记为 dead，后续调用直接使用 fallback
-- **10 秒超时降级**：请求发送后 10 秒未收到响应，标记 Worker 为 dead
-- **一次性重建**（`rebuildWorker`）：超时后尝试重新创建 Worker 实例（通过 `rebuildAttemptedRef` 保证仅尝试一次）；重建成功则后续请求使用新 Worker，重建失败则永久使用 fallback
-- 设计目标：避免 Worker 静默死亡导致全部请求超时，同时防止无限重建循环
+- Worker 不可用（构造抛错）时自动降级到主线程 fallback
 
 **`batchAnalyze` 消息类型**（v2.1 新增）：
 

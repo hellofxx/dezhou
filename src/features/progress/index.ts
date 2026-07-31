@@ -17,6 +17,7 @@ export {
   getReviewStats,
   getDaysSinceLastReview,
   getTodayString,
+  toLocalDateString,
 } from './utils/spacedRepetition';
 
 // 每日训练推荐

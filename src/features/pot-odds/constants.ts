@@ -25,3 +25,9 @@ export const DEFAULT_EV_STATE = {
   potSize: 100,
   callAmount: 50,
 };
+
+// “末题简单 + 补救”机制的固定题目 id（与题库 1-19 错开）。
+// P1B-04：补救题必须用固定 id——SRS 复习项以 `odds:${id}` 去重，
+// 旧实现 `10000 + Date.now()` 会每轮补救新增内容相同但 id 不同的 ReviewItem，永不去重。
+export const EASY_LAST_QUESTION_ID = 9999;
+export const RESCUE_QUESTION_ID = 9998;

@@ -1,16 +1,20 @@
-import type { HandNotation, HandCategory } from '@/shared/types/poker';
-import { TOTAL_HANDS } from '@/shared/constants/poker';
+import type { HandNotation, HandCategory, GameVariant } from '@/shared/types/poker';
 import { getHandCategory } from '../utils/handClassifier';
+import { getRangeComboPercentage } from '../utils/rangeCombos';
 
 interface RangeInfoProps {
   selectedHands: HandNotation[];
   highlightedHand: HandNotation | null;
   presetName?: string;
+  /** 游戏变体（短牌总组合数 630，其余 1326） */
+  variant?: GameVariant;
 }
 
-export function RangeInfo({ selectedHands, highlightedHand, presetName }: RangeInfoProps) {
+export function RangeInfo({ selectedHands, highlightedHand, presetName, variant = 'standard' }: RangeInfoProps) {
   const total = selectedHands.length;
-  const percentage = ((total / TOTAL_HANDS) * 100).toFixed(1);
+  // P1A-07 修复：范围占比按组合数加权（对子6/同花4/offsuit12）除以总组合数，
+  // 不再用规范手牌数/169
+  const percentage = getRangeComboPercentage(selectedHands, variant).toFixed(1);
 
   // 统计各类型
   const stats = selectedHands.reduce(

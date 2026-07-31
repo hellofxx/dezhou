@@ -21,6 +21,9 @@ export default function PuzzleHome() {
   const rushBest = usePuzzleStore((s) => s.rushBest);
   const dailyBest = usePuzzleStore((s) => s.dailyBest);
   const dailyCompleted = usePuzzleStore((s) => s.dailyCompleted);
+  // P1D-09 修复：themeBest 改为响应式订阅（旧实现在 render 中 getState() 非响应式读取，
+  // 刚完成主题训练返回首页时新纪录不刷新）
+  const themeBest = usePuzzleStore((s) => s.themeBest);
 
   const today = useMemo(() => new Date(), []);
   const todayKey = useMemo(() => getDailyKey(today), [today]);
@@ -63,7 +66,22 @@ export default function PuzzleHome() {
                 {rushBest && (
                   <span>🏆 {t('puzzle.home.bestRecord', { score: rushBest.bestScore })}</span>
                 )}
-                <span>3/5 min</span>
+                {/* P1D-08 修复：新增 3/5 分钟双入口（旧实现卡片写 "3/5 min" 却硬编码只跳 duration=3） */}
+                <span className="flex items-center gap-1">
+                  {([3, 5] as const).map((min) => (
+                    <button
+                      key={min}
+                      type="button"
+                      className="px-2 py-0.5 rounded-full border border-[var(--walnut-border)] text-[var(--brass-bright)] hover:border-[var(--brass-muted)] hover:bg-[var(--surface-raised)] transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/puzzle/rush?duration=${min}`);
+                      }}
+                    >
+                      {min} min
+                    </button>
+                  ))}
+                </span>
               </div>
             </div>
           </motion.div>
@@ -131,7 +149,7 @@ export default function PuzzleHome() {
                   {categoryThemes.map((theme) => {
                     const questions = getPuzzlesByTheme(theme.id);
                     const count = questions.length;
-                    const best = usePuzzleStore.getState().themeBest[theme.id];
+                    const best = themeBest[theme.id];
                     const label = t(theme.nameKey, theme.fallbackName);
                     const avgDiff =
                       count > 0

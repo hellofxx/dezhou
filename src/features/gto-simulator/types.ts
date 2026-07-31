@@ -71,9 +71,9 @@ export interface GTODecision {
   scenarioId: string;
   userAction: Decision;
   gtoStrategy: HandStrategy;
-  evLoss: number;            // EV损失（BB/100）
+  evLoss: number;            // EV损失（BB，单决策）
   isOptimal: boolean;        // 是否在容差范围内
-  timeTaken: number;
+  timeTaken: number;         // 毫秒（P1C-19：每题用时，非累计）
 }
 
 // 场景配置选项
@@ -92,7 +92,8 @@ export interface GTOResult {
   sessionId: string;
   scenarios: number;
   optimalDecisions: number;
-  averageEVLoss: number;
+  averageEVLoss: number;     // 单决策平均 EV 损失（BB）
+  evLossBB100: number;       // P1C-11: 会话 EV 损失率（BB/100）
   worstSpots: Array<{ scenario: Scenario; evLoss: number }>;
   accuracy: number;          // 最优决策比例
   totalTime: number;

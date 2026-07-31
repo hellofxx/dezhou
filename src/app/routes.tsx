@@ -8,7 +8,6 @@ import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
 // Lazy-loaded pages
 const Dashboard = lazy(() => import('@/features/progress/components/Dashboard'));
 const RangeTrainerHome = lazy(() => import('@/features/range-trainer/components/RangeTrainerHome'));
-const SessionResultPage = lazy(() => import('@/features/range-trainer/components/SessionResultPage'));
 const RangeLearnPage = lazy(() => import('@/features/range-trainer/components/RangeLearnPage'));
 const RangeQuizPage = lazy(() => import('@/features/range-trainer/components/RangeQuizPage'));
 const PotOddsPage = lazy(() => import('@/features/pot-odds/components/PotOddsPage'));
@@ -54,7 +53,6 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <LazyWrapper><ErrorBoundary><Dashboard /></ErrorBoundary></LazyWrapper> },
       { path: 'range-trainer', element: <LazyWrapper><RangeTrainerHome /></LazyWrapper> },
-      { path: 'range-trainer/result/:sessionId', element: <LazyWrapper><SessionResultPage /></LazyWrapper> },
       { path: 'pot-odds', element: <LazyWrapper><PotOddsPage /></LazyWrapper> },
       { path: 'gto-simulator', element: <LazyWrapper><ErrorBoundary><GTOSimulatorHome /></ErrorBoundary></LazyWrapper> },
       { path: 'gto-simulator/result/:sessionId', element: <LazyWrapper><GTOResultPage /></LazyWrapper> },

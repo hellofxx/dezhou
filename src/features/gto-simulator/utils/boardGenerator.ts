@@ -49,40 +49,59 @@ function getRanks(variant: GameVariant): Rank[] {
 
 const ALL_SUITS = [Suit.Hearts, Suit.Diamonds, Suit.Clubs, Suit.Spades];
 
-function randomFrom<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)]!;
-}
-
-function cardExcluded(card: Card, exclude: Card[]): boolean {
-  return exclude.some((c) => c.suit === card.suit && c.rank === card.rank);
-}
-
-/** 生成翻牌（3张）及 texture */
-export function generateFlop(variant: GameVariant): { cards: Card[]; texture: BoardTexture } {
+/**
+ * P1C-26：构建剔除已用牌后的剩余牌堆。
+ * 抽牌一律从剩余牌堆中取，天然无重复，替代旧的"随机生成 + 重试"模式
+ * （旧模式重试上限耗尽后会返回重复牌）。
+ */
+export function buildRemainingDeck(exclude: Card[], variant: GameVariant = 'standard'): Card[] {
   const ranks = getRanks(variant);
-  const cards: Card[] = [];
-
-  while (cards.length < 3) {
-    const card: Card = { suit: randomFrom(ALL_SUITS), rank: randomFrom(ranks) };
-    if (!cardExcluded(card, cards)) cards.push(card);
+  const deck: Card[] = [];
+  for (const suit of ALL_SUITS) {
+    for (const rank of ranks) {
+      if (!exclude.some((c) => c.suit === suit && c.rank === rank)) {
+        deck.push({ suit, rank });
+      }
+    }
   }
+  return deck;
+}
 
+/** 从剩余牌堆随机抽取 count 张（不放回） */
+export function drawCards(count: number, exclude: Card[] = [], variant: GameVariant = 'standard'): Card[] {
+  const deck = buildRemainingDeck(exclude, variant);
+  const drawn: Card[] = [];
+  for (let i = 0; i < count && deck.length > 0; i++) {
+    const idx = Math.floor(Math.random() * deck.length);
+    drawn.push(deck.splice(idx, 1)[0]!);
+  }
+  return drawn;
+}
+
+/** 随机生成 Hero 手牌（2 张，不重复） */
+export function randomHeroHand(variant: GameVariant = 'standard'): [Card, Card] {
+  const [c1, c2] = drawCards(2, [], variant);
+  return [c1!, c2!];
+}
+
+/**
+ * 生成翻牌（3张）及 texture
+ * P1C-01：excludeCards 传入 Hero 手牌（及其他已发牌），确保公共牌与 Hero 手牌全局唯一
+ */
+export function generateFlop(
+  variant: GameVariant,
+  excludeCards: Card[] = []
+): { cards: Card[]; texture: BoardTexture } {
+  const cards = drawCards(3, excludeCards, variant);
   return { cards, texture: classifyBoardTexture(cards) };
 }
 
-/** 生成转牌 */
-export function generateTurnCard(existingBoard: Card[], variant: GameVariant): Card {
-  const ranks = getRanks(variant);
-  let card: Card;
-  let attempts = 0;
-  do {
-    card = { suit: randomFrom(ALL_SUITS), rank: randomFrom(ranks) };
-    attempts++;
-  } while (cardExcluded(card, existingBoard) && attempts < 200);
-  return card;
+/** 生成转牌（P1C-01：excludeCards 传入 Hero 手牌等场外已用牌） */
+export function generateTurnCard(existingBoard: Card[], variant: GameVariant, excludeCards: Card[] = []): Card {
+  return drawCards(1, [...existingBoard, ...excludeCards], variant)[0]!;
 }
 
-/** 生成河牌 */
-export function generateRiverCard(existingBoard: Card[], variant: GameVariant): Card {
-  return generateTurnCard(existingBoard, variant);
+/** 生成河牌（P1C-01：excludeCards 传入 Hero 手牌等场外已用牌） */
+export function generateRiverCard(existingBoard: Card[], variant: GameVariant, excludeCards: Card[] = []): Card {
+  return generateTurnCard(existingBoard, variant, excludeCards);
 }

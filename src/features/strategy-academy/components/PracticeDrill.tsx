@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target, Zap, Keyboard } from 'lucide-react';
-import type { PracticeDrill as PracticeDrillType, PracticeQuestion, PracticeOption, PracticeResult, QuestionDifficulty } from '../types';
+import type { PracticeDrill as PracticeDrillType, PracticeQuestion, PracticeOption, PracticeResult, PracticeAnswerDetail, QuestionDifficulty } from '../types';
 import { PokerCard } from '@/shared/components/Card';
 import { PositionBadge } from '@/shared/components/PositionBadge';
 import { Position } from '@/shared/types/position';
@@ -14,6 +14,9 @@ import { soundManager } from '@/shared/utils/soundManager';
 import { useProgressStore } from '@/features/progress/store';
 import { useAcademyStore } from '../store';
 import { getCurrentDifficulty, selectQuestionsByDifficulty, shouldRecommendReview } from '../utils/adaptiveDifficulty';
+import { orderPracticeOptions } from '../utils/practiceOptionOrder';
+// P1E-13: 超时判分口径（超时恒判错，对齐 range-trainer P1A-02）
+import { gradePracticeSelection, pickTimeoutFallbackOption } from '../utils/practiceGrading';
 
 export type DrillMode = 'normal' | 'pressure';
 
@@ -122,6 +125,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   const [timeoutCount, setTimeoutCount] = useState(0);
   const [showCooldown, setShowCooldown] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
+  // P1E-05（专批 B）：逐题作答明细（供 QuickDrill 对 review-* 复习题做 SRS 回写）
+  const answersRef = useRef<PracticeAnswerDetail[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const soundInitRef = useRef(false);
 
@@ -151,6 +156,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   }, []);
 
   // 自适应模式下动态选择题目
+  // P0B-01：渲染前统一走 orderPracticeOptions 排序出口（动作类 canonical /
+  // 数值类单调 / 文字类 id 种子洗牌），禁止按题库原序渲染；源题库数据不改。
   const questions = useMemo(() => {
     if (isPressure) {
       // 压力模式：循环题目到 20 题
@@ -160,10 +167,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       for (let i = 0; i < PRESSURE_TOTAL_QUESTIONS; i++) {
         result.push(base[i % base.length]!);
       }
-      return result;
+      return result.map(orderPracticeOptions);
     }
-    if (!adaptive || !adaptiveConfig.enabled) return drill.questions;
-    return selectQuestionsByDifficulty(drill.questions, currentDifficulty, drill.questions.length);
+    if (!adaptive || !adaptiveConfig.enabled) return drill.questions.map(orderPracticeOptions);
+    return selectQuestionsByDifficulty(drill.questions, currentDifficulty, drill.questions.length)
+      .map(orderPracticeOptions);
   }, [adaptive, adaptiveConfig.enabled, drill.questions, currentDifficulty, isPressure]);
 
   const totalQuestions = questions.length;
@@ -214,12 +222,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
     };
   }, [currentIndex, isAnswered, finished, timeLimit, currentQuestion]);
 
-  // 超时处理
+  // 超时处理（P1E-13: 系统代选仅用于展示，判分强制计错 — 见 handleSelect 的 gradedCorrect）
   useEffect(() => {
     if (timeRemaining === 0 && timeLimit > 0 && !isAnswered && !finished && currentQuestion) {
-      // 自动选择 fold（最保守动作）
-      const foldOption = currentQuestion.options.find(o => o.action === 'Fold');
-      const fallbackOption = foldOption || currentQuestion.options[0];
+      // 自动选择 fold（最保守动作）作为展示用代选项
+      const fallbackOption = pickTimeoutFallbackOption(currentQuestion);
       if (fallbackOption) {
         setIsTimedOut(true);
         setShowTimeoutFlash(true);
@@ -276,17 +283,30 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
 
       const questionDifficulty = currentQuestion?.difficulty ?? 'beginner';
 
+      // P1E-13: 判分唯一事实源 — 超时恒判错（即使代选项恰好正确也不计对、
+      // 不加连击、不播答对音效），对齐 range-trainer P1A-02 口径
+      const gradedCorrect = gradePracticeSelection(option, isTimeout);
+
+      // P1E-05（专批 B）：记录逐题作答明细（复习题 SRS 回写的数据源）
+      if (currentQuestion) {
+        answersRef.current.push({
+          questionId: currentQuestion.id,
+          isCorrect: gradedCorrect,
+          timeTaken: elapsed,
+        });
+      }
+
       // 更新能力评估
       updateAbility({
-        isCorrect: option.isCorrect,
+        isCorrect: gradedCorrect,
         timeTaken: elapsed,
         difficulty: questionDifficulty,
       });
 
       // P2-5.2: 情绪管理 — 记录答题
-      recordAnswerForEmotion(option.isCorrect);
+      recordAnswerForEmotion(gradedCorrect);
 
-      if (option.isCorrect) {
+      if (gradedCorrect) {
         setCorrectCount((c) => c + 1);
         currentStreakRef.current += 1;
         setMaxStreak(m => Math.max(m, currentStreakRef.current));
@@ -296,7 +316,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         currentStreakRef.current = 0;
         const newConsecutiveWrong = consecutiveWrong + 1;
         setConsecutiveWrong(newConsecutiveWrong);
-        soundManager.playWrong();
+        // 超时路径已在超时 effect 中播报 playTimeout，避免叠加答错音效
+        if (!isTimeout) soundManager.playWrong();
 
         // 压力模式：连续错 3 题显示冷却提示
         if (isPressure && newConsecutiveWrong >= 3) {
@@ -318,7 +339,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       const answeredCount = currentIndex + 1;
       if (adaptive && !isPressure && answeredCount % 5 === 0) {
         const recentResults = newTimes.slice(-5).map((t, i) => ({
-          isCorrect: i === newTimes.length - 1 ? option.isCorrect : true,
+          isCorrect: i === newTimes.length - 1 ? gradedCorrect : true,
           timeTaken: t,
         }));
         checkDifficultyAdjustment(recentResults);
@@ -341,6 +362,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         averageTime: Math.round(avgTime * 10) / 10,
         weakPoints: [...new Set(weakPoints)],
         timestamp: Date.now(),
+        // P1E-05（专批 B）：逐题作答明细随结果上报（不入 persist，见 recordPracticeScore）
+        answers: [...answersRef.current],
       };
       setFinished(true);
       onComplete(result);
@@ -731,16 +754,26 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             <div
               className={cn(
                 'rounded-lg border p-4',
-                selectedOption.isCorrect
+                selectedOption.isCorrect && !isTimedOut
                   ? 'border-[var(--success)]/40 bg-[var(--success)]/10'
                   : 'border-[var(--danger)]/40 bg-[var(--danger)]/10'
               )}
             >
               <div className="flex items-center gap-2 mb-2">
-                {isTimedOut && (
-                  <span className="text-sm font-bold text-[var(--danger)] animate-pulse">⏰ 超时！</span>
-                )}
-                {selectedOption.isCorrect ? (
+                {/* P1E-13: 超时路径仅展示"系统代选"，本题计为答错（即使代选项正确） */}
+                {isTimedOut ? (
+                  <>
+                    <XCircle className="w-4 h-4 text-[var(--danger)]" />
+                    <span className="text-sm font-bold text-[var(--danger)]">
+                      ⏰ 超时！系统代选 {selectedOption.action}，本题计为答错
+                    </span>
+                    {correctOption && (
+                      <span className="text-xs text-[var(--ivory-muted)] ml-2">
+                        正确答案：{correctOption.action}{correctOption.amount ? ` ${correctOption.amount}` : ''}
+                      </span>
+                    )}
+                  </>
+                ) : selectedOption.isCorrect ? (
                   <>
                     <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
                     <span className="text-sm font-bold text-[var(--success)]">✓ 正确</span>
@@ -769,8 +802,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               </div>
               <p className="text-xs text-[var(--ivory-dim)] leading-relaxed">{selectedOption.explanation}</p>
 
-              {/* 去复习链接：答错且存在关联课程时显示 */}
-              {!selectedOption.isCorrect && currentQuestion.relatedLessonId && (
+              {/* 去复习链接：答错（含超时计错）且存在关联课程时显示 */}
+              {(!selectedOption.isCorrect || isTimedOut) && currentQuestion.relatedLessonId && (
                 <button
                   onClick={() => navigate(`/academy/lesson/${currentQuestion.relatedLessonId}`)}
                   className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--brass-bright)] underline underline-offset-2 hover:opacity-80 transition-opacity"
@@ -783,7 +816,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               {scenario.opponent && (
                 <p className="text-xs text-[var(--ivory-muted)] mt-2">
                   📊 提示：面对{scenario.opponent.shortName}类型玩家，{
-                    selectedOption.isCorrect
+                    selectedOption.isCorrect && !isTimedOut
                       ? '你的决策考虑了对手倾向，很好！'
                       : `此类对手${scenario.opponent.tendencies[0]}，需要相应调整策略。`
                   }

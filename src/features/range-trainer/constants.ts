@@ -2,36 +2,57 @@ import { Position } from '@/shared/types/position';
 import type { GameVariant } from '@/shared/types/poker';
 import type { RangePreset } from './types';
 
+/**
+ * 6-max 基础预置范围（open 类）。
+ *
+ * 数据源定性（2026-07-31 跨模块专批 C，P1A-06）：
+ *   以 gto-simulator `data/preflop-ranges.json`（6max_100bb_preflop）为权威源，
+ *   按「raise 频率 ≥ 0.5」阈值离散化生成（call 类 preset 用「call 频率 ≥ 0.5」）。
+ *   一致性由跨模块守卫测试 `src/rangePresetGtoConsistency.test.ts` 锁定；
+ *   修改本表或 JSON 任一侧都会使守卫变红。
+ *   注意：「发起 3-bet」类 preset（见 ADVANCED_PRESET_RANGES 内注释）不在此口径内。
+ */
 export const PRESET_RANGES: RangePreset[] = [
   {
     id: 'utg-open',
-    name: 'UTG Open Raise (~16%)',
+    name: 'UTG Open Raise (~19%)',
     position: Position.UTG,
     actionType: 'open',
     hands: [
-      'AA', 'KK', 'QQ', 'JJ', 'TT', '99', '88', '77', '66', '55',
-      'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s',
-      'KQs', 'KJs', 'KTs',
+      'AA', 'KK', 'QQ', 'JJ', 'TT', '99', '88', '77', '66', '55', '44',
+      'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A5s', 'A4s',
+      'KQs', 'KJs', 'KTs', 'K9s',
       'QJs', 'QTs',
       'JTs', 'J9s',
-      'T9s', '98s', '87s', '76s', '65s', '54s',
-      'AKo', 'AQo', 'AJo',
-      'KQo',
+      'T9s',
+      '98s',
+      '87s',
+      '76s',
+      '65s',
+      '54s',
+      'AKo', 'AQo', 'AJo', 'ATo',
+      'KQo', 'KJo',
+      'QJo',
+      'JTo',
     ],
   },
   {
     id: 'hj-open',
-    name: 'HJ Open Raise',
+    name: 'HJ Open Raise (~22%)',
     position: Position.HJ,
     actionType: 'open',
     hands: [
       'AA', 'KK', 'QQ', 'JJ', 'TT', '99', '88', '77', '66', '55', '44', '33', '22',
-      'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A5s', 'A4s', 'A3s',
+      'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A5s', 'A4s', 'A3s',
       'KQs', 'KJs', 'KTs', 'K9s',
       'QJs', 'QTs', 'Q9s',
       'JTs', 'J9s',
       'T9s', 'T8s',
-      '98s', '87s', '76s', '65s', '54s',
+      '98s',
+      '87s',
+      '76s',
+      '65s',
+      '54s',
       'AKo', 'AQo', 'AJo', 'ATo',
       'KQo', 'KJo',
       'QJo',
@@ -41,14 +62,14 @@ export const PRESET_RANGES: RangePreset[] = [
   },
   {
     id: 'co-open',
-    name: 'CO Open Raise',
+    name: 'CO Open Raise (~32%)',
     position: Position.CO,
     actionType: 'open',
     hands: [
       'AA', 'KK', 'QQ', 'JJ', 'TT', '99', '88', '77', '66', '55', '44', '33', '22',
       'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s',
       'KQs', 'KJs', 'KTs', 'K9s', 'K8s',
-      'QJs', 'QTs', 'Q9s',
+      'QJs', 'QTs', 'Q9s', 'Q8s',
       'JTs', 'J9s', 'J8s',
       'T9s', 'T8s', 'T7s',
       '98s', '97s',
@@ -56,46 +77,45 @@ export const PRESET_RANGES: RangePreset[] = [
       '76s', '75s',
       '65s', '64s',
       '54s', '53s',
-      'AKo', 'AQo', 'AJo', 'ATo',
-      'KQo', 'KJo',
-      'QJo',
-      'JTo',
+      'AKo', 'AQo', 'AJo', 'ATo', 'A9o',
+      'KQo', 'KJo', 'KTo',
+      'QJo', 'QTo',
+      'JTo', 'J9o',
       'T9o',
+      '98o',
+      '87o',
+      '76o',
     ],
   },
   {
     id: 'btn-open',
-    name: 'BTN Open Raise',
+    name: 'BTN Open Raise (~39%)',
     position: Position.BTN,
     actionType: 'open',
     hands: [
       'AA', 'KK', 'QQ', 'JJ', 'TT', '99', '88', '77', '66', '55', '44', '33', '22',
       'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s',
-      'KQs', 'KJs', 'KTs', 'K9s', 'K8s', 'K7s', 'K6s', 'K5s', 'K4s', 'K3s', 'K2s',
-      'QJs', 'QTs', 'Q9s', 'Q8s', 'Q7s', 'Q6s',
-      'JTs', 'J9s', 'J8s', 'J7s',
-      'T9s', 'T8s', 'T7s', 'T6s',
-      '98s', '97s', '96s',
-      '87s', '86s', '85s',
+      'KQs', 'KJs', 'KTs', 'K9s', 'K8s', 'K7s', 'K6s', 'K5s', 'K4s',
+      'QJs', 'QTs', 'Q9s', 'Q8s', 'Q7s',
+      'JTs', 'J9s', 'J8s',
+      'T9s', 'T8s',
+      '98s', '97s',
+      '87s', '86s',
       '76s', '75s',
-      '65s', '64s', '63s',
-      '54s', '53s',
-      '43s',
-      'AKo', 'AQo', 'AJo', 'ATo', 'A9o', 'A8o', 'A7o', 'A6o', 'A5o', 'A4o', 'A3o', 'A2o',
+      '65s', '64s',
+      '54s',
+      'AKo', 'AQo', 'AJo', 'ATo', 'A9o', 'A8o', 'A7o', 'A6o', 'A5o', 'A4o',
       'KQo', 'KJo', 'KTo', 'K9o',
       'QJo', 'QTo', 'Q9o',
       'JTo', 'J9o',
       'T9o', 'T8o',
-      '98o', '97o',
+      '98o',
       '87o',
-      '76o',
-      '65o',
-      '54o',
     ],
   },
   {
     id: 'sb-open',
-    name: 'SB Open Raise',
+    name: 'SB Open Raise (~38%)',
     position: Position.SB,
     actionType: 'open',
     hands: [
@@ -109,14 +129,15 @@ export const PRESET_RANGES: RangePreset[] = [
       '87s', '86s',
       '76s', '75s',
       '65s', '64s',
-      '54s', '53s',
+      '54s',
       'AKo', 'AQo', 'AJo', 'ATo', 'A9o', 'A8o', 'A7o', 'A6o', 'A5o',
-      'KQo', 'KJo', 'KTo',
-      'QJo', 'QTo',
+      'KQo', 'KJo', 'KTo', 'K9o',
+      'QJo', 'QTo', 'Q9o',
       'JTo', 'J9o',
-      'T9o',
+      'T9o', 'T8o',
       '98o',
       '87o',
+      '76o',
     ],
   },
 ];
@@ -173,7 +194,7 @@ export const GRID_RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4'
 /** 短牌 9×9 矩阵的牌面排序（A→6） */
 export const SHORT_DECK_GRID_RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6'] as const;
 
-// ─── 短牌预置范围 ────────────────────────────────────────────────────────────
+// ─── 短牌预置范围（变体 preset：JSON 口径为 6max_100bb，无对应表，模块自身权威源）────────────────────
 
 export const SHORT_DECK_PRESET_RANGES: RangePreset[] = [
   {
@@ -225,7 +246,7 @@ export const SHORT_DECK_PRESET_RANGES: RangePreset[] = [
 export const HU_PRESET_RANGES: RangePreset[] = [
   {
     id: 'hu-btn-open',
-    name: 'HU BTN Open Raise (~75%)',
+    name: 'HU BTN Open Raise (~62%)',
     position: Position.BTN,
     actionType: 'open',
     hands: [
@@ -357,15 +378,27 @@ export const FOUR_MAX_PRESET_RANGES: RangePreset[] = [
 ];
 
 // ─── 6-Max 3-Bet / BB Defense / 4-Bet 预置范围 ────────────────────────────────
+//
+// 数据源定性（2026-07-31 跨模块专批 C，P1A-06 / P1-C 已定性）：
+// - 「发起 3-bet」类 preset（btn-3bet-vs-co / co-3bet-vs-hj）与「通用 4-bet」（4bet-range）
+//   在 gto-simulator `preflop-ranges.json` 中**没有**对应频率表：JSON 的 `btn_vs_co_3bet` /
+//   `co_vs_hj_3bet` 语义是「Hero open 后**面对** 3-bet 的响应（4-bet/call/fold）」，与本处
+//   「面对 open **发起** 3-bet」是不同 spot，二者**不得互相校验/对齐**。
+// - 上述三个 preset 以本模块为自身权威源（教学参考范围）；严禁为对齐而臆造 JSON 频率数据
+//   （臆造的求解器频率会成为错误教学权威源，危害大于数据缺口）。
+// - 例外：bb-3bet-vs-btn / bb-call-vs-btn 对应 JSON `bb_vs_btn_open` 表（BB 面对 BTN open，
+//   raise 即发起 3-bet），JSON 有覆盖，已纳入一致性守卫（src/rangePresetGtoConsistency.test.ts）。
 
 export const ADVANCED_PRESET_RANGES: RangePreset[] = [
   {
+    // 发起 3-bet spot：JSON 无对应表（btn_vs_co_3bet 是「面对 3-bet 响应」不同 spot），
+    // 本 preset 为模块自身权威源，不参与 JSON 一致性守卫（专批 C 定性，勿再误判为应对齐）
     id: 'btn-3bet-vs-co',
-    name: 'BTN 3-Bet vs CO Open',
+    name: 'BTN 3-Bet vs CO Open (~6%)',
     position: Position.BTN,
     actionType: '3bet',
     hands: [
-      // 价值 3-bet（约 6-8%）
+      // 价值 3-bet
       'AA', 'KK', 'QQ', 'JJ', 'AKs', 'AQs', 'AKo',
       // Bluff 3-bet（Ax blocker + suited connectors）
       'A5s', 'A4s', 'A3s', 'A2s',
@@ -374,8 +407,9 @@ export const ADVANCED_PRESET_RANGES: RangePreset[] = [
     ],
   },
   {
+    // 发起 3-bet spot：同上，模块自身权威源，不参与 JSON 一致性守卫
     id: 'co-3bet-vs-hj',
-    name: 'CO 3-Bet vs HJ Open',
+    name: 'CO 3-Bet vs HJ Open (~5%)',
     position: Position.CO,
     actionType: '3bet',
     hands: [
@@ -385,21 +419,22 @@ export const ADVANCED_PRESET_RANGES: RangePreset[] = [
     ],
   },
   {
+    // 数据源：JSON `bb_vs_btn_open` 表 call 频率 ≥ 0.5（专批 C 重生成，守卫锁定）
     id: 'bb-call-vs-btn',
-    name: 'BB Call vs BTN Open (~35-40%)',
+    name: 'BB Call vs BTN Open (~33%)',
     position: Position.BB,
     actionType: 'call-vs-raise',
     hands: [
       '99', '88', '77', '66', '55', '44', '33', '22',
       'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s',
-      'KQs', 'KJs', 'KTs', 'K9s', 'K8s', 'K7s',
+      'KQs', 'KJs', 'KTs', 'K9s', 'K8s',
       'QJs', 'QTs', 'Q9s',
       'JTs', 'J9s',
       'T9s', 'T8s',
       '98s', '97s',
       '87s', '86s',
       '76s', '75s',
-      '65s', '64s',
+      '65s',
       '54s',
       'AJo', 'ATo', 'A9o', 'A8o', 'A7o', 'A5o', 'A4o', 'A3o', 'A2o',
       'KQo', 'KJo', 'KTo', 'K9o',
@@ -408,11 +443,16 @@ export const ADVANCED_PRESET_RANGES: RangePreset[] = [
       'T9o',
       '98o',
       '87o',
+      '76o',
+      '65o',
+      '54o',
     ],
   },
   {
+    // 数据源：JSON `bb_vs_btn_open` 表 raise 频率 ≥ 0.5（BB 面对 BTN open 时 raise 即发起 3-bet，
+    // 此 spot JSON 有覆盖，守卫锁定）
     id: 'bb-3bet-vs-btn',
-    name: 'BB 3-Bet vs BTN Open',
+    name: 'BB 3-Bet vs BTN Open (~5%)',
     position: Position.BB,
     actionType: '3bet',
     hands: [
@@ -423,8 +463,9 @@ export const ADVANCED_PRESET_RANGES: RangePreset[] = [
     ],
   },
   {
+    // 通用 4-bet 教学范围：JSON 无单一对应 spot，模块自身权威源，不参与 JSON 一致性守卫
     id: '4bet-range',
-    name: '通用 4-Bet 范围',
+    name: '通用 4-Bet 范围 (~4%)',
     position: Position.BTN,
     actionType: '4bet',
     hands: [

@@ -2,41 +2,16 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Position } from '@/shared/types/position';
 import type { TrainingResult } from '@/shared/types/common';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/components/ui/select';
-import { HelpCircle, Zap, Clock, Hash } from 'lucide-react';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { useProgressStore } from '@/features/progress/store';
 import { TrainingSession } from './TrainingSession';
 import { SessionResult } from './SessionResult';
+import { QuizConfig } from './QuizConfig';
 import { useRangeTrainerStore } from '../store';
-import { SIX_MAX_POSITIONS, ACTION_TYPES } from '../constants';
 // P2-5.4: Session 止损守卫
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
 
 type Phase = 'config' | 'training' | 'result';
-
-const TIME_OPTIONS = [
-  { value: '0', label: '无限时' },
-  { value: '5', label: '5 秒' },
-  { value: '10', label: '10 秒' },
-  { value: '15', label: '15 秒' },
-  { value: '30', label: '30 秒' },
-];
-
-const QUESTION_COUNT_OPTIONS = [
-  { value: '10', label: '10 题' },
-  { value: '20', label: '20 题' },
-  { value: '30', label: '30 题' },
-  { value: '50', label: '50 题' },
-];
 
 export default function RangeQuizPage() {
   const navigate = useNavigate();
@@ -58,9 +33,11 @@ export default function RangeQuizPage() {
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练
   const sessionLimitReached = useSessionLimitReached();
 
+  // P1A-01 修复：startQuiz 生成 0 题时返回 false，不切换 phase（停留在配置页）
   const handleStart = useCallback(() => {
-    startQuiz(position, actionType, timeLimit, questionCount);
-    setPhase('training');
+    if (startQuiz(position, actionType, timeLimit, questionCount)) {
+      setPhase('training');
+    }
   }, [position, actionType, timeLimit, questionCount, startQuiz]);
 
   const handleComplete = useCallback((r: TrainingResult) => {
@@ -79,10 +56,14 @@ export default function RangeQuizPage() {
   }, [recordTrainingDay]);
 
   const handleRetry = useCallback(() => {
+    // P1A-09：resetQuiz 保留 handWeights，"再练一次"保住间隔重复加权
     resetQuiz();
-    startQuiz(position, actionType, timeLimit, questionCount);
     setResult(null);
-    setPhase('training');
+    if (startQuiz(position, actionType, timeLimit, questionCount)) {
+      setPhase('training');
+    } else {
+      setPhase('config');
+    }
   }, [position, actionType, timeLimit, questionCount, startQuiz, resetQuiz]);
 
   const handleBackToHome = useCallback(() => {
@@ -90,6 +71,7 @@ export default function RangeQuizPage() {
     navigate('/range-trainer');
   }, [navigate, resetQuiz]);
 
+  // P1A-04：中途退出统一走此路径 —— 仅 resetQuiz 回配置页，不入账、不 emit、不计 streak
   const handleExit = useCallback(() => {
     resetQuiz();
     setPhase('config');
@@ -126,113 +108,18 @@ export default function RangeQuizPage() {
     );
   }
 
-  // ─── 配置阶段 ────────────────────────────────────────
+  // ─── 配置阶段（P1A-01/05/10：选项过滤 + 位置解锁门禁见 QuizConfig）─────
   return (
-    <div className="h-full flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-[var(--surface)] border-[var(--surface-raised)]">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-2 w-12 h-12 rounded-xl bg-[var(--brass)]/10 flex items-center justify-center">
-            <HelpCircle className="w-6 h-6 text-[var(--brass)]" />
-          </div>
-          <CardTitle className="text-xl">范围测验</CardTitle>
-          <CardDescription>
-            测试你对各位置开牌范围的掌握程度
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          {/* 位置选择 */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-[var(--ivory-muted)]">
-              <Zap className="w-4 h-4" />
-              位置
-            </label>
-            <Select value={position} onValueChange={(v) => setPosition(v as Position)}>
-              <SelectTrigger className="bg-[var(--background)] border-[var(--surface-raised)]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {SIX_MAX_POSITIONS.filter((p) => p !== Position.BB).map((pos) => (
-                  <SelectItem key={pos} value={pos}>
-                    {pos}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* 动作类型 */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-[var(--ivory-muted)]">
-              <Zap className="w-4 h-4" />
-              动作类型
-            </label>
-            <Select value={actionType} onValueChange={setActionType}>
-              <SelectTrigger className="bg-[var(--background)] border-[var(--surface-raised)]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {ACTION_TYPES.map((at) => (
-                  <SelectItem key={at.value} value={at.value}>
-                    {at.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* 每题限时 */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-[var(--ivory-muted)]">
-              <Clock className="w-4 h-4" />
-              每题限时
-            </label>
-            <Select value={String(timeLimit)} onValueChange={(v) => setTimeLimit(Number(v))}>
-              <SelectTrigger className="bg-[var(--background)] border-[var(--surface-raised)]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {TIME_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* 题目数量 */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-[var(--ivory-muted)]">
-              <Hash className="w-4 h-4" />
-              题目数量
-            </label>
-            <Select value={String(questionCount)} onValueChange={(v) => setQuestionCount(Number(v))}>
-              <SelectTrigger className="bg-[var(--background)] border-[var(--surface-raised)]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {QUESTION_COUNT_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* 开始按钮 */}
-          <Button
-            onClick={handleStart}
-            className="w-full bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] h-12 text-base font-semibold font-display tracking-wide"
-          >
-            开始训练
-          </Button>
-
-          <p className="text-xs text-center text-[var(--ivory-dim)]">
-            快捷键：1=Fold · 2=Call · 3=Raise · Esc=暂停
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+    <QuizConfig
+      position={position}
+      actionType={actionType}
+      timeLimit={timeLimit}
+      questionCount={questionCount}
+      onPositionChange={setPosition}
+      onActionTypeChange={setActionType}
+      onTimeLimitChange={setTimeLimit}
+      onQuestionCountChange={setQuestionCount}
+      onStart={handleStart}
+    />
   );
 }

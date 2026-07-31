@@ -36,7 +36,8 @@ export const MENTOR_FEEDBACK_TEMPLATES: Record<MentorStyle, MentorFeedbackTempla
 
 /**
  * 根据教练风格与 grade 渲染反馈文案
- * @param mentorStyle 教练风格
+ * @param mentorStyle 教练风格（P0B-06：非法/未知值防御性回退到 'encouraging'，
+ *                    避免持久化脏数据/调用方传入异常值时读取 undefined 模板抛错）
  * @param grade 反馈等级
  * @param params 替换参数 { evLoss, correctAction }
  */
@@ -45,7 +46,9 @@ export function renderMentorFeedback(
   grade: DecisionGrade,
   params: { evLoss?: number; correctAction?: string }
 ): string {
-  const template = MENTOR_FEEDBACK_TEMPLATES[mentorStyle][grade];
+  const styleTemplates =
+    MENTOR_FEEDBACK_TEMPLATES[mentorStyle] ?? MENTOR_FEEDBACK_TEMPLATES['encouraging'];
+  const template = styleTemplates[grade];
   return template
     .replace(/\{evLoss\}/g, String(params.evLoss ?? ''))
     .replace(/\{correctAction\}/g, params.correctAction ?? '');

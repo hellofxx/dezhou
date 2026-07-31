@@ -37,7 +37,7 @@ export interface PuzzleOption {
   /** 显示文本，如 'Raise' / 'Call' / 'Fold' */
   text: string;
   isCorrect: boolean;
-  /** EV 损失（BB），用于三级反馈 */
+  /** EV 损失（BB），用于五级反馈 */
   evLoss?: number;
   /** 该选项解析 */
   explanation: string;
@@ -80,7 +80,7 @@ export interface PuzzleAnswerRecord {
   isCorrect: boolean;
   /** 用时（毫秒） */
   timeTaken: number;
-  /** 三级评级 */
+  /** 五级评级（best/correct/inaccuracy/wrong/blunder，见 calculateGrade） */
   grade: DecisionGrade;
   /** EV 损失 */
   evLoss: number;

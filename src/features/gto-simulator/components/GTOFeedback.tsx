@@ -107,7 +107,7 @@ export function GTOFeedback({
           </div>
           <div className="text-right">
             <div className="text-xs opacity-80">{t('feedback.evLossLabel', { defaultValue: 'EV 损失' })}</div>
-            <div className="text-lg font-bold font-numeric">{feedback.evLoss.toFixed(2)} BB</div>
+            <div className="text-lg font-bold font-numeric">{Math.max(0, feedback.evLoss).toFixed(2)} BB</div>
           </div>
           {/* 非 best 级显示最优动作 */}
           {grade !== 'best' && feedback.correctAction && (
@@ -130,7 +130,7 @@ export function GTOFeedback({
           </div>
           <div className="text-right">
             <div className="text-xs opacity-80">EV 损失</div>
-            <div className="text-lg font-bold font-numeric">{evLoss.toFixed(2)} BB</div>
+            <div className="text-lg font-bold font-numeric">{Math.max(0, evLoss).toFixed(2)} BB</div>
           </div>
         </div>
       )}

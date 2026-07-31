@@ -62,7 +62,7 @@ export default function GTOSimulatorHome() {
             </div>
             <div className="text-right">
               <div className="text-sm text-[var(--ivory-muted)] font-numeric">
-                {lastResult.scenarios} 个场景 · EV 损失 {lastResult.averageEVLoss.toFixed(2)} BB/100
+                {lastResult.scenarios} 个场景 · EV 损失率 {lastResult.evLossBB100.toFixed(2)} BB/100
               </div>
             </div>
           </div>

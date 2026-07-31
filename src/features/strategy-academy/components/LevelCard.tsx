@@ -8,16 +8,22 @@ import { ProgressBar } from './ProgressBar';
 interface LevelCardProps {
   level: LevelInfo;
   unlocked: boolean;
-  progress: number; // 0-100
   completedLessons: string[];
   index: number;
 }
 
-export function LevelCard({ level, unlocked, progress, completedLessons, index }: LevelCardProps) {
+export function LevelCard({ level, unlocked, completedLessons, index }: LevelCardProps) {
   const navigate = useNavigate();
 
   const firstIncompleteLesson = level.lessons.find((l) => !completedLessons.includes(l.id));
   const targetLesson = firstIncompleteLesson ?? level.lessons[0];
+  // P1E-08: 进度按条目自身口径计算（l4a/l4b 各自独立），
+  // 与"N/N 课时完成"文案同源，不再使用 getLevelProgress(level) 的合并口径
+  const completedInEntry = completedLessons.filter((id) =>
+    level.lessons.some((l) => l.id === id)
+  ).length;
+  const totalInEntry = level.lessons.length;
+  const progress = totalInEntry > 0 ? Math.round((completedInEntry / totalInEntry) * 100) : 0;
   const allCompleted = progress === 100;
 
   const handleClick = () => {
@@ -77,8 +83,7 @@ export function LevelCard({ level, unlocked, progress, completedLessons, index }
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-[var(--ivory-dim)]">
-                    {completedLessons.filter((id) => level.lessons.some((l) => l.id === id)).length}
-                    /{level.lessons.length} 课时完成
+                    {completedInEntry}/{totalInEntry} 课时完成
                   </span>
                   <span className="font-numeric text-[var(--brass-bright)]">{progress}%</span>
                 </div>

@@ -47,7 +47,7 @@ function BoardCard({ card }: { card: Card }) {
 export default function GTOSessionPage() {
   const navigate = useNavigate();
   const { getCurrentScenario, submitDecision, getProgress, session } = useScenarioEngine();
-  const { showFeedback, feedback, currentNodeIndex, stepFeedbacks, continueNext } = useGTOSimulatorStore();
+  const { showFeedback, feedback, currentNodeIndex, continueNext } = useGTOSimulatorStore();
 
   const scenario = getCurrentScenario();
   const progress = getProgress();
@@ -93,28 +93,27 @@ export default function GTOSessionPage() {
     return cards;
   }, [activeBoard]);
 
+  // P1C-18: userDecisions 从结构化字段取值（不再从 explanation 解析）
   const userDecisions = useMemo(() => {
-    return stepFeedbacks.map((fb, idx) => ({
-      nodeIndex: idx,
-      action: fb.explanation.split('你选择了 ')[1]?.split('，')[0] ?? '—',
-    }));
-  }, [stepFeedbacks]);
+    if (!session || !scenario) return [];
+    return session.decisions
+      .filter((d) => d.scenarioId === scenario.id)
+      .map((d, idx) => ({
+        nodeIndex: idx,
+        action: d.userAction?.action ?? '—',
+      }));
+  }, [session, scenario]);
 
   const handleDecision = useCallback(
     (decision: Decision) => {
       submitDecision(decision);
-      // P1-2.4: 决策提交后更新 postflop 维度 ELO
-      // submitDecision 同步更新 store，可立即读取最新 feedback
       const latestFeedback = useGTOSimulatorStore.getState().feedback;
       if (latestFeedback && scenario) {
-        recordEloForAnswer(latestFeedback.isOptimal, scenario?.difficulty);
-        // P1-3.2: 仅在场景首决策节点记录 SRS（避免多步场景重复记录同一 ReviewItem）
+        // P1C-06: ELO 仅在首决策节点记录（对齐 SRS/Emotion）
         if (currentNodeIndex === 0) {
+          recordEloForAnswer(latestFeedback.isOptimal, scenario?.difficulty);
           const timeTakenMs = Date.now() - scenarioStartRef.current;
           recordSrsForAnswer(scenario, latestFeedback.isOptimal, timeTakenMs);
-        }
-        // P2-5.2: 情绪管理 — 记录决策（与 ELO 同步，仅记录首节点避免多步场景重复计数）
-        if (currentNodeIndex === 0) {
           recordAnswerForEmotion(latestFeedback.isOptimal);
         }
       }
@@ -274,32 +273,43 @@ export default function GTOSessionPage() {
           potSize={activePotSize}
           effectiveStack={scenario.effectiveStack}
           onDecision={handleDecision}
+          callAmount={(() => {
+            // P1C-12: 传入真实 callAmount
+            const actions = currentNode?.previousActions ?? scenario.previousActions;
+            if (activeStreet === 'preflop') {
+              const raises = actions.filter((a) => a.action === 'raise');
+              const lastRaise = raises[raises.length - 1];
+              return lastRaise?.amount ?? 1;
+            }
+            return Math.round(activePotSize * 0.5 * 10) / 10;
+          })()}
         />
       ) : (
         <div className="space-y-4">
           <GTOFeedback
             isOptimal={feedback?.isOptimal ?? false}
-            evLoss={feedback?.evLoss ?? 0}
+            evLoss={Math.max(0, feedback?.evLoss ?? 0)}
             explanation={feedback?.explanation ?? ''}
             gtoStrategy={feedback?.gtoStrategy ?? null}
             handNotation={handNotation}
             userEV={feedback?.userEV}
             optimalEV={feedback?.optimalEV}
             heroEquity={feedback?.heroEquity}
+            exploitMode={useGTOSimulatorStore.getState().exploitMode}
+            exploitStrategy={feedback?.exploitStrategy}
+            selectedOpponent={useGTOSimulatorStore.getState().selectedOpponent}
             feedback={(() => {
               if (!feedback) return null;
-              const gtoStrategy = feedback.gtoStrategy;
-              const optimal = gtoStrategy ? getOptimalAction(gtoStrategy) : null;
+              const gtoStrat = feedback.gtoStrategy;
+              const optimal = gtoStrat ? getOptimalAction(gtoStrat) : null;
               const correctAction = optimal
                 ? `${optimal.action}${optimal.amount ? ` ${optimal.amount}BB` : ''}`
                 : '';
-              // P4 修复：根据 scenario.street 推导 relatedLessonId，贯通"训练→课程"反馈闭环
+              // P1C-09: 用 activeStreet 而非 scenario.street
               const relatedLessonId = (() => {
-                const street = scenario?.street;
-                if (street === 'preflop') return 'l4-gto-basics';
-                if (street === 'flop') return 'l3-cbet';
-                if (street === 'turn' || street === 'river') return 'l3-multistreet';
-                return undefined;
+                if (activeStreet === 'preflop') return 'l4-gto-basics';
+                if (activeStreet === 'flop') return 'l3-cbet';
+                return 'l3-multistreet';
               })();
               return buildGtoFeedback(feedback, correctAction, relatedLessonId);
             })()}

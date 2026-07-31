@@ -2,6 +2,8 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
+import { LOCAL_TRACK } from '../data/localTrack';
+import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 
 interface GraphNode {
   id: string;
@@ -164,10 +166,38 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
   }, [hoveredNode, edges]);
 
   // 判断节点状态（审计 1.1：按所属 LevelInfo 条目判定，区分 l4a/l4b）
+  // P1E-12: 本土课节点（LOCAL_TRACK.lessonIds，挂在 l7 条目下）不再用
+  // isLevelEntryUnlocked('l7')（L3+L5 口径），而是按 LOCAL_TRACK.prerequisiteLevelIds
+  // （l1-l3 课程完成口径）判定，与 CourseView 本土课门禁统一；
+  // mental-tilt-recognition 无前置依赖可随时访问；调试解锁时放行
+  const localLessonIds = useMemo(() => new Set(LOCAL_TRACK.lessonIds), []);
+
+  const isEntryCompleted = useCallback(
+    (levelId: string): boolean => {
+      const entry = LEVELS.find((l) => l.id === levelId);
+      if (!entry || entry.lessons.length === 0) return false;
+      return entry.lessons.every((l) => completedLessons.includes(l.id));
+    },
+    [completedLessons]
+  );
+
+  const isLocalLessonUnlocked = useCallback(
+    (lessonId: string): boolean => {
+      if (lessonId === 'mental-tilt-recognition') return true;
+      if (isDebugUnlockActive()) return true;
+      return (LOCAL_TRACK.prerequisiteLevelIds ?? []).every(isEntryCompleted);
+    },
+    [isEntryCompleted]
+  );
+
   const getNodeStatus = useCallback(
     (node: GraphNode): 'completed' | 'current' | 'locked' | 'available' => {
       if (completedLessons.includes(node.id)) return 'completed';
-      if (!isLevelEntryUnlocked(node.levelId)) return 'locked';
+      if (localLessonIds.has(node.id)) {
+        if (!isLocalLessonUnlocked(node.id)) return 'locked';
+      } else if (!isLevelEntryUnlocked(node.levelId)) {
+        return 'locked';
+      }
       // 当前进行中：该条目已解锁，该课程未完成，且前一课已完成（或为第一课）
       const levelInfo = LEVELS.find((l) => l.id === node.levelId);
       if (levelInfo) {
@@ -179,7 +209,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       }
       return 'available';
     },
-    [completedLessons, isLevelEntryUnlocked]
+    [completedLessons, isLevelEntryUnlocked, localLessonIds, isLocalLessonUnlocked]
   );
 
   // 缩放
@@ -245,6 +275,10 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
               <div className="space-y-1.5">
                 {lessons.map((lesson) => {
                   const isCompleted = completedLessons.includes(lesson.id);
+                  // P1E-12: 本土课按 LOCAL_TRACK 前置口径单独判定（与桌面端 getNodeStatus 同步）
+                  const lessonUnlocked = localLessonIds.has(lesson.id)
+                    ? isLocalLessonUnlocked(lesson.id)
+                    : unlocked;
                   return (
                     <button
                       key={lesson.id}
@@ -252,7 +286,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
                       className={`w-full text-left px-3 py-2 rounded-md text-xs transition-colors ${
                         isCompleted
                           ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)] border border-[var(--poker-success)]/30'
-                          : unlocked
+                          : lessonUnlocked
                             ? 'bg-[var(--surface-raised)] text-[var(--ivory)] border border-[var(--walnut-border)] hover:border-[var(--brass)]'
                             : 'bg-transparent text-[var(--ivory-dim)] border border-dashed border-[var(--walnut-border)] opacity-60'
                       }`}

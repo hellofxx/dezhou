@@ -98,9 +98,10 @@ export function EVCalculator() {
             <p className="text-xs text-[var(--ivory-dim)]">
               盈亏平衡胜率：<span className="font-mono text-[var(--warning)]">{breakevenRate.toFixed(1)}%</span>
             </p>
+            {/* P1B-08：相等分支显示 “=” 与“盈亏平衡”，避免“50% < 50.0% → 盈利”符号与结论矛盾 */}
             <p className="text-xs text-[var(--ivory-dim)] mt-1">
-              当前胜率 {winRate}% {winRate > breakevenRate ? '>' : '<'} 平衡点 {breakevenRate.toFixed(1)}%
-              → {winRate >= breakevenRate ? '盈利' : '亏损'}
+              当前胜率 {winRate}% {winRate > breakevenRate ? '>' : winRate === breakevenRate ? '=' : '<'} 平衡点 {breakevenRate.toFixed(1)}%
+              → {winRate > breakevenRate ? '盈利' : winRate === breakevenRate ? '盈亏平衡' : '亏损'}
             </p>
           </div>
         </CardContent>

@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { usePotOddsStore } from '../store';
-import { calculatePotOdds, calculateEV, estimateEquity, calculateImpliedOdds, isProfitableCall } from '@/shared/utils/pokerMath';
+// P1-B 修复（P1B-01/02/03）：口径计算抽为纯函数 utils/oddsMath.computeOddsResult（可直接单测）
+import { computeOddsResult } from '../utils/oddsMath';
 import type { OddsResult, PotOddsQuizQuestion } from '../types';
 import { useProgressStore } from '@/features/progress/store';
 // P1-3.2: SRS 集成
@@ -52,29 +53,8 @@ export function getEasyOddsQuestion(): PotOddsQuizQuestion {
 export function useOddsCalculation(): OddsResult {
   const oddsState = usePotOddsStore((s) => s.oddsState);
 
-  return useMemo(() => {
-    const { potSize, betSize, outs, street, impliedOddsGain, gameVariant } = oddsState;
-
-    const basePotOdds = calculatePotOdds(potSize, betSize);
-    const potOdds = impliedOddsGain > 0
-      ? calculateImpliedOdds(basePotOdds, impliedOddsGain / (potSize + betSize))
-      : basePotOdds;
-
-    const requiredEquity = potOdds;
-    const estimatedEquity = estimateEquity(outs, street, gameVariant);
-    const profitable = isProfitableCall(estimatedEquity, requiredEquity);
-
-    // EV: win => potSize, lose => betSize
-    const ev = calculateEV(estimatedEquity, potSize, betSize);
-
-    return {
-      potOdds: potOdds * 100,
-      requiredEquity: requiredEquity * 100,
-      estimatedEquity: estimatedEquity * 100,
-      isProfitable: profitable,
-      ev,
-    };
-  }, [oddsState]);
+  // 口径详见 utils/oddsMath.ts 头注（题库三项式：所需胜率 = bet / (pot + bet + bet)）
+  return useMemo(() => computeOddsResult(oddsState), [oddsState]);
 }
 
 /**

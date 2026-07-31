@@ -7,7 +7,6 @@ import { RangeGrid } from './RangeGrid';
 import { RangeSelector } from './RangeSelector';
 import { RangeInfo } from './RangeInfo';
 import { useRangeTrainerStore } from '../store';
-import { PRESET_RANGES } from '../constants';
 
 export default function RangeLearnPage() {
   const navigate = useNavigate();
@@ -18,6 +17,7 @@ export default function RangeLearnPage() {
     setSelectedActionType,
     setHighlightedHand,
     presets,
+    gameVariant,
   } = useRangeTrainerStore();
 
   const selectedHands = learnState.selectedPreset?.hands ?? [];
@@ -27,14 +27,16 @@ export default function RangeLearnPage() {
   };
 
   // 自动选择第一个匹配的预设
+  // P1A-11 修复：改用 store 的变体化 presets（含 ADVANCED / HU / 短牌 / 4-max），
+  // 不再直接读 6-max 基础 PRESET_RANGES
   React.useEffect(() => {
     if (!learnState.selectedPreset) {
-      const match = PRESET_RANGES.find(
+      const match = presets.find(
         (p) => p.position === learnState.selectedPosition && p.actionType === learnState.selectedActionType
       );
       if (match) setSelectedPreset(match);
     }
-  }, [learnState.selectedPosition, learnState.selectedActionType]);
+  }, [learnState.selectedPreset, learnState.selectedPosition, learnState.selectedActionType, presets, setSelectedPreset]);
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -92,6 +94,7 @@ export default function RangeLearnPage() {
                   selectedHands={selectedHands}
                   highlightedHand={learnState.highlightedHand}
                   presetName={learnState.selectedPreset?.name}
+                  variant={gameVariant}
                 />
               </CardContent>
             </Card>
@@ -110,6 +113,7 @@ export default function RangeLearnPage() {
                 selectedHands={selectedHands}
                 highlightedHand={learnState.highlightedHand}
                 onCellHover={setHighlightedHand}
+                variant={gameVariant}
                 className="max-w-[640px]"
               />
             </CardContent>

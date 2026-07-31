@@ -7,12 +7,13 @@ import { useAcademyStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
 import { usePuzzleStore } from '@/features/puzzle-trainer/store';
 import { getQuickDrillQuestions } from '../utils/quickDrill';
-// P1-4.2: SRS 复习队列混合
-import { composeDailyMix } from '@/features/progress/utils/dailyTrainingMix';
+// P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
+import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
 import { getTodayReviewItems } from '@/features/progress/utils/spacedRepetition';
-import type { ReviewItem } from '@/features/progress/utils/spacedRepetition';
+// P1E-05（专批 B）：review-* 复习题作答后回写 SRS（推进 nextReviewDate）
+import { computeReviewWriteBacks } from '../utils/quickDrillSrs';
 import { PracticeDrillComponent } from './PracticeDrill';
-import type { PracticeResult, PracticeDrill, PracticeQuestion, QuestionDifficulty } from '../types';
+import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types';
 // P2-5.4: Session 止损守卫
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
 
@@ -28,35 +29,6 @@ type QuickDrillMode = 'range' | 'odds' | 'mixed';
 function computeQuickDrillScore(accuracy: number, averageTime: number): number {
   const timeBonus = Math.max(0, Math.round((10 - averageTime) * 3));
   return Math.round(accuracy * 100) + timeBonus;
-}
-
-/**
- * P1-4.2: 将 ReviewItem 转换为 PracticeQuestion。
- *
- * 复习题通常没有完整的 scenario（手牌/位置/底池），合成一个占位场景，
- * 把题目文本放在 previousActions 中显示。仅支持带 metadata.options 的选择题。
- */
-function reviewItemToPracticeQuestion(item: ReviewItem): PracticeQuestion | null {
-  if (!item.metadata?.options || item.metadata.options.length === 0) return null;
-  return {
-    id: `review-${item.id}`,
-    scenario: {
-      heroHand: ['As', 'Ks'], // 占位卡片（复习题不依赖具体场景）
-      heroPosition: 'BTN',
-      previousActions: [
-        { player: '📚 复习', action: item.metadata.front ?? item.label },
-      ],
-      street: 'preflop',
-      potSize: 0,
-      effectiveStack: 0,
-    },
-    options: item.metadata.options.map((opt) => ({
-      action: opt.text,
-      isCorrect: opt.isCorrect,
-      explanation: opt.explanation ?? '',
-    })),
-    difficulty: 'beginner',
-  };
 }
 
 export default function QuickDrill() {
@@ -156,12 +128,19 @@ export default function QuickDrill() {
   const todayReviewItems = useMemo(() => getTodayReviewItems(reviewItems), [reviewItems]);
 
   // 用户最近正确率（用于 composeDailyMix 决定复习比例；快速模式下读取）
+  // P1E-11: 正确率 0 是有效数据，仅无答题记录（totalQuestions === 0）时才用默认值 1.0，
+  // 避免 `|| 1.0` 把真实零正确率误判为无数据
   const userAccuracy = useMemo(() => {
     if (!isQuickMode) return 1.0;
-    return getStatsSummary().overallAccuracy || 1.0;
+    const summary = getStatsSummary();
+    return summary.totalQuestions > 0 && Number.isFinite(summary.overallAccuracy)
+      ? summary.overallAccuracy
+      : 1.0;
   }, [isQuickMode, getStatsSummary]);
 
   // 生成速训题目（P1-4.2: 快速模式下混合 SRS 复习题）
+  // P1E-04: 混合+缺口回填由 composeQuickDrillQuestions 纯函数完成（无 options 的
+  // 复习项被丢弃后按缺口从新题池回填，保证快速 5 题 / 普通 8 题的题数契约）
   const { drillQuestions, reviewCount } = useMemo(() => {
     const newQuestions = getQuickDrillQuestions(modeWeakAreas, effectiveDifficulty, questionCount);
 
@@ -169,20 +148,8 @@ export default function QuickDrill() {
       return { drillQuestions: newQuestions, reviewCount: 0 };
     }
 
-    // 调用 composeDailyMix 决定复习题/新题比例（默认 30% 复习）
-    const mix = composeDailyMix(newQuestions, todayReviewItems, questionCount, userAccuracy);
-
-    // 将复习项转换为 PracticeQuestion（仅保留带 options 的选择题）
-    const reviewQuestions: PracticeQuestion[] = todayReviewItems
-      .slice(0, mix.reviewCount)
-      .map(reviewItemToPracticeQuestion)
-      .filter((q): q is PracticeQuestion => q !== null);
-
-    // 复习题在前（作为热身），新题在后
-    return {
-      drillQuestions: [...reviewQuestions, ...mix.questions],
-      reviewCount: reviewQuestions.length,
-    };
+    const mixed = composeQuickDrillQuestions(newQuestions, todayReviewItems, questionCount, userAccuracy);
+    return { drillQuestions: mixed.questions, reviewCount: mixed.reviewCount };
   }, [modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy]);
 
   const drill: PracticeDrill = useMemo(() => ({
@@ -202,10 +169,17 @@ export default function QuickDrill() {
       recordPracticeScore({ ...result, lessonId: 'quick-drill' });
       setFinalResult(result);
 
-      if (isQuickMode) {
-        // P0-5: 快速训练完成自动计入 Streak（recordTrainingDay 内部已调用 checkMilestone）
-        recordTrainingDay();
+      // P1E-07（专批 B）：训练日 streak 口径统一 — 普通模式完成同样是实质训练，
+      // 与快速模式/theory 等模块一致计入训练日（recordTrainingDay 幂等，同日重复安全）
+      recordTrainingDay();
 
+      // P1E-05（专批 B）：review-* 复习题 SRS 回写闭环 — 按逐题作答明细推进
+      // ReviewItem（SM-2：对+快→5 / 对→4 / 错→1）。普通模式不混复习题，天然无操作。
+      const progressState = useProgressStore.getState();
+      const writeBacks = computeReviewWriteBacks(progressState.reviewItems, result.answers ?? []);
+      writeBacks.forEach((item) => progressState.updateReviewItem(item));
+
+      if (isQuickMode) {
         // P1-4.1: 计算综合分数并提交到 puzzle store
         const score = computeQuickDrillScore(result.accuracy, result.averageTime);
         const timeTakenMs = Math.round(result.averageTime * result.totalQuestions * 1000);
@@ -260,7 +234,9 @@ export default function QuickDrill() {
             drill={drill}
             lessonId="quick-drill"
             onComplete={handleComplete}
-            adaptive
+            // P1E-06: 题目已由 QuickDrill 按自适应难度选定（含复习题在前的顺序契约），
+            // 禁用 PracticeDrill 内部的 adaptive 重选重排，避免复习题前置顺序被打乱
+            adaptive={false}
           />
           {isFinished && isQuickMode && finalResult && (
             <motion.div
@@ -325,12 +301,13 @@ export default function QuickDrill() {
                   {t('quickDrill.newRecord', { defaultValue: '🎉 快速训练新纪录！' })}
                 </div>
               )}
-              {/* P1-4.3: 连续 7 天奖励冻结卡 */}
+              {/* P1-4.3: 连续打卡奖励冻结卡（P1E-10: 天数插值实际 quickDrillStreak，14/21 天触发不再硬编码"7 天"） */}
               {freezeRewarded && (
                 <div className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--success)]">
                   <Gift className="w-3.5 h-3.5" />
                   {t('quickDrill.freezeReward', {
-                    defaultValue: '🎁 连续 7 天快速训练奖励 1 张冻结卡！',
+                    defaultValue: '🎁 连续 {{count}} 天快速训练奖励 1 张冻结卡！',
+                    count: currentQuickDrillStreak > 0 ? currentQuickDrillStreak : 7,
                   })}
                 </div>
               )}

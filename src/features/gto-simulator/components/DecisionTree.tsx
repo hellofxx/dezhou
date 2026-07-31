@@ -122,10 +122,20 @@ function MultiStepTree({
                 </span>
               </div>
 
-              {cards.length > 0 && (
+              {/* P1C-17: 未来节点牌面隐藏（仅已完成和当前节点显示） */}
+              {cards.length > 0 && (isCompleted || isCurrent) && (
                 <div className="flex gap-0.5 mb-1">
                   {cards.map((c, i) => (
                     <MiniCard key={i} suit={c.suit} rank={c.rank} />
+                  ))}
+                </div>
+              )}
+              {cards.length > 0 && !isCompleted && !isCurrent && (
+                <div className="flex gap-0.5 mb-1">
+                  {cards.map((_, i) => (
+                    <span key={i} className="inline-flex items-center justify-center w-5 h-6 rounded text-[10px] font-bold border font-numeric bg-[var(--walnut-raised)] border-[var(--walnut-border)] text-[var(--ivory-muted)]">
+                      ?
+                    </span>
                   ))}
                 </div>
               )}

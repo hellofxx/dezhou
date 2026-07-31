@@ -294,6 +294,11 @@ export const useProgressStore = create<ProgressStore>()(
 
       addRecord: (record) =>
         set((state) => {
+          // P1A-04/P1F-03 兜底（专批 B）：纵深防御拒收空会话 —— totalQuestions <= 0
+          // 的训练结果不入账（不计 records，不参与统计/成就/Dashboard 聚合）。
+          // 模块侧已阻断空会话入口（range-trainer X 按钮 / theory 空题库守卫），
+          // 此处为中枢兜底，防止未来任意模块 emit 空会话污染数据
+          if (!record.result || record.result.totalQuestions <= 0) return state;
           // 去重：相同 id 的记录不重复添加（防止事件总线重复 emit）
           if (state.records.some((r) => r.id === record.id)) return state;
           return { records: [...state.records, record] };

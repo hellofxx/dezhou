@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ShieldAlert, Home } from 'lucide-react';
@@ -20,6 +21,13 @@ import { useDebugModeStore } from '@/shared/stores/debugMode';
  * ```
  *
  * 由于 React 组件无法静态暴露 reached()，调用方应使用 `useSessionLimitReached()` hook。
+ *
+ * P1D-06/P1F-01（专批 B）：**开局判定口径** —— 挂载时一次性快照"是否已达上限"并冻结：
+ * - 开局已达上限 → 拦在训练开始前（调用方渲染 <SessionLimitGuard />）
+ * - 会话进行中达上限 → 不再中途翻转拦断（原响应式判定会整体卸载进行中会话，
+ *   无结算、无 emit 直接丢弃），允许当前会话正常走完结算；下次进入训练页（新挂载）时再拦
+ * - 调试解锁旁路保持响应式（激活即放行；激活期间不冻结快照）
+ * 已知边界：同一挂载内的"再来一轮 / 重考"沿用挂载时快照，直到重新进入页面才重新判定。
  */
 export function useSessionLimitReached(): boolean {
   const limit = useProgressStore((s) => s.emotion.dailyQuestionLimit);
@@ -27,11 +35,17 @@ export function useSessionLimitReached(): boolean {
   const date = useProgressStore((s) => s.emotion.dailyQuestionsDate);
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
   const today = getTodayString();
-  // 调试解锁：解除每日题量上限
-  if (debugUnlock) return false;
   // 跨日重置：如果记录的日期不是今天，视为 0
   const effectiveAnswered = date === today ? answered : 0;
-  return limit > 0 && effectiveAnswered >= limit;
+  const reachedNow = limit > 0 && effectiveAnswered >= limit;
+  // 开局判定：首次（非调试态）渲染时冻结快照，此后不随答题计数响应式翻转
+  const frozenRef = useRef<boolean | null>(null);
+  if (frozenRef.current === null && !debugUnlock) {
+    frozenRef.current = reachedNow;
+  }
+  // 调试解锁：解除每日题量上限（响应式旁路）
+  if (debugUnlock) return false;
+  return frozenRef.current ?? reachedNow;
 }
 
 export function useSessionLimitStatus(): {

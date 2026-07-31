@@ -1,58 +1,50 @@
 import { create } from 'zustand';
-import type { HandNotation } from '@/shared/types/poker';
 import { Position } from '@/shared/types/position';
 import type { Decision } from '@/shared/types/action';
-import { ActionType } from '@/shared/types/action';
-import type { Scenario, ScenarioConfig, GTOSession, GTODecision, HandStrategy, GTOResult, DecisionNode, PreviousAction } from './types';
+import type { Scenario, ScenarioConfig, GTOSession, GTODecision, HandStrategy, GTOResult, DecisionNode } from './types';
 import { compareDecision, estimateHeroEquity, adjustForOpponent } from './utils/strategyCompare';
 import type { CompareResult } from './utils/strategyCompare';
 import { getEasyGTOScenario } from './hooks/useGTOComparison';
+import { getPreflopHandStrategy } from './utils/spotKey';
+import { estimatePostflopStrategy, boardToFlat, getCbetSizingMultiplier } from './utils/postflopStrategy';
+import { classifyBoardTexture } from './utils/boardGenerator';
 
 export interface GTOFeedbackState extends CompareResult {
   gtoStrategy: HandStrategy | null;
+  /** P1C-16: exploit 调整后的策略（区别于原始 gtoStrategy） */
+  exploitStrategy?: HandStrategy | null;
 }
 
 interface GTOSimulatorStore {
-  // 场景配置
   config: ScenarioConfig;
   setConfig: (partial: Partial<ScenarioConfig>) => void;
 
-  // Exploit 模式
   exploitMode: boolean;
   selectedOpponent: string | null;
   setExploitMode: (enabled: boolean) => void;
   setSelectedOpponent: (id: string | null) => void;
 
-  // 训练会话
   session: GTOSession | null;
   startSession: (scenarios: Scenario[]) => void;
   submitDecision: (decision: Decision) => void;
   nextScenario: () => void;
-  continueNext: () => void; // 多步：下一节点 or 下一场景
+  continueNext: () => void;
   endSession: () => void;
   resetSession: () => void;
 
-  // 多步决策状态
   currentNodeIndex: number;
   stepFeedbacks: GTOFeedbackState[];
 
-  // 当前场景决策状态
   currentDecision: Decision | null;
   setCurrentDecision: (d: Decision | null) => void;
   feedback: GTOFeedbackState | null;
   showFeedback: boolean;
   setShowFeedback: (show: boolean) => void;
 
-  // 策略矩阵查看
-  selectedSpotKey: string | null;
-  setSelectedSpotKey: (key: string | null) => void;
-  highlightedHand: HandNotation | null;
-  setHighlightedHand: (hand: HandNotation | null) => void;
+  /** P1C-19: 每道题开始时间戳（用于计算单题用时） */
+  decisionStartAt: number;
 
-  // 结果
   lastResult: GTOResult | null;
-
-  /** "最后一题简单"补救机制：是否已追加过补救场景（避免无限循环） */
   rescueUsed: boolean;
 }
 
@@ -68,11 +60,7 @@ const DEFAULT_CONFIG: ScenarioConfig = {
 
 export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
   config: DEFAULT_CONFIG,
-
-  setConfig: (partial) =>
-    set((state) => ({
-      config: { ...state.config, ...partial },
-    })),
+  setConfig: (partial) => set((s) => ({ config: { ...s.config, ...partial } })),
 
   exploitMode: false,
   selectedOpponent: null,
@@ -83,24 +71,19 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
 
   startSession: (scenarios) => {
     set({
-      session: {
-        scenarios,
-        currentIndex: 0,
-        decisions: [],
-        isComplete: false,
-        startTime: Date.now(),
-      },
+      session: { scenarios, currentIndex: 0, decisions: [], isComplete: false, startTime: Date.now() },
       currentDecision: null,
       feedback: null,
       showFeedback: false,
       currentNodeIndex: 0,
       stepFeedbacks: [],
       rescueUsed: false,
+      decisionStartAt: Date.now(),
     });
   },
 
   submitDecision: (decision) => {
-    const { session, currentNodeIndex } = get();
+    const { session, currentNodeIndex, decisionStartAt } = get();
     if (!session || session.isComplete) return;
 
     const scenario = session.scenarios[session.currentIndex];
@@ -109,18 +92,18 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
     const nodes = scenario.decisionNodes;
     const node: DecisionNode | undefined = nodes?.[currentNodeIndex];
 
-    // 查找 GTO 策略
-    let gtoStrategy = node
-      ? node.gtoStrategy
-      : getGTOStrategyForScenario(scenario);
+    // P1C-03/04: 统一 GTO 策略查找（preflop 查表 + postflop texture_strategy）
+    let gtoStrategy = node ? node.gtoStrategy : getGTOStrategyForScenario(scenario);
 
-    // Exploit 模式：根据对手类型调整策略
+    // P1C-16: Exploit 模式保留原始 gtoStrategy，同时传递 exploit 调整后策略
     const { exploitMode, selectedOpponent } = get();
+    let exploitStrategy: HandStrategy | null = null;
     if (exploitMode && selectedOpponent) {
-      gtoStrategy = adjustForOpponent(gtoStrategy, selectedOpponent, scenario);
+      exploitStrategy = adjustForOpponent(gtoStrategy, selectedOpponent, scenario);
+      // 判分使用 exploit 策略
+      gtoStrategy = exploitStrategy;
     }
 
-    // 计算 Hero equity
     const nodeBoard = node?.board;
     const nodeStreet = node?.street ?? scenario.street;
     const nodePotSize = node?.potSize ?? scenario.potSize;
@@ -132,30 +115,30 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
         : undefined;
 
     const heroEquity = estimateHeroEquity(scenario.heroHand, flatBoard, nodeStreet);
-    const callAmount = Math.max(1, nodePotSize * 0.15);
+
+    // P1C-12: 真实 callAmount（preflop: 最后一个 raise 减去 hero 已投入；postflop: pot × cbet sizing）
+    const callAmount = computeCallAmount(scenario, node, nodePotSize);
 
     const result = compareDecision(decision, gtoStrategy, nodePotSize, heroEquity, callAmount);
 
+    // P1C-19: timeTaken 使用每题开始时间戳
     const gtoDecision: GTODecision = {
       scenarioId: scenario.id,
       userAction: decision,
-      gtoStrategy,
+      gtoStrategy: exploitMode && exploitStrategy ? exploitStrategy : gtoStrategy,
       evLoss: result.evLoss,
       isOptimal: result.isOptimal,
-      timeTaken: Date.now() - (session.startTime || Date.now()),
+      timeTaken: Date.now() - decisionStartAt,
     };
 
-    const feedbackState: GTOFeedbackState = { ...result, gtoStrategy };
+    const feedbackState: GTOFeedbackState = { ...result, gtoStrategy: exploitMode ? exploitStrategy : gtoStrategy, exploitStrategy };
 
     set({
       currentDecision: decision,
       feedback: feedbackState,
       showFeedback: true,
       stepFeedbacks: [...get().stepFeedbacks, feedbackState],
-      session: {
-        ...session,
-        decisions: [...session.decisions, gtoDecision],
-      },
+      session: { ...session, decisions: [...session.decisions, gtoDecision] },
     });
   },
 
@@ -168,15 +151,8 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
 
     const nodes = scenario.decisionNodes;
     if (nodes && currentNodeIndex < nodes.length - 1) {
-      // 进入下一个决策节点
-      set({
-        currentNodeIndex: currentNodeIndex + 1,
-        currentDecision: null,
-        feedback: null,
-        showFeedback: false,
-      });
+      set({ currentNodeIndex: currentNodeIndex + 1, currentDecision: null, feedback: null, showFeedback: false, decisionStartAt: Date.now() });
     } else {
-      // 本场景完成，进入下一场景
       get().nextScenario();
     }
   },
@@ -187,45 +163,20 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
 
     const nextIndex = session.currentIndex + 1;
     if (nextIndex >= session.scenarios.length) {
-      // 即将完成会话：检查"最后一题简单"补救机制
-      // 末场景的最后一次决策是否非最优？若是且未用过补救 → 追加一道简单场景
       const lastDecision = session.decisions[session.decisions.length - 1];
       if (lastDecision && !lastDecision.isOptimal && !rescueUsed) {
         const rescueScenario = getEasyGTOScenario(session.scenarios.length);
         set({
-          session: {
-            ...session,
-            scenarios: [...session.scenarios, rescueScenario],
-          },
+          session: { ...session, scenarios: [...session.scenarios, rescueScenario] },
           rescueUsed: true,
-          currentDecision: null,
-          feedback: null,
-          showFeedback: false,
-          currentNodeIndex: 0,
-          stepFeedbacks: [],
+          currentDecision: null, feedback: null, showFeedback: false, currentNodeIndex: 0, stepFeedbacks: [], decisionStartAt: Date.now(),
         });
         return;
       }
-
       const result = computeResult(session);
-      set({
-        session: { ...session, isComplete: true },
-        lastResult: result,
-        currentDecision: null,
-        feedback: null,
-        showFeedback: false,
-        currentNodeIndex: 0,
-        stepFeedbacks: [],
-      });
+      set({ session: { ...session, isComplete: true }, lastResult: result, currentDecision: null, feedback: null, showFeedback: false, currentNodeIndex: 0, stepFeedbacks: [] });
     } else {
-      set({
-        session: { ...session, currentIndex: nextIndex },
-        currentDecision: null,
-        feedback: null,
-        showFeedback: false,
-        currentNodeIndex: 0,
-        stepFeedbacks: [],
-      });
+      set({ session: { ...session, currentIndex: nextIndex }, currentDecision: null, feedback: null, showFeedback: false, currentNodeIndex: 0, stepFeedbacks: [], decisionStartAt: Date.now() });
     }
   },
 
@@ -233,115 +184,68 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
     const { session } = get();
     if (!session) return;
     const result = computeResult(session);
-    set({
-      session: { ...session, isComplete: true },
-      lastResult: result,
-    });
+    set({ session: { ...session, isComplete: true }, lastResult: result });
   },
 
   resetSession: () => {
-    set({
-      session: null,
-      currentDecision: null,
-      feedback: null,
-      showFeedback: false,
-      lastResult: null,
-      currentNodeIndex: 0,
-      stepFeedbacks: [],
-      rescueUsed: false,
-    });
+    set({ session: null, currentDecision: null, feedback: null, showFeedback: false, lastResult: null, currentNodeIndex: 0, stepFeedbacks: [], rescueUsed: false, decisionStartAt: Date.now() });
   },
 
   currentNodeIndex: 0,
   stepFeedbacks: [],
-
   currentDecision: null,
   setCurrentDecision: (d) => set({ currentDecision: d }),
-
   feedback: null,
   showFeedback: false,
   setShowFeedback: (show) => set({ showFeedback: show }),
-
-  selectedSpotKey: null,
-  setSelectedSpotKey: (key) => set({ selectedSpotKey: key }),
-  highlightedHand: null,
-  setHighlightedHand: (hand) => set({ highlightedHand: hand }),
-
+  decisionStartAt: Date.now(),
   lastResult: null,
-
   rescueUsed: false,
 }));
 
 // ─── Helpers ───────────────────────────────────
 
-import preflopData from './data/preflop-ranges.json';
-import { classifyHand } from '@/features/range-trainer/utils/handClassifier';
-
-/** 根据 previousActions 确定 preflop spot key */
-function determineSpotKey(position: Position, previousActions: PreviousAction[]): string {
-  const pos = position.toLowerCase();
-  const raises = previousActions.filter((a) => a.action === ActionType.Raise);
-
-  if (raises.length >= 2) {
-    // 3-bet 场景：hero open 后有人 3-bet
-    const lastRaiser = raises[raises.length - 1]!;
-    const key = `${pos}_vs_${lastRaiser.position.toLowerCase()}_3bet`;
-    const gameData = (preflopData as Record<string, Record<string, Record<string, HandStrategy>>>)['6max_100bb_preflop'];
-    if (gameData?.[key]) return key;
-  }
-
-  if (raises.length === 1) {
-    const opener = raises[0]!;
-    // BB 面对 open
-    if (pos === 'bb') {
-      const key = `bb_vs_${opener.position.toLowerCase()}_open`;
-      const gameData = (preflopData as Record<string, Record<string, Record<string, HandStrategy>>>)['6max_100bb_preflop'];
-      if (gameData?.[key]) return key;
-    }
-    // SB open vs BB
-    if (pos === 'sb') {
-      const gameData = (preflopData as Record<string, Record<string, Record<string, HandStrategy>>>)['6max_100bb_preflop'];
-      if (gameData?.['sb_vs_bb_open']) return 'sb_vs_bb_open';
-    }
-  }
-
-  // 默认：位置 open
-  return `${pos}_open`;
-}
-
+/** P1C-03/04: 统一 GTO 策略查找（复用 utils/spotKey + postflopStrategy） */
 function getGTOStrategyForScenario(scenario: Scenario): HandStrategy {
-  const defaultStrategy: HandStrategy = { fold: 0.5, call: 0, raise: 0.5, raiseAmount: 2.5 };
+  const fallback: HandStrategy = { fold: 0.4, call: 0.3, raise: 0.3, raiseAmount: 2.5 };
 
-  if (scenario.street !== 'preflop') {
-    return defaultStrategy;
+  if (scenario.street === 'preflop') {
+    // P1C-03: 使用 resolveSpotKey（null 时返回 fallback，日志标记无 GTO 数据）
+    return getPreflopHandStrategy(scenario.position, scenario.previousActions, scenario.heroHand) ?? fallback;
   }
 
-  // 根据 previousActions 确定 spot key
-  const spotKey = determineSpotKey(scenario.position, scenario.previousActions);
-  const gameData = (preflopData as Record<string, Record<string, Record<string, HandStrategy>>>)['6max_100bb_preflop'];
-
-  if (!gameData) return defaultStrategy;
-
-  const spotData = gameData[spotKey];
-  if (!spotData) return defaultStrategy;
-
-  // 根据 hero 手牌查找
-  const handNotation = classifyHand(scenario.heroHand[0], scenario.heroHand[1]);
-  const handStrategy = spotData[handNotation];
-
-  if (!handStrategy) return defaultStrategy;
-
-  return handStrategy as HandStrategy;
+  // P1C-04: 翻后接入 postflop-ranges.json texture_strategy
+  if (!scenario.board) return fallback;
+  const flat = boardToFlat(scenario.board);
+  const texture = scenario.boardTexture ?? classifyBoardTexture(flat);
+  return estimatePostflopStrategy(scenario.heroHand, scenario.board, texture, scenario.street as 'flop' | 'turn' | 'river');
 }
 
+/** P1C-12: 计算真实 callAmount */
+function computeCallAmount(scenario: Scenario, node: DecisionNode | undefined, potSize: number): number {
+  const actions = node?.previousActions ?? scenario.previousActions;
+  const street = node?.street ?? scenario.street;
+
+  if (street === 'preflop') {
+    const raises = actions.filter((a) => a.action === 'raise');
+    const lastRaise = raises[raises.length - 1];
+    if (!lastRaise) return 1; // limping scenario: call 1BB
+    return lastRaise.amount ?? 2.5;
+  }
+  // postflop: 面对 c-bet，callAmount = pot × sizing multiplier
+  const texture = scenario.boardTexture ?? undefined;
+  return Math.round(potSize * getCbetSizingMultiplier(texture) * 10) / 10;
+}
+
+/** P1C-11/24: 计算会话结果 */
 function computeResult(session: GTOSession): GTOResult {
   const { decisions, scenarios, startTime } = session;
   const optimalCount = decisions.filter((d) => d.isOptimal).length;
-  const avgEVLoss = decisions.length > 0
-    ? decisions.reduce((sum, d) => sum + d.evLoss, 0) / decisions.length
-    : 0;
+  // P1C-24: 除零防御
+  const count = decisions.length || 1;
+  const totalEVLoss = decisions.reduce((sum, d) => sum + d.evLoss, 0);
+  const avgEVLoss = totalEVLoss / count;
 
-  // 找最差的spots
   const sorted = [...decisions].sort((a, b) => b.evLoss - a.evLoss);
   const worstSpots = sorted.slice(0, 5).map((d) => ({
     scenario: scenarios.find((s) => s.id === d.scenarioId)!,
@@ -353,6 +257,8 @@ function computeResult(session: GTOSession): GTOResult {
     scenarios: decisions.length,
     optimalDecisions: optimalCount,
     averageEVLoss: Math.round(avgEVLoss * 100) / 100,
+    // P1C-11: BB/100 = totalEVLoss / scenarios × 100
+    evLossBB100: decisions.length > 0 ? Math.round((totalEVLoss / decisions.length) * 100 * 100) / 100 : 0,
     worstSpots,
     accuracy: decisions.length > 0 ? optimalCount / decisions.length : 0,
     totalTime: Date.now() - startTime,

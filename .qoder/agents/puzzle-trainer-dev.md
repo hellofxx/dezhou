@@ -105,7 +105,7 @@ additionalPrompt: ""
 模块特有约束：
 - 独立 store，不写入 progress store 的 elo 字段（ELO 由各训练模块自行记录）
 - 每日谜题的题目选择必须基于日期种子，保证所有用户当天看到相同题目
-- 题目 ID 规范：`puzzle:{theme}:{questionId}`，确保跨模块唯一
+- 题目 ID 口径（2026-07-31 专批 C 定性，P1D-11）：题库静态数据使用短 id（如 `rfi-001`，全库唯一，由 `data/puzzleBank.ids.test.ts` 守卫）；本模块目前**不注册 SRS ReviewItem**，短 id 不进入跨模块键空间。若未来接入 SRS，必须在**注册处**拼接 `puzzle:{theme}:{questionId}` 作为 SRS key（题库数据不改 id、不迁移存量）
 - 五级反馈通过 EV 损失自动评级，复用 `calculateGrade` 工具函数
 - `markDailyCompleted()` 必须幂等（同一 dateKey 重复调用不重复标记）
 - Rush 模式连对 5 题奖励 +10 秒，难度递增（每 5 题升一级）
@@ -124,7 +124,7 @@ additionalPrompt: ""
 - [ ] 日期种子算法一致（所有用户当天看到相同 Daily 题目与相同选项顺序）
 - [ ] 题库出口已应用语义排序（puzzleBank.optionOrder.test.ts 全部通过：全量可解析 / 尺度升序 / 分布守卫）
 - [ ] index.ts barrel 未导出原始 PUZZLE_BANK
-- [ ] 题目 ID 跨模块唯一（`puzzle:{theme}:{questionId}`）
+- [ ] 题库短 id 全库唯一（puzzleBank.ids.test.ts 守卫）；若接入 SRS，注册处拼 `puzzle:{theme}:{questionId}` 前缀
 - [ ] submitQuickDrillResult 正确判定破纪录（score > previousBest.bestScore）
 - [ ] 五级反馈复用 calculateGrade（不自定义评级）
 - [ ] 三模式（Rush / Daily / ThemeDrill）完成后均已 trainingEvents.emit（module: 'puzzle-trainer'）

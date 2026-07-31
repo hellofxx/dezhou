@@ -4,7 +4,7 @@
  * - 完成后显示该主题的正确率与建议
  * - 主题题目数 15-30 题（P1 阶段每主题 15 题）
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
@@ -13,14 +13,13 @@ import { Progress } from '@/shared/components/ui/progress';
 import { PuzzleCard } from './PuzzleCard';
 import { PuzzleResult } from './PuzzleResult';
 import { usePuzzleEngine } from '../hooks/usePuzzleEngine';
+// 会话接线（选中项 / recordAnswer / 完成提交 / emit）下沉至 usePuzzleSession
+import { usePuzzleSession } from '../hooks/usePuzzleSession';
 import { PUZZLE_THEMES, getThemeMeta } from '../data/puzzleBank';
-import { usePuzzleStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
 // P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
-import { trainingEvents } from '@/shared/stores/trainingEvents';
-import type { TrainingResult } from '@/shared/types/common';
-import type { PuzzleResult as PuzzleResultType, PuzzleTheme } from '../types';
+import type { PuzzleTheme } from '../types';
 
 export default function ThemeDrill() {
   const { t } = useTranslation();
@@ -40,52 +39,19 @@ export default function ThemeDrill() {
     : t('puzzle.theme.unknownTheme');
 
   const engine = usePuzzleEngine({ mode: 'theme', theme: theme ?? undefined });
-  const submitResult = usePuzzleStore((s) => s.submitResult);
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
   const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
   // P2-5.4: 每日题量上限（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
 
-  const [finalResult, setFinalResult] = useState<PuzzleResultType | null>(null);
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-
-  useEffect(() => {
-    setSelectedOptionId(null);
-  }, [engine.state.currentIndex]);
-
-  // 记录答题到 progress store（用于自适应难度判定）
-  useEffect(() => {
-    if (engine.state.answers.length > 0) {
-      const lastAnswer = engine.state.answers[engine.state.answers.length - 1];
-      if (lastAnswer) {
-        recordAnswer(lastAnswer.isCorrect);
-      }
-    }
-  }, [engine.state.answers.length]);
-
-  useEffect(() => {
-    if (engine.state.status !== 'playing' && !finalResult) {
-      const result = engine.buildResult();
-      const submitRes = submitResult(result);
-      recordTrainingDay();
-      setFinalResult({ ...result, _isNewRecord: submitRes.isNewRecord } as PuzzleResultType & { _isNewRecord: boolean });
-      // 发布训练事件到 progress store
-      trainingEvents.emit(puzzleResultToTrainingRecord(result));
-    }
-  }, [engine.state.status, engine, finalResult, submitResult, recordTrainingDay]);
-
-  const handleSelect = (optionId: string) => {
-    if (engine.isCurrentAnswered) return;
-    setSelectedOptionId(optionId);
-    engine.answer(optionId);
-  };
+  // 会话接线：选中状态 / recordAnswer / 完成提交（submitResult + recordTrainingDay + emit）
+  const { finalResult, selectedOptionId, handleSelect, handleRetry } = usePuzzleSession(engine);
 
   const handleNext = () => {
     engine.next();
   };
 
-  // 每日题量上限：未完局时拦截继续答题（已完局的结果页不拦）；
+  // 每日题量上限（P1D-06 专批 B：开局判定）：挂载时已达上限则拦在开始前；
+  // 进行中会话不再中途拦断（hook 内 mount 快照冻结），走完结算后下次进入再拦；
   // 早退位于全部 hooks 之后，避免守卫翻转触发 hooks 数量变化崩溃
   if (!finalResult && sessionLimitReached) {
     return <SessionLimitGuard />;
@@ -103,15 +69,11 @@ export default function ThemeDrill() {
   }
 
   if (finalResult) {
-    const enriched = finalResult as PuzzleResultType & { _isNewRecord?: boolean };
     return (
       <PuzzleResult
-        result={enriched}
-        isNewRecord={Boolean(enriched._isNewRecord)}
-        onRetry={() => {
-          setFinalResult(null);
-          engine.reset();
-        }}
+        result={finalResult}
+        isNewRecord={Boolean(finalResult._isNewRecord)}
+        onRetry={handleRetry}
         onBackHome={() => navigate('/puzzle')}
       />
     );
@@ -192,31 +154,4 @@ export default function ThemeDrill() {
       </div>
     </div>
   );
-}
-
-/** 将 PuzzleResult 转换为 TrainingRecord 用于 trainingEvents.emit */
-function puzzleResultToTrainingRecord(result: PuzzleResultType) {
-  const trainingResult: TrainingResult = {
-    sessionId: result.sessionId,
-    module: 'puzzle-trainer',
-    totalQuestions: result.totalQuestions,
-    correctAnswers: result.correctCount,
-    accuracy: result.accuracy,
-    averageTime: result.averageTime / 1000, // 转换为秒
-    timestamp: result.timestamp,
-    details: result.answers.map((a) => ({
-      question: a.questionId,
-      isCorrect: a.isCorrect,
-      timeTaken: a.timeTaken,
-      userAnswer: a.selectedOptionId,
-      correctAnswer: '',
-    })),
-  };
-  return {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-    module: 'puzzle-trainer' as const,
-    mode: result.mode,
-    result: trainingResult,
-    createdAt: Date.now(),
-  };
 }

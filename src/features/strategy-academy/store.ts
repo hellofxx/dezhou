@@ -128,35 +128,41 @@ export const useAcademyStore = create<AcademyStore>()(
           },
         })),
 
-      recordPracticeScore: (result) =>
-        set((state) => {
-          trainingEvents.emit({
-            id: `academy-practice-${result.lessonId}-${Date.now()}`,
+      recordPracticeScore: (result) => {
+        // P1E-05（专批 B）：逐题作答明细 answers 仅供完成回调侧消费（SRS 回写），
+        // 入库前剥离，保持 practiceResults 持久化负载与历史形状不变
+        const { answers: _answers, ...persistable } = result;
+        void _answers;
+        // 先同步提交状态（纯状态归约，不在 updater 内做副作用）
+        set((state) => ({
+          practiceResults: [...state.practiceResults, persistable].slice(-200),
+          progress: {
+            ...state.progress,
+            quizScores: {
+              ...state.progress.quizScores,
+              [`practice-${result.lessonId}`]: Math.round(result.accuracy * 100),
+            },
+          },
+        }));
+        // 状态提交后再发事件：避免 updater 被重放（StrictMode 等）导致重复发事件，
+        // 也保证订阅方同步读取时看到的是含本次结果的最新状态（对齐 theory-academy 基准写法）
+        trainingEvents.emit({
+          id: `academy-practice-${result.lessonId}-${Date.now()}`,
+          module: 'strategy-academy',
+          mode: 'practice',
+          result: {
+            sessionId: `academy-practice-${result.lessonId}`,
             module: 'strategy-academy',
-            mode: 'practice',
-            result: {
-              sessionId: `academy-practice-${result.lessonId}`,
-              module: 'strategy-academy',
-              totalQuestions: result.totalQuestions,
-              correctAnswers: result.correctAnswers,
-              accuracy: result.accuracy,
-              averageTime: result.averageTime,
-              timestamp: result.timestamp,
-              details: [],
-            },
-            createdAt: Date.now(),
-          });
-          return {
-            practiceResults: [...state.practiceResults, result].slice(-200),
-            progress: {
-              ...state.progress,
-              quizScores: {
-                ...state.progress.quizScores,
-                [`practice-${result.lessonId}`]: Math.round(result.accuracy * 100),
-              },
-            },
-          };
-        }),
+            totalQuestions: result.totalQuestions,
+            correctAnswers: result.correctAnswers,
+            accuracy: result.accuracy,
+            averageTime: result.averageTime,
+            timestamp: result.timestamp,
+            details: [],
+          },
+          createdAt: Date.now(),
+        });
+      },
 
       resetProgress: () => set({ progress: { ...initialProgress } }),
 
@@ -242,32 +248,34 @@ export const useAcademyStore = create<AcademyStore>()(
           basicsProgress: { ...state.basicsProgress, currentStep: step },
         })),
 
-      completeBasics: () =>
-        set((state) => {
-          trainingEvents.emit({
-            id: `academy-basics-${Date.now()}`,
+      completeBasics: () => {
+        // 先同步提交状态（纯状态归约，不在 updater 内做副作用）
+        set((state) => ({
+          basicsProgress: {
+            ...state.basicsProgress,
+            completed: true,
+            completedAt: Date.now(),
+          },
+        }));
+        // 状态提交后再发事件：避免 updater 被重放（StrictMode 等）导致重复发事件，
+        // 也保证订阅方同步读取时看到的是 basics 已完成的最新状态（对齐 theory-academy 基准写法）
+        trainingEvents.emit({
+          id: `academy-basics-${Date.now()}`,
+          module: 'strategy-academy',
+          mode: 'basics',
+          result: {
+            sessionId: 'academy-basics',
             module: 'strategy-academy',
-            mode: 'basics',
-            result: {
-              sessionId: 'academy-basics',
-              module: 'strategy-academy',
-              totalQuestions: 0,
-              correctAnswers: 0,
-              accuracy: 1,
-              averageTime: 0,
-              timestamp: Date.now(),
-              details: [],
-            },
-            createdAt: Date.now(),
-          });
-          return {
-            basicsProgress: {
-              ...state.basicsProgress,
-              completed: true,
-              completedAt: Date.now(),
-            },
-          };
-        }),
+            totalQuestions: 0,
+            correctAnswers: 0,
+            accuracy: 1,
+            averageTime: 0,
+            timestamp: Date.now(),
+            details: [],
+          },
+          createdAt: Date.now(),
+        });
+      },
 
       resetBasics: () =>
         set({ basicsProgress: { ...initialBasicsProgress } }),

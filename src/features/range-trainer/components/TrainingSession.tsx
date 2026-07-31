@@ -34,7 +34,6 @@ export function TrainingSession({
     nextQuestion,
     pauseQuiz,
     resumeQuiz,
-    endQuiz,
     buildResult,
     recordEloForAnswer,
     recordSrsForAnswer,
@@ -50,19 +49,19 @@ export function TrainingSession({
 
   const currentQuestion = getCurrentQuestion();
 
-  // 时间到处理（视为答错）
+  // 时间到处理（P1A-02：超时显式标记为 'timeout'，恒判错，与"选择 fold"区分）
   const handleTimeUp = useCallback(() => {
     if (quizState.status !== 'running' || feedback) return;
     const q = getCurrentQuestion();
     if (!q) return;
 
-    // 记录为错误答案（用 fold 作为超时答案）
-    answerQuestion('fold' as RangeAction);
+    // 记录为超时（store 内恒判错，即使正确答案恰为 fold）
+    answerQuestion('timeout');
 
     setFeedback({
       isCorrect: false,
       correctAction: q.correctAction,
-      userAction: 'fold',
+      userAction: 'timeout',
     });
     // P2-2.3: 同步生成五级 DecisionFeedback（超时视为答错，default evLoss=3 → wrong）
     setDecisionFeedback(buildRangeFeedback(false, q));
@@ -70,8 +69,8 @@ export function TrainingSession({
 
     // P1-2.4: 超时视为答错，更新 ELO
     recordEloForAnswer(false);
-    // P1-3.1: 超时视为答错（quality=1），更新 SRS 复习队列
-    const timeTakenMs = Date.now() - quizState.questionStartTime;
+    // P1-3.1: 超时视为答错（quality=1），更新 SRS 复习队列（P1A-14：含暂停前已耗时）
+    const timeTakenMs = quizState.pausedElapsed + (Date.now() - quizState.questionStartTime);
     recordSrsForAnswer(q, false, timeTakenMs);
     // P2-5.2: 情绪管理 — 记录答错
     recordAnswerForEmotion(false);
@@ -83,9 +82,9 @@ export function TrainingSession({
       setDecisionFeedback(null);
       nextQuestion();
     }, 1500);
-  }, [quizState.status, quizState.questionStartTime, feedback, getCurrentQuestion, answerQuestion, nextQuestion, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion]);
+  }, [quizState.status, quizState.questionStartTime, quizState.pausedElapsed, feedback, getCurrentQuestion, answerQuestion, nextQuestion, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion]);
 
-  const { timeRemaining, pause: pauseTimer, reset: resetTimer } = useTimer({
+  const { timeRemaining, start: startTimer, pause: pauseTimer, reset: resetTimer } = useTimer({
     timeLimit: timeLimit,
     onTimeUp: handleTimeUp,
     autoStart: true,
@@ -123,8 +122,8 @@ export function TrainingSession({
       const q = getCurrentQuestion();
       if (!q) return;
 
-      // P1-3.1: 在 answerQuestion 之前捕获用时（answerQuestion 会重置 questionStartTime）
-      const timeTakenMs = Date.now() - quizState.questionStartTime;
+      // P1-3.1: 在 answerQuestion 之前捕获用时（P1A-14：含暂停前已耗时）
+      const timeTakenMs = quizState.pausedElapsed + (Date.now() - quizState.questionStartTime);
 
       answerQuestion(action);
       pauseTimer();
@@ -154,7 +153,7 @@ export function TrainingSession({
         nextQuestion();
       }, 1000);
     },
-    [showFeedback, quizState.status, quizState.questionStartTime, getCurrentQuestion, answerQuestion, nextQuestion, pauseTimer, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion],
+    [showFeedback, quizState.status, quizState.questionStartTime, quizState.pausedElapsed, getCurrentQuestion, answerQuestion, nextQuestion, pauseTimer, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion],
   );
 
   // 键盘快捷键：Esc 暂停, Space 下一题
@@ -164,7 +163,9 @@ export function TrainingSession({
         if (quizState.status === 'running') {
           pauseQuiz();
         } else if (quizState.status === 'paused') {
+          // P1A-03 修复：恢复时同步重启倒计时（否则倒计时永久冻结）
           resumeQuiz();
+          startTimer();
         }
       }
       if (e.key === ' ' && showFeedback) {
@@ -179,7 +180,7 @@ export function TrainingSession({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [quizState.status, showFeedback, pauseQuiz, resumeQuiz, nextQuestion]);
+  }, [quizState.status, showFeedback, pauseQuiz, resumeQuiz, startTimer, nextQuestion]);
 
   // 暂停处理
   const handlePause = () => {
@@ -188,7 +189,9 @@ export function TrainingSession({
   };
 
   const handleResume = () => {
+    // P1A-03 修复：恢复时同步重启倒计时（store 续算由 pausedElapsed 承担，P1A-14）
     resumeQuiz();
+    startTimer();
   };
 
   // 清理定时器
@@ -232,12 +235,13 @@ export function TrainingSession({
           >
             <Pause className="w-4 h-4" />
           </Button>
+          {/* P1A-04 修复：X 不再 endQuiz（全量入账），改为打开暂停遮罩作为确认层，
+              由遮罩内"退出训练"走 onExit → resetQuiz，不入账、不 emit、不计 streak */}
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => {
-              endQuiz();
-            }}
+            onClick={handlePause}
+            disabled={quizState.status !== 'running'}
           >
             <X className="w-4 h-4" />
           </Button>

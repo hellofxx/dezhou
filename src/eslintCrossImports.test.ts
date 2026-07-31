@@ -32,7 +32,10 @@ const EXPECTED_SNAPSHOT: CrossImportMap = {
 };
 
 describe('eslint ALLOWED_CROSS_IMPORTS 快照守卫', () => {
-  it('白名单与精确快照完全一致（新增边必然变红，删除边需同步更新快照）', async () => {
+  // 专批 A（2026-07-31）：动态 import eslint.config.js 会连带加载 eslint 插件链，
+  // 全量 pnpm test 并发下与其他测试竞争资源偶发超过默认 5000ms（单跑 1.4s 稳定通过）。
+  // 仅本测试放宽 timeout，不动全局默认值。
+  it('白名单与精确快照完全一致（新增边必然变红，删除边需同步更新快照）', { timeout: 30000 }, async () => {
     const actual = await loadAllowedCrossImports();
     expect(actual).toEqual(EXPECTED_SNAPSHOT);
   });

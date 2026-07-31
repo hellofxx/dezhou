@@ -16,7 +16,7 @@ import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import type { DrillResult } from './drills/types';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
-import { useProgressStore, createReviewItem } from '@/features/progress';
+import { useProgressStore, createReviewItem, toLocalDateString } from '@/features/progress';
 import type { PracticeResult } from '../types';
 
 type Phase = 'reading' | 'quiz' | 'done';
@@ -127,10 +127,15 @@ export default function CourseView() {
             reviewItem.interval = 3;
             const date = new Date();
             date.setDate(date.getDate() + 3);
-            reviewItem.nextReviewDate = date.toISOString().split('T')[0]!;
+            // P0B-03：本地时区格式化（禁用 toISOString，UTC 口径在 UTC+8 凌晨会晚一天）
+            reviewItem.nextReviewDate = toLocalDateString(date);
           }
           useProgressStore.getState().addReviewItem(reviewItem);
         }
+
+        // P1E-07（专批 B）：训练日 streak 口径统一 — Drill 完成是实质训练，
+        // 与 theory/其他训练模块一致计入训练日（recordTrainingDay 幂等，同日重复安全）
+        useProgressStore.getState().recordTrainingDay();
       }
       setPhase('done');
     },
@@ -173,10 +178,15 @@ export default function CourseView() {
             reviewItem.interval = 3;
             const date = new Date();
             date.setDate(date.getDate() + 3);
-            reviewItem.nextReviewDate = date.toISOString().split('T')[0]!;
+            // P0B-03：本地时区格式化（禁用 toISOString，UTC 口径在 UTC+8 凌晨会晚一天）
+            reviewItem.nextReviewDate = toLocalDateString(date);
           }
           useProgressStore.getState().addReviewItem(reviewItem);
         }
+
+        // P1E-07（专批 B）：训练日 streak 口径统一 — 课程测验完成是实质训练，
+        // 与 theory/其他训练模块一致计入训练日（recordTrainingDay 幂等，同日重复安全）
+        useProgressStore.getState().recordTrainingDay();
       }
       setPhase('done');
     },
@@ -384,7 +394,8 @@ export default function CourseView() {
                 {relatedTracks.map((track) => (
                   <button
                     key={track!.id}
-                    onClick={() => navigate(`/academy?track=${track!.id}`)}
+                    // P1E-01: 跳转到学习轨道页并携带 ?track= 参数（由 LearningTracksView 消费：滚动+高亮目标轨道）
+                    onClick={() => navigate(`/academy/tracks?track=${track!.id}`)}
                     className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-4 text-left hover:border-[var(--brass-bright)]/50 transition-colors group"
                   >
                     <div className="flex items-start gap-3">

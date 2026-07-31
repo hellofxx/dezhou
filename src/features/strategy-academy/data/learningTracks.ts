@@ -1,18 +1,24 @@
 import type { LearningTrack } from '../types';
 import { LOCAL_TRACK } from './localTrack';
+import { LEVELS } from './levels';
 
 /**
  * 检查用户是否已完成指定 Track 的前置 Level。
- * prerequisiteLevelIds 格式为 ['l1', 'l2', 'l3']，提取数字后与 certifications 比对。
+ *
+ * P1E-02: 统一为「课程完成口径」（与 CourseView 本土课门禁一致）：
+ * prerequisiteLevelIds 格式为 ['l1', 'l2', 'l3']，按 LevelInfo 条目的
+ * 全部课程是否都在 completedLessons 中判定（不再依赖认证 certifications）。
  */
 export function isTrackPrerequisiteMet(
   track: LearningTrack,
-  certifiedLevels: Set<number>
+  completedLessons: readonly string[]
 ): boolean {
   if (!track.prerequisiteLevelIds?.length) return true;
+  const completed = new Set(completedLessons);
   return track.prerequisiteLevelIds.every((id) => {
-    const levelNum = parseInt(id.replace(/^l/i, ''), 10);
-    return !isNaN(levelNum) && certifiedLevels.has(levelNum);
+    const entry = LEVELS.find((l) => l.id === id);
+    if (!entry || entry.lessons.length === 0) return false;
+    return entry.lessons.every((lesson) => completed.has(lesson.id));
   });
 }
 
@@ -142,8 +148,11 @@ export const LEARNING_TRACKS: LearningTrack[] = [
     color: '#c25a4c',
     relatedTrackIds: ['track-beginner'],
   },
-  // 理论学院（2026-07）：理论→实践衔接轨道，与 theory-academy 各 Level 的
-  // practiceRecommendations 对应（事实源：theory-academy/data/levels/index.ts）
+  // 理论学院（2026-07）：通用「理论→实践」入口轨道。
+  // P1F-05 定性（专批 A，2026-07-31）：theory-academy 各 Level 的 practiceRecommendations
+  // 定向推荐均指向 track-beginner / track-gto / track-cash-game，不引用本轨道；
+  // 本轨道不是各 Level 的定向推荐目标，而是经 /academy/tracks 泛浏览发现的通用衔接路径
+  // （按理论支柱顺序串联对应实战课程，lessonIds 行内注释标注 T1-T9 对应关系）。
   {
     id: 'track-theory-bridge',
     name: '理论到实践',

@@ -10,6 +10,7 @@ import { findChapterById, findLevelByChapterId, getNextChapter, isLevelFullyComp
 import { TheorySectionRenderer } from './TheorySectionRenderer';
 import { TheoryQuiz } from './TheoryQuiz';
 import { PracticeBridgeCard } from './PracticeBridgeCard';
+import { NextChapterNav } from './NextChapterNav';
 
 /**
  * 理论章节页：URL 直达门禁（所属 Level 未解锁则重定向回主页）+ 讲解 + 章末小测。
@@ -50,10 +51,17 @@ export default function TheoryChapterView() {
   if (!debugUnlocked && !isTheoryLevelUnlocked(level.id)) {
     return <Navigate to="/theory" replace />;
   }
-  // 达每日题量上限时，进入小测阶段渲染止损守卫（阅读仍可进行，与其他训练模块口径一致）
+  // 达每日题量上限时，进入小测阶段渲染止损守卫（阅读仍可进行，与其他训练模块口径一致）。
+  // P1F-01（专批 B：开局判定）：useSessionLimitReached 为 mount 快照冻结，
+  // 小测进行中达上限不再中途拦断丢弃作答进度，允许走完结算；新进入章节页时再拦
   if (phase === 'quiz' && sessionLimitReached) return <SessionLimitGuard />;
 
   const nextChapter = getNextChapter(chapter.id);
+  // P1F-02：getNextChapter 跨 Level 顺延时，目标 Level 未解锁会被上方门禁静默弹回 ——
+  // 渲染前校验解锁态（调试解锁旁路），未解锁降级为提示文案（NextChapterNav）
+  const nextChapterLevel = nextChapter ? findLevelByChapterId(nextChapter.id) : undefined;
+  const nextChapterUnlocked =
+    !!nextChapterLevel && (debugUnlocked || isTheoryLevelUnlocked(nextChapterLevel.id));
   const levelCompleted = isLevelFullyCompleted(level.id, completedChapters);
   // 已完成章节回访复习：阅读页提供免重考导航（返回目录/下一章），重考取历史最高分无数据风险
   const chapterCompleted = completedChapters.includes(chapter.id);
@@ -121,15 +129,7 @@ export default function TheoryChapterView() {
                   >
                     重新挑战小测
                   </button>
-                  {nextChapter && (
-                    <button
-                      onClick={() => navigate(`/theory/chapter/${nextChapter.id}`)}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-                    >
-                      下一章：{nextChapter.title}
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  )}
+                  <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
                 </div>
               </div>
             ) : (
@@ -175,15 +175,7 @@ export default function TheoryChapterView() {
                 <ArrowLeft className="w-4 h-4" />
                 返回目录
               </button>
-              {nextChapter && (
-                <button
-                  onClick={() => navigate(`/theory/chapter/${nextChapter.id}`)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-                >
-                  下一章：{nextChapter.title}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              )}
+              <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
             </div>
           </motion.div>
         )}

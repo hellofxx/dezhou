@@ -7,6 +7,7 @@ import type { Card } from '@/shared/types/poker';
 import type { HandStrategy, PreviousAction, Scenario } from '../types';
 import { ActionType } from '@/shared/types/action';
 import { getOptimalAction, isPureStrategy, compareDecision } from '../utils/strategyCompare';
+import { resolveSpotKey as resolveSpotKeyUtil } from '../utils/spotKey';
 import type { Decision } from '@/shared/types/action';
 import preflopData from '../data/preflop-ranges.json';
 import { useProgressStore } from '@/features/progress/store';
@@ -261,7 +262,10 @@ export function useGtoSrsRecorder() {
 
   return useCallback(
     (scenario: Scenario, isOptimal: boolean, timeTakenMs: number) => {
-      const id = `gto:${scenario.id}`;
+      // P1C-07: 稳定语义键（不含时间戳），确保同一 spot+手牌 能去重
+      const spotKey = resolveSpotKeyUtil(scenario.position, scenario.previousActions) ?? 'unknown';
+      const handNotation = classifyHand(scenario.heroHand[0], scenario.heroHand[1]);
+      const id = `gto:${spotKey}:${handNotation}`;
       const label = scenario.name || scenario.description.slice(0, 40);
       // 最优动作描述：从首决策节点取 gtoStrategy 推断
       const firstNode = scenario.decisionNodes?.[0];

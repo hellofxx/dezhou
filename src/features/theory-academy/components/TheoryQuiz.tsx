@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -16,6 +16,10 @@ interface TheoryQuizProps {
 /**
  * 章末小测：选项经 quizOrder 重排后渲染（答案位置偏差治理）。
  * 每题作答同步更新 progress 的 ELO（按章节 eloDimension）与情绪计数。
+ *
+ * 设计豁免（P0-B 2026-07-31 定性，登记于 TDD 5.9 反馈闭环系统）：
+ * 章末小测为概念判断题、无 EV 语义，暂不接入五级判分体系
+ * （沿用二元对错 + 解析），与 hand-history 不 emit 的豁免模式并列。
  */
 export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   const orderedQuestions = useMemo(
@@ -33,9 +37,15 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   // 防御：空题库（理论章节无小测）时自动按完成处理，避免 onComplete 永不触发导致卡死在空白小测页。
   // 用 effect 触发（而非渲染期调用父 setState）；完成后父组件切至 done 会卸载本组件，不会循环。
   // 正常由 theoryIntegrity 测试保证每章 3-5 题，此为防御性兜底。
+  // P1F-03：completedRef 一次性守卫（对齐 TrainingSession 防重入模式）——StrictMode 下 effect
+  // 双跑不会重置 ref，onComplete 仅触发一次，避免 completeChapter 双调、训练事件双 emit。
   const isEmpty = orderedQuestions.length === 0;
+  const completedRef = useRef(false);
   useEffect(() => {
-    if (isEmpty) onComplete(100, 0, 0);
+    if (isEmpty && !completedRef.current) {
+      completedRef.current = true;
+      onComplete(100, 0, 0);
+    }
   }, [isEmpty, onComplete]);
 
   const question = orderedQuestions[currentIndex];

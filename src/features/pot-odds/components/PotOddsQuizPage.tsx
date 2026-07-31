@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, Trophy, Clock, Target, RotateCcw, Calculator } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -10,11 +11,15 @@ import { getEasyOddsQuestion, useOddsEloRecorder, useOddsSrsRecorder, useOddsEmo
 // 答案位置偏差治理：题库抽离为数据文件，选项顺序由 orderQuizOptions 统一处理
 import { QUIZ_QUESTIONS } from '../data/quizQuestions';
 import { orderQuizOptions } from '../utils/quizOrder';
+// P1B-04：末题/补救题固定 id（SRS 去重依赖）
+import { EASY_LAST_QUESTION_ID, RESCUE_QUESTION_ID } from '../constants';
 // P2-5.4: Session 止损守卫
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
 // P4 修复（4.5-P0）：自适应难度降级 + 五级反馈
 import { useProgressStore } from '@/features/progress/store';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
+// P1B-05：评级展示统一走 GRADE_DISPLAY_CONFIG（icon + titleKey i18n + .grade-* 容器类）
+import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import { Link } from 'react-router-dom';
 
 // ─── Quiz Data ─────────────────────────────────────────────────────────────────────
@@ -34,6 +39,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default function PotOddsQuizPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<PotOddsQuizOption | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -45,11 +51,11 @@ export default function PotOddsQuizPage() {
   const startTimeRef = useRef<number>(Date.now());
   const sessionIdRef = useRef<string>(`${Date.now()}-${Math.random().toString(36).slice(2, 9)}`);
 
-  // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练
+  // Streak 记账：训练完成时计入每日连续训练（recordTrainingDay 内部幂等并检查里程碑）
+  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+
+  // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
-  if (sessionLimitReached) {
-    return <SessionLimitGuard />;
-  }
 
   // P1-2.4: pot-odds ELO 记录器（维度=math）
   const recordEloForAnswer = useOddsEloRecorder();
@@ -71,7 +77,7 @@ export default function PotOddsQuizPage() {
   const effectiveQuestions = useMemo<PotOddsQuizQuestion[]>(() => {
     if (ORDERED_QUIZ_QUESTIONS.length === 0) return [];
     const base = ORDERED_QUIZ_QUESTIONS.slice(0, ORDERED_QUIZ_QUESTIONS.length - 1);
-    const easyLast: PotOddsQuizQuestion = { ...getEasyOddsQuestion(), id: 9999 };
+    const easyLast: PotOddsQuizQuestion = { ...getEasyOddsQuestion(), id: EASY_LAST_QUESTION_ID };
     return [...base, easyLast, ...rescueQuestions];
   }, [rescueQuestions]);
 
@@ -113,15 +119,17 @@ export default function PotOddsQuizPage() {
     // 最后一题已答完：若答错且未用过补救，追加一道简单题
     if (isLastQuestion) {
       if (!lastAnswerCorrect && !rescueUsed) {
+        // P1B-04：固定 id（非 Date.now()），SRS 复习项 `odds:9998` 可正常去重更新
         const rescue: PotOddsQuizQuestion = {
           ...getEasyOddsQuestion(),
-          id: 10000 + Date.now(),
+          id: RESCUE_QUESTION_ID,
         };
         setRescueQuestions((prev) => [...prev, rescue]);
         setRescueUsed(true);
         setCurrentIndex((i) => i + 1);
         setSelectedOption(null);
         setIsAnswered(false);
+        setDecisionFeedback(null);
         startTimeRef.current = Date.now();
         return;
       }
@@ -183,7 +191,15 @@ export default function PotOddsQuizPage() {
       result,
       createdAt: Date.now(),
     });
-  }, [finished, totalQuestions, correctCount, times, effectiveQuestions, userAnswers, lastQuestionCorrect]);
+    // 计入每日连续训练（与 puzzle / theory 模块同模式：完成时同步调用，不走事件总线）
+    recordTrainingDay();
+  }, [finished, totalQuestions, correctCount, times, effectiveQuestions, userAnswers, lastQuestionCorrect, recordTrainingDay]);
+
+  // 止损早退必须位于全部 hooks 之后：守卫状态在挂载期间翻转（答题中达上限/
+  // 调试开关切换）时，hooks 数量变化会触发 "Rendered fewer hooks" 崩溃
+  if (sessionLimitReached) {
+    return <SessionLimitGuard />;
+  }
 
   // ─── Results Panel ──────────────────────────────────────────────────────────
   if (finished) {
@@ -403,20 +419,35 @@ export default function PotOddsQuizPage() {
                       {selectedOption.isCorrect ? selectedOption.explanation : (correctOption?.explanation ?? selectedOption.explanation)}
                     </p>
 
-                    {/* P4 修复（4.2-P1-1）：五级反馈显示 + 课程跳转 */}
-                    {decisionFeedback && !selectedOption.isCorrect && decisionFeedback.relatedLessonId && (
-                      <div className="mt-3 pt-3 border-t border-[var(--ivory-dim)]/20">
-                        <span className="text-xs text-[var(--ivory-muted)] mr-2">
-                          评级：{decisionFeedback.grade}
-                        </span>
-                        <Link
-                          to={`/academy/lesson/${decisionFeedback.relatedLessonId}`}
-                          className="text-xs text-[var(--brass-bright)] underline hover:text-[var(--brass)] transition-colors"
-                        >
-                          去复习相关课程 →
-                        </Link>
-                      </div>
-                    )}
+                    {/* P1B-05：五级评级徽章——统一走 GRADE_DISPLAY_CONFIG（icon + titleKey 走 t() + .grade-* 容器类），
+                        对齐 QuizCard/GTOFeedback；答对也展示（best/correct），不再仅答错时渲染。
+                        注：evLoss 维持现有兜底（答对=0，答错=3），真实 evLoss 分级需题库补 evLossBB 数据（观察项） */}
+                    {decisionFeedback && (() => {
+                      const gradeConfig = GRADE_DISPLAY_CONFIG[decisionFeedback.grade];
+                      return (
+                        <div className="mt-3 pt-3 border-t border-[var(--ivory-dim)]/20 flex items-center gap-2 flex-wrap">
+                          <span
+                            className={cn(
+                              'inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium',
+                              gradeConfig.color,
+                              gradeConfig.textColor,
+                            )}
+                            role="status"
+                          >
+                            <span aria-hidden="true">{gradeConfig.icon}</span>
+                            {t(gradeConfig.titleKey)}
+                          </span>
+                          {!selectedOption.isCorrect && decisionFeedback.relatedLessonId && (
+                            <Link
+                              to={`/academy/lesson/${decisionFeedback.relatedLessonId}`}
+                              className="text-xs text-[var(--brass-bright)] underline hover:text-[var(--brass)] transition-colors"
+                            >
+                              去复习相关课程 →
+                            </Link>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   {/* P4 修复（4.5-P0）：连续答错降级提示 */}
