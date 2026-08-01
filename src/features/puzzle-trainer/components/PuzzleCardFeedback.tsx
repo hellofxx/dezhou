@@ -84,7 +84,7 @@ export function PuzzleCardFeedback({
           className="inline-flex items-center gap-1.5 text-xs text-[var(--brass-bright)] hover:text-[var(--brass)] transition-colors pt-1"
         >
           <BookOpen className="w-3.5 h-3.5" />
-          去复习相关课程 →
+          {t('feedback.goReview')}
         </Link>
       )}
 

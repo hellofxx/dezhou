@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useHandHistoryStore } from '../store';
+import { ActionType } from '@/shared/types/action';
 import type { ReplayState } from '../types';
 
 export function useHandReplay() {
@@ -113,7 +114,7 @@ export function useHandReplay() {
       const limit = s < currentIdx ? streetActions.length : replayState.currentActionIndex;
       for (let i = 0; i < limit; i++) {
         const a = streetActions[i]!;
-        if (a.type === 'fold') {
+        if (a.type === ActionType.Fold) {
           foldedPlayers.add(a.playerIndex);
         }
       }

@@ -99,7 +99,7 @@ additionalPrompt: ""
 5. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `theory.*` 命名空间
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行（课程内容数据文件可放宽）/ 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行（课程内容数据文件可放宽）/ 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
 
 模块特有约束：
 - 独立 store，不写入 progress store 的 persist schema（仅调用其公开 action）

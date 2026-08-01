@@ -251,14 +251,15 @@ export function getTypeIcon(type: DailyRecommendation['type']): string {
  * 获取优先级颜色
  */
 export function getPriorityColor(priority: DailyRecommendation['priority']): string {
+  // P2-C: 使用 CSS 变量替代 Tailwind 霓虹类名，遵循反霓虹硬约束
   switch (priority) {
     case 'high':
-      return 'border-l-green-500';
+      return 'border-l-[var(--poker-success)]';
     case 'medium':
-      return 'border-l-yellow-500';
+      return 'border-l-[var(--brass)]';
     case 'low':
-      return 'border-l-gray-500';
+      return 'border-l-[var(--ivory-dim)]';
     default:
-      return 'border-l-gray-500';
+      return 'border-l-[var(--ivory-dim)]';
   }
 }

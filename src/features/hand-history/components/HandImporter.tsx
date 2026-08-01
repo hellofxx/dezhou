@@ -5,7 +5,7 @@ import { parsePokerStarsHand, parsePokerStarsMultiple } from '../parsers/pokerst
 import { parseGGPokerHand, parseGGPokerMultiple } from '../parsers/gg-poker';
 import { parsePartyPokerHand, parsePartyPokerMultiple } from '../parsers/partypoker';
 import type { ImportResult } from '../types';
-import { Upload, FileText, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, FileText, Check, AlertCircle, AlertTriangle, Loader2 } from 'lucide-react';
 
 export function HandImporter() {
   const addHands = useHandHistoryStore(s => s.addHands);
@@ -18,28 +18,41 @@ export function HandImporter() {
   const parseHands = useCallback((content: string): ImportResult => {
     const format = detectFormat(content);
     const errors: string[] = [];
+    const warnings: string[] = [];
     let hands: ImportResult['hands'] = [];
 
     try {
       if (format === 'pokerstars') {
         // Check if single or multiple
         const parts = content.split(/(?=PokerStars Hand #)/);
-        if (parts.filter(p => p.trim().startsWith('PokerStars Hand #')).length > 1) {
+        const expectedCount = parts.filter(p => p.trim().startsWith('PokerStars Hand #')).length;
+        if (expectedCount > 1) {
           hands = parsePokerStarsMultiple(content);
+          if (hands.length < expectedCount) {
+            warnings.push(`Skipped ${expectedCount - hands.length} unparseable hand(s) out of ${expectedCount}`);
+          }
         } else {
           hands = [parsePokerStarsHand(content)];
         }
       } else if (format === 'ggpoker') {
         const parts = content.split(/(?=(?:GGPoker\s+)?Hand\s+#(?:HD-)?)/i);
-        if (parts.filter(p => /^(?:GGPoker\s+)?Hand\s+#/i.test(p.trim())).length > 1) {
+        const expectedCount = parts.filter(p => /^(?:GGPoker\s+)?Hand\s+#/i.test(p.trim())).length;
+        if (expectedCount > 1) {
           hands = parseGGPokerMultiple(content);
+          if (hands.length < expectedCount) {
+            warnings.push(`Skipped ${expectedCount - hands.length} unparseable hand(s) out of ${expectedCount}`);
+          }
         } else {
           hands = [parseGGPokerHand(content)];
         }
       } else if (format === 'partypoker') {
         const parts = content.split(/(?=\*{5}\s*Hand History for Game)/i);
-        if (parts.filter(p => /Hand History for Game/i.test(p)).length > 1) {
+        const expectedCount = parts.filter(p => /Hand History for Game/i.test(p)).length;
+        if (expectedCount > 1) {
           hands = parsePartyPokerMultiple(content);
+          if (hands.length < expectedCount) {
+            warnings.push(`Skipped ${expectedCount - hands.length} unparseable hand(s) out of ${expectedCount}`);
+          }
         } else {
           hands = [parsePartyPokerHand(content)];
         }
@@ -54,6 +67,7 @@ export function HandImporter() {
       success: hands.length > 0 && errors.length === 0,
       hands,
       errors,
+      warnings: warnings.length > 0 ? warnings : undefined,
       format: format !== 'unknown' ? format : undefined,
     };
   }, []);
@@ -156,11 +170,19 @@ export function HandImporter() {
 
       {/* Result */}
       {result && (
-        <div className={`p-3 rounded-lg border ${result.success ? 'bg-[var(--sage)]/10 border-[var(--sage)]/30' : 'bg-[var(--clay)]/10 border-[var(--clay)]/30'}`}>
+        <div className={`p-3 rounded-lg border ${result.success ? (result.warnings ? 'bg-[var(--brass)]/10 border-[var(--brass)]/30' : 'bg-[var(--sage)]/10 border-[var(--sage)]/30') : 'bg-[var(--clay)]/10 border-[var(--clay)]/30'}`}>
           {result.success ? (
-            <div className="flex items-center gap-2 text-sm text-[var(--sage)]">
-              <Check size={16} />
-              <span>Successfully imported {result.hands.length} hand{result.hands.length > 1 ? 's' : ''} ({result.format})</span>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-sm text-[var(--sage)]">
+                <Check size={16} />
+                <span>Successfully imported {result.hands.length} hand{result.hands.length > 1 ? 's' : ''} ({result.format})</span>
+              </div>
+              {result.warnings?.map((w, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs text-[var(--brass-bright)]">
+                  <AlertTriangle size={13} />
+                  <span>{w}</span>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="space-y-1">

@@ -485,6 +485,29 @@
         "description": "Positive reinforcement, mental game focus",
         "voiceTone": "Warm, encouraging, constructive"
       }
+    },
+    "feedback": {
+      "strict-math": {
+        "best": "Optimal decision. EV loss 0 BB, GTO-approved frequency.",
+        "correct": "Reasonable decision. EV loss {evLoss} BB, within acceptable range.",
+        "inaccuracy": "Not precise. EV loss {evLoss} BB, optimal action is {correctAction}.",
+        "wrong": "Wrong decision. EV loss {evLoss} BB, should choose {correctAction}. Consider reviewing related lessons.",
+        "blunder": "Major mistake. EV loss {evLoss} BB, this will lead to significant losses long-term. Optimal action is {correctAction}."
+      },
+      "old-school": {
+        "best": "Beautiful! That's textbook play right there.",
+        "correct": "Not bad, kid. This decision makes money.",
+        "inaccuracy": "Mediocre. I've played 20 years, and I'm telling you - you should {correctAction} here.",
+        "wrong": "Eh, that was a rough play. Lost {evLoss} BB, should've {correctAction}. Go practice more.",
+        "blunder": "Son, that's a big mistake! {evLoss} BB lost - in a real game, the sharks would eat you alive. Remember, in this spot you {correctAction}."
+      },
+      "encouraging": {
+        "best": "Amazing! You're better than 80% of players!",
+        "correct": "Great! This decision is reasonable, keep it up!",
+        "inaccuracy": "So close! The optimal action is {correctAction}, try it next time.",
+        "wrong": "No worries, every expert started here. EV loss {evLoss} BB, optimal is {correctAction}. You got this!",
+        "blunder": "Don't lose heart! Lost {evLoss} BB this time, but it's a valuable learning opportunity. Remember {correctAction}, you'll nail it next time!"
+      }
     }
   },
   "shortDeck": {

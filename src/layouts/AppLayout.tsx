@@ -273,7 +273,7 @@ export default function AppLayout() {
       {/* Main content area — bottle-green felt */}
       <div className="flex flex-col flex-1 overflow-hidden felt-ambient">
         {/* Top bar — surface bg with walnut border below */}
-        <header className="flex items-center h-16 px-4 md:px-6 border-b border-[var(--walnut-border)] bg-[var(--surface)] backdrop-blur-sm shrink-0 relative brass-rail">
+        <header className="flex items-center h-12 md:h-16 px-4 md:px-6 border-b border-[var(--walnut-border)] bg-[var(--surface)] backdrop-blur-sm shrink-0 relative brass-rail">
           <h1 className="font-display text-[17px] text-[var(--ivory)] flex-1 tracking-wide">
             {currentPageTitle}
           </h1>

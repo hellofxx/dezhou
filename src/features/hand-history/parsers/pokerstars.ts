@@ -46,13 +46,29 @@ function parseActionLine(line: string, playerNameToIndex: Map<string, number>): 
   // "PlayerName: posts small blind $1"
   // "PlayerName: posts big blind $2"
 
-  const actionMatch = line.match(/^(.+?):\s+(folds|checks|calls|bets|raises|posts|shows|collected)/i);
+  // Check for "is all-in" first (may appear after other verbs like "raises ... and is all-in")
+  const isAllIn = /\bis\s+all-in\b/i.test(line);
+
+  const actionMatch = line.match(/^(.+?):\s+(folds|checks|calls|bets|raises|posts|shows|collected|is all-in)/i);
   if (!actionMatch) return null;
 
   const name = actionMatch[1]!.trim();
   const verb = actionMatch[2]!.toLowerCase();
   const playerIndex = playerNameToIndex.get(name);
   if (playerIndex === undefined) return null;
+
+  const extractAmount = (): number | undefined => {
+    const amt = line.match(/to\s+\$?([\d,.]+)/);
+    if (amt) return parseAmount(amt[1]!);
+    const amt2 = line.match(/\$?([\d,.]+)\s*$/);
+    if (amt2) return parseAmount(amt2[1]!);
+    return undefined;
+  };
+
+  // If the line contains "is all-in", return AllIn regardless of verb
+  if (isAllIn) {
+    return { type: ActionType.AllIn, amount: extractAmount(), playerIndex };
+  }
 
   switch (verb) {
     case 'folds':
@@ -82,6 +98,7 @@ function parseActionLine(line: string, playerNameToIndex: Map<string, number>): 
 }
 
 export function parsePokerStarsHand(text: string): HandHistory {
+  if (!text || !text.trim()) throw new Error('Empty hand history text');
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
 
   let handNumber = '';

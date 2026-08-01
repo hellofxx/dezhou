@@ -94,7 +94,7 @@ additionalPrompt: ""
 6. 新增测验题时：编辑 data/quizQuestions.ts（选项书写顺序不限，渲染前由 orderQuizOptions 自动处理）→ 确认 quizOrder.test.ts 分布与内容平衡守卫通过（注意保持"应弃牌/否"类正确答案的题目占比，避免重新引入"永远选肯定项"内容偏差）
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线等）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。
 
 模块特有约束：
 - 数值精度要求使用定点数或 decimal.js（避免浮点误差）

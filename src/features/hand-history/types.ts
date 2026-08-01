@@ -50,6 +50,7 @@ export interface ImportResult {
   success: boolean;
   hands: HandHistory[];
   errors: string[];
+  warnings?: string[];
   format?: string;
 }
 

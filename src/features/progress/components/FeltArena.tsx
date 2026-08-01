@@ -21,12 +21,13 @@ export default function FeltArena() {
   const streak = useProgressStore((s) => s.streak);
   const elo = useProgressStore((s) => s.elo);
   const emotion = useProgressStore((s) => s.emotion);
+  const onboarding = useProgressStore((s) => s.onboarding);
   const currentRank = useMemo(() => getRankForScore(elo.overall), [elo.overall]);
 
   const currentStreak = streak.currentStreak;
 
-  // Daily progress for the chip
-  const dailyGoal = 10;
+  // P2-C: 使用 onboarding 设定的每日目标题数，替代硬编码 10
+  const dailyGoal = onboarding.dailyGoalMinutes === 5 ? 5 : onboarding.dailyGoalMinutes === 20 ? 20 : 10;
   const dailyProgress = {
     current: emotion.dailyCorrect,
     total: emotion.dailyTotal || dailyGoal,

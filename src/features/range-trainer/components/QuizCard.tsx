@@ -127,7 +127,7 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
     ? renderMentorFeedback(mentorStyle, grade, {
         evLoss: Number((decisionFeedback.evLoss ?? 0).toFixed(2)),
         correctAction: decisionFeedback.correctAction,
-      })
+      }, t)
     : '';
   const gradeMessage = mentorMessage || (decisionFeedback && grade
     ? t(`feedback.message.${grade}`, {

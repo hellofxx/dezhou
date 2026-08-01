@@ -91,7 +91,7 @@ additionalPrompt: ""
 5. 答题后集成跨模块系统：调用 ELO/SRS/Emotion 记录器（仅首决策节点避免多步场景重复计数）
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线等）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。
 
 模块特有约束：
 - GTO 数据文件格式必须严格匹配 HandStrategy 类型

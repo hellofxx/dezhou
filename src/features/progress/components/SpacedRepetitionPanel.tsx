@@ -28,6 +28,21 @@ const CATEGORY_LABELS: Record<string, string> = {
   gto: 'GTO',
 };
 
+/** P2-C: 根据复习项 category 映射导航路由 */
+function getReviewRoute(item: ReviewItem): string {
+  switch (item.category) {
+    case 'range':
+      return '/range-trainer';
+    case 'odds':
+      return '/pot-odds';
+    case 'gto':
+      return '/gto-simulator';
+    case 'strategy':
+    default:
+      return `/academy/lesson/${item.id}`;
+  }
+}
+
 export default function SpacedRepetitionPanel({
   reviewItems,
   todayItems,
@@ -171,7 +186,7 @@ export default function SpacedRepetitionPanel({
                     )}
                   </div>
                   <button
-                    onClick={() => navigate(`/academy/lesson/${item.id}`)}
+                    onClick={() => navigate(getReviewRoute(item))}
                     className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md bg-[var(--brass)]/20 text-[var(--brass-bright)] text-xs font-medium hover:bg-[var(--brass)]/30 transition-colors"
                   >
                     {t('spacedRepetition.review', { defaultValue: '复习' })}

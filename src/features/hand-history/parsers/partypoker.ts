@@ -7,7 +7,7 @@ import { parseCardString, parseBoardCards, parseAmount } from './common';
 
 function assignPositions(playerCount: number, buttonSeat: number, seats: number[]): Position[] {
   const positions6: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.HJ, Position.CO];
-  const positions9: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.UTG1, Position.MP, Position.HJ, Position.CO, Position.BTN];
+  const positions9: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.UTG1, Position.MP, Position.MP, Position.HJ, Position.CO];
 
   const ordered = [...seats];
   const btnIdx = ordered.indexOf(buttonSeat);
@@ -79,6 +79,7 @@ function parsePartyActionLine(line: string, playerNameToIndex: Map<string, numbe
 }
 
 export function parsePartyPokerHand(text: string): HandHistory {
+  if (!text || !text.trim()) throw new Error('Empty hand history text');
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
 
   let handNumber = '';

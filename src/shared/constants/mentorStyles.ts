@@ -1,7 +1,8 @@
 /**
  * 导师风格反馈文案模板（P2-4）
  *
- * 模板占位符（简单字符串替换，不引入模板引擎）：
+ * 模板使用 i18n key 引用，实际文案在 zh.json / en.json 的 mentor.feedback.* 下。
+ * 占位符（简单字符串替换，不引入模板引擎）：
  *  - {evLoss}        EV 损失（BB）
  *  - {correctAction} 最优动作描述
  *
@@ -12,25 +13,25 @@ import type { DecisionGrade } from '../types/decisionFeedback';
 
 export const MENTOR_FEEDBACK_TEMPLATES: Record<MentorStyle, MentorFeedbackTemplate> = {
   'strict-math': {
-    best: '最优决策。EV 损失 0 BB，符合 GTO 频率。',
-    correct: '合理决策。EV 损失 {evLoss} BB，在可接受范围内。',
-    inaccuracy: '不够精确。EV 损失 {evLoss} BB，最优动作是 {correctAction}。',
-    wrong: '错误决策。EV 损失 {evLoss} BB，应选择 {correctAction}。建议复习相关课程。',
-    blunder: '严重错误。EV 损失 {evLoss} BB，这一决策长期会显著亏损。最优动作是 {correctAction}。',
+    best: 'mentor.feedback.strict-math.best',
+    correct: 'mentor.feedback.strict-math.correct',
+    inaccuracy: 'mentor.feedback.strict-math.inaccuracy',
+    wrong: 'mentor.feedback.strict-math.wrong',
+    blunder: 'mentor.feedback.strict-math.blunder',
   },
   'old-school': {
-    best: '漂亮！这就是教科书式的打法。',
-    correct: '不错，小子。这个决策能赚钱。',
-    inaccuracy: '差强人意。我打了 20 年牌，告诉你这时候应该 {correctAction}。',
-    wrong: '哎，这手打得不怎么样。损失了 {evLoss} BB，应该 {correctAction}。回去多练练。',
-    blunder: '小伙子，这是大错！{evLoss} BB 的损失，实战中会被鲨鱼吃掉。记住，这种情况要 {correctAction}。',
+    best: 'mentor.feedback.old-school.best',
+    correct: 'mentor.feedback.old-school.correct',
+    inaccuracy: 'mentor.feedback.old-school.inaccuracy',
+    wrong: 'mentor.feedback.old-school.wrong',
+    blunder: 'mentor.feedback.old-school.blunder',
   },
   'encouraging': {
-    best: '太棒了！你已经比 80% 的玩家厉害了！🌟',
-    correct: '很好！这个决策是合理的，继续保持！',
-    inaccuracy: '差一点就对了！最优动作是 {correctAction}，下次试试看。',
-    wrong: '没关系，每个高手都从这里开始。EV 损失 {evLoss} BB，最优是 {correctAction}。一起加油！',
-    blunder: '别灰心！这次损失了 {evLoss} BB，但这是个宝贵的学习机会。记住 {correctAction}，下次一定行！',
+    best: 'mentor.feedback.encouraging.best',
+    correct: 'mentor.feedback.encouraging.correct',
+    inaccuracy: 'mentor.feedback.encouraging.inaccuracy',
+    wrong: 'mentor.feedback.encouraging.wrong',
+    blunder: 'mentor.feedback.encouraging.blunder',
   },
 };
 
@@ -40,16 +41,19 @@ export const MENTOR_FEEDBACK_TEMPLATES: Record<MentorStyle, MentorFeedbackTempla
  *                    避免持久化脏数据/调用方传入异常值时读取 undefined 模板抛错）
  * @param grade 反馈等级
  * @param params 替换参数 { evLoss, correctAction }
+ * @param t i18n 翻译函数，用于解析 i18n key 为实际文案
  */
 export function renderMentorFeedback(
   mentorStyle: MentorStyle,
   grade: DecisionGrade,
-  params: { evLoss?: number; correctAction?: string }
+  params: { evLoss?: number; correctAction?: string },
+  t: (key: string) => string,
 ): string {
   const styleTemplates =
     MENTOR_FEEDBACK_TEMPLATES[mentorStyle] ?? MENTOR_FEEDBACK_TEMPLATES['encouraging'];
-  const template = styleTemplates[grade];
-  return template
-    .replace(/\{evLoss\}/g, String(params.evLoss ?? ''))
-    .replace(/\{correctAction\}/g, params.correctAction ?? '');
+  const templateKey = styleTemplates[grade];
+  let template = t(templateKey);
+  template = template.replace(/\{evLoss\}/g, String(params.evLoss ?? ''));
+  template = template.replace(/\{correctAction\}/g, params.correctAction ?? '');
+  return template;
 }

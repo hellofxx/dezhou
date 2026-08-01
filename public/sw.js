@@ -5,7 +5,9 @@
 // 因此开发与部署通用，无需为不同环境改代码。
 const BASE = self.location.pathname.replace(/\/sw\.js$/, '') + '/';
 
-const CACHE_NAME = 'poker-training-v2';
+// 从注册 URL 查询参数读取缓存版本号（由 main.tsx 在注册时传入 APP_VERSION）
+const CACHE_VERSION = new URLSearchParams(self.location.search).get('v') || '1';
+const CACHE_NAME = 'poker-training-' + CACHE_VERSION;
 const STATIC_ASSETS = [
   BASE,
   BASE + 'index.html',

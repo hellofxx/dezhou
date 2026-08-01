@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // 与 AppLayout 同策略，修复"主训练页连错 3 题无 Tilt 弹窗"的覆盖缺口）
 import TiltWarning from '@/features/progress/components/TiltWarning';
 import MilestoneCelebrationHost from '@/features/progress/components/MilestoneCelebrationHost';
+import OnboardingGate from '@/features/progress/components/OnboardingGate';
 
 const SHORTCUTS = [
   { key: '1', action: 'Fold（弃牌）' },
@@ -41,6 +42,7 @@ export default function BlankLayout() {
       <button
         onClick={() => navigate(-1)}
         className="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-2 rounded-[var(--radius)] text-sm text-[var(--ivory-muted)] hover:text-[var(--ivory)] bg-[var(--surface-overlay)] hover:bg-[var(--surface-raised)] transition-colors"
+        aria-label="返回上一页"
       >
         <ArrowLeft size={16} className="text-[var(--brass)]" />
         <span>返回</span>
@@ -51,14 +53,17 @@ export default function BlankLayout() {
         onClick={() => setShowShortcuts(true)}
         className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-2.5 py-2 rounded-[var(--radius)] text-xs text-[var(--ivory-dim)] hover:text-[var(--ivory)] bg-[var(--surface-overlay)] hover:bg-[var(--surface-raised)] transition-colors"
         title="快捷键 (?)"
+        aria-label="快捷键"
       >
         <Keyboard size={14} className="text-[var(--brass)]" />
         <span className="hidden sm:inline">?</span>
       </button>
 
-      {/* Content */}
+      {/* Content — 嵌入 OnboardingGate 门禁，覆盖全屏训练路由（P2A-01） */}
       <div className="h-full">
-        <Outlet />
+        <OnboardingGate>
+          <Outlet />
+        </OnboardingGate>
       </div>
 
       {/* P2-5.3: 全局 Tilt 提示 Dialog — 训练页（范围测验/赔率测验/GTO 会话）均在本布局下 */}
@@ -93,6 +98,7 @@ export default function BlankLayout() {
                 <button
                   onClick={() => setShowShortcuts(false)}
                   className="p-1 rounded-[var(--radius-sm)] text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/40"
+                  aria-label="关闭快捷键面板"
                 >
                   <X size={16} />
                 </button>

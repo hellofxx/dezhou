@@ -103,7 +103,7 @@ src/
 
 ### 文件大小
 
-单文件 ≤ 200 行（课程内容数据文件可放宽）。超过时拆分为子组件 / 工具函数 / 数据文件。
+单文件 ≤ 300 行（硬约束）；超过 400 行需拆分为子组件 / 工具函数 / 数据文件。以下类型文件可豁免：zustand store（`create()` 单文件约束）、格式解析器（自包含状态机）、页面级组件（内聚性大于拆分收益）。课程内容数据文件亦可放宽。
 
 ### 函数设计
 
@@ -218,7 +218,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ### 调试解锁（开发者选项，2026-07 新增）
 
 - 实现：`src/shared/stores/debugMode.ts`（独立 persist store，不并入 progress store）；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（文档与子代理文件不维护数值副本）
-- 激活后全局旁路门禁（共 7 处）：strategy-academy 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、CourseView 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard` 每日题量上限、theory-academy store 的 `isTheoryLevelUnlocked`、theory-academy `TheoryChapterView` 章节 URL 直达门禁；新增门禁时应同步接入 `isDebugUnlockActive()` 短路
+- 激活后全局旁路门禁（共 9 处）：strategy-academy 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、strategy-academy `ConceptGraph` 本土课节点解锁（`isLocalLessonUnlocked`）、CourseView 本土课与课程级门禁、strategy-academy `LearningTracksView` 轨道前置、range-trainer `RangeSelector` 位置解锁、range-trainer `QuizConfig` 位置解锁、progress `SessionLimitGuard` 每日题量上限、theory-academy store 的 `isTheoryLevelUnlocked`、theory-academy `TheoryChapterView` 章节 URL 直达门禁；短路有两种接法——store/纯逻辑用 `isDebugUnlockActive()`、组件内用 `useDebugModeStore((s) => s.unlockAll)`，新增门禁时须同步接入
 - 产品规格见 `docs/PRD.md` 5.6.6，技术设计见 `docs/TDD.md` 5.9；onboarding 不纳入解锁范围
 
 ## 文档维护（三层职责分离）
@@ -243,7 +243,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖；策略学院课程数据完整性（id 唯一 / 牌面合法 / 引用无悬空 / native order 无重复 / Drill 接线）由 `src/features/strategy-academy/data/curriculumIntegrity.test.ts` 覆盖；UI 颜色合规（禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）由 `src/designTokenGuard.test.ts` 全量扫描 src 守卫
 - **构建验证**：`pnpm build` 成功产出 `dist/`
 - **测试双项目划分**（`vitest.config.ts`）：`unit` 项目在 Node 环境运行 `src/**/*.test.ts`（纯函数 / store migrate）；`component` 项目在 jsdom 环境运行 `src/**/*.test.tsx`（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
-- 每次代码变更后必须运行类型检查、`pnpm lint` 与 `pnpm test`
+- 每次代码变更后必须运行 `pnpm verify`（即 `pnpm typecheck && pnpm lint && pnpm test` 串行短路组合，任一失败即中止；唯一事实源为 `package.json` 的 `verify` script）
 
 ## 提交粒度
 

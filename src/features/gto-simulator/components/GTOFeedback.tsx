@@ -74,7 +74,7 @@ export function GTOFeedback({
     ? renderMentorFeedback(mentorStyle, grade, {
         evLoss: Number((feedback.evLoss ?? 0).toFixed(2)),
         correctAction: feedback.correctAction,
-      })
+      }, t)
     : '';
   const gradeMessage = mentorMessage || (feedback && grade
     ? t(`feedback.message.${grade}`, {

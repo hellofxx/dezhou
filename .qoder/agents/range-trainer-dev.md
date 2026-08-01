@@ -88,7 +88,7 @@ additionalPrompt: ""
 5. 答题后集成跨模块系统：调用 recordEloForAnswer（ELO）+ recordSrsForAnswer（SRS）+ recordAnswerForEmotion（情绪）
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线等）。本节仅列模块特有约束：
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。本节仅列模块特有约束：
 
 - **答题三同步**：每次答题后必须同步调用 `recordEloForAnswer`（preflop 维度）、`recordSrsForAnswer`（注册/更新复习项）、`recordAnswerForEmotion`（情绪计数器）三处，缺一不可；同时由 `QuizCard` 调用 `renderMentorFeedback` 渲染导师文案。
 - **13×13 网格性能**：RangeGrid 渲染 169 个格子时必须使用 `React.memo` 包裹单元格组件 + Zustand selector 精细化订阅，避免无关状态变更触发整网格重渲染。

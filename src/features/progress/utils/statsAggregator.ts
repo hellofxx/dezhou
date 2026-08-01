@@ -19,8 +19,13 @@ export function aggregateStats(records: TrainingRecord[]): StatsSummary {
   const totalQuestions = records.reduce((sum, r) => sum + r.result.totalQuestions, 0);
   const totalCorrect = records.reduce((sum, r) => sum + r.result.correctAnswers, 0);
   const overallAccuracy = totalQuestions > 0 ? totalCorrect / totalQuestions : 0;
-  const totalTime = records.reduce((sum, r) => sum + r.result.averageTime * r.result.totalQuestions, 0);
-  const averageTime = totalQuestions > 0 ? totalTime / totalQuestions : 0;
+
+  // P2-C: theory 模块 averageTime 恒为 0（章末小测不记录耗时），
+  // 排除 theory 记录计算平均耗时，避免拉低整体值
+  const timedRecords = records.filter((r) => r.module !== 'theory-academy');
+  const totalTime = timedRecords.reduce((sum, r) => sum + r.result.averageTime * r.result.totalQuestions, 0);
+  const timedQuestions = timedRecords.reduce((sum, r) => sum + r.result.totalQuestions, 0);
+  const averageTime = timedQuestions > 0 ? totalTime / timedQuestions : 0;
 
   // 提取日期列表用于 streak 计算
   const dates = records.map((r) => toDateStr(r.createdAt));
@@ -63,9 +68,12 @@ export function aggregateByDay(records: TrainingRecord[], days: number): DailySt
     const dateStr = toDateStr(record.createdAt);
     const day = dateMap.get(dateStr);
     if (!day) continue;
+    // P2-C: theory 模块 averageTime=0，不参与日耗时统计
+    if (record.module !== 'theory-academy') {
+      day.totalTime += record.result.averageTime * record.result.totalQuestions;
+    }
     day.sessions++;
     day.questions += record.result.totalQuestions;
-    day.totalTime += record.result.averageTime * record.result.totalQuestions;
   }
 
   // 计算每日正确率
@@ -92,7 +100,10 @@ export function aggregateByModule(records: TrainingRecord[]): ModuleStats[] {
     existing.sessions++;
     existing.correct += record.result.correctAnswers;
     existing.total += record.result.totalQuestions;
-    existing.totalTime += record.result.averageTime * record.result.totalQuestions;
+    // P2-C: theory 模块 averageTime=0，不参与耗时统计
+    if (record.module !== 'theory-academy') {
+      existing.totalTime += record.result.averageTime * record.result.totalQuestions;
+    }
     existing.lastPlayed = Math.max(existing.lastPlayed, record.createdAt);
     moduleMap.set(key, existing);
   }

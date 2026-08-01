@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import i18n from '@/i18n/config';
+import { ActionType } from '@/shared/types/action';
+import type { PlayerAction } from '@/shared/types/action';
 import type { HandHistory, ReplayState, HandFilter } from './types';
 
 // ─── trainingEvents.emit 说明 ─────────────────────────────
@@ -155,62 +157,39 @@ function computeReplayState(hand: HandHistory, street: ReplayState['currentStree
 
   // Preflop: track blinds
   const preflopActions = hand.streets.preflop;
-  const processedPreflop = street === 'preflop' ? Math.min(actionIdx, preflopActions.length) : preflopActions.length;
 
-  for (let i = 0; i < processedPreflop; i++) {
-    const a = preflopActions[i]!;
-    const amt = a.amount ?? 0;
-    if (a.type === 'call' || a.type === 'raise') {
-      stacks[a.playerIndex] = (stacks[a.playerIndex] ?? 0) - amt;
-      pot += amt;
-    } else if (a.type === 'fold') {
-      // folded
+  const processActions = (actions: PlayerAction[], limit: number): void => {
+    for (let i = 0; i < limit; i++) {
+      const a = actions[i]!;
+      const amt = a.amount ?? 0;
+      if (a.type === ActionType.Call || a.type === ActionType.Raise || a.type === ActionType.AllIn) {
+        stacks[a.playerIndex] = (stacks[a.playerIndex] ?? 0) - amt;
+        pot += amt;
+      }
     }
-  }
+  };
+
+  processActions(preflopActions, street === 'preflop' ? Math.min(actionIdx, preflopActions.length) : preflopActions.length);
 
   // Flop
   if (street !== 'preflop') {
     visibleCards.push(...hand.streets.flop.cards);
     const flopActions = hand.streets.flop.actions;
-    const processedFlop = street === 'flop' ? Math.min(actionIdx, flopActions.length) : flopActions.length;
-    for (let i = 0; i < processedFlop; i++) {
-      const a = flopActions[i]!;
-      const amt = a.amount ?? 0;
-      if (a.type === 'call' || a.type === 'raise') {
-        stacks[a.playerIndex] = (stacks[a.playerIndex] ?? 0) - amt;
-        pot += amt;
-      }
-    }
+    processActions(flopActions, street === 'flop' ? Math.min(actionIdx, flopActions.length) : flopActions.length);
   }
 
   // Turn
   if (street === 'turn' || street === 'river' || street === 'showdown') {
     visibleCards.push(...hand.streets.turn.cards);
     const turnActions = hand.streets.turn.actions;
-    const processedTurn = street === 'turn' ? Math.min(actionIdx, turnActions.length) : turnActions.length;
-    for (let i = 0; i < processedTurn; i++) {
-      const a = turnActions[i]!;
-      const amt = a.amount ?? 0;
-      if (a.type === 'call' || a.type === 'raise') {
-        stacks[a.playerIndex] = (stacks[a.playerIndex] ?? 0) - amt;
-        pot += amt;
-      }
-    }
+    processActions(turnActions, street === 'turn' ? Math.min(actionIdx, turnActions.length) : turnActions.length);
   }
 
   // River
   if (street === 'river' || street === 'showdown') {
     visibleCards.push(...hand.streets.river.cards);
     const riverActions = hand.streets.river.actions;
-    const processedRiver = street === 'river' ? Math.min(actionIdx, riverActions.length) : riverActions.length;
-    for (let i = 0; i < processedRiver; i++) {
-      const a = riverActions[i]!;
-      const amt = a.amount ?? 0;
-      if (a.type === 'call' || a.type === 'raise') {
-        stacks[a.playerIndex] = (stacks[a.playerIndex] ?? 0) - amt;
-        pot += amt;
-      }
-    }
+    processActions(riverActions, street === 'river' ? Math.min(actionIdx, riverActions.length) : riverActions.length);
   }
 
   if (street === 'showdown') {
@@ -257,8 +236,11 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
 
   addHands: async (hands) => {
     try {
-      await dbPut(hands);
-      set((state) => ({ hands: [...state.hands, ...hands], dbError: null }));
+      const existingIds = new Set(get().hands.map(h => h.id));
+      const newHands = hands.filter(h => !existingIds.has(h.id));
+      if (newHands.length === 0) return;
+      await dbPut(newHands);
+      set((state) => ({ hands: [...state.hands, ...newHands], dbError: null }));
     } catch (err: unknown) {
       set({ dbError: classifyDBError(err) });
     }

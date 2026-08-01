@@ -870,6 +870,7 @@ interface DailyRecommendation {
    - `aggregateByDay(records, days)` → 按日聚合（图表用）
    - `aggregateByModule(records)` → 按模块聚合
    - `getWeakHands(records, module)` → 找出答错最多的手牌
+   - 平均用时计算：排除 `module === 'theory-academy'` 的记录（章末小测不记录耗时，averageTime 恒为 0，参与计算会拉低整体值）；三处聚合函数（`aggregateStats` / `aggregateByDay` / `aggregateByModule`）均执行此过滤
 
 3. **Zustand persist 中间件**：
    ```typescript
@@ -910,7 +911,7 @@ interface DailyRecommendation {
 
 9. **进步回放**（v2.1 新增）：
    - `ProgressReplay` 组件对比用户首次尝试与最近一次的表现（`firstAttemptScores` / `lastAttemptScores`）
-   - 展示各维度进步幅度，可视化成长轨迹
+   - 按绝对变化幅度降序取前 5 门课程，同时展示进步（`--poker-success`）与退步（`--poker-danger`），可视化成长轨迹
 
 ### 5.6 Onboarding（新手引导）
 
@@ -928,7 +929,7 @@ interface DailyRecommendation {
 
 1. **流程编排**：`OnboardingFlow` 组件按顺序渲染 5 步流程（Welcome → PlacementTest → FirstDrill → Celebration → GoalSetting），步骤组件各自管理局部状态，完成后回调推进下一步。
 
-2. **OnboardingGate 守卫**：`OnboardingGate` 包裹 `AppLayout` 的 `<Outlet />`，读取 `progress.onboarding` 状态，未完成时重定向到 `/onboarding`，确保新用户必经引导流程。
+2. **OnboardingGate 守卫**：`OnboardingGate` 同时包裹 `AppLayout` 与 `BlankLayout` 的 `<Outlet />`，读取 `progress.onboarding` 状态，未完成时重定向到 `/onboarding`，确保新用户必经引导流程（覆盖 5 条全屏训练路由：范围测验/赔率测验/GTO 会话/Puzzle/牌局复盘）。
 
 3. **定位测试**：5 道题覆盖 handRanking / position / odds / range 四个维度，根据答题结果推断用户初始能力等级。
 
@@ -1184,8 +1185,8 @@ interface DailyRecommendation {
 
 面向开发与演示的全局门禁旁路，激活后一次性解除所有功能锁。
 
-- 独立 store `shared/stores/debugMode.ts`（persist name=`poker-debug-mode`，version 1，不并入 progress store 以免连带 persist 形状/版本变更）：`unlockAll` 状态 + `activateWithCode(code)` + `deactivate()`；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（本文档不维护数值副本）；导出非响应式 `isDebugUnlockActive()` 供 store 方法/纯逻辑短路
-- 解锁点短路（激活后全部放行，共 7 处）：strategy-academy store 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、`CourseView` 本土课与课程级门禁、range-trainer `RangeSelector` 位置解锁、strategy-academy `LearningTracksView` 轨道前置、progress `SessionLimitGuard`（`useSessionLimitReached`）每日题量上限、theory-academy store 的 `isTheoryLevelUnlocked`、theory-academy `TheoryChapterView` 章节 URL 直达门禁
+- 独立 store `shared/stores/debugMode.ts`（persist name=`poker-debug-mode`，version 1，不并入 progress store 以免连带 persist 形状/版本变更）：`unlockAll` 状态 + `activateWithCode(code)` + `deactivate()`；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（本文档不维护数值副本）；导出非响应式 `isDebugUnlockActive()` 供 store 方法/纯逻辑短路，组件内响应式门禁改用 `useDebugModeStore((s) => s.unlockAll)`
+- 解锁点短路（激活后全部放行，共 9 处）：strategy-academy store 的 `isLevelUnlocked`/`isLevelEntryUnlocked`（`isDebugUnlockActive()`）、strategy-academy `ConceptGraph` 本土课节点解锁（`isLocalLessonUnlocked`，`isDebugUnlockActive()`）、`CourseView` 本土课与课程级门禁、strategy-academy `LearningTracksView` 轨道前置、range-trainer `RangeSelector` 位置解锁、range-trainer `QuizConfig` 位置解锁、progress `SessionLimitGuard`（`useSessionLimitReached`）每日题量上限、theory-academy store 的 `isTheoryLevelUnlocked`（`isDebugUnlockActive()`）、theory-academy `TheoryChapterView` 章节 URL 直达门禁（未标注 `isDebugUnlockActive()` 者均走组件响应式 `useDebugModeStore((s) => s.unlockAll)`）
 - UI 入口：`SettingsPage`「开发者选项」分区（数字输入框 + 激活/关闭）
 - 范围边界：onboarding 不纳入（未完成引导无法进入设置页，纳入无意义）；成就与统计数据不受影响
 
@@ -1295,7 +1296,7 @@ UI 组件：
 - **老派牌手**（`old-school`）— 经验导向，犀利直接指出问题
 - **鼓励型教练**（`encouraging`）— 正向强化，关注进步
 
-文案模板：模板存储在 `shared/constants/mentorStyles.ts`（`MENTOR_FEEDBACK_TEMPLATES`，三种风格 × 五个评级），由 `renderMentorFeedback(mentorStyle, grade, params)` 渲染（支持 EV 损失与正确动作占位符）；QuizCard / GTOFeedback 优先调用，模板缺省时降级到通用 i18n 文案；反馈颜色与图标不随风格变化（统一由 `GRADE_DISPLAY_CONFIG` 控制）。
+文案模板：模板存储在 `shared/constants/mentorStyles.ts`（`MENTOR_FEEDBACK_TEMPLATES`，三种风格 × 五个评级），由 `renderMentorFeedback(mentorStyle, grade, params, t)` 渲染——模板值改为 i18n key 引用，实际文案在 `zh.json` / `en.json` 的 `mentor.feedback.*` 下，由 `t` 函数解析后替换占位符；QuizCard / GTOFeedback 优先调用，模板缺省时降级到通用 i18n 文案；反馈颜色与图标不随风格变化（统一由 `GRADE_DISPLAY_CONFIG` 控制）。
 
 ---
 
@@ -1437,7 +1438,7 @@ function LazyWrapper({ children }: { children: React.ReactNode }) {
 
 ### 8.1 Web Worker（GTO 计算卸载）
 
-`gtoWorker.ts` 在独立线程中运行，避免策略查找和 EV 计算阻塞 UI。当前唯一消费方为 hand-history 的 `utils/gtoDeviation.ts`（模块级单例 Worker + 消息 id 映射 + 10 秒超时降级 fallback）；原 `useGTOWorker.ts` hook 封装（健康检查 / 一次性重建）为零调用方死代码，已于 2026-07-31 专批 A 删除。
+`gtoWorker.ts` 在独立线程中运行，避免策略查找和 EV 计算阻塞 UI。Worker 内复制了 `calculateGrade` 五级评级阈值（`GRADE_BEST=0` / `GRADE_CORRECT=0.5` / `GRADE_INACCURACY=2` / `GRADE_WRONG=5`，与 `shared/types/decisionFeedback.ts` 一致），通过 `estimateEvLoss(diff, handStrength)` 确定性函数计算 EV 损失（无 `Math.random()`），替代原四级评级（optimal/minor_mistake/mistake/blunder）的伪造 EV 损失。当前唯一消费方为 hand-history 的 `utils/gtoDeviation.ts`（模块级单例 Worker + 消息 id 映射 + 10 秒超时降级 fallback）；原 `useGTOWorker.ts` hook 封装（健康检查 / 一次性重建）为零调用方死代码，已于 2026-07-31 专批 A 删除。
 
 ```typescript
 // 主线程（gtoDeviation.ts）通过消息协议发送请求
@@ -1662,6 +1663,7 @@ pnpm build    # tsc -b && vite build
 `public/sw.js` 实现离线缓存：
 - `manifest.json` 声明 PWA 元数据（名称、图标、主题色）
 - `display: standalone` 模式，安装后全屏运行
+- 缓存版本号通过 SW 注册 URL 查询参数 `v` 传入（`APP_VERSION` 常量，由 `main.tsx` 在注册时动态注入），`activate` 事件自动清理旧版本缓存
 - Service Worker 拦截请求，优先返回缓存资源
 
 ### 12.3 推荐部署平台

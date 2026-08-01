@@ -53,6 +53,7 @@ export function GameVariantSelector({ compact = false, onChange }: GameVariantSe
                   ? 'bg-[var(--brass-bright)] text-[var(--felt-deep)] shadow-sm'
                   : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]'
               )}
+              aria-label={t(`gameVariant.${variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard'}`)}
             >
               <span className="text-sm leading-none">{VARIANT_ICONS[variant]}</span>
               <span className="hidden sm:inline">
@@ -92,6 +93,7 @@ export function GameVariantSelector({ compact = false, onChange }: GameVariantSe
                 ? 'border-[var(--brass-bright)] bg-[var(--brass-bright)]/10 shadow-[0_0_12px_rgba(212,175,55,0.15)]'
                 : 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/40 hover:bg-[var(--felt)]/80'
             )}
+            aria-label={t(`gameVariant.${variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard'}`)}
           >
             <div className="flex items-center gap-2 w-full">
               <span className="text-xl">{VARIANT_ICONS[variant]}</span>

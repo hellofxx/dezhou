@@ -115,7 +115,7 @@ additionalPrompt: ""
 9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / i18n 双语同步等；课程内容数据文件可适当放宽行数限制）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / i18n 双语同步等；课程内容数据文件可适当放宽行数限制）。
 
 本模块特有约束：
 - 课程内容必须为静态数据（courses.ts / localLessons/*.ts），不引入运行时网络请求

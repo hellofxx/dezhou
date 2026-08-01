@@ -36,6 +36,7 @@ export default function MobileNav() {
             <NavLink
               to={item.path}
               end={item.path === '/'}
+              aria-label={item.label}
               className={({ isActive }) =>
                 cn(
                   'flex flex-col items-center justify-center gap-0.5 px-2 py-1 min-h-[44px] min-w-[44px] text-[10px] transition-colors',

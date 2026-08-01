@@ -72,7 +72,7 @@ additionalPrompt: ""
 5. 添加牌局统计指标时：扩展 handStats.ts 工具函数 + HandStatsPanel 展示
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / 大数据用 IndexedDB 等）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 大数据用 IndexedDB 等）。
 
 模块特有约束：
 - 解析器必须处理格式异常（不崩溃，返回错误信息）

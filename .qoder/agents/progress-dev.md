@@ -129,7 +129,7 @@ shared/ 依赖（维护职责见 Authority）：
 8. 修改 SRS 比例时：编辑 dailyTrainingMix.ts 的 composeDailyMix 阈值
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，"记录完成"action 幂等要求见 AGENTS.md《状态管理 → 幂等性》，本文件不复制其内容。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，"记录完成"action 幂等要求见 AGENTS.md《状态管理 → 幂等性》，本文件不复制其内容。
 
 模块特有约束：
 - 成就判定逻辑要考虑边界条件（首次训练、零数据）

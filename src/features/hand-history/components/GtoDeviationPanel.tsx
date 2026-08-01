@@ -15,13 +15,14 @@ interface GtoDeviationPanelProps {
 }
 
 const GRADE_CONFIG: Record<string, { label: string; color: string; icon: typeof CheckCircle2 }> = {
-  optimal:       { label: '最优',   color: 'text-[var(--sage)]',         icon: CheckCircle2 },
-  minor_mistake: { label: '小失误', color: 'text-[var(--brass-bright)]', icon: AlertTriangle },
-  mistake:       { label: '失误',   color: 'text-[var(--clay)]',         icon: AlertTriangle },
+  best:          { label: '最优',   color: 'text-[var(--sage)]',         icon: CheckCircle2 },
+  correct:       { label: '正确',   color: 'text-[var(--sage)]',         icon: CheckCircle2 },
+  inaccuracy:    { label: '小偏差', color: 'text-[var(--brass-bright)]', icon: AlertTriangle },
+  wrong:         { label: '错误',   color: 'text-[var(--clay)]',         icon: AlertTriangle },
   blunder:       { label: '严重失误', color: 'text-[var(--poker-danger)]', icon: XCircle },
 };
 
-const DEFAULT_GRADE = GRADE_CONFIG.optimal!;
+const DEFAULT_GRADE = GRADE_CONFIG.best!;
 
 function StatBox({ label, value, accent = false }: { label: string; value: string | number; accent?: boolean }) {
   return (

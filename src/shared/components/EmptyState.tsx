@@ -35,6 +35,7 @@ export function EmptyState({ icon, title, description, action }: EmptyStateProps
         <button
           onClick={action.onClick}
           className="px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold hover:bg-[var(--brass-bright)] transition-colors"
+          aria-label={action.label}
         >
           {action.label}
         </button>

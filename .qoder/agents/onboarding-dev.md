@@ -83,7 +83,7 @@ additionalPrompt: ""
 5. 修改目标选项时：编辑 GoalSettingStep.tsx 的分钟数选项 + 写入 dailyGoalMinutes
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / i18n 双语同步等）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / i18n 双语同步等）。
 
 模块特有约束：
 - OnboardingGate 必须包裹 AppLayout 的 `<Outlet />`，未完成时自动重定向到 `/onboarding`

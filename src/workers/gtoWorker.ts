@@ -25,6 +25,7 @@ interface BatchAnalyzeHand {
   board?: string[];
   action: string;      // user's actual action
   street: string;
+  handStrength?: number;
 }
 
 interface BatchAnalyzeResult {
@@ -138,47 +139,66 @@ function calculateHandStrength(
 }
 
 /**
- * Grade a decision by comparing user action to GTO recommendation.
+ * 五级评级阈值（与 shared/types/decisionFeedback.ts 的 GRADE_THRESHOLDS 一致，在 worker 上下文中复制是因为 Web Worker 有独立执行上下文，无法直接 ES module 导入）
  */
-function gradeDecision(userAction: string, gtoAction: string, _gtoEv: number): { gtoAction: string; evLoss: number; grade: string } {
+const GRADE_BEST = 0;
+const GRADE_CORRECT = 0.5;
+const GRADE_INACCURACY = 2;
+const GRADE_WRONG = 5;
+
+function calculateGrade(evLoss: number): string {
+  if (evLoss <= GRADE_BEST) return 'best';
+  if (evLoss < GRADE_CORRECT) return 'correct';
+  if (evLoss <= GRADE_INACCURACY) return 'inaccuracy';
+  if (evLoss <= GRADE_WRONG) return 'wrong';
+  return 'blunder';
+}
+
+/**
+ * Estimate EV loss based on action rank difference and hand strength.
+ * Uses deterministic calculation (no Math.random) scaled by diff magnitude.
+ */
+function estimateEvLoss(diff: number, handStrength: number): number {
+  // Base EV loss per diff level: ~0.3BB per rank step, scaled by (1 - handStrength)
+  // Weaker hands have smaller opportunity cost when misplayed
+  const basePerDiff = 1.0;
+  const baseEv = diff * basePerDiff;
+  // Scale by inverse of hand strength: strong hands (0.9+) lose more when misplayed
+  const strengthFactor = 0.5 + handStrength * 0.5;
+  return Math.round(baseEv * strengthFactor * 100) / 100;
+}
+
+/**
+ * Grade a decision by comparing user action to GTO recommendation.
+ * Uses deterministic EV loss calculation (no randomness) and project-standard 5-level grades.
+ */
+function gradeDecision(userAction: string, gtoAction: string, _gtoEv: number, handStrength: number): { gtoAction: string; evLoss: number; grade: string } {
   const normalizedUser = userAction.toLowerCase();
   const normalizedGto = gtoAction.toLowerCase();
 
   let evLoss = 0;
-  let grade: string;
 
   if (normalizedUser === normalizedGto) {
     evLoss = 0;
-    grade = 'optimal';
   } else {
     // Estimate EV loss based on action mismatch severity
     const actionRank: Record<string, number> = { fold: 0, check: 1, call: 2, raise: 3, 'all-in': 4 };
     const userRank = actionRank[normalizedUser] ?? 1;
     const gtoRank = actionRank[normalizedGto] ?? 1;
     const diff = Math.abs(userRank - gtoRank);
-
-    if (diff === 1) {
-      // Minor deviation (e.g., call instead of raise)
-      evLoss = Math.round((0.5 + Math.random() * 1.0) * 100) / 100;
-      grade = 'minor_mistake';
-    } else if (diff === 2) {
-      // Moderate deviation
-      evLoss = Math.round((1.5 + Math.random() * 2.0) * 100) / 100;
-      grade = 'mistake';
-    } else {
-      // Major deviation (e.g., fold instead of raise)
-      evLoss = Math.round((3.0 + Math.random() * 3.0) * 100) / 100;
-      grade = 'blunder';
-    }
+    evLoss = estimateEvLoss(diff, handStrength);
   }
 
+  const grade = calculateGrade(evLoss);
   return { gtoAction, evLoss, grade };
 }
 
 function batchAnalyze(hands: BatchAnalyzeHand[]): BatchAnalyzeResult[] {
   return hands.map((h) => {
     const strategy = lookupStrategy({ hand: h.hand, position: h.position });
-    const { gtoAction, evLoss, grade } = gradeDecision(h.action, strategy.action, strategy.ev);
+    // Use pre-computed handStrength or fall back to strategy ev as proxy
+    const handStrength = h.handStrength ?? Math.max(0, Math.min(1, (strategy.ev + 0.5) / 2));
+    const { gtoAction, evLoss, grade } = gradeDecision(h.action, strategy.action, strategy.ev, handStrength);
     return { id: h.id, gtoAction, evLoss, grade };
   });
 }

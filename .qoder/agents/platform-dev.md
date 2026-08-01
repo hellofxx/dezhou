@@ -84,7 +84,7 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 
 ### 调试解锁系统（开发者选项，见 TDD 5.9）
 - 实现位置：`src/shared/stores/debugMode.ts`（独立 persist store，name=`poker-debug-mode`；不并入 progress store 以免连带 persist 形状/版本变更）；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（本文件不维护数值副本）
-- 解锁点短路共 5 处：strategy-academy store（`isLevelUnlocked`/`isLevelEntryUnlocked`）/ CourseView / range-trainer RangeSelector / strategy-academy LearningTracksView / progress SessionLimitGuard；新增门禁时应同步接入 `isDebugUnlockActive()` 短路并通知对应 feature 代理
+- 解锁点短路共 9 处：strategy-academy store（`isLevelUnlocked`/`isLevelEntryUnlocked`）/ strategy-academy ConceptGraph（`isLocalLessonUnlocked` 本土课节点）/ strategy-academy CourseView（本土课与课程级 URL 直达）/ strategy-academy LearningTracksView（轨道前置）/ range-trainer RangeSelector（位置解锁）/ range-trainer QuizConfig（位置解锁）/ progress SessionLimitGuard（每日题量上限）/ theory-academy store（`isTheoryLevelUnlocked`）/ theory-academy TheoryChapterView（章节 URL 直达）；短路有两种接法——store/纯逻辑用 `isDebugUnlockActive()`、组件内用 `useDebugModeStore((s) => s.unlockAll)`，新增门禁时应同步接入并通知对应 feature 代理
 - UI 入口：SettingsPage「开发者选项」（归 progress-dev）
 
 ### 策略学院等级解锁（区分 4A/4B）
@@ -126,7 +126,7 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 6. 新增跨模块系统时：在 progress store 添加状态字段 + 升级 persist version + 编写 migrate 函数
 
 ## Constraints
-继承 AGENTS.md 全局约束（包括模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，本文件不复制其内容。
+继承 AGENTS.md 全局约束（包括模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，本文件不复制其内容。
 
 仅保留 platform-dev 特有约束：
 - shared/ 层仅存放被多模块使用的代码（≥2 模块引用准入门槛）

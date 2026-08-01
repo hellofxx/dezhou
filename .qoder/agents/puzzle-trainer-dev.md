@@ -100,7 +100,7 @@ additionalPrompt: ""
 7. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate 函数（仅注入新字段默认值）
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤200 行 / 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
 
 模块特有约束：
 - 独立 store，不写入 progress store 的 elo 字段（ELO 由各训练模块自行记录）

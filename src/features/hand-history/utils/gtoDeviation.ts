@@ -167,7 +167,7 @@ function sendToWorker<T>(type: string, payload: unknown): Promise<T> {
 
 function fallbackAnalyze(payload: unknown): WorkerAnalyzeResult[] {
   const hands = payload as Array<{ id: string }>;
-  return hands.map(h => ({ id: h.id, gtoAction: 'call', evLoss: 0, grade: 'optimal' }));
+  return hands.map(h => ({ id: h.id, gtoAction: 'call', evLoss: 0, grade: 'best' }));
 }
 
 // ─── Idle scheduler ───────────────────────────────────────
@@ -244,7 +244,7 @@ export async function analyzeHandDeviations(
         action: entry.action,
         gtoAction: wr?.gtoAction ?? 'call',
         evLoss: wr?.evLoss ?? 0,
-        grade: wr?.grade ?? 'optimal',
+        grade: wr?.grade ?? 'best',
       });
     }
 
