@@ -74,7 +74,7 @@ export default function RangeTrainerHome() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-7xl mr-auto py-6 space-y-6">
+      <div className="py-6 space-y-6">
         {/* 顶部标题栏 */}
         <div className="flex items-center justify-between">
           <div>

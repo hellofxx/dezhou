@@ -138,7 +138,7 @@ export default function SettingsPage() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-2xl mr-auto py-6 space-y-6">
+      <div className="py-6 space-y-6">
         {/* 标题 */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

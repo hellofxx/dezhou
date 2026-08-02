@@ -65,7 +65,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-5xl mr-auto py-6 space-y-6">
+      <div className="py-6 space-y-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

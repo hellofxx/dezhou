@@ -100,7 +100,7 @@ export default function Leaderboard() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-3xl mr-auto py-6 space-y-4">
+      <div className="py-6 space-y-4">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

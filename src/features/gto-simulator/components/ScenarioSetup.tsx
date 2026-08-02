@@ -56,6 +56,10 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
 
   return (
     <div className="space-y-6">
+      {/* 双列表单布局：左列=模式与变体，右列=桌位与难度，充分利用宽屏空间 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 左列 */}
+        <div className="space-y-6">
       {/* 训练模式 */}
       <div className="space-y-2">
         <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">训练模式</label>
@@ -198,6 +202,10 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
         </div>
       </div>
 
+        </div>
+
+        {/* 右列 */}
+        <div className="space-y-6">
       {/* 位置选择 — sage to differentiate from brass CTAs */}
       <div className="space-y-2">
         <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">位置</label>
@@ -284,6 +292,9 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
               {count}
             </button>
           ))}
+        </div>
+      </div>
+
         </div>
       </div>
 

@@ -41,7 +41,7 @@ export default function ProgressPage() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-5xl mr-auto py-6 space-y-6">
+      <div className="py-6 space-y-6">
         {/* 顶栏 H1 已显示页名，内容区不重复大标题，仅保留副标语 */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}

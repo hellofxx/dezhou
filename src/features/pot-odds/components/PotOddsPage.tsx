@@ -10,7 +10,7 @@ export default function PotOddsPage() {
   const [activeTab, setActiveTab] = useState<'odds' | 'ev'>('odds');
 
   return (
-    <div className="max-w-7xl mr-auto py-6 space-y-6">
+    <div className="py-6 space-y-6">
       {/* Page header */}
       <div>
         <p className="section-eyebrow">Pot Odds & EV</p>
