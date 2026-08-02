@@ -41,7 +41,7 @@ export default function ProgressPage() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-5xl mr-auto py-6 space-y-6">
         {/* 顶栏 H1 已显示页名，内容区不重复大标题，仅保留副标语 */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -51,19 +51,13 @@ export default function ProgressPage() {
           <p className="text-sm text-[var(--ivory-dim)]">追踪你的训练进度与成长</p>
         </motion.div>
 
-        {/* 难度指示 + 统计卡片 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <div className="md:col-span-1">
-            <DifficultyIndicator
-              currentDifficulty={difficulty}
-              accuracy={summary.overallAccuracy}
-              sessionsCount={summary.totalSessions}
-            />
-          </div>
-          <div className="md:col-span-3">
-            <StatsOverview stats={summary} moduleStats={moduleStats} />
-          </div>
-        </div>
+        {/* 难度指示（全宽横条）+ 统计卡片（完整宽度，4 卡均分） */}
+        <DifficultyIndicator
+          currentDifficulty={difficulty}
+          accuracy={summary.overallAccuracy}
+          sessionsCount={summary.totalSessions}
+        />
+        <StatsOverview stats={summary} moduleStats={moduleStats} />
 
         {/* 图表 + 打卡日历 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -118,7 +118,7 @@ export default function Dashboard() {
       {/* Section 1: Felt Arena Hero */}
       <FeltArena />
 
-      <div className="px-5">
+      <div className="px-0">
         {/* Section 2: Streak Rail */}
         <StreakRail />
 

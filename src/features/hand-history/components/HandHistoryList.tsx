@@ -41,7 +41,7 @@ export default function HandHistoryList() {
   }, [hands, heroName]);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
+    <div className="max-w-4xl mr-auto py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>

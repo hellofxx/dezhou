@@ -22,7 +22,7 @@ export default function AcademyHome() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-3xl mr-auto py-6 space-y-6">
         {/* Path Banner */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}

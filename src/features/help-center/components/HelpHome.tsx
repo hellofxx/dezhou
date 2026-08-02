@@ -10,7 +10,7 @@ export default function HelpHome() {
   const { t } = useTranslation();
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mr-auto space-y-8">
       {/* 标题 */}
       <div className="panel-title">
         <HelpCircle size={18} />

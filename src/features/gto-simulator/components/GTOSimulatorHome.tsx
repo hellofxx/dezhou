@@ -19,7 +19,7 @@ export default function GTOSimulatorHome() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4 space-y-6">
+    <div className="max-w-2xl mr-auto py-6 space-y-6">
       {/* 标题 */}
       <div className="space-y-1">
         <p className="section-eyebrow">GTO Simulator</p>
