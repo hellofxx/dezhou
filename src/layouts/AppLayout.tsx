@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
@@ -29,6 +29,7 @@ import {
   Puzzle,
   Flame,
   Spade,
+  HelpCircle,
 } from 'lucide-react';
 
 interface NavItem {
@@ -51,6 +52,7 @@ export default function AppLayout() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const currentStreak = useProgressStore((s) => s.streak.currentStreak);
+  const navigate = useNavigate();
 
   const navGroups = useMemo<NavGroup[]>(() => [
     {
@@ -92,6 +94,7 @@ export default function AppLayout() {
       i18nKey: 'nav.settingsGroup',
       items: [
         { label: t('nav.settings'), path: '/settings', icon: <Settings size={20} />, i18nKey: 'nav.settings' },
+        { label: t('nav.help'), path: '/help', icon: <HelpCircle size={20} />, i18nKey: 'nav.help' },
       ],
     },
   ], [t]);
@@ -109,6 +112,7 @@ export default function AppLayout() {
     '/settings': t('nav.settings'),
     '/leaderboard': t('nav.leaderboard'),
     '/puzzle': t('nav.puzzle'),
+    '/help': t('nav.help'),
   };
 
   // 子路由前缀兑底（带参数路由如 /academy/lesson/:id 回退到模块名，避免页名断档到 APP_NAME）
@@ -121,6 +125,7 @@ export default function AppLayout() {
     ['/pot-odds', t('nav.potOdds')],
     ['/gto-simulator', t('nav.gtoSimulator')],
     ['/hand-history', t('nav.handHistory')],
+    ['/help', t('nav.help')],
   ];
 
   const currentPageTitle =
@@ -291,6 +296,22 @@ export default function AppLayout() {
           >
             <Globe size={14} />
             <span className="font-numeric">{i18n.language === 'zh' ? 'EN' : '中'}</span>
+          </button>
+          {/* Mobile help button */}
+          <button
+            onClick={() => navigate('/help')}
+            aria-label={t('nav.help')}
+            className="md:hidden flex items-center justify-center min-h-[44px] min-w-[44px] rounded-[var(--radius-sm)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
+          >
+            <HelpCircle size={16} />
+          </button>
+          {/* Desktop help button */}
+          <button
+            onClick={() => navigate('/help')}
+            aria-label={t('nav.help')}
+            className="hidden md:flex items-center justify-center min-h-[44px] min-w-[44px] rounded-[var(--radius-sm)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
+          >
+            <HelpCircle size={16} />
           </button>
         </header>
 

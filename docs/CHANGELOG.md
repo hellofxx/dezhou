@@ -6,6 +6,37 @@
 
 ---
 
+## feat(help-center) — 2026-08-02（帮助中心教程模块）
+
+> 新建 `src/features/help-center/` 模块，提供完整用户教程：平台总览、5 步快速上手路径、9 篇模块教程文章、6 个系统概念卡片、8 条 FAQ。
+> 全局入口三处（侧边栏、顶栏帮助按钮、设置页）。同步新建 `help-center-dev` 子代理。
+
+### 代码变更
+
+| 文件 | 变更 |
+|---|---|
+| `src/features/help-center/types.ts` | 新增 HelpArticle / HelpSection / FaqItem / HelpAccent / HelpSectionType 类型 |
+| `src/features/help-center/data/helpContent.ts` | 9 篇 HELP_ARTICLES + 5 步 QUICK_START_STEPS + 6 个 CONCEPT_CARDS + 8 条 FAQ_ITEMS（纯 i18n key） |
+| `src/features/help-center/components/` | HelpHome / HelpArticle / QuickStartPath / FaqAccordion / ModuleEntryCard（5 个组件） |
+| `src/features/help-center/index.ts` | 模块导出（顶部注明豁免 trainingEvents emit） |
+| `src/features/help-center/data/helpContent.integrity.test.ts` | 数据完整性守卫（11 个断言） |
+| `src/features/help-center/components/HelpHome.test.tsx` | 组件冒烟测试（标题 / 卡片数 / FAQ 交互） |
+| `src/app/routes.tsx` | 注册 `/help` 与 `/help/article/:articleId` 两条 lazy + ErrorBoundary 路由 |
+| `src/layouts/AppLayout.tsx` | 侧边栏 settingsGroup 追加 nav.help；顶栏帮助按钮（移动端 + 桌面端）；pageTitle / prefixTitles 补 /help |
+| `src/features/progress/components/settings/SettingsPage.tsx` | 「关于」卡片追加帮助中心入口按钮 |
+| `src/i18n/locales/zh.json` | 新增 help 命名空间 + nav.help + settings.helpCenter |
+| `src/i18n/locales/en.json` | 对称新增英文文案 |
+| `.claude/agents/help-center-dev.md` | 新建子代理文件 |
+| `AGENTS.md` | 子代理清单追加 help-center-dev 行 |
+| `docs/TDD.md` | 架构图新增 help-center 模块，路由表补 /help 两条 |
+| `docs/PRD.md` | 新增教程帮助中心功能小节 |
+
+### 验证
+
+`pnpm verify` exit 0（typecheck / lint / test 全通过）；`pnpm build` 成功产出 dist
+
+---
+
 ## refactor(platform) — 2026-08-02（文件架构优化）
 
 > 按 AI 编程最佳实践重构文件架构：progress 组件子目录分组、shared/components 分层细化、

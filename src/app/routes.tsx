@@ -37,6 +37,8 @@ const DailyPuzzle = lazy(() => import('@/features/puzzle-trainer/components/Dail
 const ThemeDrill = lazy(() => import('@/features/puzzle-trainer/components/ThemeDrill'));
 const TheoryHome = lazy(() => import('@/features/theory-academy/components/TheoryHome'));
 const TheoryChapterView = lazy(() => import('@/features/theory-academy/components/TheoryChapterView'));
+const HelpHome = lazy(() => import('@/features/help-center/components/HelpHome'));
+const HelpArticle = lazy(() => import('@/features/help-center/components/HelpArticle'));
 
 function LazyWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -76,6 +78,8 @@ export const router = createBrowserRouter([
       { path: 'puzzle/rush', element: <LazyWrapper><PuzzleRush /></LazyWrapper> },
       { path: 'puzzle/daily', element: <LazyWrapper><DailyPuzzle /></LazyWrapper> },
       { path: 'puzzle/theme/:themeId', element: <LazyWrapper><ThemeDrill /></LazyWrapper> },
+      { path: 'help', element: <LazyWrapper><ErrorBoundary><HelpHome /></ErrorBoundary></LazyWrapper> },
+      { path: 'help/article/:articleId', element: <LazyWrapper><ErrorBoundary><HelpArticle /></ErrorBoundary></LazyWrapper> },
     ],
   },
   {

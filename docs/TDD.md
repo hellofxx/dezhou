@@ -59,6 +59,10 @@
 │  │  │ Theory        │ │ Onboarding     │              │     │
 │  │  │ Academy       │ │                │              │     │
 │  │  └───────────────┘ └────────────────┘              │     │
+│  │  ┌───────────────┐                                 │     │
+│  │  │ Help Center   │                                 │     │
+│  │  │ (静态教程)    │                                 │     │
+│  │  └───────────────┘                                 │     │
 │  └─────────────────────────────────────────────────────┘     │
 │        │                                                       │
 │        ▼                                                       │
@@ -206,6 +210,12 @@ src/
 │   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序出口）
 │   │   ├── index.ts
 │   │   ├── store.ts               # persist v1（theory-academy-progress）
+│   │   └── types.ts
+│
+│   ├── help-center/               # 帮助中心模块（静态教程页，无 store）
+│   │   ├── components/            # HelpHome / HelpArticle / QuickStartPath / FaqAccordion / ModuleEntryCard
+│   │   ├── data/                  # helpContent.ts（纯 i18n key 数据）+ helpContent.integrity.test.ts
+│   │   ├── index.ts
 │   │   └── types.ts
 │
 ├── shared/                       # 共享层
@@ -1404,6 +1414,8 @@ persist(
 | `/theory/chapter/:chapterId` | TheoryChapterView | AppLayout |
 | `/leaderboard` | LeaderboardPage | AppLayout |
 | `/settings` | SettingsPage | AppLayout |
+| `/help` | HelpHome | AppLayout |
+| `/help/article/:articleId` | HelpArticle | AppLayout |
 
 ### 7.3 React.lazy + Suspense 懒加载策略
 

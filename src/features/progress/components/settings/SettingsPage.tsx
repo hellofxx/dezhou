@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
@@ -17,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog';
-import { Settings, Volume2, VolumeX, Clock, Hash, Download, Upload, Trash2, Info, Gamepad2, GraduationCap, ShieldAlert, Bug, Unlock, Lock, Snowflake } from 'lucide-react';
+import { Settings, Volume2, VolumeX, Clock, Hash, Download, Upload, Trash2, Info, Gamepad2, GraduationCap, ShieldAlert, Bug, Unlock, Lock, Snowflake, HelpCircle } from 'lucide-react';
 import { useProgressStore } from '../../store';
 import { getTodayString } from '../../utils/streakCalc';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
@@ -40,6 +41,7 @@ const item = {
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const settings = useProgressStore((s) => s.settings);
   const updateSettings = useProgressStore((s) => s.updateSettings);
   const records = useProgressStore((s) => s.records);
@@ -536,11 +538,22 @@ export default function SettingsPage() {
           {/* 关于 */}
           <motion.div variants={item}>
             <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
-              <CardContent className="p-4 flex items-center gap-3">
-                <Info className="w-4 h-4 text-[var(--ivory-dim)]" />
-                <div className="text-sm text-[var(--ivory-muted)]">
-                  德州扑克训练平台 v{APP_VERSION}
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <Info className="w-4 h-4 text-[var(--ivory-dim)]" />
+                  <div className="text-sm text-[var(--ivory-muted)]">
+                    德州扑克训练平台 v{APP_VERSION}
+                  </div>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/help')}
+                  className="gap-1"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  {t('settings.helpCenter')}
+                </Button>
               </CardContent>
             </Card>
           </motion.div>

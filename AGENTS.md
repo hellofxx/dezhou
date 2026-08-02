@@ -235,6 +235,7 @@ src/
 | `puzzle-trainer-dev` | Feature | Puzzle 三模式 |
 | `strategy-academy-dev` | Feature | 课程 / Drill / QuickDrill |
 | `theory-academy-dev` | Feature | 理论学院课程 / 章末小测 / 理论→实践桥接 |
+| `help-center-dev` | Feature | 帮助中心教程内容 / 帮助页面 UI |
 
 ### 边界约束
 
