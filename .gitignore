@@ -13,12 +13,19 @@ dist-ssr
 *.local
 *.tsbuildinfo
 
-# AI 工具会话产物（代理定义 .qoder/agents/ 与 AGENTS.md 保留入库）
+# AI 工具：会话产物（可重建，不入库）
 .solomd/
 .uploads/
 .qoder/better-harness/
+.workbuddy/
 .trae/
-page-screenshot.png
+
+# Junction 链接（可重建，不入库）
+.qoder/agents/
+.qoder/skills/
+.qoder/agents.builtin/
+
+# 子代理物理源 .claude/agents/ 与 AGENTS.md 保留入库
 
 # Editor directories and files
 .vscode/*

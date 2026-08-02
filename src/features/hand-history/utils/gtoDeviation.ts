@@ -130,7 +130,7 @@ const pending = new Map<number, (result: unknown) => void>();
 function getWorker(): Worker | null {
   if (workerRef) return workerRef;
   try {
-    workerRef = new Worker(new URL('../../../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
+    workerRef = new Worker(new URL('../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
     workerRef.onmessage = (e: MessageEvent) => {
       const { id, result } = e.data as { id: number; result: unknown };
       const resolve = pending.get(id);

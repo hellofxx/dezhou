@@ -151,7 +151,17 @@ src/
 │   │   └── types.ts
 │   │
 │   └── progress/                 # 进度追踪模块
-│       ├── components/           # UI 组件（29 个，含 AchievementWall / ProgressReplay / OnboardingGate / SessionLimitGuard 等）
+│       ├── components/           # UI 组件（31 个，按功能分组）
+│       │   ├── dashboard/        # Dashboard / StatsOverview / ModuleStatsPage / AccuracyChart
+│       │   ├── stats/            # GTOStatsPage / RangeStatsPage / WeaknessAnalysis / DifficultyIndicator
+│       │   ├── streak/           # StreakTracker / StreakCelebration / StreakRail
+│       │   ├── achievement/      # AchievementWall / AchievementBadges / DailyChallenge / Leaderboard
+│       │   ├── gate/             # OnboardingGate / SessionLimitGuard / TiltWarning / DownswingAlert
+│       │   ├── settings/         # SettingsPage / MoodTracker
+│       │   ├── srs/              # SpacedRepetitionPanel / ReviewSession
+│       │   ├── celebration/      # MilestoneCelebrationHost / RankUpCelebration
+│       │   ├── training/         # DailyTrainingPlan / FeltArena
+│       │   └── replay/           # ProgressReplay / ProgressPage
 │       ├── data/
 │       │   └── achievements.ts   # 成就定义数据（26 个成就）
 │       ├── hooks/                # 统计 hooks
@@ -199,31 +209,16 @@ src/
 │   │   └── types.ts
 │
 ├── shared/                       # 共享层
-│   ├── components/               # 通用组件（18 个 + ui 子目录）
+│   ├── components/               # 通用组件（分层组织）
 │   │   ├── ui/                   # shadcn/ui 基础组件（9个：button/card/dialog/input/progress/select/tabs/toast/tooltip）
-│   │   ├── Card.tsx              # 扑克牌组件
-│   │   ├── CardBack.tsx          # 牌背
-│   │   ├── CardSVG.tsx           # SVG 牌面
-│   │   ├── CasinoPlaque.tsx      # 牌室铭牌装饰
-│   │   ├── Chip.tsx              # 筹码
-│   │   ├── EmptyState.tsx        # 空状态组件
-│   │   ├── ErrorBoundary.tsx     # 错误边界
-│   │   ├── FeedbackGrade.tsx     # 五级反馈展示
-│   │   ├── FreezeChip.tsx        # 冻结卡筹码
-│   │   ├── GameVariantSelector.tsx  # 游戏变体选择器
-│   │   ├── HandDisplay.tsx       # 手牌展示
-│   │   ├── LiveDot.tsx           # 实时状态指示点
-│   │   ├── LoadingState.tsx      # 加载骨架屏
-│   │   ├── MottoEngraved.tsx     # 雕刻铭文装饰
-│   │   ├── PositionBadge.tsx     # 位置徽章
-│   │   ├── ResultSummary.tsx     # 训练结果摘要
-│   │   ├── SuitIcon.tsx          # 花色图标
-│   │   └── TableRail.tsx         # 牌桌栏杯装饰
+│   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / SuitIcon / HandDisplay / PositionBadge）
+│   │   ├── feedback/             # 反馈与状态组件（FeedbackGrade / ResultSummary / EmptyState / LoadingState）
+│   │   ├── layout/               # 布局组件（TableRail / LiveDot）
+│   │   └── business/             # 业务组件（CasinoPlaque / ErrorBoundary / FreezeChip / GameVariantSelector / MottoEngraved）
 │   ├── constants/
 │   │   ├── app.ts                # 应用常量
 │   │   ├── mentorStyles.ts       # 导师文案模板（MENTOR_FEEDBACK_TEMPLATES / renderMentorFeedback）
 │   │   └── poker.ts              # 扑克常量（花色/牌面/总数）
-│   ├── hooks/                    # 共享 hooks
 │   ├── stores/
 │   │   ├── debugMode.ts          # 调试解锁 store（persist name=poker-debug-mode）
 │   │   └── trainingEvents.ts     # 训练事件总线
@@ -264,9 +259,6 @@ src/
 ├── styles/
 │   └── globals.css               # 全局样式 + CSS 变量
 │
-├── workers/                      # Web Worker
-│   └── gtoWorker.ts              # GTO 策略计算 Worker（消费方：hand-history/utils/gtoDeviation.ts）
-│
 ├── App.tsx                       # 根组件
 ├── main.tsx                      # 入口文件
 └── vite-env.d.ts                 # Vite 类型声明
@@ -281,7 +273,6 @@ src/
 | `shared/` | 跨模块共享的类型、组件、工具函数、常量、事件总线 |
 | `i18n/` | 国际化资源与配置 |
 | `layouts/` | 页面级布局组件 |
-| `workers/` | Web Worker 及其 React Hook 封装 |
 | `styles/` | 全局样式、CSS 自定义属性 |
 
 ### 3.2 模块间依赖规则

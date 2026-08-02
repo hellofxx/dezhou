@@ -15,7 +15,7 @@ import { computeReviewWriteBacks } from '../utils/quickDrillSrs';
 import { PracticeDrillComponent } from './PracticeDrill';
 import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 
 type QuickDrillMode = 'range' | 'odds' | 'mixed';
 

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Position } from '@/shared/types/position';
 import { useRangeTrainerStore } from './store';
-import { INITIAL_QUIZ_STATE } from './storeQuizSlice';
+import { INITIAL_QUIZ_STATE } from './store';
 import type { QuizQuestion } from './types';
 
 /** 构造单题 running 状态（绕过随机题目生成，保证确定性） */

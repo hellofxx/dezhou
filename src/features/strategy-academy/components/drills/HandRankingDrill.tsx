@@ -7,7 +7,7 @@ import { useState, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
-import { PokerCard } from '@/shared/components/Card';
+import { PokerCard } from '@/shared/components/poker/Card';
 import { stringToCard } from '@/shared/utils/deck';
 import { cn } from '@/shared/utils/cn';
 import { orderResolvedOptions } from '../../utils/quizShuffle';

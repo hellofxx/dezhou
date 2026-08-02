@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import type { Player } from '../types';
-import { PositionBadge } from '@/shared/components/PositionBadge';
-import { HandDisplay } from '@/shared/components/HandDisplay';
+import { PositionBadge } from '@/shared/components/poker/PositionBadge';
+import { HandDisplay } from '@/shared/components/poker/HandDisplay';
 import { formatChipCount } from '@/shared/utils/formatters';
 
 interface PlayerSeatsProps {

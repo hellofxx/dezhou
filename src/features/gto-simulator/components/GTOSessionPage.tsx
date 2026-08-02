@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Decision } from '@/shared/types/action';
 import type { Card } from '@/shared/types/poker';
-import { HandDisplay } from '@/shared/components/HandDisplay';
-import { PositionBadge } from '@/shared/components/PositionBadge';
+import { HandDisplay } from '@/shared/components/poker/HandDisplay';
+import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { useScenarioEngine } from '../hooks/useScenarioEngine';
 import { useGTOComparison, useGtoEloRecorder, useGtoSrsRecorder, useGtoEmotionRecorder, buildGtoFeedback } from '../hooks/useGTOComparison';
 import { useGTOSimulatorStore } from '../store';
@@ -15,7 +15,7 @@ import type { TrainingRecord } from '@/features/progress/types';
 import { cn } from '@/shared/utils';
 import { getOptimalAction } from '../utils/strategyCompare';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 // P4 修复（4.5-P1-2）：自适应难度降级提示
 import { useProgressStore } from '@/features/progress/store';
 

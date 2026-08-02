@@ -1,6 +1,6 @@
 import type { PreviousAction, DecisionNode } from '../types';
 import type { Board } from '@/shared/types/poker';
-import { PositionBadge } from '@/shared/components/PositionBadge';
+import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { ActionType } from '@/shared/types/action';
 import type { Position } from '@/shared/types/position';
 import { cn } from '@/shared/utils';

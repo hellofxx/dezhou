@@ -56,7 +56,7 @@ const featureIsolationBlocks = FEATURES.map((feature) => {
 });
 
 export default tseslint.config(
-  { ignores: ['dist', 'poker-ui-demo', 'poker-teaching-system-analysis'] },
+  { ignores: ['dist', 'poker-ui-demo', 'docs/analysis'] },
   {
     files: ['src/**/*.{ts,tsx}'],
     languageOptions: { parser: tseslint.parser },

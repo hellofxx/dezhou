@@ -14,7 +14,7 @@ import { orderQuizOptions } from '../utils/quizOrder';
 // P1B-04：末题/补救题固定 id（SRS 去重依赖）
 import { EASY_LAST_QUESTION_ID, RESCUE_QUESTION_ID } from '../constants';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 // P4 修复（4.5-P0）：自适应难度降级 + 五级反馈
 import { useProgressStore } from '@/features/progress/store';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';

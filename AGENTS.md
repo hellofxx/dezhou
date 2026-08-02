@@ -3,7 +3,7 @@
 This file provides guidance to Qoder (qoder.com) when working with code in this repository.
 
 > 项目级 AI 代理指导文件。本文件在会话开始时自动加载，约束所有 AI 代理在本仓库内的行为。
-> 子代理配置位于 `.qoder/agents/`，详细产品规格见 `docs/PRD.md`，技术设计见 `docs/TDD.md`，版本演进见 `docs/CHANGELOG.md`。
+> 子代理配置位于 `.claude/agents/`（物理源文件，入库；`.qoder/agents/` 为 Junction 链接指向该目录，Qoder 兼容读取），详细产品规格见 `docs/PRD.md`，技术设计见 `docs/TDD.md`，版本演进见 `docs/CHANGELOG.md`。
 
 ---
 
@@ -75,71 +75,37 @@ src/
 
 每个 feature 模块自包含：`components/` / `hooks/` / `utils/` / `data/` / `store.ts` / `types.ts` / `index.ts`。
 
+**模块最小结构约定**：每个 feature 模块**至少**必须包含 `components/`、`store.ts`、`types.ts`、`index.ts`。`hooks/`、`utils/`、`data/`、`constants.ts`、`parsers/`、`workers/` 为按需目录，在模块无需相应代码时可省略。此约定确保 AI 代理在探索新模块时能以最少的文件查询确认模块结构。
+
 ### 关键约束
 
 - **模块间禁止直接引用**：必须通过 `shared/` 层或 `trainingEvents` 事件总线
 - **shared/ 层准入门槛**：被 ≥2 个模块使用才可放入；单模块使用的代码留在模块内
 - **跨模块状态集中管理**：Streak / ELO / SRS / Emotion / Mentor 五大系统统一在 `src/features/progress/store.ts`（persist version 以该文件配置为准），禁止分散到各 feature store
 - **唯一例外**：puzzle-trainer store 持有 `quickDrillBest`（快速训练最佳记录，独立持久化）；`quickDrillStreak` 连续天数计数器位于 progress store，由 `recordQuickDrillCompletion()` 维护并在连续 7 天时触发 `awardStreakFreeze(1)`
+## 编码规范（摘要，详见 docs/AI_GUIDE.md）
 
-## 编码规范
+- TypeScript strict + noUncheckedIndexedAccess，禁止 any；路径别名 `@/*`
+- 组件 PascalCase.tsx / Hook use 前缀 / 工具 camelCase / 路由 kebab-case
+- 单文件 ≤ 300 行（硬约束；豁免见 docs/AI_GUIDE.md）
 
-### TypeScript
+## 状态管理（摘要，详见 docs/AI_GUIDE.md）
 
-- `strict: true` + `noUncheckedIndexedAccess` + `noUnusedLocals` + `noUnusedParameters`
-- 路径别名：`@/*` → `./src/*`
-- 禁止 `any`；必要时用 `unknown` + 类型守卫
-- 公共 API 必须有显式返回类型
+- Zustand + persist → localStorage；牌局大数据用 IndexedDB
+- 每个 store 必须有 name 与 version；persist version 以 store 代码为唯一事实源
+- "记录完成" action 必须幂等（同日均不重复计数）
 
-### 命名
+## 国际化（摘要，详见 docs/AI_GUIDE.md）
 
-| 类别 | 约定 | 示例 |
-|---|---|---|
-| 组件 | PascalCase.tsx | `RangeGrid.tsx` |
-| Hook | camelCase.ts（use 前缀） | `useQuizEngine.ts` |
-| 工具 | camelCase.ts | `rangeParser.ts` |
-| 路由 | kebab-case | `/pot-odds/quiz` |
-| i18n key | 模块前缀 + camelCase | `range.quiz.correct` |
+- 默认中文（zh），支持 zh/en；新增 key 必须同时更新双语，缺一不可
+- key 命名：`<module>.<context>.<field>`
 
-### 文件大小
+## UI/UX 设计系统（摘要，详见 docs/AI_GUIDE.md）
 
-单文件 ≤ 300 行（硬约束）；超过 400 行需拆分为子组件 / 工具函数 / 数据文件。以下类型文件可豁免：zustand store（`create()` 单文件约束）、格式解析器（自包含状态机）、页面级组件（内聚性大于拆分收益）。课程内容数据文件亦可放宽。
-
-### 函数设计
-
-- 工具函数必须是纯函数（便于测试）
-- 副作用（emit 事件 / 写 store）集中在 hook 或 store action
-- 计算逻辑与渲染逻辑分离
-
-## 状态管理
-
-### Zustand + persist
-
-- 全局状态用 `create()` + `persist()` 中间件，持久化到 `localStorage`
-- 大数据（牌局）用 IndexedDB
-- 每个 store 必须有 `name` 与 `version` 字段
-
-persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事实源，本文档不维护数值副本：
-
-| Store | version 事实源 | name |
-|---|---|---|
-| progress | `src/features/progress/store.ts` | poker-training-progress |
-| puzzle-trainer | `src/features/puzzle-trainer/store.ts` | puzzle-trainer-store |
-| strategy-academy | `src/features/strategy-academy/store.ts` | strategy-academy-progress |
-| theory-academy | `src/features/theory-academy/store.ts` | theory-academy-progress |
-
-### Persist Version 升级硬性规则
-
-1. 递增 `version`
-2. 编写 `migrate(persistedState, fromVersion)` 函数
-3. migrate 必须防御性合并默认值（`{ ...DEFAULT_X, ...persisted.x }`），不触碰已有字段
-4. 老用户数据零丢失，首次加载自动迁移
-5. persist version 数值以 store 代码为唯一事实源，文档与子代理文件不维护数值副本（无需同步数值）
-6. 在 `docs/CHANGELOG.md` 的"数据迁移"小节记录
-
-### 幂等性
-
-`recordTrainingDay()` / `recordQuickDrillCompletion()` / `markDailyCompleted()` 等"记录完成"action 必须幂等（同一日重复调用不重复计数）。
+- 四层色彩 token（`--felt-*` / `--ivory-*` / `--brass-*` / `--walnut-*`，globals.css 为唯一权威）
+- 暗色默认，禁止硬编码颜色；WCAG 2.1 AA
+- 反霓虹硬约束：禁 Tailwind 霓虹类 / 纯黑白，由 designTokenGuard.test.ts 守卫
+- 设计契约权威源：poker-ui-demo/DESIGN_LANGUAGE.md
 
 ## 路由与代码分割
 
@@ -147,23 +113,6 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - 所有路由页面必须用 `React.lazy()` + `<LazyWrapper>` 包裹
 - 布局：`AppLayout`（主导航 + OnboardingGate）/ `BlankLayout`（无导航，用于 onboarding）
 - 移动端 < 768px 显示底部 `MobileNav`
-
-## 国际化
-
-- 默认中文（zh），支持 zh / en
-- 翻译文件：`src/i18n/locales/zh.json` + `src/i18n/locales/en.json`
-- **硬性要求**：新增 i18n key 时必须同时更新 zh 与 en，缺一不可
-- key 命名：`<module>.<context>.<field>`
-
-## UI/UX 设计系统
-
-- **色彩**：四层架构（牌桌绿 `--felt-*` / 象牙白 `--ivory-*` / 黄铜金 `--brass-*` / 胡桃木 `--walnut-*`），通过 CSS 变量定义于 `src/styles/globals.css`（色彩 token 实现唯一权威）
-- **字体**：Fraunces（serif 标题）/ Inter Tight（sans 正文）/ JetBrains Mono（mono 数字）
-- **主题**：暗色为默认，禁止硬编码颜色值
-- **响应式**：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
-- **可访问性**：遵循 WCAG 2.1 AA，交互元素必须有 `aria-label`，对比度 ≥4.5:1
-- **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-\d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `poker-ui-demo/DESIGN_LANGUAGE.md`（当前 v1.3.2）
-- **五级反馈样式**：`GRADE_DISPLAY_CONFIG` 的 color 字段引用 globals.css `.grade-best`~`.grade-blunder` 类（样式唯一事实源），禁止内联霓虹类
 
 ## 跨模块复用系统
 
@@ -254,9 +203,16 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 ## Agent 协作
 
+### 存放位置与跨工具兼容
+
+- 子代理物理源文件位于 `.claude/agents/`（入库，Claude Code / VSCode 等原生兼容读取）
+- `.qoder/agents/` 为 Windows Junction 链接，指向 `.claude/agents/`，Qoder 无感兼容读取
+- 重建命令：`scripts/setup-agent-junctions.ps1`（新环境 clone 后执行一次；Junction 本身不入库）
+- 新增 / 修改子代理统一在 `.claude/agents/` 下操作，禁止在 Junction 路径内重建文件
+
 ### 命名规范
 
-子代理文件位于 `.qoder/agents/`，命名遵循以下规则：
+子代理文件位于 `.claude/agents/`，命名遵循以下规则：
 
 1. **格式**：统一使用 kebab-case（小写字母 + 连字符分隔），禁止无连字符缩写（如 `uiux` → `ui-ux`）
 2. **Feature 模块代理**：命名为 `<feature-dir>-dev`，必须与 `src/features/<feature-dir>/` 目录名一一对应

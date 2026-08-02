@@ -9,7 +9,7 @@ import { SessionResult } from './SessionResult';
 import { QuizConfig } from './QuizConfig';
 import { useRangeTrainerStore } from '../store';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 
 type Phase = 'config' | 'training' | 'result';
 

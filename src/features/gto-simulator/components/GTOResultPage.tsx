@@ -4,8 +4,8 @@ import { Target, Clock, TrendingDown, AlertTriangle } from 'lucide-react';
 import { useGTOSimulatorStore } from '../store';
 import { StrategyMatrix } from './StrategyMatrix';
 import { resolveSpotKey, getStrategiesForSpot } from '../utils/spotKey';
-import { PositionBadge } from '@/shared/components/PositionBadge';
-import { ResultSummary } from '@/shared/components/ResultSummary';
+import { PositionBadge } from '@/shared/components/poker/PositionBadge';
+import { ResultSummary } from '@/shared/components/feedback/ResultSummary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 
 export default function GTOResultPage() {

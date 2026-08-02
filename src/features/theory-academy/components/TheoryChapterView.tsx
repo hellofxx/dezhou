@@ -3,7 +3,7 @@ import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Clock, CheckCircle2 } from 'lucide-react';
 import { useProgressStore } from '@/features/progress/store';
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import { findChapterById, findLevelByChapterId, getNextChapter, isLevelFullyCompleted } from '../utils/theoryProgress';

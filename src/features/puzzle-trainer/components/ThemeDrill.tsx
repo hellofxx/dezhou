@@ -18,7 +18,7 @@ import { usePuzzleSession } from '../hooks/usePuzzleSession';
 import { PUZZLE_THEMES, getThemeMeta } from '../data/puzzleBank';
 import { useProgressStore } from '@/features/progress/store';
 // P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 import type { PuzzleTheme } from '../types';
 
 export default function ThemeDrill() {

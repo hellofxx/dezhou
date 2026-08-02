@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { PokerCard } from '@/shared/components/Card';
+import { PokerCard } from '@/shared/components/poker/Card';
 import type { Card } from '@/shared/types/poker';
 
 interface BoardDisplayProps {

@@ -2,11 +2,11 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import AppLayout from '@/layouts/AppLayout';
 import BlankLayout from '@/layouts/BlankLayout';
-import { PageSkeleton } from '@/shared/components/LoadingState';
-import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
+import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
+import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
 
 // Lazy-loaded pages
-const Dashboard = lazy(() => import('@/features/progress/components/Dashboard'));
+const Dashboard = lazy(() => import('@/features/progress/components/dashboard/Dashboard'));
 const RangeTrainerHome = lazy(() => import('@/features/range-trainer/components/RangeTrainerHome'));
 const RangeLearnPage = lazy(() => import('@/features/range-trainer/components/RangeLearnPage'));
 const RangeQuizPage = lazy(() => import('@/features/range-trainer/components/RangeQuizPage'));
@@ -18,11 +18,11 @@ const GTOSessionPage = lazy(() => import('@/features/gto-simulator/components/GT
 const HandHistoryList = lazy(() => import('@/features/hand-history/components/HandHistoryList'));
 const HandImportPage = lazy(() => import('@/features/hand-history/components/HandImportPage'));
 const HandReplayPage = lazy(() => import('@/features/hand-history/components/HandReplayPage'));
-const ProgressPage = lazy(() => import('@/features/progress/components/ProgressPage'));
-const SettingsPage = lazy(() => import('@/features/progress/components/SettingsPage'));
-const RangeStatsPage = lazy(() => import('@/features/progress/components/RangeStatsPage'));
-const GTOStatsPage = lazy(() => import('@/features/progress/components/GTOStatsPage'));
-const LeaderboardPage = lazy(() => import('@/features/progress/components/Leaderboard'));
+const ProgressPage = lazy(() => import('@/features/progress/components/replay/ProgressPage'));
+const SettingsPage = lazy(() => import('@/features/progress/components/settings/SettingsPage'));
+const RangeStatsPage = lazy(() => import('@/features/progress/components/stats/RangeStatsPage'));
+const GTOStatsPage = lazy(() => import('@/features/progress/components/stats/GTOStatsPage'));
+const LeaderboardPage = lazy(() => import('@/features/progress/components/achievement/Leaderboard'));
 const AcademyHome = lazy(() => import('@/features/strategy-academy/components/AcademyHome'));
 const CourseView = lazy(() => import('@/features/strategy-academy/components/CourseView'));
 const BasicsIntro = lazy(() => import('@/features/strategy-academy/components/BasicsIntro'));

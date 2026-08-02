@@ -4,9 +4,9 @@ import { ArrowLeft, Keyboard, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 // 全局训练伴生 Dialog：Tilt 提醒与里程碑庆典（覆盖 BlankLayout 下的训练页，
 // 与 AppLayout 同策略，修复"主训练页连错 3 题无 Tilt 弹窗"的覆盖缺口）
-import TiltWarning from '@/features/progress/components/TiltWarning';
-import MilestoneCelebrationHost from '@/features/progress/components/MilestoneCelebrationHost';
-import OnboardingGate from '@/features/progress/components/OnboardingGate';
+import TiltWarning from '@/features/progress/components/gate/TiltWarning';
+import MilestoneCelebrationHost from '@/features/progress/components/celebration/MilestoneCelebrationHost';
+import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 
 const SHORTCUTS = [
   { key: '1', action: 'Fold（弃牌）' },

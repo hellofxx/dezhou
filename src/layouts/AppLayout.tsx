@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { APP_NAME, APP_VERSION } from '@/shared/constants/app';
-import { ErrorBoundary } from '@/shared/components/ErrorBoundary';
-import OnboardingGate from '@/features/progress/components/OnboardingGate';
+import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
+import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 // P2-5.3: 全局 Tilt 提示组件（监听连续答错数）
-import TiltWarning from '@/features/progress/components/TiltWarning';
-import MilestoneCelebrationHost from '@/features/progress/components/MilestoneCelebrationHost';
+import TiltWarning from '@/features/progress/components/gate/TiltWarning';
+import MilestoneCelebrationHost from '@/features/progress/components/celebration/MilestoneCelebrationHost';
 import MobileNav from './MobileNav';
-import TableRail from '@/shared/components/TableRail';
+import TableRail from '@/shared/components/layout/TableRail';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
 import { useProgressStore } from '@/features/progress/store';
 import {

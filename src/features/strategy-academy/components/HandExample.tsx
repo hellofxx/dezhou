@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import type { HandExample as HandExampleType } from '../types';
-import { PokerCard } from '@/shared/components/Card';
-import { PositionBadge } from '@/shared/components/PositionBadge';
+import { PokerCard } from '@/shared/components/poker/Card';
+import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { Position } from '@/shared/types/position';
 import { stringToCard } from '@/shared/utils/deck';
 import { formatBB } from '@/shared/utils/formatters';

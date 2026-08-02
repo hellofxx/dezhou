@@ -5,7 +5,7 @@ import { formatDate } from '../utils/handNotation';
 import { calculateHeroStats } from '../utils/handStats';
 import { HandStatsPanel } from './HandStatsPanel';
 import { Trash2, Upload, Search, BarChart3, List } from 'lucide-react';
-import { EmptyState } from '@/shared/components/EmptyState';
+import { EmptyState } from '@/shared/components/feedback/EmptyState';
 
 const MIN_HANDS_FOR_STATS = 20;
 
