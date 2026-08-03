@@ -12,6 +12,7 @@ tools:
   - Write
   - Bash
   - GetTerminalOutput
+model: "[DeepSeek-V4-Flash](dfmodel)"
 skills:
   - frontend-design
 ---
