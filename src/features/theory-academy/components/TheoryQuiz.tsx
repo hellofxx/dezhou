@@ -120,7 +120,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                   disabled={showExplanation}
                   aria-label={`选项 ${String.fromCharCode(65 + index)}: ${option}`}
                   className={cn(
-                    'w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
+                    'w-full text-left min-h-11 px-4 py-3 rounded-lg border text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
                     !showExplanation &&
                       'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 text-[var(--ivory-dim)]',
                     showExplanation && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
@@ -162,7 +162,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
             <div className="mt-5 flex justify-end">
               <button
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+                className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
               >
                 {currentIndex < orderedQuestions.length - 1 ? '下一题' : '查看结果'}
                 <ArrowRight className="w-4 h-4" />

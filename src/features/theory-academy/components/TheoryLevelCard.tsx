@@ -61,6 +61,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
         role="button"
         tabIndex={unlocked ? 0 : -1}
         aria-disabled={!unlocked}
+        aria-expanded={unlocked ? expanded : undefined}
         onClick={handleClick}
         onKeyDown={(e) => {
           // 仅响应卡片自身的键盘事件，忽略内部按钮（展开切换/章节行）冒泡
@@ -72,7 +73,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
         }}
         aria-label={`理论 Level ${level.level}：${level.title}${unlocked ? '' : '（未解锁）'}`}
         className={cn(
-          'w-full text-left rounded-lg border p-5 transition-all duration-200',
+          'w-full text-left rounded-lg border p-5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
           unlocked
             ? 'bg-[var(--felt)] border-[var(--walnut-border)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 cursor-pointer'
             : 'bg-[var(--felt)]/40 border-[var(--walnut-border)]/40 cursor-not-allowed opacity-60'
@@ -121,7 +122,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') goPractice(e);
                     }}
-                    className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
+                    className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
                   >
                     <Swords className="w-3.5 h-3.5" />
                     去实践应用
@@ -146,7 +147,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                 }}
                 aria-label={expanded ? `收起 ${level.title} 章节列表` : `展开 ${level.title} 章节列表`}
                 aria-expanded={expanded}
-                className="p-1.5 rounded-md text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1.5 text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
               >
                 {expanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
               </button>

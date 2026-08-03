@@ -34,7 +34,7 @@ export function PracticeBridgeCard({ recommendations }: PracticeBridgeCardProps)
             key={lesson.id}
             onClick={() => navigate(`/academy/lesson/${lesson.id}`)}
             aria-label={`前往实践课程：${lesson.title}`}
-            className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 transition-all text-sm text-[var(--ivory-dim)]"
+            className="w-full flex min-h-11 items-center justify-between px-4 py-2.5 rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 transition-all text-sm text-[var(--ivory-dim)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
           >
             <span>{lesson.title}</span>
             <ChevronRight className="w-4 h-4 text-[var(--ivory-muted)]" />
@@ -45,7 +45,7 @@ export function PracticeBridgeCard({ recommendations }: PracticeBridgeCardProps)
             // P1F-04：携带 ?track= 参数，LearningTracksView（P1E-01）消费后滚动高亮目标轨道
             onClick={() => navigate(`/academy/tracks?track=${recommendations.trackId}`)}
             aria-label="前往推荐学习轨道"
-            className="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+            className="w-full flex min-h-11 items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
           >
             <Route className="w-4 h-4" />
             进入推荐学习轨道

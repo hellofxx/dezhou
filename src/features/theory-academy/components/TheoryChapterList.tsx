@@ -28,7 +28,7 @@ export function TheoryChapterList({ chapters, completedChapters, quizScores }: T
                 navigate(`/theory/chapter/${chapter.id}`);
               }}
               aria-label={`第 ${chapter.order} 章：${chapter.title}${completed ? '（已完成，可回访复习）' : ''}`}
-              className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-left text-xs transition-colors hover:bg-[var(--walnut-raised)]/60"
+              className="w-full flex min-h-11 items-center gap-2.5 px-2.5 py-2 rounded-md text-left text-xs transition-colors hover:bg-[var(--walnut-raised)]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
             >
               {completed ? (
                 <CheckCircle2 className="w-3.5 h-3.5 text-[var(--poker-success)] shrink-0" />

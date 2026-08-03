@@ -117,7 +117,7 @@ export default function TheoryChapterView() {
               <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
                 <button
                   onClick={() => navigate('/theory')}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors"
+                  className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   返回目录
@@ -125,7 +125,7 @@ export default function TheoryChapterView() {
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     onClick={() => setPhase('quiz')}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors"
+                    className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                   >
                     重新挑战小测
                   </button>
@@ -136,7 +136,7 @@ export default function TheoryChapterView() {
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={() => setPhase('quiz')}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+                  className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                 >
                   进入章末小测
                   <ArrowRight className="w-4 h-4" />
@@ -170,7 +170,7 @@ export default function TheoryChapterView() {
             <div className="panel flex items-center justify-between gap-3">
               <button
                 onClick={() => navigate('/theory')}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors"
+                className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
               >
                 <ArrowLeft className="w-4 h-4" />
                 返回目录

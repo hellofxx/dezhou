@@ -19,7 +19,7 @@ export function NextChapterNav({ nextChapter, unlocked }: NextChapterNavProps) {
 
   if (!unlocked) {
     return (
-      <span className="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs text-[var(--ivory-muted)]">
+      <span className="inline-flex min-h-11 items-center gap-1.5 px-4 py-2.5 text-xs text-[var(--ivory-muted)]">
         <Lock className="w-3.5 h-3.5 shrink-0" />
         完成本级剩余章节后解锁：{nextChapter.title}
       </span>
@@ -29,7 +29,7 @@ export function NextChapterNav({ nextChapter, unlocked }: NextChapterNavProps) {
   return (
     <button
       onClick={() => navigate(`/theory/chapter/${nextChapter.id}`)}
-      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+      className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
     >
       下一章：{nextChapter.title}
       <ArrowRight className="w-4 h-4" />
