@@ -6,6 +6,39 @@
 
 ---
 
+## feat(theory-academy) — 2026-08-03（理论学院内容系统性扩充）
+
+> T1-T9 全部 31 章内容系统性深度扩充至经典教材标准（对照 9 本权威教材体系），每章补齐 7 类段落、2-3 个实战牌例、关键公式推导与反直觉点标注，章末小测补足至每章 5 题（124 → 155 题）。
+
+### 新增
+
+- T1-T9 各 Level 内容扩充（9 个独立 commit）：
+  - T1：组合计数 C(n,k) 通式推导、2/4 法则误差分析表与 x4 修正、方差/标准差公式
+  - T2：EV 完整推导链、所需胜率推导、隐含赔率公式化、Set Mining 精确概率
+  - T3：权益实现率量化、Gap Concept 现代修正依据、起手牌 EV 分层
+  - T4：范围构建方法论、Blockers 定量应用、范围/坚果优势牌面判定框架
+  - T5：MDF/Alpha 代数推导、价值:诈唬频率公式、无差别原则证明、节点锁定五步
+  - T6：价值下注保本公式、阻塞注定价均衡、三街几何尺度推导
+  - T7：3Bet 指标组合解读、玩家类型学动态漂移、读牌四步法、剥削四组映射
+  - T8：Tendler 7 型 Tilt 档案、Session A/B/C 档量化、Kelly 准则、8 项认知偏差清单
+  - T9：AKQ 玩具博弈均衡求解、ICM 递归算法、多人底池胜率表、GTO-剥削统一框架
+- 建立 9 本经典德扑教材对照索引（详见 PRD 5.27「经典教材对照」）：Sklansky ToP / Harrington Vol.1 / MOP / Modern Poker Theory / MSSA / Tendler Mental Game / Duke Thinking in Bets / Janda Applications of NLHE / Poker HUDs
+- 每章新增段落以「（概念源自：XXX 教材 YY 章）」脚注式标注，思想复述 + 通用数学表述，版权规避
+
+### 变更
+
+- PRD 5.27：9 级知识地图表格更新为扩充后知识点；新增「经典教材对照」小节；验收标准补充内容深度口径
+- TDD 5.8b：内容体系更新为 31 章 155 题，补充扩充标准硬性契约（7 类段落 / 公式推导 / 2-3 牌例 / 教材对照版权规避）
+- 章末小测题数：124 → 155（每章 5 题，integrity 3-5 题约束内）
+
+### 验证
+
+- `pnpm verify` 分步执行全绿：typecheck exit 0 / lint exit 0 / 理论学院 + 跨模块回归 41 tests 通过（theoryIntegrity 7 / quizOrder 4 / curriculumIntegrity 8 / statsAggregator 5 / store 相关 / SessionLimitGuard / TheoryQuiz 等）
+- 选项排序分布守卫：155 题 A19.4% / B29.0% / C23.2% / D28.4%，全部 <50%
+- `pnpm build` 成功（3.98s），lazy chunk 正常分割，无 bundle 明显膨胀（理论数据按路由拆分）
+
+---
+
 ## feat(help-center) — 2026-08-02（帮助中心教程模块）
 
 > 新建 `src/features/help-center/` 模块，提供完整用户教程：平台总览、5 步快速上手路径、9 篇模块教程文章、6 个系统概念卡片、8 条 FAQ。

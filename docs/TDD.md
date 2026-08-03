@@ -1096,7 +1096,11 @@ interface DailyRecommendation {
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point）+ content（内联中文，与策略学院课程正文口径一致，不进 i18n）
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
-2. **内容体系**：9 Level 共 31 章、124 道章末小测，数据按 Level 拆分为 `data/levels/theoryLevel1.ts ~ theoryLevel9.ts`（课程内容数据文件放宽 200 行限制），`data/levels/index.ts` 聚合为 `THEORY_LEVELS`。
+2. **内容体系**：9 Level 共 31 章、155 道章末小测（2026-08 系统性扩充后每章满 5 题；扩充前 124 题），数据按 Level 拆分为 `data/levels/theoryLevel1.ts ~ theoryLevel9.ts`（课程内容数据文件放宽 200 行限制；扩充后单文件约 350-500 行），`data/levels/index.ts` 聚合为 `THEORY_LEVELS`。扩充标准（2026-08 起为硬性契约）：
+   - 每章 content 覆盖全部 7 类段落（text/heading/highlight/key-point/formula/example/pro-tip），禁止纯 text 堆砌
+   - 关键公式必须展示推导过程而非仅结论（例：MDF 推导 `对手诈唬 EV = f×P − (1−f)×B = 0 → f = P/(P+B) = 1/(1+b)`；几何尺度三街公式 `x = ((1+2·SPR)^(1/3)−1)/2`）
+   - 每章至少 2-3 个不同场景实战牌例（翻前/翻后、价值/诈唬、浅/深筹码），标注反直觉点与认知误区（highlight 段落）
+   - 教材对照：思想复述 + 通用数学表述，禁止逐字复制受版权教材原文；出处以「（概念源自：XXX 教材 YY 章）」脚注式标注（对照索引见 PRD 5.27 经典教材对照表）
 
 3. **Store**（`store.ts`，persist name `theory-academy-progress`，version 1）：
    - 状态：`progress: { completedChapters / quizScores / currentChapter / startedAt }`
