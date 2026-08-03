@@ -21,6 +21,11 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         type: 'key-point',
         content: '纳什均衡（Nash Equilibrium）：一组策略组合，其中任何一方单方面偏离都不会让自己变得更好。约翰·纳什证明了它在极广泛的博弈中存在——扑克的 GTO 策略正是扑克这个博弈的纳什均衡。',
       },
+      {
+        type: 'formula',
+        content:
+          '零和的数学表述：单挑中 U₁(a,b) + U₂(a,b) = 0（一方所得恰为另一方所失）\n极小极大定理：存在博弈值 v，使 max_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n均衡策略保证你的期望 ≥ v，且对手无法单方面压低——这就是"不可剥削"的数学来源（概念源自：The Mathematics of Poker Ch.2 博弈论基本概念）',
+      },
       { type: 'heading', content: '均衡的含义与误读' },
       {
         type: 'text',
@@ -31,6 +36,11 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         type: 'example',
         content:
           '实例：石头剪刀布的均衡是各 1/3 随机出。对手总出石头时，均衡策略依然不输不赢（期望 0），但"总出布"的剥削策略每局都赢。而一旦你总出布，你自己就变得可被剥削（对手改出剪刀）——偏离均衡去剥削，必然打开自己的漏洞。扑克里完全同构。',
+      },
+      {
+        type: 'example',
+        content:
+          '实例二（玩具博弈的极小极大）：你写 1 或 2，对手猜，猜中你输 1、猜错你赢 2。你以 1/2 概率混合时，对手猜 1 的期望 = 0.5×1 + 0.5×(−2) = −0.5，猜 2 的期望 = 0.5×(−2) + 0.5×1 = −0.5——两边相同，你锁定 +0.5。任何偏离都会让对手选择更有利的一边压低你的期望。扑克求解器做的正是同一件事：在每个节点找"让对手所有回应无差别"的混合比例。',
       },
       { type: 'heading', content: '为什么扑克需要"随机"' },
       {
@@ -91,6 +101,18 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         correctIndex: 1,
         explanation: '三人及以上的博弈中均衡的保底性质会失效（可能被联合动态损害）。单挑与"翻前只剩两人"的场景才是严格适用域。',
       },
+      {
+        id: 't5-game-theory-q5',
+        question: '玩具博弈中你按 1/2 概率混合"写 1/写 2"，其效果是：',
+        options: [
+          '让对手更困惑',
+          '对手无论猜哪边期望都相同，你的收益被锁定为博弈值',
+          '随机必然公平',
+          '让对手更容易赢',
+        ],
+        correctIndex: 1,
+        explanation: '混合使对手各选择的期望相等后，他无法再压低你的收益——这就是极小极大意义上锁定的博弈值。扑克求解器的混合频率同理。',
+      },
     ],
   },
   {
@@ -115,7 +137,8 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
       { type: 'heading', content: '价值:诈唬比与下注尺度' },
       {
         type: 'formula',
-        content: '河牌下注 b（占底池比例）时，均衡诈唬占比 = b/(1+2b)\n例：满池下注（b=1）→ 诈唬占 1/3；半池（b=0.5）→ 诈唬占 25%',
+        content:
+          '价值:诈唬比推导（底池 P、下注 bP、对手持诈唬捕捉器）：\n对手跟注 EV = f×(P+2bP) − (1−f)×bP，令其 = 0（无差别）→ f = b/(1+2b)（f = 你的下注范围中诈唬占比）\n例：满池 b=1 → 诈唬 1/3（价值:诈唬 = 2:1）；半池 b=0.5 → 诈唬 25%（3:1）（概念源自：Modern Poker Theory Ch.2-3 GTO 结构）',
       },
       {
         type: 'text',
@@ -126,6 +149,11 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         type: 'example',
         content:
           '实例：河牌你满池下注，范围应约 2/3 价值 + 1/3 诈唬。若你实际"只用坚果下注"（诈唬占 0%），对手对你的下注全弃即可剥削你；若你诈唬过半，对手全跟即可剥削你。均衡比例是唯一让对手左右为难的构造。',
+      },
+      {
+        type: 'example',
+        content:
+          '实例二（最小必要偏离）：你观察到某对手河牌面对大注跟注率只有 30%（均衡约 50%）。据此你的河牌超池诈唬频率可以整体上调——但幅度以"他若修正到 40% 你仍不亏"为限，保留随时回到基线的转身空间。这正是"以 GTO 为基线、按可观测偏差做有方向、有纪律的偏离"的执行样例。',
       },
       { type: 'heading', content: 'GTO 与剥削的正确关系' },
       {
@@ -186,6 +214,13 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         correctIndex: 1,
         explanation: '基线提供不可剥削的保底与"正确形状"的认知，剥削在此之上把对手的错误变成额外利润——两者是地基与楼层的关系。',
       },
+      {
+        id: 't5-gto-concept-q5',
+        question: '半池下注的均衡诈唬占比是（公式 f = b/(1+2b)）：',
+        options: ['33%', '25%', '50%', '20%'],
+        correctIndex: 1,
+        explanation: 'b=0.5 → f = 0.5/2 = 25%，价值:诈唬 = 3:1。它恰等于对手跟注所需胜率，双方无差别。',
+      },
     ],
   },
   {
@@ -205,7 +240,8 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
       },
       {
         type: 'formula',
-        content: 'MDF = 底池 ÷ (底池 + 下注额) = 1/(1+b)\n例：半池下注 → MDF = 1/1.5 ≈ 67%；满池 → 50%；2 倍池 → 33%',
+        content:
+          'MDF 推导（P = 底池、B = 下注额、b = B/P、f = 你的弃牌率）：\n对手纯诈唬 EV = f×P − (1−f)×B，令其 = 0 → f = B/(P+B) = b/(1+b)\n你的最小防御频率 MDF = 1 − f = P/(P+B) = 1/(1+b)\n例：半池 b=0.5 → 67%；满池 b=1 → 50%；2 倍池 b=2 → 33%（概念源自：The Mathematics of Poker Ch.5-6 下注-弃牌子博弈）',
       },
       { type: 'heading', content: 'Alpha：诈唬的盈亏平衡弃牌率' },
       {
@@ -221,6 +257,15 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         type: 'example',
         content:
           '实例：底池 100，对手下注 50。MDF = 100/150 ≈ 67%，你需要用最强的约 67% 范围继续。选择继续哪些牌按牌力+改进潜力排序：成牌、好听牌优先，纯垃圾进入弃牌的 33%。若你实际只防 40%，对手每 50 的诈唬平均立赚：0.60×100 − 0.40×50 = 40。',
+      },
+      {
+        type: 'example',
+        content:
+          '实例二（超池与 MDF 的结合）：底池 100，对手全下 200（b=2）。MDF = 100/300 ≈ 33%，防守责任大减；同时超池均衡诈唬占比 b/(1+2b) = 2/5 = 40%，即他的范围应为 60% 价值 + 40% 诈唬。判断他"价值:诈唬"是否匹配 3:2，比机械背 MDF 更重要：若他实际 90% 价值，你的防守应从 33% 进一步压低——这正是 MDF 与剥削的正确结合。',
+      },
+      {
+        type: 'key-point',
+        content: '防守不只等于跟注：加注同样计入防守频率。面对高频诈唬者，用加注替代部分跟注既防守又收价值；面对紧弱价值型下注，超额弃牌（低于 MDF）才是剥削。先算总量，再定分配。',
       },
       { type: 'heading', content: 'MDF 的适用边界' },
       {
@@ -281,6 +326,13 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         correctIndex: 1,
         explanation: 'MDF 是对抗均衡对手的下限。对手的下注范围严重偏向价值时，超额弃牌正是最大化剥削——有信息时剥削优先于均衡。',
       },
+      {
+        id: 't5-mdf-alpha-q5',
+        question: '底池 100、对手下注 200（2 倍池），MDF 约为：',
+        options: ['50%', '67%', '33%', '25%'],
+        correctIndex: 2,
+        explanation: 'MDF = 1/(1+2) = 1/3 ≈ 33%。下注越大防守责任越小；但超池范围里均衡诈唬占比升至 40%，需用"价值:诈唬"匹配度判断而非死背防守下限。',
+      },
     ],
   },
   {
@@ -297,6 +349,11 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         type: 'text',
         content:
           '打开任何求解器都会看到：同一手牌在同一节点常被分配多个动作（如 70% 下注 / 30% 过牌）。支撑它的是无差别原则（Indifference Principle）：均衡中，一手牌被混合使用，当且仅当它的各个动作 EV 完全相等；而这种混合的目的，是让"对手"的边缘牌（如诈唬捕捉器）在跟注与弃牌之间也恰好无差别。',
+      },
+      {
+        type: 'formula',
+        content:
+          '无差别原则证明思路（混合牌 H）：\n设 H 下注 EV = V_b、过牌 EV = V_c。若 V_b > V_c，理性策略必然 100% 下注；若 V_b < V_c，必然 100% 过牌\n→ 混合存在 ⇔ V_b = V_c（反证：任何不均衡都会被对手利用）\n同理对手的诈唬捕捉器在均衡中跟/弃 EV 相等——两条无差别共同锁死频率（概念源自：Modern Poker Theory Ch.3 混合策略与无差别）',
       },
       {
         type: 'key-point',
@@ -323,6 +380,11 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         type: 'example',
         content:
           '实例：锁定"BB 面对转牌二次开火弃牌 55%（均衡应约 45%）"后重解，求解器会立刻把你的转牌诈唬频率推高、连原本过牌的弱牌也加入下注——它精确展示了"对手每偏离 1%，你应该偏离多少"来收割。节点锁定让剥削从直觉变成计算。',
+      },
+      {
+        type: 'example',
+        content:
+          '实例二（节点锁定五步实操）：① HUD 收集足够样本确认漏洞（如"BTN 面对 3Bet 弃牌 65%"）；② 在求解器中把该节点锁定为固定频率；③ 重解你的应对并对比基线；④ 标出被推高频率与尺度的具体手牌；⑤ 实战执行，每约 500 手复核样本是否仍成立。没有数据支撑的"锁定"只是纸上的剥削。',
       },
       {
         type: 'highlight',
@@ -376,6 +438,18 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
         ],
         correctIndex: 1,
         explanation: '混合节点两边 EV 相等，单次"选错"代价≈0；真正拉开差距的是纯策略节点与更早街的范围构建质量。',
+      },
+      {
+        id: 't5-mixed-strategy-q5',
+        question: '节点锁定最关键的执行纪律是：',
+        options: [
+          '锁定频率设得越高越好',
+          '锁定的对手倾向必须来自足够样本的真实观察，并定期复核',
+          '锁定一次永久有效',
+          '锁定只能用于翻前范围',
+        ],
+        correctIndex: 1,
+        explanation: '把想象中的漏洞锁进求解器会得到"纸上的剥削"；真实偏差需要 HUD 样本支撑并随对手调整复核——这是节点锁定与自欺的分界线。',
       },
     ],
   },
