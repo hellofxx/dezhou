@@ -125,16 +125,19 @@ pnpm build
 ### 3.3 经典教材对照体系实施细节
 
 #### 3.3.1 对照索引表（写入 PRD 附录）
+> 2026-08-03 定稿修订（platform-dev 复核意见）：补齐第 9 本教材 Poker HUDs，并扩大落点范围以匹配实际扩充内容。事实源以 PRD 5.27「经典教材对照」表为准。
+
 | 教材 | 章节 | 核心概念 | 本项目落点 |
 |------|------|---------|-----------|
-| The Theory of Poker (Sklansky) | Ch.2-3 | Fundamental Theorem / Gap Concept | T3 第 3 章、T3 第 2 章 |
-| Harrington on Hold'em Vol.1 | Ch.3-4 | EV / Pot Odds / Implied Odds | T2 全部 3 章 |
-| The Mathematics of Poker | Ch.5-8 | MDF / Alpha / Indifference | T5 第 3-4 章 |
-| Modern Poker Theory (Acevedo) | Ch.1-3 | GTO 基础 / 求解器 | T5 第 2 章 |
+| The Theory of Poker (Sklansky) | Ch.2-3, Ch.6 | Fundamental Theorem / Gap Concept / EV | T3 第 2-3 章、T2 第 1 章 |
+| Harrington on Hold'em Vol.1 | Ch.2-5 | 概率 / EV / Pot Odds / Implied Odds / 位置 | T1 第 2-3 章、T2 全部章节、T3 第 1 章 |
+| The Mathematics of Poker | Ch.1-3, 5-10 | 组合计数 / MDF / Alpha / Indifference / 几何尺度 | T1 全部章节、T5 第 3-4 章、T6 第 2-3 章 |
+| Modern Poker Theory (Acevedo) | Ch.1-3 | GTO 基础 / 求解器 / Sizing | T5 第 1-2 章、T6 第 1 章 |
 | MSSA | Ch.1-4 | 范围构建 / Blockers | T4 全部 3 章 |
 | The Mental Game of Poker (Tendler) | 全册 | 7 型 Tilt / A-Game | T8 全部 4 章 |
 | Thinking in Bets (Duke) | Ch.1-4 | 结果导向偏差 / 概率思维 | T8 第 4 章 |
 | Applications of NLHE (Janda) | Ch.7 | HUD 指标 / 读牌流程 | T7 全部 4 章 |
+| Poker HUDs | 全册 | HUD 数据组合解读 / 抽样注意 | T7 第 1-2 章 |
 
 #### 3.3.2 内容扩充工作流（每章 7 步）
 ```
