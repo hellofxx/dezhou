@@ -55,6 +55,11 @@
   1. `TheoryLevelCard` 外层 `role="button"` 为非原生元素（已有键盘处理与代码注释）
   2. 次级按钮高度略低于 44px 移动端触摸目标
 
+> **P2 遗留事项修复（2026-08-03 当日完成）**：两项 P2 均已修复并验证。
+> ① `TheoryLevelCard` 外层 `div role="button"`（内部嵌套 button 故无法改原生 button，HTML 合法性注释依据成立）——已强化可访问性：新增 `aria-expanded` 状态、`focus-visible` 键盘焦点环（黄铜色 ring-2）、「去实践应用」入口同步补键盘焦点样式。
+> ② 移动端触摸目标——理论学院全部交互按钮统一 `min-h-11`（44px）兜底：TheoryLevelCard 展开按钮（min-w-11 方形）、TheoryChapterList 章节行、NextChapterNav 下一章/锁定文案、TheoryChapterView 返回目录/重新挑战/进入小测、TheoryQuiz 选项/下一题、PracticeBridgeCard 课程行/轨道按钮；同时为所有按钮补充 `focus-visible:ring-2` 键盘焦点指示。
+> 验证：typecheck exit 0 / lint exit 0 / 理论学院 23 tests 全绿 / build 3.48s 成功；设计契约守卫零硬编码颜色、零霓虹类。
+
 ## 五、质量门禁汇总
 
 | 门禁 | 结果 |
@@ -70,5 +75,4 @@
 
 ---
 
-*Phase 3 结论：功能完整性、性能、质量门禁全部通过；UX 视觉复核（ui-ux-dev）通过，2 项 P2 低严重警告已记录。*
-*P2 issue 登记：① TheoryLevelCard 外层 role="button" 非原生元素（有键盘处理与注释）② 次级按钮高度略低于 44px 移动端触摸目标。按方案 2.2 归 P2（不影响功能），留待后续统一处理。*
+*Phase 3 结论：功能完整性、性能、质量门禁全部通过；UX 视觉复核（ui-ux-dev）通过，2 项 P2 低严重警告已修复（见上）。*
