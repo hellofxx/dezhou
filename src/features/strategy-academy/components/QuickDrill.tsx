@@ -221,7 +221,7 @@ export default function QuickDrill() {
     const isAllCorrect = finalResult !== null && finalResult.correctAnswers === finalResult.totalQuestions;
 
     return (
-      <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="py-6">
         <button
           onClick={() => navigate('/academy')}
           className="flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
@@ -363,7 +363,7 @@ export default function QuickDrill() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <div className="py-6 space-y-6">
         {/* Header */}
         <motion.section
           initial={{ opacity: 0, y: -8 }}

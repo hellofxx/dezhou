@@ -258,7 +258,7 @@ export default function CourseView() {
     .filter(Boolean) ?? [];
 
   return (
-    <div className="max-w-2xl mx-auto pb-16">
+    <div className="pb-16">
       {/* Header */}
       <div className="mb-6">
         <button

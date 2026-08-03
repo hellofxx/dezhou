@@ -15,7 +15,7 @@ export default function HelpArticle() {
 
   if (!article) {
     return (
-      <div className="max-w-2xl mx-auto py-12 text-center">
+      <div className="py-12 text-center">
         <p className="text-[var(--ivory-muted)]">{t('help.article.notFound')}</p>
         <Button variant="outline" size="sm" className="mt-4" onClick={() => navigate('/help')}>
           <ArrowLeft size={14} className="mr-1" />
@@ -26,7 +26,7 @@ export default function HelpArticle() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* 返回按钮 */}
       <button
         type="button"

@@ -58,7 +58,8 @@ export function ResultSummary({
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+      {/* 全宽布局：外层 main（AppLayout）已提供内边距，不再限宽居中 */}
+      <div className="py-8 space-y-6">
         {/* Title */}
         <motion.div
           className="text-center space-y-2"

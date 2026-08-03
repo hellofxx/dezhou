@@ -16,14 +16,12 @@ dist-ssr
 # AI 工具：会话产物（可重建，不入库）
 .solomd/
 .uploads/
-.qoder/better-harness/
+.qoder/
 .workbuddy/
 .trae/
 
-# Junction 链接（可重建，不入库）
-.qoder/agents/
-.qoder/skills/
-.qoder/agents.builtin/
+# Claude 内置代理（安装时自动拷贝，非项目自有源码）
+.claude/agents/builtin/
 
 # 子代理物理源 .claude/agents/ 与 AGENTS.md 保留入库
 

@@ -88,7 +88,7 @@ export default function LevelCertification() {
     const passed = score >= requiredAccuracy;
 
     return (
-      <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="py-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -134,7 +134,7 @@ export default function LevelCertification() {
 
     return (
       <div className="h-full overflow-auto">
-        <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        <div className="py-6 space-y-6">
           <motion.section
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -211,7 +211,7 @@ export default function LevelCertification() {
   const isCorrect = selectedIndex === question.correctIndex;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="py-6">
       <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
         {/* Progress */}
         <div className="flex items-center gap-1.5 mb-6">

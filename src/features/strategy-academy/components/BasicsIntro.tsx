@@ -60,7 +60,7 @@ export default function BasicsIntro() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-3xl mx-auto px-4 py-6 flex flex-col min-h-full">
+      <div className="py-6 flex flex-col min-h-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}

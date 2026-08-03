@@ -50,7 +50,7 @@ export function PuzzleResult({ result, isNewRecord, onRetry, onBackHome }: Puzzl
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="max-w-3xl mx-auto px-4 py-6 space-y-4"
+        className="py-6 space-y-4"
       >
         {/* 标题 + 破纪录徽章 */}
         <div className="text-center space-y-2">

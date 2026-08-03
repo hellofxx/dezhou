@@ -94,7 +94,7 @@ export default function ThemeDrill() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-3xl mx-auto px-4 py-4 space-y-3">
+      <div className="py-4 space-y-3">
         {/* 顶部栏 */}
         <div className="flex items-center justify-between gap-3">
           <Button

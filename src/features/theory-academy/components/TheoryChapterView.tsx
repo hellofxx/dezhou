@@ -76,7 +76,8 @@ export default function TheoryChapterView() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-5">
+      {/* 全宽布局：外层 main 已提供 p-4 md:p-6，不再限宽居中（与一级页 TheoryHome 口径一致） */}
+      <div className="py-6 space-y-5">
         {/* Breadcrumb */}
         <button
           onClick={() => navigate('/theory')}
