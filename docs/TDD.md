@@ -204,12 +204,12 @@ src/
 │   │   └── types.ts
 │   │
 │   ├── theory-academy/            # 理论学院模块（2026-07 新增，设计见 5.8b）
-│   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLevelCard / PracticeBridgeCard 等
+│   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLevelCard / PracticeBridgeCard / TheoryLearningMap 等
 │   │   ├── data/                  # levels/（index.ts + theoryLevel1.ts ~ theoryLevel9.ts）+ theoryIntegrity.test.ts
 │   │   ├── hooks/                 # useTheory
-│   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序出口）
+│   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序出口）/ getLevelTargetChapter
 │   │   ├── index.ts
-│   │   ├── store.ts               # persist v1（theory-academy-progress）
+│   │   ├── store.ts               # persist v2（theory-academy-progress）
 │   │   └── types.ts
 │
 │   ├── help-center/               # 帮助中心模块（静态教程页，无 store）
@@ -1123,6 +1123,24 @@ interface DailyRecommendation {
 8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫。
 
 9. **理论→实践桥接**：每 Level 完成后 `PracticeBridgeCard` 展示推荐课程/轨道（路由字符串跳转），各 Level 的 practiceRecommendations 定向推荐仅指向 track-beginner / track-gto / track-cash-game；strategy-academy `learningTracks.ts` 的 `track-theory-bridge`（“理论到实践”轨道）为经 `/academy/tracks` 泛浏览发现的通用衔接入口（按理论支柱顺序串联实战课程），不是各 Level 的定向推荐目标（P1F-05 定性，专批 A 2026-07-31）。
+
+**理论学院 persist v2 迁移**（2026-08）：
+- `TheoryProgress` 新增 `flaggedQuestions: string[]` 字段
+- persist version 1 → 2，migrate 注入 `flaggedQuestions` 默认值
+- 新增幂等 action `toggleFlagQuestion(questionId)`
+
+**章节难度标签阈值**（2026-08 定义）：
+- `getChapterDifficulty(level)` 返回值 < 0.35 → 基础（success 色）
+- 0.35 ≤ 值 < 0.6 → 进阶（warning 色）
+- ≥ 0.6 → 高级（danger 色）
+
+**学习路径地图**（2026-08）：
+- `getLevelTargetChapter(level, completedChapters)` 纯函数：返回首个未完成章节（全完成则返回第一章）
+- TheoryLevelCard「继续学习」与 TheoryLearningMap 节点点击共用此推导
+
+**章节切换骨架屏**（2026-08）：
+- TheoryChapterView 的 trackedChapterId 渲染期重置时同步置位 isTransitioning
+- 150ms 后恢复渲染新章节内容（ComponentSkeleton 过渡）
 
 ### 5.9 跨模块系统设计
 

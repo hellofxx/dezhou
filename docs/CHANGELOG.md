@@ -6,6 +6,38 @@
 
 ---
 
+## [Unreleased] - 2026-08-04
+
+### 理论学院教育学优化（P0+P1+学习地图+性能）
+
+#### 新增
+- 章节学习目标卡片（先行组织者策略，T1 首批填充 objectives）
+- 章节难度徽章（基础/进阶/高级三档，阈值 0.35/0.6）
+- 标记疑难题目功能（persist v2，flaggedQuestions 字段）
+- 小测完成后"再测一次"重测入口
+- Level 卡片"继续学习"显式按钮
+- 首页学习路径地图（T1-T9 九节点三态链）
+- 章节切换 150ms 骨架屏过渡
+- 章节行 hover 预加载路由 chunk
+
+#### 优化
+- 公式段落字号 text-sm → text-base + overflow-x-auto 横滚
+- 阅读面板段落间距 space-y-4 → space-y-6
+- 小测进度条 ARIA progressbar 语义
+- Level 卡片 aria-describedby 关联进度描述
+- 面包屑按钮与 Flag 按钮触摸目标 ≥44px
+- 移动端禁用 Level 卡片串行入场动画 delay
+- 移动端 body 渐变降级为纯色（减少 GPU 合成层）
+- 小测退出动画移除 x 位移（减少 layout thrashing）
+
+#### 修复
+- store.migrate.test.ts 补充 vi.resetModules() teardown（修复模块缓存导致的测试隔离问题）
+
+#### i18n
+- theory 命名空间新增 10 键（objectives / difficultyBasic / difficultyMid / difficultyAdvanced / retryQuiz / flagQuestion / flaggedQuestion / quizProgress / learningMap / continueLearning）
+
+---
+
 ## feat(strategy-academy) — 2026-08-04（课程页微观闭环改造 P1-P5）
 
 > 教育心理学设计评审（认知负荷 / 空间邻近 / 生成效应 / 脚手架梯度 / 补救闭环）驱动的课程页重构：将“理论/示例/实战”三 Tabs 并列结构改为小节锚点式微观闭环。分 5 阶段子代理协作实施，每阶段独立 commit + `pnpm verify` 门禁，收口经 platform-dev 跨模块复核（0 blocker）与 ui-ux-dev 视觉复核（0 blocker）。
