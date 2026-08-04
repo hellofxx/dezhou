@@ -85,21 +85,23 @@ export default function CourseView() {
     && lesson.id !== 'local-mental-tilt-recognition'
     && (!isLessonLevelUnlocked || !isPrerequisiteMet);
 
-  // hash 直达：监听 location.hash 变化时滚动到对应小节。
-  // hash 仅消费一次（首次挂载/变化时滚动），课程切换时 handleRestart 已通过 history.replaceState 清理。
+  // hash 直达小节：首次挂载/路由变化时滚动到对应单元；lessonId 切换时额外调用强制刷新
+  const scrollToAnchor = useCallback((id: string) => {
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.slice(1);
-      // 延迟等待 DOM 渲染
-      const timer = setTimeout(() => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
+      // 短延迟等待 DOM 挂载（Vite dev hot update 场景）+ lessonId 变化强制刷新
+      const timer = setTimeout(() => scrollToAnchor(id), 50);
       return () => clearTimeout(timer);
     }
-  }, [location.hash, lessonId]);
+  }, [location.hash, lessonId, scrollToAnchor]);
 
   useEffect(() => {
     if (lessonId) startLesson(lessonId);
