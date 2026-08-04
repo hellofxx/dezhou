@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { LessonUnit } from '../types';
+import { resolveUnitTitle } from '../utils/lessonUnits';
 
 interface SectionNavProps {
   units: LessonUnit[];
@@ -13,33 +14,39 @@ export function SectionNav({ units, activeId, completedIds, onNavigate }: Sectio
 
   return (
     <div className="sticky top-0 z-20 w-full bg-[var(--walnut-raised)] border border-[var(--walnut-border)] rounded-lg p-2">
-      <nav className="flex items-center gap-1.5 overflow-x-auto scrollbar-thin" aria-label={t('academy.sectionNav.label')}>
-        {units.map((unit, i) => {
-          const isActive = unit.id === activeId;
-          const isCompleted = completedIds.includes(unit.id);
+      {/* DEBT-3: WAI-ARIA 导航列表语义（ol > li），胶囊按钮为列表项内单一可点元素 */}
+      <nav className="w-full" aria-label={t('academy.sectionNav.label')}>
+        <ol className="flex items-center gap-1.5 overflow-x-auto scrollbar-thin list-none m-0 p-0">
+          {units.map((unit, i) => {
+            const isActive = unit.id === activeId;
+            const isCompleted = completedIds.includes(unit.id);
+            const displayTitle = resolveUnitTitle(unit, (key) => t(key));
 
-          let className = 'shrink-0 px-3 py-1.5 rounded-md text-xs transition-colors whitespace-nowrap ';
-          if (isActive) {
-            className += 'bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold';
-          } else if (isCompleted) {
-            className += 'text-[var(--poker-success)]';
-          } else {
-            className += 'text-[var(--ivory-muted)]';
-          }
+            let className = 'px-3 py-2.5 rounded-md text-xs transition-colors whitespace-nowrap ';
+            if (isActive) {
+              className += 'bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold';
+            } else if (isCompleted) {
+              className += 'text-[var(--poker-success)]';
+            } else {
+              className += 'text-[var(--ivory-muted)]';
+            }
 
-          return (
-            <button
-              key={unit.id}
-              onClick={() => onNavigate(unit.id)}
-              className={className}
-              aria-current={isActive ? 'true' : undefined}
-            >
-              {isCompleted && <span className="mr-1">✓</span>}
-              <span className="sm:hidden">{i + 1}. {unit.title.length > 6 ? unit.title.slice(0, 6) + '…' : unit.title}</span>
-              <span className="hidden sm:inline">{i + 1}. {unit.title}</span>
-            </button>
-          );
-        })}
+            return (
+              <li key={unit.id} className="shrink-0">
+                <button
+                  onClick={() => onNavigate(unit.id)}
+                  className={className}
+                  aria-current={isActive ? 'true' : undefined}
+                  aria-label={t('academy.sectionNav.goTo', { n: i + 1, title: displayTitle })}
+                >
+                  {isCompleted && <span className="mr-1">✓</span>}
+                  <span className="sm:hidden">{i + 1}. {displayTitle.length > 6 ? displayTitle.slice(0, 6) + '…' : displayTitle}</span>
+                  <span className="hidden sm:inline">{i + 1}. {displayTitle}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
       </nav>
     </div>
   );

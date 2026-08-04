@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { deriveLessonUnits } from './lessonUnits';
+import {
+  deriveLessonUnits,
+  COMPREHENSIVE_UNIT_IDENTIFIER,
+  isComprehensiveUnit,
+  resolveUnitTitle,
+} from './lessonUnits';
 import type { Lesson, LessonSection, HandExample, PracticeDrill } from '../types';
 
 function makeSection(type: LessonSection['type'], content: string): LessonSection {
@@ -94,7 +99,7 @@ describe('deriveLessonUnits', () => {
     expect(units[2]!.exampleId).toBeUndefined();
   });
 
-  it('examples 多于 units：3 examples + 2 units → 第 3 个进"综合示例"尾节', () => {
+  it('examples 多于 units：3 examples + 2 units → 第 3 个进"综合示例"尾节（标题为标识符，非硬编码文案）', () => {
     const lesson = makeLesson({
       content: [
         makeSection('heading', '第一部分'),
@@ -111,7 +116,7 @@ describe('deriveLessonUnits', () => {
     expect(units[0]!.exampleId).toBe('ex1');
     expect(units[1]!.exampleId).toBe('ex2');
     expect(units[2]!.id).toBe('u3');
-    expect(units[2]!.title).toBe('综合示例');
+    expect(units[2]!.title).toBe(COMPREHENSIVE_UNIT_IDENTIFIER);
     expect(units[2]!.sections).toHaveLength(0);
     expect(units[2]!.exampleId).toBe('ex3');
   });
@@ -180,6 +185,25 @@ describe('deriveLessonUnits', () => {
     const units = deriveLessonUnits(lesson);
 
     expect(units[0]!.checkpoint).toBe(false);
+  });
+
+  it('resolveUnitTitle：综合示例标识符翻译为 i18n 文案，普通标题原样返回', () => {
+    const lesson = makeLesson({
+      content: [makeSection('heading', '正常小节'), makeSection('text', '内容')],
+      examples: [makeExample('ex1'), makeExample('ex2'), makeExample('ex3')],
+    });
+
+    const units2 = deriveLessonUnits(lesson);
+    const normal = units2.find((u) => u.title === '正常小节')!;
+    const comprehensive = units2.find((u) => u.id === 'u2')!;
+
+    const translate = (key: string) =>
+      key === 'academy.lessonUnit.comprehensiveExamples' ? '综合示例' : key;
+
+    expect(isComprehensiveUnit(normal)).toBe(false);
+    expect(resolveUnitTitle(normal, translate)).toBe('正常小节');
+    expect(isComprehensiveUnit(comprehensive)).toBe(true);
+    expect(resolveUnitTitle(comprehensive, translate)).toBe('综合示例');
   });
 
   it('确定性：同输入两次调用 deepEqual', () => {

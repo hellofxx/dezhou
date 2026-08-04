@@ -347,7 +347,13 @@
       "noContent": "本节内容加载中"
     },
     "sectionNav": {
-      "label": "课程小节导航"
+      "label": "课程小节导航",
+      "goTo": "跳转到第 {{n}} 节：{{title}}"
+    },
+    "checkpoint": {
+      "predictPrompt": "面对这个局面，你的动作是？",
+      "revealCorrect": "正确决策",
+      "retry": "重新预测"
     },
     "lessons_new": {
       "l3-3bet-postflop": "3-Bet 底池的翻后策略",

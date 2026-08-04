@@ -8,7 +8,7 @@ import { HandExampleComponent } from './HandExample';
 import { PracticeDrillComponent } from './PracticeDrill';
 import { SectionNav } from './SectionNav';
 import { LessonIntroCard } from './LessonIntroCard';
-import { deriveLessonUnits } from '../utils/lessonUnits';
+import { deriveLessonUnits, resolveUnitTitle } from '../utils/lessonUnits';
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -123,8 +123,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
           <LessonIntroCard units={units} duration={lesson.duration} />
           {units.map((unit) => (
             <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
-              <h2 className="font-display text-[18px] text-[var(--ivory)] tracking-wide">
-                {units.indexOf(unit) + 1}. {unit.title}
+              <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
+                {units.indexOf(unit) + 1}. {resolveUnitTitle(unit, (key) => t(key))}
               </h2>
               {unit.sections.map((s, j) => (
                 <ContentBlock key={j} section={s} />
@@ -170,8 +170,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
 
           return (
             <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
-              <h2 className="font-display text-[18px] text-[var(--ivory)] tracking-wide">
-                {i + 1}. {unit.title}
+              <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
+                {i + 1}. {resolveUnitTitle(unit, (key) => t(key))}
               </h2>
               {unit.sections.length === 0 && !example && (
                 <p className="text-xs text-[var(--ivory-muted)]">

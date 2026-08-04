@@ -347,7 +347,13 @@
       "noContent": "Loading section content"
     },
     "sectionNav": {
-      "label": "Lesson section navigation"
+      "label": "Lesson section navigation",
+      "goTo": "Go to section {{n}}: {{title}}"
+    },
+    "checkpoint": {
+      "predictPrompt": "Facing this spot, what's your move?",
+      "revealCorrect": "Correct decision",
+      "retry": "Predict again"
     },
     "lessons_new": {
       "l3-3bet-postflop": "3-Bet Pot Postflop Strategy",
