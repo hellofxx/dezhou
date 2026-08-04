@@ -31,6 +31,10 @@ export function resolveUnitTitle(unit: LessonUnit, translate: (key: string) => s
  * 4. examples 按序分配到各 unit；多余 example 聚为"综合示例"尾节（标题用标识符，渲染层翻译）
  * 5. checkpoint 默认值：含 exampleId 且 lesson.practice 存在 → true
  * 6. 返回的 unit.id 从 'u1' 开始递增
+ *
+ * 已知限制（登记在案，2026-08）：unit.id 为课程内命名空间（各课复用 u1/u2/u3），
+ * 当前应用内无跨课程锚点引用，DOM 锚点不冲突；若未来引入跨课程锚点跳转，
+ * 需改为 `${lesson.id}-${unit.id}` 复合格式并同步升级 curriculumIntegrity 全局唯一守卫。
  */
 export function deriveLessonUnits(lesson: Lesson): LessonUnit[] {
   // 规则 1：显式 units 优先

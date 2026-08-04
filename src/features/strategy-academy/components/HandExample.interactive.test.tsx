@@ -5,6 +5,7 @@ import {
   PredictionPrompt,
   buildActionChoices,
   formatActionLabel,
+  localizeActionLabel,
   parseEvLoss,
 } from './PredictionPrompt';
 import { HandExampleComponent } from './HandExample';
@@ -95,6 +96,25 @@ describe('PredictionPrompt 纯函数', () => {
     expect(labels).toContain('Call');
     expect(labels[2]).toBe('Fold');
   });
+
+  it('localizeActionLabel 仅翻译干扰项动作词，其余原样返回', () => {
+    const zh = (key: string) => {
+      const map: Record<string, string> = {
+        'academy.checkpoint.action.fold': '弃牌',
+        'academy.checkpoint.action.call': '跟注',
+        'academy.checkpoint.action.check': '过牌',
+        'academy.checkpoint.action.allIn': '全下',
+      };
+      return map[key] ?? key;
+    };
+    expect(localizeActionLabel('Fold', zh)).toBe('弃牌');
+    expect(localizeActionLabel('Call', zh)).toBe('跟注');
+    expect(localizeActionLabel('Check', zh)).toBe('过牌');
+    expect(localizeActionLabel('All-in', zh)).toBe('全下');
+    // 课程数据原文（含正确/错误决策标签）不翻译
+    expect(localizeActionLabel('Raise 2.5BB', zh)).toBe('Raise 2.5BB');
+    expect(localizeActionLabel('加注 4-5BB（因为牌强）', zh)).toBe('加注 4-5BB（因为牌强）');
+  });
 });
 
 describe('PredictionPrompt 组件', () => {
@@ -121,7 +141,7 @@ describe('PredictionPrompt 组件', () => {
     expect(buttons).toHaveLength(3);
     expect(container.textContent).toContain('Raise 2.5BB');
     expect(container.textContent).toContain('加注 4-5BB（因为牌强）');
-    expect(container.textContent).toContain('Fold');
+    expect(container.textContent).toContain('弃牌');
     expect(container.textContent).not.toContain('重新预测');
   });
 
@@ -139,7 +159,7 @@ describe('PredictionPrompt 组件', () => {
     // 三个动作按钮全部禁用，正确项绿色高亮；重新预测按钮可用
     expect(findButton(container, 'Raise 2.5BB').disabled).toBe(true);
     expect(findButton(container, '加注 4-5BB（因为牌强）').disabled).toBe(true);
-    expect(findButton(container, 'Fold').disabled).toBe(true);
+    expect(findButton(container, '弃牌').disabled).toBe(true);
     expect(findButton(container, '重新预测').disabled).toBe(false);
     expect(findButton(container, 'Raise 2.5BB').className).toContain('text-[var(--poker-success)]');
   });
@@ -149,12 +169,12 @@ describe('PredictionPrompt 组件', () => {
       root.render(<PredictionPrompt example={makeExample()} answered={false} onAnswered={() => {}} />);
     });
     act(() => {
-      findButton(container, 'Fold').click();
+      findButton(container, '弃牌').click();
     });
     expect(container.textContent).toContain('严重错误');
     expect(container.textContent).toContain('正确决策');
     expect(findButton(container, 'Raise 2.5BB').className).toContain('text-[var(--poker-success)]');
-    expect(findButton(container, 'Fold').className).toContain('text-[var(--poker-danger)]');
+    expect(findButton(container, '弃牌').className).toContain('text-[var(--poker-danger)]');
     expect(findButton(container, '加注 4-5BB（因为牌强）').className).toContain('opacity-40');
   });
 
@@ -163,7 +183,7 @@ describe('PredictionPrompt 组件', () => {
       root.render(<PredictionPrompt example={makeExample()} answered={false} onAnswered={() => {}} />);
     });
     act(() => {
-      findButton(container, 'Fold').click();
+      findButton(container, '弃牌').click();
     });
     expect(container.textContent).toContain('严重错误');
     act(() => {

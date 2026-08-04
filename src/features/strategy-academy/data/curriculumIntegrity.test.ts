@@ -279,18 +279,14 @@ describe('curriculum integrity: units 完整性（P5 手写 units 守卫）', ()
     expect(bad).toEqual([]);
   });
 
-  it('units 引用完整性：每个 section 必须是 lesson.content 中对象的引用', () => {
+  it('units 引用完整性：每个 section 必须是 lesson.content 中对象的引用（防复制漂移）', () => {
     const bad: string[] = [];
     for (const lesson of allLessons) {
       for (const unit of lesson.units ?? []) {
         for (const section of unit.sections) {
-          const found = lesson.content.some(
-            (c) => c.type === section.type && c.content === section.content,
-          );
-          if (!found) {
+          if (!lesson.content.includes(section)) {
             bad.push(
-              `${lesson.id}/units/${unit.id}: section (type=${section.type}) 不在 lesson.content 中`,
-            );
+              `${lesson.id}/units/${unit.id}: section (type=${section.type}) 不是 lesson.content 中对象的引用`,            );
           }
         }
       }

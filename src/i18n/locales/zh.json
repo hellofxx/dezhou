@@ -355,7 +355,13 @@
       "predictPrompt": "面对这个局面，你的动作是？",
       "revealCorrect": "正确决策",
       "retry": "重新预测",
-      "opponentHint": "💡 面对 {shortName} 类型对手，{tip}"
+      "opponentHint": "💡 面对 {shortName} 类型对手，{tip}",
+      "action": {
+        "fold": "弃牌",
+        "call": "跟注",
+        "check": "过牌",
+        "allIn": "全下"
+      }
     },
     "practice": {
       "reviewBanner": "检测到连续答错，建议先复习相关理论再继续",

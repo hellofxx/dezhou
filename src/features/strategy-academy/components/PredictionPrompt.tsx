@@ -17,6 +17,27 @@ export interface ActionChoice {
 /** 干扰项通用池：取第一个与正确/错误决策（含 amount 拼接后的完整标签）均不同者 */
 const DISTRACTOR_POOL = ['Fold', 'Call', 'Check', 'All-in'] as const;
 
+/** 干扰项动作词 → i18n key（渲染层翻译；正确/错误决策标签为课程数据原文，不翻译） */
+const DISTRACTOR_I18N_KEYS: Record<string, string> = {
+  Fold: 'academy.checkpoint.action.fold',
+  Call: 'academy.checkpoint.action.call',
+  Check: 'academy.checkpoint.action.check',
+  'All-in': 'academy.checkpoint.action.allIn',
+};
+
+/**
+ * 本地化动作标签：仅干扰项（通用动作池成员）走 i18n 翻译；
+ * 正确/错误决策标签源自课程数据原文（中文/英文混排），原样返回。
+ * 纯函数，translate 为 t() 窄化签名（与 resolveUnitTitle 模式一致）。
+ */
+export function localizeActionLabel(
+  label: string,
+  translate: (key: string) => string,
+): string {
+  const key = DISTRACTOR_I18N_KEYS[label];
+  return key ? translate(key) : label;
+}
+
 /** 五级反馈中文兜底（t() 缺失时使用，与 PracticeDrill GRADE_FALLBACK_LABELS 语义对齐） */
 const GRADE_FALLBACK_LABELS: Record<DecisionGrade, string> = {
   best: '最优决策',
@@ -112,7 +133,7 @@ export function PredictionPrompt({ example, answered, onAnswered }: PredictionPr
               onClick={() => handleSelect(choice)}
               className={cn(BUTTON_BASE, BUTTON_IDLE)}
             >
-              {choice.label}
+              {localizeActionLabel(choice.label, (k) => t(k))}
             </button>
           ))}
         </div>
@@ -145,7 +166,7 @@ export function PredictionPrompt({ example, answered, onAnswered }: PredictionPr
                 !choice.isCorrect && !isSelectedWrong && BUTTON_DIM,
               )}
             >
-              {choice.label}
+              {localizeActionLabel(choice.label, (k) => t(k))}
             </button>
           );
         })}

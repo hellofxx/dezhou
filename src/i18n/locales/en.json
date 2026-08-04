@@ -355,7 +355,13 @@
       "predictPrompt": "Facing this spot, what's your move?",
       "revealCorrect": "Correct decision",
       "retry": "Predict again",
-      "opponentHint": "💡 Against {shortName} opponents, {tip}"
+      "opponentHint": "💡 Against {shortName} opponents, {tip}",
+      "action": {
+        "fold": "Fold",
+        "call": "Call",
+        "check": "Check",
+        "allIn": "All-in"
+      }
     },
     "practice": {
       "reviewBanner": "Wrong answers detected. Review the theory before continuing.",
