@@ -6,6 +6,49 @@
 
 ---
 
+## feat(strategy-academy) — 2026-08-04（策略学院 UI/UX 设计优化协作实施）
+
+> 基于 UI/UX 设计评审（P0-1~P0-8 / P1-1~P1-6 / P2-1~P2-8），四子代理（strategy-academy-dev / ui-ux-dev / platform-dev / progress-dev）按 P2-01 → P2-04 → P2-03 → P2-02 顺序协作实施，每任务经联合审查与 `pnpm verify` 门禁。
+
+### P2-01 排版可读性增强
+
+- 新增 `components/content/` 内容块组件系统（ContentBlock 统一分发 + FormulaBlock / TheoryReferenceBlock / DiagramBlock）：9 类内容块统一视觉词汇（highlight/key-point/pro-tip/formula/theory-reference/counter-intuitive/example/diagram/hand-example），theory-reference 支持 `data.lessonId` 可跳转，diagram 支持 `data.headers/rows` 简化表格，补齐 diagram/hand-example 死类型渲染器
+- LessonContent 阅读排版契约：`max-w-prose` 65ch 阅读列、正文行高 1.7、heading 20px 层级；Tab 图标化（BookOpen/PlayCircle/Flame）+ sticky 置顶 + <640px 图标降级
+- CourseView 进度条语义改造：Level 徽章 + 第 X/N 课（本 Level 内位置），替换原全局课程位置；行数收敛至 300（抽取 `utils/completeCourse.ts` 统一 drill/quiz 完成管道 + CourseDoneView + CourseLockedView，行为逐字段等价核对）
+- CourseLockedView：锁定页前置课程直达（前置 Level 进度 + 去完成按钮 + 缺失前置课程链接）
+- PracticeDrill 场景面板复用 `.scenario-card`（§5.16 发牌员虚线圈）
+- DESIGN_LANGUAGE.md 升级 v1.4.0：§3.3 阅读字号阶梯、§5.22 教学内容块规范、§5.6 Tab 导航、附录 G
+
+### P2-04 lessonId 重复治理
+
+- curriculumIntegrity 新增跨类 id 唯一性守卫（lesson/quiz/practice/example/drill-question 五类合并校验）
+- 本土课双宿主（l7 条目 + LOCAL_TRACK）口径确认：三方统计一致，轨道页本地轨道补「已并入 Level 7 · 本土课」徽章
+- 完成页推荐轨道去重（过滤含当前课/已全部完成）+ 推荐卡轨道内进度徽章 + 「重学本课」ghost 按钮
+- quiz id 命名规范化：mental.ts 12 个 quiz 题 id 统一 `local-` 前缀（仅改题 id，课程 id 零改动，持久化零影响）
+
+### P2-03 评测系统增强
+
+- PracticeDrill 答后反馈升级五级（`calculateGrade` + `GRADE_DISPLAY_CONFIG` 消费，shared 层零改动）：`PracticeOption` 增量扩展 `evLoss?: number`，答对无数据→best / 答错无数据→wrong，超时路径保持系统代选提示
+- 难度指示器升级常驻 pill（success/info/warning 三色 12% 透底）+ 变化黄铜闪光动效；difficultyMessage 竞态修复（timer ref 清理）
+- 结果页难度变化曲线升级为阶梯图（新组件 `DifficultyStairChart.tsx`：横轴题号 / 纵轴难度档 / 段终点按难度着色 + 图例）
+- progress-dev 评估结论：难度状态不持久化（可从 recentPracticeResults 纯函数推导、无恢复场景），recordAnswer 幂等性确认无回归
+
+### P2-02 国际化迁移准备
+
+- key 架构规划：11 组 `academy.*` 分组（courseView/lessonContent/quiz/practice/level/tracks/certification/conceptGraph/basics/handExample/drills）
+- 硬编码文案清点清单入库：`docs/analysis/strategy-academy-i18n-inventory.md`（21 文件 195 条逐条盘点 + 建议 key，作为后续迭代 backlog；教学内容数据 i18n 暂缓决策已记录）
+- CourseView 流程试点迁移：25 个 `academy.courseView.*` key 双语同步（CourseView/CourseDoneView/CourseLockedView 零中文字面量，localeParity 绿）
+- AI_GUIDE.md 新增 5 条 i18n 约束（t() 强制 + defaultValue 兜底 + 双语同步 + 教学内容暂缓 + key 分组规范）
+- ui-ux-dev 英文布局审查与修复：nextLesson 主 CTA truncate + max-w、header min-w-0、badge whitespace-nowrap
+
+### 验证
+
+- `pnpm verify` 全绿：typecheck exit 0 / lint exit 0 / 57 files 385 tests 通过（含新增跨类 id 守卫用例）
+- 浏览器视觉回归：AcademyHome / 课程页（Level 徽章 + 内容块全类型）/ 锁定页（前置直达）/ 移动端 390px（Tab 图标降级、无横向溢出）/ 英文界面（CourseView 25 key 渲染、无溢出）
+- shared / progress / i18n / styles 层零改动（P2-03 前后 git diff 验证）
+
+---
+
 ## feat(theory-academy) — 2026-08-03（理论学院内容系统性扩充）
 
 > T1-T9 全部 31 章内容系统性深度扩充至经典教材标准（对照 9 本权威教材体系），每章补齐 7 类段落、2-3 个实战牌例、关键公式推导与反直觉点标注，章末小测补足至每章 5 题（124 → 155 题）。
