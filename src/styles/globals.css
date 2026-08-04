@@ -325,6 +325,17 @@ body::after {
   }
 }
 
+/* Mobile performance: replace radial gradients with flat colors
+   to reduce GPU composite layers on low-end devices */
+@media (max-width: 767px) {
+  body::before {
+    background: rgba(232, 201, 126, 0.04);
+  }
+  body::after {
+    background: rgba(6, 13, 9, 0.3);
+  }
+}
+
 /* =========================================================
    Component classes — extracted from poker-ui-demo
    ========================================================= */
