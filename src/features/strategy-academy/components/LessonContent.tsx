@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
@@ -48,6 +48,19 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
   const [view, setView] = useState<ViewMode>(initialView ?? 'units');
   // P2: checkpoint 已答状态（unitId → 已答；纯本地，不计分不接外部系统）
   const [checkpointAnswered, setCheckpointAnswered] = useState<Record<string, boolean>>({});
+
+  // C1 fix: URL hash → activeUnitId sync（支持 #uX 直达且高亮对应胶囊）
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash && units.some((u) => u.id === hash)) {
+      setActiveUnitId(hash);
+      // 同步 DOM 滚动（CourseView 已处理 scrollIntoView，此步为防御性确保 SectionNav 高亮正确）
+      const el = document.getElementById(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }, []);
 
   const currentUnitIndex = units.findIndex((u) => u.id === activeUnitId);
   const isLastUnit = currentUnitIndex === units.length - 1;
