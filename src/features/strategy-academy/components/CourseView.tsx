@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -85,10 +85,8 @@ export default function CourseView() {
     && lesson.id !== 'local-mental-tilt-recognition'
     && (!isLessonLevelUnlocked || !isPrerequisiteMet);
 
-  // hash 消费标记：防止课程切换时 hash 残留干扰
-  const hashConsumedRef = useRef(false);
-
-  // hash 直达：监听 location.hash 变化时滚动到对应小节
+  // hash 直达：监听 location.hash 变化时滚动到对应小节。
+  // hash 仅消费一次（首次挂载/变化时滚动），课程切换时 handleRestart 已通过 history.replaceState 清理。
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.slice(1);
@@ -99,7 +97,6 @@ export default function CourseView() {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }, 300);
-      hashConsumedRef.current = true;
       return () => clearTimeout(timer);
     }
   }, [location.hash, lessonId]);

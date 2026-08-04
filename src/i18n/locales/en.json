@@ -354,7 +354,12 @@
     "checkpoint": {
       "predictPrompt": "Facing this spot, what's your move?",
       "revealCorrect": "Correct decision",
-      "retry": "Predict again"
+      "retry": "Predict again",
+      "opponentHint": "💡 Against {shortName} opponents, {tip}"
+    },
+    "practice": {
+      "reviewBanner": "Wrong answers detected. Review the theory before continuing.",
+      "reviewAction": "Back to review"
     },
     "lessons_new": {
       "l3-3bet-postflop": "3-Bet Pot Postflop Strategy",

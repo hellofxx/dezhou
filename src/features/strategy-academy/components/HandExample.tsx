@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import type { HandExample as HandExampleType } from '../types';
 import { PokerCard } from '@/shared/components/poker/Card';
@@ -25,6 +26,7 @@ export function HandExampleComponent({
   answered,
   onAnswered,
 }: HandExampleProps) {
+  const { t } = useTranslation();
   const heroCards = example.heroHand.map(stringToCard);
   const boardCards = example.board?.map(stringToCard) ?? [];
 
@@ -213,7 +215,7 @@ export function HandExampleComponent({
       {example.opponent && (
         <div className="mt-1 pt-3 border-t border-[var(--walnut-border)]">
           <p className="text-xs text-[var(--ivory-dim)]">
-            💡 面对 {example.opponent.shortName} 类型对手，{example.opponent.exploitableBy[0]}
+            💡 {t('academy.checkpoint.opponentHint', { shortName: example.opponent.shortName, tip: example.opponent.exploitableBy[0] })}
           </p>
         </div>
       )}

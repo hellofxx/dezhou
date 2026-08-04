@@ -201,7 +201,7 @@ export function PredictionPrompt({ example, answered, onAnswered }: PredictionPr
       {example.opponent && (
         <div className="pt-3 border-t border-[var(--walnut-border)]">
           <p className="text-xs text-[var(--ivory-dim)]">
-            💡 面对 {example.opponent.shortName} 类型对手，{example.opponent.exploitableBy[0]}
+            💡 {t('academy.checkpoint.opponentHint', { shortName: example.opponent.shortName, tip: example.opponent.exploitableBy[0] })}
           </p>
         </div>
       )}

@@ -488,9 +488,10 @@ export const useAcademyStore = create<AcademyStore>()(
         }
         // v3 → v4：新增小节完成记录 completedUnits（lessonId → 已完成 unit id 列表），
         // 老数据补默认空映射；已有 completedUnits 保持原值不被覆盖
+        // 防御性合并：确保缺失 progress 字段时也能产出完整形状
         if (fromVersion < 4) {
           const progress = next.progress ?? ({} as AcademyProgress);
-          next.progress = { ...progress, completedUnits: progress.completedUnits ?? {} };
+          next.progress = { ...initialProgress, ...progress, completedUnits: progress.completedUnits ?? {} };
         }
         return next as AcademyStore;
       },

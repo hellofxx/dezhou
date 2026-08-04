@@ -354,7 +354,12 @@
     "checkpoint": {
       "predictPrompt": "面对这个局面，你的动作是？",
       "revealCorrect": "正确决策",
-      "retry": "重新预测"
+      "retry": "重新预测",
+      "opponentHint": "💡 面对 {shortName} 类型对手，{tip}"
+    },
+    "practice": {
+      "reviewBanner": "检测到连续答错，建议先复习相关理论再继续",
+      "reviewAction": "返回复习"
     },
     "lessons_new": {
       "l3-3bet-postflop": "3-Bet 底池的翻后策略",

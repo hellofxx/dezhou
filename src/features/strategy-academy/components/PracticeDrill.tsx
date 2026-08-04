@@ -671,7 +671,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             className="overflow-hidden"
           >
             <div className="flex items-center gap-2 flex-wrap rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/30 px-4 py-3 text-sm text-[var(--ivory)]">
-              <span>检测到连续答错，建议先复习相关理论再继续</span>
+              <span>{t('academy.practice.reviewBanner')}</span>
               <button
                 onClick={() => {
                   const topics = reviewTopics;
@@ -680,7 +680,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                 }}
                 className="text-xs font-semibold text-[var(--brass-bright)] underline underline-offset-2 hover:opacity-80 transition-opacity"
               >
-                返回复习
+                {t('academy.practice.reviewAction')}
               </button>
             </div>
           </motion.div>

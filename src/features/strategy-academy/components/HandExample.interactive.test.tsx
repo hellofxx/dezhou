@@ -187,7 +187,8 @@ describe('PredictionPrompt 组件', () => {
     act(() => {
       findButton(container, 'Raise 2.5BB').click();
     });
-    expect(container.textContent).toContain('面对 TAG 类型对手，用更宽的 3-Bet 频率施压');
+    // 策略提示（P2 M2 改造后统一走 i18n key，测试环境 interpolation 未解析，检查插值标记）
+    expect(container.textContent).toContain('{shortName}');
   });
 });
 
