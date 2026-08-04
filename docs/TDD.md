@@ -1008,16 +1008,16 @@ interface DailyRecommendation {
 **内部结构**：
 | 层 | 文件 | 职责 |
 |----|------|------|
-| components | 课程组件 + drills/ | AcademyHome / BasicsIntro / CourseView / ConceptGraphView / LevelCard / PracticeDrill + 4 个 Drill + ChoiceDrillRenderer.tsx |
+| components | 课程组件 + drills/ | AcademyHome / BasicsIntro / CourseView / LessonContent / SectionNav / LessonIntroCard / PredictionPrompt / ConceptGraphView / LevelCard / PracticeDrill + 4 个 Drill + ChoiceDrillRenderer.tsx |
 | data | courses.ts / learningTracks / levels/ / localLessons/ / opponentProfiles | 课程数据（courses.ts 现为 re-export 兼容层）、学习路径、分级课程数据、本地课程、对手形象 |
 | hooks | useAcademy | 学院进度 hook |
-| utils | courseProgress | 进度计算工具 |
+| utils | courseProgress / lessonUnits | 进度计算工具 / 课程小节派生（显式 units 优先 → heading 分节 → 兜底单 unit → examples 分配 → 综合示例尾节标识符，`resolveUnitTitle` 渲染层翻译） |
 | store | store.ts | Zustand store（含 abilityAssessment） |
 | types.ts | 类型定义 | Course / Lesson / LearningTrack / OpponentProfile 等 |
 
 **关键设计**：
 
-1. **课程结构**：课程数据原存储在 `courses.ts`，现已拆分到 `data/levels/` 目录（`index.ts` + `level1.ts` ~ `level8.ts`，其中 level4 拆为 `level4a.ts` / `level4b.ts`），`courses.ts` 保留为 re-export 兼容层。每级包含多个课时（lesson）；lesson 类型包括理论课、Drill 实践课、概念课。`CourseView` 采用三段式视图（概念讲解 → 交互练习 → 总结回顾）。
+1. **课程结构**：课程数据原存储在 `courses.ts`，现已拆分到 `data/levels/` 目录（`index.ts` + `level1.ts` ~ `level8.ts`，其中 level4 拆为 `level4a.ts` / `level4b.ts`），`courses.ts` 保留为 re-export 兼容层。每级包含多个课时（lesson）；lesson 类型包括理论课、Drill 实践课、概念课。`CourseView` 阅读阶段采用**小节锚点式微观闭环**（2026-08 P1 重构，替代原三段式 Tabs）：课程页 = 先行组织者卡（LessonIntroCard 路线图）→ 小节序列（SectionNav sticky 锚点导航 + 概念块与内嵌牌例同屏 + 顺序推进 CTA「进入下一节 / 进入实战练习 / 完成学习」）→ 综合实战（PracticeDrill）→ 课后测验（LessonQuiz）。小节由 `utils/lessonUnits.ts` 的 `deriveLessonUnits` 派生（显式 `lesson.units` 字段优先，否则按 content 的 heading 分节、examples 按语义配对 exampleId）；`location.hash`（`#uN`）支持直达小节，`handleRestart` 以 `history.replaceState` 清理 hash 残留。
 
    **L4 拆分说明**：原 Level 4（GTO 与博弈论基础）内容过多，拆分为：
    - **L4A（范围与EV思维）**：覆盖翻前范围构造、EV 计算与应用
@@ -1085,6 +1085,10 @@ interface DailyRecommendation {
     - `l7-hu`：单挑（Heads-Up）策略
     - `l5-tools`：扑克工具使用指南
     - `l5-online-vs-live`：线上 vs 线下差异与调整
+
+12. **互动示例预测暂停（checkpoint）**（2026-08 P2 新增）：含 exampleId 且有 practice 的小节默认开启 `checkpoint`（含显式声明），`HandExampleComponent` 以 `interactive` prop 切换到 `PredictionPrompt` 互动模式——先猜后揭示（生成效应 + 自我解释效应）：预测区三动作按钮（正确决策 / 常见错误 / 干扰项，由现有数据派生零新字段）+ 五级反馈徽章（复用 `GRADE_DISPLAY_CONFIG`，evLoss 由 `commonMistake.evLoss` 解析兜底 3）。**设计豁免登记**：checkpoint 为脚手架性质，纯本地 state（`LessonContent.checkpointAnswered`），不接 ELO / 不 emit trainingEvents / 不调用 progress store（与 theory-academy 章末小测豁免同类）。
+
+13. **降级复习闭环（P3 新增）**：`PracticeDrill` 自适应降级且 `shouldRecommendReview` 命中时，以常驻提示条替代 4 秒 toast，点击「返回复习」经 `onReviewRequest(topics)` 回跳——topic 与 unit.title 双向包含匹配（无匹配回退第 1 节），跳转后经末节 CTA 重新进入实战（drill 重开，P4 后小节完成状态持久化但 drill 中途状态不持久化）。完成页新增「重新实战」入口（`CourseDoneView.hasPractice` + `onRestart('practice')` → `restartTarget` 经 phase 重挂载直达实战视图）。
 
 ### 5.8b Theory Academy（理论学院，2026-07 新增）
 
@@ -1164,6 +1168,7 @@ interface DailyRecommendation {
 - 数据源：`emotion.consecutiveWrongCount`（全局计数，由 `recordAnswer(isCorrect)` 维护）
 - 调用方：所有训练模块的会话页面（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）（v2.0 确认 puzzle-trainer 已接入）
 - 行为：连续答错 ≥3 次显示降级提示 banner；QuickDrill 自动降级难度（不低于 beginner）
+- 模块边界（2026-08 定性）：strategy-academy 课程内 PracticeDrill 的自适应降级建议（`shouldRecommendReview`）为模块内闭环，经 `onReviewRequest` 本地回跳小节锚点，**不消费也不修改** `progress.shouldDownshiftDifficulty`（后者仅 QuickDrill 只读消费）
 
 “最后一题简单 + 补救机制”实现（从 PRD 5.9 迁入）：
 
@@ -1566,7 +1571,7 @@ persist(
 |---|---|---|---|
 | progress | `poker-training-progress` | 8 | records / settings / onboarding / streak / elo / quickDrillStreak / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
 | puzzle-trainer | `puzzle-trainer-store` | 2 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted / history（上限 50 条） |
-| strategy-academy | `strategy-academy-progress` | 2 | progress / practiceResults（cap 200） / abilityAssessment / dailyPlan / certifications / firstAttemptScores / lastAttemptScores |
+| strategy-academy | `strategy-academy-progress` | 4 | progress（completedLessons / quizScores / currentLesson / startedAt / **completedUnits**）/ practiceResults（cap 200） / abilityAssessment / dailyPlan / certifications / firstAttemptScores / lastAttemptScores |
 | theory-academy | `theory-academy-progress` | 1 | progress（completedChapters / quizScores / currentChapter / startedAt） |
 | debugMode | `poker-debug-mode` | 1 | unlockAll |
 
@@ -1582,6 +1587,8 @@ persist(
 | puzzle-trainer v1 → v2 | 快速训练 Best Record：注入 `quickDrillBest: null` 默认值 |
 | strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值 |
 | strategy-academy v1 → v2 | practiceResults 裁剪：对超过 200 条的老数据执行 `.slice(-200)` 保留最近记录 |
+| strategy-academy v2 → v3 | 认证系统升级：certifications 逐条注入 `cooldownPeriod: 24` 与 `lastAttemptAt` 默认值（validUntil 保持可选） |
+| strategy-academy v3 → v4 | 小节完成状态持久化：防御性合并 progress（`{ ...initialProgress, ...progress, completedUnits: progress.completedUnits ?? {} }`），注入 `completedUnits: {}`，已有值不覆盖 |
 | theory-academy v0 → v1 | 首版兜底：防御性合并 progress 默认值（新 store，无存量迁移负担） |
 
 ---

@@ -6,6 +6,59 @@
 
 ---
 
+## feat(strategy-academy) — 2026-08-04（课程页微观闭环改造 P1-P5）
+
+> 教育心理学设计评审（认知负荷 / 空间邻近 / 生成效应 / 脚手架梯度 / 补救闭环）驱动的课程页重构：将“理论/示例/实战”三 Tabs 并列结构改为小节锚点式微观闭环。分 5 阶段子代理协作实施，每阶段独立 commit + `pnpm verify` 门禁，收口经 platform-dev 跨模块复核（0 blocker）与 ui-ux-dev 视觉复核（0 blocker）。
+
+### P1 视图重构（e014e21 + 68f7d49）
+
+- 新增 `utils/lessonUnits.ts`：`deriveLessonUnits` 派生（显式 `lesson.units` 优先 → heading 分节 → 兜底单 unit → examples 分配 → 综合示例尾节 `__COMPREHENSIVE__` 标识符渲染层翻译）；`LessonUnit` 类型 + `Lesson.units?` 可选字段（数据零迁移）
+- 新增 `components/SectionNav.tsx`（sticky 小节锚点导航，ol/li 语义，移动端编号+文字胶囊）与 `LessonIntroCard.tsx`（先行组织者路线图）
+- `LessonContent` 删除 Tabs 结构，改为 路线图 → 小节序列（概念 + 内嵌牌例同屏）→ 顺序 CTA → 实战视图（页内切换）；`CourseView` 支持 `#uN` hash 直达小节
+- i18n：`academy.lessonUnit.*` / `academy.sectionNav.*` 键（zh/en 同步）
+- 视觉复核修复：胶囊触摸目标 ≥44px、小节 h2 对齐 20px、ARIA 导航语义 + aria-label
+
+### P2 互动示例（c4c7dbd）
+
+- 新增 `components/PredictionPrompt.tsx`：先猜后揭示（三动作按钮由 correctDecision/commonMistake/干扰项派生，零新数据字段）+ 五级反馈徽章（复用 GRADE_DISPLAY_CONFIG）+ reasoning 揭示 + 重新预测
+- `HandExampleComponent` 新增 `interactive` opt-in prop（默认静态行为不变）；`LessonContent` checkpoint 接线（unitId → 已答本地 state）
+- **设计豁免登记**：checkpoint 不计分、不接 ELO / trainingEvents / progress store（脚手架非评估）
+- 新增 `HandExample.interactive.test.tsx`（14 用例）
+
+### P3 补救闭环（a553157）
+
+- `PracticeDrill` 降级建议复习：4 秒 toast → 常驻提示条 + 「返回复习」（`onReviewRequest(topics)` → topic↔unitTitle 双向包含匹配回跳小节锚点）
+- 完成页新增「重新实战」入口（`CourseDoneView.hasPractice` + `onRestart('practice')` → restartTarget 直达实战视图）；drill 中途状态不持久化（P4 明确排除）
+- 新增 `CourseDoneView.test.tsx`
+
+### P4 状态持久化（cf751ea）
+
+- **persist v3 → v4**：`AcademyProgress` 新增 `completedUnits: Record<lessonId, string[]>`；`markUnitCompleted` 幂等；migrate 防御性合并（`{ ...initialProgress, ...progress, completedUnits: ?? {} }`，已有值不覆盖）
+- `LessonContent` 本地完成状态 → store 订阅（`EMPTY_UNIT_IDS` 稳定引用防多余重渲染）；回访定位到最后完成小节
+- 迁移测试：v3→v4 补齐 + “v4 数据不被 migrate 覆盖”用例；`store.markUnitCompleted.test.ts`（幂等/顺序/跨课隔离）
+- platform-dev 复核：0 blocker / 0 major；5 minor 收口修复（见下）
+
+### P5 内容增强（c09041d）
+
+- 4 门高流量课程手写显式 `units`（l1-position / l2-3bet-basics / l3-cbet / l3-draws），exampleId 按语义配对、checkpoint 显式开启；数据内容零改动
+- `curriculumIntegrity.test.ts` 新增 5 项 units 守卫（id 唯一 / sections 非空或含 exampleId / exampleId 引用存在 / checkpoint 语义 / 内容级引用完整性）
+- 桌面右侧大纲列经评估不实现（顶部 SectionNav 已覆盖全部屏幕尺寸，成本收益不匹配）
+
+### 收口修复（735070e）
+
+- M1/M2：PracticeDrill 降级提示条与 PredictionPrompt/HandExample 对手提示硬编码中文 → i18n（`academy.practice.*` / `academy.checkpoint.opponentHint`）
+- M3：`CourseView` hashConsumedRef 死代码清理（hash 消费行为以注释固化）
+- M4：store v4 migrate 防御性合并增强
+- M5：`docs/TDD.md` 同步（课程结构描述 / persist 版本表 v2→v4 / 迁移记录补 v2→v3、v3→v4 / 5.8 新增 checkpoint 豁免与降级闭环条目 / 5.9 模块边界定性）
+
+### 验证
+
+- `pnpm verify` 全绿：62 files 428 tests（P1-P5 各阶段门禁独立通过）
+- `pnpm build` 通过（收口全量验证）
+- 手动走查：首学完整流 / 回访直达小节（#uN）/ 连错降级回小节 / 无实战课退化 × 390px/1280px 两视口
+
+---
+
 ## fix(strategy-academy) — 2026-08-04（UI 反馈修复：理论空白 / 示例重叠 / 实战色阶）
 
 > 用户反馈三处 UI 问题（P2-05）：理论页左右空白、示例页滚动重叠、实战页与全局牌桌视觉语言不统一。
