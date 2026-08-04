@@ -10,7 +10,7 @@ import { useProgressStore } from '../../store';
  * P2-5.5: 下风期检测提示卡片。
  *
  * 当 `progressStore.emotion.isDownswing === true`（最近 3 天正确率连续下降）时
- * 在 Dashboard 渲染此卡片，提供简短建议与跳转到 `mental-tilt-recognition`
+ * 在 Dashboard 渲染此卡片，提供简短建议与跳转到 `local-mental-tilt-recognition`
  * 课程（P2-1 模块 6 情绪管理）的按钮。
  *
  * 当 isDownswing=false 时不渲染任何内容。
@@ -61,7 +61,7 @@ export default function DownswingAlert() {
           </div>
           <div className="shrink-0">
             <Button
-              onClick={() => navigate('/academy/lesson/mental-tilt-recognition')}
+              onClick={() => navigate('/academy/lesson/local-mental-tilt-recognition')}
               className="bg-[var(--brass-bright)] text-[var(--felt-deep)] hover:opacity-90 gap-1.5"
               size="sm"
             >

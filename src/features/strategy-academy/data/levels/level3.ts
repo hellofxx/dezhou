@@ -1130,11 +1130,11 @@ export const LEVEL_3_LESSONS: Lesson[] = [
             {
               id: 'l3-check-range-p5',
               difficulty: 'advanced',
-              scenario: { heroHand: ['Ah', 'Qh'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kh', '8c', '3d', '2s', '7h'], street: 'river', potSize: 13, effectiveStack: 85 },
+              scenario: { heroHand: ['Ah', 'Jh'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kh', '8c', '3d', '2s', '7h'], street: 'river', potSize: 13, effectiveStack: 85 },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'AQ同花成牌，River应该价值下注。Check错失价值。', evImpact: '-1.5 BB/100' },
-                { action: 'Bet 10BB（75% pot）', isCorrect: true, explanation: 'AQ同花成牌，River标准价值下注。对手有很多弱同花/对子会Call。', evImpact: '+1.5 BB/100' },
-                { action: 'All-in', isCorrect: false, explanation: '同花成牌River All-in过度。标准尺度即可。', evImpact: '-0.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'AJ 在 Kh8c3d2s7h 河牌面没有成花（只有 Kh 和 Ah Jh 三张红桃），不是同花。应该下注 A-high bluff 或 Check-Fold。', evImpact: '-1.5 BB/100' },
+                { action: 'Bet 10BB（75% pot）', isCorrect: true, explanation: 'A-high 在 Kh 高牌面有摊牌价值，可以作为 bluff-catcher 下注获取弃牌权益，代表 Ax/Kx。', evImpact: '+1.5 BB/100' },
+                { action: 'All-in', isCorrect: false, explanation: 'A-high River All-in过度，只会被更好牌跟注。', evImpact: '-0.5 BB/100' },
               ],
               relatedLessonId: 'l3-check-range',
             },
@@ -1285,14 +1285,14 @@ export const LEVEL_3_LESSONS: Lesson[] = [
           questions: [
             {
               id: 'd-l3-odds-q1',
-              scenario: 'Flop, 你有一个同花听牌',
-              question: '同花听牌（4张outs）在Flop到Turn的命中率约为？',
+              scenario: 'Flop, 你有 AK 两高牌听牌 (4 outs)',
+              question: '你有 AK 两高牌听牌 (4 outs)，Flop→Turn 成牌的概率约为多少？',
               options: [
                 { id: 'a', text: '约 9%', isCorrect: true },
-                { id: 'b', text: '约 18%', isCorrect: false },
-                { id: 'c', text: '约 35%', isCorrect: false },
+                { id: 'b', text: '约 17%', isCorrect: false },
+                { id: 'c', text: '约 4%', isCorrect: false },
               ],
-              explanation: '同花听牌有9张outs，Flop到Turn约9/47≈19%。但如果是问Flop到River则约35%。这里问Flop到Turn，约9%是错误的，正确答案是约19%。',
+              explanation: 'Flop→Turn 单街概率≈outs/47=4/47≈8.5%，四舍五入约 9%。注意："2/4 法则"是两街累计概率估算，不适用于单街。',
               difficulty: 1,
             },
             {

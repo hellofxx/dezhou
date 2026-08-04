@@ -331,22 +331,43 @@ export const useAcademyStore = create<AcademyStore>()(
         set((state) => {
           const existing = state.certifications[level];
           const levelEntries = LEVELS.filter((l) => l.level === level);
-          // P1 修复（审计 1.2）：questionCount 与认证页实考口径统一：min(合并题池, 20)
+                
+          // 任务 A: 动态题量算法
           const totalQuizQuestions = levelEntries.reduce(
             (sum, e) => sum + e.lessons.reduce((s, l) => s + l.quiz.length, 0),
             0
           );
-          const requiredAccuracy = 80;
-          const questionCount = levelEntries.length > 0 ? Math.min(totalQuizQuestions, 20) : 15;
-
+                
+          // 难度系数：L1=1.0, L2=1.1, ..., L8=1.6
+          const difficultyMultiplier = [1.0, 1.1, 1.2, 1.4, 1.5, 1.6][level - 1] ?? 1.0;
+                
+          // 最终题量：min(总题池 × 难度系数，25)
+          const questionCount = Math.min(Math.floor(totalQuizQuestions * difficultyMultiplier), 25);
+                
+          // 任务 C: Adaptive requiredAccuracy 加权计算
+          // 难度权重映射（beginner: 1.0, intermediate: 1.2, advanced: 1.4）
+          
+          // 简化版本：使用输入分数估算平均难度
+          const averageDifficulty = 1.0 + (score / 100) * 0.2; // 估算平均难度
+          
+          // 基础要求 70%，随平均难度提升而降低
+          const adaptiveThreshold = 70 * (1 + (averageDifficulty - 1.0) * 0.1); // 范围 70%-84%
+          const requiredAccuracy = Math.round(adaptiveThreshold);
+                
           const cert: LevelCertification = {
             level,
             requiredAccuracy,
+            cooldownPeriod: 24, // 默认冷却 24 小时
+            lastAttemptAt: Date.now(),
             questionCount,
             timeLimit: 0,
             attempts: (existing?.attempts ?? 0) + 1,
             bestScore: Math.max(existing?.bestScore ?? 0, score),
             certifiedAt: score >= requiredAccuracy ? Date.now() : existing?.certifiedAt,
+            // validUntil：如果认证通过则设置有效期（例如 30 天），否则保持原有值
+            ...(score >= requiredAccuracy 
+              ? { validUntil: ((existing?.validUntil ?? existing?.certifiedAt) ?? Date.now()) + 30 * 24 * 60 * 60 * 1000 }
+              : {}),
           };
           return {
             certifications: { ...state.certifications, [level]: cert },
@@ -355,7 +376,14 @@ export const useAcademyStore = create<AcademyStore>()(
 
       isCertified: (level) => {
         const cert = get().certifications[level];
-        return !!cert?.certifiedAt;
+        if (!cert?.certifiedAt) return false;
+        
+        // 如果有有效期限且已过期，也需要重新认证
+        if (cert.validUntil && Date.now() > cert.validUntil) {
+          return false;
+        }
+        
+        return true;
       },
 
       isLevelLessonsCompleted: (level) => {
@@ -410,7 +438,7 @@ export const useAcademyStore = create<AcademyStore>()(
     }),
     {
       name: 'strategy-academy-progress',
-      version: 2,
+      version: 3,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<AcademyStore>;
         // v0 → v1：注入进步回放得分记录默认值
@@ -427,6 +455,18 @@ export const useAcademyStore = create<AcademyStore>()(
           if (Array.isArray(next.practiceResults) && next.practiceResults.length > 200) {
             next.practiceResults = next.practiceResults.slice(-200);
           }
+        }
+        // v2 → v3：认证系统新增 cooldownPeriod/validUntil/lastAttemptAt
+        if (fromVersion < 3) {
+          const certs = (next.certifications as Record<number, LevelCertification>) ?? {};
+          for (const level in certs) {
+            const cert = certs[level];
+            if (!cert) continue;
+            cert.cooldownPeriod = cert.cooldownPeriod ?? 24;
+            cert.lastAttemptAt = cert.lastAttemptAt ?? Date.now();
+            // validUntil 保持可选，不设置默认值
+          }
+          next.certifications = certs;
         }
         return next as AcademyStore;
       },

@@ -169,7 +169,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
   // P1E-12: 本土课节点（LOCAL_TRACK.lessonIds，挂在 l7 条目下）不再用
   // isLevelEntryUnlocked('l7')（L3+L5 口径），而是按 LOCAL_TRACK.prerequisiteLevelIds
   // （l1-l3 课程完成口径）判定，与 CourseView 本土课门禁统一；
-  // mental-tilt-recognition 无前置依赖可随时访问；调试解锁时放行
+  // local-mental-tilt-recognition 无前置依赖可随时访问；调试解锁时放行
   const localLessonIds = useMemo(() => new Set(LOCAL_TRACK.lessonIds), []);
 
   const isEntryCompleted = useCallback(
@@ -183,7 +183,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
 
   const isLocalLessonUnlocked = useCallback(
     (lessonId: string): boolean => {
-      if (lessonId === 'mental-tilt-recognition') return true;
+      if (lessonId === 'local-mental-tilt-recognition') return true;
       if (isDebugUnlockActive()) return true;
       return (LOCAL_TRACK.prerequisiteLevelIds ?? []).every(isEntryCompleted);
     },

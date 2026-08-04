@@ -37,9 +37,9 @@ export const LOCAL_TRACK: LearningTrack = {
     // 模块5：GTO 与剥削平衡
     'local-gto-vs-exploit',
     'local-when-to-deviate',
-    // 模块6：情绪管理
-    'mental-tilt-recognition',
-    'mental-stop-loss',
-    'mental-session-management',
+    // 模块 6：情绪管理
+    'local-mental-tilt-recognition',
+    'local-mental-stop-loss',
+    'local-mental-session-management',
   ],
 };

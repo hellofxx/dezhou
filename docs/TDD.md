@@ -1065,7 +1065,7 @@ interface DailyRecommendation {
      - **Level 门禁**：用户当前 `level` 必须 ≥ 课程所在等级
      - **Prerequisite 门禁**：课程 `prerequisites?: string[]` 中所有课程 ID 必须已完成
    - 任一门禁不通过时显示锁定提示卡片，不渲染课程内容（防止 URL 绕过）
-   - **例外**：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
+   - **例外**：`local-mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
    - `Lesson` 类型新增 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）
    - 当前已声明 prerequisite 的课程：`l2-4bet-strategy` / `l2-squeeze`（均依赖 `l2-3bet-basics`）
 

@@ -18,7 +18,7 @@ export const LIMP_LESSONS: Lesson[] = [
     content: [
       { type: 'heading', content: '什么是 Limp 局？' },
       { type: 'text', content: '国内线下俱乐部和线上低级别（NL2-NL25）最常见的结构就是 Limp 局：翻前多人只跟注大盲而不加注，导致底池多人、筹码浅、决策复杂。这与 GTO 教学中假设的"开牌-3Bet-弃牌"单挑场景截然不同。\n\n典型场景：UTG limp、MP limp、CO limp、BTN limp，到你在大盲只需补一个盲注就能看到 5 人底池的翻牌。' },
-      { type: 'key-point', content: 'Limp 局的核心特征：①多人底池频率高；②底池小、SPR 高；③玩家被动、少加注；④抽水占比相对高。这些特征要求你大幅调整标准 GTO 策略。' },
+      { type: 'key-point', content: 'Limp 局的核心特征：①多人底池频率高；②底池中等、SPR 通常 3-5（中等偏低），适合隐含赔率游戏；③玩家被动、少加注；④抽水占比相对高。这些特征要求你大幅调整标准 GTO 策略。' },
       { type: 'heading', content: 'Limp 局的盈利来源' },
       { type: 'text', content: '在 Limp 局中，盈利主要来自三个方面：\n\n1. 用强牌隔离加注（Isolate）：把多人底池压缩成单挑，让 Limp 玩家付出代价\n2. 用投机牌便宜看翻牌：同花连牌、小对子在多人底池有更高隐含赔率\n3. 翻后精准剥削：Limp 玩家通常翻后被动，可以更频繁 C-Bet 或价值下注' },
       { type: 'heading', content: '常见误区' },

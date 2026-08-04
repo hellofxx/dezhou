@@ -47,12 +47,12 @@ export default function TiltWarning() {
   };
 
   // P4 修复（4.5-P2-1）：继续训练时给出后续动作
-  // 1. 跳转到情绪管理课程（mental-tilt-recognition）帮助用户调整心态
+  // 1. 跳转到情绪管理课程（local-mental-tilt-recognition）帮助用户调整心态
   // 2. 不强制降级（降级由 shouldDownshiftDifficulty 在各训练模块独立处理）
   const handleContinue = () => {
     setOpen(false);
     // 跳转到情绪管理课程，提供具体可执行的学习路径
-    navigate('/academy/lesson/mental-tilt-recognition');
+    navigate('/academy/lesson/local-mental-tilt-recognition');
   };
 
   // P4 修复（4.5-P2-1）：新增"硬继续"选项，仅关闭弹窗不跳转

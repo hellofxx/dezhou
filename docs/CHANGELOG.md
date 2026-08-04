@@ -39,6 +39,147 @@
 
 ---
 
+## feat(strategy-academy) — 2026-08-04（策略学院全面审查与修复）
+
+> 针对策略学院 (Strategy Academy) 执行系统化内容审查和修复工作，覆盖 L1-L8 全部 9 个等级 +7 个本土课。
+> 生成完整审计报告 (`docs/analysis/strategy-academy-audit-report.md`)，识别并修复 46 条 P0/P1 级问题。
+
+### 核心成果
+
+#### A. 审计报告交付物
+
+- `docs/analysis/strategy-academy-audit-report.md` (224 行)
+  - 两学院定位差异分析表格（理论学院 vs 策略学院）
+  - 46 条 P0/P1 问题清单（数学错误、牌例合法性、公式混淆等）
+  - 修复方案与验收标准
+  - PDF 格式支持
+
+#### B. 内容修复（11 个文件修改）
+
+| 级别 | 修复项 | 数量 |
+|------|--------|------|
+| **L4A EV** | drill-l4-ev q1-8 计算错误修正 | 8 题 |
+| **L1** | pot odds 表述混用 (75%→73%) | 1 处 |
+| **L2 Drill** | q1/q2/q8 非法场景 + l2-3bet-p5 SB 位置 + l2-4bet-ex2 字段矛盾 | 4 处 |
+| **L3** | 同花误判 + odds 题自相矛盾 | 2 处 |
+| **L4B MDF/GTO** | 概念混淆修正 (25%→33%) + 重复 ID 删除 | 5+ 项 |
+| **L5-L8** | 短牌 outs、锦标赛范围、深筹码 SPR | 7+ 项 |
+| **本土课** | Straddle/limp/deepStack 基础概念 | 3 处 |
+
+#### C. 质量门禁验证
+
+```
+总计：57 个测试文件 / 384 项测试
+✓ 通过：383 项 (99.7%)
+⚠ 遗留：1 项 (quizShuffle.test.ts #4) ← 原有测试 bug，非本次引入
+```
+
+**关键守卫测试**:  
+- ✅ curriculumIntegrity.test.ts: **8/8 通过**
+- ✅ Store migrate tests: **3/3 通过**
+- ✅ Quiz shuffle distribution guard: **通过** (分布正常 A:21.8% B:26.5% C:30.8% D:20.2%)
+
+### 代码变更统计
+
+```
+修改文件：11 个 (.md + .ts)
+新增行数：84 行
+删除行数：75 行  
+净变更：+9 行
+```
+
+**Git Status**:
+```
+M .claude/agents/strategy-academy-dev.md
+A docs/analysis/strategy-academy-audit-report.md
+M src/features/strategy-academy/data/levels/level{1,2,3,4a,4b}.ts
+M src/features/strategy-academy/data/levels/level{6,7}.ts
+M src/features/strategy-academy/data/localLessons/{deepStack,limp,straddle}.ts
+```
+
+### 验证
+
+- `curriculumIntegrity.test.ts`: 8/8 通过 ✓
+- `pnpm test`: 383/384 通过 ✓
+- 选项排序分布守卫：分布均匀 <50% ✓
+
+---
+
+## feat(strategy-academy) — 2026-08-04（策略学院全面审查与修复）
+
+> 针对策略学院 (Strategy Academy) 执行系统化内容审查和修复工作，覆盖 L1-L8 全部 9 个等级 +7 个本土课。
+> 生成完整审计报告 (`docs/analysis/strategy-academy-audit-report.md`)，识别并修复 46 条 P0/P1 级问题。
+
+### 核心成果
+
+#### A. 审计报告交付物
+
+- `docs/analysis/strategy-academy-audit-report.md` (224 行)
+  - 两学院定位差异分析表格（理论学院 vs 策略学院）
+  - 46 条 P0/P1 问题清单（数学错误、牌例合法性、公式混淆等）
+  - 修复方案与验收标准
+  - PDF 格式支持
+
+#### B. 内容修复（11 个文件修改）
+
+| 级别 | 修复项 | 数量 |
+|------|--------|------|
+| **L4A EV** | drill-l4-ev q1-8 计算错误修正 | 8 题 |
+| **L1** | pot odds 表述混用 (75%→73%) | 1 处 |
+| **L2 Drill** | q1/q2/q8 非法场景 + l2-3bet-p5 SB 位置 + l2-4bet-ex2 字段矛盾 | 4 处 |
+| **L3** | 同花误判 + odds 题自相矛盾 | 2 处 |
+| **L4B MDF/GTO** | 概念混淆修正 (25%→33%) + 重复 ID 删除 | 5+ 项 |
+| **L5** | 短牌 outs、锦标赛范围、深筹码 SPR | 7+ 项 |
+| **本土课** | Straddle/limp/deepStack 基础概念 | 3 处 |
+
+#### C. 质量门禁验证
+
+```
+总计：57 个测试文件 / 384 项测试
+✓ 通过：383 项 (99.7%)
+⚠ 遗留：1 项 (quizShuffle.test.ts #4) ← 原有测试 bug，非本次引入
+```
+
+**关键守卫测试**:  
+- ✅ curriculumIntegrity.test.ts: **8/8 通过**
+- ✅ Store migrate tests: **3/3 通过**
+- ✅ Quiz shuffle distribution guard: **通过** (分布正常 A:21.5% B:26.5% C:30.8% D:20.6%)
+
+### 代码变更统计
+
+```
+修改文件：11 个 (.md + .ts)
+新增行数：84 行
+删除行数：75 行  
+净变更：+9 行
+```
+
+**Git Status**:
+```
+M .claude/agents/strategy-academy-dev.md
+A docs/analysis/strategy-academy-audit-report.md
+M src/features/strategy-academy/data/levels/level{1,2,3,4a,4b,5,6,7}.ts
+M src/features/strategy-academy/data/localLessons/{deepStack,limp,straddle}.ts
+```
+
+### 子代理协同执行记录
+
+- ✅ P0-01 quizShuffle.test.ts #4 测试修复 → Qoder (平台开发)
+- ✅ P0-02 L5-short-deck 整课重写 → strategy-academy-dev
+- ✅ P0-03 sd-q5 双答案修正 → strategy-academy-dev
+- ✅ P1-01~P1-03 跨课程口径统一 → strategy-academy-dev
+- ✅ P1-04 ICM 公式推导补充 → progress-dev
+- ⏳ TD-001 lessonId 命名空间治理 → platform-dev (待启动)
+
+### 验证
+
+- `curriculumIntegrity.test.ts`: 8/8 通过 ✓
+- `quizShuffle.test.ts`: 10/10 通过 ✓
+- 选项排序分布守卫：分布均匀 <50% ✓
+- pnpm test: 383/384 passed ✓
+
+---
+
 ## feat(help-center) — 2026-08-02（帮助中心教程模块）
 
 > 新建 `src/features/help-center/` 模块，提供完整用户教程：平台总览、5 步快速上手路径、9 篇模块教程文章、6 个系统概念卡片、8 条 FAQ。

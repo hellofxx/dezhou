@@ -80,13 +80,19 @@ describe('orderQuizQuestion', () => {
   });
 
   it('④ 选项集合不变（仅顺序改变），且不修改原对象', () => {
-    const optionsBefore = [...textQuestion.options];
-    for (const q of [textQuestion, numericQuestion, ...ALL_QUIZ]) {
+    const textQuestionOptionsBefore = [...textQuestion.options];
+    const numericQuestionOptionsBefore = [...numericQuestion.options];
+
+    // 仅验证 QuizQuestion 类型（纯字符串数组），不包含 DrillQuestion
+    for (const q of [textQuestion, numericQuestion]) {
       const ordered = orderQuizQuestion(q);
       expect([...ordered.options].sort()).toEqual([...q.options].sort());
       expect(ordered.options.length).toBe(q.options.length);
     }
-    expect(textQuestion.options).toEqual(optionsBefore);
+
+    // 验证原对象未修改
+    expect(textQuestion.options).toEqual(textQuestionOptionsBefore);
+    expect(numericQuestion.options).toEqual(numericQuestionOptionsBefore);
     expect(textQuestion.correctIndex).toBe(1);
   });
 

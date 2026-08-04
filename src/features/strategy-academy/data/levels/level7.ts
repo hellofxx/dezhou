@@ -676,16 +676,16 @@ export const LEVEL_7_LESSONS: Lesson[] = [
             },
             {
               id: 'd-l7-deep-q6',
-              scenario: 'NL200, 有效筹码200BB, 对手open',
+              scenario: 'NL200, 有效筹码 200BB, MP open(2.5BB)',
               hand: '5s4s',
               position: 'BTN',
-              question: '200BB深度，BTN open，你在BTN持有54s，应该？',
+              question: 'MP open(2.5BB), hero BTN 持 54s 是否跟注？',
               options: [
-                { id: 'a', text: 'Call', isCorrect: true },
-                { id: 'b', text: 'Fold', isCorrect: false },
+                { id: 'a', text: 'Fold（位置尚可但牌力太弱）', isCorrect: true },
+                { id: 'b', text: 'Call', isCorrect: false },
                 { id: 'c', text: '3-Bet', isCorrect: false },
               ],
-              explanation: '200BB深度时，54s有很好的隐含赔率。跟注看flop，利用翻后可玩性获取价值。',
+              explanation: '200BB 深度时，54s 在 BTN 面对 MP open 应该弃牌。主流策略 Q9s+ call，54s 太弱。',
               difficulty: 2,
             },
             {

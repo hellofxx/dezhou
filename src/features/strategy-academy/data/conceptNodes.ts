@@ -96,7 +96,7 @@ export const CONCEPT_NODES: ConceptNode[] = [
     id: 'concept-tilt-control',
     name: '情绪控制',
     description: '在逆境中保持理性决策，避免因情绪波动做出非最优选择',
-    relatedLessons: ['l5-tilt', 'mental-tilt-recognition'],
+    relatedLessons: ['l5-tilt', 'local-mental-tilt-recognition'],
     relatedModules: [],
     prerequisites: [],
     category: 'psychological',

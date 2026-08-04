@@ -42,7 +42,7 @@ export default function CourseView() {
 
   // P4 修复（4.1-P1-1）+ 审计 1.1/2.1：按 lesson 所属 LevelInfo 条目判门禁，防止通过 URL 绕过；
   // 同时消除 l4a/l4b 同为 level:4 导致的 4B 解锁旁路。
-  // 注：mental-tilt-recognition 是 DownswingAlert 的目标课程，允许在未解锁时访问
+  // 注：local-mental-tilt-recognition 是 DownswingAlert 的目标课程，允许在未解锁时访问
   const isLevelUnlocked = useAcademyStore((s) => s.isLevelUnlocked);
   const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
   const completedLessons = useAcademyStore((s) => s.progress.completedLessons);
@@ -77,7 +77,7 @@ export default function CourseView() {
     : lesson?.prerequisites?.every((id) => completedLessons.includes(id)) ?? true;
 
   const isLocked = lesson
-    && lesson.id !== 'mental-tilt-recognition'
+    && lesson.id !== 'local-mental-tilt-recognition'
     && (!isLessonLevelUnlocked || !isPrerequisiteMet);
 
   useEffect(() => {

@@ -52,9 +52,9 @@ export const DEEP_STACK_LESSONS: Lesson[] = [
       {
         id: 'local-deep-implied-q4',
         question: '深筹码中可以支撑全下的最低牌力是？',
-        options: ['顶对顶踢脚', '两对或更强', '高对', '顶对弱踢脚'],
+        options: ['顶对顶踢脚', '坚果或接近坚果（AA/KK/坚果同花）', '两对', '顶对弱踢脚'],
         correctIndex: 1,
-        explanation: '深筹码中顶对不足以支撑全下，两对或更强的牌才能放心打光深筹。',
+        explanation: '500BB 深度下，建议仅用坚果或接近坚果（AA/KK/坚果同花）全下。两对在潮湿牌面可能面临巨大反向隐含赔率。',
       },
     ],
   },

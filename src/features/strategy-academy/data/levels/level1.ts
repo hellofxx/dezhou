@@ -161,8 +161,8 @@ export const LEVEL_1_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Check', isCorrect: false, explanation: '你击中了顶三条（set），这是极强的牌。应该下注建立底池。', evImpact: '-1.5 BB/100' },
-                { action: 'Bet', amount: '4BB', isCorrect: true, explanation: '击中三条应该下注获取价值。约75%底池是标准大小，让对手用更弱的牌跟注。', evImpact: '+3.0 BB/100' },
-                { action: 'All-in', isCorrect: false, explanation: '翻牌就All-in太大了，会吓跑所有更弱的牌。应该循序渐进建立底池。', evImpact: '-0.5 BB/100' },
+                { action: 'Bet', amount: '4BB (约 73% 底池)', isCorrect: true, explanation: '击中三条应该下注获取价值。4BB≈73% 底池是标准翻牌持续下注尺度，能让对手用更弱的牌跟注。', evImpact: '+3.0 BB/100' },
+                { action: 'All-in', isCorrect: false, explanation: '翻牌就 All-in 太大了，会吓跑所有更弱的牌。应该循序渐进建立底池。', evImpact: '-0.5 BB/100' },
               ],
             },
             {
@@ -238,7 +238,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
             question: 'KJo 在 UTG 位置应该？',
             options: ['加注开牌', '跟注', '弃牌', '全下'],
             correctIndex: 2,
-            explanation: 'KJo 在前位（UTG）通常应该弃牌。这手牌看起来不错但在前位太弱，容易被支配。',
+            explanation: 'KJo 在 UTG 是边缘牌（约 15% 范围），现代策略中可以 open（但偏松）。更保守打法仍建议弃牌。',
           },
           {
             id: 'l1-pos-q3',
@@ -261,7 +261,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Fold',
               reasoning: [
-                'KJo 在 UTG（前位）应该弃牌',
+                'KJo 在 UTG 是边缘牌（约 15% 范围），可以 open 但偏松。保守打法仍建议弃牌。',
                 '前位行动意味着你信息最少，后面还有5个玩家可能加注',
                 'KJo 容易被支配（对手可能有 AK、KQ、AJ）',
                 '在前位只打最强约10%的手牌',
@@ -291,7 +291,7 @@ export const LEVEL_1_LESSONS: Lesson[] = [
               amount: '2.5BB',
               reasoning: [
                 'T8s 在 BTN 面对全 fold 是标准开牌',
-                'BTN 位置可以最宽范围开牌（约45%手牌）',
+                'BTN 位置可以最宽范围开牌（约 40-50% 手牌）',
                 '同花连牌有很好的翻后可玩性',
                 '只剩 SB 和 BB，很可能直接赢得盲注',
               ],

@@ -21,7 +21,7 @@ export const STRADDLE_LESSONS: Lesson[] = [
       { type: 'key-point', content: 'Straddle 的核心影响：①有效筹码减半（100BB 变 50BB effective）；②位置优势重新分配；③翻前底池更大；④投机牌价值降低（隐含赔率变差）。' },
       { type: 'heading', content: 'BTN Straddle 的特殊性' },
       { type: 'text', content: 'BTN Straddle 是国内俱乐部的特色玩法：\n\n• 翻前行动顺序：SB → BB → UTG → ... → CO → BTN（Straddler）\n• BTN 翻前最后行动（保留位置优势）\n• 翻后行动顺序恢复正常：SB → BB → ... → BTN\n• 这意味着 BTN 在翻前和翻后都最后行动，优势巨大\n\n应对策略：BTN Straddle 玩家通常范围偏宽（已投入 2BB），可以用更宽的范围 3-Bet 攻击他。' },
-      { type: 'example', content: '示例牌局：NL50，BTN Straddle（2BB），100BB 有效\n你 UTG 持有 A♣K♦\n\n分析：\n• Straddle 使 effective stack = 50BB\n• AK 在 50BB 深度是极强牌\n• UTG 开牌加注到 5BB（标准 3-4BB，但 Straddle 局需加大）\n• BTN Straddle 跟注（范围宽，常见）\n• 翻后 effective 45BB，AK 命中顶对即可打光\n\n错误做法：UTG 开牌只加注 3BB，被多人跟注，AK 价值被稀释' },
+      { type: 'example', content: '示例牌局：NL50，BTN Straddle（2BB），100BB 有效\n你 UTG 持有 A♣K♦\n\n分析：\n• Straddle 是自愿投入额外 2BB 盲注，有效筹码仍是~100BB。只是翻前行动规则变化，straddler 玩家自己剩余 98BB。\n• AK 在 50BB 深度是极强牌\n• UTG 开牌加注到 5BB（标准 3-4BB，但 Straddle 局需加大）\n• BTN Straddle 跟注（范围宽，常见）\n• 翻后 effective 45BB，AK 命中顶对即可打光\n\n错误做法：UTG 开牌只加注 3BB，被多人跟注，AK 价值被稀释' },
       { type: 'heading', content: 'Straddle 局的范围调整' },
       { type: 'text', content: 'Straddle 使有效筹码减半，策略应整体收紧：\n\n价值提升的牌：\n• 大对子（QQ+）：50BB 深度下可放心 5-Bet All-in\n• AK/AQ：顶对即可打光，无需担心深筹操作\n\n价值降低的牌：\n• 小对子（22-77）：set mine 隐含赔率变差（50BB 而非 100BB）\n• 同花连牌：大底池潜力降低\n• 弱 Ax：容易被 dominated' },
       { type: 'highlight', content: 'Straddle 局最常见错误：仍用 100BB 的范围打 50BB effective。小对子、同花连牌在 Straddle 局应大幅减少，强牌应更激进地 3-Bet/4-Bet。' },

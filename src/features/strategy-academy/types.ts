@@ -322,9 +322,19 @@ export interface ConceptNode {
 export interface LevelCertification {
   level: number;
   requiredAccuracy: number;       // 通过所需正确率（如 80）
+  cooldownPeriod: number;         // 重试冷却（小时），默认 24h
+  validUntil?: number;            // 有效期（毫秒时间戳）
+  lastAttemptAt?: number;         // 上次尝试时间
   questionCount: number;          // 综合测验题数
-  timeLimit: number;              // 限时（秒），0为不限时
+  timeLimit: number;              // 限时（秒），0 为不限时
   certifiedAt?: number;           // 通过时间戳
   attempts: number;               // 尝试次数
   bestScore?: number;             // 最高得分
+}
+
+// 辅助函数：检查是否可以重试
+export function isReadyForRetry(cert: LevelCertification): boolean {
+  if (!cert.lastAttemptAt) return true;
+  const hoursPassed = (Date.now() - cert.lastAttemptAt) / (1000 * 60 * 60);
+  return hoursPassed >= (cert.cooldownPeriod || 24);
 }

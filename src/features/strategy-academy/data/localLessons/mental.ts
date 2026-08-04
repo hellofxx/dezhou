@@ -7,9 +7,9 @@ import type { Lesson } from '../../types';
  * 本模块讲解 Tilt 识别、止损纪律与 Session 管理。
  */
 export const MENTAL_LESSONS: Lesson[] = [
-  // ===== mental-tilt-recognition =====
+  // ===== local-mental-tilt-recognition =====
   {
-    id: 'mental-tilt-recognition',
+    id: 'local-mental-tilt-recognition',
     level: 7,
     order: 19,
     title: 'Tilt 识别与应对',
@@ -60,9 +60,9 @@ export const MENTAL_LESSONS: Lesson[] = [
     ],
   },
 
-  // ===== mental-stop-loss =====
+  // ===== local-mental-stop-loss =====
   {
-    id: 'mental-stop-loss',
+    id: 'local-mental-stop-loss',
     level: 7,
     order: 20,
     title: '止损纪律',
@@ -112,9 +112,9 @@ export const MENTAL_LESSONS: Lesson[] = [
     ],
   },
 
-  // ===== mental-session-management =====
+  // ===== local-mental-session-management =====
   {
-    id: 'mental-session-management',
+    id: 'local-mental-session-management',
     level: 7,
     order: 21,
     title: 'Session 管理与长期盈利',

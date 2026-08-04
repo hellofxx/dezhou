@@ -38,6 +38,18 @@ export const LEVEL_6_LESSONS: Lesson[] = [
             content:
               'Bubble Factor 衡量的是 ICM 压力的强度：\n- Bubble Factor = 1：无 ICM 压力（如现金局）\n- Bubble Factor > 1：有 ICM 压力（锦标赛）\n- 泡沫期 Bubble Factor 最高，可达 1.5-2.0\n\nBubble Factor 越高，你的 call 范围应该越紧。',
           },
+          { type: 'heading', content: 'ICM 计算示例' },
+          {
+            type: 'text',
+            content:
+              '### 最小算例：SNG 奖金结构\n假设 4 人 SNG 奖金结构：1st=$50, 2nd=$30, 3rd=$20, 4th=$0\n筹码分布：A=40BB, B=30BB, C=20BB, D=10BB\n\n**步骤 1: 每人夺冠概率 ≈ 筹码占比**\n- P(A wins) = 40/(40+30+20+10) = 40%\n\n**步骤 2: 两人决赛的概率**\n- P(A & B finish top 2) = 组合计算...\n- A 得第 2 名的概率 = Σ(P(某玩家得第 1) × P(A 得第 2 | 该玩家得第 1))\n\n**步骤 3: 最终$EV**\n- A 的$EV = Σ(P(i wins at position j) × prize_j)\n- = 0.4×$50 + 0.32×$30 + 0.2×$20 = $36.6\n\n这意味着 40BB 筹码在当前的 SNG 中的期望价值是$36.6',
+          },
+          { type: 'heading', content: 'Bubble Factor (BF) 详解' },
+          {
+            type: 'text',
+            content:
+              '### 定义与公式\nBubble Factor = call 所需 equity / 现金局所需 equity\n\n### 示例\n- 现金局中面对 50% pot bet，call 需 27% 胜率\n- ICM 中 BF 可达 1.5-2.0（极端情况下更高）\n- 实际所需 equity = 27% × 1.5 = 40.5%\n\n这意味着泡沫期必须用更宽范围弃牌，即使现金局会 call。',
+          },
           { type: 'heading', content: 'ICM 对范围的影响' },
           {
             type: 'text',
@@ -392,7 +404,7 @@ export const LEVEL_6_LESSONS: Lesson[] = [
                 'SB 的 push 范围很宽（50-55%）',
                 'A8s 对抗宽范围有很好的胜率（~55%）',
                 'A 的阻断效果减少对手有 Ax 的概率',
-                '底池赔率好：call 10BB 赢 12BB',
+                '底池赔率：SB push 10BB，hero BB 追加 call 成本 9BB，总底池 21BB。所需胜率 = 9/21 ≈ 43%',
                 '即使没有 ICM 压力，这也是明显的 call',
               ],
             },
