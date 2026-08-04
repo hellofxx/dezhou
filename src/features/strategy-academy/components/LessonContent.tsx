@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
@@ -50,17 +51,15 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
   const [checkpointAnswered, setCheckpointAnswered] = useState<Record<string, boolean>>({});
 
   // C1 fix: URL hash → activeUnitId sync（支持 #uX 直达且高亮对应胶囊）
+  // 依赖 location.hash：SPA 内 hash 变更（React Router location 更新）同样触发同步，
+  // 不依赖组件重挂载（CourseView 的 scrollToAnchor 负责滚动，此处负责高亮状态）
+  const location = useLocation();
   useEffect(() => {
-    const hash = window.location.hash.slice(1);
+    const hash = location.hash.slice(1);
     if (hash && units.some((u) => u.id === hash)) {
       setActiveUnitId(hash);
-      // 同步 DOM 滚动（CourseView 已处理 scrollIntoView，此步为防御性确保 SectionNav 高亮正确）
-      const el = document.getElementById(hash);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
     }
-  }, []);
+  }, [location.hash, units]);
 
   const currentUnitIndex = units.findIndex((u) => u.id === activeUnitId);
   const isLastUnit = currentUnitIndex === units.length - 1;
