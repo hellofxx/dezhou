@@ -6,13 +6,25 @@ import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { Position } from '@/shared/types/position';
 import { stringToCard } from '@/shared/utils/deck';
 import { formatBB } from '@/shared/utils/formatters';
+import { PredictionPrompt } from './PredictionPrompt';
 
 interface HandExampleProps {
   example: HandExampleType;
   index: number;
+  /** P2: 互动示例（预测暂停 checkpoint），默认 false 保持静态行为（QuickDrill 等调用方不受影响） */
+  interactive?: boolean;
+  /** 已答状态（父层按 unitId 维护，受控传入 PredictionPrompt） */
+  answered?: boolean;
+  onAnswered?: (answered: boolean) => void;
 }
 
-export function HandExampleComponent({ example, index }: HandExampleProps) {
+export function HandExampleComponent({
+  example,
+  index,
+  interactive = false,
+  answered,
+  onAnswered,
+}: HandExampleProps) {
   const heroCards = example.heroHand.map(stringToCard);
   const boardCards = example.board?.map(stringToCard) ?? [];
 
@@ -145,7 +157,15 @@ export function HandExampleComponent({ example, index }: HandExampleProps) {
         </div>
       </div>
 
-      {/* Decision Analysis */}
+      {/* Decision Analysis：静态模式双栏；互动模式替换为预测暂停（PredictionPrompt） */}
+      {interactive ? (
+        <PredictionPrompt
+          example={example}
+          answered={answered ?? false}
+          onAnswered={onAnswered ?? (() => {})}
+        />
+      ) : (
+      <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-full">
         {/* Correct Decision */}
         <div className="rounded-lg border-l-4 border-[var(--success)] bg-[var(--success)]/5 p-4 overflow-hidden break-words">
@@ -189,13 +209,15 @@ export function HandExampleComponent({ example, index }: HandExampleProps) {
         </div>
       </div>
 
-      {/* Opponent Strategy Tip */}
+      {/* Opponent Strategy Tip（静态模式保留；互动模式由 PredictionPrompt 揭示区承载） */}
       {example.opponent && (
         <div className="mt-1 pt-3 border-t border-[var(--walnut-border)]">
           <p className="text-xs text-[var(--ivory-dim)]">
             💡 面对 {example.opponent.shortName} 类型对手，{example.opponent.exploitableBy[0]}
           </p>
         </div>
+      )}
+      </>
       )}
     </motion.div>
   );

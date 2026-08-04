@@ -29,6 +29,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
   const [activeUnitId, setActiveUnitId] = useState(units[0]?.id ?? '');
   const [completedUnitIds, setCompletedUnitIds] = useState<string[]>([]);
   const [view, setView] = useState<ViewMode>('units');
+  // P2: checkpoint 已答状态（unitId → 已答；纯本地，不计分不接外部系统）
+  const [checkpointAnswered, setCheckpointAnswered] = useState<Record<string, boolean>>({});
 
   const currentUnitIndex = units.findIndex((u) => u.id === activeUnitId);
   const isLastUnit = currentUnitIndex === units.length - 1;
@@ -181,9 +183,20 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
               {unit.sections.map((s, j) => (
                 <ContentBlock key={j} section={s} />
               ))}
-              {example && (
-                <HandExampleComponent example={example} index={i} />
-              )}
+              {example &&
+                (unit.checkpoint ? (
+                  <HandExampleComponent
+                    example={example}
+                    index={i}
+                    interactive
+                    answered={!!checkpointAnswered[unit.id]}
+                    onAnswered={(v) =>
+                      setCheckpointAnswered((prev) => ({ ...prev, [unit.id]: v }))
+                    }
+                  />
+                ) : (
+                  <HandExampleComponent example={example} index={i} />
+                ))}
             </section>
           );
         })}
