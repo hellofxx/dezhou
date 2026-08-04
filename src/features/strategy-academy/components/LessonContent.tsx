@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowLeft, BookOpen, PlayCircle, Flame, type LucideIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
 import type { Lesson, PracticeResult } from '../types';
 import { ContentBlock } from './content';
 import { HandExampleComponent } from './HandExample';
 import { PracticeDrillComponent } from './PracticeDrill';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/tabs';
+import { SectionNav } from './SectionNav';
+import { LessonIntroCard } from './LessonIntroCard';
+import { deriveLessonUnits } from '../utils/lessonUnits';
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -13,159 +16,189 @@ interface LessonContentProps {
   onPracticeComplete?: (result: PracticeResult) => void;
 }
 
-type TabValue = 'theory' | 'examples' | 'practice';
-
-interface TabItem {
-  value: TabValue;
-  label: string; // Tab 按钮短词（<640px 仅图标）
-  fullLabel: string; // 底部 CTA 完整词
-  icon: LucideIcon;
-}
+type ViewMode = 'units' | 'practice';
 
 export function LessonContent({ lesson, onComplete, onPracticeComplete }: LessonContentProps) {
-  const [activeTab, setActiveTab] = useState<TabValue>('theory');
+  const { t } = useTranslation();
 
+  const units = useMemo(() => deriveLessonUnits(lesson), [lesson]);
   const hasExamples = lesson.examples && lesson.examples.length > 0;
   const hasPractice = !!lesson.practice;
+  const isTheoryOnly = !hasExamples && !hasPractice;
 
-  const tabs: TabItem[] = [
-    { value: 'theory', label: '理论', fullLabel: '理论讲解', icon: BookOpen },
-    ...(hasExamples ? [{ value: 'examples' as TabValue, label: '示例', fullLabel: '示例演示', icon: PlayCircle }] : []),
-    ...(hasPractice ? [{ value: 'practice' as TabValue, label: '实战', fullLabel: '实战练习', icon: Flame }] : []),
-  ];
+  const [activeUnitId, setActiveUnitId] = useState(units[0]?.id ?? '');
+  const [completedUnitIds, setCompletedUnitIds] = useState<string[]>([]);
+  const [view, setView] = useState<ViewMode>('units');
 
-  const currentTabIndex = tabs.findIndex((t) => t.value === activeTab);
-  const nextTab = tabs[currentTabIndex + 1];
-  const prevTab = tabs[currentTabIndex - 1];
+  const currentUnitIndex = units.findIndex((u) => u.id === activeUnitId);
+  const isLastUnit = currentUnitIndex === units.length - 1;
 
-  const handlePracticeComplete = (result: PracticeResult) => {
-    onPracticeComplete?.(result);
-    onComplete();
-  };
+  // 导航到指定小节
+  const handleNavigateUnit = useCallback((unitId: string) => {
+    setActiveUnitId(unitId);
+    const el = document.getElementById(unitId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
 
+  // 进入下一节
+  const handleNext = useCallback(() => {
+    setCompletedUnitIds((prev) =>
+      prev.includes(activeUnitId) ? prev : [...prev, activeUnitId],
+    );
+
+    if (!isLastUnit) {
+      const nextUnit = units[currentUnitIndex + 1];
+      if (nextUnit) {
+        setActiveUnitId(nextUnit.id);
+        const el = document.getElementById(nextUnit.id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    } else if (hasPractice) {
+      setView('practice');
+    } else {
+      onComplete();
+    }
+  }, [activeUnitId, currentUnitIndex, isLastUnit, hasPractice, onComplete, units]);
+
+  // 实战完成处理
+  const handlePracticeComplete = useCallback(
+    (result: PracticeResult) => {
+      onPracticeComplete?.(result);
+      onComplete();
+    },
+    [onPracticeComplete, onComplete],
+  );
+
+  // 返回小节视图
+  const handleBackToSections = useCallback(() => {
+    setView('units');
+  }, []);
+
+  // 确定 CTA 文案
+  const nextCtaLabel = isLastUnit
+    ? hasPractice
+      ? t('academy.lessonUnit.startPractice')
+      : t('academy.lessonUnit.completeLesson')
+    : t('academy.lessonUnit.nextSection', { title: units[currentUnitIndex + 1]?.title ?? '' });
+
+  // 实战视图
+  if (view === 'practice' && hasPractice && lesson.practice) {
+    return (
+      <div className="space-y-4">
+        <button
+          onClick={handleBackToSections}
+          className="inline-flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {t('academy.lessonUnit.backToSections')}
+        </button>
+        <PracticeDrillComponent
+          drill={lesson.practice}
+          lessonId={lesson.id}
+          onComplete={handlePracticeComplete}
+        />
+      </div>
+    );
+  }
+
+  // 纯理论课空态
+  if (isTheoryOnly) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="space-y-4"
+      >
+        <SectionNav
+          units={units}
+          activeId={activeUnitId}
+          completedIds={completedUnitIds}
+          onNavigate={handleNavigateUnit}
+        />
+        <div className="mt-4 space-y-4 max-w-4xl mx-auto">
+          <LessonIntroCard units={units} duration={lesson.duration} />
+          {units.map((unit) => (
+            <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
+              <h2 className="font-display text-[18px] text-[var(--ivory)] tracking-wide">
+                {units.indexOf(unit) + 1}. {unit.title}
+              </h2>
+              {unit.sections.map((s, j) => (
+                <ContentBlock key={j} section={s} />
+              ))}
+            </section>
+          ))}
+        </div>
+        <div className="mt-4 flex items-center gap-2 text-xs text-[var(--ivory-muted)]">
+          <BookOpen className="w-3.5 h-3.5" />
+          {t('academy.lessonUnit.theoryOnly')}
+        </div>
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={onComplete}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+          >
+            {t('academy.lessonUnit.completeLesson')}
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // 标准视图：小节导航 + 内容
   return (
     <div>
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabValue)}>
-        <TabsList className="sticky top-0 z-20 w-full bg-[var(--walnut-raised)] border border-[var(--walnut-border)]">
-          {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.value}
-              value={tab.value}
-              className="flex-1 flex items-center justify-center gap-1.5 data-[state=active]:bg-[var(--brass-bright)] data-[state=active]:text-[var(--felt-deep)] text-[var(--ivory-muted)] text-xs sm:text-sm"
-            >
-              <tab.icon className="w-4 h-4 shrink-0" />
-              <span className="hidden sm:inline">{tab.label}</span>
-            </TabsTrigger>
-          ))}
-        </TabsList>
+      <SectionNav
+        units={units}
+        activeId={activeUnitId}
+        completedIds={completedUnitIds}
+        onNavigate={handleNavigateUnit}
+      />
+      <div className="mt-4 space-y-4 max-w-4xl mx-auto">
+        {/* 先行组织者卡 */}
+        <LessonIntroCard units={units} duration={lesson.duration} />
 
-        {/* Theory Tab */}
-        <TabsContent value="theory" className="mt-4">
-          {/* P2-05: 阅读区放宽至 max-w-4xl（消除宽屏左右大空白）；正文段落自身限宽保持阅读舒适 */}
-          <div className="space-y-4 max-w-4xl mx-auto">
-            {lesson.content.map((section, index) => (
-              <ContentBlock key={index} section={section} />
-            ))}
-          </div>
-          {nextTab && (
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => setActiveTab(nextTab.value)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-              >
-                进入{nextTab.fullLabel}
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-          {!nextTab && (
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={onComplete}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-              >
-                完成学习
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-        </TabsContent>
+        {/* 小节序列 */}
+        {units.map((unit, i) => {
+          const example = unit.exampleId
+            ? lesson.examples?.find((ex) => ex.id === unit.exampleId)
+            : undefined;
 
-        {/* Examples Tab */}
-        {hasExamples && (
-          <TabsContent value="examples" className="mt-4">
-            <div className="space-y-8">
-              {lesson.examples!.map((example, index) => (
-                <HandExampleComponent key={example.id} example={example} index={index} />
-              ))}
-            </div>
-            {/* Navigation */}
-            <div className="mt-6 flex items-center justify-between">
-              {prevTab ? (
-                <button
-                  onClick={() => setActiveTab(prevTab.value)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  {prevTab.fullLabel}
-                </button>
-              ) : <div />}
-              {nextTab ? (
-                <button
-                  onClick={() => setActiveTab(nextTab.value)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-                >
-                  进入{nextTab.fullLabel}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              ) : (
-                <button
-                  onClick={onComplete}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-                >
-                  完成学习
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+          return (
+            <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
+              <h2 className="font-display text-[18px] text-[var(--ivory)] tracking-wide">
+                {i + 1}. {unit.title}
+              </h2>
+              {unit.sections.length === 0 && !example && (
+                <p className="text-xs text-[var(--ivory-muted)]">
+                  {t('academy.lessonUnit.noContent')}
+                </p>
               )}
-            </div>
-          </TabsContent>
-        )}
+              {unit.sections.map((s, j) => (
+                <ContentBlock key={j} section={s} />
+              ))}
+              {example && (
+                <HandExampleComponent example={example} index={i} />
+              )}
+            </section>
+          );
+        })}
 
-        {/* Practice Tab */}
-        {hasPractice && (
-          <TabsContent value="practice" className="mt-4">
-            <PracticeDrillComponent
-              drill={lesson.practice!}
-              lessonId={lesson.id}
-              onComplete={handlePracticeComplete}
-            />
-            {/* Back navigation (only show when not finished) */}
-            {prevTab && (
-              <div className="mt-4 flex justify-start">
-                <button
-                  onClick={() => setActiveTab(prevTab.value)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  {prevTab.fullLabel}
-                </button>
-              </div>
-            )}
-          </TabsContent>
-        )}
-      </Tabs>
-
-      {/* Empty state for lessons without examples/practice */}
-      {!hasExamples && !hasPractice && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-4 flex items-center gap-2 text-xs text-[var(--ivory-muted)]"
-        >
-          <BookOpen className="w-3.5 h-3.5" />
-          本课仅有理论内容
-        </motion.div>
-      )}
+        {/* 顺序推进 CTA */}
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={handleNext}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+          >
+            {nextCtaLabel}
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

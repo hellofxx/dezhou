@@ -237,6 +237,11 @@ export interface Lesson {
    * 未声明时仅受 Level 解锁约束；声明后需同时满足 Level 解锁与 prerequisite 完成。
    */
   prerequisites?: string[];
+  /**
+   * 课程小节单元（微观闭环结构）。
+   * 未声明时由 deriveLessonUnits 视图层派生，实现数据零迁移。
+   */
+  units?: LessonUnit[];
 }
 
 // 级别信息
@@ -339,6 +344,16 @@ export interface LevelCertification {
   certifiedAt?: number;           // 通过时间戳
   attempts: number;               // 尝试次数
   bestScore?: number;             // 最高得分
+}
+
+// 课程小节单元（微观闭环：概念 + 内嵌示例 + 可选预测暂停）
+export interface LessonUnit {
+  id: string;                  // 'u1'…'uN'（DOM 锚点 id）
+  title: string;               // 小节标题（导航 + 路线图显示）
+  sections: LessonSection[];   // 概念块（现有 LessonSection 类型）
+  exampleId?: string;          // 关联 lesson.examples[] 中的牌例 id
+  checkpoint?: boolean;        // 是否在示例前插入预测暂停（P2 使用）
+  durationMin?: number;        // 可选，路线图时间估算
 }
 
 // 辅助函数：检查是否可以重试

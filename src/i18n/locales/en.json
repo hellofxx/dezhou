@@ -334,6 +334,21 @@
       "completeLevelFirst": "Please complete all lessons in this Level first",
       "missingPrereqHint": "Please complete the following prerequisite lessons:"
     },
+    "lessonUnit": {
+      "introTitle": "Lesson Roadmap",
+      "introDuration": "Duration {{duration}}",
+      "sectionCount": "{{count}} sections",
+      "nextSection": "Next: {{title}}",
+      "startPractice": "Start Practice",
+      "completeLesson": "Complete Lesson",
+      "backToSections": "Back to Sections",
+      "comprehensiveExamples": "Comprehensive Examples",
+      "theoryOnly": "This lesson contains theory only. Click 'Complete Lesson' when done.",
+      "noContent": "Loading section content"
+    },
+    "sectionNav": {
+      "label": "Lesson section navigation"
+    },
     "lessons_new": {
       "l3-3bet-postflop": "3-Bet Pot Postflop Strategy",
       "l3-3bet-postflop-desc": "Lower SPR, narrower ranges, more critical decisions",
