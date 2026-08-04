@@ -24,7 +24,10 @@ export function ContentBlock({ section }: ContentBlockProps) {
 
     case 'text':
       return (
-        <p className="text-sm text-[var(--ivory-dim)] leading-[1.7] tracking-[0.01em] whitespace-pre-line">
+        <p
+          /* 正文段落限宽 max-w-3xl（768px 阅读宽度），与放宽后的容器（max-w-4xl）形成层次 */
+          className="text-sm text-[var(--ivory-dim)] leading-[1.7] tracking-[0.01em] whitespace-pre-line max-w-3xl"
+        >
           {section.content}
         </p>
       );
@@ -96,7 +99,7 @@ export function ContentBlock({ section }: ContentBlockProps) {
 
     default:
       return (
-        <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">
+        <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line max-w-3xl">
           {section.content}
         </p>
       );

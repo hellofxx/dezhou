@@ -12,7 +12,7 @@ tools:
   - Write
   - Bash
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "[Qwen3.7-Plus](qmodel)"
 skills:
   - frontend-design
 ---

@@ -18,15 +18,22 @@ export function HandExampleComponent({ example, index }: HandExampleProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.15 }}
+      /* P2-05: 入场仅淡入（去掉 y 位移——transform 偏移不参与布局，滚动时视觉覆盖下方元素产生重叠） */
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.08, 0.3) }}
       className="space-y-5 max-w-full overflow-x-hidden"
     >
-      {/* Title */}
-      <h3 className="font-display text-[16px] text-[var(--ivory)] tracking-wide">
-        {example.title}
-      </h3>
+      {/* Title 行：序号徽章 + 标题 + 黄铜发线 */}
+      <div className="flex items-center gap-3">
+        <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded bg-[var(--brass)]/15 text-[var(--brass-bright)] border border-[var(--brass)]/30 font-numeric">
+          示例 {index + 1}
+        </span>
+        <h3 className="font-display text-[16px] text-[var(--ivory)] tracking-wide">
+          {example.title}
+        </h3>
+        <div className="flex-1 h-px bg-[var(--walnut-border)] opacity-40" />
+      </div>
 
       {/* Opponent Profile Card */}
       {example.opponent && (
@@ -72,11 +79,8 @@ export function HandExampleComponent({ example, index }: HandExampleProps) {
         </div>
       )}
 
-      {/* Poker Table */}
-      <div className="rounded-2xl bg-[var(--felt)] border border-[var(--felt-raised)] p-5 md:p-8 relative overflow-hidden max-w-full">
-        {/* Felt texture overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.04)_0%,transparent_70%)] pointer-events-none" />
-
+      {/* Poker Table（P2-05: 复用 .scenario-card 发牌员虚线圈，与实战场景卡同语言） */}
+      <div className="scenario-card p-5 md:p-8">
         <div className="relative z-10 flex flex-col items-center gap-4">
           {/* Pot size indicator */}
           <div className="bg-black/40 px-4 py-1.5 rounded-full">

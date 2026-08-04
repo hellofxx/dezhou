@@ -61,7 +61,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
 
         {/* Theory Tab */}
         <TabsContent value="theory" className="mt-4">
-          <div className="space-y-4 max-w-prose mx-auto">
+          {/* P2-05: 阅读区放宽至 max-w-4xl（消除宽屏左右大空白）；正文段落自身限宽保持阅读舒适 */}
+          <div className="space-y-4 max-w-4xl mx-auto">
             {lesson.content.map((section, index) => (
               <ContentBlock key={index} section={section} />
             ))}

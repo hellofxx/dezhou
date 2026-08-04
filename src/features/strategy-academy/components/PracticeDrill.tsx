@@ -37,12 +37,29 @@ interface PracticeDrillProps {
   adaptive?: boolean;
 }
 
+// P2-05: 动作按钮语义分类（题库 action 值多样：'fold'/'raise 2.5BB'/'Bet 4BB（33% pot）'/中文等，
+// 精确匹配会让绝大多数选项落入 fallback；按语义关键词归类到 §5.5 平权色阶）
 const ACTION_STYLES: Record<string, string> = {
-  Fold: 'bg-[var(--clay)]/80 hover:bg-[var(--clay)] border-[var(--clay)]/40 text-[var(--ivory)]',
-  Call: 'bg-[var(--brass-dark)]/80 hover:bg-[var(--brass-dark)] border-[var(--brass-dark)]/40 text-[var(--ivory)]',
-  Raise: 'bg-[var(--felt-light)]/80 hover:bg-[var(--felt-light)] border-[var(--felt-light)]/40 text-[var(--ivory)]',
-  Check: 'bg-[var(--info)]/60 hover:bg-[var(--info)]/80 border-[var(--info)]/40 text-[var(--ivory)]',
+  Fold: 'action-mini act-fold !px-4 !py-3 !text-sm !font-bold !rounded-lg',
+  Call: 'action-mini act-call !px-4 !py-3 !text-sm !font-bold !rounded-lg',
+  Raise: 'action-mini act-raise !px-4 !py-3 !text-sm !font-bold !rounded-lg',
+  'All-in': 'action-mini act-allin !px-4 !py-3 !text-sm !font-bold !rounded-lg',
+  Check: 'action-mini !px-4 !py-3 !text-sm !font-bold !rounded-lg border border-[var(--poker-info)]/50 bg-[var(--poker-info-bg)] text-[var(--poker-info)] hover:bg-[var(--poker-info)]/20',
 };
+
+function classifyAction(action: string): string {
+  const a = action.toLowerCase();
+  if (a.includes('all-in') || a.includes('allin') || a.startsWith('push') || a.includes('全下')) return ACTION_STYLES['All-in']!;
+  if (a.startsWith('fold') || a.includes('fold') || a.startsWith('弃牌') || a.startsWith('tank then')) return ACTION_STYLES['Fold']!;
+  if (a.startsWith('call') || a.startsWith('limp') || a.startsWith('跟注') || a.includes('平跟') || a.startsWith('仅跟注')) return ACTION_STYLES['Call']!;
+  if (a.startsWith('check')) return ACTION_STYLES['Check']!;
+  if (
+    a.startsWith('raise') || a.startsWith('bet') || a.startsWith('3-bet') || a.startsWith('c-bet') ||
+    a.startsWith('squeeze') || a.startsWith('open') || a.startsWith('加注') || a.startsWith('下注') ||
+    a.startsWith('min-raise') || a.startsWith('overbet') || a.startsWith('donk') || a.includes('价值下注')
+  ) return ACTION_STYLES['Raise']!;
+  return ACTION_STYLES['Call']!; // 中性兜底（心理类/工具类选项）
+}
 
 const DIFFICULTY_LABELS: Record<QuestionDifficulty, string> = {
   beginner: '基础',
@@ -753,8 +770,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       {/* Action buttons */}
       <div className="flex flex-wrap gap-2.5">
         {options.map((option, i) => {
-          const styleKey = option.action;
-          const baseStyle = ACTION_STYLES[styleKey] ?? ACTION_STYLES['Call']!;
+          // P2-05: 语义分类取色阶（题库 action 值多样，精确匹配不可靠）
+          const baseStyle = classifyAction(option.action);
           const isSelected = selectedOption === option;
           const showCorrect = isAnswered && option.isCorrect;
           const showWrong = isAnswered && isSelected && !option.isCorrect;
@@ -765,7 +782,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               onClick={() => handleSelect(option)}
               disabled={isAnswered}
               className={cn(
-                'relative flex-1 min-w-[120px] rounded-lg border px-4 py-3 text-sm font-bold transition-all text-center',
+                'relative flex-1 min-w-[120px] rounded-lg border transition-all text-center',
                 baseStyle,
                 showCorrect && 'ring-2 ring-[var(--success)] shadow-[0_0_12px_rgba(127,184,131,0.4)]',
                 showWrong && 'ring-2 ring-[var(--danger)] opacity-70',

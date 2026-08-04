@@ -6,6 +6,23 @@
 
 ---
 
+## fix(strategy-academy) — 2026-08-04（UI 反馈修复：理论空白 / 示例重叠 / 实战色阶）
+
+> 用户反馈三处 UI 问题（P2-05）：理论页左右空白、示例页滚动重叠、实战页与全局牌桌视觉语言不统一。
+
+### 修复内容
+
+- **理论页空白**：阅读区由 `max-w-prose`（65ch ≈650px）放宽至 `max-w-4xl`（896px，占面板 96%）；正文段落自身保留 `max-w-3xl` 限宽维持阅读舒适度
+- **示例页重叠**：HandExample 入场动画由 `y: 24` 位移改为纯淡入（transform 偏移不参与布局，滚动时视觉覆盖下方元素）；新增「示例 N」序号徽章 + 标题行黄铜发线；牌桌区复用 `.scenario-card`（发牌员虚线圈，与实战场景卡同语言）
+- **实战页色阶**：行动按钮改复用 globals.css §5.5 平权色阶组件类（`.action-mini.act-*` 为颜色事实源）：Fold=陶土红透底 / Call=胡桃实色 / Raise=黄铜渐变 / All-in=深胡桃嵌黄铜 / Check=info 透底；新增 `classifyAction()` 语义关键词分类（题库 action 值多样如 'fold'/'raise 2.5BB'/'Bet 4BB（33% pot）'/中文选项，精确匹配会让绝大多数落入 fallback），修复评审 P0-5 遗留（原 Raise=felt-light 绿、Call=brass-dark 与全局行动心智冲突）
+
+### 验证
+
+- `pnpm verify` 全绿：57 files 385 tests 通过
+- 浏览器验证：理论内容占面板 96% 无空旷；多示例滚动无重叠（示例 1/2 卡间距正常、无残留 transform）；实战按钮三色语义正确（Check=info 透底 / Bet=黄铜渐变深墨字 / All-in=深胡桃嵌黄铜亮字）
+
+---
+
 ## feat(strategy-academy) — 2026-08-04（策略学院 UI/UX 设计优化协作实施）
 
 > 基于 UI/UX 设计评审（P0-1~P0-8 / P1-1~P1-6 / P2-1~P2-8），四子代理（strategy-academy-dev / ui-ux-dev / platform-dev / progress-dev）按 P2-01 → P2-04 → P2-03 → P2-02 顺序协作实施，每任务经联合审查与 `pnpm verify` 门禁。
