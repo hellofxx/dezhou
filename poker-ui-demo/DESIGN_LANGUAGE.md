@@ -1,8 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.3.2
+> 德州扑克训练平台 UI/UX 设计规范 v1.4.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.4.0 更新：课程阅读排版契约（§3.3 Lesson Reading/Heading 字号）、新增 §5.22 教学内容块（content-block 视觉词汇）、课程内 Tab 图标化+sticky（§5.6）、场景卡复用（§5.16）、模块级 Emoji→Lucide 图标约定
 > v1.3.2 更新：实现层合规修复（五级反馈牌室化、霓虹色板清零、牌背胡桃化）、新增 §5.21 交互状态矩阵、§2.2 语义色 hover 变体规则、token 登记（gold/bronze/indigo-bright/terra-bright）、设计 token 守卫测试机制
 > v1.3 更新：移动端响应式重构（streak-rail 上移至 arena 下方、训练场二列、arena 紧凑三分区、纵向压缩）、CSS `!important` 特异性规则
 > v1.2 更新：导航权威统一（侧边栏单一导航）、仪表盘 5 段叙事、训练场模块网格、今日推荐/场景卡/live 呼吸点等新组件、底部黄铜打卡条
@@ -145,6 +146,8 @@
 | Caption | 10–11px | Inter Tight | 400 | 1.4 | 注释、次要信息 |
 | Eyebrow | 9–10px | Inter Tight | 600 uppercase | 1.2 | tracking 0.18–0.2em，分组标签 |
 | Numeric Big | 28–36px | Fraunces/JetBrains | 600/700 | 1 | 铭牌数值、关键数据 |
+| Lesson Reading / 课程阅读正文 | 14px | Inter Tight | 400/500 | 1.7 | 课程理论讲解正文（max-w-prose 65ch 阅读列） |
+| Lesson Heading / 课程内容标题 | 20px | Fraunces | 600 | 1.4 | 课程内容 heading 段 |
 | Motto | 11px | Fraunces italic | 400 | 1 | 两侧发线包裹格言，letter-spacing 0.15em |
 
 ---
@@ -241,6 +244,10 @@
 - 标题 `.panel-title`：Fraunces 15px 600，前带 15px Lucide 图标（brass 70%）
 - 活面板 `.panel-live`：顶部黄铜发线 `::before`（左右各留 10%，带 glow）
 - 主题卡片 `.theme-card`：同底，顶边半透明黄铜发线 `::before`，hover 点亮为实色黄铜
+- **课程内 Tab 导航（v1.4.0）**：课程内容区的阶段页签（理论讲解/示例演示/实战练习），属内容区组件而非页面导航（不与 §5.7 侧边栏导航权威冲突）
+  - `TabsList`：`sticky top-0 z-20`（内容滚动时 Tab 条悬浮）+ `walnut-raised` 底 + 1px `walnut-border` 边；active 项黄铜亮底 `--brass-bright` + 深墨字 `--felt-deep`，未选态 `ivory-muted`
+  - Tab 项 = Lucide 图标（20px）+ 短词标签（理论=BookOpen / 示例=PlayCircle / 实战=Flame）；<640px 隐藏文字仅图标（文字 `hidden sm:inline`）
+  - 底部推进 CTA：黄铜主按钮，动词式「进入{下一段完整词}」（如"进入示例演示"）；末段为「完成学习」；返回用胡桃次级按钮 + ArrowLeft
 
 ### 5.7 导航
 **导航权威唯一原则（v1.2）**：桌面端只允许一个主导航（侧边栏），不得出现顶部 Tab/底栏/抽屉等冗余导航层。移动端 <768px 侧边栏隐藏→底部 mobile-nav 接管。
@@ -314,6 +321,7 @@
 - `::before`：3px inset 虚线黄铜边（发牌员虚线圈）
 - 内阴影：inset 顶高光 `rgba(255,240,200,0.06)` + 外阴影 `0 2px 12px rgba(0,0,0,0.2)`
 - 组成：位置徽章（BTN/SB/BB）+ 2 张手牌 + 底池/手牌/对手说明（font-numeric）
+- 复用（v1.4.0）：PracticeDrill 场景面板已复用本类（`scenario-card p-5 md:p-6` 覆盖 padding 保持内部宽松；压力模式可覆盖边框为 `var(--danger)`/30）
 
 ### 5.17 推荐项 `.rec-item`（v1.2）
 - 今日训练计划列表的单条项
@@ -360,6 +368,32 @@
 | **五级反馈** | 唯一样式事实源为 `.grade-best`~`.grade-blunder`（苔藓绿/黄铜/陶土红低透底+左侧色条）；`GRADE_DISPLAY_CONFIG` 引用这些类，禁止霓虹类 | `shared/types/decisionFeedback.ts` |
 
 **守卫机制（v1.3.2）**：`src/designTokenGuard.test.ts` 在 `pnpm test` 中强制断言 src 内零 Tailwind 霓虹调色板类、零纯黑白类与 hex 字面量；豁免白名单只删不加，新增豁免须先在本文档登记设计依据。
+
+### 5.22 教学内容块 `.content-block`（v1.4.0）
+
+用于课程理论讲解（LessonContent 理论 Tab）的内容块视觉词汇，九种类型共享统一骨架：
+- **统一骨架**：`rounded-lg p-4` + 20px 图标（语义色，`shrink-0 mt-0.5`）+ 标签 `text-xs font-semibold`（部分类型无标签）+ 正文 `text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line`
+- **实现位置**：`src/features/strategy-academy/components/content/`（模块内私有，跨模块复用时升级 `shared/components/`）
+
+类型规范（token 均来自 §2，语义色短名 `--warning`/`--info`/`--success`/`--brass` 为 globals.css 别名）：
+
+| 类型 | 底色 | 边框 | 图标（Lucide） | 标签色 |
+|---|---|---|---|---|
+| `highlight` | `var(--warning)`/10 | `var(--warning)`/30 | AlertTriangle（warning） | 无标签 |
+| `key-point` | `var(--poker-success-bg)` | `var(--poker-success)`/30 | KeyRound（success） | success「关键要点」 |
+| `pro-tip` | `var(--brass)`/5 | `var(--brass)`/40 | Lightbulb（brass-bright） | brass-bright「职业牌手说」uppercase |
+| `formula` | `var(--felt-deep)` | `var(--brass-deep)`/40 | Sigma（brass-bright） | brass-bright「公式推导」 |
+| `theory-reference` | `var(--info)`/10 | `var(--info)`/30 | ExternalLink（info） | info「理论支撑」 |
+| `counter-intuitive` | `var(--poker-terra)`/15 | `var(--poker-terra)`/40 | Lightbulb（terra-bright） | terra-bright「反直觉点」 |
+| `example` | `var(--felt-deep)` | `var(--walnut-border)` | 无（文本块） | 无标签 |
+| `diagram` | `var(--felt-deep)` | `var(--walnut-border)` | Table2（brass-bright） | 无 |
+| `hand-example` | 同 example 块 | 同 example 块 | Hand（brass-bright） | 无 |
+
+规则细节：
+- **theory-reference 跳转规则**：`data.lessonId` 存在（string 非空）时标签为可点击链接（info 色虚线 underline + 小号 ExternalLink）：`data.target==='theory'` → `/theory/chapter/{lessonId}`；其他/缺失 → `/academy/lesson/{lessonId}`
+- **diagram 表格规则**：`data.headers`（string[]）+ `data.rows`（数组的数组）双守卫均非空 → 渲染简化表格（表头 ivory-muted、单元格 ivory-dim、行分隔 `walnut-border` 60%，容器 `overflow-x-auto`）；否则渲染 content 文本 + 可选 caption（ivory-muted 小字）
+- **formula / example 等宽规则**：行级 `AsciiMonoText` — 仅含 ASCII 字母/数字的行使用 font-mono，中文行保持无衬线（避免中文等宽无意义）
+- **hand-example 内容优先级**：content → `data.scenario`（string 非空）→ 占位「（手牌示例数据待补充）」
 
 ---
 
@@ -706,6 +740,17 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **杂项修复**：成就墙四档徽章 token 化（金/铜/暖银/霜钢）；`var(--clay-bright)` 失效引用修复（2 处）；CardSVG 近黑描边改胡桃调；范围网格文案"绿色"→"金色"（对齐 §5.11 黄铜色阶实现）。
 - **新章节**：§5.21 交互状态矩阵、§2.2 hover/active 变体规则与暗底文字亮阶、§12.1 React 落地形态。
 - **守卫机制**：新增 `src/designTokenGuard.test.ts`（vitest 门禁），断言 src 零霓虹类/零纯黑白类与 hex；豁免白名单只删不加。
+
+---
+
+## 附录 G：v1.4.0 变更摘要（课程阅读排版与内容块词汇）
+
+- **背景**：P2-01 排版可读性增强落地于 strategy-academy 模块（`LessonContent.tsx` 理论 Tab + `components/content/` 私有组件），本附录登记已实现规范。
+- **阅读排版契约**：理论 Tab 内容区 `max-w-prose mx-auto`（65ch 阅读列宽）+ `space-y-4`（16px 段落距）；正文 `text-sm leading-[1.7] tracking-[0.01em]` ivory-dim；内容标题 font-display 20px + tracking-wide + `mt-6 first:mt-0`（首段无上距）。§3.3 新增 Lesson Reading / Lesson Heading 两行字号层级。
+- **内容块视觉词汇**：新增 §5.22，统一骨架（rounded-lg p-4 + 20px 语义色图标 + text-xs font-semibold 标签 + text-sm ivory-dim 正文）+ 九种类型表（highlight / key-point / pro-tip / formula / theory-reference / counter-intuitive / example / diagram / hand-example），全部引用 §2 token（含 `--poker-terra`/`--poker-terra-bright`/`--poker-success-bg`），无霓虹。
+- **Tab 图标化 + sticky**：课程内 Tab 栏 `sticky top-0 z-20` + Lucide 图标+短词（<640px 仅图标），推进 CTA「进入{下一段}」；登记于 §5.6。
+- **场景卡复用**：PracticeDrill 场景面板复用 `.scenario-card`（`p-5 md:p-6` 覆盖 padding 保持宽松；压力模式 `border-[var(--danger)]/30`）；登记于 §5.16。
+- **Emoji→Lucide 模块级约定**：课程内容区图标统一替换为 Lucide 线性图标（1.5px stroke，语义色跟随 §7），禁止以 Emoji 作为内容装饰图标。
 
 ---
 
