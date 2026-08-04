@@ -103,6 +103,11 @@ export default function LearningTracksView() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-display text-[16px] text-[var(--ivory)]">{track.name}</h3>
+                      {track.id === 'track-local-cn' && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
+                          已并入 Level 7 · 本土课
+                        </span>
+                      )}
                       {isActive && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--brass-bright)]/20 text-[var(--brass-bright)]">
                           当前轨道

@@ -104,6 +104,20 @@ describe('curriculum integrity: ID 唯一性', () => {
     }
     expect(dups).toEqual([]);
   });
+  it('lesson id 与 quiz / practice / example / drillData 题 id 跨类无冲突', () => {
+    const lessonIdSet = new Set(allLessons.map((l) => l.id));
+    const conflicts: string[] = [];
+    for (const lesson of allLessons) {
+      lesson.quiz.forEach((q) => { if (lessonIdSet.has(q.id)) conflicts.push(`lesson id 与 quiz id 冲突: ${q.id}`); });
+      lesson.examples?.forEach((ex) => { if (lessonIdSet.has(ex.id)) conflicts.push(`lesson id 与 example id 冲突: ${ex.id}`); });
+      if (lesson.practice) {
+        if (lessonIdSet.has(lesson.practice.id)) conflicts.push(`lesson id 与 practice 容器 id 冲突: ${lesson.practice.id}`);
+        lesson.practice.questions.forEach((q) => { if (lessonIdSet.has(q.id)) conflicts.push(`lesson id 与 practice question id 冲突: ${q.id}`); });
+      }
+      lesson.drillData?.questions.forEach((q) => { if (lessonIdSet.has(q.id)) conflicts.push(`lesson id 与 drillData question id 冲突: ${q.id}`); });
+    }
+    expect(conflicts).toEqual([]);
+  });
 });
 
 describe('curriculum integrity: 判分数据合法性', () => {
