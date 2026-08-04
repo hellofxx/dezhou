@@ -37,11 +37,13 @@ export function TheorySectionRenderer({ section }: { section: TheorySection }) {
 
     case 'formula':
       return (
-        <div className="rounded-lg border border-[var(--brass)]/30 bg-[var(--felt-deep)] p-4 flex items-start gap-3">
-          <Sigma className="w-4 h-4 text-[var(--brass-bright)] shrink-0 mt-0.5" />
-          <p className="text-sm text-[var(--ivory)] font-mono leading-relaxed whitespace-pre-line">
-            {section.content}
-          </p>
+        <div className="overflow-x-auto">
+          <div className="rounded-lg border border-[var(--brass)]/30 bg-[var(--felt-deep)] p-4 flex items-start gap-3">
+            <Sigma className="w-5 h-5 text-[var(--brass-bright)] shrink-0 mt-0.5" />
+            <p className="text-base text-[var(--ivory)] font-mono leading-relaxed whitespace-pre-line">
+              {section.content}
+            </p>
+          </div>
         </div>
       );
 
