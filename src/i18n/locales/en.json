@@ -712,7 +712,17 @@
     "chapters": "chapters",
     "tierBasic": "Basic T1-T3",
     "tierIntermediate": "Intermediate T4-T6",
-    "tierAdvanced": "Advanced T7-T9"
+    "tierAdvanced": "Advanced T7-T9",
+    "objectives": "Learning Objectives",
+    "difficultyBasic": "Basic",
+    "difficultyMid": "Intermediate",
+    "difficultyAdvanced": "Advanced",
+    "retryQuiz": "Retake Quiz",
+    "flagQuestion": "Flag this question as difficult",
+    "flaggedQuestion": "Flagged as difficult",
+    "quizProgress": "Question {{current}} of {{total}}",
+    "learningMap": "Learning Path",
+    "continueLearning": "Continue Learning"
   },
   "handHistory": {
     "deviation": {

@@ -712,7 +712,17 @@
     "chapters": "章节",
     "tierBasic": "基础 T1-T3",
     "tierIntermediate": "中级 T4-T6",
-    "tierAdvanced": "高级 T7-T9"
+    "tierAdvanced": "高级 T7-T9",
+    "objectives": "本章学习目标",
+    "difficultyBasic": "基础",
+    "difficultyMid": "进阶",
+    "difficultyAdvanced": "高级",
+    "retryQuiz": "再测一次",
+    "flagQuestion": "标记此题为疑难",
+    "flaggedQuestion": "已标记为疑难",
+    "quizProgress": "第 {{current}} / {{total}} 题",
+    "learningMap": "理论学习地图",
+    "continueLearning": "继续学习"
   },
   "handHistory": {
     "deviation": {
