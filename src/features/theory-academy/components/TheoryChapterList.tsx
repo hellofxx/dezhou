@@ -27,6 +27,10 @@ export function TheoryChapterList({ chapters, completedChapters, quizScores }: T
                 e.stopPropagation();
                 navigate(`/theory/chapter/${chapter.id}`);
               }}
+              // hover 预取章节页 chunk（与路由层 lazy 复用同一 chunk，提前 fetch 减少点击等待）
+              onMouseEnter={() => {
+                void import('./TheoryChapterView');
+              }}
               aria-label={`第 ${chapter.order} 章：${chapter.title}${completed ? '（已完成，可回访复习）' : ''}`}
               className="w-full flex min-h-11 items-center gap-2.5 px-2.5 py-2 rounded-md text-left text-xs transition-colors hover:bg-[var(--walnut-raised)]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
             >

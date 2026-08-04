@@ -57,3 +57,12 @@ export function isLevelFullyCompleted(levelId: string, completedChapters: string
   if (!level || level.chapters.length === 0) return false;
   return level.chapters.every((c) => completedChapters.includes(c.id));
 }
+
+/**
+ * 获取 Level 的学习目标章节（首个未完成章节；全部完成则返回第一章）。
+ * TheoryLevelCard 的「继续学习」与 TheoryLearningMap 的节点点击共用此推导，避免口径分叉。
+ */
+export function getLevelTargetChapter(level: TheoryLevelInfo, completedChapters: string[]): TheoryChapter | undefined {
+  const firstIncomplete = level.chapters.find((c) => !completedChapters.includes(c.id));
+  return firstIncomplete ?? level.chapters[0];
+}

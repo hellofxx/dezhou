@@ -10,6 +10,11 @@ export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
     subtitle: '一切扑克数学的起点：52 张牌能组合出什么',
     duration: '12 min',
     eloDimension: 'math',
+    objectives: [
+      '掌握 C(n,k) 组合计数通式与起手牌总数 1326 的推导',
+      '熟练运用 6/4/12 锚点组合数为范围分析定价',
+      '区分独立事件与条件概率，避免赌徒谬误',
+    ],
     content: [
       { type: 'heading', content: '为什么概率论是德州扑克的地基' },
       {
@@ -133,6 +138,11 @@ export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
     subtitle: '把"我还有机会吗"变成一个百分数',
     duration: '10 min',
     eloDimension: 'math',
+    objectives: [
+      '准确识别并计数各类听牌的 Outs（区分干净 Outs 与脏 Outs）',
+      '熟练运用 2/4 法则估算胜率并理解其误差边界',
+      '掌握折扣 Outs 的判断方法',
+    ],
     content: [
       { type: 'heading', content: '什么是 Outs' },
       {
@@ -245,6 +255,11 @@ export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
     subtitle: '为什么正确的决策也会连续输钱',
     duration: '10 min',
     eloDimension: 'math',
+    objectives: [
+      '理解结果 = 期望值 + 波动，学会用决策过程（EV）而非单次结果评价自己',
+      '掌握样本量与方差的关系，理解“长期”需要多大的样本量',
+      '将方差意识落地为资金管理、情绪管理与复盘三条实践原则',
+    ],
     content: [
       { type: 'heading', content: '期望值与实际结果的分离' },
       {

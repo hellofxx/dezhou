@@ -45,6 +45,8 @@ export interface TheoryChapter {
   duration: string;                 // 预计阅读时长，如 '10 min'
   /** 本章小测答题影响的 ELO 维度 */
   eloDimension: EloDimension;
+  /** 本章学习目标（先行组织者策略，可选；为空时 UI 不渲染目标卡片） */
+  objectives?: string[];
   content: TheorySection[];
   quiz: TheoryQuizQuestion[];
 }
@@ -77,4 +79,6 @@ export interface TheoryProgress {
   quizScores: Record<string, number>;   // chapterId → 0-100（历史最高分）
   currentChapter: string | null;
   startedAt: number;
+  /** 标记为疑难的小测题 id 列表（供后续复习清单使用） */
+  flaggedQuestions: string[];
 }

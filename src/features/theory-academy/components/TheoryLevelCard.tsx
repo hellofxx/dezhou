@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Lock, CheckCircle2, PlayCircle, ChevronDown, ChevronUp, Swords } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -22,6 +23,7 @@ interface TheoryLevelCardProps {
  */
 export function TheoryLevelCard({ level, unlocked, progress, completedChapters, quizScores, index }: TheoryLevelCardProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   const firstIncomplete = level.chapters.find((c) => !completedChapters.includes(c.id));
@@ -55,13 +57,14 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.06 }}
+      transition={{ duration: 0.3, delay: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : index * 0.06 }}
     >
       <div
         role="button"
         tabIndex={unlocked ? 0 : -1}
         aria-disabled={!unlocked}
         aria-expanded={unlocked ? expanded : undefined}
+        aria-describedby={unlocked ? `theory-level-progress-${level.id}` : undefined}
         onClick={handleClick}
         onKeyDown={(e) => {
           // 仅响应卡片自身的键盘事件，忽略内部按钮（展开切换/章节行）冒泡
@@ -101,7 +104,10 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
 
             {unlocked ? (
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
+                <div
+                  id={`theory-level-progress-${level.id}`}
+                  className="flex items-center justify-between text-xs"
+                >
                   <span className="text-[var(--ivory-dim)]">
                     {completedCount}/{level.chapters.length} 章完成
                   </span>
@@ -113,6 +119,18 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                     style={{ width: `${progress}%` }}
                   />
                 </div>
+                {!allCompleted && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClick();
+                    }}
+                    className="mt-2 inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                  >
+                    <PlayCircle className="w-4 h-4" />
+                    {t('theory.continueLearning')}
+                  </button>
+                )}
                 {allCompleted && practiceTarget && (
                   <span
                     role="button"
@@ -139,7 +157,6 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
 
           {unlocked && (
             <div className="shrink-0 self-center flex items-center gap-1.5">
-              {!allCompleted && <PlayCircle className="w-6 h-6 text-[var(--brass-bright)]" />}
               <button
                 onClick={(e) => {
                   e.stopPropagation();

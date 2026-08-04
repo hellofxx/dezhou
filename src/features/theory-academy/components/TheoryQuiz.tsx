@@ -1,8 +1,10 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, Flag } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { useProgressStore } from '@/features/progress/store';
+import { useTheoryStore } from '../store';
 import { orderTheoryQuizQuestion } from '../utils/quizOrder';
 import { getChapterDifficulty } from '../utils/theoryProgress';
 import type { TheoryChapter } from '../types';
@@ -22,12 +24,15 @@ interface TheoryQuizProps {
  * （沿用二元对错 + 解析），与 hand-history 不 emit 的豁免模式并列。
  */
 export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
+  const { t } = useTranslation();
   const orderedQuestions = useMemo(
     () => chapter.quiz.map((q) => orderTheoryQuizQuestion(q)),
     [chapter.quiz],
   );
   const updateElo = useProgressStore((s) => s.updateElo);
   const recordAnswer = useProgressStore((s) => s.recordAnswer);
+  const flaggedQuestions = useTheoryStore((s) => s.progress.flaggedQuestions);
+  const toggleFlagQuestion = useTheoryStore((s) => s.toggleFlagQuestion);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -78,7 +83,14 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-1.5">
+      <div
+        className="flex items-center gap-1.5"
+        role="progressbar"
+        aria-valuenow={currentIndex + 1}
+        aria-valuemin={1}
+        aria-valuemax={orderedQuestions.length}
+        aria-label={t('theory.quizProgress', { current: currentIndex + 1, total: orderedQuestions.length })}
+      >
         {orderedQuestions.map((_, i) => (
           <div
             key={i}
@@ -99,12 +111,26 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
           key={currentIndex}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <p className="text-xs text-[var(--ivory-muted)] mb-2 font-numeric">
-            第 {currentIndex + 1} / {orderedQuestions.length} 题
-          </p>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-[var(--ivory-muted)] font-numeric">
+              {t('theory.quizProgress', { current: currentIndex + 1, total: orderedQuestions.length })}
+            </p>
+            <button
+              onClick={() => toggleFlagQuestion(question.id)}
+              aria-label={flaggedQuestions.includes(question.id) ? t('theory.flaggedQuestion') : t('theory.flagQuestion')}
+              className={cn(
+                'p-2 min-h-11 min-w-11 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                flaggedQuestions.includes(question.id)
+                  ? 'text-[var(--poker-gold)] bg-[var(--poker-gold)]/15'
+                  : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
+              )}
+            >
+              <Flag className="w-4 h-4" />
+            </button>
+          </div>
           <h3 className="font-display text-[17px] text-[var(--ivory)] mb-5 leading-snug">
             {question.question}
           </h3>

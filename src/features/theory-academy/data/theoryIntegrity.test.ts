@@ -76,6 +76,10 @@ describe('theory integrity: 判分数据合法性', () => {
       if (chapter.content.length === 0) bad.push(`${chapter.id}: content 为空`);
       if (!ELO_DIMENSIONS.has(chapter.eloDimension)) bad.push(`${chapter.id}: eloDimension=${chapter.eloDimension}`);
       if (chapter.content.some((s) => !s.content.trim())) bad.push(`${chapter.id}: 存在空段落`);
+      if (chapter.objectives !== undefined) {
+        if (chapter.objectives.length === 0) bad.push(`${chapter.id}: objectives 为空数组`);
+        if (chapter.objectives.some((o) => !o.trim())) bad.push(`${chapter.id}: objectives 存在空条目`);
+      }
     }
     expect(bad).toEqual([]);
   });

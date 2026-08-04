@@ -11,6 +11,7 @@ const initialProgress: TheoryProgress = {
   quizScores: {},
   currentChapter: null,
   startedAt: 0,
+  flaggedQuestions: [],
 };
 
 interface TheoryStore {
@@ -26,6 +27,8 @@ interface TheoryStore {
   isTheoryLevelUnlocked: (levelId: string) => boolean;
   getLevelProgress: (levelId: string) => number;
   getTotalProgress: () => number;
+  /** 幂等切换题目疑难标记（已标记则移除，未标记则添加） */
+  toggleFlagQuestion: (questionId: string) => void;
   resetProgress: () => void;
 }
 
@@ -99,16 +102,29 @@ export const useTheoryStore = create<TheoryStore>()(
         return Math.round((get().progress.completedChapters.length / total) * 100);
       },
 
+      toggleFlagQuestion: (questionId) =>
+        set((state) => {
+          const flagged = state.progress.flaggedQuestions;
+          const next = flagged.includes(questionId)
+            ? flagged.filter((id) => id !== questionId)
+            : [...flagged, questionId];
+          return { progress: { ...state.progress, flaggedQuestions: next } };
+        }),
+
       resetProgress: () => set({ progress: { ...initialProgress } }),
     }),
     {
       name: 'theory-academy-progress',
-      version: 1,
+      version: 2,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<TheoryStore>;
         // v0 → v1：防御性合并进度默认值（新 store 首版，兜底旧异常数据）
         if (fromVersion < 1) {
           next.progress = { ...initialProgress, ...next.progress };
+        }
+        // v1 → v2：新增 flaggedQuestions 字段默认值（幂等合并，v0 数据走完上一分支后同样受益）
+        if (fromVersion < 2) {
+          next.progress = { ...initialProgress, ...(next.progress ?? {}) };
         }
         return next as TheoryStore;
       },

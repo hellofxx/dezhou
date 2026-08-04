@@ -5,6 +5,7 @@ import { useTheory } from '../hooks/useTheory';
 import { useTheoryStore } from '../store';
 import { getTotalChapterCount } from '../utils/theoryProgress';
 import { TheoryLevelCard } from './TheoryLevelCard';
+import { TheoryLearningMap } from './TheoryLearningMap';
 import type { TheoryTier } from '../types';
 
 const TIER_ORDER: TheoryTier[] = ['basic', 'intermediate', 'advanced'];
@@ -50,6 +51,9 @@ export default function TheoryHome() {
             </div>
           </div>
         </motion.section>
+
+        {/* 学习路径地图：全局方向感 + 目标梯度效应 */}
+        <TheoryLearningMap />
 
         {/* Tiered level list */}
         {TIER_ORDER.map((tier) => {

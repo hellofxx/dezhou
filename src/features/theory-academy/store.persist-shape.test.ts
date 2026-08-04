@@ -29,6 +29,7 @@ describe('theory-academy store persisted shape', () => {
         "progress": {
           "completedChapters": "array",
           "currentChapter": "null",
+          "flaggedQuestions": "array",
           "quizScores": {},
           "startedAt": "number",
         },
