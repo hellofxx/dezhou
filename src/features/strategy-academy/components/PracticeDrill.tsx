@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target, Zap, Keyboard } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { XCircle, ArrowRight, Trophy, Clock, Target, Zap, Keyboard } from 'lucide-react';
 import type { PracticeDrill as PracticeDrillType, PracticeQuestion, PracticeOption, PracticeResult, PracticeAnswerDetail, QuestionDifficulty } from '../types';
 import { PokerCard } from '@/shared/components/poker/Card';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
@@ -17,6 +18,14 @@ import { getCurrentDifficulty, selectQuestionsByDifficulty, shouldRecommendRevie
 import { orderPracticeOptions } from '../utils/practiceOptionOrder';
 // P1E-13: 超时判分口径（超时恒判错，对齐 range-trainer P1A-02）
 import { gradePracticeSelection, pickTimeoutFallbackOption } from '../utils/practiceGrading';
+// P2-03: 五级反馈事实源（只读消费，禁止修改 shared 层）
+import {
+  calculateGrade,
+  GRADE_DISPLAY_CONFIG,
+  type DecisionGrade,
+} from '@/shared/types/decisionFeedback';
+// P2-03: 难度变化阶梯图（结果页展示）
+import { DifficultyStairChart, type DifficultyChange } from './DifficultyStairChart';
 
 export type DrillMode = 'normal' | 'pressure';
 
@@ -49,11 +58,27 @@ const DIFFICULTY_COLORS: Record<QuestionDifficulty, string> = {
 
 const DIFFICULTY_ORDER: QuestionDifficulty[] = ['beginner', 'intermediate', 'advanced'];
 
-interface DifficultyChange {
-  from: QuestionDifficulty;
-  to: QuestionDifficulty;
-  questionIndex: number;
-}
+// P2-03: 难度 pill 常驻样式（12% 透底 + 1px 对应色 30% 边框；文字色沿用 DIFFICULTY_COLORS）
+const DIFFICULTY_PILL_BG: Record<QuestionDifficulty, string> = {
+  beginner: 'bg-[var(--poker-success-bg)]',
+  intermediate: 'bg-[var(--poker-info-bg)]',
+  advanced: 'bg-[var(--warning)]/10',
+};
+
+const DIFFICULTY_PILL_BORDER: Record<QuestionDifficulty, string> = {
+  beginner: 'border-[var(--poker-success)]/30',
+  intermediate: 'border-[var(--poker-info)]/30',
+  advanced: 'border-[var(--warning)]/30',
+};
+
+// P2-03: 五级反馈中文兜底（t() 缺失时使用，与 i18n feedback.grade.* 语义对齐）
+const GRADE_FALLBACK_LABELS: Record<DecisionGrade, string> = {
+  best: '最优决策',
+  correct: '正确',
+  inaccuracy: '小幅偏差',
+  wrong: '错误',
+  blunder: '重大错误',
+};
 
 // ===== 倒计时圆环组件 =====
 function CountdownRing({ timeRemaining, timeLimit, isPressure }: { timeRemaining: number; timeLimit: number; isPressure: boolean }) {
@@ -128,9 +153,12 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   // P1E-05（专批 B）：逐题作答明细（供 QuickDrill 对 review-* 复习题做 SRS 回写）
   const answersRef = useRef<PracticeAnswerDetail[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // P2-03: 难度消息 timer（竞态修复：新消息设置前清除旧 timer）
+  const difficultyMessageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const soundInitRef = useRef(false);
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { adaptiveConfig, updateAbility, recentPracticeResults } = useAcademyStore();
   const { settings } = useProgressStore();
   // P2-5.2: 情绪管理 — 记录答题用于连续答错检测与每日题量统计
@@ -140,6 +168,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   useEffect(() => {
     soundManager.setEnabled(settings.soundEnabled);
   }, [settings.soundEnabled]);
+
+  // P2-03: 卸载时清除难度消息 timer，避免悬空回调
+  useEffect(() => () => {
+    if (difficultyMessageTimerRef.current) clearTimeout(difficultyMessageTimerRef.current);
+  }, []);
 
   // 首次交互初始化音频
   const initSound = useCallback(() => {
@@ -252,19 +285,23 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       const review = shouldRecommendReview(allResults, adaptiveConfig);
       const newIndex = DIFFICULTY_ORDER.indexOf(newDifficulty);
       const currentIndex = DIFFICULTY_ORDER.indexOf(currentDifficulty);
+      // P2-03: 竞态修复 — 设置新消息前清除旧 timer，连续调整不互相覆盖
+      const showDifficultyMessage = (msg: string) => {
+        if (difficultyMessageTimerRef.current) clearTimeout(difficultyMessageTimerRef.current);
+        setDifficultyMessage(msg);
+        difficultyMessageTimerRef.current = setTimeout(() => setDifficultyMessage(null), 4000);
+      };
       if (newIndex > currentIndex) {
-        setDifficultyMessage('📈 你的表现很好！接下来的题目会更有挑战性');
+        showDifficultyMessage('📈 你的表现很好！接下来的题目会更有挑战性');
       } else if (newIndex < currentIndex) {
         if (review.shouldReview) {
-          setDifficultyMessage('💡 建议复习一下相关理论后再继续');
+          showDifficultyMessage('💡 建议复习一下相关理论后再继续');
         } else {
-          setDifficultyMessage('📉 建议巩固基础，降低难度有助于建立信心');
+          showDifficultyMessage('📉 建议巩固基础，降低难度有助于建立信心');
         }
       } else {
-        setDifficultyMessage('');
+        showDifficultyMessage('');
       }
-
-      setTimeout(() => setDifficultyMessage(null), 4000);
     }
   }, [adaptive, adaptiveConfig, currentDifficulty, currentIndex, recentPracticeResults, isPressure]);
 
@@ -457,24 +494,12 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           </div>
         )}
 
-        {/* 难度变化曲线 */}
+        {/* 难度变化曲线（P2-03：阶梯图，横轴题号 / 纵轴难度档，段终点按难度着色） */}
         {adaptive && !isPressure && difficultyChanges.length > 0 && (
-          <div className="mb-6 max-w-sm mx-auto">
-            <p className="text-xs text-[var(--ivory-muted)] mb-2">难度变化：</p>
-            <div className="flex items-center justify-center gap-2 flex-wrap">
-              <span className={cn('text-xs font-medium', DIFFICULTY_COLORS[difficultyChanges[0]!.from])}>
-                {DIFFICULTY_LABELS[difficultyChanges[0]!.from]}
-              </span>
-              {difficultyChanges.map((change, i) => (
-                <span key={i} className="flex items-center gap-1">
-                  <ArrowRight className="w-3 h-3 text-[var(--ivory-dim)]" />
-                  <span className={cn('text-xs font-medium', DIFFICULTY_COLORS[change.to])}>
-                    {DIFFICULTY_LABELS[change.to]}
-                  </span>
-                </span>
-              ))}
-            </div>
-          </div>
+          <DifficultyStairChart
+            changes={difficultyChanges}
+            totalQuestions={totalQuestions}
+          />
         )}
 
         {weakPoints.length > 0 && (
@@ -500,6 +525,16 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   const boardCards = scenario.board?.map(stringToCard) ?? [];
   const correctOption = options.find((o) => o.isCorrect);
   const questionDifficulty = currentQuestion.difficulty ?? 'beginner';
+
+  // P2-03: 五级反馈分级（仅非超时路径；超时无真实决策，保持"系统代选"提示）。
+  // 默认值与 buildDecisionFeedback 一致：答对无数据→0→best，答错无数据→3→wrong。
+  const feedbackGrade = !isTimedOut && selectedOption
+    ? calculateGrade(selectedOption.evLoss ?? (selectedOption.isCorrect ? 0 : 3))
+    : null;
+  const gradeConfig = feedbackGrade ? GRADE_DISPLAY_CONFIG[feedbackGrade] : null;
+  const gradeLabel = gradeConfig && feedbackGrade
+    ? t(gradeConfig.titleKey, { defaultValue: GRADE_FALLBACK_LABELS[feedbackGrade] })
+    : '';
 
   return (
     <div className={cn('space-y-5', isPressure && 'relative')}>
@@ -555,11 +590,29 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             正确率 {Math.round((correctCount / currentIndex) * 100)}%
           </span>
         )}
-        {/* 难度指示器 */}
+        {/* 难度指示器（P2-03：常驻 pill，难度变化时 scale 脉冲 + 黄铜 glow） */}
         {(adaptive || isPressure) && (
-          <span className={cn('text-xs shrink-0 font-medium', DIFFICULTY_COLORS[questionDifficulty])}>
+          <motion.span
+            key={questionDifficulty}
+            className={cn(
+              'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium shrink-0',
+              DIFFICULTY_COLORS[questionDifficulty],
+              DIFFICULTY_PILL_BG[questionDifficulty],
+              DIFFICULTY_PILL_BORDER[questionDifficulty],
+            )}
+            initial={{ scale: 1, boxShadow: '0 0 0px rgba(201,162,94,0)' }}
+            animate={{
+              scale: [1, 1.15, 1],
+              boxShadow: [
+                '0 0 0px rgba(201,162,94,0)',
+                '0 0 14px rgba(201,162,94,0.45)',
+                '0 0 0px rgba(201,162,94,0)',
+              ],
+            }}
+            transition={{ duration: 0.4 }}
+          >
             {DIFFICULTY_LABELS[questionDifficulty]}
-          </span>
+          </motion.span>
         )}
         {/* 压力模式标记 */}
         {isPressure && (
@@ -602,10 +655,9 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
 
       {/* Scenario display */}
       <div className={cn(
-        'rounded-xl border p-5 md:p-6 relative overflow-hidden',
-        isPressure ? 'bg-[var(--felt)] border-[var(--danger)]/30' : 'bg-[var(--felt)] border-[var(--felt-light)]'
+        'scenario-card p-5 md:p-6',
+        isPressure && 'border-[var(--danger)]/30'
       )}>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
 
         {/* 倒计时圆环 - 右上角 */}
         {timeLimit > 0 && !isAnswered && (
@@ -756,16 +808,16 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             <div
               className={cn(
                 'rounded-lg border p-4',
-                selectedOption.isCorrect && !isTimedOut
-                  ? 'border-[var(--success)]/40 bg-[var(--success)]/10'
-                  : 'border-[var(--danger)]/40 bg-[var(--danger)]/10'
+                isTimedOut
+                  ? 'border-[var(--danger)]/40 bg-[var(--danger)]/10'
+                  : cn(gradeConfig?.color, gradeConfig?.textColor)
               )}
             >
               <div className="flex items-center gap-2 mb-2">
-                {/* P1E-13: 超时路径仅展示"系统代选"，本题计为答错（即使代选项正确） */}
+                {/* P1E-13: 超时路径仅展示"系统代选"，本题计为答错（即使代选项正确）；不显示五级（超时无真实决策） */}
                 {isTimedOut ? (
                   <>
-                    <XCircle className="w-4 h-4 text-[var(--danger)]" />
+                    <XCircle className="w-4 h-4 text-[var(--danger)] shrink-0" />
                     <span className="text-sm font-bold text-[var(--danger)]">
                       ⏰ 超时！系统代选 {selectedOption.action}，本题计为答错
                     </span>
@@ -775,21 +827,28 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                       </span>
                     )}
                   </>
-                ) : selectedOption.isCorrect ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-                    <span className="text-sm font-bold text-[var(--success)]">✓ 正确</span>
-                  </>
                 ) : (
                   <>
-                    <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                    <span className="text-sm font-bold text-[var(--danger)]">✗ 不正确</span>
-                    {correctOption && (
-                      <span className="text-xs text-[var(--ivory-muted)] ml-2">
+                    {/* P2-03: 五级反馈 — grade 图标 + 五级标签（i18n feedback.grade.* 优先，缺失时中文兜底） */}
+                    <span className="text-base leading-none">{gradeConfig?.icon}</span>
+                    <span className="text-sm font-bold">{gradeLabel}</span>
+                    {!selectedOption.isCorrect && correctOption && (
+                      <span className="text-xs text-[var(--ivory-muted)] ml-1">
                         正确答案：{correctOption.action}{correctOption.amount ? ` ${correctOption.amount}` : ''}
                       </span>
                     )}
                   </>
+                )}
+                {/* P2-03: evLoss 数值徽章（BB 损失；>0 用 danger 色突出损失，0 用 success 色） */}
+                {!isTimedOut && selectedOption.evLoss !== undefined && (
+                  <span
+                    className={cn(
+                      'ml-auto text-xs font-numeric font-semibold shrink-0',
+                      selectedOption.evLoss > 0 ? 'text-[var(--danger)]' : 'text-[var(--success)]'
+                    )}
+                  >
+                    {selectedOption.evLoss > 0 ? '+' : ''}{selectedOption.evLoss.toFixed(1)} BB EV损失
+                  </span>
                 )}
                 {selectedOption.evImpact && (
                   <span

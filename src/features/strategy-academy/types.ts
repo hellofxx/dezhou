@@ -155,6 +155,12 @@ export interface PracticeOption {
   isCorrect: boolean;
   explanation: string;
   evImpact?: string;
+  /**
+   * P2-03：EV 损失（BB，相对最优动作）。
+   * 五级反馈分级输入（calculateGrade(evLoss ?? (isCorrect ? 0 : 3))，
+   * 与 buildDecisionFeedback 默认值语义一致）；evImpact 字符串保留兼容，二者并存。
+   */
+  evLoss?: number;
 }
 
 // P1E-05（专批 B）：单题作答明细（QuickDrill review-* 复习题 SRS 回写等消费）
