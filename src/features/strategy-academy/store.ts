@@ -13,6 +13,7 @@ const initialProgress: AcademyProgress = {
   quizScores: {},
   currentLesson: null,
   startedAt: 0,
+  completedUnits: {},
 };
 
 const initialBasicsProgress: BasicsProgress = {
@@ -50,6 +51,8 @@ interface AcademyStore {
   /** 课程最近得分（lessonId → 0-100） */
   lastAttemptScores: Record<string, number>;
   startLesson: (lessonId: string) => void;
+  /** 标记课程小节完成（lessonId → unitId），幂等：重复标记同一 unit 不重复计数（P4） */
+  markUnitCompleted: (lessonId: string, unitId: string) => void;
   completeLesson: (lessonId: string) => void;
   recordQuizScore: (lessonId: string, score: number) => void;
   recordPracticeScore: (result: PracticeResult) => void;
@@ -108,6 +111,21 @@ export const useAcademyStore = create<AcademyStore>()(
             startedAt: state.progress.startedAt || Date.now(),
           },
         })),
+
+      markUnitCompleted: (lessonId, unitId) =>
+        set((state) => {
+          const current = state.progress.completedUnits[lessonId] ?? [];
+          if (current.includes(unitId)) return state; // 幂等：重复标记不计数
+          return {
+            progress: {
+              ...state.progress,
+              completedUnits: {
+                ...state.progress.completedUnits,
+                [lessonId]: [...current, unitId],
+              },
+            },
+          };
+        }),
 
       completeLesson: (lessonId) =>
         set((state) => ({
@@ -438,7 +456,7 @@ export const useAcademyStore = create<AcademyStore>()(
     }),
     {
       name: 'strategy-academy-progress',
-      version: 3,
+      version: 4,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<AcademyStore>;
         // v0 → v1：注入进步回放得分记录默认值
@@ -467,6 +485,12 @@ export const useAcademyStore = create<AcademyStore>()(
             // validUntil 保持可选，不设置默认值
           }
           next.certifications = certs;
+        }
+        // v3 → v4：新增小节完成记录 completedUnits（lessonId → 已完成 unit id 列表），
+        // 老数据补默认空映射；已有 completedUnits 保持原值不被覆盖
+        if (fromVersion < 4) {
+          const progress = next.progress ?? ({} as AcademyProgress);
+          next.progress = { ...progress, completedUnits: progress.completedUnits ?? {} };
         }
         return next as AcademyStore;
       },

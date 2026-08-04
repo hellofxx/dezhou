@@ -9,6 +9,10 @@ import { PracticeDrillComponent } from './PracticeDrill';
 import { SectionNav } from './SectionNav';
 import { LessonIntroCard } from './LessonIntroCard';
 import { deriveLessonUnits, resolveUnitTitle } from '../utils/lessonUnits';
+import { useAcademyStore } from '../store';
+
+// P4: 无完成记录时返回稳定空数组引用（zustand 默认 Object.is 比较，避免 `?? []` 每次新建引用导致重渲染）
+const EMPTY_UNIT_IDS: string[] = [];
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -28,8 +32,19 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
   const hasPractice = !!lesson.practice;
   const isTheoryOnly = !hasExamples && !hasPractice;
 
-  const [activeUnitId, setActiveUnitId] = useState(units[0]?.id ?? '');
-  const [completedUnitIds, setCompletedUnitIds] = useState<string[]>([]);
+  // P4: 已完成小节从 store 持久化读取（订阅粒度：仅本课程 completedUnits 变化时重渲染）
+  const completedUnitIds = useAcademyStore(
+    (s) => s.progress.completedUnits[lesson.id] ?? EMPTY_UNIT_IDS,
+  );
+  const markUnitCompleted = useAcademyStore((s) => s.markUnitCompleted);
+
+  // P4 回访恢复：进入已学课程时定位到最后完成小节（无记录或记录失效则第一个 unit）
+  const [activeUnitId, setActiveUnitId] = useState(() => {
+    const lastCompletedId = completedUnitIds[completedUnitIds.length - 1];
+    return lastCompletedId && units.some((u) => u.id === lastCompletedId)
+      ? lastCompletedId
+      : (units[0]?.id ?? '');
+  });
   const [view, setView] = useState<ViewMode>(initialView ?? 'units');
   // P2: checkpoint 已答状态（unitId → 已答；纯本地，不计分不接外部系统）
   const [checkpointAnswered, setCheckpointAnswered] = useState<Record<string, boolean>>({});
@@ -48,9 +63,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
 
   // 进入下一节
   const handleNext = useCallback(() => {
-    setCompletedUnitIds((prev) =>
-      prev.includes(activeUnitId) ? prev : [...prev, activeUnitId],
-    );
+    // P4: 标记完成写入 store（幂等），替代本地 useState
+    markUnitCompleted(lesson.id, activeUnitId);
 
     if (!isLastUnit) {
       const nextUnit = units[currentUnitIndex + 1];
@@ -66,7 +80,7 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
     } else {
       onComplete();
     }
-  }, [activeUnitId, currentUnitIndex, isLastUnit, hasPractice, onComplete, units]);
+  }, [activeUnitId, currentUnitIndex, isLastUnit, hasPractice, onComplete, units, lesson.id, markUnitCompleted]);
 
   // 实战完成处理
   const handlePracticeComplete = useCallback(

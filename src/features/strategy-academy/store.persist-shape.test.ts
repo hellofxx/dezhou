@@ -53,6 +53,7 @@ describe('strategy-academy store persisted shape', () => {
         "practiceResults": "array",
         "progress": {
           "completedLessons": "array",
+          "completedUnits": {},
           "currentLesson": "null",
           "quizScores": {},
           "startedAt": "number",

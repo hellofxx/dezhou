@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { createLocalStorageStub, buildPersistPayload } from '@/shared/utils/localStorageStub';
 
 /**
- * strategy-academy store persist migrate 冒烟测试（v0 → v1）。
+ * strategy-academy store persist migrate 冒烟测试（v0 → v1 / v3 → v4）。
  * 通过预置旧版本 localStorage 数据触发 rehydrate 验证迁移。
  */
 describe('strategy-academy store migrate (v0 → v1)', () => {
@@ -32,5 +32,60 @@ describe('strategy-academy store migrate (v0 → v1)', () => {
     expect(state.lastAttemptScores).toEqual({});
     // 已有字段不被触碰
     expect(state.progress.completedLessons).toEqual(['l1-hand-rankings']);
+  });
+});
+
+describe('strategy-academy store migrate (v3 → v4)', () => {
+  it('v3 数据补齐 completedUnits 默认空映射，已有字段不被触碰', async () => {
+    vi.resetModules();
+    const storageStub = createLocalStorageStub({
+      'strategy-academy-progress': buildPersistPayload(
+        {
+          progress: {
+            completedLessons: ['l1-hand-rankings'],
+            quizScores: { 'l1-hand-rankings': 90 },
+            currentLesson: null,
+            startedAt: 1700000000000,
+          },
+        },
+        3
+      ),
+    });
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+
+    const { useAcademyStore } = await import('./store');
+    const state = useAcademyStore.getState();
+
+    // v4: 注入小节完成记录默认空映射
+    expect(state.progress.completedUnits).toEqual({});
+    // 已有字段不被触碰
+    expect(state.progress.completedLessons).toEqual(['l1-hand-rankings']);
+    expect(state.progress.quizScores).toEqual({ 'l1-hand-rankings': 90 });
+  });
+
+  it('v4 数据已有 completedUnits 不被 migrate 覆盖', async () => {
+    vi.resetModules();
+    const storageStub = createLocalStorageStub({
+      'strategy-academy-progress': buildPersistPayload(
+        {
+          progress: {
+            completedLessons: ['l1-hand-rankings'],
+            quizScores: {},
+            currentLesson: null,
+            startedAt: 1700000000000,
+            completedUnits: { 'l1-hand-rankings': ['u1', 'u2'] },
+          },
+        },
+        4
+      ),
+    });
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+
+    const { useAcademyStore } = await import('./store');
+    const state = useAcademyStore.getState();
+
+    expect(state.progress.completedUnits).toEqual({ 'l1-hand-rankings': ['u1', 'u2'] });
   });
 });

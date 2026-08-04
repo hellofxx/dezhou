@@ -264,6 +264,11 @@ export interface AcademyProgress {
   quizScores: Record<string, number>;
   currentLesson: string | null;
   startedAt: number;
+  /**
+   * 已完成小节记录：lessonId → 已完成 unit id 列表（P4 持久化）。
+   * 仅用于进度显示与回访恢复，不参与门禁（软引导不硬锁）。
+   */
+  completedUnits: Record<string, string[]>;
 }
 
 // 职业素质维度
