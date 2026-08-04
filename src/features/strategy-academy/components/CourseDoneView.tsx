@@ -4,7 +4,7 @@
  * P2-01: 从 CourseView 抽取，用于收敛 done 阶段 JSX（约 84 行）。
  * 包含：成绩展示 + 返回学院/下一课按钮 + 推荐下一步轨道卡列表。
  */
-import { CheckCircle2, Home, ArrowRight, RotateCcw } from 'lucide-react';
+import { CheckCircle2, Home, ArrowRight, RotateCcw, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { DrillResult } from './drills/types';
 import type { LearningTrack } from '../types';
@@ -16,9 +16,10 @@ export interface CourseDoneViewProps {
   nextLesson: { id: string; title: string } | undefined;
   relatedTracks: LearningTrack[];
   completedLessons: readonly string[];
+  hasPractice?: boolean;
   onBack: () => void;
   onNext: () => void;
-  onRestart: () => void;
+  onRestart: (target?: 'units' | 'practice') => void;
   onNavigateToTrack: (trackId: string) => void;
 }
 
@@ -29,6 +30,7 @@ export default function CourseDoneView({
   nextLesson,
   relatedTracks,
   completedLessons,
+  hasPractice = false,
   onBack,
   onNext,
   onRestart,
@@ -79,8 +81,17 @@ export default function CourseDoneView({
             <Home className="w-4 h-4" />
             {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
           </button>
+          {hasPractice && (
+            <button
+              onClick={() => onRestart('practice')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-[var(--brass-bright)]/50 text-[var(--brass-bright)] hover:bg-[var(--brass-bright)]/10 transition-colors text-sm"
+            >
+              <Zap className="w-4 h-4" />
+              {t('academy.courseView.restartPractice', { defaultValue: '重新实战' })}
+            </button>
+          )}
           <button
-            onClick={onRestart}
+            onClick={() => onRestart('units')}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/80 transition-colors text-sm"
           >
             <RotateCcw className="w-4 h-4" />

@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
-import type { Lesson, PracticeResult } from '../types';
+import type { Lesson, LessonUnit, PracticeResult } from '../types';
 import { ContentBlock } from './content';
 import { HandExampleComponent } from './HandExample';
 import { PracticeDrillComponent } from './PracticeDrill';
@@ -14,11 +14,13 @@ interface LessonContentProps {
   lesson: Lesson;
   onComplete: () => void;
   onPracticeComplete?: (result: PracticeResult) => void;
+  // P3: 重挂载时初始视图（CourseView restart('practice') 直达实战；未传默认 units）
+  initialView?: 'units' | 'practice';
 }
 
 type ViewMode = 'units' | 'practice';
 
-export function LessonContent({ lesson, onComplete, onPracticeComplete }: LessonContentProps) {
+export function LessonContent({ lesson, onComplete, onPracticeComplete, initialView }: LessonContentProps) {
   const { t } = useTranslation();
 
   const units = useMemo(() => deriveLessonUnits(lesson), [lesson]);
@@ -28,7 +30,7 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
 
   const [activeUnitId, setActiveUnitId] = useState(units[0]?.id ?? '');
   const [completedUnitIds, setCompletedUnitIds] = useState<string[]>([]);
-  const [view, setView] = useState<ViewMode>('units');
+  const [view, setView] = useState<ViewMode>(initialView ?? 'units');
   // P2: checkpoint 已答状态（unitId → 已答；纯本地，不计分不接外部系统）
   const [checkpointAnswered, setCheckpointAnswered] = useState<Record<string, boolean>>({});
 
@@ -80,6 +82,28 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
     setView('units');
   }, []);
 
+  // P3: 降级建议复习回跳 — 把建议主题映射到小节锚点：
+  // topic 与 unit.title（resolveUnitTitle 解析后）做双向包含匹配，取第一个命中；无匹配回退第一个 unit
+  const handleReviewRequest = useCallback(
+    (topics: string[]) => {
+      const resolveTitle = (u: LessonUnit) => resolveUnitTitle(u, (key) => t(key));
+      const matched = topics
+        .map((topic) =>
+          units.find((u) => {
+            const title = resolveTitle(u);
+            return title.includes(topic) || topic.includes(title);
+          }),
+        )
+        .find((u) => u !== undefined);
+      const target = matched ?? units[0];
+      if (!target) return;
+      setView('units');
+      // view 切换为异步渲染，延迟到 units DOM 挂载后再滚动到锚点
+      window.setTimeout(() => handleNavigateUnit(target.id), 80);
+    },
+    [units, handleNavigateUnit, t],
+  );
+
   // 确定 CTA 文案
   const nextCtaLabel = isLastUnit
     ? hasPractice
@@ -102,6 +126,7 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete }: Lesson
           drill={lesson.practice}
           lessonId={lesson.id}
           onComplete={handlePracticeComplete}
+          onReviewRequest={handleReviewRequest}
         />
       </div>
     );

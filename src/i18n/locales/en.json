@@ -322,6 +322,7 @@
       "quizScoreLabel": "Quiz Score",
       "scoreUnit": "pts",
       "restartLesson": "Restart Lesson",
+      "restartPractice": "Restart Practice",
       "nextLesson": "Next Lesson: {{title}}",
       "recommendedNext": "Recommended Next",
       "trackInfo": "{{count}} lessons · {{duration}}",

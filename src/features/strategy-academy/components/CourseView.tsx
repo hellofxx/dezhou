@@ -36,6 +36,8 @@ export default function CourseView() {
   const [phase, setPhase] = useState<Phase>('reading');
   const [quizScore, setQuizScore] = useState(0);
   const [drillResult, setDrillResult] = useState<DrillResult | null>(null);
+  // P3: 重开目标（restart('practice') 时让重挂载的 LessonContent 直达实战视图）
+  const [restartTarget, setRestartTarget] = useState<'units' | 'practice'>('units');
 
   const lesson = lessonId ? findLessonById(lessonId) : undefined;
   const allLessons = getAllLessons();
@@ -106,7 +108,11 @@ export default function CourseView() {
     if (lessonId) startLesson(lessonId);
   }, [lessonId, startLesson]);
 
-  const handleStartQuiz = useCallback(() => setPhase('quiz'), []);
+  // P3: 进入测验时重置重开目标，避免残留影响后续重挂载
+  const handleStartQuiz = useCallback(() => {
+    setRestartTarget('units');
+    setPhase('quiz');
+  }, []);
 
   const handlePracticeComplete = useCallback(
     (result: PracticeResult) => {
@@ -194,10 +200,12 @@ export default function CourseView() {
     return completed < total;
   });
 
-  const handleRestart = useCallback(() => {
+  // P3: 支持 target 参数 — 'practice' 时重挂载 LessonContent 直达实战（接受 drill 重开）
+  const handleRestart = useCallback((target: 'units' | 'practice' = 'units') => {
     setPhase('reading');
     setQuizScore(0);
     setDrillResult(null);
+    setRestartTarget(target);
     // 清理 hash 残留
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
@@ -315,6 +323,7 @@ export default function CourseView() {
                 lesson={lesson}
                 onComplete={handleStartQuiz}
                 onPracticeComplete={handlePracticeComplete}
+                initialView={restartTarget === 'practice' ? 'practice' : undefined}
               />
             </div>
           </div>
@@ -340,11 +349,13 @@ export default function CourseView() {
             nextLesson={nextLesson}
             relatedTracks={relatedTracks}
             completedLessons={completedLessons}
+            hasPractice={!!lesson.practice}
             onBack={() => navigate('/academy')}
             onNext={() => {
               setPhase('reading');
               setQuizScore(0);
               setDrillResult(null);
+              setRestartTarget('units');
               navigate(`/academy/lesson/${nextLesson!.id}`);
             }}
             onRestart={handleRestart}

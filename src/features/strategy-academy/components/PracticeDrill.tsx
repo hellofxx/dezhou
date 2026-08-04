@@ -35,6 +35,8 @@ interface PracticeDrillProps {
   mode?: DrillMode;
   onComplete: (result: PracticeResult) => void;
   adaptive?: boolean;
+  // P3: 降级建议复习 → 常驻提示条（替代 4 秒 toast），点击「返回复习」时携带建议主题回传
+  onReviewRequest?: (topics: string[]) => void;
 }
 
 // P2-05: 动作按钮语义分类（题库 action 值多样：'fold'/'raise 2.5BB'/'Bet 4BB（33% pot）'/中文等，
@@ -142,7 +144,7 @@ function CountdownRing({ timeRemaining, timeLimit, isPressure }: { timeRemaining
 }
 
 // ===== 主组件 =====
-export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onComplete, adaptive = true }: PracticeDrillProps) {
+export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onComplete, adaptive = true, onReviewRequest }: PracticeDrillProps) {
   const isPressure = mode === 'pressure';
   const PRESSURE_TIME_LIMIT = 15;
   const PRESSURE_TOTAL_QUESTIONS = 20;
@@ -157,6 +159,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   const [currentDifficulty, setCurrentDifficulty] = useState<QuestionDifficulty>('beginner');
   const [difficultyChanges, setDifficultyChanges] = useState<DifficultyChange[]>([]);
   const [difficultyMessage, setDifficultyMessage] = useState<string | null>(null);
+  // P3: 常驻复习建议提示（null = 不显示；仅在答题视图渲染，结果页分支不渲染）
+  const [reviewTopics, setReviewTopics] = useState<string[] | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isTimedOut, setIsTimedOut] = useState(false);
   const [showTimeoutFlash, setShowTimeoutFlash] = useState(false);
@@ -312,7 +316,9 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         showDifficultyMessage('📈 你的表现很好！接下来的题目会更有挑战性');
       } else if (newIndex < currentIndex) {
         if (review.shouldReview) {
-          showDifficultyMessage('💡 建议复习一下相关理论后再继续');
+          // P3: 降级建议复习 → 常驻提示条（替代 4 秒 toast），点击「返回复习」后由外部跳转对应小节
+          setReviewTopics(review.suggestedTopics);
+          setDifficultyMessage(null);
         } else {
           showDifficultyMessage('📉 建议巩固基础，降低难度有助于建立信心');
         }
@@ -650,6 +656,32 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           >
             <div className="rounded-lg bg-[var(--brass-bright)]/10 border border-[var(--brass-bright)]/30 px-4 py-2.5 text-sm text-[var(--brass-bright)]">
               {difficultyMessage}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* P3: 降级建议复习 — 常驻提示条（替代 4 秒 toast；点击「返回复习」清空并回传主题） */}
+      <AnimatePresence>
+        {reviewTopics && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: 'auto' }}
+            exit={{ opacity: 0, y: -10, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex items-center gap-2 flex-wrap rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/30 px-4 py-3 text-sm text-[var(--ivory)]">
+              <span>检测到连续答错，建议先复习相关理论再继续</span>
+              <button
+                onClick={() => {
+                  const topics = reviewTopics;
+                  setReviewTopics(null);
+                  onReviewRequest?.(topics);
+                }}
+                className="text-xs font-semibold text-[var(--brass-bright)] underline underline-offset-2 hover:opacity-80 transition-opacity"
+              >
+                返回复习
+              </button>
             </div>
           </motion.div>
         )}

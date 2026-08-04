@@ -322,6 +322,7 @@
       "quizScoreLabel": "测验得分",
       "scoreUnit": "分",
       "restartLesson": "重学本课",
+      "restartPractice": "重新实战",
       "nextLesson": "下一课：{{title}}",
       "recommendedNext": "推荐下一步",
       "trackInfo": "{{count}} 节课 · {{duration}}",
