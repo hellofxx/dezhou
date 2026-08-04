@@ -449,6 +449,57 @@ export const LEVEL_2_LESSONS: Lesson[] = [
             },
           ],
         },
+        units: [
+          {
+            id: 'u1',
+            title: '什么是 3-Bet？',
+            sections: [
+              { type: 'heading', content: '什么是 3-Bet？' },
+              {
+                type: 'text',
+                content:
+                  '3-Bet 是指在翻前对开牌加注的再加注（re-raise）。"3" 来自于盲注算第一次下注，开牌加注算第二次，再加注算第三次。',
+              },
+            ],
+          },
+          {
+            id: 'u2',
+            title: '3-Bet 的目的',
+            sections: [
+              { type: 'heading', content: '3-Bet 的目的' },
+              {
+                type: 'text',
+                content:
+                  '1. 价值：用强牌（AA/KK/QQ/AKs）建立大底池\n2. 弃牌权益：迫使对手弃牌，直接赢取底池\n3. 主动权：获得翻后的下注主动权（initiative）\n4. 隔离：与特定对手单挑，避免多人底池',
+              },
+              {
+                type: 'highlight',
+                content:
+                  '新手应该先用"线性3-Bet范围"（只用强牌3-Bet），熟练后再加入"极化3-Bet范围"（强牌+部分弱牌作为bluff）。',
+              },
+              {
+                type: 'pro-tip',
+                content:
+                  '3-Bet 频率是衡量玩家攻击性的重要指标。过于被动（很少3-Bet）会让你错失很多价值，过于激进则容易被对手利用。',
+              },
+              {
+                type: 'formula',
+                content: '3Bet 范围组合计数：\\n对手 3Bet 范围 = {AA, KK, QQ, AKs, A5s}\\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\\n总计 = 26 种组合\\n\\nBlocker 影响：当你持有 A♠ 时，\\nAA 从 6 种减为 3 种，AKs 从 4 种减为 3 种\\n3Bet 范围组合数从 26 降为 22',
+              },
+              {
+                type: 'theory-reference',
+                content: '理论支撑：3Bet 的范围构建与组合计数详见理论学院 T4 第 2 章"组合数学与 Blockers"。Blocker 在翻前 3Bet/4Bet 场景中的定量应用有详细推导。',
+                data: { theoryLevelId: 't4', theoryChapterId: 't4-combinatorics' },
+              },
+              {
+                type: 'counter-intuitive',
+                content: '反直觉点：持有 A5s 时做 3Bet，AA 的组合数从 6 降到 3（因为 A 被阻断），但 K 的数量完全不受影响。这意味着持有 A5s 时对手持有 AA 的概率减半，以此为 3Bet Bluff 提供数学依据。',
+              },
+            ],
+            exampleId: 'l2-3bet-ex1',
+            checkpoint: true,
+          },
+        ],
       },
       {
         id: 'l2-4bet-strategy',

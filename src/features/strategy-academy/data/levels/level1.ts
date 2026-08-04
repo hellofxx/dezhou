@@ -389,6 +389,75 @@ export const LEVEL_1_LESSONS: Lesson[] = [
             },
           ],
         },
+        units: [
+          {
+            id: 'u1',
+            title: '为什么位置如此重要？',
+            sections: [
+              { type: 'heading', content: '为什么位置如此重要？' },
+              {
+                type: 'text',
+                content:
+                  '在德州扑克中，位置（Position）指的是你在牌桌上的座位相对于庄家按钮（Button）的位置。后位行动的玩家有巨大优势，因为他们可以看到前面玩家的行动后再做决策。',
+              },
+              {
+                type: 'key-point',
+                content: '黄金法则：按钮位（BTN）是最好的位置，你可以最后一个行动，拥有最多的信息。',
+              },
+            ],
+          },
+          {
+            id: 'u2',
+            title: '位置分类',
+            sections: [
+              { type: 'heading', content: '位置分类' },
+              {
+                type: 'text',
+                content:
+                  '前位（Early）：UTG, UTG+1 — 最先行动，信息最少，需要最强的牌\n中位（Middle）：MP, HJ — 中间位置，适度放宽范围\n后位（Late）：CO, BTN — 后行动，信息最多，范围最宽\n盲注位（Blinds）：SB, BB — 已投入筹码，但翻后最先行动',
+              },
+              {
+                type: 'highlight',
+                content:
+                  '同样的手牌，在BTN的价值远高于在UTG。例如 KJo 在BTN是标准open，在UTG通常应该弃牌。',
+              },
+              {
+                type: 'pro-tip',
+                content:
+                  '职业牌手会根据位置严格调整起手牌范围。"任何位置都能打"的手牌只有最顶端的几手（AA/KK/QQ/AKs），其余都需要根据位置调整。',
+              },
+            ],
+            exampleId: 'l1-position-ex1',
+            checkpoint: true,
+          },
+          {
+            id: 'u3',
+            title: '位置优势的体现',
+            sections: [
+              { type: 'heading', content: '位置优势的体现' },
+              {
+                type: 'text',
+                content:
+                  '1. 翻前：后位可以偷盲（Steal Blinds），用更宽的范围开牌\n2. 翻后：后位可以控制底池大小，做出更精确的价值下注\n3. 信息优势：看到对手的行动后再决策，减少犯错概率',
+              },
+              {
+                type: 'formula',
+                content: '位置权益实现率：\nBTN 开牌范围约 40-50%，通过位置优势可实现约 110-120% 的原始权益\nUTG 开牌范围约 10-15%，但由于翻后 OOP，权益实现率仅约 80-90%\n\n量化规律：后位每多一个位置，范围可放宽约 5-8 个百分点，翻后权益实现率提升约 5-10%。',
+              },
+              {
+                type: 'theory-reference',
+                content: '理论支撑：位置价值的量化分析见理论学院 T3 第 1 章"位置价值与权益实现率"，Gap Concept 的现代修正见 T3 第 2 章，Sklansky 基本定理见 T3 第 3 章。',
+                data: { theoryLevelId: 't3', theoryChapterId: 't3-position' },
+              },
+              {
+                type: 'counter-intuitive',
+                content: '反直觉点：BTN 的位置优势主要在翻后而非翻前。翻前 BTN 只是最后行动，但翻后 BTN 在所有街道都是最后行动——这意味着你可以在看到对手的所有行动后再做决策，这是巨大的信息优势。',
+              },
+            ],
+            exampleId: 'l1-position-ex2',
+            checkpoint: true,
+          },
+        ],
       },
       {
         id: 'l1-hand-selection',

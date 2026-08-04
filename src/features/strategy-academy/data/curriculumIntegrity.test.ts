@@ -228,3 +228,73 @@ describe('curriculum integrity: order 字段规范（低优先债务固化）', 
     expect(bad).toEqual([]);
   });
 });
+
+describe('curriculum integrity: units 完整性（P5 手写 units 守卫）', () => {
+  it('units id 在每个 lesson 内唯一', () => {
+    const bad: string[] = [];
+    for (const lesson of allLessons) {
+      const seen = new Set<string>();
+      for (const unit of lesson.units ?? []) {
+        if (seen.has(unit.id)) bad.push(`${lesson.id}/units/${unit.id}: 重复`);
+        seen.add(unit.id);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('unit.sections 非空，或为空时必须有 exampleId', () => {
+    const bad: string[] = [];
+    for (const lesson of allLessons) {
+      for (const unit of lesson.units ?? []) {
+        if (unit.sections.length === 0 && !unit.exampleId) {
+          bad.push(`${lesson.id}/units/${unit.id}: sections 为空且无 exampleId`);
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('unit.exampleId 必须存在于 lesson.examples', () => {
+    const bad: string[] = [];
+    for (const lesson of allLessons) {
+      const exampleIds = new Set(lesson.examples?.map((ex) => ex.id) ?? []);
+      for (const unit of lesson.units ?? []) {
+        if (unit.exampleId && !exampleIds.has(unit.exampleId)) {
+          bad.push(`${lesson.id}/units/${unit.id}: exampleId=${unit.exampleId} 不存在`);
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('checkpoint: true 的 unit 必须含 exampleId', () => {
+    const bad: string[] = [];
+    for (const lesson of allLessons) {
+      for (const unit of lesson.units ?? []) {
+        if (unit.checkpoint && !unit.exampleId) {
+          bad.push(`${lesson.id}/units/${unit.id}: checkpoint=true 但无 exampleId`);
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('units 引用完整性：每个 section 必须是 lesson.content 中对象的引用', () => {
+    const bad: string[] = [];
+    for (const lesson of allLessons) {
+      for (const unit of lesson.units ?? []) {
+        for (const section of unit.sections) {
+          const found = lesson.content.some(
+            (c) => c.type === section.type && c.content === section.content,
+          );
+          if (!found) {
+            bad.push(
+              `${lesson.id}/units/${unit.id}: section (type=${section.type}) 不在 lesson.content 中`,
+            );
+          }
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+});

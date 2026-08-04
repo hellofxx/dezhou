@@ -248,6 +248,56 @@ export const LEVEL_3_LESSONS: Lesson[] = [
             },
           ],
         },
+        units: [
+          {
+            id: 'u1',
+            title: '什么是 C-Bet？',
+            sections: [
+              { type: 'heading', content: '什么是 C-Bet？' },
+              {
+                type: 'text',
+                content:
+                  'C-Bet（Continuation Bet）是指翻前最后的加注者在翻牌后继续下注。例如你翻前加注，对手跟注，翻牌后你第一个下注就是 C-Bet。',
+              },
+              {
+                type: 'key-point',
+                content: 'C-Bet 的核心逻辑：大多数时候，翻牌对双方都不会有太大帮助。作为翻前的攻击者，你有范围优势。',
+              },
+            ],
+          },
+          {
+            id: 'u2',
+            title: 'C-Bet 大小',
+            sections: [
+              { type: 'heading', content: 'C-Bet 大小' },
+              {
+                type: 'text',
+                content:
+                  '标准 C-Bet 大小：底池的 50-75%\n干燥面（如 K-7-2 rainbow）：33-50% pot\n湿润面（如 J-T-9 两花）：66-75% pot',
+              },
+              {
+                type: 'pro-tip',
+                content:
+                  '不要100%频率 C-Bet。好的做法是在有利面 C-Bet，在不利面 Check。培养"选择性攻击"的意识。',
+              },
+              {
+                type: 'formula',
+                content: 'C-Bet EV 公式（含弃牌权益与摊牌权益）：\n下注 EV = 对手弃牌率 × 当前底池 + (1-弃牌率) × (胜率 × 新底池 - 败率 × 下注额)\n\n例：底池 6BB，C-Bet 4BB，对手弃牌率 40%，胜率 20%\nEV = 0.4×6 + 0.6×(0.2×14 - 0.8×4) = 2.4 + 0.6×(2.8-3.2) = 2.4 - 0.24 = +2.16BB',
+              },
+              {
+                type: 'theory-reference',
+                content: '理论支撑：C-Bet 的 EV 构成与下注目的的理论分析见理论学院 T5 第 2 章"GTO 与剥削：两种最优"和 T6 第 1 章"下注目的"。GTO 框架下的 C-Bet 频率与范围选择密切相关。',
+                data: { theoryLevelId: 't5', theoryChapterId: 't5-gto-concept' },
+              },
+              {
+                type: 'counter-intuitive',
+                content: '反直觉点：C-Bet 不需要强牌。只要有足够的弃牌权益（对手弃牌率够高），即使你的牌完全没中牌面，C-Bet 仍然是 +EV 的。这解释了为什么 GTO 策略中 C-Bet 频率可以高达 60-70%，其中包含大量诈唬。',
+              },
+            ],
+            exampleId: 'l3-cbet-ex1',
+            checkpoint: true,
+          },
+        ],
       },
       {
         id: 'l3-draws',
@@ -494,6 +544,55 @@ export const LEVEL_3_LESSONS: Lesson[] = [
             },
           ],
         },
+        units: [
+          {
+            id: 'u1',
+            title: '常见听牌类型',
+            sections: [
+              { type: 'heading', content: '常见听牌类型' },
+              {
+                type: 'text',
+                content:
+                  '同花听牌：9个outs，约35%胜率（flop到river）\n两头顺子听牌：8个outs，约31%胜率\n卡顺听牌：4个outs，约16%胜率\n双高牌：6个outs（两张高牌配对）',
+              },
+            ],
+          },
+          {
+            id: 'u2',
+            title: '听牌打法',
+            sections: [
+              { type: 'heading', content: '听牌打法' },
+              {
+                type: 'text',
+                content:
+                  '被动打法（推荐初学者）：跟注看下一张牌，用最小代价看到更多牌\n半诈唬（进阶）：用听牌下注/加注，同时拥有弃牌权益\n全下：当底池赔率足够好时，可以 All-in',
+              },
+              {
+                type: 'key-point',
+                content: '永远计算底池赔率！如果你成牌的概率(equity) > 底池赔率，跟注就是+EV的。',
+              },
+              {
+                type: 'pro-tip',
+                content: '职业牌手会根据位置和对手倾向灵活选择听牌打法。在有利位置用听牌半诈唬是非常有效的策略。',
+              },
+              {
+                type: 'formula',
+                content: '2/4 法则与误差分析：\n看一张牌（转牌）：胜率 ≈ Outs × 2%\n看两张牌（翻牌全下）：胜率 ≈ Outs × 4%\n\n误差分析（翻牌→河牌两张牌场景）：\n4 Outs（卡顺）：×4 估 16% | 精确 16.5% | 误差 -0.5\n8 Outs（两头顺）：×4 估 32% | 精确 31.4% | 误差 +0.6\n9 Outs（同花）：×4 估 36% | 精确 35.0% | 误差 +1.0\n12 Outs（组合听牌）：×4 估 48% | 精确 45.0% | 误差 +3.0\n\n结论：Outs ≤ 9 时 ×4 误差在 1 个百分点内，Outs ≥ 13 建议用修正公式',
+              },
+              {
+                type: 'theory-reference',
+                content: '理论支撑：Outs 计数与 2/4 法则的完整推导详见理论学院 T1 第 2 章"Outs 与 2/4 法则"，包括误差分析表与修正公式。EV 框架下的听牌跟注决策见 T2 第 1 章。',
+                data: { theoryLevelId: 't1', theoryChapterId: 't1-outs' },
+              },
+              {
+                type: 'counter-intuitive',
+                content: '反直觉点：组合听牌（如同花+顺子+高张）的胜率远超直觉。例如 J♥T♥ 在 9♥8♦3♣ 面有 15 个 Outs，胜率约 54%，实际上已经是领先大多数一对的牌型——这解释了为什么组合听牌是极佳的半诈唬候选。',
+              },
+            ],
+            exampleId: 'l3-draws-ex1',
+            checkpoint: true,
+          },
+        ],
       },
       {
         id: 'l3-multistreet',
