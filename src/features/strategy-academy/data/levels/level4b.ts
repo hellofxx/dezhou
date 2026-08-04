@@ -20,7 +20,20 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'heading', content: 'GTO 策略矩阵的读取' },
           { type: 'text', content: 'GTO 策略通常用13×13矩阵表示，每种手牌对应 Fold/Call/Raise 的频率：\n- 绿色深浅 = Raise 频率（深绿=100%加注，浅绿=混合加注）\n- 黄色 = Call 频率\n- 红色/灰色 = Fold 频率\n\n例如在BTN Open 场景中，AA/KK/QQ 是100% Raise（深绿），而72o是100% Fold（灰色）。' },
           { type: 'highlight', content: '不需要记住精确的GTO频率！理解大方向即可：强牌加注，中等牌跟注，弱牌弃牌。混合策略出现在边缘手牌上。' },
-          { type: 'pro-tip', content: 'GTO 是基础，剥削是进阶。在低级别游戏中（如NL10以下），剥削策略往往比GTO更赚钱，因为对手的错误太多。但理解GTO能让你知道“正确的基准是什么”，从而更好地判断何时偏离。' },
+          { type: 'pro-tip', content: 'GTO 是基础，剥削是进阶。在低级别游戏中（如NL10以下），剥削策略往往比GTO更赚钱，因为对手的错误太多。但理解GTO能让你知道"正确的基准是什么"，从而更好地判断何时偏离。' },
+        {
+          type: 'formula',
+          content: '纳什均衡的数学表述：\n在二人零和博弈中，存在博弈值 v，使\nmax_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n\n均衡策略保证你的期望 ≥ v，且对手无法单方面压低\n这就是"不可被剥削"的数学来源\n\n价值:诈唬比推导（河牌无后续街时）：\n对手跟注 EV = f×(P+2bP) - (1-f)×bP\n令其 = 0 → f = b/(1+2b)\n满池 b=1 → 诈唬 1/3（价值:诈唬 = 2:1）\n半池 b=0.5 → 诈唬 25%（3:1）',
+        },
+        {
+          type: 'theory-reference',
+          content: '理论支撑：纳什均衡的定义与极小极大定理的详细推导见理论学院 T5 第 1 章"零和博弈与纳什均衡"。GTO 结构的完整分析与价值:诈唬比推导见 T5 第 2 章。',
+          data: { theoryLevelId: 't5', theoryChapterId: 't5-game-theory' },
+        },
+        {
+          type: 'counter-intuitive',
+          content: '反直觉点：GTO 不是最优策略，而是不可被剥削的策略。面对一个疯狂送钱的对手，GTO 赚的比针对性剥削策略少。GTO 是保底，剥削是上限——理解这一张力是高级策略的核心。',
+        },
         ],
         quiz: [
           { id: 'l4-gto-q1', question: 'GTO 策略的核心特点是什么？', options: ['赢最多钱', '不可被剥削', '总是加注', '只看手牌强度'], correctIndex: 1, explanation: 'GTO 的核心是不可被剥削——无论对手怎么调整，都无法从你身上获利。' },
@@ -201,7 +214,20 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'text', content: '在实战中思考博弈树意味着：\n1. 下注前思考“如果对手加注我怎么办？”\n2. 跟注前思考“转牌/河牌我的计划是什么？”\n3. Bluff 前思考“如果被 Call 我还有后手吗？”\n4. 每个决策都考虑后续的“树枝”' },
           { type: 'heading', content: '节点锁定（Node Locking）' },
           { type: 'text', content: '节点锁定是将对手在某个节点的策略固定（假设对手偏离 GTO），然后重新计算我们的最优应对。\n\n例如：如果对手在河牌从不诈唬，我们可以安全地弃掉更多“拓牌”（bluff catcher），因为他们的下注几乎总是价值牌。' },
-          { type: 'pro-tip', content: '不需要在牌桌上计算完整的博弈树。只需习惯问自己“如果我这样做，后续会发生什么？”就已经超越 90% 的玩家了。' },
+          { type: 'pro-tip', content: '不需要在牌桌上计算完整的博弈树。只需习惯问自己"如果我这样做，后续会发生什么？"就已经超越 90% 的玩家了。' },
+        {
+          type: 'formula',
+          content: '博弈树节点 EV 的计算：\n节点 EV = Σ(各分支概率 × 该分支的后续累计 EV)\n\n例：翻牌圈 C-Bet 决策节点\n- 分支 1：对手弃牌（概率 40%）→ 立即赢底池 6BB\n- 分支 2：对手跟注（概率 60%）→ 转牌圈子树的 EV 为 +3BB\n\n节点 EV = 0.4×6 + 0.6×3 = 2.4 + 1.8 = +4.2BB\n这就是为什么每个决策都要考虑后续所有街道的累计 EV',
+        },
+        {
+          type: 'theory-reference',
+          content: '理论支撑：博弈树的概念与节点锁定实操详见理论学院 T5 第 4 章"混合策略与节点锁定"。混合策略的数学原理是让对手所有回应无差别。',
+          data: { theoryLevelId: 't5', theoryChapterId: 't5-mixed-strategy' },
+        },
+        {
+          type: 'counter-intuitive',
+          content: '反直觉点：混合策略不是随意决策，而是精确计算的比例。同一手牌在同一个节点按 70% 加注、30% 跟注——这不是犹豫不决，而是让对手无法通过观察你的模式来获利。',
+        },
         ],
         quiz: [
           { id: 'l4-gt-q1', question: '博弈树中的“节点”代表什么？', options: ['一张牌', '一个决策点', '一个率', '一个结果'], correctIndex: 1, explanation: '每个节点代表一个需要做决策的点，分支代表可能的行动选择。' },
@@ -237,6 +263,19 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'heading', content: '如何在实战中应用' },
           { type: 'text', content: '不需要精确计算频率，但要有意识：\n• 如果你最近连续 bluff 了 5 次都被 catch，可能 bluff 太多\n• 如果你从不 bluff，对手会开始对你的下注只跟注最强牌\n• 保持“有时 bluff、有时 value”的不可预测性' },
           { type: 'pro-tip', content: '对付高手时，频率平衡是保护自己的盾牌；对付弱手时，可以打破平衡做纯粹的剥削调整。核心是知道何时应该平衡、何时应该偏离。' },
+        {
+          type: 'formula',
+          content: '价值:诈唬比公式推导（河牌）：\n诈唬占比 = bet ÷ (pot + 2×bet)\n\n常见尺度对应的诈唬占比：\n1/3 池下注 → 诈唬占比 = 0.33/(1+0.66) = 20%（价值:诈唬 = 4:1）\n1/2 池下注 → 诈唬占比 = 0.5/(1+1) = 25%（价值:诈唬 = 3:1）\n2/3 池下注 → 诈唬占比 = 0.67/(1+1.33) = 28.6%（价值:诈唬 = 2.5:1）\n满池下注 → 诈唬占比 = 1/(1+2) = 33%（价值:诈唬 = 2:1）\n\n注意：1/2 池下注时诈唬占 25% 而非 33%！错误理解是混淆了 MDF 与诈唬占比',
+        },
+        {
+          type: 'theory-reference',
+          content: '理论支撑：频率平衡的数学原理与价值:诈唬比的推导过程详见理论学院 T5 第 2 章"GTO 与剥削：两种最优"。大尺度=极化的数学根源见 T6 第 1 章。',
+          data: { theoryLevelId: 't5', theoryChapterId: 't5-gto-concept' },
+        },
+        {
+          type: 'counter-intuitive',
+          content: '反直觉点：1/2 池下注时诈唬占 25% 是错误计算！正确公式是诈唬占比 = bet/(pot+2bet) = 0.5/2 = 25%。但很多教学材料错误地写成 33%。原因是混淆了 MDF（对手的防御频率）和诈唬占比（你的下注范围中诈唬的比例）——两者不是同一个概念。',
+        },
         ],
         quiz: [
           { id: 'l4-freq-q1', question: '河牌下注 Full Pot 时，GTO的诈唬比例应该是多少？', options: ['10%', '25%', '33%', '50%'], correctIndex: 2, explanation: '当你下注 Full Pot 时，对手需要 33% 胜率跟注，因此你的诈唬应占 33%。' },
@@ -275,6 +314,19 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'text', content: 'River 是 MDF 最常被应用的街道，因为：\n\n1. 没有后续街道的隐含赔率考虑\n2. 决策纯粹：call 或 fold\n3. Bluff 频率在 river 最高（所有错过的听牌都可以 bluff）\n\nRiver 防御框架：\n- 计算 MDF\n- 从你的范围中选择 top X% 的牌继续\n- 考虑 blocker 效应微调（阻断对手 value 的牌优先 call）' },
           { type: 'highlight', content: 'MDF 不是"必须"遵守的规则，而是防止你过度弃牌的安全网。如果你发现自己面对下注弃牌超过 70%，很可能被过度诈唬了。' },
           { type: 'pro-tip', content: '实战中不需要精确计算 MDF。记住关键数字：面对半池下注继续 2/3，面对满池下注继续 1/2。这已经足够好了。' },
+        {
+          type: 'formula',
+          content: 'MDF 与 Alpha 公式对偶关系：\nMDF = pot ÷ (pot + bet)  —— 你的防御频率\nAlpha = bet ÷ (pot + bet) —— 对手诈唬的盈亏平衡弃牌率\nMDF + Alpha = 1（互为补集）\n\n所需胜率（跟注保本线）：\n所需胜率 = bet ÷ (pot + 2×bet) —— 注意分母不同！\n\n例：对手下注 1/2 池\nMDF = 1/(1+0.5) = 67%\nAlpha = 0.5/(1+0.5) = 33%\n所需胜率 = 0.5/(1+1) = 25%\n\nMDF、Alpha、所需胜率是三个不同概念，不要混淆',
+        },
+        {
+          type: 'theory-reference',
+          content: '理论支撑：MDF 与 Alpha 的代数推导、无差别原则的证明详见理论学院 T5 第 3 章"最小防御频率（MDF）与 Alpha"。MDF 与底池赔率的关系辨析见 T2 第 2 章。',
+          data: { theoryLevelId: 't5', theoryChapterId: 't5-mdf-alpha' },
+        },
+        {
+          type: 'counter-intuitive',
+          content: '反直觉点：MDF 和所需胜率是两个不同的概念，不要混淆。MDF 回答"你应该用多少频率继续"，所需胜率回答"这手牌需要多少胜率才能跟注"。MDF 的公式是 pot/(pot+bet)，所需胜率的公式是 bet/(pot+2bet)——分母不同，用途不同。',
+        },
         ],
         quiz: [
           { id: 'l4-mdf-q1', question: '面对 50% pot 的下注，MDF 约为多少？', options: ['50%', '67%', '75%', '33%'], correctIndex: 1, explanation: 'MDF = 1 - (0.5pot / (pot + 0.5pot)) = 1 - 0.33 = 67%。你需要用 top 67% 的范围继续。' },
@@ -630,6 +682,19 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'text', content: '范围平衡是确保你的下注范围中 value:bluff 比例合理：\n\n- 面对 50% pot bet：value:bluff ≈ 3:1\n- 面对 100% pot bet：value:bluff ≈ 2:1\n- 面对 150% pot overbet：value:bluff ≈ 2:1\n\n如果你 bluff 太多 → 对手可以频繁 call\n如果你 bluff 太少 → 对手可以频繁 fold\n平衡让对手无论怎么做都无法剥削你。' },
           { type: 'highlight', content: '理解极化 vs 合并是从"打单张牌"到"打范围"的关键跳跃。每个决策都应该思考：我的整个范围在这个场景应该是什么形状？' },
           { type: 'pro-tip', content: '实战简化：小注打宽（合并），大注打窄（极化）。翻前 3-bet 用极化范围，翻前 open 用合并范围。记住这个原则就够用了。' },
+          {
+            type: 'formula',
+            content: '极化范围 vs 合并范围公式：\n极化范围 = 顶端价值牌 + 底端诈唬牌（中间牌力过牌/弃牌）\n合并范围 = 从强到弱的连续牌力分布（用中等频率下注）\n\n极化范围的下注尺度应较大（> 2/3 池），因为：\n下注越大 → 对手跟注所需胜率越高 → 你的诈唬可以更多\n合并范围的下注尺度应较小（< 1/2 池），旨在：\n从更弱的跟注范围获取薄价值',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：范围构建方法论与极化/合并的数学依据见理论学院 T4 第 1 章"范围思维"和第 4 章"范围优势与坚果优势"。范围优势的判定框架与下注策略密切相关。',
+            data: { theoryLevelId: 't4', theoryChapterId: 't4-range-thinking' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：极化范围下注大，合并范围下注小。如果用一个中等强度的牌下大注，你只会被更强的牌跟注——这是"价值下注的陷阱"：中等牌力应该过牌或小注，而不是假装自己有强牌。',
+          },
         ],
         quiz: [
           { id: 'l4-rc-q1', question: '以下哪个场景最适合使用极化范围？', options: ['Flop 小注 C-Bet', '翻前 Open Raise', 'River Overbet', '跟注对手 open'], correctIndex: 2, explanation: 'River Overbet 是典型的极化范围场景：只有坚果级别的 value 和有 blocker 的 bluff，不包含中等牌力。' },

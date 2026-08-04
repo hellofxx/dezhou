@@ -22,6 +22,19 @@ export const LEVEL_7_LESSONS: Lesson[] = [
           { type: 'text', content: '深筹码中最常见的错误：\n\n- 用顶对顶踢脚打光 200BB（在深筹码中 TPTK 不是坚果）\n- 忽视对手的隐含赔率（让对手便宜看牌，然后输大底池）\n- 过度 bluff（深筹码对手更有能力 call 你）\n- 不做多街规划（走一步看一步导致陷入困境）' },
           { type: 'highlight', content: '深筹码的核心思维：你的牌在 200BB 深度值多少？顶对在 100BB 可以打光，但在 200BB 可能只值一个中等底池。' },
           { type: 'pro-tip', content: '深筹码现金桌是盈利最高的游戏形式，但也是波动最大的。确保你的资金管理能承受 200BB 的波动（至少 30-40 个 buy-in）。' },
+          {
+            type: 'formula',
+            content: 'SPR 递进公式：\nSPR = 有效筹码 ÷ 底池大小\n\n深筹码定义（SPR > 10）：\n例：有效筹码 200BB，翻牌底池 15BB → SPR = 13.3\n\n深筹码下的策略调整：\n同花连牌（如 98s）可实现 5-10 倍底池的价值\n口袋对子（如 22）的 Set Mining 隐含赔率大幅提升\n高对（如 KK）的翻后实现率下降，因为对手可以在深筹码下用更宽的范围施加压力\n\n反向隐含赔率风险：\n当听牌完成时仍可能输给更强的牌\n深筹码时反向隐含赔率的杀伤力成倍增加',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：SPR 与筹码深度的量化关系详见理论学院 T6 第 3 章"SPR 与三街几何尺度"。深筹码下的隐含赔率与反向隐含赔率分析见 T2 第 3-4 章。',
+            data: { theoryLevelId: 't6', theoryChapterId: 't6-spr' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：深筹码时同花连牌的价值超过高对。AA 在深筹码中看似强大，但翻后实现率下降——因为对手可以在后续街用更宽的范围施加压力，迫使你做出困难的弃牌决策。而 98s 可以形成顺子、同花等多种强牌，有更好的翻后可玩性。',
+          },
         ],
         quiz: [
           { id: 'l7-deep-q1', question: '深筹码（200BB）中，以下哪类牌的价值提升最多？', options: ['AKo', '小口袋对和同花连牌', 'AQo', 'KQo'], correctIndex: 1, explanation: '深筹码中小口袋对（set mine）和同花连牌（大底池潜力）的价值提升最多，因为中牌后可以赢对手全部 200BB。' },
@@ -190,6 +203,19 @@ export const LEVEL_7_LESSONS: Lesson[] = [
           { type: 'text', content: '位置在多人底池中更加关键：\n\n- 有位置（BTN）：可以看到所有对手的行动后再决策\n- 无位置（UTG/MP）：面对多对手非常困难，范围要更紧\n- 夹心位置（CO）：最困难的位置，后面还有多个对手未行动\n\n实战建议：无位置时在多人底池中更倾向 check，有位置时更倾向 bet。' },
           { type: 'highlight', content: '多人底池的黄金法则：如果你不确定自己的牌是否够强，那就 check。多人底池中犯错的代价比单挑大得多。' },
           { type: 'pro-tip', content: '很多盈利玩家在多人底池中亏损，因为他们用单挑的思维打多人底池。记住：3 人底池不是 3 个单挑，而是一个完全不同的游戏。' },
+          {
+            type: 'formula',
+            content: '多人底池胜率稀释公式：\n单挑底池中，顶对胜率 ≈ 70-80%\n三人底池中，顶对胜率 ≈ 40-50%\n四人底池中，顶对胜率 ≈ 25-35%\n\n每增加一个对手，你的胜率大约稀释为原来的 60-70%\n\n多人底池下注策略调整：\n- 价值下注需要更强的牌（至少两对以上）\n- 诈唬频率大幅降低（需要让所有对手弃牌）\n- 同花听牌的价值下降（因为多人同时听同花的概率更高）',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：多人底池的胜率分布与策略调整详见理论学院 T9 第 3 章"多人底池与 GTO-剥削统一框架"。包括多人底池胜率表和"纳什均衡在多人底池中的适用边界"警告。',
+            data: { theoryLevelId: 't9', theoryChapterId: 't9-multiway' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：三人底池中你的胜率被稀释，但底池赔率变好。当三人底池中你面对下注时，底池中多了一个人的死钱，赔率更优。但要注意：你的牌需要同时击败两个对手，胜率下降的速度可能快于赔率改善的速度。',
+          },
         ],
         quiz: [
           { id: 'l7-multi-q1', question: '多人底池中，C-Bet 频率应该？', options: ['提高（更多人可以 bluff）', '降低（被抵抗概率更高）', '不变', '总是 all-in'], correctIndex: 1, explanation: '多人底池中 C-Bet 频率应降低。面对多对手，有人有强牌的概率更高，bluff 成功率下降（需要所有人都弃牌）。' },
@@ -374,6 +400,19 @@ export const LEVEL_7_LESSONS: Lesson[] = [
           { type: 'text', content: 'Straddle 游戏的实战要点：\n\n- 不要过度调整：Straddle 只是改变了筹码深度，基本策略框架不变\n- 注意有效筹码：始终以 straddle 为基准计算有效筹码\n- 利用位置：如果 straddler 翻后无位置，对他施加压力\n- 避免大底池：除非有强牌，否则不要在 straddle 底池中打光\n- 观察对手：有些玩家 straddle 后打得更松更激进' },
           { type: 'highlight', content: 'Straddle 游戏的本质：这是一个 50BB 的游戏（而不是 100BB）。用 50BB 的思维来打，而不是 100BB。' },
           { type: 'pro-tip', content: '很多玩家在 straddle 底池中犯的最大错误：用 100BB 的思维打 50BB 的游戏。记住，有效筹码减半了，你的策略也要相应调整。' },
+          {
+            type: 'formula',
+            content: 'Straddle 下的翻前范围调整：\nStraddle = 大盲的 2 倍（通常为 2BB）\n有效筹码相对调整：\n表面 100BB → 实际有效筹码 = 100BB/2BB = 50 个 Straddle\n\n翻前范围调整：\n- 开牌范围应收紧约 20-30%（因为底池中多了 Straddle 的死钱）\n- 3Bet 尺度应调整为 4-5 倍 Straddle\n- Straddle 位置玩家的防御范围应放宽（已经投入 2BB）\n\n注意：Straddle 不是额外下注，而是盲注的扩大——有效筹码按 Big Blind 计算，而非 Straddle',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：Straddle 结构下的位置价值变化与翻前范围调整的理论基础见理论学院 T3 第 1 章"位置价值与权益实现率"。',
+            data: { theoryLevelId: 't3', theoryChapterId: 't3-position' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：Straddle 不是额外增加的筹码投入，而是盲注的临时扩大。有效筹码仍按大盲计算，而非 Straddle 金额。这意味着 Straddle 局的实际筹码深度比表面看起来更浅，SPR 更低。',
+          },
         ],
         quiz: [
           { id: 'l7-straddle-q1', question: 'Straddle 对有效筹码的影响是？', options: ['没有影响', '有效筹码减半', '有效筹码翻倍', '只影响翻后'], correctIndex: 1, explanation: 'Straddle（2BB）使有效筹码减半。100BB 在 straddle 游戏中相当于 50BB effective，策略要相应收紧。' },

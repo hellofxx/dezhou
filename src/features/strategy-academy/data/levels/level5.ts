@@ -39,6 +39,19 @@ export const LEVEL_5_LESSONS: Lesson[] = [
             type: 'pro-tip',
             content: '资金管理是职业牌手和娱乐玩家最大的区别之一。没有资金管理纪律的人，即使技术再好，也只是在赌博。',
           },
+          {
+            type: 'formula',
+            content: 'Kelly 准则公式：\nf* = (bp - q) / b\n\n其中 f* = 最优资金比例\nb = 净赔率（赢时获得 b 倍下注）\np = 胜率\nq = 败率 = 1-p\n\n扑克场景应用：\n假设你有 60% 胜率优势，赔率 1:1\nf* = (1×0.6 - 0.4) / 1 = 0.2 = 20%\n即每次下注不超过总资金的 20%\n\n保守策略（Half Kelly）：f = f*/2 = 10%，进一步降低破产风险',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：Kelly 准则在扑克资金管理中的量化应用详见理论学院 T8 第 2 章"资金心理与量化管理"。T8 全面覆盖了扑克心理学中的资金管理方法论。',
+            data: { theoryLevelId: 't8', theoryChapterId: 't8-psychology' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：Kelly 准则下最优下注比例远低于直觉。即使你有 60% 的胜率优势，Kelly 准则也只建议投入 20% 的资金。大多数玩家在实际中投入的比例远高于 Kelly 推荐的合理值，这是导致破产的主要原因之一。',
+          },
         ],
         quiz: [
           {
@@ -219,6 +232,19 @@ export const LEVEL_5_LESSONS: Lesson[] = [
             type: 'pro-tip',
             content:
               '职业牌手不是不会 tilt，而是他们更快地意识到自己在 tilt 并采取措施。学会"止损"是情绪管理最重要的一步。记住：明天还有牌可以打，但钱输完了就没有了。',
+          },
+          {
+            type: 'formula',
+            content: 'Tendler 7 型 Tilt 档案速查：\n1. 愤怒型 Tilt — 被 bad beat 后情绪失控\n2. 沮丧型 Tilt — 长期下风期积累的负面情绪\n3. 恐惧型 Tilt — 害怕输钱导致决策过于保守\n4. 自毁型 Tilt — 潜意识里想惩罚自己\n5. 厌倦型 Tilt — 长时间 session 导致注意力下降\n6. 傲慢型 Tilt — 连续赢钱后过度自信\n7. 急迫型 Tilt — 因时间压力或资金压力而仓促决策\n\n识别信号：连续答错 3 题时，正确率下降 >15% 时，应暂停训练',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：Tendler 7 型 Tilt 档案的完整分析见理论学院 T8 第 1 章"Tilt 识别与分类"。包括各型 Tilt 的识别信号、触发场景与应对策略。',
+            data: { theoryLevelId: 't8', theoryChapterId: 't8-tilt' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：正确率下降时最需要停止，而非继续。很多玩家在情绪波动时选择"再打一手翻本"，但这是最危险的错误——Tilt 状态下的决策质量显著下降，继续游戏只会扩大损失。',
           },
         ],
         quiz: [
@@ -820,7 +846,20 @@ export const LEVEL_5_LESSONS: Lesson[] = [
           { type: 'key-point', content: '标准 Session Review 流程：1) 标记关键手牌 → 2) 分析决策点 → 3) 对比 GTO → 4) 记录得失 → 5) 制定改进计划' },
           { type: 'heading', content: '复盘五步法' },
           { type: 'text', content: 'Step 1：标记关键手牌\n• 每次 Session 结束后立即标记 3-5 手“不确定”的牌\n• 不只看输的大底池，也看赢的大底池\n\nStep 2：分析决策点\n• 在每个街的关键点问“还有其他选择吗？”\n\nStep 3：对比 GTO\n• 用本平台的 GTO 模拟器检查最优策略\n\nStep 4：记录得失\n• 写下“我做了什么”和“应该做什么”\n\nStep 5：制定改进计划\n• 将最常见的错误列为下次 Session 的重点' },
-          { type: 'pro-tip', content: '复盘时不要被结果迷惑（“我赢了所以做得对”）。关注的是决策质量，不是结果。一个错误的决策可能偶尔赢钱，但长期必定亏损。' },
+          { type: 'pro-tip', content: '复盘时不要被结果迷惑（"我赢了所以做得对"）。关注的是决策质量，不是结果。一个错误的决策可能偶尔赢钱，但长期必定亏损。' },
+          {
+            type: 'formula',
+            content: 'Session A/B/C 档分析框架：\nA 档（最佳状态）：专注、冷静、每个决策经过分析 → 适合复杂决策\nB 档（正常状态）：有一定疲劳但能维持基本决策质量 → 适合常规训练\nC 档（疲劳状态）：注意力下降、直觉代替分析 → 应立即停止\n\nSession 管理原则：\n- 单次训练不超过 60 分钟\n- 每 30 分钟休息 5 分钟\n- 出现 C 档信号时强制结束\n- 每日题量上限：0/50/100/200 四档',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：Session A/B/C 档管理方法详见理论学院 T8 第 3 章"Session 管理与长期心态"。包括 Session 规划、止损纪律与长期盈利心态的量化框架。',
+            data: { theoryLevelId: 't8', theoryChapterId: 't8-session' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：赢钱的 session 可能是最差的学习机会。当你连续赢钱时，容易产生"我打得很好"的错觉，即使实际上是在靠运气赢钱。真正的学习发生在输钱的 session 中——那是你发现并修正错误的机会。',
+          },
         ],
         quiz: [
           { id: 'l5-sr-q1', question: 'Session Review 的第一步是？', options: ['计算赢输', '标记关键手牌', '兘开GTO求解器', '发朋友圈'], correctIndex: 1, explanation: '复盘首先要标记出需要分析的关键牌局，然后再深入分析。' },

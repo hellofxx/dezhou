@@ -35,6 +35,19 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
             content:
               '范围思维是从"娱乐玩家"到"认真玩家"的最大分水岭。掌握范围思维后，你会发现很多以前"猜不透"的对手行为变得可预测了。',
           },
+          {
+            type: 'formula',
+            content: '范围权益计算（加权组合胜率）：\n范围总权益 = Σ(各组合占比 × 该组合对对手范围的胜率)\n\n例：你的范围 = {AA 6 种, KK 6 种}，对手范围 = {AK 16 种}\nAA 对 AK 约 93%，KK 对 AK 约 70%\n总体权益 = 0.5×93% + 0.5×70% ≈ 81%\n\n这种加权计算取代"我这手牌"，才能回答"整个范围在这个节点该不该出手"',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：范围思维的完整理论与"动作是过滤器"方法论见理论学院 T4 第 1 章"范围思维：从单手牌到概率分布"。范围 vs 范围的定量工具详见该章公式部分。',
+            data: { theoryLevelId: 't4', theoryChapterId: 't4-range-thinking' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：范围分析不是猜牌，而是集合运算。你永远无法确定对手的具体手牌，但你可以通过每个动作不断缩小对手可能持有的牌型集合——到河牌时，一个逻辑一致的玩家的范围已经被压缩得非常具体。',
+          },
         ],
         quiz: [
           {
@@ -239,6 +252,19 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
             content:
               '不要因为一次-EV决策碰巧赢了就认为它是正确的。也不要因为一次+EV决策输了就放弃。职业牌手关注的是决策质量，而不是单次结果。',
           },
+          {
+            type: 'formula',
+            content: 'EV 完整推导链（含弃牌权益分支）：\n跟注 EV = P(胜) × (当前底池 + 对手下注) - P(负) × 跟注额\n弃牌 EV = 0（基准）\n下注 EV = 弃牌率 × 底池 + (1-弃牌率) × [胜率 × (底池+下注) - 败率 × 下注额]\n\n常用盈亏平衡点：\n纯诈唬所需弃牌率 = 下注额 ÷ (底池 + 下注额)\n下注 2/3 池时，弃牌率 > 40% 即可盈利',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：EV 的完整定义、推导链与沉没成本陷阱详见理论学院 T2 第 1 章"期望值（EV）：所有决策的统一度量"。底池赔率与 EV 的关系详见 T2 第 2 章。',
+            data: { theoryLevelId: 't2', theoryChapterId: 't2-ev' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：沉没成本谬误——已经投入底池的筹码是死钱，不再属于你。"这手牌我已经投了 100，不跟就浪费"是错误推理。EV 只看未来分支：跟注 EV 与弃牌 EV（=0）的比较，与过去投入无关。',
+          },
         ],
         quiz: [
           {
@@ -436,6 +462,19 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
           { type: 'heading', content: '实战应用框架' },
           { type: 'text', content: '面对每个决策时，按以下框架思考：\n\n1. 我的手牌在这个位置的标准打法是什么？（GTO基准）\n2. 对手是什么类型？他的数据/行为特征是什么？\n3. 基于对手类型，我的决策应该如何调整？\n4. 调整幅度是否合理？（不要过度偏离）\n\n这个框架会随经验积累变得更加直觉化。现在先刻意练习，最终会变成下意识。' },
           { type: 'pro-tip', content: '职业牌手的核心能力不是“算得准”，而是“读得准”。准确识别对手类型并做出针对性调整，是区分微级别盈利玩家和中高级别盈利玩家的最大分水岭。建议每手牌都问自己：这个对手是什么类型？' },
+          {
+            type: 'formula',
+            content: '读牌四步法公式化流程：\nStep 1: 构建初始范围（基于位置 + 翻前动作）\nStep 2: 逐街过滤（每个动作排除一部分组合）\nStep 3: 计算价值:诈唬比（组合数 ÷ 组合数）\nStep 4: 比较所需胜率与诈唬占比\n\n例：河牌对手全下 100BB 到底池 100BB\n所需胜率 = 100 ÷ (100+100+100) = 33%\n对手范围中价值组合 15 种，诈唬组合 10 种\n诈唬占比 = 10/25 = 40% > 33% → 跟注 +EV',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：HUD 指标解读与玩家类型学的完整分析见理论学院 T7 第 1-2 章。读牌四步法见 T7 第 3 章"读牌流程"。剥削调整映射见 T7 第 4 章。',
+            data: { theoryLevelId: 't7', theoryChapterId: 't7-reading-process' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：数据越多的对手越容易被预测。NIT（紧弱型）玩家翻后加注几乎总是两对以上，而 LAG（松凶型）玩家的加注范围中诈唬比例高得多。不是所有对手都适用同样的读牌框架。',
+          },
         ],
         quiz: [
           { id: 'l4-opp-q1', question: '一个对手 VPIP 12%, PFR 10%，他最可能是？', options: ['LAG', 'TAG', 'Nit', 'Maniac'], correctIndex: 2, explanation: 'VPIP < 15% 且 PFR 接近 VPIP 的玩家是 Nit（超紧）。他只打最顶级的牌。' },
@@ -627,6 +666,19 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
           { type: 'text', content: '当你考虑是否跟注对手的大额下注时：\n\n- 如果你持有阻断对手 value 范围的牌 → 更倾向于 call\n  例：你持有 A♠，对手不太可能有 AA/AKs 等顶级 value\n- 如果你持有阻断对手 bluff 范围的牌 → 更倾向于 fold\n  例：你持有对手可能用来 bluff 的同花 blocker\n\n量化思维：每个 blocker 大约减少对手相关组合 25-50%。' },
           { type: 'highlight', content: 'Blocker 效应是"边际优势"——不会完全改变决策，但在接近的决策点（close decision）中，blocker 可以成为决定性因素。' },
           { type: 'pro-tip', content: '职业牌手在每一个 bluff 和 hero call 决策中都会考虑 blocker。养成习惯：在做困难决策时，先看自己手中阻断了什么。' },
+          {
+            type: 'formula',
+            content: 'Blocker 对组合数的修正：\n无 Blocker 时：AA = C(4,2) = 6 种\n持有一张 A 时：AA = C(3,2) = 3 种（减少 50%）\n\nAK 组合数修正：\n无 Blocker 时：AK = 4×4 = 16 种\n持有 A♠ 时：AK = 3×4 = 12 种（减少 25%）\n持有 A♠K♣ 时：AK = 3×3 = 9 种（减少 44%）\n\nBlocker 对范围比例的影响：\n对手 3Bet 范围 = {AA, KK, AK}，共 6+6+16=28 种\n你持 AK 时 → 3+3+9=15 种，你领先的 QQ 占比从 0 升至实质比例',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：Blockers 的定量应用与组合数修正的完整推导见理论学院 T4 第 2 章"组合数学与 Blockers"。包括翻前 4Bet 场景和翻后河牌抓诈唬的具体算例。',
+            data: { theoryLevelId: 't4', theoryChapterId: 't4-combinatorics' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：持有 K 不减少 AA 的组合数，只减少 AK 的组合数。很多初学者认为"我有一张 K，所以对手拿 AA 的概率降低了"——这是错误的。K 是 A 的 Blocker，只有 A 才能阻断 AA。',
+          },
         ],
         quiz: [
           { id: 'l4-blockers-q1', question: '你持有一张 A，对手持有 AA 的组合数从多少减少到多少？', options: ['从 6 种减少到 3 种', '从 6 种减少到 1 种', '从 4 种减少到 2 种', '从 16 种减少到 12 种'], correctIndex: 0, explanation: 'AA 的组合数为 C(4,2)=6。你持有 1 张 A 后，剩余 3 张 A，组合数为 C(3,2)=3，减少了 50%。' },

@@ -31,6 +31,19 @@ export const LEVEL_2_LESSONS: Lesson[] = [
             content:
               '职业牌手使用统一的加注大小来隐藏信息。如果你在拿到强牌时加注$8、弱牌时加注$5，对手很快就会发现你的模式。',
           },
+          {
+            type: 'formula',
+            content: '底池赔率公式推导：\\n所需胜率 = 跟注额 ÷ (当前底池 + 对手下注 + 跟注额)\\n\\n例：底池 100，对手下注 50 → 所需胜率 = 50÷(100+50+50) = 25%\\n\\n常用下注尺度对应所需胜率：\\n1/3 池下注 → 20%\\n1/2 池下注 → 25%\\n2/3 池下注 → 28.6%\\n满池下注 → 33.3%',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：底池赔率的完整定义与推导见理论学院 T2 第 2 章"底池赔率：跟注的价格标签"。包括所需胜率公式的推导过程（从 EV=0 的盈亏平衡点展开）。',
+            data: { theoryLevelId: 't2', theoryChapterId: 't2-pot-odds' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：加注越大对手弃牌越多，但你的成功率不一定更高。较大的加注虽然让对手跟注更贵，但也意味着你冒了更多风险去赢取有限的底池。2.5BB 是经过优化的平衡点。',
+          },
         ],
         quiz: [
           {
@@ -237,6 +250,19 @@ export const LEVEL_2_LESSONS: Lesson[] = [
             content:
               '3-Bet 频率是衡量玩家攻击性的重要指标。过于被动（很少3-Bet）会让你错失很多价值，过于激进则容易被对手利用。',
           },
+          {
+            type: 'formula',
+            content: '3Bet 范围组合计数：\\n对手 3Bet 范围 = {AA, KK, QQ, AKs, A5s}\\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\\n总计 = 26 种组合\\n\\nBlocker 影响：当你持有 A♠ 时，\\nAA 从 6 种减为 3 种，AKs 从 4 种减为 3 种\\n3Bet 范围组合数从 26 降为 22',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：3Bet 的范围构建与组合计数详见理论学院 T4 第 2 章"组合数学与 Blockers"。Blocker 在翻前 3Bet/4Bet 场景中的定量应用有详细推导。',
+            data: { theoryLevelId: 't4', theoryChapterId: 't4-combinatorics' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：持有 A5s 时做 3Bet，AA 的组合数从 6 降到 3（因为 A 被阻断），但 K 的数量完全不受影响。这意味着持有 A5s 时对手持有 AA 的概率减半，以此为 3Bet Bluff 提供数学依据。',
+          },
         ],
         quiz: [
           {
@@ -441,6 +467,19 @@ export const LEVEL_2_LESSONS: Lesson[] = [
           { type: 'text', content: '标准 4-Bet 大小：3-Bet 额的 2.2-2.5 倍。例如：Open 2.5BB → 3-Bet 7.5BB → 4-Bet 16-19BB。IP 可稍小（2.2x），OOP 稍大（2.5x）。' },
           { type: 'highlight', content: '面对 4-Bet 的决策框架：1) 5-Bet All-in：AA/KK（永远全下）2) Call：QQ/AKs（强但非无敌）3) Fold：面对紧 4-Bet 范围时弃掉中等牌。' },
           { type: 'pro-tip', content: '4-Bet 前先想好：如果对手 5-Bet All-in，我怎么办？没有计划就 4-Bet 是灾难的开始。低级别用线性 4-Bet 范围（只强牌），高级别再加 bluff。' },
+          {
+            type: 'formula',
+            content: '4Bet 盈亏平衡分析：\\n4Bet bluff 所需弃牌率 = 4Bet 额 ÷ (底池 + 4Bet 额)\\n例：你 3Bet 到 7.5BB，对手 4Bet 到 18BB\\n所需弃牌率 = 18 ÷ (7.5+18) ≈ 70.6%\\n\\n这意味着对手 4Bet bluff 时，你需要至少 70.6% 的弃牌率才能让 4Bet bluff 盈亏平衡。',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：4Bet 场景下的范围构建与博弈论原理详见理论学院 T4 第 1 章"范围思维：从单手牌到概率分布"。翻前范围的逐街过滤与面对 4Bet 的应对策略密切相关。',
+            data: { theoryLevelId: 't4', theoryChapterId: 't4-range-thinking' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：4Bet Bluff 需要对手有极高的弃牌率（约 70%）才能盈亏平衡。这意味着 4Bet Bluff 并不是一个可以频繁使用的策略，只在特定场合（对手弃牌过多时）才有效。',
+          },
         ],
         quiz: [
           { id: 'l2-4bet-q1', question: '以下哪手牌最适合作为 4-Bet Bluff？', options: ['KQo', 'A5s', '99', 'JTs'], correctIndex: 1, explanation: 'A5s 有 A blocker（降低对手持 AA/AK 概率）+ 翻后可玩性（同花/顺子潜力），是经典 4-Bet Bluff 手牌。' },

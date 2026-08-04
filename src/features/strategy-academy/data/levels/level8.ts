@@ -15,6 +15,19 @@ export const LEVEL_8_LESSONS: Lesson[] = [
           { type: 'heading', content: '各级别 Pool 的典型倾向' },
           { type: 'text', content: '微额（NL2-NL10）：\n• 跟注太多，几乎不弃牌\n• 应对：纯价值下注，几乎不 bluff\n\n低额（NL25-NL50）：\n• 翻前开始合理但翻后弱\n• 应对：多 C-Bet、多 double barrel\n\n中额（NL100-NL200）：\n• 策略接近 GTO 但仍有漏洞\n• 应对：精确的节点锁定 + 小幅剥削' },
           { type: 'pro-tip', content: '不要用对付高额玩家的策略去打微额。在微额，纯粹的价值下注和放弃 bluff 可能比 GTO 更赚钱。' },
+          {
+            type: 'formula',
+            content: '剥削调整幅度公式：\n最优偏离幅度 = 可观测偏差 × (1 - 对手调整概率)\n\n例：对手河牌弃牌率 70%（均衡约 50%）\n可观测偏差 = +20%\n假设对手调整概率 = 30%（低级别玩家调整慢）\n最优偏离幅度 = 20% × (1-0.3) = 14%\n\n这意味着你可以将诈唬频率提高约 14 个百分点，\n但需要随时准备回到基线（如果对手开始调整）\n\n剥削调整的幅度不是越大越好，而是以"不被对手反制"为上限',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：玩家类型学与剥削调整的完整框架见理论学院 T7 第 4 章"剥削调整映射"。HUD 指标组合解读见 T7 第 1-2 章。GTO-剥削统一框架见 T9 第 4 章。',
+            data: { theoryLevelId: 't7', theoryChapterId: 't7-player-types' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：剥削幅度越大，自己越容易被反剥削。当你大幅偏离 GTO 基线去剥削对手时，你自身的策略会出现明显漏洞，有经验的对手可以反过来利用你。这就是为什么剥削调整应该是"最小必要偏离"——在获取利润的同时保持转身空间。',
+          },
         ],
         quiz: [
           { id: 'l8-pool-q1', question: '微额玩家池最常见的倾向是？', options: ['Bluff太多', '跟注太多/不够激进', '打得太紧', '加注太多'], correctIndex: 1, explanation: '微额玩家通常跟注太多、不够激进，针对他们应增加价值下注、减少 bluff。' },
@@ -83,6 +96,19 @@ export const LEVEL_8_LESSONS: Lesson[] = [
           { type: 'heading', content: '剥削的风险' },
           { type: 'text', content: '剥削策略本身是“不平衡”的，这意味着：\n• 如果对手发现并调整，你反而会输\n• 不要对较强的对手过度剥削\n• 定期检查你的剥削是否仍然有效' },
           { type: 'pro-tip', content: '最好的策略是：80% GTO + 20% 剥削。用 GTO 作为基层保护自己，在明确有利可图时进行小幅剥削调整。' },
+          {
+            type: 'formula',
+            content: 'GTO-剥削统一框架：\n策略 = GTO 基线 + 方向性偏离 × 幅度限制\n\n方向性偏离规则：\n1. 对手弃牌过多 → 增加诈唬频率\n2. 对手跟注过多 → 收缩价值范围、减少诈唬\n3. 对手加注过多 → 收窄继续范围\n4. 对手加注过少 → 用更宽的范围下注\n\n幅度限制公式：\n安全偏离幅度 = 可观测偏差 × 0.5（半凯利原则）\n\n例：对手翻牌 C-Bet 频率 80%（均衡 60%，偏差 +20%）\n你的应对：提高对 C-Bet 的弃牌率约 10%\n安全幅度内，即使对手开始调整，你也不会被反制',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：GTO-剥削统一框架的完整理论详见理论学院 T9 第 4 章"GTO-剥削统一框架"。包括"以 GTO 为基线、按可观测偏差做有方向有纪律的偏离"的执行方法论。',
+            data: { theoryLevelId: 't9', theoryChapterId: 't9-gto-exploit' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：GTO 基线 + 剥削偏离 = 最优混合策略。这不是在 GTO 和剥削之间二选一，而是"以 GTO 为基础，在发现对手弱点时做最小必要偏离"。偏离幅度不是越大越好，而是在"对手修正后仍不亏"的范围内操作。',
+          },
         ],
         quiz: [
           { id: 'l8-exploit-q1', question: '何时应使用 GTO 而非剥削？', options: ['对手很弱时', '对手未知或很强时', '总是用 GTO', '总是剥削'], correctIndex: 1, explanation: '对手未知时用 GTO 保护自己；对手很强时剥削空间小，也应用 GTO。' },

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { KeyRound, AlertTriangle, ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
+import { KeyRound, AlertTriangle, ArrowRight, ArrowLeft, BookOpen, Lightbulb, ExternalLink, Sigma } from 'lucide-react';
 import type { Lesson, LessonSection, PracticeResult } from '../types';
 import { ProTip } from './ProTip';
 import { HandExampleComponent } from './HandExample';
@@ -202,6 +202,47 @@ function SectionRenderer({ section }: { section: LessonSection }) {
           <p className="text-sm text-[var(--ivory-dim)] font-mono whitespace-pre-line">
             {section.content}
           </p>
+        </div>
+      );
+
+    case 'formula':
+      return (
+        <div className="rounded-lg bg-[var(--felt-deep)] border border-[var(--brass-deep)]/40 p-4">
+          <div className="flex items-start gap-2">
+            <Sigma className="w-4 h-4 text-[var(--brass-bright)] shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs text-[var(--brass-bright)] font-semibold mb-1">公式推导</p>
+              <pre className="text-sm text-[var(--ivory-dim)] font-mono whitespace-pre-line leading-relaxed">
+                {section.content}
+              </pre>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'theory-reference':
+      return (
+        <div className="rounded-lg border border-[var(--info)]/30 bg-[var(--info)]/10 p-4">
+          <div className="flex items-start gap-3">
+            <ExternalLink className="w-4 h-4 text-[var(--info)] shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs text-[var(--info)] font-semibold mb-1">理论支撑</p>
+              <p className="text-sm text-[var(--ivory-muted)] leading-relaxed">{section.content}</p>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 'counter-intuitive':
+      return (
+        <div className="rounded-lg border border-[var(--warning)]/40 bg-[var(--warning)]/8 p-4">
+          <div className="flex items-start gap-3">
+            <Lightbulb className="w-4 h-4 text-[var(--warning)] shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs text-[var(--warning)] font-semibold mb-1">反直觉点</p>
+              <p className="text-sm text-[var(--ivory-muted)] leading-relaxed">{section.content}</p>
+            </div>
+          </div>
         </div>
       );
 

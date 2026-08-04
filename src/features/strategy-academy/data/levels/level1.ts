@@ -40,6 +40,19 @@ export const LEVEL_1_LESSONS: Lesson[] = [
             content:
               '职业牌手每手牌都在计算概率。养成"这手牌胜率多少"的思维习惯，是你走向职业化的第一步。',
           },
+          {
+            type: 'formula',
+            content: '起手牌总组合数：C(52,2) = 52×51÷2 = 1326 种\n口袋对子（如 AA）：C(4,2) = 6 种\n同花牌（如 AKs）：4 种\n非同花牌（如 AKo）：12 种\n\n理解这些基本组合数是范围分析的基础——后续的赔率计算、Blocker效应都建立在此之上。',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：组合计数与起手牌概率的完整推导见理论学院 T1 第 1 章"组合计数与起手牌概率"。详细介绍了 C(n,k) 通式推导、1326 种组合来源、6/4/12 原子单位等核心内容。',
+            data: { theoryLevelId: 't1', theoryChapterId: 't1-combinatorics' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：169 类与 1326 种是两套计数。169 是"等价类别数"（对子/同花/非同花的类型），1326 才是"可区分的实际组合数"。概率计算必须用 1326——类别数会骗你：同花 AK 和 AA 各占"1 类"，但组合权重分别是 4 和 6。',
+          },
         ],
         quiz: [
           {
@@ -224,6 +237,19 @@ export const LEVEL_1_LESSONS: Lesson[] = [
             content:
               '1. 翻前：后位可以偷盲（Steal Blinds），用更宽的范围开牌\n2. 翻后：后位可以控制底池大小，做出更精确的价值下注\n3. 信息优势：看到对手的行动后再决策，减少犯错概率',
           },
+          {
+            type: 'formula',
+            content: '位置权益实现率：\nBTN 开牌范围约 40-50%，通过位置优势可实现约 110-120% 的原始权益\nUTG 开牌范围约 10-15%，但由于翻后 OOP，权益实现率仅约 80-90%\n\n量化规律：后位每多一个位置，范围可放宽约 5-8 个百分点，翻后权益实现率提升约 5-10%。',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：位置价值的量化分析见理论学院 T3 第 1 章"位置价值与权益实现率"，Gap Concept 的现代修正见 T3 第 2 章，Sklansky 基本定理见 T3 第 3 章。',
+            data: { theoryLevelId: 't3', theoryChapterId: 't3-position' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：BTN 的位置优势主要在翻后而非翻前。翻前 BTN 只是最后行动，但翻后 BTN 在所有街道都是最后行动——这意味着你可以在看到对手的所有行动后再做决策，这是巨大的信息优势。',
+          },
         ],
         quiz: [
           {
@@ -403,6 +429,19 @@ export const LEVEL_1_LESSONS: Lesson[] = [
             content:
               '职业牌手的起手牌范围远比休闲玩家紧。宁可少打好牌，也不要在边缘情况下损失大量筹码。纪律性（Discipline）是职业牌手最重要的素质之一。',
           },
+          {
+            type: 'formula',
+            content: '起手牌组合数学（原子单位）：\n任意口袋对子（如 AA）= C(4,2) = 6 种组合\n任意同花牌（如 AKs）= 4 种组合\n任意非同花牌（如 AKo）= 4×4-4 = 12 种组合\n任意两张不同点数的牌 = 16 种组合\n\n拿到任意口袋对子的概率 = 78/1326 ≈ 5.9%（约每 17 手一次）\n拿到 AA 的概率 = 6/1326 ≈ 0.45%（约每 221 手一次）',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：起手牌的概率计算与组合计数详见理论学院 T1 第 1 章。起手牌 EV 分层与位置选择的关系见 T3 第 1 章。',
+            data: { theoryLevelId: 't1', theoryChapterId: 't1-combinatorics' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：AKs 只有 4 种组合，而 AA 有 6 种组合。虽然 AK 看起来"气势最足"，但它的组合数比重不如口袋对子。在范围分析中，对手 3Bet 范围里对子的组合权重往往远超 AK，这是很多初学者会忽略的定量偏差。',
+          },
         ],
         quiz: [
           {
@@ -559,6 +598,15 @@ export const LEVEL_1_LESSONS: Lesson[] = [
           { type: 'heading', content: '升级与降级规则' },
           { type: 'text', content: '当你的资金增长到更高级别的标准线时，可以尝试升级：\n• 升级条件：资金达到高一级的 30 个买入\n• 降级条件：资金降到当前级别的 20 个买入以下\n• 降级不丢人——保护资金才是长期赢家的做法' },
           { type: 'pro-tip', content: '将扑克资金与生活费完全分开。永远不要用"不能输"的钱打牌，因为这会严重影响你的决策质量。' },
+        {
+          type: 'formula',
+          content: 'Kelly 准则（资金管理中的最优下注比例）：\nf* = (bp - q) / b\n其中 f* = 最优资金比例，b = 赔率（净赔率），p = 胜率，q = 败率 = 1-p\n\n现金桌资金要求：20-30 个买入（最低-推荐）\n锦标赛资金要求：50-100 个买入（最低-推荐）\n\n例：NL10 桌，每个买入 $10，推荐资金 = 30 × $10 = $300',
+        },
+        {
+          type: 'theory-reference',
+          content: '理论支撑：资金管理的量化模型与 Kelly 准则在扑克中的应用详见理论学院 T8 第 2 章"资金心理与量化管理"。T8 全面覆盖了扑克心理学中的资金管理方法论。',
+          data: { theoryLevelId: 't8', theoryChapterId: 't8-psychology' },
+        },
         ],
         quiz: [
           { id: 'l1-bankroll-q1', question: '打 NL10 现金桌，推荐至少有多少资金？', options: ['$50', '$100', '$200', '$500'], correctIndex: 2, explanation: '20个买入 × $10/买入 = $200 是最低要求，推荐 $300（30个买入）。' },
@@ -588,6 +636,15 @@ export const LEVEL_1_LESSONS: Lesson[] = [
           { type: 'text', content: '#5 不关注底池大小（无法计算赔率）\n#6 情绪失控后继续打（Tilt）\n#7 诈唬频率失衡（要么不bluff，要么bluff太多）\n#8 忽视对手行为模式\n#9 不做牌局复盘\n#10 不设止损和时间限制' },
           { type: 'key-point', content: '每修正一个 Leak，你的赢率可能提升 1-3 BB/100。修正前 5 个 Leak 就能让你从输家变成赢家。' },
           { type: 'pro-tip', content: '每周选一个 Leak 集中修正，比同时修正所有问题有效得多。用打卡日历追踪你的修正进度。' },
+        {
+          type: 'theory-reference',
+          content: '理论支撑：常见 Leak 背后的数学本质是 EV 决策框架的缺失。期望值的完整定义与推导见理论学院 T2 第 1 章"期望值（EV）：所有决策的统一度量"。理解 EV 概念后，每个 Leak 都可以被量化为 -EV 行为的重复模式。',
+          data: { theoryLevelId: 't2', theoryChapterId: 't2-ev' },
+        },
+        {
+          type: 'counter-intuitive',
+          content: '反直觉点：经常输的决策仍然可能是正确的决策。EV 只保证长期平均盈利，单次结果受方差支配。一个 +EV 的跟注可能连续输 10 次，但第 11 次的 EV 仍然是正的。职业牌手关注的是决策质量，而非单次结果。',
+        },
         ],
         quiz: [
           { id: 'l1-leaks-q1', question: '赢利玩家的 VPIP 通常在什么范围？', options: ['40-60%', '30-40%', '20-28%', '10-15%'], correctIndex: 2, explanation: '6-max 赢利玩家通常 VPIP 在 20-28% 之间，具体取决于位置和打法风格。' },

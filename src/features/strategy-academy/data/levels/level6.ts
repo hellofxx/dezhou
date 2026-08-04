@@ -61,6 +61,19 @@ export const LEVEL_6_LESSONS: Lesson[] = [
             content:
               'ICM 是锦标赛策略的基石。理解 ICM 后，你会明白为什么泡沫期要用 AQ fold 面对 all-in，为什么大筹码可以“欺负”短筹码。',
           },
+          {
+            type: 'formula',
+            content: 'ICM 最小算例（4 人 SNG，奖金 50/30/20）：\n筹码分布：A=5000, B=3000, C=1500, D=500（总 10000）\n\nA 的 $EV 计算（简化）：\n第一名概率 ≈ 5000/10000 = 50%，奖金 $50\n第二名概率 ≈ 组合数计算...\n$EV ≈ 0.5×50 + 0.3×30 + 0.15×20 + 0.05×0 = $36.5\n\nBubble Factor（泡沫因子）：\nBF = 跟注所需 equity / 现金局所需 equity\n在泡沫期，BF 可达 1.5-2.0，意味着你需要约 1.5-2 倍的胜率才能跟注\n\n核心结论：筹码翻倍不等于奖金翻倍。5000 筹码的 $EV 不是 2500 的两倍。',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：ICM 递归算法的完整推导与 Bubble Factor 的公式定义见理论学院 T9 第 2 章“ICM 理论”。包括多人 SNG 的 $EV 计算方法和锦标赛策略的数学基础。',
+            data: { theoryLevelId: 't9', theoryChapterId: 't9-icm' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：筹码翻倍不等于奖金翻倍。在 ICM 模型中，筹码的边际价值递减——从 500 涨到 1000 比从 5000 涨到 5500 价值更大。这就是为什么短筹码玩家在泡沫期应该更激进，而大筹码应该更保守。',
+          },
         ],
         quiz: [
           {
@@ -312,6 +325,19 @@ export const LEVEL_6_LESSONS: Lesson[] = [
             type: 'pro-tip',
             content:
               'Push/Fold 是锦标赛短筹码的核心技能。记住：10BB 时 BTN 可以 push 40%+ 的范围，这比大多数人的直觉宽得多。',
+          },
+          {
+            type: 'formula',
+            content: 'Nash Push/Fold 均衡范围（10BB 场景）：\nSB Push 范围（面对 BB）：\n- 所有对子 22+\n- 所有 Ax\n- 所有 Kx 同花\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- 总计约 70-80% 手牌\n\nBB Call 范围（面对 SB Push）：\n- 所有对子 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- 总计约 35-40% 手牌\n\n盈亏平衡计算：\nBB call 10BB 赢 12BB（含盲注）\n所需胜率 = 9/(9+12) ≈ 43%',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：Nash Push/Fold 均衡范围的完整推导见理论学院 T9 第 2 章“ICM 理论”。锦标赛中的 ICM 压力与 Push/Fold 决策密切相关。',
+            data: { theoryLevelId: 't9', theoryChapterId: 't9-icm' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：UTG 在 10BB 时 Push 范围接近全开（约 70-80%），而非“很紧”。很多玩家认为 UTG 短筹码时应该只推强牌，但实际上 Nash 均衡显示 UTG 在 10BB 时可以用极宽的范围 Push——因为弃牌意味着盲注被蚕食，而 Push 可以获得弃牌权益。',
           },
         ],
         quiz: [
@@ -1026,6 +1052,19 @@ export const LEVEL_6_LESSONS: Lesson[] = [
           { type: 'heading', content: '调整原则' },
           { type: 'text', content: '• 覆盖短筹码时：大幅放宽跟注/加注范围（赏金价值高）\n• 被覆盖时：正常打法，不要因为对手抉3-Bet“开心”\n• 你的赏金很大时：对手会更激进地向你加注\n• 计算“赏金调整后的赔率”：\n  有效赔率 = (底池 + 对手赏金/2) : 跟注金额' },
           { type: 'pro-tip', content: 'PKO 中最常见的错误是完全忽视赏金价值（打得太紧）或过度追求赏金（用垃圾手牌 All-In）。平衡是关键。' },
+          {
+            type: 'formula',
+            content: '赏金赛 $EV 调整公式：\n有效赏金价值 = 固定赏金 × 淘汰概率\n调整后的跟注所需胜率 = 原始所需胜率 × (1 - 赏金折扣因子)\n\n例：赏金 $20，对手筹码 5000，总筹码 50000\n淘汰该对手概率 = 5000/50000 = 10%\n赏金贡献 $EV = 0.1 × $20 = $2\n\n这意味着你的跟注范围可以放宽约 5-10%，具体取决于赏金大小与筹码分布',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：多人底池的胜率稀释与赏金赛的 $EV 调整见理论学院 T9 第 3 章“多人底池与 GTO-剥削统一框架”。赏金赛策略是 ICM 理论在特殊赛制下的扩展应用。',
+            data: { theoryLevelId: 't9', theoryChapterId: 't9-multiway' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：大赏金对手时反而应该收紧跟注范围。很多人认为“大赏金意味着应该更激进地追赏金”，但数学上大赏金对手被淘汰的概率低，赏金贡献的 $EV 有限。盲目追赏金会导致 -EV 的跟注，得不偿失。',
+          },
         ],
         quiz: [
           { id: 'l6-bounty-q1', question: 'PKO 中淘汰对手可获得其多少赏金？', options: ['全部', '一半', '四分之一', '没有'], correctIndex: 1, explanation: 'PKO中淘汰对手获得其一半赏金，另一半加到自己头上。' },

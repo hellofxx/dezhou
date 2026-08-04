@@ -31,6 +31,19 @@ export const LEVEL_3_LESSONS: Lesson[] = [
             content:
               '不要100%频率 C-Bet。好的做法是在有利面 C-Bet，在不利面 Check。培养"选择性攻击"的意识。',
           },
+          {
+            type: 'formula',
+            content: 'C-Bet EV 公式（含弃牌权益与摊牌权益）：\n下注 EV = 对手弃牌率 × 当前底池 + (1-弃牌率) × (胜率 × 新底池 - 败率 × 下注额)\n\n例：底池 6BB，C-Bet 4BB，对手弃牌率 40%，胜率 20%\nEV = 0.4×6 + 0.6×(0.2×14 - 0.8×4) = 2.4 + 0.6×(2.8-3.2) = 2.4 - 0.24 = +2.16BB',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：C-Bet 的 EV 构成与下注目的的理论分析见理论学院 T5 第 2 章"GTO 与剥削：两种最优"和 T6 第 1 章"下注目的"。GTO 框架下的 C-Bet 频率与范围选择密切相关。',
+            data: { theoryLevelId: 't5', theoryChapterId: 't5-gto-concept' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：C-Bet 不需要强牌。只要有足够的弃牌权益（对手弃牌率够高），即使你的牌完全没中牌面，C-Bet 仍然是 +EV 的。这解释了为什么 GTO 策略中 C-Bet 频率可以高达 60-70%，其中包含大量诈唬。',
+          },
         ],
         quiz: [
           {
@@ -264,6 +277,19 @@ export const LEVEL_3_LESSONS: Lesson[] = [
             type: 'pro-tip',
             content: '职业牌手会根据位置和对手倾向灵活选择听牌打法。在有利位置用听牌半诈唬是非常有效的策略。',
           },
+          {
+            type: 'formula',
+            content: '2/4 法则与误差分析：\n看一张牌（转牌）：胜率 ≈ Outs × 2%\n看两张牌（翻牌全下）：胜率 ≈ Outs × 4%\n\n误差分析（翻牌→河牌两张牌场景）：\n4 Outs（卡顺）：×4 估 16% | 精确 16.5% | 误差 -0.5\n8 Outs（两头顺）：×4 估 32% | 精确 31.4% | 误差 +0.6\n9 Outs（同花）：×4 估 36% | 精确 35.0% | 误差 +1.0\n12 Outs（组合听牌）：×4 估 48% | 精确 45.0% | 误差 +3.0\n\n结论：Outs ≤ 9 时 ×4 误差在 1 个百分点内，Outs ≥ 13 建议用修正公式',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：Outs 计数与 2/4 法则的完整推导详见理论学院 T1 第 2 章"Outs 与 2/4 法则"，包括误差分析表与修正公式。EV 框架下的听牌跟注决策见 T2 第 1 章。',
+            data: { theoryLevelId: 't1', theoryChapterId: 't1-outs' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：组合听牌（如同花+顺子+高张）的胜率远超直觉。例如 J♥T♥ 在 9♥8♦3♣ 面有 15 个 Outs，胜率约 54%，实际上已经是领先大多数一对的牌型——这解释了为什么组合听牌是极佳的半诈唬候选。',
+          },
         ],
         quiz: [
           {
@@ -484,6 +510,19 @@ export const LEVEL_3_LESSONS: Lesson[] = [
           { type: 'text', content: '继续 Barrel：1) 转牌增强你的牌（顶对/听牌完成）2) 转牌是 "空白牌"（不改变牌面结构）3) 对手 Turn facing bet 弃牌率高。放弃 Barrel：1) 转牌完成明显听牌 2) 对手 Turn 加注/领先下注 3) 你的牌无胜率提升。' },
           { type: 'highlight', content: 'Triple Barrel（River 全押 Bluff）条件：1) 极化范围（强牌或纯 bluff）2) 有 Blocker（阻挡对手强牌）3) 对手不是 Calling Station。' },
           { type: 'pro-tip', content: 'Delayed C-Bet：翻牌 Check，转牌下注。适用于：1) 翻牌不适合 C-Bet 2) 想低成本看摊牌 3) 对手翻牌 Check 后转牌领先下注频率高。' },
+          {
+            type: 'formula',
+            content: 'SPR（筹码底池比）公式：\nSPR = 有效筹码 ÷ 底池大小\n\nSPR 分级与策略倾向：\nSPR < 4（低 SPR）：适合 committed 打法，顶对即可全下\nSPR 4-10（中 SPR）：标准玩法，需要谨慎\nSPR > 10（高 SPR）：深筹码，同花连牌等投机牌价值上升\n\n三街几何尺度：\n理想三街全下 → 每街下注约 60-70% 底池\n例：底池 6BB，有效 100BB，SPR≈17\nFlop 下注 4BB → 底池 14BB\nTurn 下注 10BB → 底池 34BB\nRiver 下注 25BB → 底池 84BB，总下注 39BB ≈ 40% 有效筹码',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：SPR 与几何尺度下注的完整推导见理论学院 T6 第 3 章"SPR 与三街几何尺度"。多街玩法中的下注规划与范围构建密切相关。',
+            data: { theoryLevelId: 't6', theoryChapterId: 't6-spr' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：深筹码时（SPR > 10），小同花连牌的价值超过高对。AA 在深筹码中的翻后实现率下降，因为对手可以在后续街用更宽的范围施加压力，而 98s 这类牌有更好的翻后可玩性，可以形成多种强牌。',
+          },
         ],
         quiz: [
           { id: 'l3-multi-q1', question: '多街思维的核心是什么？', options: ['只看当前街', '在 flop 就规划 turn/river 计划', '永远打三条街', '根据对手表情决策'], correctIndex: 1, explanation: '多街思维要求在 flop 决策时就规划 turn/river 计划，而不是走一步看一步。' },
@@ -781,6 +820,19 @@ export const LEVEL_3_LESSONS: Lesson[] = [
           { type: 'text', content: '小注：干燥面（K-7-2 彩虹）/ 范围优势（翻前加注者 vs BB）。中注：标准价值下注（顶对/超对）。大注：湿润面（J-T-9 两花）/ 需要保护强牌。Overbet：River 极化范围（坚果或空气）/ 对手范围封顶。' },
           { type: 'highlight', content: 'Overbet 是现代 GTO 的核心概念。在 River 有坚果优势时（如同花成牌面），用 Overbet 给对手最大压力，让中等牌力面临艰难决策。' },
           { type: 'pro-tip', content: '不要固定下注尺度（如永远 50% pot）。根据牌面结构、范围优势、对手类型调整尺度。多变的尺度让对手难以读取你的牌力。' },
+          {
+            type: 'formula',
+            content: 'MDF（最小防御频率）公式：\nMDF = pot ÷ (pot + bet)\nAlpha（对手诈唬盈亏平衡点）公式：\nAlpha = bet ÷ (pot + bet)\n\n常见值：\n1/3 池下注 → MDF=75%, Alpha=25%\n1/2 池下注 → MDF=67%, Alpha=33%\n2/3 池下注 → MDF=60%, Alpha=40%\n满池下注 → MDF=50%, Alpha=50%\n\n注意：MDF 是防御频率，Alpha 是诈唬所需最小弃牌率，两者互为补集（MDF + Alpha = 1）',
+          },
+          {
+            type: 'theory-reference',
+            content: '理论支撑：MDF 与 Alpha 的代数推导详见理论学院 T5 第 3 章"最小防御频率（MDF）与 Alpha"。下注尺度的数学依据与几何尺度推导见 T6 第 2 章。',
+            data: { theoryLevelId: 't5', theoryChapterId: 't5-mdf-alpha' },
+          },
+          {
+            type: 'counter-intuitive',
+            content: '反直觉点：下注越大，对手弃牌越多，但你的诈唬需要更高的成功率。因为大注意味着你冒了更多风险去赢取有限底池。满池下注时，你的诈唬需要至少 50% 的弃牌率才能盈亏平衡，而半池下注只需要 33%。',
+          },
         ],
         quiz: [
           { id: 'l3-bs-q1', question: '干燥面（如 K-7-2 彩虹）应该使用什么下注尺度？', options: ['小注（25-33% pot）', '中注（50-66% pot）', '大注（75-100% pot）', 'Overbet（150% pot）'], correctIndex: 0, explanation: '干燥面范围优势明显，小注即可让弱牌弃牌，同时用强牌获取价值。' },

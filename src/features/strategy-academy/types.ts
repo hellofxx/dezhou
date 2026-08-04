@@ -32,7 +32,10 @@ export type LessonSectionType =
   | 'diagram'
   | 'hand-example'
   | 'pro-tip'
-  | 'key-point';
+  | 'key-point'
+  | 'formula'          // 数学公式/推导块
+  | 'theory-reference' // 理论学院章节引用
+  | 'counter-intuitive'; // 反直觉点标注
 
 // 内容段落
 export interface LessonSection {

@@ -699,7 +699,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       </div>
 
       {/* Action buttons */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+      <div className="flex flex-wrap gap-2.5">
         {options.map((option, i) => {
           const styleKey = option.action;
           const baseStyle = ACTION_STYLES[styleKey] ?? ACTION_STYLES['Call']!;
@@ -713,7 +713,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               onClick={() => handleSelect(option)}
               disabled={isAnswered}
               className={cn(
-                'relative min-w-[100px] rounded-lg border px-4 py-3 text-sm font-bold transition-all',
+                'relative flex-1 min-w-[120px] rounded-lg border px-4 py-3 text-sm font-bold transition-all text-center',
                 baseStyle,
                 showCorrect && 'ring-2 ring-[var(--success)] shadow-[0_0_12px_rgba(127,184,131,0.4)]',
                 showWrong && 'ring-2 ring-[var(--danger)] opacity-70',
@@ -730,11 +730,13 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               whileHover={!isAnswered ? { scale: 1.03 } : {}}
               whileTap={!isAnswered ? { scale: 0.97 } : {}}
             >
-              {option.action}
-              {option.amount && <span className="ml-1 font-mono text-xs opacity-80">{option.amount}</span>}
+              <span className="inline-flex items-center justify-center gap-1.5">
+                <span>{option.action}</span>
+                {option.amount && <span className="font-mono text-xs opacity-80">{option.amount}</span>}
+              </span>
               {/* 快捷键标记 */}
               {!isAnswered && (
-                <span className="absolute bottom-1 right-1.5 text-[10px] opacity-40 font-mono">{i + 1}</span>
+                <span className="ml-2 inline-flex items-center justify-center w-4.5 h-4.5 rounded-full bg-black/25 text-[10px] font-mono opacity-50">{i + 1}</span>
               )}
             </motion.button>
           );
