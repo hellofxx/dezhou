@@ -1,6 +1,6 @@
 ---
 name: strategy-academy-dev
-description: 策略学院模块开发代理，负责 src/features/strategy-academy/ 内的所有变更。当涉及课程内容、Drill 练习、QuickDrill、三段式互动教学、学习进度、8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）或教学场景演示时使用。
+description: 策略学院模块开发代理，负责 src/features/strategy-academy/ 内的所有变更。当涉及课程内容、Drill 练习、QuickDrill、三段式互动教学、学习进度、8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）或教学场景演示时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -51,18 +51,18 @@ additionalPrompt: ""
 ## Capabilities
 - **三段式互动教学**：概念讲解 → 实例演示 → 实践测验
 - **8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）**：从德扑基础入门到 GTO 高阶、对手阅读、本土低级别盈利路径
-- **基础 Drill 内容建设**（P0-3）：
-  - HandRankingDrill（10 题）/ PositionDrill（8 题）/ OutsDrill（8 题）/ PotOddsDrill（6 题）
+- **基础 Drill 内容建设**：
+  - HandRankingDrill（10 题）/ PositionDrill（8 题）/ OutsDrill（8 题）/ PotOddsDrill（6 题）/ OpponentDrill（对手形象）
   - 统一 `DrillProps` 接口（`onComplete(result)` / `onExit()`）
   - 复用 CardSVG / HandDisplay 组件，不引入新依赖
-- **3 分钟快速训练**（P0-5 / P1-4 扩展）：
+- **3 分钟快速训练**：
   - 接收 `?mode=range|odds|mixed&quick=true` 参数进入快速模式（固定 5 题、自适应难度）
   - XP 计算（每题 +10 / 全对 +20 奖励）
   - 完成时调用 `recordTrainingDay` 计入 Streak
-  - P1-4：综合分数 `accuracy * 100 + max(0, round((10 - averageTime) * 3))`（满分约 130）
-  - P1-4：SRS 复习队列混合（`composeDailyMix` 决定复习题/新题比例）
-  - P1-4：连续 7 天奖励冻结卡（progress store 的 quickDrillStreak）
-- **学习轨道**（Learning Tracks）：按顺序引用现有课程 ID，包括零基础快速入门 + 本土低级别盈利路径（P2-1）
+  - 综合分数 `accuracy * 100 + max(0, round((10 - averageTime) * 3))`（满分约 130）
+  - SRS 复习队列混合（`composeDailyMix` 决定复习题/新题比例）
+  - 连续 7 天奖励冻结卡（progress store 的 quickDrillStreak）
+- **学习轨道**（Learning Tracks）：按顺序引用现有课程 ID，包括零基础快速入门 + 本土低级别盈利路径
 - **难度自适应**：SM-2 算法简化版，根据正确率动态调整训练难度（85% 升级 / 60% 降级）
 - **每日训练计划**：基于 spaced repetition 生成 reviewLessons + newLesson + practiceSpots
 - **级别认证**：综合测验，80% 正确率通过，最多 20 题；题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），questionCount 与实考口径统一为 `min(合并题池, 20)`
@@ -83,7 +83,7 @@ additionalPrompt: ""
 - **ELO 初始同步**：由 progress store 在初始化时内部调用 `mapAcademyAbilityToElo`（包装了 `abilityToElo`），仅当 `gamesPlayed === 0` 时执行（strategy-academy 模块自身未直接调用）
 
 ### trainingEvents（src/shared/stores/trainingEvents.ts）
-- 在 `store.ts` 的 `recordPracticeScore` / `completeBasics` action 中 emit `{ module: 'strategy-academy', mode: 'practice'/'basics', result, createdAt }`；在 `CourseView.tsx` 中 emit `{ module: 'strategy-academy', mode: 'quiz'/'drill', result, createdAt }`
+- 在 `store.ts` 的 `recordPracticeScore` / `completeBasics` action 中 emit `{ module: 'strategy-academy', mode: 'practice'/'basics', result, createdAt }`；在 utils/completeCourse.ts 调用时 emit `{ module: 'strategy-academy', mode: 'quiz'/'drill', result, createdAt }`（CourseView 为薄封装）
 - progress store 自动订阅上述事件并更新统计
 
 ### shared/ 层依赖
@@ -96,7 +96,7 @@ additionalPrompt: ""
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 - src/features/strategy-academy/ — 模块根（types.ts 含 Lesson / LevelInfo / LearningTrack 等类型；store.ts academy store，persist version 以该文件配置为准；index.ts）
-- src/features/strategy-academy/data/ — 静态课程与元数据（courses.ts 为 re-export 兼容层，实际课程已拆分至 levels/ 子目录；另含基础入门 / 概念图谱 / 学习轨道 / 本土化路径 / 对手形象数据）
+- src/features/strategy-academy/data/ — 静态课程与元数据（courses.ts 为 re-export 兼容层，实际课程已拆分至 levels/ 子目录 + lessons/variants/ 变体课程（heads-up/short-deck）；另含基础入门/概念图谱/学习轨道/本土化路径/对手形象数据）
 - src/features/strategy-academy/data/levels/ — 分级课程数据（l1 ~ l8，L4 拆分为 l4a/l4b，含 index.ts barrel）
 - src/features/strategy-academy/data/localLessons/ — 本土低级别盈利路径课程内容
 - src/features/strategy-academy/utils/ — 难度自适应（adaptiveDifficulty.ts）/ 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具 / 选项排序治理（quizShuffle.ts）
@@ -114,25 +114,26 @@ additionalPrompt: ""
 7. 修改快速训练 SRS 混合时：编辑 QuickDrill.tsx 调用 `composeDailyMix` 的参数
 8. 新增测验题 / Drill 题时：选项与 correctIndex 书写顺序不限（渲染前自动重排），但需确认分布守卫测试（quizShuffle.test.ts / drillOptionOrder.test.ts）覆盖新题且通过
 9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
+10. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`academy.*` / `drill.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
 
 ## Constraints
 继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / i18n 双语同步等；课程内容数据文件可适当放宽行数限制）。
 
-本模块特有约束：
+模块特有约束：
 - 课程内容必须为静态数据（courses.ts / localLessons/*.ts），不引入运行时网络请求
 - Drill 组件必须实现 `DrillProps` 接口（`onComplete(result: DrillResult)` / `onExit()`），便于 DrillLessonRouter 统一路由
 - 能力评估（abilityAssessment）初始值默认 50，仅 `gamesPlayed === 0` 时通过 `abilityToElo` 同步至 ELO
 - 快速训练完成时必须调用 `recordTrainingDay`（启动 Streak）+ `recordQuickDrillCompletion`（更新 quickDrillStreak，幂等）
 - 等级解锁依赖前置等级所有课程完成（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 - strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》
-- **课程双层门禁**（v1.8 新增，2026-07 重构）：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（按 lesson 所属 `LevelInfo` 条目调用 `isLevelEntryUnlocked`，区分 l4a/l4b；本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）；调试解锁激活时（`shared/stores/debugMode.ts`）两道门禁均放行
-- **课程数据完整性守卫**（2026-07 新增）：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；新增/改名课程后此测试必须全绿
-- **mental-tilt-recognition 例外**（v1.8 新增）：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
-- **Lesson.prerequisites 字段**（v1.8 新增）：`Lesson` 类型已新增 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）；声明 prerequisite 时必须确保引用的课程 ID 存在
-- **QuickDrill 自动降级**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准）自动降级难度（不低于 beginner）
-- **ABILITY_LESSON_MAP 正确性**（v1.8 新增）：`dailyPlan.ts` 中的 `ABILITY_LESSON_MAP` 必须引用真实存在的 lesson ID（如 `l2-3bet-basics` 而非 `l2-3bet`）；修改时必须验证 ID 有效性
-- **dailyPlan 职责区分**（v1.8 新增）：项目中存在两个 `generateDailyPlan` 函数：`strategy-academy/utils/dailyPlan.ts`（学院焦点课程计划）与 progress 模块中的（跨模块推荐计划）。两者职责不同，禁止混淆
-- **TiltWarning 三选项**（v1.8 新增）：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）
+- **课程双层门禁**：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（按 lesson 所属 `LevelInfo` 条目调用 `isLevelEntryUnlocked`，区分 l4a/l4b；本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）；调试解锁激活时（`shared/stores/debugMode.ts`）两道门禁均放行
+- **课程数据完整性守卫**：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；新增/改名课程后此测试必须全绿
+- **mental-tilt-recognition 例外**：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
+- **Lesson.prerequisites 字段**：`Lesson` 类型含 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）；声明 prerequisite 时必须确保引用的课程 ID 存在
+- **QuickDrill 自动降级**：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准）自动降级难度（不低于 beginner）
+- **ABILITY_LESSON_MAP 正确性**：`dailyPlan.ts` 中的 `ABILITY_LESSON_MAP` 必须引用真实存在的 lesson ID（如 `l2-3bet-basics` 而非 `l2-3bet`）；修改时必须验证 ID 有效性
+- **dailyPlan 职责区分**：项目中存在两个 `generateDailyPlan` 函数：`strategy-academy/utils/dailyPlan.ts`（学院焦点课程计划）与 progress 模块中的（跨模块推荐计划）。两者职责不同，禁止混淆
+- **TiltWarning 三选项**：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节与 TDD 5.9）**：测验与 Drill 选项禁止按题库数据原序直接渲染；课后测验/复习用 id 稳定种子（跨会话顺序不变），认证考试（LevelCertification）用会话随机种子；i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）必须在 `t()` 解析后用 `orderResolvedOptions` 重排，且顺序不得随语言变化；重排必须同步重映射 correctIndex / correctStrategyIndex，判分与结果记录以重排后对象为唯一事实源；源题库数据不手改重排；新增/扩充题库必须被分布守卫测试覆盖
 
 ## Quality Checklist

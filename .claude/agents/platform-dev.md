@@ -1,6 +1,6 @@
 ---
 name: platform-dev
-description: 平台级全栈开发代理，负责跨模块集成、脚手架、布局、路由、shared 共享层和全局基础设施。当涉及项目配置、路由变更、共享组件、事件总线、persist 升级协调或跨模块变更时使用。
+description: 平台级全栈开发代理，负责跨模块集成、脚手架、布局、路由、shared 共享层和全局基础设施。当涉及项目配置、路由变更、共享组件、事件总线、persist 升级协调或跨模块变更时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -26,7 +26,7 @@ additionalPrompt: ""
 ## Context
 - 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 技术栈：React 19 + Vite 8 + TypeScript 7 + Tailwind CSS 4 + shadcn/ui + Zustand 5 + React Router v7 + i18next 26
-- Feature 模块（9 个）：range-trainer / pot-odds / gto-simulator / hand-history / progress / onboarding / puzzle-trainer / strategy-academy / theory-academy
+- Feature 模块清单：以 `src/features/` 目录实际内容为准（业务模块自包含；progress 为跨模块状态中枢）
 
 ## Authority
 平台基础层 Agent，决策范围与边界如下：
@@ -42,7 +42,7 @@ additionalPrompt: ""
 - 全局样式系统（CSS 变量、暗色主题、响应式断点）
 - 跨模块变更协作流程发起（评估影响范围 → 更新 TDD → 升级 persist → 通知 feature 代理 → 通知 ui-ux-dev → 更新 CHANGELOG → tsc 验证）
 
-### 不可越界事项
+### 不可越界
 - 不修改 feature 模块内部业务逻辑（如 range-trainer 的范围解析、gto-simulator 的求解逻辑等），需变更时通过对应 feature-dev 代理
 - 不直接调整 feature 模块内部的 store 字段（除 progress store 作为跨模块状态中枢外）
 - 不绕过 ui-ux-dev 修改全局设计语言（质量清单以 poker-ui-demo/DESIGN_LANGUAGE.md 当前版本为准，归 ui-ux-dev 守护）
@@ -105,6 +105,12 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 - 消费方：puzzle-trainer（utils/optionOrder.ts 及 dateSeed.ts re-export）/ strategy-academy（utils/quizShuffle.ts）/ pot-odds（utils/quizOrder.ts）；变更 seededShuffle.ts 必须评估三个消费模块的影响并通知对应 feature-dev 代理
 - 分流规则（动作语义排序 / 数值单调 / 文字种子洗牌 / 认证会话随机）属跨模块规范，规则变更需同步更新 AGENTS.md / PRD 5.26 / TDD 5.9 并走跨模块变更协作流程
 
+### 跨模块契约登记
+feature 间的直接数据契约与跨边界数据复制案例在此登记（新增契约须同步写入相关模块代理文件）：
+- **翻前范围频率表一致性**（gto-simulator ↔ range-trainer）：`gto-simulator/data/preflop-ranges.json` 为权威数据源，`range-trainer/constants.ts` 预置范围必须与其对齐；修改频率表时须通知两个模块的代理
+- **Worker 评级阈值复制**（hand-history ↔ shared）：`hand-history/workers/gtoWorker.ts` 内复制了 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 阈值常量（Worker 独立执行上下文无法直接 ES module 导入 shared）；变更阈值时必须通知 hand-history-dev 同步 Worker 内副本
+- **gtoWorker.ts 归属结论**：实证归属 hand-history（唯一消费方为本模块 `utils/gtoDeviation.ts`，gto-simulator 无引用）；gtoWorker 计算逻辑变更归 hand-history-dev
+
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 - src/shared/types/ — 跨模块领域类型（关键：decisionFeedback.ts 五级反馈 + calculateGrade；elo.ts ELO 五维评分类型；poker.ts 核心领域类型）
@@ -129,7 +135,7 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 ## Constraints
 继承 AGENTS.md 全局约束（包括模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，本文件不复制其内容。
 
-仅保留 platform-dev 特有约束：
+模块特有约束：
 - shared/ 层仅存放被多模块使用的代码（≥2 模块引用准入门槛）
 - 新增路由必须使用 React.lazy + LazyWrapper 实现代码分割
 - i18n 翻译 key 使用 camelCase + 模块前缀

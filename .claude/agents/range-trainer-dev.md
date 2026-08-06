@@ -1,6 +1,6 @@
 ---
 name: range-trainer-dev
-description: 范围训练模块开发代理，负责 src/features/range-trainer/ 内的所有变更。当涉及范围解析、13×13 范围网格、位置训练、范围测验、翻前范围或范围可视化组件时使用。
+description: 范围训练模块开发代理，负责 src/features/range-trainer/ 内的所有变更。当涉及范围解析、13×13 范围网格、位置训练、范围测验、翻前范围或范围可视化组件时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -87,21 +87,22 @@ additionalPrompt: ""
 3. 优化网格性能时：检查 RangeGrid.tsx 中的 React.memo 和 selector
 4. 调整间隔重复权重时：修改 store.ts 中的 handWeights 逻辑
 5. 答题后集成跨模块系统：调用 recordEloForAnswer（ELO）+ recordSrsForAnswer（SRS）+ recordAnswerForEmotion（情绪）
+6. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`range.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。本节仅列模块特有约束：
+继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。模块特有约束：
 
 - **答题三同步**：每次答题后必须同步调用 `recordEloForAnswer`（preflop 维度）、`recordSrsForAnswer`（注册/更新复习项）、`recordAnswerForEmotion`（情绪计数器）三处，缺一不可；同时由 `QuizCard` 调用 `renderMentorFeedback` 渲染导师文案。
 - **13×13 网格性能**：RangeGrid 渲染 169 个格子时必须使用 `React.memo` 包裹单元格组件 + Zustand selector 精细化订阅，避免无关状态变更触发整网格重渲染。
 - **末题简单 + 补救机制**：最后一题必须强制为简单题（`getEasyQuestion` 返回 AA@BTN raise），并通过 `rescueUsed` 标志位保证补救机制仅触发一次，避免无限循环。
 - **范围数据静态化**：预置范围数据为静态常量，集中存放在 `constants.ts`，禁止引入运行时网络请求或动态导入；新增范围数据须同时补齐 i18n key。
 - **i18n 双语同步**：新增 `range.*` 前缀的 i18n key 时必须同时更新 zh.json 与 en.json，缺一不可。
-- **位置渐进解锁**（v1.8 新增）：`POSITION_UNLOCK_THRESHOLDS` 定义于 `constants.ts`，阈值数值（UTG / HJ / CO / BTN / SB / BB）以该常量定义为唯一事实源（本文件不维护数值副本）；`RangeSelector` 必须调用 `isPositionUnlocked(position, preflopElo)` 过滤锁定位置。调整阈值时在 `docs/CHANGELOG.md` 记录。调试解锁激活时（`shared/stores/debugMode.ts` 的 `unlockAll`）`RangeSelector` 跳过位置门禁，全部位置可选。
-- **反馈闭环 relatedLessonId**（v1.8 新增）：`buildRangeFeedback` 调用时必须传入 `relatedLessonId`，由 `inferRelatedLessonId(position, actionType)` 推导；wrong/blunder 级别在 QuizCard 显示"去复习"链接，跳转对应课程。
-- **自适应难度**（v1.8 新增）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准），`TrainingSession` 显示降级提示 banner；禁止自行判定降级条件。
-- **范围嵌套关系**（v1.8 修正）：预置范围必须满足位置嵌套关系 UTG ⊂ HJ ⊂ CO ⊂ BTN（Open Raise 场景）。修改任一位置范围时必须验证嵌套关系不被破坏。
-- **范围与 GTO 频率表一致性**（v1.8 修正）：`constants.ts` 中的预置范围必须与 `gto-simulator/data/preflop-ranges.json` 一致，以 JSON 为权威数据源。
-- **答题按钮色阶**（v1.3.2）：`QuizCard` 的 fold/call/raise 为三平权选项，须三色相并立且都明显浮于呢面：fold=陶土红透底+红字+红边、call=胡桃木不透明实色 `--walnut-raised`+象牙字、raise=黄铜渐变；不套「一亮 CTA+两沉底」CTA 色阶（否则暗按钮糊在一起）。反馈样式与 hex 合规由 `designTokenGuard.test.ts` 守卫，禁止 Tailwind 霓虹类。
+- **位置渐进解锁**：`POSITION_UNLOCK_THRESHOLDS` 定义于 `constants.ts`，阈值数值（UTG / HJ / CO / BTN / SB / BB）以该常量定义为唯一事实源（本文件不维护数值副本）；`RangeSelector` 必须调用 `isPositionUnlocked(position, preflopElo)` 过滤锁定位置。调整阈值时在 `docs/CHANGELOG.md` 记录。调试解锁激活时（`shared/stores/debugMode.ts` 的 `unlockAll`）`RangeSelector` 跳过位置门禁，全部位置可选。
+- **反馈闭环 relatedLessonId**：`buildRangeFeedback` 调用时必须传入 `relatedLessonId`，由 `inferRelatedLessonId(position, actionType)` 推导；wrong/blunder 级别在 QuizCard 显示"去复习"链接，跳转对应课程。
+- **自适应难度**：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准），`TrainingSession` 显示降级提示 banner；禁止自行判定降级条件。
+- **范围嵌套关系**：预置范围必须满足位置嵌套关系 UTG ⊂ HJ ⊂ CO ⊂ BTN（Open Raise 场景）。修改任一位置范围时必须验证嵌套关系不被破坏。
+- **范围与 GTO 频率表一致性**：`constants.ts` 中的预置范围必须与 `gto-simulator/data/preflop-ranges.json` 一致，以 JSON 为权威数据源。
+- **答题按钮色阶**：`QuizCard` 的 fold/call/raise 为三平权选项，须三色相并立且都明显浮于呢面：fold=陶土红透底+红字+红边、call=胡桃木不透明实色 `--walnut-raised`+象牙字、raise=黄铜渐变；不套「一亮 CTA+两沉底」CTA 色阶（否则暗按钮糊在一起）。反馈样式与 hex 合规由 `designTokenGuard.test.ts` 守卫，禁止 Tailwind 霓虹类。
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

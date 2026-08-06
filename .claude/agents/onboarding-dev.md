@@ -1,6 +1,6 @@
 ---
 name: onboarding-dev
-description: 新手引导流程开发代理，负责 src/features/onboarding/ 内的所有变更。当涉及引导步骤、用户偏好采集、OnboardingGate、新手教程、多步表单或首次使用体验时使用。
+description: 新手引导流程开发代理，负责 src/features/onboarding/ 内的所有变更。当涉及引导步骤、用户偏好采集、OnboardingGate、新手教程、多步表单或首次使用体验时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -38,7 +38,7 @@ additionalPrompt: ""
 - 首胜庆祝动画与 Day 1 Streak 启动时机
 - 目标设定选项（5/10/20 分钟）写入 dailyGoalMinutes
 
-不可越界：
+**不可越界**：
 - 不修改 range-trainer 的 QuizCard 组件本体，仅通过 props 传入题目数据复用
 - 不直接修改 progress store 的非 onboarding 字段（Streak / ELO / SRS / Emotion 等通过其所属 action 触发，不绕过）
 - 不修改 OnboardingGate 的拦截逻辑本体（属 progress 模块），仅依赖其门禁契约
@@ -70,6 +70,7 @@ additionalPrompt: ""
 模块内：
 - src/features/onboarding/ — 模块根（types.ts / index.ts）
 - src/features/onboarding/data/ — 定位测试题库（placementQuestions.ts，5 题覆盖 4 维度 + explanation）
+- src/features/onboarding/utils/ — 首次微训练题目编排（drillFlow.ts，含末题强制简单 + 补救题逻辑，附测试）
 - src/features/onboarding/components/ — 5 步流程容器（OnboardingFlow.tsx）+ 各步骤组件（Welcome → PlacementTest → FirstDrill → Celebration → GoalSetting）
 
 跨模块依赖（只读消费，不修改本体）：
@@ -82,6 +83,7 @@ additionalPrompt: ""
 3. 修改能力评估映射时：编辑 PlacementTestStep.tsx 的正确率 → initialAbility 映射逻辑
 4. 修改首胜庆祝动画时：编辑 CelebrationStep.tsx 的 CSS keyframes
 5. 修改目标选项时：编辑 GoalSettingStep.tsx 的分钟数选项 + 写入 dailyGoalMinutes
+6. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`onboarding.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
 
 ## Constraints
 继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / i18n 双语同步等）。

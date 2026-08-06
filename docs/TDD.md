@@ -1496,17 +1496,17 @@ self.onmessage = (e) => {
 - 带 10 秒超时保护
 - Worker 不可用（构造抛错）时自动降级到主线程 fallback
 
-**`batchAnalyze` 消息类型**（v2.1 新增）：
+**`batchAnalyze`消息类型**（v2.1 新增）：
 
-除 `lookupStrategy` 和 `calculateEV` 外，Worker 还支持 `batchAnalyze` 消息类型，用于批量分析多个手牌策略：
+除 `lookupStrategy`和 `calculateEV`外，Worker还支持 `batchAnalyze`消息类型，用于批量分析多个手牌策略：
 ```typescript
-// 主线程发送批量分析请求
-worker.postMessage({ type: 'batchAnalyze', payload: { hands: string[], gameType: string }, id });
+// 主线程（gtoDeviation.ts）发送批量分析请求
+worker.postMessage({ type: 'batchAnalyze', payload: { hands }, id });
 // Worker 返回批量结果
-{ type: 'batchAnalyze', result: Record<string, HandStrategy>, id }
+{ type: 'batchAnalyze', result: BatchAnalyzeResult[] }
 ```
-- 适用场景：范围训练测验模式需一次性获取多手牌策略时，减少主线程与 Worker 的消息往返次数
-- 内部对每手牌分别调用 `lookupStrategy`，汇总后一次性返回
+- 输入参数：`payload.hands: BatchAnalyzeHand[]`（每项含 id/hand/position/board?/action/street/handStrength?）；输出结果为 `BatchAnalyzeResult[]`（每项含 id/gtoAction/evLoss/grade）
+- 适用场景：手牌复盘模块的偏差检测（`hand-history/utils/gtoDeviation.ts`）一次性分析多决策点
 
 ### 8.2 React.memo + Zustand selector 精确订阅
 
@@ -1596,13 +1596,54 @@ persist(
 
 | Store | persist name | version | 关键字段 |
 |---|---|---|---|
-| progress | `poker-training-progress` | 8 | records / settings / onboarding / streak / elo / quickDrillStreak / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
-| puzzle-trainer | `puzzle-trainer-store` | 2 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted / history（上限 50 条） |
-| strategy-academy | `strategy-academy-progress` | 4 | progress（completedLessons / quizScores / currentLesson / startedAt / **completedUnits**）/ practiceResults（cap 200） / abilityAssessment / dailyPlan / certifications / firstAttemptScores / lastAttemptScores |
-| theory-academy | `theory-academy-progress` | 1 | progress（completedChapters / quizScores / currentChapter / startedAt） |
-| debugMode | `poker-debug-mode` | 1 | unlockAll |
+| progress | `poker-training-progress` | 以 `store.ts` persist 配置为唯一事实源 | records / settings / onboarding / streak / elo / quickDrillStreak / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
+| puzzle-trainer | `puzzle-trainer-store` | 以 `store.ts`persist 配置为唯一事实源 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted / history（上限 50 条）|
+| strategy-academy | `strategy-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedLessons / quizScores / currentLesson / startedAt / **completedUnits**）/ practiceResults（cap 200） / abilityAssessment / dailyPlan / certifications / firstAttemptScores / lastAttemptScores |
+| theory-academy | `theory-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedChapters / quizScores / currentChapter / startedAt） |
+| debugMode | `poker-debug-mode` | 以 `store.ts`persist 配置为唯一事实源 | unlockAll |
+
+> version 数值与字段清单以各 store.ts 实现为唯一事实源，本表仅作结构示意，不维护数值副本（避免漂移）。
 
 > 自适应难度的连续答错计数使用 `emotion.consecutiveWrongCount`（v6 情绪系统字段，全局计数），不存在按模块拆分的计数字段。
+
+---
+
+### 9.5 游戏变体架构
+
+#### 变体扩展统一模式
+
+任意 feature 模块如需增加游戏变体支持（短牌/单挑/Max 等），应复用 `variants/` 子目录模式，遵循以下规范：
+
+**1. 数据层结构**
+- 在模块 data 目录下创建 `variants/` 子目录
+- 每个变体对应一个 `<variant>.ts` 文件（如 theory-academy 的 `short-deck.ts` / `heads-up.ts`）
+- 新增 `variants/index.ts` 汇总导出全部变体集合与辅助函数
+
+**2. ID 命名规范**
+- Level ID：`t{level}<suffix>`（标准系列无 suffix，短牌 suffix=`sd`，单挑 suffix=`hu`）
+- Chapter ID：`t{level}<suffix>-<topic>`（如 `t1sd-概率基础` / `t1hu-位置意识`）
+- **隔离原则**：变体系列 ID 必须与标准系列完全隔离，禁止混用
+
+**3. 跨模块集成点**
+- `progress/store.ts`：注册对该 variant 的成就判定函数入口（如有）
+- `theory-progress.ts`：调用 `getTheoryLevelsByVariant(variant)` 获取对应进度
+- 其他模块按实际需求注册该 variant 的数据消费点
+
+**4. 完整性守卫**
+- 变体目录内包含 `theoryIntegrity.test.ts`（或其他同名的 integrity test）
+- 守护内容：ID 唯一性、前缀合规、小测合法性、实践推荐结构等
+
+**5. 索引导出**
+- `variants/index.ts` 必须导出：
+  - `ALL_VARIANT_THEORY_LEVELS`：标准 + 所有变体的总索引数组
+  - `getTheoryLevelsByVariant(variant: TheoryVariant): TheoryLevelInfo[]`：按 variant 过滤的查询函数
+
+#### 最佳实践与反模式
+
+✅ **推荐做法**：新变体 Level 添加时一次性完成数据创建 + index 汇总 + 跨模块集成点注册 + integrity 测试编写
+❌ **反模式**：仅添加变体数据文件而未更新 variants/index.ts 或遗漏跨模块集成点
+
+> 参考实现：theory-academy/data/levels/variants/（short-deck/heads-up 双变体系列，L7-L9 已深度集成至 progress 成就系统）。
 
 **Persist 版本迁移记录**：
 
@@ -1650,7 +1691,7 @@ persist(
 
 `vitest.config.ts` 定义两个项目：`unit` 项目在 Node 环境运行 `src/**/*.test.ts`（纯函数 / store migrate，Node 环境测 zustand persist migrate 需 stub `window.localStorage`）；`component` 项目在 jsdom 环境运行 `src/**/*.test.tsx`（组件冒烟，setup 为 `src/setupTests.components.ts`）。
 
-当前共 31 个测试文件（清单以 `src/**/*.test.ts(x)` 实际文件为准）：
+当前共 64 个测试文件（清单以 `src/**/*.test.ts(x)`实际文件为准）：
 
 | 测试目标 | 文件 | 关键用例 |
 |----------|------|----------|

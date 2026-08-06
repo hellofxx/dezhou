@@ -8,6 +8,7 @@ import tseslint from 'typescript-eslint';
 const FEATURES = [
   'gto-simulator',
   'hand-history',
+  'help-center',
   'onboarding',
   'pot-odds',
   'progress',
@@ -24,6 +25,7 @@ const FEATURES = [
 export const ALLOWED_CROSS_IMPORTS = {
   'gto-simulator': ['progress', 'range-trainer', 'strategy-academy'],
   'hand-history': [],
+  'help-center': [],
   onboarding: ['progress', 'range-trainer'],
   'pot-odds': ['progress'],
   progress: ['puzzle-trainer', 'strategy-academy', 'theory-academy'],

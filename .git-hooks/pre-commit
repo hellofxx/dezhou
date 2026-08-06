@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Agent Tools Validation Pre-commit Hook
+# 
+# 仅在 .claude/agents/*.md 有变更时触发验证
+# 警告级非阻塞（exit 0）
+
+echo "⚠️ Detecting changes to agent files..."
+
+if git diff --name-only HEAD | grep -q '\.claude/agents/.*-dev\.md'; then
+  echo "🔍 Running agent tools validation..."
+  node scripts/validate-agent-tools.ts
+  RESULT=$?
+  
+  if [ $RESULT -eq 1 ]; then
+    echo "❌ Agent tools validation FAILED"
+    echo "Please fix errors before committing."
+    exit 1
+  elif [ $RESULT -eq 0 ]; then
+    echo "✅ Agent tools validation passed (warnings allowed)"
+  fi
+else
+  echo "✓ No agent file changes detected, skipping validation."
+fi
+
+exit 0

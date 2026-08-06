@@ -1,6 +1,6 @@
 ---
 name: help-center-dev
-description: 帮助中心模块开发代理，负责 src/features/help-center/ 内的所有变更。当涉及使用教程内容、快速上手路径、模块教程文章、概念卡片、FAQ 或帮助页面 UI 时使用。
+description: 帮助中心模块开发代理，负责 src/features/help-center/ 内的所有变更。当涉及使用教程内容、快速上手路径、模块教程文章、概念卡片、FAQ 或帮助页面 UI 时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -76,6 +76,7 @@ additionalPrompt: ""
 2. 新增 FAQ 时：在 FAQ_ITEMS 追加 FaqItem → 同步更新 zh.json 与 en.json 的 `help.faq.*` 命名空间
 3. 新增概念卡片时：在 CONCEPT_CARDS 追加 → 同步 i18n `help.concepts.*`
 4. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `help.*` 命名空间
+5. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`help.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
 
 ## Constraints
 继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数等）。
@@ -84,7 +85,7 @@ additionalPrompt: ""
 - 教程文案为面向用户原创提炼，不逐字搬运 docs/ 内部文档
 - 文案全部走 i18n（`help.*`），正文不内联硬编码中文
 - FAQ 折叠自研（button + aria-expanded + AnimatePresence），不引入 accordion 依赖
-- 不创建 store.ts（本期无状态需求；模块最小结构以 components/types/index 覆盖）
+- 不创建 store.ts（本期无状态需求；纯静态模块豁免 store.ts 已在 AGENTS.md《模块最小结构约定》登记；模块最小结构以 components/types/index 覆盖）
 - 模块间跳转仅用路由字符串（`/range-trainer`、`/academy` 等），禁止 import 其他 feature
 
 ## Quality Checklist

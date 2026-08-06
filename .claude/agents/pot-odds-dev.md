@@ -1,6 +1,6 @@
 ---
 name: pot-odds-dev
-description: 赔率计算器模块开发代理，负责 src/features/pot-odds/ 内的所有变更。当涉及底池赔率计算、赔率测验、赔率可视化、outs 计算或胜率估算时使用。
+description: 赔率计算器模块开发代理，负责 src/features/pot-odds/ 内的所有变更。当涉及底池赔率计算、赔率测验、赔率可视化、outs 计算或胜率估算时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -83,7 +83,7 @@ additionalPrompt: ""
 - src/features/pot-odds/ — 模块根（types.ts / store.ts / constants.ts 常见听牌数据 / index.ts）
 - src/features/pot-odds/data/ — 测验静态题库（quizQuestions.ts，19 题含平衡题）
 - src/features/pot-odds/utils/ — 选项排序（quizOrder.ts）
-- src/features/pot-odds/hooks/ — 计算逻辑（useOddsCalculation.ts 含 ELO/SRS/Emotion 记录器 colocated；useEquityEstimate.ts）
+- src/features/pot-odds/hooks/ — 计算逻辑（useOddsCalculation.ts 含 ELO/SRS/Emotion 记录器 colocated；胜率估算由 utils/oddsMath.ts + OddsCalculator.tsx 承担）
 - src/features/pot-odds/components/ — 计算器 / 图表 / 测验页组件（PotOddsQuizPage.tsx 含末题简单 + Session 止损守卫，消费排序后题库）
 
 ## Workflows
@@ -93,6 +93,7 @@ additionalPrompt: ""
 4. 添加快捷按钮时：修改 PotSizeInput.tsx
 5. 答题后集成跨模块系统：调用 ELO/SRS/Emotion 记录器；session 完成时 trainingEvents.emit（module: 'pot-odds'）
 6. 新增测验题时：编辑 data/quizQuestions.ts（选项书写顺序不限，渲染前由 orderQuizOptions 自动处理）→ 确认 quizOrder.test.ts 分布与内容平衡守卫通过（注意保持"应弃牌/否"类正确答案的题目占比，避免重新引入"永远选肯定项"内容偏差）
+7. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`odds.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
 
 ## Constraints
 继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。

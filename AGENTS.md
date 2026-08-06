@@ -53,7 +53,7 @@ React 19 + Vite 8 + TypeScript 7（strict）+ Tailwind CSS 4 + shadcn/ui + Zusta
 src/
 ├── app/           # 路由配置（routes.tsx）
 ├── layouts/       # AppLayout / BlankLayout / MobileNav
-├── features/      # 9 个业务模块（自包含）
+├── features/      # 10 个业务模块（自包含，清单以目录实际内容为准）
 │   ├── range-trainer/
 │   ├── pot-odds/
 │   ├── gto-simulator/
@@ -62,8 +62,9 @@ src/
 │   ├── onboarding/
 │   ├── puzzle-trainer/
 │   ├── strategy-academy/
-│   └── theory-academy/  # 理论学习（与 strategy-academy 并列，理论→实践闭环）
-├── shared/        # 跨模块共享层（≥2 模块使用才放入）
+│   ├── theory-academy/  # 理论学习（与 strategy-academy 并列，理论→实践闭环）
+│   └── help-center/     # 平台使用教程（纯静态模块，豁免 store.ts）
+├── shared/        # 跨模块共享层（≥2 模块使用才放入；以下子目录注释为示例非穷举，以目录实际内容为准）
 │   ├── types/     # poker / position / action / elo / mentor / decisionFeedback
 │   ├── components/  # Card / EmptyState / LoadingState / ResultSummary
 │   ├── utils/     # pokerMath / deck / elo / shareCard（纯函数）
@@ -75,7 +76,7 @@ src/
 
 每个 feature 模块自包含：`components/` / `hooks/` / `utils/` / `data/` / `store.ts` / `types.ts` / `index.ts`。
 
-**模块最小结构约定**：每个 feature 模块**至少**必须包含 `components/`、`store.ts`、`types.ts`、`index.ts`。`hooks/`、`utils/`、`data/`、`constants.ts`、`parsers/`、`workers/` 为按需目录，在模块无需相应代码时可省略。此约定确保 AI 代理在探索新模块时能以最少的文件查询确认模块结构。
+**模块最小结构约定**：每个 feature 模块**至少**必须包含 `components/`、`store.ts`、`types.ts`、`index.ts`。`hooks/`、`utils/`、`data/`、`constants.ts`、`parsers/`、`workers/` 为按需目录，在模块无需相应代码时可省略。无状态需求的纯静态模块可豁免 `store.ts`（当前仅 help-center，其代理文件已同步声明）。此约定确保 AI 代理在探索新模块时能以最少的文件查询确认模块结构。
 
 ### 关键约束
 
@@ -83,6 +84,7 @@ src/
 - **shared/ 层准入门槛**：被 ≥2 个模块使用才可放入；单模块使用的代码留在模块内
 - **跨模块状态集中管理**：Streak / ELO / SRS / Emotion / Mentor 五大系统统一在 `src/features/progress/store.ts`（persist version 以该文件配置为准），禁止分散到各 feature store
 - **唯一例外**：puzzle-trainer store 持有 `quickDrillBest`（快速训练最佳记录，独立持久化）；`quickDrillStreak` 连续天数计数器位于 progress store，由 `recordQuickDrillCompletion()` 维护并在连续 7 天时触发 `awardStreakFreeze(1)`
+- **文件语义归属登记**：新增文件必须直接放入语义归属模块，避免物理位置与语义归属分裂；已存在分裂时以**实际消费方实证归属**（唯一消费方所在模块即归属方），并把归属结论同步到相关模块代理与 `platform-dev`（案例：`src/features/hand-history/workers/gtoWorker.ts` 实证归属 hand-history，唯一消费方为本模块 `utils/gtoDeviation.ts`）
 ## 编码规范（摘要，详见 docs/AI_GUIDE.md）
 
 - TypeScript strict + noUncheckedIndexedAccess，禁止 any；路径别名 `@/*`
@@ -125,7 +127,7 @@ src/
 - 所有训练模块的答题反馈必须复用此系统，禁止自定义评级
 - `buildDecisionFeedback` 内部统一调用 `calculateGrade(evLoss)`，禁止用 `isCorrect` 掩盖真实 EV 损失
 
-### 反馈闭环（v1.8 新增）
+### 反馈闭环
 
 - **正向反馈（训练→课程）**：所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer）的答题反馈必须携带 `relatedLessonId`，wrong/blunder 级别在反馈卡片显示"去复习"链接
 - 推导工具函数：
@@ -135,7 +137,7 @@ src/
 - **反向反馈（数据→难度）**：`progress.shouldDownshiftDifficulty()`（无参调用）是自适应难度的**唯一入口**，禁止各模块自行判定
 - 数据源：`progress.emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护，全局计数；触发阈值以 `progress/store.ts` 的 `shouldDownshiftDifficulty` 实现为准）
 
-### 位置渐进解锁（v1.8 新增）
+### 位置渐进解锁
 
 - 常量 `POSITION_UNLOCK_THRESHOLDS` 定义于 `range-trainer/constants.ts`
 - 阈值数值（UTG / HJ / CO / BTN / SB / BB）以该常量定义为唯一事实源，文档不维护数值副本
@@ -143,11 +145,11 @@ src/
 - 调用方：`RangeSelector` 组件渲染时过滤锁定位置
 - 阈值变更规则：调整时在 `docs/CHANGELOG.md` 记录（子代理文件不维护数值副本，无需同步数值）
 
-### 答题选项排序治理（2026-07 新增）
+### 答题选项排序治理
 
 - 所有选择题型训练的选项呈现顺序必须经过统一排序处理，禁止按题库数据原序直接渲染（防"正确答案位置固定"作弊）
 - 分流规则（产品规格见 `docs/PRD.md` 5.26，技术设计见 `docs/TDD.md` 5.9）：动作类选项语义固定排序（消极→激进）；纯数值选项单调排列；文字陈述类按 `hash(题目id)` 种子洗牌；认证考试用会话随机种子
-- 共享工具：`shared/utils/seededShuffle.ts`（判定与排序规则以该文件实现为唯一事实源）；各模块接入实现：puzzle-trainer `utils/optionOrder.ts`、strategy-academy `utils/quizShuffle.ts`、pot-odds `utils/quizOrder.ts`
+- 共享工具：`shared/utils/seededShuffle.ts`（判定与排序规则以该文件实现为唯一事实源）；各模块接入实现：puzzle-trainer `utils/optionOrder.ts`、strategy-academy `utils/quizShuffle.ts`、pot-odds `utils/quizOrder.ts`、theory-academy `utils/quizOrder.ts`
 - 硬性约束：源题库静态数据不手改重排，顺序处理在出口/渲染前用纯函数完成；i18n-key 型题库须在 `t()` 解析后重排，且顺序不得随语言变化；重排必须同步重映射正确答案标识；新增/扩充题库时必须经由所在模块的排序出口，并确保分布守卫测试（正确答案索引占比上限断言）覆盖新题
 - 每日谜题契约不变：同一天所有用户看到相同题目与相同选项顺序
 
@@ -161,10 +163,10 @@ src/
 ### 事件总线
 
 - 实现：`src/shared/stores/trainingEvents.ts`
-- feature 模块完成训练后必须 `trainingEvents.emit(event)`，progress store 自动订阅更新统计（v2.0 已全量合规：pot-odds / puzzle-trainer 已补全 emit；hand-history 为复盘分析工具而非交互式训练，属合理豁免，见其 store.ts 顶部说明与 `docs/CHANGELOG.md`）
-- Streak / ELO / SRS / Emotion 的"记录"action 在答题时同步调用（不走事件总线）
+- feature 模块完成训练后必须 `trainingEvents.emit(event)`，progress store 自动订阅更新统计（hand-history 为复盘分析工具而非交互式训练，属合理豁免，见其 store.ts 顶部说明与 `docs/CHANGELOG.md`）
+- 五大系统的"记录"action 在答题/反馈环节同步调用（不走事件总线）：Streak / ELO / SRS / Emotion 直接记录，Mentor 经 `renderMentorFeedback` 渲染反馈文案
 
-### 调试解锁（开发者选项，2026-07 新增）
+### 调试解锁（开发者选项）
 
 - 实现：`src/shared/stores/debugMode.ts`（独立 persist store，不并入 progress store）；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（文档与子代理文件不维护数值副本）
 - 激活后全局旁路门禁（共 9 处）：strategy-academy 的 `isLevelUnlocked`/`isLevelEntryUnlocked`、strategy-academy `ConceptGraph` 本土课节点解锁（`isLocalLessonUnlocked`）、CourseView 本土课与课程级门禁、strategy-academy `LearningTracksView` 轨道前置、range-trainer `RangeSelector` 位置解锁、range-trainer `QuizConfig` 位置解锁、progress `SessionLimitGuard` 每日题量上限、theory-academy store 的 `isTheoryLevelUnlocked`、theory-academy `TheoryChapterView` 章节 URL 直达门禁；短路有两种接法——store/纯逻辑用 `isDebugUnlockActive()`、组件内用 `useDebugModeStore((s) => s.unlockAll)`，新增门禁时须同步接入
@@ -181,6 +183,13 @@ src/
 - PRD 不含技术实现细节（文件路径 / store actions / persist version）
 - TDD 不含执行历史
 - 子代理修改代码时必须同步更新对应文档
+- **版本注记惯例**：AGENTS.md 与子代理文件只描述当前事实，禁止留存 "(vX.X 新增)" / "(YYYY-MM 新增)" 类批注；演进历史一律记录于 `docs/CHANGELOG.md`
+
+### 文档维护原则·单点事实源
+
+凡涉及代码事实的（module list/version number/test count/file existence），应以实际代码为唯一事实源，禁止硬编码数值。AGENTS.md/TDD.md/子智能体文件应仅描述"当前事实"与"访问路径"，避免维护随时间漂移的值域或版本快照。历史演进信息统一记录于 `docs/CHANGELOG.md`。
+
+示例：`TDD.md` §9.4 persist version 表不再硬编码版本号，改为"以 store.ts persist 配置为唯一事实源"引用策略；`features`模块列表采用"以 src/features/目录为准"动态引用而非静态枚举。
 
 ## 质量门禁
 
@@ -189,10 +198,20 @@ src/
   - `no-restricted-imports`：锁定 features 模块间直接引用，允许边清单以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（收紧时只删不加）
   - `@typescript-eslint/no-explicit-any`：禁止 any
   - 注：lint 工具链通过 `.pnpmfile.cjs` 侧载 TS 6 API（typescript-eslint 尚不支持 TS 7.0），不影响 typecheck/build 使用的 TS 7
-- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行；i18n 双语键对称由 `src/i18n/localeParity.test.ts` 覆盖；策略学院课程数据完整性（id 唯一 / 牌面合法 / 引用无悬空 / native order 无重复 / Drill 接线）由 `src/features/strategy-academy/data/curriculumIntegrity.test.ts` 覆盖；UI 颜色合规（禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）由 `src/designTokenGuard.test.ts` 全量扫描 src 守卫
+- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行。全局级守卫：i18n 双语键对称（`src/i18n/localeParity.test.ts`）、UI 颜色合规（`src/designTokenGuard.test.ts` 全量扫描 src，禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）。模块级数据完整性守卫由各 feature 模块自持（课程结构 / 题库 id / 理论结构 / 选项排序分布等），`pnpm test` 全量运行时强制，清单以各模块实际测试文件为准
 - **构建验证**：`pnpm build` 成功产出 `dist/`
-- **测试双项目划分**（`vitest.config.ts`）：`unit` 项目在 Node 环境运行 `src/**/*.test.ts`（纯函数 / store migrate）；`component` 项目在 jsdom 环境运行 `src/**/*.test.tsx`（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
-- 每次代码变更后必须运行 `pnpm verify`（即 `pnpm typecheck && pnpm lint && pnpm test` 串行短路组合，任一失败即中止；唯一事实源为 `package.json` 的 `verify` script）
+- **测试后缀速查**（`vitest.config.ts` 双项目划分）：`.test.ts` = unit 项目，Node 环境（纯函数 / store migrate）；`.test.tsx` = component 项目，jsdom 环境（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
+- **每次代码变更后必须运行 `pnpm verify`**（即 `pnpm typecheck && pnpm lint && pnpm test`串行短路组合，任一失败即中止；唯一事实源为 `package.json` 的 `verify` script）
+- **子智能体 tools 字段验证**：修改 `.claude/agents/*.md` 时建议运行 `node scripts/validate-agent-tools.ts` 校验 tools 字段合规性（可选但推荐，非强制门禁）
+
+### Feature PR Checklist（建议补充到 CI 或模板）
+
+提交含 feature 模块变更的 PR 时，开发者应自检以下项目：
+- [ ] 对应子智能体文件的 Key Files / Cross-Module Touchpoints / Workflows已同步更新，确保与代码保持镜像一致
+- [ ] 新增跨模块引用已在 `eslint.config.js`的 `ALLOWED_CROSS_IMPORTS`中登记，且`pnpm test` 守卫未变红
+- [ ] 涉及数据模型/持久化 schema 变更时，persist version 已递增并编写 migrate 函数
+- [ ] 涉及模块数量/版本计数/etc 事实性陈述时，文档采用"以代码为准"单源引用策略，而非硬编码数值
+- [ ] `pnpm verify`全部通过（typecheck + lint + test）
 
 ## 提交粒度
 
@@ -219,6 +238,8 @@ src/
 3. **跨模块基础代理**：使用描述性 scope 前缀，不带项目名前缀（项目名冗余，所有代理均属于本项目）
 4. **文件名 = frontmatter name**：`.md` 文件名必须与 frontmatter 中的 `name` 字段完全一致
 5. **后缀约定**：`-dev` 表示开发类代理（含设计守护），后续如新增非开发类代理（如 review、qa）再扩展后缀
+6. **模块-代理同步创建**：新建 feature 模块时，同名代理文件须在同一逻辑单元内创建（保持 1:1 绑定，防止"有模块无代理"漂移）
+7. **frontmatter 字段顺序**：统一为 `name → description → tools → model → skills → mcpServers → additionalPrompt`
 
 ### 子代理清单
 
@@ -237,9 +258,15 @@ src/
 | `theory-academy-dev` | Feature | 理论学院课程 / 章末小测 / 理论→实践桥接 |
 | `help-center-dev` | Feature | 帮助中心教程内容 / 帮助页面 UI |
 
+### 工具权限分配
+
+- **feature-dev 标准工具集（10 项）**：`Read / Glob / Grep / LSP / GetProblems / SearchReplace / Write / DeleteFile / Bash / GetTerminalOutput`
+- **只读复核型代理收窄**：移除 `DeleteFile`（先例：ui-ux-dev），删除文件需求转交 `platform-dev` 协调
+- **声明规则**：`tools` 字段必须显式声明最小工具集，禁止通配符与省略声明（等同继承全部工具）；文件名必须与 frontmatter `name` 字段一致
+
 ### 边界约束
 
-- 子代理只能修改本模块文件 + 必要的 `shared/` 文件
+- 子代理只能修改本模块文件；触碰 `shared/` 层须遵循各自代理文件 Authority 声明（默认经 `platform-dev` 协调）
 - 跨模块变更必须通过 `platform-dev` 协调
 - 子代理文件的 `## Constraints` 章节不得与本 AGENTS.md 冲突
 
@@ -251,7 +278,7 @@ src/
 4. 通知受影响 feature 模块的子代理更新其文件
 5. 涉及全局样式/共享组件/布局/导航/主题色变更时，通知 `ui-ux-dev` 做视觉一致性复核（质量清单以 `poker-ui-demo/DESIGN_LANGUAGE.md` 当前版本为准）
 6. 更新 `docs/CHANGELOG.md`
-7. 运行 `pnpm typecheck` 验证
+7. 运行 `pnpm verify` 验证
 
 ## 行为准则
 

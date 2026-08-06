@@ -1,7 +1,6 @@
 ---
 name: ui-ux-dev
-description: UI/UX 设计守护代理，负责视觉一致性、设计语言落地、组件质感、响应式布局和可访问性。当涉及全局样式、主题色、共享组件视觉、布局调整、设计审查、CSS 变量、暗色主题、移动端适配或 WCAG 无障碍时使用。
-additionalPrompt: ""
+description: UI/UX 设计守护代理，负责视觉一致性、设计语言落地、组件质感、响应式布局和可访问性。当涉及全局样式、主题色、共享组件视觉、布局调整、设计审查、CSS 变量、暗色主题、移动端适配或 WCAG 无障碍时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -15,6 +14,8 @@ tools:
 model: "[Qwen3.7-Plus](qmodel)"
 skills:
   - frontend-design
+mcpServers: []
+additionalPrompt: ""
 ---
 
 # PokerLab UI/UX Designer
@@ -86,9 +87,9 @@ skills:
 
 语义色（低饱和牌室化，禁止高饱和霓虹）：Success 苔藓绿 / Danger 陶土红 / Warning=黄铜 / Info 鼠尾草灰绿 / Freeze 霜钢蓝，均以 `--poker-*` token 为准。
 
-装饰/徽章色（v1.3.2）：`--poker-gold`（金牌）/ `--poker-bronze`（铜牌）/ `--poker-indigo(-bright)`（石板靛）/ `--poker-terra(-bright)`（陶土赭）；成就墙四档=金/铜/`--ivory-dim`(银)/`--poker-frost`(钻)。
+装饰/徽章色：`--poker-gold`（金牌）/ `--poker-bronze`（铜牌）/ `--poker-indigo(-bright)`（石板靛）/ `--poker-terra(-bright)`（陶土赭）；成就墙四档=金/铜/`--ivory-dim`(银)/`--poker-frost`(钻)。
 
-花色：♥♦ 酒红 `--suit-heart/--suit-diamond`；♣♠ **象牙白** `--suit-club/--suit-spade`（v1.3.1 起由深棕改象牙白，暗底可见性优先，对比度 ≥7:1；亮底分享卡另行覆盖为深色）。
+花色：♥♦ 酒红 `--suit-heart/--suit-diamond`；♣♠ **象牙白** `--suit-club/--suit-spade`（暗底可见性优先，对比度 ≥7:1；亮底分享卡另行覆盖为深色）。
 
 **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|...)-\d{2,3}`）、纯白/纯黑文字类、纯黑白 hex；语义反馈映射规则见 `docs/TDD.md` §14.7。由 `src/designTokenGuard.test.ts` 守卫（`pnpm test` 强制，全量扫描 src）。五级反馈样式以 globals.css `.grade-best`~`.grade-blunder` 为唯一事实源，`GRADE_DISPLAY_CONFIG.color` 引用之。
 

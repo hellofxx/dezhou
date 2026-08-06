@@ -1,6 +1,6 @@
 ---
 name: hand-history-dev
-description: 牌局复盘模块开发代理，负责 src/features/hand-history/ 内的所有变更。当涉及牌局导入解析、手牌回放、复盘分析、IndexedDB 存储、PokerStars/GGPoker 格式或决策标注时使用。
+description: 牌局复盘模块开发代理，负责 src/features/hand-history/ 内的所有变更。当涉及牌局导入解析、手牌回放、复盘分析、IndexedDB 存储、PokerStars/GGPoker 格式或决策标注时使用；此类任务应主动委派给本代理。
 tools:
   - Read
   - Glob
@@ -26,7 +26,7 @@ additionalPrompt: ""
 ## Context
 - 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/hand-history/
-- 技术栈：React 19 + TypeScript 7 + Zustand 5 + IndexedDB + framer-motion 12
+- 技术栈：React 19 + TypeScript 7 + Zustand 5 + IndexedDB + Web Worker + framer-motion 12
 
 ## Authority
 **决策范围**：
@@ -35,6 +35,7 @@ additionalPrompt: ""
 - IndexedDB 持久化封装（store.ts 内）
 - 标注系统（每决策点文字笔记，types.ts 的 Annotation 类型）
 - 牌局统计分析工具与展示组件
+- workers/：`gtoWorker.ts` GTO 策略查找与 EV 计算 Worker（实证归属本模块，唯一消费方为 `utils/gtoDeviation.ts`）
 
 **不可越界**：
 - 不修改 `shared/` 层代码，除非需新增公共解析工具且经 `platform-dev` 协调
@@ -51,16 +52,18 @@ additionalPrompt: ""
 - IndexedDB 大容量持久化
 - 标注系统（每决策点文字笔记）
 - 牌局统计分析（HandStatsPanel）
+- GTO 偏差检测（gtoDeviation.ts + gtoWorker.ts Worker 计算卸载，含主线程 fallback 与 idle 调度分批分析）
 
 ## Cross-Module Touchpoints
 - **progress store**：无直接调用（复盘无答题评分，不触发 ELO / SRS / Emotion 系统）
-- **trainingEvents**：合理豁免（v2.0 确认）——hand-history 是复盘分析工具而非答题训练模块，无 quiz/practice 形式的训练结果，不适合 emit TrainingRecord；豁免依据见 `store.ts` 顶部说明与 `docs/CHANGELOG.md`，禁止为凑合规范而伪造 emit
+- **trainingEvents**：合理豁免——hand-history 是复盘分析工具而非答题训练模块，无 quiz/practice 形式的训练结果，不适合 emit TrainingRecord；豁免依据见 `store.ts` 顶部说明与 `docs/CHANGELOG.md`，禁止为凑合规范而伪造 emit
 - **shared/ 层依赖**：poker.ts / formatters.ts / handRanking.ts
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 - src/features/hand-history/ — 模块根（types.ts / store.ts 含 IndexedDB 封装 / index.ts）
 - src/features/hand-history/parsers/ — 多平台手牌历史解析器（common.ts 为格式检测 + 公共工具，其余按平台一文件）
+- src/features/hand-history/workers/ — GTO 策略查找与 EV 计算 Worker（gtoWorker.ts，消费方为 utils/gtoDeviation.ts；内复制 GRADE_THRESHOLDS 阈值副本）
 - src/features/hand-history/hooks/ — 回放引擎（useHandReplay.ts）
 - src/features/hand-history/utils/ — 牌局记法与统计工具
 - src/features/hand-history/components/ — 导入 / 回放 / 标注 / 统计展示组件
@@ -71,6 +74,9 @@ additionalPrompt: ""
 3. 修改牌桌布局时：调整 PlayerSeats.tsx 的 CSS absolute 定位
 4. 添加新标注类型时：扩展 annotations 类型和 AnnotationPanel 组件
 5. 添加牌局统计指标时：扩展 handStats.ts 工具函数 + HandStatsPanel 展示
+6. 修改 GTO 偏差计算时：编辑 workers/gtoWorker.ts 的消息处理与策略查找逻辑（其中阈值常量副本必须与 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 保持一致；阈值变更时需同步通知 platform-dev 并更新副本）
+7. 同步评级阈值：当 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 变更时，立即同步更新 `workers/gtoWorker.ts`内的副本以保持两者一致
+7. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`handHistory.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
 
 ## Constraints
 继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 大数据用 IndexedDB 等）。
@@ -81,6 +87,7 @@ additionalPrompt: ""
 - IndexedDB 操作必须使用 Promise 封装（不阻塞主线程）
 - 椭圆形牌桌布局用 CSS absolute 定位（不用图片）
 - 标注系统支持每决策点文字笔记（types.ts 的 Annotation 类型）
+- `workers/gtoWorker.ts` 内复制的评级阈值常量必须与 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 保持一致（Worker 独立执行上下文无法直接导入 shared）；阈值变更时同步更新副本
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
