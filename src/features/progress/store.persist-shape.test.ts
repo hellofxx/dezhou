@@ -27,6 +27,7 @@ describe('progress store persisted shape', () => {
     expect(buildPersistedShape(persisted)).toMatchInlineSnapshot(`
       {
         "achievementUnlockDates": {},
+        "activeVariant": "string",
         "currentGameVariant": "string",
         "dismissedRecommendations": "array",
         "elo": {
@@ -39,6 +40,44 @@ describe('progress store persisted shape', () => {
           "overall": "number",
           "postflop": "number",
           "preflop": "number",
+        },
+        "eloByVariant": {
+          "heads-up": {
+            "gamesPlayed": "number",
+            "handReading": "number",
+            "kFactor": "number",
+            "lastUpdated": "number",
+            "math": "number",
+            "mental": "number",
+            "overall": "number",
+            "postflop": "number",
+            "preflop": "number",
+            "variant": "string",
+          },
+          "short-deck": {
+            "gamesPlayed": "number",
+            "handReading": "number",
+            "kFactor": "number",
+            "lastUpdated": "number",
+            "math": "number",
+            "mental": "number",
+            "overall": "number",
+            "postflop": "number",
+            "preflop": "number",
+            "variant": "string",
+          },
+          "standard": {
+            "gamesPlayed": "number",
+            "handReading": "number",
+            "kFactor": "number",
+            "lastUpdated": "number",
+            "math": "number",
+            "mental": "number",
+            "overall": "number",
+            "postflop": "number",
+            "preflop": "number",
+            "variant": "string",
+          },
         },
         "eloRankUp": "null",
         "emotion": {

@@ -35,6 +35,7 @@ describe('strategy-academy store persisted shape', () => {
           "rangeKnowledge": "number",
         },
         "activeTrackId": "null",
+        "activeVariant": "string",
         "adaptiveConfig": {
           "downgradeThreshold": "number",
           "enabled": "boolean",
