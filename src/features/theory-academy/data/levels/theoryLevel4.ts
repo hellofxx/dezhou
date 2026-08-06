@@ -30,7 +30,7 @@ export const THEORY_LEVEL_4_CHAPTERS: TheoryChapter[] = [
       {
         type: 'example',
         content:
-          '实例：紧凶玩家 UTG 开局，BTN 跟注。翻牌 K♠7♦2♣，UTG C-Bet，BTN 跟注。转牌 3♥，UTG 二次开火，BTN 仍跟注。河牌 2♦，UTG 全下——此时他的范围叙事是"三条街都声称有 K 以上牌力"：AK、KK、AA、77 为主，偶带 AQ 诈唬。你的 KQ 变成了诈唬捕捉器（Bluff Catcher），决策就从"我有一对 K 挺大"变成"他的全下范围里诈唬占比够不够 25%"。',
+          '实例：紧凶玩家 UTG 开局，BTN 跟注。翻牌 K♠7♦2♣，UTG C-Bet，BTN 跟注。转牌 3♥，UTG 二次开火，BTN 仍跟注。河牌 2♦，UTG 全下——此时他的范围叙事是"三条街都声称有 K 以上牌力":AK、KK、AA、77 为主，偶带 AQ 诈唬。你的 KQ 变成了跟注站 (Bluff Catcher)，决策就从"我有一对 K 挺大"变成"他的全下范围里诈唬占比够不够 25%"。',
       },
       {
         type: 'example',
@@ -97,7 +97,7 @@ export const THEORY_LEVEL_4_CHAPTERS: TheoryChapter[] = [
           '因为投入太多必须跟注',
         ],
         correctIndex: 1,
-        explanation: '此时你的牌是诈唬捕捉器：只赢诈唬、输给全部价值。决策 = 对手范围中诈唬比例 vs 底池赔率所需胜率。',
+        explanation: '此时你的牌是跟注站：只赢诈唬、输给全部价值。决策 = 对手范围中诈唬比例 vs 底池赔率所需胜率。',
       },
       {
         id: 't4-range-thinking-q4',
@@ -217,7 +217,7 @@ export const THEORY_LEVEL_4_CHAPTERS: TheoryChapter[] = [
       },
       {
         id: 't4-combinatorics-q4',
-        question: '对手全下范围为价值 11 种组合、诈唬 6 种，面对满池全下（需 25% 胜率）。你的诈唬捕捉器应该：',
+        question: '对手全下范围为价值 11 种组合、诈唬 6 种，面对满池全下（需 25% 胜率）。你的跟注站应该：',
         options: ['弃牌，价值组合更多', '跟注，诈唬占比 35% 超过所需 25%', '加注', '取决于运气'],
         correctIndex: 1,
         explanation: '诈唬占比 = 6/17 ≈ 35%，高于底池赔率要求的 25%，跟注长期盈利。数字直接给出答案，无需感觉。',

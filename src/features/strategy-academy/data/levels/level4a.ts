@@ -441,6 +441,38 @@ export const LEVEL_4A_LESSONS: Lesson[] = [
         },
       },
       {
+        id: 'l4-ev-real-cases',
+        level: 4,
+        order: 0.5,
+        title: 'EV 思维实战牌例库',
+        subtitle: '来自真实牌局的 EV 分析案例',
+        duration: '12 min',
+        content: [
+          { type: 'heading', content: 'Case E1: River Value Bet with Second Best Hand' },
+          { type: 'example', content: 'Hero K♣Q♣ in CO vs TAG on river A♦, Pot 25BB\n\nKeyDecision: Value bet instead of check back\n\nReasoning:\n- TAG\'s river range is mostly weak Ax after calling two streets\n- Your K♣Q♣ is second best but extracts value from weaker Ax\n- EV(bet) ≈ +5BB higher than EV(check-back)\n\nKeyLesson: 第二好牌也要下注获取价值（Kx 在 TAG 范围中很弱）。不要保守地只过牌收底池。\nSource: Upswing Poker Blog #234' },
+          { type: 'heading', content: 'Case E2: Semi-bluff on Combined Draw' },
+          { type: 'example', content: 'Hero T♥J♥ on flop 9♥8♣2♥ vs LAG, Pot 10BB\n\nKeyDecision: C-bet 6BB as semi-bluff\n\nReasoning:\n- Combined draws (~15 outs): flush + OESD\n- Fold equity: LAG folds ~45% to C-bets\n- Showdown equity if called: ~30% by river\n- EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB\n\nKeyLesson: 组合听牌的价值在于 fold equity + showdown equity 双重来源。不要因为牌没成就不敢下注。\nSource: RIO Video Clip #156' },
+        ],
+        quiz: [
+          {
+            id: 'l4-ev-rc-q1',
+            question: 'Case E1 中，Hero K♣Q♣面对 TAG River 检查应该？',
+            options: ['Check back', 'Value bet', 'Fold', 'All-in'],
+            correctIndex: 1,
+            explanation: '第二好牌也要下注获取价值。TAG\'s river range is mostly weak Ax after calling two streets.',
+          },
+          {
+            id: 'l4-ev-rc-q2',
+            question: 'Case E2 中，Hero T♥J♥在 floop 有组合听牌应该？',
+            options: ['Check', 'C-bet semi-bluff', 'Fold', 'Raise'],
+            correctIndex: 1,
+            explanation: '组合听牌的价值在于 fold equity + showdown equity 双重来源。EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB.',
+          },
+        ],
+        practice: { id: 'l4-ev-real-practice', questions: [] },
+        examples: [],
+      },
+      {
         id: 'l4-opponent-reading',
         level: 4,
         order: 3,

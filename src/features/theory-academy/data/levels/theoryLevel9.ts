@@ -21,7 +21,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
       {
         type: 'text',
         content:
-          '经典玩具博弈之一是 AKQ 博弈：牌堆只有 A、K、Q 三张，两人各发一张单街对决。均衡解揭示了三个永恒角色：A（坚果）永远价值下注；Q（空气）按精确频率诈唬；K（中等牌）永远不下注——它只能做诈唬捕捉器，按无差别频率跟注。真实扑克中每手牌在每个节点都在扮演这三个角色之一，这就是"范围三层结构"（价值/中等/空气）的理论原型。',
+          '经典玩具博弈之一是 AKQ 博弈：牌堆只有 A、K、Q 三张，两人各发一张单街对决。均衡解揭示了三个永恒角色：A（坚果）永远价值下注；Q（空气）按精确频率诈唬；K（中等牌）永远不下注——它只能做跟注站，按无差别频率跟注。真实扑克中每手牌在每个节点都在扮演这三个角色之一，这就是"范围三层结构"（价值/中等/空气）的理论原型。',
       },
       {
         type: 'formula',
@@ -80,7 +80,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
         question: 'AKQ 博弈中，K（中等牌）的均衡策略是：',
         options: [
           '小额下注试探',
-          '永不下注，只做按频率跟注的诈唬捕捉器',
+          '永不下注，只做按频率跟注的跟注站',
           '偶尔诈唬',
           '永远弃牌',
         ],
@@ -158,8 +158,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
         type: 'example',
         content:
           '实例：泡沫期（再淘汰 1 人人人有奖），你是中等筹码，大筹码对你全下。即使你判断 55% 胜率（cEV 明显为正），跟注可能仍是 $EV 灾难：赢了筹码增值有限，输了 100% 奖金期望归零；而大筹码淘汰不了你的对手们正等着你们互撞。反过来这正是大筹码的武器——ICM 压力让他可以用极宽范围推压所有中等筹码：你们"知道他在抢"，数学上依然只能弃。',
-      },
-      { type: 'heading', content: 'ICM 的策略含义' },
+      }, { type: 'heading', content: 'ICM 的策略含义' },
       {
         type: 'text',
         content:
@@ -356,6 +355,98 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
     ],
   },
   {
+    id: 't9-alpha',
+    level: 9,
+    order: 1.5,
+    title: 'Alpha（优势比例）详解',
+    subtitle: 'MDF 的对偶概念与实战应用',
+    duration: '10 min',
+    eloDimension: 'math',
+    content: [
+      { type: 'heading', content: 'Alpha 的定义与公式' },
+      {
+        type: 'text',
+        content: 'Alpha = bet ÷ (pot + bet) —— 对手诈唬的盈亏平衡弃牌率\n\n举例说明：当你下注 1/2 池时（bet=0.5pot）\n- Alpha = 0.5/(1+0.5) = 33%\n- 意味着对手的弃牌率必须超过 33% 你的 bluff 才盈利\n\n这是从进攻方视角看的"价格标签",回答的是"对手至少要弃掉多少比例的牌我的 bluff 才能保本"这个问题。',
+      },
+      { type: 'heading', content: '与 MDF 的对偶关系' },
+      {
+        type: 'text',
+        content: 'MDF 与 Alpha 是同一个博弈树的两侧视角，揭示了博弈论的核心本质：\n- MDF = pot/(pot+bet) —— **你的防御频率**（防守方视角）\n- Alpha = bet/(pot+bet) —— **对手需要的弃牌率**（进攻方视角）\n- **关键发现**: MDF + Alpha = 1（两者互为补集）\n\n这个对偶关系表明：一方的最优策略恰好抵消了另一方的剥削空间。防守方的 MDF 决定了进攻方的 Alpha，反之亦然。它们在数学上共享同一个分母 (pot+bet)，只是分子不同（pot vs bet）。',
+      },
+      { type: 'key-point', content: 'MDF + Alpha = 1 的证明：pot/(pot+bet) + bet/(pot+bet) = (pot+bet)/(pot+bet) = 1' },
+      { type: 'heading', content: 'Alpha 的实战应用' },
+      {
+        type: 'text',
+        content: 'Alpha 的核心价值在于它提供了一个**定量的视角**，帮助你评估对手的诈唬频率是否足够高，从而决定是否跟注。具体步骤如下：\n1. **计算 Alpha**：根据你的下注额和当前底池大小计算 Alpha\n2. **观察对手的弃牌率**：通过统计对手的 C-Bet 弃牌率、河牌大注弃牌率等数据\n3. **比较 Alpha 与对手弃牌率**：如果对手的弃牌率高于 Alpha，你的跟注是盈利的；反之则应弃牌\n\n这个定量的视角让你能够更客观地做出决策，而不是依赖直觉或经验。',
+      },
+      {
+        type: 'example',
+        content:
+          '实例：你下注 1/3 池，Alpha = 1/4。对手的 C-Bet 弃牌率是 30%，低于 Alpha。这意味着对手的诈唬频率不够高，你应该弃牌。相反，如果对手的弃牌率是 40%，高于 Alpha，你应该跟注。',
+      },
+      {
+        type: 'example',
+        content:
+          '实例二：你下注 1/2 池，Alpha = 1/3。对手的河牌大注弃牌率是 25%，低于 Alpha。你应该弃牌。如果对手的弃牌率是 35%，高于 Alpha，你应该跟注。',
+      },
+      {
+        type: 'example',
+        content:
+          '实例三：你下注 1/4 池，Alpha = 1/5。对手的 C-Bet 弃牌率是 20%，低于 Alpha。你应该弃牌。如果对手的弃牌率是 25%，高于 Alpha，你应该跟注。',
+      },
+      {
+        type: 'highlight',
+        content: 'Alpha 的应用原则：**定量比较**，而不是依赖直觉。通过 Alpha，你可以更客观地评估对手的诈唬频率，从而做出更准确的决策。',
+      },
+      {
+        type: 'pro-tip',
+        content: '自测理解深度：能否用 Alpha 向朋友解释"为什么在某些情况下你应该弃牌"？能讲清楚这一点，你就掌握了 Alpha 的精髓。',
+      },
+    ],
+    quiz: [
+      {
+        id: 't9-alpha-q1',
+        question: 'Alpha 的公式是？',
+        options: ['Alpha = pot / (pot + bet)', 'Alpha = bet / (pot + bet)', 'Alpha = bet / (pot + 2×bet)', 'Alpha = pot / (pot + 2×bet)'],
+        correctIndex: 1,
+        explanation: 'Alpha = bet / (pot + bet)，与 MDF 共享相同分母，只是分子不同。这是对手需要弃牌的概率阈值。',
+      },
+      {
+        id: 't9-alpha-q2',
+        question: 'Alpha 与 MDF 的关系是？',
+        options: ['Alpha = MDF', 'Alpha + MDF = 1', 'Alpha = 1 - MDF', 'Alpha = 1 / MDF'],
+        correctIndex: 1,
+        explanation: 'Alpha + MDF = 1，两者互为补集。Alpha 是对手需要的弃牌率，MDF 是你的防御频率。',
+      },
+      {
+        id: 't9-alpha-q3',
+        question: 'Alpha 的核心价值在于？',
+        options: ['提供一个定量的视角', '提供一个定性的视角', '提供一个经验法则', '提供一个直觉'],
+        correctIndex: 0,
+        explanation: 'Alpha 提供了一个定量的视角，帮助你评估对手的诈唬频率是否足够高，从而决定是否跟注。',
+      },
+      {
+        id: 't9-alpha-q4',
+        question: 'Alpha 的应用步骤是？',
+        options: [
+          '计算 Alpha → 观察对手的弃牌率 → 比较 Alpha 与对手弃牌率',
+          '观察对手的弃牌率 → 计算 Alpha → 比较 Alpha 与对手弃牌率',
+          '比较 Alpha 与对手弃牌率 → 计算 Alpha → 观察对手的弃牌率',
+          '观察对手的弃牌率 → 比较 Alpha 与对手弃牌率 → 计算 Alpha',
+        ],
+        correctIndex: 0,
+        explanation: 'Alpha 的应用步骤是：计算 Alpha → 观察对手的弃牌率 → 比较 Alpha 与对手弃牌率。',
+      },
+      {
+        id: 't9-alpha-q5',
+        question: '你下注 1/3 池，Alpha = 1/4。对手的 C-Bet 弃牌率是 30%，你应该？',
+        options: ['跟注', '弃牌', '加注', '全下'],
+        correctIndex: 1,
+        explanation: '对手的弃牌率低于 Alpha，你应该弃牌。',
+      },
+    ],
+  },
+  {
     id: 't9-unified',
     level: 9,
     order: 4,
@@ -398,8 +489,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
         type: 'example',
         content:
           '实例三（适应监控的循环）：你连续三次用"他面对河牌大注从不诈唬"的读牌弃掉抓诈唬。第四次他全下你弃牌，他亮出纯空气——适应信号出现。此时不是推翻读牌，而是把它降级为"大多数时候如此"，回到均衡基线等待新样本。剥削是动态游戏：你在调整别人，别人也在调整你。',
-      },
-      { type: 'heading', content: '继续深造的路线图' },
+      }, { type: 'heading', content: '继续深造的路线图' },
       {
         type: 'text',
         content:

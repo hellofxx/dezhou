@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import MdfComparisonTable from '../../../shared/components/MdfComparisonTable';
 
 interface StepProps {
   title: string;
@@ -90,6 +91,7 @@ interface MDFDerivationProps {
 }
 
 export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
+  const [activeTab, setActiveTab] = useState<'derivation' | 'comparison'>('derivation');
   const [displayPot, setDisplayPot] = useState(pot);
   const [displayBet, setDisplayBet] = useState(bet);
 
@@ -99,63 +101,92 @@ export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
 
   return (
     <div className="bg-[var(--felt-raised)]/30 rounded-lg p-6 border border-[var(--brass-deep)]/30">
-      <h3 className="font-display font-semibold text-lg mb-4 text-[var(--ivory)]">
-        MDF 推导过程
-      </h3>
-
-      <Step title="步骤 1：计算防御频率 (MDF)">
-        <FormulaBlock>
-          MDF = pot / (pot + bet)
-            = {displayPot} / ({displayPot} + {displayBet})
-            = {(mdf * 100).toFixed(1)}%
-        </FormulaBlock>
-        <Note>
-          你需要用 top {(mdf * 100).toFixed(0)}% 的范围继续防守，以防止对手利用 bluff 获利
-        </Note>
-      </Step>
-
-      <Step title="步骤 2：计算跟注所需胜率 (Required Equity)">
-        <FormulaBlock>
-          Required Equity = bet / (pot + bet)
-            = {displayBet} / ({displayPot} + {displayBet})
-            = {(requiredEquity * 100).toFixed(1)}%
-        </FormulaBlock>
-        <Warning>注意：这和 MDF 不同！不要混淆。</Warning>
-        <Note>
-          这是你跟注所需的最低胜率。如果你的实际胜率高于这个值，跟注就是有利可图的
-        </Note>
-      </Step>
-
-      <div className="border-t border-[var(--walnut-border)] pt-4 space-y-4">
-        <InteractiveSlider
-          label="底池大小"
-          value={displayPot}
-          onChange={setDisplayPot}
-          min={5}
-          max={100}
-          step={1}
-        />
-        <InteractiveSlider
-          label="下注额"
-          value={displayBet}
-          onChange={setDisplayBet}
-          min={1}
-          max={200}
-          step={1}
-        />
-      </div>
-
-      {/* Results summary */}
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <div className="bg-[var(--surface)] rounded p-3 text-center">
-          <div className="text-xs text-[var(--ivory-muted)] mb-1">MDF (防御频率)</div>
-          <div className="text-xl font-bold text-[var(--brass-bright)]">{(mdf * 100).toFixed(1)}%</div>
-        </div>
-        <div className="bg-[var(--surface)] rounded p-3 text-center">
-          <div className="text-xs text-[var(--ivory-muted)] mb-1">跟注所需胜率</div>
-          <div className="text-xl font-bold text-[var(--success)]">{(requiredEquity * 100).toFixed(1)}%</div>
+      {/* Tab Navigation */}
+      <div className="border-b border-[var(--walnut-border)] mb-6">
+        <div className="flex space-x-4">
+          <button
+            className={`px-4 py-2 text-sm font-medium rounded-t transition-colors ${
+              activeTab === 'derivation'
+                ? 'text-[var(--ivory)] bg-[var(--brass-dark)]/50'
+                : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
+            }`}
+            onClick={() => setActiveTab('derivation')}
+          >
+            MDF 推导过程
+          </button>
+          <button
+            className={`px-4 py-2 text-sm font-medium rounded-t transition-colors ${
+              activeTab === 'comparison'
+                ? 'text-[var(--ivory)] bg-[var(--brass-dark)]/50'
+                : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
+            }`}
+            onClick={() => setActiveTab('comparison')}
+          >
+            三概念对比
+          </button>
         </div>
       </div>
+
+      {/* Content based on active tab */}
+      {activeTab === 'derivation' ? (
+        <>
+          <Step title="步骤 1：计算防御频率 (MDF)">
+            <FormulaBlock>
+              MDF = pot / (pot + bet)
+                = {displayPot} / ({displayPot} + {displayBet})
+                = {(mdf * 100).toFixed(1)}%
+            </FormulaBlock>
+            <Note>
+              你需要用 top {(mdf * 100).toFixed(0)}% 的范围继续防守，以防止对手利用 bluff 获利
+            </Note>
+          </Step>
+
+          <Step title="步骤 2：计算跟注所需胜率 (Required Equity)">
+            <FormulaBlock>
+              Required Equity = bet / (pot + bet)
+                = {displayBet} / ({displayPot} + {displayBet})
+                = {(requiredEquity * 100).toFixed(1)}%
+            </FormulaBlock>
+            <Warning>注意：这和 MDF 不同！不要混淆。</Warning>
+            <Note>
+              这是你跟注所需的最低胜率。如果你的实际胜率高于这个值，跟注就是有利可图的
+            </Note>
+          </Step>
+
+          <div className="border-t border-[var(--walnut-border)] pt-4 space-y-4">
+            <InteractiveSlider
+              label="底池大小"
+              value={displayPot}
+              onChange={setDisplayPot}
+              min={5}
+              max={100}
+              step={1}
+            />
+            <InteractiveSlider
+              label="下注额"
+              value={displayBet}
+              onChange={setDisplayBet}
+              min={1}
+              max={200}
+              step={1}
+            />
+          </div>
+
+          {/* Results summary */}
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <div className="bg-[var(--surface)] rounded p-3 text-center">
+              <div className="text-xs text-[var(--ivory-muted)] mb-1">MDF (防御频率)</div>
+              <div className="text-xl font-bold text-[var(--brass-bright)]">{(mdf * 100).toFixed(1)}%</div>
+            </div>
+            <div className="bg-[var(--surface)] rounded p-3 text-center">
+              <div className="text-xs text-[var(--ivory-muted)] mb-1">跟注所需胜率</div>
+              <div className="text-xl font-bold text-[var(--success)]">{(requiredEquity * 100).toFixed(1)}%</div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <MdfComparisonTable initialPot={displayPot} initialBet={displayBet} />
+      )}
     </div>
   );
 }

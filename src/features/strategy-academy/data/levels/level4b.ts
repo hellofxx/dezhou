@@ -259,13 +259,13 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'text', content: '频率平衡是指在特定场景下，你的各种行动（下注/过牌/加注）保持一定的比例，使得对手无法通过调整策略来剥削你。' },
           { type: 'key-point', content: 'GTO 的核心就是频率平衡。当你的策略平衡时，对手无论怎么调整都无法获利；当你的策略失衡时，对手可以通过剥削获取额外利润。' },
           { type: 'heading', content: '诈唬/价值比例' },
-          { type: 'text', content: '最重要的频率平衡是下注时的诈唬与价值的比例：\n\n• 河牌 Full Pot 下注：对手需 33% 胜率跟注\n  → 你的 bluff 占比应为 33%(value:bluff = 2:1)\n\n• 河牌 2/3 Pot 下注：对手需 40% 胜率跟注\n  → 你的 bluff 占比应为 33%(value:bluff = 2:1)\n\n• 河牌 1/2 Pot 下注：对手需 25% 胜率跟注\n  → 你的 bluff 占比应为 33%(value:bluff = 2:1)，而非 25%\n\n平衡原则：value:bluff = pot : bet，因此 bluff 占比 = bet/(pot+bet+bet)。当 bet=1/2pot 时，bluff = 0.5pot/(pot+0.5pot+0.5pot) = 0.5/2 = 25% 是错误的！正确是：value:bluff = pot:bet = 1:0.5 = 2:1，所以 bluff = 1/(2+1) = 33%。' },
+          { type: 'text', content: '最重要的频率平衡是下注时的诈唬与价值的比例：\n\n• 河牌 Full Pot 下注：对手需 33% 胜率跟注\n  → 你的 bluff 占比应为 33%(value:bluff = 2:1)\n\n• 河牌 2/3 Pot 下注：对手需 40% 胜率跟注\n  → 你的 bluff 占比应约为 28.6%(value:bluff ≈ 2.5:1)\n\n• 河牌 1/2 Pot 下注：对手需 25% 胜率跟注\n  → 你的 bluff 占比应为 25%(value:bluff = 3:1)\n\n关键区分：\n- bluff 占比（你的下注范围中）= bet / (pot + 2×bet)\n- MDF（你作为防守方的防御频率）= pot / (pot + bet)\n- 所需胜率（单次跟注保本线）= bet / (pot + 2×bet)\n\n注意：MDF、所需胜率和 bluff 占比公式形式上可能相似，但它们的应用场景完全不同！混淆这三者是新手最常见的错误。' },
           { type: 'heading', content: '如何在实战中应用' },
           { type: 'text', content: '不需要精确计算频率，但要有意识：\n• 如果你最近连续 bluff 了 5 次都被 catch，可能 bluff 太多\n• 如果你从不 bluff，对手会开始对你的下注只跟注最强牌\n• 保持“有时 bluff、有时 value”的不可预测性' },
           { type: 'pro-tip', content: '对付高手时，频率平衡是保护自己的盾牌；对付弱手时，可以打破平衡做纯粹的剥削调整。核心是知道何时应该平衡、何时应该偏离。' },
         {
           type: 'formula',
-          content: '价值:诈唬比公式推导（河牌）：\n诈唬占比 = bet ÷ (pot + 2×bet)\n\n常见尺度对应的诈唬占比：\n1/3 池下注 → 诈唬占比 = 0.33/(1+0.66) = 20%（价值:诈唬 = 4:1）\n1/2 池下注 → 诈唬占比 = 0.5/(1+1) = 25%（价值:诈唬 = 3:1）\n2/3 池下注 → 诈唬占比 = 0.67/(1+1.33) = 28.6%（价值:诈唬 = 2.5:1）\n满池下注 → 诈唬占比 = 1/(1+2) = 33%（价值:诈唬 = 2:1）\n\n注意：1/2 池下注时诈唬占 25% 而非 33%！错误理解是混淆了 MDF 与诈唬占比',
+          content: '价值：诈唬比公式推导（河牌）：\n诈唬占比 = bet ÷ (pot + 2×bet)\n\n常见尺度对应的诈唬占比：\n1/3 池下注 → 诈唬占比 = 0.33/(1+0.66) ≈ 20%（价值：诈唬 = 4:1）\n1/2 池下注 → 诈唬占比 = 0.5/(1+1) = 25%（价值：诈唬 = 3:1）\n2/3 池下注 → 诈唬占比 = 0.67/(1+1.33) ≈ 28.6%（价值：诈唬 = 2.5:1）\n满池下注 → 诈唬占比 = 1/(1+2) = 33%（价值：诈唬 = 2:1）\n\n对比概念：\nMDF(防御频率) = pot/(pot+bet) —— 你作为防守方至少需要继续的频率\n所需胜率 = bet/(pot+2bet) —— 单次跟注的保本线\n\n记住：MDF、所需胜率和 bluff 占比是三个完全不同的公式，应用在不同场景！',
         },
         {
           type: 'theory-reference',
@@ -274,7 +274,7 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
         },
         {
           type: 'counter-intuitive',
-          content: '反直觉点：1/2 池下注时诈唬占 25% 是错误计算！正确公式是诈唬占比 = bet/(pot+2bet) = 0.5/2 = 25%。但很多教学材料错误地写成 33%。原因是混淆了 MDF（对手的防御频率）和诈唬占比（你的下注范围中诈唬的比例）——两者不是同一个概念。',
+          content: '反直觉点：很多人会混淆 MDF、所需胜率和 bluff 占比，因为它们公式形式上可能相似。正确理解是：MDF 回答面对下注我应该用多少频率继续（pot/(pot+bet)），所需胜率回答这手牌跟注是否保本（bet/(pot+2bet)），bluff 占比回答我的下注范围中应该带多少诈唬（同样是 bet/(pot+2bet) 但应用场景不同）。三者概念清晰，不要混为一谈！',
         },
         ],
         quiz: [
@@ -479,8 +479,43 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
             },
           
             { id: 'l4-mdf-p4', difficulty: 'advanced', scenario: { heroHand: ['Kd', 'Qd'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Ac', '7c', '2h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Call 3BB', isCorrect: true, explanation: 'KQ在A72面有后门同花，跟注一枪看转牌。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'KQ有后门潜力，MDF足够跟注。', evImpact: '-0.8 BB/100' }, { action: 'Raise 10BB', isCorrect: false, explanation: '面对TAG在A面加注过度。', evImpact: '-1.5 BB/100' }], relatedLessonId: 'l4-mdf' },
-            { id: 'l4-mdf-p5', difficulty: 'advanced', scenario: { heroHand: ['Jh', 'Th'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['9h', '8c', '4h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Check-Raise 12BB', isCorrect: true, explanation: 'JT有同花+卡顺组合听牌，Check-Raise半诈唬。', evImpact: '+1.8 BB/100' }, { action: 'Check-Call', isCorrect: false, explanation: '组合听牌应该加注获取弃牌权益。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '组合听牌太强不能弃。', evImpact: '-2.5 BB/100' }], relatedLessonId: 'l4-mdf' },],
+            { id: 'l4-mdf-p5', difficulty: 'advanced', scenario: { heroHand: ['Jh', 'Th'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['9h', '8c', '4h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Check-Raise 12BB', isCorrect: true, explanation: 'JT 有同花 + 卡顺组合听牌，Check-Raise 半诈唬。', evImpact: '+1.8 BB/100' }, { action: 'Check-Call', isCorrect: false, explanation: '组合听牌应该加注获取弃牌权益。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '组合听牌太强不能弃。', evImpact: '-2.5 BB/100' }], relatedLessonId: 'l4-mdf' },],
         },
+      },
+      // Real hand cases library for MDF lesson
+      {
+        id: 'l4-mdf-real-cases',
+        level: 4,
+        order: 0.5,
+        title: 'MDF 实战牌例库',
+        subtitle: '最小防御频率的真实案例分析',
+        duration: '12 min',
+        content: [
+          { type: 'heading', content: 'Case M1: Over defending against Maniac' },
+          { type: 'example', content: 'BB vs Maniac on Q-4-2 dry board, Pot 6BB\n\nScenario:\n- Maniac raises 2.5BB from BTN\n- BB calls with A-T\n- Flop: Q-4-2, Maniac C-bets 3BB (50% pot)\n\nKey Decision: Call using wider than standard range\n\nAnalysis:\n- Maniac bluff frequency: ~65% (AF 7.0+)\n- Alpha for 50% pot bet = 0.5/(1+0.5) = 33%\n- Maniac fold rate to C-bets: only ~25%\n- Your A-T beats his entire bluff range\n\nWhy call wider than MDF?\n- MDF suggests calling 67%, but your read says he bluffs too much\n- With 65% bluff frequency >> 33% Alpha threshold, value betting becomes dominant\n- EV(call with A-T) approx +2.0BB (beats 65% of his range)\n- Expected outcome: Exploit Maniac over-playing tendencies\n\nKeyLesson: 面对高 bluff 频率对手（Maniac）时，可以安全地用更宽范围继续防守。你的顶对能击败他的整个诈唬范围。\nSource: Derived from LAG statistics analysis',
+          },
+          { type: 'heading', content: 'Case M2: Folding below MDF against Nit' },
+          { type: 'example', content: 'BTN vs Nit on J C J D J S 3 D K H board, Pot 25BB\n\nScenario:\n- Nit opens UTG 2.5BB\n- BTN calls\n- Flop: JJJ, Nit leads 8BB, BTN calls\n- Turn: 3, Nit bets 15BB\n- River: K, Nit shoves all-in 40BB into 50BB pot\n- BTN holds QQ, facing river shove\n\nKey Decision: Fold despite MDF suggesting continue\n\nAnalysis:\n- MDF for all-in: 50/(50+40) = 56% defense required\n- But NITS river range analysis:\n  - Value hands only: JJ+, QQ, KK (almost no bluffs)\n  - His AF < 1.0 means extremely rare bluffing\n  - QQ loses to 95% of his range\n\nWhy fold below MDF?\n- Against Nit, actual value:bluff ratio >> theoretical GTO\n- MDF assumes balanced ranges, but Nit is heavily value-heavy\n- EV(fold) = 0 vs EV(call) ≈ -35BB (loses to AA/KK/JJ)\n- Information about opponent overrides pure MDF calculation\n\nKeyLesson: 面对超紧玩家（Nit）的河牌大注时，即使 MDF 建议跟注也应该弃牌。Nit 几乎从不 bluff，你的顶对在他范围中完全落后。\nSource: NIT exploitation framework',
+          },
+        ],
+        quiz: [
+          {
+            id: 'l4-mdf-rc-q1',
+            question: 'M1 案例中，为什么可以用比 MDF 更宽的范围跟注？',
+            options: ['底池赔率好', '对手是 Maniac  bluff 频率很高', '我的牌很强', '位置有利'],
+            correctIndex: 1,
+            explanation: '面对 Maniac（AF 7.0+），对手的 bluff 频率远超 Alpha 阈值（65% > 33%），此时可以用更宽范围跟注来剥削。',
+          },
+          {
+            id: 'l4-mdf-rc-q2',
+            question: 'M2 案例中，为什么面对 Nit 应该弃牌尽管 MDF 建议跟注？',
+            options: ['NIT 几乎从不 bluff，价值范围极强', '弃牌损失更小', 'MDF 计算错误', '我的 QQ 太弱'],
+            correctIndex: 0,
+            explanation: 'NIT 的 river 下注几乎全是价值（AA/KK/JJ），他的 AF<1.0 意味着极低 bluff 频率，实际 value:bluff 比远高于理论值。',
+          },
+        ],
+        practice: { id: 'l4-mdf-real-practice', questions: [] },
+        examples: [],
       },
       {
         id: 'l4-overbet',
@@ -574,9 +609,9 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
               action: 'Bet',
               amount: '33BB (150% pot)',
               reasoning: [
-                '你有 A♥T♥ — 错过的坚果同花听牌（A 高红心）',
+                '你有 AT — 错过的坚果同花听牌（A 高红心）',
                 '你的范围在这个牌面是极化的：要么有同花（坚果），要么是空气',
-                'A♥ 是极好的 bluff blocker：阻断对手 A♥x♥ 的坚果同花',
+                'A 是极好的 bluff blocker：阻断对手 Ax 的坚果同花',
                 '对手 check-call 两次后范围 capped（不太可能有强牌）',
                 'Overbet 让对手的顶对/两对面临极困难的决策',
               ],
@@ -629,9 +664,9 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['unknown'],
               },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'Q♥J♥ 是错过的坚果同花听牌。你的范围在这个牌面极化（有同花或空气），适合 overbet bluff。Check 浪费了 bluff 机会。', evImpact: '-1.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'QJ 是错过的坚果同花听牌。你的范围在这个牌面极化（有同花或空气），适合 overbet bluff。Check 浪费了 bluff 机会。', evImpact: '-1.5 BB/100' },
                 { action: 'Bet', amount: '5BB (50% pot)', isCorrect: false, explanation: '小注 bluff 不够有威胁。对手面对小注太容易 call，你的 bluff 成功率低。要么不 bluff，要么用 overbet 施加最大压力。', evImpact: '+0.5 BB/100' },
-                { action: 'Bet', amount: '15BB (150% pot)', isCorrect: true, explanation: 'Q♥J♥ 是完美的 overbet bluff：你有 A♥/K♥ 的 blocker（阻断对手坚果同花），你的范围极化（有同花或空气），overbet 让对手的顶对面临极困难决策。', evImpact: '+2.5 BB/100' },
+                { action: 'Bet', amount: '15BB (150% pot)', isCorrect: true, explanation: 'QJ 是完美的 overbet bluff：你有 A/K 的 blocker（阻断对手坚果同花），你的范围极化（有同花或空气），overbet 让对手的顶对面临极困难决策。', evImpact: '+2.5 BB/100' },
               ],
             },
             {
@@ -827,9 +862,9 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['tag'],
               },
               options: [
-                { action: 'Check', isCorrect: false, explanation: '9♥8♥ 是错过的同花听牌（空气）。你的范围在这个牌面极化（有同花或空气），适合 bluff。Check 浪费了 bluff 机会。', evImpact: '-1.0 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: '98 是错过的同花听牌（空气）。你的范围在这个牌面极化（有同花或空气），适合 bluff。Check 浪费了 bluff 机会。', evImpact: '-1.0 BB/100' },
                 { action: 'Bet', amount: '3BB (30% pot)', isCorrect: false, explanation: '小注 bluff 不够有威胁。对手面对小注太容易 call（pot odds 好）。要么不 bluff，要么用足够大的下注施加压力。', evImpact: '+0.3 BB/100' },
-                { action: 'Bet', amount: '10BB (100% pot)', isCorrect: true, explanation: '9♥8♥ 是完美的 bluff 候选：有同花 blocker（对手不太可能有同花），你的范围极化（有同花或空气），满池下注让对手的顶对面临困难决策。', evImpact: '+2.0 BB/100' },
+                { action: 'Bet', amount: '10BB (100% pot)', isCorrect: true, explanation: '98 是完美的 bluff 候选：有同花 blocker（对手不太可能有同花），你的范围极化（有同花或空气），满池下注让对手的顶对面临困难决策。', evImpact: '+2.0 BB/100' },
               ],
             },
           
@@ -854,14 +889,14 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'heading', content: '对手形象对 Bluff Catching 的影响' },
           { type: 'text', content: '面对 Maniac/LAG：bluff catching 频率提高\n- 他们的 bluff 范围宽，你可以用更弱的牌 Call\n- 例：LAG River 下注 pot，你用顶对弱踢脚就可以 Call\n\n面对 Nit/TAG：bluff catching 频率降低\n- 他们的 bluff 频率低，需要更强的牌才能 Call\n- 例：Nit River 下注 pot，你需要两对+ 才能 Call\n\n面对 Unknown：使用 MDF（Minimum Defense Frequency）作为基准\n- MDF = 1 - bet/(pot+bet)\n- 例：对手下注 pot，MDF = 50%（你应该 Call 50% 的范围）' },
           { type: 'heading', content: 'Blocker 在 Bluff Catching 中的应用' },
-          { type: 'text', content: 'Blocker 原则：\n\n1. 持有对手 value 范围的 blocker → 减少 Call\n   因为你阻断了他的强牌，他更可能在 bluff\n   等等——这意味着你应该增加 Call！\n\n2. 持有对手 bluff 范围的 blocker → 减少 Call\n   因为你阻断了他的 bluff，他更可能是 value\n\n例：持有 A♠ 在单色 ♠ 牌面\n→ 阻断对手坚果同花（value）→ 对手更可能在 bluff → 更倾向 Call' },
+          { type: 'text', content: 'Blocker 原则：\n\n1. 持有对手 value 范围的 blocker → 减少 Call\n   因为你阻断了他的强牌，他更可能在 bluff\n   等等——这意味着你应该增加 Call！\n\n2. 持有对手 bluff 范围的 blocker → 减少 Call\n   因为你阻断了他的 bluff，他更可能是 value\n\n例：持有 A 在单色  牌面\n→ 阻断对手坚果同花（value）→ 对手更可能在 bluff → 更倾向 Call' },
           { type: 'pro-tip', content: 'Blocker 思维是高级 bluff catching 的核心。不要只看自己的牌强不强，要看你的牌对对手范围的影响。' },
           { type: 'heading', content: '过度诈唬的识别与利用' },
           { type: 'text', content: '过度诈唬的信号：\n- 对手 C-Bet 频率 > 70%\n- Turn barrel 频率 > 50%\n- River 下注频率 > 40%\n- 对手在多人底池仍然频繁下注\n\n利用方式：\n- 扩大 bluff catching 范围，用更弱的牌 Call\n- 不要用中等牌力 Raise（让他继续 bluff）\n- 陷阱打法：用强牌 Call 而不是 Raise，让他继续 bluff River\n\n注意：过度诈唬的对手是低级别最常见的“送钱机器”。识别他们，然后用宽范围 Call 他们。' },
         ],
         quiz: [
           { id: 'l4-bc-q1', question: '对手 River 下注 1/2 pot，你需要的最低胜率是多少才能 Call？', options: ['20%', '25%', '33%', '50%'], correctIndex: 2, explanation: '最低胜率 = bet/(pot+bet)。下注 1/2 pot 时，你需要 call 0.5pot 去赢 1.5pot，pot odds = 0.5/1.5 = 33%。所以需要至少 33% 胜率才能 Call。' },
-          { id: 'l4-bc-q2', question: '持有 A♠ 在单色 ♠ 牌面，对手 River 全押，你应该？', options: ['更倾向 Fold（A♠ 阻断同花）', '更倾向 Call（阻断对手坚果同花 value）', '无所谓', '必须 Raise'], correctIndex: 1, explanation: 'A♠ 阻断了对手的坚果同花（A♠x♠），这意味着对手的 value 范围减少，bluff 比例相对增加，所以更倾向 Call。' },
+          { id: 'l4-bc-q2', question: '持有 A 在单色  牌面，对手 River 全押，你应该？', options: ['更倾向 Fold（A 阻断同花）', '更倾向 Call（阻断对手坚果同花 value）', '无所谓', '必须 Raise'], correctIndex: 1, explanation: 'A 阻断了对手的坚果同花（Ax），这意味着对手的 value 范围减少，bluff 比例相对增加，所以更倾向 Call。' },
           { id: 'l4-bc-q3', question: '面对 Nit 的 River 大注，你应该？', options: ['扩大 bluff catching 范围', '收紧 bluff catching 范围', '用任何对子 Call', '永远 Raise'], correctIndex: 1, explanation: 'Nit 的 bluff 频率极低，River 大注通常是强牌。应该收紧 bluff catching 范围，只用非常强的牌 Call。' },
         ],
         examples: [
@@ -871,8 +906,8 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
             previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }, { player: 'BTN', action: 'bet 4BB' }, { player: 'BB', action: 'call' }, { player: 'BTN', action: 'bet 10BB' }, { player: 'BB', action: 'call' }],
             board: ['Ts', '8s', '4c', '2d', 'Js'], street: 'river', effectiveStack: 75, potSize: 28,
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'Call', reasoning: ['BTN 三条街下注，River 全押 28BB（pot）', '你持有 A♠K♦，阻断了对手的坚果同花（A♠x♠）', 'BTN 的 value 范围（坚果同花）因为你持有 A♠ 而减少', 'BTN 的 bluff 范围（错过的听牌、空气）相对增加', '面对 pot 下注需要 33% 胜率，TAG 的 bluff 频率约 35-40% → Call +EV'] },
-            commonMistake: { action: 'Fold', reasoning: 'Fold 太紧。A♠ 是完美的 bluff catcher blocker，阻断了对手最强的 value 组合。面对 TAG 的 bluff 频率，Call 是+EV。', evLoss: '-2.0 BB/100' },
+            correctDecision: { action: 'Call', reasoning: ['BTN 三条街下注，River 全押 28BB（pot）', '你持有 AK，阻断了对手的坚果同花（Ax）', 'BTN 的 value 范围（坚果同花）因为你持有 A 而减少', 'BTN 的 bluff 范围（错过的听牌、空气）相对增加', '面对 pot 下注需要 33% 胜率，TAG 的 bluff 频率约 35-40% → Call +EV'] },
+            commonMistake: { action: 'Fold', reasoning: 'Fold 太紧。A 是完美的 bluff catcher blocker，阻断了对手最强的 value 组合。面对 TAG 的 bluff 频率，Call 是+EV。', evLoss: '-2.0 BB/100' },
           },
           {
             id: 'l4-bc-ex2', title: '识别过度诈唬：宽范围 Call',
@@ -909,8 +944,8 @@ export const LEVEL_4B_LESSONS: Lesson[] = [
               id: 'l4-bc-p3',
               scenario: { heroHand: ['Ah', '9h'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }, { player: 'BTN', action: 'bet 4BB' }, { player: 'BB', action: 'call' }, { player: 'BTN', action: 'check' }, { player: 'BB', action: 'check' }, { player: 'BTN', action: 'bet 15BB' }], board: ['Kh', '7h', '3c', '2d', 'Ts'], street: 'river', potSize: 28, effectiveStack: 70, opponent: OPPONENT_PROFILES['tag'] },
               options: [
-                { action: 'Call', isCorrect: true, explanation: 'A♥9♥ 阻断了对手的坚果同花（A♥x♥），且对手 Turn check 表明范围不强。River 下注可能是 bluff（错过的听牌）。A♥ 是完美的 bluff catcher blocker，Call +EV。', evImpact: '+1.5 BB/100' },
-                { action: 'Fold', isCorrect: false, explanation: 'A♥ 阻断了对手最强的 value 组合（坚果同花），且 Turn check 表明对手范围不强。Fold 太紧，放弃了 blocker 优势。', evImpact: '-1.0 BB/100' },
+                { action: 'Call', isCorrect: true, explanation: 'A9 阻断了对手的坚果同花（Ax），且对手 Turn check 表明范围不强。River 下注可能是 bluff（错过的听牌）。A 是完美的 bluff catcher blocker，Call +EV。', evImpact: '+1.5 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: 'A 阻断了对手最强的 value 组合（坚果同花），且 Turn check 表明对手范围不强。Fold 太紧，放弃了 blocker 优势。', evImpact: '-1.0 BB/100' },
                 { action: 'Raise', isCorrect: false, explanation: 'A-high 没有 Raise 的价值。Raise 只会让更强的牌 Call，弱牌/bluff 全弃。Bluff catcher 应该 Call 而不是 Raise。', evImpact: '-2.5 BB/100' },
               ],
             },

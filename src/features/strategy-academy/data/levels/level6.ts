@@ -328,6 +328,10 @@ export const LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'formula',
+            content: 'ICM Bubble Factor 定义：\nBF = call 所需 equity / 现金局所需 equity\n\n解释：泡沫期（bubble）存活权重 > 即时 EV，Bubble Factor 通常 1.5-3.0x。意味着你需要更高的胜率才能 call，因为弃牌可能意味着淘汰（$EV = 0）。\n\n示例：4 人 SNG 泡沫期（奖金结构 50%/30%/20%）\n- 筹码分布：你 40%, MP 35%, CO 20%, BTN 5%\n- 你的 $EV(fold) = 35% (确保第二名)\n- 你的 $EV(call, win) = 50%\n- 你的 $EV(call, lose) = 0\n- 盈亏平衡：35 <= p×50% + (1-p)×0 → p >= 70%\n- 现金局只需：pot odds 计算（如 43%）\n- Bubble Factor ≈ 70%/43% ≈ 1.6x',
+          },
+          {
+            type: 'formula',
             content: 'Nash Push/Fold 均衡范围（10BB 场景）：\nSB Push 范围（面对 BB）：\n- 所有对子 22+\n- 所有 Ax\n- 所有 Kx 同花\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- 总计约 70-80% 手牌\n\nBB Call 范围（面对 SB Push）：\n- 所有对子 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- 总计约 35-40% 手牌\n\n盈亏平衡计算：\nBB call 10BB 赢 12BB（含盲注）\n所需胜率 = 9/(9+12) ≈ 43%',
           },
           {

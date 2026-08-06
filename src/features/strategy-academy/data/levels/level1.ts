@@ -24,7 +24,7 @@ const L1_POSITION_U2_SECTIONS: LessonSection[] = [
   {
     type: 'highlight',
     content:
-      '同样的手牌，在BTN的价值远高于在UTG。例如 KJo 在BTN是标准open，在UTG通常应该弃牌。',
+      '同样的手牌，在 BTN 的价值远高于在 UTG。例如 KJo 在 BTN 是标准 open，在 UTG 通常应该弃牌（保守玩家约 15% 范围）。',
   },
   {
     type: 'pro-tip',
@@ -42,7 +42,7 @@ const L1_POSITION_U3_SECTIONS: LessonSection[] = [
   },
   {
     type: 'formula',
-    content: '位置权益实现率：\nBTN 开牌范围约 40-50%，通过位置优势可实现约 110-120% 的原始权益\nUTG 开牌范围约 10-15%，但由于翻后 OOP，权益实现率仅约 80-90%\n\n量化规律：后位每多一个位置，范围可放宽约 5-8 个百分点，翻后权益实现率提升约 5-10%。',
+    content: '位置权益实现率：\nBTN 开牌范围约 40-50%（Sklansky-Murr 经典理论建议 35%，现代 solver 输出可达 50%）\nUTG 开牌范围约 10-15%，但由于翻后 OOP，权益实现率仅约 80-90%\n\n量化规律：后位每多一个位置，范围可放宽约 5-8 个百分点，翻后权益实现率提升约 5-10%。',
   },
   {
     type: 'theory-reference',

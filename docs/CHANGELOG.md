@@ -6,6 +6,28 @@
 
 ---
 
+## [Unreleased] - 2026-08-05
+
+### 策略学院技术债全面修复（P1+P2）
+
+#### 新增
+- ICM Bubble Factor 公式推导补充（`level6/l6-pushfold`, formula 类型段落）
+
+#### 修复
+- **P1-01**: L1/L2 UTG KJo 弃牌矛盾（L1 hand-selection“边缘牌，保守玩家建议弃牌”）
+- **P1-02**: BTN 范围数值冲突（统一为"40-50%（Sklansky-Murr 经典理论建议 35%，现代 solver 输出可达 50%）”）
+- **P1-03**: L2 Drill 3-Bet 尺度不统一（IP 7.5-8BB / OOP 9-10BB）
+- **P1-04**: ICM 公式推导缺失（4 人 SNG 泡沫期最小算例 + bubble factor 定义）
+- **P1-05**: 数值精度校准（l7-deep-p4 `投入 2BB（SB 已投 1BB）`、l6-pushfold-ex2 `betSize=8→25`）
+
+### 验证
+
+- `pnpm verify` 全绿：62 files 431 tests ✅
+- `curriculumIntegrity.test.ts`: 14/14 通过 ✅
+- `quizShuffle.test.ts`: 10/10 通过 ✅
+
+---
+
 ## [Unreleased] - 2026-08-04
 
 ### 理论学院教育学优化（P0+P1+学习地图+性能）
