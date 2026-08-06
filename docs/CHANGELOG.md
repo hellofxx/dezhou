@@ -8,6 +8,38 @@
 
 ## [Unreleased] - 2026-08-06
 
+### 标准德州内容纯化与变体隔离
+
+> 审计背景：确保标准德州模块（52 张牌、葫芦 > 同花 > 顺子 > 三条、6-max 口径）不与短牌/单挑变体内容混用。审计确认：标准牌型评估、pot-odds 题库数学（9/8/15 outs）、GTO 胜率表（标准 52 张）、range-trainer 标准预设、理论学院 T1-T9、onboarding 牌型题均符合标准规则，无需改动。
+
+#### 变更（strategy-academy）
+
+- 标准课程移除两门混入的变体课：`l5-short-deck`（短牌入门，原 Level 5）与 `l7-hu`（单挑策略基础，原 Level 7）；L5 后续课程 order 顺延（5→4 至 9→8）
+- `learningTracks.ts`：`track-cash-game` 移除 `l7-hu` 引用
+- 短牌课内容修正后迁入 `data/lessons/variants/short-deck.ts` 新课程 `l3sd-intro`（variant: 'short-deck'）：
+  - sd-ex1 数学修正：短牌同花听牌 outs 9 → 5（每花色 9 张 − 已见 4 张）
+  - sd-q5 多答案缺陷重构：改为“哪种牌型 beats 葫芦”单一正确答案题
+  - JTs 表述矛盾统一：连牌可玩性好但不属顶级梯队（删除“约等于标准 AKs”说法）
+  - 牌型等级统一为主流 6+ 口径：三条 > 顺子、同花 > 葫芦
+- 单挑课迁入 `data/lessons/variants/heads-up.ts` 骨架 `l7hu-stakes`（variant: 'heads-up'），id 与 relatedLessonId 同步改为 l7hu-stakes 前缀
+- 既有用户本地存储中 `l5-short-deck`/`l7-hu` 的历史完成记录保留但不再计入标准课程进度（无 persist migrate，无破坏性）
+
+#### 修复（shared / 变体规则）
+
+- `shared/utils/handRanking.ts` `SHORT_DECK_RANK_SCORE` 方向修正（主流 6+ 口径）：顺子 5→4、三条 4→5（三条 > 顺子），葫芦 7→6、同花 6→7（同花 > 葫芦）；同步修正文件注释
+- `shared/constants/poker.ts` short-deck `handRankingChanges`：'顺子 > 三条' → '三条 > 顺子'
+- `shared/components/business/GameVariantSelector.tsx` 短牌描述文案同步修正（zh/en）
+- `gto-simulator/components/ScenarioSetup.tsx` 短牌提示文案修正（三条 > 顺子，同花 > 葫芦，并修复乱码字）
+- 新增 `shared/utils/handRanking.test.ts` 回归断言：标准德州葫芦 > 同花 > 顺子 > 三条；短牌三条 > 顺子、同花 > 葫芦、A-6-7-8-9 合法最小顺子
+
+#### 文档同步
+
+- `docs/PRD.md`：L7 课程表、新增课程清单与验收标准 9 中单挑/短牌课程归属改为变体课程体系
+
+---
+
+## [Unreleased] - 2026-08-06
+
 ### P2: Variant Extension System - Phase 1 完成
 
 #### 新增（基础设施构建）

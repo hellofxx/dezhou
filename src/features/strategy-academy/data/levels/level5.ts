@@ -577,266 +577,9 @@ export const LEVEL_5_LESSONS: Lesson[] = [
         },
       },
       {
-        id: 'l5-short-deck',
-        level: 5,
-        order: 4,
-        title: '短牌德州入门 (6+ Hold\'em)',
-        subtitle: '掌握36张牌组的规则变化和策略调整',
-        duration: '12 min',
-        content: [
-          { type: 'heading', content: '什么是短牌德州？' },
-          {
-            type: 'text',
-            content:
-              '短牌德州（Short Deck / 6+ Hold\'em）是德州扑克的流行变体，使用36张牌（6-A），移除了2、3、4、5。这导致了游戏动态的显著变化：更多翻牌率、更多听牌、更多行动。',
-          },
-          {
-            type: 'key-point',
-            content:
-              '短牌德州在亚洲高额桌和 Triton 系列赛中非常流行。相比标准德州，它的波动更大但行动更多。',
-          },
-          { type: 'heading', content: '核心规则差异' },
-          {
-            type: 'text',
-            content:
-              '1. 牌组：36张牌（6-A），移除2-5\n2. 牌型等级变化：\n   - 顺子 > 三条（标准德州中三条 > 顺子）\n   - 同花 > 葫芦（标准德州中葫芦 > 同花）\n3. 最小顺子：A-6-7-8-9（A 可以作为 5 使用组成最小顺子）\n4. 前注（Ante）制：通常没有盲注，改用所有人投前注 + BTN 投额外 ante',
-          },
-          {
-            type: 'example',
-            content:
-              '短牌牌型等级（从弱到强）：\n\n1. 高牌\n2. 一对\n3. 两对\n4. 顺子 ← 注意：在标准德州中这里应该是三条\n5. 三条 ← 注意：在标准德州中这里应该是顺子\n6. 同花 ← 注意：在标准德州中这里应该是葫芦\n7. 葫芦 ← 注意：在标准德州中这里应该是同花\n8. 四条\n9. 同花顺\n10. 皇家同花顺',
-          },
-          {
-            type: 'highlight',
-            content:
-              '最容易犯的错误：在短牌中用三条下重注以为自己是坚果，但对手可能有更便宜的顺子！记住短牌中顺子 beats 三条。',
-          },
-          { type: 'heading', content: '短牌策略调整要点' },
-          {
-            type: 'text',
-            content:
-              '1. 手牌价值变化:\n' +
-              '• 连牌（如 JTs, 98s）在短牌中相对价值下降——虽然更容易中顺子，但被同花/葫芦压制的风险也增加\n' +
-              '• 同花牌价值提升——短牌中同花 beats 葫芦\n' +
-              '• 小口袋对价值下降——set 被顺子 beats，set mine 的隐含赔率降低\n' +
-              '• AK 等高牌在短牌中价值提升——牌组只剩 9 个等级后，顶对踢脚更值钱，AK 是除 AA/KK 外最强的非对子牌\n\n' +
-              '2. 翻牌率更高：\n' +
-              '• 36 张牌意味着更容易翻牌击中\n' +
-              '• 约 45% 的概率翻牌中至少一对（标准德州约 33%）\n\n' +
-              '3. 更多听牌和 action：\n' +
-              '• 顺子听牌更常见\n' +
-              '• 底池通常更大（前注制 + 更多跟注）\n' +
-              '• 波动更大，资金管理需要更保守',
-          },
-          { type: 'heading', content: '短牌起手牌范围调整' },
-          {
-            type: 'text',
-            content:
-              '短牌范围与标准德州有显著差异：\n\n- JTs 等连牌在短牌中仍有一定价值，但不像传统说法那样“相当于 AKs”\n- 所有同花连牌价值有所提升（同花 > 葫芦的牌型变化）\n- 小口袋对（66-88）价值下降（set 容易被顺子压制）\n- AK 等高牌价值显著提升，是除 AA/KK 外最强起手牌\n- KQo 等非花大牌价值相对标准德州略有下降\n- 范围整体偏紧——短牌中位置和后手筹码深度更重要',
-          },
-          {
-            type: 'pro-tip',
-            content:
-              '短牌德州的关键是理解“等值手牌”的变化。标准德州中的“标准打法”在短牌中可能是严重错误。建议在低额短牌桌上先练习，适应牌型等级变化和范围调整后再升级。',
-          },
-        ],
-        quiz: [
-          {
-            id: 'sd-q1',
-            question: '短牌德州使用多少张牌？',
-            options: ['40张', '36张', '32张', '48张'],
-            correctIndex: 1,
-            explanation: '短牌德州移除 2-5，使用 36 张牌（6-A，每个花色9张）。',
-          },
-          {
-            id: 'sd-q2',
-            question: '短牌中，以下哪个牌型排名正确？',
-            options: ['三条 > 顺子', '顺子 > 三条', '葫芦 > 同花', '两者相同'],
-            correctIndex: 1,
-            explanation: '短牌中顺子 beats 三条（与标准德州相反），因为顺子更难组成。',
-          },
-          {
-            id: 'sd-q3',
-            question: '短牌中最小的合法顺子是？',
-            options: ['A-2-3-4-5', 'A-6-7-8-9', '6-7-8-9-T', '2-3-4-5-6'],
-            correctIndex: 1,
-            explanation: 'A-6-7-8-9 是短牌中最小的顺子（A 作为 5 使用）。A-2-3-4-5 不合法因为 2-5 被移除了。',
-          },
-          { id: 'sd-q4', question: '短牌德州中，以下哪类牌价值相对提升？', options: ['同花连牌', 'AK 等高牌', '小口袋对', '非同花大牌'], correctIndex: 1, explanation: 'AK 等高牌在短牌中价值显著提升。由于牌组只有 9 个等级（6-A），顶对踢脚的胜率提高，AK 成为除 AA/KK 外最强的非对子牌。JTs 等连牌虽然翻牌可塑性增强，但也面临被同花/葫芦压制的风险，整体价值相对标准德州有所下降或持平。' },
-        
-          { id: 'sd-q5', question: '短牌德州中同花beats什么？', options: ['顺子', '三条', '葫芦', '高牌'], correctIndex: 2, explanation: '短牌中同花beats葫芦（与标准德州不同）。' },],
-        examples: [
-          {
-            id: 'sd-ex1',
-            title: '短牌中同花听牌的价值',
-            heroHand: ['9h', '8h'],
-            heroPosition: 'BTN',
-            previousActions: [{ player: 'CO', action: 'raise 2 ante' }],
-            street: 'flop',
-            board: ['Ah', '7h', '6c'],
-            effectiveStack: 100,
-            potSize: 8,
-            correctDecision: {
-              action: 'Raise',
-              amount: '12 ante',
-              reasoning: [
-                '你持有同花听牌（9h8h）+ 卡顺听牌（需要T组成6-7-8-9-T）',
-                '短牌中同花 beats 葫芦，同花听牌价值极高',
-                '翻牌 Ah7h6c 你有 9 个同花 outs + 可能的顺子 outs',
-                '半诈唬加注可以迫使对手弃牌或建立大底池',
-              ],
-            },
-            commonMistake: {
-              action: '仅跟注',
-              reasoning:
-                '在标准德州中仅跟注可能合理，但短牌中同花价值更高（beats葫芦），应该更积极地玩同花听牌。',
-              evLoss: '-2.0 ante',
-            },
-          },
-          {
-            id: 'sd-ex2',
-            title: '短牌中小口袋对的处理',
-            heroHand: ['7s', '7c'],
-            heroPosition: 'CO',
-            previousActions: [{ player: 'UTG', action: 'raise 2 ante' }],
-            street: 'preflop',
-            effectiveStack: 100,
-            potSize: 5,
-            correctDecision: {
-              action: 'Fold',
-              reasoning: [
-                '77 在短牌中价值大幅下降',
-                '短牌中顺子 beats 三条，set mine 的价值降低',
-                '对手 UTG open 范围在短牌中仍然偏强',
-                '翻牌后即使中 set，也可能输给顺子',
-              ],
-            },
-            commonMistake: {
-              action: 'Call（set mine）',
-              reasoning:
-                '在标准德州中 77 call UTG open 是标准 set mine。但短牌中 set 不再是最强牌型之一（顺子和同花都 beats 它），set mine 的隐含赔率大幅下降。',
-              evLoss: '-0.8 ante',
-            },
-          },
-        ],
-        practice: {
-          id: 'sd-practice',
-          questions: [
-            {
-              id: 'sd-p1',
-              scenario: {
-                heroHand: ['Jh', 'Th'],
-                heroPosition: 'BTN',
-                previousActions: [{ player: 'CO', action: 'raise 2 ante' }],
-                street: 'preflop',
-                potSize: 5,
-                effectiveStack: 100,
-              },
-              options: [
-                {
-                  action: 'Fold',
-                  isCorrect: false,
-                  explanation: 'JTs 在短牌中是顶级起手牌，绝对不能弃牌。',
-                  evImpact: '-2.0 ante',
-                },
-                {
-                  action: 'Call',
-                  isCorrect: false,
-                  explanation: 'Call 不够激进。JTs 在短牌中足够强做 3-Bet。',
-                  evImpact: '+0.5 ante',
-                },
-                {
-                  action: 'Raise',
-                  amount: '6 ante',
-                  isCorrect: true,
-                  explanation:
-                    'JTs 在短牌中的价值相当于标准德州的 AKs。3-Bet 建立大底池并利用翻后可玩性。',
-                  evImpact: '+2.5 ante',
-                },
-              ],
-              relatedLessonId: 'l5-short-deck',
-            },
-            {
-              id: 'sd-p2',
-              scenario: {
-                heroHand: ['Ac', 'Kc'],
-                heroPosition: 'BB',
-                previousActions: [{ player: 'BTN', action: 'raise 2 ante' }],
-                street: 'flop',
-                board: ['Qc', '8c', '6h'],
-                potSize: 6,
-                effectiveStack: 98,
-              },
-              options: [
-                {
-                  action: 'Check',
-                  isCorrect: false,
-                  explanation:
-                    '你有同花听牌 + 两个高牌，应该主动下注。短牌中同花价值极高。',
-                  evImpact: '-1.0 ante',
-                },
-                {
-                  action: 'Raise',
-                  amount: '5 ante',
-                  isCorrect: true,
-                  explanation:
-                    'AK 同花听牌 + 两张高牌在短牌翻牌上是强力半诈唬。同花 beats 葫芦使你的听牌价值极高。',
-                  evImpact: '+3.0 ante',
-                },
-                {
-                  action: 'Call',
-                  isCorrect: false,
-                  explanation: 'Call 太被动。你的牌有足够的 equity 做加注。',
-                  evImpact: '+0.5 ante',
-                },
-              ],
-              relatedLessonId: 'l5-short-deck',
-            },
-            {
-              id: 'sd-p3',
-              scenario: {
-                heroHand: ['As', '6d'],
-                heroPosition: 'BTN',
-                previousActions: [],
-                street: 'flop',
-                board: ['7s', '8h', '9c'],
-                potSize: 4,
-                effectiveStack: 96,
-              },
-              options: [
-                {
-                  action: 'Check',
-                  isCorrect: false,
-                  explanation:
-                    '你有 A-6-7-8-9 顺子！这是短牌中的合法最小顺子，应该价值下注。',
-                  evImpact: '-2.0 ante',
-                },
-                {
-                  action: 'Raise',
-                  amount: '3 ante',
-                  isCorrect: true,
-                  explanation:
-                    'A-6-7-8-9 是短牌中的合法顺子！下注获取价值。注意这不是坚果顺子（T-high 顺子更大），但仍值得价值下注。',
-                  evImpact: '+2.0 ante',
-                },
-                {
-                  action: 'Fold',
-                  isCorrect: false,
-                  explanation: '你有顺子！绝对不要弃牌。',
-                  evImpact: '-4.0 ante',
-                },
-              ],
-              relatedLessonId: 'l5-short-deck',
-            },
-          
-            { id: 'sd-p4', scenario: { heroHand: ['Ks', 'Kc'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2 ante' }], street: 'preflop', potSize: 5, effectiveStack: 100 }, options: [{ action: 'Fold', isCorrect: false, explanation: 'KK在短牌中是顶级强牌，不能弃牌。', evImpact: '-3.0 ante' }, { action: 'Raise 6 ante', isCorrect: true, explanation: 'KK在短牌中是顶级强牌，3-Bet获取价值。', evImpact: '+2.5 ante' }, { action: 'Call', isCorrect: false, explanation: 'KK足够强做3-Bet，Call太被动。', evImpact: '+1.0 ante' }], relatedLessonId: 'l5-short-deck' },
-            { id: 'sd-p5', scenario: { heroHand: ['6s', '6c'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 2 ante' }], street: 'flop', board: ['6h', '9h', 'Th'], potSize: 8, effectiveStack: 96 }, options: [{ action: 'Check', isCorrect: false, explanation: '中了set应该下注保护，听牌很多。', evImpact: '-1.5 ante' }, { action: 'Raise 5 ante', isCorrect: true, explanation: 'Set需要下注保护。短牌中顺子beats三条，但对手有听牌。', evImpact: '+2.0 ante' }, { action: 'Fold', isCorrect: false, explanation: '中了set绝不能弃牌。', evImpact: '-4.0 ante' }], relatedLessonId: 'l5-short-deck' },],
-        },
-      },
-      {
         id: 'l5-session-review',
         level: 5,
-        order: 5,
+        order: 4,
         title: 'Session Review 方法论',
         subtitle: '学会系统化复盘每次打牌，从实战中学习',
         duration: '9 min',
@@ -882,7 +625,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'l5-data-driven',
         level: 5,
-        order: 6,
+        order: 5,
         title: '数据驱动的漏洞修补',
         subtitle: '用统计数据识别并修复你最大的策略漏洞',
         duration: '10 min',
@@ -916,7 +659,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'drill-l5-tilt',
         level: 5,
-        order: 7,
+        order: 6,
         title: '情绪识别 Drill',
         subtitle: '识别 Tilt 前兆',
         duration: '3分钟',
@@ -1029,7 +772,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'l5-tools',
         level: 5,
-        order: 8,
+        order: 7,
         title: '扑克分析工具入门',
         subtitle: '善用工具加速学习，但不要被工具绑架',
         duration: '8分钟',
@@ -1242,7 +985,7 @@ export const LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'l5-online-vs-live',
         level: 5,
-        order: 9,
+        order: 8,
         title: '线上与线下扑克差异',
         subtitle: '适应不同环境，成为全能型牌手',
         duration: '8分钟',

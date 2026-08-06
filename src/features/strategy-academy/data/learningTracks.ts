@@ -82,7 +82,6 @@ export const LEARNING_TRACKS: LearningTrack[] = [
       'l7-straddle',
       'l7-rake',
       'l7-table-selection',
-      'l7-hu',
     ],
     color: '#c9a25e',
     relatedTrackIds: ['track-gto', 'track-local-cn'],

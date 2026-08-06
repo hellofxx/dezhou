@@ -21,7 +21,7 @@ const VARIANT_BADGES: Partial<Record<GameVariant, string>> = {
 
 const VARIANT_DESCRIPTIONS: Record<GameVariant, { zh: string; en: string }> = {
   standard: { zh: '经典52张牌，全球最流行的扑克变体', en: 'Classic 52-card deck, the world\'s most popular poker variant' },
-  'short-deck': { zh: '36张牌（6-A），顺子>三条，同花>葫芦', en: '36 cards (6-A), straight > trips, flush > full house' },
+  'short-deck': { zh: '36张牌（6-A），三条>顺子，同花>葫芦', en: '36 cards (6-A), trips > straight, flush > full house' },
   'heads-up': { zh: '1v1 单挑对决，纯策略博弈', en: '1v1 duel, pure strategy battle' },
 };
 

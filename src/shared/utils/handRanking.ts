@@ -23,8 +23,9 @@ export function evaluateStandardHand(cards: Card[]): HandResult {
 
 /**
  * 短牌牌型评估（36 张牌组）
- * 短牌牌型等级变化：
- * 高牌 < 一对 < 两对 < 顺子 < 三条 < 同花 < 葫芦 < 四条 < 同花顺 < 皇家同花顺
+ * 短牌牌型等级变化（主流 6+ 口径，PokerStars/Triton）：
+ * 高牌 < 一对 < 两对 < 顺子 < 三条 < 葫芦 < 同花 < 四条 < 同花顺 < 皇家同花顺
+ * 即三条 > 顺子、同花 > 葫芦，两处与标准德州相反
  * A-6-7-8-9 是合法的最小顺子
  */
 export function evaluateShortDeckHand(cards: Card[]): HandResult {
@@ -133,7 +134,7 @@ function evaluate5Cards(cards: Card[], isShortDeck: boolean): HandResult {
     name = '高牌';
   }
 
-  // 短牌牌型等级调整：顺子 > 三条，同花 > 葫芦
+  // 短牌牌型等级调整（主流 6+ 口径）：三条 > 顺子，同花 > 葫芦
   // 保持 rank 返回正确的枚举值，通过 score 映射实现等级比较
 
   // 计算数值评分用于比较
@@ -142,15 +143,15 @@ function evaluate5Cards(cards: Card[], isShortDeck: boolean): HandResult {
   return { rank, name, cards, score };
 }
 
-/** 短牌牌型等级分数映射（顺子 > 三条） */
+/** 短牌牌型等级分数映射（主流 6+ 口径：三条 > 顺子，同花 > 葫芦） */
 const SHORT_DECK_RANK_SCORE: Record<number, number> = {
   [HandRank.HighCard]: 1,
   [HandRank.OnePair]: 2,
   [HandRank.TwoPair]: 3,
-  [HandRank.Straight]: 5,    // 短牌中顺子等级提升，高于三条
-  [HandRank.ThreeOfAKind]: 4, // 短牌中三条等级降低，低于顺子
-  [HandRank.Flush]: 6,
-  [HandRank.FullHouse]: 7,
+  [HandRank.Straight]: 4,    // 短牌中顺子等级降低，低于三条
+  [HandRank.ThreeOfAKind]: 5, // 短牌中三条等级提升，高于顺子
+  [HandRank.FullHouse]: 6,   // 短牌中葫芦等级降低，低于同花
+  [HandRank.Flush]: 7,       // 短牌中同花等级提升，高于葫芦
   [HandRank.FourOfAKind]: 8,
   [HandRank.StraightFlush]: 9,
   [HandRank.RoyalFlush]: 10,

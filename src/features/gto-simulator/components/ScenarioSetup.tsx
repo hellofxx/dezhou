@@ -157,7 +157,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
         </div>
         {config.gameVariant === 'short-deck' && (
           <p className="text-xs text-[var(--sage)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
-            短牌模式：36 张牌组（移除 2-5），同花 &gt; 蒸蘆，顺子 &gt; 三条
+            短牌模式：36 张牌组（移除 2-5），三条 &gt; 顺子，同花 &gt; 葫芦
           </p>
         )}
       </div>
