@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { TheoryProgress } from './types';
-import { THEORY_LEVELS } from './data/levels';
+import { getTheoryLevelsByVariant } from './data/levels/variants';
+import { ALL_VARIANT_THEORY_LEVELS } from './data/levels/variants';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import { isLevelUnlockedByCompleted } from './utils/theoryProgress';
@@ -98,17 +99,25 @@ export const useTheoryStore = create<TheoryStore>()(
       },
 
       getLevelProgress: (levelId) => {
-        const level = THEORY_LEVELS.find((l) => l.id === levelId);
+        const level = ALL_VARIANT_THEORY_LEVELS.find((l) => l.id === levelId);
         if (!level || level.chapters.length === 0) return 0;
         const { completedChapters } = get().progress;
         const done = level.chapters.filter((c) => completedChapters.includes(c.id)).length;
         return Math.round((done / level.chapters.length) * 100);
       },
 
+      /**
+       * 按当前 activeVariant 的序列计算总进度（分母为变体自己的总章节数）。
+       * 分子仅统计当前变体序列内的已完成章节，切换变体后进度统计自洽。
+       */
       getTotalProgress: () => {
-        const total = THEORY_LEVELS.reduce((sum, l) => sum + l.chapters.length, 0);
+        const { activeVariant, completedChapters } = get().progress;
+        const levels = getTheoryLevelsByVariant(activeVariant);
+        const total = levels.reduce((sum, l) => sum + l.chapters.length, 0);
         if (total === 0) return 0;
-        return Math.round((get().progress.completedChapters.length / total) * 100);
+        const variantChapterIds = new Set(levels.flatMap((l) => l.chapters.map((c) => c.id)));
+        const done = completedChapters.filter((id) => variantChapterIds.has(id)).length;
+        return Math.round((done / total) * 100);
       },
 
       toggleFlagQuestion: (questionId) =>

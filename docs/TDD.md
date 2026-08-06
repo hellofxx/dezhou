@@ -1142,6 +1142,15 @@ interface DailyRecommendation {
 - TheoryChapterView 的 trackedChapterId 渲染期重置时同步置位 isTransitioning
 - 150ms 后恢复渲染新章节内容（ComponentSkeleton 过渡）
 
+**变体课程体系**（P2 变体支持，2026-08）：
+- 数据位置：`data/levels/variants/`（`short-deck.ts` / `heads-up.ts` / `index.ts` / `theoryIntegrity.test.ts`）；标准系列复用主 `THEORY_LEVELS` 不重复存放
+- 索引：`variants/index.ts` 导出 `ALL_VARIANT_THEORY_LEVELS`（标准 + 短牌 + 单挑总索引）与 `getTheoryLevelsByVariant(variant)` 查询函数（TheoryHome 按 activeVariant 过滤 Level 列表）
+- ID 命名：Level `t{level}{suffix}`、章节 `t{level}{suffix}-{topic}`（短牌 suffix=sd、单挑 suffix=hu），与标准系列 `t{level}` 隔离；变体完整性守卫（`variants/theoryIntegrity.test.ts`，8 用例：ID 全局唯一/前缀格式/T1-T9 全覆盖/order 连续/eloDimension 合法/tier 归属）
+- 内容标准与标准系列同构：每章 content 覆盖全部 7 类段落、公式含推导、实战案例含具体牌面/位置/底池、教材引用采用「（概念源自：《教材名》作者 Ch.XX）」脚注式标注
+- 内容填充进度（2026-08-06）：单挑 T1-T3（t1hu 概率基础 / t2hu 赔率策略 / t3hu 位置与起手牌）已填充完整内容与章末小测，practiceRecommendations 对接单挑实践课程（l7hu-stakes / l4hu-ev-adjustments / l4hu-bn-opening / l3hu-bb-defense）；T4-T9 与短牌系列仍为骨架（content/quiz 空数组，守卫允许骨架阶段为空）
+- 变体实践推荐引用的课程 ID 不纳入标准系列 `CROSS_MODULE_LESSON_IDS` 白名单（该白名单仅对照标准 LEVELS 校验），悬空风险由变体课程自身存在性保证
+- **变体解锁门禁适配**：变体 Level 的解锁链在变体自己的 Level 序列内独立判定（序列内 idx=0 恒解锁，Tn 需前一 Level 全部章节完成），`isLevelUnlockedByCompleted` 通过 `ALL_VARIANT_THEORY_LEVELS` 查找 levelId 所属变体再取该变体序列，标准系列行为完全不变；章节查找（`findChapterById`/`findLevelByChapterId`/`getNextChapter`）均支持变体章节，`getNextChapter` 顺延在同一变体序列内（不跨变体）；进度计算（`getLevelProgress`/`getTotalProgress`）按当前 `activeVariant` 的序列自洽统计
+
 ### 5.9 跨模块系统设计
 
 > 本节汇总 Streak / ELO / SRS / Emotion / Mentor 五大跨模块系统，以及 v2.1 新增的反馈闭环 / 位置渐进解锁 / 自适应难度三大系统、选项排序治理系统的技术设计。这些系统横切多个 feature 模块，状态统一收敛在 `progress` store，通过 persist 持久化。

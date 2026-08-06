@@ -22,7 +22,7 @@ export default function TheoryHome() {
   const levels = getTheoryLevelsByVariant(activeVariant);
 
   const totalProgress = getTotalProgress();
-  const totalChapters = getTotalChapterCount();
+  const totalChapters = getTotalChapterCount(activeVariant);
   const completedCount = progress.completedChapters.length;
 
   const tierLabel: Record<TheoryTier, string> = {

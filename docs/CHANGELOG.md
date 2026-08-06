@@ -8,6 +8,39 @@
 
 ## [Unreleased] - 2026-08-06
 
+### 单挑（Heads-Up）理论学院 T1-T3 内容填充
+
+> 执行模式：子代理协作（theory-academy-dev 内容编写 + ui-ux-dev 质量审查 + platform-dev 架构集成），严格串行流程，每级经审查返工后通过。
+
+#### 新增（theory-academy）
+
+- `data/levels/variants/heads-up.ts` T1-T3 骨架章节填充完整内容（content + quiz + objectives）：
+  - **T1 单挑概率基础（t1hu）**：两人对局概率重排（1/1225 对手拿 AA 推导、三档胜率锚点）/ Outs 计算（单挑听牌折扣放宽、组合听牌 15 Outs 精确值 54.1%）/ 波动管理（√N 法则、50+ 买入资金管理）
+  - **T2 单挑赔率策略（t2hu）**：即时赔率（SB 死钱、limp 25% 跟注线）/ 期望值优化（EV 三分支框架、诈唬盈亏平衡 f*=Bet/(P+Bet)、位置价值 0.5-1BB/手）/ 风险评估（check-raise vs check-call、SPR 三档）
+  - **T3 单挑位置与起手牌（t3hu）**：SB 位置策略（limp 合理性、min-raise 偷盲盈亏平衡 60%）/ BB 位置防守（MDF 双口径 33%-38%、GTO 防守 60%-70%）/ 位置反转（街间位置价值模型、河牌占比 57%、OOP 补偿工具）
+- 每章含完整数学推导、≥2 本权威教材引用（Moshman / Janda / Acevedo / Sklansky / Chen / Harrington / Tendler / Seidman）、4 道章末小测
+- T1-T3 `practiceRecommendations` 对接单挑实践课程（l1-basics / l7hu-stakes / l4hu-ev-adjustments / l4hu-bn-opening / l3hu-bb-defense）
+- T4-T9 仍为骨架，待后续阶段填充
+
+#### 修复（变体解锁门禁缺陷）
+
+- `utils/theoryProgress.ts` 全部 6 个函数重建变体支持：
+  - `isLevelUnlockedByCompleted` 按变体序列独立判定（t1hu 恒解锁、t2hu 需 t1hu 全完成），标准系列行为零变化
+  - `findChapterById` / `findLevelByChapterId` / `getNextChapter` 可命中变体章节，`getNextChapter` 顺延在同一变体序列内（不跨变体）
+  - `getTotalChapterCount(variant?)` 接受可选变体参数
+- `store.ts` `getLevelProgress` / `getTotalProgress` 按变体序列自洽统计；`TheoryHome.tsx` 传入 `activeVariant` 统计总章节数
+- `utils/theoryProgress.test.ts` 新增 8 个变体用例（t1hu 恒解锁、t2hu 需 t1hu 全完成、变体章节查找、变体下一章顺延不跨变体、变体正常顺序流不变式）
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、64 files 463 tests ✅
+- 变体完整性测试 `variants/theoryIntegrity.test.ts` 8/8 通过 ✅
+- 选项分布守卫：theory quizOrder 160 题，任一索引占比 <50% ✅
+
+---
+
+## [Unreleased] - 2026-08-06
+
 ### 标准德州内容纯化与变体隔离
 
 > 审计背景：确保标准德州模块（52 张牌、葫芦 > 同花 > 顺子 > 三条、6-max 口径）不与短牌/单挑变体内容混用。审计确认：标准牌型评估、pot-odds 题库数学（9/8/15 outs）、GTO 胜率表（标准 52 张）、range-trainer 标准预设、理论学院 T1-T9、onboarding 牌型题均符合标准规则，无需改动。
