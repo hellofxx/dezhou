@@ -1,4 +1,4 @@
-import type { EloDimension } from '@/shared/types/elo';
+import type { EloDimension, PokerVariant } from '@/shared/types/elo';
 
 // ===== 理论学院（Theory Academy）类型体系 =====
 // 与 strategy-academy 并列的独立理论学习模块：
@@ -73,7 +73,65 @@ export interface TheoryLevelInfo {
   practiceRecommendations: PracticeRecommendation;
 }
 
-/** 理论学习进度（持久化） */
+/** 变体规则信息 */
+export interface VariantRuleInfo {
+  deckSize?: number;                 // 36/52
+  handRanking?: {
+    flushBeatsStraight?: true;      // 短牌：同花 > 顺子
+    aceHighStraight?: string[];     // A-K-Q-J-T
+    aceLowStraight?: string[];      // A-2-3-4-5
+    pairBeatsAnyAceKing?: true;     // 短牌核心：口袋对 > AKo
+  };
+  positionDynamics?: {
+    sbAnte?: boolean;               // 单挑：SB 强制 Ante
+    bbFirstActionPreflop?: true;    // 单挑：BB 翻前最后行动
+    sbFirstActionPostflop?: true;   // 单挑：SB 翻后先行动（反转）
+  };
+  blindStructure?: {
+    sbAmount: number;
+    bbAmount: number;
+  };
+  preFlopHandStrength?: {
+    pairBeatsAnyAceKing?: true;     // 短牌核心规则
+    suitedConnectorsStrength?: 'elevated';
+  };
+  [key: string]: unknown;
+}
+
+/** 理论章节增强 */
+export interface TheoryChapter {
+  id: string;                       // 全局唯一，前缀 t<level>-（与 l<level>- 隔离）
+  level: TheoryLevelNumber;
+  order: number;
+  title: string;
+  subtitle: string;
+  duration: string;                 // 预计阅读时长，如 '10 min'
+  /** 本章小测答题影响的 ELO 维度 */
+  eloDimension: EloDimension;
+  /** 本章学习目标（先行组织者策略，可选；为空时 UI 不渲染目标卡片） */
+  objectives?: string[];
+  content: TheorySection[];
+  quiz: TheoryQuizQuestion[];
+  variant: PokerVariant;            // ← 新增：所属变体标识
+  variantRules?: VariantRuleInfo;   // ← 新增：变体特有规则说明
+}
+
+/** 理论 Level 信息增强 */
+export interface TheoryLevelInfo {
+  id: string;                       // 't1' ... 't9'
+  level: TheoryLevelNumber;
+  tier: TheoryTier;
+  title: string;
+  description: string;
+  icon: string;
+  chapters: TheoryChapter[];
+  unlockRequirement: string;
+  /** 完成本 Level 后的实践推荐（策略学院课程/轨道） */
+  practiceRecommendations: PracticeRecommendation;
+  variant: PokerVariant;            // ← 新增：所属变体
+}
+
+/** 理论学习进度（持久化）增强 */
 export interface TheoryProgress {
   completedChapters: string[];
   quizScores: Record<string, number>;   // chapterId → 0-100（历史最高分）
@@ -81,4 +139,14 @@ export interface TheoryProgress {
   startedAt: number;
   /** 标记为疑难的小测题 id 列表（供后续复习清单使用） */
   flaggedQuestions: string[];
+  
+  /** P2 扩展字段：当前选中的变体上下文 */
+  activeVariant: PokerVariant;      // ← 新增：默认'standard'
+  
+  /** P2 扩展字段：各变体的独立进度元数据 */
+  variantMetadata?: {
+    'standard': { lastViewedAt: number; preferredOrder: number };
+    'short-deck': { lastViewedAt: number; preferredOrder: number };
+    'heads-up': { lastViewedAt: number; preferredOrder: number };
+  };
 }

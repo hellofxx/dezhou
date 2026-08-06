@@ -6,6 +6,103 @@
 
 ---
 
+## [Unreleased] - 2026-08-06
+
+### P2: Variant Extension System - Phase 1 完成
+
+#### 新增（基础设施构建）
+
+**类型系统扩展**
+- `shared/types/elo.ts`新增 `PokerVariant` 类型定义（标准/短牌/单挑）
+- `shared/types/elo.ts`新增 `VariantConfig`接口和 `VARIANT_CONFIG` 常量
+- `shared/utils/variantRules.ts` 新建规则工厂，定义三种变体的规则常量（STANDARD_DECK_RULES / SHORT_DECK_RULES / HEADS_UP_RULES）
+- `shared/types/elo.ts` `EloRating`接口新增可选 `variant`字段
+
+**Progress Store 扩展**
+- `progress/store.ts` 扩展为多变体 ELO 系统（`eloByVariant` + `activeVariant`）
+- Persist version 升级：v9 → v10（migrate 函数支持老用户数据迁移）
+- 每个变体拥有独立的五维 ELO 评分（preflop/postflop/math/handReading/mental）
+
+**Theory Academy 模块扩展**
+- `types.ts`新增 `VariantRuleInfo`接口（deckSize/handRanking/positionDynamics/blindStructure/preFlopHandStrength）
+- `TheoryChapter`接口新增必填 `variant` + 可选 `variantRules` 字段
+- `TheoryLevelInfo` 接口新增必填 `variant` 字段
+- `TheoryProgress`接口新增 `activeVariant`（默认'standard'）+ `variantMetadata`
+- Persist version 升级：v2 → v3（migrate 函数支持老用户数据迁移）
+- 生成 Short Deck T1-T9 Level 骨架文件（22 章节，t{level}sd-{topic}命名）
+- 生成 Heads-Up T1-T9 Level 骨架文件（22 章节，t{level}hu-{topic}命名）
+- 新增变体完整性测试守卫（variants/theoryIntegrity.test.ts，8 用例）
+- 标准系列 9 个 Level + 35 个章节全部补充 `variant: 'standard'`
+
+**Strategy Academy 模块扩展**
+- `types.ts`新增 `VariantContext`接口（dealerButtonPosition/anteStructure/stackDepth）
+- `Lesson` 接口新增可选 `variant` + `variantContext` 字段（向后兼容）
+- `LearningTrack` 接口新增可选 `variant` 字段（向后兼容）
+- 生成 Short Deck L3-L8 Lesson 骨架文件（16 课，l{level}sd-{topic}命名）
+- 生成 Heads-Up L3-L8 Lesson 骨架文件（12 课，l{level}hu-{topic}命名）
+- 新增变体完整性测试守卫（curriculumIntegrity.test.ts 更新，5 用例）
+- `variants/index.ts`索引导出（ALL_VARIANT_LESSONS + getLessonsByVariantAndLevel）
+
+**UI 组件开发**
+- `shared/components/VariantToggle.tsx` 新建（变体切换器，使用设计 token，无霓虹色/纯黑白违规）
+- `shared/components/VariantRuleBanner.tsx` 新建（规则差异提示，紧凑/完整模式）
+- 所有组件通过 designTokenGuard 测试
+
+**UI 集成（Day 5 补充）**
+- `TheoryHome.tsx` 集成 VariantToggle：按 activeVariant 过滤 Level 列表（getTheoryLevelsByVariant）；学习地图仅标准变体展示
+- `AcademyHome.tsx` 集成 VariantToggle：非标准变体显示骨架课程数提示（VARIANT_LESSON_INDEX）
+- `theory-academy/store.ts` 新增 `switchVariant` action（同步更新 variantMetadata.lastViewedAt）
+- `strategy-academy/store.ts` 新增 `activeVariant` + `switchVariant`；Persist version 升级：v4 → v5（migrate 注入默认值）
+- `theory-academy/data/levels/variants/index.ts` 新增 ALL_VARIANT_THEORY_LEVELS 总索引 + getTheoryLevelsByVariant 查询函数
+
+**Dashboard 多变体进度概览（Week 4）**
+- `progress/store.ts` 新增 switchActiveVariant / getVariantElo / getAllVariantsRatings 接口；updateElo 双写 eloByVariant[activeVariant]
+- `progress/components/stats/VariantEloOverview.tsx` 新建（三变体综合分 + 段位卡片，点击切换活动变体）
+- `Dashboard.tsx` 集成 VariantEloOverview（StreakRail 下方）
+- i18n 新增 variant.eloOverview / variant.gamesPlayed（zh/en 同步）
+
+**国际化扩展**
+- `locales/zh.json`新增 `variant.*` 命名空间（name/description/rules_difference/switch_variant/select_variant）
+- `locales/en.json` 同步更新（双语对称）
+
+#### 架构决策
+
+**混合模式分层结构**：
+- 基础层（T1-T3/L1-L2）：所有变体共享标准德州内容
+- 高级层（T4-T9/L3-L8）：按变体完全独立
+- ELO 系统：完全独立（每个变体拥有独立的五维评分）
+- Store Migration：v9→v10 (progress), v2→v3 (theory)
+
+**ID 命名规范**：
+- Theory: `t<level><suffix>-<chapter>`（标准=s, 短牌=sd, 单挑=hu）
+- Strategy: `l<level><suffix>-<lesson>`（标准=s, 短牌=sd, 单挑=hu）
+
+#### 验证
+
+- `pnpm typecheck`: exit 0 ✅
+- `pnpm test`: 63 files, 447 tests 全通过 ✅（含新增 strategy v4→v5 migrate 2 用例）
+- theory-academy: 34/34 通过（含新增变体 integrity 8 项 + v2→v3 migrate 1 项）✅
+- strategy-academy: 18 文件测试全通过（含 v4→v5 migrate + persist-shape 快照更新）✅
+- i18n: localeParity.test.ts 双语对称通过 ✅
+- designTokenGuard: 4/4 通过（无设计语言违规）✅
+
+#### Next Steps (Phase 2+)
+
+**Week 2-3**: 数据骨架填充
+- [ ] 短牌 T4-T9 章节内容逐步填充
+- [ ] 单挑 T4-T9 章节内容逐步填充
+- [ ] 短牌 L3-L8 课程详细编写
+- [ ] 单挑 L3-L8 课程详细编写
+- [ ] Quiz 题库变体适配
+
+**Week 4**: UI 集成与测试
+- [x] TheoryHome/AcademyHome 变体筛选逻辑（VariantToggle 已接入）
+- [x] 变体切换持久化（theory store v3 / strategy store v5）
+- [x] Dashboard 多变体进度概览（VariantEloOverview 已接入）
+- [x] 端到端测试（浏览器验证：变体切换/持久化/ELO 概览，截图存档 .uploads/verify-variant-*-2026-08-06.png）
+
+---
+
 ## [Unreleased] - 2026-08-05
 
 ### 策略学院技术债全面修复（P1+P2）

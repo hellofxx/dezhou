@@ -5,6 +5,7 @@ export const THEORY_LEVEL_6_CHAPTERS: TheoryChapter[] = [
   {
     id: 't6-bet-purpose',
     level: 6,
+    variant: 'standard',
     order: 1,
     title: '下注的目的：每个筹码都要有理由',
     subtitle: '价值、诈唬、保护——以及三个都不占时为什么该过牌',
@@ -123,6 +124,7 @@ export const THEORY_LEVEL_6_CHAPTERS: TheoryChapter[] = [
   {
     id: 't6-sizing-theory',
     level: 6,
+    variant: 'standard',
     order: 2,
     title: '尺度理论：极化与线性',
     subtitle: '下多大不是风格，是范围结构的函数',
@@ -256,6 +258,7 @@ export const THEORY_LEVEL_6_CHAPTERS: TheoryChapter[] = [
   {
     id: 't6-geometric',
     level: 6,
+    variant: 'standard',
     order: 3,
     title: 'SPR 与几何尺度：多街规划',
     subtitle: '从"这条街下多少"升级为"三条街怎么把钱全放进去"',

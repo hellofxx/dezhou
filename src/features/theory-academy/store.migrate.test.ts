@@ -95,3 +95,54 @@ describe('theory-academy store migrate (v1 → v2)', () => {
     expect(useTheoryStore.getState().progress.completedChapters).toEqual(['t1-combinatorics']);
   });
 });
+
+/**
+ * theory-academy store persist migrate 测试（v2 → v3）。
+ * 预置 v2 数据（无 activeVariant / variantMetadata 字段）触发 rehydrate，
+ * 验证 migrate 注入变体上下文字段默认值且原有进度不丢失。
+ */
+describe('theory-academy store migrate (v2 → v3)', () => {
+  let storageStub: ReturnType<typeof createLocalStorageStub>;
+
+  beforeEach(() => {
+    storageStub = createLocalStorageStub({
+      'theory-academy-progress': buildPersistPayload(
+        {
+          progress: {
+            completedChapters: ['t1-combinatorics', 't1-outs'],
+            quizScores: { 't1-combinatorics': 80, 't1-outs': 100 },
+            currentChapter: 't1-outs',
+            startedAt: 2000,
+            flaggedQuestions: ['t1-combinatorics-q2'],
+          },
+        },
+        2
+      ),
+    });
+    // zustand persist 默认 storage 引用 window.localStorage，需同时 stub window
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.resetModules();
+  });
+
+  it('v2 数据迁移后注入 activeVariant=standard 与 variantMetadata 默认值且保留原有进度', async () => {
+    const { useTheoryStore } = await import('./store');
+    const { progress } = useTheoryStore.getState();
+    expect(progress.activeVariant).toBe('standard');
+    expect(progress.variantMetadata).toEqual({
+      standard: { lastViewedAt: expect.any(Number), preferredOrder: 0 },
+      'short-deck': { lastViewedAt: 0, preferredOrder: 1 },
+      'heads-up': { lastViewedAt: 0, preferredOrder: 2 },
+    });
+    // 原有进度完整保留
+    expect(progress.completedChapters).toEqual(['t1-combinatorics', 't1-outs']);
+    expect(progress.quizScores['t1-outs']).toBe(100);
+    expect(progress.currentChapter).toBe('t1-outs');
+    expect(progress.startedAt).toBe(2000);
+    expect(progress.flaggedQuestions).toEqual(['t1-combinatorics-q2']);
+  });
+});

@@ -21,6 +21,7 @@ function makeChapter(quiz: TheoryChapter['quiz']): TheoryChapter {
     eloDimension: 'math',
     content: [],
     quiz,
+    variant: 'standard',
   };
 }
 

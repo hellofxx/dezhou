@@ -27,11 +27,26 @@ describe('theory-academy store persisted shape', () => {
     expect(buildPersistedShape(persisted)).toMatchInlineSnapshot(`
       {
         "progress": {
+          "activeVariant": "string",
           "completedChapters": "array",
           "currentChapter": "null",
           "flaggedQuestions": "array",
           "quizScores": {},
           "startedAt": "number",
+          "variantMetadata": {
+            "heads-up": {
+              "lastViewedAt": "number",
+              "preferredOrder": "number",
+            },
+            "short-deck": {
+              "lastViewedAt": "number",
+              "preferredOrder": "number",
+            },
+            "standard": {
+              "lastViewedAt": "number",
+              "preferredOrder": "number",
+            },
+          },
         },
       }
     `);

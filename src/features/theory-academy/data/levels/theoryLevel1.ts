@@ -5,6 +5,7 @@ export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
   {
     id: 't1-combinatorics',
     level: 1,
+    variant: 'standard',
     order: 1,
     title: '组合计数与起手牌概率',
     subtitle: '一切扑克数学的起点：52 张牌能组合出什么',
@@ -133,6 +134,7 @@ export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
   {
     id: 't1-outs',
     level: 1,
+    variant: 'standard',
     order: 2,
     title: 'Outs 与 2/4 法则',
     subtitle: '把"我还有机会吗"变成一个百分数',
@@ -250,6 +252,7 @@ export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
   {
     id: 't1-variance',
     level: 1,
+    variant: 'standard',
     order: 3,
     title: '方差与长期视角',
     subtitle: '为什么正确的决策也会连续输钱',

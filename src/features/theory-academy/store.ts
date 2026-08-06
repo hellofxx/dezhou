@@ -5,6 +5,7 @@ import { THEORY_LEVELS } from './data/levels';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import { isLevelUnlockedByCompleted } from './utils/theoryProgress';
+import type { PokerVariant } from '@/shared/types/elo';
 
 const initialProgress: TheoryProgress = {
   completedChapters: [],
@@ -12,6 +13,12 @@ const initialProgress: TheoryProgress = {
   currentChapter: null,
   startedAt: 0,
   flaggedQuestions: [],
+  activeVariant: 'standard',
+  variantMetadata: {
+    standard: { lastViewedAt: Date.now(), preferredOrder: 0 },
+    'short-deck': { lastViewedAt: 0, preferredOrder: 1 },
+    'heads-up': { lastViewedAt: 0, preferredOrder: 2 },
+  },
 };
 
 interface TheoryStore {
@@ -29,6 +36,8 @@ interface TheoryStore {
   getTotalProgress: () => number;
   /** 幂等切换题目疑难标记（已标记则移除，未标记则添加） */
   toggleFlagQuestion: (questionId: string) => void;
+  /** P2 变体支持：切换当前学习变体上下文（同步更新 variantMetadata.lastViewedAt） */
+  switchVariant: (variant: PokerVariant) => void;
   resetProgress: () => void;
 }
 
@@ -111,11 +120,26 @@ export const useTheoryStore = create<TheoryStore>()(
           return { progress: { ...state.progress, flaggedQuestions: next } };
         }),
 
+      switchVariant: (variant) =>
+        set((state) => {
+          const metadata = state.progress.variantMetadata ?? initialProgress.variantMetadata!;
+          return {
+            progress: {
+              ...state.progress,
+              activeVariant: variant,
+              variantMetadata: {
+                ...metadata,
+                [variant]: { ...(metadata[variant] ?? { preferredOrder: 0 }), lastViewedAt: Date.now() },
+              },
+            },
+          };
+        }),
+
       resetProgress: () => set({ progress: { ...initialProgress } }),
     }),
     {
       name: 'theory-academy-progress',
-      version: 2,
+      version: 3,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<TheoryStore>;
         // v0 → v1：防御性合并进度默认值（新 store 首版，兜底旧异常数据）
@@ -124,6 +148,10 @@ export const useTheoryStore = create<TheoryStore>()(
         }
         // v1 → v2：新增 flaggedQuestions 字段默认值（幂等合并，v0 数据走完上一分支后同样受益）
         if (fromVersion < 2) {
+          next.progress = { ...initialProgress, ...(next.progress ?? {}) };
+        }
+        // v2 → v3：新增 activeVariant / variantMetadata 变体上下文字段（幂等合并，默认 standard）
+        if (fromVersion < 3) {
           next.progress = { ...initialProgress, ...(next.progress ?? {}) };
         }
         return next as TheoryStore;

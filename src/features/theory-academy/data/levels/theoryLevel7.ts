@@ -5,6 +5,7 @@ export const THEORY_LEVEL_7_CHAPTERS: TheoryChapter[] = [
   {
     id: 't7-stats',
     level: 7,
+    variant: 'standard',
     order: 1,
     title: '统计指标体系：VPIP / PFR / AF / WTSD',
     subtitle: '用四个数字给对手拍 X 光片',
@@ -139,6 +140,7 @@ export const THEORY_LEVEL_7_CHAPTERS: TheoryChapter[] = [
   {
     id: 't7-player-types',
     level: 7,
+    variant: 'standard',
     order: 2,
     title: '玩家类型学：四象限画像',
     subtitle: 'TAG、LAG、NIT、跟注站——以及每一类的标准收割方案',
@@ -258,6 +260,7 @@ export const THEORY_LEVEL_7_CHAPTERS: TheoryChapter[] = [
   {
     id: 't7-hand-reading',
     level: 7,
+    variant: 'standard',
     order: 3,
     title: '读牌流程：从范围到组合的四步法',
     subtitle: '把 T4 的范围理论装配成实战流水线',
@@ -378,6 +381,7 @@ export const THEORY_LEVEL_7_CHAPTERS: TheoryChapter[] = [
   {
     id: 't7-exploit',
     level: 7,
+    variant: 'standard',
     order: 4,
     title: '剥削理论与动态调整',
     subtitle: '发现漏洞 → 定向偏离 → 防备反剥削的完整循环',

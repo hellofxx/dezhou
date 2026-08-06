@@ -5,6 +5,7 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
   {
     id: 't5-game-theory',
     level: 5,
+    variant: 'standard',
     order: 1,
     title: '零和博弈与纳什均衡',
     subtitle: '从冯·诺依曼到扑克桌：均衡为什么存在',
@@ -118,6 +119,7 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
   {
     id: 't5-gto-concept',
     level: 5,
+    variant: 'standard',
     order: 2,
     title: 'GTO 与剥削：两种"最优"',
     subtitle: '理解求解器时代的策略坐标系',
@@ -226,6 +228,7 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
   {
     id: 't5-mdf-alpha',
     level: 5,
+    variant: 'standard',
     order: 3,
     title: 'MDF 与 Alpha：防守与进攻的临界频率',
     subtitle: '两个公式，锁定"下注-弃牌"攻防的数学边界',
@@ -338,6 +341,7 @@ export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
   {
     id: 't5-mixed-strategy',
     level: 5,
+    variant: 'standard',
     order: 4,
     title: '混合策略、无差别原则与节点锁定',
     subtitle: '读懂求解器输出的三把钥匙',

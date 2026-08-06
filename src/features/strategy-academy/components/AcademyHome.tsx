@@ -8,12 +8,16 @@ import { useAcademyStore } from '../store';
 import { getTotalLessonCount } from '../utils/courseProgress';
 import { LevelCard } from './LevelCard';
 import { DailyPlanCard } from './DailyPlanCard';
+import { VariantToggle } from '@/shared/components/VariantToggle';
+import { VARIANT_LESSON_INDEX } from '../data/lessons/variants';
 
 export default function AcademyHome() {
   const { t } = useTranslation();
   const { progress, getTotalProgress, basicsProgress } = useAcademy();
   // 审计 1.1：卡片解锁按 LevelInfo 条目判定，与 CourseView 门禁口径一致（区分 l4a/l4b）
   const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
+  const activeVariant = useAcademyStore((s) => s.activeVariant);
+  const switchVariant = useAcademyStore((s) => s.switchVariant);
   const navigate = useNavigate();
 
   const totalProgress = getTotalProgress();
@@ -163,6 +167,23 @@ export default function AcademyHome() {
             </div>
           </button>
         </motion.div>
+
+        {/* P2 变体切换器 */}
+        <div className="flex items-center justify-between gap-4 px-1">
+          <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
+            {t('variant.select_variant')}
+          </h2>
+          <VariantToggle active={activeVariant} onSelect={switchVariant} />
+        </div>
+
+        {/* 变体课程骨架提示（非标准变体课程内容尚在填充中） */}
+        {activeVariant !== 'standard' && (
+          <div className="rounded-lg border border-felt-700 bg-felt-900/20 p-4">
+            <p className="text-sm text-[var(--ivory-dim)]">
+              {t('variant.name.' + activeVariant)} · {VARIANT_LESSON_INDEX[activeVariant].length} {t('academy.lessons')}（骨架已就绪，内容填充中）
+            </p>
+          </div>
+        )}
 
         {/* Level cards */}
         <div className="space-y-3">

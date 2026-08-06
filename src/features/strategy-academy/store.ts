@@ -7,6 +7,8 @@ import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import { DEFAULT_ADAPTIVE_CONFIG, updateAbilityScore } from './utils/adaptiveDifficulty';
 import { generateDailyPlan, isDailyPlanFresh } from './utils/dailyPlan';
+import type { PokerVariant } from '@/shared/types/elo';
+import { DEFAULT_VARIANT } from '@/shared/types/elo';
 
 const initialProgress: AcademyProgress = {
   completedLessons: [],
@@ -46,6 +48,8 @@ interface AcademyStore {
   dailyPlan: DailyPlan | null;
   certifications: Record<number, LevelCertification>;
   activeTrackId: string | null;
+  /** P2 变体支持：当前选中的游戏变体上下文（默认 standard） */
+  activeVariant: PokerVariant;
   /** 课程首次得分（lessonId → 0-100） */
   firstAttemptScores: Record<string, number>;
   /** 课程最近得分（lessonId → 0-100） */
@@ -82,6 +86,8 @@ interface AcademyStore {
   isTrackCompleted: (trackId: string) => boolean;
   // 新增：学习轨道
   setActiveTrack: (trackId: string | null) => void;
+  /** P2 变体支持：切换当前学习变体上下文 */
+  switchVariant: (variant: PokerVariant) => void;
   /** 记录课程尝试得分（首次写入 firstAttemptScores，始终更新 lastAttemptScores） */
   recordAttemptScore: (lessonId: string, score: number) => void;
   /** 获取课程进步数据（首次得分、最近得分、提升幅度） */
@@ -100,6 +106,7 @@ export const useAcademyStore = create<AcademyStore>()(
       dailyPlan: null,
       certifications: {},
       activeTrackId: null,
+      activeVariant: DEFAULT_VARIANT,
       firstAttemptScores: {},
       lastAttemptScores: {},
 
@@ -433,6 +440,9 @@ export const useAcademyStore = create<AcademyStore>()(
       // ===== 学习轨道 =====
       setActiveTrack: (trackId) => set({ activeTrackId: trackId }),
 
+      // ===== P2 变体支持 =====
+      switchVariant: (variant) => set({ activeVariant: variant }),
+
       // ===== 进步回放得分记录 =====
       recordAttemptScore: (lessonId, score) =>
         set((state) => {
@@ -456,7 +466,7 @@ export const useAcademyStore = create<AcademyStore>()(
     }),
     {
       name: 'strategy-academy-progress',
-      version: 4,
+      version: 5,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<AcademyStore>;
         // v0 → v1：注入进步回放得分记录默认值
@@ -492,6 +502,12 @@ export const useAcademyStore = create<AcademyStore>()(
         if (fromVersion < 4) {
           const progress = next.progress ?? ({} as AcademyProgress);
           next.progress = { ...initialProgress, ...progress, completedUnits: progress.completedUnits ?? {} };
+        }
+        // v4 → v5：P2 变体支持，新增 activeVariant 字段（默认 standard）
+        if (fromVersion < 5) {
+          if (!next.activeVariant) {
+            next.activeVariant = DEFAULT_VARIANT;
+          }
         }
         return next as AcademyStore;
       },

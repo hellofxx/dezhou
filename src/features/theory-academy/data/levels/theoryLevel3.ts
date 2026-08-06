@@ -5,6 +5,7 @@ export const THEORY_LEVEL_3_CHAPTERS: TheoryChapter[] = [
   {
     id: 't3-position-value',
     level: 3,
+    variant: 'standard',
     order: 1,
     title: '位置价值的来源',
     subtitle: '为什么"最后说话"本身就是一种筹码',
@@ -126,6 +127,7 @@ export const THEORY_LEVEL_3_CHAPTERS: TheoryChapter[] = [
   {
     id: 't3-starting-hands',
     level: 3,
+    variant: 'standard',
     order: 2,
     title: '起手牌理论与 Gap Concept',
     subtitle: '进池标准不是一张表，而是一套随情境移动的逻辑',
@@ -252,6 +254,7 @@ export const THEORY_LEVEL_3_CHAPTERS: TheoryChapter[] = [
   {
     id: 't3-fundamental-theorem',
     level: 3,
+    variant: 'standard',
     order: 3,
     title: 'Sklansky 基本定理与主动权',
     subtitle: '扑克盈利的第一性原理：让对手犯错',

@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { THEORY_LEVELS } from '../data/levels';
 import { useTheory } from '../hooks/useTheory';
 import { useTheoryStore } from '../store';
 import { getTotalChapterCount } from '../utils/theoryProgress';
 import { TheoryLevelCard } from './TheoryLevelCard';
 import { TheoryLearningMap } from './TheoryLearningMap';
+import { getTheoryLevelsByVariant } from '../data/levels/variants';
+import { VariantToggle } from '@/shared/components/VariantToggle';
 import type { TheoryTier } from '../types';
 
 const TIER_ORDER: TheoryTier[] = ['basic', 'intermediate', 'advanced'];
@@ -14,6 +15,11 @@ export default function TheoryHome() {
   const { t } = useTranslation();
   const { progress, getLevelProgress, getTotalProgress } = useTheory();
   const isTheoryLevelUnlocked = useTheoryStore((s) => s.isTheoryLevelUnlocked);
+  const activeVariant = useTheoryStore((s) => s.progress.activeVariant);
+  const switchVariant = useTheoryStore((s) => s.switchVariant);
+
+  // P2 变体支持：按当前变体过滤 Level 列表（standard 为主课程体系）
+  const levels = getTheoryLevelsByVariant(activeVariant);
 
   const totalProgress = getTotalProgress();
   const totalChapters = getTotalChapterCount();
@@ -52,18 +58,27 @@ export default function TheoryHome() {
           </div>
         </motion.section>
 
-        {/* 学习路径地图：全局方向感 + 目标梯度效应 */}
-        <TheoryLearningMap />
+        {/* 学习路径地图：全局方向感 + 目标梯度效应（仅标准变体展示，变体课程体系尚在填充中） */}
+        {activeVariant === 'standard' && <TheoryLearningMap />}
+
+        {/* P2 变体切换器 */}
+        <div className="flex items-center justify-between gap-4 px-1">
+          <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
+            {t('variant.select_variant')}
+          </h2>
+          <VariantToggle active={activeVariant} onSelect={switchVariant} />
+        </div>
 
         {/* Tiered level list */}
         {TIER_ORDER.map((tier) => {
-          const levels = THEORY_LEVELS.filter((l) => l.tier === tier);
+          const tierLevels = levels.filter((l) => l.tier === tier);
+          if (tierLevels.length === 0) return null;
           return (
             <section key={tier} className="space-y-3">
               <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold px-1">
                 {tierLabel[tier]}
               </h2>
-              {levels.map((level, index) => (
+              {tierLevels.map((level, index) => (
                 <TheoryLevelCard
                   key={level.id}
                   level={level}

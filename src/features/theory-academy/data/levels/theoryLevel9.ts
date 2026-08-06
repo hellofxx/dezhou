@@ -5,6 +5,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
   {
     id: 't9-mop',
     level: 9,
+    variant: 'standard',
     order: 1,
     title: '《扑克数学》（MOP）核心思想',
     subtitle: '从玩具博弈出发，看清真实扑克的骨架',
@@ -123,6 +124,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
   {
     id: 't9-icm',
     level: 9,
+    variant: 'standard',
     order: 2,
     title: 'ICM 理论：当筹码不再等于金钱',
     subtitle: '锦标赛决策的第二套坐标系',
@@ -239,6 +241,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
   {
     id: 't9-multiway',
     level: 9,
+    variant: 'standard',
     order: 3,
     title: '多人底池理论',
     subtitle: '当博弈从二人变成 N 人，哪些定律要重写',
@@ -357,6 +360,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
   {
     id: 't9-alpha',
     level: 9,
+    variant: 'standard',
     order: 1.5,
     title: 'Alpha（优势比例）详解',
     subtitle: 'MDF 的对偶概念与实战应用',
@@ -449,6 +453,7 @@ export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
   {
     id: 't9-unified',
     level: 9,
+    variant: 'standard',
     order: 4,
     title: 'GTO 与剥削的统一框架',
     subtitle: '九个 Level 的收束：一套完整的决策操作系统',

@@ -89,3 +89,59 @@ describe('strategy-academy store migrate (v3 → v4)', () => {
     expect(state.progress.completedUnits).toEqual({ 'l1-hand-rankings': ['u1', 'u2'] });
   });
 });
+
+describe('strategy-academy store migrate (v4 → v5)', () => {
+  it('v4 数据注入 activeVariant 默认值 standard，已有字段不被触碰', async () => {
+    vi.resetModules();
+    const storageStub = createLocalStorageStub({
+      'strategy-academy-progress': buildPersistPayload(
+        {
+          progress: {
+            completedLessons: ['l1-hand-rankings'],
+            quizScores: {},
+            currentLesson: null,
+            startedAt: 1700000000000,
+            completedUnits: {},
+          },
+        },
+        4
+      ),
+    });
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+
+    const { useAcademyStore } = await import('./store');
+    const state = useAcademyStore.getState();
+
+    // v5: 注入变体上下文默认值
+    expect(state.activeVariant).toBe('standard');
+    // 已有字段不被触碰
+    expect(state.progress.completedLessons).toEqual(['l1-hand-rankings']);
+  });
+
+  it('v5 数据已有 activeVariant 不被 migrate 覆盖', async () => {
+    vi.resetModules();
+    const storageStub = createLocalStorageStub({
+      'strategy-academy-progress': buildPersistPayload(
+        {
+          progress: {
+            completedLessons: [],
+            quizScores: {},
+            currentLesson: null,
+            startedAt: 1700000000000,
+            completedUnits: {},
+          },
+          activeVariant: 'short-deck',
+        },
+        5
+      ),
+    });
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+
+    const { useAcademyStore } = await import('./store');
+    const state = useAcademyStore.getState();
+
+    expect(state.activeVariant).toBe('short-deck');
+  });
+});

@@ -5,6 +5,7 @@ export const THEORY_LEVEL_2_CHAPTERS: TheoryChapter[] = [
   {
     id: 't2-ev',
     level: 2,
+    variant: 'standard',
     order: 1,
     title: '期望值（EV）：所有决策的统一度量',
     subtitle: '把每个决策翻译成一个数字，然后选最大的那个',
@@ -130,6 +131,7 @@ export const THEORY_LEVEL_2_CHAPTERS: TheoryChapter[] = [
   {
     id: 't2-pot-odds',
     level: 2,
+    variant: 'standard',
     order: 2,
     title: '底池赔率：跟注的价格标签',
     subtitle: '底池给你的价格 vs 你的胜率，一个除法解决跟注问题',
@@ -246,6 +248,7 @@ export const THEORY_LEVEL_2_CHAPTERS: TheoryChapter[] = [
   {
     id: 't2-implied-odds',
     level: 2,
+    variant: 'standard',
     order: 3,
     title: '隐含赔率与反向隐含赔率',
     subtitle: '把未来的钱算进现在的决策',

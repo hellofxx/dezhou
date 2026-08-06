@@ -5,6 +5,7 @@ export const THEORY_LEVEL_8_CHAPTERS: TheoryChapter[] = [
   {
     id: 't8-tilt',
     level: 8,
+    variant: 'standard',
     order: 1,
     title: 'Tilt 的类型与识别',
     subtitle: '情绪不是性格问题，而是可分类、可干预的技术漏洞',
@@ -128,6 +129,7 @@ export const THEORY_LEVEL_8_CHAPTERS: TheoryChapter[] = [
   {
     id: 't8-session',
     level: 8,
+    variant: 'standard',
     order: 2,
     title: 'Session 管理：把状态当作资源',
     subtitle: '什么时候打、打多久、什么时候必须离开',
@@ -251,6 +253,7 @@ export const THEORY_LEVEL_8_CHAPTERS: TheoryChapter[] = [
   {
     id: 't8-bankroll-psych',
     level: 8,
+    variant: 'standard',
     order: 3,
     title: '资金管理心理学',
     subtitle: '资金规则是给情绪上的保险，不是给数学上的',
@@ -381,6 +384,7 @@ export const THEORY_LEVEL_8_CHAPTERS: TheoryChapter[] = [
   {
     id: 't8-mindset',
     level: 8,
+    variant: 'standard',
     order: 4,
     title: '认知偏差与长期心态',
     subtitle: '大脑出厂设置里的 Bug，以及职业玩家的补丁',

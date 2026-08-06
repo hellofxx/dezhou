@@ -17,8 +17,8 @@ import {
 } from './utils/streakCalc';
 import type { GameVariant } from '@/shared/types/poker';
 // P1-2: ELO 能力分级
-import type { EloRating, EloDimension, RankUpEvent } from '@/shared/types/elo';
-import { DEFAULT_ELO } from '@/shared/types/elo';
+import type { EloRating, EloDimension, RankUpEvent, PokerVariant } from '@/shared/types/elo';
+import { DEFAULT_ELO, DEFAULT_VARIANT } from '@/shared/types/elo';
 import {
   applyEloChange,
   checkRankUp,
@@ -212,8 +212,9 @@ interface ProgressStore {
   earnBackStreak: (previousStreak: number) => void;
 
   // ELO 能力分级（P1-2）
+  /** 现有 eloRating 字段（待弃用，保留用于迁移兼容）*/
   elo: EloRating;
-  /** 段位升级事件（非 null 时表示刚发生升级，Dashboard 监听并弹 Dialog） */
+  /** 段位升级事件（非 null 时表示刚发生升级，Dashboard 监听并弹 Dialog）*/
   eloRankUp: RankUpEvent | null;
   /** 更新对应维度 ELO 与 overall；自动检测段位升级并设置 eloRankUp */
   updateElo: (
@@ -221,12 +222,24 @@ interface ProgressStore {
     isCorrect: boolean,
     difficulty: number
   ) => void;
-  /** 重置 ELO 为默认值（gamesPlayed 清零） */
+  /** 重置 ELO 为默认值（gamesPlayed 清零）*/
   resetElo: () => void;
-  /** 清空段位升级事件（关闭 Dialog 后调用） */
+  /** 清空段位升级事件（关闭 Dialog 后调用）*/
   clearEloRankUp: () => void;
-  /** 从 strategy-academy 的 abilityAssessment 同步初始 ELO（仅当 gamesPlayed=0 时生效） */
+  /** 从 strategy-academy 的 abilityAssessment 同步初始 ELO（仅当 gamesPlayed=0 时生效）*/
   syncEloFromAcademyAbility: (aa: AbilityAssessment) => void;
+    
+  // P2-1: 游戏变体 ELO 分离（eloRating → eloByVariant）
+  /** 当前选中的游戏变体 */
+  activeVariant: PokerVariant;
+  /** 各变体的独立 ELO 评分 */
+  eloByVariant: Record<PokerVariant, EloRating>;
+  /** P2-1: 切换当前活动变体（ELO 更新将作用于该变体） */
+  switchActiveVariant: (variant: PokerVariant) => void;
+  /** P2-1: 获取指定变体指定维度的 ELO 分数 */
+  getVariantElo: (variant: PokerVariant, dimension: EloDimension) => number;
+  /** P2-1: 获取全部变体的 ELO 评分 */
+  getAllVariantsRatings: () => Record<PokerVariant, EloRating>;
 
   // P1-4.3: 快速训练连续打卡（与 streak 独立的子计数器）
   /** 连续完成快速训练的天数（与 streak.currentStreak 解耦，仅统计快速训练） */
@@ -471,17 +484,31 @@ export const useProgressStore = create<ProgressStore>()(
         }));
       },
 
-      // ===== ELO 能力分级（P1-2） =====
+      // ===== ELO 能力分级（P1-2）=====
+      /** 现有 eloRating 字段（待弃用，保留用于迁移兼容）*/
       elo: { ...DEFAULT_ELO, lastUpdated: Date.now() },
       eloRankUp: null,
+      
+      // P2-1: 游戏变体 ELO 分离
+      activeVariant: DEFAULT_VARIANT,
+      eloByVariant: {
+        standard: { ...DEFAULT_ELO, variant: 'standard' as PokerVariant },
+        'short-deck': { ...DEFAULT_ELO, variant: 'short-deck' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+        'heads-up': { ...DEFAULT_ELO, variant: 'heads-up' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+      },
 
       updateElo: (dimension, isCorrect, difficulty) => {
         const prev = get().elo;
         const oldOverall = prev.overall;
         const newElo = applyEloChange(prev, dimension, isCorrect, difficulty);
         const rankUp = checkRankUp(oldOverall, newElo.overall);
+        // P2-1: 同步更新当前活动变体的独立 ELO（双写兼容：老消费方读 elo，新消费方读 eloByVariant）
+        const variant = get().activeVariant;
+        const prevVariantElo = get().eloByVariant[variant];
+        const newVariantElo = applyEloChange(prevVariantElo, dimension, isCorrect, difficulty);
         set({
           elo: newElo,
+          eloByVariant: { ...get().eloByVariant, [variant]: { ...newVariantElo, variant } },
           // 仅在发生升段时覆盖事件；未升段保留现值，避免会话中后续答题
           // 把尚未展示的升段庆祝事件清零（由 clearEloRankUp 在弹窗关闭后清除）
           eloRankUp: rankUp.isUp
@@ -501,6 +528,13 @@ export const useProgressStore = create<ProgressStore>()(
         if (!hasNonDefaultAbility(aa)) return;
         set({ elo: mapAcademyAbilityToElo(aa) });
       },
+
+      // ===== P2-1: 变体 ELO 查询与切换 =====
+      switchActiveVariant: (variant) => set({ activeVariant: variant }),
+
+      getVariantElo: (variant, dimension) => get().eloByVariant[variant][dimension],
+
+      getAllVariantsRatings: () => get().eloByVariant,
 
       // ===== P1-4.3: 快速训练连续打卡（独立于 streak.currentStreak） =====
       quickDrillStreak: 0,
@@ -721,7 +755,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 9,
+      version: 10,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak
         const next = (persistedState ?? {}) as Partial<ProgressStore> & {
@@ -811,6 +845,35 @@ export const useProgressStore = create<ProgressStore>()(
         if (fromVersion < 9) {
           if (next.pendingMilestone === undefined) {
             next.pendingMilestone = null;
+          }
+        }
+        // v9 → v10：游戏变体 ELO 分离（eloRating → eloByVariant）
+        if (fromVersion < 10) {
+          // 如果已有 eloRating，克隆到 eloByVariant.standard
+          if (next.elo && next.eloByVariant === undefined) {
+            const standardElo = { ...next.elo, variant: 'standard' as PokerVariant };
+            next.eloByVariant = {
+              standard: standardElo,
+              'short-deck': { ...standardElo, variant: 'short-deck' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+              'heads-up': { ...standardElo, variant: 'heads-up' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+            };
+            // activeVariant 默认为 standard
+            if (next.activeVariant === undefined) {
+              next.activeVariant = 'standard';
+            }
+          }
+          // 如果没有 eloRating 但有 eloByVariant（新用户使用），确保所有变体都有默认值
+          if (next.eloByVariant && !('elo' in next)) {
+            for (const variant of ['standard', 'short-deck', 'heads-up'] as PokerVariant[]) {
+              if (!next.eloByVariant[variant]) {
+                next.eloByVariant[variant] = {
+                  ...DEFAULT_ELO,
+                  variant,
+                  gamesPlayed: 0,
+                  lastUpdated: 0,
+                };
+              }
+            }
           }
         }
         return next as ProgressStore;

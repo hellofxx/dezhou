@@ -10,6 +10,8 @@ import { LEVELS } from './levels';
 import { LOCAL_LESSONS } from './localLessons';
 import { LEARNING_TRACKS } from './learningTracks';
 import { CONCEPT_NODES } from './conceptNodes';
+import { ALL_VARIANTS } from '@/shared/types/elo';
+import { ALL_VARIANT_LESSONS, getLessonsByVariantAndLevel } from './lessons/variants';
 import type { Lesson } from '../types';
 
 const DRILL_COMPONENTS = new Set([
@@ -289,6 +291,73 @@ describe('curriculum integrity: units 完整性（P5 手写 units 守卫）', ()
               `${lesson.id}/units/${unit.id}: section (type=${section.type}) 不是 lesson.content 中对象的引用`,            );
           }
         }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+});
+
+describe('curriculum integrity: 变体课程守卫（P2 变体支持）', () => {
+  it('所有变体 Lesson 的 ID 全局唯一（含 LEVELS 现有课程）', () => {
+    const ids = ALL_VARIANT_LESSONS.map((l) => l.id);
+    const dups = ids.filter((id, i) => ids.indexOf(id) !== i);
+    expect([...new Set(dups)]).toEqual([]);
+  });
+
+  it('每个变体都有完整的 L3-L8 策略课程', () => {
+    const bad: string[] = [];
+    for (const variant of ALL_VARIANTS) {
+      for (let level = 3; level <= 8; level++) {
+        if (getLessonsByVariantAndLevel(variant, level).length === 0) {
+          bad.push(`变体 ${variant} 缺少 Level ${level} 课程`);
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('变体课程 ID 格式正确：l{level} 前缀 + sd/hu 变体标识', () => {
+    const bad: string[] = [];
+    for (const lesson of ALL_VARIANT_LESSONS) {
+      const variant = lesson.variant ?? 'standard';
+      if (variant === 'standard') continue; // 现有课程含 drill-* 命名，不套用 l{level} 规范
+      const expectedPrefix = `l${lesson.level}`;
+      if (!lesson.id.startsWith(expectedPrefix)) {
+        bad.push(`${lesson.id} 应以 ${expectedPrefix} 开头`);
+      }
+      const expectedToken = variant === 'short-deck' ? 'sd' : 'hu';
+      if (!lesson.id.includes(expectedToken)) {
+        bad.push(`${lesson.id} 应包含变体标识 ${expectedToken}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('变体骨架课程未混入 LEVELS 门禁数据流（独立存放，后续按变体索引接入）', () => {
+    const levelIds = new Set(allLessons.map((l) => l.id));
+    const bad: string[] = [];
+    for (const lesson of ALL_VARIANT_LESSONS) {
+      if ((lesson.variant ?? 'standard') === 'standard') continue;
+      if (levelIds.has(lesson.id)) {
+        bad.push(`${lesson.id}: 变体课程混入 LEVELS 门禁数据流`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('变体上下文合法：anteStructure 枚举合法、stackDepth 为正数', () => {
+    const bad: string[] = [];
+    for (const lesson of ALL_VARIANT_LESSONS) {
+      const ctx = lesson.variantContext;
+      if (!ctx) continue;
+      if (
+        ctx.anteStructure &&
+        !['sb_ante', 'both_ante', 'no_ante'].includes(ctx.anteStructure)
+      ) {
+        bad.push(`${lesson.id}: 非法 anteStructure=${ctx.anteStructure}`);
+      }
+      if (ctx.stackDepth !== undefined && ctx.stackDepth <= 0) {
+        bad.push(`${lesson.id}: stackDepth=${ctx.stackDepth}`);
       }
     }
     expect(bad).toEqual([]);

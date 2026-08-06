@@ -1,4 +1,21 @@
 {
+  "variant": {
+    "name": {
+      "standard": "Texas Hold'em",
+      "short-deck": "Short Deck",
+      "heads-up": "Heads-Up"
+    },
+    "description": {
+      "standard": "Standard Texas Hold'em, 52 cards, up to 9 players",
+      "short-deck": "Short Deck Hold'em, 36 cards (2-5 removed), Flush > Straight, Pair beats AKo",
+      "heads-up": "Heads-Up Hold'em, 1v1 duel, SB antes, SB acts first postflop"
+    },
+    "rules_difference": "Rules Difference",
+    "switch_variant": "Switch Variant",
+    "select_variant": "Select Game Variant",
+    "eloOverview": "Variant ELO Overview",
+    "gamesPlayed": "questions"
+  },
   "app": {
     "name": "Poker Training Platform",
     "version": "0.1.0"

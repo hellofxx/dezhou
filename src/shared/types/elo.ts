@@ -15,6 +15,7 @@ export interface EloRating {
   kFactor: number;       // K 因子（动态：新手 48 / 默认 32 / 高分 24）
   gamesPlayed: number;   // 累计答题数
   lastUpdated: number;   // 最后更新时间戳
+  variant?: PokerVariant; // P2 新增：所属变体标识（可选，用于多变体 ELO 分离）
 }
 
 /** 段位定义 */
@@ -55,3 +56,65 @@ export interface RankUpEvent {
   from: Rank;
   to: Rank;
 }
+
+// ===== 游戏变体支持（P2 新增） =====
+
+/** 游戏变体类型 */
+export type PokerVariant = 'standard' | 'short-deck' | 'heads-up';
+
+/** 默认变体 */
+export const DEFAULT_VARIANT: PokerVariant = 'standard';
+
+/** 所有变体列表 */
+export const ALL_VARIANTS: PokerVariant[] = ['standard', 'short-deck', 'heads-up'];
+
+/** 变体配置元信息 */
+export interface VariantConfig {
+  id: PokerVariant;
+  name: string;
+  shortName: string;
+  description: string;
+  icon: string;         // emoji
+  color: string;        // hex for UI theming
+  deckSize: number;
+  maxPlayers: number;
+  /** 是否启用位置解锁机制 */
+  supportsPositionUnlock: boolean;
+}
+
+/** 变体常量配置 */
+export const VARIANT_CONFIG: Record<PokerVariant, VariantConfig> = {
+  'standard': {
+    id: 'standard',
+    name: "Texas Hold'em",
+    shortName: 'Hold\'em',
+    description: '标准德州扑克，52 张牌，最多 9 人桌',
+    icon: '♠️',
+    color: '#c9a25e',
+    deckSize: 52,
+    maxPlayers: 9,
+    supportsPositionUnlock: true,
+  },
+  'short-deck': {
+    id: 'short-deck',
+    name: 'Short Deck Hold\'em',
+    shortName: 'Short Deck',
+    description: '短牌德州，36 张牌（移除 2-5），同花>顺子，AA>KQ',
+    icon: '♦️',
+    color: '#ef4444',
+    deckSize: 36,
+    maxPlayers: 6,
+    supportsPositionUnlock: true,
+  },
+  'heads-up': {
+    id: 'heads-up',
+    name: 'Heads-Up Hold\'em',
+    shortName: 'Heads-Up',
+    description: '单挑德州，2 人对战，SB 强制 Ante，翻后 SB 先行动',
+    icon: '👤',
+    color: '#3b82f6',
+    deckSize: 52,
+    maxPlayers: 2,
+    supportsPositionUnlock: false,
+  },
+};

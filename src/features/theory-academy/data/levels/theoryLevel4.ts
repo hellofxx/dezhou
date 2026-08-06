@@ -5,6 +5,7 @@ export const THEORY_LEVEL_4_CHAPTERS: TheoryChapter[] = [
   {
     id: 't4-range-thinking',
     level: 4,
+    variant: 'standard',
     order: 1,
     title: '范围思维：从单手牌到概率分布',
     subtitle: '职业与业余之间最重要的一次思维升级',
@@ -128,6 +129,7 @@ export const THEORY_LEVEL_4_CHAPTERS: TheoryChapter[] = [
   {
     id: 't4-combinatorics',
     level: 4,
+    variant: 'standard',
     order: 2,
     title: '组合数学与 Blockers',
     subtitle: '数组合：把范围从名词变成数字',
@@ -234,6 +236,7 @@ export const THEORY_LEVEL_4_CHAPTERS: TheoryChapter[] = [
   {
     id: 't4-range-advantage',
     level: 4,
+    variant: 'standard',
     order: 3,
     title: '范围优势与坚果优势',
     subtitle: '为什么有的牌面属于加注者，有的属于跟注者',

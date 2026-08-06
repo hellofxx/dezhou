@@ -28,6 +28,7 @@ import FeltArena from '../training/FeltArena';
 import StreakRail from '../streak/StreakRail';
 import AchievementWall from '../achievement/AchievementWall';
 import ProgressReplay from '../replay/ProgressReplay';
+import { VariantEloOverview } from '../stats/VariantEloOverview';
 import { ACHIEVEMENTS } from '../../data/achievements';
 
 const MODULE_LABELS: Record<string, string> = {
@@ -121,6 +122,11 @@ export default function Dashboard() {
       <div className="px-0">
         {/* Section 2: Streak Rail */}
         <StreakRail />
+
+        {/* P2 变体支持：多变体 ELO 概览 */}
+        <div className="px-4 mb-4">
+          <VariantEloOverview />
+        </div>
 
         {/* Section 3: Quick Drill Brass Banner */}
         <div className="quick-drill-card">

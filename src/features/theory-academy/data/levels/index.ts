@@ -19,6 +19,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '概率论基础',
     description: '组合计数、Outs 与 2/4 法则、方差与长期视角',
     icon: '🎲',
+    variant: 'standard',
     unlockRequirement: '无',
     chapters: THEORY_LEVEL_1_CHAPTERS,
     practiceRecommendations: {
@@ -36,6 +37,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '期望值与赔率体系',
     description: 'EV 计算、底池赔率、隐含赔率与反向隐含赔率',
     icon: '⚖️',
+    variant: 'standard',
     unlockRequirement: '完成 T1 所有章节',
     chapters: THEORY_LEVEL_2_CHAPTERS,
     practiceRecommendations: {
@@ -52,6 +54,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '位置理论与起手牌理论',
     description: '位置价值、Gap Concept、Sklansky 基本定理与主动权',
     icon: '🧭',
+    variant: 'standard',
     unlockRequirement: '完成 T2 所有章节',
     chapters: THEORY_LEVEL_3_CHAPTERS,
     practiceRecommendations: {
@@ -68,6 +71,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '范围理论',
     description: '范围思维、组合数学与 Blockers、范围优势与坚果优势',
     icon: '🗺️',
+    variant: 'standard',
     unlockRequirement: '完成 T3 所有章节',
     chapters: THEORY_LEVEL_4_CHAPTERS,
     practiceRecommendations: {
@@ -85,6 +89,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '博弈论基础',
     description: '纳什均衡、GTO 概念、MDF 与 Alpha、混合策略与节点锁定',
     icon: '♟️',
+    variant: 'standard',
     unlockRequirement: '完成 T4 所有章节',
     chapters: THEORY_LEVEL_5_CHAPTERS,
     practiceRecommendations: {
@@ -103,6 +108,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '下注理论',
     description: '下注目的、极化与线性尺度、SPR 与几何尺度',
     icon: '💠',
+    variant: 'standard',
     unlockRequirement: '完成 T5 所有章节',
     chapters: THEORY_LEVEL_6_CHAPTERS,
     practiceRecommendations: {
@@ -120,6 +126,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '对手分析理论',
     description: 'VPIP/PFR/AF/WTSD 指标、玩家类型学、读牌流程与剥削调整',
     icon: '🔍',
+    variant: 'standard',
     unlockRequirement: '完成 T6 所有章节',
     chapters: THEORY_LEVEL_7_CHAPTERS,
     practiceRecommendations: {
@@ -136,6 +143,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '扑克心理学',
     description: 'Tilt 识别、Session 管理、资金心理与长期心态',
     icon: '🧠',
+    variant: 'standard',
     unlockRequirement: '完成 T7 所有章节',
     chapters: THEORY_LEVEL_8_CHAPTERS,
     practiceRecommendations: {
@@ -153,6 +161,7 @@ export const THEORY_LEVELS: TheoryLevelInfo[] = [
     title: '经典理论综合',
     description: 'MOP 要义、ICM 理论、多人底池与 GTO-剥削统一框架',
     icon: '🏛️',
+    variant: 'standard',
     unlockRequirement: '完成 T8 所有章节',
     chapters: THEORY_LEVEL_9_CHAPTERS,
     practiceRecommendations: {

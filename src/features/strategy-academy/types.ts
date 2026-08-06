@@ -1,3 +1,5 @@
+import type { PokerVariant } from '@/shared/types/elo';
+
 // 题目难度级别
 export type QuestionDifficulty = 'beginner' | 'intermediate' | 'advanced';
 
@@ -209,6 +211,20 @@ export interface DrillData {
   questions: DrillQuestion[];
 }
 
+// ===== 游戏变体上下文（P2 变体支持） =====
+
+/** 变体上下文信息 */
+export interface VariantContext {
+  /** 按钮位/庄位归属（'HU_SB' | 'HU_BB' 等，单挑等特殊座位结构使用） */
+  dealerButtonPosition?: string;
+  /** Ante 结构：SB 独付 / 双方同付 / 无 Ante */
+  anteStructure?: 'sb_ante' | 'both_ante' | 'no_ante';
+  /** 典型筹码深度（BB），短牌通常更浅筹码 */
+  stackDepth?: number;
+  /** 变体特有的其他上下文（由消费方按需扩展） */
+  [key: string]: unknown;
+}
+
 // 课程章节
 export interface Lesson {
   id: string;
@@ -242,6 +258,14 @@ export interface Lesson {
    * 未声明时由 deriveLessonUnits 视图层派生，实现数据零迁移。
    */
   units?: LessonUnit[];
+  /**
+   * P2 变体支持：所属游戏变体标识。
+   * 缺省视为 'standard'（与 shared/types/elo DEFAULT_VARIANT 语义一致），
+   * 现有标准课程数据零迁移；short-deck / heads-up 变体课程必须显式声明。
+   */
+  variant?: PokerVariant;
+  /** P2 变体支持：变体特定上下文（如单挑按钮位、Ante 结构、浅筹码深度） */
+  variantContext?: VariantContext;
 }
 
 // 级别信息
@@ -322,6 +346,8 @@ export interface LearningTrack {
   color: string;                  // 主题色
   prerequisiteLevelIds?: string[]; // 前置 Level ID 列表（如 ['l1','l2','l3']），未完成时显示提示
   relatedTrackIds?: string[];      // 横向推荐关联路径 ID
+  /** P2 变体支持：所属游戏变体标识，缺省视为 'standard' */
+  variant?: PokerVariant;
 }
 
 // ===== 概念节点（跨模块关联）=====
