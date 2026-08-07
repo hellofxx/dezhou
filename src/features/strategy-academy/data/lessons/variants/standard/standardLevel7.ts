@@ -1,8 +1,8 @@
-import { LOCAL_LESSONS } from '../localLessons';
-import { OPPONENT_PROFILES } from '../opponentProfiles';
-import type { Lesson } from '../../types';
+import { LOCAL_LESSONS } from '../../../localLessons';
+import { OPPONENT_PROFILES } from '../../../opponentProfiles';
+import type { Lesson } from '../../../../types';
 
-export const LEVEL_7_LESSONS: Lesson[] = [
+export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
       {
         id: 'l7-deepstack',
         level: 7,

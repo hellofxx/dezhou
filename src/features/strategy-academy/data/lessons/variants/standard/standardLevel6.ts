@@ -1,7 +1,7 @@
-import { OPPONENT_PROFILES } from '../opponentProfiles';
-import type { Lesson } from '../../types';
+import { OPPONENT_PROFILES } from '../../../opponentProfiles';
+import type { Lesson } from '../../../../types';
 
-export const LEVEL_6_LESSONS: Lesson[] = [
+export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
       {
         id: 'l6-icm',
         level: 6,

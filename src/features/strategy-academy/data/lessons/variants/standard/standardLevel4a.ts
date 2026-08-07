@@ -1,7 +1,7 @@
-import { OPPONENT_PROFILES } from '../opponentProfiles';
-import type { Lesson } from '../../types';
+import { OPPONENT_PROFILES } from '../../../opponentProfiles';
+import type { Lesson } from '../../../../types';
 
-export const LEVEL_4A_LESSONS: Lesson[] = [
+export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
       {
         id: 'l4-range-thinking',
         level: 4,

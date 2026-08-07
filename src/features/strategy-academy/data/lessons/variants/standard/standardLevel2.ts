@@ -1,5 +1,5 @@
-import { OPPONENT_PROFILES } from '../opponentProfiles';
-import type { Lesson, LessonSection } from '../../types';
+import { OPPONENT_PROFILES } from '../../../opponentProfiles';
+import type { Lesson, LessonSection } from '../../../../types';
 
 // ===== l2-3bet-basics 分段常量（引用相等契约：content 与手写 units.sections 共享同一批对象） =====
 const L2_3BET_U1_SECTIONS: LessonSection[] = [
@@ -43,7 +43,7 @@ const L2_3BET_U2_SECTIONS: LessonSection[] = [
   },
 ];
 
-export const LEVEL_2_LESSONS: Lesson[] = [
+export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
       {
         id: 'l2-raise-sizing',
         level: 2,

@@ -1,6 +1,6 @@
-import type { Lesson } from '../../types';
+import type { Lesson } from '../../../../types';
 
-export const LEVEL_5_LESSONS: Lesson[] = [
+export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
       {
         id: 'l5-bankroll',
         level: 5,

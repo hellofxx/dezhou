@@ -304,7 +304,7 @@ describe('curriculum integrity: 变体课程守卫（P2 变体支持）', () => 
     expect([...new Set(dups)]).toEqual([]);
   });
 
-  it('每个变体都有完整的 L3-L8 策略课程', () => {
+  it('每个变体都有完整的 L3-L8 策略课程（L1/L2 由共享基础层承担，见下例）', () => {
     const bad: string[] = [];
     for (const variant of ALL_VARIANTS) {
       for (let level = 3; level <= 8; level++) {
@@ -314,6 +314,21 @@ describe('curriculum integrity: 变体课程守卫（P2 变体支持）', () => 
       }
     }
     expect(bad).toEqual([]);
+  });
+
+  it('变体 L1/L2 经共享基础层回退：short-deck / heads-up 复用标准通用基础课（不重复存储）', () => {
+    // 共享基础层契约：L1/L2 为变体无关通用地基（规则/位置/加注/起手牌），由标准变体承担；
+    // 变体查询 L1/L2 时经 getLessonsByVariantAndLevel 回退引用，避免内容重复，
+    // 同时保证变体学习路径贯通 L1-L8。变体差异从 L3 起由变体专属课程覆盖。
+    for (const variant of ['short-deck', 'heads-up'] as const) {
+      for (const level of [1, 2]) {
+        // 变体 L1/L2 回退后应与标准基础层完全一致（变体无专属 L1/L2）
+        const variantIds = getLessonsByVariantAndLevel(variant, level).map((l) => l.id);
+        const standardIds = getLessonsByVariantAndLevel('standard', level).map((l) => l.id);
+        expect(variantIds, `${variant} L${level} 未回退共享基础层`).toEqual(standardIds);
+        expect(variantIds.length, `${variant} L${level} 共享基础层为空`).toBeGreaterThan(0);
+      }
+    }
   });
 
   it('变体课程 ID 格式正确：l{level} 前缀 + sd/hu 变体标识', () => {

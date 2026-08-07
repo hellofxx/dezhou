@@ -1,6 +1,6 @@
-import type { Lesson } from '../../types';
+import type { Lesson } from '../../../../types';
 
-export const LEVEL_8_LESSONS: Lesson[] = [
+export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
       {
         id: 'l8-pool-tendencies',
         level: 8,

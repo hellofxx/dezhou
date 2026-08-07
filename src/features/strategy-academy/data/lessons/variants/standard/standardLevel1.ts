@@ -1,4 +1,4 @@
-import type { Lesson, LessonSection } from '../../types';
+import type { Lesson, LessonSection } from '../../../../types';
 
 // ===== l1-position 分段常量（引用相等契约：content 与手写 units.sections 共享同一批对象） =====
 const L1_POSITION_U1_SECTIONS: LessonSection[] = [
@@ -55,7 +55,7 @@ const L1_POSITION_U3_SECTIONS: LessonSection[] = [
   },
 ];
 
-export const LEVEL_1_LESSONS: Lesson[] = [
+export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
       {
         id: 'l1-basics',
         level: 1,
