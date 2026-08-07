@@ -75,7 +75,7 @@ additionalPrompt: ""
 
 模块内：
 - src/features/theory-academy/ — 模块根（types.ts 含 TheoryChapter / TheoryLevelInfo / TheorySection / PracticeRecommendation 等；store.ts 独立 persist store；index.ts）
-- src/features/theory-academy/data/levels/ — 标准理论 Level 内容数据（theoryLevel1~9.ts + index.ts 聚合 THEORY_LEVELS）+ 游戏变体 Level 体系（short-deck.ts / heads-up.ts / index.ts 导出 ALL_VARIANT_THEORY_LEVELS 与 getTheoryLevelsByVariant，附 theoryIntegrity.test.ts）
+- src/features/theory-academy/data/levels/ — 理论 Level 内容数据（index.ts 为兼容层 re-export THEORY_LEVELS；variants/ 下三变体平级子目录：standard/、short-deck/、heads-up/，各含 standardLevel1~9.ts / shortDeckLevel1~9.ts / headsUpLevel1~9.ts（每 Level 单文件，导出 `<VARIANT>_LEVEL_<N>_CHAPTERS`）与 index.ts 聚合 standardLevels / shortDeckLevels / headsUpLevels；variantRules.ts 集中维护变体规则；index.ts 导出 ALL_VARIANT_THEORY_LEVELS 与 getTheoryLevelsByVariant，附 theoryIntegrity.test.ts）
 - src/features/theory-academy/data/theoryIntegrity.test.ts — 数据完整性守卫
 - src/features/theory-academy/utils/ — theoryProgress.ts（纯函数）+ quizOrder.ts（选项排序出口）+ quizOrder.test.ts
 - src/features/theory-academy/hooks/ — useTheory.ts
@@ -87,13 +87,13 @@ additionalPrompt: ""
 - src/features/progress/store.ts — 消费 updateElo / recordAnswer / recordTrainingDay（设计内中枢引用）
 
 ## Workflows
-1. 新增章节时：在对应 theoryLevelN.ts 添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验
-2. 新增 Level 时：新建 theoryLevelN.ts → 在 levels/index.ts 注册（含 practiceRecommendations）→ 更新 unlockRequirement 链
-3. 调整实践推荐时：编辑 levels/index.ts 的 practiceRecommendations → 同步 strategy-academy curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS（须经 platform-dev）
+1. 新增章节时：在对应 variants/standard/standardLevelN.ts（标准变体）或 variants/short-deck/shortDeckLevelN.ts / variants/heads-up/headsUpLevelN.ts（变体）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验
+2. 新增 Level 时：新建 variants/<variant>/<variant>LevelN.ts → 在对应 variants/<variant>/index.ts 注册（含 practiceRecommendations）→ 更新 unlockRequirement 链
+3. 调整实践推荐时：编辑 variants/standard/index.ts（standard）或 variants/<variant>/index.ts（变体）的 practiceRecommendations → 同步 strategy-academy curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS（须经 platform-dev）
 4. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate（仅注入新字段默认值）+ 更新 store.persist-shape.test.ts 快照与 store.migrate.test.ts 迁移用例
 5. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `theory.*` 命名空间
 6. **内容扩充标准工作流（每章 7 步）**：
-   - Step 1 读取现有章节数据（theoryLevelN.ts 对应章节）
+   - Step 1 读取现有章节数据（variants/<variant>/<variant>LevelN.ts 对应章节）
    - Step 2 对照教材清单逐段审核，输出差距清单（缺失/不准确/需推导）
    - Step 3 增量修改，新增段落注释标记来源 `/* 概念源自: MSSA Ch.2 */`（或 content 内脚注式标注）
    - Step 4 新增/修订小测题（3-5 题/章，记忆/理解/分析三类题型覆盖）

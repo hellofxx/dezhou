@@ -8,6 +8,81 @@
 
 ## [Unreleased] - 2026-08-07
 
+### 三种游戏变体数据结构对齐重构（standard / short-deck / heads-up）
+
+> 目标：让标准德州、短牌、单挑三种变体在两大学院（理论学院 / 策略学院）中以完全相同的「变体 → Level → 单文件」结构组织，执行统一命名规则，降低维护成本。
+
+#### 理论学院（theory-academy · `data/levels/`）
+
+- **standard 归位**：`theoryLevel1.ts`~`theoryLevel9.ts` 迁移至 `variants/standard/standardLevel1.ts`~`standardLevel9.ts`，导出统一为 `STANDARD_LEVEL_N_CHAPTERS`；Level 外壳集中到 `variants/standard/index.ts`（导出 `standardLevels`）。原 `data/levels/index.ts` 保留为兼容层（re-export `THEORY_LEVELS`），消费方零改动。
+- **short-deck / heads-up 拆分**：原单文件 `variants/short-deck.ts`（≈2751 行）与 `variants/heads-up.ts`（≈2714 行）拆分为 `variants/short-deck/shortDeckLevel1.ts`~`shortDeckLevel9.ts`、`variants/heads-up/headsUpLevel1.ts`~`headsUpLevel9.ts`（每 Level 单文件），各 `index.ts` 聚合导出 `shortDeckLevels` / `headsUpLevels`。
+- **规则抽离**：新增 `variants/variantRules.ts` 集中维护 `shortDeckRules` / `headsUpRules`（单一事实源），各 level 文件统一引用。
+
+#### 策略学院（strategy-academy · `data/lessons/`）
+
+- **standard 归位**：`data/levels/level1.ts`~`level8.ts`（含 `level4a.ts` / `level4b.ts`）迁移至 `lessons/variants/standard/standardLevel1.ts`~`standardLevel8.ts`（含 `standardLevel4a.ts` / `standardLevel4b.ts`），导出统一为 `STANDARD_LEVEL_N_LESSONS`；Level 外壳集中到 `lessons/variants/standard/index.ts`（导出 `standardLevels`）。原 `data/levels/index.ts` 保留为兼容层（re-export `LEVELS`），`data/courses.ts` 不变，消费方零改动。
+- **short-deck / heads-up 拆分**：原单文件 `lessons/variants/short-deck.ts`（≈3600 行）与 `lessons/variants/heads-up.ts`（≈2600 行）拆分为 `lessons/variants/short-deck/shortDeckLevel3.ts`~`shortDeckLevel8.ts`、`lessons/variants/heads-up/headsUpLevel3.ts`~`headsUpLevel8.ts`（每 Level 单文件，L4 含 L4A+L4B 全部 level-4 课程），各 `index.ts` 聚合导出 `SHORT_DECK_STRATEGY_COURSES` / `HEADS_UP_STRATEGY_COURSES`。
+- **变体索引**：`lessons/variants/index.ts` 的 standard 来源由 `LEVELS` 改为直接引用 `./standard` 的 `standardLevels`，三变体完全平级。
+- **共享基础层（变体 L1/L2 回退）**：新增「共享基础层」契约——策略变体（short-deck / heads-up）的 L1/L2 通用地基（规则/位置/加注/起手牌）不重复存储，由标准变体承担；`getLessonsByVariantAndLevel(variant, level)` 在查询变体 L1/L2 时自动回退引用标准共享基础层，保证变体学习路径贯通 L1-L8 且零内容重复。变体差异（牌型重排 / Ante 结构 / 位置动态）从 L3 起由变体专属课程覆盖。
+- **兼容层精简**：`data/courses.ts` 由 `export from './levels'` 改为直接 `export from './lessons/variants/standard'`，消除「courses → levels → variants/standard」三层级联，改为两条平行直达路径（`courses.ts` 供对外消费、`data/levels/index.ts` 供内部数据文件），均直接指向 `variants/standard`，消费方零改动。
+
+#### 架构说明
+
+- **统一命名规则**：Level 内容文件 `<variant>Level<N>.ts` → 导出 `<VARIANT>_LEVEL_<N>_CHAPTERS` / `<VARIANT>_LEVEL_<N>_LESSONS`（理论）/（策略）；变体聚合导出 `<variant>Levels` / `<VARIANT>_STRATEGY_COURSES`。
+- **兼容层保证零破坏**：理论 `data/levels/index.ts`（THEORY_LEVELS）、策略 `data/levels/index.ts` 与 `data/courses.ts`（LEVELS）均保留为 re-export，store / 组件 / 跨模块（progress/dailyTrainingPlan.ts）/ 守卫测试全部零改动。
+- **测试兼容**：`theoryProgress.test.ts` 直接 import `variants/heads-up` 解析到新目录 `index.ts`，行为不变。
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、64 files 463 tests ✅
+- 理论学院变体守卫 `variants/theoryIntegrity.test.ts`（8 tests）、标准守卫 `theoryIntegrity.test.ts`（7 tests）通过 ✅
+- 策略学院课程守卫 `curriculumIntegrity.test.ts`（20 tests，含新增的「变体 L1/L2 经共享基础层回退」校验）、学习轨道守卫 `learningTracks.test.ts`（6 tests）通过 ✅
+
+---
+
+## [Unreleased] - 2026-08-07
+
+### 短牌（Short Deck）理论学院 T1-T9 + 策略学院 L3-L8 内容补全
+
+> 执行模式：子代理协作（theory-academy-dev / strategy-academy-dev 内容编写 + platform-dev 跨模块协调），主代理按模块规范组织执行并复核验收。
+
+#### 新增（theory-academy · 短牌 T1-T9 全部 20 章）
+
+- `data/levels/variants/short-deck.ts` T1-T9 骨架章节填充完整内容（objectives + content + quiz + practiceRecommendations），以短牌特有规则为锚点（36 张牌、同花 > 葫芦、三条 > 顺子、A-6-7-8-9 最小顺子、AK 最强非对子、outs 按 36 张重算）：
+  - **T1 短牌概率基础（t1sd）**：组合数（36 张牌 630 种起手、对子密度 8.6%）/ Outs 重算（同花 = 9 − 已见该花色）/ 波动（高波动根源、≥150 买入）
+  - **T2 短牌赔率与 EV（t2sd）**：Ante 制底池赔率 / 隐含赔率（同花顺子佳、set mining 门槛升）/ 反向隐含赔率（边缘成牌 RIO 放大）
+  - **T3 短牌起手与位置（t3sd）**：起手重排（对子 > AK）/ 同花价值提升 / 位置调整（IP 追听、OOP 控池）
+  - **T4 短牌范围（t4sd）**：范围组成（对子同花优先）/ 权益稀释（多路池）/ 挡牌效应
+  - **T5 短牌 GTO（t5sd）**：GTO 适配（频率基准调整）/ 诈唬频率（半诈唬 EV 高）
+  - **T6 短牌下注（t6sd）**：下注尺（湿润面大注保护）/ 连续价值下注
+  - **T7 短牌对手（t7sd）**：常见错误模式（标准玩家认知偏差）/ 策略调整（思维转换）
+  - **T8 短牌心理（t8sd）**：波动承受 / 情绪控制（tilt 防线）
+  - **T9 短牌大师（t9sd）**：系统整合（决策闭环）/ 职业玩家案例
+- 每章含完整数学推导、≥2 权威教材/短牌规则引用、反直觉点 highlight、pro-tip 口诀、4-5 道章末小测
+- T1-T9 `practiceRecommendations` 对接短牌实践课程（l3sd-intro / l3sd-cbet / l3sd-check-raise / l4sd-nuts-equity / l4sd-preflop-ranges / l4sd-blocker-bluff / l4sd-gto-fundamentals / l4sd-solver-readout / l3sd-donk / l8sd-exploit-i / l8sd-exploit-ii / l5sd-tilt-control / l5sd-bankroll / l7sd-deep-stack / l7sd-shallow-stack）
+
+#### 新增（strategy-academy · 短牌 L3-L8 全部 16 课）
+
+- `data/lessons/variants/short-deck.ts` L3-L8 骨架课程填充完整内容（content + quiz + examples + practice），与已完成的 `l3sd-intro` 风格一致：
+  - **L3 翻后策略**：短牌持续下注（l3sd-cbet，干燥面高频小注/湿滑面大注保护）/ 短牌 Donk（l3sd-donk，OOP 范围占优时主动下注）/ 短牌过牌加注（l3sd-check-raise，两极化 x/r 范围）
+  - **L4A 范围与 EV**：短牌翻前范围（l4sd-preflop-ranges，对子同花优先）/ 坚果与权益计算（l4sd-nuts-equity，outs 按 36 张）/ 阻断牌诈唬（l4sd-blocker-bluff）
+  - **L4B GTO**：短牌 GTO 基础（l4sd-gto-fundamentals，频率基准调整）/ Solver 结果解读（l4sd-solver-readout）
+  - **L5 职业素养**：短牌资金管理（l5sd-bankroll，≥150 买入）/ 短牌情绪控制（l5sd-tilt-control）
+  - **L6 锦标赛**：短牌锦标赛一（l6sd-tourney-i，筹码节奏）/ 二（l6sd-tourney-ii，ICM 泡沫）
+  - **L7 现金桌**：短牌深筹码（l7sd-deep-stack，价值提取与 RIO）/ 短牌浅筹码（l7sd-shallow-stack，Push/Fold）
+  - **L8 高级剥削**：短牌剥削一（l8sd-exploit-i，认知偏差收割）/ 二（l8sd-exploit-ii，动态博弈）
+- 每课含 4-5 道课后测验（含 explanation）、1 个 HandExample（correctDecision/commonMistake/evLoss）、3 道 PracticeQuestion（难度分档 + evImpact/evLoss + relatedLessonId）
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、64 files 463 tests ✅
+- 理论学院变体守卫 `variants/theoryIntegrity.test.ts` 通过（T1-T9 全覆盖、t{level}sd- 格式）✅
+- 策略学院课程守卫 `curriculumIntegrity.test.ts` 通过（变体 ID 唯一、l{level}sd- 格式、variantContext 合法）✅
+
+---
+
+## [Unreleased] - 2026-08-07
+
 ### 单挑（Heads-Up）策略学院 L3-L8 课程内容补全
 
 > 执行模式：子代理协作（strategy-academy-dev 内容编写 + platform-dev 跨模块协调），主代理按 strategy-academy-dev 规范组织执行并复核验收。

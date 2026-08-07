@@ -96,8 +96,9 @@ additionalPrompt: ""
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 - src/features/strategy-academy/ — 模块根（types.ts 含 Lesson / LevelInfo / LearningTrack 等类型；store.ts academy store，persist version 以该文件配置为准；index.ts）
-- src/features/strategy-academy/data/ — 静态课程与元数据（courses.ts 为 re-export 兼容层，实际课程已拆分至 levels/ 子目录 + lessons/variants/ 变体课程（heads-up/short-deck）；另含基础入门/概念图谱/学习轨道/本土化路径/对手形象数据）
-- src/features/strategy-academy/data/levels/ — 分级课程数据（l1 ~ l8，L4 拆分为 l4a/l4b，含 index.ts barrel）
+- src/features/strategy-academy/data/ — 静态课程与元数据（courses.ts 与 data/levels/index.ts 均为直接 re-export `standardLevels as LEVELS` from `./lessons/variants/standard` 的平行直达入口，不互相级联；实际课程已拆分至 lessons/variants/standard/（每 Level 单文件 standardLevel1~8.ts，L4 拆分为 standardLevel4a/4b.ts）与 lessons/variants/ 变体课程（short-deck/、heads-up/ 子目录，各含每 Level 单文件）；另含基础入门/概念图谱/学习轨道/本土化路径/对手形象数据）
+- **共享基础层契约**：变体（short-deck / heads-up）的 L1/L2 不重复存储，经 `lessons/variants/index.ts` 的 `getLessonsByVariantAndLevel` 回退引用标准共享基础层（L1/L2 为变体无关通用地基），保证变体学习路径贯通 L1-L8 且零内容重复；变体专属课程覆盖 L3-L8。契约由 `data/curriculumIntegrity.test.ts` 守卫固化。新增变体课程时：L1/L2 勿复制标准内容，L3+ 放对应变体 Level 文件即可。
+- src/features/strategy-academy/data/levels/ — 兼容层（index.ts re-export LEVELS，指向 lessons/variants/standard/index.ts）
 - src/features/strategy-academy/data/localLessons/ — 本土低级别盈利路径课程内容
 - src/features/strategy-academy/utils/ — 难度自适应（adaptiveDifficulty.ts）/ 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具 / 选项排序治理（quizShuffle.ts）
 - src/features/strategy-academy/hooks/ — useAcademy 等消费 hook

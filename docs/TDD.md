@@ -205,7 +205,7 @@ src/
 │   │
 │   ├── theory-academy/            # 理论学院模块（2026-07 新增，设计见 5.8b）
 │   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLevelCard / PracticeBridgeCard / TheoryLearningMap 等
-│   │   ├── data/                  # levels/（index.ts + theoryLevel1.ts ~ theoryLevel9.ts）+ theoryIntegrity.test.ts
+│   │   ├── data/                  # levels/（index.ts 兼容层 + variants/ 三变体子目录 + theoryIntegrity.test.ts）
 │   │   ├── hooks/                 # useTheory
 │   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序出口）/ getLevelTargetChapter
 │   │   ├── index.ts
@@ -1017,7 +1017,7 @@ interface DailyRecommendation {
 
 **关键设计**：
 
-1. **课程结构**：课程数据原存储在 `courses.ts`，现已拆分到 `data/levels/` 目录（`index.ts` + `level1.ts` ~ `level8.ts`，其中 level4 拆为 `level4a.ts` / `level4b.ts`），`courses.ts` 保留为 re-export 兼容层。每级包含多个课时（lesson）；lesson 类型包括理论课、Drill 实践课、概念课。`CourseView` 阅读阶段采用**小节锚点式微观闭环**（2026-08 P1 重构，替代原三段式 Tabs）：课程页 = 先行组织者卡（LessonIntroCard 路线图）→ 小节序列（SectionNav sticky 锚点导航 + 概念块与内嵌牌例同屏 + 顺序推进 CTA「进入下一节 / 进入实战练习 / 完成学习」）→ 综合实战（PracticeDrill）→ 课后测验（LessonQuiz）。小节由 `utils/lessonUnits.ts` 的 `deriveLessonUnits` 派生（显式 `lesson.units` 字段优先，否则按 content 的 heading 分节、examples 按语义配对 exampleId）；`location.hash`（`#uN`）支持直达小节，`handleRestart` 以 `history.replaceState` 清理 hash 残留。
+1. **课程结构**：课程数据原存储在 `courses.ts`，现已拆分到 `data/lessons/variants/standard/` 目录（`index.ts` 聚合 + `standardLevel1.ts` ~ `standardLevel8.ts`，其中 L4 拆为 `standardLevel4a.ts` / `standardLevel4b.ts`）；`data/levels/index.ts` 与 `data/courses.ts` 保留为 re-export 兼容层。每级包含多个课时（lesson）；lesson 类型包括理论课、Drill 实践课、概念课。`CourseView` 阅读阶段采用**小节锚点式微观闭环**（2026-08 P1 重构，替代原三段式 Tabs）：课程页 = 先行组织者卡（LessonIntroCard 路线图）→ 小节序列（SectionNav sticky 锚点导航 + 概念块与内嵌牌例同屏 + 顺序推进 CTA「进入下一节 / 进入实战练习 / 完成学习」）→ 综合实战（PracticeDrill）→ 课后测验（LessonQuiz）。小节由 `utils/lessonUnits.ts` 的 `deriveLessonUnits` 派生（显式 `lesson.units` 字段优先，否则按 content 的 heading 分节、examples 按语义配对 exampleId）；`location.hash`（`#uN`）支持直达小节，`handleRestart` 以 `history.replaceState` 清理 hash 残留。
 
    **L4 拆分说明**：原 Level 4（GTO 与博弈论基础）内容过多，拆分为：
    - **L4A（范围与EV思维）**：覆盖翻前范围构造、EV 计算与应用
@@ -1100,7 +1100,7 @@ interface DailyRecommendation {
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point）+ content（内联中文，与策略学院课程正文口径一致，不进 i18n）
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
-2. **内容体系**：9 Level 共 31 章、155 道章末小测（2026-08 系统性扩充后每章满 5 题；扩充前 124 题），数据按 Level 拆分为 `data/levels/theoryLevel1.ts ~ theoryLevel9.ts`（课程内容数据文件放宽 200 行限制；扩充后单文件约 350-500 行），`data/levels/index.ts` 聚合为 `THEORY_LEVELS`。扩充标准（2026-08 起为硬性契约）：
+2. **内容体系**：9 Level 共 31 章、155 道章末小测（2026-08 系统性扩充后每章满 5 题；扩充前 124 题），数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件放宽 200 行限制），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。扩充标准（2026-08 起为硬性契约）：
    - 每章 content 覆盖全部 7 类段落（text/heading/highlight/key-point/formula/example/pro-tip），禁止纯 text 堆砌
    - 关键公式必须展示推导过程而非仅结论（例：MDF 推导 `对手诈唬 EV = f×P − (1−f)×B = 0 → f = P/(P+B) = 1/(1+b)`；几何尺度三街公式 `x = ((1+2·SPR)^(1/3)−1)/2`）
    - 每章至少 2-3 个不同场景实战牌例（翻前/翻后、价值/诈唬、浅/深筹码），标注反直觉点与认知误区（highlight 段落）
@@ -1143,7 +1143,7 @@ interface DailyRecommendation {
 - 150ms 后恢复渲染新章节内容（ComponentSkeleton 过渡）
 
 **变体课程体系**（P2 变体支持，2026-08）：
-- 数据位置：`data/levels/variants/`（`short-deck.ts` / `heads-up.ts` / `index.ts` / `theoryIntegrity.test.ts`）；标准系列复用主 `THEORY_LEVELS` 不重复存放
+- 数据位置：`data/levels/variants/`（`variantRules.ts` + `standard/`、`short-deck/`、`heads-up/` 三变体平级子目录 + `index.ts` + `theoryIntegrity.test.ts`）；三变体均按「每 Level 单文件」组织（如 `short-deck/shortDeckLevel1.ts` ~ `shortDeckLevel9.ts`），各 `index.ts` 聚合导出 `standardLevels` / `shortDeckLevels` / `headsUpLevels`
 - 索引：`variants/index.ts` 导出 `ALL_VARIANT_THEORY_LEVELS`（标准 + 短牌 + 单挑总索引）与 `getTheoryLevelsByVariant(variant)` 查询函数（TheoryHome 按 activeVariant 过滤 Level 列表）
 - ID 命名：Level `t{level}{suffix}`、章节 `t{level}{suffix}-{topic}`（短牌 suffix=sd、单挑 suffix=hu），与标准系列 `t{level}` 隔离；变体完整性守卫（`variants/theoryIntegrity.test.ts`，8 用例：ID 全局唯一/前缀格式/T1-T9 全覆盖/order 连续/eloDimension 合法/tier 归属）
 - 内容标准与标准系列同构：每章 content 覆盖全部 7 类段落、公式含推导、实战案例含具体牌面/位置/底池、教材引用采用「（概念源自：《教材名》作者 Ch.XX）」脚注式标注
@@ -1616,8 +1616,11 @@ persist(
 
 **1. 数据层结构**
 - 在模块 data 目录下创建 `variants/` 子目录
-- 每个变体对应一个 `<variant>.ts` 文件（如 theory-academy 的 `short-deck.ts` / `heads-up.ts`）
+- 每个变体对应一个 `<variant>/` 子目录，内含「每 Level 单文件」+ `index.ts` 聚合（如 theory-academy 的 `variants/standard/`、`short-deck/`、`heads-up/`，分别含 `standardLevel1.ts`~`standardLevel9.ts` 等；导出统一为 `<VARIANT>_LEVEL_<N>_CHAPTERS` / `<VARIANT>_LEVEL_<N>_LESSONS`）
+- 变体间共享规则抽离到 `variants/variantRules.ts`（如 theory-academy 的 `shortDeckRules` / `headsUpRules`）
 - 新增 `variants/index.ts` 汇总导出全部变体集合与辅助函数
+
+**共享基础层契约（strategy-academy）**：策略变体的 L1/L2（规则/位置/加注大小/起手牌等变体无关的通用地基）不重复存储，由标准变体承担；`getLessonsByVariantAndLevel(variant, level)` 在查询变体 L1/L2 时自动回退引用标准共享基础层，保证变体学习路径贯通 L1-L8 且零内容重复。变体差异（牌型重排 / Ante 结构 / 位置动态）从 L3 起由变体专属课程覆盖。理论学院因各变体概率/范围/赔率均不同，其变体全覆盖 T1-T9 不适用该回退。契约由 `curriculumIntegrity.test.ts` 守卫固化。
 
 **2. ID 命名规范**
 - Level ID：`t{level}<suffix>`（标准系列无 suffix，短牌 suffix=`sd`，单挑 suffix=`hu`）
