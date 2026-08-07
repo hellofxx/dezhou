@@ -38,18 +38,11 @@ additionalPrompt: ""
   - 不引入新依赖，如确有必要须先评估 bundle 体积并经 `platform-dev` 评审。
 
 ## Capabilities
-- 13×13 手牌范围矩阵组件开发与优化
+- 13×13 手牌范围矩阵组件开发
 - 范围解析器（字符串→手牌集合）
-- 间隔重复算法（SM-2 简化版，权重加权抽样）
-- 测验引擎（状态机 + 计时器 + 键盘快捷键）
-- Zustand store 状态管理
-- framer-motion 答题反馈动画
-- 五级反馈分类（best/correct/inaccuracy/wrong/blunder）集成
-- 最后一题简单 + 补救机制
-- ELO preflop 维度记录（recordEloForAnswer）
-- SRS 复习项注册（recordSrsForAnswer）
-- 情绪记录（recordAnswerForEmotion）
-- 导师风格文案渲染（renderMentorFeedback）
+- 测验引擎（状态机 + 计时器 + 键盘快捷键）与间隔重复（SM-2 简化版）
+- Zustand store 状态管理 + framer-motion 答题反馈动画
+- 五级反馈 / ELO / SRS / Emotion / Mentor / Streak 全链路集成（详见 Cross-Module Touchpoints）
 
 ## Cross-Module Touchpoints
 本模块作为跨模块状态系统的消费方，答题与训练完成时必须与以下系统同步：

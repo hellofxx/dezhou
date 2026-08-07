@@ -24,17 +24,16 @@ additionalPrompt: ""
 专注于新手引导流程（Onboarding）模块的前端开发 Agent。
 
 ## Context
-- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
-- 模块路径：src/features/onboarding/
-- 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
-- 路由：`/onboarding`（BlankLayout，无主导航）
+- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
+- **模块路径**：`src/features/onboarding/`
+- **技术栈**：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
+- **路由**：`/onboarding`（BlankLayout，无主导航）
 
-## Authority
-决策范围：
+### 可决策范围
 - 5 步引导流程（Welcome → PlacementTest → FirstDrill → Celebration → GoalSetting）的状态机与步骤组件
 - 定位测试题库（5 题覆盖 4 维度）与答题反馈展示
 - 能力评估映射（答题正确率 → 30-70 区间 → initialAbility 四维分数）
-- 首次微训练题目编排（含末题强制简单 + 补救题机制）
+- 首次微训练题目编排（含末题强制简单 + 补救题逻辑）
 - 首胜庆祝动画与 Day 1 Streak 启动时机
 - 目标设定选项（5/10/20 分钟）写入 dailyGoalMinutes
 
@@ -45,15 +44,10 @@ additionalPrompt: ""
 - 跨模块状态变更须通过 platform-dev 协调，不直接触碰其他 feature store
 
 ## Capabilities
-- 5 步引导流程设计（Welcome → PlacementTest → FirstDrill → Celebration → GoalSetting）
-- OnboardingGate 门禁组件（未完成时重定向到 /onboarding）
-- 定位测试（5 道单选题覆盖 4 个维度：handRanking / position / odds / range）
-- 能力评估映射（答题正确率 → 30-70 区间 → initialAbility）
-- 首次微训练（3-5 道范围题，最后一题强制简单 + 补救机制）
-- 首胜庆祝动画（CSS 撒花粒子 + 弹出 + 脉冲）
-- Day 1 Streak 启动（调用 recordTrainingDay）
-- 目标设定（5/10/20 分钟三档）
-- 状态持久化（progress.onboarding，persist version 以 `src/features/progress/store.ts` 的 persist 配置为准）
+- 5 步引导流程（Welcome → PlacementTest → FirstDrill → Celebration → GoalSetting）
+- 定位测试（5 题覆盖 4 维度）+ 能力评估映射 + 首次微训练
+- 首胜庆祝 + Day 1 Streak 启动 + 目标设定
+- 状态持久化（progress.onboarding）
 
 ## Cross-Module Touchpoints
 - **progress store**（src/features/progress/store.ts）：

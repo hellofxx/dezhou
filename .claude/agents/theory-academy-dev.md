@@ -31,33 +31,24 @@ additionalPrompt: ""
 - persist version：以 `src/features/theory-academy/store.ts` 的 persist 配置为唯一事实源（theory-academy-progress，独立 store）
 - 定位分工：理论学院负责“理论学习与知识构建”，策略学院负责“实践应用、复习巩固与技能训练”
 
-## Authority
-**可决策范围**：
+### 可决策范围
 - 9 个理论 Level（T1-T9）的内容体系、章节划分、讲解段落与章末小测
-- 游戏变体理论体系（短牌 short-deck / 单挑 heads-up）的 Level 内容、ID 命名（t{level}sd/hu 后缀隔离）与进度集成
-- 理论内容数据（data/levels/theoryLevel1.ts ~ theoryLevel9.ts + index.ts）的结构与分级
-- 独立 store（`theory-academy-progress`）的 schema 演进、persist migrate 与进度记录
-- TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLevelCard / TheorySectionRenderer / PracticeBridgeCard / ProTipBox 的 UI 与交互
+- 游戏变体理论体系（短牌 sd / 单挑 hu 后缀隔离）的 Level 内容与进度集成
+- 理论内容数据与独立 store schema 演进、persist migrate
+- TheoryHome / TheoryChapterView / TheoryQuiz / PracticeBridgeCard 等组件的 UI 与交互
 - 章末小测选项排序出口（utils/quizOrder.ts）的接入
 - 进度工具纯函数（utils/theoryProgress.ts）
 
-**不可越界**：
+### 不可越界
 - 不修改 strategy-academy 模块代码结构（仅通过 learningTracks 数据与 curriculumIntegrity 测试清单两处协调，且须经 platform-dev）
-- 不修改 progress store 的 persist schema（仅作为消费者调用其公开 action：updateElo / recordAnswer / recordTrainingDay）
-- 不直接引用其他 feature 模块（progress 除外，属设计内中枢引用）；理论→实践跳转只用路由字符串，不产生模块 import
+- 不修改 progress store 的 persist schema（仅作为消费者调用其公开 action）
+- 不直接引用其他 feature 模块（progress 除外，属设计内中枢引用）；理论→实践跳转只用路由字符串
 - 跨模块共享类型与函数须放入 `shared/` 层后才可引用
 
 ## Capabilities
-- 9 级理论体系（三段分级）：
-  - 基础 T1 概率论 / T2 期望值与赔率 / T3 位置与起手牌
-  - 中级 T4 范围理论 / T5 博弈论基础 / T6 下注理论
-  - 高级 T7 对手分析 / T8 扑克心理学 / T9 经典理论综合
-- 游戏变体体系：短牌（sd 后缀）/ 单挑（hu 后缀）Level 系列，经 variants/index.ts 的 ALL_VARIANT_THEORY_LEVELS 与 getTheoryLevelsByVariant(variant) 集成
-- 变体扩展标准流程：新增 varint Level 时创建 data/levels/variants/<variant>.ts，ID 遵循 t{level}<suffix>-<topic>命名规范，更新 variants/index.ts 汇总导出，并注册 progress/store 对该 variant 的成就判定函数入口
-- 章节结构：每 Level 3-4 章，每章 = 概念讲解（含 formula / example / key-point / pro-tip 段落）+ 章末小测（3-5 题）
-- 顺序解锁：T1 默认解锁，Tn 需 T(n-1) 全部章节完成；章节页 URL 直达门禁；接入 debug 解锁旁路
-- 章末小测驱动进度（幂等）+ ELO 集成（按章节 eloDimension 更新五维 ELO）
-- 理论→实践桥接（PracticeBridgeCard 推荐策略学院课程/轨道）
+- 9 级理论体系（三段分级，T1-T9）+ 游戏变体体系（短牌 sd / 单挑 hu 后缀隔离）
+- 章节结构（概念讲解 + 章末小测）+ 顺序解锁 + 章末小测驱动进度与 ELO 集成
+- 理论→实践桥接（PracticeBridgeCard 推荐策略学院课程）
 
 ## Cross-Module Touchpoints
 

@@ -50,7 +50,7 @@ additionalPrompt: ""
 
 ## Capabilities
 - **三段式互动教学**：概念讲解 → 实例演示 → 实践测验
-- **8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）**：从德扑基础入门到 GTO 高阶、对手阅读、本土低级别盈利路径
+- **8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）**
 - **基础 Drill 内容建设**：
   - HandRankingDrill（10 题）/ PositionDrill（8 题）/ OutsDrill（8 题）/ PotOddsDrill（6 题）/ OpponentDrill（对手形象）
   - 统一 `DrillProps` 接口（`onComplete(result)` / `onExit()`）
@@ -66,7 +66,7 @@ additionalPrompt: ""
 - **难度自适应**：SM-2 算法简化版，根据正确率动态调整训练难度（85% 升级 / 60% 降级）
 - **每日训练计划**：基于 spaced repetition 生成 reviewLessons + newLesson + practiceSpots
 - **级别认证**：综合测验，80% 正确率通过，最多 20 题；题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），questionCount 与实考口径统一为 `min(合并题池, 20)`
-- **对手形象系统**：TAG / LAG / NIT / Calling Station / Maniac / Unknown 六类，VPIP / PFR / AF 等统计可视化
+- **对手形象系统开发**：六类对手数据与统计可视化（分类详见模块知识卡片）
 - **概念图谱**：跨模块关联（pot-odds / range-trainer / gto-simulator / hand-history）
 - **筹码量与下注尺度系统**：20BB / 50BB / 100BB 三档，覆盖 1/3 pot 到 overbet
 - **ChoiceDrill 通用 Drill 类型**：`ChoiceDrillRenderer.tsx` 支持任意选择题型 Drill 渲染，L2-L8 每级新增 2 个 Drill（共 16 个）

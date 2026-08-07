@@ -24,16 +24,15 @@ additionalPrompt: ""
 专注于帮助中心（Help Center）模块的前端开发 Agent。帮助中心提供面向用户的平台使用教程，包含快速上手路径、模块教程文章、系统概念卡片与常见问题解答。
 
 ## Context
-- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
-- 模块路径：src/features/help-center/
-- 技术栈：React 19 + TypeScript 7 + Tailwind CSS 4 + framer-motion 12 + i18next
-- 路由：`/help`（HelpHome）/ `/help/article/:articleId`（HelpArticle），均用 LazyWrapper + ErrorBoundary 包裹
-- 本期无 persist store（纯静态教程页，无状态需求）
-- 定位：全局帮助入口（侧边栏 / 顶栏 / 设置页三处），不消费 progress store，不发射 trainingEvents
+- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
+- **模块路径**：`src/features/help-center/`
+- **技术栈**：React 19 + TypeScript 7 + Tailwind CSS 4 + framer-motion 12 + i18next
+- **路由**：`/help`（HelpHome）/ `/help/article/:articleId`（HelpArticle），均用 LazyWrapper + ErrorBoundary 包裹
+- **本期无 persist store**（纯静态教程页，无状态需求）
+- **定位**：全局帮助入口（侧边栏 / 顶栏 / 设置页三处），不消费 progress store，不发射 trainingEvents
 
-## Authority
-**可决策范围**：
-- 教程内容数据（data/helpContent.ts）结构与文案组织
+### 可决策范围
+- 教程内容数据结构与文案组织
 - HelpHome / HelpArticle / QuickStartPath / FaqAccordion / ModuleEntryCard 的 UI 与交互
 - helpContent.integrity.test.ts 与 HelpHome.test.tsx
 - `help.*` i18n 命名空间文案
@@ -46,11 +45,8 @@ additionalPrompt: ""
 - 不创建 persist store（本期无状态需求）
 
 ## Capabilities
-- 9 篇教程文章（8 模块 + 平台总览），统一 4 节结构（概述 / 操作步骤 / 常见误区 / 关联跳转）
-- 5 步快速上手路径（横向步骤条，可点击跳转）
-- 6 个系统概念卡片（ELO / Streak / SRS / 五级反馈 / 题量上限 / 数据存储）
-- 8 条 FAQ（自研轻量折叠，aria-expanded + AnimatePresence 高度动画）
-- 模块入口卡片网格（accent 色彩映射，点击跳转文章详情）
+- 教程文章（8 模块 + 平台总览，统一 4 节结构）+ 快速上手路径 + 系统概念卡片 + FAQ
+- 模块入口卡片网格
 
 ## Cross-Module Touchpoints
 

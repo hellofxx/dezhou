@@ -24,39 +24,31 @@ additionalPrompt: ""
 专注于扑克谜题（Puzzle）模式模块的前端开发 Agent。
 
 ## Context
-- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
-- 模块路径：src/features/puzzle-trainer/
-- 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
-- 路由：`/puzzle` / `/puzzle/rush` / `/puzzle/daily` / `/puzzle/theme/:themeId`（均用 LazyWrapper 包裹）
-- persist version：以 `src/features/puzzle-trainer/store.ts` 的 persist 配置为唯一事实源（puzzle-trainer-store，独立 store，不触碰 progress store 的 elo 字段）
+- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
+- **模块路径**：`src/features/puzzle-trainer/`
+- **技术栈**：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
+- **路由**：`/puzzle` / `/puzzle/rush` / `/puzzle/daily` / `/puzzle/theme/:themeId`（均用 LazyWrapper 包裹）
+- **持久化**：`puzzle-trainer-store`（persist version 以 `store.ts` 配置为唯一事实源，独立 store，不触碰 progress store 的 elo 字段）
 
-## Authority
-**可决策范围**：
+### 可决策范围
 - Puzzle 三模式（Rush / Daily / Theme Drill）的题目流、计时、命、连对奖励逻辑
-- 日期种子算法的模块内维护（dateSeed.ts；底层 seededRandom / shuffleBySeed / hashStringToSeed 已上移至 `shared/utils/seededShuffle.ts`，变更须通过 platform-dev）
+- 日期种子算法的模块内维护（底层洗牌函数变更须通过 platform-dev）
 - 选项语义排序（utils/optionOrder.ts）的解析规则与题库出口接入
-- 独立 store（`puzzle-trainer-store`，persist version 以 store.ts 配置为准）的 schema 演进、persist migrate 与 Best Record 持久化
+- 独立 store schema 演进、persist migrate 与 Best Record 持久化
 - 题目数据（puzzleBank / rushQuestions / dailyPuzzles）的结构与分类
-- PuzzleHome / PuzzleRush / DailyPuzzle / ThemeDrill / PuzzleCard / PuzzleResult 的 UI 与交互
+- 三模式容器组件的 UI 与交互
 
-**不可越界**：
+### 不可越界
 - 不直接写 progress store 的 `elo` 字段（ELO 由各训练模块自行记录）
 - 不修改 progress store 的 persist schema（仅作为消费者调用其公开 action）
 - 不直接引用其他 feature 模块（必须通过 `shared/` 层或 `trainingEvents` 事件总线）
 - 跨模块共享类型与函数须放入 `shared/` 层后才可引用
 
 ## Capabilities
-- 三种模式实现：
-  - **Puzzle Rush**（限时冲刺）：3/5 分钟（URL 参数 `?duration=3|5`），3 条命，连对 5 题奖励 +10 秒，难度递增
-  - **Daily Puzzle**（每日谜题）：基于日期种子（YYYYMMDD）从全题库抽取 8 题，所有人当天看到相同
-  - **Theme Drill**（主题训练）：单主题 15 题专攻
-- Rush 分数公式：`correctCount × 100 + floor(timeRemaining/1000) × 10 + lives × 200`
-- 日期种子算法：`getDateSeed` / `pickBySeed` / `getDailyCompletionCount` / `getDailyKey`（dateSeed.ts；seededRandom / shuffleBySeed / hashStringToSeed 已上移至 `shared/utils/seededShuffle.ts` 并由 dateSeed.ts re-export）
-- 选项语义排序（utils/optionOrder.ts）：`parseOptionSortKey` 解析动作类别与尺度（消极→激进、同类按 BB 升序），`sortOptionsCanonically` 在题库出口逐题应用，消除正确答案位置固定问题
-- 独立 zustand store（`puzzle-trainer-store`），与 progress store 解耦
-- 五级反馈复用（根据 EV 损失自动评级 best/correct/inaccuracy/wrong/blunder）
-- 快速训练 Best Record 持久化（quickDrillBest，综合分数 `accuracy * 100 + 时间奖励`）
-- 主题分类（10 主题，4 大类：preflop / postflop / river / tournament）
+- 三种模式：Puzzle Rush（限时冲刺）/ Daily Puzzle（日期种子）/ Theme Drill（主题专攻）
+- 日期种子算法 + 选项语义排序（`optionOrder.ts`）+ 独立 store
+- 五级反馈复用 + 快速训练 Best Record 持久化
+- 主题分类（10 主题，4 大类）
 
 > 注：SRS 复习队列混合（`composeDailyMix`）与连续 7 天快速训练奖励冻结卡（`awardStreakFreeze`）实际由 strategy-academy/QuickDrill 实现，不在本模块。
 

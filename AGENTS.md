@@ -3,7 +3,7 @@
 This file provides guidance to Qoder (qoder.com) when working with code in this repository.
 
 > 项目级 AI 代理指导文件。本文件在会话开始时自动加载，约束所有 AI 代理在本仓库内的行为。
-> 子代理配置位于 `.claude/agents/`（物理源文件，入库；`.qoder/agents/` 为 Junction 链接指向该目录，Qoder 兼容读取），详细产品规格见 `docs/PRD.md`，技术设计见 `docs/TDD.md`，版本演进见 `docs/CHANGELOG.md`。
+> 子代理配置位于 `.claude/agents/`（物理源文件，入库；`.qoder/agents/` 为 Junction 链接指向该目录，Qoder 兼容读取），详细产品规格见 `docs/PRD.md`，技术设计见 `docs/TDD.md`，版本演进见 `docs/CHANGELOG.md`。深度知识库见 `.qoder/repowiki/`（详见下文「知识库（repowiki）」章节）。
 
 ---
 
@@ -67,6 +67,7 @@ src/
 ├── shared/        # 跨模块共享层（≥2 模块使用才放入；以下子目录注释为示例非穷举，以目录实际内容为准）
 │   ├── types/     # poker / position / action / elo / mentor / decisionFeedback
 │   ├── components/  # Card / EmptyState / LoadingState / ResultSummary
+│   │   └── (子目录划分：ui/ shadcn 基础组件、business/ 业务组件、feedback/ 反馈类组件；具体以目录实际内容为准)
 │   ├── utils/     # pokerMath / deck / elo / shareCard（纯函数）
 │   ├── constants/ # mentorStyles
 │   └── stores/    # trainingEvents（事件总线）/ debugMode（调试解锁开发者选项）
@@ -115,6 +116,12 @@ src/
 - 所有路由页面必须用 `React.lazy()` + `<LazyWrapper>` 包裹
 - 布局：`AppLayout`（主导航 + OnboardingGate）/ `BlankLayout`（无导航，用于 onboarding）
 - 移动端 < 768px 显示底部 `MobileNav`
+
+## 构建与离线
+
+- **分包策略**：`vite.config.ts` 通过 `manualChunks` 对大型数据文件与 vendor 库进行手动分包，提升并行加载与缓存效率（具体规则以 `vite.config.ts` 实际配置为唯一事实源）
+- **Service Worker 离线缓存**：`public/sw.js` 带 `APP_VERSION` 查询参数缓存静态资源，激活时清理旧版本缓存，支持离线访问（版本号机制以 `public/sw.js` 实际实现为准）
+- **路径基准**：路由 `basename` 使用 `import.meta.env.BASE_URL`，自动适配 GitHub Pages 子路径部署
 
 ## 跨模块复用系统
 
@@ -190,6 +197,22 @@ src/
 凡涉及代码事实的（module list/version number/test count/file existence），应以实际代码为唯一事实源，禁止硬编码数值。AGENTS.md/TDD.md/子智能体文件应仅描述"当前事实"与"访问路径"，避免维护随时间漂移的值域或版本快照。历史演进信息统一记录于 `docs/CHANGELOG.md`。
 
 示例：`TDD.md` §9.4 persist version 表不再硬编码版本号，改为"以 store.ts persist 配置为唯一事实源"引用策略；`features`模块列表采用"以 src/features/目录为准"动态引用而非静态枚举。
+
+## 知识库（repowiki）
+
+### Qoder 平台使用（推荐）
+- **位置**：`.qoder/repowiki/`（自动维护，无需手动操作）
+- **生成与维护**：通过 Qoder IDE 的 `/knowledge` 命令触发增量更新
+- **检索方式**：开发时 Agent 会自动加载相关模块知识到上下文
+- **详情指南**：参考 `docs/knowledge-guide.md`
+
+### 子代理规范
+- 子代理文件（`.claude/agents/*.md`）描述行为约束与工作流，**禁止复制知识库中的描述性内容**
+- 模块能力与实现细节详见对应知识卡片，通过 Qoder 自动检索获取
+- 知识库与代码事实可能不一致时，以代码为唯一事实源
+
+### 通用环境（非 Qoder）
+如在使用其他 AI 开发工具，可手动参考 `docs/knowledge-guide.md` 中的替代方案说明。
 
 ## 质量门禁
 

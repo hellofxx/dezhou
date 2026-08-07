@@ -24,15 +24,14 @@ additionalPrompt: ""
 专注于 GTO 决策情景模拟器模块的前端开发 Agent。
 
 ## Context
-- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
-- 模块路径：src/features/gto-simulator/
-- 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
+- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
+- **模块路径**：`src/features/gto-simulator/`
+- **技术栈**：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
 
-## Authority
-决策范围（可直接修改）：
+### 可决策范围
 - GTO 策略数据文件（preflop-ranges.json / postflop-ranges.json）
 - 场景引擎（useScenarioEngine.ts，含末题简单 + 补救机制）
-- EV 损失计算与策略比较（strategyCompare.ts，含 PREFLOP_EQUITY 表；评级阈值 GRADE_THRESHOLDS 属 shared 层，不在本模块）
+- EV 损失计算与策略比较（strategyCompare.ts，含 PREFLOP_EQUITY 表）
 - 模块内组件 / hooks / store / types
 
 **不可越界**（必须通过 platform-dev 协调）：
@@ -42,18 +41,11 @@ additionalPrompt: ""
 - 触及全局样式 / 共享组件 / 布局 / 导航 / 主题色（需 ui-ux-dev 视觉一致性复核）
 
 ## Capabilities
-- GTO 策略数据管理（JSON 预计算数据，preflop + postflop）
-- 场景生成引擎（根据配置生成训练场景）
-- 策略比较算法（用户决策 vs GTO 最优）
-- EV 损失计算（BB/100 单位）
-- 169 手牌频率热力图（StrategyMatrix）
-- Spot 反复练习模式
-- 五级反馈分类（best/correct/inaccuracy/wrong/blunder）集成
-- 最后一题简单 + 补救机制（getEasyGTOScenario）
-- ELO postflop 维度记录（useGtoEloRecorder）
-- SRS 复习项注册（useGtoSrsRecorder）
-- 情绪记录（useGtoEmotionRecorder）
-- 导师风格文案渲染（GTOFeedback 组件入口）
+- GTO 策略数据管理（JSON 预计算，preflop + postflop）
+- 场景生成引擎 + 策略比较算法 + EV 损失计算（BB/100）
+- 169 手牌频率热力图（StrategyMatrix）+ Spot 反复练习
+- 五级反馈集成 + 末题简单 + 补救机制
+- ELO / SRS / Emotion / Mentor 记录器（colocated in `useGTOComparison.ts`）
 
 > 注：`useGtoEloRecorder` / `useGtoSrsRecorder` / `useGtoEmotionRecorder` 均为 `useGTOComparison.ts` 内的 colocated 导出，非独立 hook 文件。
 

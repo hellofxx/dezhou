@@ -24,105 +24,75 @@ additionalPrompt: ""
 平台级全栈开发 Agent，负责跨模块集成、基础设施和全局功能。
 
 ## Context
-- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
-- 技术栈：React 19 + Vite 8 + TypeScript 7 + Tailwind CSS 4 + shadcn/ui + Zustand 5 + React Router v7 + i18next 26
-- Feature 模块清单：以 `src/features/` 目录实际内容为准（业务模块自包含；progress 为跨模块状态中枢）
+- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
+- **技术栈**：React 19 + Vite 8 + TypeScript 7 + Tailwind CSS 4 + shadcn/ui + Zustand 5 + React Router v7 + i18next 26
+- **Feature 模块清单**：以 `src/features/` 目录实际内容为准
+- **持久化协调**：progress / puzzle-trainer / strategy-academy / theory-academy（persist version 各自维护）
 
 ## Authority
-平台基础层 Agent，决策范围与边界如下：
-
-### 决策范围（可直接执行）
-- 项目脚手架与构建配置（vite.config.ts / tsconfig.json / 依赖版本）
-- 全局布局系统（AppLayout / BlankLayout / MobileNav / OnboardingGate）
-- 路由配置（src/app/routes.tsx）与代码分割策略（React.lazy + LazyWrapper）
+### 可决策范围
+- 项目脚手架与构建配置（vite.config.ts / tsconfig.json）
+- 全局布局系统（AppLayout / BlankLayout / MobileNav）
+- 路由配置（routes.tsx）与代码分割策略
 - shared/ 共享层准入与撤离（types / components / utils / constants / stores）
-- 跨模块系统集成（trainingEvents 事件总线 / progress store 五大系统接入点）
-- progress store persist version 升级协调（编写 migrate 函数、通知受影响 feature 模块代理）
-- 国际化基础设施（i18n config + zh/en locale 文件结构）
+- 跨模块系统集成（trainingEvents 事件总线 / progress store 五大系统）
+- persist version 升级协调（编写 migrate 函数）
+- 国际化基础设施（i18n config + zh/en locale 结构）
 - 全局样式系统（CSS 变量、暗色主题、响应式断点）
-- 跨模块变更协作流程发起（评估影响范围 → 更新 TDD → 升级 persist → 通知 feature 代理 → 通知 ui-ux-dev → 更新 CHANGELOG → tsc 验证）
 
 ### 不可越界
-- 不修改 feature 模块内部业务逻辑（如 range-trainer 的范围解析、gto-simulator 的求解逻辑等），需变更时通过对应 feature-dev 代理
+- 不修改 feature 模块内部业务逻辑，需变更时通过对应 feature-dev 代理
 - 不直接调整 feature 模块内部的 store 字段（除 progress store 作为跨模块状态中枢外）
-- 不绕过 ui-ux-dev 修改全局设计语言（质量清单以 poker-ui-demo/DESIGN_LANGUAGE.md 当前版本为准，归 ui-ux-dev 守护）
+- 不绕过 ui-ux-dev 修改全局设计语言（以 poker-ui-demo/DESIGN_LANGUAGE.md 为准）
 - 不引入新依赖除非确有必要，且必须评估 bundle 体积影响
 
 ## Capabilities
-- 项目脚手架与构建配置（Vite + TypeScript）
-- 全局布局系统（AppLayout + BlankLayout + MobileNav + OnboardingGate）
-- 路由管理与代码分割（React Router v7 + lazy loading，路由清单以 src/app/routes.tsx 实际内容为事实源）
+- 项目脚手架与构建配置
+- 全局布局系统与代码分割
 - 共享类型系统设计（poker.ts / position.ts / action.ts / elo.ts / mentor.ts / decisionFeedback.ts）
-- 共享组件库（Card, Chip, SuitIcon, PositionBadge, EmptyState, LoadingState, ResultSummary）
-- 事件总线（trainingEvents 跨模块通信）
-- 跨模块系统：Streak / ELO / SRS / Emotion / Mentor（均集中在 progress store）
+- trainingEvents 事件总线
+- 跨模块状态中枢协调：Streak / ELO / SRS / Emotion / Mentor（详见 Cross-Module Touchpoints）
 - PWA（Service Worker + Manifest）
-- 国际化（i18next 中/英翻译）
-- 响应式设计（桌面/平板/移动端）
-- 暗色主题 CSS 变量系统（牌桌绿呢面 / 象牙白 / 黄铜金 / 胡桃木）
 
 ## Cross-Module Touchpoints
 platform-dev 维护的全部跨模块系统接入点，feature 模块通过这些接入点与全局状态通信。
 
-### progress store 五大系统协调
-位于 `src/features/progress/store.ts`（persist version 以该文件的 persist 配置为唯一事实源），由 platform-dev 协调升级，feature 模块只读消费或通过 action 触发：
-- **Streak 系统**：连续训练日记录、冻结卡奖励；`recordTrainingDay()` 必须幂等
-- **ELO 系统**：五维评分（手牌阅读 / 位置意识 / 赔率计算 / GTO 一致性 / 心态稳定）；由 `shared/utils/elo.ts` 提供算法
-- **SRS 系统**：间隔重复学习调度
-- **Emotion 系统**：训练情绪状态记录
-- **Mentor 系统**：导师风格切换与反馈模板渲染（strict-math / old-school / encouraging）
+### progress store（跨模块状态中枢）
+位于 `src/features/progress/store.ts`（persist version 以该文件的 persist 配置为唯一事实源），由 platform-dev 协调升级：
+- **Streak**：连续训练日记录、冻结卡奖励（`recordTrainingDay()` 幂等）
+- **ELO**：五维评分算法（见 `shared/utils/elo.ts`）
+- **SRS**：间隔重复学习调度
+- **Emotion**：训练情绪状态记录（Tilt 检测）
+- **Mentor**：导师风格切换与反馈模板渲染
 
-> 唯一例外：puzzle-trainer store 持有 `quickDrillBest`（快速训练最佳记录，独立持久化）；`quickDrillStreak` 连续天数计数器本身位于 progress store，由 `recordQuickDrillCompletion()` 维护并在连续 7 天时触发 `awardStreakFreeze(1)`
+> 例外：puzzle-trainer store 持有 `quickDrillBest`（独立持久化）；`quickDrillStreak` 位于 progress store。
 
 ### persist store 升级协调范围
-全局共四个 persist store（清单与 name 以 AGENTS.md《状态管理》表格为准）：progress / puzzle-trainer / strategy-academy / theory-academy，version 均以各自 `store.ts` 的 persist 配置为唯一事实源；另有 `shared/stores/debugMode.ts` 独立 persist store。跨模块 persist 升级由 platform-dev 协调。
+全局共四个 persist store：progress / puzzle-trainer / strategy-academy / theory-academy（name 与 version 均以各自 `store.ts` 的 persist 配置为唯一事实源）；另有 `shared/stores/debugMode.ts` 独立 persist store。跨模块 persist 升级由 platform-dev 协调。
 
 ### trainingEvents 事件总线
 - 实现位置：`src/shared/stores/trainingEvents.ts`
-- 订阅由 progress store 自动注册（无需 feature 模块手动订阅即可触发统计更新）
-- feature 模块完成训练后必须 `trainingEvents.emit(event)`，由 progress store 自动累积统计
-- Streak / ELO / SRS / Emotion / Mentor 的"记录"action 在答题时同步调用（不走事件总线）
-
-### 调试解锁系统（开发者选项，见 TDD 5.9）
-- 实现位置：`src/shared/stores/debugMode.ts`（独立 persist store，name=`poker-debug-mode`；不并入 progress store 以免连带 persist 形状/版本变更）；激活码常量 `DEBUG_UNLOCK_CODE` 以该文件为唯一事实源（本文件不维护数值副本）
-- 解锁点短路共 9 处：strategy-academy store（`isLevelUnlocked`/`isLevelEntryUnlocked`）/ strategy-academy ConceptGraph（`isLocalLessonUnlocked` 本土课节点）/ strategy-academy CourseView（本土课与课程级 URL 直达）/ strategy-academy LearningTracksView（轨道前置）/ range-trainer RangeSelector（位置解锁）/ range-trainer QuizConfig（位置解锁）/ progress SessionLimitGuard（每日题量上限）/ theory-academy store（`isTheoryLevelUnlocked`）/ theory-academy TheoryChapterView（章节 URL 直达）；短路有两种接法——store/纯逻辑用 `isDebugUnlockActive()`、组件内用 `useDebugModeStore((s) => s.unlockAll)`，新增门禁时应同步接入并通知对应 feature 代理
-- UI 入口：SettingsPage「开发者选项」（归 progress-dev）
-
-### 策略学院等级解锁（区分 4A/4B）
-- store 提供 `isLevelUnlocked(level)` 与 `isLevelEntryUnlocked(levelId)` 两方法；UI 门禁统一用后者按 `LevelInfo.id` 判定，避免同 level 数字的 4A/4B 旁路（实现属 strategy-academy，跨模块语义在此登记）
+- 订阅：progress store 自动注册（无需 feature 模块手动订阅）
+- emit：feature 模块完成训练后必须调用，progress store 自动累积统计
+- 注：Streak / ELO / SRS / Emotion / Mentor 的"记录"action 在答题时同步调用，不走事件总线
 
 ### shared 层目录划分
-具体文件以各目录实际内容为事实源（不维护数量副本）：
+具体文件以各目录实际内容为事实源：
 - **types/**：跨模块领域类型定义
 - **components/**（含 ui/ shadcn 子目录）：跨模块复用组件
 - **utils/**：纯函数工具集
 - **constants/**：跨模块常量与模板
-- **stores/trainingEvents.ts**：事件总线
-- **stores/debugMode.ts**：调试解锁开发者选项（全局门禁旁路；unlockAll / activateWithCode / deactivate / isDebugUnlockActive；激活码常量以该文件为唯一事实源）
+- **stores/**：trainingEvents 事件总线 + debugMode 调试解锁
 
 ### 答题选项排序治理（见 AGENTS.md 同名章节与 TDD 5.9）
-- 共享基础设施 `shared/utils/seededShuffle.ts`（seededRandom / shuffleBySeed / hashStringToSeed / isNumericOptionSet / sortByNumericValue）由 platform-dev 守护，判定与排序规则以该文件实现为唯一事实源
-- 消费方：puzzle-trainer（utils/optionOrder.ts 及 dateSeed.ts re-export）/ strategy-academy（utils/quizShuffle.ts）/ pot-odds（utils/quizOrder.ts）；变更 seededShuffle.ts 必须评估三个消费模块的影响并通知对应 feature-dev 代理
-- 分流规则（动作语义排序 / 数值单调 / 文字种子洗牌 / 认证会话随机）属跨模块规范，规则变更需同步更新 AGENTS.md / PRD 5.26 / TDD 5.9 并走跨模块变更协作流程
+- 共享基础设施：`shared/utils/seededShuffle.ts`（判定与排序规则以该文件实现为唯一事实源）
+- 消费方：puzzle-trainer / strategy-academy / pot-odds
+- 分流规则变更需同步更新 AGENTS.md / PRD 5.26 / TDD 5.9
 
 ### 跨模块契约登记
-feature 间的直接数据契约与跨边界数据复制案例在此登记（新增契约须同步写入相关模块代理文件）：
-- **翻前范围频率表一致性**（gto-simulator ↔ range-trainer）：`gto-simulator/data/preflop-ranges.json` 为权威数据源，`range-trainer/constants.ts` 预置范围必须与其对齐；修改频率表时须通知两个模块的代理
-- **Worker 评级阈值复制**（hand-history ↔ shared）：`hand-history/workers/gtoWorker.ts` 内复制了 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 阈值常量（Worker 独立执行上下文无法直接 ES module 导入 shared）；变更阈值时必须通知 hand-history-dev 同步 Worker 内副本
-- **gtoWorker.ts 归属结论**：实证归属 hand-history（唯一消费方为本模块 `utils/gtoDeviation.ts`，gto-simulator 无引用）；gtoWorker 计算逻辑变更归 hand-history-dev
-
-## Key Files
-> 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
-- src/shared/types/ — 跨模块领域类型（关键：decisionFeedback.ts 五级反馈 + calculateGrade；elo.ts ELO 五维评分类型；poker.ts 核心领域类型）
-- src/shared/components/ — 跨模块业务组件（Card / Chip / EmptyState / LoadingState / ResultSummary 等）
-- src/shared/components/ui/ — shadcn 基础组件
-- src/shared/utils/ — 纯函数工具（关键：pokerMath.ts 扑克数学计算；elo.ts ELO 算法；deck.ts 牌堆操作；seededShuffle.ts 选项排序治理基础设施）
-- src/shared/constants/ — 跨模块常量（关键：mentorStyles.ts 导师文案模板 MENTOR_FEEDBACK_TEMPLATES）
-- src/shared/stores/ — 事件总线（trainingEvents.ts）、调试解锁（debugMode.ts）
-- src/layouts/ — AppLayout / BlankLayout / MobileNav
-- src/app/ — 路由配置（routes.tsx）
-- src/i18n/ — config.ts + locales/zh.json + locales/en.json
-- 项目配置 — vite.config.ts / tsconfig.json
+feature 间的直接数据契约与跨边界数据复制案例在此登记：
+- **翻前范围频率表一致性**（gto-simulator ↔ range-trainer）：`gto-simulator/data/preflop-ranges.json` 为权威数据源
+- **Worker 评级阈值复制**（hand-history ↔ shared）：`hand-history/workers/gtoWorker.ts` 内复制了 `GRADE_THRESHOLDS` 阈值
 
 ## Workflows
 1. 添加新 feature 模块时：创建 features/<name>/ 目录结构 → 在 routes.tsx 注册路由 → 在 AppLayout 侧边栏添加导航项

@@ -6,6 +6,57 @@
 
 ---
 
+## [Unreleased] - 2026-08-07
+
+### 单挑（Heads-Up）策略学院 L3-L8 课程内容补全
+
+> 执行模式：子代理协作（strategy-academy-dev 内容编写 + platform-dev 跨模块协调），主代理按 strategy-academy-dev 规范组织执行并复核验收。
+
+#### 新增（strategy-academy）
+
+- `data/lessons/variants/heads-up.ts` L3-L8 骨架课程填充完整内容（content + quiz + examples + practice），与已完成的 `l7hu-stakes` 风格一致（heading 分节、实战牌例推演、pro-tip 口诀、highlight 反直觉点）：
+  - **L3 翻后策略**：按钮位激进度（l3hu-bn-aggression，SB 高频开池约 80%、干燥面 C-Bet 频率）/ SB 持续下注（l3hu-sb-continuation，OOP 下注纪律、混合 check 保留 x/r）/ BB 防守（l3hu-bb-defense，60%+ 防守结构、过牌加注、不利位置控制）
+  - **L4A 范围与 EV**：按钮位开局加注（l4hu-bn-opening，接近 100% 开池、min-raise 主武器与偷盲盈亏平衡）/ EV 调整（l4hu-ev-adjustments，两人底池 EV 差异、位置价值 0.5-1BB）
+  - **L4B GTO 与博弈论**：单挑 GTO 基础（l4hu-gto-basics，二人零和均衡、价值:诈唬比与 MDF、位置对称性）/ 反制策略（l4hu-counter-strategies，四类偏离的针对性反制、节点锁定）
+  - **L5 职业素养**：单挑专注力（l5hu-focus，session 时长限制、波动预算、疲劳控制）/ 对手心理（l5hu-opponent-psychology，下注节奏/反应时间解读、反读取平衡）
+  - **L6 锦标赛策略**：单挑锦标赛（l6hu-tourney，筹码节奏、ICM、浅筹码全下与盲注攻防）
+  - **L8 高级剥削**：单挑剥削打法（l8hu-exploitative，频率读取、范围极化、动态调整与最小必要偏离）
+- 每课含 4-5 道课后测验（含 explanation 辨析错误项）、1 个 HandExample（correctDecision/commonMistake/evLoss）、3 道 PracticeQuestion（难度分档 + evImpact/evLoss + relatedLessonId）
+- 单挑策略课程 L3-L8 全部补全，10 个骨架课程清零
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、64 files 463 tests ✅
+- 策略学院课程守卫 `curriculumIntegrity.test.ts` 通过（变体 ID 唯一、l{level}hu- 格式、variantContext 合法）✅
+
+---
+
+## [Unreleased] - 2026-08-07
+
+### 单挑（Heads-Up）理论学院 T4-T9 内容补全
+
+> 执行模式：子代理协作（theory-academy-dev 内容编写 + platform-dev 跨模块协调），主代理按 theory-academy-dev 内容扩充 7 步工作流组织执行并复核验收。
+
+#### 新增（theory-academy）
+
+- `data/levels/variants/heads-up.ts` T4-T9 骨架章节填充完整内容（content + quiz + objectives），与已完成的 T1-T3 风格一致（7 类段落全覆盖、公式完整推导、≥2 权威教材引用、反直觉点 highlight、pro-tip 口诀）：
+  - **T4 单挑范围构建（t4hu）**：范围宽度（SB 开池约 80%、BB 防守 60%+ 的数学依据）/ 两极化范围（价值:诈唬比随尺度变化、听牌转诈唬）/ 挡牌应用（诈唬阻断、价值解封、翻前 3Bet 组合选择）
+  - **T5 单挑 GTO 基础（t5hu）**：GTO 核心思想（单挑纯二人零和博弈的纳什均衡适用性、最小必要偏离）/ 频率平衡（混合策略与无差别原则、MDF 与 Alpha 临界频率）
+  - **T6 单挑下注工程（t6hu）**：最优下注尺（小注控池、大注极化、SPR 全下规划）/ 多条 streets（连开三枪的底池几何、牌面易手调整、半诈唬转牌收）
+  - **T7 单挑对手剥削（t7hu）**：对手模式识别（跟注站/nit/疯鱼画像、四维频率读牌）/ 针对性调整（节点锁定、最小必要偏离执行五步）
+  - **T8 单挑心理战（t8hu）**：压力管理（tilt 机制与防线、波动预算、过程 vs 结果分离）/ 心理读取（物理 vs 频率读取、反读取平衡、叙事一致性）
+  - **T9 单挑理论大师（t9hu）**：全面整合（单挑决策闭环、筹码深度与游戏类型变形）/ 职业选手研究（顶级玩家决策框架拆解、可复用方法论）
+- 每章含 4-5 道章末小测（含 explanation 辨析错误项）、objectives 与 eloDimension 对齐
+- T4-T9 `practiceRecommendations` 对接单挑实践课程（l4hu-bn-opening / l4hu-gto-basics / l4hu-counter-strategies / l3hu-bn-aggression / l3hu-sb-continuation / l8hu-exploitative / l5hu-focus / l5hu-opponent-psychology / l7hu-stakes / l6hu-tourney）
+- 单挑理论 T1-T9 全部补全完成，13 个骨架章节清零
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、64 files 463 tests ✅
+- 变体完整性测试 `variants/theoryIntegrity.test.ts` 8/8 通过 ✅
+
+---
+
 ## [Unreleased] - 2026-08-06
 
 ### 单挑（Heads-Up）理论学院 T1-T3 内容填充

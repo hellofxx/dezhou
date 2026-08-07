@@ -24,9 +24,9 @@ additionalPrompt: ""
 专注于历史牌局复盘分析模块的前端开发 Agent。
 
 ## Context
-- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
-- 模块路径：src/features/hand-history/
-- 技术栈：React 19 + TypeScript 7 + Zustand 5 + IndexedDB + Web Worker + framer-motion 12
+- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
+- **模块路径**：`src/features/hand-history/`
+- **技术栈**：React 19 + TypeScript 7 + Zustand 5 + IndexedDB + Web Worker + framer-motion 12
 
 ## Authority
 **决策范围**：
@@ -37,22 +37,17 @@ additionalPrompt: ""
 - 牌局统计分析工具与展示组件
 - workers/：`gtoWorker.ts` GTO 策略查找与 EV 计算 Worker（实证归属本模块，唯一消费方为 `utils/gtoDeviation.ts`）
 
-**不可越界**：
+### 不可越界
 - 不修改 `shared/` 层代码，除非需新增公共解析工具且经 `platform-dev` 协调
 - 不直接调用其他 feature 模块的 store / 组件
 - 不修改 progress store 的 persist version 与五大系统（Streak / ELO / SRS / Emotion / Mentor）
 - 跨模块通信仅通过 `trainingEvents` 事件总线
 
 ## Capabilities
-- 多平台手牌历史解析（PokerStars / GGPoker / PartyPoker 格式）
-- 正则 + 状态机文本解析器
-- 牌局回放引擎（步进/回退/自动播放/速度控制）
-- 椭圆形牌桌布局（PlayerSeats 6 人座位）
-- CSS 3D 翻牌动画（BoardDisplay）
-- IndexedDB 大容量持久化
-- 标注系统（每决策点文字笔记）
-- 牌局统计分析（HandStatsPanel）
-- GTO 偏差检测（gtoDeviation.ts + gtoWorker.ts Worker 计算卸载，含主线程 fallback 与 idle 调度分批分析）
+- 多平台手牌历史解析（PokerStars / GGPoker / PartyPoker）
+- 牌局回放引擎（步进 / 回退 / 自动播放 / 速度控制）
+- 椭圆形牌桌布局 + IndexedDB 持久化 + 标注系统
+- 牌局统计分析 + GTO 偏差检测（Worker 计算卸载）
 
 ## Cross-Module Touchpoints
 - **progress store**：无直接调用（复盘无答题评分，不触发 ELO / SRS / Emotion 系统）

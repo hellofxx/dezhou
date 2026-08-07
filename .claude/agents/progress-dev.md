@@ -47,21 +47,11 @@ additionalPrompt: ""
 - 跨模块架构变更须先更新 `docs/TDD.md` 架构图与跨模块系统章节
 
 ## Capabilities
-- 训练数据统计聚合（按日/周/月/模块）
-- Recharts 图表（折线图、五维雷达图、条形图）
-- 连续天数计算（打卡日历）
-- 成就系统（解锁判定 + 进度追踪）
-- 难度分级算法
-- Zustand persist + localStorage 持久化（version 以 store.ts 的 persist 配置为准，含 migrate 函数）
-- 跨模块训练事件订阅（trainingEvents）
-- **Streak 系统**：冻结卡 / 里程碑 / Earn Back / 分享卡片 / 晚间紧迫感
-- **ELO 能力分级**：五维评分（preflop/postflop/math/handReading/mental）/ 六段位 / 动态 K 因子 / 段位升级庆祝
-- **SRS 间隔重复**：SM-2 算法 / ReviewItem 元数据扩展 / 每日混合比例（30%/50%/70%）
-- **Emotion 情绪管理**：Tilt 前兆识别 / Session 止损 / 下风期检测 / 情绪标记
-- **Mentor 导师人格化**：三种教练风格 / 文案模板 / 偏好持久化
-- 快速训练连续打卡（quickDrillStreak，独立于 streak）
-- 新手引导状态管理（onboarding）
-- 用户设置（SettingsPage 读写 `settings` 状态）：语言偏好 `settings.language` 为唯一事实源，切换时同步 `i18n.changeLanguage`（顶栏切换由 AppLayout 同步写回，应用启动由 `src/app/providers.tsx` 从持久化偏好恢复；i18n 基础设施本身归 platform-dev）
+- 训练数据统计聚合（按日/周/月/模块）+ Recharts 图表 + 成就系统
+- 跨模块状态中枢：Streak / ELO / SRS / Emotion / Mentor 五大系统（详见 Cross-Module Touchpoints）
+- Zustand persist + localStorage 持久化 + trainingEvents 事件订阅
+- 快速训练连续打卡（quickDrillStreak）+ 新手引导状态管理
+- 用户设置（SettingsPage 语言偏好 / 开发者选项入口）
 
 ## Cross-Module Touchpoints
 作为跨模块系统中枢，progress store 对外暴露五大系统的状态与 actions，并自动订阅 trainingEvents 事件总线。

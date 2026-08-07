@@ -50,14 +50,12 @@ additionalPrompt: ""
 
 ## Capabilities
 - 设计语言守护（DESIGN_LANGUAGE.md 当前版本的唯一权威解释）
-- 视觉一致性复核（颜色 / 字号 / 间距 / 组件复用 / 反模式检查）
+- 视觉一致性复核（颜色/字号/间距/组件复用/反模式检查）
 - 全局主题与 CSS 变量系统（四层色彩架构）
-- 响应式设计（桌面 / 平板 / 移动端断点）
-- 可访问性（WCAG 2.1 AA，aria-label / 对比度 / 键盘导航）
-- 动效设计（微交互 / 过渡 / 大场景 / 呼吸四档时长）
-- 组件质感验收（扑克牌 / 筹码 / 庄码 / 铭牌 / 按钮等 15 类组件）
-- 跨模块视觉协调（模块子代理修改共享组件或全局样式时复核）
-- Demo 原型验证（在 poker-ui-demo/pages/index.html 中先验证质感再落代码）
+- 响应式设计（桌面/平板/移动端断点）
+- 可访问性（WCAG 2.1 AA，aria-label/对比度/键盘导航）
+- 动效设计与跨模块视觉协调
+- Demo 原型验证（poker-ui-demo/pages/index.html）
 
 ## Cross-Module Touchpoints
 - **视觉验收职责**：对所有 feature 模块的页面改造承担视觉一致性复核（颜色/字号/间距/组件复用/反模式检查）
@@ -101,23 +99,7 @@ additionalPrompt: ""
 - **字号层级**：Hero 48–60 / H1 20–22 / H2 15–16 / H3 13–14 / Body 12–13 / Caption 10–11 / Eyebrow 9–10 uppercase tracking 0.2em
 
 ## Component Inventory
-> 组件清单以 DESIGN_LANGUAGE.md 当前版本 §5 为唯一事实源。
-所有新界面必须复用以下组件，禁止新造容器或按钮样式：
-1. **扑克牌** `.playing-card`（small/medium/large）— 象牙白底+三色阴影+45°暗斜纹
-2. **筹码** `.chip`（brass/red/frost/green/black）— 径向渐变+面值数字居中
-3. **庄码** `.casino-plaque` / `.dealer-btn` — 黄铜/象牙 D 字圆，用于导航 active
-4. **赌场铭牌** `.casino-plaque`（象牙/黄铜变体）— 大数值+标签+副标三层
-5. **按钮** 6 类：`.btn-brass`（主 CTA）/ `.btn-fold`（危险）/ `.btn-call`（中性）/ `.btn-allin`（高风险金属）/ `.btn-ghost`（次级）/ `.pill`（筛选）
-6. **面板** `.panel`（胡桃渐变+黄铜边+8px 圆角）+ `.panel-live`（顶部黄铜发线+glow）
-7. **黄铜横幅** `.quick-drill-card` / `.path-banner` — 深黄铜渐变+顶高光+拉丝+深投影
-8. **黄铜雕刻铭文** `.motto-engraved` — 两侧黄铜发线夹文字
-9. **导师头像** 三风格：石板靛/陶土赭/苔藓松绿（饱和度 25–35%）
-10. **场景卡** `.scenario-card` — 绿呢微观视角，用于训练题面
-11. **推荐项** `.rec-item` — 左侧优先级色条+图标+文本+箭头
-12. **模块入口卡** `.module-card` — 主题色图标方块+hover 上浮
-13. **周打卡条** `.streak-rail` — arena 下方（非页面底部）黄铜-苔藓双色横条，骑椭圆下缘 8–14px；手机端隐藏文字标签只保留图标+数字，禁止横向滚动
-14. **Live 呼吸点** `.live-dot` — 8px 黄铜脉冲点，标示进行中
-15. **进度条** / **图表** / **徽章** / **滑块** / **开关** / **弹窗** 等细节见 DESIGN_LANGUAGE §5
+> 组件清单以 DESIGN_LANGUAGE.md 当前版本 §5 为唯一事实源。所有新界面必须复用 §5 定义的 15 类组件（扑克牌 / 筹码 / 庄码 / 铭牌 / 按钮 / 面板 / 横幅 / 铭文 / 导师头像 / 场景卡 / 推荐项 / 模块入口卡 / 周打卡条 / 呼吸点 / 进度图表），禁止新造容器或按钮样式。
 
 ## Layout Rules
 - **桌面 ≥1024px**：240px 侧边栏（sticky）+ 主内容；双列 grid 用 2fr:1fr 或 3fr:2fr

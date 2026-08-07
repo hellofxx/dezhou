@@ -24,20 +24,18 @@ additionalPrompt: ""
 专注于底池赔率与 EV 计算器模块的前端开发 Agent。
 
 ## Context
-- 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
-- 模块路径：src/features/pot-odds/
-- 技术栈：React 19 + TypeScript 7 + Zustand 5 + Recharts 3 + Tailwind CSS 4
+- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
+- **模块路径**：`src/features/pot-odds/`
+- **技术栈**：React 19 + TypeScript 7 + Zustand 5 + Recharts 3 + Tailwind CSS 4
 
-## Authority
-**可决策范围**：
+### 可决策范围
 - 底池赔率计算逻辑（Pot Odds = Bet / (Pot + Bet)）的模块内实现
 - EV 分析与隐含赔率计算的模块内实现
 - Rule of 2 and 4 快速估算法的模块内实现
-- Recharts 图表（EquityChart 折线图）的配置与样式
+- Recharts 图表配置与样式
 - 滑块输入组件（PotSizeInput）的交互设计
-- 模块内 store / hooks / components 的所有变更
-- 末题简单 + 补救机制（getEasyOddsQuestion）的策略调整
 - 测验题库（data/quizQuestions.ts）内容建设与选项排序（utils/quizOrder.ts）
+- 末题简单 + 补救机制策略调整
 
 **不可越界**：
 - 不修改 `src/shared/utils/pokerMath.ts` 的核心计算公式（影响所有模块，必须通过 `platform-dev` 协调）
@@ -46,18 +44,11 @@ additionalPrompt: ""
 - 不直接引用其他 feature 模块（必须通过 `shared/` 层或 `trainingEvents` 事件总线）
 
 ## Capabilities
-- 底池赔率实时计算（Pot Odds = Bet / (Pot + Bet)）
-- EV 分析（EV = Win% × WinAmount - Lose% × LoseAmount）
-- Rule of 2 and 4（Outs 快速估算法）
-- Recharts 图表可视化（EquityChart, 折线图）
-- 滑块输入组件（PotSizeInput）
-- 隐含赔率计算
-- 五级反馈分类（best/correct/inaccuracy/wrong/blunder）集成
-- 测验题库（data/quizQuestions.ts，19 题，含"识别 -EV 跟注"平衡题）+ 选项排序（utils/quizOrder.ts 的 `orderQuizOptions`：数值选项升序、文字选项按题目 id 种子洗牌）
-- 最后一题简单 + 补救机制（getEasyOddsQuestion，返回前同样经 `orderQuizOptions` 处理）
-- ELO math 维度记录（useOddsEloRecorder）
-- SRS 复习项注册（useOddsSrsRecorder）
-- 情绪记录（useOddsEmotionRecorder）
+- 底池赔率 / EV / 隐含赔率实时计算 + Rule of 2 and 4 快速估算
+- Recharts 图表可视化（EquityChart）+ 滑块输入组件（PotSizeInput）
+- 五级反馈集成 + 末题简单 + 补救机制
+- 测验题库（19 题）+ 选项排序（`orderQuizOptions`：数值升序 / 文字种子洗牌）
+- ELO / SRS / Emotion 记录器（colocated in `useOddsCalculation.ts`）
 
 > 注：`useOddsEloRecorder` / `useOddsSrsRecorder` / `useOddsEmotionRecorder` 均为 `useOddsCalculation.ts` 内的 colocated 导出，非独立 hook 文件。
 
