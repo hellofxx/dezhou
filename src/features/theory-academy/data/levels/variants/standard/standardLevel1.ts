@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T1 概率论基础 —— 组合计数、Outs、2/4 法则、方差初识
-export const THEORY_LEVEL_1_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_1_CHAPTERS: TheoryChapter[] = [
   {
     id: 't1-combinatorics',
     level: 1,

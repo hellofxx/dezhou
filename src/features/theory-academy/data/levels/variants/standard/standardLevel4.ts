@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T4 范围理论 —— 范围思维、组合数学、Blockers、范围优势
-export const THEORY_LEVEL_4_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
   {
     id: 't4-range-thinking',
     level: 4,

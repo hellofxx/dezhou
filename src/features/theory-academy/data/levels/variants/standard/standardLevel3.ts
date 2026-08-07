@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T3 位置理论与起手牌理论 —— 位置价值、Gap Concept、Sklansky 基本定理
-export const THEORY_LEVEL_3_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_3_CHAPTERS: TheoryChapter[] = [
   {
     id: 't3-position-value',
     level: 3,

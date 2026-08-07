@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T5 博弈论基础 —— 纳什均衡、GTO、MDF、Alpha、混合策略、节点锁定
-export const THEORY_LEVEL_5_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_5_CHAPTERS: TheoryChapter[] = [
   {
     id: 't5-game-theory',
     level: 5,

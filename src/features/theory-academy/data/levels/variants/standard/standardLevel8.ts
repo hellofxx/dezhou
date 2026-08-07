@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T8 扑克心理学 —— Tilt 类型识别、Session 管理、资金心理、认知偏差与长期心态
-export const THEORY_LEVEL_8_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_8_CHAPTERS: TheoryChapter[] = [
   {
     id: 't8-tilt',
     level: 8,

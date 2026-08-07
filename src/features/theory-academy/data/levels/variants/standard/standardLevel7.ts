@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T7 对手分析理论 —— 统计指标、玩家类型学、读牌流程、剥削调整
-export const THEORY_LEVEL_7_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_7_CHAPTERS: TheoryChapter[] = [
   {
     id: 't7-stats',
     level: 7,

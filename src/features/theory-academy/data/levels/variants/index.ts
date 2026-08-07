@@ -5,23 +5,24 @@
  */
 import type { TheoryLevelInfo } from '../../../types';
 import type { PokerVariant } from '@/shared/types/elo';
-import { THEORY_LEVELS } from '../index';
+import { standardLevels } from './standard';
 import { shortDeckLevels } from './short-deck';
 import { headsUpLevels } from './heads-up';
 
+export { standardLevels } from './standard';
 export { shortDeckLevels } from './short-deck';
 export { headsUpLevels } from './heads-up';
 
 /**
- * 所有变体的 Level 总索引（standard 复用主 THEORY_LEVELS，避免数据重复）
+ * 所有变体的 Level 总索引（三变体平级：standard / short-deck / heads-up）
  */
 export const ALL_VARIANT_THEORY_LEVELS: TheoryLevelInfo[] = [
-  ...THEORY_LEVELS,
+  ...standardLevels,
   ...shortDeckLevels,
   ...headsUpLevels,
 ];
 
-/** 按变体过滤 Level 列表（standard 返回主 THEORY_LEVELS） */
+/** 按变体过滤 Level 列表（standard 返回标准变体 Level） */
 export function getTheoryLevelsByVariant(variant: PokerVariant): TheoryLevelInfo[] {
   switch (variant) {
     case 'short-deck':
@@ -29,6 +30,6 @@ export function getTheoryLevelsByVariant(variant: PokerVariant): TheoryLevelInfo
     case 'heads-up':
       return headsUpLevels;
     default:
-      return THEORY_LEVELS;
+      return standardLevels;
   }
 }

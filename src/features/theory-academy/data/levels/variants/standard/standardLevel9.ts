@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T9 经典理论综合 —— MOP 要义、ICM、多人底池、GTO 与剥削的统一框架
-export const THEORY_LEVEL_9_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
   {
     id: 't9-mop',
     level: 9,

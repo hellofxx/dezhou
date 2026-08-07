@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T2 期望值与赔率体系 —— EV、底池赔率、隐含赔率、反向隐含赔率
-export const THEORY_LEVEL_2_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
   {
     id: 't2-ev',
     level: 2,

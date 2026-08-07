@@ -1,7 +1,7 @@
-import type { TheoryChapter } from '../../types';
+import type { TheoryChapter } from '../../../../types';
 
 // T6 下注理论 —— 下注目的、尺度理论（极化/线性）、SPR 与几何尺度、频率控制
-export const THEORY_LEVEL_6_CHAPTERS: TheoryChapter[] = [
+export const STANDARD_LEVEL_6_CHAPTERS: TheoryChapter[] = [
   {
     id: 't6-bet-purpose',
     level: 6,
