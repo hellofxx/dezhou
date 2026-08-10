@@ -1056,6 +1056,10 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Personalize your training experience — changes are saved automatically",
+    "hero": {
+      "eyebrow": "ROOM SETUP"
+    },
+    "navAria": "Settings sections",
     "autoSaved": "Auto-saved",
     "appearance": "Appearance",
     "appearanceHint": "Theme & interface language",
@@ -1694,6 +1698,17 @@
     "home": {
       "title": "Poker Puzzles",
       "subtitle": "Train your decisions through scenario-based puzzles covering 10 themes: preflop RFI, BB defense, 3-bet, c-bet, flush draws, river value, bluffing, short stack, ICM, and multiway pots.",
+      "hero": {
+        "ariaLabel": "Puzzle Desk",
+        "eyebrow": "PUZZLE DESK",
+        "startDaily": "Start Today's Puzzle",
+        "reviewDaily": "Review Today's Puzzle",
+        "meta": "3 modes · 10 themes · 8 fixed daily questions",
+        "doneLabel": "Completed today",
+        "doneAccuracy": "· Best accuracy {{percent}}%",
+        "plaqueLabel": "DAILY PUZZLE"
+      },
+      "todayBadge": "TODAY",
       "rushTitle": "Puzzle Rush",
       "rushDesc": "3 or 5 minute timed run, 3 lives, +10s bonus every 5-streak. Increasing difficulty.",
       "dailyTitle": "Daily Puzzle",
@@ -1718,6 +1733,8 @@
       "bestAccuracyShort": "Best {{percent}}%"
     },
     "card": {
+      "scenarioLabel": "Scenario",
+      "yourMove": "Your Move",
       "progress": "Q {{current}} / {{total}}",
       "handLabel": "Hand",
       "positionLabel": "Pos",
@@ -1742,6 +1759,7 @@
       "noQuestions": "No puzzle for today",
       "completionCount": "{{count}} people finished today",
       "alreadyCompleted": "Done today ✓",
+      "alreadyCompletedShort": "Done",
       "fixedHint": "Today's puzzle is fixed — everyone sees the same questions."
     },
     "theme": {

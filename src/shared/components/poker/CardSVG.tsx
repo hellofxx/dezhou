@@ -1,5 +1,5 @@
 import { Suit, Rank } from '@/shared/types/poker';
-import { SUIT_SYMBOLS, SUIT_COLORS, RANK_DISPLAY } from '@/shared/constants/poker';
+import { SUIT_SYMBOLS, SUIT_COLORS, RANK_CARD_FACE_DISPLAY } from '@/shared/constants/poker';
 
 interface CardSVGProps {
   suit: Suit;
@@ -16,7 +16,9 @@ interface CardSVGProps {
 export function CardSVG({ suit, rank, width = 80, height = 112 }: CardSVGProps) {
   const color = SUIT_COLORS[suit];
   const symbol = SUIT_SYMBOLS[suit];
-  const display = RANK_DISPLAY[rank];
+  const display = RANK_CARD_FACE_DISPLAY[rank];
+  // "10" 是两位数，在牌面角落略缩字号以免拥挤
+  const rankFontSize = rank === Rank.Ten ? 12 : 14;
 
   // Card-face typography: a serif for the rank index (matching real playing
   // cards) and the system suit glyphs for the pips.
@@ -59,7 +61,7 @@ export function CardSVG({ suit, rank, width = 80, height = 112 }: CardSVGProps) 
       <rect x="2" y="2" width="76" height="108" rx="6" fill="none" stroke="rgba(243,235,217,0.6)" strokeWidth="0.5" />
 
       {/* Top-left rank + suit */}
-      <text x="7" y="17" fontFamily={rankFont} fontWeight="600" fontSize="14" fill={color}>{display}</text>
+      <text x="7" y="17" fontFamily={rankFont} fontWeight="600" fontSize={rankFontSize} fill={color}>{display}</text>
       <text x="7.5" y="29" fontFamily={suitFont} fontSize="11" fill={color}>{symbol}</text>
 
       {/* Center large suit */}
@@ -69,7 +71,7 @@ export function CardSVG({ suit, rank, width = 80, height = 112 }: CardSVGProps) 
 
       {/* Bottom-right rank + suit (rotated 180°) */}
       <g transform="rotate(180, 40, 56)">
-        <text x="7" y="17" fontFamily={rankFont} fontWeight="600" fontSize="14" fill={color}>{display}</text>
+        <text x="7" y="17" fontFamily={rankFont} fontWeight="600" fontSize={rankFontSize} fill={color}>{display}</text>
         <text x="7.5" y="29" fontFamily={suitFont} fontSize="11" fill={color}>{symbol}</text>
       </g>
     </svg>

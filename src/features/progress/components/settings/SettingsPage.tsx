@@ -52,6 +52,7 @@ import { MENTOR_PROFILES } from '@/shared/types/mentor';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { cn } from '@/shared/utils/cn';
 import { MOTION_DURATION, staggerContainer, staggerItem, transitionStandard } from '@/shared/utils/motion';
+import SettingsNav from './SettingsNav';
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
@@ -119,6 +120,10 @@ export default function SettingsPage() {
     fileInputRef.current?.click();
   };
 
+  // 受控展开：导航点击时把目标分区强制展开（解决 main 内容不可滚动时
+  // scrollIntoView 无效的问题——折叠的 section 不滚动，用户看不到激活项）
+  const [forceOpenId, setForceOpenId] = useState<string | null>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -152,34 +157,47 @@ export default function SettingsPage() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="py-6 space-y-5 max-w-3xl mx-auto">
-        {/* 标题 + 自动保存提示 */}
+      <div className="py-5 space-y-4 max-w-[1100px]">
+        {/* Hero：eyebrow + 标题 + 自动保存铭牌 */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transitionStandard}
-          className="flex items-end justify-between gap-4"
+          className="settings-hero"
         >
-          <div className="min-w-0">
-            <h1 className="text-xl md:text-2xl font-display font-semibold text-[var(--ivory)] flex items-center gap-2 tracking-wide">
-              <Settings className="w-5 h-5 md:w-6 md:h-6 text-[var(--brass)] shrink-0" />
-              {t('settings.title', { defaultValue: '设置' })}
-            </h1>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1">
-              {t('settings.subtitle', { defaultValue: '个性化你的训练体验，更改会自动保存' })}
-            </p>
+          <p className="settings-hero-eyebrow">{t('settings.hero.eyebrow', { defaultValue: '牌室设置 · ROOM SETUP' })}</p>
+          <div className="flex items-end justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="settings-hero-title">
+                <Settings className="w-5 h-5 md:w-6 md:h-6 shrink-0" />
+                {t('settings.title', { defaultValue: '设置' })}
+              </h1>
+              <p className="settings-hero-sub">
+                {t('settings.subtitle', { defaultValue: '个性化你的训练体验，更改会自动保存' })}
+              </p>
+            </div>
+            <span className="settings-hero-autosave hidden sm:inline-flex">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
+              {t('settings.autoSaved', { defaultValue: '自动保存' })}
+            </span>
           </div>
-          <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[var(--ivory-muted)] font-numeric shrink-0 mb-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
-            {t('settings.autoSaved', { defaultValue: '自动保存' })}
-          </span>
         </motion.div>
 
-        <motion.div variants={staggerContainer(0.06)} initial="hidden" animate="visible" className="space-y-3">
+        <div className="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-4 lg:items-start">
+          {/* 左侧分区导航（桌面 sticky） */}
+          <div className="hidden lg:block lg:sticky lg:top-0">
+            <SettingsNav
+              sectionIds={['appearance', 'coach', 'training', 'game-streak', 'data', 'developer', 'about']}
+              onActivate={setForceOpenId}
+            />
+          </div>
+
+          <motion.div variants={staggerContainer(0.06)} initial="hidden" animate="visible" className="space-y-3 min-w-0">
           {/* 外观 */}
           <motion.div variants={staggerItem}>
             <SettingsSection
               id="appearance"
+              forceOpen={forceOpenId === 'appearance'}
               icon={<Palette className="w-4 h-4" />}
               title={t('settings.appearance', { defaultValue: '外观' })}
               hint={t('settings.appearanceHint', { defaultValue: '主题与界面语言' })}
@@ -233,6 +251,7 @@ export default function SettingsPage() {
           <motion.div variants={staggerItem}>
             <SettingsSection
               id="coach"
+              forceOpen={forceOpenId === 'coach'}
               icon={<GraduationCap className="w-4 h-4" />}
               title={t('mentor.settings.title')}
               hint={t('mentor.settings.hint')}
@@ -283,6 +302,7 @@ export default function SettingsPage() {
           <motion.div variants={staggerItem}>
             <SettingsSection
               id="training"
+              forceOpen={forceOpenId === 'training'}
               icon={<SlidersHorizontal className="w-4 h-4" />}
               title={t('settings.training', { defaultValue: '训练偏好' })}
               hint={t('settings.trainingHint', { defaultValue: '音效、计时与题量' })}
@@ -373,6 +393,7 @@ export default function SettingsPage() {
           <motion.div variants={staggerItem}>
             <SettingsSection
               id="game-streak"
+              forceOpen={forceOpenId === 'game-streak'}
               icon={<Gamepad2 className="w-4 h-4" />}
               title={t('gameVariant.title')}
               hint={t('gameVariant.switchHint')}
@@ -424,6 +445,7 @@ export default function SettingsPage() {
           <motion.div variants={staggerItem}>
             <SettingsSection
               id="data"
+              forceOpen={forceOpenId === 'data'}
               icon={<Database className="w-4 h-4" />}
               title={t('settings.data', { defaultValue: '数据管理' })}
               hint={t('settings.dataHint', { defaultValue: '导出、导入或清除训练数据' })}
@@ -477,6 +499,7 @@ export default function SettingsPage() {
           <motion.div variants={staggerItem}>
             <SettingsSection
               id="developer"
+              forceOpen={forceOpenId === 'developer'}
               icon={<Bug className="w-4 h-4" />}
               title={t('settings.developer', { defaultValue: '开发者选项' })}
               hint={t('settings.developerHint', { defaultValue: '调试解锁全部功能' })}
@@ -538,6 +561,7 @@ export default function SettingsPage() {
           <motion.div variants={staggerItem}>
             <SettingsSection
               id="about"
+              forceOpen={forceOpenId === 'about'}
               icon={<Info className="w-4 h-4" />}
               title={t('settings.about', { defaultValue: '关于' })}
             >
@@ -557,7 +581,8 @@ export default function SettingsPage() {
               </div>
             </SettingsSection>
           </motion.div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* 确认清除对话框 */}
         <Dialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
@@ -599,6 +624,7 @@ function SettingsSection({
   title,
   hint,
   defaultOpen = true,
+  forceOpen = false,
   children,
 }: {
   id: string;
@@ -606,16 +632,20 @@ function SettingsSection({
   title: string;
   hint?: string;
   defaultOpen?: boolean;
+  /** 受控强制展开（导航点击时由父组件传入） */
+  forceOpen?: boolean;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+  // forceOpen=true 时覆盖本地状态，但允许用户再手动折叠回去
+  const effectiveOpen = forceOpen || open;
 
   return (
-    <div className="rounded-lg border border-[var(--walnut-border)] bg-[var(--surface)] overflow-hidden">
+    <div id={`settings-section-${id}`} className="scroll-mt-4 rounded-lg border border-[var(--walnut-border)] bg-[var(--surface)] overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
+        aria-expanded={effectiveOpen}
         aria-controls={`settings-${id}`}
         className="w-full flex items-center gap-3 px-4 py-3 min-h-[44px] text-left transition-colors hover:bg-[var(--walnut-raised)]/40"
       >
@@ -629,11 +659,11 @@ function SettingsSection({
           )}
         </span>
         <ChevronDown
-          className={cn('w-4 h-4 text-[var(--ivory-muted)] shrink-0 transition-transform duration-300', open && 'rotate-180')}
+          className={cn('w-4 h-4 text-[var(--ivory-muted)] shrink-0 transition-transform duration-300', effectiveOpen && 'rotate-180')}
         />
       </button>
       <AnimatePresence initial={false}>
-        {open && (
+        {effectiveOpen && (
           <motion.div
             key={`settings-${id}-content`}
             id={`settings-${id}`}

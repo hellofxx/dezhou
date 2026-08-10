@@ -24,6 +24,16 @@ export const RANK_DISPLAY: Record<Rank, string> = {
   [Rank.Ace]: 'A',
 };
 
+/**
+ * 扑克牌牌面（实物）专用显示。与 RANK_DISPLAY 不同：
+ * 10 在牌面上渲染为 "10"，而 "T" 仅保留给手牌 notation / 理论文字表述
+ * （如 deck.ts 的 RANK_SHORT 与 getCardDisplayName）。
+ */
+export const RANK_CARD_FACE_DISPLAY: Record<Rank, string> = {
+  ...RANK_DISPLAY,
+  [Rank.Ten]: '10',
+};
+
 export const SUIT_SYMBOLS: Record<Suit, string> = {
   [Suit.Hearts]: '♥',
   [Suit.Diamonds]: '♦',

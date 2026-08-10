@@ -892,17 +892,616 @@ body::after {
   transition: all 0.2s; cursor: pointer; position: relative; overflow: hidden;
 }
 .puzzle-card:hover { transform: translateY(-2px); border-color: var(--walnut-border); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-.puzzle-card .puzzle-emoji { font-size: 36px; line-height: 1; margin-bottom: 10px; display: block; }
+.puzzle-card .puzzle-mode-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px; margin-bottom: 12px;
+  background: linear-gradient(145deg, rgba(201,162,94,0.2), rgba(201,162,94,0.06));
+  border: 1px solid rgba(201,162,94,0.3);
+  color: var(--brass-bright);
+}
+.puzzle-card:hover .puzzle-mode-icon { color: var(--brass); border-color: rgba(201,162,94,0.5); }
 .puzzle-card .puzzle-name { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--ivory); font-variation-settings: 'opsz' 144; margin-bottom: 4px; }
 .puzzle-card .puzzle-desc { font-size: 12px; color: var(--ivory-muted); line-height: 1.5; margin-bottom: 12px; }
 .puzzle-card .puzzle-meta { display: flex; gap: 10px; font-size: 11px; color: var(--ivory-muted); font-family: var(--font-mono); padding-top: 10px; border-top: 1px solid rgba(45,34,20,0.6); }
 .puzzle-card .puzzle-meta span { display: inline-flex; align-items: center; gap: 4px; }
 .puzzle-card.daily::before {
-  content: '今日'; position: absolute; top: 12px; right: -22px;
+  content: attr(data-badge); position: absolute; top: 12px; right: -22px;
   background: linear-gradient(135deg, var(--brass-bright), var(--brass)); color: var(--walnut);
   font-size: 10px; font-weight: 700; padding: 3px 28px;
   transform: rotate(40deg); letter-spacing: 0.1em;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* ---- Theme Card：难度徽章 ---- */
+.theme-diff-pill {
+  display: inline-flex; align-items: center;
+  font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
+  padding: 1px 7px; border-radius: 999px;
+  color: var(--ivory-dim);
+  background: var(--walnut-raised);
+  border: 1px solid var(--walnut-border);
+  font-variant-numeric: tabular-nums;
+}
+.theme-diff-pill.beginner { color: var(--sage); border-color: color-mix(in srgb, var(--sage) 35%, transparent); background: color-mix(in srgb, var(--sage) 10%, transparent); }
+.theme-diff-pill.intermediate { color: var(--brass-bright); border-color: color-mix(in srgb, var(--brass-bright) 35%, transparent); background: color-mix(in srgb, var(--brass-bright) 10%, transparent); }
+.theme-diff-pill.advanced { color: var(--clay); border-color: color-mix(in srgb, var(--clay) 40%, transparent); background: color-mix(in srgb, var(--clay) 12%, transparent); }
+
+/* =========================================================
+   Puzzle Hero（2026-08-10）— 签名元素「翻开的谜题牌」
+   家族同形（academy/theory/progress/help hero 同构），
+   差异化：象牙扑克牌面微倾立起 + 花色问号 + 今日日期角标。
+   ========================================================= */
+
+/* ---- Puzzle Hero（谜题台） ---- */
+.puzzle-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--walnut-border);
+  border-radius: var(--poker-radius-lg);
+  background:
+    radial-gradient(ellipse 70% 150% at 0% 0%, rgba(201,162,94,0.1), transparent 60%),
+    linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+  padding: 22px 26px 22px;
+}
+.puzzle-hero::before {
+  content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass-deep) 15%, var(--brass-bright) 50%, var(--brass-deep) 85%, transparent);
+  opacity: 0.7;
+}
+.puzzle-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 28px;
+  align-items: center;
+}
+.puzzle-hero-copy { min-width: 0; }
+.puzzle-hero-eyebrow {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.22em; color: var(--brass-deep); margin-bottom: 10px;
+}
+.puzzle-hero-title {
+  font-family: var(--font-display);
+  font-size: 27px; font-weight: 600; color: var(--ivory);
+  line-height: 1.25; margin: 0 0 8px; letter-spacing: 0.01em;
+  font-variation-settings: 'opsz' 144;
+}
+.puzzle-hero-sub {
+  font-size: 13px; color: var(--ivory-dim);
+  line-height: 1.65; max-width: 470px; margin: 0;
+}
+.puzzle-hero-actions {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 18px; flex-wrap: wrap;
+}
+.puzzle-hero-cta {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: var(--poker-radius-md);
+  background: linear-gradient(180deg, var(--brass-bright) 0%, var(--brass) 100%);
+  color: var(--primary-foreground); font-size: 13px; font-weight: 600;
+  border: 1px solid var(--brass-dark);
+  box-shadow: 0 3px 10px rgba(201,162,94,0.25), inset 0 1px 0 rgba(255,240,200,0.55);
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  text-decoration: none; min-height: 38px;
+}
+.puzzle-hero-cta:hover {
+  filter: brightness(1.08); transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(201,162,94,0.32), inset 0 1px 0 rgba(255,240,200,0.55);
+}
+.puzzle-hero-meta {
+  font-size: 11px; color: var(--ivory-muted); letter-spacing: 0.05em;
+}
+.puzzle-hero-done {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px; padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px; color: var(--poker-success);
+  background: color-mix(in srgb, var(--poker-success) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--poker-success) 30%, transparent);
+}
+
+/* ---- 翻开的谜题牌（签名元素） ---- */
+.puzzle-hero-plaque-wrap {
+  position: relative;
+  perspective: 900px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+}
+.puzzle-face {
+  position: relative;
+  width: 210px;
+  aspect-ratio: 5 / 7;
+  padding: 12px;
+  background: linear-gradient(180deg, var(--stable-ivory) 0%, #e8dcc0 100%);
+  border: 1px solid rgba(201,162,94,0.6);
+  border-radius: var(--poker-radius-md);
+  box-shadow:
+    0 14px 34px rgba(0,0,0,0.5),
+    inset 0 0 0 3px rgba(255,255,255,0.42),
+    inset 0 0 0 4px rgba(201,162,94,0.3);
+  color: var(--stable-ink);
+  display: flex; flex-direction: column; justify-content: space-between;
+  transform-origin: 50% 100%;
+  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+}
+.puzzle-hero-plaque-wrap:hover .puzzle-face,
+.puzzle-hero-plaque-wrap:focus-within .puzzle-face {
+  transform: rotateY(-2deg) rotateX(1deg);
+}
+.puzzle-face-index {
+  display: flex; flex-direction: column; align-items: center;
+  line-height: 1.1;
+}
+.puzzle-face-index.br {
+  transform: rotate(180deg);
+  align-self: flex-end;
+}
+.puzzle-face-suit { font-size: 17px; color: var(--stable-ink); font-weight: 600; }
+.puzzle-face-date {
+  font-family: var(--font-mono); font-size: 11px;
+  color: #6e6553; letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+.puzzle-face-center {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.puzzle-face-mark {
+  display: flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(201,162,94,0.28), rgba(201,162,94,0.1));
+  border: 1px solid rgba(201,162,94,0.5);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), 0 3px 8px rgba(160,125,61,0.25);
+}
+.puzzle-face-q {
+  font-family: var(--font-display);
+  font-size: 34px; font-weight: 700; color: var(--brass-dark);
+  line-height: 1; font-variation-settings: 'opsz' 144;
+}
+.puzzle-face-label {
+  font-size: 8px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.28em; color: #6e6553;
+  white-space: nowrap;
+}
+
+/* ---- Puzzle Hero responsive ---- */
+@media (max-width: 767px) {
+  .puzzle-hero { padding: 18px 18px 20px; }
+  .puzzle-hero-grid { grid-template-columns: 1fr; gap: 20px; }
+  .puzzle-hero-title { font-size: 22px; }
+  .puzzle-hero-sub { font-size: 12px; }
+  .puzzle-hero-plaque-wrap { order: -1; padding: 4px 0 0; }
+  .puzzle-face { width: 150px; }
+  .puzzle-face-mark { width: 52px; height: 52px; }
+  .puzzle-face-q { font-size: 27px; }
+}
+
+/* =========================================================
+   Daily Puzzle 答题页（2026-08-10 重设）
+   — 签名元素：「行动按钮的等级」(ActionBoard tier gauge)
+   — 3 选项时按激进程度 passive/standard/aggressive 分档视觉权重，
+   — 让玩家一眼分清"防御/标准/致命"三类动作。
+   ========================================================= */
+
+/* ---- Daily Puzzle 容器 / 顶部 / footer ---- */
+.daily-puzzle-shell {
+  width: 100%;
+  max-width: 1024px;        /* 1024 桌面宽，给题干充足横向展宽 */
+  margin: 0 auto;
+  padding: 18px 20px 40px;
+}
+.daily-puzzle-topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 40px;
+}
+.daily-puzzle-title {
+  display: inline-flex; align-items: baseline; gap: 8px;
+  font-family: var(--font-display); font-size: 16px; font-weight: 600;
+  color: var(--ivory); letter-spacing: 0.04em;
+  font-variation-settings: 'opsz' 144;
+  margin: 0;
+}
+.daily-puzzle-date {
+  font-size: 12px; color: var(--ivory-dim); letter-spacing: 0.06em;
+}
+.daily-puzzle-chips {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+}
+.daily-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 8px; border-radius: 999px;
+  font-size: 11px;
+  background: color-mix(in srgb, var(--walnut-raised) 70%, transparent);
+  border: 1px solid var(--walnut-border);
+  color: var(--ivory-dim);
+}
+.daily-chip--done {
+  color: var(--poker-success);
+  background: color-mix(in srgb, var(--poker-success) 13%, transparent);
+  border-color: color-mix(in srgb, var(--poker-success) 30%, transparent);
+}
+.daily-puzzle-footer {
+  padding-top: 4px;
+}
+.daily-puzzle-score {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--ivory-muted);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--walnut-border);
+  background: color-mix(in srgb, var(--walnut) 60%, transparent);
+  margin: 0 auto;
+}
+.daily-puzzle-score { display: flex; justify-content: center; width: 100%; }
+
+/* ---- DailyPuzzle 桌面 / 移动响应 ---- */
+@media (max-width: 767px) {
+  .daily-puzzle-shell { padding: 14px 14px 28px; }
+  .daily-puzzle-title { font-size: 14px; }
+  .daily-puzzle-date { font-size: 11px; }
+}
+
+/* ---- 题目卡片（场景描述区） ---- */
+.puzzle-question-card {
+  background: linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+  border: 1px solid var(--walnut-border);
+  border-radius: var(--poker-radius-lg);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.puzzle-question-card::before {
+  content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass-deep) 15%, var(--brass-bright) 50%, var(--brass-deep) 85%, transparent);
+  opacity: 0.45;
+}
+.puzzle-question-eyebrow {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.22em; color: var(--brass-deep);
+  margin: 0;
+}
+.puzzle-question-scenario {
+  font-size: 14.5px; line-height: 1.7;
+  color: var(--ivory); margin: 0;
+}
+.puzzle-question-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--walnut-border) 20%, var(--walnut-border) 80%, transparent);
+  margin: 2px 0;
+}
+.puzzle-action-eyebrow {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.24em; color: var(--brass-bright);
+  margin: 0;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.puzzle-action-eyebrow::before {
+  content: ''; display: inline-block; width: 12px; height: 1px;
+  background: var(--brass-bright);
+}
+
+/* =========================================================
+   ActionBoard 行动按钮 (passive / standard / aggressive)
+   — 视觉签名：3 dots gauge + 行动强度档位
+   — 保守低权重 / 标准中等权重 / 激进满色高权重
+   ========================================================= */
+.action-board {
+  display: grid;
+  width: 100%;
+}
+.action-board--cols-1 { grid-template-columns: 1fr; }
+.action-board--cols-2 { grid-template-columns: 1fr; }
+.action-board--cols-3 { grid-template-columns: 1fr; }
+.action-board--cols-4 { grid-template-columns: 1fr; }
+@media (min-width: 640px) {
+  .action-board--cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .action-board--cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .action-board--cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .action-board--cols-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.action-tile {
+  position: relative;
+  display: flex; flex-direction: column; align-items: flex-start;
+  justify-content: space-between; gap: 10px;
+  padding: 13px 14px;
+  min-height: 84px;
+  border-radius: var(--poker-radius-md);
+  text-align: left;
+  font-family: var(--font-display);
+  cursor: pointer;
+  transition:
+    transform 0.18s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.18s, background 0.18s, box-shadow 0.18s;
+  outline: none;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--walnut-raised) 75%, transparent),
+    color-mix(in srgb, var(--walnut) 80%, transparent));
+  border: 1.5px solid var(--walnut-border);
+  color: var(--ivory);
+}
+.action-tile:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: var(--brass);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+.action-tile:focus-visible {
+  border-color: var(--brass-bright);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass-bright) 35%, transparent);
+}
+.action-tile:active:not(:disabled) { transform: translateY(0); }
+.action-tile:disabled { cursor: default; }
+
+/* tier gauge dots（三个小圆点，按 tier 灯亮数量与颜色） */
+.action-tile-gauge {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 6px;
+}
+.action-tile-gauge .dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--walnut-border);
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.action-tile-gauge .dot--on.dot--frost {
+  background: var(--poker-indigo-bright);
+  box-shadow: 0 0 5px color-mix(in srgb, var(--poker-indigo-bright) 70%, transparent);
+}
+.action-tile-gauge .dot--on.dot--brass {
+  background: var(--brass-bright);
+  box-shadow: 0 0 5px color-mix(in srgb, var(--brass-bright) 60%, transparent);
+}
+.action-tile-gauge .dot--on.dot--clay {
+  background: var(--clay);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--clay) 65%, transparent);
+}
+
+/* 主标签 */
+.action-tile-label {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-variation-settings: 'opsz' 144;
+  color: inherit;
+  line-height: 1.25;
+  /* 防止过长（如"3bet 全下 15BB"）撑破布局 */
+  word-break: keep-all;
+}
+
+/* 揭示态标记：正确 ✓ / 选错 ✗ */
+.action-tile-mark {
+  position: absolute; top: 8px; right: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--success);
+  color: var(--walnut);
+}
+.action-tile-mark--wrong {
+  background: var(--danger);
+  color: var(--ivory);
+}
+
+/* ---- Tier 1: passive (cat 0-1, Fold/Check) — 石板靛 indigo（保守·弃守） ---- */
+.action-tile-passive {
+  border-color: color-mix(in srgb, var(--poker-indigo-bright) 55%, var(--walnut-border));
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--poker-indigo) 14%, var(--walnut-raised)),
+    color-mix(in srgb, var(--poker-indigo) 6%, var(--walnut)));
+  color: var(--poker-indigo-bright);
+}
+.action-tile-passive .action-tile-label { color: var(--poker-indigo-bright); font-weight: 600; }
+.action-tile-passive:hover:not(:disabled) {
+  border-color: var(--poker-indigo-bright);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--poker-indigo) 22%, var(--walnut-raised)),
+    color-mix(in srgb, var(--poker-indigo) 10%, var(--walnut)));
+}
+
+/* ---- Tier 2: standard (cat 2-5, Call/Bet/Raise) — brass 中等权重 ---- */
+.action-tile-standard {
+  border-color: var(--brass-deep);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--brass) 10%, var(--walnut-raised)),
+    color-mix(in srgb, var(--brass) 4%, var(--walnut)));
+}
+.action-tile-standard .action-tile-label {
+  color: var(--ivory); font-weight: 600;
+}
+
+/* ---- Tier 3: aggressive (cat 6, All-in) — 陶土红 clay 浅底（致命一击，低饱和与另两档对齐） ---- */
+.action-tile-aggressive {
+  border-color: color-mix(in srgb, var(--clay) 55%, var(--walnut-border));
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--clay) 15%, var(--walnut-raised)),
+    color-mix(in srgb, var(--clay) 6%, var(--walnut)));
+  color: var(--clay);
+}
+.action-tile-aggressive .action-tile-label {
+  color: var(--clay); font-weight: 700; font-size: 17px;
+}
+.action-tile-aggressive .action-tile-gauge .dot {
+  background: color-mix(in srgb, var(--clay) 45%, transparent);
+}
+.action-tile-aggressive .action-tile-gauge .dot--on.dot--clay {
+  background: var(--clay);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--clay) 65%, transparent);
+}
+.action-tile-aggressive:hover:not(:disabled) {
+  border-color: var(--clay);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--clay) 24%, var(--walnut-raised)),
+    color-mix(in srgb, var(--clay) 10%, var(--walnut)));
+}
+
+/* ---- 答题后的反馈态（覆盖 tier） ---- */
+.action-tile--correct {
+  border-color: var(--poker-success) !important;
+  background: color-mix(in srgb, var(--poker-success) 18%, var(--walnut)) !important;
+  color: var(--poker-success) !important;
+}
+.action-tile--correct .action-tile-label { color: var(--poker-success); }
+.action-tile--wrong {
+  border-color: var(--clay) !important;
+  background: color-mix(in srgb, var(--clay) 18%, var(--walnut)) !important;
+  color: var(--clay) !important;
+}
+.action-tile--wrong .action-tile-label { color: var(--clay); }
+.action-tile--correct-reveal {
+  border-color: color-mix(in srgb, var(--poker-success) 70%, var(--walnut-border));
+}
+.action-tile--correct-reveal .action-tile-label { color: var(--poker-success); }
+.action-tile-aggressive.action-tile--correct {
+  background: color-mix(in srgb, var(--poker-success) 22%, var(--walnut)) !important;
+}
+.action-tile-aggressive.action-tile--wrong {
+  background: color-mix(in srgb, var(--clay) 22%, var(--walnut)) !important;
+}
+.action-tile--dim { opacity: 0.32; }
+
+/* ---- Light theme overrides ---- */
+html[data-theme="light"] .puzzle-question-card {
+  background: linear-gradient(180deg, var(--walnut) 0%, var(--walnut-raised) 100%);
+}
+html[data-theme="light"] .action-tile-passive {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--poker-indigo) 18%, var(--walnut-raised)),
+    color-mix(in srgb, var(--poker-indigo) 8%, var(--walnut)));
+}
+html[data-theme="light"] .action-tile-standard {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--brass) 16%, var(--walnut-raised)),
+    color-mix(in srgb, var(--brass) 7%, var(--walnut)));
+}
+html[data-theme="light"] .action-tile-aggressive {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--clay) 20%, var(--walnut-raised)),
+    color-mix(in srgb, var(--clay) 8%, var(--walnut)));
+  border-color: color-mix(in srgb, var(--clay) 55%, var(--walnut-border));
+  color: var(--clay);
+}
+html[data-theme="light"] .action-tile-aggressive .action-tile-label {
+  color: var(--clay);
+}
+html[data-theme="light"] .action-tile-aggressive .action-tile-gauge .dot {
+  background: color-mix(in srgb, var(--clay) 45%, transparent);
+}
+html[data-theme="light"] .action-tile-aggressive .action-tile-gauge .dot--on.dot--clay {
+  background: var(--clay);
+  box-shadow: 0 0 7px color-mix(in srgb, var(--clay) 65%, transparent);
+}
+
+@media (max-width: 640px) {
+  .action-tile { padding: 12px 12px; min-height: 76px; }
+  .action-tile-label { font-size: 15px; }
+  .action-tile-aggressive .action-tile-label { font-size: 16px; }
+}
+
+
+/* =========================================================
+   Settings 设置页（2026-08-10）— 签名元素「分区台卡导航」
+   桌面双栏：左侧 sticky 竖向黄铜节点导航 + 右侧折叠分组；
+   Hero 顶部黄铜发线 + eyebrow + 自动保存铭牌。
+   ========================================================= */
+
+/* ---- Settings Hero ---- */
+.settings-hero {
+  position: relative;
+  border: 1px solid var(--walnut-border);
+  border-radius: var(--poker-radius-lg);
+  background:
+    radial-gradient(ellipse 70% 160% at 100% 0%, rgba(201,162,94,0.06), transparent 60%),
+    linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+  padding: 18px 22px 16px;
+  overflow: hidden;
+}
+.settings-hero::before {
+  content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass-deep) 15%, var(--brass-bright) 50%, var(--brass-deep) 85%, transparent);
+  opacity: 0.7;
+}
+.settings-hero-eyebrow {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.22em; color: var(--brass-deep); margin-bottom: 6px;
+}
+.settings-hero-title {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600; color: var(--ivory);
+  line-height: 1.25; letter-spacing: 0.01em;
+  font-variation-settings: 'opsz' 144;
+  display: flex; align-items: center; gap: 8px;
+}
+.settings-hero-title svg { color: var(--brass); }
+.settings-hero-sub {
+  font-size: 12px; color: var(--ivory-muted);
+  line-height: 1.6; margin-top: 4px;
+}
+.settings-hero-autosave {
+  align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ivory-muted); font-variant-numeric: tabular-nums;
+  padding: 5px 10px; border-radius: 999px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--walnut-border);
+  flex-shrink: 0;
+}
+
+/* ---- Settings Nav（分区台卡导航） ---- */
+.settings-nav {
+  padding: 4px 2px;
+}
+.settings-nav-list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.settings-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 8px 10px; border-radius: 8px;
+  background: transparent; border: 1px solid transparent;
+  color: var(--ivory-muted); font-size: 12.5px;
+  text-align: left; cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 38px;
+  position: relative;
+}
+.settings-nav-item:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--ivory);
+}
+.settings-nav-item.active {
+  background: rgba(201,162,94,0.12);
+  border-color: rgba(201,162,94,0.3);
+  color: var(--brass-bright);
+}
+.settings-nav-item.active::before {
+  content: ''; position: absolute; left: -1px; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 18px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--brass-bright), var(--brass));
+}
+.settings-nav-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
+  background: var(--walnut-raised);
+  border: 1px solid var(--walnut-border);
+  color: var(--ivory-dim);
+}
+.settings-nav-item.active .settings-nav-icon {
+  background: rgba(201,162,94,0.16);
+  border-color: rgba(201,162,94,0.35);
+  color: var(--brass-bright);
+}
+.settings-nav-label {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ---- Settings light theme ---- */
+html[data-theme="light"] .settings-hero {
+  background:
+    radial-gradient(ellipse 70% 160% at 100% 0%, rgba(161,121,45,0.05), transparent 60%),
+    linear-gradient(180deg, var(--felt) 0%, var(--felt-raised) 100%);
+}
+html[data-theme="light"] .settings-nav-item:hover {
+  background: rgba(90,70,35,0.06);
 }
 
 /* ---- Concept Node (Knowledge Graph) ---- */
@@ -2300,6 +2899,14 @@ html[data-theme="light"] .help-hero {
   background:
     radial-gradient(ellipse 70% 150% at 0% 0%, rgba(161,121,45,0.06), transparent 60%),
     linear-gradient(180deg, var(--felt) 0%, var(--felt-raised) 100%);
+}
+html[data-theme="light"] .puzzle-hero {
+  background:
+    radial-gradient(ellipse 70% 150% at 0% 0%, rgba(161,121,45,0.06), transparent 60%),
+    linear-gradient(180deg, var(--felt) 0%, var(--felt-raised) 100%);
+}
+html[data-theme="light"] .puzzle-card {
+  border-color: rgba(161,121,45,0.18);
 }
 html[data-theme="light"] .concept-card {
   background: linear-gradient(135deg, rgba(240,233,214,0.7) 0%, rgba(228,218,194,0.85) 100%);

@@ -8,6 +8,121 @@
 
 ## [Unreleased] - 2026-08-10
 
+### ActionBoard 三档按钮配色重构 — 一档一色，视觉焦点均衡
+
+> 用户反馈：三个选项按钮视觉焦点不平衡，需要三种颜色分别代表三个按钮，且每个位置固定一种颜色、避免重复定义。
+
+#### 设计决策
+
+- 原实现中 standard 与 aggressive 同为 brass 金色系（aggressive 为满色金板），passive 使用 sage 绿接近隐形，三档视觉权重失衡且与答题反馈色（正确=苔藓绿 success）撞色。
+- 重构为**一档固定一色、三色互不重复、权重均衡**，强度层级改由 gauge dots 数量（1/2/3）表达：
+
+| 档位 | 语义 | 固定色 | token |
+|---|---|---|---|
+| passive（cat 0-1，Fold/Check） | 保守·弃守 | 霜钢蓝 | `--poker-frost` / `--poker-frost-deep` |
+| standard（cat 2-5，Call/Bet/Raise） | 标准行动 | 黄铜金 | `--brass-deep` / `--brass` |
+| aggressive（cat 6，全下） | 致命一击 | 陶土红 | `--clay` |
+- 三色与答题反馈色错开：正确=苔藓绿、错误=陶土红，避免答题前被颜色暗示答案；aggressive 不再使用与 standard 同族的 brass，改用陶土红满色 + 象牙文字。
+
+#### 改动
+
+- `components/ActionBoard.tsx`：gauge dots 颜色由 `TIER_DOT` 单源映射（`dot--frost` / `dot--brass` / `dot--clay`），按档点亮 1/2/3 颗且全部同色；新增选错选项的 ✗ 角标（`action-tile-mark--wrong`，danger 底），与正确选项 ✓ 角标对称。
+- `src/styles/globals.css`：
+  - `.action-tile-gauge .dot--on.dot--sage` → `dot--frost`（霜钢蓝）
+  - `.action-tile-passive`：sage → frost 薄边 + 蓝调浅底
+  - `.action-tile-aggressive`：brass-bright 满色 → clay 陶土红满色渐变 + 象牙文字 + clay 光晕阴影
+  - `.action-tile-mark--wrong`：新增 danger 底 ✗ 角标
+  - light theme 覆盖补全三档（passive frost 浅底 / standard brass 浅底 / aggressive clay 满色），浅色主题下同样三色分明
+- `ActionBoard.test.tsx`：无需改动（测试断言 data-tier 与交互类名，不依赖颜色）。
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、70 files 487 tests ✅（designTokenGuard 通过，无新增霓虹色）
+
+#### 用户反馈迭代：passive 配色再优化（frost → indigo）
+
+> 用户反馈「第一个和第二个几乎一样」：frost 浅蓝灰与 brass 黄调在暗背景下色温接近，passive 与 standard 视觉差异不足。
+
+- **passive 配色从霜钢蓝 `--poker-frost` 升级为石板靛 `--poker-indigo` + `--poker-indigo-bright`**（§2.3 登记色）：
+  - `.action-tile-passive`：边框 frost 32% → indigo-bright 55%；底色 frost 5% → indigo 14%；文字标签 `ivory` → `indigo-bright`；font-weight 500→600 让蓝字更辨识
+  - hover 蓝调加深（indigo 22% / 10%）
+  - gauge dot 同步 indigo-bright
+  - light theme 覆盖同步更新（indigo 18% / 8%）
+- 组件顶部 JSDoc 注释同步更新（frost → indigo）
+- 复用既有 `--poker-indigo` / `--poker-indigo-bright` token，零新增 token，零新增依赖
+
+#### 二次验证
+
+- `pnpm verify` 全绿：typecheck ✓ lint ✓ 70 files 487 tests ✓（designTokenGuard 通过）
+- 截图 `.visual-check/action-board-indigo-{desktop,mobile}.png`：Check 文字明显石板靛蓝，与 Bet 4BB 黄铜、22.5BB 陶土红三色彻底拉开 ✅
+
+#### light theme 对比度修复（程序化颜色断言）
+
+- 通过 Playwright 计算样式断言 dark/light 双主题下三档按钮的边框/文字/gauge 颜色：dark 下三色分离完美；**light 下 aggressive 的 `--ivory` 被覆盖为深棕、叠在 clay 红底上对比不足**
+- 修复：light 下 aggressive 文字、label、gauge dots 改用 `--stable-ivory`（#f8f2e2，不随主题翻转的象牙白），文字 `rgb(248,242,226)` 对比度达标
+- 两种主题下三档均保持 indigo / brass / clay 三色独立
+- 验证脚本：`.visual-check/action_board_color_probe.py`（临时，用户选择保留）
+
+#### 用户反馈迭代：aggressive 满色改浅底
+
+> 用户反馈「红色底色太突兀了」：aggressive 的陶土红满色实底在三个按钮中视觉重量过大，破坏了「一档一色、权重均衡」的目标。
+
+- `.action-tile-aggressive` 由满色实底改为与其他两档对齐的**低饱和浅底 + 红边 + 红字**（clay 15% → 6%，与 passive indigo 14%→6%、standard brass 10%→4% 同量级）
+- 文字由满色方案的 ivory/stable-ivory 白字改为 clay 红字；gauge 3 dots 点亮 + clay 色
+- hover 加深至 24% / 10%；light theme 覆盖同步改为 clay 浅底（20% / 8%）+ 红字
+- **三档统一形态定稿**：浅彩底 + 彩边 + 彩字 + N dots（indigo / brass / clay），强度层级完全由 dot 数量表达，视觉焦点均衡
+- `pnpm verify` 全绿：typecheck ✓ lint ✓ 70 files 487 tests ✓
+
+### 每日谜题答题页视觉重设 — ActionBoard 行动分档
+
+> 用户反馈：每日谜题答题页左右空隙明显、三个选项按钮视觉权重完全相同无法区分。
+
+#### 新增（puzzle-trainer · ActionBoard 行动桌）
+
+- `components/ActionBoard.tsx`：选项按钮组件，按 `optionOrder.ts` 的 `parseOptionSortKey` category 把动作分入 3 档视觉权重
+  - **passive**（cat 0-1，Fold/Check）：sage 暗薄边、低权重，1 个 sage 绿 dot 暗示 "防御位"
+  - **standard**（cat 2-5，Call/Limp/Bet/Raise）：brass 金边、中等权重，2 个 dot（sage + brass）暗示 "标准玩法"
+  - **aggressive**（cat 6，全下类）：brass-bright 满色填充 + 深色文字、3 个 dot（sage + brass + clay）暗示 "致命一击"
+- 签名元素：每个按钮左上 `action-tile-gauge` 三圆点 gauge，dot 颜色映射 tier，把"行动激进程度"内嵌到按钮视觉里——玩家无需读字即可分辨激进档
+- 2-3 选项桌面铺开为 3 列横排，4+ 选项自适应 2 / 3 列，移动端小屏回 1 列
+- 答题反馈态通过 `--correct / --wrong / --correct-reveal / --dim` modifier 渲染（覆盖 tier 颜色，保留 gauge）
+- a11y：`aria-label={opt.text}` + `aria-pressed={isSelected}`，focus-visible brass 环
+
+#### 改动（puzzle-trainer · DailyPuzzle 容器布局）
+
+- `components/DailyPuzzle.tsx`：
+  - 容器从 `max-w-3xl mx-auto` 扩到 `max-w-[1024px] mx-auto` + 横向 padding 18/20px，消除左右空隙
+  - 顶部栏从"3 段式（退出 / 标题 / 日期） + 整张 Card 状状态"重设为"一行 chip 流（退出 / 标题 + 日期 / 完成人数 + 已完成态）"，节省 70px 高度
+  - 进度条合并到分数区上方一行：`#{{current}}/{{total}} ―progress bar― {{pct}}%`
+  - 底部实时分数与"今日题目固定"提示合并为 footer strip chip
+- `components/PuzzleCard.tsx`：
+  - 情景描述：新增 `.puzzle-question-eyebrow`（场景 SCENARIO）与 `.puzzle-question-scenario`（size 14.5px / lh 1.7）
+  - 行动区上方新增横向 hairline 分隔 + `.puzzle-action-eyebrow`（你的行动 · YOUR MOVE）
+  - 选项按钮渲染从 inline `<Button variant="outline">` grid 委托至 `<ActionBoard>`，保持接口不变（rush / daily / theme 三模式共享）
+  - theme chip 加 `truncate max-w-[160px]` 与 responsive text-[10px]/[11px]，避免窄屏与"第 N/8 题"重叠
+
+#### 新增（styles）
+
+- `src/styles/globals.css` 新增分区「Daily Puzzle 重设」：`.daily-puzzle-shell` `.daily-puzzle-topbar` `.daily-puzzle-chips` `.daily-puzzle-score`、`.puzzle-question-card / eyebrow / scenario / divider`、`.puzzle-action-eyebrow`、`.action-board (CSS grid 列布局)` `.action-tile` 三 tier 配色、`.action-tile-gauge .dot` 三色变体、答题反馈 modifier 类
+- 全部样式均通过已有的四层色彩 token（`--walnut-*` / `--ivory-*` / `--brass-*` / `--sage` / `--clay`）派生，未引入新硬编码颜色
+
+#### i18n
+
+- 新增 key：`puzzle.card.scenarioLabel` / `puzzle.card.yourMove` / `puzzle.daily.alreadyCompletedShort`（zh/en 双语对称）
+
+#### 新增（测试）
+
+- `components/ActionBoard.test.tsx` 6 用例：3-tier 渲染 + 选中态 + 答题锁定 + 答题反馈态（正确/错误/揭示）+ 列布局 modifier
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、70 files 487 tests ✅
+- 视觉验证：`.visual-check/daily-redesign-desktop.png` (1440×900) + `daily-redesign-mobile.png` (390×844)，3 选项桌面铺开、移动单列堆叠 ✅
+
+---
+
+## [Unreleased] - 2026-08-10
+
 ### 已知限制全部修复（2026-08-10 三次 cr）
 
 > 执行模式：子代理协作（progress-dev / theory-academy-dev / strategy-academy-dev 规范），主代理按模块组织执行并复核验收。

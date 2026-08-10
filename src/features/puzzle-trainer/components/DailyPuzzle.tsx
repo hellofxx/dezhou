@@ -5,14 +5,18 @@
  * - 完成状态持久化（在 store 中记录 dailyCompleted: { [dateKey]: true }）
  * - 当日重复做不改变完成状态（已完成时显示"今日已完成 ✓"但仍可查看题目）
  * - 显示"今日已有 XXX 人完成"（基于 dateSeed 生成 100-999 之间）
+ *
+ * P2026-08 视觉重设：
+ * - 容器宽度 max-w-3xl → max-w-5xl 并加 padding，避免左右空隙
+ * - 顶部栏重构为一行 chip 风格（退出 / 题号 / 完成状态 / 同伴数）
+ * - 进度条 + 实时分数合并为 footer strip（紧凑 + 不干扰答题区）
  */
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, Users } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Hash, Users } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import { Card, CardContent } from '@/shared/components/ui/card';
 import { Progress } from '@/shared/components/ui/progress';
 import { PuzzleCard } from './PuzzleCard';
 import { PuzzleResult } from './PuzzleResult';
@@ -93,9 +97,9 @@ export default function DailyPuzzle() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="py-4 space-y-3 max-w-3xl mx-auto">
-        {/* 顶部栏 */}
-        <div className="flex items-center justify-between gap-3">
+      <div className="daily-puzzle-shell space-y-4">
+        {/* 顶部精简栏：退出 / 题号 / 同伴 / 完成态 */}
+        <header className="daily-puzzle-topbar">
           <Button
             variant="ghost"
             size="sm"
@@ -105,46 +109,53 @@ export default function DailyPuzzle() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             {t('puzzle.common.exit')}
           </Button>
-          <h2 className="font-display text-base text-[var(--ivory)] tracking-wide">
-            {t('puzzle.daily.title')}
-          </h2>
-          <div className="text-xs text-[var(--ivory-dim)] font-numeric">{dateKey}</div>
-        </div>
 
-        {/* 状态卡片：完成人数 + 今日已完成 */}
-        <Card className="bg-[var(--surface)] border-[var(--walnut-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
-          <CardContent className="p-3 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-sm">
-              <Users className="w-4 h-4 text-[var(--brass-bright)]" />
-              <span className="text-[var(--ivory-muted)]">
-                {t('puzzle.daily.completionCount', { count: completionCount })}
-              </span>
-            </div>
+          <h2 className="daily-puzzle-title">
+            {t('puzzle.daily.title')}
+            <span className="daily-puzzle-date font-numeric">{dateKey}</span>
+          </h2>
+
+          <div className="daily-puzzle-chips">
+            <span className="daily-chip" aria-label={t('puzzle.daily.completionCount', { count: completionCount })}>
+              <Users className="w-3.5 h-3.5" />
+              <span className="font-numeric">{completionCount}</span>
+            </span>
             {alreadyCompleted && (
-              <motion.div
+              <motion.span
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--success)]/15 text-[var(--success)] text-xs font-display"
+                className="daily-chip daily-chip--done"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                {t('puzzle.daily.alreadyCompleted')}
-              </motion.div>
+                {t('puzzle.daily.alreadyCompletedShort')}
+              </motion.span>
             )}
-          </CardContent>
-        </Card>
-
-        {/* 进度条 */}
-        <Progress
-          value={progressValue}
-          className="h-1.5 [&_[class*=indicator]]:bg-[var(--brass-bright)]"
-        />
-
-        {/* 连续答错降级提示 */}
-        {shouldDownshiftDifficulty() && (
-          <div className="px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
-            {t('puzzle.common.downshiftHint')}
           </div>
-        )}
+        </header>
+
+        {/* 进度条 + 连续答错降级提示 */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs">
+            <Hash className="w-3.5 h-3.5 text-[var(--brass-bright)]" />
+            <span className="font-numeric text-[var(--ivory-muted)]">
+              {t('puzzle.card.progress', {
+                current: engine.state.currentIndex + 1,
+                total: engine.state.questions.length,
+              })}
+            </span>
+            <Progress
+              value={progressValue}
+              className="flex-1 h-1 [&_[class*=indicator]]:bg-[var(--brass-bright)]"
+            />
+            <span className="font-numeric text-[var(--brass-bright)]">{Math.round(progressValue)}%</span>
+          </div>
+
+          {shouldDownshiftDifficulty() && (
+            <div className="px-3 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+              {t('puzzle.common.downshiftHint')}
+            </div>
+          )}
+        </div>
 
         {/* 题目卡片 */}
         <PuzzleCard
@@ -160,20 +171,22 @@ export default function DailyPuzzle() {
           }}
         />
 
-        {/* 实时分数 */}
-        <div className="flex items-center justify-center gap-6 pt-2 text-xs text-[var(--ivory-dim)]">
-          <span>
-            {t('puzzle.common.correct')}: <span className="font-numeric text-[var(--success)]">{engine.state.correctCount}</span>
-          </span>
-          <span>
-            {t('puzzle.common.wrong')}: <span className="font-numeric text-[var(--clay)]">{engine.state.wrongCount}</span>
-          </span>
-        </div>
-
-        {/* 提示：今日题目固定 */}
-        <p className="text-center text-[10px] text-[var(--ivory-dim)]/70 pt-1">
-          {t('puzzle.daily.fixedHint')}
-        </p>
+        {/* Footer strip：实时分数 + 今日提示（一行压缩） */}
+        <footer className="daily-puzzle-footer">
+          <div className="daily-puzzle-score">
+            <span>
+              {t('puzzle.common.correct')}:{' '}
+              <span className="font-numeric text-[var(--success)]">{engine.state.correctCount}</span>
+            </span>
+            <span className="opacity-30">·</span>
+            <span>
+              {t('puzzle.common.wrong')}:{' '}
+              <span className="font-numeric text-[var(--clay)]">{engine.state.wrongCount}</span>
+            </span>
+            <span className="opacity-30">·</span>
+            <span className="text-[var(--ivory-dim)]">{t('puzzle.daily.fixedHint')}</span>
+          </div>
+        </footer>
       </div>
     </div>
   );

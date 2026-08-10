@@ -1056,6 +1056,10 @@
   "settings": {
     "title": "设置",
     "subtitle": "个性化你的训练体验，更改会自动保存",
+    "hero": {
+      "eyebrow": "牌室设置 · ROOM SETUP"
+    },
+    "navAria": "设置分区导航",
     "autoSaved": "自动保存",
     "appearance": "外观",
     "appearanceHint": "主题与界面语言",
@@ -1694,6 +1698,17 @@
     "home": {
       "title": "扑克谜题",
       "subtitle": "通过趣味谜题场景训练决策能力，覆盖翻前 RFI、大盲防守、3Bet、C-Bet、同花听牌、河牌价值、诈唬、短筹码、ICM、多人底池 10 大主题。",
+      "hero": {
+        "ariaLabel": "谜题台",
+        "eyebrow": "谜题台 · PUZZLE DESK",
+        "startDaily": "开始今日谜题",
+        "reviewDaily": "查看今日谜题",
+        "meta": "3 种模式 · 10 大主题 · 每日固定 8 题",
+        "doneLabel": "今日已完成",
+        "doneAccuracy": "· 最佳正确率 {{percent}}%",
+        "plaqueLabel": "DAILY PUZZLE"
+      },
+      "todayBadge": "今日",
       "rushTitle": "限时冲刺",
       "rushDesc": "3 或 5 分钟限时，3 条命，连对 5 题奖励 +10 秒。难度递增。",
       "dailyTitle": "每日谜题",
@@ -1718,6 +1733,8 @@
       "bestAccuracyShort": "最佳 {{percent}}%"
     },
     "card": {
+      "scenarioLabel": "场景",
+      "yourMove": "你的行动",
       "progress": "第 {{current}} / {{total}} 题",
       "handLabel": "手牌",
       "positionLabel": "位置",
@@ -1742,6 +1759,7 @@
       "noQuestions": "今日暂无题目",
       "completionCount": "今日已有 {{count}} 人完成",
       "alreadyCompleted": "今日已完成 ✓",
+      "alreadyCompletedShort": "今日已做",
       "fixedHint": "今日题目固定，所有人看到的题目相同"
     },
     "theme": {
