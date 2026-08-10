@@ -181,7 +181,7 @@ export const useAcademyStore = create<AcademyStore>()(
             totalQuestions: result.totalQuestions,
             correctAnswers: result.correctAnswers,
             accuracy: result.accuracy,
-            averageTime: result.averageTime,
+            averageTime: result.averageTime * 1000, // PracticeResult 单位为秒，转毫秒（与 progress 各模块一致）
             timestamp: result.timestamp,
             details: [],
           },

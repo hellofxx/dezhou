@@ -59,7 +59,7 @@ export function completeCourse(params: CompleteCourseParams): void {
         totalQuestions: drillResult.total,
         correctAnswers: drillResult.correct,
         accuracy: drillResult.total > 0 ? drillResult.correct / drillResult.total : 0,
-        averageTime: drillResult.timeTaken / 1000 / Math.max(drillResult.total, 1),
+        averageTime: drillResult.timeTaken / Math.max(drillResult.total, 1),
         timestamp: Date.now(),
         details: [],
       },

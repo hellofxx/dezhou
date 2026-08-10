@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { TrendingUp, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { transitionSlow } from '@/shared/utils/motion';
 import { useAcademyStore } from '@/features/strategy-academy/store';
 import { getAllLessons } from '@/features/strategy-academy/utils/courseProgress';
 
@@ -14,6 +16,7 @@ interface ProgressEntry {
 }
 
 export default function ProgressReplay() {
+  const { t } = useTranslation();
   const firstAttemptScores = useAcademyStore((s) => s.firstAttemptScores);
   const lastAttemptScores = useAcademyStore((s) => s.lastAttemptScores);
 
@@ -46,13 +49,13 @@ export default function ProgressReplay() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.4 }}
+      transition={{ ...transitionSlow, delay: 0.4 }}
     >
       <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
         <CardHeader className="pb-3">
           <CardTitle className="font-display text-[17px] text-[var(--ivory)] tracking-wide flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-[var(--brass-bright)]" />
-            回放你的进步
+            {t('dashboard.progressReplay.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -124,7 +127,7 @@ export default function ProgressReplay() {
             <div className="text-center py-6">
               <div className="text-2xl mb-2">📈</div>
               <p className="text-xs text-[var(--ivory-muted)]">
-                完成更多课程后将显示你的进步轨迹
+                {t('dashboard.progressReplay.empty')}
               </p>
             </div>
           )}

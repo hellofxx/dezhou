@@ -20,6 +20,11 @@ import { TheorySectionRenderer } from './TheorySectionRenderer';
 import { TheoryQuiz } from './TheoryQuiz';
 import { PracticeBridgeCard } from './PracticeBridgeCard';
 import { NextChapterNav } from './NextChapterNav';
+import {
+  resolveChapterTitle,
+  resolveChapterSubtitle,
+  resolveTheoryLevelTitle,
+} from '../utils/titleKeys';
 
 /**
  * 理论章节页：URL 直达门禁（所属 Level 未解锁则重定向回主页）+ 讲解 + 章末小测。
@@ -108,7 +113,7 @@ export default function TheoryChapterView() {
           className="inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          理论学院 · {level.icon} {level.title}
+          {t('theory.title')} · {level.icon} {resolveTheoryLevelTitle(t, level)}
         </button>
 
         {isTransitioning ? (
@@ -121,9 +126,9 @@ export default function TheoryChapterView() {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="panel">
           <p className="section-eyebrow mb-1.5">Theory {level.id.toUpperCase()} · 第 {chapter.order} 章</p>
           <h1 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
-            {chapter.title}
+            {resolveChapterTitle(t, chapter)}
           </h1>
-          <p className="text-sm text-[var(--ivory-dim)]">{chapter.subtitle}</p>
+          <p className="text-sm text-[var(--ivory-dim)]">{resolveChapterSubtitle(t, chapter)}</p>
           <div className="mt-3 flex items-center gap-3 text-xs text-[var(--ivory-muted)]">
             <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{chapter.duration}</span>
             {(() => {

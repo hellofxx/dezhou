@@ -6,6 +6,7 @@
  */
 import { CheckCircle2, Home, ArrowRight, RotateCcw, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { resolveTrackName, resolveTrackDescription, resolveTrackDuration } from '../utils/titleKeys';
 import type { DrillResult } from './drills/types';
 import type { LearningTrack } from '../types';
 
@@ -136,17 +137,17 @@ export default function CourseDoneView({
                     <span className="text-2xl shrink-0">{track!.icon}</span>
                     <div className="flex-1 min-w-0">
                       <p className="font-display text-sm text-[var(--ivory)] group-hover:text-[var(--brass-bright)] transition-colors">
-                        {track!.name}
+                        {resolveTrackName(t, track!)}
                       </p>
                       <p className="text-xs text-[var(--ivory-muted)] mt-1 line-clamp-2">
-                        {track!.description}
+                        {resolveTrackDescription(t, track!)}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <span className="text-xs text-[var(--ivory-dim)]">
                           {t('academy.courseView.trackInfo', {
                             defaultValue: '{{count}} 节课 · {{duration}}',
                             count: track!.lessonIds.length,
-                            duration: track!.estimatedDuration,
+                            duration: resolveTrackDuration(t, track!),
                           })}
                         </span>
                         <span className="text-[10px] text-[var(--ivory-dim)] bg-[var(--walnut-raised)] px-1.5 py-0.5 rounded">

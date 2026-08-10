@@ -6,6 +6,11 @@ import { Lock, CheckCircle2, PlayCircle, ChevronDown, ChevronUp, Swords } from '
 import { cn } from '@/shared/utils/cn';
 import type { TheoryLevelInfo } from '../types';
 import { TheoryChapterList } from './TheoryChapterList';
+import {
+  resolveTheoryLevelTitle,
+  resolveTheoryLevelDescription,
+  resolveTheoryLevelUnlock,
+} from '../utils/titleKeys';
 
 interface TheoryLevelCardProps {
   level: TheoryLevelInfo;
@@ -74,7 +79,11 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
             handleClick();
           }
         }}
-        aria-label={`理论 Level ${level.level}：${level.title}${unlocked ? '' : '（未解锁）'}`}
+        aria-label={t('theory.levelCard.levelAria', {
+          level: level.level,
+          title: resolveTheoryLevelTitle(t, level),
+          locked: unlocked ? '' : t('theory.levelCard.lockedSuffix'),
+        })}
         className={cn(
           'w-full text-left rounded-lg border p-5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
           unlocked
@@ -99,8 +108,8 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
               </span>
               {allCompleted && <CheckCircle2 className="w-3.5 h-3.5 text-[var(--poker-success)]" />}
             </div>
-            <h3 className="font-display text-[16px] text-[var(--ivory)] mb-0.5">{level.title}</h3>
-            <p className="text-xs text-[var(--ivory-muted)] mb-3">{level.description}</p>
+            <h3 className="font-display text-[16px] text-[var(--ivory)] mb-0.5">{resolveTheoryLevelTitle(t, level)}</h3>
+            <p className="text-xs text-[var(--ivory-muted)] mb-3">{resolveTheoryLevelDescription(t, level)}</p>
 
             {unlocked ? (
               <div className="space-y-1.5">
@@ -135,7 +144,9 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                   <span
                     role="button"
                     tabIndex={0}
-                    aria-label={`${level.title} 已完成，去实践应用`}
+                    aria-label={t('theory.levelCard.doneAria', {
+                      title: resolveTheoryLevelTitle(t, level),
+                    })}
                     onClick={goPractice}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') goPractice(e);
@@ -150,7 +161,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
             ) : (
               <p className="text-xs text-[var(--ivory-muted)] flex items-center gap-1.5">
                 <Lock className="w-3 h-3" />
-                {level.unlockRequirement}
+                {resolveTheoryLevelUnlock(t, level)}
               </p>
             )}
           </div>
@@ -162,7 +173,11 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                   e.stopPropagation();
                   setExpanded((v) => !v);
                 }}
-                aria-label={expanded ? `收起 ${level.title} 章节列表` : `展开 ${level.title} 章节列表`}
+                aria-label={
+                  expanded
+                    ? t('theory.levelCard.collapseAria', { title: resolveTheoryLevelTitle(t, level) })
+                    : t('theory.levelCard.expandAria', { title: resolveTheoryLevelTitle(t, level) })
+                }
                 aria-expanded={expanded}
                 className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-1.5 text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
               >

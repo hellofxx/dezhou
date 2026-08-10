@@ -5,6 +5,7 @@ import { cn } from '@/shared/utils/cn';
 import { useTheoryStore } from '../store';
 import { THEORY_LEVELS } from '../data/levels';
 import { getLevelTargetChapter } from '../utils/theoryProgress';
+import { resolveTheoryLevelTitle } from '../utils/titleKeys';
 
 /**
  * 理论学习路径地图：T1-T9 九节点横向链，三态着色（已完成/进行中/锁定）。
@@ -40,7 +41,15 @@ export function TheoryLearningMap() {
                     if (unlocked && target) navigate(`/theory/chapter/${target.id}`);
                   }}
                   disabled={!unlocked}
-                  aria-label={`Theory ${level.id.toUpperCase()}：${level.title}${completed ? '（已完成）' : unlocked ? '（进行中）' : '（未解锁）'}`}
+                  aria-label={t('theory.learningMap.levelAria', {
+                    tier: level.id.toUpperCase(),
+                    title: resolveTheoryLevelTitle(t, level),
+                    state: completed
+                      ? t('theory.learningMap.done')
+                      : unlocked
+                        ? t('theory.learningMap.inProgress')
+                        : t('theory.learningMap.locked'),
+                  })}
                   className={cn(
                     'flex flex-col items-center gap-1.5 px-1 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
                     unlocked ? 'cursor-pointer hover:bg-[var(--walnut-raised)]/40' : 'cursor-not-allowed'
@@ -72,7 +81,7 @@ export function TheoryLearningMap() {
                       !unlocked && 'text-[var(--ivory-muted)]'
                     )}
                   >
-                    {level.title}
+                    {resolveTheoryLevelTitle(t, level)}
                   </span>
                 </button>
               </div>

@@ -1,11 +1,13 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
+import { resolveLevelTitle, resolveLessonTitle, lessonTitleKey, levelTitleKey } from '../utils/titleKeys';
 
 interface GraphNode {
   id: string;
@@ -130,6 +132,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
   onSelect,
   onHover,
 }: GraphNodeItemProps) {
+  const { t } = useTranslation();
   const keyboardProps = useGridKeyboardNav(node.id, onSelect);
 
   // 样式
@@ -220,7 +223,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
         fontSize={11}
         fontWeight={status === 'completed' ? 600 : 400}
       >
-        {node.label}
+        {truncateLabel(t(lessonTitleKey(node.id), { defaultValue: node.fullTitle }))}
       </text>
 
       {/* 已完成 ✓ */}
@@ -251,10 +254,12 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
             stroke="rgba(255,255,255,0.2)"
           />
           <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 27} textAnchor="middle" fill="white" fontSize={10} fontWeight={500}>
-            {node.fullTitle}
+            {t(lessonTitleKey(node.id), { defaultValue: node.fullTitle })}
           </text>
           <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 14} textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize={9}>
-            {levelInfo ? `L${levelInfo.level} · ${levelInfo.title}` : ''} ·{' '}
+            {levelInfo
+              ? `L${levelInfo.level} · ${t(levelTitleKey(`l${levelInfo.level}`), { defaultValue: levelInfo.title })}`
+              : ''} ·{' '}
             {status === 'completed' ? '已完成' : status === 'current' ? '进行中' : status === 'locked' ? '未解锁' : '未开始'}
           </text>
         </g>
@@ -264,6 +269,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
 });
 
 export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
+  const { t } = useTranslation();
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [viewBox, setViewBox] = useState({ x: 0, y: 0, w: 1200, h: 800 });
@@ -421,7 +427,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm">{levelInfo.icon}</span>
                 <span className="text-xs font-semibold text-[var(--ivory)]">
-                  L{levelInfo.level} · {levelInfo.title}
+                  L{levelInfo.level} · {resolveLevelTitle(t, levelInfo)}
                 </span>
                 {!unlocked && <span className="text-[10px] text-[var(--ivory-dim)]">🔒</span>}
               </div>
@@ -445,7 +451,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
                       }`}
                     >
                       <span className="mr-1.5">{isCompleted ? '✓' : '○'}</span>
-                      {lesson.title}
+                      {resolveLessonTitle(t, lesson)}
                     </button>
                   );
                 })}
@@ -513,7 +519,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
                   L{levelInfo.level}
                 </text>
                 <text x={12} y={levelY + 32} fill="var(--ivory-dim)" fontSize={9}>
-                  {levelInfo.title}
+                  {resolveLevelTitle(t, levelInfo)}
                 </text>
               </g>
             );

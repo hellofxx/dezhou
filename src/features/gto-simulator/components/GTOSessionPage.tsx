@@ -137,7 +137,7 @@ export default function GTOSessionPage() {
             totalQuestions: result.scenarios,
             correctAnswers: result.optimalDecisions,
             accuracy: result.accuracy,
-            averageTime: result.totalTime / result.scenarios / 1000,
+            averageTime: result.totalTime / Math.max(result.scenarios, 1),
             timestamp: Date.now(),
             details: [],
           },

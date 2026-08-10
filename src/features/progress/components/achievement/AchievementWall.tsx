@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/shared/components/ui/dialog';
+import { transitionFast } from '@/shared/utils/motion';
 import {
   ACHIEVEMENTS,
   ACHIEVEMENTS_BY_CATEGORY,
@@ -98,7 +99,7 @@ export default function AchievementWall({ open, onOpenChange }: AchievementWallP
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
+              transition={transitionFast}
               className="grid grid-cols-1 sm:grid-cols-2 gap-3"
             >
               {currentAchievements.map((achievement) => (

@@ -8,6 +8,7 @@ import { Button } from '@/shared/components/ui/button';
 import { useProgressStore } from '../../store';
 import { getTodayString } from '../../utils/spacedRepetition';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
+import { transitionStandard } from '@/shared/utils/motion';
 
 /**
  * P2-5.4: Session 止损守卫组件。
@@ -75,7 +76,7 @@ export default function SessionLimitGuard() {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35 }}
+        transition={transitionStandard}
         className="w-full max-w-md"
       >
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow)]">

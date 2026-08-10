@@ -3,35 +3,43 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FAQ_ITEMS } from '../data/helpContent';
+import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 
-/** 自研轻量 FAQ 折叠面板（无 accordion 依赖） */
+/**
+ * FAQ 折叠面板 — 编号 01-08 + brass 左侧描边 + framer-motion 动效。
+ * 左侧 brass 描边在 hover / 展开时由 walnut-border 提亮至 brass。
+ */
 export default function FaqAccordion() {
   const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="space-y-2">
+    <div className="faq-list">
       {FAQ_ITEMS.map((item, idx) => {
         const isOpen = openIndex === idx;
         const panelId = `faq-panel-${idx}`;
         const buttonId = `faq-button-${idx}`;
+        const num = String(idx + 1).padStart(2, '0');
         return (
-          <div
-            key={idx}
-            className="rounded-lg border border-[var(--walnut-border)] bg-[var(--surface)] overflow-hidden"
-          >
+          <div key={idx} className={`faq-item${isOpen ? ' open' : ''}`}>
             <button
               id={buttonId}
               type="button"
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => setOpenIndex(isOpen ? null : idx)}
-              className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm text-[var(--ivory)] hover:bg-[var(--walnut-light)]/30 transition-colors min-h-[44px]"
+              className="faq-item-button"
             >
-              <span>{t(`help.${item.questionKey}`)}</span>
+              <span className="faq-item-num" aria-hidden="true">
+                {num}
+              </span>
+              <span className="faq-item-question">
+                {t(`help.${item.questionKey}`)}
+              </span>
               <ChevronDown
                 size={16}
-                className={`shrink-0 text-[var(--ivory-dim)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                className={`faq-item-chevron${isOpen ? ' open' : ''}`}
+                aria-hidden="true"
               />
             </button>
             <AnimatePresence initial={false}>
@@ -43,12 +51,12 @@ export default function FaqAccordion() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
+                  transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.standard }}
+                  className="faq-item-panel-wrap"
                 >
-                  <p className="px-4 pb-3 text-sm text-[var(--ivory-muted)] leading-relaxed">
+                  <div className="faq-item-panel">
                     {t(`help.${item.answerKey}`)}
-                  </p>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

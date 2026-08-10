@@ -1,12 +1,20 @@
 import { useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Users, Clock, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
-import { LEARNING_TRACKS, isTrackPrerequisiteMet, getPrerequisiteHint } from '../data/learningTracks';
+import { LEARNING_TRACKS, isTrackPrerequisiteMet } from '../data/learningTracks';
+import {
+  resolveTrackName,
+  resolveTrackDescription,
+  resolveTrackAudience,
+  resolveTrackDuration,
+} from '../utils/titleKeys';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { ProgressBar } from './ProgressBar';
 export default function LearningTracksView() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   // P1E-01: 消费 ?track= 参数（滚动/高亮）
   const [searchParams] = useSearchParams();
@@ -63,9 +71,14 @@ export default function LearningTracksView() {
 
             // P1E-02: 前置条件检查改用课程完成口径（调试解锁时直接放行）
             const prereqMet = debugUnlock || isTrackPrerequisiteMet(track, progress.completedLessons);
-            const prereqHint = !prereqMet && track.prerequisiteLevelIds
-              ? getPrerequisiteHint(track.prerequisiteLevelIds)
-              : null;
+            const prereqHint =
+              !prereqMet && track.prerequisiteLevelIds
+                ? t('academy.tracks.prereqHint', {
+                    levels: track.prerequisiteLevelIds
+                      .map((id) => id.replace(/^l/i, 'Level '))
+                      .join('、'),
+                  })
+                : null;
 
             // 找到轨道中下一个未完成的课程
             const nextLesson = track.lessonIds.find(
@@ -102,7 +115,7 @@ export default function LearningTracksView() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-display text-[16px] text-[var(--ivory)]">{track.name}</h3>
+                      <h3 className="font-display text-[16px] text-[var(--ivory)]">{resolveTrackName(t, track)}</h3>
                       {track.id === 'track-local-cn' && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
                           已并入 Level 7 · 本土课
@@ -117,7 +130,7 @@ export default function LearningTracksView() {
                         <CheckCircle2 className="w-4 h-4 text-[var(--poker-success)]" />
                       )}
                     </div>
-                    <p className="text-xs text-[var(--ivory-muted)] mb-3">{track.description}</p>
+                    <p className="text-xs text-[var(--ivory-muted)] mb-3">{resolveTrackDescription(t, track)}</p>
 
                     {/* P1E-03: 前置条件提示（附跳转链接） */}
                     {prereqHint && (
@@ -137,11 +150,11 @@ export default function LearningTracksView() {
                     <div className="flex items-center gap-3 text-[11px] text-[var(--ivory-dim)] mb-3">
                       <span className="inline-flex items-center gap-1">
                         <Users className="w-3 h-3" />
-                        {track.targetAudience}
+                        {resolveTrackAudience(t, track)}
                       </span>
                       <span className="inline-flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {track.estimatedDuration}
+                        {resolveTrackDuration(t, track)}
                       </span>
                     </div>
 

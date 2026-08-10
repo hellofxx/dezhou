@@ -1,8 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.4.0
+> 德州扑克训练平台 UI/UX 设计规范 v1.5.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.5.0 更新：动效章节全量规范（§8）— 新增动效 token（缓动/时长）、触发方式、动画类型定义（淡入/滑动/缩放/旋转）、组件状态动画行为矩阵，React 侧共享动效规范 `src/shared/utils/motion.ts` 为单一事实源
 > v1.4.0 更新：课程阅读排版契约（§3.3 Lesson Reading/Heading 字号）、新增 §5.22 教学内容块（content-block 视觉词汇）、课程内 Tab 图标化+sticky（§5.6）、场景卡复用（§5.16）、模块级 Emoji→Lucide 图标约定
 > v1.3.2 更新：实现层合规修复（五级反馈牌室化、霓虹色板清零、牌背胡桃化）、新增 §5.21 交互状态矩阵、§2.2 语义色 hover 变体规则、token 登记（gold/bronze/indigo-bright/terra-bright）、设计 token 守卫测试机制
 > v1.3 更新：移动端响应式重构（streak-rail 上移至 arena 下方、训练场二列、arena 紧凑三分区、纵向压缩）、CSS `!important` 特异性规则
@@ -472,26 +473,97 @@
 
 ## 8. 动效
 
-### 8.1 时长
-- 微交互（hover/press）：150–200ms
-- 过渡（tab 切换/面板展开）：250–350ms
-- 大场景（牌桌入场/发牌）：400–600ms
-- 呼吸/等待（卡背/庄码）：1.5–3s 循环
+> **单一事实源（v1.5.0）**：动效 token 与组件状态矩阵的唯一实现权威为 `src/shared/utils/motion.ts`（React / framer-motion）与 `src/styles/globals.css`（CSS keyframes / CSS 变量）。本文档为设计定义权威，二者任一变更须同步其余两处；新增动效禁止绕过共享规范自造参数。
 
-### 8.2 缓动
-- 默认：`ease` / `cubic-bezier(0.4,0,0.2,1)`
-- 出场：`cubic-bezier(0.4,0,1,1)`（快出慢进）
-- 弹性（筹码落/卡牌翻）：`cubic-bezier(0.34,1.56,0.64,1)` 轻度回弹
+### 8.1 动效原则
 
-### 8.3 典型动效
-- **Tab 切换**：active 下划线从旧滑到新 200ms+glow；`.table-rail` 铆钉不动（锚点）
-- **卡牌入场**：-20px + 5° 旋转落下 400ms 弹性
-- **筹码堆叠**：0.8 缩放落下 300ms
-- **按钮 hover**：背景 200ms 渐变 + 0→1 黄铜辉光
-- **面板 live 光**：顶部光线 3s 循环脉冲 opacity 0.6↔1
-- **正确答案**：面板闪 1 帧苔藓绿+数字上跳 +2px 回落
-- **错误答案**：左右 3 次 shake `translateX -4px ↔ 4px` 200ms，陶土红边框瞬亮
-- **冻结卡使用**：霜蓝脉冲 600ms，雪花旋转 30°
+**设计取向**：动效是"发牌员递牌"的触觉延伸——帮助用户理解**状态发生了什么变化**（入场/反馈/等待），而非装饰。遵循"克制奢华"：绝大多数时间静止，动效只出现在状态切换的瞬间。
+
+#### 8.1.1 缓动（Easing）
+
+| Token | 值 | 用途 |
+|---|---|---|
+| `--poker-ease-standard` | `cubic-bezier(0.4,0,0.2,1)` | 默认入场/状态过渡（最常见的缓动） |
+| `--poker-ease-out` | `cubic-bezier(0,0,0.2,1)` | 元素出现（快起慢停，结果数字上跳） |
+| `--poker-ease-in` | `cubic-bezier(0.4,0,1,1)` | 元素退场/移除（慢入快出） |
+| `--poker-ease-spring` | `cubic-bezier(0.34,1.56,0.64,1)` | 弹性回弹（筹码落/卡牌翻/徽章 pop） |
+
+> 对应实现：`motion.ts` 导出 `MOTION_EASE`，CSS 变量见 globals.css `--poker-ease-*`。
+
+#### 8.1.2 时长（Duration）
+
+| Token | 值 | 用途 |
+|---|---|---|
+| `--poker-duration-fast` | 150–200ms | hover、press、选中态、tab 滑动 |
+| `--poker-duration-standard` | 250–350ms | 面板展开、路由切换、反馈浮层 |
+| `--poker-duration-slow` | 400–600ms | 大场景（牌桌入场/发牌/结果页数字） |
+| `--poker-duration-loop` | 1.5–3s | 循环呼吸/等待（live-dot、卡背、面板光） |
+
+> 对应实现：`motion.ts` 导出 `MOTION_DURATION`。
+
+**时长层级规则**：同一动作的进入/退出时长必须对称或遵循"进快出慢"（`standard` 进 / `in` 退），禁止进出都抢速。
+
+#### 8.1.3 触发方式（Triggers）
+
+| 触发 | 时机 | 典型动效 |
+|---|---|---|
+| `hover` | 指针悬停 | 背景/边框过渡 + 位移或缩放（150–200ms） |
+| `press` | 按下 | `scale(0.96)` 微缩，松手回弹（100–150ms） |
+| `focus` | 键盘聚焦 | 黄铜 outline（§5.21），不带动效 |
+| `state-change` | 状态翻转 | 颜色/边框/辉光过渡（150–250ms） |
+| `mount` | 挂载/入场 | 淡入 + 位移/缩放（250–350ms） |
+| `unmount` | 卸载/退场 | 淡出 + 位移（150–200ms） |
+| `loop` | 持续状态 | 呼吸/脉冲无限循环（1.5–3s） |
+
+**规则**：
+- hover 触发不得使用位移导致布局抖动（用 `transform`，不用 `top/left`）
+- 入场/退场必须成对出现（framer-motion `AnimatePresence` 或等价），禁止只进不出
+- 循环动效必须尊重 `prefers-reduced-motion`（globals.css 已全局兜底）
+
+### 8.2 常用动画类型定义
+
+统一实现：`src/shared/utils/motion.ts` 导出预置 variants 常量（`FADE_IN` / `SLIDE_UP` / `SLIDE_DOWN` / `SLIDE_LEFT` / `SLIDE_RIGHT` / `SCALE_IN` / `ROTATE_*` / `POP` / `SHAKE`），组件直接引用，禁止内联 `initial/animate` 字面量。CSS 侧对应 keyframes 类（`animate-*`，见 globals.css）。
+
+| 类型 | 关键属性 | 时长 | 缓动 | 用途 |
+|---|---|---|---|---|
+| **淡入淡出** fade | `opacity 0→1 / 1→0` | 150–300ms | standard/in | 浮层、反馈、状态徽章 |
+| **上滑** slide-up | `translateY(12–24px) → 0` + fade | 250–350ms | standard | 面板/卡片入场（最常见） |
+| **下滑** slide-down | `translateY(-16px) → 0` + fade | 250–350ms | standard | 顶部提示、下拉内容 |
+| **左滑** slide-left | `translateX(16–24px) → 0` + fade | 250–300ms | standard | 题目切换、列表推进 |
+| **右滑** slide-right | `translateX(-16px) → 0` + fade | 250–300ms | standard | 返回上一步、列表回退 |
+| **缩放** scale-in | `scale(0.9–0.96) → 1` + fade | 200–300ms | spring | 徽章、弹窗、庄码、反馈卡 |
+| **旋转** rotate | `rotate(0→180°/±30°)` | 200–300ms | standard | 箭头/chevron 展开、冻结卡雪花 |
+| **回弹** pop | `scale(0.8→1.15→1)` | 400–500ms | spring | 正确答案、成就解锁、连击 |
+| **摇晃** shake | `translateX(-4px↔4px)` × 3 | 200–250ms | standard | 错误答案、危险操作 |
+
+> **组合规则**：入场/退场动画默认叠加 `opacity` 淡入淡出（不透明度过渡可与 transform 并行，二者互不冲突）；位移与缩放可组合（如 slide-up + scale-in 同时作用），但**禁止**同时使用两个不同方向的位移。
+
+### 8.3 组件状态动画行为矩阵
+
+> 组件 → 状态 → 动效的权威映射。实现约定：交互动效统一 `MOTION_DURATION` + `MOTION_EASE`（`motion.ts`），循环/等待动效用 globals.css keyframes 类；组件新增动效须按此矩阵登记，禁止模块自造参数。
+
+| 组件 | hover | press | active/选中 | 入场（mount） | 退场（unmount） | 反馈/循环 |
+|---|---|---|---|---|---|---|
+| **按钮 `.btn-*`** | 背景/辉光 200ms standard | scale 0.96 | 黄铜辉光加深 | — | — | 禁用 opacity 40% |
+| **pill 筛选** | 边框亮化 150ms standard | scale 0.97 | 黄铜渐变 150ms | — | — | — |
+| **卡片 `.theme-card`/`.module-card`/`.puzzle-card`** | `translateY(-2px)` + 阴影 250ms standard | scale 0.98 | 边框点亮 | slide-up 250–300ms stagger | fade 150ms | — |
+| **扑克牌 `PokerCard`** | scale 1.05 | scale 0.97 | 黄铜辉光 drop-shadow | -20px + 5° 旋转落下 400ms spring | fade 200ms | 翻面 rotateY 300ms |
+| **反馈条 `feedback-grade`** | — | — | — | scale-in + fade 200ms | fade 150ms | 正确：pop 400ms spring / 错误：shake 200ms |
+| **FAQ 折叠** | 左边框提亮 200ms standard | — | chevron rotate 180° + 高度展开 200ms | slide-down 250ms | height→0 200ms | — |
+| **路由过渡** | — | — | — | slide-left 300ms standard | slide-right 200ms | — |
+| **结果页数字** | — | — | — | fade + slide-up 600ms ease-out（延迟 400ms） | — | — |
+| **live-dot / 面板光** | — | — | — | — | — | 循环呼吸 1.8–3s |
+| **streak-dot 今日** | — | — | 辉光脉冲 2s loop | — | — | — |
+| **进度条 fill** | — | — | — | width 0→目标 400ms standard | — | — |
+| **概念节点** | scale 1.08 | scale 0.95 | 辉光 + 边框点亮 | scale-in 200ms | — | — |
+
+### 8.4 实现约定
+
+- **React 组件**：全部经 framer-motion `motion.*` 实现，参数引用 `src/shared/utils/motion.ts` 的 `MOTION_DURATION` / `MOTION_EASE` 与预置 variants；`AnimatePresence` 负责退场
+- **CSS keyframes**：循环/等待类（live-pulse、panel-glow、card-wait、streak glow）与通用 `animate-*` 类定义于 globals.css，动画参数用 `var(--poker-ease-*)` / `var(--poker-duration-*)`，不写裸数字
+- **路由过渡**：`AppLayout` 使用统一的 page-transition variants（slide-left 入 / slide-right 出）
+- **键盘/无障碍**：hover 动效不得是唯一信息通道（focus-visible 必须等价可见）；`prefers-reduced-motion` 全局降级
+- **性能**：只用 `transform` / `opacity` 动画，避免 layout/paint 抖动；列表 stagger 步进 50–80ms，整页最大延迟 ≤600ms
 
 ---
 
@@ -543,7 +615,7 @@
 
 **候选组件**：`.hand-history-card`（手牌历史，参考 plaque）/ `.avatar-frame`（对手头像黄铜环）/ `.chat-bubble`（绿呢/胡桃双色）/ `.tournament-banner`（缩小椭圆绿呢+奖池，质感参照 path-banner）/ `.medal`（黄铜/金/银/铜四档）/ `.coach-tip`（象牙底+深棕字+小三角）/ `.equity-bar`（brass vs terracotta 双色）/ `.stamp`（深胡桃半透+黄铜字+细边，替代绿色对勾）。
 
-**动效扩展**：发牌贝塞尔飞行 / 筹码推底池残影 / 胜利金粉粒子 `<canvas>`。
+**动效扩展**：发牌贝塞尔飞行 / 筹码推底池残影 / 胜利金粉粒子 `<canvas>`。新增动效一律先按 §8 规范落地（token + variants 引用），扩展能力挂到现有 token 之上。
 
 **响应式断点**：`@media (max-width:1280px)` 小桌面 / `1024px` 平板 / `768px` 移动 / `480px` 小屏。
 
@@ -754,4 +826,14 @@ border-radius: var(--poker-radius-md); /* 8px */
 
 ---
 
-*本文档随项目演进而更新。新增 token/组件/页面模式时，请在对应章节补充条目，并在附录记录版本变更。*
+## 附录 H：v1.5.0 变更摘要（动效规范全量化）
+
+- **背景**：动效参数长期散落于各组件内联 framer-motion 字面量（duration 0.15–1.2s 混用、ease 混用 `easeOut`/`linear`/`spring`），无统一 token 出口，动效行为与设计文档 §8 存在漂移。本次将 §8 由「典型动效清单」升级为「全量规范」，并建立单一事实源。
+- **动效原则（§8.1）**：新增缓动 token 表（standard / out / in / spring，对应 `--poker-ease-*`）、时长 token 表（fast / standard / slow / loop，对应 `--poker-duration-*`）、触发方式表（hover / press / focus / state-change / mount / unmount / loop）与使用规则（进场退场成对、循环动效尊重 reduced-motion、hover 用 transform 不抖布局）。
+- **动画类型定义（§8.2）**：新增 9 类常用动画的规范定义（fade / slide-up / slide-down / slide-left / slide-right / scale-in / rotate / pop / shake），每类含关键属性、时长、缓动、用途；组合规则（位移+缩放可叠、双向位移禁止）。
+- **组件状态矩阵（§8.3）**：12 类组件 × 状态（hover / press / active / mount / unmount / 反馈循环）的动画行为权威映射表。
+- **实现约定（§8.4）**：React 侧统一 `src/shared/utils/motion.ts`（`MOTION_DURATION` / `MOTION_EASE` / 预置 variants）为单一事实源；CSS 侧 keyframes 与 `animate-*` 类用 token 变量；路由过渡统一 page-transition variants。
+- **实现层落地**：`src/shared/utils/motion.ts` 新增（导出 `MOTION_DURATION` / `MOTION_EASE` / `PAGE_TRANSITION` 等预置 variants）；`globals.css` 新增 `--poker-ease-*` / `--poker-duration-*` 变量与 `animate-*` 工具类；核心组件（PokerCard / QuizCard / FaqAccordion / LevelLadder / LessonQuiz / TheoryQuiz / StatsOverview / AchievementBadges / SettingsPage / ResultSummary / AppLayout）统一引用共享动效规范。
+- **守卫**：设计 token 守卫（designTokenGuard）不扫描动效参数；动效一致性靠共享规范单一事实源 + 组件引用收口，新组件动效须按 §8.3 矩阵登记。
+
+---

@@ -91,8 +91,8 @@ export default function DailyChallenge() {
       : '/gto-simulator';
 
   return (
-    <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
-      <CardContent className="p-4">
+    <Card className="bg-[var(--felt)] border-[var(--walnut-border)] h-full">
+      <CardContent className="p-4 flex flex-col h-full">
         <div className="flex items-center gap-2 mb-3">
           <Trophy className="w-5 h-5 text-[var(--brass-bright)]" />
           <h2 className="font-display text-[17px] text-[var(--ivory)] tracking-wide">
@@ -105,7 +105,7 @@ export default function DailyChallenge() {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3 flex-1">
           <div className="flex items-start gap-2">
             {todayCompleted ? (
               <CheckCircle2 className="w-5 h-5 text-[var(--brass-bright)] shrink-0 mt-0.5" />
@@ -142,7 +142,7 @@ export default function DailyChallenge() {
           {/* 每日谜题入口行：与每日挑战统一为今日任务 */}
           <button
             onClick={() => navigate('/puzzle/daily')}
-            className="w-full flex items-center gap-2 pt-3 border-t border-[var(--walnut-border)]/60 text-left group"
+            className="w-full flex items-center gap-2 pt-3 border-t border-[var(--walnut-border)]/60 text-left group mt-auto"
           >
             {puzzleDone ? (
               <CheckCircle2 className="w-5 h-5 text-[var(--brass-bright)] shrink-0" />

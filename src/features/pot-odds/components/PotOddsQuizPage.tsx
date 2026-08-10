@@ -179,7 +179,7 @@ export default function PotOddsQuizPage() {
       totalQuestions,
       correctAnswers: correctCount,
       accuracy,
-      averageTime: avgTime,
+      averageTime: avgTime * 1000, // times 单位为秒，转毫秒（与 progress 各模块一致）
       timestamp: Date.now(),
       details,
       lastQuestionCorrect,

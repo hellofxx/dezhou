@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Smile, Meh, Frown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { transitionStandard } from '@/shared/utils/motion';
 import { useProgressStore } from '../../store';
 import { getTodayString } from '../../utils/spacedRepetition';
 
@@ -64,7 +65,7 @@ export default function MoodTracker() {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={transitionStandard}
     >
       <Card className="bg-[var(--surface)] border-[var(--walnut-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
         <CardHeader className="pb-2">

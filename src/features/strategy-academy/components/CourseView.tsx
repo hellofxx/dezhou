@@ -17,6 +17,11 @@ import { ProgressBar } from './ProgressBar';
 import { CourseLockedView } from './CourseLockedView';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import CourseDoneView from './CourseDoneView';
+import {
+  resolveLevelTitle,
+  resolveLessonTitle,
+  resolveLessonSubtitle,
+} from '../utils/titleKeys';
 import type { DrillResult } from './drills/types';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import type { PracticeResult, LearningTrack } from '../types';
@@ -225,7 +230,7 @@ export default function CourseView() {
         {levelEntry ? (
           <div className="flex items-center gap-3 mb-4">
             <span className="course-level inline-flex items-center gap-1.5 rounded-full bg-[var(--walnut-raised)] px-3 py-1 text-xs font-medium text-[var(--brass-bright)]">
-              {levelEntry.icon} L{levelEntry.level} · {levelEntry.title}
+              {levelEntry.icon} L{levelEntry.level} · {resolveLevelTitle(t, levelEntry)}
             </span>
             <span className="font-numeric text-xs text-[var(--ivory-muted)]">
               {t('academy.courseView.lessonOf', {
@@ -271,9 +276,9 @@ export default function CourseView() {
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h1 className="font-display text-[22px] text-[var(--ivory)] leading-tight">
-              {lesson.title}
+              {resolveLessonTitle(t, lesson)}
             </h1>
-            <p className="text-sm text-[var(--ivory-muted)] mt-1">{lesson.subtitle}</p>
+            <p className="text-sm text-[var(--ivory-muted)] mt-1">{resolveLessonSubtitle(t, lesson)}</p>
           </div>
           <div className="flex items-center gap-3 text-xs text-[var(--ivory-muted)] shrink-0 pt-1">
             <span className="flex items-center gap-1">

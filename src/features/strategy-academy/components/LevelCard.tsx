@@ -1,9 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Lock, CheckCircle2, PlayCircle, ChevronRight, Award } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import type { LevelInfo } from '../types';
 import { ProgressBar } from './ProgressBar';
+import {
+  resolveLevelTitle,
+  resolveLevelDescription,
+  resolveLevelUnlock,
+} from '../utils/titleKeys';
 
 interface LevelCardProps {
   level: LevelInfo;
@@ -14,6 +20,7 @@ interface LevelCardProps {
 
 export function LevelCard({ level, unlocked, completedLessons, index }: LevelCardProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const firstIncompleteLesson = level.lessons.find((l) => !completedLessons.includes(l.id));
   const targetLesson = firstIncompleteLesson ?? level.lessons[0];
@@ -76,8 +83,8 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
                 <CheckCircle2 className="w-3.5 h-3.5 text-[var(--poker-success)]" />
               )}
             </div>
-            <h3 className="font-display text-[16px] text-[var(--ivory)] mb-0.5">{level.title}</h3>
-            <p className="text-xs text-[var(--ivory-muted)] mb-3">{level.description}</p>
+            <h3 className="font-display text-[16px] text-[var(--ivory)] mb-0.5">{resolveLevelTitle(t, level)}</h3>
+            <p className="text-xs text-[var(--ivory-muted)] mb-3">{resolveLevelDescription(t, level)}</p>
 
             {unlocked ? (
               <div className="space-y-1.5">
@@ -107,7 +114,7 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
             ) : (
               <p className="text-xs text-[var(--ivory-muted)] flex items-center gap-1.5">
                 <Lock className="w-3 h-3" />
-                {level.unlockRequirement}
+                {resolveLevelUnlock(t, level)}
               </p>
             )}
           </div>

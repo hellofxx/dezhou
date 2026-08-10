@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Lock, Home, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { LEVELS } from '../data/courses';
+import { resolveLevelTitle } from '../utils/titleKeys';
 import type { Lesson } from '../types';
 
 interface CourseLockedViewProps {
@@ -85,7 +86,7 @@ export function CourseLockedView({
                       <span className="text-xl shrink-0">{entry.icon}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-[var(--ivory)] font-display">
-                          {entry.title}
+                          {resolveLevelTitle(t, entry)}
                         </p>
                         <p className="text-xs text-[var(--ivory-muted)] mt-0.5">
                           {t('academy.courseView.completed', { defaultValue: '已完成' })}{' '}

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import { orderQuizQuestion } from '../utils/quizShuffle';
 import type { QuizQuestion } from '../types';
 
@@ -111,7 +112,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.standard }}
         >
           <p className="text-xs text-[var(--ivory-muted)] mb-2 font-numeric">
             第 {currentIndex + 1} / {orderedQuestions.length} 题
@@ -168,6 +169,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
               className={cn(
                 'mt-4 rounded-lg p-4 text-sm leading-relaxed',
                 isCorrect

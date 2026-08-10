@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui
 import { Flame, Trophy, Snowflake } from 'lucide-react';
 import { useProgressStore } from '../../store';
 import { isEarnBackActive, getTodayString } from '../../utils/streakCalc';
+import { transitionSlow } from '@/shared/utils/motion';
 
 interface StreakTrackerProps {
   currentStreak: number;
@@ -86,12 +87,12 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
+      transition={{ ...transitionSlow, delay: 0.3 }}
     >
       <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
         <CardHeader className="pb-2">
           <CardTitle className="font-display text-[17px] text-[var(--ivory)] tracking-wide">
-            训练打卡
+            {t('progress.calendar.title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -144,7 +145,7 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="text-center text-xs text-[var(--brass-bright)] font-semibold py-1"
               >
-                ✨ 碎片合成成功！获得 1 张冻结卡
+                ✨ {t('streak.fragment.synthesized')}
               </motion.div>
             )}
           </AnimatePresence>
@@ -165,7 +166,7 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
                   {currentStreak}
                 </span>
               </div>
-              <div className="text-xs text-[var(--ivory-muted)] mt-1">当前连续天数</div>
+              <div className="text-xs text-[var(--ivory-muted)] mt-1">{t('progress.calendar.currentStreak')}</div>
             </div>
             <div className="w-px h-10 bg-[var(--walnut-border)]" />
             <div className="text-center">
@@ -175,19 +176,19 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
                   {longestStreak}
                 </span>
               </div>
-              <div className="text-xs text-[var(--ivory-muted)] mt-1">最长连续记录</div>
+              <div className="text-xs text-[var(--ivory-muted)] mt-1">{t('progress.calendar.longestStreak')}</div>
             </div>
           </div>
 
           {/* 打卡日历网格 */}
           <div>
-            <div className="text-xs text-[var(--ivory-muted)] mb-2">最近 30 天</div>
+            <div className="text-xs text-[var(--ivory-muted)] mb-2">{t('progress.calendar.last30Days')}</div>
             <div className="grid grid-cols-10 gap-1">
               {gridDays.map(({ date, dayLabel, count }) => (
                 <div
                   key={date}
                   className="relative group"
-                  title={`${date}: ${count} 次训练`}
+                  title={t('progress.calendar.sessions', { count })}
                 >
                   <div
                     className="w-full aspect-square rounded-sm transition-colors"
@@ -199,19 +200,19 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
                   {/* tooltip on hover */}
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block z-10">
                     <div className="px-2 py-1 bg-[var(--felt-deep)] border border-[var(--walnut-border)] rounded text-[10px] text-[var(--ivory-dim)] whitespace-nowrap font-numeric">
-                      {dayLabel}日: {count}次
+                      {t('progress.calendar.tooltip', { day: dayLabel, count })}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
             <div className="flex items-center justify-end gap-1 mt-2 text-[10px] text-[var(--ivory-muted)]">
-              <span>少</span>
+              <span>{t('progress.calendar.less')}</span>
               <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: getCellColor(0) }} />
               <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: getCellColor(1) }} />
               <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: getCellColor(3) }} />
               <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: getCellColor(5) }} />
-              <span>多</span>
+              <span>{t('progress.calendar.more')}</span>
             </div>
           </div>
         </CardContent>
@@ -227,8 +228,8 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
  */
 function getCellColor(count: number): string {
   if (count === 0) return 'var(--walnut-raised)';
-  if (count === 1) return 'rgba(201, 162, 94, 0.25)';
-  if (count === 2) return 'rgba(201, 162, 94, 0.45)';
-  if (count <= 4) return 'rgba(201, 162, 94, 0.7)';
-  return 'rgba(201, 162, 94, 0.92)';
+  if (count === 1) return 'var(--brass-cell-2)';
+  if (count === 2) return 'var(--brass-cell-3)';
+  if (count <= 4) return 'var(--brass-cell-4)';
+  return 'var(--brass-cell-5)';
 }

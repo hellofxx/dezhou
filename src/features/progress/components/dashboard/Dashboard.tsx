@@ -6,19 +6,23 @@ import {
   Calculator,
   Gamepad2,
   ArrowRight,
-  TrendingUp,
   GraduationCap,
   ClipboardList,
   Zap,
   Puzzle,
+  History,
+  Clock,
 } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 import { useProgressStore } from '../../store';
 import { useAcademyStore } from '@/features/strategy-academy/store';
+import { useModuleLabel } from '@/shared/hooks/useModuleLabel';
+import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import DailyChallenge from '../achievement/DailyChallenge';
 import DailyTrainingPlan from '../training/DailyTrainingPlan';
 import SpacedRepetitionPanel from '../srs/SpacedRepetitionPanel';
 import ReviewSession from '../srs/ReviewSession';
+import FirstVisitBanner from './FirstVisitBanner';
 import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
 import { getTodayReviewItems, getTodayString } from '../../utils/spacedRepetition';
 import RankUpCelebration from '../celebration/RankUpCelebration';
@@ -31,20 +35,31 @@ import ProgressReplay from '../replay/ProgressReplay';
 import { VariantEloOverview } from '../stats/VariantEloOverview';
 import { ACHIEVEMENTS } from '../../data/achievements';
 
-const MODULE_LABELS: Record<string, string> = {
-  'range-trainer': '手牌范围训练',
-  'pot-odds': '赔率计算器',
-  'gto-simulator': 'GTO 模拟器',
-  'hand-history': '牌局复盘',
-  'strategy-academy': '策略学院',
-  'theory-academy': '理论学院',
+type TimeRange = '7d' | '30d' | '90d' | 'all';
+
+const TIME_RANGE_KEYS: Record<TimeRange, string> = {
+  '7d': 'dashboard.timeRange.7d',
+  '30d': 'dashboard.timeRange.30d',
+  '90d': 'dashboard.timeRange.90d',
+  all: 'dashboard.timeRange.all',
+};
+
+const TIME_RANGE_DAYS: Record<TimeRange, number | null> = {
+  '7d': 7,
+  '30d': 30,
+  '90d': 90,
+  all: null,
 };
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { summary, recentRecords, records } = useProgress();
+  const { summary, records } = useProgress();
   const academyProgress = useAcademyStore((s) => s.progress);
+  const moduleLabel = useModuleLabel();
+
+  // 时间范围筛选器 — 联动「最近训练」列表
+  const [timeRange, setTimeRange] = useState<TimeRange>('30d');
 
   // 复习状态
   const reviewItems = useProgressStore((s) => s.reviewItems);
@@ -114,21 +129,27 @@ export default function Dashboard() {
     return allRecommendations.filter((r) => !dismissedRecommendations.includes(r.id));
   }, [academyProgress, records, reviewItems, summary.currentStreak, dismissedRecommendations]);
 
+  // 时间范围筛选后的训练记录（基于全量 records，展示层再 slice，避免仅统计最近 10 条）
+  const filteredRecentRecords = useMemo(() => {
+    const days = TIME_RANGE_DAYS[timeRange];
+    if (days === null) return records;
+    const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+    return records.filter((r) => r.createdAt >= cutoff);
+  }, [records, timeRange]);
+
   return (
     <div className="h-full overflow-auto">
       {/* Section 1: Felt Arena Hero */}
       <FeltArena />
 
       <div className="px-0">
-        {/* Section 2: Streak Rail */}
+        {/* First visit banner — 首访引导置于首屏，紧随 Hero */}
+        {summary.totalSessions === 0 && <FirstVisitBanner />}
+
+        {/* Section 2: Streak Rail — 连续天数 + 周轨道 + 今日正确率（核心进度指标） */}
         <StreakRail />
 
-        {/* P2 变体支持：多变体 ELO 概览 */}
-        <div className="px-4 mb-4">
-          <VariantEloOverview />
-        </div>
-
-        {/* Section 3: Quick Drill Brass Banner */}
+        {/* Section 3: Quick Drill Brass Banner — 高频训练入口 */}
         <div className="quick-drill-card">
           <div className="quick-drill-left">
             <div className="quick-drill-icon">
@@ -173,46 +194,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* P1-3: Achievement Entry Card */}
-        <button
-          onClick={() => setAchievementWallOpen(true)}
-          className="w-full mb-5 panel flex items-center gap-4 p-4 text-left hover:brightness-105 transition-all"
-          style={{ borderLeft: '3px solid var(--brass)' }}
-        >
-          <div className="text-3xl">{latestAchievement?.icon ?? '🏆'}</div>
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold text-[var(--ivory)]">
-              {t('achievements.title')}
-            </div>
-            <div className="text-xs text-[var(--ivory-muted)] mt-0.5">
-              {latestAchievement
-                ? t('achievements.newUnlock') + ' ' + t(latestAchievement.title)
-                : t('achievements.progress', { current: unlockedAchievements.length, total: ACHIEVEMENTS.length })}
-            </div>
-          </div>
-          <div className="shrink-0 text-xs font-numeric text-[var(--brass-bright)]">
-            {unlockedAchievements.length}/{ACHIEVEMENTS.length}
-          </div>
-          <ArrowRight className="w-4 h-4 text-[var(--ivory-muted)]" />
-        </button>
-
-        {/* First visit guide */}
-        {summary.totalSessions === 0 && (
-          <div className="panel p-4 flex flex-col sm:flex-row items-center gap-3 mb-4" style={{ borderLeft: '3px solid var(--brass)' }}>
-            <span className="text-2xl shrink-0">👋</span>
-            <div className="flex-1 text-center sm:text-left">
-              <p className="text-[var(--ivory)] font-medium text-sm">{t('progress.firstVisitWelcome')}</p>
-            </div>
-            <button
-              onClick={() => navigate('/academy/basics')}
-              className="shrink-0 px-4 py-2 rounded-md bg-[var(--brass-bright)] text-[var(--primary-fg)] font-semibold text-sm hover:brightness-110 transition-all shadow-[var(--shadow-brass)]"
-            >
-              {t('progress.startLearning')}
-            </button>
-          </div>
-        )}
-
-        {/* Section 4: Row 1 - Training (2/3) + SRS (1/3) */}
+        {/* Section 4: 今日任务 + 今日复习（双卡，2:1 主从布局） */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5" style={{ gridAutoRows: '1fr' }}>
           <div className="lg:col-span-2 h-full">
             <DailyChallenge />
@@ -226,16 +208,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Downswing + Mood (conditional) */}
+        {/* Downswing Alert — 下风期警示，仅条件性渲染 */}
         <DownswingAlert />
-        <MoodTracker />
 
-        {/* Progress Replay - 回放你的进步 */}
-        <div className="mb-5">
-          <ProgressReplay />
-        </div>
-
-        {/* Section 5: Row 2 - Data (2/3) + Recommendations (1/3) */}
+        {/* Section 5: 智能推荐（主） + 最近训练（次，含时间范围筛选） */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5" style={{ gridAutoRows: '1fr' }}>
           <div className="lg:col-span-2 h-full">
             <DailyTrainingPlan
@@ -244,47 +220,119 @@ export default function Dashboard() {
             />
           </div>
           <div className="h-full">
-            {/* Accuracy trend / recent records panel */}
+            {/* 最近训练记录 — 时间范围筛选器联动 */}
             <div className="panel h-full flex flex-col">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <div className="panel-title mb-0">
-                  <TrendingUp className="w-4 h-4" />
-                  {t('dashboard.dataPlan.accuracyTrend')}
+                  <History className="w-4 h-4" />
+                  {t('dashboard.recentTraining.title')}
+                </div>
+                {/* 时间范围筛选器 */}
+                <div className="flex items-center gap-1 rounded-md bg-[var(--walnut-raised)]/60 p-0.5" role="tablist" aria-label={t('dashboard.timeRange.ariaLabel')}>
+                  {(['7d', '30d', '90d', 'all'] as TimeRange[]).map((range) => {
+                    const active = timeRange === range;
+                    return (
+                      <button
+                        key={range}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        onClick={() => setTimeRange(range)}
+                        className={`px-2 py-1 text-[10px] font-numeric rounded transition-colors ${
+                          active
+                            ? 'bg-[var(--brass)] text-[var(--primary-foreground)] font-semibold'
+                            : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
+                        }`}
+                      >
+                        {t(TIME_RANGE_KEYS[range])}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
+
+              {/* 当前筛选下的关键统计 — 强化"决策辅助"价值 */}
+              <FilteredSummary records={filteredRecentRecords} />
+
               <div className="flex-1">
-                {recentRecords.length > 0 ? (
+                {filteredRecentRecords.length > 0 ? (
                   <div className="space-y-1">
-                    {recentRecords.slice(0, 5).map((record) => (
+                    {filteredRecentRecords.slice(0, 5).map((record) => (
                       <div
                         key={record.id}
                         className="flex items-center justify-between py-2 border-b border-[var(--walnut-border)]/40 last:border-0"
                       >
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded bg-[var(--walnut-light)]/50 flex items-center justify-center">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-7 h-7 rounded bg-[var(--walnut-light)]/50 flex items-center justify-center shrink-0">
                             <Target className="w-3.5 h-3.5 text-[var(--brass-bright)]" />
                           </div>
-                          <div className="text-xs text-[var(--ivory)]">
-                            {MODULE_LABELS[record.module] ?? record.module}
+                          <div className="text-xs text-[var(--ivory)] truncate">
+                            {moduleLabel(record.module)}
                           </div>
                         </div>
-                        <span className="font-numeric text-xs text-[var(--brass-bright)]">
-                          {(record.result.accuracy * 100).toFixed(1)}%
-                        </span>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="text-[10px] text-[var(--ivory-muted)] font-numeric">
+                            {formatRelative(record.createdAt, t)}
+                          </span>
+                          <span className="font-numeric text-xs text-[var(--brass-bright)] min-w-[44px] text-right">
+                            {(record.result.accuracy * 100).toFixed(1)}%
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center text-xs text-[var(--ivory-muted)] py-8">
-                    {t('progress.noRecords', '还没有训练记录')}
-                  </div>
+                  <EmptyState
+                    icon={<Clock className="w-8 h-8" />}
+                    title={t('dashboard.recentTraining.empty.title')}
+                    description={t('dashboard.recentTraining.empty.description')}
+                  />
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Section 6: Training Grounds - 6 module cards */}
+        {/* Section 6: 多变体 ELO 概览 + 成就入口（双列，水平对称） */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+          <VariantEloOverview />
+          <button
+            onClick={() => setAchievementWallOpen(true)}
+            className="panel flex items-center gap-4 p-5 text-left hover:brightness-105 transition-all"
+            style={{ borderLeft: '3px solid var(--brass)' }}
+            aria-label={t('achievements.title')}
+          >
+            <div className="text-4xl shrink-0">{latestAchievement?.icon ?? '🏆'}</div>
+            <div className="flex-1 min-w-0">
+              <div className="font-display text-[15px] text-[var(--ivory)] tracking-wide">
+                {t('achievements.title')}
+              </div>
+              <div className="text-xs text-[var(--ivory-muted)] mt-1 line-clamp-2">
+                {latestAchievement
+                  ? `${t('achievements.newUnlock')}：${t(latestAchievement.title)}`
+                  : t('achievements.progress', { current: unlockedAchievements.length, total: ACHIEVEMENTS.length })}
+              </div>
+            </div>
+            <div className="shrink-0 flex flex-col items-end gap-1">
+              <span className="font-numeric text-sm text-[var(--brass-bright)]">
+                {unlockedAchievements.length}/{ACHIEVEMENTS.length}
+              </span>
+              <ArrowRight className="w-4 h-4 text-[var(--ivory-muted)]" />
+            </div>
+          </button>
+        </div>
+
+        {/* Section 7: 进度回放 + 情绪标记（情绪为辅助，放右侧） */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5" style={{ gridAutoRows: '1fr' }}>
+          <div className="lg:col-span-2 h-full">
+            <ProgressReplay />
+          </div>
+          <div className="h-full">
+            <MoodTracker />
+          </div>
+        </div>
+
+        {/* Section 8: Training Grounds — 6 个训练模块入口（最后，作为完整目录） */}
         <div className="mb-5">
           <div className="flex items-center justify-between mb-3">
             <div className="panel-title mb-0">
@@ -300,7 +348,7 @@ export default function Dashboard() {
             <button className="module-card" onClick={() => navigate('/range-trainer')}>
               <div
                 className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, rgba(201,162,94,0.22), rgba(201,162,94,0.06))' }}
+                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--brass) 22%, transparent), color-mix(in srgb, var(--brass) 6%, transparent))' }}
               >
                 <Target className="w-5 h-5 text-[var(--brass-bright)]" />
               </div>
@@ -317,7 +365,7 @@ export default function Dashboard() {
             <button className="module-card" onClick={() => navigate('/pot-odds')}>
               <div
                 className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, rgba(139,165,155,0.22), rgba(139,165,155,0.06))' }}
+                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-info) 22%, transparent), color-mix(in srgb, var(--poker-info) 6%, transparent))' }}
               >
                 <Calculator className="w-5 h-5 text-[var(--poker-info)]" />
               </div>
@@ -334,7 +382,7 @@ export default function Dashboard() {
             <button className="module-card" onClick={() => navigate('/gto-simulator')}>
               <div
                 className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, rgba(168,196,207,0.22), rgba(168,196,207,0.06))' }}
+                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-frost) 22%, transparent), color-mix(in srgb, var(--poker-frost) 6%, transparent))' }}
               >
                 <Gamepad2 className="w-5 h-5 text-[var(--poker-frost)]" />
               </div>
@@ -351,7 +399,7 @@ export default function Dashboard() {
             <button className="module-card" onClick={() => navigate('/academy')}>
               <div
                 className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, rgba(127,184,131,0.22), rgba(127,184,131,0.06))' }}
+                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-success) 22%, transparent), color-mix(in srgb, var(--poker-success) 6%, transparent))' }}
               >
                 <GraduationCap className="w-5 h-5 text-[var(--poker-success)]" />
               </div>
@@ -368,7 +416,7 @@ export default function Dashboard() {
             <button className="module-card" onClick={() => navigate('/puzzle')}>
               <div
                 className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, rgba(201,162,94,0.22), rgba(201,162,94,0.06))' }}
+                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--brass) 22%, transparent), color-mix(in srgb, var(--brass) 6%, transparent))' }}
               >
                 <Puzzle className="w-5 h-5 text-[var(--brass-bright)]" />
               </div>
@@ -385,7 +433,7 @@ export default function Dashboard() {
             <button className="module-card" onClick={() => navigate('/hand-history')}>
               <div
                 className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, rgba(192,138,90,0.2), rgba(192,138,90,0.05))' }}
+                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-leather) 22%, transparent), color-mix(in srgb, var(--poker-leather) 6%, transparent))' }}
               >
                 <ClipboardList className="w-5 h-5 text-[var(--poker-leather)]" />
               </div>
@@ -414,4 +462,91 @@ export default function Dashboard() {
       />
     </div>
   );
+}
+
+/* ===== 私有子组件：最近训练筛选汇总 ===== */
+function FilteredSummary({
+  records,
+}: {
+  records: { result: { totalQuestions: number; correctAnswers: number; accuracy: number } }[];
+}) {
+  const { t } = useTranslation();
+  const stats = useMemo(() => {
+    if (records.length === 0) {
+      return { count: 0, questions: 0, accuracy: 0 };
+    }
+    let q = 0;
+    let c = 0;
+    for (const r of records) {
+      q += r.result.totalQuestions;
+      c += r.result.correctAnswers;
+    }
+    return {
+      count: records.length,
+      questions: q,
+      accuracy: q > 0 ? c / q : 0,
+    };
+  }, [records]);
+
+  return (
+    <div className="grid grid-cols-3 gap-2 mb-3 pb-3 border-b border-[var(--walnut-border)]/40">
+      <Metric
+        label={t('dashboard.recentTraining.sessions')}
+        value={String(stats.count)}
+      />
+      <Metric
+        label={t('dashboard.recentTraining.questions')}
+        value={String(stats.questions)}
+      />
+      <Metric
+        label={t('dashboard.recentTraining.accuracy')}
+        value={`${(stats.accuracy * 100).toFixed(1)}%`}
+        accent={stats.accuracy >= 0.7 ? 'success' : stats.accuracy < 0.5 ? 'danger' : 'brass'}
+      />
+    </div>
+  );
+}
+
+function Metric({
+  label,
+  value,
+  accent = 'ivory',
+}: {
+  label: string;
+  value: string;
+  accent?: 'ivory' | 'brass' | 'success' | 'danger';
+}) {
+  const valueClass =
+    accent === 'brass'
+      ? 'text-[var(--brass-bright)]'
+      : accent === 'success'
+        ? 'text-[var(--poker-success)]'
+        : accent === 'danger'
+          ? 'text-[var(--poker-danger)]'
+          : 'text-[var(--ivory)]';
+  return (
+    <div className="flex flex-col items-start">
+      <span className="text-[10px] uppercase tracking-wider text-[var(--ivory-muted)]">
+        {label}
+      </span>
+      <span className={`font-numeric text-base font-semibold mt-0.5 ${valueClass}`}>
+        {value}
+      </span>
+    </div>
+  );
+}
+
+/** 相对时间格式化（紧凑形式：今天/昨天/N 天前/N 周前/N 月前） */
+function formatRelative(
+  timestamp: number,
+  t: (key: string, options?: Record<string, number>) => string,
+): string {
+  const diff = Date.now() - timestamp;
+  const day = 24 * 60 * 60 * 1000;
+  if (diff < day) return t('dashboard.recentTraining.justNow');
+  if (diff < 2 * day) return t('dashboard.recentTraining.yesterday');
+  if (diff < 7 * day) return t('dashboard.recentTraining.daysAgo', { n: Math.floor(diff / day) });
+  if (diff < 30 * day) return t('dashboard.recentTraining.weeksAgo', { n: Math.floor(diff / (7 * day)) });
+  if (diff < 365 * day) return t('dashboard.recentTraining.monthsAgo', { n: Math.floor(diff / (30 * day)) });
+  return t('dashboard.recentTraining.yearsAgo', { n: Math.floor(diff / (365 * day)) });
 }

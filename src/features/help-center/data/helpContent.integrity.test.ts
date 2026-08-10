@@ -60,6 +60,16 @@ describe('helpContent integrity', () => {
     expect(CONCEPT_CARDS.length).toBe(6);
   });
 
+  it('CONCEPT_CARDS iconKey 非空且在已知映射内', () => {
+    const KNOWN_ICONS = new Set([
+      'gauge', 'flame', 'repeat', 'award', 'clock', 'database',
+    ]);
+    for (const card of CONCEPT_CARDS) {
+      expect(card.iconKey.length).toBeGreaterThan(0);
+      expect(KNOWN_ICONS.has(card.iconKey)).toBe(true);
+    }
+  });
+
   it('FAQ_ITEMS >= 8', () => {
     expect(FAQ_ITEMS.length).toBeGreaterThanOrEqual(8);
   });

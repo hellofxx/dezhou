@@ -1,10 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Search, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { transitionStandard } from '@/shared/utils/motion';
 import { useAcademyStore } from '../store';
 import { BASICS_STEPS, GLOSSARY_TERMS } from '../data/basicsContent';
+import { resolveBasicsStepTitle } from '../utils/titleKeys';
 import type { LessonSection, Term } from '../types';
 
 const CATEGORY_TABS = [
@@ -16,6 +19,7 @@ const CATEGORY_TABS = [
 
 export default function BasicsIntro() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { basicsProgress, updateBasicsStep, completeBasics } = useAcademyStore();
   const [currentStep, setCurrentStep] = useState(basicsProgress.currentStep);
   const [showCompletion, setShowCompletion] = useState(false);
@@ -80,7 +84,7 @@ export default function BasicsIntro() {
                 className="h-full rounded-full bg-[var(--brass-bright)]"
                 initial={{ width: 0 }}
                 animate={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
-                transition={{ duration: 0.3 }}
+                transition={transitionStandard}
               />
             </div>
             <span className="text-xs text-[var(--ivory-muted)] font-numeric shrink-0">
@@ -105,7 +109,7 @@ export default function BasicsIntro() {
               )}
             >
               <span>{s.icon}</span>
-              <span className="hidden md:inline">{s.title}</span>
+              <span className="hidden md:inline">{resolveBasicsStepTitle(t, s)}</span>
             </button>
           ))}
         </div>
@@ -117,13 +121,13 @@ export default function BasicsIntro() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.25 }}
+            transition={transitionStandard}
             className="flex-1"
           >
             <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-5 md:p-6">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">{step.icon}</span>
-                <h2 className="font-display text-lg text-[var(--ivory)]">{step.title}</h2>
+                <h2 className="font-display text-lg text-[var(--ivory)]">{resolveBasicsStepTitle(t, step)}</h2>
               </div>
 
               {/* Render lesson sections */}

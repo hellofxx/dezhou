@@ -6,7 +6,63 @@
 
 ---
 
-## [Unreleased] - 2026-08-07
+## [Unreleased] - 2026-08-10
+
+### 已知限制全部修复（2026-08-10 三次 cr）
+
+> 执行模式：子代理协作（progress-dev / theory-academy-dev / strategy-academy-dev 规范），主代理按模块组织执行并复核验收。
+
+#### 已修复
+
+- **StreakCelebration keyframes rgba 光晕 token 化**：`sc-shine` / `sc-glow` 内 `rgba(201,162,94,*)` 改用 `--brass-cell-4/5`（color-mix 随主题联动）。
+- **历史组件内联 transition 统一 motion.ts 单源**：`DailyTrainingPlan` / `AchievementWall` / `ProgressReplay` / `WeaknessAnalysis` / `SessionLimitGuard` / `DownswingAlert` / `ReviewSession` / `ModuleStatsPage` / `MoodTracker` / `AccuracyChart` / `DifficultyIndicator` / `BasicsIntro` 的内联 duration 字面量统一为 `transitionFast` / `transitionStandard` / `transitionSlow`（RankUpCelebration 的 spring/粒子特效属特殊动画类型，保留内联）。
+- **学院数据层 title 渲染层 i18n 化（标准变体全量）**：数据层不动，新建渲染层 title key 解析（`strategy-academy/utils/titleKeys.ts`、`theory-academy/utils/titleKeys.ts`），消费组件统一 `t(key, { defaultValue })`，英文环境命中双语 key、中文环境回退数据层原文。覆盖：
+  - strategy：8 Level（title/description/unlockRequirement）+ 60 Lesson（title/subtitle）+ 7 LearningTrack（name/description/targetAudience/duration）+ 15 ConceptNode（name/description）+ 6 BasicsStep（title）+ 轨道前置提示
+  - theory：9 Level（title/description/unlockRequirement）+ 33 Chapter（title/subtitle）+ 下一章/实践桥接卡片文案
+  - 双语新增约 240 组 key（zh/en 对称，localeParity 守卫通过）
+
+#### 已知限制（本次仍不改）
+
+- 课程正文内容（handExamples 牌例、basicsContent 正文段落、lesson 内部 content 文本）仍为数据层硬编码中文，属内容本地化范畴，超出"元数据 title"本次范围。
+- 变体数据（heads-up / short-deck）的 title 元数据未迁移（UI 仅展示骨架提示，不渲染变体 title）。
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、68 files 477 tests ✅
+
+### 代码审查修复批次（2026-08-10 二次 cr）
+
+> 执行模式：子代理协作（progress-dev / theory-academy-dev / strategy-academy-dev 规范），主代理按模块组织执行并复核验收。
+
+#### 已修复
+
+- **framer-motion variant 状态名不匹配（严重）**：`StatsOverview` / `SettingsPage` / `AchievementBadges` 的 `animate="show"` 与 `staggerContainer()` 定义的 `visible` 状态名不匹配，jsdom 实测元素永久 `opacity: 0` 不可见；统一改 `animate="visible"`。
+- **FeltArena 今日进度语义 + 跨日防御**：今日进度由「今日答对数 / 今日已答题数」修正为「今日已答题数 / 目标题数」，并补 `dailyQuestionsDate === getTodayString()` 跨日防御（复用 MoodTracker 模式）；`dailyGoalMinutes` 恒等映射简化。
+- **SpacedRepetitionPanel i18n 兜底**：`t(key) || t(fallback)` 改为 `t(key, { defaultValue: t(fallback) })`（i18next 缺 key 返回 key 字符串，`||` 短路永不触发）。
+- **难度阈值单源**：新增 `src/features/progress/constants.ts` 定义 `DIFFICULTY_THRESHOLDS`（advanced 0.85 / intermediate 0.55 / downshift 0.5 / upgradeMinSessions 20），统一 `ProgressPage` 难度档位判定与 `DifficultyIndicator` 建议阈值，消除「已显示最高档仍建议升级」矛盾。
+- **ProgressPage 表格 i18n**：`record.mode` 映射 `progress.mode.*`（quiz / scenario / practice / basics / drill / rush / daily / theme），日期改 `Intl.DateTimeFormat` 跟随 i18n locale。
+- **学院模块 i18n**：`TheoryHome` 平均分「分」硬编码、`LevelLadder` / `TheoryLadder` aria-label「课程/章节列表」硬编码中文改 i18n（新增 `theory.stats.avgScoreValue` / `academy.path.lessonList` / `theory.ladder.chapterList`）。
+- **颜色 token 化**：`globals.css` 新增 `--brass-cell-1..5`（color-mix 基于 `var(--brass)`，随主题联动）与 `.first-visit-banner` / `.first-visit-banner-icon`（含 `html[data-theme="light"]` 浅色覆盖）；`StreakTracker` 热力图、`AppLayout` streak 徽章描边、`Dashboard` 6 个 module-icon 渐变、`FirstVisitBanner` 渐变去除硬编码 rgba。
+- **动效单源补齐**：`TheoryHome` / `TheoryLadder` / `AcademyHome` / `AcademyResume` / `TheoryResume` / `StreakTracker` / `ProgressPage` 的内联 transition 字面量统一引用 `motion.ts` 预置 `transitionStandard` / `transitionSlow`。
+
+#### 已知限制（本次不改）
+
+- 课程/章节元数据 `title` / `description` / `unlockRequirement` 为数据层硬编码中文，英文环境标题混排属数据层既有问题，未纳入本次改造（aria-label 与静态文案已 i18n 化）。
+- `StreakCelebration` keyframes 内 rgba 光晕、`DailyTrainingPlan` / `WeaknessAnalysis` / `MoodTracker` 等历史组件的内联 transition 字面量未在本批处理，留待动效全量规范后续批次。
+
+#### 验证
+
+- `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、68 files 477 tests ✅
+
+### 动效规范全量化（DESIGN_LANGUAGE v1.5.0 §8）
+
+> 目标：将设计语言文档 §8 由「典型动效清单」升级为「全量动画规范」，并建立 React 侧共享动效单一事实源，消除组件内散落的内联 duration/ease 字面量漂移。
+
+- **设计文档**：`poker-ui-demo/DESIGN_LANGUAGE.md` 升级 v1.5.0，§8 重构为 4 节：动效原则（缓动 token 表 `--poker-ease-*` / 时长 token 表 `--poker-duration-*` / 触发方式与规则）、动画类型定义（fade / slide-up / slide-down / slide-left / slide-right / scale-in / rotate / pop / shake 9 类）、组件状态动画行为矩阵（12 类组件 × hover/press/active/mount/unmount/反馈循环）、实现约定；附录 H 记录变更摘要。
+- **共享规范单一事实源**：新增 `src/shared/utils/motion.ts`（`MOTION_DURATION` / `MOTION_EASE` / `transitionFast|Standard|Slow|Spring` / `FADE_IN` / `SLIDE_UP|DOWN|LEFT|RIGHT` / `SCALE_IN` / `ROTATE_180` / `POP` / `SHAKE` / `PAGE_TRANSITION` / `staggerContainer` / `staggerItem` / `RESULT_NUMBER`），组件动效一律引用，禁止内联字面量。
+- **CSS token**：`src/styles/globals.css` `:root` 新增 `--poker-ease-*` / `--poker-duration-*` 变量；新增通用 `animate-*` 工具类（fade-in / slide-up / slide-down / slide-left / scale-in / pop / shake）与对应 keyframes；`live-pulse` / `panel-glow` 改用 token 变量。
+- **组件统一**：核心组件引用共享规范——`PokerCard`（入场下落+翻面）、`QuizCard`（题目切换 / 反馈 pop+shake）、`FaqAccordion`（折叠展开）、`LevelLadder`（阶梯 stagger）、`LessonQuiz` / `TheoryQuiz`（题目滑动）、`StatsOverview` / `SettingsPage`（列表 stagger）、`AchievementBadges`（徽章 SCALE_IN）、`ResultSummary`（结果页 slow 时序）、`EmptyState`、`GTOResultPage`（延迟淡入）、`AppLayout`（路由 PAGE_TRANSITION）。
+- **验证**：`pnpm verify` 全绿（typecheck 0 错误、lint 0 错误、68 files 477 tests ✅）。
 
 ### 三种游戏变体数据结构对齐重构（standard / short-deck / heads-up）
 

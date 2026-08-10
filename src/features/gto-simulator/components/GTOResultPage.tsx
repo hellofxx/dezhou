@@ -7,6 +7,7 @@ import { resolveSpotKey, getStrategiesForSpot } from '../utils/spotKey';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { ResultSummary } from '@/shared/components/feedback/ResultSummary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { MOTION_DURATION } from '@/shared/utils/motion';
 
 export default function GTOResultPage() {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export default function GTOResultPage() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
+        transition={{ duration: MOTION_DURATION.fast, delay: 0.8 }}
         className="flex items-center justify-center gap-2 p-3 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)]"
       >
         <TrendingDown className="w-4 h-4 text-[var(--brass-bright)]" />
@@ -80,7 +81,7 @@ export default function GTOResultPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
+          transition={{ duration: MOTION_DURATION.fast, delay: 0.9 }}
         >
           <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
             <CardHeader className="pb-2">
@@ -115,7 +116,7 @@ export default function GTOResultPage() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
+        transition={{ duration: MOTION_DURATION.fast, delay: 1 }}
         className="space-y-3"
       >
         <h2 className="font-display text-sm font-semibold text-[var(--ivory-dim)] tracking-wide">

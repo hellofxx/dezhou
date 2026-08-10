@@ -25,6 +25,7 @@ import {
   DialogDescription,
 } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
+import { transitionStandard } from '@/shared/utils/motion';
 import { useProgressStore } from '../../store';
 import type { ReviewItem } from '../../utils/spacedRepetition';
 import { processReview, getTodayReviewItems } from '../../utils/spacedRepetition';
@@ -277,7 +278,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
             className="h-full bg-gradient-to-r from-[var(--brass)] to-[var(--sage)] rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
-            transition={{ duration: 0.3 }}
+            transition={transitionStandard}
           />
         </div>
 

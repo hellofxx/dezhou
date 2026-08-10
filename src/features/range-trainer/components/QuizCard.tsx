@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { RangeAction, Card } from '@/shared/types/poker';
 import { Suit, Rank } from '@/shared/types/poker';
+import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import type { QuizQuestion, QuestionFeedback } from '../types';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { PokerCard } from '@/shared/components/poker/Card';
@@ -170,7 +171,7 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
         initial={{ opacity: 0, x: 60 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -60 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
+        transition={{ duration: MOTION_DURATION.standard, ease: MOTION_EASE.out }}
         className="flex flex-col items-center gap-8 w-full max-w-md mx-auto"
       >
         {/* 位置 + 上下文 */}
@@ -236,7 +237,7 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
               className={`w-full p-4 rounded-md border text-left ${gradeConfig.color} ${gradeConfig.textColor}`}
             >
               <div className="flex items-center justify-between gap-3">
@@ -275,7 +276,7 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
               className={`w-full p-4 rounded-md border text-center ${
                 feedback.isCorrect
                   ? 'bg-[var(--sage)]/12 border-[var(--sage)]/40 text-[var(--sage)]'
@@ -286,7 +287,7 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
                 <motion.div
                   initial={{ scale: 0.8 }}
                   animate={{ scale: [0.8, 1.1, 1] }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: MOTION_DURATION.slow, ease: MOTION_EASE.spring }}
                   className="text-xl font-display font-semibold"
                 >
                   ✓ 正确！
@@ -295,7 +296,7 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
                 <motion.div
                   initial={{ x: [-8, 8, -6, 6, -3, 3, 0] }}
                   animate={{ x: 0 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: MOTION_DURATION.standard, ease: MOTION_EASE.standard }}
                 >
                   <div className="text-xl font-display font-semibold">✗ 错误</div>
                   <div className="text-sm mt-1 opacity-90 font-body">

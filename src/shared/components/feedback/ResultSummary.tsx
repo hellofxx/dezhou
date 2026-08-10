@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, RotateCcw, Home } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
+import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 
 interface StatItem {
   icon: React.ReactNode;
@@ -65,7 +66,7 @@ export function ResultSummary({
           className="text-center space-y-2"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: MOTION_DURATION.slow }}
         >
           <div className="flex items-center justify-center gap-2">
             <Trophy className="w-6 h-6 text-[var(--brass-bright)]" />
@@ -79,7 +80,7 @@ export function ResultSummary({
           className="flex justify-center"
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: MOTION_DURATION.slow, delay: 0.2 }}
         >
           <div className="relative w-40 h-40">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
@@ -93,7 +94,7 @@ export function ResultSummary({
                 strokeDasharray={2 * Math.PI * 52}
                 initial={{ strokeDashoffset: 2 * Math.PI * 52 }}
                 animate={{ strokeDashoffset: 2 * Math.PI * 52 * (1 - accuracy) }}
-                transition={{ duration: 1.2, delay: 0.4, ease: 'easeOut' }}
+                transition={{ duration: MOTION_DURATION.slow, delay: 0.4, ease: MOTION_EASE.out }}
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -101,7 +102,7 @@ export function ResultSummary({
                 className={`font-numeric text-4xl font-bold ${accColor}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
+                transition={{ duration: MOTION_DURATION.slow, ease: MOTION_EASE.out }}
               >
                 {accuracyPercent}%
               </motion.span>
@@ -115,7 +116,7 @@ export function ResultSummary({
           className="grid grid-cols-2 md:grid-cols-4 gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: MOTION_DURATION.slow, delay: 0.6 }}
         >
           {stats.map((stat, i) => (
             <div key={i} className="bg-[var(--felt)] border border-[var(--walnut-border)] rounded-md p-3 text-center">
@@ -134,7 +135,7 @@ export function ResultSummary({
           className="flex justify-center gap-4 pt-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          transition={{ duration: MOTION_DURATION.fast, delay: 1.2 }}
         >
           <Button
             onClick={onRetry}

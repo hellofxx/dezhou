@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { transitionStandard } from '@/shared/utils/motion';
 import {
   LineChart,
   Line,
@@ -72,7 +73,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={transitionStandard}
           className="flex items-center gap-3"
         >
           <button

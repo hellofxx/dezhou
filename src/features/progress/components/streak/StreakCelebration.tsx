@@ -120,8 +120,8 @@ export default function StreakCelebration({ days, open, onClose }: StreakCelebra
             100% { transform: scale(1); opacity: 1; }
           }
           @keyframes sc-shine {
-            0%, 100% { filter: brightness(1) drop-shadow(0 0 0 rgba(201,162,94,0)); }
-            50% { filter: brightness(1.4) drop-shadow(0 0 24px rgba(201,162,94,0.9)); }
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 0 transparent); }
+            50% { filter: brightness(1.4) drop-shadow(0 0 24px var(--brass-cell-5)); }
           }
           @keyframes sc-legend {
             0% { transform: scale(0.2) rotate(-30deg); opacity: 0; }
@@ -134,8 +134,8 @@ export default function StreakCelebration({ days, open, onClose }: StreakCelebra
             100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
           }
           @keyframes sc-glow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(201,162,94,0); }
-            50% { box-shadow: 0 0 60px 12px rgba(201,162,94,0.5); }
+            0%, 100% { box-shadow: 0 0 0 0 transparent; }
+            50% { box-shadow: 0 0 60px 12px var(--brass-cell-4); }
           }
         `}</style>
 

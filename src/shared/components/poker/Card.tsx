@@ -3,6 +3,7 @@ import type { Card } from '@/shared/types/poker';
 import { CardSVG } from '@/shared/components/poker/CardSVG';
 import { CardBack } from '@/shared/components/poker/CardBack';
 import { cn } from '@/shared/utils/cn';
+import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 
 interface CardProps {
   card: Card;
@@ -52,9 +53,13 @@ export function PokerCard({
         filter: highlighted ? 'drop-shadow(0 0 8px rgba(232,201,126,0.65))' : undefined,
       }}
       onClick={onClick}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: animationDelay, duration: 0.3 }}
+      initial={{ opacity: 0, y: -20, rotate: -5 }}
+      animate={{ opacity: 1, y: 0, rotate: 0 }}
+      transition={{
+        delay: animationDelay,
+        duration: MOTION_DURATION.slow,
+        ease: MOTION_EASE.spring,
+      }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.97 }}
     >
@@ -62,7 +67,7 @@ export function PokerCard({
         className="absolute inset-0"
         style={{ transformStyle: 'preserve-3d' }}
         animate={{ rotateY: showBack ? 180 : 0 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: MOTION_DURATION.standard, ease: MOTION_EASE.out }}
       >
         {/* Front face — ivory card with paper texture */}
         <div

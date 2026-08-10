@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { transitionSlow } from '@/shared/utils/motion';
 // P1-2.6: 改为从 progress store 读取 ELO 五维分数（0-3000 量纲）
 import { useProgressStore } from '../../store';
 import { getRankForScore } from '@/shared/utils/elo';
@@ -61,7 +62,7 @@ export default function WeaknessAnalysis() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
+      transition={{ ...transitionSlow, delay: 0.3 }}
     >
       <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
         <CardHeader className="pb-2">

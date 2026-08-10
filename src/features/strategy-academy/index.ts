@@ -11,6 +11,8 @@ export { PracticeDrillComponent } from './components/PracticeDrill';
 export type { DrillMode } from './components/PracticeDrill';
 export { ConceptGraph } from './components/ConceptGraph';
 export { DailyPlanCard } from './components/DailyPlanCard';
+export { LevelLadder, findActiveLevelId } from './components/LevelLadder';
+export { AcademyResume } from './components/AcademyResume';
 export { DEFAULT_ADAPTIVE_CONFIG, getCurrentDifficulty, selectQuestionsByDifficulty, shouldRecommendReview, updateAbilityScore } from './utils/adaptiveDifficulty';
 export { generateDailyPlan, isDailyPlanFresh, getAbilityLabel } from './utils/dailyPlan';
 export { getQuickDrillQuestions, collectAllPracticeQuestions, getQuestionPoolStats } from './utils/quickDrill';

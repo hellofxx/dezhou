@@ -1,6 +1,9 @@
+import { Fragment } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/shared/components/ui/card';
+import { useTranslation } from 'react-i18next';
 import { ArrowUpCircle, ArrowDownCircle, Minus } from 'lucide-react';
+import { DIFFICULTY_THRESHOLDS } from '../../constants';
+import { transitionStandard } from '@/shared/utils/motion';
 
 interface DifficultyIndicatorProps {
   currentDifficulty: 'beginner' | 'intermediate' | 'advanced';
@@ -8,74 +11,90 @@ interface DifficultyIndicatorProps {
   sessionsCount: number;
 }
 
+interface LevelDef {
+  id: 'beginner' | 'intermediate' | 'advanced';
+  label: string;
+  colorVar: string;
+  dotClass: string;
+}
+
 // Difficulty ladder: sage (calm) → gold (warming up) → clay (under pressure).
 // Avoids traffic-light green/yellow/red — fits the card-room palette.
-const DIFFICULTY_CONFIG = {
-  beginner: { label: '初级', color: 'text-[var(--sage)]', bg: 'bg-[var(--sage)]/12', border: 'border-[var(--sage)]/30' },
-  intermediate: { label: '中级', color: 'text-[var(--brass-bright)]', bg: 'bg-[var(--brass)]/12', border: 'border-[var(--brass)]/30' },
-  advanced: { label: '高级', color: 'text-[var(--clay)]', bg: 'bg-[var(--clay)]/12', border: 'border-[var(--clay)]/30' },
-};
+const LEVELS: LevelDef[] = [
+  { id: 'beginner', label: 'beginner', colorVar: 'var(--sage)', dotClass: 'beginner' },
+  { id: 'intermediate', label: 'intermediate', colorVar: 'var(--brass)', dotClass: 'intermediate' },
+  { id: 'advanced', label: 'advanced', colorVar: 'var(--clay)', dotClass: 'advanced' },
+];
 
 export default function DifficultyIndicator({
   currentDifficulty,
   accuracy,
   sessionsCount,
 }: DifficultyIndicatorProps) {
-  const config = DIFFICULTY_CONFIG[currentDifficulty];
-  const suggestion = getSuggestion(accuracy, sessionsCount);
+  const { t } = useTranslation();
+  const suggestion = getSuggestion(accuracy, sessionsCount, t);
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4 }}
+      transition={transitionStandard}
     >
-      <Card className={`bg-[var(--felt)] border-[var(--walnut-border)]`}>
-        <CardContent className="p-3 flex items-center gap-3">
-          <div className={`shrink-0 w-10 h-10 rounded-md flex items-center justify-center ${config.bg} ${config.border} border`}>
-            <span className={`font-display text-base ${config.color}`}>
-              {config.label.charAt(0)}
-            </span>
+      <div className="difficulty-ladder" role="group" aria-label={t('progress.difficulty.label')}>
+        <span className="dl-label">{t('progress.difficulty.label')}</span>
+        <div className="dl-track">
+          {LEVELS.map((level, i) => {
+            const active = level.id === currentDifficulty;
+            return (
+              <Fragment key={level.id}>
+                {i > 0 && <div className="dl-line" aria-hidden />}
+                <div
+                  className={`dl-step ${level.dotClass}${active ? ' active' : ''}`}
+                  aria-current={active ? 'step' : undefined}
+                >
+                  <span className="dl-dot" style={active ? { borderColor: level.colorVar } : undefined} />
+                  <span className="dl-step-name">{t(`progress.difficulty.${level.label}`)}</span>
+                </div>
+              </Fragment>
+            );
+          })}
+        </div>
+        {suggestion && (
+          <div className="dl-suggestion">
+            {suggestion.icon}
+            <span>{suggestion.text}</span>
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className={`text-sm font-semibold ${config.color}`}>{config.label}</span>
-              <span className="text-xs text-[var(--ivory-muted)]">难度</span>
-            </div>
-            {suggestion && (
-              <div className="flex items-center gap-1 mt-0.5">
-                {suggestion.icon}
-                <span className="text-xs text-[var(--ivory-dim)]">{suggestion.text}</span>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </motion.div>
   );
 }
 
-function getSuggestion(accuracy: number, sessionsCount: number) {
+function getSuggestion(
+  accuracy: number,
+  sessionsCount: number,
+  t: (key: string) => string,
+): { text: string; icon: React.ReactNode } | null {
   if (sessionsCount < 5) {
     return {
-      text: '完成更多训练以获取建议',
+      text: t('progress.difficulty.needMore'),
       icon: <Minus className="w-3 h-3 text-[var(--ivory-muted)]" />,
     };
   }
-  if (accuracy > 0.85 && sessionsCount > 20) {
+  if (accuracy > DIFFICULTY_THRESHOLDS.advanced && sessionsCount > DIFFICULTY_THRESHOLDS.upgradeMinSessions) {
     return {
-      text: '表现出色，建议升级难度',
+      text: t('progress.difficulty.upgrade'),
       icon: <ArrowUpCircle className="w-3 h-3 text-[var(--sage)]" />,
     };
   }
-  if (accuracy < 0.5) {
+  if (accuracy < DIFFICULTY_THRESHOLDS.downshift) {
     return {
-      text: '建议降低难度巩固基础',
+      text: t('progress.difficulty.downshift'),
       icon: <ArrowDownCircle className="w-3 h-3 text-[var(--brass-bright)]" />,
     };
   }
   return {
-    text: '当前难度适合你',
+    text: t('progress.difficulty.fits'),
     icon: <Minus className="w-3 h-3 text-[var(--brass)]" />,
   };
 }

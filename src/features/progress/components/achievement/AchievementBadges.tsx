@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { MOTION_DURATION, SCALE_IN, staggerContainer } from '@/shared/utils/motion';
 import type { TrainingRecord } from '../../types';
 
 interface Achievement {
@@ -186,38 +188,31 @@ function toDateStr(timestamp: number): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.06 } },
-};
-
-const item = {
-  hidden: { opacity: 0, scale: 0.9 },
-  show: { opacity: 1, scale: 1 },
-};
-
 export default function AchievementBadges({ records }: AchievementBadgesProps) {
+  const { t } = useTranslation();
   const achievements = useMemo(() => computeAchievements(records), [records]);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.4 }}
+      transition={{ duration: MOTION_DURATION.slow, delay: 0.4 }}
     >
       <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base text-[var(--ivory)]">成就</CardTitle>
+          <CardTitle className="font-display text-[15px] text-[var(--ivory)] tracking-wide">
+            {t('achievements.title')}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <motion.div
-            variants={container}
+            variants={staggerContainer(0.06)}
             initial="hidden"
-            animate="show"
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
           >
             {achievements.map((ach) => (
-              <motion.div key={ach.id} variants={item}>
+              <motion.div key={ach.id} variants={SCALE_IN}>
                 <AchievementCard achievement={ach} />
               </motion.div>
             ))}
@@ -229,8 +224,12 @@ export default function AchievementBadges({ records }: AchievementBadgesProps) {
 }
 
 function AchievementCard({ achievement }: { achievement: Achievement }) {
+  const { t } = useTranslation();
   const unlocked = achievement.unlockedAt !== null;
   const progressPct = Math.min(100, Math.max(0, achievement.progress));
+  const nameKey = `progress.achievementItems.${achievement.id}.name`;
+  const descKey = `progress.achievementItems.${achievement.id}.description`;
+  const reqKey = `progress.achievementItems.${achievement.id}.requirement`;
 
   return (
     <div
@@ -246,9 +245,9 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className={`text-sm font-semibold ${unlocked ? 'text-[var(--brass)]' : 'text-[var(--ivory-dim)]'}`}>
-            {achievement.name}
+            {t(nameKey)}
           </div>
-          <div className="text-xs text-[var(--ivory-muted)] truncate">{achievement.description}</div>
+          <div className="text-xs text-[var(--ivory-muted)] truncate">{t(descKey)}</div>
         </div>
       </div>
       {!unlocked && (
@@ -259,12 +258,12 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
               style={{ width: `${progressPct}%` }}
             />
           </div>
-          <div className="text-[10px] text-[var(--ivory-muted)] font-numeric">{achievement.requirement}</div>
+          <div className="text-[10px] text-[var(--ivory-muted)] font-numeric">{t(reqKey)}</div>
         </div>
       )}
       {unlocked && (
         <div className="text-[10px] text-[var(--brass)]/80 font-numeric">
-          {achievement.unlockedAt ? formatDate(achievement.unlockedAt) : '已解锁'}
+          {achievement.unlockedAt ? formatDate(achievement.unlockedAt) : t('achievements.unlocked')}
         </div>
       )}
     </div>

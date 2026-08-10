@@ -144,13 +144,13 @@ export const QUICK_START_STEPS: { key: string; to: string }[] = [
 ];
 
 /** 6 个系统概念卡片 */
-export const CONCEPT_CARDS: { key: string }[] = [
-  { key: 'concepts.elo' },
-  { key: 'concepts.streak' },
-  { key: 'concepts.srs' },
-  { key: 'concepts.feedback' },
-  { key: 'concepts.sessionLimit' },
-  { key: 'concepts.dataStorage' },
+export const CONCEPT_CARDS: { key: string; iconKey: string }[] = [
+  { key: 'concepts.elo', iconKey: 'gauge' },
+  { key: 'concepts.streak', iconKey: 'flame' },
+  { key: 'concepts.srs', iconKey: 'repeat' },
+  { key: 'concepts.feedback', iconKey: 'award' },
+  { key: 'concepts.sessionLimit', iconKey: 'clock' },
+  { key: 'concepts.dataStorage', iconKey: 'database' },
 ];
 
 /** 8 条 FAQ */

@@ -8,10 +8,15 @@ import { Chip } from '@/shared/components/poker/Chip';
 import { getRankForScore } from '@/shared/utils/elo';
 import { useProgressStore } from '../../store';
 import { useProgress } from '../../hooks/useProgress';
+import { getTodayString } from '../../utils/streakCalc';
 
 /**
  * FeltArena — 椭圆牌桌 Hero 区域。
- * 展示 ELO 段位、欢迎语、铭文、装饰卡牌/筹码、数据铭牌。
+ *
+ * 结构（避免绝对定位元素相互重叠）：
+ * 1. 顶部栏：左侧 ELO 段位徽章（桌面端展示，移动端 CSS 隐藏）
+ * 2. 中央：今日引导 eyebrow + 欢迎语 + 铭文 + 装饰牌堆/筹码
+ * 3. 底部：三项核心指标以水平 plaque 呈现（总手数 / 综合正确率 / 今日进度）
  */
 export default function FeltArena() {
   const { t } = useTranslation();
@@ -27,11 +32,20 @@ export default function FeltArena() {
   const currentStreak = streak.currentStreak;
 
   // P2-C: 使用 onboarding 设定的每日目标题数，替代硬编码 10
-  const dailyGoal = onboarding.dailyGoalMinutes === 5 ? 5 : onboarding.dailyGoalMinutes === 20 ? 20 : 10;
+  const dailyGoal =
+    onboarding.dailyGoalMinutes === 5 || onboarding.dailyGoalMinutes === 20
+      ? onboarding.dailyGoalMinutes
+      : 10;
+  // 今日进度 = 今日已答题数 / 目标题数；跨日时 dailyQuestionsDate 非今日 → 视为 0（防御昨日残留数据）
+  const isToday = emotion.dailyQuestionsDate === getTodayString();
   const dailyProgress = {
-    current: emotion.dailyCorrect,
-    total: emotion.dailyTotal || dailyGoal,
+    current: isToday ? emotion.dailyTotal : 0,
+    total: dailyGoal,
   };
+  const progressPercent =
+    dailyProgress.total > 0
+      ? Math.min(100, Math.round((dailyProgress.current / dailyProgress.total) * 100))
+      : 0;
 
   const weekSessions = useMemo(() => {
     const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -41,30 +55,22 @@ export default function FeltArena() {
   return (
     <div className="felt-arena-wrap">
       <div className="felt-arena">
-        <div
-          className="relative z-10 flex flex-col items-center justify-start text-center"
-          style={{ minHeight: '200px', paddingTop: '10px' }}
+        {/* 顶部：ELO 段位徽章 — 静态 flex 居中于椭圆内，避免绝对定位骑椭圆边缘 */}
+        <button
+          onClick={() => navigate('/progress')}
+          className="elo-rank-badge"
+          aria-label={`${currentRank.name} ${elo.overall} ELO`}
         >
-          {/* ELO rank badge - top right */}
-          <button
-            onClick={() => navigate('/progress')}
-            className="elo-rank-badge"
-            style={{ position: 'absolute', top: '-4px', right: '18%', zIndex: 5 }}
-            aria-label={`${currentRank.name} ${elo.overall} ELO`}
-          >
-            <span style={{ fontSize: '22px' }}>{currentRank.icon}</span>
-            <div>
-              <div className="font-display text-[15px] font-semibold text-[var(--ivory)]">
-                {currentRank.name}
-              </div>
-              <div className="font-numeric text-[12px] text-[var(--brass)] font-semibold">
-                {elo.overall} ELO
-              </div>
-            </div>
-          </button>
+          <span className="elo-suit">{currentRank.icon}</span>
+          <span className="elo-meta">
+            <span className="elo-name">{currentRank.name}</span>
+            <span className="elo-score">{elo.overall} ELO</span>
+          </span>
+        </button>
 
-          {/* Top greeting */}
-          <div className="mb-2">
+        {/* 中央：欢迎语 */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-center">
+          <div>
             <div className="section-eyebrow">
               {t('dashboard.feltArena.todaySession', { day: currentStreak || 1 })}
             </div>
@@ -74,9 +80,18 @@ export default function FeltArena() {
             <MottoEngraved text={t('dashboard.feltArena.motto')} />
           </div>
 
-          {/* Center: cards + chips + challenge card */}
-          <div className="flex items-center justify-center gap-5 mt-1">
-            {/* Card stack */}
+          {/* 装饰：四花色行（扑克桌主题点缀） */}
+          <div className="felt-suit-row" aria-hidden="true">
+            <span className="felt-suit-line" />
+            <span className="felt-suit-spade">♠</span>
+            <span className="felt-suit-heart">♥</span>
+            <span className="felt-suit-diamond">♦</span>
+            <span className="felt-suit-club">♣</span>
+            <span className="felt-suit-line" />
+          </div>
+
+          {/* 装饰：牌堆 + 筹码 */}
+          <div className="felt-arena-decor">
             <div className="relative" style={{ width: '88px', height: '66px' }}>
               <div style={{ position: 'absolute', transform: 'rotate(-7deg)', left: 0, top: '3px' }}>
                 <CardBack size="sm" />
@@ -85,57 +100,44 @@ export default function FeltArena() {
                 <CardBack size="sm" />
               </div>
             </div>
-
-            {/* Chip stack */}
             <div className="flex flex-col items-center" style={{ gap: '2px' }}>
               <Chip amount={currentStreak} color="brass" size="sm" />
               <Chip amount={0} color="brass" size="sm" />
               <Chip amount={0} color="brass" size="sm" />
             </div>
-
-            {/* Today challenge card - A♠ */}
-            <div className="flex flex-col items-center gap-1">
-              <div className="text-[8px] uppercase tracking-[0.2em] text-[var(--brass)] font-semibold">
-                {t('dashboard.feltArena.todayChallenge')}
-              </div>
-              <div className="text-2xl text-[var(--ivory)]">♠</div>
-            </div>
           </div>
 
-          <p className="text-[10px] text-[var(--ivory-muted)] mt-2 relative z-10">
+          <p className="text-[10px] text-[var(--ivory-muted)] relative z-10">
             {t('dashboard.feltArena.ready')}
           </p>
+        </div>
 
-          {/* Left plaque - total hands */}
-          <div style={{ position: 'absolute', top: '18%', left: '6%' }}>
-            <CasinoPlaque
-              value={String(summary.totalSessions)}
-              label={t('dashboard.feltArena.totalHands')}
-              sub={t('dashboard.feltArena.totalHandsWeek', { count: weekSessions })}
-              size="sm"
-            />
-          </div>
-
-          {/* Right plaque - accuracy */}
-          <div style={{ position: 'absolute', bottom: '18%', left: '10%' }}>
-            <CasinoPlaque
-              value={`${(summary.overallAccuracy * 100).toFixed(1)}%`}
-              label={t('dashboard.feltArena.accuracy')}
-              sub={t('dashboard.feltArena.accuracyLevel')}
-              size="sm"
-            />
-          </div>
-
-          {/* Daily progress chip - brass styled */}
-          <div className="daily-progress-chip" style={{ position: 'absolute', bottom: '22%', right: '14%' }}>
+        {/* 底部：三项核心指标 plaque（水平排列，非绝对定位） */}
+        <div className="felt-arena-stats">
+          <CasinoPlaque
+            value={String(summary.totalSessions)}
+            label={t('dashboard.feltArena.totalHands')}
+            sub={t('dashboard.feltArena.totalHandsWeek', { count: weekSessions })}
+            size="sm"
+          />
+          <CasinoPlaque
+            value={`${(summary.overallAccuracy * 100).toFixed(1)}%`}
+            label={t('dashboard.feltArena.accuracy')}
+            sub={t('dashboard.feltArena.accuracyLevel')}
+            size="sm"
+          />
+          <div className="daily-progress-chip">
             <div className="text-[8px] uppercase tracking-[0.15em] text-[var(--brass)] font-semibold">
-              {t('dashboard.feltArena.todayProgress', '今日')}
+              {t('dashboard.feltArena.todayProgress')}
             </div>
             <div className="font-numeric text-[12px] text-[var(--ivory)] font-semibold mt-0.5">
               {dailyProgress.current} / {dailyProgress.total}
             </div>
             <div className="progress-track mt-1" style={{ height: '3px', width: '60px' }}>
-              <div className="progress-fill" style={{ width: `${dailyProgress.total > 0 ? (dailyProgress.current / dailyProgress.total) * 100 : 0}%` }} />
+              <div
+                className="progress-fill"
+                style={{ width: `${progressPercent}%` }}
+              />
             </div>
           </div>
         </div>

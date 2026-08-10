@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { TrendingDown, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
+import { transitionStandard } from '@/shared/utils/motion';
 import { useProgressStore } from '../../store';
 
 /**
@@ -31,7 +32,7 @@ export default function DownswingAlert() {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={transitionStandard}
     >
       <Card className="border-[var(--warning)]/40 bg-[var(--warning)]/10 rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]">
         <CardContent className="p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Brain, BookOpen, Lock, Link2 } from 'lucide-react';
 import { ConceptGraph } from './ConceptGraph';
 import { useAcademyStore } from '../store';
 import { getTotalLessonCount } from '../utils/courseProgress';
 import { CONCEPT_NODES } from '../data/conceptNodes';
+import { resolveConceptName, resolveConceptDescription } from '../utils/titleKeys';
 
 export default function ConceptGraphView() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { progress } = useAcademyStore();
 
@@ -136,8 +139,8 @@ export default function ConceptGraphView() {
                   }}
                   className={`text-left rounded-md border px-3 py-2.5 transition-all hover:-translate-y-0.5 hover:shadow-md ${colorClass}`}
                 >
-                  <div className="text-xs font-semibold mb-0.5">{concept.name}</div>
-                  <div className="text-[10px] opacity-70 leading-snug">{concept.description}</div>
+                  <div className="text-xs font-semibold mb-0.5">{resolveConceptName(t, concept)}</div>
+                  <div className="text-[10px] opacity-70 leading-snug">{resolveConceptDescription(t, concept)}</div>
                   {concept.relatedModules.length > 0 && (
                     <div className="flex gap-1 mt-1.5 flex-wrap">
                       {concept.relatedModules.map((mod) => (

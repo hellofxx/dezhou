@@ -14,7 +14,7 @@ export interface TrainingResult {
   totalQuestions: number;
   correctAnswers: number;
   accuracy: number;
-  averageTime: number; // 平均每题用时（秒）
+  averageTime: number; // 平均每题用时（毫秒）
   timestamp: number;
   details: QuestionResult[];
   /** 最后一题是否答对（"最后一题简单"策略 + 补救机制后的最终题） */

@@ -16,7 +16,7 @@ export function puzzleResultToTrainingRecord(result: PuzzleResult) {
     totalQuestions: result.totalQuestions,
     correctAnswers: result.correctCount,
     accuracy: result.accuracy,
-    averageTime: result.averageTime / 1000, // 转换为秒
+    averageTime: result.averageTime, // 单位：毫秒（与 range-trainer / pot-odds 等模块一致）
     timestamp: result.timestamp,
     details: result.answers.map((a) => ({
       question: a.questionId,

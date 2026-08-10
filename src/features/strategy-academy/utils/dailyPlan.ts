@@ -158,10 +158,10 @@ function calculateEstimatedTime(
   minutes += hasNewLesson ? 10 : 0; // 新课程约10分钟
   minutes += practiceCount * 3;  // 每组练习约3分钟
 
-  if (minutes <= 10) return '5-10 分钟';
-  if (minutes <= 20) return '15-20 分钟';
-  if (minutes <= 30) return '20-30 分钟';
-  return '30+ 分钟';
+  if (minutes <= 10) return '5-10';
+  if (minutes <= 20) return '15-20';
+  if (minutes <= 30) return '20-30';
+  return '30+';
 }
 
 /** 判断今天是否已生成计划（同一天内不重复生成） */

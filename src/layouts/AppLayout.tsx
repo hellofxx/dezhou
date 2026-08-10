@@ -3,6 +3,7 @@ import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
+import { PAGE_TRANSITION } from '@/shared/utils/motion';
 import { APP_NAME, APP_VERSION } from '@/shared/constants/app';
 import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
 import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
@@ -10,6 +11,7 @@ import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 import TiltWarning from '@/features/progress/components/gate/TiltWarning';
 import MilestoneCelebrationHost from '@/features/progress/components/celebration/MilestoneCelebrationHost';
 import MobileNav from './MobileNav';
+import { useThemeApplier } from './useThemeApplier';
 import TableRail from '@/shared/components/layout/TableRail';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
 import { useProgressStore } from '@/features/progress/store';
@@ -54,50 +56,106 @@ export default function AppLayout() {
   const currentStreak = useProgressStore((s) => s.streak.currentStreak);
   const navigate = useNavigate();
 
+  // 主题应用器：settings.theme（含 system）→ <html data-theme> / color-scheme
+  useThemeApplier();
+
+  // 导航层级精简：Dashboard 置顶去分组（原"概览"单项目分组冗余），
+  // 其余按 训练 / 研习 / 数据 / 设置 四组；图标统一 18px 线性风格（DESIGN_LANGUAGE §7）
   const navGroups = useMemo<NavGroup[]>(() => [
-    {
-      title: t('nav.overview'),
-      i18nKey: 'nav.overview',
-      items: [
-        { label: t('nav.dashboard'), path: '/', icon: <Home size={20} />, i18nKey: 'nav.dashboard' },
-      ],
-    },
     {
       title: t('nav.training'),
       i18nKey: 'nav.training',
       items: [
-        { label: t('nav.rangeTrainer'), path: '/range-trainer', icon: <Target size={20} />, i18nKey: 'nav.rangeTrainer' },
-        { label: t('nav.potOdds'), path: '/pot-odds', icon: <Calculator size={20} />, i18nKey: 'nav.potOdds' },
-        { label: t('nav.gtoSimulator'), path: '/gto-simulator', icon: <Bot size={20} />, i18nKey: 'nav.gtoSimulator' },
-        { label: t('nav.puzzle'), path: '/puzzle', icon: <Puzzle size={20} />, i18nKey: 'nav.puzzle' },
+        { label: t('nav.rangeTrainer'), path: '/range-trainer', icon: <Target size={18} />, i18nKey: 'nav.rangeTrainer' },
+        { label: t('nav.potOdds'), path: '/pot-odds', icon: <Calculator size={18} />, i18nKey: 'nav.potOdds' },
+        { label: t('nav.gtoSimulator'), path: '/gto-simulator', icon: <Bot size={18} />, i18nKey: 'nav.gtoSimulator' },
+        { label: t('nav.puzzle'), path: '/puzzle', icon: <Puzzle size={18} />, i18nKey: 'nav.puzzle' },
       ],
     },
     {
       title: t('nav.study'),
       i18nKey: 'nav.study',
       items: [
-        { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={20} />, i18nKey: 'nav.academy', hint: t('academy.positioning') },
-        { label: t('nav.theory'), path: '/theory', icon: <Library size={20} />, i18nKey: 'nav.theory', hint: t('theory.positioning') },
-        { label: t('nav.handHistory'), path: '/hand-history', icon: <ClipboardList size={20} />, i18nKey: 'nav.handHistory' },
+        { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={18} />, i18nKey: 'nav.academy', hint: t('academy.positioning') },
+        { label: t('nav.theory'), path: '/theory', icon: <Library size={18} />, i18nKey: 'nav.theory', hint: t('theory.positioning') },
+        { label: t('nav.handHistory'), path: '/hand-history', icon: <ClipboardList size={18} />, i18nKey: 'nav.handHistory' },
       ],
     },
     {
       title: t('nav.data'),
       i18nKey: 'nav.data',
       items: [
-        { label: t('nav.progress'), path: '/progress', icon: <BarChart3 size={20} />, i18nKey: 'nav.progress' },
-        { label: t('nav.leaderboard'), path: '/leaderboard', icon: <Trophy size={20} />, i18nKey: 'nav.leaderboard' },
+        { label: t('nav.progress'), path: '/progress', icon: <BarChart3 size={18} />, i18nKey: 'nav.progress' },
+        { label: t('nav.leaderboard'), path: '/leaderboard', icon: <Trophy size={18} />, i18nKey: 'nav.leaderboard' },
       ],
     },
     {
       title: t('nav.settingsGroup'),
       i18nKey: 'nav.settingsGroup',
       items: [
-        { label: t('nav.settings'), path: '/settings', icon: <Settings size={20} />, i18nKey: 'nav.settings' },
-        { label: t('nav.help'), path: '/help', icon: <HelpCircle size={20} />, i18nKey: 'nav.help' },
+        { label: t('nav.settings'), path: '/settings', icon: <Settings size={18} />, i18nKey: 'nav.settings' },
+        { label: t('nav.help'), path: '/help', icon: <HelpCircle size={18} />, i18nKey: 'nav.help' },
       ],
     },
   ], [t]);
+
+  // 置顶首页项（不归属任何分组，降低导航层级噪音）
+  const dashboardItem: NavItem = {
+    label: t('nav.dashboard'),
+    path: '/',
+    icon: <Home size={18} />,
+    i18nKey: 'nav.dashboard',
+  };
+
+  const isPathActive = (path: string) =>
+    path === '/'
+      ? location.pathname === '/'
+      : location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+  const renderNavItem = (item: NavItem) => {
+    const active = isPathActive(item.path);
+    // R1: 不用函数式 className/children —— TooltipTrigger asChild 的 Radix Slot 会把函数 className 字符串化，导致激活态失效
+    const link = (
+      <NavLink
+        to={item.path}
+        aria-label={item.label}
+        title={collapsed ? undefined : item.hint}
+        className={cn(
+          'flex items-center gap-3 px-3 h-9 rounded-[var(--radius-sm)] text-sm transition-all duration-150 relative',
+          active
+            ? 'text-[var(--brass-bright)] bg-[var(--brass-glow)] font-medium'
+            : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/40'
+        )}
+      >
+        {active && (
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-[var(--brass)] rounded-r" />
+        )}
+        <span className="shrink-0">{item.icon}</span>
+        {!collapsed && <span className="truncate">{item.label}</span>}
+        {/* 庄码 D（DESIGN_LANGUAGE §5.3）：展开态斜体 Fraunces；折叠态降级为黄铜小圆点避免与图标重叠 */}
+        {active && !collapsed && (
+          <span aria-hidden="true" className="absolute right-2 w-[22px] h-[22px] rounded-full bg-gradient-to-br from-[var(--brass-bright)] to-[var(--brass)] flex items-center justify-center text-[10px] font-display font-bold italic text-[var(--primary-foreground)]">
+            D
+          </span>
+        )}
+        {active && collapsed && (
+          <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-[var(--brass)]" />
+        )}
+      </NavLink>
+    );
+    return (
+      <li key={item.path}>
+        {collapsed ? (
+          <Tooltip>
+            <TooltipTrigger asChild>{link}</TooltipTrigger>
+            <TooltipContent side="right">{item.label}</TooltipContent>
+          </Tooltip>
+        ) : (
+          link
+        )}
+      </li>
+    );
+  };
 
   const pageTitle: Record<string, string> = {
     '/': t('dashboard.title', '训练仪表盘'),
@@ -177,8 +235,11 @@ export default function AppLayout() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-5">
+        <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-6">
           <TooltipProvider delayDuration={200}>
+            {/* 置顶首页 —— 无分组标签，保持导航层级扁平 */}
+            <ul className="space-y-0.5">{renderNavItem(dashboardItem)}</ul>
+            <div className={cn('hairline-brass mx-2', collapsed && 'opacity-40')} />
             {navGroups.map((group) => (
               <div key={group.i18nKey}>
                 {!collapsed && (
@@ -186,54 +247,7 @@ export default function AppLayout() {
                     {group.title}
                   </p>
                 )}
-                <ul className="space-y-0.5">
-                  {group.items.map((item) => {
-                    // R1: 不用函数式 className/children —— TooltipTrigger asChild 的 Radix Slot 会把函数 className 字符串化，导致激活态失效
-                    const active = item.path === '/'
-                      ? location.pathname === '/'
-                      : location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
-                    const link = (
-                      <NavLink
-                        to={item.path}
-                        aria-label={item.label}
-                        title={collapsed ? undefined : item.hint}
-                        className={cn(
-                          'flex items-center gap-3 px-3 py-2 rounded-[var(--radius-sm)] text-sm transition-colors relative',
-                          active
-                            ? 'text-[var(--brass-bright)] bg-[rgba(201,162,94,0.08)]'
-                            : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/60'
-                        )}
-                      >
-                        {active && (
-                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[var(--brass)] rounded-r" />
-                        )}
-                        <span className="shrink-0">{item.icon}</span>
-                        {!collapsed && <span className="truncate">{item.label}</span>}
-                        {/* 庄码 D（DESIGN_LANGUAGE §5.3）：展开态斜体 Fraunces；折叠态降级为黄铜小圆点避免与图标重叠 */}
-                        {active && !collapsed && (
-                          <span aria-hidden="true" className="absolute right-2 w-[22px] h-[22px] rounded-full bg-gradient-to-br from-[var(--brass-bright)] to-[var(--brass)] flex items-center justify-center text-[10px] font-display font-bold italic text-[var(--primary-foreground)]">
-                            D
-                          </span>
-                        )}
-                        {active && collapsed && (
-                          <span aria-hidden="true" className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-[var(--brass)]" />
-                        )}
-                      </NavLink>
-                    );
-                    return (
-                      <li key={item.path}>
-                        {collapsed ? (
-                          <Tooltip>
-                            <TooltipTrigger asChild>{link}</TooltipTrigger>
-                            <TooltipContent side="right">{item.label}</TooltipContent>
-                          </Tooltip>
-                        ) : (
-                          link
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
+                <ul className="space-y-0.5">{group.items.map(renderNavItem)}</ul>
               </div>
             ))}
           </TooltipProvider>
@@ -286,7 +300,7 @@ export default function AppLayout() {
             {currentPageTitle}
           </p>
           {currentStreak > 0 && (
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 mr-2 rounded-md bg-[var(--brass-glow)] border border-[rgba(201,162,94,0.15)]">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 mr-2 rounded-md bg-[var(--brass-glow)] border border-[var(--brass-cell-1)]">
               <Flame className="w-4 h-4 text-[var(--brass)]" />
               <span className="text-sm font-semibold text-[var(--brass-bright)] font-numeric">{currentStreak}</span>
             </div>
@@ -327,10 +341,10 @@ export default function AppLayout() {
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -8 }}
-              transition={{ duration: 0.3 }}
+              variants={PAGE_TRANSITION}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               className="h-full"
             >
               <ErrorBoundary>

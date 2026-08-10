@@ -2,9 +2,11 @@
 // 用于 L2-L8 的 ChoiceDrill 类型课程，数据来自 lesson.drillData
 
 import { useState, useRef, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { orderDrillOptions } from '../../utils/quizShuffle';
+import { resolveLessonTitle, resolveLessonSubtitle } from '../../utils/titleKeys';
 import type { DrillProps, DrillResult } from './types';
 import type { Lesson } from '../../types';
 
@@ -13,6 +15,7 @@ interface ChoiceDrillRendererProps extends DrillProps {
 }
 
 export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: ChoiceDrillRendererProps) {
+  const { t } = useTranslation();
   // 答案位置偏差治理：渲染前重排选项（数值升序 / id 稳定种子洗牌），源数据不变
   const questions = useMemo(
     () => (lesson.drillData?.questions ?? []).map((q) => orderDrillOptions(q)),
@@ -139,10 +142,10 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
       {/* Title */}
       <div className="text-center">
         <h2 className="font-display text-xl text-[var(--ivory)]">
-          {lesson.title}
+          {resolveLessonTitle(t, lesson)}
         </h2>
         <p className="text-xs text-[var(--ivory-dim)] mt-1">
-          {lesson.subtitle}
+          {resolveLessonSubtitle(t, lesson)}
         </p>
       </div>
 

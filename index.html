@@ -14,6 +14,28 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- 主题预渲染：React 加载前从 persist 读取 settings.theme，避免首屏浅色/深色闪烁。
+         settings.theme 事实源：progress store persist (poker-training-progress) -->
+    <script>
+      (function () {
+        try {
+          var theme = 'dark';
+          var raw = localStorage.getItem('poker-training-progress');
+          if (raw) {
+            var state = JSON.parse(raw).state || {};
+            var saved = state.settings && state.settings.theme;
+            if (saved === 'light' || saved === 'dark' || saved === 'system') theme = saved;
+          }
+          if (theme === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          }
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#e9e1cd' : '#0e1a14');
+        } catch (e) {}
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

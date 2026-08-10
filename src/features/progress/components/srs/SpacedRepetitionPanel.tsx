@@ -21,13 +21,6 @@ const CATEGORY_COLORS: Record<string, string> = {
   gto: 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15',
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  strategy: '策略',
-  range: '范围',
-  odds: '赔率',
-  gto: 'GTO',
-};
-
 /** P2-C: 根据复习项 category 映射导航路由 */
 function getReviewRoute(item: ReviewItem): string {
   switch (item.category) {
@@ -71,8 +64,8 @@ export default function SpacedRepetitionPanel({
   const allDone = remainingToday === 0;
 
   return (
-    <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
-      <CardContent className="p-4">
+    <Card className="bg-[var(--felt)] border-[var(--walnut-border)] h-full">
+      <CardContent className="p-4 flex flex-col h-full">
         <div className="flex items-center gap-2 mb-3">
           <RefreshCw className="w-5 h-5 text-[var(--brass-bright)]" />
           <h2 className="font-display text-[17px] text-[var(--ivory)] tracking-wide">
@@ -173,7 +166,9 @@ export default function SpacedRepetitionPanel({
                           CATEGORY_COLORS[item.category] || CATEGORY_COLORS.strategy
                         }`}
                       >
-                        {CATEGORY_LABELS[item.category] || '策略'}
+                        {t(`spacedRepetition.category.${item.category}`, {
+                          defaultValue: t('spacedRepetition.category.strategy'),
+                        })}
                       </span>
                     </div>
                     {daysSince !== null && (
@@ -207,7 +202,7 @@ export default function SpacedRepetitionPanel({
         )}
 
         {/* 复习统计 */}
-        <div className="flex items-center justify-between pt-3 border-t border-[var(--walnut-border)]/40">
+        <div className="flex items-center justify-between pt-3 border-t border-[var(--walnut-border)]/40 mt-auto">
           <div className="flex items-center gap-1.5 text-xs text-[var(--ivory-muted)]">
             <GraduationCap className="w-3.5 h-3.5" />
             <span>{t('spacedRepetition.totalItems', { defaultValue: '总知识点' })}</span>

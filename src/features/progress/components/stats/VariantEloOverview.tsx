@@ -17,9 +17,11 @@ export function VariantEloOverview() {
   const switchActiveVariant = useProgressStore((s) => s.switchActiveVariant);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">{t('variant.eloOverview')}</CardTitle>
+    <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
+      <CardHeader className="pb-3">
+        <CardTitle className="font-display text-[17px] text-[var(--ivory)] tracking-wide">
+          {t('variant.eloOverview')}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

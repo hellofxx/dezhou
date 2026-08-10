@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle2, Circle } from 'lucide-react';
 import type { TheoryChapter } from '../types';
+import { resolveChapterTitle } from '../utils/titleKeys';
 
 interface TheoryChapterListProps {
   chapters: TheoryChapter[];
@@ -13,6 +15,7 @@ interface TheoryChapterListProps {
  * 已完成章节显示绿色对勾与历史最高分；点击行导航到章节页（与 URL 门禁口径一致，不新增章节级门禁）。
  */
 export function TheoryChapterList({ chapters, completedChapters, quizScores }: TheoryChapterListProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -31,7 +34,11 @@ export function TheoryChapterList({ chapters, completedChapters, quizScores }: T
               onMouseEnter={() => {
                 void import('./TheoryChapterView');
               }}
-              aria-label={`第 ${chapter.order} 章：${chapter.title}${completed ? '（已完成，可回访复习）' : ''}`}
+              aria-label={t('theory.chapterList.chapterAria', {
+                order: chapter.order,
+                title: resolveChapterTitle(t, chapter),
+                revisitable: completed ? t('theory.chapterList.revisitable') : '',
+              })}
               className="w-full flex min-h-11 items-center gap-2.5 px-2.5 py-2 rounded-md text-left text-xs transition-colors hover:bg-[var(--walnut-raised)]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
             >
               {completed ? (
@@ -40,7 +47,7 @@ export function TheoryChapterList({ chapters, completedChapters, quizScores }: T
                 <Circle className="w-3.5 h-3.5 text-[var(--ivory-muted)] shrink-0" />
               )}
               <span className="text-[var(--ivory-muted)] shrink-0">第 {chapter.order} 章</span>
-              <span className="flex-1 min-w-0 truncate text-[var(--ivory)]">{chapter.title}</span>
+              <span className="flex-1 min-w-0 truncate text-[var(--ivory)]">{resolveChapterTitle(t, chapter)}</span>
               <span className="text-[var(--ivory-muted)] shrink-0">{chapter.duration}</span>
               {completed && typeof score === 'number' && (
                 <span className="font-numeric text-[var(--brass-bright)] shrink-0">{score}分</span>

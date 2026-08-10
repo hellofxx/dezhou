@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, Flag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
@@ -112,7 +113,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.standard }}
         >
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs text-[var(--ivory-muted)] font-numeric">
@@ -172,6 +173,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
               className={cn(
                 'mt-4 rounded-lg p-4 text-sm leading-relaxed',
                 isCorrect
