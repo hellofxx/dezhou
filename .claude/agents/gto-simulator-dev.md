@@ -51,6 +51,7 @@ additionalPrompt: ""
 
 ## Cross-Module Touchpoints
 - **progress store**（src/features/progress/store.ts，跨模块状态中枢）：
+> 集成契约以 progress-dev §训练结果提交统一契约为单源；本模块协同如下：
   - ELO：postflop 维度，通过 `useGtoEloRecorder`（colocated in `useGTOComparison.ts`，非独立 hook 文件）调用 `updateElo('postflop', isCorrect, difficulty)`
   - SRS：通过 `useGtoSrsRecorder`（colocated）调用 `processReview(reviewItem)`
   - Emotion：通过 `useGtoEmotionRecorder`（colocated）调用 `recordAnswer(isCorrect)`
@@ -78,10 +79,10 @@ additionalPrompt: ""
 2. 调整 EV 损失容差时：评级阈值 `GRADE_THRESHOLDS` 定义于 `shared/types/decisionFeedback.ts`，必须通过 platform-dev 协调（影响所有训练模块）；模块内只可调整 strategyCompare.ts 的策略比较逻辑
 3. 添加新位置数据时：在 JSON 中添加对应位置的策略映射
 4. 答题后集成跨模块系统：调用 ELO/SRS/Emotion 记录器（仅首决策节点避免多步场景重复计数）
-5. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`gto.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+5. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - GTO 数据文件格式必须严格匹配 HandStrategy 类型

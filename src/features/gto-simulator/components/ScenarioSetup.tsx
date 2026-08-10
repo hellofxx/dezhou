@@ -230,7 +230,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
       {/* 玩家人数 */}
       <div className="space-y-2">
         <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">玩家人数</label>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {playerCountOptions.map((count) => (
             <button
               key={count}

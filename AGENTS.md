@@ -281,6 +281,56 @@ src/
 | `theory-academy-dev` | Feature | 理论学院课程 / 章末小测 / 理论→实践桥接 |
 | `help-center-dev` | Feature | 帮助中心教程内容 / 帮助页面 UI |
 
+### 子代理共享基线条款（单点事实源）
+
+> 本段为所有 feature / 基础层 agent 文件**唯一共享基线**。各 agent 文件**禁止重述**以下内容，仅引用本段。变更全局规则只需改此处（同时遵循「子代理规范」禁止复制知识库描述性内容原则）。
+
+#### 新增页面/组件标准路径（Workflow 单源）
+
+1. 在 `src/features/<module>/components/` 创建 `PascalCase.tsx`（按模块最小结构约定）
+2. 若引入新文案，同时更新 `src/i18n/locales/zh.json` 与 `en.json`（双语缺一不可，key 命名 `<module>.<context>.<field>`）
+3. 若新增测试，按 `vitest.config.ts` 双项目选后缀：纯函数 / store migrate 用 `.test.ts`（Node），组件冒烟用 `.test.tsx`（jsdom）
+4. 运行 `pnpm verify`（= typecheck && lint && test）确保门禁通过
+5. 若新增路由页面，由 `platform-dev` 在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册
+6. 若涉及全局视觉 / 共享组件 / 布局 / 导航 / 主题色，由 `ui-ux-dev` 复核（质量清单以 `poker-ui-demo/DESIGN_LANGUAGE.md` 为准）
+
+#### 全局约束（单源）
+
+- TypeScript strict + noUncheckedIndexedAccess，禁止 any；路径别名 `@/*`
+- 组件 PascalCase.tsx / Hook use 前缀 / 工具 camelCase / 路由 kebab-case
+- 单文件 ≤ 300 行（硬约束；豁免见 docs/AI_GUIDE.md）
+- 模块间禁止直接引用；跨模块状态集中 progress store；shared 准入门槛 ≥2 模块
+- i18n 双语同步、key 命名规范；UI 四层色彩 token，禁硬编码 / 霓虹
+- 每个 store 必须有 name + version；"记录完成" action 幂等
+- 五级反馈 `calculateGrade(evLoss)` 唯一评级，禁止自定义
+- 调试解锁 9 处门禁；选项排序治理（seededShuffle）
+
+#### 基线 Quality Checklist
+
+- [ ] `pnpm typecheck` exit 0
+- [ ] `pnpm lint` exit 0（no-restricted-imports + no-explicit-any）
+- [ ] `pnpm test` 全量 exit 0（含 i18n 双语对称、designTokenGuard）
+- [ ] 新增 key 双语齐备
+- [ ] 涉及 persist schema 变更：version 递增 + migrate
+- [ ] `pnpm verify` 通过
+
+各 feature agent 文件以一行引用取代上述明细：
+`> 全局约束、标准路径与基线 Quality Checklist 见 AGENTS.md §子代理共享基线条款（禁止在此重述）。`
+
+### 跨模块能力归属登记表
+
+> 单一事实源：所有"非本模块独属"的跨模块能力在此登记，避免各 agent 文件口头澄清"这不归我"。新增 / 变更跨模块能力时须同步更新本表。
+
+| 能力 | Owner agent | 消费方 / 说明 |
+|---|---|---|
+| QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `strategy-academy-dev` | `puzzle-trainer-dev` 仅消费，不持有；quickDrillBest 由 puzzle-trainer store 独立持久化 |
+| 五大系统集成（Streak / ELO / SRS / Emotion / Mentor）统一提交入口 | `progress-dev` | 全部 trainer 经 progress store 公开 API 提交训练结果（契约见 progress-dev；禁止各模块自写集成） |
+| trainingEvents emit / 订阅 | `progress-dev`（总线实现）+ 各模块自 emit | hand-history、help-center 合理豁免 emit |
+| 调试解锁（9 处门禁） | `platform-dev` 协调 | 全局旁路，清单见 AGENTS.md §调试解锁 |
+| 位置渐进解锁阈值 | `range-trainer-dev` | 阈值常量以 range-trainer/constants.ts 为准 |
+| GRADE_THRESHOLDS 源 | `shared/types/decisionFeedback.ts` | hand-history/workers/gtoWorker.ts 为 worker 隔离拷贝，须 parity 测试守护（见 §质量门禁） |
+| 每日计划生成（双源已消歧） | `strategy-academy-dev` 持 `generateDailyPlan`（academy 内部）/ `progress-dev` 持 `generateCrossModuleDailyPlan`（跨模块日训） | 两者命名已区分，禁止混用 |
+
 ### 工具权限分配
 
 - **feature-dev 标准工具集（10 项）**：`Read / Glob / Grep / LSP / GetProblems / SearchReplace / Write / DeleteFile / Bash / GetTerminalOutput`

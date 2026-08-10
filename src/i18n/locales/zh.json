@@ -612,7 +612,8 @@
   "settings": {
     "languageLabel": "语言",
     "languageHint": "界面语言，切换后立即生效",
-    "helpCenter": "帮助中心"
+    "helpCenter": "帮助中心",
+    "soundSwitch": "音效开关"
   },
   "downswing": {
     "title": "检测到下风期",
@@ -755,6 +756,14 @@
       "unavailable": "存储不可用，请检查浏览器设置或隐私模式",
       "quotaExceeded": "存储空间已满，请清理部分牌局数据",
       "generic": "数据读写失败，请稍后重试"
+    },
+    "replay": {
+      "prevStreet": "上一街",
+      "prevAction": "上一步",
+      "nextAction": "下一步",
+      "nextStreet": "下一街",
+      "play": "播放",
+      "pause": "暂停"
     }
   },
   "feedback": {

@@ -50,16 +50,18 @@ additionalPrompt: ""
 - 五级反馈复用 + 快速训练 Best Record 持久化
 - 主题分类（10 主题，4 大类）
 
-> 注：SRS 复习队列混合（`composeDailyMix`）与连续 7 天快速训练奖励冻结卡（`awardStreakFreeze`）实际由 strategy-academy/QuickDrill 实现，不在本模块。
+> 注：SRS 复习队列混合（`composeDailyMix`）与连续 7 天快速训练奖励冻结卡（`awardStreakFreeze`）由 strategy-academy/QuickDrill 实现（见 AGENTS.md §跨模块能力归属登记表），本模块仅消费其产出的混合作业，不持有该逻辑。
 
 ## Cross-Module Touchpoints
 
 ### progress store
+
+> 集成契约以 progress-dev §训练结果提交统一契约为单源；本模块协同如下：
 - 三模式组件（PuzzleRush / DailyPuzzle / ThemeDrill）作为消费方调用其公开 action：
   - `recordTrainingDay()`：会话完成时计入 Streak（幂等）
   - `recordAnswer(isCorrect)`：每题作答时更新情绪/连错计数
   - `shouldDownshiftDifficulty()`：无参调用，达标时显示降级提示
-- 不直接写 progress store 的 `elo` 字段；`quickDrillStreak` / `awardStreakFreeze` / `composeDailyMix` 等快速训练集成实际由 strategy-academy/QuickDrill 触发，不在本模块
+- 不直接写 progress store 的 `elo` 字段（ELO 通过 progress store 公开 action 记录）
 
 ### trainingEvents（事件总线）
 - PuzzleRush / DailyPuzzle / ThemeDrill 三模式经共享的 `usePuzzleSession` 单处接入：完成后通过 `puzzleResultToTrainingRecord` 转换并 `trainingEvents.emit`（`record.module` 为 `'puzzle-trainer'`）
@@ -81,7 +83,7 @@ additionalPrompt: ""
 跨模块依赖：
 - src/shared/types/decisionFeedback.ts — 五级反馈类型与 calculateGrade 评级函数
 
-> 注：`composeDailyMix` / `quickDrillStreak` / `awardStreakFreeze` 等快速训练集成实际由 strategy-academy/QuickDrill 实现，不在本模块。
+> 注：`composeDailyMix` / `quickDrillStreak` / `awardStreakFreeze` 由 strategy-academy/QuickDrill 实现（见 AGENTS.md §跨模块能力归属登记表），本模块不持有该逻辑；`quickDrillBest` 仍由本模块 store 独立持久化。
 
 ## Workflows
 1. 添加新主题时：在 types.ts 的 `PuzzleTheme` 添加值 → puzzleBank.ts 添加题目 → PuzzleHome 主题卡片自动渲染
@@ -91,10 +93,10 @@ additionalPrompt: ""
 5. 修改 Rush 分数公式时：编辑 usePuzzleEngine.ts 的计算逻辑 + PuzzleResult.tsx 展示
 6. 调整日期种子算法时：编辑 dateSeed.ts（保持种子一致性，避免 Daily 题目漂移；底层洗牌函数变更需经 platform-dev）
 7. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate 函数（仅注入新字段默认值）
-8. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`puzzle.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+8. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - 独立 store，不写入 progress store 的 elo 字段（ELO 由各训练模块自行记录）

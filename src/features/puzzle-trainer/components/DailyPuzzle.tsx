@@ -93,7 +93,7 @@ export default function DailyPuzzle() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="py-4 space-y-3">
+      <div className="py-4 space-y-3 max-w-3xl mx-auto">
         {/* 顶部栏 */}
         <div className="flex items-center justify-between gap-3">
           <Button

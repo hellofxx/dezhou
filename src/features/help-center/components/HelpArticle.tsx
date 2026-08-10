@@ -26,7 +26,7 @@ export default function HelpArticle() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl mx-auto">
       {/* 返回按钮 */}
       <button
         type="button"

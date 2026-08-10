@@ -115,22 +115,22 @@ export function HandImporter() {
 
   return (
     <div className="space-y-4">
-      {/* Drop zone */}
-      <div
+      {/* Drop zone — H-H4: 改原生 <label> 包裹隐藏 file input，键盘/读屏可达（WCAG 优先语义 HTML） */}
+      <label
         className={`
-          border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer
+          block border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer
           ${dragOver ? 'border-[var(--brass)] bg-[var(--brass)]/5' : 'border-[var(--walnut-border)] hover:border-[var(--ivory-muted)]'}
+          focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--brass)]/60
         `}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleFileDrop}
-        onClick={() => fileInputRef.current?.click()}
       >
         <input
           ref={fileInputRef}
           type="file"
           accept=".txt"
-          className="hidden"
+          className="sr-only"
           onChange={handleFileSelect}
         />
         <Upload size={32} className="mx-auto mb-2 text-[var(--brass-bright)]" />
@@ -140,7 +140,7 @@ export function HandImporter() {
         <p className="text-xs text-[var(--ivory-muted)] mt-1">
           Supports PokerStars, GGPoker, and PartyPoker hand history formats
         </p>
-      </div>
+      </label>
 
       {/* Text area */}
       <textarea

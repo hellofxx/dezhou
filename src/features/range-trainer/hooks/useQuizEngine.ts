@@ -7,9 +7,8 @@ import { useRangeTrainerStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
 // P1-3.1: SRS 集成
 import {
-  createReviewItem,
-  processReview,
-  type ReviewItem,
+  answerQuality,
+  upsertReviewItem,
 } from '@/features/progress/utils/spacedRepetition';
 // P2-2.3: 五级反馈
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
@@ -203,7 +202,7 @@ export function useQuizEngine() {
   );
 
   // P1-3.1: SRS 集成 — 答题后将该题注册/更新到复习队列
-  // quality 评分：答对且用时<5秒→5，答对→4，答错但接近→2，答错→1
+  // quality 评分复用共享 answerQuality：答对+快→5，答对→4，答错→1
   // （range-trainer 只有 fold/call/raise，"答错但接近"无判定依据，统一为 1）
   // 调用方在 handleAnswer 中答题后调用，与 recordEloForAnswer 并列
   const addReviewItem = useProgressStore((s) => s.addReviewItem);
@@ -226,19 +225,19 @@ export function useQuizEngine() {
         source: 'range' as const,
       };
 
-      const existing = reviewItems.find((r) => r.id === id);
-      const baseItem: ReviewItem = existing
-        ? existing
-        : createReviewItem(id, label, 'range', metadata);
+      const { item: updated, isNew } = upsertReviewItem(
+        reviewItems,
+        id,
+        label,
+        'range',
+        metadata,
+        answerQuality(isCorrect, timeTakenMs),
+      );
 
-      // quality 映射：答对+快→5，答对→4，答错→1
-      const quality = isCorrect ? (timeTakenMs < 5000 ? 5 : 4) : 1;
-      const updated = processReview(baseItem, quality);
-
-      if (existing) {
-        updateReviewItem(updated);
-      } else {
+      if (isNew) {
         addReviewItem(updated);
+      } else {
+        updateReviewItem(updated);
       }
     },
     [reviewItems, addReviewItem, updateReviewItem]

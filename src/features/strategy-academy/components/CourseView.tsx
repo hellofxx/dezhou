@@ -317,7 +317,7 @@ export default function CourseView() {
 
         {phase === 'reading' && !isDrill && (
           <div>
-            <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
+            <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6 max-w-3xl mx-auto">
               <LessonContent
                 lesson={lesson}
                 onComplete={handleStartQuiz}

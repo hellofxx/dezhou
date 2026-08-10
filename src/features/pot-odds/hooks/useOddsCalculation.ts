@@ -6,9 +6,8 @@ import type { OddsResult, PotOddsQuizQuestion } from '../types';
 import { useProgressStore } from '@/features/progress/store';
 // P1-3.2: SRS 集成
 import {
-  createReviewItem,
-  processReview,
-  type ReviewItem,
+  answerQuality,
+  upsertReviewItem,
 } from '@/features/progress/utils/spacedRepetition';
 // P2-2.3: 五级反馈
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
@@ -110,18 +109,19 @@ export function useOddsSrsRecorder() {
         scenario: question.scenario,
       };
 
-      const existing = reviewItems.find((r) => r.id === id);
-      const baseItem: ReviewItem = existing
-        ? existing
-        : createReviewItem(id, label, 'odds', metadata);
+      const { item: updated, isNew } = upsertReviewItem(
+        reviewItems,
+        id,
+        label,
+        'odds',
+        metadata,
+        answerQuality(isCorrect, timeTakenMs),
+      );
 
-      const quality = isCorrect ? (timeTakenMs < 5000 ? 5 : 4) : 1;
-      const updated = processReview(baseItem, quality);
-
-      if (existing) {
-        updateReviewItem(updated);
-      } else {
+      if (isNew) {
         addReviewItem(updated);
+      } else {
+        updateReviewItem(updated);
       }
     },
     [reviewItems, addReviewItem, updateReviewItem]

@@ -19,7 +19,7 @@ import DailyChallenge from '../achievement/DailyChallenge';
 import DailyTrainingPlan from '../training/DailyTrainingPlan';
 import SpacedRepetitionPanel from '../srs/SpacedRepetitionPanel';
 import ReviewSession from '../srs/ReviewSession';
-import { generateDailyPlan } from '../../utils/dailyTrainingPlan';
+import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
 import { getTodayReviewItems, getTodayString } from '../../utils/spacedRepetition';
 import RankUpCelebration from '../celebration/RankUpCelebration';
 import DownswingAlert from '../gate/DownswingAlert';
@@ -105,7 +105,7 @@ export default function Dashboard() {
 
   // 生成每日推荐
   const recommendations = useMemo(() => {
-    const allRecommendations = generateDailyPlan(
+    const allRecommendations = generateCrossModuleDailyPlan(
       academyProgress,
       records,
       reviewItems,

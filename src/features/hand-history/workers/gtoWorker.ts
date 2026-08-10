@@ -1,6 +1,9 @@
 // Web Worker for GTO strategy lookup and EV calculations
 
-const _self = self as unknown as {
+const _self = (typeof self !== 'undefined'
+  ? self
+  : ({} as { onmessage: ((e: MessageEvent) => void) | null; postMessage: (msg: unknown) => void })
+) as unknown as {
   onmessage: ((e: MessageEvent) => void) | null;
   postMessage: (msg: unknown) => void;
 };
@@ -139,18 +142,21 @@ function calculateHandStrength(
 }
 
 /**
- * 五级评级阈值（与 shared/types/decisionFeedback.ts 的 GRADE_THRESHOLDS 一致，在 worker 上下文中复制是因为 Web Worker 有独立执行上下文，无法直接 ES module 导入）
+ * 五级评级阈值（与 shared/types/decisionFeedback.ts 的 GRADE_THRESHOLDS 一致，在 worker 上下文中复制是因为 Web Worker 有独立执行上下文，无法直接 ES module 导入）。
+ * 通过 gtoWorkerThresholds.test.ts 守护与源一致性，禁止在此手改阈值。
  */
-const GRADE_BEST = 0;
-const GRADE_CORRECT = 0.5;
-const GRADE_INACCURACY = 2;
-const GRADE_WRONG = 5;
+export const WORKER_GRADE_THRESHOLDS = {
+  best: 0,
+  correct: 0.5,
+  inaccuracy: 2,
+  wrong: 5,
+};
 
 function calculateGrade(evLoss: number): string {
-  if (evLoss <= GRADE_BEST) return 'best';
-  if (evLoss < GRADE_CORRECT) return 'correct';
-  if (evLoss <= GRADE_INACCURACY) return 'inaccuracy';
-  if (evLoss <= GRADE_WRONG) return 'wrong';
+  if (evLoss <= WORKER_GRADE_THRESHOLDS.best) return 'best';
+  if (evLoss < WORKER_GRADE_THRESHOLDS.correct) return 'correct';
+  if (evLoss <= WORKER_GRADE_THRESHOLDS.inaccuracy) return 'inaccuracy';
+  if (evLoss <= WORKER_GRADE_THRESHOLDS.wrong) return 'wrong';
   return 'blunder';
 }
 

@@ -37,6 +37,10 @@ const INTERVAL_SEQUENCE = [1, 3, 7, 14, 30];
 const DEFAULT_EASE_FACTOR = 2.5;
 const MIN_EASE_FACTOR = 1.3;
 
+/** 快答阈值（秒）：答对且用时低于该值视为"完美记忆"（quality 5）。
+ * 单点事实源，供各 trainer SRS 记录器与 QuickDrill 复用，避免各处硬编码 5000ms。 */
+export const FAST_ANSWER_SECONDS = 5;
+
 /** 本地时区日期格式化 YYYY-MM-DD（与 streakCalc 统一口径，
  * 禁用 toISOString：UTC 日期在 UTC+8 的 00:00-08:00 会比本地日期晚一天，
  * 导致跨日判定错位（今日完成态/每日题量上限/情绪标记选中态））
@@ -159,6 +163,49 @@ export function createReviewItem(
     lastReviewedAt: undefined,
     metadata,
   };
+}
+
+/**
+ * SM-2 quality 映射（统一口径，单位=毫秒）：
+ *   答对 + 用时 < FAST_ANSWER_SECONDS → 5（完美记忆）
+ *   答对                                         → 4
+ *   答错                                         → 1
+ * 供各 trainer SRS 记录器复用，取代各自硬编码的 `timeTakenMs < 5000 ? 5 : 4 : 1`。
+ */
+export function answerQuality(isCorrect: boolean, timeTakenMs: number): number {
+  if (!isCorrect) return 1;
+  return timeTakenMs < FAST_ANSWER_SECONDS * 1000 ? 5 : 4;
+}
+
+/**
+ * 在复习队列中查找或创建复习项，并用给定 quality 推进其 SRS 状态（纯函数）。
+ * 返回推进后的 ReviewItem 及是否为新建项，由调用方负责写回 store
+ * （addReviewItem / updateReviewItem），从而保持本函数为可单测的纯函数。
+ *
+ * - 已存在：对现有项 processReview(quality)
+ * - 不存在：createReviewItem(id, label, category, metadata) 后 processReview(quality)
+ *
+ * @param reviewItems 现有复习项列表
+ * @param id          复习项唯一 id（如 `range:pos:hand` / `odds:id` / `gto:spotKey:hand`）
+ * @param label       显示名称
+ * @param category    分类（range/odds/gto/strategy）
+ * @param metadata    SRS 复习模式渲染用元数据（仅新建项写入）
+ * @param quality     回忆质量 0-5（通常由 answerQuality 计算）
+ */
+export function upsertReviewItem(
+  reviewItems: ReviewItem[],
+  id: string,
+  label: string,
+  category: string,
+  metadata: ReviewItemMetadata,
+  quality: number,
+): { item: ReviewItem; isNew: boolean } {
+  const existing = reviewItems.find((r) => r.id === id);
+  if (existing) {
+    return { item: processReview(existing, quality), isNew: false };
+  }
+  const baseItem = createReviewItem(id, label, category, metadata);
+  return { item: processReview(baseItem, quality), isNew: true };
 }
 
 /**

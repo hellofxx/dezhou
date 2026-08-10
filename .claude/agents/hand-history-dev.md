@@ -51,7 +51,7 @@ additionalPrompt: ""
 
 ## Cross-Module Touchpoints
 - **progress store**：无直接调用（复盘无答题评分，不触发 ELO / SRS / Emotion 系统）
-- **trainingEvents**：合理豁免——hand-history 是复盘分析工具而非答题训练模块，无 quiz/practice 形式的训练结果，不适合 emit TrainingRecord；豁免依据见 `store.ts` 顶部说明与 `docs/CHANGELOG.md`，禁止为凑合规范而伪造 emit
+- **trainingEvents**：合理豁免——hand-history 是复盘分析工具而非答题训练模块，无 quiz/practice 形式的训练结果，不适合 emit TrainingRecord；豁免依据见 `store.ts` 顶部说明与 `docs/CHANGELOG.md`，禁止为凑合规范而伪造 emit；豁免集中登记见 AGENTS.md §跨模块能力归属登记表
 - **shared/ 层依赖**：poker.ts / formatters.ts / handRanking.ts
 
 ## Key Files
@@ -71,10 +71,10 @@ additionalPrompt: ""
 5. 添加牌局统计指标时：扩展 handStats.ts 工具函数 + HandStatsPanel 展示
 6. 修改 GTO 偏差计算时：编辑 workers/gtoWorker.ts 的消息处理与策略查找逻辑（其中阈值常量副本必须与 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 保持一致；阈值变更时需同步通知 platform-dev 并更新副本）
 7. 同步评级阈值：当 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 变更时，立即同步更新 `workers/gtoWorker.ts`内的副本以保持两者一致
-7. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`handHistory.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+7. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 大数据用 IndexedDB 等）。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - 解析器必须处理格式异常（不崩溃，返回错误信息）

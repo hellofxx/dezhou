@@ -61,8 +61,9 @@ export function RangeSelector({
                 size="sm"
                 disabled={!unlocked}
                 title={unlocked ? pos : `需 preflop ELO ≥ ${threshold} 解锁`}
+                aria-label={unlocked ? pos : `需 preflop ELO ≥ ${threshold} 解锁`}
                 className={cn(
-                  'text-xs px-3 py-1.5 h-auto',
+                  'text-xs px-4 min-h-11',
                   selectedPosition === pos && 'bg-[var(--brass)] hover:bg-[var(--brass-bright)]',
                   !unlocked && 'opacity-50 cursor-not-allowed'
                 )}

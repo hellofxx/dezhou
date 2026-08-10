@@ -134,7 +134,7 @@ export default function Leaderboard() {
               {leaderboard.map((entry) => (
                 <div
                   key={entry.name}
-                  className={`flex items-center gap-3 px-4 py-3 transition-colors ${
+                  className={`flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 transition-colors ${
                     entry.isUser
                       ? 'bg-[var(--brass)]/8 border-l-2 border-l-[var(--brass-bright)]'
                       : 'hover:bg-[var(--walnut-raised)]/30'
@@ -143,7 +143,7 @@ export default function Leaderboard() {
                   <div className="w-6 flex justify-center shrink-0">
                     {getRankIcon(entry.rank)}
                   </div>
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 truncate">
                     <span className={`text-sm font-medium ${
                       entry.isUser ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory)]'
                     }`}>

@@ -612,7 +612,8 @@
   "settings": {
     "languageLabel": "Language",
     "languageHint": "Interface language, applies immediately",
-    "helpCenter": "Help Center"
+    "helpCenter": "Help Center",
+    "soundSwitch": "Sound effects switch"
   },
   "downswing": {
     "title": "Downswing Detected",
@@ -755,6 +756,14 @@
       "unavailable": "Storage unavailable, please check browser settings or private mode",
       "quotaExceeded": "Storage quota exceeded, please clear some hand data",
       "generic": "Data read/write failed, please try again later"
+    },
+    "replay": {
+      "prevStreet": "Previous street",
+      "prevAction": "Previous action",
+      "nextAction": "Next action",
+      "nextStreet": "Next street",
+      "play": "Play",
+      "pause": "Pause"
     }
   },
   "feedback": {

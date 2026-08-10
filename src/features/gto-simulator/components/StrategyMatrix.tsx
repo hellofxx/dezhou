@@ -4,6 +4,7 @@ import type { HandStrategy } from '../types';
 import { getHandFromGrid } from '@/features/range-trainer/utils/rangeParser';
 import { GRID_RANKS } from '@/features/range-trainer/constants';
 import { cn } from '@/shared/utils';
+import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
 
 interface StrategyMatrixProps {
   strategies: Record<HandNotation, HandStrategy> | null;
@@ -70,6 +71,8 @@ const MatrixCell = React.memo(function MatrixCell({
   onClick,
 }: MatrixCellProps) {
   const colorClass = getCellColor(strategy);
+  // G-G3: 键盘/读屏可达（role=button + tabIndex + Enter/Space）
+  const keyboardProps = useGridKeyboardNav(hand, onClick);
 
   return (
     <div
@@ -84,6 +87,7 @@ const MatrixCell = React.memo(function MatrixCell({
       onMouseLeave={() => onHover(null)}
       onClick={() => onClick(hand)}
       title={strategy ? `${hand}: R${Math.round(strategy.raise * 100)}% C${Math.round(strategy.call * 100)}% F${Math.round(strategy.fold * 100)}%` : hand}
+      {...keyboardProps}
     >
       {hand}
     </div>

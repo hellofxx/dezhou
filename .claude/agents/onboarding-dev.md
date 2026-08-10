@@ -77,10 +77,10 @@ additionalPrompt: ""
 3. 修改能力评估映射时：编辑 PlacementTestStep.tsx 的正确率 → initialAbility 映射逻辑
 4. 修改首胜庆祝动画时：编辑 CelebrationStep.tsx 的 CSS keyframes
 5. 修改目标选项时：编辑 GoalSettingStep.tsx 的分钟数选项 + 写入 dailyGoalMinutes
-6. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`onboarding.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+6. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / i18n 双语同步等）。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - OnboardingGate 必须包裹 AppLayout 的 `<Outlet />`，未完成时自动重定向到 `/onboarding`

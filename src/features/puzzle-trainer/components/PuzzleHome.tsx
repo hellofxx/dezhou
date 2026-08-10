@@ -72,7 +72,7 @@ export default function PuzzleHome() {
                     <button
                       key={min}
                       type="button"
-                      className="px-2 py-0.5 rounded-full border border-[var(--walnut-border)] text-[var(--brass-bright)] hover:border-[var(--brass-muted)] hover:bg-[var(--surface-raised)] transition-colors"
+                      className="px-3 min-h-8 inline-flex items-center rounded-full border border-[var(--walnut-border)] text-[var(--brass-bright)] hover:border-[var(--brass-muted)] hover:bg-[var(--surface-raised)] transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/puzzle/rush?duration=${min}`);

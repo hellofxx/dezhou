@@ -56,7 +56,7 @@ export default function ConceptGraphView() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.1 }}
-          className="grid grid-cols-3 gap-3"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3"
         >
           <div className="rounded-lg bg-[var(--walnut-raised)] border border-[var(--walnut-border)] p-4 text-center">
             <div className="flex items-center justify-center gap-1.5 mb-1">

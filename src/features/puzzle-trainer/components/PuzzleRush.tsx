@@ -98,7 +98,7 @@ export default function PuzzleRush() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="py-4 space-y-3">
+      <div className="py-4 space-y-3 max-w-3xl mx-auto">
         {/* 顶部栏：返回 / 标题 / 倒计时 */}
         <div className="flex items-center justify-between gap-3">
           <Button

@@ -23,7 +23,7 @@ export {
 // 每日训练推荐
 export type { DailyRecommendation } from './utils/dailyTrainingPlan';
 export {
-  generateDailyPlan,
+  generateCrossModuleDailyPlan,
   getReasonColor,
   getTypeIcon,
   getPriorityColor,

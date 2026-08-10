@@ -14,9 +14,8 @@ import { useProgressStore } from '@/features/progress/store';
 import type { Difficulty } from '@/shared/types/common';
 // P1-3.2: SRS 集成
 import {
-  createReviewItem,
-  processReview,
-  type ReviewItem,
+  answerQuality,
+  upsertReviewItem,
 } from '@/features/progress/utils/spacedRepetition';
 // P2-2.3: 五级反馈
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
@@ -281,18 +280,19 @@ export function useGtoSrsRecorder() {
         scenario: scenario.description,
       };
 
-      const existing = reviewItems.find((r) => r.id === id);
-      const baseItem: ReviewItem = existing
-        ? existing
-        : createReviewItem(id, label, 'gto', metadata);
+      const { item: updated, isNew } = upsertReviewItem(
+        reviewItems,
+        id,
+        label,
+        'gto',
+        metadata,
+        answerQuality(isOptimal, timeTakenMs),
+      );
 
-      const quality = isOptimal ? (timeTakenMs < 5000 ? 5 : 4) : 1;
-      const updated = processReview(baseItem, quality);
-
-      if (existing) {
-        updateReviewItem(updated);
-      } else {
+      if (isNew) {
         addReviewItem(updated);
+      } else {
+        updateReviewItem(updated);
       }
     },
     [reviewItems, addReviewItem, updateReviewItem]

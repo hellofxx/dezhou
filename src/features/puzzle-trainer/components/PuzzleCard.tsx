@@ -130,7 +130,7 @@ export function PuzzleCard({
           </div>
 
           {/* 选项按钮列表 */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 pt-1">
             {question.options.map((opt) => {
               const isSelected = selectedOptionId === opt.id;
               const showResult = isAnswered && isSelected;

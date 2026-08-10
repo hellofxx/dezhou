@@ -51,7 +51,7 @@ additionalPrompt: ""
 ## Cross-Module Touchpoints
 
 ### trainingEvents（事件总线）
-- 本模块为静态教程页，**豁免 trainingEvents emit**（参照 hand-history「非交互式训练」口径，在 index.ts 顶部注明）
+- 本模块为静态教程页，**豁免 trainingEvents emit**（豁免口径集中登记于 AGENTS.md §跨模块能力归属登记表）
 
 ### 路由跳转
 - 仅通过路由字符串跳转各模块（`modulePath` 字段），禁止 import 其他 feature 模块
@@ -72,10 +72,10 @@ additionalPrompt: ""
 2. 新增 FAQ 时：在 FAQ_ITEMS 追加 FaqItem → 同步更新 zh.json 与 en.json 的 `help.faq.*` 命名空间
 3. 新增概念卡片时：在 CONCEPT_CARDS 追加 → 同步 i18n `help.concepts.*`
 4. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `help.*` 命名空间
-5. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`help.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+5. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数等）。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - 教程文案为面向用户原创提炼，不逐字搬运 docs/ 内部文档

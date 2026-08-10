@@ -1,6 +1,7 @@
 import React from 'react';
 import type { HandNotation, GameVariant } from '@/shared/types/poker';
 import { cn } from '@/shared/utils';
+import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
 import { getHandFromGrid } from '../utils/rangeParser';
 import { getHandCategory } from '../utils/handClassifier';
 import { GRID_RANKS, SHORT_DECK_GRID_RANKS } from '../constants';
@@ -36,6 +37,8 @@ const GridCell = React.memo(function GridCell({
   const category = getHandCategory(hand);
   const isPair = category === 'pair';
   const isSuited = category === 'suited';
+  // R-R1: 键盘/读屏可达（role=button + tabIndex + Enter/Space）
+  const keyboardProps = useGridKeyboardNav(hand, onClick);
 
   // Inlaid-tile palette: selected = brass fill with ink text;
   // unselected cells are dim ivory tile, with pairs tinted warm (brass-deep)
@@ -64,6 +67,7 @@ const GridCell = React.memo(function GridCell({
       onMouseEnter={() => onHover?.(hand)}
       onMouseLeave={() => onHover?.(null)}
       title={hand}
+      {...keyboardProps}
     >
       {hand}
     </div>
@@ -111,8 +115,10 @@ export function RangeGrid({
 
   return (
     <div className={cn('w-full', className)}>
+      {/* R-R2: 窄容器下允许横向滚动，min-w 保证 13 列最小可读宽度 */}
+      <div className="overflow-x-auto">
       {/* 列标题 */}
-      <div className="grid gap-[2px]" style={{ gridTemplateColumns: `24px repeat(${gridSize}, 1fr)` }}>
+      <div className="grid gap-[2px] min-w-[520px]" style={{ gridTemplateColumns: `24px repeat(${gridSize}, 1fr)` }}>
         <div /> {/* 左上角空白 */}
         {ranks.map((rank) => (
           <div
@@ -125,7 +131,7 @@ export function RangeGrid({
       </div>
 
       {/* 网格主体 */}
-      <div className="grid gap-[2px]" style={{ gridTemplateColumns: `24px repeat(${gridSize}, 1fr)` }}>
+      <div className="grid gap-[2px] min-w-[520px]" style={{ gridTemplateColumns: `24px repeat(${gridSize}, 1fr)` }}>
         {Array.from({ length: gridSize }, (_, rowIdx) => (
           <React.Fragment key={`row-${rowIdx}`}>
             {/* 行标题 */}
@@ -150,6 +156,7 @@ export function RangeGrid({
             })}
           </React.Fragment>
         ))}
+      </div>
       </div>
     </div>
   );

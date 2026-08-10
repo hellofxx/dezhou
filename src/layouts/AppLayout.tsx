@@ -279,9 +279,12 @@ export default function AppLayout() {
       <div className="flex flex-col flex-1 overflow-hidden felt-ambient">
         {/* Top bar — surface bg with walnut border below */}
         <header className="flex items-center h-12 md:h-16 px-4 md:px-6 border-b border-[var(--walnut-border)] bg-[var(--surface)] backdrop-blur-sm shrink-0 relative brass-rail">
-          <h1 className="font-display text-[17px] text-[var(--ivory)] flex-1 tracking-wide">
+          <p
+            aria-hidden="true"
+            className="font-display text-[17px] text-[var(--ivory)] flex-1 tracking-wide"
+          >
             {currentPageTitle}
-          </h1>
+          </p>
           {currentStreak > 0 && (
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 mr-2 rounded-md bg-[var(--brass-glow)] border border-[rgba(201,162,94,0.15)]">
               <Flame className="w-4 h-4 text-[var(--brass)]" />
@@ -319,6 +322,8 @@ export default function AppLayout() {
 
         {/* Page content */}
         <main className="flex-1 overflow-auto p-4 md:p-6 pb-20 md:pb-6">
+          {/* G1: 全局限宽——操作台/统计页随 main 收敛；阅读型页面正文由各模块 agent 单独 max-w-3xl */}
+          <div className="mx-auto w-full max-w-[1400px] h-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -335,6 +340,7 @@ export default function AppLayout() {
               </ErrorBoundary>
             </motion.div>
           </AnimatePresence>
+          </div>
         </main>
       </div>
 

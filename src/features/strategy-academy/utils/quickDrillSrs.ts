@@ -11,24 +11,25 @@
  * 间隔推进由 processReview（SM-2 简化版，1→3→7→14→30，答错重置 1 天）负责。
  */
 import type { ReviewItem } from '@/features/progress/utils/spacedRepetition';
-import { processReview } from '@/features/progress/utils/spacedRepetition';
+import { processReview, answerQuality } from '@/features/progress/utils/spacedRepetition';
 import type { PracticeAnswerDetail } from '../types';
 
 /** 复习题 PracticeQuestion.id 前缀（见 quickDrillMix.reviewItemToPracticeQuestion） */
 export const REVIEW_QUESTION_PREFIX = 'review-';
 
-/** 快答阈值（秒）：答对且低于该用时视为"完美记忆"（quality 5） */
-export const FAST_ANSWER_SECONDS = 5;
+/** 快答阈值（秒）：答对且低于该用时视为"完美记忆"（quality 5）。
+ * 单点事实源已迁至 progress/utils/spacedRepetition，此处仅做兼容重导出。 */
+export { FAST_ANSWER_SECONDS } from '@/features/progress/utils/spacedRepetition';
 
 /** 是否为复习题的作答记录 */
 export function isReviewQuestionId(questionId: string): boolean {
   return questionId.startsWith(REVIEW_QUESTION_PREFIX);
 }
 
-/** SM-2 quality 映射：对+快 → 5 / 对 → 4 / 错 → 1 */
+/** SM-2 quality 映射：对+快 → 5 / 对 → 4 / 错 → 1。
+ * 复用共享 answerQuality（单位=毫秒），本模块作答明细 timeTaken 单位为秒，故 ×1000。 */
 export function reviewQualityFor(isCorrect: boolean, timeTaken: number): number {
-  if (!isCorrect) return 1;
-  return timeTaken < FAST_ANSWER_SECONDS ? 5 : 4;
+  return answerQuality(isCorrect, timeTaken * 1000);
 }
 
 /**

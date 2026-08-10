@@ -1,9 +1,11 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
+import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
 
 interface GraphNode {
   id: string;
@@ -109,6 +111,157 @@ function buildGraph() {
 
   return { nodes, edges };
 }
+
+interface GraphNodeItemProps {
+  node: GraphNode;
+  status: 'completed' | 'current' | 'locked' | 'available';
+  isHovered: boolean;
+  levelInfo: { level: number; title: string } | undefined;
+  onSelect: (lessonId: string) => void;
+  onHover: (id: string | null) => void;
+}
+
+/** S-S1: SVG 节点子组件——在组件顶层调 hook，补键盘/读屏可达 + 焦点 tooltip */
+const GraphNodeItem = React.memo(function GraphNodeItem({
+  node,
+  status,
+  isHovered,
+  levelInfo,
+  onSelect,
+  onHover,
+}: GraphNodeItemProps) {
+  const keyboardProps = useGridKeyboardNav(node.id, onSelect);
+
+  // 样式
+  let fill: string;
+  let stroke: string;
+  let textColor: string;
+  let dashArray: string | undefined;
+
+  switch (status) {
+    case 'completed':
+      fill = 'rgba(127, 184, 131, 0.15)';
+      stroke = 'var(--success)';
+      textColor = 'var(--poker-success)';
+      dashArray = undefined;
+      break;
+    case 'current':
+      fill = 'var(--surface-raised)';
+      stroke = 'var(--brass)';
+      textColor = 'var(--ivory)';
+      dashArray = undefined;
+      break;
+    case 'locked':
+      fill = 'rgba(0,0,0,0.2)';
+      stroke = 'var(--ivory-dim)';
+      textColor = 'var(--ivory-dim)';
+      dashArray = '4 3';
+      break;
+    default:
+      fill = 'var(--surface-raised)';
+      stroke = 'rgba(255,255,255,0.25)';
+      textColor = 'var(--ivory)';
+      dashArray = undefined;
+  }
+
+  return (
+    <motion.g
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.25, delay: (node.level - 1) * 0.06 + node.order * 0.03 }}
+      style={{ cursor: 'pointer' }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect(node.id);
+      }}
+      onMouseEnter={() => onHover(node.id)}
+      onMouseLeave={() => onHover(null)}
+      onFocus={() => onHover(node.id)}
+      onBlur={() => onHover(null)}
+      {...keyboardProps}
+    >
+      {/* 节点背景 */}
+      <rect
+        x={node.x}
+        y={node.y}
+        width={LAYOUT.nodeWidth}
+        height={LAYOUT.nodeHeight}
+        rx={8}
+        fill={fill}
+        stroke={isHovered ? 'var(--brass-bright)' : stroke}
+        strokeWidth={isHovered ? 2.5 : 1.5}
+        strokeDasharray={dashArray}
+      />
+
+      {/* 当前进行中脉冲动画 */}
+      {status === 'current' && (
+        <rect
+          x={node.x - 2}
+          y={node.y - 2}
+          width={LAYOUT.nodeWidth + 4}
+          height={LAYOUT.nodeHeight + 4}
+          rx={10}
+          fill="none"
+          stroke="var(--brass)"
+          strokeWidth={1}
+          opacity={0.5}
+        >
+          <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2s" repeatCount="indefinite" />
+        </rect>
+      )}
+
+      {/* 节点文字 */}
+      <text
+        x={node.x + LAYOUT.nodeWidth / 2}
+        y={node.y + LAYOUT.nodeHeight / 2 + (status === 'completed' ? 0 : 1)}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill={textColor}
+        fontSize={11}
+        fontWeight={status === 'completed' ? 600 : 400}
+      >
+        {node.label}
+      </text>
+
+      {/* 已完成 ✓ */}
+      {status === 'completed' && (
+        <g transform={`translate(${node.x + LAYOUT.nodeWidth - 18}, ${node.y + 4})`}>
+          <circle cx={7} cy={7} r={7} fill="var(--success)" opacity={0.9} />
+          <path d="M4 7 L6.5 9.5 L10 4.5" stroke="white" strokeWidth={1.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+      )}
+
+      {/* 未解锁 🔒 */}
+      {status === 'locked' && (
+        <text x={node.x + LAYOUT.nodeWidth - 16} y={node.y + 14} fontSize={10} fill="var(--ivory-dim)">
+          🔒
+        </text>
+      )}
+
+      {/* Tooltip */}
+      {isHovered && (
+        <g>
+          <rect
+            x={node.x - 10}
+            y={node.y - 40}
+            width={LAYOUT.nodeWidth + 20}
+            height={32}
+            rx={6}
+            fill="rgba(0,0,0,0.92)"
+            stroke="rgba(255,255,255,0.2)"
+          />
+          <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 27} textAnchor="middle" fill="white" fontSize={10} fontWeight={500}>
+            {node.fullTitle}
+          </text>
+          <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 14} textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize={9}>
+            {levelInfo ? `L${levelInfo.level} · ${levelInfo.title}` : ''} ·{' '}
+            {status === 'completed' ? '已完成' : status === 'current' ? '进行中' : status === 'locked' ? '未解锁' : '未开始'}
+          </text>
+        </g>
+      )}
+    </motion.g>
+  );
+});
 
 export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
@@ -420,139 +573,17 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
           })}
 
           {/* 节点 */}
-          {nodes.map((node) => {
-            const status = getNodeStatus(node);
-            const isHovered = hoveredNode === node.id;
-            const levelInfo = LEVELS.find((l) => l.id === node.levelId);
-
-            // 样式
-            let fill: string;
-            let stroke: string;
-            let textColor: string;
-            let dashArray: string | undefined;
-
-            switch (status) {
-              case 'completed':
-                fill = 'rgba(127, 184, 131, 0.15)';
-                stroke = 'var(--success)';
-                textColor = 'var(--poker-success)';
-                dashArray = undefined;
-                break;
-              case 'current':
-                fill = 'var(--surface-raised)';
-                stroke = 'var(--brass)';
-                textColor = 'var(--ivory)';
-                dashArray = undefined;
-                break;
-              case 'locked':
-                fill = 'rgba(0,0,0,0.2)';
-                stroke = 'var(--ivory-dim)';
-                textColor = 'var(--ivory-dim)';
-                dashArray = '4 3';
-                break;
-              default:
-                fill = 'var(--surface-raised)';
-                stroke = 'rgba(255,255,255,0.25)';
-                textColor = 'var(--ivory)';
-                dashArray = undefined;
-            }
-
-            return (
-              <motion.g
-                key={node.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.25, delay: (node.level - 1) * 0.06 + node.order * 0.03 }}
-                style={{ cursor: 'pointer' }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onNodeClick(node.id);
-                }}
-                onMouseEnter={() => setHoveredNode(node.id)}
-                onMouseLeave={() => setHoveredNode(null)}
-              >
-                {/* 节点背景 */}
-                <rect
-                  x={node.x}
-                  y={node.y}
-                  width={LAYOUT.nodeWidth}
-                  height={LAYOUT.nodeHeight}
-                  rx={8}
-                  fill={fill}
-                  stroke={isHovered ? 'var(--brass-bright)' : stroke}
-                  strokeWidth={isHovered ? 2.5 : 1.5}
-                  strokeDasharray={dashArray}
-                />
-
-                {/* 当前进行中脉冲动画 */}
-                {status === 'current' && (
-                  <rect
-                    x={node.x - 2}
-                    y={node.y - 2}
-                    width={LAYOUT.nodeWidth + 4}
-                    height={LAYOUT.nodeHeight + 4}
-                    rx={10}
-                    fill="none"
-                    stroke="var(--brass)"
-                    strokeWidth={1}
-                    opacity={0.5}
-                  >
-                    <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2s" repeatCount="indefinite" />
-                  </rect>
-                )}
-
-                {/* 节点文字 */}
-                <text
-                  x={node.x + LAYOUT.nodeWidth / 2}
-                  y={node.y + LAYOUT.nodeHeight / 2 + (status === 'completed' ? 0 : 1)}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill={textColor}
-                  fontSize={11}
-                  fontWeight={status === 'completed' ? 600 : 400}
-                >
-                  {node.label}
-                </text>
-
-                {/* 已完成 ✓ */}
-                {status === 'completed' && (
-                  <g transform={`translate(${node.x + LAYOUT.nodeWidth - 18}, ${node.y + 4})`}>
-                    <circle cx={7} cy={7} r={7} fill="var(--success)" opacity={0.9} />
-                    <path d="M4 7 L6.5 9.5 L10 4.5" stroke="white" strokeWidth={1.5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  </g>
-                )}
-
-                {/* 未解锁 🔒 */}
-                {status === 'locked' && (
-                  <text x={node.x + LAYOUT.nodeWidth - 16} y={node.y + 14} fontSize={10} fill="var(--ivory-dim)">
-                    🔒
-                  </text>
-                )}
-
-                {/* Tooltip */}
-                {isHovered && (
-                  <g>
-                    <rect
-                      x={node.x - 10}
-                      y={node.y - 40}
-                      width={LAYOUT.nodeWidth + 20}
-                      height={32}
-                      rx={6}
-                      fill="rgba(0,0,0,0.92)"
-                      stroke="rgba(255,255,255,0.2)"
-                    />
-                    <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 27} textAnchor="middle" fill="white" fontSize={10} fontWeight={500}>
-                      {node.fullTitle}
-                    </text>
-                    <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 14} textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize={9}>
-                      {levelInfo ? `L${levelInfo.level} · ${levelInfo.title}` : ''} ·{' '}
-                      {status === 'completed' ? '已完成' : status === 'current' ? '进行中' : status === 'locked' ? '未解锁' : '未开始'}
-                    </text>
-                  </g>
-                )}
-              </motion.g>
-            );
-          })}
+          {nodes.map((node) => (
+            <GraphNodeItem
+              key={node.id}
+              node={node}
+              status={getNodeStatus(node)}
+              isHovered={hoveredNode === node.id}
+              levelInfo={LEVELS.find((l) => l.id === node.levelId)}
+              onSelect={onNodeClick}
+              onHover={setHoveredNode}
+            />
+          ))}
         </svg>
       </div>
 

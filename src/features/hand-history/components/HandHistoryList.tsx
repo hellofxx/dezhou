@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useHandHistoryStore } from '../store';
 import { formatDate } from '../utils/handNotation';
 import { calculateHeroStats } from '../utils/handStats';
@@ -11,6 +12,7 @@ const MIN_HANDS_FOR_STATS = 20;
 
 export default function HandHistoryList() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { hands, filter, setFilter, getFilteredHands, deleteHand, clearAll, loaded, loadFromDB } = useHandHistoryStore();
   const [confirmClear, setConfirmClear] = useState(false);
   const [activeTab, setActiveTab] = useState<'list' | 'stats'>('list');
@@ -117,8 +119,8 @@ export default function HandHistoryList() {
       {activeTab === 'list' && (
         <>
           {/* Filters */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1 relative">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <div className="flex-1 min-w-[200px] relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ivory-muted)]" />
               <input
                 type="text"
@@ -131,7 +133,7 @@ export default function HandHistoryList() {
             <select
               value={filter.site ?? ''}
               onChange={(e) => setFilter({ site: e.target.value || undefined })}
-              className="px-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] focus:outline-none"
+              className="shrink-0 px-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] focus:outline-none"
             >
               <option value="">All Sites</option>
               <option value="pokerstars">PokerStars</option>
@@ -142,7 +144,7 @@ export default function HandHistoryList() {
             <select
               value={filter.sortBy}
               onChange={(e) => setFilter({ sortBy: e.target.value as 'date' | 'pot' | 'site' })}
-              className="px-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] focus:outline-none"
+              className="shrink-0 px-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] focus:outline-none"
             >
               <option value="date">Sort by Date</option>
               <option value="pot">Sort by Pot</option>
@@ -193,14 +195,15 @@ export default function HandHistoryList() {
                     <div className="text-right">
                       <div className="text-sm font-bold text-[var(--brass-bright)] font-numeric">${hand.pot.toFixed(2)}</div>
                       {hand.winner && (
-                        <div className="text-[10px] text-[var(--ivory-muted)] truncate max-w-[100px]">
+                        <div className="text-[10px] text-[var(--ivory-muted)] truncate max-w-[160px]">
                           Won by {hand.players[hand.winner.playerId]?.name ?? '?'}
                         </div>
                       )}
                     </div>
                     <button
                       onClick={(e) => { e.stopPropagation(); deleteHand(hand.id); }}
-                      className="p-2 rounded-lg opacity-0 group-hover:opacity-100 text-[var(--ivory-muted)] hover:text-[var(--clay)] hover:bg-[var(--clay)]/10 transition-all"
+                      aria-label={t('common.delete')}
+                      className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)]/70 hover:text-[var(--clay)] hover:bg-[var(--clay)]/10 transition-all"
                     >
                       <Trash2 size={14} />
                     </button>

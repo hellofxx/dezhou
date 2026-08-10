@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHandReplay } from '../hooks/useHandReplay';
 import { BoardDisplay } from './BoardDisplay';
 import { PlayerSeats } from './PlayerSeats';
@@ -15,6 +16,7 @@ import {
 const SPEEDS = [0.5, 1, 2, 4];
 
 export function HandReplayer() {
+  const { t } = useTranslation();
   const {
     hand,
     state,
@@ -83,7 +85,7 @@ export function HandReplayer() {
 
         {/* Table area — bottle-green felt with walnut rail */}
         <div className="flex-1 relative flex items-center justify-center p-4">
-          <div className="relative w-full max-w-[700px] h-[400px] rounded-[50%] bg-gradient-to-b from-[var(--felt)] to-[var(--felt-deep)] border-4 border-[var(--walnut)] shadow-[inset_0_0_60px_rgba(0,0,0,0.3)]">
+          <div className="relative w-full max-w-[700px] min-h-[320px] h-[min(48vh,400px)] rounded-[50%] bg-gradient-to-b from-[var(--felt)] to-[var(--felt-deep)] border-4 border-[var(--walnut)] shadow-[inset_0_0_60px_rgba(0,0,0,0.3)]">
             {/* Board cards in center */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <BoardDisplay
@@ -104,11 +106,12 @@ export function HandReplayer() {
         </div>
 
         {/* Control bar */}
-        <div className="flex items-center justify-center gap-3 px-6 py-4 border-t border-[var(--walnut-border)] bg-[var(--walnut-raised)]/20">
+        <div className="flex flex-wrap items-center justify-center gap-3 px-6 py-4 border-t border-[var(--walnut-border)] bg-[var(--walnut-raised)]/20">
           {/* Prev street */}
           <button
             onClick={skipToPrevStreet}
-            className="p-2 rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
+            aria-label={t('handHistory.replay.prevStreet')}
+            className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
             title="Previous street"
           >
             <ChevronsLeft size={18} />
@@ -117,7 +120,8 @@ export function HandReplayer() {
           {/* Prev action */}
           <button
             onClick={prevAction}
-            className="p-2 rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
+            aria-label={t('handHistory.replay.prevAction')}
+            className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
             title="Previous action"
           >
             <SkipBack size={18} />
@@ -126,7 +130,8 @@ export function HandReplayer() {
           {/* Play/Pause */}
           <button
             onClick={togglePlay}
-            className="p-3 rounded-full bg-[var(--brass)] text-[var(--primary-foreground)] hover:bg-[var(--brass-bright)] transition-colors shadow-lg"
+            aria-label={state.isPlaying ? t('handHistory.replay.pause') : t('handHistory.replay.play')}
+            className="min-h-12 min-w-12 flex items-center justify-center rounded-full bg-[var(--brass)] text-[var(--primary-foreground)] hover:bg-[var(--brass-bright)] transition-colors shadow-lg"
             title={state.isPlaying ? 'Pause' : 'Play'}
           >
             {state.isPlaying ? <Pause size={20} /> : <Play size={20} />}
@@ -135,7 +140,8 @@ export function HandReplayer() {
           {/* Next action */}
           <button
             onClick={nextAction}
-            className="p-2 rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
+            aria-label={t('handHistory.replay.nextAction')}
+            className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
             title="Next action"
           >
             <SkipForward size={18} />
@@ -144,7 +150,8 @@ export function HandReplayer() {
           {/* Next street */}
           <button
             onClick={skipToNextStreet}
-            className="p-2 rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
+            aria-label={t('handHistory.replay.nextStreet')}
+            className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
             title="Next street"
           >
             <ChevronsRight size={18} />
@@ -171,7 +178,7 @@ export function HandReplayer() {
       </div>
 
       {/* Right panel: Action log + Annotations + GTO Deviation */}
-      <div className="w-64 border-l border-[var(--walnut-border)] flex flex-col bg-[var(--walnut-raised)]/15">
+      <div className="w-56 lg:w-64 border-l border-[var(--walnut-border)] flex flex-col bg-[var(--walnut-raised)]/15">
         <div className="flex-1 overflow-hidden">
           <ActionLog
             hand={hand}

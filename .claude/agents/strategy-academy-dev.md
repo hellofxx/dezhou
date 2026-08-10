@@ -77,6 +77,8 @@ additionalPrompt: ""
 ## Cross-Module Touchpoints
 
 ### progress store（src/features/progress/store.ts）
+
+> 集成契约以 progress-dev §训练结果提交统一契约为单源；本模块协同如下：
 - **Streak**：训练完成时调用 `recordTrainingDay()`（启动 Streak，幂等，同一日重复调用不重复计数）
 - **quickDrillStreak**：快速训练完成时调用 `recordQuickDrillCompletion()`（更新 quickDrillStreak，幂等；连续 7 天触发 `awardStreakFreeze(1)` 冻结卡奖励）
 - **SRS**：快速训练调用 `composeDailyMix(newQuestions, todayReviewItems, questionCount, userAccuracy)` 决定复习题/新题比例（依据用户最近正确率动态调整）
@@ -115,10 +117,10 @@ additionalPrompt: ""
 7. 修改快速训练 SRS 混合时：编辑 QuickDrill.tsx 调用 `composeDailyMix` 的参数
 8. 新增测验题 / Drill 题时：选项与 correctIndex 书写顺序不限（渲染前自动重排），但需确认分布守卫测试（quizShuffle.test.ts / drillOptionOrder.test.ts）覆盖新题且通过
 9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
-10. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`academy.*` / `drill.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+10. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / i18n 双语同步等；课程内容数据文件可适当放宽行数限制）。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - 课程内容必须为静态数据（courses.ts / localLessons/*.ts），不引入运行时网络请求

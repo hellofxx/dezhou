@@ -48,6 +48,8 @@ additionalPrompt: ""
 本模块作为跨模块状态系统的消费方，答题与训练完成时必须与以下系统同步：
 
 ### progress store（通过 useQuizEngine 暴露的记录器）
+
+> 集成契约以 progress-dev §训练结果提交统一契约为单源；本模块协同如下：
 - **ELO**：preflop 维度，通过 `useQuizEngine.recordEloForAnswer` 调用 `updateElo('preflop', isCorrect, difficulty)`。难度推断：题目无 difficulty 字段时，由当前 preflop ELO 推断（ELO 0-3000 → 难度 0-1）。
 - **SRS**：通过 `useQuizEngine.recordSrsForAnswer` 调用 `processReview(reviewItem)`，将该题以 `range:<position>:<hand>` 为 id 注册/更新到复习队列；quality 评分映射：答对且 <5s → 5，答对 → 4，答错 → 1。
 - **Emotion**：通过 `useQuizEngine.recordAnswerForEmotion` 调用 `recordAnswer(isCorrect)`，驱动连续答错检测与每日题量统计。
@@ -80,10 +82,10 @@ additionalPrompt: ""
 3. 优化网格性能时：检查 RangeGrid.tsx 中的 React.memo 和 selector
 4. 调整间隔重复权重时：修改 store.ts 中的 handWeights 逻辑
 5. 答题后集成跨模块系统：调用 recordEloForAnswer（ELO）+ recordSrsForAnswer（SRS）+ recordAnswerForEmotion（情绪）
-6. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`range.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+6. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线等）。模块特有约束：
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。模块特有约束：
 
 - **答题三同步**：每次答题后必须同步调用 `recordEloForAnswer`（preflop 维度）、`recordSrsForAnswer`（注册/更新复习项）、`recordAnswerForEmotion`（情绪计数器）三处，缺一不可；同时由 `QuizCard` 调用 `renderMentorFeedback` 渲染导师文案。
 - **13×13 网格性能**：RangeGrid 渲染 169 个格子时必须使用 `React.memo` 包裹单元格组件 + Zustand selector 精细化订阅，避免无关状态变更触发整网格重渲染。

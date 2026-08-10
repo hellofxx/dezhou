@@ -96,7 +96,7 @@ function getWeakestModule(accuracyMap: Map<string, number>): string | null {
 /**
  * 根据用户数据生成今日推荐（3-5项）
  */
-export function generateDailyPlan(
+export function generateCrossModuleDailyPlan(
   academyProgress: AcademyProgress,
   trainingRecords: TrainingRecord[],
   reviewItems: ReviewItem[],

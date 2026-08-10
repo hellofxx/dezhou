@@ -251,7 +251,7 @@ export default function QuickDrill() {
                   {t('quickDrill.result.title', { defaultValue: '训练完成' })}
                 </span>
               </div>
-              <div className="grid grid-cols-3 gap-3 mb-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                 <div className="rounded-md bg-[var(--walnut-raised)] p-3 text-center">
                   <p className="font-numeric text-2xl text-[var(--brass-bright)]">
                     {Math.round(finalResult.accuracy * 100)}%
@@ -426,7 +426,7 @@ export default function QuickDrill() {
               <p className="text-xs text-[var(--ivory-dim)] mb-2">
                 {t('quickDrill.selectDifficulty', { defaultValue: '选择难度' })}
               </p>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {(['beginner', 'intermediate', 'advanced'] as const).map((d) => (
                   <button
                     key={d}

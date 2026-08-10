@@ -38,7 +38,7 @@ export function EVCalculator() {
       <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-base">EV 计算</CardTitle>
-          <Button variant="ghost" size="icon" onClick={resetEV} className="h-8 w-8 text-[var(--ivory-dim)]">
+          <Button variant="ghost" size="icon" onClick={resetEV} className="h-11 w-11 text-[var(--ivory-dim)]">
             <RotateCcw className="w-4 h-4" />
           </Button>
         </CardHeader>

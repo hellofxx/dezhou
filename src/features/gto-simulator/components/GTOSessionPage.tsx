@@ -191,7 +191,7 @@ export default function GTOSessionPage() {
     : activeStreet === 'turn' ? '转牌圈' : '河牌圈';
 
   return (
-    <div className="max-w-lg mx-auto p-4 space-y-6 min-h-screen flex flex-col">
+    <div className="max-w-2xl mx-auto p-4 space-y-6 min-h-screen flex flex-col">
       {/* 进度条 */}
       <div className="space-y-1">
         <div className="flex items-center justify-between text-xs text-[var(--ivory-muted)] font-numeric">

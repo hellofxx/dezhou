@@ -53,6 +53,8 @@ additionalPrompt: ""
 ## Cross-Module Touchpoints
 
 ### progress store（设计内中枢引用）
+
+> 集成契约以 progress-dev §训练结果提交统一契约为单源；本模块协同如下：
 - `updateElo(dimension, isCorrect, difficulty)`：章末小测每题作答时按章节 eloDimension 调用
 - `recordAnswer(isCorrect)`：更新情绪/连续答错计数
 - `recordTrainingDay()`：章节完成时计入 Streak
@@ -101,10 +103,10 @@ additionalPrompt: ""
    - Step 6 人工复核数学准确性（抽算每个公式数值）
    - Step 7 运行质量门禁，通过后进入下一章
    - 扩充硬性契约：每章 content 覆盖全部 7 类段落（禁止纯 text 堆砌）；关键公式展示推导过程；每章至少 2-3 个不同场景实战牌例；标注反直觉点与认知误区（highlight）；教材对照索引见 PRD 5.27「经典教材对照」
-7. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`theory.*` 前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+7. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行（课程内容数据文件可放宽）/ 工具函数纯函数 / trainingEvents 事件总线 / persist 升级硬性规则等）。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - 独立 store，不写入 progress store 的 persist schema（仅调用其公开 action）

@@ -99,7 +99,7 @@ export default function TheoryChapterView() {
 
   return (
     <div className="h-full overflow-auto">
-      {/* 全宽布局：外层 main 已提供 p-4 md:p-6，不再限宽居中（与一级页 TheoryHome 口径一致） */}
+      {/* 全宽布局：外层 main 已提供 p-4 md:p-6 + G1 全局限宽；正文区单独 max-w-3xl（T-T1） */}
       <div className="py-6 space-y-5">
         {/* Breadcrumb */}
         <button
@@ -171,7 +171,7 @@ export default function TheoryChapterView() {
         )}
 
         {phase === 'reading' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel space-y-6">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel space-y-6 max-w-3xl mx-auto">
             {chapter.content.map((section, index) => (
               <TheorySectionRenderer key={index} section={section} />
             ))}

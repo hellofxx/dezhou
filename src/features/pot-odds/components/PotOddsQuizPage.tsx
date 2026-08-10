@@ -218,7 +218,7 @@ export default function PotOddsQuizPage() {
           <h2 className="font-display text-3xl text-[var(--ivory)] mb-2">训练完成！</h2>
           <p className="text-[var(--ivory-muted)] mb-8">赔率速算训练结果</p>
 
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="rounded-xl bg-[var(--walnut-raised)] p-5">
               <p className="font-numeric text-3xl text-[var(--brass-bright)]">{accuracy}%</p>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">正确率</p>

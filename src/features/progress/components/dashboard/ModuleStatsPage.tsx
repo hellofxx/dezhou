@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import {
   LineChart,
@@ -22,6 +23,7 @@ interface ModuleStatsPageProps {
 }
 
 export default function ModuleStatsPage({ moduleName, displayName }: ModuleStatsPageProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const records = useProgressStore((s) => s.records);
 
@@ -75,7 +77,8 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         >
           <button
             onClick={() => navigate('/progress')}
-            className="p-1.5 rounded-lg hover:bg-[var(--surface-raised)] transition-colors"
+            aria-label={t('common.back')}
+            className="min-h-11 min-w-11 flex items-center justify-center rounded-lg hover:bg-[var(--surface-raised)] transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-[var(--ivory-muted)]" />
           </button>
@@ -86,7 +89,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         </motion.div>
 
         {/* Stat cards */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           <StatCard
             icon={<Target className="w-4 h-4 text-[var(--brass)]" />}
             label="总训练次数"

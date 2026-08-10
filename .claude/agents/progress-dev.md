@@ -119,10 +119,10 @@ shared/ 依赖（维护职责见 Authority）：
 6. 修改 Streak 规则时：编辑 streakCalc.ts 的 updateStreak / checkNewMilestone 逻辑
 7. 修改 ELO 算法时：编辑 shared/utils/elo.ts 的 calculateEloChange / getDynamicKFactor
 8. 修改 SRS 比例时：编辑 dailyTrainingMix.ts 的 composeDailyMix 阈值
-9. 新增页面/组件标准路径：在 components/ 创建组件（单文件 ≤300 行）→ 同步 zh/en 双语 i18n key（`progress.*` 等前缀）→ 按内容补测试并选对后缀（纯逻辑 `.test.ts` / 组件冒烟 `.test.tsx`）→ 运行 `pnpm verify`；需新路由时经 platform-dev 在 routes.tsx 注册（React.lazy + LazyWrapper），视觉一致性经 ui-ux-dev 复核
+9. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，"记录完成"action 幂等要求见 AGENTS.md《状态管理 → 幂等性》，本文件不复制其内容。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，"记录完成"action 幂等要求见 AGENTS.md《状态管理 → 幂等性》，本文件不复制其内容。
 
 模块特有约束：
 - 成就判定逻辑要考虑边界条件（首次训练、零数据）
@@ -132,6 +132,24 @@ shared/ 依赖（维护职责见 Authority）：
 - **shouldDownshiftDifficulty 唯一入口**：`progress.shouldDownshiftDifficulty(): boolean`（无参调用）是自适应难度的**唯一入口**，所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy）必须通过此 API 判定降级条件，禁止各模块自行实现
 - **数据源**：`emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护：答错 +1，答对重置为 0，全局计数不分模块），触发阈值以 store.ts 的 `shouldDownshiftDifficulty` 实现为准（当前与 TiltWarning 阈值一致）
 - **演进约束**：如未来需要按模块维度的自适应难度状态（如分模块连错计数）并持久化，须递增 persist version 并编写 migrate 函数
+
+## 训练结果提交统一契约（单源）
+
+> 所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy / theory-academy）完成训练后，须经本 store 公开 API 提交训练结果以更新五大系统（Streak / ELO / SRS / Emotion / Mentor）。各 trainer agent 文件仅描述本模块特有的 colocated recorder / hook，集成契约以本节为**唯一事实源**，禁止各模块自写集成或自判降级。
+
+集成入口（progress store 公开 action / 工具）：
+- `updateElo(dimension, isCorrect, difficulty)`：ELO 更新（dimension 各模块不同：range=`'range'` / pot-odds=`'math'` / gto=`'postflop'` / …）
+- `processReview(reviewItem)`：SRS 复习项处理
+- `recordAnswer(isCorrect)`：情绪 / 连错计数（全局计数，答错 +1 答对重置）
+- `recordTrainingDay()`：Streak 计入（幂等）
+- `renderMentorFeedback(mentorStyle, grade, params)`：导师文案渲染
+- `shouldDownshiftDifficulty()`：自适应难度降级**唯一入口**（无参，禁止各模块自行判定）
+
+硬性契约：
+- 训练完成（session 完成）时调用 `recordTrainingDay()`；每题作答调用 `recordAnswer(isCorrect)`
+- 多步场景（GTO）仅首决策节点记录 ELO / SRS / Emotion，避免重复计数
+- 反馈必须复用 `calculateGrade(evLoss)`（禁自定义评级），wrong / blunder 携带 `relatedLessonId` 并显示"去复习"链接
+- 跨模块状态集中 progress store，禁止各 trainer 直接写 elo 字段或 persist schema
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
