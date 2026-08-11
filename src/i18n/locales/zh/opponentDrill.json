@@ -1,0 +1,17 @@
+{
+  "title": "对手画像训练",
+  "subtitle": "根据统计数据判断对手类型并选择应对策略",
+  "scenario": "场景",
+  "stats": "统计数据",
+  "sampleSize": "样本手数",
+  "recentActions": "近期行为",
+  "questionType": "这位对手属于哪种类型？",
+  "questionStrategy": "面对这位对手，最佳应对策略是？",
+  "correct": "回答正确",
+  "wrong": "回答错误",
+  "explanation": "解析",
+  "nextQuestion": "下一题",
+  "finish": "完成训练",
+  "result": "训练结果",
+  "accuracy": "正确率"
+}

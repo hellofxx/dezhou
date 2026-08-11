@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { RangeAction, Card } from '@/shared/types/poker';
 import { Suit, Rank } from '@/shared/types/poker';
@@ -76,10 +77,10 @@ function notationToCards(hand: string): Card[] {
   ];
 }
 
-function getSuitedLabel(suited: string): string {
-  if (suited === 'pair') return '对子';
-  if (suited === 'suited') return '同花';
-  return '非同花';
+function getSuitedLabel(t: TFunction, suited: string): string {
+  if (suited === 'pair') return t('rangeTrainer.quizCard.pair');
+  if (suited === 'suited') return t('rangeTrainer.quizCard.suited');
+  return t('rangeTrainer.quizCard.offsuit');
 }
 
 function getSuitedColor(suited: string): string {
@@ -93,10 +94,11 @@ function getSuitedColor(suited: string): string {
 // answer options (not one CTA + two muted): each button keeps its card-room hue
 // (fold=terracotta / call=neutral walnut / raise=brass) and sits clearly above the
 // felt background so all three read distinctly.
+// RNG-02：fold 陶土红改用 token（--poker-terra 系列），消除 rgba 硬编码
 const ACTION_BUTTONS: { action: RangeAction; label: string; shortcut: string; colorClass: string }[] = [
-  { action: 'fold', label: 'Fold', shortcut: '1', colorClass: 'bg-[rgba(194,90,76,0.16)] text-[var(--poker-danger)] border-[rgba(194,90,76,0.55)] hover:bg-[rgba(194,90,76,0.26)]' },
+  { action: 'fold', label: 'Fold', shortcut: '1', colorClass: 'bg-[var(--poker-terra)]/15 text-[var(--poker-terra-bright)] border-[var(--poker-terra)]/50 hover:bg-[var(--poker-terra)]/25' },
   { action: 'call', label: 'Call', shortcut: '2', colorClass: 'bg-[var(--walnut-raised)] text-[var(--ivory-dim)] border-[var(--walnut-light)] hover:bg-[var(--walnut-light)] hover:text-[var(--ivory)]' },
-  { action: 'raise', label: 'Raise', shortcut: '3', colorClass: 'bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass-dark)] hover:brightness-105' },
+  { action: 'raise', label: 'Raise', shortcut: '3', colorClass: 'hover-bright bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass-dark)]' },
 ];
 
 export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disabled }: QuizCardProps) {
@@ -199,16 +201,22 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
           {/* 手牌类型标签 */}
           <div className="text-center mt-2">
             <span className={`text-xs font-numeric font-medium tracking-wider ${getSuitedColor(suited)}`}>
-              {question.hand} · {getSuitedLabel(suited)}
+              {question.hand} · {getSuitedLabel(t, suited)}
             </span>
           </div>
         </div>
 
         {/* 提示文字 */}
         <p className="text-sm text-[var(--ivory-muted)] text-center">
-          这手牌应该 <span className="text-[var(--brass-bright)] font-medium">Raise</span>、
-          <span className="text-[var(--ivory-dim)] font-medium">Call</span> 还是
-          <span className="text-[var(--poker-danger)] font-medium">Fold</span>？
+          <Trans
+            i18nKey="rangeTrainer.quizCard.prompt"
+            components={{
+              raise: <span className="text-[var(--brass-bright)] font-medium" />,
+              call: <span className="text-[var(--ivory-dim)] font-medium" />,
+              fold: <span className="text-[var(--poker-danger)] font-medium" />,
+            }}
+            defaults="这手牌应该 <raise>Raise</raise>、<call>Call</call> 还是 <fold>Fold</fold>？"
+          />
         </p>
 
         {/* 动作按钮 — §5.5 风险色阶：fold 陶土透底 / call 深胡桃 / raise 黄铜渐变 */}
@@ -259,7 +267,12 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
               <div className="text-sm mt-2 opacity-95 space-y-1">
                 <div>{gradeMessage}</div>
                 {(grade === 'wrong' || grade === 'blunder') && decisionFeedback.explanation && (
-                  <div className="text-xs opacity-90">{decisionFeedback.explanation}</div>
+                  <div className="text-xs opacity-90">
+                    {t(decisionFeedback.explanation, {
+                      action: decisionFeedback.correctAction,
+                      defaultValue: decisionFeedback.explanation,
+                    })}
+                  </div>
                 )}
                 {(grade === 'wrong' || grade === 'blunder') && decisionFeedback.relatedLessonId && (
                   <Link
@@ -290,7 +303,7 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
                   transition={{ duration: MOTION_DURATION.slow, ease: MOTION_EASE.spring }}
                   className="text-xl font-display font-semibold"
                 >
-                  ✓ 正确！
+                  {t('rangeTrainer.quizCard.correct')}
                 </motion.div>
               ) : (
                 <motion.div
@@ -298,14 +311,14 @@ export function QuizCard({ question, onAnswer, feedback, decisionFeedback, disab
                   animate={{ x: 0 }}
                   transition={{ duration: MOTION_DURATION.standard, ease: MOTION_EASE.standard }}
                 >
-                  <div className="text-xl font-display font-semibold">✗ 错误</div>
+                  <div className="text-xl font-display font-semibold">{t('rangeTrainer.quizCard.wrong')}</div>
                   <div className="text-sm mt-1 opacity-90 font-body">
-                    正确答案是 <span className="font-bold capitalize font-numeric">{feedback.correctAction}</span>
+                    {t('rangeTrainer.quizCard.correctAnswerIs', { action: feedback.correctAction })}
                     {feedback.correctAction === 'raise'
-                      ? ' — 这手牌在标准范围内'
+                      ? ` ${t('rangeTrainer.quizCard.inRange')}`
                       : feedback.correctAction === 'fold'
-                      ? ' — 这手牌不在标准范围内'
-                      : ' — 这手牌适合跟注'}
+                      ? ` ${t('rangeTrainer.quizCard.notInRange')}`
+                      : ` ${t('rangeTrainer.quizCard.suitableCall')}`}
                   </div>
                 </motion.div>
               )}

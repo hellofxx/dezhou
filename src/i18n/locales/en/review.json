@@ -1,0 +1,30 @@
+{
+  "title": "Today's Review",
+  "subtitle": "Mixed categories — reinforce long-term memory",
+  "category": {
+    "strategy": "Strategy",
+    "range": "Range",
+    "odds": "Odds",
+    "gto": "GTO"
+  },
+  "defaultFront": "Recall the key points of this item, then click \"Show Answer\" to self-rate.",
+  "answerLabel": "Answer",
+  "showAnswer": "Show Answer",
+  "remembered": "Remembered",
+  "forgot": "Forgot",
+  "minimalHint": "Recall the key points of this item and self-rate.",
+  "next": "Next",
+  "finish": "Finish Review",
+  "empty": {
+    "title": "Today's review complete ✓",
+    "subtitle": "Nothing to review today. Come back after your next drill!"
+  },
+  "complete": {
+    "title": "Today's review complete ✓",
+    "subtitle": "Keep the rhythm — memory gets stronger",
+    "total": "Total",
+    "correct": "Correct",
+    "accuracy": "Accuracy",
+    "duration": "Took {{sec}} sec"
+  }
+}

@@ -105,18 +105,22 @@ function SectionRenderer({ section }: { section: HelpSection }) {
       );
 
     case 'link':
-      return (
-        <div className="flex items-center gap-3">
-          <p className="text-sm text-[var(--ivory-muted)] flex-1">
-            {t(`help.${section.key}`)}
-          </p>
-          {section.to && (
-            <Button variant="outline" size="sm" onClick={() => navigate(section.to!)}>
-              {t('help.article.useModule')}
-            </Button>
-          )}
-        </div>
-      );
+      // HELP-02：局部收窄消除非空断言，避免 `section.to!` 依赖窄化边界
+      return (() => {
+        const to = section.to;
+        return (
+          <div className="flex items-center gap-3">
+            <p className="text-sm text-[var(--ivory-muted)] flex-1">
+              {t(`help.${section.key}`)}
+            </p>
+            {to && (
+              <Button variant="outline" size="sm" onClick={() => navigate(to)}>
+                {t('help.article.useModule')}
+              </Button>
+            )}
+          </div>
+        );
+      })();
 
     default:
       return null;

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore } from '../store';
@@ -8,7 +9,11 @@ import { LEVELS } from '../data/courses';
 // P1E-09: 题目集构建抽出为种子化纯函数（重试重置种子即重洗）
 import { buildCertificationExam } from '../utils/certificationExam';
 
+/** 认证通过基准正确率（%），与 store 自适应算法（70%-84%）的基准一致；ACAD-04 */
+const BASE_REQUIRED_ACCURACY = 80;
+
 export default function LevelCertification() {
+  const { t } = useTranslation();
   const { level: levelParam } = useParams<{ level: string }>();
   const navigate = useNavigate();
   const { certifications, attemptCertification, progress } = useAcademyStore();
@@ -29,7 +34,9 @@ export default function LevelCertification() {
 
   const certification = certifications[level];
   const isCertified = !!certification?.certifiedAt;
-  const requiredAccuracy = 80;
+  // ACAD-04 修复：通过标准与 store 的 attemptCertification 自适应 requiredAccuracy 对齐。
+  // 已有认证记录时读取其阈值；首次尝试用基准 80%（与 store 动态算法 70%-84% 的基准一致）。
+  const requiredAccuracy = certification?.requiredAccuracy ?? BASE_REQUIRED_ACCURACY;
 
   // 从该级别全部条目的所有课程中收集测验题（种子化洗牌取最多 20 题 + 选项重排）
   const allQuestions = useMemo(
@@ -40,9 +47,9 @@ export default function LevelCertification() {
   if (levelEntries.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4">
-        <p className="text-[var(--ivory-muted)]">级别未找到</p>
+        <p className="text-[var(--ivory-muted)]">{t('academy.levelCertification.levelNotFound')}</p>
         <button onClick={() => navigate('/academy')} className="text-sm text-[var(--brass-bright)] hover:underline">
-          返回学院
+          {t('academy.levelCertification.backToAcademy')}
         </button>
       </div>
     );

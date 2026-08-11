@@ -7,6 +7,7 @@ import type { TrainingRecord } from '../../types';
 
 interface Achievement {
   id: string;
+  /** i18n key：title/description 单源复用 achievements.items.*（与 AchievementWall 同源） */
   name: string;
   description: string;
   icon: string;
@@ -18,6 +19,17 @@ interface Achievement {
 interface AchievementBadgesProps {
   records: TrainingRecord[];
 }
+
+// PROG-03：徽章进度阈值集中命名（单点事实源），消除魔法数字内联
+const BADGE_THRESHOLDS = {
+  streakDays: 7,
+  hundredSessions: 100,
+  sharpshooterAccuracy: 0.9,
+  gtoAccuracy: 0.8,
+  perfectSampleSize: 20,
+  allRounderSessions: 10,
+  speedAvgTimeMs: 5000,
+} as const;
 
 function computeAchievements(records: TrainingRecord[]): Achievement[] {
   const sorted = [...records].sort((a, b) => a.createdAt - b.createdAt);
@@ -54,7 +66,7 @@ function computeAchievements(records: TrainingRecord[]): Achievement[] {
   // 最高单次正确率（20题以上）
   let hasPerfect = false;
   for (const r of records) {
-    if (r.result.totalQuestions >= 20 && r.result.accuracy >= 1) {
+    if (r.result.totalQuestions >= BADGE_THRESHOLDS.perfectSampleSize && r.result.accuracy >= 1) {
       hasPerfect = true;
       break;
     }
@@ -63,7 +75,7 @@ function computeAchievements(records: TrainingRecord[]): Achievement[] {
   // 任意模块90%正确率
   let has90Accuracy = false;
   for (const [, s] of moduleStats) {
-    if (s.total > 0 && s.correct / s.total >= 0.9) {
+    if (s.total > 0 && s.correct / s.total >= BADGE_THRESHOLDS.sharpshooterAccuracy) {
       has90Accuracy = true;
       break;
     }
@@ -77,7 +89,7 @@ function computeAchievements(records: TrainingRecord[]): Achievement[] {
   const requiredModules = ['range-trainer', 'pot-odds', 'gto-simulator'];
   const allModulesQualified = requiredModules.every((m) => {
     const s = moduleStats.get(m);
-    return s && s.sessions >= 10;
+    return s && s.sessions >= BADGE_THRESHOLDS.allRounderSessions;
   });
   const minModuleSessions = requiredModules.reduce((min, m) => {
     const s = moduleStats.get(m);
@@ -92,75 +104,77 @@ function computeAchievements(records: TrainingRecord[]): Achievement[] {
   return [
     {
       id: 'first-training',
-      name: '初出茅庐',
-      description: '完成首次训练',
+      // PROG-03：title/description 单源复用 achievements.items.*（与 ACHIEVEMENTS 数据源同 key），
+      // requirement 保留 badges.*（徽章带进度展示独有）
+      name: 'achievements.items.firstTraining.title',
+      description: 'achievements.items.firstTraining.description',
       icon: '🌟',
       unlockedAt: sorted.length > 0 ? sorted[0]!.createdAt : null,
       progress: Math.min(totalSessions, 1),
-      requirement: '完成 1 次训练',
+      requirement: 'achievements.badges.firstTraining.requirement',
     },
     {
       id: 'streak-7',
-      name: '连续7天',
-      description: '连续训练7天',
+      name: 'achievements.items.streak7.title',
+      description: 'achievements.items.streak7.description',
       icon: '🔥',
-      unlockedAt: maxStreak >= 7 ? findStreakUnlockedDate(dates) : null,
-      progress: Math.min(maxStreak, 7),
-      requirement: '连续训练 7 天',
+      unlockedAt: maxStreak >= BADGE_THRESHOLDS.streakDays ? findStreakUnlockedDate(dates) : null,
+      progress: Math.min(maxStreak, BADGE_THRESHOLDS.streakDays),
+      requirement: 'achievements.badges.streak7.requirement',
     },
     {
       id: 'hundred-sessions',
-      name: '百炼成钢',
-      description: '完成100次训练',
+      name: 'achievements.badges.hundredSessions.name',
+      description: 'achievements.badges.hundredSessions.description',
       icon: '💪',
-      unlockedAt: totalSessions >= 100 ? sorted[99]?.createdAt ?? null : null,
-      progress: Math.min(totalSessions, 100),
-      requirement: '完成 100 次训练',
+      unlockedAt: totalSessions >= BADGE_THRESHOLDS.hundredSessions ? sorted[99]?.createdAt ?? null : null,
+      progress: Math.min(totalSessions, BADGE_THRESHOLDS.hundredSessions),
+      requirement: 'achievements.badges.hundredSessions.requirement',
     },
     {
       id: 'sharpshooter',
-      name: '神射手',
-      description: '任意模块正确率达到90%',
+      name: 'achievements.badges.sharpshooter.name',
+      description: 'achievements.badges.sharpshooter.description',
       icon: '🎯',
       unlockedAt: has90Accuracy ? records[records.length - 1]?.createdAt ?? null : null,
       progress: has90Accuracy ? 100 : Math.round(Math.max(...Array.from(moduleStats.values()).map(s => s.total > 0 ? (s.correct / s.total) * 100 : 0), 0)),
-      requirement: '任意模块正确率 90%',
+      requirement: 'achievements.badges.sharpshooter.requirement',
     },
     {
       id: 'gto-master',
-      name: 'GTO大师',
-      description: 'GTO模拟器正确率达80%',
+      name: 'achievements.badges.gtoMaster.name',
+      description: 'achievements.badges.gtoMaster.description',
       icon: '🧠',
-      unlockedAt: gtoAccuracy >= 0.8 ? records.find(r => r.module === 'gto-simulator')?.createdAt ?? null : null,
+      unlockedAt: gtoAccuracy >= BADGE_THRESHOLDS.gtoAccuracy ? records.find(r => r.module === 'gto-simulator')?.createdAt ?? null : null,
       progress: Math.round(gtoAccuracy * 100),
-      requirement: 'GTO 正确率 80%',
+      requirement: 'achievements.badges.gtoMaster.requirement',
     },
     {
       id: 'perfectionist',
-      name: '完美主义',
-      description: '单次训练100%正确（20题以上）',
+      name: 'achievements.badges.perfectionist.name',
+      description: 'achievements.badges.perfectionist.description',
       icon: '💎',
-      unlockedAt: hasPerfect ? records.find(r => r.result.totalQuestions >= 20 && r.result.accuracy >= 1)?.createdAt ?? null : null,
+      unlockedAt: hasPerfect ? records.find(r => r.result.totalQuestions >= BADGE_THRESHOLDS.perfectSampleSize && r.result.accuracy >= 1)?.createdAt ?? null : null,
       progress: hasPerfect ? 100 : 0,
-      requirement: '单次 20 题全对',
+      requirement: 'achievements.badges.perfectionist.requirement',
     },
     {
       id: 'all-rounder',
-      name: '全能选手',
-      description: '所有模块各完成至少10次训练',
+      name: 'achievements.badges.allRounder.name',
+      description: 'achievements.badges.allRounder.description',
       icon: '🏆',
       unlockedAt: allModulesQualified ? records[records.length - 1]?.createdAt ?? null : null,
-      progress: Math.min(minModuleSessions, 10) * 10,
-      requirement: '各模块至少 10 次',
+      progress: Math.min(minModuleSessions, BADGE_THRESHOLDS.allRounderSessions) * 10,
+      requirement: 'achievements.badges.allRounder.requirement',
     },
     {
       id: 'speed-king',
-      name: '速度之王',
-      description: '平均答题时间低于5秒',
+      name: 'achievements.badges.speedKing.name',
+      description: 'achievements.badges.speedKing.description',
       icon: '⚡',
-      unlockedAt: avgTime > 0 && avgTime <= 5000 ? records[records.length - 1]?.createdAt ?? null : null,
-      progress: avgTime > 0 ? Math.max(0, Math.round((1 - (avgTime - 5000) / 10000) * 100)) : 0,
-      requirement: '平均用时 < 5 秒',
+      unlockedAt: avgTime > 0 && avgTime <= BADGE_THRESHOLDS.speedAvgTimeMs ? records[records.length - 1]?.createdAt ?? null : null,
+      progress: avgTime > 0 ? Math.max(0, Math.round((1 - (avgTime - BADGE_THRESHOLDS.speedAvgTimeMs) / 10000) * 100)) : 0,
+      requirement: 'achievements.badges.speedKing.requirement',
     },
   ];
 }
@@ -227,15 +241,16 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
   const { t } = useTranslation();
   const unlocked = achievement.unlockedAt !== null;
   const progressPct = Math.min(100, Math.max(0, achievement.progress));
-  const nameKey = `progress.achievementItems.${achievement.id}.name`;
-  const descKey = `progress.achievementItems.${achievement.id}.description`;
-  const reqKey = `progress.achievementItems.${achievement.id}.requirement`;
+  // PROG-03：name/description/requirement 已是 i18n key（achievements.badges.*），直接 t() 解析
+  const nameKey = achievement.name;
+  const descKey = achievement.description;
+  const reqKey = achievement.requirement;
 
   return (
     <div
       className={`rounded-lg border p-3 transition-all ${
         unlocked
-          ? 'border-[var(--brass)]/40 bg-[var(--brass)]/8 shadow-[0_0_12px_rgba(200,164,86,0.18)]'
+          ? 'border-[var(--brass)]/40 bg-[var(--brass)]/8 shadow-[var(--shadow-brass)]'
           : 'border-[var(--walnut-border)] bg-[var(--felt)]/50 opacity-70'
       }`}
     >

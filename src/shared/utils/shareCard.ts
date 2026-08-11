@@ -25,16 +25,32 @@ const FELT_BOTTOM = '#064426';
 /** 黄铜金（数字与边框装饰） */
 const BRASS = '#c9a25e';
 
+/** Canvas 文案翻译接口（PLAT-10：文案走 i18n，调用方从 t() 取翻译传入） */
+export interface ShareCardTranslations {
+  /** "🔥 连续训练" 标题 */
+  title: string;
+  /** "天" 单位 */
+  dayUnit: string;
+  /** "正确率 X% · 获得 N 枚徽章" */
+  statsLine: (accuracyPct: number, badgeCount: number) => string;
+  /** "当前连续 N 天 · 最长记录 M 天" */
+  currentLine: (current: number, longest: number) => string;
+  /** 底部产品名 */
+  productName: string;
+}
+
 /**
  * 生成 Streak 分享图片
  *
  * @param days 连续训练天数（显示为大数字）
  * @param stats 用户统计（正确率 / 徽章 / 当前 streak）
+ * @param translations Canvas 文案翻译（缺省时回退中文，供无 i18n 上下文调用）
  * @returns PNG Blob，可用于下载或 navigator.share
  */
 export async function generateStreakShareCanvas(
   days: number,
   stats: ShareCardStats,
+  translations?: ShareCardTranslations,
 ): Promise<Blob> {
   const W = 1080;
   const H = 1080;
@@ -73,7 +89,7 @@ export async function generateStreakShareCanvas(
   ctx.shadowOffsetY = 4;
   ctx.fillStyle = '#f3ebd9';
   ctx.font = 'bold 64px system-ui, -apple-system, "Segoe UI", sans-serif';
-  ctx.fillText('🔥 连续训练', W / 2, 260);
+  ctx.fillText(translations?.title ?? '🔥 连续训练', W / 2, 260);
 
   // 5. 大数字（天数）
   ctx.fillStyle = BRASS;
@@ -83,7 +99,7 @@ export async function generateStreakShareCanvas(
   // 6. "天" 单位
   ctx.fillStyle = '#f3ebd9';
   ctx.font = 'bold 56px system-ui, -apple-system, "Segoe UI", sans-serif';
-  ctx.fillText('天', W / 2, 620);
+  ctx.fillText(translations?.dayUnit ?? '天', W / 2, 620);
 
   // 7. 副标题：正确率 · 徽章数
   ctx.shadowBlur = 6;
@@ -92,7 +108,8 @@ export async function generateStreakShareCanvas(
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
   const accuracyPct = Math.round(stats.accuracy * 100);
   ctx.fillText(
-    `正确率 ${accuracyPct}%  ·  获得 ${stats.badges.length} 枚徽章`,
+    translations?.statsLine(accuracyPct, stats.badges.length) ??
+      `正确率 ${accuracyPct}%  ·  获得 ${stats.badges.length} 枚徽章`,
     W / 2,
     720,
   );
@@ -103,7 +120,8 @@ export async function generateStreakShareCanvas(
   ctx.font = '28px system-ui, -apple-system, "Segoe UI", sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
   ctx.fillText(
-    `当前连续 ${stats.currentStreak} 天  ·  最长记录 ${Math.max(stats.currentStreak, days)} 天`,
+    translations?.currentLine(stats.currentStreak, Math.max(stats.currentStreak, days)) ??
+      `当前连续 ${stats.currentStreak} 天  ·  最长记录 ${Math.max(stats.currentStreak, days)} 天`,
     W / 2,
     780,
   );
@@ -112,7 +130,7 @@ export async function generateStreakShareCanvas(
   ctx.font = '600 32px system-ui, -apple-system, "Segoe UI", sans-serif';
   ctx.fillStyle = BRASS;
   ctx.globalAlpha = 0.9;
-  ctx.fillText('德州扑克训练平台', W / 2, 980);
+  ctx.fillText(translations?.productName ?? '德州扑克训练平台', W / 2, 980);
   ctx.globalAlpha = 1;
 
   // 10. 转 Blob

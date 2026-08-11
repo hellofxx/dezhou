@@ -1,0 +1,235 @@
+{
+  "title": "Help Center",
+  "hero": {
+    "ariaLabel": "Help Center navigation",
+    "eyebrow": "House Rules · Player Guide",
+    "title": "Welcome to the Card Room",
+    "subtitle": "Quick start, module tutorials and system rules — all on this table card.",
+    "cta": "Start with Quick Start",
+    "meta": "9 module tutorials · 6 system rules · 8 FAQ",
+    "cardAria": "Table card quick nav",
+    "cardEyebrow": "HOUSE RULES",
+    "cardFooter": "DEALER'S GUIDE",
+    "rules": {
+      "01": {
+        "title": "Quick Start",
+        "body": "5 steps into the training rhythm"
+      },
+      "02": {
+        "title": "Module Tutorials",
+        "body": "Detailed guides for all 9 modules"
+      },
+      "03": {
+        "title": "FAQ",
+        "body": "Data / language / offline / freeze cards"
+      }
+    }
+  },
+  "quickStart": {
+    "title": "Quick Start",
+    "subtitle": "Recommended onboarding sequence",
+    "steps": {
+      "0": "Placement Test",
+      "1": "Strategy Academy",
+      "2": "Quick Drill",
+      "3": "Daily Challenge",
+      "4": "Progress Data"
+    }
+  },
+  "articles": {
+    "title": "Module Tutorials",
+    "subtitle": "Click any card for detailed usage guides",
+    "overview": {
+      "title": "Platform Overview",
+      "intro": "Understand the platform layout and learning path",
+      "s0": "This platform is a pure front-end poker training tool with 8 functional modules: Range Trainer, Pot Odds Calculator, GTO Simulator, Strategy Academy, Theory Academy, Puzzle Trainer, Hand History, and Progress Tracking. All data is stored locally in your browser — no registration required.",
+      "s1": "Recommended learning path",
+      "s1-steps": {
+        "0": "Complete the placement test to get a personalized starting point",
+        "1": "Enter Strategy Academy and start with L1 basics",
+        "2": "Complete quick drills and daily puzzles every day to stay sharp",
+        "3": "Check progress stats regularly to identify and work on weak areas"
+      },
+      "s2": "Tip: You don't need to use all modules in a fixed order. Choose your starting point based on your level, focus on weaknesses, and maintain strengths.",
+      "s3": "View your training data"
+    },
+    "range-trainer": {
+      "title": "Range Trainer",
+      "intro": "Learn and quiz starting hand ranges by position",
+      "s0": "Range Trainer helps you memorize and understand opening ranges for each position. The 13×13 matrix visualization shows exactly which hands to open, call, or 3-bet from each seat.",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "Use Learn mode to browse standard range charts for each position",
+        "1": "Switch to Quiz mode for randomized questions testing your memory",
+        "2": "Review feedback to correct mistakes, focusing on frequently missed positions",
+        "3": "Unlock more positions as your ELO rises (UTG → HJ → CO → BTN → SB → BB)"
+      },
+      "s2": "Common mistake: Don't try to memorize all positions at once. Start with BTN and CO — they have the widest ranges and appear most frequently.",
+      "s3": "Start range training"
+    },
+    "pot-odds": {
+      "title": "Pot Odds Calculator",
+      "intro": "Master pot odds and equity calculations",
+      "s0": "The Pot Odds Calculator helps you quickly determine if a call is +EV. Input the pot size, opponent's bet, and your outs count to see whether you should continue.",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "Enter the current pot size and opponent's bet amount",
+        "1": "Estimate your outs — the system calculates equity automatically",
+        "2": "Enter Quiz mode for timed questions to build calculation speed"
+      },
+      "s2": "Common mistake: Don't double-count outs. For example, a flush draw has 9 outs — don't add straight draw outs on top (they may overlap).",
+      "s3": "Start odds practice"
+    },
+    "gto-simulator": {
+      "title": "GTO Simulator",
+      "intro": "Practice GTO decisions in simulated scenarios",
+      "s0": "The GTO Simulator provides pre-computed game theory optimal strategy scenarios. You make decisions on specific boards and positions, and the system compares your choice against the GTO solution with EV loss feedback.",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "Select a training scenario (preflop/flop/turn/river)",
+        "1": "Read the scenario description and make your decision (fold/call/raise)",
+        "2": "Review the GTO optimal solution and EV difference from your choice",
+        "3": "Focus on wrong/blunder level feedback and review related lessons"
+      },
+      "s2": "Common mistake: GTO isn't the only correct strategy. Against specific opponent types, exploitative play may be more profitable. GTO training builds a baseline thinking framework.",
+      "s3": "Start GTO training"
+    },
+    "academy": {
+      "title": "Strategy Academy",
+      "intro": "8-level structured courses with drill practice",
+      "s0": "Strategy Academy offers an 8-level curriculum from beginner to advanced. Each level includes video-style lessons, concept graphs, and drill exercises. Pass certification exams to unlock the next level.",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "Start from L1 and study each level's content in order",
+        "1": "Complete post-lesson drills to reinforce what you've learned",
+        "2": "Pass the level certification exam (≥70% accuracy) to unlock the next level",
+        "3": "Use Quick Drill mode to randomly review previously learned material"
+      },
+      "s2": "Common mistake: Don't skip drills and go straight to exams. The instant feedback from drills helps you truly understand concepts rather than just memorize.",
+      "s3": "Enter Strategy Academy"
+    },
+    "theory": {
+      "title": "Theory Academy",
+      "intro": "9-level authoritative poker theory system",
+      "s0": "Theory Academy provides systematic poker theory learning, from probability basics to advanced game theory. Parallel to Strategy Academy, forming a 'theory → practice' loop.",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "Start from T1 Probability and unlock 9 levels sequentially",
+        "1": "Each chapter includes concept explanations + end-of-chapter quizzes with automatic progress tracking",
+        "2": "Follow 'Practice Bridge' cards to connect theory with Strategy Academy lessons"
+      },
+      "s2": "Common mistake: Theory study can't replace practice. After completing each theory level, do exercises in the corresponding module (e.g., odds quizzes after learning odds theory).",
+      "s3": "Enter Theory Academy"
+    },
+    "puzzle": {
+      "title": "Poker Puzzles",
+      "intro": "Three modes to train decision intuition",
+      "s0": "Puzzle Trainer offers three modes: Rush (timed consecutive questions), Daily Puzzle (one question per day, same for all players), and Theme Drill (topic-specific practice).",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "Daily Puzzle: one question per day, compete with players worldwide",
+        "1": "Rush: answer as many as possible in 60 seconds, chase your best record",
+        "2": "Theme Drill: select specific themes (e.g., RFI, 3-bet) for focused practice",
+        "3": "Track your consecutive correct streak to maintain momentum"
+      },
+      "s2": "Common mistake: Don't sacrifice accuracy for speed. Make sure you understand the logic of each question first, then gradually increase pace.",
+      "s3": "Start puzzle training"
+    },
+    "hand-history": {
+      "title": "Hand History",
+      "intro": "Import and analyze your real-game hands",
+      "s0": "Hand History supports importing from PokerStars, GGPoker, and PartyPoker formats. The system auto-parses and provides GTO deviation analysis.",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "Export hand history files (.txt) from your poker platform",
+        "1": "Paste or upload files on the import page — format is auto-detected",
+        "2": "Review parsed results and click any hand to enter replay mode",
+        "3": "Check the GTO deviation panel to identify decision mistakes"
+      },
+      "s2": "Common mistake: Don't only review big pots you lost. Frequent small mistakes accumulate to a larger impact — review comprehensively.",
+      "s3": "Import hands"
+    },
+    "progress": {
+      "title": "Progress Tracking",
+      "intro": "Track your training data and growth trajectory",
+      "s0": "Progress Tracking aggregates data from all modules, including ELO ratings, training streaks, accuracy trends, weakness analysis, and other visualizations.",
+      "s1": "How to use",
+      "s1-steps": {
+        "0": "View the dashboard overview: today's volume, ELO changes, streak count",
+        "1": "Enter detailed stats pages to see per-module accuracy trends",
+        "2": "Check weakness analysis — the system recommends areas needing improvement"
+      },
+      "s2": "Tip: Daily consistent training is more effective than occasional marathon sessions. The system tracks your streak — ELO decays if you stop.",
+      "s3": "View progress"
+    }
+  },
+  "article": {
+    "back": "Back to Help Center",
+    "useModule": "Open Module",
+    "notFound": "Article not found"
+  },
+  "concepts": {
+    "title": "System Concepts",
+    "subtitle": "Brief explanations of the six core systems",
+    "elo": {
+      "title": "ELO Rating System",
+      "body": "Each training module has an independent ELO score. Correct answers add points, wrong answers subtract — harder questions cause larger swings. Ranks range from 'Novice' to 'Grandmaster' across 8 tiers."
+    },
+    "streak": {
+      "title": "Streak & Freeze Cards",
+      "body": "Your training streak tracks learning consistency. Missing a day resets it to zero. Freeze cards protect one day without training — earn them by maintaining a 7-day streak."
+    },
+    "srs": {
+      "title": "SRS Spaced Repetition",
+      "body": "Based on the SM-2 algorithm. Missed questions are automatically added to a review queue, reminding you to review at optimal intervals for long-term retention."
+    },
+    "feedback": {
+      "title": "Five-Level Feedback",
+      "body": "Each answer receives a grade based on EV loss: best (optimal) / correct / inaccuracy / wrong / blunder (critical mistake)."
+    },
+    "sessionLimit": {
+      "title": "Daily Question Limit",
+      "body": "Configure a daily training cap in Settings. When reached, the system suggests a break to prevent fatigue-driven diminishing returns. Set to 0 for unlimited."
+    },
+    "dataStorage": {
+      "title": "Data Storage & Export",
+      "body": "All data is stored in browser localStorage. Export a JSON backup from Settings, and import it on a new device. Clearing browser data will erase your records."
+    }
+  },
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "Common questions about data, language, offline, freeze cards",
+    "q0": {
+      "question": "Where is my data stored?",
+      "answer": "All training data is stored in your browser's localStorage and is never uploaded to any server. Clearing browser data or switching browsers will cause data loss — export backups regularly from Settings."
+    },
+    "q1": {
+      "question": "How do I migrate data to a new device?",
+      "answer": "Click 'Export Data' in Settings on your old device to download a JSON file, then click 'Import Data' on the new device and select that file to restore all training records."
+    },
+    "q2": {
+      "question": "Does it work offline?",
+      "answer": "Yes. This is a PWA app — after the first load, all features work offline. In supported browsers, you can 'Add to Home Screen' for an app-like experience."
+    },
+    "q3": {
+      "question": "How do I switch languages?",
+      "answer": "Three ways: the language toggle in the top bar, the language button at the bottom of the sidebar, or the language dropdown in Settings. Changes apply immediately and preferences are saved automatically."
+    },
+    "q4": {
+      "question": "How do I get and use freeze cards?",
+      "answer": "Maintain a 7-day training streak to automatically earn 1 freeze card. When you can't train one day, click 'Use Freeze Card' in Settings to protect your streak. Maximum 1 per day."
+    },
+    "q5": {
+      "question": "What happens if my streak breaks?",
+      "answer": "Your streak resets to 0. ELO scores don't reset but will decay slightly. After a break, start with easier questions to rebuild momentum."
+    },
+    "q6": {
+      "question": "What is debug unlock?",
+      "answer": "Debug unlock in Developer Options bypasses all learning progress gates (course levels, position unlocks, daily limits, etc.). It's for development testing only — regular users don't need it."
+    },
+    "q7": {
+      "question": "Can I recover data after clearing?",
+      "answer": "No. The 'Clear All Data' action in Settings is irreversible. Make sure you've exported a backup before proceeding. If browser data was accidentally deleted, recovery is not possible."
+    }
+  }
+}

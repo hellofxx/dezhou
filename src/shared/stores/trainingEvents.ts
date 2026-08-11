@@ -1,4 +1,5 @@
-import type { TrainingRecord } from '@/features/progress/types';
+// PLAT-01：类型引用从 feature 层下沉到 shared 层（shared 不依赖 feature 的分层约束）
+import type { TrainingRecord } from '@/shared/types/training';
 
 type TrainingEventCallback = (record: TrainingRecord) => void;
 

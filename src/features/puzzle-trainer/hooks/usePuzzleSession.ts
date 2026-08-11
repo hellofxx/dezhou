@@ -9,7 +9,7 @@
  *   buildPuzzleResult / puzzleResultToTrainingRecord 同源）
  * - 重试（onRetry 钩子 + engine.reset）
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useProgressStore } from '@/features/progress/store';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { usePuzzleStore } from '../store';
@@ -55,8 +55,11 @@ export function usePuzzleSession(
   }, [engine.state.answers.length]);
 
   // 引擎结束时构建结果并提交（finalResult 非空后不重复执行）
+  // PZL-02：added submittedRef 防 StrictMode 双跑——首次 effect 即置位，杜绝重复提交/重复 emit
+  const submittedRef = useRef(false);
   useEffect(() => {
-    if (engine.state.status !== 'playing' && !finalResult) {
+    if (engine.state.status !== 'playing' && !finalResult && !submittedRef.current) {
+      submittedRef.current = true;
       const result = engine.buildResult();
       const submitRes = submitResult(result);
       options.onComplete?.(result);

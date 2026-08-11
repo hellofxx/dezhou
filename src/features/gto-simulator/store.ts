@@ -166,8 +166,14 @@ export const useGTOSimulatorStore = create<GTOSimulatorStore>((set, get) => ({
       const lastDecision = session.decisions[session.decisions.length - 1];
       if (lastDecision && !lastDecision.isOptimal && !rescueUsed) {
         const rescueScenario = getEasyGTOScenario(session.scenarios.length);
+        // P1 fix: 追加 rescue 场景后同步 currentIndex 指向新场景下标（追加前长度即新下标），
+        // 避免 submitDecision 中 session.scenarios[currentIndex] 取到旧场景导致决策绑定错误、进度错乱、下一次 nextScenario 跳过救援场景
         set({
-          session: { ...session, scenarios: [...session.scenarios, rescueScenario] },
+          session: {
+            ...session,
+            scenarios: [...session.scenarios, rescueScenario],
+            currentIndex: session.scenarios.length,
+          },
           rescueUsed: true,
           currentDecision: null, feedback: null, showFeedback: false, currentNodeIndex: 0, stepFeedbacks: [], decisionStartAt: Date.now(),
         });
@@ -221,8 +227,8 @@ function getGTOStrategyForScenario(scenario: Scenario): HandStrategy {
   return estimatePostflopStrategy(scenario.heroHand, scenario.board, texture, scenario.street as 'flop' | 'turn' | 'river');
 }
 
-/** P1C-12: 计算真实 callAmount */
-function computeCallAmount(scenario: Scenario, node: DecisionNode | undefined, potSize: number): number {
+/** P1C-12: 计算真实 callAmount（导出供 GTOSessionPage 复用，保证 UI 显示与内部判分口径一致） */
+export function computeCallAmount(scenario: Scenario, node: DecisionNode | undefined, potSize: number): number {
   const actions = node?.previousActions ?? scenario.previousActions;
   const street = node?.street ?? scenario.street;
 
@@ -233,7 +239,10 @@ function computeCallAmount(scenario: Scenario, node: DecisionNode | undefined, p
     return lastRaise.amount ?? 2.5;
   }
   // postflop: 面对 c-bet，callAmount = pot × sizing multiplier
-  const texture = scenario.boardTexture ?? undefined;
+  // P1 fix: 多步节点（turn/river）的 board 已变化，texture 应按 node 实际 board 重新分类，
+  // 而非沿用 scenario.boardTexture（flop 时刻缓存），否则 turn/river 节点 callAmount 用错 texture。
+  const flat = node?.board ? boardToFlat(node.board) : scenario.board ? boardToFlat(scenario.board) : undefined;
+  const texture = flat ? classifyBoardTexture(flat) : scenario.boardTexture;
   return Math.round(potSize * getCbetSizingMultiplier(texture) * 10) / 10;
 }
 
@@ -247,10 +256,11 @@ function computeResult(session: GTOSession): GTOResult {
   const avgEVLoss = totalEVLoss / count;
 
   const sorted = [...decisions].sort((a, b) => b.evLoss - a.evLoss);
-  const worstSpots = sorted.slice(0, 5).map((d) => ({
-    scenario: scenarios.find((s) => s.id === d.scenarioId)!,
-    evLoss: d.evLoss,
-  })).filter((ws) => ws.scenario);
+  // GTO-10：移除非空断言，scenarioId 缺失时过滤该条目（防御性兜底）
+  const worstSpots = sorted.slice(0, 5).flatMap((d) => {
+    const scenario = scenarios.find((s) => s.id === d.scenarioId);
+    return scenario ? [{ scenario, evLoss: d.evLoss }] : [];
+  });
 
   return {
     sessionId: `gto-${Date.now()}`,

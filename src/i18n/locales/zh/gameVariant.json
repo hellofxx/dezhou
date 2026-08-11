@@ -1,0 +1,12 @@
+{
+  "title": "游戏变体",
+  "standard": "标准德州",
+  "shortDeck": "短牌德州 (6+)",
+  "headsUp": "单挑德州",
+  "switchHint": "切换变体后，训练模块的数据和规则将自动调整",
+  "descStandard": "经典52张牌，全球最流行的扑克变体",
+  "descShortDeck": "36张牌（6-A），三条>顺子，同花>葫芦",
+  "descHeadsUp": "1v1 单挑对决，纯策略博弈",
+  "deckSize": "张牌",
+  "players": "人"
+}

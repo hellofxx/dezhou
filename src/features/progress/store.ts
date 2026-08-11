@@ -1,14 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState } from './types';
-import { DEFAULT_EMOTION_STATE, MILESTONE_FREEZE_REWARDS } from './types';
+import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { ReviewItem } from './utils/spacedRepetition';
 import { getTodayString as getTodayStringFromSR } from './utils/spacedRepetition';
 import {
   updateStreak,
-  checkNewMilestone,
   isEarnBackActive,
   applyManualFreeze,
   computeStreakBrokenAt,
@@ -440,21 +439,32 @@ export const useProgressStore = create<ProgressStore>()(
 
       checkMilestone: () => {
         const streak = get().streak;
-        const newDay = checkNewMilestone(streak.currentStreak, streak.milestones);
-        if (newDay === null) return null;
-        const key = `day${newDay}` as keyof StreakMilestones;
+        // P1 fix: 收集所有新达成的里程碑（而非仅最大者）。
+        // 逐日训练时 streak 每次 +1 只会命中一个；但 earnBack/导入记录导致跳档时
+        // （如 2 天直接到 30 天），3/7 天里程碑也会被一并标记并发奖，避免奖励丢失。
+        const newlyReached = MILESTONE_DAYS.filter(
+          (day) => !streak.milestones[`day${day}` as keyof StreakMilestones] && streak.currentStreak >= day,
+        );
+        if (newlyReached.length === 0) return null;
+        const nextMilestones = { ...streak.milestones };
+        let totalRewards = 0;
+        for (const day of newlyReached) {
+          nextMilestones[`day${day}` as keyof StreakMilestones] = true;
+          totalRewards += MILESTONE_FREEZE_REWARDS[day] ?? 1;
+        }
+        const lastDay = newlyReached[newlyReached.length - 1]!;
         set({
           streak: {
             ...streak,
-            milestones: { ...streak.milestones, [key]: true },
-            lastMilestoneCelebrated: newDay,
+            milestones: nextMilestones,
+            lastMilestoneCelebrated: lastDay,
           },
-          // 设置待展示庆典（全局 host 监听弹窗；不依赖弹窗关闭发奖，避免奖励丢失）
-          pendingMilestone: newDay,
+          // 设置待展示庆典（展示最大者；奖励已按全部新达成累计发放）
+          pendingMilestone: lastDay,
         });
         // 达成即发放冻结卡奖励（与弹窗展示解耦，刷新/导航不丢奖励）
-        get().awardStreakFreeze(MILESTONE_FREEZE_REWARDS[newDay] ?? 1);
-        return newDay;
+        get().awardStreakFreeze(totalRewards);
+        return lastDay;
       },
 
       pendingMilestone: null,
@@ -518,7 +528,15 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       resetElo: () =>
-        set({ elo: { ...DEFAULT_ELO, lastUpdated: Date.now() }, eloRankUp: null }),
+        // P1 fix: reset 时同步重置 standard 变体 ELO，避免 elo 与 eloByVariant.standard 漂移
+        set({
+          elo: { ...DEFAULT_ELO, lastUpdated: Date.now() },
+          eloByVariant: {
+            ...get().eloByVariant,
+            standard: { ...DEFAULT_ELO, variant: 'standard' as PokerVariant, lastUpdated: Date.now() },
+          },
+          eloRankUp: null,
+        }),
 
       clearEloRankUp: () => set({ eloRankUp: null }),
 
@@ -526,7 +544,15 @@ export const useProgressStore = create<ProgressStore>()(
         // 仅当 ELO 尚未被答题更新过时才同步（避免覆盖已累积的进度）
         if (get().elo.gamesPlayed > 0) return;
         if (!hasNonDefaultAbility(aa)) return;
-        set({ elo: mapAcademyAbilityToElo(aa) });
+        const synced = mapAcademyAbilityToElo(aa);
+        // P1 fix: 同步更新 standard 变体 ELO，保持双写一致性
+        set({
+          elo: synced,
+          eloByVariant: {
+            ...get().eloByVariant,
+            standard: { ...synced, variant: 'standard' as PokerVariant },
+          },
+        });
       },
 
       // ===== P2-1: 变体 ELO 查询与切换 =====
@@ -661,6 +687,11 @@ export const useProgressStore = create<ProgressStore>()(
           }
           return false;
         }
+        // PROG-10 修复：当日答题数过少（<3 题）时跳过下风期判断，
+        // 避免单题剧烈波动把当日 accuracy 拉低造成误判噪声
+        if (prev.dailyQuestionsAnswered < 3) {
+          return prev.isDownswing;
+        }
         // 取最近 3 天，按日期升序比较
         const last3 = history.slice(-3);
         const isDownswing =
@@ -743,10 +774,20 @@ export const useProgressStore = create<ProgressStore>()(
         }
 
         if (newUnlocked.length > 0) {
-          set((s) => ({
-            unlockedAchievements: [...s.unlockedAchievements, ...newUnlocked],
-            achievementUnlockDates: { ...s.achievementUnlockDates, ...newDates },
-          }));
+          // PROG-13 修复：并发安全 —— 函数式更新中过滤已存在的成就，
+          // 避免 async 窗口内重复调用时同一成就被重复解锁/重复发奖
+          set((s) => {
+            const existing = new Set(s.unlockedAchievements);
+            const dedupNew = newUnlocked.filter((id) => !existing.has(id));
+            if (dedupNew.length === 0) return s;
+            const dates = Object.fromEntries(
+              dedupNew.map((id) => [id, newDates[id] ?? Date.now()]),
+            );
+            return {
+              unlockedAchievements: [...s.unlockedAchievements, ...dedupNew],
+              achievementUnlockDates: { ...s.achievementUnlockDates, ...dates },
+            };
+          });
           if (freezeReward > 0) {
             get().awardStreakFreeze(freezeReward);
           }

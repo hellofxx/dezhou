@@ -2,6 +2,8 @@ import { useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { ArrowLeft, ArrowRight, Users, Clock, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
 import { LEARNING_TRACKS, isTrackPrerequisiteMet } from '../data/learningTracks';
 import {
@@ -10,6 +12,7 @@ import {
   resolveTrackAudience,
   resolveTrackDuration,
 } from '../utils/titleKeys';
+import { LEVELS } from '../data/courses';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { ProgressBar } from './ProgressBar';
@@ -40,7 +43,7 @@ export default function LearningTracksView() {
         <motion.section
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={transitionSlow}
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] relative brass-rail overflow-hidden"
         >
           <div className="p-5 md:p-6">
@@ -49,11 +52,11 @@ export default function LearningTracksView() {
               className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              返回策略学院
+              {t('academy.tracks.backToAcademy')}
             </button>
-            <h1 className="font-display text-2xl text-[var(--ivory)]">学习轨道</h1>
+            <h1 className="font-display text-2xl text-[var(--ivory)]">{t('academy.tracks.title')}</h1>
             <p className="text-sm text-[var(--ivory-dim)] mt-1">
-              根据你的目标选择合适的学习路径，系统化提升特定方向的技能
+              {t('academy.tracks.subtitle')}
             </p>
           </div>
         </motion.section>
@@ -71,6 +74,18 @@ export default function LearningTracksView() {
 
             // P1E-02: 前置条件检查改用课程完成口径（调试解锁时直接放行）
             const prereqMet = debugUnlock || isTrackPrerequisiteMet(track, progress.completedLessons);
+            // ACAD-09：定位第一个未满足的前置 Level 的第一课，供"去学习"动态跳转
+            // （旧实现固定跳 /academy/basics，与 prerequisiteLevelIds 不对应）
+            const firstMissingLessonId = (() => {
+              if (prereqMet || !track.prerequisiteLevelIds) return null;
+              for (const prereqId of track.prerequisiteLevelIds) {
+                const entry = LEVELS.find((l) => l.id === prereqId);
+                if (!entry) continue;
+                const missing = entry.lessons.find((l) => !progress.completedLessons.includes(l.id));
+                if (missing) return missing.id;
+              }
+              return null;
+            })();
             const prereqHint =
               !prereqMet && track.prerequisiteLevelIds
                 ? t('academy.tracks.prereqHint', {
@@ -94,7 +109,7 @@ export default function LearningTracksView() {
                 ref={(el) => { trackRefs.current[track.id] = el; }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.08 }}
+                transition={{ ...transitionStandard, delay: index * 0.08 }}
                 className={`rounded-lg border p-5 transition-all ${
                   isHighlighted
                     ? 'border-[var(--brass-bright)] bg-[var(--brass-bright)]/8 ring-1 ring-[var(--brass-bright)]/40'
@@ -118,12 +133,12 @@ export default function LearningTracksView() {
                       <h3 className="font-display text-[16px] text-[var(--ivory)]">{resolveTrackName(t, track)}</h3>
                       {track.id === 'track-local-cn' && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
-                          已并入 Level 7 · 本土课
+                          {t('academy.tracks.mergedIntoLevel7')}
                         </span>
                       )}
                       {isActive && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--brass-bright)]/20 text-[var(--brass-bright)]">
-                          当前轨道
+                          {t('academy.tracks.currentTrack')}
                         </span>
                       )}
                       {progressPercent === 100 && (
@@ -138,10 +153,14 @@ export default function LearningTracksView() {
                         <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                         <span>{prereqHint}</span>
                         <button
-                          onClick={() => navigate('/academy/basics')}
+                          onClick={() =>
+                            firstMissingLessonId
+                              ? navigate(`/academy/lesson/${firstMissingLessonId}`)
+                              : navigate('/academy/basics')
+                          }
                           className="ml-auto text-[var(--brass-bright)] underline underline-offset-2 whitespace-nowrap"
                         >
-                          去学习 →
+                          {t('academy.tracks.goLearn')}
                         </button>
                       </div>
                     )}
@@ -163,7 +182,7 @@ export default function LearningTracksView() {
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-[var(--ivory-dim)]">
-                            {completedInTrack}/{totalInTrack} 课时
+                            {t('academy.tracks.lessonsCount', { completed: completedInTrack, total: totalInTrack })}
                           </span>
                           <span className="font-numeric text-[var(--brass-bright)]">{progressPercent}%</span>
                         </div>
@@ -173,7 +192,7 @@ export default function LearningTracksView() {
 
                     {isLeakFix && (
                       <p className="text-xs text-[var(--ivory-muted)]">
-                        根据你的五维能力评分动态推荐
+                        {t('academy.tracks.recommendedByAbility')}
                       </p>
                     )}
 
@@ -191,7 +210,7 @@ export default function LearningTracksView() {
                         }`}
                       >
                         {!prereqMet && <Lock className="inline w-3 h-3 mr-1" />}
-                        {isActive ? '取消选择' : '选择此轨道'}
+                        {isActive ? t('academy.tracks.deselectTrack') : t('academy.tracks.selectTrack')}
                       </button>
                       {nextLesson && !isLeakFix && (
                         <button
@@ -203,7 +222,7 @@ export default function LearningTracksView() {
                               : 'bg-[var(--walnut-raised)] text-[var(--ivory)] hover:text-[var(--brass-bright)]'
                           }`}
                         >
-                          继续学习
+                          {t('academy.tracks.continueLearning')}
                           <ArrowRight className="w-3 h-3" />
                         </button>
                       )}

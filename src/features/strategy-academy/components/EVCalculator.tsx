@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LineChart, Line, XAxis, YAxis, ReferenceLine, ResponsiveContainer } from 'recharts';
 
 export function calculateEV(potSize: number, betAmount: number, winRate: number): number {
@@ -15,6 +16,7 @@ interface EVVisualizerProps {
 }
 
 export function EVVisualizer({ potSize, betAmount, winRate }: EVVisualizerProps) {
+  const { t } = useTranslation();
   const currentEV = useMemo(() => 
     calculateEV(potSize, betAmount, winRate), 
     [potSize, betAmount, winRate]
@@ -38,7 +40,7 @@ export function EVVisualizer({ potSize, betAmount, winRate }: EVVisualizerProps)
 
   return (
     <div className="p-4 rounded-lg border border-[var(--brass-deep)]/30">
-      <h3 className="font-display text-sm font-semibold mb-3 text-[var(--ivory)]">EV 曲线可视化</h3>
+      <h3 className="font-display text-sm font-semibold mb-3 text-[var(--ivory)]">{t('academy.evVisualizer.chartTitle')}</h3>
       <div className="w-full h-[180px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={curveData} margin={{ top: 5, right: 20, left: 0, bottom: 0 }}>
@@ -71,17 +73,17 @@ export function EVVisualizer({ potSize, betAmount, winRate }: EVVisualizerProps)
       </div>
       <div className="mt-3 pt-3 border-t border-[var(--walnut-border)] text-xs space-y-1">
         <div className="flex justify-between">
-          <span className="text-[var(--ivory-dim)]">当前胜率：</span>
+          <span className="text-[var(--ivory-dim)]">{t('academy.evVisualizer.currentEquityLabel')}</span>
           <span className="font-mono text-[var(--brass)]">{winRate}%</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-[var(--ivory-dim)]">期望值 (EV)：</span>
+          <span className="text-[var(--ivory-dim)]">{t('academy.evVisualizer.evLabel')}</span>
           <span className={`font-mono font-bold ${currentEV >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
             {currentEV >= 0 ? '+' : ''}{currentEV.toFixed(2)}BB
           </span>
         </div>
         <div className="text-[var(--ivory-dim)] mt-2">
-          盈亏平衡点：<span className="font-mono text-[var(--warning)]">{(breakevenRate * 100).toFixed(1)}%</span>
+          {t('academy.evVisualizer.breakevenLabel')} <span className="font-mono text-[var(--warning)]">{(breakevenRate * 100).toFixed(1)}%</span>
         </div>
       </div>
     </div>
@@ -99,6 +101,7 @@ export function EVCalculator({
   initialBetAmount = 50,
   initialWinRate = 30
 }: EVCalculatorProps) {
+  const { t } = useTranslation();
   const [potSize, setPotSize] = React.useState(initialPotSize);
   const [betAmount, setBetAmount] = React.useState(initialBetAmount);
   const [winRate, setWinRate] = React.useState(initialWinRate);
@@ -107,7 +110,7 @@ export function EVCalculator({
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div className="space-y-2">
-          <label className="text-xs text-[var(--ivory-muted)]">底池大小 (BB)</label>
+          <label className="text-xs text-[var(--ivory-muted)]">{t('academy.evVisualizer.potLabel')}</label>
           <input
             type="number"
             min={1}
@@ -115,11 +118,11 @@ export function EVCalculator({
             value={potSize}
             onChange={(e) => setPotSize(Number(e.target.value))}
             className="w-full bg-[var(--surface)] border border-[var(--walnut-border)] rounded px-3 py-2 text-[var(--ivory)] font-mono focus:border-[var(--brass)] outline-none"
-            aria-label="底池大小"
+            aria-label={t('academy.evVisualizer.potAria')}
           />
         </div>
         <div className="space-y-2">
-          <label className="text-xs text-[var(--ivory-muted)]">下注额 (BB)</label>
+          <label className="text-xs text-[var(--ivory-muted)]">{t('academy.evVisualizer.betLabel')}</label>
           <input
             type="number"
             min={1}
@@ -127,11 +130,11 @@ export function EVCalculator({
             value={betAmount}
             onChange={(e) => setBetAmount(Number(e.target.value))}
             className="w-full bg-[var(--surface)] border border-[var(--walnut-border)] rounded px-3 py-2 text-[var(--ivory)] font-mono focus:border-[var(--brass)] outline-none"
-            aria-label="下注金额"
+            aria-label={t('academy.evVisualizer.betAria')}
           />
         </div>
         <div className="space-y-2">
-          <label className="text-xs text-[var(--ivory-muted)]">胜率 (%)</label>
+          <label className="text-xs text-[var(--ivory-muted)]">{t('academy.evVisualizer.equityLabel')}</label>
           <input
             type="range"
             min={0}
@@ -140,7 +143,7 @@ export function EVCalculator({
             value={winRate}
             onChange={(e) => setWinRate(Number(e.target.value))}
             className="w-full accent-[var(--brass)]"
-            aria-label="胜率滑块"
+            aria-label={t('academy.evVisualizer.equityAria')}
           />
           <div className="text-right font-mono text-[var(--brass)]">{winRate}%</div>
         </div>

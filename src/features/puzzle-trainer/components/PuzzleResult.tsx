@@ -7,6 +7,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { MOTION_DURATION, transitionSlow } from '@/shared/utils/motion';
 import { Trophy, Clock, Target, RefreshCw, Home, TrendingUp } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { StatCard, WrongAnswerList, type WrongAnswerEntry } from './PuzzleResultParts';
@@ -49,7 +51,7 @@ export function PuzzleResult({ result, isNewRecord, onRetry, onBackHome }: Puzzl
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={transitionSlow}
         className="py-6 space-y-4"
       >
         {/* 标题 + 破纪录徽章 */}
@@ -61,7 +63,7 @@ export function PuzzleResult({ result, isNewRecord, onRetry, onBackHome }: Puzzl
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+              transition={{ duration: MOTION_DURATION.standard, type: 'spring', delay: 0.2 }}
               className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[var(--brass-dark)] to-[var(--brass-bright)] text-[var(--felt-deep)] font-display text-sm shadow-[var(--shadow-brass)]"
             >
               <Trophy className="w-4 h-4" />

@@ -387,9 +387,3 @@ export interface LessonUnit {
   durationMin?: number;        // 可选，路线图时间估算
 }
 
-// 辅助函数：检查是否可以重试
-export function isReadyForRetry(cert: LevelCertification): boolean {
-  if (!cert.lastAttemptAt) return true;
-  const hoursPassed = (Date.now() - cert.lastAttemptAt) / (1000 * 60 * 60);
-  return hoursPassed >= (cert.cooldownPeriod || 24);
-}

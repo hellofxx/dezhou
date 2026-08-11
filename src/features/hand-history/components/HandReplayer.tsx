@@ -112,7 +112,7 @@ export function HandReplayer() {
             onClick={skipToPrevStreet}
             aria-label={t('handHistory.replay.prevStreet')}
             className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
-            title="Previous street"
+            title={t('handHistory.replay.prevStreet')}
           >
             <ChevronsLeft size={18} />
           </button>
@@ -122,7 +122,7 @@ export function HandReplayer() {
             onClick={prevAction}
             aria-label={t('handHistory.replay.prevAction')}
             className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
-            title="Previous action"
+            title={t('handHistory.replay.prevAction')}
           >
             <SkipBack size={18} />
           </button>
@@ -132,7 +132,7 @@ export function HandReplayer() {
             onClick={togglePlay}
             aria-label={state.isPlaying ? t('handHistory.replay.pause') : t('handHistory.replay.play')}
             className="min-h-12 min-w-12 flex items-center justify-center rounded-full bg-[var(--brass)] text-[var(--primary-foreground)] hover:bg-[var(--brass-bright)] transition-colors shadow-lg"
-            title={state.isPlaying ? 'Pause' : 'Play'}
+            title={state.isPlaying ? t('handHistory.replay.pause') : t('handHistory.replay.play')}
           >
             {state.isPlaying ? <Pause size={20} /> : <Play size={20} />}
           </button>
@@ -142,7 +142,7 @@ export function HandReplayer() {
             onClick={nextAction}
             aria-label={t('handHistory.replay.nextAction')}
             className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
-            title="Next action"
+            title={t('handHistory.replay.nextAction')}
           >
             <SkipForward size={18} />
           </button>
@@ -152,7 +152,7 @@ export function HandReplayer() {
             onClick={skipToNextStreet}
             aria-label={t('handHistory.replay.nextStreet')}
             className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
-            title="Next street"
+            title={t('handHistory.replay.nextStreet')}
           >
             <ChevronsRight size={18} />
           </button>

@@ -6,6 +6,90 @@
 
 ---
 
+## [Unreleased] - 2026-08-11
+
+### i18n 模块化拆分（zh/en 大文件 → 按顶层 key 拆分 + 路由级懒加载）
+
+- 将单一超大 `src/i18n/locales/zh.json` / `en.json`（各约 150KB）按 41 个顶层 key 拆分为 `locales/{zh,en}/<module>.json` 模块文件；提供 `scripts/split-locales.mjs`（一次性拆分 + 完整性校验）与 `scripts/merge-locales.mjs`（合并回退，CI/调试用）。
+- 保持单一 `translation` 命名空间与 `t('a.b.c')` 路径式调用不变，全项目 150+ 处 `useTranslation()` 调用零改动。
+- 新增 `src/i18n/moduleRegistry.ts`（`I18nModuleKey` / `ALL_MODULES` / `CORE_MODULES` / `FEATURE_GROUPS` 路由分组 / `loadModule` 每语言动态加载器）与 `src/i18n/preload.ts`（`preloadI18n` 幂等懒加载 + `addResourceBundle` 深层合并注入 + `languageChanged` 对已请求模块自动补加载）。
+- `src/i18n/config.ts` 改为静态加载 10 个 core 模块（nav/common/dashboard/academy/theory/variant/gameVariant/tilt/streak/feedback），功能模块经 `src/app/routes.tsx` 的 `lazyPage` 与页面 chunk 并行按需加载。
+- 测试：`localeParity.test.ts` 改为按模块文件扫描双语对称（41 模块逐项报告）；新增 `preload.test.ts`（注册表完整性 + 幂等注入 + 深层合并 + 语言切换补加载）；`drillOptionOrder.test.ts` 改读 `locales/{zh,en}/drills.json` 模块文件。
+- 构建产物验证：82 个语言模块独立 chunk，core 经 config 静态依赖链启动加载，其余随路由动态加载；兼容 `public/sw.js` 对 `/assets/` hash 静态资源的 cache-first 缓存策略。
+
+### 全项目代码评审修复（2026-08-11 评审批次，109 项问题）
+
+> 依据 `docs/analysis/code-review-report.md`（12 个评审子代理并行产出）分批执行修复，
+> 覆盖 P1×15 / P2×39 / P3×55（P0 无）。每批修复后 `pnpm verify` 门禁全绿。
+
+#### P1 逻辑修复（批次 1）
+
+- `range-trainer`：`questionGenerator` call-vs-raise 题型 `correctAction` 按 actionType 判定，修复教学答案恒为 raise 的错误。
+- `gto-simulator`：rescue 场景追加后 `currentIndex` 更新到新场景；`computeCallAmount` 按 node 实际 texture 重新分类并与 ActionSelector 显示统一。
+- `hand-history`：`getDeviationSummary` 改判 `grade === 'best'`（修复废弃 'optimal' 致最优率恒 0%）；`gtoWorker` 增加 onerror 重建与 clearTimeout；`deleteHand`/`clearAll` 同步清理 analysisCache。
+- `progress`：`resetElo`/`syncEloFromAcademyAbility` 同步 `eloByVariant.standard`（消除写扩散漂移）；`checkNewMilestone` 里程碑跳档全量标记并累计发放冻结卡。
+
+#### P1 i18n 修复（批次 2）
+
+- `progress`：`ModuleStatsPage`、`dailyTrainingPlan` 全量 t() 化。
+- `pot-odds`：全模块 i18n（计算器/EV/赔率展示/听牌参考/Quiz UI + 19 题题库存 i18n key）；SRS 复习会话/面板渲染端 t() 解析；题库平衡题改 `balanceQuestion` 显式标记。
+- `onboarding`：`placementQuestions` 5 道定位题存 i18n key，`PlacementTestStep` t() 解析。
+
+#### P1 架构修复（批次 3）
+
+- `platform`：`TrainingRecord` 类型下沉 `shared/types/training.ts`（trainingEvents 解除 feature 依赖）；`GameVariantSelector` 改受控组件（props 注入）；删除 `VariantRuleBanner.tsx` 与 `shared/utils/variantRules.ts` 死代码（含危险桩 `evaluateAnswer`）。
+
+#### 动效单源（批次 4）
+
+- 清除 25 处组件内联 framer-motion transition 裸字面量，统一为 `motion.ts` 预设（跨 8 模块 20+ 文件）。
+
+#### P2 修复（批次 5，39 项）
+
+- 认证逻辑：strategy-academy `difficultyMultiplier` 补齐 8 元素、`areAllLevelsCertified` 校验 validUntil、认证冷却死代码删除、requiredAccuracy 与 store 自适应阈值对齐。
+- 阈值单源：ReviewSession 5000ms 快速作答阈值命名化；pot-odds `timeTaken` 单位审计。
+- token 色值：RangeTrainer fold 按钮 rgba → `--poker-terra`；AchievementBadges 黄铜阴影 → `--shadow-brass`；HandHistory DeleteAll clay 满底 → 低饱和边框。
+- i18n 全量：theory-academy 组件层（Quiz/ChapterView/ChapterList/LevelCard/ProTip）、progress 成就/雷达图/每日挑战、BlankLayout 快捷键、ResultSummary、shareCard Canvas（翻译注入）、AchievementBadges 成就文案。
+- 边界/耦合：mdfComparison 0 除防御；TheoryHome 选择器订阅；onboarding 路由 ErrorBoundary。
+- 遗留收尾（批次 5 剩余 P2 全量清零，2026-08-11）：
+  - `ACAD-05` 变体课程可达性：`findLessonById`/`getNextLesson` 标准课程未命中回退 `ALL_VARIANT_LESSONS`；`CourseView` 变体课程进度按变体全集计算；`AcademyHome` 按 `activeVariant` 构造变体课程阶梯（`buildVariantLevels`），变体课程从 UI 直达。
+  - `PROG-03` 成就系统收敛：`AchievementBadges` 徽章 title/description 单源复用 `achievements.items.*`（与 AchievementWall 同 key），删除重复的 `badges.*` name/description；阈值提取 `BADGE_THRESHOLDS` 命名常量。
+  - `PLAT-06` 单模块独用收敛：`MdfComparisonTable` + `mdfComparison.ts` 移入 `strategy-academy`（唯一消费方 MDFVisualizer），并全量 i18n（表格/滑块/结果/概念数据字段全部 key 化）；旧 `shared/` 文件已删。
+  - `THY-07` 确认豁免：标准 Level 课程数据文件超 300 行属数据文件豁免（`docs/AI_GUIDE.md` 与 `docs/TDD.md` 均声明课程内容数据文件放宽），无需拆分。
+  - `UI-04`：Chip `COLOR_MAP` 渐变 stop 裸 hex 逐一锚定 token 近似关系注释。
+  - `UI-05`：GTO 场景设置/反馈/对手 Drill 渲染的对手画像 name/description 走 `gto.setup.opponentProfile.*` 双语 key（数据层中文作 defaultValue 兜底）。
+  - `UI-06`：brass glow 系列 rgba 阴影统一 `--shadow-brass-glow-*` token（含纠正 `#d4af37` 色相漂移到标准 `rgba(201,162,94)`）；PositionBadge clay/sage/brass 三色 glow token 化；PracticeDrill 动画关键帧集中为命名常量。
+  - `UI-07`：9 处组件内联 `hover:brightness-*` 替换为 globals.css 集中定义的 `.hover-bright` / `.hover-bright-lg` 工具类。
+  - `PLAT-08/09/10` 复核：ResultSummary 已 i18n 且被 gto+progress 双模块使用（符合 shared 门槛）；BlankLayout 快捷键已 key 化；shareCard 已翻译注入。
+
+#### P3 修复（批次 6，完成）
+
+- a11y：FaqAccordion aria-controls 折叠态置空；EVCalculator range slider label 关联；ConceptCard 图标 key 字面量类型收窄。
+- 守卫增强：designTokenGuard 拦截任意值槽纯黑白 hex。
+- 资源/并发：SettingsPage 定时器统一清理；usePuzzleSession 会话结束 StrictMode 双跑防护；checkAchievements 并发去重；ActionBoard 未知档位中性化；PuzzleHome 跨日实时日期；PuzzleRush 复用共享 cn；useProgress 违规嵌套 hooks + 死代码清理。
+- 回归修复（截图反馈）：
+  - `dashboard.dataPlan.reason.*`：补嵌套对象（review/nextLesson/weakSpot/streakReward/dailyPractice）双语，消除 i18next 回退暴露 key 字符串的红框
+  - ELO 段位六段（rookie/entry/intermediate/mid/advanced/expert）改语义 key 化，`Rank.name/description` 不再存展示文本；补 `progress.rank.<key>.{name,description}` 双语；渲染端 4 处（ProgressHero / FeltArena / WeaknessAnalysis / VariantEloOverview）走 t() 解析；elo.test.ts 断言同步更新
+  - GTOSimulatorHome 主页三处硬编码中文（标题/副标题/两 tab/查看完整结果）走 `gto.home.{title,subtitle,tabSetup,tabSpot,viewFullResult}` 双语
+  - dailyTrainingPlan 学院课程推荐 title 由 `titleAcademyLesson` 模板改为 `academy.lessonTitle.<lessonId>` key；DailyTrainingPlan 渲染端检测 i18n 解析失败时兜底到 lesson.title（数据层硬编码），避免 key 字符串直接渲染
+  - 已知遗留：strategy-academy 数据层 lesson.title 仍为中文硬编码（l3-basics 等标准课程 100+ 标题 en 翻译未补），属于数据层双语化扩展任务，本批不覆盖
+- 大数据量数据层 i18n 收尾：
+  - `theory-academy`：变体（短牌/单挑 18 个 Level 文件）levelTitle/levelDescription/levelUnlock/chapterTitle/chapterSubtitle 双语 key 全量补齐（含 practiceRecommendations 引用的变体课程标题 `academy.lessonTitle` 27 个新 key）；TheoryQuiz 两处内联 transition 统一为 `transitionFast` 预设。
+  - `range-trainer`：presetName 中文 preset（短牌 CO/BTN Open Raise、通用 4-Bet）经 `presetI18n.ts` 渲染层 key 覆盖双语齐备，组件层零硬编码。
+  - `hand-history`：全层（组件/utils/parsers/workers/store）零硬编码中文；GtoDeviationPanel 等级标签复用 `GRADE_DISPLAY_CONFIG` titleKey。
+  - `strategy-academy`：FormulaBlock/TheoryReferenceBlock/HandExample（街道/筹码/下注/正误结论）/PracticeDrill（完成态/统计/快捷键 Trans）/ChoiceDrillRenderer/HandRankingDrill/LevelCertification 补 i18n。
+  - `onboarding`：FirstDrillStep 双击防抖；OnboardingGate 路由匹配；CelebrationStep 动态动画（合理性保留）。
+  - `progress`：ProgressReplay 遍历边界防护。
+  - `pot-odds`：EVCalculator 浮点相等分支 epsilon 判定；PotOddsQuizPage handleRestart；OddsDisplay 动画 key 精度处理。
+  - `puzzle-trainer`：DailyPuzzle 跨午夜完成态归属；usePuzzleEngine 首题计时基线。
+  - `gto-simulator`：worstSpots 空数组防御。
+  - `shared`：PositionBadge 增加位置组语义 title/aria-label（颜色非唯一通道）；globals.css 渐变 stop 裸 hex 全部抽取为 `--grad-*` 命名 token（视觉不变）。
+
+#### 回归
+
+- 每批 `pnpm verify` 全绿（75 测试文件 / 503 测试），新增 designTokenGuard 增强测试。
+
+---
+
 ## [Unreleased] - 2026-08-10
 
 ### ActionBoard 三档按钮配色重构 — 一档一色，视觉焦点均衡

@@ -23,29 +23,34 @@ interface DimensionScore {
   fullMark: number;
 }
 
-/** ELO 维度 → 显示标签映射 */
-const ELO_DIMENSION_LABELS: Record<EloDimension, string> = {
-  preflop: '翻前',
-  postflop: '翻后',
-  math: '赔率数学',
-  handReading: '牌局阅读',
-  mental: '心态一致性',
+/** ELO 维度 → i18n key 映射（PROG-05：改为存 key，渲染时 t() 解析，消除硬编码中文） */
+const ELO_DIMENSION_LABEL_KEYS: Record<EloDimension, string> = {
+  preflop: 'elo.radar.dimensionPreflop',
+  postflop: 'elo.radar.dimensionPostflop',
+  math: 'elo.radar.dimensionMath',
+  handReading: 'elo.radar.dimensionHandReading',
+  mental: 'elo.radar.dimensionMental',
 };
 
+type TFunction = (key: string, options?: Record<string, unknown>) => string;
+
 /** 从 ELO 状态构建雷达图数据（0-3000 量纲） */
-function buildEloRadarData(elo: {
-  preflop: number;
-  postflop: number;
-  math: number;
-  handReading: number;
-  mental: number;
-}): DimensionScore[] {
+function buildEloRadarData(
+  elo: {
+    preflop: number;
+    postflop: number;
+    math: number;
+    handReading: number;
+    mental: number;
+  },
+  t: TFunction,
+): DimensionScore[] {
   return [
-    { dimension: ELO_DIMENSION_LABELS.preflop, score: elo.preflop, fullMark: 3000 },
-    { dimension: ELO_DIMENSION_LABELS.postflop, score: elo.postflop, fullMark: 3000 },
-    { dimension: ELO_DIMENSION_LABELS.math, score: elo.math, fullMark: 3000 },
-    { dimension: ELO_DIMENSION_LABELS.handReading, score: elo.handReading, fullMark: 3000 },
-    { dimension: ELO_DIMENSION_LABELS.mental, score: elo.mental, fullMark: 3000 },
+    { dimension: t(ELO_DIMENSION_LABEL_KEYS.preflop), score: elo.preflop, fullMark: 3000 },
+    { dimension: t(ELO_DIMENSION_LABEL_KEYS.postflop), score: elo.postflop, fullMark: 3000 },
+    { dimension: t(ELO_DIMENSION_LABEL_KEYS.math), score: elo.math, fullMark: 3000 },
+    { dimension: t(ELO_DIMENSION_LABEL_KEYS.handReading), score: elo.handReading, fullMark: 3000 },
+    { dimension: t(ELO_DIMENSION_LABEL_KEYS.mental), score: elo.mental, fullMark: 3000 },
   ];
 }
 
@@ -55,7 +60,7 @@ export default function WeaknessAnalysis() {
   const gamesPlayed = elo.gamesPlayed;
   const hasData = gamesPlayed > 0;
 
-  const data = useMemo(() => buildEloRadarData(elo), [elo]);
+  const data = useMemo(() => buildEloRadarData(elo, t), [elo, t]);
   const currentRank = useMemo(() => getRankForScore(elo.overall), [elo.overall]);
 
   return (
@@ -77,10 +82,10 @@ export default function WeaknessAnalysis() {
                   borderColor: `${currentRank.color}55`,
                   color: currentRank.color,
                 }}
-                title={currentRank.description}
+                title={t(`progress.rank.${currentRank.name}.description`)}
               >
                 <span className="text-sm leading-none">{currentRank.icon}</span>
-                <span className="font-bold">{currentRank.name}</span>
+                <span className="font-bold">{t(`progress.rank.${currentRank.name}.name`)}</span>
                 <span className="font-numeric text-[var(--ivory)] tabular-nums">
                   {elo.overall}
                 </span>

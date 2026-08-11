@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { ArrowLeft, BookOpen } from 'lucide-react';
@@ -10,6 +11,7 @@ import { useRangeTrainerStore } from '../store';
 
 export default function RangeLearnPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     learnState,
     setSelectedPreset,
@@ -50,15 +52,15 @@ export default function RangeLearnPage() {
               onClick={() => navigate('/range-trainer')}
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
-              返回
+              {t('common.back')}
             </Button>
             <div>
               <h1 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">
                 <BookOpen className="w-6 h-6 text-[var(--brass)]" />
-                学习模式
+                {t('rangeTrainer.learn')}
               </h1>
               <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
-                浏览和学习各位置的标准开牌范围
+                {t('rangeTrainer.learnSubtitle')}
               </p>
             </div>
           </div>
@@ -70,8 +72,8 @@ export default function RangeLearnPage() {
           <div className="space-y-4">
             <Card className="bg-[var(--surface)] border-[var(--surface-raised)]">
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">范围选择</CardTitle>
-                <CardDescription>选择位置和动作类型查看标准范围</CardDescription>
+                <CardTitle className="text-base">{t('rangeTrainer.rangeSelect.title')}</CardTitle>
+                <CardDescription>{t('rangeTrainer.rangeSelect.hint')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RangeSelector
@@ -87,13 +89,13 @@ export default function RangeLearnPage() {
 
             <Card className="bg-[var(--surface)] border-[var(--surface-raised)]">
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">范围信息</CardTitle>
+                <CardTitle className="text-base">{t('rangeTrainer.rangeInfo.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <RangeInfo
                   selectedHands={selectedHands}
                   highlightedHand={learnState.highlightedHand}
-                  presetName={learnState.selectedPreset?.name}
+                  preset={learnState.selectedPreset}
                   variant={gameVariant}
                 />
               </CardContent>
@@ -103,9 +105,9 @@ export default function RangeLearnPage() {
           {/* 右侧网格 */}
           <Card className="bg-[var(--surface)] border-[var(--surface-raised)]">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base">13×13 范围矩阵</CardTitle>
+              <CardTitle className="text-base">{t('rangeTrainer.rangeInfo.matrix13')}</CardTitle>
               <CardDescription>
-                对角线=对子 | 上三角=同花 | 下三角=非同花 | 金色=在范围内
+                {t('rangeTrainer.rangeInfo.matrixLegend')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -122,7 +124,7 @@ export default function RangeLearnPage() {
 
         {/* 底部说明 */}
         <div className="text-center text-xs text-[var(--ivory-dim)] pb-4">
-          <p>以上范围基于 6-max 现金局近似 GTO 策略，实际范围会根据对手倾向和筹码深度有所调整。</p>
+          <p>{t('rangeTrainer.footer.note')}</p>
         </div>
       </div>
     </div>

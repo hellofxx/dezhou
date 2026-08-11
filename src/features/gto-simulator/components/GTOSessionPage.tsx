@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { Decision } from '@/shared/types/action';
 import type { Card } from '@/shared/types/poker';
@@ -45,6 +46,7 @@ function BoardCard({ card }: { card: Card }) {
 }
 
 export default function GTOSessionPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { getCurrentScenario, submitDecision, getProgress, session } = useScenarioEngine();
   const { showFeedback, feedback, currentNodeIndex, continueNext } = useGTOSimulatorStore();
@@ -160,12 +162,12 @@ export default function GTOSessionPage() {
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="text-[var(--ivory-muted)] mb-4">没有活跃的训练会话</div>
+        <div className="text-[var(--ivory-muted)] mb-4">{t('gto.session.noActive')}</div>
         <button
           onClick={() => navigate('/gto-simulator')}
           className="px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold"
         >
-          返回主页
+          {t('gto.session.backHome')}
         </button>
       </div>
     );
@@ -174,7 +176,7 @@ export default function GTOSessionPage() {
   if (!scenario) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="text-[var(--ivory-muted)] font-display">训练完成！</div>
+        <div className="text-[var(--ivory-muted)] font-display">{t('gto.session.done')}</div>
       </div>
     );
   }
@@ -183,19 +185,19 @@ export default function GTOSessionPage() {
   const isLastNode = !isMultiStep || currentNodeIndex >= (nodes?.length ?? 1) - 1;
   const isLastScenario = progress.current >= progress.total;
 
-  const continueLabel = !isLastNode ? '下一步 →' : isLastScenario ? '查看结果' : '下一个场景 →';
+  const continueLabel = !isLastNode ? t('gto.session.nextStep') : isLastScenario ? t('gto.result.title') : t('gto.session.nextScenarioLabel');
 
   const streetLabel =
-    activeStreet === 'preflop' ? '翻前'
-    : activeStreet === 'flop' ? '翻牌圈'
-    : activeStreet === 'turn' ? '转牌圈' : '河牌圈';
+    activeStreet === 'preflop' ? t('gto.session.streetPreflop')
+    : activeStreet === 'flop' ? t('gto.session.streetFlop')
+    : activeStreet === 'turn' ? t('gto.session.streetTurn') : t('gto.session.streetRiver');
 
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-6 min-h-screen flex flex-col">
       {/* 进度条 */}
       <div className="space-y-1">
         <div className="flex items-center justify-between text-xs text-[var(--ivory-muted)] font-numeric">
-          <span>场景 {progress.current} / {progress.total}</span>
+          <span>{t('gto.session.scenarioLabel', { n: progress.current })} / {progress.total}</span>
           <span>{Math.round(progress.percentage)}%</span>
         </div>
         <div className="h-1.5 bg-[var(--walnut-raised)] rounded-full overflow-hidden">
@@ -209,7 +211,7 @@ export default function GTOSessionPage() {
       {/* P4 修复（4.5-P1-2）：连续答错降级提示 */}
       {shouldDownshiftDifficulty() && (
         <div className="px-3 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
-          检测到连续答错 3 次以上，建议返回场景设置选择更简单的难度，或先复习相关课程。
+          {t('gto.session.downshiftHint')}
         </div>
       )}
 

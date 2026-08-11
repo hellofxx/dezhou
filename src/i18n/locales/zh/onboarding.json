@@ -1,0 +1,90 @@
+{
+  "steps": {
+    "welcome": "欢迎",
+    "placement": "定位测试",
+    "drill": "首次训练",
+    "celebration": "首胜庆祝",
+    "goal": "目标设定"
+  },
+  "complete": {
+    "title": "引导完成",
+    "redirecting": "即将进入训练平台..."
+  },
+  "welcome": {
+    "title": "欢迎来到德州扑克训练平台",
+    "subtitle": "让我们用几分钟时间为你定制专属学习路径",
+    "beginnerTitle": "我是新手",
+    "beginnerDesc": "刚接触德州扑克，希望从基础规则与牌型开始系统学习",
+    "beginnerCta": "从定位测试开始",
+    "experiencedTitle": "我有基础",
+    "experiencedDesc": "已掌握基本规则，希望跳过定位直接体验训练流程",
+    "experiencedCta": "直接进入训练",
+    "skip": "跳过引导"
+  },
+  "placement": {
+    "questionOf": "第 {{current}} / {{total}} 题",
+    "explanation": "解析",
+    "next": "下一题",
+    "finish": "完成测试",
+    "q1": {
+      "question": "以下哪手起手牌的牌力最强？",
+      "optA": "AA（口袋火箭）",
+      "optB": "KK（口袋国王）",
+      "optC": "QQ（口袋王后）",
+      "optD": "JJ（口袋杰克）",
+      "explanation": "AA 是德州扑克最强的起手牌，对抗任何其他起手牌都有约 80%+ 的胜率。"
+    },
+    "q2": {
+      "question": "在最终成牌中，以下哪种牌型最强？",
+      "optA": "同花顺（Straight Flush）",
+      "optB": "四条（Four of a Kind）",
+      "optC": "葫芦（Full House）",
+      "optD": "同花（Flush）",
+      "explanation": "牌型从大到小：皇家同花顺 > 同花顺 > 四条 > 葫芦 > 同花 > 顺子 > 三条 > 两对 > 一对 > 高牌。"
+    },
+    "q3": {
+      "question": "在 6-max 游戏中，哪个位置在翻前具有最大的位置优势？",
+      "optA": "UTG（枪口位）",
+      "optB": "HJ（劫持位）",
+      "optC": "CO（截断位）",
+      "optD": "BTN（按钮位）",
+      "explanation": "BTN（按钮位）是翻前/翻后都最后行动的位置，拥有最多信息优势，是 6-max 中最有利的位置。"
+    },
+    "q4": {
+      "question": "底池有 100 筹码，对手下注 50，你需要跟注 50。你至少需要多少胜率才能跟注有利可图？",
+      "optA": "20%",
+      "optB": "25%",
+      "optC": "33%",
+      "optD": "50%",
+      "explanation": "跟注 50 进入 200 的总底池（100 原底池 + 50 对手下注 + 50 你的跟注），所需胜率 = 50 / 200 = 25%。"
+    },
+    "q5": {
+      "question": "在 UTG（枪口位，6 人桌最早行动位置），以下哪手牌应该开池加注？",
+      "optA": "72o（非同花 72）",
+      "optB": "K2s（同花 K2）",
+      "optC": "92o（非同花 92）",
+      "optD": "AQo（非同花 AQ）",
+      "explanation": "UTG 是最早行动的位置，应使用紧凑的开池范围（约 16% 的手牌）。AQo 是强牌在 UTG 标准范围内；72o / 92o / K2s 都太弱，不在 UTG 开池范围。"
+    }
+  },
+  "drill": {
+    "title": "首次微训练",
+    "questionOf": "第 {{current}} / {{total}} 题",
+    "next": "下一题",
+    "finish": "完成训练",
+    "rescueHint": "别灰心，再来一道简单题练练手"
+  },
+  "celebration": {
+    "title": "恭喜完成首次训练！",
+    "subtitle": "你已经迈出成为优秀玩家的第一步，继续保持！",
+    "streakStarted": "Day 1 Streak 已启动",
+    "continue": "继续设定目标"
+  },
+  "goal": {
+    "title": "设定每日训练目标",
+    "subtitle": "选择一个可持续的每日训练时长，养成习惯比强度更重要",
+    "minutes": "分钟",
+    "hint": "随时可以在设置中调整目标。建议新手从 10 分钟开始。",
+    "confirm": "确认目标"
+  }
+}

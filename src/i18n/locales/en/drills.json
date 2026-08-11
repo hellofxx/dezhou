@@ -1,0 +1,221 @@
+{
+  "common": {
+    "complete": "Drill Complete!",
+    "accuracyLabel": "Accuracy",
+    "timeLabel": "Time",
+    "correctLabel": "Correct",
+    "finish": "Finish Drill",
+    "exit": "Exit",
+    "progress": "Question {{current}} / {{total}}",
+    "runningAccuracy": "Current accuracy {{correct}}/{{answered}}",
+    "correctFeedback": "Correct!",
+    "wrongFeedback": "Incorrect",
+    "correctAnswerPrefix": "Correct answer: {{answer}}",
+    "viewResult": "View Result",
+    "next": "Next"
+  },
+  "opponent": {
+    "title": "Opponent Profiling",
+    "subtitle": "Read the stats, identify the player type, then pick the best exploit",
+    "typePrompt": "Q1: What player type is this?",
+    "strategyPrompt": "Q2: What is the best adjustment?",
+    "sampleSize": "{{count}} hands sample",
+    "recentActions": "Recent behavior",
+    "typeLabel": "Type read",
+    "strategyLabel": "Strategy",
+    "scoringNote": "Both answers must be correct to score"
+  },
+  "handRanking": {
+    "title": "Hand Ranking Blitz",
+    "subtitle": "Quickly identify the 9 hand rankings and compare two hands",
+    "comparePrompt": "Which hand is stronger?",
+    "identifyPrompt": "Identify the hand rank of these 5 cards:",
+    "simpleComparePrompt": "Which starting hand is stronger?",
+    "options": {
+      "handA": "Hand A",
+      "handB": "Hand B",
+      "tie": "Tie",
+      "labelA": "Hand A",
+      "labelB": "Hand B",
+      "royalFlush": "Royal Flush",
+      "straightFlush": "Straight Flush",
+      "fourOfAKind": "Four of a Kind",
+      "fullHouse": "Full House",
+      "flush": "Flush",
+      "straight": "Straight",
+      "threeOfAKind": "Three of a Kind",
+      "twoPair": "Two Pair",
+      "onePair": "One Pair",
+      "highCard": "High Card"
+    },
+    "questions": {
+      "q1": {
+        "explanation": "Hand B is AKQJT suited (Royal Flush), the strongest hand in Texas Hold'em, beating the plain AKQJT straight."
+      },
+      "q2": {
+        "explanation": "Hand B is AAKKK full house (trip Kings + pair Aces), which beats trip 9s."
+      },
+      "q3": {
+        "explanation": "Hand A is a flush (5 hearts), Hand B is a straight. Flush > Straight."
+      },
+      "q4": {
+        "explanation": "AKQJT all spades — Royal Flush, the strongest hand in Texas Hold'em."
+      },
+      "q5": {
+        "explanation": "98765 all hearts — Straight Flush (not royal, since not AKQJT)."
+      },
+      "q6": {
+        "explanation": "KKK99 is trip Kings + pair 9s = Full House. Don't confuse with two pair or trips."
+      },
+      "q7": {
+        "explanation": "T9876 is 5 consecutive cards = Straight (note: not all same suit)."
+      },
+      "q8": {
+        "explanation": "AAAQ2 is Three of a Kind Aces (three same rank + two kickers)."
+      },
+      "q9": {
+        "explanation": "AA is the strongest starting hand, far stronger than 22. Higher pocket pair wins."
+      },
+      "q10": {
+        "explanation": "AKs (suited AK) is a strong starting hand, far better than 72o (offsuit 72), one of the weakest."
+      }
+    }
+  },
+  "position": {
+    "title": "Position Awareness",
+    "subtitle": "Identify positions on a 6-max table and understand position advantage",
+    "questions": {
+      "q1": {
+        "prompt": "Which position acts last preflop and is considered the best? (Dealer)",
+        "explanation": "BTN (Button) acts last preflop, giving the most information before deciding."
+      },
+      "q2": {
+        "prompt": "Which position acts first preflop?",
+        "explanation": "UTG (Under The Gun) acts first preflop with the least information — play only strong hands."
+      },
+      "q3": {
+        "prompt": "Which position acts last both preflop and postflop, called the 'best position'?",
+        "explanation": "BTN acts last both preflop and postflop — the most profitable position at the table."
+      },
+      "q4": {
+        "prompt": "In 6-max, the position to the left of the button (posts small blind) is?",
+        "explanation": "SB (Small Blind) sits left of BTN, posts 0.5BB forced bet, out of position postflop."
+      },
+      "q5": {
+        "prompt": "Which position posts the big blind?",
+        "explanation": "BB (Big Blind) sits left of SB, posts 1BB forced bet, last blind to act preflop."
+      },
+      "q6": {
+        "prompt": "After a UTG raise preflop, which blind position acts last (closes action)?",
+        "explanation": "BB is the last to act preflop (among blinds), closing action — a positional advantage."
+      },
+      "q7": {
+        "prompt": "From which position should you raise to steal blinds most often?",
+        "explanation": "BTN is the best steal position — only SB and BB left to act, high success rate."
+      },
+      "q8": {
+        "prompt": "In 6-max, the position immediately after UTG is?",
+        "explanation": "MP (Middle Position) follows UTG, slightly better than UTG but still requires tight ranges."
+      }
+    }
+  },
+  "outs": {
+    "title": "Outs Calculation Drill",
+    "subtitle": "Identify drawing hands and quickly count Outs, master the Rule of 2 and 4",
+    "boardLabel": "Board",
+    "heroLabel": "Your Hand",
+    "rulePrompt": "Calculate your current number of Outs",
+    "options": {
+      "count2": "2 outs",
+      "count3": "3 outs",
+      "count4": "4 outs",
+      "count6": "6 outs",
+      "count8": "8 outs",
+      "count9": "9 outs",
+      "count12": "12 outs",
+      "count15": "15 outs",
+      "equity8": "~8%",
+      "equity16": "~16%",
+      "equity32": "~32%",
+      "equity36": "~36%"
+    },
+    "questions": {
+      "q1": {
+        "prompt": "You hold suited AK, flop shows 2 of your suit. How many Outs?",
+        "explanation": "Flush draw: 13 suited cards - 4 visible = 9 outs."
+      },
+      "q2": {
+        "prompt": "You hold suited 89, flop has 2 of your suit. How many Outs?",
+        "explanation": "Flush draw = 9 outs (13-4=9), the most common strong draw."
+      },
+      "q3": {
+        "prompt": "You hold 89, board is 7T2. How many Outs for your OESD (open-ended straight draw)?",
+        "explanation": "OESD: any 6 or J completes the straight = 8 outs."
+      },
+      "q4": {
+        "prompt": "You hold 56, board is 479. How many Outs for your OESD?",
+        "explanation": "OESD: any 3 or 8 completes the straight = 8 outs."
+      },
+      "q5": {
+        "prompt": "You hold 79, board is 56K. How many Outs for your Gutshot?",
+        "explanation": "Gutshot (inside straight): only an 8 completes = 4 outs."
+      },
+      "q6": {
+        "prompt": "You hold TJ, board is 792. How many Outs for your Gutshot?",
+        "explanation": "Gutshot: only an 8 completes = 4 outs."
+      },
+      "q7": {
+        "prompt": "8 Outs from turn→river equals approximately what equity? (Rule of 2 and 4)",
+        "explanation": "Rule of 2: 8 outs × 2 ≈ 16% equity (turn→river single street)."
+      },
+      "q8": {
+        "prompt": "You hold AK high, board has no A or K. How many Outs to hit top pair?",
+        "explanation": "AK high drawing to top pair: 3 Aces + 3 Kings = 6 outs."
+      }
+    }
+  },
+  "potOdds": {
+    "title": "Pot Odds Intuition",
+    "subtitle": "Visual pot odds training, master call/fold decisions",
+    "potLabel": "Pot",
+    "betLabel": "Bet",
+    "callLabel": "Call",
+    "equityLabel": "Equity",
+    "positiveEv": "+EV Call",
+    "ratioHint": "Pot {{pot}} : Call {{call}}",
+    "options": {
+      "potOdds20": "20%",
+      "potOdds25": "25%",
+      "potOdds33": "33%",
+      "potOdds50": "50%",
+      "call": "Call",
+      "fold": "Fold"
+    },
+    "questions": {
+      "q1": {
+        "prompt": "Pot 100, opponent bets 50, you call 50. What's the pot odds?",
+        "explanation": "Call 50 to win final pot 200 (100+50+50), odds = 50/200 = 25%."
+      },
+      "q2": {
+        "prompt": "Pot 80, opponent bets 40, you call 40. What's the pot odds?",
+        "explanation": "Call 40 to win 160 (80+40+40), odds = 40/160 = 25%."
+      },
+      "q3": {
+        "prompt": "Pot 100, opponent bets 50, you call 50. Your equity is 36%, should you?",
+        "explanation": "Pot odds 25%, equity 36% > 25%, +EV call."
+      },
+      "q4": {
+        "prompt": "Pot 100, opponent bets 50, you call 50. Your equity is 16%, should you?",
+        "explanation": "Pot odds 25%, equity 16% < 25%, -EV call, fold."
+      },
+      "q5": {
+        "prompt": "Pot 120, opponent bets 60, you call 60. What's the pot odds?",
+        "explanation": "Call 60 to win 240 (120+60+60), odds = 60/240 = 25%."
+      },
+      "q6": {
+        "prompt": "Your equity is 40%, pot odds 25%, should you?",
+        "explanation": "Equity 40% well above pot odds 25%, clearly +EV call."
+      }
+    }
+  }
+}

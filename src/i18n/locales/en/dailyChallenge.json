@@ -1,0 +1,15 @@
+{
+  "title": "Today's Tasks",
+  "rangeChallenge": "Complete {{count}} range training questions with >{{accuracy}}% accuracy",
+  "potOddsChallenge": "Complete {{count}} pot odds questions with >{{accuracy}}% accuracy",
+  "gtoChallenge": "Complete {{count}} GTO simulation questions with >{{accuracy}}% accuracy",
+  "completed": "Completed",
+  "notCompleted": "Not Completed",
+  "consecutiveDays": "Day Streak",
+  "startChallenge": "Start Challenge",
+  "reward": "Reward",
+  "rewardRange": "Hand Master",
+  "rewardPotOdds": "Odds Expert",
+  "rewardGto": "GTO Elite",
+  "dailyPuzzle": "Daily Puzzle"
+}

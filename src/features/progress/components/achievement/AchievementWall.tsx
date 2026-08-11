@@ -132,7 +132,7 @@ function AchievementCard({ achievement, unlocked, unlockDate }: AchievementCardP
     <div
       className={`relative rounded-lg border p-4 transition-all ${
         unlocked
-          ? 'border-[var(--brass)]/50 bg-[var(--brass)]/8 shadow-[0_0_16px_rgba(200,164,86,0.15)]'
+          ? 'border-[var(--brass)]/50 bg-[var(--brass)]/8 shadow-[var(--shadow-brass-glow-soft)]'
           : 'border-[var(--walnut-border)] bg-[var(--felt)]/60 opacity-75'
       }`}
     >

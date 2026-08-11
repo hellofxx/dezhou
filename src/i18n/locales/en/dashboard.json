@@ -1,0 +1,144 @@
+{
+  "title": "Training Dashboard",
+  "quickStart": {
+    "title": "3-Minute Quick Drill",
+    "subtitle": "5 questions a day, keep your edge",
+    "range": "Range Practice",
+    "odds": "Odds Calc",
+    "mixed": "Mixed Drill",
+    "completedToday": "Done today"
+  },
+  "puzzleDesc": "Rush / Daily / Theme drills — fun scenario-based decision training",
+  "feltArena": {
+    "todaySession": "Today's Session · Day {{day}}",
+    "welcome": "Welcome Back to the Table",
+    "motto": "Know the way, master the game",
+    "totalHands": "Total Hands",
+    "totalHandsWeek": "+{{count}} this week",
+    "accuracy": "Overall Accuracy",
+    "accuracyLevel": "Intermediate",
+    "todayChallenge": "Today's Challenge",
+    "ready": "Today's practice is ready for you.",
+    "todayProgress": "Today"
+  },
+  "streakRail": {
+    "consecutiveDays": "Day Streak",
+    "freezeCard": "Freeze Card",
+    "todayAccuracy": "Today's Accuracy",
+    "weekDays": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    },
+    "rest": "Rest",
+    "today": "Today"
+  },
+  "quickDrill": {
+    "title": "3-Minute Quick Drill",
+    "subtitle": "Smart recommendations based on your weaknesses",
+    "completed": "✓ Completed Today",
+    "range": "Range",
+    "odds": "Odds",
+    "mixed": "Mixed"
+  },
+  "training": {
+    "todayQuestion": "Today's Practice · Q{{current}} / {{total}}",
+    "difficulty": "Difficulty",
+    "yourDecision": "Your Decision",
+    "nextQuestion": "Next Question",
+    "nextTopic": "Next: {{topic}}",
+    "srs": "Spaced Repetition",
+    "srsDescription": "{{count}} items due for review today",
+    "startReview": "Start Review · {{count}} items",
+    "todayProgress": "Today's Progress",
+    "pending": "Pending",
+    "mastered": "Mastered",
+    "dueRate": "Due Rate"
+  },
+  "trainingGrounds": {
+    "title": "Training Grounds",
+    "subtitle": "Six Core Modules",
+    "rangeDesc": "Memorize and test opening ranges by position",
+    "oddsDesc": "Pot odds, EV and outs calculation",
+    "gtoDesc": "Optimal decision training in real scenarios",
+    "academyDesc": "Systematic courses from beginner to pro",
+    "puzzleDesc": "Daily puzzles, Rush mode and theme drills",
+    "reviewDesc": "Import hand histories for deep analysis"
+  },
+  "dataPlan": {
+    "title": "Today's Training Plan",
+    "count": "{{count}} items",
+    "allDone": "Today's training goal is complete!",
+    "freeTrain": "Free training",
+    "start": "Start",
+    "skip": "Skip",
+    "accuracyTrend": "Accuracy Trend",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "todayRecommend": "Today's Recommendations",
+    "recommendDescription": "Generated from your weaknesses and SRS",
+    "viewFullPlan": "View Full Plan",
+    "tagWeakness": "Weakness",
+    "tagSrs": "SRS",
+    "tagCourse": "Course",
+    "titleReview": "Review {{count}} knowledge points",
+    "titleAcademyLesson": "{{title}}",
+    "titleWeakRange": "Hand Range Practice",
+    "titleWeakOdds": "Pot Odds Practice",
+    "titlePracticeRange": "Hand Range Training",
+    "titlePracticeOdds": "Pot Odds Training",
+    "titleGtoChallenge": "Advanced GTO Challenge",
+    "descReview": "{{items}}",
+    "descReviewMore": "{{items}} and {{count}} more",
+    "descAcademyLesson": "Level {{level}} course",
+    "descWeakAccuracy": "Current accuracy {{accuracy}}%, needs improvement",
+    "descWeakNone": "Not practiced yet, try it",
+    "descPracticeAccuracy": "Current accuracy {{accuracy}}%",
+    "descPracticeNone": "Keep your edge",
+    "descStreakChallenge": "{{streak}} days in a row! Challenge higher difficulty",
+    "reasonReview": "Review",
+    "reasonNextLesson": "Next lesson",
+    "reasonWeakSpot": "Weak spot",
+    "reasonStreakReward": "Streak reward",
+    "reasonDailyPractice": "Daily practice",
+    "reason": {
+      "review": "Review",
+      "nextLesson": "Next lesson",
+      "weakSpot": "Weak spot",
+      "streakReward": "Streak reward",
+      "dailyPractice": "Daily practice"
+    }
+  },
+  "recentTraining": {
+    "title": "Recent Training",
+    "sessions": "Sessions",
+    "questions": "Questions",
+    "accuracy": "Accuracy",
+    "justNow": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{n}}d ago",
+    "weeksAgo": "{{n}}w ago",
+    "monthsAgo": "{{n}}mo ago",
+    "yearsAgo": "{{n}}y ago",
+    "empty": {
+      "title": "No training records",
+      "description": "Complete any training to see your history here."
+    }
+  },
+  "timeRange": {
+    "ariaLabel": "Time range",
+    "7d": "7D",
+    "30d": "30D",
+    "90d": "90D",
+    "all": "All"
+  },
+  "progressReplay": {
+    "title": "Replay Your Progress",
+    "empty": "Complete more courses to reveal your progress track"
+  }
+}

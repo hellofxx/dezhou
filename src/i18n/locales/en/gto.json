@@ -1,0 +1,163 @@
+{
+  "title": "GTO Simulator",
+  "startSession": "Start Training",
+  "optimal": "Optimal Decision",
+  "evLoss": "EV Loss",
+  "feedback": {
+    "optimalLabel": "Optimal Decision",
+    "severeError": "Severe Error",
+    "suboptimal": "Suboptimal Decision",
+    "yourEV": "Your EV",
+    "optimalEV": "Optimal EV",
+    "heroEquity": "Hero Equity",
+    "nearOptimal": "✓ Near optimal (EV loss < 0.3 BB)",
+    "opponentPrefix": "Opponent:",
+    "frequencyDistribution": "GTO Frequency",
+    "suggestedRaise": "Suggested raise: {{amount}} BB",
+    "exploitSuggestion": "Exploit suggestion (vs {{name}})",
+    "gtoRatio": "GTO: R{{r}}/C{{c}}/F{{f}}",
+    "exploitRatio": "Exploit: R{{r}}/C{{c}}/F{{f}}",
+    "recommended": "Recommended",
+    "evUnit": "BB",
+    "pot": "Pot",
+    "call": "Call",
+    "raise": "Raise",
+    "fold": "Fold"
+  },
+  "setup": {
+    "title": "Scenario Setup",
+    "position": "Position",
+    "opponent": "Opponent Type",
+    "opponentStandard": "Standard Opponent",
+    "street": "Street",
+    "sizing": "Bet Sizing",
+    "start": "Start Training",
+    "selectStreet": "Select Street",
+    "selectVariant": "Select Variant",
+    "selectScenario": "Select Scenario",
+    "difficulty": "Difficulty",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "variantStandard": "Standard Texas Hold'em",
+    "variantShortDeck": "Short Deck (6+)",
+    "shortDeckHint": "Short deck: 36-card deck (removes 2-5), Three of a Kind > Straight, Flush > Full House",
+    "effectiveStack": "Effective Stack",
+    "startGtoTraining": "Start GTO Training",
+    "modeLabel": "Training Mode",
+    "gtoMode": "GTO Mode",
+    "exploitMode": "Exploit Mode",
+    "exploitHint": "Exploit mode adjusts the optimal strategy to the opponent type — learn how to exploit weaknesses.",
+    "opponentLabel": "Opponent Type",
+    "variantLabel": "Game Variant",
+    "gameTypeLabel": "Game Type",
+    "positionLabel": "Position",
+    "playerCountLabel": "Players",
+    "difficultyLabel": "Difficulty",
+    "scenarioCountLabel": "Number of Scenarios",
+    "gameTypeCash": "Cash Game",
+    "gameTypeTournament": "Tournament",
+    "gameTypeSnG": "SNG",
+    "difficultyBeginner": "Beginner",
+    "difficultyBeginnerDesc": "Strategy-focused, obvious decisions",
+    "difficultyIntermediate": "Intermediate",
+    "difficultyIntermediateDesc": "Includes mixed strategies",
+    "difficultyAdvanced": "Advanced",
+    "difficultyAdvancedDesc": "Borderline hands, precise frequencies",
+    "startBtn": "Start Training",
+    "opponentProfile": {
+      "tag": {
+        "name": "TAG (Tight-Aggressive)",
+        "description": "Tight and aggressive — plays only strong hands but bets them hard"
+      },
+      "lag": {
+        "name": "LAG (Loose-Aggressive)",
+        "description": "Loose and aggressive — plays many hands and raises often"
+      },
+      "nit": {
+        "name": "Nit (Ultra-Tight)",
+        "description": "Extremely conservative — plays only the very best hands"
+      },
+      "maniac": {
+        "name": "Maniac",
+        "description": "Extremely aggressive — constantly raising and bluffing"
+      },
+      "calling_station": {
+        "name": "Calling Station",
+        "description": "Passive — rarely raises but loves calling to showdown"
+      },
+      "unknown": {
+        "name": "Unknown",
+        "description": "Not enough data — plays the default GTO strategy"
+      }
+    }
+  },
+  "session": {
+    "yourHand": "Your Hand",
+    "board": "Board",
+    "potSize": "Pot",
+    "opponentBet": "Opponent Bet",
+    "chooseAction": "Choose Your Action",
+    "correctHint": "GTO optimal action: {{action}}",
+    "nextScenario": "Next Scenario",
+    "showSolution": "Show Solution",
+    "exploitMode": "Exploit Mode",
+    "endSession": "End Training",
+    "progress": "Progress {{current}}/{{total}}",
+    "sessionResult": "Session Results",
+    "score": "Score",
+    "backToHome": "Back to Home",
+    "analysis": "Decision Analysis",
+    "correctRate": "Accuracy",
+    "scenarioLabel": "Scenario {{n}}",
+    "noActive": "No active training session",
+    "backHome": "Back to Home",
+    "done": "Training Complete!",
+    "nextStep": "Next →",
+    "nextScenarioLabel": "Next Scenario →",
+    "streetPreflop": "Preflop",
+    "streetFlop": "Flop",
+    "streetTurn": "Turn",
+    "streetRiver": "River",
+    "downshiftHint": "3+ consecutive wrong answers detected — return to scenario setup for an easier difficulty, or review the related course."
+  },
+  "result": {
+    "title": "Training Results",
+    "subtitle": "GTO Simulation Results",
+    "score": "Total Score",
+    "accuracy": "Accuracy",
+    "correctCount": "Correct",
+    "totalScenarios": "Total Scenarios",
+    "gradeExcellent": "🎯 Excellent! Your GTO grasp is sharp!",
+    "gradeGood": "👍 Good! Keep building your GTO understanding.",
+    "gradeFair": "📚 Needs work on GTO fundamentals.",
+    "gradePoor": "💡 Start with the GTO basics course.",
+    "restart": "Train Again",
+    "backHome": "Back to Home",
+    "noData": "No result data"
+  },
+  "home": {
+    "lastTraining": "Last Training",
+    "optimalRate": "Optimal Decision Rate",
+    "scenariosCount": "{{count}} scenarios · EV loss {{ev}} BB/100",
+    "scenarioCount": "scenarios",
+    "title": "GTO Decision Simulator",
+    "subtitle": "Learn game-theoretic optimal strategy and sharpen your poker decisions",
+    "tabSetup": "Scenario Setup",
+    "tabSpot": "Spot Trainer",
+    "viewFullResult": "View full result →"
+  },
+  "spot": {
+    "title": "Spot Training",
+    "chooseSpot": "Choose Training Spot",
+    "continue": "Continue",
+    "back": "Back"
+  },
+  "tree": {
+    "title": "Decision Tree",
+    "nodeLabel": "Decision Point",
+    "empty": "No decision data yet",
+    "history": "Action History",
+    "emptyHeroTurn": "Everyone folded to Hero"
+  }
+}

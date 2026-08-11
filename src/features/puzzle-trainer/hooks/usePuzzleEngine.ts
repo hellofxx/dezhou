@@ -72,7 +72,8 @@ export function usePuzzleEngine(options: UsePuzzleEngineOptions): UsePuzzleEngin
   const [lastBonus, setLastBonus] = useState(0);
 
   // 当前题开始时间（用于计算单题用时）
-  const questionStartRef = useRef<number>(Date.now());
+  // PZL-07：初始为 null，首题在首次作答时定格——避免页面加载时长被计入首题用时
+  const questionStartRef = useRef<number | null>(null);
 
   const rushDuration = options.mode === 'rush' ? (options.duration ?? RUSH_DEFAULT_DURATION) : 0;
   const livesEnabled = options.mode === 'rush' && (options.enableLives ?? true);
@@ -125,11 +126,16 @@ export function usePuzzleEngine(options: UsePuzzleEngineOptions): UsePuzzleEngin
 
   const answer = useCallback(
     (optionId: string) => {
+      // PZL-07：首题首次作答时定格开始时间，排除页面加载时长
+      if (questionStartRef.current === null) {
+        questionStartRef.current = Date.now();
+      }
+      const questionStartedAt = questionStartRef.current;
       setState((prev) => {
         const next = applyAnswer(prev, {
           optionId,
           mode: options.mode,
-          questionStartedAt: questionStartRef.current,
+          questionStartedAt,
           now: Date.now(),
           inferLessonId: inferPuzzleLessonId,
         });

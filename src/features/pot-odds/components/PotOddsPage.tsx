@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { OddsCalculator } from './OddsCalculator';
 import { EVCalculator } from './EVCalculator';
 import { DrawsReference } from './DrawsReference';
@@ -6,6 +7,7 @@ import { EquityChart } from './EquityChart';
 import { useOddsCalculation } from '../hooks/useOddsCalculation';
 
 export default function PotOddsPage() {
+  const { t } = useTranslation();
   const result = useOddsCalculation();
   const [activeTab, setActiveTab] = useState<'odds' | 'ev'>('odds');
 
@@ -14,9 +16,9 @@ export default function PotOddsPage() {
       {/* Page header */}
       <div>
         <p className="section-eyebrow">Pot Odds & EV</p>
-        <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">底池赔率与 EV 计算器</h1>
+        <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{t('potOdds.page.title')}</h1>
         <p className="text-sm text-[var(--ivory-muted)] mt-1">
-          计算底池赔率、估算胜率、分析期望值，帮助你做出更好的跟注决策
+          {t('potOdds.page.subtitle')}
         </p>
       </div>
 
@@ -26,13 +28,13 @@ export default function PotOddsPage() {
           onClick={() => setActiveTab('odds')}
           className={`pill ${activeTab === 'odds' ? 'active' : ''}`}
         >
-          底池赔率
+          {t('potOdds.page.tabOdds')}
         </button>
         <button
           onClick={() => setActiveTab('ev')}
           className={`pill ${activeTab === 'ev' ? 'active' : ''}`}
         >
-          EV 分析
+          {t('potOdds.page.tabEv')}
         </button>
       </div>
 

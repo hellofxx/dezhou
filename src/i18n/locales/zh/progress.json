@@ -1,0 +1,181 @@
+{
+  "title": "进度统计",
+  "subtitle": "追踪你的训练进度与成长",
+  "totalSessions": "总训练次数",
+  "accuracy": "正确率",
+  "streak": "连续天数",
+  "achievements": "成就",
+  "welcome": "德州扑克训练平台",
+  "welcomeBack": "已完成 {{count}} 次训练，继续加油！",
+  "firstTraining": "开始你的第一次训练吧！",
+  "totalTraining": "总训练",
+  "weekSessions": "本周训练",
+  "recentSessions": "最近训练",
+  "viewAll": "查看全部",
+  "noRecords": "暂无训练记录",
+  "recentRecords": "最近训练记录",
+  "recentRecordsEmpty": "暂无训练记录，开始你的第一次训练吧！",
+  "firstVisit": {
+    "title": "欢迎来到德州扑克训练平台",
+    "description": "建议从基础入门开始你的学习之旅，快速掌握牌力、位置与底池赔率核心概念。",
+    "primaryCta": "开始基础入门",
+    "secondaryCta": "浏览全部课程"
+  },
+  "moduleEntry": {
+    "rangeTitle": "手牌范围训练详情",
+    "rangeDesc": "查看范围训练的详细统计与薄弱点",
+    "gtoTitle": "GTO 模拟器详情",
+    "gtoDesc": "查看 GTO 训练的详细统计与分析"
+  },
+  "moduleStats": {
+    "subtitle": "详细训练统计",
+    "totalSessions": "总训练次数",
+    "accuracy": "正确率",
+    "avgTime": "平均用时",
+    "accuracyTrend": "正确率趋势",
+    "noData": "暂无训练数据",
+    "recentTen": "最近 10 次训练",
+    "noRecords": "暂无记录",
+    "weakSpots": "薄弱点分析",
+    "weakNoData": "暂无数据",
+    "weakWrong": "错误 {{wrong}}/{{total}}",
+    "weakRate": "{{rate}}% 错误率"
+  },
+  "hero": {
+    "ariaLabel": "当前段位与核心进度指标",
+    "eyebrow": "战绩记录",
+    "eloScore": "综合段位评分",
+    "totalSessions": "总训练次数",
+    "accuracy": "综合正确率",
+    "streak": "连续天数",
+    "avgTime": "平均用时",
+    "basedOn": "基于 {{games}} 次答题的评分"
+  },
+  "rank": {
+    "rookie": {
+      "name": "新手",
+      "description": "刚开始接触德州扑克"
+    },
+    "entry": {
+      "name": "入门",
+      "description": "掌握基本概念"
+    },
+    "intermediate": {
+      "name": "进阶",
+      "description": "理解位置与范围"
+    },
+    "mid": {
+      "name": "中级",
+      "description": "能应用 GTO 基础"
+    },
+    "advanced": {
+      "name": "高级",
+      "description": "熟练运用剥削策略"
+    },
+    "expert": {
+      "name": "专家",
+      "description": "深度理解与实战盈利"
+    }
+  },
+  "difficulty": {
+    "label": "当前难度",
+    "beginner": "基础",
+    "intermediate": "进阶",
+    "advanced": "高级",
+    "needMore": "完成更多训练以获取建议",
+    "upgrade": "表现出色，建议升级难度",
+    "downshift": "建议降低难度巩固基础",
+    "fits": "当前难度适合你"
+  },
+  "stats": {
+    "totalSessions": "总训练次数",
+    "accuracy": "综合正确率",
+    "streak": "连续天数",
+    "avgTime": "平均用时",
+    "moduleTitle": "各模块统计",
+    "sessions": "训练次数"
+  },
+  "chart": {
+    "accuracyTrend": "正确率趋势",
+    "empty": "暂无训练数据",
+    "emptyHint": "完成训练后这里会显示你最近 14 天的正确率变化",
+    "accuracySeries": "正确率"
+  },
+  "calendar": {
+    "title": "训练打卡",
+    "currentStreak": "当前连续天数",
+    "longestStreak": "最长连续记录",
+    "last30Days": "最近 30 天",
+    "sessions": "{{count}} 次训练",
+    "tooltip": "{{day}}日: {{count}}次",
+    "less": "少",
+    "more": "多"
+  },
+  "achievementItems": {
+    "first-training": {
+      "name": "初出茅庐",
+      "description": "完成首次训练",
+      "requirement": "完成 1 次训练"
+    },
+    "streak-7": {
+      "name": "连续7天",
+      "description": "连续训练7天",
+      "requirement": "连续训练 7 天"
+    },
+    "hundred-sessions": {
+      "name": "百炼成钢",
+      "description": "完成100次训练",
+      "requirement": "完成 100 次训练"
+    },
+    "sharpshooter": {
+      "name": "神射手",
+      "description": "任意模块正确率达到90%",
+      "requirement": "任意模块正确率 90%"
+    },
+    "gto-master": {
+      "name": "GTO大师",
+      "description": "GTO模拟器正确率达80%",
+      "requirement": "GTO 正确率 80%"
+    },
+    "perfectionist": {
+      "name": "完美主义",
+      "description": "单次训练100%正确（20题以上）",
+      "requirement": "单次 20 题全对"
+    },
+    "all-rounder": {
+      "name": "全能选手",
+      "description": "所有模块各完成至少10次训练",
+      "requirement": "各模块至少 10 次"
+    },
+    "speed-king": {
+      "name": "速度之王",
+      "description": "平均答题时间低于5秒",
+      "requirement": "平均用时 < 5 秒"
+    }
+  },
+  "mode": {
+    "quiz": "答题训练",
+    "scenario": "场景模拟",
+    "practice": "练习",
+    "basics": "基础训练",
+    "drill": "专项训练",
+    "rush": "极速挑战",
+    "daily": "每日谜题",
+    "theme": "主题训练"
+  },
+  "column": {
+    "module": "模块",
+    "mode": "模式",
+    "accuracy": "正确率",
+    "time": "用时",
+    "date": "日期"
+  },
+  "replay": {
+    "title": "回放你的进步",
+    "subtitle": "看看你提升了多少",
+    "firstAttempt": "首次",
+    "lastAttempt": "最近",
+    "improvement": "+{score} 提升",
+    "noData": "完成更多课程后将显示你的进步轨迹"
+  }
+}

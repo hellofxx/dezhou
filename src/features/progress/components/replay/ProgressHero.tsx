@@ -26,7 +26,7 @@ export default function ProgressHero({ summary }: ProgressHeroProps) {
       <div className="rp-body">
         <div className="rp-plaque">
           <span className="rp-plaque-icon" aria-hidden>{rank.icon}</span>
-          <span className="rp-plaque-name">{rank.name}</span>
+          <span className="rp-plaque-name">{t(`progress.rank.${rank.name}.name`)}</span>
           <span className="rp-plaque-score">{hasEloData ? elo.overall : '—'}</span>
           <span className="rp-plaque-label">{t('progress.hero.eloScore')}</span>
         </div>
@@ -59,7 +59,7 @@ export default function ProgressHero({ summary }: ProgressHeroProps) {
         <span>
           {t('progress.hero.basedOn', { games: elo.gamesPlayed })}
         </span>
-        {hasEloData && <span className="rp-rank-desc">{rank.description}</span>}
+        {hasEloData && <span className="rp-rank-desc">{t(`progress.rank.${rank.name}.description`)}</span>}
       </div>
     </section>
   );

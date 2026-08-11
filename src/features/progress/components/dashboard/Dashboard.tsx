@@ -298,7 +298,7 @@ export default function Dashboard() {
           <VariantEloOverview />
           <button
             onClick={() => setAchievementWallOpen(true)}
-            className="panel flex items-center gap-4 p-5 text-left hover:brightness-105 transition-all"
+            className="hover-bright panel flex items-center gap-4 p-5 text-left transition-all"
             style={{ borderLeft: '3px solid var(--brass)' }}
             aria-label={t('achievements.title')}
           >

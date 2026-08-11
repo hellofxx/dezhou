@@ -46,11 +46,11 @@ export function TheoryChapterList({ chapters, completedChapters, quizScores }: T
               ) : (
                 <Circle className="w-3.5 h-3.5 text-[var(--ivory-muted)] shrink-0" />
               )}
-              <span className="text-[var(--ivory-muted)] shrink-0">第 {chapter.order} 章</span>
+              <span className="text-[var(--ivory-muted)] shrink-0">{t('theory.chapterList.chapterOrder', { order: chapter.order })}</span>
               <span className="flex-1 min-w-0 truncate text-[var(--ivory)]">{resolveChapterTitle(t, chapter)}</span>
               <span className="text-[var(--ivory-muted)] shrink-0">{chapter.duration}</span>
               {completed && typeof score === 'number' && (
-                <span className="font-numeric text-[var(--brass-bright)] shrink-0">{score}分</span>
+                <span className="font-numeric text-[var(--brass-bright)] shrink-0">{score}{t('theory.chapterList.scoreSuffix')}</span>
               )}
             </button>
           </li>

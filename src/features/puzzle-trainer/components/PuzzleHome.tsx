@@ -7,7 +7,6 @@
  * - 每日谜题卡片显示今日完成状态
  * - 主题训练卡片显示主题列表（点击进入对应主题）
  */
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -27,8 +26,9 @@ export default function PuzzleHome() {
   const dailyCompleted = usePuzzleStore((s) => s.dailyCompleted);
   const themeBest = usePuzzleStore((s) => s.themeBest);
 
-  const today = useMemo(() => new Date(), []);
-  const todayKey = useMemo(() => getDailyKey(today), [today]);
+  // PZL-05 修复：不再在 mount 时冻结 today，每次渲染实时取日期，
+  // 避免跨午夜停留时每日完成态滞后（getDailyKey 仅字符串拼接，开销可忽略）
+  const todayKey = getDailyKey(new Date());
   const isTodayCompleted = Boolean(dailyCompleted[todayKey]);
 
   return (

@@ -1,16 +1,18 @@
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { COMMON_DRAWS } from '../constants';
 import { usePotOddsStore } from '../store';
 
 export function DrawsReference() {
+  const { t } = useTranslation();
   const setOuts = usePotOddsStore((s) => s.setOuts);
   const currentOuts = usePotOddsStore((s) => s.oddsState.outs);
 
   return (
     <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">常见听牌参考</CardTitle>
-        <p className="text-xs text-[var(--ivory-dim)]">点击可快速填入 Outs 到计算器</p>
+        <CardTitle className="text-base">{t('potOdds.draws.title')}</CardTitle>
+        <p className="text-xs text-[var(--ivory-dim)]">{t('potOdds.draws.subtitle')}</p>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
@@ -28,8 +30,8 @@ export function DrawsReference() {
                 <span className="font-mono font-bold text-sm text-[var(--brass)]">{draw.outs}</span>
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-medium text-[var(--ivory)] truncate">{draw.name}</p>
-                <p className="text-xs text-[var(--ivory-dim)] mt-0.5">{draw.description}</p>
+                <p className="text-sm font-medium text-[var(--ivory)] truncate">{t(draw.name)}</p>
+                <p className="text-xs text-[var(--ivory-dim)] mt-0.5">{t(draw.description)}</p>
               </div>
             </button>
           ))}

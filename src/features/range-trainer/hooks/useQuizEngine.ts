@@ -72,7 +72,7 @@ export function buildRangeFeedback(
   const correctAction = question.correctAction;
   const explanation = isCorrect
     ? ''
-    : `最优动作是 ${correctAction}。`;
+    : 'rangeTrainer.feedback.optimalAction';
 
   // 从 context（格式 `${position} ${actionType}`）解析 actionType
   let actionType = '';
@@ -215,13 +215,14 @@ export function useQuizEngine() {
       const id = `range:${question.position}:${question.hand}`;
       const label = `${question.hand} @ ${question.position}${question.context ? ` (${question.context})` : ''}`;
       const metadata = {
-        front: `${question.hand} 在 ${question.position} 该如何行动？`,
+        front: 'rangeTrainer.srs.howToAct',
         back: question.correctAction,
         options: [
-          { text: '弃牌 Fold', isCorrect: question.correctAction === 'fold' },
-          { text: '跟注 Call', isCorrect: question.correctAction === 'call' },
-          { text: '加注 Raise', isCorrect: question.correctAction === 'raise' },
+          { text: 'rangeTrainer.srs.optionFold', isCorrect: question.correctAction === 'fold' },
+          { text: 'rangeTrainer.srs.optionCall', isCorrect: question.correctAction === 'call' },
+          { text: 'rangeTrainer.srs.optionRaise', isCorrect: question.correctAction === 'raise' },
         ],
+        params: { hand: question.hand, position: question.position },
         source: 'range' as const,
       };
 

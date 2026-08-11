@@ -49,4 +49,6 @@ export interface PotOddsQuizQuestion {
   scenario: string;
   question: string;
   options: PotOddsQuizOption[];
+  /** 平衡题标记：正确答案为弃牌/不跟注等否定项（对冲题库"肯定项为正确答案"偏差）。语义守卫依据 */
+  balanceQuestion?: boolean;
 }

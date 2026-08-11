@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { LessonSection } from '../../types';
 
 interface TheoryReferenceBlockProps {
@@ -18,6 +19,7 @@ function resolveLink(data: Record<string, unknown> | undefined): string | null {
 
 /** 理论支撑块：info 系边框 + ExternalLink 图标；data.lessonId 存在时标签可点击跳转 */
 export function TheoryReferenceBlock({ section }: TheoryReferenceBlockProps) {
+  const { t } = useTranslation();
   const href = resolveLink(section.data);
   return (
     <div className="rounded-lg border border-[var(--info)]/30 bg-[var(--info)]/10 p-4">
@@ -30,11 +32,11 @@ export function TheoryReferenceBlock({ section }: TheoryReferenceBlockProps) {
                 href={href}
                 className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--info)] underline decoration-dotted underline-offset-4 hover:text-[var(--ivory)] transition-colors"
               >
-                理论支撑
+                {t('academy.content.theoryReference')}
                 <ExternalLink className="w-3 h-3" />
               </a>
             ) : (
-              <p className="text-xs font-semibold text-[var(--info)]">理论支撑</p>
+              <p className="text-xs font-semibold text-[var(--info)]">{t('academy.content.theoryReference')}</p>
             )}
           </div>
           <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">

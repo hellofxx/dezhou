@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { HandHistory, ReplayState } from '../types';
 import { formatAction } from '../utils/handNotation';
 import { cn } from '@/shared/utils/cn';
@@ -27,13 +28,14 @@ function StreetSection({
   streetKey: ReplayState['currentStreet'];
   onJump?: (street: ReplayState['currentStreet'], idx: number) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="mb-3">
       <div className="text-[10px] uppercase tracking-wider text-[var(--ivory-muted)] mb-1 font-display font-semibold">
         {label}
       </div>
       {actions.length === 0 && (
-        <div className="text-xs text-[var(--ivory-muted)]/50">No actions</div>
+        <div className="text-xs text-[var(--ivory-muted)]/50">{t('handHistory.streets.noActions')}</div>
       )}
       {actions.map((action, idx) => {
         const isCurrentAction = isActive && idx === currentIdx - 1;
@@ -56,7 +58,16 @@ function StreetSection({
   );
 }
 
+const STREET_LABEL_KEYS: Record<ReplayState['currentStreet'], string> = {
+  preflop: 'handHistory.streets.preflop',
+  flop: 'handHistory.streets.flop',
+  turn: 'handHistory.streets.turn',
+  river: 'handHistory.streets.river',
+  showdown: 'handHistory.streets.showdown',
+};
+
 export function ActionLog({ hand, currentStreet, currentActionIndex, onJumpToAction }: ActionLogProps) {
+  const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const currentIdx = (['preflop', 'flop', 'turn', 'river', 'showdown'] as const).indexOf(currentStreet);
 
@@ -74,7 +85,7 @@ export function ActionLog({ hand, currentStreet, currentActionIndex, onJumpToAct
       className="h-full overflow-y-auto p-3 space-y-1 scrollbar-thin scrollbar-thumb-[var(--walnut-border)]"
     >
       <StreetSection
-        label="Preflop"
+        label={t(STREET_LABEL_KEYS.preflop)}
         actions={hand.streets.preflop}
         players={hand.players}
         isActive={currentStreet === 'preflop'}
@@ -83,7 +94,7 @@ export function ActionLog({ hand, currentStreet, currentActionIndex, onJumpToAct
         onJump={onJumpToAction}
       />
       <StreetSection
-        label="Flop"
+        label={t(STREET_LABEL_KEYS.flop)}
         actions={hand.streets.flop.actions}
         players={hand.players}
         isActive={currentStreet === 'flop'}
@@ -92,7 +103,7 @@ export function ActionLog({ hand, currentStreet, currentActionIndex, onJumpToAct
         onJump={onJumpToAction}
       />
       <StreetSection
-        label="Turn"
+        label={t(STREET_LABEL_KEYS.turn)}
         actions={hand.streets.turn.actions}
         players={hand.players}
         isActive={currentStreet === 'turn'}
@@ -101,7 +112,7 @@ export function ActionLog({ hand, currentStreet, currentActionIndex, onJumpToAct
         onJump={onJumpToAction}
       />
       <StreetSection
-        label="River"
+        label={t(STREET_LABEL_KEYS.river)}
         actions={hand.streets.river.actions}
         players={hand.players}
         isActive={currentStreet === 'river'}

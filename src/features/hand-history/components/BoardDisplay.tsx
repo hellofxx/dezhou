@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionStandard } from '@/shared/utils/motion';
 import { PokerCard } from '@/shared/components/poker/Card';
 import type { Card } from '@/shared/types/poker';
 
@@ -22,7 +24,7 @@ export function BoardDisplay({ cards, totalBoard, className }: BoardDisplayProps
             key={`${card.rank}-${card.suit}-${index}`}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.1, duration: 0.3 }}
+            transition={{ ...transitionStandard, delay: index * 0.1 }}
           >
             <PokerCard
               card={card}

@@ -12,6 +12,10 @@ import { useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { MOTION_DURATION } from '@/shared/utils/motion';
+// PZL-06：复用共享 cn 工具，消除本地 cnInline 重复实现
+import { cn } from '@/shared/utils/cn';
 import { Clock, ArrowLeft } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { Progress } from '@/shared/components/ui/progress';
@@ -115,8 +119,8 @@ export default function PuzzleRush() {
           </h2>
           <motion.div
             animate={isUrgent ? { scale: [1, 1.05, 1] } : {}}
-            transition={{ duration: 0.5, repeat: isUrgent ? Infinity : 0 }}
-            className={cnInline(
+            transition={{ duration: MOTION_DURATION.slow, repeat: isUrgent ? Infinity : 0 }}
+            className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 rounded-full font-numeric text-lg tracking-wider',
               isUrgent
                 ? 'bg-[var(--clay)]/20 text-[var(--clay)] border border-[var(--clay)]/40'
@@ -131,7 +135,7 @@ export default function PuzzleRush() {
         {/* 倒计时进度条 */}
         <Progress
           value={progressValue}
-          className={cnInline(
+          className={cn(
             'h-1.5',
             isUrgent ? '[&_[class*=indicator]]:bg-[var(--clay)]' : '[&_[class*=indicator]]:bg-[var(--brass-bright)]'
           )}
@@ -177,9 +181,4 @@ export default function PuzzleRush() {
       </div>
     </div>
   );
-}
-
-/** 简易 cn 内联（避免循环导入问题，仅用于此处动态拼接） */
-function cnInline(...classes: (string | false | undefined | null)[]): string {
-  return classes.filter(Boolean).join(' ');
 }

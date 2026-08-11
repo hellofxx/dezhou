@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/shared/components/ui/button';
@@ -67,6 +67,8 @@ export default function SettingsPage() {
   // P2-5.4: 每日题量上限（Session 止损）
   const dailyQuestionLimit = useProgressStore((s) => s.emotion.dailyQuestionLimit);
   const setDailyQuestionLimit = useProgressStore((s) => s.setDailyQuestionLimit);
+  const currentGameVariant = useProgressStore((s) => s.currentGameVariant);
+  const setGameVariant = useProgressStore((s) => s.setGameVariant);
 
   // P0-2: 手动使用冻结卡（PRD 5.8：设置页一键"为今天请假"，反馈成功/失败）
   const streakFreezes = useProgressStore((s) => s.streak.streakFreezes);
@@ -74,13 +76,21 @@ export default function SettingsPage() {
   const lastTrainingDate = useProgressStore((s) => s.streak.lastTrainingDate);
   const useStreakFreezeAction = useProgressStore((s) => s.useStreakFreeze);
   const [freezeStatus, setFreezeStatus] = useState<'success' | 'fail' | null>(null);
+  // PROG-12：收集状态自动复位定时器，组件卸载时统一清理，避免卸载后 setState 告警
+  const statusTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  useEffect(() => {
+    const timers = statusTimersRef.current;
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+    };
+  }, []);
   // 今日已训练时无需保护（与 streak 同为本地时区口径）
   const trainedToday = lastTrainingDate === getTodayString();
 
   const handleUseFreeze = () => {
     const ok = useStreakFreezeAction();
     setFreezeStatus(ok ? 'success' : 'fail');
-    setTimeout(() => setFreezeStatus(null), 3000);
+    statusTimersRef.current.push(setTimeout(() => setFreezeStatus(null), 3000));
   };
 
   // 开发者选项：调试解锁
@@ -140,14 +150,14 @@ export default function SettingsPage() {
             updateSettings(data.settings);
           }
           setImportStatus(t('settings.importSuccess', { defaultValue: '成功导入 {{count}} 条记录', count: data.records.length }));
-          setTimeout(() => setImportStatus(null), 3000);
+          statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 3000));
         } else {
           setImportStatus(t('settings.importInvalid', { defaultValue: '文件格式不正确' }));
-          setTimeout(() => setImportStatus(null), 3000);
+          statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 3000));
         }
       } catch {
         setImportStatus(t('settings.importFailed', { defaultValue: '导入失败：文件解析错误' }));
-        setTimeout(() => setImportStatus(null), 3000);
+        statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 3000));
       }
     };
     reader.readAsText(file);
@@ -398,7 +408,10 @@ export default function SettingsPage() {
               title={t('gameVariant.title')}
               hint={t('gameVariant.switchHint')}
             >
-              <GameVariantSelector />
+              <GameVariantSelector
+                currentVariant={currentGameVariant}
+                onChange={setGameVariant}
+              />
               <div className="hairline-brass" />
               <SettingRow
                 label={t('streak.freeze.settingLabel', { defaultValue: '冻结卡' })}

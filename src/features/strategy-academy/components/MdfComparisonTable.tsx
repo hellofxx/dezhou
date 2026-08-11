@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { MDF_COMPARISON_DATA, CalculationResult, calculateComparisonValues } from '../types/mdfComparison';
+import { useTranslation } from 'react-i18next';
+import { MDF_COMPARISON_DATA, CalculationResult, calculateComparisonValues } from '../data/mdfComparison';
 
 interface MdfComparisonTableProps {
   initialPot?: number;
   initialBet?: number;
 }
 
-const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({ 
+const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
   initialPot = 100,
-  initialBet = 50 
+  initialBet = 50,
 }) => {
+  const { t } = useTranslation();
   const [displayPot, setDisplayPot] = useState(initialPot);
   const [displayBet, setDisplayBet] = useState(initialBet);
 
@@ -28,7 +30,7 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
       <div className="border-b border-[var(--walnut-border)] mb-4">
         <div className="flex space-x-4">
           <button className="px-4 py-2 text-sm font-medium text-[var(--ivory)] bg-[var(--brass-dark)]/50 rounded-t">
-            三概念对比
+            {t('academy.mdf.tabComparison')}
           </button>
         </div>
       </div>
@@ -39,29 +41,29 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
           <thead>
             <tr className="border-b border-[var(--walnut-border)]">
               <th className="text-left py-3 px-4 text-sm font-semibold text-[var(--ivory-muted)]">
-                概念
+                {t('academy.mdf.tableConcept')}
               </th>
               <th className="text-left py-3 px-4 text-sm font-semibold text-[var(--ivory-muted)]">
-                公式
+                {t('academy.mdf.tableFormula')}
               </th>
               <th className="text-left py-3 px-4 text-sm font-semibold text-[var(--ivory-muted)]">
-                应用场景
+                {t('academy.mdf.tableApplication')}
               </th>
               <th className="text-left py-3 px-4 text-sm font-semibold text-[var(--ivory-muted)]">
-                易错点
+                {t('academy.mdf.tableWrongPoint')}
               </th>
             </tr>
           </thead>
           <tbody>
             {MDF_COMPARISON_DATA.map((row, index) => (
-              <tr 
-                key={row.conceptName}
+              <tr
+                key={row.englishName}
                 className={`border-b border-[var(--walnut-border)] ${
                   index % 2 === 0 ? 'bg-[var(--surface)]' : ''
                 }`}
               >
                 <td className="py-3 px-4 text-sm">
-                  <div className="font-medium text-[var(--ivory)]">{row.conceptName}</div>
+                  <div className="font-medium text-[var(--ivory)]">{t(row.conceptName)}</div>
                   <div className="text-xs text-[var(--ivory-muted)]">{row.englishName}</div>
                 </td>
                 <td className="py-3 px-4 text-sm">
@@ -70,12 +72,12 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
                   </code>
                 </td>
                 <td className="py-3 px-4 text-sm text-[var(--ivory)] max-w-md">
-                  {row.applicationScenario}
+                  {t(row.applicationScenario)}
                 </td>
                 <td className="py-3 px-4 text-sm">
                   <div className="flex items-start space-x-2">
                     <span className="text-[var(--brass)] text-lg mt-0.5">⚠️</span>
-                    <span className="text-[var(--warning)]">{row.wrongPoint}</span>
+                    <span className="text-[var(--warning)]">{t(row.wrongPoint)}</span>
                   </div>
                 </td>
               </tr>
@@ -88,7 +90,7 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
       <div className="border-t border-[var(--walnut-border)] pt-4 space-y-4">
         <div>
           <label className="block text-sm text-[var(--ivory-muted)] mb-2">
-            底池大小：{displayPot}BB
+            {t('academy.mdf.sliderPotLabel', { value: displayPot })}
           </label>
           <input
             type="range"
@@ -100,10 +102,10 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
             className="w-full h-2 bg-[var(--walnut-border)] rounded-lg appearance-none cursor-pointer accent-[var(--brass-bright)]"
           />
         </div>
-        
+
         <div>
           <label className="block text-sm text-[var(--ivory-muted)] mb-2">
-            下注额：{displayBet}BB
+            {t('academy.mdf.sliderBetLabel', { value: displayBet })}
           </label>
           <input
             type="range"
@@ -121,7 +123,7 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
       <div className="mt-6 grid grid-cols-3 gap-4">
         <div className="bg-[var(--surface)] rounded p-3 text-center border border-[var(--brass-deep)]/20">
           <div className="text-xs text-[var(--ivory-muted)] mb-1">
-            最小防御频率
+            {t('academy.mdf.resultMdf')}
           </div>
           <div className="text-xl font-bold text-[var(--brass-bright)]">
             {formatPercentage(calculationResult.mdf)}
@@ -130,7 +132,7 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
 
         <div className="bg-[var(--surface)] rounded p-3 text-center border border-[var(--brass-deep)]/20">
           <div className="text-xs text-[var(--ivory-muted)] mb-1">
-            所需胜率
+            {t('academy.mdf.resultReqEquity')}
           </div>
           <div className="text-xl font-bold text-[var(--success)]">
             {formatPercentage(calculationResult.requiredEquity)}
@@ -139,7 +141,7 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
 
         <div className="bg-[var(--surface)] rounded p-3 text-center border border-[var(--brass-deep)]/20">
           <div className="text-xs text-[var(--ivory-muted)] mb-1">
-            诈唬占比
+            {t('academy.mdf.resultBluff')}
           </div>
           <div className="text-xl font-bold text-[var(--warning)]">
             {formatPercentage(calculationResult.bluffFrequency)}
@@ -150,11 +152,15 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
       {/* Example Result Display */}
       <div className="mt-4 p-4 bg-[var(--brass-dark)]/10 rounded-lg border border-[var(--brass-deep)]/20">
         <p className="text-sm text-[var(--ivory)] text-center">
-          当 bet={displayBet}BB, pot={displayPot}BB 时 (bet/pot ratio = {(displayBet / displayPot).toFixed(2)}):
+          {t('academy.mdf.exampleIntro', {
+            bet: displayBet,
+            pot: displayPot,
+            ratio: (displayBet / displayPot).toFixed(2),
+          })}
         </p>
         {MDF_COMPARISON_DATA[0] && MDF_COMPARISON_DATA[1] && (
           <p className="text-xs text-[var(--ivory-muted)] text-center mt-1">
-            {MDF_COMPARISON_DATA[0].exampleResult.split('=')[0]} = {(displayPot / (displayPot + displayBet)).toFixed(1)}% | 
+            {MDF_COMPARISON_DATA[0].exampleResult.split('=')[0]} = {(displayPot / (displayPot + displayBet)).toFixed(1)}% |
             {MDF_COMPARISON_DATA[1].exampleResult.split('=')[0]} = {(displayBet / (displayPot + 2 * displayBet) * 100).toFixed(1)}%
           </p>
         )}

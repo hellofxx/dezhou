@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import MdfComparisonTable from '../../../shared/components/MdfComparisonTable';
+import { useTranslation } from 'react-i18next';
+import MdfComparisonTable from './MdfComparisonTable';
 
 interface StepProps {
   title: string;
@@ -91,6 +92,7 @@ interface MDFDerivationProps {
 }
 
 export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'derivation' | 'comparison'>('derivation');
   const [displayPot, setDisplayPot] = useState(pot);
   const [displayBet, setDisplayBet] = useState(bet);
@@ -112,7 +114,7 @@ export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
             }`}
             onClick={() => setActiveTab('derivation')}
           >
-            MDF 推导过程
+            {t('academy.mdf.tabDerivation')}
           </button>
           <button
             className={`px-4 py-2 text-sm font-medium rounded-t transition-colors ${
@@ -122,7 +124,7 @@ export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
             }`}
             onClick={() => setActiveTab('comparison')}
           >
-            三概念对比
+            {t('academy.mdf.tabComparison')}
           </button>
         </div>
       </div>
@@ -130,32 +132,32 @@ export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
       {/* Content based on active tab */}
       {activeTab === 'derivation' ? (
         <>
-          <Step title="步骤 1：计算防御频率 (MDF)">
+          <Step title={t('academy.mdf.step1Title')}>
             <FormulaBlock>
               MDF = pot / (pot + bet)
                 = {displayPot} / ({displayPot} + {displayBet})
                 = {(mdf * 100).toFixed(1)}%
             </FormulaBlock>
             <Note>
-              你需要用 top {(mdf * 100).toFixed(0)}% 的范围继续防守，以防止对手利用 bluff 获利
+              {t('academy.mdf.step1Note', { pct: (mdf * 100).toFixed(0) })}
             </Note>
           </Step>
 
-          <Step title="步骤 2：计算跟注所需胜率 (Required Equity)">
+          <Step title={t('academy.mdf.step2Title')}>
             <FormulaBlock>
               Required Equity = bet / (pot + bet)
                 = {displayBet} / ({displayPot} + {displayBet})
                 = {(requiredEquity * 100).toFixed(1)}%
             </FormulaBlock>
-            <Warning>注意：这和 MDF 不同！不要混淆。</Warning>
+            <Warning>{t('academy.mdf.step2Warning')}</Warning>
             <Note>
-              这是你跟注所需的最低胜率。如果你的实际胜率高于这个值，跟注就是有利可图的
+              {t('academy.mdf.step2Note')}
             </Note>
           </Step>
 
           <div className="border-t border-[var(--walnut-border)] pt-4 space-y-4">
             <InteractiveSlider
-              label="底池大小"
+              label={t('academy.mdf.potLabel')}
               value={displayPot}
               onChange={setDisplayPot}
               min={5}
@@ -163,7 +165,7 @@ export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
               step={1}
             />
             <InteractiveSlider
-              label="下注额"
+              label={t('academy.mdf.betLabel')}
               value={displayBet}
               onChange={setDisplayBet}
               min={1}
@@ -175,11 +177,11 @@ export function MDFDerivation({ pot, bet }: MDFDerivationProps) {
           {/* Results summary */}
           <div className="mt-6 grid grid-cols-2 gap-4">
             <div className="bg-[var(--surface)] rounded p-3 text-center">
-              <div className="text-xs text-[var(--ivory-muted)] mb-1">MDF (防御频率)</div>
+              <div className="text-xs text-[var(--ivory-muted)] mb-1">{t('academy.mdf.mdfResultLabel')}</div>
               <div className="text-xl font-bold text-[var(--brass-bright)]">{(mdf * 100).toFixed(1)}%</div>
             </div>
             <div className="bg-[var(--surface)] rounded p-3 text-center">
-              <div className="text-xs text-[var(--ivory-muted)] mb-1">跟注所需胜率</div>
+              <div className="text-xs text-[var(--ivory-muted)] mb-1">{t('academy.mdf.reqEquityResultLabel')}</div>
               <div className="text-xl font-bold text-[var(--success)]">{(requiredEquity * 100).toFixed(1)}%</div>
             </div>
           </div>

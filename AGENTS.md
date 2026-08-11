@@ -71,7 +71,7 @@ src/
 │   ├── utils/     # pokerMath / deck / elo / shareCard（纯函数）
 │   ├── constants/ # mentorStyles
 │   └── stores/    # trainingEvents（事件总线）/ debugMode（调试解锁开发者选项）
-├── i18n/          # config.ts + locales/zh.json + locales/en.json
+├── i18n/          # config.ts + moduleRegistry.ts + preload.ts + locales/{zh,en}/<module>.json
 └── styles/        # globals.css（CSS 变量）
 ```
 
@@ -288,7 +288,7 @@ src/
 #### 新增页面/组件标准路径（Workflow 单源）
 
 1. 在 `src/features/<module>/components/` 创建 `PascalCase.tsx`（按模块最小结构约定）
-2. 若引入新文案，同时更新 `src/i18n/locales/zh.json` 与 `en.json`（双语缺一不可，key 命名 `<module>.<context>.<field>`）
+2. 若引入新文案，同时更新 `src/i18n/locales/zh/<module>.json` 与 `en/<module>.json`（双语缺一不可，key 命名 `<module>.<context>.<field>`）
 3. 若新增测试，按 `vitest.config.ts` 双项目选后缀：纯函数 / store migrate 用 `.test.ts`（Node），组件冒烟用 `.test.tsx`（jsdom）
 4. 运行 `pnpm verify`（= typecheck && lint && test）确保门禁通过
 5. 若新增路由页面，由 `platform-dev` 在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册

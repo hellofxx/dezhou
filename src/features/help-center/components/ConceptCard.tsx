@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Gauge, Flame, Repeat, Award, Clock, Database, type LucideIcon } from 'lucide-react';
+import type { ConceptIconKey } from '../types';
 
-const ICON_MAP: Record<string, LucideIcon> = {
+const ICON_MAP: Record<ConceptIconKey, LucideIcon> = {
   gauge: Gauge,
   flame: Flame,
   repeat: Repeat,
@@ -13,8 +14,8 @@ const ICON_MAP: Record<string, LucideIcon> = {
 interface Props {
   /** i18n key（如 'concepts.elo'），组件用 `help.${cardKey}.title` / `.body` 渲染 */
   cardKey: string;
-  /** 图标 key（在 ICON_MAP 中查找） */
-  iconKey: string;
+  /** 图标 key（在 ICON_MAP 中查找，编译期校验） */
+  iconKey: ConceptIconKey;
 }
 
 /**

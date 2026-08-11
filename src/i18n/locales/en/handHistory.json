@@ -1,0 +1,95 @@
+{
+  "deviation": {
+    "title": "GTO Deviation Analysis",
+    "decisions": "Decisions",
+    "optimal": "Optimal Rate",
+    "avgEvLoss": "Avg EV Loss",
+    "worstDecision": "Worst Decision",
+    "loading": "Analyzing...",
+    "loadingWithProgress": "GTO analyzing ({{completed}}/{{total}})",
+    "noData": "No deviation data",
+    "streetComparison": "Street Comparison",
+    "youActed": "You: {{action}}",
+    "gtoActed": "GTO: {{action}}",
+    "avgLossPerHand": "Avg loss per hand {{evLoss}}BB",
+    "worstOnStreet": ", worst decision on {{street}}"
+  },
+  "dbError": {
+    "unavailable": "Storage unavailable, please check browser settings or private mode",
+    "quotaExceeded": "Storage quota exceeded, please clear some hand data",
+    "generic": "Data read/write failed, please try again later"
+  },
+  "replay": {
+    "prevStreet": "Previous street",
+    "prevAction": "Previous action",
+    "nextAction": "Next action",
+    "nextStreet": "Next street",
+    "play": "Play",
+    "pause": "Pause"
+  },
+  "streets": {
+    "preflop": "Preflop",
+    "flop": "Flop",
+    "turn": "Turn",
+    "river": "River",
+    "showdown": "Showdown",
+    "actions": "{{count}} actions",
+    "noActions": "No actions"
+  },
+  "list": {
+    "tabsHands": "Hands",
+    "tabsStats": "My Stats",
+    "import": "Import",
+    "clearAll": "Clear All",
+    "importedCount": "{{count}} hands imported",
+    "handNumber": "Hand #{{number}}",
+    "players": "players",
+    "wonBy": "Won by {{name}}",
+    "searchPlaceholder": "Search by hand #, player name, or site...",
+    "allSites": "All Sites",
+    "sortByDate": "Sort by Date",
+    "sortByPot": "Sort by Pot",
+    "sortBySite": "Sort by Site",
+    "statsInsufficientTitle": "Not Enough Data",
+    "statsInsufficientDesc": "At least {{min}} hands are required to show stats (currently {{count}})",
+    "heroNotFoundTitle": "No Hero Player Detected",
+    "heroNotFoundDesc": "Make sure your imported hands contain your hole cards",
+    "emptyTitle": "No Hands Imported Yet",
+    "emptyDesc": "Import your first hand to start reviewing",
+    "emptyAction": "Import Hand",
+    "noMatch": "No Matching Hands",
+    "confirmClearTitle": "Clear All Hands?",
+    "confirmClearDesc": "This will permanently delete all {{count}} imported hands.",
+    "cancel": "Cancel",
+    "deleteAll": "Delete All"
+  },
+  "stats": {
+    "suggestion": "Suggestion",
+    "vpipLow": "Low, suggest {{range}}%",
+    "vpipHigh": "High, suggest {{range}}%",
+    "positionFeedback": "Your {{position}} VPIP {{vpip}}%{{feedback}}"
+  },
+  "annotation": {
+    "export": "Export"
+  },
+  "replayPage": {
+    "notFound": "Hand not found",
+    "backToList": "Back to hand history",
+    "loading": "Loading..."
+  },
+  "importer": {
+    "pageTitle": "Import Hand History",
+    "pageDesc": "Paste hand history text or upload a .txt file. Supports PokerStars, GGPoker and PartyPoker formats.",
+    "dropHint": "Drop .txt file here or click to browse",
+    "supportsFormats": "Supports PokerStars, GGPoker, and PartyPoker hand history formats",
+    "pastePlaceholder": "Or paste hand history text here...",
+    "format": "Format: {{format}}",
+    "unknown": "Unknown",
+    "import": "Import",
+    "success": "Successfully imported {{count}} hand(s) ({{format}})",
+    "skipped": "Skipped {{skipped}} / {{total}} unparseable hand(s)",
+    "unrecognized": "Unrecognized hand history format. Please paste PokerStars, GGPoker, or PartyPoker format.",
+    "parseError": "Parse error: {{message}}",
+    "unknownError": "Unknown error"
+  }
+}

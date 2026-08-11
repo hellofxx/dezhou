@@ -50,7 +50,7 @@ export default function HandHistoryList() {
           <p className="section-eyebrow">Hand History</p>
           <h1 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">Hand History</h1>
           <p className="text-sm text-[var(--ivory-muted)] mt-1 font-numeric">
-            {hands.length} hand{hands.length !== 1 ? 's' : ''} imported
+            {t('handHistory.list.importedCount', { count: hands.length })}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function HandHistoryList() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold hover:bg-[var(--brass-bright)] transition-colors"
           >
             <Upload size={16} />
-            Import
+            {t('handHistory.list.import')}
           </button>
           {hands.length > 0 && (
             <button
@@ -67,7 +67,7 @@ export default function HandHistoryList() {
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-display font-semibold text-[var(--clay)] hover:bg-[var(--clay)]/10 transition-colors"
             >
               <Trash2 size={16} />
-              Clear All
+              {t('handHistory.list.clearAll')}
             </button>
           )}
         </div>
@@ -80,14 +80,14 @@ export default function HandHistoryList() {
           className={`pill ${activeTab === 'list' ? 'active' : ''}`}
         >
           <List size={13} className="inline mr-1" />
-          牌局列表
+          {t('handHistory.list.tabsHands')}
         </button>
         <button
           onClick={() => setActiveTab('stats')}
           className={`pill ${activeTab === 'stats' ? 'active' : ''}`}
         >
           <BarChart3 size={13} className="inline mr-1" />
-          我的统计
+          {t('handHistory.list.tabsStats')}
         </button>
       </div>
 
@@ -99,15 +99,15 @@ export default function HandHistoryList() {
               <div className="w-16 h-16 rounded-full bg-[var(--walnut-raised)]/40 flex items-center justify-center mb-4">
                 <BarChart3 size={24} className="text-[var(--ivory-muted)]" />
               </div>
-              <p className="text-sm text-[var(--ivory-dim)] font-display mb-1">数据不足</p>
+              <p className="text-sm text-[var(--ivory-dim)] font-display mb-1">{t('handHistory.list.statsInsufficientTitle')}</p>
               <p className="text-xs text-[var(--ivory-muted)]">
-                至少需要 {MIN_HANDS_FOR_STATS} 手牌局才能显示统计数据（当前 {hands.length} 手）
+                {t('handHistory.list.statsInsufficientDesc', { min: MIN_HANDS_FOR_STATS, count: hands.length })}
               </p>
             </div>
           ) : !heroName ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-sm text-[var(--ivory-dim)] font-display mb-2">未检测到 Hero 玩家</p>
-              <p className="text-xs text-[var(--ivory-muted)]">请确保导入的牌局中包含你的底牌信息</p>
+              <p className="text-sm text-[var(--ivory-dim)] font-display mb-2">{t('handHistory.list.heroNotFoundTitle')}</p>
+              <p className="text-xs text-[var(--ivory-muted)]">{t('handHistory.list.heroNotFoundDesc')}</p>
             </div>
           ) : stats ? (
             <HandStatsPanel stats={stats} />
@@ -126,7 +126,7 @@ export default function HandHistoryList() {
                 type="text"
                 value={filter.search}
                 onChange={(e) => setFilter({ search: e.target.value })}
-                placeholder="Search by hand #, player name, or site..."
+                placeholder={t('handHistory.list.searchPlaceholder')}
                 className="w-full pl-9 pr-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] focus:outline-none focus:border-[var(--brass)]/50"
               />
             </div>
@@ -135,7 +135,7 @@ export default function HandHistoryList() {
               onChange={(e) => setFilter({ site: e.target.value || undefined })}
               className="shrink-0 px-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] focus:outline-none"
             >
-              <option value="">All Sites</option>
+              <option value="">{t('handHistory.list.allSites')}</option>
               <option value="pokerstars">PokerStars</option>
               <option value="ggpoker">GGPoker</option>
               <option value="partypoker">PartyPoker</option>
@@ -146,9 +146,9 @@ export default function HandHistoryList() {
               onChange={(e) => setFilter({ sortBy: e.target.value as 'date' | 'pot' | 'site' })}
               className="shrink-0 px-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] focus:outline-none"
             >
-              <option value="date">Sort by Date</option>
-              <option value="pot">Sort by Pot</option>
-              <option value="site">Sort by Site</option>
+              <option value="date">{t('handHistory.list.sortByDate')}</option>
+              <option value="pot">{t('handHistory.list.sortByPot')}</option>
+              <option value="site">{t('handHistory.list.sortBySite')}</option>
             </select>
           </div>
 
@@ -157,16 +157,16 @@ export default function HandHistoryList() {
             hands.length === 0 ? (
               <EmptyState
                 icon="📋"
-                title="还没有导入任何牌局"
-                description="导入你的第一手牌局，开始复盘分析"
-                action={{ label: '导入牌局', onClick: () => navigate('/hand-history/import') }}
+                title={t('handHistory.list.emptyTitle')}
+                description={t('handHistory.list.emptyDesc')}
+                action={{ label: t('handHistory.list.emptyAction'), onClick: () => navigate('/hand-history/import') }}
               />
             ) : (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="w-16 h-16 rounded-full bg-[var(--walnut-raised)]/40 flex items-center justify-center mb-4">
                   <Search size={24} className="text-[var(--ivory-muted)]" />
                 </div>
-                <p className="text-sm text-[var(--ivory-muted)]">没有匹配的牌局</p>
+                <p className="text-sm text-[var(--ivory-muted)]">{t('handHistory.list.noMatch')}</p>
               </div>
             )
           ) : (
@@ -183,11 +183,11 @@ export default function HandHistoryList() {
                         {hand.site}
                       </span>
                       <span className="text-sm font-display font-medium text-[var(--ivory)] truncate">
-                        Hand #{hand.handNumber}
+                        {t('handHistory.list.handNumber', { number: hand.handNumber })}
                       </span>
                     </div>
                     <div className="text-xs text-[var(--ivory-muted)] font-numeric">
-                      {hand.gameType} · ${hand.stakes.smallBlind}/${hand.stakes.bigBlind} · {hand.players.length} players · {formatDate(hand.timestamp)}
+                      {hand.gameType} · ${hand.stakes.smallBlind}/${hand.stakes.bigBlind} · {hand.players.length} {t('handHistory.list.players')} · {formatDate(hand.timestamp)}
                     </div>
                   </div>
 
@@ -196,7 +196,7 @@ export default function HandHistoryList() {
                       <div className="text-sm font-bold text-[var(--brass-bright)] font-numeric">${hand.pot.toFixed(2)}</div>
                       {hand.winner && (
                         <div className="text-[10px] text-[var(--ivory-muted)] truncate max-w-[160px]">
-                          Won by {hand.players[hand.winner.playerId]?.name ?? '?'}
+                          {t('handHistory.list.wonBy', { name: hand.players[hand.winner.playerId]?.name ?? '?' })}
                         </div>
                       )}
                     </div>
@@ -219,20 +219,20 @@ export default function HandHistoryList() {
       {confirmClear && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--felt-deep)]/70" onClick={() => setConfirmClear(false)}>
           <div className="bg-[var(--felt)] rounded-xl p-6 max-w-sm mx-4 border border-[var(--walnut-border)]" onClick={e => e.stopPropagation()}>
-            <h3 className="text-sm font-display font-semibold text-[var(--ivory)] mb-2">Clear all hands?</h3>
-            <p className="text-xs text-[var(--ivory-muted)] mb-4">This will permanently delete all {hands.length} imported hands.</p>
+            <h3 className="text-sm font-display font-semibold text-[var(--ivory)] mb-2">{t('handHistory.list.confirmClearTitle')}</h3>
+            <p className="text-xs text-[var(--ivory-muted)] mb-4">{t('handHistory.list.confirmClearDesc', { count: hands.length })}</p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setConfirmClear(false)}
                 className="px-3 py-1.5 text-xs rounded-lg text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]/60"
               >
-                Cancel
+                {t('handHistory.list.cancel')}
               </button>
               <button
                 onClick={() => { clearAll(); setConfirmClear(false); }}
-                className="px-3 py-1.5 text-xs rounded-lg bg-[var(--clay)] text-[var(--ivory)] hover:brightness-110"
+                className="px-3 py-1.5 text-xs rounded-lg bg-[var(--clay)]/15 text-[var(--clay)] border border-[var(--clay)]/40 hover:bg-[var(--clay)]/25 transition-colors"
               >
-                Delete All
+                {t('handHistory.list.deleteAll')}
               </button>
             </div>
           </div>

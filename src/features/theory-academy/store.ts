@@ -57,6 +57,9 @@ export const useTheoryStore = create<TheoryStore>()(
         })),
 
       completeChapter: (chapterId, score, totalQuestions, correctAnswers) => {
+        // THY-12：幂等守卫 —— 重测（章节已首次完成）不重复发训练事件，
+        // 避免事件总线累积重复记录；状态侧已幂等（completedChapters 去重 / quizScores 取最高）
+        const alreadyCompleted = get().progress.completedChapters.includes(chapterId);
         // 先同步提交状态（纯状态归约，不在 updater 内做副作用）
         set((state) => ({
           progress: {
@@ -70,6 +73,7 @@ export const useTheoryStore = create<TheoryStore>()(
             },
           },
         }));
+        if (alreadyCompleted) return;
         // 状态提交后再发事件：确保订阅方（progress addRecord / 成就检查）同步读取时
         // 看到的是含本章的最新 completedChapters，也避免 updater 被重放导致重复发事件
         trainingEvents.emit({

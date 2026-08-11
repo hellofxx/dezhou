@@ -1,0 +1,25 @@
+{
+  "grade": {
+    "best": "最优决策！",
+    "correct": "正确决策",
+    "inaccuracy": "不够精确",
+    "wrong": "决策错误",
+    "blunder": "严重错误",
+    "optimal": "[deprecated] 最优决策！",
+    "acceptable": "[deprecated] 可接受决策",
+    "error": "[deprecated] 决策错误"
+  },
+  "message": {
+    "best": "最优决策！🌟",
+    "correct": "正确！这个决策是合理的",
+    "inaccuracy": "不太精确，还有更好的选择",
+    "wrong": "这个决策损失了 {{evLoss}} BB",
+    "blunder": "严重错误！损失了 {{evLoss}} BB",
+    "optimal": "[deprecated] 最优决策！",
+    "acceptable": "[deprecated] 不错，但还有更好的选择",
+    "error": "[deprecated] 这个决策损失了 {{evLoss}} BB"
+  },
+  "evLossLabel": "EV 损失",
+  "correctAction": "最优动作",
+  "goReview": "去复习 →"
+}

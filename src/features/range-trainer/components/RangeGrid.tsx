@@ -61,7 +61,7 @@ const GridCell = React.memo(function GridCell({
         'aspect-square border border-black/20',
         bgClass,
         isHighlighted && 'ring-2 ring-[var(--brass-bright)] ring-offset-1 ring-offset-[var(--felt)] scale-110 z-10',
-        !isSelected && !isHighlighted && 'hover:brightness-125 hover:ring-1 hover:ring-[var(--brass)]/40'
+        !isSelected && !isHighlighted && 'hover-bright-lg hover:ring-1 hover:ring-[var(--brass)]/40'
       )}
       onClick={() => onClick?.(hand)}
       onMouseEnter={() => onHover?.(hand)}

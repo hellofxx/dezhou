@@ -61,14 +61,18 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-medium text-[var(--ivory)] truncate">
-                          {rec.title}
+                          {(() => {
+                            const resolved = t(rec.title, rec.titleParams);
+                            // i18n key 缺失回退：若 i18next 返回原 key 字符串，使用 titleParams.title（数据层硬编码兜底）
+                            return resolved === rec.title ? (rec.titleParams?.title ?? resolved) : resolved;
+                          })()}
                         </span>
                         <span className={`text-[10px] px-1.5 py-0.5 rounded ${getReasonColor(rec.reason)}`}>
-                          {rec.reason}
+                          {t(`dashboard.dataPlan.reason.${rec.reason}`)}
                         </span>
                       </div>
                       <p className="text-xs text-[var(--ivory-muted)] mt-0.5 line-clamp-1">
-                        {rec.description}
+                        {t(rec.description, rec.descParams)}
                       </p>
                       <div className="flex items-center gap-3 mt-2">
                         <span className="text-[10px] text-[var(--ivory-dim)]">

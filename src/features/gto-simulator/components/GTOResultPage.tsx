@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Target, Clock, TrendingDown, AlertTriangle } from 'lucide-react';
 import { useGTOSimulatorStore } from '../store';
@@ -10,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui
 import { MOTION_DURATION } from '@/shared/utils/motion';
 
 export default function GTOResultPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { lastResult, config, session } = useGTOSimulatorStore();
 
@@ -33,12 +35,12 @@ export default function GTOResultPage() {
   if (!lastResult) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="text-[var(--ivory-muted)] mb-4">没有结果数据</div>
+        <div className="text-[var(--ivory-muted)] mb-4">{t('gto.result.noData')}</div>
         <button
           onClick={() => navigate('/gto-simulator')}
           className="px-4 py-2 rounded-md bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-medium font-display"
         >
-          返回主页
+          {t('gto.session.backHome')}
         </button>
       </div>
     );

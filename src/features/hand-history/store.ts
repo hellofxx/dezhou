@@ -3,6 +3,7 @@ import i18n from '@/i18n/config';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HandHistory, ReplayState, HandFilter } from './types';
+import { clearDeviationCache } from './utils/gtoDeviation';
 
 // ─── trainingEvents.emit 说明 ─────────────────────────────
 // hand-history 是手牌复盘分析工具（导入/回放/统计），非答题训练模块，
@@ -50,11 +51,28 @@ function getDB(): Promise<IDBDatabase> {
 async function dbGetAll(): Promise<HandHistory[]> {
   const db = await getDB();
   return new Promise((resolve, reject) => {
+    // HH-06：游标分批读取，避免大数据量下 getAll 一次性构造大数组阻塞主线程；
+    // 每批通过 microtask 让出事件循环，UI 可渐进呈现（API 兼容原 getAll）
     const tx = db.transaction(STORE_NAME, 'readonly');
     const store = tx.objectStore(STORE_NAME);
-    const req = store.getAll();
-    req.onsuccess = () => resolve(req.result);
+    const results: HandHistory[] = [];
+    const BATCH = 200;
+    const req = store.openCursor();
     req.onerror = () => reject(req.error);
+    req.onsuccess = () => {
+      const cursor = req.result;
+      if (!cursor) {
+        resolve(results);
+        return;
+      }
+      results.push(cursor.value as HandHistory);
+      if (results.length % BATCH === 0) {
+        // 让出主线程后继续遍历
+        setTimeout(() => cursor.continue(), 0);
+      } else {
+        cursor.continue();
+      }
+    };
   });
 }
 
@@ -249,6 +267,8 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
   deleteHand: async (id) => {
     try {
       await dbDelete(id);
+      // P1 fix: 删除牌局后同步清空偏差分析缓存，避免重导入同 id 显示陈旧数据
+      clearDeviationCache();
       set((state) => ({ hands: state.hands.filter(h => h.id !== id), dbError: null }));
     } catch (err: unknown) {
       set({ dbError: classifyDBError(err) });
@@ -258,6 +278,8 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
   clearAll: async () => {
     try {
       await dbClear();
+      // P1 fix: 清空全部牌局时同步清空偏差分析缓存
+      clearDeviationCache();
       set({ hands: [], dbError: null });
     } catch (err: unknown) {
       set({ dbError: classifyDBError(err) });
@@ -396,7 +418,8 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
       result = result.filter(h => h.timestamp <= filter.dateTo!);
     }
 
-    if (filter.minPot) {
+    // HH-09：显式数值判断（minPot=0 也应被识别为「任意底池」，避免 truthiness 语义模糊）
+    if (typeof filter.minPot === 'number' && filter.minPot > 0) {
       result = result.filter(h => h.pot >= filter.minPot!);
     }
 

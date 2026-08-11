@@ -15,6 +15,8 @@ export interface ReviewItemMetadata {
   }>;
   source?: 'range' | 'odds' | 'gto' | 'strategy';  // 来源模块
   scenario?: string;                       // 场景描述（如 pot-odds 的 scenario 文本）
+  /** i18n 插值参数：front/options.text 为带 {{var}} 的 key 时透传给 t() */
+  params?: Record<string, string | number>;
 }
 
 // 知识点复习项

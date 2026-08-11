@@ -35,7 +35,9 @@ type ActionTier = 'passive' | 'standard' | 'aggressive';
 function getActionTier(category: number): ActionTier {
   if (category <= 1) return 'passive';
   if (category <= 5) return 'standard';
-  return 'aggressive';
+  if (category === 6) return 'aggressive';
+  // PZL-04：未知 category（非 1-6）归入中性档，避免误标 aggressive
+  return 'standard';
 }
 
 /** 每档固定一种 gauge 点色（与按钮主体色同源） */

@@ -39,12 +39,16 @@ describe('pot-odds 题库选项排序（quizOrder）', () => {
     }
   });
 
-  it('内容平衡：正确选项文本含"否"或"弃牌"的题目 ≥ 5', () => {
-    const negativeCorrect = QUIZ_QUESTIONS.filter((q) => {
-      const correct = q.options.find((o) => o.isCorrect);
-      return correct !== undefined && (correct.text.includes('否') || correct.text.includes('弃牌'));
-    });
-    expect(negativeCorrect.length).toBeGreaterThanOrEqual(5);
+  it('内容平衡：否定项平衡题（balanceQuestion 标记）≥ 5', () => {
+    // i18n 化后选项文本为 key（potOdds.quizBank.qN.optX.text），无法再从文本判语义。
+    // 平衡题语义由数据层的 balanceQuestion 标记显式声明（id 15-19，正确答案为弃牌/不跟注否定项）。
+    const balanceQuestions = QUIZ_QUESTIONS.filter((q) => q.balanceQuestion === true);
+    expect(balanceQuestions.length).toBeGreaterThanOrEqual(5);
+    // 每题正确答案存在且为 1 个（平衡题仍是有效题）
+    for (const q of balanceQuestions) {
+      const correct = q.options.filter((o) => o.isCorrect);
+      expect(correct, `平衡题 ${q.id} 正确选项数量异常`).toHaveLength(1);
+    }
   });
 
   it('确定性：两次处理结果完全一致', () => {

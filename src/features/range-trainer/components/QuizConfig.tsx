@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Position } from '@/shared/types/position';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
@@ -16,13 +17,13 @@ import { useRangeTrainerStore } from '../store';
 import { SIX_MAX_POSITIONS, ACTION_TYPES, POSITION_UNLOCK_THRESHOLDS, isPositionUnlocked } from '../constants';
 
 const TIME_OPTIONS = [
-  { value: '0', label: '无限时' }, { value: '5', label: '5 秒' }, { value: '10', label: '10 秒' },
-  { value: '15', label: '15 秒' }, { value: '30', label: '30 秒' },
+  { value: '0' }, { value: '5' }, { value: '10' },
+  { value: '15' }, { value: '30' },
 ];
 
 const QUESTION_COUNT_OPTIONS = [
-  { value: '10', label: '10 题' }, { value: '20', label: '20 题' },
-  { value: '30', label: '30 题' }, { value: '50', label: '50 题' },
+  { value: '10' }, { value: '20' },
+  { value: '30' }, { value: '50' },
 ];
 
 /** 带图标标签的下拉配置项（本文件内复用，压缩四段重复 JSX） */
@@ -73,6 +74,7 @@ export function QuizConfig({
   position, actionType, timeLimit, questionCount,
   onPositionChange, onActionTypeChange, onTimeLimitChange, onQuestionCountChange, onStart,
 }: QuizConfigProps) {
+  const { t } = useTranslation();
   const presets = useRangeTrainerStore((s) => s.presets);
   const preflopElo = useProgressStore((s) => s.elo.preflop);
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
@@ -112,29 +114,30 @@ export function QuizConfig({
           <div className="mx-auto mb-2 w-12 h-12 rounded-xl bg-[var(--brass)]/10 flex items-center justify-center">
             <HelpCircle className="w-6 h-6 text-[var(--brass)]" />
           </div>
-          <CardTitle className="text-xl">范围测验</CardTitle>
+          <CardTitle className="text-xl">{t('rangeTrainer.config.title')}</CardTitle>
           <CardDescription>
-            测试你对各位置开牌范围的掌握程度
+            {t('rangeTrainer.config.subtitle')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           {/* 位置选择（P1A-05：锁定位置禁用 + 阈值提示） */}
-          <ConfigField icon={<Zap className="w-4 h-4" />} label="位置" value={position} onChange={(v) => onPositionChange(v as Position)}>
+          <ConfigField icon={<Zap className="w-4 h-4" />} label={t('rangeTrainer.config.position')} value={position} onChange={(v) => onPositionChange(v as Position)}>
             {positionOptions.map((pos) => {
               const unlocked = isUnlocked(pos);
               const threshold = POSITION_UNLOCK_THRESHOLDS[pos];
+              const lockHint = t('rangeTrainer.rangeSelect.unlockRequirement', { threshold });
               return (
                 <SelectItem
                   key={pos}
                   value={pos}
                   disabled={!unlocked}
-                  title={unlocked ? pos : `需 preflop ELO ≥ ${threshold} 解锁`}
+                  title={unlocked ? pos : lockHint}
                 >
                   <span className="inline-flex items-center gap-1.5">
                     {!unlocked && <Lock className="w-3 h-3" />}
                     {pos}
                     {!unlocked && (
-                      <span className="text-xs opacity-70">需 preflop ELO ≥ {threshold} 解锁</span>
+                      <span className="text-xs opacity-70">{lockHint}</span>
                     )}
                   </span>
                 </SelectItem>
@@ -143,7 +146,7 @@ export function QuizConfig({
           </ConfigField>
 
           {/* 动作类型（P1A-01/P1A-10：仅列出当前位置实际存在题库的动作） */}
-          <ConfigField icon={<Zap className="w-4 h-4" />} label="动作类型" value={actionType} onChange={onActionTypeChange}>
+          <ConfigField icon={<Zap className="w-4 h-4" />} label={t('rangeTrainer.config.actionType')} value={actionType} onChange={onActionTypeChange}>
             {actionOptions.map((at) => (
               <SelectItem key={at.value} value={at.value}>
                 {at.label}
@@ -151,25 +154,25 @@ export function QuizConfig({
             ))}
           </ConfigField>
 
-          <ConfigField icon={<Clock className="w-4 h-4" />} label="每题限时" value={String(timeLimit)} onChange={(v) => onTimeLimitChange(Number(v))}>
+          <ConfigField icon={<Clock className="w-4 h-4" />} label={t('rangeTrainer.config.timeLimit')} value={String(timeLimit)} onChange={(v) => onTimeLimitChange(Number(v))}>
             {TIME_OPTIONS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
+                {opt.value === '0' ? t('rangeTrainer.config.timeUnlimited') : t('rangeTrainer.config.timeSeconds', { count: Number(opt.value) })}
               </SelectItem>
             ))}
           </ConfigField>
 
-          <ConfigField icon={<Hash className="w-4 h-4" />} label="题目数量" value={String(questionCount)} onChange={(v) => onQuestionCountChange(Number(v))}>
+          <ConfigField icon={<Hash className="w-4 h-4" />} label={t('rangeTrainer.config.questionCount')} value={String(questionCount)} onChange={(v) => onQuestionCountChange(Number(v))}>
             {QUESTION_COUNT_OPTIONS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
+                {t('rangeTrainer.config.questionUnit', { count: Number(opt.value) })}
               </SelectItem>
             ))}
           </ConfigField>
 
           {/* P1A-01 防御兜底：过滤后理论上不可达，仍保留提示避免静默无响应 */}
           {!hasPreset && (
-            <p className="text-xs text-center text-[var(--clay)]">该组合暂无题库</p>
+            <p className="text-xs text-center text-[var(--clay)]">{t('rangeTrainer.config.noPreset')}</p>
           )}
 
           <Button
@@ -177,11 +180,11 @@ export function QuizConfig({
             disabled={startDisabled}
             className="w-full bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] h-12 text-base font-semibold font-display tracking-wide disabled:opacity-40"
           >
-            开始训练
+            {t('rangeTrainer.config.start')}
           </Button>
 
           <p className="text-xs text-center text-[var(--ivory-dim)]">
-            快捷键：1=Fold · 2=Call · 3=Raise · Esc=暂停
+            {t('rangeTrainer.config.shortcuts')}
           </p>
         </CardContent>
       </Card>

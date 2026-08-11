@@ -7,6 +7,8 @@
  */
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionStandard } from '@/shared/utils/motion';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import ActionBoard from './ActionBoard';
 import { PuzzleCardFeedback } from './PuzzleCardFeedback';
@@ -56,7 +58,7 @@ export function PuzzleCard({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={transitionStandard}
       className="space-y-3"
     >
       {/* 顶部状态条 */}

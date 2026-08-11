@@ -1,0 +1,17 @@
+{
+  "title": "对手形象",
+  "profiles": "对手画像",
+  "tight": "紧手型",
+  "loose": "松手型",
+  "aggressive": "激进型",
+  "passive": "被动型",
+  "tag": "TAG（紧凶）",
+  "lag": "LAG（松凶）",
+  "nit": "NIT（极紧）",
+  "callingStation": "跟注站",
+  "vpip": "VPIP",
+  "pfr": "PFR",
+  "af": "激进度",
+  "readOpponent": "阅读对手",
+  "adjustStrategy": "调整策略"
+}

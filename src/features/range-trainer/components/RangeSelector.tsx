@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils';
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -13,6 +14,7 @@ import type { RangePreset } from '../types';
 import { SIX_MAX_POSITIONS, ACTION_TYPES, POSITION_UNLOCK_THRESHOLDS, isPositionUnlocked } from '../constants';
 import { useProgressStore } from '@/features/progress/store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
+import { resolvePresetName } from '../utils/presetI18n';
 
 interface RangeSelectorProps {
   selectedPosition: Position;
@@ -33,6 +35,7 @@ export function RangeSelector({
   onPresetSelect,
   positions,
 }: RangeSelectorProps) {
+  const { t } = useTranslation();
   // P4 修复（4.4-P1-1）：基于 preflop ELO 的位置渐进解锁
   const preflopElo = useProgressStore((s) => s.elo.preflop);
   // 调试解锁：解除全部位置门禁
@@ -49,19 +52,20 @@ export function RangeSelector({
     <div className="space-y-4">
       {/* 位置选择 */}
       <div>
-        <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">位置</h3>
+        <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">{t('rangeTrainer.rangeSelect.position')}</h3>
         <div className="flex flex-wrap gap-1.5">
           {displayPositions.map((pos) => {
             const unlocked = debugUnlock || isPositionUnlocked(pos, preflopElo);
             const threshold = POSITION_UNLOCK_THRESHOLDS[pos];
+            const lockHint = t('rangeTrainer.rangeSelect.unlockRequirement', { threshold });
             return (
               <Button
                 key={pos}
                 variant={selectedPosition === pos ? 'default' : 'outline'}
                 size="sm"
                 disabled={!unlocked}
-                title={unlocked ? pos : `需 preflop ELO ≥ ${threshold} 解锁`}
-                aria-label={unlocked ? pos : `需 preflop ELO ≥ ${threshold} 解锁`}
+                title={unlocked ? pos : lockHint}
+                aria-label={unlocked ? pos : lockHint}
                 className={cn(
                   'text-xs px-4 min-h-11',
                   selectedPosition === pos && 'bg-[var(--brass)] hover:bg-[var(--brass-bright)]',
@@ -79,7 +83,7 @@ export function RangeSelector({
 
       {/* 动作类型选择 */}
       <div>
-        <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">动作类型</h3>
+        <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">{t('rangeTrainer.rangeSelect.actionType')}</h3>
         <div className="flex flex-wrap gap-1.5">
           {ACTION_TYPES.map((at) => (
             <Button
@@ -101,18 +105,21 @@ export function RangeSelector({
       {/* 预设范围快速选择 */}
       {filteredPresets.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">预设范围</h3>
+          <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">{t('rangeTrainer.rangeSelect.preset')}</h3>
           <Select onValueChange={(val) => {
             const preset = presets.find((p) => p.id === val);
             if (preset) onPresetSelect(preset);
           }}>
             <SelectTrigger className="w-full bg-[var(--surface)] border-[var(--surface-raised)]">
-              <SelectValue placeholder="选择预设范围..." />
+              <SelectValue placeholder={t('rangeTrainer.rangeSelect.presetPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
               {filteredPresets.map((preset) => (
                 <SelectItem key={preset.id} value={preset.id}>
-                  {preset.name} ({preset.hands.length}手牌)
+                  {t('rangeTrainer.rangeSelect.presetHands', {
+                    name: resolvePresetName(t, preset),
+                    count: preset.hands.length,
+                  })}
                 </SelectItem>
               ))}
             </SelectContent>

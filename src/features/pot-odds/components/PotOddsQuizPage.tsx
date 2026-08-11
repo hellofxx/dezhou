@@ -2,6 +2,8 @@ import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, Trophy, Clock, Target, RotateCcw, Calculator } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
@@ -28,11 +30,12 @@ import { Link } from 'react-router-dom';
 // 数值选项题（outs 计算）按数值升序，其余按题目 id 种子洗牌（确定性，跨用户一致）。
 const ORDERED_QUIZ_QUESTIONS: PotOddsQuizQuestion[] = QUIZ_QUESTIONS.map((q) => orderQuizOptions(q));
 
+// 存 i18n key，渲染时经 t() 解析（potOdds.quiz.*）
 const CATEGORY_LABELS: Record<string, string> = {
-  'odds-judgment': '赔率判断',
-  'outs-calculation': 'Outs 计算',
-  'implied-odds': '隐含赔率',
-  'reverse-implied': '反向隐含赔率',
+  'odds-judgment': 'potOdds.quiz.categoryJudgment',
+  'outs-calculation': 'potOdds.quiz.categoryOuts',
+  'implied-odds': 'potOdds.quiz.categoryImplied',
+  'reverse-implied': 'potOdds.quiz.categoryReverse',
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -157,6 +160,8 @@ export default function PotOddsQuizPage() {
     setRescueUsed(false);
     setRescueQuestions([]);
     setUserAnswers([]);
+    // ODDS-05：重新开始时清空上一题遗留的决策反馈
+    setDecisionFeedback(null);
     sessionIdRef.current = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
     startTimeRef.current = Date.now();
   }, []);
@@ -211,28 +216,28 @@ export default function PotOddsQuizPage() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          transition={transitionSlow}
           className="w-full max-w-md text-center"
         >
           <Trophy className="w-16 h-16 text-[var(--brass-bright)] mx-auto mb-4" />
-          <h2 className="font-display text-3xl text-[var(--ivory)] mb-2">训练完成！</h2>
-          <p className="text-[var(--ivory-muted)] mb-8">赔率速算训练结果</p>
+          <h2 className="font-display text-3xl text-[var(--ivory)] mb-2">{t('potOdds.quiz.doneTitle')}</h2>
+          <p className="text-[var(--ivory-muted)] mb-8">{t('potOdds.quiz.doneSubtitle')}</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="rounded-xl bg-[var(--walnut-raised)] p-5">
               <p className="font-numeric text-3xl text-[var(--brass-bright)]">{accuracy}%</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">正确率</p>
+              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('potOdds.quiz.accuracy')}</p>
             </div>
             <div className="rounded-xl bg-[var(--walnut-raised)] p-5">
               <p className="font-numeric text-3xl text-[var(--ivory)]">{avgTime}s</p>
               <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-                <Clock className="w-3 h-3" /> 平均用时
+                <Clock className="w-3 h-3" /> {t('potOdds.quiz.avgTime')}
               </p>
             </div>
             <div className="rounded-xl bg-[var(--walnut-raised)] p-5">
               <p className="font-numeric text-3xl text-[var(--ivory)]">{correctCount}/{totalQuestions}</p>
               <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-                <Target className="w-3 h-3" /> 答对
+                <Target className="w-3 h-3" /> {t('potOdds.quiz.correctCount')}
               </p>
             </div>
           </div>
@@ -240,14 +245,14 @@ export default function PotOddsQuizPage() {
           {/* Performance message */}
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4 mb-8">
             <p className="text-sm text-[var(--ivory-dim)]">
-              {accuracy >= 90 ? '🎯 出色！你的赔率计算能力非常扎实！' :
-               accuracy >= 70 ? '👍 不错！继续练习可以更加熟练。' :
-               accuracy >= 50 ? '📚 还需要加强，建议复习赔率计算基础。' :
-               '💡 建议先学习底池赔率和 Outs 计算的基础知识。'}
+              {accuracy >= 90 ? t('potOdds.quiz.gradeExcellent') :
+               accuracy >= 70 ? t('potOdds.quiz.gradeGood') :
+               accuracy >= 50 ? t('potOdds.quiz.gradeFair') :
+               t('potOdds.quiz.gradePoor')}
             </p>
             {lastQuestionCorrect && (
               <p className="text-xs text-[var(--sage)] mt-2 font-display">
-                ✓ 最后一题答对，以成功收尾！
+                {t('potOdds.quiz.lastCorrect')}
               </p>
             )}
           </div>
@@ -257,13 +262,13 @@ export default function PotOddsQuizPage() {
               onClick={handleRestart}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
             >
-              <RotateCcw className="w-4 h-4" /> 再来一轮
+              <RotateCcw className="w-4 h-4" /> {t('potOdds.quiz.restart')}
             </button>
             <button
               onClick={() => navigate('/pot-odds')}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[var(--ivory-dim)]/30 text-[var(--ivory)] font-semibold text-sm hover:bg-[var(--walnut-raised)] transition-colors"
             >
-              <Calculator className="w-4 h-4" /> 返回计算器
+              <Calculator className="w-4 h-4" /> {t('potOdds.quiz.backToCalc')}
             </button>
           </div>
         </motion.div>
@@ -283,11 +288,11 @@ export default function PotOddsQuizPage() {
             onClick={() => navigate('/pot-odds')}
             className="inline-flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> 返回
+            <ArrowLeft className="w-4 h-4" /> {t('potOdds.quiz.back')}
           </button>
-          <h1 className="font-display text-xl text-[var(--ivory)]">赔率速算训练</h1>
+          <h1 className="font-display text-xl text-[var(--ivory)]">{t('potOdds.quiz.title')}</h1>
           <span className="text-xs text-[var(--ivory-muted)]">
-            {CATEGORY_LABELS[currentQuestion.category]}
+            {t(CATEGORY_LABELS[currentQuestion.category] ?? 'potOdds.quiz.categoryJudgment')}
           </span>
         </div>
 
@@ -298,7 +303,7 @@ export default function PotOddsQuizPage() {
               className="h-full rounded-full bg-[var(--brass-bright)]"
               initial={{ width: 0 }}
               animate={{ width: `${(currentIndex / totalQuestions) * 100}%` }}
-              transition={{ duration: 0.3 }}
+              transition={transitionStandard}
             />
           </div>
           <span className="text-xs text-[var(--ivory-muted)] shrink-0">
@@ -318,7 +323,7 @@ export default function PotOddsQuizPage() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.3 }}
+            transition={transitionStandard}
           >
             <div className="rounded-xl bg-[var(--felt)] border border-[var(--felt-light)] p-6 mb-5 relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
@@ -326,11 +331,11 @@ export default function PotOddsQuizPage() {
                 <div className="flex items-start gap-3 mb-4">
                   <span className="text-2xl">🃏</span>
                   <p className="text-[var(--ivory)] text-base leading-relaxed font-medium">
-                    {currentQuestion.scenario}
+                    {t(currentQuestion.scenario)}
                   </p>
                 </div>
                 <p className="text-[var(--brass-bright)] font-semibold text-lg pl-10">
-                  {currentQuestion.question}
+                  {t(currentQuestion.question)}
                 </p>
               </div>
             </div>
@@ -359,7 +364,7 @@ export default function PotOddsQuizPage() {
                       showWrong ? { x: [0, -4, 4, -4, 4, 0] } :
                       showCorrect ? { scale: [1, 1.01, 1] } : {}
                     }
-                    transition={{ duration: 0.4 }}
+                    transition={transitionSlow}
                     whileHover={!isAnswered ? { scale: 1.01 } : {}}
                     whileTap={!isAnswered ? { scale: 0.99 } : {}}
                   >
@@ -374,7 +379,7 @@ export default function PotOddsQuizPage() {
                          showWrong ? <XCircle className="w-4 h-4" /> :
                          String.fromCharCode(65 + i)}
                       </span>
-                      <span className="font-medium">{option.text}</span>
+                      <span className="font-medium">{t(option.text)}</span>
                     </div>
                   </motion.button>
                 );
@@ -388,7 +393,7 @@ export default function PotOddsQuizPage() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={transitionStandard}
                   className="overflow-hidden"
                 >
                   <div className={cn(
@@ -401,22 +406,22 @@ export default function PotOddsQuizPage() {
                       {selectedOption.isCorrect ? (
                         <>
                           <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-                          <span className="text-sm font-bold text-[var(--success)]">正确！</span>
+                          <span className="text-sm font-bold text-[var(--success)]">{t('potOdds.quiz.correct')}</span>
                         </>
                       ) : (
                         <>
                           <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                          <span className="text-sm font-bold text-[var(--danger)]">不正确</span>
+                          <span className="text-sm font-bold text-[var(--danger)]">{t('potOdds.quiz.incorrect')}</span>
                           {correctOption && (
                             <span className="text-xs text-[var(--ivory-muted)] ml-2">
-                              正确答案：{correctOption.text}
+                              {t('potOdds.quiz.correctAnswer', { answer: t(correctOption.text) })}
                             </span>
                           )}
                         </>
                       )}
                     </div>
                     <p className="text-sm text-[var(--ivory-dim)] leading-relaxed">
-                      {selectedOption.isCorrect ? selectedOption.explanation : (correctOption?.explanation ?? selectedOption.explanation)}
+                      {t(selectedOption.isCorrect ? selectedOption.explanation : (correctOption?.explanation ?? selectedOption.explanation))}
                     </p>
 
                     {/* P1B-05：五级评级徽章——统一走 GRADE_DISPLAY_CONFIG（icon + titleKey 走 t() + .grade-* 容器类），
@@ -442,7 +447,7 @@ export default function PotOddsQuizPage() {
                               to={`/academy/lesson/${decisionFeedback.relatedLessonId}`}
                               className="text-xs text-[var(--brass-bright)] underline hover:text-[var(--brass)] transition-colors"
                             >
-                              去复习相关课程 →
+                              {t('potOdds.quiz.reviewLink')}
                             </Link>
                           )}
                         </div>
@@ -453,7 +458,7 @@ export default function PotOddsQuizPage() {
                   {/* P4 修复（4.5-P0）：连续答错降级提示 */}
                   {shouldDownshiftDifficulty() && (
                     <div className="mb-4 px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
-                      检测到连续答错 3 次以上，建议放慢节奏，先复习基础课程再继续训练。
+                      {t('potOdds.quiz.downshiftHint')}
                     </div>
                   )}
 
@@ -463,7 +468,7 @@ export default function PotOddsQuizPage() {
                       onClick={handleNext}
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
                     >
-                      {currentIndex + 1 >= totalQuestions ? '查看成绩' : '下一题'}
+                      {currentIndex + 1 >= totalQuestions ? t('potOdds.quiz.viewResult') : t('potOdds.quiz.next')}
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>

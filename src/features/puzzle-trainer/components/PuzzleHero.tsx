@@ -8,6 +8,8 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionSlow } from '@/shared/utils/motion';
 import { CalendarDays, CheckCircle2 } from 'lucide-react';
 import { getDailyKey } from '../data/dailyPuzzles';
 
@@ -62,7 +64,7 @@ export default function PuzzleHero({ dailyCompleted, dailyAccuracy }: PuzzleHero
           <motion.div
             initial={{ opacity: 0, y: 16, rotateY: -12 }}
             animate={{ opacity: 1, y: 0, rotateY: -7 }}
-            transition={{ duration: 0.5 }}
+            transition={transitionSlow}
             className="puzzle-face"
           >
             {/* 左上角标：花色 + 日期 */}

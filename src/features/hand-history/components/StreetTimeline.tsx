@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import type { ReplayState, HandHistory } from '../types';
 import { cn } from '@/shared/utils/cn';
 
@@ -8,13 +9,15 @@ interface StreetTimelineProps {
   onJump: (street: ReplayState['currentStreet']) => void;
 }
 
-const STREETS: { key: ReplayState['currentStreet']; label: string }[] = [
-  { key: 'preflop', label: 'Preflop' },
-  { key: 'flop', label: 'Flop' },
-  { key: 'turn', label: 'Turn' },
-  { key: 'river', label: 'River' },
-  { key: 'showdown', label: 'Showdown' },
-];
+const STREET_LABEL_KEYS: Record<ReplayState['currentStreet'], string> = {
+  preflop: 'handHistory.streets.preflop',
+  flop: 'handHistory.streets.flop',
+  turn: 'handHistory.streets.turn',
+  river: 'handHistory.streets.river',
+  showdown: 'handHistory.streets.showdown',
+};
+
+const STREETS: ReplayState['currentStreet'][] = ['preflop', 'flop', 'turn', 'river', 'showdown'];
 
 function getActionCount(hand: HandHistory, street: ReplayState['currentStreet']): number {
   switch (street) {
@@ -27,19 +30,20 @@ function getActionCount(hand: HandHistory, street: ReplayState['currentStreet'])
 }
 
 export function StreetTimeline({ hand, currentStreet, onJump }: StreetTimelineProps) {
-  const currentIdx = STREETS.findIndex(s => s.key === currentStreet);
+  const { t } = useTranslation();
+  const currentIdx = STREETS.indexOf(currentStreet);
 
   return (
     <div className="flex items-center gap-1">
-      {STREETS.map((street, idx) => {
-        const isCurrent = street.key === currentStreet;
+      {STREETS.map((streetKey, idx) => {
+        const isCurrent = streetKey === currentStreet;
         const isCompleted = idx < currentIdx;
-        const actionCount = getActionCount(hand, street.key);
+        const actionCount = getActionCount(hand, streetKey);
 
         return (
-          <div key={street.key} className="flex items-center">
+          <div key={streetKey} className="flex items-center">
             <button
-              onClick={() => onJump(street.key)}
+              onClick={() => onJump(streetKey)}
               className={cn(
                 'flex flex-col items-center px-3 py-1.5 rounded-lg text-xs font-display font-medium transition-all',
                 isCurrent && 'bg-[var(--brass)]/15 text-[var(--brass-bright)] border border-[var(--brass)]/40',
@@ -47,9 +51,9 @@ export function StreetTimeline({ hand, currentStreet, onJump }: StreetTimelinePr
                 !isCurrent && !isCompleted && 'text-[var(--ivory-muted)] hover:text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]/60'
               )}
             >
-              <span>{street.label}</span>
+              <span>{t(STREET_LABEL_KEYS[streetKey])}</span>
               {actionCount > 0 && (
-                <span className="text-[10px] opacity-70 font-numeric">{actionCount} actions</span>
+                <span className="text-[10px] opacity-70 font-numeric">{t('handHistory.streets.actions', { count: actionCount })}</span>
               )}
             </button>
             {idx < STREETS.length - 1 && (

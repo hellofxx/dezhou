@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionFast } from '@/shared/utils/motion';
+import { useTranslation } from 'react-i18next';
 import { CheckCircle, XCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { formatPercentage } from '@/shared/utils/formatters';
@@ -14,10 +17,11 @@ interface OddsDisplayProps {
 function AnimatedNumber({ value, suffix = '%' }: { value: number; suffix?: string }) {
   return (
     <motion.span
-      key={value.toFixed(1)}
+      // ODDS-07：用原始值作 key（而非 toFixed(1)），避免精度内的数值变化不触发重挂载动画
+      key={value}
       initial={{ opacity: 0.5, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.15 }}
+      transition={transitionFast}
       className="font-mono"
     >
       {value.toFixed(1)}{suffix}
@@ -26,6 +30,7 @@ function AnimatedNumber({ value, suffix = '%' }: { value: number; suffix?: strin
 }
 
 export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfitable, ev }: OddsDisplayProps) {
+  const { t } = useTranslation();
   const marginOfSafety = estimatedEquity - requiredEquity;
 
   return (
@@ -33,14 +38,14 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
       {/* Main odds display */}
       <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm text-[var(--ivory-muted)] font-normal">底池赔率</CardTitle>
+          <CardTitle className="text-sm text-[var(--ivory-muted)] font-normal">{t('potOdds.oddsDisplay.title')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
           <div className={`text-5xl font-bold ${isProfitable ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
             <AnimatedNumber value={potOdds} />
           </div>
           <p className="mt-2 text-xs text-[var(--ivory-dim)]">
-            你需要至少 {formatPercentage(requiredEquity)} 的胜率来盈利
+            {t('potOdds.oddsDisplay.needEquity', { equity: formatPercentage(requiredEquity) })}
           </p>
         </CardContent>
       </Card>
@@ -49,7 +54,7 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
       <div className="grid grid-cols-2 gap-3">
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
           <CardContent className="p-4">
-            <p className="text-xs text-[var(--ivory-dim)] mb-1">需要胜率</p>
+            <p className="text-xs text-[var(--ivory-dim)] mb-1">{t('potOdds.oddsDisplay.requiredEquity')}</p>
             <p className="text-xl font-bold text-[var(--warning)] font-mono">
               <AnimatedNumber value={requiredEquity} />
             </p>
@@ -58,7 +63,7 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
 
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
           <CardContent className="p-4">
-            <p className="text-xs text-[var(--ivory-dim)] mb-1">估算胜率</p>
+            <p className="text-xs text-[var(--ivory-dim)] mb-1">{t('potOdds.oddsDisplay.estimatedEquity')}</p>
             <p className="text-xl font-bold text-[var(--info)] font-mono">
               <AnimatedNumber value={estimatedEquity} />
             </p>
@@ -67,7 +72,7 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
 
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
           <CardContent className="p-4">
-            <p className="text-xs text-[var(--ivory-dim)] mb-1">期望值 (EV)</p>
+            <p className="text-xs text-[var(--ivory-dim)] mb-1">{t('potOdds.oddsDisplay.evLabel')}</p>
             <p className={`text-xl font-bold font-mono ${ev >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
               {ev >= 0 ? '+' : ''}{ev.toFixed(1)}
             </p>
@@ -76,7 +81,7 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
 
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
           <CardContent className="p-4">
-            <p className="text-xs text-[var(--ivory-dim)] mb-1">安全边际</p>
+            <p className="text-xs text-[var(--ivory-dim)] mb-1">{t('potOdds.oddsDisplay.margin')}</p>
             <p className={`text-xl font-bold font-mono ${marginOfSafety >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
               {marginOfSafety >= 0 ? '+' : ''}{marginOfSafety.toFixed(1)}%
             </p>
@@ -91,9 +96,12 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
             <>
               <CheckCircle className="w-8 h-8 text-[var(--success)] shrink-0" />
               <div>
-                <p className="font-semibold text-[var(--success)]">建议跟注</p>
+                <p className="font-semibold text-[var(--success)]">{t('potOdds.oddsDisplay.callTitle')}</p>
                 <p className="text-sm text-[var(--ivory-muted)]">
-                  你的估算胜率 ({formatPercentage(estimatedEquity)}) 高于底池赔率 ({formatPercentage(requiredEquity)})，长期有利可图
+                  {t('potOdds.oddsDisplay.callDesc', {
+                    est: formatPercentage(estimatedEquity),
+                    req: formatPercentage(requiredEquity),
+                  })}
                 </p>
               </div>
             </>
@@ -101,9 +109,12 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
             <>
               <XCircle className="w-8 h-8 text-[var(--danger)] shrink-0" />
               <div>
-                <p className="font-semibold text-[var(--danger)]">建议弃牌</p>
+                <p className="font-semibold text-[var(--danger)]">{t('potOdds.oddsDisplay.foldTitle')}</p>
                 <p className="text-sm text-[var(--ivory-muted)]">
-                  你的估算胜率 ({formatPercentage(estimatedEquity)}) 低于底池赔率 ({formatPercentage(requiredEquity)})，跟注会亏损
+                  {t('potOdds.oddsDisplay.foldDesc', {
+                    est: formatPercentage(estimatedEquity),
+                    req: formatPercentage(requiredEquity),
+                  })}
                 </p>
               </div>
             </>

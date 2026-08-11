@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { QuestionDifficulty } from '../types';
 
 /**
@@ -56,6 +57,7 @@ export function DifficultyStairChart({
   changes: DifficultyChange[];
   totalQuestions: number;
 }) {
+  const { t } = useTranslation();
   // 阶梯点序列：起点（题 0，初始难度）→ 每次变化在 questionIndex 处水平延伸后垂直跳变 → 终点（末题）
   const points: Array<[number, number]> = [[0, DIFFICULTY_LEVEL[changes[0]!.from]]];
   const segmentEnds: Array<{ x: number; y: number; level: QuestionDifficulty }> = [];
@@ -74,13 +76,13 @@ export function DifficultyStairChart({
 
   return (
     <div className="mb-6 max-w-sm mx-auto">
-      <p className="text-xs text-[var(--ivory-muted)] mb-2">难度变化：</p>
+      <p className="text-xs text-[var(--ivory-muted)] mb-2">{t('academy.difficultyStairChart.label')}</p>
       <div className="rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)]/40 p-2">
         <svg
           viewBox={`0 0 ${W} ${H}`}
           className="w-full h-auto"
           role="img"
-          aria-label="难度变化阶梯图"
+          aria-label={t('academy.difficultyStairChart.ariaLabel')}
         >
           {/* 三条水平参考线（对应三个难度档） */}
           {([0, 1, 2] as const).map((lv) => (

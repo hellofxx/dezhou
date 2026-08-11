@@ -1,0 +1,163 @@
+{
+  "title": "GTO 模拟器",
+  "startSession": "开始训练",
+  "optimal": "最优决策",
+  "evLoss": "EV 损失",
+  "feedback": {
+    "optimalLabel": "最优决策",
+    "severeError": "严重错误",
+    "suboptimal": "次优决策",
+    "yourEV": "你的 EV",
+    "optimalEV": "最优 EV",
+    "heroEquity": "Hero Equity",
+    "nearOptimal": "✓ 接近最优（EV 损失 < 0.3 BB）",
+    "opponentPrefix": "对手:",
+    "frequencyDistribution": "GTO 频率分布",
+    "suggestedRaise": "建议加注大小: {{amount}} BB",
+    "exploitSuggestion": "剥削建议（vs {{name}}）",
+    "gtoRatio": "GTO: R{{r}}/C{{c}}/F{{f}}",
+    "exploitRatio": "剥削: R{{r}}/C{{c}}/F{{f}}",
+    "recommended": "推荐",
+    "evUnit": "BB",
+    "pot": "底池",
+    "call": "跟注",
+    "raise": "加注",
+    "fold": "弃牌"
+  },
+  "setup": {
+    "title": "场景设置",
+    "position": "位置",
+    "opponent": "对手类型",
+    "opponentStandard": "标准对手",
+    "street": "街道",
+    "sizing": "下注尺寸",
+    "start": "开始训练",
+    "selectStreet": "选择街道",
+    "selectVariant": "选择变体",
+    "selectScenario": "选择场景",
+    "difficulty": "难度",
+    "easy": "简单",
+    "medium": "中等",
+    "hard": "困难",
+    "variantStandard": "标准德州",
+    "variantShortDeck": "短牌德州 (6+)",
+    "shortDeckHint": "短牌模式：36 张牌组（移除 2-5），三条 > 顺子，同花 > 葫芦",
+    "effectiveStack": "有效筹码",
+    "startGtoTraining": "开始 GTO 训练",
+    "modeLabel": "训练模式",
+    "gtoMode": "GTO 模式",
+    "exploitMode": "Exploit 模式",
+    "exploitHint": "剥削模式：根据对手类型调整最优策略，学习如何利用对手漏洞",
+    "opponentLabel": "对手类型",
+    "variantLabel": "游戏变体",
+    "gameTypeLabel": "游戏类型",
+    "positionLabel": "位置",
+    "playerCountLabel": "玩家人数",
+    "difficultyLabel": "难度",
+    "scenarioCountLabel": "场景数量",
+    "gameTypeCash": "现金局",
+    "gameTypeTournament": "锦标赛",
+    "gameTypeSnG": "SNG",
+    "difficultyBeginner": "初级",
+    "difficultyBeginnerDesc": "纯策略为主，明显决策",
+    "difficultyIntermediate": "中级",
+    "difficultyIntermediateDesc": "包含混合策略",
+    "difficultyAdvanced": "高级",
+    "difficultyAdvancedDesc": "边界手牌，精确频率",
+    "startBtn": "开始训练",
+    "opponentProfile": {
+      "tag": {
+        "name": "TAG (紧凶)",
+        "description": "紧而激进的玩家，只打强牌但打得很凶"
+      },
+      "lag": {
+        "name": "LAG (松凶)",
+        "description": "松而激进的玩家，打很多牌且经常加注"
+      },
+      "nit": {
+        "name": "Nit (超紧)",
+        "description": "极其保守的玩家，只打最顶级的牌"
+      },
+      "maniac": {
+        "name": "Maniac (疯狂)",
+        "description": "极度激进的玩家，不断加注和bluff"
+      },
+      "calling_station": {
+        "name": "Calling Station (跟注站)",
+        "description": "被动玩家，很少加注但喜欢跟注到底"
+      },
+      "unknown": {
+        "name": "Unknown (未知)",
+        "description": "没有足够数据的对手，使用默认GTO策略"
+      }
+    }
+  },
+  "session": {
+    "yourHand": "你的手牌",
+    "board": "公共牌",
+    "potSize": "底池",
+    "opponentBet": "对手下注",
+    "chooseAction": "选择你的行动",
+    "correctHint": "GTO 最优动作：{{action}}",
+    "nextScenario": "下一个场景",
+    "showSolution": "查看解法",
+    "exploitMode": "剥削模式",
+    "endSession": "结束训练",
+    "progress": "进度 {{current}}/{{total}}",
+    "sessionResult": "本次训练结果",
+    "score": "得分",
+    "backToHome": "返回首页",
+    "analysis": "决策分析",
+    "correctRate": "正确率",
+    "scenarioLabel": "场景 {{n}}",
+    "noActive": "没有活跃的训练会话",
+    "backHome": "返回主页",
+    "done": "训练完成！",
+    "nextStep": "下一步 →",
+    "nextScenarioLabel": "下一个场景 →",
+    "streetPreflop": "翻前",
+    "streetFlop": "翻牌圈",
+    "streetTurn": "转牌圈",
+    "streetRiver": "河牌圈",
+    "downshiftHint": "检测到连续答错 3 次以上，建议返回场景设置选择更简单的难度，或先复习相关课程。"
+  },
+  "result": {
+    "title": "训练结果",
+    "subtitle": "GTO 模拟训练成绩",
+    "score": "总得分",
+    "accuracy": "正确率",
+    "correctCount": "答对",
+    "totalScenarios": "总场景",
+    "gradeExcellent": "🎯 出色！你对 GTO 的把握非常精准！",
+    "gradeGood": "👍 不错！继续保持对 GTO 的理解。",
+    "gradeFair": "📚 还需要加强 GTO 基础概念。",
+    "gradePoor": "💡 建议从 GTO 基础课程开始。",
+    "restart": "重新训练",
+    "backHome": "返回首页",
+    "noData": "没有结果数据"
+  },
+  "home": {
+    "lastTraining": "上次训练",
+    "optimalRate": "最优决策率",
+    "scenariosCount": "{{count}} 个场景 · EV 损失率 {{ev}} BB/100",
+    "scenarioCount": "个场景",
+    "title": "GTO 决策模拟器",
+    "subtitle": "学习博弈论最优策略，提升你的扑克决策能力",
+    "tabSetup": "场景训练",
+    "tabSpot": "Spot 练习",
+    "viewFullResult": "查看完整结果 →"
+  },
+  "spot": {
+    "title": "具体场景训练",
+    "chooseSpot": "选择训练场景",
+    "continue": "继续",
+    "back": "返回"
+  },
+  "tree": {
+    "title": "决策树",
+    "nodeLabel": "决策点",
+    "empty": "暂无决策数据",
+    "history": "行动历史",
+    "emptyHeroTurn": "前面所有人都 fold，轮到 Hero"
+  }
+}

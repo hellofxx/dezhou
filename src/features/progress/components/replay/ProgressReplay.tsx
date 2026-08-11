@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui
 import { transitionSlow } from '@/shared/utils/motion';
 import { useAcademyStore } from '@/features/strategy-academy/store';
 import { getAllLessons } from '@/features/strategy-academy/utils/courseProgress';
+import { resolveLessonTitle } from '@/features/strategy-academy/utils/titleKeys';
+import type { Lesson } from '@/features/strategy-academy/types';
 
 interface ProgressEntry {
   lessonId: string;
@@ -22,7 +24,7 @@ export default function ProgressReplay() {
 
   const topChanges = useMemo(() => {
     const allLessons = getAllLessons();
-    const lessonMap = new Map(allLessons.map((l) => [l.id, l.title]));
+    const lessonMap = new Map<string, Lesson>(allLessons.map((l) => [l.id, l]));
 
     const entries: ProgressEntry[] = [];
     for (const lessonId of Object.keys(lastAttemptScores)) {
@@ -30,9 +32,11 @@ export default function ProgressReplay() {
       const last = lastAttemptScores[lessonId];
       if (first === undefined || last === undefined) continue;
       const improvement = last - first;
+      const lesson = lessonMap.get(lessonId);
       entries.push({
         lessonId,
-        lessonTitle: lessonMap.get(lessonId) ?? lessonId,
+        // PROG-14：优先 i18n 解析课程标题（含变体课程），数据层缺省时回退 id
+        lessonTitle: lesson ? resolveLessonTitle(t, lesson) : lessonId,
         first,
         last,
         improvement,
@@ -41,7 +45,7 @@ export default function ProgressReplay() {
     // P2-C: 按绝对变化幅度降序排列，展示进步与退步，取前 5 门
     entries.sort((a, b) => Math.abs(b.improvement) - Math.abs(a.improvement));
     return entries.slice(0, 5);
-  }, [firstAttemptScores, lastAttemptScores]);
+  }, [firstAttemptScores, lastAttemptScores, t]);
 
   const hasData = topChanges.length > 0;
 

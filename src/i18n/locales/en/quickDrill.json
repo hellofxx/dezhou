@@ -1,0 +1,45 @@
+{
+  "title": "5-Minute Drill",
+  "subtitle": "Hand-picked questions from the global bank, targeting your weak spots",
+  "quickTitle": "3-Minute Quick Drill",
+  "quickSubtitle": "{{count}} questions a day, keep your edge — {{mode}}",
+  "back": "Back to Academy",
+  "backAcademy": "Back to Academy",
+  "backHome": "Back to Home",
+  "again": "One more round",
+  "selectDifficulty": "Select difficulty",
+  "adaptiveDifficulty": "Adaptive difficulty",
+  "weakAreasHint": "Questions will be prioritized from your weak areas",
+  "modeHint": "Current mode: {{mode}}. Completing today's drill will count toward your streak.",
+  "questionCount": "This drill",
+  "questions": "questions",
+  "start": "Start Drill",
+  "noQuestions": "No questions available",
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "mode": {
+    "range": "Range Practice",
+    "odds": "Odds Calc",
+    "mixed": "Mixed Drill"
+  },
+  "result": {
+    "title": "Drill Complete",
+    "accuracy": "Accuracy",
+    "time": "Avg Time",
+    "xp": "XP Earned",
+    "allCorrectBonus": "All correct +20 XP bonus",
+    "streakRecorded": "Counted toward your streak ✓",
+    "reviewIncluded": "Includes {{count}} review questions"
+  },
+  "reviewQueueHint": "Today you have {{count}} review questions; 30% will be mixed into this drill automatically",
+  "newRecord": "🎉 New quick drill record!",
+  "freezeReward": "🎁 {{count}}-day quick drill streak reward: 1 freeze card!",
+  "streak": {
+    "current": "Quick drill streak: {{count}} day(s)",
+    "rewarded": "1 freeze card rewarded",
+    "broken": "Quick drill streak broken, reset"
+  }
+}

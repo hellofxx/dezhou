@@ -1,6 +1,7 @@
 // 答案位置偏差治理（i18n-key 型 Drill 题库）：orderResolvedOptions 测试
 // ① 重映射正确性 ② zh/en 数值题分支与顺序一致 ③ 真实题库分布守卫 ④ 确定性；
-// i18n key 直接读 zh.json / en.json 构造解析文本（不起 i18next 实例）
+// i18n key 直接读拆分后的 drills 模块文件（locales/{zh,en}/drills.json），
+// 包裹为 { drills } 以保持 'drills.xxx' 解析前缀不变（不起 i18next 实例）
 
 import { describe, it, expect } from 'vitest';
 import { orderResolvedOptions } from './quizShuffle';
@@ -9,8 +10,11 @@ import { POT_ODDS_QUESTIONS } from '../components/drills/potOddsQuestions';
 import { HAND_RANKING_QUESTIONS } from '../components/drills/handRankingQuestions';
 import type { HandRankingQuestion } from '../components/drills/handRankingQuestions';
 import { OPPONENT_DRILL_QUESTIONS } from '../data/opponentProfiles';
-import zh from '@/i18n/locales/zh.json';
-import en from '@/i18n/locales/en.json';
+import drillsZh from '@/i18n/locales/zh/drills.json';
+import drillsEn from '@/i18n/locales/en/drills.json';
+
+const zh = { drills: drillsZh } as const;
+const en = { drills: drillsEn } as const;
 
 // ===== i18n key 解析（沿路径下钻 locale JSON）=====
 function resolveKey(dict: unknown, key: string): string {

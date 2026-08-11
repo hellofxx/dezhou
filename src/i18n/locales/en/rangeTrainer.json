@@ -1,0 +1,127 @@
+{
+  "title": "Range Trainer",
+  "subtitle": "Learn standard opening ranges for each position and master GTO fundamentals",
+  "learnSubtitle": "Browse and learn standard opening ranges for each position",
+  "learn": "Learn Mode",
+  "quiz": "Quiz Mode",
+  "startQuiz": "Start Training",
+  "correct": "Correct",
+  "wrong": "Wrong",
+  "timeRemaining": "Time Remaining",
+  "variant": {
+    "standard": "Standard",
+    "shortDeck": "Short Deck (6+)",
+    "headsUp": "Heads-Up (HU)",
+    "label": "Game Variant",
+    "playerCount": "Players",
+    "max": "{{count}}-Max",
+    "shortDeckHint": "Short deck: removes 2-5, 36 cards, 9×9 range matrix. Flush > Full House, Straight > Three of a Kind."
+  },
+  "rangeSelect": {
+    "title": "Range Selector",
+    "hint": "Choose a position and action type to view the standard range",
+    "position": "Position",
+    "actionType": "Action Type",
+    "preset": "Preset Ranges",
+    "presetPlaceholder": "Select a preset range...",
+    "presetHands": "{{name}} ({{count}} hands)",
+    "unlockRequirement": "Requires preflop ELO ≥ {{threshold}}"
+  },
+  "rangeInfo": {
+    "title": "Range Info",
+    "currentRange": "Current Range",
+    "stats": "Range Stats",
+    "handCount": "Hands",
+    "rangePercent": "Range %",
+    "typeDistribution": "Type Distribution",
+    "pair": "Pair",
+    "suited": "Suited",
+    "offsuit": "Offsuit",
+    "handDetail": "Hand Detail",
+    "inRange": "In Range",
+    "notInRange": "Out of Range",
+    "typeLabel": "Type: {{type}}",
+    "matrixLegend": "Diagonal = Pairs | Upper = Suited | Lower = Offsuit | Gold = In Range",
+    "matrix9": "9×9 Range Matrix",
+    "matrix13": "13×13 Range Matrix"
+  },
+  "footer": {
+    "note": "Ranges above approximate GTO for 6-max cash games; adjust based on opponent tendencies and stack depth.",
+    "hover": "Hover a cell in the grid to see hand details; gold means the hand is in the current range."
+  },
+  "config": {
+    "title": "Range Quiz",
+    "subtitle": "Test how well you know opening ranges for each position",
+    "position": "Position",
+    "actionType": "Action Type",
+    "timeLimit": "Time Limit",
+    "questionCount": "Question Count",
+    "noPreset": "No quiz available for this combination",
+    "start": "Start Training",
+    "timeUnlimited": "Unlimited",
+    "timeSeconds": "{{count}} sec",
+    "questionUnit": "{{count}} questions",
+    "shortcuts": "Shortcuts: 1=Fold · 2=Call · 3=Raise · Esc=Pause"
+  },
+  "session": {
+    "question": "Question {{current}} / {{total}}",
+    "correctCount": "{{count}} right",
+    "wrongCount": "{{count}} wrong",
+    "downshiftHint": "Detected consecutive wrong answers — switch to a more basic position or action type",
+    "switchTraining": "Switch Training",
+    "shortcuts": "Shortcuts: 1=Fold · 2=Call · 3=Raise · Space=Confirm/Next · Esc=Pause",
+    "paused": "Paused",
+    "resume": "Resume Training",
+    "exit": "Exit Training"
+  },
+  "result": {
+    "title": "Training Complete!",
+    "accuracy": "Accuracy",
+    "total": "Total Questions",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "avgTime": "Avg Time",
+    "weakHands": "Weak Hands",
+    "wrongCount": "Wrong {{count}}×",
+    "wrongDetails": "Wrong Answers",
+    "hand": "Hand",
+    "yourChoice": "Your Choice",
+    "correctAnswer": "Correct Answer",
+    "time": "Time",
+    "retry": "Try Again",
+    "backHome": "Back to Home",
+    "excellent": "Excellent!",
+    "good": "Good",
+    "keepGoing": "Keep Going",
+    "morePractice": "More Practice Needed"
+  },
+  "quizCard": {
+    "prompt": "Should this hand <raise>Raise</raise>, <call>Call</call>, or <fold>Fold</fold>?",
+    "correct": "✓ Correct!",
+    "wrong": "✗ Wrong",
+    "correctAnswerIs": "Correct answer: {{action}}",
+    "inRange": "— This hand is in the standard range",
+    "notInRange": "— This hand is out of the standard range",
+    "suitableCall": "— This hand is suitable for a call",
+    "pair": "Pair",
+    "suited": "Suited",
+    "offsuit": "Offsuit"
+  },
+  "presetName": {
+    "sd-co-open": "Short Deck CO Open Raise",
+    "sd-btn-open": "Short Deck BTN Open Raise",
+    "4bet-range": "Universal 4-Bet Range (~4%)"
+  },
+  "srs": {
+    "howToAct": "How should {{hand}} act at {{position}}?",
+    "optionFold": "Fold",
+    "optionCall": "Call",
+    "optionRaise": "Raise"
+  },
+  "feedback": {
+    "optimalAction": "The optimal action is {{action}}."
+  },
+  "timer": {
+    "paused": "Paused"
+  }
+}

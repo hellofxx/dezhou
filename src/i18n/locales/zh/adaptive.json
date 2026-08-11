@@ -1,0 +1,10 @@
+{
+  "title": "难度自适应",
+  "currentLevel": "当前难度",
+  "easy": "简单",
+  "medium": "中等",
+  "hard": "困难",
+  "adjusting": "正在调整难度...",
+  "levelUp": "难度提升！",
+  "levelDown": "难度降低"
+}

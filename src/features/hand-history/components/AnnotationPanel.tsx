@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { HandHistory, ReplayState } from '../types';
 import { useHandHistoryStore } from '../store';
 import { MessageSquare, Save, Download } from 'lucide-react';
@@ -101,6 +102,7 @@ function exportAnnotationsMarkdown(hand: HandHistory) {
 }
 
 export function AnnotationPanel({ hand, currentStreet }: AnnotationPanelProps) {
+  const { t } = useTranslation();
   const addAnnotation = useHandHistoryStore(s => s.addAnnotation);
   const [note, setNote] = useState(hand.annotations[currentStreet] ?? '');
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -164,7 +166,7 @@ export function AnnotationPanel({ hand, currentStreet }: AnnotationPanelProps) {
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-display font-semibold rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
           >
             <Download size={12} />
-            导出
+            {t('handHistory.annotation.export')}
           </button>
           {showExportMenu && (
             <div className="absolute bottom-full left-0 mb-1 w-36 rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] shadow-lg overflow-hidden z-10">

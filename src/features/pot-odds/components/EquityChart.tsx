@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 
@@ -7,9 +8,10 @@ interface EquityChartProps {
 }
 
 export function EquityChart({ potOdds, estimatedEquity }: EquityChartProps) {
+  const { t } = useTranslation();
   const data = [
-    { name: '需要胜率', value: potOdds, fill: 'var(--warning)' },
-    { name: '估算胜率', value: estimatedEquity, fill: estimatedEquity >= potOdds ? 'var(--success)' : 'var(--danger)' },
+    { name: t('potOdds.equityChart.requiredEquity'), value: potOdds, fill: 'var(--warning)' },
+    { name: t('potOdds.equityChart.estimatedEquity'), value: estimatedEquity, fill: estimatedEquity >= potOdds ? 'var(--success)' : 'var(--danger)' },
   ];
 
   const diff = estimatedEquity - potOdds;
@@ -18,9 +20,9 @@ export function EquityChart({ potOdds, estimatedEquity }: EquityChartProps) {
     <Card className="bg-[var(--surface)] border-[var(--walnut-border)] h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm text-[var(--ivory-muted)] font-normal flex items-center justify-between">
-          <span>权益对比</span>
+          <span>{t('potOdds.equityChart.title')}</span>
           <span className={`text-xs font-mono px-2 py-0.5 rounded ${diff >= 0 ? 'bg-[var(--success)]/10 text-[var(--success)]' : 'bg-[var(--danger)]/10 text-[var(--danger)]'}`}>
-            差值: {diff >= 0 ? '+' : ''}{diff.toFixed(1)}%
+            {t('potOdds.equityChart.diffLabel', { diff: `${diff >= 0 ? '+' : ''}${diff.toFixed(1)}` })}
           </span>
         </CardTitle>
       </CardHeader>

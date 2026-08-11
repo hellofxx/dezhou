@@ -5,6 +5,8 @@
  * 显示"去复习"课程跳转（relatedLessonId 由 usePuzzleEngine 推导）。
  */
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionFast } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -37,7 +39,7 @@ export function PuzzleCardFeedback({
     <motion.div
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
-      transition={{ duration: 0.25 }}
+      transition={transitionFast}
       className="mt-2 rounded-md border border-[var(--walnut-border)]/60 bg-[var(--walnut)]/30 p-3 space-y-2"
     >
       {/* 评级 + 文案 */}

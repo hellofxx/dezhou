@@ -1,0 +1,120 @@
+{
+  "rushTitle": "Puzzle Rush",
+  "rushDesc": "3-5 分钟限时冲刺，3 条命，连对奖励额外时间，答错扣命，冲击你的最高分。",
+  "dailyTitle": "每日谜题",
+  "dailyDesc": "每天 8 道精选题目，全球玩家同一天挑战，完成后查看全球排名与正确率分布。",
+  "themeDrillTitle": "Theme Drill",
+  "themeDrillDesc": "针对特定场景的集中训练，10 大主题覆盖翻前到河牌，弱项定向突破。",
+  "themes": {
+    "preflop-rfi": "翻前 RFI",
+    "big-blind-defense": "大盲防守",
+    "three-bet": "3Bet 策略",
+    "c-bet": "C-Bet 持续下注",
+    "flush-draw": "同花听牌",
+    "river-value": "河牌价值下注",
+    "bluff": "诈唬时机",
+    "short-stack": "短筹码策略",
+    "icm": "ICM 基础",
+    "multiway": "多人底池"
+  },
+  "categories": {
+    "preflop": "翻前",
+    "postflop": "翻后",
+    "river": "河牌",
+    "tournament": "锦标赛"
+  },
+  "home": {
+    "title": "扑克谜题",
+    "subtitle": "通过趣味谜题场景训练决策能力，覆盖翻前 RFI、大盲防守、3Bet、C-Bet、同花听牌、河牌价值、诈唬、短筹码、ICM、多人底池 10 大主题。",
+    "hero": {
+      "ariaLabel": "谜题台",
+      "eyebrow": "谜题台 · PUZZLE DESK",
+      "startDaily": "开始今日谜题",
+      "reviewDaily": "查看今日谜题",
+      "meta": "3 种模式 · 10 大主题 · 每日固定 8 题",
+      "doneLabel": "今日已完成",
+      "doneAccuracy": "· 最佳正确率 {{percent}}%",
+      "plaqueLabel": "DAILY PUZZLE"
+    },
+    "todayBadge": "今日",
+    "rushTitle": "限时冲刺",
+    "rushDesc": "3 或 5 分钟限时，3 条命，连对 5 题奖励 +10 秒。难度递增。",
+    "dailyTitle": "每日谜题",
+    "dailyDesc": "每天 8 道固定题目，混合主题，完成后显示详细解析。",
+    "themeTitle": "主题训练",
+    "themeDesc": "针对单一主题完成 {{count}} 题深度训练，巩固专项技能。",
+    "themesTitle": "按主题训练",
+    "questionsUnit": "题",
+    "themesUnit": "个主题",
+    "difficulty": {
+      "beginner": "初级",
+      "intermediate": "中级",
+      "advanced": "高级"
+    },
+    "minutes": "分钟",
+    "startDaily": "开始今日谜题",
+    "reviewToday": "查看今日题目",
+    "todayDone": "今日已完成 ✓",
+    "startTheme": "选择主题",
+    "bestRecord": "最高分 {{score}}",
+    "bestAccuracy": "最佳正确率 {{percent}}%",
+    "bestAccuracyShort": "最佳 {{percent}}%"
+  },
+  "card": {
+    "scenarioLabel": "场景",
+    "yourMove": "你的行动",
+    "progress": "第 {{current}} / {{total}} 题",
+    "handLabel": "手牌",
+    "positionLabel": "位置",
+    "boardLabel": "公共牌",
+    "potLabel": "底池",
+    "betLabel": "下注",
+    "stackLabel": "筹码",
+    "fullExplanation": "完整解析",
+    "correctAnswerPrefix": "正确答案：{{answer}}",
+    "nextQuestion": "下一题",
+    "viewResult": "查看结果"
+  },
+  "rush": {
+    "title": "{{minutes}} 分钟限时冲刺",
+    "noQuestions": "暂无可用题目",
+    "correct": "答对",
+    "wrong": "答错",
+    "streak": "连对"
+  },
+  "daily": {
+    "title": "每日谜题",
+    "noQuestions": "今日暂无题目",
+    "completionCount": "今日已有 {{count}} 人完成",
+    "alreadyCompleted": "今日已完成 ✓",
+    "alreadyCompletedShort": "今日已做",
+    "fixedHint": "今日题目固定，所有人看到的题目相同"
+  },
+  "theme": {
+    "unknownTheme": "未知主题",
+    "noQuestions": "该主题暂无题目"
+  },
+  "result": {
+    "title": "训练完成",
+    "rushTitle": "冲刺结束",
+    "newRecord": "🎉 新纪录！",
+    "score": "分数",
+    "correctRate": "正确率",
+    "correctCount": "答对题数",
+    "duration": "用时",
+    "avgTime": "平均用时",
+    "minutes": "{{min}}分{{sec}}秒",
+    "wrongList": "答错 {{count}} 题",
+    "yourAnswer": "你的选择",
+    "correctAnswer": "正确答案",
+    "retry": "再试一次",
+    "backHome": "返回首页"
+  },
+  "common": {
+    "exit": "退出",
+    "correct": "答对",
+    "wrong": "答错",
+    "backHome": "返回首页",
+    "downshiftHint": "检测到连续答错，建议放慢节奏，先复习基础课程再继续训练。"
+  }
+}

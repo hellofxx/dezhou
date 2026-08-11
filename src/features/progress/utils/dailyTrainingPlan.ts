@@ -12,12 +12,17 @@ import { LEVELS } from '@/features/strategy-academy/data/courses';
 export interface DailyRecommendation {
   id: string;
   type: 'academy-lesson' | 'range-quiz' | 'pot-odds-quiz' | 'gto-practice' | 'review';
+  /** i18n key（渲染端 t(title, titleParams) 解析），不再直接存储展示文案 */
   title: string;
+  titleParams?: Record<string, string | number>;
+  /** i18n key（渲染端 t(description, descParams) 解析） */
   description: string;
+  descParams?: Record<string, string | number>;
   route: string;                 // 跳转路由
   priority: 'high' | 'medium' | 'low';
   estimatedTime: string;         // "10 min"
-  reason: string;                // 推荐理由
+  /** 推荐理由语义 key（渲染端 t(`dashboard.dataPlan.reason.${reason}`)） */
+  reason: string;
 }
 
 // 模块路由映射
@@ -108,16 +113,22 @@ export function generateCrossModuleDailyPlan(
   // 1. 优先：今日待复习
   const todayReviews = getTodayReviewItems(reviewItems);
   if (todayReviews.length > 0) {
+    const firstItems = todayReviews.slice(0, 3).map((item) => item.label).join('、');
     recommendations.push({
       id: 'review-today',
       type: 'review',
-      title: `复习 ${todayReviews.length} 个知识点`,
-      description: todayReviews.slice(0, 3).map((item) => item.label).join('、') +
-        (todayReviews.length > 3 ? ` 等${todayReviews.length}项` : ''),
+      title: 'dashboard.dataPlan.titleReview',
+      titleParams: { count: todayReviews.length },
+      description: todayReviews.length > 3
+        ? 'dashboard.dataPlan.descReviewMore'
+        : 'dashboard.dataPlan.descReview',
+      descParams: todayReviews.length > 3
+        ? { items: firstItems, count: todayReviews.length }
+        : { items: firstItems },
       route: '/academy',
       priority: 'high',
       estimatedTime: `${Math.min(todayReviews.length * 3, 15)} min`,
-      reason: '待复习',
+      reason: 'review',
     });
     usedTypes.add('review');
   }
@@ -128,12 +139,16 @@ export function generateCrossModuleDailyPlan(
     recommendations.push({
       id: `lesson-${nextLesson.id}`,
       type: 'academy-lesson',
-      title: nextLesson.title,
-      description: `第 ${nextLesson.level} 级课程`,
+      // title 直接传 i18n key（academy.lessonTitle.<id>），渲染端 t() 解析；
+      // 课程数据层 title 字段保留兼容旧消费方。
+      title: `academy.lessonTitle.${nextLesson.id}`,
+      titleParams: { title: nextLesson.title },
+      description: 'dashboard.dataPlan.descAcademyLesson',
+      descParams: { level: nextLesson.level },
       route: `/academy/lesson/${nextLesson.id}`,
       priority: recommendations.length === 0 ? 'high' : 'medium',
       estimatedTime: '15 min',
-      reason: '下一课',
+      reason: 'nextLesson',
     });
     usedTypes.add('academy-lesson');
   }
@@ -145,27 +160,30 @@ export function generateCrossModuleDailyPlan(
   if (weakestModule && !usedTypes.has('range-quiz') && !usedTypes.has('pot-odds-quiz')) {
     const accuracy = accuracyMap.get(weakestModule);
     const type = weakestModule === 'range-trainer' ? 'range-quiz' : 'pot-odds-quiz';
-    const title = weakestModule === 'range-trainer' ? '手牌范围练习' : '赔率计算练习';
+    const title = weakestModule === 'range-trainer'
+      ? 'dashboard.dataPlan.titleWeakRange'
+      : 'dashboard.dataPlan.titleWeakOdds';
 
     recommendations.push({
       id: `weak-${weakestModule}`,
       type,
       title,
       description: accuracy !== undefined
-        ? `当前正确率 ${(accuracy * 100).toFixed(0)}%，需要加强`
-        : '尚未练习过，建议尝试',
+        ? 'dashboard.dataPlan.descWeakAccuracy'
+        : 'dashboard.dataPlan.descWeakNone',
+      descParams: accuracy !== undefined ? { accuracy: Math.round(accuracy * 100) } : undefined,
       route: MODULE_ROUTES[weakestModule] || '/range-trainer',
       priority: 'medium',
       estimatedTime: '10 min',
-      reason: '薄弱环节',
+      reason: 'weakSpot',
     });
     usedTypes.add(type);
   }
 
   // 4. 多样性 — 确保推荐覆盖不同模块
   const availableModules = [
-    { module: 'range-trainer', type: 'range-quiz' as const, title: '手牌范围训练', route: '/range-trainer', time: '10 min' },
-    { module: 'pot-odds', type: 'pot-odds-quiz' as const, title: '赔率计算训练', route: '/pot-odds', time: '10 min' },
+    { module: 'range-trainer', type: 'range-quiz' as const, title: 'dashboard.dataPlan.titlePracticeRange', route: '/range-trainer', time: '10 min' },
+    { module: 'pot-odds', type: 'pot-odds-quiz' as const, title: 'dashboard.dataPlan.titlePracticeOdds', route: '/pot-odds', time: '10 min' },
   ];
 
   for (const item of availableModules) {
@@ -177,12 +195,13 @@ export function generateCrossModuleDailyPlan(
         type: item.type,
         title: item.title,
         description: accuracy !== undefined
-          ? `当前正确率 ${(accuracy * 100).toFixed(0)}%`
-          : '保持手感',
+          ? 'dashboard.dataPlan.descPracticeAccuracy'
+          : 'dashboard.dataPlan.descPracticeNone',
+        descParams: accuracy !== undefined ? { accuracy: Math.round(accuracy * 100) } : undefined,
         route: item.route,
         priority: 'low',
         estimatedTime: item.time,
-        reason: '日常练习',
+        reason: 'dailyPractice',
       });
       usedTypes.add(item.type);
     }
@@ -193,12 +212,13 @@ export function generateCrossModuleDailyPlan(
     recommendations.push({
       id: 'streak-challenge',
       type: 'gto-practice',
-      title: '高难度 GTO 挑战',
-      description: `连续训练 ${streak} 天！挑战更高难度`,
+      title: 'dashboard.dataPlan.titleGtoChallenge',
+      description: 'dashboard.dataPlan.descStreakChallenge',
+      descParams: { streak },
       route: '/gto-simulator',
       priority: 'low',
       estimatedTime: '20 min',
-      reason: '连续奖励',
+      reason: 'streakReward',
     });
   }
 
@@ -210,17 +230,17 @@ export function generateCrossModuleDailyPlan(
 }
 
 /**
- * 获取分类标签颜色
+ * 获取分类标签颜色（reason 为语义 key：review/nextLesson/weakSpot/streakReward/dailyPractice）
  */
 export function getReasonColor(reason: string): string {
   switch (reason) {
-    case '待复习':
+    case 'review':
       return 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15';
-    case '下一课':
+    case 'nextLesson':
       return 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]';
-    case '薄弱环节':
+    case 'weakSpot':
       return 'text-[var(--poker-danger)] bg-[var(--poker-danger-bg)]';
-    case '连续奖励':
+    case 'streakReward':
       return 'text-[var(--brass-bright)] bg-[var(--poker-warning-bg)]';
     default:
       return 'text-[var(--ivory-muted)] bg-[var(--walnut-raised)]/50';

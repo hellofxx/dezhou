@@ -1,0 +1,17 @@
+{
+  "unit": "分",
+  "rankBadge": {
+    "aria": "当前段位 {{rank}}，分数 {{score}}，点击查看五维能力雷达图"
+  },
+  "radar": {
+    "title": "五维能力雷达图",
+    "subtitle": "基于 ELO 评分（0-3000），累计答题 {{games}} 次",
+    "empty": "暂无 ELO 数据，完成一次训练后即可生成能力分析",
+    "scoreLabel": "ELO 分数",
+    "dimensionPreflop": "翻前",
+    "dimensionPostflop": "翻后",
+    "dimensionMath": "赔率数学",
+    "dimensionHandReading": "牌局阅读",
+    "dimensionMental": "心态一致性"
+  }
+}

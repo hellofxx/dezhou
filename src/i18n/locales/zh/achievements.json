@@ -1,0 +1,158 @@
+{
+  "title": "成就",
+  "wall": "成就墙",
+  "locked": "未解锁",
+  "unlocked": "已解锁",
+  "progress": "{{current}}/{{total}} 已解锁",
+  "newUnlock": "新成就解锁！",
+  "badges": {
+    "firstTraining": {
+      "requirement": "完成 1 次训练"
+    },
+    "streak7": {
+      "requirement": "连续训练 7 天"
+    },
+    "hundredSessions": {
+      "name": "百炼成钢",
+      "description": "完成100次训练",
+      "requirement": "完成 100 次训练"
+    },
+    "sharpshooter": {
+      "name": "神射手",
+      "description": "任意模块正确率达到90%",
+      "requirement": "任意模块正确率 90%"
+    },
+    "gtoMaster": {
+      "name": "GTO大师",
+      "description": "GTO模拟器正确率达80%",
+      "requirement": "GTO 正确率 80%"
+    },
+    "perfectionist": {
+      "name": "完美主义",
+      "description": "单次训练100%正确（20题以上）",
+      "requirement": "单次 20 题全对"
+    },
+    "allRounder": {
+      "name": "全能选手",
+      "description": "所有模块各完成至少10次训练",
+      "requirement": "各模块至少 10 次"
+    },
+    "speedKing": {
+      "name": "速度之王",
+      "description": "平均答题时间低于5秒",
+      "requirement": "平均用时 < 5 秒"
+    }
+  },
+  "categories": {
+    "learning": "学习",
+    "streak": "连续",
+    "skill": "技能",
+    "milestone": "里程碑"
+  },
+  "items": {
+    "firstTraining": {
+      "title": "初出茅庐",
+      "description": "完成首次训练"
+    },
+    "completeLevel1": {
+      "title": "入门弟子",
+      "description": "完成 Level 1 全部课程"
+    },
+    "completeLevel2": {
+      "title": "进阶学徒",
+      "description": "完成 Level 2 全部课程"
+    },
+    "completeLevel3": {
+      "title": "策略新星",
+      "description": "完成 Level 3 全部课程"
+    },
+    "certificationAny": {
+      "title": "持证上岗",
+      "description": "完成任意 Level 认证"
+    },
+    "certificationAll": {
+      "title": "全栈大师",
+      "description": "完成所有 Level 认证"
+    },
+    "streak3": {
+      "title": "三日坚持",
+      "description": "连续训练 3 天"
+    },
+    "streak7": {
+      "title": "一周之约",
+      "description": "连续训练 7 天"
+    },
+    "streak30": {
+      "title": "月度勇士",
+      "description": "连续训练 30 天"
+    },
+    "streak100": {
+      "title": "百日传奇",
+      "description": "连续训练 100 天"
+    },
+    "quickDrill7": {
+      "title": "闪电连续",
+      "description": "快速训练连续 7 天"
+    },
+    "perfect10": {
+      "title": "小试牛刀",
+      "description": "单次训练 100% 正确率（≥10题）"
+    },
+    "perfect20": {
+      "title": "完美无瑕",
+      "description": "单次训练 100% 正确率（≥20题）"
+    },
+    "eloBeginner": {
+      "title": "入门棋手",
+      "description": "ELO 达到 500+"
+    },
+    "eloIntermediate": {
+      "title": "进阶棋手",
+      "description": "ELO 达到 800+"
+    },
+    "eloAdvanced": {
+      "title": "中级棋手",
+      "description": "ELO 达到 1200+"
+    },
+    "eloExpert": {
+      "title": "专家棋手",
+      "description": "ELO 达到 2000+"
+    },
+    "firstPuzzle": {
+      "title": "谜题新手",
+      "description": "完成首次谜题"
+    },
+    "firstDailyPuzzle": {
+      "title": "每日挑战",
+      "description": "完成首次每日谜题"
+    },
+    "completeTrackAny": {
+      "title": "路径探索者",
+      "description": "完成任意学习路径"
+    },
+    "completeTrackLocal": {
+      "title": "本土化先锋",
+      "description": "完成本土化路径"
+    },
+    "allAchievements": {
+      "title": "成就猎手",
+      "description": "解锁所有成就"
+    },
+    "firstTheoryChapter": {
+      "title": "理论启蒙",
+      "description": "完成首个理论章节"
+    },
+    "theoryBasics": {
+      "title": "数学地基",
+      "description": "完成理论学院基础段（T1-T3）全部章节"
+    },
+    "theoryIntermediate": {
+      "title": "博弈思想家",
+      "description": "完成理论学院中级段（T4-T6）全部章节"
+    },
+    "theoryMaster": {
+      "title": "理论宗师",
+      "description": "完成理论学院全部 9 个 Level"
+    }
+  }
+}

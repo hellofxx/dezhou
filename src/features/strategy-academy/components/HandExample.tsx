@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import type { HandExample as HandExampleType } from '../types';
@@ -35,7 +37,7 @@ export function HandExampleComponent({
       /* P2-05: 入场仅淡入（去掉 y 位移——transform 偏移不参与布局，滚动时视觉覆盖下方元素产生重叠） */
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.08, 0.3) }}
+      transition={{ ...transitionStandard, delay: Math.min(index * 0.08, 0.3) }}
       className="space-y-5 max-w-full overflow-x-hidden"
     >
       {/* Title 行：序号徽章 + 标题 + 黄铜发线 */}
@@ -104,7 +106,7 @@ export function HandExampleComponent({
           {/* Board cards */}
           {boardCards.length > 0 && (
             <div className="flex flex-col items-center gap-2">
-              <span className="text-[10px] uppercase tracking-widest text-[var(--ivory-muted)]">公共牌</span>
+              <span className="text-[10px] uppercase tracking-widest text-[var(--ivory-muted)]">{t('academy.content.handExample.community')}</span>
               <div className="flex gap-2">
                 {boardCards.map((card, i) => (
                   <PokerCard key={i} card={card} size="sm" animationDelay={0.2 + i * 0.1} />
@@ -146,15 +148,21 @@ export function HandExampleComponent({
 
           {/* Stack + Bet info */}
           <div className="flex items-center gap-4 text-xs text-[var(--ivory-muted)]">
-            <span>筹码: <b className="text-[var(--ivory)] font-mono">{formatBB(example.effectiveStack)}</b></span>
+            <span>{t('academy.content.handExample.stack', { value: formatBB(example.effectiveStack) })}</span>
             {example.betSize && (
-              <span>下注: <b className="text-[var(--success)] font-mono">{formatBB(example.betSize)}</b></span>
+              <span>{t('academy.content.handExample.bet', { value: formatBB(example.betSize) })}</span>
             )}
           </div>
 
           {/* Street indicator */}
           <span className="text-[10px] uppercase tracking-widest text-[var(--ivory-muted)] mt-1">
-            {example.street === 'preflop' ? '翻前' : example.street === 'flop' ? '翻牌' : example.street === 'turn' ? '转牌' : '河牌'}
+            {example.street === 'preflop'
+              ? t('academy.content.handExample.streetPreflop')
+              : example.street === 'flop'
+                ? t('academy.content.handExample.streetFlop')
+                : example.street === 'turn'
+                  ? t('academy.content.handExample.streetTurn')
+                  : t('academy.content.handExample.streetRiver')}
           </span>
         </div>
       </div>
@@ -173,7 +181,7 @@ export function HandExampleComponent({
         <div className="rounded-lg border-l-4 border-[var(--success)] bg-[var(--success)]/5 p-4 overflow-hidden break-words">
           <div className="flex items-center gap-2 mb-3">
             <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-            <span className="text-sm font-semibold text-[var(--success)]">正确决策</span>
+            <span className="text-sm font-semibold text-[var(--success)]">{t('academy.content.handExample.correctDecision')}</span>
           </div>
           <p className="text-sm font-bold text-[var(--ivory)] mb-2">
             {example.correctDecision.action}
@@ -197,7 +205,7 @@ export function HandExampleComponent({
         <div className="rounded-lg border-l-4 border-[var(--danger)] bg-[var(--danger)]/5 p-4 overflow-hidden break-words">
           <div className="flex items-center gap-2 mb-3">
             <XCircle className="w-4 h-4 text-[var(--danger)]" />
-            <span className="text-sm font-semibold text-[var(--danger)]">常见错误</span>
+            <span className="text-sm font-semibold text-[var(--danger)]">{t('academy.content.handExample.commonMistake')}</span>
           </div>
           <p className="text-sm font-bold text-[var(--ivory)] mb-2">
             {example.commonMistake.action}

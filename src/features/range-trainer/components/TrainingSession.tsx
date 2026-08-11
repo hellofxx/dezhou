@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { RangeAction } from '@/shared/types/poker';
 import type { TrainingResult } from '@/shared/types/common';
 import type { QuestionFeedback } from '../types';
@@ -25,6 +26,7 @@ export function TrainingSession({
   onComplete,
   onExit,
 }: TrainingSessionProps) {
+  const { t } = useTranslation();
   const {
     quizState,
     getCurrentQuestion,
@@ -209,14 +211,15 @@ export function TrainingSession({
       <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--walnut-border)]">
         <div className="flex items-center gap-4">
           <div className="text-sm text-[var(--ivory-dim)]">
-            第 <span className="text-[var(--ivory)] font-bold font-numeric">{quizState.currentIndex + 1}</span>
-            {' / '}
-            <span className="font-numeric">{quizState.questions.length}</span> 题
+            {t('rangeTrainer.session.question', {
+              current: quizState.currentIndex + 1,
+              total: quizState.questions.length,
+            })}
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-[var(--sage)] font-medium font-numeric">{getScore.correct} 对</span>
+            <span className="text-[var(--sage)] font-medium font-numeric">{t('rangeTrainer.session.correctCount', { count: getScore.correct })}</span>
             <span className="text-[var(--ivory-muted)]">/</span>
-            <span className="text-[var(--clay)] font-medium font-numeric">{getScore.wrong} 错</span>
+            <span className="text-[var(--clay)] font-medium font-numeric">{t('rangeTrainer.session.wrongCount', { count: getScore.wrong })}</span>
           </div>
         </div>
 
@@ -254,12 +257,12 @@ export function TrainingSession({
       {/* P4 修复（4.5-P0）：连续答错降级提示 */}
       {shouldDownshiftDifficulty() && (
         <div className="px-6 py-2 bg-[var(--clay)]/15 border-b border-[var(--clay)]/30 text-xs text-[var(--clay)] flex items-center justify-between">
-          <span>检测到连续答错，建议返回选择更基础的位置或动作类型进行训练</span>
+          <span>{t('rangeTrainer.session.downshiftHint')}</span>
           <button
             onClick={onExit}
             className="text-[var(--clay)] underline hover:opacity-75 transition-opacity"
           >
-            切换训练
+            {t('rangeTrainer.session.switchTraining')}
           </button>
         </div>
       )}
@@ -281,7 +284,7 @@ export function TrainingSession({
       {/* 底部提示 */}
       <div className="text-center pb-4 text-xs text-[var(--ivory-dim)]">
         <span className="hidden sm:inline">
-          快捷键：1=Fold · 2=Call · 3=Raise · Space=跳过 · Esc=暂停
+          {t('rangeTrainer.session.shortcuts')}
         </span>
       </div>
 
@@ -289,19 +292,19 @@ export function TrainingSession({
       {quizState.status === 'paused' && (
         <div className="absolute inset-0 bg-[var(--felt-deep)]/85 backdrop-blur-sm flex items-center justify-center z-20">
           <div className="text-center space-y-4">
-            <div className="font-display text-2xl text-[var(--ivory)] tracking-wide">已暂停</div>
+            <div className="font-display text-2xl text-[var(--ivory)] tracking-wide">{t('rangeTrainer.session.paused')}</div>
             <Button
               onClick={handleResume}
               className="bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] px-8"
             >
-              继续训练
+              {t('rangeTrainer.session.resume')}
             </Button>
             <div>
               <button
                 onClick={onExit}
                 className="text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] transition-colors"
               >
-                退出训练
+                {t('rangeTrainer.session.exit')}
               </button>
             </div>
           </div>

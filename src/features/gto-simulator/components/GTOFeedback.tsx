@@ -53,7 +53,11 @@ export function GTOFeedback({
       ? 'text-[var(--clay)] border-[var(--clay)]/40 bg-[var(--clay)]/10'
       : 'text-[var(--brass-bright)] border-[var(--brass)]/40 bg-[var(--brass)]/10';
   const legacyStatusIcon = isOptimal ? '✓' : evLoss > 3 ? '✗' : '△';
-  const legacyStatusLabel = isOptimal ? '最优决策' : evLoss > 3 ? '严重错误' : '次优决策';
+  const legacyStatusLabel = isOptimal
+    ? t('gto.feedback.optimalLabel')
+    : evLoss > 3
+      ? t('gto.feedback.severeError')
+      : t('gto.feedback.suboptimal');
 
   // 五级反馈的默认文案兜底（i18n key 缺失时使用）
   const defaultGradeMessage =
@@ -129,7 +133,7 @@ export function GTOFeedback({
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs opacity-80">EV 损失</div>
+            <div className="text-xs opacity-80">{t('gto.evLoss')}</div>
             <div className="text-lg font-bold font-numeric">{Math.max(0, evLoss).toFixed(2)} BB</div>
           </div>
         </div>
@@ -139,7 +143,7 @@ export function GTOFeedback({
       {(userEV !== undefined || optimalEV !== undefined) && (
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="rounded-lg bg-black/20 p-2">
-            <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">你的 EV</div>
+            <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">{t('gto.feedback.yourEV')}</div>
             <div className={cn(
               'font-numeric font-bold text-sm',
               (userEV ?? 0) >= 0 ? 'text-[var(--sage)]' : 'text-[var(--clay)]'
@@ -148,13 +152,13 @@ export function GTOFeedback({
             </div>
           </div>
           <div className="rounded-lg bg-black/20 p-2">
-            <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">最优 EV</div>
+            <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">{t('gto.feedback.optimalEV')}</div>
             <div className="font-numeric font-bold text-sm text-[var(--brass-bright)]">
               {(optimalEV ?? 0) >= 0 ? '+' : ''}{(optimalEV ?? 0).toFixed(2)} BB
             </div>
           </div>
           <div className="rounded-lg bg-black/20 p-2">
-            <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">Hero Equity</div>
+            <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">{t('gto.feedback.heroEquity')}</div>
             <div className="font-numeric font-bold text-sm text-[var(--ivory)]">
               {Math.round((heroEquity ?? 0) * 100)}%
             </div>
@@ -164,7 +168,7 @@ export function GTOFeedback({
 
       {/* 接近最优标记（仅旧二元模式显示） */}
       {!isOptimal && evLoss < 0.3 && !feedback && (
-        <div className="text-xs text-[var(--sage)] font-display">✓ 接近最优（EV 损失 &lt; 0.3 BB）</div>
+        <div className="text-xs text-[var(--sage)] font-display">{t('gto.feedback.nearOptimal')}</div>
       )}
 
       {/* 对手信息（Exploit 模式） */}
@@ -173,7 +177,8 @@ export function GTOFeedback({
           <span className="text-lg">{opponent.icon}</span>
           <div className="flex-1">
             <span className="text-xs font-display font-semibold" style={{ color: opponent.color }}>
-              对手: {opponent.name}
+              {t('gto.feedback.opponentPrefix')}{' '}
+              {t(`gto.setup.opponentProfile.${opponent.id}.name`, { defaultValue: opponent.name })}
             </span>
             <div className="flex gap-2 text-[10px] font-numeric text-[var(--ivory-muted)]">
               <span>VPIP {opponent.stats.vpip}%</span>
@@ -187,7 +192,7 @@ export function GTOFeedback({
       {/* 频率条形图 — Raise=brass, Call=sage, Fold=clay */}
       {gtoStrategy && (
         <div className="space-y-2">
-          <div className="text-xs font-medium opacity-80">GTO 频率分布</div>
+          <div className="text-xs font-medium opacity-80">{t('gto.feedback.frequencyDistribution')}</div>
           <div className="flex h-6 rounded overflow-hidden">
             {gtoStrategy.raise > 0 && (
               <div
@@ -221,7 +226,7 @@ export function GTOFeedback({
           </div>
           {gtoStrategy.raiseAmount && gtoStrategy.raise > 0 && (
             <div className="text-xs text-[var(--ivory-muted)] font-numeric">
-              建议加注大小: {gtoStrategy.raiseAmount} BB
+              {t('gto.feedback.suggestedRaise', { amount: gtoStrategy.raiseAmount })}
             </div>
           )}
         </div>
@@ -230,7 +235,7 @@ export function GTOFeedback({
       {/* Exploit 策略对比（Exploit 模式） */}
       {exploitMode && exploitStrategy && gtoStrategy && (
         <div className="space-y-2">
-          <div className="text-xs font-medium opacity-80">剥削建议（vs {opponent?.shortName ?? '对手'}）</div>
+          <div className="text-xs font-medium opacity-80">{t('gto.feedback.exploitSuggestion', { name: opponent?.shortName ?? t('gto.feedback.opponentPrefix') })}</div>
           <div className="flex h-6 rounded overflow-hidden">
             {exploitStrategy.raise > 0 && (
               <div
@@ -263,9 +268,17 @@ export function GTOFeedback({
             <span className="text-[var(--clay)]">Fold {Math.round(exploitStrategy.fold * 100)}%</span>
           </div>
           <div className="text-[10px] text-[var(--ivory-muted)]">
-            GTO: R{Math.round(gtoStrategy.raise * 100)}/C{Math.round(gtoStrategy.call * 100)}/F{Math.round(gtoStrategy.fold * 100)}
+            {t('gto.feedback.gtoRatio', {
+              r: Math.round(gtoStrategy.raise * 100),
+              c: Math.round(gtoStrategy.call * 100),
+              f: Math.round(gtoStrategy.fold * 100),
+            })}
             {' → '}
-            剥削: R{Math.round(exploitStrategy.raise * 100)}/C{Math.round(exploitStrategy.call * 100)}/F{Math.round(exploitStrategy.fold * 100)}
+            {t('gto.feedback.exploitRatio', {
+              r: Math.round(exploitStrategy.raise * 100),
+              c: Math.round(exploitStrategy.call * 100),
+              f: Math.round(exploitStrategy.fold * 100),
+            })}
           </div>
         </div>
       )}

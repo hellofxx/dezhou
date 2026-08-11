@@ -4,6 +4,8 @@ import { Zap, Route, GraduationCap, Network, ChevronRight } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import type { LevelInfo } from '../types';
+import type { PokerVariant } from '@/shared/types/elo';
 import { LEVELS } from '../data/courses';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyStore } from '../store';
@@ -13,6 +15,27 @@ import { LevelLadder, findActiveLevelId } from './LevelLadder';
 import { DailyPlanCard } from './DailyPlanCard';
 import { VariantToggle } from '@/shared/components/VariantToggle';
 import { VARIANT_LESSON_INDEX } from '../data/lessons/variants';
+
+/**
+ * ACAD-05：按变体构造课程阶梯。
+ * - standard：直接返回标准 LEVELS。
+ * - short-deck / heads-up：复用 VARIANT_LESSON_INDEX 按 level 分组，
+ *   元数据沿用标准 LevelInfo（L1/L2 为共享基础层，标题结构一致），
+ *   课程列表替换为变体课程，使变体课程从 UI 可达。
+ */
+function buildVariantLevels(variant: PokerVariant): LevelInfo[] {
+  const variantLessons = VARIANT_LESSON_INDEX[variant];
+  const byLevel = new Map<number, LevelInfo['lessons']>();
+  for (const l of variantLessons) {
+    const arr = byLevel.get(l.level) ?? [];
+    arr.push(l);
+    byLevel.set(l.level, arr);
+  }
+  return LEVELS.filter((lv) => byLevel.has(lv.level)).map((lv) => ({
+    ...lv,
+    lessons: byLevel.get(lv.level) ?? lv.lessons,
+  }));
+}
 
 export default function AcademyHome() {
   const { t } = useTranslation();
@@ -26,13 +49,16 @@ export default function AcademyHome() {
   const totalLessons = getTotalLessonCount();
   const completedCount = progress.completedLessons.length;
 
-  const activeLevelId = findActiveLevelId(LEVELS, progress.completedLessons, isLevelEntryUnlocked);
-  const activeLevel = LEVELS.find((l) => (l.id ?? String(l.level)) === activeLevelId) ?? null;
+  // ACAD-05：阶梯按当前变体渲染（standard 原样；short-deck/heads-up 用变体课程列表）
+  const ladderLevels = activeVariant === 'standard' ? LEVELS : buildVariantLevels(activeVariant);
 
-  const levelsDoneCount = LEVELS.filter((level) =>
+  const activeLevelId = findActiveLevelId(ladderLevels, progress.completedLessons, isLevelEntryUnlocked);
+  const activeLevel = ladderLevels.find((l) => (l.id ?? String(l.level)) === activeLevelId) ?? null;
+
+  const levelsDoneCount = ladderLevels.filter((level) =>
     level.lessons.every((l) => progress.completedLessons.includes(l.id))
   ).length;
-  const certifiedCount = LEVELS.reduce(
+  const certifiedCount = ladderLevels.reduce(
     (n, level) => (isCertified(level.level) ? n + 1 : n),
     0
   );
@@ -56,7 +82,7 @@ export default function AcademyHome() {
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.05 }}
+          transition={{ ...transitionStandard, delay: 0.05 }}
           className="panel variant-panel"
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
@@ -88,7 +114,7 @@ export default function AcademyHome() {
             className="lg:col-span-2"
           >
             <LevelLadder
-              levels={LEVELS}
+              levels={ladderLevels}
               completedLessons={progress.completedLessons}
               isUnlocked={isLevelEntryUnlocked}
             />

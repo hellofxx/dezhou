@@ -2,10 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { GAME_VARIANT_CONFIGS } from '@/shared/constants/poker';
 import type { GameVariant } from '@/shared/types/poker';
-import { useProgressStore } from '@/features/progress/store';
 
+// PLAT-02 修复：改为受控组件（props 注入 currentVariant/onChange），
+// 解除对 features/progress/store 的直接依赖（shared 不依赖 feature 的分层约束）。
+// PLAT-03 修复：VARIANT_DESCRIPTIONS 双语双轨改为 i18n key（gameVariant.desc* / deckSize / players）。
 interface GameVariantSelectorProps {
   compact?: boolean;
+  /** 当前变体（受控值），由使用方从 progress store 读取传入 */
+  currentVariant: GameVariant;
+  /** 变体切换回调，由使用方调用 progress store 的 setGameVariant */
   onChange?: (variant: GameVariant) => void;
 }
 
@@ -19,22 +24,15 @@ const VARIANT_BADGES: Partial<Record<GameVariant, string>> = {
   'short-deck': '6+',
 };
 
-const VARIANT_DESCRIPTIONS: Record<GameVariant, { zh: string; en: string }> = {
-  standard: { zh: '经典52张牌，全球最流行的扑克变体', en: 'Classic 52-card deck, the world\'s most popular poker variant' },
-  'short-deck': { zh: '36张牌（6-A），三条>顺子，同花>葫芦', en: '36 cards (6-A), trips > straight, flush > full house' },
-  'heads-up': { zh: '1v1 单挑对决，纯策略博弈', en: '1v1 duel, pure strategy battle' },
-};
-
-export function GameVariantSelector({ compact = false, onChange }: GameVariantSelectorProps) {
-  const { t, i18n } = useTranslation();
-  const currentVariant = useProgressStore((s) => s.currentGameVariant);
-  const setGameVariant = useProgressStore((s) => s.setGameVariant);
-  const lang = i18n.language as 'zh' | 'en';
+export function GameVariantSelector({ compact = false, currentVariant, onChange }: GameVariantSelectorProps) {
+  const { t } = useTranslation();
 
   const variants: GameVariant[] = ['standard', 'short-deck', 'heads-up'];
 
+  const i18nKeyFor = (variant: GameVariant) =>
+    variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard';
+
   const handleSelect = (variant: GameVariant) => {
-    setGameVariant(variant);
     onChange?.(variant);
   };
 
@@ -53,11 +51,11 @@ export function GameVariantSelector({ compact = false, onChange }: GameVariantSe
                   ? 'bg-[var(--brass-bright)] text-[var(--felt-deep)] shadow-sm'
                   : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]'
               )}
-              aria-label={t(`gameVariant.${variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard'}`)}
+              aria-label={t(`gameVariant.${i18nKeyFor(variant)}`)}
             >
               <span className="text-sm leading-none">{VARIANT_ICONS[variant]}</span>
               <span className="hidden sm:inline">
-                {t(`gameVariant.${variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard'}`)}
+                {t(`gameVariant.${i18nKeyFor(variant)}`)}
               </span>
               {VARIANT_BADGES[variant] && (
                 <span className={cn(
@@ -81,7 +79,7 @@ export function GameVariantSelector({ compact = false, onChange }: GameVariantSe
       {variants.map((variant) => {
         const config = GAME_VARIANT_CONFIGS[variant];
         const isActive = currentVariant === variant;
-        const i18nKey = variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard';
+        const i18nKey = i18nKeyFor(variant);
 
         return (
           <button
@@ -90,10 +88,10 @@ export function GameVariantSelector({ compact = false, onChange }: GameVariantSe
             className={cn(
               'relative flex flex-col items-start gap-1.5 rounded-lg border p-3 text-left transition-all',
               isActive
-                ? 'border-[var(--brass-bright)] bg-[var(--brass-bright)]/10 shadow-[0_0_12px_rgba(212,175,55,0.15)]'
+                ? 'border-[var(--brass-bright)] bg-[var(--brass-bright)]/10 shadow-[var(--shadow-brass-glow)]'
                 : 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/40 hover:bg-[var(--felt)]/80'
             )}
-            aria-label={t(`gameVariant.${variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard'}`)}
+            aria-label={t(`gameVariant.${i18nKey}`)}
           >
             <div className="flex items-center gap-2 w-full">
               <span className="text-xl">{VARIANT_ICONS[variant]}</span>
@@ -109,14 +107,14 @@ export function GameVariantSelector({ compact = false, onChange }: GameVariantSe
                 </span>
               )}
               {isActive && (
-                <span className="ml-auto h-2 w-2 rounded-full bg-[var(--brass-bright)] shadow-[0_0_6px_rgba(212,175,55,0.6)]" />
+                <span className="ml-auto h-2 w-2 rounded-full bg-[var(--brass-bright)] shadow-[var(--shadow-brass-glow-dot)]" />
               )}
             </div>
             <p className="text-xs text-[var(--ivory-muted)] leading-relaxed">
-              {VARIANT_DESCRIPTIONS[variant][lang] || VARIANT_DESCRIPTIONS[variant].zh}
+              {t(`gameVariant.desc${i18nKey}`)}
             </p>
             <p className="text-[10px] text-[var(--ivory-muted)]/60">
-              {config.deckSize} {lang === 'zh' ? '张牌' : 'cards'} · {config.minPlayers}-{config.maxPlayers} {lang === 'zh' ? '人' : 'players'}
+              {config.deckSize} {t('gameVariant.deckSize')} · {config.minPlayers}-{config.maxPlayers} {t('gameVariant.players')}
             </p>
           </button>
         );

@@ -87,11 +87,24 @@ export default function StreakCelebration({ days, open, onClose }: StreakCelebra
   const handleShare = useCallback(async () => {
     setSharing(true);
     try {
-      const blob = await generateStreakShareCanvas(days, {
-        accuracy: summary.overallAccuracy,
-        badges: [],
-        currentStreak: streak.currentStreak,
-      });
+      // PLAT-10：Canvas 文案走 i18n（t() 翻译传入），消除分享卡硬编码中文
+      const blob = await generateStreakShareCanvas(
+        days,
+        {
+          accuracy: summary.overallAccuracy,
+          badges: [],
+          currentStreak: streak.currentStreak,
+        },
+        {
+          title: t('streak.share.title'),
+          dayUnit: t('streak.share.dayUnit'),
+          statsLine: (accuracyPct, badgeCount) =>
+            t('streak.share.statsLine', { accuracy: accuracyPct, count: badgeCount }),
+          currentLine: (current, longest) =>
+            t('streak.share.currentLine', { current, longest }),
+          productName: t('streak.share.productName'),
+        },
+      );
       downloadBlob(blob, `streak-${days}-days.png`);
     } catch (err) {
       console.error('[StreakCelebration] 生成分享卡片失败', err);

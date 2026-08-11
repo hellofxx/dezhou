@@ -1,6 +1,8 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import React from 'react';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
@@ -171,7 +173,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
     <motion.g
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.25, delay: (node.level - 1) * 0.06 + node.order * 0.03 }}
+      transition={{ ...transitionStandard, delay: (node.level - 1) * 0.06 + node.order * 0.03 }}
       style={{ cursor: 'pointer' }}
       onClick={(e) => {
         e.stopPropagation();
@@ -260,7 +262,13 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
             {levelInfo
               ? `L${levelInfo.level} · ${t(levelTitleKey(`l${levelInfo.level}`), { defaultValue: levelInfo.title })}`
               : ''} ·{' '}
-            {status === 'completed' ? '已完成' : status === 'current' ? '进行中' : status === 'locked' ? '未解锁' : '未开始'}
+            {status === 'completed'
+              ? t('academy.conceptGraph.statusCompleted')
+              : status === 'current'
+                ? t('academy.conceptGraph.statusInProgress')
+                : status === 'locked'
+                  ? t('academy.conceptGraph.statusLocked')
+                  : t('academy.conceptGraph.statusNotStarted')}
           </text>
         </g>
       )}
@@ -472,7 +480,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
           onClick={resetView}
           className="px-2 py-1 text-[10px] rounded bg-[var(--walnut-raised)] border border-[var(--walnut-border)] text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] hover:border-[var(--brass)] transition-colors"
         >
-          适应屏幕
+          {t('academy.conceptGraph.fitScreen')}
         </button>
       </div>
 
@@ -597,27 +605,27 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 justify-center">
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-[var(--poker-success)]/20 border border-[var(--poker-success)]" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">已完成</span>
+          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendCompleted')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-[var(--surface-raised)] border border-[var(--brass)]" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">进行中</span>
+          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendInProgress')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-[var(--surface-raised)] border border-white/25" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">未开始</span>
+          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendNotStarted')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm border border-dashed border-[var(--ivory-dim)]" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">未解锁</span>
+          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendLocked')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="var(--success)" strokeWidth="1.5" /></svg>
-          <span className="text-[10px] text-[var(--ivory-muted)]">已完成路径</span>
+          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendCompletedPath')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="var(--walnut-light)" strokeWidth="1.5" strokeDasharray="4 2" /></svg>
-          <span className="text-[10px] text-[var(--ivory-muted)]">前置依赖</span>
+          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendPrerequisite')}</span>
         </div>
       </div>
     </div>

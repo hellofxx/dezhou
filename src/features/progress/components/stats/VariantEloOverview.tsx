@@ -54,7 +54,7 @@ export function VariantEloOverview() {
                 </div>
                 <div className="text-xs text-[var(--ivory-muted)] flex items-center gap-1">
                   <span>{rank.icon}</span>
-                  <span>{rank.name}</span>
+                  <span>{t(`progress.rank.${rank.name}.name`)}</span>
                   {elo.gamesPlayed > 0 && <span>· {elo.gamesPlayed} {t('variant.gamesPlayed')}</span>}
                 </div>
               </button>

@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, Flag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
+import { transitionFast } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
@@ -113,7 +113,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.standard }}
+          transition={transitionFast}
         >
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs text-[var(--ivory-muted)] font-numeric">
@@ -145,7 +145,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                   key={index}
                   onClick={() => handleSelect(index)}
                   disabled={showExplanation}
-                  aria-label={`选项 ${String.fromCharCode(65 + index)}: ${option}`}
+                  aria-label={t('theory.quiz.optionAria', { letter: String.fromCharCode(65 + index), option })}
                   className={cn(
                     'w-full text-left min-h-11 px-4 py-3 rounded-lg border text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
                     !showExplanation &&
@@ -173,7 +173,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
+              transition={transitionFast}
               className={cn(
                 'mt-4 rounded-lg p-4 text-sm leading-relaxed',
                 isCorrect
@@ -181,7 +181,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                   : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
               )}
             >
-              <p className="font-semibold mb-1">{isCorrect ? '✓ 正确！' : '✗ 错误'}</p>
+              <p className="font-semibold mb-1">{isCorrect ? t('theory.quiz.correct') : t('theory.quiz.incorrect')}</p>
               <p>{question.explanation}</p>
             </motion.div>
           )}
@@ -192,7 +192,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                 onClick={handleNext}
                 className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
               >
-                {currentIndex < orderedQuestions.length - 1 ? '下一题' : '查看结果'}
+                {currentIndex < orderedQuestions.length - 1 ? t('theory.quiz.next') : t('theory.quiz.viewResult')}
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

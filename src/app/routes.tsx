@@ -4,41 +4,55 @@ import AppLayout from '@/layouts/AppLayout';
 import BlankLayout from '@/layouts/BlankLayout';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
+import { preloadI18n } from '@/i18n/preload';
+import { FEATURE_GROUPS } from '@/i18n/moduleRegistry';
+
+type PageModule = { default: React.ComponentType<unknown> };
+type PageLoader = () => Promise<PageModule>;
+
+/**
+ * 路由级懒加载：页面组件 chunk 与该路由所需翻译模块并行加载。
+ * 翻译注入（preloadI18n）在组件渲染前完成，core 模块幂等跳过不重复加载。
+ */
+function lazyPage(loader: PageLoader, group: keyof typeof FEATURE_GROUPS) {
+  const keys = FEATURE_GROUPS[group];
+  return lazy(() => Promise.all([loader(), preloadI18n(keys)]).then(([mod]) => mod));
+}
 
 // Lazy-loaded pages
-const Dashboard = lazy(() => import('@/features/progress/components/dashboard/Dashboard'));
-const RangeTrainerHome = lazy(() => import('@/features/range-trainer/components/RangeTrainerHome'));
-const RangeLearnPage = lazy(() => import('@/features/range-trainer/components/RangeLearnPage'));
-const RangeQuizPage = lazy(() => import('@/features/range-trainer/components/RangeQuizPage'));
-const PotOddsPage = lazy(() => import('@/features/pot-odds/components/PotOddsPage'));
-const PotOddsQuizPage = lazy(() => import('@/features/pot-odds/components/PotOddsQuizPage'));
-const GTOSimulatorHome = lazy(() => import('@/features/gto-simulator/components/GTOSimulatorHome'));
-const GTOResultPage = lazy(() => import('@/features/gto-simulator/components/GTOResultPage'));
-const GTOSessionPage = lazy(() => import('@/features/gto-simulator/components/GTOSessionPage'));
-const HandHistoryList = lazy(() => import('@/features/hand-history/components/HandHistoryList'));
-const HandImportPage = lazy(() => import('@/features/hand-history/components/HandImportPage'));
-const HandReplayPage = lazy(() => import('@/features/hand-history/components/HandReplayPage'));
-const ProgressPage = lazy(() => import('@/features/progress/components/replay/ProgressPage'));
-const SettingsPage = lazy(() => import('@/features/progress/components/settings/SettingsPage'));
-const RangeStatsPage = lazy(() => import('@/features/progress/components/stats/RangeStatsPage'));
-const GTOStatsPage = lazy(() => import('@/features/progress/components/stats/GTOStatsPage'));
-const LeaderboardPage = lazy(() => import('@/features/progress/components/achievement/Leaderboard'));
-const AcademyHome = lazy(() => import('@/features/strategy-academy/components/AcademyHome'));
-const CourseView = lazy(() => import('@/features/strategy-academy/components/CourseView'));
-const BasicsIntro = lazy(() => import('@/features/strategy-academy/components/BasicsIntro'));
-const ConceptGraphView = lazy(() => import('@/features/strategy-academy/components/ConceptGraphView'));
-const LearningTracksView = lazy(() => import('@/features/strategy-academy/components/LearningTracksView'));
-const QuickDrill = lazy(() => import('@/features/strategy-academy/components/QuickDrill'));
-const LevelCertification = lazy(() => import('@/features/strategy-academy/components/LevelCertification'));
-const OnboardingFlow = lazy(() => import('@/features/onboarding/components/OnboardingFlow'));
-const PuzzleHome = lazy(() => import('@/features/puzzle-trainer/components/PuzzleHome'));
-const PuzzleRush = lazy(() => import('@/features/puzzle-trainer/components/PuzzleRush'));
-const DailyPuzzle = lazy(() => import('@/features/puzzle-trainer/components/DailyPuzzle'));
-const ThemeDrill = lazy(() => import('@/features/puzzle-trainer/components/ThemeDrill'));
-const TheoryHome = lazy(() => import('@/features/theory-academy/components/TheoryHome'));
-const TheoryChapterView = lazy(() => import('@/features/theory-academy/components/TheoryChapterView'));
-const HelpHome = lazy(() => import('@/features/help-center/components/HelpHome'));
-const HelpArticle = lazy(() => import('@/features/help-center/components/HelpArticle'));
+const Dashboard = lazyPage(() => import('@/features/progress/components/dashboard/Dashboard'), '/');
+const RangeTrainerHome = lazyPage(() => import('@/features/range-trainer/components/RangeTrainerHome'), '/range-trainer');
+const RangeLearnPage = lazyPage(() => import('@/features/range-trainer/components/RangeLearnPage'), '/range-trainer/learn');
+const RangeQuizPage = lazyPage(() => import('@/features/range-trainer/components/RangeQuizPage'), '/range-trainer/quiz');
+const PotOddsPage = lazyPage(() => import('@/features/pot-odds/components/PotOddsPage'), '/pot-odds');
+const PotOddsQuizPage = lazyPage(() => import('@/features/pot-odds/components/PotOddsQuizPage'), '/pot-odds/quiz');
+const GTOSimulatorHome = lazyPage(() => import('@/features/gto-simulator/components/GTOSimulatorHome'), '/gto-simulator');
+const GTOResultPage = lazyPage(() => import('@/features/gto-simulator/components/GTOResultPage'), '/gto-simulator/result/:sessionId');
+const GTOSessionPage = lazyPage(() => import('@/features/gto-simulator/components/GTOSessionPage'), '/gto-simulator/session/:scenarioId');
+const HandHistoryList = lazyPage(() => import('@/features/hand-history/components/HandHistoryList'), '/hand-history');
+const HandImportPage = lazyPage(() => import('@/features/hand-history/components/HandImportPage'), '/hand-history/import');
+const HandReplayPage = lazyPage(() => import('@/features/hand-history/components/HandReplayPage'), '/hand-history/:handId');
+const ProgressPage = lazyPage(() => import('@/features/progress/components/replay/ProgressPage'), '/progress');
+const SettingsPage = lazyPage(() => import('@/features/progress/components/settings/SettingsPage'), '/settings');
+const RangeStatsPage = lazyPage(() => import('@/features/progress/components/stats/RangeStatsPage'), '/progress/range');
+const GTOStatsPage = lazyPage(() => import('@/features/progress/components/stats/GTOStatsPage'), '/progress/gto');
+const LeaderboardPage = lazyPage(() => import('@/features/progress/components/achievement/Leaderboard'), '/leaderboard');
+const AcademyHome = lazyPage(() => import('@/features/strategy-academy/components/AcademyHome'), '/academy');
+const CourseView = lazyPage(() => import('@/features/strategy-academy/components/CourseView'), '/academy/lesson/:lessonId');
+const BasicsIntro = lazyPage(() => import('@/features/strategy-academy/components/BasicsIntro'), '/academy/basics');
+const ConceptGraphView = lazyPage(() => import('@/features/strategy-academy/components/ConceptGraphView'), '/academy/concept-graph');
+const LearningTracksView = lazyPage(() => import('@/features/strategy-academy/components/LearningTracksView'), '/academy/tracks');
+const QuickDrill = lazyPage(() => import('@/features/strategy-academy/components/QuickDrill'), '/academy/quick-drill');
+const LevelCertification = lazyPage(() => import('@/features/strategy-academy/components/LevelCertification'), '/academy/certification/:level');
+const OnboardingFlow = lazyPage(() => import('@/features/onboarding/components/OnboardingFlow'), '/onboarding');
+const PuzzleHome = lazyPage(() => import('@/features/puzzle-trainer/components/PuzzleHome'), '/puzzle');
+const PuzzleRush = lazyPage(() => import('@/features/puzzle-trainer/components/PuzzleRush'), '/puzzle/rush');
+const DailyPuzzle = lazyPage(() => import('@/features/puzzle-trainer/components/DailyPuzzle'), '/puzzle/daily');
+const ThemeDrill = lazyPage(() => import('@/features/puzzle-trainer/components/ThemeDrill'), '/puzzle/theme/:themeId');
+const TheoryHome = lazyPage(() => import('@/features/theory-academy/components/TheoryHome'), '/theory');
+const TheoryChapterView = lazyPage(() => import('@/features/theory-academy/components/TheoryChapterView'), '/theory/chapter/:chapterId');
+const HelpHome = lazyPage(() => import('@/features/help-center/components/HelpHome'), '/help');
+const HelpArticle = lazyPage(() => import('@/features/help-center/components/HelpArticle'), '/help/article/:articleId');
 
 function LazyWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -85,7 +99,7 @@ export const router = createBrowserRouter([
   {
     element: <BlankLayout />,
     children: [
-      { path: 'onboarding', element: <LazyWrapper><OnboardingFlow /></LazyWrapper> },
+      { path: 'onboarding', element: <LazyWrapper><ErrorBoundary><OnboardingFlow /></ErrorBoundary></LazyWrapper> },
       { path: 'range-trainer/learn', element: <LazyWrapper><RangeLearnPage /></LazyWrapper> },
       { path: 'range-trainer/quiz', element: <LazyWrapper><RangeQuizPage /></LazyWrapper> },
       { path: 'pot-odds/quiz', element: <LazyWrapper><PotOddsQuizPage /></LazyWrapper> },

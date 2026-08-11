@@ -34,3 +34,12 @@ export interface FaqItem {
   questionKey: string;
   answerKey: string;
 }
+
+/** 系统概念卡片图标 key（HELP-04：字面量联合，编译期校验） */
+export type ConceptIconKey = 'gauge' | 'flame' | 'repeat' | 'award' | 'clock' | 'database';
+
+/** 系统概念卡片 */
+export interface ConceptCard {
+  key: string;
+  iconKey: ConceptIconKey;
+}

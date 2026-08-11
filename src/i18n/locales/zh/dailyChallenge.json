@@ -1,0 +1,15 @@
+{
+  "title": "今日任务",
+  "rangeChallenge": "完成 {{count}} 题手牌范围训练，正确率 > {{accuracy}}%",
+  "potOddsChallenge": "完成 {{count}} 题赔率计算训练，正确率 > {{accuracy}}%",
+  "gtoChallenge": "完成 {{count}} 题 GTO 模拟训练，正确率 > {{accuracy}}%",
+  "completed": "已完成",
+  "notCompleted": "未完成",
+  "consecutiveDays": "连续训练天数",
+  "startChallenge": "开始挑战",
+  "reward": "奖励",
+  "rewardRange": "手牌大师",
+  "rewardPotOdds": "赔率专家",
+  "rewardGto": "GTO 精英",
+  "dailyPuzzle": "每日谜题"
+}

@@ -138,7 +138,7 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
                 key={profileId}
                 onClick={() => handleSelectType(profileId)}
                 disabled={selectedType !== null}
-                aria-label={profile.name}
+                aria-label={t(`gto.setup.opponentProfile.${profile.id}.name`, { defaultValue: profile.name })}
                 className={cn(
                   'rounded-lg border px-3 py-2.5 text-left text-sm transition-all',
                   'border-[var(--walnut-border)] bg-[var(--walnut-raised)] text-[var(--ivory)]',
@@ -149,7 +149,7 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
                 )}
               >
                 <span className="mr-1.5">{profile.icon}</span>
-                {profile.name}
+                {t(`gto.setup.opponentProfile.${profile.id}.name`, { defaultValue: profile.name })}
               </button>
             );
           })}
@@ -216,7 +216,11 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
             </span>
             {!typeCorrect && (
               <span className="text-xs text-[var(--ivory-muted)]">
-                {t('drills.common.correctAnswerPrefix', { answer: getOpponentProfile(current.correctType).name })}
+                {t('drills.common.correctAnswerPrefix', {
+                  answer: t(`gto.setup.opponentProfile.${current.correctType}.name`, {
+                    defaultValue: getOpponentProfile(current.correctType).name,
+                  }),
+                })}
               </span>
             )}
           </div>

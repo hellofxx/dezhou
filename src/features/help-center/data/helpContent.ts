@@ -2,7 +2,7 @@
  * 帮助中心纯数据层 — 只存 i18n key，不含硬编码文案。
  * 所有用户可见文本通过 `help.*` 命名空间在 zh.json / en.json 中维护。
  */
-import type { HelpArticle, FaqItem } from '../types';
+import type { HelpArticle, FaqItem, ConceptCard } from '../types';
 
 /** 9 篇教程文章（8 模块 + 平台总览） */
 export const HELP_ARTICLES: HelpArticle[] = [
@@ -144,7 +144,7 @@ export const QUICK_START_STEPS: { key: string; to: string }[] = [
 ];
 
 /** 6 个系统概念卡片 */
-export const CONCEPT_CARDS: { key: string; iconKey: string }[] = [
+export const CONCEPT_CARDS: ConceptCard[] = [
   { key: 'concepts.elo', iconKey: 'gauge' },
   { key: 'concepts.streak', iconKey: 'flame' },
   { key: 'concepts.srs', iconKey: 'repeat' },

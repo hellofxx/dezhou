@@ -1,0 +1,127 @@
+{
+  "title": "手牌范围训练",
+  "subtitle": "学习各位置的标准开牌范围，掌握 GTO 基础",
+  "learnSubtitle": "浏览和学习各位置的标准开牌范围",
+  "learn": "学习模式",
+  "quiz": "测验模式",
+  "startQuiz": "开始训练",
+  "correct": "正确",
+  "wrong": "错误",
+  "timeRemaining": "剩余时间",
+  "variant": {
+    "standard": "标准德州",
+    "shortDeck": "短牌德州 (6+)",
+    "headsUp": "单挑 (HU)",
+    "label": "游戏变体",
+    "playerCount": "玩家人数",
+    "max": "{{count}}-Max",
+    "shortDeckHint": "短牌模式：移除 2-5，共 36 张牌，9×9 范围矩阵。同花 > 葫芦，顺子 > 三条。"
+  },
+  "rangeSelect": {
+    "title": "范围选择",
+    "hint": "选择位置和动作类型查看标准范围",
+    "position": "位置",
+    "actionType": "动作类型",
+    "preset": "预设范围",
+    "presetPlaceholder": "选择预设范围...",
+    "presetHands": "{{name}} ({{count}} 手牌)",
+    "unlockRequirement": "需 preflop ELO ≥ {{threshold}} 解锁"
+  },
+  "rangeInfo": {
+    "title": "范围信息",
+    "currentRange": "当前范围",
+    "stats": "范围统计",
+    "handCount": "手牌数",
+    "rangePercent": "范围占比",
+    "typeDistribution": "类型分布",
+    "pair": "对子 (Pair)",
+    "suited": "同花 (Suited)",
+    "offsuit": "非同花 (Offsuit)",
+    "handDetail": "手牌详情",
+    "inRange": "在范围内",
+    "notInRange": "不在范围",
+    "typeLabel": "类型: {{type}}",
+    "matrixLegend": "对角线=对子 | 上三角=同花 | 下三角=非同花 | 金色=在范围内",
+    "matrix9": "9×9 范围矩阵",
+    "matrix13": "13×13 范围矩阵"
+  },
+  "footer": {
+    "note": "以上范围基于 6-max 现金局近似 GTO 策略，实际范围会根据对手倾向和筹码深度有所调整。",
+    "hover": "悬停网格中的格子可查看手牌详情，金色表示该手牌在当前范围中。"
+  },
+  "config": {
+    "title": "范围测验",
+    "subtitle": "测试你对各位置开牌范围的掌握程度",
+    "position": "位置",
+    "actionType": "动作类型",
+    "timeLimit": "每题限时",
+    "questionCount": "题目数量",
+    "noPreset": "该组合暂无题库",
+    "start": "开始训练",
+    "timeUnlimited": "无限时",
+    "timeSeconds": "{{count}} 秒",
+    "questionUnit": "{{count}} 题",
+    "shortcuts": "快捷键：1=Fold · 2=Call · 3=Raise · Esc=暂停"
+  },
+  "session": {
+    "question": "第 {{current}} / {{total}} 题",
+    "correctCount": "{{count}} 对",
+    "wrongCount": "{{count}} 错",
+    "downshiftHint": "检测到连续答错，建议返回选择更基础的位置或动作类型进行训练",
+    "switchTraining": "切换训练",
+    "shortcuts": "快捷键：1=Fold · 2=Call · 3=Raise · Space=确认/下一题 · Esc=暂停",
+    "paused": "已暂停",
+    "resume": "继续训练",
+    "exit": "退出训练"
+  },
+  "result": {
+    "title": "训练完成！",
+    "accuracy": "正确率",
+    "total": "总题数",
+    "correct": "正确",
+    "wrong": "错误",
+    "avgTime": "平均用时",
+    "weakHands": "薄弱手牌",
+    "wrongCount": "错 {{count}} 次",
+    "wrongDetails": "错题详情",
+    "hand": "手牌",
+    "yourChoice": "你的选择",
+    "correctAnswer": "正确答案",
+    "time": "用时",
+    "retry": "再练一次",
+    "backHome": "返回首页",
+    "excellent": "优秀！",
+    "good": "良好",
+    "keepGoing": "继续加油",
+    "morePractice": "需要更多练习"
+  },
+  "quizCard": {
+    "prompt": "这手牌应该 <raise>Raise</raise>、<call>Call</call> 还是 <fold>Fold</fold>？",
+    "correct": "✓ 正确！",
+    "wrong": "✗ 错误",
+    "correctAnswerIs": "正确答案是 {{action}}",
+    "inRange": "— 这手牌在标准范围内",
+    "notInRange": "— 这手牌不在标准范围内",
+    "suitableCall": "— 这手牌适合跟注",
+    "pair": "对子",
+    "suited": "同花",
+    "offsuit": "非同花"
+  },
+  "presetName": {
+    "sd-co-open": "短牌 CO Open Raise",
+    "sd-btn-open": "短牌 BTN Open Raise",
+    "4bet-range": "通用 4-Bet 范围 (~4%)"
+  },
+  "srs": {
+    "howToAct": "{{hand}} 在 {{position}} 该如何行动？",
+    "optionFold": "弃牌 Fold",
+    "optionCall": "跟注 Call",
+    "optionRaise": "加注 Raise"
+  },
+  "feedback": {
+    "optimalAction": "最优动作是 {{action}}。"
+  },
+  "timer": {
+    "paused": "暂停"
+  }
+}

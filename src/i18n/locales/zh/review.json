@@ -1,0 +1,30 @@
+{
+  "title": "今日复习",
+  "subtitle": "按类别混合复习，巩固长期记忆",
+  "category": {
+    "strategy": "策略",
+    "range": "范围",
+    "odds": "赔率",
+    "gto": "GTO"
+  },
+  "defaultFront": "请回忆该知识点的关键内容，然后点击\"显示答案\"自评。",
+  "answerLabel": "答案",
+  "showAnswer": "显示答案",
+  "remembered": "记得",
+  "forgot": "不记得",
+  "minimalHint": "请回忆该知识点的关键内容，自评是否记得。",
+  "next": "下一题",
+  "finish": "完成复习",
+  "empty": {
+    "title": "今日复习已完成 ✓",
+    "subtitle": "今天没有待复习的内容，下次训练后再来吧！"
+  },
+  "complete": {
+    "title": "今日复习已完成 ✓",
+    "subtitle": "保持节奏，记忆会更牢固",
+    "total": "总题数",
+    "correct": "答对",
+    "accuracy": "正确率",
+    "duration": "用时 {{sec}} 秒"
+  }
+}

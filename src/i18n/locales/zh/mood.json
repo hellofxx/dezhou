@@ -1,0 +1,12 @@
+{
+  "title": "今日情绪",
+  "good": "好",
+  "neutral": "一般",
+  "bad": "差",
+  "todayAccuracy": "今日正确率",
+  "noData": "暂无数据",
+  "correlationGoodHigh": "状态不错，正确率也高 — 保持节奏！",
+  "correlationBadLow": "状态差且正确率偏低，建议休息一下。",
+  "correlationBadHigh": "虽然状态不佳但正确率尚可，注意疲劳累积。",
+  "correlationNeutral": "记录持续累积后可发现情绪与正确率的关联。"
+}

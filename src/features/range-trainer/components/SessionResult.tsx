@@ -1,5 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { MOTION_DURATION, MOTION_EASE, transitionSlow } from '@/shared/utils/motion';
 import type { TrainingResult } from '@/shared/types/common';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
@@ -11,12 +14,12 @@ interface SessionResultProps {
   onBackToHome: () => void;
 }
 
-/** 根据正确率返回颜色和评价 — uses card-room palette (brass/sage/clay) */
-function getAccuracyInfo(accuracy: number): { color: string; label: string } {
-  if (accuracy >= 0.9) return { color: 'text-[var(--brass-bright)]', label: '优秀！' };
-  if (accuracy >= 0.7) return { color: 'text-[var(--sage)]', label: '良好' };
-  if (accuracy >= 0.5) return { color: 'text-[var(--brass)]', label: '继续加油' };
-  return { color: 'text-[var(--clay)]', label: '需要更多练习' };
+/** 根据正确率返回颜色和评价 key — uses card-room palette (brass/sage/clay) */
+function getAccuracyInfo(accuracy: number): { color: string; labelKey: string } {
+  if (accuracy >= 0.9) return { color: 'text-[var(--brass-bright)]', labelKey: 'rangeTrainer.result.excellent' };
+  if (accuracy >= 0.7) return { color: 'text-[var(--sage)]', labelKey: 'rangeTrainer.result.good' };
+  if (accuracy >= 0.5) return { color: 'text-[var(--brass)]', labelKey: 'rangeTrainer.result.keepGoing' };
+  return { color: 'text-[var(--clay)]', labelKey: 'rangeTrainer.result.morePractice' };
 }
 
 /** 统计薄弱手牌（答错≥2次） */
@@ -39,7 +42,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
     <motion.span
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+      transition={{ duration: MOTION_DURATION.loop, ease: MOTION_EASE.out }}
     >
       {value}{suffix}
     </motion.span>
@@ -47,8 +50,9 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 }
 
 export function SessionResult({ result, onRetry, onBackToHome }: SessionResultProps) {
+  const { t } = useTranslation();
   const accuracyPercent = Math.round(result.accuracy * 100);
-  const { color: accColor, label: accLabel } = getAccuracyInfo(result.accuracy);
+  const { color: accColor, labelKey: accLabelKey } = getAccuracyInfo(result.accuracy);
   const weakHands = getWeakHands(result);
   const avgTimeSec = (result.averageTime / 1000).toFixed(1);
   const wrongDetails = result.details.filter((d) => !d.isCorrect);
@@ -61,13 +65,13 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
           className="text-center space-y-2"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={transitionSlow}
         >
           <div className="flex items-center justify-center gap-2">
             <Trophy className="w-6 h-6 text-[var(--brass-bright)]" />
-            <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">训练完成！</h1>
+            <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{t('rangeTrainer.result.title')}</h1>
           </div>
-          <p className="text-sm text-[var(--ivory-muted)]">{accLabel}</p>
+          <p className="text-sm text-[var(--ivory-muted)]">{t(accLabelKey)}</p>
         </motion.div>
 
         {/* 正确率大圆环 */}
@@ -75,7 +79,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
           className="flex justify-center"
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: MOTION_DURATION.loop, delay: 0.2 }}
         >
           <div className="relative w-40 h-40">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
@@ -96,14 +100,14 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
                 animate={{
                   strokeDashoffset: 2 * Math.PI * 52 * (1 - result.accuracy),
                 }}
-                transition={{ duration: 1.2, delay: 0.4, ease: 'easeOut' }}
+                transition={{ duration: MOTION_DURATION.loop, delay: 0.4, ease: MOTION_EASE.out }}
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className={`font-numeric text-4xl font-bold ${accColor}`}>
                 <AnimatedNumber value={accuracyPercent} suffix="%" />
               </span>
-              <span className="text-xs text-[var(--ivory-muted)]">正确率</span>
+              <span className="text-xs text-[var(--ivory-muted)]">{t('rangeTrainer.result.accuracy')}</span>
             </div>
           </div>
         </motion.div>
@@ -113,12 +117,12 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
           className="grid grid-cols-4 gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ ...transitionSlow, delay: 0.6 }}
         >
-          <StatCard icon={<Target className="w-4 h-4" />} label="总题数" value={`${result.totalQuestions}`} />
-          <StatCard icon={<span className="text-[var(--sage)] text-sm font-bold">✓</span>} label="正确" value={`${result.correctAnswers}`} />
-          <StatCard icon={<span className="text-[var(--clay)] text-sm font-bold">✗</span>} label="错误" value={`${result.totalQuestions - result.correctAnswers}`} />
-          <StatCard icon={<Clock className="w-4 h-4" />} label="平均用时" value={`${avgTimeSec}s`} />
+          <StatCard icon={<Target className="w-4 h-4" />} label={t('rangeTrainer.result.total')} value={`${result.totalQuestions}`} />
+          <StatCard icon={<span className="text-[var(--sage)] text-sm font-bold">✓</span>} label={t('rangeTrainer.result.correct')} value={`${result.correctAnswers}`} />
+          <StatCard icon={<span className="text-[var(--clay)] text-sm font-bold">✗</span>} label={t('rangeTrainer.result.wrong')} value={`${result.totalQuestions - result.correctAnswers}`} />
+          <StatCard icon={<Clock className="w-4 h-4" />} label={t('rangeTrainer.result.avgTime')} value={`${avgTimeSec}s`} />
         </motion.div>
 
         {/* 薄弱手牌 */}
@@ -132,7 +136,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
               <CardHeader className="pb-2">
                 <CardTitle className="font-display text-[17px] text-[var(--ivory)] flex items-center gap-2 tracking-wide">
                   <AlertTriangle className="w-4 h-4 text-[var(--brass-bright)]" />
-                  薄弱手牌
+                  {t('rangeTrainer.result.weakHands')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -143,7 +147,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
                       className="px-3 py-1.5 rounded-md bg-[var(--clay)]/12 border border-[var(--clay)]/40 text-[var(--clay)] text-sm font-medium font-numeric"
                     >
                       {hand}
-                      <span className="ml-1 text-xs opacity-80">错{wrongCount}次</span>
+                      <span className="ml-1 text-xs opacity-80">{t('rangeTrainer.result.wrongCount', { count: wrongCount })}</span>
                     </span>
                   ))}
                 </div>
@@ -161,17 +165,17 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
           >
             <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
               <CardHeader className="pb-2">
-                <CardTitle className="font-display text-[17px] text-[var(--ivory)] tracking-wide">错题详情</CardTitle>
+                <CardTitle className="font-display text-[17px] text-[var(--ivory)] tracking-wide">{t('rangeTrainer.result.wrongDetails')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-[var(--ivory-muted)] border-b border-[var(--walnut-border)]">
-                        <th className="text-left py-2 px-2 font-medium">手牌</th>
-                        <th className="text-left py-2 px-2 font-medium">你的选择</th>
-                        <th className="text-left py-2 px-2 font-medium">正确答案</th>
-                        <th className="text-right py-2 px-2 font-medium">用时</th>
+                        <th className="text-left py-2 px-2 font-medium">{t('rangeTrainer.result.hand')}</th>
+                        <th className="text-left py-2 px-2 font-medium">{t('rangeTrainer.result.yourChoice')}</th>
+                        <th className="text-left py-2 px-2 font-medium">{t('rangeTrainer.result.correctAnswer')}</th>
+                        <th className="text-right py-2 px-2 font-medium">{t('rangeTrainer.result.time')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -205,7 +209,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
             className="bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] px-6"
           >
             <RotateCcw className="w-4 h-4 mr-2" />
-            再练一次
+            {t('rangeTrainer.result.retry')}
           </Button>
           <Button
             variant="outline"
@@ -213,7 +217,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
             className="px-6 border-[var(--walnut-border)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/40"
           >
             <Home className="w-4 h-4 mr-2" />
-            返回首页
+            {t('rangeTrainer.result.backHome')}
           </Button>
         </motion.div>
       </div>

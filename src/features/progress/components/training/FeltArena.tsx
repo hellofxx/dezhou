@@ -59,11 +59,11 @@ export default function FeltArena() {
         <button
           onClick={() => navigate('/progress')}
           className="elo-rank-badge"
-          aria-label={`${currentRank.name} ${elo.overall} ELO`}
+          aria-label={`${t(`progress.rank.${currentRank.name}.name`)} ${elo.overall} ELO`}
         >
           <span className="elo-suit">{currentRank.icon}</span>
           <span className="elo-meta">
-            <span className="elo-name">{currentRank.name}</span>
+            <span className="elo-name">{t(`progress.rank.${currentRank.name}.name`)}</span>
             <span className="elo-score">{elo.overall} ELO</span>
           </span>
         </button>

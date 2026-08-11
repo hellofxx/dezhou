@@ -68,17 +68,19 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ## 国际化
 
 - 默认中文（zh），支持 zh / en
-- 翻译文件：`src/i18n/locales/zh.json` + `src/i18n/locales/en.json`
-- **硬性要求**：新增 i18n key 时必须同时更新 zh 与 en，缺一不可
-- key 命名：`<module>.<context>.<field>`
+- 翻译文件按顶层 key 模块化拆分：`src/i18n/locales/{zh,en}/<module>.json`（如 `zh/rangeTrainer.json`、`en/academy.json`），单一 `translation` 命名空间，`t('a.b.c')` 路径式调用不变
+- 加载策略：core 模块（布局/导航/全局反馈：nav/common/dashboard/academy/theory/variant/gameVariant/tilt/streak/feedback）由 `config.ts` 启动静态加载；功能模块经 `src/app/routes.tsx` 的 `lazyPage` 随路由与页面 chunk 并行按需加载
+- 模块注册表（唯一契约源）：`src/i18n/moduleRegistry.ts`（`I18nModuleKey` / `ALL_MODULES` / `CORE_MODULES` / `FEATURE_GROUPS` / `loadModule`）；懒加载注入由 `src/i18n/preload.ts`（`preloadI18n` 幂等 + `addResourceBundle` 深层合并 + 语言切换自动补加载）实现
+- **硬性要求**：新增 i18n key 时必须同时更新 zh 与 en 对应模块文件，缺一不可
+- key 命名：`<module>.<context>.<field>`（顶层 key 即模块名，与文件名一一对应）
 
 ### 国际化约束
 
 - **新 UI 组件/页面文案必须走 `t()`（useTranslation）**，禁止直接书写中文字面量。
 - **必须使用 `defaultValue` 兜底参数**：`t('key', { defaultValue: 'Fallback' })`，确保 key 缺失时不白屏。
-- **新增 key 必须同步 zh/en 双语**：`localeParity.test.ts` 自动守护 key 对称性，但人工审查仍需确保两语言文件同时更新。
+- **新增 key 必须同步 zh/en 双语**：`localeParity.test.ts` 按模块自动守护 key 对称性，但人工审查仍需确保两语言对应模块文件同时更新。
 - **教学内容数据 i18n 暂缓**：课程正文、测验题目、Drill 题库等数据量大且包含专业扑克知识，i18n 迁移策略需单独评估（翻译质量、双语一致性、维护成本），决策待定。
-- **`academy.*` key 分组规范**：遵循 `<module>.<context>.<field>`，与现有 `academy.*` 和 `drills.*` key 不冲突。新增 key 前先查阅 `zh.json` 中 `academy.*` 和 `drills.*` 段，避免重复/冲突。
+- **`academy.*` key 分组规范**：遵循 `<module>.<context>.<field>`，与现有 `academy.*` 和 `drills.*` key 不冲突。新增 key 前先查阅 `src/i18n/locales/zh/academy.json` 与 `zh/drills.json` 对应段，避免重复/冲突。
 
 
 ## UI/UX 设计系统

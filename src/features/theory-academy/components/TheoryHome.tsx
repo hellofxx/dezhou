@@ -13,7 +13,9 @@ import { TheoryLadder, findActiveTheoryLevelId } from './TheoryLadder';
 
 export default function TheoryHome() {
   const { t } = useTranslation();
-  const { progress, getTotalProgress } = useTheoryStore();
+  // THY-10：改用选择器订阅，避免整 store 订阅导致无关状态变化触发重渲染
+  const progress = useTheoryStore((s) => s.progress);
+  const getTotalProgress = useTheoryStore((s) => s.getTotalProgress);
   const isTheoryLevelUnlocked = useTheoryStore((s) => s.isTheoryLevelUnlocked);
   const activeVariant = useTheoryStore((s) => s.progress.activeVariant);
   const switchVariant = useTheoryStore((s) => s.switchVariant);

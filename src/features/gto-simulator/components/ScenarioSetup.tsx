@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { getPositionsForPlayerCount } from '@/shared/types/position';
 import type { GameType, Difficulty } from '@/shared/types/common';
 import type { GameVariant } from '@/shared/types/poker';
@@ -6,21 +7,22 @@ import { useGTOSimulatorStore } from '../store';
 import { cn } from '@/shared/utils';
 import { OPPONENT_PROFILES, getOpponentProfile } from '@/features/strategy-academy/data/opponentProfiles';
 
+// label/desc 存 i18n key（gto.setup.*），渲染时 t() 解析
 const GAME_TYPES: { value: GameType; label: string }[] = [
-  { value: 'cash', label: '现金局' },
-  { value: 'tournament', label: '锦标赛' },
-  { value: 'sit-and-go', label: 'SNG' },
+  { value: 'cash', label: 'gto.setup.gameTypeCash' },
+  { value: 'tournament', label: 'gto.setup.gameTypeTournament' },
+  { value: 'sit-and-go', label: 'gto.setup.gameTypeSnG' },
 ];
 
 const VARIANT_OPTIONS: { value: GameVariant; label: string }[] = [
-  { value: 'standard', label: '标准德州' },
-  { value: 'short-deck', label: '短牌德州 (6+)' },
+  { value: 'standard', label: 'gto.setup.variantStandard' },
+  { value: 'short-deck', label: 'gto.setup.variantShortDeck' },
 ];
 
 const DIFFICULTIES: { value: Difficulty; label: string; desc: string }[] = [
-  { value: 'beginner', label: '初级', desc: '纯策略为主，明显决策' },
-  { value: 'intermediate', label: '中级', desc: '包含混合策略' },
-  { value: 'advanced', label: '高级', desc: '边界手牌，精确频率' },
+  { value: 'beginner', label: 'gto.setup.difficultyBeginner', desc: 'gto.setup.difficultyBeginnerDesc' },
+  { value: 'intermediate', label: 'gto.setup.difficultyIntermediate', desc: 'gto.setup.difficultyIntermediateDesc' },
+  { value: 'advanced', label: 'gto.setup.difficultyAdvanced', desc: 'gto.setup.difficultyAdvancedDesc' },
 ];
 
 const SCENARIO_COUNTS = [10, 20, 30];
@@ -39,6 +41,7 @@ interface ScenarioSetupProps {
 }
 
 export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
+  const { t } = useTranslation();
   const { config, setConfig, exploitMode, selectedOpponent, setExploitMode, setSelectedOpponent } = useGTOSimulatorStore();
   const positions = getPositionsForPlayerCount(config.playerCount);
   const playerCountOptions = getPlayerCountOptions(config.gameVariant);
@@ -62,7 +65,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
         <div className="space-y-6">
       {/* 训练模式 */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">训练模式</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.modeLabel')}</label>
         <div className="flex gap-2">
           <button
             onClick={() => setExploitMode(false)}
@@ -73,7 +76,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                 : 'bg-[var(--walnut-raised)]/40 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
             )}
           >
-            GTO 模式
+            {t('gto.setup.gtoMode')}
           </button>
           <button
             onClick={() => setExploitMode(true)}
@@ -84,12 +87,12 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                 : 'bg-[var(--walnut-raised)]/40 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
             )}
           >
-            Exploit 模式
+            {t('gto.setup.exploitMode')}
           </button>
         </div>
         {exploitMode && (
           <p className="text-xs text-[var(--sage)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
-            剥削模式：根据对手类型调整最优策略，学习如何利用对手漏洞
+            {t('gto.setup.exploitHint')}
           </p>
         )}
       </div>
@@ -97,7 +100,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
       {/* 对手选择（仅 Exploit 模式） */}
       {exploitMode && (
         <div className="space-y-2">
-          <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">对手类型</label>
+          <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.opponentLabel')}</label>
           <div className="grid grid-cols-3 gap-2">
             {opponentIds.map((id) => {
               const profile = OPPONENT_PROFILES[id]!;
@@ -121,9 +124,12 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
           {selectedProfile && (
             <div className="rounded-lg bg-black/20 p-3 space-y-1">
               <div className="text-xs font-display font-semibold" style={{ color: selectedProfile.color }}>
-                {selectedProfile.icon} {selectedProfile.name}
+                {selectedProfile.icon}{' '}
+                {t(`gto.setup.opponentProfile.${selectedProfile.id}.name`, { defaultValue: selectedProfile.name })}
               </div>
-              <div className="text-xs text-[var(--ivory-muted)]">{selectedProfile.description}</div>
+              <div className="text-xs text-[var(--ivory-muted)]">
+                {t(`gto.setup.opponentProfile.${selectedProfile.id}.description`, { defaultValue: selectedProfile.description })}
+              </div>
               <div className="flex gap-3 text-xs font-numeric text-[var(--ivory-dim)]">
                 <span>VPIP: {selectedProfile.stats.vpip}%</span>
                 <span>PFR: {selectedProfile.stats.pfr}%</span>
@@ -136,7 +142,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
 
       {/* 游戏变体 */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">游戏变体</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.variantLabel')}</label>
         <div className="flex gap-2">
           {VARIANT_OPTIONS.map((v) => (
             <button
@@ -151,19 +157,19 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   : 'bg-[var(--walnut-raised)]/40 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
               )}
             >
-              {v.label}
+              {t(v.label)}
             </button>
           ))}
         </div>
         {config.gameVariant === 'short-deck' && (
           <p className="text-xs text-[var(--sage)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
-            短牌模式：36 张牌组（移除 2-5），三条 &gt; 顺子，同花 &gt; 葫芦
+            {t('gto.setup.shortDeckHint')}
           </p>
         )}
       </div>
       {/* 游戏类型 */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">游戏类型</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.gameTypeLabel')}</label>
         <div className="flex gap-2">
           {GAME_TYPES.map((gt) => (
             <button
@@ -176,7 +182,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   : 'bg-[var(--walnut-raised)]/40 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
               )}
             >
-              {gt.label}
+              {t(gt.label)}
             </button>
           ))}
         </div>
@@ -185,7 +191,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
       {/* 有效筹码 */}
       <div className="space-y-2">
         <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">
-          有效筹码: <span className="text-[var(--brass-bright)] font-numeric">{config.effectiveStack} BB</span>
+          {t('gto.setup.effectiveStack')}: <span className="text-[var(--brass-bright)] font-numeric">{config.effectiveStack} BB</span>
         </label>
         <input
           type="range"
@@ -208,7 +214,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
         <div className="space-y-6">
       {/* 位置选择 — sage to differentiate from brass CTAs */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">位置</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.positionLabel')}</label>
         <div className="flex flex-wrap gap-2">
           {positions.map((pos) => (
             <button
@@ -229,7 +235,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
 
       {/* 玩家人数 */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">玩家人数</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.playerCountLabel')}</label>
         <div className="flex flex-wrap gap-2">
           {playerCountOptions.map((count) => (
             <button
@@ -254,7 +260,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
 
       {/* 难度 */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">难度</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.difficultyLabel')}</label>
         <div className="flex gap-2">
           {DIFFICULTIES.map((d) => (
             <button
@@ -267,8 +273,8 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   : 'bg-[var(--walnut-raised)]/40 border-[var(--walnut-border)]/40 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
               )}
             >
-              <div className="font-display font-semibold">{d.label}</div>
-              <div className="text-xs opacity-80 mt-0.5">{d.desc}</div>
+              <div className="font-display font-semibold">{t(d.label)}</div>
+              <div className="text-xs opacity-80 mt-0.5">{t(d.desc)}</div>
             </button>
           ))}
         </div>
@@ -276,7 +282,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
 
       {/* 场景数量 */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">场景数量</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.scenarioCountLabel')}</label>
         <div className="flex gap-2">
           {SCENARIO_COUNTS.map((count) => (
             <button
@@ -301,9 +307,9 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
       {/* 开始按钮 */}
       <button
         onClick={onStart}
-        className="w-full py-3 rounded-xl bg-gradient-to-r from-[var(--brass)] to-[var(--sage)] text-[var(--primary-foreground)] font-display font-bold text-lg shadow-lg hover:brightness-110 transition-all hover:scale-[1.02] active:scale-[0.98]"
+        className="hover-bright w-full py-3 rounded-xl bg-[var(--brass)] text-[var(--primary-foreground)] font-display font-bold text-lg shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
       >
-        开始 GTO 训练
+        {t('gto.setup.startGtoTraining')}
       </button>
     </div>
   );

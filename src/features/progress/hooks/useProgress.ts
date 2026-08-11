@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import type { TrainingResult } from '@/shared/types/common';
 import type { TrainingRecord } from '../types';
 import { useProgressStore } from '../store';
-import { aggregateByDay } from '../utils/statsAggregator';
-import { getTrainingCalendar } from '../utils/streakCalc';
 
 export function useProgress() {
   const records = useProgressStore((s) => s.records);
@@ -44,21 +42,11 @@ export function useProgress() {
     addRecord(record);
   };
 
-  /** 获取每日统计 */
-  const dailyStats = (days: number = 14) =>
-    useMemo(() => aggregateByDay(records, days), [records, days]);
-
-  /** 获取训练日历 */
-  const calendarData = (month: number, year: number) =>
-    useMemo(() => getTrainingCalendar(records, month, year), [records, month, year]);
-
   return {
     summary,
     moduleStats,
     recentRecords,
     recordSession,
-    dailyStats,
-    calendarData,
     settings,
     records,
   };

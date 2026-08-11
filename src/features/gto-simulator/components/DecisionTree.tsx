@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { PreviousAction, DecisionNode } from '../types';
 import type { Board } from '@/shared/types/poker';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
@@ -35,8 +36,9 @@ function actionColor(action: ActionType): string {
   }
 }
 
+// 存 i18n key（gto.session.street*），MultiStepTree 渲染时经 t() 解析
 const STREET_LABEL: Record<string, string> = {
-  preflop: '翻前', flop: '翻牌圈', turn: '转牌圈', river: '河牌圈',
+  preflop: 'gto.session.streetPreflop', flop: 'gto.session.streetFlop', turn: 'gto.session.streetTurn', river: 'gto.session.streetRiver',
 };
 
 function boardCards(board?: Board) {
@@ -82,6 +84,7 @@ function MultiStepTree({
   currentNodeIndex: number;
   userDecisions: Array<{ nodeIndex: number; action: string }>;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-0">
       {nodes.map((node, idx) => {
@@ -115,7 +118,7 @@ function MultiStepTree({
                     !isCompleted && !isCurrent && 'text-[var(--ivory-muted)]'
                   )}
                 >
-                  {STREET_LABEL[node.street] ?? node.street}
+                  {t(STREET_LABEL[node.street] ?? node.street)}
                 </span>
                 <span className="text-[10px] font-numeric text-[var(--ivory-muted)]">
                   {node.potSize.toFixed(1)} BB
@@ -172,17 +175,18 @@ function SingleStepHistory({
   heroPosition: Position;
   potSize: number;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between text-xs text-[var(--ivory-muted)]">
-        <span className="font-display tracking-wide">行动历史</span>
+        <span className="font-display tracking-wide">{t('gto.tree.history')}</span>
         <span className="font-numeric">
-          底池: <span className="text-[var(--brass-bright)] font-bold">{potSize.toFixed(1)} BB</span>
+          {t('gto.feedback.pot')}: <span className="text-[var(--brass-bright)] font-bold">{potSize.toFixed(1)} BB</span>
         </span>
       </div>
 
       {actions.length === 0 ? (
-        <div className="text-xs text-[var(--ivory-muted)]">前面所有人都 fold，轮到 Hero</div>
+        <div className="text-xs text-[var(--ivory-muted)]">{t('gto.tree.emptyHeroTurn')}</div>
       ) : (
         <div className="flex items-center gap-1 flex-wrap">
           {actions.map((action, idx) => (

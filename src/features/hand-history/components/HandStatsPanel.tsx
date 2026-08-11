@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import type { HeroStats } from '../utils/handStats';
 import { TrendingUp, AlertTriangle } from 'lucide-react';
@@ -30,19 +31,16 @@ function StatCard({ label, value, suffix = '%' }: { label: string; value: number
   );
 }
 
-function getPositionFeedback(position: string, vpip: number): string | null {
+function getPositionFeedback(position: string, vpip: number): { low: boolean; range: [number, number] } | null {
   const range = STANDARD_RANGES[position];
   if (!range) return null;
-  if (vpip < range.vpip[0]) {
-    return `偏低，建议 ${range.vpip[0]}-${range.vpip[1]}%`;
-  }
-  if (vpip > range.vpip[1]) {
-    return `偏高，建议 ${range.vpip[0]}-${range.vpip[1]}%`;
-  }
+  if (vpip < range.vpip[0]) return { low: true, range: range.vpip };
+  if (vpip > range.vpip[1]) return { low: false, range: range.vpip };
   return null;
 }
 
 export function HandStatsPanel({ stats }: HandStatsPanelProps) {
+  const { t } = useTranslation();
   const chartData = useMemo(() => {
     const positionOrder = ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
     return positionOrder
@@ -56,11 +54,11 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
   }, [stats.byPosition]);
 
   const feedbacks = useMemo(() => {
-    const items: { position: string; message: string }[] = [];
+    const items: { position: string; vpip: number; feedback: NonNullable<ReturnType<typeof getPositionFeedback>> }[] = [];
     for (const [pos, data] of Object.entries(stats.byPosition)) {
       const feedback = getPositionFeedback(pos, data.vpip);
       if (feedback) {
-        items.push({ position: pos, message: `你的 ${pos} VPIP ${data.vpip}% ${feedback}` });
+        items.push({ position: pos, vpip: data.vpip, feedback });
       }
     }
     return items;
@@ -154,7 +152,7 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
         <div className="space-y-2">
           <h3 className="text-xs font-display font-semibold text-[var(--ivory-dim)] tracking-wide flex items-center gap-1.5">
             <TrendingUp size={13} />
-            建议
+            {t('handHistory.stats.suggestion')}
           </h3>
           {feedbacks.map((fb, i) => (
             <div
@@ -162,7 +160,15 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
               className="flex items-start gap-2 p-2.5 rounded-lg bg-[var(--clay)]/10 border border-[var(--clay)]/20 text-xs text-[var(--ivory-dim)]"
             >
               <AlertTriangle size={13} className="text-[var(--clay)] mt-0.5 shrink-0" />
-              <span>{fb.message}</span>
+              <span>
+                {t('handHistory.stats.positionFeedback', {
+                  position: fb.position,
+                  vpip: fb.vpip,
+                  feedback: t(fb.feedback.low ? 'handHistory.stats.vpipLow' : 'handHistory.stats.vpipHigh', {
+                    range: `${fb.feedback.range[0]}-${fb.feedback.range[1]}`,
+                  }),
+                })}
+              </span>
             </div>
           ))}
         </div>

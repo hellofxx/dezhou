@@ -1,0 +1,90 @@
+{
+  "steps": {
+    "welcome": "Welcome",
+    "placement": "Placement Test",
+    "drill": "First Drill",
+    "celebration": "Celebration",
+    "goal": "Goal Setting"
+  },
+  "complete": {
+    "title": "Onboarding Complete",
+    "redirecting": "Entering the training platform..."
+  },
+  "welcome": {
+    "title": "Welcome to Poker Training Platform",
+    "subtitle": "Let's take a few minutes to customize your learning path",
+    "beginnerTitle": "I'm New",
+    "beginnerDesc": "New to Texas Hold'em, want to start from rules and hand rankings",
+    "beginnerCta": "Start with placement test",
+    "experiencedTitle": "I Have Experience",
+    "experiencedDesc": "Already know the basics, want to skip placement and start training",
+    "experiencedCta": "Go straight to training",
+    "skip": "Skip onboarding"
+  },
+  "placement": {
+    "questionOf": "Question {{current}} / {{total}}",
+    "explanation": "Explanation",
+    "next": "Next",
+    "finish": "Finish Test",
+    "q1": {
+      "question": "Which starting hand is the strongest?",
+      "optA": "AA (Pocket Rockets)",
+      "optB": "KK (Pocket Kings)",
+      "optC": "QQ (Pocket Queens)",
+      "optD": "JJ (Pocket Jacks)",
+      "explanation": "AA is the strongest starting hand in Texas Hold'em, with roughly 80%+ equity against any other hand."
+    },
+    "q2": {
+      "question": "Among final made hands, which is the strongest?",
+      "optA": "Straight Flush",
+      "optB": "Four of a Kind",
+      "optC": "Full House",
+      "optD": "Flush",
+      "explanation": "Hand rankings from high to low: Royal Flush > Straight Flush > Four of a Kind > Full House > Flush > Straight > Three of a Kind > Two Pair > One Pair > High Card."
+    },
+    "q3": {
+      "question": "In 6-max, which position has the greatest preflop positional advantage?",
+      "optA": "UTG",
+      "optB": "HJ",
+      "optC": "CO",
+      "optD": "BTN",
+      "explanation": "BTN acts last both preflop and postflop, giving it the most informational advantage — the most profitable position in 6-max."
+    },
+    "q4": {
+      "question": "Pot is 100 chips, opponent bets 50, you must call 50. What is the minimum equity you need for a profitable call?",
+      "optA": "20%",
+      "optB": "25%",
+      "optC": "33%",
+      "optD": "50%",
+      "explanation": "Calling 50 into a total pot of 200 (100 original + 50 opponent bet + 50 your call) requires equity of 50 / 200 = 25%."
+    },
+    "q5": {
+      "question": "At UTG (earliest position in a 6-handed table), which hand should you open-raise with?",
+      "optA": "72o (off-suit 72)",
+      "optB": "K2s (suited K2)",
+      "optC": "92o (off-suit 92)",
+      "optD": "AQo (off-suit AQ)",
+      "explanation": "UTG acts first and should use a tight opening range (~16% of hands). AQo is strong and in range; 72o / 92o / K2s are too weak."
+    }
+  },
+  "drill": {
+    "title": "First Drill",
+    "questionOf": "Question {{current}} / {{total}}",
+    "next": "Next",
+    "finish": "Finish Drill",
+    "rescueHint": "Don't worry, try one more simple question"
+  },
+  "celebration": {
+    "title": "Congratulations on your first training!",
+    "subtitle": "You've taken the first step to becoming a great player. Keep going!",
+    "streakStarted": "Day 1 Streak Started",
+    "continue": "Continue to goal setting"
+  },
+  "goal": {
+    "title": "Set Your Daily Training Goal",
+    "subtitle": "Choose a sustainable daily duration. Building a habit matters more than intensity.",
+    "minutes": "min",
+    "hint": "You can adjust this anytime in settings. Beginners should start with 10 minutes.",
+    "confirm": "Confirm Goal"
+  }
+}

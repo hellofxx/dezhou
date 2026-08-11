@@ -285,9 +285,10 @@ function HandRow({ label, cards }: { label: string; cards: string[] }) {
 }
 
 function SimpleLabel({ label }: { label: string }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center gap-1">
-      <span className="text-xs text-[var(--ivory-muted)]">{label.length > 2 ? '手牌' : '对子'}</span>
+      <span className="text-xs text-[var(--ivory-muted)]">{label.length > 2 ? t('academy.drill.handLabel') : t('academy.drill.pairLabel')}</span>
       <span className="font-display text-3xl font-bold text-[var(--brass-bright)] tracking-wider">
         {label}
       </span>

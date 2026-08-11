@@ -87,6 +87,36 @@
   --suit-club: #f3ebd9;
   --suit-spade: #f3ebd9;
 
+  /* Gradient stops — UI-10: 渐变 stop 抽为 token，消除渐变内裸 hex（visual 不变） */
+  --grad-felt-1: #215d38;
+  --grad-felt-2: #1a4f2f;
+  --grad-felt-3: #133f24;
+  --grad-felt-4: #0c2b18;
+  --grad-felt-5: #081e10;
+  --grad-felt-raised: #163825;
+  --grad-felt-deep-1: #0c1f13;
+  --grad-felt-deep-2: #060d09;
+  --grad-plaque: #e8dcc0;
+  --grad-streak-today: #a8842e;
+  --grad-frost-light: #d4e4eb;
+  --grad-brass-light: #d4b068;
+  --grad-brass-light-2: #b8914a;
+  --grad-brass-light-3: #b48f44;
+  --grad-brass-hover-1: #f0d892;
+  --grad-brass-hover-2: #f5df9b;
+  --grad-brass-hover-3: #b08a45;
+  --grad-brass-bright-soft: #f0d48a;
+  --grad-walnut-dark-1: #4a3218;
+  --grad-walnut-dark-2: #2a1c0a;
+  --grad-walnut-hover-1: #5a3e20;
+  --grad-walnut-hover-2: #3a2810;
+  --grad-mentor-indigo-1: #6b7fa0;
+  --grad-mentor-indigo-2: #3d4d6b;
+  --grad-mentor-terra-1: #b88868;
+  --grad-mentor-terra-2: #7a4e32;
+  --grad-mentor-moss-1: #8ab08a;
+  --grad-mentor-moss-2: #537a52;
+
   /* Token aliases — keep existing components working */
   --background: var(--felt-deep);
   --surface: var(--felt);
@@ -137,6 +167,15 @@
   --shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
   --shadow-brass: 0 4px 20px rgba(201, 162, 94, 0.15);
+  /* UI-06：brass glow 系列——统一锚定 --brass 色相 rgba(201,162,94)，消除 #d4af37 漂移 */
+  --shadow-brass-glow-sm: 0 0 8px rgba(201, 162, 94, 0.5);
+  --shadow-brass-glow: 0 0 12px rgba(201, 162, 94, 0.15);
+  --shadow-brass-glow-lg: 0 0 16px rgba(201, 162, 94, 0.45);
+  --shadow-brass-glow-soft: 0 0 16px rgba(201, 162, 94, 0.15);
+  --shadow-brass-glow-dot: 0 0 6px rgba(201, 162, 94, 0.6);
+  --shadow-brass-btn: 0 3px 10px rgba(201, 162, 94, 0.25), inset 0 1px 0 rgba(255, 240, 200, 0.55);
+  --shadow-clay-glow-sm: 0 0 8px rgba(168, 56, 56, 0.5);
+  --shadow-sage-glow-sm: 0 0 8px rgba(107, 142, 122, 0.5);
 
   /* Typography */
   --font-display: 'Fraunces', 'Cormorant Garamond', 'Source Han Serif SC', 'Songti SC', serif;
@@ -472,7 +511,7 @@ body::after {
   position: relative; width: 100%;
   background:
     radial-gradient(ellipse 70% 60% at 50% 35%, rgba(232,201,126,0.10), transparent 70%),
-    radial-gradient(ellipse 90% 80% at 50% 50%, #215d38 0%, #1a4f2f 25%, #133f24 50%, #0c2b18 75%, #081e10 100%); /* gradient: felt color stops — no direct token */
+    radial-gradient(ellipse 90% 80% at 50% 50%, var(--grad-felt-1) 0%, var(--grad-felt-2) 25%, var(--grad-felt-3) 50%, var(--grad-felt-4) 75%, var(--grad-felt-5) 100%); /* gradient: felt color stops — UI-10 token 化 */
   border-radius: 50% / 32%;
   padding: 30px 60px 26px;
   margin-top: -22px;
@@ -556,7 +595,7 @@ body::after {
 
 /* ---- Casino Plaque ---- */
 .casino-plaque {
-  background: linear-gradient(180deg, var(--stable-ivory) 0%, #e8dcc0 100%); /* token: #e8dcc0 ≈ --stable-ivory gradient stop */
+  background: linear-gradient(180deg, var(--stable-ivory) 0%, var(--grad-plaque) 100%); /* UI-10 token 化 */
   border: 1px solid rgba(201,162,94,0.5); border-radius: 6px;
   padding: 8px 14px; text-align: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.35), inset 0 0 0 3px rgba(255,255,255,0.4), inset 0 0 0 4px rgba(201,162,94,0.3);
@@ -601,13 +640,13 @@ body::after {
 .streak-dot.missed em { color: rgba(180,160,130,0.4); }
 .streak-dot.done { background: linear-gradient(180deg, rgba(201,162,94,0.18), rgba(201,162,94,0.06)); color: var(--brass-bright); border: 1px solid rgba(201,162,94,0.28); }
 .streak-dot.done em { color: var(--brass); opacity: 0.75; }
-.streak-dot.today { background: linear-gradient(180deg, var(--brass) 0%, #a8842e 100%); color: var(--stable-ink); border: 1px solid var(--brass-bright); box-shadow: 0 0 10px rgba(232,201,126,0.45); } /* gradient: #a8842e ≈ --brass-deep variant */
+.streak-dot.today { background: linear-gradient(180deg, var(--brass) 0%, var(--grad-streak-today) 100%); color: var(--stable-ink); border: 1px solid var(--brass-bright); box-shadow: 0 0 10px rgba(232,201,126,0.45); } /* UI-10 token 化 */
 .streak-dot.today em { color: var(--stable-ink); font-weight: 700; }
 
 /* ---- Freeze Chip ---- */
 .freeze-chip {
   width: 28px; height: 28px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #d4e4eb, #a8c4cf 55%, #5e8796 100%); /* gradient: frost chip — #a8c4cf = --poker-frost */
+  background: radial-gradient(circle at 35% 35%, var(--grad-frost-light), var(--poker-frost) 55%, var(--poker-frost-deep) 100%); /* UI-10 token 化 */
   display: inline-flex; align-items: center; justify-content: center;
   color: #2c4f5e; font-weight: 700; /* token: frost deep text */
   box-shadow: 0 0 8px rgba(168,196,207,0.35), inset 0 1px 1px rgba(255,255,255,0.4);
@@ -672,6 +711,17 @@ body::after {
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
 }
+/* OB-03：onboarding 庆祝页撒花粒子与弹入动画（从组件内联 <style> 迁移至全局） */
+@keyframes onboarding-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+@keyframes onboarding-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 .animate-fade-in { animation: animate-fade-in var(--poker-duration-standard) var(--poker-ease-standard) both; }
 .animate-slide-up { animation: animate-slide-up var(--poker-duration-standard) var(--poker-ease-standard) both; }
 .animate-slide-down { animation: animate-slide-down var(--poker-duration-standard) var(--poker-ease-standard) both; }
@@ -726,7 +776,7 @@ body::after {
 
 /* ---- Quick Drill Card ---- */
 .quick-drill-card {
-  background: linear-gradient(180deg, #d4b068 0%, var(--brass) 45%, #b8914a 100%); /* gradient: #d4b068/#b8914a ≈ --brass light/dark stops */
+  background: linear-gradient(180deg, var(--grad-brass-light) 0%, var(--brass) 45%, var(--grad-brass-light-2) 100%); /* UI-10 token 化 */
   border: 1px solid var(--brass-dark); border-radius: 8px; /* token: #8a6b30 = --brass-dark */
   padding: 14px 20px;
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
@@ -765,10 +815,16 @@ body::after {
 .action-mini.act-call  { background: rgba(58,44,28,0.6); color: var(--ivory-dim); border-color: rgba(58,44,28,0.9); }
 .action-mini.act-call:hover { background: rgba(58,44,28,0.85); color: var(--ivory); }
 .action-mini.act-raise { background: linear-gradient(180deg, var(--brass-bright), var(--brass)); color: var(--walnut); border-color: var(--brass-dark); }
-.action-mini.act-raise:hover { background: linear-gradient(180deg, #f0d892, #d4b068); } /* gradient: brass hover light stops */
-.action-mini.act-allin { background: linear-gradient(180deg, #4a3218, #2a1c0a); color: var(--brass-bright); border-color: rgba(201,162,94,0.4); box-shadow: inset 0 1px 0 rgba(201,162,94,0.15); } /* gradient: walnut dark stops */
-.action-mini.act-allin:hover { background: linear-gradient(180deg, #5a3e20, #3a2810); } /* gradient: walnut hover stops */
+.action-mini.act-raise:hover { background: linear-gradient(180deg, var(--grad-brass-hover-1), var(--grad-brass-light)); } /* UI-10 token 化 */
+.action-mini.act-allin { background: linear-gradient(180deg, var(--grad-walnut-dark-1), var(--grad-walnut-dark-2)); color: var(--brass-bright); border-color: rgba(201,162,94,0.4); box-shadow: inset 0 1px 0 rgba(201,162,94,0.15); } /* UI-10 token 化 */
+.action-mini.act-allin:hover { background: linear-gradient(180deg, var(--grad-walnut-hover-1), var(--grad-walnut-hover-2)); } /* UI-10 token 化 */
 .action-mini.active { background: linear-gradient(180deg, var(--brass-bright) 0%, var(--brass) 100%); color: var(--walnut); border-color: var(--brass-deep); box-shadow: 0 2px 8px rgba(201,162,94,0.35), inset 0 1px 0 rgba(255,240,200,0.4); font-weight: 700; }
+
+/* UI-07：hover 亮度反馈集中定义（替代组件层内联 hover:brightness-* 滤镜，视觉反馈 token 化） */
+.hover-bright { transition: filter 0.2s ease; }
+.hover-bright:hover { filter: brightness(1.1); }
+.hover-bright-lg { transition: filter 0.2s ease; }
+.hover-bright-lg:hover { filter: brightness(1.25); }
 
 /* ---- Pill ---- */
 .pill {
@@ -806,7 +862,7 @@ body::after {
 /* ---- Mini Felt (for GTO table) ---- */
 .mini-felt {
   position: relative;
-  background: radial-gradient(ellipse 70% 60% at 50% 45%, var(--poker-felt-center) 0%, #163825 55%, #0c1f13 90%, #060d09 100%); /* gradient: #163825 ≈ --felt-raised, #0c1f13/#060d09 ≈ --felt-deep */
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, var(--poker-felt-center) 0%, var(--grad-felt-raised) 55%, var(--grad-felt-deep-1) 90%, var(--grad-felt-deep-2) 100%); /* gradient: UI-10 token 化 */
   border-radius: 50% / 30%;
   box-shadow: inset 0 0 40px rgba(0,0,0,0.5), inset 0 0 0 5px var(--walnut), inset 0 0 0 6px var(--walnut-border), 0 10px 30px rgba(0,0,0,0.5); /* token: #1a130a ≈ --walnut, #3a2c1c ≈ --walnut-border */
   min-height: 260px;
@@ -825,7 +881,7 @@ body::after {
 
 /* ---- Path Banner (strategy academy) ---- */
 .path-banner {
-  background: linear-gradient(180deg, #d4b068 0%, var(--brass) 50%, #b48f44 100%); /* gradient: brass banner stops */
+  background: linear-gradient(180deg, var(--grad-brass-light) 0%, var(--brass) 50%, var(--grad-brass-light-3) 100%); /* UI-10 token 化 */
   border: 1px solid var(--brass-dark); border-radius: 8px;
   padding: 18px 24px; color: var(--stable-ink);
   box-shadow: 0 4px 18px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,240,200,0.45), inset 0 -1px 0 rgba(0,0,0,0.12);
@@ -1012,7 +1068,7 @@ body::after {
   width: 210px;
   aspect-ratio: 5 / 7;
   padding: 12px;
-  background: linear-gradient(180deg, var(--stable-ivory) 0%, #e8dcc0 100%);
+  background: linear-gradient(180deg, var(--stable-ivory) 0%, var(--grad-plaque) 100%);
   border: 1px solid rgba(201,162,94,0.6);
   border-radius: var(--poker-radius-md);
   box-shadow:
@@ -1558,9 +1614,9 @@ html[data-theme="light"] .settings-nav-item:hover {
   font-size: 16px; color: var(--ivory);
   border: 2px solid rgba(243,235,217,0.08);
 }
-.mentor-avatar.av-math  { background: radial-gradient(circle at 35% 35%, #6b7fa0, #3d4d6b); } /* gradient: slate indigo mentor */
-.mentor-avatar.av-old   { background: radial-gradient(circle at 35% 35%, #b88868, #7a4e32); } /* gradient: terra cotta mentor */
-.mentor-avatar.av-buddy { background: radial-gradient(circle at 35% 35%, #8ab08a, #537a52); } /* gradient: moss green mentor */
+.mentor-avatar.av-math  { background: radial-gradient(circle at 35% 35%, var(--grad-mentor-indigo-1), var(--grad-mentor-indigo-2)); } /* UI-10 token 化 */
+.mentor-avatar.av-old   { background: radial-gradient(circle at 35% 35%, var(--grad-mentor-terra-1), var(--grad-mentor-terra-2)); } /* UI-10 token 化 */
+.mentor-avatar.av-buddy { background: radial-gradient(circle at 35% 35%, var(--grad-mentor-moss-1), var(--grad-mentor-moss-2)); } /* UI-10 token 化 */
 .mentor-name { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--ivory); font-variation-settings: 'opsz' 144; }
 .mentor-tone {
   font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em;
@@ -1635,14 +1691,14 @@ html[data-theme="light"] .settings-nav-item:hover {
 /* ---- SRS Large CTA Button ---- */
 .btn-brass-lg {
   width: 100%; padding: 13px; border-radius: 8px;
-  background: linear-gradient(180deg, #f0d48a, var(--brass) 50%, var(--brass-deep)); /* gradient: #f0d48a ≈ --brass-bright lighter */
+  background: linear-gradient(180deg, var(--grad-brass-bright-soft), var(--brass) 50%, var(--brass-deep)); /* UI-10 token 化 */
   color: var(--stable-ink); font-weight: 700; font-size: 14px;
   border: 1px solid var(--brass-dark); cursor: pointer; transition: all 0.15s;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   box-shadow: 0 3px 10px rgba(201,162,94,0.25), inset 0 1px 0 rgba(255,240,200,0.55);
   font-family: var(--font-body);
 }
-.btn-brass-lg:hover { background: linear-gradient(180deg, #f5df9b, #d4b068 50%, #b08a45); box-shadow: 0 5px 16px rgba(201,162,94,0.4); } /* gradient: brass hover stops */
+.btn-brass-lg:hover { background: linear-gradient(180deg, var(--grad-brass-hover-2), var(--grad-brass-light) 50%, var(--grad-brass-hover-3)); box-shadow: 0 5px 16px rgba(201,162,94,0.4); } /* UI-10 token 化 */
 
 /* =========================================================
    Strategy Academy — Home redesign (2026-08-10)
@@ -1887,7 +1943,7 @@ html[data-theme="light"] .settings-nav-item:hover {
   min-width: 190px;
   padding: 16px 20px;
   text-align: center;
-  background: linear-gradient(180deg, var(--stable-ivory) 0%, #e8dcc0 100%);
+  background: linear-gradient(180deg, var(--stable-ivory) 0%, var(--grad-plaque) 100%);
   border: 1px solid rgba(201,162,94,0.55);
   border-radius: var(--poker-radius-md);
   box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 0 0 3px rgba(255,255,255,0.45), inset 0 0 0 4px rgba(201,162,94,0.28);
@@ -2582,7 +2638,7 @@ html[data-theme="light"] .streak-rail {
   width: 100%;
   max-width: 320px;
   padding: 18px 18px 16px;
-  background: linear-gradient(180deg, var(--stable-ivory) 0%, #e8dcc0 100%);
+  background: linear-gradient(180deg, var(--stable-ivory) 0%, var(--grad-plaque) 100%);
   border: 1px solid rgba(201,162,94,0.6);
   border-radius: var(--poker-radius-md);
   box-shadow:

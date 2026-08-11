@@ -46,11 +46,18 @@ export interface HandHistory {
 }
 
 // 导入结果
+export interface ImportMessage {
+  /** i18n key（handHistory.importer.*），渲染端经 t() 解析 */
+  key: string;
+  /** t() 插值参数 */
+  params?: Record<string, string | number>;
+}
+
 export interface ImportResult {
   success: boolean;
   hands: HandHistory[];
-  errors: string[];
-  warnings?: string[];
+  errors: ImportMessage[];
+  warnings?: ImportMessage[];
   format?: string;
 }
 

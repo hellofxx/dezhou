@@ -37,10 +37,11 @@ function generateDailyChallenge(dateStr: string, dayOfYear: number): DailyChalle
   const count = counts[dayOfYear % counts.length]!;
   const accuracy = accuracies[(dayOfYear + 1) % accuracies.length]!;
 
+  // PROG-06：奖励名存 i18n key（dailyChallenge.reward*），渲染时 t() 解析
   const rewards: Record<string, string> = {
-    'range': '手牌大师',
-    'pot-odds': '赔率专家',
-    'gto': 'GTO 精英',
+    'range': 'dailyChallenge.rewardRange',
+    'pot-odds': 'dailyChallenge.rewardPotOdds',
+    'gto': 'dailyChallenge.rewardGto',
   };
 
   return {
@@ -118,7 +119,7 @@ export default function DailyChallenge() {
               </p>
               <div className="flex items-center gap-3 mt-1.5">
                 <span className="text-xs text-[var(--ivory-muted)]">
-                  {t('dailyChallenge.reward')}: {challenge.reward}
+                  {t('dailyChallenge.reward')}: {t(challenge.reward)}
                 </span>
                 <span className={`text-xs font-medium ${todayCompleted ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory-muted)]'}`}>
                   {todayCompleted ? t('dailyChallenge.completed') : t('dailyChallenge.notCompleted')}

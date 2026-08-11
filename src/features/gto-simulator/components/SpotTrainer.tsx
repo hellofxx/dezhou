@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Position, getPositionsForPlayerCount } from '@/shared/types/position';
 import type { HandNotation } from '@/shared/types/poker';
 import { StrategyMatrix } from './StrategyMatrix';
@@ -10,6 +11,7 @@ interface SpotTrainerProps {
 }
 
 export function SpotTrainer({ onClose }: SpotTrainerProps) {
+  const { t } = useTranslation();
   const [selectedPosition, setSelectedPosition] = useState<Position>(Position.BTN);
   const [selectedHand, setSelectedHand] = useState<HandNotation | null>(null);
   // P1C-15: BB 无 open 场景，剩余 GTO 表仅有 bb_vs_X_open，从位置选择中剔除 BB
@@ -35,7 +37,7 @@ export function SpotTrainer({ onClose }: SpotTrainerProps) {
 
       {/* 位置选择 */}
       <div className="space-y-2">
-        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">选择位置查看 GTO 策略</label>
+        <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.spot.chooseSpot')}</label>
         <div className="flex gap-2 flex-wrap">
           {positions.map((pos) => (
             <button

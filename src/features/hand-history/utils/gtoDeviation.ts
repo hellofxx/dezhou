@@ -130,8 +130,8 @@ const pending = new Map<number, (result: unknown) => void>();
 function getWorker(): Worker | null {
   if (workerRef) return workerRef;
   try {
-    workerRef = new Worker(new URL('../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
-    workerRef.onmessage = (e: MessageEvent) => {
+    const worker = new Worker(new URL('../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
+    worker.onmessage = (e: MessageEvent) => {
       const { id, result } = e.data as { id: number; result: unknown };
       const resolve = pending.get(id);
       if (resolve) {
@@ -139,7 +139,20 @@ function getWorker(): Worker | null {
         pending.delete(id);
       }
     };
-    return workerRef;
+    // P1 fix: worker 崩溃后置空引用并终止旧实例，下次调用可重建；
+    // 否则 workerRef 指向已失效实例，后续 batchAnalyze 全部卡满 10s 超时且永不恢复。
+    worker.onerror = () => {
+      try {
+        worker.terminate();
+      } catch {
+        // ignore terminate errors
+      }
+      workerRef = null;
+      // 该 worker 的所有悬挂请求走 fallback（清空 pending，超时定时器会自行 resolve fallback），避免永久等待
+      pending.clear();
+    };
+    workerRef = worker;
+    return worker;
   } catch {
     return null;
   }
@@ -154,9 +167,14 @@ function sendToWorker<T>(type: string, payload: unknown): Promise<T> {
       return;
     }
     const id = ++msgId;
-    pending.set(id, resolve as (result: unknown) => void);
+    // P1 fix: 超时定时器存于闭包，消息成功返回或 worker 崩溃时 clearTimeout，避免悬挂定时器
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    pending.set(id, (result: unknown) => {
+      if (timer !== null) clearTimeout(timer);
+      resolve(result as T);
+    });
     worker.postMessage({ type, payload, id });
-    setTimeout(() => {
+    timer = setTimeout(() => {
       if (pending.has(id)) {
         pending.delete(id);
         resolve(fallbackAnalyze(payload) as T);
@@ -193,30 +211,35 @@ export async function analyzeHandDeviations(
   heroName: string,
   onProgress?: (completed: number, total: number) => void,
 ): Promise<DeviationResult[]> {
-  const results: DeviationResult[] = [];
-  const toAnalyze: DecisionEntry[] = [];
-  const handIds: string[] = [];
+  // HH-08：按 handId 聚合跨 batch 的 decisions，避免同一手牌因决策
+  // 分散在多个 batch 而产生重复 DeviationResult（progress 按已完成手牌数上报）。
+  // 初始 decisions 仅作为待分析输入（toAnalyze），分析结果统一聚合到 resultMap，
+  // 全部批次完成后一次构建 DeviationResult。
+  const resultMap = new Map<string, DeviationDecision[]>();
+  const pendingEntries: DecisionEntry[] = [];
+  let analyzedHandCount = 0;
 
   // Collect decisions, skip cached hands
   for (const hand of hands) {
     const cached = analysisCache.get(hand.id);
     if (cached) {
-      results.push(cached);
+      analyzedHandCount++;
       continue;
     }
-    handIds.push(hand.id);
-    const decisions = extractHeroDecisions(hand, heroName);
-    toAnalyze.push(...decisions);
+    resultMap.set(hand.id, []);
+    pendingEntries.push(...extractHeroDecisions(hand, heroName));
   }
 
-  if (toAnalyze.length === 0) {
-    onProgress?.(results.length, results.length);
-    return results;
+  const uncachedIds = [...resultMap.keys()];
+  if (uncachedIds.length === 0) {
+    onProgress?.(analyzedHandCount, analyzedHandCount);
+    return [...analysisCache.values()].filter((r) => hands.some((h) => h.id === r.handId));
   }
 
   // Process in batches during idle time
-  let completed = 0;
+  const toAnalyze = pendingEntries;
   const totalBatches = Math.ceil(toAnalyze.length / BATCH_SIZE);
+  let processed = 0;
 
   for (let batchIdx = 0; batchIdx < totalBatches; batchIdx++) {
     // Yield to idle
@@ -232,14 +255,13 @@ export async function analyzeHandDeviations(
       grade: string;
     }>>('batchAnalyze', batch);
 
-    // Group results back by handId
-    const resultMap = new Map<string, DeviationDecision[]>();
     for (let i = 0; i < batch.length; i++) {
       const entry = batch[i]!;
       const wr = workerResults[i];
       const handId = entry.id.split(':')[0]!;
-      if (!resultMap.has(handId)) resultMap.set(handId, []);
-      resultMap.get(handId)!.push({
+      const deviations = resultMap.get(handId);
+      if (!deviations) continue;
+      deviations.push({
         street: entry.street,
         action: entry.action,
         gtoAction: wr?.gtoAction ?? 'call',
@@ -248,21 +270,25 @@ export async function analyzeHandDeviations(
       });
     }
 
-    // Build DeviationResult per hand and cache
-    for (const [handId, deviations] of resultMap) {
-      const result: DeviationResult = {
-        handId,
-        deviations,
-        analyzedAt: Date.now(),
-      };
-      analysisCache.set(handId, result);
-      results.push(result);
-    }
-
-    completed++;
-    onProgress?.(results.length, hands.length);
+    processed += batch.length;
+    // 按已完成决策比例粗粒度上报进度（保守：仅当达到 100% 时精确到手牌数）
+    onProgress?.(Math.round((processed / toAnalyze.length) * uncachedIds.length), uncachedIds.length);
   }
 
+  // Build final results, cache, and report progress with unique hand count
+  const results: DeviationResult[] = [];
+  for (const [handId, deviations] of resultMap) {
+    if (deviations.length === 0) continue;
+    const result: DeviationResult = {
+      handId,
+      deviations,
+      analyzedAt: Date.now(),
+    };
+    analysisCache.set(handId, result);
+    results.push(result);
+  }
+
+  onProgress?.(results.length, results.length);
   return results;
 }
 
@@ -272,7 +298,9 @@ export async function analyzeHandDeviations(
 export function getDeviationSummary(result: DeviationResult): DeviationSummary {
   const { deviations } = result;
   const totalDecisions = deviations.length;
-  const optimalCount = deviations.filter(d => d.grade === 'optimal').length;
+  // P1 fix: 五级体系（best/correct/inaccuracy/wrong/blunder）中最优为 'best'，
+  // 'optimal' 是已废弃的三级旧值，导致 optimalCount 恒为 0、最优率永远显示 0%。
+  const optimalCount = deviations.filter(d => d.grade === 'best').length;
   const averageEvLoss = totalDecisions > 0
     ? Math.round((deviations.reduce((s, d) => s + d.evLoss, 0) / totalDecisions) * 100) / 100
     : 0;

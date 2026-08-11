@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { MOTION_DURATION, MOTION_EASE, transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -45,7 +47,7 @@ export default function RankUpCelebration({ rankUp, onClose }: RankUpCelebration
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.4, type: 'spring', stiffness: 200 }}
+              transition={transitionStandard}
               className="text-center py-4"
             >
               {/* 大徽章 emoji */}
@@ -75,7 +77,7 @@ export default function RankUpCelebration({ rankUp, onClose }: RankUpCelebration
                       y: (Math.sin((i / 8) * Math.PI * 2) * 120) + 50,
                       scale: 0.3,
                     }}
-                    transition={{ duration: 1.2, delay: 0.2 + i * 0.05, ease: 'easeOut' }}
+                    transition={{ duration: MOTION_DURATION.loop, delay: 0.2 + i * 0.05, ease: MOTION_EASE.out }}
                     className="absolute left-1/2 top-1/2 w-2 h-2 rounded-full"
                     style={{
                       background: i % 2 === 0 ? 'var(--brass-bright)' : 'var(--success)',
@@ -127,7 +129,7 @@ export default function RankUpCelebration({ rankUp, onClose }: RankUpCelebration
                     animate={{
                       scale: [1, 1.15, 1],
                     }}
-                    transition={{ duration: 1.2, repeat: Infinity }}
+                    transition={{ duration: MOTION_DURATION.loop, repeat: Infinity }}
                     className="text-4xl"
                   >
                     {rankUp.to.icon}
@@ -149,7 +151,7 @@ export default function RankUpCelebration({ rankUp, onClose }: RankUpCelebration
               {/* 继续按钮 */}
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-[var(--radius)] bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:brightness-110 transition-all shadow-[var(--shadow-brass)]"
+                className="hover-bright px-6 py-2.5 rounded-[var(--radius)] bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm transition-all shadow-[var(--shadow-brass)]"
               >
                 {t('rankUp.continue')}
               </button>

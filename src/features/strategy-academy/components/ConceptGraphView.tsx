@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Brain, BookOpen, Lock, Link2 } from 'lucide-react';
@@ -28,7 +30,7 @@ export default function ConceptGraphView() {
         <motion.section
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          transition={transitionSlow}
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] relative brass-rail overflow-hidden"
         >
           <div className="p-5 md:p-6">
@@ -37,7 +39,7 @@ export default function ConceptGraphView() {
               className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              返回策略学院
+              {t('academy.conceptGraph.backToAcademy')}
             </button>
 
             <div className="flex items-center gap-4">
@@ -45,9 +47,9 @@ export default function ConceptGraphView() {
                 <Brain className="w-6 h-6 text-[var(--brass-bright)]" />
               </div>
               <div>
-                <h1 className="font-display text-2xl text-[var(--ivory)]">知识图谱</h1>
+                <h1 className="font-display text-2xl text-[var(--ivory)]">{t('academy.conceptGraph.title')}</h1>
                 <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
-                  可视化课程知识依赖关系，点击节点跳转到对应课程
+                  {t('academy.conceptGraph.subtitle')}
                 </p>
               </div>
             </div>
@@ -58,7 +60,7 @@ export default function ConceptGraphView() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, delay: 0.1 }}
+          transition={{ ...transitionStandard, delay: 0.1 }}
           className="grid grid-cols-1 sm:grid-cols-3 gap-3"
         >
           <div className="rounded-lg bg-[var(--walnut-raised)] border border-[var(--walnut-border)] p-4 text-center">
@@ -66,21 +68,21 @@ export default function ConceptGraphView() {
               <BookOpen className="w-4 h-4 text-[var(--poker-success)]" />
               <span className="font-numeric text-2xl text-[var(--poker-success)]">{completedCount}</span>
             </div>
-            <p className="text-xs text-[var(--ivory-muted)]">已学习</p>
+            <p className="text-xs text-[var(--ivory-muted)]">{t('academy.conceptGraph.learned')}</p>
           </div>
           <div className="rounded-lg bg-[var(--walnut-raised)] border border-[var(--walnut-border)] p-4 text-center">
             <div className="flex items-center justify-center gap-1.5 mb-1">
               <Lock className="w-4 h-4 text-[var(--ivory-dim)]" />
               <span className="font-numeric text-2xl text-[var(--ivory-dim)]">{remainingCount}</span>
             </div>
-            <p className="text-xs text-[var(--ivory-muted)]">未学习</p>
+            <p className="text-xs text-[var(--ivory-muted)]">{t('academy.conceptGraph.notLearned')}</p>
           </div>
           <div className="rounded-lg bg-[var(--walnut-raised)] border border-[var(--walnut-border)] p-4 text-center">
             <div className="flex items-center justify-center gap-1.5 mb-1">
               <Brain className="w-4 h-4 text-[var(--brass-bright)]" />
               <span className="font-numeric text-2xl text-[var(--brass-bright)]">{totalLessons}</span>
             </div>
-            <p className="text-xs text-[var(--ivory-muted)]">总课程</p>
+            <p className="text-xs text-[var(--ivory-muted)]">{t('academy.conceptGraph.totalCourses')}</p>
           </div>
         </motion.div>
 
@@ -88,7 +90,7 @@ export default function ConceptGraphView() {
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, delay: 0.2 }}
+          transition={{ ...transitionStandard, delay: 0.2 }}
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-4 md:p-6"
         >
           <ConceptGraph onNodeClick={handleNodeClick} />
@@ -98,25 +100,25 @@ export default function ConceptGraphView() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.35, delay: 0.3 }}
+          transition={{ ...transitionStandard, delay: 0.3 }}
           className="text-center text-xs text-[var(--ivory-dim)] pb-2"
         >
-          💡 提示：滚轮缩放 · 拖拽平移 · 悬停高亮依赖链 · 点击节点跳转课程
+          {t('academy.conceptGraph.hint')}
         </motion.div>
 
         {/* Concept Nodes - 跨模块概念关联 */}
         <motion.section
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, delay: 0.35 }}
+          transition={{ ...transitionStandard, delay: 0.35 }}
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-4 md:p-6"
         >
           <div className="flex items-center gap-2 mb-4">
             <Link2 className="w-4 h-4 text-[var(--brass-bright)]" />
-            <h2 className="font-display text-[16px] text-[var(--ivory)]">核心概念关联</h2>
+            <h2 className="font-display text-[16px] text-[var(--ivory)]">{t('academy.conceptGraph.coreConcepts')}</h2>
           </div>
           <p className="text-xs text-[var(--ivory-muted)] mb-4">
-            点击概念查看关联课程和训练模块，实现跨模块知识联动
+            {t('academy.conceptGraph.coreConceptsDesc')}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {CONCEPT_NODES.map((concept) => {
@@ -145,7 +147,7 @@ export default function ConceptGraphView() {
                     <div className="flex gap-1 mt-1.5 flex-wrap">
                       {concept.relatedModules.map((mod) => (
                         <span key={mod} className="text-[9px] px-1.5 py-0.5 rounded bg-black/20">
-                          {mod === 'pot-odds' ? '赔率' : mod === 'range-trainer' ? '范围' : mod === 'gto-simulator' ? 'GTO' : '复盘'}
+                          {mod === 'pot-odds' ? t('academy.conceptGraph.moduleOdds') : mod === 'range-trainer' ? t('academy.conceptGraph.moduleRange') : mod === 'gto-simulator' ? t('academy.conceptGraph.moduleGto') : t('academy.conceptGraph.moduleReview')}
                         </span>
                       ))}
                     </div>

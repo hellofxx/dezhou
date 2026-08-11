@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { HandHistory } from '../types';
 import {
   analyzeHandDeviations,
@@ -14,12 +15,16 @@ interface GtoDeviationPanelProps {
   heroName: string;
 }
 
-const GRADE_CONFIG: Record<string, { label: string; color: string; icon: typeof CheckCircle2 }> = {
-  best:          { label: '最优',   color: 'text-[var(--sage)]',         icon: CheckCircle2 },
-  correct:       { label: '正确',   color: 'text-[var(--sage)]',         icon: CheckCircle2 },
-  inaccuracy:    { label: '小偏差', color: 'text-[var(--brass-bright)]', icon: AlertTriangle },
-  wrong:         { label: '错误',   color: 'text-[var(--clay)]',         icon: AlertTriangle },
-  blunder:       { label: '严重失误', color: 'text-[var(--poker-danger)]', icon: XCircle },
+// HH-05 修复：label 复用 shared GRADE_DISPLAY_CONFIG 的 titleKey（i18n），消除重复实现。
+// color/icon 保留本地（.grade-* 组件类与本地 lucide 图标显示需求不同）。
+import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
+
+const GRADE_CONFIG: Record<string, { labelKey: string; color: string; icon: typeof CheckCircle2 }> = {
+  best:          { labelKey: GRADE_DISPLAY_CONFIG.best.titleKey,       color: 'text-[var(--sage)]',         icon: CheckCircle2 },
+  correct:       { labelKey: GRADE_DISPLAY_CONFIG.correct.titleKey,    color: 'text-[var(--sage)]',         icon: CheckCircle2 },
+  inaccuracy:    { labelKey: GRADE_DISPLAY_CONFIG.inaccuracy.titleKey, color: 'text-[var(--brass-bright)]', icon: AlertTriangle },
+  wrong:         { labelKey: GRADE_DISPLAY_CONFIG.wrong.titleKey,      color: 'text-[var(--clay)]',         icon: AlertTriangle },
+  blunder:       { labelKey: GRADE_DISPLAY_CONFIG.blunder.titleKey,    color: 'text-[var(--poker-danger)]', icon: XCircle },
 };
 
 const DEFAULT_GRADE = GRADE_CONFIG.best!;
@@ -36,6 +41,7 @@ function StatBox({ label, value, accent = false }: { label: string; value: strin
 }
 
 export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
+  const { t } = useTranslation();
   const [result, setResult] = useState<DeviationResult | null>(null);
   const [summary, setSummary] = useState<DeviationSummary | null>(null);
   const [loading, setLoading] = useState(false);
@@ -73,7 +79,11 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
       <div className="p-3 rounded-xl border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/20">
         <div className="flex items-center gap-2 text-xs text-[var(--ivory-muted)]">
           <Loader2 size={13} className="animate-spin" />
-          <span>GTO 分析中{progress.total > 0 ? ` (${progress.completed}/${progress.total})` : '...'}</span>
+          <span>
+            {progress.total > 0
+              ? t('handHistory.deviation.loadingWithProgress', { completed: progress.completed, total: progress.total })
+              : t('handHistory.deviation.loading')}
+          </span>
         </div>
       </div>
     );
@@ -89,16 +99,16 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
       {/* Header */}
       <div className="flex items-center gap-2">
         <Target size={14} className="text-[var(--brass-bright)]" />
-        <span className="text-xs font-display font-semibold text-[var(--ivory-dim)] tracking-wide">GTO 偏差分析</span>
+        <span className="text-xs font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('handHistory.deviation.title')}</span>
       </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-4 gap-2">
-        <StatBox label="决策数" value={totalDecisions} />
-        <StatBox label="最优率" value={`${optimalPct}%`} accent={optimalPct >= 70} />
-        <StatBox label="平均EV损失" value={`${averageEvLoss}BB`} />
+        <StatBox label={t('handHistory.deviation.decisions')} value={totalDecisions} />
+        <StatBox label={t('handHistory.deviation.optimal')} value={`${optimalPct}%`} accent={optimalPct >= 70} />
+        <StatBox label={t('handHistory.deviation.avgEvLoss')} value={`${averageEvLoss}BB`} />
         <StatBox
-          label="最差决策"
+          label={t('handHistory.deviation.worstDecision')}
           value={worstDecision ? `${worstDecision.evLoss}BB` : '—'}
         />
       </div>
@@ -107,7 +117,7 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
       {result.deviations.length > 0 && (
         <div className="space-y-1.5">
           <span className="text-[10px] uppercase tracking-wider text-[var(--ivory-muted)] font-display font-semibold">
-            逐街对比
+            {t('handHistory.deviation.streetComparison')}
           </span>
           {result.deviations.map((d, i) => {
             const cfg = GRADE_CONFIG[d.grade] ?? DEFAULT_GRADE;
@@ -120,16 +130,16 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
                 <div className="flex items-center gap-2">
                   <Icon size={12} className={cfg.color} />
                   <span className="text-[var(--ivory-dim)] capitalize">{d.street}</span>
-                  <span className="text-[var(--ivory-muted)]">你: {d.action}</span>
+                  <span className="text-[var(--ivory-muted)]">{t('handHistory.deviation.youActed', { action: d.action })}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[var(--ivory-muted)]">GTO: <span className="text-[var(--ivory-dim)]">{d.gtoAction}</span></span>
+                  <span className="text-[var(--ivory-muted)]">{t('handHistory.deviation.gtoActed', { action: d.gtoAction })}</span>
                   {d.evLoss > 0 && (
                     <span className={`font-numeric font-semibold ${cfg.color}`}>
                       -{d.evLoss}BB
                     </span>
                   )}
-                  <span className={`text-[10px] ${cfg.color}`}>{cfg.label}</span>
+                  <span className={`text-[10px] ${cfg.color}`}>{t(cfg.labelKey)}</span>
                 </div>
               </div>
             );
@@ -142,10 +152,8 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
         <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[var(--clay)]/8 border border-[var(--clay)]/20 text-xs text-[var(--ivory-dim)]">
           <TrendingDown size={13} className="text-[var(--clay)] shrink-0" />
           <span>
-            平均每手损失 <span className="font-numeric font-semibold text-[var(--clay)]">{averageEvLoss}BB</span>
-            {worstDecision && (
-              <>，最差决策出现在 <span className="font-display font-semibold">{worstDecision.street}</span></>
-            )}
+            {t('handHistory.deviation.avgLossPerHand', { evLoss: averageEvLoss })}
+            {worstDecision && t('handHistory.deviation.worstOnStreet', { street: worstDecision.street })}
           </span>
         </div>
       )}

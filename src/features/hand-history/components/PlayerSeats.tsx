@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { MOTION_DURATION } from '@/shared/utils/motion';
 import type { Player } from '../types';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { HandDisplay } from '@/shared/components/poker/HandDisplay';
@@ -55,12 +57,12 @@ export function PlayerSeats({
             className={`
               flex flex-col items-center gap-1 p-3 rounded-xl
               bg-[var(--walnut-raised)]/70 border backdrop-blur-sm transition-all duration-300
-              ${isActive ? 'border-[var(--brass)] shadow-[0_0_16px_rgba(201,162,94,0.45)]' : 'border-[var(--walnut-border)]/60'}
+              ${isActive ? 'border-[var(--brass)] shadow-[var(--shadow-brass-glow-lg)]' : 'border-[var(--walnut-border)]/60'}
               ${isFolded ? 'opacity-40' : ''}
             `}
             style={getSeatStyle(index)}
             animate={isActive ? { scale: [1, 1.02, 1] } : {}}
-            transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
+            transition={{ duration: MOTION_DURATION.slow, repeat: isActive ? Infinity : 0 }}
           >
             {/* Position badge */}
             <PositionBadge position={player.position} active={isActive} className="text-[10px]" />

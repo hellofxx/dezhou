@@ -1,0 +1,52 @@
+{
+  "freeze": {
+    "label": "Freeze Cards",
+    "used": "Freeze card used today",
+    "awarded": "Earned {{count}} freeze cards",
+    "empty": "Not enough freeze cards",
+    "settingLabel": "Freeze Cards",
+    "settingHint": "No time to train today? Use 1 freeze card to take the day off and keep your streak (1 per day), {{count}} remaining",
+    "useNow": "Use Freeze Card",
+    "useSuccess": "1 card used, today's streak protected ✓",
+    "useFail": "Unavailable (trained/used today, no cards, or no streak to protect)"
+  },
+  "share": {
+    "title": "🔥 Training Streak",
+    "dayUnit": "days",
+    "statsLine": "Accuracy {{accuracy}}%  ·  {{count}} badges earned",
+    "currentLine": "Current streak {{current}} days  ·  Longest {{longest}} days",
+    "productName": "Poker Training Platform"
+  },
+  "celebration": {
+    "hiddenTitle": "Streak Milestone: {{days}} Days",
+    "hiddenDesc": "You've reached a {{days}}-day training streak milestone",
+    "bronzeTitle": "Bronze Badge!",
+    "bronzeSubtitle": "3-day streak — the habit is forming",
+    "flameTitle": "Golden Flame!",
+    "flameSubtitle": "7-day streak — you're in the zone",
+    "trophyTitle": "Trophy Earned!",
+    "trophySubtitle": "30-day streak — you're a serious player",
+    "diamondTitle": "Diamond Badge!",
+    "diamondSubtitle": "100-day streak — rare territory",
+    "legendTitle": "Legendary!",
+    "legendSubtitle": "365-day streak — you are a legend",
+    "congrats": "Congratulations! You've trained {{days}} days in a row!",
+    "freezeReward": "Earned {{count}} freeze cards",
+    "share": "Share with friends",
+    "sharing": "Generating...",
+    "continue": "Keep Training"
+  },
+  "earnBack": {
+    "windowHint": "Earn Back Window",
+    "restored": "Streak restored!",
+    "expired": "Earn Back window expired, streak has been reset"
+  },
+  "endingSoon": "Your streak is about to fade — train now to keep it alive!",
+  "fragment": {
+    "title": "Freeze Card Fragments",
+    "progress": "{current}/5",
+    "earned": "Earned 1 fragment!",
+    "synthesized": "Fragments synthesized into a freeze card!",
+    "dailyLimit": "Daily fragment limit reached"
+  }
+}

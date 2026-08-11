@@ -1,0 +1,23 @@
+{
+  "title": "🔄 Today's Review",
+  "todayReview": "Today's Review",
+  "items": "items",
+  "startReview": "Start Review",
+  "allDone": "Done",
+  "allDoneMessage": "✅ Today's review complete — keep the rhythm!",
+  "emptyToday": "Nothing to review today. Complete a drill and items will be queued automatically.",
+  "progressLabel": "Today's Progress",
+  "lastReview": "Last reviewed {{days}} days ago",
+  "moreItems": "{{count}} more to review",
+  "totalItems": "Total Items",
+  "review": "Review",
+  "nextReview": "Next Review",
+  "mastered": "Mastered",
+  "learning": "Learning",
+  "category": {
+    "strategy": "Strategy",
+    "range": "Range",
+    "odds": "Odds",
+    "gto": "GTO"
+  }
+}

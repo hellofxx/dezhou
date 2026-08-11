@@ -1,13 +1,7 @@
-import type { TrainingResult } from '@/shared/types/common';
-
 // 训练记录（持久化存储）
-export interface TrainingRecord {
-  id: string;
-  module: 'range-trainer' | 'pot-odds' | 'gto-simulator' | 'strategy-academy' | 'puzzle-trainer' | 'hand-history' | 'theory-academy';
-  mode: string;              // 'quiz', 'practice', etc.
-  result: TrainingResult;
-  createdAt: number;         // timestamp
-}
+// PLAT-01：TrainingRecord 类型已下沉至 shared/types/training.ts（shared 不依赖 feature 约束），
+// 此处 re-export 保持 progress 模块内既有引用路径不变。
+export type { TrainingRecord } from '@/shared/types/training';
 
 // 统计数据汇总
 export interface StatsSummary {

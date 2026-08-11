@@ -1,0 +1,45 @@
+{
+  "title": "5 分钟速训",
+  "subtitle": "从全局题库精选题目，针对弱点快速强化",
+  "quickTitle": "3 分钟快速训练",
+  "quickSubtitle": "每天 {{count}} 题，保持牌感 — {{mode}}",
+  "back": "返回学院",
+  "backAcademy": "返回策略学院",
+  "backHome": "返回首页",
+  "again": "再来一轮",
+  "selectDifficulty": "选择难度",
+  "adaptiveDifficulty": "自适应难度",
+  "weakAreasHint": "将优先从你的薄弱领域抽取题目",
+  "modeHint": "当前模式：{{mode}}，已完成今日训练将自动计入连续天数",
+  "questionCount": "本次速训",
+  "questions": "道题目",
+  "start": "开始速训",
+  "noQuestions": "暂无可用题目",
+  "difficulty": {
+    "beginner": "基础",
+    "intermediate": "进阶",
+    "advanced": "高级"
+  },
+  "mode": {
+    "range": "范围练习",
+    "odds": "赔率速算",
+    "mixed": "混合训练"
+  },
+  "result": {
+    "title": "训练完成",
+    "accuracy": "正确率",
+    "time": "平均用时",
+    "xp": "XP 获得",
+    "allCorrectBonus": "全对 +20 XP 奖励",
+    "streakRecorded": "已计入连续训练 ✓",
+    "reviewIncluded": "本次包含 {{count}} 道复习题"
+  },
+  "reviewQueueHint": "今日有 {{count}} 道待复习题，将自动混合 30% 进入本次训练",
+  "newRecord": "🎉 快速训练新纪录！",
+  "freezeReward": "🎁 连续 {{count}} 天快速训练奖励 1 张冻结卡！",
+  "streak": {
+    "current": "快速训练连续 {{count}} 天",
+    "rewarded": "已奖励 1 张冻结卡",
+    "broken": "快速训练连续中断，已重置"
+  }
+}

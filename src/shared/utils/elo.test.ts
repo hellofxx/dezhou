@@ -26,13 +26,13 @@ describe('calculateEloChange', () => {
 });
 
 describe('getRankForScore', () => {
-  it('0 分为新手，500 分进入入门段位', () => {
-    expect(getRankForScore(0).name).toBe('新手');
-    expect(getRankForScore(500).name).toBe('入门');
+  it('0 分为新手（语义 key rookie），500 分进入入门（语义 key entry）', () => {
+    expect(getRankForScore(0).name).toBe('rookie');
+    expect(getRankForScore(500).name).toBe('entry');
   });
 
-  it('超过 3000 钳制后仍为专家', () => {
-    expect(getRankForScore(3500).name).toBe('专家');
+  it('超过 3000 钳制后仍为专家（语义 key expert）', () => {
+    expect(getRankForScore(3500).name).toBe('expert');
   });
 });
 
@@ -59,7 +59,7 @@ describe('checkRankUp', () => {
   it('跨段位向上返回升级事件', () => {
     const result = checkRankUp(499, 501);
     expect(result.isUp).toBe(true);
-    expect(result.newRank?.name).toBe('入门');
+    expect(result.newRank?.name).toBe('entry');
   });
 
   it('降级或段位内变化不触发升级', () => {

@@ -160,7 +160,7 @@ export default function SpacedRepetitionPanel({
                   <BookOpen className="w-4 h-4 text-[var(--brass-bright)] shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-[var(--ivory)] truncate">{item.label}</span>
+                      <span className="text-sm text-[var(--ivory)] truncate">{t(item.label)}</span>
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded shrink-0 ${
                           CATEGORY_COLORS[item.category] || CATEGORY_COLORS.strategy

@@ -83,7 +83,7 @@ export default function PlacementTestStep() {
         {t('onboarding.placement.questionOf', { current: currentIdx + 1, total: placementQuestions.length })}
       </div>
       <h2 className="font-display text-2xl text-[var(--ivory)] text-center mb-8">
-        {question.question}
+        {t(question.question)}
       </h2>
 
       <div className="w-full space-y-3 mb-6">
@@ -105,7 +105,7 @@ export default function PlacementTestStep() {
                 answered && !showCorrect && !showWrong && 'border-[var(--walnut-border)] bg-[var(--surface)] opacity-60',
               )}
             >
-              <span className="text-sm text-[var(--ivory)]">{option.text}</span>
+              <span className="text-sm text-[var(--ivory)]">{t(option.text)}</span>
               {showCorrect && <Check size={18} className="text-[var(--sage)] shrink-0" />}
               {showWrong && <X size={18} className="text-[var(--clay)] shrink-0" />}
             </button>
@@ -118,7 +118,7 @@ export default function PlacementTestStep() {
           <p className="text-xs text-[var(--brass)] font-medium mb-1">
             {t('onboarding.placement.explanation')}
           </p>
-          <p className="text-sm text-[var(--ivory-muted)]">{question.explanation}</p>
+          <p className="text-sm text-[var(--ivory-muted)]">{t(question.explanation)}</p>
         </div>
       )}
 

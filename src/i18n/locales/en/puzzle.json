@@ -1,0 +1,120 @@
+{
+  "rushTitle": "Puzzle Rush",
+  "rushDesc": "3-5 min timed sprint, 3 lives, streak bonuses, push your high score.",
+  "dailyTitle": "Daily Puzzle",
+  "dailyDesc": "8 curated questions daily, global leaderboard.",
+  "themeDrillTitle": "Theme Drill",
+  "themeDrillDesc": "Focused training on 10 themes from preflop to river.",
+  "themes": {
+    "preflop-rfi": "Preflop RFI",
+    "big-blind-defense": "Big Blind Defense",
+    "three-bet": "3-Bet Strategy",
+    "c-bet": "C-Bet",
+    "flush-draw": "Flush Draw",
+    "river-value": "River Value Betting",
+    "bluff": "Bluffing Spots",
+    "short-stack": "Short Stack Strategy",
+    "icm": "ICM Basics",
+    "multiway": "Multiway Pots"
+  },
+  "categories": {
+    "preflop": "Preflop",
+    "postflop": "Postflop",
+    "river": "River",
+    "tournament": "Tournament"
+  },
+  "home": {
+    "title": "Poker Puzzles",
+    "subtitle": "Train your decisions through scenario-based puzzles covering 10 themes: preflop RFI, BB defense, 3-bet, c-bet, flush draws, river value, bluffing, short stack, ICM, and multiway pots.",
+    "hero": {
+      "ariaLabel": "Puzzle Desk",
+      "eyebrow": "PUZZLE DESK",
+      "startDaily": "Start Today's Puzzle",
+      "reviewDaily": "Review Today's Puzzle",
+      "meta": "3 modes · 10 themes · 8 fixed daily questions",
+      "doneLabel": "Completed today",
+      "doneAccuracy": "· Best accuracy {{percent}}%",
+      "plaqueLabel": "DAILY PUZZLE"
+    },
+    "todayBadge": "TODAY",
+    "rushTitle": "Puzzle Rush",
+    "rushDesc": "3 or 5 minute timed run, 3 lives, +10s bonus every 5-streak. Increasing difficulty.",
+    "dailyTitle": "Daily Puzzle",
+    "dailyDesc": "8 fixed questions per day, mixed themes, full explanations after each question.",
+    "themeTitle": "Theme Drill",
+    "themeDesc": "Deep-dive a single theme with {{count}} questions to master specific skills.",
+    "themesTitle": "Train by Theme",
+    "questionsUnit": "Q",
+    "themesUnit": "themes",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "minutes": "min",
+    "startDaily": "Start Today's Puzzle",
+    "reviewToday": "View Today's Puzzle",
+    "todayDone": "Done today ✓",
+    "startTheme": "Pick a Theme",
+    "bestRecord": "Best {{score}}",
+    "bestAccuracy": "Best accuracy {{percent}}%",
+    "bestAccuracyShort": "Best {{percent}}%"
+  },
+  "card": {
+    "scenarioLabel": "Scenario",
+    "yourMove": "Your Move",
+    "progress": "Q {{current}} / {{total}}",
+    "handLabel": "Hand",
+    "positionLabel": "Pos",
+    "boardLabel": "Board",
+    "potLabel": "Pot",
+    "betLabel": "Bet",
+    "stackLabel": "Stack",
+    "fullExplanation": "Full Explanation",
+    "correctAnswerPrefix": "Correct answer: {{answer}}",
+    "nextQuestion": "Next",
+    "viewResult": "View Result"
+  },
+  "rush": {
+    "title": "{{minutes}}-Minute Rush",
+    "noQuestions": "No questions available",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "streak": "Streak"
+  },
+  "daily": {
+    "title": "Daily Puzzle",
+    "noQuestions": "No puzzle for today",
+    "completionCount": "{{count}} people finished today",
+    "alreadyCompleted": "Done today ✓",
+    "alreadyCompletedShort": "Done",
+    "fixedHint": "Today's puzzle is fixed — everyone sees the same questions."
+  },
+  "theme": {
+    "unknownTheme": "Unknown theme",
+    "noQuestions": "No questions for this theme"
+  },
+  "result": {
+    "title": "Session Complete",
+    "rushTitle": "Rush Complete",
+    "newRecord": "🎉 New Record!",
+    "score": "Score",
+    "correctRate": "Accuracy",
+    "correctCount": "Correct",
+    "duration": "Duration",
+    "avgTime": "Avg Time",
+    "minutes": "{{min}}m {{sec}}s",
+    "wrongList": "{{count}} wrong",
+    "yourAnswer": "Your pick",
+    "correctAnswer": "Correct",
+    "retry": "Try Again",
+    "backHome": "Back Home"
+  },
+  "common": {
+    "exit": "Exit",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "backHome": "Back Home",
+    "downshiftHint": "Multiple wrong answers detected. Consider reviewing fundamentals before continuing."
+  }
+}

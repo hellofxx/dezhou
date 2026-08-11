@@ -112,7 +112,7 @@ export function AcademyResume({
           <button
             type="button"
             onClick={goCta}
-            className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border border-[var(--brass-dark)] shadow-[0_3px_10px_rgba(201,162,94,0.25),inset_0_1px_0_rgba(255,240,200,0.55)] hover:brightness-110 transition-all"
+            className="hover-bright mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border border-[var(--brass-dark)] shadow-[var(--shadow-brass-btn)] transition-all"
           >
             <CtaIcon className="w-4 h-4" />
             {ctaLabel}

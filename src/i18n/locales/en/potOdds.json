@@ -1,0 +1,378 @@
+{
+  "title": "Pot Odds Calculator",
+  "potSize": "Pot Size",
+  "betSize": "Bet Size",
+  "outs": "Outs",
+  "profitable": "Call is profitable",
+  "notProfitable": "Call is not profitable",
+  "page": {
+    "title": "Pot Odds & EV Calculator",
+    "subtitle": "Calculate pot odds, estimate equity, and analyze expected value to make better call decisions",
+    "tabOdds": "Pot Odds",
+    "tabEv": "EV Analysis"
+  },
+  "calculator": {
+    "standard": "Standard Texas Hold'em",
+    "shortDeck": "Short Deck (6+)",
+    "paramsTitle": "Parameters",
+    "variantLabel": "Game Variant",
+    "shortDeckHint": "Short deck uses a 36-card deck; equity estimates use the actual remaining cards.",
+    "opponentBet": "Opponent Bet",
+    "currentStreet": "Current Street",
+    "streetFlop": "Post-flop (Flop)",
+    "streetTurn": "Post-turn (Turn)",
+    "ruleFourHint": "2 cards to come, use the ×4 rule",
+    "ruleTwoHint": "1 card to come, use the ×2 rule",
+    "impliedOdds": "Implied Odds (Advanced)",
+    "expectedExtra": "Expected Extra Winnings"
+  },
+  "ev": {
+    "title": "EV Calculation",
+    "equity": "Equity",
+    "potWin": "Pot Size (won if you win)",
+    "callCost": "Call Amount (lost if you lose)",
+    "resultLabel": "Expected Value (EV)",
+    "resultDesc": "Long-term average gain per call",
+    "breakevenLabel": "Breakeven equity:",
+    "currentEquity": "Current equity",
+    "breakeven": "Breakeven",
+    "profitable": "Profitable",
+    "breakEven": "Break-even",
+    "losing": "Losing",
+    "chartTitle": "EV vs Equity Curve",
+    "xAxisLabel": "Equity %",
+    "tooltipEquity": "Equity: {{label}}%",
+    "breakevenLine": "Breakeven"
+  },
+  "oddsDisplay": {
+    "title": "Pot Odds",
+    "needEquity": "You need at least {{equity}} equity to profit",
+    "requiredEquity": "Required Equity",
+    "estimatedEquity": "Estimated Equity",
+    "evLabel": "Expected Value (EV)",
+    "margin": "Safety Margin",
+    "callTitle": "Call",
+    "callDesc": "Your estimated equity ({{est}}) is above pot odds ({{req}}), profitable long-term",
+    "foldTitle": "Fold",
+    "foldDesc": "Your estimated equity ({{est}}) is below pot odds ({{req}}), calling loses money"
+  },
+  "equityChart": {
+    "requiredEquity": "Required Equity",
+    "estimatedEquity": "Estimated Equity",
+    "title": "Equity Comparison",
+    "diffLabel": "Difference: {{diff}}%"
+  },
+  "draws": {
+    "title": "Common Draws Reference",
+    "subtitle": "Click to quickly fill Outs into the calculator",
+    "openEndedStraight": "Open-ended Straight Draw",
+    "openEndedStraightDesc": "e.g. 56 on a 78x board",
+    "flushDraw": "Flush Draw",
+    "flushDrawDesc": "4 to a flush, 1 needed",
+    "comboDraw": "Combo Draw (Flush + Straight)",
+    "comboDrawDesc": "Flush draw + open-ended straight",
+    "overcards": "Two Overcards",
+    "overcardsDesc": "Two overcards to pair",
+    "gutshot": "Gutshot Straight Draw",
+    "gutshotDesc": "e.g. 56 on a 79x board",
+    "setMine": "Pocket Pair to Set",
+    "setMineDesc": "Pocket pair set mining",
+    "pairDraw": "Pair Draw",
+    "pairDrawDesc": "Single overcard to pair",
+    "backdoorFlush": "Backdoor Flush Draw",
+    "backdoorFlushDesc": "Two more of a suit needed"
+  },
+  "quiz": {
+    "categoryJudgment": "Odds Judgment",
+    "categoryOuts": "Outs Calculation",
+    "categoryImplied": "Implied Odds",
+    "categoryReverse": "Reverse Implied Odds",
+    "doneTitle": "Training Complete!",
+    "doneSubtitle": "Pot Odds Speed Quiz Results",
+    "accuracy": "Accuracy",
+    "avgTime": "Avg Time",
+    "correctCount": "Correct",
+    "gradeExcellent": "🎯 Excellent! Your pot odds skills are solid!",
+    "gradeGood": "👍 Good! Keep practicing to get sharper.",
+    "gradeFair": "📚 Needs work — consider reviewing pot odds basics.",
+    "gradePoor": "💡 Start with pot odds and outs fundamentals.",
+    "lastCorrect": "✓ Got the last question right — ending on a high note!",
+    "restart": "Play Again",
+    "backToCalc": "Back to Calculator",
+    "back": "Back",
+    "title": "Pot Odds Speed Quiz",
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "correctAnswer": "Correct answer: {{answer}}",
+    "reviewLink": "Review related course →",
+    "downshiftHint": "3+ consecutive wrong answers detected — slow down and review the basics before continuing.",
+    "viewResult": "View Results",
+    "next": "Next"
+  },
+  "quizBank": {
+    "q1": {
+      "scenario": "Pot $100, opponent bets $50, you have a flush draw (9 outs). Flop dealt, two cards to come.",
+      "question": "Do the pot odds support a call?",
+      "optA": {
+        "text": "Yes, calling is profitable",
+        "explanation": "Pot odds = 50/(100+50+50) = 25%. Flush draw post-flop equity ≈ 35% (9 outs × 4). 35% > 25%, calling is +EV."
+      },
+      "optB": {
+        "text": "No, should fold",
+        "explanation": "The odds are sufficient — don't fold. A flush draw has ~35% equity post-flop, well above the required 25%."
+      }
+    },
+    "q2": {
+      "scenario": "You hold 8♠9♠, flop is T♠J♥2♠.",
+      "question": "Approximately how many outs do you have?",
+      "optA": {
+        "text": "8 (open-ended straight)",
+        "explanation": "You not only have a straight draw but also a flush draw."
+      },
+      "optB": {
+        "text": "9 (flush draw)",
+        "explanation": "You not only have a flush draw but also a straight draw."
+      },
+      "optC": {
+        "text": "About 15 (combo draw)",
+        "explanation": "Flush 9 outs + open-ended straight 8 outs - overlap ~2 = about 15 outs. A strong combo draw with ~54% equity."
+      },
+      "optD": {
+        "text": "4 (gutshot)",
+        "explanation": "Your draw is far stronger than a gutshot — you have a flush + open-ended straight combo draw."
+      }
+    },
+    "q3": {
+      "scenario": "Pot $20, opponent bets $15. You hold a small pocket pair (set mining). Effective stack $200.",
+      "question": "Direct pot odds don't justify a call, but what about implied odds?",
+      "optA": {
+        "text": "Call, implied odds are enough",
+        "explanation": "Direct odds = 15/(20+15+15) = 30%, set mining at ~12% isn't enough. But implied odds: hitting a set can win more from villain; effective stack/call = 200/15 ≈ 13:1, well above the required ~7.5:1."
+      },
+      "optB": {
+        "text": "Fold, odds insufficient",
+        "explanation": "This ignores implied odds with deep stacks. Set mining deep-stacked is a classic implied odds play."
+      }
+    },
+    "q4": {
+      "scenario": "You hold K♠Q♠, flop is K♥7♦3♣. Villain bets large on a wet board.",
+      "question": "What problem might you face here?",
+      "optA": {
+        "text": "Reverse implied odds — top pair may be dominated",
+        "explanation": "KQ hit top pair but the kicker isn't the strongest. If villain holds AK or KK, the more you invest the more you lose. A classic reverse implied odds spot."
+      },
+      "optB": {
+        "text": "No risk, top pair is strong",
+        "explanation": "KQ's kicker isn't the best (AK dominates you). A large bet suggests a strong range — be wary."
+      }
+    },
+    "q5": {
+      "scenario": "Pot $80, opponent bets $80 (full pot). You have an open-ended straight draw (8 outs), Turn dealt, one card to come.",
+      "question": "Should you call?",
+      "optA": {
+        "text": "Call, odds just barely enough",
+        "explanation": "8 outs after the turn has only ~17% equity. Required odds = 80/(80+80+80) = 33%. 17% < 33%, direct odds aren't enough."
+      },
+      "optB": {
+        "text": "Fold, odds insufficient",
+        "explanation": "Pot odds require 33%, but 8 outs after the turn is ~17% (8×2+1). Unless huge implied odds exist, fold."
+      }
+    },
+    "q6": {
+      "scenario": "You hold A♥K♥, flop is 2♥7♥9♣. You have the nut flush draw + two overcards.",
+      "question": "Approximately how many outs do you have?",
+      "optA": {
+        "text": "9 (flush only)",
+        "explanation": "Don't forget your two overcards (A and K) can also pair up."
+      },
+      "optB": {
+        "text": "About 15",
+        "explanation": "Flush 9 outs + overcard pair 6 outs (3 As + 3 Ks) = 15 outs. A very strong draw with ~54% equity."
+      },
+      "optC": {
+        "text": "6 (overcards only)",
+        "explanation": "You also have the nut flush draw — far more than overcard outs."
+      },
+      "optD": {
+        "text": "12",
+        "explanation": "Flush 9 + overcards 6 = 15, not 12."
+      }
+    },
+    "q7": {
+      "scenario": "Pot $60, opponent bets $20 (1/3 pot). You have a gutshot draw (4 outs), Flop dealt.",
+      "question": "Do the pot odds support a call?",
+      "optA": {
+        "text": "Yes, the small bet gives good odds",
+        "explanation": "Pot odds = 20/(60+20+20) = 20%. Gutshot post-flop equity ≈ 16% (4×4). Close, but with implied odds (hitting a straight can win more), a call is reasonable."
+      },
+      "optB": {
+        "text": "No, 4 outs is too few",
+        "explanation": "Only 4 outs, but villain gives a great price (only 20% equity needed). With implied odds, calling is +EV."
+      }
+    },
+    "q8": {
+      "scenario": "You hold 5♦5♣, UTG opens to $15, effective stack $300. You're on BTN.",
+      "question": "Is set mining profitable here?",
+      "optA": {
+        "text": "Yes, deep-stack implied odds are excellent",
+        "explanation": "Set mining needs about 15-20× the call amount in implied chips. $300/$15 = 20×, satisfying the condition. Hitting a set will likely win a big pot."
+      },
+      "optB": {
+        "text": "No, pocket pair is too weak",
+        "explanation": "Set mining a small pocket pair deep-stacked is a classic profitable play — 20× implied odds is enough."
+      }
+    },
+    "q9": {
+      "scenario": "You hold A♣T♣, flop is A♦8♣5♠. Villain check-raises your bet.",
+      "question": "Why be careful here?",
+      "optA": {
+        "text": "Reverse implied odds: AT's top pair is dominated by stronger Ax",
+        "explanation": "A check-raise usually means strength. Villain may have AK, AQ, AJ, or a set. Your AT top pair with a mediocre kicker faces serious reverse implied odds — win small, lose big."
+      },
+      "optB": {
+        "text": "Top pair top kicker, should shove",
+        "explanation": "AT is not top pair top kicker (AK/AQ/AJ dominate you). Be cautious against a check-raise."
+      }
+    },
+    "q10": {
+      "scenario": "Pot $200, opponent shoves $100. You have a flush + gutshot combo draw (~12 outs), Turn dealt.",
+      "question": "Should you call?",
+      "optA": {
+        "text": "Call, odds are enough",
+        "explanation": "Pot odds = 100/(200+100+100) = 25%. 12 outs after the turn ≈ 24% (12×2). Very close, plus possible backdoor chances — a call is roughly break-even to slightly profitable."
+      },
+      "optB": {
+        "text": "Fold, not enough",
+        "explanation": "12 outs ≈ 24% is very close to the required 25%. With possible extra outs and precise calculation, this is a marginal call."
+      }
+    },
+    "q11": {
+      "scenario": "You hold J♠T♠, flop is Q♠9♠3♦. You have a flush draw + open-ended straight draw.",
+      "question": "After accounting for overlap, how many effective outs?",
+      "optA": {
+        "text": "17 (straight addition)",
+        "explanation": "You can't just add 9+8=17 — there's overlap (e.g., K♠ and 8♠ complete both the flush and the straight)."
+      },
+      "optB": {
+        "text": "About 15",
+        "explanation": "Flush 9 + straight 8 - overlap 2 (K♠ and 8♠) = 15 effective outs. A very strong combo draw."
+      },
+      "optC": {
+        "text": "8",
+        "explanation": "You also have flush draw outs — far more than 8."
+      },
+      "optD": {
+        "text": "9",
+        "explanation": "You also have open-ended straight outs — far more than 9."
+      }
+    },
+    "q12": {
+      "scenario": "You hold 7♣6♣, villain opens CO to $10. Effective stack $80. You're in BB.",
+      "question": "Are the implied odds for set mining / speculative calls enough?",
+      "optA": {
+        "text": "No, stacks too shallow",
+        "explanation": "Implied odds need ~15-20×: $80/$10 = 8×, well below required. Suited-connector speculation is hard to profit shallow — fold or 3-bet."
+      },
+      "optB": {
+        "text": "Yes, speculative hands always win big pots",
+        "explanation": "8× implied odds is far from enough. You need at least 15× to make speculative calls profitable."
+      }
+    },
+    "q13": {
+      "scenario": "Pot $150, opponent bets $37.5 (1/4 pot). You have the nut flush draw (9 outs), Flop dealt.",
+      "question": "Facing this small bet, you should?",
+      "optA": {
+        "text": "Call, excellent odds",
+        "explanation": "Pot odds = 37.5/(150+37.5+37.5) = 16.7%. Flush draw post-flop ≈ 35% equity. 35% >> 16.7% — an excellent call. Raising can even be considered."
+      },
+      "optB": {
+        "text": "Fold, small bet means strength",
+        "explanation": "Regardless of villain's hand, you only need 16.7% equity to call and you have 35%. Mathematically you must call."
+      }
+    },
+    "q14": {
+      "scenario": "You hold A♠J♠, flop is A♥T♦4♣. Villain c-bets, you call. Turn is 2♣, villain bets large again.",
+      "question": "What do two consecutive large bets suggest?",
+      "optA": {
+        "text": "Reverse implied odds increase: villain may have AK/AQ/two pair/set",
+        "explanation": "Two consecutive large bets (double barrel) usually represent a strong range. AJ top pair with a mediocre kicker faces serious reverse implied odds — you win when villain is weak, lose when villain is strong."
+      },
+      "optB": {
+        "text": "Villain is bluffing, should raise",
+        "explanation": "Could be a bluff, but large bets on two streets are more often value. AJ is a typical bluff-catcher here, but reverse implied odds risk is high."
+      }
+    },
+    "q15": {
+      "scenario": "Pot $40, opponent overbets $120 (3× pot). You have a gutshot (4 outs), Turn dealt, one card to come.",
+      "question": "Should you call?",
+      "optA": {
+        "text": "Call, hitting the straight wins a big pot",
+        "explanation": "Required equity = 120/(40+120+120) = 42.9%, but 4 outs after the turn is only ~8.7% (4/46, Rule of 2 ≈ 4×2=8%). Huge gap — \"hitting wins big\" cannot bridge 34 percentage points."
+      },
+      "optB": {
+        "text": "Fold, odds nowhere near enough",
+        "explanation": "Required equity = 120/(40+120+120) = 42.9%. A gutshot after the turn has only ~8.7% equity (4/46). The overbet prices draws out completely — a clear fold."
+      }
+    },
+    "q16": {
+      "scenario": "River, pot $100, opponent bets $100 (full pot). You only have third pair, no draws, can only beat bluffs. Estimated bluff frequency ~20% from the line.",
+      "question": "By pot odds, should you bluff-catch this river bet?",
+      "optA": {
+        "text": "No, equity below required odds",
+        "explanation": "Required equity = 100/(100+100+100) = 33.3%. You can only beat bluffs, equity ≈ villain's bluff frequency 20%. 20% < 33.3%, calling is -EV: EV = 0.2×$200 - 0.8×$100 = -$40 — fold."
+      },
+      "optB": {
+        "text": "Call, can't let villain push you around",
+        "explanation": "\"Not wanting to be bluffed\" isn't a mathematical reason. On the river there's no more action — your equity is villain's bluff frequency 20%, below the required 33.3%. Calling long-term loses."
+      }
+    },
+    "q17": {
+      "scenario": "Pot $50, opponent bets $50, leaving only $20 behind. You have a flush draw (9 outs), Flop dealt, this call sees only the Turn.",
+      "question": "Direct odds aren't enough — can implied odds save this call?",
+      "optA": {
+        "text": "Yes, the flush draw is worth chasing",
+        "explanation": "Implied odds are capped by villain's remaining stack. Break-even needs ~$113 more after hitting (50/0.19 ≈ 263, 263-150 = 113), but villain only has $20 — the gap can't be bridged."
+      },
+      "optB": {
+        "text": "No, stacks too shallow, fold",
+        "explanation": "Direct odds = 50/(50+50+50) = 33.3%, one-card equity ≈ 19% (9/47). Break-even needs ~$113 more after hitting (50/0.19 ≈ 263 minus current pot 150), but villain only has $20. Implied odds are capped — fold."
+      }
+    },
+    "q18": {
+      "scenario": "You hold 6♥5♥, flop is K♥9♥9♣ (paired board). Pot $60, opponent bets $60 (full pot).",
+      "question": "Should you continue with your low flush draw?",
+      "optA": {
+        "text": "Continue, 9 flush outs is enough",
+        "explanation": "Nominal 9 outs × 4 ≈ 36% looks enough vs 33.3%, but on a paired board some outs are \"dirty\": if villain holds 9x/K9, you make a flush while he makes a boat; your 6-high flush can also be dominated by bigger hearts. Effective equity needs heavy discounting."
+      },
+      "optB": {
+        "text": "Fold, reverse implied odds too bad",
+        "explanation": "Required equity = 60/(60+60+60) = 33.3%. Nominal 9 outs (~36%) must be discounted on the paired board: making your flush can still lose to a boat (villain with 9x/K9), and a 6-high flush can be dominated. Effective ~6 outs (~24%), below required — fold."
+      }
+    },
+    "q19": {
+      "scenario": "Pot $60, a very tight rock-type player bets $60 (full pot). You have a gutshot (4 outs), Flop dealt, this call sees only the Turn.",
+      "question": "Is chasing a gutshot on implied odds viable?",
+      "optA": {
+        "text": "No, should fold",
+        "explanation": "Direct odds = 60/(60+60+60) = 33.3%, one-card equity ≈ 8.5% (4/47). Break-even needs ~$526 more after hitting (60/0.085 ≈ 706 minus current pot 180), and rock-type players almost never pay big on obvious scary boards. The implied odds are an illusion — fold."
+      },
+      "optB": {
+        "text": "Yes, the gutshot is disguised and wins big when it hits",
+        "explanation": "\"Disguised\" doesn't mean \"gets paid\". The gap needs ~$526 more after hitting to break even, and a super-tight villain won't pay that size. Be extra conservative about implied odds vs tight players."
+      }
+    },
+    "easy": {
+      "scenario": "Pot 100, opponent checks (bets 0). You call 0 to see the next card.",
+      "question": "Is calling profitable here?",
+      "optA": {
+        "text": "Yes, a free card is always profitable",
+        "explanation": "Call amount is 0, required equity = 0/(100+0+0) = 0%. Every hand satisfies it — calling (effectively checking) is always +EV."
+      },
+      "optB": {
+        "text": "No, should fold",
+        "explanation": "Calling 0 needs no equity; folding gives up a free card."
+      }
+    }
+  }
+}

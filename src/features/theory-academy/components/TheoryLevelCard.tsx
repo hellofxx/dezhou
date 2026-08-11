@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionStandard } from '@/shared/utils/motion';
 import { Lock, CheckCircle2, PlayCircle, ChevronDown, ChevronUp, Swords } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import type { TheoryLevelInfo } from '../types';
@@ -62,7 +64,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : index * 0.06 }}
+      transition={{ ...transitionStandard, delay: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : index * 0.06 }}
     >
       <div
         role="button"
@@ -118,7 +120,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                   className="flex items-center justify-between text-xs"
                 >
                   <span className="text-[var(--ivory-dim)]">
-                    {completedCount}/{level.chapters.length} 章完成
+                    {t('theory.levelCard.chaptersDone', { count: completedCount, total: level.chapters.length })}
                   </span>
                   <span className="font-numeric text-[var(--brass-bright)]">{progress}%</span>
                 </div>
@@ -154,7 +156,7 @@ export function TheoryLevelCard({ level, unlocked, progress, completedChapters, 
                     className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
                   >
                     <Swords className="w-3.5 h-3.5" />
-                    去实践应用
+                    {t('theory.levelCard.goPractice')}
                   </span>
                 )}
               </div>

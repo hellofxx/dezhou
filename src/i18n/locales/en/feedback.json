@@ -1,0 +1,25 @@
+{
+  "grade": {
+    "best": "Best!",
+    "correct": "Correct",
+    "inaccuracy": "Inaccuracy",
+    "wrong": "Mistake",
+    "blunder": "Blunder",
+    "optimal": "[deprecated] Optimal!",
+    "acceptable": "[deprecated] Acceptable",
+    "error": "[deprecated] Mistake"
+  },
+  "message": {
+    "best": "Optimal decision! 🌟",
+    "correct": "Correct! This decision is reasonable",
+    "inaccuracy": "Not quite precise — a better option exists",
+    "wrong": "This decision cost {{evLoss}} BB",
+    "blunder": "Blunder! Lost {{evLoss}} BB",
+    "optimal": "[deprecated] Optimal decision!",
+    "acceptable": "[deprecated] Decent, but a better option exists",
+    "error": "[deprecated] This decision cost {{evLoss}} BB"
+  },
+  "evLossLabel": "EV Loss",
+  "correctAction": "Optimal Action",
+  "goReview": "Review →"
+}

@@ -49,8 +49,11 @@ describe('HelpHome 冒烟测试', () => {
       );
     });
 
-    // 找到 FAQ 按钮（aria-expanded 集合中筛选帮助中心 FAQ）
-    const faqButtons = container.querySelectorAll('[aria-expanded]');
+    // 找到 FAQ 按钮（HELP-05：限定在 #help-faq 容器内查询 aria-expanded，
+    // 避免误匹配其它可能使用该属性的交互元素）
+    const faqSection = container.querySelector('#help-faq');
+    expect(faqSection).not.toBeNull();
+    const faqButtons = faqSection!.querySelectorAll('button[aria-expanded]');
     expect(faqButtons.length).toBeGreaterThanOrEqual(8);
 
     const firstBtn = faqButtons[0] as HTMLButtonElement;

@@ -2,6 +2,8 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionSlow } from '@/shared/utils/motion';
 import { ArrowLeft, Zap, Target, RotateCcw, Trophy, Clock, Award, CheckCircle2, Sparkles, Gift } from 'lucide-react';
 import { useAcademyStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
@@ -242,7 +244,7 @@ export default function QuickDrill() {
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={transitionSlow}
               className="mt-6 rounded-lg border border-[var(--brass-bright)]/40 bg-gradient-to-br from-[var(--brass-dark)]/30 to-[var(--brass-bright)]/10 p-5"
             >
               <div className="flex items-center gap-2 mb-3">

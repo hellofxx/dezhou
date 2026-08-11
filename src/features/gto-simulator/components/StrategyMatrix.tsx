@@ -81,7 +81,7 @@ const MatrixCell = React.memo(function MatrixCell({
         'aspect-square border border-black/20',
         colorClass,
         isHighlighted && 'ring-2 ring-[var(--brass-bright)] ring-offset-1 ring-offset-[var(--felt)] scale-110 z-10',
-        !isHighlighted && 'hover:brightness-125 hover:ring-1 hover:ring-[var(--brass)]/40'
+        !isHighlighted && 'hover-bright-lg hover:ring-1 hover:ring-[var(--brass)]/40'
       )}
       onMouseEnter={() => onHover(hand)}
       onMouseLeave={() => onHover(null)}

@@ -1,0 +1,17 @@
+{
+  "name": {
+    "standard": "标准德州",
+    "short-deck": "短牌德州",
+    "heads-up": "单挑"
+  },
+  "description": {
+    "standard": "标准德州扑克，52 张牌，最多 9 人桌",
+    "short-deck": "短牌德州，36 张牌（移除 2-5），同花>顺子，AA>KQ",
+    "heads-up": "单挑德州，2 人对战，SB 强制 Ante，翻后 SB 先行动"
+  },
+  "rules_difference": "规则差异",
+  "switch_variant": "切换变体",
+  "select_variant": "选择游戏变体",
+  "eloOverview": "变体 ELO 概览",
+  "gamesPlayed": "题"
+}

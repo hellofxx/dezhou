@@ -1,0 +1,52 @@
+{
+  "fold": "Fold",
+  "call": "Call",
+  "raise": "Raise",
+  "positionGroup": {
+    "early": "Early position",
+    "middle": "Middle position",
+    "late": "Late position",
+    "blinds": "Blinds"
+  },
+  "active": "active",
+  "resultSummary": {
+    "excellent": "Excellent!",
+    "good": "Good",
+    "keepGoing": "Keep Going",
+    "morePractice": "More Practice Needed",
+    "defaultTitle": "Training Complete!",
+    "retry": "Try Again",
+    "back": "Back to Home",
+    "accuracy": "Accuracy"
+  },
+  "allIn": "All-In",
+  "start": "Start",
+  "pause": "Pause",
+  "reset": "Reset",
+  "back": "Back",
+  "next": "Next",
+  "comingSoon": "Coming Soon",
+  "loading": "Loading...",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "retry": "Try Again",
+  "backHome": "Back to Home",
+  "shortcuts": {
+    "fold": "Fold",
+    "call": "Call",
+    "raise": "Raise",
+    "confirm": "Confirm / Next",
+    "exit": "Exit Training",
+    "toggle": "Show / Hide Shortcuts"
+  },
+  "close": "Close",
+  "shortcutsTitle": "Keyboard Shortcuts",
+  "errorBoundary": {
+    "title": "Rendering Error",
+    "description": "An unexpected error occurred. Please try refreshing the page or clearing your browser cache.",
+    "retry": "Retry",
+    "reload": "Reload Page"
+  }
+}

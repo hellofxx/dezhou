@@ -1,4 +1,4 @@
-import type { HandNotation, GameVariant } from '@/shared/types/poker';
+import type { HandNotation, GameVariant, RangeAction } from '@/shared/types/poker';
 import type { Position } from '@/shared/types/position';
 import type { RangePreset, QuizQuestion } from '../types';
 import { getAllHandNotations } from '@/shared/utils/deck';
@@ -91,13 +91,16 @@ export function generateQuestions(
   const questions: QuizQuestion[] = [];
   const halfCount = Math.ceil(totalQuestions / 2);
 
-  // 范围内题目（正确答案=raise）
+  // 范围内题目：正确答案随 actionType 语义判定
+  // - call-vs-raise（BB 防御类）：范围内手牌应跟注 call
+  // - open/3bet/4bet：范围内手牌应加注 raise
+  const inAction: RangeAction = actionType.includes('call') ? 'call' : 'raise';
   const inPicks = weightedPick(inRange, halfCount, handWeights);
   for (const hand of inPicks) {
     questions.push({
       hand,
       position,
-      correctAction: 'raise',
+      correctAction: inAction,
       context: `${position} ${actionType}`,
     });
   }

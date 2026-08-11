@@ -70,6 +70,16 @@ export default function OnboardingFlow() {
         {currentStep === 2 && <FirstDrillStep />}
         {currentStep === 3 && <CelebrationStep />}
         {currentStep === 4 && <GoalSettingStep />}
+        {/* OB-04：currentStep >= 5（已完成）在 effect 跳转前的过渡帧渲染完成占位，避免空白闪烁 */}
+        {currentStep >= 5 && (
+          <div className="flex flex-col items-center justify-center h-full gap-3 px-4">
+            <div className="w-10 h-10 rounded-full bg-[var(--brass)]/20 flex items-center justify-center">
+              <span className="text-[var(--brass-bright)] text-xl">✓</span>
+            </div>
+            <div className="text-sm font-display text-[var(--ivory)]">{t('onboarding.complete.title')}</div>
+            <div className="text-xs text-[var(--ivory-dim)]">{t('onboarding.complete.redirecting')}</div>
+          </div>
+        )}
       </div>
 
       {/* 步骤标题（仅在当前步骤有效时显示） */}

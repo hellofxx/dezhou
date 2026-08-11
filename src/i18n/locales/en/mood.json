@@ -1,0 +1,12 @@
+{
+  "title": "Today's Mood",
+  "good": "Good",
+  "neutral": "Neutral",
+  "bad": "Bad",
+  "todayAccuracy": "Today's Accuracy",
+  "noData": "No data yet",
+  "correlationGoodHigh": "Feeling good and accuracy is high — keep it up!",
+  "correlationBadLow": "Mood is low and accuracy is below 50% — consider taking a break.",
+  "correlationBadHigh": "Accuracy is OK despite low mood — watch out for accumulating fatigue.",
+  "correlationNeutral": "Keep logging to discover the correlation between mood and accuracy."
+}

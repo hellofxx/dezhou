@@ -1,0 +1,181 @@
+{
+  "title": "Progress",
+  "subtitle": "Track your training progress and growth",
+  "totalSessions": "Total Sessions",
+  "accuracy": "Accuracy",
+  "streak": "Streak",
+  "achievements": "Achievements",
+  "welcome": "Poker Training Platform",
+  "welcomeBack": "{{count}} sessions completed, keep going!",
+  "firstTraining": "Start your first training session!",
+  "totalTraining": "Total",
+  "weekSessions": "This Week",
+  "recentSessions": "Recent Sessions",
+  "viewAll": "View All",
+  "noRecords": "No training records yet",
+  "recentRecords": "Recent Training Records",
+  "recentRecordsEmpty": "No training records yet — start your first session!",
+  "firstVisit": {
+    "title": "Welcome to the Poker Training Platform",
+    "description": "Start with the basics to quickly master core concepts like hand strength, position, and pot odds.",
+    "primaryCta": "Start with the Basics",
+    "secondaryCta": "Browse All Courses"
+  },
+  "moduleEntry": {
+    "rangeTitle": "Range Trainer Details",
+    "rangeDesc": "Detailed stats and weaknesses for range training",
+    "gtoTitle": "GTO Simulator Details",
+    "gtoDesc": "Detailed stats and analysis for GTO training"
+  },
+  "moduleStats": {
+    "subtitle": "Detailed training statistics",
+    "totalSessions": "Total Sessions",
+    "accuracy": "Accuracy",
+    "avgTime": "Avg Time",
+    "accuracyTrend": "Accuracy Trend",
+    "noData": "No training data yet",
+    "recentTen": "Recent 10 Sessions",
+    "noRecords": "No records",
+    "weakSpots": "Weak Spots",
+    "weakNoData": "No data",
+    "weakWrong": "Wrong {{wrong}}/{{total}}",
+    "weakRate": "{{rate}}% error rate"
+  },
+  "hero": {
+    "ariaLabel": "Current rank and core progress metrics",
+    "eyebrow": "Progress Record",
+    "eloScore": "Overall Rank Score",
+    "totalSessions": "Total Sessions",
+    "accuracy": "Accuracy",
+    "streak": "Day Streak",
+    "avgTime": "Avg Time",
+    "basedOn": "Rated across {{games}} answered questions"
+  },
+  "rank": {
+    "rookie": {
+      "name": "Rookie",
+      "description": "Just starting your poker journey"
+    },
+    "entry": {
+      "name": "Beginner",
+      "description": "Grasp the core concepts"
+    },
+    "intermediate": {
+      "name": "Apprentice",
+      "description": "Understand positions and ranges"
+    },
+    "mid": {
+      "name": "Intermediate",
+      "description": "Can apply GTO fundamentals"
+    },
+    "advanced": {
+      "name": "Advanced",
+      "description": "Proficient with exploitative strategy"
+    },
+    "expert": {
+      "name": "Expert",
+      "description": "Deep understanding and in-game profit"
+    }
+  },
+  "difficulty": {
+    "label": "Difficulty",
+    "beginner": "Basic",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "needMore": "Complete more sessions for a recommendation",
+    "upgrade": "Great form — consider a harder level",
+    "downshift": "Consider easing up to solidify fundamentals",
+    "fits": "Current difficulty suits you"
+  },
+  "stats": {
+    "totalSessions": "Total Sessions",
+    "accuracy": "Accuracy",
+    "streak": "Day Streak",
+    "avgTime": "Avg Time",
+    "moduleTitle": "By Module",
+    "sessions": "Sessions"
+  },
+  "chart": {
+    "accuracyTrend": "Accuracy Trend",
+    "empty": "No training data yet",
+    "emptyHint": "Your 14-day accuracy will appear here after training",
+    "accuracySeries": "Accuracy"
+  },
+  "calendar": {
+    "title": "Training Calendar",
+    "currentStreak": "Current Streak",
+    "longestStreak": "Longest Streak",
+    "last30Days": "Last 30 Days",
+    "sessions": "{{count}} sessions",
+    "tooltip": "{{day}}: {{count}} sessions",
+    "less": "Less",
+    "more": "More"
+  },
+  "achievementItems": {
+    "first-training": {
+      "name": "First Steps",
+      "description": "Complete your first training session",
+      "requirement": "Complete 1 session"
+    },
+    "streak-7": {
+      "name": "7-Day Streak",
+      "description": "Train for 7 consecutive days",
+      "requirement": "Train 7 days in a row"
+    },
+    "hundred-sessions": {
+      "name": "Forge Master",
+      "description": "Complete 100 training sessions",
+      "requirement": "Complete 100 sessions"
+    },
+    "sharpshooter": {
+      "name": "Sharpshooter",
+      "description": "Reach 90% accuracy in any module",
+      "requirement": "90% accuracy in any module"
+    },
+    "gto-master": {
+      "name": "GTO Master",
+      "description": "Reach 80% accuracy in GTO Simulator",
+      "requirement": "80% GTO accuracy"
+    },
+    "perfectionist": {
+      "name": "Perfectionist",
+      "description": "Score 100% in a single session (20+ questions)",
+      "requirement": "Perfect score with 20+ questions"
+    },
+    "all-rounder": {
+      "name": "All-Rounder",
+      "description": "Complete at least 10 sessions in every module",
+      "requirement": "10 sessions per module"
+    },
+    "speed-king": {
+      "name": "Speed King",
+      "description": "Average answer time under 5 seconds",
+      "requirement": "Avg time < 5s"
+    }
+  },
+  "mode": {
+    "quiz": "Quiz",
+    "scenario": "Scenario",
+    "practice": "Practice",
+    "basics": "Basics",
+    "drill": "Drill",
+    "rush": "Rush",
+    "daily": "Daily",
+    "theme": "Theme"
+  },
+  "column": {
+    "module": "Module",
+    "mode": "Mode",
+    "accuracy": "Accuracy",
+    "time": "Time",
+    "date": "Date"
+  },
+  "replay": {
+    "title": "Your Progress",
+    "subtitle": "See how much you've improved",
+    "firstAttempt": "First",
+    "lastAttempt": "Latest",
+    "improvement": "+{score} improvement",
+    "noData": "Complete more lessons to see your progress"
+  }
+}

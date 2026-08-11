@@ -20,7 +20,7 @@ export default function CelebrationStep() {
         aria-hidden
       />
 
-      {/* 撒花粒子（CSS keyframe 动画） */}
+      {/* 撒花粒子（CSS keyframe 动画，keyframes 定义于 globals.css） */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
         {Array.from({ length: 12 }).map((_, i) => (
           <span
@@ -36,19 +36,6 @@ export default function CelebrationStep() {
           </span>
         ))}
       </div>
-
-      <style>{`
-        @keyframes onboarding-fall {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-          10% { opacity: 1; }
-          100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
-        @keyframes onboarding-pop {
-          0% { transform: scale(0.5); opacity: 0; }
-          60% { transform: scale(1.15); opacity: 1; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-      `}</style>
 
       {/* 主体内容 */}
       <div

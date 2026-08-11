@@ -23,6 +23,9 @@ const NEON_PALETTE =
   /(?:bg|text|border|from|to|ring)-(?:red|green|blue|yellow|purple|pink|cyan|emerald|sky|indigo|violet|amber|lime|teal|rose|fuchsia|orange)-\d{2,3}/g;
 const PURE_WHITE_BLACK_CLASS = /\btext-white\b|\btext-black\b|\bbg-white\b(?!\/)|\bbg-black\b(?!\/)/g;
 const PURE_HEX = /#(?:ffffff|fff|000000|000)\b/gi;
+// UI-08 增强：任意值槽中直接写纯黑/纯白 hex（bg-[#fff]、text-[#000] 等），绕过 token 体系
+const ARBITRARY_PURE_HEX =
+  /(?:bg|text|border|ring|from|to)-(?:\[#(?:fff|ffffff|000|000000)\])/gi;
 
 function findViolations(pattern: RegExp): string[] {
   const violations: string[] = [];
@@ -53,5 +56,9 @@ describe('设计 token 守卫（防霓虹色板回流）', () => {
 
   it('src 内不得出现纯黑/纯白 hex 字面量（§1.2 三不原则）', () => {
     expect(findViolations(PURE_HEX)).toEqual([]);
+  });
+
+  it('src 内不得在任意值槽写纯黑/纯白 hex（UI-08 增强，绕过 token 体系）', () => {
+    expect(findViolations(ARBITRARY_PURE_HEX)).toEqual([]);
   });
 });

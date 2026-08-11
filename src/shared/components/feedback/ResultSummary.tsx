@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Trophy, RotateCcw, Home } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
@@ -30,11 +31,12 @@ function getAccuracyColor(accuracy: number): string {
   return 'text-[var(--clay)]';
 }
 
+// PLAT-08：返回 i18n key，组件内 t() 解析（common.resultSummary.*）
 function getAccuracyText(accuracy: number): string {
-  if (accuracy >= 0.9) return '优秀！';
-  if (accuracy >= 0.7) return '良好';
-  if (accuracy >= 0.5) return '继续加油';
-  return '需要更多练习';
+  if (accuracy >= 0.9) return 'common.resultSummary.excellent';
+  if (accuracy >= 0.7) return 'common.resultSummary.good';
+  if (accuracy >= 0.5) return 'common.resultSummary.keepGoing';
+  return 'common.resultSummary.morePractice';
 }
 
 /**
@@ -42,20 +44,24 @@ function getAccuracyText(accuracy: number): string {
  * Provides consistent layout across all training modules.
  */
 export function ResultSummary({
-  title = '训练完成！',
+  title = 'common.resultSummary.defaultTitle',
   subtitle,
   accuracy,
   accuracyLabel,
   stats,
   onRetry,
   onBack,
-  retryLabel = '再来一次',
-  backLabel = '返回首页',
+  retryLabel = 'common.resultSummary.retry',
+  backLabel = 'common.resultSummary.back',
   children,
 }: ResultSummaryProps) {
+  const { t } = useTranslation();
   const accuracyPercent = Math.round(accuracy * 100);
   const accColor = getAccuracyColor(accuracy);
-  const accLabel = accuracyLabel ?? getAccuracyText(accuracy);
+  const accLabel = accuracyLabel ?? t(getAccuracyText(accuracy));
+  const resolvedTitle = t(title, { defaultValue: title });
+  const resolvedRetryLabel = t(retryLabel, { defaultValue: retryLabel });
+  const resolvedBackLabel = t(backLabel, { defaultValue: backLabel });
 
   return (
     <div className="h-full overflow-auto">
@@ -70,7 +76,7 @@ export function ResultSummary({
         >
           <div className="flex items-center justify-center gap-2">
             <Trophy className="w-6 h-6 text-[var(--brass-bright)]" />
-            <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{title}</h1>
+            <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{resolvedTitle}</h1>
           </div>
           <p className="text-sm text-[var(--ivory-muted)]">{subtitle ?? accLabel}</p>
         </motion.div>
@@ -106,7 +112,7 @@ export function ResultSummary({
               >
                 {accuracyPercent}%
               </motion.span>
-              <span className="text-xs text-[var(--ivory-muted)]">正确率</span>
+              <span className="text-xs text-[var(--ivory-muted)]">{t('common.resultSummary.accuracy')}</span>
             </div>
           </div>
         </motion.div>
@@ -142,7 +148,7 @@ export function ResultSummary({
             className="bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] px-6"
           >
             <RotateCcw className="w-4 h-4 mr-2" />
-            {retryLabel}
+            {resolvedRetryLabel}
           </Button>
           <Button
             variant="outline"
@@ -150,7 +156,7 @@ export function ResultSummary({
             className="px-6 border-[var(--walnut-border)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/40"
           >
             <Home className="w-4 h-4 mr-2" />
-            {backLabel}
+            {resolvedBackLabel}
           </Button>
         </motion.div>
       </div>

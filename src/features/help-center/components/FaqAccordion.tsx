@@ -26,7 +26,7 @@ export default function FaqAccordion() {
               id={buttonId}
               type="button"
               aria-expanded={isOpen}
-              aria-controls={panelId}
+              aria-controls={isOpen ? panelId : undefined}
               onClick={() => setOpenIndex(isOpen ? null : idx)}
               className="faq-item-button"
             >

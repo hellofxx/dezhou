@@ -7,7 +7,7 @@
 // - simple-compare   : 简单文字比较（题 9-10）
 //
 // 所有 promptKey / optionsKeys / explanationKey 均为 i18n key，
-// 见 src/i18n/locales/zh.json 中 drills.handRanking.questions.*
+// 见 src/i18n/locales/zh/drills.json 中 handRanking.questions.*
 
 import type { ChoiceDrillQuestion } from './types';
 

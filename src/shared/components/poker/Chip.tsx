@@ -11,6 +11,13 @@ interface ChipProps {
  * COLOR_MAP — references CSS variables (§11.1 token centralization).
  * Each entry: [base, light-stop, dark-stop, text-color]
  * §5.2 radial gradient circle at 35% 35%, §10.3 chip-red = #a83838 (clay)
+ * UI-04：渐变 stop 裸 hex 逐一锚定 token（近似关系，见 DESIGN_LANGUAGE §5.2/§10.3）：
+ * - red.light #c85555 / red.dark #7a2828 ≈ --poker-clay 亮/暗 stop（chip-red #a83838 同族）
+ * - blue.light #5a6a8a / blue.dark #3a4a6a ≈ --poker-indigo 亮/暗 stop
+ * - green.light #7aa66a / green.dark #4a6a3a ≈ --poker-moss 亮/暗 stop
+ * - black.light #2a1f12 / black.dark #120d07 ≈ --walnut 亮/暗 stop
+ * - white.light #fff8e8 ≈ --ivory 亮 stop；white.dark #8a8068 ≈ --ivory-dim 暗 stop
+ * - frost.light #c8dde6 ≈ --poker-frost 亮 stop；frost.text #0d1b26 ≈ --felt-deep 同族
  */
 const COLOR_MAP = {
   red:   { base: 'var(--poker-clay)',   light: '#c85555', dark: '#7a2828', text: 'var(--ivory)' },

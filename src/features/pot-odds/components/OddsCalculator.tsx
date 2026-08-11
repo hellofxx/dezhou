@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
@@ -8,12 +9,14 @@ import { PotSizeInput } from './PotSizeInput';
 import { OddsDisplay } from './OddsDisplay';
 import type { GameVariant } from '@/shared/types/poker';
 
+// label 存 i18n key，渲染时经 t() 解析（potOdds.calculator.*）
 const VARIANT_OPTIONS: { value: GameVariant; label: string }[] = [
-  { value: 'standard', label: '标准德州' },
-  { value: 'short-deck', label: '短牌德州 (6+)' },
+  { value: 'standard', label: 'potOdds.calculator.standard' },
+  { value: 'short-deck', label: 'potOdds.calculator.shortDeck' },
 ];
 
 export function OddsCalculator() {
+  const { t } = useTranslation();
   const [showImplied, setShowImplied] = useState(false);
 
   const { potSize, betSize, outs, street, impliedOddsGain, gameVariant } = usePotOddsStore((s) => s.oddsState);
@@ -39,7 +42,7 @@ export function OddsCalculator() {
       {/* Input section */}
       <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-base">参数设置</CardTitle>
+          <CardTitle className="text-base">{t('potOdds.calculator.paramsTitle')}</CardTitle>
           <Button variant="ghost" size="icon" onClick={resetOdds} className="h-11 w-11 text-[var(--ivory-dim)]">
             <RotateCcw className="w-4 h-4" />
           </Button>
@@ -47,7 +50,7 @@ export function OddsCalculator() {
         <CardContent className="space-y-5 pt-0">
           {/* 游戏变体切换 */}
           <div className="space-y-2">
-            <label className="text-sm text-[var(--ivory-muted)]">游戏变体</label>
+            <label className="text-sm text-[var(--ivory-muted)]">{t('potOdds.calculator.variantLabel')}</label>
             <div className="flex gap-2">
               {VARIANT_OPTIONS.map((v) => (
                 <button
@@ -61,19 +64,19 @@ export function OddsCalculator() {
                       : 'bg-[var(--walnut-raised)]/60 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
                   }`}
                 >
-                  {v.label}
+                  {t(v.label)}
                 </button>
               ))}
             </div>
             {gameVariant === 'short-deck' && (
               <p className="text-xs text-[var(--sage)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
-                短牌模式基于 36 张牌组计算，胜率估算使用实际剩余牌数。
+                {t('potOdds.calculator.shortDeckHint')}
               </p>
             )}
           </div>
 
           <PotSizeInput
-            label="底池大小"
+            label={t('potOdds.potSize')}
             value={potSize}
             onChange={setPotSize}
             min={1}
@@ -83,7 +86,7 @@ export function OddsCalculator() {
           />
 
           <PotSizeInput
-            label="对手下注"
+            label={t('potOdds.calculator.opponentBet')}
             value={betSize}
             onChange={setBetSize}
             min={1}
@@ -96,7 +99,7 @@ export function OddsCalculator() {
           {/* Outs selector */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm text-[var(--ivory-muted)]">Outs（补牌数）</label>
+              <label className="text-sm text-[var(--ivory-muted)]">{t('potOdds.outs')}</label>
               <span className="text-lg font-bold font-mono text-[var(--brass)]">{outs}</span>
             </div>
             <input
@@ -119,7 +122,7 @@ export function OddsCalculator() {
 
           {/* Street toggle */}
           <div className="space-y-2">
-            <label className="text-sm text-[var(--ivory-muted)]">当前街道</label>
+            <label className="text-sm text-[var(--ivory-muted)]">{t('potOdds.calculator.currentStreet')}</label>
             <div className="flex gap-2">
               {(['flop', 'turn'] as const).map((s) => (
                 <button
@@ -131,12 +134,12 @@ export function OddsCalculator() {
                       : 'bg-[var(--walnut-raised)]/60 text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
                   }`}
                 >
-                  {s === 'flop' ? '翻牌后 (Flop)' : '转牌后 (Turn)'}
+                  {s === 'flop' ? t('potOdds.calculator.streetFlop') : t('potOdds.calculator.streetTurn')}
                 </button>
               ))}
             </div>
             <p className="text-xs text-[var(--ivory-dim)]">
-              {street === 'flop' ? '还有2张牌要来，使用 ×4 法则' : '还有1张牌要来，使用 ×2 法则'}
+              {street === 'flop' ? t('potOdds.calculator.ruleFourHint') : t('potOdds.calculator.ruleTwoHint')}
             </p>
           </div>
 
@@ -147,12 +150,12 @@ export function OddsCalculator() {
               className="flex items-center gap-1 text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory-muted)] transition-colors"
             >
               {showImplied ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              隐含赔率（高级选项）
+              {t('potOdds.calculator.impliedOdds')}
             </button>
             {showImplied && (
               <div className="mt-3">
                 <PotSizeInput
-                  label="预期额外收益"
+                  label={t('potOdds.calculator.expectedExtra')}
                   value={impliedOddsGain}
                   onChange={setImpliedOddsGain}
                   min={0}

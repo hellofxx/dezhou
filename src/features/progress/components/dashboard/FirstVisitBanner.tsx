@@ -38,7 +38,7 @@ export default function FirstVisitBanner() {
           <button
             type="button"
             onClick={() => navigate('/academy/basics')}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-md bg-[var(--brass-bright)] text-[var(--primary-fg)] font-semibold text-sm hover:brightness-110 transition-all shadow-[var(--shadow-brass)] inline-flex items-center justify-center gap-1.5"
+            className="hover-bright w-full sm:w-auto px-5 py-2.5 rounded-md bg-[var(--brass-bright)] text-[var(--primary-fg)] font-semibold text-sm transition-all shadow-[var(--shadow-brass)] inline-flex items-center justify-center gap-1.5"
           >
             {t('progress.firstVisit.primaryCta')}
             <ArrowRight className="w-4 h-4" />

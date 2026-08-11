@@ -1,0 +1,10 @@
+{
+  "title": "Adaptive Difficulty",
+  "currentLevel": "Current Level",
+  "easy": "Easy",
+  "medium": "Medium",
+  "hard": "Hard",
+  "adjusting": "Adjusting difficulty...",
+  "levelUp": "Level Up!",
+  "levelDown": "Level Down"
+}

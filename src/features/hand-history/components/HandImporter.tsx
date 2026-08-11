@@ -1,13 +1,15 @@
 import { useState, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHandHistoryStore } from '../store';
 import { detectFormat } from '../parsers/common';
 import { parsePokerStarsHand, parsePokerStarsMultiple } from '../parsers/pokerstars';
 import { parseGGPokerHand, parseGGPokerMultiple } from '../parsers/gg-poker';
 import { parsePartyPokerHand, parsePartyPokerMultiple } from '../parsers/partypoker';
-import type { ImportResult } from '../types';
+import type { ImportResult, ImportMessage } from '../types';
 import { Upload, FileText, Check, AlertCircle, AlertTriangle, Loader2 } from 'lucide-react';
 
 export function HandImporter() {
+  const { t } = useTranslation();
   const addHands = useHandHistoryStore(s => s.addHands);
   const [text, setText] = useState('');
   const [result, setResult] = useState<ImportResult | null>(null);
@@ -17,9 +19,14 @@ export function HandImporter() {
 
   const parseHands = useCallback((content: string): ImportResult => {
     const format = detectFormat(content);
-    const errors: string[] = [];
-    const warnings: string[] = [];
+    const errors: ImportMessage[] = [];
+    const warnings: ImportMessage[] = [];
     let hands: ImportResult['hands'] = [];
+
+    const skippedWarning = (expected: number): ImportMessage => ({
+      key: 'handHistory.importer.skipped',
+      params: { skipped: expected - hands.length, total: expected },
+    });
 
     try {
       if (format === 'pokerstars') {
@@ -29,7 +36,7 @@ export function HandImporter() {
         if (expectedCount > 1) {
           hands = parsePokerStarsMultiple(content);
           if (hands.length < expectedCount) {
-            warnings.push(`Skipped ${expectedCount - hands.length} unparseable hand(s) out of ${expectedCount}`);
+            warnings.push(skippedWarning(expectedCount));
           }
         } else {
           hands = [parsePokerStarsHand(content)];
@@ -40,7 +47,7 @@ export function HandImporter() {
         if (expectedCount > 1) {
           hands = parseGGPokerMultiple(content);
           if (hands.length < expectedCount) {
-            warnings.push(`Skipped ${expectedCount - hands.length} unparseable hand(s) out of ${expectedCount}`);
+            warnings.push(skippedWarning(expectedCount));
           }
         } else {
           hands = [parseGGPokerHand(content)];
@@ -51,16 +58,20 @@ export function HandImporter() {
         if (expectedCount > 1) {
           hands = parsePartyPokerMultiple(content);
           if (hands.length < expectedCount) {
-            warnings.push(`Skipped ${expectedCount - hands.length} unparseable hand(s) out of ${expectedCount}`);
+            warnings.push(skippedWarning(expectedCount));
           }
         } else {
           hands = [parsePartyPokerHand(content)];
         }
       } else {
-        errors.push('Unrecognized hand history format. Please paste PokerStars, GGPoker, or PartyPoker format.');
+        errors.push({ key: 'handHistory.importer.unrecognized' });
       }
     } catch (e) {
-      errors.push(`Parse error: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      errors.push(
+        e instanceof Error
+          ? { key: 'handHistory.importer.parseError', params: { message: e.message } }
+          : { key: 'handHistory.importer.unknownError' },
+      );
     }
 
     return {
@@ -135,10 +146,10 @@ export function HandImporter() {
         />
         <Upload size={32} className="mx-auto mb-2 text-[var(--brass-bright)]" />
         <p className="text-sm text-[var(--ivory-dim)] font-display">
-          Drop .txt file here or click to browse
+          {t('handHistory.importer.dropHint')}
         </p>
         <p className="text-xs text-[var(--ivory-muted)] mt-1">
-          Supports PokerStars, GGPoker, and PartyPoker hand history formats
+          {t('handHistory.importer.supportsFormats')}
         </p>
       </label>
 
@@ -146,7 +157,7 @@ export function HandImporter() {
       <textarea
         value={text}
         onChange={(e) => { setText(e.target.value); setResult(null); }}
-        placeholder="Or paste hand history text here..."
+        placeholder={t('handHistory.importer.pastePlaceholder')}
         className="w-full h-48 bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] rounded-xl p-4 text-xs font-numeric text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] resize-none focus:outline-none focus:border-[var(--brass)]/50"
       />
 
@@ -154,7 +165,11 @@ export function HandImporter() {
       {text && !result && (
         <div className="flex items-center gap-2 text-xs text-[var(--ivory-muted)] font-numeric">
           <FileText size={14} />
-          <span>Format: {detectFormat(text) === 'unknown' ? 'Unknown' : detectFormat(text)}</span>
+          <span>
+            {t('handHistory.importer.format', {
+              format: detectFormat(text) === 'unknown' ? t('handHistory.importer.unknown') : detectFormat(text),
+            })}
+          </span>
         </div>
       )}
 
@@ -165,7 +180,7 @@ export function HandImporter() {
         className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--brass-bright)] transition-colors"
       >
         {importing ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-        Import
+        {t('handHistory.importer.import')}
       </button>
 
       {/* Result */}
@@ -175,12 +190,12 @@ export function HandImporter() {
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-sm text-[var(--sage)]">
                 <Check size={16} />
-                <span>Successfully imported {result.hands.length} hand{result.hands.length > 1 ? 's' : ''} ({result.format})</span>
+                <span>{t('handHistory.importer.success', { count: result.hands.length, format: result.format ?? '' })}</span>
               </div>
               {result.warnings?.map((w, i) => (
                 <div key={i} className="flex items-center gap-2 text-xs text-[var(--brass-bright)]">
                   <AlertTriangle size={13} />
-                  <span>{w}</span>
+                  <span>{t(w.key, w.params)}</span>
                 </div>
               ))}
             </div>
@@ -189,7 +204,7 @@ export function HandImporter() {
               {result.errors.map((err, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm text-[var(--clay)]">
                   <AlertCircle size={16} />
-                  <span>{err}</span>
+                  <span>{t(err.key, err.params)}</span>
                 </div>
               ))}
             </div>

@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { XCircle, ArrowRight, Trophy, Clock, Target, Zap, Keyboard } from 'lucide-react';
 import type { PracticeDrill as PracticeDrillType, PracticeQuestion, PracticeOption, PracticeResult, PracticeAnswerDetail, QuestionDifficulty } from '../types';
 import { PokerCard } from '@/shared/components/poker/Card';
@@ -11,6 +11,8 @@ import { stringToCard } from '@/shared/utils/deck';
 import { cn } from '@/shared/utils/cn';
 import { formatBB } from '@/shared/utils/formatters';
 import { Chip } from '@/shared/components/poker/Chip';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { MOTION_DURATION, MOTION_EASE, transitionStandard, transitionSlow } from '@/shared/utils/motion';
 import { soundManager } from '@/shared/utils/soundManager';
 import { useProgressStore } from '@/features/progress/store';
 import { useAcademyStore } from '../store';
@@ -38,6 +40,14 @@ interface PracticeDrillProps {
   // P3: 降级建议复习 → 常驻提示条（替代 4 秒 toast），点击「返回复习」时携带建议主题回传
   onReviewRequest?: (topics: string[]) => void;
 }
+
+// UI-06：brass glow 关键帧（--brass 色相 rgba(201,162,94)）。framer-motion 插值需数值 keyframes，
+// CSS 变量无法用于动画插值，故集中为命名常量并锚定语义（仅此一处动画阴影）。
+const BRASS_GLOW_KEYFRAMES: string[] = [
+  '0 0 0px rgba(201,162,94,0)',
+  '0 0 14px rgba(201,162,94,0.45)',
+  '0 0 0px rgba(201,162,94,0)',
+];
 
 // P2-05: 动作按钮语义分类（题库 action 值多样：'fold'/'raise 2.5BB'/'Bet 4BB（33% pot）'/中文等，
 // 精确匹配会让绝大多数选项落入 fallback；按语义关键词归类到 §5.5 平权色阶）
@@ -131,7 +141,7 @@ function CountdownRing({ timeRemaining, timeLimit, isPressure }: { timeRemaining
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           animate={{ strokeDashoffset, stroke: getColor() }}
-          transition={{ duration: 0.3, ease: 'linear' }}
+          transition={transitionStandard}
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
@@ -470,29 +480,29 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        transition={transitionSlow}
         className="text-center py-8"
       >
         <Trophy className="w-14 h-14 text-[var(--brass-bright)] mx-auto mb-4" />
         <h3 className="font-display text-2xl text-[var(--ivory)] mb-6">
-          {isPressure ? '压力测试完成！' : '练习完成！'}
+          {isPressure ? t('academy.drill.pressureCompletedTitle') : t('academy.drill.completedTitle')}
         </h3>
 
         <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
             <p className="font-numeric text-3xl text-[var(--brass-bright)]">{accuracy}%</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1">正确率</p>
+            <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.accuracy')}</p>
           </div>
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
             <p className="font-numeric text-3xl text-[var(--ivory)]">{avgTime}s</p>
             <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Clock className="w-3 h-3" /> 平均用时
+              <Clock className="w-3 h-3" /> {t('academy.drill.avgTime')}
             </p>
           </div>
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
             <p className="font-numeric text-3xl text-[var(--ivory)]">{correctCount}/{totalQuestions}</p>
             <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Target className="w-3 h-3" /> 答对
+              <Target className="w-3 h-3" /> {t('academy.drill.correctCount')}
             </p>
           </div>
         </div>
@@ -502,17 +512,17 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
             <div className="rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/30 p-3">
               <p className="font-numeric text-2xl text-[var(--danger)]">{timeoutCount}</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">超时次数</p>
+              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.timeouts')}</p>
             </div>
             <div className="rounded-lg bg-[var(--success)]/10 border border-[var(--success)]/30 p-3">
               <p className="font-numeric text-2xl text-[var(--success)]">{maxStreak}</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">最长连续</p>
+              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.longestStreak')}</p>
             </div>
             <div className="rounded-lg bg-[var(--brass-bright)]/10 border border-[var(--brass-bright)]/30 p-3">
               <p className="font-numeric text-2xl text-[var(--brass-bright)]">
                 {Math.round(Math.max(0, accuracy - timeoutCount * 5 + maxStreak * 2))}
               </p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">压力评分</p>
+              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.pressureScore')}</p>
             </div>
           </div>
         )}
@@ -527,7 +537,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
 
         {weakPoints.length > 0 && (
           <div className="mb-6 text-left max-w-sm mx-auto">
-            <p className="text-xs text-[var(--ivory-muted)] mb-2">薄弱点：</p>
+            <p className="text-xs text-[var(--ivory-muted)] mb-2">{t('academy.drill.weakPoints')}</p>
             <div className="flex flex-wrap gap-1.5">
               {[...new Set(weakPoints)].map((wp, i) => (
                 <span key={i} className="rounded bg-[var(--danger)]/15 px-2 py-0.5 text-xs text-[var(--danger)]">
@@ -576,7 +586,14 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             className="flex items-center gap-2 rounded-lg bg-[var(--walnut-raised)] border border-[var(--ivory-dim)]/20 px-4 py-2.5 text-xs text-[var(--ivory-muted)]"
           >
             <Keyboard className="w-4 h-4 shrink-0" />
-            <span>快捷键：<b className="text-[var(--ivory)]">1-4</b> 选择动作，<b className="text-[var(--ivory)]">空格/回车</b> 下一题</span>
+            <span>
+              <Trans
+                i18nKey="academy.drill.shortcuts"
+                components={{
+                  b: <b className="text-[var(--ivory)]" />,
+                }}
+              />
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -602,7 +619,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             className={cn('h-full rounded-full', isPressure ? 'bg-[var(--danger)]' : 'bg-[var(--brass-bright)]')}
             initial={{ width: 0 }}
             animate={{ width: `${((currentIndex) / totalQuestions) * 100}%` }}
-            transition={{ duration: 0.3 }}
+            transition={transitionStandard}
           />
         </div>
         <span className="text-xs text-[var(--ivory-muted)] shrink-0">
@@ -623,16 +640,14 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               DIFFICULTY_PILL_BG[questionDifficulty],
               DIFFICULTY_PILL_BORDER[questionDifficulty],
             )}
-            initial={{ scale: 1, boxShadow: '0 0 0px rgba(201,162,94,0)' }}
+            // UI-06：brass glow 关键帧（--brass 色相 rgba(201,162,94)）——
+            // framer-motion 插值需数值 keyframes，CSS 变量无法用于动画插值，故锚定语义常量
+            initial={{ scale: 1, boxShadow: BRASS_GLOW_KEYFRAMES[0] }}
             animate={{
               scale: [1, 1.15, 1],
-              boxShadow: [
-                '0 0 0px rgba(201,162,94,0)',
-                '0 0 14px rgba(201,162,94,0.45)',
-                '0 0 0px rgba(201,162,94,0)',
-              ],
+              boxShadow: BRASS_GLOW_KEYFRAMES,
             }}
-            transition={{ duration: 0.4 }}
+            transition={transitionSlow}
           >
             {DIFFICULTY_LABELS[questionDifficulty]}
           </motion.span>
@@ -694,10 +709,10 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: [0, 1, 0.5, 1, 0] }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.5 }}
+            transition={{ duration: MOTION_DURATION.loop, ease: MOTION_EASE.standard }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
           >
-            <span className="text-3xl font-bold text-[var(--danger)] drop-shadow-lg">⏰ 时间到！</span>
+            <span className="text-3xl font-bold text-[var(--danger)] drop-shadow-lg">{t('academy.drill.timeUp')}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -827,7 +842,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                     ? { scale: [1, 1.05, 1] }
                     : {}
               }
-              transition={{ duration: 0.4 }}
+              transition={transitionSlow}
               whileHover={!isAnswered ? { scale: 1.03 } : {}}
               whileTap={!isAnswered ? { scale: 0.97 } : {}}
             >
@@ -851,7 +866,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={transitionStandard}
             className="overflow-hidden"
           >
             <div
@@ -940,8 +955,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                 onClick={handleNext}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
               >
-                {currentIndex + 1 >= totalQuestions ? '查看成绩' : '下一题'}
-                <span className="text-xs opacity-60">(空格)</span>
+                {currentIndex + 1 >= totalQuestions ? t('academy.drill.viewScore') : t('academy.drill.nextQuestion')}
+                <span className="text-xs opacity-60">{t('academy.drill.spaceHint')}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

@@ -189,40 +189,30 @@ export const useAcademyStore = create<AcademyStore>()(
         });
       },
 
-      resetProgress: () => set({ progress: { ...initialProgress } }),
+      // ACAD-08：重置进度时联动清理由进度派生的关联状态，避免 UI 残留旧数据。
+      // 包括：练习明细 / 认证记录 / 首末次得分 / 每日计划 / 学习轨道 / 能力评估与自适应配置。
+      resetProgress: () =>
+        set({
+          progress: { ...initialProgress },
+          practiceResults: [],
+          basicsProgress: { ...initialBasicsProgress },
+          abilityAssessment: { ...initialAbilityAssessment, lastUpdated: Date.now() },
+          adaptiveConfig: DEFAULT_ADAPTIVE_CONFIG,
+          recentPracticeResults: [],
+          dailyPlan: null,
+          certifications: {},
+          activeTrackId: null,
+          firstAttemptScores: {},
+          lastAttemptScores: {},
+        }),
 
       isLevelUnlocked: (level) => {
         if (isDebugUnlockActive()) return true; // 调试解锁：解除全部 Level 门禁
-        if (level <= 1) return get().basicsProgress.completed;
-        const { completedLessons } = get().progress;
-
-        // 找到所有匹配 level 的 LEVELS 索引（处理 L4A/L4B 同为 level:4 的情况）
-        const indices = LEVELS.reduce<number[]>((acc, l, i) => {
-          if (l.level === level) acc.push(i);
-          return acc;
-        }, []);
-
-        for (const idx of indices) {
-          const levelInfo = LEVELS[idx];
-          if (!levelInfo) continue;
-
-          // 优先使用 prerequisiteLevelIds（显式声明的前置 Level）
-          if (levelInfo.prerequisiteLevelIds && levelInfo.prerequisiteLevelIds.length > 0) {
-            const allPrereqsMet = levelInfo.prerequisiteLevelIds.every((prereqId) => {
-              const prereqLevel = LEVELS.find((l) => l.id === prereqId);
-              if (!prereqLevel) return false;
-              return prereqLevel.lessons.every((l) => completedLessons.includes(l.id));
-            });
-            if (allPrereqsMet) return true;
-          } else {
-            // 回退：默认依赖前一个 LEVELS 条目
-            const prevAllComplete = idx === 0
-              ? get().basicsProgress.completed
-              : LEVELS[idx - 1]?.lessons.every((l) => completedLessons.includes(l.id)) ?? false;
-            if (prevAllComplete) return true;
-          }
-        }
-        return false;
+        // ACAD-07：委托逐条目判定，且要求同 level 全部条目都满足才解锁，
+        // 消除旧「任一满足即 return true」的 || 旁路（L4A/L4B 同为 level:4 时 4B 被误放行）
+        const entries = LEVELS.filter((l) => l.level === level && typeof l.id === 'string');
+        if (entries.length === 0) return false;
+        return entries.every((entry) => get().isLevelEntryUnlocked(entry.id!));
       },
 
       // P0 修复（审计 1.1）：按 LevelInfo 条目判定解锁，消除 l4a/l4b 同为 level:4 时
@@ -363,8 +353,9 @@ export const useAcademyStore = create<AcademyStore>()(
             0
           );
                 
-          // 难度系数：L1=1.0, L2=1.1, ..., L8=1.6
-          const difficultyMultiplier = [1.0, 1.1, 1.2, 1.4, 1.5, 1.6][level - 1] ?? 1.0;
+          // 难度系数：L1=1.0, L2=1.1, ..., L8=1.8
+          // ACAD-01 修复：数组补齐 8 个元素，L7/L8 不再回落 1.0
+          const difficultyMultiplier = [1.0, 1.1, 1.2, 1.4, 1.5, 1.6, 1.7, 1.8][level - 1] ?? 1.0;
                 
           // 最终题量：min(总题池 × 难度系数，25)
           const questionCount = Math.min(Math.floor(totalQuizQuestions * difficultyMultiplier), 25);
@@ -422,7 +413,13 @@ export const useAcademyStore = create<AcademyStore>()(
       areAllLevelsCertified: () => {
         const certs = get().certifications;
         const levelNumbers = [...new Set(LEVELS.map((l) => l.level))];
-        return levelNumbers.every((lv) => !!certs[lv]?.certifiedAt);
+        // ACAD-02 修复：校验 validUntil 过期（过期认证视为未达成）
+        const now = Date.now();
+        return levelNumbers.every((lv) => {
+          const cert = certs[lv];
+          if (!cert?.certifiedAt) return false;
+          return cert.validUntil === undefined || cert.validUntil > now;
+        });
       },
 
       isTrackCompleted: (trackId) => {

@@ -30,18 +30,19 @@ export function getEasyOddsQuestion(): PotOddsQuizQuestion {
     {
       id: 0, // 调用方负责改写 id 以避免与现有题目冲突
       category: 'odds-judgment',
-      scenario: '底池 100，对手过牌（下注 0），你跟注 0 即可看到下一张牌。',
-      question: '此时跟注是否盈利？',
+      // i18n（P1）：文本存 i18n key，渲染端经 t() 解析（potOdds.quizBank.easy.*）
+      scenario: 'potOdds.quizBank.easy.scenario',
+      question: 'potOdds.quizBank.easy.question',
       options: [
         {
-          text: '是，免费看牌永远盈利',
+          text: 'potOdds.quizBank.easy.optA.text',
           isCorrect: true,
-          explanation: '跟注金额为 0，所需胜率 = 0/(100+0+0) = 0%。任何手牌都满足，跟注（实际为过牌）永远是 +EV。',
+          explanation: 'potOdds.quizBank.easy.optA.explanation',
         },
         {
-          text: '否，应该弃牌',
+          text: 'potOdds.quizBank.easy.optB.text',
           isCorrect: false,
-          explanation: '跟注 0 不需要任何胜率，弃牌反而放弃了免费看牌的机会。',
+          explanation: 'potOdds.quizBank.easy.optB.explanation',
         },
       ],
     },

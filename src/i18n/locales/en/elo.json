@@ -1,0 +1,17 @@
+{
+  "unit": "pts",
+  "rankBadge": {
+    "aria": "Current rank {{rank}}, score {{score}}. Click to view the five-dimension radar chart."
+  },
+  "radar": {
+    "title": "Five-Dimension Ability Radar",
+    "subtitle": "Based on ELO ratings (0-3000). {{games}} answers played.",
+    "empty": "No ELO data yet. Complete a training drill to generate the ability analysis.",
+    "scoreLabel": "ELO Score",
+    "dimensionPreflop": "Preflop",
+    "dimensionPostflop": "Postflop",
+    "dimensionMath": "Odds Math",
+    "dimensionHandReading": "Hand Reading",
+    "dimensionMental": "Mental Consistency"
+  }
+}

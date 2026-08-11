@@ -109,7 +109,7 @@ export default function TheoryChapterView() {
         {/* Breadcrumb */}
         <button
           onClick={() => navigate('/theory')}
-          aria-label="返回理论学院"
+          aria-label={t('theory.chapterView.backAria')}
           className="inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
@@ -124,7 +124,7 @@ export default function TheoryChapterView() {
           <>
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="panel">
-          <p className="section-eyebrow mb-1.5">Theory {level.id.toUpperCase()} · 第 {chapter.order} 章</p>
+          <p className="section-eyebrow mb-1.5">{t('theory.chapterView.chapterEyebrow', { tier: level.id.toUpperCase(), order: chapter.order })}</p>
           <h1 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
             {resolveChapterTitle(t, chapter)}
           </h1>
@@ -148,11 +148,11 @@ export default function TheoryChapterView() {
             })()}
             {chapterCompleted && (
               <span className="inline-flex items-center gap-1 text-[var(--poker-success)]">
-                <CheckCircle2 className="w-3.5 h-3.5" />已完成
+                <CheckCircle2 className="w-3.5 h-3.5" />{t('theory.chapterView.completed')}
               </span>
             )}
             {chapterCompleted && typeof bestScore === 'number' && (
-              <span className="font-numeric text-[var(--brass-bright)]">最高 {bestScore}分</span>
+              <span className="font-numeric text-[var(--brass-bright)]">{t('theory.chapterView.bestScore', { score: bestScore })}</span>
             )}
           </div>
         </motion.div>
@@ -188,14 +188,14 @@ export default function TheoryChapterView() {
                   className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  返回目录
+                  {t('theory.chapterView.backToChapters')}
                 </button>
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     onClick={() => setPhase('quiz')}
                     className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                   >
-                    重新挑战小测
+                    {t('theory.chapterView.retryQuiz')}
                   </button>
                   <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
                 </div>
@@ -206,7 +206,7 @@ export default function TheoryChapterView() {
                   onClick={() => setPhase('quiz')}
                   className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                 >
-                  进入章末小测
+                  {t('theory.chapterView.startQuiz')}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -226,11 +226,11 @@ export default function TheoryChapterView() {
             {result && (
               <div className="panel text-center py-6">
                 <div className="text-4xl mb-3">{result.score >= 70 ? '🎉' : '📚'}</div>
-                <h2 className="font-display text-xl text-[var(--ivory)] mb-1">本章完成</h2>
+                <h2 className="font-display text-xl text-[var(--ivory)] mb-1">{t('theory.chapterView.chapterDone')}</h2>
                 <p className="text-sm text-[var(--ivory-dim)] mb-1">
-                  答对 {result.correct}/{result.total} 题
+                  {t('theory.chapterView.answered', { correct: result.correct, total: result.total })}
                 </p>
-                <p className="font-numeric text-3xl text-[var(--brass-bright)]">{result.score}分</p>
+                <p className="font-numeric text-3xl text-[var(--brass-bright)]">{t('theory.chapterView.score', { score: result.score })}</p>
               </div>
             )}
             {/* Level 全部完成时展示实践桥接推荐 */}
@@ -241,7 +241,7 @@ export default function TheoryChapterView() {
                 className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
               >
                 <ArrowLeft className="w-4 h-4" />
-                返回目录
+                {t('theory.chapterView.backToChapters')}
               </button>
               <button
                 onClick={() => {

@@ -85,7 +85,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
         <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
             <p className="font-numeric text-3xl text-[var(--brass-bright)]">{accuracy}%</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1">正确率</p>
+            <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.accuracy')}</p>
           </div>
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
             <p className="font-numeric text-3xl text-[var(--ivory)]">{seconds}s</p>
@@ -234,12 +234,12 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
             {current.options[selectedIndex]?.isCorrect ? (
               <>
                 <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-                <span className="text-sm font-bold text-[var(--success)]">✓ 正确</span>
+                <span className="text-sm font-bold text-[var(--success)]">{t('academy.drill.correct')}</span>
               </>
             ) : (
               <>
                 <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                <span className="text-sm font-bold text-[var(--danger)]">✗ 不正确</span>
+                <span className="text-sm font-bold text-[var(--danger)]">{t('academy.drill.incorrect')}</span>
                 {current.options.find(o => o.isCorrect) && (
                   <span className="text-xs text-[var(--ivory-muted)] ml-2">
                     正确答案：{current.options.find(o => o.isCorrect)!.text}

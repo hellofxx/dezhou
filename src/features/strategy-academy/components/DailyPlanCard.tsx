@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionStandard } from '@/shared/utils/motion';
 import { BookOpen, Target, Clock, RefreshCw, Sparkles, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAcademyStore } from '../store';
@@ -51,7 +53,7 @@ export function DailyPlanCard() {
     <motion.section
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: 0.06 }}
+      transition={{ ...transitionStandard, delay: 0.06 }}
       className="panel academy-plan"
       aria-label={t('academy.dailyPlan.title')}
     >

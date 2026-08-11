@@ -45,12 +45,16 @@ const CATEGORY_COLORS: Record<string, string> = {
   gto: 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15',
 };
 
+// PROG-04：存 i18n key（review.category.*），渲染时 t() 解析
 const CATEGORY_LABELS: Record<string, string> = {
-  strategy: '策略',
-  range: '范围',
-  odds: '赔率',
-  gto: 'GTO',
+  strategy: 'review.category.strategy',
+  range: 'review.category.range',
+  odds: 'review.category.odds',
+  gto: 'review.category.gto',
 };
+
+/** SRS 快速作答阈值（5 秒内答对计"快速"质量分），PROG-04 魔法数字命名化 */
+const QUICK_ANSWER_MS = 5000;
 
 interface AnswerRecord {
   itemId: string;
@@ -108,7 +112,8 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
       const timeTakenMs = Date.now() - questionStartRef.current;
 
       // quality 评分：答对+快→5，答对→4，答错→1（自评"记得"=5，"不记得"=1）
-      const quality = isCorrect ? (timeTakenMs < 5000 ? 5 : 4) : 1;
+      // PROG-04：5000ms（5 秒）快速作答阈值命名化，避免魔法数字
+      const quality = isCorrect ? (timeTakenMs < QUICK_ANSWER_MS ? 5 : 4) : 1;
       const updated = processReview(currentItem, quality);
       updateReviewItem(updated);
 
@@ -292,18 +297,19 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                     CATEGORY_COLORS[currentItem.category] ?? CATEGORY_COLORS.strategy
                   }`}
                 >
-                  {CATEGORY_LABELS[currentItem.category] ?? '策略'}
+                  {t(CATEGORY_LABELS[currentItem.category] ?? 'review.category.strategy')}
                 </span>
-                <span className="text-xs text-[var(--ivory-muted)]">{currentItem.label}</span>
+                <span className="text-xs text-[var(--ivory-muted)]">{t(currentItem.label)}</span>
               </div>
 
               {/* 题干 */}
               <div className="p-3 rounded-lg bg-[var(--walnut-raised)]/30 border border-[var(--walnut-border)]/40">
                 <p className="text-sm text-[var(--ivory)] leading-relaxed">
-                  {currentItem.metadata?.front ??
-                    t('review.defaultFront', {
-                      defaultValue: '请回忆该知识点的关键内容，然后点击"显示答案"自评。',
-                    })}
+                  {currentItem.metadata?.front
+                    ? t(currentItem.metadata.front, currentItem.metadata.params ?? {})
+                    : t('review.defaultFront', {
+                        defaultValue: '请回忆该知识点的关键内容，然后点击"显示答案"自评。',
+                      })}
                 </p>
               </div>
             </div>
@@ -340,7 +346,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                         disabled={hasAnswered}
                         className={`w-full text-left px-3 py-2.5 rounded-md border text-sm transition-all flex items-center justify-between gap-2 ${optionClass}`}
                       >
-                        <span className="text-[var(--ivory)]">{opt.text}</span>
+                        <span className="text-[var(--ivory)]">{t(opt.text ?? '', currentItem.metadata?.params ?? {})}</span>
                         {showFeedback && isCorrectOpt && (
                           <CheckCircle2 className="w-4 h-4 text-[var(--poker-success)] shrink-0" />
                         )}
@@ -354,7 +360,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                   {/* 选项解析（答对/答错后显示） */}
                   {hasAnswered && currentItem.metadata.options[selectedOption ?? correctOptionIdx]?.explanation && (
                     <div className="p-2.5 rounded-md bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)]/40 text-xs text-[var(--ivory-dim)]">
-                      {currentItem.metadata.options[selectedOption ?? correctOptionIdx]?.explanation}
+                      {t(currentItem.metadata.options[selectedOption ?? correctOptionIdx]?.explanation ?? '')}
                     </div>
                   )}
                 </motion.div>
@@ -373,7 +379,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                         {t('review.answerLabel', { defaultValue: '答案' })}
                       </div>
                       <p className="text-sm text-[var(--ivory)] leading-relaxed">
-                        {currentItem.metadata?.back ?? ''}
+                        {currentItem.metadata?.back ? t(currentItem.metadata.back) : ''}
                       </p>
                     </div>
                   ) : (

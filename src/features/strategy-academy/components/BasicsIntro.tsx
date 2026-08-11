@@ -11,10 +11,10 @@ import { resolveBasicsStepTitle } from '../utils/titleKeys';
 import type { LessonSection, Term } from '../types';
 
 const CATEGORY_TABS = [
-  { key: 'basic', label: '基础' },
-  { key: 'hand', label: '手牌' },
-  { key: 'action', label: '行动' },
-  { key: 'strategy', label: '策略' },
+  { key: 'basic', labelKey: 'academy.basicsIntro.categoryBasic' },
+  { key: 'hand', labelKey: 'academy.basicsIntro.categoryHand' },
+  { key: 'action', labelKey: 'academy.basicsIntro.categoryAction' },
+  { key: 'strategy', labelKey: 'academy.basicsIntro.categoryStrategy' },
 ] as const;
 
 export default function BasicsIntro() {
@@ -75,7 +75,7 @@ export default function BasicsIntro() {
             Poker Basics
           </p>
           <h1 className="font-display text-[24px] md:text-[28px] text-[var(--ivory)] mb-3">
-            德州扑克基础入门
+            {t('academy.basicsIntro.title')}
           </h1>
           {/* Progress bar */}
           <div className="flex items-center gap-3">
@@ -156,7 +156,7 @@ export default function BasicsIntro() {
             )}
           >
             <ChevronLeft size={16} />
-            上一步
+            {t('academy.basicsIntro.prev')}
           </button>
 
           <button
@@ -168,7 +168,7 @@ export default function BasicsIntro() {
                 : 'bg-[var(--walnut-raised)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/80'
             )}
           >
-            {isLastStep ? '完成入门' : '下一步'}
+            {isLastStep ? t('academy.basicsIntro.finish') : t('academy.basicsIntro.next')}
             {!isLastStep && <ChevronRight size={16} />}
             {isLastStep && <CheckCircle2 size={16} />}
           </button>
@@ -192,10 +192,10 @@ export default function BasicsIntro() {
             >
               <div className="text-6xl mb-4">✅</div>
               <h2 className="font-display text-2xl text-[var(--ivory)] mb-2">
-                基础入门完成！
+                {t('academy.basicsIntro.completionTitle')}
               </h2>
               <p className="text-[var(--ivory-dim)] text-sm">
-                即将跳转到第一课... {countdown}s
+                {t('academy.basicsIntro.completionRedirect', { countdown })}
               </p>
             </motion.div>
           </motion.div>
@@ -253,6 +253,7 @@ function SectionRenderer({ section }: { section: LessonSection }) {
 
 /** Glossary grid with search and category tabs */
 function GlossaryGrid() {
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<string>('basic');
 
@@ -279,7 +280,7 @@ function GlossaryGrid() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="搜索术语（中英文）..."
+          placeholder={t('academy.basicsIntro.searchPlaceholder')}
           className="w-full pl-9 pr-4 py-2 rounded-md bg-[var(--felt-deep)]/60 border border-[var(--walnut-border)] text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] focus:outline-none focus:border-[var(--brass-bright)]/50 transition-colors"
         />
       </div>
@@ -297,7 +298,7 @@ function GlossaryGrid() {
                 : 'text-[var(--ivory-muted)] hover:text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]/50'
             )}
           >
-            {tab.label}
+            {t(tab.labelKey)}
           </button>
         ))}
       </div>
@@ -311,7 +312,7 @@ function GlossaryGrid() {
 
       {filteredTerms.length === 0 && (
         <p className="text-center text-sm text-[var(--ivory-muted)] py-6">
-          未找到匹配的术语
+          {t('academy.basicsIntro.noTermsFound')}
         </p>
       )}
     </div>

@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionStandard } from '@/shared/utils/motion';
 import { Lock, CheckCircle2, PlayCircle, ChevronRight, Award } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import type { LevelInfo } from '../types';
@@ -50,7 +52,7 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.08 }}
+      transition={{ ...transitionStandard, delay: index * 0.08 }}
     >
       <button
         onClick={handleClick}
@@ -90,7 +92,7 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-[var(--ivory-dim)]">
-                    {completedInEntry}/{totalInEntry} 课时完成
+                    {t('academy.levelCard.lessonsCompleted', { completed: completedInEntry, total: totalInEntry })}
                   </span>
                   <span className="font-numeric text-[var(--brass-bright)]">{progress}%</span>
                 </div>
@@ -99,7 +101,7 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
                   <span
                     role="button"
                     tabIndex={0}
-                    aria-label={`参加 Level ${level.level} 认证测验`}
+                    aria-label={t('academy.levelCard.takeCertification', { level: level.level })}
                     onClick={goCertification}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') goCertification(e);
@@ -107,7 +109,7 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
                     className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
                   >
                     <Award className="w-3.5 h-3.5" />
-                    参加 Level {level.level} 认证测验
+                    {t('academy.levelCard.takeCertification', { level: level.level })}
                   </span>
                 )}
               </div>

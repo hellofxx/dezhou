@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
+import { transitionFast } from '@/shared/utils/motion';
 
 interface QuizTimerProps {
   timeRemaining: number;  // 秒
@@ -7,6 +10,7 @@ interface QuizTimerProps {
 }
 
 export function QuizTimer({ timeRemaining, timeLimit, isPaused }: QuizTimerProps) {
+  const { t } = useTranslation();
   const size = 80;
   const strokeWidth = 6;
   const radius = (size - strokeWidth) / 2;
@@ -58,7 +62,7 @@ export function QuizTimer({ timeRemaining, timeLimit, isPaused }: QuizTimerProps
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           animate={{ strokeDashoffset, stroke: getColor() }}
-          transition={{ duration: 0.1, ease: 'linear' }}
+          transition={transitionFast}
         />
       </svg>
       {/* 中间数字 */}
@@ -70,7 +74,7 @@ export function QuizTimer({ timeRemaining, timeLimit, isPaused }: QuizTimerProps
           {timeStr}
         </span>
         {isPaused && (
-          <span className="text-[10px] text-[var(--ivory-dim)]">暂停</span>
+          <span className="text-[10px] text-[var(--ivory-dim)]">{t('rangeTrainer.timer.paused')}</span>
         )}
       </div>
     </div>

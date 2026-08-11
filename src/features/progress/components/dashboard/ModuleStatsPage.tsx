@@ -54,7 +54,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
     );
     return dailyStats.map((d) => ({
       date: d.date.slice(5),
-      正确率: d.questions > 0 ? Math.round(d.accuracy * 100) : null,
+      accuracy: d.questions > 0 ? Math.round(d.accuracy * 100) : null,
     }));
   }, [records, moduleName]);
 
@@ -64,7 +64,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
   );
 
   const recentTen = moduleRecords.slice(0, 10);
-  const hasTrendData = trendData.some((d) => d.正确率 !== null);
+  const hasTrendData = trendData.some((d) => d.accuracy !== null);
 
   return (
     <div className="h-full overflow-auto">
@@ -85,7 +85,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
           </button>
           <div>
             <h1 className="text-2xl font-bold text-[var(--ivory)]">{displayName}</h1>
-            <p className="text-sm text-[var(--ivory-dim)] mt-0.5">详细训练统计</p>
+            <p className="text-sm text-[var(--ivory-dim)] mt-0.5">{t('progress.moduleStats.subtitle')}</p>
           </div>
         </motion.div>
 
@@ -93,17 +93,17 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           <StatCard
             icon={<Target className="w-4 h-4 text-[var(--brass)]" />}
-            label="总训练次数"
+            label={t('progress.moduleStats.totalSessions')}
             value={`${stats.sessions}`}
           />
           <StatCard
             icon={<BarChart3 className="w-4 h-4 text-[var(--info)]" />}
-            label="正确率"
+            label={t('progress.moduleStats.accuracy')}
             value={`${(stats.accuracy * 100).toFixed(1)}%`}
           />
           <StatCard
             icon={<Clock className="w-4 h-4 text-[var(--info)]" />}
-            label="平均用时"
+            label={t('progress.moduleStats.avgTime')}
             value={`${(stats.averageTime / 1000).toFixed(1)}s`}
           />
         </div>
@@ -111,12 +111,12 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         {/* Trend chart */}
         <Card className="bg-[var(--surface)] border-[var(--surface-raised)]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base text-[var(--ivory)]">正确率趋势</CardTitle>
+            <CardTitle className="text-base text-[var(--ivory)]">{t('progress.moduleStats.accuracyTrend')}</CardTitle>
           </CardHeader>
           <CardContent>
             {!hasTrendData ? (
               <div className="h-[200px] flex items-center justify-center text-[var(--ivory-dim)] text-sm">
-                暂无训练数据
+                {t('progress.moduleStats.noData')}
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={200}>
@@ -138,11 +138,11 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
                       color: 'var(--ivory)',
                       fontSize: '12px',
                     }}
-                    formatter={(value) => [value != null ? `${value}%` : 'N/A', '正确率']}
+                    formatter={(value) => [value != null ? `${value}%` : 'N/A', t('progress.moduleStats.accuracy')]}
                   />
                   <Line
                     type="monotone"
-                    dataKey="正确率"
+                    dataKey="accuracy"
                     stroke="var(--brass)"
                     strokeWidth={2}
                     dot={{ fill: 'var(--brass)', r: 3 }}
@@ -158,11 +158,11 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
           {/* Recent 10 sessions */}
           <Card className="bg-[var(--surface)] border-[var(--surface-raised)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base text-[var(--ivory)]">最近 10 次训练</CardTitle>
+              <CardTitle className="text-base text-[var(--ivory)]">{t('progress.moduleStats.recentTen')}</CardTitle>
             </CardHeader>
             <CardContent>
               {recentTen.length === 0 ? (
-                <div className="py-6 text-center text-[var(--ivory-dim)] text-sm">暂无记录</div>
+                <div className="py-6 text-center text-[var(--ivory-dim)] text-sm">{t('progress.moduleStats.noRecords')}</div>
               ) : (
                 <div className="space-y-2">
                   {recentTen.map((record, idx) => (
@@ -190,11 +190,11 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
           {/* Weak spots */}
           <Card className="bg-[var(--surface)] border-[var(--surface-raised)]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-base text-[var(--ivory)]">薄弱点分析</CardTitle>
+              <CardTitle className="text-base text-[var(--ivory)]">{t('progress.moduleStats.weakSpots')}</CardTitle>
             </CardHeader>
             <CardContent>
               {weakHands.length === 0 ? (
-                <div className="py-6 text-center text-[var(--ivory-dim)] text-sm">暂无数据</div>
+                <div className="py-6 text-center text-[var(--ivory-dim)] text-sm">{t('progress.moduleStats.weakNoData')}</div>
               ) : (
                 <div className="space-y-2">
                   {weakHands.map((wh) => (
@@ -205,10 +205,10 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
                       <span className="text-sm text-[var(--ivory)] font-numeric">{wh.hand}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-[var(--ivory-muted)] font-numeric">
-                          错误 {wh.wrongCount}/{wh.totalCount}
+                          {t('progress.moduleStats.weakWrong', { wrong: wh.wrongCount, total: wh.totalCount })}
                         </span>
                         <span className="text-xs font-numeric text-[var(--clay)]">
-                          {Math.round((wh.wrongCount / wh.totalCount) * 100)}% 错误率
+                          {t('progress.moduleStats.weakRate', { rate: Math.round((wh.wrongCount / wh.totalCount) * 100) })}
                         </span>
                       </div>
                     </div>

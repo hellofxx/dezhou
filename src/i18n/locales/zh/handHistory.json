@@ -1,0 +1,95 @@
+{
+  "deviation": {
+    "title": "GTO 偏差分析",
+    "decisions": "决策数",
+    "optimal": "最优率",
+    "avgEvLoss": "平均 EV 损失",
+    "worstDecision": "最差决策",
+    "loading": "分析中...",
+    "loadingWithProgress": "GTO 分析中 ({{completed}}/{{total}})",
+    "noData": "暂无偏差数据",
+    "streetComparison": "逐街对比",
+    "youActed": "你: {{action}}",
+    "gtoActed": "GTO: {{action}}",
+    "avgLossPerHand": "平均每手损失 {{evLoss}}BB",
+    "worstOnStreet": "，最差决策出现在 {{street}}"
+  },
+  "dbError": {
+    "unavailable": "存储不可用，请检查浏览器设置或隐私模式",
+    "quotaExceeded": "存储空间已满，请清理部分牌局数据",
+    "generic": "数据读写失败，请稍后重试"
+  },
+  "replay": {
+    "prevStreet": "上一街",
+    "prevAction": "上一步",
+    "nextAction": "下一步",
+    "nextStreet": "下一街",
+    "play": "播放",
+    "pause": "暂停"
+  },
+  "streets": {
+    "preflop": "翻前",
+    "flop": "翻牌",
+    "turn": "转牌",
+    "river": "河牌",
+    "showdown": "摊牌",
+    "actions": "{{count}} 个动作",
+    "noActions": "无动作"
+  },
+  "list": {
+    "tabsHands": "牌局列表",
+    "tabsStats": "我的统计",
+    "import": "导入",
+    "clearAll": "清空全部",
+    "importedCount": "已导入 {{count}} 手牌局",
+    "handNumber": "牌局 #{{number}}",
+    "players": "玩家",
+    "wonBy": "获胜者：{{name}}",
+    "searchPlaceholder": "搜索牌局号、玩家名或平台...",
+    "allSites": "全部平台",
+    "sortByDate": "按日期排序",
+    "sortByPot": "按底池排序",
+    "sortBySite": "按平台排序",
+    "statsInsufficientTitle": "数据不足",
+    "statsInsufficientDesc": "至少需要 {{min}} 手牌局才能显示统计数据（当前 {{count}} 手）",
+    "heroNotFoundTitle": "未检测到 Hero 玩家",
+    "heroNotFoundDesc": "请确保导入的牌局中包含你的底牌信息",
+    "emptyTitle": "还没有导入任何牌局",
+    "emptyDesc": "导入你的第一手牌局，开始复盘分析",
+    "emptyAction": "导入牌局",
+    "noMatch": "没有匹配的牌局",
+    "confirmClearTitle": "清空全部牌局？",
+    "confirmClearDesc": "将永久删除全部 {{count}} 手已导入的牌局。",
+    "cancel": "取消",
+    "deleteAll": "全部删除"
+  },
+  "stats": {
+    "suggestion": "建议",
+    "vpipLow": "偏低，建议 {{range}}%",
+    "vpipHigh": "偏高，建议 {{range}}%",
+    "positionFeedback": "你的 {{position}} VPIP {{vpip}}%{{feedback}}"
+  },
+  "annotation": {
+    "export": "导出"
+  },
+  "replayPage": {
+    "notFound": "未找到该牌局",
+    "backToList": "返回牌局列表",
+    "loading": "加载中..."
+  },
+  "importer": {
+    "pageTitle": "导入牌局历史",
+    "pageDesc": "粘贴牌局历史文本，或上传 .txt 文件。支持 PokerStars、GGPoker 与 PartyPoker 格式。",
+    "dropHint": "将 .txt 文件拖到此处，或点击浏览",
+    "supportsFormats": "支持 PokerStars、GGPoker 与 PartyPoker 牌局历史格式",
+    "pastePlaceholder": "或在此粘贴牌局历史文本...",
+    "format": "格式: {{format}}",
+    "unknown": "未知",
+    "import": "导入",
+    "success": "成功导入 {{count}} 手牌局 ({{format}})",
+    "skipped": "跳过 {{skipped}} / {{total}} 手无法解析的牌局",
+    "unrecognized": "无法识别的牌局历史格式。请粘贴 PokerStars、GGPoker 或 PartyPoker 格式。",
+    "parseError": "解析错误: {{message}}",
+    "unknownError": "未知错误"
+  }
+}

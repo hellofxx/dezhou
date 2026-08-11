@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/shared/components/ui/button';
 import { QuizCard } from '@/features/range-trainer/components/QuizCard';
@@ -19,6 +19,8 @@ export default function FirstDrillStep() {
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
 
   const [drill, setDrill] = useState(createDrillState);
+  // OB-05：防止「完成」按钮快速双击触发两次 completeOnboardingStep（加锁防抖）
+  const completingRef = useRef(false);
 
   const currentQuestion = drill.questions[drill.currentIdx]!;
   const isFinal = isOnFinalQuestion(drill);
@@ -31,11 +33,13 @@ export default function FirstDrillStep() {
   };
 
   const handleNext = () => {
+    if (completingRef.current) return;
     const result = advanceDrill(drill);
     if (result.done) {
       // P2A-02：首胜达成时刻（微训练完成、进入庆祝页之前）记 Day 1 训练日。
       // recordTrainingDay 幂等防同日重复；庆祝页只做展示，
       // 跨日卡在庆祝页重新挂载不会再触发本回调 → 不再重复记训练日
+      completingRef.current = true;
       recordTrainingDay();
       completeOnboardingStep(3);
       return;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/shared/components/ui/button';
 import { BookOpen, HelpCircle } from 'lucide-react';
 import { RangeGrid } from './RangeGrid';
@@ -7,13 +8,12 @@ import { RangeSelector } from './RangeSelector';
 import { RangeInfo } from './RangeInfo';
 import { useRangeTrainerStore } from '../store';
 import { getPositionsForPlayerCount } from '@/shared/types/position';
-import { GAME_VARIANT_CONFIGS } from '@/shared/constants/poker';
 import type { GameVariant } from '@/shared/types/poker';
 
-const VARIANT_OPTIONS: { value: GameVariant; label: string }[] = [
-  { value: 'standard', label: '标准德州' },
-  { value: 'short-deck', label: '短牌德州 (6+)' },
-  { value: 'heads-up', label: '单挑 (HU)' },
+const VARIANT_OPTIONS: { value: GameVariant; labelKey: string }[] = [
+  { value: 'standard', labelKey: 'rangeTrainer.variant.standard' },
+  { value: 'short-deck', labelKey: 'rangeTrainer.variant.shortDeck' },
+  { value: 'heads-up', labelKey: 'rangeTrainer.variant.headsUp' },
 ];
 
 function getPlayerCountOptions(variant: GameVariant): number[] {
@@ -26,6 +26,7 @@ function getPlayerCountOptions(variant: GameVariant): number[] {
 
 export default function RangeTrainerHome() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     learnState,
     setSelectedPreset,
@@ -53,7 +54,6 @@ export default function RangeTrainerHome() {
   );
 
   const playerCountOptions = getPlayerCountOptions(gameVariant);
-  const variantConfig = GAME_VARIANT_CONFIGS[gameVariant];
 
   // 自动选择第一个匹配的预设
   React.useEffect(() => {
@@ -78,9 +78,9 @@ export default function RangeTrainerHome() {
         {/* 顶部标题栏 */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-[var(--ivory)]">手牌范围训练</h1>
+            <h1 className="text-2xl font-bold text-[var(--ivory)]">{t('rangeTrainer.title')}</h1>
             <p className="text-sm text-[var(--ivory-dim)] mt-1">
-              学习各位置的标准开牌范围，掌握 GTO 基础
+              {t('rangeTrainer.subtitle')}
             </p>
           </div>
           <div className="flex gap-2">
@@ -91,7 +91,7 @@ export default function RangeTrainerHome() {
               onClick={() => navigate('/range-trainer/learn')}
             >
               <BookOpen className="w-4 h-4 mr-1" />
-              学习模式
+              {t('rangeTrainer.learn')}
             </Button>
             <Button
               variant="outline"
@@ -99,7 +99,7 @@ export default function RangeTrainerHome() {
               onClick={() => navigate('/range-trainer/quiz')}
             >
               <HelpCircle className="w-4 h-4 mr-1" />
-              测验模式
+              {t('rangeTrainer.quiz')}
             </Button>
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function RangeTrainerHome() {
           <div className="space-y-3">
             {/* 变体选择 */}
             <div>
-              <label className="text-xs font-medium text-[var(--ivory-dim)] mb-1.5 block">游戏变体</label>
+              <label className="text-xs font-medium text-[var(--ivory-dim)] mb-1.5 block">{t('rangeTrainer.variant.label')}</label>
               <div className="flex gap-2">
                 {VARIANT_OPTIONS.map((v) => (
                   <button
@@ -117,7 +117,7 @@ export default function RangeTrainerHome() {
                     onClick={() => setGameVariant(v.value)}
                     className={`pill flex-1 ${gameVariant === v.value ? 'active' : ''}`}
                   >
-                    {v.label}
+                    {t(v.labelKey)}
                   </button>
                 ))}
               </div>
@@ -125,7 +125,7 @@ export default function RangeTrainerHome() {
             {/* 人数选择 */}
             {playerCountOptions.length > 1 && (
               <div>
-                <label className="text-xs font-medium text-[var(--ivory-dim)] mb-1.5 block">玩家人数</label>
+                <label className="text-xs font-medium text-[var(--ivory-dim)] mb-1.5 block">{t('rangeTrainer.variant.playerCount')}</label>
                 <div className="flex gap-2">
                   {playerCountOptions.map((count) => (
                     <button
@@ -133,7 +133,7 @@ export default function RangeTrainerHome() {
                       onClick={() => setPlayerCount(count)}
                       className={`pill flex-1 ${playerCount === count ? 'active' : ''}`}
                     >
-                      {count}-Max
+                      {t('rangeTrainer.variant.max', { count })}
                     </button>
                   ))}
                 </div>
@@ -141,7 +141,7 @@ export default function RangeTrainerHome() {
             )}
             {gameVariant === 'short-deck' && (
               <p className="text-xs text-[var(--brass-bright)] bg-[var(--brass)]/10 rounded-md px-3 py-1.5">
-                短牌模式：移除 2-5，共 36 张牌，9×9 范围矩阵。同花 &gt; 蒸蘆，顺子 &gt; 三条。
+                {t('rangeTrainer.variant.shortDeckHint')}
               </p>
             )}
           </div>
@@ -153,8 +153,8 @@ export default function RangeTrainerHome() {
           <div className="space-y-4">
             {/* 范围选择器 */}
             <div className="panel">
-              <div className="panel-title">范围选择</div>
-              <p className="text-xs text-[var(--ivory-muted)] mb-3">选择位置和动作类型查看标准范围</p>
+              <div className="panel-title">{t('rangeTrainer.rangeSelect.title')}</div>
+              <p className="text-xs text-[var(--ivory-muted)] mb-3">{t('rangeTrainer.rangeSelect.hint')}</p>
               <RangeSelector
                 selectedPosition={learnState.selectedPosition}
                 selectedActionType={learnState.selectedActionType}
@@ -168,11 +168,11 @@ export default function RangeTrainerHome() {
 
             {/* 范围信息 */}
             <div className="panel">
-              <div className="panel-title">范围信息</div>
+              <div className="panel-title">{t('rangeTrainer.rangeInfo.title')}</div>
               <RangeInfo
                 selectedHands={selectedHands}
                 highlightedHand={learnState.highlightedHand}
-                presetName={learnState.selectedPreset?.name}
+                preset={learnState.selectedPreset}
               />
             </div>
           </div>
@@ -180,15 +180,15 @@ export default function RangeTrainerHome() {
           {/* 右侧网格 */}
           <div className="panel">
             <div className="panel-title">
-              {gameVariant === 'short-deck' ? '9×9 范围矩阵' : '13×13 范围矩阵'}
+              {gameVariant === 'short-deck' ? t('rangeTrainer.rangeInfo.matrix9') : t('rangeTrainer.rangeInfo.matrix13')}
               {gameVariant !== 'standard' && (
                 <span className="ml-2 text-xs font-normal text-[var(--brass-bright)]">
-                  {variantConfig.displayName}
+                  {gameVariant === 'short-deck' ? t('rangeTrainer.variant.shortDeck') : t('rangeTrainer.variant.headsUp')}
                 </span>
               )}
             </div>
             <p className="text-xs text-[var(--ivory-muted)] mb-3">
-              对角线=对子 | 上三角=同花 | 下三角=非同花 | 金色=在范围内
+              {t('rangeTrainer.rangeInfo.matrixLegend')}
             </p>
             <RangeGrid
               selectedHands={selectedHands}
@@ -203,10 +203,10 @@ export default function RangeTrainerHome() {
         {/* 底部说明 */}
         <div className="text-center text-xs text-[var(--ivory-dim)] pb-4">
           <p>
-            以上范围基于 6-max 现金局近似 GTO 策略，实际范围会根据对手倾向和筹码深度有所调整。
+            {t('rangeTrainer.footer.note')}
           </p>
           <p className="mt-1">
-            悬停网格中的格子可查看手牌详情，金色表示该手牌在当前范围中。
+            {t('rangeTrainer.footer.hover')}
           </p>
         </div>
       </div>

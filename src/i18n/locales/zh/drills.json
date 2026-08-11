@@ -1,0 +1,221 @@
+{
+  "common": {
+    "complete": "训练完成！",
+    "accuracyLabel": "正确率",
+    "timeLabel": "用时",
+    "correctLabel": "正确题数",
+    "finish": "完成训练",
+    "exit": "退出",
+    "progress": "第 {{current}} / {{total}} 题",
+    "runningAccuracy": "当前正确率 {{correct}}/{{answered}}",
+    "correctFeedback": "回答正确！",
+    "wrongFeedback": "回答错误",
+    "correctAnswerPrefix": "正确答案：{{answer}}",
+    "viewResult": "查看结果",
+    "next": "下一题"
+  },
+  "opponent": {
+    "title": "对手画像识别",
+    "subtitle": "根据统计数据判断对手类型，并选择最优剥削策略",
+    "typePrompt": "第 1 问：这是哪种对手类型？",
+    "strategyPrompt": "第 2 问：最佳应对策略是？",
+    "sampleSize": "样本 {{count}} 手",
+    "recentActions": "最近行为",
+    "typeLabel": "类型判断",
+    "strategyLabel": "策略选择",
+    "scoringNote": "两问全对才计为答对"
+  },
+  "handRanking": {
+    "title": "牌力排名闪电战",
+    "subtitle": "快速识别德州扑克 9 种牌型，并比较两手牌的大小",
+    "comparePrompt": "以下两手牌，哪手更大？",
+    "identifyPrompt": "请判断以下 5 张牌组成的牌型：",
+    "simpleComparePrompt": "以下两组起手牌，哪组更强？",
+    "options": {
+      "handA": "左手牌",
+      "handB": "右手牌",
+      "tie": "平手",
+      "labelA": "牌组 A",
+      "labelB": "牌组 B",
+      "royalFlush": "皇家同花顺",
+      "straightFlush": "同花顺",
+      "fourOfAKind": "四条",
+      "fullHouse": "葫芦",
+      "flush": "同花",
+      "straight": "顺子",
+      "threeOfAKind": "三条",
+      "twoPair": "两对",
+      "onePair": "一对",
+      "highCard": "高牌"
+    },
+    "questions": {
+      "q1": {
+        "explanation": "右手牌是 AKQJT 同花顺（皇家同花顺），是德州扑克中最强的牌型，胜过普通的 AKQJT 顺子。"
+      },
+      "q2": {
+        "explanation": "右手牌是 AAKKK 葫芦（三条 K + 一对 A），葫芦胜过三条 9。"
+      },
+      "q3": {
+        "explanation": "左手牌是同花（5 张红桃），右手牌是顺子。同花 > 顺子。"
+      },
+      "q4": {
+        "explanation": "AKQJT 全部黑桃，是皇家同花顺——德州扑克最强牌型。"
+      },
+      "q5": {
+        "explanation": "98765 全部红桃，是同花顺（不是皇家，因为不是 AKQJT）。"
+      },
+      "q6": {
+        "explanation": "KKK99 是三条 K + 一对 9，组成葫芦。注意不要与两对或三条混淆。"
+      },
+      "q7": {
+        "explanation": "T9876 是 5 张连续牌，组成顺子（注意并非全部同花）。"
+      },
+      "q8": {
+        "explanation": "AAAQ2 是三条 A（三个相同点子 + 两张散牌）。"
+      },
+      "q9": {
+        "explanation": "AA 是最强的起手牌，远强于 22。口袋对越大越强。"
+      },
+      "q10": {
+        "explanation": "AKs（同花 AK）是强起手牌，远胜 72o（不同花 72）这种最弱的起手牌之一。"
+      }
+    }
+  },
+  "position": {
+    "title": "位置认知训练",
+    "subtitle": "在 6-max 牌桌上识别各位置，理解位置优势",
+    "questions": {
+      "q1": {
+        "prompt": "翻牌前最后行动的最佳位置是哪个？（庄家位）",
+        "explanation": "BTN（Button，庄家位）是翻前最后行动的位置，能获取最多信息后再做决策。"
+      },
+      "q2": {
+        "prompt": "翻牌前最早行动的位置是哪个？",
+        "explanation": "UTG（Under The Gun）是翻前第一个行动的位置，信息最少，应只玩强牌。"
+      },
+      "q3": {
+        "prompt": "哪个位置在翻前和翻后都最后行动，被称为「最佳位置」？",
+        "explanation": "BTN 在翻前和翻后都是最后行动，是全桌最有利的位置。"
+      },
+      "q4": {
+        "prompt": "在 6-max 中，庄家左手第一个位置（负责下小盲注）是？",
+        "explanation": "SB（Small Blind，小盲注）位于 BTN 左侧，翻前已强制下注 0.5BB，翻后处于不利位置。"
+      },
+      "q5": {
+        "prompt": "负责下大盲注的位置是？",
+        "explanation": "BB（Big Blind，大盲注）位于 SB 左侧，翻前已强制下注 1BB，是翻前最后一个行动的盲注位。"
+      },
+      "q6": {
+        "prompt": "翻前 UTG 加注后，最后一个能跟注或 3bet 的盲注位置是？",
+        "explanation": "BB 是翻前最后一个行动的位置（盲注位），能关闭行动，获得「关掉行动」的位置优势。"
+      },
+      "q7": {
+        "prompt": "想要最多偷盲机会时，应该从哪个位置加注？",
+        "explanation": "BTN 是偷盲最佳位置，因为只有 SB / BB 两位玩家在后面，偷盲成功率高。"
+      },
+      "q8": {
+        "prompt": "6-max 中 UTG 之后的下一个位置是？",
+        "explanation": "MP（Middle Position）位于 UTG 之后，比 UTG 稍有位置优势，但仍需谨慎选择起手牌。"
+      }
+    }
+  },
+  "outs": {
+    "title": "Outs 速算训练",
+    "subtitle": "识别听牌并快速计算 Outs 数量，掌握二四法则",
+    "boardLabel": "公共牌",
+    "heroLabel": "你的底牌",
+    "rulePrompt": "请计算你目前的 Outs 数量",
+    "options": {
+      "count2": "2 outs",
+      "count3": "3 outs",
+      "count4": "4 outs",
+      "count6": "6 outs",
+      "count8": "8 outs",
+      "count9": "9 outs",
+      "count12": "12 outs",
+      "count15": "15 outs",
+      "equity8": "约 8%",
+      "equity16": "约 16%",
+      "equity32": "约 32%",
+      "equity36": "约 36%"
+    },
+    "questions": {
+      "q1": {
+        "prompt": "你持有 AK 同花，翻牌出现 2 张同花，Outs 是多少？",
+        "explanation": "同花听牌：13 张同花 - 4 张已出现 = 9 outs。"
+      },
+      "q2": {
+        "prompt": "你持有 89 同花，翻牌有 2 张同花，Outs 是多少？",
+        "explanation": "同花听牌共 9 outs（13-4=9），是最常见的强听牌。"
+      },
+      "q3": {
+        "prompt": "你持有 89，牌面 7T2，你的 OESD（两端顺子听牌）有多少 Outs？",
+        "explanation": "OESD 两端顺子听牌：6 或 J 完成顺子，共 8 outs。"
+      },
+      "q4": {
+        "prompt": "你持有 56，牌面 479，你的 OESD 有多少 Outs？",
+        "explanation": "OESD：3 或 8 完成顺子，共 8 outs。"
+      },
+      "q5": {
+        "prompt": "你持有 79，牌面 56K，你的 Gutshot（卡顺）有多少 Outs？",
+        "explanation": "Gutshot 卡顺听牌：仅 8 完成顺子，共 4 outs。"
+      },
+      "q6": {
+        "prompt": "你持有 TJ，牌面 792，你的 Gutshot 有多少 Outs？",
+        "explanation": "Gutshot 卡顺：仅 8 完成顺子，共 4 outs。"
+      },
+      "q7": {
+        "prompt": "8 Outs 在 turn→river 的胜率约为多少？（二四法则）",
+        "explanation": "二四法则：8 outs × 2 ≈ 16% 胜率（turn→river 单街）。"
+      },
+      "q8": {
+        "prompt": "你持有 AK 高牌，牌面无 A 无 K，命中顶对的 Outs 是？",
+        "explanation": "AK 高牌听顶对：3 张 A + 3 张 K = 6 outs。"
+      }
+    }
+  },
+  "potOdds": {
+    "title": "底池赔率直觉",
+    "subtitle": "图形化训练底池赔率计算，掌握跟注决策",
+    "potLabel": "底池",
+    "betLabel": "下注",
+    "callLabel": "跟注",
+    "equityLabel": "胜率",
+    "positiveEv": "+EV 跟注",
+    "ratioHint": "底池 {{pot}} : 跟注 {{call}}",
+    "options": {
+      "potOdds20": "20%",
+      "potOdds25": "25%",
+      "potOdds33": "33%",
+      "potOdds50": "50%",
+      "call": "跟注",
+      "fold": "弃牌"
+    },
+    "questions": {
+      "q1": {
+        "prompt": "底池 100，对手下注 50，你需要跟注 50。底池赔率是多少？",
+        "explanation": "跟注 50 赢取最终底池 200（100+50+50），赔率 = 50/200 = 25%。"
+      },
+      "q2": {
+        "prompt": "底池 80，对手下注 40，你需要跟注 40。底池赔率是多少？",
+        "explanation": "跟注 40 赢取 160（80+40+40），赔率 = 40/160 = 25%。"
+      },
+      "q3": {
+        "prompt": "底池 100，对手下注 50，你跟注 50。你的胜率 36%，应该？",
+        "explanation": "底池赔率 25%，胜率 36% > 25%，跟注 +EV，应跟注。"
+      },
+      "q4": {
+        "prompt": "底池 100，对手下注 50，你跟注 50。你的胜率 16%，应该？",
+        "explanation": "底池赔率 25%，胜率 16% < 25%，跟注 -EV，应弃牌。"
+      },
+      "q5": {
+        "prompt": "底池 120，对手下注 60，你跟注 60。底池赔率是多少？",
+        "explanation": "跟注 60 赢取 240（120+60+60），赔率 = 60/240 = 25%。"
+      },
+      "q6": {
+        "prompt": "你的胜率 40%，底池赔率 25%，应该？",
+        "explanation": "胜率 40% 远高于底池赔率 25%，明显 +EV 跟注。"
+      }
+    }
+  }
+}

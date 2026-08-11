@@ -20,22 +20,24 @@ export interface EloRating {
 
 /** 段位定义 */
 export interface Rank {
+  /** 语义 key（不是展示文本），渲染端通过 `progress.rank.<key>.name` i18n 解析 */
   name: string;
   minScore: number;
   maxScore: number;
   color: string;        // hex 颜色
+  /** 语义 key（不是展示文本），渲染端通过 `progress.rank.<key>.description` i18n 解析 */
   description: string;
   icon: string;         // emoji
 }
 
 /** 六段位常量（按 minScore 升序） */
 export const RANKS: Rank[] = [
-  { name: '新手', minScore: 0, maxScore: 500, color: '#9ca3af', icon: '🌱', description: '刚开始接触德州扑克' },
-  { name: '入门', minScore: 500, maxScore: 800, color: '#8ba59b', icon: '🎯', description: '掌握基本概念' },
-  { name: '进阶', minScore: 800, maxScore: 1200, color: '#7fb883', icon: '♠️', description: '理解位置与范围' },
-  { name: '中级', minScore: 1200, maxScore: 1600, color: '#c9a25e', icon: '♥️', description: '能应用 GTO 基础' },
-  { name: '高级', minScore: 1600, maxScore: 2000, color: '#c9a25e', icon: '♦️', description: '熟练运用剥削策略' },
-  { name: '专家', minScore: 2000, maxScore: 3000, color: '#c25a4c', icon: '♣️', description: '深度理解与实战盈利' },
+  { name: 'rookie',       minScore: 0,    maxScore: 500,  color: '#9ca3af', icon: '🌱', description: 'rookie' },
+  { name: 'entry',        minScore: 500,  maxScore: 800,  color: '#8ba59b', icon: '🎯', description: 'entry' },
+  { name: 'intermediate', minScore: 800,  maxScore: 1200, color: '#7fb883', icon: '♠️', description: 'intermediate' },
+  { name: 'mid',          minScore: 1200, maxScore: 1600, color: '#c9a25e', icon: '♥️', description: 'mid' },
+  { name: 'advanced',     minScore: 1600, maxScore: 2000, color: '#c9a25e', icon: '♦️', description: 'advanced' },
+  { name: 'expert',       minScore: 2000, maxScore: 3000, color: '#c25a4c', icon: '♣️', description: 'expert' },
 ];
 
 /** 默认 ELO 评分（新用户起始 500 分） */
