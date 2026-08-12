@@ -470,9 +470,12 @@ body::after {
   border: 1px solid var(--walnut-border); border-radius: var(--poker-radius-md);
   padding: 20px; position: relative;
 }
-/* Reading prose wrap — panel keeps full width aligned with sibling panels,
-   inner content clamps to a readable line length (T-T1). */
-.prose-wrap { max-width: 720px; margin-inline: auto; }
+/* Reading prose wrap — gives the chapter reading section a soft column ceiling
+   at very wide screens (T-T2).
+   - 不居中:文本/标题与上方 objectives/header 面板左边缘齐平,消除"双重缩进"错觉;
+   - max-width 约束大屏下(>1400px)的行长(阅读舒适上限 ~75-90ch),小屏(<1400px panel
+     实际宽度)自然占满 panel,padding 由 .panel 提供左对齐基线。 */
+.prose-wrap { max-width: 880px; }
 .panel-title {
   display: flex; align-items: center; gap: 8px;
   font-family: var(--font-display); font-size: 15px; font-weight: 600;

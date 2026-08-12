@@ -178,8 +178,9 @@ export default function TheoryChapterView() {
 
         {phase === 'reading' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel">
-            {/* 阅读区面板保持与 header/objectives 同宽,正文经 prose-wrap 约束最大宽度(T-T1),
-                避免与上部面板产生左右错位;移动端 prose-wrap 自适应缩窄 */}
+            {/* 阅读区面板满宽与 header/objectives 对齐;
+                内层 prose-wrap 仅约束大屏(>1400px)行长,文本/标题/box 全部从 panel 自身
+                padding 起点左对齐,起始位置严格与上方 objectives 卡片左边缘齐平(T-T2) */}
             <div className="space-y-6 prose-wrap">
               {chapter.content.map((section, index) => (
                 <TheorySectionRenderer
