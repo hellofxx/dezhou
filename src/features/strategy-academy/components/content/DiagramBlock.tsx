@@ -4,6 +4,8 @@ import type { LessonSection } from '../../types';
 
 interface SectionBlockProps {
   section: LessonSection;
+  /** i18n content key（渲染层 key 覆盖）：命中取译文，缺省回退数据层原文 */
+  contentKey?: string;
 }
 
 /** 表格守卫：data.rows 为数组的数组，data.headers 为字符串数组（运行时类型守卫） */
@@ -20,8 +22,10 @@ function parseTable(data: Record<string, unknown> | undefined) {
 }
 
 /** 示意图块：data.rows+headers → 简化表格；否则 content 文本 + 可选 caption */
-export function DiagramBlock({ section }: SectionBlockProps) {
+export function DiagramBlock({ section, contentKey }: SectionBlockProps) {
+  const { t } = useTranslation();
   const { rows, headers, caption, hasTable } = parseTable(section.data);
+  const content = contentKey ? t(contentKey, { defaultValue: section.content }) : section.content;
   return (
     <div className="rounded-lg bg-[var(--felt-deep)] border border-[var(--walnut-border)] p-4">
       <div className="flex items-start gap-3">
@@ -57,7 +61,7 @@ export function DiagramBlock({ section }: SectionBlockProps) {
             </div>
           ) : (
             <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">
-              {section.content}
+              {content}
             </p>
           )}
           {caption && <p className="text-xs text-[var(--ivory-muted)] mt-2">{caption}</p>}
@@ -68,13 +72,14 @@ export function DiagramBlock({ section }: SectionBlockProps) {
 }
 
 /** 手牌示例块：content 优先；为空时回退 data.scenario，再回退占位说明 */
-export function HandExampleBlock({ section }: SectionBlockProps) {
+export function HandExampleBlock({ section, contentKey }: SectionBlockProps) {
   const { t } = useTranslation();
+  const content = contentKey ? t(contentKey, { defaultValue: section.content }) : section.content;
   const scenario =
     typeof section.data?.scenario === 'string' && section.data.scenario.trim() !== ''
       ? section.data.scenario
       : '';
-  const text = section.content || scenario || t('academy.content.handExampleFallback');
+  const text = content || scenario || t('academy.content.handExampleFallback');
   return (
     <div className="rounded-lg bg-[var(--felt-deep)] border border-[var(--walnut-border)] p-4 flex items-start gap-3">
       <Hand className="w-5 h-5 text-[var(--brass-bright)] shrink-0 mt-0.5" />

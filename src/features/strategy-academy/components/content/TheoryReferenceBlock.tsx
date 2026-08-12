@@ -4,6 +4,8 @@ import type { LessonSection } from '../../types';
 
 interface TheoryReferenceBlockProps {
   section: LessonSection;
+  /** i18n content key（渲染层 key 覆盖）：命中取译文，缺省回退数据层原文 */
+  contentKey?: string;
 }
 
 /** 跳转目标解析：data.lessonId 存在（string）时生成跳转链接；target 决定路径形态 */
@@ -18,9 +20,10 @@ function resolveLink(data: Record<string, unknown> | undefined): string | null {
 }
 
 /** 理论支撑块：info 系边框 + ExternalLink 图标；data.lessonId 存在时标签可点击跳转 */
-export function TheoryReferenceBlock({ section }: TheoryReferenceBlockProps) {
+export function TheoryReferenceBlock({ section, contentKey }: TheoryReferenceBlockProps) {
   const { t } = useTranslation();
   const href = resolveLink(section.data);
+  const content = contentKey ? t(contentKey, { defaultValue: section.content }) : section.content;
   return (
     <div className="rounded-lg border border-[var(--info)]/30 bg-[var(--info)]/10 p-4">
       <div className="flex items-start gap-3">
@@ -40,7 +43,7 @@ export function TheoryReferenceBlock({ section }: TheoryReferenceBlockProps) {
             )}
           </div>
           <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">
-            {section.content}
+            {content}
           </p>
         </div>
       </div>

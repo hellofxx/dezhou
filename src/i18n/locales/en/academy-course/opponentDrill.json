@@ -1,0 +1,124 @@
+{
+  "opponentDrill": {
+    "opp-drill-q1": {
+      "scenario": "NL10 cash game — opponent stats:",
+      "strategy": [
+        "Bluff frequently to make him fold",
+        "Pure value betting, larger sizing, never bluff",
+        "Tighten the opening range and wait for AA/KK",
+        "Frequent 3-Bet bluffs"
+      ],
+      "recentActions": [
+        "Limp 5 of the last 10 hands",
+        "Frequently check-calls postflop",
+        "Almost never folds to C-Bets"
+      ],
+      "explanation": "VPIP 42% / PFR 6% / AF 0.8 / Fold to C-Bet 18% is the classic Calling Station profile: calls wide, raises tight, rarely folds. The right strategy is pure value betting at larger sizing (2/3 pot+), never bluffing (his Fold to C-Bet is only 18%). Fold immediately when he raises (a raise means a strong hand)."
+    },
+    "opp-drill-q2": {
+      "scenario": "NL25 cash game — opponent stats:",
+      "strategy": [
+        "Stack off with top pair, weak kicker",
+        "Value-bet two to three streets with a wide range at larger sizing",
+        "Only play AA/KK, fold everything else",
+        "Frequent 3-Bet bluffs"
+      ],
+      "recentActions": [
+        "Limps preflop and still calls a raise",
+        "Called down to the river with K5o",
+        "Raised once and showed a set"
+      ],
+      "explanation": "VPIP 38% / PFR 4% / AF 0.6 is a classic Calling Station. The right strategy is wide-range value betting (top pair with a weak kicker can be worth two to three streets) at 2/3 pot+. Don't bluff — fold top pair when he raises (his raise means a set or better). Note: stacking off with top pair is wrong — his calling range contains two pair/sets, so top pair can't support an all-in."
+    },
+    "opp-drill-q3": {
+      "scenario": "NL25 cash game — opponent stats:",
+      "strategy": [
+        "Tighten the range, trap with strong hands, never bluff",
+        "Bluff-fight him",
+        "Change tables immediately",
+        "Only play AA/KK"
+      ],
+      "recentActions": [
+        "3-Bet 3 of the last 10 hands",
+        "Continuously triple barrels postflop",
+        "Once 5-Bet shoved with K7o"
+      ],
+      "explanation": "VPIP 48% / PFR 38% / AF 6.5 / 3-Bet 16% is a classic Maniac: extremely loose-aggressive with high bluff frequency. The right strategy is to tighten your range and 4-Bet for value with strong hands (QQ+/AK) or call and trap, letting him donate chips. Never bluff (he won't fold). Changing tables is escaping — you'd miss the chance to profit from the most exploitable opponent."
+    },
+    "opp-drill-q4": {
+      "scenario": "NL50 cash game — opponent stats:",
+      "strategy": [
+        "Call and trap with AA, let him keep attacking postflop",
+        "Fold all non-premium hands",
+        "Change tables to avoid him",
+        "4-Bet for value with AQ"
+      ],
+      "recentActions": [
+        "4-Bet shoved preflop, got called by QQ, showed A7o",
+        "C-Bets nearly 100% postflop",
+        "Visibly emotional, raising relentlessly"
+      ],
+      "explanation": "VPIP 52% / PFR 42% / AF 7.0 is an extreme Maniac (with a tilt tendency). AA/KK should call and trap (not 4-Bet) so he keeps C-Bet bluffing chips your way. 4-Betting AQ is correct but not optimal — the Maniac's 5-Bet shove range contains many bluffs, so trapping with AA has higher EV. Folding non-premium hands is wrong (JJ/TT/AK all have significant value)."
+    },
+    "opp-drill-q5": {
+      "scenario": "NL100 cash game — opponent stats:",
+      "strategy": [
+        "Steal blinds relentlessly, bluff C-Bet, fold when he raises",
+        "Value-bet top pair for three streets",
+        "Only play stronger hands",
+        "Frequent 3-Bet bluffs"
+      ],
+      "recentActions": [
+        "Opened only 2 of the last 20 hands (AA and AK)",
+        "Extremely high fold-to-C-Bet rate",
+        "Never raised postflop"
+      ],
+      "explanation": "VPIP 9% / PFR 7% / Fold to C-Bet 72% is a classic Nit: ultra-tight, folds easily, and a raise means a strong hand. The right strategy is relentless blind stealing (he folds to steals 70%+), frequent C-Bet bluffs (Fold to C-Bet 72%), and instant folding when he raises. Value-betting top pair is wrong — his three-street calling range is AA/KK/sets, where top pair has no equity."
+    },
+    "opp-drill-q6": {
+      "scenario": "NL200 cash game — opponent stats:",
+      "strategy": [
+        "4-Bet for value with TT+/AQ+, trap with strong hands, use position",
+        "Fold all medium-strength hands",
+        "Only play AA/KK",
+        "Frequent limp traps"
+      ],
+      "recentActions": [
+        "Frequent 3-Bets (including blocker hands like A5s, K9s)",
+        "High double-barrel frequency postflop",
+        "Adjusts strategy based on opponents"
+      ],
+      "explanation": "VPIP 28% / PFR 24% / AF 4.2 / 3-Bet 11% is a classic LAG: loose-aggressive but logical and capable of folding. The right strategy is to 4-Bet for value aggressively with TT+/AQ+ (his 3-Bet range is wide), call and trap with AA/KK, and use position to pressure his wide range. Folding medium-strength hands is wrong — the LAG's range is wide, so top pair / medium pairs still have value."
+    },
+    "opp-drill-q7": {
+      "scenario": "NL50 cash game — opponent stats:",
+      "strategy": [
+        "Use GTO strategy with mild exploitation of his folds",
+        "Bluff him relentlessly",
+        "Only value bet, never bluff",
+        "Change tables to avoid him"
+      ],
+      "recentActions": [
+        "Reasonable opening range (about 16%)",
+        "Standard postflop C-Bet frequency",
+        "Folds to 3-Bets depending on position"
+      ],
+      "explanation": "VPIP 19% / PFR 16% / AF 3.2 / 3-Bet 6% is a classic TAG (tight-aggressive): reasonable range, standard C-Bets, adjusts by position. TAGs are hard to exploit — use GTO strategy with only mild exploitation of his Fold to C-Bet 55% (slightly above the GTO 50%, so you can add a few C-Bet bluffs). Relentless bluffing is wrong (55% Fold to C-Bet isn't high enough), and value-only is also wrong (his fold rate supports reasonable bluffs)."
+    },
+    "opp-drill-q8": {
+      "scenario": "NL25 cash game — opponent stats (small sample):",
+      "strategy": [
+        "Use the GTO default strategy, adjust after gathering more data",
+        "Assume he's a Calling Station and pure value-bet",
+        "Assume he's a Maniac and tighten your range",
+        "Change tables immediately"
+      ],
+      "recentActions": [
+        "Stats fluctuate too much to judge",
+        "Sometimes aggressive, sometimes passive",
+        "No clear tendency yet"
+      ],
+      "explanation": "With only 28 hands the stats are unreliable (VPIP 35% could range from 20-50%). The right strategy is to use the GTO default and gather more data (at least 100 hands) before exploitative adjustments. Exploiting a small sample too early is a common -EV mistake — he could actually be a TAG or Calling Station, and wrong exploitation will cost you."
+    }
+  }
+}

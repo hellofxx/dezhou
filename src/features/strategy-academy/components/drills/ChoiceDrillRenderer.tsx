@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } f
 import { cn } from '@/shared/utils/cn';
 import { orderDrillOptions } from '../../utils/quizShuffle';
 import { resolveLessonTitle, resolveLessonSubtitle } from '../../utils/titleKeys';
+import { resolveDrillQuestion } from '../../utils/contentKeys';
 import type { DrillProps, DrillResult } from './types';
 import type { Lesson } from '../../types';
 
@@ -16,10 +17,11 @@ interface ChoiceDrillRendererProps extends DrillProps {
 
 export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: ChoiceDrillRendererProps) {
   const { t } = useTranslation();
-  // 答案位置偏差治理：渲染前重排选项（数值升序 / id 稳定种子洗牌），源数据不变
+  // 答案位置偏差治理：渲染前先 t() 解析（key 缺失回退数据层中文），再重排选项
+  // （数值升序 / id 稳定种子洗牌）——种子只依赖 id，zh/en 顺序一致，源数据不变
   const questions = useMemo(
-    () => (lesson.drillData?.questions ?? []).map((q) => orderDrillOptions(q)),
-    [lesson],
+    () => (lesson.drillData?.questions ?? []).map((q) => orderDrillOptions(resolveDrillQuestion(t, q))),
+    [lesson, t],
   );
   const TOTAL = questions.length;
 

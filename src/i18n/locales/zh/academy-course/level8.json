@@ -1,0 +1,662 @@
+{
+  "lessonContent": {
+    "l8-pool-tendencies": [
+      "什么是 Player Pool Tendencies？",
+      "每个级别的玩家池（Player Pool）都有特定的共同倾向。例如微额玩家通常跟注太多、不够激进；而中额玩家可能 3-Bet 太多但翻后放弃太快。",
+      "剥削的核心：找到对手/玩家池偏离 GTO 的方向，然后向相反方向调整。对手跟注太多？增加价值下注、减少 bluff。对手弃牌太多？增加 bluff 频率。",
+      "各级别 Pool 的典型倾向",
+      "微额（NL2-NL10）：\n• 跟注太多，几乎不弃牌\n• 应对：纯价值下注，几乎不 bluff\n\n低额（NL25-NL50）：\n• 翻前开始合理但翻后弱\n• 应对：多 C-Bet、多 double barrel\n\n中额（NL100-NL200）：\n• 策略接近 GTO 但仍有漏洞\n• 应对：精确的节点锁定 + 小幅剥削",
+      "不要用对付高额玩家的策略去打微额。在微额，纯粹的价值下注和放弃 bluff 可能比 GTO 更赚钱。",
+      "剥削调整幅度公式：\n最优偏离幅度 = 可观测偏差 × (1 - 对手调整概率)\n\n例：对手河牌弃牌率 70%（均衡约 50%）\n可观测偏差 = +20%\n假设对手调整概率 = 30%（低级别玩家调整慢）\n最优偏离幅度 = 20% × (1-0.3) = 14%\n\n这意味着你可以将诈唬频率提高约 14 个百分点，\n但需要随时准备回到基线（如果对手开始调整）\n\n剥削调整的幅度不是越大越好，而是以\"不被对手反制\"为上限",
+      "理论支撑：玩家类型学与剥削调整的完整框架见理论学院 T7 第 4 章\"剥削调整映射\"。HUD 指标组合解读见 T7 第 1-2 章。GTO-剥削统一框架见 T9 第 4 章。",
+      "反直觉点：剥削幅度越大，自己越容易被反剥削。当你大幅偏离 GTO 基线去剥削对手时，你自身的策略会出现明显漏洞，有经验的对手可以反过来利用你。这就是为什么剥削调整应该是\"最小必要偏离\"——在获取利润的同时保持转身空间。"
+    ],
+    "l8-population-analysis": [
+      "从个体分析到群体分析",
+      "当你没有特定对手的数据时，可以用该级别玩家的「平均倾向」作为默认假设。这就是 Population Analysis——分析特定玩家池的统计倾向。",
+      "关键统计指标：\n• Pool 平均 VPIP/PFR：确定玩家池的松紧度\n• Fold to C-Bet %：决定你的 C-Bet 频率\n• Fold to 3-Bet %：决定你的 3-Bet bluff 频率\n• WTSD%（Went to Showdown）：判断多街 bluff 的效果",
+      "应用实例",
+      "如果 Pool 平均 Fold to C-Bet = 65%（远高于GTO的 45%）：\n→ 你应该 C-Bet 更频繁（甚至 100% 在干燥牌面）\n\n如果 Pool 平均 Fold to 3-Bet = 70%：\n→ 你可以大幅增加 3-Bet bluff 范围\n\n如果 Pool 平均 WTSD = 28%（较高）：\n→ 减少多街 bluff，增加价值下注",
+      "用 Population 数据作为\"默认假设\"，然后随着对特定对手的了解加深，逐渐转向个体化剥削。"
+    ],
+    "l8-exploitative-adjustments": [
+      "GTO vs Exploitative：何时用哪个？",
+      "GTO 策略是\"不可被剥削\"的防御策略；而 Exploitative 策略是\"最大化利用对手弱点\"的进攻策略。在实战中，两者应该结合使用。",
+      "何时用 GTO：对手未知、对手很强、多人底池。\n何时剥削：对手有明显漏洞、你有充足数据、单挑场景。",
+      "常见剥削调整示例",
+      "面对 Nit（超紧玩家）：\n• 疑狂偷盲注\n• 他加注时立即弃牌\n• 不要 bluff 他\n\n面对 Calling Station：\n• 纯价值下注，永远不 bluff\n• 下注尺度可以稍大\n• 他加注时要重视\n\n面对 Maniac：\n• 耐心等待强牌\n• 用中等牌力 Call 到底\n• 不要对他 bluff\n• 控制底池大小",
+      "剥削的风险",
+      "剥削策略本身是\"不平衡\"的，这意味着：\n• 如果对手发现并调整，你反而会输\n• 不要对较强的对手过度剥削\n• 定期检查你的剥削是否仍然有效",
+      "最好的策略是：80% GTO + 20% 剥削。用 GTO 作为基层保护自己，在明确有利可图时进行小幅剥削调整。",
+      "GTO-剥削统一框架：\n策略 = GTO 基线 + 方向性偏离 × 幅度限制\n\n方向性偏离规则：\n1. 对手弃牌过多 → 增加诈唬频率\n2. 对手跟注过多 → 收缩价值范围、减少诈唬\n3. 对手加注过多 → 收窄继续范围\n4. 对手加注过少 → 用更宽的范围下注\n\n幅度限制公式：\n安全偏离幅度 = 可观测偏差 × 0.5（半凯利原则）\n\n例：对手翻牌 C-Bet 频率 80%（均衡 60%，偏差 +20%）\n你的应对：提高对 C-Bet 的弃牌率约 10%\n安全幅度内，即使对手开始调整，你也不会被反制",
+      "理论支撑：GTO-剥削统一框架的完整理论详见理论学院 T9 第 4 章\"GTO-剥削统一框架\"。包括\"以 GTO 为基线、按可观测偏差做有方向有纪律的偏离\"的执行方法论。",
+      "反直觉点：GTO 基线 + 剥削偏离 = 最优混合策略。这不是在 GTO 和剥削之间二选一，而是\"以 GTO 为基础，在发现对手弱点时做最小必要偏离\"。偏离幅度不是越大越好，而是在\"对手修正后仍不亏\"的范围内操作。"
+    ]
+  },
+  "lessonQuiz": {
+    "l8-pool-q1": {
+      "question": "微额玩家池最常见的倾向是？",
+      "options": [
+        "Bluff太多",
+        "跟注太多/不够激进",
+        "打得太紧",
+        "加注太多"
+      ],
+      "explanation": "微额玩家通常跟注太多、不够激进，针对他们应增加价值下注、减少 bluff。"
+    },
+    "l8-pool-q2": {
+      "question": "剥削的核心原则是？",
+      "options": [
+        "总是 GTO",
+        "向对手偏差的相反方向调整",
+        "只诈唬",
+        "只价值下注"
+      ],
+      "explanation": "剥削的核心是找到对手偏离 GTO 的方向，然后向相反方向调整。"
+    },
+    "l8-pool-q3": {
+      "question": "低额（NL25-NL50）玩家的典型弱点是？",
+      "options": [
+        "打得太紧",
+        "翻前合理但翻后弱",
+        "全是职业选手",
+        "没有弱点"
+      ],
+      "explanation": "低额玩家翻前开始合理但翻后弱，应多C-Bet、多double barrel。"
+    },
+    "l8-pool-q4": {
+      "question": "面对跟注太多的玩家应该？",
+      "options": [
+        "多bluff",
+        "纯价值下注，减少bluff",
+        "打GTO",
+        "弃牌"
+      ],
+      "explanation": "对手跟注太多就增加价值下注、减少bluff。"
+    },
+    "l8-pool-q5": {
+      "question": "面对弃牌太多的玩家应该？",
+      "options": [
+        "纯价值下注",
+        "增加bluff频率",
+        "打GTO",
+        "弃牌"
+      ],
+      "explanation": "对手弃牌太多就增加bluff频率。"
+    },
+    "l8-pop-q1": {
+      "question": "如果 Pool 平均 Fold to C-Bet = 65%，你应该？",
+      "options": [
+        "减少 C-Bet",
+        "大幅增加 C-Bet 频率",
+        "保持 GTO 频率",
+        "只用强牌 C-Bet"
+      ],
+      "explanation": "Pool 弃牌率远高于 GTO，意味着你的 C-Bet bluff 很赚钱，应增加频率。"
+    },
+    "l8-pop-q2": {
+      "question": "Population Analysis 的核心是？",
+      "options": [
+        "分析单个对手",
+        "分析整个玩家池的平均倾向",
+        "只看自己的数据",
+        "计算EV"
+      ],
+      "explanation": "Population Analysis 分析特定级别整个玩家群体的平均倾向。"
+    },
+    "l8-pop-q3": {
+      "question": "如果Pool平均Fold to 3-Bet = 70%，你应该？",
+      "options": [
+        "减少3-Bet",
+        "大幅增加3-Bet bluff",
+        "保持GTO",
+        "只value 3-Bet"
+      ],
+      "explanation": "Pool弃牌率70%给3-Bet，大幅增加bluff范围。"
+    },
+    "l8-pop-q4": {
+      "question": "WTSD%高说明什么？",
+      "options": [
+        "对手经常弃牌",
+        "对手跟注到摊牌",
+        "对手bluff多",
+        "对手打得紧"
+      ],
+      "explanation": "WTSD%高说明对手跟注到摊牌，多街bluff效果差。"
+    },
+    "l8-pop-q5": {
+      "question": "Population数据应该作为什么使用？",
+      "options": [
+        "最终决策",
+        "默认假设",
+        "不需要",
+        "唯一参考"
+      ],
+      "explanation": "Population数据作为\"默认假设\"，随了解加深转向个体化剥削。"
+    },
+    "l8-exploit-q1": {
+      "question": "何时应使用 GTO 而非剥削？",
+      "options": [
+        "对手很弱时",
+        "对手未知或很强时",
+        "总是用 GTO",
+        "总是剥削"
+      ],
+      "explanation": "对手未知时用 GTO 保护自己；对手很强时剥削空间小，也应用 GTO。"
+    },
+    "l8-exploit-q2": {
+      "question": "面对 Calling Station 应该怎么打？",
+      "options": [
+        "纯价值下注，不 bluff",
+        "多 bluff",
+        "打得更紧",
+        "GTO 不变"
+      ],
+      "explanation": "Calling Station 不弃牌，所以 bluff 无效。应该纯粹价值下注让他们用弱牌跟注。"
+    },
+    "l8-exploit-q3": {
+      "question": "剥削策略的主要风险是？",
+      "options": [
+        "太多赢钱",
+        "如果对手发现并调整，你反而会输",
+        "没有风险",
+        "Rake太高"
+      ],
+      "explanation": "剥削策略是不平衡的，如果对手识破并反剥削，你会亏损。"
+    },
+    "l8-exploit-q4": {
+      "question": "面对Nit应该？",
+      "options": [
+        "多bluff",
+        "疑狂偷盲注，他加注时弃牌",
+        "和他对打",
+        "用GTO"
+      ],
+      "explanation": "Nit太紧，应该偷他盲注，他加注时立即弃牌（他有强牌）。"
+    },
+    "l8-exploit-q5": {
+      "question": "最好的策略组合是？",
+      "options": [
+        "纯GTO",
+        "纯剥削",
+        "80% GTO + 20% 剥削",
+        "50/50"
+      ],
+      "explanation": "80% GTO基层保护自己 + 20%剥削最大化利润。"
+    }
+  },
+  "lessonPractice": {
+    "l8-pool-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "NL5对手跟注太多，应该价值下注。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Bet 4BB",
+          "explanation": "NL5对手跟注太多，AK顶对应该价值下注。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet 10BB",
+          "explanation": "大注只有强牌会call。标准下注更好。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL5，对手们跟注太多"
+    },
+    "l8-pool-p2": {
+      "option": [
+        {
+          "action": "C-Bet bluff",
+          "explanation": "NL5对手fold to cbet只有30%，bluff不赚钱。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Check/Give up",
+          "explanation": "对手很少弃牌给C-Bet，bluff不赚钱。放弃bluff。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Q高全下过度。对手不弃牌就放弃。",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "NL5，对手fold to cbet 30%"
+    },
+    "l8-pool-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A2s有A阻断效果。对手过度defend就增加偷盲频率。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "盲注位过度defend意味着他们call太多。A2s有阻断效果，open获取价值。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Raise 5BB",
+          "explanation": "Min-raise就够了。大注让弱牌弃牌。",
+          "evImpact": "+0.3 BB/100"
+        }
+      ],
+      "tableDesc": "NL5，盲注位玩家过度defend"
+    },
+    "l8-pool-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KQs在CO是强牌。对手紧被动应该更激进。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "对手紧被动意味着他们fold太多。KQs在CO标准open。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "KQs应该加注。",
+          "evImpact": "+0.3 BB/100"
+        }
+      ],
+      "tableDesc": "NL10，对手们打得紧被动"
+    },
+    "l8-pool-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "对手翻后过度fold，应该C-Bet bluff。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "C-Bet 4BB",
+          "explanation": "NL25对手翻后过度fold。C-Bet bluff很赚钱。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "C-Bet 7BB",
+          "explanation": "小注就够了。大注让中等牌call。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL25，对手翻后过度fold"
+    },
+    "l8-pop-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "Pool fold to 3-bet 70%，应该用宽范围3-Bet bluff。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "Pool fold to 3-bet 70%，3-Bet bluff更赚钱。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB然后准备3-Bet bluff如果被4-Bet就弃牌",
+          "explanation": "Pool弃牌率70%，open后如果被3-Bet可以用A5s做3-Bet bluff re-raise。",
+          "evImpact": "+1.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL50，Pool平均fold to 3-bet 70%"
+    },
+    "l8-pop-p2": {
+      "option": [
+        {
+          "action": "Multi-street bluff",
+          "explanation": "WTSD%高说明对手跟注到摊牌。多街bluff效果差。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Give up after one bet",
+          "explanation": "WTSD%高，对手不爱弃牌。减少多街bluff，一手牌bluff一次就够了。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "All-in bluff",
+          "explanation": "WTSD%高时all-in bluff更不赚钱。对手会call到底。",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "NL25，Pool WTSD% = 30%（较高）"
+    },
+    "l8-pop-p3": {
+      "option": [
+        {
+          "action": "用微额策略（纯价值不bluff）",
+          "explanation": "NL100接近GTO，需要精确剥削而非纯价值。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "精确节点锁定+小幅剥削",
+          "explanation": "NL100策略接近GTO但有漏洞。用精确节点锁定小幅剥削。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "完全GTO",
+          "explanation": "完全GTO放弃剥削机会。应该小幅剥削。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "NL100，Pool平均VPIP 22%, PFR 18%"
+    },
+    "l8-pop-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "Pool fold to cbet 65%，C-Bet bluff很赚钱。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "C-Bet 3BB",
+          "explanation": "Pool fold to cbet 65%远高于GTO的45%。C-Bet bluff赚钱。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "C-Bet 6BB",
+          "explanation": "小注就够了。大注让中等牌call。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL5，Pool平均fold to cbet 65%"
+    },
+    "l8-pop-p5": {
+      "option": [
+        {
+          "action": "用NL10的策略不变",
+          "explanation": "不同级别pool倾向不同。NL25翻后开始合理但翻后弱。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "调整：多C-Bet、多double barrel",
+          "explanation": "NL25玩家翻后弱，应该多C-Bet、多double barrel利用。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "打得更紧",
+          "explanation": "不需要更紧。应该利用翻后优势更激进。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "从NL10升级到NL25"
+    },
+    "l8-exploit-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AQs在BTN是强牌。SB是Nit就偷他盲注。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "SB是Nit，他fold太多。AQs在BTN标准open偷盲。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Raise 5BB",
+          "explanation": "Min-raise就够了。Nitfold太多不需要大注。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "SB是Nit（VPIP 10%）"
+    },
+    "l8-exploit-p2": {
+      "option": [
+        {
+          "action": "C-Bet bluff",
+          "explanation": "Calling Station不bluff无效。Check。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Check/Give up",
+          "explanation": "Calling Station不弃牌，bluff无效。KQ高牌放弃。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "K高all-in对Calling Station毫无意义。",
+          "evImpact": "-5 BB/100"
+        }
+      ],
+      "tableDesc": "BTN是Calling Station（VPIP 60%）"
+    },
+    "l8-exploit-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AKs面对Maniac是顶级强牌。应该4-Bet获取价值。",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "4-Bet 12BB",
+          "explanation": "AKs面对Maniac是顶级强牌。4-Bet获取价值，Maniac会用弱牌call。",
+          "evImpact": "+3 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "AKs应该4-Bet获取价值。Call让Maniac看到便宜flop。",
+          "evImpact": "+1 BB/100"
+        }
+      ],
+      "tableDesc": "CO是Maniac（VPIP 70%, PFR 50%）"
+    },
+    "l8-exploit-p4": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "Nit UTG open范围极强（QQ+/AK）。JTs胜率不足。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Nit UTG open范围极强。JTs胜率不足，fold。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "3-Bet",
+          "explanation": "Nit UTG范围太强，3-Bet bluff不赚钱。",
+          "evImpact": "-1 BB/100"
+        }
+      ],
+      "tableDesc": "UTG是Nit（VPIP 8%）"
+    },
+    "l8-exploit-p5": {
+      "option": [
+        {
+          "action": "纯剥削策略",
+          "explanation": "对手未知应该用GTO保护自己。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "GTO为主，观察后小幅剥削",
+          "explanation": "对手未知时用GTO保护自己。观察几手牌后再调整。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "完全随机",
+          "explanation": "完全随机不是策略。应该用GTO。",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "对手是未知玩家"
+    }
+  },
+  "drill": {
+    "d-l8-exploit-q1": {
+      "scenario": "NL50, 对手VPIP 70%, PFR 5%",
+      "question": "面对超级被动玩家（VPIP 70%, PFR 5%），你应该怎么调整？",
+      "option": [
+        "多bluff他",
+        "纯价值下注，不bluff",
+        "用GTO策略"
+      ],
+      "explanation": "Calling Station不弃牌，bluff无效。应该纯价值下注，让他们用弱牌跟注。"
+    },
+    "d-l8-exploit-q2": {
+      "scenario": "NL100, 对手fold to 3-bet 75%",
+      "question": "发现对手fold to 3-Bet 75%，你应该怎么调整？",
+      "option": [
+        "减少3-Bet",
+        "用更多手牌3-Bet bluff",
+        "继续GTO策略"
+      ],
+      "explanation": "对手75%弃牌给3-Bet，用更多手牌3-Bet bluff是+EV。这是明显的剥削机会。"
+    },
+    "d-l8-exploit-q3": {
+      "scenario": "NL25, 对手VPIP 12%, PFR 10%",
+      "question": "面对超紧玩家（VPIP 12%, PFR 10%），他river raise时你应该？",
+      "option": [
+        "用GTO范围跟注",
+        "用紧的范围跟注，尊重他的价值",
+        "用宽的范围跟注"
+      ],
+      "explanation": "Nit的river raise范围极强，应该用紧的范围跟注。弃掉中等牌力，只用顶级牌跟注。"
+    },
+    "d-l8-exploit-q4": {
+      "scenario": "NL10, 对手cbet 90%",
+      "question": "发现对手C-Bet 90%，你应该怎么调整？",
+      "option": [
+        "弃牌更多",
+        "用更宽的范围跟注/加注",
+        "继续GTO策略"
+      ],
+      "explanation": "对手90% C-Bet说明他范围太宽。应该用更宽的范围跟注/加注，惩罚他的过度激进。"
+    },
+    "d-l8-exploit-q5": {
+      "scenario": "NL200, 对手是职业选手",
+      "question": "面对职业选手，你应该怎么调整？",
+      "option": [
+        "纯剥削策略",
+        "GTO为主，小幅剥削",
+        "完全随机"
+      ],
+      "explanation": "面对强对手，GTO保护自己。如果发现他的倾向可以小幅剥削，但不要过度。"
+    },
+    "d-l8-exploit-q6": {
+      "scenario": "NL5, 对手VPIP 80%, PFR 50%",
+      "question": "面对超级激进玩家（VPIP 80%, PFR 50%），你应该怎么调整？",
+      "option": [
+        "用GTO策略",
+        "等待强牌，用中等牌力call到底",
+        "比他更激进"
+      ],
+      "explanation": "面对Maniac，耐心等待强牌。用中等牌力Call到底，不要对他bluff。"
+    },
+    "d-l8-exploit-q7": {
+      "scenario": "NL50, 对手never check-raises",
+      "question": "发现对手从不check-raise，你应该怎么调整？",
+      "option": [
+        "继续GTO策略",
+        "每次他check就下注",
+        "减少下注"
+      ],
+      "explanation": "对手从不check-raise，说明他check时范围很弱。每次他check就下注，获取免费价值。"
+    },
+    "d-l8-exploit-q8": {
+      "scenario": "NL100, 对手over-folds to cbet 70%",
+      "question": "发现对手70%弃牌给C-Bet，你应该怎么调整？",
+      "option": [
+        "减少C-Bet",
+        "用任意两张C-Bet剥削",
+        "继续GTO策略"
+      ],
+      "explanation": "对手70%弃牌给C-Bet，用任意两张C-Bet都是+EV。这是明显的剥削机会。"
+    },
+    "d-l8-pool-q1": {
+      "scenario": "NL10 级别，整体数据显示该级别玩家平均 VPIP 45%, PFR 12%",
+      "question": "NL10 玩家群体 VPIP 45% / PFR 12%，你应该怎么调整？",
+      "option": [
+        "多用 value bet，少 bluff，因为对手太被动",
+        "多用 bluff，因为对手太松",
+        "保持 GTO 策略不变"
+      ],
+      "explanation": "VPIP 45% / PFR 12% 说明群体太松太被动（大量 call 很少 raise）。应该纯价值下注，减少 bluff，让他们的弱牌付代价。"
+    },
+    "d-l8-pool-q2": {
+      "scenario": "NL50 级别，该级别玩家平均 fold to cbet 65%",
+      "question": "NL50 群体 fold to cbet 65%，你应该怎么调整？",
+      "option": [
+        "减少 C-Bet",
+        "用更宽的范围 C-Bet，包括很多 bluff",
+        "只用强牌 C-Bet"
+      ],
+      "explanation": "65% 弃牌给 C-Bet 说明群体太弱。用更宽的范围 C-Bet（包括 bluff）是明显剥削。即使被 call 也有翻后可玩性。"
+    },
+    "d-l8-pool-q3": {
+      "scenario": "NL200 级别，该级别玩家平均 3-Bet 频率 8%",
+      "question": "NL200 群体 3-Bet 频率 8%，你 open 后面对 3-Bet 应该怎么调整？",
+      "option": [
+        "用宽范围 4-Bet bluff",
+        "尊重 3-Bet，用紧范围应对（群体 3-Bet 偏 value）",
+        "每次都 fold"
+      ],
+      "explanation": "8% 3-Bet 频率说明群体 3-Bet 范围偏 value（非 polarized）。面对 value-heavy 的 3-Bet 应该用紧范围应对，弃掉中等牌力。"
+    },
+    "d-l8-pool-q4": {
+      "scenario": "你所在的牌桌平均 pot 很大，玩家平均 showdown 频率 35%",
+      "question": "高 showdown 频率（35%）说明什么？应该如何调整？",
+      "option": [
+        "群体太松，减少 bluff，多做 thin value bet",
+        "群体太紧，增加 bluff",
+        "没有意义"
+      ],
+      "explanation": "35% showdown 频率说明群体很少弃牌（calling station 倾向）。减少 bluff，增加 thin value bet。让他们用弱牌跟注。"
+    },
+    "d-l8-pool-q5": {
+      "scenario": "NL5 级别，数据显示该级别玩家 river bet 频率仅 8%",
+      "question": "NL5 群体 river bet 频率仅 8%，你应该怎么调整？",
+      "option": [
+        "他们 river bet 时应该尊重（偏 value）",
+        "他们 river bet 时应该 call 更多",
+        "不需要调整"
+      ],
+      "explanation": "River bet 仅 8% 说明群体极被动，river bet 几乎纯 value。面对 river bet 应该用紧范围 call，弃掉中等牌力。"
+    },
+    "d-l8-pool-q6": {
+      "scenario": "你发现某个级别玩家平均 check-raise 频率仅 2%",
+      "question": "群体 check-raise 仅 2%，你应该怎么利用？",
+      "option": [
+        "每次对手 check 都下注（包括 bluff）",
+        "减少下注",
+        "保持 GTO"
+      ],
+      "explanation": "Check-raise 仅 2% 说明群体几乎不 raise。每次对手 check 就下注，获取免费价值。不用担心被 check-raise。"
+    },
+    "d-l8-pool-q7": {
+      "scenario": "NL100 级别，该级别玩家平均 open raise 大小 2.2BB",
+      "question": "群体 open 仅 2.2BB（偏小），你在 BB 应该怎么调整？",
+      "option": [
+        "用更紧的范围 3-Bet",
+        "用更宽的范围 defend（因为赔率更好）",
+        "不需要调整"
+      ],
+      "explanation": "Open 2.2BB 意味着你在 BB 面对的价格更好（赔率更优）。应该用更宽的范围 defend（call/3-bet），因为数学上更有利。"
+    },
+    "d-l8-pool-q8": {
+      "scenario": "你发现某个级别玩家 fold to steal（SB/BTN open）仅 40%",
+      "question": "群体 fold to steal 仅 40%，你应该怎么调整？",
+      "option": [
+        "减少偷盲频率，因为对手不弃牌",
+        "增加偷盲频率",
+        "不需要调整"
+      ],
+      "explanation": "Fold to steal 仅 40% 说明群体防御盲注很积极。减少偷盲频率，改用更强的牌 open，因为 bluff 成功率低。"
+    },
+    "d-l8-pool-q9": {
+      "scenario": "NL25 级别，群体在 turn 面对 cbet 的 fold 频率为 55%",
+      "question": "Turn 面对 cbet fold 55%，你应该怎么调整？",
+      "option": [
+        "减少 turn cbet",
+        "增加 turn cbet 频率，包括 value 和 bluff 混合",
+        "只用强牌 cbet"
+      ],
+      "explanation": "55% fold to turn cbet 说明群体在 turn 太弱。增加 cbet 频率（value + bluff 混合）可以获取大量弃牌权益。"
+    }
+  }
+}

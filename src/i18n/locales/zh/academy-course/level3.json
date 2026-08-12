@@ -1,0 +1,2013 @@
+{
+  "lessonContent": {
+    "l3-cbet": [
+      "什么是 C-Bet？",
+      "C-Bet（Continuation Bet）是指翻前最后的加注者在翻牌后继续下注。例如你翻前加注，对手跟注，翻牌后你第一个下注就是 C-Bet。",
+      "C-Bet 的核心逻辑：大多数时候，翻牌对双方都不会有太大帮助。作为翻前的攻击者，你有范围优势。",
+      "C-Bet 大小",
+      "标准 C-Bet 大小：底池的 50-75%\n干燥面（如 K-7-2 rainbow）：33-50% pot\n湿润面（如 J-T-9 两花）：66-75% pot",
+      "不要100%频率 C-Bet。好的做法是在有利面 C-Bet，在不利面 Check。培养\"选择性攻击\"的意识。",
+      "C-Bet EV 公式（含弃牌权益与摊牌权益）：\n下注 EV = 对手弃牌率 × 当前底池 + (1-弃牌率) × (胜率 × 新底池 - 败率 × 下注额)\n\n例：底池 6BB，C-Bet 4BB，对手弃牌率 40%，胜率 20%\nEV = 0.4×6 + 0.6×(0.2×14 - 0.8×4) = 2.4 + 0.6×(2.8-3.2) = 2.4 - 0.24 = +2.16BB",
+      "理论支撑：C-Bet 的 EV 构成与下注目的的理论分析见理论学院 T5 第 2 章\"GTO 与剥削：两种最优\"和 T6 第 1 章\"下注目的\"。GTO 框架下的 C-Bet 频率与范围选择密切相关。",
+      "反直觉点：C-Bet 不需要强牌。只要有足够的弃牌权益（对手弃牌率够高），即使你的牌完全没中牌面，C-Bet 仍然是 +EV 的。这解释了为什么 GTO 策略中 C-Bet 频率可以高达 60-70%，其中包含大量诈唬。"
+    ],
+    "l3-draws": [
+      "常见听牌类型",
+      "同花听牌：9个outs，约35%胜率（flop到river）\n两头顺子听牌：8个outs，约31%胜率\n卡顺听牌：4个outs，约16%胜率\n双高牌：6个outs（两张高牌配对）",
+      "听牌打法",
+      "被动打法（推荐初学者）：跟注看下一张牌，用最小代价看到更多牌\n半诈唬（进阶）：用听牌下注/加注，同时拥有弃牌权益\n全下：当底池赔率足够好时，可以 All-in",
+      "永远计算底池赔率！如果你成牌的概率(equity) > 底池赔率，跟注就是+EV的。",
+      "职业牌手会根据位置和对手倾向灵活选择听牌打法。在有利位置用听牌半诈唬是非常有效的策略。",
+      "2/4 法则与误差分析：\n看一张牌（转牌）：胜率 ≈ Outs × 2%\n看两张牌（翻牌全下）：胜率 ≈ Outs × 4%\n\n误差分析（翻牌→河牌两张牌场景）：\n4 Outs（卡顺）：×4 估 16% | 精确 16.5% | 误差 -0.5\n8 Outs（两头顺）：×4 估 32% | 精确 31.4% | 误差 +0.6\n9 Outs（同花）：×4 估 36% | 精确 35.0% | 误差 +1.0\n12 Outs（组合听牌）：×4 估 48% | 精确 45.0% | 误差 +3.0\n\n结论：Outs ≤ 9 时 ×4 误差在 1 个百分点内，Outs ≥ 13 建议用修正公式",
+      "理论支撑：Outs 计数与 2/4 法则的完整推导详见理论学院 T1 第 2 章\"Outs 与 2/4 法则\"，包括误差分析表与修正公式。EV 框架下的听牌跟注决策见 T2 第 1 章。",
+      "反直觉点：组合听牌（如同花+顺子+高张）的胜率远超直觉。例如 J♥T♥ 在 9♥8♦3♣ 面有 15 个 Outs，胜率约 54%，实际上已经是领先大多数一对的牌型——这解释了为什么组合听牌是极佳的半诈唬候选。"
+    ],
+    "l3-multistreet": [
+      "多街思维",
+      "多街思维（Multi-Street Planning）是指在 flop 决策时就规划 turn/river 的计划。不是 \"走一步看一步\"，而是 \"这手牌我准备打几条街？什么牌面继续？什么牌面放弃？\"",
+      "Double Barrel = 翻牌 C-Bet + 转牌继续下注。频率约 50-60%，取决于牌面结构和对手。",
+      "何时 Double Barrel",
+      "继续 Barrel：1) 转牌增强你的牌（顶对/听牌完成）2) 转牌是 \"空白牌\"（不改变牌面结构）3) 对手 Turn facing bet 弃牌率高。放弃 Barrel：1) 转牌完成明显听牌 2) 对手 Turn 加注/领先下注 3) 你的牌无胜率提升。",
+      "Triple Barrel（River 全押 Bluff）条件：1) 极化范围（强牌或纯 bluff）2) 有 Blocker（阻挡对手强牌）3) 对手不是 Calling Station。",
+      "Delayed C-Bet：翻牌 Check，转牌下注。适用于：1) 翻牌不适合 C-Bet 2) 想低成本看摊牌 3) 对手翻牌 Check 后转牌领先下注频率高。",
+      "SPR（筹码底池比）公式：\nSPR = 有效筹码 ÷ 底池大小\n\nSPR 分级与策略倾向：\nSPR < 4（低 SPR）：适合 committed 打法，顶对即可全下\nSPR 4-10（中 SPR）：标准玩法，需要谨慎\nSPR > 10（高 SPR）：深筹码，同花连牌等投机牌价值上升\n\n三街几何尺度：\n理想三街全下 → 每街下注约 60-70% 底池\n例：底池 6BB，有效 100BB，SPR≈17\nFlop 下注 4BB → 底池 14BB\nTurn 下注 10BB → 底池 34BB\nRiver 下注 25BB → 底池 84BB，总下注 39BB ≈ 40% 有效筹码",
+      "理论支撑：SPR 与几何尺度下注的完整推导见理论学院 T6 第 3 章\"SPR 与三街几何尺度\"。多街玩法中的下注规划与范围构建密切相关。",
+      "反直觉点：深筹码时（SPR > 10），小同花连牌的价值超过高对。AA 在深筹码中的翻后实现率下降，因为对手可以在后续街用更宽的范围施加压力，而 98s 这类牌有更好的翻后可玩性，可以形成多种强牌。"
+    ],
+    "l3-checkraise": [
+      "Check-Raise 的两种用途",
+      "Check-Raise = 先 Check，面对对手下注时 Raise。价值 Check-Raise：两对以上/Set 在湿润面（保护强牌 + 建立大底池）。Bluff Check-Raise：强听牌（同花+顺子组合听牌，有胜率 + 弃牌权益）。",
+      "BB vs C-Bet Check-Raise 频率约 10-15%。范围要平衡：价值牌（Set/两对/强顶对）+ Bluff（组合听牌/强听牌）。",
+      "面对 Check-Raise 的应对",
+      "Fold：弱牌/边缘牌（中对/弱顶对）。Call：强牌但非坚果（顶对好踢脚/超对）。Re-Raise：坚果牌（Set+/两对+）或强 Bluff（组合听牌）。",
+      "Check-Raise 大小：通常为 C-Bet 额的 2.5-3x。例如：C-Bet 4BB → Check-Raise 10-12BB。",
+      "不要在干燥面频繁 Check-Raise bluff。干燥面（如 K-7-2 彩虹）对手 C-Bet 范围强，Check-Raise 弃牌率低。湿润面（如 J-T-9 两花）更适合。"
+    ],
+    "l3-float-probe": [
+      "Float（浮动跟注）",
+      "Float = 翻牌 Call C-Bet，计划 Turn 对手 Check 时下注偷底。适用于：1) 对手 C-Bet 频率高但 Turn give-up 多 2) 你有位置优势 3) 牌面适合 Bluff（干燥面/对手范围弱）。",
+      "Float 手牌选择：后门听牌（后门同花/顺子）、高牌（A/K 高）、弱对（底对/中对）。纯空气牌不适合 Float。",
+      "Probe Bet（探测下注）",
+      "Probe Bet = 翻前加注者翻牌 Check 后，你在 Turn 下注。适用于：1) 对手翻牌 Check 频率高 2) 对手 Turn facing bet 弃牌率高 3) 你有一定胜率（不是纯空气）。",
+      "Float vs Probe 区别：Float 是 Call C-Bet 后 Turn 下注；Probe 是对手翻牌 Check 后 Turn 下注。两者都利用位置 + 对手弱点。",
+      "不要对 Calling Station Float/Probe。CS 不会弃牌，你只是在送钱。这些策略适用于 TAG/NIT 等会弃牌的对手。"
+    ],
+    "l3-bet-sizing": [
+      "下注尺度分类",
+      "小注（25-33% pot）：干燥面/范围优势时。中注（50-66% pot）：标准价值下注。大注（75-100% pot）：湿润面/极化范围。Overbet（125-200% pot）：River 坚果优势面（现代 GTO 核心概念）。",
+      "下注尺度与范围的关系：小注 = 宽范围（很多牌都可以下注）| 大注 = 窄范围（只有强牌或纯 bluff）。",
+      "何时使用不同尺度",
+      "小注：干燥面（K-7-2 彩虹）/ 范围优势（翻前加注者 vs BB）。中注：标准价值下注（顶对/超对）。大注：湿润面（J-T-9 两花）/ 需要保护强牌。Overbet：River 极化范围（坚果或空气）/ 对手范围封顶。",
+      "Overbet 是现代 GTO 的核心概念。在 River 有坚果优势时（如同花成牌面），用 Overbet 给对手最大压力，让中等牌力面临艰难决策。",
+      "不要固定下注尺度（如永远 50% pot）。根据牌面结构、范围优势、对手类型调整尺度。多变的尺度让对手难以读取你的牌力。",
+      "MDF（最小防御频率）公式：\nMDF = pot ÷ (pot + bet)\nAlpha（对手诈唬盈亏平衡点）公式：\nAlpha = bet ÷ (pot + bet)\n\n常见值：\n1/3 池下注 → MDF=75%, Alpha=25%\n1/2 池下注 → MDF=67%, Alpha=33%\n2/3 池下注 → MDF=60%, Alpha=40%\n满池下注 → MDF=50%, Alpha=50%\n\n注意：MDF 是防御频率，Alpha 是诈唬所需最小弃牌率，两者互为补集（MDF + Alpha = 1）",
+      "理论支撑：MDF 与 Alpha 的代数推导详见理论学院 T5 第 3 章\"最小防御频率（MDF）与 Alpha\"。下注尺度的数学依据与几何尺度推导见 T6 第 2 章。",
+      "反直觉点：下注越大，对手弃牌越多，但你的诈唬需要更高的成功率。因为大注意味着你冒了更多风险去赢取有限底池。满池下注时，你的诈唬需要至少 50% 的弃牌率才能盈亏平衡，而半池下注只需要 33%。"
+    ],
+    "l3-bluffing": [
+      "诈唬的数学基础",
+      "诈唬不是\"偷鸡\"，而是有严格数学基础的+EV决策。\n\nFold Equity（弃牌权益）公式：\nFE = 对手弃牌概率 × 底池大小\n\n诈唬盈亏平衡点：\n当对手弃牌率 > bet / (pot + bet) 时，诈唬为+EV。\n\n例：下注 2/3 pot → 需要对手弃牌率 > 40%\n下注 1/2 pot → 需要对手弃牌率 > 33%\n下注 pot → 需要对手弃牌率 > 50%",
+      "核心公式：Bluff EV = Fold% × Pot - Call% × Bet。当 Fold% > Bet/(Pot+Bet) 时，即使不考虑翻后隐含赔率，纯诈唬也是+EV。",
+      "不同街的诈唬策略",
+      "Flop 诈唬：频率最高（对手范围最宽，击中率低），小注即可（33-50% pot）。\n\nTurn 诈唬：频率降低，需要更好的 blocker 或叙事一致性（你的行动线要能代表强牌）。Turn barrel 通常用 60-75% pot。\n\nRiver 诈唬：最谨慎，仅极化场景（坚果或空气）。River 没有隐含赔率，纯靠 fold equity，需要对手有足够多的可弃牌组合。",
+      "三条街诈唬频率递减原则：Flop > Turn > River。每一轮继续诈唬都需要更强的理由（更好的 blocker、更一致的叙事、对手更弱的范围）。",
+      "Semi-Bluff（半诈唬）",
+      "定义：用听牌下注/加注（当前不领先但有 outs 可以反超）。\n\n双重盈利方式：\n1. 对手弃牌 → 直接赢底池（Fold Equity）\n2. 对手跟注 → 击中成牌赢大底池（Equity Realization）\n\nSemi-Bluff EV = Fold% × Pot + Call% × Equity × (Pot + Bet) - Call% × (1-Equity) × Bet\n\n最佳 Semi-Bluff 手牌排序：\n组合听牌（同花+顺子）> 同花听牌 > 两端顺子听牌 > 卡顺听牌",
+      "Semi-Bluff 是新手最安全的诈唬方式——即使被 Call，你还有 outs 可以反超。永远优先选择有 equity 的牌来诈唬。",
+      "下注尺度与诈唬的关系",
+      "大注（75-150% pot）→ 极化范围（坚果 + 诈唬，无中等牌力）\n小注（25-33% pot）→ 合并范围（宽范围含薄价值）\n\n关键原则：诈唬尺度应匹配价值下注尺度。\n如果你价值下注用 75% pot，那诈唬也应该用 75% pot。\n尺度不一致会暴露你的手牌强度（被对手读取）。",
+      "Bluff-to-Value Ratio（诈唬与价值比）",
+      "River 理论比例：每 1 个 value bet 配 1/(pot_odds+1) 个 bluff。\n\n例：下注 pot（对手需要 33% 胜率才能 call）→ bluff:value = 1:2\n下注 1/2 pot（对手需要 25% 胜率）→ bluff:value = 1:3\n\n实战中略低于理论比例（因为对手有 overcall 倾向，且低级别对手 fold 不够多）。\n\n简单记忆：River 下注 pot → 每 3 手下注中 1 手是 bluff。"
+    ],
+    "l3-texture": [
+      "什么是牌面质地（Board Texture）？",
+      "牌面质地指公共牌的结构特征：连接性、花色分布、高低张等。不同质地的牌面需要完全不同的策略。",
+      "干燥牌面 vs 湿润牌面",
+      "干燥牌面（Dry）：如 K♠72A♠\n• 很少听牌和组合\n• 翻牌前加注者范围优势大\n• 适合小注持续下注（1/3 pot）\n• 转牌/河牌策略变化小\n\n湿润牌面（Wet）：如 9♠8♠7♣\n• 大量听牌、顺子、同花\n• 防御者范围命中率高\n• 适合大注保护成牌（2/3-full pot）\n• 转牌可能完全改变局势",
+      "牌面质地的三个维度",
+      "1. 连接性（Connectedness）：牌面是否形成顺子/听顺子\n2. 花色分布（Suitedness）：是否有同花/听同花\n3. 高低张（High/Low）：牌面是高张还是低张",
+      "高张干燥牌面（如 AK2r）有利于翻前加注者；低张湿润牌面（如 876ss）有利于跟注者。根据谁的范围优势更大来决定是否下注。",
+      "在湿润牌面上，你的\"没完成的强牌\"可能在转牌就变成第二好牌（Second Best）。要么强势下注保护，要么准备好弃牌。"
+    ],
+    "l3-check-range": [
+      "为什么需要过牌范围？",
+      "如果你每次有强牌都下注、没牌都过牌，对手很容易读到你的策略。构建平衡的过牌范围是保护自己不被剥削的关键。",
+      "核心原则：你的过牌范围应包含一些强牌（用于Check-Raise或后续街动作），而不是只包含弱牌。",
+      "何时应该过牌而不是下注？",
+      "以下情况适合过牌：\n1. 你没有范围优势（如位置不利的低张牌面）\n2. 你有中等牌力想控制底池大小\n3. 你计划用Check-Raise做陷阱\n4. 你的强牌在当前牌面不需要保护\n5. 多人底池中你不是最后行动者",
+      "平衡的过牌范围构成",
+      "一个好的过牌范围应包含：\n• 强牌（约 15-20%）：用于 Check-Raise 或慢打\n• 中等牌（约 40-50%）：控制底池，后续街观察\n• 弱牌/放弃（约 30-40%）：准备对面下注时弃牌",
+      "如果你的过牌范围全是弱牌，对手可以无限攻击你的过牌。保留一些强牌在过牌范围中是防御的关键。",
+      "在不利位置（OOP）时，你的过牌范围应该比有利位置（IP）时更宽，因为你得在不知道对手行动的情况下做决策。"
+    ],
+    "l3-3bet-postflop": [
+      "3-Bet 底池的独特性",
+      "3-Bet 底池与单次加注底池有本质区别。由于翻前底池更大，翻后的 SPR（筹码底池比）显著降低。这意味着：\n\n- 有效筹码相对底池更小，决策空间被压缩\n- 范围更窄（3-Bet 范围通常只有 5-15%）\n- 每个决策的 EV 影响更大\n- 更容易在翻牌全下（SPR 通常 3-6）",
+      "核心概念：3-Bet 底池的 SPR 通常在 3-6 之间，远低于单次加注底池的 8-15。低 SPR 意味着顶对级别的牌力就足以打光筹码。",
+      "过度牌面 vs 安全牌面",
+      "在 3-Bet 底池中，牌面分类更加关键：\n\n过度牌面（Wet/Connected）：如 J♠T♠9♣、8♥7♥6♣\n- 对防守方范围非常有利\n- 3-Bet 者应降低 C-Bet 频率\n- AA/KK 等超对需要谨慎对待\n\n安全牌面（Dry/Static）：如 A♠7♣2♦、K♣8♥3♠\n- 对 3-Bet 者范围有利（高牌多）\n- 应该高频 C-Bet\n- 超对仍然是最强牌",
+      "常见场景：大对在 3-Bet 底池的应对",
+      "AA/KK 在 3-Bet 底池中的翻后策略：\n\n1. 干燥面（A-high 或 K-high）：自信价值下注，准备打光\n2. 中等连接面（如 Q-J-7）：C-Bet 但准备好面对抵抗时减速\n3. 湿润连接面（如 T-9-8 两花）：Check 控制底池，放弃过度攻击\n\n记住：3-Bet 底池中 SPR 低，顶对好踢脚通常足以全下。但在湿润面要警惕两对+的牌力。",
+      "3-Bet 底池中最常见的错误是在湿润牌面过度执着于超对。AA 在 J-T-9 两花牌面只值一个 Check，不要为了\"保护\"而下大注。",
+      "关键公式：SPR = 有效筹码 ÷ 底池大小。SPR < 4 时，顶对级别的牌力可以舒适地全下。SPR > 6 时，需要更强的牌力才能打光。"
+    ]
+  },
+  "lessonQuiz": {
+    "l3-cbet-q1": {
+      "question": "C-Bet 是什么？",
+      "options": [
+        "跟注",
+        "翻前加注者翻后继续下注",
+        "All-in",
+        "Check"
+      ],
+      "explanation": "C-Bet 是翻前最后的加注者在翻牌后继续下注的行为。"
+    },
+    "l3-cbet-q2": {
+      "question": "在干燥面（K-7-2 rainbow）应该 C-Bet 多大？",
+      "options": [
+        "100% pot",
+        "33-50% pot",
+        "200% pot",
+        "不应该下注"
+      ],
+      "explanation": "干燥面使用较小的 C-Bet（33-50% pot），因为对手很难有强牌来抵抗。"
+    },
+    "l3-cbet-q3": {
+      "question": "在湿润面（J-T-9 两花）应该 C-Bet 多大？",
+      "options": [
+        "25% pot",
+        "33% pot",
+        "66-75% pot",
+        "不应该下注"
+      ],
+      "explanation": "湿润面有很多听牌，需要用较大注（66-75% pot）让对手的听牌付出代价。"
+    },
+    "l3-cbet-q4": {
+      "question": "什么时候不应该 C-Bet？",
+      "options": [
+        "干燥面",
+        "有范围优势时",
+        "牌面对对手范围更有利时",
+        "有利位置时"
+      ],
+      "explanation": "当牌面对对手范围更有利时（如湿润连接面），应该Check而不是C-Bet。"
+    },
+    "l3-cbet-q5": {
+      "question": "C-Bet 的核心逻辑是什么？",
+      "options": [
+        "偷底池",
+        "翻前加注者有范围优势",
+        "规则要求",
+        "展示强牌"
+      ],
+      "explanation": "C-Bet的核心逻辑是翻前加注者通常有范围优势，因为大多数时候翻牌对双方都不会有太大帮助。"
+    },
+    "l3-draw-q1": {
+      "question": "同花听牌有多少个outs？",
+      "options": [
+        "4个",
+        "6个",
+        "9个",
+        "12个"
+      ],
+      "explanation": "同花听牌有9个outs（13张同花 - 已知的4张 = 9张未见的同花牌）。"
+    },
+    "l3-draw-q2": {
+      "question": "初学者打同花听牌的推荐方式是？",
+      "options": [
+        "All-in",
+        "大幅加注",
+        "跟注看牌",
+        "立即弃牌"
+      ],
+      "explanation": "初学者推荐用被动打法（跟注），用最小代价看到下一张牌。进阶后可以学习半诈唬。"
+    },
+    "l3-draw-q3": {
+      "question": "两头顺子听牌（OESD）有多少个outs？",
+      "options": [
+        "4个",
+        "6个",
+        "8个",
+        "12个"
+      ],
+      "explanation": "OESD两端都可以成顺，每端4张，共8个outs。"
+    },
+    "l3-draw-q4": {
+      "question": "用二四法则，9个outs从Flop到Turn约多少命中率？",
+      "options": [
+        "9%",
+        "18%",
+        "35%",
+        "45%"
+      ],
+      "explanation": "二四法则：Flop到Turn用×2，9×2=18%，实际约19%。"
+    },
+    "l3-draw-q5": {
+      "question": "组合听牌（同花+OESD）大约有多少outs？",
+      "options": [
+        "9个",
+        "12个",
+        "15个",
+        "20个"
+      ],
+      "explanation": "同花9outs + OESD 8outs，去重后约15个outs。这是最强的听牌类型。"
+    },
+    "l3-multi-q1": {
+      "question": "多街思维的核心是什么？",
+      "options": [
+        "只看当前街",
+        "在 flop 就规划 turn/river 计划",
+        "永远打三条街",
+        "根据对手表情决策"
+      ],
+      "explanation": "多街思维要求在 flop 决策时就规划 turn/river 计划，而不是走一步看一步。"
+    },
+    "l3-multi-q2": {
+      "question": "Double Barrel 是指什么？",
+      "options": [
+        "翻牌 Check + 转牌下注",
+        "翻牌 C-Bet + 转牌继续下注",
+        "翻牌 + 转牌 + 河牌都下注",
+        "翻牌 All-in"
+      ],
+      "explanation": "Double Barrel = 翻牌 C-Bet + 转牌继续下注，是翻前加注者保持压力的标准打法。"
+    },
+    "l3-multi-q3": {
+      "question": "Triple Barrel bluff 的最佳条件是？",
+      "options": [
+        "对手是 Calling Station",
+        "极化范围 + 有 Blocker",
+        "牌面全是听牌",
+        "对手从不弃牌"
+      ],
+      "explanation": "Triple Barrel bluff 需要极化范围 + Blocker，让对手面临艰难决策。"
+    },
+    "l3-multi-q4": {
+      "question": "Delayed C-Bet 适用于什么情况？",
+      "options": [
+        "翻牌适合C-Bet时",
+        "翻牌不适合C-Bet时",
+        "永远使用",
+        "从不使用"
+      ],
+      "explanation": "Delayed C-Bet适用于翻牌不适合C-Bet的情况，如牌面对对手范围更有利时。"
+    },
+    "l3-multi-q5": {
+      "question": "转牌应该放弃Double Barrel的情况是？",
+      "options": [
+        "转牌是空白牌",
+        "转牌完成明显听牌",
+        "对手弃牌率高",
+        "你有顶对"
+      ],
+      "explanation": "转牌完成明显听牌时应该放弃Barrel，因为对手的听牌很可能完成了。"
+    },
+    "l3-cr-q1": {
+      "question": "Check-Raise 是指什么？",
+      "options": [
+        "先下注再加注",
+        "先 Check 再对对手下注 Raise",
+        "连续两次 Check",
+        "All-in"
+      ],
+      "explanation": "Check-Raise = 先 Check，面对对手下注时 Raise，是翻后最有力的攻击武器。"
+    },
+    "l3-cr-q2": {
+      "question": "BB vs C-Bet 的标准 Check-Raise 频率是？",
+      "options": [
+        "2-5%",
+        "10-15%",
+        "25-30%",
+        "40-50%"
+      ],
+      "explanation": "BB vs C-Bet Check-Raise 频率约 10-15%，范围要平衡（价值 + Bluff）。"
+    },
+    "l3-cr-q3": {
+      "question": "以下哪手牌最适合做 Check-Raise Bluff？",
+      "options": [
+        "中对",
+        "同花+顺子组合听牌",
+        "底对",
+        "空气牌"
+      ],
+      "explanation": "同花+顺子组合听牌有约 12 个 outs（40%+ 胜率），是最佳 Check-Raise bluff 手牌。"
+    },
+    "l3-cr-q4": {
+      "question": "Check-Raise 的典型大小是 C-Bet 额的多少倍？",
+      "options": [
+        "1-1.5x",
+        "2.5-3x",
+        "4-5x",
+        "6-7x"
+      ],
+      "explanation": "Check-Raise通常为C-Bet额的2.5-3倍，如C-Bet 4BB → Check-Raise 10-12BB。"
+    },
+    "l3-cr-q5": {
+      "question": "什么时候不应该在干燥面 Check-Raise bluff？",
+      "options": [
+        "湿润面",
+        "对手C-Bet范围强时",
+        "对手弃牌率高时",
+        "有组合听牌时"
+      ],
+      "explanation": "干燥面对手C-Bet范围强（如K-7-2彩虹），Check-Raise弃牌率低，不适合bluff。"
+    },
+    "l3-fp-q1": {
+      "question": "Float 是指什么？",
+      "options": [
+        "翻牌 Raise C-Bet",
+        "翻牌 Call C-Bet，计划 Turn 偷底",
+        "翻牌 All-in",
+        "翻牌 Check-Raise"
+      ],
+      "explanation": "Float = 翻牌 Call C-Bet，计划 Turn 对手 Check 时下注偷底。"
+    },
+    "l3-fp-q2": {
+      "question": "Probe Bet 适用于什么情况？",
+      "options": [
+        "对手翻牌 C-Bet 后",
+        "翻前加注者翻牌 Check 后，你 Turn 下注",
+        "对手 All-in 后",
+        "河牌摊牌时"
+      ],
+      "explanation": "Probe Bet = 翻前加注者翻牌 Check 后，你在 Turn 下注偷底。"
+    },
+    "l3-fp-q3": {
+      "question": "以下哪种对手最不适合 Float？",
+      "options": [
+        "TAG",
+        "NIT",
+        "Calling Station",
+        "LAG"
+      ],
+      "explanation": "Calling Station 不会弃牌（Fold to C-Bet 仅 20%），Float 是纯亏损。"
+    },
+    "l3-fp-q4": {
+      "question": "Float的手牌选择应该是什么？",
+      "options": [
+        "纯空气牌",
+        "后门听牌/高牌/弱对",
+        "坚果牌",
+        "中对以上"
+      ],
+      "explanation": "Float适合用后门听牌、高牌或弱对，纯空气牌不适合Float。"
+    },
+    "l3-fp-q5": {
+      "question": "Probe Bet与Float的主要区别是？",
+      "options": [
+        "没有区别",
+        "Probe是对手翻牌Check后Turn下注",
+        "Probe是翻牌Raise",
+        "Probe是河牌下注"
+      ],
+      "explanation": "Probe Bet是翻前加注者翻牌Check后，你在Turn下注。Float是Call C-Bet后Turn对手Check时下注。"
+    },
+    "l3-bs-q1": {
+      "question": "干燥面（如 K-7-2 彩虹）应该使用什么下注尺度？",
+      "options": [
+        "小注（25-33% pot）",
+        "中注（50-66% pot）",
+        "大注（75-100% pot）",
+        "Overbet（150% pot）"
+      ],
+      "explanation": "干燥面范围优势明显，小注即可让弱牌弃牌，同时用强牌获取价值。"
+    },
+    "l3-bs-q2": {
+      "question": "Overbet 最适合在什么时候使用？",
+      "options": [
+        "翻牌干燥面",
+        "Turn 听牌面",
+        "River 有坚果优势时",
+        "翻前 Open"
+      ],
+      "explanation": "Overbet 最适合 River 有坚果优势时（如同花成牌面），用极化范围给对手最大压力。"
+    },
+    "l3-bs-q3": {
+      "question": "下注尺度与范围的关系是？",
+      "options": [
+        "小注=窄范围，大注=宽范围",
+        "小注=宽范围，大注=窄范围",
+        "没有关系",
+        "永远用 50% pot"
+      ],
+      "explanation": "小注对应宽范围（很多牌可下注），大注对应窄范围（只有强牌或纯 bluff）。"
+    },
+    "l3-bs-q4": {
+      "question": "中注（50-66% pot）适合什么情况？",
+      "options": [
+        "极干燥面",
+        "标准价值下注",
+        "极湿润面",
+        "River坚果优势"
+      ],
+      "explanation": "中注（50-66% pot）是标准价值下注尺度，适合顶对/超对等中等强牌。"
+    },
+    "l3-bs-q5": {
+      "question": "为什么不应该固定下注尺度？",
+      "options": [
+        "规则不允许",
+        "会被对手读取",
+        "浪费筹码",
+        "没有原因"
+      ],
+      "explanation": "固定尺度会让对手容易读取你的牌力。多变的尺度让对手难以判断。"
+    },
+    "l3-bluff-q1": {
+      "question": "下注 2/3 pot 时，对手需要至少多少弃牌率才能让诈唬盈亏平衡？",
+      "options": [
+        "33%",
+        "40%",
+        "50%",
+        "60%"
+      ],
+      "explanation": "盈亏平衡公式：bet/(pot+bet) = (2/3)/(1+2/3) = 0.4 = 40%。对手弃牌率 > 40% 时诈唬+EV。"
+    },
+    "l3-bluff-q2": {
+      "question": "以下哪手牌是最佳的 Semi-Bluff 候选？",
+      "options": [
+        "A-high（无听牌）",
+        "同花听牌+卡顺（组合听牌）",
+        "底对",
+        "纯空气"
+      ],
+      "explanation": "组合听牌（同花+顺子）有最多 outs（约 15 张），即使被 Call 也有很高概率反超，是最佳 Semi-Bluff 手牌。"
+    },
+    "l3-bluff-q3": {
+      "question": "River 下注 pot 时，理论的 bluff-to-value ratio 是多少？",
+      "options": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "2:1"
+      ],
+      "explanation": "下注 pot 时对手需要 33% 胜率才能 call。理论比例为 bluff:value = 1:2（每 3 手下注中 1 手 bluff，2 手 value）。"
+    },
+    "l3-bluff-q4": {
+      "question": "哪条街的诈唬频率应该最高？",
+      "options": [
+        "River",
+        "Turn",
+        "Flop",
+        "所有街相同"
+      ],
+      "explanation": "Flop 对手范围最宽、击中率最低，诈唬成功率最高。随着街数推进，对手范围越来越强，诈唬频率应递减。"
+    },
+    "l3-bluff-q5": {
+      "question": "Semi-Bluff的双重盈利方式是什么？",
+      "options": [
+        "对手弃牌+成牌赢大底池",
+        "偷底池+规则奖励",
+        "弃牌权益+隐含赔率",
+        "位置优势+范围优势"
+      ],
+      "explanation": "Semi-Bluff通过对手弃牌直接赢底池，或被Call后成牌赢大底池两种方式盈利。"
+    },
+    "l3-texture-q1": {
+      "question": "以下哪个是\"干燥牌面\"？",
+      "options": [
+        "9♠8♠7♣",
+        "K♠72♠",
+        "J♠T♠9♠",
+        "Q♠J♠8♠"
+      ],
+      "explanation": "K♠72♠ 无连接性、无同花、分散的高低张，是典型的干燥牌面。"
+    },
+    "l3-texture-q2": {
+      "question": "湿润牌面上应该怎么调整下注尺度？",
+      "options": [
+        "更小（1/4 pot）",
+        "更大（2/3-full pot）",
+        "不下注",
+        "全下"
+      ],
+      "explanation": "湿润牌面上对手有很多听牌，需要下大注让他们付出代价继续看牌。"
+    },
+    "l3-texture-q3": {
+      "question": "高张干燥牌面有利于谁？",
+      "options": [
+        "跟注者",
+        "翻前加注者",
+        "双方均等",
+        "小盲注"
+      ],
+      "explanation": "高张干燥牌面（如AK2）为翻前加注者的范围\"命中\"更多，因为加注者范围中大牌更多。"
+    },
+    "l3-texture-q4": {
+      "question": "牌面质地的三个维度是什么？",
+      "options": [
+        "大小/花色/数字",
+        "连接性/花色分布/高低张",
+        "干湿/快慢/高低",
+        "同花/顺子/三条"
+      ],
+      "explanation": "牌面质地的三个维度是连接性、花色分布和高低张。"
+    },
+    "l3-texture-q5": {
+      "question": "低张湿润牌面（如876ss）有利于谁？",
+      "options": [
+        "翻前加注者",
+        "跟注者",
+        "双方均等",
+        "庄家"
+      ],
+      "explanation": "低张湿润牌面有利于跟注者，因为这类牌面命中跟注者的范围更多。"
+    },
+    "l3-check-range-q1": {
+      "question": "过牌范围应该包含哪些牌？",
+      "options": [
+        "只有弱牌",
+        "只有强牌",
+        "强牌+中等牌+弱牌的混合",
+        "只有听牌"
+      ],
+      "explanation": "平衡的过牌范围应包含各种牌力的混合，让对手无法轻松读取你的策略。"
+    },
+    "l3-check-range-q2": {
+      "question": "以下哪种情况不适合过牌？",
+      "options": [
+        "没有范围优势的低张牌面",
+        "多人底池",
+        "有位置且牌面范围优势明显",
+        "计划Check-Raise"
+      ],
+      "explanation": "有位置且范围优势明显时，应该主动下注获取价值，而不是过牌给对手免费看牌。"
+    },
+    "l3-check-range-q3": {
+      "question": "不利位置（OOP）的过牌范围应该怎样？",
+      "options": [
+        "比IP更窄",
+        "比IP更宽",
+        "与IP相同",
+        "不应该过牌"
+      ],
+      "explanation": "OOP缺乏信息，需要更宽的过牌范围来平衡策略，避免被读穿。"
+    },
+    "l3-check-range-q4": {
+      "question": "过牌范围中强牌的用途是什么？",
+      "options": [
+        "没有用途",
+        "用于Check-Raise或慢打",
+        "用于弃牌",
+        "用于下注"
+      ],
+      "explanation": "过牌范围中的强牌用于Check-Raise陷阱或慢打，让对手无法轻松读取你的策略。"
+    },
+    "l3-check-range-q5": {
+      "question": "什么时候应该主动下注而不是过牌？",
+      "options": [
+        "没有范围优势时",
+        "多人底池时",
+        "有位置且范围优势明显时",
+        "计划Check-Raise时"
+      ],
+      "explanation": "有位置且范围优势明显时，应该主动下注获取价值，而不是过牌给对手免费看牌。"
+    },
+    "l3-3bet-pf-q1": {
+      "question": "3-Bet 底池的 SPR 通常在什么范围？",
+      "options": [
+        "1-2",
+        "3-6",
+        "10-15",
+        "20+"
+      ],
+      "explanation": "3-Bet 底池由于翻前底池较大，SPR 通常在 3-6 之间，远低于单次加注底池。"
+    },
+    "l3-3bet-pf-q2": {
+      "question": "在 3-Bet 底池中，SPR 为 3 时顶对的正确打法通常是？",
+      "options": [
+        "Check-Fold",
+        "控制底池只打一条街",
+        "可以舒适地全下",
+        "只能 Check-Call"
+      ],
+      "explanation": "SPR < 4 时，顶对级别的牌力已经可以舒适地全下，因为筹码相对底池已经不够深。"
+    },
+    "l3-3bet-pf-q3": {
+      "question": "AA 在 3-Bet 底池面对 J-T-9 两花牌面应该？",
+      "options": [
+        "All-in 保护",
+        "C-Bet 75% pot",
+        "Check 控制底池",
+        "Fold"
+      ],
+      "explanation": "J-T-9 两花是过度牌面，对防守方范围极有利。AA 虽然超对但应该 Check 控制底池，避免被两对/顺子套住。"
+    },
+    "l3-3bet-pf-q4": {
+      "question": "以下哪个牌面对 3-Bet 者最有利？",
+      "options": [
+        "J♠T♠9♣",
+        "A♠7♣2♦",
+        "8♥7♥6♣",
+        "Q♥T♥9♠"
+      ],
+      "explanation": "A-7-2 彩虹是干燥面，对 3-Bet 者范围最有利（大量高牌 Ax），应该高频 C-Bet。"
+    },
+    "l3-3bet-pf-q5": {
+      "question": "3-Bet 底池中低 SPR 的主要影响是？",
+      "options": [
+        "翻后决策更简单",
+        "需要更多筹码",
+        "bluff 更有威力",
+        "位置不重要了"
+      ],
+      "explanation": "低 SPR 意味着决策空间被压缩，很多情况下顶对就能打光，翻后决策相对更简单。"
+    }
+  },
+  "lessonExample": {
+    "l3-cbet-ex1": {
+      "title": "干燥面 C-Bet：小注高频",
+      "correctAction": "C-Bet",
+      "correctAmount": "33% pot",
+      "reasoning": [
+        "K-7-2 rainbow 是非常干燥的面",
+        "对手很难击中这个面，小注就能让他弃牌",
+        "你有 A 高牌，即使被跟注也有 6 个 outs",
+        "33% pot 的 C-Bet 性价比最高"
+      ],
+      "mistakeAction": "下注 75% pot",
+      "mistakeReasoning": "在干燥面下大注是浪费。对手要么弃牌要么有强牌，大注无法获取额外价值。",
+      "mistakeEvLoss": "-0.5 BB/100",
+      "tableDesc": "标准100BB现金桌，对手翻前跟注你的BTN open"
+    },
+    "l3-cbet-ex2": {
+      "title": "湿润面 Check：不利面不攻击",
+      "correctAction": "Check",
+      "reasoning": [
+        "J-T-9 两花是非常湿润的面",
+        "BTN 的跟注范围中有很多两对、顺子、听牌",
+        "你只有 A 高牌，没有任何对子",
+        "这个面对对手范围更有利，C-Bet 会被大量跟注或加注"
+      ],
+      "mistakeAction": "C-Bet 75% pot",
+      "mistakeReasoning": "在湿润面用空气牌 C-Bet 是严重错误。对手有太多强牌和听牌会继续，你的bluff很难成功。",
+      "mistakeEvLoss": "-2.0 BB/100",
+      "tableDesc": "BTN是一个LAG玩家，翻前用很宽的范围跟注"
+    },
+    "l3-draws-ex1": {
+      "title": "同花听牌的跟注决策",
+      "correctAction": "Call（跟注 C-Bet）",
+      "reasoning": [
+        "你有 A 高同花听牌（9个 outs）",
+        "从 flop 到 river 约 35% 胜率",
+        "对手 C-Bet 4BB，底池 10.5BB，你只需跟 4BB",
+        "底池赔率 = 4/14.5 ≈ 28%，你的胜率 35% > 28%，跟注是 +EV"
+      ],
+      "mistakeAction": "Fold（弃牌）",
+      "mistakeReasoning": "同花听牌有 35% 胜率，底池赔率又好，弃牌是严重的-EV错误。你放弃了大量权益。",
+      "mistakeEvLoss": "-2.5 BB/100"
+    },
+    "l3-draws-ex2": {
+      "title": "半诈唬加注：组合听牌",
+      "correctAction": "Raise（半诈唬）",
+      "correctAmount": "12BB",
+      "reasoning": [
+        "你有同花听牌 + 两头顺子听牌（组合听牌）",
+        "组合听牌约 12-15 个 outs（同花 9 + 顺子 8，去重后），胜率约 45-54%",
+        "加注可以同时获取弃牌权益和成牌价值",
+        "即使被跟注，你仍然有很高胜率"
+      ],
+      "mistakeAction": "只跟注（太被动）",
+      "mistakeReasoning": "组合听牌胜率极高，应该主动加注建立底池。只跟注浪费了弃牌权益和主动权。",
+      "mistakeEvLoss": "-1.5 BB/100",
+      "tableDesc": "CO是一个NIT，面对加注弃牌率很高(70%)"
+    },
+    "l3-multi-ex1": {
+      "title": "Double Barrel：顶对转牌继续",
+      "correctAction": "Bet",
+      "correctAmount": "9BB",
+      "reasoning": [
+        "翻牌 C-Bet 后 CO Call，转牌 2♠ 是空白牌",
+        "AK 顶对顶踢脚，转牌应该继续 Barrel 获取价值",
+        "TAG Call 翻牌后范围：Ax/9x/听牌，很多会继续 Call",
+        "2♠ 不改变牌面结构，你的牌仍然领先"
+      ],
+      "mistakeAction": "Check",
+      "mistakeReasoning": "顶对顶踢脚转牌 Check 太被动。空白牌应该继续 Barrel 获取价值。",
+      "mistakeEvLoss": "-1.2 BB/100"
+    },
+    "l3-multi-ex2": {
+      "title": "Give-Up：转牌放弃 Bluff",
+      "correctAction": "Check",
+      "reasoning": [
+        "翻牌 C-Bet 后 CS Call，转牌 T♥ 完成听牌可能",
+        "QJ 无胜率提升，面对 CS 继续 Barrel 是-EV",
+        "CS 不会弃牌（Fold to C-Bet 仅 20%），Bluff 无效",
+        "Check 控制底池，看河牌是否改善"
+      ],
+      "mistakeAction": "Bet 9BB",
+      "mistakeReasoning": "面对 Calling Station 继续 Bluff 是纯亏损。CS 不会弃牌，你只是在送钱。",
+      "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l3-cr-ex1": {
+      "title": "价值 Check-Raise：Set 在湿润面",
+      "correctAction": "Check-Raise",
+      "correctAmount": "12BB",
+      "reasoning": [
+        "Set 9 在 J-9-8 两花面应该 Check-Raise",
+        "湿润面有很多听牌，需要保护强牌",
+        "LAG C-Bet 频率高（80%），Check-Raise 可获取价值",
+        "建立大底池，为 Turn/River 全下做准备"
+      ],
+      "mistakeAction": "Check-Call",
+      "mistakeReasoning": "Set 在湿润面只 Call 太被动。应该 Check-Raise 建立大底池 + 保护强牌。",
+      "mistakeEvLoss": "-1.5 BB/100"
+    },
+    "l3-cr-ex2": {
+      "title": "Bluff Check-Raise：组合听牌",
+      "correctAction": "Check-Raise",
+      "correctAmount": "12BB",
+      "reasoning": [
+        "J♥T♥ 在 9-8-4 两花面有同花+卡顺组合听牌",
+        "约 12 个 outs（40%+ 胜率），Check-Raise 半诈唬",
+        "TAG 面对 Check-Raise 弃牌率高",
+        "被 Call 也有很高胜率，Turn/River 可继续"
+      ],
+      "mistakeAction": "Check-Call",
+      "mistakeReasoning": "组合听牌只 Call 浪费了弃牌权益 + 主动权。Check-Raise 半诈唬更 +EV。",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l3-fp-ex1": {
+      "title": "Float：Call C-Bet 后 Turn 偷底",
+      "correctAction": "Bet",
+      "correctAmount": "9BB",
+      "reasoning": [
+        "翻牌 Call C-Bet（Float），Turn CO Check",
+        "TAG Turn Check 表示牌力弱（顶对以下）",
+        "QJ 有后门顺子潜力 + 高牌胜率",
+        "Turn 下注代表 Kx，TAG 会弃掉弱牌"
+      ],
+      "mistakeAction": "Check back",
+      "mistakeReasoning": "Turn Check 错失偷底机会。TAG Check 表示弱牌，应该下注施压。",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l3-fp-ex2": {
+      "title": "Probe Bet：对手翻牌 Check 后 Turn 下注",
+      "correctAction": "Bet",
+      "correctAmount": "4BB",
+      "reasoning": [
+        "翻牌双方 Check，Turn NIT 再次 Check",
+        "NIT 连续 Check 表示牌力极弱",
+        "AT 有高牌胜率 + 后门同花潜力",
+        "Probe 下注代表 9x/6x，NIT 会弃掉空气牌"
+      ],
+      "mistakeAction": "Check back",
+      "mistakeReasoning": "NIT 连续 Check 是明显弱牌信号，应该 Probe 偷底。Check 错失机会。",
+      "mistakeEvLoss": "-0.8 BB/100"
+    },
+    "l3-bs-ex1": {
+      "title": "小注：干燥面范围优势",
+      "correctAction": "Bet",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "K-7-2 彩虹是极干燥面，BB 范围很难击中",
+        "BTN 有巨大范围优势，应该高频小注 C-Bet",
+        "小注（33% pot）让弱牌弃牌，强牌 Call",
+        "不需要大注保护，牌面没有听牌"
+      ],
+      "mistakeAction": "Bet 4BB（75% pot）",
+      "mistakeReasoning": "干燥面用大注是浪费。小注即可达到目的，大注让弱牌全弃，无法获取价值。",
+      "mistakeEvLoss": "-0.5 BB/100"
+    },
+    "l3-bs-ex2": {
+      "title": "Overbet：River 极化范围",
+      "correctAction": "Overbet",
+      "correctAmount": "40BB",
+      "reasoning": [
+        "河牌 7♥ 完成同花，BTN 有坚果同花（A♥Q♥）",
+        "BB 范围封顶（没有 A♥，最多 K♥x 同花）",
+        "Overbet（160% pot）给 BB 最大压力",
+        "极化范围：坚果同花或纯 bluff，Overbet 是标准尺度"
+      ],
+      "mistakeAction": "Bet 15BB（60% pot）",
+      "mistakeReasoning": "有坚果同花时只用 60% pot 是浪费。Overbet 可获取最大价值，BB 会用弱同花/Call。",
+      "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l3-bluff-ex1": {
+      "title": "River 极化场景的 Bluff",
+      "correctAction": "Bet",
+      "correctAmount": "28BB (pot)",
+      "reasoning": [
+        "AQ 在这个牌面只有 A-high（顶对弱踢脚），但你的范围极化",
+        "你三条街下注代表 AK/AA/KK 等超强牌",
+        "BB 的 Call 范围被压缩到 A-Kicker/两对，面对 pot 下注很多会弃",
+        "A-high 没有摊牌价值（BB 有 Kx/Ax 更强），bluff 是唯一赢底池的方式",
+        "Fold Equity：TAG 面对三条街 pot 下注弃牌率约 55-60%"
+      ],
+      "mistakeAction": "Check（放弃）",
+      "mistakeReasoning": "Check 几乎必输（A-high 摊牌价值极低）。三条街叙事一致，River bluff 是+EV。放弃浪费了前两条街建立的形象。",
+      "mistakeEvLoss": "-3.0 BB/100"
+    },
+    "l3-bluff-ex2": {
+      "title": "Flop Semi-Bluff：同花听牌 Raise C-Bet",
+      "correctAction": "Raise",
+      "correctAmount": "10BB",
+      "reasoning": [
+        "T♥9♥ 是同花听牌（9 outs）+ 卡顺潜力（J 来成顺）",
+        "Raise C-Bet 是 Semi-Bluff：对手可能弃牌（Fold Equity）",
+        "即使被 Call，你有约 35% 胜率（9 outs 同花 + 部分顺子 outs）",
+        "在 K-high 牌面，你的 raise 代表 Kx/暗三条，叙事一致",
+        "BTN C-Bet 频率高但面对 raise 弃牌率约 45%"
+      ],
+      "mistakeAction": "Call（被动）",
+      "mistakeReasoning": "Call 虽不亏，但放弃了 Fold Equity。Semi-Bluff raise 比被动 Call 多一种赢的方式（对手弃牌），EV 更高约 1.5BB/100。",
+      "mistakeEvLoss": "-1.5 BB/100"
+    },
+    "l3-3bet-pf-ex1": {
+      "title": "AA 在 3-Bet 底池的干燥面",
+      "correctAction": "Bet",
+      "correctAmount": "8-10BB（约50% pot）",
+      "reasoning": [
+        "A-7-2 彩虹是极干燥面，对 3-Bet 者范围极有利",
+        "AA 是坚果级别，SPR 4.3 完全可以打光",
+        "TAG 范围中有 Ax/中等对子会跟注",
+        "50% pot 下注既能获取价值又不会吓跑所有弱牌"
+      ],
+      "mistakeAction": "Check（慢打）",
+      "mistakeReasoning": "干燥面慢打毫无必要。SPR 很低，应该直接下注建立底池。",
+      "mistakeEvLoss": "-2.0 BB/100",
+      "tableDesc": "标准100BB现金桌，3-Bet底池SPR约4.3"
+    },
+    "l3-3bet-pf-ex2": {
+      "title": "KK 在 3-Bet 底池的湿润面",
+      "correctAction": "Check",
+      "reasoning": [
+        "Q-J-8 两花是过度牌面，对 CO 防守范围极有利",
+        "TAG 范围中有大量 QJ/TT/99/同花听牌",
+        "KK 虽然是超对但非常脆弱",
+        "Check 控制底池，面对下注时考虑跟注一条街但不应打光"
+      ],
+      "mistakeAction": "C-Bet 15BB（约75% pot）",
+      "mistakeReasoning": "在过度牌面大注 C-Bet 是严重错误。被跟注时几乎总是落后，被加注时面临艰难决策。",
+      "mistakeEvLoss": "-3.5 BB/100",
+      "tableDesc": "标准100BB现金桌，3-Bet底池SPR约4.1"
+    }
+  },
+  "lessonPractice": {
+    "l3-cbet-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "你击中了顶对顶kicker，这是非常强的牌。应该下注获取价值。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "2BB",
+          "explanation": "干燥面（A-8-3 rainbow）用小注 C-Bet。对手很难击中，小注就能获取弃牌权益，被跟注时你也有顶对。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB",
+          "explanation": "干燥面不需要下这么大。大注会让弱牌都弃牌，只有强牌跟注，减少了你的价值。",
+          "evImpact": "+0.8 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QQ 在 9-8-7 面仍然是超对，有很强的价值。应该下注。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4.5BB",
+          "explanation": "湿润面（9-8-7两花）用较大注 C-Bet。很多听牌会跟注，你需要让他们付出代价。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "翻牌就All-in太过激进。对手只会用更强的牌（顺子、两对）跟注。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "J-6-2 面对你没有任何帮助，而且J很可能击中了BB的跟注范围。这里应该Check控制底池。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "2BB",
+          "explanation": "J 很可能击中了对手范围，你的KQ只有高牌。C-Bet bluff 在这里成功率低。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "在不利面下大注更糟糕。对手有J时会跟注或加注，你没有任何牌力支撑。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "你击中了顶对，应该下注获取价值。Check错失价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "2BB",
+          "explanation": "J83面有后门同花可能但较干燥。顶对用1/3 pot小注C-Bet获取价值。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB",
+          "explanation": "大注让弱牌弃牌，只有更强牌跟注。小注即可获取价值。",
+          "evImpact": "+0.3 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AQ在KTc面有顶对+后门同花，应该C-Bet获取价值。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4.5BB",
+          "explanation": "KTc两花面较湿润，LAG有很多听牌。用较大注C-Bet保护手牌+获取价值。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "1BB",
+          "explanation": "1BB太小，给对手太好的跟注价格。湿润面应该用较大注。",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "同花听牌有 9 个 outs，约 35% 胜率。底池赔率足够好，不应该弃牌。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "4BB",
+          "explanation": "同花听牌应该跟注。底池赔率约 28%，你的胜率 35%，跟注是 +EV 的。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "单独同花听牌不够强做 All-in。除非是组合听牌，否则应该控制投入。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "组合听牌（同花+卡顺）胜率很高，绝对不应该弃牌。",
+          "evImpact": "-3.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "组合听牌应该主动加注。只跟注浪费了弃牌权益和主动权。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "12BB",
+          "explanation": "同花+卡顺组合听牌有约 12 个 outs，胜率超过 40%。半诈唬加注可以获取弃牌权益，被跟注也有很高胜率。",
+          "evImpact": "+2.0 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "两头顺子听牌有 8 个 outs，约 31% 胜率。不应该放弃。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "3BB",
+          "explanation": "两头顺子听牌有 8 个 outs，底池赔率约 25%，胜率 31% > 25%，跟注是 +EV。",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "10BB",
+          "explanation": "没有位置优势（OOP），单独两头顺听牌加注风险较大。跟注控制底池更合适。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "同花听牌Turn到River约19%胜率，底池赔率通常足够跟注。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "6BB",
+          "explanation": "A高同花听牌+后门高牌，Turn跟注看River。底池赔率约25%，胜率约22%+隐含赔率，跟注+EV。",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "15BB",
+          "explanation": "Turn用单一同花听牌加注过度。没有位置优势，跟注更合适。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "组合听牌（同花+卡顺）有很高胜率，K没改变太多。不应该弃牌。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "6BB",
+          "explanation": "组合听牌应该加注获取弃牌权益+成牌价值。只跟注太被动。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "14BB",
+          "explanation": "87在962面有同花+卡顺组合听牌（约12 outs），K来没太大帮助。半诈唬加注可获取弃牌权益，被Call也有很高胜率。",
+          "evImpact": "+2.0 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "KQ 顶对好踢脚，转牌空白牌应该继续 Barrel。Check 错失价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "KQ 顶对好踢脚，转牌 5♠ 是空白牌。TAG Call 翻牌后有很多弱牌会继续 Call，应该 Barrel 获取价值。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "顶对转牌 All-in 过度。应该用标准下注尺度（66% pot）获取价值。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "98 在 A-K-4-Q 牌面无胜率，NIT 不会弃牌。转牌应该 Give-Up，Check 看河牌。",
+          "evImpact": "+0.2 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "面对 NIT 在 A-K-4-Q 牌面 Bluff 是-EV。NIT 有 A/K 不会弃牌，你没有胜率。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "空气牌 All-in 是灾难。NIT 只跟强牌，你完全被碾压。",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A5 同花成牌，河牌应该价值下注。Check 错失从弱牌获取价值的机会。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "18BB",
+          "explanation": "A5 同花成牌，河牌应该价值下注（约 75% pot）。TAG 范围中有 Kx/8x 会 Call，获取价值。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "同花成牌 All-in 过度。TAG 只跟更强牌（更大同花/葫芦），弱牌全弃。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK顶对顶踢脚，转牌空白牌应该继续Barrel获取价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "AK顶对顶踢脚，转牌8♠是空白牌。NIT有很多弱Ax/听牌会Call，应该Barrel获取价值。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "顶对转牌All-in过度。标准尺度获取价值即可。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QJ在K-8-3-2-9牌面有Q-high，但三条街叙事可以代表Kx。River bluff可以考虑。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "10BB（75% pot）",
+          "explanation": "QJ无摊牌价值，三条街叙事一致（代表Kx/AK）。TAG面对三条街压力很多弱牌会弃。River bluff是+EV。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "All-in过度，TAG只会用Kx/更强牌Call。标准尺度即可。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p1": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "Set K 在干燥面可以 Check-Call 设陷阱，但面对 LAG（C-Bet 80%）Check-Raise 获取价值更好。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "Set K 应该 Check-Raise。LAG C-Bet 频率高，Check-Raise 建立大底池 + 获取价值。干燥面也可 Raise（对手难弃顶对）。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Bet（领先下注）不是标准打法。Check-Raise 让对手先下注再加注，获取更多价值。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p2": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "组合听牌（同花+卡顺）有 40%+ 胜率，绝对不应该 Fold。",
+          "evImpact": "-2.5 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "组合听牌 Call 可以但偏被动。Check-Raise 半诈唬可获取弃牌权益 + 主动权。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "Q♥J♥ 有同花+卡顺组合听牌（约 12 outs），Check-Raise 半诈唬是标准打法。TAG 弃牌率高，被 Call 也有胜率。",
+          "evImpact": "+1.8 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p3": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "87 在 A-K-6 牌面几乎无胜率，面对 NIT C-Bet 应该 Fold。NIT 范围强（Ax/Kx），Bluff 无效。",
+          "evImpact": "+0.1 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "87 在 A-K-6 牌面 Call 是-EV。NIT 范围强，你几乎无胜率，不要继续投入。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "面对 NIT 在 A-K-6 牌面 Check-Raise bluff 是灾难。NIT 只 C-Bet 强牌，不会弃牌。",
+          "evImpact": "-2.5 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p4": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "AK顶对顶踢脚在干燥面可以Check-Raise获取价值。只Call错失价值。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "AK顶对顶踢脚，Check-Raise获取价值。TAG会用Ax/弱牌Call，你建立大底池。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Bet不是标准打法。Check-Raise让对手先下注再加注，获取更多价值。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p5": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "组合听牌（同花+卡顺）有40%+胜率，绝对不应该Fold。",
+          "evImpact": "-3.0 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "组合听牌Call可以但偏被动。Check-Raise半诈唬可获取弃牌权益+主动权。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "T9s有同花+卡顺组合听牌，Check-Raise半诈唬是标准打法。面对Maniac弃牌权益虽低，但被Call也有很高胜率。",
+          "evImpact": "+1.8 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "KQ 有后门同花 + 高牌胜率，TAG Turn Check 表示弱牌。应该 Float 后 Turn 下注偷底。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "KQ 翻牌 Float（Call C-Bet），Turn TAG Check。应该下注偷底，代表 Ax。TAG 会弃掉弱牌。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Turn All-in 过度。标准下注尺度（66% pot）即可，All-in 只被强牌 Call。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "98 有卡顺潜力，NIT 连续 Check 表示弱牌。应该 Probe 偷底。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "98 翻牌 Check，NIT 也 Check。Turn NIT 再次 Check，应该 Probe 下注偷底。NIT 会弃掉空气牌。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Probe 下注不需要 All-in。标准尺度（66% pot）即可，All-in 过度。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "面对 Calling Station 不应该 Float/Probe。CS 不会弃牌（Fold 20%），Bluff 是纯亏损。Check 看河牌。",
+          "evImpact": "+0.2 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "面对 CS 下注是-EV。CS 不会弃牌，你只是在送钱。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "面对 CS All-in 是灾难。CS 会用任何对子 Call，你完全被碾压。",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AT有后门同花+高牌胜率，NIT Turn Check表示弱牌。应该Float后Turn下注偷底。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "AT翻牌Float，Turn NIT Check。NIT范围弱，下注代表Kx，NIT会弃掉弱牌。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Turn All-in过度。NIT只跟强牌，标准尺度即可。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "87有卡顺潜力，TAG连续Check表示弱牌。应该Probe偷底。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "87翻牌Check，TAG也Check。Turn TAG再次Check，应该Probe下注偷底。TAG会弃掉弱牌。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5.5BB（full pot）",
+          "explanation": "Probe不需要满池下注。标准尺度（66% pot）即可，满池过度。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p1": {
+      "option": [
+        {
+          "action": "Bet 2BB（33% pot）",
+          "explanation": "K-8-3 彩虹是干燥面，BTN 有范围优势。小注 C-Bet 是标准打法，让弱牌弃牌，强牌 Call。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet 4BB（75% pot）",
+          "explanation": "干燥面用大注过度。小注即可达到目的，大注让弱牌全弃。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "KQ 顶对好踢脚在干燥面应该 C-Bet 获取价值。Check 错失价值。",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "JT 顺子成牌，River 应该价值下注。Check 错失从弱牌获取价值的机会。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 15BB（60% pot）",
+          "explanation": "顺子成牌在 9-8-4-2-7 牌面是坚果，应该 Overbet 获取最大价值。60% pot 不够。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Overbet 40BB（160% pot）",
+          "explanation": "JT 顺子是坚果，BB 范围封顶（最多 Set/两对）。Overbet 给最大压力，BB 会用弱牌 Call。",
+          "evImpact": "+2.5 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK 在 J-T-9-2-5 牌面有 A 高，但 CS 会用任何对子 Call。应该价值下注（A 高可能赢）。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 15BB（60% pot）",
+          "explanation": "面对 CS 用标准价值下注（60% pot）。CS 会用弱对子 Call，获取价值。不要 Overbet（CS 可能用更强牌 Call）。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "面对 CS Overbet 风险大。CS 会用任何对子 Call，A 高可能输。标准尺度更安全。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p4": {
+      "option": [
+        {
+          "action": "Bet 2BB（33% pot）",
+          "explanation": "K-7-2彩虹是极干燥面，小注C-Bet即可。范围优势明显，弱牌会弃，强牌会Call。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet 4BB（75% pot）",
+          "explanation": "干燥面用大注过度。弱牌全弃，只有强牌跟注。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "AK顶对顶踢脚在干燥面应该C-Bet获取价值。Check错失价值。",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QQ超对成牌，River应该价值下注。Check错失价值。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 15BB（60% pot）",
+          "explanation": "QQ超对在9-8-4-2-7牌面是强牌，但非坚果。标准价值下注（60% pot）获取价值。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "QQ不是坚果，Overbet过度。TAG只跟更强牌，弱牌全弃。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p1": {
+      "option": [
+        {
+          "action": "Bet 3.5BB（66% pot）",
+          "explanation": "JTs 在 9-4-2 牌面有卡顺听牌（需要 Q），且 BTN 有范围优势。C-Bet 是 Semi-Bluff：TAG 弃牌率约 50%，即使被 Call 有 4 outs 反超。66% pot 是标准尺度。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Check 放弃了 Fold Equity 和主动权。BTN 在 9-4-2 牌面有巨大范围优势，应该高频 C-Bet。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 5BB（100% pot）",
+          "explanation": "干燥面用满池下注过度。TAG 面对大注只会用强牌继续，弱牌全弃。小注/中注即可达到目的。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p2": {
+      "option": [
+        {
+          "action": "Bet 7BB（70% pot）",
+          "explanation": "A♦5♦ 有坚果同花听牌（9 outs）+ A-high overcard。Turn 继续 Semi-Bluff：叙事一致（翻前 open + flop bet 代表 Kx），TAG 面对 turn barrel 弃牌率约 45%。即使被 Call 有 35% 胜率。",
+          "evImpact": "+1.8 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Check 放弃了同花听牌的 Semi-Bluff 价值。你有 9 outs + Fold Equity，check 只实现部分 equity。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Turn 用听牌 All-in 过度。只有极强听牌（组合听牌）才考虑 All-in。单一同花听牌用标准尺度即可。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "面对 Calling Station 不要 bluff！CS 的弃牌率极低（< 30%），bluff 盈亏平衡需要 > 40% 弃牌率。Q-high 没有摊牌价值但 bluff 必被 Call，Check 止损。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet 9BB（66% pot）",
+          "explanation": "面对 CS bluff 是严重错误。CS 会用任何对子（甚至 A-high）Call。你的弃牌权益接近 0，bluff 纯亏 9BB。",
+          "evImpact": "-3.5 BB/100"
+        },
+        {
+          "action": "Bet 4BB（30% pot）",
+          "explanation": "即使小注 bluff 面对 CS 也不+EV。CS 的 call 阈值极低，任何下注都会被 Call。不要对 CS bluff。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A4s有同花听牌+后门高牌，BTN范围优势明显。Semi-Bluff C-Bet是+EV。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 2BB（33% pot）",
+          "explanation": "A4s有同花听牌（9 outs）+ A高后门，干燥面用小注Semi-Bluff。TAG弃牌率高，即使被Call有35%胜率。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Bet 5BB（100% pot）",
+          "explanation": "干燥面用满池下注过度。小注即可达到目的。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QJ 无摊牌价值，Check 放弃了让中小对子弃牌的机会。卡顺听牌更适合半诈唬。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "QJ 在 A-8-3-K 面有卡顺听牌（T 成坚果顺），双飞代表 Ax/Kx，NIT 的中小对子弃牌率极高，是标准半诈唬。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "半诈唬无需 All-in，过度下注只会被 Ax 以上跟注。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p1": {
+      "option": [
+        {
+          "action": "Bet 4BB（75% pot）",
+          "explanation": "K-7-2彩虹是极干燥面，大注让弱牌全弃。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Bet 2BB（33% pot）",
+          "explanation": "K-7-2彩虹是极干燥面，小注C-Bet即可。范围优势明显。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "AK顶对顶踢脚在干燥面应该C-Bet获取价值。",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p2": {
+      "option": [
+        {
+          "action": "Bet 2BB（33% pot）",
+          "explanation": "T98两花是极湿润面，小注给对手听牌太好价格。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 4-5BB（75-100% pot）",
+          "explanation": "T98两花是极湿润面，需要大注让听牌付出代价。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "QJ有卡顺潜力，但湿润面应该主动下注保护。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p3": {
+      "option": [
+        {
+          "action": "Bet 4BB（75% pot）",
+          "explanation": "752两红桃较湿润，但BB范围中同花较少。中等注即可。",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Bet 3BB（50% pot）",
+          "explanation": "752两红桃有一定湿润度，但BB范围中同花较少。中注平衡价值和保护。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "AK两高牌+后门同花，应该C-Bet获取价值。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p4": {
+      "option": [
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "98s在762面有OESD+后门同花，组合听牌适合Check-Raise半诈唬。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "组合听牌应该主动加注获取弃牌权益。只Call太被动。",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Bet不是标准打法。Check-Raise更有效。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK顶对顶踢脚，River应该价值下注获取价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 9BB（70% pot）",
+          "explanation": "AK顶对顶踢脚，River标准价值下注。对手有很多弱Ax会Call。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "顶对River All-in过度。标准尺度即可。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK顶对顶踢脚在干燥面有范围优势，应该下注获取价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 2BB（33% pot）",
+          "explanation": "AK在A72干燥面是顶级强牌，小注C-Bet获取价值。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet 5BB（100% pot）",
+          "explanation": "干燥面满池下注过度，弱牌全弃。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p2": {
+      "option": [
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "QJ在K83面没有强到Check-Raise。应该Check控制底池。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "QJ在K83面没有对子，OOP应该Check控制底池。过牌范围包含中等牌和弱牌。",
+          "evImpact": "+0.2 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "3BB",
+          "explanation": "Donk Bet不是标准打法。OOP应该Check让对手先行动。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p3": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "Set 9在湿润面应该Check-Raise获取价值+保护强牌。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "Set 9在974面是强牌，湿润面应该Check-Raise建立大底池+保护。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Bet不是标准打法。Check-Raise更有效。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p4": {
+      "option": [
+        {
+          "action": "Bet 5BB（75% pot）",
+          "explanation": "JT9两花面很湿润，对手有很多听牌和两对。大注C-Bet风险高。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "JT9两花面对手范围很有利，KQ没有对子。应该Check控制底池，过牌范围包含这类中等牌。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "空气牌All-in是灾难。对手有很多强牌会继续。",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AJ 在 Kh8c3d2s7h 河牌面没有成花（只有 Kh 和 Ah Jh 三张红桃），不是同花。应该下注 A-high bluff 或 Check-Fold。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 10BB（75% pot）",
+          "explanation": "A-high 在 Kh 高牌面有摊牌价值，可以作为 bluff-catcher 下注获取弃牌权益，代表 Ax/Kx。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A-high River All-in过度，只会被更好牌跟注。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "K-8-3 干燥面对 3-Bet 者极有利，AA 应该下注获取价值。Check 错失价值。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 8BB（约45% pot）",
+          "explanation": "干燥面 AA 是坚果级别，SPR 约 4.3。中等下注获取价值，为后续打光做准备。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "All-in 80BB",
+          "explanation": "SPR 4.3 直接 All-in 过度。中等下注可以让更宽范围跟注，All-in 只被强牌跟。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p2": {
+      "option": [
+        {
+          "action": "Bet 14BB（75% pot）",
+          "explanation": "T-9-4 两花对 LAG 范围有利，KK 不应该大注。LAG 有范围优势应该由他先行动。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "T-9 两花是过度牌面，LAG 范围中有大量顺子和同花。Check 控制底池是正确选择。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise All-in",
+          "explanation": "KK 在 T-9 两花面 Check-Raise All-in 是灾难。LAG 继续时几乎总是有顺子/两对。",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QQ 在 Q-7-2 干燥面是坚果级别，面对 TAG 下注应该加注获取价值。Fold 是最差选择。",
+          "evImpact": "-5.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "QQ 在干燥面是绝对坚果，Call 太慢。应该 Raise 建立底池，SPR 低可以打光。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Raise to 25BB",
+          "explanation": "QQ 在 Q-7-2 干燥面是坚果。Raise 建立底池，SPR 约 2.5 可以准备全下。TAG 会用 Ax/中等对子跟注。",
+          "evImpact": "+3.0 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A-J-5 有两花但仍是高牌面，对 3-Bet 者有利。AK 顶对顶踢脚应该下注。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 8BB（约45% pot）",
+          "explanation": "A-J-5 虽有两花但高牌面对 3-Bet 者有利。AK 顶对顶踢脚应该中等下注获取价值。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet 16BB（满池）",
+          "explanation": "满池下注过大。A-J-5 有一定连接性，中等下注即可。大注只被更强牌跟注。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p5": {
+      "option": [
+        {
+          "action": "Bet 14BB（75% pot）",
+          "explanation": "JJ 在 T-8-3-2 牌面仍然是强牌。TAG Turn Check 后应该下注保护，阻止 Q9/97 等听牌实现胜率。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "JJ 在 T-8 面需要保护。Check 给听牌免费牌，降低了 JJ 的胜率。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Turn All-in 过度。SPR 约 4，标准下注即可。All-in 只被更强牌跟注（Set/两对）。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "3-Bet底池，Turn牌面T-8-3-2"
+    }
+  },
+  "drill": {
+    "d-l3-cbet-q1": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你BTN open, BB call。Flop: K♠ 7♥ 2♣。你持有AK，应该？",
+      "option": [
+        "C-Bet 1/3底池",
+        "Check",
+        "C-Bet 2/3底池"
+      ],
+      "explanation": "AK在K72彩虹面是顶级强牌，用1/3底池小注下注获取价值。这个牌面很干，小注即可。"
+    },
+    "d-l3-cbet-q2": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你CO open, BB call。Flop: 9♥ 8♥ 6♦。你持有AQ，应该？",
+      "option": [
+        "C-Bet 2/3底池",
+        "Check",
+        "C-Bet 1/3底池"
+      ],
+      "explanation": "986两红桃面对BB的跟注范围，这个牌面连接性很强，对手可能有很多顺子/同花听牌。AQ没有同花也没有对子，check是最佳选择。"
+    },
+    "d-l3-cbet-q3": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你BTN open, BB call。Flop: J♠ 9♦ 4♣。你持有JJ，应该？",
+      "option": [
+        "Check",
+        "C-Bet 1/3底池",
+        "C-Bet 满池"
+      ],
+      "explanation": "JJ在J94面是暗三条，用1/3底池小注下注。这个牌面很干，小注可以让对手的弱牌继续。"
+    },
+    "d-l3-cbet-q4": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你SB open, BB call。Flop: T♠ 8♠ 3♥。你持有AT，应该？",
+      "option": [
+        "Check",
+        "C-Bet 1/3底池",
+        "C-Bet 2/3底池"
+      ],
+      "explanation": "AT在T83面是顶对顶踢脚，OOP应该用较大注下注保护手牌。对手有很多听牌可能，需要下注收费。"
+    },
+    "d-l3-cbet-q5": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你BTN open, BB call。Flop: Q♥ J♠ 2♦。你持有QJ，应该？",
+      "option": [
+        "Check",
+        "C-Bet 1/3底池",
+        "C-Bet 满池"
+      ],
+      "explanation": "QJ在QJ2面是两对，用1/3底池小注下注。这个牌面比较干，小注可以让对手的弱对/听牌继续。"
+    },
+    "d-l3-cbet-q6": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你CO open, BB call。Flop: A♠ 5♥ 3♣。你持有55，应该？",
+      "option": [
+        "Check",
+        "C-Bet 1/3底池",
+        "C-Bet 满池"
+      ],
+      "explanation": "55在A53面是暗三条，但A高面让对手很难继续。用1/3底池小注下注，试图让对手的弱A/听牌跟注。"
+    },
+    "d-l3-cbet-q7": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你BTN open, BB call。Flop: 7♥ 5♥ 2♥。你持有KQ，应该？",
+      "option": [
+        "C-Bet 1/3底池",
+        "Check",
+        "C-Bet 满池"
+      ],
+      "explanation": "752三红桃面对BB的跟注范围，对手有很多同花。KQ没有红桃，check控制底池是最佳选择。"
+    },
+    "d-l3-cbet-q8": {
+      "scenario": "NL100, 6-max, 100BB, 单挑底池",
+      "question": "你BTN open, BB call。Flop: 9♦ 6♦ 2♠。你持有A9，应该？",
+      "option": [
+        "Check",
+        "C-Bet 1/3底池",
+        "C-Bet 满池"
+      ],
+      "explanation": "A9在962面是顶对，有一个后门同花听牌。用1/3底池小注下注获取价值，同时保护手牌。"
+    },
+    "d-l3-odds-q1": {
+      "scenario": "Flop, 你有 AK 两高牌听牌 (4 outs)",
+      "question": "你有 AK 两高牌听牌 (4 outs)，Flop→Turn 成牌的概率约为多少？",
+      "option": [
+        "约 9%",
+        "约 17%",
+        "约 4%"
+      ],
+      "explanation": "Flop→Turn 单街概率≈outs/47=4/47≈8.5%，四舍五入约 9%。注意：\"2/4 法则\"是两街累计概率估算，不适用于单街。"
+    },
+    "d-l3-odds-q2": {
+      "scenario": "Flop, 你有一个同花听牌",
+      "question": "同花听牌（9张outs）从Flop到River的命中率约为？",
+      "option": [
+        "约 18%",
+        "约 35%",
+        "约 50%"
+      ],
+      "explanation": "9张outs从Flop到River：用二四法则 9×4=36%，实际约35%。这是最重要的赔率计算之一。"
+    },
+    "d-l3-odds-q3": {
+      "scenario": "Flop, 你有一个OESD",
+      "question": "OESD（顺子听牌，8张outs）从Flop到River的命中率约为？",
+      "option": [
+        "约 17%",
+        "约 32%",
+        "约 45%"
+      ],
+      "explanation": "8张outs用二四法则：8×4=32%。实际约31.5%。OESD是同花听牌之外最强的听牌。"
+    },
+    "d-l3-odds-q4": {
+      "scenario": "Turn, 你有一个同花听牌",
+      "question": "Turn上同花听牌（9张outs）到River的命中率约为？",
+      "option": [
+        "约 9%",
+        "约 19%",
+        "约 35%"
+      ],
+      "explanation": "Turn到River只有1张牌，9/46≈19.6%。用二二法则：9×2=18%，接近实际值。"
+    },
+    "d-l3-odds-q5": {
+      "scenario": "Flop, 底池10BB，对手下注5BB",
+      "question": "底池15BB，你需要跟注5BB。你需要多少胜率才能跟注？",
+      "option": [
+        "约 20%",
+        "约 25%",
+        "约 33%"
+      ],
+      "explanation": "跟注5BB赢15BB+5BB=20BB，赔率5:20=1:4，需要1/(4+1)=20%胜率。但实际是跟注5BB，总底池20BB，需要5/20=25%。"
+    },
+    "d-l3-odds-q6": {
+      "scenario": "Flop, 你有一个Gutshot",
+      "question": "Gutshot（4张outs）从Flop到River的命中率约为？",
+      "option": [
+        "约 8%",
+        "约 16%",
+        "约 25%"
+      ],
+      "explanation": "4张outs用二四法则：4×4=16%。实际约16.5%。Gutshot需要很好的隐含赔率才能跟注。"
+    },
+    "d-l3-odds-q7": {
+      "scenario": "Turn, 底池20BB，对手下注15BB",
+      "question": "底池35BB，你需要跟注15BB。你有同花听牌（9 outs），应该？",
+      "option": [
+        "跟注",
+        "弃牌",
+        "加注"
+      ],
+      "explanation": "跟注15BB赢35BB，需要15/50=30%胜率。但同花听牌Turn到River只有约19%胜率，不够。弃牌。"
+    },
+    "d-l3-odds-q8": {
+      "scenario": "Flop, 你有一个组合听牌",
+      "question": "同花听牌+OESD（15张outs）从Flop到River的命中率约为？",
+      "option": [
+        "约 32%",
+        "约 54%",
+        "约 65%"
+      ],
+      "explanation": "15张outs用二四法则：15×4=60%，但实际约54%。组合听牌是非常强的，超过50%胜率。"
+    }
+  },
+  "unitTitle": {
+    "l3-cbet": {
+      "u1": "什么是 C-Bet？",
+      "u2": "C-Bet 大小"
+    },
+    "l3-draws": {
+      "u1": "常见听牌类型",
+      "u2": "听牌打法"
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
@@ -9,6 +10,7 @@ import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { Position } from '@/shared/types/position';
 import { stringToCard } from '@/shared/utils/deck';
 import { formatBB } from '@/shared/utils/formatters';
+import { resolveHandExample, resolveOpponent } from '../utils/contentKeys';
 import { PredictionPrompt } from './PredictionPrompt';
 
 interface HandExampleProps {
@@ -29,8 +31,14 @@ export function HandExampleComponent({
   onAnswered,
 }: HandExampleProps) {
   const { t } = useTranslation();
-  const heroCards = example.heroHand.map(stringToCard);
-  const boardCards = example.board?.map(stringToCard) ?? [];
+  // 渲染层 key 覆盖：解析后对象为唯一渲染源（key 缺失时回退数据层中文）
+  const resolvedExample = useMemo(() => resolveHandExample(t, example), [example, t]);
+  const resolvedOpponent = useMemo(
+    () => (resolvedExample.opponent ? resolveOpponent(t, resolvedExample.opponent) : undefined),
+    [resolvedExample.opponent, t],
+  );
+  const heroCards = resolvedExample.heroHand.map(stringToCard);
+  const boardCards = resolvedExample.board?.map(stringToCard) ?? [];
 
   return (
     <motion.div
@@ -46,55 +54,55 @@ export function HandExampleComponent({
           {t('academy.content.exampleLabel', { n: index + 1 })}
         </span>
         <h3 className="font-display text-[16px] text-[var(--ivory)] tracking-wide">
-          {example.title}
+          {resolvedExample.title}
         </h3>
         <div className="flex-1 h-px bg-[var(--walnut-border)] opacity-40" />
       </div>
 
       {/* Opponent Profile Card */}
-      {example.opponent && (
+      {resolvedOpponent && (
         <div className="flex items-center gap-3 bg-[var(--surface)] rounded-lg p-3 border border-[var(--walnut-border)]">
           <div
             className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
-            style={{ backgroundColor: example.opponent.color + '20', border: `2px solid ${example.opponent.color}` }}
+            style={{ backgroundColor: resolvedOpponent.color + '20', border: `2px solid ${resolvedOpponent.color}` }}
           >
-            {example.opponent.icon}
+            {resolvedOpponent.icon}
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-medium text-[var(--ivory)]">
-              {example.opponent.name}
+              {resolvedOpponent.name}
             </div>
             <div className="text-xs text-[var(--ivory-muted)]">
-              VPIP {example.opponent.stats.vpip}% | PFR {example.opponent.stats.pfr}% | AF {example.opponent.stats.af}
+              VPIP {resolvedOpponent.stats.vpip}% | PFR {resolvedOpponent.stats.pfr}% | AF {resolvedOpponent.stats.af}
             </div>
           </div>
         </div>
       )}
 
       {/* Game Context Tags */}
-      {example.gameContext && (
+      {resolvedExample.gameContext && (
         <div className="flex flex-wrap gap-2 items-center">
           <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
-            {example.gameContext.gameType === 'cash'
+            {resolvedExample.gameContext.gameType === 'cash'
               ? t('academy.gameContext.cash')
-              : example.gameContext.gameType === 'mtt'
+              : resolvedExample.gameContext.gameType === 'mtt'
                 ? t('academy.gameContext.mtt')
                 : t('academy.gameContext.sng')}
           </span>
-          {example.gameContext.icmPressure && example.gameContext.icmPressure !== 'low' && (
+          {resolvedExample.gameContext.icmPressure && resolvedExample.gameContext.icmPressure !== 'low' && (
             <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-danger)]/20 text-[var(--poker-danger)]">
               {t('academy.gameContext.icmPressure')}
-              {example.gameContext.icmPressure === 'high' ? t('academy.gameContext.icmHigh') : t('academy.gameContext.icmMedium')}
+              {resolvedExample.gameContext.icmPressure === 'high' ? t('academy.gameContext.icmHigh') : t('academy.gameContext.icmMedium')}
             </span>
           )}
-          {example.gameContext.bubbleFactor && (
+          {resolvedExample.gameContext.bubbleFactor && (
             <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-terra)]/25 text-[var(--poker-terra-bright)]">
               {t('academy.gameContext.bubble')}
             </span>
           )}
-          {example.gameContext.tableDescription && (
+          {resolvedExample.gameContext.tableDescription && (
             <span className="text-xs text-[var(--ivory-dim)]">
-              "{example.gameContext.tableDescription}"
+              "{resolvedExample.gameContext.tableDescription}"
             </span>
           )}
         </div>
@@ -105,7 +113,7 @@ export function HandExampleComponent({
         <div className="relative z-10 flex flex-col items-center gap-4">
           {/* Pot size indicator */}
           <div className="bg-black/40 px-4 py-1.5 rounded-full">
-            <span className="text-[var(--brass)] font-mono text-xs md:text-sm font-bold">Pot: {formatBB(example.potSize)}</span>
+            <span className="text-[var(--brass)] font-mono text-xs md:text-sm font-bold">Pot: {formatBB(resolvedExample.potSize)}</span>
           </div>
 
           {/* Board cards */}
@@ -121,9 +129,9 @@ export function HandExampleComponent({
           )}
 
           {/* Previous actions */}
-          {example.previousActions.length > 0 && (
+          {resolvedExample.previousActions.length > 0 && (
             <div className="flex flex-wrap items-center justify-center gap-2 py-1">
-              {example.previousActions.map((act, i) => (
+              {resolvedExample.previousActions.map((act, i) => (
                 <span
                   key={i}
                   className="inline-flex items-center gap-1.5 rounded-full bg-black/30 px-2.5 py-1 text-[11px] md:text-xs text-[var(--ivory-dim)]"
@@ -140,7 +148,7 @@ export function HandExampleComponent({
 
           {/* Hero info: position + stack */}
           <div className="flex items-center gap-2.5">
-            <PositionBadge position={example.heroPosition as Position} active />
+            <PositionBadge position={resolvedExample.heroPosition as Position} active />
             <span className="text-xs md:text-sm font-medium text-[var(--ivory)]">HERO</span>
           </div>
 
@@ -153,19 +161,19 @@ export function HandExampleComponent({
 
           {/* Stack + Bet info */}
           <div className="flex items-center gap-4 text-xs text-[var(--ivory-muted)]">
-            <span>{t('academy.content.handExample.stack', { value: formatBB(example.effectiveStack) })}</span>
-            {example.betSize && (
-              <span>{t('academy.content.handExample.bet', { value: formatBB(example.betSize) })}</span>
+            <span>{t('academy.content.handExample.stack', { value: formatBB(resolvedExample.effectiveStack) })}</span>
+            {resolvedExample.betSize && (
+              <span>{t('academy.content.handExample.bet', { value: formatBB(resolvedExample.betSize) })}</span>
             )}
           </div>
 
           {/* Street indicator */}
           <span className="text-[10px] uppercase tracking-widest text-[var(--ivory-muted)] mt-1">
-            {example.street === 'preflop'
+            {resolvedExample.street === 'preflop'
               ? t('academy.content.handExample.streetPreflop')
-              : example.street === 'flop'
+              : resolvedExample.street === 'flop'
                 ? t('academy.content.handExample.streetFlop')
-                : example.street === 'turn'
+                : resolvedExample.street === 'turn'
                   ? t('academy.content.handExample.streetTurn')
                   : t('academy.content.handExample.streetRiver')}
           </span>
@@ -189,13 +197,13 @@ export function HandExampleComponent({
             <span className="text-sm font-semibold text-[var(--success)]">{t('academy.content.handExample.correctDecision')}</span>
           </div>
           <p className="text-sm font-bold text-[var(--ivory)] mb-2">
-            {example.correctDecision.action}
-            {example.correctDecision.amount && (
-              <span className="ml-1.5 text-[var(--success)] font-mono">{example.correctDecision.amount}</span>
+            {resolvedExample.correctDecision.action}
+            {resolvedExample.correctDecision.amount && (
+              <span className="ml-1.5 text-[var(--success)] font-mono">{resolvedExample.correctDecision.amount}</span>
             )}
           </p>
           <ol className="space-y-1.5">
-            {example.correctDecision.reasoning.map((step, i) => (
+            {resolvedExample.correctDecision.reasoning.map((step, i) => (
               <li key={i} className="flex items-start gap-2 text-xs text-[var(--ivory-dim)] leading-relaxed">
                 <span className="shrink-0 w-4 h-4 rounded-full bg-[var(--success)]/20 text-[var(--success)] flex items-center justify-center text-[10px] font-bold mt-0.5">
                   {i + 1}
@@ -213,22 +221,22 @@ export function HandExampleComponent({
             <span className="text-sm font-semibold text-[var(--danger)]">{t('academy.content.handExample.commonMistake')}</span>
           </div>
           <p className="text-sm font-bold text-[var(--ivory)] mb-2">
-            {example.commonMistake.action}
+            {resolvedExample.commonMistake.action}
           </p>
           <p className="text-xs text-[var(--ivory-dim)] leading-relaxed mb-2">
-            {example.commonMistake.reasoning}
+            {resolvedExample.commonMistake.reasoning}
           </p>
           <span className="inline-block rounded bg-[var(--danger)]/15 px-2 py-0.5 text-xs font-mono text-[var(--danger)]">
-            EV: {example.commonMistake.evLoss}
+            EV: {resolvedExample.commonMistake.evLoss}
           </span>
         </div>
       </div>
 
       {/* Opponent Strategy Tip（静态模式保留；互动模式由 PredictionPrompt 揭示区承载） */}
-      {example.opponent && (
+      {resolvedOpponent && (
         <div className="mt-1 pt-3 border-t border-[var(--walnut-border)]">
           <p className="text-xs text-[var(--ivory-dim)]">
-            💡 {t('academy.checkpoint.opponentHint', { shortName: example.opponent.shortName, tip: example.opponent.exploitableBy[0] })}
+            💡 {t('academy.checkpoint.opponentHint', { shortName: resolvedOpponent.shortName, tip: resolvedOpponent.exploitableBy[0] })}
           </p>
         </div>
       )}

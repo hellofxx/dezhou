@@ -12,6 +12,7 @@ import { cn } from '@/shared/utils/cn';
 import { OPPONENT_DRILL_QUESTIONS, getOpponentProfile } from '../../data/opponentProfiles';
 import { scoreOpponentAnswer } from '../../utils/opponentScoring';
 import { orderResolvedOptions } from '../../utils/quizShuffle';
+import { resolveOpponentDrillQuestion } from '../../utils/contentKeys';
 import { OpponentStatsPanel } from './OpponentStatsPanel';
 import { OpponentDrillResult } from './OpponentDrillResult';
 import type { DrillProps, DrillResult } from './types';
@@ -28,17 +29,19 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
   const overallStartRef = useRef<number>(Date.now());
 
   const raw = OPPONENT_DRILL_QUESTIONS[currentIndex]!;
-  // 渲染前重排第 2 问策略选项（内联文本，getText 为恒等），重排后的题目对象
-  // 作为判分（scoreOpponentAnswer）与渲染的唯一事实源，判定链路自洽。
+  // 渲染层 key 覆盖：先 t() 解析（key 缺失回退数据层中文），再重排第 2 问策略选项
+  // （getText 为恒等），重排后的题目对象作为判分（scoreOpponentAnswer）与渲染的
+  // 唯一事实源，判定链路自洽。
   const current = useMemo(() => {
+    const resolved = resolveOpponentDrillQuestion(t, raw);
     const ordered = orderResolvedOptions(
-      raw.id,
-      raw.strategyOptions,
-      raw.correctStrategyIndex,
+      resolved.id,
+      resolved.strategyOptions,
+      resolved.correctStrategyIndex,
       (option) => option,
     );
-    return { ...raw, strategyOptions: ordered.options, correctStrategyIndex: ordered.correctIndex };
-  }, [raw]);
+    return { ...resolved, strategyOptions: ordered.options, correctStrategyIndex: ordered.correctIndex };
+  }, [raw, t]);
   const isAnswered = selectedStrategy !== null;
   const { typeCorrect, strategyCorrect } = scoreOpponentAnswer(current, selectedType, selectedStrategy);
 

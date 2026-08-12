@@ -8,6 +8,7 @@ import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
 // P1E-09: 题目集构建抽出为种子化纯函数（重试重置种子即重洗）
 import { buildCertificationExam } from '../utils/certificationExam';
+import { resolveQuizQuestion } from '../utils/contentKeys';
 
 /** 认证通过基准正确率（%），与 store 自适应算法（70%-84%）的基准一致；ACAD-04 */
 const BASE_REQUIRED_ACCURACY = 80;
@@ -39,9 +40,14 @@ export default function LevelCertification() {
   const requiredAccuracy = certification?.requiredAccuracy ?? BASE_REQUIRED_ACCURACY;
 
   // 从该级别全部条目的所有课程中收集测验题（种子化洗牌取最多 20 题 + 选项重排）
+  // 渲染层 key 覆盖：先解析各课 quiz 文案（key 缺失回退数据层中文），再进入种子化构建
   const allQuestions = useMemo(
-    () => buildCertificationExam(mergedLessons, sessionSeed),
-    [mergedLessons, sessionSeed]
+    () =>
+      buildCertificationExam(
+        mergedLessons.map((l) => ({ ...l, quiz: l.quiz.map((q) => resolveQuizQuestion(t, q)) })),
+        sessionSeed,
+      ),
+    [mergedLessons, sessionSeed, t]
   );
 
   if (levelEntries.length === 0) {

@@ -7,6 +7,7 @@ import { cn } from '@/shared/utils/cn';
 import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
 import { orderTheoryQuizQuestion } from '../utils/quizOrder';
+import { resolveTheoryQuizQuestion } from '../utils/contentKeys';
 import { getChapterDifficulty } from '../utils/theoryProgress';
 import type { TheoryChapter } from '../types';
 
@@ -26,9 +27,11 @@ interface TheoryQuizProps {
  */
 export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   const { t } = useTranslation();
+  // 渲染层 key 覆盖：先 t() 解析（key 缺失回退数据层中文），再重排选项
+  // （数值升序 / id 稳定种子洗牌）——种子只依赖 id，zh/en 顺序一致，源数据不变
   const orderedQuestions = useMemo(
-    () => chapter.quiz.map((q) => orderTheoryQuizQuestion(q)),
-    [chapter.quiz],
+    () => chapter.quiz.map((q) => orderTheoryQuizQuestion(resolveTheoryQuizQuestion(t, q))),
+    [chapter.quiz, t],
   );
   const updateElo = useProgressStore((s) => s.updateElo);
   const recordAnswer = useProgressStore((s) => s.recordAnswer);

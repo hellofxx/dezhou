@@ -115,14 +115,14 @@ additionalPrompt: ""
 - `completeChapter` 必须幂等（同一 chapterId 重复完成不重复计数，quizScores 取历史最高分）
 - **选项排序治理（见 AGENTS.md 同名章节）**：章末小测选项渲染前必须经 `orderTheoryQuizQuestion` 出口处理（数值升序 / id 哈希种子洗牌 + correctIndex 重映射）；源题库静态数据不手改重排
 - Level 顺序解锁 + 章节 URL 直达门禁必须接入 `isDebugUnlockActive()` 短路
-- 理论正文为内联中文（与策略学院课程正文口径一致，不进 i18n）；仅 UI chrome（title/subtitle/分级标签等）走 `theory.*` i18n key
+- **课程内容渲染层 key 覆盖（数据层零改动）**：理论正文/章末小测/objectives 为数据层内联中文（data/levels/** 不改），渲染层经 `utils/contentKeys.ts` 的 `t(key, { defaultValue: 数据层中文 })` 覆盖；新增内容 key 必须同步 `src/i18n/locales/{zh,en}/theory.json`（contentI18n.test.ts 双语对称守卫）；UI chrome（title/subtitle/分级标签等）继续走 `theory.*` i18n key；小测选项在 `t()` 解析后走 orderTheoryQuizQuestion 重排（顺序不随语言变化）
 - 理论→实践跳转只用路由字符串（`/academy/lesson/:id` / `/academy/tracks`），禁止 import strategy-academy 模块
 - 理论内容基于业界公认理论，原创编写，不逐字复制受版权保护教材
 - **教材对照与版权规避**：对照 9 本权威教材（Sklansky ToP / Harrington Vol.1 / MOP / Modern Poker Theory / MSSA / Tendler Mental Game / Duke Thinking in Bets / Janda Applications of NLHE / Poker HUDs）；思想复述 + 通用数学表述，禁止逐字复制教材原文；出处以「（概念源自：XXX 教材 YY 章）」脚注式标注；内容扩充时必须同时满足 integrity 结构约束与字符串内禁用裸 ASCII 撇号（英文缩写一律用 U+2019 弯引号，避免破坏单引号字符串语法）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
-- [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `theory.*` / `nav.theory` / `achievements.items.theory*`）
+- [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `theory.*` / `nav.theory` / `achievements.items.theory*` / 课程内容 `theory.content|quiz|objectives.*`）
 - [ ] theoryIntegrity.test.ts 全部通过（ID 唯一与前缀 / 小测合法性 / eloDimension / 实践推荐结构）
 - [ ] 每章扩充后立即运行 integrity 测试：ID 前缀 / quiz 3-5 题 / eloDimension / 段落非空；新扩充内容符合 7 类段落契约与公式推导要求
 - [ ] quizOrder.test.ts 全部通过（correctIndex 重映射 / 确定性 / 分布守卫 <50%）

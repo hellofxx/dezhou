@@ -1,0 +1,662 @@
+{
+  "lessonContent": {
+    "l8-pool-tendencies": [
+      "What Are Player Pool Tendencies?",
+      "Every stake's player pool has specific shared tendencies. For example, micro-stakes players usually call too much and aren't aggressive enough; mid-stakes players may 3-Bet too much but give up too fast postflop.",
+      "The core of exploitation: find the direction where opponents/the pool deviate from GTO, then adjust in the opposite direction. Opponent calls too much? Increase value bets, reduce bluffs. Opponent folds too much? Increase bluff frequency.",
+      "Typical Pool Tendencies by Stake",
+      "Micro-stakes (NL2-NL10):\n• Call too much, rarely fold\n• Response: pure value betting, almost no bluffs\n\nLow-stakes (NL25-NL50):\n• Preflop becoming reasonable but weak postflop\n• Response: more C-Bets, more double barrels\n\nMid-stakes (NL100-NL200):\n• Strategy close to GTO but still has leaks\n• Response: precise node locking + small exploitation",
+      "Don't use high-stakes strategies against micro-stakes. At micro-stakes, pure value betting and abandoning bluffs may make more than GTO.",
+      "Exploitation adjustment-size formula:\nOptimal deviation = observable deviation × (1 - opponent adjustment probability)\n\nExample: opponent river fold rate 70% (equilibrium ~50%)\nObservable deviation = +20%\nAssume opponent adjustment probability = 30% (low-stakes players adjust slowly)\nOptimal deviation = 20% × (1-0.3) = 14%\n\nThis means you can raise your bluff frequency by about 14 percentage points,\nbut be ready to return to baseline (if the opponent starts adjusting)\n\nExploitation magnitude isn't \"bigger is better\" — it's capped by \"not being counter-exploited\"",
+      "Theory reference: the full framework of player typology and exploitation adjustments is in Theory Academy T7 Chapter 4 \"Exploitative Adjustment Mapping\". HUD metric combination interpretation is in T7 Chapters 1-2. The GTO-exploitation unified framework is in T9 Chapter 4.",
+      "Counter-intuitive: the bigger your exploitation, the easier you get counter-exploited. When you deviate heavily from the GTO baseline to exploit an opponent, your own strategy develops obvious leaks that experienced opponents can exploit in turn. That's why exploitative adjustments should be \"minimum necessary deviations\" — capturing profit while keeping room to pivot."
+    ],
+    "l8-population-analysis": [
+      "From Individual Analysis to Population Analysis",
+      "When you have no data on a specific opponent, use the \"average tendencies\" of that stake's players as the default assumption. That's Population Analysis — analyzing the statistical tendencies of a specific player pool.",
+      "Key statistical metrics:\n• Pool average VPIP/PFR: determines the pool's looseness/tightness\n• Fold to C-Bet %: determines your C-Bet frequency\n• Fold to 3-Bet %: determines your 3-Bet bluff frequency\n• WTSD% (Went to Showdown): judges multi-street bluff effectiveness",
+      "Application Examples",
+      "If the pool's average Fold to C-Bet = 65% (far above GTO's 45%):\n→ You should C-Bet more frequently (even 100% on dry boards)\n\nIf the pool's average Fold to 3-Bet = 70%:\n→ You can significantly widen your 3-Bet bluff range\n\nIf the pool's average WTSD = 28% (high):\n→ Reduce multi-street bluffs, increase value bets",
+      "Use population data as a \"default assumption\", then gradually shift to individualized exploitation as you learn a specific opponent."
+    ],
+    "l8-exploitative-adjustments": [
+      "GTO vs Exploitative: When to Use Which?",
+      "GTO is an \"unexploitable\" defensive strategy; Exploitative is an \"maximize opponent weakness\" offensive strategy. In practice, combine both.",
+      "Use GTO when: opponent unknown, opponent very strong, multiway pots.\nUse exploitation when: opponent has clear leaks, you have enough data, heads-up spots.",
+      "Common Exploitative Adjustment Examples",
+      "vs a Nit (ultra-tight):\n• Steal blinds relentlessly\n• Fold immediately when he raises\n• Don't bluff him\n\nvs a Calling Station:\n• Pure value betting, never bluff\n• Slightly larger bet sizing\n• Respect his raises\n\nvs a Maniac:\n• Patiently wait for strong hands\n• Call down with medium strength\n• Don't bluff him\n• Control pot size",
+      "The Risk of Exploitation",
+      "Exploitative strategies are inherently \"unbalanced\":\n• If the opponent notices and adjusts, you can lose\n• Don't over-exploit strong opponents\n• Regularly check whether your exploitation still works",
+      "The best strategy is: 80% GTO + 20% exploitation. Use GTO as a protective baseline and make small exploitative adjustments when clearly profitable.",
+      "The GTO-exploitation unified framework:\nStrategy = GTO baseline + directional deviation × magnitude cap\n\nDirectional deviation rules:\n1. Opponent folds too much → increase bluff frequency\n2. Opponent calls too much → tighten value range, reduce bluffs\n3. Opponent raises too much → narrow your continuing range\n4. Opponent raises too little → bet with a wider range\n\nMagnitude cap formula:\nSafe deviation = observable deviation × 0.5 (half-Kelly principle)\n\nExample: opponent flop C-Bet frequency 80% (equilibrium 60%, deviation +20%)\nYour response: increase fold-to-C-Bet rate about 10%\nWithin the safe range, even if the opponent adjusts, you won't get counter-exploited",
+      "Theory reference: the full theory of the GTO-exploitation unified framework is in Theory Academy T9 Chapter 4 \"The GTO-Exploitation Unified Framework\", including the execution methodology of \"using GTO as a baseline and making disciplined directional deviations based on observable deviations\".",
+      "Counter-intuitive: GTO baseline + exploitative deviation = the optimal mixed strategy. This isn't choosing between GTO and exploitation — it's \"starting from GTO and making minimal necessary deviations when spotting weaknesses\". Deviation magnitude isn't \"bigger is better\"; operate within the range where \"you still don't lose after the opponent adjusts\"."
+    ]
+  },
+  "lessonQuiz": {
+    "l8-pool-q1": {
+      "question": "What is the most common micro-stakes pool tendency?",
+      "options": [
+        "Bluff too much",
+        "Call too much / not aggressive enough",
+        "Play too tight",
+        "Raise too much"
+      ],
+      "explanation": "Micro-stakes players usually call too much and aren't aggressive enough — increase value bets and reduce bluffs against them."
+    },
+    "l8-pool-q2": {
+      "question": "What is the core principle of exploitation?",
+      "options": [
+        "Always GTO",
+        "Adjust in the opposite direction of the opponent's deviation",
+        "Only bluff",
+        "Only value bet"
+      ],
+      "explanation": "Exploitation's core is finding where the opponent deviates from GTO, then adjusting in the opposite direction."
+    },
+    "l8-pool-q3": {
+      "question": "What is the typical weakness of low-stakes (NL25-NL50) players?",
+      "options": [
+        "Play too tight",
+        "Reasonable preflop but weak postflop",
+        "All pros",
+        "No weaknesses"
+      ],
+      "explanation": "Low-stakes players are becoming reasonable preflop but weak postflop — use more C-Bets and double barrels."
+    },
+    "l8-pool-q4": {
+      "question": "Against a player who calls too much, you should?",
+      "options": [
+        "Bluff more",
+        "Pure value betting, fewer bluffs",
+        "Play GTO",
+        "Fold"
+      ],
+      "explanation": "If the opponent calls too much, increase value bets and reduce bluffs."
+    },
+    "l8-pool-q5": {
+      "question": "Against a player who folds too much, you should?",
+      "options": [
+        "Pure value betting",
+        "Increase bluff frequency",
+        "Play GTO",
+        "Fold"
+      ],
+      "explanation": "If the opponent folds too much, increase bluff frequency."
+    },
+    "l8-pop-q1": {
+      "question": "If the pool's average Fold to C-Bet = 65%, you should?",
+      "options": [
+        "Reduce C-Bets",
+        "Greatly increase C-Bet frequency",
+        "Keep GTO frequency",
+        "Only C-Bet strong hands"
+      ],
+      "explanation": "The pool's fold rate far exceeds GTO — your C-Bet bluffs are profitable, so increase frequency."
+    },
+    "l8-pop-q2": {
+      "question": "What is the core of Population Analysis?",
+      "options": [
+        "Analyze a single opponent",
+        "Analyze the average tendencies of a whole player pool",
+        "Only look at your own data",
+        "Calculate EV"
+      ],
+      "explanation": "Population Analysis analyzes the average tendencies of an entire player group at a specific stake."
+    },
+    "l8-pop-q3": {
+      "question": "If the pool's average Fold to 3-Bet = 70%, you should?",
+      "options": [
+        "Reduce 3-Bets",
+        "Greatly increase 3-Bet bluffs",
+        "Keep GTO",
+        "Only value 3-Bet"
+      ],
+      "explanation": "The pool folds 70% to 3-Bets — greatly widen your bluff range."
+    },
+    "l8-pop-q4": {
+      "question": "What does a high WTSD% mean?",
+      "options": [
+        "Opponent folds often",
+        "Opponent calls down to showdown",
+        "Opponent bluffs a lot",
+        "Opponent plays tight"
+      ],
+      "explanation": "High WTSD% means opponents call to showdown — multi-street bluffs work poorly."
+    },
+    "l8-pop-q5": {
+      "question": "What should population data be used as?",
+      "options": [
+        "Final decisions",
+        "Default assumptions",
+        "Not needed",
+        "Sole reference"
+      ],
+      "explanation": "Population data serves as a \"default assumption\", shifting to individualized exploitation as you learn more."
+    },
+    "l8-exploit-q1": {
+      "question": "When should you use GTO instead of exploitation?",
+      "options": [
+        "When the opponent is weak",
+        "When the opponent is unknown or strong",
+        "Always GTO",
+        "Always exploit"
+      ],
+      "explanation": "Use GTO to protect yourself when the opponent is unknown; when the opponent is strong, exploitation room is small — also use GTO."
+    },
+    "l8-exploit-q2": {
+      "question": "How should you play against a Calling Station?",
+      "options": [
+        "Pure value betting, no bluffs",
+        "Bluff more",
+        "Play tighter",
+        "GTO unchanged"
+      ],
+      "explanation": "Calling Stations don't fold, so bluffs are useless. Purely value bet to let them call with weak hands."
+    },
+    "l8-exploit-q3": {
+      "question": "What is the main risk of exploitation?",
+      "options": [
+        "Too much winning",
+        "If the opponent notices and adjusts, you can lose",
+        "No risk",
+        "Rake too high"
+      ],
+      "explanation": "Exploitative strategies are unbalanced — if the opponent sees through and counter-exploits, you lose."
+    },
+    "l8-exploit-q4": {
+      "question": "Against a Nit you should?",
+      "options": [
+        "Bluff more",
+        "Steal blinds relentlessly, fold when he raises",
+        "Fight him",
+        "Use GTO"
+      ],
+      "explanation": "Nits are too tight — steal their blinds and fold immediately when they raise (they have strong hands)."
+    },
+    "l8-exploit-q5": {
+      "question": "What is the best strategy mix?",
+      "options": [
+        "Pure GTO",
+        "Pure exploitation",
+        "80% GTO + 20% exploitation",
+        "50/50"
+      ],
+      "explanation": "80% GTO baseline protects you + 20% exploitation maximizes profit."
+    }
+  },
+  "lessonPractice": {
+    "l8-pool-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "NL5 opponents call too much — value bet.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Bet 4BB",
+          "explanation": "NL5 opponents call too much — AK top pair should value bet.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet 10BB",
+          "explanation": "Big bets only get called by strong hands. A standard bet is better.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL5; opponents call too much"
+    },
+    "l8-pool-p2": {
+      "option": [
+        {
+          "action": "C-Bet bluff",
+          "explanation": "NL5 opponents fold to C-Bets only 30% — bluffs don't profit.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Check/Give up",
+          "explanation": "Opponents rarely fold to C-Bets — bluffs don't profit. Give up the bluff.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving Q-high is excessive. Give up if opponents don't fold.",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "NL5; opponents fold to cbet 30%"
+    },
+    "l8-pool-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A2s has the A blocker. If opponents over-defend, increase steal frequency.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "Blinds over-defending means they call too much. A2s has blockers — open for value.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Raise 5BB",
+          "explanation": "Min-raise is enough. Big bets fold weak hands.",
+          "evImpact": "+0.3 BB/100"
+        }
+      ],
+      "tableDesc": "NL5; blind players over-defend"
+    },
+    "l8-pool-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KQs in CO is a strong hand. Against tight-passive opponents play more aggressively.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "Tight-passive opponents fold too much. KQs in CO is a standard open.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "KQs should raise.",
+          "evImpact": "+0.3 BB/100"
+        }
+      ],
+      "tableDesc": "NL10; opponents play tight and passive"
+    },
+    "l8-pool-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "Opponents over-fold postflop — C-Bet bluff.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "C-Bet 4BB",
+          "explanation": "NL25 opponents over-fold postflop. C-Bet bluffs are profitable.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "C-Bet 7BB",
+          "explanation": "A small bet is enough. Big bets get called by medium hands.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL25; opponents over-fold postflop"
+    },
+    "l8-pop-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "Pool folds to 3-Bets 70% — use a wide 3-Bet bluff range.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "Pool folds to 3-Bets 70% — 3-Bet bluffs are more profitable.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB then 3-Bet bluff if raised, fold to 4-Bet",
+          "explanation": "Pool folds 70% — after opening, if 3-Bet, you can re-raise bluff with A5s.",
+          "evImpact": "+1.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL50; pool averages fold-to-3bet 70%"
+    },
+    "l8-pop-p2": {
+      "option": [
+        {
+          "action": "Multi-street bluff",
+          "explanation": "High WTSD% means opponents call to showdown. Multi-street bluffs work poorly.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Give up after one bet",
+          "explanation": "High WTSD% — opponents don't like folding. Reduce multi-street bluffs; one bluff per hand is enough.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "All-in bluff",
+          "explanation": "All-in bluffs are even less profitable at high WTSD%. Opponents call down.",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "NL25; pool WTSD% = 30% (high)"
+    },
+    "l8-pop-p3": {
+      "option": [
+        {
+          "action": "Use micro-stakes strategy (pure value, no bluffs)",
+          "explanation": "NL100 is close to GTO — needs precise exploitation, not pure value.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Precise node locking + small exploitation",
+          "explanation": "NL100 strategy is close to GTO but has leaks. Use precise node locking with small exploitation.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Fully GTO",
+          "explanation": "Fully GTO gives up exploitation opportunities. Exploit a little.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "NL100; pool averages VPIP 22%, PFR 18%"
+    },
+    "l8-pop-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "Pool folds to C-Bets 65% — C-Bet bluffs are profitable.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "C-Bet 3BB",
+          "explanation": "Pool folds to C-Bets 65%, far above GTO's 45%. C-Bet bluffs profit.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "C-Bet 6BB",
+          "explanation": "A small bet is enough. Big bets get called by medium hands.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "NL5; pool averages fold-to-cbet 65%"
+    },
+    "l8-pop-p5": {
+      "option": [
+        {
+          "action": "Keep the NL10 strategy unchanged",
+          "explanation": "Different stakes have different pool tendencies. NL25 players are reasonable preflop but weak postflop.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Adjust: more C-Bets, more double barrels",
+          "explanation": "NL25 players are weak postflop — exploit with more C-Bets and double barrels.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Play tighter",
+          "explanation": "No need to tighten. Use postflop advantage more aggressively.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Moving up from NL10 to NL25"
+    },
+    "l8-exploit-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AQs on the BTN is a strong hand. The SB is a Nit — steal his blind.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "The SB is a Nit who folds too much. AQs on the BTN is a standard open-steal.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Raise 5BB",
+          "explanation": "Min-raise is enough. Nits fold too much — no need for a big bet.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "The SB is a Nit (VPIP 10%)"
+    },
+    "l8-exploit-p2": {
+      "option": [
+        {
+          "action": "C-Bet bluff",
+          "explanation": "Bluffing a Calling Station is useless. Check.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Check/Give up",
+          "explanation": "Calling Stations don't fold — bluffs are useless. Give up KQ high.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving K-high vs a Calling Station is meaningless.",
+          "evImpact": "-5 BB/100"
+        }
+      ],
+      "tableDesc": "The BTN is a Calling Station (VPIP 60%)"
+    },
+    "l8-exploit-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AKs vs a Maniac is a premium hand. 4-Bet for value.",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "4-Bet 12BB",
+          "explanation": "AKs vs a Maniac is premium. 4-Bet for value — the Maniac calls with weak hands.",
+          "evImpact": "+3 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "AKs should 4-Bet for value. Calling lets the Maniac see a cheap flop.",
+          "evImpact": "+1 BB/100"
+        }
+      ],
+      "tableDesc": "The CO is a Maniac (VPIP 70%, PFR 50%)"
+    },
+    "l8-exploit-p4": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "The Nit's UTG open range is extremely strong (QQ+/AK). JTs lacks equity.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "The Nit's UTG open range is extremely strong. JTs lacks equity — fold.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "3-Bet",
+          "explanation": "The Nit's UTG range is too strong — 3-Bet bluffs don't profit.",
+          "evImpact": "-1 BB/100"
+        }
+      ],
+      "tableDesc": "The UTG is a Nit (VPIP 8%)"
+    },
+    "l8-exploit-p5": {
+      "option": [
+        {
+          "action": "Pure exploitative",
+          "explanation": "Against an unknown, use GTO to protect yourself.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "GTO-first, small exploitation after observing",
+          "explanation": "Use GTO to protect yourself vs unknowns. Adjust after a few hands.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fully random",
+          "explanation": "Fully random isn't a strategy. Use GTO.",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "The opponent is an unknown player"
+    }
+  },
+  "drill": {
+    "d-l8-exploit-q1": {
+      "scenario": "NL50, opponent VPIP 70%, PFR 5%",
+      "question": "Against a super-passive player (VPIP 70%, PFR 5%), how should you adjust?",
+      "option": [
+        "Bluff him more",
+        "Pure value betting, no bluffs",
+        "Use GTO"
+      ],
+      "explanation": "Calling Stations don't fold — bluffs are useless. Pure value bet to let them call with weak hands."
+    },
+    "d-l8-exploit-q2": {
+      "scenario": "NL100, opponent folds to 3-Bets 75%",
+      "question": "You discover the opponent folds to 3-Bets 75%. How should you adjust?",
+      "option": [
+        "Reduce 3-Bets",
+        "3-Bet bluff with more hands",
+        "Continue GTO"
+      ],
+      "explanation": "The opponent folds 75% to 3-Bets — 3-Bet bluffing more hands is +EV. A clear exploitation opportunity."
+    },
+    "d-l8-exploit-q3": {
+      "scenario": "NL25, opponent VPIP 12%, PFR 10%",
+      "question": "Against an ultra-tight player (VPIP 12%, PFR 10%), when he raises the river you should?",
+      "option": [
+        "Call with the GTO range",
+        "Call with a tight range, respect his value",
+        "Call with a wide range"
+      ],
+      "explanation": "The Nit's river-raise range is extremely strong — call tight. Fold medium hands and only call with premium hands."
+    },
+    "d-l8-exploit-q4": {
+      "scenario": "NL10, opponent C-Bets 90%",
+      "question": "You discover the opponent C-Bets 90%. How should you adjust?",
+      "option": [
+        "Fold more",
+        "Call/raise with a wider range",
+        "Continue GTO"
+      ],
+      "explanation": "90% C-Bet means his range is too wide. Call/raise wider to punish his over-aggression."
+    },
+    "d-l8-exploit-q5": {
+      "scenario": "NL200, opponent is a pro",
+      "question": "Against a professional, how should you adjust?",
+      "option": [
+        "Pure exploitation",
+        "GTO-first with small exploitation",
+        "Fully random"
+      ],
+      "explanation": "Against a strong opponent, GTO protects you. If you spot tendencies you can mildly exploit, but don't overdo it."
+    },
+    "d-l8-exploit-q6": {
+      "scenario": "NL5, opponent VPIP 80%, PFR 50%",
+      "question": "Against a super-aggressive player (VPIP 80%, PFR 50%), how should you adjust?",
+      "option": [
+        "Use GTO",
+        "Wait for strong hands and call down with medium hands",
+        "Be even more aggressive"
+      ],
+      "explanation": "Against a Maniac, patiently wait for strong hands. Call down with medium hands — never bluff him."
+    },
+    "d-l8-exploit-q7": {
+      "scenario": "NL50, opponent never check-raises",
+      "question": "You discover the opponent never check-raises. How should you adjust?",
+      "option": [
+        "Continue GTO",
+        "Bet every time he checks",
+        "Reduce betting"
+      ],
+      "explanation": "Never check-raising means his check range is weak. Bet every time he checks to capture free value."
+    },
+    "d-l8-exploit-q8": {
+      "scenario": "NL100, opponent over-folds to C-Bets 70%",
+      "question": "You discover the opponent folds 70% to C-Bets. How should you adjust?",
+      "option": [
+        "Reduce C-Bets",
+        "Exploit by C-Betting any two cards",
+        "Continue GTO"
+      ],
+      "explanation": "The opponent folds 70% to C-Bets — C-Betting any two cards is +EV. A clear exploitation opportunity."
+    },
+    "d-l8-pool-q1": {
+      "scenario": "NL10 stake, pool data shows average VPIP 45%, PFR 12%",
+      "question": "The NL10 pool has VPIP 45% / PFR 12%. How should you adjust?",
+      "option": [
+        "More value bets, fewer bluffs, because opponents are too passive",
+        "More bluffs, because opponents are too loose",
+        "Keep GTO unchanged"
+      ],
+      "explanation": "VPIP 45% / PFR 12% means the pool is too loose-passive (lots of calls, few raises). Pure value bet, reduce bluffs, and make their weak hands pay."
+    },
+    "d-l8-pool-q2": {
+      "scenario": "NL50 stake, pool average fold to C-Bet 65%",
+      "question": "The NL50 pool folds 65% to C-Bets. How should you adjust?",
+      "option": [
+        "Reduce C-Bets",
+        "C-Bet with a wider range, including many bluffs",
+        "Only C-Bet strong hands"
+      ],
+      "explanation": "65% fold-to-C-Bet means the pool is too weak. C-Betting wider (including bluffs) is a clear exploitation. Even when called, you have postflop playability."
+    },
+    "d-l8-pool-q3": {
+      "scenario": "NL200 stake, pool average 3-Bet frequency 8%",
+      "question": "The NL200 pool 3-Bets at 8%. Facing a 3-Bet after your open, how should you adjust?",
+      "option": [
+        "4-Bet bluff with a wide range",
+        "Respect the 3-Bet, respond with a tight range (pool 3-Bets are value-heavy)",
+        "Fold every time"
+      ],
+      "explanation": "8% 3-Bet frequency means the pool's 3-Bet range is value-heavy (not polarized). Against value-heavy 3-Bets, respond tight and fold medium hands."
+    },
+    "d-l8-pool-q4": {
+      "scenario": "Your table has big average pots and average showdown frequency 35%",
+      "question": "High showdown frequency (35%) means what? How should you adjust?",
+      "option": [
+        "Pool is too loose — reduce bluffs, do more thin value bets",
+        "Pool is too tight — increase bluffs",
+        "Meaningless"
+      ],
+      "explanation": "35% showdown frequency means the pool rarely folds (Calling Station tendency). Reduce bluffs and increase thin value bets to make them call with weak hands."
+    },
+    "d-l8-pool-q5": {
+      "scenario": "NL5 stake, data shows river bet frequency only 8%",
+      "question": "The NL5 pool river-bets only 8%. How should you adjust?",
+      "option": [
+        "Respect their river bets (value-heavy)",
+        "Call their river bets more",
+        "No adjustment needed"
+      ],
+      "explanation": "River bets at only 8% mean the pool is extremely passive — river bets are almost pure value. Call tight against river bets and fold medium hands."
+    },
+    "d-l8-pool-q6": {
+      "scenario": "You discover a stake's players check-raise only 2% on average",
+      "question": "The pool check-raises only 2%. How should you exploit this?",
+      "option": [
+        "Bet every time the opponent checks (including bluffs)",
+        "Reduce betting",
+        "Keep GTO"
+      ],
+      "explanation": "Check-raising only 2% means the pool almost never raises. Bet every time the opponent checks to capture free value — no worry about being check-raised."
+    },
+    "d-l8-pool-q7": {
+      "scenario": "NL100 stake, average open-raise size 2.2BB",
+      "question": "The pool opens only 2.2BB (small). In the BB, how should you adjust?",
+      "option": [
+        "3-Bet with a tighter range",
+        "Defend with a wider range (better odds)",
+        "No adjustment needed"
+      ],
+      "explanation": "A 2.2BB open means you get a better price in the BB (better pot odds). Defend wider (call/3-bet) because it's mathematically more favorable."
+    },
+    "d-l8-pool-q8": {
+      "scenario": "You discover a stake's players fold to steals (SB/BTN open) only 40%",
+      "question": "The pool folds to steals only 40%. How should you adjust?",
+      "option": [
+        "Reduce steal frequency, because opponents don't fold",
+        "Increase steal frequency",
+        "No adjustment needed"
+      ],
+      "explanation": "Folding to steals only 40% means the pool defends the blinds actively. Reduce steal frequency and open stronger hands, because bluff success is low."
+    },
+    "d-l8-pool-q9": {
+      "scenario": "NL25 stake, pool folds to turn C-Bets 55%",
+      "question": "The pool folds 55% to turn C-Bets. How should you adjust?",
+      "option": [
+        "Reduce turn C-Bets",
+        "Increase turn C-Bet frequency with a value + bluff mix",
+        "Only C-Bet strong hands"
+      ],
+      "explanation": "55% fold-to-turn-C-Bet means the pool is too weak on the turn. Increase C-Bet frequency (value + bluff mix) to capture lots of fold equity."
+    }
+  }
+}

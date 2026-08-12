@@ -8,6 +8,15 @@
 
 ## [Unreleased] - 2026-08-11
 
+### 课程内容国际化全量迁移（2026-08-12，content-course-i18n-plan 三阶段完成）
+
+> 对 strategy-academy（853 sections / 400 quiz / 102 examples / 1409 practice options / 术语 / 对手档案 / Basics / 轨道 / drillData / localLessons 本土课）与 theory-academy（877 sections / 371 quiz / objectives）课程内容做全量「渲染层 key 覆盖」国际化：数据层保持中文原文作 fallback，渲染层 `t(key, { defaultValue: 中文 })` 解析；英文界面命中 i18n key，中文界面回退原文零变化。
+
+- **阶段一·架构**：strategy-academy / theory-academy 各新增 `utils/contentKeys.ts`（key 生成 + resolve 单源），16 个消费组件（ContentBlock/DiagramBlock/HandExampleBlock/TheoryReferenceBlock/LessonQuiz/LevelCertification/PracticeDrill/LessonContent/SectionNav/BasicsIntro/HandExample/ChoiceDrillRenderer/OpponentDrill/TheorySectionRenderer/TheoryQuiz/TheoryChapterView）改为 key 优先 fallback；`academy-course/` 子目录（level1~8.json + short-deck.json + heads-up.json + local-lessons.json）经 `config.ts` `import.meta.glob` eager + `mergeCourseBundles()` deep 合并注入 `academy` 命名空间，`t()` 路径不变。
+- **阶段二·内容 key 化**：strategy standard L1-L8、theory standard T1-T9、theory 变体（short-deck/heads-up 各 22 章）、strategy 变体（short-deck 17 课 / heads-up 12 课）、localLessons 本土 16 课全部双语 key 化；quiz/practice/drill 选项先 `t()` resolve 后走既有排序出口（orderQuizQuestion / orderPracticeOptions / orderTheoryQuizQuestion / orderDrillOptions），种子只依赖 id，zh/en 顺序一致；命名空间冲突处理——`academy.content/quiz/practice` 被 UI chrome 占用改 `lessonContent/lessonQuiz/lessonPractice`，`theory.objectives` 改 `chapterObjectives`，quiz UI 标签与题库合并进同一对象。
+- **阶段三·守卫兜底**：`contentI18n.test.ts` 强化为「全量遍历」——从数据模块（ALL_VARIANT_LESSONS / LOCAL_LESSONS / BASICS_STEPS / GLOSSARY_TERMS / OPPONENT_PROFILES / OPPONENT_DRILL_QUESTIONS / ALL_VARIANT_THEORY_LEVELS）遍历生成全部渲染消费点 key，断言 zh/en 双语 JSON 均存在（expectedCount ≈ 12948）；修复主文件 key 收集漏加 module 前缀的守卫 bug；补齐全量遍历暴露的漏注册（standard unitTitle 与 gameContext 字段 200 个、theory 变体 chapterObjectives 133 个、localLessons content 2 个）。
+- **验证**：`pnpm verify` 全量门禁通过（typecheck + lint + 556 tests / 81 files）。
+
 ### 语言切换遗留建议执行（2026-08-12）
 
 > 落地 `language-switch-fix-plan.md` §7 的三条遗留建议：切换体验预加载、错误文案存 key 渲染时翻译、gto 生成文案 key 化与 displayName 清理。

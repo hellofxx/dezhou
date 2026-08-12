@@ -1,0 +1,542 @@
+[
+  {
+    "key": "academy.lessonContent.local-gto-vs-exploit.10",
+    "zh": "实战推荐：80% GTO + 20% 剥削。用 GTO 作为基础框架保护自己，在明确有利可图时进行小幅剥削调整。这能兼顾稳定性和收益上限。"
+  },
+  {
+    "key": "academy.lessonContent.local-mental-tilt-recognition.10",
+    "zh": "使用 Session 日志记录情绪状态：每次 session 后标记\"今天情绪如何（1-5 分）\"，并与盈亏关联。长期数据会让你发现\"情绪差时亏损严重\"，从而建立情绪管理意识。"
+  },
+  {
+    "key": "theory.content.t5-gto-concept.11",
+    "zh": "学习求解器输出时别背频率，问三个为什么：为什么这个牌面用这个尺度？为什么这手牌进下注范围而那手进过牌？为什么转牌后频率变了？理解结构，频率自然会记住。"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-combinatorics.0",
+    "zh": "理解 36 张牌牌组（移除 2-5）对组合计数与起手牌数量的根本影响"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-combinatorics.1",
+    "zh": "掌握短牌翻牌前的组合数与翻牌结构差异，体会更\"稠密\"的听牌环境"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-combinatorics.2",
+    "zh": "会用组合数推导短牌关键概率，如对手持某手牌的频率"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-outs.0",
+    "zh": "掌握短牌 outs 按 36 张牌组重算的方法（每花色仅 9 张）"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-outs.1",
+    "zh": "理解短牌 2/4 法则的误差与修正方向"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-outs.2",
+    "zh": "学会将短牌听牌胜率转化为跟注与半诈唬决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-variance.0",
+    "zh": "理解短牌高波动性的数学根源（翻牌率更高、听牌更常见、底池更大）"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-variance.1",
+    "zh": "掌握短牌更保守的资金管理原则与波动承受心态"
+  },
+  {
+    "key": "theory.chapterObjectives.t1sd-variance.2",
+    "zh": "学会在短牌高频波动中保持决策质量与情绪稳定"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-potodds.0",
+    "zh": "理解短牌 Ante 制下底池赔率的计算差异（无标准盲注，前注制）"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-potodds.1",
+    "zh": "掌握短牌所需胜率的快速估算，结合更低的听牌命中率做跟注决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-potodds.2",
+    "zh": "学会在短牌大底池环境中正确评估赔率与胜率"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-implied.0",
+    "zh": "理解短牌中同花/顺子成牌后价值极高，隐含赔率普遍更佳"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-implied.1",
+    "zh": "掌握短牌 set mining 门槛提高的原因（三条牌级低于葫芦/同花）"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-implied.2",
+    "zh": "学会用隐含赔率支撑短牌听牌的跟注与半诈唬决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-reverse.0",
+    "zh": "理解反向隐含赔率（RIO）在短牌中的放大（边缘牌被更强成牌压制）"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-reverse.1",
+    "zh": "掌握短牌中易被\"压制\"的牌型与处境，避免慢打边缘牌"
+  },
+  {
+    "key": "theory.chapterObjectives.t2sd-reverse.2",
+    "zh": "学会用 RIO 意识收紧边缘跟注与慢玩，保护筹码"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-rankings.0",
+    "zh": "理解短牌起手牌强度的根本重排：口袋对 > 任何 A-K、AK 最强非对子"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-rankings.1",
+    "zh": "掌握 AK 与口袋对、同花连牌在短牌中的相对价值变化"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-rankings.2",
+    "zh": "学会根据重排后的起手牌强度调整翻前策略"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-suitedness.0",
+    "zh": "理解短牌同花价值提升的根本原因（同花 beats 葫芦）"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-suitedness.1",
+    "zh": "掌握同花连牌与同花 Ax 在短牌中的可玩性与策略地位"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-suitedness.2",
+    "zh": "学会利用同花价值提升优化翻前范围与翻后决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-position.0",
+    "zh": "理解位置价值在短牌中的放大（听牌密度高、决策更频繁）"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-position.1",
+    "zh": "掌握 BTN 位置优势在短牌中的利用与 BB 位置的防守调整"
+  },
+  {
+    "key": "theory.chapterObjectives.t3sd-position.2",
+    "zh": "学会用位置优势补偿短牌的高波动风险"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-range-construction.0",
+    "zh": "理解短牌范围构建与标准德州的结构差异（对子密度高、同花价值提升）"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-range-construction.1",
+    "zh": "掌握短牌翻前/翻后范围的价值分布特征与极化策略"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-range-construction.2",
+    "zh": "学会根据短牌特有起手牌强度构建有效范围"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-equity.0",
+    "zh": "理解短牌多路底池中权益（Equity）被稀释的机制"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-equity.1",
+    "zh": "掌握短牌多人池中听牌与成牌的权益分配差异"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-equity.2",
+    "zh": "学会在短牌多路池中调整下注与跟注决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-blockers.0",
+    "zh": "理解挡牌（Blocker）在短牌中的特殊应用（对子密度高、同花价值大）"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-blockers.1",
+    "zh": "掌握短牌中阻断同花/对子的挡牌价值"
+  },
+  {
+    "key": "theory.chapterObjectives.t4sd-blockers.2",
+    "zh": "学会用挡牌优化短牌诈唬与跟注决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t5sd-gto-short.0",
+    "zh": "理解短牌均衡策略（GTO）与标准德州的结构差异"
+  },
+  {
+    "key": "theory.chapterObjectives.t5sd-gto-short.1",
+    "zh": "掌握短牌中价值:诈唬比、MDF 等频率基准的调整"
+  },
+  {
+    "key": "theory.chapterObjectives.t5sd-gto-short.2",
+    "zh": "学会以 GTO 为基线识别对手偏离并做最小必要偏离"
+  },
+  {
+    "key": "theory.chapterObjectives.t5sd-bluff.0",
+    "zh": "理解短牌诈唬收益提升的原因（成牌价值高、弃牌收益大）"
+  },
+  {
+    "key": "theory.chapterObjectives.t5sd-bluff.1",
+    "zh": "掌握短牌半诈唬的运用（强听牌诈唬价值高）"
+  },
+  {
+    "key": "theory.chapterObjectives.t5sd-bluff.2",
+    "zh": "学会用挡牌与弃牌率判断短牌诈唬频率"
+  },
+  {
+    "key": "theory.chapterObjectives.t6sd-sizing.0",
+    "zh": "理解短牌传统下注尺度（1/3 池等）在部分场景失效的原因"
+  },
+  {
+    "key": "theory.chapterObjectives.t6sd-sizing.1",
+    "zh": "掌握短牌下注尺度的调整：成牌价值高、听牌密度大"
+  },
+  {
+    "key": "theory.chapterObjectives.t6sd-sizing.2",
+    "zh": "学会根据牌面与筹码深度选择短牌有效下注尺"
+  },
+  {
+    "key": "theory.chapterObjectives.t6sd-barrel.0",
+    "zh": "理解短牌连续下注（barrel）更频繁的原因（成牌价值高、价值下注多）"
+  },
+  {
+    "key": "theory.chapterObjectives.t6sd-barrel.1",
+    "zh": "掌握短牌多街下注的协调与牌面易手调整"
+  },
+  {
+    "key": "theory.chapterObjectives.t6sd-barrel.2",
+    "zh": "学会用连续价值下注榨取短牌成牌价值"
+  },
+  {
+    "key": "theory.chapterObjectives.t7sd-mistakes.0",
+    "zh": "识别标准德州玩家转短牌时的常见认知偏差"
+  },
+  {
+    "key": "theory.chapterObjectives.t7sd-mistakes.1",
+    "zh": "掌握从对手错误模式反推范围与剥削方向"
+  },
+  {
+    "key": "theory.chapterObjectives.t7sd-mistakes.2",
+    "zh": "学会用频率统计确认对手的错误倾向"
+  },
+  {
+    "key": "theory.chapterObjectives.t7sd-adjustment.0",
+    "zh": "理解从 NLHE 到短牌的关键思维转换点"
+  },
+  {
+    "key": "theory.chapterObjectives.t7sd-adjustment.1",
+    "zh": "掌握短牌特有策略调整（范围、下注、追听）"
+  },
+  {
+    "key": "theory.chapterObjectives.t7sd-adjustment.2",
+    "zh": "学会用\"短牌思维\"替代\"满员桌思维\"做决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t8sd-variance.0",
+    "zh": "理解短牌高波动对心理韧性的考验"
+  },
+  {
+    "key": "theory.chapterObjectives.t8sd-variance.1",
+    "zh": "掌握承受短牌波动的心理策略与波动预算"
+  },
+  {
+    "key": "theory.chapterObjectives.t8sd-variance.2",
+    "zh": "学会在短牌高频波动中保持决策质量"
+  },
+  {
+    "key": "theory.chapterObjectives.t8sd-tilt.0",
+    "zh": "理解短牌高波动下 tilt 的高发机制"
+  },
+  {
+    "key": "theory.chapterObjectives.t8sd-tilt.1",
+    "zh": "掌握避免 tilt 的自我觉察与预设纪律"
+  },
+  {
+    "key": "theory.chapterObjectives.t8sd-tilt.2",
+    "zh": "学会用\"过程 vs 结果\"分离控制情绪"
+  },
+  {
+    "key": "theory.chapterObjectives.t9sd-integration.0",
+    "zh": "把 T1-T8 的短牌知识整合为完整决策闭环"
+  },
+  {
+    "key": "theory.chapterObjectives.t9sd-integration.1",
+    "zh": "理解短牌理论在不同筹码深度与游戏类型的适用变化"
+  },
+  {
+    "key": "theory.chapterObjectives.t9sd-integration.2",
+    "zh": "建立个人短牌复盘与学习体系"
+  },
+  {
+    "key": "theory.chapterObjectives.t9sd-case-study.0",
+    "zh": "研究职业短牌玩家的决策框架与短牌特有调整"
+  },
+  {
+    "key": "theory.chapterObjectives.t9sd-case-study.1",
+    "zh": "理解顶级玩家的共同特征：短牌思维、频率平衡、情绪稳定"
+  },
+  {
+    "key": "theory.chapterObjectives.t9sd-case-study.2",
+    "zh": "学会从职业短牌案例中提炼可复用方法论"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-probability.0",
+    "zh": "掌握单挑结构差异（SB 强制 Ante、BB 翻前最后行动、翻后 SB 先行动）对概率框架的影响"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-probability.1",
+    "zh": "理解单挑起手牌胜率重排：只需打败一个对手时，高张与同花连张的价值上升"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-probability.2",
+    "zh": "会用组合数推导\"对手拿 A\"等单挑关键概率，并建立三档胜率锚点"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-outs.0",
+    "zh": "理解单挑中 Outs 的相对性：先判断领先还是落后，再决定数谁的 Outs"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-outs.1",
+    "zh": "掌握 6 Outs 高张与 15 Outs 组合听牌的双街精确推导与 2/4 法则误差边界"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-outs.2",
+    "zh": "将单挑听牌胜率转化为半诈唬与全下决策"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-variance.0",
+    "zh": "理解单挑高频对抗导致波动浓缩的数学机制（√N 法则与 50-60% 全下分布）"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-variance.1",
+    "zh": "掌握连败窗口的概率直觉，避免把波动误判为水平问题"
+  },
+  {
+    "key": "theory.chapterObjectives.t1hu-variance.2",
+    "zh": "将波动意识落地为单挑资金管理（50 个买入以上）与 session 管理原则"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-odds.0",
+    "zh": "理解单挑盲注结构导致的翻前底池赔率差异——SB 的 0.5 死钱使跟注价格显著优于满员桌"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-odds.1",
+    "zh": "掌握 limp vs raise 两种行动的底池赔率计算与跟注需求阈值"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-odds.2",
+    "zh": "对比单挑与满员桌的多路底池中\"赔率稀释\"的本质：公式不变、胜率打折"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-ev.0",
+    "zh": "掌握 EV 三分支框架（fold/call/raise）及其数值比较方法"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-ev.1",
+    "zh": "理解位置价值量化：单挑中每手牌约 0.5-1BB 的位置差异（BB 位优势）"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-ev.2",
+    "zh": "用 EV 模型分析翻前 limp vs raise 决策，识别死钱偷盲价值"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-risk.0",
+    "zh": "理解单挑中翻后位置劣势方（SB 翻前最后行动但翻后先行动）的风险暴露"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-risk.1",
+    "zh": "掌握 check-raise 作为补偿工具，对比 check-call 的风险收益"
+  },
+  {
+    "key": "theory.chapterObjectives.t2hu-risk.2",
+    "zh": "评估隐含赔率在单挑中的变化：宽范围导致支付密度低→反向隐含赔率上升"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-sb-strategy.0",
+    "zh": "理解单挑 SB 的结构独特性——翻前最后行动 + 0.5 强制 Ante 死钱，与满员桌 SB 完全相反"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-sb-strategy.1",
+    "zh": "掌握 SB 开池尺度的数学：盈亏平衡弃牌率与 MDF，理解 min-raise 为何是单挑主武器"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-sb-strategy.2",
+    "zh": "学会划分 limp 叠与 raise 叠，理解单挑 limp 的 GTO 合理性及随对手的调整条件"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-bb-defense.0",
+    "zh": "理解单挑 BB 的双重优势（翻前最后行动 + 翻后位置）如何把满员桌的亏损位变成盈利位"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-bb-defense.1",
+    "zh": "掌握 MDF 的计算，区分防守底线与最优防守频率，理解 60%+ 防守的数学依据"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-bb-defense.2",
+    "zh": "学会跟注防守与 3Bet 防守的划分，掌握面对 SB limp 的 isolate 策略"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-position-reversal.0",
+    "zh": "理解单挑\"位置反转\"结构：翻前 SB 最后行动、翻后 SB 先行动，BB 获得翻后位置"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-position-reversal.1",
+    "zh": "掌握位置优势的街间衰减规律（river 位置价值最大）及其量化模型"
+  },
+  {
+    "key": "theory.chapterObjectives.t3hu-position-reversal.2",
+    "zh": "学会 OOP 的三大补偿工具（check 为主、check-raise、罕见 donk）与 IP 的应对"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-range-width.0",
+    "zh": "理解单挑范围宽度远超满员桌的根本原因——打败一个对手与位置反转的双重作用"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-range-width.1",
+    "zh": "掌握 SB 开池约 80%、BB 防守 60%+ 的频率基准及其数学依据（死钱赔率与翻后位置）"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-range-width.2",
+    "zh": "学会按对手倾向动态收放范围宽度，避免\"固定范围\"在单挑中被剥削"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-polarization.0",
+    "zh": "理解极化（polarized）与线性（linear）范围的区别及其适用场景"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-polarization.1",
+    "zh": "掌握单挑下注范围的价值:诈唬两极化结构与均衡比例推导"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-polarization.2",
+    "zh": "学会用\"两条街坚果 + 一个听牌转诈唬\"构建不可预测的下注范围"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-blocking.0",
+    "zh": "理解挡牌（Blocker）的定义：手中的牌减少对手特定组合数"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-blocking.1",
+    "zh": "掌握单挑宽范围中挡牌的三重价值：诈唬阻断、价值解封、翻前 3Bet 选择"
+  },
+  {
+    "key": "theory.chapterObjectives.t4hu-blocking.2",
+    "zh": "学会用挡牌微调下注与跟注决策，在单挑边缘局面争取边际 EV"
+  },
+  {
+    "key": "theory.chapterObjectives.t5hu-gto-he.0",
+    "zh": "理解单挑是纯二人零和博弈，纳什均衡的\"不可剥削\"保证在此严格成立"
+  },
+  {
+    "key": "theory.chapterObjectives.t5hu-gto-he.1",
+    "zh": "掌握 GTO 不是\"最赚钱\"而是\"不被剥削\"的策略定位，及其与剥削的关系"
+  },
+  {
+    "key": "theory.chapterObjectives.t5hu-gto-he.2",
+    "zh": "学会在单挑中以 GTO 为基线，识别对手偏离并做最小必要偏离"
+  },
+  {
+    "key": "theory.chapterObjectives.t5hu-frequency.0",
+    "zh": "理解混合策略与无差别原则：同一手牌按频率分配动作的条件"
+  },
+  {
+    "key": "theory.chapterObjectives.t5hu-frequency.1",
+    "zh": "掌握 MDF 与 Alpha 在单挑防守进攻中的临界频率计算"
+  },
+  {
+    "key": "theory.chapterObjectives.t5hu-frequency.2",
+    "zh": "学会在单挑宽范围下执行频率平衡，避免可被剥削的确定性倾向"
+  },
+  {
+    "key": "theory.chapterObjectives.t6hu-sizing-optimal.0",
+    "zh": "理解下注尺度的三因素：牌力层级、范围优势与底池几何（SPR）"
+  },
+  {
+    "key": "theory.chapterObjectives.t6hu-sizing-optimal.1",
+    "zh": "掌握单挑中\"小注控池、大注极化\"的尺度逻辑与价值:诈唬比随尺度变化"
+  },
+  {
+    "key": "theory.chapterObjectives.t6hu-sizing-optimal.2",
+    "zh": "学会根据筹码深度（SPR）选择翻牌/转牌尺度，规划河牌全下"
+  },
+  {
+    "key": "theory.chapterObjectives.t6hu-barrel.0",
+    "zh": "理解单挑多街下注（barrel）的协调逻辑：翻牌/转牌/河牌的尺度与频率联动"
+  },
+  {
+    "key": "theory.chapterObjectives.t6hu-barrel.1",
+    "zh": "掌握连开三枪（triple barrel）的适用条件与牌面易手（board change）调整"
+  },
+  {
+    "key": "theory.chapterObjectives.t6hu-barrel.2",
+    "zh": "学会根据对手范围收窄与底池增长，动态分配各街的下注组合"
+  },
+  {
+    "key": "theory.chapterObjectives.t7hu-patterns.0",
+    "zh": "识别单挑最常见的对手类型：跟注站、nit（紧弱）、疯鱼（激进跟注）、紧凶"
+  },
+  {
+    "key": "theory.chapterObjectives.t7hu-patterns.1",
+    "zh": "掌握从频率与倾向推断对手范围的读牌方法"
+  },
+  {
+    "key": "theory.chapterObjectives.t7hu-patterns.2",
+    "zh": "学会区分\"可剥削倾向\"与\"一次性动作\"，避免过度反应"
+  },
+  {
+    "key": "theory.chapterObjectives.t7hu-exploit.0",
+    "zh": "理解从 GTO 基线转向剥削策略的正确框架：最小必要偏离"
+  },
+  {
+    "key": "theory.chapterObjectives.t7hu-exploit.1",
+    "zh": "掌握针对不同对手类型的具体调整（频率、尺度、范围）"
+  },
+  {
+    "key": "theory.chapterObjectives.t7hu-exploit.2",
+    "zh": "学会识别\"何时回到 GTO\"——剥削打开漏洞的边界"
+  },
+  {
+    "key": "theory.chapterObjectives.t8hu-pressure.0",
+    "zh": "理解单挑高频对抗下的波动密度与情绪触发机制"
+  },
+  {
+    "key": "theory.chapterObjectives.t8hu-pressure.1",
+    "zh": "掌握避免 tilt（情绪失控）的策略与自我觉察方法"
+  },
+  {
+    "key": "theory.chapterObjectives.t8hu-pressure.2",
+    "zh": "学会用\"过程 vs 结果\"分离保持长期决策质量"
+  },
+  {
+    "key": "theory.chapterObjectives.t8hu-reads.0",
+    "zh": "理解线下物理读取（tell）与线上频率读取的区别与局限"
+  },
+  {
+    "key": "theory.chapterObjectives.t8hu-reads.1",
+    "zh": "掌握反读取（平衡自己的动作，避免泄露范围）"
+  },
+  {
+    "key": "theory.chapterObjectives.t8hu-reads.2",
+    "zh": "学会用\"叙事一致性\"判断对手意图，避免过拟合"
+  },
+  {
+    "key": "theory.chapterObjectives.t9hu-mastery.0",
+    "zh": "把 T1-T8 的知识整合为单挑决策的完整闭环：范围→数学→下注→剥削→心理"
+  },
+  {
+    "key": "theory.chapterObjectives.t9hu-mastery.1",
+    "zh": "理解单挑理论在不同筹码深度与游戏类型（现金/锦标赛）的适用变化"
+  },
+  {
+    "key": "theory.chapterObjectives.t9hu-mastery.2",
+    "zh": "建立个人复盘与学习体系，形成持续改进的方法论"
+  },
+  {
+    "key": "theory.chapterObjectives.t9hu-pro-study.0",
+    "zh": "研究职业单挑选手的决策框架与范围构建习惯"
+  },
+  {
+    "key": "theory.chapterObjectives.t9hu-pro-study.1",
+    "zh": "理解顶级玩家的共同特征：频率平衡、范围一致、情绪稳定"
+  },
+  {
+    "key": "theory.chapterObjectives.t9hu-pro-study.2",
+    "zh": "学会从职业选手的公开策略与牌例中提炼可复用的方法论"
+  }
+]

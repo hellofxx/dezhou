@@ -1,0 +1,1388 @@
+{
+  "lessonContent": {
+    "l5-bankroll": [
+      "为什么资金管理如此重要？",
+      "即使你是世界级水平的牌手，没有足够的资金管理（Bankroll Management），一次倒霉的下风期就可能让你破产。资金管理是保护你免受方差影响的安全网。",
+      "黄金法则：现金局至少需要 20-30 个买入（Buy-in）的资金。锦标赛至少需要 50-100 个买入。",
+      "资金管理规则",
+      "现金局（NLH）：\n- 最低要求：20个买入\n- 推荐：30-50个买入\n- 职业标准：50+个买入\n\n例：打$1/$2（买入$200），你需要至少 $4,000-$10,000 的专用资金。",
+      "永远不要把生活费和扑克资金混在一起！专款专用是资金管理的第一原则。",
+      "升级和降级",
+      "升级条件：在当前级别积累到下一级30个买入\n降级条件：资金降至当前级别20个买入以下时果断降级\n\n降级不丢人！很多世界顶级牌手都曾因下风而降级，然后又打回来。",
+      "资金管理是职业牌手和娱乐玩家最大的区别之一。没有资金管理纪律的人，即使技术再好，也只是在赌博。",
+      "Kelly 准则公式：\nf* = (bp - q) / b\n\n其中 f* = 最优资金比例\nb = 净赔率（赢时获得 b 倍下注）\np = 胜率\nq = 败率 = 1-p\n\n扑克场景应用：\n假设你有 60% 胜率优势，赔率 1:1\nf* = (1×0.6 - 0.4) / 1 = 0.2 = 20%\n即每次下注不超过总资金的 20%\n\n保守策略（Half Kelly）：f = f*/2 = 10%，进一步降低破产风险",
+      "理论支撑：Kelly 准则在扑克资金管理中的量化应用详见理论学院 T8 第 2 章\"资金心理与量化管理\"。T8 全面覆盖了扑克心理学中的资金管理方法论。",
+      "反直觉点：Kelly 准则下最优下注比例远低于直觉。即使你有 60% 的胜率优势，Kelly 准则也只建议投入 20% 的资金。大多数玩家在实际中投入的比例远高于 Kelly 推荐的合理值，这是导致破产的主要原因之一。"
+    ],
+    "l5-tilt": [
+      "什么是 Tilt？",
+      "Tilt（情绪失控）是指因为负面事件（被bad beat、连续输牌、对手挑衅等）导致情绪波动，做出非理性决策的状态。Tilt 是扑克玩家最大的敌人，比技术差距造成的伤害大得多。",
+      "Tilt 的成本往往超过技术差距的成本。一个$10/hr 的赢家，一次严重的 tilt session 可能损失$500+。",
+      "Tilt 的类型",
+      "1. 愤怒型 Tilt：被bad beat后愤怒加注、bluff\n2. 恐惧型 Tilt：连输后不敢下注、过度弃牌\n3. 报复型 Tilt：针对某个对手做出非理性行动\n4. 绝望型 Tilt：想快速赢回损失，打太多手牌",
+      "防 Tilt 策略",
+      "1. 止损线：设定每次session的最大亏损（如2个买入），到了就停\n2. 休息规则：每打1小时休息5-10分钟\n3. 自我觉察：定期检查自己的情绪状态\n4. 长期视角：提醒自己这是一手牌，不是整个人生\n5. 停止信号：发现自己在做\"不像自己\"的行动时，立即停止",
+      "职业牌手不是不会 tilt，而是他们更快地意识到自己在 tilt 并采取措施。学会\"止损\"是情绪管理最重要的一步。记住：明天还有牌可以打，但钱输完了就没有了。",
+      "Tendler 7 型 Tilt 档案速查：\n1. 愤怒型 Tilt — 被 bad beat 后情绪失控\n2. 沮丧型 Tilt — 长期下风期积累的负面情绪\n3. 恐惧型 Tilt — 害怕输钱导致决策过于保守\n4. 自毁型 Tilt — 潜意识里想惩罚自己\n5. 厌倦型 Tilt — 长时间 session 导致注意力下降\n6. 傲慢型 Tilt — 连续赢钱后过度自信\n7. 急迫型 Tilt — 因时间压力或资金压力而仓促决策\n\n识别信号：连续答错 3 题时，正确率下降 >15% 时，应暂停训练",
+      "理论支撑：Tendler 7 型 Tilt 档案的完整分析见理论学院 T8 第 1 章\"Tilt 识别与分类\"。包括各型 Tilt 的识别信号、触发场景与应对策略。",
+      "反直觉点：正确率下降时最需要停止，而非继续。很多玩家在情绪波动时选择\"再打一手翻本\"，但这是最危险的错误——Tilt 状态下的决策质量显著下降，继续游戏只会扩大损失。"
+    ],
+    "l5-game-selection": [
+      "游戏选择",
+      "好的游戏选择可以让你的小时赢率翻倍。寻找以下特征的桌子：\n- 有高比例的休闲玩家（VPIP > 30%）\n- 平均底池较大\n- 翻牌率较高（多玩家看flop）\n- 玩家之间互动多（加注频繁）",
+      "你是桌上第6好的玩家还是第1好的玩家，比你打哪个级别更重要。",
+      "长期思维",
+      "扑克是一个长期游戏。短期结果（1天、1周甚至1个月）很大程度上受运气影响。只有在足够大的样本量下（10,000+手牌），技术差距才会显现。\n\n不要因为短期的好运气升级到超出自己资金的级别，也不要因为短期的坏运气放弃正确的策略。",
+      "职业牌手的思维方式：\"这一手牌的结果不重要，重要的是我的决策是否是+EV的。如果我持续做出+EV决策，长期来看我一定会盈利。\" 这种心态是区分职业和业余的根本。"
+    ],
+    "l5-session-review": [
+      "为什么复盘比打牌更重要？",
+      "许多玩家花大量时间打牌却很少复盘。研究表明，每小时打牌 + 30分钟复盘的进步速度，远超 2 小时纯打牌。",
+      "标准 Session Review 流程：1) 标记关键手牌 → 2) 分析决策点 → 3) 对比 GTO → 4) 记录得失 → 5) 制定改进计划",
+      "复盘五步法",
+      "Step 1：标记关键手牌\n• 每次 Session 结束后立即标记 3-5 手\"不确定\"的牌\n• 不只看输的大底池，也看赢的大底池\n\nStep 2：分析决策点\n• 在每个街的关键点问\"还有其他选择吗？\"\n\nStep 3：对比 GTO\n• 用本平台的 GTO 模拟器检查最优策略\n\nStep 4：记录得失\n• 写下\"我做了什么\"和\"应该做什么\"\n\nStep 5：制定改进计划\n• 将最常见的错误列为下次 Session 的重点",
+      "复盘时不要被结果迷惑（\"我赢了所以做得对\"）。关注的是决策质量，不是结果。一个错误的决策可能偶尔赢钱，但长期必定亏损。",
+      "Session A/B/C 档分析框架：\nA 档（最佳状态）：专注、冷静、每个决策经过分析 → 适合复杂决策\nB 档（正常状态）：有一定疲劳但能维持基本决策质量 → 适合常规训练\nC 档（疲劳状态）：注意力下降、直觉代替分析 → 应立即停止\n\nSession 管理原则：\n- 单次训练不超过 60 分钟\n- 每 30 分钟休息 5 分钟\n- 出现 C 档信号时强制结束\n- 每日题量上限：0/50/100/200 四档",
+      "理论支撑：Session A/B/C 档管理方法详见理论学院 T8 第 3 章\"Session 管理与长期心态\"。包括 Session 规划、止损纪律与长期盈利心态的量化框架。",
+      "反直觉点：赢钱的 session 可能是最差的学习机会。当你连续赢钱时，容易产生\"我打得很好\"的错觉，即使实际上是在靠运气赢钱。真正的学习发生在输钱的 session 中——那是你发现并修正错误的机会。"
+    ],
+    "l5-data-driven": [
+      "用数据找到你的漏洞",
+      "属于自己的统计数据是最客观的镜子。通过分析你的 VPIP、PFR、C-Bet %、各位置赢率等数据，可以精确定位弱点。",
+      "关键指标解读",
+      "VPIP/PFR 差距过大（>8）：跟注太多、加注太少\nC-Bet % < 50%：翻后不够激进\n各位置赢率差异大：某些位置的策略有问题\nShowdown % > 35%：跟注太多到河牌",
+      "修复漏洞的优先级：先修频率最高的场景（如翻前范围），再修低频场景。一个翻前 Leak 每手都影响你，一个河牌 Leak 可能很少发生。",
+      "每月做一次\"数据体检\"：导出你的各项统计，对比上月和目标值。进步就是漏洞不断缩小的过程。"
+    ],
+    "l5-tools": [
+      "为什么需要使用工具？",
+      "现代扑克已经进入数据化时代。分析工具可以帮助你：\n\n1. 验证直觉：用数学验证你的打法是否正确\n2. 发现漏洞：通过数据发现自己的策略漏洞\n3. 学习GTO：了解理论最优策略作为参考基准\n4. 追踪进步：记录和分析你的长期表现",
+      "工具是辅助学习的利器，但过度依赖工具会阻碍直觉培养。正确使用工具的姿势：先理解原理，再用工具验证。",
+      "核心工具介绍",
+      "PioSOLVER / GTO+：\n- 用途：求解特定场景的GTO策略\n- 适用：翻后策略分析、频率平衡研究\n- 学习建议：从简单场景开始（如单挑翻牌圈），逐步增加复杂度\n\nEquilab（免费）：\n- 用途：计算手牌对阵范围的胜率\n- 适用：翻前范围分析、底池赔率计算\n- 学习建议：熟悉常用范围的胜率，培养直觉\n\nHand2Note / Holdem Resource Manager：\n- 用途：追踪和分析你的历史数据\n- 适用：发现策略漏洞、监控表现\n- 学习建议：关注关键指标（VPIP/PFR/3-Bet%），不要过度分析",
+      "最有效的学习方式：先用工具分析你的问题手牌，理解正确打法，然后在实战中刻意练习。不要只是看结果，要理解背后的逻辑。",
+      "警告：不要在学习时同时开多个工具。专注理解一个场景，比快速浏览100个场景更有效。"
+    ],
+    "l5-online-vs-live": [
+      "节奏差异",
+      "线上扑克：\n- 节奏快，每手牌约 10-15 秒\n- 每小时约 60-80 手牌\n- 需要快速决策能力\n- 可以使用多表（MTT）提高效率\n\n线下扑克：\n- 节奏慢，每手牌约 1-2 分钟\n- 每小时约 25-35 手牌\n- 有更多时间思考\n- 需要耐心和心理素质",
+      "核心差异：线上靠速度和数量盈利，线下靠质量和耐心盈利。两种环境需要不同的技能和心态。",
+      "多桌管理（MTT）",
+      "线上多桌技巧：\n- 从 2-4 桌开始，逐步增加\n- 选择不同位置的桌子（避免都在同一时间行动）\n- 使用快捷决策，减少思考时间\n- 注意：多桌会降低每桌的专注度，适合打标准牌\n\n线下单桌技巧：\n- 可以专注观察每个对手\n- 有更多时间阅读 Tell 和形象\n- 适合打剥削策略",
+      "HUD 数据利用与反 HUD",
+      "HUD（Heads-Up Display）是线上特有的工具：\n\n利用 HUD：\n- 快速识别对手类型（VPIP/PFR/3-Bet%）\n- 发现对手的漏洞（如面对 C-Bet 弃牌率过高）\n- 做出数据驱动的决策\n\n反 HUD 策略：\n- 平衡你的数据（不要让数据过于极端）\n- 利用对手依赖 HUD 的弱点（如频繁 3-Bet 对付 HUD 显示紧的玩家）\n- 定期改变打法，让数据失效",
+      "速度扑克（Zoom/Blitz）",
+      "速度扑克的特点：\n- 每手牌立即换桌，节奏极快\n- 无法针对特定对手调整\n- 适合打 GTO 策略\n- 需要快速决策能力\n\n适应策略：\n- 简化决策流程\n- 依赖标准打法\n- 不要试图在速度扑克中过度剥削",
+      "线下 Tell 阅读与形象管理",
+      "线下特有的技能：\n\nTell 阅读：\n- 观察对手的下注动作、表情、姿态\n- 常见 Tell：手抖（通常是强牌）、犹豫（通常是弱牌）\n- 注意：不要过度解读，结合数据判断\n\n形象管理：\n- 建立稳定的形象（紧/松/激进/被动）\n- 利用形象剥削对手（如紧形象时多 bluff）\n- 保持一致性，不要让对手读出你的模式",
+      "最好的牌手能够在线上和线下都保持盈利。建议两种环境都尝试，培养全面的技能。"
+    ]
+  },
+  "lessonQuiz": {
+    "l5-br-q1": {
+      "question": "打$1/$2现金局（买入$200），最低需要多少资金？",
+      "options": [
+        "$400",
+        "$2,000",
+        "$4,000-$6,000",
+        "$100"
+      ],
+      "explanation": "最低需要20个买入 = 20 × $200 = $4,000。推荐30个 = $6,000。"
+    },
+    "l5-br-q2": {
+      "question": "什么时候应该降级？",
+      "options": [
+        "连输3手牌",
+        "资金降至20个买入以下",
+        "不想打了",
+        "对手太强"
+      ],
+      "explanation": "当你的资金降至当前级别20个买入以下时，应该果断降级以保护资金安全。"
+    },
+    "l5-br-q3": {
+      "question": "推荐的现金局资金管理是多少个买入？",
+      "options": [
+        "10个",
+        "20个",
+        "30-50个",
+        "100个"
+      ],
+      "explanation": "推荐30-50个买入的资金管理，这能让你承受正常的波动。"
+    },
+    "l5-br-q4": {
+      "question": "升级的条件是？",
+      "options": [
+        "想升级就升级",
+        "在当前级别积累到下一级30个买入",
+        "赢了10手牌",
+        "对手太弱"
+      ],
+      "explanation": "升级条件是在当前级别积累到下一级30个买入，确保有足够的安全边际。"
+    },
+    "l5-br-q5": {
+      "question": "为什么不能把生活费和扑克资金混在一起？",
+      "options": [
+        "方便计算",
+        "专款专用是资金管理第一原则",
+        "没有原因",
+        "法律规定"
+      ],
+      "explanation": "专款专用是资金管理的第一原则，混合使用会导致在有压力时做出非理性决策。"
+    },
+    "l5-tilt-q1": {
+      "question": "被bad beat后最好的做法是？",
+      "options": [
+        "立即加注报复",
+        "继续打更多手牌赢回来",
+        "停下来检查自己的情绪",
+        "骂对手"
+      ],
+      "explanation": "最好的做法是暂停，检查自己的情绪状态。如果感到愤怒或沮丧，应该停止当前的session。"
+    },
+    "l5-tilt-q2": {
+      "question": "什么是\"止损线\"？",
+      "options": [
+        "停止打牌的时间",
+        "设定的最大亏损额度",
+        "下注的上限",
+        "休息时间"
+      ],
+      "explanation": "止损线是你提前设定的每次session的最大亏损额度（如2个买入），达到后立即停止，防止tilt造成更大损失。"
+    },
+    "l5-tilt-q3": {
+      "question": "Tilt的类型不包括？",
+      "options": [
+        "愤怒型",
+        "恐惧型",
+        "开心型",
+        "报复型"
+      ],
+      "explanation": "Tilt类型包括愤怒型、恐惧型、报复型和绝望型，不包括\"开心型\"。"
+    },
+    "l5-tilt-q4": {
+      "question": "发现自己在做\"不像自己\"的行动时应该？",
+      "options": [
+        "继续打",
+        "立即停止",
+        "加注更多",
+        "换桌子"
+      ],
+      "explanation": "发现自己在做不像自己的行动时，这是tilt的停止信号，应该立即停止。"
+    },
+    "l5-tilt-q5": {
+      "question": "每打多久应该休息5-10分钟？",
+      "options": [
+        "30分钟",
+        "1小时",
+        "2小时",
+        "3小时"
+      ],
+      "explanation": "建议每打1小时休息5-10分钟，保持清醒的头脑和稳定的情绪。"
+    },
+    "l5-game-q1": {
+      "question": "好桌子的特征之一是？",
+      "options": [
+        "全是职业牌手",
+        "底池很小",
+        "有很多休闲玩家",
+        "没人加注"
+      ],
+      "explanation": "理想的桌子有很多休闲玩家（高VPIP），这让你的技术优势最大化。"
+    },
+    "l5-game-q2": {
+      "question": "至少需要多少手牌的样本量才能准确评估你的水平？",
+      "options": [
+        "100手",
+        "1,000手",
+        "10,000手以上",
+        "10手"
+      ],
+      "explanation": "至少需要10,000+手牌，短期的结果受方差影响太大，无法准确评估技术水平。"
+    },
+    "l5-game-q3": {
+      "question": "你是桌上第几好的玩家最理想？",
+      "options": [
+        "第1好",
+        "第3好",
+        "第6好",
+        "无所谓"
+      ],
+      "explanation": "理想情况是你是桌上最好的玩家，技术优势最大化。"
+    },
+    "l5-game-q4": {
+      "question": "短期（1周）的输赢能说明什么？",
+      "options": [
+        "你的真实水平",
+        "策略有问题",
+        "受方差影响太大",
+        "应该换策略"
+      ],
+      "explanation": "短期结果受方差影响太大，需要10,000+手牌才能评估。"
+    },
+    "l5-game-q5": {
+      "question": "关注什么比关注结果更重要？",
+      "options": [
+        "单手输赢",
+        "决策质量",
+        "对手的表情",
+        "运气"
+      ],
+      "explanation": "关注决策质量而非结果。错误决策可能偶尔赢钱，但长期必亏。"
+    },
+    "l5-sr-q1": {
+      "question": "Session Review 的第一步是？",
+      "options": [
+        "计算赢输",
+        "标记关键手牌",
+        "打开GTO求解器",
+        "发朋友圈"
+      ],
+      "explanation": "复盘首先要标记出需要分析的关键牌局，然后再深入分析。"
+    },
+    "l5-sr-q2": {
+      "question": "复盘时应该关注什么？",
+      "options": [
+        "单手牌的输赢结果",
+        "决策质量而非结果",
+        "只看大底池",
+        "对手的表情"
+      ],
+      "explanation": "质量复盘关注的是决策过程是否正确，而非单次结果。"
+    },
+    "l5-sr-q3": {
+      "question": "复盘应该关注什么？",
+      "options": [
+        "单手输赢",
+        "决策质量",
+        "对手运气",
+        "牌桌风水"
+      ],
+      "explanation": "复盘关注决策质量而非结果。"
+    },
+    "l5-sr-q4": {
+      "question": "每次Session应标记几手关键牌？",
+      "options": [
+        "所有手牌",
+        "3-5手",
+        "1手",
+        "不标记"
+      ],
+      "explanation": "每次Session结束后标记3-5手\"不确定\"的牌。"
+    },
+    "l5-sr-q5": {
+      "question": "复盘的第5步是？",
+      "options": [
+        "计算赢输",
+        "标记手牌",
+        "制定改进计划",
+        "对比GTO"
+      ],
+      "explanation": "复盘第5步是制定改进计划。"
+    },
+    "l5-dd-q1": {
+      "question": "VPIP/PFR 差距过大说明什么？",
+      "options": [
+        "打得太紧",
+        "跟注太多、加注太少",
+        "打得很好",
+        "bluff太多"
+      ],
+      "explanation": "VPIP远大于PFR说明你被动跟注太多，应该要么加注要么弃牌。"
+    },
+    "l5-dd-q2": {
+      "question": "修复漏洞应优先关注哪类？",
+      "options": [
+        "河牌场景",
+        "翻前场景（频率最高）",
+        "锦标赛场景",
+        "全部同时修"
+      ],
+      "explanation": "翻前决策每手牌都会发生，修复翻前漏洞的收益最大。"
+    },
+    "l5-dd-q3": {
+      "question": "C-Bet % < 50% 说明什么？",
+      "options": [
+        "打得太松",
+        "翻后不够激进",
+        "打得很好",
+        "bluff太多"
+      ],
+      "explanation": "C-Bet低于50%说明翻后不够激进。"
+    },
+    "l5-dd-q4": {
+      "question": "Showdown % > 35% 说明什么？",
+      "options": [
+        "打得太紧",
+        "跟注太多到河牌",
+        "bluff太多",
+        "打得很好"
+      ],
+      "explanation": "Showdown%过高说明跟注太多到河牌。"
+    },
+    "l5-dd-q5": {
+      "question": "每月应该做什么来追踪进步？",
+      "options": [
+        "换级别",
+        "做数据体检",
+        "换平台",
+        "不需要追踪"
+      ],
+      "explanation": "每月做数据体检，导出各项统计对比目标值。"
+    },
+    "l5-tools-q1": {
+      "question": "PioSOLVER / GTO+ 的主要用途是？",
+      "options": [
+        "追踪历史数据",
+        "求解特定场景的GTO策略",
+        "计算胜率",
+        "管理资金"
+      ],
+      "explanation": "PioSOLVER/GTO+ 是求解器，用于分析特定场景的GTO策略。"
+    },
+    "l5-tools-q2": {
+      "question": "Equilab 的主要功能是？",
+      "options": [
+        "分析翻后策略",
+        "追踪历史数据",
+        "计算手牌对阵范围的胜率",
+        "管理资金"
+      ],
+      "explanation": "Equilab 是免费的胜率计算器，用于分析手牌对阵范围的胜率。"
+    },
+    "l5-tools-q3": {
+      "question": "使用分析工具的正确姿势是？",
+      "options": [
+        "完全依赖工具做决策",
+        "先理解原理，再用工具验证",
+        "只看结果不理解逻辑",
+        "同时开多个工具快速浏览"
+      ],
+      "explanation": "工具是辅助学习的，应该先理解原理，再用工具验证。"
+    },
+    "l5-tools-q4": {
+      "question": "Hand2Note / Holdem Resource Manager 的主要用途是？",
+      "options": [
+        "求解GTO策略",
+        "计算胜率",
+        "追踪和分析历史数据",
+        "训练翻后技术"
+      ],
+      "explanation": "Hand2Note/Holdem Resource Manager 是数据追踪工具，用于分析历史数据。"
+    },
+    "l5-tools-q5": {
+      "question": "关于工具使用的建议，以下哪项是错误的？",
+      "options": [
+        "从简单场景开始学习",
+        "专注理解一个场景比快速浏览100个更有效",
+        "同时开多个工具提高效率",
+        "先理解原理再验证"
+      ],
+      "explanation": "同时开多个工具会降低学习效率。应该专注理解一个场景，深入分析。"
+    },
+    "l5-online-vs-live-q1": {
+      "question": "线上扑克每小时约多少手牌？",
+      "options": [
+        "25-35手",
+        "60-80手",
+        "100-120手",
+        "150+手"
+      ],
+      "explanation": "线上扑克节奏快，每小时约 60-80 手牌。"
+    },
+    "l5-online-vs-live-q2": {
+      "question": "HUD 的主要用途是？",
+      "options": [
+        "计算胜率",
+        "快速识别对手类型和数据",
+        "分析翻后策略",
+        "管理资金"
+      ],
+      "explanation": "HUD 可以快速显示对手的 VPIP/PFR/3-Bet% 等数据，帮助识别对手类型。"
+    },
+    "l5-online-vs-live-q3": {
+      "question": "速度扑克（Zoom/Blitz）适合打什么策略？",
+      "options": [
+        "剥削策略",
+        "GTO 策略",
+        "Tell 阅读",
+        "形象管理"
+      ],
+      "explanation": "速度扑克每手牌换桌，无法针对特定对手调整，适合打 GTO 策略。"
+    },
+    "l5-online-vs-live-q4": {
+      "question": "线下扑克的优势是？",
+      "options": [
+        "节奏快",
+        "可以观察 Tell 和形象",
+        "可以多桌",
+        "每小时手牌多"
+      ],
+      "explanation": "线下扑克节奏慢，有更多时间观察对手的 Tell 和建立形象。"
+    },
+    "l5-online-vs-live-q5": {
+      "question": "反 HUD 策略的核心是？",
+      "options": [
+        "不使用 HUD",
+        "平衡数据，让对手无法利用",
+        "只打紧凶",
+        "只打松凶"
+      ],
+      "explanation": "反 HUD 策略的核心是平衡你的数据，不要让数据过于极端，让对手无法利用。"
+    }
+  },
+  "lessonExample": {
+    "l5-bankroll-ex1": {
+      "title": "升级时机判断",
+      "correctAction": "升级条件判断",
+      "reasoning": [
+        "你当前打 NL10（买入 $10），资金 $450",
+        "NL25 的 30 个买入 = $750，你还没达到",
+        "应该继续在 NL10 积累资金",
+        "不要因为是\"好日子\"就冲动升级"
+      ],
+      "mistakeAction": "资金不够就升级（\"我先试试\"）",
+      "mistakeReasoning": "没有足够资金就升级是赌博行为。一旦遇到下风期，你会很快破产。",
+      "mistakeEvLoss": "破产风险增加 300%"
+    },
+    "l5-bankroll-ex2": {
+      "title": "降级不丢人",
+      "correctAction": "降级决策",
+      "reasoning": [
+        "你当前打 NL50（买入 $50），资金从 $2000 降到 $900",
+        "NL50 的 20 个买入 = $1000，你已经低于这个线",
+        "应该果断降级到 NL25",
+        "降级不是失败，是保护资金的聪明做法"
+      ],
+      "mistakeAction": "\"我不降级，我要打回来\"",
+      "mistakeReasoning": "拒绝降级是典型的 ego 问题。很多世界级牌手都曾降级再打回来。保护资金永远是第一位。",
+      "mistakeEvLoss": "破产风险 > 50%"
+    },
+    "l5-tilt-ex1": {
+      "title": "识别 Tilt 状态：被 Bad Beat 后",
+      "correctAction": "停下来，检查情绪",
+      "reasoning": [
+        "你的 AA 被对手的 Kx 在河牌击中两对反超",
+        "这是典型的 bad beat，你做了所有正确的决策",
+        "如果感到愤怒、想\"赢回来\"，说明你在 tilt",
+        "正确做法：深呼吸，离开桌子 5 分钟，评估情绪"
+      ],
+      "mistakeAction": "立即开下一手牌，加大注\"赢回来\"",
+      "mistakeReasoning": "Bad beat 后立即打牌是 tilt 的典型表现。你会打得太松、太激进，损失更多。",
+      "mistakeEvLoss": "-5 到 -20 BB（tilt session）"
+    },
+    "l5-tilt-ex2": {
+      "title": "止损线的应用",
+      "correctAction": "停止今天的 session",
+      "reasoning": [
+        "你今天已经输了 2 个买入（达到止损线）",
+        "你发现自己开始打太多手牌、加注太大",
+        "这是 tilt 的早期信号",
+        "正确做法：立即停止，明天再打"
+      ],
+      "mistakeAction": "\"再打一手就停\"（然后继续打 2 小时）",
+      "mistakeReasoning": "\"再打一手\"是 tilt 时最危险的自我欺骗。一旦超过止损线，你的决策质量会急剧下降。",
+      "mistakeEvLoss": "-10 到 -50 BB（继续 tilt）"
+    },
+    "l5-game-ex1": {
+      "title": "好桌子 vs 坏桌子识别",
+      "correctAction": "这是一张好桌子！",
+      "reasoning": [
+        "多人 limp 入池 = 休闲玩家多",
+        "平均底池较大，翻牌率高",
+        "玩家被动（limp 而不是 raise）",
+        "你的技术优势可以最大化"
+      ],
+      "mistakeAction": "离开这张桌子（\"太松了\"）",
+      "mistakeReasoning": "松被动的桌子是最好的赚钱机会。休闲玩家多意味着你的技术优势最大化。",
+      "mistakeEvLoss": "错失高赢率机会",
+      "tableDesc": "多人limp入池，典型的休闲玩家桌"
+    },
+    "l5-game-ex2": {
+      "title": "长期思维：不要因短期结果改变策略",
+      "correctAction": "继续执行正确策略",
+      "reasoning": [
+        "你这周输了 5 个买入，但你的策略是正确的",
+        "5 个买入 = 500BB，在正常方差范围内",
+        "10,000 手牌后才能准确评估水平",
+        "不要因短期下风就改变正确策略"
+      ],
+      "mistakeAction": "\"我的策略不行，我要换打法\"",
+      "mistakeReasoning": "短期下风不代表策略有问题。方差是扑克的一部分，只有足够大的样本才能证明策略是否+EV。",
+      "mistakeEvLoss": "频繁换策略导致长期-EV"
+    },
+    "l5-tools-ex1": {
+      "title": "使用 PioSOLVER 分析 C-Bet 策略",
+      "correctAction": "使用 PioSOLVER 分析",
+      "reasoning": [
+        "设置场景：BTN open vs BB call，K-8-3 彩虹面",
+        "运行求解器，查看GTO推荐的 C-Bet 频率和尺度",
+        "观察不同手牌的 C-Bet 策略分布",
+        "对比你的实战打法与GTO的差异，发现漏洞"
+      ],
+      "mistakeAction": "只看结果不分析过程",
+      "mistakeReasoning": "不要只关注\"应该下注多少\"，要理解为什么这个尺度是最优的。",
+      "mistakeEvLoss": "学习效率降低"
+    },
+    "l5-online-vs-live-ex1": {
+      "title": "线上多桌管理",
+      "correctAction": "多桌标准打法",
+      "reasoning": [
+        "同时打 4 桌，每桌都需要快速决策",
+        "AK 在 BTN 是标准加注，不需要深度思考",
+        "使用快捷决策，减少每桌的思考时间",
+        "多桌适合打标准牌，不要过度复杂化"
+      ],
+      "mistakeAction": "在多桌中过度分析每手牌",
+      "mistakeReasoning": "多桌时过度分析会降低效率。标准牌用标准打法，复杂牌再深度思考。",
+      "mistakeEvLoss": "效率降低"
+    }
+  },
+  "lessonPractice": {
+    "l5-bankroll-p1": {
+      "option": [
+        {
+          "action": "继续打当前级别",
+          "explanation": "你打NL10，资金$350 = 35个买入。资金充足，应该继续在当前级别积累。",
+          "evImpact": "0"
+        },
+        {
+          "action": "升级到NL25",
+          "explanation": "NL25需要30个买入=$750，你只有$350。资金不足就升级是赌博行为。",
+          "evImpact": "破产风险+200%"
+        },
+        {
+          "action": "降级到NL5",
+          "explanation": "你有35个买入，资金充足，不需要降级。过度保守会减慢进步速度。",
+          "evImpact": "-学习速度"
+        }
+      ]
+    },
+    "l5-bankroll-p2": {
+      "option": [
+        {
+          "action": "继续打NL50",
+          "explanation": "你打NL50，资金$800 = 16个买入。已经低于20个买入的最低线，应该降级。",
+          "evImpact": "破产风险+150%"
+        },
+        {
+          "action": "降级到NL25",
+          "explanation": "资金降至20个买入以下，应该果断降级。NL25的买入$25，你有32个买入，更安全。",
+          "evImpact": "保护资金安全"
+        },
+        {
+          "action": "All-in 赢回来",
+          "explanation": "\"赢回来\"心态是典型的 tilt + 没有资金管理。这会让你更快破产。",
+          "evImpact": "破产风险+500%"
+        }
+      ]
+    },
+    "l5-bankroll-p3": {
+      "option": [
+        {
+          "action": "用扑克资金交房租",
+          "explanation": "绝对不要把扑克资金和生活费混在一起！专款专用是资金管理的第一原则。",
+          "evImpact": "破产风险+100%"
+        },
+        {
+          "action": "保持资金分离，继续打",
+          "explanation": "扑克资金和生活费必须完全分离。只用专门的扑克资金打牌。",
+          "evImpact": "0"
+        },
+        {
+          "action": "借钱打牌",
+          "explanation": "永远不要借钱打牌！这会让你在有压力时做出非理性决策。",
+          "evImpact": "破产风险+300%"
+        }
+      ]
+    },
+    "l5-bankroll-p4": {
+      "option": [
+        {
+          "action": "用扑克资金支付日常开销",
+          "explanation": "扑克资金只能用于打牌，混用会破坏资金管理。",
+          "evImpact": "破产风险+200%"
+        },
+        {
+          "action": "保持资金完全分离",
+          "explanation": "扑克资金和生活费必须完全分离，这是资金管理的基本原则。",
+          "evImpact": "0"
+        },
+        {
+          "action": "偶尔借用扑克资金",
+          "explanation": "借用扑克资金会破坏资金管理的完整性。",
+          "evImpact": "破产风险+150%"
+        }
+      ]
+    },
+    "l5-bankroll-p5": {
+      "option": [
+        {
+          "action": "资金$1800，继续打NL50",
+          "explanation": "NL50的20个买入=$1000，你还有$1800=36个买入。资金充足，可以继续。",
+          "evImpact": "0"
+        },
+        {
+          "action": "资金$900，果断降级到NL25",
+          "explanation": "当前$1800=36个买入，资金充足不需要降级。",
+          "evImpact": "-学习速度"
+        },
+        {
+          "action": "借钱继续打NL50",
+          "explanation": "永远不要借钱打牌！",
+          "evImpact": "破产风险+500%"
+        }
+      ]
+    },
+    "l5-tilt-p1": {
+      "option": [
+        {
+          "action": "立即开下一手，加大注赢回来",
+          "explanation": "这是典型的 tilt 行为。被 bad beat 后情绪化打牌会让你损失更多。",
+          "evImpact": "-10 BB/session"
+        },
+        {
+          "action": "停下来，深呼吸，检查情绪",
+          "explanation": "被 bad beat 后最好的做法是暂停。检查自己是否在 tilt，如果情绪波动就停止。",
+          "evImpact": "保护资金"
+        },
+        {
+          "action": "在聊天室骂对手",
+          "explanation": "骂对手没有任何好处，只会让你更情绪化，影响后续决策。",
+          "evImpact": "-5 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p2": {
+      "option": [
+        {
+          "action": "用 QJo 在 UTG 后面开牌（正常打法）",
+          "explanation": "你今天的止损线是 2 个买入，你已经亏了 2 个买入。应该停止，不是继续打。",
+          "evImpact": "-5 BB/session"
+        },
+        {
+          "action": "停止今天的 session",
+          "explanation": "达到止损线就应该停止。明天还有牌可以打，但钱输完了就没有了。",
+          "evImpact": "保护资金"
+        },
+        {
+          "action": "加大买入继续打",
+          "explanation": "加大买入\"赢回来\"是绝望型 tilt 的典型表现。这会让你损失更多。",
+          "evImpact": "-20 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p3": {
+      "option": [
+        {
+          "action": "正常打（如果情绪稳定）",
+          "explanation": "如果你检查后情绪稳定，没有 tilt 迹象，可以继续正常打。定期自我检查是好习惯。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "打任何手牌（\"无所谓了\"）",
+          "explanation": "\"无所谓\"心态是 tilt 的信号。如果你不在乎输赢，说明你的决策已经不是理性的。",
+          "evImpact": "-5 BB/session"
+        },
+        {
+          "action": "针对之前赢你的对手加注",
+          "explanation": "报复型 tilt：针对特定对手做出非理性行动。应该对所有人用同样的策略。",
+          "evImpact": "-3 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p4": {
+      "option": [
+        {
+          "action": "连输3手后加大加注",
+          "explanation": "连输后加大加注是tilt的表现。",
+          "evImpact": "-5 BB/session"
+        },
+        {
+          "action": "检查情绪状态，正常打",
+          "explanation": "定期检查情绪状态，如果稳定就继续正常打。",
+          "evImpact": "0"
+        },
+        {
+          "action": "弃掉所有手牌",
+          "explanation": "过度弃牌也是tilt（恐惧型）的表现。",
+          "evImpact": "-3 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p5": {
+      "option": [
+        {
+          "action": "设定session止损线为2个买入",
+          "explanation": "提前设定止损线是防tilt的关键措施。",
+          "evImpact": "保护资金"
+        },
+        {
+          "action": "不设止损线",
+          "explanation": "没有止损线很容易在tilt时继续打。",
+          "evImpact": "-10 BB/session"
+        },
+        {
+          "action": "止损线设为10个买入",
+          "explanation": "10个买入太多了。2个买入是合理的止损线。",
+          "evImpact": "-5 BB/session"
+        }
+      ]
+    },
+    "l5-game-p1": {
+      "option": [
+        {
+          "action": "这是一张好桌子，留下来",
+          "explanation": "多人加注、3-Bet、大底池 = 可能是职业牌手桌。这种桌子很难打，技术优势小。",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "考虑换桌子（对手太强）",
+          "explanation": "多人激进加注说明对手水平较高。寻找更被动的桌子（多人limp）更有利可图。",
+          "evImpact": "+3 BB/100"
+        },
+        {
+          "action": "All-in（\"我不怕\"）",
+          "explanation": "ATs 面对 3-Bet 和多人跟注应该弃牌。这不是勇气问题，是数学问题。",
+          "evImpact": "-15 BB/100"
+        }
+      ],
+      "tableDesc": "多人激进加注，可能是职业牌手桌"
+    },
+    "l5-game-p2": {
+      "option": [
+        {
+          "action": "\"我这周输了，我打法有问题\"",
+          "explanation": "一周的结果受方差影响太大，不能证明策略有问题。需要 10,000+ 手牌才能评估。",
+          "evImpact": "-信心"
+        },
+        {
+          "action": "继续执行正确策略，关注长期",
+          "explanation": "短期下风是正常的。只要你持续做+EV决策，长期一定会盈利。关注决策质量而非结果。",
+          "evImpact": "+长期盈利"
+        },
+        {
+          "action": "升级到更高级别\"赢回来\"",
+          "explanation": "因下风而升级是极其危险的行为。这会让你在更高级别遇到更强的对手，损失更大。",
+          "evImpact": "破产风险+200%"
+        }
+      ]
+    },
+    "l5-game-p3": {
+      "option": [
+        {
+          "action": "Raise",
+          "amount": "6BB",
+          "explanation": "多人 limp 的桌子是好桌子！用强牌加注隔离休闲玩家，建立大底池。",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Limp along",
+          "explanation": "JTs 在多人底池有很好潜力，但应该加注而不是 limp。加注可以建立底池并获取主动权。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold（\"太多人了\"）",
+          "explanation": "JTs 在多人底池有极好的隐含赔率。而且这是好桌子的标志，应该留下而不是离开。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "多人被动limp，休闲玩家桌"
+    },
+    "l5-game-p4": {
+      "option": [
+        {
+          "action": "离开这张太松的桌子",
+          "explanation": "松被动的桌子是最好的赚钱机会。",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "Raise 6BB，隔离休闲玩家",
+          "explanation": "多人limp是好桌子！用强牌加注隔离休闲玩家。",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Limp along",
+          "explanation": "KQs应该加注而不是limp。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "多人limp，休闲玩家桌"
+    },
+    "l5-game-p5": {
+      "option": [
+        {
+          "action": "打了500手就评估水平",
+          "explanation": "500手远远不够，至少需要10,000+手牌。",
+          "evImpact": "-信心"
+        },
+        {
+          "action": "关注决策质量，不关注短期结果",
+          "explanation": "关注决策质量是长期成功的关键。",
+          "evImpact": "+长期盈利"
+        },
+        {
+          "action": "因连输而改变策略",
+          "explanation": "短期下风不代表策略有问题。频繁换策略导致长期-EV。",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p1": {
+      "option": [
+        {
+          "action": "赢了所以做得对",
+          "explanation": "结果导向思维。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "分析每个决策点是否+EV",
+          "explanation": "复盘应关注决策质量。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "只看输的大底池",
+          "explanation": "赢的牌也可能有决策错误。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p2": {
+      "option": [
+        {
+          "action": "Session后立即标记3-5手关键牌",
+          "explanation": "趁记忆新鲜立即标记。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "等一周后再复盘",
+          "explanation": "等太久会忘记关键细节。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "不复盘",
+          "explanation": "不复盘就失去最重要的学习机会。",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p3": {
+      "option": [
+        {
+          "action": "用GTO求解器检查每个标记的牌局",
+          "explanation": "用GTO求解器对比是复盘的重要步骤。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "只凭感觉判断",
+          "explanation": "凭感觉不够客观。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "只看对手的错误",
+          "explanation": "复盘重点是自己的决策。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p4": {
+      "option": [
+        {
+          "action": "记录\"做了什么\"和\"应该做什么\"",
+          "explanation": "记录得失是复盘的核心步骤。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "只计算输赢金额",
+          "explanation": "只计算输赢是结果导向。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "不记录",
+          "explanation": "不记录容易遗忘和自欺。",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p5": {
+      "option": [
+        {
+          "action": "将最常见的错误列为下次重点",
+          "explanation": "制定改进计划是复盘最后一步。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "同时修复所有漏洞",
+          "explanation": "同时修所有漏洞效率低。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "靠直觉进步",
+          "explanation": "不系统复盘无法发现重复错误。",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p1": {
+      "option": [
+        {
+          "action": "VPIP 45%, PFR 25%",
+          "explanation": "差距20%过大，需要调整。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "检查VPIP/PFR差距是否>8",
+          "explanation": "VPIP/PFR差距是最基础的指标。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "只看赢输金额",
+          "explanation": "赢输金额不能反映决策质量。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p2": {
+      "option": [
+        {
+          "action": "先修低频场景",
+          "explanation": "应该先修高频场景。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "先修翻前漏洞（频率最高）",
+          "explanation": "翻前决策每手牌都发生，收益最大。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "全部同时修",
+          "explanation": "同时修效率低。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p3": {
+      "option": [
+        {
+          "action": "导出本月数据对比目标值",
+          "explanation": "每月数据体检可以发现趋势和漏洞。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "只看最近100手",
+          "explanation": "100手样本太小。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "不需要追踪",
+          "explanation": "不追踪就无法发现漏洞。",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p4": {
+      "option": [
+        {
+          "action": "各位置赢率差异大说明运气不好",
+          "explanation": "通常说明某些位置策略有问题。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "分析各位置赢率找出薄弱位置",
+          "explanation": "各位置赢率是重要诊断指标。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "只关注总体赢率",
+          "explanation": "总体赢率掩盖位置差异。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p5": {
+      "option": [
+        {
+          "action": "进步就是漏洞不断缩小的过程",
+          "explanation": "进步的本质是不断发现和修复漏洞。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "进步就是赢钱越来越多",
+          "explanation": "短期赢钱受方差影响。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "不需要刻意修补漏洞",
+          "explanation": "不修补就会停滞不前。",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p1": {
+      "option": [
+        {
+          "action": "打开 Equilab 计算胜率",
+          "explanation": "Equilab 用于翻前范围分析，翻后场景应该用 PioSOLVER。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "打开 PioSOLVER 分析这个场景",
+          "explanation": "PioSOLVER 适合分析翻后特定场景的GTO策略。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "打开 Hand2Note 追踪数据",
+          "explanation": "Hand2Note 用于追踪历史数据，不是分析当前场景。",
+          "evImpact": "0 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p2": {
+      "option": [
+        {
+          "action": "使用 Equilab 计算 QJ 对阵 BTN call 范围的胜率",
+          "explanation": "Equilab 适合计算翻前手牌对阵范围的胜率。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "使用 PioSOLVER 分析",
+          "explanation": "翻前场景用 Equilab 更合适，PioSOLVER 主要用于翻后。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "不需要工具分析",
+          "explanation": "使用工具可以帮助你理解 QJ 在不同位置的强度。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p3": {
+      "option": [
+        {
+          "action": "使用 Hand2Note 查看对手数据",
+          "explanation": "Hand2Note 用于追踪自己的历史数据，不是分析当前场景。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "使用 PioSOLVER 分析 BB 防守范围的策略",
+          "explanation": "PioSOLVER 可以分析 BB 防守范围在这个牌面的GTO策略。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "使用 Equilab 计算胜率",
+          "explanation": "翻后场景应该用 PioSOLVER，Equilab 主要用于翻前。",
+          "evImpact": "0 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p4": {
+      "option": [
+        {
+          "action": "使用 Hand2Note 分析自己的 VPIP/PFR",
+          "explanation": "Hand2Note 可以追踪你的翻前数据，发现策略漏洞。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "使用 PioSOLVER 分析",
+          "explanation": "翻前场景用 Equilab 或数据追踪工具更合适。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "不需要工具",
+          "explanation": "数据追踪可以帮助你发现自己的策略漏洞。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p5": {
+      "option": [
+        {
+          "action": "使用 PioSOLVER 分析 Turn 策略",
+          "explanation": "PioSOLVER 可以分析 Turn 的多街策略。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "使用 Equilab 计算胜率",
+          "explanation": "翻后多街场景应该用 PioSOLVER。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "不需要工具分析",
+          "explanation": "Turn 策略比较复杂，使用工具可以帮助你理解正确打法。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l5-online-vs-live-p1": {
+      "option": [
+        {
+          "action": "使用标准 GTO 策略 C-Bet",
+          "explanation": "速度扑克无法针对特定对手，适合打标准 GTO 策略。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "根据对手 Tell 调整",
+          "explanation": "速度扑克每手牌换桌，无法观察 Tell。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "建立形象剥削对手",
+          "explanation": "速度扑克无法建立形象，每手牌都是新对手。",
+          "evImpact": "0 BB/100"
+        }
+      ],
+      "tableDesc": "线上速度扑克（Zoom）"
+    },
+    "l5-online-vs-live-p2": {
+      "option": [
+        {
+          "action": "观察对手 Tell，结合数据决策",
+          "explanation": "线下扑克可以利用 Tell 阅读辅助决策。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "只看 HUD 数据",
+          "explanation": "线下没有 HUD，需要结合 Tell 和形象判断。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "忽略 Tell，只打 GTO",
+          "explanation": "线下 Tell 是重要信息来源，不应该忽略。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "线下现金桌，对手有明显 Tell"
+    },
+    "l5-online-vs-live-p3": {
+      "option": [
+        {
+          "action": "使用标准打法，快速决策",
+          "explanation": "多桌时标准牌用标准打法，快速决策提高效率。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "深度分析对手范围",
+          "explanation": "多桌时过度分析会降低效率。标准牌用标准打法。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "弃牌，减少思考",
+          "explanation": "98s 在 BB 有足够赔率跟注，不应该因为多桌就弃牌。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "线上现金桌，同时打 4 桌"
+    },
+    "l5-online-vs-live-p4": {
+      "option": [
+        {
+          "action": "利用 HUD 数据，对 Calling Station 减少 bluff",
+          "explanation": "HUD 显示对手是 Calling Station（VPIP 45%，弃牌率 20%），应该减少 bluff，多价值下注。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "忽略 HUD，打 GTO",
+          "explanation": "HUD 数据可以帮助你做出剥削调整，不应该忽略。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "频繁 bluff",
+          "explanation": "面对 Calling Station bluff 是-EV，他们不会弃牌。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ],
+      "tableDesc": "线上现金桌，HUD 显示对手 VPIP 45%，面对 C-Bet 弃牌率 20%"
+    },
+    "l5-online-vs-live-p5": {
+      "option": [
+        {
+          "action": "利用紧凶形象，在 Turn  bluff",
+          "explanation": "紧凶形象会让对手更尊重你的下注，可以适当 bluff。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "忽略形象，打 GTO",
+          "explanation": "线下形象是重要信息来源，可以利用形象剥削对手。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "总是价值下注",
+          "explanation": "紧凶形象也可以 bluff，不要总是价值下注。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "线下现金桌，你建立了紧凶形象"
+    }
+  },
+  "drill": {
+    "d-l5-tilt-q1": {
+      "scenario": "情绪识别",
+      "question": "你的AA被K7在河牌反超（bad beat），现在最可能处于什么状态？",
+      "option": [
+        "冷静",
+        "愤怒型Tilt",
+        "兴奋"
+      ],
+      "explanation": "被bad beat后最典型的反应是愤怒。如果感到愤怒并想\"赢回来\"，说明已进入愤怒型Tilt。应立即停止或休息。"
+    },
+    "d-l5-tilt-q2": {
+      "scenario": "情绪识别",
+      "question": "连续3手牌被bluff后，你开始过度弃牌，这是哪种Tilt？",
+      "option": [
+        "愤怒型",
+        "恐惧型Tilt",
+        "报复型"
+      ],
+      "explanation": "连输后不敢下注、过度弃牌是典型的恐惧型Tilt。"
+    },
+    "d-l5-tilt-q3": {
+      "scenario": "情绪识别",
+      "question": "某个对手连续赢了你几手牌，你现在只针对他加注，这是哪种Tilt？",
+      "option": [
+        "报复型Tilt",
+        "厌倦型",
+        "急迫型"
+      ],
+      "explanation": "针对特定对手做出非理性行动是报复型Tilt。"
+    },
+    "d-l5-tilt-q4": {
+      "scenario": "止损决策",
+      "question": "你的止损线是2个买入，现在已亏1.8个买入，应该？",
+      "option": [
+        "继续打",
+        "接近止损线，准备停止",
+        "加大买入"
+      ],
+      "explanation": "接近止损线应该准备停止。达到止损线就停止，不要\"再打一手\"。"
+    },
+    "d-l5-tilt-q5": {
+      "scenario": "止损决策",
+      "question": "你已连续输5手牌，情绪明显波动，应该？",
+      "option": [
+        "继续打",
+        "停止，检查情绪",
+        "加注报复"
+      ],
+      "explanation": "情绪明显波动时应该停止，检查情绪状态。"
+    },
+    "d-l5-tilt-q6": {
+      "scenario": "情绪识别",
+      "question": "你连续赢了2小时，开始觉得\"我永远不会输\"，这是哪种Tilt？",
+      "option": [
+        "急迫型",
+        "傲慢型Tilt",
+        "自毁型"
+      ],
+      "explanation": "连续赢钱后过度自信是傲慢型Tilt。"
+    },
+    "d-l5-tilt-q7": {
+      "scenario": "止损决策",
+      "question": "打牌1小时后你开始频繁看手机，注意力下降，应该？",
+      "option": [
+        "继续打",
+        "休息5-10分钟",
+        "加大下注"
+      ],
+      "explanation": "注意力下降是厌倦型Tilt信号。每打1小时休息5-10分钟。"
+    },
+    "d-l5-tilt-q8": {
+      "scenario": "情绪识别",
+      "question": "你发现自己做出\"不像自己\"的行动（比如用72o加注），应该？",
+      "option": [
+        "继续打",
+        "立即停止",
+        "加大加注"
+      ],
+      "explanation": "做出不像自己的行动是Tilt的停止信号，应立即停止。"
+    },
+    "d-l5-session-q1": {
+      "scenario": "Session规划",
+      "question": "你一天的最佳训练时长是？",
+      "option": [
+        "60分钟",
+        "180分钟",
+        "连续打5小时"
+      ],
+      "explanation": "单次训练不超过60分钟，每30分钟休息5分钟。"
+    },
+    "d-l5-session-q2": {
+      "scenario": "Session规划",
+      "question": "你处于C档（疲劳状态），应该？",
+      "option": [
+        "继续打",
+        "立即停止",
+        "加大题量"
+      ],
+      "explanation": "C档是疲劳状态，注意力下降、直觉代替分析，应立即停止。"
+    },
+    "d-l5-session-q3": {
+      "scenario": "Session规划",
+      "question": "你的每日题量上限是？",
+      "option": [
+        "不设限",
+        "0/50/100/200 四档",
+        "1000题"
+      ],
+      "explanation": "每日题量上限分为 0/50/100/200 四档，防止过度训练。"
+    },
+    "d-l5-session-q4": {
+      "scenario": "Session规划",
+      "question": "复盘应在什么时候进行？",
+      "option": [
+        "一周后",
+        "Session结束后立即",
+        "不复盘"
+      ],
+      "explanation": "Session结束后立即复盘，趁记忆新鲜。"
+    },
+    "d-l5-session-q5": {
+      "scenario": "Session规划",
+      "question": "每次Session应标记几手关键牌？",
+      "option": [
+        "所有手牌",
+        "3-5手",
+        "1手"
+      ],
+      "explanation": "每次Session结束后标记3-5手\"不确定\"的牌。"
+    },
+    "d-l5-session-q6": {
+      "scenario": "Session规划",
+      "question": "复盘应该关注什么？",
+      "option": [
+        "单手输赢",
+        "决策质量",
+        "对手运气"
+      ],
+      "explanation": "复盘关注决策质量而非结果。"
+    },
+    "d-l5-session-q7": {
+      "scenario": "Session规划",
+      "question": "Session A/B/C档中的B档适合什么？",
+      "option": [
+        "复杂决策",
+        "常规训练",
+        "应立即停止"
+      ],
+      "explanation": "B档（正常状态）适合常规训练。"
+    },
+    "d-l5-session-q8": {
+      "scenario": "Session规划",
+      "question": "C档的正确应对是？",
+      "option": [
+        "继续训练",
+        "强制结束",
+        "加大训练量"
+      ],
+      "explanation": "C档（疲劳状态）应强制结束训练。"
+    },
+    "d-l5-session-q9": {
+      "scenario": "Session规划",
+      "question": "A档（最佳状态）适合什么？",
+      "option": [
+        "复杂决策",
+        "关闭训练",
+        "休息"
+      ],
+      "explanation": "A档（最佳状态）适合复杂决策。"
+    }
+  }
+}

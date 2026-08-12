@@ -5,6 +5,7 @@ import { CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import { orderQuizQuestion } from '../utils/quizShuffle';
+import { resolveQuizQuestion } from '../utils/contentKeys';
 import type { QuizQuestion } from '../types';
 
 interface LessonQuizProps {
@@ -14,10 +15,11 @@ interface LessonQuizProps {
 
 export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
   const { t } = useTranslation();
-  // 答案位置偏差治理：渲染前重排选项（数值升序 / id 稳定种子洗牌），源数据不变
+  // 答案位置偏差治理：渲染前先 t() 解析（key 缺失回退数据层中文），再重排选项
+  // （数值升序 / id 稳定种子洗牌）——种子只依赖 id，zh/en 顺序一致，源数据不变
   const orderedQuestions = useMemo(
-    () => questions.map((q) => orderQuizQuestion(q)),
-    [questions],
+    () => questions.map((q) => orderQuizQuestion(resolveQuizQuestion(t, q))),
+    [questions, t],
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);

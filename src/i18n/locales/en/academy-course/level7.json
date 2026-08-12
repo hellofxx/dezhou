@@ -1,0 +1,1073 @@
+{
+  "lessonContent": {
+    "l7-deepstack": [
+      "Deep Stacks vs Standard Stacks",
+      "Key differences between deep stacks (200BB+) and standard stacks (100BB):\n\n- Preflop: small pocket pairs and suited connectors gain value (set-mining and big-pot potential)\n- Postflop: more multi-street maneuvering room, implied odds matter more\n- Hand-strength bar: top pair top kicker is no longer an \"absolute strong hand\"\n- Bluff value: deep-stack bluffs are more powerful (you can apply more pressure)\n- Position value: positional advantage is more pronounced with deep stacks",
+      "Core principle: the deeper the stack, the more postflop skill matters. 100BB can profit with preflop play alone; 200BB+ requires mastering multi-street postflop play.",
+      "Preflop Adjustments",
+      "Deep-stack preflop range adjustments:\n\nHands gaining value:\n- Small pocket pairs (22-88): set-mining value is extreme (a set can win 200BB)\n- Suited connectors (54s-T9s): big-pot potential (straights/flushes can win the whole stack)\n- Suited Ax (A2s-A9s): nut-flush potential\n\nHands losing relative value:\n- AKo/AQo: easily manipulated at deep stacks\n- Big pocket pairs (AA/KK): still strong, but need more careful postflop play",
+      "Postflop Adjustments",
+      "Key deep-stack postflop adjustments:\n\n1. Multi-street planning: don't just look at the current street — plan the turn and river\n2. Pot control: medium hands (top pair) shouldn't build oversized pots\n3. Implied odds: draws and speculative hands gain value (can win more)\n4. Pressure: deep-stack bluffs are more powerful (opponents face bigger decision pressure)\n5. Position exploitation: value-bet and bluff more often from position",
+      "Deep-Stack Traps",
+      "Most common deep-stack mistakes:\n\n- Stacking off 200BB with top pair top kicker (TPTK isn't the nuts at deep stacks)\n- Ignoring opponents' implied odds (letting them draw cheaply, then losing big pots)\n- Over-bluffing (deep-stack opponents are better able to call you)\n- No multi-street planning (playing one street at a time leads to trouble)",
+      "Deep-stack core thinking: how much is your hand worth at 200BB? Top pair can stack off at 100BB, but at 200BB it may only be worth a medium pot.",
+      "Deep-stack cash games are the most profitable game form, but also the most volatile. Make sure your bankroll can handle 200BB swings (at least 30-40 buy-ins).",
+      "SPR progression formula:\nSPR = effective stack ÷ pot size\n\nDeep-stack definition (SPR > 10):\nExample: 200BB effective, 15BB flop pot → SPR = 13.3\n\nStrategy adjustments at deep stacks:\nSuited connectors (e.g. 98s) can realize 5-10x the pot value\nPocket pairs (e.g. 22) get a huge set-mining implied-odds boost\nBig pairs (e.g. KK) drop in postflop realization, because opponents can pressure you with wider ranges at deep stacks\n\nReverse implied-odds risk:\nYou can still lose to stronger hands when draws complete\nAt deep stacks, reverse implied odds become exponentially more punishing",
+      "Theory reference: the quantitative relationship between SPR and stack depth is in Theory Academy T6 Chapter 3 \"SPR and Three-Street Geometric Sizing\". Implied-odds and reverse implied-odds analysis at deep stacks is in T2 Chapters 3-4.",
+      "Counter-intuitive: at deep stacks, suited connectors are worth more than big pairs. AA looks powerful deep-stacked, but its postflop realization drops — opponents can pressure you with wider ranges on later streets, forcing tough folds. Meanwhile 98s can make straights, flushes, and other strong hands with better postflop playability."
+    ],
+    "l7-multiway": [
+      "Multiway vs Heads-Up: Core Differences",
+      "When 3 or more players enter the pot, strategy needs major adjustments:\n\n- Tighter ranges: vs multiple opponents you need stronger hands to continue\n- Fewer bluffs: the chance someone calls rises with more opponents\n- Purer value bets: need stronger hands to value bet\n- Position matters more: positional advantage is more pronounced multiway\n- Pot odds improve: bigger pots, but both implied and reverse implied odds grow",
+      "Core principle: in multiway pots, your hand-strength bar rises significantly. Top pair heads-up may be just medium strength in a 4-way pot.",
+      "Preflop Adjustments",
+      "Multiway preflop strategy:\n\n- Tighten the open range: more likely to be called by multiple players, need stronger hands\n- Speculative hands gain value: multiway implied odds are better (can win from more people)\n- Avoid opening marginal hands: getting called by 3 people makes postflop hard\n- Raise-size adjustment: can raise bigger multiway (to isolate weak hands)",
+      "Postflop Adjustments",
+      "Multiway postflop strategy:\n\n1. Lower C-Bet frequency:\n   - Heads-up: C-Bet 60-70%\n   - 3-way pot: C-Bet 40-50%\n   - 4+ way pot: C-Bet 30-40%\n\n2. Higher value bar:\n   - Heads-up: top pair can value bet 3 streets\n   - Multiway: top pair may only be worth 1-2 streets of value\n\n3. Bluff frequency drops sharply:\n   - Higher chance someone has a strong hand\n   - Bluff success = probability ALL opponents fold (multiplicative effect)",
+      "Position Importance in Multiway Pots",
+      "Position is even more critical multiway:\n\n- In position (BTN): can see all opponents' actions before deciding\n- Out of position (UTG/MP): very difficult vs multiple opponents, tighter ranges\n- Squeezed position (CO): toughest spot, multiple opponents still to act behind\n\nPractical tip: lean check in multiway pots out of position, lean bet in position.",
+      "Multiway golden rule: if you're not sure your hand is strong enough, check. Mistakes cost far more multiway than heads-up.",
+      "Many winning players lose money in multiway pots because they use heads-up thinking. Remember: a 3-way pot isn't 3 heads-up pots — it's a completely different game.",
+      "Multiway equity dilution formula:\nHeads-up pot: top pair equity ≈ 70-80%\n3-way pot: top pair equity ≈ 40-50%\n4-way pot: top pair equity ≈ 25-35%\n\nEach additional opponent dilutes your equity to roughly 60-70% of before\n\nMultiway betting adjustments:\n- Value bets need stronger hands (at least two pair+)\n- Bluff frequency drops sharply (need all opponents to fold)\n- Flush-draw value drops (multiple opponents drawing to the same flush is more likely)",
+      "Theory reference: multiway equity distribution and strategy adjustments are in Theory Academy T9 Chapter 3 \"Multiway Pots and the GTO-Exploitation Unified Framework\", including multiway equity tables and the \"Nash equilibrium applicability boundary in multiway pots\" warning.",
+      "Counter-intuitive: your equity is diluted in a 3-way pot, but your pot odds improve. When facing a bet in a 3-way pot, the dead money of another player makes your odds better. But note: your hand must beat two opponents, and equity can fall faster than odds improve."
+    ],
+    "l7-straddle": [
+      "What Is a Straddle?",
+      "A straddle is an optional extra blind posted by the UTG (or BTN) player before the deal, usually 2BB (twice the big blind).\n\nEffects of a straddle:\n- Effective stack halves: 100BB becomes 50BB effective (relative to the straddle)\n- Bigger pot: preflop pot goes from 1.5BB to 3.5BB\n- Lower SPR: less stack depth relative to the pot\n- Action-order change: the straddler acts last preflop",
+      "Core effect of the straddle: the effective stack halves. 100BB in a straddle game is equivalent to 50BB — adjust strategy accordingly.",
+      "Strategy Adjustments",
+      "Strategy changes in straddle games:\n\n1. Tighten ranges:\n   - Less stack depth = less speculative-hand value\n   - Small pocket pairs and suited connectors drop in value (set-mining doesn't pay)\n   - Strong hands (AA-JJ, AK) gain relative value\n\n2. Raise-size adjustment:\n   - Baseline is the straddle: 2x straddle = 4BB\n   - Standard open becomes 4-5BB (instead of 2.5BB)\n   - 3-Bets grow accordingly\n\n3. Exploit the straddler's positional disadvantage:\n   - The straddler acts last preflop but first postflop\n   - You can pressure the straddler postflop",
+      "Mississippi Straddle vs BTN Straddle",
+      "Two common straddle forms:\n\nMississippi Straddle (UTG straddle):\n- UTG posts 2BB\n- Action: starts at UTG+1, straddler acts last preflop\n- Postflop: straddler acts first (positional disadvantage)\n\nBTN Straddle:\n- BTN posts 2BB\n- Action: starts at SB, BTN acts last preflop\n- Postflop: BTN still acts last (positional advantage retained)\n- The BTN straddle favors the BTN (keeps positional advantage)",
+      "Practical Advice",
+      "Practical straddle-game tips:\n\n- Don't over-adjust: the straddle just changes stack depth; the basic framework stays\n- Track effective stacks: always compute effective stacks relative to the straddle\n- Use position: if the straddler is OOP postflop, pressure him\n- Avoid big pots: don't stack off in straddle pots unless you have a strong hand\n- Observe opponents: some players play looser and more aggressively after straddling",
+      "The essence of a straddle game: it's a 50BB game (not 100BB). Play with 50BB thinking, not 100BB.",
+      "The biggest mistake many players make in straddle pots: using 100BB thinking in a 50BB game. Remember, the effective stack halved — adjust your strategy accordingly.",
+      "Preflop range adjustments under a straddle:\nStraddle = 2x the big blind (usually 2BB)\nEffective-stack adjustment:\nApparent 100BB → actual effective = 100BB/2BB = 50 straddles\n\nPreflop range adjustments:\n- Tighten the opening range by about 20-30% (because of the straddle's dead money in the pot)\n- 3Bet sizing should adjust to 4-5x the straddle\n- The straddle-position player's defense range should widen (already posted 2BB)\n\nNote: the straddle isn't an extra bet but an expansion of the blind — effective stacks are computed in Big Blinds, not straddles",
+      "Theory reference: the theoretical basis of position-value changes and preflop range adjustments under straddle structures is in Theory Academy T3 Chapter 1 \"Position Value and Equity Realization\".",
+      "Counter-intuitive: a straddle isn't extra chips invested — it's a temporary expansion of the blind. Effective stacks are still computed by the big blind, not the straddle amount. That means actual stack depth in a straddle game is shallower than it appears, with lower SPR."
+    ],
+    "l7-rake": [
+      "What Is Rake and Why Does It Matter?",
+      "Rake is the service fee taken by the platform/casino from each pot. It directly affects your win rate: every hand you're playing against an \"invisible opponent\" (the house).",
+      "In a high-rake environment:\n• Play tighter (fewer marginal hands)\n• Reduce calls (calls get the most EV eroded by rake)\n• Increase iso-raises and 3-Bets (reduce multiway pots)",
+      "Responding to Different Rake Structures",
+      "• Micro-stakes online (NL2-NL10): rake can hit 8-12 BB/100 — you must play very tight\n• Mid-stakes online (NL25-NL100): rake drops to 4-6 BB/100 — can loosen up moderately\n• Live cash: usually has a Cap (rake ceiling), so big pots have relatively lower rake",
+      "At micro-stakes, rake may be your biggest \"opponent\". Choose platforms with reasonable rake structures and take full advantage of rakeback policies."
+    ],
+    "l7-table-selection": [
+      "Why Is Table Selection the Most Underrated Skill?",
+      "Choosing a table with fish (weak players) can boost your win rate more than months of technical practice. Pros spend a lot of time on table selection — nothing shameful about it.",
+      "Good-table markers:\n• High average pot (Avg Pot)\n• High players/flop share (Players/Flop % > 30%)\n• Obvious weak players (high VPIP, low PFR)\n• Not multiple known strong players",
+      "Live Table-Selection Tips",
+      "Live table selection matters even more:\n• Observe 5-10 minutes before sitting\n• Look for drinking/chatty/emotional players\n• Choose a seat to the left of weak players (to have position on them more often)\n• Don't show pride — if the whole table is REGs, skip this table",
+      "Your win rate = your skill edge × opponent weakness. Even if you're the world's 10th best player, if the table is all top-9, you're still the weakest at the table."
+    ]
+  },
+  "lessonQuiz": {
+    "l7-deep-q1": {
+      "question": "At deep stacks (200BB), which hand type gains the most value?",
+      "options": [
+        "AKo",
+        "Small pocket pairs and suited connectors",
+        "AQo",
+        "KQo"
+      ],
+      "explanation": "Small pocket pairs (set-mining) and suited connectors (big-pot potential) gain the most at deep stacks, because hitting lets you win the opponent's full 200BB."
+    },
+    "l7-deep-q2": {
+      "question": "What is the correct way to play TPTK at deep stacks?",
+      "options": [
+        "Stack off immediately",
+        "Control pot size, don't build oversized pots",
+        "Always all-in",
+        "Fold immediately"
+      ],
+      "explanation": "At 200BB, TPTK is no longer an \"absolute strong hand\". Control the pot — don't stack off 200BB with just top pair."
+    },
+    "l7-deep-q3": {
+      "question": "Why are deep-stack bluffs more powerful than standard-stack bluffs?",
+      "options": [
+        "Opponents fold easier",
+        "You can apply more chip pressure",
+        "Deep-stack opponents are weaker",
+        "No difference"
+      ],
+      "explanation": "Deep-stack bluffs apply more chip pressure (opponents face losing 200BB). But being called costs more too."
+    },
+    "l7-deep-q4": {
+      "question": "How does position value change at deep stacks?",
+      "options": [
+        "Unchanged",
+        "Positional advantage becomes more pronounced",
+        "Position doesn't matter",
+        "Early position is better"
+      ],
+      "explanation": "Positional advantage becomes more pronounced at deep stacks because there's more street-by-street maneuvering room."
+    },
+    "l7-deep-q5": {
+      "question": "How many buy-ins do you need at minimum for deep-stack cash games?",
+      "options": [
+        "10",
+        "20",
+        "30-40",
+        "50"
+      ],
+      "explanation": "200BB deep-stack swings are big — need at least 30-40 buy-ins of bankroll."
+    },
+    "l7-multi-q1": {
+      "question": "In multiway pots, the C-Bet frequency should?",
+      "options": [
+        "Increase (more people to bluff)",
+        "Decrease (higher resistance probability)",
+        "Stay the same",
+        "Always all-in"
+      ],
+      "explanation": "Multiway C-Bet frequency should drop. With multiple opponents, someone having a strong hand is more likely, and bluff success drops (all must fold)."
+    },
+    "l7-multi-q2": {
+      "question": "Holding top pair in a 4-way pot, what is the correct value-bet strategy?",
+      "options": [
+        "Bet 3 streets like heads-up",
+        "Reduce value streets (1-2)",
+        "Always all-in",
+        "Never value bet"
+      ],
+      "explanation": "Top pair's value drops multiway. Heads-up it's 3 streets of value, but multiway it may only be worth 1-2 streets."
+    },
+    "l7-multi-q3": {
+      "question": "Why does bluff success drop in multiway pots?",
+      "options": [
+        "Opponents are stronger",
+        "All opponents must fold (multiplicative effect)",
+        "Pots are too small",
+        "Position doesn't matter"
+      ],
+      "explanation": "A bluff needs all opponents to fold. In a 3-way pot, even at 50% fold each, the probability all fold is only 50%×50% = 25%."
+    },
+    "l7-multi-q4": {
+      "question": "What is the correct strategy for top pair multiway?",
+      "options": [
+        "Same as heads-up",
+        "Reduce value streets",
+        "Always all-in",
+        "Never value bet"
+      ],
+      "explanation": "Top pair value drops multiway — reduce value streets (1-2)."
+    },
+    "l7-multi-q5": {
+      "question": "What is the safest position in multiway pots?",
+      "options": [
+        "UTG",
+        "BTN (in position)",
+        "BB",
+        "Doesn't matter"
+      ],
+      "explanation": "BTN has positional advantage — you see all opponents' actions before deciding."
+    },
+    "l7-straddle-q1": {
+      "question": "How does a straddle affect the effective stack?",
+      "options": [
+        "No effect",
+        "Effective stack halves",
+        "Effective stack doubles",
+        "Only postflop"
+      ],
+      "explanation": "A straddle (2BB) halves the effective stack. 100BB in a straddle game is 50BB effective — tighten strategy accordingly."
+    },
+    "l7-straddle-q2": {
+      "question": "In a straddle game, which hand type drops in value?",
+      "options": [
+        "AA/KK",
+        "AK",
+        "Small pocket pairs and suited connectors",
+        "AQ"
+      ],
+      "explanation": "The straddle halves the effective stack, so small pocket pairs (set-mining) and suited connectors (big-pot potential) drop in value due to worse implied odds. Strong hands gain relative value."
+    },
+    "l7-straddle-q3": {
+      "question": "What is the advantage of a BTN straddle over a UTG straddle?",
+      "options": [
+        "More chips",
+        "Keeps postflop positional advantage",
+        "Can bluff more",
+        "No difference"
+      ],
+      "explanation": "After a BTN straddle, the BTN still acts last postflop (position retained). After a UTG straddle, the straddler acts first postflop (disadvantage)."
+    },
+    "l7-straddle-q4": {
+      "question": "What does the standard open become after a straddle?",
+      "options": [
+        "2BB",
+        "2.5BB",
+        "4-5BB",
+        "10BB"
+      ],
+      "explanation": "After a straddle, the standard open becomes 4-5BB (2-2.5x straddle)."
+    },
+    "l7-straddle-q5": {
+      "question": "Postflop in a straddle game, you should act toward the straddler?",
+      "options": [
+        "More passively",
+        "Apply pressure",
+        "Avoid confrontation",
+        "No change"
+      ],
+      "explanation": "The straddler acts first postflop (positional disadvantage) — apply pressure on him."
+    },
+    "l7-rake-q1": {
+      "question": "How should you adjust in a high-rake environment?",
+      "options": [
+        "Play looser",
+        "Play tighter, reduce calls",
+        "Bluff more",
+        "Unaffected"
+      ],
+      "explanation": "Rake erodes marginal-hand EV — play tighter and reduce passive calls under high rake."
+    },
+    "l7-rake-q2": {
+      "question": "What is the rake at micro-stakes online (NL2-NL10)?",
+      "options": [
+        "1-2 BB/100",
+        "4-6 BB/100",
+        "8-12 BB/100",
+        "20 BB/100"
+      ],
+      "explanation": "Micro-stakes rake is typically as high as 8-12 BB/100 — a huge drag on win rate."
+    },
+    "l7-rake-q3": {
+      "question": "What should you increase under high rake?",
+      "options": [
+        "Calls",
+        "Iso-raises and 3-Bets",
+        "Bluffs",
+        "Multiway pots"
+      ],
+      "explanation": "Increase iso-raises and 3-Bets to reduce multiway pots — multiway pots have the highest rake cost."
+    },
+    "l7-rake-q4": {
+      "question": "What does live cash-game rake usually have?",
+      "options": [
+        "No cap",
+        "A Cap (rake ceiling)",
+        "Higher percentage",
+        "No rake"
+      ],
+      "explanation": "Live games usually have a Cap (rake ceiling), so big pots have relatively lower rake."
+    },
+    "l7-rake-q5": {
+      "question": "What is the rake at mid-stakes (NL25-NL100)?",
+      "options": [
+        "1-2 BB/100",
+        "4-6 BB/100",
+        "8-12 BB/100",
+        "20 BB/100"
+      ],
+      "explanation": "Mid-stakes rake drops to 4-6 BB/100 — can loosen up moderately."
+    },
+    "l7-ts-q1": {
+      "question": "Which is a \"good table\" marker?",
+      "options": [
+        "All REGs",
+        "High Players/Flop %",
+        "Low average pot",
+        "Nobody playing"
+      ],
+      "explanation": "High Players/Flop % means many players are playing loose — weak players at the table."
+    },
+    "l7-ts-q2": {
+      "question": "Where should you sit relative to a weak player live?",
+      "options": [
+        "To the right",
+        "To the left (to have position on him)",
+        "Across",
+        "Doesn't matter"
+      ],
+      "explanation": "Sitting left of a weak player means you act after him often — positional advantage."
+    },
+    "l7-ts-q3": {
+      "question": "How long should you observe before sitting at a live table?",
+      "options": [
+        "No need",
+        "5-10 minutes",
+        "1 hour",
+        "Sit immediately"
+      ],
+      "explanation": "Observe 5-10 minutes before sitting to find weak players."
+    },
+    "l7-ts-q4": {
+      "question": "What does your win rate equal?",
+      "options": [
+        "Your skill",
+        "Your skill edge × opponent weakness",
+        "Luck",
+        "Rake"
+      ],
+      "explanation": "Win rate = skill edge × opponent weakness. Both are indispensable."
+    },
+    "l7-ts-q5": {
+      "question": "If the whole table is REGs, you should?",
+      "options": [
+        "Keep playing",
+        "Skip this table",
+        "Try harder",
+        "Change strategy"
+      ],
+      "explanation": "If the whole table is REGs (regular players), your edge is small — change tables."
+    }
+  },
+  "lessonExample": {
+    "l7-deep-ex1": {
+      "title": "The value of set-mining at deep stacks",
+      "correctAction": "Call",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "At 250BB depth, set-mining 55 has extreme value",
+        "Set probability is about 12%, but hitting can win the opponent's 250BB",
+        "Implied odds: invest 2BB for a chance at 250BB (125:1)",
+        "TAG C-Bets at high frequency postflop — your set can win a lot",
+        "This is worth calling at 100BB too; at 250BB it's a clear call"
+      ],
+      "mistakeAction": "Fold (\"just a small pocket pair\")",
+      "mistakeReasoning": "At deep stacks, small pocket pairs have extreme set-mining value. Folding 55 wastes an excellent implied-odds opportunity.",
+      "mistakeEvLoss": "-0.8 BB/100",
+      "tableDesc": "Deep-stacked cash game, 250BB effective"
+    },
+    "l7-deep-ex2": {
+      "title": "Pot control with top pair at deep stacks",
+      "correctAction": "Bet",
+      "correctAmount": "3BB (45% pot)",
+      "reasoning": [
+        "AK top pair top kicker at 240BB is a strong hand but not the nuts",
+        "Small C-Bet to control the pot — don't build a huge pot early",
+        "If the opponent check-raises, you can reassess hand strength",
+        "At 240BB you don't want to stack off with just top pair",
+        "Plan: small bet on the flop, decide on the turn based on the situation"
+      ],
+      "mistakeAction": "Bet 5BB (75% pot) then prepare to stack off",
+      "mistakeReasoning": "Stacking off 240BB with top pair top kicker is a common mistake. At deep stacks the opponent's range is stronger — top pair can't support a 240BB pot.",
+      "mistakeEvLoss": "-2.0 BB/100",
+      "tableDesc": "Deep-stacked cash game, 240BB effective"
+    },
+    "l7-multi-ex1": {
+      "title": "C-Bet decision in a multiway pot",
+      "correctAction": "Bet",
+      "correctAmount": "10BB (50% pot)",
+      "reasoning": [
+        "4-way pot, you have top pair AK (strong hand)",
+        "Multiway C-Bet frequency drops, but top pair is still worth a value bet",
+        "50% pot is the standard multiway size (no need for bigger)",
+        "Against 3 opponents, someone calling is likely, but your hand is strong enough",
+        "If raised, reassess (a multiway raise represents an extremely strong hand)"
+      ],
+      "mistakeAction": "Check (\"too many players\")",
+      "mistakeReasoning": "Although multiway C-Bet frequency drops, top pair AK is still worth a value bet. Checking wastes value from weak hands.",
+      "mistakeEvLoss": "-1.0 BB/100",
+      "tableDesc": "4-way pot; UTG/MP/BB all called"
+    },
+    "l7-multi-ex2": {
+      "title": "Giving up on a bluff in a multiway pot",
+      "correctAction": "Check",
+      "reasoning": [
+        "4-way pot, you only have Q-high (air)",
+        "Multiway bluff success is extremely low (need all 3 to fold)",
+        "An A on the board means someone likely has Ax",
+        "Even at 40% fold each, all 3 folding is only 6.4%",
+        "Check and wait for a better spot (bluff when fewer players on the turn/river)"
+      ],
+      "mistakeAction": "C-Bet 8BB (heads-up thinking in a multiway pot)",
+      "mistakeReasoning": "Heads-up, QJ can C-Bet bluff an A-high board, but in a 4-way pot bluff success is extremely low. This is the classic \"heads-up thinking in a multiway pot\" mistake.",
+      "mistakeEvLoss": "-1.5 BB/100",
+      "tableDesc": "4-way pot; multiple preflop calls"
+    },
+    "l7-straddle-ex1": {
+      "title": "Open-size adjustment in a straddle game",
+      "correctAction": "Raise",
+      "correctAmount": "5BB (2.5x straddle)",
+      "reasoning": [
+        "After the straddle the effective stack = 50BB (100BB / 2BB straddle)",
+        "AK at 50BB depth is an extremely strong hand (like AA at 100BB)",
+        "Open size is based on the straddle: 2.5x = 5BB",
+        "AK at 50BB can comfortably stack off (no deep-stack concerns)",
+        "Standard open range tightens, but AK is clearly in it"
+      ],
+      "mistakeAction": "Open 2.5BB (using the normal size)",
+      "mistakeReasoning": "After the straddle the pot is already 3.5BB — opening 2.5BB is too small (less than the pot). Base the open on the straddle: 4-5BB.",
+      "mistakeEvLoss": "-0.3 BB/100",
+      "tableDesc": "UTG straddle 2BB; 100BB buy-in"
+    },
+    "l7-straddle-ex2": {
+      "title": "Folding speculative hands in a straddle game",
+      "correctAction": "Fold",
+      "reasoning": [
+        "65s vs a CO open can call at normal 100BB (good implied odds)",
+        "But after the straddle the effective stack is only 50BB — set-mining/flush implied odds worsen",
+        "At 50BB calling 5BB = 10% of the stack; hitting wins at most 50BB (not enough compensation)",
+        "Speculative hands drop sharply in value at shallow stacks",
+        "Fold and wait for a better spot"
+      ],
+      "mistakeAction": "Call (using 100BB thinking)",
+      "mistakeReasoning": "Calling 65s is standard at 100BB, but after the straddle you only have 50BB effective. Implied odds can't compensate the call cost.",
+      "mistakeEvLoss": "-0.5 BB/100",
+      "tableDesc": "UTG straddle 2BB; 100BB buy-in"
+    }
+  },
+  "lessonPractice": {
+    "l7-deep-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "87s has excellent implied odds at 300BB. Flush/straight potential is extremely valuable at deep stacks.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "At 300BB, 87s's implied odds are excellent. Hitting a flush/straight can win the opponent's 300BB. Suited connectors gain huge value at deep stacks, plus positional advantage.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "10BB",
+          "explanation": "3-Betting 87s at deep stacks isn't ideal. If 4-Bet you're forced to fold, wasting implied odds. Calling suits speculative hands.",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QQ is only third pair on A-K-5-2. At 230BB don't build a big pot. Check to control — call small bets, fold to big ones.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "8BB",
+          "explanation": "Betting QQ on an A-K board is dangerous. TAG's calling range has plenty of Ax/Kx dominating you. At deep stacks don't build big pots with medium strength.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Check-Raise if bet",
+          "explanation": "Check-raising QQ on an A-K board is meaningless. Not strong enough for a value raise and not suited to bluff (no good blockers).",
+          "evImpact": "-2.5 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A♥T♥ is the missed nut flush draw. Your range is polarized on this board — suited to bluffing. Checking wastes the bluff opportunity.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "6BB (50% pot)",
+          "explanation": "A small bluff isn't threatening. At deep stacks opponents call small bets too easily. Either don't bluff or bet big enough.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "18BB (150% pot)",
+          "explanation": "Deep-stack overbet bluffs are extremely powerful. You hold A♥ (blocking the opponent's nut flush) and the opponent faces losing 220BB. Overbet fold equity is higher at deep stacks.",
+          "evImpact": "+2.5 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "66 at 300BB has extreme set-mining value. Implied odds are excellent.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "At 300BB, set-mining 66 has excellent implied odds. Invest 2BB (SB posted 1BB) for a chance at 300BB.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Raise 10BB",
+          "explanation": "3-Betting 66 at deep stacks isn't ideal. Calling suits speculative hands.",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "You have the nut flush draw + overcards. At deep stacks you should semi-bluff bet.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 5BB",
+          "explanation": "The nut flush draw at 240BB should semi-bluff bet. Deep-stack bluffs are more powerful.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "Shoving with a draw at 240BB is excessive. A semi-bluff small bet is enough.",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "KK's set in a multiway pot is an extremely strong hand. Bet for value — don't slowplay (slowplaying multiway is risky).",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "14BB (66% pot)",
+          "explanation": "KK's set in a 5-way pot is an extremely strong value hand. Multiway strong hands should bet bigger (66% pot) since someone calling is likely — maximize value.",
+          "evImpact": "+3.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB (25% pot)",
+          "explanation": "A small bet is too weak multiway. You have a set — bet bigger to make draws pay. Small bets let too many weak hands see cheaply.",
+          "evImpact": "+1.0 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AQ top pair is only medium strength on the turn of a 4-way pot. The J on board means someone may have AJ/KJ. Top pair value drops multiway — check to control.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "15BB (60% pot)",
+          "explanation": "Betting AQ top pair on the turn of a 4-way pot is too aggressive. The chance someone has AJ/KJ/two pair is high multiway. Top pair is only 1 street of value (flop) multiway — control the turn.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "8BB (33% pot)",
+          "explanation": "Although smaller than a big bet, betting top pair on the multiway turn is still risky. Checking is safer — call small bets.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "T♥9♥ on 8♥7♥2♦ has extreme equity (flush draw + straight draw + two-pair potential). Multiway you should bet to build the pot.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "6BB (66% pot)",
+          "explanation": "T9 has extreme equity here (nut flush draw + straight draw). Multiway strong draws should bet to build the pot, and multiway implied odds are excellent (hit and win from many players).",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Check-Raise if bet",
+          "explanation": "Check-raising multiway is risky (players still to act behind). Direct betting is simpler, more effective, and controls the pot.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK top pair top kicker is worth a value bet in a 4-way pot.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Bet 10BB (50% pot)",
+          "explanation": "AK top pair top kicker is worth a 50% pot value bet multiway.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet 18BB (85% pot)",
+          "explanation": "Big bets multiway only get called by strong hands. A smaller bet is better.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p5": {
+      "option": [
+        {
+          "action": "C-Bet 12BB",
+          "explanation": "Bluffing Q-high in a 3-way pot has low success. Check and wait for a better spot.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Multiway Q-high bluffs have extremely low success (all must fold). Check.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet 6BB",
+          "explanation": "Bluffing air multiway isn't good enough. Check.",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p1": {
+      "option": [
+        {
+          "action": "Call 2BB",
+          "explanation": "QQ at 50BB depth is an extremely strong hand. Only calling (limping) is too passive — open-raise to build the pot.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "5BB",
+          "explanation": "QQ at 50BB is a premium hand. Opening 5BB (2.5x straddle) is the standard size. At 50BB QQ can comfortably stack off without deep-stack concerns.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "10BB",
+          "explanation": "Opening 10BB (5x straddle) is too big — weak hands all fold and only stronger hands (AA/KK) call. The standard 2.5x (5BB) is better.",
+          "evImpact": "+1.0 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A5s has an A blocker + flush potential. After a BTN straddle you have positional advantage (act last postflop) — a 3-Bet bluff works.",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Calling is OK but not optimal. After a BTN straddle you have positional advantage — A5s's blocker effect makes it better suited to a 3-Bet bluff.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "15BB",
+          "explanation": "After a BTN straddle you have positional advantage (act last postflop). A5s has the A blocker — a 3-Bet bluff fits. At 50BB, 3-Betting to 15BB is the standard size.",
+          "evImpact": "+1.5 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "99 at 50BB is still a decent hand. Though set-mining value drops, 99 has showdown value.",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "5BB",
+          "explanation": "99 at 50BB can open. Although set-mining value drops, 99 still has decent equity at 50BB. Standard open 5BB (2.5x straddle).",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Call 2BB",
+          "explanation": "Limping 99 is too passive. From the CO you should open-raise, not limp. Limping lets players behind see cheaply and loses initiative.",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AK at 50BB depth is a premium hand. You should 3-Bet.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 15BB",
+          "explanation": "AK at 50BB is a premium hand. 3-Bet to 15BB (3x straddle) is the standard size.",
+          "evImpact": "+2 BB/100"
+        },
+        {
+          "action": "Call 5BB",
+          "explanation": "AK is too strong to just call. 3-Bet for value.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "65s drops in value at 50BB vs an MP open. Implied odds worsen after the straddle — fold.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Call 5BB",
+          "explanation": "At 50BB calling 5BB = 10% of the stack; hitting wins at most 50BB. Implied odds are insufficient.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 15BB",
+          "explanation": "65s doesn't suit a 3-Bet bluff. Too weak vs an MP open range.",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p1": {
+      "option": [
+        {
+          "action": "Call 1BB",
+          "explanation": "In a high-rake environment reduce passive calls. Iso-raise is better.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 4BB (iso-raise)",
+          "explanation": "Iso-raise beats calling under high rake. Reduces multiway pots and rake cost.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "KQs in CO is too strong to fold. Iso-raise for value.",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p2": {
+      "option": [
+        {
+          "action": "Limp",
+          "explanation": "Limping under high rake leads to multiway pots — the highest rake cost.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 5BB",
+          "explanation": "Under high rake, iso-raise to reduce players in the pot. JTs is strong enough to raise.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "JTs on the BTN is too strong to fold. Iso-raise.",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p3": {
+      "option": [
+        {
+          "action": "Call 2.5BB",
+          "explanation": "Under high rake, passive calls get the most EV eroded. 3-Bet is better.",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Raise 8BB (3-Bet)",
+          "explanation": "Under high rake, 3-Bet beats calling. Reduces multiway pots and takes initiative. A5s has bluff potential.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "A5s on the BTN has bluff potential — a 3-Bet is +EV.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p4": {
+      "option": [
+        {
+          "action": "Call 1.5BB",
+          "explanation": "Calling from the SB under high rake leads to multiway pots. 3-Bet or fold instead.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 8BB (3-Bet)",
+          "explanation": "Under high rake, 3-Bet reduces multiway pots. 98s has postflop playability.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "98s has postflop potential from the SB — a 3-Bet is +EV.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p5": {
+      "option": [
+        {
+          "action": "Call 2.5BB",
+          "explanation": "Calling under high rake leads to multiway pots. 3-Bet or fold instead.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 10BB (3-Bet)",
+          "explanation": "Under high rake, 3-Bet to isolate and reduce multiway pots. QJs is strong enough to 3-Bet.",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "QJs in CO is strong enough to 3-Bet. Don't fold.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l7-ts-p1": {
+      "option": [
+        {
+          "action": "Leave this table",
+          "explanation": "A table with weak players is a good table! Stay and profit.",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "Raise 6BB, isolate the weak player",
+          "explanation": "A good table with weak players! Raise with a strong hand to isolate.",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "AKs should raise, not limp.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Two clearly weak players at the table (high VPIP)"
+    },
+    "l7-ts-p2": {
+      "option": [
+        {
+          "action": "Keep playing and observe this player",
+          "explanation": "A drinking player may be weak. Observe and confirm first, then exploit.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Leave immediately",
+          "explanation": "A drinking player may be weak — a good-table sign.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "All-in against him",
+          "explanation": "Observe before deciding. Don't be impulsive.",
+          "evImpact": "-2 BB/100"
+        }
+      ],
+      "tableDesc": "Just sat down; noticed a drinking player at the table"
+    },
+    "l7-ts-p3": {
+      "option": [
+        {
+          "action": "Call 9BB",
+          "explanation": "Frequent 3-Bets on a REG table make calling dangerous. Consider changing tables.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Fold and consider changing tables",
+          "explanation": "A table with multiple REGs is hard to profit from. Fold JTs and consider moving to a table with weak players.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "4-Bet all-in",
+          "explanation": "JTs doesn't suit a 4-Bet. Play tighter on REG tables.",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "Multiple REGs at the table who 3Bet frequently"
+    },
+    "l7-ts-p4": {
+      "option": [
+        {
+          "action": "Move to the weak player's left",
+          "explanation": "The weak player is already on your right — you act after him = position. That's great.",
+          "evImpact": "0"
+        },
+        {
+          "action": "Stay here and exploit position on the weak player",
+          "explanation": "The weak player on your right means you often have position on him. An ideal seat.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Leave the table",
+          "explanation": "A weak player on your right is a good position — stay.",
+          "evImpact": "-1 BB/100"
+        }
+      ],
+      "tableDesc": "The weak player is to your right"
+    },
+    "l7-ts-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "ATs on the BTN is a good hand. A good table deserves active play.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "High Players/Flop % = a good table. ATs on the BTN is a standard open.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "ATs should raise, not limp.",
+          "evImpact": "+0.3 BB/100"
+        }
+      ],
+      "tableDesc": "Players/Flop% = 45% with clearly weak players"
+    }
+  },
+  "drill": {
+    "d-l7-deep-q1": {
+      "scenario": "NL200, 200BB effective",
+      "question": "At 200BB on the BTN holding 76s, what should you do?",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "At 200BB, suited connectors' implied odds grow massively. 76s on the BTN is a standard open — use postflop implied odds."
+    },
+    "d-l7-deep-q2": {
+      "scenario": "NL200, 250BB effective",
+      "question": "At 250BB in CO holding A2s, what should you do?",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "At 250BB, suited Ax implied odds are extreme. Even A2s has great postflop value — a standard CO open."
+    },
+    "d-l7-deep-q3": {
+      "scenario": "NL200, 200BB effective",
+      "question": "At 200BB in UTG holding Q9s, what should you do?",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "At 200BB, the UTG range can widen. Q9s has enough postflop playability to open from UTG."
+    },
+    "d-l7-deep-q4": {
+      "scenario": "NL200, 200BB effective",
+      "question": "At 200BB on the BTN holding KTs, what should you do?",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "KTs on the BTN is a strong hand — even more worth opening at 200BB. Implied odds make this hand more valuable."
+    },
+    "d-l7-deep-q5": {
+      "scenario": "NL200, 200BB effective",
+      "question": "At 200BB in the SB holding 98s, what should you do?",
+      "option": [
+        "Raise 3BB",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "At 200BB, 98s in the SB is a standard raise. Suited connectors gain huge value at deep stacks."
+    },
+    "d-l7-deep-q6": {
+      "scenario": "NL200, 200BB effective, MP open(2.5BB)",
+      "question": "MP open(2.5BB), hero on BTN with 54s — call or fold?",
+      "option": [
+        "Fold (position OK but hand too weak)",
+        "Call",
+        "3-Bet"
+      ],
+      "explanation": "At 200BB, 54s should fold vs an MP open from the BTN. Mainstream strategy calls Q9s+, 54s is too weak."
+    },
+    "d-l7-deep-q7": {
+      "scenario": "NL200, 200BB effective",
+      "question": "At 200BB in CO holding J8s, what should you do?",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "At 200BB, J8s in CO has enough postflop value. Suited connectors' implied odds make it worth opening."
+    },
+    "d-l7-deep-q8": {
+      "scenario": "NL200, 200BB effective",
+      "question": "At 200BB in MP holding T9s, what should you do?",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "At 200BB, T9s in MP is a standard open. Suited connectors gain huge value at deep stacks."
+    },
+    "d-l7-multi-q1": {
+      "scenario": "3-way pot, Flop: K♠ 8♥ 3♣",
+      "question": "3-way pot, BTN with KQ on K83, what should you do?",
+      "option": [
+        "Check",
+        "Bet 1/3 pot",
+        "Bet 2/3 pot"
+      ],
+      "explanation": "Play tighter multiway. KQ in a 3-way pot is only top pair medium kicker — check to control the pot is best."
+    },
+    "d-l7-multi-q2": {
+      "scenario": "3-way pot, Flop: A♠ 9♥ 5♣",
+      "question": "3-way pot, CO with AT on A95, what should you do?",
+      "option": [
+        "Check",
+        "Bet 1/3 pot",
+        "Bet full pot"
+      ],
+      "explanation": "3-way, AT is top pair good kicker. Small 1/3-pot bet for value — don't bet big with just top pair."
+    },
+    "d-l7-multi-q3": {
+      "scenario": "4-way pot, Flop: J♠ T♥ 7♣",
+      "question": "4-way pot, BTN with QJ on JT7, what should you do?",
+      "option": [
+        "Bet 1/3 pot",
+        "Check",
+        "Bet full pot"
+      ],
+      "explanation": "JT7 in a 4-way pot is very dangerous — opponents may have straights/two pairs. QJ is only top pair medium kicker — check to control."
+    },
+    "d-l7-multi-q4": {
+      "scenario": "3-way pot, Flop: Q♠ 7♥ 2♣",
+      "question": "3-way pot, BTN with QQ on Q72, what should you do?",
+      "option": [
+        "Check",
+        "Bet 1/3 pot",
+        "Bet full pot"
+      ],
+      "explanation": "3-way, QQ is a set. Small 1/3-pot bet for value — let weak hands continue."
+    },
+    "d-l7-multi-q5": {
+      "scenario": "3-way pot, Flop: 9♠ 8♥ 7♣",
+      "question": "3-way pot, BTN with AK on 987, what should you do?",
+      "option": [
+        "Bet 1/3 pot",
+        "Check",
+        "Bet full pot"
+      ],
+      "explanation": "987 in a 3-way pot is dangerous — opponents may have straights. AK is only high cards — check to control the pot is best."
+    },
+    "d-l7-multi-q6": {
+      "scenario": "3-way pot, Flop: A♠ K♥ 5♣",
+      "question": "3-way pot, CO with AK on AK5, what should you do?",
+      "option": [
+        "Check",
+        "Bet 1/3 pot",
+        "Bet full pot"
+      ],
+      "explanation": "3-way, AK is two pair. Small 1/3-pot bet for value — let weak hands continue."
+    },
+    "d-l7-multi-q7": {
+      "scenario": "4-way pot, Flop: 6♠ 5♥ 4♣",
+      "question": "4-way pot, BTN with AK on 654, what should you do?",
+      "option": [
+        "Bet 1/3 pot",
+        "Check",
+        "Bet full pot"
+      ],
+      "explanation": "654 in a 4-way pot is very dangerous — opponents may have straights. AK is only high cards — check to control."
+    },
+    "d-l7-multi-q8": {
+      "scenario": "3-way pot, Flop: K♠ 9♥ 2♣",
+      "question": "3-way pot, BTN with KJ on K92, what should you do?",
+      "option": [
+        "Check",
+        "Bet 1/3 pot",
+        "Bet 2/3 pot"
+      ],
+      "explanation": "3-way, KJ is only top pair medium kicker. Play tighter multiway — check to control the pot is best."
+    }
+  }
+}

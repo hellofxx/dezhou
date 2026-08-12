@@ -485,32 +485,6 @@
       "streetRiver": "River"
     }
   },
-  "drill": {
-    "accuracy": "Accuracy",
-    "timeouts": "Timeouts",
-    "longestStreak": "Longest Streak",
-    "pressureScore": "Pressure Score",
-    "weakPoints": "Weak points:",
-    "shortcuts": "Shortcuts: <b>1-4</b> select action, <b>Space/Enter</b> next",
-    "timeUp": "⏰ Time's Up!",
-    "correct": "✓ Correct",
-    "incorrect": "✗ Incorrect",
-    "handLabel": "Hand",
-    "pairLabel": "Pair",
-    "spaceHint": "(Space)",
-    "avgTime": "Avg Time",
-    "correctCount": "Correct",
-    "completedTitle": "Drill Complete!",
-    "pressureCompletedTitle": "Pressure Test Complete!",
-    "nextQuestion": "Next",
-    "viewScore": "View Score",
-    "opponentHintTemplate": "This opponent is {{tendency}} — adjust your strategy accordingly.",
-    "opponentHintPrefix": "📊 Tip: vs {{name}} type opponent, ",
-    "opponentTipCorrect": "you factored in the opponent's tendencies — nice!",
-    "pressure": "Pressure",
-    "evLossBB": "BB EV loss",
-    "reviewLink": "Review →"
-  },
   "basicsIntro": {
     "title": "Texas Hold'em Basics",
     "prev": "Previous",

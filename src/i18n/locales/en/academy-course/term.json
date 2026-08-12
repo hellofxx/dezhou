@@ -1,0 +1,176 @@
+{
+  "term": {
+    "t-pot": {
+      "chinese": "底池",
+      "explanation": "The total amount of chips all players have contributed to the current pot"
+    },
+    "t-blinds": {
+      "chinese": "盲注",
+      "explanation": "Mandatory preflop bets (SB and BB) that create the initial pot"
+    },
+    "t-stack": {
+      "chinese": "筹码量",
+      "explanation": "The total number of chips a player currently holds"
+    },
+    "t-position": {
+      "chinese": "位置",
+      "explanation": "A player's seat at the table, which determines the order of action"
+    },
+    "t-buyin": {
+      "chinese": "买入",
+      "explanation": "The amount of chips required to enter a cash game or tournament"
+    },
+    "t-showdown": {
+      "chinese": "摊牌",
+      "explanation": "The phase after the river where remaining players reveal their hands to compare"
+    },
+    "t-community": {
+      "chinese": "公共牌",
+      "explanation": "The five shared cards in the center of the table used by all players"
+    },
+    "t-holecards": {
+      "chinese": "底牌",
+      "explanation": "The two private face-down cards dealt to each player"
+    },
+    "t-dealer": {
+      "chinese": "庄家按钮",
+      "explanation": "The round disc that marks the current dealer position"
+    },
+    "t-rake": {
+      "chinese": "抽水",
+      "explanation": "The service fee the casino/platform takes from the pot"
+    },
+    "t-suited": {
+      "chinese": "同花",
+      "explanation": "Two hole cards of the same suit (e.g. Ah Kh), written as \"s\""
+    },
+    "t-offsuit": {
+      "chinese": "非同花",
+      "explanation": "Two hole cards of different suits (e.g. Ah Kd), written as \"o\""
+    },
+    "t-connector": {
+      "chinese": "连牌",
+      "explanation": "Two cards with adjacent ranks (e.g. JTs, 89o) with straight potential"
+    },
+    "t-pocketpair": {
+      "chinese": "口袋对子",
+      "explanation": "Two hole cards of the same rank (e.g. AA, 77, 22)"
+    },
+    "t-gapper": {
+      "chinese": "间张",
+      "explanation": "Cards one or two ranks apart (e.g. J9 = one gapper, T7 = two gapper)"
+    },
+    "t-broadway": {
+      "chinese": "百老汇",
+      "explanation": "Any two cards from T-J-Q-K-A (e.g. AK, QJ, AT)"
+    },
+    "t-rag": {
+      "chinese": "垃圾牌",
+      "explanation": "A worthless small hand (e.g. 72o, 83o) to fold from any position"
+    },
+    "t-nuts": {
+      "chinese": "坚果牌",
+      "explanation": "The absolute strongest hand possible on the current board"
+    },
+    "t-draw": {
+      "chinese": "听牌",
+      "explanation": "A hand one card away from a strong hand (e.g. flush draw, straight draw)"
+    },
+    "t-outs": {
+      "chinese": "补牌数",
+      "explanation": "The number of remaining cards that can improve your hand (e.g. 9 outs for a flush draw)"
+    },
+    "t-open": {
+      "chinese": "开牌加注",
+      "explanation": "The first raise preflop (as opposed to just calling the blind)"
+    },
+    "t-3bet": {
+      "chinese": "再加注",
+      "explanation": "A re-raise against an open raise (the third betting action preflop)"
+    },
+    "t-4bet": {
+      "chinese": "反再加注",
+      "explanation": "A re-raise against a 3-Bet"
+    },
+    "t-cbet": {
+      "chinese": "持续下注",
+      "explanation": "A continuation bet made postflop by the preflop raiser"
+    },
+    "t-checkraise": {
+      "chinese": "过牌加注",
+      "explanation": "Checking to let an opponent bet, then raising (a powerful move)"
+    },
+    "t-slowplay": {
+      "chinese": "慢打",
+      "explanation": "Deliberately checking/calling with a strong hand to conceal its strength"
+    },
+    "t-float": {
+      "chinese": "漂浮跟注",
+      "explanation": "Calling a flop C-Bet with a weak hand, planning to steal the pot on the turn"
+    },
+    "t-donkbet": {
+      "chinese": "驴式下注",
+      "explanation": "Betting out of position into the aggressor postflop (often seen as a weak play)"
+    },
+    "t-squeeze": {
+      "chinese": "挤压加注",
+      "explanation": "A large re-raise against one raise and one or more calls"
+    },
+    "t-limp": {
+      "chinese": "平跟",
+      "explanation": "Merely calling the big blind preflop instead of raising (often considered a weak play)"
+    },
+    "t-ev": {
+      "chinese": "期望值",
+      "explanation": "The average profit/loss of a decision repeated over the long run"
+    },
+    "t-range": {
+      "chinese": "范围",
+      "explanation": "The set of all hands a player might hold"
+    },
+    "t-equity": {
+      "chinese": "权益/胜率",
+      "explanation": "The probability that your hand wins against an opponent's range"
+    },
+    "t-potodds": {
+      "chinese": "底池赔率",
+      "explanation": "The ratio of the call amount to the total pot (determines whether a call is profitable)"
+    },
+    "t-impliedodds": {
+      "chinese": "隐含赔率",
+      "explanation": "Effective odds that account for additional profit on future streets"
+    },
+    "t-gto": {
+      "chinese": "博弈论最优",
+      "explanation": "Game Theory Optimal — an unexploitable strategy that cannot be beaten no matter how the opponent plays"
+    },
+    "t-exploitative": {
+      "chinese": "剥削策略",
+      "explanation": "A strategy adjusted to exploit specific opponent weaknesses"
+    },
+    "t-variance": {
+      "chinese": "方差",
+      "explanation": "The fluctuation of short-term results around long-term expectation"
+    },
+    "t-tilt": {
+      "chinese": "情绪失控",
+      "explanation": "Making irrational decisions due to emotional swings caused by negative events"
+    },
+    "t-bankroll": {
+      "chinese": "资金",
+      "explanation": "Money reserved specifically for playing poker, kept separate from living expenses"
+    },
+    "t-vpip": {
+      "chinese": "自愿入池率",
+      "explanation": "The frequency of voluntarily putting money into the pot (excluding forced blinds)"
+    },
+    "t-pfr": {
+      "chinese": "翻前加注率",
+      "explanation": "The frequency of raising preflop voluntarily"
+    },
+    "t-icm": {
+      "chinese": "独立筹码模型",
+      "explanation": "Independent Chip Model — converts chips into real monetary value in tournaments"
+    }
+  }
+}

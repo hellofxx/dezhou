@@ -1,0 +1,96 @@
+{
+  "opponent": {
+    "tag": {
+      "name": "TAG (Tight-Aggressive)",
+      "shortName": "TAG",
+      "description": "Tight and aggressive: plays few hands but plays them hard",
+      "tendencies": [
+        "Tight starting-hand range, mostly strong hands",
+        "High postflop continuation-bet frequency",
+        "Usually folds to 3-Bets (except premium hands)",
+        "Rarely bluffs, but value-bets heavily"
+      ],
+      "exploitable": [
+        "Steal his blinds often (he folds a lot)",
+        "Give more credit when he raises",
+        "Float him from position"
+      ]
+    },
+    "lag": {
+      "name": "LAG (Loose-Aggressive)",
+      "shortName": "LAG",
+      "description": "Loose and aggressive: plays many hands and raises frequently",
+      "tendencies": [
+        "Very wide starting-hand range",
+        "Frequent 3-Bets and raises",
+        "Extremely high postflop C-Bet frequency",
+        "Bluffs often, but also has strong hands"
+      ],
+      "exploitable": [
+        "Set traps with strong hands and let him bluff",
+        "Fold less often against his C-Bets",
+        "Call his bets with a wider range"
+      ]
+    },
+    "nit": {
+      "name": "Nit (Tight-Passive)",
+      "shortName": "NIT",
+      "description": "Extremely conservative: only plays the very best hands",
+      "tendencies": [
+        "Only plays premium hands like AA/KK/QQ/AK",
+        "Almost never bluffs",
+        "Folds often to raises",
+        "Almost always has a strong hand when raising"
+      ],
+      "exploitable": [
+        "Steal his blinds relentlessly",
+        "Fold medium hands immediately when he raises",
+        "Don't try to bluff him (he folds, but you can't win big pots from him either)"
+      ]
+    },
+    "maniac": {
+      "name": "Maniac",
+      "shortName": "MAN",
+      "description": "Extremely aggressive: constantly raising and bluffing",
+      "tendencies": [
+        "Plays almost every hand",
+        "Frequent large raises",
+        "Bluffs a lot and rarely folds",
+        "Emotionally volatile and prone to tilt"
+      ],
+      "exploitable": [
+        "Patiently wait with strong hands for him to ship chips",
+        "Don't bluff him (he won't fold)",
+        "Call down with medium-strength hands (his range is too wide)",
+        "Control the pot size to avoid being dragged by his aggression"
+      ]
+    },
+    "calling_station": {
+      "name": "Calling Station",
+      "shortName": "CS",
+      "description": "Passive: rarely raises but loves to call down",
+      "tendencies": [
+        "Loves to call but not raise",
+        "Almost never folds (especially to small bets)",
+        "Rarely bets aggressively",
+        "Usually has a very strong hand when raising"
+      ],
+      "exploitable": [
+        "Value-bet against him (he calls with weak hands)",
+        "Don't bluff him (he won't fold)",
+        "Fold immediately when he raises (he only raises with strength)"
+      ]
+    },
+    "unknown": {
+      "name": "Unknown",
+      "shortName": "?",
+      "description": "No data available — use default GTO strategy",
+      "tendencies": [
+        "Not enough data — respond with the GTO baseline strategy"
+      ],
+      "exploitable": [
+        "Use GTO strategy and avoid over-adjusting"
+      ]
+    }
+  }
+}

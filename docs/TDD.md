@@ -1082,6 +1082,15 @@ interface DailyRecommendation {
     - 两者通过注释明确职责，避免功能混淆
     - `ABILITY_LESSON_MAP` 已修正 5 个错误 lesson ID（如 `l2-3bet` → `l2-3bet-basics`）
 
+10b. **课程内容渲染层 key 覆盖**（2026-08 全量迁移）：
+    - **背景**：课程正文/题库/例题/实战数据（data/** 约 1.5MB 中文）保持硬编码中文原文，全量重写数据层成本极高且破坏引用完整性。
+    - **方案**：渲染层 key 覆盖——模块级 `utils/contentKeys.ts`（strategy-academy 与 theory-academy 各一份，命名空间隔离）提供 key 生成函数，消费组件统一 `t(key, { defaultValue: <数据层中文> })`；英文界面命中 i18n key，中文界面回退数据层原文（行为零变化）。
+    - **key 命名**：正文段落（section 无稳定 id）用 `lessonId + content 数组索引` 派生（`academy.lessonContent.<lessonId>.<i>` / `theory.content.<chapterId>.<i>`）；quiz/example/practice/drill 均有稳定 id 直接用 id 派生（`academy.lessonQuiz|lessonExample|lessonPractice|drill|opponentDrill.<id>.*` / `theory.quiz.<id>.*`）；术语 `academy.term.<id>.*`；对手档案 `academy.opponent.<id>.*`（跨模块共享）；Basics `academy.basicsContent.<stepId>.<i>`；unit 标题 `academy.unitTitle.<lessonId>.<unitId>`；theory 学习目标 `theory.chapterObjectives.<chapterId>.<i>`。
+    - **命名空间冲突规避**：`academy.content/quiz/practice` 已被 UI chrome 占用，课程内容统一用 `lesson*` 前缀（`lessonContent/lessonQuiz/lessonPractice`）；`theory.objectives` 被 UI 标签占用，改用 `chapterObjectives`；quiz 题库并入现有 UI `quiz` 对象（UI 标签 + 题目共存）。
+    - **翻译文件组织**：`locales/{zh,en}/academy-course/` 子目录按课程代码文件拆分（`level1~8.json` + `short-deck.json` + `heads-up.json` + `local-lessons.json`），`config.ts` `import.meta.glob` eager 加载 + `mergeCourseBundles()` deep 合并注入 `academy` 命名空间，`t()` 路径不变；academy.json 瘦身为 UI chrome。
+    - **选项排序治理**：quiz/practice/drill 的 resolve 函数先 `t()` 解析（option 用原始索引派生 key），再由调用方走既有排序出口（`orderQuizQuestion` / `orderPracticeOptions` / `orderTheoryQuizQuestion` / `orderDrillOptions`）重排；种子只依赖 id，zh/en 顺序一致，correctIndex 同步重映射。
+    - **守卫**：`src/i18n/contentI18n.test.ts` 强化为全量遍历断言——从数据模块（`ALL_VARIANT_LESSONS` / `LOCAL_LESSONS` / `BASICS_STEPS` / `GLOSSARY_TERMS` / `OPPONENT_PROFILES` / `OPPONENT_DRILL_QUESTIONS` / `ALL_VARIANT_THEORY_LEVELS`）遍历生成全部渲染消费点 key（expectedCount ≈ 12948），断言 zh/en 双语 JSON 均存在；localeParity / curriculumIntegrity / theoryIntegrity / 排序分布守卫保持绿。
+
 11. **新增课程**（v2.1 新增）：
     - `l3-3bet-postflop`：3Bet 翻后策略
     - `l7-hu`：单挑（Heads-Up）策略
@@ -1099,7 +1108,7 @@ interface DailyRecommendation {
 1. **数据模型**（`theory-academy/types.ts`）：
    - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
    - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）
-   - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point）+ content（内联中文，与策略学院课程正文口径一致，不进 i18n）
+   - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
 2. **内容体系**：9 Level 共 31 章、155 道章末小测（2026-08 系统性扩充后每章满 5 题；扩充前 124 题），数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件放宽 200 行限制），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。扩充标准（2026-08 起为硬性契约）：

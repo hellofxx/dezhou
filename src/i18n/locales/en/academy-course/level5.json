@@ -1,0 +1,1388 @@
+{
+  "lessonContent": {
+    "l5-bankroll": [
+      "Why Is Bankroll Management So Important?",
+      "Even if you're a world-class player, without adequate bankroll management, one unlucky downswing can bankrupt you. Bankroll management is the safety net that protects you from variance.",
+      "Golden rule: at least 20-30 buy-ins for cash games, 50-100 buy-ins for tournaments.",
+      "Bankroll Management Rules",
+      "Cash games (NLH):\n- Minimum: 20 buy-ins\n- Recommended: 30-50 buy-ins\n- Pro standard: 50+ buy-ins\n\nExample: playing $1/$2 (buy-in $200), you need at least $4,000-$10,000 dedicated.",
+      "Never mix living expenses with your poker bankroll! Keeping them separate is the first principle of bankroll management.",
+      "Moving Up and Down",
+      "Move up: accumulate 30 buy-ins of the next stake in your current game\nMove down: decisively move down when your bankroll drops below 20 buy-ins of the current stake\n\nMoving down isn't shameful! Many world-class players moved down during downswings, then climbed back.",
+      "Bankroll management is one of the biggest differences between pros and recreational players. Without bankroll discipline, even great technique is just gambling.",
+      "Kelly Criterion formula:\nf* = (bp - q) / b\n\nWhere f* = optimal bankroll fraction\nb = net odds (win b times the bet)\np = win probability\nq = loss probability = 1-p\n\nPoker application:\nAssume you have a 60% win-rate edge at 1:1 odds\nf* = (1×0.6 - 0.4) / 1 = 0.2 = 20%\nThat is, never bet more than 20% of your total bankroll\n\nConservative (Half Kelly): f = f*/2 = 10%, further reducing ruin risk",
+      "Theory reference: the quantitative application of the Kelly Criterion to poker bankroll management is in Theory Academy T8 Chapter 2 \"Bankroll Psychology and Quantitative Management\", which fully covers bankroll methodology in poker psychology.",
+      "Counter-intuitive: the optimal betting fraction under the Kelly Criterion is far lower than intuition suggests. Even with a 60% win-rate edge, Kelly only recommends committing 20% of your bankroll. Most players actually commit far more than Kelly's recommended value — one of the main causes of ruin."
+    ],
+    "l5-tilt": [
+      "What Is Tilt?",
+      "Tilt is a state where negative events (bad beats, losing streaks, opponent taunts, etc.) cause emotional swings that lead to irrational decisions. Tilt is the poker player's biggest enemy — it costs far more than skill gaps.",
+      "The cost of tilt often exceeds the cost of skill gaps. A $10/hr winner can lose $500+ in one serious tilt session.",
+      "Types of Tilt",
+      "1. Anger tilt: furious raising/bluffing after a bad beat\n2. Fear tilt: afraid to bet or over-folding after losses\n3. Revenge tilt: irrational actions targeting one specific opponent\n4. Desperation tilt: playing too many hands to win back losses fast",
+      "Tilt Prevention Strategies",
+      "1. Stop-loss: set a maximum session loss (e.g. 2 buy-ins) and stop when reached\n2. Rest rule: take a 5-10 minute break every hour\n3. Self-awareness: regularly check your emotional state\n4. Long-term perspective: remind yourself this is one hand, not your whole life\n5. Stop signal: stop immediately when you notice yourself taking \"out-of-character\" actions",
+      "Pros don't never tilt — they recognize it faster and take action. Learning to \"stop-loss\" is the most important emotional-management step. Remember: there's always another session tomorrow, but once the money's gone it's gone.",
+      "Tendler's 7 Tilt profiles quick reference:\n1. Anger tilt — emotional loss of control after bad beats\n2. Frustration tilt — negative emotions from a long downswing\n3. Fear tilt — overcautious decisions from fear of losing\n4. Self-destructive tilt — subconsciously punishing yourself\n5. Boredom tilt — attention dropping during long sessions\n6. Ego tilt — overconfidence after a winning streak\n7. Urgency tilt — rushed decisions from time or money pressure\n\nRecognition signals: pause training when you miss 3 questions in a row or accuracy drops >15%",
+      "Theory reference: the complete analysis of Tendler's 7 tilt profiles is in Theory Academy T8 Chapter 1 \"Tilt Recognition and Classification\", including recognition signals, triggers, and responses for each profile.",
+      "Counter-intuitive: when accuracy drops, stopping matters more than continuing. Many players choose \"one more hand to win it back\" during emotional swings, but this is the most dangerous mistake — decision quality drops significantly while tilting, so continuing only expands the loss."
+    ],
+    "l5-game-selection": [
+      "Game Selection",
+      "Good game selection can double your hourly win rate. Look for tables with:\n- A high share of recreational players (VPIP > 30%)\n- Larger average pots\n- Higher flop rate (many players seeing the flop)\n- More interaction between players (frequent raises)",
+      "Whether you're the 6th-best or 1st-best player at the table matters more than which stake you play.",
+      "Long-Term Thinking",
+      "Poker is a long-term game. Short-term results (1 day, 1 week, even 1 month) are heavily luck-influenced. Only at a large enough sample (10,000+ hands) does the skill gap show.\n\nDon't move up stakes because of short-term luck beyond your bankroll, and don't abandon correct strategies because of short-term bad luck.",
+      "The pro mindset: \"this hand's result doesn't matter — what matters is whether my decision is +EV. If I keep making +EV decisions, I'll profit long-term.\" This mindset is what fundamentally separates pros from amateurs."
+    ],
+    "l5-session-review": [
+      "Why Is Reviewing More Important Than Playing?",
+      "Many players spend lots of time playing but rarely review. Research shows that 1 hour of playing + 30 minutes of review progresses faster than 2 hours of pure playing.",
+      "Standard Session Review flow: 1) mark key hands → 2) analyze decision points → 3) compare with GTO → 4) record wins/losses → 5) make an improvement plan",
+      "The Five-Step Review Method",
+      "Step 1: Mark key hands\n• Right after each session, mark 3-5 \"uncertain\" hands\n• Don't just look at big pots lost — also big pots won\n\nStep 2: Analyze decision points\n• At each street's key point ask \"was there another option?\"\n\nStep 3: Compare with GTO\n• Use this platform's GTO simulator to check the optimal play\n\nStep 4: Record wins and losses\n• Write down \"what I did\" and \"what I should have done\"\n\nStep 5: Make an improvement plan\n• List the most common errors as next session's focus",
+      "Don't be fooled by results during review (\"I won, so I did it right\"). Focus on decision quality, not results. A wrong decision can occasionally win money, but always loses long-term.",
+      "Session A/B/C tier analysis framework:\nA tier (best state): focused, calm, every decision analyzed → suited to complex decisions\nB tier (normal): some fatigue but basic decision quality maintained → suited to routine training\nC tier (fatigued): attention dropping, intuition replacing analysis → stop immediately\n\nSession management principles:\n- No session over 60 minutes\n- Rest 5 minutes every 30 minutes\n- Force-end at C-tier signals\n- Daily question caps: 0/50/100/200 four tiers",
+      "Theory reference: the Session A/B/C tier management method is in Theory Academy T8 Chapter 3 \"Session Management and the Long-Term Mindset\", including session planning, stop-loss discipline, and a quantitative framework for long-term profitable mindset.",
+      "Counter-intuitive: winning sessions may be your worst learning opportunities. When you win consecutively, you get the illusion of \"playing great\", even when winning on luck. Real learning happens in losing sessions — that's when you find and fix errors."
+    ],
+    "l5-data-driven": [
+      "Use Data to Find Your Leaks",
+      "Your own stats are the most objective mirror. By analyzing your VPIP, PFR, C-Bet %, per-position win rates, etc., you can precisely locate weaknesses.",
+      "Key Metric Interpretation",
+      "VPIP/PFR gap too large (>8): calling too much, raising too little\nC-Bet % < 50%: not aggressive enough postflop\nBig per-position win-rate variance: strategy problems in certain positions\nShowdown % > 35%: calling down to the river too often",
+      "Leak-fixing priority: fix the highest-frequency spots first (like preflop ranges), then lower-frequency spots. A preflop leak affects every hand; a river leak may rarely occur.",
+      "Do a monthly \"data check-up\": export your stats and compare with last month and target values. Progress is the process of leaks shrinking."
+    ],
+    "l5-tools": [
+      "Why Use Tools?",
+      "Modern poker has entered the data age. Analysis tools help you:\n\n1. Verify intuition: use math to check whether your play is correct\n2. Find leaks: discover strategy leaks through data\n3. Learn GTO: understand the theoretical optimal as a reference baseline\n4. Track progress: record and analyze your long-term performance",
+      "Tools are great learning aids, but over-reliance hinders intuition. Correct usage: understand the principle first, then use the tool to verify.",
+      "Core Tools Introduction",
+      "PioSOLVER / GTO+:\n- Purpose: solve the GTO strategy for a specific spot\n- Use: postflop strategy analysis, frequency-balance research\n- Learning tip: start with simple spots (e.g. heads-up flop), gradually add complexity\n\nEquilab (free):\n- Purpose: calculate a hand's equity vs a range\n- Use: preflop range analysis, pot-odds calculation\n- Learning tip: familiarize yourself with common range equities to build intuition\n\nHand2Note / Holdem Resource Manager:\n- Purpose: track and analyze your historical data\n- Use: find strategy leaks, monitor performance\n- Learning tip: focus on key metrics (VPIP/PFR/3-Bet%), don't over-analyze",
+      "The most effective learning path: use tools to analyze your problem hands, understand the correct play, then deliberately practice it live. Don't just look at results — understand the reasoning behind them.",
+      "Warning: don't open multiple tools at once while learning. Focused understanding of one spot beats skimming 100 spots."
+    ],
+    "l5-online-vs-live": [
+      "Pace Differences",
+      "Online poker:\n- Fast pace, about 10-15 seconds per hand\n- About 60-80 hands per hour\n- Needs fast decision-making\n- Multi-tabling (MTT) boosts efficiency\n\nLive poker:\n- Slow pace, about 1-2 minutes per hand\n- About 25-35 hands per hour\n- More time to think\n- Needs patience and mental toughness",
+      "Core difference: online profits from speed and volume; live profits from quality and patience. The two environments need different skills and mindsets.",
+      "Multi-Tabling (MTT)",
+      "Online multi-tabling tips:\n- Start with 2-4 tables, gradually increase\n- Choose tables at different positions (avoid acting simultaneously)\n- Use quick decisions, reduce thinking time\n- Note: multi-tabling lowers per-table focus — suited to standard hands\n\nLive single-table tips:\n- Focus on observing each opponent\n- More time to read tells and images\n- Suited to exploitative play",
+      "HUD Data Usage and Counter-HUD",
+      "The HUD (Heads-Up Display) is an online-specific tool:\n\nUsing the HUD:\n- Quickly identify opponent types (VPIP/PFR/3-Bet%)\n- Find opponent leaks (e.g. excessive fold-to-C-Bet)\n- Make data-driven decisions\n\nCounter-HUD strategy:\n- Balance your data (don't let it get extreme)\n- Exploit opponents who over-rely on HUD (e.g. frequent 3-Bets vs players the HUD shows as tight)\n- Vary your play regularly to make the data stale",
+      "Fast-Fold Poker (Zoom/Blitz)",
+      "Fast-fold poker features:\n- New table every hand, extremely fast pace\n- Can't adjust to specific opponents\n- Suited to GTO play\n- Needs fast decisions\n\nAdaptation strategy:\n- Simplify decision processes\n- Rely on standard play\n- Don't try to over-exploit in fast-fold",
+      "Live Tell Reading and Image Management",
+      "Live-specific skills:\n\nTell reading:\n- Observe betting actions, expressions, posture\n- Common tells: trembling hands (usually strong), hesitation (usually weak)\n- Note: don't over-read — combine with data\n\nImage management:\n- Build a stable image (tight/loose/aggressive/passive)\n- Exploit the image (e.g. bluff more with a tight image)\n- Stay consistent so opponents can't read your patterns",
+      "The best players stay profitable both online and live. Try both environments to build a complete skill set."
+    ]
+  },
+  "lessonQuiz": {
+    "l5-br-q1": {
+      "question": "Playing $1/$2 cash (buy-in $200), what is the minimum bankroll?",
+      "options": [
+        "$400",
+        "$2,000",
+        "$4,000-$6,000",
+        "$100"
+      ],
+      "explanation": "Minimum is 20 buy-ins = 20 × $200 = $4,000. Recommended 30 = $6,000."
+    },
+    "l5-br-q2": {
+      "question": "When should you move down?",
+      "options": [
+        "After 3 losing hands",
+        "When the bankroll drops below 20 buy-ins",
+        "When you don't feel like playing",
+        "When opponents are too strong"
+      ],
+      "explanation": "When your bankroll drops below 20 buy-ins of the current stake, decisively move down to protect it."
+    },
+    "l5-br-q3": {
+      "question": "How many buy-ins is the recommended cash-game bankroll?",
+      "options": [
+        "10",
+        "20",
+        "30-50",
+        "100"
+      ],
+      "explanation": "30-50 buy-ins is recommended, letting you survive normal swings."
+    },
+    "l5-br-q4": {
+      "question": "What is the condition to move up?",
+      "options": [
+        "Move up whenever you want",
+        "Accumulate 30 buy-ins of the next stake in your current game",
+        "Win 10 hands",
+        "Opponents too weak"
+      ],
+      "explanation": "Move up when you've accumulated 30 buy-ins of the next stake, ensuring enough safety margin."
+    },
+    "l5-br-q5": {
+      "question": "Why not mix living expenses with poker bankroll?",
+      "options": [
+        "Easier accounting",
+        "Keeping them separate is the first bankroll principle",
+        "No reason",
+        "Legal requirement"
+      ],
+      "explanation": "Separate funds is the first principle of bankroll management. Mixing leads to irrational decisions under pressure."
+    },
+    "l5-tilt-q1": {
+      "question": "After a bad beat, what is the best move?",
+      "options": [
+        "Immediately raise in revenge",
+        "Play more hands to win back",
+        "Stop and check your emotions",
+        "Insult the opponent"
+      ],
+      "explanation": "The best move is to pause and check your emotional state. If angry or frustrated, stop the session."
+    },
+    "l5-tilt-q2": {
+      "question": "What is a \"stop-loss line\"?",
+      "options": [
+        "The time to stop playing",
+        "The maximum loss you've set for a session",
+        "The betting cap",
+        "Rest time"
+      ],
+      "explanation": "A stop-loss is the maximum session loss you preset (e.g. 2 buy-ins). Stop when reached to prevent bigger tilt losses."
+    },
+    "l5-tilt-q3": {
+      "question": "Which is NOT a tilt type?",
+      "options": [
+        "Anger",
+        "Fear",
+        "Happy",
+        "Revenge"
+      ],
+      "explanation": "Tilt types include anger, fear, revenge, and desperation — not \"happy\"."
+    },
+    "l5-tilt-q4": {
+      "question": "When you catch yourself doing \"out-of-character\" actions, you should?",
+      "options": [
+        "Keep playing",
+        "Stop immediately",
+        "Raise more",
+        "Change tables"
+      ],
+      "explanation": "Out-of-character actions are a tilt stop signal — stop immediately."
+    },
+    "l5-tilt-q5": {
+      "question": "How often should you take a 5-10 minute break?",
+      "options": [
+        "Every 30 minutes",
+        "Every 1 hour",
+        "Every 2 hours",
+        "Every 3 hours"
+      ],
+      "explanation": "Take a 5-10 minute break every hour to keep a clear head and stable emotions."
+    },
+    "l5-game-q1": {
+      "question": "One trait of a good table is?",
+      "options": [
+        "All pros",
+        "Small pots",
+        "Many recreational players",
+        "Nobody raises"
+      ],
+      "explanation": "Ideal tables have many recreational players (high VPIP), maximizing your skill edge."
+    },
+    "l5-game-q2": {
+      "question": "How many hands of sample do you need to accurately assess your level?",
+      "options": [
+        "100 hands",
+        "1,000 hands",
+        "10,000+ hands",
+        "10 hands"
+      ],
+      "explanation": "At least 10,000+ hands. Short-term results are too variance-affected to assess skill."
+    },
+    "l5-game-q3": {
+      "question": "What is the ideal ranking for you at the table?",
+      "options": [
+        "1st best",
+        "3rd best",
+        "6th best",
+        "Doesn't matter"
+      ],
+      "explanation": "Ideally you're the best player at the table, maximizing your skill edge."
+    },
+    "l5-game-q4": {
+      "question": "What does a short-term (1 week) win/loss show?",
+      "options": [
+        "Your true level",
+        "Strategy problems",
+        "Too much variance",
+        "Should change strategy"
+      ],
+      "explanation": "Short-term results are too variance-affected — need 10,000+ hands to assess."
+    },
+    "l5-game-q5": {
+      "question": "What matters more than results?",
+      "options": [
+        "Single-hand wins",
+        "Decision quality",
+        "Opponent expressions",
+        "Luck"
+      ],
+      "explanation": "Focus on decision quality, not results. Wrong decisions may occasionally win but always lose long-term."
+    },
+    "l5-sr-q1": {
+      "question": "What is the first step of Session Review?",
+      "options": [
+        "Calculate wins/losses",
+        "Mark key hands",
+        "Open the GTO solver",
+        "Post on social media"
+      ],
+      "explanation": "Review starts by marking the key hands to analyze, then deep analysis."
+    },
+    "l5-sr-q2": {
+      "question": "What should review focus on?",
+      "options": [
+        "Single-hand results",
+        "Decision quality, not results",
+        "Only big pots",
+        "Opponent expressions"
+      ],
+      "explanation": "Quality review focuses on whether the decision process was correct, not the single result."
+    },
+    "l5-sr-q3": {
+      "question": "What should review focus on?",
+      "options": [
+        "Single-hand wins",
+        "Decision quality",
+        "Opponent luck",
+        "Table feng shui"
+      ],
+      "explanation": "Review focuses on decision quality, not results."
+    },
+    "l5-sr-q4": {
+      "question": "How many key hands should you mark per session?",
+      "options": [
+        "All hands",
+        "3-5 hands",
+        "1 hand",
+        "None"
+      ],
+      "explanation": "Mark 3-5 \"uncertain\" hands after each session."
+    },
+    "l5-sr-q5": {
+      "question": "What is the 5th step of review?",
+      "options": [
+        "Calculate wins/losses",
+        "Mark hands",
+        "Make an improvement plan",
+        "Compare with GTO"
+      ],
+      "explanation": "The 5th step is making an improvement plan."
+    },
+    "l5-dd-q1": {
+      "question": "A big VPIP/PFR gap indicates?",
+      "options": [
+        "Playing too tight",
+        "Calling too much, raising too little",
+        "Playing great",
+        "Bluffing too much"
+      ],
+      "explanation": "VPIP far above PFR means too much passive calling — raise or fold instead."
+    },
+    "l5-dd-q2": {
+      "question": "Which leak type should you prioritize fixing?",
+      "options": [
+        "River spots",
+        "Preflop spots (highest frequency)",
+        "Tournament spots",
+        "All at once"
+      ],
+      "explanation": "Preflop decisions happen every hand — fixing preflop leaks has the biggest return."
+    },
+    "l5-dd-q3": {
+      "question": "C-Bet % < 50% indicates?",
+      "options": [
+        "Playing too loose",
+        "Not aggressive enough postflop",
+        "Playing great",
+        "Bluffing too much"
+      ],
+      "explanation": "C-Bet below 50% means not aggressive enough postflop."
+    },
+    "l5-dd-q4": {
+      "question": "Showdown % > 35% indicates?",
+      "options": [
+        "Playing too tight",
+        "Calling down to the river too often",
+        "Bluffing too much",
+        "Playing great"
+      ],
+      "explanation": "A too-high showdown % means calling down to the river too often."
+    },
+    "l5-dd-q5": {
+      "question": "What should you do monthly to track progress?",
+      "options": [
+        "Change stakes",
+        "Do a data check-up",
+        "Change platforms",
+        "No tracking needed"
+      ],
+      "explanation": "Do a monthly data check-up — export stats and compare with targets."
+    },
+    "l5-tools-q1": {
+      "question": "What is the main use of PioSOLVER / GTO+?",
+      "options": [
+        "Track history",
+        "Solve the GTO strategy for specific spots",
+        "Calculate equity",
+        "Manage bankroll"
+      ],
+      "explanation": "PioSOLVER/GTO+ are solvers for analyzing GTO strategies in specific spots."
+    },
+    "l5-tools-q2": {
+      "question": "What is Equilab's main function?",
+      "options": [
+        "Analyze postflop strategy",
+        "Track history",
+        "Calculate a hand's equity vs a range",
+        "Manage bankroll"
+      ],
+      "explanation": "Equilab is a free equity calculator for hand-vs-range analysis."
+    },
+    "l5-tools-q3": {
+      "question": "What is the correct way to use analysis tools?",
+      "options": [
+        "Fully rely on tools",
+        "Understand the principle first, then verify with tools",
+        "Only look at results without understanding",
+        "Open multiple tools and skim fast"
+      ],
+      "explanation": "Tools aid learning — understand the principle first, then verify with tools."
+    },
+    "l5-tools-q4": {
+      "question": "What is the main use of Hand2Note / Holdem Resource Manager?",
+      "options": [
+        "Solve GTO",
+        "Calculate equity",
+        "Track and analyze history",
+        "Train postflop skills"
+      ],
+      "explanation": "Hand2Note/Holdem Resource Manager are data trackers for analyzing historical data."
+    },
+    "l5-tools-q5": {
+      "question": "Which tool-use suggestion is WRONG?",
+      "options": [
+        "Start with simple spots",
+        "Focused understanding of one spot beats skimming 100",
+        "Open multiple tools at once for efficiency",
+        "Understand principle before verifying"
+      ],
+      "explanation": "Opening multiple tools at once lowers learning efficiency. Focus on one spot and analyze deeply."
+    },
+    "l5-online-vs-live-q1": {
+      "question": "How many hands per hour does online poker have?",
+      "options": [
+        "25-35",
+        "60-80",
+        "100-120",
+        "150+"
+      ],
+      "explanation": "Online is fast — about 60-80 hands per hour."
+    },
+    "l5-online-vs-live-q2": {
+      "question": "What is the main use of a HUD?",
+      "options": [
+        "Calculate equity",
+        "Quickly identify opponent types and data",
+        "Analyze postflop strategy",
+        "Manage bankroll"
+      ],
+      "explanation": "A HUD shows opponent VPIP/PFR/3-Bet% etc. to identify opponent types."
+    },
+    "l5-online-vs-live-q3": {
+      "question": "What strategy suits fast-fold poker (Zoom/Blitz)?",
+      "options": [
+        "Exploitative",
+        "GTO",
+        "Tell reading",
+        "Image management"
+      ],
+      "explanation": "Fast-fold changes tables every hand, so you can't target specific opponents — play GTO."
+    },
+    "l5-online-vs-live-q4": {
+      "question": "What is the advantage of live poker?",
+      "options": [
+        "Fast pace",
+        "Can observe tells and images",
+        "Can multi-table",
+        "More hands per hour"
+      ],
+      "explanation": "Live is slow-paced with more time to observe opponent tells and build images."
+    },
+    "l5-online-vs-live-q5": {
+      "question": "What is the core of counter-HUD strategy?",
+      "options": [
+        "Don't use a HUD",
+        "Balance your data so opponents can't exploit you",
+        "Only play tight-aggressive",
+        "Only play loose-aggressive"
+      ],
+      "explanation": "Counter-HUD means balancing your data so it doesn't get extreme and can't be exploited."
+    }
+  },
+  "lessonExample": {
+    "l5-bankroll-ex1": {
+      "title": "Judging when to move up",
+      "correctAction": "Evaluate the move-up condition",
+      "reasoning": [
+        "You currently play NL10 (buy-in $10) with a bankroll of $450",
+        "NL25 requires 30 buy-ins = $750 — you haven't reached it yet",
+        "Continue accumulating at NL10",
+        "Don't impulsively move up just because it's a \"good day\""
+      ],
+      "mistakeAction": "Moving up without enough bankroll (\"let me try\")",
+      "mistakeReasoning": "Moving up without enough bankroll is gambling. One downswing will bankrupt you fast.",
+      "mistakeEvLoss": "Bankruptcy risk +300%"
+    },
+    "l5-bankroll-ex2": {
+      "title": "Moving down isn't shameful",
+      "correctAction": "Decide to move down",
+      "reasoning": [
+        "You play NL50 (buy-in $50), bankroll dropped from $2000 to $900",
+        "NL50 requires 20 buy-ins = $1000 — you're below that line",
+        "Decisively move down to NL25",
+        "Moving down isn't failure — it's the smart way to protect your bankroll"
+      ],
+      "mistakeAction": "\"I won't move down, I'll win it back\"",
+      "mistakeReasoning": "Refusing to move down is a classic ego problem. Many world-class players moved down and climbed back. Protecting the bankroll always comes first.",
+      "mistakeEvLoss": "Bankruptcy risk > 50%"
+    },
+    "l5-tilt-ex1": {
+      "title": "Recognizing tilt: after a bad beat",
+      "correctAction": "Stop and check your emotions",
+      "reasoning": [
+        "Your AA got rivered by the opponent's Kx hitting two pair",
+        "This is a classic bad beat — you made all the right decisions",
+        "If you feel angry and want to \"win it back\", you're tilting",
+        "Correct move: deep breath, leave the table 5 minutes, assess emotions"
+      ],
+      "mistakeAction": "Immediately play the next hand, raising big to \"win it back\"",
+      "mistakeReasoning": "Playing right after a bad beat is classic tilt behavior. You'll play too loose and aggressive, losing more.",
+      "mistakeEvLoss": "-5 to -20 BB (tilt session)"
+    },
+    "l5-tilt-ex2": {
+      "title": "Applying the stop-loss line",
+      "correctAction": "Stop today's session",
+      "reasoning": [
+        "You've already lost 2 buy-ins today (reaching the stop-loss)",
+        "You notice yourself playing too many hands and raising too big",
+        "These are early tilt signals",
+        "Correct move: stop immediately and play again tomorrow"
+      ],
+      "mistakeAction": "\"One more hand then stop\" (then keep playing 2 hours)",
+      "mistakeReasoning": "\"One more hand\" is the most dangerous self-deception when tilting. Once past the stop-loss, your decision quality plummets.",
+      "mistakeEvLoss": "-10 to -50 BB (continuing to tilt)"
+    },
+    "l5-game-ex1": {
+      "title": "Recognizing good vs bad tables",
+      "correctAction": "This is a great table!",
+      "reasoning": [
+        "Many limpers entering = many recreational players",
+        "Larger average pots and high flop rate",
+        "Players are passive (limping instead of raising)",
+        "Your skill edge can be maximized"
+      ],
+      "mistakeAction": "Leaving this table (\"too loose\")",
+      "mistakeReasoning": "Loose-passive tables are the best money-making opportunities. More recreational players means your skill edge is maximized.",
+      "mistakeEvLoss": "Missed high-win-rate opportunity",
+      "tableDesc": "Multiway limping — a typical recreational table"
+    },
+    "l5-game-ex2": {
+      "title": "Long-term thinking: don't change strategy over short-term results",
+      "correctAction": "Continue executing the correct strategy",
+      "reasoning": [
+        "You lost 5 buy-ins this week, but your strategy is correct",
+        "5 buy-ins = 500BB, within normal variance",
+        "Need 10,000 hands to accurately assess your level",
+        "Don't change a correct strategy over a short-term downswing"
+      ],
+      "mistakeAction": "\"My strategy isn't working, I need a new approach\"",
+      "mistakeReasoning": "A short-term downswing doesn't mean the strategy is wrong. Variance is part of poker — only a large enough sample proves whether a strategy is +EV.",
+      "mistakeEvLoss": "Frequent strategy-switching = long-term -EV"
+    },
+    "l5-tools-ex1": {
+      "title": "Using PioSOLVER to analyze C-Bet strategy",
+      "correctAction": "Use PioSOLVER to analyze",
+      "reasoning": [
+        "Set the spot: BTN open vs BB call, K-8-3 rainbow board",
+        "Run the solver and check GTO's recommended C-Bet frequency and size",
+        "Observe the C-Bet strategy distribution across different hands",
+        "Compare your actual play with GTO to find leaks"
+      ],
+      "mistakeAction": "Only looking at results without analyzing the process",
+      "mistakeReasoning": "Don't just focus on \"how much to bet\" — understand why this size is optimal.",
+      "mistakeEvLoss": "Lower learning efficiency"
+    },
+    "l5-online-vs-live-ex1": {
+      "title": "Online multi-tabling management",
+      "correctAction": "Standard multi-table play",
+      "reasoning": [
+        "Playing 4 tables, each needing fast decisions",
+        "AK on the BTN is a standard raise — no deep thought needed",
+        "Use quick decisions to reduce per-table thinking time",
+        "Multi-tabling suits standard hands — don't overcomplicate"
+      ],
+      "mistakeAction": "Over-analyzing every hand while multi-tabling",
+      "mistakeReasoning": "Over-analysis while multi-tabling lowers efficiency. Standard hands get standard plays; deep-think only the complex ones.",
+      "mistakeEvLoss": "Lower efficiency"
+    }
+  },
+  "lessonPractice": {
+    "l5-bankroll-p1": {
+      "option": [
+        {
+          "action": "Continue at the current stake",
+          "explanation": "You play NL10 with a bankroll of $350 = 35 buy-ins. Plenty of bankroll — continue accumulating at the current stake.",
+          "evImpact": "0"
+        },
+        {
+          "action": "Move up to NL25",
+          "explanation": "NL25 needs 30 buy-ins = $750; you only have $350. Moving up without enough bankroll is gambling.",
+          "evImpact": "Bankruptcy risk +200%"
+        },
+        {
+          "action": "Move down to NL5",
+          "explanation": "You have 35 buy-ins — plenty. Moving down is over-conservative and slows progress.",
+          "evImpact": "-Learning speed"
+        }
+      ]
+    },
+    "l5-bankroll-p2": {
+      "option": [
+        {
+          "action": "Continue at NL50",
+          "explanation": "You play NL50 with $800 = 16 buy-ins — below the 20 buy-in minimum. Should move down.",
+          "evImpact": "Bankruptcy risk +150%"
+        },
+        {
+          "action": "Move down to NL25",
+          "explanation": "Bankroll dropped below 20 buy-ins — decisively move down. At NL25 (buy-in $25) you have 32 buy-ins, safer.",
+          "evImpact": "Protects bankroll"
+        },
+        {
+          "action": "All-in to win it back",
+          "explanation": "The \"win it back\" mindset is classic tilt + no bankroll management. It bankrupts you faster.",
+          "evImpact": "Bankruptcy risk +500%"
+        }
+      ]
+    },
+    "l5-bankroll-p3": {
+      "option": [
+        {
+          "action": "Use poker bankroll for rent",
+          "explanation": "Never mix poker bankroll with living expenses! Keeping them separate is the first bankroll principle.",
+          "evImpact": "Bankruptcy risk +100%"
+        },
+        {
+          "action": "Keep funds separate and keep playing",
+          "explanation": "Poker bankroll and living expenses must be fully separate. Only play with dedicated poker funds.",
+          "evImpact": "0"
+        },
+        {
+          "action": "Borrow money to play",
+          "explanation": "Never borrow to play! It leads to irrational decisions under pressure.",
+          "evImpact": "Bankruptcy risk +300%"
+        }
+      ]
+    },
+    "l5-bankroll-p4": {
+      "option": [
+        {
+          "action": "Use poker bankroll for daily expenses",
+          "explanation": "Poker bankroll is only for playing — mixing destroys bankroll management.",
+          "evImpact": "Bankruptcy risk +200%"
+        },
+        {
+          "action": "Keep the bankroll fully separate",
+          "explanation": "Poker bankroll and living expenses must be fully separate — a basic bankroll principle.",
+          "evImpact": "0"
+        },
+        {
+          "action": "Occasionally borrow from the bankroll",
+          "explanation": "Borrowing from the poker bankroll breaks its integrity.",
+          "evImpact": "Bankruptcy risk +150%"
+        }
+      ]
+    },
+    "l5-bankroll-p5": {
+      "option": [
+        {
+          "action": "Bankroll $1800 — continue at NL50",
+          "explanation": "NL50 needs 20 buy-ins = $1000; you have $1800 = 36 buy-ins. Plenty — continue.",
+          "evImpact": "0"
+        },
+        {
+          "action": "Bankroll $900 — decisively move down to NL25",
+          "explanation": "At $1800 = 36 buy-ins you have plenty — no need to move down.",
+          "evImpact": "-Learning speed"
+        },
+        {
+          "action": "Borrow money to continue NL50",
+          "explanation": "Never borrow money to play!",
+          "evImpact": "Bankruptcy risk +500%"
+        }
+      ]
+    },
+    "l5-tilt-p1": {
+      "option": [
+        {
+          "action": "Play the next hand immediately, raising big to win it back",
+          "explanation": "Classic tilt behavior. Emotional play after a bad beat loses you more.",
+          "evImpact": "-10 BB/session"
+        },
+        {
+          "action": "Stop, breathe, and check your emotions",
+          "explanation": "The best move after a bad beat is to pause. Check if you're tilting — stop if emotional.",
+          "evImpact": "Protects bankroll"
+        },
+        {
+          "action": "Insult the opponent in chat",
+          "explanation": "Insulting does no good — it only makes you more emotional and hurts later decisions.",
+          "evImpact": "-5 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p2": {
+      "option": [
+        {
+          "action": "Open with QJo behind UTG (normal play)",
+          "explanation": "Your stop-loss is 2 buy-ins and you've already lost 2. You should stop, not continue.",
+          "evImpact": "-5 BB/session"
+        },
+        {
+          "action": "Stop today's session",
+          "explanation": "Once the stop-loss is reached, stop. There's always tomorrow's session, but gone money stays gone.",
+          "evImpact": "Protects bankroll"
+        },
+        {
+          "action": "Buy in bigger and keep playing",
+          "explanation": "Buying in bigger to \"win it back\" is classic desperation tilt. It loses more.",
+          "evImpact": "-20 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p3": {
+      "option": [
+        {
+          "action": "Play normally (if emotionally stable)",
+          "explanation": "If your check shows stability with no tilt signs, continue normally. Regular self-checks are a good habit.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Play any hand (\"whatever\")",
+          "explanation": "The \"whatever\" attitude is a tilt signal. If you stop caring about winning, your decisions are no longer rational.",
+          "evImpact": "-5 BB/session"
+        },
+        {
+          "action": "Raise specifically the opponent who beat you",
+          "explanation": "Revenge tilt: irrational actions targeting one opponent. Use the same strategy against everyone.",
+          "evImpact": "-3 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p4": {
+      "option": [
+        {
+          "action": "Raise bigger after 3 losses",
+          "explanation": "Raising bigger after losses is a tilt sign.",
+          "evImpact": "-5 BB/session"
+        },
+        {
+          "action": "Check emotions and play normally",
+          "explanation": "Regularly check emotional state — if stable, continue normally.",
+          "evImpact": "0"
+        },
+        {
+          "action": "Fold everything",
+          "explanation": "Over-folding is also tilt (fear tilt).",
+          "evImpact": "-3 BB/session"
+        }
+      ]
+    },
+    "l5-tilt-p5": {
+      "option": [
+        {
+          "action": "Set the session stop-loss at 2 buy-ins",
+          "explanation": "Presetting a stop-loss is a key tilt-prevention measure.",
+          "evImpact": "Protects bankroll"
+        },
+        {
+          "action": "No stop-loss",
+          "explanation": "Without a stop-loss you easily keep playing while tilting.",
+          "evImpact": "-10 BB/session"
+        },
+        {
+          "action": "Set the stop-loss at 10 buy-ins",
+          "explanation": "10 buy-ins is too many. 2 buy-ins is a reasonable stop-loss.",
+          "evImpact": "-5 BB/session"
+        }
+      ]
+    },
+    "l5-game-p1": {
+      "option": [
+        {
+          "action": "Great table — stay",
+          "explanation": "Frequent raising, 3-Bets, big pots = likely a pro table. Hard to play; small skill edge.",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "Consider changing tables (opponents too strong)",
+          "explanation": "Aggressive raising by many indicates skilled opponents. Finding more passive tables (many limpers) is more profitable.",
+          "evImpact": "+3 BB/100"
+        },
+        {
+          "action": "All-in (\"I'm not afraid\")",
+          "explanation": "ATs facing a 3-Bet and multiple calls should fold. This isn't about courage — it's math.",
+          "evImpact": "-15 BB/100"
+        }
+      ],
+      "tableDesc": "Multiway aggressive raising — possibly a pro table"
+    },
+    "l5-game-p2": {
+      "option": [
+        {
+          "action": "\"I lost this week, my strategy is broken\"",
+          "explanation": "A week of results is too variance-affected to prove a strategy wrong. Need 10,000+ hands.",
+          "evImpact": "-Confidence"
+        },
+        {
+          "action": "Continue the correct strategy and focus long-term",
+          "explanation": "Short-term downswings are normal. As long as you keep making +EV decisions, you profit long-term. Focus on decision quality, not results.",
+          "evImpact": "+Long-term profit"
+        },
+        {
+          "action": "Move up to win it back",
+          "explanation": "Moving up because of a downswing is extremely dangerous. Stronger opponents at higher stakes lose you more.",
+          "evImpact": "Bankruptcy risk +200%"
+        }
+      ]
+    },
+    "l5-game-p3": {
+      "option": [
+        {
+          "action": "Raise",
+          "amount": "6BB",
+          "explanation": "A table with many limpers is a great table! Raise with a strong hand to isolate recreational players and build a big pot.",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Limp along",
+          "explanation": "JTs has great potential in a multiway pot, but you should raise, not limp. Raising builds the pot and takes initiative.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold (\"too many players\")",
+          "explanation": "JTs has excellent implied odds in a multiway pot. Also, this is a good-table sign — stay, not leave.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "Multiway passive limping — a recreational table"
+    },
+    "l5-game-p4": {
+      "option": [
+        {
+          "action": "Leave this too-loose table",
+          "explanation": "Loose-passive tables are the best money-making opportunities.",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "Raise 6BB to isolate recreational players",
+          "explanation": "Many limpers = great table! Raise with a strong hand to isolate recreational players.",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Limp along",
+          "explanation": "KQs should raise, not limp.",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Multiway limping — a recreational table"
+    },
+    "l5-game-p5": {
+      "option": [
+        {
+          "action": "Assess your level after 500 hands",
+          "explanation": "500 hands is far too few — need at least 10,000+.",
+          "evImpact": "-Confidence"
+        },
+        {
+          "action": "Focus on decision quality, not short-term results",
+          "explanation": "Focusing on decision quality is the key to long-term success.",
+          "evImpact": "+Long-term profit"
+        },
+        {
+          "action": "Change strategy because of a losing streak",
+          "explanation": "A short-term downswing doesn't mean the strategy is wrong. Frequent switching leads to long-term -EV.",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p1": {
+      "option": [
+        {
+          "action": "I won, so I did it right",
+          "explanation": "Results-oriented thinking.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Analyze whether each decision was +EV",
+          "explanation": "Review should focus on decision quality.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Only look at big pots lost",
+          "explanation": "Won hands can have decision errors too.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p2": {
+      "option": [
+        {
+          "action": "Mark 3-5 key hands immediately after the session",
+          "explanation": "Mark while memory is fresh.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Review a week later",
+          "explanation": "Waiting too long loses key details.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Don't review",
+          "explanation": "No review means missing the most important learning opportunity.",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p3": {
+      "option": [
+        {
+          "action": "Use the GTO solver to check each marked hand",
+          "explanation": "Comparing with the GTO solver is an important review step.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Judge by feel only",
+          "explanation": "Feel isn't objective enough.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Only look at opponent errors",
+          "explanation": "Review focuses on your own decisions.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p4": {
+      "option": [
+        {
+          "action": "Record \"what I did\" and \"what I should have done\"",
+          "explanation": "Recording wins/losses is the core review step.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Only calculate money won/lost",
+          "explanation": "Money-only is results-oriented.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Don't record",
+          "explanation": "Not recording leads to forgetfulness and self-deception.",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l5-sr-p5": {
+      "option": [
+        {
+          "action": "List the most common errors as next-session focus",
+          "explanation": "Making an improvement plan is the final review step.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Fix all leaks at once",
+          "explanation": "Fixing everything at once is inefficient.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Progress by intuition",
+          "explanation": "Without systematic review you can't find repeated errors.",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p1": {
+      "option": [
+        {
+          "action": "VPIP 45%, PFR 25%",
+          "explanation": "A 20% gap is too large — needs adjustment.",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Check whether the VPIP/PFR gap is > 8",
+          "explanation": "The VPIP/PFR gap is the most basic metric.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Only look at money won/lost",
+          "explanation": "Money won/lost doesn't reflect decision quality.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p2": {
+      "option": [
+        {
+          "action": "Fix low-frequency spots first",
+          "explanation": "Fix high-frequency spots first.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Fix preflop leaks first (highest frequency)",
+          "explanation": "Preflop decisions happen every hand — biggest return.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Fix everything at once",
+          "explanation": "Fixing everything at once is inefficient.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p3": {
+      "option": [
+        {
+          "action": "Export this month's data and compare with targets",
+          "explanation": "The monthly data check-up reveals trends and leaks.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Only look at the last 100 hands",
+          "explanation": "100 hands is too small a sample.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "No tracking needed",
+          "explanation": "Without tracking you can't find leaks.",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p4": {
+      "option": [
+        {
+          "action": "Per-position win-rate variance means bad luck",
+          "explanation": "It usually indicates strategy problems in certain positions.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Analyze per-position win rates to find weak positions",
+          "explanation": "Per-position win rates are an important diagnostic metric.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Only focus on overall win rate",
+          "explanation": "Overall win rate hides position differences.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l5-dd-p5": {
+      "option": [
+        {
+          "action": "Progress is the process of leaks shrinking",
+          "explanation": "Progress is continuously finding and fixing leaks.",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "Progress is winning more and more",
+          "explanation": "Short-term winnings are variance-affected.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "No need to deliberately fix leaks",
+          "explanation": "Without fixing, you stagnate.",
+          "evImpact": "-2 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p1": {
+      "option": [
+        {
+          "action": "Open Equilab to calculate equity",
+          "explanation": "Equilab suits preflop range analysis — postflop spots should use PioSOLVER.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Open PioSOLVER to analyze this spot",
+          "explanation": "PioSOLVER suits analyzing GTO strategies in specific postflop spots.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Open Hand2Note to track data",
+          "explanation": "Hand2Note tracks history — not for analyzing the current spot.",
+          "evImpact": "0 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p2": {
+      "option": [
+        {
+          "action": "Use Equilab to calculate QJ's equity vs a BTN call range",
+          "explanation": "Equilab suits calculating preflop hand-vs-range equity.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Use PioSOLVER to analyze",
+          "explanation": "Preflop spots fit Equilab better; PioSOLVER is mainly postflop.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "No tool needed",
+          "explanation": "Tools help you understand QJ's strength across positions.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p3": {
+      "option": [
+        {
+          "action": "Use Hand2Note to view opponent data",
+          "explanation": "Hand2Note tracks your own history — not for current-spot analysis.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Use PioSOLVER to analyze BB defense-range strategy",
+          "explanation": "PioSOLVER can analyze the BB defense range's GTO strategy on this board.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Use Equilab to calculate equity",
+          "explanation": "Postflop spots fit PioSOLVER; Equilab is mainly preflop.",
+          "evImpact": "0 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p4": {
+      "option": [
+        {
+          "action": "Use Hand2Note to analyze your own VPIP/PFR",
+          "explanation": "Hand2Note tracks your preflop data to find strategy leaks.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Use PioSOLVER to analyze",
+          "explanation": "Preflop spots fit Equilab or a data tracker better.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "No tool needed",
+          "explanation": "Data tracking helps you find your own strategy leaks.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l5-tools-p5": {
+      "option": [
+        {
+          "action": "Use PioSOLVER to analyze the turn strategy",
+          "explanation": "PioSOLVER can analyze multi-street turn strategies.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Use Equilab to calculate equity",
+          "explanation": "Postflop multi-street spots should use PioSOLVER.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "No tool needed",
+          "explanation": "Turn strategy is complex — tools help you understand the correct play.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l5-online-vs-live-p1": {
+      "option": [
+        {
+          "action": "Use standard GTO strategy to C-Bet",
+          "explanation": "Fast-fold can't target specific opponents — play standard GTO.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Adjust based on opponent tells",
+          "explanation": "Fast-fold changes tables every hand — no tells to read.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Build an image to exploit opponents",
+          "explanation": "Fast-fold can't build an image — new opponents every hand.",
+          "evImpact": "0 BB/100"
+        }
+      ],
+      "tableDesc": "Online fast-fold poker (Zoom)"
+    },
+    "l5-online-vs-live-p2": {
+      "option": [
+        {
+          "action": "Observe opponent tells and combine with data",
+          "explanation": "Live poker allows tell-reading to support decisions.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Only look at HUD data",
+          "explanation": "No HUD live — combine tells and images instead.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Ignore tells, only play GTO",
+          "explanation": "Live tells are an important information source — don't ignore them.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Live cash game; the opponent has an obvious tell"
+    },
+    "l5-online-vs-live-p3": {
+      "option": [
+        {
+          "action": "Use standard play and fast decisions",
+          "explanation": "Multi-tabling: standard hands get standard plays for efficiency.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Deep-analyze opponent ranges",
+          "explanation": "Over-analysis while multi-tabling lowers efficiency. Standard hands get standard plays.",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Fold to reduce thinking",
+          "explanation": "98s in the BB has enough odds to call — don't fold just because of multi-tabling.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "Online cash game; playing 4 tables at once"
+    },
+    "l5-online-vs-live-p4": {
+      "option": [
+        {
+          "action": "Use HUD data — bluff less vs the Calling Station",
+          "explanation": "The HUD shows a Calling Station (VPIP 45%, fold-to-bet 20%) — bluff less and value-bet more.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Ignore the HUD and play GTO",
+          "explanation": "HUD data enables exploitative adjustments — don't ignore it.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bluff frequently",
+          "explanation": "Bluffing a Calling Station is -EV — they don't fold.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ],
+      "tableDesc": "Online cash game; the HUD shows VPIP 45% and fold-to-C-Bet 20%"
+    },
+    "l5-online-vs-live-p5": {
+      "option": [
+        {
+          "action": "Exploit the tight-aggressive image by bluffing the turn",
+          "explanation": "A tight-aggressive image makes opponents respect your bets — you can bluff appropriately.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Ignore the image and play GTO",
+          "explanation": "The live image is an important info source — you can exploit with it.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Always value bet",
+          "explanation": "A tight-aggressive image also allows bluffs — don't always value-bet.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "Live cash game; you have built a tight-aggressive image"
+    }
+  },
+  "drill": {
+    "d-l5-tilt-q1": {
+      "scenario": "Emotion recognition",
+      "question": "Your AA got rivered by K7 (bad beat). What state are you most likely in now?",
+      "option": [
+        "Calm",
+        "Anger tilt",
+        "Excited"
+      ],
+      "explanation": "The most typical reaction after a bad beat is anger. If you feel angry and want to \"win it back\", you're in anger tilt. Stop or rest immediately."
+    },
+    "d-l5-tilt-q2": {
+      "scenario": "Emotion recognition",
+      "question": "After being bluffed 3 hands in a row, you start over-folding. Which tilt is this?",
+      "option": [
+        "Anger",
+        "Fear tilt",
+        "Revenge"
+      ],
+      "explanation": "Not daring to bet and over-folding after losses is classic fear tilt."
+    },
+    "d-l5-tilt-q3": {
+      "scenario": "Emotion recognition",
+      "question": "One opponent has beaten you several hands. You now only raise against him. Which tilt is this?",
+      "option": [
+        "Revenge tilt",
+        "Boredom",
+        "Urgency"
+      ],
+      "explanation": "Irrational actions targeting one specific opponent is revenge tilt."
+    },
+    "d-l5-tilt-q4": {
+      "scenario": "Stop-loss decision",
+      "question": "Your stop-loss is 2 buy-ins and you've lost 1.8. What should you do?",
+      "option": [
+        "Keep playing",
+        "Near the stop-loss — prepare to stop",
+        "Buy in bigger"
+      ],
+      "explanation": "Near the stop-loss, prepare to stop. Stop when reached — don't \"one more hand\"."
+    },
+    "d-l5-tilt-q5": {
+      "scenario": "Stop-loss decision",
+      "question": "You've lost 5 hands in a row and are clearly emotional. What should you do?",
+      "option": [
+        "Keep playing",
+        "Stop and check emotions",
+        "Raise in revenge"
+      ],
+      "explanation": "When clearly emotional, stop and check your emotional state."
+    },
+    "d-l5-tilt-q6": {
+      "scenario": "Emotion recognition",
+      "question": "You've won for 2 hours straight and start thinking \"I can never lose\". Which tilt is this?",
+      "option": [
+        "Urgency",
+        "Ego tilt",
+        "Self-destructive"
+      ],
+      "explanation": "Overconfidence after consecutive wins is ego tilt."
+    },
+    "d-l5-tilt-q7": {
+      "scenario": "Stop-loss decision",
+      "question": "After 1 hour of play you keep checking your phone, attention dropping. What should you do?",
+      "option": [
+        "Keep playing",
+        "Rest 5-10 minutes",
+        "Bet bigger"
+      ],
+      "explanation": "Dropping attention is a boredom-tilt signal. Rest 5-10 minutes every hour."
+    },
+    "d-l5-tilt-q8": {
+      "scenario": "Emotion recognition",
+      "question": "You catch yourself doing \"out-of-character\" actions (e.g. raising 72o). What should you do?",
+      "option": [
+        "Keep playing",
+        "Stop immediately",
+        "Raise bigger"
+      ],
+      "explanation": "Out-of-character actions are a tilt stop signal — stop immediately."
+    },
+    "d-l5-session-q1": {
+      "scenario": "Session planning",
+      "question": "What is your optimal daily training duration?",
+      "option": [
+        "60 minutes",
+        "180 minutes",
+        "5 hours straight"
+      ],
+      "explanation": "No session over 60 minutes, rest 5 minutes every 30."
+    },
+    "d-l5-session-q2": {
+      "scenario": "Session planning",
+      "question": "You're in C-tier (fatigued). What should you do?",
+      "option": [
+        "Keep playing",
+        "Stop immediately",
+        "Add more questions"
+      ],
+      "explanation": "C-tier is fatigue — attention drops and intuition replaces analysis. Stop immediately."
+    },
+    "d-l5-session-q3": {
+      "scenario": "Session planning",
+      "question": "What is your daily question cap?",
+      "option": [
+        "Unlimited",
+        "0/50/100/200 four tiers",
+        "1000 questions"
+      ],
+      "explanation": "Daily caps are divided into 0/50/100/200 four tiers to prevent overtraining."
+    },
+    "d-l5-session-q4": {
+      "scenario": "Session planning",
+      "question": "When should review happen?",
+      "option": [
+        "A week later",
+        "Immediately after the session",
+        "Never"
+      ],
+      "explanation": "Review immediately after the session while memory is fresh."
+    },
+    "d-l5-session-q5": {
+      "scenario": "Session planning",
+      "question": "How many key hands should you mark per session?",
+      "option": [
+        "All hands",
+        "3-5 hands",
+        "1 hand"
+      ],
+      "explanation": "Mark 3-5 \"uncertain\" hands after each session."
+    },
+    "d-l5-session-q6": {
+      "scenario": "Session planning",
+      "question": "What should review focus on?",
+      "option": [
+        "Single-hand wins",
+        "Decision quality",
+        "Opponent luck"
+      ],
+      "explanation": "Review focuses on decision quality, not results."
+    },
+    "d-l5-session-q7": {
+      "scenario": "Session planning",
+      "question": "What is B-tier (normal state) suited for?",
+      "option": [
+        "Complex decisions",
+        "Routine training",
+        "Stop immediately"
+      ],
+      "explanation": "B-tier (normal) suits routine training."
+    },
+    "d-l5-session-q8": {
+      "scenario": "Session planning",
+      "question": "The correct response to C-tier is?",
+      "option": [
+        "Keep training",
+        "Force-end",
+        "Train more"
+      ],
+      "explanation": "C-tier (fatigue) should force-end the training."
+    },
+    "d-l5-session-q9": {
+      "scenario": "Session planning",
+      "question": "What is A-tier (best state) suited for?",
+      "option": [
+        "Complex decisions",
+        "Close the training",
+        "Rest"
+      ],
+      "explanation": "A-tier (best state) suits complex decisions."
+    }
+  }
+}

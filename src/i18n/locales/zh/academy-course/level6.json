@@ -1,0 +1,1126 @@
+{
+  "lessonContent": {
+    "l6-icm": [
+      "什么是 ICM（Independent Chip Model）",
+      "ICM（独立筹码模型）是锦标赛中计算筹码真实价值（$EV）的数学模型。与现金局不同，锦标赛中筹码的价值不是线性的——你的第一个筹码比最后一个筹码更有价值。",
+      "核心概念：锦标赛中 Chip EV ≠ $EV。10000 筹码的价值不等于 2 × 5000 筹码的价值。",
+      "Chip EV vs $EV",
+      "在现金局中，每 1BB 的价值是固定的（比如 $1）。但在锦标赛中：\n- 翻倍筹码不会让你的奖金翻倍\n- 失去一半筹码会让你损失超过一半的期望奖金\n- 生存本身就是有价值的（奖金阶梯）",
+      "ICM 的核心结论",
+      "1. 大筹码的实际价值 < 筹码比例（边际递减）\n   例如：持有 50% 筹码的玩家，其 $EV 可能只有 40%\n\n2. 短筹码的实际价值 > 筹码比例（生存价值）\n   例如：持有 10% 筹码的玩家，其 $EV 可能有 15%\n\n3. 中筹码在泡沫期应该避免与大筹码对抗\n   因为被淘汰的损失远大于翻倍筹码的收益",
+      "Bubble Factor：衡量 ICM 压力",
+      "Bubble Factor 衡量的是 ICM 压力的强度：\n- Bubble Factor = 1：无 ICM 压力（如现金局）\n- Bubble Factor > 1：有 ICM 压力（锦标赛）\n- 泡沫期 Bubble Factor 最高，可达 1.5-2.0\n\nBubble Factor 越高，你的 call 范围应该越紧。",
+      "ICM 计算示例",
+      "### 最小算例：SNG 奖金结构\n假设 4 人 SNG 奖金结构：1st=$50, 2nd=$30, 3rd=$20, 4th=$0\n筹码分布：A=40BB, B=30BB, C=20BB, D=10BB\n\n**步骤 1: 每人夺冠概率 ≈ 筹码占比**\n- P(A wins) = 40/(40+30+20+10) = 40%\n\n**步骤 2: 两人决赛的概率**\n- P(A & B finish top 2) = 组合计算...\n- A 得第 2 名的概率 = Σ(P(某玩家得第 1) × P(A 得第 2 | 该玩家得第 1))\n\n**步骤 3: 最终$EV**\n- A 的$EV = Σ(P(i wins at position j) × prize_j)\n- = 0.4×$50 + 0.32×$30 + 0.2×$20 = $36.6\n\n这意味着 40BB 筹码在当前的 SNG 中的期望价值是$36.6",
+      "Bubble Factor (BF) 详解",
+      "### 定义与公式\nBubble Factor = call 所需 equity / 现金局所需 equity\n\n### 示例\n- 现金局中面对 50% pot bet，call 需 27% 胜率\n- ICM 中 BF 可达 1.5-2.0（极端情况下更高）\n- 实际所需 equity = 27% × 1.5 = 40.5%\n\n这意味着泡沫期必须用更宽范围弃牌，即使现金局会 call。",
+      "ICM 对范围的影响",
+      "泡沫期策略调整：\n- 收紧 call 范围：需要更强的牌才能 call all-in\n- 保持或扩大 push 范围：利用对手的 ICM 恐惧\n- 大筹码可以用更宽的范围 push 短筹码\n- 短筹码应该寻找最佳全押时机，而不是被动等待",
+      "ICM 是锦标赛策略的基石。理解 ICM 后，你会明白为什么泡沫期要用 AQ fold 面对 all-in，为什么大筹码可以\"欺负\"短筹码。",
+      "ICM 最小算例（4 人 SNG，奖金 50/30/20）：\n筹码分布：A=5000, B=3000, C=1500, D=500（总 10000）\n\nA 的 $EV 计算（简化）：\n第一名概率 ≈ 5000/10000 = 50%，奖金 $50\n第二名概率 ≈ 组合数计算...\n$EV ≈ 0.5×50 + 0.3×30 + 0.15×20 + 0.05×0 = $36.5\n\nBubble Factor（泡沫因子）：\nBF = 跟注所需 equity / 现金局所需 equity\n在泡沫期，BF 可达 1.5-2.0，意味着你需要约 1.5-2 倍的胜率才能跟注\n\n核心结论：筹码翻倍不等于奖金翻倍。5000 筹码的 $EV 不是 2500 的两倍。",
+      "理论支撑：ICM 递归算法的完整推导与 Bubble Factor 的公式定义见理论学院 T9 第 2 章\"ICM 理论\"。包括多人 SNG 的 $EV 计算方法和锦标赛策略的数学基础。",
+      "反直觉点：筹码翻倍不等于奖金翻倍。在 ICM 模型中，筹码的边际价值递减——从 500 涨到 1000 比从 5000 涨到 5500 价值更大。这就是为什么短筹码玩家在泡沫期应该更激进，而大筹码应该更保守。"
+    ],
+    "l6-pushfold": [
+      "何时进入 Push/Fold 模式",
+      "当你的筹码降到 15BB 以下时，应该考虑进入 Push/Fold 模式：\n- < 15BB：开始考虑 push/fold\n- < 10BB：必须使用 push/fold 策略\n- < 8BB：几乎任何位置都应该寻找 push 机会\n\n原因：筹码太浅时，翻后可玩性大大降低，open-raise 后被 3-bet 会很尴尬。",
+      "Push/Fold 的核心：用全押代替 open-raise，最大化弃牌率，避免翻后决策。",
+      "Nash Equilibrium Push/Fold 范围",
+      "Nash 均衡是博弈论中的最优策略概念。在 Push/Fold 场景中：\n- Push 范围：让对手 call 无利可图的范围\n- Call 范围：对抗对手 push 范围有正 EV 的范围\n\n实际应用中，你应该：\n- 对手紧：用比 Nash 更宽的范围 push\n- 对手松：用比 Nash 更紧的范围 push",
+      "关键筹码量节点",
+      "10BB 时的 Push 范围：\n- BTN push：约 40-45%（任何 Ax、任何对子、K8s+、Q9s+、J9s+、T9s、98s）\n- SB push：约 50-55%（更宽，因为只剩 BB）\n\n15BB 时的 Push 范围：\n- BTN push：约 25-30%（收紧，因为筹码还有翻后价值）\n- SB push：约 35-40%\n\n8BB 时的 Push 范围：\n- BTN push：约 50%+（非常宽）\n- 任何位置：寻找 push 机会",
+      "BB 面对 Push 的 Call 范围",
+      "BB 面对 push 的 call 范围取决于：\n1. 对手位置：BTN push 比 UTG push 范围宽得多\n2. 对手筹码量：短筹码 push 范围更宽\n3. ICM 压力：泡沫期需要更紧的 call 范围\n\n一般规则：\n- 面对 BTN 10BB push：call 约 30-35%（任何对子、A2s+、K9s+、QJs）\n- 面对 UTG 10BB push：call 约 15-20%（77+、ATs+、KQs）",
+      "锦标赛 vs 现金桌 Push/Fold 差异",
+      "现金桌：\n- Push/Fold 很少使用（除非极短筹码）\n- 可以用 min-raise 保持翻后可玩性\n\n锦标赛：\n- ICM 压力让 push 范围更宽（对手 call 更紧）\n- 泡沫期 push 范围可以比 Nash 更宽\n- 决赛桌 payout 跳跃大时，push 范围更宽",
+      "Push/Fold 是锦标赛短筹码的核心技能。记住：10BB 时 BTN 可以 push 40%+ 的范围，这比大多数人的直觉宽得多。",
+      "ICM Bubble Factor 定义：\nBF = call 所需 equity / 现金局所需 equity\n\n解释：泡沫期（bubble）存活权重 > 即时 EV，Bubble Factor 通常 1.5-3.0x。意味着你需要更高的胜率才能 call，因为弃牌可能意味着淘汰（$EV = 0）。\n\n示例：4 人 SNG 泡沫期（奖金结构 50%/30%/20%）\n- 筹码分布：你 40%, MP 35%, CO 20%, BTN 5%\n- 你的 $EV(fold) = 35% (确保第二名)\n- 你的 $EV(call, win) = 50%\n- 你的 $EV(call, lose) = 0\n- 盈亏平衡：35 <= p×50% + (1-p)×0 → p >= 70%\n- 现金局只需：pot odds 计算（如 43%）\n- Bubble Factor ≈ 70%/43% ≈ 1.6x",
+      "Nash Push/Fold 均衡范围（10BB 场景）：\nSB Push 范围（面对 BB）：\n- 所有对子 22+\n- 所有 Ax\n- 所有 Kx 同花\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- 总计约 70-80% 手牌\n\nBB Call 范围（面对 SB Push）：\n- 所有对子 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- 总计约 35-40% 手牌\n\n盈亏平衡计算：\nBB call 10BB 赢 12BB（含盲注）\n所需胜率 = 9/(9+12) ≈ 43%",
+      "理论支撑：Nash Push/Fold 均衡范围的完整推导见理论学院 T9 第 2 章\"ICM 理论\"。锦标赛中的 ICM 压力与 Push/Fold 决策密切相关。",
+      "反直觉点：UTG 在 10BB 时 Push 范围接近全开（约 70-80%），而非\"很紧\"。很多玩家认为 UTG 短筹码时应该只推强牌，但实际上 Nash 均衡显示 UTG 在 10BB 时可以用极宽的范围 Push——因为弃牌意味着盲注被蚕食，而 Push 可以获得弃牌权益。"
+    ],
+    "l6-bubble": [
+      "什么是泡沫期（Bubble）",
+      "泡沫期是指距离奖金圈只剩 1-3 人淘汰的阶段。例如：\n- 100 人参赛，前 15 名有奖金\n- 当只剩 16-18 人时，就是泡沫期\n\n这是锦标赛中 ICM 压力最大的阶段，因为：\n- 再淘汰 1-3 人就能进入奖金圈\n- 被淘汰 = 零奖金\n- 进入奖金圈 = 至少 min-cash",
+      "泡沫期是锦标赛中 ICM 压力最大的阶段，也是大筹码获利最多的阶段。",
+      "大筹码的泡沫策略",
+      "如果你是桌上前 3 的大筹码：\n\n1. 激进施压\n   - 用宽范围 open（40-50%）\n   - 用宽范围 3-bet（尤其是针对中筹码）\n   - 利用中筹码的 ICM 恐惧\n\n2. 目标选择\n   - 优先攻击中筹码（他们最怕被淘汰）\n   - 短筹码反而可能\"拼命\"（已经没什么可失去的）\n\n3. 位置利用\n   - 在 BTN/CO 位置施加最大压力\n   - 中筹码在盲注位置最难决策",
+      "中筹码的泡沫策略",
+      "如果你是中等筹码：\n\n1. 避免与大筹码冲突\n   - 大筹码 open 时，用更紧的范围 3-bet/call\n   - 不要\"证明自己\"，生存第一\n\n2. 压制短筹码\n   - 对短筹码用宽范围 open/3-bet\n   - 短筹码需要用很紧的范围 call\n\n3. 位置意识\n   - 在大筹码后面行动时更紧\n   - 在短筹码后面行动时更宽",
+      "短筹码的泡沫策略",
+      "如果你是短筹码（< 10BB）：\n\n1. 寻找最佳全押时机\n   - 前位弃牌到你时 push（最大化弃牌率）\n   - 避免在大筹码后面 push\n\n2. 不要被动等待\n   - 等到 5BB 以下再 push 就太晚了\n   - 10-15BB 时 push 还有弃牌率\n\n3. 手牌选择\n   - 优先选择有阻断效果的牌（Ax、Kx）\n   - 避免\"被压制\"的牌（KJ、QT 等）",
+      "泡沫爆裂后的策略转变",
+      "当泡沫爆裂（有人被淘汰进入奖金圈）后：\n\n1. ICM 压力骤降\n   - 所有人都已经 min-cash\n   - 下一个目标是更高名次\n\n2. 范围放宽\n   - 短筹码可以\"放手一搏\"\n   - 中筹码不再那么恐惧\n\n3. 策略调整\n   - 回归更接近现金局的打法\n   - 但仍然要注意 payout 跳跃",
+      "泡沫期是大筹码的\"印钞机\"。如果你是短筹码，不要害怕在 10-15BB 时 push——等到 5BB 就太晚了。"
+    ],
+    "l6-finaltable": [
+      "Final Table 的 Payout 结构影响",
+      "决赛桌（通常 9 人或 6 人）的 payout 跳跃很大：\n- 第 9 名：$1,000\n- 第 8 名：$1,500\n- 第 7 名：$2,200\n- ...\n- 第 1 名：$20,000\n\n这意味着：\n- 每次淘汰都有显著的奖金跳跃\n- ICM 压力在决赛桌仍然很大\n- 大筹码可以利用 payout 跳跃施压",
+      "决赛桌策略核心：根据 payout 跳跃和筹码分布动态调整，不要\"一套打法打到底\"。",
+      "动态调整：根据筹码分布",
+      "决赛桌需要根据桌上筹码分布调整策略：\n\n1. 你是大筹码（top 2-3）\n   - 激进施压，用宽范围 open/3-bet\n   - 利用中筹码的 ICM 恐惧\n   - 目标：积累筹码，争取第 1 名\n\n2. 你是中筹码\n   - 避免与大筹码冲突\n   - 压制短筹码\n   - 目标：生存，等待更好的时机\n\n3. 你是短筹码\n   - 寻找最佳全押时机\n   - 不要被动等待\n   - 目标：翻倍或淘汰",
+      "Steal（偷盲）策略",
+      "何时偷盲：\n- 盲注大（相对于筹码）\n- 对手紧（fold to steal 高）\n- 你有位置（BTN/CO）\n\n偷盲范围：\n- BTN：40-50%（任何 Ax、任何对子、大部分 suited 牌）\n- CO：30-40%\n\n偷盲大小：\n- Min-raise（2-2.2x）最常用\n- 给对手最差的赔率\n- 减少自己的风险",
+      "Re-Steal（反偷）",
+      "Re-steal 是从盲注位置对偷盲者 3-bet all-in：\n\n何时 re-steal：\n- 对手偷盲频率高（open > 40%）\n- 你有 15-25BB（太少没有弃牌率，太多浪费）\n- 你有 blocker（Ax、Kx）\n\n手牌选择：\n- Ax：阻断对手的 Ax 组合\n- Suited 牌：有翻后可玩性\n- 避免\"被压制\"的牌（KJ、QT）",
+      "Heads-Up（最终单挑）策略简介",
+      "Heads-Up 是锦标赛的最终阶段：\n\n1. 范围极宽\n   - SB（BTN）open 70-80%\n   - BB defend 60-70%\n\n2. 激进度是关键\n   - 被动 = 输\n   - 主动施压赢得盲注\n\n3. 调整能力\n   - 观察对手 tendencies\n   - 对手紧 → 多偷盲\n   - 对手松 → 多价值下注",
+      "决赛桌是锦标赛中最重要的阶段。记住：大筹码应该利用 payout 跳跃施压，短筹码应该主动寻找 push 机会。"
+    ],
+    "l6-bounty": [
+      "什么是 Bounty/PKO 锦标赛？",
+      "Progressive Knockout（PKO）锦标赛中，每个玩家头上有赏金。淘汰对手可获得其一半赏金，另一半加到自己头上。这彻底改变了策略。",
+      "Bounty 使得\"淘汰\"本身就有价值。当覆盖对手时，你的跟注/加注范围应比普通锦标赛更宽，因为除了底池还有赏金价值。",
+      "调整原则",
+      "• 覆盖短筹码时：大幅放宽跟注/加注范围（赏金价值高）\n• 被覆盖时：正常打法，不要因为对手抉3-Bet\"开心\"\n• 你的赏金很大时：对手会更激进地向你加注\n• 计算\"赏金调整后的赔率\"：\n  有效赔率 = (底池 + 对手赏金/2) : 跟注金额",
+      "PKO 中最常见的错误是完全忽视赏金价值（打得太紧）或过度追求赏金（用垃圾手牌 All-In）。平衡是关键。",
+      "赏金赛 $EV 调整公式：\n有效赏金价值 = 固定赏金 × 淘汰概率\n调整后的跟注所需胜率 = 原始所需胜率 × (1 - 赏金折扣因子)\n\n例：赏金 $20，对手筹码 5000，总筹码 50000\n淘汰该对手概率 = 5000/50000 = 10%\n赏金贡献 $EV = 0.1 × $20 = $2\n\n这意味着你的跟注范围可以放宽约 5-10%，具体取决于赏金大小与筹码分布",
+      "理论支撑：多人底池的胜率稀释与赏金赛的 $EV 调整见理论学院 T9 第 3 章\"多人底池与 GTO-剥削统一框架\"。赏金赛策略是 ICM 理论在特殊赛制下的扩展应用。",
+      "反直觉点：大赏金对手时反而应该收紧跟注范围。很多人认为\"大赏金意味着应该更激进地追赏金\"，但数学上大赏金对手被淘汰的概率低，赏金贡献的 $EV 有限。盲目追赏金会导致 -EV 的跟注，得不偿失。"
+    ]
+  },
+  "lessonQuiz": {
+    "l6-icm-q1": {
+      "question": "ICM 的核心概念是什么？",
+      "options": [
+        "筹码价值是线性的",
+        "锦标赛中 Chip EV = $EV",
+        "锦标赛中筹码价值不等于钱",
+        "ICM 只适用于现金局"
+      ],
+      "explanation": "ICM 的核心是锦标赛中筹码的真实价值（$EV）与筹码数量（Chip EV）不相等，因为奖金结构的存在。"
+    },
+    "l6-icm-q2": {
+      "question": "在泡沫期，中筹码玩家应该？",
+      "options": [
+        "与大筹码对抗",
+        "避免与大筹码冲突",
+        "用任何牌 call all-in",
+        "立即全押"
+      ],
+      "explanation": "中筹码在泡沫期应该避免与大筹码对抗，因为被淘汰的损失（失去奖金）远大于翻倍筹码的收益。"
+    },
+    "l6-icm-q3": {
+      "question": "Bubble Factor 越高，你的 call 范围应该？",
+      "options": [
+        "越宽",
+        "越紧",
+        "不变",
+        "只 call 超强牌"
+      ],
+      "explanation": "Bubble Factor 越高，ICM 压力越大，你需要更强的牌才能 call all-in，因为被淘汰的代价更高。"
+    },
+    "l6-icm-q4": {
+      "question": "大筹码在泡沫期可以？",
+      "options": [
+        "用更紧的范围 push",
+        "用更宽的范围 push 短筹码",
+        "只打超强牌",
+        "避免任何冲突"
+      ],
+      "explanation": "大筹码可以利用 ICM 压力，用更宽的范围 push 短筹码，因为短筹码需要用更强的牌才能 call。"
+    },
+    "l6-icm-q5": {
+      "question": "ICM压力最大的阶段是？",
+      "options": [
+        "比赛开始",
+        "泡沫期",
+        "决赛桌后",
+        "盲注期"
+      ],
+      "explanation": "泡沫期是ICM压力最大的阶段，因为再淘汰1-3人进入奖金圈。"
+    },
+    "l6-pushfold-q1": {
+      "question": "通常何时应该进入 Push/Fold 模式？",
+      "options": [
+        "< 30BB",
+        "< 20BB",
+        "< 15BB",
+        "< 5BB"
+      ],
+      "explanation": "当筹码降到 15BB 以下时，应该考虑进入 Push/Fold 模式。< 10BB 时必须使用。"
+    },
+    "l6-pushfold-q2": {
+      "question": "10BB 时 BTN 的 Nash push 范围大约是？",
+      "options": [
+        "10-15%",
+        "20-25%",
+        "40-45%",
+        "70-80%"
+      ],
+      "explanation": "10BB 时 BTN 的 Nash push 范围约 40-45%，包括任何 Ax、任何对子、大部分 suited 连牌。"
+    },
+    "l6-pushfold-q3": {
+      "question": "泡沫期你的 push 范围应该？",
+      "options": [
+        "比 Nash 更紧",
+        "与 Nash 相同",
+        "比 Nash 更宽",
+        "只 push 超强牌"
+      ],
+      "explanation": "泡沫期 ICM 压力让对手 call 更紧，所以你可以用比 Nash 更宽的范围 push。"
+    },
+    "l6-pushfold-q4": {
+      "question": "面对 UTG 的 10BB push，BB 的 call 范围应该？",
+      "options": [
+        "非常宽（50%+）",
+        "中等（30-35%）",
+        "很紧（15-20%）",
+        "只 call AA/KK"
+      ],
+      "explanation": "UTG 的 push 范围很紧（通常是强牌），所以 BB 应该用很紧的范围 call（15-20%）。"
+    },
+    "l6-pushfold-q5": {
+      "question": "SB 10BB时的push范围约？",
+      "options": [
+        "20-25%",
+        "30-35%",
+        "50-55%",
+        "80%+"
+      ],
+      "explanation": "SB 10BB时可以push约50-55%的范围，因为只剩BB。"
+    },
+    "l6-bubble-q1": {
+      "question": "泡沫期是指？",
+      "options": [
+        "比赛刚开始",
+        "距离奖金圈 1-3 人淘汰",
+        "决赛桌",
+        "比赛中间阶段"
+      ],
+      "explanation": "泡沫期是指距离奖金圈只剩 1-3 人淘汰的阶段，是 ICM 压力最大的时候。"
+    },
+    "l6-bubble-q2": {
+      "question": "大筹码在泡沫期应该？",
+      "options": [
+        "打得很紧",
+        "激进施压，用宽范围 open/3-bet",
+        "只打超强牌",
+        "避免任何冲突"
+      ],
+      "explanation": "大筹码应该利用 ICM 压力激进施压，用宽范围 open/3-bet，尤其是针对中筹码。"
+    },
+    "l6-bubble-q3": {
+      "question": "中筹码在泡沫期应该？",
+      "options": [
+        "与大筹码对抗",
+        "避免与大筹码冲突，压制短筹码",
+        "用任何牌 call",
+        "立即全押"
+      ],
+      "explanation": "中筹码应该避免与大筹码冲突（被淘汰的损失太大），但可以压制短筹码。"
+    },
+    "l6-bubble-q4": {
+      "question": "短筹码在泡沫期应该？",
+      "options": [
+        "被动等待",
+        "主动寻找push机会（10-15BB时）",
+        "只打AA",
+        "弃牌所有手牌"
+      ],
+      "explanation": "短筹码应在10-15BB时主动push，等到5BB就没有弃牌率了。"
+    },
+    "l6-bubble-q5": {
+      "question": "泡沫爆裂后ICM压力？",
+      "options": [
+        "增大",
+        "骤降",
+        "不变",
+        "消失"
+      ],
+      "explanation": "泡沫爆裂后所有人都已min-cash，ICM压力骤降。"
+    },
+    "l6-finaltable-q1": {
+      "question": "决赛桌的 payout 跳跃意味着？",
+      "options": [
+        "ICM 压力消失",
+        "每次淘汰都有显著奖金变化",
+        "所有人都打得很松",
+        "短筹码应该被动等待"
+      ],
+      "explanation": "决赛桌 payout 跳跃大，每次淘汰都有显著的奖金变化，所以 ICM 压力仍然很大。"
+    },
+    "l6-finaltable-q2": {
+      "question": "BTN 的偷盲范围通常是？",
+      "options": [
+        "10-15%",
+        "20-25%",
+        "40-50%",
+        "80-90%"
+      ],
+      "explanation": "BTN 的偷盲范围通常是 40-50%，包括任何 Ax、任何对子、大部分 suited 牌。"
+    },
+    "l6-finaltable-q3": {
+      "question": "Re-steal 的最佳筹码量是？",
+      "options": [
+        "5-10BB",
+        "15-25BB",
+        "40-50BB",
+        "100BB+"
+      ],
+      "explanation": "Re-steal 的最佳筹码量是 15-25BB：太少没有弃牌率，太多浪费筹码。"
+    },
+    "l6-finaltable-q4": {
+      "question": "Heads-Up中SB(BTN)的open范围约？",
+      "options": [
+        "30-40%",
+        "50-60%",
+        "70-80%",
+        "90%+"
+      ],
+      "explanation": "Heads-Up中SB(BTN)open约70-80%的范围，范围极宽。"
+    },
+    "l6-finaltable-q5": {
+      "question": "偷盲的最佳大小通常是？",
+      "options": [
+        "3BB",
+        "Min-raise(2-2.2x)",
+        "5BB",
+        "Half pot"
+      ],
+      "explanation": "Min-raise给对手最差赔率，减少自己风险，是最常用的偷盲大小。"
+    },
+    "l6-bounty-q1": {
+      "question": "PKO 中淘汰对手可获得其多少赏金？",
+      "options": [
+        "全部",
+        "一半",
+        "四分之一",
+        "没有"
+      ],
+      "explanation": "PKO中淘汰对手获得其一半赏金，另一半加到自己头上。"
+    },
+    "l6-bounty-q2": {
+      "question": "覆盖短筹码时应该怎么调整？",
+      "options": [
+        "更保守",
+        "大幅放宽范围",
+        "和普通赛一样",
+        "只打AA/KK"
+      ],
+      "explanation": "覆盖短筹码时赏金价值高，应大幅放宽跟注/加注范围。"
+    },
+    "l6-bounty-q3": {
+      "question": "PKO中你的赏金很大时，对手会？",
+      "options": [
+        "更保守",
+        "更激进地向你加注",
+        "弃牌更多",
+        "没有变化"
+      ],
+      "explanation": "你的赏金大时，对手为了获得赏金会更激进地向你加注。"
+    },
+    "l6-bounty-q4": {
+      "question": "被覆盖时应该怎么打？",
+      "options": [
+        "更保守",
+        "正常打法，不因3-Bet开心",
+        "全下所有手牌",
+        "弃牌所有手牌"
+      ],
+      "explanation": "被覆盖时正常打法，不要因为对手的激进而情绪化。"
+    },
+    "l6-bounty-q5": {
+      "question": "PKO中最常见的错误是？",
+      "options": [
+        "打得太紧",
+        "忽视赏金价值或过度追求赏金",
+        "总是全下",
+        "从不弃牌"
+      ],
+      "explanation": "最常见的错误是完全忽视赏金价值（太紧）或过度追求赏金（用垃圾牌全下）。"
+    }
+  },
+  "lessonExample": {
+    "l6-icm-ex1": {
+      "title": "泡沫期 fold AQ",
+      "correctAction": "Fold",
+      "reasoning": [
+        "锦标赛泡沫期，还有 2 人淘汰进入奖金圈",
+        "你是中等筹码，CO 是大筹码（覆盖你）",
+        "AQ 虽然强，但 call 后被淘汰的风险太高",
+        "Fold 后你仍然有很高的概率进入奖金圈",
+        "ICM 压力让 call 的 $EV 为负"
+      ],
+      "mistakeAction": "Call all-in",
+      "mistakeReasoning": "在现金局中 AQ 是明显的 call，但锦标赛泡沫期 ICM 压力让 fold 成为正确选择。",
+      "mistakeEvLoss": "-$50（失去进入奖金圈的机会）",
+      "tableDesc": "锦标赛泡沫期，还有 2 人淘汰进入奖金圈",
+      "stackDesc": "你是中等筹码，CO 是大筹码（覆盖你），还有 2 个短筹码"
+    },
+    "l6-icm-ex2": {
+      "title": "大筹码宽范围 push 短筹码",
+      "correctAction": "Raise all-in",
+      "reasoning": [
+        "你是大筹码，SB 和 BB 都是短筹码（8-10BB）",
+        "泡沫期短筹码需要用非常紧的范围 call（ICM 压力）",
+        "97s 有不错的阻断效果和翻后可玩性",
+        "即使被 call，你仍有位置优势和筹码优势",
+        "利用 ICM 压力施加最大压力"
+      ],
+      "mistakeAction": "Fold 或 min-raise",
+      "mistakeReasoning": "在现金局中 97s 可能只是 call，但锦标赛中大筹码应该利用 ICM 压力主动施压。",
+      "mistakeEvLoss": "-2BB（失去偷盲机会）",
+      "tableDesc": "锦标赛泡沫期，你是大筹码",
+      "stackDesc": "你 25BB，SB 8BB，BB 10BB，还有 2 个中等筹码"
+    },
+    "l6-pushfold-ex1": {
+      "title": "BTN 10BB Push",
+      "correctAction": "Push all-in",
+      "reasoning": [
+        "你只有 10BB，进入 Push/Fold 模式",
+        "BTN 位置可以 push 40-45% 的范围",
+        "K9s 在 Nash push 范围内",
+        "SB 和 BB 需要用很紧的范围 call",
+        "即使被 call，K9s 对抗 call 范围仍有 35%+ 胜率"
+      ],
+      "mistakeAction": "Fold 或 min-raise",
+      "mistakeReasoning": "10BB 时 min-raise 没有意义（被 3-bet 就完了），fold 太紧。Push 是最优选择。",
+      "mistakeEvLoss": "-1.5BB（失去偷盲机会）",
+      "tableDesc": "MTT 中期，距离奖金圈还有 15 人",
+      "stackDesc": "你 10BB，SB 15BB，BB 12BB"
+    },
+    "l6-pushfold-ex2": {
+      "title": "BB 面对 SB Push 的 Call",
+      "correctAction": "Call",
+      "reasoning": [
+        "SB 的 push 范围很宽（50-55%）",
+        "A8s 对抗宽范围有很好的胜率（~55%）",
+        "A 的阻断效果减少对手有 Ax 的概率",
+        "底池赔率：SB push 10BB，hero BB 追加 call 成本 9BB，总底池 21BB。所需胜率 = 9/21 ≈ 43%",
+        "即使没有 ICM 压力，这也是明显的 call"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "A8s 对抗 SB 的宽 push 范围胜率足够，fold 太紧。",
+      "mistakeEvLoss": "-1BB（放弃正 EV 的 call）",
+      "tableDesc": "MTT 早期，距离奖金圈还远",
+      "stackDesc": "你 12BB，SB 10BB"
+    },
+    "l6-bubble-ex1": {
+      "title": "大筹码泡沫期施压",
+      "correctAction": "Raise 2.5BB",
+      "reasoning": [
+        "你是大筹码（35BB），泡沫期",
+        "SB 和 BB 都是中筹码（15-20BB）",
+        "中筹码最怕被淘汰，会用很紧的范围 defend",
+        "K9s 有不错的阻断效果和翻后可玩性",
+        "即使被 call，你仍有位置优势"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "泡沫期大筹码应该利用 ICM 压力施压，fold 太被动。",
+      "mistakeEvLoss": "-1.5BB（失去偷盲机会）",
+      "tableDesc": "MTT 泡沫期，还有 2 人进入奖金圈",
+      "stackDesc": "你 35BB（大筹码），SB 18BB，BB 15BB（中筹码）"
+    },
+    "l6-bubble-ex2": {
+      "title": "短筹码泡沫期全押",
+      "correctAction": "Push all-in",
+      "reasoning": [
+        "你是短筹码（12BB），泡沫期",
+        "前位弃牌到你，最大化弃牌率",
+        "A7s 有 A 的阻断效果",
+        "BTN/SB/BB 需要用很紧的范围 call（ICM 压力）",
+        "不要等到 5BB 再 push，那时就没有弃牌率了"
+      ],
+      "mistakeAction": "Fold 等待更好的时机",
+      "mistakeReasoning": "短筹码在泡沫期应该主动寻找 push 机会，而不是被动等待。等到 5BB 就太晚了。",
+      "mistakeEvLoss": "-2BB（盲注消耗）",
+      "tableDesc": "MTT 泡沫期，你是短筹码",
+      "stackDesc": "你 12BB（短筹码），桌上有 3 个大筹码和 2 个中筹码"
+    },
+    "l6-finaltable-ex1": {
+      "title": "决赛桌大筹码施压",
+      "correctAction": "Raise 2.2BB",
+      "reasoning": [
+        "你是大筹码（40BB），决赛桌",
+        "SB 和 BB 都是中筹码（20-25BB）",
+        "Payout 跳跃大，中筹码怕被淘汰",
+        "Q8s 有不错的阻断效果和翻后可玩性",
+        "Min-raise 给对手最差的赔率"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "决赛桌大筹码应该利用 payout 跳跃施压，fold 太被动。",
+      "mistakeEvLoss": "-1.5BB（失去偷盲机会）",
+      "tableDesc": "MTT 决赛桌，9 人桌，payout 跳跃大",
+      "stackDesc": "你 40BB（大筹码），SB 22BB，BB 25BB（中筹码）"
+    },
+    "l6-finaltable-ex2": {
+      "title": "Re-Steal 反偷",
+      "correctAction": "Re-raise all-in",
+      "reasoning": [
+        "BTN 的 open 范围很宽（40%+）",
+        "你有 20BB，是 re-steal 的理想筹码量",
+        "A5s 有 A 的阻断效果（减少对手有 Ax 的概率）",
+        "BTN 需要用很紧的范围 call（~15%）",
+        "即使被 call，A5s 对抗 call 范围仍有 40%+ 胜率"
+      ],
+      "mistakeAction": "Call 或 Fold",
+      "mistakeReasoning": "Call 让你翻后无位置打弱牌，fold 太被动。Re-steal 是最优选择。",
+      "mistakeEvLoss": "-2BB（放弃正 EV 的 re-steal）",
+      "tableDesc": "MTT 决赛桌，BTN 是 LAG 玩家",
+      "stackDesc": "你 20BB，BTN 30BB"
+    }
+  },
+  "lessonPractice": {
+    "l6-icm-p1": {
+      "option": [
+        {
+          "action": "Call all-in",
+          "explanation": "KQs 在现金局是明显的 call，但 SNG 泡沫期 ICM 压力极大。你 call 后被淘汰就失去奖金，而 fold 后短筹码很可能先被淘汰。",
+          "evImpact": "-$30"
+        },
+        {
+          "action": "Fold",
+          "explanation": "SNG 泡沫期，你是中等筹码，有 2 个更短的筹码。Fold KQs 是正确的 ICM 决策，让短筹码先被淘汰。",
+          "evImpact": "+$25"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "你没有足够的筹码做 3-bet all-in，而且即使有，ICM 压力也不支持这样做。",
+          "evImpact": "-$35"
+        }
+      ],
+      "tableDesc": "SNG 泡沫期，还有 1 人淘汰进入奖金圈",
+      "stackDesc": "你 12BB，CO 18BB，还有 2 个 5BB 短筹码"
+    },
+    "l6-icm-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A5s 有很强的阻断效果（阻断 AA/AK），在泡沫期作为大筹码应该利用 ICM 压力施压。",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "Min-raise 给对手很好的赔率，而且你不想被 3-bet。直接 all-in 施加最大 ICM 压力。",
+          "evImpact": "+0.5BB"
+        },
+        {
+          "action": "Raise all-in",
+          "explanation": "作为大筹码在泡沫期，A5s 有 A 的阻断效果，短筹码需要用非常紧的范围 call。利用 ICM 压力最大化弃牌率。",
+          "evImpact": "+2.0BB"
+        }
+      ],
+      "tableDesc": "MTT 泡沫期，你是大筹码",
+      "stackDesc": "你 30BB，SB 8BB，BB 10BB"
+    },
+    "l6-icm-p3": {
+      "option": [
+        {
+          "action": "Call all-in",
+          "explanation": "JTs 对抗 UTG 的 all-in 范围（通常是 QQ+/AK）胜率不足。即使没有 ICM 压力，这也是负 EV 的 call。",
+          "evImpact": "-3BB"
+        },
+        {
+          "action": "Fold",
+          "explanation": "UTG 的 all-in 范围很强，JTs 胜率不足。即使没有泡沫期 ICM 压力，也应该 fold。",
+          "evImpact": "0BB"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "你没有足够的筹码做 3-bet，而且 JTs 对抗 UTG 范围胜率不足。",
+          "evImpact": "-5BB"
+        }
+      ],
+      "tableDesc": "MTT 中期，距离奖金圈还有 20 人",
+      "stackDesc": "你 20BB，UTG 20BB，桌上有 3 个短筹码"
+    },
+    "l6-icm-p4": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "KQs在泡沫期ICM压力下太弱call。有2个更短筹码，fold保护锦标赛生命。",
+          "evImpact": "-$30"
+        },
+        {
+          "action": "Fold",
+          "explanation": "泡沫期ICM压力极大，有2个更短筹码。Fold KQs是正确的ICM决策。",
+          "evImpact": "+$20"
+        }
+      ],
+      "tableDesc": "SNG泡沫期",
+      "stackDesc": "你15BB，CO 20BB，还有2个5BB短筹码"
+    },
+    "l6-icm-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "6BB非常短，AKs是顶级强牌。应该push最大化弃牌率。",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "6BB时AKs是顶级强牌，全下是最佳选择。",
+          "evImpact": "+2BB"
+        }
+      ],
+      "tableDesc": "MTT泡沫期，你非常短",
+      "stackDesc": "你6BB，SB 20BB，BB 25BB"
+    },
+    "l6-pushfold-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QTS 在 SB 10BB 时是明显的 push。SB 可以 push 50%+ 的范围，QTS 在其中。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "SB 10BB 时可以 push 50-55% 的范围。QTS 有不错的胜率和阻断效果，是标准 push。",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "10BB 时 min-raise 没有意义。被 3-bet 你就完了，不如直接 push 最大化弃牌率。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT 中期，你只有 10BB",
+      "stackDesc": "你 10BB，BB 15BB"
+    },
+    "l6-pushfold-p2": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "虽然 77 对抗 BTN 的宽 push 范围胜率不错，但泡沫期 ICM 压力让 call 的 $EV 为负。让短筹码先被淘汰。",
+          "evImpact": "-$20"
+        },
+        {
+          "action": "Fold",
+          "explanation": "泡沫期 ICM 压力极大。你是中等筹码，有 2 个更短的筹码。Fold 77 是正确的 ICM 决策。",
+          "evImpact": "+$15"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "你没有足够的筹码做 3-bet，而且 ICM 压力不支持这样做。",
+          "evImpact": "-$25"
+        }
+      ],
+      "tableDesc": "MTT 泡沫期，还有 3 人进入奖金圈",
+      "stackDesc": "你 12BB，BTN 10BB，还有 2 个 5BB 短筹码"
+    },
+    "l6-pushfold-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A2s 在 BTN 8BB 时是明显的 push。任何 Ax 都在 push 范围内。",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "8BB 时 BTN 可以 push 50%+ 的范围。A2s 有 A 的阻断效果，是标准 push。",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "8BB 时 min-raise 没有意义。直接 push 最大化弃牌率。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "SNG 中期，你只有 8BB",
+      "stackDesc": "你 8BB，SB 12BB，BB 10BB"
+    },
+    "l6-pushfold-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KK在12BB是顶级强牌，不能fold。",
+          "evImpact": "-3BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "KK在12BB是顶级强牌，全下获取最大价值。",
+          "evImpact": "+2BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "12BB时min-raise没有意义，被3-bet很尴尬。直接push。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT中期，你12BB"
+    },
+    "l6-pushfold-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AJs对抗BTN 10BB push范围（40%+）胜率足够。没有ICM压力，明显call。",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "AJs对抗宽push范围胜率约60%。无ICM压力，标准call。",
+          "evImpact": "+2BB"
+        }
+      ],
+      "tableDesc": "MTT早期，距奖金圈远"
+    },
+    "l6-bubble-p1": {
+      "option": [
+        {
+          "action": "3-bet all-in",
+          "explanation": "你是中筹码，CO 是大筹码。泡沫期避免与大筹码冲突，因为被淘汰的损失太大。",
+          "evImpact": "-$40"
+        },
+        {
+          "action": "Call",
+          "explanation": "QJs 对抗大筹码的 open 范围胜率一般，而且翻后无位置。ICM 压力不支持 call。",
+          "evImpact": "-$10"
+        },
+        {
+          "action": "Fold",
+          "explanation": "泡沫期中筹码应该避免与大筹码冲突。Fold QJs 是正确的 ICM 决策，让短筹码先被淘汰。",
+          "evImpact": "+$15"
+        }
+      ],
+      "tableDesc": "MTT 泡沫期，你是中筹码",
+      "stackDesc": "你 20BB（中筹码），CO 40BB（大筹码），还有 2 个 8BB 短筹码"
+    },
+    "l6-bubble-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "你是大筹码，泡沫期应该利用 ICM 压力施压。A9s 有 A 的阻断效果，是标准 open。",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "大筹码在泡沫期应该用宽范围 open。A9s 有 A 的阻断效果，中筹码会用很紧的范围 defend。",
+          "evImpact": "+2.0BB"
+        },
+        {
+          "action": "Raise 3BB",
+          "explanation": "Min-raise（2.2BB）就够了，不需要更大。更大的 open 只是增加风险。",
+          "evImpact": "+1.5BB"
+        }
+      ],
+      "tableDesc": "MTT 泡沫期，你是大筹码",
+      "stackDesc": "你 45BB（大筹码），SB 18BB，BB 15BB（中筹码）"
+    },
+    "l6-bubble-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KTS 在 SB 10BB 时是标准 push。前位都弃牌了，最大化弃牌率。不要被动等待。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "短筹码在泡沫期应该主动寻找 push 机会。KTS 有不错的胜率和阻断效果，前位弃牌后 push 是标准打法。",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "10BB 时 min-raise 没有意义。被 3-bet 你就完了，不如直接 push。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT 泡沫期，你是短筹码",
+      "stackDesc": "你 10BB（短筹码），BB 25BB（大筹码）"
+    },
+    "l6-bubble-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "8BB很短，ATs有A阻断效果。应该主动push，不要等到5BB。",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "8BB短筹码，ATs有A阻断效果，前位弃牌后push最大化弃牌率。",
+          "evImpact": "+1.5BB"
+        }
+      ],
+      "tableDesc": "MTT泡沫期，你是短筹码",
+      "stackDesc": "你8BB，BTN 30BB，SB 25BB，BB 20BB"
+    },
+    "l6-bubble-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QQ在30BB是顶级强牌。大筹码泡沫期应该激进。",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "QQ是顶级强牌，min-raise获取价值。大筹码泡沫期利用ICM施压。",
+          "evImpact": "+2BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "30BB时QQ不需要全下。min-raise更好，保留翻后可玩性。",
+          "evImpact": "+1BB"
+        }
+      ],
+      "tableDesc": "MTT泡沫期，你是大筹码",
+      "stackDesc": "你30BB（大筹码），SB 15BB，BB 18BB"
+    },
+    "l6-finaltable-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "你是大筹码，决赛桌应该利用 payout 跳跃施压。K9s 是标准 open。",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "大筹码在决赛桌应该用宽范围 open。K9s 有不错的阻断效果，中筹码会用很紧的范围 defend。",
+          "evImpact": "+2.0BB"
+        },
+        {
+          "action": "Raise 3BB",
+          "explanation": "Min-raise（2.2BB）就够了，不需要更大。",
+          "evImpact": "+1.5BB"
+        }
+      ],
+      "tableDesc": "MTT 决赛桌，你是大筹码",
+      "stackDesc": "你 35BB（大筹码），SB 18BB，BB 20BB（中筹码）"
+    },
+    "l6-finaltable-p2": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "Call 让你翻后无位置打弱牌。A4s 是 re-steal 的好选择（有 A 的阻断效果）。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Fold",
+          "explanation": "A4s 有 A 的阻断效果，是 re-steal 的好选择。Fold 太被动。",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "A4s 有 A 的阻断效果，18BB 是 re-steal 的理想筹码量。BTN 需要用很紧的范围 call。",
+          "evImpact": "+3BB"
+        }
+      ],
+      "tableDesc": "MTT 决赛桌，BTN 偷盲频率高",
+      "stackDesc": "你 18BB，BTN 28BB"
+    },
+    "l6-finaltable-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "99 在 SB 15BB 时是标准 push。前位都弃牌了，最大化弃牌率。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "99 在 SB 15BB 时是标准 push。前位弃牌后 push 最大化弃牌率，即使被 call 也有 50% 胜率。",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "15BB 时 min-raise 没有意义。被 3-bet 你就完了，不如直接 push。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT 决赛桌，你是短筹码",
+      "stackDesc": "你 15BB（短筹码），BB 30BB（大筹码）"
+    },
+    "l6-finaltable-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A3s有A阻断效果，大筹码决赛桌应该利用payout跳跃施压。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "A3s有A阻断效果，min-raise偷盲。中筹码怕被淘汰。",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "25BB不需要全下。min-raise就够了。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "决赛桌，你是大筹码",
+      "stackDesc": "你25BB，SB 18BB，BB 20BB"
+    },
+    "l6-finaltable-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "JJ是强牌，BTN偷盲频率高。应该re-steal。",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "JJ是强牌，20BB是re-steal理想筹码量。BTN范围宽，JJ胜率很高。",
+          "evImpact": "+3BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "Call翻后无位置。20BB直接re-steal all-in更好。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "决赛桌，BTN频繁偷盲",
+      "stackDesc": "你20BB，BTN 35BB"
+    },
+    "l6-bounty-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KQs是强牌，CO有大赏金意味着更多人想淘汰他。call范围应更宽。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "CO有大赏金，淘汰他可获得额外价值。KQs足够强call。",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "50BB深度不需要用KQs全下。call就够了。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "PKO锦标赛，CO头上有大赏金"
+    },
+    "l6-bounty-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "JTs在CO是强牌。虽然你头上有赏金，但不要因此打得太紧。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "JTs在CO是标准open。不要因为头上有赏金就过度保守。",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Limp",
+          "explanation": "Limp太被动。应该open raise获取主动权。",
+          "evImpact": "+0.3BB"
+        }
+      ],
+      "tableDesc": "PKO锦标赛，你头上有大赏金"
+    },
+    "l6-bounty-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A5s有A阻断+同花潜力。BTN有大赏金，淘汰他的额外价值让call更优。",
+          "evImpact": "-0.5BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "BTN有大赏金，淘汰他可获得额外价值。A5s有阻断效果，call获取赏金价值。",
+          "evImpact": "+2BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "40BB深度不需要全下。call就够了。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "PKO锦标赛，BTN头上有大赏金"
+    },
+    "l6-bounty-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QJs是强牌，不要因为头上有赏金就弃掉强牌。",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "QJs是强牌。虽然你头上有赏金，但牌力足够call。注意对手可能更激进。",
+          "evImpact": "+1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "35BB深度不需要全下。call就够了。",
+          "evImpact": "+0.3BB"
+        }
+      ],
+      "tableDesc": "PKO锦标赛，你头上有大赏金"
+    },
+    "l6-bounty-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "你有坚果同花听牌+顺子听牌！应该下注建立底池，尤其是对手有大赏金。",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Bet 5BB",
+          "explanation": "组合听牌极强，下注建立底池。对手有大赏金，淘汰他的额外价值让半诈唬更优。",
+          "evImpact": "+2.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "32BB深度不需要用听牌全下。半诈唬下注就够了。",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "PKO锦标赛，BTN头上有大赏金"
+    }
+  },
+  "drill": {
+    "d-l6-icm-q1": {
+      "scenario": "SNG, 泡沫期, 你15BB, 对手10BB",
+      "question": "泡沫期你15BB，对手10BB盲注。你在BTN持有AJs，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "泡沫期短筹码应该积极全下。AJs在BTN足够强，全下可以给对手最大压力，利用ICM压力迫使他们弃牌。"
+    },
+    "d-l6-icm-q2": {
+      "scenario": "MTT, 钱圈外, 你8BB",
+      "question": "钱圈外你8BB，CO持有KQs，应该？",
+      "option": [
+        "全下",
+        "加注2BB",
+        "弃牌"
+      ],
+      "explanation": "8BB已经很短，KQs是强牌。全下是最佳选择，不要给对手看到flop的机会。"
+    },
+    "d-l6-icm-q3": {
+      "scenario": "SNG, 泡沫期, 你20BB",
+      "question": "泡沫期你20BB，SB持有76s，应该？",
+      "option": [
+        "全下",
+        "加注3BB",
+        "弃牌"
+      ],
+      "explanation": "泡沫期20BB还不够短，76s太弱不应该全下。ICM压力下应该用更强的牌全下，弃掉边缘牌。"
+    },
+    "d-l6-icm-q4": {
+      "scenario": "MTT, 决赛桌, 你12BB",
+      "question": "决赛桌你12BB，BTN持有ATs，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "决赛桌12BB，ATs在BTN是强牌。全下是最佳选择，利用ICM压力迫使对手弃牌。"
+    },
+    "d-l6-icm-q5": {
+      "scenario": "SNG, 泡沫期, 对手全下10BB",
+      "question": "泡沫期对手全下10BB，你在BB持有QJs，应该？",
+      "option": [
+        "跟注",
+        "弃牌",
+        "加注"
+      ],
+      "explanation": "泡沫期ICM压力下，QJs面对全下太弱。对手范围应该很强，弃牌保护你的锦标赛生命。"
+    },
+    "d-l6-icm-q6": {
+      "scenario": "MTT, 钱圈外, 你5BB",
+      "question": "钱圈外你5BB，BTN持有A2s，应该？",
+      "option": [
+        "全下",
+        "加注2BB",
+        "弃牌"
+      ],
+      "explanation": "5BB已经非常短，A2s有A阻断牌。全下是最佳选择，不要给对手看到flop的机会。"
+    },
+    "d-l6-icm-q7": {
+      "scenario": "SNG, 泡沫期, 你25BB",
+      "question": "泡沫期你25BB，UTG持有KK，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "KK是顶级强牌，即使ICM压力下也应该全下。不要慢打KK，获取最大价值。"
+    },
+    "d-l6-icm-q8": {
+      "scenario": "MTT, 决赛桌, 对手全下15BB",
+      "question": "决赛桌对手全下15BB，你在BB持有AKs，应该？",
+      "option": [
+        "跟注",
+        "弃牌",
+        "加注"
+      ],
+      "explanation": "AKs是顶级强牌，面对全下应该跟注。即使决赛桌ICM压力大，AKs的胜率足够高。"
+    },
+    "d-l6-push-q1": {
+      "scenario": "15BB, 6-max",
+      "question": "15BB，UTG持有AQs，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "15BB的UTG，AQs是强牌。全下是最佳选择，不要给对手看到flop的机会。"
+    },
+    "d-l6-push-q2": {
+      "scenario": "12BB, 6-max",
+      "question": "12BB，BTN持有JTs，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "12BB的BTN，JTs足够强全下。利用位置优势和ICM压力迫使盲注弃牌。"
+    },
+    "d-l6-push-q3": {
+      "scenario": "18BB, 6-max",
+      "question": "18BB，UTG持有87s，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "18BB的UTG，87s太弱。UTG位置需要更强的牌全下，弃掉边缘牌。"
+    },
+    "d-l6-push-q4": {
+      "scenario": "10BB, 6-max",
+      "question": "10BB，CO持有K9s，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "10BB已经很短，K9s在CO足够强全下。不要给对手看到flop的机会。"
+    },
+    "d-l6-push-q5": {
+      "scenario": "20BB, 6-max",
+      "question": "20BB，BTN持有54s，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "20BB的BTN，54s太弱。20BB还不够短，应该用标准策略打，不要用弱牌全下。"
+    },
+    "d-l6-push-q6": {
+      "scenario": "8BB, 6-max",
+      "question": "8BB，SB持有QJs，应该？",
+      "option": [
+        "全下",
+        "加注3BB",
+        "弃牌"
+      ],
+      "explanation": "8BB已经非常短，QJs是强牌。全下是最佳选择，不要给对手看到flop的机会。"
+    },
+    "d-l6-push-q7": {
+      "scenario": "15BB, 6-max, 前面有人全下",
+      "question": "UTG全下15BB，你在BTN持有A9s，应该？",
+      "option": [
+        "跟注",
+        "弃牌",
+        "加注"
+      ],
+      "explanation": "UTG全下范围很强，A9s太弱跟注。UTG的push范围应该很紧，弃掉边缘牌。"
+    },
+    "d-l6-push-q8": {
+      "scenario": "12BB, 6-max",
+      "question": "12BB，MP持有AKs，应该？",
+      "option": [
+        "全下",
+        "加注2.5BB",
+        "弃牌"
+      ],
+      "explanation": "12BB的MP，AKs是顶级强牌。全下是最佳选择，不要给对手看到flop的机会。"
+    }
+  }
+}

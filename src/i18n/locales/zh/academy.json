@@ -485,32 +485,6 @@
       "streetRiver": "河牌"
     }
   },
-  "drill": {
-    "accuracy": "正确率",
-    "timeouts": "超时次数",
-    "longestStreak": "最长连续",
-    "pressureScore": "压力评分",
-    "weakPoints": "薄弱点：",
-    "shortcuts": "快捷键：<b>1-4</b> 选择动作，<b>空格/回车</b> 下一题",
-    "timeUp": "⏰ 时间到！",
-    "correct": "✓ 正确",
-    "incorrect": "✗ 不正确",
-    "handLabel": "手牌",
-    "pairLabel": "对子",
-    "spaceHint": "(空格)",
-    "avgTime": "平均用时",
-    "correctCount": "答对",
-    "completedTitle": "练习完成！",
-    "pressureCompletedTitle": "压力测试完成！",
-    "nextQuestion": "下一题",
-    "viewScore": "查看成绩",
-    "opponentHintTemplate": "此类对手{{tendency}}，需要相应调整策略。",
-    "opponentHintPrefix": "📊 提示：面对{{name}}类型玩家，",
-    "opponentTipCorrect": "你的决策考虑了对手倾向，很好！",
-    "pressure": "压力",
-    "evLossBB": "BB EV损失",
-    "reviewLink": "去复习 →"
-  },
   "basicsIntro": {
     "title": "德州扑克基础入门",
     "prev": "上一步",

@@ -1,0 +1,801 @@
+{
+  "lessonContent": {
+    "local-limp-intro": [
+      "What Is a Limp-Heavy Game?",
+      "The most common structure at domestic live clubs and low-stakes online (NL2-NL25) is the limp-heavy game: preflop many players just call the big blind instead of raising, producing multiway pots, shallow stacks, and complex decisions. This is completely different from the \"open-3Bet-fold\" heads-up scenarios assumed in GTO teaching.\n\nTypical scene: UTG limps, MP limps, CO limps, BTN limps, and you in the big blind only need to complete one blind to see a 5-way flop.",
+      "Core features of a limp-heavy game: ① high frequency of multiway pots; ② medium pots with SPR usually 3-5 (medium-low), suited to implied-odds games; ③ passive players who rarely raise; ④ relatively high rake share. These features require you to significantly adjust standard GTO strategy.",
+      "Where the Profit Comes From in a Limp Game",
+      "In a limp-heavy game, profit mainly comes from three sources:\n\n1. Isolating with strong hands: compress multiway pots into heads-up and make limpers pay\n2. Seeing flops cheaply with speculative hands: suited connectors and small pairs have higher implied odds in multiway pots\n3. Precise postflop exploitation: limpers are usually passive postflop, so you can C-Bet or value-bet more frequently",
+      "Common Mistakes",
+      "The most common errors domestic low-stakes players make in limp games:\n\n• Calling limps with too wide a range (completing with junk like K5o, 96o)\n• Not isolating with strong hands — limping along with AA/KK and getting outdrawn in multiway pots\n• Betting off top pair weak kicker in multiway pots, ignoring how top pair devalues multiway\n• Ignoring rake, letting it eat you over small long-run pots",
+      "The most deadly limp-game error: treating a multiway pot like heads-up. In multiway pots, top pair top kicker (TPTK) drops sharply in value — you must tighten your value range.",
+      "In a limp-heavy game, positional value is even higher. BTN or CO can limp behind with a wider range, because they act last postflop and exploit passive players more efficiently."
+    ],
+    "local-limp-isolate": [
+      "Why Isolate?",
+      "When someone limps, they usually hold a wide, weak range (any two suited, connectors, small pairs, even junk like K5o). If you hold a strong hand (like AQ+, TT+) and just limp along, you get a 5-way pot and your strong hand's advantage is diluted.\n\nThe purpose of isolation: compress the multiway pot into heads-up or single-raised action, letting you dominate the opponent with positional and hand-strength advantage postflop.",
+      "The three goals of isolation: ① build the pot (strong-hand value); ② reduce the number of opponents (raise win rate); ③ seize the initiative (postflop C-Bet advantage).",
+      "Isolation Sizing",
+      "Isolation sizing in domestic limp games needs to be bigger than standard GTO:\n\n• One limper: raise to 4-5BB (standard is 3-4BB)\n• Two limpers: raise to 6-7BB\n• Three limpers: raise to 8-10BB\n\nReason: limpers have too-wide calling ranges for a small raise to drive them out. Bigger sizing both reduces callers and builds a bigger pot for value with strong hands.",
+      "Example hand: NL25 cash, 100BB effective\nUTG limps (a VPIP-45 calling station), MP limps, CO folds\nYou're on the BTN with A♠K♥\n\nCorrect play: raise to 6BB (isolating the two limpers)\n• UTG calls (wide range, common)\n• MP folds (ideal result)\n• Postflop heads-up, you C-Bet from the BTN with AK\n\nWrong play: limp along and see a 5-way flop, diluting AK's value",
+      "Isolation Range",
+      "Hands suited for isolating:\n• Value range: TT+, AQ+, KQs (strong hands that want to build pots)\n• Shape range: A2s-A5s, 56s-9Ts (speculative but with flush potential)\n\nHands NOT suited for isolating:\n• Medium strength: AT, KJ, QT (disadvantaged after a 4-Bet or call)\n• Junk: K5o, 96o, 72o (no reason to raise)",
+      "When isolation fails: if you've isolated three times in a row and been called multiway each time, the table is too loose — tighten the isolation range, size up, or switch to a limp-behind strategy to see flops cheaply with speculative hands.",
+      "After isolating, if the flop misses (like AK on 7♠8♦2♣), still C-Bet at high frequency. Limpers fold postflop often; a single C-Bet's EV is far better than passively checking and exposing your range."
+    ],
+    "local-limp-multiway": [
+      "The Fundamental Shift in Multiway Pots",
+      "When 4-5 people see a flop, fundamental changes happen:\n\n• Top pair drops sharply in value: about 60% win rate 3-way, dropping to 35% 5-way\n• Draws rise in value: flush/straight draws have great odds in multiway pots\n• C-Bet success plummets: about 50% heads-up, dropping to 25% 5-way\n• Strong combos more likely: the probability of \"two pair+\" among many opponents rises significantly",
+      "Multiway pot principles: ① tighten the value range (top pair no longer worth three streets); ② reduce C-Bet bluffs (low success); ③ see flops cheaply with draws (good implied odds).",
+      "C-Bet Strategy Adjustments",
+      "C-Bet frequency in multiway pots should drop sharply (about 30-40%, vs 60-70% heads-up):\n\nScenarios to C-Bet:\n• You hold a genuinely strong hand (two pair+) → value C-Bet\n• Dry board (like K82r) and you hit top pair → value C-Bet\n• You're the preflop raiser and heads-up in position → selective C-Bet\n\nScenarios not to C-Bet:\n• Wet board (like T♥9♥8♠) multiway → too easily raised\n• You completely missed with multiple stations behind → low bluff success\n• Medium strength (top pair weak kicker) multiway → pot control is better",
+      "Example hand: NL10, 4-way pot, BB limped behind preflop\nYou hold 8♠9♠ in the BB; UTG/MP/BTN all limp, you check\nFlop: 7♠T♠2♦\n\nAnalysis:\n• You have an OESD + flush draw (15 outs total)\n• 4-way pot, low C-Bet value (you're not the preflop raiser)\n• But you can check-raise to steal the pot\n\nCorrect play: check; if someone bets 1/2 pot, raise (semi-bluff backed by tons of outs)\nWrong play: donk bet, exposing your hand and facing multiway raise risk",
+      "Value-Bet Range Adjustments",
+      "The hand-strength bar for value betting in multiway pots:\n• 4-way pot: two pair and up can multi-street value bet\n• 5+ way pot: trips and up worth multi-street value\n• Top pair top kicker: one street of value on the flop only; pot control after the turn\n• Made draws: after making a flush/straight, can multi-street value bet\n\nRemember: \"weird two pairs\" (like 87s on an 8-7-2 flop) are very common multiway — TPTK is no longer safe.",
+      "The golden rule of multiway limp pots: when someone actively raises, you can almost be sure they hold two pair or better. Domestic limpers rarely bluff — a raise means strength.",
+      "In multiway pots, draws have excellent implied odds. If you hold 5♠6♠ in the BB after 4 limps, completing 1BB to see a 5BB pot can win 30-50BB when the flush hits — a far better payoff ratio than heads-up."
+    ],
+    "local-straddle": [
+      "What Is a Straddle?",
+      "A straddle is a voluntary blind posted preflop from UTG (common live) or BTN (common at domestic clubs), usually 2BB. The straddler has the last action preflop (the \"last-raise right\").\n\nDomestic clubs especially favor the BTN straddle: the dealer acts last preflop, giving \"double positional advantage\".",
+      "Core effects of a straddle: ① effective stacks halve (100BB becomes 50BB effective); ② positional advantage is redistributed; ③ the preflop pot is bigger; ④ speculative hands drop in value (worse implied odds).",
+      "The Special Nature of the BTN Straddle",
+      "The BTN straddle is a signature of domestic clubs:\n\n• Preflop action order: SB → BB → UTG → ... → CO → BTN (straddler)\n• The BTN acts last preflop (keeping positional advantage)\n• Postflop action order returns to normal: SB → BB → ... → BTN\n• This means the BTN acts last both preflop and postflop — a huge advantage\n\nCounter-strategy: BTN straddlers usually have a wide range (already invested 2BB), so you can attack them with a wider 3-Bet range.",
+      "Example hand: NL50, BTN straddle (2BB), 100BB effective\nYou're UTG with A♣K♦\n\nAnalysis:\n• The straddle is a voluntary extra 2BB blind; the effective stack is still ~100BB. Only the preflop action rules change; the straddler himself has 98BB left.\n• AK is an extremely strong hand at 50BB depth\n• UTG opens to 5BB (standard 3-4BB, but straddle games need bigger)\n• BTN straddler calls (wide range, common)\n• Postflop ~45BB effective; AK can get it in on a top pair\n\nWrong play: UTG opens only 3BB, gets multiway calls, diluting AK's value",
+      "Range Adjustments in Straddle Games",
+      "The straddle halves effective stacks, so strategy should tighten overall:\n\nHands that rise in value:\n• Big pairs (QQ+): can confidently 5-Bet all-in at 50BB depth\n• AK/AQ: can get it in on top pair, no deep-stack maneuvering needed\n\nHands that drop in value:\n• Small pairs (22-77): set-mine implied odds worsen (50BB not 100BB)\n• Suited connectors: big-pot potential drops\n• Weak Ax: easily dominated",
+      "The most common straddle-game error: still using a 100BB range at 50BB effective. Small pairs and suited connectors should be cut dramatically in straddle games, and strong hands should 3-Bet/4-Bet more aggressively.",
+      "If you're the straddler (BTN position), you can mix: mostly check to see a free flop, occasionally check-raise with strong hands (KK/AA) to trap the raiser's chips."
+    ],
+    "local-ante": [
+      "The Nature of the Ante Structure",
+      "An ante is a small mandatory contribution preflop from every player (usually 0.1-0.25BB). Domestic clubs often introduce antes in cash games to boost pots and action.\n\nThe ante changes pot odds: the initial pot is bigger (e.g. a 6-handed table + 0.2BB ante = 1.2BB antes + 1.5BB blinds = 2.7BB), so calling odds improve and you should enter with a wider range.",
+      "Core effects of the ante: ① bigger initial pot; ② better calling odds (widen ranges); ③ higher steal value (bigger pot to steal); ④ lower fold-rate requirement for short-stack shoves.",
+      "Preflop Range Adjustments",
+      "Under the ante structure, widen ranges overall:\n\n• Opening range: widen about 15% (e.g. UTG from 12% → 14%)\n• Steal range: BTN can widen to 45-50% (standard is 35-40%)\n• 3-Bet range: slightly wider, but value-oriented\n• Big blind defense: widen the calling range (better odds)\n\nKey formula: the bigger the ante, the better the pot odds, and the wider the call/defense ranges should be.",
+      "Example: 6-handed, 0.2BB ante, NL100\nWithout ante: pot = SB 0.5 + BB 1 = 1.5BB\nWith ante: pot = SB 0.5 + BB 1 + antes 1.2 = 2.7BB\n\nBTN steal raises 2.5BB:\n• No ante: BB calls 1.5BB to win 4BB (37.5% odds)\n• With ante: BB calls 1.5BB to win 5.2BB (28.8% odds)\n\nConclusion: in ante games the BB's defense range should widen noticeably (required equity drops from 37.5% to 28.8%).",
+      "Steal Strategy in Ante Games",
+      "The ante makes stealing more profitable:\n• The stolen pot is bigger (includes antes)\n• The BB's defense range is wider but the average hand is weaker\n• CO/BTN/SB should all raise steal frequency\n\nBut note: the ante also makes 3-Bet-stealing players' ranges wider, so you can counter with strong-hand 4-Bets.",
+      "The most common ante-game error: still playing the tight no-ante ranges. Under an ante structure you should clearly widen, especially steals and big-blind defense.",
+      "The bigger the ante, the more aggressive you should be. In big-ante games (like 0.5BB+), the BTN opening range can widen to 55-60% because the pot odds are excellent."
+    ],
+    "local-deep-implied-odds": [
+      "The Implied-Odds Revolution of Deep Stacks",
+      "In domestic club deep-stack games (200-500BB effective), implied odds change qualitatively:\n\n• 100BB depth: call 3BB, make a set and win 100BB (33:1)\n• 500BB depth: call 3BB, make a set and win 500BB (166:1)\n\nThis means small pairs and suited connectors rise sharply in value at deep stacks — even when your \"immediate odds\" are insufficient, implied odds are enough to justify calling.",
+      "Implied-odds formula: implied odds = (current pot + expected future-street winnings) : call amount. Deep stacks hugely raise \"expected future-street winnings\", turning many seemingly unprofitable calls +EV.",
+      "How Hand Values Change at Deep Stacks",
+      "Hands that rise sharply:\n• Small pairs (22-88): set-mining value is excellent; making a set can win all the deep chips\n• Suited connectors (54s-T9s): big straight/flush potential; can win all chips deep\n• Suited Ax (A2s-A5s): nut-flush potential, extremely valuable deep\n• Big suited connectors (JTs/QTs): straight potential + top-pair potential\n\nHands that relatively drop:\n• Top pair top kicker (AK/AQ hitting top pair): no longer an \"absolute strong hand\" deep\n• Medium pairs (99-TT): easily outdrawn by small-pair sets\n• Weak two pair: easily outdrawn by straights/flushes deep",
+      "Example hand: domestic club NL200, 500BB effective\nUTG opens 8BB (deep-stack games size up), you're CO with 7♠7♣\n\nAnalysis:\n• Immediate odds: calling 8BB to win 11.5BB (unfavorable)\n• Implied odds: set probability about 12%; can win 500BB when set hits\n• Expected value: 0.12 × 500 - 0.88 × 8 = 60 - 7 = +53BB\n\nCorrect play: call. Deep-stacked 77 has excellent implied odds\nWrong play: fold \"it's just a small pair\", wasting deep-stack implied-odds advantage",
+      "Reverse Implied Odds",
+      "Deep stacks also demand caution about reverse implied odds:\n\n• Weak Ax (like A7o): hits top pair A but gets dominated by AT/AJ, potentially losing 500BB deep\n• Weak suited hands (like 92s): makes a flush but gets dominated by a bigger flush, costly deep\n• Top pair weak kicker: easily outdrawn by better kickers or two pair deep\n\nPrinciple: deep-stacked, avoid \"medium strength getting dominated\" spots; prefer speculative hands that \"either miss or make a big hand\".",
+      "The most deadly deep-stack error: getting 500BB in with top pair top kicker. Deep, top pair is \"medium strength\" — pot control; only two pair, trips, straights+ support deep-stack shoves.",
+      "In deep-stack games, bankroll management matters even more. 500BB variance far exceeds 100BB; you need at least 50 buy-ins to absorb deep-stack variance."
+    ],
+    "local-deep-suited-connectors": [
+      "Why Are Suited Connectors So Valuable Deep?",
+      "Suited connectors (like 76s, T9s) are \"high-EV speculative hands\" at deep stacks because:\n\n• Straight potential: can make 4 straights (e.g. 76s makes 7-8-9-T-J, 6-7-8-9-T, 5-6-7-8-9, 4-5-6-7-8)\n• Flush potential: can make the nut flush (you're the nuts if the flush A is in your hand)\n• Hidden value: straights/flushes are hard for opponents to spot, winning big pots\n• Double draws: the flop often gives OESD + flush draw (15+ outs)\n\nDeep stacks amplify these potentials — making a big hand can win all the deep chips.",
+      "Suited-connector EV formula (simplified): EV = P(make straight/flush) × average win - P(miss) × investment. Deep stacks hugely raise \"average win\", so even at only 5-8% P(make), overall EV is positive.",
+      "Position and Range for Suited Connectors",
+      "Recommended deep-stack suited-connector ranges:\n\n• UTG: 54s-T9s (only the strongest, about 6 combos)\n• MP: 43s-JTs (expanded to 10 combos)\n• CO: 32s-QJs (widest, about 12 combos)\n• BTN: all suited connectors + one-gappers (like 86s, 97s)\n\nKey: suited connectors need positional advantage. BTN/CO play the widest; UTG tightens up.",
+      "Example hand: NL200, 500BB effective, BTN holds 8♠7♠\nCO opens 8BB, you call on the BTN (deep + position; 76s/87s etc. are all +EV)\n\nFlop: 6♠9♠T♦\n• You have an OESD (7-8-9-T or 5-6-7-8-9) + flush draw\n• 15 outs total (9 flush + 6 straight, minus the duplicate 5♠T♠)\n• Make probability: about 32% (one street) or 54% (two streets)\n\nCorrect play:\n• CO C-Bets 6BB → you call (excellent implied odds)\n• Turn 5♠ → you make the straight-flush; CO keeps betting → you raise or call to induce a river shove\n\nWrong play: raising the flop exposes your hand, lets CO fold weak hands, and loses deep value",
+      "Postflop Strategy for Suited Connectors",
+      "Deep-stack suited-connector postflop keys:\n\n• Hit a strong hand (straight/flush/two pair+): don't rush to raise — let the opponent keep betting to build the pot\n• Hit a draw: call rather than raise (good implied odds and hidden value)\n• Complete miss: fold, don't hang on\n• Hit top pair: pot control; top pair devalues deep\n\nCore mindset: suited connectors either make a big hand and win a big pot, or miss and fold. Avoid tangling with medium strength like top pair deep.",
+      "The hidden nature of suited connectors is key: when you make a straight (like 76s on a 4-5-8 flop), opponents rarely put you on it and keep value-betting two pair/trips, letting you win all the deep chips.",
+      "Deep-stacked \"double-barreling draws\" is a high-EV strategy: call the flop C-Bet, and if the turn brings extra outs (like flush draw plus straight draw) keep calling — deep implied odds support this aggressive calling."
+    ],
+    "local-exploit-calling-station": [
+      "Identifying the Calling Station",
+      "The calling station is the most common opponent type at domestic low stakes (NL2-NL25), with these features:\n\n• VPIP 35-50% (very loose)\n• PFR 3-8% (rarely raises)\n• AF 0.5-1.0 (passive)\n• Fold to C-Bet 15-25% (almost never folds)\n\nTypical behavior: calls down with any two suited, connectors, Ax; limps a lot preflop; passive check-calls postflop; a raise means a strong hand.",
+      "Core station traits: calls wide, raises tight, almost never folds. Exploitation principles — bluff rarely, value a lot, respect his raises.",
+      "Exploitation Strategy: Value Maximization",
+      "The profit formula vs a station: pure value betting, almost no bluffing.\n\nWiden the value range:\n• Top pair weak kicker: value bet three streets against a station (only 1-2 streets in standard games)\n• Medium pairs (88-TT): value bet the flop and turn\n• Two pair and stronger: big bets every time (75-100% pot)\n\nSize up:\n• Standard C-Bet 1/2 pot → C-Bet 2/3 pot against a station (he doesn't fold, win more value)\n• Value bets can overbet: the station still calls\n\nBluff frequency near zero:\n• No C-Bet bluffs (under 15% success)\n• No triple-barrel bluffs\n• No bluff raises",
+      "Example hand: NL10, station (VPIP 45/PFR 5), 100BB\nYou're BTN with A♠K♣, open 4BB, the station calls from the BB\n\nFlop: K♦7♠2♥ (top pair top kicker)\n• Standard game: C-Bet 2.5BB (1/2 pot), high fold rate\n• vs station: C-Bet 4BB (2/3 pot), he calls with Kx, Ax, 77, etc.\n\nTurn: 3♦ (blank)\n• Standard game: maybe check for pot control\n• vs station: bet 8BB (he calls with weaker hands)\n\nRiver: 9♣\n• vs station: bet 20BB (about 80% pot), he calls with K9/K7/99, etc.\n\nEV analysis: the station's range is far wider than a standard opponent, making AK hugely valuable to him",
+      "What a Station's Raise Means",
+      "Stations rarely raise; when they do, it's almost always a strong hand:\n\n• Preflop raise: usually AA/KK/QQ/AK (extremely narrow preflop raise range)\n• Postflop raise: usually two pair+ (top pair doesn't raise)\n• River raise: usually the nuts or an extremely strong hand\n\nResponse: when a station raises, fold top pair, two pair, and other medium strength. Don't \"pay off\" his strong hands.",
+      "The most common station-exploitation error: still trying to bluff him. A station's Fold to C-Bet is only 15-25%; bluffing is −EV. Switch to pure value betting and let him \"donate\" with weak hands.",
+      "The station is the most profitable opponent at low stakes. Sit to his left (positional advantage), value-bet with a wide range, and you can win his whole buy-in in one night. Prefer tables with many stations when table-selecting."
+    ],
+    "local-exploit-maniac": [
+      "Identifying the Maniac",
+      "The Maniac is the second most common opponent type at domestic low stakes, with these features:\n\n• VPIP 40-55% (extremely loose)\n• PFR 30-45% (crazy raising)\n• AF 5.0+ (extremely aggressive)\n• 3-Bet 12-20% (frequent 3-Bets)\n\nTypical behavior: crazy raising/3-Betting preflop; high-frequency C-Bet, double barrel, triple barrel postflop; frequent bluff all-ins; volatile emotions.",
+      "Core maniac traits: loose, aggressive, high-frequency bluffs. Exploitation principles — tighten your range, trap with strong hands, never bluff him, control the pot.",
+      "Exploitation Strategy: Tight-Aggressive Traps",
+      "The profit formula vs a maniac: patiently wait for strong hands and let him feed you chips.\n\nPreflop strategy:\n• Tighten your opening range (don't tangle with him using junk)\n• 4-Bet for value with QQ+/AK (he 5-Bet all-ins)\n• Medium hands (JJ/TT/AQ) can call and let him bluff postflop\n\nPostflop strategy:\n• Hit strong (two pair+): don't rush to raise — call to induce more bluffs\n• Medium strength (top pair): call 1-2 streets, but be cautious on big river bets\n• Draws: can call (the maniac bets big, good odds)\n\nNever bluff the maniac:\n• He doesn't fold — bluffing is −EV\n• No donk bets (let him lead)\n• No check-raise bluffs (he re-raise all-ins)",
+      "Example hand: NL25, maniac (VPIP 50/PFR 40), 100BB\nYou're CO with K♠K♦, open 3BB\nManiac 3-Bets to 12BB on the BTN\nYou 4-Bet to 28BB\nManiac 5-Bet all-in 100BB\n\nAnalysis:\n• The maniac's 5-Bet all-in range is extremely wide (may include 88+/AQ+/even KQ/bluffs)\n• KK is 75%+ vs that range\n\nCorrect play: call the all-in\nEV analysis: 0.75 × 200 - 0.25 × 100 = +125BB\n\nWrong play: fold \"afraid of AA\", wasting the maniac's wide-range advantage",
+      "When to Use Trap Plays",
+      "The most profitable play vs a maniac is the \"strong-hand trap\":\n\n• Preflop: call his 3-Bet with AA/KK (rather than 4-Bet), letting him keep bluffing postflop\n• Postflop: check-call when you hit a set/nuts rather than raising\n• Let him \"feed\" you the chips\n\nTrap timing:\n• When you have positional advantage (BTN/CO)\n• When effective stacks are deep (100BB+, giving him more bluff room)\n• On dry boards (like AK2r, he won't believe you hit)\n\nAvoid trapping:\n• Multiway pots (others may outdraw)\n• Wet boards (like T♠9♠8♠, your top pair may already be outdrawn)",
+      "The most common maniac-exploitation error: getting pulled into his aggression and \"bluff-warring\" with him. That's exactly what the maniac wants — his range is wide but you're also bluffing, and long-term you lose worse.",
+      "Emotion management is critical vs a maniac. He'll frequently bad-beat you (hitting miracles with junk), but long-term his chips flow to you. Stay patient, don't tilt."
+    ],
+    "local-exploit-nit": [
+      "Identifying the Nit",
+      "The Nit is a common conservative player at domestic mid-stakes (NL50-NL200), with these features:\n\n• VPIP 8-12% (extremely tight)\n• PFR 6-10% (almost only raises strong hands)\n• AF 2.0-3.0 (neither aggressive nor passive)\n• Fold to C-Bet 65-80% (folds to C-Bets at high frequency)\n• Fold BB to Steal 70%+ (extremely tight big-blind defense)\n\nTypical behavior: only plays AA/KK/QQ/AK; few preflop opens; folds a lot to raises; folds when missing postflop.",
+      "Core nit traits: super tight, easy to fold, rarely active. Exploitation principles — steal blinds relentlessly, C-Bet bluff, and fold when he raises.",
+      "Exploitation Strategy: Blind Stealing and Bluffing",
+      "The profit formula vs a nit: steal his blinds, bluff his misses, and never value-bet into him.\n\nBlind-stealing strategy:\n• CO/BTN open with an extremely wide range (like 50%+)\n• When the nit is in BB/SB, your steal success is 70%+\n• Even when called, he folds a lot postflop to C-Bets\n\nPostflop bluffing:\n• High-frequency C-Bet (nit Fold to C-Bet 65-80%)\n• C-Bet 1/3 pot on almost any board as a probe\n• When he calls a C-Bet it usually means top pair+ — you can fold\n\nNever value-bet weak hands:\n• A nit calling your bet = he has top pair+\n• Your top pair weak kicker is worthless against him\n• Only two pair+ can value-bet against him",
+      "Example hand: NL50, nit in BB (VPIP 10), you're CO with 7♠8♠\n\nPreflop:\n• Nit in BB; you CO open 2.5BB (steal)\n• Nit calls (rare — his range tightens to 99+/AQ+)\n\nFlop: K♦5♣2♥ (dry, unfavorable to the nit's range)\n• Nit checks\n• You C-Bet 2BB (1/3 pot, probe)\n• Nit folds (he missed the K, and you might C-Bet even when missing)\n\nAnalysis:\n• Nit's range 99+/AQ+; on K52 only AK/KK hit\n• Your 78s completely missed, but C-Bet success is 70%+\n• EV: 0.7 × 5.5 - 0.3 × 2 = +3.25BB\n\nWrong play: limping preflop against the nit, letting him see the flop cheaply (missing the steal value)",
+      "What a Nit's Raise Means",
+      "Nits raise very rarely; when they do, it represents an extremely strong hand:\n\n• Preflop raise: AA/KK/QQ/AK (basically just these)\n• Preflop 3-Bet: AA/KK (occasionally QQ)\n• Postflop raise: usually a set or stronger\n• River raise: almost always the nuts\n\nResponse: when a nit raises, immediately fold top pair, two pair, and other medium strength. Don't \"verify\" his hand — that just wastes chips.",
+      "The most common nit-exploitation error: value-betting top pair for three streets against him. A nit calling three streets has AA/KK/set — your top pair has no chance.",
+      "The nit is a low-risk, high-reward opponent. Sit to his left (positional advantage) and steal frequently for steady exploitation. But don't over-steal — he occasionally 3-Bets back (fold immediately when he does)."
+    ],
+    "local-exploit-lag": [
+      "Identifying the LAG",
+      "The LAG (Loose Aggressive) is the hardest opponent type at domestic mid-stakes, with these features:\n\n• VPIP 25-35% (loose but not excessive)\n• PFR 20-28% (high-frequency raising)\n• AF 3.5-4.5 (aggressive)\n• 3-Bet 8-12% (frequent 3-Bets)\n• Fold to 3-Bet 35-45% (won't easily fold)\n\nDifference from the maniac: the LAG's range is wide but logical and he folds; the maniac's range is wide and illogical and never folds. The LAG is harder to exploit because he combines aggression with judgment.",
+      "Core LAG traits: loose, aggressive, logical, folds. Exploitation principles — 4-Bet with strong hands, call with medium hands, pressure with position, avoid being dragged into his rhythm.",
+      "Exploitation Strategy: 4-Bets and Calling Traps",
+      "The profit formula vs a LAG: fight his raises with strong hands and pressure his wide range with position.\n\nPreflop 4-Bet value:\n• The LAG 3-Bets frequently (8-12%); your TT+/AQ+ should 4-Bet actively\n• The 4-Bet range can widen to 88+/AJ+ (he 5-Bet all-ins or folds with a wide range)\n• Occasionally 4-Bet bluff (with blockers like A2s-A5s)\n\nCalling traps:\n• Call his 3-Bet with AA/KK (rather than 4-Bet), letting him keep attacking postflop\n• Check-call when you hit strong rather than raising\n• The LAG keeps C-Bet/double-barreling; calling lets him build the pot\n\nPositional advantage:\n• The LAG clearly plays worse out of position\n• You can call his 3-Bet on the BTN/CO (position + strong hand)\n• Use the positional information edge to exploit his wide range",
+      "Example hand: NL100, LAG in CO (VPIP 30/PFR 25), you're BTN with Q♠Q♦\n\nPreflop:\n• LAG CO opens 3BB\n• You BTN 3-Bet to 10BB\n• LAG 4-Bets to 24BB\n\nAnalysis:\n• The LAG's 4-Bet range is wide (includes AQ+/JJ+/bluffs)\n• QQ is about 70% vs that range\n• Deep-stacked you can 5-Bet all-in or call as a trap\n\nCorrect play: call (trap, letting him keep C-Bet-bluffing postflop)\n• He C-Bets 80% postflop\n• You hit a Q and can call/raise for value\n\nWrong play: instantly 5-Bet all-in, letting him fold AQ/JJ that you dominate",
+      "Postflop Keys Against the LAG",
+      "Postflop strategy vs a LAG:\n\nHit strong (two pair+):\n• Don't rush to raise — call to induce more C-Bet/double barrels\n• River raise for extra value\n\nHit top pair:\n• Call 1-2 streets (LAG's range is wide; top pair still has value)\n• Be cautious on big river bets (LAG triple-barrel bluffs but also has strong hands)\n\nComplete miss:\n• Don't fold easily (LAG C-Bets at high frequency; your blind is already invested)\n• Call one street to probe the turn\n• Fold when he double-barrels the turn (LAG double barrels usually have a hand)\n\nDraws:\n• The LAG bets big, so draw odds are good — call\n• Raise when you hit (LAG's range is wide; he calls your strong hands)",
+      "The most common LAG-exploitation error: getting scared by his raise frequency and over-folding. The LAG's range is wide; your top pair/medium pairs still have significant value — call selectively rather than folding everything.",
+      "The key vs a LAG: maintain positional advantage. Sit to his left, call his opens from BTN/CO, and use the positional information edge to judge his range strength. Out of position, tighten your range to avoid being dragged into his rhythm."
+    ],
+    "local-gto-vs-exploit": [
+      "The Nature of GTO vs Exploitation",
+      "GTO (Game Theory Optimal): the game-theoretically optimal strategy whose goal is \"not being exploited\". When you don't know the opponent's tendencies, GTO is the best default.\n\nExploitative: adjusting strategy against a specific opponent weakness, with the goal of \"maximizing EV\". When you know the opponent's tendencies, exploitation makes more money than GTO.\n\nKey insight: GTO isn't the \"strongest strategy\" but the \"strategy no strategy can beat\". Against an opponent with weaknesses, pure GTO actually has lower EV than targeted exploitation.",
+      "Decision framework: opponent data sufficient + clear weakness → exploit; data insufficient or opponent is high-level → GTO. They aren't opposites but dynamically switchable.",
+      "When to Use GTO",
+      "Stick with GTO in these scenarios:\n\n• Unknown opponent: without data to back exploitation, GTO is the safest default\n• Strong REG opponent: high-level opponents leave little exploitation room and high reverse-exploitation risk\n• Multiway pots: exploiting a single opponent is already complex; GTO is steadier multiway\n• Online mid-high stakes (NL200+): the player pool approaches GTO, narrowing exploitation room\n• Tournament bubble: under ICM pressure, GTO + ICM adjustments are safest\n\nGTO advantages: stable, hard to counter-exploit, predictable long-term EV.",
+      "Example: first encounter with an unknown opponent\nYou're BTN with A♠5♠, open 2.5BB\nUnknown opponent 3-Bets to 10BB from the BB\n\nGTO response: mixed strategy — 70% fold / 25% call / 5% 4-Bet bluff\n• A5s is a standard 4-Bet-bluff hand (A blocker + flush potential)\n• But against an unknown you don't need to use the mix immediately\n• In practice, simplify to: fold (conservative) or 4-Bet bluff (probe the opponent's reaction)\n\nWrong play: deciding by \"feel\" with no strategic framework. First observe the opponent's reactions, accumulate data, then exploit.",
+      "When to Use Exploitation",
+      "Switch to exploitation in these scenarios:\n\n• Opponent data sufficient (>100 hands): VPIP/PFR/AF/Fold to C-Bet are reliable\n• Clear opponent tendencies: e.g. Fold to C-Bet 70%+ (add C-Bet bluffs)\n• Online low stakes (NL2-NL50): the pool broadly deviates from GTO, big exploitation room\n• Live clubs: distinct player types (many stations/maniacs), high exploitation returns\n• Heads-up: 1v1 exploits a single opponent most directly\n\nExploitation advantages: higher EV ceiling than GTO, squeezing opponent weaknesses.",
+      "The core GTO-vs-exploitation tradeoff: GTO has a high floor (won't lose badly) and low ceiling (won't win much); exploitation has a low floor (can be counter-exploited) and high ceiling (can win a lot). The less data, the more you lean GTO; the more data, the more you lean exploitation.",
+      "Practical recommendation: 80% GTO + 20% exploitation. Use GTO as the base framework to protect yourself, and make small exploitative adjustments when clearly profitable. This balances stability and profit ceiling.",
+      "Practical recommendation: 80% GTO + 20% exploitation. Use GTO as the base framework to protect yourself, and make small exploitative adjustments when clearly profitable. This balances stability with a higher profit ceiling."
+    ],
+    "local-when-to-deviate": [
+      "The Criteria for Deviating From GTO",
+      "Deviating from GTO isn't \"by feel\" but based on the opponent's statistical deviations. The criteria:\n\n1. Sufficient data: at least 50 hands of sample (100+ is better)\n2. Significant deviation: a statistic deviates 20%+ from the GTO baseline\n3. One-directional deviation: the opponent's deviation is \"one-way\" (e.g. always calls too much, not random)\n\nGTO baseline references:\n• VPIP/PFR: about 22/18 (6-max)\n• Fold to C-Bet: about 45-50%\n• 3-Bet: about 7-9%\n• Fold to 3-Bet: about 55%",
+      "Deviation principle: adjust in the \"opposite direction\" of the opponent's deviation. Opponent calls a lot → more value, less bluff; opponent folds a lot → more bluff, less value.",
+      "Common Deviation Scenarios",
+      "Scenario 1: opponent Fold to C-Bet 65%+ (GTO 45-50%)\n• Deviation: folds too much (+15-20%)\n• Adjust: increase C-Bet frequency (including bluffs), reduce C-Bet size\n• Extreme: 100% C-Bet 1/3 pot with almost any two cards\n\nScenario 2: opponent Fold to C-Bet under 25% (GTO 45-50%)\n• Deviation: calls too much (-20%)\n• Adjust: cut C-Bet bluffs, only value C-Bet, size up\n• Extreme: pure value 2/3 pot+, never bluff\n\nScenario 3: opponent 3-Bet 15%+ (GTO 7-9%)\n• Deviation: 3-Bets too much (+6-8%)\n• Adjust: tighten the opening range, 4-Bet value with strong hands\n• Extreme: open only the top 12% (premium hands), making his 3-Bet bluffs worthless\n\nScenario 4: opponent Fold to 3-Bet 75%+ (GTO 55%)\n• Deviation: folds too much (+20%)\n• Adjust: increase 3-Bet bluff frequency (with blockers like A2s-A5s, K9s)\n• Extreme: expand the 3-Bet range from 8% to 18% (with plenty of bluffs)",
+      "Example hand: opponent sample 200 hands, Fold to C-Bet 68% (GTO 50%)\nYou're BTN with 8♣9♦ (weak, missed), open 2.5BB, opponent calls from the BB\nFlop: K♠5♦2♥ (dry, you completely missed)\nOpponent checks\n\nGTO strategy: about 60% C-Bet (mixing value and bluffs)\nExploitation strategy: 100% C-Bet 1/3 pot (2BB)\n\nEV analysis:\n• Opponent Fold to C-Bet 68%, C-Bet success 68%\n• EV = 0.68 × 5.5 - 0.32 × 2 = +3.16BB\n• GTO mixed strategy EV about +1.5BB\n• Exploitation EV improves +110%\n\nConclusion: the opponent's Fold-to-C-Bet deviation is significant (+18%) — clearly deviate from GTO toward exploitation",
+      "The Risks and Boundaries of Deviation",
+      "Deviating from GTO isn't unlimited; watch out for:\n\n• Data sample: statistics under 50 hands are unreliable — avoid premature deviation\n• Opponent adaptation: strong opponents detect your deviation and counter-exploit — check periodically\n• Multiway spots: deviation risk is higher multiway, be more conservative\n• Your own balance: still keep some balance when deviating, avoiding being read to death\n\nDeviation check: re-examine the opponent's statistics every 50-100 hands to confirm the deviation persists. If the opponent adjusts, return to GTO or re-deviate.",
+      "The most deadly deviation error: deviating based on \"small samples\" or \"intuition\". Seeing a 20-hand sample of Fold to C-Bet 80% and bluffing wildly — only to find he's actually a 50% GTO player and getting counter-exploited.",
+      "When using a HUD, watch the \"sample size\" indicator. VPIP/PFR are reliable after about 20 hands, but Fold to C-Bet/3-Bet need 100+ hands to stabilize. Don't use under-threshold statistics as a basis for deviation."
+    ],
+    "local-mental-tilt-recognition": [
+      "What Is Tilt?",
+      "Tilt is a poker player's biggest enemy. It refers to emotional swings from negative events (bad beats, losing streaks, opponent provocation, etc.) that lead to irrational decisions.\n\nDomestic low-stakes players tilt especially easily: high rake, large variance, and lucky opponents (stations hitting miracles with junk) all trigger emotional loss of control.\n\nKey insight: tilt won't make you \"feel\" out of control; it makes you \"think\" you're making correct decisions while actually deviating from optimal strategy.",
+      "The nature of tilt: the emotional system hijacks the rational decision system. You're not \"deliberately\" playing badly — your brain auto-selects a suboptimal strategy under emotional pressure.",
+      "Early Tilt Signals",
+      "Recognize tilt's physical and behavioral signals:\n\nPhysical signals:\n• Racing heart, shallow breathing\n• Blushing, sweating, muscle tension (especially jaw/shoulders)\n• Posture changes: leaning forward, clenching fists, bouncing legs\n• Narrowed vision (tunnel vision)\n\nBehavioral signals:\n• Opening range clearly widens (opening with junk like K5o, 96o)\n• Bet sizes grow (sudden overbets or all-ins)\n• Frequent bluffs (retaliatory attacks)\n• Calling down to the river (\"I have to see what he has\")\n• Inability to fold (insisting on getting top pair in)\n\nMental signals:\n• \"I have to win it back\"\n• \"This table's luck is terrible, I need to change tables\"\n• \"This opponent is annoying, I need to teach him a lesson\"\n• \"One more hand and I'll quit\"",
+      "Example scenario: tilt after consecutive bad beats\n\nHand 1: your AA all-in loses to KK (river K)\nHand 2: your KK all-in loses to QQ (river Q)\nHand 3: your AK top pair loses to 72 (river two pair)\n\nTilt signals:\n• Racing heart, shallow breathing\n• Hand 4: you open K9o (you normally wouldn't)\n• Hand 5: you call a 3-Bet with 87o (you normally wouldn't)\n• Hand 6: you river all-in bluff (retaliatory)\n\nCorrect response:\n• Immediately stand up and leave the table for 5-10 minutes\n• Breathe deeply 10 times (4s inhale, 7s hold, 8s exhale)\n• Drink water, walk around, use the restroom\n• Assess: can you still make rational decisions? If not, stop for today\n\nWrong response: keep playing, \"win it back\" — this usually leads to bigger losses",
+      "Tilt Types and Responses",
+      "Different tilt types need different responses:\n\n1. Loss tilt (most common): wanting to \"chase back\" after consecutive losses\n• Response: leave the table and review decisions (not results)\n\n2. Injustice tilt: feeling \"unfair\" after bad beats\n• Response: remember variance is poker's nature; long-term skill wins\n\n3. Helplessness tilt: feeling you can't affect results\n• Response: drop to a lower stake for a few hands to regain control\n\n4. Revenge tilt: wanting to \"teach a specific opponent a lesson\"\n• Response: change tables and avoid tangling with him\n\n5. Fatigue tilt: decision quality drops after long sessions\n• Response: rest regularly; sessions no longer than 2 hours",
+      "The most deadly tilt cognitive error: thinking \"I can control myself\". Tilt is the subconscious taking over decisions — you feel rational but are actually out of control. The best response is \"prevention\" — set hard stop-losses and leave on schedule.",
+      "Use a session log to record emotional states: after each session mark \"today's mood (1-5)\" and correlate with profit/loss. Long-term data reveals that \"poor mood correlates with heavy losses\", building emotional-management awareness.",
+      "Use a session log to record emotional states: after each session mark \"today's mood (1-5)\" and correlate it with profit/loss. Long-term data reveals that \"poor mood correlates with heavy losses\", building emotional-management awareness."
+    ],
+    "local-mental-stop-loss": [
+      "Why Do You Need a Stop-Loss?",
+      "Poker is a high-variance game; even with an edge, short-term losses can be large. A stop-loss is a hard rule protecting bankroll and mindset: you must stop when reaching the loss threshold, regardless of \"feelings\".\n\nDomestic low-stakes players' most common problem: no stop-loss, continuing to \"chase back\" after losses — small losses become big losses, big losses become bust.\n\nKey insight: a stop-loss isn't \"admitting failure\" but \"protecting your future self\". Today's loss has already happened; the stop-loss prevents tomorrow's bigger loss.",
+      "The nature of a stop-loss: replacing emotional decisions with preset rules. In an emotional state you always feel \"one more hand and I'm even\"; a hard stop-loss forcibly cuts this loop.",
+      "Setting Stop-Loss Rules",
+      "Recommended stop-loss rules:\n\nBy buy-in:\n• Single-session stop-loss: 3 buy-ins (e.g. NL100 stop at 300BB)\n• Single-day stop-loss: 5 buy-ins (500BB)\n• Single-week stop-loss: 10 buy-ins (1000BB)\n\nBy emotional state:\n• Down 2 buy-ins consecutively: pause 15 minutes, assess emotions\n• Down 3 buy-ins consecutively: force-stop the day's session\n• Feeling tilt: stop immediately, win or lose\n\nBy time:\n• Session no longer than 2 hours (fatigue stop-loss)\n• Day no longer than 6 hours (cumulative fatigue stop-loss)\n• 3 consecutive losing days: rest 1 day (deep stop-loss)",
+      "Example: an NL50 player's stop-loss rules\n\nSingle-session stop-loss: 3 × 50BB = 150BB\nSingle-day stop-loss: 5 × 50BB = 250BB\nSingle-week stop-loss: 10 × 50BB = 500BB\n\nScenario: Monday session loses 150BB (triggers the single-session stop-loss)\n• Correct: immediately stop Monday's session\n• Wrong: change tables and keep playing \"to change the luck\"\n\nScenario: Monday to Wednesday cumulative loss 400BB\n• Assess: near the weekly stop-loss (500BB); how are the emotions?\n• If stable: Thursday can continue, but tighten the session stop-loss to 100BB\n• If unstable: rest Thursday and Friday, restart next week\n\nScenario: single session down 100BB but feeling tilt\n• Correct: stop immediately (emotional stop-loss outranks amount stop-loss)\n• Wrong: \"not at 150BB yet, keep playing\"",
+      "Psychological Obstacles to Executing the Stop-Loss",
+      "Common psychological obstacles when executing a stop-loss:\n\n1. \"One more hand and I'm even\"\n• Truth: every hand is independent; the loss has happened; \"one more hand\" has negative expectation (you're already tilting)\n• Response: preset automatic stops (timer, amount alarm)\n\n2. \"Today's luck is bad, tomorrow will be better\"\n• Truth: luck doesn't \"owe\" you; tomorrow may be worse\n• Response: decide on long-term EV, not short-term luck expectations\n\n3. \"I'm technically better than the opponent, I should win\"\n• Truth: an edge only shows long-term; short-term variance dominates\n• Response: accept short-term losses as the cost of a winning technique\n\n4. \"A stop-loss is admitting defeat\"\n• Truth: a stop-loss protects bankroll and mindset — professional discipline\n• Response: view it as \"cost control\", not \"admitting defeat\"",
+      "The most deadly stop-loss error: \"breaking the rule\" and continuing after the stop-loss triggers. Once you break it, the rule loses meaning and becomes even harder to follow next time. Adhere to the \"zero exceptions\" principle.",
+      "Use an app or timer to support the stop-loss: set a 2-hour single-session timer and force-stop on schedule. Use a bankroll-tracking sheet to record daily profit/loss and force rest when the weekly stop-loss threshold is hit."
+    ],
+    "local-mental-session-management": [
+      "The Core Principles of Session Management",
+      "A single session's profit/loss doesn't matter; long-term accumulated EV is the root of profit. Session management's goals: maintain decision quality, control fatigue, and accumulate long-term advantage.\n\nDomestic low-stakes players' most common problems: overlong sessions (4-6 hours or all-night), fatigued decisions, and emotional raising. All erode long-term EV.\n\nKey insight: poker isn't \"play more, win more\" but \"decision quality × hand count = long-term profit\". Fatigue and emotion significantly reduce decision quality.",
+      "Session management = decision-quality protection. The optimal session length varies by person; decision quality typically drops noticeably after 90-120 minutes — rest regularly.",
+      "Session Planning and Execution",
+      "Recommended session flow:\n\nBefore the session (10 minutes):\n• Assess current emotional and physical state (1-5; don't play under 3)\n• Set this session's goals (hands / duration / stop-loss)\n• Confirm bankroll sufficiency (at least 30 buy-ins)\n• Choose good tables (HUD data, table selection)\n\nDuring the session:\n• Rest 5 minutes every 60 (stand, walk, drink)\n• Deep rest 10 minutes every 90 (breathe, restroom, snack)\n• Sessions no longer than 2 hours\n• Stop immediately when the stop-loss triggers\n\nAfter the session (5 minutes):\n• Record profit/loss, hands, duration\n• Mark the emotional state (1-5)\n• Record key hands (especially erroneous decisions)\n• Assess whether to continue (at least 1 hour between sessions)",
+      "Example: a pro's daily session schedule\n\nMorning 10:00-12:00 (2 hours)\n• Main session, most energetic\n• Goal: 500 hands, focused decisions\n• 12:00-13:00 lunch break\n\nAfternoon 14:00-16:00 (2 hours)\n• Second session\n• Goal: 500 hands\n• 16:00-19:00 long break (exercise, dinner)\n\nEvening 20:00-22:00 (2 hours)\n• Third session (optional)\n• Assess the first two sessions' state; skip if fatigued\n\nDaily total: 6 hours / 1500 hands\n• Rest 1-2 days weekly (prevent fatigue accumulation)\n• Monthly review (identify patterns, adjust strategy)\n\nContrast with common amateur errors:\n• All-night 8-10 hour sessions (decision quality plummets)\n• No fixed schedule (emotional starts)\n• No review (repeating mistakes)",
+      "Table Selection and Opponent Filtering",
+      "80% of session profit comes from table selection:\n\nSigns of a good table:\n• High Players/Flop% (>40% means loose)\n• Large average pots (>80BB)\n• 1-2 clearly weak players (stations/maniacs)\n• You have positional advantage (seated left of the weak player)\n\nSigns of a bad table:\n• All REGs (VPIP < 25%)\n• Small average pots (<40BB)\n• No weak players\n• No positional advantage\n\nPrinciple: rather than not playing at all, don't play bad tables. Waiting for a good table is more worthwhile than struggling on a bad one.",
+      "The Mindset of Long-Term Profit",
+      "Core mindsets for long-term poker profit:\n\n1. Focus on decisions, not results\n• Good decisions can lose (variance); bad decisions can win (luck)\n• Long-term, decision quality determines profit/loss\n• In review, ask \"was my decision right\" rather than \"did I win\"\n\n2. Accept variance\n• Even at 80% win rate, there's a 20% chance of losing\n• Losing 10 hands in a row to luck is normal\n• Don't let variance affect decisions\n\n3. Keep learning\n• Review 5-10 key hands weekly\n• Learn new strategies (GTO/exploitation/math)\n• Discuss with strong players\n\n4. Bankroll management\n• Keep 30-50 buy-ins\n• Immediately move down below 20 buy-ins\n• Don't play with living expenses",
+      "The most deadly long-term-profit error: chasing \"short-term windfalls\" rather than \"long-term stability\". Today's 5 buy-in loss doesn't matter; what matters is how many correct decisions you made today. Long-term, correct decisions bring steady profit.",
+      "Use review tools (like hand-history records, tracker software) to review 5-10 key hands weekly. Focus on \"erroneous decisions\" rather than \"lost hands\" — the former are improvement opportunities, the latter is just variance."
+    ]
+  },
+  "lessonQuiz": {
+    "local-limp-intro-q1": {
+      "question": "What is the most common table feature of domestic low-stakes limp games?",
+      "options": [
+        "Mostly heads-up preflop",
+        "High frequency of multiway pots",
+        "Players raise frequently",
+        "All stacks are deep"
+      ],
+      "explanation": "Limp games have many preflop limpers, producing an extremely high frequency of multiway pots. This is the most common structure at domestic low stakes."
+    },
+    "local-limp-intro-q2": {
+      "question": "How does top pair top kicker (TPTK) value in a limp game?",
+      "options": [
+        "As strong as heads-up",
+        "Drops sharply",
+        "Completely worthless",
+        "Stronger than a full house"
+      ],
+      "explanation": "Top pair devalues badly in multiway pots — in a 3-5 way pot the probability someone holds two pair+ rises significantly. TPTK is no longer an \"absolute strong hand\"."
+    },
+    "local-limp-intro-q3": {
+      "question": "What is the main profit source in a limp game?",
+      "options": [
+        "Frequent bluffing",
+        "Isolation + speculative-hand implied odds + postflop exploitation",
+        "Only AA/KK",
+        "Winning big pots by luck"
+      ],
+      "explanation": "Limp-game profit comes from three sources: isolating with strong hands, seeing flops cheaply with speculative hands, and postflop exploitation of passive players. Frequent bluffing is a losing strategy in station-heavy limp games."
+    },
+    "local-limp-isolate-q1": {
+      "question": "Against two limpers, what should the standard isolation size be?",
+      "options": [
+        "2-3BB",
+        "6-7BB",
+        "15BB",
+        "Direct all-in"
+      ],
+      "explanation": "Against two limpers in domestic limp games, raise to 6-7BB. Limpers have wide calling ranges; small sizes can't isolate and huge sizes scare off strong-hand value."
+    },
+    "local-limp-isolate-q2": {
+      "question": "Which hand type is best suited for isolation?",
+      "options": [
+        "K5o",
+        "TT and AQ+",
+        "96o",
+        "23o"
+      ],
+      "explanation": "TT+ and AQ+ are strong hands suited to isolating — building pots and compressing opponents. K5o, 96o, 23o are junk and shouldn't raise."
+    },
+    "local-limp-isolate-q3": {
+      "question": "Which is NOT a core goal of isolation?",
+      "options": [
+        "Reducing the number of opponents",
+        "Building the pot for value",
+        "Seizing postflop initiative",
+        "Bluffing everyone off the pot"
+      ],
+      "explanation": "Isolation isn't a bluff — it's building pots and reducing opponents with strong hands. Limpers rarely fold, so hoping everyone folds is unrealistic."
+    },
+    "local-limp-multiway-q1": {
+      "question": "How valuable is top pair top kicker (TPTK) in a 5-way pot?",
+      "options": [
+        "Nuts — can get it in",
+        "Devalues badly — only one street",
+        "Completely useless",
+        "Stronger than two pair"
+      ],
+      "explanation": "TPTK wins only about 35% in a 5-way pot — devalued badly. Pot control; at most one street of value on the flop, then control after the turn."
+    },
+    "local-limp-multiway-q2": {
+      "question": "How should C-Bet frequency adjust in multiway limp pots?",
+      "options": [
+        "Raise to 80%",
+        "Lower to 30-40%",
+        "Keep at 60%",
+        "Always 100% C-Bet"
+      ],
+      "explanation": "Multiway C-Bet success plummets (about 25% in a 5-way pot), so lower frequency to 30-40%. C-Bet only with strong hands or on dry boards."
+    },
+    "local-limp-multiway-q3": {
+      "question": "How valuable are draws in multiway pots?",
+      "options": [
+        "Devalue (easily raised)",
+        "Rise (good implied odds)",
+        "Unchanged",
+        "Completely useless"
+      ],
+      "explanation": "Multiway draws have excellent implied odds — see flops cheaply and win multiple stacks when hitting. Suited connectors are high +EV speculative hands multiway."
+    },
+    "local-limp-multiway-q4": {
+      "question": "In a multiway limp pot, a domestic limper actively raising usually represents?",
+      "options": [
+        "A bluff",
+        "Two pair or stronger",
+        "Top pair",
+        "A draw"
+      ],
+      "explanation": "Domestic limpers rarely bluff; an active multiway raise is almost always two pair+. Fold medium strength like top pair immediately when raised."
+    },
+    "local-straddle-q1": {
+      "question": "What is the core advantage of a BTN straddle vs an UTG straddle?",
+      "options": [
+        "More chips",
+        "Acts last both preflop and postflop",
+        "Can bluff more",
+        "No difference"
+      ],
+      "explanation": "A BTN straddle makes the BTN act last preflop (straddle right) + last postflop (positional advantage) — \"double positional advantage\"."
+    },
+    "local-straddle-q2": {
+      "question": "In a straddle game (100BB→50BB effective), which hand type drops most in value?",
+      "options": [
+        "AA/KK",
+        "Small pairs and suited connectors",
+        "AK",
+        "AQ"
+      ],
+      "explanation": "The straddle halves effective stacks, worsening implied odds for small pairs (set mining) and suited connectors (big-pot potential) — their value drops."
+    },
+    "local-straddle-q3": {
+      "question": "How should opening raise size adjust in a straddle game?",
+      "options": [
+        "Reduce to 2BB",
+        "Keep 3BB",
+        "Increase to 4-5BB",
+        "Always all-in"
+      ],
+      "explanation": "The straddle game pot is bigger (already includes the 2BB straddle), so opening raises should increase to 4-5BB to avoid multiway calls diluting strong-hand value."
+    },
+    "local-ante-q1": {
+      "question": "How does the ante structure affect pot odds?",
+      "options": [
+        "Calling odds worsen",
+        "Calling odds improve",
+        "No effect",
+        "Only postflop"
+      ],
+      "explanation": "The ante makes the initial pot bigger, so calling the same amount wins more — calling odds improve and you should widen the calling range."
+    },
+    "local-ante-q2": {
+      "question": "How should the BTN steal range adjust in ante games?",
+      "options": [
+        "Tighten to 25%",
+        "Widen to 45-50%",
+        "Keep 35%",
+        "Never steal"
+      ],
+      "explanation": "The ante makes stealing more profitable (bigger pot), so the BTN steal range should widen to 45-50%."
+    },
+    "local-ante-q3": {
+      "question": "On a 0.2BB-ante 6-handed table, after the BTN raises 2.5BB, the BB's call odds are about:",
+      "options": [
+        "37.5% (no-ante level)",
+        "28.8% (better odds)",
+        "50%",
+        "15%"
+      ],
+      "explanation": "With the ante the BB calls 1.5BB to win 5.2BB — about 28.8% odds, clearly better than the no-ante 37.5%, so widen the defense range."
+    },
+    "local-deep-implied-q1": {
+      "question": "At 500BB deep, a small pair's set-mining implied odds are about:",
+      "options": [
+        "33:1 (same as 100BB)",
+        "166:1",
+        "10:1",
+        "500:1"
+      ],
+      "explanation": "At 500BB depth, calling 3BB and winning 500BB on a set gives implied odds of about 166:1 — far better than 100BB's 33:1."
+    },
+    "local-deep-implied-q2": {
+      "question": "Which hand type relatively drops in value at deep stacks?",
+      "options": [
+        "Small pairs",
+        "Suited connectors",
+        "Top pair top kicker (AK hitting top pair)",
+        "Suited Ax"
+      ],
+      "explanation": "Deep, top pair is medium strength, easily outdrawn by two pair, trips, and straights — its value relatively drops. Small pairs and suited connectors rise."
+    },
+    "local-deep-implied-q3": {
+      "question": "Which \"reverse implied odds\" spot should you avoid at deep stacks?",
+      "options": [
+        "Set mining with 55",
+        "Suited connector 87s",
+        "Hitting top pair A with A7o",
+        "Straight draw with 76s"
+      ],
+      "explanation": "A7o hitting top pair A is easily dominated by AT/AJ, potentially losing 500BB deep — a classic reverse implied odds trap."
+    },
+    "local-deep-implied-q4": {
+      "question": "What is the minimum hand strength that supports a deep-stack shove?",
+      "options": [
+        "Top pair top kicker",
+        "The nuts or near-nuts (AA/KK/nut flush)",
+        "Two pair",
+        "Top pair weak kicker"
+      ],
+      "explanation": "At 500BB depth, only shove with the nuts or near-nuts (AA/KK/nut flush). Two pair may face huge reverse implied odds on wet boards."
+    },
+    "local-deep-sc-q1": {
+      "question": "The core reason suited connectors rise in value at deep stacks is:",
+      "options": [
+        "Higher win rate",
+        "Winning all the deep chips when making a big hand (implied odds)",
+        "Weaker opponents",
+        "Lower rake"
+      ],
+      "explanation": "Suited connectors can win the opponent's entire deep stack when making a straight/flush — excellent implied odds, the core reason their value rises deep."
+    },
+    "local-deep-sc-q2": {
+      "question": "The recommended UTG suited-connector range at deep stacks is:",
+      "options": [
+        "All suited connectors",
+        "54s-T9s (only the strongest)",
+        "Don't play suited connectors",
+        "32s+"
+      ],
+      "explanation": "UTG has no positional advantage, so only play the strongest suited connectors (54s-T9s). BTN/CO can widen to all suited connectors."
+    },
+    "local-deep-sc-q3": {
+      "question": "How should you play after making a straight at deep stacks?",
+      "options": [
+        "Immediately all-in",
+        "Call or small-raise to induce more bets",
+        "Immediately big raise",
+        "Fold"
+      ],
+      "explanation": "Deep-stacked, keep the straight hidden — call or small-raise to induce more value bets, letting the opponent feed you the chips."
+    },
+    "local-deep-sc-q4": {
+      "question": "Making an OESD + flush draw (15 outs) on the flop, the two-street make probability is about:",
+      "options": [
+        "About 32%",
+        "About 54%",
+        "About 15%",
+        "About 95%"
+      ],
+      "explanation": "15-outs double draw: about 32% one street, about 54% two streets (the 2/4 rule estimates 15×4=60%, slightly above the exact value) — an extremely strong draw."
+    },
+    "local-exploit-cs-q1": {
+      "question": "The core feature of a calling station is:",
+      "options": [
+        "Raises frequently",
+        "Calls wide, raises tight, almost never folds",
+        "Plays very tight",
+        "Always all-in"
+      ],
+      "explanation": "A station has high VPIP (35-50%), low PFR (3-8%), and low Fold to C-Bet (15-25%) — calls wide, raises tight, almost never folds."
+    },
+    "local-exploit-cs-q2": {
+      "question": "How should C-Bet size adjust against a station?",
+      "options": [
+        "Reduce to 1/3 pot",
+        "Increase to 2/3 pot or bigger",
+        "Don't C-Bet",
+        "Always pot size"
+      ],
+      "explanation": "A station doesn't fold, so increase C-Bet size to 2/3 pot or bigger for more value. Small sizes only \"win less\"."
+    },
+    "local-exploit-cs-q3": {
+      "question": "A station raising on the river usually represents:",
+      "options": [
+        "A bluff",
+        "The nuts or an extremely strong hand",
+        "Top pair",
+        "A failed draw"
+      ],
+      "explanation": "Stations rarely raise; a river raise is almost always the nuts or an extremely strong hand. Fold two pair and below."
+    },
+    "local-exploit-cs-q4": {
+      "question": "What should the bluff strategy be against a station?",
+      "options": [
+        "High-frequency bluffs",
+        "Almost never bluff",
+        "Only triple barrel",
+        "Only river bluffs"
+      ],
+      "explanation": "A station's Fold to C-Bet is only 15-25%; bluffing is −EV. Almost never bluff — pure value betting."
+    },
+    "local-exploit-man-q1": {
+      "question": "The core statistical feature of a Maniac is:",
+      "options": [
+        "VPIP 10/PFR 8",
+        "VPIP 40-55/PFR 30-45",
+        "VPIP 20/PFR 18",
+        "VPIP 50/PFR 5"
+      ],
+      "explanation": "The maniac is extremely loose and aggressive — VPIP 40-55%, PFR 30-45%, AF 5.0+, raising and bluffing frequently."
+    },
+    "local-exploit-man-q2": {
+      "question": "How should you play KK preflop against a maniac?",
+      "options": [
+        "Fold fearing AA",
+        "4-Bet for value or call as a trap",
+        "Only call, never raise",
+        "Only all-in"
+      ],
+      "explanation": "KK is 75%+ vs the maniac's wide range — 4-Bet for value or call as a trap to let him bluff."
+    },
+    "local-exploit-man-q3": {
+      "question": "Which action should you avoid against a maniac?",
+      "options": [
+        "Trapping with strong hands",
+        "Bluff-warring with him",
+        "Tightening the opening range",
+        "Controlling pot size"
+      ],
+      "explanation": "The maniac doesn't fold; bluff-warring with him is −EV. Patiently wait for strong hands and let him feed you the chips."
+    },
+    "local-exploit-man-q4": {
+      "question": "The best timing for trap plays against a maniac is:",
+      "options": [
+        "Multiway pots",
+        "Wet boards",
+        "Position + deep stacks + dry boards",
+        "Short stacks"
+      ],
+      "explanation": "The best trap timing is position + deep stacks + dry boards — giving him bluff room while you keep position and hand-strength advantage."
+    },
+    "local-exploit-nit-q1": {
+      "question": "The core statistical feature of a Nit is:",
+      "options": [
+        "VPIP 8-12%/Fold to Steal 70%+",
+        "VPIP 45/PFR 5",
+        "VPIP 50/PFR 40",
+        "VPIP 20/PFR 18"
+      ],
+      "explanation": "The nit is super tight — VPIP 8-12%, Fold to Steal 70%+, Fold to C-Bet 65-80% — a passive, easy-to-fold opponent."
+    },
+    "local-exploit-nit-q2": {
+      "question": "Against a nit in the BB, what should the CO steal range be?",
+      "options": [
+        "Tighten to 10%",
+        "Widen to 50%+",
+        "Keep 25%",
+        "Only AA"
+      ],
+      "explanation": "The nit's Fold to Steal is 70%+, so the CO should widen the steal range to 50%+ — almost any two cards can steal."
+    },
+    "local-exploit-nit-q3": {
+      "question": "A nit raising postflop usually represents:",
+      "options": [
+        "A bluff",
+        "A set or stronger",
+        "Top pair",
+        "A draw"
+      ],
+      "explanation": "Nits raise very rarely; a postflop raise usually represents a set or stronger. Fold medium strength like top pair and two pair."
+    },
+    "local-exploit-nit-q4": {
+      "question": "Which action should you avoid against a nit?",
+      "options": [
+        "Blind stealing",
+        "C-Bet bluffing",
+        "Value-betting top pair for three streets",
+        "Folding when he raises"
+      ],
+      "explanation": "A nit calling three streets has AA/KK/set — your top pair has no chance. Avoid value-betting medium strength against him."
+    },
+    "local-exploit-lag-q1": {
+      "question": "The core difference between a LAG and a Maniac is:",
+      "options": [
+        "The LAG's range is wide but logical, and he folds",
+        "The LAG doesn't raise",
+        "The maniac is tighter",
+        "No difference"
+      ],
+      "explanation": "The LAG's range is wide but logical and he folds by hand strength; the maniac's range is wide and illogical and almost never folds. The LAG is harder to exploit."
+    },
+    "local-exploit-lag-q2": {
+      "question": "Against a LAG's frequent 3-Bets, how should TT/AQ+ respond?",
+      "options": [
+        "Fold",
+        "4-Bet for value",
+        "Only call",
+        "Only all-in"
+      ],
+      "explanation": "The LAG 3-Bets 8-12%; TT+/AQ+ have a significant edge against his wide range — 4-Bet for value actively."
+    },
+    "local-exploit-lag-q3": {
+      "question": "How should you play top pair postflop against a LAG?",
+      "options": [
+        "Fold immediately",
+        "Call 1-2 streets, be cautious on the river",
+        "Always all-in",
+        "Only check"
+      ],
+      "explanation": "The LAG's range is wide, so top pair still has value. Call 1-2 streets; be cautious on big river bets (the LAG may triple-barrel bluff or hold a strong hand)."
+    },
+    "local-exploit-lag-q4": {
+      "question": "The best positional strategy against a LAG is:",
+      "options": [
+        "Sit to his right",
+        "Sit to his left (positional advantage)",
+        "Sit opposite",
+        "Irrelevant"
+      ],
+      "explanation": "Sitting to the LAG's left gives you positional advantage, letting you use the information edge to judge his range strength — the most effective exploiting position."
+    },
+    "local-gto-vs-exploit-q1": {
+      "question": "The core goal of GTO strategy is:",
+      "options": [
+        "Maximizing EV",
+        "Not being exploited",
+        "Winning every hand",
+        "Bluffing opponents"
+      ],
+      "explanation": "GTO's goal is \"not being exploited by any strategy\" — defensively optimal. Against an opponent with weaknesses, targeted exploitation has higher EV."
+    },
+    "local-gto-vs-exploit-q2": {
+      "question": "Which scenario should prioritize GTO?",
+      "options": [
+        "A known calling station",
+        "An unknown or strong-REG opponent",
+        "Online NL10",
+        "Live clubs"
+      ],
+      "explanation": "Use GTO as the default when the opponent is unknown (no data for exploitation) or a strong REG (little exploitation room)."
+    },
+    "local-gto-vs-exploit-q3": {
+      "question": "Against an opponent with Fold to C-Bet 70%+, how should you adjust?",
+      "options": [
+        "C-Bet less",
+        "Increase C-Bet frequency (exploit his over-folding)",
+        "Keep GTO",
+        "Only value bet"
+      ],
+      "explanation": "Fold to C-Bet 70%+ means he folds too much — increase C-Bet frequency (including bluffs) to exploit the over-folding."
+    },
+    "local-gto-vs-exploit-q4": {
+      "question": "The recommended practical GTO-to-exploitation ratio is:",
+      "options": [
+        "100% GTO",
+        "50% GTO + 50% exploitation",
+        "80% GTO + 20% exploitation",
+        "100% exploitation"
+      ],
+      "explanation": "Recommended 80% GTO + 20% exploitation — GTO as the base to protect yourself, with small exploitative adjustments when clearly profitable."
+    },
+    "local-when-to-deviate-q1": {
+      "question": "Which is NOT a criterion for deviating from GTO?",
+      "options": [
+        "Sufficient data (50+ hands)",
+        "Significant deviation (>20%)",
+        "Opponent's fame",
+        "One-directional deviation"
+      ],
+      "explanation": "Deviating from GTO is based on the opponent's statistical deviations, not his fame. The criteria are sufficient data, significant deviation, and one-directional deviation."
+    },
+    "local-when-to-deviate-q2": {
+      "question": "Opponent Fold to C-Bet 65%+ (GTO 50%); how should you deviate?",
+      "options": [
+        "C-Bet less",
+        "Increase C-Bet frequency (including bluffs)",
+        "Keep GTO",
+        "Only value bet"
+      ],
+      "explanation": "He folds too much — increase C-Bet frequency (including bluffs) to exploit the over-folding, and reduce the size to 1/3 pot."
+    },
+    "local-when-to-deviate-q3": {
+      "question": "Opponent 3-Bet 15%+ (GTO 8%); how should you deviate?",
+      "options": [
+        "Widen the opening range",
+        "Tighten the opening range, 4-Bet value with strong hands",
+        "No adjustment",
+        "Only all-in"
+      ],
+      "explanation": "He 3-Bets too much — tighten the opening range (reducing hands that fold to 3-Bets) and 4-Bet value with strong hands to make his wide range pay."
+    },
+    "local-when-to-deviate-q4": {
+      "question": "The main risk of deviating from GTO is:",
+      "options": [
+        "Winning too much",
+        "Strong opponents counter-exploiting",
+        "No risk",
+        "Getting kicked off the table"
+      ],
+      "explanation": "Deviation from GTO is unbalanced — strong opponents detect it and counter-exploit. Periodically check whether the opponent adjusted, and return or re-deviate accordingly."
+    },
+    "local-mental-tilt-q1": {
+      "question": "The nature of tilt is:",
+      "options": [
+        "Deliberately playing badly",
+        "The emotional system hijacking the rational decision system",
+        "Lack of skill",
+        "Bad luck"
+      ],
+      "explanation": "Tilt is the brain auto-selecting a suboptimal strategy under emotional pressure — you feel rational but are actually out of control. It isn't \"deliberate\" bad play."
+    },
+    "local-mental-tilt-q2": {
+      "question": "Which is a behavioral tilt signal?",
+      "options": [
+        "Opening range clearly widens",
+        "Racing heart",
+        "Shallow breathing",
+        "Blushing"
+      ],
+      "explanation": "Behavioral signals include a widened opening range, growing bet sizes, and frequent bluffs. Racing heart, shallow breathing, and blushing are physical signals."
+    },
+    "local-mental-tilt-q3": {
+      "question": "The correct response after consecutive bad beats is:",
+      "options": [
+        "Keep playing to \"win it back\"",
+        "Leave the table for 5-10 minutes",
+        "Move up stakes",
+        "Change tables and continue"
+      ],
+      "explanation": "After consecutive bad beats, immediately leave the table for 5-10 minutes, breathe deeply, walk around, and assess whether you can stay rational. If not, stop the session."
+    },
+    "local-mental-tilt-q4": {
+      "question": "The most deadly cognitive error about tilt is:",
+      "options": [
+        "Admitting you're tilting",
+        "Thinking \"I can control myself\"",
+        "Leaving the table",
+        "Recording emotions"
+      ],
+      "explanation": "Tilt is the subconscious taking over — you feel rational but are actually out of control. Thinking \"I can control myself\" is the deadliest error; set hard stop-losses."
+    },
+    "local-mental-stop-loss-q1": {
+      "question": "The recommended single-session stop-loss is:",
+      "options": [
+        "1 buy-in",
+        "3 buy-ins",
+        "10 buy-ins",
+        "Unlimited"
+      ],
+      "explanation": "Recommended: 3 buy-ins per session, 5 per day, 10 per week — a rule balancing protection and profit room."
+    },
+    "local-mental-stop-loss-q2": {
+      "question": "The nature of a stop-loss is:",
+      "options": [
+        "Admitting failure",
+        "Replacing emotional decisions with preset rules",
+        "Guaranteeing profit",
+        "Revenge against opponents"
+      ],
+      "explanation": "A stop-loss replaces emotional decisions with preset rules; in an emotional state you always feel \"one more hand and I'm even\", and a hard stop-loss forcibly cuts the loop."
+    },
+    "local-mental-stop-loss-q3": {
+      "question": "The \"one more hand and I'm even\" psychology after a stop-loss trigger is:",
+      "options": [
+        "Correct persistence",
+        "Typical tilt psychology",
+        "Rational calculation",
+        "GTO strategy"
+      ],
+      "explanation": "\"One more hand and I'm even\" is typical tilt psychology — every hand is independent, the loss has happened, and you're already tilting with negative expectation."
+    },
+    "local-mental-stop-loss-q4": {
+      "question": "The most deadly stop-loss execution error is:",
+      "options": [
+        "Strict execution",
+        "Presetting",
+        "\"Breaking the rule\" and continuing after the trigger",
+        "Recording profit/loss"
+      ],
+      "explanation": "\"Breaking the rule\" and continuing after the stop-loss trigger is the deadliest error — once broken, the rule loses meaning and is harder to follow next time. Adhere to \"zero exceptions\"."
+    },
+    "local-mental-session-q1": {
+      "question": "The core principle of session management is:",
+      "options": [
+        "The more you play, the better",
+        "Protecting decision quality",
+        "Chasing one big win",
+        "All-night sessions"
+      ],
+      "explanation": "Session management's core is protecting decision quality. Decision quality × hand count = long-term profit; fatigue and emotion significantly reduce decision quality."
+    },
+    "local-mental-session-q2": {
+      "question": "The recommended maximum single-session length is:",
+      "options": [
+        "1 hour",
+        "2 hours",
+        "4 hours",
+        "8 hours"
+      ],
+      "explanation": "Recommended no more than 2 hours per session. Decision quality typically drops noticeably after 90-120 minutes — rest regularly."
+    },
+    "local-mental-session-q3": {
+      "question": "80% of session profit comes from:",
+      "options": [
+        "Skill",
+        "Luck",
+        "Table selection",
+        "Bankroll"
+      ],
+      "explanation": "80% of session profit comes from table selection — choosing good tables with weak players matters more than refining skill. Rather than not playing, don't play bad tables."
+    },
+    "local-mental-session-q4": {
+      "question": "The most deadly long-term-profit error is:",
+      "options": [
+        "Strictly executing stop-losses",
+        "Chasing short-term windfalls rather than long-term stability",
+        "Weekly review",
+        "Keeping 30+ buy-ins"
+      ],
+      "explanation": "Chasing \"short-term windfalls\" is the deadliest error. Today's 5 buy-in loss doesn't matter; what matters is how many correct decisions you made. Long-term, correct decisions bring steady profit."
+    }
+  }
+}

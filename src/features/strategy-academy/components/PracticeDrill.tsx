@@ -18,6 +18,7 @@ import { useProgressStore } from '@/features/progress/store';
 import { useAcademyStore } from '../store';
 import { getCurrentDifficulty, selectQuestionsByDifficulty, shouldRecommendReview } from '../utils/adaptiveDifficulty';
 import { orderPracticeOptions } from '../utils/practiceOptionOrder';
+import { resolvePracticeQuestion } from '../utils/contentKeys';
 // P1E-13: 超时判分口径（超时恒判错，对齐 range-trainer P1A-02）
 import { gradePracticeSelection, pickTimeoutFallbackOption } from '../utils/practiceGrading';
 // P2-03: 五级反馈事实源（只读消费，禁止修改 shared 层）
@@ -219,9 +220,10 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   }, []);
 
   // 自适应模式下动态选择题目
-  // P0B-01：渲染前统一走 orderPracticeOptions 排序出口（动作类 canonical /
-  // 数值类单调 / 文字类 id 种子洗牌），禁止按题库原序渲染；源题库数据不改。
+  // P0B-01：渲染前先 t() 解析（key 缺失回退数据层中文），再统一走 orderPracticeOptions
+  // 排序出口（动作类 canonical / 数值类单调 / 文字类 id 种子洗牌），禁止按题库原序渲染；源题库数据不改。
   const questions = useMemo(() => {
+    const resolveOrder = (q: PracticeQuestion) => orderPracticeOptions(resolvePracticeQuestion(t, q));
     if (isPressure) {
       // 压力模式：循环题目到 20 题
       const base = drill.questions;
@@ -230,12 +232,12 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       for (let i = 0; i < PRESSURE_TOTAL_QUESTIONS; i++) {
         result.push(base[i % base.length]!);
       }
-      return result.map(orderPracticeOptions);
+      return result.map(resolveOrder);
     }
-    if (!adaptive || !adaptiveConfig.enabled) return drill.questions.map(orderPracticeOptions);
+    if (!adaptive || !adaptiveConfig.enabled) return drill.questions.map(resolveOrder);
     return selectQuestionsByDifficulty(drill.questions, currentDifficulty, drill.questions.length)
-      .map(orderPracticeOptions);
-  }, [adaptive, adaptiveConfig.enabled, drill.questions, currentDifficulty, isPressure]);
+      .map(resolveOrder);
+  }, [adaptive, adaptiveConfig.enabled, drill.questions, currentDifficulty, isPressure, t]);
 
   const totalQuestions = questions.length;
   const currentQuestion: PracticeQuestion | undefined = questions[currentIndex];

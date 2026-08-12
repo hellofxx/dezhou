@@ -1,0 +1,499 @@
+{
+  "lessonContent": {
+    "l1-basics": [
+      "What is Texas Hold'em?",
+      "Texas Hold'em is the world's most popular poker variant. Each player receives 2 hole cards and combines them with 5 community cards to make the best 5-card hand and win the pot.",
+      "Core goal: not to win every hand, but to make +EV (positive expected value) decisions over the long run.",
+      "Game Flow",
+      "1. Preflop: each player gets 2 hole cards, action starts after the blinds post\n2. Flop: 3 community cards are dealt\n3. Turn: the 4th community card is dealt\n4. River: the 5th community card is dealt\n5. Showdown: reveal hands and compare",
+      "Hand Rankings (Strongest to Weakest)",
+      "Royal Flush > Straight Flush > Four of a Kind > Full House > Flush > Straight > Three of a Kind > Two Pair > One Pair > High Card",
+      "Remember: Flush beats Straight! Many beginners mix up this order.",
+      "Pro players calculate probabilities on every hand. Building the habit of asking \"what's my equity here?\" is your first step toward playing professionally.",
+      "Total starting-hand combinations: C(52,2) = 52×51÷2 = 1326\nPocket pairs (e.g. AA): C(4,2) = 6\nSuited hands (e.g. AKs): 4\nOffsuit hands (e.g. AKo): 12\n\nUnderstanding these basic combinatorics is the foundation of range analysis — the pot-odds math and Blocker effects you'll learn later all build on it.",
+      "Theory reference: the full derivation of combinatorics and starting-hand probability is in Theory Academy T1 Chapter 1 \"Combinatorics and Starting-Hand Probability\" — covering the C(n,k) formula, the origin of the 1326 combinations, and the 6/4/12 atomic units.",
+      "Counter-intuitive: 169 classes and 1326 combinations are two different counts. 169 is the number of \"equivalent classes\" (pair/suited/offsuit types), while 1326 is the number of \"distinguishable actual combinations\". Probability math must use 1326 — classes deceive you: suited AK and AA each count as \"1 class\", but their combination weights are 4 and 6 respectively."
+    ],
+    "l1-position": [
+      "Why Is Position So Important?",
+      "In Texas Hold'em, position refers to where you sit at the table relative to the dealer button. Players acting later have a huge advantage because they can see the actions of everyone before them before deciding.",
+      "Golden rule: the button (BTN) is the best position — you act last and have the most information.",
+      "Position Categories",
+      "Early: UTG, UTG+1 — act first with the least information, need the strongest hands\nMiddle: MP, HJ — middle positions, can widen slightly\nLate: CO, BTN — act late with the most information, widest range\nBlinds: SB, BB — have chips committed, but act first postflop",
+      "The same hand is worth far more on the BTN than in UTG. For example, KJo is a standard open on the BTN but should usually fold in UTG (about 15% range for conservative players).",
+      "Pro players strictly adjust their starting-hand range by position. Only a few hands (AA/KK/QQ/AKs) are playable \"in any position\"; everything else must be adjusted by position.",
+      "How Position Advantage Shows Up",
+      "1. Preflop: late position can steal blinds and open a wider range\n2. Postflop: late position controls pot size and makes more precise value bets\n3. Information edge: decide after seeing opponents' actions, reducing error rate",
+      "Equity realization by position:\nBTN opens about 40-50% (Sklansky-Murr classic theory suggests 35%, modern solver outputs up to 50%)\nUTG opens about 10-15%, but being OOP postflop cuts equity realization to roughly 80-90%\n\nQuantitative rule: each additional position of late position lets you widen the range about 5-8 percentage points and raises postflop equity realization by about 5-10%.",
+      "Theory reference: quantitative analysis of position value is in Theory Academy T3 Chapter 1 \"Position Value and Equity Realization\"; the modern revision of the Gap Concept is in T3 Chapter 2; Sklansky's Fundamental Theorem is in T3 Chapter 3.",
+      "Counter-intuitive: BTN's positional advantage is mainly postflop, not preflop. Preflop BTN only acts last; but postflop BTN acts last on every street — meaning you can see all opponents' actions before deciding, which is a huge information advantage."
+    ],
+    "l1-hand-selection": [
+      "Why Starting-Hand Selection Matters",
+      "Starting-hand selection is the most fundamental and important skill in Texas Hold'em. Playing too many hands (too loose) or too few (too tight) seriously hurts your win rate.",
+      "The most common beginner mistake: playing too many hands. In 6-max, you should only play about 20-25% of hands.",
+      "Hand Categories",
+      "Tier 1 (playable in any position): AA, KK, QQ, AKs\nTier 2 (playable from middle position on): JJ, TT, AQs, AQo, AJs\nTier 3 (playable from late position/blinds): 99-22, KQs, KJs, QJs, JTs, T9s, 98s\nGarbage (fold in any position): unsuited small hands like 72o, 83o, 94o",
+      "s = suited, o = offsuit. Suited hands are worth about 3-4% more than offsuit hands.",
+      "Selection Principles",
+      "1. High-card value: A/K/Q/J combinations are stronger\n2. Connectivity: connected cards (e.g. JTs) have straight potential\n3. Suitedness: suited cards have flush potential\n4. Domination: avoid easily dominated hands (e.g. K3o vs KQo)",
+      "Pro players' starting ranges are far tighter than recreational players'. Better to play fewer good hands than to lose big chips in marginal spots. Discipline is one of the most important qualities of a professional player.",
+      "Starting-hand combinatorics (atomic units):\nAny pocket pair (e.g. AA) = C(4,2) = 6 combinations\nAny suited hand (e.g. AKs) = 4 combinations\nAny offsuit hand (e.g. AKo) = 4×4-4 = 12 combinations\nAny two different ranks = 16 combinations\n\nProbability of any pocket pair = 78/1326 ≈ 5.9% (about once every 17 hands)\nProbability of AA = 6/1326 ≈ 0.45% (about once every 221 hands)",
+      "Theory reference: starting-hand probability and combinatorics are detailed in Theory Academy T1 Chapter 1. The relationship between starting-hand EV tiers and position is in T3 Chapter 1.",
+      "Counter-intuitive: AKs has only 4 combinations while AA has 6. Although AK looks the most \"imposing\", its combination weight is lower than a pocket pair's. In range analysis, pairs in an opponent's 3-Bet range usually outweigh AK in combination weight — a quantitative bias many beginners overlook."
+    ],
+    "l1-bankroll": [
+      "Why Is Bankroll Management So Important?",
+      "Bankroll management is the foundation of every successful poker player. No matter how good your skills are, without sound bankroll management, variance will eventually bankrupt you.",
+      "Golden rule: never sit at a table with more than 5% of your total bankroll. For cash games, keep 20-30 buy-ins; for tournaments, keep 50-100 buy-ins.",
+      "Bankroll Requirements by Stake",
+      "Cash game NL10 (BB $0.10):\n  Minimum: 20 × $10 = $200\n  Recommended: 30 × $10 = $300\n\nCash game NL50 (BB $0.50):\n  Minimum: 20 × $50 = $1,000\n  Recommended: 30 × $50 = $1,500\n\nTournament $11 buy-in:\n  Minimum: 50 × $11 = $550\n  Recommended: 100 × $11 = $1,100",
+      "Moving Up and Down Rules",
+      "When your bankroll grows to the next stake's standard line, you can try moving up:\n• Move up: bankroll reaches 30 buy-ins of the higher stake\n• Move down: bankroll drops below 20 buy-ins of the current stake\n• Moving down isn't shameful — protecting your bankroll is what long-term winners do",
+      "Completely separate your poker bankroll from living expenses. Never play with money you \"can't afford to lose\", because it seriously damages your decision quality.",
+      "Kelly Criterion (optimal betting fraction in bankroll management):\nf* = (bp - q) / b\nwhere f* = optimal bankroll fraction, b = odds (net odds), p = win probability, q = loss probability = 1-p\n\nCash game requirement: 20-30 buy-ins (minimum-recommended)\nTournament requirement: 50-100 buy-ins (minimum-recommended)\n\nExample: NL10 table, each buy-in $10, recommended bankroll = 30 × $10 = $300",
+      "Theory reference: the quantitative model of bankroll management and the Kelly Criterion in poker are covered in Theory Academy T8 Chapter 2 \"Bankroll Psychology and Quantitative Management\", which fully covers poker psychology's bankroll management methodology."
+    ],
+    "l1-leaks": [
+      "Why Is Identifying Errors More Important Than Learning Techniques?",
+      "Fixing one error usually gains more than learning one new technique. Here are the 10 most common beginner leaks, ordered from most severe to least:",
+      "Leak #1: Playing Too Many Hands (VPIP Too High)",
+      "Beginners usually play 40-60% of hands, while winning players play only 20-28%.\n\nFix: strictly follow the preflop range chart — only play hands \"worth playing\".",
+      "Leak #2: Missing Position Awareness",
+      "Playing too many hands from bad position and ignoring positional advantage.\n\nFix: in early position (UTG/HJ) only play the strongest 15%; in late position (CO/BTN) you can widen to 25-35%.",
+      "Leak #3: Passive Calling (Too Many Calls, Too Few Raises)",
+      "\"Call is the weakest action\" — most of the time you should raise or fold instead of passively calling.",
+      "Leak #4: Poor Bet Sizing",
+      "Betting too small lets opponents call easily; betting too big wastes what a small bet could achieve.\n\nStandard: 1/3-2/3 pot on the flop, 2/3-full pot on the turn/river.",
+      "Leaks #5-10",
+      "#5 Not tracking pot size (can't calculate odds)\n#6 Continuing to play after tilting\n#7 Unbalanced bluffing frequency (either never bluffing or bluffing too much)\n#8 Ignoring opponent behavior patterns\n#9 Not reviewing hands\n#10 No stop-loss or time limits",
+      "Each Leak you fix may raise your win rate by 1-3 BB/100. Fixing the first 5 Leaks can turn you from a loser into a winner.",
+      "Focus on one Leak per week rather than fixing everything at once. Track your progress with a check-in calendar.",
+      "Theory reference: the mathematical essence behind common Leaks is a missing EV decision framework. The full definition and derivation of expected value is in Theory Academy T2 Chapter 1 \"Expected Value (EV): The Unified Measure of All Decisions\". Once you understand EV, every Leak can be quantified as a repeating pattern of -EV behavior.",
+      "Counter-intuitive: a decision that often loses can still be correct. EV only guarantees long-run average profit; single results are governed by variance. A +EV call can lose 10 times in a row — the EV of the 11th call is still positive. Pro players focus on decision quality, not single outcomes."
+    ]
+  },
+  "lessonQuiz": {
+    "l1-basics-q1": {
+      "question": "Which hand is the strongest?",
+      "options": [
+        "Straight",
+        "Flush",
+        "Full House",
+        "Four of a Kind"
+      ],
+      "explanation": "Four of a Kind > Full House > Flush > Straight"
+    },
+    "l1-basics-q2": {
+      "question": "How many community cards are dealt on the Flop?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "5"
+      ],
+      "explanation": "The flop deals 3 community cards, the turn 1, and the river 1 — 5 in total."
+    },
+    "l1-basics-q3": {
+      "question": "What is the core goal in Texas Hold'em?",
+      "options": [
+        "Win every hand",
+        "Get the biggest hand",
+        "Make +EV decisions over the long run",
+        "Bluff opponents"
+      ],
+      "explanation": "Pro players care about long-term expected value (EV), not single-hand results."
+    },
+    "l1-pos-q1": {
+      "question": "Which position is the best?",
+      "options": [
+        "UTG",
+        "MP",
+        "BTN",
+        "SB"
+      ],
+      "explanation": "BTN (button) is the best position — you almost always act last with the most information."
+    },
+    "l1-pos-q2": {
+      "question": "What should you do with KJo in UTG?",
+      "options": [
+        "Raise open",
+        "Call",
+        "Fold",
+        "All-in"
+      ],
+      "explanation": "KJo in UTG is a marginal hand (about 15% range); modern strategy allows a loose open, but conservative play still suggests folding."
+    },
+    "l1-pos-q3": {
+      "question": "What is the biggest advantage of late position?",
+      "options": [
+        "More chips",
+        "Better cards",
+        "More information",
+        "Better luck"
+      ],
+      "explanation": "Late position's biggest advantage is information — you decide after seeing all previous actions."
+    },
+    "l1-hand-q1": {
+      "question": "In 6-max, what's the ideal VPIP?",
+      "options": [
+        "10%",
+        "20-25%",
+        "40%",
+        "60%"
+      ],
+      "explanation": "In 6-max you should only play about 20-25% of hands. Playing too many hands is the most common beginner mistake."
+    },
+    "l1-hand-q2": {
+      "question": "Which hand can open-raise from UTG?",
+      "options": [
+        "K8o",
+        "QJo",
+        "AJs",
+        "76o"
+      ],
+      "explanation": "AJs (suited Ace-Jack) is strong enough to open standard from UTG. K8o and 76o are too weak, and QJo isn't strong enough from early position."
+    },
+    "l1-hand-q3": {
+      "question": "What does \"s\" mean in AKs?",
+      "options": [
+        "small",
+        "suited",
+        "strong",
+        "straight"
+      ],
+      "explanation": "s = suited, meaning both cards are the same suit. AKs is a suited Ace and King."
+    },
+    "l1-bankroll-q1": {
+      "question": "How much bankroll is the recommended minimum for NL10 cash games?",
+      "options": [
+        "$50",
+        "$100",
+        "$200",
+        "$500"
+      ],
+      "explanation": "20 buy-ins × $10/buy-in = $200 is the minimum; $300 (30 buy-ins) is recommended."
+    },
+    "l1-bankroll-q2": {
+      "question": "When should you move down?",
+      "options": [
+        "After 3 losing days",
+        "When in a bad mood",
+        "When the bankroll drops below 20 buy-ins of the current stake",
+        "After any loss"
+      ],
+      "explanation": "Moving down should be based on objective bankroll standards, not emotions. Move down to protect capital when under-rolled."
+    },
+    "l1-bankroll-q3": {
+      "question": "Which of these is wrong?",
+      "options": [
+        "Separate poker bankroll from living expenses",
+        "Set a stop-loss",
+        "Borrow money to chase losses",
+        "Record every session result"
+      ],
+      "explanation": "Borrowing money to chase losses is the most dangerous practice — it leads to tilt and bigger losses."
+    },
+    "l1-leaks-q1": {
+      "question": "What VPIP range do winning players typically have?",
+      "options": [
+        "40-60%",
+        "30-40%",
+        "20-28%",
+        "10-15%"
+      ],
+      "explanation": "Winning 6-max players typically have a VPIP of 20-28%, depending on position and style."
+    },
+    "l1-leaks-q2": {
+      "question": "Which of these is NOT a common beginner mistake?",
+      "options": [
+        "Playing too many hands",
+        "Strictly following range charts",
+        "Always calling and never raising",
+        "Ignoring position"
+      ],
+      "explanation": "Strictly following range charts is correct — not a mistake."
+    },
+    "l1-leaks-q3": {
+      "question": "What is the standard flop bet size?",
+      "options": [
+        "1/4 pot",
+        "1/3 to 2/3 pot",
+        "Full pot",
+        "2x pot"
+      ],
+      "explanation": "The standard flop bet is 1/3 to 2/3 of the pot, adjusted by board texture and range advantage."
+    }
+  },
+  "lessonExample": {
+    "l1-basics-ex1": {
+      "title": "Identify the hand: Flush vs Straight",
+      "correctAction": "Win (Flush)",
+      "reasoning": [
+        "You hold 8♥9♥ and the board shows T♥J♥2♥",
+        "You make an 8-9-T-J-2 flush (5 hearts)",
+        "Flush beats straight — even if the opponent has AK for a straight, you still win"
+      ],
+      "mistakeAction": "Folding, thinking the opponent's straight is stronger",
+      "mistakeReasoning": "Beginners often confuse the strength of flushes and straights. Remember: Flush > Straight!",
+      "mistakeEvLoss": "Lose the entire pot (about 8BB)"
+    },
+    "l1-basics-ex2": {
+      "title": "Identify the hand: making a Full House",
+      "correctAction": "Value bet (Full House)",
+      "correctAmount": "75% pot",
+      "reasoning": [
+        "You hold K♦K♣ and the board shows K♥7♦7♠",
+        "You make KKK77 — a full house (three Ks + a pair of 7s)",
+        "A full house is very strong — only beaten by four of a kind and straight flush",
+        "Bet big for value"
+      ],
+      "mistakeAction": "Checking, hoping to win at showdown",
+      "mistakeReasoning": "With a full house you should actively bet for value instead of passively checking. Opponents may call with weaker hands.",
+      "mistakeEvLoss": "-3 BB/100"
+    },
+    "l1-position-ex1": {
+      "title": "Same hand, different position: KJo in UTG vs BTN",
+      "correctAction": "Fold",
+      "reasoning": [
+        "KJo in UTG is a marginal hand (about 15% range) — an open is loose; conservative play still suggests folding",
+        "Acting first means you have the least information, and 5 more players behind can raise",
+        "KJo is easily dominated (opponents may hold AK, KQ, AJ)",
+        "In early position only play the strongest ~10% of hands"
+      ],
+      "mistakeAction": "Open-raising with KJo in UTG",
+      "mistakeReasoning": "KJo looks decent, but it's too weak in early position. If someone behind 3-Bets, you'll be in a very tough spot.",
+      "mistakeEvLoss": "-0.8 BB/100"
+    },
+    "l1-position-ex2": {
+      "title": "Blind steal from BTN",
+      "correctAction": "Raise",
+      "correctAmount": "2.5BB",
+      "reasoning": [
+        "T8s on the BTN facing all folds is a standard open",
+        "BTN can open the widest range (about 40-50% of hands)",
+        "Suited connectors play very well postflop",
+        "Only SB and BB remain — you may win the blinds outright"
+      ],
+      "mistakeAction": "Fold (playing too tight)",
+      "mistakeReasoning": "Folding T8s on the BTN facing all folds is too tight. This is the clearest spot for positional advantage — use it.",
+      "mistakeEvLoss": "-0.6 BB/100"
+    },
+    "l1-hand-ex1": {
+      "title": "Marginal hand judgement: A5o in MP",
+      "correctAction": "Fold",
+      "reasoning": [
+        "A5o should fold in MP",
+        "Even with an Ace, the kicker (5) is too weak",
+        "Offsuit has no flush potential and poor connectivity",
+        "Easily dominated (opponents may hold AQ, AJ, AT)"
+      ],
+      "mistakeAction": "Open-raising just because of the Ace",
+      "mistakeReasoning": "Many beginners want to play any Ace, but A5o's kicker is too weak. If an opponent also has an Ace, you almost always lose.",
+      "mistakeEvLoss": "-0.9 BB/100"
+    },
+    "l1-hand-ex2": {
+      "title": "The value of suited connectors: 98s in CO",
+      "correctAction": "Raise",
+      "correctAmount": "2.5BB",
+      "reasoning": [
+        "98s in CO is a standard open",
+        "Suited connectors have great postflop playability",
+        "They can make straights, flushes, two pair, and more",
+        "From the CO the range can widen"
+      ],
+      "mistakeAction": "Fold (thinking 9 and 8 are too small)",
+      "mistakeReasoning": "Suited connectors' value comes from connectivity and suitedness, not high cards. 98s in CO is a +EV open.",
+      "mistakeEvLoss": "-0.5 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l1-basics-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AKs on the BTN facing all folds is a very strong open — folding is a serious error.",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "There's no raise to call here — you should actively raise to open.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "AKs is a premium starting hand. Facing all folds on the BTN, open to a standard 2.5BB.",
+          "evImpact": "+2.5 BB/100"
+        }
+      ]
+    },
+    "l1-basics-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "You flopped top set — an extremely strong hand. You should bet to build the pot.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB (about 73% pot)",
+          "explanation": "With a set you should bet for value. 4BB ≈ 73% pot is a standard flop C-Bet size that lets weaker hands call.",
+          "evImpact": "+3.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving the flop is too big — it scares off all weaker hands. Build the pot gradually.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l1-basics-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "72o is one of the worst starting hands — fold it from any position. No high-card value, no connectivity, no flush potential.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "72o is way too weak — opening only gets you to the flop with garbage, losing a lot over the long run.",
+          "evImpact": "-2.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "There's no raise to call in UTG, and 72o isn't worth entering with in any way.",
+          "evImpact": "-1.8 BB/100"
+        }
+      ]
+    },
+    "l1-position-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A9s in UTG is a marginal hand — fold from early position. Easily dominated (opponents may hold AQ, AJ, AT).",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "Opening A9s from UTG is too loose. Early position only plays the strongest 10-12% — A9s isn't in it.",
+          "evImpact": "-0.7 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "There's no raise to call in UTG, and A9s isn't worth entering with from early position.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l1-position-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A9s on the BTN facing all folds is a good opening hand — folding is too tight.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "A9s on the BTN is a standard open. The suited Ace has great postflop potential and the BTN's positional advantage is clear.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Nobody raised before you — open with a raise instead of \"calling\".",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l1-position-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "JTs in CO facing all folds is a good opening hand — folding is too tight.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "JTs is a suited connector — a standard open in CO. Great straight and flush potential, and a decent position.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Nobody raised before you — you should actively raise to open.",
+          "evImpact": "-0.4 BB/100"
+        }
+      ]
+    },
+    "l1-hand-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "K3o is too weak even on the BTN. The kicker (3) is too weak and offsuit has no extra value — it belongs in the fold category.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "K3o is too weak — even the widest BTN opening range doesn't include it.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "There's no raise to call, and K3o isn't worth entering with in any way.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l1-hand-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QJs in MP is a good opening hand — folding is too tight. Suited high connectors have strong postflop potential.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "QJs is a suited high connector — a standard open in MP with strong straight, flush, and high-card potential.",
+          "evImpact": "+1.3 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Nobody raised before you — you should actively raise to open.",
+          "evImpact": "-0.4 BB/100"
+        }
+      ]
+    },
+    "l1-hand-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AQs is among the strongest Tier-2 hands and can be opened from any position.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "AQs in UTG is a standard open. Suited AQ is a premium starting hand — raise from any position.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "There's no raise to call in UTG — you should actively raise.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    }
+  },
+  "unitTitle": {
+    "l1-position": {
+      "u1": "Why Does Position Matter So Much?",
+      "u2": "Position Categories",
+      "u3": "How Positional Advantage Shows Up"
+    }
+  }
+}

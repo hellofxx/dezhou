@@ -1,0 +1,1073 @@
+{
+  "lessonContent": {
+    "l7-deepstack": [
+      "深筹码 vs 标准筹码",
+      "深筹码（200BB+）与标准筹码（100BB）的关键差异：\n\n- 翻前：小口袋对和同花连牌价值提升（set mine 和大底池潜力）\n- 翻后：更多多街操作空间，隐含赔率更重要\n- 牌力标准：顶对顶踢脚不再是\"绝对强牌\"\n- Bluff 价值：深筹码 bluff 更有威力（可以施加更大压力）\n- 位置价值：位置优势在深筹码中更显著",
+      "核心原则：筹码越深，翻后技巧越重要。100BB 可以靠翻前打法盈利，200BB+ 必须精通翻后多街操作。",
+      "翻前调整",
+      "深筹码翻前范围调整：\n\n价值提升的牌：\n- 小口袋对（22-88）：set mine 价值极高（中 set 可赢 200BB）\n- 同花连牌（54s-T9s）：大底池潜力（顺子/同花可赢全筹码）\n- 同花 Ax（A2s-A9s）：坚果同花潜力\n\n价值相对降低的牌：\n- AKo/AQo：在深筹码中容易被操作\n- 大口袋对（AA/KK）：仍然强，但需要更小心翻后操作",
+      "翻后调整",
+      "深筹码翻后的关键调整：\n\n1. 多街规划：不要只看当前街道，规划 turn 和 river 的行动\n2. 底池控制：中等牌力（顶对）不要建立过大底池\n3. 隐含赔率：听牌和投机牌更有价值（可以赢更多）\n4. 压力施加：深筹码 bluff 更有威力（对手面临更大的决策压力）\n5. 位置利用：有位置时可以更频繁地价值下注和 bluff",
+      "深筹码的陷阱",
+      "深筹码中最常见的错误：\n\n- 用顶对顶踢脚打光 200BB（在深筹码中 TPTK 不是坚果）\n- 忽视对手的隐含赔率（让对手便宜看牌，然后输大底池）\n- 过度 bluff（深筹码对手更有能力 call 你）\n- 不做多街规划（走一步看一步导致陷入困境）",
+      "深筹码的核心思维：你的牌在 200BB 深度值多少？顶对在 100BB 可以打光，但在 200BB 可能只值一个中等底池。",
+      "深筹码现金桌是盈利最高的游戏形式，但也是波动最大的。确保你的资金管理能承受 200BB 的波动（至少 30-40 个 buy-in）。",
+      "SPR 递进公式：\nSPR = 有效筹码 ÷ 底池大小\n\n深筹码定义（SPR > 10）：\n例：有效筹码 200BB，翻牌底池 15BB → SPR = 13.3\n\n深筹码下的策略调整：\n同花连牌（如 98s）可实现 5-10 倍底池的价值\n口袋对子（如 22）的 Set Mining 隐含赔率大幅提升\n高对（如 KK）的翻后实现率下降，因为对手可以在深筹码下用更宽的范围施加压力\n\n反向隐含赔率风险：\n当听牌完成时仍可能输给更强的牌\n深筹码时反向隐含赔率的杀伤力成倍增加",
+      "理论支撑：SPR 与筹码深度的量化关系详见理论学院 T6 第 3 章\"SPR 与三街几何尺度\"。深筹码下的隐含赔率与反向隐含赔率分析见 T2 第 3-4 章。",
+      "反直觉点：深筹码时同花连牌的价值超过高对。AA 在深筹码中看似强大，但翻后实现率下降——因为对手可以在后续街用更宽的范围施加压力，迫使你做出困难的弃牌决策。而 98s 可以形成顺子、同花等多种强牌，有更好的翻后可玩性。"
+    ],
+    "l7-multiway": [
+      "多人底池 vs 单挑的核心差异",
+      "当 3 个或更多玩家入池时，策略需要重大调整：\n\n- 范围更紧：面对多对手，你需要更强的牌才能继续\n- Bluff 更少：多对手中有人 call 的概率更高\n- 价值下注更纯粹：需要更强的牌才能 value bet\n- 位置更重要：多人底池中位置优势更显著\n- Pot odds 改善：底池更大，但 implied odds 和 reverse implied odds 都增大",
+      "核心原则：多人底池中，你的牌力标准要显著提高。单挑中的顶对在 4 人底池中可能只是中等牌力。",
+      "翻前调整",
+      "多人底池翻前策略：\n\n- Open 范围收紧：被多人 call 的概率更高，需要更强的牌\n- 投机牌价值提升：多人底池隐含赔率更好（可以赢更多人）\n- 避免用边缘牌 open：被 3 人 call 后翻后很难打\n- 加注大小调整：多人底池可以加注更大（隔离弱牌）",
+      "翻后调整",
+      "多人底池翻后策略：\n\n1. C-Bet 频率降低：\n   - 单挑：C-Bet 60-70%\n   - 3 人底池：C-Bet 40-50%\n   - 4+ 人底池：C-Bet 30-40%\n\n2. Value 标准提高：\n   - 单挑：顶对可以 value bet 3 条街\n   - 多人：顶对可能只值 1-2 条街 value\n\n3. Bluff 频率大幅降低：\n   - 多对手中有人有强牌的概率更高\n   - Bluff 成功率 = 所有对手都弃牌的概率（乘法效应）",
+      "位置在多人底池中的重要性",
+      "位置在多人底池中更加关键：\n\n- 有位置（BTN）：可以看到所有对手的行动后再决策\n- 无位置（UTG/MP）：面对多对手非常困难，范围要更紧\n- 夹心位置（CO）：最困难的位置，后面还有多个对手未行动\n\n实战建议：无位置时在多人底池中更倾向 check，有位置时更倾向 bet。",
+      "多人底池的黄金法则：如果你不确定自己的牌是否够强，那就 check。多人底池中犯错的代价比单挑大得多。",
+      "很多盈利玩家在多人底池中亏损，因为他们用单挑的思维打多人底池。记住：3 人底池不是 3 个单挑，而是一个完全不同的游戏。",
+      "多人底池胜率稀释公式：\n单挑底池中，顶对胜率 ≈ 70-80%\n三人底池中，顶对胜率 ≈ 40-50%\n四人底池中，顶对胜率 ≈ 25-35%\n\n每增加一个对手，你的胜率大约稀释为原来的 60-70%\n\n多人底池下注策略调整：\n- 价值下注需要更强的牌（至少两对以上）\n- 诈唬频率大幅降低（需要让所有对手弃牌）\n- 同花听牌的价值下降（因为多人同时听同花的概率更高）",
+      "理论支撑：多人底池的胜率分布与策略调整详见理论学院 T9 第 3 章\"多人底池与 GTO-剥削统一框架\"。包括多人底池胜率表和\"纳什均衡在多人底池中的适用边界\"警告。",
+      "反直觉点：三人底池中你的胜率被稀释，但底池赔率变好。当三人底池中你面对下注时，底池中多了一个人的死钱，赔率更优。但要注意：你的牌需要同时击败两个对手，胜率下降的速度可能快于赔率改善的速度。"
+    ],
+    "l7-straddle": [
+      "什么是 Straddle？",
+      "Straddle 是在发牌前，UTG（或 BTN）位置的玩家自愿投入的额外盲注，通常是 2BB（大盲注的 2 倍）。\n\nStraddle 的影响：\n- 有效筹码减半：100BB 变成 50BB effective（相对于 straddle）\n- 底池更大：翻前底池从 1.5BB 变成 3.5BB\n- SPR 更低：更少的筹码深度相对于底池\n- 行动顺序变化：straddler 翻前最后行动",
+      "Straddle 的核心影响：有效筹码减半。100BB 在 straddle 游戏中相当于 50BB，策略要相应调整。",
+      "策略调整",
+      "Straddle 游戏中的策略变化：\n\n1. 范围收紧：\n   - 更少的筹码深度 = 更少的投机牌价值\n   - 小口袋对和同花连牌价值降低（set mine 不划算）\n   - 强牌（AA-JJ, AK）价值相对提升\n\n2. 加注大小调整：\n   - 以 straddle 为基准：2x straddle = 4BB\n   - 标准 open 变为 4-5BB（而不是 2.5BB）\n   - 3-Bet 相应变大\n\n3. 利用 Straddler 的位置劣势：\n   - Straddler 翻前最后行动，但翻后第一个行动\n   - 可以在翻后对 straddler 施加压力",
+      "Mississippi Straddle vs BTN Straddle",
+      "两种常见 Straddle 形式：\n\nMississippi Straddle（UTG Straddle）：\n- UTG 投入 2BB\n- 行动顺序：UTG+1 开始，straddler 翻前最后行动\n- 翻后：straddler 第一个行动（位置劣势）\n\nBTN Straddle：\n- BTN 投入 2BB\n- 行动顺序：SB 开始，BTN 翻前最后行动\n- 翻后：BTN 仍然最后行动（位置优势保留）\n- BTN Straddle 对 BTN 更有利（保留位置优势）",
+      "实战建议",
+      "Straddle 游戏的实战要点：\n\n- 不要过度调整：Straddle 只是改变了筹码深度，基本策略框架不变\n- 注意有效筹码：始终以 straddle 为基准计算有效筹码\n- 利用位置：如果 straddler 翻后无位置，对他施加压力\n- 避免大底池：除非有强牌，否则不要在 straddle 底池中打光\n- 观察对手：有些玩家 straddle 后打得更松更激进",
+      "Straddle 游戏的本质：这是一个 50BB 的游戏（而不是 100BB）。用 50BB 的思维来打，而不是 100BB。",
+      "很多玩家在 straddle 底池中犯的最大错误：用 100BB 的思维打 50BB 的游戏。记住，有效筹码减半了，你的策略也要相应调整。",
+      "Straddle 下的翻前范围调整：\nStraddle = 大盲的 2 倍（通常为 2BB）\n有效筹码相对调整：\n表面 100BB → 实际有效筹码 = 100BB/2BB = 50 个 Straddle\n\n翻前范围调整：\n- 开牌范围应收紧约 20-30%（因为底池中多了 Straddle 的死钱）\n- 3Bet 尺度应调整为 4-5 倍 Straddle\n- Straddle 位置玩家的防御范围应放宽（已经投入 2BB）\n\n注意：Straddle 不是额外下注，而是盲注的扩大——有效筹码按 Big Blind 计算，而非 Straddle",
+      "理论支撑：Straddle 结构下的位置价值变化与翻前范围调整的理论基础见理论学院 T3 第 1 章\"位置价值与权益实现率\"。",
+      "反直觉点：Straddle 不是额外增加的筹码投入，而是盲注的临时扩大。有效筹码仍按大盲计算，而非 Straddle 金额。这意味着 Straddle 局的实际筹码深度比表面看起来更浅，SPR 更低。"
+    ],
+    "l7-rake": [
+      "Rake 是什么？为什么重要？",
+      "Rake（抽水）是平台/赌场从每个底池中抽取的服务费。它直接影响你的赢率：每手牌你都在跟\"看不见的对手\"（平台）打。",
+      "在高 Rake 的环境中：\n• 应该打得更紧（少打边缘牌）\n• 减少跟注（Call 的 EV 被 Rake 侵蚀最多）\n• 增加 iso-raise 和 3-Bet（减少多人底池）",
+      "不同 Rake 结构的应对",
+      "• 线上微额（NL2-NL10）：Rake 可达 8-12 BB/100，必须打得非常紧\n• 线上中额（NL25-NL100）：Rake 降至 4-6 BB/100，可以适度放宽\n• 线下现金：通常有 Cap（抽水上限），大底池相对 Rake 更低",
+      "在微额级别，Rake 可能是你最大的\"对手\"。选择 Rake 结构合理的平台，并充分利用返水（Rakeback）政策。"
+    ],
+    "l7-table-selection": [
+      "为什么 Table Selection 是最被低估的技能？",
+      "选择一张有鱼（弱玩家）的桌子，对赢率的提升可能超过几个月的技术练习。职业牌手花大量时间选桌，这不是丢人的事。",
+      "好桌子的标志：\n• 高平均底池（Avg Pot）\n• 高玩家/手局占比（Players/Flop % > 30%）\n• 有明显的弱玩家（高 VPIP、低 PFR）\n• 没有多个已知的强玩家",
+      "线下选桌技巧",
+      "线下现金桌的选桌更加重要：\n• 观察 5-10 分钟再入座\n• 寻找喝酒/聊天/情绪化的玩家\n• 选择弱玩家左边的位置（能更多地对他有位置）\n• 不要显摇——如果全桌都是 REG，放弃这张桌",
+      "你的赢率 = 你的技术优势 × 对手的弱点。即使你是世界第 10 名，如果桌上全是前 9 名，你依然是桌上最弱的。"
+    ]
+  },
+  "lessonQuiz": {
+    "l7-deep-q1": {
+      "question": "深筹码（200BB）中，以下哪类牌的价值提升最多？",
+      "options": [
+        "AKo",
+        "小口袋对和同花连牌",
+        "AQo",
+        "KQo"
+      ],
+      "explanation": "深筹码中小口袋对（set mine）和同花连牌（大底池潜力）的价值提升最多，因为中牌后可以赢对手全部 200BB。"
+    },
+    "l7-deep-q2": {
+      "question": "深筹码中顶对顶踢脚（TPTK）的正确打法是？",
+      "options": [
+        "尽快打光所有筹码",
+        "控制底池大小，不要建立过大底池",
+        "总是 all-in",
+        "立即弃牌"
+      ],
+      "explanation": "在 200BB 深度，TPTK 不再是\"绝对强牌\"。应该控制底池大小，避免在只有顶对时打光 200BB。"
+    },
+    "l7-deep-q3": {
+      "question": "深筹码 bluff 比标准筹码更有威力的原因是？",
+      "options": [
+        "对手更容易弃牌",
+        "可以施加更大的筹码压力",
+        "深筹码对手牌力更弱",
+        "没有任何区别"
+      ],
+      "explanation": "深筹码时 bluff 可以施加更大的筹码压力（对手面临失去 200BB 的威胁），使 bluff 更有威力。但也意味着被 call 时损失更大。"
+    },
+    "l7-deep-q4": {
+      "question": "深筹码中位置价值如何变化？",
+      "options": [
+        "不变",
+        "位置优势更显著",
+        "位置不重要",
+        "前位更有利"
+      ],
+      "explanation": "深筹码中位置优势更显著，因为有更多街的操作空间。"
+    },
+    "l7-deep-q5": {
+      "question": "深筹码现金桌至少需要多少个buy-in的资金？",
+      "options": [
+        "10个",
+        "20个",
+        "30-40个",
+        "50个"
+      ],
+      "explanation": "深筹码200BB波动大，至少需要30-40个buy-in的资金管理。"
+    },
+    "l7-multi-q1": {
+      "question": "多人底池中，C-Bet 频率应该？",
+      "options": [
+        "提高（更多人可以 bluff）",
+        "降低（被抵抗概率更高）",
+        "不变",
+        "总是 all-in"
+      ],
+      "explanation": "多人底池中 C-Bet 频率应降低。面对多对手，有人有强牌的概率更高，bluff 成功率下降（需要所有人都弃牌）。"
+    },
+    "l7-multi-q2": {
+      "question": "4 人底池中你持有顶对，正确的 value bet 策略是？",
+      "options": [
+        "和单挑一样打 3 条街",
+        "减少 value 街道（1-2 条街）",
+        "总是 all-in",
+        "从不 value bet"
+      ],
+      "explanation": "多人底池中顶对的价值降低。单挑中顶对可以 value bet 3 条街，但多人底池中可能只值 1-2 条街。"
+    },
+    "l7-multi-q3": {
+      "question": "多人底池中 bluff 成功率降低的原因是？",
+      "options": [
+        "对手牌力更强",
+        "需要所有对手都弃牌（乘法效应）",
+        "底池太小",
+        "位置不重要"
+      ],
+      "explanation": "Bluff 成功需要所有对手都弃牌。3 人底池中，即使每人 50% 弃牌率，全部弃牌的概率只有 50%×50% = 25%。"
+    },
+    "l7-multi-q4": {
+      "question": "多人底池中顶对的正确策略是？",
+      "options": [
+        "和单挑一样",
+        "减少value街道",
+        "总是all-in",
+        "从不value bet"
+      ],
+      "explanation": "多人底池中顶对价值降低，应该减少value街道（1-2条街）。"
+    },
+    "l7-multi-q5": {
+      "question": "多人底池中最安全的位置是？",
+      "options": [
+        "UTG",
+        "BTN（有位置）",
+        "BB",
+        "无所谓"
+      ],
+      "explanation": "BTN有位置优势，可以看到所有对手行动后再决策。"
+    },
+    "l7-straddle-q1": {
+      "question": "Straddle 对有效筹码的影响是？",
+      "options": [
+        "没有影响",
+        "有效筹码减半",
+        "有效筹码翻倍",
+        "只影响翻后"
+      ],
+      "explanation": "Straddle（2BB）使有效筹码减半。100BB 在 straddle 游戏中相当于 50BB effective，策略要相应收紧。"
+    },
+    "l7-straddle-q2": {
+      "question": "Straddle 游戏中，以下哪类牌的价值降低？",
+      "options": [
+        "AA/KK",
+        "AK",
+        "小口袋对和同花连牌",
+        "AQ"
+      ],
+      "explanation": "Straddle 使有效筹码减半，小口袋对（set mine）和同花连牌（大底池潜力）的价值降低，因为隐含赔率变差。强牌价值相对提升。"
+    },
+    "l7-straddle-q3": {
+      "question": "BTN Straddle 相比 UTG Straddle 的优势是？",
+      "options": [
+        "筹码更多",
+        "翻后保留位置优势",
+        "可以 bluff 更多",
+        "没有区别"
+      ],
+      "explanation": "BTN Straddle 后，BTN 翻后仍然最后行动（保留位置优势）。UTG Straddle 后，straddler 翻后第一个行动（位置劣势）。"
+    },
+    "l7-straddle-q4": {
+      "question": "Straddle后标准open变为多少？",
+      "options": [
+        "2BB",
+        "2.5BB",
+        "4-5BB",
+        "10BB"
+      ],
+      "explanation": "Straddle后标准open变为4-5BB（2-2.5x straddle）。"
+    },
+    "l7-straddle-q5": {
+      "question": "Straddle游戏中翻后应该对straddler？",
+      "options": [
+        "更被动",
+        "施加压力",
+        "避免对抗",
+        "没有变化"
+      ],
+      "explanation": "Straddler翻后第一个行动（位置劣势），应该对他施加压力。"
+    },
+    "l7-rake-q1": {
+      "question": "高 Rake 环境下应该怎么调整？",
+      "options": [
+        "打得更松",
+        "打得更紧，减少跟注",
+        "增加 bluff",
+        "不受影响"
+      ],
+      "explanation": "Rake 侵蚀边缘牌的 EV，高 Rake 下应更紧并减少被动跟注。"
+    },
+    "l7-rake-q2": {
+      "question": "线上微额（NL2-NL10）的 Rake 大约多少？",
+      "options": [
+        "1-2 BB/100",
+        "4-6 BB/100",
+        "8-12 BB/100",
+        "20 BB/100"
+      ],
+      "explanation": "微额级别的 Rake 通常高达 8-12 BB/100，是赢率的巨大拖累。"
+    },
+    "l7-rake-q3": {
+      "question": "高Rake应该增加什么？",
+      "options": [
+        "跟注",
+        "iso-raise和3-Bet",
+        "bluff",
+        "多人底池"
+      ],
+      "explanation": "高Rake应增加iso-raise和3-Bet减少多人底池，因为多人底池的Rake成本最高。"
+    },
+    "l7-rake-q4": {
+      "question": "线下现金桌的Rake通常有？",
+      "options": [
+        "无上限",
+        "Cap（抽水上限）",
+        "更高比例",
+        "没有Rake"
+      ],
+      "explanation": "线下通常有Cap（抽水上限），大底池相对Rake更低。"
+    },
+    "l7-rake-q5": {
+      "question": "中额级别（NL25-NL100）的Rake约？",
+      "options": [
+        "1-2 BB/100",
+        "4-6 BB/100",
+        "8-12 BB/100",
+        "20 BB/100"
+      ],
+      "explanation": "中额级别Rake降至4-6 BB/100，可以适度放宽。"
+    },
+    "l7-ts-q1": {
+      "question": "以下哪个是\"好桌子\"的标志？",
+      "options": [
+        "全是REG",
+        "高 Players/Flop %",
+        "低平均底池",
+        "无人玩"
+      ],
+      "explanation": "高 Players/Flop % 说明很多玩家打得松，意味着桌上有弱玩家。"
+    },
+    "l7-ts-q2": {
+      "question": "线下应该坐在弱玩家的哪个位置？",
+      "options": [
+        "右边",
+        "左边（对他有位置）",
+        "对面",
+        "无所谓"
+      ],
+      "explanation": "坐在弱玩家左边意味着你经常在他之后行动，拥有位置优势。"
+    },
+    "l7-ts-q3": {
+      "question": "线下选桌应该先观察多久？",
+      "options": [
+        "不需要观察",
+        "5-10分钟",
+        "1小时",
+        "直接入座"
+      ],
+      "explanation": "线下应该观察5-10分钟再入座，寻找弱玩家。"
+    },
+    "l7-ts-q4": {
+      "question": "你的赢率等于什么？",
+      "options": [
+        "你的技术",
+        "你的技术优势×对手弱点",
+        "运气",
+        "Rake"
+      ],
+      "explanation": "赢率 = 技术优势 × 对手弱点。两者缺一不可。"
+    },
+    "l7-ts-q5": {
+      "question": "如果全桌都是REG应该？",
+      "options": [
+        "继续打",
+        "放弃这张桌",
+        "加倍努力",
+        "换策略"
+      ],
+      "explanation": "如果全桌都是REG（常规玩家），你的优势很小，应该换桌。"
+    }
+  },
+  "lessonExample": {
+    "l7-deep-ex1": {
+      "title": "深筹码 Set Mine 的价值",
+      "correctAction": "Call",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "250BB 深度，55 的 set mine 价值极高",
+        "中 set 概率约 12%，但中牌后可赢对手 250BB",
+        "隐含赔率：投入 2BB 有机会赢 250BB（125:1）",
+        "TAG 翻后 C-Bet 频率高，你的 set 可以赚到大量筹码",
+        "在 100BB 深度这也值得 call，250BB 更是明确 call"
+      ],
+      "mistakeAction": "Fold（\"只是小口袋对\"）",
+      "mistakeReasoning": "在深筹码中，小口袋对的 set mine 价值极高。弃掉 55 浪费了极好的隐含赔率机会。",
+      "mistakeEvLoss": "-0.8 BB/100",
+      "tableDesc": "深筹码现金桌，250BB 有效"
+    },
+    "l7-deep-ex2": {
+      "title": "深筹码中顶对的底池控制",
+      "correctAction": "Bet",
+      "correctAmount": "3BB (45% pot)",
+      "reasoning": [
+        "AK 顶对顶踢脚在 240BB 深度是强牌但不是坚果",
+        "小注 C-Bet 控制底池大小，不要过早建立巨大底池",
+        "如果对手 check-raise，你可以重新评估牌力",
+        "在 240BB 深度，你不想用顶对打光所有筹码",
+        "计划：flop 小注，turn 根据情况决定是否继续"
+      ],
+      "mistakeAction": "下注 5BB（75% pot）然后准备打光",
+      "mistakeReasoning": "在 240BB 深度用顶对顶踢脚打光是常见错误。深筹码中对手的范围更强，顶对不足以支撑 240BB 的底池。",
+      "mistakeEvLoss": "-2.0 BB/100",
+      "tableDesc": "深筹码现金桌，240BB 有效"
+    },
+    "l7-multi-ex1": {
+      "title": "多人底池中的 C-Bet 决策",
+      "correctAction": "Bet",
+      "correctAmount": "10BB (50% pot)",
+      "reasoning": [
+        "4 人底池，你有顶对 AK（强牌）",
+        "多人底池中 C-Bet 频率降低，但顶对仍然值得 value bet",
+        "50% pot 是多人底池的标准大小（不需要太大）",
+        "面对 3 个对手，有人 call 的概率高，但你的牌够强",
+        "如果面对 raise，需要重新评估（多人底池中 raise 代表极强牌）"
+      ],
+      "mistakeAction": "Check（\"太多人了\"）",
+      "mistakeReasoning": "虽然多人底池 C-Bet 频率降低，但顶对 AK 仍然值得 value bet。Check 浪费了从弱牌获取价值的机会。",
+      "mistakeEvLoss": "-1.0 BB/100",
+      "tableDesc": "4 人底池，UTG/MP/BB 都 call 了"
+    },
+    "l7-multi-ex2": {
+      "title": "多人底池中放弃 Bluff",
+      "correctAction": "Check",
+      "reasoning": [
+        "4 人底池，你只有 Q 高（空气）",
+        "多人底池中 bluff 成功率极低（需要 3 人都弃牌）",
+        "A 在牌面意味着很可能有人有 Ax",
+        "即使每人 40% 弃牌率，3 人都弃牌的概率只有 6.4%",
+        "Check 等待更好的机会（turn/river 人少时再 bluff）"
+      ],
+      "mistakeAction": "C-Bet 8BB（用单挑思维打多人底池）",
+      "mistakeReasoning": "在单挑中 QJ 在 A 高牌面可以 C-Bet bluff，但 4 人底池中 bluff 成功率极低。这是典型的\"单挑思维打多人底池\"错误。",
+      "mistakeEvLoss": "-1.5 BB/100",
+      "tableDesc": "4 人底池，翻前多人 call"
+    },
+    "l7-straddle-ex1": {
+      "title": "Straddle 游戏中的 Open 调整",
+      "correctAction": "Raise",
+      "correctAmount": "5BB (2.5x straddle)",
+      "reasoning": [
+        "Straddle 后有效筹码 = 50BB（100BB / 2BB straddle）",
+        "AK 在 50BB 深度是极强的牌（接近 100BB 中的 AA）",
+        "Open 大小以 straddle 为基准：2.5x = 5BB",
+        "50BB 深度 AK 可以舒服地打光（不需要担心深筹码操作）",
+        "标准 open 范围收紧，但 AK 明确在 open 范围内"
+      ],
+      "mistakeAction": "Open 2.5BB（用正常大小）",
+      "mistakeReasoning": "Straddle 后底池已经 3.5BB，open 2.5BB 太小（不到底池大小）。应该以 straddle 为基准，open 4-5BB。",
+      "mistakeEvLoss": "-0.3 BB/100",
+      "tableDesc": "UTG Straddle 2BB，100BB 买入"
+    },
+    "l7-straddle-ex2": {
+      "title": "Straddle 中放弃投机牌",
+      "correctAction": "Fold",
+      "reasoning": [
+        "65s 在正常 100BB 中面对 CO open 可以 call（隐含赔率好）",
+        "但 Straddle 后有效筹码只有 50BB，set mine/同花隐含赔率变差",
+        "50BB 深度 call 5BB = 10% 筹码，中牌后最多赢 50BB（不够补偿）",
+        "投机牌在短筹码中价值大幅降低",
+        "Fold 等待更好的机会"
+      ],
+      "mistakeAction": "Call（用 100BB 思维）",
+      "mistakeReasoning": "在 100BB 中 65s call 是标准的，但 straddle 后只有 50BB effective。隐含赔率不足以补偿 call 的成本。",
+      "mistakeEvLoss": "-0.5 BB/100",
+      "tableDesc": "UTG Straddle 2BB，100BB 买入"
+    }
+  },
+  "lessonPractice": {
+    "l7-deep-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "87s 在 300BB 深度有极好的隐含赔率。同花/顺子潜力在深筹码中价值极高。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "300BB 深度，87s 的隐含赔率极好。中同花/顺子后可赢对手 300BB。同花连牌在深筹码中价值大幅提升。有位置优势加成。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "10BB",
+          "explanation": "3-Bet 87s 在深筹码中不太理想。如果被 4-Bet 你被迫弃牌，浪费隐含赔率机会。Call 更适合投机牌。",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QQ 在 A-K-5-2 牌面只是第三对。230BB 深度不应该建立大底池。Check 控制底池，如果对手下注小可以 call，下注大可以 fold。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "8BB",
+          "explanation": "在 A-K 牌面下注 QQ 很危险。TAG 的 call 范围中大量 Ax/Kx 支配你。深筹码中不要用中等牌力建立大底池。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Check-Raise if bet",
+          "explanation": "QQ 在 A-K 牌面做 check-raise 没有意义。你的牌不够强到 value raise，也不适合做 bluff（没有好的 blocker）。",
+          "evImpact": "-2.5 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A♥T♥ 是错过的坚果同花听牌。你的范围在这个牌面极化，适合 bluff。Check 浪费了 bluff 机会。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "6BB (50% pot)",
+          "explanation": "小注 bluff 不够有威胁。深筹码中对手面对小注太容易 call。要么不 bluff，要么用足够大的下注。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "18BB (150% pot)",
+          "explanation": "深筹码 overbet bluff 极具威力。你有 A♥（阻断对手坚果同花），对手面临失去 220BB 的威胁。深筹码中 overbet 的弃牌率更高。",
+          "evImpact": "+2.5 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "66在300BB深度set mine价值极高。隐含赔率极好。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "300BB深度，66的set mine隐含赔率极好。投入2BB（SB已投1BB）有机会赢300BB。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Raise 10BB",
+          "explanation": "3-Bet 66在深筹码中不理想。Call更适合投机牌。",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l7-deep-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "你有坚果同花听牌+高牌。深筹码中应该半诈唬下注。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 5BB",
+          "explanation": "坚果同花听牌在240BB深度应该半诈唬下注。深筹码bluff更有威力。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "240BB深度用听牌全下过度。半诈唬小注就够了。",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "KK 暗三条在多人底池中是极强的牌。应该下注获取价值，不要慢打（多人底池慢打风险大）。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "14BB (66% pot)",
+          "explanation": "KK 暗三条在 5 人底池中是极强的 value 牌。多人底池中强牌应该下注更大（66% pot），因为有人 call 的概率高，最大化价值。",
+          "evImpact": "+3.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB (25% pot)",
+          "explanation": "小注在多人底池中太弱。你有暗三条，应该下注更大让听牌付出代价。小注让太多弱牌便宜看牌。",
+          "evImpact": "+1.0 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AQ 顶对在 4 人底池的 turn 只是中等牌力。J 在牌面意味着可能有人有 AJ/KJ。多人底池中顶对价值降低，check 控制底池。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "15BB (60% pot)",
+          "explanation": "4 人底池 turn 下注 AQ 顶对太激进。多人底池中有人有 AJ/KJ/两对的概率很高。顶对在多人底池只值 1 条街 value（flop），turn 应该控制底池。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "8BB (33% pot)",
+          "explanation": "虽然小注比大注好，但多人底池 turn 用顶对下注仍然风险大。Check 更安全，如果对手下注小可以 call。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "T♥9♥ 在 8♥7♥2♦ 牌面有极强的 equity（同花听牌+顺子听牌+两对潜力）。多人底池中应该下注建立底池。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "6BB (66% pot)",
+          "explanation": "T9 在这个牌面有极强的 equity（坚果同花听牌+顺子听牌）。多人底池中强听牌应该下注建立底池，且多人底池隐含赔率极好（中牌后赢多人）。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Check-Raise if bet",
+          "explanation": "Check-raise 在多人底池中风险大（后面还有多人未行动）。直接下注更简单有效，且可以控制底池大小。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK顶对顶踢脚在4人底池值得value bet。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Bet 10BB (50% pot)",
+          "explanation": "AK顶对顶踢脚在多人底池值得50% pot的value bet。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet 18BB (85% pot)",
+          "explanation": "大注在多人底池中只有强牌才会call。小注更好。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ]
+    },
+    "l7-multi-p5": {
+      "option": [
+        {
+          "action": "C-Bet 12BB",
+          "explanation": "3人底池QJ高牌bluff成功率低。Check等待更好机会。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "多人底池Q高bluff成功率极低（需要所有人都弃牌）。Check。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet 6BB",
+          "explanation": "多人底池用空气bluff不够好。Check。",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p1": {
+      "option": [
+        {
+          "action": "Call 2BB",
+          "explanation": "QQ 在 50BB 深度是极强的牌。只 call（limp）太被动，应该 open raise 建立底池。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "5BB",
+          "explanation": "QQ 在 50BB 深度是顶级强牌。Open 5BB（2.5x straddle）是标准大小。50BB 深度 QQ 可以舒服地打光，不需要担心深筹码操作。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "10BB",
+          "explanation": "10BB open 太大（5x straddle）。会让弱牌全部弃牌，只被更强的牌（AA/KK）call。标准 2.5x（5BB）更优。",
+          "evImpact": "+1.0 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A5s 有 A blocker + 同花潜力。在 BTN straddle 后你有位置优势（翻后最后行动），可以 3-Bet bluff。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Call 可以但不是最优。BTN straddle 后你有位置优势，A5s 的 blocker 效应使其更适合 3-Bet bluff。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "15BB",
+          "explanation": "BTN straddle 后你有位置优势（翻后最后行动）。A5s 有 A blocker，适合 3-Bet bluff。50BB 深度 3-Bet 到 15BB 是标准大小。",
+          "evImpact": "+1.5 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "99 在 50BB 深度仍然是不错的牌。虽然 set mine 价值降低，但 99 本身有 showdown value。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "5BB",
+          "explanation": "99 在 50BB 深度可以 open。虽然 set mine 价值降低，但 99 在 50BB 中仍然有不错的 equity。标准 open 5BB（2.5x straddle）。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Call 2BB",
+          "explanation": "Limp 99 太被动。在 CO 位置应该 open raise 而不是 limp。Limp 让后面玩家便宜看牌，失去主动权。",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AK在50BB深度是顶级强牌。应该3-Bet。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 15BB",
+          "explanation": "AK在50BB是顶级强牌。3-Bet到15BB（3x straddle）标准大小。",
+          "evImpact": "+2 BB/100"
+        },
+        {
+          "action": "Call 5BB",
+          "explanation": "AK太强不应该只是call。3-Bet获取价值。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ]
+    },
+    "l7-straddle-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "65s在50BB面对MP open价值降低。Straddle后隐含赔率变差，fold。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Call 5BB",
+          "explanation": "50BB深度call 5BB=10%筹码，中牌后最多赢50BB。隐含赔率不足。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 15BB",
+          "explanation": "65s不适合3-Bet bluff。面对MP open范围太弱。",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p1": {
+      "option": [
+        {
+          "action": "Call 1BB",
+          "explanation": "高Rake环境下应该减少被动跟注。iso-raise更好。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 4BB (iso-raise)",
+          "explanation": "高Rake环境下iso-raise优于call。减少多人底池，降低Rake成本。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "KQs在CO太强不能fold。iso-raise获取价值。",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p2": {
+      "option": [
+        {
+          "action": "Limp",
+          "explanation": "高Rake环境下limp导致多人底池，Rake成本最高。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 5BB",
+          "explanation": "高Rake环境下应该iso-raise减少入池人数。JTs足够强raise。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "JTs在BTN太强不能fold。iso-raise。",
+          "evImpact": "-1 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p3": {
+      "option": [
+        {
+          "action": "Call 2.5BB",
+          "explanation": "高Rake环境下被动跟注的EV被Rake侵蚀最多。3-Bet更好。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Raise 8BB (3-Bet)",
+          "explanation": "高Rake环境下3-Bet优于call。减少多人底池，获取主动权。A5s有bluff潜力。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "A5s在BTN有bluff潜力，3-Bet是+EV。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p4": {
+      "option": [
+        {
+          "action": "Call 1.5BB",
+          "explanation": "高Rake环境下SB call导致多人底池。应该3-Bet或fold。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 8BB (3-Bet)",
+          "explanation": "高Rake环境下3-Bet减少多人底池。98s有翻后可玩性。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "98s在SB有翻后潜力，3-Bet是+EV。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l7-rake-p5": {
+      "option": [
+        {
+          "action": "Call 2.5BB",
+          "explanation": "高Rake环境下call导致多人底池。应该3-Bet或fold。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise 10BB (3-Bet)",
+          "explanation": "高Rake环境下3-Bet隔离，减少多人底池。QJs足够强3-Bet。",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "QJs在CO足够强3-Bet。不要fold。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l7-ts-p1": {
+      "option": [
+        {
+          "action": "离开这张桌子",
+          "explanation": "有弱玩家的桌子是好桌子！应该留下盈利。",
+          "evImpact": "-2 BB/100"
+        },
+        {
+          "action": "Raise 6BB，隔离弱玩家",
+          "explanation": "有弱玩家的好桌子！用强牌加注隔离。",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "AKs应该加注而不是limp。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "桌上有2个明显弱玩家（高VPIP）"
+    },
+    "l7-ts-p2": {
+      "option": [
+        {
+          "action": "继续打，观察该玩家",
+          "explanation": "喝酒的玩家可能是弱玩家。先观察确认，然后利用。",
+          "evImpact": "+1 BB/100"
+        },
+        {
+          "action": "立即离开",
+          "explanation": "喝酒的玩家可能是弱玩家，这是好桌子的标志。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "针对他all-in",
+          "explanation": "先观察再决策。不要冲动。",
+          "evImpact": "-2 BB/100"
+        }
+      ],
+      "tableDesc": "刚入座，观察到桌上有一个喝酒的玩家"
+    },
+    "l7-ts-p3": {
+      "option": [
+        {
+          "action": "Call 9BB",
+          "explanation": "REG桌上频繁3-Bet，call很危险。考虑换桌。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Fold，考虑换桌",
+          "explanation": "多个REG的桌子很难盈利。Fold JTs，考虑换到有弱玩家的桌子。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "4-Bet all-in",
+          "explanation": "JTs不适合4-Bet。REG桌上应该更紧。",
+          "evImpact": "-3 BB/100"
+        }
+      ],
+      "tableDesc": "桌上有多个REG，频繁3-Bet"
+    },
+    "l7-ts-p4": {
+      "option": [
+        {
+          "action": "换到弱玩家左边的位置",
+          "explanation": "弱玩家已经在右边了，你在他后面行动=有位置。这很好。",
+          "evImpact": "0"
+        },
+        {
+          "action": "留在这个位置，利用对弱玩家的位置",
+          "explanation": "弱玩家在右边意味着你经常对他有位置。这是理想位置。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "离开桌子",
+          "explanation": "有弱玩家在你右边是好位置，应该留下。",
+          "evImpact": "-1 BB/100"
+        }
+      ],
+      "tableDesc": "弱玩家在你右边"
+    },
+    "l7-ts-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "ATs在BTN是好牌。好桌子应该积极参与。",
+          "evImpact": "-1 BB/100"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "Players/Flop%高=好桌子。ATs在BTN是标准open。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "ATs应该加注而不是limp。",
+          "evImpact": "+0.3 BB/100"
+        }
+      ],
+      "tableDesc": "Players/Flop% = 45%，有明显弱玩家"
+    }
+  },
+  "drill": {
+    "d-l7-deep-q1": {
+      "scenario": "NL200, 有效筹码200BB",
+      "question": "200BB深度，你在BTN持有76s，应该？",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "200BB深度时，同花连牌的隐含赔率大幅增加。76s在BTN是标准open，可以利用翻后隐含赔率。"
+    },
+    "d-l7-deep-q2": {
+      "scenario": "NL200, 有效筹码250BB",
+      "question": "250BB深度，你在CO持有A2s，应该？",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "250BB深度时，Ax同花的隐含赔率极大。即使A2s也有很好的翻后价值，在CO是标准open。"
+    },
+    "d-l7-deep-q3": {
+      "scenario": "NL200, 有效筹码200BB",
+      "question": "200BB深度，你在UTG持有Q9s，应该？",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "200BB深度时，UTG范围可以放宽。Q9s有足够的翻后可玩性，在UTG可以open。"
+    },
+    "d-l7-deep-q4": {
+      "scenario": "NL200, 有效筹码200BB",
+      "question": "200BB深度，你在BTN持有KTs，应该？",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "KTs在BTN是强牌，200BB深度时更应该open获取价值。隐含赔率让这手牌更有价值。"
+    },
+    "d-l7-deep-q5": {
+      "scenario": "NL200, 有效筹码200BB",
+      "question": "200BB深度，你在SB持有98s，应该？",
+      "option": [
+        "Raise 3BB",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "200BB深度时，98s在SB是标准raise。同花连牌在深筹码时价值大幅提升。"
+    },
+    "d-l7-deep-q6": {
+      "scenario": "NL200, 有效筹码 200BB, MP open(2.5BB)",
+      "question": "MP open(2.5BB), hero BTN 持 54s 是否跟注？",
+      "option": [
+        "Fold（位置尚可但牌力太弱）",
+        "Call",
+        "3-Bet"
+      ],
+      "explanation": "200BB 深度时，54s 在 BTN 面对 MP open 应该弃牌。主流策略 Q9s+ call，54s 太弱。"
+    },
+    "d-l7-deep-q7": {
+      "scenario": "NL200, 有效筹码200BB",
+      "question": "200BB深度，你在CO持有J8s，应该？",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "200BB深度时，J8s在CO有足够的翻后价值。同花连牌的隐含赔率让它值得open。"
+    },
+    "d-l7-deep-q8": {
+      "scenario": "NL200, 有效筹码200BB",
+      "question": "200BB深度，你在MP持有T9s，应该？",
+      "option": [
+        "Open Raise",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "200BB深度时，T9s在MP是标准open。同花连牌在深筹码时价值大幅提升。"
+    },
+    "d-l7-multi-q1": {
+      "scenario": "3人底池, Flop: K♠ 8♥ 3♣",
+      "question": "3人底池，你在BTN持有KQ，牌面K83，应该？",
+      "option": [
+        "Check",
+        "Bet 1/3底池",
+        "Bet 2/3底池"
+      ],
+      "explanation": "多人底池应该打得更紧。KQ在3人底池只有顶对中等踢脚，check控制底池是最佳选择。"
+    },
+    "d-l7-multi-q2": {
+      "scenario": "3人底池, Flop: A♠ 9♥ 5♣",
+      "question": "3人底池，你在CO持有AT，牌面A95，应该？",
+      "option": [
+        "Check",
+        "Bet 1/3底池",
+        "Bet 满池"
+      ],
+      "explanation": "3人底池，AT是顶对好踢脚。用1/3底池小注下注获取价值，但不要用大注因为只有顶对。"
+    },
+    "d-l7-multi-q3": {
+      "scenario": "4人底池, Flop: J♠ T♥ 7♣",
+      "question": "4人底池，你在BTN持有QJ，牌面JT7，应该？",
+      "option": [
+        "Bet 1/3底池",
+        "Check",
+        "Bet 满池"
+      ],
+      "explanation": "4人底池JT7面非常危险，对手可能有很多顺子/两对。QJ只有顶对中等踢脚，check控制底池。"
+    },
+    "d-l7-multi-q4": {
+      "scenario": "3人底池, Flop: Q♠ 7♥ 2♣",
+      "question": "3人底池，你在BTN持有QQ，牌面Q72，应该？",
+      "option": [
+        "Check",
+        "Bet 1/3底池",
+        "Bet 满池"
+      ],
+      "explanation": "3人底池，QQ是暗三条。用1/3底池小注下注获取价值，让对手的弱牌继续。"
+    },
+    "d-l7-multi-q5": {
+      "scenario": "3人底池, Flop: 9♠ 8♥ 7♣",
+      "question": "3人底池，你在BTN持有AK，牌面987，应该？",
+      "option": [
+        "Bet 1/3底池",
+        "Check",
+        "Bet 满池"
+      ],
+      "explanation": "3人底池987面很危险，对手可能有很多顺子。AK只有高牌，check控制底池是最佳选择。"
+    },
+    "d-l7-multi-q6": {
+      "scenario": "3人底池, Flop: A♠ K♥ 5♣",
+      "question": "3人底池，你在CO持有AK，牌面AK5，应该？",
+      "option": [
+        "Check",
+        "Bet 1/3底池",
+        "Bet 满池"
+      ],
+      "explanation": "3人底池，AK是两对。用1/3底池小注下注获取价值，让对手的弱牌继续。"
+    },
+    "d-l7-multi-q7": {
+      "scenario": "4人底池, Flop: 6♠ 5♥ 4♣",
+      "question": "4人底池，你在BTN持有AK，牌面654，应该？",
+      "option": [
+        "Bet 1/3底池",
+        "Check",
+        "Bet 满池"
+      ],
+      "explanation": "4人底池654面非常危险，对手可能有很多顺子。AK只有高牌，check控制底池。"
+    },
+    "d-l7-multi-q8": {
+      "scenario": "3人底池, Flop: K♠ 9♥ 2♣",
+      "question": "3人底池，你在BTN持有KJ，牌面K92，应该？",
+      "option": [
+        "Check",
+        "Bet 1/3底池",
+        "Bet 2/3底池"
+      ],
+      "explanation": "3人底池，KJ只有顶对中等踢脚。多人底池应该打得更紧，check控制底池是最佳选择。"
+    }
+  }
+}

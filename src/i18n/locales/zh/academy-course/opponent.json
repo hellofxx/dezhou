@@ -1,0 +1,96 @@
+{
+  "opponent": {
+    "tag": {
+      "name": "TAG (紧凶)",
+      "shortName": "TAG",
+      "description": "紧而激进的玩家，只打强牌但打得很凶",
+      "tendencies": [
+        "起手牌范围紧，主要是强牌",
+        "翻后持续下注频率高",
+        "面对3-Bet通常弃牌（除顶级牌外）",
+        "很少bluff，但价值下注很重"
+      ],
+      "exploitable": [
+        "多偷他的盲注（他弃牌多）",
+        "他加注时给予更多信用",
+        "用位置优势对他做浮动跟注"
+      ]
+    },
+    "lag": {
+      "name": "LAG (松凶)",
+      "shortName": "LAG",
+      "description": "松而激进的玩家，打很多牌且经常加注",
+      "tendencies": [
+        "起手牌范围很宽",
+        "频繁3-Bet和加注",
+        "翻后C-Bet频率极高",
+        "经常bluff，但也有强牌"
+      ],
+      "exploitable": [
+        "用强牌设陷阱让他bluff",
+        "减少对他C-Bet的弃牌率",
+        "用更宽的范围跟注他的下注"
+      ]
+    },
+    "nit": {
+      "name": "Nit (超紧)",
+      "shortName": "NIT",
+      "description": "极其保守的玩家，只打最顶级的牌",
+      "tendencies": [
+        "只打 AA/KK/QQ/AK 等顶级牌",
+        "几乎不bluff",
+        "面对加注经常弃牌",
+        "加注时几乎总是有强牌"
+      ],
+      "exploitable": [
+        "疯狂偷他的盲注",
+        "他加注时立即弃掉中等牌",
+        "不要尝试对他bluff（他会弃牌但你也无法从他身上赢大底池）"
+      ]
+    },
+    "maniac": {
+      "name": "Maniac (疯狂)",
+      "shortName": "MAN",
+      "description": "极度激进的玩家，不断加注和bluff",
+      "tendencies": [
+        "几乎每手牌都参与",
+        "频繁大额加注",
+        "大量bluff，很难弃牌",
+        "情绪波动大，容易tilt"
+      ],
+      "exploitable": [
+        "用强牌耐心等他送筹码",
+        "不要对他bluff（他不会弃牌）",
+        "用中等牌力跟注到底（他范围太宽）",
+        "控制底池大小，避免被他的激进带动"
+      ]
+    },
+    "calling_station": {
+      "name": "Calling Station (跟注站)",
+      "shortName": "CS",
+      "description": "被动玩家，很少加注但喜欢跟注到底",
+      "tendencies": [
+        "喜欢跟注但不喜欢加注",
+        "几乎不弃牌（尤其是面对小注）",
+        "很少主动下注",
+        "加注时通常有非常强的牌"
+      ],
+      "exploitable": [
+        "对他价值下注（他会用弱牌跟注）",
+        "不要对他bluff（他不会弃牌）",
+        "他加注时立即弃牌（他只有强牌才加注）"
+      ]
+    },
+    "unknown": {
+      "name": "Unknown (未知)",
+      "shortName": "?",
+      "description": "没有足够数据的对手，使用默认GTO策略",
+      "tendencies": [
+        "没有足够数据，使用GTO基准策略应对"
+      ],
+      "exploitable": [
+        "使用GTO策略，避免过度调整"
+      ]
+    }
+  }
+}

@@ -1,0 +1,200 @@
+academy.unitTitle.l1-position.u1	为什么位置如此重要？
+academy.unitTitle.l1-position.u2	位置分类
+academy.unitTitle.l1-position.u3	位置优势的体现
+academy.unitTitle.l2-3bet-basics.u1	什么是 3-Bet？
+academy.unitTitle.l2-3bet-basics.u2	3-Bet 的目的
+academy.unitTitle.l3-cbet.u1	什么是 C-Bet？
+academy.unitTitle.l3-cbet.u2	C-Bet 大小
+academy.lessonExample.l3-cbet-ex1.tableDesc	标准100BB现金桌，对手翻前跟注你的BTN open
+academy.lessonExample.l3-cbet-ex2.tableDesc	BTN是一个LAG玩家，翻前用很宽的范围跟注
+academy.unitTitle.l3-draws.u1	常见听牌类型
+academy.unitTitle.l3-draws.u2	听牌打法
+academy.lessonExample.l3-draws-ex2.tableDesc	CO是一个NIT，面对加注弃牌率很高(70%)
+academy.lessonExample.l3-3bet-pf-ex1.tableDesc	标准100BB现金桌，3-Bet底池SPR约4.3
+academy.lessonExample.l3-3bet-pf-ex2.tableDesc	标准100BB现金桌，3-Bet底池SPR约4.1
+academy.lessonPractice.l3-3bet-pf-p5.tableDesc	3-Bet底池，Turn牌面T-8-3-2
+academy.lessonExample.l4-opp-ex2.tableDesc	该对手过去20手加注了14次，非常激进
+academy.lessonExample.l4-opp-ex2.opponentHistory	该Maniac最近3次加注后翻牌全部C-Bet
+academy.lessonPractice.l4-opp-p2.tableDesc	SNG 后期，只剩4人，前3有奖金
+academy.lessonPractice.l4-opp-p3.tableDesc	深筹码现金桌，200BB有效
+academy.lessonExample.l4-gto-ex2.tableDesc	标准100BB现金桌，BTN是TAG风格
+academy.lessonExample.l5-game-ex1.tableDesc	多人limp入池，典型的休闲玩家桌
+academy.lessonPractice.l5-game-p1.tableDesc	多人激进加注，可能是职业牌手桌
+academy.lessonPractice.l5-game-p3.tableDesc	多人被动limp，休闲玩家桌
+academy.lessonPractice.l5-game-p4.tableDesc	多人limp，休闲玩家桌
+academy.lessonPractice.l5-online-vs-live-p1.tableDesc	线上速度扑克（Zoom）
+academy.lessonPractice.l5-online-vs-live-p2.tableDesc	线下现金桌，对手有明显 Tell
+academy.lessonPractice.l5-online-vs-live-p3.tableDesc	线上现金桌，同时打 4 桌
+academy.lessonPractice.l5-online-vs-live-p4.tableDesc	线上现金桌，HUD 显示对手 VPIP 45%，面对 C-Bet 弃牌率 20%
+academy.lessonPractice.l5-online-vs-live-p5.tableDesc	线下现金桌，你建立了紧凶形象
+academy.lessonExample.l6-icm-ex1.tableDesc	锦标赛泡沫期，还有 2 人淘汰进入奖金圈
+academy.lessonExample.l6-icm-ex1.stackDesc	你是中等筹码，CO 是大筹码（覆盖你），还有 2 个短筹码
+academy.lessonExample.l6-icm-ex2.tableDesc	锦标赛泡沫期，你是大筹码
+academy.lessonExample.l6-icm-ex2.stackDesc	你 25BB，SB 8BB，BB 10BB，还有 2 个中等筹码
+academy.lessonPractice.l6-icm-p1.tableDesc	SNG 泡沫期，还有 1 人淘汰进入奖金圈
+academy.lessonPractice.l6-icm-p1.stackDesc	你 12BB，CO 18BB，还有 2 个 5BB 短筹码
+academy.lessonPractice.l6-icm-p2.tableDesc	MTT 泡沫期，你是大筹码
+academy.lessonPractice.l6-icm-p2.stackDesc	你 30BB，SB 8BB，BB 10BB
+academy.lessonPractice.l6-icm-p3.tableDesc	MTT 中期，距离奖金圈还有 20 人
+academy.lessonPractice.l6-icm-p3.stackDesc	你 20BB，UTG 20BB，桌上有 3 个短筹码
+academy.lessonPractice.l6-icm-p4.tableDesc	SNG泡沫期
+academy.lessonPractice.l6-icm-p4.stackDesc	你15BB，CO 20BB，还有2个5BB短筹码
+academy.lessonPractice.l6-icm-p5.tableDesc	MTT泡沫期，你非常短
+academy.lessonPractice.l6-icm-p5.stackDesc	你6BB，SB 20BB，BB 25BB
+academy.lessonExample.l6-pushfold-ex1.tableDesc	MTT 中期，距离奖金圈还有 15 人
+academy.lessonExample.l6-pushfold-ex1.stackDesc	你 10BB，SB 15BB，BB 12BB
+academy.lessonExample.l6-pushfold-ex2.tableDesc	MTT 早期，距离奖金圈还远
+academy.lessonExample.l6-pushfold-ex2.stackDesc	你 12BB，SB 10BB
+academy.lessonPractice.l6-pushfold-p1.tableDesc	MTT 中期，你只有 10BB
+academy.lessonPractice.l6-pushfold-p1.stackDesc	你 10BB，BB 15BB
+academy.lessonPractice.l6-pushfold-p2.tableDesc	MTT 泡沫期，还有 3 人进入奖金圈
+academy.lessonPractice.l6-pushfold-p2.stackDesc	你 12BB，BTN 10BB，还有 2 个 5BB 短筹码
+academy.lessonPractice.l6-pushfold-p3.tableDesc	SNG 中期，你只有 8BB
+academy.lessonPractice.l6-pushfold-p3.stackDesc	你 8BB，SB 12BB，BB 10BB
+academy.lessonPractice.l6-pushfold-p4.tableDesc	MTT中期，你12BB
+academy.lessonPractice.l6-pushfold-p5.tableDesc	MTT早期，距奖金圈远
+academy.lessonExample.l6-bubble-ex1.tableDesc	MTT 泡沫期，还有 2 人进入奖金圈
+academy.lessonExample.l6-bubble-ex1.stackDesc	你 35BB（大筹码），SB 18BB，BB 15BB（中筹码）
+academy.lessonExample.l6-bubble-ex2.tableDesc	MTT 泡沫期，你是短筹码
+academy.lessonExample.l6-bubble-ex2.stackDesc	你 12BB（短筹码），桌上有 3 个大筹码和 2 个中筹码
+academy.lessonPractice.l6-bubble-p1.tableDesc	MTT 泡沫期，你是中筹码
+academy.lessonPractice.l6-bubble-p1.stackDesc	你 20BB（中筹码），CO 40BB（大筹码），还有 2 个 8BB 短筹码
+academy.lessonPractice.l6-bubble-p2.tableDesc	MTT 泡沫期，你是大筹码
+academy.lessonPractice.l6-bubble-p2.stackDesc	你 45BB（大筹码），SB 18BB，BB 15BB（中筹码）
+academy.lessonPractice.l6-bubble-p3.tableDesc	MTT 泡沫期，你是短筹码
+academy.lessonPractice.l6-bubble-p3.stackDesc	你 10BB（短筹码），BB 25BB（大筹码）
+academy.lessonPractice.l6-bubble-p4.tableDesc	MTT泡沫期，你是短筹码
+academy.lessonPractice.l6-bubble-p4.stackDesc	你8BB，BTN 30BB，SB 25BB，BB 20BB
+academy.lessonPractice.l6-bubble-p5.tableDesc	MTT泡沫期，你是大筹码
+academy.lessonPractice.l6-bubble-p5.stackDesc	你30BB（大筹码），SB 15BB，BB 18BB
+academy.lessonExample.l6-finaltable-ex1.tableDesc	MTT 决赛桌，9 人桌，payout 跳跃大
+academy.lessonExample.l6-finaltable-ex1.stackDesc	你 40BB（大筹码），SB 22BB，BB 25BB（中筹码）
+academy.lessonExample.l6-finaltable-ex2.tableDesc	MTT 决赛桌，BTN 是 LAG 玩家
+academy.lessonExample.l6-finaltable-ex2.stackDesc	你 20BB，BTN 30BB
+academy.lessonPractice.l6-finaltable-p1.tableDesc	MTT 决赛桌，你是大筹码
+academy.lessonPractice.l6-finaltable-p1.stackDesc	你 35BB（大筹码），SB 18BB，BB 20BB（中筹码）
+academy.lessonPractice.l6-finaltable-p2.tableDesc	MTT 决赛桌，BTN 偷盲频率高
+academy.lessonPractice.l6-finaltable-p2.stackDesc	你 18BB，BTN 28BB
+academy.lessonPractice.l6-finaltable-p3.tableDesc	MTT 决赛桌，你是短筹码
+academy.lessonPractice.l6-finaltable-p3.stackDesc	你 15BB（短筹码），BB 30BB（大筹码）
+academy.lessonPractice.l6-finaltable-p4.tableDesc	决赛桌，你是大筹码
+academy.lessonPractice.l6-finaltable-p4.stackDesc	你25BB，SB 18BB，BB 20BB
+academy.lessonPractice.l6-finaltable-p5.tableDesc	决赛桌，BTN频繁偷盲
+academy.lessonPractice.l6-finaltable-p5.stackDesc	你20BB，BTN 35BB
+academy.lessonPractice.l6-bounty-p1.tableDesc	PKO锦标赛，CO头上有大赏金
+academy.lessonPractice.l6-bounty-p2.tableDesc	PKO锦标赛，你头上有大赏金
+academy.lessonPractice.l6-bounty-p3.tableDesc	PKO锦标赛，BTN头上有大赏金
+academy.lessonPractice.l6-bounty-p4.tableDesc	PKO锦标赛，你头上有大赏金
+academy.lessonPractice.l6-bounty-p5.tableDesc	PKO锦标赛，BTN头上有大赏金
+academy.lessonExample.l7-deep-ex1.tableDesc	深筹码现金桌，250BB 有效
+academy.lessonExample.l7-deep-ex2.tableDesc	深筹码现金桌，240BB 有效
+academy.lessonExample.l7-multi-ex1.tableDesc	4 人底池，UTG/MP/BB 都 call 了
+academy.lessonExample.l7-multi-ex2.tableDesc	4 人底池，翻前多人 call
+academy.lessonExample.l7-straddle-ex1.tableDesc	UTG Straddle 2BB，100BB 买入
+academy.lessonExample.l7-straddle-ex2.tableDesc	UTG Straddle 2BB，100BB 买入
+academy.lessonPractice.l7-ts-p1.tableDesc	桌上有2个明显弱玩家（高VPIP）
+academy.lessonPractice.l7-ts-p2.tableDesc	刚入座，观察到桌上有一个喝酒的玩家
+academy.lessonPractice.l7-ts-p3.tableDesc	桌上有多个REG，频繁3-Bet
+academy.lessonPractice.l7-ts-p4.tableDesc	弱玩家在你右边
+academy.lessonPractice.l7-ts-p5.tableDesc	Players/Flop% = 45%，有明显弱玩家
+academy.lessonPractice.l8-pool-p1.tableDesc	NL5，对手们跟注太多
+academy.lessonPractice.l8-pool-p2.tableDesc	NL5，对手fold to cbet 30%
+academy.lessonPractice.l8-pool-p3.tableDesc	NL5，盲注位玩家过度defend
+academy.lessonPractice.l8-pool-p4.tableDesc	NL10，对手们打得紧被动
+academy.lessonPractice.l8-pool-p5.tableDesc	NL25，对手翻后过度fold
+academy.lessonPractice.l8-pop-p1.tableDesc	NL50，Pool平均fold to 3-bet 70%
+academy.lessonPractice.l8-pop-p2.tableDesc	NL25，Pool WTSD% = 30%（较高）
+academy.lessonPractice.l8-pop-p3.tableDesc	NL100，Pool平均VPIP 22%, PFR 18%
+academy.lessonPractice.l8-pop-p4.tableDesc	NL5，Pool平均fold to cbet 65%
+academy.lessonPractice.l8-pop-p5.tableDesc	从NL10升级到NL25
+academy.lessonPractice.l8-exploit-p1.tableDesc	SB是Nit（VPIP 10%）
+academy.lessonPractice.l8-exploit-p2.tableDesc	BTN是Calling Station（VPIP 60%）
+academy.lessonPractice.l8-exploit-p3.tableDesc	CO是Maniac（VPIP 70%, PFR 50%）
+academy.lessonPractice.l8-exploit-p4.tableDesc	UTG是Nit（VPIP 8%）
+academy.lessonPractice.l8-exploit-p5.tableDesc	对手是未知玩家
+academy.lessonPractice.l3sd-cbet-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l3sd-cbet-p2.tableDesc	短牌现金桌，湿滑连接面
+academy.lessonPractice.l3sd-cbet-p3.tableDesc	短牌现金桌
+academy.lessonPractice.l3sd-donk-p1.tableDesc	短牌现金桌，湿润连接面
+academy.lessonPractice.l3sd-donk-p2.tableDesc	短牌现金桌，干燥高牌面
+academy.lessonPractice.l3sd-donk-p3.tableDesc	短牌现金桌
+academy.lessonPractice.l3sd-check-raise-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l3sd-check-raise-p2.tableDesc	短牌现金桌
+academy.lessonPractice.l3sd-check-raise-p3.tableDesc	短牌现金桌，湿润连接面
+academy.lessonPractice.l4sd-preflop-ranges-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-preflop-ranges-p2.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-preflop-ranges-p3.tableDesc	短牌现金桌，BTN 面对 3-Bet 弃牌率高
+academy.lessonPractice.l4sd-nuts-equity-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-nuts-equity-p2.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-nuts-equity-p3.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-blocker-bluff-p1.tableDesc	短牌现金桌，两张方块
+academy.lessonPractice.l4sd-blocker-bluff-p2.tableDesc	短牌现金桌，BTN 面对 3-Bet 弃牌率高
+academy.lessonPractice.l4sd-blocker-bluff-p3.tableDesc	短牌现金桌，三张红桃
+academy.lessonPractice.l4sd-gto-fundamentals-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-gto-fundamentals-p2.tableDesc	短牌现金桌，3-Bet 底池
+academy.lessonPractice.l4sd-gto-fundamentals-p3.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-solver-readout-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-solver-readout-p2.tableDesc	短牌现金桌
+academy.lessonPractice.l4sd-solver-readout-p3.tableDesc	短牌现金桌，极湿连接面
+academy.lessonPractice.l5sd-bankroll-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l5sd-bankroll-p2.tableDesc	短牌现金桌，湿滑连接面
+academy.lessonPractice.l5sd-bankroll-p3.tableDesc	短牌现金桌，已输 30 买入接近波动预算
+academy.lessonPractice.l5sd-tilt-control-p1.tableDesc	短牌现金桌
+academy.lessonPractice.l5sd-tilt-control-p2.tableDesc	短牌现金桌，连输后情绪不稳
+academy.lessonPractice.l5sd-tilt-control-p3.tableDesc	短牌现金桌，已输 45BB 接近止损点
+academy.lessonPractice.l6sd-tourney-i-p1.tableDesc	短牌 MTT，短筹码 15 ante
+academy.lessonPractice.l6sd-tourney-i-p2.tableDesc	短牌 MTT，中筹码 45 ante
+academy.lessonPractice.l6sd-tourney-i-p3.tableDesc	短牌 MTT，泡沫期，筹码健康
+academy.lessonPractice.l6sd-tourney-ii-p1.tableDesc	短牌 MTT，泡沫期，筹码健康
+academy.lessonPractice.l6sd-tourney-ii-p2.tableDesc	短牌 MTT，钱圈边缘，中筹码
+academy.lessonPractice.l6sd-tourney-ii-p3.tableDesc	短牌 MTT 决赛桌剩 3 人，深筹码，两短筹码
+academy.lessonPractice.l7sd-deep-stack-p1.tableDesc	短牌深筹码现金桌
+academy.lessonPractice.l7sd-deep-stack-p2.tableDesc	短牌深筹码现金桌，成坚果同花听牌
+academy.lessonPractice.l7sd-deep-stack-p3.tableDesc	短牌深筹码现金桌，湿润连接面
+academy.lessonPractice.l7sd-shallow-stack-p1.tableDesc	短牌浅筹码
+academy.lessonPractice.l7sd-shallow-stack-p2.tableDesc	短牌浅筹码
+academy.lessonPractice.l7sd-shallow-stack-p3.tableDesc	短牌浅筹码，BB 面对全下弃牌率高
+academy.lessonPractice.l8sd-exploit-i-p1.tableDesc	短牌现金桌，BB 追听过松
+academy.lessonPractice.l8sd-exploit-i-p2.tableDesc	短牌现金桌，BB 低估同花价值
+academy.lessonPractice.l8sd-exploit-i-p3.tableDesc	短牌现金桌，BTN 面对 x/r 弃牌率高
+academy.lessonPractice.l8sd-exploit-ii-p1.tableDesc	短牌现金桌，BB 已 tilt
+academy.lessonPractice.l8sd-exploit-ii-p2.tableDesc	短牌现金桌，BB 短筹码 25 ante
+academy.lessonPractice.l8sd-exploit-ii-p3.tableDesc	短牌现金桌，BTN 开始频繁 3-Bet 反制你的偷盲
+academy.lessonPractice.l3hu-bn-aggression-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l3hu-bn-aggression-p2.tableDesc	HU 现金桌
+academy.lessonPractice.l3hu-bn-aggression-p3.tableDesc	HU 现金桌
+academy.lessonPractice.l3hu-sb-continuation-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l3hu-sb-continuation-p2.tableDesc	HU 现金桌，湿润连接面
+academy.lessonPractice.l3hu-sb-continuation-p3.tableDesc	HU 现金桌
+academy.lessonPractice.l3hu-bb-defense-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l3hu-bb-defense-p2.tableDesc	HU 现金桌
+academy.lessonPractice.l3hu-bb-defense-p3.tableDesc	HU 现金桌，3-Bet 底池
+academy.lessonPractice.l4hu-bn-opening-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l4hu-bn-opening-p2.tableDesc	HU 现金桌，BB 面对 min-raise 弃牌 55%
+academy.lessonPractice.l4hu-bn-opening-p3.tableDesc	HU 现金桌，BB 3-Bet 频率 20%
+academy.lessonPractice.l4hu-ev-adjustments-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l4hu-ev-adjustments-p2.tableDesc	HU 现金桌
+academy.lessonPractice.l4hu-ev-adjustments-p3.tableDesc	HU 现金桌
+academy.lessonPractice.l4hu-gto-basics-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l4hu-gto-basics-p2.tableDesc	HU 现金桌，3-Bet 底池
+academy.lessonPractice.l4hu-gto-basics-p3.tableDesc	HU 现金桌
+academy.lessonPractice.l4hu-counter-strategies-p1.tableDesc	HU 现金桌，BB 面对 min-raise 弃牌 65%
+academy.lessonPractice.l4hu-counter-strategies-p2.tableDesc	HU 现金桌，BB 面对 C-Bet 弃牌 60%
+academy.lessonPractice.l4hu-counter-strategies-p3.tableDesc	HU 现金桌，SB 面对 x/r 弃牌 55%
+academy.lessonPractice.l5hu-focus-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l5hu-focus-p2.tableDesc	HU 现金桌
+academy.lessonPractice.l5hu-focus-p3.tableDesc	HU 现金桌，已打 2 小时疲劳状态
+academy.lessonPractice.l5hu-opponent-psychology-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l5hu-opponent-psychology-p2.tableDesc	HU 现金桌，SB 面对 x/r 弃牌率高
+academy.lessonPractice.l5hu-opponent-psychology-p3.tableDesc	HU 现金桌，SB 下注节奏反常
+academy.lessonPractice.l6hu-tourney-p1.tableDesc	单挑 SNG 决赛桌，浅筹码 15BB
+academy.lessonPractice.l6hu-tourney-p2.tableDesc	单挑 SNG 决赛桌，浅筹码 12BB，盲注即将上涨
+academy.lessonPractice.l6hu-tourney-p3.tableDesc	单挑 MTT 决赛，深筹码 45BB，对手 nit
+academy.lessonPractice.l7hu-stakes-p1.tableDesc	HU 现金桌
+academy.lessonPractice.l7hu-stakes-p2.tableDesc	HU 现金桌
+academy.lessonPractice.l7hu-stakes-p3.tableDesc	HU 现金桌，对手是紧弱型
+academy.lessonPractice.l7hu-stakes-p4.tableDesc	HU 现金桌
+academy.lessonPractice.l7hu-stakes-p5.tableDesc	HU 现金桌，3-Bet 底池
+academy.lessonPractice.l8hu-exploitative-p1.tableDesc	HU 现金桌，BB 面对 min-raise 弃牌 65%
+academy.lessonPractice.l8hu-exploitative-p2.tableDesc	HU 现金桌，SB 面对 x/r 弃牌 60%
+academy.lessonPractice.l8hu-exploitative-p3.tableDesc	HU 现金桌，SB 面对 3-Bet 弃牌 40%（偏离）

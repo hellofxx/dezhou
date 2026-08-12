@@ -138,10 +138,11 @@ additionalPrompt: ""
 - **dailyPlan 职责区分**：项目中存在两个 `generateDailyPlan` 函数：`strategy-academy/utils/dailyPlan.ts`（学院焦点课程计划）与 progress 模块中的（跨模块推荐计划）。两者职责不同，禁止混淆
 - **TiltWarning 三选项**：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节与 TDD 5.9）**：测验与 Drill 选项禁止按题库数据原序直接渲染；课后测验/复习用 id 稳定种子（跨会话顺序不变），认证考试（LevelCertification）用会话随机种子；i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）必须在 `t()` 解析后用 `orderResolvedOptions` 重排，且顺序不得随语言变化；重排必须同步重映射 correctIndex / correctStrategyIndex，判分与结果记录以重排后对象为唯一事实源；源题库数据不手改重排；新增/扩充题库必须被分布守卫测试覆盖
+- **课程内容渲染层 key 覆盖（数据层零改动）**：课程正文/题库/例题/实战/Drill/术语/对手档案为数据层内联中文（data/** 不改），渲染层经 `utils/contentKeys.ts` 的 `t(key, { defaultValue: 数据层中文 })` 覆盖；新增内容 key 必须同步 `src/i18n/locales/{zh,en}/academy.json`（contentI18n.test.ts 双语对称守卫）；quiz/practice/drill 选项在 `t()` 解析后走既有排序出口（顺序不随语言变化）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
-- [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `academy.*` / `drill.*` / `quickDrill.*`）
+- [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `academy.*` / `drill.*` / `quickDrill.*` / 课程内容 `academy.content|quiz|example|practice|drill|opponentDrill|term|opponent.*`）
 - [ ] Drill 组件实现 DrillProps 接口（onComplete / onExit）
 - [ ] 课程数据为静态 JSON / TS 常量（无运行时网络请求）
 - [ ] 快速训练完成时 recordTrainingDay + recordQuickDrillCompletion 已调用

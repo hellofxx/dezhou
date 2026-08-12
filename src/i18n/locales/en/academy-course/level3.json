@@ -1,0 +1,2013 @@
+{
+  "lessonContent": {
+    "l3-cbet": [
+      "What Is a C-Bet?",
+      "A C-Bet (Continuation Bet) is when the last preflop raiser continues betting on the flop. For example, you raise preflop, an opponent calls, and you're first to bet on the flop — that's a C-Bet.",
+      "The core logic of the C-Bet: most of the time the flop doesn't help either player much. As the preflop aggressor, you have a range advantage.",
+      "C-Bet Size",
+      "Standard C-Bet size: 50-75% of the pot\nDry boards (e.g. K-7-2 rainbow): 33-50% pot\nWet boards (e.g. J-T-9 two-tone): 66-75% pot",
+      "Don't C-Bet 100% of the time. The right approach is to C-Bet on favorable boards and Check on unfavorable ones. Cultivate \"selective aggression\".",
+      "C-Bet EV formula (including fold equity and showdown equity):\nBet EV = opponent fold rate × current pot + (1-fold rate) × (equity × new pot - loss rate × bet size)\n\nExample: pot 6BB, C-Bet 4BB, fold rate 40%, equity 20%\nEV = 0.4×6 + 0.6×(0.2×14 - 0.8×4) = 2.4 + 0.6×(2.8-3.2) = 2.4 - 0.24 = +2.16BB",
+      "Theory reference: the theoretical analysis of C-Bet EV construction and betting purposes is in Theory Academy T5 Chapter 2 \"GTO vs Exploitative: Two Kinds of Optimal\" and T6 Chapter 1 \"Betting Purposes\". Under the GTO framework, C-Bet frequency and range selection are closely related.",
+      "Counter-intuitive: a C-Bet doesn't need a strong hand. As long as you have enough fold equity (the opponent folds often enough), even if your hand completely missed the board, the C-Bet is still +EV. That's why GTO strategies can C-Bet at up to 60-70% frequency, including plenty of bluffs."
+    ],
+    "l3-draws": [
+      "Common Draw Types",
+      "Flush draw: 9 outs, about 35% equity (flop to river)\nOpen-ended straight draw: 8 outs, about 31% equity\nGutshot straight draw: 4 outs, about 16% equity\nTwo overcards: 6 outs (pairing either overcard)",
+      "How to Play Draws",
+      "Passive play (recommended for beginners): call to see the next card, seeing more cards at minimum cost\nSemi-bluff (advanced): bet/raise with a draw, gaining fold equity\nAll-in: when the pot odds are good enough",
+      "Always calculate pot odds! If your equity > pot odds, calling is +EV.",
+      "Pros choose their draw line based on position and opponent tendencies. Semi-bluffing with draws from position is a very effective strategy.",
+      "The 2/4 Rule and error analysis:\nOne card (turn): equity ≈ Outs × 2%\nTwo cards (all-in on flop): equity ≈ Outs × 4%\n\nError analysis (flop→river two-card scenario):\n4 Outs (gutshot): ×4 estimates 16% | exact 16.5% | error -0.5\n8 Outs (OESD): ×4 estimates 32% | exact 31.4% | error +0.6\n9 Outs (flush): ×4 estimates 36% | exact 35.0% | error +1.0\n12 Outs (combo draw): ×4 estimates 48% | exact 45.0% | error +3.0\n\nConclusion: for Outs ≤ 9, ×4 has error within 1 percentage point; for Outs ≥ 13, use the corrected formula.",
+      "Theory reference: the full derivation of Outs counting and the 2/4 Rule is in Theory Academy T1 Chapter 2 \"Outs and the 2/4 Rule\", including the error analysis table and corrected formula. The EV framework for calling with draws is in T2 Chapter 1.",
+      "Counter-intuitive: combo draws (flush + straight + overcards) have far more equity than intuition suggests. For example, J♥T♥ on a 9♥8♦3♣ board has 15 outs and about 54% equity — actually ahead of most one-pair hands. That's why combo draws are the best semi-bluff candidates."
+    ],
+    "l3-multistreet": [
+      "Multi-Street Thinking",
+      "Multi-Street Planning means planning the turn/river strategy while making your flop decision. Not \"one street at a time\", but \"how many streets do I plan to play this hand? Which boards do I continue on? Which boards do I give up on?\"",
+      "Double Barrel = flop C-Bet + turn continuation bet. Frequency about 50-60%, depending on board structure and opponent.",
+      "When to Double Barrel",
+      "Continue barreling: 1) the turn improves your hand (top pair/draw completes) 2) the turn is a \"blank\" (doesn't change the board structure) 3) the opponent folds to turn bets at a high rate. Give up: 1) the turn completes an obvious draw 2) the opponent raises/donks the turn 3) your hand gains no equity.",
+      "Triple Barrel (river all-in bluff) conditions: 1) polarized range (strong hands or pure bluffs) 2) you have Blockers 3) the opponent is not a Calling Station.",
+      "Delayed C-Bet: check the flop, bet the turn. Use when: 1) the flop isn't suited to a C-Bet 2) you want to see showdown cheaply 3) the opponent leads the turn frequently after checking the flop.",
+      "SPR (Stack-to-Pot Ratio) formula:\nSPR = effective stack ÷ pot size\n\nSPR tiers and strategy lean:\nSPR < 4 (low): committed play — top pair can get all-in comfortably\nSPR 4-10 (medium): standard play, be careful\nSPR > 10 (high): deep stacks — speculative hands like suited connectors gain value\n\nGeometric sizing over three streets:\nIdeal three-street all-in → about 60-70% pot each street\nExample: pot 6BB, effective 100BB, SPR≈17\nFlop bet 4BB → pot 14BB\nTurn bet 10BB → pot 34BB\nRiver bet 25BB → pot 84BB, total bet 39BB ≈ 40% of effective stack",
+      "Theory reference: the full derivation of SPR and geometric sizing is in Theory Academy T6 Chapter 3 \"SPR and Three-Street Geometric Sizing\". Betting plans in multi-street play are closely tied to range construction.",
+      "Counter-intuitive: at deep stacks (SPR > 10), small suited connectors are worth more than big pairs. AA's postflop realization drops at deep stacks because opponents can apply pressure with wider ranges on later streets, while hands like 98s have better postflop playability and can make many strong hands."
+    ],
+    "l3-checkraise": [
+      "The Two Uses of Check-Raise",
+      "Check-Raise = check first, then raise when the opponent bets. Value Check-Raise: two pair+/Set on wet boards (protect a strong hand + build a big pot). Bluff Check-Raise: strong draws (combo flush+straight draws with equity + fold equity).",
+      "BB vs C-Bet Check-Raise frequency is about 10-15%. The range should be balanced: value hands (Set/two pair/strong top pair) + Bluffs (combo draws/strong draws).",
+      "Responding to a Check-Raise",
+      "Fold: weak/marginal hands (middle pair/weak top pair). Call: strong but not the nuts (top pair good kicker/overpair). Re-Raise: the nuts (Set+/two pair+) or strong bluffs (combo draws).",
+      "Check-Raise size: usually 2.5-3x the C-Bet. Example: C-Bet 4BB → Check-Raise 10-12BB.",
+      "Don't Check-Raise bluff frequently on dry boards. On dry boards (e.g. K-7-2 rainbow) the opponent's C-Bet range is strong, so the Check-Raise fold rate is low. Wet boards (e.g. J-T-9 two-tone) are better."
+    ],
+    "l3-float-probe": [
+      "Float",
+      "Float = call the C-Bet on the flop, planning to bet the turn when the opponent checks, to steal the pot. Use when: 1) the opponent C-Bets often but gives up on the turn a lot 2) you have position 3) the board suits bluffing (dry board/weak opponent range).",
+      "Float hand selection: backdoor draws (backdoor flush/straight), overcards (A/K high), weak pairs (bottom/middle pair). Pure air is not suited to floating.",
+      "Probe Bet",
+      "Probe Bet = you bet the turn after the preflop raiser checks the flop. Use when: 1) the opponent checks the flop frequently 2) the opponent folds to turn bets at a high rate 3) you have some equity (not pure air).",
+      "Float vs Probe difference: Float is betting the turn after calling a C-Bet; Probe is betting the turn after the opponent checks the flop. Both exploit position + opponent weaknesses.",
+      "Don't Float/Probe against a Calling Station. CS won't fold — you're just donating money. These strategies target opponents who can fold, like TAGs and NITs."
+    ],
+    "l3-bet-sizing": [
+      "Bet-Size Categories",
+      "Small (25-33% pot): dry boards/range advantage. Medium (50-66% pot): standard value bets. Large (75-100% pot): wet boards/polarized ranges. Overbet (125-200% pot): river nut-advantage boards (a core modern GTO concept).",
+      "Bet size vs range: small bet = wide range (many hands can bet) | large bet = narrow range (only strong hands or pure bluffs).",
+      "When to Use Each Size",
+      "Small: dry boards (K-7-2 rainbow)/range advantage (preflop raiser vs BB). Medium: standard value bets (top pair/overpair). Large: wet boards (J-T-9 two-tone)/when protecting strong hands. Overbet: river polarized ranges (nuts or air)/when the opponent's range is capped.",
+      "The Overbet is a core modern GTO concept. When you have the nut advantage on the river (e.g. flush-completing board), use an Overbet to put maximum pressure on the opponent and force medium-strength hands into tough decisions.",
+      "Don't use a fixed bet size (e.g. always 50% pot). Adjust based on board structure, range advantage, and opponent type. Varied sizing makes it hard for opponents to read your hand strength.",
+      "MDF (Minimum Defense Frequency) formula:\nMDF = pot ÷ (pot + bet)\nAlpha (opponent's bluff break-even point) formula:\nAlpha = bet ÷ (pot + bet)\n\nCommon values:\n1/3 pot bet → MDF=75%, Alpha=25%\n1/2 pot bet → MDF=67%, Alpha=33%\n2/3 pot bet → MDF=60%, Alpha=40%\nFull pot bet → MDF=50%, Alpha=50%\n\nNote: MDF is the defense frequency and Alpha is the minimum fold rate a bluff needs — they are complements (MDF + Alpha = 1).",
+      "Theory reference: the algebraic derivation of MDF and Alpha is in Theory Academy T5 Chapter 3 \"Minimum Defense Frequency (MDF) and Alpha\". The mathematical basis of bet sizing and geometric sizing is in T6 Chapter 2.",
+      "Counter-intuitive: the bigger your bet, the more opponents fold — but your bluff needs a higher success rate. A big bet means you risk more to win a limited pot. With a full-pot bet your bluff needs at least 50% fold rate to break even, while a half-pot bet only needs 33%."
+    ],
+    "l3-bluffing": [
+      "The Math Behind Bluffing",
+      "Bluffing isn't \"stealing\" — it's a +EV decision with rigorous mathematical foundations.\n\nFold Equity formula:\nFE = opponent fold probability × pot size\n\nBluff break-even point:\nWhen the opponent's fold rate > bet / (pot + bet), the bluff is +EV.\n\nExample: bet 2/3 pot → need fold rate > 40%\nBet 1/2 pot → need fold rate > 33%\nBet pot → need fold rate > 50%",
+      "Core formula: Bluff EV = Fold% × Pot - Call% × Bet. When Fold% > Bet/(Pot+Bet), a pure bluff is +EV even without considering postflop implied odds.",
+      "Bluff Strategy by Street",
+      "Flop bluffs: highest frequency (opponent's range is widest, hit rate lowest), small size works (33-50% pot).\n\nTurn bluffs: frequency drops; you need better blockers or a consistent narrative (your action line must represent a strong hand). Turn barrels usually use 60-75% pot.\n\nRiver bluffs: most cautious, only in polarized spots (nuts or air). The river has no implied odds — pure fold equity — so you need enough foldable combos in the opponent's range.",
+      "Three-street bluff frequency decreasing principle: Flop > Turn > River. Each continued barrel needs a stronger reason (better blockers, more consistent narrative, weaker opponent range).",
+      "Semi-Bluff",
+      "Definition: bet/raise with a draw (not currently ahead but with outs to improve).\n\nTwo ways to profit:\n1. Opponent folds → win the pot directly (Fold Equity)\n2. Opponent calls → hit and win a big pot (Equity Realization)\n\nSemi-Bluff EV = Fold% × Pot + Call% × Equity × (Pot + Bet) - Call% × (1-Equity) × Bet\n\nBest Semi-Bluff hand ranking:\nCombo draws (flush+straight) > flush draws > open-ended straight draws > gutshots",
+      "The Semi-Bluff is the safest bluff form for beginners — even when called, you still have outs to improve. Always prefer bluffing with hands that have equity.",
+      "Bet Size and Bluffing",
+      "Big bets (75-150% pot) → polarized range (nuts + bluffs, no medium hands)\nSmall bets (25-33% pot) → merged range (wide range with thin value)\n\nKey principle: bluff size should match value-bet size.\nIf you value-bet 75% pot, your bluffs should also be 75% pot.\nInconsistent sizing exposes your hand strength (read by opponents).",
+      "Bluff-to-Value Ratio",
+      "River theoretical ratio: for every 1 value bet, add 1/(pot_odds+1) bluffs.\n\nExample: bet pot (opponent needs 33% equity to call) → bluff:value = 1:2\nBet 1/2 pot (opponent needs 25% equity) → bluff:value = 1:3\n\nIn practice slightly below the theoretical ratio (because opponents overcall and low-stakes opponents don't fold enough).\n\nEasy memory: bet pot on the river → 1 in 3 bets is a bluff."
+    ],
+    "l3-texture": [
+      "What Is Board Texture?",
+      "Board texture refers to the structural characteristics of the community cards: connectivity, suit distribution, high/low cards, etc. Different textures require completely different strategies.",
+      "Dry Boards vs Wet Boards",
+      "Dry board (e.g. K♠72A♠):\n• Few draws or combinations\n• The preflop raiser has a big range advantage\n• Suits small continuation bets (1/3 pot)\n• Turn/river strategy changes little\n\nWet board (e.g. 9♠8♠7♣):\n• Many draws, straights, flushes\n• The defender's range hits hard\n• Suits big bets to protect made hands (2/3-full pot)\n• The turn can completely change the situation",
+      "Three Dimensions of Board Texture",
+      "1. Connectedness: does the board form straights/straight draws\n2. Suitedness: is there a flush/flush draw\n3. High/Low: is the board high cards or low cards",
+      "High-card dry boards (e.g. AK2r) favor the preflop raiser; low-card wet boards (e.g. 876ss) favor the caller. Decide whether to bet based on who has the bigger range advantage.",
+      "On wet boards, your \"unimproved strong hand\" can become second-best by the turn. Either bet strongly to protect, or be ready to fold."
+    ],
+    "l3-check-range": [
+      "Why Do You Need a Checking Range?",
+      "If you always bet with strong hands and check with weak ones, opponents easily read your strategy. Building a balanced checking range is key to protecting yourself from exploitation.",
+      "Core principle: your checking range should include some strong hands (for Check-Raises or later-street action), not only weak hands.",
+      "When to Check Instead of Bet",
+      "Check is appropriate when:\n1. You have no range advantage (e.g. low-card boards out of position)\n2. You have medium-strength hands and want to control pot size\n3. You plan to trap with a Check-Raise\n4. Your strong hand needs no protection on this board\n5. You're not the last to act in a multiway pot",
+      "Building a Balanced Checking Range",
+      "A good checking range includes:\n• Strong hands (about 15-20%): for Check-Raises or slowplay\n• Medium hands (about 40-50%): control the pot, observe on later streets\n• Weak/give-up hands (about 30-40%): ready to fold to a bet",
+      "If your checking range is all weak hands, opponents can attack your checks endlessly. Keeping some strong hands in your checking range is the key to defense.",
+      "Out of position (OOP), your checking range should be wider than in position (IP), because you must decide without knowing the opponent's action."
+    ],
+    "l3-3bet-postflop": [
+      "The Uniqueness of 3-Bet Pots",
+      "3-Bet pots are fundamentally different from single-raised pots. Because the preflop pot is bigger, the postflop SPR (Stack-to-Pot Ratio) drops significantly. This means:\n\n- The effective stack is smaller relative to the pot, compressing decision space\n- The range is narrower (3-Bet ranges are usually only 5-15%)\n- Each decision has a bigger EV impact\n- It's easier to get all-in on the flop (SPR usually 3-6)",
+      "Core concept: the SPR in a 3-Bet pot is usually 3-6, far below the 8-15 of a single-raised pot. Low SPR means top-pair-strength hands are enough to stack off.",
+      "Overconnected Boards vs Safe Boards",
+      "In 3-Bet pots, board classification matters more:\n\nOverconnected (Wet/Connected): e.g. J♠T♠9♣, 8♥7♥6♣\n- Very favorable to the defender's range\n- The 3-Better should lower C-Bet frequency\n- Overpairs like AA/KK need caution\n\nSafe (Dry/Static): e.g. A♠7♣2♦, K♣8♥3♠\n- Favorable to the 3-Better's range (many high cards)\n- C-Bet frequently\n- Overpairs are still the strongest hands",
+      "Common Scenario: Big Pairs in 3-Bet Pots",
+      "Postflop strategy for AA/KK in a 3-Bet pot:\n\n1. Dry board (A-high or K-high): confident value betting, ready to stack off\n2. Medium-connected board (e.g. Q-J-7): C-Bet but slow down against resistance\n3. Wet-connected board (e.g. T-9-8 two-tone): Check to control the pot, give up over-aggression\n\nRemember: in 3-Bet pots the SPR is low, so top pair good kicker is usually enough to stack off. But on wet boards beware of two pair+ hands.",
+      "The most common 3-Bet pot mistake is clinging too hard to an overpair on a wet board. AA on a J-T-9 two-tone board is only worth a Check — don't bet big just to \"protect\".",
+      "Key formula: SPR = effective stack ÷ pot size. When SPR < 4, top-pair strength can comfortably get all-in. When SPR > 6, you need a stronger hand to stack off."
+    ]
+  },
+  "lessonQuiz": {
+    "l3-cbet-q1": {
+      "question": "What is a C-Bet?",
+      "options": [
+        "Call",
+        "The preflop raiser continues betting postflop",
+        "All-in",
+        "Check"
+      ],
+      "explanation": "A C-Bet is the last preflop raiser continuing to bet on the flop."
+    },
+    "l3-cbet-q2": {
+      "question": "How big should you C-Bet on a dry board (K-7-2 rainbow)?",
+      "options": [
+        "100% pot",
+        "33-50% pot",
+        "200% pot",
+        "Don't bet"
+      ],
+      "explanation": "Use a smaller C-Bet (33-50% pot) on dry boards, because opponents rarely have strong hands to resist with."
+    },
+    "l3-cbet-q3": {
+      "question": "How big should you C-Bet on a wet board (J-T-9 two-tone)?",
+      "options": [
+        "25% pot",
+        "33% pot",
+        "66-75% pot",
+        "Don't bet"
+      ],
+      "explanation": "Wet boards have many draws — use a bigger bet (66-75% pot) to make draws pay."
+    },
+    "l3-cbet-q4": {
+      "question": "When should you NOT C-Bet?",
+      "options": [
+        "Dry board",
+        "When you have range advantage",
+        "When the board favors the opponent's range",
+        "When in position"
+      ],
+      "explanation": "When the board favors the opponent's range (e.g. wet-connected boards), Check instead of C-Bet."
+    },
+    "l3-cbet-q5": {
+      "question": "What is the core logic of the C-Bet?",
+      "options": [
+        "Steal the pot",
+        "The preflop raiser has range advantage",
+        "Rule requirement",
+        "Show a strong hand"
+      ],
+      "explanation": "The core logic is that the preflop raiser usually has a range advantage, because most flops don't help either player much."
+    },
+    "l3-draw-q1": {
+      "question": "How many outs does a flush draw have?",
+      "options": [
+        "4",
+        "6",
+        "9",
+        "12"
+      ],
+      "explanation": "A flush draw has 9 outs (13 suited cards - 4 known = 9 unseen suited cards)."
+    },
+    "l3-draw-q2": {
+      "question": "What is the recommended way for beginners to play a flush draw?",
+      "options": [
+        "All-in",
+        "Big raise",
+        "Call to see a card",
+        "Instant fold"
+      ],
+      "explanation": "Beginners should use passive play (calling) to see the next card at minimum cost. Semi-bluffing comes later."
+    },
+    "l3-draw-q3": {
+      "question": "How many outs does an open-ended straight draw (OESD) have?",
+      "options": [
+        "4",
+        "6",
+        "8",
+        "12"
+      ],
+      "explanation": "An OESD can complete at either end, 4 cards each — 8 outs total."
+    },
+    "l3-draw-q4": {
+      "question": "Using the 2/4 rule, what hit rate do 9 outs have from flop to turn?",
+      "options": [
+        "9%",
+        "18%",
+        "35%",
+        "45%"
+      ],
+      "explanation": "2/4 rule: flop to turn uses ×2, 9×2=18%, actual about 19%."
+    },
+    "l3-draw-q5": {
+      "question": "About how many outs does a combo draw (flush + OESD) have?",
+      "options": [
+        "9",
+        "12",
+        "15",
+        "20"
+      ],
+      "explanation": "9 flush outs + 8 OESD outs, deduplicated to about 15. This is the strongest draw type."
+    },
+    "l3-multi-q1": {
+      "question": "What is the core of multi-street thinking?",
+      "options": [
+        "Only look at the current street",
+        "Plan the turn/river while deciding the flop",
+        "Always play three streets",
+        "Decide from opponent's expression"
+      ],
+      "explanation": "Multi-street thinking requires planning the turn/river during the flop decision, not one street at a time."
+    },
+    "l3-multi-q2": {
+      "question": "What does Double Barrel mean?",
+      "options": [
+        "Check the flop + bet the turn",
+        "C-Bet the flop + continue betting the turn",
+        "Bet the flop, turn and river",
+        "All-in on the flop"
+      ],
+      "explanation": "Double Barrel = flop C-Bet + turn continuation bet, the standard way for the preflop raiser to keep pressure on."
+    },
+    "l3-multi-q3": {
+      "question": "What are the best conditions for a Triple Barrel bluff?",
+      "options": [
+        "Opponent is a Calling Station",
+        "Polarized range + Blockers",
+        "The board is all draws",
+        "The opponent never folds"
+      ],
+      "explanation": "A Triple Barrel bluff needs a polarized range + Blockers to force tough decisions."
+    },
+    "l3-multi-q4": {
+      "question": "When is a Delayed C-Bet appropriate?",
+      "options": [
+        "When the flop suits a C-Bet",
+        "When the flop doesn't suit a C-Bet",
+        "Always",
+        "Never"
+      ],
+      "explanation": "A Delayed C-Bet fits when the flop isn't suited to a C-Bet, e.g. when the board favors the opponent's range."
+    },
+    "l3-multi-q5": {
+      "question": "When should you give up the Double Barrel on the turn?",
+      "options": [
+        "The turn is a blank",
+        "The turn completes an obvious draw",
+        "The opponent folds a lot",
+        "You have top pair"
+      ],
+      "explanation": "Give up barreling when the turn completes an obvious draw, because the opponent's draw likely got there."
+    },
+    "l3-cr-q1": {
+      "question": "What is a Check-Raise?",
+      "options": [
+        "Bet then raise",
+        "Check first, then raise against the opponent's bet",
+        "Check twice",
+        "All-in"
+      ],
+      "explanation": "Check-Raise = check first, then raise when the opponent bets — the most powerful postflop attacking weapon."
+    },
+    "l3-cr-q2": {
+      "question": "What is the standard BB vs C-Bet Check-Raise frequency?",
+      "options": [
+        "2-5%",
+        "10-15%",
+        "25-30%",
+        "40-50%"
+      ],
+      "explanation": "BB vs C-Bet Check-Raise frequency is about 10-15%, with a balanced range (value + Bluffs)."
+    },
+    "l3-cr-q3": {
+      "question": "Which hand is best for a Check-Raise Bluff?",
+      "options": [
+        "Middle pair",
+        "Combo flush+straight draw",
+        "Bottom pair",
+        "Air"
+      ],
+      "explanation": "A combo flush+straight draw has about 12 outs (40%+ equity) — the best Check-Raise bluff hand."
+    },
+    "l3-cr-q4": {
+      "question": "How big is a typical Check-Raise relative to the C-Bet?",
+      "options": [
+        "1-1.5x",
+        "2.5-3x",
+        "4-5x",
+        "6-7x"
+      ],
+      "explanation": "A Check-Raise is usually 2.5-3x the C-Bet, e.g. C-Bet 4BB → Check-Raise 10-12BB."
+    },
+    "l3-cr-q5": {
+      "question": "When should you NOT Check-Raise bluff on a dry board?",
+      "options": [
+        "Wet boards",
+        "When the opponent's C-Bet range is strong",
+        "When the opponent folds a lot",
+        "When you have a combo draw"
+      ],
+      "explanation": "On dry boards the opponent's C-Bet range is strong (e.g. K-7-2 rainbow) — the Check-Raise fold rate is low, so bluffing doesn't work."
+    },
+    "l3-fp-q1": {
+      "question": "What is a Float?",
+      "options": [
+        "Raise the flop C-Bet",
+        "Call the flop C-Bet, planning to steal the turn",
+        "All-in on the flop",
+        "Check-Raise the flop"
+      ],
+      "explanation": "Float = call the C-Bet on the flop, then bet the turn when the opponent checks, to steal the pot."
+    },
+    "l3-fp-q2": {
+      "question": "When is a Probe Bet appropriate?",
+      "options": [
+        "After the opponent C-Bets the flop",
+        "When the preflop raiser checks the flop, you bet the turn",
+        "After the opponent goes all-in",
+        "At the river showdown"
+      ],
+      "explanation": "Probe Bet = after the preflop raiser checks the flop, you bet the turn to steal the pot."
+    },
+    "l3-fp-q3": {
+      "question": "Which opponent is the worst to Float against?",
+      "options": [
+        "TAG",
+        "NIT",
+        "Calling Station",
+        "LAG"
+      ],
+      "explanation": "A Calling Station won't fold (Fold to C-Bet only 20%) — floating is pure loss."
+    },
+    "l3-fp-q4": {
+      "question": "What hands should you Float with?",
+      "options": [
+        "Pure air",
+        "Backdoor draws/overcards/weak pairs",
+        "The nuts",
+        "Middle pair or better"
+      ],
+      "explanation": "Float with backdoor draws, overcards, or weak pairs. Pure air is not suited to floating."
+    },
+    "l3-fp-q5": {
+      "question": "What is the main difference between Probe Bet and Float?",
+      "options": [
+        "No difference",
+        "Probe is betting the turn after the opponent checks the flop",
+        "Probe is raising the flop",
+        "Probe is a river bet"
+      ],
+      "explanation": "Probe Bet is betting the turn after the preflop raiser checks the flop. Float is betting the turn after calling a C-Bet when the opponent checks."
+    },
+    "l3-bs-q1": {
+      "question": "What bet size should you use on a dry board (e.g. K-7-2 rainbow)?",
+      "options": [
+        "Small (25-33% pot)",
+        "Medium (50-66% pot)",
+        "Large (75-100% pot)",
+        "Overbet (150% pot)"
+      ],
+      "explanation": "On dry boards you have a big range advantage — a small bet folds weak hands and gets value from strong ones."
+    },
+    "l3-bs-q2": {
+      "question": "When is an Overbet most appropriate?",
+      "options": [
+        "Dry flop board",
+        "Turn draw board",
+        "River with nut advantage",
+        "Preflop open"
+      ],
+      "explanation": "The Overbet is best when you have the nut advantage on the river (e.g. flush-completing board), applying maximum pressure with a polarized range."
+    },
+    "l3-bs-q3": {
+      "question": "What is the relationship between bet size and range?",
+      "options": [
+        "Small bet = narrow range, big bet = wide range",
+        "Small bet = wide range, big bet = narrow range",
+        "No relationship",
+        "Always 50% pot"
+      ],
+      "explanation": "A small bet corresponds to a wide range (many hands can bet); a big bet corresponds to a narrow range (only strong hands or pure bluffs)."
+    },
+    "l3-bs-q4": {
+      "question": "When is a medium bet (50-66% pot) appropriate?",
+      "options": [
+        "Very dry board",
+        "Standard value betting",
+        "Very wet board",
+        "River nut advantage"
+      ],
+      "explanation": "A medium bet (50-66% pot) is the standard value-bet size for medium-strength hands like top pair/overpair."
+    },
+    "l3-bs-q5": {
+      "question": "Why shouldn't you use a fixed bet size?",
+      "options": [
+        "The rules forbid it",
+        "It gets read by opponents",
+        "Wastes chips",
+        "No reason"
+      ],
+      "explanation": "A fixed size lets opponents easily read your hand strength. Varied sizing makes it hard to judge."
+    },
+    "l3-bluff-q1": {
+      "question": "Betting 2/3 pot, what minimum fold rate does the opponent need for the bluff to break even?",
+      "options": [
+        "33%",
+        "40%",
+        "50%",
+        "60%"
+      ],
+      "explanation": "Break-even formula: bet/(pot+bet) = (2/3)/(1+2/3) = 0.4 = 40%. If the opponent folds > 40%, the bluff is +EV."
+    },
+    "l3-bluff-q2": {
+      "question": "Which hand is the best Semi-Bluff candidate?",
+      "options": [
+        "A-high (no draw)",
+        "Combo flush+gutshot draw",
+        "Bottom pair",
+        "Pure air"
+      ],
+      "explanation": "Combo draws (flush+straight) have the most outs (about 15) and high improving odds even when called — the best Semi-Bluff hands."
+    },
+    "l3-bluff-q3": {
+      "question": "Betting pot on the river, what is the theoretical bluff-to-value ratio?",
+      "options": [
+        "1:1",
+        "1:2",
+        "1:3",
+        "2:1"
+      ],
+      "explanation": "Betting pot means the opponent needs 33% equity to call. The theoretical ratio is bluff:value = 1:2 (1 bluff for every 2 value bets)."
+    },
+    "l3-bluff-q4": {
+      "question": "Which street should have the highest bluff frequency?",
+      "options": [
+        "River",
+        "Turn",
+        "Flop",
+        "Same on all streets"
+      ],
+      "explanation": "On the flop the opponent's range is widest and hit rate lowest, so bluffs succeed most. As streets progress, the opponent's range strengthens and bluff frequency should decline."
+    },
+    "l3-bluff-q5": {
+      "question": "What are the two ways a Semi-Bluff profits?",
+      "options": [
+        "Opponent folds + hitting a big pot",
+        "Stealing the pot + rule rewards",
+        "Fold equity + implied odds",
+        "Position + range advantage"
+      ],
+      "explanation": "A Semi-Bluff profits by the opponent folding (winning the pot directly) or by hitting when called (winning a big pot)."
+    },
+    "l3-texture-q1": {
+      "question": "Which of these is a \"dry board\"?",
+      "options": [
+        "9♠8♠7♣",
+        "K♠72♠",
+        "J♠T♠9♠",
+        "Q♠J♠8♠"
+      ],
+      "explanation": "K♠72♠ has no connectivity, no flush, scattered high/low cards — a classic dry board."
+    },
+    "l3-texture-q2": {
+      "question": "How should bet size adjust on a wet board?",
+      "options": [
+        "Smaller (1/4 pot)",
+        "Bigger (2/3-full pot)",
+        "Don't bet",
+        "All-in"
+      ],
+      "explanation": "On wet boards opponents have many draws — bet big to make them pay to continue."
+    },
+    "l3-texture-q3": {
+      "question": "Who does a high-card dry board favor?",
+      "options": [
+        "The caller",
+        "The preflop raiser",
+        "Both equally",
+        "The small blind"
+      ],
+      "explanation": "High-card dry boards (e.g. AK2) hit the preflop raiser's range more, because that range has more big cards."
+    },
+    "l3-texture-q4": {
+      "question": "What are the three dimensions of board texture?",
+      "options": [
+        "Size/suit/number",
+        "Connectivity/suit distribution/high-low",
+        "Wet-dry/fast-slow/high-low",
+        "Flush/straight/trips"
+      ],
+      "explanation": "The three dimensions are connectivity, suit distribution, and high/low cards."
+    },
+    "l3-texture-q5": {
+      "question": "Who does a low-card wet board (e.g. 876ss) favor?",
+      "options": [
+        "The preflop raiser",
+        "The caller",
+        "Both equally",
+        "The dealer"
+      ],
+      "explanation": "Low-card wet boards favor the caller, because such boards hit the caller's range more."
+    },
+    "l3-check-range-q1": {
+      "question": "What should a checking range contain?",
+      "options": [
+        "Only weak hands",
+        "Only strong hands",
+        "A mix of strong+medium+weak hands",
+        "Only draws"
+      ],
+      "explanation": "A balanced checking range mixes hand strengths so opponents can't easily read your strategy."
+    },
+    "l3-check-range-q2": {
+      "question": "Which situation is NOT suited to checking?",
+      "options": [
+        "Low-card board with no range advantage",
+        "Multiway pot",
+        "In position with a clear range advantage",
+        "Planning a Check-Raise"
+      ],
+      "explanation": "In position with a clear range advantage, you should bet for value rather than give a free card."
+    },
+    "l3-check-range-q3": {
+      "question": "How should the OOP checking range compare to IP?",
+      "options": [
+        "Narrower than IP",
+        "Wider than IP",
+        "Same as IP",
+        "Never check"
+      ],
+      "explanation": "OOP lacks information and needs a wider checking range to balance strategy and avoid being read."
+    },
+    "l3-check-range-q4": {
+      "question": "What are the strong hands in the checking range for?",
+      "options": [
+        "No purpose",
+        "Check-Raise traps or slowplay",
+        "Folding",
+        "Betting"
+      ],
+      "explanation": "Strong hands in the checking range serve Check-Raise traps or slowplay, stopping opponents from easily reading your strategy."
+    },
+    "l3-check-range-q5": {
+      "question": "When should you bet instead of check?",
+      "options": [
+        "No range advantage",
+        "Multiway pot",
+        "In position with a clear range advantage",
+        "Planning a Check-Raise"
+      ],
+      "explanation": "In position with a clear range advantage, bet for value rather than giving a free card."
+    },
+    "l3-3bet-pf-q1": {
+      "question": "What SPR range do 3-Bet pots usually have?",
+      "options": [
+        "1-2",
+        "3-6",
+        "10-15",
+        "20+"
+      ],
+      "explanation": "Because the preflop pot is bigger, the SPR in a 3-Bet pot is usually 3-6, far below a single-raised pot."
+    },
+    "l3-3bet-pf-q2": {
+      "question": "In a 3-Bet pot with SPR 3, how should top pair typically be played?",
+      "options": [
+        "Check-Fold",
+        "Control the pot, one street only",
+        "Comfortably get all-in",
+        "Only Check-Call"
+      ],
+      "explanation": "When SPR < 4, top-pair strength can comfortably get all-in, because the stack is already shallow relative to the pot."
+    },
+    "l3-3bet-pf-q3": {
+      "question": "What should AA do on a J-T-9 two-tone board in a 3-Bet pot?",
+      "options": [
+        "All-in to protect",
+        "C-Bet 75% pot",
+        "Check to control the pot",
+        "Fold"
+      ],
+      "explanation": "J-T-9 two-tone is an overconnected board that strongly favors the defender. AA is an overpair but should Check to control the pot and avoid being trapped by two pair/straights."
+    },
+    "l3-3bet-pf-q4": {
+      "question": "Which board favors the 3-Better most?",
+      "options": [
+        "J♠T♠9♣",
+        "A♠7♣2♦",
+        "8♥7♥6♣",
+        "Q♥T♥9♠"
+      ],
+      "explanation": "A-7-2 rainbow is a dry board that most favors the 3-Better's range (many high Ax) — C-Bet frequently."
+    },
+    "l3-3bet-pf-q5": {
+      "question": "What is the main effect of low SPR in a 3-Bet pot?",
+      "options": [
+        "Postflop decisions get simpler",
+        "Need more chips",
+        "Bluffs are more powerful",
+        "Position no longer matters"
+      ],
+      "explanation": "Low SPR compresses decision space — top pair can often get all-in, making postflop decisions relatively simpler."
+    }
+  },
+  "lessonExample": {
+    "l3-cbet-ex1": {
+      "title": "Dry board C-Bet: small size, high frequency",
+      "correctAction": "C-Bet",
+      "correctAmount": "33% pot",
+      "reasoning": [
+        "K-7-2 rainbow is a very dry board",
+        "The opponent rarely hits this board — a small bet gets folds",
+        "You have A-high, so even when called you have 6 outs",
+        "A 33% pot C-Bet offers the best value"
+      ],
+      "mistakeAction": "Bet 75% pot",
+      "mistakeReasoning": "Betting big on a dry board is wasteful. The opponent either folds or has a strong hand — a big bet gains no extra value.",
+      "mistakeEvLoss": "-0.5 BB/100",
+      "tableDesc": "Standard 100BB cash game; the opponent called your BTN open preflop"
+    },
+    "l3-cbet-ex2": {
+      "title": "Wet board Check: don't attack an unfavorable board",
+      "correctAction": "Check",
+      "reasoning": [
+        "J-T-9 two-tone is a very wet board",
+        "BTN's calling range contains many two pairs, straights, and draws",
+        "You only have A-high with no pair",
+        "This board favors the opponent's range — a C-Bet gets called or raised a lot"
+      ],
+      "mistakeAction": "C-Bet 75% pot",
+      "mistakeReasoning": "C-Betting with air on a wet board is a serious mistake. The opponent has too many strong hands and draws that continue — your bluff rarely works.",
+      "mistakeEvLoss": "-2.0 BB/100",
+      "tableDesc": "The BTN is a LAG player who called with a very wide range preflop"
+    },
+    "l3-draws-ex1": {
+      "title": "Flush draw calling decision",
+      "correctAction": "Call (call the C-Bet)",
+      "reasoning": [
+        "You have an A-high flush draw (9 outs)",
+        "About 35% equity from flop to river",
+        "Opponent C-Bets 4BB, pot is 10.5BB — you only need to call 4BB",
+        "Pot odds = 4/14.5 ≈ 28%, your equity 35% > 28% — calling is +EV"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "A flush draw has 35% equity and great pot odds — folding is a serious -EV error. You're giving up huge equity.",
+      "mistakeEvLoss": "-2.5 BB/100"
+    },
+    "l3-draws-ex2": {
+      "title": "Semi-bluff raise: combo draw",
+      "correctAction": "Raise (semi-bluff)",
+      "correctAmount": "12BB",
+      "reasoning": [
+        "You have a flush draw + open-ended straight draw (combo draw)",
+        "Combo draws have about 12-15 outs (9 flush + 8 straight, deduplicated), about 45-54% equity",
+        "Raising gains both fold equity and made-hand value",
+        "Even when called, you still have high equity"
+      ],
+      "mistakeAction": "Only call (too passive)",
+      "mistakeReasoning": "Combo draws have huge equity — raise to build the pot actively. Only calling wastes fold equity and initiative.",
+      "mistakeEvLoss": "-1.5 BB/100",
+      "tableDesc": "The CO is a NIT with a very high fold-to-raise rate (70%)"
+    },
+    "l3-multi-ex1": {
+      "title": "Double Barrel: top pair continues on the turn",
+      "correctAction": "Bet",
+      "correctAmount": "9BB",
+      "reasoning": [
+        "After the flop C-Bet CO calls, the turn 2♠ is a blank",
+        "AK top pair top kicker — continue barreling on the turn for value",
+        "TAG's flop calling range: Ax/9x/draws — many will continue calling",
+        "2♠ doesn't change the board structure — your hand is still ahead"
+      ],
+      "mistakeAction": "Check",
+      "mistakeReasoning": "Checking top pair top kicker on the turn is too passive. On a blank continue barreling for value.",
+      "mistakeEvLoss": "-1.2 BB/100"
+    },
+    "l3-multi-ex2": {
+      "title": "Give-Up: giving up the bluff on the turn",
+      "correctAction": "Check",
+      "reasoning": [
+        "After the flop C-Bet CS calls, the turn T♥ may complete draws",
+        "QJ gains no equity — continuing to barrel against a CS is -EV",
+        "CS won't fold (Fold to C-Bet only 20%) — the bluff is useless",
+        "Check to control the pot and see if the river improves you"
+      ],
+      "mistakeAction": "Bet 9BB",
+      "mistakeReasoning": "Continuing to bluff a Calling Station is pure loss. CS won't fold — you're just donating money.",
+      "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l3-cr-ex1": {
+      "title": "Value Check-Raise: Set on a wet board",
+      "correctAction": "Check-Raise",
+      "correctAmount": "12BB",
+      "reasoning": [
+        "Set of 9s on a J-9-8 two-tone board should Check-Raise",
+        "Wet boards have many draws — protect your strong hand",
+        "LAG C-Bets at high frequency (80%) — the Check-Raise gains value",
+        "Build a big pot to set up a turn/river shove"
+      ],
+      "mistakeAction": "Check-Call",
+      "mistakeReasoning": "Only calling with a Set on a wet board is too passive. Check-Raise to build the pot + protect.",
+      "mistakeEvLoss": "-1.5 BB/100"
+    },
+    "l3-cr-ex2": {
+      "title": "Bluff Check-Raise: combo draw",
+      "correctAction": "Check-Raise",
+      "correctAmount": "12BB",
+      "reasoning": [
+        "J♥T♥ on a 9-8-4 two-tone board has a flush + gutshot combo draw",
+        "About 12 outs (40%+ equity) — Check-Raise semi-bluff",
+        "TAG folds to Check-Raises at a high rate",
+        "Even when called you have high equity and can continue on the turn/river"
+      ],
+      "mistakeAction": "Check-Call",
+      "mistakeReasoning": "Only calling with a combo draw wastes fold equity + initiative. A Check-Raise semi-bluff is more +EV.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l3-fp-ex1": {
+      "title": "Float: steal the pot on the turn after calling the C-Bet",
+      "correctAction": "Bet",
+      "correctAmount": "9BB",
+      "reasoning": [
+        "Called the flop C-Bet (Float), then CO checks the turn",
+        "TAG checking the turn indicates a weak hand (below top pair)",
+        "QJ has backdoor straight potential + overcard equity",
+        "A turn bet represents Kx — TAG folds weak hands"
+      ],
+      "mistakeAction": "Check back",
+      "mistakeReasoning": "Checking the turn misses the steal opportunity. TAG's check signals weakness — bet to pressure.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l3-fp-ex2": {
+      "title": "Probe Bet: bet the turn after the opponent checks the flop",
+      "correctAction": "Bet",
+      "correctAmount": "4BB",
+      "reasoning": [
+        "Both check the flop, then NIT checks the turn again",
+        "NIT checking twice indicates extreme weakness",
+        "AT has overcard equity + backdoor flush potential",
+        "A Probe bet represents 9x/6x — NIT folds air"
+      ],
+      "mistakeAction": "Check back",
+      "mistakeReasoning": "NIT checking twice is a clear weakness signal — Probe to steal. Checking misses the opportunity.",
+      "mistakeEvLoss": "-0.8 BB/100"
+    },
+    "l3-bs-ex1": {
+      "title": "Small bet: dry board range advantage",
+      "correctAction": "Bet",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "K-7-2 rainbow is an extremely dry board — BB's range rarely hits",
+        "BTN has a huge range advantage — C-Bet small and often",
+        "A small bet (33% pot) folds weak hands and gets calls from strong ones",
+        "No need to protect with a big bet — there are no draws"
+      ],
+      "mistakeAction": "Bet 4BB (75% pot)",
+      "mistakeReasoning": "Betting big on a dry board is wasteful. A small bet achieves the goal; a big bet folds all weak hands and gains no value.",
+      "mistakeEvLoss": "-0.5 BB/100"
+    },
+    "l3-bs-ex2": {
+      "title": "Overbet: river polarized range",
+      "correctAction": "Overbet",
+      "correctAmount": "40BB",
+      "reasoning": [
+        "The river 7♥ completes the flush — BTN has the nut flush (A♥Q♥)",
+        "BB's range is capped (no A♥, at best a K♥x flush)",
+        "The Overbet (160% pot) puts maximum pressure on BB",
+        "Polarized range: nut flush or pure bluff — the Overbet is the standard size"
+      ],
+      "mistakeAction": "Bet 15BB (60% pot)",
+      "mistakeReasoning": "Using only 60% pot with the nut flush is wasteful. An Overbet gets maximum value — BB calls with weaker flushes.",
+      "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l3-bluff-ex1": {
+      "title": "River polarized-spot bluff",
+      "correctAction": "Bet",
+      "correctAmount": "28BB (pot)",
+      "reasoning": [
+        "AQ is only A-high (top pair weak kicker) here, but your range is polarized",
+        "Three streets of betting represent AK/AA/KK etc. super strong hands",
+        "BB's calling range is squeezed to A-kicker/two pair — many fold to a pot bet",
+        "A-high has no showdown value (BB has Kx/Ax stronger) — bluffing is the only way to win",
+        "Fold equity: TAG folds to a three-street pot bet about 55-60%"
+      ],
+      "mistakeAction": "Check (give up)",
+      "mistakeReasoning": "Checking almost certainly loses (A-high has minimal showdown value). With a consistent three-street narrative, the river bluff is +EV. Giving up wastes the image built on the first two streets.",
+      "mistakeEvLoss": "-3.0 BB/100"
+    },
+    "l3-bluff-ex2": {
+      "title": "Flop semi-bluff: raising the C-Bet with a flush draw",
+      "correctAction": "Raise",
+      "correctAmount": "10BB",
+      "reasoning": [
+        "T♥9♥ is a flush draw (9 outs) + gutshot potential (J completes a straight)",
+        "Raising the C-Bet is a semi-bluff: the opponent may fold (Fold Equity)",
+        "Even when called, you have about 35% equity (9 flush outs + partial straight outs)",
+        "On a K-high board, your raise represents Kx/set — consistent narrative",
+        "BTN C-Bets often but folds to raises about 45%"
+      ],
+      "mistakeAction": "Call (passive)",
+      "mistakeReasoning": "Calling isn't losing, but it forfeits fold equity. A semi-bluff raise has one more way to win (opponent folds), with about +1.5BB/100 higher EV than passive calling.",
+      "mistakeEvLoss": "-1.5 BB/100"
+    },
+    "l3-3bet-pf-ex1": {
+      "title": "AA on a dry board in a 3-Bet pot",
+      "correctAction": "Bet",
+      "correctAmount": "8-10BB (about 50% pot)",
+      "reasoning": [
+        "A-7-2 rainbow is an extremely dry board — very favorable to the 3-Better",
+        "AA is the nuts level — at SPR 4.3 it can fully stack off",
+        "TAG's range contains Ax/medium pairs that will call",
+        "A 50% pot bet gains value without scaring off all weak hands"
+      ],
+      "mistakeAction": "Check (slowplay)",
+      "mistakeReasoning": "Slowplaying on a dry board is unnecessary. The SPR is low — bet directly to build the pot.",
+      "mistakeEvLoss": "-2.0 BB/100",
+      "tableDesc": "Standard 100BB cash game; 3Bet pot with SPR around 4.3"
+    },
+    "l3-3bet-pf-ex2": {
+      "title": "KK on a wet board in a 3-Bet pot",
+      "correctAction": "Check",
+      "reasoning": [
+        "Q-J-8 two-tone is an overconnected board — very favorable to CO's defense range",
+        "TAG's range contains many QJ/TT/99/flush draws",
+        "KK is an overpair but very vulnerable",
+        "Check to control the pot — if facing a bet, consider calling one street but not stacking off"
+      ],
+      "mistakeAction": "C-Bet 15BB (about 75% pot)",
+      "mistakeReasoning": "Big C-Betting on an overconnected board is a serious mistake. When called you're almost always behind; when raised you face a tough decision.",
+      "mistakeEvLoss": "-3.5 BB/100",
+      "tableDesc": "Standard 100BB cash game; 3Bet pot with SPR around 4.1"
+    }
+  },
+  "lessonPractice": {
+    "l3-cbet-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "You flopped top pair top kicker — a very strong hand. Bet for value.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "2BB",
+          "explanation": "On the dry board (A-8-3 rainbow) use a small C-Bet. The opponent rarely hits — a small bet gains fold equity, and you have top pair when called.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB",
+          "explanation": "No need to bet this big on a dry board. A big bet folds all weak hands and only gets called by strong ones, reducing your value.",
+          "evImpact": "+0.8 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QQ on a 9-8-7 board is still an overpair with strong value. You should bet.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4.5BB",
+          "explanation": "On the wet board (9-8-7 two-tone) use a bigger C-Bet. Many draws will call — make them pay.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving the flop is too aggressive. Opponents only call with stronger hands (straights, two pair).",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "J-6-2 doesn't help you, and the J likely hit BB's calling range. Check to control the pot.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "2BB",
+          "explanation": "The J likely hit the opponent's range — your KQ is only high cards. A C-Bet bluff rarely works here.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "Betting big on an unfavorable board is worse. If the opponent has a J they call or raise — you have nothing behind your hand.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "You flopped top pair — bet for value. Checking misses value.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "2BB",
+          "explanation": "J-8-3 has some backdoor flush but is fairly dry. Top pair — small 1/3 pot C-Bet for value.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB",
+          "explanation": "A big bet folds weak hands and only gets called by stronger ones. A small bet is enough for value.",
+          "evImpact": "+0.3 BB/100"
+        }
+      ]
+    },
+    "l3-cbet-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AQ on a K-Tc board has top pair + backdoor flush — C-Bet for value.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4.5BB",
+          "explanation": "The K-Tc two-tone board is fairly wet — LAG has many draws. Use a bigger C-Bet to protect + gain value.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "1BB",
+          "explanation": "1BB is too small — gives the opponent a great calling price. Wet boards need bigger bets.",
+          "evImpact": "+0.2 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A flush draw has 9 outs and about 35% equity. The pot odds are good enough — don't fold.",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "4BB",
+          "explanation": "Call with the flush draw. Pot odds are about 28% and your equity is 35% — calling is +EV.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A lone flush draw isn't strong enough to shove. Unless it's a combo draw, control your investment.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A combo draw (flush + gutshot) has high equity — never fold it.",
+          "evImpact": "-3.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "A combo draw should raise actively. Only calling wastes fold equity and initiative.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "12BB",
+          "explanation": "A flush+gutshot combo draw has about 12 outs and 40%+ equity. A semi-bluff raise gains fold equity and high equity when called.",
+          "evImpact": "+2.0 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "An OESD has 8 outs and about 31% equity. Don't give up.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "3BB",
+          "explanation": "An OESD has 8 outs. Pot odds are about 25% and equity 31% > 25% — calling is +EV.",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "10BB",
+          "explanation": "Out of position, raising a lone OESD is risky. Calling to control the pot is better.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A flush draw has about 19% equity from turn to river — pot odds are usually enough to call.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "6BB",
+          "explanation": "A-high flush draw + backdoor overcards — call the turn to see the river. Pot odds about 25%, equity about 22% + implied odds — calling is +EV.",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "15BB",
+          "explanation": "Raising with a lone flush draw on the turn is excessive. Out of position, calling is better.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-draws-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A combo draw (flush + gutshot) has high equity — the K doesn't change much. Don't fold.",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "6BB",
+          "explanation": "A combo draw should raise for fold equity + made-hand value. Only calling is too passive.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "14BB",
+          "explanation": "87 on 9-6-2 has a flush + gutshot combo draw (about 12 outs) — the K doesn't help much. A semi-bluff raise gains fold equity, with high equity when called.",
+          "evImpact": "+2.0 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "KQ top pair good kicker — the blank turn should continue barreling. Checking misses value.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "KQ top pair good kicker — the turn 5♠ is a blank. TAG's flop calling range has many weak hands that continue — barrel for value.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving top pair on the turn is excessive. Use the standard size (66% pot) for value.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "98 on an A-K-4-Q board has no equity and NIT won't fold. Give up on the turn and check the river.",
+          "evImpact": "+0.2 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "Bluffing a NIT on an A-K-4-Q board is -EV. NIT has A/K and won't fold — you have no equity.",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving with air is a disaster. NIT only calls strong hands — you're crushed.",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A5 made a flush — value-bet the river. Checking misses value from weak hands.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "18BB",
+          "explanation": "A5 made a flush — value-bet the river (about 75% pot). TAG's range has Kx/8x that call — gain value.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving a flush is excessive. TAG only calls with stronger hands (bigger flush/full house) and folds weak ones.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK top pair top kicker — the blank turn should continue barreling for value.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "AK top pair top kicker — the turn 8♠ is a blank. NIT has many weak Ax/draws that call — barrel for value.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving top pair on the turn is excessive. A standard size gains value.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-multi-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QJ has Q-high on K-8-3-2-9, but a three-street narrative can represent Kx. A river bluff is worth considering.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "10BB (75% pot)",
+          "explanation": "QJ has no showdown value — the three-street narrative is consistent (representing Kx/AK). TAG folds many weak hands to three streets of pressure. The river bluff is +EV.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving is excessive — TAG only calls with Kx or stronger. Use the standard size.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p1": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "Set K on a dry board can Check-Call to trap, but against LAG (C-Bet 80%) a Check-Raise gains more value.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "Set K should Check-Raise. LAG C-Bets at high frequency — the Check-Raise builds a big pot + gains value. On a dry board raising works too (opponents struggle to fold top pair).",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Betting (leading out) isn't standard. A Check-Raise lets the opponent bet first, then you raise — gaining more value.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p2": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "A combo draw (flush + gutshot) has 40%+ equity — never fold it.",
+          "evImpact": "-2.5 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "Calling a combo draw is OK but passive. A Check-Raise semi-bluff gains fold equity + initiative.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "Q♥J♥ has a flush + gutshot combo draw (about 12 outs) — the Check-Raise semi-bluff is standard. TAG folds a lot, and you have equity when called.",
+          "evImpact": "+1.8 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p3": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "87 on an A-K-6 board has almost no equity — fold against a NIT C-Bet. The NIT range is strong (Ax/Kx) — bluffing is useless.",
+          "evImpact": "+0.1 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "Calling 87 on an A-K-6 board is -EV. The NIT range is strong and you have almost no equity — don't invest more.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "Check-Raise bluffing a NIT on an A-K-6 board is a disaster. NITs only C-Bet strong hands and won't fold.",
+          "evImpact": "-2.5 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p4": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "AK top pair top kicker on a dry board can Check-Raise for value. Only calling misses value.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "AK top pair top kicker — Check-Raise for value. TAG calls with Ax/weak pairs — you build a big pot.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Betting isn't standard. A Check-Raise lets the opponent bet first, then you raise — gaining more value.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-cr-p5": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "A combo draw (flush + gutshot) has 40%+ equity — never fold it.",
+          "evImpact": "-3.0 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "Calling a combo draw is OK but passive. A Check-Raise semi-bluff gains fold equity + initiative.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "T9s has a flush + gutshot combo draw — the Check-Raise semi-bluff is standard. Against a Maniac fold equity is low, but you have high equity when called.",
+          "evImpact": "+1.8 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "KQ has backdoor flush + overcard equity, and TAG checking the turn signals weakness. Float then bet the turn to steal.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "KQ floated the flop (called the C-Bet), then TAG checks the turn. Bet to steal, representing Ax. TAG folds weak hands.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving the turn is excessive. A standard size (66% pot) works — an all-in only gets called by strong hands.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "98 has gutshot potential and NIT checking twice signals weakness. Probe to steal.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "98 checks the flop, NIT checks too. NIT checks again on the turn — Probe bet to steal. NIT folds air.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A Probe doesn't need an all-in. The standard size (66% pot) works — shoving is excessive.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "Don't Float/Probe against a Calling Station. CS won't fold (Fold 20%) — bluffing is pure loss. Check to see the river.",
+          "evImpact": "+0.2 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "Betting against a CS is -EV. CS won't fold — you're just donating money.",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving against a CS is a disaster. CS calls with any pair — you're crushed.",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AT has backdoor flush + overcard equity, and NIT checking the turn signals weakness. Float then bet the turn to steal.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "AT floated the flop, then NIT checks the turn. The NIT range is weak — bet representing Kx, and NIT folds weak hands.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving the turn is excessive. NITs only call strong hands — use the standard size.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-fp-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "87 has gutshot potential and TAG checking twice signals weakness. Probe to steal.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "87 checks the flop, TAG checks too. TAG checks again on the turn — Probe bet to steal. TAG folds weak hands.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5.5BB (full pot)",
+          "explanation": "A Probe doesn't need a full-pot bet. The standard size (66% pot) works — full pot is excessive.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p1": {
+      "option": [
+        {
+          "action": "Bet 2BB (33% pot)",
+          "explanation": "K-8-3 rainbow is a dry board with BTN range advantage. A small C-Bet is standard — folds weak hands, gets calls from strong ones.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet 4BB (75% pot)",
+          "explanation": "A big bet on a dry board is excessive. A small bet achieves the goal; a big bet folds all weak hands.",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "KQ top pair good kicker on a dry board should C-Bet for value. Checking misses value.",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "JT made a straight — value-bet the river. Checking misses value from weak hands.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 15BB (60% pot)",
+          "explanation": "A straight on 9-8-4-2-7 is the nuts — Overbet for maximum value. 60% pot isn't enough.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Overbet 40BB (160% pot)",
+          "explanation": "JT's straight is the nuts and BB's range is capped (at best Set/two pair). The Overbet applies maximum pressure — BB calls with weak hands.",
+          "evImpact": "+2.5 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK has A-high on J-T-9-2-5, but CS calls with any pair. Value-bet (A-high may win).",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 15BB (60% pot)",
+          "explanation": "Use a standard value bet (60% pot) against the CS. CS calls with weak pairs — gain value. Don't Overbet (CS may call with stronger hands).",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "Overbetting against a CS is risky. CS calls with any pair and A-high may lose. The standard size is safer.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p4": {
+      "option": [
+        {
+          "action": "Bet 2BB (33% pot)",
+          "explanation": "K-7-2 rainbow is an extremely dry board — a small C-Bet works. Clear range advantage: weak hands fold, strong hands call.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet 4BB (75% pot)",
+          "explanation": "A big bet on a dry board is excessive. Weak hands fold and only strong ones call.",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "AK top pair top kicker on a dry board should C-Bet for value. Checking misses value.",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l3-bs-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QQ overpair — value-bet the river. Checking misses value.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 15BB (60% pot)",
+          "explanation": "QQ overpair on 9-8-4-2-7 is strong but not the nuts. A standard value bet (60% pot) gains value.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "QQ isn't the nuts — an Overbet is excessive. TAGs only call with stronger hands and fold weak ones.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p1": {
+      "option": [
+        {
+          "action": "Bet 3.5BB (66% pot)",
+          "explanation": "JTs on 9-4-2 has a gutshot (needs Q) plus BTN range advantage. C-Bet as a semi-bluff: TAG folds about 50%, and even when called you have 4 outs to improve. 66% pot is standard.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Checking forfeits fold equity and initiative. BTN has a huge range advantage on 9-4-2 — C-Bet at high frequency.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 5BB (100% pot)",
+          "explanation": "A full-pot bet on a dry board is excessive. TAG only continues with strong hands against a big bet. A small/medium bet achieves the goal.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p2": {
+      "option": [
+        {
+          "action": "Bet 7BB (70% pot)",
+          "explanation": "A♦5♦ has the nut flush draw (9 outs) + A-high overcard. Continue the semi-bluff on the turn: consistent narrative (preflop open + flop bet representing Kx), TAG folds to turn barrels about 45%. Even when called you have 35% equity.",
+          "evImpact": "+1.8 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Checking forfeits the flush draw's semi-bluff value. You have 9 outs + fold equity — checking only realizes part of the equity.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving with a draw on the turn is excessive. Only extremely strong draws (combo draws) shove. A lone flush draw uses the standard size.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "Don't bluff a Calling Station! CS folds at an extremely low rate (< 30%), and the bluff needs > 40% fold rate to break even. Q-high has no showdown value but the bluff always gets called — check to stop the bleeding.",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet 9BB (66% pot)",
+          "explanation": "Bluffing a CS is a serious mistake. CS calls with any pair (even A-high). Your fold equity is near zero — the bluff loses 9BB.",
+          "evImpact": "-3.5 BB/100"
+        },
+        {
+          "action": "Bet 4BB (30% pot)",
+          "explanation": "Even a small bluff against a CS isn't +EV. CS's calling threshold is extremely low — any bet gets called. Don't bluff a CS.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A4s has a flush draw + backdoor overcards, and BTN has a clear range advantage. A semi-bluff C-Bet is +EV.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 2BB (33% pot)",
+          "explanation": "A4s has a flush draw (9 outs) + A-high backdoor — semi-bluff small on the dry board. TAG folds a lot, and you have 35% equity when called.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Bet 5BB (100% pot)",
+          "explanation": "A full-pot bet on a dry board is excessive. A small bet achieves the goal.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-bluff-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QJ has no showdown value — checking forfeits the chance to fold small/medium pairs. A gutshot suits the semi-bluff better.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "QJ on A-8-3-K has a gutshot (T makes the nuts straight). Double-barreling represents Ax/Kx — NITs fold small/medium pairs at an extreme rate. A standard semi-bluff.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A semi-bluff doesn't need an all-in — an overbet only gets called by Ax or better.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p1": {
+      "option": [
+        {
+          "action": "Bet 4BB (75% pot)",
+          "explanation": "K-7-2 rainbow is an extremely dry board — a big bet folds all weak hands.",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Bet 2BB (33% pot)",
+          "explanation": "K-7-2 rainbow is an extremely dry board — a small C-Bet works. Clear range advantage.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "AK top pair top kicker on a dry board should C-Bet for value.",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p2": {
+      "option": [
+        {
+          "action": "Bet 2BB (33% pot)",
+          "explanation": "T-9-8 two-tone is an extremely wet board — a small bet gives draws too good a price.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 4-5BB (75-100% pot)",
+          "explanation": "T-9-8 two-tone is an extremely wet board — bet big to make draws pay.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "QJ has gutshot potential, but on a wet board you should bet to protect.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p3": {
+      "option": [
+        {
+          "action": "Bet 4BB (75% pot)",
+          "explanation": "7-5-2 with two hearts is fairly wet, but BB's range rarely has flushes. A medium bet works.",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Bet 3BB (50% pot)",
+          "explanation": "7-5-2 two-heart has some wetness, but BB's range rarely has flushes. A medium bet balances value and protection.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "AK two overcards + backdoor flush should C-Bet for value.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p4": {
+      "option": [
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "98s on 7-6-2 has an OESD + backdoor flush — a combo draw suits the Check-Raise semi-bluff.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "A combo draw should raise actively for fold equity. Only calling is too passive.",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Betting isn't standard. A Check-Raise is more effective.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-texture-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK top pair top kicker — value-bet the river.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 9BB (70% pot)",
+          "explanation": "AK top pair top kicker — a standard river value bet. The opponent has many weak Ax hands that call.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving top pair on the river is excessive. Use the standard size.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK top pair top kicker on a dry board has range advantage — bet for value.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 2BB (33% pot)",
+          "explanation": "AK on an A-7-2 dry board is a premium hand — small C-Bet for value.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet 5BB (100% pot)",
+          "explanation": "A full-pot bet on a dry board is excessive — weak hands fold.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p2": {
+      "option": [
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "QJ on K-8-3 isn't strong enough to Check-Raise. Check to control the pot.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "QJ on K-8-3 has no pair — OOP, check to control the pot. The checking range includes medium and weak hands.",
+          "evImpact": "+0.2 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "3BB",
+          "explanation": "Donk Betting isn't standard. OOP, check to let the opponent act first.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p3": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "Set 9 on a wet board should Check-Raise for value + protection.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "Set 9 on 9-7-4 is strong — Check-Raise on a wet board to build a big pot + protect.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk Betting isn't standard. A Check-Raise is more effective.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p4": {
+      "option": [
+        {
+          "action": "Bet 5BB (75% pot)",
+          "explanation": "J-T-9 two-tone is very wet — the opponent has many draws and two pairs. A big C-Bet is risky.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "J-T-9 two-tone strongly favors the opponent's range and KQ has no pair. Check to control the pot — this type of medium hand belongs in the checking range.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving with air is a disaster. The opponent has many strong hands that continue.",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-check-range-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AJ on a Kh8c3d2s7h river has no flush (only Kh and Ah Jh make three hearts) — not a flush. Bet an A-high bluff or Check-Fold.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 10BB (75% pot)",
+          "explanation": "A-high on a K-high board has showdown value — bet as a bluff-catcher to gain fold equity, representing Ax/Kx.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving A-high on the river is excessive — only better hands call.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "K-8-3 is a dry board very favorable to the 3-Better — AA should bet for value. Checking misses value.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 8BB (about 45% pot)",
+          "explanation": "AA on a dry board is the nuts level, SPR about 4.3. A medium bet gains value and sets up the stack-off.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "All-in 80BB",
+          "explanation": "Shoving directly at SPR 4.3 is excessive. A medium bet lets a wider range call — an all-in only gets called by strong hands.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p2": {
+      "option": [
+        {
+          "action": "Bet 14BB (75% pot)",
+          "explanation": "T-9-4 two-tone favors the LAG's range — KK shouldn't bet big. The LAG has range advantage and should act first.",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "T-9 two-tone is an overconnected board — the LAG range has many straights and flushes. Checking to control the pot is correct.",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Check-Raise All-in",
+          "explanation": "Check-Raise shoving KK on a T-9 two-tone board is a disaster. When the LAG continues, he almost always has a straight/two pair.",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QQ on a Q-7-2 dry board is the nuts level — facing a TAG bet, raise for value. Folding is the worst choice.",
+          "evImpact": "-5.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "QQ is the absolute nuts on a dry board — calling is too slow. Raise to build the pot; at low SPR you can stack off.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Raise to 25BB",
+          "explanation": "QQ on a Q-7-2 dry board is the nuts. Raise to build the pot — at SPR about 2.5 you can prepare a shove. TAG calls with Ax/medium pairs.",
+          "evImpact": "+3.0 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A-J-5 is two-tone but still a high-card board favorable to the 3-Better. AK top pair top kicker should bet.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 8BB (about 45% pot)",
+          "explanation": "A-J-5 has some two-tone but is a high-card board favorable to the 3-Better. AK top pair top kicker — medium bet for value.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet 16BB (full pot)",
+          "explanation": "A full-pot bet is excessive. A-J-5 has some connectivity — a medium bet works. A big bet only gets called by stronger hands.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l3-3bet-pf-p5": {
+      "option": [
+        {
+          "action": "Bet 14BB (75% pot)",
+          "explanation": "JJ on a T-8-3-2 board is still strong. After TAG checks the turn, bet to protect — stopping draws like Q9/97 from realizing equity.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "JJ on T-8 needs protection. Checking gives draws a free card, lowering JJ's equity.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving the turn is excessive. At SPR about 4, use the standard size. An all-in only gets called by stronger hands (Set/two pair).",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "3Bet pot; turn board T-8-3-2"
+    }
+  },
+  "drill": {
+    "d-l3-cbet-q1": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open BTN, BB calls. Flop: K♠ 7♥ 2♣. You hold AK — what should you do?",
+      "option": [
+        "C-Bet 1/3 pot",
+        "Check",
+        "C-Bet 2/3 pot"
+      ],
+      "explanation": "AK on K-7-2 rainbow is a premium hand — bet 1/3 pot small for value. The board is dry, a small bet is enough."
+    },
+    "d-l3-cbet-q2": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open CO, BB calls. Flop: 9♥ 8♥ 6♦. You hold AQ — what should you do?",
+      "option": [
+        "C-Bet 2/3 pot",
+        "Check",
+        "C-Bet 1/3 pot"
+      ],
+      "explanation": "9-8-6 two-heart strongly connects with BB's calling range — the opponent may have many straight/flush draws. AQ has no flush and no pair — check is best."
+    },
+    "d-l3-cbet-q3": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open BTN, BB calls. Flop: J♠ 9♦ 4♣. You hold JJ — what should you do?",
+      "option": [
+        "Check",
+        "C-Bet 1/3 pot",
+        "C-Bet full pot"
+      ],
+      "explanation": "JJ on J-9-4 is a set — bet 1/3 pot small. The board is dry; a small bet lets weak hands continue."
+    },
+    "d-l3-cbet-q4": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open SB, BB calls. Flop: T♠ 8♠ 3♥. You hold AT — what should you do?",
+      "option": [
+        "Check",
+        "C-Bet 1/3 pot",
+        "C-Bet 2/3 pot"
+      ],
+      "explanation": "AT on T-8-3 is top pair top kicker — OOP, bet bigger to protect. The opponent may have many draws — charge them."
+    },
+    "d-l3-cbet-q5": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open BTN, BB calls. Flop: Q♥ J♠ 2♦. You hold QJ — what should you do?",
+      "option": [
+        "Check",
+        "C-Bet 1/3 pot",
+        "C-Bet full pot"
+      ],
+      "explanation": "QJ on Q-J-2 is two pair — bet 1/3 pot small. The board is fairly dry; a small bet lets weak pairs/draws continue."
+    },
+    "d-l3-cbet-q6": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open CO, BB calls. Flop: A♠ 5♥ 3♣. You hold 55 — what should you do?",
+      "option": [
+        "Check",
+        "C-Bet 1/3 pot",
+        "C-Bet full pot"
+      ],
+      "explanation": "55 on A-5-3 is a set, but the A-high board makes it hard for opponents to continue. Bet 1/3 pot small, trying to get weak Ax/draws to call."
+    },
+    "d-l3-cbet-q7": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open BTN, BB calls. Flop: 7♥ 5♥ 2♥. You hold KQ — what should you do?",
+      "option": [
+        "C-Bet 1/3 pot",
+        "Check",
+        "C-Bet full pot"
+      ],
+      "explanation": "7-5-2 all hearts — BB's calling range has many flushes. KQ has no heart — check to control the pot is best."
+    },
+    "d-l3-cbet-q8": {
+      "scenario": "NL100, 6-max, 100BB, heads-up pot",
+      "question": "You open BTN, BB calls. Flop: 9♦ 6♦ 2♠. You hold A9 — what should you do?",
+      "option": [
+        "Check",
+        "C-Bet 1/3 pot",
+        "C-Bet full pot"
+      ],
+      "explanation": "A9 on 9-6-2 is top pair with a backdoor flush draw — bet 1/3 pot small for value while protecting."
+    },
+    "d-l3-odds-q1": {
+      "scenario": "Flop, you have AK two overcards (4 outs)",
+      "question": "AK two overcards (4 outs): what is the hit rate from Flop to Turn?",
+      "option": [
+        "About 9%",
+        "About 17%",
+        "About 4%"
+      ],
+      "explanation": "Flop→Turn single-street probability ≈ outs/47 = 4/47 ≈ 8.5%, rounded to about 9%. Note: the \"2/4 rule\" estimates two-street cumulative probability, not a single street."
+    },
+    "d-l3-odds-q2": {
+      "scenario": "Flop, you have a flush draw",
+      "question": "A flush draw (9 outs) from Flop to River hits about how often?",
+      "option": [
+        "About 18%",
+        "About 35%",
+        "About 50%"
+      ],
+      "explanation": "9 outs flop to river: 2/4 rule 9×4=36%, actual about 35%. This is one of the most important odds calculations."
+    },
+    "d-l3-odds-q3": {
+      "scenario": "Flop, you have an OESD",
+      "question": "An OESD (8 outs) from Flop to River hits about how often?",
+      "option": [
+        "About 17%",
+        "About 32%",
+        "About 45%"
+      ],
+      "explanation": "8 outs with the 2/4 rule: 8×4=32%. Actual about 31.5%. OESD is the strongest draw besides a flush draw."
+    },
+    "d-l3-odds-q4": {
+      "scenario": "Turn, you have a flush draw",
+      "question": "A flush draw (9 outs) from Turn to River hits about how often?",
+      "option": [
+        "About 9%",
+        "About 19%",
+        "About 35%"
+      ],
+      "explanation": "Turn to river is only one card: 9/46 ≈ 19.6%. Using 2×2: 9×2=18%, close to the actual value."
+    },
+    "d-l3-odds-q5": {
+      "scenario": "Flop, pot 10BB, opponent bets 5BB",
+      "question": "Pot is 15BB, you need to call 5BB. What equity do you need to call?",
+      "option": [
+        "About 20%",
+        "About 25%",
+        "About 33%"
+      ],
+      "explanation": "Calling 5BB wins 15BB+5BB=20BB, odds 5:20=1:4, needing 1/(4+1)=20% equity. But actually calling 5BB into a 20BB total pot needs 5/20=25%."
+    },
+    "d-l3-odds-q6": {
+      "scenario": "Flop, you have a gutshot",
+      "question": "A gutshot (4 outs) from Flop to River hits about how often?",
+      "option": [
+        "About 8%",
+        "About 16%",
+        "About 25%"
+      ],
+      "explanation": "4 outs with the 2/4 rule: 4×4=16%. Actual about 16.5%. A gutshot needs great implied odds to call."
+    },
+    "d-l3-odds-q7": {
+      "scenario": "Turn, pot 20BB, opponent bets 15BB",
+      "question": "Pot is 35BB, you need to call 15BB. You have a flush draw (9 outs) — what should you do?",
+      "option": [
+        "Call",
+        "Fold",
+        "Raise"
+      ],
+      "explanation": "Calling 15BB wins 35BB, needing 15/50=30% equity. But a flush draw only has about 19% turn-to-river equity — not enough. Fold."
+    },
+    "d-l3-odds-q8": {
+      "scenario": "Flop, you have a combo draw",
+      "question": "A flush draw + OESD (15 outs) from Flop to River hits about how often?",
+      "option": [
+        "About 32%",
+        "About 54%",
+        "About 65%"
+      ],
+      "explanation": "15 outs with the 2/4 rule: 15×4=60%, but actual about 54%. A combo draw is very strong — over 50% equity."
+    }
+  },
+  "unitTitle": {
+    "l3-cbet": {
+      "u1": "What Is a C-Bet?",
+      "u2": "C-Bet Sizing"
+    },
+    "l3-draws": {
+      "u1": "Common Draw Types",
+      "u2": "Playing Draws"
+    }
+  }
+}

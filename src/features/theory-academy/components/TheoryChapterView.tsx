@@ -25,6 +25,7 @@ import {
   resolveChapterSubtitle,
   resolveTheoryLevelTitle,
 } from '../utils/titleKeys';
+import { resolveTheoryObjectives, theoryContentKey } from '../utils/contentKeys';
 
 /**
  * 理论章节页：URL 直达门禁（所属 Level 未解锁则重定向回主页）+ 讲解 + 章末小测。
@@ -165,7 +166,7 @@ export default function TheoryChapterView() {
               {t('theory.objectives')}
             </h2>
             <ul className="space-y-1">
-              {chapter.objectives.map((obj, i) => (
+              {resolveTheoryObjectives(t, chapter.id, chapter.objectives).map((obj, i) => (
                 <li key={i} className="text-sm text-[var(--ivory-dim)] leading-relaxed flex items-start gap-2">
                   <span className="text-[var(--poker-frost)] mt-0.5 shrink-0">•</span>
                   {obj}
@@ -178,7 +179,11 @@ export default function TheoryChapterView() {
         {phase === 'reading' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel space-y-6 max-w-3xl mx-auto">
             {chapter.content.map((section, index) => (
-              <TheorySectionRenderer key={index} section={section} />
+              <TheorySectionRenderer
+                key={index}
+                section={section}
+                contentKey={theoryContentKey(chapter.id, index)}
+              />
             ))}
             {chapterCompleted ? (
               // 已完成章节：免重考复习导航（返回目录/下一章）+ 可选重考（幂等，取历史最高分）

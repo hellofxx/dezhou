@@ -8,6 +8,7 @@ import { transitionStandard } from '@/shared/utils/motion';
 import { useAcademyStore } from '../store';
 import { BASICS_STEPS, GLOSSARY_TERMS } from '../data/basicsContent';
 import { resolveBasicsStepTitle } from '../utils/titleKeys';
+import { basicsContentKey, resolveTerm } from '../utils/contentKeys';
 import type { LessonSection, Term } from '../types';
 
 const CATEGORY_TABS = [
@@ -133,7 +134,7 @@ export default function BasicsIntro() {
               {/* Render lesson sections */}
               <div className="space-y-3">
                 {step.content.map((section, i) => (
-                  <SectionRenderer key={i} section={section} />
+                  <SectionRenderer key={i} section={section} contentKey={basicsContentKey(step.id, i)} />
                 ))}
               </div>
 
@@ -205,48 +206,50 @@ export default function BasicsIntro() {
   );
 }
 
-/** Renders a single LessonSection */
-function SectionRenderer({ section }: { section: LessonSection }) {
+/** Renders a single LessonSection（contentKey 传入时走 key 优先，fallback 数据层原文） */
+function SectionRenderer({ section, contentKey }: { section: LessonSection; contentKey?: string }) {
+  const { t } = useTranslation();
+  const content = contentKey ? t(contentKey, { defaultValue: section.content }) : section.content;
   switch (section.type) {
     case 'heading':
       return (
         <h3 className="font-display text-[15px] text-[var(--brass-bright)] mt-4 first:mt-0">
-          {section.content}
+          {content}
         </h3>
       );
     case 'text':
       return (
         <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">
-          {section.content}
+          {content}
         </p>
       );
     case 'key-point':
       return (
         <div className="rounded-md border border-[var(--brass-bright)]/30 bg-[var(--brass-bright)]/5 px-4 py-3 text-sm text-[var(--ivory)]">
-          💡 {section.content}
+          💡 {content}
         </div>
       );
     case 'highlight':
       return (
         <div className="rounded-md border-l-2 border-[var(--brass-bright)] bg-[var(--walnut-raised)]/50 px-4 py-3 text-sm text-[var(--ivory-dim)]">
-          {section.content}
+          {content}
         </div>
       );
     case 'example':
       return (
         <pre className="rounded-md bg-[var(--felt-deep)]/60 border border-[var(--walnut-border)] px-4 py-3 text-xs text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line overflow-x-auto font-mono">
-          {section.content}
+          {content}
         </pre>
       );
     case 'pro-tip':
       return (
         <div className="rounded-md bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 px-4 py-3 text-sm text-[var(--poker-success)]/90">
-          🎯 {section.content}
+          🎯 {content}
         </div>
       );
     default:
       return (
-        <p className="text-sm text-[var(--ivory-dim)]">{section.content}</p>
+        <p className="text-sm text-[var(--ivory-dim)]">{content}</p>
       );
   }
 }
@@ -320,11 +323,13 @@ function GlossaryGrid() {
 }
 
 function TermCard({ term }: { term: Term }) {
+  const { t } = useTranslation();
+  const resolved = resolveTerm(t, term);
   return (
     <div className="rounded-md border border-[var(--walnut-border)] bg-[var(--felt-deep)]/40 px-3.5 py-3 transition-all hover:border-[var(--brass-bright)]/40 hover:-translate-y-0.5 hover:shadow-md">
-      <div className="text-sm font-semibold text-[var(--ivory)]">{term.english}</div>
-      <div className="text-xs text-[var(--brass-bright)] mb-1">{term.chinese}</div>
-      <div className="text-[11px] text-[var(--ivory-muted)] leading-snug">{term.explanation}</div>
+      <div className="text-sm font-semibold text-[var(--ivory)]">{resolved.english}</div>
+      <div className="text-xs text-[var(--brass-bright)] mb-1">{resolved.chinese}</div>
+      <div className="text-[11px] text-[var(--ivory-muted)] leading-snug">{resolved.explanation}</div>
     </div>
   );
 }

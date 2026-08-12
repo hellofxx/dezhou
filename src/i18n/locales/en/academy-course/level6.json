@@ -1,0 +1,1126 @@
+{
+  "lessonContent": {
+    "l6-icm": [
+      "What Is ICM (Independent Chip Model)",
+      "ICM (Independent Chip Model) is a mathematical model that calculates the real value ($EV) of chips in tournaments. Unlike cash games, chip value in tournaments is not linear — your first chip is worth more than your last chip.",
+      "Core concept: in tournaments Chip EV ≠ $EV. 10,000 chips are not worth 2 × 5,000 chips.",
+      "Chip EV vs $EV",
+      "In cash games, each 1BB has a fixed value (e.g. $1). But in tournaments:\n- Doubling your chips doesn't double your prize\n- Losing half your chips costs you more than half your expected prize\n- Survival itself has value (the prize ladder)",
+      "Core ICM Conclusions",
+      "1. Big stacks are worth less than their chip share (diminishing marginal value)\n   Example: a player holding 50% of chips may have only 40% $EV\n\n2. Short stacks are worth more than their chip share (survival value)\n   Example: a player holding 10% of chips may have 15% $EV\n\n3. Medium stacks should avoid clashing with big stacks on the bubble\n   Because the loss from elimination far exceeds the gain from doubling",
+      "Bubble Factor: Measuring ICM Pressure",
+      "Bubble Factor measures the strength of ICM pressure:\n- Bubble Factor = 1: no ICM pressure (like cash games)\n- Bubble Factor > 1: ICM pressure exists (tournaments)\n- Highest on the bubble, reaching 1.5-2.0\n\nThe higher the Bubble Factor, the tighter your calling range should be.",
+      "ICM Calculation Example",
+      "### Minimal example: SNG prize structure\nAssume a 4-player SNG: 1st=$50, 2nd=$30, 3rd=$20, 4th=$0\nChip distribution: A=40BB, B=30BB, C=20BB, D=10BB\n\n**Step 1: each player's win probability ≈ chip share**\n- P(A wins) = 40/(40+30+20+10) = 40%\n\n**Step 2: probability of two-player final**\n- P(A & B finish top 2) = combination calculation...\n- P(A 2nd) = Σ(P(X 1st) × P(A 2nd | X 1st))\n\n**Step 3: final $EV**\n- A's $EV = Σ(P(i wins at position j) × prize_j)\n- = 0.4×$50 + 0.32×$30 + 0.2×$20 = $36.6\n\nThat means 40BB of chips has an expected value of $36.6 in this SNG",
+      "Bubble Factor (BF) Explained",
+      "### Definition and formula\nBubble Factor = required equity for call / required equity in a cash game\n\n### Example\n- In a cash game facing a 50% pot bet, you need 27% equity to call\n- In ICM, BF can reach 1.5-2.0 (higher in extreme cases)\n- Actual required equity = 27% × 1.5 = 40.5%\n\nThis means on the bubble you must fold with a wider range, even hands you'd call in cash games.",
+      "ICM's Impact on Ranges",
+      "Bubble period strategy adjustments:\n- Tighten the calling range: need stronger hands to call all-ins\n- Keep or widen the push range: exploit opponents' ICM fear\n- Big stacks can push short stacks with wider ranges\n- Short stacks should seek the best shove spot, not passively wait",
+      "ICM is the cornerstone of tournament strategy. Once you understand ICM, you'll see why you fold AQ to an all-in on the bubble and why big stacks can \"bully\" short stacks.",
+      "ICM minimal example (4-player SNG, prizes 50/30/20):\nChip distribution: A=5000, B=3000, C=1500, D=500 (total 10000)\n\nA's $EV calculation (simplified):\nFirst-place probability ≈ 5000/10000 = 50%, prize $50\nSecond-place probability ≈ combination calculation...\n$EV ≈ 0.5×50 + 0.3×30 + 0.15×20 + 0.05×0 = $36.5\n\nBubble Factor:\nBF = required equity to call / required equity in cash\nOn the bubble, BF can reach 1.5-2.0, meaning you need about 1.5-2x the equity to call\n\nCore conclusion: doubling chips doesn't double the prize. 5000 chips' $EV is not 2 × 2500's.",
+      "Theory reference: the full derivation of the ICM recursive algorithm and the Bubble Factor formula is in Theory Academy T9 Chapter 2 \"ICM Theory\", including $EV calculation methods for multi-player SNGs and the mathematical foundation of tournament strategy.",
+      "Counter-intuitive: doubling chips doesn't double your prize. In the ICM model, chip marginal value diminishes — going from 500 to 1000 matters more than from 5000 to 5500. That's why short stacks should be more aggressive on the bubble and big stacks more conservative."
+    ],
+    "l6-pushfold": [
+      "When to Enter Push/Fold Mode",
+      "When your stack drops below 15BB, consider entering Push/Fold mode:\n- < 15BB: start considering push/fold\n- < 10BB: must use push/fold strategy\n- < 8BB: look for push opportunities from almost any position\n\nReason: when chips are too shallow, postflop playability drops sharply, and getting 3-bet after an open-raise is awkward.",
+      "Push/Fold core: replace open-raises with all-ins to maximize fold equity and avoid postflop decisions.",
+      "Nash Equilibrium Push/Fold Ranges",
+      "Nash equilibrium is the optimal-strategy concept from game theory. In Push/Fold spots:\n- Push range: a range that makes opponent calls unprofitable\n- Call range: a range with +EV against the opponent's push range\n\nIn practice you should:\n- vs tight opponents: push wider than Nash\n- vs loose opponents: push tighter than Nash",
+      "Key Stack-Size Nodes",
+      "Push ranges at 10BB:\n- BTN push: about 40-45% (any Ax, any pair, K8s+, Q9s+, J9s+, T9s, 98s)\n- SB push: about 50-55% (wider, only BB remains)\n\nPush ranges at 15BB:\n- BTN push: about 25-30% (tighter, chips still have postflop value)\n- SB push: about 35-40%\n\nPush ranges at 8BB:\n- BTN push: about 50%+ (very wide)\n- Any position: look for push opportunities",
+      "BB's Calling Range vs a Push",
+      "BB's call range vs a push depends on:\n1. Opponent position: BTN push is much wider than UTG push\n2. Opponent stack: short stacks push wider\n3. ICM pressure: tighter call range on the bubble\n\nGeneral rules:\n- vs BTN 10BB push: call about 30-35% (any pair, A2s+, K9s+, QJs)\n- vs UTG 10BB push: call about 15-20% (77+, ATs+, KQs)",
+      "Tournament vs Cash Push/Fold Differences",
+      "Cash games:\n- Push/Fold rarely used (except extremely short)\n- Can use min-raise to keep postflop playability\n\nTournaments:\n- ICM pressure widens push ranges (opponents call tighter)\n- Push ranges can be wider than Nash on the bubble\n- Push wider when final-table pay jumps are big",
+      "Push/Fold is the core short-stack skill in tournaments. Remember: at 10BB the BTN can push 40%+ of hands — much wider than most people's intuition.",
+      "ICM Bubble Factor definition:\nBF = required equity to call / required equity in cash\n\nExplanation: on the bubble, survival weight > immediate EV, so the Bubble Factor is usually 1.5-3.0x. You need higher equity to call because folding might mean survival ($EV > 0).\n\nExample: 4-player SNG bubble (prizes 50%/30%/20%)\n- Chip distribution: you 40%, MP 35%, CO 20%, BTN 5%\n- Your $EV(fold) = 35% (securing 2nd)\n- Your $EV(call, win) = 50%\n- Your $EV(call, lose) = 0\n- Break-even: 35 <= p×50% + (1-p)×0 → p >= 70%\n- In cash you'd only need: pot odds (e.g. 43%)\n- Bubble Factor ≈ 70%/43% ≈ 1.6x",
+      "Nash Push/Fold equilibrium ranges (10BB spot):\nSB Push range (vs BB):\n- All pairs 22+\n- All Ax\n- All suited Kx\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- Total about 70-80% of hands\n\nBB Call range (vs SB Push):\n- All pairs 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- Total about 35-40% of hands\n\nBreak-even calculation:\nBB calls 10BB to win 12BB (incl. blinds)\nRequired equity = 9/(9+12) ≈ 43%",
+      "Theory reference: the full derivation of Nash Push/Fold equilibrium ranges is in Theory Academy T9 Chapter 2 \"ICM Theory\". Tournament ICM pressure and Push/Fold decisions are closely related.",
+      "Counter-intuitive: UTG's push range at 10BB is nearly wide open (about 70-80%), not \"tight\". Many players think short-stacked UTG should only push strong hands, but Nash equilibrium shows UTG at 10BB can push an extremely wide range — because folding means blinds get eaten, while pushing captures fold equity."
+    ],
+    "l6-bubble": [
+      "What Is the Bubble?",
+      "The bubble is the stage with only 1-3 eliminations left before the money. For example:\n- 100 players, top 15 get paid\n- When only 16-18 remain, it's the bubble\n\nThis is the stage with the highest ICM pressure, because:\n- Eliminating 1-3 more players enters the money\n- Elimination = zero prize\n- Entering the money = at least min-cash",
+      "The bubble is the stage with the highest ICM pressure in a tournament, and the stage where big stacks profit the most.",
+      "Big-Stack Bubble Strategy",
+      "If you're one of the top 3 big stacks:\n\n1. Aggressive pressure\n   - Open wide (40-50%)\n   - 3-bet wide (especially vs medium stacks)\n   - Exploit medium stacks' ICM fear\n\n2. Target selection\n   - Attack medium stacks first (they fear elimination most)\n   - Short stacks may \"fight back\" (nothing left to lose)\n\n3. Position exploitation\n   - Apply maximum pressure from BTN/CO\n   - Medium stacks in the blinds face the toughest decisions",
+      "Medium-Stack Bubble Strategy",
+      "If you're a medium stack:\n\n1. Avoid clashing with big stacks\n   - When a big stack opens, 3-bet/call with a tighter range\n   - Don't \"prove yourself\" — survival first\n\n2. Pressure short stacks\n   - Open/3-bet wide against short stacks\n   - Short stacks need very tight calling ranges\n\n3. Position awareness\n   - Play tighter behind big stacks\n   - Play wider behind short stacks",
+      "Short-Stack Bubble Strategy",
+      "If you're a short stack (< 10BB):\n\n1. Seek the best shove spot\n   - Push when early positions fold to you (max fold equity)\n   - Avoid pushing behind big stacks\n\n2. Don't passively wait\n   - Pushing below 5BB is too late\n   - Pushing at 10-15BB still has fold equity\n\n3. Hand selection\n   - Prefer hands with blockers (Ax, Kx)\n   - Avoid \"dominated\" hands (KJ, QT etc.)",
+      "Strategy Shift After the Bubble Bursts",
+      "After the bubble bursts (someone is eliminated into the money):\n\n1. ICM pressure drops sharply\n   - Everyone has min-cashed\n   - The next target is a higher finish\n\n2. Ranges widen\n   - Short stacks can \"go for it\"\n   - Medium stacks no longer fear so much\n\n3. Strategy adjustments\n   - Return closer to cash-game play\n   - Still watch for pay jumps",
+      "The bubble is a big stack's \"money printer\". If you're short, don't be afraid to push at 10-15BB — waiting until 5BB is too late."
+    ],
+    "l6-finaltable": [
+      "The Impact of Final Table Payout Structure",
+      "Final tables (usually 9 or 6 players) have big pay jumps:\n- 9th: $1,000\n- 8th: $1,500\n- 7th: $2,200\n- ...\n- 1st: $20,000\n\nThis means:\n- Every elimination has a significant prize jump\n- ICM pressure is still strong at the final table\n- Big stacks can exploit pay jumps to apply pressure",
+      "Final-table strategy core: adjust dynamically based on pay jumps and chip distribution — don't \"play one style all the way\".",
+      "Dynamic Adjustment by Chip Distribution",
+      "Adjust strategy by table chip distribution:\n\n1. You're a big stack (top 2-3)\n   - Apply pressure with wide opens/3-bets\n   - Exploit medium stacks' ICM fear\n   - Goal: accumulate chips, chase 1st place\n\n2. You're a medium stack\n   - Avoid clashing with big stacks\n   - Pressure short stacks\n   - Goal: survive, wait for a better spot\n\n3. You're a short stack\n   - Seek the best shove spot\n   - Don't passively wait\n   - Goal: double up or bust",
+      "Steal Strategy",
+      "When to steal:\n- Blinds are big (relative to stacks)\n- Opponents are tight (high fold-to-steal)\n- You're in position (BTN/CO)\n\nSteal range:\n- BTN: 40-50% (any Ax, any pair, most suited hands)\n- CO: 30-40%\n\nSteal size:\n- Min-raise (2-2.2x) is most common\n- Gives opponents the worst odds\n- Reduces your own risk",
+      "Re-Steal",
+      "Re-stealing is 3-betting all-in from the blinds against a stealer:\n\nWhen to re-steal:\n- The opponent steals often (open > 40%)\n- You have 15-25BB (too little = no fold equity, too much = wasteful)\n- You have blockers (Ax, Kx)\n\nHand selection:\n- Ax: block the opponent's Ax combos\n- Suited hands: postflop playability\n- Avoid \"dominated\" hands (KJ, QT)",
+      "Heads-Up Strategy Intro",
+      "Heads-Up is the final stage of a tournament:\n\n1. Extremely wide ranges\n   - SB (BTN) opens 70-80%\n   - BB defends 60-70%\n\n2. Aggression is key\n   - Passive = lose\n   - Active pressure wins blinds\n\n3. Adaptability\n   - Observe opponent tendencies\n   - Tight opponent → steal more\n   - Loose opponent → value bet more",
+      "The final table is the most important stage of a tournament. Remember: big stacks should exploit pay jumps with pressure, short stacks should actively seek push opportunities."
+    ],
+    "l6-bounty": [
+      "What Are Bounty/PKO Tournaments?",
+      "In Progressive Knockout (PKO) tournaments, every player carries a bounty. Eliminating an opponent awards half their bounty; the other half is added to your own head. This completely changes strategy.",
+      "Bounties make \"eliminating\" valuable in itself. When covering an opponent, your calling/raising range should be wider than in a normal tournament, because there's bounty value beyond the pot.",
+      "Adjustment Principles",
+      "• When covering short stacks: significantly widen your calling/raising range (bounty value is high)\n• When covered: play normally — don't get \"excited\" by opponents' 3-Bets\n• When your bounty is big: opponents will raise at you more aggressively\n• Calculate \"bounty-adjusted odds\":\n  Effective odds = (pot + opponent bounty/2) : call amount",
+      "The most common PKO mistake is completely ignoring bounty value (playing too tight) or over-chasing bounties (shoving garbage hands). Balance is key.",
+      "Bounty tournament $EV adjustment formula:\nEffective bounty value = fixed bounty × elimination probability\nAdjusted call required equity = original required equity × (1 - bounty discount factor)\n\nExample: bounty $20, opponent chips 5000, total chips 50000\nElimination probability = 5000/50000 = 10%\nBounty $EV contribution = 0.1 × $20 = $2\n\nThis means your calling range can widen about 5-10%, depending on bounty size and chip distribution",
+      "Theory reference: multiway equity dilution and bounty-tournament $EV adjustments are in Theory Academy T9 Chapter 3 \"Multiway Pots and the GTO-Exploitation Unified Framework\". Bounty strategy is ICM theory extended to a special format.",
+      "Counter-intuitive: against a big-bounty opponent you should actually tighten your calling range. Many think \"big bounty means chase more aggressively\", but mathematically a big-bounty opponent has a low elimination probability, so the bounty's $EV contribution is limited. Blindly chasing bounties leads to -EV calls."
+    ]
+  },
+  "lessonQuiz": {
+    "l6-icm-q1": {
+      "question": "What is the core concept of ICM?",
+      "options": [
+        "Chip value is linear",
+        "In tournaments Chip EV = $EV",
+        "Chip value in tournaments ≠ money value",
+        "ICM only applies to cash games"
+      ],
+      "explanation": "ICM's core is that chip real value ($EV) in tournaments doesn't equal chip count (Chip EV), because of the prize structure."
+    },
+    "l6-icm-q2": {
+      "question": "On the bubble, medium stacks should?",
+      "options": [
+        "Clash with big stacks",
+        "Avoid clashing with big stacks",
+        "Call all-ins with any hand",
+        "Shove immediately"
+      ],
+      "explanation": "Medium stacks should avoid clashing with big stacks on the bubble, because the elimination loss (losing prizes) far exceeds the doubling gain."
+    },
+    "l6-icm-q3": {
+      "question": "The higher the Bubble Factor, your calling range should be?",
+      "options": [
+        "Wider",
+        "Tighter",
+        "Unchanged",
+        "Only premium hands"
+      ],
+      "explanation": "Higher Bubble Factor = stronger ICM pressure, so you need stronger hands to call all-ins because elimination costs more."
+    },
+    "l6-icm-q4": {
+      "question": "Big stacks on the bubble can?",
+      "options": [
+        "Push with a tighter range",
+        "Push short stacks with a wider range",
+        "Only play premium hands",
+        "Avoid all conflict"
+      ],
+      "explanation": "Big stacks can exploit ICM pressure and push short stacks with a wider range, because short stacks need stronger hands to call."
+    },
+    "l6-icm-q5": {
+      "question": "Which stage has the highest ICM pressure?",
+      "options": [
+        "Start of the tournament",
+        "The bubble",
+        "After the final table",
+        "Blind period"
+      ],
+      "explanation": "The bubble has the highest ICM pressure, because 1-3 more eliminations enter the money."
+    },
+    "l6-pushfold-q1": {
+      "question": "When should you typically enter Push/Fold mode?",
+      "options": [
+        "< 30BB",
+        "< 20BB",
+        "< 15BB",
+        "< 5BB"
+      ],
+      "explanation": "When the stack drops below 15BB, consider Push/Fold mode. Below 10BB you must use it."
+    },
+    "l6-pushfold-q2": {
+      "question": "What is BTN's Nash push range at 10BB?",
+      "options": [
+        "10-15%",
+        "20-25%",
+        "40-45%",
+        "70-80%"
+      ],
+      "explanation": "At 10BB BTN's Nash push range is about 40-45%, including any Ax, any pair, and most suited connectors."
+    },
+    "l6-pushfold-q3": {
+      "question": "Your push range on the bubble should be?",
+      "options": [
+        "Tighter than Nash",
+        "Same as Nash",
+        "Wider than Nash",
+        "Only premium hands"
+      ],
+      "explanation": "On the bubble, ICM pressure makes opponents call tighter, so you can push wider than Nash."
+    },
+    "l6-pushfold-q4": {
+      "question": "Vs a UTG 10BB push, BB's calling range should be?",
+      "options": [
+        "Very wide (50%+)",
+        "Medium (30-35%)",
+        "Tight (15-20%)",
+        "Only AA/KK"
+      ],
+      "explanation": "UTG's push range is tight (usually strong), so BB should call with a tight range (15-20%)."
+    },
+    "l6-pushfold-q5": {
+      "question": "What is SB's push range at 10BB?",
+      "options": [
+        "20-25%",
+        "30-35%",
+        "50-55%",
+        "80%+"
+      ],
+      "explanation": "SB can push about 50-55% at 10BB because only BB remains."
+    },
+    "l6-bubble-q1": {
+      "question": "What is the bubble?",
+      "options": [
+        "Start of the tournament",
+        "1-3 eliminations from the money",
+        "The final table",
+        "Middle stage"
+      ],
+      "explanation": "The bubble is the stage 1-3 eliminations from the money, with the highest ICM pressure."
+    },
+    "l6-bubble-q2": {
+      "question": "Big stacks on the bubble should?",
+      "options": [
+        "Play tight",
+        "Pressure aggressively with wide opens/3-bets",
+        "Only premium hands",
+        "Avoid all conflict"
+      ],
+      "explanation": "Big stacks should exploit ICM pressure and open/3-bet wide, especially against medium stacks."
+    },
+    "l6-bubble-q3": {
+      "question": "Medium stacks on the bubble should?",
+      "options": [
+        "Clash with big stacks",
+        "Avoid big stacks and pressure short stacks",
+        "Call with any hand",
+        "Shove immediately"
+      ],
+      "explanation": "Medium stacks should avoid clashing with big stacks (elimination loss too big) but can pressure short stacks."
+    },
+    "l6-bubble-q4": {
+      "question": "Short stacks on the bubble should?",
+      "options": [
+        "Wait passively",
+        "Actively seek push spots (10-15BB)",
+        "Only play AA",
+        "Fold everything"
+      ],
+      "explanation": "Short stacks should actively push at 10-15BB — by 5BB there's no fold equity left."
+    },
+    "l6-bubble-q5": {
+      "question": "After the bubble bursts, ICM pressure?",
+      "options": [
+        "Increases",
+        "Drops sharply",
+        "Unchanged",
+        "Disappears"
+      ],
+      "explanation": "After the bubble bursts everyone has min-cashed, so ICM pressure drops sharply."
+    },
+    "l6-finaltable-q1": {
+      "question": "Final-table pay jumps mean?",
+      "options": [
+        "ICM pressure disappears",
+        "Every elimination has a significant prize change",
+        "Everyone plays loose",
+        "Short stacks wait passively"
+      ],
+      "explanation": "Final-table pay jumps are big — every elimination changes prizes significantly, so ICM pressure remains strong."
+    },
+    "l6-finaltable-q2": {
+      "question": "What is BTN's typical steal range?",
+      "options": [
+        "10-15%",
+        "20-25%",
+        "40-50%",
+        "80-90%"
+      ],
+      "explanation": "BTN's steal range is typically 40-50%, including any Ax, any pair, and most suited hands."
+    },
+    "l6-finaltable-q3": {
+      "question": "What is the ideal stack for a re-steal?",
+      "options": [
+        "5-10BB",
+        "15-25BB",
+        "40-50BB",
+        "100BB+"
+      ],
+      "explanation": "15-25BB is ideal for re-stealing: too little has no fold equity, too much wastes chips."
+    },
+    "l6-finaltable-q4": {
+      "question": "What is SB (BTN)'s open range in Heads-Up?",
+      "options": [
+        "30-40%",
+        "50-60%",
+        "70-80%",
+        "90%+"
+      ],
+      "explanation": "In Heads-Up the SB (BTN) opens about 70-80% — an extremely wide range."
+    },
+    "l6-finaltable-q5": {
+      "question": "What is the typical steal size?",
+      "options": [
+        "3BB",
+        "Min-raise (2-2.2x)",
+        "5BB",
+        "Half pot"
+      ],
+      "explanation": "Min-raise gives opponents the worst odds and reduces your risk — the most common steal size."
+    },
+    "l6-bounty-q1": {
+      "question": "How much of an opponent's bounty do you get in PKO?",
+      "options": [
+        "All",
+        "Half",
+        "A quarter",
+        "None"
+      ],
+      "explanation": "In PKO you get half the opponent's bounty; the other half is added to your own head."
+    },
+    "l6-bounty-q2": {
+      "question": "When covering short stacks, how should you adjust?",
+      "options": [
+        "More conservative",
+        "Significantly widen ranges",
+        "Same as a normal tournament",
+        "Only AA/KK"
+      ],
+      "explanation": "Bounty value is high when covering short stacks — significantly widen calling/raising ranges."
+    },
+    "l6-bounty-q3": {
+      "question": "When your bounty is big in PKO, opponents will?",
+      "options": [
+        "Be more conservative",
+        "Raise at you more aggressively",
+        "Fold more",
+        "No change"
+      ],
+      "explanation": "When your bounty is big, opponents raise at you more aggressively to win it."
+    },
+    "l6-bounty-q4": {
+      "question": "When covered, how should you play?",
+      "options": [
+        "More conservative",
+        "Play normally, don't get excited by 3-Bets",
+        "Shove all hands",
+        "Fold all hands"
+      ],
+      "explanation": "When covered, play normally — don't get emotional from opponents' aggression."
+    },
+    "l6-bounty-q5": {
+      "question": "What is the most common PKO mistake?",
+      "options": [
+        "Playing too tight",
+        "Ignoring bounty value or over-chasing bounties",
+        "Always shoving",
+        "Never folding"
+      ],
+      "explanation": "The most common mistake is completely ignoring bounty value (too tight) or over-chasing bounties (shoving garbage)."
+    }
+  },
+  "lessonExample": {
+    "l6-icm-ex1": {
+      "title": "Folding AQ on the bubble",
+      "correctAction": "Fold",
+      "reasoning": [
+        "Tournament bubble, 2 more eliminations enter the money",
+        "You're a medium stack, CO is a big stack (covering you)",
+        "AQ is strong, but the elimination risk after calling is too high",
+        "After folding you still have a high probability of entering the money",
+        "ICM pressure makes the call's $EV negative"
+      ],
+      "mistakeAction": "Call all-in",
+      "mistakeReasoning": "AQ is a clear call in cash games, but on the tournament bubble ICM pressure makes folding correct.",
+      "mistakeEvLoss": "-$50 (losing the chance to enter the money)",
+      "tableDesc": "Tournament bubble; 2 more eliminations until the money",
+      "stackDesc": "You are a medium stack; the CO is a big stack covering you; 2 short stacks remain"
+    },
+    "l6-icm-ex2": {
+      "title": "Big stack pushing short stacks wide",
+      "correctAction": "Raise all-in",
+      "reasoning": [
+        "You're a big stack; SB and BB are both short stacks (8-10BB)",
+        "Short stacks on the bubble need very tight calling ranges (ICM pressure)",
+        "97s has decent blockers and postflop playability",
+        "Even when called, you still have position and chip advantages",
+        "Apply maximum pressure with ICM pressure"
+      ],
+      "mistakeAction": "Fold or min-raise",
+      "mistakeReasoning": "In cash games 97s might just call, but in tournaments big stacks should actively pressure with ICM leverage.",
+      "mistakeEvLoss": "-2BB (missing the blind-steal opportunity)",
+      "tableDesc": "Tournament bubble; you are the big stack",
+      "stackDesc": "You 25BB; SB 8BB; BB 10BB; 2 medium stacks remain"
+    },
+    "l6-pushfold-ex1": {
+      "title": "BTN 10BB Push",
+      "correctAction": "Push all-in",
+      "reasoning": [
+        "You only have 10BB — enter Push/Fold mode",
+        "BTN position can push 40-45% of hands",
+        "K9s is in the Nash push range",
+        "SB and BB need very tight calling ranges",
+        "Even when called, K9s has 35%+ equity vs the calling range"
+      ],
+      "mistakeAction": "Fold or min-raise",
+      "mistakeReasoning": "Min-raising at 10BB is meaningless (3-bet ends you), folding is too tight. Pushing is optimal.",
+      "mistakeEvLoss": "-1.5BB (missing the blind-steal opportunity)",
+      "tableDesc": "MTT mid-stage; 15 players left until the money",
+      "stackDesc": "You 10BB; SB 15BB; BB 12BB"
+    },
+    "l6-pushfold-ex2": {
+      "title": "BB calling an SB push",
+      "correctAction": "Call",
+      "reasoning": [
+        "SB's push range is wide (50-55%)",
+        "A8s has great equity vs a wide range (~55%)",
+        "The A blocker reduces the chance the opponent has Ax",
+        "Pot odds: SB pushes 10BB, hero BB calls 9BB, total pot 21BB. Required equity = 9/21 ≈ 43%",
+        "Even without ICM pressure this is a clear call"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "A8s has enough equity vs SB's wide push range — folding is too tight.",
+      "mistakeEvLoss": "-1BB (giving up a +EV call)",
+      "tableDesc": "MTT early stage; far from the money",
+      "stackDesc": "You 12BB; SB 10BB"
+    },
+    "l6-bubble-ex1": {
+      "title": "Big stack pressuring on the bubble",
+      "correctAction": "Raise 2.5BB",
+      "reasoning": [
+        "You're a big stack (35BB) on the bubble",
+        "SB and BB are both medium stacks (15-20BB)",
+        "Medium stacks fear elimination most and defend tight",
+        "K9s has decent blockers and postflop playability",
+        "Even when called, you still have positional advantage"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "Big stacks should exploit ICM pressure on the bubble — folding is too passive.",
+      "mistakeEvLoss": "-1.5BB (missing the blind-steal opportunity)",
+      "tableDesc": "MTT bubble; 2 more players until the money",
+      "stackDesc": "You 35BB (big stack); SB 18BB; BB 15BB (medium stack)"
+    },
+    "l6-bubble-ex2": {
+      "title": "Short stack shoving on the bubble",
+      "correctAction": "Push all-in",
+      "reasoning": [
+        "You're a short stack (12BB) on the bubble",
+        "Early positions folded to you — maximize fold equity",
+        "A7s has the A blocker",
+        "BTN/SB/BB need very tight calling ranges (ICM pressure)",
+        "Don't wait until 5BB to push — by then there's no fold equity"
+      ],
+      "mistakeAction": "Fold and wait for a better spot",
+      "mistakeReasoning": "Short stacks should actively seek push spots on the bubble, not wait passively. By 5BB it's too late.",
+      "mistakeEvLoss": "-2BB (blind erosion)",
+      "tableDesc": "MTT bubble; you are the short stack",
+      "stackDesc": "You 12BB (short stack); 3 big stacks and 2 medium stacks at the table"
+    },
+    "l6-finaltable-ex1": {
+      "title": "Big stack pressuring at the final table",
+      "correctAction": "Raise 2.2BB",
+      "reasoning": [
+        "You're a big stack (40BB) at the final table",
+        "SB and BB are both medium stacks (20-25BB)",
+        "Big pay jumps — medium stacks fear elimination",
+        "Q8s has decent blockers and postflop playability",
+        "Min-raise gives opponents the worst odds"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "Big stacks should exploit pay jumps at the final table — folding is too passive.",
+      "mistakeEvLoss": "-1.5BB (missing the blind-steal opportunity)",
+      "tableDesc": "MTT final table; 9-handed with big payout jumps",
+      "stackDesc": "You 40BB (big stack); SB 22BB; BB 25BB (medium stack)"
+    },
+    "l6-finaltable-ex2": {
+      "title": "Re-Steal",
+      "correctAction": "Re-raise all-in",
+      "reasoning": [
+        "BTN's open range is wide (40%+)",
+        "You have 20BB — the ideal re-steal stack",
+        "A5s has the A blocker (reducing the chance of opponent Ax)",
+        "BTN needs a very tight calling range (~15%)",
+        "Even when called, A5s has 40%+ equity vs the calling range"
+      ],
+      "mistakeAction": "Call or Fold",
+      "mistakeReasoning": "Calling plays a weak hand OOP postflop; folding is too passive. Re-stealing is optimal.",
+      "mistakeEvLoss": "-2BB (giving up a +EV re-steal)",
+      "tableDesc": "MTT final table; the BTN is a LAG",
+      "stackDesc": "You 20BB; BTN 30BB"
+    }
+  },
+  "lessonPractice": {
+    "l6-icm-p1": {
+      "option": [
+        {
+          "action": "Call all-in",
+          "explanation": "KQs is a clear call in cash games, but SNG bubble ICM pressure is extreme. If you call and get eliminated you lose the prize, while folding lets the short stacks get eliminated first.",
+          "evImpact": "-$30"
+        },
+        {
+          "action": "Fold",
+          "explanation": "SNG bubble: you're a medium stack with 2 shorter stacks. Folding KQs is the correct ICM decision — let the short stacks get eliminated first.",
+          "evImpact": "+$25"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "You don't have enough chips for a 3-bet all-in, and even if you did, ICM pressure doesn't support it.",
+          "evImpact": "-$35"
+        }
+      ],
+      "tableDesc": "SNG bubble; 1 more elimination until the money",
+      "stackDesc": "You 12BB; CO 18BB; 2 short stacks at 5BB"
+    },
+    "l6-icm-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A5s has strong blockers (blocking AA/AK). As a big stack on the bubble you should pressure with ICM leverage.",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "Min-raising gives opponents good odds and you don't want to get 3-bet. Shove directly to apply maximum ICM pressure.",
+          "evImpact": "+0.5BB"
+        },
+        {
+          "action": "Raise all-in",
+          "explanation": "As a big stack on the bubble, A5s has the A blocker and short stacks need very tight calling ranges. Use ICM pressure to maximize fold equity.",
+          "evImpact": "+2.0BB"
+        }
+      ],
+      "tableDesc": "MTT bubble; you are the big stack",
+      "stackDesc": "You 30BB; SB 8BB; BB 10BB"
+    },
+    "l6-icm-p3": {
+      "option": [
+        {
+          "action": "Call all-in",
+          "explanation": "JTs lacks equity vs UTG's all-in range (usually QQ+/AK). Even without ICM pressure this is a -EV call.",
+          "evImpact": "-3BB"
+        },
+        {
+          "action": "Fold",
+          "explanation": "UTG's all-in range is strong — JTs lacks equity. Even without bubble ICM pressure, fold.",
+          "evImpact": "0BB"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "You don't have enough chips to 3-bet, and JTs lacks equity vs UTG's range.",
+          "evImpact": "-5BB"
+        }
+      ],
+      "tableDesc": "MTT mid-stage; 20 players left until the money",
+      "stackDesc": "You 20BB; UTG 20BB; 3 short stacks at the table"
+    },
+    "l6-icm-p4": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "KQs is too weak to call under bubble ICM pressure. With 2 shorter stacks, folding protects your tournament life.",
+          "evImpact": "-$30"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Bubble ICM pressure is extreme with 2 shorter stacks. Folding KQs is the correct ICM decision.",
+          "evImpact": "+$20"
+        }
+      ],
+      "tableDesc": "SNG bubble",
+      "stackDesc": "You 15BB; CO 20BB; 2 short stacks at 5BB"
+    },
+    "l6-icm-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "At 6BB you're very short and AKs is a premium hand. Push to maximize fold equity.",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "At 6BB AKs is a premium hand — shoving is the best play.",
+          "evImpact": "+2BB"
+        }
+      ],
+      "tableDesc": "MTT bubble; you are very short",
+      "stackDesc": "You 6BB; SB 20BB; BB 25BB"
+    },
+    "l6-pushfold-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QTS is a clear push from the SB at 10BB. SB can push 50%+ of hands — QTS is in it.",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "SB can push 50-55% at 10BB. QTS has decent equity and blockers — a standard push.",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "Min-raising at 10BB is meaningless. Getting 3-bet ends you — push directly to maximize fold equity.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT mid-stage; you only have 10BB",
+      "stackDesc": "You 10BB; BB 15BB"
+    },
+    "l6-pushfold-p2": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "Although 77 has decent equity vs BTN's wide push range, bubble ICM pressure makes the call's $EV negative. Let the short stacks get eliminated first.",
+          "evImpact": "-$20"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Bubble ICM pressure is extreme. You're a medium stack with 2 shorter stacks. Folding 77 is the correct ICM decision.",
+          "evImpact": "+$15"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "You don't have enough chips to 3-bet, and ICM pressure doesn't support it.",
+          "evImpact": "-$25"
+        }
+      ],
+      "tableDesc": "MTT bubble; 3 more players until the money",
+      "stackDesc": "You 12BB; BTN 10BB; 2 short stacks at 5BB"
+    },
+    "l6-pushfold-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A2s is a clear push from the BTN at 8BB. Any Ax is in the push range.",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "BTN can push 50%+ at 8BB. A2s has the A blocker — a standard push.",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "Min-raising at 8BB is meaningless. Push directly to maximize fold equity.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "SNG mid-stage; you only have 8BB",
+      "stackDesc": "You 8BB; SB 12BB; BB 10BB"
+    },
+    "l6-pushfold-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KK is a premium hand at 12BB — can't fold.",
+          "evImpact": "-3BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "KK is a premium hand at 12BB — shove for maximum value.",
+          "evImpact": "+2BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "Min-raising at 12BB is meaningless and getting 3-bet is awkward. Push directly.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT mid-stage; you have 12BB"
+    },
+    "l6-pushfold-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AJs has enough equity vs BTN's 10BB push range (40%+). Without ICM pressure, it's a clear call.",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "AJs has about 60% equity vs a wide push range. No ICM pressure — standard call.",
+          "evImpact": "+2BB"
+        }
+      ],
+      "tableDesc": "MTT early stage; far from the money"
+    },
+    "l6-bubble-p1": {
+      "option": [
+        {
+          "action": "3-bet all-in",
+          "explanation": "You're a medium stack, CO is a big stack. Avoid clashing with big stacks on the bubble — the elimination loss is too big.",
+          "evImpact": "-$40"
+        },
+        {
+          "action": "Call",
+          "explanation": "QJs has mediocre equity vs a big stack's open range and you're OOP postflop. ICM pressure doesn't support calling.",
+          "evImpact": "-$10"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Medium stacks should avoid clashing with big stacks on the bubble. Folding QJs is the correct ICM decision — let the short stacks get eliminated first.",
+          "evImpact": "+$15"
+        }
+      ],
+      "tableDesc": "MTT bubble; you are the medium stack",
+      "stackDesc": "You 20BB (medium); CO 40BB (big stack); 2 short stacks at 8BB"
+    },
+    "l6-bubble-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "You're a big stack — pressure on the bubble with ICM leverage. A9s has the A blocker — a standard open.",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "Big stacks should open wide on the bubble. A9s has the A blocker and medium stacks defend tight.",
+          "evImpact": "+2.0BB"
+        },
+        {
+          "action": "Raise 3BB",
+          "explanation": "Min-raise (2.2BB) is enough — bigger just adds risk.",
+          "evImpact": "+1.5BB"
+        }
+      ],
+      "tableDesc": "MTT bubble; you are the big stack",
+      "stackDesc": "You 45BB (big stack); SB 18BB; BB 15BB (medium stack)"
+    },
+    "l6-bubble-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KTS is a standard push from the SB at 10BB. Everyone folded before — maximize fold equity. Don't wait passively.",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "Short stacks should actively seek push spots on the bubble. KTS has decent equity and blockers — pushing after early folds is standard.",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "Min-raising at 10BB is meaningless. Getting 3-bet ends you — push directly.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT bubble; you are the short stack",
+      "stackDesc": "You 10BB (short stack); BB 25BB (big stack)"
+    },
+    "l6-bubble-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "At 8BB you're very short — ATs has the A blocker. Push actively; don't wait until 5BB.",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "Short-stacked at 8BB, ATs has the A blocker — pushing after early folds maximizes fold equity.",
+          "evImpact": "+1.5BB"
+        }
+      ],
+      "tableDesc": "MTT bubble; you are the short stack",
+      "stackDesc": "You 8BB; BTN 30BB; SB 25BB; BB 20BB"
+    },
+    "l6-bubble-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QQ is a premium hand at 30BB. Big stacks should be aggressive on the bubble.",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "QQ is a premium hand — min-raise for value. Big stacks use ICM pressure on the bubble.",
+          "evImpact": "+2BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "QQ doesn't need a shove at 30BB. Min-raise is better, keeping postflop playability.",
+          "evImpact": "+1BB"
+        }
+      ],
+      "tableDesc": "MTT bubble; you are the big stack",
+      "stackDesc": "You 30BB (big stack); SB 15BB; BB 18BB"
+    },
+    "l6-finaltable-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "You're a big stack — pressure with pay jumps at the final table. K9s is a standard open.",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "Big stacks should open wide at the final table. K9s has decent blockers and medium stacks defend tight.",
+          "evImpact": "+2.0BB"
+        },
+        {
+          "action": "Raise 3BB",
+          "explanation": "Min-raise (2.2BB) is enough — no need for bigger.",
+          "evImpact": "+1.5BB"
+        }
+      ],
+      "tableDesc": "MTT final table; you are the big stack",
+      "stackDesc": "You 35BB (big stack); SB 18BB; BB 20BB (medium stack)"
+    },
+    "l6-finaltable-p2": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "Calling plays a weak hand OOP postflop. A4s is a good re-steal candidate (A blocker).",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Fold",
+          "explanation": "A4s has the A blocker — a good re-steal candidate. Folding is too passive.",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "A4s has the A blocker and 18BB is the ideal re-steal stack. BTN needs a very tight calling range.",
+          "evImpact": "+3BB"
+        }
+      ],
+      "tableDesc": "MTT final table; the BTN steals blinds at high frequency",
+      "stackDesc": "You 18BB; BTN 28BB"
+    },
+    "l6-finaltable-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "99 is a standard push from the SB at 15BB. Everyone folded — maximize fold equity.",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "99 is a standard push from the SB at 15BB. Pushing after early folds maximizes fold equity — even when called you have ~50% equity.",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "Min-raising at 15BB is meaningless. Getting 3-bet ends you — push directly.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "MTT final table; you are the short stack",
+      "stackDesc": "You 15BB (short stack); BB 30BB (big stack)"
+    },
+    "l6-finaltable-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A3s has the A blocker — big stacks should pressure with pay jumps at the final table.",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Raise 2.2BB",
+          "explanation": "A3s has the A blocker — min-raise to steal. Medium stacks fear elimination.",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "No shove needed at 25BB — min-raise is enough.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "Final table; you are the big stack",
+      "stackDesc": "You 25BB; SB 18BB; BB 20BB"
+    },
+    "l6-finaltable-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "JJ is a strong hand and BTN steals often. You should re-steal.",
+          "evImpact": "-2BB"
+        },
+        {
+          "action": "Re-raise all-in",
+          "explanation": "JJ is a strong hand and 20BB is the ideal re-steal stack. BTN's range is wide — JJ has great equity.",
+          "evImpact": "+3BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "Calling is OOP postflop. At 20BB a direct re-steal all-in is better.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "Final table; the BTN steals blinds frequently",
+      "stackDesc": "You 20BB; BTN 35BB"
+    },
+    "l6-bounty-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KQs is a strong hand, and CO's big bounty means more people want to eliminate him — the calling range should be wider.",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "CO has a big bounty — eliminating him earns extra value. KQs is strong enough to call.",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "At 50BB depth you don't need to shove KQs. Calling is enough.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "PKO tournament; a big bounty on the CO"
+    },
+    "l6-bounty-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "JTs is a strong hand in CO. Although you carry a big bounty, don't play too tight because of it.",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Raise 2.5BB",
+          "explanation": "JTs is a standard open in CO. Don't be over-conservative because of your bounty.",
+          "evImpact": "+1.5BB"
+        },
+        {
+          "action": "Limp",
+          "explanation": "Limping is too passive. Open-raise to take initiative.",
+          "evImpact": "+0.3BB"
+        }
+      ],
+      "tableDesc": "PKO tournament; a big bounty on your head"
+    },
+    "l6-bounty-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A5s has the A blocker + flush potential. BTN has a big bounty — the extra elimination value makes calling better.",
+          "evImpact": "-0.5BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "BTN has a big bounty — eliminating him earns extra value. A5s has blockers — call to capture bounty value.",
+          "evImpact": "+2BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "At 40BB depth no shove needed. Calling is enough.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "PKO tournament; a big bounty on the BTN"
+    },
+    "l6-bounty-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "QJs is a strong hand — don't fold strong hands just because you carry a bounty.",
+          "evImpact": "-1.5BB"
+        },
+        {
+          "action": "Call",
+          "explanation": "QJs is a strong hand. Although you carry a bounty, the hand is strong enough to call. Note opponents may play more aggressively.",
+          "evImpact": "+1BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "At 35BB depth no shove needed. Calling is enough.",
+          "evImpact": "+0.3BB"
+        }
+      ],
+      "tableDesc": "PKO tournament; a big bounty on your head"
+    },
+    "l6-bounty-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "You have the nut flush draw + straight draw! Bet to build the pot, especially since the opponent has a big bounty.",
+          "evImpact": "-1BB"
+        },
+        {
+          "action": "Bet 5BB",
+          "explanation": "The combo draw is extremely strong — bet to build the pot. The opponent's big bounty makes the semi-bluff even better due to elimination value.",
+          "evImpact": "+2.5BB"
+        },
+        {
+          "action": "Push all-in",
+          "explanation": "At 32BB depth no need to shove with a draw. A semi-bluff bet is enough.",
+          "evImpact": "+0.5BB"
+        }
+      ],
+      "tableDesc": "PKO tournament; a big bounty on the BTN"
+    }
+  },
+  "drill": {
+    "d-l6-icm-q1": {
+      "scenario": "SNG, bubble, you 15BB, opponent 10BB",
+      "question": "Bubble, you have 15BB vs opponent's 10BB. On the BTN with AJs, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "Short stacks should shove actively on the bubble. AJs is strong enough from the BTN — shoving applies maximum pressure and uses ICM leverage to force folds."
+    },
+    "d-l6-icm-q2": {
+      "scenario": "MTT, out of the money, you 8BB",
+      "question": "Out of the money with 8BB in CO holding KQs, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2BB",
+        "Fold"
+      ],
+      "explanation": "8BB is very short and KQs is a strong hand. Shoving is best — don't give opponents a free flop."
+    },
+    "d-l6-icm-q3": {
+      "scenario": "SNG, bubble, you 20BB",
+      "question": "Bubble with 20BB in the SB holding 76s, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 3BB",
+        "Fold"
+      ],
+      "explanation": "On the bubble 20BB isn't short enough and 76s is too weak to shove. Under ICM pressure shove with stronger hands and fold marginal ones."
+    },
+    "d-l6-icm-q4": {
+      "scenario": "MTT, final table, you 12BB",
+      "question": "Final table with 12BB on the BTN holding ATs, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "Final table with 12BB, ATs on the BTN is a strong hand. Shoving is best — use ICM pressure to force folds."
+    },
+    "d-l6-icm-q5": {
+      "scenario": "SNG, bubble, opponent shoves 10BB",
+      "question": "Bubble, opponent shoves 10BB and you're in the BB with QJs. What should you do?",
+      "option": [
+        "Call",
+        "Fold",
+        "Raise"
+      ],
+      "explanation": "Under bubble ICM pressure QJs is too weak vs an all-in. The opponent's range should be strong — fold to protect your tournament life."
+    },
+    "d-l6-icm-q6": {
+      "scenario": "MTT, out of the money, you 5BB",
+      "question": "Out of the money with 5BB on the BTN holding A2s, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2BB",
+        "Fold"
+      ],
+      "explanation": "5BB is extremely short and A2s has the A blocker. Shoving is best — don't give opponents a free flop."
+    },
+    "d-l6-icm-q7": {
+      "scenario": "SNG, bubble, you 25BB",
+      "question": "Bubble with 25BB in UTG holding KK, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "KK is a premium hand — shove even under ICM pressure. Don't slowplay KK; get maximum value."
+    },
+    "d-l6-icm-q8": {
+      "scenario": "MTT, final table, opponent shoves 15BB",
+      "question": "Final table, opponent shoves 15BB and you're in the BB with AKs. What should you do?",
+      "option": [
+        "Call",
+        "Fold",
+        "Raise"
+      ],
+      "explanation": "AKs is a premium hand — call an all-in. Even with final-table ICM pressure, AKs has enough equity."
+    },
+    "d-l6-push-q1": {
+      "scenario": "15BB, 6-max",
+      "question": "15BB in UTG holding AQs, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "AQs in UTG at 15BB is a strong hand. Shoving is best — don't give opponents a free flop."
+    },
+    "d-l6-push-q2": {
+      "scenario": "12BB, 6-max",
+      "question": "12BB on the BTN holding JTs, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "JTs on the BTN at 12BB is strong enough to shove. Use positional advantage and ICM pressure to force the blinds to fold."
+    },
+    "d-l6-push-q3": {
+      "scenario": "18BB, 6-max",
+      "question": "18BB in UTG holding 87s, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "87s in UTG at 18BB is too weak. UTG needs stronger hands to shove — fold the marginal hand."
+    },
+    "d-l6-push-q4": {
+      "scenario": "10BB, 6-max",
+      "question": "10BB in CO holding K9s, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "10BB is very short and K9s in CO is strong enough to shove. Don't give opponents a free flop."
+    },
+    "d-l6-push-q5": {
+      "scenario": "20BB, 6-max",
+      "question": "20BB on the BTN holding 54s, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "54s on the BTN at 20BB is too weak. 20BB isn't short enough — play standard strategy, don't shove weak hands."
+    },
+    "d-l6-push-q6": {
+      "scenario": "8BB, 6-max",
+      "question": "8BB in the SB holding QJs, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 3BB",
+        "Fold"
+      ],
+      "explanation": "8BB is extremely short and QJs is a strong hand. Shoving is best — don't give opponents a free flop."
+    },
+    "d-l6-push-q7": {
+      "scenario": "15BB, 6-max, someone shoved before you",
+      "question": "UTG shoves 15BB and you're on the BTN with A9s. What should you do?",
+      "option": [
+        "Call",
+        "Fold",
+        "Raise"
+      ],
+      "explanation": "UTG's shove range is strong — A9s is too weak to call. UTG's push range should be tight — fold the marginal hand."
+    },
+    "d-l6-push-q8": {
+      "scenario": "12BB, 6-max",
+      "question": "12BB in MP holding AKs, what should you do?",
+      "option": [
+        "Shove",
+        "Raise 2.5BB",
+        "Fold"
+      ],
+      "explanation": "AKs in MP at 12BB is a premium hand. Shoving is best — don't give opponents a free flop."
+    }
+  }
+}

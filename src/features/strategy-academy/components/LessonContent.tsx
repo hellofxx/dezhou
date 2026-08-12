@@ -10,6 +10,7 @@ import { PracticeDrillComponent } from './PracticeDrill';
 import { SectionNav } from './SectionNav';
 import { LessonIntroCard } from './LessonIntroCard';
 import { deriveLessonUnits, resolveUnitTitle } from '../utils/lessonUnits';
+import { lessonContentKey, resolveUnitTitleKeyed } from '../utils/contentKeys';
 import { useAcademyStore } from '../store';
 
 // P4: 无完成记录时返回稳定空数组引用（zustand 默认 Object.is 比较，避免 `?? []` 每次新建引用导致重渲染）
@@ -171,17 +172,25 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
           activeId={activeUnitId}
           completedIds={completedUnitIds}
           onNavigate={handleNavigateUnit}
+          lessonId={lesson.id}
         />
         <div className="mt-4 space-y-4 max-w-4xl mx-auto">
           <LessonIntroCard units={units} duration={lesson.duration} />
           {units.map((unit) => (
             <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
               <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
-                {units.indexOf(unit) + 1}. {resolveUnitTitle(unit, (key) => t(key))}
+                {units.indexOf(unit) + 1}. {resolveUnitTitleKeyed(t, lesson, unit)}
               </h2>
-              {unit.sections.map((s, j) => (
-                <ContentBlock key={j} section={s} />
-              ))}
+              {unit.sections.map((s, j) => {
+                const idx = lesson.content.indexOf(s);
+                return (
+                  <ContentBlock
+                    key={j}
+                    section={s}
+                    contentKey={idx >= 0 ? lessonContentKey(lesson.id, idx) : undefined}
+                  />
+                );
+              })}
             </section>
           ))}
         </div>
@@ -210,6 +219,7 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
         activeId={activeUnitId}
         completedIds={completedUnitIds}
         onNavigate={handleNavigateUnit}
+        lessonId={lesson.id}
       />
       <div className="mt-4 space-y-4 max-w-4xl mx-auto">
         {/* 先行组织者卡 */}
@@ -224,16 +234,23 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
           return (
             <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
               <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
-                {i + 1}. {resolveUnitTitle(unit, (key) => t(key))}
+                {i + 1}. {resolveUnitTitleKeyed(t, lesson, unit)}
               </h2>
               {unit.sections.length === 0 && !example && (
                 <p className="text-xs text-[var(--ivory-muted)]">
                   {t('academy.lessonUnit.noContent')}
                 </p>
               )}
-              {unit.sections.map((s, j) => (
-                <ContentBlock key={j} section={s} />
-              ))}
+              {unit.sections.map((s, j) => {
+                const idx = lesson.content.indexOf(s);
+                return (
+                  <ContentBlock
+                    key={j}
+                    section={s}
+                    contentKey={idx >= 0 ? lessonContentKey(lesson.id, idx) : undefined}
+                  />
+                );
+              })}
               {example &&
                 (unit.checkpoint ? (
                   <HandExampleComponent

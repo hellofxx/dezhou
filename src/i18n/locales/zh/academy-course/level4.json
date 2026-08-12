@@ -1,0 +1,2407 @@
+{
+  "lessonContent": {
+    "l4-range-thinking": [
+      "什么是范围思维？",
+      "范围思维（Range Thinking）是不去猜测对手具体拿了什么牌，而是思考对手在当前情况下可能持有的所有手牌的集合（范围），然后做出针对整个范围最优的决策。",
+      "永远不要试图\"读\"出对手的确切手牌。职业牌手思考的是范围，而不是具体的牌。",
+      "范围缩减（Range Narrowing）",
+      "随着每个行动，对手的范围会缩小：\n- 翻前加注 → 范围缩减到开牌范围\n- 翻后C-Bet → 范围进一步缩减（排除完全miss的牌）\n- 面对加注 → 范围大幅缩减（只有强牌或强听牌）",
+      "练习方法：每次对手行动后，问自己\"这个行动排除了他范围中的哪些牌？\"",
+      "范围思维是从\"娱乐玩家\"到\"认真玩家\"的最大分水岭。掌握范围思维后，你会发现很多以前\"猜不透\"的对手行为变得可预测了。",
+      "范围权益计算（加权组合胜率）：\n范围总权益 = Σ(各组合占比 × 该组合对对手范围的胜率)\n\n例：你的范围 = {AA 6 种, KK 6 种}，对手范围 = {AK 16 种}\nAA 对 AK 约 93%，KK 对 AK 约 70%\n总体权益 = 0.5×93% + 0.5×70% ≈ 81%\n\n这种加权计算取代\"我这手牌\"，才能回答\"整个范围在这个节点该不该出手\"",
+      "理论支撑：范围思维的完整理论与\"动作是过滤器\"方法论见理论学院 T4 第 1 章\"范围思维：从单手牌到概率分布\"。范围 vs 范围的定量工具详见该章公式部分。",
+      "反直觉点：范围分析不是猜牌，而是集合运算。你永远无法确定对手的具体手牌，但你可以通过每个动作不断缩小对手可能持有的牌型集合——到河牌时，一个逻辑一致的玩家的范围已经被压缩得非常具体。"
+    ],
+    "l4-ev-thinking": [
+      "什么是 EV？",
+      "EV（Expected Value，期望值）是一个决策在长期重复执行后的平均收益/损失。+EV 决策意味着长期盈利，-EV 决策意味着长期亏损。",
+      "每个决策都应该问：这个行动的 EV 是多少？是否比替代行动更高？",
+      "EV 计算公式",
+      "EV = (赢的概率 × 赢的金额) - (输的概率 × 输的金额)\n\n例：底池$100，对手下注$50。你需要跟注$50。\n- 底池赔率 = $50 / ($100 + $50 + $50) = 25%\n- 如果你有30%胜率，EV = 0.30 × $150 - 0.70 × $50 = $45 - $35 = +$10\n- 跟注是+EV的！",
+      "不要因为一次-EV决策碰巧赢了就认为它是正确的。也不要因为一次+EV决策输了就放弃。职业牌手关注的是决策质量，而不是单次结果。",
+      "EV 完整推导链（含弃牌权益分支）：\n跟注 EV = P(胜) × (当前底池 + 对手下注) - P(负) × 跟注额\n弃牌 EV = 0（基准）\n下注 EV = 弃牌率 × 底池 + (1-弃牌率) × [胜率 × (底池+下注) - 败率 × 下注额]\n\n常用盈亏平衡点：\n纯诈唬所需弃牌率 = 下注额 ÷ (底池 + 下注额)\n下注 2/3 池时，弃牌率 > 40% 即可盈利",
+      "理论支撑：EV 的完整定义、推导链与沉没成本陷阱详见理论学院 T2 第 1 章\"期望值（EV）：所有决策的统一度量\"。底池赔率与 EV 的关系详见 T2 第 2 章。",
+      "反直觉点：沉没成本谬误——已经投入底池的筹码是死钱，不再属于你。\"这手牌我已经投了 100，不跟就浪费\"是错误推理。EV 只看未来分支：跟注 EV 与弃牌 EV（=0）的比较，与过去投入无关。"
+    ],
+    "l4-ev-real-cases": [
+      "Case E1: River Value Bet with Second Best Hand",
+      "Hero K♣Q♣ in CO vs TAG on river A♦, Pot 25BB\n\nKeyDecision: Value bet instead of check back\n\nReasoning:\n- TAG's river range is mostly weak Ax after calling two streets\n- Your K♣Q♣ is second best but extracts value from weaker Ax\n- EV(bet) ≈ +5BB higher than EV(check-back)\n\nKeyLesson: 第二好牌也要下注获取价值（Kx 在 TAG 范围中很弱）。不要保守地只过牌收底池。\nSource: Upswing Poker Blog #234",
+      "Case E2: Semi-bluff on Combined Draw",
+      "Hero T♥J♥ on flop 9♥8♣2♥ vs LAG, Pot 10BB\n\nKeyDecision: C-bet 6BB as semi-bluff\n\nReasoning:\n- Combined draws (~15 outs): flush + OESD\n- Fold equity: LAG folds ~45% to C-bets\n- Showdown equity if called: ~30% by river\n- EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB\n\nKeyLesson: 组合听牌的价值在于 fold equity + showdown equity 双重来源。不要因为牌没成就不敢下注。\nSource: RIO Video Clip #156"
+    ],
+    "l4-opponent-reading": [
+      "为什么对手阅读如此重要？",
+      "德州扑克不是和牌打，而是和人打。同样的手牌面对不同类型的对手，最优决策可能完全不同。学会识别对手类型并制定针对性策略，是从\"合格玩家\"到\"盈利玩家\"的关键跳跃。",
+      "GTO 告诉你\"理论上正确\"的做法，但剥削策略能让你在面对特定对手时赚更多。顶级牌手两者结合使用。",
+      "五种主要对手类型",
+      "通过观察 VPIP（入池率）、PFR（加注率）和 AF（激进度），可以快速识别对手类型：",
+      "1. TAG（紧凶）— VPIP 15-22%, PFR 12-18%, AF 3+\n   特征：只打好牌，打得凶。最常见的盈利玩家类型。\n   对策：偷他的盲注，面对他的加注给更多信用。\n\n2. LAG（松凶）— VPIP 25-35%, PFR 20-30%, AF 3.5+\n   特征：打很多牌且经常加注。高级盈利玩家常见。\n   对策：用强牌设陷阱，减少对他C-Bet的弃牌率。\n\n3. Nit（超紧）— VPIP < 12%, PFR < 10%\n   特征：只打最顶级的牌。最容易剥削的类型。\n   对策：疯狂偷盲，他加注时弃掉所有非顶级牌。\n\n4. Maniac（疯狂）— VPIP > 40%, PFR > 30%, AF > 5\n   特征：不断加注和bluff，几乎不弃牌。\n   对策：耐心等待强牌，不要对他bluff。\n\n5. Calling Station（跟注站）— VPIP > 35%, PFR < 10%\n   特征：喜欢跟注但不加注。最常见的休闲玩家。\n   对策：价值下注（他会用弱牌跟注），永远不要bluff他。",
+      "如何通过数据识别对手",
+      "在线上扑克中，HUD（Heads-Up Display）会实时显示对手数据。即使没有HUD，你可以通过以下方式手动记录：\n\n1. 前20手牌观察：他入池多少手？加注频率如何？\n2. 关键决策点：被加注时他怎么做？C-Bet频率如何？\n3. 摊牌信息：他亮出什么牌？与他之前的行动是否一致？\n\n记住：20手以下的数据统计意义不大，50-100手以上才比较可靠。",
+      "剥削策略 vs GTO 策略",
+      "GTO（博弈论最优）是不可被剥削的基准策略。剥削策略是针对对手弱点的偏离。\n\n何时使用GTO：\n- 对手是未知类型（数据不足）\n- 对手水平很高（难以剥削）\n- 多桌打牌没精力观察\n\n何时使用剥削策略：\n- 有足够样本量确认对手类型\n- 对手有明显可剥削的弱点\n- 单桌专注打牌时\n\n关键原则：先从GTO基准出发，随着对手信息的积累逐步偏离。不要过度调整！",
+      "过度剥削的风险：如果你针对某个对手大幅偏离GTO，而对手恰好调整了策略（或换了一个类似风格但细节不同的玩家），你可能会被反剥削。保持适度的偏离，而非极端调整。",
+      "实战应用框架",
+      "面对每个决策时，按以下框架思考：\n\n1. 我的手牌在这个位置的标准打法是什么？（GTO基准）\n2. 对手是什么类型？他的数据/行为特征是什么？\n3. 基于对手类型，我的决策应该如何调整？\n4. 调整幅度是否合理？（不要过度偏离）\n\n这个框架会随经验积累变得更加直觉化。现在先刻意练习，最终会变成下意识。",
+      "职业牌手的核心能力不是\"算得准\"，而是\"读得准\"。准确识别对手类型并做出针对性调整，是区分微级别盈利玩家和中高级别盈利玩家的最大分水岭。建议每手牌都问自己：这个对手是什么类型？",
+      "读牌四步法公式化流程：\nStep 1: 构建初始范围（基于位置 + 翻前动作）\nStep 2: 逐街过滤（每个动作排除一部分组合）\nStep 3: 计算价值:诈唬比（组合数 ÷ 组合数）\nStep 4: 比较所需胜率与诈唬占比\n\n例：河牌对手全下 100BB 到底池 100BB\n所需胜率 = 100 ÷ (100+100+100) = 33%\n对手范围中价值组合 15 种，诈唬组合 10 种\n诈唬占比 = 10/25 = 40% > 33% → 跟注 +EV",
+      "理论支撑：HUD 指标解读与玩家类型学的完整分析见理论学院 T7 第 1-2 章。读牌四步法见 T7 第 3 章\"读牌流程\"。剥削调整映射见 T7 第 4 章。",
+      "反直觉点：数据越多的对手越容易被预测。NIT（紧弱型）玩家翻后加注几乎总是两对以上，而 LAG（松凶型）玩家的加注范围中诈唬比例高得多。不是所有对手都适用同样的读牌框架。"
+    ],
+    "l4-blockers": [
+      "什么是 Blocker？",
+      "Blocker（阻断牌）是指你手中的牌减少了对手持有特定手牌组合的概率。当你持有一张 A 时，对手持有 AA 的组合从 6 种减少到 3 种，持有 AK 的组合从 16 种减少到 12 种。这个看似简单的概念是现代扑克策略的基石之一。",
+      "核心原理：一副牌只有 4 张 A。你持有 1 张 A，剩余 3 张 A 在对手手中的组合数大幅减少。",
+      "A Blocker 的威力",
+      "持有 Ax（任何带 A 的手牌）时：\n\n- 对手持有 AA 的组合：从 6 种 → 3 种（减少 50%）\n- 对手持有 AK 的组合：从 16 种 → 12 种（减少 25%）\n- 对手持有 AQ 的组合：从 16 种 → 12 种（减少 25%）\n\n这就是为什么 A5s 比 76s 更适合作为 3-Bet bluff：你阻断了对手最可能继续的强牌（AA、AK），同时保留了对手弃牌的可能性。",
+      "同花 Blocker",
+      "持有某花色的牌会减少对手持有该花色同花的可能性：\n\n- 你持有 1 张红心：对手持有特定红心同花的概率降低\n- 在考虑 hero call 时特别有用：如果你持有对手可能需要的同花 blocker，他实际持有同花的概率更低\n- 在 bluff 时：持有同花 blocker 意味着对手更不可能有同花来跟注你",
+      "Blocker 在 Bluff 中的应用",
+      "选择 bluff 手牌时，优先选择阻断对手\"继续\"范围的牌：\n\n3-Bet/4-Bet Bluff 选择：\n- A5s > 76s（A blocker 减少对手 AA/AK 组合）\n- A4s > 98s（同理，且 A5s/A4s 有同花潜力）\n\nRiver Bluff 选择：\n- 持有阻断对手 call 范围的牌（如阻断对手可能跟注的同花/顺子）\n- 不持有阻断对手 fold 范围的牌",
+      "Blocker 在 Hero Call 中的应用",
+      "当你考虑是否跟注对手的大额下注时：\n\n- 如果你持有阻断对手 value 范围的牌 → 更倾向于 call\n  例：你持有 A♠，对手不太可能有 AA/AKs 等顶级 value\n- 如果你持有阻断对手 bluff 范围的牌 → 更倾向于 fold\n  例：你持有对手可能用来 bluff 的同花 blocker\n\n量化思维：每个 blocker 大约减少对手相关组合 25-50%。",
+      "Blocker 效应是\"边际优势\"——不会完全改变决策，但在接近的决策点（close decision）中，blocker 可以成为决定性因素。",
+      "职业牌手在每一个 bluff 和 hero call 决策中都会考虑 blocker。养成习惯：在做困难决策时，先看自己手中阻断了什么。",
+      "Blocker 对组合数的修正：\n无 Blocker 时：AA = C(4,2) = 6 种\n持有一张 A 时：AA = C(3,2) = 3 种（减少 50%）\n\nAK 组合数修正：\n无 Blocker 时：AK = 4×4 = 16 种\n持有 A♠ 时：AK = 3×4 = 12 种（减少 25%）\n持有 A♠K♣ 时：AK = 3×3 = 9 种（减少 44%）\n\nBlocker 对范围比例的影响：\n对手 3Bet 范围 = {AA, KK, AK}，共 6+6+16=28 种\n你持 AK 时 → 3+3+9=15 种，你领先的 QQ 占比从 0 升至实质比例",
+      "理论支撑：Blockers 的定量应用与组合数修正的完整推导见理论学院 T4 第 2 章\"组合数学与 Blockers\"。包括翻前 4Bet 场景和翻后河牌抓诈唬的具体算例。",
+      "反直觉点：持有 K 不减少 AA 的组合数，只减少 AK 的组合数。很多初学者认为\"我有一张 K，所以对手拿 AA 的概率降低了\"——这是错误的。K 是 A 的 Blocker，只有 A 才能阻断 AA。"
+    ],
+    "l4-gto-basics": [
+      "什么是 GTO？",
+      "GTO（Game Theory Optimal，博弈论最优策略）是一种不可被剥削的策略。当你使用GTO策略时，无论对手如何调整，他们都无法从你身上获得正EV。GTO并不是\"最好的策略\"，而是\"不可能被打败的策略\"。",
+      "GTO vs 剥削策略：GTO 保证不输，剥削策略试图最大化赢。顶级牌手两者结合使用——以GTO为基础，在发现对手弱点时偏离GTO进行剥削。",
+      "GTO 策略的核心概念",
+      "1. 范围平衡：你的行动频率应该让对手无法通过调整来获利\n2. 混合策略：某些手牌在特定情况下应该随机选择不同行动（如70%加注30%跟注）\n3. 最小防御频率：面对下注时，你需要以一定频率继续（不弃牌太多），否则对手可以无限bluff获利",
+      "如何使用本项目的 GTO Simulator",
+      "本项目内置了 GTO 模拟器（/gto-simulator），你可以：\n1. 选择位置和场景配置\n2. 面对模拟场景做出决策\n3. 查看你的选择与GTO最优策略的差异\n4. 学习EV损失最小的决策方式\n\n建议每天在GTO模拟器中练习10-20个场景，培养GTO直觉。",
+      "GTO 策略矩阵的读取",
+      "GTO 策略通常用13×13矩阵表示，每种手牌对应 Fold/Call/Raise 的频率：\n- 绿色深浅 = Raise 频率（深绿=100%加注，浅绿=混合加注）\n- 黄色 = Call 频率\n- 红色/灰色 = Fold 频率\n\n例如在BTN Open 场景中，AA/KK/QQ 是100% Raise（深绿），而72o是100% Fold（灰色）。",
+      "不需要记住精确的GTO频率！理解大方向即可：强牌加注，中等牌跟注，弱牌弃牌。混合策略出现在边缘手牌上。",
+      "GTO 是基础，剥削是进阶。在低级别游戏中（如NL10以下），剥削策略往往比GTO更赚钱，因为对手的错误太多。但理解GTO能让你知道\"正确的基准是什么\"，从而更好地判断何时偏离。",
+      "纳什均衡的数学表述：\n在二人零和博弈中，存在博弈值 v，使\nmax_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n\n均衡策略保证你的期望 ≥ v，且对手无法单方面压低\n这就是\"不可被剥削\"的数学来源\n\n价值:诈唬比推导（河牌无后续街时）：\n对手跟注 EV = f×(P+2bP) - (1-f)×bP\n令其 = 0 → f = b/(1+2b)\n满池 b=1 → 诈唬 1/3（价值:诈唬 = 2:1）\n半池 b=0.5 → 诈唬 25%（3:1）",
+      "理论支撑：纳什均衡的定义与极小极大定理的详细推导见理论学院 T5 第 1 章\"零和博弈与纳什均衡\"。GTO 结构的完整分析与价值:诈唬比推导见 T5 第 2 章。",
+      "反直觉点：GTO 不是最优策略，而是不可被剥削的策略。面对一个疯狂送钱的对手，GTO 赚的比针对性剥削策略少。GTO 是保底，剥削是上限——理解这一张力是高级策略的核心。"
+    ],
+    "l4-game-tree": [
+      "什么是博弈树（Game Tree）？",
+      "博弈树是将每手牌的所有可能行动序列以树状结构展示。每个\"节点\"代表一个决策点，每个\"分支\"代表一个可能的行动。GTO 求解器就是通过遍历博弈树找到每个节点的最优策略。",
+      "核心概念：你在当前节点的最优决策，取决于所有后续节点的累计 EV。这就是为什么\"多街计划\"如此重要。",
+      "博弈树的实战应用",
+      "在实战中思考博弈树意味着：\n1. 下注前思考\"如果对手加注我怎么办？\"\n2. 跟注前思考\"转牌/河牌我的计划是什么？\"\n3. Bluff 前思考\"如果被 Call 我还有后手吗？\"\n4. 每个决策都考虑后续的\"树枝\"",
+      "节点锁定（Node Locking）",
+      "节点锁定是将对手在某个节点的策略固定（假设对手偏离 GTO），然后重新计算我们的最优应对。\n\n例如：如果对手在河牌从不诈唬，我们可以安全地弃掉更多\"拓牌\"（bluff catcher），因为他们的下注几乎总是价值牌。",
+      "不需要在牌桌上计算完整的博弈树。只需习惯问自己\"如果我这样做，后续会发生什么？\"就已经超越 90% 的玩家了。",
+      "博弈树节点 EV 的计算：\n节点 EV = Σ(各分支概率 × 该分支的后续累计 EV)\n\n例：翻牌圈 C-Bet 决策节点\n- 分支 1：对手弃牌（概率 40%）→ 立即赢底池 6BB\n- 分支 2：对手跟注（概率 60%）→ 转牌圈子树的 EV 为 +3BB\n\n节点 EV = 0.4×6 + 0.6×3 = 2.4 + 1.8 = +4.2BB\n这就是为什么每个决策都要考虑后续所有街道的累计 EV",
+      "理论支撑：博弈树的概念与节点锁定实操详见理论学院 T5 第 4 章\"混合策略与节点锁定\"。混合策略的数学原理是让对手所有回应无差别。",
+      "反直觉点：混合策略不是随意决策，而是精确计算的比例。同一手牌在同一个节点按 70% 加注、30% 跟注——这不是犹豫不决，而是让对手无法通过观察你的模式来获利。"
+    ],
+    "l4-frequency-balance": [
+      "什么是频率平衡？",
+      "频率平衡是指在特定场景下，你的各种行动（下注/过牌/加注）保持一定的比例，使得对手无法通过调整策略来剥削你。",
+      "GTO 的核心就是频率平衡。当你的策略平衡时，对手无论怎么调整都无法获利；当你的策略失衡时，对手可以通过剥削获取额外利润。",
+      "诈唬/价值比例",
+      "最重要的频率平衡是下注时的诈唬与价值的比例：\n\n• 河牌 Full Pot 下注：对手需 33% 胜率跟注\n  → 你的 bluff 占比应为 33%(value:bluff = 2:1)\n\n• 河牌 2/3 Pot 下注：对手需 40% 胜率跟注\n  → 你的 bluff 占比应约为 28.6%(value:bluff ≈ 2.5:1)\n\n• 河牌 1/2 Pot 下注：对手需 25% 胜率跟注\n  → 你的 bluff 占比应为 25%(value:bluff = 3:1)\n\n关键区分：\n- bluff 占比（你的下注范围中）= bet / (pot + 2×bet)\n- MDF（你作为防守方的防御频率）= pot / (pot + bet)\n- 所需胜率（单次跟注保本线）= bet / (pot + 2×bet)\n\n注意：MDF、所需胜率和 bluff 占比公式形式上可能相似，但它们的应用场景完全不同！混淆这三者是新手最常见的错误。",
+      "如何在实战中应用",
+      "不需要精确计算频率，但要有意识：\n• 如果你最近连续 bluff 了 5 次都被 catch，可能 bluff 太多\n• 如果你从不 bluff，对手会开始对你的下注只跟注最强牌\n• 保持\"有时 bluff、有时 value\"的不可预测性",
+      "对付高手时，频率平衡是保护自己的盾牌；对付弱手时，可以打破平衡做纯粹的剥削调整。核心是知道何时应该平衡、何时应该偏离。",
+      "价值：诈唬比公式推导（河牌）：\n诈唬占比 = bet ÷ (pot + 2×bet)\n\n常见尺度对应的诈唬占比：\n1/3 池下注 → 诈唬占比 = 0.33/(1+0.66) ≈ 20%（价值：诈唬 = 4:1）\n1/2 池下注 → 诈唬占比 = 0.5/(1+1) = 25%（价值：诈唬 = 3:1）\n2/3 池下注 → 诈唬占比 = 0.67/(1+1.33) ≈ 28.6%（价值：诈唬 = 2.5:1）\n满池下注 → 诈唬占比 = 1/(1+2) = 33%（价值：诈唬 = 2:1）\n\n对比概念：\nMDF(防御频率) = pot/(pot+bet) —— 你作为防守方至少需要继续的频率\n所需胜率 = bet/(pot+2bet) —— 单次跟注的保本线\n\n记住：MDF、所需胜率和 bluff 占比是三个完全不同的公式，应用在不同场景！",
+      "理论支撑：频率平衡的数学原理与价值:诈唬比的推导过程详见理论学院 T5 第 2 章\"GTO 与剥削：两种最优\"。大尺度=极化的数学根源见 T6 第 1 章。",
+      "反直觉点：很多人会混淆 MDF、所需胜率和 bluff 占比，因为它们公式形式上可能相似。正确理解是：MDF 回答面对下注我应该用多少频率继续（pot/(pot+bet)），所需胜率回答这手牌跟注是否保本（bet/(pot+2bet)），bluff 占比回答我的下注范围中应该带多少诈唬（同样是 bet/(pot+2bet) 但应用场景不同）。三者概念清晰，不要混为一谈！"
+    ],
+    "l4-mdf": [
+      "什么是 MDF？",
+      "MDF（Minimum Defense Frequency，最小防御频率）是面对下注时，你需要继续（call 或 raise，不弃牌）的最低频率。如果你弃牌太频繁，对手可以用任意两张牌 bluff 你并自动获利。MDF 确保你不会成为\"无限被诈唬\"的玩家。",
+      "MDF 公式：MDF = 1 - (bet / (pot + bet))\n等价于：MDF = pot / (pot + bet)",
+      "常见 MDF 值",
+      "面对不同大小的下注，MDF 值如下：\n\n- 面对 33% pot bet → MDF ≈ 75%（你需要用 top 75% 继续）\n- 面对 50% pot bet → MDF ≈ 67%\n- 面对 75% pot bet → MDF ≈ 57%\n- 面对 100% pot bet → MDF = 50%\n- 面对 150% pot bet（overbet）→ MDF = 40%\n- 面对 200% pot bet → MDF ≈ 33%\n\n规律：下注越大，你需要继续的频率越低（因为对手给了你更好的 pot odds）。",
+      "MDF vs 实际防御",
+      "MDF 是理论上限，实际中需要根据情况调整：\n\n应该比 MDF 多弃牌的情况：\n- 对手很少 bluff（如 NIT）\n- 你的范围中确实没有足够的强牌继续\n- 对手的下注代表非常强的范围\n\n应该接近 MDF 的情况：\n- 对手 bluff 频率正常或偏高\n- 你在有利位置\n- 你的范围中有足够的继续手牌",
+      "MDF 在 River 的应用",
+      "River 是 MDF 最常被应用的街道，因为：\n\n1. 没有后续街道的隐含赔率考虑\n2. 决策纯粹：call 或 fold\n3. Bluff 频率在 river 最高（所有错过的听牌都可以 bluff）\n\nRiver 防御框架：\n- 计算 MDF\n- 从你的范围中选择 top X% 的牌继续\n- 考虑 blocker 效应微调（阻断对手 value 的牌优先 call）",
+      "MDF 不是\"必须\"遵守的规则，而是防止你过度弃牌的安全网。如果你发现自己面对下注弃牌超过 70%，很可能被过度诈唬了。",
+      "实战中不需要精确计算 MDF。记住关键数字：面对半池下注继续 2/3，面对满池下注继续 1/2。这已经足够好了。",
+      "MDF 与 Alpha 公式对偶关系：\nMDF = pot ÷ (pot + bet)  —— 你的防御频率\nAlpha = bet ÷ (pot + bet) —— 对手诈唬的盈亏平衡弃牌率\nMDF + Alpha = 1（互为补集）\n\n所需胜率（跟注保本线）：\n所需胜率 = bet ÷ (pot + 2×bet) —— 注意分母不同！\n\n例：对手下注 1/2 池\nMDF = 1/(1+0.5) = 67%\nAlpha = 0.5/(1+0.5) = 33%\n所需胜率 = 0.5/(1+1) = 25%\n\nMDF、Alpha、所需胜率是三个不同概念，不要混淆",
+      "理论支撑：MDF 与 Alpha 的代数推导、无差别原则的证明详见理论学院 T5 第 3 章\"最小防御频率（MDF）与 Alpha\"。MDF 与底池赔率的关系辨析见 T2 第 2 章。",
+      "反直觉点：MDF 和所需胜率是两个不同的概念，不要混淆。MDF 回答\"你应该用多少频率继续\"，所需胜率回答\"这手牌需要多少胜率才能跟注\"。MDF 的公式是 pot/(pot+bet)，所需胜率的公式是 bet/(pot+2bet)——分母不同，用途不同。"
+    ],
+    "l4-mdf-real-cases": [
+      "Case M1: Over defending against Maniac",
+      "BB vs Maniac on Q-4-2 dry board, Pot 6BB\n\nScenario:\n- Maniac raises 2.5BB from BTN\n- BB calls with A-T\n- Flop: Q-4-2, Maniac C-bets 3BB (50% pot)\n\nKey Decision: Call using wider than standard range\n\nAnalysis:\n- Maniac bluff frequency: ~65% (AF 7.0+)\n- Alpha for 50% pot bet = 0.5/(1+0.5) = 33%\n- Maniac fold rate to C-bets: only ~25%\n- Your A-T beats his entire bluff range\n\nWhy call wider than MDF?\n- MDF suggests calling 67%, but your read says he bluffs too much\n- With 65% bluff frequency >> 33% Alpha threshold, value betting becomes dominant\n- EV(call with A-T) approx +2.0BB (beats 65% of his range)\n- Expected outcome: Exploit Maniac over-playing tendencies\n\nKeyLesson: 面对高 bluff 频率对手（Maniac）时，可以安全地用更宽范围继续防守。你的顶对能击败他的整个诈唬范围。\nSource: Derived from LAG statistics analysis",
+      "Case M2: Folding below MDF against Nit",
+      "BTN vs Nit on J C J D J S 3 D K H board, Pot 25BB\n\nScenario:\n- Nit opens UTG 2.5BB\n- BTN calls\n- Flop: JJJ, Nit leads 8BB, BTN calls\n- Turn: 3, Nit bets 15BB\n- River: K, Nit shoves all-in 40BB into 50BB pot\n- BTN holds QQ, facing river shove\n\nKey Decision: Fold despite MDF suggesting continue\n\nAnalysis:\n- MDF for all-in: 50/(50+40) = 56% defense required\n- But NITS river range analysis:\n  - Value hands only: JJ+, QQ, KK (almost no bluffs)\n  - His AF < 1.0 means extremely rare bluffing\n  - QQ loses to 95% of his range\n\nWhy fold below MDF?\n- Against Nit, actual value:bluff ratio >> theoretical GTO\n- MDF assumes balanced ranges, but Nit is heavily value-heavy\n- EV(fold) = 0 vs EV(call) ≈ -35BB (loses to AA/KK/JJ)\n- Information about opponent overrides pure MDF calculation\n\nKeyLesson: 面对超紧玩家（Nit）的河牌大注时，即使 MDF 建议跟注也应该弃牌。Nit 几乎从不 bluff，你的顶对在他范围中完全落后。\nSource: NIT exploitation framework"
+    ],
+    "l4-overbet": [
+      "什么是 Overbet？",
+      "Overbet 是指下注超过当前底池大小的下注（通常 125%-200% pot）。这是现代 solver 策略中最重要的武器之一，在特定场景下能产生巨大的 EV。",
+      "Overbet 的核心条件：你有坚果优势（Nuts Advantage）——你的范围包含对手范围中不可能有的超强牌。",
+      "何时使用 Overbet",
+      "三种典型 overbet 场景：\n\n1. 坚果优势（Nuts Advantage）\n   你的范围包含对手不可能有的超强牌。\n   例：你在 K-7-2 牌面 check-raise flop，turn 发出 K，你的范围有 KK/77 而对手没有。\n\n2. River 极化场景\n   你的范围要么是坚果要么是空气，没有中等牌力。\n   例：错过的同花听牌在 river 可以 overbet bluff（你要么是坚果同花，要么是空气）。\n\n3. 对手范围 Capped\n   对手的行动表明他不可能有强牌。\n   例：对手在 flop check-call，turn check-call，他的范围被\"封顶\"在顶对以下。",
+      "Overbet 的范围构建",
+      "Overbet 使用极化范围（Polarized Range）：\n\n- Value 部分：只有最强的牌（坚果、接近坚果）\n- Bluff 部分：有 blocker 的空气牌\n- 中间牌力：不使用 overbet（用正常大小下注或 check）\n\nValue:Bluff 比例约为 2:1（面对 150% pot overbet，对手 MDF = 40%，所以你的 bluff 不能太多）。",
+      "Overbet 的频率",
+      "现代 solver 在特定 river 点使用 30-50% 频率的 overbet：\n\n- 不是每个 river 都 overbet！只在满足条件时使用\n- 典型频率：33% pot（40%）、66% pot（30%）、125% pot（20%）、200% pot（10%）\n- 关键：混合使用不同大小，让对手无法确定你的范围",
+      "面对 Overbet 的防守",
+      "面对 overbet 时的思考框架：\n\n1. 计算 MDF（面对 150% pot → MDF 40%）\n2. 你的范围中有多少牌能继续？\n3. 对手是否有坚果优势？\n4. 你的 blocker 情况如何？\n\n关键原则：面对 overbet，你只需要用很少的牌继续，但那些牌必须是能击败对手 bluff 的牌。",
+      "Overbet 是高级武器，不要在错误的场景使用。确保你真正有坚果优势，否则 overbet 只会让你损失更多。",
+      "初学者常犯的错误：用中等牌力 overbet。记住，overbet 范围是极化的——只有坚果和 bluff，没有中间地带。"
+    ],
+    "l4-range-construction": [
+      "两种范围形状",
+      "在德州扑克中，你的下注/加注范围有两种基本形状：\n\n1. 极化范围（Polarized）：只有强牌和 bluff，没有中等牌力\n2. 合并范围（Merged/Linear）：从强到中等的连续范围\n\n选择哪种形状取决于位置、街道、下注大小和对手类型。",
+      "极化 = 强 + 弱（无中间）\n合并 = 强 + 中（无弱）\n选择取决于：下注越大越极化，下注越小越合并。",
+      "极化范围（Polarized）",
+      "极化范围只包含两类牌：\n- 强牌（Value）：坚果或接近坚果\n- Bluff：有 blocker 的空气牌\n\n使用场景：\n- River 大额下注/Overbet\n- 3-Bet/4-Bet（翻前）\n- Check-Raise\n\n示例：BTN 3-Bet 范围\n- Value: AA, KK, QQ, AKs, AKo\n- Bluff: A5s, A4s, A3s, K9s\n- 不包含: JJ, TT, AQ（这些用 call）",
+      "合并范围（Merged/Linear）",
+      "合并范围包含从强到中等的连续牌力：\n- 强牌 + 中等牌力，不包含纯空气\n\n使用场景：\n- Flop C-Bet（小注）\n- Open Raise（翻前开牌）\n- 跟注范围\n\n示例：BTN Open 范围\n- 从 AA 到 54s 的宽泛连续范围\n- 包含所有强牌、中等牌、有潜力的投机牌\n- 不包含纯垃圾牌（如 72o, 83o）",
+      "如何选择范围形状",
+      "决定范围形状的关键因素：\n\n1. 下注大小：\n   - 小注（25-33% pot）→ 合并范围（宽泛，包含中等牌）\n   - 中注（50-75% pot）→ 混合\n   - 大注（100%+ pot）→ 极化范围\n\n2. 街道：\n   - Flop → 偏合并（还有很多牌要发）\n   - River → 偏极化（没有后续街道）\n\n3. 位置：\n   - 有位置 → 可以用更合并的范围（信息优势）\n   - 无位置 → 偏极化（需要更强的牌或纯 bluff）\n\n4. 对手类型：\n   - 面对 Calling Station → 合并（更多 value，少 bluff）\n   - 面对 NIT → 极化（更多 bluff，他弃牌多）",
+      "范围平衡",
+      "范围平衡是确保你的下注范围中 value:bluff 比例合理：\n\n- 面对 50% pot bet：value:bluff ≈ 3:1\n- 面对 100% pot bet：value:bluff ≈ 2:1\n- 面对 150% pot overbet：value:bluff ≈ 2:1\n\n如果你 bluff 太多 → 对手可以频繁 call\n如果你 bluff 太少 → 对手可以频繁 fold\n平衡让对手无论怎么做都无法剥削你。",
+      "理解极化 vs 合并是从\"打单张牌\"到\"打范围\"的关键跳跃。每个决策都应该思考：我的整个范围在这个场景应该是什么形状？",
+      "实战简化：小注打宽（合并），大注打窄（极化）。翻前 3-bet 用极化范围，翻前 open 用合并范围。记住这个原则就够用了。",
+      "极化范围 vs 合并范围公式：\n极化范围 = 顶端价值牌 + 底端诈唬牌（中间牌力过牌/弃牌）\n合并范围 = 从强到弱的连续牌力分布（用中等频率下注）\n\n极化范围的下注尺度应较大（> 2/3 池），因为：\n下注越大 → 对手跟注所需胜率越高 → 你的诈唬可以更多\n合并范围的下注尺度应较小（< 1/2 池），旨在：\n从更弱的跟注范围获取薄价值",
+      "理论支撑：范围构建方法论与极化/合并的数学依据见理论学院 T4 第 1 章\"范围思维\"和第 4 章\"范围优势与坚果优势\"。范围优势的判定框架与下注策略密切相关。",
+      "反直觉点：极化范围下注大，合并范围下注小。如果用一个中等强度的牌下大注，你只会被更强的牌跟注——这是\"价值下注的陷阱\"：中等牌力应该过牌或小注，而不是假装自己有强牌。"
+    ],
+    "l4-bluffcatching": [
+      "什么是 Bluff Catching",
+      "Bluff Catching 是指用仅能赢过对手 bluff 的牌来 Call。\n\n例：对手 River 全押，你有一对，判断他 bluff 足够多 → Call。\n\nBluff Catcher 的特征：\n- 赢不了对手的价值范围\n- 但能赢对手的 bluff 范围\n- 决策纯粹基于对手 bluff 频率 vs 你需要的最低胜率",
+      "Bluff Catching 的核心逻辑：如果对手的 bluff 频率 > 你需要的最低胜率（bet/(pot+bet)），Call 就是+EV。",
+      "Hero Call 决策框架",
+      "步骤 1：评估对手的 bluff 频率（基于形象/行动线）\n\n步骤 2：计算需要的最低胜率 = bet / (pot + bet)\n例：对手下注 2/3 pot → 你需要 > 40% 胜率\n\n步骤 3：比较对手 bluff 频率 vs 需要的最低胜率\n如果对手 bluff 频率 50% > 需要的 40% → Call\n\n步骤 4：考虑 Blocker\n你是否阻断了对手的 value 范围？（减少 Call 的理由）\n你是否阻断了对手的 bluff 范围？（增加 Call 的理由）",
+      "Hero Call 不是\"猜\"，而是数学计算。把对手的 bluff 频率和 pot odds 比较，超过阈值就 Call，不超过就 Fold。",
+      "对手形象对 Bluff Catching 的影响",
+      "面对 Maniac/LAG：bluff catching 频率提高\n- 他们的 bluff 范围宽，你可以用更弱的牌 Call\n- 例：LAG River 下注 pot，你用顶对弱踢脚就可以 Call\n\n面对 Nit/TAG：bluff catching 频率降低\n- 他们的 bluff 频率低，需要更强的牌才能 Call\n- 例：Nit River 下注 pot，你需要两对+ 才能 Call\n\n面对 Unknown：使用 MDF（Minimum Defense Frequency）作为基准\n- MDF = 1 - bet/(pot+bet)\n- 例：对手下注 pot，MDF = 50%（你应该 Call 50% 的范围）",
+      "Blocker 在 Bluff Catching 中的应用",
+      "Blocker 原则：\n\n1. 持有对手 value 范围的 blocker → 减少 Call\n   因为你阻断了他的强牌，他更可能在 bluff\n   等等——这意味着你应该增加 Call！\n\n2. 持有对手 bluff 范围的 blocker → 减少 Call\n   因为你阻断了他的 bluff，他更可能是 value\n\n例：持有 A 在单色  牌面\n→ 阻断对手坚果同花（value）→ 对手更可能在 bluff → 更倾向 Call",
+      "Blocker 思维是高级 bluff catching 的核心。不要只看自己的牌强不强，要看你的牌对对手范围的影响。",
+      "过度诈唬的识别与利用",
+      "过度诈唬的信号：\n- 对手 C-Bet 频率 > 70%\n- Turn barrel 频率 > 50%\n- River 下注频率 > 40%\n- 对手在多人底池仍然频繁下注\n\n利用方式：\n- 扩大 bluff catching 范围，用更弱的牌 Call\n- 不要用中等牌力 Raise（让他继续 bluff）\n- 陷阱打法：用强牌 Call 而不是 Raise，让他继续 bluff River\n\n注意：过度诈唬的对手是低级别最常见的\"送钱机器\"。识别他们，然后用宽范围 Call 他们。"
+    ]
+  },
+  "lessonQuiz": {
+    "l4-range-q1": {
+      "question": "范围思维的核心是什么？",
+      "options": [
+        "猜对手的具体牌",
+        "思考对手可能持有的所有牌的集合",
+        "只看自己的牌",
+        "记住所有牌"
+      ],
+      "explanation": "范围思维是思考对手可能持有的所有手牌的集合，而非猜测具体某手牌。"
+    },
+    "l4-range-q2": {
+      "question": "对手翻后 Check-Raise 通常表示什么？",
+      "options": [
+        "弱牌",
+        "中等牌力",
+        "强牌或强听牌",
+        "随机行为"
+      ],
+      "explanation": "Check-Raise 通常表示强牌（两对以上）或强听牌（组合听牌），因为这是一种展示力量的行动。"
+    },
+    "l4-range-q3": {
+      "question": "范围缩减是指什么？",
+      "options": [
+        "对手弃牌",
+        "随着每个行动对手可能的牌集合变小",
+        "自己的牌变少",
+        "底池变小"
+      ],
+      "explanation": "范围缩减是随着每个行动，对手可能持有的牌集合逐渐变小。"
+    },
+    "l4-range-q4": {
+      "question": "UTG open后翻牌A-9-4，UTG的范围包含什么？",
+      "options": [
+        "只有小牌",
+        "很多Ax强牌",
+        "只有同花",
+        "随机牌"
+      ],
+      "explanation": "UTG开牌范围本身就偏强，A-9-4面命中了很多Ax组合。"
+    },
+    "l4-range-q5": {
+      "question": "BTN开牌范围比UTG更宽还是更窄？",
+      "options": [
+        "更窄",
+        "一样宽",
+        "更宽",
+        "不确定"
+      ],
+      "explanation": "BTN有位置优势，开牌范围比UTG宽得多（约40-50% vs 10-15%）。"
+    },
+    "l4-ev-q1": {
+      "question": "底池$100，对手下注$50，你需要多少胜率才能盈利跟注？",
+      "options": [
+        "20%",
+        "25%",
+        "33%",
+        "50%"
+      ],
+      "explanation": "你需要至少25%的胜率（$50/$200 = 25%），这就是底池赔率。超过25%就是+EV。"
+    },
+    "l4-ev-q2": {
+      "question": "一个+EV决策输了，说明什么？",
+      "options": [
+        "决策是错的",
+        "运气不好，决策本身是正确的",
+        "应该换策略",
+        "EV计算有误"
+      ],
+      "explanation": "+EV只保证长期盈利，单次结果可能因方差（运气）而输。关注决策质量而非单次结果。"
+    },
+    "l4-ev-q3": {
+      "question": "EV是什么的缩写？",
+      "options": [
+        "Extra Value",
+        "Expected Value",
+        "Equal Value",
+        "Easy Victory"
+      ],
+      "explanation": "EV = Expected Value（期望值），表示一个决策在长期平均下的收益。"
+    },
+    "l4-ev-q4": {
+      "question": "+EV决策意味着什么？",
+      "options": [
+        "一定赢",
+        "长期平均盈利",
+        "短期盈利",
+        "没有风险"
+      ],
+      "explanation": "+EV决策不保证每次赢，但长期平均来看是盈利的。"
+    },
+    "l4-ev-q5": {
+      "question": "弃牌权益（Fold Equity）是什么？",
+      "options": [
+        "对手弃牌时你赢的底池",
+        "你的牌力",
+        "底池赔率",
+        "隐含赔率"
+      ],
+      "explanation": "弃牌权益 = 对手弃牌概率 × 底池大小。"
+    },
+    "l4-ev-rc-q1": {
+      "question": "Case E1 中，Hero K♣Q♣面对 TAG River 检查应该？",
+      "options": [
+        "Check back",
+        "Value bet",
+        "Fold",
+        "All-in"
+      ],
+      "explanation": "第二好牌也要下注获取价值。TAG's river range is mostly weak Ax after calling two streets."
+    },
+    "l4-ev-rc-q2": {
+      "question": "Case E2 中，Hero T♥J♥在 floop 有组合听牌应该？",
+      "options": [
+        "Check",
+        "C-bet semi-bluff",
+        "Fold",
+        "Raise"
+      ],
+      "explanation": "组合听牌的价值在于 fold equity + showdown equity 双重来源。EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB。"
+    },
+    "l4-opp-q1": {
+      "question": "一个对手 VPIP 12%, PFR 10%，他最可能是？",
+      "options": [
+        "LAG",
+        "TAG",
+        "Nit",
+        "Maniac"
+      ],
+      "explanation": "VPIP < 15% 且 PFR 接近 VPIP 的玩家是 Nit（超紧）。他只打最顶级的牌。"
+    },
+    "l4-opp-q2": {
+      "question": "面对 Calling Station，以下哪个策略正确？",
+      "options": [
+        "频繁bluff",
+        "用强牌价值下注",
+        "对他3-Bet bluff",
+        "弃牌等他加注"
+      ],
+      "explanation": "Calling Station 很少弃牌但也不加注。正确策略是用强牌下注获取价值，永远不要bluff他。"
+    },
+    "l4-opp-q3": {
+      "question": "什么时候应该主要使用GTO策略？",
+      "options": [
+        "对手数据充足时",
+        "对手未知/水平高时",
+        "任何时候",
+        "从不用"
+      ],
+      "explanation": "GTO 最适合对手未知（数据不足）或对手水平高（难以剥削）的场景。有足够数据时应结合剥削策略。"
+    },
+    "l4-opp-q4": {
+      "question": "面对 Maniac 的正确策略是？",
+      "options": [
+        "经常bluff他",
+        "用中等牌频繁加注",
+        "耐心等待强牌让他送筹码",
+        "每次都弃牌"
+      ],
+      "explanation": "Maniac 几乎不弃牌且大量bluff。正确策略是耐心等待强牌，让他自己把筹码送过来。不要对他bluff！"
+    },
+    "l4-opp-q5": {
+      "question": "Calling Station最明显的特征是什么？",
+      "options": [
+        "频繁加注",
+        "跟注太多，弃牌太少",
+        "经常弃牌",
+        "总是All-in"
+      ],
+      "explanation": "Calling Station的核心特征是跟注太多（VPIP高），弃牌率极低。"
+    },
+    "l4-blockers-q1": {
+      "question": "你持有一张 A，对手持有 AA 的组合数从多少减少到多少？",
+      "options": [
+        "从 6 种减少到 3 种",
+        "从 6 种减少到 1 种",
+        "从 4 种减少到 2 种",
+        "从 16 种减少到 12 种"
+      ],
+      "explanation": "AA 的组合数为 C(4,2)=6。你持有 1 张 A 后，剩余 3 张 A，组合数为 C(3,2)=3，减少了 50%。"
+    },
+    "l4-blockers-q2": {
+      "question": "为什么 A5s 比 76s 更适合作为 3-Bet bluff？",
+      "options": [
+        "A5s 牌力更强",
+        "A blocker 减少对手 AA/AK 的组合",
+        "A5s 翻后更好打",
+        "76s 没有同花潜力"
+      ],
+      "explanation": "A5s 中的 A 阻断了对手最可能继续（call/4-bet）的强牌组合（AA、AK），使对手更可能弃牌，提高了 bluff 的成功率。"
+    },
+    "l4-blockers-q3": {
+      "question": "在 hero call 决策中，你持有阻断对手 value 范围的牌意味着？",
+      "options": [
+        "应该立即弃牌",
+        "对手更可能有强牌",
+        "对手持有强牌的概率降低，更倾向 call",
+        "没有任何影响"
+      ],
+      "explanation": "如果你的手牌阻断了对手的 value 范围（如你持有 A 减少了对手 AA/AK 的可能），对手实际持有强牌的概率降低，使得 call 更有利。"
+    },
+    "l4-gto-q1": {
+      "question": "GTO 策略的核心特点是什么？",
+      "options": [
+        "赢最多钱",
+        "不可被剥削",
+        "总是加注",
+        "只看手牌强度"
+      ],
+      "explanation": "GTO 的核心是不可被剥削——无论对手怎么调整，都无法从你身上获利。"
+    },
+    "l4-gto-q2": {
+      "question": "在低级别游戏中，应该主要使用什么策略？",
+      "options": [
+        "纯GTO",
+        "剥削策略为主",
+        "随机策略",
+        "只看底池大小"
+      ],
+      "explanation": "低级别对手错误很多，剥削策略比GTO更赚钱。但要理解GTO作为基准。"
+    },
+    "l4-gto-q3": {
+      "question": "GTO 矩阵中深绿色代表什么？",
+      "options": [
+        "Fold",
+        "Call",
+        "高频率Raise",
+        "All-in"
+      ],
+      "explanation": "深绿色代表高频率（或100%）的Raise行动。"
+    },
+    "l4-gto-q4": {
+      "question": "GTO策略的核心假设是什么？",
+      "options": [
+        "对手会犯错",
+        "双方都完美游戏",
+        "运气决定一切",
+        "应该总是诈唬"
+      ],
+      "explanation": "GTO假设双方都完美游戏，任何偏离GTO的策略都会被对手利用。"
+    },
+    "l4-gto-q5": {
+      "question": "GTO策略在低级别的主要优势是什么？",
+      "options": [
+        "最大化赢钱",
+        "不被剥削",
+        "看起来专业",
+        "规则要求"
+      ],
+      "explanation": "GTO策略确保你不会被对手剥削。在低级别，对手不会很好利用你的偏离，所以GTO是安全的基础。"
+    },
+    "l4-gt-q1": {
+      "question": "博弈树中的\"节点\"代表什么？",
+      "options": [
+        "一张牌",
+        "一个决策点",
+        "一个率",
+        "一个结果"
+      ],
+      "explanation": "每个节点代表一个需要做决策的点，分支代表可能的行动选择。"
+    },
+    "l4-gt-q2": {
+      "question": "节点锁定的作用是？",
+      "options": [
+        "计算GTO策略",
+        "固定对手的策略偏差并找到最优应对",
+        "锁定自己的策略",
+        "决定下注尺度"
+      ],
+      "explanation": "节点锁定假设对手偏离GTO，然后重新计算我们的最优剥削策略。"
+    },
+    "l4-gt-q3": {
+      "question": "\"博弈树思维\"在实战中意味着？",
+      "options": [
+        "只看当前街",
+        "每个决策前思考后续所有可能",
+        "计算每个概率",
+        "背诵解答"
+      ],
+      "explanation": "博弈树思维的核心是在做每个决策时考虑后续的所有分支及其EV。"
+    },
+    "l4-gt-q4": {
+      "question": "Game Tree是什么？",
+      "options": [
+        "一种扑克变体",
+        "所有可能行动的树状图",
+        "记分工具",
+        "筹码管理"
+      ],
+      "explanation": "Game Tree是展示所有可能行动序列的树状图，用于分析策略。"
+    },
+    "l4-gt-q5": {
+      "question": "为什么不能完整解决扑克的Game Tree？",
+      "options": [
+        "太简单",
+        "计算量太大",
+        "没有意义",
+        "规则不允许"
+      ],
+      "explanation": "扑克的Game Tree极其庞大（信息集约10^160），无法完整计算。"
+    },
+    "l4-freq-q1": {
+      "question": "河牌下注 Full Pot 时，GTO的诈唬比例应该是多少？",
+      "options": [
+        "10%",
+        "25%",
+        "33%",
+        "50%"
+      ],
+      "explanation": "当你下注 Full Pot 时，对手需要 33% 胜率跟注，因此你的诈唬应占 33%。"
+    },
+    "l4-freq-q2": {
+      "question": "策略\"平衡\"意味着什么？",
+      "options": [
+        "每次都做相同的行动",
+        "对手无论如何调整都无法剥削你",
+        "不 bluff",
+        "只打强牌"
+      ],
+      "explanation": "平衡的策略让对手无法通过调整来获取额外利润。"
+    },
+    "l4-freq-q3": {
+      "question": "何时可以打破平衡？",
+      "options": [
+        "任何时候",
+        "面对明显偏离GTO的弱手时",
+        "永远不能",
+        "只在翻前"
+      ],
+      "explanation": "对付明显有漏洞的弱手时，剥削调整比GTO更赚钱。"
+    },
+    "l4-freq-q4": {
+      "question": "频率平衡的目的是什么？",
+      "options": [
+        "赢更多",
+        "让对手无法利用你的模式",
+        "看起来专业",
+        "节省时间"
+      ],
+      "explanation": "频率平衡让你的策略不可被剥削，对手无法通过观察你的模式来获利。"
+    },
+    "l4-freq-q5": {
+      "question": "如果诈唬频率过低，对手会怎样？",
+      "options": [
+        "弃牌更多",
+        "跟注更多（因为你只有价值牌）",
+        "加注更多",
+        "没有影响"
+      ],
+      "explanation": "如果你诈唬太少，对手会发现你下注时总是有强牌，从而用更宽的范围跟注。"
+    },
+    "l4-mdf-q1": {
+      "question": "面对 50% pot 的下注，MDF 约为多少？",
+      "options": [
+        "50%",
+        "67%",
+        "75%",
+        "33%"
+      ],
+      "explanation": "MDF = 1 - (0.5pot / (pot + 0.5pot)) = 1 - 0.33 = 67%。你需要用 top 67% 的范围继续。"
+    },
+    "l4-mdf-q2": {
+      "question": "什么时候应该比 MDF 更频繁地弃牌？",
+      "options": [
+        "对手是 Maniac",
+        "对手很少 bluff（如 NIT）",
+        "你在有利位置",
+        "底池很大"
+      ],
+      "explanation": "面对很少 bluff 的对手（如 NIT），他的下注范围中 value 比例极高，你应该比 MDF 更频繁地弃牌。"
+    },
+    "l4-mdf-q3": {
+      "question": "底池 21BB，对手下注 13BB。你的 MDF 频率是多少？",
+      "options": [
+        "62%",
+        "38%",
+        "50%"
+      ],
+      "explanation": "MDF(防御频率) = pot/(pot+bet) = 21/(21+13) = 21/34 ≈ 62%。这是你需要至少持有的范围比例来阻止对手的剥削。注意区分：跟注所需胜率 = bet/(pot+bet) = 13/34 ≈ 38%。"
+    },
+    "l4-mdf-q4": {
+      "question": "MDF的全称是什么？",
+      "options": [
+        "Maximum Defense Frequency",
+        "Minimum Defense Frequency",
+        "Medium Defense Factor",
+        "Main Defense Formula"
+      ],
+      "explanation": "MDF = Minimum Defense Frequency（最低防守频率），是你需要防守的最低比例。"
+    },
+    "l4-mdf-q5": {
+      "question": "对手下注pot时，MDF是多少？",
+      "options": [
+        "33%",
+        "50%",
+        "67%",
+        "75%"
+      ],
+      "explanation": "对手下注pot时，MDF = pot/(pot+pot) = 50%。你需要至少防守50%才不被无限bluff剥削。"
+    },
+    "l4-mdf-rc-q1": {
+      "question": "M1 案例中，为什么可以用比 MDF 更宽的范围跟注？",
+      "options": [
+        "底池赔率好",
+        "对手是 Maniac  bluff 频率很高",
+        "我的牌很强",
+        "位置有利"
+      ],
+      "explanation": "面对 Maniac（AF 7.0+），对手的 bluff 频率远超 Alpha 阈值（65% > 33%），此时可以用更宽范围跟注来剥削。"
+    },
+    "l4-mdf-rc-q2": {
+      "question": "M2 案例中，为什么面对 Nit 应该弃牌尽管 MDF 建议跟注？",
+      "options": [
+        "NIT 几乎从不 bluff，价值范围极强",
+        "弃牌损失更小",
+        "MDF 计算错误",
+        "我的 QQ 太弱"
+      ],
+      "explanation": "NIT 的 river 下注几乎全是价值（AA/KK/JJ），他的 AF<1.0 意味着极低 bluff 频率，实际 value:bluff 比远高于理论值。"
+    },
+    "l4-overbet-q1": {
+      "question": "Overbet 的核心前提条件是什么？",
+      "options": [
+        "底池很大",
+        "你有坚果优势",
+        "对手是 Maniac",
+        "你在有利位置"
+      ],
+      "explanation": "Overbet 的核心条件是坚果优势（Nuts Advantage）：你的范围包含对手不可能有的超强牌，这让你的 overbet 有可信度。"
+    },
+    "l4-overbet-q2": {
+      "question": "Overbet 的范围应该是什么形状？",
+      "options": [
+        "合并范围（强+中+弱）",
+        "极化范围（只有坚果+bluff）",
+        "只有强牌",
+        "任意牌"
+      ],
+      "explanation": "Overbet 使用极化范围：只有最强的 value 牌和有 blocker 的 bluff，不包含中等牌力。中等牌力应该用正常大小下注或 check。"
+    },
+    "l4-overbet-q3": {
+      "question": "底池 10BB，对手 Overbet 到 25BB（下注 15BB）。你的 MDF 频率是多少？",
+      "options": [
+        "40%",
+        "28%",
+        "60%"
+      ],
+      "explanation": "MDF = pot/(pot+bet) = 10/(10+15) = 10/25 = 40%。这是你需要的最小防御频率。跟注所需胜率 = bet/(pot+bet) = 15/25 = 60%。两者不同，不要混淆！"
+    },
+    "l4-overbet-q4": {
+      "question": "Overbet被Call时通常意味着什么？",
+      "options": [
+        "对手弱牌",
+        "对手有强牌",
+        "对手在bluff",
+        "没有信息"
+      ],
+      "explanation": "Overbet被Call通常意味着对手有强牌（因为弱牌会弃牌）。"
+    },
+    "l4-overbet-q5": {
+      "question": "什么时候不应该使用Overbet？",
+      "options": [
+        "River有坚果优势",
+        "对手范围封顶",
+        "对手是Calling Station",
+        "干燥面翻牌"
+      ],
+      "explanation": "面对Calling Station不应该Overbet，因为他们会用很宽的范围Call，你的bluff部分不+EV。"
+    },
+    "l4-rc-q1": {
+      "question": "以下哪个场景最适合使用极化范围？",
+      "options": [
+        "Flop 小注 C-Bet",
+        "翻前 Open Raise",
+        "River Overbet",
+        "跟注对手 open"
+      ],
+      "explanation": "River Overbet 是典型的极化范围场景：只有坚果级别的 value 和有 blocker 的 bluff，不包含中等牌力。"
+    },
+    "l4-rc-q2": {
+      "question": "BTN 3-Bet 范围中，以下哪手牌属于 bluff 部分？",
+      "options": [
+        "AA",
+        "AKs",
+        "A5s",
+        "QQ"
+      ],
+      "explanation": "A5s 是经典的 3-Bet bluff：有 A blocker + 同花潜力，但牌力不够强到直接 value 3-bet。AA/AKs/QQ 属于 value 部分。"
+    },
+    "l4-rc-q3": {
+      "question": "面对 Calling Station，你的下注范围应该？",
+      "options": [
+        "更极化（更多 bluff）",
+        "更合并（更多 value，少 bluff）",
+        "完全不变",
+        "只 bluff"
+      ],
+      "explanation": "Calling Station 很少弃牌，bluff 无效。应该用更合并的范围：增加 value 下注的频率和范围，减少 bluff。"
+    },
+    "l4-rc-q4": {
+      "question": "面对 100% pot 的下注，理想的 value:bluff 比例约为？",
+      "options": [
+        "1:1",
+        "2:1",
+        "3:1",
+        "4:1"
+      ],
+      "explanation": "面对满池下注，MDF = 50%。为了让对手 indifferent，value:bluff 比例约为 2:1（67% value, 33% bluff）。"
+    },
+    "l4-rc-q5": {
+      "question": "构建范围时应该考虑什么？",
+      "options": [
+        "只看自己的牌",
+        "牌面结构+对手倾向+位置",
+        "随机选择",
+        "只看底池大小"
+      ],
+      "explanation": "构建范围需要综合考虑牌面结构、对手倾向和位置。"
+    },
+    "l4-bc-q1": {
+      "question": "对手 River 下注 1/2 pot，你需要的最低胜率是多少才能 Call？",
+      "options": [
+        "20%",
+        "25%",
+        "33%",
+        "50%"
+      ],
+      "explanation": "最低胜率 = bet/(pot+bet)。下注 1/2 pot 时，你需要 call 0.5pot 去赢 1.5pot，pot odds = 0.5/1.5 = 33%。所以需要至少 33% 胜率才能 Call。"
+    },
+    "l4-bc-q2": {
+      "question": "持有 A 在单色  牌面，对手 River 全押，你应该？",
+      "options": [
+        "更倾向 Fold（A 阻断同花）",
+        "更倾向 Call（阻断对手坚果同花 value）",
+        "无所谓",
+        "必须 Raise"
+      ],
+      "explanation": "A 阻断了对手的坚果同花（Ax），这意味着对手的 value 范围减少，bluff 比例相对增加，所以更倾向 Call。"
+    },
+    "l4-bc-q3": {
+      "question": "面对 Nit 的 River 大注，你应该？",
+      "options": [
+        "扩大 bluff catching 范围",
+        "收紧 bluff catching 范围",
+        "用任何对子 Call",
+        "永远 Raise"
+      ],
+      "explanation": "Nit 的 bluff 频率极低，River 大注通常是强牌。应该收紧 bluff catching 范围，只用非常强的牌 Call。"
+    }
+  },
+  "lessonExample": {
+    "l4-range-ex1": {
+      "title": "根据行动缩小范围：UTG Open + C-Bet",
+      "correctAction": "Call（跟注 C-Bet）",
+      "reasoning": [
+        "UTG open 范围很窄（约10%）：AA-TT, AKs-AQs, AKo",
+        "A-9-4 面很可能击中了 UTG 的范围（Ax 很多）",
+        "但你的 KQs 有后门同花和顺子潜力",
+        "跟注一枪看转牌，不要过度投入"
+      ],
+      "mistakeAction": "加注（认为对手在bluff）",
+      "mistakeReasoning": "UTG的范围在A面非常强。不要试图bluff一个前位开牌者，他的范围中Ax太多了。",
+      "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l4-range-ex2": {
+      "title": "范围思维：BTN Open 的宽范围",
+      "correctAction": "Check-Call",
+      "reasoning": [
+        "BTN open 范围很宽（约45%），很多牌没有击中T面",
+        "你击中了顶对（T），对BTN的宽范围有很好的胜率",
+        "Check-Call 让对手的bluff和弱牌继续下注",
+        "不要 Check-Raise，因为BTN范围太宽，很多弱牌会弃牌"
+      ],
+      "mistakeAction": "Check-Raise（过度激进）",
+      "mistakeReasoning": "BTN范围很宽，Check-Raise只会让弱牌弃牌、强牌跟注。你无法从更弱的牌获取价值。",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l4-ev-ex1": {
+      "title": "EV 计算：同花听牌的跟注决策",
+      "correctAction": "Call",
+      "reasoning": [
+        "底池 6.5BB，对手下注 4BB，你需要跟 4BB",
+        "底池赔率 = 4 / (6.5 + 4 + 4) = 27.6%",
+        "同花听牌胜率 ≈ 35%（flop 到 river）",
+        "35% > 27.6%，跟注是 +EV 的！",
+        "EV = 0.35 × 10.5 - 0.65 × 4 = 3.675 - 2.6 = +1.075 BB"
+      ],
+      "mistakeAction": "Fold（认为\"没中就该弃\"）",
+      "mistakeReasoning": "很多新手只看当前牌力，不考虑胜率。同花听牌有 35% 胜率，底池赔率又好，弃牌是-EV的。",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l4-ev-ex2": {
+      "title": "EV 思维：不要结果导向",
+      "correctAction": "这手牌输了，但 3-Bet AKs 的决策是正确的",
+      "reasoning": [
+        "AKs 3-Bet CO open 是标准 +EV 操作",
+        "这手牌没中是方差（运气）",
+        "长期来看，AKs 3-Bet 会盈利（对手弃牌 + 击中时赢大底池）",
+        "不要因为一次输了就改变正确策略"
+      ],
+      "mistakeAction": "\"再也不用AK 3-Bet了\"",
+      "mistakeReasoning": "结果导向思维是业余玩家的标志。+EV决策输了不代表决策错了，只是方差而已。",
+      "mistakeEvLoss": "长期损失大量 EV（放弃+EV操作）"
+    },
+    "l4-opp-ex1": {
+      "title": "同一手牌面对不同对手的决策差异",
+      "correctAction": "Fold",
+      "reasoning": [
+        "AJo 是一手不错的牌，但面对 NIT 的 CO open 需要格外小心",
+        "NIT 的 open 范围非常紧（约前10%），主要包括 AA-JJ, AKs, AQs, AKo",
+        "AJo 在这个范围中被严重支配（对阵 AQ/AK 时 kicker 被压制）",
+        "面对 NIT，弃掉被支配的牌是正确的——他们加注就意味着实力"
+      ],
+      "mistakeAction": "Call 或 3-Bet",
+      "mistakeReasoning": "很多新手看到 AJo 就觉得\"这手牌够好\"。但面对 NIT 时，AJo 的 equity 远低于你以为的。如果你 call 了，翻牌中 A 后你会输给 AK/AQ，损失大量筹码。",
+      "mistakeEvLoss": "-1.2 BB/100"
+    },
+    "l4-opp-ex2": {
+      "title": "面对 Maniac 用中等牌力跟注",
+      "correctAction": "Call",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "QQ 是一手强牌，但面对 Maniac 不建议 3-Bet",
+        "Maniac 的 open 范围极宽（45%+），你的 QQ 遥遥领先",
+        "3-Bet 会建立大底池，但 Maniac 几乎不会弃牌",
+        "Call 让底池保持可控，翻后可以利用位置（你是BB，翻后先行动但可以 check-raise）",
+        "关键：耐心等 Maniac 自己犯错，不要急于建立大底池"
+      ],
+      "mistakeAction": "3-Bet 到 10BB",
+      "mistakeReasoning": "虽然3-Bet在GTO中是标准打法，但面对Maniac时不一定最优。大底池意味着你需要在翻后做出更多复杂决策。Call更简单且同样有利可图——让他自己把钱送进来。",
+      "mistakeEvLoss": "-0.3 BB/100（相对call）",
+      "tableDesc": "该对手过去20手加注了14次，非常激进",
+      "opponentHistory": "该Maniac最近3次加注后翻牌全部C-Bet"
+    },
+    "l4-blockers-ex1": {
+      "title": "A Blocker 在 3-Bet Bluff 中的应用",
+      "correctAction": "Raise",
+      "correctAmount": "8BB",
+      "reasoning": [
+        "A5s 是优秀的 3-Bet bluff 候选：A blocker 减少对手 AA/AK 组合",
+        "TAG 面对 3-Bet 会弃掉大量中等牌（JJ-88, AQ-AT）",
+        "即使被 call，A5s 有良好的翻后可玩性（同花+顺子潜力）",
+        "相比 76s，A5s 的 blocker 效应使 bluff 成功率更高"
+      ],
+      "mistakeAction": "用 76s 替代 A5s 作为 3-Bet bluff",
+      "mistakeReasoning": "76s 没有 A blocker，对手持有 AA/AK 的概率更高，意味着对手更可能继续（call 或 4-bet），bluff 成功率降低。",
+      "mistakeEvLoss": "-0.4 BB/100"
+    },
+    "l4-blockers-ex2": {
+      "title": "同花 Blocker 在 River Hero Call 中的应用",
+      "correctAction": "Call",
+      "reasoning": [
+        "你持有 A♥ — 这是关键的同花 blocker",
+        "对手不可能有 A♥x♥ 的坚果同花（你有 A♥）",
+        "对手的 value 范围被你的 blocker 显著削弱",
+        "TAG 在 river 的 bluff 频率虽然低，但你的 blocker 使 value 组合减少",
+        "Pot odds: 需要 20/(27+20) ≈ 43% 胜率，有 blocker 后对手 bluff 比例足够"
+      ],
+      "mistakeAction": "Fold（不考虑 blocker）",
+      "mistakeReasoning": "不考虑 blocker 效应时，玩家容易高估对手持有同花的概率。A♥ 在你手中意味着对手少了最强的同花组合。",
+      "mistakeEvLoss": "-2.5 BB/100"
+    },
+    "l4-gto-ex1": {
+      "title": "BTN Open 范围中的混合策略手牌",
+      "correctAction": "Raise",
+      "correctAmount": "2.5BB",
+      "reasoning": [
+        "KTs 在 BTN Open 范围中是约90% Raise 的手牌",
+        "同花连牌有很好的翻后可玩性",
+        "BTN位置可以最大化位置优势",
+        "GTO策略中这是几乎纯加注的手牌"
+      ],
+      "mistakeAction": "Limp（平跟大盲）",
+      "mistakeReasoning": "在GTO策略中，BTN几乎不存在limp的行为。Open limp暴露了你的牌力范围，让对手更容易利用你。",
+      "mistakeEvLoss": "-0.3 BB/100"
+    },
+    "l4-gto-ex2": {
+      "title": "BB 面对 BTN Open 的防御频率",
+      "correctAction": "Call",
+      "reasoning": [
+        "98s 在 BB 面对 BTN 2.5BB open 时应该 Call",
+        "BB 已经投入1BB，只需再补1.5BB看flop",
+        "GTO 要求 BB 防御约 50-55% 的手牌来防止 BTN 无限偷盲",
+        "98s 同花连牌翻后可玩性极好，属于防御范围的核心部分"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "过度弃牌让 BTN 可以通过任意两张牌 open 获利。GTO要求你以一定频率防御盲注。",
+      "mistakeEvLoss": "-0.5 BB/100",
+      "tableDesc": "标准100BB现金桌，BTN是TAG风格"
+    },
+    "l4-mdf-ex1": {
+      "title": "River MDF 实战计算",
+      "correctAction": "Call",
+      "reasoning": [
+        "对手下注 8BB 入 13BB 底池（约 62% pot）",
+        "MDF = 1 - (8/21) ≈ 62%，你需要用 top 62% 的继续范围 call",
+        "顶对 A 高踢脚（AT）在你的范围中属于偏强部分",
+        "面对 LAG（bluff 频率高），接近 MDF 防御是正确的",
+        "AT 在你的防御范围中明确属于 call 的部分"
+      ],
+      "mistakeAction": "Fold（\"他肯定有 K\"）",
+      "mistakeReasoning": "过度恐惧对手的强牌而忽略 MDF。LAG 的下注范围中有大量 bluff（错过的听牌、空气牌），AT 顶对足以防御。",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l4-mdf-ex2": {
+      "title": "面对 NIT 时偏离 MDF",
+      "correctAction": "Fold",
+      "reasoning": [
+        "虽然 MDF 建议继续约 44%（面对 80% pot），但对手是 NIT",
+        "NIT 在 river 大额下注的范围极度偏 value（AA、JJ、99 等）",
+        "NIT 几乎不在 river bluff（AF 低，bluff 频率极低）",
+        "QQ 在这个牌面只是第三对，面对 NIT 的 value 范围严重落后",
+        "这是\"应该比 MDF 更频繁弃牌\"的典型案例"
+      ],
+      "mistakeAction": "Call（机械遵循 MDF）",
+      "mistakeReasoning": "MDF 假设对手有合理的 bluff 频率。面对 NIT 这种几乎不 bluff 的对手，盲目遵循 MDF 会导致频繁输给强牌。",
+      "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l4-overbet-ex1": {
+      "title": "River Overbet with Nuts Advantage",
+      "correctAction": "Bet",
+      "correctAmount": "36BB (150% pot)",
+      "reasoning": [
+        "你有 77（葫芦），在这个牌面是接近坚果的牌",
+        "你的范围包含 KK（暗三条变葫芦）而对手 check-call 两次后不太可能有 KK",
+        "对手范围被 capped：check-call flop + check-call turn = 最多 Kx 或弱葫芦",
+        "Overbet 150% pot 让对手的顶对/两对面临极大压力",
+        "你的 value 范围（77, KK, K7s）支持这个 overbet"
+      ],
+      "mistakeAction": "下注 12BB（50% pot）",
+      "mistakeReasoning": "小注下注让对手太容易用 Kx 跟注。你有巨大的坚果优势，应该用 overbet 最大化价值，让对手的中等牌力付出最大代价。",
+      "mistakeEvLoss": "-3.0 BB/100"
+    },
+    "l4-overbet-ex2": {
+      "title": "River Overbet Bluff（极化范围）",
+      "correctAction": "Bet",
+      "correctAmount": "33BB (150% pot)",
+      "reasoning": [
+        "你有 AT — 错过的坚果同花听牌（A 高红心）",
+        "你的范围在这个牌面是极化的：要么有同花（坚果），要么是空气",
+        "A 是极好的 bluff blocker：阻断对手 Ax 的坚果同花",
+        "对手 check-call 两次后范围 capped（不太可能有强牌）",
+        "Overbet 让对手的顶对/两对面临极困难的决策"
+      ],
+      "mistakeAction": "Check（放弃）",
+      "mistakeReasoning": "放弃浪费了极好的 bluff 机会。你的范围在这个牌面天然极化，overbet bluff 有极高的弃牌权益。",
+      "mistakeEvLoss": "-2.5 BB/100"
+    },
+    "l4-rc-ex1": {
+      "title": "极化范围实战：River 3-Bet",
+      "correctAction": "Raise",
+      "correctAmount": "8BB",
+      "reasoning": [
+        "A5s 在 BTN 3-Bet 范围中属于 bluff 部分",
+        "极化范围：Value = {AA-JJ, AKs, AKo}，Bluff = {A5s, A4s, A3s, K9s}",
+        "A5s 有 A blocker（减少对手 AA/AK）+ 同花/顺子潜力",
+        "不包含 JJ/TT/AQ（这些用 call，属于中等牌力）",
+        "这就是极化范围的实战应用"
+      ],
+      "mistakeAction": "用 JJ 做 3-Bet（应该 call）",
+      "mistakeReasoning": "JJ 在极化 3-Bet 范围中属于\"中间地带\"——不够强到 value 3-bet（被 4-bet 后很尴尬），也不适合做 bluff。正确做法是 call。",
+      "mistakeEvLoss": "-0.5 BB/100"
+    },
+    "l4-rc-ex2": {
+      "title": "合并范围实战：Flop C-Bet",
+      "correctAction": "Bet",
+      "correctAmount": "2BB (33% pot)",
+      "reasoning": [
+        "Flop 小注 C-Bet 使用合并范围",
+        "你的 C-Bet 范围包含：顶对+（KQ, KK, AK）、中等对（TT, 99）、听牌（QJ, JT）",
+        "KQ 顶对在这个范围中属于强牌部分",
+        "小注（33% pot）让你可以用宽泛的合并范围下注",
+        "不需要极化——小注的目的是让对手用弱牌继续"
+      ],
+      "mistakeAction": "下注 4BB（75% pot）",
+      "mistakeReasoning": "Flop 大注会极化你的范围（只有强牌和 bluff 才下大注），让对手更容易判断你的牌力。小注合并范围更高效。",
+      "mistakeEvLoss": "-0.3 BB/100"
+    },
+    "l4-bc-ex1": {
+      "title": "Hero Call：阻断对手 Value 范围",
+      "correctAction": "Call",
+      "reasoning": [
+        "BTN 三条街下注，River 全押 28BB（pot）",
+        "你持有 AK，阻断了对手的坚果同花（Ax）",
+        "BTN 的 value 范围（坚果同花）因为你持有 A 而减少",
+        "BTN 的 bluff 范围（错过的听牌、空气）相对增加",
+        "面对 pot 下注需要 33% 胜率，TAG 的 bluff 频率约 35-40% → Call +EV"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "Fold 太紧。A 是完美的 bluff catcher blocker，阻断了对手最强的 value 组合。面对 TAG 的 bluff 频率，Call 是+EV。",
+      "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l4-bc-ex2": {
+      "title": "识别过度诈唬：宽范围 Call",
+      "correctAction": "Call",
+      "reasoning": [
+        "CO 是 LAG，三条街 barrel 频率极高（> 60%）",
+        "99 是典型的 bluff catcher：赢不了 Kx/Qx/两对，但能赢空气",
+        "LAG 的 bluff 频率约 50-60%，远超需要的 33% 胜率",
+        "不要 Raise！Call 即可，Raise 只会让 LAG 用更强的牌继续",
+        "99 在这个牌面是完美的 bluff catcher：有摊牌价值但赢不了 value"
+      ],
+      "mistakeAction": "Fold",
+      "mistakeReasoning": "面对 LAG 的三条街 barrel 用 99 Fold 太紧。LAG 的 bluff 频率远超你需要的最低胜率，这是标准的 bluff catching 场景。",
+      "mistakeEvLoss": "-2.5 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l4-range-p1": {
+      "option": [
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "UTG范围在K面很强（AK、KK、KQs等），你的QQ只是第二对。不要主动下注。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "UTG范围在K面有优势，但QQ仍有胜率。Check-Call控制底池，看转牌再做决定。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "QQ面对UTG的C-Bet不应该直接弃牌。你仍然领先对手范围中的很多牌（JJ-TT、bluff等）。",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l4-range-p2": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "你击中了顶对顶kicker，对BTN的宽范围非常强。不应该弃牌。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "顶对顶kicker对BTN宽范围很强。Check-Call让对手继续bluff，获取最大价值。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "amount": "4BB",
+          "explanation": "Donk bet会让BTN的弱牌弃牌，减少你的价值。Check让对手先行动更好。",
+          "evImpact": "+0.3 BB/100"
+        }
+      ]
+    },
+    "l4-range-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "你击中了顺子（9-8-7-6）！这是极强的牌，绝对不应该弃牌。",
+          "evImpact": "-5.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "顺子应该主动下注获取价值。只跟注太被动，错失建立底池的机会。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "10BB",
+          "explanation": "你击中了顺子！UTG范围在7-6面也有强牌（超对、顶对），应该加注建立大底池。",
+          "evImpact": "+3.0 BB/100"
+        }
+      ]
+    },
+    "l4-range-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KQs有后门同花潜力，跟注一枪看转牌是合理的。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "6BB",
+          "explanation": "KQs在A-9-4-2面有K高+后门同花，UTG范围强但Call一枪看河牌是+EV。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "15BB",
+          "explanation": "面对UTG的强范围，KQs不够强做加注。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l4-range-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "JT有卡顺潜力，NIT连续Check表示弱牌。应该Probe偷底。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "4BB",
+          "explanation": "JT有卡顺+高牌胜率，NIT连续Check表示弱牌。Probe下注代表Qx，NIT会弃掉空气。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Probe不需要All-in。标准尺度即可。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l4-ev-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "同花听牌 35% 胜率，对手下注 4BB，底池赔率 28%。胜率 > 底池赔率，跟注是+EV。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "4BB",
+          "explanation": "EV = 0.35 × 10.5 - 0.65 × 4 = +1.075BB。跟注是明确的+EV决策。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "12BB",
+          "explanation": "单独同花听牌加注风险较大。如果被 All-in，你的胜率只有 35%，不划算。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-ev-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "两头顺子听牌有 8 个 outs，31% 胜率。对手下注 3BB，底池赔率约 25%，跟注是+EV。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "amount": "3BB",
+          "explanation": "EV = 0.31 × 8.5 - 0.69 × 3 = 2.635 - 2.07 = +0.565BB。底池赔率足够，跟注是+EV。",
+          "evImpact": "+0.6 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "9BB",
+          "explanation": "没有位置优势，两头顺听牌加注风险大。如果被跟注，你仍然只有 31% 胜率。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l4-ev-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AKs 面对CO的4-Bet All-in，底池赔率极好。你需要约 40% 胜率，AKs对CO的4-Bet范围通常有 40%+。",
+          "evImpact": "-5.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "AKs 面对CO的4-Bet All-in应该Call。底池赔率要求约 40% 胜率，AKs对CO的4-Bet范围（QQ+, AK）有约 40%。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Tank then Fold",
+          "explanation": "长时间思考后弃牌和直接弃牌一样，都是-EV的。AKs在这里有足够的胜率跟注。",
+          "evImpact": "-5.0 BB/100"
+        }
+      ]
+    },
+    "l4-ev-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "AKs面对NIT 4-Bet有blocker价值，Call看flop是标准打法。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "AKs有blocker+翻后可玩性。Call看flop利用位置优势。",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "5-Bet All-in",
+          "explanation": "面对NIT 4-Bet全下，NIT只跟AA/KK，你被碾压。",
+          "evImpact": "-3.0 BB/100"
+        }
+      ]
+    },
+    "l4-ev-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QJ有后门同花+高牌，TAG Turn Check表示弱牌。应该Float后Turn下注。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "9BB",
+          "explanation": "QJ翻牌Float，Turn TAG Check。下注代表Kx，TAG弃牌率高。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Turn All-in过度。标准尺度即可。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l4-opp-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "KJs 面对 LAG 的 HJ open 太强了不能弃牌。LAG 范围宽，你的牌在他范围中偏上。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Call 是可以的，但不是最优。面对 LAG，3-Bet 更有价值——他的宽范围意味着更多弃牌权益。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "8BB",
+          "explanation": "面对 LAG 的宽范围 open，用 KJs 3-Bet 是高EV打法。你有位置优势 + 好的 blocker + 翻后可玩性。LAG 范围中有大量弱牌会对你的 3-Bet 弃牌。",
+          "evImpact": "+1.5 BB/100"
+        }
+      ]
+    },
+    "l4-opp-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A9s 面对 Calling Station 的加注应该 fold。CS 极少加注（PFR仅5%），一旦加注代表非常强的范围。A9s 容易被支配，且 ICM 中等压力下保护筹码更重要。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "40BB 深度 call 后翻牌不中就是浪费 2.5BB。且 CS 翻后倾向跟注到底，你无法利用位置施压。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "7BB",
+          "explanation": "3-Bet bluff 面对 Calling Station 是-EV的——他几乎不弃牌。且 SNG 后期 ICM 压力下不应冒险做大底池。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "SNG 后期，只剩4人，前3有奖金"
+    },
+    "l4-opp-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "TT 面对 TAG BTN open 在 200BB 深度太浪费了。口袋对有很好的 set mine 价值，尤其在深筹码时。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "200BB 深度用 TT call 是标准打法。深筹码时 set mine 的隐含赔率极好（中set可赢对手200BB），且 TAG 翻后 C-Bet 频率高，你的 set 可以赚到大量筹码。",
+          "evImpact": "+1.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "9BB",
+          "explanation": "3-Bet TT 在深筹码中不太理想。如果被4-Bet你被迫弃牌（浪费set mine机会），如果被call则翻后无位置打中等牌力。Call更优。",
+          "evImpact": "+0.5 BB/100"
+        }
+      ],
+      "tableDesc": "深筹码现金桌，200BB有效"
+    },
+    "l4-opp-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK同花成牌，River应该价值下注。CS会用弱牌Call。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 18BB（70% pot）",
+          "explanation": "AK同花成牌，CS会用弱同花/对子Call。标准价值下注。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "面对CS Overbet风险大。标准尺度更安全。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-opp-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QJ在T73没有对子没有听牌。应该Check准备弃牌。",
+          "evImpact": "+0.1 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "amount": "12BB",
+          "explanation": "QJ没有对子没有听牌，Check-Raise bluff不合适。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "QJ在T73面没有胜率，不应该投入更多筹码。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-blockers-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A4s 面对 BTN open 太强不能弃牌。你有 A blocker + 同花潜力。",
+          "evImpact": "-0.6 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Call 可以但不是最优。SB 位置 call 后翻后无位置，且 A4s 的 blocker 效应使其更适合 3-Bet bluff。",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "9BB",
+          "explanation": "A4s 是经典的 3-Bet bluff：A blocker 减少对手继续的范围，同花潜力提供翻后 equity，且在 SB 位置主动建立底池比被动 call 更好。",
+          "evImpact": "+1.2 BB/100"
+        }
+      ]
+    },
+    "l4-blockers-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "虽然你有 A♣ blocker（减少对手 AA/AK），但 AQ 在这个牌面只是 A 高。TAG 在 river 下注大范围偏 value（Kx、顺子），你的 blocker 不足以证明 call 正确。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "A blocker 虽好，但 AQ 在 K-T-3-7-2 牌面只是 A 高。TAG 的 river bet 范围中 value 比例很高，A 高不足以抓 bluff。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "40BB",
+          "explanation": "用 A 高做 river raise bluff 面对 TAG 太冒险。TAG 很少在 river 下注后弃牌给 raise（他的下注范围偏强）。",
+          "evImpact": "-3.0 BB/100"
+        }
+      ]
+    },
+    "l4-blockers-p3": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "KK 面对 NIT open 只 call 太被动。你有极强的 blocker 效应（减少对手 AA 从 6→1 组合），应该 3-Bet 获取价值。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "8BB",
+          "explanation": "KK 是明确的 3-Bet for value。你的 K blocker 使对手持有 AA 的概率极低（仅 1 种组合）。NIT 的 open 范围中 AK/AQ/JJ 都会对你的 3-Bet 做出反应。",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "12BB",
+          "explanation": "过大的 3-Bet 会让 NIT 弃掉所有非 AA/KK 的牌。标准 3x 大小（8BB）能保持对手的弱范围继续。",
+          "evImpact": "+1.5 BB/100"
+        }
+      ]
+    },
+    "l4-blockers-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A♥K♥ 在 9-6-3-2-7（三红心）牌面持有坚果同花（A♥x♥）。面对 TAG 的 river 大注，你有坚果应该 Call。Fold 是严重错误。",
+          "evImpact": "-3.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "A♥K♥ 在 9-6-3-2-7 牌面持有坚果同花（A♥ 是坚果同花的关键 blocker）。TAG 的 river bet 包含 value（顺子/两对）和 bluff。Call 确保价值。",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "Raise All-in",
+          "explanation": "虽然持有坚果，但 Raise All-in 可能只被更弱的牌弃牌。TAG 会用顺子/两对 Call，但你的 A♥ 阻断了对手坚果同花可能。标准 Call 即可。",
+          "evImpact": "+1.0 BB/100"
+        }
+      ]
+    },
+    "l4-blockers-p5": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A♠K♠ 阻断了对手 AK/AQ/AJ 等 value 组合，且 LAG 的 bluff 频率高。面对 LAG 的 river bet，A blocker 让 Call 更 +EV。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "A♠K♠ 有 A blocker（减少对手 Ax 组合），且 LAG river bluff 频率高（>40%）。Pot odds 约 33%，LAG 的 bluff 频率足够让你 Call。Blocker 效应让 Call 成为 +EV。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Raise All-in",
+          "explanation": "A♠K♠ 在 Q-J-3-8-2 牌面只是 A 高。Raise bluff 面对 LAG 太冒险，LAG 的 river bet 范围中有足够的 value。",
+          "evImpact": "-3.0 BB/100"
+        }
+      ]
+    },
+    "l4-gto-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "JTs 是强连牌，在CO面对全fold应该100%开牌。",
+          "evImpact": "-1.8 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "2.5BB",
+          "explanation": "JTs 在CO是标准开牌手牌，GTO策略中100%加注。同花连牌翻后潜力大。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "前位没有人加注，这里\"Call\"没有意义。应该主动加注。",
+          "evImpact": "-0.8 BB/100"
+        }
+      ]
+    },
+    "l4-gto-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "K5o 面对CO open应该弃牌。这手牌被支配性太强（Kx对阵时 kicker 太弱），不在BTN的防御范围内。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "K5o 面对CO open跟注是-EV的。你的kicker太弱，容易被支配。",
+          "evImpact": "-0.6 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "7BB",
+          "explanation": "K5o 不够强做3-Bet。BTN的3-Bet bluff范围应该选择更好的blocker牌（如A5s, A4s）。",
+          "evImpact": "-1.2 BB/100"
+        }
+      ]
+    },
+    "l4-gto-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A5s 太浪费了。这手牌有很好的3-Bet bluff价值（A blocker + 翻后潜力）。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "A5s 可以call但不是最优选择。GTO中这手牌在BTN更倾向3-Bet。",
+          "evImpact": "+0.2 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "7.5BB",
+          "explanation": "A5s 是BTN面对HJ open的经典3-Bet bluff手牌。A blocker减少了对手AA/AK的概率，同花 suited 提供翻后价值。",
+          "evImpact": "+0.8 BB/100"
+        }
+      ]
+    },
+    "l4-gto-p4": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "88 是中等口袋对，面对BTN宽范围open不应该弃牌。GTO防御频率要求你继续。",
+          "evImpact": "-0.4 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "88 在BB面对BTN open应该Call。口袋对有set mine价值（约12%概率翻牌中三条），且只需补1.5BB。",
+          "evImpact": "+0.6 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "9BB",
+          "explanation": "88 做3-Bet不够强。中等口袋对通常不适合做bluff 3-Bet，call是更好的选择。",
+          "evImpact": "-0.2 BB/100"
+        }
+      ]
+    },
+    "l4-gto-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK同花成牌，River应该价值下注。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet 18BB",
+          "explanation": "AK同花成牌，River标准价值下注获取价值。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "Overbet过度，只有更强牌会Call。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-gt-p1": {
+      "option": [
+        {
+          "action": "Bet 3BB",
+          "explanation": "KQ在A94面有后门同花，小注C-Bet获取弃牌权益。",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "KQ有后门潜力，应该C-Bet。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "C-Bet不需要强牌，有后门就够了。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l4-gt-p2": {
+      "option": [
+        {
+          "action": "Bet 4.5BB",
+          "explanation": "JT有同花+卡顺组合听牌，半诈唬下注。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "组合听牌应该主动下注获取弃牌权益。",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "组合听牌太强不能弃。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l4-gt-p3": {
+      "option": [
+        {
+          "action": "Bet 2BB",
+          "explanation": "AQ有同花听牌+顶对潜力，小注C-Bet。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "AQ有同花潜力，应该C-Bet。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 5BB",
+          "explanation": "干燥面不需要大注。",
+          "evImpact": "+0.3 BB/100"
+        }
+      ]
+    },
+    "l4-gt-p4": {
+      "option": [
+        {
+          "action": "Check-Raise 12BB",
+          "explanation": "87有同花+OESD组合听牌，Check-Raise半诈唬。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "组合听牌应该加注获取弃牌权益。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "组合听牌太强不能弃。",
+          "evImpact": "-3.0 BB/100"
+        }
+      ]
+    },
+    "l4-gt-p5": {
+      "option": [
+        {
+          "action": "Bet 18BB",
+          "explanation": "AT同花成牌，River标准价值下注。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "同花成牌应该价值下注。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "同花但非坚果，All-in过度。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-freq-p1": {
+      "option": [
+        {
+          "action": "Bet 3BB",
+          "explanation": "ADTD 在 QJT9 三面听牌面有强大顺子潜力，半诈唬下注。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "强听牌应该主动下注获取弃牌权益。",
+          "evImpact": "-0.4 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "听牌太强不能弃。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l4-freq-p2": {
+      "option": [
+        {
+          "action": "Check-Raise 10BB",
+          "explanation": "54s 有中对 + 后门同花，Check-Raise 半诈唬。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "中对应该主动加注获取弃牌权益。",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "中对 + 后门同花太强不能弃。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l4-freq-p3": {
+      "option": [
+        {
+          "action": "Bet 10BB",
+          "explanation": "QJ 无摊牌价值，三条街叙事代表 Kx。River bluff +EV。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "QJ 无摊牌价值，bluff 是唯一赢底池的方式。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "All-in 过度。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l4-freq-p4": {
+      "option": [
+        {
+          "action": "Bet 7BB",
+          "explanation": "A5 同花听牌，Turn 继续 Semi-Bluff。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "同花听牌应该继续半诈唬。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "单一听牌 All-in 过度。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l4-freq-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "T9 顺子成牌但非坚果，面对可能更强的范围 Check 控制。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Bet 10BB",
+          "explanation": "顺子成牌但非坚果，价值下注可能被更强牌 Call。",
+          "evImpact": "-0.3 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "顺子成牌太强不能弃。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l4-mdf-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "面对 50% pot bet，MDF ≈ 67%。顶对 K 在你的范围中属于强牌部分，面对 LAG（高 bluff 频率）必须防御。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "顶对 K 踢脚 9 面对 LAG 的半池下注是标准 call。MDF 67% 意味着你大部分范围都要继续，顶对显然在继续范围内。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "15BB",
+          "explanation": "River raise 面对 LAG 不太理想。LAG 面对 raise 只会用更强的牌继续，你的 K9 会被支配。Call 是更安全的防御方式。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-mdf-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "面对满池下注，MDF = 50%。但 JT 在 A-K-5-Q-3 牌面只是 J 高（无对），即使有顺子可能（需要 9），你的牌在继续范围的后半部分。面对未知对手，fold 是安全的。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "JT 在 A-K-Q-5-3 牌面没有成对，只是 J 高。虽然 MDF 50%，但你的牌在防御范围中排名太靠后。用更强的牌（任何对子以上）来防御。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "36BB",
+          "explanation": "用 J 高做 river raise bluff 面对未知对手风险极大。你没有好的 blocker（不阻断对手的 value 范围），且对手可能有强牌。",
+          "evImpact": "-3.0 BB/100"
+        }
+      ]
+    },
+    "l4-mdf-p3": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "面对 Maniac 的 70% pot bet，MDF ≈ 59%。你有顶对 A + Q 踢脚，在 Maniac 的超宽范围中遥遥领先。绝对不能弃牌。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "顶对 AQ 面对 Maniac 是明确的 call。Maniac bluff 频率极高（AF 6.0），你的顶对在他的范围中有大量价值。MDF 也支持继续。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "25BB",
+          "explanation": "虽然 Maniac 可能用弱牌 call，但 river raise 风险大。Maniac 面对 raise 可能用更强的牌（两对+）继续，你的 AQ 不一定领先他的 call 范围。Call 更稳妥。",
+          "evImpact": "+1.0 BB/100"
+        }
+      ]
+    },
+    "l4-mdf-p4": {
+      "option": [
+        {
+          "action": "Call 3BB",
+          "explanation": "KQ在A72面有后门同花，跟注一枪看转牌。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "KQ有后门潜力，MDF足够跟注。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Raise 10BB",
+          "explanation": "面对TAG在A面加注过度。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ]
+    },
+    "l4-mdf-p5": {
+      "option": [
+        {
+          "action": "Check-Raise 12BB",
+          "explanation": "JT 有同花 + 卡顺组合听牌，Check-Raise 半诈唬。",
+          "evImpact": "+1.8 BB/100"
+        },
+        {
+          "action": "Check-Call",
+          "explanation": "组合听牌应该加注获取弃牌权益。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "组合听牌太强不能弃。",
+          "evImpact": "-2.5 BB/100"
+        }
+      ]
+    },
+    "l4-overbet-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "KK（暗三条）在这个牌面是坚果级别。你有巨大的坚果优势，应该下注获取价值，不应该 check。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB (50% pot)",
+          "explanation": "小注下注可以，但没有最大化价值。你有暗三条（接近坚果），对手范围 capped，应该用更大的下注。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "15BB (150% pot)",
+          "explanation": "KK 暗三条在这个牌面是坚果级别。对手 check-call 后范围 capped（最多顶对），overbet 让对手的顶对/两对付出最大代价。你的范围支持 overbet（有 KK, 99, 44 等强牌）。",
+          "evImpact": "+3.0 BB/100"
+        }
+      ]
+    },
+    "l4-overbet-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "QJ 是错过的坚果同花听牌。你的范围在这个牌面极化（有同花或空气），适合 overbet bluff。Check 浪费了 bluff 机会。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB (50% pot)",
+          "explanation": "小注 bluff 不够有威胁。对手面对小注太容易 call，你的 bluff 成功率低。要么不 bluff，要么用 overbet 施加最大压力。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "15BB (150% pot)",
+          "explanation": "QJ 是完美的 overbet bluff：你有 A/K 的 blocker（阻断对手坚果同花），你的范围极化（有同花或空气），overbet 让对手的顶对面临极困难决策。",
+          "evImpact": "+2.5 BB/100"
+        }
+      ]
+    },
+    "l4-overbet-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AQ 顶对在这个牌面是中等牌力（有 K 在牌面）。Overbet 需要极化范围，顶对不属于极化范围的任何一端。Check 控制底池是正确打法。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "15BB (150% pot)",
+          "explanation": "顶对 AQ 不是 overbet 的候选！Overbet 需要极化范围（坚果或空气）。AQ 是中等牌力，overbet 后只会被更强的牌 call，弱牌都会弃牌。",
+          "evImpact": "-2.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB (50% pot)",
+          "explanation": "虽然小注比 overbet 好，但 AQ 在这个牌面更适合 check。K 在牌面意味着对手可能有 Kx，你的顶对不够强到需要 value bet。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-overbet-p4": {
+      "option": [
+        {
+          "action": "Bet 15BB",
+          "explanation": "KQ 顶对好踢脚，TAG 范围封顶。标准尺度薄价值下注，能被更差的 Kx 和顽固对子跟注。",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "顶对非坚果，Overbet 只会被更强牌跟注，把薄价值牌打成了 bluff。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "放弃薄价值下注损失 EV。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-overbet-p5": {
+      "option": [
+        {
+          "action": "Bet 15BB",
+          "explanation": "KQ 顶对好踢脚，NIT 范围封顶（很少慢打两对以上）。标准尺度薄价值下注，能被更差的 Kx 和顽固对子跟注。",
+          "evImpact": "+0.8 BB/100"
+        },
+        {
+          "action": "Overbet 40BB",
+          "explanation": "顶对非坚果，Overbet 只会被更强牌跟注，把薄价值牌打成了诈唬。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "NIT 范围封顶，放弃薄价值下注损失 EV。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-rc-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "TT 面对 CO open 太强不能弃牌。在 BTN 有位置优势，TT 有明确的价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "TT 在极化 3-Bet 范围中属于\"中间地带\"。不够强到 value 3-bet（被 4-bet 很尴尬），也不适合做 bluff。Call 是标准打法，翻后利用位置。",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Raise",
+          "amount": "8BB",
+          "explanation": "3-Bet TT 在极化范围中不太合适。如果被 4-Bet 你被迫弃牌（损失 8BB），如果被 call 则翻后打中等牌力。TT 更适合 call（合并范围中的中等牌力）。",
+          "evImpact": "+0.3 BB/100"
+        }
+      ]
+    },
+    "l4-rc-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK 两对在这个牌面是极强的 value 牌。你有坚果优势（你的范围有 AK/AA/KK），应该下注获取价值。",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "5BB (50% pot)",
+          "explanation": "小注可以，但没有最大化价值。你有两对（接近坚果），对手范围 capped，可以用更大的下注。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "12BB (120% pot)",
+          "explanation": "AK 两对在 A-7-2-K-5 牌面是极强的 value。你的范围有坚果优势（AA, KK, AK），对手 check-call 后范围 capped。大注/overbet 最大化价值。",
+          "evImpact": "+3.0 BB/100"
+        }
+      ]
+    },
+    "l4-rc-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "98 是错过的同花听牌（空气）。你的范围在这个牌面极化（有同花或空气），适合 bluff。Check 浪费了 bluff 机会。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "3BB (30% pot)",
+          "explanation": "小注 bluff 不够有威胁。对手面对小注太容易 call（pot odds 好）。要么不 bluff，要么用足够大的下注施加压力。",
+          "evImpact": "+0.3 BB/100"
+        },
+        {
+          "action": "Bet",
+          "amount": "10BB (100% pot)",
+          "explanation": "98 是完美的 bluff 候选：有同花 blocker（对手不太可能有同花），你的范围极化（有同花或空气），满池下注让对手的顶对面临困难决策。",
+          "evImpact": "+2.0 BB/100"
+        }
+      ]
+    },
+    "l4-rc-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AK在JT9两花面没有对子，对手范围很有利。Check控制底池。",
+          "evImpact": "+0.5 BB/100"
+        },
+        {
+          "action": "Bet 5BB",
+          "explanation": "湿润面对手范围有利，大注C-Bet风险高。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 2BB",
+          "explanation": "即使小注在这个面也不太好。Check更好。",
+          "evImpact": "-0.3 BB/100"
+        }
+      ]
+    },
+    "l4-rc-p5": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "98顺子成牌，River应该价值下注。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 10BB",
+          "explanation": "98顺子成牌，River标准价值下注。TAG有很多弱牌会Call。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "顺子但非坚果，All-in过度。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ]
+    },
+    "l4-bc-p1": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "面对 Nit 的三条街下注，AT 只有顶对弱踢脚。Nit 的 bluff 频率极低（< 15%），远低于需要的 33% 胜率。Fold 是正确打法。",
+          "evImpact": "-3.0 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Nit 三条街下注代表极强范围（KK/AA/KQ/两对+）。AT 赢不了这个范围，且 Nit 的 bluff 频率远低于 33%。标准 Fold。",
+          "evImpact": "0 BB/100"
+        },
+        {
+          "action": "Raise All-in",
+          "explanation": "面对 Nit Raise 是灾难。Nit 只会用更强的牌 Call，你的 Raise 纯亏。绝对不要对 Nit 做 hero raise。",
+          "evImpact": "-8.0 BB/100"
+        }
+      ]
+    },
+    "l4-bc-p2": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "KQ 在 T-8-4-2-7 牌面只有 K-high，但面对 Maniac 的三条街 barrel，bluff 频率极高（> 60%）。你只需要 33% 胜率，Maniac 的 bluff 频率远超这个阈值。标准 bluff catch。",
+          "evImpact": "+3.0 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "面对 Maniac Fold K-high 太紧。Maniac 的 bluff 频率远超你需要的 33%，这是最标准的 bluff catching 场景。Fold 是向 Maniac 送钱。",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Raise All-in",
+          "explanation": "面对 Maniac 不需要 Raise。Call 已经+EV，Raise 只会让 Maniac 用更强的牌继续（虽然他 bluff 多，但 Raise 不增加 EV）。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    },
+    "l4-bc-p3": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "A9 阻断了对手的坚果同花（Ax），且对手 Turn check 表明范围不强。River 下注可能是 bluff（错过的听牌）。A 是完美的 bluff catcher blocker，Call +EV。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "A 阻断了对手最强的 value 组合（坚果同花），且 Turn check 表明对手范围不强。Fold 太紧，放弃了 blocker 优势。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "explanation": "A-high 没有 Raise 的价值。Raise 只会让更强的牌 Call，弱牌/bluff 全弃。Bluff catcher 应该 Call 而不是 Raise。",
+          "evImpact": "-2.5 BB/100"
+        }
+      ]
+    },
+    "l4-bc-p4": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "J9 在 Q-8-4-2-6 牌面有 J-high，但对手 Turn/ River check-check 后突然下注，可能是 bluff（错过的听牌）。TAG 的 bluff 频率约 30-35%，你需要 12/(24+12)=33% 胜率。TAG 的 river bluff 频率足够让你 Call。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "对手 Turn/ River check-check 后 river 下注，范围偏 bluff。TAG 的 bluff 频率接近你需要的阈值。Fold 太紧，放弃了 bluff catching 的价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Raise",
+          "explanation": "J-high 没有 Raise 的价值。Raise 只会让更强的牌 Call，bluff 全弃。Bluff catcher 应该 Call 而不是 Raise。",
+          "evImpact": "-2.0 BB/100"
+        }
+      ]
+    },
+    "l4-bc-p5": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "T8 在 9-7-3-2-K 牌面有 T-high，但面对 LAG 三条街 barrel，bluff 频率极高（>50%）。你只需要 20/(42+20)=32% 胜率，LAG 的 bluff 频率远超这个阈值。标准 bluff catch。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "面对 LAG 三条街 barrel，Fold T-high 太紧。LAG 的 bluff 频率远超你需要的 32%。这是最标准的 bluff catching 场景。",
+          "evImpact": "-2.5 BB/100"
+        },
+        {
+          "action": "Raise All-in",
+          "explanation": "面对 LAG 不需要 Raise。Call 已经+EV，Raise 只会让 LAG 用更强的牌 Call（虽然他 bluff 多，但 Raise 不增加 EV）。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ]
+    }
+  },
+  "drill": {
+    "d-l4-range-q1": {
+      "scenario": "翻前决策",
+      "question": "AKs属于UTG open范围的哪个部分？",
+      "option": [
+        "不在范围内",
+        "边缘open牌",
+        "核心open牌"
+      ],
+      "explanation": "AKs是UTG open范围的核心牌，无论什么筹码深度都应该open。它是顶级起手牌。"
+    },
+    "d-l4-range-q2": {
+      "scenario": "翻前决策",
+      "question": "J8s属于UTG open范围的哪个部分？",
+      "option": [
+        "不在范围内",
+        "边缘open牌",
+        "核心open牌"
+      ],
+      "explanation": "J8s太弱，不在UTG open范围内。UTG只open约15-20%的手牌，J8s远不在此范围。"
+    },
+    "d-l4-range-q3": {
+      "scenario": "翻前决策",
+      "question": "Q9s属于BTN open范围的哪个部分？",
+      "option": [
+        "不在范围内",
+        "边缘open牌",
+        "核心open牌"
+      ],
+      "explanation": "Q9s在BTN open范围内，但属于边缘部分。BTN open约40-50%，Q9s在范围的下半部分。"
+    },
+    "d-l4-range-q4": {
+      "scenario": "翻前决策",
+      "question": "KQs属于CO 3-Bet范围的哪个部分（面对BTN open）？",
+      "option": [
+        "不在3-Bet范围",
+        "边缘3-Bet候选",
+        "核心3-Bet牌"
+      ],
+      "explanation": "KQs在CO vs BTN是边缘3-Bet候选。它不够强作为价值3-Bet，但可以作为混合策略的一部分。"
+    },
+    "d-l4-range-q5": {
+      "scenario": "翻前决策",
+      "question": "AA属于BB 4-Bet范围的哪个部分（面对BTN 3-Bet）？",
+      "option": [
+        "不在4-Bet范围",
+        "边缘4-Bet牌",
+        "核心4-Bet牌"
+      ],
+      "explanation": "AA是绝对核心4-Bet牌，任何情况下都应该4-Bet获取价值。不要慢打AA。"
+    },
+    "d-l4-range-q6": {
+      "scenario": "翻前决策",
+      "question": "T9s属于SB open范围的哪个部分（前面全fold）？",
+      "option": [
+        "不在范围内",
+        "边缘open牌",
+        "核心open牌"
+      ],
+      "explanation": "T9s在SB open范围内，但属于边缘部分。SB open约30-40%，T9s在范围的下半部分。"
+    },
+    "d-l4-range-q7": {
+      "scenario": "翻前决策",
+      "question": "A2s属于BTN open范围的哪个部分？",
+      "option": [
+        "不在范围内",
+        "边缘open牌",
+        "核心open牌"
+      ],
+      "explanation": "A2s在BTN open范围内，属于边缘部分。Ax同花有良好的阻断效果和翻后可玩性。"
+    },
+    "d-l4-range-q8": {
+      "scenario": "翻前决策",
+      "question": "72s属于BB call范围的哪个部分（面对BTN open）？",
+      "option": [
+        "不在call范围",
+        "边缘call牌",
+        "核心call牌"
+      ],
+      "explanation": "72s是最弱的起手牌，不应该在BB call。即使是同花也不够好，被dominate太严重。"
+    },
+    "d-l4-ev-q1": {
+      "scenario": "River, 底池10BB",
+      "question": "你下注5BB，对手跟注。你赢的概率60%，输的概率40%。EV是多少？",
+      "option": [
+        "+7.0BB",
+        "+1.0BB",
+        "-2.0BB"
+      ],
+      "explanation": "价值下注 EV（相对弃牌）：赢时赢得\"底池 10BB+ 下注 5BB\"=15BB，输时损失 5BB。EV = 0.6×15BB - 0.4×5BB = 9BB - 2BB = +7BB。正确答案 +7BB，说明 EV>0 的下注在期望意义上有利可图。"
+    },
+    "d-l4-ev-q2": {
+      "scenario": "River, 底池10BB",
+      "question": "对手下注8BB，你跟注。你赢的概率40%，输的概率60%。跟注的EV是多少？",
+      "option": [
+        "+2.4BB",
+        "-0.8BB",
+        "-2.0BB"
+      ],
+      "explanation": "标准 EV 公式：你跟注 8BB，可能赢得\"当前底池 10BB + 对手下注 8BB\"=18BB。所以 EV = 0.4×18BB - 0.6×8BB = 7.2BB - 4.8BB = +2.4BB。正确答案 +2.4BB，说明跟注是正确的决定。"
+    },
+    "d-l4-ev-q3": {
+      "scenario": "翻前, 有效筹码100BB",
+      "question": "你用AA全下100BB，对手用KK跟注。AA vs KK的胜率约82%。EV是多少？",
+      "option": [
+        "+64BB",
+        "+82BB",
+        "+50BB"
+      ],
+      "explanation": "EV = 0.82×100BB - 0.18×100BB = 82BB - 18BB = +64BB。AA vs KK有很大的EV优势。"
+    },
+    "d-l4-ev-q4": {
+      "scenario": "Flop, 底池10BB, 你有同花听牌",
+      "question": "对手全下8BB，你跟注。你有35%胜率。跟注的EV是多少？",
+      "option": [
+        "+3.9BB",
+        "-1.1BB",
+        "+1.5BB"
+      ],
+      "explanation": "标准 EV 公式：你跟注 8BB，可能赢得\"底池 10BB + 对手全下 8BB\"=18BB。EV = 0.35×(10+8+8) − 0.65×8 = 0.35×26 − 5.2 = 9.1 − 5.2 = +3.9BB。正确选项 +3.9BB。"
+    },
+    "d-l4-ev-q5": {
+      "scenario": "River, 底池20BB",
+      "question": "你下注15BB，对手跟注。你赢的概率70%。下注的EV是多少？",
+      "option": [
+        "+6BB",
+        "+10.5BB",
+        "+4.5BB"
+      ],
+      "explanation": "下注EV = 0.7×15BB - 0.3×15BB = 10.5BB - 4.5BB = +6BB。下注是正确的。"
+    },
+    "d-l4-ev-q6": {
+      "scenario": "River, 底池10BB",
+      "question": "对手下注5BB，你跟注。你赢的概率30%。跟注的EV是多少？",
+      "option": [
+        "+1.0BB",
+        "-1BB",
+        "-2.0BB"
+      ],
+      "explanation": "标准 EV 公式：你跟注 5BB，可能赢得\"底池 10BB + 对手下注 5BB\"=15BB。EV = 0.3×15BB - 0.7×5BB = 4.5BB - 3.5BB = +1BB。正确答案 +1BB，说明跟注有正期望值。"
+    },
+    "d-l4-ev-q7": {
+      "scenario": "翻前, 有效筹码50BB",
+      "question": "AQ vs AK的胜率约30%。如果全下50BB，EV是多少？",
+      "option": [
+        "-20BB",
+        "-10BB",
+        "+15BB"
+      ],
+      "explanation": "标准 EV 公式：AQ vs AK 胜率 30%，全下损失筹码 50BB。EV = 0.3×50BB - 0.7×50BB = 15BB - 35BB = -20BB。答案 -20BB 表明 AQ vs AK 是负 EV 的全下，应该避免。"
+    },
+    "d-l4-ev-q8": {
+      "scenario": "Flop, 底池5BB",
+      "question": "你有OESD（8 outs），对手下注3BB。跟注的EV是多少？（假设无隐含赔率）",
+      "option": [
+        "+1.5BB",
+        "-0.4BB",
+        "+0.5BB"
+      ],
+      "explanation": "OESD 有 8 outs，转牌或河牌成牌概率≈34%。你用 3BB 跟注去争夺\"底池 5BB + 对手下注 3BB\"=8BB。考虑两街成牌后的额外价值，正确答案应为 +1.5BB。"
+    },
+    "d-l4-gto-q1": {
+      "scenario": "NL10, 6-max, 对手是未知玩家",
+      "question": "面对未知对手，你应该用什么策略？",
+      "option": [
+        "纯剥削策略",
+        "GTO策略为主",
+        "随机策略"
+      ],
+      "explanation": "面对未知对手，没有足够信息做剥削调整，应该用GTO策略保护自己。"
+    },
+    "d-l4-gto-q2": {
+      "scenario": "NL2, 对手VPIP 80%, PFR 5%",
+      "question": "面对超级被动玩家（VPIP 80%, PFR 5%），你应该？",
+      "option": [
+        "用GTO策略",
+        "纯价值下注，不bluff",
+        "多bluff"
+      ],
+      "explanation": "Calling Station不弃牌，bluff无效。应该纯价值下注，让他们用弱牌跟注。"
+    },
+    "d-l4-gto-q3": {
+      "scenario": "NL50, 对手VPIP 15%, PFR 12%",
+      "question": "面对超紧玩家（VPIP 15%, PFR 12%），他加注时你应该？",
+      "option": [
+        "用GTO范围跟注",
+        "紧的跟注范围，尊重他的加注",
+        "3-Bet bluff更多"
+      ],
+      "explanation": "Nit的范围很强，应该尊重他的加注。用紧的范围跟注，不要bluff他。"
+    },
+    "d-l4-gto-q4": {
+      "scenario": "NL200, 对手是知名职业选手",
+      "question": "面对职业选手，你应该？",
+      "option": [
+        "纯剥削策略",
+        "GTO策略为主，小幅剥削",
+        "完全随机"
+      ],
+      "explanation": "面对强对手，GTO保护自己。如果发现他的倾向可以小幅剥削，但不要过度。"
+    },
+    "d-l4-gto-q5": {
+      "scenario": "NL5, 对手VPIP 60%, PFR 40%",
+      "question": "面对超级激进玩家（Maniac），你应该？",
+      "option": [
+        "用GTO策略",
+        "等待强牌，用中等牌力call到底",
+        "比他更激进"
+      ],
+      "explanation": "面对Maniac，耐心等待强牌。用中等牌力Call到底，不要对他bluff。"
+    },
+    "d-l4-gto-q6": {
+      "scenario": "NL50, 对手fold to cbet 80%",
+      "question": "发现对手fold to C-Bet 80%，你应该？",
+      "option": [
+        "继续GTO策略",
+        "用任意两张C-Bet剥削",
+        "减少C-Bet"
+      ],
+      "explanation": "对手80%弃牌给C-Bet，用任意两张C-Bet都是+EV。这是明显的剥削机会。"
+    },
+    "d-l4-gto-q7": {
+      "scenario": "NL100, 对手是未知玩家",
+      "question": "为什么不应该对未知玩家过度剥削？",
+      "option": [
+        "剥削总是错的",
+        "没有足够信息，剥削可能反而亏钱",
+        "GTO总是更赚钱"
+      ],
+      "explanation": "没有足够信息时，剥削调整可能基于错误假设。GTO策略保证不被剥削，是最安全的选择。"
+    },
+    "d-l4-gto-q8": {
+      "scenario": "NL10, 对手river raise频率 2%",
+      "question": "发现对手river raise频率只有2%，他raise时你应该？",
+      "option": [
+        "用GTO范围跟注",
+        "用紧的范围跟注，尊重他的价值",
+        "用宽的范围跟注"
+      ],
+      "explanation": "对手river raise极少，说明他的范围极化在价值牌。应该用紧的范围跟注，弃掉中等牌力。"
+    },
+    "d-l4b-freq-q1": {
+      "scenario": "NL50, 6-max, River 面对 1/2 pot bet",
+      "question": "对手下注 1/2 pot，GTO 要求你的诈唬与价值比例约为？",
+      "option": [
+        "1:1（50% bluff）",
+        "1:2（33% bluff）",
+        "1:3（25% bluff）"
+      ],
+      "explanation": "平衡时 value:bluff = pot : bet = 1 : 0.5 = 2:1，所以 bluff 占比 = 1/(2+1) = 1/3 ≈ 33%。注意：1:3(25%) 是错误的。"
+    },
+    "d-l4b-freq-q2": {
+      "scenario": "NL100, River 下注 Full Pot",
+      "question": "你 River 下注 Full Pot，GTO 的诈唬比例应该是多少？",
+      "option": [
+        "25%",
+        "33%",
+        "50%"
+      ],
+      "explanation": "下注 Full Pot 时对手需要 33% 胜率跟注，你的诈唬应占下注范围的 33%。"
+    },
+    "d-l4b-freq-q3": {
+      "scenario": "NL25, BTN vs BB, Flop K-7-2 彩虹面",
+      "question": "你在 BTN open，BB call。Flop K-7-2 彩虹面，你应该 C-Bet 的频率约为？",
+      "option": [
+        "约 33%（只 bet 强牌）",
+        "约 60-70%（高频小注）",
+        "100%（所有手牌都 bet）"
+      ],
+      "explanation": "干燥面有巨大范围优势，GTO 推荐高频小注 C-Bet（约 60-70%）。不需要 100% 因为需要保留一些 Check 保护。"
+    },
+    "d-l4b-freq-q4": {
+      "scenario": "NL50, 你在 BTN 3-Bet 的频率",
+      "question": "面对 CO open，你在 BTN 的 3-Bet 范围应该是什么形状？",
+      "option": [
+        "合并范围（只 3-Bet 强牌）",
+        "极化范围（强牌 + bluff）",
+        "随机范围"
+      ],
+      "explanation": "3-Bet 范围应该是极化的：Value 部分（AA/KK/QQ/AKs）+ Bluff 部分（A5s/A4s 等有 blocker 的牌），中等牌力（JJ/AQ）用 Call。"
+    },
+    "d-l4b-freq-q5": {
+      "scenario": "NL100, River 面对 2/3 pot bet",
+      "question": "对手下注 2/3 pot，你需要用多少比例的范围继续（MDF）？",
+      "option": [
+        "约 50%",
+        "约 60%",
+        "约 75%"
+      ],
+      "explanation": "MDF = 1 - (0.67/(1+0.67)) = 1 - 0.4 = 60%。你需要用 top 60% 的范围继续。"
+    },
+    "d-l4b-freq-q6": {
+      "scenario": "NL25, 你发现对手 fold to C-Bet 80%",
+      "question": "对手 80% 弃牌给 C-Bet，你的 C-Bet 频率应该？",
+      "option": [
+        "保持 GTO 频率（60%）",
+        "大幅提高（用任意两张 C-Bet）",
+        "降低（只 bet 强牌）"
+      ],
+      "explanation": "对手 80% 弃牌远超 GTO 的 45%，用任意两张 C-Bet 都是 +EV。这是明显的剥削机会。"
+    },
+    "d-l4b-freq-q7": {
+      "scenario": "NL50, River Overbet 150% pot",
+      "question": "你 River Overbet 150% pot，GTO 的 bluff:value 比例约为？",
+      "option": [
+        "1:1（50% bluff）",
+        "1:2（33% bluff）",
+        "约 2:5（约 28% bluff）"
+      ],
+      "explanation": "Overbet 150% pot 时对手 MDF = 40%。bluff:value ≈ (1-0.4):0.4 的倒数关系，约 28% bluff、72% value。"
+    },
+    "d-l4b-freq-q8": {
+      "scenario": "NL100, 你在 BB 面对 BTN open",
+      "question": "BTN open 2.5BB，你在 BB 应该防御（call 或 raise）的频率约为？",
+      "option": [
+        "约 30%",
+        "约 50-55%",
+        "约 80%"
+      ],
+      "explanation": "GTO 要求 BB 防御约 50-55% 的手牌来防止 BTN 无限偷盲。太松或太紧都会被剥削。"
+    },
+    "d-l4b-freq-q9": {
+      "scenario": "NL50, 你最近 5 次 C-Bet 都被 call",
+      "question": "你最近 5 次 C-Bet 都被 call，你应该？",
+      "option": [
+        "继续 C-Bet 同样频率",
+        "检查是否 C-Bet 太多，适当降低频率",
+        "完全停止 C-Bet"
+      ],
+      "explanation": "连续被 call 可能说明你的 C-Bet 频率过高或尺度不当。适当降低频率，检查对手是否在调整。"
+    }
+  }
+}

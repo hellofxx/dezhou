@@ -1,15 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import type { LessonUnit } from '../types';
 import { resolveUnitTitle } from '../utils/lessonUnits';
+import { unitTitleKey } from '../utils/contentKeys';
 
 interface SectionNavProps {
   units: LessonUnit[];
   activeId: string;
   completedIds: string[];
   onNavigate: (unitId: string) => void;
+  /** 所属课程 id（传入时 unit 标题走 key 优先覆盖，fallback 数据原文） */
+  lessonId?: string;
 }
 
-export function SectionNav({ units, activeId, completedIds, onNavigate }: SectionNavProps) {
+export function SectionNav({ units, activeId, completedIds, onNavigate, lessonId }: SectionNavProps) {
   const { t } = useTranslation();
 
   return (
@@ -20,7 +23,11 @@ export function SectionNav({ units, activeId, completedIds, onNavigate }: Sectio
           {units.map((unit, i) => {
             const isActive = unit.id === activeId;
             const isCompleted = completedIds.includes(unit.id);
-            const displayTitle = resolveUnitTitle(unit, (key) => t(key));
+            const displayTitle = lessonId
+              ? t(unitTitleKey(lessonId, unit.id), {
+                  defaultValue: resolveUnitTitle(unit, (key) => t(key)),
+                })
+              : resolveUnitTitle(unit, (key) => t(key));
 
             let className = 'px-3 py-2.5 rounded-md text-xs transition-colors whitespace-nowrap ';
             if (isActive) {
