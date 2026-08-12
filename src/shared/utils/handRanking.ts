@@ -82,7 +82,7 @@ function getCombinations<T>(arr: T[], k: number): T[][] {
 
 /** 评估 5 张牌的牌型 */
 function evaluate5Cards(cards: Card[], isShortDeck: boolean): HandResult {
-  const ranks = cards.map(c => c.rank).sort((a, b) => b - a);
+  const ranks = cards.map(c => c.rank).toSorted((a, b) => b - a);
   const suits = cards.map(c => c.suit);
 
   const isFlush = suits.every(s => s === suits[0]);
@@ -94,7 +94,7 @@ function evaluate5Cards(cards: Card[], isShortDeck: boolean): HandResult {
   for (const r of ranks) {
     rankCounts.set(r, (rankCounts.get(r) || 0) + 1);
   }
-  const counts = [...rankCounts.values()].sort((a, b) => b - a);
+  const counts = [...rankCounts.values()].toSorted((a, b) => b - a);
 
   // 确定牌型
   let rank: HandRank;
@@ -159,7 +159,7 @@ const SHORT_DECK_RANK_SCORE: Record<number, number> = {
 
 /** 检测顺子，返回顺子最高牌 */
 function getStraightInfo(ranks: number[], isShortDeck: boolean): { high: Rank } | null {
-  const unique = [...new Set(ranks)].sort((a, b) => b - a);
+  const unique = [...new Set(ranks)].toSorted((a, b) => b - a);
 
   // 标准顺子检测
   if (unique.length >= 5) {
@@ -199,7 +199,7 @@ function calculateScore(
 
   // 按牌型添加kicker分数
   const sortedByCountThenRank = [...rankCounts.entries()]
-    .sort((a, b) => b[1] - a[1] || b[0] - a[0]);
+    .toSorted((a, b) => b[1] - a[1] || b[0] - a[0]);
 
   let multiplier = 100_000_000;
   for (const [r] of sortedByCountThenRank) {

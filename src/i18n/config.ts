@@ -16,8 +16,6 @@ import theoryZh from './locales/zh/theory.json';
 import theoryEn from './locales/en/theory.json';
 import variantZh from './locales/zh/variant.json';
 import variantEn from './locales/en/variant.json';
-import gameVariantZh from './locales/zh/gameVariant.json';
-import gameVariantEn from './locales/en/gameVariant.json';
 import tiltZh from './locales/zh/tilt.json';
 import tiltEn from './locales/en/tilt.json';
 import streakZh from './locales/zh/streak.json';
@@ -35,7 +33,6 @@ const coreZh = {
   academy: academyZh,
   theory: theoryZh,
   variant: variantZh,
-  gameVariant: gameVariantZh,
   tilt: tiltZh,
   streak: streakZh,
   feedback: feedbackZh,
@@ -48,7 +45,6 @@ const coreEn = {
   academy: academyEn,
   theory: theoryEn,
   variant: variantEn,
-  gameVariant: gameVariantEn,
   tilt: tiltEn,
   streak: streakEn,
   feedback: feedbackEn,

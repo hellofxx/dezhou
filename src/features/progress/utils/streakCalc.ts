@@ -5,7 +5,7 @@ import { MILESTONE_DAYS } from '../types';
 export function calculateCurrentStreak(dates: string[]): number {
   if (dates.length === 0) return 0;
 
-  const sorted = [...dates].sort().reverse();
+  const sorted = [...dates].toSorted().toReversed();
   const today = toTodayStr();
   const yesterday = toRelativeDayStr(-1);
 
@@ -33,7 +33,7 @@ export function calculateCurrentStreak(dates: string[]): number {
 export function calculateLongestStreak(dates: string[]): number {
   if (dates.length === 0) return 0;
 
-  const uniqueSorted = [...new Set(dates)].sort();
+  const uniqueSorted = [...new Set(dates)].toSorted();
   let longest = 1;
   let current = 1;
 

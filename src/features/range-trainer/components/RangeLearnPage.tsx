@@ -52,7 +52,7 @@ export default function RangeLearnPage() {
               onClick={() => navigate('/range-trainer')}
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
-              {t('common.back')}
+              {t('common.ui.back')}
             </Button>
             <div>
               <h1 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">

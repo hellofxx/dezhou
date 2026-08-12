@@ -29,7 +29,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
   const records = useProgressStore((s) => s.records);
 
   const moduleRecords = useMemo(
-    () => records.filter((r) => r.module === moduleName).sort((a, b) => b.createdAt - a.createdAt),
+    () => records.filter((r) => r.module === moduleName).toSorted((a, b) => b.createdAt - a.createdAt),
     [records, moduleName],
   );
 
@@ -78,7 +78,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         >
           <button
             onClick={() => navigate('/progress')}
-            aria-label={t('common.back')}
+            aria-label={t('common.ui.back')}
             className="min-h-11 min-w-11 flex items-center justify-center rounded-lg hover:bg-[var(--surface-raised)] transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-[var(--ivory-muted)]" />

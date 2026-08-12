@@ -100,16 +100,17 @@ export function orderPracticeOptions(question: PracticeQuestion): PracticeQuesti
   let orderedOptions: PracticeOption[];
   if (allActionLike) {
     // 动作类：消极→激进固定排序，同类别按尺度升序，稳定排序保持原相对顺序
-    const keyed = question.options.map((option, index) => {
-      const sizeMatch = FIRST_NUMBER_PATTERN.exec(texts[index]!);
-      return {
-        option,
-        category: categories[index]!,
-        size: sizeMatch ? Number.parseFloat(sizeMatch[0]) : 0,
-        index,
-      };
-    });
-    keyed.sort((a, b) => a.category - b.category || a.size - b.size || a.index - b.index);
+    const keyed = question.options
+      .map((option, index) => {
+        const sizeMatch = FIRST_NUMBER_PATTERN.exec(texts[index]!);
+        return {
+          option,
+          category: categories[index]!,
+          size: sizeMatch ? Number.parseFloat(sizeMatch[0]) : 0,
+          index,
+        };
+      })
+      .toSorted((a, b) => a.category - b.category || a.size - b.size || a.index - b.index);
     orderedOptions = keyed.map((entry) => entry.option);
   } else if (isNumericOptionSet(texts)) {
     // 数值类：单调升序

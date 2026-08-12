@@ -1,14 +1,33 @@
 {
-  "fold": "弃牌",
-  "call": "跟注",
-  "raise": "加注",
+  "action": {
+    "fold": "弃牌",
+    "call": "跟注",
+    "raise": "加注",
+    "allIn": "全下"
+  },
   "positionGroup": {
     "early": "早期位置",
     "middle": "中间位置",
     "late": "后期位置",
     "blinds": "盲注位"
   },
-  "active": "激活",
+  "ui": {
+    "active": "激活",
+    "start": "开始",
+    "pause": "暂停",
+    "reset": "重置",
+    "back": "返回",
+    "next": "下一步",
+    "comingSoon": "即将推出",
+    "loading": "加载中...",
+    "confirm": "确认",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "retry": "再来一次",
+    "backHome": "返回首页",
+    "close": "关闭"
+  },
   "resultSummary": {
     "excellent": "优秀！",
     "good": "良好",
@@ -19,29 +38,11 @@
     "back": "返回首页",
     "accuracy": "正确率"
   },
-  "allIn": "全下",
-  "start": "开始",
-  "pause": "暂停",
-  "reset": "重置",
-  "back": "返回",
-  "next": "下一步",
-  "comingSoon": "即将推出",
-  "loading": "加载中...",
-  "confirm": "确认",
-  "cancel": "取消",
-  "save": "保存",
-  "delete": "删除",
-  "retry": "再来一次",
-  "backHome": "返回首页",
   "shortcuts": {
-    "fold": "Fold（弃牌）",
-    "call": "Call（跟注）",
-    "raise": "Raise（加注）",
     "confirm": "确认 / 下一题",
     "exit": "退出训练",
     "toggle": "显示/隐藏快捷键"
   },
-  "close": "关闭",
   "shortcutsTitle": "键盘快捷键",
   "errorBoundary": {
     "title": "页面渲染出错",

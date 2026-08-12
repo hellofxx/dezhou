@@ -9,9 +9,22 @@
     "short-deck": "Short Deck Hold'em, 36 cards (2-5 removed), Flush > Straight, Pair beats AKo",
     "heads-up": "Heads-Up Hold'em, 1v1 duel, SB antes, SB acts first postflop"
   },
-  "rules_difference": "Rules Difference",
-  "switch_variant": "Switch Variant",
-  "select_variant": "Select Game Variant",
+  "title": "Game Variant",
+  "switchHint": "Switching variants will automatically adjust training data and rules",
+  "rulesDifference": "Rules Difference",
+  "switchVariant": "Switch Variant",
+  "selectVariant": "Select Game Variant",
   "eloOverview": "Variant ELO Overview",
-  "gamesPlayed": "questions"
+  "gamesPlayed": "questions",
+  "deckSize": "cards",
+  "players": "players",
+  "descStandard": "Classic 52-card deck, the world's most popular poker variant",
+  "descShortDeck": "36 cards (6-A), trips > straight, flush > full house",
+  "descHeadsUp": "1v1 duel, pure strategy battle",
+  "shortDeckRules": {
+    "ruleChanges": "Rule Changes",
+    "deckInfo": "36 cards (6-A), removing 2-5",
+    "straightBeatsTrips": "Straight > Trips",
+    "flushBeatsFullHouse": "Flush > Full House"
+  }
 }

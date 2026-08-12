@@ -54,7 +54,7 @@ function buildGraph() {
 
   LEVELS.forEach((levelInfo, levelIdx) => {
     const levelY = LAYOUT.paddingTop + levelIdx * (LAYOUT.nodeHeight + LAYOUT.levelGap);
-    const lessons = [...levelInfo.lessons].sort((a, b) => a.order - b.order);
+    const lessons = [...levelInfo.lessons].toSorted((a, b) => a.order - b.order);
 
     lessons.forEach((lesson, lessonIdx) => {
       const x = LAYOUT.paddingLeft + LAYOUT.levelLabelWidth + lessonIdx * (LAYOUT.nodeWidth + LAYOUT.nodeGap);
@@ -82,7 +82,7 @@ function buildGraph() {
     if (levelIdx > 0) {
       const prevLevel = LEVELS[levelIdx - 1];
       if (prevLevel) {
-        const prevLessons = [...prevLevel.lessons].sort((a, b) => a.order - b.order);
+        const prevLessons = [...prevLevel.lessons].toSorted((a, b) => a.order - b.order);
         const prevLast = prevLessons[prevLessons.length - 1];
         const curFirst = lessons[0];
         if (prevLast && curFirst) {
@@ -95,14 +95,14 @@ function buildGraph() {
   // 特殊依赖：根据 prerequisiteLevelIds 添加跨层边
   LEVELS.forEach((levelInfo) => {
     if (!levelInfo.prerequisiteLevelIds || levelInfo.prerequisiteLevelIds.length === 0) return;
-    const curLessons = [...levelInfo.lessons].sort((a, b) => a.order - b.order);
+    const curLessons = [...levelInfo.lessons].toSorted((a, b) => a.order - b.order);
     const curFirst = curLessons[0];
     if (!curFirst) return;
 
     levelInfo.prerequisiteLevelIds.forEach((prereqId) => {
       const prereqLevel = LEVELS.find((l) => l.id === prereqId);
       if (!prereqLevel) return;
-      const prereqLessons = [...prereqLevel.lessons].sort((a, b) => a.order - b.order);
+      const prereqLessons = [...prereqLevel.lessons].toSorted((a, b) => a.order - b.order);
       const prereqLast = prereqLessons[prereqLessons.length - 1];
       if (prereqLast) {
         const exists = edges.some((e) => e.from === prereqLast.id && e.to === curFirst.id);
@@ -368,7 +368,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       // 当前进行中：该条目已解锁，该课程未完成，且前一课已完成（或为第一课）
       const levelInfo = LEVELS.find((l) => l.id === node.levelId);
       if (levelInfo) {
-        const lessons = [...levelInfo.lessons].sort((a, b) => a.order - b.order);
+        const lessons = [...levelInfo.lessons].toSorted((a, b) => a.order - b.order);
         const idx = lessons.findIndex((l) => l.id === node.id);
         if (idx === 0) return 'current';
         const prevLesson = lessons[idx - 1];
@@ -428,7 +428,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
     return (
       <div className="space-y-4">
         {LEVELS.map((levelInfo) => {
-          const lessons = [...levelInfo.lessons].sort((a, b) => a.order - b.order);
+          const lessons = [...levelInfo.lessons].toSorted((a, b) => a.order - b.order);
           const unlocked = isLevelEntryUnlocked(levelInfo.id ?? String(levelInfo.level));
           return (
             <div key={levelInfo.id ?? levelInfo.level} className="rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)] p-3">

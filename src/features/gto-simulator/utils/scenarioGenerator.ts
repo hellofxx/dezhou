@@ -273,7 +273,10 @@ export function generateScenario(config: ScenarioConfig, index: number): Scenari
 
   return {
     id: `scenario-${Date.now()}-${index}`,
-    name: `${config.position} ${streetLabel} 决策`,
+    // 纯英文结构化标识（避免硬编码中文导致英文界面下出现"BTN Turn 决策"中英混杂）。
+    // "决策"语义由 position + street 已暗示；中文界面下也保持 "BTN Turn" 而非硬编码"决策"。
+    // SRS / GTOResultPage / useGTOComparison 等消费者直接渲染此字段时不再含中文。
+    name: `${config.position} ${streetLabel}`,
     description: `${config.playerCount}-max ${config.gameType}, ${config.effectiveStack}BB, SPR ${spr}`,
     gameType: config.gameType,
     stakes,

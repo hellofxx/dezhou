@@ -5,7 +5,7 @@ import type { GameVariant } from '@/shared/types/poker';
 
 // PLAT-02 修复：改为受控组件（props 注入 currentVariant/onChange），
 // 解除对 features/progress/store 的直接依赖（shared 不依赖 feature 的分层约束）。
-// PLAT-03 修复：VARIANT_DESCRIPTIONS 双语双轨改为 i18n key（gameVariant.desc* / deckSize / players）。
+// PLAT-03 修复：VARIANT_DESCRIPTIONS 双语双轨改为 i18n key（variant.desc* / deckSize / players）。
 interface GameVariantSelectorProps {
   compact?: boolean;
   /** 当前变体（受控值），由使用方从 progress store 读取传入 */
@@ -29,8 +29,9 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
 
   const variants: GameVariant[] = ['standard', 'short-deck', 'heads-up'];
 
+  // desc 描述 key 为 camelCase 且首字母大写（descStandard/descShortDeck/descHeadsUp），需与 variant.json 精确匹配
   const i18nKeyFor = (variant: GameVariant) =>
-    variant === 'short-deck' ? 'shortDeck' : variant === 'heads-up' ? 'headsUp' : 'standard';
+    variant === 'short-deck' ? 'ShortDeck' : variant === 'heads-up' ? 'HeadsUp' : 'Standard';
 
   const handleSelect = (variant: GameVariant) => {
     onChange?.(variant);
@@ -51,11 +52,11 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
                   ? 'bg-[var(--brass-bright)] text-[var(--felt-deep)] shadow-sm'
                   : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]'
               )}
-              aria-label={t(`gameVariant.${i18nKeyFor(variant)}`)}
+              aria-label={t(`variant.name.${variant}`)}
             >
               <span className="text-sm leading-none">{VARIANT_ICONS[variant]}</span>
               <span className="hidden sm:inline">
-                {t(`gameVariant.${i18nKeyFor(variant)}`)}
+                {t(`variant.name.${variant}`)}
               </span>
               {VARIANT_BADGES[variant] && (
                 <span className={cn(
@@ -91,7 +92,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
                 ? 'border-[var(--brass-bright)] bg-[var(--brass-bright)]/10 shadow-[var(--shadow-brass-glow)]'
                 : 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/40 hover:bg-[var(--felt)]/80'
             )}
-            aria-label={t(`gameVariant.${i18nKey}`)}
+            aria-label={t(`variant.name.${variant}`)}
           >
             <div className="flex items-center gap-2 w-full">
               <span className="text-xl">{VARIANT_ICONS[variant]}</span>
@@ -99,7 +100,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
                 'text-sm font-semibold',
                 isActive ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory)]'
               )}>
-                {t(`gameVariant.${i18nKey}`)}
+                {t(`variant.name.${variant}`)}
               </span>
               {VARIANT_BADGES[variant] && (
                 <span className="ml-auto rounded-full bg-[var(--brass)]/20 px-1.5 py-0.5 text-[10px] font-bold text-[var(--brass-bright)]">
@@ -111,10 +112,10 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
               )}
             </div>
             <p className="text-xs text-[var(--ivory-muted)] leading-relaxed">
-              {t(`gameVariant.desc${i18nKey}`)}
+              {t(`variant.desc${i18nKey}`)}
             </p>
             <p className="text-[10px] text-[var(--ivory-muted)]/60">
-              {config.deckSize} {t('gameVariant.deckSize')} · {config.minPlayers}-{config.maxPlayers} {t('gameVariant.players')}
+              {config.deckSize} {t('variant.deckSize')} · {config.minPlayers}-{config.maxPlayers} {t('variant.players')}
             </p>
           </button>
         );

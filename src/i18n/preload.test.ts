@@ -58,6 +58,17 @@ describe('moduleRegistry 注册表完整性', () => {
       expect(Object.keys(loadModule[lng]).sort()).toEqual([...ALL_MODULES].sort());
     }
   });
+
+  it('ALL_MODULES 均被 CORE/FEATURE_GROUPS 引用（无未消费模块）', () => {
+    const referenced = new Set<string>(CORE_MODULES);
+    for (const keys of Object.values(FEATURE_GROUPS)) {
+      for (const key of keys) referenced.add(key);
+    }
+    const unconsumed = ALL_MODULES.filter((m) => !referenced.has(m)).sort();
+    // 历史 7 个未消费模块（adaptive/app/dailyPlan/localTrack/opponent/opponentDrill/toast）已清理，
+    // 若新增模块必须同时接入 CORE_MODULES 或 FEATURE_GROUPS 引用面。
+    expect(unconsumed).toEqual([]);
+  });
 });
 
 describe('preloadI18n 幂等注入', () => {

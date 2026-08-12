@@ -405,8 +405,8 @@ export default function SettingsPage() {
               id="game-streak"
               forceOpen={forceOpenId === 'game-streak'}
               icon={<Gamepad2 className="w-4 h-4" />}
-              title={t('gameVariant.title')}
-              hint={t('gameVariant.switchHint')}
+              title={t('variant.title')}
+              hint={t('variant.switchHint')}
             >
               <GameVariantSelector
                 currentVariant={currentGameVariant}

@@ -64,14 +64,14 @@ export function selectQuestionsByDifficulty(
 
   // 如果目标难度题目不够，按难度接近程度补充
   const targetIdx = DIFFICULTY_ORDER.indexOf(targetDifficulty);
-  const remaining = allQuestions.filter((q) => getDifficulty(q) !== targetDifficulty);
-
   // 按与目标难度的距离排序
-  remaining.sort((a, b) => {
-    const distA = Math.abs(DIFFICULTY_ORDER.indexOf(getDifficulty(a)) - targetIdx);
-    const distB = Math.abs(DIFFICULTY_ORDER.indexOf(getDifficulty(b)) - targetIdx);
-    return distA - distB;
-  });
+  const remaining = allQuestions
+    .filter((q) => getDifficulty(q) !== targetDifficulty)
+    .toSorted((a, b) => {
+      const distA = Math.abs(DIFFICULTY_ORDER.indexOf(getDifficulty(a)) - targetIdx);
+      const distB = Math.abs(DIFFICULTY_ORDER.indexOf(getDifficulty(b)) - targetIdx);
+      return distA - distB;
+    });
 
   const result = [...shuffleArray(targetQuestions), ...remaining];
   return result.slice(0, count);

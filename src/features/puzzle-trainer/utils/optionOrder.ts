@@ -84,7 +84,8 @@ export function parseOptionSortKey(text: string): OptionSortKey {
  * 同 category 同 size（含 category 99 的未识别项）保持原相对顺序。
  */
 export function sortOptionsCanonically(options: readonly PuzzleOption[]): PuzzleOption[] {
-  const keyed = options.map((option) => ({ option, key: parseOptionSortKey(option.text) }));
-  keyed.sort((a, b) => a.key.category - b.key.category || a.key.size - b.key.size);
+  const keyed = options
+    .map((option) => ({ option, key: parseOptionSortKey(option.text) }))
+    .toSorted((a, b) => a.key.category - b.key.category || a.key.size - b.key.size);
   return keyed.map((entry) => entry.option);
 }

@@ -9,28 +9,21 @@ export type I18nLanguage = 'zh' | 'en';
 export type I18nModuleKey =
   | 'academy'
   | 'achievements'
-  | 'adaptive'
-  | 'app'
   | 'common'
   | 'dailyChallenge'
-  | 'dailyPlan'
   | 'dashboard'
   | 'downswing'
   | 'drills'
   | 'elo'
   | 'feedback'
-  | 'gameVariant'
   | 'gto'
   | 'handHistory'
   | 'help'
   | 'leaderboard'
-  | 'localTrack'
   | 'mentor'
   | 'mood'
   | 'nav'
   | 'onboarding'
-  | 'opponent'
-  | 'opponentDrill'
   | 'potOdds'
   | 'progress'
   | 'puzzle'
@@ -40,41 +33,35 @@ export type I18nModuleKey =
   | 'review'
   | 'sessionLimit'
   | 'settings'
-  | 'shortcuts'
-  | 'shortDeck'
   | 'spacedRepetition'
   | 'streak'
   | 'theory'
   | 'tilt'
-  | 'toast'
   | 'variant';
 
-/** 全部模块 key（satisfies 保证与 I18nModuleKey 一一对应，注册表完整性由 preload.test.ts 守卫） */
+/**
+ * 全部模块 key（satisfies 保证与 I18nModuleKey 一一对应，注册表完整性由 preload.test.ts 守卫）。
+ * 模块必须是 CORE_MODULES 或 FEATURE_GROUPS 的引用面之一；无消费方的模块应删除，
+ * 而非作为"保留模块"长期驻留（历史 7 个未消费模块已清理，见 docs/CHANGELOG.md）。
+ */
 export const ALL_MODULES = [
   'academy',
   'achievements',
-  'adaptive',
-  'app',
   'common',
   'dailyChallenge',
-  'dailyPlan',
   'dashboard',
   'downswing',
   'drills',
   'elo',
   'feedback',
-  'gameVariant',
   'gto',
   'handHistory',
   'help',
   'leaderboard',
-  'localTrack',
   'mentor',
   'mood',
   'nav',
   'onboarding',
-  'opponent',
-  'opponentDrill',
   'potOdds',
   'progress',
   'puzzle',
@@ -84,13 +71,10 @@ export const ALL_MODULES = [
   'review',
   'sessionLimit',
   'settings',
-  'shortcuts',
-  'shortDeck',
   'spacedRepetition',
   'streak',
   'theory',
   'tilt',
-  'toast',
   'variant',
 ] as const satisfies readonly I18nModuleKey[];
 
@@ -106,7 +90,6 @@ export const CORE_MODULES = [
   'academy',
   'theory',
   'variant',
-  'gameVariant',
   'tilt',
   'streak',
   'feedback',
@@ -118,10 +101,11 @@ export const CORE_MODULES = [
  */
 export const FEATURE_GROUPS = {
   // Dashboard 首页树：FeltArena/VariantEloOverview/FirstVisitBanner 消费 progress；
-  // DailyChallenge/SpacedRepetitionPanel/DownswingAlert/MoodTracker 分别消费 dailyChallenge/spacedRepetition/downswing/mood
-  '/': ['dashboard', 'nav', 'achievements', 'progress', 'dailyChallenge', 'spacedRepetition', 'downswing', 'mood'],
+  // DailyChallenge/SpacedRepetitionPanel/DownswingAlert/MoodTracker 分别消费 dailyChallenge/spacedRepetition/downswing/mood；
+  // RankUpCelebration/ReviewSession 由 Dashboard 渲染，分别消费 rankUp/review
+  '/': ['dashboard', 'nav', 'achievements', 'progress', 'dailyChallenge', 'spacedRepetition', 'downswing', 'mood', 'rankUp', 'review'],
   // MoodTracker 实际由 Dashboard 渲染（settings 分组不含 mood；mood 归属 '/')
-  '/settings': ['settings', 'mentor', 'sessionLimit', 'gameVariant', 'streak'],
+  '/settings': ['settings', 'mentor', 'sessionLimit', 'variant', 'streak'],
   '/leaderboard': ['leaderboard'],
   '/range-trainer/learn': ['rangeTrainer', 'common'],
   '/range-trainer/quiz': ['rangeTrainer', 'feedback'],
@@ -170,28 +154,21 @@ export const loadModule: Record<I18nLanguage, Record<I18nModuleKey, JsonBundle>>
   zh: {
     academy: () => import('./locales/zh/academy.json'),
     achievements: () => import('./locales/zh/achievements.json'),
-    adaptive: () => import('./locales/zh/adaptive.json'),
-    app: () => import('./locales/zh/app.json'),
     common: () => import('./locales/zh/common.json'),
     dailyChallenge: () => import('./locales/zh/dailyChallenge.json'),
-    dailyPlan: () => import('./locales/zh/dailyPlan.json'),
     dashboard: () => import('./locales/zh/dashboard.json'),
     downswing: () => import('./locales/zh/downswing.json'),
     drills: () => import('./locales/zh/drills.json'),
     elo: () => import('./locales/zh/elo.json'),
     feedback: () => import('./locales/zh/feedback.json'),
-    gameVariant: () => import('./locales/zh/gameVariant.json'),
     gto: () => import('./locales/zh/gto.json'),
     handHistory: () => import('./locales/zh/handHistory.json'),
     help: () => import('./locales/zh/help.json'),
     leaderboard: () => import('./locales/zh/leaderboard.json'),
-    localTrack: () => import('./locales/zh/localTrack.json'),
     mentor: () => import('./locales/zh/mentor.json'),
     mood: () => import('./locales/zh/mood.json'),
     nav: () => import('./locales/zh/nav.json'),
     onboarding: () => import('./locales/zh/onboarding.json'),
-    opponent: () => import('./locales/zh/opponent.json'),
-    opponentDrill: () => import('./locales/zh/opponentDrill.json'),
     potOdds: () => import('./locales/zh/potOdds.json'),
     progress: () => import('./locales/zh/progress.json'),
     puzzle: () => import('./locales/zh/puzzle.json'),
@@ -201,40 +178,30 @@ export const loadModule: Record<I18nLanguage, Record<I18nModuleKey, JsonBundle>>
     review: () => import('./locales/zh/review.json'),
     sessionLimit: () => import('./locales/zh/sessionLimit.json'),
     settings: () => import('./locales/zh/settings.json'),
-    shortcuts: () => import('./locales/zh/shortcuts.json'),
-    shortDeck: () => import('./locales/zh/shortDeck.json'),
     spacedRepetition: () => import('./locales/zh/spacedRepetition.json'),
     streak: () => import('./locales/zh/streak.json'),
     theory: () => import('./locales/zh/theory.json'),
     tilt: () => import('./locales/zh/tilt.json'),
-    toast: () => import('./locales/zh/toast.json'),
     variant: () => import('./locales/zh/variant.json'),
   },
   en: {
     academy: () => import('./locales/en/academy.json'),
     achievements: () => import('./locales/en/achievements.json'),
-    adaptive: () => import('./locales/en/adaptive.json'),
-    app: () => import('./locales/en/app.json'),
     common: () => import('./locales/en/common.json'),
     dailyChallenge: () => import('./locales/en/dailyChallenge.json'),
-    dailyPlan: () => import('./locales/en/dailyPlan.json'),
     dashboard: () => import('./locales/en/dashboard.json'),
     downswing: () => import('./locales/en/downswing.json'),
     drills: () => import('./locales/en/drills.json'),
     elo: () => import('./locales/en/elo.json'),
     feedback: () => import('./locales/en/feedback.json'),
-    gameVariant: () => import('./locales/en/gameVariant.json'),
     gto: () => import('./locales/en/gto.json'),
     handHistory: () => import('./locales/en/handHistory.json'),
     help: () => import('./locales/en/help.json'),
     leaderboard: () => import('./locales/en/leaderboard.json'),
-    localTrack: () => import('./locales/en/localTrack.json'),
     mentor: () => import('./locales/en/mentor.json'),
     mood: () => import('./locales/en/mood.json'),
     nav: () => import('./locales/en/nav.json'),
     onboarding: () => import('./locales/en/onboarding.json'),
-    opponent: () => import('./locales/en/opponent.json'),
-    opponentDrill: () => import('./locales/en/opponentDrill.json'),
     potOdds: () => import('./locales/en/potOdds.json'),
     progress: () => import('./locales/en/progress.json'),
     puzzle: () => import('./locales/en/puzzle.json'),
@@ -244,13 +211,10 @@ export const loadModule: Record<I18nLanguage, Record<I18nModuleKey, JsonBundle>>
     review: () => import('./locales/en/review.json'),
     sessionLimit: () => import('./locales/en/sessionLimit.json'),
     settings: () => import('./locales/en/settings.json'),
-    shortcuts: () => import('./locales/en/shortcuts.json'),
-    shortDeck: () => import('./locales/en/shortDeck.json'),
     spacedRepetition: () => import('./locales/en/spacedRepetition.json'),
     streak: () => import('./locales/en/streak.json'),
     theory: () => import('./locales/en/theory.json'),
     tilt: () => import('./locales/en/tilt.json'),
-    toast: () => import('./locales/en/toast.json'),
     variant: () => import('./locales/en/variant.json'),
   },
 };

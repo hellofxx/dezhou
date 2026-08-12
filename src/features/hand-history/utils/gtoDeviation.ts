@@ -64,7 +64,7 @@ const RANK_CHAR: Record<number, string> = {
  */
 function holeCardsToNotation(cards: Card[]): string {
   if (cards.length < 2) return 'AA'; // fallback
-  const sorted = [...cards].sort((a, b) => (RANK_ORDER[b.rank] ?? 0) - (RANK_ORDER[a.rank] ?? 0));
+  const sorted = [...cards].toSorted((a, b) => (RANK_ORDER[b.rank] ?? 0) - (RANK_ORDER[a.rank] ?? 0));
   const high = sorted[0]!;
   const low = sorted[1]!;
   const r1 = RANK_CHAR[high.rank] ?? '?';

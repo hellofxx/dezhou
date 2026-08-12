@@ -97,6 +97,6 @@ export function sortByNumericValue<T>(
       const value = match ? parseFloat(match[0]) : Infinity;
       return { item, index, value };
     })
-    .sort((a, b) => a.value - b.value || a.index - b.index)
+    .toSorted((a, b) => a.value - b.value || a.index - b.index)
     .map((entry) => entry.item);
 }

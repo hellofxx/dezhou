@@ -423,7 +423,7 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
       result = result.filter(h => h.pot >= filter.minPot!);
     }
 
-    result.sort((a, b) => {
+    result = result.toSorted((a, b) => {
       switch (filter.sortBy) {
         case 'date': return b.timestamp - a.timestamp;
         case 'pot': return b.pot - a.pot;

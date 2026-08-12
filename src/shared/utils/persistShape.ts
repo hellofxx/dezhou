@@ -32,7 +32,7 @@ export function buildPersistedShape(value: unknown): ShapeNode {
   if (Array.isArray(value)) return 'array';
   if (typeof value === 'object') {
     const shape: { [key: string]: ShapeNode } = {};
-    for (const key of Object.keys(value as Record<string, unknown>).sort()) {
+    for (const key of Object.keys(value as Record<string, unknown>).toSorted()) {
       const child = (value as Record<string, unknown>)[key];
       // 函数 / undefined / symbol 不会被持久化，忽略
       if (child === undefined || typeof child === 'function' || typeof child === 'symbol') {

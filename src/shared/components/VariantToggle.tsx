@@ -56,7 +56,7 @@ export function VariantToggle({
 }: VariantToggleProps) {
   const { t } = useTranslation();
   return (
-    <div className={cn('variant-seg', className)} role="group" aria-label={t('variant.select_variant')}>
+    <div className={cn('variant-seg', className)} role="group" aria-label={t('variant.selectVariant')}>
       {variants.map((v) => (
         <VariantToggleItem key={v} variant={v} selected={v === active} onClick={() => onSelect?.(v)} />
       ))}

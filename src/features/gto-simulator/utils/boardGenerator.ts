@@ -16,7 +16,7 @@ export function classifyBoardTexture(board: Card[]): BoardTexture {
   if (board.length < 3) return 'dry';
 
   const suits = board.map((c) => c.suit);
-  const ranks = board.map((c) => c.rank).sort((a, b) => a - b);
+  const ranks = board.map((c) => c.rank).toSorted((a, b) => a - b);
 
   // monotone: 全部同花
   if (suits.every((s) => s === suits[0])) return 'monotone';

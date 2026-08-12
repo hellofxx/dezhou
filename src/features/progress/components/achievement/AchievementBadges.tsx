@@ -32,11 +32,11 @@ const BADGE_THRESHOLDS = {
 } as const;
 
 function computeAchievements(records: TrainingRecord[]): Achievement[] {
-  const sorted = [...records].sort((a, b) => a.createdAt - b.createdAt);
+  const sorted = [...records].toSorted((a, b) => a.createdAt - b.createdAt);
   const totalSessions = records.length;
 
   // 连续天数计算
-  const dates = [...new Set(records.map((r) => toDateStr(r.createdAt)))].sort();
+  const dates = [...new Set(records.map((r) => toDateStr(r.createdAt)))].toSorted();
   let maxStreak = 0;
   let currentRun = 1;
   for (let i = 1; i < dates.length; i++) {
@@ -181,7 +181,7 @@ function computeAchievements(records: TrainingRecord[]): Achievement[] {
 
 function findStreakUnlockedDate(dates: string[]): number | null {
   if (dates.length < 7) return null;
-  const sorted = [...dates].sort();
+  const sorted = [...dates].toSorted();
   let run = 1;
   for (let i = 1; i < sorted.length; i++) {
     const prev = new Date(sorted[i - 1]!);

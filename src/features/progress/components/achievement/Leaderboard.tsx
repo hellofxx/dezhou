@@ -57,17 +57,17 @@ export default function Leaderboard() {
     switch (activeTab) {
       case 'accuracy':
         all = [...MOCK_PLAYERS, userEntry]
-          .sort((a, b) => b.accuracy - a.accuracy)
+          .toSorted((a, b) => b.accuracy - a.accuracy)
           .map((p, i) => ({ ...p, rank: i + 1 }));
         break;
       case 'sessions':
         all = [...MOCK_PLAYERS, userEntry]
-          .sort((a, b) => b.sessions - a.sessions)
+          .toSorted((a, b) => b.sessions - a.sessions)
           .map((p, i) => ({ ...p, rank: i + 1 }));
         break;
       default:
         all = [...MOCK_PLAYERS, userEntry]
-          .sort((a, b) => b.score - a.score)
+          .toSorted((a, b) => b.score - a.score)
           .map((p, i) => ({ ...p, rank: i + 1 }));
     }
 

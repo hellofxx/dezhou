@@ -92,16 +92,26 @@ src/
 - 组件 PascalCase.tsx / Hook use 前缀 / 工具 camelCase / 路由 kebab-case
 - 单文件 ≤ 300 行（硬约束；豁免见 docs/AI_GUIDE.md）
 
+### React 渲染约定
+
+- **数组不可变性**：排序/反转/删除链优先用不可变 API（`toSorted()` / `toReversed()` / `toSpliced()`），禁止对源数组原地 `.sort()`；`map`/`filter` 已返回新数组可接 `.sort()`，但统一改 `toSorted()` 以保持语义一致
+- **条件渲染**：条件为数值/字符串等非布尔值时用三元（`count > 0 ? <X/> : null`），禁止 `count && <X/>`（会渲染 `0`/空串）；布尔条件可用 `&&`
+- **Effect 治理**：可由 props/state 派生的值禁止用 `useEffect` + `setState` 回写（渲染期直接计算）；交互触发的副作用（提交/跳转/播放音效）放事件处理器，不用 state + Effect 建模
+- **组件定义**：禁止在组件内部定义组件（导致每次渲染重挂载与状态丢失），内部子组件提取到模块级并经 props 传值
+- **事件监听器**：`addEventListener` 必须在 `useEffect` 内注册并 cleanup；滚动/触摸类监听须传 `{ passive: true }`
+
 ## 状态管理（摘要，详见 docs/AI_GUIDE.md）
 
 - Zustand + persist → localStorage；牌局大数据用 IndexedDB
+- 禁止裸调 `localStorage.getItem/setItem`，所有持久化经 zustand persist 中间件（自动版本化 + migrate）
 - 每个 store 必须有 name 与 version；persist version 以 store 代码为唯一事实源
 - "记录完成" action 必须幂等（同日均不重复计数）
 
 ## 国际化（摘要，详见 docs/AI_GUIDE.md）
 
 - 默认中文（zh），支持 zh/en；新增 key 必须同时更新双语，缺一不可
-- key 命名：`<module>.<context>.<field>`
+- key 命名：`<module>.<context>.<field>`；静态 key 一律 camelCase（如 `selectVariant` / `rulesDifference`）；kebab-case 仅用于与枚举值/路由参数一一对应的动态 key（如 `variant.name.short-deck`）
+- 模块注册表 `src/i18n/moduleRegistry.ts` 为唯一契约源：模块增删须同步 `I18nModuleKey` / `ALL_MODULES` / `loadModule`（/ `CORE_MODULES` / `FEATURE_GROUPS`）
 
 ## UI/UX 设计系统（摘要，详见 docs/AI_GUIDE.md）
 
@@ -114,6 +124,7 @@ src/
 
 - 路由配置：`src/app/routes.tsx`
 - 所有路由页面必须用 `React.lazy()` + `<LazyWrapper>` 包裹
+- 页面 chunk 与该路由所需 i18n 模块并行加载（`lazyPage` 用 `Promise.all([loader(), preloadI18n(keys)])`），core 模块幂等跳过不重复加载
 - 布局：`AppLayout`（主导航 + OnboardingGate）/ `BlankLayout`（无导航，用于 onboarding）
 - 移动端 < 768px 显示底部 `MobileNav`
 
@@ -304,6 +315,7 @@ src/
 - 每个 store 必须有 name + version；"记录完成" action 幂等
 - 五级反馈 `calculateGrade(evLoss)` 唯一评级，禁止自定义
 - 调试解锁 9 处门禁；选项排序治理（seededShuffle）
+- React 渲染约定（数组不可变 `toSorted` / 条件渲染三元 / Effect 治理 / 组件定义 / 事件监听 passive）见 §编码规范
 
 #### 基线 Quality Checklist
 

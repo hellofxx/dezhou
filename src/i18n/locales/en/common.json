@@ -1,14 +1,33 @@
 {
-  "fold": "Fold",
-  "call": "Call",
-  "raise": "Raise",
+  "action": {
+    "fold": "Fold",
+    "call": "Call",
+    "raise": "Raise",
+    "allIn": "All-In"
+  },
   "positionGroup": {
     "early": "Early position",
     "middle": "Middle position",
     "late": "Late position",
     "blinds": "Blinds"
   },
-  "active": "active",
+  "ui": {
+    "active": "Active",
+    "start": "Start",
+    "pause": "Pause",
+    "reset": "Reset",
+    "back": "Back",
+    "next": "Next",
+    "comingSoon": "Coming Soon",
+    "loading": "Loading...",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "retry": "Try Again",
+    "backHome": "Back to Home",
+    "close": "Close"
+  },
   "resultSummary": {
     "excellent": "Excellent!",
     "good": "Good",
@@ -19,29 +38,11 @@
     "back": "Back to Home",
     "accuracy": "Accuracy"
   },
-  "allIn": "All-In",
-  "start": "Start",
-  "pause": "Pause",
-  "reset": "Reset",
-  "back": "Back",
-  "next": "Next",
-  "comingSoon": "Coming Soon",
-  "loading": "Loading...",
-  "confirm": "Confirm",
-  "cancel": "Cancel",
-  "save": "Save",
-  "delete": "Delete",
-  "retry": "Try Again",
-  "backHome": "Back to Home",
   "shortcuts": {
-    "fold": "Fold",
-    "call": "Call",
-    "raise": "Raise",
     "confirm": "Confirm / Next",
     "exit": "Exit Training",
     "toggle": "Show / Hide Shortcuts"
   },
-  "close": "Close",
   "shortcutsTitle": "Keyboard Shortcuts",
   "errorBoundary": {
     "title": "Rendering Error",

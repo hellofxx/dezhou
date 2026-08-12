@@ -130,7 +130,7 @@ export function getTodayReviewItems(items: ReviewItem[]): ReviewItem[] {
   const today = getTodayString();
   return items
     .filter((item) => item.nextReviewDate <= today)
-    .sort((a, b) => {
+    .toSorted((a, b) => {
       // 按到期日期排序，最旧的优先
       if (a.nextReviewDate !== b.nextReviewDate) {
         return a.nextReviewDate.localeCompare(b.nextReviewDate);

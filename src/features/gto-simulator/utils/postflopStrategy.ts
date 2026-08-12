@@ -56,7 +56,7 @@ export function classifyHandStrength(heroHand: [Card, Card], board: Board): Hand
   for (const c of allCards) suitCounts.set(c.suit, (suitCounts.get(c.suit) ?? 0) + 1);
   const hasFlushDraw = [...suitCounts.values()].some((v) => v === 4);
 
-  const uniqueRanks = [...new Set(allCards.map((c) => c.rank))].sort((a, b) => a - b);
+  const uniqueRanks = [...new Set(allCards.map((c) => c.rank))].toSorted((a, b) => a - b);
 
   // 检测已成顺子（5张连续）
   for (let i = 0; i <= uniqueRanks.length - 5; i++) {

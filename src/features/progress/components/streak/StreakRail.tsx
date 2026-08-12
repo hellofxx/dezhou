@@ -21,8 +21,20 @@ export default function StreakRail() {
     detectStreakBreak();
   }, [detectStreakBreak]);
 
-  // Week day labels (Mon-Sun)
-  const weekDayLabels = ['一', '二', '三', '四', '五', '六', '日'];
+  // Week day labels (Mon-Sun) — localized via i18n
+  const weekDayLabels = useMemo(
+    () =>
+      [
+        t('dashboard.streakRail.weekDays.mon'),
+        t('dashboard.streakRail.weekDays.tue'),
+        t('dashboard.streakRail.weekDays.wed'),
+        t('dashboard.streakRail.weekDays.thu'),
+        t('dashboard.streakRail.weekDays.fri'),
+        t('dashboard.streakRail.weekDays.sat'),
+        t('dashboard.streakRail.weekDays.sun'),
+      ] as const,
+    [t],
+  );
 
   // Calculate which days of the current week had training
   const weekData = useMemo(() => {
@@ -41,7 +53,7 @@ export default function StreakRail() {
       trainedDates.add(key);
     }
 
-    return weekDayLabels.map((_, i) => {
+    return weekDayLabels.map((_label, i) => {
       const date = new Date(monday);
       date.setDate(monday.getDate() + i);
       const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
@@ -52,7 +64,7 @@ export default function StreakRail() {
       const isDone = trainedDates.has(key);
       return { isToday, isDone };
     });
-  }, [records]);
+  }, [records, weekDayLabels]);
 
   // Today's accuracy from emotion state
   // 防御：dailyQuestionsDate 必须是今天，否则昨日数据会被当作"今日正确率"展示

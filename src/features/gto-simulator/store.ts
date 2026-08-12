@@ -255,7 +255,7 @@ function computeResult(session: GTOSession): GTOResult {
   const totalEVLoss = decisions.reduce((sum, d) => sum + d.evLoss, 0);
   const avgEVLoss = totalEVLoss / count;
 
-  const sorted = [...decisions].sort((a, b) => b.evLoss - a.evLoss);
+  const sorted = [...decisions].toSorted((a, b) => b.evLoss - a.evLoss);
   // GTO-10：移除非空断言，scenarioId 缺失时过滤该条目（防御性兜底）
   const worstSpots = sorted.slice(0, 5).flatMap((d) => {
     const scenario = scenarios.find((s) => s.id === d.scenarioId);

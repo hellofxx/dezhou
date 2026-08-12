@@ -88,7 +88,7 @@ export default function AcademyHome() {
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
             <div className="min-w-0">
               <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
-                {t('variant.select_variant')}
+                {t('variant.selectVariant')}
               </h2>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
                 {t(`variant.name.${activeVariant}`)}

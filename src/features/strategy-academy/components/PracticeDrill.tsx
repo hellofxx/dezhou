@@ -184,6 +184,10 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   // P1E-05（专批 B）：逐题作答明细（供 QuickDrill 对 review-* 复习题做 SRS 回写）
   const answersRef = useRef<PracticeAnswerDetail[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // 倒计时数值 ref（interval tick 内直接读取，避免在 setState updater 内触发副作用）
+  const timeRemainingRef = useRef(0);
+  // 超时闪烁 timer（换题/卸载时清除，避免悬空回调）
+  const timeoutFlashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // P2-03: 难度消息 timer（竞态修复：新消息设置前清除旧 timer）
   const difficultyMessageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const soundInitRef = useRef(false);
@@ -200,9 +204,10 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
     soundManager.setEnabled(settings.soundEnabled);
   }, [settings.soundEnabled]);
 
-  // P2-03: 卸载时清除难度消息 timer，避免悬空回调
+  // P2-03: 卸载时清除难度消息 / 超时闪烁 timer，避免悬空回调
   useEffect(() => () => {
     if (difficultyMessageTimerRef.current) clearTimeout(difficultyMessageTimerRef.current);
+    if (timeoutFlashTimerRef.current) clearTimeout(timeoutFlashTimerRef.current);
   }, []);
 
   // 首次交互初始化音频
@@ -248,59 +253,6 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   }, [isPressure, currentQuestion]);
 
   const timeLimit = getTimeLimit();
-
-  // 压力模式：每 5 题难度递增
-  useEffect(() => {
-    if (!isPressure) return;
-    const level = Math.min(Math.floor(currentIndex / 5), 2);
-    const newDiff = DIFFICULTY_ORDER[level]!;
-    if (newDiff !== currentDifficulty) {
-      setCurrentDifficulty(newDiff);
-    }
-  }, [currentIndex, isPressure, currentDifficulty]);
-
-  // 倒计时逻辑
-  useEffect(() => {
-    if (isAnswered || finished || !currentQuestion) return;
-    if (timeLimit <= 0) return;
-
-    setTimeRemaining(timeLimit);
-
-    timerRef.current = setInterval(() => {
-      setTimeRemaining((prev) => {
-        const next = prev - 1;
-        // 最后 5 秒播放滴答声
-        if (next <= 5 && next > 0) {
-          soundManager.playTick();
-        }
-        if (next <= 0) {
-          if (timerRef.current) clearInterval(timerRef.current);
-          return 0;
-        }
-        return next;
-      });
-    }, 1000);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [currentIndex, isAnswered, finished, timeLimit, currentQuestion]);
-
-  // 超时处理（P1E-13: 系统代选仅用于展示，判分强制计错 — 见 handleSelect 的 gradedCorrect）
-  useEffect(() => {
-    if (timeRemaining === 0 && timeLimit > 0 && !isAnswered && !finished && currentQuestion) {
-      // 自动选择 fold（最保守动作）作为展示用代选项
-      const fallbackOption = pickTimeoutFallbackOption(currentQuestion);
-      if (fallbackOption) {
-        setIsTimedOut(true);
-        setShowTimeoutFlash(true);
-        setTimeoutCount(c => c + 1);
-        soundManager.playTimeout();
-        setTimeout(() => setShowTimeoutFlash(false), 1500);
-        handleSelect(fallbackOption, true);
-      }
-    }
-  }, [timeRemaining, timeLimit, isAnswered, finished, currentQuestion]);
 
   // 检查是否需要调整难度（每5题检查一次）
   const checkDifficultyAdjustment = useCallback((newResults: Array<{ isCorrect: boolean; timeTaken: number }>) => {
@@ -417,6 +369,50 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
     },
     [isAnswered, currentQuestion, times, currentIndex, adaptive, updateAbility, checkDifficultyAdjustment, initSound, timeLimit, consecutiveWrong, isPressure, recordAnswerForEmotion]
   );
+
+  // 超时处理（P1E-13: 系统代选仅用于展示，判分强制计错 — 见 handleSelect 的 gradedCorrect）
+  const handleTimeout = useCallback(() => {
+    if (!currentQuestion) return;
+    const fallbackOption = pickTimeoutFallbackOption(currentQuestion);
+    if (fallbackOption) {
+      setIsTimedOut(true);
+      setShowTimeoutFlash(true);
+      setTimeoutCount((c) => c + 1);
+      soundManager.playTimeout();
+      if (timeoutFlashTimerRef.current) clearTimeout(timeoutFlashTimerRef.current);
+      timeoutFlashTimerRef.current = setTimeout(() => setShowTimeoutFlash(false), 1500);
+      handleSelect(fallbackOption, true);
+    }
+  }, [currentQuestion, handleSelect]);
+
+  // 倒计时逻辑：归零时在 tick 回调内直接触发 handleTimeout，避免 Effect 链
+  useEffect(() => {
+    if (isAnswered || finished || !currentQuestion) return;
+    if (timeLimit <= 0) return;
+
+    timeRemainingRef.current = timeLimit;
+    setTimeRemaining(timeLimit);
+
+    timerRef.current = setInterval(() => {
+      const next = timeRemainingRef.current - 1;
+      timeRemainingRef.current = next;
+      // 最后 5 秒播放滴答声
+      if (next <= 5 && next > 0) {
+        soundManager.playTick();
+      }
+      if (next <= 0) {
+        if (timerRef.current) clearInterval(timerRef.current);
+        setTimeRemaining(0);
+        handleTimeout();
+        return;
+      }
+      setTimeRemaining(next);
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [currentIndex, isAnswered, finished, timeLimit, currentQuestion, handleTimeout]);
 
   const handleNext = useCallback(() => {
     initSound();

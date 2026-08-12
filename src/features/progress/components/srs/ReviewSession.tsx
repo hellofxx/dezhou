@@ -194,7 +194,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
           </DialogHeader>
           <div className="flex justify-end pt-2">
             <Button onClick={handleClose} className="bg-[var(--brass)] text-[var(--primary-foreground)]">
-              {t('common.confirm', { defaultValue: '确认' })}
+              {t('common.ui.confirm', { defaultValue: '确认' })}
             </Button>
           </div>
         </DialogContent>
@@ -248,7 +248,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
 
           <div className="flex justify-end pt-3">
             <Button onClick={handleClose} className="bg-[var(--brass)] text-[var(--primary-foreground)]">
-              {t('common.confirm', { defaultValue: '确认' })}
+              {t('common.ui.confirm', { defaultValue: '确认' })}
             </Button>
           </div>
         </DialogContent>

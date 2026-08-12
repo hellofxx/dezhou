@@ -52,7 +52,7 @@ export function PositionBadge({ position, active = false, className }: PositionB
   const colors = GROUP_COLORS[group] ?? GROUP_COLORS.early!;
   // UI-09：颜色不是唯一语义通道 — 补充位置组文本标签（title/aria-label 双提供）
   const groupLabel = t(GROUP_LABEL_KEYS[group] ?? 'common.positionGroup.early');
-  const semanticLabel = active ? `${position} · ${groupLabel} · ${t('common.active')}` : `${position} · ${groupLabel}`;
+  const semanticLabel = active ? `${position} · ${groupLabel} · ${t('common.ui.active')}` : `${position} · ${groupLabel}`;
 
   return (
     <span

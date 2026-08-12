@@ -129,7 +129,7 @@ function estimatePostflopEquity(heroHand: [Card, Card], board: Card[]): number {
   const flushMade = [...suitCounts.values()].some((v) => v >= 5);
   if (flushMade) madeStrength = Math.max(madeStrength, 0.84);
 
-  const uniqueRanks = [...new Set(allCards.map((c) => c.rank))].sort((a, b) => a - b);
+  const uniqueRanks = [...new Set(allCards.map((c) => c.rank))].toSorted((a, b) => a - b);
 
   // 检测已成顺子（5张连续）
   let hasMadeStraight = false;
@@ -327,8 +327,8 @@ export function getOptimalAction(strategy: HandStrategy): Decision {
     { action: ActionType.Call, freq: strategy.call },
     { action: ActionType.Raise, freq: strategy.raise, amount: strategy.raiseAmount },
   ];
-  actions.sort((a, b) => b.freq - a.freq);
-  const best = actions[0]!;
+  const sortedActions = actions.toSorted((a, b) => b.freq - a.freq);
+  const best = sortedActions[0]!;
   return {
     action: best.action,
     amount: best.action === ActionType.Raise ? best.amount : undefined,

@@ -33,7 +33,7 @@ function getWeakHands(result: TrainingResult): { hand: string; wrongCount: numbe
   return Object.entries(wrongMap)
     .filter(([, count]) => count >= 2)
     .map(([hand, wrongCount]) => ({ hand, wrongCount }))
-    .sort((a, b) => b.wrongCount - a.wrongCount);
+    .toSorted((a, b) => b.wrongCount - a.wrongCount);
 }
 
 /** 数字递增动画 */

@@ -113,7 +113,13 @@ export function generateCrossModuleDailyPlan(
   // 1. 优先：今日待复习
   const todayReviews = getTodayReviewItems(reviewItems);
   if (todayReviews.length > 0) {
-    const firstItems = todayReviews.slice(0, 3).map((item) => item.label).join('、');
+    // P0C：清洗历史遗留的硬编码中文"决策"后缀（GTO 场景 name 曾为 "BTN Turn 决策"）。
+    // 不依赖 persist migrate 时机，渲染端兜底保证英文界面不再出现中英混杂。
+    const cleanLabel = (label: string) => label.replace(/\s*决策$/, '');
+    const firstItems = todayReviews
+      .slice(0, 3)
+      .map((item) => cleanLabel(item.label))
+      .join('、');
     recommendations.push({
       id: 'review-today',
       type: 'review',
@@ -225,7 +231,7 @@ export function generateCrossModuleDailyPlan(
   // 按优先级排序
   const priorityOrder = { high: 0, medium: 1, low: 2 };
   return recommendations
-    .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
+    .toSorted((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
     .slice(0, 5);
 }
 

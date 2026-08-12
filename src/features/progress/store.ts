@@ -796,11 +796,12 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 10,
+      version: 11,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak
         const next = (persistedState ?? {}) as Partial<ProgressStore> & {
           lastTrainingDate?: number | null;
+          reviewItems?: Array<{ label?: string }>;
         };
         // v0 → v1：注入 onboarding
         if (fromVersion < 1) {
@@ -917,7 +918,34 @@ export const useProgressStore = create<ProgressStore>()(
             }
           }
         }
+        // v10 → v11：清洗 reviewItems GTO 标签尾部的硬编码中文"决策"。
+        // 场景数据层（GTO scenarioGenerator）已不再写入"决策"后缀，
+        // 此处清理已持久化在 localStorage 中的遗留脏数据，避免首页
+        // 英文界面下出现"BTN Turn 决策"中英混杂。
+        if (fromVersion < 11 && Array.isArray(next.reviewItems)) {
+          next.reviewItems = next.reviewItems.map((item) => {
+            if (item.label && item.label.endsWith(' 决策')) {
+              return { ...item, label: item.label.slice(0, -3) };
+            }
+            return item;
+          });
+        }
         return next as ProgressStore;
+      },
+      // 启动时（hydration 完成后）兜底清洗历史遗留的 GTO 标签中文"决策"后缀。
+      // 不依赖 version migrate 的触发时机，确保任何时期写入的脏 label 都被清理。
+      onRehydrateStorage: () => (state) => {
+        const items = state?.reviewItems;
+        if (!items || items.length === 0) return;
+        const dirty = items.some((item) => item.label?.endsWith('决策'));
+        if (!dirty) return;
+        useProgressStore.setState({
+          reviewItems: items.map((item) =>
+            item.label?.endsWith('决策')
+              ? { ...item, label: item.label.replace(/\s*决策$/, '') }
+              : item,
+          ),
+        });
       },
     }
   )

@@ -43,8 +43,8 @@ export default function ProgressReplay() {
       });
     }
     // P2-C: 按绝对变化幅度降序排列，展示进步与退步，取前 5 门
-    entries.sort((a, b) => Math.abs(b.improvement) - Math.abs(a.improvement));
-    return entries.slice(0, 5);
+    const sortedEntries = entries.toSorted((a, b) => Math.abs(b.improvement) - Math.abs(a.improvement));
+    return sortedEntries.slice(0, 5);
   }, [firstAttemptScores, lastAttemptScores, t]);
 
   const hasData = topChanges.length > 0;

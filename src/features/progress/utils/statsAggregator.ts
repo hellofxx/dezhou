@@ -120,7 +120,7 @@ export function aggregateByModule(records: TrainingRecord[]): ModuleStats[] {
 /** 获取最近 N 条记录 */
 export function getRecentRecords(records: TrainingRecord[], count: number): TrainingRecord[] {
   return [...records]
-    .sort((a, b) => b.createdAt - a.createdAt)
+    .toSorted((a, b) => b.createdAt - a.createdAt)
     .slice(0, count);
 }
 
@@ -144,7 +144,7 @@ export function getWeakHands(
   return Array.from(handStats.entries())
     .filter(([, s]) => s.wrong > 0)
     .map(([hand, s]) => ({ hand, wrongCount: s.wrong, totalCount: s.total }))
-    .sort((a, b) => b.wrongCount - a.wrongCount);
+    .toSorted((a, b) => b.wrongCount - a.wrongCount);
 }
 
 /** 时间戳转 YYYY-MM-DD */

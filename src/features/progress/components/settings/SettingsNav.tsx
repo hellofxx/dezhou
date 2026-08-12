@@ -32,7 +32,7 @@ export default function SettingsNav({ sectionIds, onActivate }: SettingsNavProps
     { id: 'appearance', icon: <Palette className="w-4 h-4" />, label: t('settings.appearance', { defaultValue: '外观' }) },
     { id: 'coach', icon: <GraduationCap className="w-4 h-4" />, label: t('mentor.settings.title') },
     { id: 'training', icon: <SlidersHorizontal className="w-4 h-4" />, label: t('settings.training', { defaultValue: '训练偏好' }) },
-    { id: 'game-streak', icon: <Gamepad2 className="w-4 h-4" />, label: t('gameVariant.title') },
+    { id: 'game-streak', icon: <Gamepad2 className="w-4 h-4" />, label: t('variant.title') },
     { id: 'data', icon: <Database className="w-4 h-4" />, label: t('settings.data', { defaultValue: '数据管理' }) },
     { id: 'developer', icon: <Bug className="w-4 h-4" />, label: t('settings.developer', { defaultValue: '开发者选项' }) },
     { id: 'about', icon: <Info className="w-4 h-4" />, label: t('settings.about', { defaultValue: '关于' }) },

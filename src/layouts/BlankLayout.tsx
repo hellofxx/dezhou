@@ -13,9 +13,9 @@ import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 
 // PLAT-09：存 i18n key（common.shortcuts.*），渲染时 t() 解析
 const SHORTCUTS = [
-  { key: '1', action: 'common.shortcuts.fold' },
-  { key: '2', action: 'common.shortcuts.call' },
-  { key: '3', action: 'common.shortcuts.raise' },
+  { key: '1', action: 'common.action.fold' },
+  { key: '2', action: 'common.action.call' },
+  { key: '3', action: 'common.action.raise' },
   { key: 'Space', action: 'common.shortcuts.confirm' },
   { key: 'Esc', action: 'common.shortcuts.exit' },
   { key: '?', action: 'common.shortcuts.toggle' },
@@ -47,10 +47,10 @@ export default function BlankLayout() {
       <button
         onClick={() => navigate(-1)}
         className="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-2 rounded-[var(--radius)] text-sm text-[var(--ivory-muted)] hover:text-[var(--ivory)] bg-[var(--surface-overlay)] hover:bg-[var(--surface-raised)] transition-colors"
-        aria-label={t('common.back')}
+        aria-label={t('common.ui.back')}
       >
         <ArrowLeft size={16} className="text-[var(--brass)]" />
-        <span>{t('common.back')}</span>
+        <span>{t('common.ui.back')}</span>
       </button>
 
       {/* Keyboard hint button - top right */}
@@ -103,7 +103,7 @@ export default function BlankLayout() {
                 <button
                   onClick={() => setShowShortcuts(false)}
                   className="p-1 rounded-[var(--radius-sm)] text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/40"
-                  aria-label={t('common.close')}
+                  aria-label={t('common.ui.close')}
                 >
                   <X size={16} />
                 </button>

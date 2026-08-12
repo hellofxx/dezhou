@@ -83,7 +83,7 @@ export default function Dashboard() {
   // 最近解锁的成就
   const latestAchievement = useMemo(() => {
     if (unlockedAchievements.length === 0) return null;
-    const sorted = [...unlockedAchievements].sort(
+    const sorted = [...unlockedAchievements].toSorted(
       (a, b) => (achievementUnlockDates[b] ?? 0) - (achievementUnlockDates[a] ?? 0)
     );
     const id = sorted[0];

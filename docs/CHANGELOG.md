@@ -8,6 +8,39 @@
 
 ## [Unreleased] - 2026-08-11
 
+### React 最佳实践修复（Vercel React Best Practices 审查落地）
+
+> 依据 `react-best-practices-review.md` 审查结论，按 AGENTS.md §React 渲染约定执行系统性修复。
+
+- **ES2023 数组方法解锁**：`tsconfig.json` / `tsconfig.app.json` 的 `lib` 升级 `ES2020` → `ES2023`（`target` 保持 `ES2020`，Vite/esbuild 负责转译，构建产物零影响），解锁 `toSorted` / `toReversed` / `toSpliced` 类型定义。
+- **数组不可变性（P1）**：26 个生产文件 39 处 `.sort()` 原地排序全部替换为 `.toSorted()` 不可变排序；7 处源数组直接突变项（strategyCompare / hand-history store / ProgressReplay / rushQuestions / optionOrder / adaptiveDifficulty / practiceOptionOrder）改为返回新数组并重新消费；streakCalc 的 `.sort().reverse()` 同步改为 `.toSorted().toReversed()`；测试文件保留 `.sort()`（断言语义合理）。
+- **Effect 治理（P3）**：`PracticeDrill.tsx` 删除压力模式难度递增 Effect（该 state 在压力模式下无消费者）；超时处理由独立 Effect 监听 state 归零改为倒计时 interval tick 内直接触发（消除 Effect 链），并经 ui-visual-validator 验证无交互回归（超时单次触发、倒计时/答题/去复习/压力模式均正常）。
+- **验证**：`pnpm verify` 全量门禁通过（typecheck + lint + 553 tests / 76 files）。
+
+### i18n 拆分方案整改（评估 7 项问题全量修复，模块数 41 → 38）
+
+> 依据 `i18n-splitting-review.md` 评估报告，对 i18n 模块化拆分架构执行卫生整改，
+> 保持单 `translation` 命名空间与 `t('a.b.c')` 调用路径不变。
+
+- **清理废弃键（P0）**：删除 `feedback.json` 中 6 个 `[deprecated]` 键（`grade`/`message` 的 `optimal`/`acceptable`/`error`），消除五级反馈迁移残留的废弃键复活风险。
+- **删除重复模块（P1）**：删除与 `common.shortcuts.*` 完全重复的 `shortcuts.json` 模块（2 文件）。
+- **合并变体翻译三分流（P1）**：`variant` / `gameVariant` / `shortDeck` 合并为单一 `variant` 模块（删除 4 文件），吸收 `title` / `switchHint` / `deckSize` / `players` / `desc*` / `shortDeckRules.*`；`gameVariant.*` 调用方迁移至 `variant.*`，变体名统一复用 `variant.name.<variant>` 动态 key。
+- **统一键值命名（P2）**：`variant.json` 的 snake_case（`select_variant` / `rules_difference` / `switch_variant`）改为 camelCase（`selectVariant` / `rulesDifference` / `switchVariant`），3 处调用方同步迁移。
+- **common 嵌套重构（P3）**：`common.json` 顶层扁平 key 归入 `action.*`（fold/call/raise/allIn）与 `ui.*`（start/pause/back/confirm 等 15 个操作词）二级嵌套，8 处调用方迁移；同时删除 `shortcuts` 内与 `action.*` 重复的 fold/call/raise（快捷键面板改指 `common.action.*`），消除同一动作三处定义。
+- **未消费模块治理（P2）**：`ALL_MODULES` 重排为「活跃模块」+「未消费保留模块」两分区并附清理准则注释；`preload.test.ts` 新增未消费清单断言（当前 7 个：adaptive/app/dailyPlan/localTrack/opponent/opponentDrill/toast）；实证修复 `rankUp`/`review` 引用面遗漏（RankUpCelebration/ReviewSession 由 Dashboard 渲染，补入 `/` 分组）。
+- **AGENTS.md**：§国际化补充命名硬约束（静态 key 一律 camelCase；kebab-case 仅限枚举值/路由参数对应动态 key）。
+- **后续里程碑**：新增第三语言时评估引入 i18next-parser 自动提取，补全"双方都缺 key"守卫盲区（当前不引入新依赖，localeParity 仍兜底单边缺失）。
+
+### 未消费 i18n 模块清理（2026-08-12，模块数 38 → 31）
+
+> 落地上批「未消费模块治理」的清理准则：无消费方的模块直接删除，不再作为"保留模块"长期驻留。
+
+- **删除 7 个未消费模块**（14 文件）：`adaptive` / `app` / `dailyPlan` / `localTrack` / `opponent` / `opponentDrill` / `toast`，含 `locales/{zh,en}/<module>.json` 全部移除。
+- **清理依据**：全量实证扫描无任何 `t('<module>.')` 静态 key、动态模板字符串 key、JSON import 消费（`opponent` 仅存在字段同名数据属性如 `scenario.opponent.*`，非 i18n key；`toast` 为组件调用约定非翻译模块；`dailyPlan` 消费实为 `academy.dailyPlan.*` 嵌套键，非独立模块）。
+- **注册表同步**：`moduleRegistry.ts` 从 `I18nModuleKey` / `ALL_MODULES` / `loadModule` 移除 7 key；`ALL_MODULES` 由「活跃 + 未消费分区」简化为单一活跃清单，并更新注释为"无消费方即删除"约束。
+- **测试守卫更新**：`preload.test.ts` 未消费清单断言改为 `toEqual([])`（新增模块必须接入 CORE_MODULES 或 FEATURE_GROUPS）；`localeParity.test.ts` 基于 `ALL_MODULES` + `import.meta.glob` 动态扫描，自动适配无改动。
+- **AGENTS.md 同步**：§国际化「模块注册表唯一契约源」条款不变，模块增删仍须同步 `I18nModuleKey` / `ALL_MODULES` / `loadModule`。
+
 ### i18n 模块化拆分（zh/en 大文件 → 按顶层 key 拆分 + 路由级懒加载）
 
 - 将单一超大 `src/i18n/locales/zh.json` / `en.json`（各约 150KB）按 41 个顶层 key 拆分为 `locales/{zh,en}/<module>.json` 模块文件；提供 `scripts/split-locales.mjs`（一次性拆分 + 完整性校验）与 `scripts/merge-locales.mjs`（合并回退，CI/调试用）。

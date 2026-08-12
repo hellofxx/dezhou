@@ -202,7 +202,7 @@ export default function HandHistoryList() {
                     </div>
                     <button
                       onClick={(e) => { e.stopPropagation(); deleteHand(hand.id); }}
-                      aria-label={t('common.delete')}
+                      aria-label={t('common.ui.delete')}
                       className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)]/70 hover:text-[var(--clay)] hover:bg-[var(--clay)]/10 transition-all"
                     >
                       <Trash2 size={14} />

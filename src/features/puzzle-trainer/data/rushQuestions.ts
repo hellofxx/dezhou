@@ -30,11 +30,12 @@ export function getRushQuestions(count: number = 30, date: Date = new Date()): P
   const mediumTarget = Math.ceil(count / 3);
   const hardTarget = Math.max(0, count - easyTarget - mediumTarget);
 
+  // 稳定排序保证最终难度非降序（段内保持种子洗牌顺序）
   const picked = [
     ...easy.slice(0, easyTarget),
     ...medium.slice(0, mediumTarget),
     ...hard.slice(0, hardTarget),
-  ];
+  ].toSorted((a, b) => a.difficulty - b.difficulty);
 
   // 某难度段题量不足时，从剩余题目补齐（不改变配比设计，仅兜底）
   if (picked.length < count) {
@@ -43,8 +44,6 @@ export function getRushQuestions(count: number = 30, date: Date = new Date()): P
     picked.push(...rest.slice(0, count - picked.length));
   }
 
-  // 稳定排序保证最终难度非降序（段内保持种子洗牌顺序）
-  picked.sort((a, b) => a.difficulty - b.difficulty);
   return picked.slice(0, Math.min(count, picked.length));
 }
 
