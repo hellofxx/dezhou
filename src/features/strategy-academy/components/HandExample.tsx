@@ -37,6 +37,16 @@ export function HandExampleComponent({
     () => (resolvedExample.opponent ? resolveOpponent(t, resolvedExample.opponent) : undefined),
     [resolvedExample.opponent, t],
   );
+  // 交互模式传入 PredictionPrompt 的 example 也须为解析后对象：
+  // PredictionPrompt 直接消费 correctDecision.reasoning 与 opponent.exploitableBy 等
+  // 数据层硬编码中文字段，父层不 resolve 会导致英文界面回退中文。
+  const resolvedExampleWithOpponent = useMemo(
+    () =>
+      resolvedExample.opponent && resolvedOpponent
+        ? { ...resolvedExample, opponent: resolvedOpponent }
+        : resolvedExample,
+    [resolvedExample, resolvedOpponent],
+  );
   const heroCards = resolvedExample.heroHand.map(stringToCard);
   const boardCards = resolvedExample.board?.map(stringToCard) ?? [];
 
@@ -183,7 +193,7 @@ export function HandExampleComponent({
       {/* Decision Analysis：静态模式双栏；互动模式替换为预测暂停（PredictionPrompt） */}
       {interactive ? (
         <PredictionPrompt
-          example={example}
+          example={resolvedExampleWithOpponent}
           answered={answered ?? false}
           onAnswered={onAnswered ?? (() => {})}
         />

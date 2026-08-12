@@ -8,6 +8,15 @@
 
 ## [Unreleased] - 2026-08-11
 
+### 课程展示页对齐修复（theory-academy T-T1，2026-08-12）
+
+> 排查并修复课程展示页（TheoryChapterView）与理论阶梯（TheoryLadder）在网格/列表布局下，缩略图、标题、描述、进度条与按钮的垂直/水平对齐偏差，使其在移动端、平板与桌面端均保持统一间距与基线对齐。
+
+- **阅读区面板同宽对齐**：TheoryChapterView 阅读态面板 `motion.div` 原 `panel space-y-6 max-w-3xl mx-auto` 导致面板宽度小于 header/objectives 上方面板，宽屏下左右错位。改为 `panel`（保持与上部面板同宽）+ 内层 `.prose-wrap`（新增 CSS：max-width:720px; margin-inline:auto）只约束正文可读行长。`globals.css` 新增 `.prose-wrap` 一行声明。
+- **多按钮区响应式重构**：已完成章节阅读区（返回目录 / 重考小测 / 下一章 3 按钮）与 done 阶段 footer（同样 3 按钮）原 `flex flex-wrap items-center justify-between gap-3` 三按钮平铺方案，在窄屏会被 justify-between 错误拉伸到左右两端且第 3 按钮独立成行。新方案：`flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between`——移动端纵向堆叠（CTA 在上，返回在下），桌面端左/右双簇对齐；按钮区顶部加 `border-t border-[var(--walnut-border)]/50 pt-4 mt-2` 与正文视觉分隔；按钮统一 `justify-center` 文本居中。
+- **跨学院 chip 时钟图标一致性**：TheoryLadder 章节 chip 时长 `text-[9px] font-numeric opacity-70 flex items-center gap-1` 仅有文本（gap-1 失效）。同步 strategy-academy LevelLadder 的 `<Clock className="w-2.5 h-2.5" />` + 时长模式，从 lucide-react 导入 Clock 图标，`inline-flex items-center gap-1 shrink-0` 并加 `aria-hidden`。两学院章节 chip 时长标识在视觉与无障碍语义上对齐。
+- **验证**：`pnpm verify`（typecheck + lint + 564 passed / 1 pre-existing `.tmp.test.tsx` 失败为先前会话残留诊断文件，与本次修改无关）；theory-academy 模块测试 + i18n localeParity + TheoryQuiz 78/78 全绿。
+
 ### 课程内容国际化全量迁移（2026-08-12，content-course-i18n-plan 三阶段完成）
 
 > 对 strategy-academy（853 sections / 400 quiz / 102 examples / 1409 practice options / 术语 / 对手档案 / Basics / 轨道 / drillData / localLessons 本土课）与 theory-academy（877 sections / 371 quiz / objectives）课程内容做全量「渲染层 key 覆盖」国际化：数据层保持中文原文作 fallback，渲染层 `t(key, { defaultValue: 中文 })` 解析；英文界面命中 i18n key，中文界面回退原文零变化。

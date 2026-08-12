@@ -254,10 +254,12 @@ export function resolvePracticeQuestion(t: TFunction, q: PracticeQuestion): Prac
         ? t(practiceOptionEvImpactKey(q.id, i), { defaultValue: opt.evImpact })
         : undefined,
     })),
-    scenario: gameContext
-      ? {
-          ...scenario,
-          gameContext: {
+    scenario: {
+      ...scenario,
+      // opponent 走 resolveOpponent（data/opponentProfiles 硬编码中文，渲染层 key 覆盖）
+      opponent: scenario.opponent ? resolveOpponent(t, scenario.opponent) : scenario.opponent,
+      gameContext: gameContext
+        ? {
             ...gameContext,
             tableDescription: gameContext.tableDescription
               ? t(practiceTableDescKey(q.id), { defaultValue: gameContext.tableDescription })
@@ -268,9 +270,9 @@ export function resolvePracticeQuestion(t: TFunction, q: PracticeQuestion): Prac
             stackDistribution: gameContext.stackDistribution
               ? t(practiceStackDescKey(q.id), { defaultValue: gameContext.stackDistribution })
               : undefined,
-          },
-        }
-      : scenario,
+          }
+        : gameContext,
+    },
   };
 }
 

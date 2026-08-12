@@ -3,6 +3,7 @@
 // 由 CourseView 在 lesson.type === 'drill' 时调用
 
 import { lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Lesson } from '../../types';
 import type { DrillProps } from './types';
 
@@ -19,6 +20,7 @@ interface DrillLessonRouterProps extends DrillProps {
 }
 
 export function DrillLessonRouter({ lesson, onComplete, onExit }: DrillLessonRouterProps) {
+  const { t } = useTranslation();
   const props: DrillProps = { onComplete, onExit };
 
   const renderDrill = () => {
@@ -38,7 +40,9 @@ export function DrillLessonRouter({ lesson, onComplete, onExit }: DrillLessonRou
       default:
         return (
           <div className="text-center py-8 text-[var(--ivory-muted)]">
-            未知 Drill 组件：{lesson.drillComponent ?? '(undefined)'}
+            {t('drills.common.unknownDrill', {
+              name: lesson.drillComponent ?? '(undefined)',
+            })}
           </div>
         );
     }
@@ -48,7 +52,7 @@ export function DrillLessonRouter({ lesson, onComplete, onExit }: DrillLessonRou
     <Suspense
       fallback={
         <div className="text-center py-8 text-[var(--ivory-muted)] text-sm">
-          加载训练内容...
+          {t('drills.common.loading')}
         </div>
       }
     >

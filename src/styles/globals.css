@@ -470,6 +470,9 @@ body::after {
   border: 1px solid var(--walnut-border); border-radius: var(--poker-radius-md);
   padding: 20px; position: relative;
 }
+/* Reading prose wrap — panel keeps full width aligned with sibling panels,
+   inner content clamps to a readable line length (T-T1). */
+.prose-wrap { max-width: 720px; margin-inline: auto; }
 .panel-title {
   display: flex; align-items: center; gap: 8px;
   font-family: var(--font-display); font-size: 15px; font-weight: 600;

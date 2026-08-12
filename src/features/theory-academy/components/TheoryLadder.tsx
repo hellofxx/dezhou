@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Lock, CheckCircle2, PlayCircle, BookOpen, Swords } from 'lucide-react';
+import { ChevronDown, Lock, CheckCircle2, PlayCircle, BookOpen, Swords, Clock } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
@@ -290,7 +290,8 @@ function TheoryChapterChip({ chapter, completed, isNext, score, onOpen }: Theory
               {t('theory.ladder.quizScore', { score })}
             </span>
           )}
-          <span className="text-[9px] font-numeric opacity-70 flex items-center gap-1">
+          <span className="text-[9px] font-numeric opacity-70 inline-flex items-center gap-1 shrink-0">
+            <Clock className="w-2.5 h-2.5" aria-hidden="true" />
             {chapter.duration.replace(/ ?(min|分钟)$/, '')}
           </span>
         </span>

@@ -599,7 +599,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             exit={{ opacity: 0, scale: 0.9 }}
             className="rounded-lg bg-[var(--warning)]/15 border border-[var(--warning)]/40 px-4 py-3 text-sm text-[var(--warning)] text-center"
           >
-            🧊 冷静一下！连续答错 3 题，深呼吸，回顾一下策略要点再继续。
+            {t('academy.drill.cooldownHint')}
           </motion.div>
         )}
       </AnimatePresence>
@@ -619,7 +619,9 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         </span>
         {currentIndex > 0 && (
           <span className="text-xs text-[var(--success)] shrink-0">
-            正确率 {Math.round((correctCount / currentIndex) * 100)}%
+            {t('academy.drill.liveAccuracy', {
+              accuracy: Math.round((correctCount / currentIndex) * 100),
+            })}
           </span>
         )}
         {/* 难度指示器（P2-03：常驻 pill，难度变化时 scale 脉冲 + 黄铜 glow） */}
@@ -761,11 +763,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           <div className="flex items-center gap-4 text-[11px] text-[var(--ivory-muted)]">
             <span className="inline-flex items-center gap-1.5">
               <Chip amount={scenario.potSize} color="green" size="sm" />
-              底池 <b className="text-[var(--brass)] font-mono">{formatBB(scenario.potSize)}</b>
+              {t('academy.drill.potLabel')} <b className="text-[var(--brass)] font-mono">{formatBB(scenario.potSize)}</b>
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Chip amount={scenario.effectiveStack} color="blue" size="sm" />
-              有效筹码 <b className="text-[var(--ivory)] font-mono">{formatBB(scenario.effectiveStack)}</b>
+              {t('academy.drill.stackLabel')} <b className="text-[var(--ivory)] font-mono">{formatBB(scenario.effectiveStack)}</b>
             </span>
           </div>
 
@@ -880,11 +882,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                   <>
                     <XCircle className="w-4 h-4 text-[var(--danger)] shrink-0" />
                     <span className="text-sm font-bold text-[var(--danger)]">
-                      ⏰ 超时！系统代选 {selectedOption.action}，本题计为答错
+                      {t('academy.drill.timeoutPick', { action: selectedOption.action })}
                     </span>
                     {correctOption && (
                       <span className="text-xs text-[var(--ivory-muted)] ml-2">
-                        正确答案：{correctOption.action}{correctOption.amount ? ` ${correctOption.amount}` : ''}
+                        {t('academy.drill.correctAnswerPrefix')}{correctOption.action}{correctOption.amount ? ` ${correctOption.amount}` : ''}
                       </span>
                     )}
                   </>
@@ -895,7 +897,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                     <span className="text-sm font-bold">{gradeLabel}</span>
                     {!selectedOption.isCorrect && correctOption && (
                       <span className="text-xs text-[var(--ivory-muted)] ml-1">
-                        正确答案：{correctOption.action}{correctOption.amount ? ` ${correctOption.amount}` : ''}
+                        {t('academy.drill.correctAnswerPrefix')}{correctOption.action}{correctOption.amount ? ` ${correctOption.amount}` : ''}
                       </span>
                     )}
                   </>

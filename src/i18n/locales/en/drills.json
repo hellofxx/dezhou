@@ -14,7 +14,9 @@
     "viewResult": "View Result",
     "next": "Next",
     "noQuestions": "No questions available",
-    "finishBtn": "Finish"
+    "finishBtn": "Finish",
+    "loading": "Loading drill content...",
+    "unknownDrill": "Unknown drill component: {{name}}"
   },
   "opponent": {
     "title": "Opponent Profiling",

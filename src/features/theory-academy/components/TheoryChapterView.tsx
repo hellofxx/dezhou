@@ -177,20 +177,25 @@ export default function TheoryChapterView() {
         )}
 
         {phase === 'reading' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel space-y-6 max-w-3xl mx-auto">
-            {chapter.content.map((section, index) => (
-              <TheorySectionRenderer
-                key={index}
-                section={section}
-                contentKey={theoryContentKey(chapter.id, index)}
-              />
-            ))}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel">
+            {/* 阅读区面板保持与 header/objectives 同宽,正文经 prose-wrap 约束最大宽度(T-T1),
+                避免与上部面板产生左右错位;移动端 prose-wrap 自适应缩窄 */}
+            <div className="space-y-6 prose-wrap">
+              {chapter.content.map((section, index) => (
+                <TheorySectionRenderer
+                  key={index}
+                  section={section}
+                  contentKey={theoryContentKey(chapter.id, index)}
+                />
+              ))}
+            </div>
             {chapterCompleted ? (
               // 已完成章节：免重考复习导航（返回目录/下一章）+ 可选重考（幂等，取历史最高分）
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+              // 三按钮(返回目录 / 重考小测 / 下一章)窄屏纵向堆叠，桌面端左/右双簇对齐
+              <div className="pt-4 mt-2 border-t border-[var(--walnut-border)]/50 flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                 <button
                   onClick={() => navigate('/theory')}
-                  className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   {t('theory.chapterView.backToChapters')}
@@ -198,7 +203,7 @@ export default function TheoryChapterView() {
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     onClick={() => setPhase('quiz')}
-                    className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                    className="inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
                   >
                     {t('theory.chapterView.retryQuiz')}
                   </button>
@@ -206,7 +211,7 @@ export default function TheoryChapterView() {
                 </div>
               </div>
             ) : (
-              <div className="pt-2 flex justify-end">
+              <div className="pt-4 mt-2 border-t border-[var(--walnut-border)]/50 flex justify-end">
                 <button
                   onClick={() => setPhase('quiz')}
                   className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
@@ -240,24 +245,26 @@ export default function TheoryChapterView() {
             )}
             {/* Level 全部完成时展示实践桥接推荐 */}
             {levelCompleted && <PracticeBridgeCard recommendations={level.practiceRecommendations} />}
-            <div className="panel flex flex-wrap items-center justify-between gap-3">
+            <div className="panel flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
               <button
                 onClick={() => navigate('/theory')}
-                className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                className="inline-flex min-h-11 items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
               >
                 <ArrowLeft className="w-4 h-4" />
                 {t('theory.chapterView.backToChapters')}
               </button>
-              <button
-                onClick={() => {
-                  setRetryCount((c) => c + 1);
-                  setPhase('quiz');
-                }}
-                className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
-              >
-                {t('theory.retryQuiz')}
-              </button>
-              <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => {
+                    setRetryCount((c) => c + 1);
+                    setPhase('quiz');
+                  }}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                >
+                  {t('theory.retryQuiz')}
+                </button>
+                <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
+              </div>
             </div>
           </motion.div>
         )}
