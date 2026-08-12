@@ -335,7 +335,7 @@ src/
 
 | 能力 | Owner agent | 消费方 / 说明 |
 |---|---|---|
-| QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `strategy-academy-dev` | `puzzle-trainer-dev` 仅消费，不持有；quickDrillBest 由 puzzle-trainer store 独立持久化 |
+| QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `progress-dev` | 状态与逻辑定义于 progress store（quickDrillStreak / awardStreakFreeze / recordQuickDrillCompletion）与 progress/utils（composeDailyMix）；strategy-academy（QuickDrill 界面）与 puzzle-trainer 为消费方；quickDrillBest 由 puzzle-trainer store 独立持久化 |
 | 五大系统集成（Streak / ELO / SRS / Emotion / Mentor）统一提交入口 | `progress-dev` | 全部 trainer 经 progress store 公开 API 提交训练结果（契约见 progress-dev；禁止各模块自写集成） |
 | trainingEvents emit / 订阅 | `progress-dev`（总线实现）+ 各模块自 emit | hand-history、help-center 合理豁免 emit |
 | 调试解锁（9 处门禁） | `platform-dev` 协调 | 全局旁路，清单见 AGENTS.md §调试解锁 |

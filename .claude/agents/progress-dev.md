@@ -62,11 +62,12 @@ additionalPrompt: ""
   - `awardStreakFreeze(n)`（发放 n 张冻结卡）
   - `recordQuickDrillCompletion()`（快速训练打卡，幂等）
 - **ELO**：
-  - `updateElo(dimension, isCorrect, difficulty)`（更新五维中指定维度 ELO）
-  - `checkRankUp()`（段位升级检测，触发 RankUpCelebration）
+  - `updateElo(dimension, isCorrect, difficulty)`（更新五维中指定维度 ELO；内部调用 `shared/utils/elo.ts` 的 `checkRankUp` 纯函数自动检测段位升级并设置 `eloRankUp` 事件，触发 RankUpCelebration）
+  - `eloRankUp`（state 事件，非 null 表示刚升级，Dashboard 监听弹 Dialog）/ `clearEloRankUp()`
 - **SRS**：
-  - `processReview(reviewItem)`（执行 SM-2 复习，更新下次复习时间）
-  - `composeDailyMix(newQuestions, reviewItems, totalCount, userAccuracy)`（按用户正确率动态调整新题/复习题比例 30%/50%/70%）
+  - `updateReviewItem(item)` / `addReviewItem(item)` / `dismissRecommendation(id)` / `clearDailyDismissals()`（store 公开 action）
+  - `processReview(item, quality)`（`progress/utils/spacedRepetition.ts` 纯函数，SM-2 算法；store 不暴露）
+  - `composeDailyMix(newQuestions, reviewItems, totalCount, userAccuracy)`（`progress/utils/dailyTrainingMix.ts` 工具函数，按用户正确率动态调整新题/复习题比例 30%/50%/70%；store 不暴露）
 - **Emotion**：
   - `recordAnswer(isCorrect)`（记录答题正误，更新今日情绪计数）
   - `setTodayMood(mood)`（手动设置今日心情）
@@ -138,8 +139,8 @@ shared/ 依赖（维护职责见 Authority）：
 > 所有训练模块（range-trainer / pot-odds / gto-simulator / puzzle-trainer / strategy-academy / theory-academy）完成训练后，须经本 store 公开 API 提交训练结果以更新五大系统（Streak / ELO / SRS / Emotion / Mentor）。各 trainer agent 文件仅描述本模块特有的 colocated recorder / hook，集成契约以本节为**唯一事实源**，禁止各模块自写集成或自判降级。
 
 集成入口（progress store 公开 action / 工具）：
-- `updateElo(dimension, isCorrect, difficulty)`：ELO 更新（dimension 各模块不同：range=`'range'` / pot-odds=`'math'` / gto=`'postflop'` / …）
-- `processReview(reviewItem)`：SRS 复习项处理
+- `updateElo(dimension, isCorrect, difficulty)`：ELO 更新（dimension 各模块不同：range=`'preflop'` / pot-odds=`'math'` / gto=`'postflop'`；合法值见 `shared/types/elo.ts` 的 `EloDimension`）
+- `processReview(item, quality)`（`progress/utils/spacedRepetition.ts` 纯函数）+ `updateReviewItem(item)`（store action 持久化）：SRS 复习处理
 - `recordAnswer(isCorrect)`：情绪 / 连错计数（全局计数，答错 +1 答对重置）
 - `recordTrainingDay()`：Streak 计入（幂等）
 - `renderMentorFeedback(mentorStyle, grade, params)`：导师文案渲染

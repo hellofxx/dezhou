@@ -50,7 +50,7 @@ additionalPrompt: ""
 - 五级反馈复用 + 快速训练 Best Record 持久化
 - 主题分类（10 主题，4 大类）
 
-> 注：SRS 复习队列混合（`composeDailyMix`）与连续 7 天快速训练奖励冻结卡（`awardStreakFreeze`）由 strategy-academy/QuickDrill 实现（见 AGENTS.md §跨模块能力归属登记表），本模块仅消费其产出的混合作业，不持有该逻辑。
+> 注：SRS 复习队列混合（`composeDailyMix`，progress/utils/dailyTrainingMix.ts）与连续 7 天快速训练奖励冻结卡（`awardStreakFreeze`，progress store）均由 progress 模块持有（见 AGENTS.md §跨模块能力归属登记表）；strategy-academy/QuickDrill 与本模块均为消费方，不持有该逻辑。
 
 ## Cross-Module Touchpoints
 
@@ -83,7 +83,7 @@ additionalPrompt: ""
 跨模块依赖：
 - src/shared/types/decisionFeedback.ts — 五级反馈类型与 calculateGrade 评级函数
 
-> 注：`composeDailyMix` / `quickDrillStreak` / `awardStreakFreeze` 由 strategy-academy/QuickDrill 实现（见 AGENTS.md §跨模块能力归属登记表），本模块不持有该逻辑；`quickDrillBest` 仍由本模块 store 独立持久化。
+> 注：`composeDailyMix`（progress/utils） / `quickDrillStreak` / `awardStreakFreeze`（progress store）由 progress 模块持有（见 AGENTS.md §跨模块能力归属登记表），本模块与 strategy-academy 均为消费方；`quickDrillBest` 仍由本模块 store 独立持久化。
 
 ## Workflows
 1. 添加新主题时：在 types.ts 的 `PuzzleTheme` 添加值 → puzzleBank.ts 添加题目 → PuzzleHome 主题卡片自动渲染
@@ -104,7 +104,7 @@ additionalPrompt: ""
 - 题目 ID 口径：题库静态数据使用短 id（如 `rfi-001`，全库唯一，由 `data/puzzleBank.ids.test.ts` 守卫）；本模块目前**不注册 SRS ReviewItem**，短 id 不进入跨模块键空间。若未来接入 SRS，必须在**注册处**拼接 `puzzle:{theme}:{questionId}` 作为 SRS key（题库数据不改 id、不迁移存量）
 - 五级反馈通过 EV 损失自动评级，复用 `calculateGrade` 工具函数
 - `markDailyCompleted()` 必须幂等（同一 dateKey 重复调用不重复标记）
-- Rush 模式连对 5 题奖励 +10 秒，难度递增（每 5 题升一级）
+- Rush 模式连对 5 题奖励 +10 秒；难度按题量分 3 段递增（`getRushQuestions` 以 `count/3` 分段：easy/medium/hard，30 题时每 10 题升一级）
 - 题目数据为静态 JSON（puzzleBank.ts / rushQuestions.ts / dailyPuzzles.ts），不引入运行时网络请求
 - **选项语义排序（答题选项排序治理，见 AGENTS.md 同名章节）**：题库出口 `getAllPuzzles()` / `getPuzzlesByTheme()` 必须逐题应用 `sortOptionsCanonically`（消极→激进、同类按尺度升序）；禁止按题库数据原序直接渲染选项；源题库静态数据不手改重排
 - **barrel 收紧**：`index.ts` 禁止导出原始 `PUZZLE_BANK` 常量（防绕过排序出口），消费方只能通过出口 getter 取题

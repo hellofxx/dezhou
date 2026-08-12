@@ -72,7 +72,7 @@ additionalPrompt: ""
 - `src/styles/globals.css` — 全局 CSS 变量与主题（牌桌绿/象牙白/黄铜金/胡桃木四层色）
 - `src/shared/components/` — 跨模块业务组件（扑克牌 / 筹码 / 徽章 / 空态加载态 / 结果摘要等，视觉一致性均归本代理复核）
 - `src/layouts/` — AppLayout（侧边栏+顶栏+桌沿+主内容+移动端底栏）/ BlankLayout（onboarding）/ MobileNav（移动端底部导航）
-- `src/i18n/locales/zh.json` / `en.json` — 文案（所有界面文字必须双语）
+- `src/i18n/locales/zh/<module>.json` / `en/<module>.json` — 文案（按模块拆分，所有界面文字必须双语，key 以 moduleRegistry.ts 契约为准）
 
 ## Color System (Enforced)
 > 色值以 `src/styles/globals.css` 的 `:root` 为实现唯一权威，设计定义以 `poker-ui-demo/DESIGN_LANGUAGE.md` §2 当前版本为准；本文件不维护色值副本（避免三份分歧，参见 DESIGN_LANGUAGE 附录 E 反向对齐记录）。

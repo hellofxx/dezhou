@@ -19,6 +19,15 @@ dist-ssr
 .qoder/
 .workbuddy/
 .trae/
+.codebuddy/
+.visual-check/
+.cursor/
+.windsurf/
+.cline/
+.zed/
+
+# 开发过程归档（审查/审计/截图/日志等临时产物，本地保留不入库）
+.archive/
 
 # Claude 内置代理（安装时自动拷贝，非项目自有源码）
 .claude/agents/builtin/
