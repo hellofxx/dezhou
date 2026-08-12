@@ -141,7 +141,9 @@ export function generateDecisionNodes(
   nodes.push({
     id: `node-preflop-${ts}`,
     street: 'preflop',
-    description: `Hero 在 ${position} 面对翻前行动`,
+    description: `Hero ${position} preflop`,
+    descriptionKey: 'gto.nodeDesc.preflop',
+    descriptionParams: { position },
     potSize: preflopPot,
     heroHand,
     gtoStrategy: preflopStrategy,
@@ -155,7 +157,9 @@ export function generateDecisionNodes(
   nodes.push({
     id: `node-flop-${ts}`,
     street: 'flop',
-    description: `翻牌圈，底池 ${flopPot}BB`,
+    description: `Flop pot ${flopPot}BB`,
+    descriptionKey: 'gto.nodeDesc.flop',
+    descriptionParams: { pot: flopPot },
     board: flopBoard,
     potSize: flopPot,
     heroHand,
@@ -172,7 +176,9 @@ export function generateDecisionNodes(
   nodes.push({
     id: `node-turn-${ts}`,
     street: 'turn',
-    description: `转牌圈，底池 ${turnPot}BB`,
+    description: `Turn pot ${turnPot}BB`,
+    descriptionKey: 'gto.nodeDesc.turn',
+    descriptionParams: { pot: turnPot },
     board: turnBoard,
     potSize: turnPot,
     heroHand,
@@ -189,7 +195,9 @@ export function generateDecisionNodes(
   nodes.push({
     id: `node-river-${ts}`,
     street: 'river',
-    description: `河牌圈，底池 ${riverPot}BB`,
+    description: `River pot ${riverPot}BB`,
+    descriptionKey: 'gto.nodeDesc.river',
+    descriptionParams: { pot: riverPot },
     board: riverBoard,
     potSize: riverPot,
     heroHand,

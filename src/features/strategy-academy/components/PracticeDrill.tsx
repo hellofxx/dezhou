@@ -73,12 +73,6 @@ function classifyAction(action: string): string {
   return ACTION_STYLES['Call']!; // 中性兜底（心理类/工具类选项）
 }
 
-const DIFFICULTY_LABELS: Record<QuestionDifficulty, string> = {
-  beginner: '基础',
-  intermediate: '进阶',
-  advanced: '高级',
-};
-
 const DIFFICULTY_COLORS: Record<QuestionDifficulty, string> = {
   beginner: 'text-[var(--success)]',
   intermediate: 'text-[var(--info)]',
@@ -275,14 +269,14 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         difficultyMessageTimerRef.current = setTimeout(() => setDifficultyMessage(null), 4000);
       };
       if (newIndex > currentIndex) {
-        showDifficultyMessage('📈 你的表现很好！接下来的题目会更有挑战性');
+        showDifficultyMessage('academy.difficulty.msgUp');
       } else if (newIndex < currentIndex) {
         if (review.shouldReview) {
           // P3: 降级建议复习 → 常驻提示条（替代 4 秒 toast），点击「返回复习」后由外部跳转对应小节
           setReviewTopics(review.suggestedTopics);
           setDifficultyMessage(null);
         } else {
-          showDifficultyMessage('📉 建议巩固基础，降低难度有助于建立信心');
+          showDifficultyMessage('academy.difficulty.msgDown');
         }
       } else {
         showDifficultyMessage('');
@@ -645,13 +639,13 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             }}
             transition={transitionSlow}
           >
-            {DIFFICULTY_LABELS[questionDifficulty]}
+            {t(`academy.difficulty.${questionDifficulty}`)}
           </motion.span>
         )}
         {/* 压力模式标记 */}
         {isPressure && (
           <span className="inline-flex items-center gap-1 text-xs text-[var(--danger)] font-bold shrink-0">
-            <Zap className="w-3 h-3" /> 压力
+            <Zap className="w-3 h-3" /> {t('academy.drill.pressure')}
           </span>
         )}
       </div>
@@ -666,7 +660,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             className="overflow-hidden"
           >
             <div className="rounded-lg bg-[var(--brass-bright)]/10 border border-[var(--brass-bright)]/30 px-4 py-2.5 text-sm text-[var(--brass-bright)]">
-              {difficultyMessage}
+              {difficultyMessage ? t(difficultyMessage) : ''}
             </div>
           </motion.div>
         )}
@@ -793,11 +787,16 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           {scenario.gameContext && (
             <div className="flex flex-wrap items-center justify-center gap-1.5">
               <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
-                {scenario.gameContext.gameType === 'cash' ? '💰 现金桌' : scenario.gameContext.gameType === 'mtt' ? '🏆 锦标赛' : '🎰 SNG'}
+                {scenario.gameContext.gameType === 'cash'
+                  ? t('academy.gameContext.cash')
+                  : scenario.gameContext.gameType === 'mtt'
+                    ? t('academy.gameContext.mtt')
+                    : t('academy.gameContext.sng')}
               </span>
               {scenario.gameContext.icmPressure && scenario.gameContext.icmPressure !== 'low' && (
                 <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--poker-danger)]/20 text-[var(--poker-danger)]">
-                  ICM压力: {scenario.gameContext.icmPressure === 'high' ? '高' : '中'}
+                  {t('academy.gameContext.icmPressure')}
+                  {scenario.gameContext.icmPressure === 'high' ? t('academy.gameContext.icmHigh') : t('academy.gameContext.icmMedium')}
                 </span>
               )}
               {scenario.gameContext.tableDescription && (
@@ -907,7 +906,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                       selectedOption.evLoss > 0 ? 'text-[var(--danger)]' : 'text-[var(--success)]'
                     )}
                   >
-                    {selectedOption.evLoss > 0 ? '+' : ''}{selectedOption.evLoss.toFixed(1)} BB EV损失
+                    {selectedOption.evLoss > 0 ? '+' : ''}{selectedOption.evLoss.toFixed(1)} {t('academy.drill.evLossBB')}
                   </span>
                 )}
                 {selectedOption.evImpact && (
@@ -929,18 +928,17 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                   onClick={() => navigate(`/academy/lesson/${currentQuestion.relatedLessonId}`)}
                   className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--brass-bright)] underline underline-offset-2 hover:opacity-80 transition-opacity"
                 >
-                  去复习 →
+                  {t('academy.drill.reviewLink')}
                 </button>
               )}
 
               {/* Opponent Strategy Hint */}
               {scenario.opponent && (
                 <p className="text-xs text-[var(--ivory-muted)] mt-2">
-                  📊 提示：面对{scenario.opponent.shortName}类型玩家，{
-                    selectedOption.isCorrect && !isTimedOut
-                      ? '你的决策考虑了对手倾向，很好！'
-                      : `此类对手${scenario.opponent.tendencies[0]}，需要相应调整策略。`
-                  }
+                  {t('academy.drill.opponentHintPrefix', { name: scenario.opponent.shortName })}
+                  {selectedOption.isCorrect && !isTimedOut
+                    ? t('academy.drill.opponentTipCorrect')
+                    : t('academy.drill.opponentHintTemplate', { tendency: scenario.opponent.tendencies[0] })}
                 </p>
               )}
             </div>

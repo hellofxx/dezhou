@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -12,6 +13,7 @@ interface LessonQuizProps {
 }
 
 export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
+  const { t } = useTranslation();
   // 答案位置偏差治理：渲染前重排选项（数值升序 / id 稳定种子洗牌），源数据不变
   const orderedQuestions = useMemo(
     () => questions.map((q) => orderQuizQuestion(q)),
@@ -68,19 +70,19 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
       >
         <div className="text-5xl mb-4">{score >= 70 ? '🎉' : '📚'}</div>
         <h3 className="font-display text-2xl text-[var(--ivory)] mb-2">
-          {score >= 70 ? '测验通过！' : '继续加油！'}
+          {score >= 70 ? t('academy.quiz.passed') : t('academy.quiz.keepGoing')}
         </h3>
         <p className="text-[var(--ivory-dim)] mb-1">
-          答对 {correctCount}/{orderedQuestions.length} 题
+          {t('academy.quiz.answeredCount', { correct: correctCount, total: orderedQuestions.length })}
         </p>
-        <p className="font-numeric text-3xl text-[var(--brass-bright)] mb-6">{score}分</p>
+        <p className="font-numeric text-3xl text-[var(--brass-bright)] mb-6">{t('academy.quiz.score', { score })}</p>
         {score < 70 && (
           <button
             onClick={handleRetry}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/80 transition-colors text-sm"
           >
             <RotateCcw className="w-4 h-4" />
-            重新测验
+            {t('academy.quiz.retry')}
           </button>
         )}
       </motion.div>
@@ -115,7 +117,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
           transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.standard }}
         >
           <p className="text-xs text-[var(--ivory-muted)] mb-2 font-numeric">
-            第 {currentIndex + 1} / {orderedQuestions.length} 题
+            {t('academy.quiz.progress', { current: currentIndex + 1, total: orderedQuestions.length })}
           </p>
           <h3 className="font-display text-[17px] text-[var(--ivory)] mb-5 leading-snug">
             {question.question}
@@ -177,7 +179,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
                   : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
               )}
             >
-              <p className="font-semibold mb-1">{isCorrect ? '✓ 正确！' : '✗ 错误'}</p>
+              <p className="font-semibold mb-1">{isCorrect ? t('academy.quiz.correctMark') : t('academy.quiz.wrongMark')}</p>
               <p>{question.explanation}</p>
             </motion.div>
           )}
@@ -188,7 +190,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
                 onClick={handleNext}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
               >
-                {currentIndex < orderedQuestions.length - 1 ? '下一题' : '查看结果'}
+                {currentIndex < orderedQuestions.length - 1 ? t('academy.quiz.next') : t('academy.quiz.viewResult')}
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

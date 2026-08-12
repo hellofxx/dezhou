@@ -1,4 +1,5 @@
 import { Table2, Hand } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { LessonSection } from '../../types';
 
 interface SectionBlockProps {
@@ -68,11 +69,12 @@ export function DiagramBlock({ section }: SectionBlockProps) {
 
 /** 手牌示例块：content 优先；为空时回退 data.scenario，再回退占位说明 */
 export function HandExampleBlock({ section }: SectionBlockProps) {
+  const { t } = useTranslation();
   const scenario =
     typeof section.data?.scenario === 'string' && section.data.scenario.trim() !== ''
       ? section.data.scenario
       : '';
-  const text = section.content || scenario || '（手牌示例数据待补充）';
+  const text = section.content || scenario || t('academy.content.handExampleFallback');
   return (
     <div className="rounded-lg bg-[var(--felt-deep)] border border-[var(--walnut-border)] p-4 flex items-start gap-3">
       <Hand className="w-5 h-5 text-[var(--brass-bright)] shrink-0 mt-0.5" />

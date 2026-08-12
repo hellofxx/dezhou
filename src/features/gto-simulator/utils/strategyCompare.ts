@@ -1,6 +1,7 @@
 import type { Card } from '@/shared/types/poker';
 import type { Decision } from '@/shared/types/action';
 import { ActionType } from '@/shared/types/action';
+import i18n from '@/i18n/config';
 import type { HandStrategy, Scenario } from '../types';
 import { getOpponentProfile } from '@/features/strategy-academy/data/opponentProfiles';
 // P1C-10：isOptimal 边界与五级反馈阈值统一（只读引用 shared 常量，不修改 shared）
@@ -295,15 +296,22 @@ export interface CompareResult {
   heroEquity: number;
 }
 
+/** i18n t 函数签名（说明文案生成时按当前语言翻译） */
+type TranslateFn = (key: string, params?: Record<string, unknown>) => string;
+
 /**
  * 比较用户决策与 GTO 最优策略（含真实 EV 计算）
+ *
+ * explanation 按当前语言生成（经 t 翻译，缺省用全局 i18n 实例）。
+ * 说明：该文案为即时反馈、不持久化，语言切换后新答题即用新语言生成。
  */
 export function compareDecision(
   userAction: Decision,
   gtoStrategy: HandStrategy,
   potSize: number,
   heroEquity: number = 0.5,
-  callAmount: number = 1
+  callAmount: number = 1,
+  t: TranslateFn = (key, params) => i18n.t(key, params)
 ): CompareResult {
   const { userEV, optimalEV, evLoss } = computeDecisionEVs(
     userAction.action, userAction.amount, gtoStrategy, heroEquity, potSize, callAmount
@@ -313,7 +321,7 @@ export function compareDecision(
   // （calculateGrade 中 0.5 归 inaccuracy，此处同口径用严格小于）
   const isOptimal = evLoss < GRADE_THRESHOLDS.correct;
   const optimal = getOptimalAction(gtoStrategy);
-  const explanation = generateExplanation(userAction, gtoStrategy, optimal, isOptimal, evLoss);
+  const explanation = generateExplanation(userAction, gtoStrategy, optimal, isOptimal, evLoss, t);
 
   return { isOptimal, evLoss, explanation, userEV, optimalEV, heroEquity };
 }
@@ -340,16 +348,24 @@ function generateExplanation(
   gtoStrategy: HandStrategy,
   optimal: Decision,
   isOptimal: boolean,
-  evLoss: number
+  evLoss: number,
+  t: TranslateFn
 ): string {
   if (isOptimal) {
-    return `好的决策！GTO 建议这里以较高频率 ${actionLabel(optimal.action)}，EV 损失仅 ${evLoss.toFixed(2)} BB。`;
+    return t('gto.feedback.explanationOptimal', {
+      action: actionLabel(optimal.action),
+      evLoss: evLoss.toFixed(2),
+    });
   }
   const parts: string[] = [];
   if (gtoStrategy.raise > 0) parts.push(`${Math.round(gtoStrategy.raise * 100)}% raise`);
   if (gtoStrategy.call > 0) parts.push(`${Math.round(gtoStrategy.call * 100)}% call`);
   if (gtoStrategy.fold > 0) parts.push(`${Math.round(gtoStrategy.fold * 100)}% fold`);
-  return `GTO 建议这里 ${parts.join(', ')}。你选择了 ${actionLabel(userAction.action)}，EV 损失 ${evLoss.toFixed(2)} BB。`;
+  return t('gto.feedback.explanationMixed', {
+    parts: parts.join(', '),
+    userAction: actionLabel(userAction.action),
+    evLoss: evLoss.toFixed(2),
+  });
 }
 
 function actionLabel(action: ActionType): string {

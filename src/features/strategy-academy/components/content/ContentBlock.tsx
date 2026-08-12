@@ -1,4 +1,5 @@
 import { AlertTriangle, KeyRound, Lightbulb, type LucideIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { LessonSection } from '../../types';
 import { FormulaBlock, AsciiMonoText } from './FormulaBlock';
 import { TheoryReferenceBlock } from './TheoryReferenceBlock';
@@ -14,6 +15,7 @@ interface ContentBlockProps {
  * 正文 text-sm text-[var(--ivory-dim)] leading-relaxed。
  */
 export function ContentBlock({ section }: ContentBlockProps) {
+  const { t } = useTranslation();
   switch (section.type) {
     case 'heading':
       return (
@@ -47,7 +49,7 @@ export function ContentBlock({ section }: ContentBlockProps) {
         <LabeledBlock
           icon={KeyRound}
           iconClass="text-[var(--poker-success)]"
-          label="关键要点"
+          label={t('academy.content.keyPoint')}
           labelClass="text-[var(--poker-success)]"
           wrapClass="border border-[var(--poker-success)]/30 bg-[var(--poker-success-bg)]"
           content={section.content}
@@ -59,7 +61,7 @@ export function ContentBlock({ section }: ContentBlockProps) {
         <LabeledBlock
           icon={Lightbulb}
           iconClass="text-[var(--brass-bright)]"
-          label="职业牌手说"
+          label={t('academy.content.proTip')}
           labelClass="text-[var(--brass-bright)] uppercase tracking-wider"
           wrapClass="border border-[var(--brass)]/40 bg-[var(--brass)]/5"
           content={section.content}
@@ -71,7 +73,7 @@ export function ContentBlock({ section }: ContentBlockProps) {
         <LabeledBlock
           icon={Lightbulb}
           iconClass="text-[var(--poker-terra-bright)]"
-          label="反直觉点"
+          label={t('academy.content.counterIntuitive')}
           labelClass="text-[var(--poker-terra-bright)]"
           wrapClass="border border-[var(--poker-terra)]/40 bg-[var(--poker-terra)]/15"
           content={section.content}

@@ -486,7 +486,7 @@ export default function QuickDrill() {
 
           {/* Question count */}
           <div className="text-xs text-[var(--ivory-dim)]">
-            {t('quickDrill.questionCount', { defaultValue: '本次速训' })}：
+            {t('quickDrill.questionCount', { defaultValue: '本次速训：' })}
             <span className="font-numeric text-[var(--ivory)]">
               {Math.min(drillQuestions.length, questionCount)}
             </span>{' '}

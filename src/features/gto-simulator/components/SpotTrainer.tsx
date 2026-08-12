@@ -26,12 +26,12 @@ export function SpotTrainer({ onClose }: SpotTrainerProps) {
     <div className="space-y-6">
       {/* 头部 */}
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-lg font-bold tracking-wide text-[var(--ivory)]">Spot 练习</h2>
+        <h2 className="font-display text-lg font-bold tracking-wide text-[var(--ivory)]">{t('gto.spot.practiceTitle')}</h2>
         <button
           onClick={onClose}
           className="text-sm text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors"
         >
-          ← 返回
+          {t('gto.spot.back')}
         </button>
       </div>
 
@@ -102,15 +102,15 @@ export function SpotTrainer({ onClose }: SpotTrainerProps) {
 
           {selectedStrategy.raiseAmount && (
             <div className="text-sm text-[var(--ivory-dim)]">
-              加注大小: <span className="text-[var(--brass-bright)] font-bold font-numeric">{selectedStrategy.raiseAmount} BB</span>
+              {t('gto.spot.raiseSize')}<span className="text-[var(--brass-bright)] font-bold font-numeric">{selectedStrategy.raiseAmount} BB</span>
             </div>
           )}
 
           <div className="text-xs text-[var(--ivory-muted)]">
-            {selectedStrategy.raise >= 0.95 && '纯 Raise - 这是一个必须加注的手牌'}
-            {selectedStrategy.raise > 0 && selectedStrategy.raise < 0.95 && selectedStrategy.fold > 0 && '混合策略 - GTO 建议随机化'}
-            {selectedStrategy.fold >= 0.95 && '纯 Fold - 这手牌太弱，应该弃牌'}
-            {selectedStrategy.call >= 0.95 && '纯 Call - 这里应该跟注'}
+            {selectedStrategy.raise >= 0.95 && t('gto.spot.descPureRaise')}
+            {selectedStrategy.raise > 0 && selectedStrategy.raise < 0.95 && selectedStrategy.fold > 0 && t('gto.spot.descMixed')}
+            {selectedStrategy.fold >= 0.95 && t('gto.spot.descPureFold')}
+            {selectedStrategy.call >= 0.95 && t('gto.spot.descPureCall')}
           </div>
         </div>
       )}

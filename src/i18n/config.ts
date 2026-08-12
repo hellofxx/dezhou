@@ -60,6 +60,13 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
+  react: {
+    // 关键修复：语言切换时 preload.ts 异步补加载 feature 翻译模块，
+    // addResourceBundle 注入完成后 store 会 emit 'added'；默认 bindI18nStore 为空不订阅，
+    // 导致懒加载模块文案滞留 fallback 语言直到下一次任意渲染（"部分内容滞后更新"根因）。
+    // 订阅 store 的 added/removed 事件，资源注入即触发所有 useTranslation 组件重渲染。
+    bindI18nStore: 'added removed',
+  },
 });
 
 export default i18n;

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import i18n from '@/i18n/config';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HandHistory, ReplayState, HandFilter } from './types';
@@ -111,19 +110,26 @@ async function dbClear(): Promise<void> {
   });
 }
 
-function classifyDBError(err: unknown): string {
+/**
+ * IndexedDB 错误类型标识（存 key 而非翻译字符串——UI 渲染时经
+ * t(`handHistory.dbError.${type}`) 翻译，语言切换后错误提示自动刷新）。
+ * 与 src/i18n/locales/{zh,en}/handHistory.json 的 dbError.* 一一对应。
+ */
+export type DBErrorType = 'quotaExceeded' | 'unavailable' | 'generic';
+
+function classifyDBError(err: unknown): DBErrorType {
   const msg = err instanceof DOMException ? err.message : '';
   const name = err instanceof DOMException ? err.name : '';
   if (name === 'QuotaExceededError' || msg.includes('quota')) {
-    return i18n.t('handHistory.dbError.quotaExceeded');
+    return 'quotaExceeded';
   }
   if (name === 'InvalidStateError' || name === 'AbortError') {
-    return i18n.t('handHistory.dbError.unavailable');
+    return 'unavailable';
   }
   if (err instanceof TypeError || name === 'SecurityError') {
-    return i18n.t('handHistory.dbError.unavailable');
+    return 'unavailable';
   }
-  return i18n.t('handHistory.dbError.generic');
+  return 'generic';
 }
 
 // ─── Store ────────────────────────────────────────────────
@@ -133,7 +139,7 @@ interface HandHistoryStore {
   replayState: ReplayState;
   filter: HandFilter;
   loaded: boolean;
-  dbError: string | null;
+  dbError: DBErrorType | null;
 
   // Data management
   loadFromDB: () => Promise<void>;

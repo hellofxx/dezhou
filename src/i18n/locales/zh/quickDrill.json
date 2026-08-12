@@ -11,7 +11,7 @@
   "adaptiveDifficulty": "自适应难度",
   "weakAreasHint": "将优先从你的薄弱领域抽取题目",
   "modeHint": "当前模式：{{mode}}，已完成今日训练将自动计入连续天数",
-  "questionCount": "本次速训",
+  "questionCount": "本次速训：",
   "questions": "道题目",
   "start": "开始速训",
   "noQuestions": "暂无可用题目",

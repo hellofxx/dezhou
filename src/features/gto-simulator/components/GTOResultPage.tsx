@@ -52,19 +52,23 @@ export default function GTOResultPage() {
 
   return (
     <ResultSummary
-      title="训练完成！"
-      subtitle={`${lastResult.scenarios} 个场景 · ${config.position} · ${config.effectiveStack}BB`}
+      title={t('gto.session.done')}
+      subtitle={t('gto.result.subtitleDetail', {
+        count: lastResult.scenarios,
+        position: config.position,
+        stack: config.effectiveStack,
+      })}
       accuracy={lastResult.accuracy}
       stats={[
-        { icon: <Target className="w-4 h-4" />, label: '总场景数', value: `${lastResult.scenarios}` },
-        { icon: <span className="text-[var(--sage)] text-sm font-bold">✓</span>, label: '最优决策', value: `${lastResult.optimalDecisions}` },
-        { icon: <span className="text-[var(--clay)] text-sm font-bold">✗</span>, label: '非最优', value: `${lastResult.scenarios - lastResult.optimalDecisions}` },
-        { icon: <Clock className="w-4 h-4" />, label: '平均用时', value: `${avgTimePerDecision}s` },
+        { icon: <Target className="w-4 h-4" />, label: t('gto.result.statTotalScenarios'), value: `${lastResult.scenarios}` },
+        { icon: <span className="text-[var(--sage)] text-sm font-bold">✓</span>, label: t('gto.result.statOptimal'), value: `${lastResult.optimalDecisions}` },
+        { icon: <span className="text-[var(--clay)] text-sm font-bold">✗</span>, label: t('gto.result.statNonOptimal'), value: `${lastResult.scenarios - lastResult.optimalDecisions}` },
+        { icon: <Clock className="w-4 h-4" />, label: t('gto.result.statAvgTime'), value: `${avgTimePerDecision}s` },
       ]}
       onRetry={() => navigate('/gto-simulator')}
       onBack={() => navigate('/gto-simulator')}
-      retryLabel="再练一次"
-      backLabel="返回首页"
+      retryLabel={t('gto.result.retry')}
+      backLabel={t('gto.result.backHome')}
     >
       {/* EV Loss highlight */}
       <motion.div
@@ -74,7 +78,7 @@ export default function GTOResultPage() {
         className="flex items-center justify-center gap-2 p-3 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)]"
       >
         <TrendingDown className="w-4 h-4 text-[var(--brass-bright)]" />
-        <span className="text-sm text-[var(--ivory-dim)]">EV 损失率：</span>
+        <span className="text-sm text-[var(--ivory-dim)]">{t('gto.result.evLossRate')}</span>
         <span className="font-bold font-numeric text-[var(--brass-bright)]">{lastResult.evLossBB100.toFixed(1)} BB/100</span>
       </motion.div>
 
@@ -89,7 +93,7 @@ export default function GTOResultPage() {
             <CardHeader className="pb-2">
               <CardTitle className="font-display text-[17px] text-[var(--ivory)] flex items-center gap-2 tracking-wide">
                 <AlertTriangle className="w-4 h-4 text-[var(--brass-bright)]" />
-                最需要改进的 Spots
+                {t('gto.result.worstSpots')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -122,13 +126,15 @@ export default function GTOResultPage() {
         className="space-y-3"
       >
         <h2 className="font-display text-sm font-semibold text-[var(--ivory-dim)] tracking-wide">
-          {sessionSpotKey ? `${config.position} GTO 策略矩阵 (${sessionSpotKey})` : `${config.position} GTO 策略矩阵`}
+          {sessionSpotKey
+            ? t('gto.result.matrixTitleWithSpot', { position: config.position, spot: sessionSpotKey })
+            : t('gto.result.matrixTitle', { position: config.position })}
         </h2>
         {allStrategies ? (
           <StrategyMatrix strategies={allStrategies} />
         ) : (
           <div className="p-4 text-center text-sm text-[var(--ivory-muted)] border border-dashed border-[var(--walnut-border)] rounded-lg">
-            该 spot 无 GTO 数据
+            {t('gto.result.noSpotData')}
           </div>
         )}
       </motion.div>

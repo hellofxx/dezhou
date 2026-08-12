@@ -67,7 +67,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
   if (TOTAL === 0) {
     return (
       <div className="text-center py-8 text-[var(--ivory-muted)]">
-        暂无题目数据
+        {t('drills.common.noQuestions')}
       </div>
     );
   }
@@ -80,7 +80,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
       <div className="text-center py-8">
         <Trophy className="w-14 h-14 text-[var(--brass-bright)] mx-auto mb-4" />
         <h3 className="font-display text-2xl text-[var(--ivory)] mb-6">
-          训练完成！
+          {t('drills.common.complete')}
         </h3>
         <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
@@ -90,13 +90,13 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
             <p className="font-numeric text-3xl text-[var(--ivory)]">{seconds}s</p>
             <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Clock className="w-3 h-3" /> 用时
+              <Clock className="w-3 h-3" /> {t('drills.common.timeLabel')}
             </p>
           </div>
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
             <p className="font-numeric text-3xl text-[var(--ivory)]">{correctCount}/{TOTAL}</p>
             <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Target className="w-3 h-3" /> 答对
+              <Target className="w-3 h-3" /> {t('academy.drill.correctCount')}
             </p>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
           onClick={handleFinish}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
         >
-          完成
+          {t('drills.common.finishBtn')}
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
@@ -121,7 +121,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
           className="inline-flex items-center gap-1 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors shrink-0"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          退出
+          {t('drills.common.exit')}
         </button>
         <div className="flex-1 h-1.5 rounded-full bg-[var(--walnut-raised)] overflow-hidden">
           <div
@@ -134,7 +134,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
         </span>
         {currentIndex > 0 && (
           <span className="text-xs text-[var(--success)] shrink-0">
-            正确率 {Math.round((correctCount / currentIndex) * 100)}%
+            {t('academy.drill.accuracy')} {Math.round((correctCount / currentIndex) * 100)}%
           </span>
         )}
       </div>
@@ -242,7 +242,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
                 <span className="text-sm font-bold text-[var(--danger)]">{t('academy.drill.incorrect')}</span>
                 {current.options.find(o => o.isCorrect) && (
                   <span className="text-xs text-[var(--ivory-muted)] ml-2">
-                    正确答案：{current.options.find(o => o.isCorrect)!.text}
+                    {t('drills.common.correctAnswerPrefix', { answer: current.options.find(o => o.isCorrect)!.text })}
                   </span>
                 )}
               </>
@@ -256,7 +256,7 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
               onClick={handleNext}
               className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
             >
-              {currentIndex + 1 >= TOTAL ? '查看成绩' : '下一题'}
+              {currentIndex + 1 >= TOTAL ? t('academy.drill.viewScore') : t('drills.common.next')}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

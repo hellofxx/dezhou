@@ -48,6 +48,7 @@ import { APP_VERSION } from '@/shared/constants/app';
 import type { TrainingRecord } from '../../types';
 import { GameVariantSelector } from '@/shared/components/business/GameVariantSelector';
 import { useTranslation } from 'react-i18next';
+import { switchLanguage } from '@/i18n/preload';
 import { MENTOR_PROFILES } from '@/shared/types/mentor';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { cn } from '@/shared/utils/cn';
@@ -55,7 +56,7 @@ import { MOTION_DURATION, staggerContainer, staggerItem, transitionStandard } fr
 import SettingsNav from './SettingsNav';
 
 export default function SettingsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const settings = useProgressStore((s) => s.settings);
   const updateSettings = useProgressStore((s) => s.updateSettings);
@@ -242,7 +243,8 @@ export default function SettingsPage() {
                     const lang = v as 'zh' | 'en';
                     // 语言偏好事实源：progress store settings.language（persist），同步切换 i18n 实例
                     updateSettings({ language: lang });
-                    i18n.changeLanguage(lang);
+                    // 预加载目标语言资源后再切换，避免"先 fallback 后跳变"闪烁
+                    void switchLanguage(lang);
                   }}
                 >
                   <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">

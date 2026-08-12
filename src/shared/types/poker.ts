@@ -83,7 +83,6 @@ export type GameVariant = 'standard' | 'short-deck' | 'heads-up';
 // 游戏变体配置
 export interface GameVariantConfig {
   variant: GameVariant;
-  displayName: string;           // "标准德州" / "短牌德州" / "单挑"
   deckSize: number;              // 52 / 36 / 52
   minPlayers: number;            // 2 / 2 / 2
   maxPlayers: number;            // 9 / 6 / 2

@@ -88,7 +88,6 @@ export const SHORT_DECK_TOTAL_HANDS = 81;
 export const GAME_VARIANT_CONFIGS: Record<GameVariant, GameVariantConfig> = {
   'standard': {
     variant: 'standard',
-    displayName: '标准德州',
     deckSize: 52,
     minPlayers: 2,
     maxPlayers: 9,
@@ -98,7 +97,6 @@ export const GAME_VARIANT_CONFIGS: Record<GameVariant, GameVariantConfig> = {
   },
   'short-deck': {
     variant: 'short-deck',
-    displayName: '短牌德州 (6+)',
     deckSize: 36,
     minPlayers: 2,
     maxPlayers: 6,
@@ -108,7 +106,6 @@ export const GAME_VARIANT_CONFIGS: Record<GameVariant, GameVariantConfig> = {
   },
   'heads-up': {
     variant: 'heads-up',
-    displayName: '单挑德州',
     deckSize: 52,
     minPlayers: 2,
     maxPlayers: 2,

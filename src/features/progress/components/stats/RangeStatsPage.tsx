@@ -1,5 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import ModuleStatsPage from '../dashboard/ModuleStatsPage';
 
 export default function RangeStatsPage() {
-  return <ModuleStatsPage moduleName="range-trainer" displayName="手牌范围训练" />;
+  const { t } = useTranslation();
+  return <ModuleStatsPage moduleName="range-trainer" displayName={t('nav.rangeTrainer')} />;
 }

@@ -1568,6 +1568,8 @@ manualChunks(id) {
 | `poker-debug-mode` | 调试解锁状态 | Zustand persist（debugMode store） |
 
 > 语言切换通过顶部导航的 `i18n.changeLanguage` 实现（未接入 LanguageDetector，默认 zh）；用户语言偏好字段 `settings.language` 随 progress store 持久化。
+>
+> 语言切换重渲染机制：core 模块（zh/en 静态同置内存）经 `languageChanged` 事件即时切换；feature 懒加载模块由 `preload.ts` 的 `languageChanged` 监听器异步补加载目标语言资源，`config.ts` 配置 `react.bindI18nStore: 'added removed'`，使 `addResourceBundle` 注入完成后触发所有 `useTranslation` 组件重渲染（默认值不订阅 store 事件会导致文案滞留 fallback 语言直至下次任意渲染）。
 
 ### 9.2 IndexedDB
 

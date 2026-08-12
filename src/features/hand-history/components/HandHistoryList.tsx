@@ -5,7 +5,7 @@ import { useHandHistoryStore } from '../store';
 import { formatDate } from '../utils/handNotation';
 import { calculateHeroStats } from '../utils/handStats';
 import { HandStatsPanel } from './HandStatsPanel';
-import { Trash2, Upload, Search, BarChart3, List } from 'lucide-react';
+import { Trash2, Upload, Search, BarChart3, List, AlertCircle } from 'lucide-react';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 
 const MIN_HANDS_FOR_STATS = 20;
@@ -13,7 +13,7 @@ const MIN_HANDS_FOR_STATS = 20;
 export default function HandHistoryList() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { hands, filter, setFilter, getFilteredHands, deleteHand, clearAll, loaded, loadFromDB } = useHandHistoryStore();
+  const { hands, filter, setFilter, getFilteredHands, deleteHand, clearAll, loaded, loadFromDB, dbError } = useHandHistoryStore();
   const [confirmClear, setConfirmClear] = useState(false);
   const [activeTab, setActiveTab] = useState<'list' | 'stats'>('list');
   const [heroName, setHeroName] = useState('');
@@ -72,6 +72,14 @@ export default function HandHistoryList() {
           )}
         </div>
       </div>
+
+      {/* IndexedDB 错误提示：dbError 存类型 key，渲染时翻译（语言切换自动刷新） */}
+      {dbError && (
+        <div className="mb-6 flex items-start gap-2 rounded-lg border border-[var(--clay)]/40 bg-[var(--clay)]/10 px-4 py-3 text-sm text-[var(--clay)]">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" />
+          <span>{t(`handHistory.dbError.${dbError}`)}</span>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex items-center gap-2 mb-6">

@@ -103,21 +103,23 @@ export default function LevelCertification() {
         >
           <div className="text-6xl mb-4">{passed ? '🎉' : '📚'}</div>
           <h2 className="font-display text-2xl text-[var(--ivory)] mb-2">
-            {passed ? `Level ${level} 认证通过！` : '再接再厉！'}
+            {passed ? t('academy.levelCertification.passedTitle', { level }) : t('academy.levelCertification.keepGoing')}
           </h2>
           <p className="text-[var(--ivory-dim)] mb-1">
-            答对 {correctCount}/{allQuestions.length} 题
+            {t('academy.quiz.answeredCount', { correct: correctCount, total: allQuestions.length })}
           </p>
-          <p className="font-numeric text-4xl text-[var(--brass-bright)] mb-2">{score}分</p>
+          <p className="font-numeric text-4xl text-[var(--brass-bright)] mb-2">{t('academy.quiz.score', { score })}</p>
           <p className="text-xs text-[var(--ivory-muted)] mb-6">
-            {passed ? '恭喜！你已掌握本级别核心知识' : `需要 ${requiredAccuracy}% 以上才能通过`}
+            {passed
+              ? t('academy.levelCertification.passedHint')
+              : t('academy.levelCertification.needAccuracy', { required: requiredAccuracy })}
           </p>
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={() => navigate('/academy')}
               className="px-5 py-2.5 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80"
             >
-              返回学院
+              {t('academy.levelCertification.backToAcademy')}
             </button>
             {!passed && (
               <button
@@ -125,7 +127,7 @@ export default function LevelCertification() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90"
               >
                 <RotateCcw className="w-4 h-4" />
-                重新挑战
+                {t('academy.levelCertification.retry')}
               </button>
             )}
           </div>
@@ -152,7 +154,7 @@ export default function LevelCertification() {
               className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              返回策略学院
+              {t('academy.conceptGraph.backToAcademy')}
             </button>
 
             <div className="flex items-center gap-4 mb-6">
@@ -161,7 +163,7 @@ export default function LevelCertification() {
               </div>
               <div>
                 <h1 className="font-display text-2xl text-[var(--ivory)]">
-                  Level {level} 认证测验
+                  {t('academy.levelCertification.title', { level })}
                 </h1>
                 <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
                   {levelEntries.map((e) => e.title).join(' · ')}
@@ -173,22 +175,27 @@ export default function LevelCertification() {
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
                 <span className="w-2 h-2 rounded-full bg-[var(--brass-bright)]" />
-                题目数量：{allQuestions.length} 题（从本级别所有课程测验中抽取）
+                {t('academy.levelCertification.questionCount', { count: allQuestions.length })}
               </div>
               <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
                 <span className="w-2 h-2 rounded-full bg-[var(--brass-bright)]" />
-                通过标准：正确率 ≥ {requiredAccuracy}%
+                {t('academy.levelCertification.passStandard', { required: requiredAccuracy })}
               </div>
               {certification && (
                 <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
                   <span className="w-2 h-2 rounded-full bg-[var(--info)]" />
-                  历史尝试：{certification.attempts} 次 · 最高分 {certification.bestScore ?? 0}%
+                  {t('academy.levelCertification.attemptHistory', {
+                    attempts: certification.attempts,
+                    best: certification.bestScore ?? 0,
+                  })}
                 </div>
               )}
               {isCertified && (
                 <div className="flex items-center gap-2 text-xs text-[var(--poker-success)]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  已通过认证（{new Date(certification!.certifiedAt!).toLocaleDateString()}）
+                  {t('academy.levelCertification.passedOn', {
+                    date: new Date(certification!.certifiedAt!).toLocaleDateString(),
+                  })}
                 </div>
               )}
             </div>
@@ -196,7 +203,7 @@ export default function LevelCertification() {
             {/* Prerequisites check */}
             {!allCompleted && (
               <div className="rounded-lg bg-[var(--warning)]/10 border border-[var(--warning)]/30 p-3 mb-6 text-xs text-[var(--warning)]">
-                建议先完成本级别所有课程再参加认证测验（当前进度：{levelProgress}/{mergedLessons.length}）
+                {t('academy.levelCertification.prereqHint', { progress: levelProgress, total: mergedLessons.length })}
               </div>
             )}
 
@@ -205,7 +212,7 @@ export default function LevelCertification() {
               disabled={allQuestions.length === 0}
               className="w-full py-3 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 disabled:opacity-50"
             >
-              {isCertified ? '重新挑战' : '开始认证'}
+              {isCertified ? t('academy.levelCertification.retry') : t('academy.levelCertification.start')}
             </button>
           </motion.section>
         </div>
@@ -234,7 +241,7 @@ export default function LevelCertification() {
         </div>
 
         <p className="text-xs text-[var(--ivory-muted)] mb-2 font-numeric">
-          第 {currentIndex + 1} / {allQuestions.length} 题
+          {t('academy.quiz.progress', { current: currentIndex + 1, total: allQuestions.length })}
         </p>
         <h3 className="font-display text-[17px] text-[var(--ivory)] mb-5 leading-snug">
           {question.question}
@@ -279,7 +286,7 @@ export default function LevelCertification() {
               isCorrect ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90' : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
             )}
           >
-            <p className="font-semibold mb-1">{isCorrect ? '✓ 正确！' : '✗ 错误'}</p>
+            <p className="font-semibold mb-1">{isCorrect ? t('academy.quiz.correctMark') : t('academy.quiz.wrongMark')}</p>
             <p>{question.explanation}</p>
           </motion.div>
         )}
@@ -290,7 +297,7 @@ export default function LevelCertification() {
               onClick={handleNext}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90"
             >
-              {currentIndex < allQuestions.length - 1 ? '下一题' : '查看结果'}
+              {currentIndex < allQuestions.length - 1 ? t('academy.quiz.next') : t('academy.quiz.viewResult')}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

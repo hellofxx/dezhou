@@ -43,7 +43,7 @@ export function HandExampleComponent({
       {/* Title 行：序号徽章 + 标题 + 黄铜发线 */}
       <div className="flex items-center gap-3">
         <span className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded bg-[var(--brass)]/15 text-[var(--brass-bright)] border border-[var(--brass)]/30 font-numeric">
-          示例 {index + 1}
+          {t('academy.content.exampleLabel', { n: index + 1 })}
         </span>
         <h3 className="font-display text-[16px] text-[var(--ivory)] tracking-wide">
           {example.title}
@@ -75,16 +75,21 @@ export function HandExampleComponent({
       {example.gameContext && (
         <div className="flex flex-wrap gap-2 items-center">
           <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-indigo)]/25 text-[var(--poker-indigo-bright)]">
-            {example.gameContext.gameType === 'cash' ? '💰 现金桌' : example.gameContext.gameType === 'mtt' ? '🏆 锦标赛' : '🎰 SNG'}
+            {example.gameContext.gameType === 'cash'
+              ? t('academy.gameContext.cash')
+              : example.gameContext.gameType === 'mtt'
+                ? t('academy.gameContext.mtt')
+                : t('academy.gameContext.sng')}
           </span>
           {example.gameContext.icmPressure && example.gameContext.icmPressure !== 'low' && (
             <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-danger)]/20 text-[var(--poker-danger)]">
-              ICM压力: {example.gameContext.icmPressure === 'high' ? '高' : '中'}
+              {t('academy.gameContext.icmPressure')}
+              {example.gameContext.icmPressure === 'high' ? t('academy.gameContext.icmHigh') : t('academy.gameContext.icmMedium')}
             </span>
           )}
           {example.gameContext.bubbleFactor && (
             <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-terra)]/25 text-[var(--poker-terra-bright)]">
-              🫧 泡沫期
+              {t('academy.gameContext.bubble')}
             </span>
           )}
           {example.gameContext.tableDescription && (

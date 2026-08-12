@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { PAGE_TRANSITION } from '@/shared/utils/motion';
 import { APP_NAME, APP_VERSION } from '@/shared/constants/app';
+import { switchLanguage } from '@/i18n/preload';
 import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
 import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 // P2-5.3: 全局 Tilt 提示组件（监听连续答错数）
@@ -51,6 +52,7 @@ interface NavGroup {
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const [switching, setSwitching] = useState(false);
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const currentStreak = useProgressStore((s) => s.streak.currentStreak);
@@ -191,11 +193,18 @@ export default function AppLayout() {
     prefixTitles.find(([prefix]) => location.pathname.startsWith(`${prefix}/`))?.[1] ??
     APP_NAME;
 
-  const toggleLanguage = () => {
+  const toggleLanguage = async () => {
+    if (switching) return;
     const next = i18n.language === 'zh' ? 'en' : 'zh';
-    i18n.changeLanguage(next);
-    // 语言偏好事实源：progress store settings.language，顶栏切换同步写入以便跨刷新恢复
-    useProgressStore.getState().updateSettings({ language: next });
+    setSwitching(true);
+    try {
+      // 预加载目标语言资源后再切换，消除"先 fallback 后跳变"闪烁
+      await switchLanguage(next);
+      // 语言偏好事实源：progress store settings.language，顶栏切换同步写入以便跨刷新恢复
+      useProgressStore.getState().updateSettings({ language: next });
+    } finally {
+      setSwitching(false);
+    }
   };
 
   return (
@@ -267,10 +276,11 @@ export default function AppLayout() {
               </div>
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] hover:bg-[var(--walnut-light)] transition-colors"
+                disabled={switching}
+                className="flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] hover:bg-[var(--walnut-light)] transition-colors disabled:opacity-50"
                 aria-label={t('nav.toggleLanguage')}
               >
-                <Globe size={14} />
+                <Globe size={14} className={cn('transition-transform', switching && 'animate-spin')} />
                 <span className="font-numeric">{i18n.language === 'zh' ? 'EN' : '中'}</span>
               </button>
             </div>
@@ -278,10 +288,11 @@ export default function AppLayout() {
             <div className="text-center">
               <button
                 onClick={toggleLanguage}
-                className="flex items-center justify-center w-full py-1 text-[10px] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
+                disabled={switching}
+                className="flex items-center justify-center w-full py-1 text-[10px] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors disabled:opacity-50"
                 aria-label={t('nav.toggleLanguage')}
               >
-                <Globe size={14} />
+                <Globe size={14} className={cn('transition-transform', switching && 'animate-spin')} />
               </button>
               <p className="text-[10px] text-[var(--ivory-dim)] font-numeric">v{APP_VERSION}</p>
             </div>
@@ -308,10 +319,11 @@ export default function AppLayout() {
           {/* Mobile language toggle */}
           <button
             onClick={toggleLanguage}
+            disabled={switching}
             aria-label={t('nav.toggleLanguage')}
-            className="md:hidden flex items-center justify-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
+            className="md:hidden flex items-center justify-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors disabled:opacity-50"
           >
-            <Globe size={14} />
+            <Globe size={14} className={cn('transition-transform', switching && 'animate-spin')} />
             <span className="font-numeric">{i18n.language === 'zh' ? 'EN' : '中'}</span>
           </button>
           {/* Mobile help button */}

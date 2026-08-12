@@ -47,6 +47,18 @@
   "correct": "正确",
   "wrong": "错误",
   "avgTime": "平均用时",
+  "quiz": {
+    "passed": "测验通过！",
+    "keepGoing": "继续加油！",
+    "answeredCount": "答对 {{correct}}/{{total}} 题",
+    "score": "{{score}}分",
+    "retry": "重新测验",
+    "progress": "第 {{current}} / {{total}} 题",
+    "correctMark": "✓ 正确！",
+    "wrongMark": "✗ 错误",
+    "next": "下一题",
+    "viewResult": "查看结果"
+  },
   "pathBanner": {
     "title": "本土低级别盈利路径",
     "subtitle": "{{modules}} 模块 {{lessons}} 课 · 预计 {{hours}} 小时 · 当前进度 {{progress}}%",
@@ -379,7 +391,19 @@
   },
   "levelCertification": {
     "levelNotFound": "级别未找到",
-    "backToAcademy": "返回学院"
+    "backToAcademy": "返回学院",
+    "title": "Level {{level}} 认证测验",
+    "questionCount": "题目数量：{{count}} 题（从本级别所有课程测验中抽取）",
+    "passStandard": "通过标准：正确率 ≥ {{required}}%",
+    "attemptHistory": "历史尝试：{{attempts}} 次 · 最高分 {{best}}%",
+    "passedOn": "已通过认证（{{date}}）",
+    "prereqHint": "建议先完成本级别所有课程再参加认证测验（当前进度：{{progress}}/{{total}}）",
+    "start": "开始认证",
+    "retry": "重新挑战",
+    "passedTitle": "Level {{level}} 认证通过！",
+    "keepGoing": "再接再厉！",
+    "passedHint": "恭喜！你已掌握本级别核心知识",
+    "needAccuracy": "需要 {{required}}% 以上才能通过"
   },
   "mdf": {
     "tabDerivation": "MDF 推导过程",
@@ -425,7 +449,28 @@
     "evLabel": "期望值 (EV)：",
     "breakevenLabel": "盈亏平衡点："
   },
+  "difficulty": {
+    "beginner": "基础",
+    "intermediate": "进阶",
+    "advanced": "高级",
+    "msgUp": "📈 你的表现很好！接下来的题目会更有挑战性",
+    "msgDown": "📉 建议巩固基础，降低难度有助于建立信心"
+  },
+  "gameContext": {
+    "cash": "💰 现金桌",
+    "mtt": "🏆 锦标赛",
+    "sng": "🎰 SNG",
+    "icmPressure": "ICM压力: ",
+    "icmHigh": "高",
+    "icmMedium": "中",
+    "bubble": "🫧 泡沫期"
+  },
   "content": {
+    "keyPoint": "关键要点",
+    "proTip": "职业牌手说",
+    "counterIntuitive": "反直觉点",
+    "handExampleFallback": "（手牌示例数据待补充）",
+    "exampleLabel": "示例 {{n}}",
     "formula": "公式推导",
     "theoryReference": "理论支撑",
     "handExample": {
@@ -459,7 +504,12 @@
     "pressureCompletedTitle": "压力测试完成！",
     "nextQuestion": "下一题",
     "viewScore": "查看成绩",
-    "opponentHintTemplate": "此类对手{{tendency}}，需要相应调整策略。"
+    "opponentHintTemplate": "此类对手{{tendency}}，需要相应调整策略。",
+    "opponentHintPrefix": "📊 提示：面对{{name}}类型玩家，",
+    "opponentTipCorrect": "你的决策考虑了对手倾向，很好！",
+    "pressure": "压力",
+    "evLossBB": "BB EV损失",
+    "reviewLink": "去复习 →"
   },
   "basicsIntro": {
     "title": "德州扑克基础入门",

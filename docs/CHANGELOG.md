@@ -8,6 +8,26 @@
 
 ## [Unreleased] - 2026-08-11
 
+### 语言切换遗留建议执行（2026-08-12）
+
+> 落地 `language-switch-fix-plan.md` §7 的三条遗留建议：切换体验预加载、错误文案存 key 渲染时翻译、gto 生成文案 key 化与 displayName 清理。
+
+- **切换体验（建议 3）**：`preload.ts` 新增 `switchLanguage(next)`——先预加载目标语言下所有已触及模块资源，再执行 `changeLanguage`，消除"先 fallback 后跳变"闪烁；`AppLayout` 三处语言切换按钮（侧栏/折叠/移动端）与 `SettingsPage` 语言选择接入（切换期间禁用并显示加载动画）。新增 `preload.test.ts` 预加载时序与幂等切换测试。
+- **错误文案存 key（建议 2）**：`hand-history` store 的 `dbError` 由翻译字符串改为 `DBErrorType` 类型 key（`'quotaExceeded' | 'unavailable' | 'generic'`），`classifyDBError` 不再调用 `i18n.t()`；`HandHistoryList` 新增错误提示条，渲染时 `t('handHistory.dbError.' + type)`——语言切换后错误提示自动刷新。
+- **gto 生成文案 key 化（建议 1 可落地子集）**：`DecisionNode` 新增 `descriptionKey`/`descriptionParams`；`scenarioGenerator` 4 处节点描述与 `getEasyGTOScenario` 场景/节点描述改为存 key（`gto.nodeDesc.*` / `gto.easyScenario.*`），`DecisionTree` 渲染时 `t()` 翻译；SRS metadata.front 存 key（`ReviewSession` 已支持 key 渲染，自动受益）；`strategyCompare.explanation` 经可选 `t` 参数按当前语言生成（缺省用全局 i18n），新增 `gto.feedback.explanationOptimal/Mixed` 双语 key。新增 `scenarioI18n.test.ts` 守卫节点描述 key 双语存在。
+- **displayName 清理**：`GAME_VARIANT_CONFIGS.displayName`（'标准德州'/'短牌德州 (6+)'/'单挑德州'）无任何消费方，从类型与常量删除；`handRankingChanges` 同样无消费方但保留，待消费方出现时 key 化。
+- **内容层专项**：strategy-academy / theory-academy 课程正文（约 1.3MB+ 中文 content/quiz/examples）超大规模，单独产出 `content-i18n-roadmap.md` 分阶段方案，不并入本次。
+- **验证**：`pnpm verify` 全量门禁通过（typecheck + lint + 551 tests / 78 files）。
+
+### 语言切换滞后更新修复（2026-08-12）
+
+> 排查"中英文切换后部分内容立即切换、其他内容滞后/永不更新"问题，覆盖状态订阅、异步模块补加载重渲染、翻译缓存与硬编码四类根因。
+
+- **根因修复（P0）**：`src/i18n/config.ts` 配置 `react.bindI18nStore: 'added removed'`。react-i18next v17 默认仅订阅 `languageChanged`，语言切换时 `preload.ts` 异步补加载的 feature 翻译模块在 `addResourceBundle` 注入后不触发 `useTranslation` 组件重渲染，文案滞留 fallback（zh）直至下一次任意渲染；core 模块（静态打包 zh/en 同置内存）即时生效，呈现"部分立即切换、部分滞后"。订阅 store 的 `added`/`removed` 事件后，资源注入即触发全局重渲染。
+- **回归测试**：新增 `src/i18n/languageSwitch.test.tsx`，复现并断言完整时序——core 模块立即切换、懒加载模块 fallback 滞留、`addResourceBundle` 注入后自动刷新。
+- **硬编码文案国际化（P2）**：全量扫描清理 13 个组件硬编码中文——gto（GTOResultPage / SpotTrainer）、strategy-academy（LessonQuiz / LevelCertification / ChoiceDrillRenderer / PracticeDrill / ContentBlock / DiagramBlock / HandExample / QuickDrill）、progress（RangeStatsPage / GTOStatsPage）、shared（FreezeChip）；新增 `gto` / `academy`（quiz / levelCertification / difficulty / gameContext / content / drill） / `drills` / `quickDrill` 双语 key；删除 `PracticeDrill` 的 `DIFFICULTY_LABELS` 硬编码常量（改用 `academy.difficulty.<level>` 动态 key）。
+- **验证**：`pnpm verify` 全量门禁通过（typecheck + lint + 547 tests / 77 files）。
+
 ### React 最佳实践修复（Vercel React Best Practices 审查落地）
 
 > 依据 `react-best-practices-review.md` 审查结论，按 AGENTS.md §React 渲染约定执行系统性修复。

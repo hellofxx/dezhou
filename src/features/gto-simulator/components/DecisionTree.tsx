@@ -143,7 +143,9 @@ function MultiStepTree({
                 </div>
               )}
 
-              <div className="text-xs text-[var(--ivory-dim)]">{node.description}</div>
+              <div className="text-xs text-[var(--ivory-dim)]">
+                {node.descriptionKey ? t(node.descriptionKey, node.descriptionParams) : node.description}
+              </div>
 
               {isCompleted && decision && (
                 <div className="mt-1 flex items-center gap-1">

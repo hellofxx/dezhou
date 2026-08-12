@@ -22,7 +22,9 @@
     "pot": "底池",
     "call": "跟注",
     "raise": "加注",
-    "fold": "弃牌"
+    "fold": "弃牌",
+    "explanationOptimal": "好的决策！GTO 建议这里以较高频率 {{action}}，EV 损失仅 {{evLoss}} BB。",
+    "explanationMixed": "GTO 建议这里 {{parts}}。你选择了 {{userAction}}，EV 损失 {{evLoss}} BB。"
   },
   "setup": {
     "title": "场景设置",
@@ -124,10 +126,21 @@
   "result": {
     "title": "训练结果",
     "subtitle": "GTO 模拟训练成绩",
+    "subtitleDetail": "{{count}} 个场景 · {{position}} · {{stack}}BB",
     "score": "总得分",
     "accuracy": "正确率",
     "correctCount": "答对",
     "totalScenarios": "总场景",
+    "statTotalScenarios": "总场景数",
+    "statOptimal": "最优决策",
+    "statNonOptimal": "非最优",
+    "statAvgTime": "平均用时",
+    "evLossRate": "EV 损失率：",
+    "worstSpots": "最需要改进的 Spots",
+    "noSpotData": "该 spot 无 GTO 数据",
+    "matrixTitle": "{{position}} GTO 策略矩阵",
+    "matrixTitleWithSpot": "{{position}} GTO 策略矩阵 ({{spot}})",
+    "retry": "再练一次",
     "gradeExcellent": "🎯 出色！你对 GTO 的把握非常精准！",
     "gradeGood": "👍 不错！继续保持对 GTO 的理解。",
     "gradeFair": "📚 还需要加强 GTO 基础概念。",
@@ -150,6 +163,12 @@
   "spot": {
     "title": "具体场景训练",
     "chooseSpot": "选择训练场景",
+    "practiceTitle": "Spot 练习",
+    "raiseSize": "加注大小: ",
+    "descPureRaise": "纯 Raise - 这是一个必须加注的手牌",
+    "descMixed": "混合策略 - GTO 建议随机化",
+    "descPureFold": "纯 Fold - 这手牌太弱，应该弃牌",
+    "descPureCall": "纯 Call - 这里应该跟注",
     "continue": "继续",
     "back": "返回"
   },
@@ -159,5 +178,15 @@
     "empty": "暂无决策数据",
     "history": "行动历史",
     "emptyHeroTurn": "前面所有人都 fold，轮到 Hero"
+  },
+  "nodeDesc": {
+    "preflop": "Hero 在 {{position}} 面对翻前行动",
+    "flop": "翻牌圈，底池 {{pot}} BB",
+    "turn": "转牌圈，底池 {{pot}} BB",
+    "river": "河牌圈，底池 {{pot}} BB"
+  },
+  "easyScenario": {
+    "prompt": "BTN 持 AA，前面全部弃牌，你第一个行动。应该怎么打？",
+    "nodeDesc": "BTN 持 AA 面对前面全部弃牌，第一个行动"
   }
 }

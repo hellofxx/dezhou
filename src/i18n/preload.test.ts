@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from 'vitest';
 import i18n from './config';
-import { preloadI18n } from './preload';
+import { preloadI18n, switchLanguage } from './preload';
 import {
   ALL_MODULES,
   CORE_MODULES,
@@ -119,5 +119,29 @@ describe('preloadI18n 语言维度', () => {
     // 切回 zh 不影响已注入的 zh 资源
     await i18n.changeLanguage('zh');
     expect(i18n.getResource('zh', 'translation', 'rangeTrainer.title')).toBeTruthy();
+  });
+});
+
+describe('switchLanguage 预加载', () => {
+  it('切换前预加载目标语言，changeLanguage 完成时资源已就绪（无 fallback 闪烁）', async () => {
+    // 用本文件前序测试未触及的 potOdds 模块验证（rangeTrainer 的 en 已被补加载测试注入）
+    await preloadI18n(['potOdds'], 'zh');
+    expect(i18n.getResource('zh', 'translation', 'potOdds.title')).toBeTruthy();
+    // 模拟目标语言资源尚未加载（en 未触及）
+    expect(i18n.getResource('en', 'translation', 'potOdds.title')).toBeUndefined();
+    await switchLanguage('en');
+    // 切换完成时 en 资源已就绪，t() 立即返回译文而非 key/fallback
+    expect(i18n.getResource('en', 'translation', 'potOdds.title')).toBeTruthy();
+    expect(i18n.t('potOdds.title')).not.toBe('potOdds.title');
+    expect(i18n.language).toBe('en');
+  });
+
+  it('多次切换幂等：已加载语言键自动跳过，不重复注入', async () => {
+    await preloadI18n(['rangeTrainer'], 'zh');
+    await switchLanguage('en');
+    await switchLanguage('zh');
+    await switchLanguage('en');
+    expect(i18n.language).toBe('en');
+    expect(i18n.t('rangeTrainer.title')).not.toBe('rangeTrainer.title');
   });
 });

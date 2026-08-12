@@ -47,6 +47,18 @@
   "correct": "Correct",
   "wrong": "Wrong",
   "avgTime": "Avg Time",
+  "quiz": {
+    "passed": "Quiz Passed!",
+    "keepGoing": "Keep Going!",
+    "answeredCount": "{{correct}}/{{total}} correct",
+    "score": "{{score}} pts",
+    "retry": "Retry Quiz",
+    "progress": "Question {{current}} / {{total}}",
+    "correctMark": "✓ Correct!",
+    "wrongMark": "✗ Wrong",
+    "next": "Next Question",
+    "viewResult": "View Results"
+  },
   "pathBanner": {
     "title": "Local Low-Stakes Profit Path",
     "subtitle": "{{modules}} modules {{lessons}} lessons · ~{{hours}} hours · {{progress}}% complete",
@@ -379,7 +391,19 @@
   },
   "levelCertification": {
     "levelNotFound": "Level not found",
-    "backToAcademy": "Back to Academy"
+    "backToAcademy": "Back to Academy",
+    "title": "Level {{level}} Certification Quiz",
+    "questionCount": "{{count}} questions (drawn from all quizzes in this level)",
+    "passStandard": "Pass mark: accuracy ≥ {{required}}%",
+    "attemptHistory": "Attempts: {{attempts}} · Best: {{best}}%",
+    "passedOn": "Certified ({{date}})",
+    "prereqHint": "Complete all lessons in this level before taking the certification quiz (progress: {{progress}}/{{total}})",
+    "start": "Start Certification",
+    "retry": "Retry",
+    "passedTitle": "Level {{level}} Certified!",
+    "keepGoing": "Keep Going!",
+    "passedHint": "Congrats! You've mastered this level's core knowledge",
+    "needAccuracy": "Need {{required}}% or higher to pass"
   },
   "mdf": {
     "tabDerivation": "MDF Derivation",
@@ -425,7 +449,28 @@
     "evLabel": "Expected Value (EV):",
     "breakevenLabel": "Breakeven point:"
   },
+  "difficulty": {
+    "beginner": "Basic",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "msgUp": "📈 Great job! The next questions will be more challenging",
+    "msgDown": "📉 Consider consolidating the basics — a lower difficulty builds confidence"
+  },
+  "gameContext": {
+    "cash": "💰 Cash Game",
+    "mtt": "🏆 Tournament",
+    "sng": "🎰 SNG",
+    "icmPressure": "ICM pressure: ",
+    "icmHigh": "High",
+    "icmMedium": "Medium",
+    "bubble": "🫧 Bubble"
+  },
   "content": {
+    "keyPoint": "Key Point",
+    "proTip": "Pro Tip",
+    "counterIntuitive": "Counter-Intuitive",
+    "handExampleFallback": "(Hand example data pending)",
+    "exampleLabel": "Example {{n}}",
     "formula": "Formula Derivation",
     "theoryReference": "Theory Reference",
     "handExample": {
@@ -459,7 +504,12 @@
     "pressureCompletedTitle": "Pressure Test Complete!",
     "nextQuestion": "Next",
     "viewScore": "View Score",
-    "opponentHintTemplate": "This opponent is {{tendency}} — adjust your strategy accordingly."
+    "opponentHintTemplate": "This opponent is {{tendency}} — adjust your strategy accordingly.",
+    "opponentHintPrefix": "📊 Tip: vs {{name}} type opponent, ",
+    "opponentTipCorrect": "you factored in the opponent's tendencies — nice!",
+    "pressure": "Pressure",
+    "evLossBB": "BB EV loss",
+    "reviewLink": "Review →"
   },
   "basicsIntro": {
     "title": "Texas Hold'em Basics",

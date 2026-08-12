@@ -69,3 +69,14 @@ i18n.on('languageChanged', (lng: string) => {
   const lang = normalizeLanguage(lng);
   void preloadI18n([...touchedKeys], lang);
 });
+
+/**
+ * 语言切换入口：先预加载目标语言下所有已触及模块的资源，再执行 changeLanguage。
+ * 消除"先 fallback 后跳变"闪烁——切换完成时目标语言资源已就绪，useTranslation 组件
+ * 立即渲染正确文案，无需等待懒加载模块异步注入。
+ * 注：若目标语言资源加载失败仍会切换语言，由 fallbackLng('zh') 兜底。
+ */
+export async function switchLanguage(next: I18nLanguage): Promise<void> {
+  await preloadI18n([...touchedKeys], next);
+  await i18n.changeLanguage(next);
+}

@@ -45,7 +45,8 @@ export function getEasyGTOScenario(index: number = 0): Scenario {
   return {
     id: `scenario-easy-${Date.now()}-${index}`,
     name: 'BTN AA Open',
-    description: 'BTN 持 AA，前面全部弃牌，你第一个行动。应该怎么打？',
+    // 存 i18n key：SRS metadata.front 直接使用，ReviewSession 渲染时 t() 翻译
+    description: 'gto.easyScenario.prompt',
     gameType: 'cash',
     stakes: { smallBlind: 0.5, bigBlind: 1 },
     effectiveStack: 100,
@@ -69,7 +70,8 @@ export function getEasyGTOScenario(index: number = 0): Scenario {
       {
         id: `node-easy-${Date.now()}-${index}`,
         street: 'preflop',
-        description: 'BTN 持 AA 面对前面全部弃牌，第一个行动',
+        description: 'BTN AA preflop action',
+        descriptionKey: 'gto.easyScenario.nodeDesc',
         potSize: 1.5,
         heroHand,
         gtoStrategy,

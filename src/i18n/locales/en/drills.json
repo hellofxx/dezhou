@@ -12,7 +12,9 @@
     "wrongFeedback": "Incorrect",
     "correctAnswerPrefix": "Correct answer: {{answer}}",
     "viewResult": "View Result",
-    "next": "Next"
+    "next": "Next",
+    "noQuestions": "No questions available",
+    "finishBtn": "Finish"
   },
   "opponent": {
     "title": "Opponent Profiling",

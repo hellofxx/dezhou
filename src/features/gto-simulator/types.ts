@@ -9,6 +9,10 @@ export interface DecisionNode {
   id: string;
   street: 'preflop' | 'flop' | 'turn' | 'river';
   description: string;
+  /** 描述文案 i18n key（渲染时经 t() 翻译；存在时优先于 description） */
+  descriptionKey?: string;
+  /** descriptionKey 的插值参数 */
+  descriptionParams?: Record<string, string | number>;
   board?: Board;
   potSize: number;
   heroHand: [Card, Card];

@@ -22,7 +22,9 @@
     "pot": "Pot",
     "call": "Call",
     "raise": "Raise",
-    "fold": "Fold"
+    "fold": "Fold",
+    "explanationOptimal": "Good decision! GTO suggests {{action}} here at a high frequency — EV loss is only {{evLoss}} BB.",
+    "explanationMixed": "GTO suggests {{parts}} here. You chose {{userAction}}, EV loss {{evLoss}} BB."
   },
   "setup": {
     "title": "Scenario Setup",
@@ -124,10 +126,21 @@
   "result": {
     "title": "Training Results",
     "subtitle": "GTO Simulation Results",
+    "subtitleDetail": "{{count}} scenarios · {{position}} · {{stack}}BB",
     "score": "Total Score",
     "accuracy": "Accuracy",
     "correctCount": "Correct",
     "totalScenarios": "Total Scenarios",
+    "statTotalScenarios": "Total Scenarios",
+    "statOptimal": "Optimal",
+    "statNonOptimal": "Suboptimal",
+    "statAvgTime": "Avg Time",
+    "evLossRate": "EV loss rate:",
+    "worstSpots": "Spots to Improve",
+    "noSpotData": "No GTO data for this spot",
+    "matrixTitle": "{{position}} GTO Strategy Matrix",
+    "matrixTitleWithSpot": "{{position}} GTO Strategy Matrix ({{spot}})",
+    "retry": "Train Again",
     "gradeExcellent": "🎯 Excellent! Your GTO grasp is sharp!",
     "gradeGood": "👍 Good! Keep building your GTO understanding.",
     "gradeFair": "📚 Needs work on GTO fundamentals.",
@@ -150,6 +163,12 @@
   "spot": {
     "title": "Spot Training",
     "chooseSpot": "Choose Training Spot",
+    "practiceTitle": "Spot Practice",
+    "raiseSize": "Raise size: ",
+    "descPureRaise": "Pure Raise - this hand must be raised",
+    "descMixed": "Mixed strategy - GTO recommends randomization",
+    "descPureFold": "Pure Fold - this hand is too weak, should fold",
+    "descPureCall": "Pure Call - call here",
     "continue": "Continue",
     "back": "Back"
   },
@@ -159,5 +178,15 @@
     "empty": "No decision data yet",
     "history": "Action History",
     "emptyHeroTurn": "Everyone folded to Hero"
+  },
+  "nodeDesc": {
+    "preflop": "Hero faces preflop action from {{position}}",
+    "flop": "Flop, pot {{pot}} BB",
+    "turn": "Turn, pot {{pot}} BB",
+    "river": "River, pot {{pot}} BB"
+  },
+  "easyScenario": {
+    "prompt": "BTN holds AA with everyone folded to you — you act first. What's the play?",
+    "nodeDesc": "BTN holds AA facing folds from everyone before, acting first"
   }
 }
