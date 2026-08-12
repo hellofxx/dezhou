@@ -67,6 +67,8 @@ additionalPrompt: ""
 - `shared/utils/seededShuffle.ts`：种子洗牌 / 数值排序（quizOrder 出口复用，变更归 platform-dev）
 - `shared/stores/debugMode.ts`：`isDebugUnlockActive()` 短路 Level 与章节门禁
 - `shared/types/elo.ts`：`EloDimension` 类型
+- `shared/components/business/ContentBlocks.tsx`：LabeledBlock / AsciiMonoText / FormulaBlock（课程内容块共享视觉组件，TheorySectionRenderer/ProTipBox 消费；与 strategy-academy 视觉词汇统一，变更归 platform-dev）
+- `shared/components/business/ProgressBar.tsx`：学习进度条（TheoryChapterView header 的 level 进度 / strategy-academy CourseView 课程进度共用，变更归 platform-dev）
 
 ### strategy-academy（仅数据协调，须经 platform-dev）
 - `learningTracks.ts` 的 `track-theory-bridge` 轨道与本模块 practiceRecommendations 对应

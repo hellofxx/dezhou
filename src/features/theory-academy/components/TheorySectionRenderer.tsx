@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { KeyRound, AlertTriangle, Sigma } from 'lucide-react';
+import { AlertTriangle, KeyRound } from 'lucide-react';
 import type { TheorySection } from '../types';
+import {
+  LabeledBlock,
+  AsciiMonoText,
+  FormulaBlock,
+} from '@/shared/components/business/ContentBlocks';
 import { ProTipBox } from './ProTipBox';
 
 interface TheorySectionRendererProps {
@@ -9,21 +14,26 @@ interface TheorySectionRendererProps {
   contentKey?: string;
 }
 
-/** 理论段落渲染器：按 section type 渲染（视觉与 strategy-academy LessonContent 对齐） */
+/**
+ * 理论段落渲染器：按 section type 渲染。
+ * 视觉词汇与 strategy-academy ContentBlock 严格对齐（P2-01 统一骨架）：
+ * heading text-[20px] / text leading-[1.7] max-w-3xl / LabeledBlock 标签骨架 /
+ * FormulaBlock / AsciiMonoText / 语义色图标。
+ */
 export function TheorySectionRenderer({ section, contentKey }: TheorySectionRendererProps) {
   const { t } = useTranslation();
   const content = contentKey ? t(contentKey, { defaultValue: section.content }) : section.content;
   switch (section.type) {
     case 'heading':
       return (
-        <h2 className="font-display text-[18px] text-[var(--ivory)] tracking-wide pt-2">
+        <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide mt-6 first:mt-0">
           {content}
         </h2>
       );
 
     case 'text':
       return (
-        <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">
+        <p className="text-sm text-[var(--ivory-dim)] leading-[1.7] tracking-[0.01em] whitespace-pre-line max-w-3xl">
           {content}
         </p>
       );
@@ -31,37 +41,30 @@ export function TheorySectionRenderer({ section, contentKey }: TheorySectionRend
     case 'highlight':
       return (
         <div className="rounded-lg border border-[var(--warning)]/30 bg-[var(--warning)]/10 p-4 flex items-start gap-3">
-          <AlertTriangle className="w-4 h-4 text-[var(--warning)] shrink-0 mt-0.5" />
-          <p className="text-sm text-[var(--ivory-muted)] leading-relaxed">{content}</p>
+          <AlertTriangle className="w-5 h-5 text-[var(--warning)] shrink-0 mt-0.5" />
+          <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">{content}</p>
         </div>
       );
 
     case 'key-point':
       return (
-        <div className="rounded-lg border border-[var(--felt-light)]/50 bg-[var(--felt-light)]/10 p-4 flex items-start gap-3">
-          <KeyRound className="w-4 h-4 text-[var(--success)] shrink-0 mt-0.5" />
-          <p className="text-sm text-[var(--ivory-muted)] leading-relaxed">{content}</p>
-        </div>
+        <LabeledBlock
+          icon={KeyRound}
+          iconClass="text-[var(--poker-success)]"
+          label={t('academy.content.keyPoint')}
+          labelClass="text-[var(--poker-success)]"
+          wrapClass="border border-[var(--poker-success)]/30 bg-[var(--poker-success-bg)]"
+          content={content}
+        />
       );
 
     case 'formula':
-      return (
-        <div className="overflow-x-auto">
-          <div className="rounded-lg border border-[var(--brass)]/30 bg-[var(--felt-deep)] p-4 flex items-start gap-3">
-            <Sigma className="w-5 h-5 text-[var(--brass-bright)] shrink-0 mt-0.5" />
-            <p className="text-base text-[var(--ivory)] font-mono leading-relaxed whitespace-pre-line">
-              {content}
-            </p>
-          </div>
-        </div>
-      );
+      return <FormulaBlock content={content} />;
 
     case 'example':
       return (
         <div className="rounded-lg bg-[var(--felt-deep)] border border-[var(--walnut-border)] p-4">
-          <p className="text-sm text-[var(--ivory-dim)] whitespace-pre-line leading-relaxed">
-            {content}
-          </p>
+          <AsciiMonoText content={content} />
         </div>
       );
 
@@ -70,7 +73,9 @@ export function TheorySectionRenderer({ section, contentKey }: TheorySectionRend
 
     default:
       return (
-        <p className="text-sm text-[var(--ivory-dim)] leading-relaxed">{content}</p>
+        <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line max-w-3xl">
+          {content}
+        </p>
       );
   }
 }

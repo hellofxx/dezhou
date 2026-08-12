@@ -8,6 +8,24 @@
 
 ## [Unreleased] - 2026-08-11
 
+### 两学院课程内容块视觉统一（2026-08-12）
+
+> 用户反馈「课程内容的展示形式，理论学院和策略学院风格统一，现有策略学院还行」。将理论学院 `TheorySectionRenderer` 的全部 block 视觉词汇与策略学院 `ContentBlock` 严格对齐，并把两者共用的通用骨架提升至 shared 层。
+
+> 二轮（T-T3）：用户反馈文字展示「居中、容器大小」仍有偏差。将理论学院章内阅读区统一为策略学院 CourseView 的居中正文容器（`max-w-3xl mx-auto`，约 768px）：阅读区由满宽 `panel` + 左对齐 880px 改为 `walnut-panel rounded-lg border p-6 max-w-3xl mx-auto`（与策略学院完全一致）；删除已无消费方的 `.prose-wrap` CSS。
+
+> 三轮（T-T4）：T-T3 误把 objectives 卡片也加 `max-w-3xl mx-auto`——但 objectives 是「信息元数据卡」非正文，与 header panel 同宽满宽才对，形成「header 满宽 / objectives 满宽 / 阅读区居中」三层清晰层级（与策略学院 CourseView 的「header 满宽 + 正文居中」模式一致）。**T-T4 撤销 objectives 的 mx-auto，恢复满宽**。
+
+> 四轮（T-T5，用户澄清）：「THEORY T1 · 第 1 章 等修改为和策略学院一样的展示形式；本章学习目标和正文内容是对齐的，和原来一样」。明确三点：① header 章眉 `section-eyebrow` 小字（`chapterEyebrow` key）替换为策略学院 CourseView 同款 level pill 徽章（`course-level inline-flex items-center gap-1.5 rounded-full bg-[var(--walnut-raised)] px-3 py-1 text-xs font-medium text-[var(--brass-bright)]`，内容 `icon T{level} · 等级标题`）+ 章节计数（`font-numeric text-xs`）；② objectives 卡片恢复 `max-w-3xl mx-auto` 与阅读区正文对齐（**撤销 T-T4 满宽**——用户确认先行组织者卡属于正文阅读列而非 header 元数据列）；③ i18n `theory.chapterView.chapterEyebrow` 双删、新增 `chapterOf`（`第 {{current}}/{{total}} 章` / `Chapter {{current}}/{{total}}`）。理论学院 header 现与策略学院 CourseView 展示形式一致：`level pill + 章节计数` 在上，标题/副标题/难度·完成元数据在下。
+
+> 五轮（T-T6）：用户反馈「理论学院这个方框和策略学院的展示形式还是不同，将整个方框进行修改」——指理论学院 header 那个 panel 外框（截图对照策略学院 CourseView 头无外框）。**T-T6 去掉 header panel 外框改为页内流式布局**：`motion.div className="panel"` → `motion.div className="mb-6"`，所有内容（pill + 章节计数 + level 进度 ProgressBar + 标题 + 副标题 + 难度/完成元数据）直接放在 main 流内，与策略学院 CourseView header 结构完全一致；**ProgressBar 同步提升至 `shared/components/business/ProgressBar.tsx`**（满足 ≥2 模块准入门槛），strategy-academy `ProgressBar.tsx` 改为 re-export 兼容层；理论学院新增 level 进度计算（`completedInLevel / totalInLevel`）。理论学院章节页 header 与 strategy-academy 课程页 header 完全消除最后视觉差异。
+
+- **共享组件提取**：`LabeledBlock`（图标+标签+正文骨架）/ `AsciiMonoText`（行级 font-mono）/ `FormulaBlock`（Sigma+标签+公式块）从 strategy-academy 内联实现提升至 `shared/components/business/ContentBlocks.tsx`（满足 shared 层 ≥2 模块使用准入门槛）。`strategy-academy/components/content/FormulaBlock.tsx` 改为 re-export 兼容层（对外导出名不变，消费方 import 路径零改动）；`ContentBlock.tsx` 删除本地 LabeledBlock 实现改为引用共享组件。
+- **理论学院对齐（TheorySectionRenderer 重写）**：heading `text-[18px] pt-2` → `text-[20px] mt-6 first:mt-0`；text 补 `leading-[1.7] tracking-[0.01em] max-w-3xl`；highlight 图标 `w-4 h-4`/`ivory-muted` → `w-5 h-5`/`ivory-dim`；key-point 从「无标签手写盒」→ `LabeledBlock`（KeyRound + `academy.content.keyPoint` 标签 + poker-success 色）；formula 从手写 Sigma+font-mono → 共享 `FormulaBlock`；example 从纯文本 → `AsciiMonoText`。
+- **ProTipBox 改造**：理论学院 `ProTipBox` 内部改为复用共享 `LabeledBlock`（Lightbulb + `academy.content.proTip` 标签 + brass 色），与策略学院 pro-tip 渲染完全一致；`theory.proTip.title` key 不再被消费（保留于 theory.json 无害）。
+- **i18n 归属**：三个标签文案沿用 `academy.content.keyPoint/proTip/formula`（语义两院通用），复用保证文案 100% 一致，无需为理论学院单独翻译。
+- **验证**：`pnpm verify` 全量通过（typecheck + lint + 84 files / 565 tests）。
+
 ### 课程展示页对齐修复（theory-academy T-T1，2026-08-12）
 
 > 排查并修复课程展示页（TheoryChapterView）与理论阶梯（TheoryLadder）在网格/列表布局下，缩略图、标题、描述、进度条与按钮的垂直/水平对齐偏差，使其在移动端、平板与桌面端均保持统一间距与基线对齐。

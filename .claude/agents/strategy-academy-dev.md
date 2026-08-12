@@ -94,6 +94,7 @@ additionalPrompt: ""
 - `src/shared/types/poker.ts`（Card / Hand / HandRank 等基础类型）
 - `src/shared/types/decisionFeedback.ts`（五级反馈 DecisionGrade / calculateGrade）
 - `src/shared/utils/seededShuffle.ts`（选项排序治理基础设施：shuffleBySeed / hashStringToSeed / isNumericOptionSet / sortByNumericValue，变更归 platform-dev）
+- `src/shared/components/business/ContentBlocks.tsx`（LabeledBlock / AsciiMonoText / FormulaBlock 课程内容块共享视觉组件，与 theory-academy 共用；ContentBlock/FormulaBlock 消费，变更归 platform-dev）
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。

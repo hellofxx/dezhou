@@ -1,7 +1,8 @@
-import { AlertTriangle, KeyRound, Lightbulb, type LucideIcon } from 'lucide-react';
+import { AlertTriangle, KeyRound, Lightbulb } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { LessonSection } from '../../types';
 import { FormulaBlock, AsciiMonoText } from './FormulaBlock';
+import { LabeledBlock } from '@/shared/components/business/ContentBlocks';
 import { TheoryReferenceBlock } from './TheoryReferenceBlock';
 import { DiagramBlock, HandExampleBlock } from './DiagramBlock';
 
@@ -111,24 +112,4 @@ export function ContentBlock({ section, contentKey }: ContentBlockProps) {
   }
 }
 
-interface LabeledBlockProps {
-  icon: LucideIcon;
-  iconClass: string;
-  label: string;
-  labelClass: string;
-  wrapClass: string;
-  content: string;
-}
 
-/** 图标 + 标签 + 正文的通用骨架（key-point / pro-tip / counter-intuitive 共用） */
-function LabeledBlock({ icon: Icon, iconClass, label, labelClass, wrapClass, content }: LabeledBlockProps) {
-  return (
-    <div className={`rounded-lg ${wrapClass} p-4 flex items-start gap-3`}>
-      <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${iconClass}`} />
-      <div className="min-w-0 flex-1">
-        <p className={`text-xs font-semibold mb-1.5 ${labelClass}`}>{label}</p>
-        <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">{content}</p>
-      </div>
-    </div>
-  );
-}

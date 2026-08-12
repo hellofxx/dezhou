@@ -329,7 +329,7 @@
   },
   "chapterView": {
     "backAria": "返回理论学院",
-    "chapterEyebrow": "Theory {{tier}} · 第 {{order}} 章",
+    "chapterOf": "第 {{current}}/{{total}} 章",
     "completed": "已完成",
     "bestScore": "最高 {{score}} 分",
     "backToChapters": "返回目录",

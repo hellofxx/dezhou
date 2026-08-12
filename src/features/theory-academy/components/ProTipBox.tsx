@@ -1,23 +1,25 @@
 import { useTranslation } from 'react-i18next';
+import { Lightbulb } from 'lucide-react';
+import { LabeledBlock } from '@/shared/components/business/ContentBlocks';
 
 interface ProTipBoxProps {
   content: string;
 }
 
-/** 职业建议提示框（与 strategy-academy ProTip 视觉对齐，模块内自持避免跨模块引用） */
+/**
+ * 职业建议提示框：复用 shared LabeledBlock 骨架，
+ * 与 strategy-academy ContentBlock 的 pro-tip 视觉完全一致（Lightbulb + 标签）。
+ */
 export function ProTipBox({ content }: ProTipBoxProps) {
   const { t } = useTranslation();
   return (
-    <div className="rounded-lg border border-[var(--brass)]/40 bg-[var(--brass)]/5 p-4">
-      <div className="flex items-start gap-3">
-        <span className="text-xl shrink-0">💡</span>
-        <div>
-          <p className="text-xs font-semibold text-[var(--brass-bright)] mb-1.5 uppercase tracking-wider">
-            {t('theory.proTip.title')}
-          </p>
-          <p className="text-sm text-[var(--ivory-dim)] leading-relaxed">{content}</p>
-        </div>
-      </div>
-    </div>
+    <LabeledBlock
+      icon={Lightbulb}
+      iconClass="text-[var(--brass-bright)]"
+      label={t('academy.content.proTip')}
+      labelClass="text-[var(--brass-bright)] uppercase tracking-wider"
+      wrapClass="border border-[var(--brass)]/40 bg-[var(--brass)]/5"
+      content={content}
+    />
   );
 }

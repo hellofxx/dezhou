@@ -5,6 +5,8 @@ import { ArrowLeft, ArrowRight, Clock, CheckCircle2, Target } from 'lucide-react
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
+import { transitionStandard } from '@/shared/utils/motion';
+import { ProgressBar } from '@/shared/components/business/ProgressBar';
 import { useProgressStore } from '@/features/progress/store';
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
@@ -123,44 +125,78 @@ export default function TheoryChapterView() {
           </div>
         ) : (
           <>
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="panel">
-          <p className="section-eyebrow mb-1.5">{t('theory.chapterView.chapterEyebrow', { tier: level.id.toUpperCase(), order: chapter.order })}</p>
-          <h1 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
-            {resolveChapterTitle(t, chapter)}
-          </h1>
-          <p className="text-sm text-[var(--ivory-dim)]">{resolveChapterSubtitle(t, chapter)}</p>
-          <div className="mt-3 flex items-center gap-3 text-xs text-[var(--ivory-muted)]">
-            <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{chapter.duration}</span>
-            {(() => {
-              const diff = getChapterDifficulty(chapter.level);
-              return (
-                <span className={cn(
-                  'px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide',
-                  diff < 0.35
-                    ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)]'
-                    : diff < 0.6
-                      ? 'bg-[var(--poker-warning-bg)] text-[var(--poker-warning)]'
-                      : 'bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]'
-                )}>
-                  {diff < 0.35 ? t('theory.difficultyBasic') : diff < 0.6 ? t('theory.difficultyMid') : t('theory.difficultyAdvanced')}
+        {/* Header（页内流式，无 panel 外框 —— 与 strategy-academy CourseView 完全一致）。
+    T-T6 撤销 T-T1 给 header 加的 panel 外框：策略学院 header 在 main 流内贴左起步
+    （返回按钮 + pill + 进度条 + 标题 + 元数据均无外框包住）。理论学院同样改为流式布局。 */}
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={transitionStandard}
+          className="mb-6"
+        >
+          <div className="flex flex-wrap items-center gap-3 mb-3">
+            <span className="course-level inline-flex items-center gap-1.5 rounded-full bg-[var(--walnut-raised)] px-3 py-1 text-xs font-medium text-[var(--brass-bright)]">
+              {level.icon} T{level.level} · {resolveTheoryLevelTitle(t, level)}
+            </span>
+            <span className="font-numeric text-xs text-[var(--ivory-muted)]">
+              {t('theory.chapterView.chapterOf', { current: chapter.order, total: level.chapters.length })}
+            </span>
+            <div className="flex-1 min-w-[160px]">
+              <ProgressBar
+                value={
+                  level.chapters.length > 0
+                    ? Math.round(
+                        (level.chapters.filter((c) => completedChapters.includes(c.id)).length /
+                          level.chapters.length) *
+                          100
+                      )
+                    : 0
+                }
+                size="sm"
+              />
+            </div>
+          </div>
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
+                {resolveChapterTitle(t, chapter)}
+              </h1>
+              <p className="text-sm text-[var(--ivory-dim)]">{resolveChapterSubtitle(t, chapter)}</p>
+            </div>
+            <div className="flex items-center gap-3 text-xs text-[var(--ivory-muted)] shrink-0 pt-1">
+              <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{chapter.duration}</span>
+              {(() => {
+                const diff = getChapterDifficulty(chapter.level);
+                return (
+                  <span className={cn(
+                    'px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide',
+                    diff < 0.35
+                      ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)]'
+                      : diff < 0.6
+                        ? 'bg-[var(--poker-warning-bg)] text-[var(--poker-warning)]'
+                        : 'bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]'
+                  )}>
+                    {diff < 0.35 ? t('theory.difficultyBasic') : diff < 0.6 ? t('theory.difficultyMid') : t('theory.difficultyAdvanced')}
+                  </span>
+                );
+              })()}
+              {chapterCompleted && (
+                <span className="inline-flex items-center gap-1 text-[var(--poker-success)]">
+                  <CheckCircle2 className="w-3.5 h-3.5" />{t('theory.chapterView.completed')}
                 </span>
-              );
-            })()}
-            {chapterCompleted && (
-              <span className="inline-flex items-center gap-1 text-[var(--poker-success)]">
-                <CheckCircle2 className="w-3.5 h-3.5" />{t('theory.chapterView.completed')}
-              </span>
-            )}
-            {chapterCompleted && typeof bestScore === 'number' && (
-              <span className="font-numeric text-[var(--brass-bright)]">{t('theory.chapterView.bestScore', { score: bestScore })}</span>
-            )}
+              )}
+              {chapterCompleted && typeof bestScore === 'number' && (
+                <span className="font-numeric text-[var(--brass-bright)]">{t('theory.chapterView.bestScore', { score: bestScore })}</span>
+              )}
+            </div>
           </div>
         </motion.div>
 
-        {/* 学习目标卡片（先行组织者策略）：章节 objectives 非空时渲染 */}
+        {/* 学习目标卡片（先行组织者策略）：章节 objectives 非空时渲染。
+            与下方阅读区正文容器**同宽居中对齐**（max-w-3xl mx-auto）——
+            先行组织者卡与正文构成统一的阅读列，与 strategy-academy 正文列一致。 */}
         {chapter.objectives && chapter.objectives.length > 0 && (
-          <div className="panel border-[var(--poker-frost)]/40 bg-[var(--poker-frost-bg)]">
+          <div className="panel border-[var(--poker-frost)]/40 bg-[var(--poker-frost-bg)] max-w-3xl mx-auto">
             <h2 className="text-sm font-semibold text-[var(--poker-frost)] mb-2 flex items-center gap-2">
               <Target className="w-4 h-4 shrink-0" />
               {t('theory.objectives')}
@@ -177,11 +213,14 @@ export default function TheoryChapterView() {
         )}
 
         {phase === 'reading' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel">
-            {/* 阅读区面板满宽与 header/objectives 对齐;
-                内层 prose-wrap 仅约束大屏(>1400px)行长,文本/标题/box 全部从 panel 自身
-                padding 起点左对齐,起始位置严格与上方 objectives 卡片左边缘齐平(T-T2) */}
-            <div className="space-y-6 prose-wrap">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6 max-w-3xl mx-auto"
+          >
+            {/* 正文容器与 strategy-academy CourseView 完全一致（居中 max-w-3xl walnut-panel），
+                两学院课程文字展示的居中与容器大小统一 */}
+            <div className="space-y-6">
               {chapter.content.map((section, index) => (
                 <TheorySectionRenderer
                   key={index}

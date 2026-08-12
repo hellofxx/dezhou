@@ -329,7 +329,7 @@
   },
   "chapterView": {
     "backAria": "Back to Theory Academy",
-    "chapterEyebrow": "Theory {{tier}} · Chapter {{order}}",
+    "chapterOf": "Chapter {{current}}/{{total}}",
     "completed": "Completed",
     "bestScore": "Best {{score}} pts",
     "backToChapters": "Back to Chapters",
