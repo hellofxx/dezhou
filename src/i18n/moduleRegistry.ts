@@ -117,8 +117,11 @@ export const CORE_MODULES = [
  * 子路由含动态参数（:sessionId 等），最长前缀优先匹配（见 routes.tsx 的 lazyPage 实现）。
  */
 export const FEATURE_GROUPS = {
-  '/': ['dashboard', 'nav', 'achievements'],
-  '/settings': ['settings', 'mentor', 'sessionLimit', 'gameVariant', 'streak', 'mood'],
+  // Dashboard 首页树：FeltArena/VariantEloOverview/FirstVisitBanner 消费 progress；
+  // DailyChallenge/SpacedRepetitionPanel/DownswingAlert/MoodTracker 分别消费 dailyChallenge/spacedRepetition/downswing/mood
+  '/': ['dashboard', 'nav', 'achievements', 'progress', 'dailyChallenge', 'spacedRepetition', 'downswing', 'mood'],
+  // MoodTracker 实际由 Dashboard 渲染（settings 分组不含 mood；mood 归属 '/')
+  '/settings': ['settings', 'mentor', 'sessionLimit', 'gameVariant', 'streak'],
   '/leaderboard': ['leaderboard'],
   '/range-trainer/learn': ['rangeTrainer', 'common'],
   '/range-trainer/quiz': ['rangeTrainer', 'feedback'],
@@ -133,20 +136,28 @@ export const FEATURE_GROUPS = {
   '/hand-history': ['handHistory', 'common'],
   '/progress/range': ['progress', 'common'],
   '/progress/gto': ['progress', 'common'],
-  '/progress': ['progress', 'dashboard', 'common'],
+  // ProgressPage 渲染 AchievementBadges（achievements）与 WeaknessAnalysis（elo）
+  '/progress': ['progress', 'dashboard', 'common', 'achievements', 'elo'],
   '/academy/quick-drill': ['quickDrill', 'academy'],
-  '/academy/basics': ['academy', 'drills'],
+  // BasicsIntro 仅消费 academy（basicsIntro.*），不渲染 drill 组件
+  '/academy/basics': ['academy'],
   '/academy/concept-graph': ['academy'],
   '/academy/tracks': ['academy'],
   '/academy/certification/:level': ['academy'],
-  '/academy/lesson/:lessonId': ['academy'],
-  '/academy': ['academy', 'quickDrill', 'variant', 'drills'],
-  '/theory/chapter/:chapterId': ['theory'],
+  // CourseView 渲染 DrillLessonRouter → 各 Drill 组件：Position/Outs/PotOdds/HandRanking 消费 drills，
+  // OpponentDrill 额外消费 gto.setup.opponentProfile.*
+  '/academy/lesson/:lessonId': ['academy', 'drills', 'gto'],
+  // AcademyHome 仅消费 academy + variant（VariantToggle），quickDrill/drills 不在此页渲染
+  '/academy': ['academy', 'variant'],
+  // TheoryChapterView 渲染 PracticeBridgeCard 消费 academy（academy 属 core，启动已加载，此处列出以如实反映渲染树）
+  '/theory/chapter/:chapterId': ['theory', 'academy'],
   '/theory': ['theory', 'variant'],
-  '/puzzle/theme/:themeId': ['puzzle'],
-  '/puzzle/rush': ['puzzle'],
-  '/puzzle/daily': ['puzzle'],
-  '/puzzle': ['puzzle', 'feedback'],
+  // ThemeDrill/PuzzleRush/DailyPuzzle 渲染 PuzzleCard → PuzzleCardFeedback 消费 feedback
+  '/puzzle/theme/:themeId': ['puzzle', 'feedback'],
+  '/puzzle/rush': ['puzzle', 'feedback'],
+  '/puzzle/daily': ['puzzle', 'feedback'],
+  // PuzzleHome 不渲染 PuzzleCard（feedback 由子路由消费）
+  '/puzzle': ['puzzle'],
   '/help/article/:articleId': ['help'],
   '/help': ['help'],
   '/onboarding': ['onboarding'],

@@ -17,6 +17,21 @@
 - 测试：`localeParity.test.ts` 改为按模块文件扫描双语对称（41 模块逐项报告）；新增 `preload.test.ts`（注册表完整性 + 幂等注入 + 深层合并 + 语言切换补加载）；`drillOptionOrder.test.ts` 改读 `locales/{zh,en}/drills.json` 模块文件。
 - 构建产物验证：82 个语言模块独立 chunk，core 经 config 静态依赖链启动加载，其余随路由动态加载；兼容 `public/sw.js` 对 `/assets/` hash 静态资源的 cache-first 缓存策略。
 
+### i18n 路由分组归属核对修正（2026-08-11）
+
+对 `FEATURE_GROUPS` 路由→模块分组做全量实证核对（逐页面组件树扫描 `t('xxx.yyy')` 消费），修正 7 处归属缺陷：
+
+- `/`（Dashboard 首页树）：补 `progress`（FeltArena/VariantEloOverview/FirstVisitBanner）、`dailyChallenge`/`spacedRepetition`/`downswing`/`mood`（DailyChallenge/SpacedRepetitionPanel/DownswingAlert/MoodTracker）。
+- `/settings`：移除 `mood`（MoodTracker 实际由 Dashboard 渲染，不在此页）。
+- `/progress`：补 `achievements`（AchievementBadges）与 `elo`（WeaknessAnalysis）。
+- `/academy/lesson/:lessonId`：补 `drills`（Position/Outs/PotOdds/HandRanking Drill）与 `gto`（OpponentDrill 消费 `gto.setup.opponentProfile.*`）。
+- `/academy/basics`：移除 `drills`（BasicsIntro 仅消费 `academy.basicsIntro.*`）。
+- `/academy`：移除 `quickDrill`/`drills`（AcademyHome 仅消费 `academy` + `variant`）。
+- `/puzzle/daily|rush|theme/:themeId`：补 `feedback`（渲染 PuzzleCard → PuzzleCardFeedback）；`/puzzle` 主分组移除 `feedback`（PuzzleHome 不渲染 PuzzleCard）。
+- `/theory/chapter/:chapterId`：补 `academy`（TheoryChapterView 渲染 PracticeBridgeCard）。
+
+原则：分组以页面组件树实际消费为准（含子组件），core 模块冗余列出无害（幂等）；修正后 `typecheck` 与 `preload.test.ts`/`localeParity.test.ts` 全部通过。
+
 ### 全项目代码评审修复（2026-08-11 评审批次，109 项问题）
 
 > 依据 `docs/analysis/code-review-report.md`（12 个评审子代理并行产出）分批执行修复，
