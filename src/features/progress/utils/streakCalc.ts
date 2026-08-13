@@ -1,5 +1,7 @@
 import type { TrainingRecord, StreakState, StreakMilestones } from '../types';
 import { MILESTONE_DAYS } from '../types';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+import { toLocalDateString } from './spacedRepetition';
 
 /** 计算当前连续训练天数 */
 export function calculateCurrentStreak(dates: string[]): number {
@@ -64,7 +66,7 @@ export function getTrainingCalendar(
   for (const record of records) {
     const d = new Date(record.createdAt);
     if (d.getFullYear() === year && d.getMonth() === month) {
-      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const dateStr = toLocalDateKey(d.getTime());
       calendar.set(dateStr, (calendar.get(dateStr) ?? 0) + 1);
     }
   }
@@ -75,22 +77,20 @@ export function getTrainingCalendar(
 // ─── 内部工具 ──────────────────────────────────────
 
 function toTodayStr(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return toLocalDateKey(Date.now());
 }
 
 function toRelativeDayStr(offset: number): string {
   const d = new Date();
   d.setDate(d.getDate() + offset);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return toLocalDateKey(d.getTime());
 }
 
 // ─── P0-2 Streak 核心机制 ──────────────────────────────────────
 
-/** 获取今日 YYYY-MM-DD 字符串（本地时区） */
-export function getTodayString(): string {
-  return toTodayStr();
-}
+// 今日 YYYY-MM-DD（本地时区）：统一委托 spacedRepetition 的单一实现（内部走 shared/toLocalDateKey），
+// 消除双实现；spacedRepetition 的 toLocalDateString 支持无参调用（返回今天），故可安全 re-export
+export { toLocalDateString as getTodayString } from './spacedRepetition';
 
 /** 获取昨日 YYYY-MM-DD 字符串（本地时区） */
 export function getYesterdayString(): string {
@@ -144,7 +144,7 @@ export function isEarnBackActive(streakBrokenAt: number | null, now: number = Da
  * @returns 更新后的 streak 状态（不修改 milestones / lastMilestoneCelebrated，由 checkNewMilestone 处理）
  */
 export function updateStreak(state: StreakState): StreakState {
-  const today = getTodayString();
+  const today = toLocalDateString();
   const yesterday = getYesterdayString();
 
   // 1. 今天已训练，幂等返回
@@ -276,7 +276,7 @@ export function checkNewMilestone(
  * 无可保护的 streak（从未训练或已断签 ≥ 2 天）。
  */
 export function applyManualFreeze(state: StreakState): StreakState | null {
-  const today = getTodayString();
+  const today = toLocalDateString();
   const yesterday = getYesterdayString();
   if (state.lastTrainingDate === today) return null;          // 今日已训练，无需保护
   if (state.streakFreezes <= 0 || state.streakFreezeUsedToday) return null;
@@ -304,7 +304,7 @@ export function applyManualFreeze(state: StreakState): StreakState | null {
  * @returns 断裂时刻时间戳；无需标记时返回 null
  */
 export function computeStreakBrokenAt(state: StreakState): number | null {
-  const today = getTodayString();
+  const today = toLocalDateString();
   if (state.streakBrokenAt !== null) return null;              // 已标记
   if (state.currentStreak <= 0 || state.lastTrainingDate === null) return null;
   if (state.lastTrainingDate === today) return null;           // 今日已训

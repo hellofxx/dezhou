@@ -652,5 +652,12 @@
     "medium": "15-20 分钟",
     "long": "20-30 分钟",
     "xlong": "30+ 分钟"
+  },
+  "feedback": {
+    "gradeBest": "最优决策",
+    "gradeCorrect": "正确",
+    "gradeInaccuracy": "小幅偏差",
+    "gradeWrong": "错误",
+    "gradeBlunder": "重大错误"
   }
 }

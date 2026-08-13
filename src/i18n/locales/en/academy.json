@@ -652,5 +652,12 @@
     "medium": "15-20 min",
     "long": "20-30 min",
     "xlong": "30+ min"
+  },
+  "feedback": {
+    "gradeBest": "Best Decision",
+    "gradeCorrect": "Correct",
+    "gradeInaccuracy": "Minor Inaccuracy",
+    "gradeWrong": "Wrong",
+    "gradeBlunder": "Blunder"
   }
 }

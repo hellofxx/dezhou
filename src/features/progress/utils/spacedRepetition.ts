@@ -3,6 +3,8 @@
  * 用于管理知识点复习队列
  */
 
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+
 // P1-3: 复习项附加元数据，用于复习模式渲染原题内容（front/back/options）
 // 所有字段可选，老数据无 metadata 仍能正常工作（复习模式回退到自评 UI）
 export interface ReviewItemMetadata {
@@ -48,11 +50,10 @@ export const FAST_ANSWER_SECONDS = 5;
  * 导致跨日判定错位（今日完成态/每日题量上限/情绪标记选中态））
  * P0B-03：导出供消费方（如 strategy-academy CourseView 计算 nextReviewDate）复用，
  * 避免各处自行 toISOString 造成时区遗漏 */
-export function toLocalDateString(d: Date): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+export function toLocalDateString(ts?: number | Date): string {
+  // 委托 shared/toLocalDateKey（单一事实源）；兼容旧消费方传 Date 对象，无参时返回今天
+  const t = ts === undefined ? Date.now() : ts instanceof Date ? ts.getTime() : ts;
+  return toLocalDateKey(t);
 }
 
 /**
@@ -180,6 +181,15 @@ export function answerQuality(isCorrect: boolean, timeTakenMs: number): number {
 }
 
 /**
+ * 将测验分数（0-100）映射为 SM-2 质量评分（0-5）。
+ * 与 answerQuality（用时维度：答对 + 快答 → 5，答对 → 4，答错 → 1）口径不同：
+ * 本函数仅以分数判定，最低档为 2（勉强回忆），不产生 0/1 的"遗忘"档。
+ */
+export function quizScoreToQuality(score: number): number {
+  return score >= 90 ? 5 : score >= 75 ? 4 : score >= 60 ? 3 : 2;
+}
+
+/**
  * 在复习队列中查找或创建复习项，并用给定 quality 推进其 SRS 状态（纯函数）。
  * 返回推进后的 ReviewItem 及是否为新建项，由调用方负责写回 store
  * （addReviewItem / updateReviewItem），从而保持本函数为可单测的纯函数。
@@ -228,8 +238,8 @@ export function updateReviewQueue(
 
   if (existingItem) {
     // 已存在，根据分数更新复习状态
-    // 分数越高，回忆质量越好
-    const quality = quizScore >= 90 ? 5 : quizScore >= 75 ? 4 : quizScore >= 60 ? 3 : 2;
+    // 分数越高，回忆质量越好（分数 → SM-2 quality 映射见 quizScoreToQuality）
+    const quality = quizScoreToQuality(quizScore);
     const updatedItem = processReview(existingItem, quality);
     return existingItems.map((item) =>
       item.id === completedLessonId ? updatedItem : item

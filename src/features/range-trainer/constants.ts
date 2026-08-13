@@ -188,8 +188,8 @@ export const ACTION_TYPES = [
   { value: 'call-vs-raise', label: 'Call vs Raise' },
 ] as const;
 
-/** 13×13 矩阵的牌面排序（A→2） */
-export const GRID_RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const;
+/** 13×13 矩阵的牌面排序（A→2）——单一事实源在 shared/constants/poker.ts，此处 re-export 兼容旧路径 */
+export { GRID_RANKS } from '@/shared/constants/poker';
 
 /** 短牌 9×9 矩阵的牌面排序（A→6） */
 export const SHORT_DECK_GRID_RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6'] as const;

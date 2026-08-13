@@ -5,25 +5,56 @@
 
 import type { ReviewItem } from './spacedRepetition';
 import { getTodayReviewItems } from './spacedRepetition';
+import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
 import type { TrainingRecord } from '../types';
 import type { AcademyProgress } from '@/features/strategy-academy/types';
 import { LEVELS } from '@/features/strategy-academy/data/courses';
 
-export interface DailyRecommendation {
+/** 推荐项公共字段 */
+interface BaseRecommendation {
   id: string;
-  type: 'academy-lesson' | 'range-quiz' | 'pot-odds-quiz' | 'gto-practice' | 'review';
   /** i18n key（渲染端 t(title, titleParams) 解析），不再直接存储展示文案 */
   title: string;
   titleParams?: Record<string, string | number>;
   /** i18n key（渲染端 t(description, descParams) 解析） */
   description: string;
-  descParams?: Record<string, string | number>;
   route: string;                 // 跳转路由
   priority: 'high' | 'medium' | 'low';
   estimatedTime: string;         // "10 min"
   /** 推荐理由语义 key（渲染端 t(`dashboard.dataPlan.reason.${reason}`)） */
   reason: string;
 }
+
+/** 今日待复习推荐（descParams.items = 前 3 项预览，count 仅在 >3 时存在） */
+export interface ReviewRecommendation extends BaseRecommendation {
+  type: 'review';
+  descParams: { items: string; count?: number };
+}
+
+/** 学院下一课推荐 */
+export interface AcademyLessonRecommendation extends BaseRecommendation {
+  type: 'academy-lesson';
+  descParams: { level: number };
+}
+
+/** 薄弱/多样性训练推荐（range-quiz / pot-odds-quiz；无答题记录时 descParams 缺省） */
+export interface QuizPracticeRecommendation extends BaseRecommendation {
+  type: 'range-quiz' | 'pot-odds-quiz';
+  descParams?: { accuracy: number };
+}
+
+/** 连续天数挑战推荐 */
+export interface GtoPracticeRecommendation extends BaseRecommendation {
+  type: 'gto-practice';
+  descParams: { streak: number };
+}
+
+/** 每日训练推荐项（按 type 窄化的 discriminated union，descParams 结构由类型系统保证） */
+export type DailyRecommendation =
+  | ReviewRecommendation
+  | AcademyLessonRecommendation
+  | QuizPracticeRecommendation
+  | GtoPracticeRecommendation;
 
 // 模块路由映射
 const MODULE_ROUTES: Record<string, string> = {
@@ -115,10 +146,10 @@ export function generateCrossModuleDailyPlan(
   if (todayReviews.length > 0) {
     // P0C：清洗历史遗留的硬编码中文"决策"后缀（GTO 场景 name 曾为 "BTN Turn 决策"）。
     // 不依赖 persist migrate 时机，渲染端兜底保证英文界面不再出现中英混杂。
-    const cleanLabel = (label: string) => label.replace(/\s*决策$/, '');
+    // 统一口径：shared/utils/sanitizeReviewLabel（与 migrate / onRehydrateStorage 共用）
     const firstItems = todayReviews
       .slice(0, 3)
-      .map((item) => cleanLabel(item.label))
+      .map((item) => sanitizeReviewLabel(item.label))
       .join('、');
     recommendations.push({
       id: 'review-today',

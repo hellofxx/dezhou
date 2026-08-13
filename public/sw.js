@@ -72,22 +72,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Self-hosted fonts (public/fonts/): cache-first (immutable, offline-capable)
-  if (url.pathname.startsWith(BASE + 'fonts/')) {
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        if (cached) return cached;
-        return fetch(event.request).then((response) => {
-          if (response && response.status === 200) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          }
-          return response;
-        });
-      })
-    );
-    return;
-  }
+  // 自托管字体已迁移至 src/fonts/，由 Vite 打包为哈希资产，走上方 assets/ 规则（离线能力不变）
 
   // Other same-origin GET: network-first, no caching (avoids stale modules after update)
   event.respondWith(

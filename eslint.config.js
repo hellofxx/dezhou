@@ -23,12 +23,12 @@ const FEATURES = [
 // 其余 peer 边为存量债务（绕过 shared/ 层与事件总线），新增边一律变红。
 // 快照守卫测试：src/eslintCrossImports.test.ts（新增边时 pnpm test 必然变红）。
 export const ALLOWED_CROSS_IMPORTS = {
-  'gto-simulator': ['progress', 'range-trainer', 'strategy-academy'],
+  'gto-simulator': ['progress'],
   'hand-history': [],
   'help-center': [],
-  onboarding: ['progress', 'range-trainer'],
+  onboarding: ['progress'],
   'pot-odds': ['progress'],
-  progress: ['puzzle-trainer', 'strategy-academy', 'theory-academy'],
+  progress: ['strategy-academy'],
   'puzzle-trainer': ['progress'],
   'range-trainer': ['progress'],
   'strategy-academy': ['progress', 'puzzle-trainer'],

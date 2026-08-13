@@ -1,4 +1,5 @@
 export { useProgressStore } from './store';
+export { initProgressStore } from './store.bootstrap';
 export { useProgress } from './hooks/useProgress';
 export type { TrainingRecord, StatsSummary, DailyStats, ModuleStats, UserSettings } from './types';
 export { default as WeaknessAnalysis } from './components/stats/WeaknessAnalysis';

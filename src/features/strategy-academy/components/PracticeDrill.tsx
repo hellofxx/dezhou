@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trans, useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 import { XCircle, ArrowRight, Trophy, Clock, Target, Zap, Keyboard } from 'lucide-react';
 import type { PracticeDrill as PracticeDrillType, PracticeQuestion, PracticeOption, PracticeResult, PracticeAnswerDetail, QuestionDifficulty } from '../types';
 import { PokerCard } from '@/shared/components/poker/Card';
@@ -25,7 +26,6 @@ import { gradePracticeSelection, pickTimeoutFallbackOption } from '../utils/prac
 import {
   calculateGrade,
   GRADE_DISPLAY_CONFIG,
-  type DecisionGrade,
 } from '@/shared/types/decisionFeedback';
 // P2-03: 难度变化阶梯图（结果页展示）
 import { DifficultyStairChart, type DifficultyChange } from './DifficultyStairChart';
@@ -60,18 +60,41 @@ const ACTION_STYLES: Record<string, string> = {
   Check: 'action-mini !px-4 !py-3 !text-sm !font-bold !rounded-lg border border-[var(--poker-info)]/50 bg-[var(--poker-info-bg)] text-[var(--poker-info)] hover:bg-[var(--poker-info)]/20',
 };
 
-function classifyAction(action: string): string {
+type ActionKind = 'fold' | 'call' | 'raise' | 'allin' | 'check';
+
+function classifyActionKind(action: string): ActionKind {
   const a = action.toLowerCase();
-  if (a.includes('all-in') || a.includes('allin') || a.startsWith('push') || a.includes('全下')) return ACTION_STYLES['All-in']!;
-  if (a.startsWith('fold') || a.includes('fold') || a.startsWith('弃牌') || a.startsWith('tank then')) return ACTION_STYLES['Fold']!;
-  if (a.startsWith('call') || a.startsWith('limp') || a.startsWith('跟注') || a.includes('平跟') || a.startsWith('仅跟注')) return ACTION_STYLES['Call']!;
-  if (a.startsWith('check')) return ACTION_STYLES['Check']!;
+  // 英文关键词匹配（与数据层语义对齐）
+  if (a.includes('all-in') || a.includes('allin') || a.startsWith('push')) return 'allin';
+  if (a.startsWith('fold') || a.startsWith('tank then')) return 'fold';
+  if (a.startsWith('call') || a.startsWith('limp')) return 'call';
+  if (a.startsWith('check')) return 'check';
+  // raise 类（覆盖 bet / squeeze / open / min-raise / overbet / donk / 加注 等）
   if (
-    a.startsWith('raise') || a.startsWith('bet') || a.startsWith('3-bet') || a.startsWith('c-bet') ||
-    a.startsWith('squeeze') || a.startsWith('open') || a.startsWith('加注') || a.startsWith('下注') ||
-    a.startsWith('min-raise') || a.startsWith('overbet') || a.startsWith('donk') || a.includes('价值下注')
-  ) return ACTION_STYLES['Raise']!;
-  return ACTION_STYLES['Call']!; // 中性兜底（心理类/工具类选项）
+    a.startsWith('raise') || a.startsWith('bet') ||
+    a.startsWith('squeeze') || a.startsWith('open') ||
+    a.startsWith('min-raise') || a.startsWith('overbet') || a.startsWith('donk') ||
+    a.includes('raise')
+  ) return 'raise';
+  // LEGACY: 中文关键词匹配作为数据层迁移前的过渡兼容
+  if (a.includes('全下')) return 'allin';
+  if (a.startsWith('弃牌')) return 'fold';
+  if (a.startsWith('跟注') || a.includes('平跟') || a.startsWith('仅跟注')) return 'call';
+  if (a.startsWith('加注') || a.startsWith('下注') || a.includes('价值下注')) return 'raise';
+  // 默认退回 raise（最保守分类）
+  return 'raise';
+}
+
+const ACTION_KIND_STYLES: Record<ActionKind, string> = {
+  fold: ACTION_STYLES['Fold']!,
+  call: ACTION_STYLES['Call']!,
+  raise: ACTION_STYLES['Raise']!,
+  allin: ACTION_STYLES['All-in']!,
+  check: ACTION_STYLES['Check']!,
+};
+
+function classifyAction(action: string): string {
+  return ACTION_KIND_STYLES[classifyActionKind(action)];
 }
 
 const DIFFICULTY_COLORS: Record<QuestionDifficulty, string> = {
@@ -95,13 +118,13 @@ const DIFFICULTY_PILL_BORDER: Record<QuestionDifficulty, string> = {
   advanced: 'border-[var(--warning)]/30',
 };
 
-// P2-03: 五级反馈中文兜底（t() 缺失时使用，与 i18n feedback.grade.* 语义对齐）
-const GRADE_FALLBACK_LABELS: Record<DecisionGrade, string> = {
-  best: '最优决策',
-  correct: '正确',
-  inaccuracy: '小幅偏差',
-  wrong: '错误',
-  blunder: '重大错误',
+// P2-03: 五级反馈 i18n 兜底（纯 key 调用，与 i18n academy.feedback.grade* 语义对齐）
+const GRADE_FALLBACK_LABELS = {
+  best: t('academy.feedback.gradeBest'),
+  correct: t('academy.feedback.gradeCorrect'),
+  inaccuracy: t('academy.feedback.gradeInaccuracy'),
+  wrong: t('academy.feedback.gradeWrong'),
+  blunder: t('academy.feedback.gradeBlunder'),
 };
 
 // ===== 倒计时圆环组件 =====
@@ -186,11 +209,12 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   // P2-03: 难度消息 timer（竞态修复：新消息设置前清除旧 timer）
   const difficultyMessageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const soundInitRef = useRef(false);
+  const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { adaptiveConfig, updateAbility, recentPracticeResults } = useAcademyStore();
-  const { settings } = useProgressStore();
+  const settings = useProgressStore((s) => s.settings);
   // P2-5.2: 情绪管理 — 记录答题用于连续答错检测与每日题量统计
   const recordAnswerForEmotion = useProgressStore((s) => s.recordAnswer);
 
@@ -199,10 +223,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
     soundManager.setEnabled(settings.soundEnabled);
   }, [settings.soundEnabled]);
 
-  // P2-03: 卸载时清除难度消息 / 超时闪烁 timer，避免悬空回调
+  // P2-03: 卸载时清除难度消息 / 超时闪烁 / cooldown timer，避免悬空回调
   useEffect(() => () => {
     if (difficultyMessageTimerRef.current) clearTimeout(difficultyMessageTimerRef.current);
     if (timeoutFlashTimerRef.current) clearTimeout(timeoutFlashTimerRef.current);
+    if (cooldownTimerRef.current) clearTimeout(cooldownTimerRef.current);
   }, []);
 
   // 首次交互初始化音频
@@ -340,7 +365,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         // 压力模式：连续错 3 题显示冷却提示
         if (isPressure && newConsecutiveWrong >= 3) {
           setShowCooldown(true);
-          setTimeout(() => setShowCooldown(false), 3000);
+          cooldownTimerRef.current = setTimeout(() => setShowCooldown(false), 3000);
           setConsecutiveWrong(0);
         }
 
@@ -356,9 +381,9 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       // 每5题检查一次难度调整
       const answeredCount = currentIndex + 1;
       if (adaptive && !isPressure && answeredCount % 5 === 0) {
-        const recentResults = newTimes.slice(-5).map((t, i) => ({
-          isCorrect: i === newTimes.length - 1 ? gradedCorrect : true,
-          timeTaken: t,
+        const recentResults = answersRef.current.slice(-5).map((a) => ({
+          isCorrect: a.isCorrect,
+          timeTaken: a.timeTaken,
         }));
         checkDifficultyAdjustment(recentResults);
       }

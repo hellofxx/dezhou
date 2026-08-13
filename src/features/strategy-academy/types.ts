@@ -3,15 +3,9 @@ import type { PokerVariant } from '@/shared/types/elo';
 // 题目难度级别
 export type QuestionDifficulty = 'beginner' | 'intermediate' | 'advanced';
 
-// 用户能力评估
-export interface AbilityAssessment {
-  rangeKnowledge: number;     // 范围知识
-  oddsCalculation: number;    // 赔率计算
-  gtoUnderstanding: number;   // GTO理解
-  positionalPlay: number;     // 位置打法
-  emotionalControl: number;   // 情绪控制
-  lastUpdated: number;
-}
+// 用户能力评估（单一事实源在 shared/types/ability.ts，此处 re-export 兼容旧路径）
+import type { AbilityAssessment } from '@/shared/types/ability';
+export type { AbilityAssessment };
 
 // 难度自适应配置
 export interface AdaptiveConfig {
@@ -56,29 +50,9 @@ export interface QuizQuestion {
 }
 
 // ===== 对手形象系统类型 =====
-
-// 对手统计数据
-export interface OpponentStats {
-  vpip: number;           // 自愿入池率（%）
-  pfr: number;            // 翻前加注率（%）
-  af: number;             // 激进度因子
-  threeBetPercent: number; // 3-Bet频率（%）
-  foldToCBet: number;     // 面对C-Bet弃牌率（%）
-  cbetFrequency: number;  // C-Bet频率（%）
-}
-
-// 对手形象
-export interface OpponentProfile {
-  id: string;             // 'tag' | 'lag' | 'nit' | 'maniac' | 'calling_station' | 'unknown'
-  name: string;           // 完整名称如 "TAG (紧凶)"
-  shortName: string;      // 短标签如 "TAG"
-  description: string;    // 一句话描述
-  color: string;          // 主题色（hex）
-  icon: string;           // emoji 图标
-  stats: OpponentStats;
-  tendencies: string[];   // 行为特征列表
-  exploitableBy: string[]; // 可利用方式列表
-}
+// 单一事实源在 shared/types/opponent.ts（gto-simulator 亦消费），此处 re-export 兼容旧路径
+import type { OpponentStats, OpponentProfile } from '@/shared/types/opponent';
+export type { OpponentStats, OpponentProfile };
 
 // 游戏上下文（牌桌动态）
 export interface GameContext {

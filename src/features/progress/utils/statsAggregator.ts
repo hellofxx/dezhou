@@ -1,5 +1,6 @@
 import type { TrainingRecord, StatsSummary, DailyStats, ModuleStats } from '../types';
 import { calculateCurrentStreak, calculateLongestStreak } from './streakCalc';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 
 /** 从训练记录聚合统计数据 */
 export function aggregateStats(records: TrainingRecord[]): StatsSummary {
@@ -28,7 +29,7 @@ export function aggregateStats(records: TrainingRecord[]): StatsSummary {
   const averageTime = timedQuestions > 0 ? totalTime / timedQuestions : 0;
 
   // 提取日期列表用于 streak 计算
-  const dates = records.map((r) => toDateStr(r.createdAt));
+  const dates = records.map((r) => toLocalDateKey(r.createdAt));
   const uniqueDates = [...new Set(dates)];
 
   const lastTrainingDate = Math.max(...records.map((r) => r.createdAt));
@@ -52,7 +53,7 @@ export function aggregateByDay(records: TrainingRecord[], days: number): DailySt
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(now);
     d.setDate(d.getDate() - i);
-    const dateStr = toDateStr(d.getTime());
+    const dateStr = toLocalDateKey(d.getTime());
     result.push({
       date: dateStr,
       sessions: 0,
@@ -65,7 +66,7 @@ export function aggregateByDay(records: TrainingRecord[], days: number): DailySt
   const dateMap = new Map(result.map((d) => [d.date, d]));
 
   for (const record of records) {
-    const dateStr = toDateStr(record.createdAt);
+    const dateStr = toLocalDateKey(record.createdAt);
     const day = dateMap.get(dateStr);
     if (!day) continue;
     // P2-C: theory 模块 averageTime=0，不参与日耗时统计
@@ -80,7 +81,7 @@ export function aggregateByDay(records: TrainingRecord[], days: number): DailySt
   for (const day of result) {
     if (day.questions > 0) {
       // 重新从 records 中获取该天的正确数
-      const dayRecords = records.filter((r) => toDateStr(r.createdAt) === day.date);
+      const dayRecords = records.filter((r) => toLocalDateKey(r.createdAt) === day.date);
       const correct = dayRecords.reduce((sum, r) => sum + r.result.correctAnswers, 0);
       day.accuracy = correct / day.questions;
       day.totalTime = day.totalTime / day.questions;
@@ -145,13 +146,4 @@ export function getWeakHands(
     .filter(([, s]) => s.wrong > 0)
     .map(([hand, s]) => ({ hand, wrongCount: s.wrong, totalCount: s.total }))
     .toSorted((a, b) => b.wrongCount - a.wrongCount);
-}
-
-/** 时间戳转 YYYY-MM-DD */
-function toDateStr(timestamp: number): string {
-  const d = new Date(timestamp);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
 }

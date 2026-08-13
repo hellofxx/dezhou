@@ -2,8 +2,10 @@ import type { HandNotation, RangeAction } from '@/shared/types/poker';
 import type { Position } from '@/shared/types/position';
 import type { SessionStatus } from '@/shared/types/common';
 
-/** 用户答案：动作 / 'timeout'（超时显式标记，恒判错，P1A-02）/ null（未作答） */
-export type QuizAnswer = RangeAction | 'timeout';
+/** 用户答案：动作 / 'timeout'（超时显式标记，恒判错，P1A-02）/ null（未作答）
+ *  单一事实源在 shared/types/quiz.ts（onboarding 首训亦消费），此处 re-export 兼容旧路径 */
+import type { QuizAnswer } from '@/shared/types/quiz';
+export type { QuizAnswer };
 
 // 范围表中一个格子的状态
 export interface RangeCell {
@@ -29,19 +31,9 @@ export interface LearnState {
 }
 
 // 测验题目
-export interface QuizQuestion {
-  hand: HandNotation;
-  position: Position;
-  context?: string;
-  correctAction: RangeAction;
-}
-
-// 单题答题反馈
-export interface QuestionFeedback {
-  isCorrect: boolean;
-  correctAction: RangeAction;
-  userAction: QuizAnswer;
-}
+// 单题答题反馈（单一事实源在 shared/types/quiz.ts，此处 re-export）
+import type { QuizQuestion } from '@/shared/types/quiz';
+export type { QuizQuestion, QuestionFeedback } from '@/shared/types/quiz';
 
 // 测验会话状态
 export interface QuizSessionState {

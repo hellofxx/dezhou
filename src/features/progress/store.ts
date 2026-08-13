@@ -3,17 +3,17 @@ import { persist } from 'zustand/middleware';
 import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState } from './types';
 import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
-import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { ReviewItem } from './utils/spacedRepetition';
-import { getTodayString as getTodayStringFromSR } from './utils/spacedRepetition';
 import {
   updateStreak,
   isEarnBackActive,
   applyManualFreeze,
   computeStreakBrokenAt,
-  getTodayString as getTodayStringFromStreak,
+  getTodayString,
   getYesterdayString as getYesterdayStringFromStreak,
 } from './utils/streakCalc';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
 import type { GameVariant } from '@/shared/types/poker';
 // P1-2: ELO 能力分级
 import type { EloRating, EloDimension, RankUpEvent, PokerVariant } from '@/shared/types/elo';
@@ -26,7 +26,7 @@ import {
   computeOverallElo,
   getDynamicKFactor,
 } from '@/shared/utils/elo';
-import type { AbilityAssessment } from '@/features/strategy-academy/types';
+import type { AbilityAssessment } from '@/shared/types/ability';
 // P2-4: 导师角色人格化
 import type { MentorStyle } from '@/shared/types/mentor';
 import { DEFAULT_MENTOR } from '@/shared/types/mentor';
@@ -34,37 +34,9 @@ import { DEFAULT_MENTOR } from '@/shared/types/mentor';
 import { ACHIEVEMENTS } from './data/achievements';
 import type { AchievementCondition } from './data/achievements';
 // 跨模块 store 引用（用于成就检查）
-// strategy-academy/store 通过动态 import 访问，避免静态循环依赖（见 getAcademyStore）
-import { usePuzzleStore } from '@/features/puzzle-trainer/store';
-
-// ===== 跨模块动态导入辅助（避免静态循环依赖） =====
-let _academyModule: { useAcademyStore: typeof import('@/features/strategy-academy/store')['useAcademyStore'] } | null = null;
-
-/** 获取 strategy-academy store 模块（首次调用时动态加载，后续复用缓存） */
-async function getAcademyStore() {
-  if (!_academyModule) {
-    _academyModule = await import('@/features/strategy-academy/store');
-  }
-  return _academyModule;
-}
-
-// theory-academy（2026-07）：同模式的动态导入（避免静态循环依赖）
-let _theoryModule: {
-  store: typeof import('@/features/theory-academy/store');
-  utils: typeof import('@/features/theory-academy/utils/theoryProgress');
-} | null = null;
-
-/** 获取 theory-academy store 与进度工具模块（首次调用时动态加载，后续复用缓存） */
-async function getTheoryStore() {
-  if (!_theoryModule) {
-    const [store, utils] = await Promise.all([
-      import('@/features/theory-academy/store'),
-      import('@/features/theory-academy/utils/theoryProgress'),
-    ]);
-    _theoryModule = { store, utils };
-  }
-  return _theoryModule;
-}
+// 成就检查已改为依赖倒置：业务模块（strategy-academy / theory-academy / puzzle-trainer）通过
+// achievementRegistry 注册数据源，此处仅遍历注册表查询，不再 import 具体模块。
+import { getAchievementSources } from '@/shared/stores/achievementRegistry';
 
 // onboarding 默认状态（migrate 与初始化共用）
 export const DEFAULT_ONBOARDING: OnboardingState = {
@@ -108,7 +80,7 @@ export const DEFAULT_STREAK_STATE: StreakState = {
  *   handReading← gtoUnderstanding, rangeKnowledge（综合阅读）
  *   mental     ← emotionalControl（情绪）
  */
-function mapAcademyAbilityToElo(aa: AbilityAssessment): EloRating {
+export function mapAcademyAbilityToElo(aa: AbilityAssessment): EloRating {
   const elo: EloRating = {
     ...DEFAULT_ELO,
     preflop: abilityToElo((aa.rangeKnowledge + aa.positionalPlay) / 2),
@@ -124,7 +96,7 @@ function mapAcademyAbilityToElo(aa: AbilityAssessment): EloRating {
 }
 
 /** 检测 abilityAssessment 是否包含非默认数据（用于判断是否需要映射） */
-function hasNonDefaultAbility(aa: AbilityAssessment | undefined | null): aa is AbilityAssessment {
+export function hasNonDefaultAbility(aa: AbilityAssessment | undefined | null): aa is AbilityAssessment {
   if (!aa) return false;
   return (
     typeof aa.rangeKnowledge === 'number' &&
@@ -140,14 +112,145 @@ function hasNonDefaultAbility(aa: AbilityAssessment | undefined | null): aa is A
   );
 }
 
-/** 时间戳转本地时区 YYYY-MM-DD（用于 migrate 老数据） */
-function timestampToYYYYMMDD(ts: number): string {
-  const d = new Date(ts);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
+/**
+ * 持久化版本迁移表（表驱动，替代线性 if 链）。
+ * MIGRATIONS[i] 对应 v(i) → v(i+1) 迁移（即原 `if (fromVersion < i+1)` 代码块），
+ * migrate 从 fromVersion 起顺序执行到数组末尾，与线性链行为完全等价。
+ */
+const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
+  // v0 → v1：注入 onboarding（v0 数据不存在，此段为防御性保留）
+  (s) => {
+    if (!s.onboarding) {
+      s.onboarding = { ...DEFAULT_ONBOARDING, startedAt: Date.now() };
+    }
+  },
+  // v1 → v2：注入 streak 默认值，转换老 lastTrainingDate
+  (s) => {
+    if (!s.streak) {
+      const oldLastTrainingDate = s.lastTrainingDate;
+      const lastTrainingStr =
+        typeof oldLastTrainingDate === 'number' && Number.isFinite(oldLastTrainingDate)
+          ? toLocalDateKey(oldLastTrainingDate)
+          : null;
+      s.streak = {
+        ...DEFAULT_STREAK_STATE,
+        lastTrainingDate: lastTrainingStr,
+        // 若老用户已有训练记录，将 streakStartDate 同步为最近训练日（保守值）
+        streakStartDate: lastTrainingStr,
+      };
+    }
+    // 删除顶层 lastTrainingDate（已迁入 streak）
+    delete s.lastTrainingDate;
+  },
+  // v2 → v3：注入 ELO 默认值与 eloRankUp=null
+  // 注：strategy-academy 的 abilityAssessment → ELO 映射由 initProgressStore
+  // （store.bootstrap.ts）通过 setTimeout + 动态 import 自动完成（避免循环依赖）
+  (s) => {
+    if (!s.elo) {
+      s.elo = { ...DEFAULT_ELO, lastUpdated: Date.now() };
+    }
+    if (s.eloRankUp === undefined) {
+      s.eloRankUp = null;
+    }
+  },
+  // v3 → v4：注入 P1-4.3 快速训练连续打卡默认值
+  (s) => {
+    if (s.quickDrillStreak === undefined) {
+      s.quickDrillStreak = 0;
+    }
+    if (s.lastQuickDrillDate === undefined) {
+      s.lastQuickDrillDate = null;
+    }
+  },
+  // v4 → v5：注入 P2-4 导师风格默认值
+  (s) => {
+    if (!s.mentorStyle) {
+      s.mentorStyle = DEFAULT_MENTOR;
+    }
+  },
+  // v5 → v6：注入 P2-5 情绪管理模块默认值
+  (s) => {
+    if (!s.emotion) {
+      s.emotion = { ...DEFAULT_EMOTION_STATE };
+    } else {
+      // 防御性合并：补全可能缺失的内部计数器字段
+      s.emotion = { ...DEFAULT_EMOTION_STATE, ...(s.emotion as object) };
+    }
+  },
+  // v6 → v7：注入 P1-3 成就系统默认值
+  (s) => {
+    if (!s.unlockedAchievements) {
+      s.unlockedAchievements = [];
+    }
+    if (!s.achievementUnlockDates) {
+      s.achievementUnlockDates = {};
+    }
+  },
+  // v7 → v8：注入冻结卡碎片经济系统默认值
+  (s) => {
+    if (s.freezeCardFragments === undefined) {
+      s.freezeCardFragments = 0;
+    }
+    if (s.lastFragmentDate === undefined) {
+      s.lastFragmentDate = null;
+    }
+    if (s.fragmentsEarnedToday === undefined) {
+      s.fragmentsEarnedToday = 0;
+    }
+  },
+  // v8 → v9：注入待展示里程碑庆典默认值（全局庆典 host）
+  (s) => {
+    if (s.pendingMilestone === undefined) {
+      s.pendingMilestone = null;
+    }
+  },
+  // v9 → v10：游戏变体 ELO 分离（elo → eloByVariant）
+  (s) => {
+    const elo = s.elo as EloRating | undefined;
+    const eloByVariant = s.eloByVariant as Record<PokerVariant, EloRating> | undefined;
+    // 如果已有 elo，克隆到 eloByVariant.standard
+    if (elo && eloByVariant === undefined) {
+      const standardElo = { ...elo, variant: 'standard' as PokerVariant };
+      s.eloByVariant = {
+        standard: standardElo,
+        'short-deck': { ...standardElo, variant: 'short-deck' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+        'heads-up': { ...standardElo, variant: 'heads-up' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+      };
+      // activeVariant 默认为 standard
+      if (s.activeVariant === undefined) {
+        s.activeVariant = 'standard';
+      }
+    }
+    // 如果没有 elo 但有 eloByVariant（新用户使用），确保所有变体都有默认值
+    if (eloByVariant && !('elo' in s)) {
+      for (const variant of ['standard', 'short-deck', 'heads-up'] as PokerVariant[]) {
+        if (!eloByVariant[variant]) {
+          eloByVariant[variant] = {
+            ...DEFAULT_ELO,
+            variant,
+            gamesPlayed: 0,
+            lastUpdated: 0,
+          };
+        }
+      }
+    }
+  },
+  // v10 → v11：清洗 reviewItems GTO 标签尾部的硬编码中文"决策"。
+  // 场景数据层（GTO scenarioGenerator）已不再写入"决策"后缀，
+  // 此处清理已持久化在 localStorage 中的遗留脏数据，避免首页
+  // 英文界面下出现"BTN Turn 决策"中英混杂。
+  (s) => {
+    const items = s.reviewItems as Array<{ label?: string }> | undefined;
+    if (Array.isArray(items)) {
+      s.reviewItems = items.map((item) => {
+        if (item.label && item.label.endsWith(' 决策')) {
+          return { ...item, label: sanitizeReviewLabel(item.label) };
+        }
+        return item;
+      });
+    }
+  },
+];
 
 interface ProgressStore {
   // 训练记录
@@ -349,7 +452,7 @@ export const useProgressStore = create<ProgressStore>()(
       // 间隔重复复习
       reviewItems: [],
       dismissedRecommendations: [],
-      lastDismissalDate: getTodayStringFromSR(),
+      lastDismissalDate: getTodayString(),
 
       updateReviewItem: (item) =>
         set((state) => ({
@@ -369,13 +472,16 @@ export const useProgressStore = create<ProgressStore>()(
           };
         }),
 
-      dismissRecommendation: (id) =>
-        set((state) => ({
+      dismissRecommendation: (id) => set((state) => {
+        // 去重：同一 id 重复调用不重复 push
+        if (state.dismissedRecommendations.includes(id)) return state;
+        return {
           dismissedRecommendations: [...state.dismissedRecommendations, id],
-        })),
+        };
+      }),
 
       clearDailyDismissals: () =>
-        set({ dismissedRecommendations: [], lastDismissalDate: getTodayStringFromSR() }),
+        set({ dismissedRecommendations: [], lastDismissalDate: getTodayString() }),
 
       // 新手引导
       onboarding: { ...DEFAULT_ONBOARDING, startedAt: Date.now() },
@@ -413,7 +519,7 @@ export const useProgressStore = create<ProgressStore>()(
         const prev = get().streak;
         const updated = updateStreak(prev);
         // 只在今日成功记录（lastTrainingDate 等于 today）时检查里程碑
-        if (updated.lastTrainingDate === getTodayStringFromStreak() && updated !== prev) {
+        if (updated.lastTrainingDate === getTodayString() && updated !== prev) {
           set({ streak: updated });
           get().checkMilestone();
           // 完成每日训练有 30% 概率获得 1 个碎片（每日最多 2 个）
@@ -488,7 +594,7 @@ export const useProgressStore = create<ProgressStore>()(
             currentStreak: restored,
             longestStreak: Math.max(state.streak.longestStreak, restored),
             streakBrokenAt: null,
-            lastTrainingDate: getTodayStringFromStreak(),
+            lastTrainingDate: getTodayString(),
             streakFreezeUsedToday: false,
           },
         }));
@@ -567,7 +673,7 @@ export const useProgressStore = create<ProgressStore>()(
       lastQuickDrillDate: null,
 
       recordQuickDrillCompletion: () => {
-        const today = getTodayStringFromStreak();
+        const today = getTodayString();
         const yesterday = getYesterdayStringFromStreak();
         const prev = get();
 
@@ -603,7 +709,7 @@ export const useProgressStore = create<ProgressStore>()(
       emotion: { ...DEFAULT_EMOTION_STATE },
 
       setTodayMood: (mood) => {
-        const today = getTodayStringFromStreak();
+        const today = getTodayString();
         set((state) => ({
           emotion: {
             ...state.emotion,
@@ -614,7 +720,7 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       recordAnswer: (isCorrect) => {
-        const today = getTodayStringFromStreak();
+        const today = getTodayString();
         const prev = get().emotion;
 
         // 跨日重置：如果 dailyQuestionsDate 不是今天，先重置计数器（含连续答错数）
@@ -704,7 +810,7 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       resetDailyCounters: () => {
-        const today = getTodayStringFromStreak();
+        const today = getTodayString();
         set((state) => ({
           emotion: {
             ...state.emotion,
@@ -755,7 +861,7 @@ export const useProgressStore = create<ProgressStore>()(
       achievementUnlockDates: {},
 
       checkAchievements: async () => {
-        // 此函数将被 debounce 包装（见文件底部）
+        // 此函数由 initProgressStore（store.bootstrap.ts）中的 debounce 包装
         const state = get();
         const alreadyUnlocked = new Set(state.unlockedAchievements);
         const newUnlocked: string[] = [];
@@ -798,139 +904,14 @@ export const useProgressStore = create<ProgressStore>()(
       name: 'poker-training-progress',
       version: 11,
       migrate: (persistedState: unknown, fromVersion: number) => {
-        // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak
-        const next = (persistedState ?? {}) as Partial<ProgressStore> & {
-          lastTrainingDate?: number | null;
-          reviewItems?: Array<{ label?: string }>;
-        };
-        // v0 → v1：注入 onboarding
-        if (fromVersion < 1) {
-          if (!next.onboarding) {
-            next.onboarding = { ...DEFAULT_ONBOARDING, startedAt: Date.now() };
-          }
+        // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。
+        // 表驱动调度：MIGRATIONS[i] 对应 v(i) → v(i+1)（即原 if (fromVersion < i+1) 段），
+        // 从 fromVersion 起顺序执行到数组末尾，与线性 if 链行为完全等价。
+        const next = (persistedState as Record<string, unknown>) ?? {};
+        for (let v = fromVersion; v < MIGRATIONS.length; v++) {
+          MIGRATIONS[v]!(next);
         }
-        // v1 → v2：注入 streak 默认值，转换老 lastTrainingDate
-        if (fromVersion < 2) {
-          if (!next.streak) {
-            const oldLastTrainingDate = next.lastTrainingDate;
-            const lastTrainingStr =
-              typeof oldLastTrainingDate === 'number' && Number.isFinite(oldLastTrainingDate)
-                ? timestampToYYYYMMDD(oldLastTrainingDate)
-                : null;
-            next.streak = {
-              ...DEFAULT_STREAK_STATE,
-              lastTrainingDate: lastTrainingStr,
-              // 若老用户已有训练记录，将 streakStartDate 同步为最近训练日（保守值）
-              streakStartDate: lastTrainingStr,
-            };
-          }
-          // 删除顶层 lastTrainingDate（已迁入 streak）
-          delete (next as Record<string, unknown>).lastTrainingDate;
-        }
-        // v2 → v3：注入 ELO 默认值与 eloRankUp=null
-        // 注：strategy-academy 的 abilityAssessment → ELO 映射在模块底部
-        // 通过 setTimeout + 动态 import 自动完成（避免循环依赖）
-        if (fromVersion < 3) {
-          if (!next.elo) {
-            next.elo = { ...DEFAULT_ELO, lastUpdated: Date.now() };
-          }
-          if (next.eloRankUp === undefined) {
-            next.eloRankUp = null;
-          }
-        }
-        // v3 → v4：注入 P1-4.3 快速训练连续打卡默认值
-        if (fromVersion < 4) {
-          if (next.quickDrillStreak === undefined) {
-            next.quickDrillStreak = 0;
-          }
-          if (next.lastQuickDrillDate === undefined) {
-            next.lastQuickDrillDate = null;
-          }
-        }
-        // v4 → v5：注入 P2-4 导师风格默认值
-        if (fromVersion < 5) {
-          if (!next.mentorStyle) {
-            next.mentorStyle = DEFAULT_MENTOR;
-          }
-        }
-        // v5 → v6：注入 P2-5 情绪管理模块默认值
-        if (fromVersion < 6) {
-          if (!next.emotion) {
-            next.emotion = { ...DEFAULT_EMOTION_STATE };
-          } else {
-            // 防御性合并：补全可能缺失的内部计数器字段
-            next.emotion = { ...DEFAULT_EMOTION_STATE, ...next.emotion };
-          }
-        }
-        // v6 → v7：注入 P1-3 成就系统默认值
-        if (fromVersion < 7) {
-          if (!next.unlockedAchievements) {
-            next.unlockedAchievements = [];
-          }
-          if (!next.achievementUnlockDates) {
-            next.achievementUnlockDates = {};
-          }
-        }
-        // v7 → v8：注入冻结卡碎片经济系统默认值
-        if (fromVersion < 8) {
-          if (next.freezeCardFragments === undefined) {
-            next.freezeCardFragments = 0;
-          }
-          if (next.lastFragmentDate === undefined) {
-            next.lastFragmentDate = null;
-          }
-          if (next.fragmentsEarnedToday === undefined) {
-            next.fragmentsEarnedToday = 0;
-          }
-        }
-        // v8 → v9：注入待展示里程碑庆典默认值（全局庆典 host）
-        if (fromVersion < 9) {
-          if (next.pendingMilestone === undefined) {
-            next.pendingMilestone = null;
-          }
-        }
-        // v9 → v10：游戏变体 ELO 分离（eloRating → eloByVariant）
-        if (fromVersion < 10) {
-          // 如果已有 eloRating，克隆到 eloByVariant.standard
-          if (next.elo && next.eloByVariant === undefined) {
-            const standardElo = { ...next.elo, variant: 'standard' as PokerVariant };
-            next.eloByVariant = {
-              standard: standardElo,
-              'short-deck': { ...standardElo, variant: 'short-deck' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
-              'heads-up': { ...standardElo, variant: 'heads-up' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
-            };
-            // activeVariant 默认为 standard
-            if (next.activeVariant === undefined) {
-              next.activeVariant = 'standard';
-            }
-          }
-          // 如果没有 eloRating 但有 eloByVariant（新用户使用），确保所有变体都有默认值
-          if (next.eloByVariant && !('elo' in next)) {
-            for (const variant of ['standard', 'short-deck', 'heads-up'] as PokerVariant[]) {
-              if (!next.eloByVariant[variant]) {
-                next.eloByVariant[variant] = {
-                  ...DEFAULT_ELO,
-                  variant,
-                  gamesPlayed: 0,
-                  lastUpdated: 0,
-                };
-              }
-            }
-          }
-        }
-        // v10 → v11：清洗 reviewItems GTO 标签尾部的硬编码中文"决策"。
-        // 场景数据层（GTO scenarioGenerator）已不再写入"决策"后缀，
-        // 此处清理已持久化在 localStorage 中的遗留脏数据，避免首页
-        // 英文界面下出现"BTN Turn 决策"中英混杂。
-        if (fromVersion < 11 && Array.isArray(next.reviewItems)) {
-          next.reviewItems = next.reviewItems.map((item) => {
-            if (item.label && item.label.endsWith(' 决策')) {
-              return { ...item, label: item.label.slice(0, -3) };
-            }
-            return item;
-          });
-        }
-        return next as ProgressStore;
+        return next as unknown as ProgressStore;
       },
       // 启动时（hydration 完成后）兜底清洗历史遗留的 GTO 标签中文"决策"后缀。
       // 不依赖 version migrate 的触发时机，确保任何时期写入的脏 label 都被清理。
@@ -942,7 +923,7 @@ export const useProgressStore = create<ProgressStore>()(
         useProgressStore.setState({
           reviewItems: items.map((item) =>
             item.label?.endsWith('决策')
-              ? { ...item, label: item.label.replace(/\s*决策$/, '') }
+              ? { ...item, label: sanitizeReviewLabel(item.label) }
               : item,
           ),
         });
@@ -950,22 +931,6 @@ export const useProgressStore = create<ProgressStore>()(
     }
   )
 );
-
-// 订阅训练事件总线，自动写入 store
-trainingEvents.subscribe((record) => {
-  useProgressStore.getState().addRecord(record);
-  // 训练完成后触发成就检查（debounced）
-  debouncedCheckAchievements();
-});
-
-// P1-3: 成就检查 debounce 包装（300ms）
-let checkTimeout: ReturnType<typeof setTimeout> | null = null;
-function debouncedCheckAchievements() {
-  if (checkTimeout) clearTimeout(checkTimeout);
-  checkTimeout = setTimeout(() => {
-    useProgressStore.getState().checkAchievements();
-  }, 300);
-}
 
 /**
  * 成就条件检查辅助函数
@@ -981,14 +946,10 @@ async function checkCondition(
 
     case 'completeLessons': {
       if (condition.level === undefined) return false;
-      try {
-        const academy = await getAcademyStore();
-        // “完成 Level N”成就：该级全部课程完成（含 L4 拆分后的 4A/4B 节点），
-        // 而非仅完成 1 课；判定逻辑收敛在 academy store（课程数据属其模块内部）
-        return academy.useAcademyStore.getState().isLevelLessonsCompleted(condition.level);
-      } catch {
-        return false;
-      }
+      // “完成 Level N”成就：该级全部课程完成（含 L4 拆分后的 4A/4B 节点），
+      // 而非仅完成 1 课；判定逻辑由 academy 注册的数据源提供（依赖倒置）
+      const level = condition.level;
+      return getAchievementSources().some((s) => s.isLevelLessonsCompleted(level));
     }
 
     case 'streak':
@@ -1009,85 +970,53 @@ async function checkCondition(
       return state.elo.overall >= condition.minScore;
 
     case 'certification': {
-      try {
-        const academy = await getAcademyStore();
-        const certs = academy.useAcademyStore.getState().certifications;
+      for (const source of getAchievementSources()) {
+        const certs = source.getCertifications();
         if (condition.level === 0) {
-          return Object.values(certs).some((c) => c.certifiedAt);
+          if (Object.values(certs).some((c) => c?.certifiedAt)) return true;
+        } else if (certs[condition.level]?.certifiedAt) {
+          return true;
         }
-        return !!certs[condition.level]?.certifiedAt;
-      } catch {
-        return false;
       }
+      return false;
     }
 
     case 'allCertifications': {
-      try {
-        const academy = await getAcademyStore();
-        // 全部等级均需认证（区别于 certification level=0 的“任意认证”）
-        return academy.useAcademyStore.getState().areAllLevelsCertified();
-      } catch {
-        return false;
-      }
+      // 全部等级均需认证（区别于 certification level=0 的“任意认证”）
+      return getAchievementSources().some((s) => s.areAllLevelsCertified());
     }
 
     case 'completeTrack': {
-      try {
-        const academy = await getAcademyStore();
-        // 按 trackId 精确判定轨道全部课程完成（'any' = 任一非空轨道），
-        // 替代旧版“完成 10 课即算”的粗糙估算
-        return academy.useAcademyStore.getState().isTrackCompleted(condition.trackId);
-      } catch {
-        return false;
-      }
+      // 按 trackId 精确判定轨道全部课程完成（'any' = 任一非空轨道），
+      // 替代旧版“完成 10 课即算”的粗糙估算
+      return getAchievementSources().some((s) => s.isTrackCompleted(condition.trackId));
     }
 
     case 'firstPuzzle': {
-      try {
-        const history = usePuzzleStore.getState().history;
-        return history.length > 0;
-      } catch {
-        return false;
-      }
+      return getAchievementSources().some((s) => s.hasPuzzleHistory?.() ?? false);
     }
 
     case 'firstDailyPuzzle': {
-      try {
-        const dailyCompleted = usePuzzleStore.getState().dailyCompleted;
-        return Object.keys(dailyCompleted).length > 0;
-      } catch {
-        return false;
-      }
+      return getAchievementSources().some((s) => s.hasCompletedDailyPuzzle?.() ?? false);
     }
 
     // 理论学院（2026-07）：完成章节数达标
     case 'theoryChapters': {
-      // 廉价短路：仅在理论模块产生过训练记录时才动态加载理论内容 chunk，
-      // 避免任意模块训练完成后的成就检查都下载全量理论数据
+      // 廉价短路：仅在理论模块产生过训练记录时才查询注册数据源，
+      // 避免任意模块训练完成后的成就检查都触发理论数据读取
       if (!state.records.some((r) => r.module === 'theory-academy')) return false;
-      try {
-        const theory = await getTheoryStore();
-        const completed = theory.store.useTheoryStore.getState().progress.completedChapters;
-        return completed.length >= condition.count;
-      } catch {
-        return false;
-      }
+      return getAchievementSources().some(
+        (s) => (s.getCompletedChapters?.() ?? []).length >= condition.count
+      );
     }
 
     // 理论学院（2026-07）：前 N 个 Level（t1..tN）全部章节完成
     case 'theoryLevel': {
       // 廉价短路：同 theoryChapters，理论模块无记录时直接返回 false
       if (!state.records.some((r) => r.module === 'theory-academy')) return false;
-      try {
-        const theory = await getTheoryStore();
-        const completed = theory.store.useTheoryStore.getState().progress.completedChapters;
-        for (let lv = 1; lv <= condition.level; lv++) {
-          if (!theory.utils.isLevelFullyCompleted(`t${lv}`, completed)) return false;
-        }
-        return true;
-      } catch {
-        return false;
-      }
+      return getAchievementSources().some(
+        (s) => s.isTheoryLevelFullyCompleted?.(condition.level) ?? false
+      );
     }
 
     case 'allAchievements': {
@@ -1106,7 +1035,7 @@ async function checkCondition(
 // 每日最多获得 2 个碎片，跨日自动重置计数器
 function tryEarnFragment(probability: number) {
   const state = useProgressStore.getState();
-  const today = getTodayStringFromStreak();
+  const today = getTodayString();
 
   // 跨日重置
   if (state.lastFragmentDate !== today) {
@@ -1125,23 +1054,3 @@ function tryEarnFragment(probability: number) {
   }
 }
 
-// P1-2.3: 启动时从 strategy-academy 的 abilityAssessment 同步初始 ELO
-// 仅当 elo.gamesPlayed === 0 时执行（避免覆盖已累积的答题进度）
-// 通过 getAcademyStore() 动态加载，避免静态循环依赖
-if (typeof window !== 'undefined') {
-  setTimeout(() => {
-    void (async () => {
-      try {
-        const progressState = useProgressStore.getState();
-        if (progressState.elo.gamesPlayed > 0) return;
-        const academy = await getAcademyStore();
-        const aa = academy.useAcademyStore.getState().abilityAssessment;
-        if (hasNonDefaultAbility(aa)) {
-          useProgressStore.setState({ elo: mapAcademyAbilityToElo(aa) });
-        }
-      } catch {
-        // 静默失败：academy store 未初始化时不影响主流程
-      }
-    })();
-  }, 0);
-}

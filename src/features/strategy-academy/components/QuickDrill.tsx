@@ -53,6 +53,8 @@ export default function QuickDrill() {
   // P1-4.2: SRS 复习队列
   const reviewItems = useProgressStore((s) => s.reviewItems);
   const getStatsSummary = useProgressStore((s) => s.getStatsSummary);
+  // 记录总数（仅用于正确率 memo 的失效键，避免全量订阅 records）
+  const recordCount = useProgressStore((s) => s.records.length);
   // P1-4.3: 快速训练连续打卡
   const recordQuickDrillCompletion = useProgressStore((s) => s.recordQuickDrillCompletion);
   // P1-4.1: Puzzle store 快速训练 Best Record
@@ -132,13 +134,14 @@ export default function QuickDrill() {
   // 用户最近正确率（用于 composeDailyMix 决定复习比例；快速模式下读取）
   // P1E-11: 正确率 0 是有效数据，仅无答题记录（totalQuestions === 0）时才用默认值 1.0，
   // 避免 `|| 1.0` 把真实零正确率误判为无数据
+  // recordCount 作为失效键：新增记录后重算，避免快速模式跨会话读到陈旧正确率
   const userAccuracy = useMemo(() => {
     if (!isQuickMode) return 1.0;
     const summary = getStatsSummary();
     return summary.totalQuestions > 0 && Number.isFinite(summary.overallAccuracy)
       ? summary.overallAccuracy
       : 1.0;
-  }, [isQuickMode, getStatsSummary]);
+  }, [isQuickMode, getStatsSummary, recordCount]);
 
   // 生成速训题目（P1-4.2: 快速模式下混合 SRS 复习题）
   // P1E-04: 混合+缺口回填由 composeQuickDrillQuestions 纯函数完成（无 options 的

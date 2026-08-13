@@ -18,15 +18,16 @@ async function loadAllowedCrossImports(): Promise<CrossImportMap> {
 // 当前依赖图精确快照（10 个模块键）：
 // progress 边为 AGENTS.md 设计内的跨模块状态中枢引用，其余 peer 边为存量债务。
 // theory-academy 引用 progress（中枢）；
-// progress → theory-academy 为成就检查的动态 import（与 strategy-academy 同模式）。
+// progress → strategy-academy 为残留边（dailyTrainingPlan 与 ProgressReplay 的完全倒置属 P3 路线图）；
+// progress 的成就检查已全部依赖倒置（achievementRegistry：academy / theory / puzzle），不再静态 import 任何 trainer store。
 // help-center 为纯静态教程模块，无任何 feature 引用（纳入守卫防未来漂移）。
 const EXPECTED_SNAPSHOT: CrossImportMap = {
-  'gto-simulator': ['progress', 'range-trainer', 'strategy-academy'],
+  'gto-simulator': ['progress'],
   'hand-history': [],
   'help-center': [],
-  onboarding: ['progress', 'range-trainer'],
+  onboarding: ['progress'],
   'pot-odds': ['progress'],
-  progress: ['puzzle-trainer', 'strategy-academy', 'theory-academy'],
+  progress: ['strategy-academy'],
   'puzzle-trainer': ['progress'],
   'range-trainer': ['progress'],
   'strategy-academy': ['progress', 'puzzle-trainer'],

@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react';
 import type { HandNotation } from '@/shared/types/poker';
 import { Suit, Rank } from '@/shared/types/poker';
 import { Position } from '@/shared/types/position';
-import { classifyHand } from '@/features/range-trainer/utils/handClassifier';
+import { classifyHand } from '@/shared/utils/handClassifier';
 import type { Card } from '@/shared/types/poker';
 import type { HandStrategy, PreviousAction, Scenario } from '../types';
 import { ActionType } from '@/shared/types/action';

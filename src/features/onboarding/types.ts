@@ -11,5 +11,5 @@ export interface PlacementQuestion {
   explanation: string;
 }
 
-// 首次微训练题目（复用 range-trainer 的 QuizQuestion）
-export type { QuizQuestion } from '@/features/range-trainer/types';
+// 首次微训练题目（共享层 quiz 类型，单一事实源 shared/types/quiz.ts）
+export type { QuizQuestion } from '@/shared/types/quiz';

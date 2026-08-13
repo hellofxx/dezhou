@@ -1,7 +1,7 @@
 import type { Card, HandNotation } from '@/shared/types/poker';
 import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
-import { classifyHand } from '@/features/range-trainer/utils/handClassifier';
+import { classifyHand } from '@/shared/utils/handClassifier';
 import type { HandStrategy, PreviousAction } from '../types';
 import preflopData from '../data/preflop-ranges.json';
 

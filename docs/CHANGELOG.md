@@ -8,6 +8,18 @@
 
 ## [Unreleased] - 2026-08-11
 
+### 遗留问题修复批次（A/B 档，2026-08-13）
+
+> P2/P3 架构修复方案完成后的审计遗留项清零：A 档为修复线路上的同类遗漏（i18n 中文兖底、临时测试、字体 404），B 档为可立即推进的依赖收敛。
+
+- **A1 i18n 去中文兖底**：`shared/components/business/QuizCard.tsx` 与 `gto-simulator/GTOFeedback.tsx` 删除 `defaultGradeMessage` 硬编码中文块与 `feedback.evLossLabel/correctAction/goReview` 的中文 defaultValue（双语 key 已齐备，英文界面不再泄漏中文）；对手数据层 defaultValue 兖底保留（设计内）。
+- **A2 临时测试清理**：删除 `contentGap.tmp.test.ts` / `contentGap2.tmp.test.ts` / `enContent.tmp.test.ts`（覆盖已由 `contentI18n.test.ts` 全量遍历接管）；`unitRef.tmp.test.ts` → `unitRef.test.ts`、`switchRepro.tmp.test.tsx` → `languageSwitchRecalc.test.tsx` 正式化并删除未启用的 no-console disable 指令（lint warnings 10 → 0）。
+- **A3 字体 404 修复**：`public/fonts/*.woff2` 迁移至 `src/fonts/`——`globals.css` 的 `url(../fonts/)` 相对解析恰为 `src/fonts/`，Vite 打包加 hash 并适配 base，三个品牌字体首次真正加载（浏览器验证 200）；`sw.js` 删除失效的 `fonts/` cache-first 规则（改走 `assets/` 哈希规则，离线能力不变）。
+- **B1 AbilityAssessment 下沉**：接口迁移至 `shared/types/ability.ts`（progress ELO 映射与 academy 自适应难度共享契约），strategy-academy `types.ts` 改 re-export 兼容。
+- **B2 puzzle 成就检查依赖倒置**：`puzzle-trainer/store.bootstrap.ts` 注册 `hasPuzzleHistory` / `hasCompletedDailyPuzzle` / `isDailyPuzzleCompleted` 数据源；progress `store.ts` 删除 `usePuzzleStore` 静态 import，`firstPuzzle` / `firstDailyPuzzle` 改注册表查询；`DailyChallenge.tsx` 的 `getDailyKey` 复用 shared `toLocalDateKey`（口径等价）、每日谜题完成态改注册表查询。
+- **B3 白名单收敛**：`ALLOWED_CROSS_IMPORTS` 的 progress 边从 `['puzzle-trainer', 'strategy-academy']` 收敛为 `['strategy-academy']`（快照测试同步）；残留边登记：dailyTrainingPlan / ProgressReplay 的完全倒置属 P3 路线图。
+- **验证**：`pnpm verify` 全绿（81 测试文件，0 warnings）；浏览器验证字体 200 加载、控制台零错误、仪表盘排版无回归。
+
 ### 两学院课程内容块视觉统一（2026-08-12）
 
 > 用户反馈「课程内容的展示形式，理论学院和策略学院风格统一，现有策略学院还行」。将理论学院 `TheorySectionRenderer` 的全部 block 视觉词汇与策略学院 `ContentBlock` 严格对齐，并把两者共用的通用骨架提升至 shared 层。

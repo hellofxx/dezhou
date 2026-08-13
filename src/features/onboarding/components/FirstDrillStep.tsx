@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/shared/components/ui/button';
-import { QuizCard } from '@/features/range-trainer/components/QuizCard';
+import { QuizCard } from '@/shared/components/business/QuizCard';
 import type { RangeAction } from '@/shared/types/poker';
 import { useProgressStore } from '@/features/progress/store';
 import {
@@ -17,6 +17,7 @@ export default function FirstDrillStep() {
   const { t } = useTranslation();
   const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+  const mentorStyle = useProgressStore((s) => s.mentorStyle);
 
   const [drill, setDrill] = useState(createDrillState);
   // OB-05：防止「完成」按钮快速双击触发两次 completeOnboardingStep（加锁防抖）
@@ -65,6 +66,7 @@ export default function FirstDrillStep() {
           onAnswer={handleAnswer}
           feedback={drill.feedback}
           disabled={!!drill.feedback}
+          mentorStyle={mentorStyle}
           {...timeProps}
         />
       </div>

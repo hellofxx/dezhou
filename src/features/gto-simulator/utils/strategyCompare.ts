@@ -3,7 +3,7 @@ import type { Decision } from '@/shared/types/action';
 import { ActionType } from '@/shared/types/action';
 import i18n from '@/i18n/config';
 import type { HandStrategy, Scenario } from '../types';
-import { getOpponentProfile } from '@/features/strategy-academy/data/opponentProfiles';
+import { getOpponentProfile } from '@/shared/data/opponentProfiles';
 // P1C-10：isOptimal 边界与五级反馈阈值统一（只读引用 shared 常量，不修改 shared）
 import { GRADE_THRESHOLDS } from '@/shared/types/decisionFeedback';
 

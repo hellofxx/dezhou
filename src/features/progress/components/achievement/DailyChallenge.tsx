@@ -6,10 +6,10 @@ import { Card, CardContent } from '@/shared/components/ui/card';
 import { Trophy, Flame, ArrowRight, CheckCircle2, Circle, Puzzle } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 import { useProgressStore } from '../../store';
-// 今日任务卡：合并每日挑战（训练器引导）与每日谜题入口；streak 统一读 progress store（ALLOWED_CROSS_IMPORTS 已含 progress→puzzle-trainer）
-import { usePuzzleStore } from '@/features/puzzle-trainer/store';
-// 从 utils/dateSeed 引入纯日期函数，避免经 data/dailyPuzzles 拉入 puzzleBank 题库 chunk
-import { getDailyKey } from '@/features/puzzle-trainer/utils/dateSeed';
+// 今日任务卡：合并每日挑战（训练器引导）与每日谜题入口；streak 统一读 progress store
+// 依赖倒置：每日谜题完成状态经 achievementRegistry 查询，日期 key 复用 shared toLocalDateKey
+import { getAchievementSources } from '@/shared/stores/achievementRegistry';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 
 interface DailyChallenge {
   id: string;
@@ -61,8 +61,8 @@ export default function DailyChallenge() {
   const { records } = useProgress();
   // streak 展示统一读 progress store（全局唯一事实源，不再私有计算）
   const currentStreak = useProgressStore((s) => s.streak.currentStreak);
-  const dailyKey = getDailyKey();
-  const puzzleDone = usePuzzleStore((s) => Boolean(s.dailyCompleted[dailyKey]));
+  const dailyKey = toLocalDateKey(Date.now());
+  const puzzleDone = getAchievementSources().some((s) => s.isDailyPuzzleCompleted?.(dailyKey) ?? false);
 
   const today = new Date();
   // R3: 与每日谜题行统一用本地时区日期（原 toISOString 为 UTC，同卡双口径会在 00:00–08:00 错位）
@@ -75,7 +75,7 @@ export default function DailyChallenge() {
     const types: string[] = ['range-trainer', 'pot-odds', 'gto-simulator'];
     const expectedModule = types[dayOfYear % 3];
     return records.some((r) => {
-      return getDailyKey(new Date(r.createdAt)) === dateStr && r.module === expectedModule;
+      return toLocalDateKey(r.createdAt) === dateStr && r.module === expectedModule;
     });
   }, [records, dateStr, dayOfYear]);
 

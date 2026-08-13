@@ -1,8 +1,8 @@
 import React from 'react';
 import type { HandNotation } from '@/shared/types/poker';
 import type { HandStrategy } from '../types';
-import { getHandFromGrid } from '@/features/range-trainer/utils/rangeParser';
-import { GRID_RANKS } from '@/features/range-trainer/constants';
+import { getHandFromGrid } from '@/shared/utils/rangeParser';
+import { GRID_RANKS } from '@/shared/constants/poker';
 import { cn } from '@/shared/utils';
 import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
 

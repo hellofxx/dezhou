@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { HandStrategy } from '../types';
 import type { HandNotation } from '@/shared/types/poker';
 import { cn } from '@/shared/utils';
-import { getOpponentProfile } from '@/features/strategy-academy/data/opponentProfiles';
+import { getOpponentProfile } from '@/shared/data/opponentProfiles';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
@@ -59,19 +59,6 @@ export function GTOFeedback({
       ? t('gto.feedback.severeError')
       : t('gto.feedback.suboptimal');
 
-  // 五级反馈的默认文案兜底（i18n key 缺失时使用）
-  const defaultGradeMessage =
-    grade === 'best'
-      ? '最优决策！🌟'
-      : grade === 'correct'
-        ? '正确！这个决策是合理的'
-        : grade === 'inaccuracy'
-          ? '不太精确，还有更好的选择'
-          : grade === 'wrong'
-            ? `这个决策损失了 ${(feedback?.evLoss ?? 0).toFixed(2)} BB`
-            : grade === 'blunder'
-              ? `严重错误！损失了 ${(feedback?.evLoss ?? 0).toFixed(2)} BB`
-              : '';
   // P2-4：优先使用 mentorStyle 渲染人格化文案；缺省时降级到 i18n
   const mentorStyle = useProgressStore((s) => s.mentorStyle);
   const mentorMessage = feedback && grade
@@ -83,11 +70,10 @@ export function GTOFeedback({
   const gradeMessage = mentorMessage || (feedback && grade
     ? t(`feedback.message.${grade}`, {
         evLoss: (feedback.evLoss ?? 0).toFixed(2),
-        defaultValue: defaultGradeMessage,
       })
     : '');
   const gradeTitle = gradeConfig
-    ? t(gradeConfig.titleKey, { defaultValue: defaultGradeMessage })
+    ? t(gradeConfig.titleKey)
     : '';
 
   // 容器样式：五级反馈优先使用 GRADE_DISPLAY_CONFIG 的 color/textColor，否则用旧二元
@@ -110,13 +96,13 @@ export function GTOFeedback({
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs opacity-80">{t('feedback.evLossLabel', { defaultValue: 'EV 损失' })}</div>
+            <div className="text-xs opacity-80">{t('feedback.evLossLabel')}</div>
             <div className="text-lg font-bold font-numeric">{Math.max(0, feedback.evLoss).toFixed(2)} BB</div>
           </div>
           {/* 非 best 级显示最优动作 */}
           {grade !== 'best' && feedback.correctAction && (
             <div className="text-right">
-              <div className="text-xs opacity-80">{t('feedback.correctAction', { defaultValue: '最优动作' })}</div>
+              <div className="text-xs opacity-80">{t('feedback.correctAction')}</div>
               <div className="text-sm font-bold font-numeric">{feedback.correctAction}</div>
             </div>
           )}
@@ -295,7 +281,7 @@ export function GTOFeedback({
               to={`/academy/lesson/${feedback.relatedLessonId}`}
               className="inline-flex items-center gap-1 text-xs font-display font-semibold underline underline-offset-2 hover:opacity-80"
             >
-              {t('feedback.goReview', { defaultValue: '去复习 →' })}
+              {t('feedback.goReview')}
             </Link>
           )}
         </div>

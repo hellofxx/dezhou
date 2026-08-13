@@ -11,7 +11,7 @@
  */
 import { Position } from '@/shared/types/position';
 import type { RangeAction } from '@/shared/types/poker';
-import type { QuizQuestion, QuestionFeedback } from '@/features/range-trainer/types';
+import type { QuizQuestion, QuestionFeedback } from '@/shared/types/quiz';
 
 // 首次微训练题目（从简单到稍难，最后一题必须是最简单的"必对题"）
 export const DRILL_QUESTIONS: QuizQuestion[] = [

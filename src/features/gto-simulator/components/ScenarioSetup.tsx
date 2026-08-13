@@ -5,7 +5,7 @@ import type { GameVariant } from '@/shared/types/poker';
 import { GAME_VARIANT_CONFIGS } from '@/shared/constants/poker';
 import { useGTOSimulatorStore } from '../store';
 import { cn } from '@/shared/utils';
-import { OPPONENT_PROFILES, getOpponentProfile } from '@/features/strategy-academy/data/opponentProfiles';
+import { OPPONENT_PROFILES, getOpponentProfile } from '@/shared/data/opponentProfiles';
 
 // label/desc 存 i18n key（gto.setup.*），渲染时 t() 解析
 const GAME_TYPES: { value: GameType; label: string }[] = [

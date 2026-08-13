@@ -69,6 +69,9 @@ export const TOTAL_HANDS = 169;
 /** 总手牌组合数 */
 export const TOTAL_COMBOS = 1326;
 
+/** 13×13 矩阵的牌面排序（A→2），用于范围网格渲染与解析 */
+export const GRID_RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const;
+
 // 短牌移除的牌面值
 export const SHORT_DECK_REMOVED_RANKS = [Rank.Two, Rank.Three, Rank.Four, Rank.Five] as const;
 
