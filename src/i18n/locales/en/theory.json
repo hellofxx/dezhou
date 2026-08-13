@@ -15,6 +15,7 @@
   "flaggedQuestion": "Flagged as difficult",
   "quizProgress": "Question {{current}} of {{total}}",
   "learningMap": {
+    "title": "Learning Map",
     "levelAria": "Theory {{tier}}: {{title}} ({{state}})",
     "done": "completed",
     "inProgress": "in progress",

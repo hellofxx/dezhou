@@ -232,7 +232,7 @@ src/
   - `no-restricted-imports`：锁定 features 模块间直接引用，允许边清单以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（收紧时只删不加）
   - `@typescript-eslint/no-explicit-any`：禁止 any
   - 注：lint 工具链通过 `.pnpmfile.cjs` 侧载 TS 6 API（typescript-eslint 尚不支持 TS 7.0），不影响 typecheck/build 使用的 TS 7
-- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行。全局级守卫：i18n 双语键对称（`src/i18n/localeParity.test.ts`）、UI 颜色合规（`src/designTokenGuard.test.ts` 全量扫描 src，禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）。模块级数据完整性守卫由各 feature 模块自持（课程结构 / 题库 id / 理论结构 / 选项排序分布等），`pnpm test` 全量运行时强制，清单以各模块实际测试文件为准
+- **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行。全局级守卫：i18n 双语键对称（`src/i18n/localeParity.test.ts`）、i18n 静态 key 引用（`src/i18n/staticKeyGuard.test.ts`，兜底 zh/en 双方都缺 key 的盲区）、UI 颜色合规（`src/designTokenGuard.test.ts` 全量扫描 src，禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）。模块级数据完整性守卫由各 feature 模块自持（课程结构 / 题库 id / 理论结构 / 选项排序分布等），`pnpm test` 全量运行时强制，清单以各模块实际测试文件为准
 - **构建验证**：`pnpm build` 成功产出 `dist/`
 - **测试后缀速查**（`vitest.config.ts` 双项目划分）：`.test.ts` = unit 项目，Node 环境（纯函数 / store migrate）；`.test.tsx` = component 项目，jsdom 环境（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
 - **每次代码变更后必须运行 `pnpm verify`**（即 `pnpm typecheck && pnpm lint && pnpm test`串行短路组合，任一失败即中止；唯一事实源为 `package.json` 的 `verify` script）

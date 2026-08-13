@@ -28,7 +28,7 @@ export const ALLOWED_CROSS_IMPORTS = {
   'help-center': [],
   onboarding: ['progress'],
   'pot-odds': ['progress'],
-  progress: ['strategy-academy'],
+  progress: [],
   'puzzle-trainer': ['progress'],
   'range-trainer': ['progress'],
   'strategy-academy': ['progress', 'puzzle-trainer'],

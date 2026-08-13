@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 import { TrendingUp, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { transitionSlow } from '@/shared/utils/motion';
-import { useAcademyStore } from '@/features/strategy-academy/store';
-import { getAllLessons } from '@/features/strategy-academy/utils/courseProgress';
-import { resolveLessonTitle } from '@/features/strategy-academy/utils/titleKeys';
-import type { Lesson } from '@/features/strategy-academy/types';
+import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
+import {
+  useAcademyFirstAttemptScores,
+  useAcademyLastAttemptScores,
+} from '@/shared/hooks/useAcademyDataSource';
 
 interface ProgressEntry {
   lessonId: string;
@@ -19,12 +20,11 @@ interface ProgressEntry {
 
 export default function ProgressReplay() {
   const { t } = useTranslation();
-  const firstAttemptScores = useAcademyStore((s) => s.firstAttemptScores);
-  const lastAttemptScores = useAcademyStore((s) => s.lastAttemptScores);
+  const firstAttemptScores = useAcademyFirstAttemptScores();
+  const lastAttemptScores = useAcademyLastAttemptScores();
 
   const topChanges = useMemo(() => {
-    const allLessons = getAllLessons();
-    const lessonMap = new Map<string, Lesson>(allLessons.map((l) => [l.id, l]));
+    const source = getAcademyDataSource();
 
     const entries: ProgressEntry[] = [];
     for (const lessonId of Object.keys(lastAttemptScores)) {
@@ -32,11 +32,14 @@ export default function ProgressReplay() {
       const last = lastAttemptScores[lessonId];
       if (first === undefined || last === undefined) continue;
       const improvement = last - first;
-      const lesson = lessonMap.get(lessonId);
+      const meta = source?.getLessonMeta(lessonId);
       entries.push({
         lessonId,
-        // PROG-14：优先 i18n 解析课程标题（含变体课程），数据层缺省时回退 id
-        lessonTitle: lesson ? resolveLessonTitle(t, lesson) : lessonId,
+        // PROG-14：优先 i18n 解析课程标题（含变体课程），数据层缺省时回退 id；
+        // 依赖倒置后经数据源取元数据，key 前缀与 strategy-academy titleKeys.lessonTitleKey 单源一致
+        lessonTitle: meta
+          ? t(`academy.lessonTitle.${lessonId}`, { defaultValue: meta.title })
+          : lessonId,
         first,
         last,
         improvement,

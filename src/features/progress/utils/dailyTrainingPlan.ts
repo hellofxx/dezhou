@@ -7,8 +7,8 @@ import type { ReviewItem } from './spacedRepetition';
 import { getTodayReviewItems } from './spacedRepetition';
 import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
 import type { TrainingRecord } from '../types';
-import type { AcademyProgress } from '@/features/strategy-academy/types';
-import { LEVELS } from '@/features/strategy-academy/data/courses';
+import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
+import type { AcademyLessonMeta } from '@/shared/types/academyDataSource';
 
 /** 推荐项公共字段 */
 interface BaseRecommendation {
@@ -87,20 +87,10 @@ function calculateModuleAccuracy(records: TrainingRecord[]): Map<string, number>
 }
 
 /**
- * 找到下一个未完成的课程
+ * 找到下一个未完成的课程（经学院数据源查询，依赖倒置）
  */
-function findNextLesson(academyProgress: AcademyProgress): { id: string; title: string; level: number } | null {
-  const { completedLessons } = academyProgress;
-
-  for (const level of LEVELS) {
-    for (const lesson of level.lessons) {
-      if (!completedLessons.includes(lesson.id)) {
-        return { id: lesson.id, title: lesson.title, level: level.level };
-      }
-    }
-  }
-
-  return null;
+function findNextLesson(completedLessons: readonly string[]): AcademyLessonMeta | null {
+  return getAcademyDataSource()?.findNextLesson(completedLessons) ?? null;
 }
 
 /**
@@ -133,7 +123,7 @@ function getWeakestModule(accuracyMap: Map<string, number>): string | null {
  * 根据用户数据生成今日推荐（3-5项）
  */
 export function generateCrossModuleDailyPlan(
-  academyProgress: AcademyProgress,
+  completedLessons: readonly string[],
   trainingRecords: TrainingRecord[],
   reviewItems: ReviewItem[],
   streak: number
@@ -171,7 +161,7 @@ export function generateCrossModuleDailyPlan(
   }
 
   // 2. 学院进度 — 推荐下一课
-  const nextLesson = findNextLesson(academyProgress);
+  const nextLesson = findNextLesson(completedLessons);
   if (nextLesson) {
     recommendations.push({
       id: `lesson-${nextLesson.id}`,

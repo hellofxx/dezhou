@@ -5,8 +5,11 @@
  * 由应用入口 import 本文件触发注册（见 src/main.tsx）。
  */
 import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
+import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import { useAcademyStore } from './store';
 import { useProgressStore } from '@/features/progress/store';
+import { LEVELS } from './data/courses';
+import { findLessonById } from './utils/courseProgress';
 
 // 成就检查数据源：progress store 的 checkCondition 经注册表查询
 registerAchievementSource({
@@ -14,6 +17,29 @@ registerAchievementSource({
   getCertifications: () => useAcademyStore.getState().certifications,
   areAllLevelsCertified: () => useAcademyStore.getState().areAllLevelsCertified(),
   isTrackCompleted: (trackId) => useAcademyStore.getState().isTrackCompleted(trackId),
+});
+
+// 学院课程数据源（P3 依赖倒置）：progress 的每日训练计划 / 进步回放经注册表查询，
+// 消除 progress → strategy-academy 的直接 import（每日训练计划的「下一课」逻辑回迁本模块）。
+registerAcademyDataSource({
+  findNextLesson: (completedLessons) => {
+    for (const level of LEVELS) {
+      for (const lesson of level.lessons) {
+        if (!completedLessons.includes(lesson.id)) {
+          return { id: lesson.id, title: lesson.title, level: level.level };
+        }
+      }
+    }
+    return null;
+  },
+  getLessonMeta: (lessonId) => {
+    const lesson = findLessonById(lessonId);
+    return lesson ? { id: lesson.id, title: lesson.title, level: lesson.level } : undefined;
+  },
+  getAcademyProgressSnapshot: () => useAcademyStore.getState().progress,
+  getFirstAttemptScoresSnapshot: () => useAcademyStore.getState().firstAttemptScores,
+  getLastAttemptScoresSnapshot: () => useAcademyStore.getState().lastAttemptScores,
+  subscribe: (listener) => useAcademyStore.subscribe(listener),
 });
 
 // P1-2.3: 启动时从本模块 abilityAssessment 同步初始 ELO。

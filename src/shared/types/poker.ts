@@ -88,7 +88,6 @@ export interface GameVariantConfig {
   maxPlayers: number;            // 9 / 6 / 2
   defaultPlayers: number;        // 6 / 6 / 2
   removedRanks: Rank[];          // 短牌移除的牌面值
-  handRankingChanges: string[];  // 牌型变化描述
 }
 
 // 游戏格式（变体 + 人数 + 类型）

@@ -8,6 +8,15 @@
 
 ## [Unreleased] - 2026-08-11
 
+### P3 遗留问题清零：progress 依赖倒置 + i18n 守卫盲区 + 死字段删除（2026-08-13）
+
+> 上批 B3 登记的「dailyTrainingPlan / ProgressReplay 完全倒置（P3 路线图）」、i18n「双方都缺 key」守卫盲区、`handRankingChanges` 死字段三项遗留，本批全部销项。
+
+- **LI-1 progress → strategy-academy 依赖倒置**：新增 shared 层 `types/academyDataSource.ts`（`AcademyDataSource` 接口 + `AcademyLessonMeta` / `AcademyProgressSnapshot`）、`stores/academyDataSourceRegistry.ts`（`registerAcademyDataSource` / `getAcademyDataSource`）、`hooks/useAcademyDataSource.ts`（`useSyncExternalStore` 响应式订阅 + 未注册 EMPTY 兜底）；strategy-academy `store.bootstrap.ts` 注册数据源实现（`findNextLesson` / `getLessonMeta` / 快照 / `subscribe` 桥接 zustand，「下一课」逻辑回迁本模块）；progress 三处消费点（`dailyTrainingPlan.ts` / `ProgressReplay.tsx` / `Dashboard.tsx`）移除 `@/features/strategy-academy` 直接 import 改经注册表/hook 消费；`ALLOWED_CROSS_IMPORTS` progress 边 `['strategy-academy']` → `[]`（快照测试同步），progress 模块零残留 import。
+- **LI-2 i18n 静态 key 引用守卫**：新增 `src/i18n/staticKeyGuard.test.ts`——复用 `designTokenGuard` 的 `import.meta.glob(?raw)` 源码扫描，剥离注释后提取全部静态 `t('字面量')` / `i18n.t` / `i18next.t` 调用，断言 key 在 zh/en 词典均存在，补 `localeParity` 只兜底单边缺失的「双方都缺」盲区（零新依赖）；捕获并修复真实缺漏 `TheoryLearningMap.tsx` 的 `t('theory.learningMap')`（对象误用）→ `t('theory.learningMap.title')` + 补 `theory.learningMap.title` 双语 key。
+- **LI-3 `handRankingChanges` 死字段删除**：`shared/types/poker.ts` 类型字段 + `shared/constants/poker.ts` 三处赋值（含 short-deck 硬编码中文）全量删除（对齐同批 displayName 处置），全库实证无消费方。
+- **验证**：`pnpm verify` 全绿（typecheck + lint + 561 tests / 82 files）。
+
 ### 遗留问题修复批次（A/B 档，2026-08-13）
 
 > P2/P3 架构修复方案完成后的审计遗留项清零：A 档为修复线路上的同类遗漏（i18n 中文兖底、临时测试、字体 404），B 档为可立即推进的依赖收敛。

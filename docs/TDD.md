@@ -1707,12 +1707,12 @@ persist(
 
 `vitest.config.ts` 定义两个项目：`unit` 项目在 Node 环境运行 `src/**/*.test.ts`（纯函数 / store migrate，Node 环境测 zustand persist migrate 需 stub `window.localStorage`）；`component` 项目在 jsdom 环境运行 `src/**/*.test.tsx`（组件冒烟，setup 为 `src/setupTests.components.ts`）。
 
-当前共 64 个测试文件（清单以 `src/**/*.test.ts(x)`实际文件为准）：
+测试文件清单（以 `src/**/*.test.ts(x)` 实际文件为准，不维护数值快照）：
 
 | 测试目标 | 文件 | 关键用例 |
 |----------|------|----------|
 | 全局守卫 | designTokenGuard.test.ts / eslintCrossImports.test.ts | UI 颜色合规全量扫描 / 跨模块导入白名单 |
-| i18n | localeParity.test.ts | zh/en 键集对称性 |
+| i18n | localeParity.test.ts / contentI18n.test.ts / staticKeyGuard.test.ts | zh/en 键集对称性 / 内容 key 全量遍历 / 静态 t() 字面量 key 引用守卫 |
 | 共享层 | pokerMath / elo / deck / seededShuffle / decisionFeedback 各 .test.ts | 赔率与 EV 计算、ELO 变化与段位、牌组生成、种子洗牌、GRADE_THRESHOLDS 边界 |
 | gto-simulator | strategyCompare.test.ts | 最优判定、EV 损失精度 |
 | hand-history | parsers/common.test.ts | 牌面解析、三平台格式检测（含 partypoker） |

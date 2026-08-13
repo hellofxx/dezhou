@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 import { useProgressStore } from '../../store';
-import { useAcademyStore } from '@/features/strategy-academy/store';
+import { useAcademyProgressSnapshot } from '@/shared/hooks/useAcademyDataSource';
 import { useModuleLabel } from '@/shared/hooks/useModuleLabel';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import DailyChallenge from '../achievement/DailyChallenge';
@@ -55,7 +55,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { summary, records } = useProgress();
-  const academyProgress = useAcademyStore((s) => s.progress);
+  const academyProgress = useAcademyProgressSnapshot();
   const moduleLabel = useModuleLabel();
 
   // 时间范围筛选器 — 联动「最近训练」列表
@@ -121,7 +121,7 @@ export default function Dashboard() {
   // 生成每日推荐
   const recommendations = useMemo(() => {
     const allRecommendations = generateCrossModuleDailyPlan(
-      academyProgress,
+      academyProgress.completedLessons,
       records,
       reviewItems,
       summary.currentStreak

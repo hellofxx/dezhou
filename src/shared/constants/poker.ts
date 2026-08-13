@@ -96,7 +96,6 @@ export const GAME_VARIANT_CONFIGS: Record<GameVariant, GameVariantConfig> = {
     maxPlayers: 9,
     defaultPlayers: 6,
     removedRanks: [],
-    handRankingChanges: [],
   },
   'short-deck': {
     variant: 'short-deck',
@@ -105,7 +104,6 @@ export const GAME_VARIANT_CONFIGS: Record<GameVariant, GameVariantConfig> = {
     maxPlayers: 6,
     defaultPlayers: 6,
     removedRanks: [Rank.Two, Rank.Three, Rank.Four, Rank.Five],
-    handRankingChanges: ['三条 > 顺子', '同花 > 葫芦', 'A-6-7-8-9 是最小顺子'],
   },
   'heads-up': {
     variant: 'heads-up',
@@ -114,6 +112,5 @@ export const GAME_VARIANT_CONFIGS: Record<GameVariant, GameVariantConfig> = {
     maxPlayers: 2,
     defaultPlayers: 2,
     removedRanks: [],
-    handRankingChanges: [],
   },
 };

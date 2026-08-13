@@ -15,6 +15,7 @@
   "flaggedQuestion": "已标记为疑难",
   "quizProgress": "第 {{current}} / {{total}} 题",
   "learningMap": {
+    "title": "学习地图",
     "levelAria": "Theory {{tier}}：{{title}}（{{state}}）",
     "done": "已完成",
     "inProgress": "进行中",

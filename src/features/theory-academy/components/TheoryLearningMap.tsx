@@ -21,7 +21,7 @@ export function TheoryLearningMap() {
   return (
     <section className="panel">
       <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold mb-4">
-        {t('theory.learningMap')}
+        {t('theory.learningMap.title')}
       </h2>
       <div className="overflow-x-auto pb-1">
         <div className="flex items-center min-w-max">
