@@ -7,10 +7,25 @@ import App from './App'
 // 启动引导（副作用注册，须在首次渲染前执行）：
 // - progress：事件总线订阅 + 成就检查 debounce（P1 副作用外移）
 // - strategy-academy / theory-academy：成就检查数据源注册 + 初始 ELO 同步（P2-2 依赖倒置）
-import { initProgressStore } from '@/features/progress'
-import '@/features/strategy-academy/store.bootstrap'
-import '@/features/theory-academy/store.bootstrap'
-import '@/features/puzzle-trainer/store.bootstrap'
+import { initProgressStore } from '@/features/progress/store.bootstrap'
+
+// P0-03: bootstrap 延迟加载 —— 三学院 bootstrap 非首屏必需，改为 requestIdleCallback 动态导入
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(async () => {
+    await import('@/features/strategy-academy/store.bootstrap');
+    await import('@/features/puzzle-trainer/store.bootstrap');
+    await import('@/features/theory-academy/store.bootstrap');
+  });
+} else {
+  setTimeout(() => {
+    Promise.all([
+      import('@/features/strategy-academy/store.bootstrap'),
+      import('@/features/puzzle-trainer/store.bootstrap'),
+      import('@/features/theory-academy/store.bootstrap'),
+    ]);
+  }, 0);
+}
+
 initProgressStore()
 
 createRoot(document.getElementById('root')!).render(
