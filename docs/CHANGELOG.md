@@ -8,6 +8,16 @@
 
 ## [Unreleased] - 2026-08-14
 
+### elo 兼容层退役收尾（消费方迁移 + 内存镜像移除，progress persist v14）
+
+> 销项架构深度审查修复批次登记的遗留事项：`s.elo` 内存镜像全部读取点迁移至 `eloByVariant`，随后整体移除兼容层，ELO 以 `eloByVariant` 为单一事实源。分两个独立提交：先迁移（零行为变化）再移除。
+
+- **消费方迁移**：5 处跨模块读取点改读 `s.eloByVariant[s.activeVariant]` 对应维度——range-trainer（QuizConfig / RangeSelector / useQuizEngine 的 preflop，位置解锁与难度推断）/ gto-simulator（postflop）/ pot-odds（math）；另全面排查出 progress 模块内部 4 处读取点一并迁移：WeaknessAnalysis / FeltArena / ProgressHero（ELO 雷达 / 段位徽章 / 战绩牌匾）与成就条件 `checkCondition` 的 `elo` 分支（改以当前活动变体 overall 判定）。
+- **镜像移除**：store state 删除顶层 `elo` 字段与接口声明；`updateElo` / `resetElo` / `syncEloFromAcademyAbility` 三个 action 删除 `elo` 双写，改为仅写 `eloByVariant`（updateElo 作用于当前活动变体，升段检测同源）；`eloRankUp` 保留。
+- **persist v13 → v14**：新增 v13→v14 migrate 防御性删除残留 `elo` 键（v13 之后内存镜像曾通过 partialize 回写复活过该键，已处于 v13 的存量用户需二次清理）。
+- **测试同步**：store.migrate.test.ts 断言改 `eloByVariant.standard.overall === 500` 并新增 `'elo' in state === false`；persist-shape 快照移除顶层 `elo` 键。range-trainer 位置解锁逻辑（isPositionUnlocked 依赖 preflopElo）行为不变。
+- **验证**：`pnpm verify` 全绿（82 files / 558 tests）。
+
 ### 架构深度审查修复批次（Critical×3 + Important×5 全量销项，2026-08-14）
 
 > 依据代码审查报告（首屏打包策略与中枢 store 膨胀两条结构性短板），在 `refactor/architecture-critical-fixes` 分支按 P0→P1→P2 优先级分 8 个独立逻辑单元提交修复，每步经 `pnpm verify` 门禁验证。

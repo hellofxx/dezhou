@@ -30,8 +30,9 @@ describe('progress store migrate (v0 → v9)', () => {
     expect(state.streak.streakStartDate).toBe('2024-01-15');
     // 顶层 lastTrainingDate 已删除
     expect('lastTrainingDate' in state).toBe(false);
-    // v3: ELO 默认值
-    expect(state.elo.overall).toBe(500);
+    // v3: ELO 默认值（经 v10 迁入 eloByVariant.standard；v13/v14 删除顶层 elo）
+    expect(state.eloByVariant.standard.overall).toBe(500);
+    expect('elo' in state).toBe(false);
     expect(state.eloRankUp).toBeNull();
     // v4: 快速训练打卡
     expect(state.quickDrillStreak).toBe(0);

@@ -259,8 +259,7 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
     }
   },
   // v12 → v13：淘汰 elo 字段，统一使用 eloByVariant.standard
-  // （P2-01 阶段 A 退役计划第一步：清理 localStorage 中的双写冗余数据；
-  //   内存镜像 elo 保留供旧消费方兼容，消费方迁移完成后的后续阶段再移除）
+  // （P2-01 阶段 A 退役计划第一步：清理 localStorage 中的双写冗余数据）
   (s) => {
     const eloByVariant = s.eloByVariant as Record<PokerVariant, EloRating> | undefined;
     if (!eloByVariant) {
@@ -274,6 +273,12 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
       eloByVariant.standard = { ...DEFAULT_ELO, variant: 'standard' as PokerVariant };
     }
     // 直接删除顶层 elo 字段（退役：统一以 eloByVariant.standard 为单一事实源）
+    delete s.elo;
+  },
+  // v13 → v14：清理 elo 内存兼容层残留键
+  // （消费方已全部迁移至 eloByVariant；v13 之后内存镜像曾通过 partialize 回写复活
+  //   过 elo 键，已处于 v13 的存量用户此处防御性删除，此后不再复活）
+  (s) => {
     delete s.elo;
   },
 ];
@@ -340,8 +345,6 @@ interface ProgressStore {
   earnBackStreak: (previousStreak: number) => void;
 
   // ELO 能力分级（P1-2）
-  /** 现有 eloRating 字段（待弃用，保留用于迁移兼容）*/
-  elo: EloRating;
   /** 段位升级事件（非 null 时表示刚发生升级，Dashboard 监听并弹 Dialog）*/
   eloRankUp: RankUpEvent | null;
   /** 更新对应维度 ELO 与 overall；自动检测段位升级并设置 eloRankUp */
@@ -661,13 +664,7 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       // ===== ELO 能力分级（P1-2）=====
-      /**
-       * 现有 eloRating 字段（退役中）。
-       * P2-01 阶段 A（v13 起）：不再持久化（migrate 已删除存量），内存镜像保留供
-       * 旧消费方（pot-odds / gto-simulator / range-trainer 及 progress 图表）兼容；
-       * 消费方迁移到 eloByVariant 后的后续阶段再整体移除。
-       */
-      elo: { ...DEFAULT_ELO, lastUpdated: Date.now() },
+      // eloByVariant 为 ELO 单一事实源（顶层 elo 镜像已移除，persist v14）
       eloRankUp: null,
       
       // P2-1: 游戏变体 ELO 分离
@@ -679,17 +676,14 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       updateElo: (dimension, isCorrect, difficulty) => {
-        const prev = get().elo;
+        // ELO 更新作用于当前活动变体（eloByVariant 单一事实源）
+        const variant = get().activeVariant;
+        const prev = get().eloByVariant[variant];
         const oldOverall = prev.overall;
         const newElo = applyEloChange(prev, dimension, isCorrect, difficulty);
         const rankUp = checkRankUp(oldOverall, newElo.overall);
-        // P2-1: 同步更新当前活动变体的独立 ELO（双写兼容：老消费方读 elo，新消费方读 eloByVariant）
-        const variant = get().activeVariant;
-        const prevVariantElo = get().eloByVariant[variant];
-        const newVariantElo = applyEloChange(prevVariantElo, dimension, isCorrect, difficulty);
         set({
-          elo: newElo,
-          eloByVariant: { ...get().eloByVariant, [variant]: { ...newVariantElo, variant } },
+          eloByVariant: { ...get().eloByVariant, [variant]: { ...newElo, variant } },
           // 仅在发生升段时覆盖事件；未升段保留现值，避免会话中后续答题
           // 把尚未展示的升段庆祝事件清零（由 clearEloRankUp 在弹窗关闭后清除）
           eloRankUp: rankUp.isUp
@@ -699,9 +693,8 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       resetElo: () =>
-        // P1 fix: reset 时同步重置 standard 变体 ELO，避免 elo 与 eloByVariant.standard 漂移
+        // 重置 standard 变体 ELO（gamesPlayed 清零；eloByVariant 单一事实源）
         set({
-          elo: { ...DEFAULT_ELO, lastUpdated: Date.now() },
           eloByVariant: {
             ...get().eloByVariant,
             standard: { ...DEFAULT_ELO, variant: 'standard' as PokerVariant, lastUpdated: Date.now() },
@@ -713,12 +706,11 @@ export const useProgressStore = create<ProgressStore>()(
 
       syncEloFromAcademyAbility: (aa) => {
         // 仅当 ELO 尚未被答题更新过时才同步（避免覆盖已累积的进度）
-        if (get().elo.gamesPlayed > 0) return;
+        if (get().eloByVariant.standard.gamesPlayed > 0) return;
         if (!hasNonDefaultAbility(aa)) return;
         const synced = mapAcademyAbilityToElo(aa);
-        // P1 fix: 同步更新 standard 变体 ELO，保持双写一致性
+        // 同步初始 ELO 到 standard 变体（eloByVariant 单一事实源）
         set({
-          elo: synced,
           eloByVariant: {
             ...get().eloByVariant,
             standard: { ...synced, variant: 'standard' as PokerVariant },
@@ -984,7 +976,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 13,
+      version: 14,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。
         // 表驱动调度：MIGRATIONS[i] 对应 v(i) → v(i+1)（即原 if (fromVersion < i+1) 段），

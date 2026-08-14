@@ -58,6 +58,6 @@
 
 ## 遗留事项（非阻塞，建议后续迭代）
 
-1. **8 处 `s.elo` 内存镜像读取点**（pot-odds / gto-simulator / range-trainer 等）待迁移至 `eloByVariant`，迁移完成后可整体移除 elo 内存兼容层（需跨模块协调）。
+1. ~~**8 处 `s.elo` 内存镜像读取点**（pot-odds / gto-simulator / range-trainer 等）待迁移至 `eloByVariant`，迁移完成后可整体移除 elo 内存兼容层（需跨模块协调）。~~ ✅ 已完成（2026-08-14，progress persist v14，详见 CHANGELOG「elo 兼容层退役收尾」）。
 2. **P2-01 阶段 B/C**（progress store slices 拆分）已有详细设计文档，建议排入后续独立迭代周期。
 3. 体积门禁严格版预算（1MB / 30 chunks）可在后续优化达成后收紧。

@@ -14,6 +14,7 @@ import { buildPersistedShape } from '@/shared/utils/persistShape';
  *
  * P2-01 阶段 A（v13）：records 外迁 IndexedDB，经 partialize 排除出 localStorage
  * （快照中不再包含 records 键；持久化由 recordDatabase 承担，见 utils/recordDatabase.ts）。
+ * v14：elo 内存兼容层移除，快照中不再包含顶层 elo 键（ELO 以 eloByVariant 为单一事实源）。
  */
 describe('progress store persisted shape', () => {
   it('持久化键结构与当前快照一致（变化即需 bump version + migrate）', async () => {
@@ -33,17 +34,6 @@ describe('progress store persisted shape', () => {
         "activeVariant": "string",
         "currentGameVariant": "string",
         "dismissedRecommendations": "array",
-        "elo": {
-          "gamesPlayed": "number",
-          "handReading": "number",
-          "kFactor": "number",
-          "lastUpdated": "number",
-          "math": "number",
-          "mental": "number",
-          "overall": "number",
-          "postflop": "number",
-          "preflop": "number",
-        },
         "eloByVariant": {
           "heads-up": {
             "gamesPlayed": "number",
