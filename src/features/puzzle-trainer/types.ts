@@ -169,22 +169,5 @@ export interface PuzzleBestRecord {
   achievedAt: number;
 }
 
-/**
- * P1-4.1: 快速训练 Best Record
- *
- * 与 PuzzleBestRecord 解耦的独立记录，字段更简洁（不绑定 mode/theme）。
- * 分数计算：accuracy * 100 + 用时奖励（见 QuickDrill.computeQuickDrillScore）。
- */
-export interface QuickDrillBestRecord {
-  /** 综合分数（accuracy * 100 + 时间奖励） */
-  bestScore: number;
-  /** 最高正确率 0-1 */
-  bestAccuracy: number;
-  /** 用时（毫秒） */
-  bestTime: number;
-  /** 达成时间戳 */
-  achievedAt: number;
-}
-
 /** 每日完成状态：{ [dateKey: 'YYYY-MM-DD']: true } */
 export type DailyCompletionMap = Record<string, boolean>;

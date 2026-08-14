@@ -11,7 +11,7 @@ import { Button } from '@/shared/components/ui/button';
 import { useProgressStore } from '../../store';
 import { useProgress } from '../../hooks/useProgress';
 import { MILESTONE_FREEZE_REWARDS } from '../../types';
-import { generateStreakShareCanvas, downloadBlob } from '@/shared/utils/shareCard';
+import { generateStreakShareCanvas, downloadBlob } from './shareCard';
 
 interface StreakCelebrationProps {
   /** 里程碑天数（3/7/30/100/365） */

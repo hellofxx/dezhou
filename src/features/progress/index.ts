@@ -2,10 +2,6 @@ export { useProgressStore } from './store';
 export { initProgressStore } from './store.bootstrap';
 export { useProgress } from './hooks/useProgress';
 export type { TrainingRecord, StatsSummary, DailyStats, ModuleStats, UserSettings } from './types';
-export { default as WeaknessAnalysis } from './components/stats/WeaknessAnalysis';
-export { default as AchievementBadges } from './components/achievement/AchievementBadges';
-export { default as DifficultyIndicator } from './components/stats/DifficultyIndicator';
-export { default as ModuleStatsPage } from './components/dashboard/ModuleStatsPage';
 export { openDB, saveToStore, loadFromStore, clearStore } from './utils/indexedDB';
 
 // 间隔重复复习
@@ -30,19 +26,10 @@ export {
   getPriorityColor,
 } from './utils/dailyTrainingPlan';
 
-// 新组件
-export { default as DailyTrainingPlan } from './components/training/DailyTrainingPlan';
-export { default as SpacedRepetitionPanel } from './components/srs/SpacedRepetitionPanel';
-// P1-3.5: 复习模式 Dialog 组件
-export { default as ReviewSession } from './components/srs/ReviewSession';
-// P1-3.3: 每日训练题目组成（SRS 复习 + 新题混合）
-export { composeDailyMix, getReviewRatio } from './utils/dailyTrainingMix';
-export type { DailyMixResult } from './utils/dailyTrainingMix';
-
 // P1-3: 成就/徽章系统
-export { default as AchievementWall } from './components/achievement/AchievementWall';
 export { ACHIEVEMENTS, ACHIEVEMENTS_BY_CATEGORY, TIER_ORDER } from './data/achievements';
 export type { Achievement, AchievementCategory, AchievementTier, AchievementCondition } from './data/achievements';
 
-// 进步回放
-export { default as ProgressReplay } from './components/replay/ProgressReplay';
+// P1-3.5: 复习模式 Dialog 组件（仅导出类型与工具函数，组件由进度页面直接引用）
+export type { DailyMixResult } from './utils/dailyTrainingMix';
+export { composeDailyMix, getReviewRatio } from './utils/dailyTrainingMix';

@@ -106,6 +106,18 @@ export interface EmotionState {
   dailyTotal: number;                                 // 今日已答题总数
 }
 
+/** 快速训练历史最佳记录（P2-02：从 puzzle-trainer 迁入）*/
+export interface QuickDrillBestRecord {
+  /** 综合分数（accuracy * 100 + 时间奖励） */
+  bestScore: number;
+  /** 最高正确率 0-1 */
+  bestAccuracy: number;
+  /** 用时（毫秒） */
+  bestTime: number;
+  /** 达成时间戳 */
+  achievedAt: number;
+}
+
 export const DEFAULT_EMOTION_STATE: EmotionState = {
   todayMood: null,
   moodDate: null,

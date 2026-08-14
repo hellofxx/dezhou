@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState } from './types';
+import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState, QuickDrillBestRecord } from './types';
 import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
+// P2-01 阶段 A：records 持久化外迁 IndexedDB
+import { recordDatabase } from './utils/recordDatabase';
 import type { ReviewItem } from './utils/spacedRepetition';
 import {
   updateStreak,
@@ -250,6 +252,35 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
       });
     }
   },
+  // v11 → v12：注入 quickDrillBest 默认值（P2-02：从 puzzle-trainer store 迁入）
+  (s) => {
+    if (s.quickDrillBest === undefined) {
+      s.quickDrillBest = null;
+    }
+  },
+  // v12 → v13：淘汰 elo 字段，统一使用 eloByVariant.standard
+  // （P2-01 阶段 A 退役计划第一步：清理 localStorage 中的双写冗余数据）
+  (s) => {
+    const eloByVariant = s.eloByVariant as Record<PokerVariant, EloRating> | undefined;
+    if (!eloByVariant) {
+      // 防御：老数据缺失 eloByVariant 时兜底重建（v9→v10 已保证存在，此处双保险）
+      s.eloByVariant = {
+        standard: { ...DEFAULT_ELO, variant: 'standard' as PokerVariant },
+        'short-deck': { ...DEFAULT_ELO, variant: 'short-deck' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+        'heads-up': { ...DEFAULT_ELO, variant: 'heads-up' as PokerVariant, gamesPlayed: 0, lastUpdated: 0 },
+      };
+    } else if (!eloByVariant.standard) {
+      eloByVariant.standard = { ...DEFAULT_ELO, variant: 'standard' as PokerVariant };
+    }
+    // 直接删除顶层 elo 字段（退役：统一以 eloByVariant.standard 为单一事实源）
+    delete s.elo;
+  },
+  // v13 → v14：清理 elo 内存兼容层残留键
+  // （消费方已全部迁移至 eloByVariant；v13 之后内存镜像曾通过 partialize 回写复活
+  //   过 elo 键，已处于 v13 的存量用户此处防御性删除，此后不再复活）
+  (s) => {
+    delete s.elo;
+  },
 ];
 
 interface ProgressStore {
@@ -314,8 +345,6 @@ interface ProgressStore {
   earnBackStreak: (previousStreak: number) => void;
 
   // ELO 能力分级（P1-2）
-  /** 现有 eloRating 字段（待弃用，保留用于迁移兼容）*/
-  elo: EloRating;
   /** 段位升级事件（非 null 时表示刚发生升级，Dashboard 监听并弹 Dialog）*/
   eloRankUp: RankUpEvent | null;
   /** 更新对应维度 ELO 与 overall；自动检测段位升级并设置 eloRankUp */
@@ -348,12 +377,23 @@ interface ProgressStore {
   quickDrillStreak: number;
   /** 上次完成快速训练的日期（YYYY-MM-DD），用于幂等与连续判断 */
   lastQuickDrillDate: string | null;
+  /** P2-02: 快速训练历史最佳记录（从 puzzle-trainer store 迁入） */
+  quickDrillBest: QuickDrillBestRecord | null;
   /**
    * 记录一次快速训练完成（幂等：同日多次完成只计一次）。
    * 若连续 7 天达成，奖励 1 张冻结卡。
    * @returns newBadge 是否触发了 7 天奖励；quickDrillStreak 当前连续天数
    */
   recordQuickDrillCompletion: () => { newBadge: boolean; quickDrillStreak: number };
+  /**
+   * P2-02: 提交快速训练结果，返回是否破纪录。
+   * 从 puzzle-trainer store 迁入，实现与原来完全一致。
+   */
+  submitQuickDrillResult: (input: {
+    score: number;
+    accuracy: number;
+    timeTaken: number;
+  }) => { isNewRecord: boolean; previousBest: QuickDrillBestRecord | null };
 
   // P2-4: 导师角色人格化
   /** 当前教练风格（默认 strict-math），影响反馈文案 */
@@ -407,24 +447,47 @@ export const useProgressStore = create<ProgressStore>()(
     (set, get) => ({
       records: [],
 
-      addRecord: (record) =>
+      addRecord: (record) => {
+        // P1A-04/P1F-03 兜底（专批 B）：纵深防御拒收空会话 —— totalQuestions <= 0
+        // 的训练结果不入账（不计 records，不写 IndexedDB，不参与统计/成就/Dashboard 聚合）。
+        // 模块侧已阻断空会话入口（range-trainer X 按钮 / theory 空题库守卫），
+        // 此处为中枢兜底，防止未来任意模块 emit 空会话污染数据
+        if (!record.result || record.result.totalQuestions <= 0) return;
         set((state) => {
-          // P1A-04/P1F-03 兜底（专批 B）：纵深防御拒收空会话 —— totalQuestions <= 0
-          // 的训练结果不入账（不计 records，不参与统计/成就/Dashboard 聚合）。
-          // 模块侧已阻断空会话入口（range-trainer X 按钮 / theory 空题库守卫），
-          // 此处为中枢兜底，防止未来任意模块 emit 空会话污染数据
-          if (!record.result || record.result.totalQuestions <= 0) return state;
           // 去重：相同 id 的记录不重复添加（防止事件总线重复 emit）
           if (state.records.some((r) => r.id === record.id)) return state;
           return { records: [...state.records, record] };
-        }),
+        });
+        // P2-01 阶段 A：records 持久化外迁 IndexedDB —— 内存仍保留全量 records 供
+        // 实时查询/统计，持久化由 side-effect 统一写入（put 按 id 幂等）并自动裁剪。
+        // IndexedDB 不可用时静默降级为会话内记录（跨会话持久化缺失，不影响功能）。
+        void (async () => {
+          try {
+            await recordDatabase.add([record]);
+            await recordDatabase.cleanup(1000); // 自动裁剪：仅保留最近 1000 条
+          } catch (err) {
+            console.warn('[progress] 训练记录写入 IndexedDB 失败', err);
+          }
+        })();
+      },
 
-      deleteRecord: (id) =>
+      deleteRecord: (id) => {
         set((state) => ({
           records: state.records.filter((r) => r.id !== id),
-        })),
+        }));
+        // P2-01 阶段 A：同步删除 IndexedDB 记录，避免刷新后残留
+        void recordDatabase.delete(id).catch((err) => {
+          console.warn('[progress] 删除训练记录失败', err);
+        });
+      },
 
-      clearAllRecords: () => set({ records: [] }),
+      clearAllRecords: () => {
+        set({ records: [] });
+        // P2-01 阶段 A：同步清空 IndexedDB
+        void recordDatabase.clear().catch((err) => {
+          console.warn('[progress] 清空训练记录失败', err);
+        });
+      },
 
       settings: {
         theme: 'dark',
@@ -601,8 +664,7 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       // ===== ELO 能力分级（P1-2）=====
-      /** 现有 eloRating 字段（待弃用，保留用于迁移兼容）*/
-      elo: { ...DEFAULT_ELO, lastUpdated: Date.now() },
+      // eloByVariant 为 ELO 单一事实源（顶层 elo 镜像已移除，persist v14）
       eloRankUp: null,
       
       // P2-1: 游戏变体 ELO 分离
@@ -614,17 +676,14 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       updateElo: (dimension, isCorrect, difficulty) => {
-        const prev = get().elo;
+        // ELO 更新作用于当前活动变体（eloByVariant 单一事实源）
+        const variant = get().activeVariant;
+        const prev = get().eloByVariant[variant];
         const oldOverall = prev.overall;
         const newElo = applyEloChange(prev, dimension, isCorrect, difficulty);
         const rankUp = checkRankUp(oldOverall, newElo.overall);
-        // P2-1: 同步更新当前活动变体的独立 ELO（双写兼容：老消费方读 elo，新消费方读 eloByVariant）
-        const variant = get().activeVariant;
-        const prevVariantElo = get().eloByVariant[variant];
-        const newVariantElo = applyEloChange(prevVariantElo, dimension, isCorrect, difficulty);
         set({
-          elo: newElo,
-          eloByVariant: { ...get().eloByVariant, [variant]: { ...newVariantElo, variant } },
+          eloByVariant: { ...get().eloByVariant, [variant]: { ...newElo, variant } },
           // 仅在发生升段时覆盖事件；未升段保留现值，避免会话中后续答题
           // 把尚未展示的升段庆祝事件清零（由 clearEloRankUp 在弹窗关闭后清除）
           eloRankUp: rankUp.isUp
@@ -634,9 +693,8 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       resetElo: () =>
-        // P1 fix: reset 时同步重置 standard 变体 ELO，避免 elo 与 eloByVariant.standard 漂移
+        // 重置 standard 变体 ELO（gamesPlayed 清零；eloByVariant 单一事实源）
         set({
-          elo: { ...DEFAULT_ELO, lastUpdated: Date.now() },
           eloByVariant: {
             ...get().eloByVariant,
             standard: { ...DEFAULT_ELO, variant: 'standard' as PokerVariant, lastUpdated: Date.now() },
@@ -648,12 +706,11 @@ export const useProgressStore = create<ProgressStore>()(
 
       syncEloFromAcademyAbility: (aa) => {
         // 仅当 ELO 尚未被答题更新过时才同步（避免覆盖已累积的进度）
-        if (get().elo.gamesPlayed > 0) return;
+        if (get().eloByVariant.standard.gamesPlayed > 0) return;
         if (!hasNonDefaultAbility(aa)) return;
         const synced = mapAcademyAbilityToElo(aa);
-        // P1 fix: 同步更新 standard 变体 ELO，保持双写一致性
+        // 同步初始 ELO 到 standard 变体（eloByVariant 单一事实源）
         set({
-          elo: synced,
           eloByVariant: {
             ...get().eloByVariant,
             standard: { ...synced, variant: 'standard' as PokerVariant },
@@ -671,6 +728,7 @@ export const useProgressStore = create<ProgressStore>()(
       // ===== P1-4.3: 快速训练连续打卡（独立于 streak.currentStreak） =====
       quickDrillStreak: 0,
       lastQuickDrillDate: null,
+      quickDrillBest: null,
 
       recordQuickDrillCompletion: () => {
         const today = getTodayString();
@@ -699,6 +757,22 @@ export const useProgressStore = create<ProgressStore>()(
         // 快速训练完成时有 20% 概率获得 1 个碎片（每日最多 2 个）
         tryEarnFragment(0.2);
         return { newBadge, quickDrillStreak: newStreak };
+      },
+
+      submitQuickDrillResult: ({ score, accuracy, timeTaken }) => {
+        const previousBest = get().quickDrillBest;
+        const isNewRecord = !previousBest || score > previousBest.bestScore;
+        if (isNewRecord) {
+          set({
+            quickDrillBest: {
+              bestScore: score,
+              bestAccuracy: accuracy,
+              bestTime: timeTaken,
+              achievedAt: Date.now(),
+            },
+          });
+        }
+        return { isNewRecord, previousBest };
       },
 
       // ===== P2-4: 导师角色人格化 =====
@@ -902,7 +976,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 11,
+      version: 14,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。
         // 表驱动调度：MIGRATIONS[i] 对应 v(i) → v(i+1)（即原 if (fromVersion < i+1) 段），
@@ -912,6 +986,13 @@ export const useProgressStore = create<ProgressStore>()(
           MIGRATIONS[v]!(next);
         }
         return next as unknown as ProgressStore;
+      },
+      // P2-01 阶段 A：records 外迁 IndexedDB —— 排除在 localStorage 之外，
+      // 避免无上限 records 数组导致每次 set() 全量 JSON.stringify 阻塞主线程。
+      // records 持久化由 addRecord 等 action 的 side-effect 统一写入 recordDatabase。
+      partialize: (state) => {
+        const { records, ...rest } = state;
+        return rest as Partial<ProgressStore>;
       },
       // 启动时（hydration 完成后）兜底清洗历史遗留的 GTO 标签中文"决策"后缀。
       // 不依赖 version migrate 的触发时机，确保任何时期写入的脏 label 都被清理。
@@ -967,7 +1048,8 @@ async function checkCondition(
     }
 
     case 'elo':
-      return state.elo.overall >= condition.minScore;
+      // 以当前活动变体的 ELO 为判定源（eloByVariant 单一事实源）
+      return state.eloByVariant[state.activeVariant].overall >= condition.minScore;
 
     case 'certification': {
       for (const source of getAchievementSources()) {

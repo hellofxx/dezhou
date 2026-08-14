@@ -31,7 +31,7 @@ export const ALLOWED_CROSS_IMPORTS = {
   progress: [],
   'puzzle-trainer': ['progress'],
   'range-trainer': ['progress'],
-  'strategy-academy': ['progress', 'puzzle-trainer'],
+  'strategy-academy': ['progress'],
   'theory-academy': ['progress'],
 };
 

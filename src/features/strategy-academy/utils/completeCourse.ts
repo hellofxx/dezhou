@@ -9,7 +9,8 @@
  */
 import { useAcademyStore } from '../store';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
-import { useProgressStore, createReviewItem, toLocalDateString } from '@/features/progress';
+import { useProgressStore } from '@/features/progress/store';
+import { createReviewItem, toLocalDateString } from '@/features/progress/utils/spacedRepetition';
 import type { Lesson } from '../types';
 import type { DrillResult } from '../components/drills/types';
 

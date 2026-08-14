@@ -66,7 +66,7 @@ export function useOddsCalculation(): OddsResult {
  */
 export function useOddsEloRecorder() {
   const updateElo = useProgressStore((s) => s.updateElo);
-  const mathElo = useProgressStore((s) => s.elo.math);
+  const mathElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].math);
 
   return useCallback(
     (isCorrect: boolean, difficulty?: number) => {

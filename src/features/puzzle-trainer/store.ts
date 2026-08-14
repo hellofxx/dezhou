@@ -6,14 +6,13 @@
  *  - dailyBest: Daily 谜题最佳正确率
  *  - themeBest: 主题训练最佳记录（按主题分组）
  *  - dailyCompleted: 每日完成状态（dateKey -> true）
- *  - quickDrillBest: P1-4.1 快速训练最佳记录（与 PuzzleBestRecord 解耦）
  *  - history: 历史会话记录（最多保留 50 条，用于趋势）
  *
  * 持久化到 localStorage，与 progress store 解耦。
  */
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { PuzzleBestRecord, PuzzleMode, PuzzleTheme, DailyCompletionMap, QuickDrillBestRecord } from './types';
+import type { PuzzleBestRecord, PuzzleMode, PuzzleTheme, DailyCompletionMap } from './types';
 import type { PuzzleResult } from './types';
 
 interface PuzzleStore {
@@ -25,8 +24,6 @@ interface PuzzleStore {
   themeBest: Partial<Record<PuzzleTheme, PuzzleBestRecord>>;
   /** 每日谜题完成状态：dateKey -> true */
   dailyCompleted: DailyCompletionMap;
-  /** P1-4.1: 快速训练历史最佳记录 */
-  quickDrillBest: QuickDrillBestRecord | null;
   /** 历史会话记录（最多保留 50 条，用于趋势） */
   history: PuzzleResult[];
 
@@ -36,12 +33,6 @@ interface PuzzleStore {
   markDailyCompleted: (dateKey: string) => void;
   /** 检查今日 daily 是否已完成 */
   isDailyCompleted: (dateKey: string) => boolean;
-  /** P1-4.1: 提交快速训练结果，返回是否破纪录 */
-  submitQuickDrillResult: (input: {
-    score: number;
-    accuracy: number;
-    timeTaken: number;
-  }) => { isNewRecord: boolean; previousBest: QuickDrillBestRecord | null };
   /** 清空所有记录（用于测试/重置） */
   reset: () => void;
 }
@@ -75,7 +66,6 @@ export const usePuzzleStore = create<PuzzleStore>()(
       dailyBest: null,
       themeBest: {},
       dailyCompleted: {},
-      quickDrillBest: null,
       history: [],
 
       submitResult: (result) => {
@@ -122,46 +112,27 @@ export const usePuzzleStore = create<PuzzleStore>()(
 
       isDailyCompleted: (dateKey) => Boolean(get().dailyCompleted[dateKey]),
 
-      submitQuickDrillResult: ({ score, accuracy, timeTaken }) => {
-        const previousBest = get().quickDrillBest;
-        // P1-4.1: 快速训练以综合分数（accuracy * 100 + 时间奖励）比较
-        const isNewRecord = !previousBest || score > previousBest.bestScore;
-        if (isNewRecord) {
-          set({
-            quickDrillBest: {
-              bestScore: score,
-              bestAccuracy: accuracy,
-              bestTime: timeTaken,
-              achievedAt: Date.now(),
-            },
-          });
-        }
-        return { isNewRecord, previousBest };
-      },
-
       reset: () => {
         set({
           rushBest: null,
           dailyBest: null,
           themeBest: {},
           dailyCompleted: {},
-          quickDrillBest: null,
           history: [],
         });
       },
     }),
     {
       name: 'puzzle-trainer-store',
-      version: 2,
-      migrate: (persistedState: unknown, fromVersion: number) => {
-        // v1 → v2：注入 quickDrillBest 默认值（null）
-        const next = (persistedState ?? {}) as Partial<PuzzleStore>;
-        if (fromVersion < 2) {
-          if (next.quickDrillBest === undefined) {
-            next.quickDrillBest = null;
-          }
+      version: 3,
+      migrate: (_persistedState: unknown, _fromVersion: number) => {
+        // v3 (P2-02)：quickDrillBest 已迁至 progress store，从持久化数据中清除
+        // v2→v3 确保存量用户 persist 中的 quickDrillBest 被清理
+        const next = (_persistedState ?? {}) as Record<string, unknown>;
+        if ('quickDrillBest' in next) {
+          delete next.quickDrillBest;
         }
-        return next as PuzzleStore;
+        return next as unknown as PuzzleStore;
       },
     }
   )

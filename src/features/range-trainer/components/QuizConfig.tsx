@@ -76,7 +76,7 @@ export function QuizConfig({
 }: QuizConfigProps) {
   const { t } = useTranslation();
   const presets = useRangeTrainerStore((s) => s.presets);
-  const preflopElo = useProgressStore((s) => s.elo.preflop);
+  const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
   // 按当前变体 presets 实际存在的组合过滤位置与动作类型

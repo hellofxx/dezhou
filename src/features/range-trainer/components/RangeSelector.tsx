@@ -37,7 +37,7 @@ export function RangeSelector({
 }: RangeSelectorProps) {
   const { t } = useTranslation();
   // P4 修复（4.4-P1-1）：基于 preflop ELO 的位置渐进解锁
-  const preflopElo = useProgressStore((s) => s.elo.preflop);
+  const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
   // 调试解锁：解除全部位置门禁
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 

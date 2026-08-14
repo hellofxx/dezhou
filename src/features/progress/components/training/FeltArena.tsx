@@ -24,7 +24,7 @@ export default function FeltArena() {
   const { summary, recentRecords } = useProgress();
 
   const streak = useProgressStore((s) => s.streak);
-  const elo = useProgressStore((s) => s.elo);
+  const elo = useProgressStore((s) => s.eloByVariant[s.activeVariant]);
   const emotion = useProgressStore((s) => s.emotion);
   const onboarding = useProgressStore((s) => s.onboarding);
   const currentRank = useMemo(() => getRankForScore(elo.overall), [elo.overall]);

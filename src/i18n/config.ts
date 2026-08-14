@@ -12,8 +12,7 @@ import dashboardZh from './locales/zh/dashboard.json';
 import dashboardEn from './locales/en/dashboard.json';
 import academyZh from './locales/zh/academy.json';
 import academyEn from './locales/en/academy.json';
-import theoryZh from './locales/zh/theory.json';
-import theoryEn from './locales/en/theory.json';
+// theory / academy-course 经 FEATURE_GROUPS 路由分组懒加载（移至 preload.ts 动态注入）
 import variantZh from './locales/zh/variant.json';
 import variantEn from './locales/en/variant.json';
 import tiltZh from './locales/zh/tilt.json';
@@ -23,43 +22,14 @@ import streakEn from './locales/en/streak.json';
 import feedbackZh from './locales/zh/feedback.json';
 import feedbackEn from './locales/en/feedback.json';
 
-// 课程内容按 Level/变体拆分于 academy-course/ 子目录（对齐 data/lessons/variants 课程代码文件），
-// 经 import.meta.glob 静态合并注入 academy 命名空间；t('academy.lessonContent.l1-basics.0') 路径不变。
-// 拆分动机：单文件 academy.json 会随内容全量迁移膨胀至 1.5MB，子目录维护性与课程代码一一对应。
-const academyCourseZh = import.meta.glob<Record<string, unknown>>('./locales/zh/academy-course/*.json', {
-  import: 'default',
-  eager: true,
-});
-const academyCourseEn = import.meta.glob<Record<string, unknown>>('./locales/en/academy-course/*.json', {
-  import: 'default',
-  eager: true,
-});
+// academy-course 课程内容文件移出 eager glob，由 preload.ts 在 /academy/lesson/:lessonId 路由按需合并注入
+// 避免首屏打包 1.5MB 课程文案（见 C1 审查报告）
+// mergeCourseBundles 函数已在 preload.ts 中重新定义为 mergeAcademyCourses
 
-/** 合并课程内容文件（同顶层 key 深合并；数组/叶子直接覆盖） */
-function mergeCourseBundles(
-  base: Record<string, unknown>,
-  bundles: Record<string, Record<string, unknown>>,
-): Record<string, unknown> {
-  const merged: Record<string, unknown> = { ...base };
-  for (const bundle of Object.values(bundles)) {
-    for (const [key, value] of Object.entries(bundle)) {
-      if (
-        typeof value === 'object' &&
-        value !== null &&
-        !Array.isArray(value) &&
-        typeof merged[key] === 'object' &&
-        merged[key] !== null &&
-        !Array.isArray(merged[key])
-      ) {
-        merged[key] = { ...(merged[key] as Record<string, unknown>), ...value };
-      } else {
-        merged[key] = value;
-      }
-    }
-  }
-  return merged;
-}
-
+/**
+ * 课程内容已剥离出 core bundle，仅保留顶层框架 key（如 academy.positioning、academy.basicsIntro）
+ * 详细课程正文经 preload.ts 动态注入到 academy.lessonContent.* 命名空间
+ */
 type CoreKey = (typeof CORE_MODULES)[number];
 
 // satisfies 校验：coreZh/coreEn 的 key 集合与 CORE_MODULES 完全一致（缺任一 key 即编译失败）
@@ -67,8 +37,8 @@ const coreZh = {
   nav: navZh,
   common: commonZh,
   dashboard: dashboardZh,
-  academy: mergeCourseBundles(academyZh, academyCourseZh),
-  theory: theoryZh,
+  academy: academyZh,
+  // theory / academy-course 经 route-based preload 懒加载
   variant: variantZh,
   tilt: tiltZh,
   streak: streakZh,
@@ -79,8 +49,8 @@ const coreEn = {
   nav: navEn,
   common: commonEn,
   dashboard: dashboardEn,
-  academy: mergeCourseBundles(academyEn, academyCourseEn),
-  theory: theoryEn,
+  academy: academyEn,
+  // theory / academy-course 经 route-based preload 懒加载
   variant: variantEn,
   tilt: tiltEn,
   streak: streakEn,

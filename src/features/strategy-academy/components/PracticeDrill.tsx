@@ -14,7 +14,7 @@ import { formatBB } from '@/shared/utils/formatters';
 import { Chip } from '@/shared/components/poker/Chip';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION, MOTION_EASE, transitionStandard, transitionSlow } from '@/shared/utils/motion';
-import { soundManager } from '@/shared/utils/soundManager';
+import { soundManager } from '@/features/strategy-academy/utils/soundManager';
 import { useProgressStore } from '@/features/progress/store';
 import { useAcademyStore } from '../store';
 import { getCurrentDifficulty, selectQuestionsByDifficulty, shouldRecommendReview } from '../utils/adaptiveDifficulty';

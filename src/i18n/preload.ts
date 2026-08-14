@@ -57,11 +57,90 @@ export async function preloadI18n(
 }
 
 /**
+ * 合并 academy-course 课程内容文件（同顶层 key 深合并；数组/叶子直接覆盖）
+ * 由 config.ts 中的 mergeCourseBundles 复用（避免重复定义）
+ */
+async function mergeAcademyCourses(
+  base: Record<string, unknown>,
+  bundles: Record<string, Record<string, unknown>>,
+): Promise<Record<string, unknown>> {
+  const merged: Record<string, unknown> = { ...base };
+  for (const bundle of Object.values(bundles)) {
+    for (const [key, value] of Object.entries(bundle)) {
+      if (
+        typeof value === 'object' &&
+        value !== null &&
+        !Array.isArray(value) &&
+        typeof merged[key] === 'object' &&
+        merged[key] !== null &&
+        !Array.isArray(merged[key])
+      ) {
+        // 深合并子对象（如 lessonContent.l1-basics + lessonContent.l1-position）
+        merged[key] = {
+          ...(merged[key] as Record<string, unknown>),
+          ...(value as Record<string, unknown>)
+        };
+      } else {
+        // 数组/简单值直接覆盖
+        merged[key] = value;
+      }
+    }
+  }
+  return merged;
+}
+
+/**
  * 预加载某个路由分组（见 FEATURE_GROUPS 映射）。
  * 返回值用于 lazyPage 的 Promise.all 并行加载。
  */
-export function preloadFeature(group: keyof typeof FEATURE_GROUPS): Promise<void> {
+export async function preloadFeature(group: keyof typeof FEATURE_GROUPS): Promise<void> {
+  // P0-02: /academy/lesson/:lessonId 需要额外加载 academy-course 子模块
+  if (group === '/academy/lesson/:lessonId') {
+    await loadAcademyCourses(i18n.language as I18nLanguage);
+  }
   return preloadI18n(FEATURE_GROUPS[group]);
+}
+
+/**
+ * 动态加载并合并 academy-course 所有课程文案到 academy.lessonContent.* 命名空间
+ * 调用时机：首次访问 /academy/lesson/:lessonId 路由时（preloadFeature 中触发）
+ */
+export async function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
+  try {
+    console.log(`[loadAcademyCourses] Starting to load ${lng} academy courses...`);
+    // Vite glob 要求路径是字符串字面量，因此需要分别处理 zh/en
+    const courseModules = lng === 'zh'
+      ? await import.meta.glob('./locales/zh/academy-course/*.json', { import: 'default' })
+      : await import.meta.glob('./locales/en/academy-course/*.json', { import: 'default' });
+    
+    console.log(`[loadAcademyCourses] Found ${Object.keys(courseModules).length} course modules for ${lng}`);
+    
+    // glob 返回类型为 Record<string, () => Promise<unknown>>，需转换为 content 对象
+    // 关键修复：保持原始嵌套结构，不要用 Object.assign 平铺顶层 key
+    const contents: Record<string, unknown> = {};
+    for (const [filePath, module] of Object.entries(courseModules)) {
+      const mod = await module() as { default?: Record<string, unknown> };
+      const content = mod.default || mod;
+      // 将每个文件的内容按文件名作为 key 保存（如 l1-basics, level1, etc.）
+      const filename = filePath.split('/').pop()?.replace('.json', '') || 'unknown';
+      contents[filename] = content;
+    }
+    console.log(`[loadAcademyCourses] Collected ${Object.keys(contents).length} course files with nested structure`);
+    console.log(`[loadAcademyCourses] Sample file (level1) keys: ${Object.keys(contents['level1'] as object || {}).join(', ')}`);
+    
+    const merged = await mergeAcademyCourses(
+      {},
+      contents as unknown as Record<string, Record<string, unknown>>
+    );
+    console.log(`[loadAcademyCourses] Final merged academy structure: ${Object.keys(merged).join(', ')}`);
+    console.log(`[loadAcademyCourses] lessonContent sample keys: ${Object.keys((merged.lessonContent as object) || {}).slice(0, 3).join(', ')}`);
+    // 直接注入整个 merged 对象到 academy 命名空间（保持 lessonContent.lessonQuiz.lessonExample.lessonPractice 等子命名空间）
+    i18n.addResourceBundle(lng, 'translation', { academy: merged }, true, true);
+    console.log(`[loadAcademyCourses] Completed loading ${lng} academy courses`);
+  } catch (err) {
+    console.error(`[loadAcademyCourses] ERROR loading ${lng} academy courses`, err);
+    throw err; // Re-throw to expose error in test
+  }
 }
 
 // 语言切换：对已请求过的模块补加载目标语言（幂等，已加载的语言键自动跳过）

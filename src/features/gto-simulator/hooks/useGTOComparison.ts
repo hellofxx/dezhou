@@ -225,7 +225,7 @@ const GTO_DIFFICULTY_MAP: Record<Difficulty, number> = {
 
 export function useGtoEloRecorder() {
   const updateElo = useProgressStore((s) => s.updateElo);
-  const postflopElo = useProgressStore((s) => s.elo.postflop);
+  const postflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].postflop);
 
   return useCallback(
     (isCorrect: boolean, difficulty?: Difficulty | number) => {
