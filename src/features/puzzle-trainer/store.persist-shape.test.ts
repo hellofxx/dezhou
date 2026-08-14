@@ -29,7 +29,6 @@ describe('puzzle-trainer store persisted shape', () => {
         "dailyBest": "null",
         "dailyCompleted": {},
         "history": "array",
-        "quickDrillBest": "null",
         "rushBest": "null",
         "themeBest": {},
       }

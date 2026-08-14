@@ -7,7 +7,6 @@ import { transitionSlow } from '@/shared/utils/motion';
 import { ArrowLeft, Zap, Target, RotateCcw, Trophy, Clock, Award, CheckCircle2, Sparkles, Gift } from 'lucide-react';
 import { useAcademyStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
-import { usePuzzleStore } from '@/features/puzzle-trainer/store';
 import { getQuickDrillQuestions } from '../utils/quickDrill';
 // P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
 import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
@@ -57,8 +56,8 @@ export default function QuickDrill() {
   const recordCount = useProgressStore((s) => s.records.length);
   // P1-4.3: 快速训练连续打卡
   const recordQuickDrillCompletion = useProgressStore((s) => s.recordQuickDrillCompletion);
-  // P1-4.1: Puzzle store 快速训练 Best Record
-  const submitQuickDrillResult = usePuzzleStore((s) => s.submitQuickDrillResult);
+// P1-4.1: Progress store 快速训练 Best Record
+  const submitQuickDrillResult = useProgressStore((s) => s.submitQuickDrillResult);
 
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();

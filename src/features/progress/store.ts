@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState } from './types';
+import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState, QuickDrillBestRecord } from './types';
 import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
 import type { ReviewItem } from './utils/spacedRepetition';
@@ -250,6 +250,12 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
       });
     }
   },
+  // v11 → v12：注入 quickDrillBest 默认值（P2-02：从 puzzle-trainer store 迁入）
+  (s) => {
+    if (s.quickDrillBest === undefined) {
+      s.quickDrillBest = null;
+    }
+  },
 ];
 
 interface ProgressStore {
@@ -348,12 +354,23 @@ interface ProgressStore {
   quickDrillStreak: number;
   /** 上次完成快速训练的日期（YYYY-MM-DD），用于幂等与连续判断 */
   lastQuickDrillDate: string | null;
+  /** P2-02: 快速训练历史最佳记录（从 puzzle-trainer store 迁入） */
+  quickDrillBest: QuickDrillBestRecord | null;
   /**
    * 记录一次快速训练完成（幂等：同日多次完成只计一次）。
    * 若连续 7 天达成，奖励 1 张冻结卡。
    * @returns newBadge 是否触发了 7 天奖励；quickDrillStreak 当前连续天数
    */
   recordQuickDrillCompletion: () => { newBadge: boolean; quickDrillStreak: number };
+  /**
+   * P2-02: 提交快速训练结果，返回是否破纪录。
+   * 从 puzzle-trainer store 迁入，实现与原来完全一致。
+   */
+  submitQuickDrillResult: (input: {
+    score: number;
+    accuracy: number;
+    timeTaken: number;
+  }) => { isNewRecord: boolean; previousBest: QuickDrillBestRecord | null };
 
   // P2-4: 导师角色人格化
   /** 当前教练风格（默认 strict-math），影响反馈文案 */
@@ -671,6 +688,7 @@ export const useProgressStore = create<ProgressStore>()(
       // ===== P1-4.3: 快速训练连续打卡（独立于 streak.currentStreak） =====
       quickDrillStreak: 0,
       lastQuickDrillDate: null,
+      quickDrillBest: null,
 
       recordQuickDrillCompletion: () => {
         const today = getTodayString();
@@ -699,6 +717,22 @@ export const useProgressStore = create<ProgressStore>()(
         // 快速训练完成时有 20% 概率获得 1 个碎片（每日最多 2 个）
         tryEarnFragment(0.2);
         return { newBadge, quickDrillStreak: newStreak };
+      },
+
+      submitQuickDrillResult: ({ score, accuracy, timeTaken }) => {
+        const previousBest = get().quickDrillBest;
+        const isNewRecord = !previousBest || score > previousBest.bestScore;
+        if (isNewRecord) {
+          set({
+            quickDrillBest: {
+              bestScore: score,
+              bestAccuracy: accuracy,
+              bestTime: timeTaken,
+              achievedAt: Date.now(),
+            },
+          });
+        }
+        return { isNewRecord, previousBest };
       },
 
       // ===== P2-4: 导师角色人格化 =====
@@ -902,7 +936,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 11,
+      version: 12,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。
         // 表驱动调度：MIGRATIONS[i] 对应 v(i) → v(i+1)（即原 if (fromVersion < i+1) 段），

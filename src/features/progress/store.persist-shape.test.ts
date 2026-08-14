@@ -111,6 +111,7 @@ describe('progress store persisted shape', () => {
           "startedAt": "number",
         },
         "pendingMilestone": "null",
+        "quickDrillBest": "null",
         "quickDrillStreak": "number",
         "records": "array",
         "reviewItems": "array",

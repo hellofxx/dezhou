@@ -30,7 +30,7 @@ const EXPECTED_SNAPSHOT: CrossImportMap = {
   progress: [],
   'puzzle-trainer': ['progress'],
   'range-trainer': ['progress'],
-  'strategy-academy': ['progress', 'puzzle-trainer'],
+  'strategy-academy': ['progress'],
   'theory-academy': ['progress'],
 };
 
