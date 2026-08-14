@@ -1056,7 +1056,8 @@ async function checkCondition(
     }
 
     case 'elo':
-      return state.elo.overall >= condition.minScore;
+      // 以当前活动变体的 ELO 为判定源（eloByVariant 单一事实源）
+      return state.eloByVariant[state.activeVariant].overall >= condition.minScore;
 
     case 'certification': {
       for (const source of getAchievementSources()) {

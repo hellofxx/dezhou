@@ -101,7 +101,7 @@ export function useQuizEngine() {
 
   // P1-2.4: ELO 能力分级 — range-trainer 维度=preflop
   const updateElo = useProgressStore((s) => s.updateElo);
-  const preflopElo = useProgressStore((s) => s.elo.preflop);
+  const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
 
   // P2-5.2: 情绪管理 — 记录答题用于连续答错检测与每日题量统计
   const recordAnswerForEmotion = useProgressStore((s) => s.recordAnswer);

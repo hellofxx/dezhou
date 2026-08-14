@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { transitionSlow } from '@/shared/utils/motion';
-// P1-2.6: 改为从 progress store 读取 ELO 五维分数（0-3000 量纲）
+// P1-2.6: 从 progress store 读取当前活动变体的 ELO 五维分数（0-3000 量纲）
 import { useProgressStore } from '../../store';
 import { getRankForScore } from '@/shared/utils/elo';
 import type { EloDimension } from '@/shared/types/elo';
@@ -56,7 +56,7 @@ function buildEloRadarData(
 
 export default function WeaknessAnalysis() {
   const { t } = useTranslation();
-  const elo = useProgressStore((s) => s.elo);
+  const elo = useProgressStore((s) => s.eloByVariant[s.activeVariant]);
   const gamesPlayed = elo.gamesPlayed;
   const hasData = gamesPlayed > 0;
 

@@ -16,7 +16,7 @@ interface ProgressHeroProps {
  */
 export default function ProgressHero({ summary }: ProgressHeroProps) {
   const { t } = useTranslation();
-  const elo = useProgressStore((s) => s.elo);
+  const elo = useProgressStore((s) => s.eloByVariant[s.activeVariant]);
   const rank = useMemo(() => getRankForScore(elo.overall), [elo.overall]);
   const hasEloData = elo.gamesPlayed > 0;
 
