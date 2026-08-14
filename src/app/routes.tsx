@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/AppLayout';
 import BlankLayout from '@/layouts/BlankLayout';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
-import { preloadI18n } from '@/i18n/preload';
+import { preloadI18n, preloadFeature } from '@/i18n/preload';
 import { FEATURE_GROUPS } from '@/i18n/moduleRegistry';
 
 type PageModule = { default: React.ComponentType<unknown> };
@@ -17,6 +17,16 @@ type PageLoader = () => Promise<PageModule>;
 function lazyPage(loader: PageLoader, group: keyof typeof FEATURE_GROUPS) {
   const keys = FEATURE_GROUPS[group];
   return lazy(() => Promise.all([loader(), preloadI18n(keys)]).then(([mod]) => mod));
+}
+
+/**
+ * 特殊路由懒加载：支持 preloadFeature（用于 academy-course 动态注入）
+ */
+function lazyPageWithFeature(loader: PageLoader, group: keyof typeof FEATURE_GROUPS) {
+  return lazy(() => Promise.all([
+    loader(),
+    preloadFeature(group as '/academy/lesson/:lessonId')
+  ]).then(([mod]) => mod));
 }
 
 // Lazy-loaded pages
@@ -38,7 +48,7 @@ const RangeStatsPage = lazyPage(() => import('@/features/progress/components/sta
 const GTOStatsPage = lazyPage(() => import('@/features/progress/components/stats/GTOStatsPage'), '/progress/gto');
 const LeaderboardPage = lazyPage(() => import('@/features/progress/components/achievement/Leaderboard'), '/leaderboard');
 const AcademyHome = lazyPage(() => import('@/features/strategy-academy/components/AcademyHome'), '/academy');
-const CourseView = lazyPage(() => import('@/features/strategy-academy/components/CourseView'), '/academy/lesson/:lessonId');
+const CourseView = lazyPageWithFeature(() => import('@/features/strategy-academy/components/CourseView'), '/academy/lesson/:lessonId');
 const BasicsIntro = lazyPage(() => import('@/features/strategy-academy/components/BasicsIntro'), '/academy/basics');
 const ConceptGraphView = lazyPage(() => import('@/features/strategy-academy/components/ConceptGraphView'), '/academy/concept-graph');
 const LearningTracksView = lazyPage(() => import('@/features/strategy-academy/components/LearningTracksView'), '/academy/tracks');

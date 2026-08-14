@@ -88,7 +88,7 @@ export const CORE_MODULES = [
   'common',
   'dashboard',
   'academy',
-  'theory',
+  // theory / academy-course 经 FEATURE_GROUPS 懒加载（移除 theory 以避免首屏 955KB 内容注入）
   'variant',
   'tilt',
   'streak',
