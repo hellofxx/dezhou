@@ -58,7 +58,7 @@ async function dbGetAll(): Promise<HandHistory[]> {
     const BATCH = 200;
     const req = store.openCursor();
     req.onerror = () => reject(req.error);
-    req.onsuccess = () => {
+    req.onsuccess = async () => {
       const cursor = req.result;
       if (!cursor) {
         resolve(results);
@@ -66,8 +66,11 @@ async function dbGetAll(): Promise<HandHistory[]> {
       }
       results.push(cursor.value as HandHistory);
       if (results.length % BATCH === 0) {
-        // 让出主线程后继续遍历
-        setTimeout(() => cursor.continue(), 0);
+        // 通过 microtask 让出主线程（await Promise.resolve() === queueMicrotask）
+        // IndexedDB 事务在回调返回且无 pending 请求时 auto-commit；
+        // microtask 中事务仍为 active 状态，可安全调用 cursor.continue()
+        await Promise.resolve();
+        cursor.continue();
       } else {
         cursor.continue();
       }
