@@ -13,4 +13,4 @@ export { getHandGridPosition, getHandFromGrid, parseRange, rangeToString } from 
 // Heavy modules with enum dependencies - import directly from their files:
 // import { ... } from '@/shared/utils/deck'
 // import { ... } from '@/shared/utils/pokerMath'
-// import { ... } from '@/shared/utils/handRanking'
+// HandRanking removed (zero consumption)

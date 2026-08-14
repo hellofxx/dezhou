@@ -17,6 +17,12 @@ export const trainingEvents = {
     };
   },
   emit: (record: TrainingRecord) => {
-    callbacks.forEach((cb) => cb(record));
+    for (const cb of callbacks) {
+      try {
+        cb(record);
+      } catch (err) {
+        console.error('[trainingEvents] subscriber failed', err);
+      }
+    }
   },
 };

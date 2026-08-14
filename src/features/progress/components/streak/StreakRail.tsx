@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flame } from 'lucide-react';
-import FreezeChip from '@/shared/components/business/FreezeChip';
+import FreezeChip from './FreezeChip';
 import { useProgressStore } from '../../store';
 import { getTodayString } from '../../utils/streakCalc';
 
