@@ -8,6 +8,22 @@
 
 ## [Unreleased] - 2026-08-14
 
+### 架构深度审查修复批次（Critical×3 + Important×5 全量销项，2026-08-14）
+
+> 依据代码审查报告（首屏打包策略与中枢 store 膨胀两条结构性短板），在 `refactor/architecture-critical-fixes` 分支按 P0→P1→P2 优先级分 8 个独立逻辑单元提交修复，每步经 `pnpm verify` 门禁验证。
+
+- **P0-01 IndexedDB 游标事务失效修复**（hand-history）：`dbGetAll` 分批读取的 `setTimeout(() => cursor.continue(), 0)` 为 macrotask，IndexedDB 事务在 success 回调返回且无 pending 请求时 auto-commit，数据 > 200 条时 `cursor.continue()` 必抛 `TransactionInactiveError` 且 Promise 永久 pending（列表页永久 loading）。`onsuccess` 改 async + `await Promise.resolve()`（microtask 内事务仍 active）。
+- **P0-02 i18n 首屏懒加载**（C1+C2）：`academy-course/*.json` 的 `import.meta.glob` 去除 `eager: true`（双语 1.56MB 课程文案移出启动 bundle），改由 `preload.ts` 新增 `loadAcademyCourses` 在 `/academy/lesson/:lessonId` 路由按需合并注入 `academy.lessonContent.*`（新增 `lazyPageWithFeature` 路由辅助）；`theory` 移出 `CORE_MODULES`（双语 955KB 改经 FEATURE_GROUPS 路由分组懒加载）。首屏纯 i18n 内容约 -2.4MB（未压缩）。
+- **P0-03 bootstrap 延迟加载 + barrel 瘦身**：main.tsx 三学院 `store.bootstrap` 静态 import 改 `requestIdleCallback` 动态 import（降级 `setTimeout`）；`initProgressStore` 改深路径导入；progress `index.ts` 移除 9 个组件 re-export（recharts 链退出首屏闭包）；strategy-academy `completeCourse.ts` 同步改深路径导入。首屏再减 ~1.2MB 依赖链。
+- **P1-01 shared 准入清理**：`soundManager.ts` 下沉 strategy-academy/utils（唯一消费方 PracticeDrill）；`shareCard.ts` / `FreezeChip.tsx` 下沉 progress/components/streak；`handRanking.ts` + 测试删除（生产零引用死代码）。
+- **P1-02 trainingEvents 错误隔离**：`emit` 由 `forEach` 改 try/catch 逐个调用（订阅者抛错不再中断后续订阅者与 emit 调用方），新增 2 个错误隔离专项测试。
+- **P2-02 academy→puzzle peer 依赖解除**：`quickDrillBest` / `submitQuickDrillResult` 从 puzzle-trainer store 迁至 progress store（对齐跨模块能力归属表：QuickDrill owner 为 progress-dev）；puzzle-trainer persist v2→v3 清理存量数据，progress persist v11→v12 注入默认值；`ALLOWED_CROSS_IMPORTS` 删除 `strategy-academy → puzzle-trainer` 边（模块依赖图 peer 边清零，快照守卫同步）。
+- **P2-03 构建体积门禁**：新增 `scripts/check-bundle-size.mjs`（解析 index.html modulepreload 闭包 + Top 5 chunk 排行 + gzip/网络耗时预估），预算首屏 JS < 1.1MB / preload < 40 / 单 chunk < 500KB，CI `deploy.yml` 构建后阻断式检查。
+- **P2-01 阶段 A records 外迁 IndexedDB**（progress persist v13）：新增 `utils/recordDatabase.ts`（复用 hand-history IndexedDB helper 模式，`cleanup(1000)` 自动裁剪）；persist 新增 `partialize` 排除 records（localStorage 写入量 -95%+）；`addRecord` / `deleteRecord` / `clearAllRecords` 同步 IndexedDB；`store.bootstrap` 改 async，等待 hydration 完成后一次性迁入存量 records（防竞态覆盖）；v12→v13 migrate 删除顶层 `elo` 字段（双写债务退役，内存镜像暂留兼容 8 处 `s.elo` 读取点，待消费方迁移 `eloByVariant` 后整体移除）。
+- **量化成果**：首屏 JS 4.5MB → 1.06MB（-76%）；modulepreload 68 → 38（-44%）；IndexedDB >200 条挂死消除；shared 层违规文件清零；peer 依赖边清零。
+- **关键技术沉淀**：① IndexedDB 批量游标分批让出必须用 microtask（macrotask 导致事务 auto-commit）；② Vite `import.meta.glob` 路径必须字符串字面量（语言分支需独立 glob 调用）；③ zustand `set(partial, second)` 第二参数为 replace 布尔值，异步 side-effect 需独立 IIFE；④ persist hydration 与 IndexedDB 迁移存在竞态，需 `hasHydrated` + `onFinishHydration` 双保险。
+- **验证**：全部 8 个提交逐一通过 pre-commit（typecheck + lint）；最终 `pnpm verify` 全绿（82 files / 558 tests）+ `pnpm build` + `pnpm size:check` 体积门禁通过。
+
 ### 构建体积门禁（P2-03，2026-08-14）
 
 > 防止首屏 JS 回潮，设置预算阈值并集成到 CI。
