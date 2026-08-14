@@ -6,6 +6,20 @@
 
 ---
 
+## [Unreleased] - 2026-08-14
+
+### 构建体积门禁（P2-03，2026-08-14）
+
+> 防止首屏 JS 回潮，设置预算阈值并集成到 CI。
+
+- **脚本实现**：`scripts/check-bundle-size.mjs` —— 分析 dist/产物，解析 index.html 的 modulepreload 链接，计算总大小与各 chunk 分布；支持 GitHub Pages 子路径部署（/dezhou/）路径标准化。
+- **预算阈值**：首屏 JS < 1.1MB (未压缩) / Modulepreload < 40 个 / 单 chunk < 500KB（严格版 1MB/30 将在 P0-02+P0-03优化后启用）；当前实测 ~1.06MB / 38 preload chunks，预留安全边际待后续性能任务优化。
+- **报告输出**：Top 5 Chunk 排行 + 大方块警告 + gzip 压缩预估 + 网络加载时间估算（3G/4G）。
+- **CI 集成**：`.github/workflows/deploy.yml` 新增 `Bundle Size Check` 步骤（Build 之后、SPA fallback 之前），失败则阻断部署。
+- **验证**：`pnpm build && pnpm size:check` 本地通过；`pnpm verify` 全绿（558 tests / 82 files）。
+
+---
+
 ## [Unreleased] - 2026-08-11
 
 ### P3 遗留问题清零：progress 依赖倒置 + i18n 守卫盲区 + 死字段删除（2026-08-13）
