@@ -11,6 +11,9 @@ import { buildPersistedShape } from '@/shared/utils/persistShape';
  *
  * ⚠️ 快照失配时禁止盲目 `vitest -u`：请先在 store 中递增 persist version 并编写
  *    migrate（防御性合并默认值），再更新本快照（见 AGENTS.md「Persist Version 升级硬性规则」）。
+ *
+ * P2-01 阶段 A（v13）：records 外迁 IndexedDB，经 partialize 排除出 localStorage
+ * （快照中不再包含 records 键；持久化由 recordDatabase 承担，见 utils/recordDatabase.ts）。
  */
 describe('progress store persisted shape', () => {
   it('持久化键结构与当前快照一致（变化即需 bump version + migrate）', async () => {
@@ -113,7 +116,6 @@ describe('progress store persisted shape', () => {
         "pendingMilestone": "null",
         "quickDrillBest": "null",
         "quickDrillStreak": "number",
-        "records": "array",
         "reviewItems": "array",
         "settings": {
           "defaultQuestionCount": "number",
