@@ -5,7 +5,7 @@ import { Smile, Meh, Frown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useProgressStore } from '../../store';
-import { getTodayString } from '../../utils/spacedRepetition';
+import { getTodayString } from '@/shared/utils/spacedRepetition';
 
 type Mood = 'good' | 'neutral' | 'bad';
 

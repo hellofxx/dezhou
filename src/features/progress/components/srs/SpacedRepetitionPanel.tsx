@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { RefreshCw, ArrowRight, CheckCircle2, BookOpen, GraduationCap, PlayCircle } from 'lucide-react';
-import type { ReviewItem } from '../../utils/spacedRepetition';
-import { getDaysSinceLastReview, getReviewStats } from '../../utils/spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
+import { getDaysSinceLastReview, getReviewStats } from '@/shared/utils/spacedRepetition';
 
 interface SpacedRepetitionPanelProps {
   reviewItems: ReviewItem[];

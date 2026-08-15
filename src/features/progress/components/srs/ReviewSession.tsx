@@ -27,8 +27,8 @@ import {
 import { Button } from '@/shared/components/ui/button';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useProgressStore } from '../../store';
-import type { ReviewItem } from '../../utils/spacedRepetition';
-import { processReview, getTodayReviewItems } from '../../utils/spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
+import { processReview, getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 
 interface ReviewSessionProps {
   open: boolean;

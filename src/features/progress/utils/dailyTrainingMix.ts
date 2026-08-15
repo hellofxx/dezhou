@@ -21,8 +21,8 @@
  *   3. 复习题与新题的顺序可由调用方决定（建议交错排列）
  */
 
-import type { ReviewItem } from './spacedRepetition';
-import { getTodayString } from './spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
+import { getTodayString } from '@/shared/utils/spacedRepetition';
 
 /** 默认复习占比 */
 const DEFAULT_REVIEW_RATIO = 0.3;

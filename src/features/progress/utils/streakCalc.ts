@@ -1,7 +1,7 @@
 import type { TrainingRecord, StreakState, StreakMilestones } from '../types';
 import { MILESTONE_DAYS } from '../types';
 import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
-import { toLocalDateString } from './spacedRepetition';
+import { toLocalDateString } from '@/shared/utils/spacedRepetition';
 
 /** 计算当前连续训练天数 */
 export function calculateCurrentStreak(dates: string[]): number {
@@ -90,7 +90,7 @@ function toRelativeDayStr(offset: number): string {
 
 // 今日 YYYY-MM-DD（本地时区）：统一委托 spacedRepetition 的单一实现（内部走 shared/toLocalDateKey），
 // 消除双实现；spacedRepetition 的 toLocalDateString 支持无参调用（返回今天），故可安全 re-export
-export { toLocalDateString as getTodayString } from './spacedRepetition';
+export { toLocalDateString as getTodayString } from '@/shared/utils/spacedRepetition';
 
 /** 获取昨日 YYYY-MM-DD 字符串（本地时区） */
 export function getYesterdayString(): string {

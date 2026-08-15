@@ -1,2 +1,173 @@
-// @ts-nocheck
-import { describe, it, expect } from 'vitest';import { orderQuizQuestion, orderDrillOptions } from './quizShuffle';import { LEVELS } from '../data/levels';import { LOCAL_LESSONS } from '../data/localLessons';import type { DrillQuestion, Lesson, QuizQuestion } from '../types';// ===== 真实数据收集（levels + localLessons，按 lesson.id 去重防重复计数）=====const ALL_LESSONS: Lesson[] = (() => {  const map = new Map<string, Lesson>();  for (const level of LEVELS) {    for (const lesson of level.lessons) map.set(lesson.id, lesson);  }  for (const lesson of LOCAL_LESSONS) map.set(lesson.id, lesson);  return [...map.values()];})();const ALL_QUIZ: QuizQuestion[] = ALL_LESSONS.flatMap((l) => l.quiz);const ALL_DRILL: DrillQuestion[] = ALL_LESSONS.flatMap((l) => l.drillData?.questions ?? []);// ===== 构造样例 =====const textQuestion: QuizQuestion = {  id: 'test-text-q1',  question: '以下哪个说法正确？',  options: ['选项甲', '选项乙', '选项丙', '选项丁'],  correctIndex: 1,  explanation: '测试解析',};const numericQuestion: QuizQuestion = {  id: 'test-numeric-q1',  question: '底池赔率是多少？',  options: ['50%', '25%', '33%', '20%'],  correctIndex: 0,  explanation: '测试解析',};const drillQuestion: DrillQuestion = {  id: 'test-drill-q1',  scenario: '测试场景',  question: '应该怎么做？',  options: [    { id: 'a', text: '弃牌', isCorrect: false },    { id: 'b', text: '跟注', isCorrect: true },    { id: 'c', text: '加注', isCorrect: false },    { id: 'd', text: '全下', isCorrect: false },  ],  explanation: '测试解析',  difficulty: 1,};describe('orderQuizQuestion', () => {  it('① 重映射正确性：构造样例洗牌后 correctIndex 指向原正确答案文本', () => {    const ordered = orderQuizQuestion(textQuestion);    expect(ordered.options[ordered.correctIndex]).toBe(      textQuestion.options[textQuestion.correctIndex],    );  });  it('① 重映射正确性：全部真实 levels + localLessons 题目', () => {    expect(ALL_QUIZ.length).toBeGreaterThan(0);    for (const q of ALL_QUIZ) {      const ordered = orderQuizQuestion(q);      expect(ordered.options[ordered.correctIndex]).toBe(q.options[q.correctIndex]);    }  });  it('② id 稳定种子确定性：同题两次调用结果一致', () => {    expect(orderQuizQuestion(textQuestion)).toEqual(orderQuizQuestion(textQuestion));    for (const q of ALL_QUIZ.slice(0, 30)) {      expect(orderQuizQuestion(q)).toEqual(orderQuizQuestion(q));    }  });  it('③ 数值选项题走升序分支且 correctIndex 正确重映射', () => {    const ordered = orderQuizQuestion(numericQuestion);    expect(ordered.options).toEqual(['20%', '25%', '33%', '50%']);    expect(ordered.correctIndex).toBe(3); // 原正确答案 '50%' 升序后在末位    // 显式 seed 不影响数值升序分支    expect(orderQuizQuestion(numericQuestion, 12345)).toEqual(ordered);  });  it('④ 选项集合不变（仅顺序改变），且不修改原对象', () => {    const textQuestionOptionsBefore = [...textQuestion.options];    const numericQuestionOptionsBefore = [...numericQuestion.options];    // 仅验证 QuizQuestion 类型（纯字符串数组），不包含 DrillQuestion    for (const q of [textQuestion, numericQuestion]) {      const ordered = orderQuizQuestion(q);      expect([...ordered.options].sort()).toEqual([...q.options].sort());      expect(ordered.options.length).toBe(q.options.length);    }    // 验证原对象未修改    expect(textQuestion.options).toEqual(textQuestionOptionsBefore);    expect(numericQuestion.options).toEqual(numericQuestionOptionsBefore);    expect(textQuestion.correctIndex).toBe(1);  });  it('⑤ 分布守卫：levels + localLessons 处理后正确答案索引分布任一 <50%', () => {    const distribution: Record<number, number> = {};    for (const q of ALL_QUIZ) {      const ordered = orderQuizQuestion(q);      distribution[ordered.correctIndex] = (distribution[ordered.correctIndex] ?? 0) + 1;    }    const total = ALL_QUIZ.length;    const readable = Object.entries(distribution)      .map(([idx, count]) => {        const letter = String.fromCharCode(65 + Number(idx));        return `${letter}: ${count} (${((count / total) * 100).toFixed(1)}%)`;      })      .join(', ');    console.log(`[quizShuffle 分布守卫] 共 ${total} 题 → ${readable}`);    for (const count of Object.values(distribution)) {      expect(count / total).toBeLessThan(0.5);    }  });  it('显式 seed：不同 seed 可产生不同顺序，同 seed 结果一致（会话随机）', () => {    const a = orderQuizQuestion(textQuestion, 1);    const b = orderQuizQuestion(textQuestion, 1);    expect(a).toEqual(b);    // 至少存在某个 seed 使顺序与 seed=1 不同（遍历少量 seed 必然命中）    const seeds = [2, 3, 4, 5, 6, 7, 8];    const anyDifferent = seeds.some(      (s) => orderQuizQuestion(textQuestion, s).options.join('|') !== a.options.join('|'),    );    expect(anyDifferent).toBe(true);  });});describe('orderDrillOptions', () => {  it('⑥ isCorrect 标记跟随选项移动（构造样例 + 真实 drillData）', () => {    for (const q of [drillQuestion, ...ALL_DRILL]) {      const ordered = orderDrillOptions(q);      const correctBefore = q.options.filter((o) => o.isCorrect).map((o) => o.text).sort();      const correctAfter = ordered.options.filter((o) => o.isCorrect).map((o) => o.text).sort();      expect(correctAfter).toEqual(correctBefore);      // 选项集合不变（按 id 比较）      expect(ordered.options.map((o) => o.id).sort()).toEqual(        q.options.map((o) => o.id).sort(),      );    }  });  it('⑥ 确定性：同题两次调用结果一致，且不修改原对象', () => {    const before = q0Snapshot();    expect(orderDrillOptions(drillQuestion)).toEqual(orderDrillOptions(drillQuestion));    for (const q of ALL_DRILL.slice(0, 30)) {      expect(orderDrillOptions(q)).toEqual(orderDrillOptions(q));    }    expect(q0Snapshot()).toEqual(before);    function q0Snapshot(): string {      return JSON.stringify(drillQuestion.options);    }  });  it('数值选项集走升序分支', () => {    const numericDrill: DrillQuestion = {      ...drillQuestion,      id: 'test-drill-numeric',      options: [        { id: 'a', text: '9 个', isCorrect: true },        { id: 'b', text: '4 个', isCorrect: false },        { id: 'c', text: '15 个', isCorrect: false },        { id: 'd', text: '约 2 个', isCorrect: false },      ],    };    const ordered = orderDrillOptions(numericDrill);    expect(ordered.options.map((o) => o.text)).toEqual(['约 2 个', '4 个', '9 个', '15 个']);    expect(ordered.options.find((o) => o.isCorrect)?.text).toBe('9 个');  });});
+import { describe, it, expect } from 'vitest';
+import { orderQuizQuestion, orderDrillOptions } from './quizShuffle';
+import { LEVELS } from '../data/levels';
+import { LOCAL_LESSONS } from '../data/localLessons';
+import type { DrillQuestion, Lesson, QuizQuestion } from '../types';
+
+// ===== 真实数据收集（levels + localLessons，按 lesson.id 去重防重复计数）=====
+const ALL_LESSONS: Lesson[] = (() => {
+  const map = new Map<string, Lesson>();
+  for (const level of LEVELS) {
+    for (const lesson of level.lessons) map.set(lesson.id, lesson);
+  }
+  for (const lesson of LOCAL_LESSONS) map.set(lesson.id, lesson);
+  return [...map.values()];
+})();
+
+const ALL_QUIZ: QuizQuestion[] = ALL_LESSONS.flatMap((l) => l.quiz);
+const ALL_DRILL: DrillQuestion[] = ALL_LESSONS.flatMap((l) => l.drillData?.questions ?? []);
+
+// ===== 构造样例 =====
+const textQuestion: QuizQuestion = {
+  id: 'test-text-q1',
+  question: '以下哪个说法正确？',
+  options: ['选项甲', '选项乙', '选项丙', '选项丁'],
+  correctIndex: 1,
+  explanation: '测试解析',
+};
+
+const numericQuestion: QuizQuestion = {
+  id: 'test-numeric-q1',
+  question: '底池赔率是多少？',
+  options: ['50%', '25%', '33%', '20%'],
+  correctIndex: 0,
+  explanation: '测试解析',
+};
+
+const drillQuestion: DrillQuestion = {
+  id: 'test-drill-q1',
+  scenario: '测试场景',
+  question: '应该怎么做？',
+  options: [
+    { id: 'a', text: '弃牌', isCorrect: false },
+    { id: 'b', text: '跟注', isCorrect: true },
+    { id: 'c', text: '加注', isCorrect: false },
+    { id: 'd', text: '全下', isCorrect: false },
+  ],
+  explanation: '测试解析',
+  difficulty: 1,
+};
+
+describe('orderQuizQuestion', () => {
+  it('① 重映射正确性：构造样例洗牌后 correctIndex 指向原正确答案文本', () => {
+    const ordered = orderQuizQuestion(textQuestion);
+    expect(ordered.options[ordered.correctIndex]).toBe(
+      textQuestion.options[textQuestion.correctIndex],
+    );
+  });
+
+  it('① 重映射正确性：全部真实 levels + localLessons 题目', () => {
+    expect(ALL_QUIZ.length).toBeGreaterThan(0);
+    for (const q of ALL_QUIZ) {
+      const ordered = orderQuizQuestion(q);
+      expect(ordered.options[ordered.correctIndex]).toBe(q.options[q.correctIndex]);
+    }
+  });
+
+  it('② id 稳定种子确定性：同题两次调用结果一致', () => {
+    expect(orderQuizQuestion(textQuestion)).toEqual(orderQuizQuestion(textQuestion));
+    for (const q of ALL_QUIZ.slice(0, 30)) {
+      expect(orderQuizQuestion(q)).toEqual(orderQuizQuestion(q));
+    }
+  });
+
+  it('③ 数值选项题走升序分支且 correctIndex 正确重映射', () => {
+    const ordered = orderQuizQuestion(numericQuestion);
+    expect(ordered.options).toEqual(['20%', '25%', '33%', '50%']);
+    expect(ordered.correctIndex).toBe(3); // 原正确答案 '50%' 升序后在末位
+    // 显式 seed 不影响数值升序分支
+    expect(orderQuizQuestion(numericQuestion, 12345)).toEqual(ordered);
+  });
+
+  it('④ 选项集合不变（仅顺序改变），且不修改原对象', () => {
+    const textQuestionOptionsBefore = [...textQuestion.options];
+    const numericQuestionOptionsBefore = [...numericQuestion.options];
+
+    // 仅验证 QuizQuestion 类型（纯字符串数组），不包含 DrillQuestion
+    for (const q of [textQuestion, numericQuestion]) {
+      const ordered = orderQuizQuestion(q);
+      expect([...ordered.options].sort()).toEqual([...q.options].sort());
+      expect(ordered.options.length).toBe(q.options.length);
+    }
+
+    // 验证原对象未修改
+    expect(textQuestion.options).toEqual(textQuestionOptionsBefore);
+    expect(numericQuestion.options).toEqual(numericQuestionOptionsBefore);
+    expect(textQuestion.correctIndex).toBe(1);
+  });
+
+  it('⑤ 分布守卫：levels + localLessons 处理后正确答案索引分布任一 <50%', () => {
+    const distribution: Record<number, number> = {};
+    for (const q of ALL_QUIZ) {
+      const ordered = orderQuizQuestion(q);
+      distribution[ordered.correctIndex] = (distribution[ordered.correctIndex] ?? 0) + 1;
+    }
+    const total = ALL_QUIZ.length;
+    const readable = Object.entries(distribution)
+      .map(([idx, count]) => {
+        const letter = String.fromCharCode(65 + Number(idx));
+        return `${letter}: ${count} (${((count / total) * 100).toFixed(1)}%)`;
+      })
+      .join(', ');
+    console.log(`[quizShuffle 分布守卫] 共 ${total} 题 → ${readable}`);
+    for (const count of Object.values(distribution)) {
+      expect(count / total).toBeLessThan(0.5);
+    }
+  });
+
+  it('显式 seed：不同 seed 可产生不同顺序，同 seed 结果一致（会话随机）', () => {
+    const a = orderQuizQuestion(textQuestion, 1);
+    const b = orderQuizQuestion(textQuestion, 1);
+    expect(a).toEqual(b);
+    // 至少存在某个 seed 使顺序与 seed=1 不同（遍历少量 seed 必然命中）
+    const seeds = [2, 3, 4, 5, 6, 7, 8];
+    const anyDifferent = seeds.some(
+      (s) => orderQuizQuestion(textQuestion, s).options.join('|') !== a.options.join('|'),
+    );
+    expect(anyDifferent).toBe(true);
+  });
+});
+
+describe('orderDrillOptions', () => {
+  it('⑥ isCorrect 标记跟随选项移动（构造样例 + 真实 drillData）', () => {
+    for (const q of [drillQuestion, ...ALL_DRILL]) {
+      const ordered = orderDrillOptions(q);
+      const correctBefore = q.options.filter((o) => o.isCorrect).map((o) => o.text).sort();
+      const correctAfter = ordered.options.filter((o) => o.isCorrect).map((o) => o.text).sort();
+      expect(correctAfter).toEqual(correctBefore);
+      // 选项集合不变（按 id 比较）
+      expect(ordered.options.map((o) => o.id).sort()).toEqual(
+        q.options.map((o) => o.id).sort(),
+      );
+    }
+  });
+
+  it('⑥ 确定性：同题两次调用结果一致，且不修改原对象', () => {
+    const before = q0Snapshot();
+    expect(orderDrillOptions(drillQuestion)).toEqual(orderDrillOptions(drillQuestion));
+    for (const q of ALL_DRILL.slice(0, 30)) {
+      expect(orderDrillOptions(q)).toEqual(orderDrillOptions(q));
+    }
+    expect(q0Snapshot()).toEqual(before);
+
+    function q0Snapshot(): string {
+      return JSON.stringify(drillQuestion.options);
+    }
+  });
+
+  it('数值选项集走升序分支', () => {
+    const numericDrill: DrillQuestion = {
+      ...drillQuestion,
+      id: 'test-drill-numeric',
+      options: [
+        { id: 'a', text: '9 个', isCorrect: true },
+        { id: 'b', text: '4 个', isCorrect: false },
+        { id: 'c', text: '15 个', isCorrect: false },
+        { id: 'd', text: '约 2 个', isCorrect: false },
+      ],
+    };
+    const ordered = orderDrillOptions(numericDrill);
+    expect(ordered.options.map((o) => o.text)).toEqual(['约 2 个', '4 个', '9 个', '15 个']);
+    expect(ordered.options.find((o) => o.isCorrect)?.text).toBe('9 个');
+  });
+});

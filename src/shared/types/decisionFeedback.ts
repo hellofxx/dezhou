@@ -14,6 +14,9 @@
 
 export type DecisionGrade = 'best' | 'correct' | 'inaccuracy' | 'wrong' | 'blunder';
 
+/** 旧三级 grade（P0-4），用于 migrateGrade 输入类型 */
+export type LegacyDecisionGrade = 'optimal' | 'acceptable' | 'error';
+
 export interface DecisionFeedback {
   grade: DecisionGrade;
   evLoss: number;           // BB 损失（相对于最优动作）
@@ -64,6 +67,24 @@ export const GRADE_DISPLAY_CONFIG: Record<DecisionGrade, {
   wrong:       { color: 'grade-wrong',      textColor: 'text-[var(--poker-danger)]',  icon: '🟠', titleKey: 'feedback.grade.wrong' },
   blunder:     { color: 'grade-blunder',    textColor: 'text-[var(--poker-danger)]',  icon: '🔴', titleKey: 'feedback.grade.blunder' },
 };
+
+/**
+ * 将旧三级 grade 映射到新五级（向后兼容）。
+ *
+ * GTO 标准映射（保守原则：旧 `error` 包含 wrong + blunder，无法区分时归入 wrong）：
+ * - optimal → best（旧"最优"= 新"最优"）
+ * - acceptable → correct（旧"可接受"= 新"正确"）
+ * - error → wrong（旧"错误"保守映射为 wrong，避免对历史错误过度惩罚）
+ *
+ * 注：旧 `error` 在五级体系中可能对应 wrong（2-5BB）或 blunder（>5BB），
+ * 但旧数据未记录 EV 损失，无法精确区分。保守映射为 wrong 让用户在 SRS 复习中
+ * 看到错误但不被过度惩罚，是更合理的策略。
+ */
+export function migrateGrade(oldGrade: LegacyDecisionGrade): DecisionGrade {
+  if (oldGrade === 'optimal') return 'best';
+  if (oldGrade === 'acceptable') return 'correct';
+  return 'wrong';
+}
 
 /**
  * 根据答题是否正确与 EV 损失构造 DecisionFeedback。

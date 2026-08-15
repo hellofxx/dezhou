@@ -3,8 +3,8 @@
  * 根据用户数据生成个性化训练计划
  */
 
-import type { ReviewItem } from './spacedRepetition';
-import { getTodayReviewItems } from './spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
+import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
 import type { TrainingRecord } from '../types';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';

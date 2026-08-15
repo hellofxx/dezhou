@@ -24,7 +24,7 @@ import SpacedRepetitionPanel from '../srs/SpacedRepetitionPanel';
 import ReviewSession from '../srs/ReviewSession';
 import FirstVisitBanner from './FirstVisitBanner';
 import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
-import { getTodayReviewItems, getTodayString } from '../../utils/spacedRepetition';
+import { getTodayReviewItems, getTodayString } from '@/shared/utils/spacedRepetition';
 import RankUpCelebration from '../celebration/RankUpCelebration';
 import DownswingAlert from '../gate/DownswingAlert';
 import MoodTracker from '../settings/MoodTracker';

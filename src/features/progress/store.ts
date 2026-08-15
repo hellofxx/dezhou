@@ -1005,7 +1005,7 @@ export const useProgressStore = create<ProgressStore>()(
         if (!dirty) return;
         
         // 🔍 监控计数（仅开发环境输出）
-        if (__DEV__) {
+        if (import.meta.env.DEV) {
           console.warn('[ProgressStore] P3.4 监控：检测到需要清洗的脏 label:', items.filter(i => i.label?.endsWith('决策')).length, '项');
           // TODO: 上报埋点到监控系统（生产环境替换为 analytics.track()）
         }

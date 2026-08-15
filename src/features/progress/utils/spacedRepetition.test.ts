@@ -4,8 +4,8 @@ import {
   upsertReviewItem,
   FAST_ANSWER_SECONDS,
   createReviewItem,
-} from './spacedRepetition';
-import type { ReviewItemMetadata } from './spacedRepetition';
+} from '@/shared/utils/spacedRepetition';
+import type { ReviewItemMetadata } from '@/shared/utils/spacedRepetition';
 
 /**
  * P0-3 低风险 DRY（§7 建议项）：共享 SRS 辅助纯函数测试。

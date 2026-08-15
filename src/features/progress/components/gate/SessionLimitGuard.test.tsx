@@ -4,9 +4,9 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { useSessionLimitReached } from './SessionLimitGuard';
+import { useSessionLimitReached } from '@/shared/components/gate/SessionLimitGuard';
 import { useProgressStore } from '../../store';
-import { getTodayString } from '../../utils/spacedRepetition';
+import { getTodayString } from '@/shared/utils/spacedRepetition';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 
 /** 探针组件：把 hook 结果渲染为文本便于断言 */
