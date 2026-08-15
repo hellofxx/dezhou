@@ -26,19 +26,19 @@ if ('requestIdleCallback' in window) {
   }, 0);
 }
 
-initProgressStore()
+// P0-03: 同步等待 progress store bootstrap 完成，防止早期训练事件丢失
+void initProgressStore().then(() => {
+  // bootstrap 完成后才渲染应用，确保 subscription 已就位
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+});
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
-
-// Register Service Worker
+// Register Service Worker（延迟到 bootstrap 后，避免并行竞态）
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
-    // import.meta.env.BASE_URL 在 dev 为 '/'，部署时为 '/dezhou/'，自动适配子路径
-    // 传入 APP_VERSION 作为缓存版本号，SW 在 activate 时自动清理旧版本缓存
     const { APP_VERSION } = await import('@/shared/constants/app');
     navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js?v=' + APP_VERSION).catch(() => {
       // SW registration failed, app still works normally

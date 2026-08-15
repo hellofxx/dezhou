@@ -1,6 +1,9 @@
 /**
- * SM-2 简化间隔重复算法
- * 用于管理知识点复习队列
+ * SM-2 简化间隔重复算法 - 共享工具函数
+ * 
+ * @module shared/utils/spacedRepetition
+ * @description 跨模块复用 SRS 复习队列管理逻辑（strategy-academy/puzzle-trainer/pot-odds/range-trainer）
+ * @see progress store 为持久化持有方
  */
 
 import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';

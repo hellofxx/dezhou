@@ -5,7 +5,7 @@ import {
   reviewQualityFor,
   computeReviewWriteBacks,
 } from './quickDrillSrs';
-import { createReviewItem, getTodayString } from '@/features/progress/utils/spacedRepetition';
+import { createReviewItem, getTodayString } from '@/shared/utils/spacedRepetition';
 import type { PracticeAnswerDetail } from '../types';
 
 /**

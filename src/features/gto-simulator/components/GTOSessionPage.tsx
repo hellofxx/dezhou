@@ -16,7 +16,7 @@ import type { TrainingRecord } from '@/features/progress/types';
 import { cn } from '@/shared/utils';
 import { getOptimalAction } from '../utils/strategyCompare';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/shared/components/gate/SessionLimitGuard';
 // P4 修复（4.5-P1-2）：自适应难度降级提示
 import { useProgressStore } from '@/features/progress/store';
 

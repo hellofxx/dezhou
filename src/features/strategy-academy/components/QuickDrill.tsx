@@ -10,13 +10,13 @@ import { useProgressStore } from '@/features/progress/store';
 import { getQuickDrillQuestions } from '../utils/quickDrill';
 // P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
 import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
-import { getTodayReviewItems } from '@/features/progress/utils/spacedRepetition';
+import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 // P1E-05（专批 B）：review-* 复习题作答后回写 SRS（推进 nextReviewDate）
 import { computeReviewWriteBacks } from '../utils/quickDrillSrs';
 import { PracticeDrillComponent } from './PracticeDrill';
 import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/shared/components/gate/SessionLimitGuard';
 
 type QuickDrillMode = 'range' | 'odds' | 'mixed';
 

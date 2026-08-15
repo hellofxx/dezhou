@@ -7,7 +7,7 @@
  *
  * 本模块在丢弃后按缺口数量从新题池回填补足总题数（新题池不足时尽力而为）。
  */
-import type { ReviewItem } from '@/features/progress/utils/spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import { composeDailyMix } from '@/features/progress/utils/dailyTrainingMix';
 import type { PracticeQuestion } from '../types';
 

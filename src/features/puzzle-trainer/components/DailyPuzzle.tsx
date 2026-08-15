@@ -28,7 +28,7 @@ import { getDailyCompletionCount } from '../utils/dateSeed';
 import { usePuzzleStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
 // P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/shared/components/gate/SessionLimitGuard';
 
 export default function DailyPuzzle() {
   const { t } = useTranslation();

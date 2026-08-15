@@ -1,43 +1,11 @@
 /**
  * PuzzleResult 子组件（P1-D 修复批从 PuzzleResult.tsx 拆出以满足单文件 ≤200 行）：
- * - StatCard：核心指标卡片
  * - WrongAnswerList：答错题目列表（含正确答案与解析）
  */
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import type { PuzzleQuestion, PuzzleOption } from '../types';
 
-/** 统计卡片 */
-export function StatCard({
-  icon,
-  label,
-  value,
-  accent,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  accent?: 'gold' | 'green' | 'default';
-}) {
-  const accentColor =
-    accent === 'gold'
-      ? 'text-[var(--brass-bright)]'
-      : accent === 'green'
-      ? 'text-[var(--success)]'
-      : 'text-[var(--ivory)]';
-
-  return (
-    <Card className="bg-[var(--surface)] border-[var(--walnut-border)] rounded-[var(--radius)] shadow-[var(--shadow-sm)]">
-      <CardContent className="p-3 flex flex-col items-center gap-1 text-center">
-        <div className="text-[var(--ivory-dim)]">{icon}</div>
-        <div className="text-[10px] uppercase tracking-wider text-[var(--ivory-dim)]">
-          {label}
-        </div>
-        <div className={`font-numeric text-xl ${accentColor}`}>{value}</div>
-      </CardContent>
-    </Card>
-  );
-}
 
 export interface WrongAnswerEntry {
   question: PuzzleQuestion;

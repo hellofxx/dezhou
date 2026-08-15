@@ -10,8 +10,8 @@
  *   答对 + 用时 < 5 秒 → 5；答对 → 4；答错 → 1
  * 间隔推进由 processReview（SM-2 简化版，1→3→7→14→30，答错重置 1 天）负责。
  */
-import type { ReviewItem } from '@/features/progress/utils/spacedRepetition';
-import { processReview, answerQuality } from '@/features/progress/utils/spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
+import { processReview, answerQuality } from '@/shared/utils/spacedRepetition';
 import type { PracticeAnswerDetail } from '../types';
 
 /** 复习题 PracticeQuestion.id 前缀（见 quickDrillMix.reviewItemToPracticeQuestion） */
@@ -19,7 +19,7 @@ export const REVIEW_QUESTION_PREFIX = 'review-';
 
 /** 快答阈值（秒）：答对且低于该用时视为"完美记忆"（quality 5）。
  * 单点事实源已迁至 progress/utils/spacedRepetition，此处仅做兼容重导出。 */
-export { FAST_ANSWER_SECONDS } from '@/features/progress/utils/spacedRepetition';
+export { FAST_ANSWER_SECONDS } from '@/shared/utils/spacedRepetition';
 
 /** 是否为复习题的作答记录 */
 export function isReviewQuestionId(questionId: string): boolean {

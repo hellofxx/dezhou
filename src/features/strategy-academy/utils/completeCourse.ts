@@ -10,7 +10,7 @@
 import { useAcademyStore } from '../store';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { useProgressStore } from '@/features/progress/store';
-import { createReviewItem, toLocalDateString } from '@/features/progress/utils/spacedRepetition';
+import { createReviewItem, toLocalDateString } from '@/shared/utils/spacedRepetition';
 import type { Lesson } from '../types';
 import type { DrillResult } from '../components/drills/types';
 

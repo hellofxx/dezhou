@@ -107,14 +107,13 @@ export async function preloadFeature(group: keyof typeof FEATURE_GROUPS): Promis
  */
 export async function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
   try {
-    console.log(`[loadAcademyCourses] Starting to load ${lng} academy courses...`);
-    // Vite glob 要求路径是字符串字面量，因此需要分别处理 zh/en
     const courseModules = lng === 'zh'
       ? await import.meta.glob('./locales/zh/academy-course/*.json', { import: 'default' })
       : await import.meta.glob('./locales/en/academy-course/*.json', { import: 'default' });
     
-    console.log(`[loadAcademyCourses] Found ${Object.keys(courseModules).length} course modules for ${lng}`);
-    
+    // 将 academy-course 标记为已触及，确保语言切换时补加载
+    // 注意：academy-course 是内部课程文件集合，不在 I18nModuleKey 枚举中，用 (key as unknown as I18nModuleKey)
+    touchedKeys.add('academy-course' as unknown as I18nModuleKey);
     // glob 返回类型为 Record<string, () => Promise<unknown>>，需转换为 content 对象
     // 关键修复：保持原始嵌套结构，不要用 Object.assign 平铺顶层 key
     const contents: Record<string, unknown> = {};
@@ -125,20 +124,15 @@ export async function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
       const filename = filePath.split('/').pop()?.replace('.json', '') || 'unknown';
       contents[filename] = content;
     }
-    console.log(`[loadAcademyCourses] Collected ${Object.keys(contents).length} course files with nested structure`);
-    console.log(`[loadAcademyCourses] Sample file (level1) keys: ${Object.keys(contents['level1'] as object || {}).join(', ')}`);
     
     const merged = await mergeAcademyCourses(
       {},
       contents as unknown as Record<string, Record<string, unknown>>
     );
-    console.log(`[loadAcademyCourses] Final merged academy structure: ${Object.keys(merged).join(', ')}`);
-    console.log(`[loadAcademyCourses] lessonContent sample keys: ${Object.keys((merged.lessonContent as object) || {}).slice(0, 3).join(', ')}`);
     // 直接注入整个 merged 对象到 academy 命名空间（保持 lessonContent.lessonQuiz.lessonExample.lessonPractice 等子命名空间）
     i18n.addResourceBundle(lng, 'translation', { academy: merged }, true, true);
-    console.log(`[loadAcademyCourses] Completed loading ${lng} academy courses`);
   } catch (err) {
-    console.error(`[loadAcademyCourses] ERROR loading ${lng} academy courses`, err);
+    console.warn(`[i18n] 加载课程文案失败 ${lng}/academy-course`, err);
     throw err; // Re-throw to expose error in test
   }
 }

@@ -5,7 +5,7 @@ import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from 
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
 // P2-01 阶段 A：records 持久化外迁 IndexedDB
 import { recordDatabase } from './utils/recordDatabase';
-import type { ReviewItem } from './utils/spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import {
   updateStreak,
   isEarnBackActive,
@@ -996,11 +996,20 @@ export const useProgressStore = create<ProgressStore>()(
       },
       // 启动时（hydration 完成后）兜底清洗历史遗留的 GTO 标签中文"决策"后缀。
       // 不依赖 version migrate 的触发时机，确保任何时期写入的脏 label 都被清理。
+      // 🔍 P3.4: 灰度观察 - 添加监控计数器（开发环境），用于判断是否需要完全删除此逻辑
+      // 建议观察周期：2-3 个 release cycle（约 2-3 个月）。命中率为 0 → 可安全删除。
       onRehydrateStorage: () => (state) => {
         const items = state?.reviewItems;
         if (!items || items.length === 0) return;
         const dirty = items.some((item) => item.label?.endsWith('决策'));
         if (!dirty) return;
+        
+        // 🔍 监控计数（仅开发环境输出）
+        if (__DEV__) {
+          console.warn('[ProgressStore] P3.4 监控：检测到需要清洗的脏 label:', items.filter(i => i.label?.endsWith('决策')).length, '项');
+          // TODO: 上报埋点到监控系统（生产环境替换为 analytics.track()）
+        }
+        
         useProgressStore.setState({
           reviewItems: items.map((item) =>
             item.label?.endsWith('决策')

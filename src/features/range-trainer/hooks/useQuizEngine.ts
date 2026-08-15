@@ -9,7 +9,7 @@ import { useProgressStore } from '@/features/progress/store';
 import {
   answerQuality,
   upsertReviewItem,
-} from '@/features/progress/utils/spacedRepetition';
+} from '@/shared/utils/spacedRepetition';
 // P2-2.3: 五级反馈
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { buildDecisionFeedback } from '@/shared/types/decisionFeedback';

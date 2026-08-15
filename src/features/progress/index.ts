@@ -5,7 +5,7 @@ export type { TrainingRecord, StatsSummary, DailyStats, ModuleStats, UserSetting
 export { openDB, saveToStore, loadFromStore, clearStore } from './utils/indexedDB';
 
 // 间隔重复复习
-export type { ReviewItem, ReviewItemMetadata } from './utils/spacedRepetition';
+export type { ReviewItem, ReviewItemMetadata } from '@/shared/utils/spacedRepetition';
 export {
   processReview,
   getTodayReviewItems,
@@ -15,7 +15,7 @@ export {
   getDaysSinceLastReview,
   getTodayString,
   toLocalDateString,
-} from './utils/spacedRepetition';
+} from '@/shared/utils/spacedRepetition';
 
 // 每日训练推荐
 export type { DailyRecommendation } from './utils/dailyTrainingPlan';

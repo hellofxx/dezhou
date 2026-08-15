@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
@@ -6,6 +5,7 @@ import { MOTION_DURATION, MOTION_EASE, transitionSlow } from '@/shared/utils/mot
 import type { TrainingResult } from '@/shared/types/common';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { StatCard } from '@/shared/components/business/StatCard';
 import { RotateCcw, Home, Trophy, Target, Clock, AlertTriangle } from 'lucide-react';
 
 interface SessionResultProps {
@@ -225,12 +225,4 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
   );
 }
 
-function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="bg-[var(--felt)] border border-[var(--walnut-border)] rounded-md p-3 text-center">
-      <div className="flex justify-center mb-1 text-[var(--ivory-muted)]">{icon}</div>
-      <div className="text-xl font-bold text-[var(--ivory)] font-numeric">{value}</div>
-      <div className="text-xs text-[var(--ivory-muted)]">{label}</div>
-    </div>
-  );
-}
+

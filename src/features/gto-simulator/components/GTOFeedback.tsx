@@ -46,18 +46,6 @@ export function GTOFeedback({
   const grade = feedback?.grade ?? null;
   const gradeConfig = grade ? GRADE_DISPLAY_CONFIG[grade] : null;
 
-  // 旧二元显示的样式（feedback 缺省时使用）
-  const legacyStatusColor = isOptimal
-    ? 'text-[var(--sage)] border-[var(--sage)]/40 bg-[var(--sage)]/10'
-    : evLoss > 3
-      ? 'text-[var(--clay)] border-[var(--clay)]/40 bg-[var(--clay)]/10'
-      : 'text-[var(--brass-bright)] border-[var(--brass)]/40 bg-[var(--brass)]/10';
-  const legacyStatusIcon = isOptimal ? '✓' : evLoss > 3 ? '✗' : '△';
-  const legacyStatusLabel = isOptimal
-    ? t('gto.feedback.optimalLabel')
-    : evLoss > 3
-      ? t('gto.feedback.severeError')
-      : t('gto.feedback.suboptimal');
 
   // P2-4：优先使用 mentorStyle 渲染人格化文案；缺省时降级到 i18n
   const mentorStyle = useProgressStore((s) => s.mentorStyle);
@@ -77,14 +65,11 @@ export function GTOFeedback({
     : '';
 
   // 容器样式：五级反馈优先使用 GRADE_DISPLAY_CONFIG 的 color/textColor，否则用旧二元
-  const containerClass = gradeConfig && feedback
-    ? cn('p-4 rounded-md border space-y-4', gradeConfig.color, gradeConfig.textColor)
-    : cn('p-4 rounded-md border space-y-4', legacyStatusColor);
-
+  const containerClass = cn('p-4 rounded-md border space-y-4', gradeConfig?.color, gradeConfig?.textColor);
   return (
     <div className={containerClass}>
       {/* 状态头部：五级反馈优先，否则降级为旧二元显示 */}
-      {gradeConfig && feedback ? (
+      {gradeConfig && feedback && (
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="font-display text-2xl">{gradeConfig.icon}</span>
@@ -106,22 +91,6 @@ export function GTOFeedback({
               <div className="text-sm font-bold font-numeric">{feedback.correctAction}</div>
             </div>
           )}
-        </div>
-      ) : (
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="font-display text-2xl">{legacyStatusIcon}</span>
-            <div>
-              <div className="font-display font-semibold">{legacyStatusLabel}</div>
-              {handNotation && (
-                <div className="text-xs opacity-80 font-numeric">{handNotation}</div>
-              )}
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs opacity-80">{t('gto.evLoss')}</div>
-            <div className="text-lg font-bold font-numeric">{Math.max(0, evLoss).toFixed(2)} BB</div>
-          </div>
         </div>
       )}
 
@@ -150,11 +119,6 @@ export function GTOFeedback({
             </div>
           </div>
         </div>
-      )}
-
-      {/* 接近最优标记（仅旧二元模式显示） */}
-      {!isOptimal && evLoss < 0.3 && !feedback && (
-        <div className="text-xs text-[var(--sage)] font-display">{t('gto.feedback.nearOptimal')}</div>
       )}
 
       {/* 对手信息（Exploit 模式） */}
@@ -270,7 +234,7 @@ export function GTOFeedback({
       )}
 
       {/* 解释文字 / 五级反馈消息行 */}
-      {gradeConfig && feedback ? (
+      {gradeConfig && feedback && (
         <div className="text-sm opacity-95 space-y-1">
           <div>{gradeMessage}</div>
           {(grade === 'wrong' || grade === 'blunder') && feedback.explanation && (
@@ -285,8 +249,6 @@ export function GTOFeedback({
             </Link>
           )}
         </div>
-      ) : (
-        <div className="text-sm opacity-90">{explanation}</div>
       )}
     </div>
   );

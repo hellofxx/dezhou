@@ -8,7 +8,7 @@ import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
 import { transitionStandard } from '@/shared/utils/motion';
 import { ProgressBar } from '@/shared/components/business/ProgressBar';
 import { useProgressStore } from '@/features/progress/store';
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import SessionLimitGuard, { useSessionLimitReached } from '@/shared/components/gate/SessionLimitGuard';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import {
