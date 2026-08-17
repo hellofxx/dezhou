@@ -501,6 +501,7 @@
     "keyPoint": "Key Point",
     "proTip": "Pro Tip",
     "counterIntuitive": "Counter-Intuitive",
+    "takeaway": "Key Takeaways",
     "handExampleFallback": "(Hand example data pending)",
     "exampleLabel": "Example {{n}}",
     "formula": "Formula Derivation",

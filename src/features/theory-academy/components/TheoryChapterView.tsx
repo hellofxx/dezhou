@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Clock, CheckCircle2, Target } from 'lucide-react';
@@ -58,6 +58,9 @@ export default function TheoryChapterView() {
   const [trackedChapterId, setTrackedChapterId] = useState(chapterId);
   // 章节切换时短暂展示骨架屏，消除「旧章标题下挂新章内容」的视觉跳变
   const [isTransitioning, setIsTransitioning] = useState(false);
+  // §13.3.4 / §13.7.1 移动端阅读进度条：监听滚动容器，计算阅读百分比
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [readPct, setReadPct] = useState(0);
   if (chapterId !== trackedChapterId) {
     setTrackedChapterId(chapterId);
     setPhase('reading');
@@ -76,6 +79,19 @@ export default function TheoryChapterView() {
     const timer = setTimeout(() => setIsTransitioning(false), 150);
     return () => clearTimeout(timer);
   }, [isTransitioning]);
+
+  // §13.3.4 阅读进度条：scrollTop/(scrollHeight-clientHeight) 百分比，passive 监听 + cleanup
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const update = () => {
+      const max = el.scrollHeight - el.clientHeight;
+      setReadPct(max > 0 ? Math.min(100, (el.scrollTop / max) * 100) : 0);
+    };
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    return () => el.removeEventListener('scroll', update);
+  }, [chapter?.id]);
 
   if (!chapter || !level) return <Navigate to="/theory" replace />;
   // URL 直达门禁（debug 解锁响应式旁路）
@@ -106,7 +122,9 @@ export default function TheoryChapterView() {
   };
 
   return (
-    <div className="h-full overflow-auto">
+    <div ref={scrollRef} className="h-full overflow-auto">
+      {/* §13.3.4 移动端阅读进度条（fixed top，仅 <768px 显示） */}
+      <div className="reading-progress-bar" style={{ width: `${readPct}%` }} />
       {/* 全宽布局：外层 main 已提供 p-4 md:p-6 + G1 全局限宽；正文区单独 max-w-3xl（T-T1） */}
       <div className="py-6 space-y-5">
         {/* Breadcrumb */}
@@ -226,6 +244,8 @@ export default function TheoryChapterView() {
                   key={index}
                   section={section}
                   contentKey={theoryContentKey(chapter.id, index)}
+                  chapterOrder={chapter.order}
+                  sectionIndex={index}
                 />
               ))}
             </div>

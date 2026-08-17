@@ -1,7 +1,8 @@
 import { AlertTriangle, KeyRound, Lightbulb } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { LessonSection } from '../../types';
-import { FormulaBlock, AsciiMonoText } from './FormulaBlock';
+import { AsciiMonoText } from './FormulaBlock';
+import { FormulaDisplay } from './FormulaDisplay';
 import { LabeledBlock } from '@/shared/components/business/ContentBlocks';
 import { TheoryReferenceBlock } from './TheoryReferenceBlock';
 import { DiagramBlock, HandExampleBlock } from './DiagramBlock';
@@ -55,7 +56,7 @@ export function ContentBlock({ section, contentKey }: ContentBlockProps) {
           iconClass="text-[var(--poker-success)]"
           label={t('academy.content.keyPoint')}
           labelClass="text-[var(--poker-success)]"
-          wrapClass="border border-[var(--poker-success)]/30 bg-[var(--poker-success-bg)]"
+          wrapClass="border border-[var(--poker-success)]/30 border-l-[3px] border-l-[var(--poker-success)] bg-[var(--poker-success-bg)]"
           content={resolvedContent}
         />
       );
@@ -67,7 +68,7 @@ export function ContentBlock({ section, contentKey }: ContentBlockProps) {
           iconClass="text-[var(--brass-bright)]"
           label={t('academy.content.proTip')}
           labelClass="text-[var(--brass-bright)] uppercase tracking-wider"
-          wrapClass="border border-[var(--brass)]/40 bg-[var(--brass)]/5"
+          wrapClass="border border-[var(--brass)]/40 border-l-[3px] border-l-[var(--brass)] bg-[var(--brass)]/5"
           content={resolvedContent}
         />
       );
@@ -85,7 +86,10 @@ export function ContentBlock({ section, contentKey }: ContentBlockProps) {
       );
 
     case 'formula':
-      return <FormulaBlock content={resolvedContent} />;
+      return <FormulaDisplay content={resolvedContent} />;
+
+    case 'takeaway':
+      return <LessonTakeawayBlock content={resolvedContent} />;
 
     case 'example':
       return (
@@ -110,6 +114,33 @@ export function ContentBlock({ section, contentKey }: ContentBlockProps) {
         </p>
       );
   }
+}
+
+/**
+ * 要点总结卡（§13.3.1）：walnut-raised 底 + brass-deep 顶边 + brass 左侧竖线，
+ * 内容按换行拆分为带 brass 圆点的小项列表。
+ */
+function LessonTakeawayBlock({ content }: { content: string }) {
+  const { t } = useTranslation();
+  const items = content.split('\n').map((s) => s.trim()).filter(Boolean);
+  return (
+    <div className="lesson-takeaway">
+      <p className="text-sm font-semibold text-[var(--ivory)] mb-2">
+        {t('academy.content.takeaway')}
+      </p>
+      <ul className="space-y-1.5">
+        {items.map((item, i) => (
+          <li
+            key={i}
+            className="text-sm text-[var(--ivory-dim)] leading-[1.7] flex items-start gap-2"
+          >
+            <span aria-hidden="true" className="mt-[9px] w-1.5 h-1.5 shrink-0 rounded-full bg-[var(--brass)]" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 

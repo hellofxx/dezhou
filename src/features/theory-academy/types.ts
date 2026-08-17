@@ -18,7 +18,8 @@ export type TheorySectionType =
   | 'example'
   | 'formula'
   | 'pro-tip'
-  | 'key-point';
+  | 'key-point'
+  | 'takeaway';
 
 /** 内容段落 */
 export interface TheorySection {

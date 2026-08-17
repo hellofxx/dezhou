@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -46,6 +46,9 @@ export default function CourseView() {
   const [drillResult, setDrillResult] = useState<DrillResult | null>(null);
   // P3: 重开目标（restart('practice') 时让重挂载的 LessonContent 直达实战视图）
   const [restartTarget, setRestartTarget] = useState<'units' | 'practice'>('units');
+  // §13.3.4/§13.7.1: 移动端阅读进度（0-100），scrollTop/(scrollHeight-clientHeight)
+  const [readingProgress, setReadingProgress] = useState(0);
+  const readingRootRef = useRef<HTMLDivElement>(null);
 
   const lesson = lessonId ? findLessonById(lessonId) : undefined;
   const allLessons = getAllLessons();
@@ -122,6 +125,27 @@ export default function CourseView() {
   useEffect(() => {
     if (lessonId) startLesson(lessonId);
   }, [lessonId, startLesson]);
+
+  // §13.3.4/§13.7.1: 移动端阅读进度条 — 监听滚动祖先（AppLayout main 为 overflow-auto），
+  // scroll 监听 passive: true；仅 reading 阶段注册
+  useEffect(() => {
+    if (phase !== 'reading') return;
+    const root = readingRootRef.current;
+    if (!root) return;
+    let node: HTMLElement | null = root.parentElement;
+    while (node && !/(auto|scroll)/.test(getComputedStyle(node).overflowY)) {
+      node = node.parentElement;
+    }
+    if (!node) return;
+    const scroller = node;
+    const handleScroll = () => {
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      setReadingProgress(max > 0 ? (scroller.scrollTop / max) * 100 : 0);
+    };
+    handleScroll();
+    scroller.addEventListener('scroll', handleScroll, { passive: true });
+    return () => scroller.removeEventListener('scroll', handleScroll);
+  }, [phase]);
 
   // P3: 进入测验时重置重开目标，避免残留影响后续重挂载
   const handleStartQuiz = useCallback(() => {
@@ -228,7 +252,11 @@ export default function CourseView() {
   }, []);
 
   return (
-    <div className="pb-16">
+    <div ref={readingRootRef} className="pb-16">
+      {/* §13.3.4 移动端阅读进度条（fixed top-0，桌面端 CSS 隐藏） */}
+      {phase === 'reading' && (
+        <div className="reading-progress-bar" style={{ width: `${readingProgress}%` }} />
+      )}
       {/* Header */}
       <div className="mb-6">
         <button

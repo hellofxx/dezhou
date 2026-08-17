@@ -176,10 +176,11 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
         />
         <div className="mt-4 space-y-4 max-w-4xl mx-auto">
           <LessonIntroCard units={units} duration={lesson.duration} />
-          {units.map((unit) => (
+          {units.map((unit, i) => (
             <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
               <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
-                {units.indexOf(unit) + 1}. {resolveUnitTitleKeyed(t, lesson, unit)}
+                <span className="section-number">§{lesson.level}.{i + 1}</span>
+                {resolveUnitTitleKeyed(t, lesson, unit)}
               </h2>
               {unit.sections.map((s, j) => {
                 const idx = lesson.content.indexOf(s);
@@ -234,7 +235,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
           return (
             <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
               <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
-                {i + 1}. {resolveUnitTitleKeyed(t, lesson, unit)}
+                <span className="section-number">§{lesson.level}.{i + 1}</span>
+                {resolveUnitTitleKeyed(t, lesson, unit)}
               </h2>
               {unit.sections.length === 0 && !example && (
                 <p className="text-xs text-[var(--ivory-muted)]">

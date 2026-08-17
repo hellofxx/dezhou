@@ -501,6 +501,7 @@
     "keyPoint": "关键要点",
     "proTip": "职业牌手说",
     "counterIntuitive": "反直觉点",
+    "takeaway": "要点总结",
     "handExampleFallback": "（手牌示例数据待补充）",
     "exampleLabel": "示例 {{n}}",
     "formula": "公式推导",

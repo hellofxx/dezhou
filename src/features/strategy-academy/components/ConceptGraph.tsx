@@ -9,6 +9,7 @@ import { LEVELS } from '../data/courses';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
+import ProgressRing from '@/shared/components/business/ProgressRing';
 import { resolveLevelTitle, resolveLessonTitle, lessonTitleKey, levelTitleKey } from '../utils/titleKeys';
 
 interface GraphNode {
@@ -197,6 +198,14 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
         strokeWidth={isHovered ? 2.5 : 1.5}
         strokeDasharray={dashArray}
       />
+
+      {/* 完成度进度环（左上角，§13.2.1）：completed=满环 / current=半环 / 未开始=空环 */}
+      <g transform={`translate(${node.x + 5}, ${node.y + 5})`}>
+        <ProgressRing
+          value={status === 'completed' ? 1 : status === 'current' ? 0.5 : 0}
+          size={22}
+        />
+      </g>
 
       {/* 当前进行中脉冲动画 */}
       {status === 'current' && (
