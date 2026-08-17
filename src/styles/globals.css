@@ -155,6 +155,7 @@
   --poker-brass-deep: var(--brass-deep);
   --poker-brass-dark: var(--brass-dark);
   --poker-brass-glow: var(--brass-glow);
+  --poker-brass-muted: var(--brass-muted);
 
   /* Radius scale — §4.1 four-tier (poker- prefixed) */
   --poker-radius-sm: 4px;
@@ -3020,4 +3021,115 @@ html[data-theme="light"] .quick-path-node-num { background: var(--stable-ivory);
     border-right: 4px solid transparent;
   }
   .help-section-head-sub { margin-left: 0; padding-left: 0; width: 100%; margin-top: 2px; }
+}
+
+/* ===== 教育学习设计规范 §13 ===== */
+/* ---- §13.3.1 要点总结卡 ---- */
+.lesson-takeaway {
+  background: var(--poker-walnut-raised);
+  border: 1px solid var(--poker-brass-deep);
+  border-left: 3px solid var(--poker-brass);
+  padding: 16px 20px;
+  border-radius: var(--poker-radius-md);
+}
+
+/* ---- §13.3.2 公式展示块 ---- */
+.formula-display {
+  background: rgba(201, 162, 94, 0.06);
+  border: 1px solid rgba(201, 162, 94, 0.2);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: var(--poker-ivory-dim);
+}
+
+/* ---- §13.3.3 课程标题编号 eyebrow ---- */
+.section-number {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--poker-brass-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ---- §13.3.4 阅读进度条（移动端专属） ---- */
+.reading-progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--poker-brass);
+  z-index: 50;
+  transition: width 100ms linear;
+}
+@media (min-width: 768px) {
+  .reading-progress-bar { display: none; }
+}
+
+/* ---- §13.4.4 相关课程标签 pill ---- */
+.related-lesson-chip {
+  background: rgba(201, 162, 94, 0.08);
+  border: 1px solid rgba(201, 162, 94, 0.15);
+  color: var(--poker-ivory-dim);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.related-lesson-chip:hover {
+  background: rgba(201, 162, 94, 0.15);
+}
+
+/* ---- §13.5.2 最近训练标记 ---- */
+.last-training-badge {
+  font-size: 9px;
+  color: var(--poker-ivory-muted);
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+}
+.last-training-badge.today {
+  color: var(--poker-success);
+}
+
+/* ---- §13.5.1 模块图标方块微纹理（变体类） ---- */
+.module-icon.module-texture-range {
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(201,162,94,0.06) 3px, rgba(201,162,94,0.06) 4px),
+                    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(201,162,94,0.06) 3px, rgba(201,162,94,0.06) 4px);
+}
+.module-icon.module-texture-gto {
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(201,162,94,0.05) 4px, rgba(201,162,94,0.05) 5px),
+                    repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(201,162,94,0.05) 4px, rgba(201,162,94,0.05) 5px);
+}
+.module-icon.module-texture-pot-odds {
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201,162,94,0.05) 2px, rgba(201,162,94,0.05) 3px),
+                    radial-gradient(circle, rgba(201,162,94,0.06) 1px, transparent 1px);
+  background-size: 100% 6px, 8px 8px;
+}
+.module-icon.module-texture-strategy {
+  background-image: repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(201,162,94,0.05) 6px, rgba(201,162,94,0.05) 7px);
+}
+.module-icon.module-texture-puzzle {
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(201,162,94,0.05) 5px, rgba(201,162,94,0.05) 6px),
+                    repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(201,162,94,0.05) 5px, rgba(201,162,94,0.05) 6px),
+                    repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(201,162,94,0.04) 8px, rgba(201,162,94,0.04) 9px);
+}
+.module-icon.module-texture-hand-history {
+  background-image: radial-gradient(circle at 30% 30%, rgba(201,162,94,0.07) 1px, transparent 1px),
+                    radial-gradient(circle at 70% 70%, rgba(201,162,94,0.05) 1px, transparent 1px);
+  background-size: 10px 10px, 10px 10px;
+}
+
+/* ---- §13.2.3 里程碑标记 ---- */
+.milestone-marker {
+  width: 6px; height: 6px;
+  background: var(--poker-brass-bright);
+  transform: rotate(45deg);
+  position: absolute;
+  top: -3px;
 }

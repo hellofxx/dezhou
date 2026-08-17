@@ -15,5 +15,14 @@
   },
   "evLossLabel": "EV 损失",
   "correctAction": "最优动作",
-  "goReview": "去复习 →"
+  "goReview": "去复习 →",
+  "tryAgain": "再做一题",
+  "relatedLesson": "相关课程",
+  "decisionAnalysis": {
+    "viewAnalysis": "查看分析",
+    "hideAnalysis": "收起分析",
+    "yourDecision": "你的决策",
+    "gtoOptimal": "GTO 最优",
+    "differenceTitle": "差异原因"
+  }
 }

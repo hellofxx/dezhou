@@ -15,5 +15,14 @@
   },
   "evLossLabel": "EV Loss",
   "correctAction": "Optimal Action",
-  "goReview": "Review →"
+  "goReview": "Review →",
+  "tryAgain": "Try another",
+  "relatedLesson": "Related lesson",
+  "decisionAnalysis": {
+    "viewAnalysis": "View analysis",
+    "hideAnalysis": "Hide analysis",
+    "yourDecision": "Your decision",
+    "gtoOptimal": "GTO optimal",
+    "differenceTitle": "Why the difference"
+  }
 }
