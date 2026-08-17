@@ -22,9 +22,13 @@ import { useProgressStore } from '@/features/progress/store';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 // P1B-05：评级展示统一走 GRADE_DISPLAY_CONFIG（icon + titleKey i18n + .grade-* 容器类）
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
-import { Link } from 'react-router-dom';
+import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
+import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 
 // ─── Quiz Data ─────────────────────────────────────────────────────────────────────
+
+// 错误级别判定：wrong / blunder 为严重错误（默认展开决策分析、显示再看一题）
+const isSevereGrade = (grade: DecisionFeedback['grade']) => grade === 'wrong' || grade === 'blunder';
 
 // 题库数据见 ../data/quizQuestions（19 题）。模块顶层一次性完成选项排序：
 // 数值选项题（outs 计算）按数值升序，其余按题目 id 种子洗牌（确定性，跨用户一致）。
@@ -424,13 +428,17 @@ export default function PotOddsQuizPage() {
                       {t(selectedOption.isCorrect ? selectedOption.explanation : (correctOption?.explanation ?? selectedOption.explanation))}
                     </p>
 
-                    {/* P1B-05：五级评级徽章——统一走 GRADE_DISPLAY_CONFIG（icon + titleKey 走 t() + .grade-* 容器类），
-                        对齐 QuizCard/GTOFeedback；答对也展示（best/correct），不再仅答错时渲染。
-                        注：evLoss 维持现有兜底（答对=0，答错=3），真实 evLoss 分级需题库补 evLossBB 数据（观察项） */}
+                    {/* P1B-05：五级评级徽章 + 教育脚手架（§13.4）：
+                        评级徽章统一走 GRADE_DISPLAY_CONFIG（答对/答错均展示）；
+                        答错时展示可折叠 DecisionAnalysis（对比视图 + 差异原因 + 相关课程链接），
+                        wrong/blunder 级别默认展开（§13.4.1）。 */}
                     {decisionFeedback && (() => {
                       const gradeConfig = GRADE_DISPLAY_CONFIG[decisionFeedback.grade];
+                      const isWrong = !selectedOption.isCorrect;
+                      const userActionText = t(selectedOption.text);
+                      const gtoActionText = correctOption ? t(correctOption.text) : undefined;
                       return (
-                        <div className="mt-3 pt-3 border-t border-[var(--ivory-dim)]/20 flex items-center gap-2 flex-wrap">
+                        <div className="mt-3 pt-3 border-t border-[var(--ivory-dim)]/20">
                           <span
                             className={cn(
                               'inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium',
@@ -442,18 +450,28 @@ export default function PotOddsQuizPage() {
                             <span aria-hidden="true">{gradeConfig.icon}</span>
                             {t(gradeConfig.titleKey)}
                           </span>
-                          {!selectedOption.isCorrect && decisionFeedback.relatedLessonId && (
-                            <Link
-                              to={`/academy/lesson/${decisionFeedback.relatedLessonId}`}
-                              className="text-xs text-[var(--brass-bright)] underline hover:text-[var(--brass)] transition-colors"
-                            >
-                              {t('potOdds.quiz.reviewLink')}
-                            </Link>
+                          {isWrong && (
+                            <div className="mt-3">
+                              <DecisionAnalysis
+                                userAction={userActionText}
+                                gtoAction={gtoActionText}
+                                difference={t(decisionFeedback.explanation)}
+                                relatedLessonId={decisionFeedback.relatedLessonId}
+                                defaultOpen={isSevereGrade(decisionFeedback.grade)}
+                              />
+                            </div>
                           )}
                         </div>
                       );
                     })()}
                   </div>
+
+                  {/* 再看一题按钮（wrong / blunder 级别，§13.4.3） */}
+                  {!selectedOption.isCorrect && decisionFeedback && isSevereGrade(decisionFeedback.grade) && (
+                    <div className="flex justify-end mb-4">
+                      <TryAgainButton onTryAgain={handleNext} />
+                    </div>
+                  )}
 
                   {/* P4 修复（4.5-P0）：连续答错降级提示 */}
                   {shouldDownshiftDifficulty() && (

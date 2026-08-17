@@ -1,12 +1,13 @@
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { HandStrategy } from '../types';
+import type { Decision } from '@/shared/types/action';
 import type { HandNotation } from '@/shared/types/poker';
 import { cn } from '@/shared/utils';
 import { getOpponentProfile } from '@/shared/data/opponentProfiles';
-import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
-import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
+import { GRADE_DISPLAY_CONFIG, type DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
+import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
+import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 import { useProgressStore } from '@/features/progress/store';
 
 interface GTOFeedbackProps {
@@ -23,6 +24,10 @@ interface GTOFeedbackProps {
   selectedOpponent?: string | null;
   /** 五级反馈（可选）。提供时优先使用五级显示，否则降级为旧的二元显示 */
   feedback?: DecisionFeedback | null;
+  /** 用户选择的动作（用于决策分析对比） */
+  userAction?: Decision | null;
+  /** 再做一题回调（wrong/blunder 反馈底部） */
+  onTryAgain?: () => void;
 }
 
 export function GTOFeedback({
@@ -38,6 +43,8 @@ export function GTOFeedback({
   exploitStrategy = null,
   selectedOpponent = null,
   feedback,
+  userAction,
+  onTryAgain,
 }: GTOFeedbackProps) {
   const { t } = useTranslation();
   const opponent = selectedOpponent ? getOpponentProfile(selectedOpponent) : null;
@@ -269,22 +276,21 @@ export function GTOFeedback({
         </div>
       )}
 
-      {/* 解释文字 / 五级反馈消息行 */}
+      {/* 解释文字 / 决策分析区（§13.4.1）：wrong/blunder 默认展开 */}
       {gradeConfig && feedback ? (
-        <div className="text-sm opacity-95 space-y-1">
-          <div>{gradeMessage}</div>
-          {(grade === 'wrong' || grade === 'blunder') && feedback.explanation && (
-            <div className="text-xs opacity-90">{feedback.explanation}</div>
+        <>
+          <div className="text-sm opacity-95">{gradeMessage}</div>
+          <DecisionAnalysis
+            userAction={userAction ? `${userAction.action}${userAction.amount ? ` ${userAction.amount}BB` : ''}` : undefined}
+            gtoAction={feedback.correctAction || undefined}
+            difference={(grade === 'wrong' || grade === 'blunder') ? feedback.explanation : undefined}
+            relatedLessonId={feedback.relatedLessonId}
+            defaultOpen={grade === 'wrong' || grade === 'blunder'}
+          />
+          {(grade === 'wrong' || grade === 'blunder') && onTryAgain && (
+            <TryAgainButton onTryAgain={onTryAgain} />
           )}
-          {(grade === 'wrong' || grade === 'blunder') && feedback.relatedLessonId && (
-            <Link
-              to={`/academy/lesson/${feedback.relatedLessonId}`}
-              className="inline-flex items-center gap-1 text-xs font-display font-semibold underline underline-offset-2 hover:opacity-80"
-            >
-              {t('feedback.goReview')}
-            </Link>
-          )}
-        </div>
+        </>
       ) : (
         <div className="text-sm opacity-90">{explanation}</div>
       )}

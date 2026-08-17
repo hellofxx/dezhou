@@ -158,6 +158,16 @@ export function TrainingSession({
     [showFeedback, quizState.status, quizState.questionStartTime, quizState.pausedElapsed, getCurrentQuestion, answerQuestion, nextQuestion, pauseTimer, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion],
   );
 
+  // §13.4.3 教育脚手架：wrong/blunder 反馈底部"再做一题"→ 清除自动跳转定时器后进入下一题
+  // （range-trainer 会话内题目均为同位置同动作类型，下一题即"同类型新题"，不清除当前反馈记录）
+  const handleTryAgain = useCallback(() => {
+    if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
+    setShowFeedback(false);
+    setFeedback(null);
+    setDecisionFeedback(null);
+    nextQuestion();
+  }, [nextQuestion]);
+
   // 键盘快捷键：Esc 暂停, Space 下一题
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -278,6 +288,7 @@ export function TrainingSession({
           feedback={showFeedback ? feedback : null}
           decisionFeedback={showFeedback ? decisionFeedback : null}
           disabled={showFeedback || quizState.status !== 'running'}
+          onTryAgain={handleTryAgain}
         />
       </div>
 

@@ -49,7 +49,7 @@ export default function GTOSessionPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { getCurrentScenario, submitDecision, getProgress, session } = useScenarioEngine();
-  const { showFeedback, feedback, currentNodeIndex, continueNext } = useGTOSimulatorStore();
+  const { showFeedback, feedback, currentNodeIndex, continueNext, currentDecision } = useGTOSimulatorStore();
 
   const scenario = getCurrentScenario();
   const progress = getProgress();
@@ -300,6 +300,8 @@ export default function GTOSessionPage() {
             exploitMode={useGTOSimulatorStore.getState().exploitMode}
             exploitStrategy={feedback?.exploitStrategy}
             selectedOpponent={useGTOSimulatorStore.getState().selectedOpponent}
+            userAction={currentDecision}
+            onTryAgain={handleContinue}
             feedback={(() => {
               if (!feedback) return null;
               const gtoStrat = feedback.gtoStrategy;

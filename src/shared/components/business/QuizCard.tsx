@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+
 import { Trans, useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +14,9 @@ import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { DEFAULT_MENTOR } from '@/shared/types/mentor';
+// 教育脚手架（DESIGN_LANGUAGE §13.4）：决策分析区 / 再看一题 / 相关课程标签
+import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
+import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 
 export interface QuizCardProps {
   question: QuizQuestion;
@@ -26,6 +29,16 @@ export interface QuizCardProps {
   /** 导师风格（由调用方从 progress store 注入；缺省 strict-math） */
   mentorStyle?: MentorStyle;
   disabled?: boolean;
+  /** §13.4.3 教育脚手架：wrong/blunder 反馈底部"再做一题"回调（由调用方驱动下一题，不清除当前反馈） */
+  onTryAgain?: () => void;
+}
+
+/** 将动作映射为展示标签（§13.4 对比视图用） */
+function getActionLabel(t: TFunction, action: string): string {
+  if (action === 'fold') return t('rangeTrainer.srs.optionFold');
+  if (action === 'call') return t('rangeTrainer.srs.optionCall');
+  if (action === 'raise') return t('rangeTrainer.srs.optionRaise');
+  return action;
 }
 
 /** 解析手牌 notation 为展示用名称 */
@@ -111,6 +124,7 @@ export function QuizCard({
   decisionFeedback,
   disabled,
   mentorStyle = DEFAULT_MENTOR,
+  onTryAgain,
 }: QuizCardProps) {
   const { t } = useTranslation();
   const { suited } = getHandDisplayName(question.hand);
@@ -137,6 +151,23 @@ export function QuizCard({
   const gradeTitle = gradeConfig
     ? t(gradeConfig.titleKey)
     : '';
+
+  // §13.4 教育脚手架：wrong/blunder 级别默认展开决策分析，并显示"再做一题"
+  const isWrongOrBlunder = grade === 'wrong' || grade === 'blunder';
+  const userActionLabel = decisionFeedback && feedback?.userAction
+    ? getActionLabel(t, feedback.userAction)
+    : undefined;
+  const gtoActionLabel = decisionFeedback?.correctAction
+    ? getActionLabel(t, decisionFeedback.correctAction)
+    : undefined;
+  // explanation 可能存 i18n key（如 rangeTrainer.feedback.optimalAction），展开时转译为展示文案
+  const differenceText =
+    isWrongOrBlunder && decisionFeedback?.explanation
+      ? t(decisionFeedback.explanation, {
+          action: gtoActionLabel ?? decisionFeedback.correctAction,
+          defaultValue: decisionFeedback.explanation,
+        })
+      : undefined;
 
   // 键盘快捷键
   const handleKeyDown = useCallback(
@@ -262,21 +293,20 @@ export function QuizCard({
               </div>
               <div className="text-sm mt-2 opacity-95 space-y-1">
                 <div>{gradeMessage}</div>
-                {(grade === 'wrong' || grade === 'blunder') && decisionFeedback.explanation && (
-                  <div className="text-xs opacity-90">
-                    {t(decisionFeedback.explanation, {
-                      action: decisionFeedback.correctAction,
-                      defaultValue: decisionFeedback.explanation,
-                    })}
-                  </div>
+                {/* §13.4 教育脚手架：wrong/blunder 默认展开决策分析（含对比视图/差异原因/相关课程），底部再做一题 */}
+                {isWrongOrBlunder && (
+                  <DecisionAnalysis
+                    userAction={userActionLabel}
+                    gtoAction={gtoActionLabel}
+                    difference={differenceText}
+                    relatedLessonId={decisionFeedback.relatedLessonId}
+                    defaultOpen
+                  />
                 )}
-                {(grade === 'wrong' || grade === 'blunder') && decisionFeedback.relatedLessonId && (
-                  <Link
-                    to={`/academy/lesson/${decisionFeedback.relatedLessonId}`}
-                    className="inline-flex items-center gap-1 text-xs font-display font-semibold underline underline-offset-2 hover:opacity-80"
-                  >
-                    {t('feedback.goReview')}
-                  </Link>
+                {isWrongOrBlunder && onTryAgain && (
+                  <div className="mt-3 flex justify-end">
+                    <TryAgainButton onTryAgain={onTryAgain} />
+                  </div>
                 )}
               </div>
             </motion.div>
