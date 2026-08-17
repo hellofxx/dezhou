@@ -53,6 +53,10 @@ additionalPrompt: ""
 - trainingEvents 事件总线
 - 跨模块状态中枢协调：Streak / ELO / SRS / Emotion / Mentor（详见 Cross-Module Touchpoints）
 - PWA（Service Worker + Manifest）
+- 教育场景全局协调：Onboarding 教育叙事强化（首屏价值主张 + 学习路径可视化）
+- 渐进式信息披露路由：根据 totalSessions 控制模块入口可见性，新手优先展示推荐路径
+- 移动端教育体验基础设施：底部 Sheet 反馈组件、reading-progress-bar 全局组件
+- 跨模块教育动效协调：正确率数字递增、知识节点解锁、段位晋升、课程完成动效的统一参数
 
 ## Cross-Module Touchpoints
 platform-dev 维护的全部跨模块系统接入点，feature 模块通过这些接入点与全局状态通信。

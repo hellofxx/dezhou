@@ -14,6 +14,13 @@
         "windowSize": {
           "width": 1358,
           "height": 1313
+        },
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 1540,
+          "viewportWidth": 1358,
+          "sourceHash": "fnv1a-309c3286",
+          "measuredAt": 1786941364579
         }
       },
       "devMetadata": {

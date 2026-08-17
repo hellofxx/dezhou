@@ -52,6 +52,10 @@ additionalPrompt: ""
 - Zustand persist + localStorage 持久化 + trainingEvents 事件订阅
 - 快速训练连续打卡（quickDrillStreak）+ 新手引导状态管理
 - 用户设置（SettingsPage 语言偏好 / 开发者选项入口）
+- 学习进度可视化组件：progress-ring（进度环）、sparkline（趋势微图）、milestone-marker（里程碑标记）、daily-goal-card（今日目标卡）
+- Dashboard 教育叙事：首屏学习目标展示 + 正确率趋势 + 薄弱点高亮 + 今日推荐路径
+- 渐进式信息披露：根据 totalSessions 控制训练场模块网格的可见性（新手仅展示推荐路径）
+- learning-focus-mode：模块锁定仪表盘聚焦，自动过滤该模块的进度与推荐
 
 ## Cross-Module Touchpoints
 作为跨模块系统中枢，progress store 对外暴露五大系统的状态与 actions，并自动订阅 trainingEvents 事件总线。

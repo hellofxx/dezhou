@@ -73,6 +73,12 @@ additionalPrompt: ""
 - **学习路径横向推荐**：`LearningTrack` 新增 `relatedTrackIds` 字段，支持跨路径推荐
 - **本土化路径前置条件**：`LearningTrack` 新增 `prerequisiteLevelIds` 字段，本土化路径需完成 L1-L3
 - **选项排序治理**（utils/quizShuffle.ts）：`orderQuizQuestion`（测验题，数值集升序 / 文字题种子洗牌并重映射 correctIndex）/ `orderDrillOptions`（DrillQuestion）/ `orderResolvedOptions`（i18n-key 型题库 `t()` 解析后重排，数值题单调 + 方向哈希）；接入 LessonQuiz（id 稳定种子）/ LevelCertification（会话随机种子）/ ChoiceDrillRenderer / OutsDrill 等 4 个 i18n-key Drill
+- **响应式布局（v1.6.0 · 自适应学习工作台）**：概览视图（Home / Tracks / ConceptGraph）走 L2 概览展宽档（AppLayout 依路由判定，归属 platform-dev），模块内负责自适应分栏承接横向扩展空间——Home `lg:grid-cols-[minmax(0,1fr)_340px]`（主列阶梯自适应 + 侧栏固定 340px）、Tracks `xl:grid-cols-2`、ConceptGraph 概念卡 `xl:grid-cols-4`；阅读/作答视图（课程正文 CourseView / QuickDrill / 认证 / 基础入门）维持在 L3 收敛档，不为展宽所动。规范以 `poker-ui-demo/DESIGN_LANGUAGE.md` §6.5 与 §9 页面模式 7 为唯一权威
+- 课程内容排版增强：lesson-takeaway（要点总结卡）、formula-display（公式展示块）、标题编号系统（§2.1 格式）
+- 阅读进度条：移动端课程阅读顶部进度条（reading-progress-bar）
+- 反馈教育脚手架：decision-analysis 折叠区（GTO 推荐 vs 你的动作 + 差异原因）、comparison-view 对比视图、related-lesson-chip 相关课程链接
+- try-again 模式：wrong/blunder 级别反馈底部"再看一题"按钮（同类型题目巩固）
+- 课程完成动效：checkmark 描边动画 + brass 辉光
 
 ## Cross-Module Touchpoints
 
@@ -140,6 +146,7 @@ additionalPrompt: ""
 - **TiltWarning 三选项**：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节与 TDD 5.9）**：测验与 Drill 选项禁止按题库数据原序直接渲染；课后测验/复习用 id 稳定种子（跨会话顺序不变），认证考试（LevelCertification）用会话随机种子；i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）必须在 `t()` 解析后用 `orderResolvedOptions` 重排，且顺序不得随语言变化；重排必须同步重映射 correctIndex / correctStrategyIndex，判分与结果记录以重排后对象为唯一事实源；源题库数据不手改重排；新增/扩充题库必须被分布守卫测试覆盖
 - **课程内容渲染层 key 覆盖（数据层零改动）**：课程正文/题库/例题/实战/Drill/术语/对手档案为数据层内联中文（data/** 不改），渲染层经 `utils/contentKeys.ts` 的 `t(key, { defaultValue: 数据层中文 })` 覆盖；新增内容 key 必须同步 `src/i18n/locales/{zh,en}/academy.json`（contentI18n.test.ts 双语对称守卫）；quiz/practice/drill 选项在 `t()` 解析后走既有排序出口（顺序不随语言变化）
+- **响应式宽度语义**：概览视图可展宽（L2），但内部必须以自适应分栏承接，禁止把单个内容块或侧栏用 `1fr` 拉到超宽；阅读/作答视图保持 L3 收敛（正文 `max-w-prose`，作答视图聚焦居中），禁止跟随概览展宽。宽度切换统一在 AppLayout（platform-dev），模块不做负 margin / 全宽容器 hack
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

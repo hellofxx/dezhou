@@ -49,6 +49,10 @@ additionalPrompt: ""
 - 9 级理论体系（三段分级，T1-T9）+ 游戏变体体系（短牌 sd / 单挑 hu 后缀隔离）
 - 章节结构（概念讲解 + 章末小测）+ 顺序解锁 + 章末小测驱动进度与 ELO 集成
 - 理论→实践桥接（PracticeBridgeCard 推荐策略学院课程）
+- 理论内容排版增强：lesson-takeaway 要点总结卡、formula-display 公式展示块、标题编号系统
+- 移动端阅读体验：reading-progress-bar 顶部进度条 + 纵向内容列表
+- 章末小测反馈增强：decision-analysis 折叠区 + comparison-view 对比视图 + related-lesson-chip 策略学院实践桥接
+- 理论→实践桥接视觉强化：PracticeBridgeCard 增加 brass 渐变底 + 箭头动效，引导用户从理论到实践
 
 ## Cross-Module Touchpoints
 

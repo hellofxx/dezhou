@@ -1,8 +1,10 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.5.0
+> 德州扑克训练平台 UI/UX 设计规范 v1.7.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.7.0 更新：新增 §13 教育学习设计规范 — 学习进度可视化、课程内容排版增强、反馈教育脚手架、模块教育目的视觉区分、渐进式信息披露、移动端教育体验、教育场景动效
+> v1.6.0 更新：内容宽度分级（§6.5）— 新增三档容器宽度（L1 默认收敛 1400 / L2 概览展宽 1680 / L3 阅读作答收敛），策略学院概览视图走 L2 展宽消除超宽屏 felt 留白（§9 页面模式 7）
 > v1.5.0 更新：动效章节全量规范（§8）— 新增动效 token（缓动/时长）、触发方式、动画类型定义（淡入/滑动/缩放/旋转）、组件状态动画行为矩阵，React 侧共享动效规范 `src/shared/utils/motion.ts` 为单一事实源
 > v1.4.0 更新：课程阅读排版契约（§3.3 Lesson Reading/Heading 字号）、新增 §5.22 教学内容块（content-block 视觉词汇）、课程内 Tab 图标化+sticky（§5.6）、场景卡复用（§5.16）、模块级 Emoji→Lucide 图标约定
 > v1.3.2 更新：实现层合规修复（五级反馈牌室化、霓虹色板清零、牌背胡桃化）、新增 §5.21 交互状态矩阵、§2.2 语义色 hover 变体规则、token 登记（gold/bronze/indigo-bright/terra-bright）、设计 token 守卫测试机制
@@ -459,6 +461,22 @@
 | 50 | 移动端底栏、Toast |
 | 100 | 弹窗、Modal、下拉菜单 |
 
+### 6.5 内容宽度分级（v1.6.0 新增）
+
+全局限宽由 AppLayout 主内容盒统一承担，按**视图用途**分三档，兼顾「超宽屏不出现大段 felt 空洞」与「正文不被过度拉长」两个教育目标：
+
+| 档位 | 容器 | 适用视图 | 设计意图（教育向） |
+|---|---|---|---|
+| **L1 默认收敛 1400px** | `mx-auto w-full max-w-[1400px]` | 操作台/统计/独立交互页面（仪表盘、训练模块、设置、复盘等） | 扫读与操作的舒适带宽，随 main 居中收敛 |
+| **L2 概览展宽 1680px** | `mx-auto w-full max-w-[1680px]` | 策略学院**概览/课程地图**类视图（`/academy`、`/academy/tracks`、`/academy/concept-graph`） | 课程阶梯/学习轨道/知识图谱需横向展开以降低纵向滚动手数；展宽消除宽屏 felt 留白，内部须用自适应多栏承接 |
+| **L3 阅读/作答收敛** | 模块内部 `max-w-prose`（65ch）或 `max-w-3xl` | 课程正文（CourseView）、快速训练、认证考试、基础入门等连续阅读/专注作答 | 保持可读行长，避免单行过长降低阅读效率 |
+
+**切换规则**
+- 宽度档位统一由 AppLayout 依据路由判定（单一集中点），禁止各模块自造全宽容器或负 `margin` hack 突破限宽。
+- 所有 L2 展宽视图内部必须**自适应分栏**承接多出的横向空间，不得让单个内容块或被 `1fr` 侧栏强制拉伸到超宽（反例：宽屏下 `lg:grid-cols-3` 的 `1fr` 侧栏被拉成 450px 空洞）。
+- 断点统一复用 §10.3：`xl(1280)` 展宽分栏、`lg(1024)` 平板回落、`md(768)` 移动、`480px` 小屏。
+- 规则作者：ui-ux-dev 复核；宽度档位归属 AppLayout（platform-dev 协调），分栏归属各模块子代理。
+
 ---
 
 ## 7. 图标与插画
@@ -580,7 +598,12 @@
 4. **底池赔率**：左侧计算器（滑块+结果+EV）+ 右侧补牌表+二四法则
 5. **牌局复盘**：左侧手牌列表 + 中央街 timeline + 微型桌 + 学习要点
 6. **谜题训练**：三入口卡（Puzzle Rush/每日谜题/Theme Drill）+ 10 主题卡网格（顶边黄铜发线）+ 阶段 pill
-7. **策略学院**：黄铜路径横幅 + 正在学习 + 推荐课程（左黄铜竖条分级）+ 知识图谱（三色环）+ 对手画像 + 每日 Drill
+7. **策略学院**：黄铜路径横幅 + 正在学习 + 推荐课程（左黄铜竖条分级）+ 知识图谱（三色环）+ 对手画像 + 每日 Drill。
+   - **响应式布局（v1.6.0 · 自适应学习工作台）**：概览类视图（Home / Tracks / ConceptGraph）走 §6.5 **L2 概览展宽**档，内部用自适应分栏承接横向空间——
+     - Home：`lg:grid-cols-[minmax(0,1fr)_340px]` — 主列=课程阶梯自适应扩充（chips `auto-fill` 自动换行填充新增宽度）；侧栏=Today Plan / Study Tools，固定 340px 带宽保叙事节奏，不再随 `1fr` 膨胀成巨宽空洞
+     - Tracks：`xl:grid-cols-2` — 轨道卡在超宽时平铺两列，header 全宽居中
+     - ConceptGraph：概念卡 `xl:grid-cols-4`（默认 3 列升至 4 列）
+   - 阅读/作答视图（课程正文 / QuickDrill / 认证考试 / 基础入门）走 **L3 收敛**档，保持可读窄列，不随概览展宽
 
 ---
 
@@ -837,3 +860,571 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **守卫**：设计 token 守卫（designTokenGuard）不扫描动效参数；动效一致性靠共享规范单一事实源 + 组件引用收口，新组件动效须按 §8.3 矩阵登记。
 
 ---
+
+## 附录 I：v1.6.0 变更摘要（内容宽度分级与策略学院自适应布局）
+
+- **背景**：实测 1920×1080 全屏下，侧边栏 240px + 主内容盒 `max-w-[1400px]` 居中，导致 `main` 宽 1680px 而内容盒仅 1400px，**左右各留白 140px**；同时 Home 的 `lg:grid-cols-3` 让侧栏（Daily Plan / Study Tools）以 `1fr` 膨胀到约 450px 巨宽空洞。两者叠加使策略学院在宽屏上"两侧大片留白 + 侧栏过度拉宽"，与「3 秒落座、克制的场域感」背道而驰。
+- **新增 §6.5 内容宽度分级**：统一由 AppLayout 依路由判定三档容器宽度——L1 默认收敛 1400（操作台/交互页）、L2 概览展宽 1680（策略学院概览视图）、L3 阅读作答收敛（模块内部 max-w-prose / max-w-3xl）。
+- **策略学院响应式布局（§9 页面模式 7）**：概览视图走 L2 展宽，内部自适应分栏承接横向空间——Home 改 `lg:grid-cols-[minmax(0,1fr)_340px]`（主列阶梯自适应、侧栏固定 340px）；Tracks 改 `xl:grid-cols-2`；ConceptGraph 概念卡 `xl:grid-cols-4`；阅读/作答视图维持在 L3 收敛，不随概览展宽。
+- **职责**：宽度档位归属 AppLayout（platform-dev），分栏归属各 feature 模块子代理（strategy-academy-dev），视觉一致性由 ui-ux-dev 复核。
+
+---
+
+## 13. 教育学习设计规范（v1.7.0）
+
+> 本章为教育学习场景的视觉语言规范，与牌室品牌主题（§1-§12）无缝衔接。所有新增组件沿用 §2 色彩 token、§3 字体系统、§4 间距阴影圆角、§8 动效规范，不引入新的基础设计 token。
+
+### 13.1 教育设计原则
+
+五大原则指导教育场景的视觉设计决策：
+
+| 原则 | 核心含义 | 视觉设计启示 |
+|---|---|---|
+| **学习目标可见性** | 首屏即可感知"今天学什么" | 今日推荐学习路径置顶，进度数据前移 |
+| **进步可量化** | 正确率/ELO/段位应视觉化呈现 | 进度环、折线微图、里程碑标记作为一等视觉元素 |
+| **反馈即教学** | 错误反馈不仅是"错了"，更要解释"为什么" | 决策分析区、对比视图、相关课程链接组成反馈闭环 |
+| **渐进式披露** | 新手用户信息密度逐步释放 | 模块入口按训练次数逐步解锁，新手仪表盘收敛 |
+| **扫读友好** | 课程内容排版支持快速扫读与深度阅读双模式 | 要点总结卡、公式展示块、节号前缀、阅读进度条 |
+
+### 13.2 学习进度可视化
+
+#### 13.2.1 `progress-ring` 进度环
+
+进度环用 SVG `<circle>` 实现，以 `stroke-dasharray` 控制完成比例，用于概念节点/课程章节的完成度指示。
+
+```
+规格：
+- 默认尺寸：40px × 40px（小节点）/ 56px × 56px（课程章节）
+- 圆环 stroke-width：3px（小）/ 4px（大）
+- 底色（未完成轨迹）：var(--poker-walnut-border)
+- 底色透明度：0.3
+- 背景圆：无填充，stroke 仅作底轨
+
+三色状态：
+- 未开始：stroke = var(--poker-walnut-border)，opacity 0.3
+- 进行中：stroke = var(--poker-brass)
+- 已完成：stroke = var(--poker-success)
+
+实现参考：
+<svg viewBox="0 0 40 40">
+  <circle cx="20" cy="20" r="17" fill="none"
+          stroke="var(--poker-walnut-border)" stroke-width="3" opacity="0.3" />
+  <circle cx="20" cy="20" r="17" fill="none"
+          stroke="var(--poker-brass)" stroke-width="3"
+          stroke-linecap="round"
+          stroke-dasharray="106.8"
+          stroke-dashoffset="26.7"
+          transform="rotate(-90 20 20)" />
+</svg>
+```
+
+#### 13.2.2 `sparkline` 微图
+
+8px 高的迷你折线图，展示 7 日正确率趋势，用于 StreakRail 右侧。
+
+```
+规格：
+- 尺寸：宽 56px × 高 8px（默认）/ 宽 72px × 高 8px（宽屏）
+- 线条色：var(--poker-brass)
+- 线条 stroke-width：1px
+- 填充：var(--poker-brass) 的 8% 透明度渐变（线下方）
+- 数据点：不显示圆点，仅连线
+- 7 日数据点，x 轴均匀分布，y 轴为正确率 0-100%
+- 无坐标轴、无网格线
+
+实现：SVG <polyline> 或 <path>，points 根据 7 日正确率数组动态生成
+```
+
+#### 13.2.3 `milestone-marker` 里程碑标记
+
+进度条上的小菱形标记点，标注"距离下一段位还需 X ELO"。
+
+```
+规格：
+- 形状：菱形（正方形旋转 45°），6px × 6px
+- 颜色：var(--poker-brass-bright)
+- 位置：进度条上对应下一段位阈值的位置
+- 标注文字：9px ivory-muted，位于标记点上方 4px
+- 标注内容："距下一段位还需 {X} ELO"
+
+CSS 参考：
+.milestone-marker {
+  width: 6px; height: 6px;
+  background: var(--poker-brass-bright);
+  transform: rotate(45deg);
+  position: absolute;
+  top: -3px;
+}
+```
+
+#### 13.2.4 `daily-goal-card` 今日学习目标卡
+
+象牙铭牌样式，显示今日学习目标与完成进度。
+
+```
+规格：
+- 底色：var(--poker-walnut-raised)
+- 边框：1px solid var(--poker-walnut-border)
+- 顶边黄铜发线：linear-gradient(90deg, transparent, var(--poker-brass), transparent) 1px
+- 圆角：var(--poker-radius-md)（8px）
+- 内边距：16px 20px
+- 铭牌顶部：eyebrow 标签"今日目标"（9px uppercase tracking 0.2em ivory-muted）
+
+内容区域：
+- 主文本："{已完成}/{总数} 项任务"（font-display 18px ivory）
+- 副文本："今日已学习 {X} 分钟"（12px ivory-dim）
+- 进度条：height 4px，底色 walnut-border，填充 brass，圆角 2px
+- 进度条位于卡片底部，距上方内容 12px
+```
+
+### 13.3 课程内容排版增强
+
+#### 13.3.1 `lesson-takeaway` 要点总结卡
+
+用于章末要点回顾，视觉上突出但不过度抢眼。
+
+```
+规格：
+- 底色：var(--poker-walnut-raised)
+- 顶边：1px solid var(--poker-brass-deep)
+- 左侧竖线：3px solid var(--poker-brass)，位于内容区左侧
+- 内边距：16px 20px（含左侧竖线占位）
+- 圆角：var(--poker-radius-md)（8px）
+- 标题：「要点总结」（text-sm font-semibold ivory，带小图标）
+- 列表项：text-sm ivory-dim，leading-[1.7]，每项前带 brass 小圆点（·）
+- 适用场景：每个章末自动渲染，也可手动插入章节内
+
+CSS 参考：
+.lesson-takeaway {
+  background: var(--poker-walnut-raised);
+  border: 1px solid var(--poker-brass-deep);
+  border-left: 3px solid var(--poker-brass);
+  padding: 16px 20px;
+  border-radius: var(--poker-radius-md);
+}
+```
+
+#### 13.3.2 `formula-display` 公式展示块
+
+用于 EV 计算、概率公式等数学内容展示。
+
+```
+规格：
+- 底色：rgba(201, 162, 94, 0.06)（brass 6% 透明底）
+- 边框：1px solid rgba(201, 162, 94, 0.2)（brass 20% 透明边）
+- 字体：font-mono 14px
+- 对齐：text-center
+- 内边距：12px 16px
+- 圆角：6px
+- 公式变量：brass 高亮关键变量名（如 EV、P(win)），其余 ivory-dim
+- 适用场景：正文中嵌入的数学公式，区别于代码块
+
+CSS 参考：
+.formula-display {
+  background: rgba(201, 162, 94, 0.06);
+  border: 1px solid rgba(201, 162, 94, 0.2);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: var(--poker-ivory-dim);
+}
+```
+
+#### 13.3.3 课程标题编号系统
+
+采用 `§2.1 翻前开牌范围` 格式，eyebrow 样式标签作为节号前缀。
+
+```
+规格：
+- 节号标签：9px uppercase tracking 0.2em，颜色 var(--poker-brass-muted)
+- 节号标签与标题之间用空格分隔，无额外装饰
+- 标题文字：font-display 20px ivory（继承 §3.3 Lesson Heading 规范）
+- 编号层次：§{章}.{节}（如 §2.1、§3.4）
+- 适用场景：所有课程内容标题自动生成编号
+
+CSS 参考：
+.section-number {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--poker-brass-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+```
+
+#### 13.3.4 `reading-progress-bar` 阅读进度条
+
+顶部固定细线，随滚动填充 brass 色，仅移动端（<768px）显示。
+
+```
+规格：
+- 位置：fixed，top: 0（在 header 之上），z-50
+- 高度：2px
+- 宽度：0% → 100%（随滚动位置线性变化）
+- 颜色：var(--poker-brass)
+- 底色：transparent（未滚动部分不可见）
+- 桌面端（≥768px）：display: none
+- 实现：监听 scroll 事件，计算 `scrollTop / (scrollHeight - clientHeight)` 百分比
+
+CSS 参考：
+.reading-progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--poker-brass);
+  z-index: 50;
+  transition: width 100ms linear;
+}
+@media (min-width: 768px) {
+  .reading-progress-bar { display: none; }
+}
+```
+
+### 13.4 反馈教育脚手架
+
+#### 13.4.1 决策分析区
+
+在反馈卡片（§5.21 交互状态矩阵）中增加可折叠的"决策分析"区域。
+
+```
+规格：
+- 触发：点击反馈卡片中的"查看分析"按钮（btn-ghost 样式 + ChevronDown 图标）
+- 折叠态：显示评级标签（§5.12 五级反馈色）+ 简短评语
+- 展开态：显示以下三个区域——
+  1. GTO 推荐动作 vs 你的动作（comparison-view，见 §13.4.2）
+  2. 差异原因（text-sm ivory-dim，1-2 句解释）
+  3. 相关课程链接（related-lesson-chip，见 §13.4.4）
+- 折叠/展开动画：300ms ease-out（max-height 过渡），复用 §8.2 scale-in 变体
+- 适用场景：wrong / blunder 级别默认展开，其余级别默认折叠
+```
+
+#### 13.4.2 `comparison-view` 对比视图
+
+左右分栏对比"你的决策 vs GTO 最优"，高亮差异点。
+
+```
+规格：
+- 布局：flex row（≥480px）/ flex col（<480px）
+- 左栏（你的决策）：
+  - 标签："你的决策"（10px uppercase ivory-muted）
+  - 动作文字：16px ivory-dim
+  - 背景：var(--poker-danger-bg)（如果错误），否则 var(--poker-walnut-raised)
+- 右栏（GTO 最优）：
+  - 标签："GTO 最优"（10px uppercase ivory-muted）
+  - 动作文字：16px var(--poker-brass)
+  - 背景：var(--poker-brass-glow)（rgba(232,201,126,0.12)）
+- 差异高亮：差异项（动作类型/下注尺寸）用 brass 色底部虚线边框标记
+- 分隔线：中间 1px var(--poker-walnut-border)
+- 内边距：12px 16px
+- 圆角：6px
+- 边框：1px solid var(--poker-walnut-border)
+- 适用场景：仅 wrong / blunder 级别展示
+```
+
+#### 13.4.3 `try-again-btn` 再看一题按钮
+
+btn-ghost 样式 + RefreshCw 图标，出现在 wrong/blunder 反馈卡片底部。
+
+```
+规格：
+- 样式：btn-ghost（§5.5），透明底 + 1px walnut-border，hover 时 walnut-raised
+- 图标：RefreshCw（Lucide），16px，位于文字左侧，间距 6px
+- 文字："再做一题"（text-sm ivory-dim）
+- 位置：反馈卡片底部，距上方内容 12px，右对齐
+- 交互：点击触发同类型新题（不清除当前反馈），按钮短暂 scale 动画（150ms）
+- 适用场景：wrong / blunder 反馈卡片底部
+```
+
+#### 13.4.4 `related-lesson-chip` 相关课程标签
+
+Pill 样式标签，指向相关课程，带 ExternalLink 图标。
+
+```
+规格：
+- 样式：pill（§5.5 pill 变体），底色 var(--poker-brass) 8% 透明度
+- 边框：1px solid rgba(201, 162, 94, 0.15)
+- 文字："{课程名称}"（11px ivory-dim）
+- 图标：ExternalLink（Lucide），12px，brass-muted，位于文字右侧，间距 4px
+- 最小宽度：fit-content
+- 内边距：4px 10px
+- 圆角：9999px（全圆角 pill）
+- 交互：hover 时底色加深至 var(--poker-brass) 15% 透明度，cursor pointer
+- 点击行为：跳转到对应课程页面（React Router navigate）
+- 适用场景：反馈卡片底部的决策分析展开区，以及课程内容中跨章节引用
+
+CSS 参考：
+.related-lesson-chip {
+  background: rgba(201, 162, 94, 0.08);
+  border: 1px solid rgba(201, 162, 94, 0.15);
+  color: var(--poker-ivory-dim);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.related-lesson-chip:hover {
+  background: rgba(201, 162, 94, 0.15);
+}
+```
+
+### 13.5 模块教育目的视觉区分
+
+#### 13.5.1 模块图标方块微纹理
+
+在现有 6 大模块图标方块（§5.18 `.module-card`）基础上，增加微纹理以体现教育目的差异。
+
+```
+纹理实现：CSS repeating-linear-gradient，不透明度 5-8%，叠加在图标方块上。
+
+各模块纹理：
+- 范围训练（range-trainer）：网格纹理
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(201,162,94,0.06) 3px, rgba(201,162,94,0.06) 4px),
+                    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(201,162,94,0.06) 3px, rgba(201,162,94,0.06) 4px);
+
+- GTO 模拟器（gto-simulator）：节点连线纹理
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(201,162,94,0.05) 4px, rgba(201,162,94,0.05) 5px),
+                    repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(201,162,94,0.05) 4px, rgba(201,162,94,0.05) 5px);
+
+- 赔率计算器（pot-odds）：百分号纹理
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201,162,94,0.05) 2px, rgba(201,162,94,0.05) 3px),
+                    radial-gradient(circle, rgba(201,162,94,0.06) 1px, transparent 1px);
+  background-size: 100% 6px, 8px 8px;
+
+- 策略学院（strategy-academy）：书本纹理
+  background-image: repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(201,162,94,0.05) 6px, rgba(201,162,94,0.05) 7px);
+
+- 谜题训练（puzzle-trainer）：拼图纹理
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(201,162,94,0.05) 5px, rgba(201,162,94,0.05) 6px),
+                    repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(201,162,94,0.05) 5px, rgba(201,162,94,0.05) 6px),
+                    repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(201,162,94,0.04) 8px, rgba(201,162,94,0.04) 9px);
+
+- 牌局复盘（hand-history）：放大镜纹理
+  background-image: radial-gradient(circle at 30% 30%, rgba(201,162,94,0.07) 1px, transparent 1px),
+                    radial-gradient(circle at 70% 70%, rgba(201,162,94,0.05) 1px, transparent 1px);
+  background-size: 10px 10px, 10px 10px;
+
+规则：
+- 纹理叠加在图标方块底色之上，不覆盖图标本身
+- 纹理不透明度始终 ≤ 8%，避免喧宾夺主
+- 纹理在 hover 时微调不透明度（+2%），与卡片 hover 抬升（§5.18）联动
+- 移动端（<768px）纹理不透明度降低至 4-6%，保持简洁
+```
+
+#### 13.5.2 `last-training-badge` 最近训练标记
+
+模块卡右下角显示"X天前"或"今日已练"。
+
+```
+规格：
+- 字体：9px ivory-muted
+- 位置：模块卡右下角，距右/下边缘 8px
+- 内容：
+  - 今日已训练："今日已练"（颜色 var(--poker-success)）
+  - 昨日训练："1天前"（颜色 ivory-muted）
+  - 更早："{X}天前"（颜色 ivory-muted）
+  - 从未训练：不显示
+- 数据源：progress store 中各模块的 lastTrainingDate
+
+CSS 参考：
+.last-training-badge {
+  font-size: 9px;
+  color: var(--poker-ivory-muted);
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+}
+.last-training-badge.today {
+  color: var(--poker-success);
+}
+```
+
+### 13.6 渐进式信息披露
+
+#### 13.6.1 新手仪表盘收敛
+
+当 `totalSessions < 5` 时，仪表盘隐藏训练场模块网格，仅展示"今日推荐学习路径"单一卡片。
+
+```
+规格：
+- 触发条件：progress store 中 totalSessions < 5（新用户）
+- 隐藏内容：训练场模块网格（§5.18 的 6 模块卡片区）
+- 替代展示：单一"今日推荐学习路径"卡片——
+  - 卡片样式：walnut-raised 底 + 1px walnut-border + 顶边黄铜发线
+  - 内容：学习路径名称 + 简要描述 + "开始学习"按钮（黄铜渐变）
+  - 位置：占据原模块网格位置（仪表盘中段）
+- 过渡：当 totalSessions 达到 5 时，下次页面加载自动切换为完整模块网格
+- 与训练场模块网格 session-count-filter（§13.6.3）协同：新手仪表盘收敛是 0-4 次阶段，session-count-filter 控制 1-5 次逐步解锁
+```
+
+#### 13.6.2 `learning-focus-mode` 学习焦点模式
+
+用户可锁定模块，仪表盘自动聚焦该模块进度和推荐。
+
+```
+规格：
+- 触发：模块卡右上角"聚焦"按钮（Pin 图标，初始 ivory-muted，锁定后 brass）
+- 锁定态：仪表盘中段仅显示该模块的进度面板 + 今日推荐 + 快速入口
+- 解锁：再次点击 Pin 图标或切换至其他模块
+- 视觉反馈：锁定模块卡边框变为 brass（1.5px），其余模块卡 opacity 降至 0.4
+- 存储：锁定状态保存在 progress store，跨会话持久化
+- 适用场景：专注攻克某一模块（如考前冲刺 GTO）
+```
+
+#### 13.6.3 `session-count-filter` 入口逐步解锁
+
+按训练次数逐步解锁模块入口。
+
+```
+解锁规则：
+- 第 1 次（totalSessions = 0）：仅显示范围训练（range-trainer）
+- 第 3 次（totalSessions = 2）：解锁赔率计算器（pot-odds）
+- 第 5 次（totalSessions = 4）：解锁全部 6 模块
+
+未解锁模块的视觉处理：
+- 模块卡半透明（opacity 0.3）
+- 显示锁定图标（Lock，Lucide，12px，ivory-muted）
+- 显示灰色文字"完成 {X} 次训练后解锁"
+- 不可点击（pointer-events: none）
+
+已解锁模块：
+- 正常显示（§5.18 规范）
+- 首次解锁时播放 §13.8 知识节点解锁动画
+
+与新手仪表盘收敛（§13.6.1）的协同：
+- totalSessions 0-4：新手仪表盘收敛 + session-count-filter 逐步解锁联动
+- totalSessions ≥ 5：完整模块网格 + 全部入口解锁
+```
+
+### 13.7 移动端教育体验
+
+移动端（<768px）教育场景的额外视觉适配。
+
+#### 13.7.1 阅读进度条
+
+见 §13.3.4 `reading-progress-bar`，移动端专属组件。
+
+#### 13.7.2 答题反馈底部 Sheet
+
+移动端答题反馈使用底部 Sheet 替代 Modal。
+
+```
+规格：
+- 样式：底部 Sheet（从屏幕底部滑入），max-height 70vh
+- 背景：var(--poker-felt) + 顶部 8px 圆角
+- 拖拽手柄：顶部中央 32px × 4px 横条，ivory-muted 40% 透明度
+- 手势：下拉关闭（< 30% 高度自动关闭），支持 Rubber-band 回弹
+- 内容区域：滚动（overflow-y: auto），与 §13.4 反馈教育脚手架一致
+- 动画：slide-up 进场 300ms ease-out（§8.2），slide-down 退场 200ms ease-in
+- 何时使用：移动端答题结果反馈（正确/错误/严重错误）
+- 何时不用：桌面端仍使用 Modal / 内联反馈卡片
+```
+
+#### 13.7.3 概念图纵向列表
+
+移动端概念图由横向节点图改为纵向列表。
+
+```
+规格：
+- 桌面端（≥1024px）：横向节点图（ConceptGraph 现有布局）
+- 移动端（<768px）：纵向列表，每个节点为独立卡片——
+  - 卡片样式：walnut-raised 底 + 1px walnut-border
+  - 节点标题：15px ivory，左侧带 progress-ring（§13.2.1）
+  - 节点间连接：左侧 2px 竖线（walnut-border），连接相邻卡片
+  - 连接线位置：卡片左侧，与 progress-ring 对齐
+  - 内边距：12px 14px
+  - 间距：8px（卡片间）
+- 平板（768-1023px）：根据内容宽度自适应，优先横向节点图
+```
+
+#### 13.7.4 答题按钮触摸目标
+
+移动端答题按钮 min-height 44px 触摸目标（重申 §6.3 已有规范，教育场景同样适用）。
+
+```
+规格：
+- 所有答题按钮（fold/call/raise/all-in）min-height: 44px
+- 按钮间距 ≥ 8px（防止误触）
+- 按钮宽度 ≥ 44px（窄屏时最小宽度）
+- 2×2 grid 布局（§6.3，gap 6px）
+- 此规范与 §6.3 保持一致，教育场景无需额外调整
+```
+
+### 13.8 教育场景动效扩展
+
+本节扩展 §8 动效规范，新增教育场景专属动效。所有动效沿用 §8.1 缓动/时长 token。
+
+#### 13.8.1 正确率数字递增动画
+
+```
+规格：
+- 触发：答题结果面板展示时（正确率/ELO 数值变化）
+- 动画：数字从 0 递增至目标值，600ms ease-out
+- 实现：framer-motion 的 animate 从 0 到目标值，使用 useSpring 或自定义计数器
+- Token：duration = var(--poker-duration-standard)（300ms），可覆盖为 600ms
+- 复用：§8.2 RESULT_NUMBER variant（已定义，此处落地教育场景）
+- 适用场景：答题反馈的正确率展示、Dashboard 的今日正确率、进度统计
+```
+
+#### 13.8.2 知识节点解锁动画
+
+```
+规格：
+- 触发：课程节点从未解锁变为已解锁状态
+- 动画：
+  1. POP 动画（§8.2）：scale 0.8 → 1.05 → 1，300ms spring
+  2. brass 辉光渐显：box-shadow 0 0 12px rgba(232,201,126,0.3) 在 300ms 内从 0 到 1 透明度
+- 辉光消退：动画完成后辉光保留 500ms，然后 500ms 渐隐
+- 总时长：约 1.1s
+- 适用场景：课程节点解锁、模块入口解锁（session-count-filter）、段位晋升
+```
+
+#### 13.8.3 段位晋升动画
+
+```
+规格：
+- 触发：ELO 超过段位阈值
+- 动画：
+  1. 庄码 D（§5.3）360° 旋转（rotate，600ms ease-out）
+  2. 庄码放大 scale 1.2×（同步 600ms）
+  3. 庄码 brass-glow 扩散：box-shadow 从 0 0 0 扩散至 0 0 24px rgba(232,201,126,0.4)，500ms 后渐隐
+  4. 新段位名称淡入（fade-in，300ms，延迟 600ms）
+- 总时长：约 1.5s
+- 适用场景：进度页面的 ELO 段位晋升弹窗/横幅
+```
+
+#### 13.8.4 课程完成动画
+
+```
+规格：
+- 触发：课程/章节学习完成
+- 动画：
+  1. checkmark 描边动画：SVG checkmark 的 stroke-dasharray 从 0 到全长
+  2. 动画时长：500ms ease-out
+  3. 完成后 checkmark 短暂 brass 辉光（300ms），然后稳定为 success 色
+- 实现：
+  <svg> <path stroke="var(--poker-success)" stroke-dasharray="X" stroke-dashoffset="X" /> </svg>
+  使用 CSS transition 或 framer-motion 驱动 stroke-dashoffset
+- 适用场景：章末完成标记、课程完成弹窗、成就解锁标记
+```
+
+---
+
+## 附录 J：v1.7.0 变更摘要（教育学习设计规范）
+
+- **背景**：德州扑克训练平台（PokerLab）现有设计语言 v1.6.0 在棋牌风格一致性上已达专业水准，但教育学习场景（课程阅读、答题反馈、进度追踪、模块引导）缺乏统一的视觉语言规范。本次新增 §13 教育学习设计规范，在不引入新基础 token 的前提下，为教育场景建立完整的视觉语言体系。
+- **新增 §13.1 教育设计原则**：五大原则——学习目标可见性、进步可量化、反馈即教学、渐进式披露、扫读友好。
+- **新增 §13.2 学习进度可视化**：4 个新组件——`progress-ring`进度环（SVG circle stroke-dasharray，三色状态）、`sparkline`微图（8px 迷你折线图，7 日趋势）、`milestone-marker`里程碑标记（菱形标记点+ELO 标注）、`daily-goal-card`今日学习目标卡（象牙铭牌样式）。
+- **新增 §13.3 课程内容排版增强**：4 个新组件——`lesson-takeaway`要点总结卡（walnut-raised 底+brass 竖线）、`formula-display`公式展示块（brass 6% 底+mono 字体）、课程标题编号系统（§2.1 格式+eyebrow 标签）、`reading-progress-bar`阅读进度条（顶部 fixed 2px brass 线，仅移动端）。
+- **新增 §13.4 反馈教育脚手架**：4 个新组件——决策分析区（可折叠，展开显示 GTO 对比+原因+课程链接）、`comparison-view`对比视图（左右分栏，你的决策 vs GTO 最优）、`try-again-btn`再看一题按钮（btn-ghost+RefreshCw）、`related-lesson-chip`相关课程标签（pill 样式+ExternalLink）。
+- **新增 §13.5 模块教育目的视觉区分**：6 模块图标方块增加微纹理（CSS repeating-linear-gradient，不透明度 5-8%，各模块纹理不同）+ `last-training-badge`最近训练标记（右下角"X天前"）。
+- **新增 §13.6 渐进式信息披露**：3 个机制——新手仪表盘收敛（totalSessions<5 隐藏模块网格，单一学习路径卡）、`learning-focus-mode`学习焦点模式（Pin 锁定模块）、`session-count-filter`入口逐步解锁（第 1/3/5 次分阶段解锁模块）。
+- **新增 §13.7 移动端教育体验**：4 项适配——reading-progress-bar（§13.3）、答题反馈底部 Sheet（替代 Modal）、概念图纵向列表（替代横向节点图）、答题按钮 44px 触摸目标（重申）。
+- **新增 §13.8 教育场景动效扩展**：4 个新动效——正确率数字递增（600ms ease-out）、知识节点解锁（POP+brass 辉光 300ms）、段位晋升（庄码 D 360° 旋转+放大+辉光扩散）、课程完成（checkmark 描边动画 500ms）。所有动效沿用 §8 动效 token。
+- **版本号**：v1.6.0 → v1.7.0。
+- **兼容性**：所有新增组件沿用 §2 色彩 token、§3 字体、§4 间距/圆角/阴影、§8 动效 token，不引入新的基础设计 token，与牌室品牌主题无缝衔接。

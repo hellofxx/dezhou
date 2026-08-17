@@ -40,6 +40,11 @@ additionalPrompt: ""
 - **克制的奢华**：不滥用金色渐变/高光/立体，多数时间沉在胡桃木与绿呢暗色里
 - **3 秒落座**：仪表盘/首页必须在 3 秒内让用户"落座→开局→训练"，主 CTA 始终黄铜高亮
 - **叙事结构**：每个页面都有清晰的叙事动线，不是组件拼贴
+- **教育场景优先**：牌室美学服务于学习目标，让用户不仅感觉"在牌室"，更感觉"在进步"
+- **学习进度可见**：首屏即可感知学习目标与进度（Dashboard 今日目标卡、正确率趋势微图、段位里程碑）
+- **反馈即教学**：错误反馈不仅是"错了"，更要解释"为什么"（决策分析折叠区、对比视图、再看一题）
+- **扫读友好**：课程内容排版支持快速扫读（要点总结卡、公式块、标题编号）与深度阅读双模式
+- **渐进式披露**：新手用户信息密度逐步释放（首访仅展示推荐路径，随训练次数解锁模块入口）
 
 ## Authority
 - **设计语言唯一来源**：`poker-ui-demo/DESIGN_LANGUAGE.md`（以其当前版本为准），所有视觉决策以其为准
@@ -56,6 +61,12 @@ additionalPrompt: ""
 - 可访问性（WCAG 2.1 AA，aria-label/对比度/键盘导航）
 - 动效设计与跨模块视觉协调
 - Demo 原型验证（poker-ui-demo/pages/index.html）
+- 教育场景视觉设计：学习进度可视化（progress-ring / sparkline / milestone-marker / daily-goal-card）
+- 课程内容排版规范：lesson-takeaway / formula-display / 标题编号系统 / reading-progress-bar
+- 反馈教育脚手架：decision-analysis 折叠区 / comparison-view 对比视图 / try-again 模式
+- 模块教育目的视觉区分：微纹理 + last-training-badge
+- 渐进式信息披露：learning-focus-mode / session-count-filter
+- 移动端教育体验：底部 Sheet 反馈 / 纵向概念列表 / 阅读进度条
 
 ## Cross-Module Touchpoints
 - **视觉验收职责**：对所有 feature 模块的页面改造承担视觉一致性复核（颜色/字号/间距/组件复用/反模式检查）
@@ -102,6 +113,7 @@ additionalPrompt: ""
 > 组件清单以 DESIGN_LANGUAGE.md 当前版本 §5 为唯一事实源。所有新界面必须复用 §5 定义的 15 类组件（扑克牌 / 筹码 / 庄码 / 铭牌 / 按钮 / 面板 / 横幅 / 铭文 / 导师头像 / 场景卡 / 推荐项 / 模块入口卡 / 周打卡条 / 呼吸点 / 进度图表），禁止新造容器或按钮样式。
 
 ## Layout Rules
+- **内容宽度分级（v1.6.0）**：全局限宽由 AppLayout 依路由判定三档（以 `poker-ui-demo/DESIGN_LANGUAGE.md` §6.5 为唯一权威，本文件不维护数值副本）：L1 默认收敛 1400（操作台/交互页）/ **L2 概览展宽 1680（策略学院概览视图 `/academy`、`/academy/tracks`、`/academy/concept-graph`，用于课程阶梯/轨道/知识图谱，消除宽屏 felt 留白）** / L3 阅读作答收敛（模块内部 `max-w-prose`/`max-w-3xl`）。宽度档位归属 AppLayout（platform-dev）；L2 展宽视图必须内部自适应分栏承接空间，禁止单块或 `1fr` 侧栏被拉成超宽空洞；断点复用 DESIGN_LANGUAGE §10.3（xl 1280 / lg 1024 / md 768 / 480）。
 - **桌面 ≥1024px**：240px 侧边栏（sticky）+ 主内容；双列 grid 用 2fr:1fr 或 3fr:2fr
 - **平板 768–1023px**：侧边栏保留，grid 降为 1fr 堆叠；训练场 2 列
 - **移动 <768px**：全部像素级细节以 DESIGN_LANGUAGE §6.3（移动 <768px）为唯一事实源，本文件不维护副本（涵盖：侧边栏→mobile-nav 与 ≥44px 触摸目标 / arena 椭圆三分区 / streak-rail 上移骑椭圆下缘 / 训练场 2 列网格 / 取消等高拉伸 / panel 与组件 padding 压缩 / action-btn-row 2×2 / gap 压缩）；覆盖 Tailwind md:/lg: 断点类时必须加 `!important` 的特异性规则见 DESIGN_LANGUAGE §10.5
