@@ -61,8 +61,8 @@ export default function LearningTracksView() {
           </div>
         </motion.section>
 
-        {/* Track cards */}
-        <div className="space-y-4">
+        {/* Track cards — 超宽（xl）平铺两列承接 L2 展宽空间，header 居中 */}
+        <div className="grid gap-4 xl:grid-cols-2 xl:items-start">
           {LEARNING_TRACKS.map((track, index) => {
             const isActive = activeTrackId === track.id;
             const completedInTrack = track.lessonIds.filter((id) =>

@@ -50,6 +50,10 @@ interface NavGroup {
   items: NavItem[];
 }
 
+// 内容宽度分级 L2（DESIGN_LANGUAGE §6.5）：策略学院概览/课程地图视图展宽，
+// 消除超宽屏 felt 留白；阅读/作答视图（/academy/lesson、/quick-drill 等）保持 L3 收敛，由模块内部自行限宽
+const LAB_OVERVIEW_WIDE_ROUTES = ['/academy', '/academy/tracks', '/academy/concept-graph'];
+
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [switching, setSwitching] = useState(false);
@@ -348,8 +352,13 @@ export default function AppLayout() {
 
         {/* Page content */}
         <main className="flex-1 overflow-auto p-4 md:p-6 pb-20 md:pb-6">
-          {/* G1: 全局限宽——操作台/统计页随 main 收敛；阅读型页面正文由各模块 agent 单独 max-w-3xl */}
-          <div className="mx-auto w-full max-w-[1400px] h-full">
+          {/* G1: 全局限宽——操作台/统计页随 main 收敛（L1 1400）；策略学院概览视图走 L2 展宽 1680（DESIGN_LANGUAGE §6.5）；阅读型页面正文由各模块 agent 单独 max-w-prose */}
+          <div
+            className={cn(
+              'mx-auto w-full h-full',
+              LAB_OVERVIEW_WIDE_ROUTES.includes(location.pathname) ? 'max-w-[1680px]' : 'max-w-[1400px]'
+            )}
+          >
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

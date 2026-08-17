@@ -120,7 +120,7 @@ export default function ConceptGraphView() {
           <p className="text-xs text-[var(--ivory-muted)] mb-4">
             {t('academy.conceptGraph.coreConceptsDesc')}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5">
             {CONCEPT_NODES.map((concept) => {
               const categoryColors: Record<string, string> = {
                 fundamental: 'bg-[var(--poker-success-bg)] border-[var(--poker-success)]/30 text-[var(--poker-success)]',

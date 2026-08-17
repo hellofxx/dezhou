@@ -105,13 +105,13 @@ export default function AcademyHome() {
           </div>
         </motion.div>
 
-        {/* Zone B + C：课程阶梯（主列）＋ 侧栏（今日计划/工具） */}
-        <div className="grid gap-5 lg:grid-cols-3 lg:items-start">
+        {/* Zone B + C：课程阶梯（主列，自适应扩充）＋ 侧栏（今日计划/工具，固定带宽演出奏节奏） */}
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...transitionStandard, delay: 0.1 }}
-            className="lg:col-span-2"
+            className="min-w-0"
           >
             <LevelLadder
               levels={ladderLevels}
