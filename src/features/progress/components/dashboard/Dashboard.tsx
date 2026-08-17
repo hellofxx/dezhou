@@ -6,10 +6,7 @@ import {
   Calculator,
   Gamepad2,
   ArrowRight,
-  GraduationCap,
-  ClipboardList,
   Zap,
-  Puzzle,
   History,
   Clock,
 } from 'lucide-react';
@@ -34,6 +31,7 @@ import AchievementWall from '../achievement/AchievementWall';
 import ProgressReplay from '../replay/ProgressReplay';
 import { VariantEloOverview } from '../stats/VariantEloOverview';
 import { ACHIEVEMENTS } from '../../data/achievements';
+import ModuleGrid, { NewbiePathCard } from './ModuleGrid';
 
 type TimeRange = '7d' | '30d' | '90d' | 'all';
 
@@ -136,6 +134,21 @@ export default function Dashboard() {
     const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
     return records.filter((r) => r.createdAt >= cutoff);
   }, [records, timeRange]);
+
+  // §13.6.1 新手收敛：totalSessions < 5 时隐藏训练场网格，展示单一学习路径卡
+  const isNewbie = summary.totalSessions < 5;
+  const pathCard = useMemo(() => {
+    const rec = recommendations[0];
+    if (!rec) {
+      return { title: t('dashboard.progressive.newbieTitle'), description: '', route: '/academy' };
+    }
+    // title/description 为 i18n key（渲染端 t() 解析，key 缺失回退 titleParams.title）
+    const resolvedTitle =
+      t(rec.title, rec.titleParams) === rec.title
+        ? String(rec.titleParams?.title ?? rec.title)
+        : t(rec.title, rec.titleParams);
+    return { title: resolvedTitle, description: t(rec.description, rec.descParams), route: rec.route };
+  }, [recommendations, t]);
 
   return (
     <div className="h-full overflow-auto">
@@ -332,121 +345,28 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Section 8: Training Grounds — 6 个训练模块入口（最后，作为完整目录） */}
-        <div className="mb-5">
-          <div className="flex items-center justify-between mb-3">
-            <div className="panel-title mb-0">
-              <Gamepad2 className="w-4 h-4" />
-              {t('dashboard.trainingGrounds.title')}
+        {/* Section 8: Training Grounds — 6 个训练模块入口（最后，作为完整目录）
+            §13.6.1 新手收敛：totalSessions < 5 时替换为单一学习路径卡 */}
+        {isNewbie ? (
+          <NewbiePathCard
+            title={pathCard.title}
+            description={pathCard.description}
+            route={pathCard.route}
+          />
+        ) : (
+          <div className="mb-5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="panel-title mb-0">
+                <Gamepad2 className="w-4 h-4" />
+                {t('dashboard.trainingGrounds.title')}
+              </div>
+              <span className="text-[10px] text-[var(--ivory-muted)]">
+                {t('dashboard.trainingGrounds.subtitle')}
+              </span>
             </div>
-            <span className="text-[10px] text-[var(--ivory-muted)]">
-              {t('dashboard.trainingGrounds.subtitle')}
-            </span>
+            <ModuleGrid />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {/* Range Trainer */}
-            <button className="module-card" onClick={() => navigate('/range-trainer')}>
-              <div
-                className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--brass) 22%, transparent), color-mix(in srgb, var(--brass) 6%, transparent))' }}
-              >
-                <Target className="w-5 h-5 text-[var(--brass-bright)]" />
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="text-[13px] font-semibold text-[var(--ivory)]">{t('nav.rangeTrainer')}</div>
-                <div className="text-[10px] text-[var(--ivory-muted)] mt-0.5 leading-snug">
-                  {t('dashboard.trainingGrounds.rangeDesc')}
-                </div>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[var(--ivory-muted)]" />
-            </button>
-
-            {/* Pot Odds */}
-            <button className="module-card" onClick={() => navigate('/pot-odds')}>
-              <div
-                className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-info) 22%, transparent), color-mix(in srgb, var(--poker-info) 6%, transparent))' }}
-              >
-                <Calculator className="w-5 h-5 text-[var(--poker-info)]" />
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="text-[13px] font-semibold text-[var(--ivory)]">{t('nav.potOdds')}</div>
-                <div className="text-[10px] text-[var(--ivory-muted)] mt-0.5 leading-snug">
-                  {t('dashboard.trainingGrounds.oddsDesc')}
-                </div>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[var(--ivory-muted)]" />
-            </button>
-
-            {/* GTO Simulator */}
-            <button className="module-card" onClick={() => navigate('/gto-simulator')}>
-              <div
-                className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-frost) 22%, transparent), color-mix(in srgb, var(--poker-frost) 6%, transparent))' }}
-              >
-                <Gamepad2 className="w-5 h-5 text-[var(--poker-frost)]" />
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="text-[13px] font-semibold text-[var(--ivory)]">{t('nav.gtoSimulator')}</div>
-                <div className="text-[10px] text-[var(--ivory-muted)] mt-0.5 leading-snug">
-                  {t('dashboard.trainingGrounds.gtoDesc')}
-                </div>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[var(--ivory-muted)]" />
-            </button>
-
-            {/* Strategy Academy */}
-            <button className="module-card" onClick={() => navigate('/academy')}>
-              <div
-                className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-success) 22%, transparent), color-mix(in srgb, var(--poker-success) 6%, transparent))' }}
-              >
-                <GraduationCap className="w-5 h-5 text-[var(--poker-success)]" />
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="text-[13px] font-semibold text-[var(--ivory)]">{t('nav.academy')}</div>
-                <div className="text-[10px] text-[var(--ivory-muted)] mt-0.5 leading-snug">
-                  {t('dashboard.trainingGrounds.academyDesc')}
-                </div>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[var(--ivory-muted)]" />
-            </button>
-
-            {/* Puzzle Trainer */}
-            <button className="module-card" onClick={() => navigate('/puzzle')}>
-              <div
-                className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--brass) 22%, transparent), color-mix(in srgb, var(--brass) 6%, transparent))' }}
-              >
-                <Puzzle className="w-5 h-5 text-[var(--brass-bright)]" />
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="text-[13px] font-semibold text-[var(--ivory)]">{t('nav.puzzle')}</div>
-                <div className="text-[10px] text-[var(--ivory-muted)] mt-0.5 leading-snug">
-                  {t('dashboard.trainingGrounds.puzzleDesc')}
-                </div>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[var(--ivory-muted)]" />
-            </button>
-
-            {/* Hand History */}
-            <button className="module-card" onClick={() => navigate('/hand-history')}>
-              <div
-                className="module-icon"
-                style={{ background: 'radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--poker-leather) 22%, transparent), color-mix(in srgb, var(--poker-leather) 6%, transparent))' }}
-              >
-                <ClipboardList className="w-5 h-5 text-[var(--poker-leather)]" />
-              </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="text-[13px] font-semibold text-[var(--ivory)]">{t('nav.handHistory')}</div>
-                <div className="text-[10px] text-[var(--ivory-muted)] mt-0.5 leading-snug">
-                  {t('dashboard.trainingGrounds.reviewDesc')}
-                </div>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-[var(--ivory-muted)]" />
-            </button>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Dialogs */}

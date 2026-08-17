@@ -177,5 +177,13 @@
     "lastAttempt": "最近",
     "improvement": "+{score} 提升",
     "noData": "完成更多课程后将显示你的进步轨迹"
+  },
+  "dailyGoal": {
+    "eyebrow": "今日目标",
+    "count": "{{completed}}/{{total}} 项任务",
+    "minutes": "今日已学习 {{minutes}} 分钟"
+  },
+  "ring": {
+    "aria": "{{pct}}% 完成"
   }
 }

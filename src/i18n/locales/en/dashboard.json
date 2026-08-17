@@ -137,6 +137,20 @@
     "90d": "90D",
     "all": "All"
   },
+  "dailyGoal": {
+    "label": "Master today's recommended training goals"
+  },
+  "lastTraining": {
+    "today": "Trained today",
+    "daysAgo": "{{n}}d ago"
+  },
+  "focusMode": {
+    "pin": "Focus this module"
+  },
+  "progressive": {
+    "newbieTitle": "Your learning path",
+    "newbieCta": "Start learning"
+  },
   "progressReplay": {
     "title": "Replay Your Progress",
     "empty": "Complete more courses to reveal your progress track"

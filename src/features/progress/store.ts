@@ -281,6 +281,12 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
   (s) => {
     delete s.elo;
   },
+  // v14 → v15：注入学习焦点模式默认值（§13.6.2）
+  (s) => {
+    if (s.focusModule === undefined) {
+      s.focusModule = null;
+    }
+  },
 ];
 
 interface ProgressStore {
@@ -427,6 +433,12 @@ interface ProgressStore {
   achievementUnlockDates: Record<string, number>;
   /** 检查并解锁新成就（debounced） */
   checkAchievements: () => void;
+
+  // 学习焦点模式（§13.6.2）
+  /** 当前聚焦的模块 ID（null = 未聚焦） */
+  focusModule: string | null;
+  /** 设置聚焦模块（传递 null 取消聚焦） */
+  setFocusModule: (module: string | null) => void;
 
   // 冻结卡碎片经济系统
   /** 当前碎片数量（0-4，满5合成1张） */
@@ -934,6 +946,10 @@ export const useProgressStore = create<ProgressStore>()(
       unlockedAchievements: [],
       achievementUnlockDates: {},
 
+      // ===== 学习焦点模式（§13.6.2）=====
+      focusModule: null,
+      setFocusModule: (module) => set({ focusModule: module }),
+
       checkAchievements: async () => {
         // 此函数由 initProgressStore（store.bootstrap.ts）中的 debounce 包装
         const state = get();
@@ -976,7 +992,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 14,
+      version: 15,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。
         // 表驱动调度：MIGRATIONS[i] 对应 v(i) → v(i+1)（即原 if (fromVersion < i+1) 段），

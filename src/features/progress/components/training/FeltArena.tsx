@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import CasinoPlaque from '@/shared/components/business/CasinoPlaque';
 import MottoEngraved from '@/shared/components/business/MottoEngraved';
+import DailyGoalCard from '@/shared/components/business/DailyGoalCard';
 import { CardBack } from '@/shared/components/poker/CardBack';
 import { Chip } from '@/shared/components/poker/Chip';
 import { getRankForScore } from '@/shared/utils/elo';
@@ -140,6 +141,15 @@ export default function FeltArena() {
               />
             </div>
           </div>
+        </div>
+
+        {/* §13.2.4：每日目标卡 — 放在 stats 区下方 */}
+        <div className="mt-3 px-4 w-full max-w-[400px] mx-auto">
+          <DailyGoalCard
+            completed={isToday ? emotion.dailyTotal : 0}
+            total={dailyGoal}
+            goalLabel={t('dashboard.dailyGoal.label')}
+          />
         </div>
       </div>
     </div>

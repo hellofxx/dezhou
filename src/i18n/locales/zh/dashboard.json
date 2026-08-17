@@ -137,6 +137,20 @@
     "90d": "近90天",
     "all": "全部"
   },
+  "dailyGoal": {
+    "label": "掌握今日推荐训练目标"
+  },
+  "lastTraining": {
+    "today": "今日已练",
+    "daysAgo": "{{n}}天前"
+  },
+  "focusMode": {
+    "pin": "聚焦此模块"
+  },
+  "progressive": {
+    "newbieTitle": "你的学习路径",
+    "newbieCta": "开始学习"
+  },
   "progressReplay": {
     "title": "回放你的进步",
     "empty": "完成更多课程后将显示你的进步轨迹"

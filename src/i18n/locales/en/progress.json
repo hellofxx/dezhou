@@ -177,5 +177,13 @@
     "lastAttempt": "Latest",
     "improvement": "+{score} improvement",
     "noData": "Complete more lessons to see your progress"
+  },
+  "dailyGoal": {
+    "eyebrow": "Today's Goal",
+    "count": "{{completed}}/{{total}} tasks",
+    "minutes": "{{minutes}} minutes learned today"
+  },
+  "ring": {
+    "aria": "{{pct}}% complete"
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flame } from 'lucide-react';
+import Sparkline from '@/shared/components/business/Sparkline';
 import FreezeChip from './FreezeChip';
 import { useProgressStore } from '../../store';
 import { getTodayString } from '../../utils/streakCalc';
@@ -74,6 +75,30 @@ export default function StreakRail() {
       ? Math.round((emotion.dailyCorrect / emotion.dailyTotal) * 100)
       : null;
 
+  // §13.2.2：最近 7 天每日正确率趋势（按日聚合 correctAnswers/totalQuestions，无数据日填 0）
+  const sevenDayAccuracy = useMemo(() => {
+    const now = new Date();
+    const days: { date: string; correct: number; total: number }[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(now.getDate() - i);
+      days.push({ date: `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`, correct: 0, total: 0 });
+    }
+    const indexByDate = new Map(days.map((d, i) => [d.date, i]));
+    for (const r of records) {
+      const d = new Date(r.createdAt);
+      const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+      const idx = indexByDate.get(key);
+      if (idx === undefined) continue;
+      days[idx]!.correct += r.result.correctAnswers;
+      days[idx]!.total += r.result.totalQuestions;
+    }
+    return days.map((d) => (d.total > 0 ? Math.round((d.correct / d.total) * 100) : 0));
+  }, [records]);
+
+  // 全 0（无任何记录）时不渲染微图
+  const hasAccuracyData = sevenDayAccuracy.some((v) => v > 0);
+
   return (
     <div className="streak-rail" style={{ marginTop: '-14px', marginBottom: '12px' }}>
       {/* Left: streak count */}
@@ -133,6 +158,8 @@ export default function StreakRail() {
         ) : (
           <span className="text-[10px] text-[var(--ivory-muted)] font-numeric">--</span>
         )}
+        {/* §13.2.2：7 日正确率趋势微图（无数据不渲染） */}
+        {hasAccuracyData && <Sparkline data={sevenDayAccuracy} />}
       </div>
     </div>
   );

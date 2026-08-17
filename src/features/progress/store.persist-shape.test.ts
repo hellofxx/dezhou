@@ -85,6 +85,7 @@ describe('progress store persisted shape', () => {
           "moodDate": "null",
           "todayMood": "null",
         },
+        "focusModule": "null",
         "fragmentsEarnedToday": "number",
         "freezeCardFragments": "number",
         "lastDismissalDate": "string",
