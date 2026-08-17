@@ -82,9 +82,24 @@ export default function OnboardingFlow() {
         )}
       </div>
 
-      {/* 步骤标题（仅在当前步骤有效时显示） */}
-      <div className="px-4 py-3 text-center text-xs text-[var(--ivory-dim)]">
-        {currentLabelKey && t(currentLabelKey)}
+      {/* 底部圆点进度指示器 + 步骤标题 */}
+      <div className="px-4 py-3 text-center">
+        <div className="flex items-center justify-center gap-[6px] mb-1.5">
+          {STEP_LABEL_KEYS.map((labelKey, i) => (
+            <div
+              key={labelKey}
+              className={cn(
+                'w-2 h-2 rounded-full transition-colors',
+                i < currentStep && 'bg-[var(--brass-bright)]',
+                i === currentStep && 'bg-[var(--brass)] ring-2 ring-[var(--brass)]/40',
+                i > currentStep && 'border-2 border-[var(--walnut-light)] bg-transparent'
+              )}
+            />
+          ))}
+        </div>
+        <div className="text-xs text-[var(--ivory-dim)]">
+          {currentLabelKey && t(currentLabelKey)}
+        </div>
       </div>
     </div>
   );

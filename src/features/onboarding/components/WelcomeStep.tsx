@@ -18,8 +18,11 @@ export default function WelcomeStep() {
     <div className="flex flex-col items-center justify-center min-h-full px-6 py-10 max-w-3xl mx-auto">
       <div className="text-5xl mb-4">♠️</div>
       <h1 className="font-display text-3xl md:text-4xl text-[var(--ivory)] text-center mb-3">
-        {t('onboarding.welcome.title')}
+        {t('onboarding.welcome.valueProp')}
       </h1>
+      <p className="font-display text-lg text-[var(--brass-bright)] text-center mb-2">
+        {t('onboarding.welcome.title')}
+      </p>
       <p className="text-[var(--ivory-muted)] text-center mb-10 max-w-md">
         {t('onboarding.welcome.subtitle')}
       </p>
