@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { Decision } from '@/shared/types/action';
@@ -19,6 +19,9 @@ import { getOptimalAction } from '../utils/strategyCompare';
 import SessionLimitGuard, { useSessionLimitReached } from '@/shared/components/gate/SessionLimitGuard';
 // P4 修复（4.5-P1-2）：自适应难度降级提示
 import { useProgressStore } from '@/features/progress/store';
+// §13.7.2：移动端反馈底部 Sheet
+import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedbackSheet';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 const SUIT_SYMBOL: Record<string, string> = {
   hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠',
@@ -50,6 +53,13 @@ export default function GTOSessionPage() {
   const navigate = useNavigate();
   const { getCurrentScenario, submitDecision, getProgress, session } = useScenarioEngine();
   const { showFeedback, feedback, currentNodeIndex, continueNext, currentDecision } = useGTOSimulatorStore();
+  // §13.7.2：移动端答题反馈底部 Sheet（桌面端保持内联）
+  const isMobile = useIsMobile();
+  // 移动端 Sheet 开关：showFeedback 为 true 时自动打开，用户可遮罩关闭（不清反馈状态）
+  const [sheetOpen, setSheetOpen] = useState(false);
+  useEffect(() => {
+    if (showFeedback) setSheetOpen(true);
+  }, [showFeedback]);
 
   const scenario = getCurrentScenario();
   const progress = getProgress();
@@ -269,7 +279,7 @@ export default function GTOSessionPage() {
         />
       )}
 
-      {/* 决策区 / 反馈区 */}
+      {/* 决策区 / 反馈区 — §13.7.2：移动端反馈渲染进底部 Sheet，桌面端内联 */}
       {!showFeedback ? (
         <ActionSelector
           potSize={activePotSize}
@@ -286,46 +296,57 @@ export default function GTOSessionPage() {
             return Math.round(activePotSize * 0.5 * 10) / 10;
           })()}
         />
+      ) : isMobile ? (
+        <MobileFeedbackSheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          {renderFeedbackContent()}
+        </MobileFeedbackSheet>
       ) : (
-        <div className="space-y-4">
-          <GTOFeedback
-            isOptimal={feedback?.isOptimal ?? false}
-            evLoss={Math.max(0, feedback?.evLoss ?? 0)}
-            explanation={feedback?.explanation ?? ''}
-            gtoStrategy={feedback?.gtoStrategy ?? null}
-            handNotation={handNotation}
-            userEV={feedback?.userEV}
-            optimalEV={feedback?.optimalEV}
-            heroEquity={feedback?.heroEquity}
-            exploitMode={useGTOSimulatorStore.getState().exploitMode}
-            exploitStrategy={feedback?.exploitStrategy}
-            selectedOpponent={useGTOSimulatorStore.getState().selectedOpponent}
-            userAction={currentDecision}
-            onTryAgain={handleContinue}
-            feedback={(() => {
-              if (!feedback) return null;
-              const gtoStrat = feedback.gtoStrategy;
-              const optimal = gtoStrat ? getOptimalAction(gtoStrat) : null;
-              const correctAction = optimal
-                ? `${optimal.action}${optimal.amount ? ` ${optimal.amount}BB` : ''}`
-                : '';
-              // P1C-09: 用 activeStreet 而非 scenario.street
-              const relatedLessonId = (() => {
-                if (activeStreet === 'preflop') return 'l4-gto-basics';
-                if (activeStreet === 'flop') return 'l3-cbet';
-                return 'l3-multistreet';
-              })();
-              return buildGtoFeedback(feedback, correctAction, relatedLessonId);
-            })()}
-          />
-          <button
-            onClick={handleContinue}
-            className="w-full py-3 rounded-xl bg-[var(--brass)] text-[var(--primary-foreground)] font-display font-bold text-sm hover:bg-[var(--brass-bright)] transition-all active:scale-[0.98]"
-          >
-            {continueLabel}
-          </button>
-        </div>
+        <div className="space-y-4">{renderFeedbackContent()}</div>
       )}
     </div>
   );
+
+  /** 反馈内容本体（桌面端内联 / 移动端 Sheet 共用） */
+  function renderFeedbackContent() {
+    return (
+      <>
+        <GTOFeedback
+          isOptimal={feedback?.isOptimal ?? false}
+          evLoss={Math.max(0, feedback?.evLoss ?? 0)}
+          explanation={feedback?.explanation ?? ''}
+          gtoStrategy={feedback?.gtoStrategy ?? null}
+          handNotation={handNotation}
+          userEV={feedback?.userEV}
+          optimalEV={feedback?.optimalEV}
+          heroEquity={feedback?.heroEquity}
+          exploitMode={useGTOSimulatorStore.getState().exploitMode}
+          exploitStrategy={feedback?.exploitStrategy}
+          selectedOpponent={useGTOSimulatorStore.getState().selectedOpponent}
+          userAction={currentDecision}
+          onTryAgain={handleContinue}
+          feedback={(() => {
+            if (!feedback) return null;
+            const gtoStrat = feedback.gtoStrategy;
+            const optimal = gtoStrat ? getOptimalAction(gtoStrat) : null;
+            const correctAction = optimal
+              ? `${optimal.action}${optimal.amount ? ` ${optimal.amount}BB` : ''}`
+              : '';
+            // P1C-09: 用 activeStreet 而非 scenario.street
+            const relatedLessonId = (() => {
+              if (activeStreet === 'preflop') return 'l4-gto-basics';
+              if (activeStreet === 'flop') return 'l3-cbet';
+              return 'l3-multistreet';
+            })();
+            return buildGtoFeedback(feedback, correctAction, relatedLessonId);
+          })()}
+        />
+        <button
+          onClick={handleContinue}
+          className="w-full py-3 rounded-xl bg-[var(--brass)] text-[var(--primary-foreground)] font-display font-bold text-sm hover:bg-[var(--brass-bright)] transition-all active:scale-[0.98]"
+        >
+          {continueLabel}
+        </button>
+      </>
+    );
+  }
 }

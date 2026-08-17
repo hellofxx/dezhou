@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from 'react';
+import { useEffect, useCallback, useMemo, useState } from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
@@ -17,6 +17,9 @@ import { DEFAULT_MENTOR } from '@/shared/types/mentor';
 // 教育脚手架（DESIGN_LANGUAGE §13.4）：决策分析区 / 再看一题 / 相关课程标签
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
+// §13.7.2：移动端反馈底部 Sheet
+import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedbackSheet';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 export interface QuizCardProps {
   question: QuizQuestion;
@@ -169,6 +172,15 @@ export function QuizCard({
         })
       : undefined;
 
+  // §13.7.2：移动端（<768px）答题反馈改用底部 Sheet，桌面端保持内联反馈卡片
+  const isMobile = useIsMobile();
+  // 移动端 Sheet 开关：反馈出现后自动打开，用户可遮罩关闭（不清答题状态）
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const hasFeedback = !!feedback || (showGradeFeedback && !!decisionFeedback);
+  useEffect(() => {
+    if (hasFeedback) setSheetOpen(true);
+  }, [hasFeedback]);
+
   // 键盘快捷键
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -265,93 +277,110 @@ export function QuizCard({
           })}
         </div>
 
-        {/* 反馈显示：五级反馈优先，否则降级为旧二元显示 */}
-        <AnimatePresence>
-          {showGradeFeedback && decisionFeedback && gradeConfig && grade ? (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
-              className={`w-full p-4 rounded-md border text-left ${gradeConfig.color} ${gradeConfig.textColor}`}
-            >
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="font-display text-2xl">{gradeConfig.icon}</span>
-                  <div className="font-display font-semibold">{gradeTitle}</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs opacity-80">{t('feedback.evLossLabel')}</div>
-                  <div className="text-lg font-bold font-numeric">{decisionFeedback.evLoss.toFixed(2)} BB</div>
-                </div>
-                {grade !== 'best' && decisionFeedback.correctAction && (
-                  <div className="text-right">
-                    <div className="text-xs opacity-80">{t('feedback.correctAction')}</div>
-                    <div className="text-sm font-bold font-numeric">{decisionFeedback.correctAction}</div>
-                  </div>
-                )}
-              </div>
-              <div className="text-sm mt-2 opacity-95 space-y-1">
-                <div>{gradeMessage}</div>
-                {/* §13.4 教育脚手架：wrong/blunder 默认展开决策分析（含对比视图/差异原因/相关课程），底部再做一题 */}
-                {isWrongOrBlunder && (
-                  <DecisionAnalysis
-                    userAction={userActionLabel}
-                    gtoAction={gtoActionLabel}
-                    difference={differenceText}
-                    relatedLessonId={decisionFeedback.relatedLessonId}
-                    defaultOpen
-                  />
-                )}
-                {isWrongOrBlunder && onTryAgain && (
-                  <div className="mt-3 flex justify-end">
-                    <TryAgainButton onTryAgain={onTryAgain} />
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ) : feedback ? (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
-              className={`w-full p-4 rounded-md border text-center ${
-                feedback.isCorrect
-                  ? 'bg-[var(--sage)]/12 border-[var(--sage)]/40 text-[var(--sage)]'
-                  : 'bg-[var(--clay)]/12 border-[var(--clay)]/40 text-[var(--clay)]'
-              }`}
-            >
-              {feedback.isCorrect ? (
-                <motion.div
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: [0.8, 1.1, 1] }}
-                  transition={{ duration: MOTION_DURATION.slow, ease: MOTION_EASE.spring }}
-                  className="text-xl font-display font-semibold"
-                >
-                  {t('rangeTrainer.quizCard.correct')}
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ x: [-8, 8, -6, 6, -3, 3, 0] }}
-                  animate={{ x: 0 }}
-                  transition={{ duration: MOTION_DURATION.standard, ease: MOTION_EASE.standard }}
-                >
-                  <div className="text-xl font-display font-semibold">{t('rangeTrainer.quizCard.wrong')}</div>
-                  <div className="text-sm mt-1 opacity-90 font-body">
-                    {t('rangeTrainer.quizCard.correctAnswerIs', { action: feedback.correctAction })}
-                    {feedback.correctAction === 'raise'
-                      ? ` ${t('rangeTrainer.quizCard.inRange')}`
-                      : feedback.correctAction === 'fold'
-                      ? ` ${t('rangeTrainer.quizCard.notInRange')}`
-                      : ` ${t('rangeTrainer.quizCard.suitableCall')}`}
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+        {/* 反馈显示：五级反馈优先，否则降级为旧二元显示。
+            §13.7.2：移动端（<768px）渲染进底部 Sheet，桌面端保持内联卡片 */}
+        {isMobile ? (
+          <MobileFeedbackSheet
+            open={sheetOpen}
+            onOpenChange={setSheetOpen}
+          >
+            {renderFeedbackContent()}
+          </MobileFeedbackSheet>
+        ) : (
+          <AnimatePresence>{renderFeedbackContent()}</AnimatePresence>
+        )}
       </motion.div>
     </AnimatePresence>
   );
+
+  /** 反馈内容本体（桌面端内联 / 移动端 Sheet 共用） */
+  function renderFeedbackContent() {
+    return (
+      <>
+        {showGradeFeedback && decisionFeedback && gradeConfig && grade ? (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
+            className={`w-full p-4 rounded-md border text-left ${gradeConfig.color} ${gradeConfig.textColor}`}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="font-display text-2xl">{gradeConfig.icon}</span>
+                <div className="font-display font-semibold">{gradeTitle}</div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs opacity-80">{t('feedback.evLossLabel')}</div>
+                <div className="text-lg font-bold font-numeric">{decisionFeedback.evLoss.toFixed(2)} BB</div>
+              </div>
+              {grade !== 'best' && decisionFeedback.correctAction && (
+                <div className="text-right">
+                  <div className="text-xs opacity-80">{t('feedback.correctAction')}</div>
+                  <div className="text-sm font-bold font-numeric">{decisionFeedback.correctAction}</div>
+                </div>
+              )}
+            </div>
+            <div className="text-sm mt-2 opacity-95 space-y-1">
+              <div>{gradeMessage}</div>
+              {/* §13.4 教育脚手架：wrong/blunder 默认展开决策分析（含对比视图/差异原因/相关课程），底部再做一题 */}
+              {isWrongOrBlunder && (
+                <DecisionAnalysis
+                  userAction={userActionLabel}
+                  gtoAction={gtoActionLabel}
+                  difference={differenceText}
+                  relatedLessonId={decisionFeedback.relatedLessonId}
+                  defaultOpen
+                />
+              )}
+              {isWrongOrBlunder && onTryAgain && (
+                <div className="mt-3 flex justify-end">
+                  <TryAgainButton onTryAgain={onTryAgain} />
+                </div>
+              )}
+            </div>
+          </motion.div>
+        ) : feedback ? (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
+            className={`w-full p-4 rounded-md border text-center ${
+              feedback.isCorrect
+                ? 'bg-[var(--sage)]/12 border-[var(--sage)]/40 text-[var(--sage)]'
+                : 'bg-[var(--clay)]/12 border-[var(--clay)]/40 text-[var(--clay)]'
+            }`}
+          >
+            {feedback.isCorrect ? (
+              <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{ scale: [0.8, 1.1, 1] }}
+                transition={{ duration: MOTION_DURATION.slow, ease: MOTION_EASE.spring }}
+                className="text-xl font-display font-semibold"
+              >
+                {t('rangeTrainer.quizCard.correct')}
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ x: [-8, 8, -6, 6, -3, 3, 0] }}
+                animate={{ x: 0 }}
+                transition={{ duration: MOTION_DURATION.standard, ease: MOTION_EASE.standard }}
+              >
+                <div className="text-xl font-display font-semibold">{t('rangeTrainer.quizCard.wrong')}</div>
+                <div className="text-sm mt-1 opacity-90 font-body">
+                  {t('rangeTrainer.quizCard.correctAnswerIs', { action: feedback.correctAction })}
+                  {feedback.correctAction === 'raise'
+                    ? ` ${t('rangeTrainer.quizCard.inRange')}`
+                    : feedback.correctAction === 'fold'
+                    ? ` ${t('rangeTrainer.quizCard.notInRange')}`
+                    : ` ${t('rangeTrainer.quizCard.suitableCall')}`}
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        ) : null}
+      </>
+    );
+  }
 }

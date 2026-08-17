@@ -24,6 +24,9 @@ import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
+// §13.7.2：移动端反馈底部 Sheet
+import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedbackSheet';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 // ─── Quiz Data ─────────────────────────────────────────────────────────────────────
 
@@ -74,6 +77,12 @@ export default function PotOddsQuizPage() {
   const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
   // P4 修复（4.2-P1-1）：五级反馈状态
   const [decisionFeedback, setDecisionFeedback] = useState<DecisionFeedback | null>(null);
+  // §13.7.2：移动端答题反馈底部 Sheet
+  const isMobile = useIsMobile();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  useEffect(() => {
+    if (isAnswered) setSheetOpen(true);
+  }, [isAnswered]);
 
   // "最后一题简单"策略：将末题替换为最简单的赔率题；
   // rescueUsed 用于避免无限追加补救题。
@@ -390,112 +399,125 @@ export default function PotOddsQuizPage() {
               })}
             </div>
 
-            {/* Feedback */}
-            <AnimatePresence>
-              {isAnswered && selectedOption && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={transitionStandard}
-                  className="overflow-hidden"
-                >
-                  <div className={cn(
-                    'rounded-lg border p-4 mb-4',
-                    selectedOption.isCorrect
-                      ? 'border-[var(--success)]/40 bg-[var(--success)]/10'
-                      : 'border-[var(--danger)]/40 bg-[var(--danger)]/10'
-                  )}>
-                    <div className="flex items-center gap-2 mb-2">
-                      {selectedOption.isCorrect ? (
-                        <>
-                          <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-                          <span className="text-sm font-bold text-[var(--success)]">{t('potOdds.quiz.correct')}</span>
-                        </>
-                      ) : (
-                        <>
-                          <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                          <span className="text-sm font-bold text-[var(--danger)]">{t('potOdds.quiz.incorrect')}</span>
-                          {correctOption && (
-                            <span className="text-xs text-[var(--ivory-muted)] ml-2">
-                              {t('potOdds.quiz.correctAnswer', { answer: t(correctOption.text) })}
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>
-                    <p className="text-sm text-[var(--ivory-dim)] leading-relaxed">
-                      {t(selectedOption.isCorrect ? selectedOption.explanation : (correctOption?.explanation ?? selectedOption.explanation))}
-                    </p>
-
-                    {/* P1B-05：五级评级徽章 + 教育脚手架（§13.4）：
-                        评级徽章统一走 GRADE_DISPLAY_CONFIG（答对/答错均展示）；
-                        答错时展示可折叠 DecisionAnalysis（对比视图 + 差异原因 + 相关课程链接），
-                        wrong/blunder 级别默认展开（§13.4.1）。 */}
-                    {decisionFeedback && (() => {
-                      const gradeConfig = GRADE_DISPLAY_CONFIG[decisionFeedback.grade];
-                      const isWrong = !selectedOption.isCorrect;
-                      const userActionText = t(selectedOption.text);
-                      const gtoActionText = correctOption ? t(correctOption.text) : undefined;
-                      return (
-                        <div className="mt-3 pt-3 border-t border-[var(--ivory-dim)]/20">
-                          <span
-                            className={cn(
-                              'inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium',
-                              gradeConfig.color,
-                              gradeConfig.textColor,
-                            )}
-                            role="status"
-                          >
-                            <span aria-hidden="true">{gradeConfig.icon}</span>
-                            {t(gradeConfig.titleKey)}
-                          </span>
-                          {isWrong && (
-                            <div className="mt-3">
-                              <DecisionAnalysis
-                                userAction={userActionText}
-                                gtoAction={gtoActionText}
-                                difference={t(decisionFeedback.explanation)}
-                                relatedLessonId={decisionFeedback.relatedLessonId}
-                                defaultOpen={isSevereGrade(decisionFeedback.grade)}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })()}
-                  </div>
-
-                  {/* 再看一题按钮（wrong / blunder 级别，§13.4.3） */}
-                  {!selectedOption.isCorrect && decisionFeedback && isSevereGrade(decisionFeedback.grade) && (
-                    <div className="flex justify-end mb-4">
-                      <TryAgainButton onTryAgain={handleNext} />
-                    </div>
-                  )}
-
-                  {/* P4 修复（4.5-P0）：连续答错降级提示 */}
-                  {shouldDownshiftDifficulty() && (
-                    <div className="mb-4 px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
-                      {t('potOdds.quiz.downshiftHint')}
-                    </div>
-                  )}
-
-                  {/* Next button */}
-                  <div className="flex justify-end">
-                    <button
-                      onClick={handleNext}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
-                    >
-                      {currentIndex + 1 >= totalQuestions ? t('potOdds.quiz.viewResult') : t('potOdds.quiz.next')}
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Feedback — §13.7.2：移动端渲染进底部 Sheet，桌面端保持内联展开 */}
+            {isMobile ? (
+              <MobileFeedbackSheet open={sheetOpen} onOpenChange={setSheetOpen}>
+                {renderFeedbackContent()}
+              </MobileFeedbackSheet>
+            ) : (
+              <AnimatePresence>{renderFeedbackContent()}</AnimatePresence>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
     </div>
   );
+
+  /** 反馈内容本体（桌面端内联 / 移动端 Sheet 共用） */
+  function renderFeedbackContent() {
+    return (
+      <>
+        {isAnswered && selectedOption && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={transitionStandard}
+            className="overflow-hidden"
+          >
+            <div className={cn(
+              'rounded-lg border p-4 mb-4',
+              selectedOption.isCorrect
+                ? 'border-[var(--success)]/40 bg-[var(--success)]/10'
+                : 'border-[var(--danger)]/40 bg-[var(--danger)]/10'
+            )}>
+              <div className="flex items-center gap-2 mb-2">
+                {selectedOption.isCorrect ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
+                    <span className="text-sm font-bold text-[var(--success)]">{t('potOdds.quiz.correct')}</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="w-4 h-4 text-[var(--danger)]" />
+                    <span className="text-sm font-bold text-[var(--danger)]">{t('potOdds.quiz.incorrect')}</span>
+                    {correctOption && (
+                      <span className="text-xs text-[var(--ivory-muted)] ml-2">
+                        {t('potOdds.quiz.correctAnswer', { answer: t(correctOption.text) })}
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+              <p className="text-sm text-[var(--ivory-dim)] leading-relaxed">
+                {t(selectedOption.isCorrect ? selectedOption.explanation : (correctOption?.explanation ?? selectedOption.explanation))}
+              </p>
+
+              {/* P1B-05：五级评级徽章 + 教育脚手架（§13.4）：
+                  评级徽章统一走 GRADE_DISPLAY_CONFIG（答对/答错均展示）；
+                  答错时展示可折叠 DecisionAnalysis（对比视图 + 差异原因 + 相关课程链接），
+                  wrong/blunder 级别默认展开（§13.4.1）。 */}
+              {decisionFeedback && (() => {
+                const gradeConfig = GRADE_DISPLAY_CONFIG[decisionFeedback.grade];
+                const isWrong = !selectedOption.isCorrect;
+                const userActionText = t(selectedOption.text);
+                const gtoActionText = correctOption ? t(correctOption.text) : undefined;
+                return (
+                  <div className="mt-3 pt-3 border-t border-[var(--ivory-dim)]/20">
+                    <span
+                      className={cn(
+                        'inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium',
+                        gradeConfig.color,
+                        gradeConfig.textColor,
+                      )}
+                      role="status"
+                    >
+                      <span aria-hidden="true">{gradeConfig.icon}</span>
+                      {t(gradeConfig.titleKey)}
+                    </span>
+                    {isWrong && (
+                      <div className="mt-3">
+                        <DecisionAnalysis
+                          userAction={userActionText}
+                          gtoAction={gtoActionText}
+                          difference={t(decisionFeedback.explanation)}
+                          relatedLessonId={decisionFeedback.relatedLessonId}
+                          defaultOpen={isSevereGrade(decisionFeedback.grade)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* 再看一题按钮（wrong / blunder 级别，§13.4.3） */}
+            {!selectedOption.isCorrect && decisionFeedback && isSevereGrade(decisionFeedback.grade) && (
+              <div className="flex justify-end mb-4">
+                <TryAgainButton onTryAgain={handleNext} />
+              </div>
+            )}
+
+            {/* P4 修复（4.5-P0）：连续答错降级提示 */}
+            {shouldDownshiftDifficulty() && (
+              <div className="mb-4 px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+                {t('potOdds.quiz.downshiftHint')}
+              </div>
+            )}
+
+            {/* Next button */}
+            <div className="flex justify-end">
+              <button
+                onClick={handleNext}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+              >
+                {currentIndex + 1 >= totalQuestions ? t('potOdds.quiz.viewResult') : t('potOdds.quiz.next')}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </>
+    );
+  }
 }

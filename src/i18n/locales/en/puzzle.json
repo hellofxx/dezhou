@@ -63,6 +63,7 @@
   "card": {
     "scenarioLabel": "Scenario",
     "yourMove": "Your Move",
+    "feedback": "Answer Feedback",
     "progress": "Q {{current}} / {{total}}",
     "handLabel": "Hand",
     "positionLabel": "Pos",

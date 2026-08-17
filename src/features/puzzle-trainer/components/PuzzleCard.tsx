@@ -6,10 +6,13 @@
  * - 支持三种模式（rush / daily / theme），Rush 模式下额外显示连对数与剩余命
  */
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
 import { Card, CardContent } from '@/shared/components/ui/card';
+import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedbackSheet';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import ActionBoard from './ActionBoard';
 import { PuzzleCardFeedback } from './PuzzleCardFeedback';
 import { InfoChip, RushStatusBar } from './PuzzleCardChrome';
@@ -52,6 +55,13 @@ export function PuzzleCard({
 }: PuzzleCardProps) {
   const { t } = useTranslation();
   const isAnswered = answerRecord !== null;
+  // §13.7.2：移动端（<768px）答题反馈改用底部 Sheet，桌面端保持内联反馈卡片
+  const isMobile = useIsMobile();
+  // 移动端 Sheet 开关：答题后自动打开，用户可下拉/遮罩关闭（不清答题状态）
+  const [sheetOpen, setSheetOpen] = useState(false);
+  useEffect(() => {
+    if (isAnswered) setSheetOpen(true);
+  }, [isAnswered]);
   const themeLabel = t(`puzzle.themes.${question.theme}`, question.theme);
 
   return (
@@ -150,14 +160,29 @@ export function PuzzleCard({
             />
           </div>
 
-          {/* 反馈面板 */}
+          {/* 反馈面板 — 移动端底部 Sheet，桌面端内联卡片（§13.7.2） */}
           {isAnswered && answerRecord && (
-            <PuzzleCardFeedback
-              question={question}
-              record={answerRecord}
-              onNext={onNext}
-              isLastQuestion={isLastQuestion}
-            />
+            isMobile ? (
+              <MobileFeedbackSheet
+                open={sheetOpen}
+                onOpenChange={setSheetOpen}
+                ariaLabel={t('puzzle.card.feedback')}
+              >
+                <PuzzleCardFeedback
+                  question={question}
+                  record={answerRecord}
+                  onNext={onNext}
+                  isLastQuestion={isLastQuestion}
+                />
+              </MobileFeedbackSheet>
+            ) : (
+              <PuzzleCardFeedback
+                question={question}
+                record={answerRecord}
+                onNext={onNext}
+                isLastQuestion={isLastQuestion}
+              />
+            )
           )}
         </CardContent>
       </Card>

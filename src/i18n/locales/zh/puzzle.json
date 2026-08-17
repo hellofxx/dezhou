@@ -63,6 +63,7 @@
   "card": {
     "scenarioLabel": "场景",
     "yourMove": "你的行动",
+    "feedback": "答题反馈",
     "progress": "第 {{current}} / {{total}} 题",
     "handLabel": "手牌",
     "positionLabel": "位置",
