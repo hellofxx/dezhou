@@ -81,6 +81,10 @@ export function usePuzzleSession(
   const handleRetry = () => {
     options.onRetry?.();
     setFinalResult(null);
+    // BUG-PZL-001：重置提交标记，否则重试后的新会话结束时
+    // 提交 effect 被 `!submittedRef.current` 挡住，结果不落 store /
+    // Streak 漏记 / trainingEvents 不 emit
+    submittedRef.current = false;
     engine.reset();
   };
 

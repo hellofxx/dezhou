@@ -4,14 +4,17 @@
  */
 import type { VariantRuleInfo } from '../../../types';
 
-/** Short Deck（短牌）：36 张牌、三条 > 顺子、同花 > 葫芦、AK 最强非对子 */
+/**
+ * Short Deck（短牌 / 6+ Hold'em）：36 张牌（6-A）、三条 > 顺子、同花 > 葫芦、
+ * AK 最强非对子；因 2-5 被移除，最低顺子为 A-6-7-8-9（A 当低张）。
+ */
 export const shortDeckRules: VariantRuleInfo = {
   deckSize: 36,
   handRanking: {
-    flushBeatsStraight: true,
+    tripsBeatsStraight: true,
+    flushBeatsFullHouse: true,
     aceHighStraight: ['A', 'K', 'Q', 'J', 'T'],
-    aceLowStraight: ['A', '2', '3', '4', '5'],
-    pairBeatsAnyAceKing: true,
+    aceLowStraight: ['A', '6', '7', '8', '9'],
   },
   preFlopHandStrength: {
     pairBeatsAnyAceKing: true,
@@ -19,13 +22,16 @@ export const shortDeckRules: VariantRuleInfo = {
   },
 };
 
-/** Heads-Up（单挑）：SB 强制 Ante、BB 翻前最后行动、翻后 SB 先行动 */
+/**
+ * Heads-Up（单挑）：SB 即按钮位（button）、SB 翻前先行动；
+ * 翻后 BB 先行动，SB（按钮位）最后行动并持有位置优势。
+ */
 export const headsUpRules: VariantRuleInfo = {
   deckSize: 52,
   positionDynamics: {
     sbAnte: true,
-    bbFirstActionPreflop: true,
-    sbFirstActionPostflop: true,
+    sbFirstActionPreflop: true,
+    bbFirstActionPostflop: true,
   },
   blindStructure: {
     sbAmount: 0.5,

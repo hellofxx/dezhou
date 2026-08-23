@@ -7,7 +7,7 @@ import { HandDisplay } from '@/shared/components/poker/HandDisplay';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { useScenarioEngine } from '../hooks/useScenarioEngine';
 import { useGTOComparison, useGtoEloRecorder, useGtoSrsRecorder, useGtoEmotionRecorder, buildGtoFeedback } from '../hooks/useGTOComparison';
-import { useGTOSimulatorStore } from '../store';
+import { useGTOSimulatorStore, computeCallAmount } from '../store';
 import { ActionSelector } from './ActionSelector';
 import { GTOFeedback } from './GTOFeedback';
 import { DecisionTree } from './DecisionTree';
@@ -199,8 +199,8 @@ export default function GTOSessionPage() {
 
   const streetLabel =
     activeStreet === 'preflop' ? t('gto.session.streetPreflop')
-    : activeStreet === 'flop' ? t('gto.session.streetFlop')
-    : activeStreet === 'turn' ? t('gto.session.streetTurn') : t('gto.session.streetRiver');
+      : activeStreet === 'flop' ? t('gto.session.streetFlop')
+        : activeStreet === 'turn' ? t('gto.session.streetTurn') : t('gto.session.streetRiver');
 
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-6 min-h-screen flex flex-col">
@@ -285,16 +285,9 @@ export default function GTOSessionPage() {
           potSize={activePotSize}
           effectiveStack={scenario.effectiveStack}
           onDecision={handleDecision}
-          callAmount={(() => {
-            // P1C-12: 传入真实 callAmount
-            const actions = currentNode?.previousActions ?? scenario.previousActions;
-            if (activeStreet === 'preflop') {
-              const raises = actions.filter((a) => a.action === 'raise');
-              const lastRaise = raises[raises.length - 1];
-              return lastRaise?.amount ?? 1;
-            }
-            return Math.round(activePotSize * 0.5 * 10) / 10;
-          })()}
+          // P1C-12: 复用 store 导出的 computeCallAmount，保证 UI 显示与内部判分口径一致
+          // （postflop 按实际 board texture 的 cbet sizing 取值，不再用固定 0.5 近似）
+          callAmount={computeCallAmount(scenario, currentNode, activePotSize)}
         />
       ) : isMobile ? (
         <MobileFeedbackSheet open={sheetOpen} onOpenChange={setSheetOpen}>

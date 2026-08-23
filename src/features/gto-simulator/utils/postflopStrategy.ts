@@ -63,6 +63,12 @@ export function classifyHandStrength(heroHand: [Card, Card], board: Board): Hand
     if (uniqueRanks[i + 4]! - uniqueRanks[i]! === 4) return 'strong_hand';
   }
 
+  // wheel 顺子（A-2-3-4-5）：A 按 1 计，上面的窗口检测会漏掉
+  const rankSet = new Set(uniqueRanks);
+  if (rankSet.has(14) && rankSet.has(2) && rankSet.has(3) && rankSet.has(4) && rankSet.has(5)) {
+    return 'strong_hand';
+  }
+
   // 检测顺子听牌（4张牌在5张跨度内）
   let hasStraightDraw = false;
   for (let i = 0; i <= uniqueRanks.length - 4; i++) {

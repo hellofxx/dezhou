@@ -341,7 +341,7 @@ export interface ConceptNode {
 
 export interface LevelCertification {
   level: number;
-  requiredAccuracy: number;       // 通过所需正确率（如 80）
+  requiredAccuracy: number;       // 通过所需正确率（单一事实源：store.ts REQUIRED_ACCURACY）
   cooldownPeriod: number;         // 重试冷却（小时），默认 24h
   validUntil?: number;            // 有效期（毫秒时间戳）
   lastAttemptAt?: number;         // 上次尝试时间

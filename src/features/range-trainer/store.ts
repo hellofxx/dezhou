@@ -117,8 +117,10 @@ export const useRangeTrainerStore = create<RangeTrainerStore>((set, get) => ({
   quizState: INITIAL_QUIZ_STATE,
 
   startQuiz: (position, actionType, timeLimit, totalQuestions = 20) => {
-    const { quizState, presets } = get();
-    const generated = generateQuestions(presets, position, actionType, totalQuestions, quizState.handWeights);
+    const { quizState, presets, gameVariant } = get();
+    // RNG-001 修复：传入 gameVariant，短牌模式下题目池限定为 36 张牌的 81 种组合，
+    // 否则默认 standard（1326 种）会让范围外题目抽到短牌中不存在的牌（如 22/55/32s）
+    const generated = generateQuestions(presets, position, actionType, totalQuestions, quizState.handWeights, gameVariant);
 
     if (generated.length === 0) return false;
 

@@ -2,17 +2,17 @@
 name: theory-academy-dev
 description: 理论学院模块开发代理，负责 src/features/theory-academy/ 内的所有变更。当涉及理论课程内容、9 级理论体系、章末小测、ELO 集成、理论→实践桥接或权威德扑理论教程时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取理论课程数据
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑理论内容/小测
+  - Write         # 新建课程/组件/i18n 文件
+  - DeleteFile    # 删除废弃的课程数据
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[Qwen3.8-Max](qmodel_38max)"
+model: "Qwen3.8-Max"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -124,7 +124,32 @@ additionalPrompt: ""
 - **课程内容渲染层 key 覆盖（数据层零改动）**：理论正文/章末小测/objectives 为数据层内联中文（data/levels/** 不改），渲染层经 `utils/contentKeys.ts` 的 `t(key, { defaultValue: 数据层中文 })` 覆盖；新增内容 key 必须同步 `src/i18n/locales/{zh,en}/theory.json`（contentI18n.test.ts 双语对称守卫）；UI chrome（title/subtitle/分级标签等）继续走 `theory.*` i18n key；小测选项在 `t()` 解析后走 orderTheoryQuizQuestion 重排（顺序不随语言变化）
 - 理论→实践跳转只用路由字符串（`/academy/lesson/:id` / `/academy/tracks`），禁止 import strategy-academy 模块
 - 理论内容基于业界公认理论，原创编写，不逐字复制受版权保护教材
-- **教材对照与版权规避**：对照 9 本权威教材（Sklansky ToP / Harrington Vol.1 / MOP / Modern Poker Theory / MSSA / Tendler Mental Game / Duke Thinking in Bets / Janda Applications of NLHE / Poker HUDs）；思想复述 + 通用数学表述，禁止逐字复制教材原文；出处以「（概念源自：XXX 教材 YY 章）」脚注式标注；内容扩充时必须同时满足 integrity 结构约束与字符串内禁用裸 ASCII 撇号（英文缩写一律用 U+2019 弯引号，避免破坏单引号字符串语法）
+- 教材对照与版权规避：对照 9 本权威教材（Sklansky ToP / Harrington Vol.1 / MOP / Modern Poker Theory / MSSA / Tendler Mental Game / Duke Thinking in Bets / Janda Applications of NLHE / Poker HUDs）；思想复述 + 通用数学表述，禁止逐字复制教材原文；出处以「（概念源自：XXX 教材 YY 章）」脚注式标注；内容扩充时必须同时满足 integrity 结构约束与字符串内禁用裸 ASCII 撇号（英文缩写一律用 U+2019 弯引号，避免破坏单引号字符串语法）
+
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'theory-academy';
+  target: 'platform-dev' | 'ui-ux-dev' | 'progress-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- 调用 progress store 公开 action 的超时：30s
+- 章末小测 ELO 同步的最大延迟：单次答题 ≤500ms
+- `completeChapter` 失败回退：幂等保证，可安全重试
+- trainingEvents.emit 失败不阻断完成流程（fire-and-forget 语义）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

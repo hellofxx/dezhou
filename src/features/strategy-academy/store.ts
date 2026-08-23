@@ -10,6 +10,11 @@ import { generateDailyPlan, isDailyPlanFresh } from './utils/dailyPlan';
 import type { PokerVariant } from '@/shared/types/elo';
 import { DEFAULT_VARIANT } from '@/shared/types/elo';
 
+/** 级别认证通过基准正确率（%）：store 判定与 LevelCertification 组件展示/判定的单一事实源 */
+export const REQUIRED_ACCURACY = 70;
+/** 认证有效期（毫秒）：30 天，每次通过认证从当次通过时间起算 */
+const CERT_VALIDITY_MS = 30 * 24 * 60 * 60 * 1000;
+
 const initialProgress: AcademyProgress = {
   completedLessons: [],
   quizScores: {},
@@ -346,30 +351,25 @@ export const useAcademyStore = create<AcademyStore>()(
         set((state) => {
           const existing = state.certifications[level];
           const levelEntries = LEVELS.filter((l) => l.level === level);
-                
+
           // 任务 A: 动态题量算法
           const totalQuizQuestions = levelEntries.reduce(
             (sum, e) => sum + e.lessons.reduce((s, l) => s + l.quiz.length, 0),
             0
           );
-                
+
           // 难度系数：L1=1.0, L2=1.1, ..., L8=1.8
           // ACAD-01 修复：数组补齐 8 个元素，L7/L8 不再回落 1.0
           const difficultyMultiplier = [1.0, 1.1, 1.2, 1.4, 1.5, 1.6, 1.7, 1.8][level - 1] ?? 1.0;
-                
+
           // 最终题量：min(总题池 × 难度系数，25)
           const questionCount = Math.min(Math.floor(totalQuizQuestions * difficultyMultiplier), 25);
-                
-          // 任务 C: Adaptive requiredAccuracy 加权计算
-          // 难度权重映射（beginner: 1.0, intermediate: 1.2, advanced: 1.4）
-          
-          // 简化版本：使用输入分数估算平均难度
-          const averageDifficulty = 1.0 + (score / 100) * 0.2; // 估算平均难度
-          
-          // 基础要求 70%，随平均难度提升而降低
-          const adaptiveThreshold = 70 * (1 + (averageDifficulty - 1.0) * 0.1); // 范围 70%-84%
-          const requiredAccuracy = Math.round(adaptiveThreshold);
-                
+
+          // 通过标准为固定基准（REQUIRED_ACCURACY，与组件展示口径单一事实源）。
+          // 旧实现按考生分数动态抬升阈值（70%-71.4%）且组件展示 80%，双口径不一致已修复。
+          const requiredAccuracy = REQUIRED_ACCURACY;
+          const passed = score >= requiredAccuracy;
+
           const cert: LevelCertification = {
             level,
             requiredAccuracy,
@@ -379,11 +379,11 @@ export const useAcademyStore = create<AcademyStore>()(
             timeLimit: 0,
             attempts: (existing?.attempts ?? 0) + 1,
             bestScore: Math.max(existing?.bestScore ?? 0, score),
-            certifiedAt: score >= requiredAccuracy ? Date.now() : existing?.certifiedAt,
-            // validUntil：如果认证通过则设置有效期（例如 30 天），否则保持原有值
-            ...(score >= requiredAccuracy 
-              ? { validUntil: ((existing?.validUntil ?? existing?.certifiedAt) ?? Date.now()) + 30 * 24 * 60 * 60 * 1000 }
-              : {}),
+            certifiedAt: passed ? Date.now() : existing?.certifiedAt,
+            // 有效期 30 天，每次通过认证从当次通过时间起算（修复：旧实现基于历史
+            // validUntil 叠加 30 天，认证过期很久后重新通过会得到仍是过去时间的
+            // validUntil，即"刚通过立即失效"）；未通过时保留既有有效期字段。
+            validUntil: passed ? Date.now() + CERT_VALIDITY_MS : existing?.validUntil,
           };
           return {
             certifications: { ...state.certifications, [level]: cert },
@@ -393,12 +393,12 @@ export const useAcademyStore = create<AcademyStore>()(
       isCertified: (level) => {
         const cert = get().certifications[level];
         if (!cert?.certifiedAt) return false;
-        
+
         // 如果有有效期限且已过期，也需要重新认证
         if (cert.validUntil && Date.now() > cert.validUntil) {
           return false;
         }
-        
+
         return true;
       },
 

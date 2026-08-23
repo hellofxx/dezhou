@@ -1,4 +1,5 @@
 import type { HandHistory } from '../types';
+import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 
@@ -55,32 +56,41 @@ function analyzeHand(hand: HandHistory, heroName: string): HandAnalysis | null {
   // Track raises before hero's action for 3-bet detection
   let raisesBeforeHero = 0;
   let heroActed = false;
+  // 盲注 post 是被迫动作，不计入「hero 已自愿行动」；在其后的加注仍属 hero 面对的加注
+  let heroVoluntaryActed = false;
+  let heroCallCount = 0;
 
   for (const action of preflop) {
     if (action.playerIndex === heroIdx) {
       heroActed = true;
       if (action.type === ActionType.Call) {
-        // Check if this is a forced blind (amount equals BB or SB and no prior raise)
-        const isForcedBlind = raisesBeforeHero === 0 &&
-          (action.amount === hand.stakes.bigBlind || action.amount === hand.stakes.smallBlind);
+        heroCallCount++;
+        // Forced blind 判定需位置匹配 + 是 hero 的首个 call（盲注 post 行）：
+        // 仅凭金额判断会把 UTG open-limp（金额=BB）与 SB 补齐跟注（金额=SB）误判为被迫盲注
+        const isForcedBlind = raisesBeforeHero === 0 && heroCallCount === 1 &&
+          ((hero.position === Position.SB && action.amount === hand.stakes.smallBlind) ||
+            (hero.position === Position.BB && action.amount === hand.stakes.bigBlind));
         if (!isForcedBlind) {
           heroVPIP = true;
+          heroVoluntaryActed = true;
         }
       } else if (action.type === ActionType.Raise || action.type === ActionType.AllIn) {
         heroVPIP = true;
         heroPFR = true;
         heroWasPreflopRaiser = true;
+        heroVoluntaryActed = true;
         if (raisesBeforeHero >= 1) {
           heroThreeBet = true;
         }
+      } else if (action.type === ActionType.Fold || action.type === ActionType.Check) {
+        heroVoluntaryActed = true;
       }
-      if (action.type === ActionType.Call || action.type === ActionType.Raise || action.type === ActionType.AllIn) {
-        facedRaise = raisesBeforeHero > 0;
-      }
+      // 面对加注的机会：hero 行动时场上已有加注（含 fold 面对加注的情形，3-bet 分母口径）
+      facedRaise = raisesBeforeHero > 0;
     } else {
       if (action.type === ActionType.Raise || action.type === ActionType.AllIn) {
         raiseCount++;
-        if (!heroActed) {
+        if (!heroVoluntaryActed) {
           raisesBeforeHero++;
         }
       }
@@ -110,13 +120,22 @@ function analyzeHand(hand: HandHistory, heroName: string): HandAnalysis | null {
     }
   }
 
-  // Showdown detection
-  const heroWentToShowdown = hand.winner !== undefined &&
-    hand.streets.flop.cards.length > 0 &&
+  // Showdown detection：hero 未在任何街弃牌 + 到达 flop + 至少一名对手也未弃牌。
+  // 依赖 winner 字段会把「hero 下注后全桌弃牌直接收池」误判为摊牌（WTSD/W$SD 虚高）
+  const foldedInHand = (playerIdx: number): boolean => {
+    const all: PlayerAction[] = [
+      ...preflop,
+      ...flopActions,
+      ...hand.streets.turn.actions,
+      ...hand.streets.river.actions,
+    ];
+    return all.some(a => a.playerIndex === playerIdx && a.type === ActionType.Fold);
+  };
+  const anyOpponentAtShowdown = hand.players.some((_, i) => i !== heroIdx && !foldedInHand(i));
+  const heroWentToShowdown = hand.streets.flop.cards.length > 0 &&
     !heroFoldedPreflop &&
-    !hand.streets.flop.actions.some(a => a.playerIndex === heroIdx && a.type === ActionType.Fold) &&
-    !hand.streets.turn.actions.some(a => a.playerIndex === heroIdx && a.type === ActionType.Fold) &&
-    !hand.streets.river.actions.some(a => a.playerIndex === heroIdx && a.type === ActionType.Fold);
+    !foldedInHand(heroIdx) &&
+    anyOpponentAtShowdown;
 
   const heroWonShowdown = heroWentToShowdown && hand.winner?.playerId === heroIdx;
 
@@ -188,6 +207,8 @@ export function calculateHeroStats(hands: HandHistory[], heroName: string): Hero
 
   const showdownHands = analyses.filter(a => a.heroWentToShowdown);
   const showdownWins = analyses.filter(a => a.heroWonShowdown).length;
+  // WTSD 标准口径分母为「见翻牌手数」（含翻牌后弃牌的手），而非全部手数
+  const sawFlopHands = analyses.filter(a => a.heroSawFlop);
 
   // By position
   const byPosition: Record<string, { hands: number; vpip: number; pfr: number }> = {};
@@ -217,7 +238,7 @@ export function calculateHeroStats(hands: HandHistory[], heroName: string): Hero
     cbetFrequency: preflopRaiserHands.length > 0
       ? Math.round((cbetCount / preflopRaiserHands.length) * 100)
       : 0,
-    wtsd: totalHands > 0 ? Math.round((showdownHands.length / totalHands) * 100) : 0,
+    wtsd: sawFlopHands.length > 0 ? Math.round((showdownHands.length / sawFlopHands.length) * 100) : 0,
     wsd: showdownHands.length > 0 ? Math.round((showdownWins / showdownHands.length) * 100) : 0,
     byPosition,
   };

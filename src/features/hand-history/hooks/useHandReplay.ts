@@ -12,6 +12,7 @@ export function useHandReplay() {
     startReplay,
     pauseReplay,
     jumpToStreet,
+    jumpToAction,
     setPlaybackSpeed,
   } = useHandHistoryStore();
 
@@ -108,10 +109,13 @@ export function useHandReplay() {
     ];
     const streetKeys: ReplayState['currentStreet'][] = ['preflop', 'flop', 'turn', 'river'];
     const currentIdx = streetKeys.indexOf(replayState.currentStreet);
+    // showdown 不在 streetKeys 中（indexOf 返回 -1）需映射为「全部街道已完成」，
+    // 否则摊牌视图丢失全部弃牌标记
+    const effectiveIdx = currentIdx === -1 ? streets.length : currentIdx;
 
-    for (let s = 0; s <= currentIdx; s++) {
+    for (let s = 0; s < streets.length && s <= effectiveIdx; s++) {
       const streetActions = streets[s]!.actions;
-      const limit = s < currentIdx ? streetActions.length : replayState.currentActionIndex;
+      const limit = s < effectiveIdx ? streetActions.length : replayState.currentActionIndex;
       for (let i = 0; i < limit; i++) {
         const a = streetActions[i]!;
         if (a.type === ActionType.Fold) {
@@ -132,6 +136,7 @@ export function useHandReplay() {
     skipToNextStreet,
     skipToPrevStreet,
     jumpToStreet,
+    jumpToAction,
     setPlaybackSpeed,
   };
 }

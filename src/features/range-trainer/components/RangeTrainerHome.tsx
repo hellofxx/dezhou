@@ -56,6 +56,9 @@ export default function RangeTrainerHome() {
   const playerCountOptions = getPlayerCountOptions(gameVariant);
 
   // 自动选择第一个匹配的预设
+  // RNG-002 修复：依赖须含 selectedPreset —— setSelectedPosition/ActionType 会将
+  // selectedPreset 置 null，若点击的是"已选中"的位置/动作（position/actionType 值不变），
+  // 缺失该依赖会导致 effect 不重跑、预设永久丢失（网格清空直到切换到其他组合）
   React.useEffect(() => {
     if (!learnState.selectedPreset) {
       const match = presets.find(
@@ -63,7 +66,7 @@ export default function RangeTrainerHome() {
       );
       if (match) setSelectedPreset(match);
     }
-  }, [learnState.selectedPosition, learnState.selectedActionType, presets]);
+  }, [learnState.selectedPreset, learnState.selectedPosition, learnState.selectedActionType, presets, setSelectedPreset]);
 
   // 当变体切换后，确保位置有效
   React.useEffect(() => {
@@ -173,6 +176,7 @@ export default function RangeTrainerHome() {
                 selectedHands={selectedHands}
                 highlightedHand={learnState.highlightedHand}
                 preset={learnState.selectedPreset}
+                variant={gameVariant}
               />
             </div>
           </div>

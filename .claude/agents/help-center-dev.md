@@ -2,17 +2,16 @@
 name: help-center-dev
 description: 帮助中心模块开发代理，负责 src/features/help-center/ 内的所有变更。当涉及使用教程内容、快速上手路径、模块教程文章、概念卡片、FAQ 或帮助页面 UI 时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取教程数据与测试文件
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑代码与 i18n 文案
+  - Write         # 新建组件/数据/i18n 文件
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -83,6 +82,29 @@ additionalPrompt: ""
 - FAQ 折叠自研（button + aria-expanded + AnimatePresence），不引入 accordion 依赖
 - 不创建 store.ts（本期无状态需求；纯静态模块豁免 store.ts 已在 AGENTS.md《模块最小结构约定》登记；模块最小结构以 components/types/index 覆盖）
 - 模块间跳转仅用路由字符串（`/range-trainer`、`/academy` 等），禁止 import 其他 feature
+
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'help-center';
+  target: 'platform-dev' | 'ui-ux-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- help-center 为纯静态模块，无跨模块 action 调用
+- 路由跳转失败：URL 不合法时 fallback 到 `/help` 首页
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

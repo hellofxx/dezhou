@@ -41,6 +41,10 @@ describe('calculateGrade（边界归入更严重等级）', () => {
   it('evLoss > 5 → blunder', () => {
     expect(calculateGrade(5.01)).toBe('blunder');
   });
+
+  it('evLoss = NaN → 按 0 处理归 best（NaN 防御，防误判 blunder）', () => {
+    expect(calculateGrade(NaN)).toBe('best');
+  });
 });
 
 describe('migrateGrade（旧三级 → 五级）', () => {

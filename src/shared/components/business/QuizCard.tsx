@@ -208,7 +208,7 @@ export function QuizCard({
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={question.hand}
+        key={`${question.hand}-${question.id ?? ''}`}
         initial={{ opacity: 0, x: 60 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -60 }}

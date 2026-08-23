@@ -51,7 +51,24 @@ export function TrainingSession({
 
   const currentQuestion = getCurrentQuestion();
 
-  // 时间到处理（P1A-02：超时显式标记为 'timeout'，恒判错，与"选择 fold"区分）
+  // RNG-005：反馈自动跳题定时器统一入口（暂停时清除、恢复时按需重启）
+  const clearFeedbackTimer = useCallback(() => {
+    if (feedbackTimerRef.current) {
+      clearTimeout(feedbackTimerRef.current);
+      feedbackTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleFeedbackAdvance = useCallback((delay: number) => {
+    feedbackTimerRef.current = setTimeout(() => {
+      setShowFeedback(false);
+      setFeedback(null);
+      setDecisionFeedback(null);
+      nextQuestion();
+    }, delay);
+  }, [nextQuestion]);
+
+  // 时间到处理（P1A-02：超时显式标记为 'timeout'，恒判错，与"选择 fold"语义区分）
   const handleTimeUp = useCallback(() => {
     if (quizState.status !== 'running' || feedback) return;
     const q = getCurrentQuestion();
@@ -78,13 +95,8 @@ export function TrainingSession({
     recordAnswerForEmotion(false);
 
     // 1.5 秒后自动进入下一题
-    feedbackTimerRef.current = setTimeout(() => {
-      setShowFeedback(false);
-      setFeedback(null);
-      setDecisionFeedback(null);
-      nextQuestion();
-    }, 1500);
-  }, [quizState.status, quizState.questionStartTime, quizState.pausedElapsed, feedback, getCurrentQuestion, answerQuestion, nextQuestion, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion]);
+    scheduleFeedbackAdvance(1500);
+  }, [quizState.status, quizState.questionStartTime, quizState.pausedElapsed, feedback, getCurrentQuestion, answerQuestion, scheduleFeedbackAdvance, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion]);
 
   const { timeRemaining, start: startTimer, pause: pauseTimer, reset: resetTimer } = useTimer({
     timeLimit: timeLimit,
@@ -148,41 +160,41 @@ export function TrainingSession({
       recordAnswerForEmotion(isCorrect);
 
       // 1 秒后自动进入下一题
-      feedbackTimerRef.current = setTimeout(() => {
-        setShowFeedback(false);
-        setFeedback(null);
-        setDecisionFeedback(null);
-        nextQuestion();
-      }, 1000);
+      scheduleFeedbackAdvance(1000);
     },
-    [showFeedback, quizState.status, quizState.questionStartTime, quizState.pausedElapsed, getCurrentQuestion, answerQuestion, nextQuestion, pauseTimer, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion],
+    [showFeedback, quizState.status, quizState.questionStartTime, quizState.pausedElapsed, getCurrentQuestion, answerQuestion, scheduleFeedbackAdvance, pauseTimer, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion],
   );
 
   // §13.4.3 教育脚手架：wrong/blunder 反馈底部"再做一题"→ 清除自动跳转定时器后进入下一题
   // （range-trainer 会话内题目均为同位置同动作类型，下一题即"同类型新题"，不清除当前反馈记录）
   const handleTryAgain = useCallback(() => {
-    if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
+    clearFeedbackTimer();
     setShowFeedback(false);
     setFeedback(null);
     setDecisionFeedback(null);
     nextQuestion();
-  }, [nextQuestion]);
+  }, [nextQuestion, clearFeedbackTimer]);
 
   // 键盘快捷键：Esc 暂停, Space 下一题
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (quizState.status === 'running') {
+          // RNG-005/006：Esc 暂停与按钮暂停行为对齐——清除反馈跳题定时器 + 同步停表
+          // （修复前 Esc 只暂停 store，倒计时在暂停遮罩下继续走，恢复后段起点错位）
+          clearFeedbackTimer();
           pauseQuiz();
+          pauseTimer();
         } else if (quizState.status === 'paused') {
           // P1A-03 修复：恢复时同步重启倒计时（否则倒计时永久冻结）
           resumeQuiz();
           startTimer();
+          if (showFeedback) scheduleFeedbackAdvance(1000);
         }
       }
       if (e.key === ' ' && showFeedback) {
         e.preventDefault();
-        if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
+        clearFeedbackTimer();
         setShowFeedback(false);
         setFeedback(null);
         setDecisionFeedback(null);
@@ -192,10 +204,12 @@ export function TrainingSession({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [quizState.status, showFeedback, pauseQuiz, resumeQuiz, startTimer, nextQuestion]);
+  }, [quizState.status, showFeedback, pauseQuiz, resumeQuiz, startTimer, nextQuestion, clearFeedbackTimer, pauseTimer, scheduleFeedbackAdvance]);
 
   // 暂停处理
   const handlePause = () => {
+    // RNG-005：清除反馈自动跳题定时器，暂停期间不切题（恢复时若仍在反馈中会重启定时器）
+    clearFeedbackTimer();
     pauseQuiz();
     pauseTimer();
   };
@@ -204,6 +218,8 @@ export function TrainingSession({
     // P1A-03 修复：恢复时同步重启倒计时（store 续算由 pausedElapsed 承担，P1A-14）
     resumeQuiz();
     startTimer();
+    // RNG-005：暂停打断了反馈自动跳转，恢复后重新计时（反馈期间暂停不应吞掉跳转）
+    if (showFeedback) scheduleFeedbackAdvance(1000);
   };
 
   // 清理定时器

@@ -35,8 +35,8 @@ export function BoardDisplay({ cards, totalBoard, className }: BoardDisplayProps
           </motion.div>
         );
       })}
-      {/* Empty slots for remaining cards */}
-      {Array.from({ length: 5 - totalBoard.length }).map((_, i) => (
+      {/* Empty slots for remaining cards（异常数据 board >5 时防负长度 RangeError） */}
+      {Array.from({ length: Math.max(0, 5 - totalBoard.length) }).map((_, i) => (
         <div
           key={`empty-${i}`}
           className="w-16 h-[90px] rounded-lg border border-dashed border-[var(--walnut-border)]/40"

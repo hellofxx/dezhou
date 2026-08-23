@@ -1,4 +1,5 @@
 import { Card, Suit, Rank, GameVariant } from '@/shared/types/poker';
+import { Position } from '@/shared/types/position';
 
 const CHAR_TO_SUIT: Record<string, Suit> = {
   h: Suit.Hearts,
@@ -57,6 +58,45 @@ export function parseAmount(str: string): number {
   const cleaned = str.replace(/[$,€£]/g, '').trim();
   const num = parseFloat(cleaned);
   return isNaN(num) ? 0 : num;
+}
+
+// 按人数的座位环位置序列（从按钮位起顺时针：BTN → SB → BB → 最早位 … → CO）。
+// HU（2 人）按钮位即小盲（shared/types/position.ts getPositionsForPlayerCount 口径），
+// 另一位为 BB；5 人无 UTG（HJ 为最早行动位）；7/8 人为 9 人序列前缀。
+const POSITIONS_BY_COUNT: Record<number, Position[]> = {
+  2: [Position.BTN, Position.BB],
+  3: [Position.BTN, Position.SB, Position.BB],
+  4: [Position.BTN, Position.SB, Position.BB, Position.CO],
+  5: [Position.BTN, Position.SB, Position.BB, Position.HJ, Position.CO],
+  6: [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.HJ, Position.CO],
+  7: [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.UTG1, Position.HJ, Position.CO],
+  8: [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.UTG1, Position.MP, Position.HJ, Position.CO],
+  9: [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.UTG1, Position.MP, Position.MP, Position.HJ, Position.CO],
+};
+
+const POSITIONS_FALLBACK_6: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.HJ, Position.CO];
+const POSITIONS_FALLBACK_9: Position[] = POSITIONS_BY_COUNT[9]!;
+
+/**
+ * 按座位环（从按钮位起）为各座位分配位置。
+ * 三平台解析器共用（此前三份拷贝对 2/4/5 人桌均沿用 6 人序列导致错位）。
+ */
+export function assignPositions(playerCount: number, buttonSeat: number, seats: number[]): Position[] {
+  const posList = POSITIONS_BY_COUNT[playerCount] ??
+    (playerCount <= 6 ? POSITIONS_FALLBACK_6 : POSITIONS_FALLBACK_9);
+
+  // 从按钮位起的座位环
+  const btnIdx = seats.indexOf(buttonSeat);
+  const ordered = btnIdx >= 0
+    ? [...seats.slice(btnIdx), ...seats.slice(0, btnIdx)]
+    : [...seats];
+
+  const posMap = new Map<number, Position>();
+  for (let i = 0; i < ordered.length; i++) {
+    posMap.set(ordered[i]!, posList[i % posList.length] ?? Position.MP);
+  }
+
+  return seats.map(s => posMap.get(s) ?? Position.MP);
 }
 
 /**

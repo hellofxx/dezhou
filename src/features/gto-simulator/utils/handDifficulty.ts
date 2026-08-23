@@ -1,4 +1,5 @@
 import type { Card, GameVariant } from '@/shared/types/poker';
+import { Suit } from '@/shared/types/poker';
 import { randomHeroHand } from './boardGenerator';
 
 /**
@@ -102,6 +103,39 @@ export function handToNotation(c1: Card, c2: Card): string {
   return high + low + (suited ? 's' : 'o');
 }
 
+const RANK_VALUE: Record<string, number> = {
+  A: 14, K: 13, Q: 12, J: 11, T: 10,
+  '9': 9, '8': 8, '7': 7, '6': 6, '5': 5, '4': 4, '3': 3, '2': 2,
+};
+
+/**
+ * 由 notation（如 AKs / QJo / TT）反向构造一副具体手牌。
+ * 返回 null 表示 notation 非法（不匹配 169 手规范形式）。
+ */
+export function notationToHand(notation: string): [Card, Card] | null {
+  const m = /^([AKQJT2-9])([AKQJT2-9])(s|o)?$/.exec(notation);
+  if (!m) return null;
+  const high = RANK_VALUE[m[1]!]!;
+  const low = RANK_VALUE[m[2]!]!;
+  if (high !== low && m[3] === undefined) return null; // 非对子必须带 s/o
+  if (high === low && m[3] !== undefined) return null; // 对子不带 s/o
+  if (m[3] === 's') {
+    return [
+      { suit: Suit.Spades, rank: high },
+      { suit: Suit.Spades, rank: low },
+    ];
+  }
+  return [
+    { suit: Suit.Spades, rank: high },
+    { suit: Suit.Hearts, rank: low },
+  ];
+}
+
+/**
+ * 按难度选一副手牌：从目标难度池随机选 notation 后反向构造，
+ * 保证 100% 命中目标难度（旧实现为 50 次随机重试，存在小概率出圈）。
+ * short-deck 变体下过滤掉含 2-5 的 notation（该牌组中不存在）。
+ */
 export function selectHandForDifficulty(difficulty: string, variant: GameVariant = 'standard'): [Card, Card] {
   let targetHands: string[];
   switch (difficulty) {
@@ -110,9 +144,10 @@ export function selectHandForDifficulty(difficulty: string, variant: GameVariant
     case 'advanced': targetHands = ADVANCED_HANDS; break;
     default: return randomHeroHand(variant);
   }
-  for (let i = 0; i < 50; i++) {
-    const hand = randomHeroHand(variant);
-    if (targetHands.includes(handToNotation(hand[0], hand[1]))) return hand;
-  }
-  return randomHeroHand(variant);
+  const pool = variant === 'short-deck'
+    ? targetHands.filter((h) => RANK_VALUE[h[0]!]! >= 6 && RANK_VALUE[h[1]!]! >= 6)
+    : targetHands;
+  if (pool.length === 0) return randomHeroHand(variant);
+  const notation = pool[Math.floor(Math.random() * pool.length)]!;
+  return notationToHand(notation) ?? randomHeroHand(variant);
 }

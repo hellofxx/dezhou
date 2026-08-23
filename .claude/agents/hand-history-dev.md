@@ -2,17 +2,17 @@
 name: hand-history-dev
 description: 牌局复盘模块开发代理，负责 src/features/hand-history/ 内的所有变更。当涉及牌局导入解析、手牌回放、复盘分析、IndexedDB 存储、PokerStars/GGPoker 格式或决策标注时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取牌局数据与解析器
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑解析器/回放/组件
+  - Write         # 新建解析器/组件/文件
+  - DeleteFile    # 删除废弃的解析器
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -83,6 +83,30 @@ additionalPrompt: ""
 - 椭圆形牌桌布局用 CSS absolute 定位（不用图片）
 - 标注系统支持每决策点文字笔记（types.ts 的 Annotation 类型）
 - `workers/gtoWorker.ts` 内复制的评级阈值常量必须与 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 保持一致（Worker 独立执行上下文无法直接导入 shared）；阈值变更时同步更新副本
+
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'hand-history';
+  target: 'platform-dev' | 'ui-ux-dev' | 'progress-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- IndexedDB 操作使用 Promise 封装，自带错误处理（不阻塞主线程）
+- Worker 消息通信超时：10s，超时后自动 fallback 到主线程计算
+- 解析器异常：捕获格式错误并返回错误信息，不崩溃
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

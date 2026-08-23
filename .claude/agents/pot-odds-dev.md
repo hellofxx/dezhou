@@ -2,17 +2,17 @@
 name: pot-odds-dev
 description: 赔率计算器模块开发代理，负责 src/features/pot-odds/ 内的所有变更。当涉及底池赔率计算、赔率测验、赔率可视化、outs 计算或胜率估算时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取赔率数据与组件代码
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑计算/测验/组件
+  - Write         # 新建组件/数据/i18n 文件
+  - DeleteFile    # 删除废弃的测验数据
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -98,6 +98,31 @@ additionalPrompt: ""
 - Recharts 图表必须支持暗色主题（无硬编码色值，使用 CSS 变量或主题 token）
 - 末题简单 + 补救机制（getEasyOddsQuestion，`rescueUsed` 仅一次）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节）**：测验选项禁止按题库数据原序直接渲染，必须经 `orderQuizOptions` 处理（数值选项升序、文字选项按 `hash(题目id)` 种子洗牌）；getEasyOddsQuestion 补救题同样处理；源题库数据不手改重排；新增题目必须被 quizOrder.test.ts 分布与内容平衡守卫覆盖
+
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'pot-odds';
+  target: 'platform-dev' | 'ui-ux-dev' | 'progress-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- 调用 progress store 公开 action 的超时：30s
+- 答题三同步（ELO/SRS/Emotion）的最大延迟：单次答题 ≤500ms
+- 末题补救机制失败回退：rescueUsed 标志保证仅触发一次
+- trainingEvents.emit 失败不阻断训练完成流程（fire-and-forget 语义）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

@@ -241,7 +241,7 @@ export default function AppLayout() {
               'flex items-center justify-center w-7 h-7 rounded-[var(--radius-sm)] hover:bg-[var(--walnut-light)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors',
               collapsed && 'mx-auto'
             )}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={collapsed ? t('nav.expandSidebar') : t('nav.collapseSidebar')}
           >
             <ChevronLeft size={16} className={cn('transition-transform duration-300', collapsed && 'rotate-180')} />
           </button>

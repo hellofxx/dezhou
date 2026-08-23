@@ -39,7 +39,8 @@ export const MENTOR_FEEDBACK_TEMPLATES: Record<MentorStyle, MentorFeedbackTempla
  * 根据教练风格与 grade 渲染反馈文案
  * @param mentorStyle 教练风格（P0B-06：非法/未知值防御性回退到 'encouraging'，
  *                    避免持久化脏数据/调用方传入异常值时读取 undefined 模板抛错）
- * @param grade 反馈等级
+ * @param grade 反馈等级（非法/未知值防御性回退到 'wrong' 档模板，
+ *              避免脏数据触发 t(undefined).replace TypeError）
  * @param params 替换参数 { evLoss, correctAction }
  * @param t i18n 翻译函数，用于解析 i18n key 为实际文案
  */
@@ -51,7 +52,9 @@ export function renderMentorFeedback(
 ): string {
   const styleTemplates =
     MENTOR_FEEDBACK_TEMPLATES[mentorStyle] ?? MENTOR_FEEDBACK_TEMPLATES['encouraging'];
-  const templateKey = styleTemplates[grade];
+  // 防御：非法 grade（脏持久化数据/调用方异常值）回退 'wrong' 档模板，
+  // 避免 styleTemplates[grade] 为 undefined 时 t(undefined).replace 抛 TypeError
+  const templateKey = styleTemplates[grade] ?? styleTemplates['wrong'];
   let template = t(templateKey);
   template = template.replace(/\{evLoss\}/g, String(params.evLoss ?? ''));
   template = template.replace(/\{correctAction\}/g, params.correctAction ?? '');

@@ -124,16 +124,15 @@ export function AnnotationPanel({ hand, currentStreet }: AnnotationPanelProps) {
   }, [showExportMenu]);
 
   const handleSave = () => {
-    if (note.trim()) {
-      addAnnotation(hand.id, annotationKey, note.trim());
-    }
+    // 空 note 提交 = 删除该街道批注（store.addAnnotation 空值删 key）
+    addAnnotation(hand.id, annotationKey, note.trim());
   };
 
   return (
     <div className="p-3 space-y-2">
       <div className="flex items-center gap-2 text-xs font-display font-semibold text-[var(--ivory-dim)] tracking-wide">
         <MessageSquare size={14} />
-        <span>Notes - {currentStreet}</span>
+        <span>{t('handHistory.annotation.notes', { street: currentStreet })}</span>
       </div>
 
       {existingNote && (
@@ -145,18 +144,18 @@ export function AnnotationPanel({ hand, currentStreet }: AnnotationPanelProps) {
       <textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        placeholder={`Add notes for ${currentStreet}...`}
+        placeholder={t('handHistory.annotation.placeholder', { street: currentStreet })}
         className="w-full h-24 bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] rounded-lg p-2 text-xs text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] resize-none focus:outline-none focus:border-[var(--brass)]/50"
       />
 
       <div className="flex items-center gap-2">
         <button
           onClick={handleSave}
-          disabled={!note.trim()}
+          disabled={!note.trim() && !existingNote}
           className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-display font-semibold rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--brass-bright)] transition-colors"
         >
           <Save size={12} />
-          Save
+          {t('handHistory.annotation.save')}
         </button>
 
         {/* Export dropdown */}

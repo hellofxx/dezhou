@@ -152,11 +152,14 @@ export const WORKER_GRADE_THRESHOLDS = {
   wrong: 5,
 };
 
-function calculateGrade(evLoss: number): string {
-  if (evLoss <= WORKER_GRADE_THRESHOLDS.best) return 'best';
-  if (evLoss < WORKER_GRADE_THRESHOLDS.correct) return 'correct';
-  if (evLoss <= WORKER_GRADE_THRESHOLDS.inaccuracy) return 'inaccuracy';
-  if (evLoss <= WORKER_GRADE_THRESHOLDS.wrong) return 'wrong';
+export function calculateGrade(evLoss: number): string {
+  // NaN 防御与源 calculateGrade parity：非法 EV 损失按 0 处理，
+  // 防止 NaN 落入比较链末端被误判为 blunder
+  const safeLoss = Number.isNaN(evLoss) ? 0 : evLoss;
+  if (safeLoss <= WORKER_GRADE_THRESHOLDS.best) return 'best';
+  if (safeLoss < WORKER_GRADE_THRESHOLDS.correct) return 'correct';
+  if (safeLoss <= WORKER_GRADE_THRESHOLDS.inaccuracy) return 'inaccuracy';
+  if (safeLoss <= WORKER_GRADE_THRESHOLDS.wrong) return 'wrong';
   return 'blunder';
 }
 

@@ -6,8 +6,11 @@ import {
   getOptimalAction,
   isPureStrategy,
   getDominantAction,
+  estimateHeroEquity,
 } from './strategyCompare';
 import { ActionType } from '@/shared/types/action';
+import { Suit, Rank } from '@/shared/types/poker';
+import type { Card } from '@/shared/types/poker';
 import type { HandStrategy } from '../types';
 
 const pureCall: HandStrategy = { fold: 0, call: 1, raise: 0 };
@@ -133,5 +136,20 @@ describe('P1C-10: isOptimal 边界对齐 GRADE_THRESHOLDS', () => {
     const result = compareDecision({ action: ActionType.Fold }, pureCall, 10, 0.5, 2);
     expect(result.evLoss).toBeGreaterThan(0.5);
     expect(result.isOptimal).toBe(false);
+  });
+});
+
+describe('estimateHeroEquity wheel 顺子（回归：旧窗口检测漏 A-2-3-4-5）', () => {
+  it('hero A2 + board 3-4-5 → 按成顺强度估算（>= 0.72）', () => {
+    const hero: [Card, Card] = [
+      { suit: Suit.Hearts, rank: Rank.Ace },
+      { suit: Suit.Diamonds, rank: Rank.Two },
+    ];
+    const board: Card[] = [
+      { suit: Suit.Clubs, rank: Rank.Three },
+      { suit: Suit.Spades, rank: Rank.Four },
+      { suit: Suit.Hearts, rank: Rank.Five },
+    ];
+    expect(estimateHeroEquity(hero, board, 'flop')).toBeGreaterThanOrEqual(0.72);
   });
 });

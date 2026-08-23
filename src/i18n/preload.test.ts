@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from 'vitest';
 import i18n from './config';
-import { preloadI18n, switchLanguage } from './preload';
+import { preloadI18n, switchLanguage, loadAcademyCourses } from './preload';
 import {
   ALL_MODULES,
   CORE_MODULES,
@@ -143,5 +143,34 @@ describe('switchLanguage 预加载', () => {
     await switchLanguage('en');
     expect(i18n.language).toBe('en');
     expect(i18n.t('rangeTrainer.title')).not.toBe('rangeTrainer.title');
+  });
+});
+
+describe('academy-course 语言切换补加载（回归：课程内容滞留 fallback 语言）', () => {
+  it('switchLanguage 后课程内容自动注入目标语言，无需手动 loadAcademyCourses', async () => {
+    // 模拟首次访问课程路由：preloadFeature 触发 loadAcademyCourses(当前语言 zh)
+    await loadAcademyCourses('zh');
+    expect(i18n.getResource('zh', 'translation', 'academy.lessonContent.l1-basics.0')).toBeTruthy();
+    // 切换前目标语言的课程内容未注入
+    expect(i18n.getResource('en', 'translation', 'academy.lessonContent.l1-basics.0')).toBeUndefined();
+
+    // 切换语言：switchLanguage 须自动补加载 en 课程内容（原先静默漏加载，滞留中文）
+    await switchLanguage('en');
+    expect(i18n.getResource('en', 'translation', 'academy.lessonContent.l1-basics.0')).toBeTruthy();
+    expect(i18n.t('academy.lessonContent.l1-basics.0')).not.toBe(
+      i18n.getResource('zh', 'translation', 'academy.lessonContent.l1-basics.0'),
+    );
+
+    // 切回 zh：zh 课程资源保持完整（幂等缓存不破坏已注入资源）
+    await switchLanguage('zh');
+    expect(i18n.getResource('zh', 'translation', 'academy.lessonContent.l1-basics.0')).toBeTruthy();
+    expect(i18n.language).toBe('zh');
+  });
+
+  it('loadAcademyCourses 幂等：同语言重复调用不抛错且资源保持可用', async () => {
+    await loadAcademyCourses('zh');
+    await loadAcademyCourses('zh');
+    expect(i18n.t('academy.lessonContent.l1-basics.0')).toBeTruthy();
+    expect(i18n.t('academy.lessonContent.l1-basics.0')).not.toBe('academy.lessonContent.l1-basics.0');
   });
 });

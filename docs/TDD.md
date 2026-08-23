@@ -951,7 +951,7 @@ interface DailyRecommendation {
 | data | 3 个题库 | rushQuestions / dailyPuzzles / puzzleBank（主题题库） |
 | hooks | usePuzzleEngine | 统一管理三种模式的题目流 / 计时 / 命 / 连对奖励 |
 | utils | dateSeed | 日期种子算法（Mulberry32 + Fisher–Yates） |
-| store | store.ts | persist（version 以 store.ts 配置为唯一事实源；rushBest / dailyBest / themeBest / dailyCompleted / quickDrillBest / history） |
+| store | store.ts | persist（version 以 store.ts 配置为唯一事实源；rushBest / dailyBest / themeBest / dailyCompleted / history） |
 | types.ts | 类型定义 | PuzzleTheme / PuzzleResult / PuzzleBestRecord 等 |
 
 **三种模式**：
@@ -1412,8 +1412,8 @@ persist(
 | `usePotOddsStore` | `oddsState` + `evState` | 否（内存） |
 | `useGTOSimulatorStore` | `config` + `session` + `feedback` + `lastResult` | 否（内存） |
 | `useHandHistoryStore` | `hands[]` + `currentHand` + `replayState` + `filter` | IndexedDB |
-| `useProgressStore` | `records[]` + `settings` + `onboarding` + `streak` + `eloByVariant` + `activeVariant` + `quickDrillStreak` + `mentorStyle` + `emotion` + `unlockedAchievements` + `achievementUnlockDates` + `freezeCardFragments` + `lastFragmentDate` + `fragmentsEarnedToday` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
-| `usePuzzleTrainerStore` | `rushBest` + `dailyBest` + `themeBest` + `dailyCompleted` + `quickDrillBest` + `history` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
+| `useProgressStore` | `records[]` + `settings` + `onboarding` + `streak` + `eloByVariant` + `activeVariant` + `quickDrillStreak` + `quickDrillBest` + `mentorStyle` + `emotion` + `unlockedAchievements` + `achievementUnlockDates` + `freezeCardFragments` + `lastFragmentDate` + `fragmentsEarnedToday` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
+| `usePuzzleTrainerStore` | `rushBest` + `dailyBest` + `themeBest` + `dailyCompleted` + `history` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `useStrategyAcademyStore` | `progress` + `practiceResults`（cap 200） + `basicsProgress` + `abilityAssessment` + `adaptiveConfig` + `recentPracticeResults` + `dailyPlan` + `certifications` + `activeTrackId` + `activeVariant` + `firstAttemptScores` + `lastAttemptScores` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `useTheoryAcademyStore` | `progress`（completedChapters / quizScores / currentChapter / startedAt） | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `useDebugModeStore` | `unlockAll` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
@@ -1609,8 +1609,8 @@ persist(
 
 | Store | persist name | version | 关键字段 |
 |---|---|---|---|
-| progress | `poker-training-progress` | 以 `store.ts` persist 配置为唯一事实源 | records / settings / onboarding / streak / eloByVariant / activeVariant / quickDrillStreak / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
-| puzzle-trainer | `puzzle-trainer-store` | 以 `store.ts`persist 配置为唯一事实源 | rushBest / dailyBest / themeBest / quickDrillBest / dailyCompleted / history（上限 50 条）|
+| progress | `poker-training-progress` | 以 `store.ts` persist 配置为唯一事实源 | records / settings / onboarding / streak / eloByVariant / activeVariant / quickDrillStreak / quickDrillBest / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
+| puzzle-trainer | `puzzle-trainer-store` | 以 `store.ts`persist 配置为唯一事实源 | rushBest / dailyBest / themeBest / dailyCompleted / history（上限 50 条）|
 | strategy-academy | `strategy-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedLessons / quizScores / currentLesson / startedAt / **completedUnits**）/ practiceResults（cap 200） / basicsProgress / abilityAssessment / adaptiveConfig / recentPracticeResults / dailyPlan / certifications / activeTrackId / activeVariant / firstAttemptScores / lastAttemptScores |
 | theory-academy | `theory-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedChapters / quizScores / currentChapter / startedAt / **flaggedQuestions**）/ activeVariant / variantMetadata |
 | debugMode | `poker-debug-mode` | 以 `store.ts`persist 配置为唯一事实源 | unlockAll |
@@ -1669,6 +1669,7 @@ persist(
 | v6 → v7 | 成就系统迁移：注入 `unlockedAchievements: []` 和 `achievementUnlockDates: {}` 默认值 |
 | v7 → v8 | 冻结卡碎片系统迁移：注入 `freezeCardFragments: 0`、`lastFragmentDate: ''`、`fragmentsEarnedToday: 0` 默认值 |
 | puzzle-trainer v1 → v2 | 快速训练 Best Record：注入 `quickDrillBest: null` 默认值 |
+| puzzle-trainer v2 → v3 | quickDrillBest 迁至 progress store：清理本模块存量字段 |
 | strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值 |
 | strategy-academy v1 → v2 | practiceResults 裁剪：对超过 200 条的老数据执行 `.slice(-200)` 保留最近记录 |
 | strategy-academy v2 → v3 | 认证系统升级：certifications 逐条注入 `cooldownPeriod: 24` 与 `lastAttemptAt` 默认值（validUntil 保持可选） |

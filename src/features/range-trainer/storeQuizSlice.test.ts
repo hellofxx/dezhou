@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { Position } from '@/shared/types/position';
 import { useRangeTrainerStore } from './store';
 import { INITIAL_QUIZ_STATE } from './store';
+import { getShortDeckHandNotations } from './utils/questionGenerator';
 import type { QuizQuestion } from './types';
 
 /** 构造单题 running 状态（绕过随机题目生成，保证确定性） */
@@ -95,6 +96,48 @@ describe('range-trainer quiz store（P1-A 修复回归）', () => {
       expect(quizState.status).toBe('idle');
       expect(quizState.questions).toHaveLength(0);
       expect(quizState.currentIndex).toBe(0);
+    });
+  });
+
+  // ─── RNG-001：短牌模式题目池须限定 36 张牌的 81 种组合 ─────────
+  describe('RNG-001 短牌题目池变体传递', () => {
+    afterEach(() => {
+      // 还原标准变体，避免污染同文件其他用例（presets/playerCount/learnState 均随变体重置）
+      useRangeTrainerStore.getState().setGameVariant('standard');
+    });
+
+    it('短牌模式下所有题目 hand 均属于短牌 81 种组合（不含 2-5 的牌）', () => {
+      useRangeTrainerStore.getState().setGameVariant('short-deck');
+      const ok = useRangeTrainerStore.getState().startQuiz(Position.CO, 'open', 10, 10);
+      expect(ok).toBe(true);
+
+      const { questions } = useRangeTrainerStore.getState().quizState;
+      expect(questions.length).toBeGreaterThan(0);
+
+      const shortDeckSet = new Set(getShortDeckHandNotations());
+      for (const q of questions) {
+        // 修复前：generateQuestions 未收到 variant（默认 standard，1326 种），
+        // 范围外题目会抽到 22/55/32s 等短牌中不存在的牌
+        expect(shortDeckSet.has(q.hand)).toBe(true);
+      }
+    });
+
+    it('短牌模式下范围外题目存在且答案为 fold（题目池仍含范围外抽样）', () => {
+      useRangeTrainerStore.getState().setGameVariant('short-deck');
+      const ok = useRangeTrainerStore.getState().startQuiz(Position.CO, 'open', 10, 10);
+      expect(ok).toBe(true);
+
+      const { questions } = useRangeTrainerStore.getState().quizState;
+      const presetHands = new Set(
+        useRangeTrainerStore.getState().presets
+          .find((p) => p.position === Position.CO && p.actionType === 'open')
+          ?.hands ?? [],
+      );
+      const outRange = questions.filter((q) => !presetHands.has(q.hand));
+      expect(outRange.length).toBeGreaterThan(0);
+      for (const q of outRange) {
+        expect(q.correctAction).toBe('fold');
+      }
     });
   });
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { aggregateStats, aggregateByModule, getRecentRecords } from './statsAggregator';
+import { aggregateStats, aggregateByDay, aggregateByModule, getRecentRecords } from './statsAggregator';
 import type { TrainingRecord } from '../types';
 
 const makeRecord = (overrides: Partial<TrainingRecord>): TrainingRecord => ({
@@ -42,6 +42,61 @@ describe('aggregateStats', () => {
     // 加权平均时间: (4*10 + 6*20)/30 = 160/30 ≈ 5.333
     expect(stats.averageTime).toBeCloseTo(5.333, 2);
     expect(stats.lastTrainingDate).toBe(2000);
+  });
+});
+
+describe('aggregateByDay', () => {
+  it('theory 记录题数不稀释每日平均耗时（分母只计非 theory 题数，与 aggregateStats 口径一致）', () => {
+    const now = Date.now();
+    const records = [
+      makeRecord({
+        result: { sessionId: 's1', module: 'range-trainer', totalQuestions: 10, correctAnswers: 7, accuracy: 0.7, averageTime: 4, timestamp: now, details: [] },
+        createdAt: now,
+      }),
+      makeRecord({
+        module: 'theory-academy',
+        result: { sessionId: 's2', module: 'theory-academy', totalQuestions: 20, correctAnswers: 10, accuracy: 0.5, averageTime: 0, timestamp: now, details: [] },
+        createdAt: now,
+      }),
+    ];
+    const daily = aggregateByDay(records, 1);
+    // 修复前：分子 (4*10 + 0) 除以全部 30 题被稀释为 ≈1.33；修复后：只按 10 道计时题平均 = 4
+    expect(daily[0]!.totalTime).toBeCloseTo(4, 5);
+    // questions / accuracy 口径不变：含 theory 的 30 题与 17 次答对
+    expect(daily[0]!.questions).toBe(30);
+    expect(daily[0]!.accuracy).toBeCloseTo(17 / 30, 5);
+  });
+
+  it('全天仅 theory 记录 → totalTime 为 0（无除零）', () => {
+    const now = Date.now();
+    const records = [
+      makeRecord({
+        module: 'theory-academy',
+        result: { sessionId: 's1', module: 'theory-academy', totalQuestions: 5, correctAnswers: 4, accuracy: 0.8, averageTime: 0, timestamp: now, details: [] },
+        createdAt: now,
+      }),
+    ];
+    const daily = aggregateByDay(records, 1);
+    expect(daily[0]!.totalTime).toBe(0);
+    expect(daily[0]!.questions).toBe(5);
+    expect(daily[0]!.accuracy).toBeCloseTo(0.8, 5);
+  });
+
+  it('纯计时记录的平均耗时不受修复影响', () => {
+    const now = Date.now();
+    const records = [
+      makeRecord({
+        result: { sessionId: 's1', module: 'range-trainer', totalQuestions: 10, correctAnswers: 7, accuracy: 0.7, averageTime: 4, timestamp: now, details: [] },
+        createdAt: now,
+      }),
+      makeRecord({
+        module: 'pot-odds',
+        result: { sessionId: 's2', module: 'pot-odds', totalQuestions: 10, correctAnswers: 5, accuracy: 0.5, averageTime: 6, timestamp: now, details: [] },
+        createdAt: now,
+      }),
+    ];
+    const daily = aggregateByDay(records, 1);
+    expect(daily[0]!.totalTime).toBeCloseTo(5, 5); // (4*10 + 6*10) / 20
   });
 });
 

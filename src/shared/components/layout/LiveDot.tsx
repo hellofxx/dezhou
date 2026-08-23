@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 
 export interface LiveDotProps {
@@ -9,5 +10,6 @@ export interface LiveDotProps {
  * 纯 CSS 动画，无 framer-motion。
  */
 export default function LiveDot({ className }: LiveDotProps) {
-  return <span className={cn('live-dot', className)} role="status" aria-label="live" />;
+  const { t } = useTranslation();
+  return <span className={cn('live-dot', className)} role="status" aria-label={t('common.ui.live')} />;
 }

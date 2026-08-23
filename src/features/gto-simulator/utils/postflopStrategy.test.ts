@@ -59,6 +59,19 @@ describe('classifyHandStrength（P1C-04/23）', () => {
     ]);
     expect(classifyHandStrength(hero, board)).toBe('air');
   });
+
+  it('wheel 顺子（hero A2 + board 3-4-5）→ strong_hand（回归：旧窗口检测漏 A-2-3-4-5）', () => {
+    const hero: [Card, Card] = [
+      { suit: Suit.Hearts, rank: Rank.Ace },
+      { suit: Suit.Diamonds, rank: Rank.Two },
+    ];
+    const board = makeBoard([
+      { suit: Suit.Clubs, rank: Rank.Three },
+      { suit: Suit.Spades, rank: Rank.Four },
+      { suit: Suit.Hearts, rank: Rank.Five },
+    ]);
+    expect(classifyHandStrength(hero, board)).toBe('strong_hand');
+  });
 });
 
 describe('estimatePostflopStrategy 翻后策略随牌力变化（P1C-04）', () => {

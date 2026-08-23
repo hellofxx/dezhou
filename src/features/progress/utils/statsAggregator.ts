@@ -84,7 +84,12 @@ export function aggregateByDay(records: TrainingRecord[], days: number): DailySt
       const dayRecords = records.filter((r) => toLocalDateKey(r.createdAt) === day.date);
       const correct = dayRecords.reduce((sum, r) => sum + r.result.correctAnswers, 0);
       day.accuracy = correct / day.questions;
-      day.totalTime = day.totalTime / day.questions;
+      // P2-C 修复：平均耗时分母只计非 theory 记录的题数——theory averageTime 恒为 0
+      // 已被排除在 totalTime 分子之外，若分母混入其题数会稀释平均耗时（与 aggregateStats 口径对齐）
+      const timedQuestions = dayRecords
+        .filter((r) => r.module !== 'theory-academy')
+        .reduce((sum, r) => sum + r.result.totalQuestions, 0);
+      day.totalTime = timedQuestions > 0 ? day.totalTime / timedQuestions : 0;
     }
   }
 

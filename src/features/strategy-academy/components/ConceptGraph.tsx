@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
 import { LOCAL_TRACK } from '../data/localTrack';
-import { isDebugUnlockActive } from '@/shared/stores/debugMode';
+import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
 import ProgressRing from '@/shared/components/business/ProgressRing';
 import { resolveLevelTitle, resolveLessonTitle, lessonTitleKey, levelTitleKey } from '../utils/titleKeys';
@@ -296,6 +296,9 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
 
   const { progress, isLevelEntryUnlocked } = useAcademyStore();
   const completedLessons = progress.completedLessons;
+  // 调试解锁：解除本土课节点门禁（响应式订阅，激活/关闭即时生效；
+  // 旧实现用非响应式 isDebugUnlockActive，已挂载图谱不随开关刷新）
+  const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
   const { nodes, edges } = useMemo(() => buildGraph(), []);
 
@@ -360,10 +363,10 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
   const isLocalLessonUnlocked = useCallback(
     (lessonId: string): boolean => {
       if (lessonId === 'local-mental-tilt-recognition') return true;
-      if (isDebugUnlockActive()) return true;
+      if (debugUnlock) return true;
       return (LOCAL_TRACK.prerequisiteLevelIds ?? []).every(isEntryCompleted);
     },
-    [isEntryCompleted]
+    [isEntryCompleted, debugUnlock]
   );
 
   const getNodeStatus = useCallback(
@@ -459,13 +462,12 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
                     <button
                       key={lesson.id}
                       onClick={() => onNodeClick(lesson.id)}
-                      className={`w-full text-left px-3 py-2 rounded-md text-xs transition-colors ${
-                        isCompleted
-                          ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)] border border-[var(--poker-success)]/30'
-                          : lessonUnlocked
-                            ? 'bg-[var(--surface-raised)] text-[var(--ivory)] border border-[var(--walnut-border)] hover:border-[var(--brass)]'
-                            : 'bg-transparent text-[var(--ivory-dim)] border border-dashed border-[var(--walnut-border)] opacity-60'
-                      }`}
+                      className={`w-full text-left px-3 py-2 rounded-md text-xs transition-colors ${isCompleted
+                        ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)] border border-[var(--poker-success)]/30'
+                        : lessonUnlocked
+                          ? 'bg-[var(--surface-raised)] text-[var(--ivory)] border border-[var(--walnut-border)] hover:border-[var(--brass)]'
+                          : 'bg-transparent text-[var(--ivory-dim)] border border-dashed border-[var(--walnut-border)] opacity-60'
+                        }`}
                     >
                       <span className="mr-1.5">{isCompleted ? '✓' : '○'}</span>
                       {resolveLessonTitle(t, lesson)}

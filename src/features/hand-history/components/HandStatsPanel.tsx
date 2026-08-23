@@ -85,7 +85,7 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
       {chartData.length > 0 && (
         <div className="p-4 rounded-xl bg-[var(--walnut-raised)]/30 border border-[var(--walnut-border)]">
           <h3 className="text-xs font-display font-semibold text-[var(--ivory-dim)] mb-3 tracking-wide">
-            VPIP / PFR by Position
+            {t('handHistory.stats.byPositionTitle')}
           </h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData} barGap={2}>
@@ -127,8 +127,8 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
           <table className="w-full text-xs">
             <thead>
               <tr className="bg-[var(--walnut-raised)]/40">
-                <th className="px-3 py-2 text-left font-display font-semibold text-[var(--ivory-dim)]">Position</th>
-                <th className="px-3 py-2 text-center font-display font-semibold text-[var(--ivory-dim)]">Hands</th>
+                <th className="px-3 py-2 text-left font-display font-semibold text-[var(--ivory-dim)]">{t('handHistory.stats.colPosition')}</th>
+                <th className="px-3 py-2 text-center font-display font-semibold text-[var(--ivory-dim)]">{t('handHistory.stats.colHands')}</th>
                 <th className="px-3 py-2 text-center font-display font-semibold text-[var(--ivory-dim)]">VPIP</th>
                 <th className="px-3 py-2 text-center font-display font-semibold text-[var(--ivory-dim)]">PFR</th>
               </tr>
@@ -176,7 +176,7 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
 
       {/* Total hands info */}
       <p className="text-[10px] text-[var(--ivory-muted)] font-numeric text-center">
-        Based on {stats.totalHands} hands analyzed
+        {t('handHistory.stats.basedOn', { count: stats.totalHands })}
       </p>
     </div>
   );

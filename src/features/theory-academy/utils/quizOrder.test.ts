@@ -1,13 +1,14 @@
 /**
  * 理论章末小测选项排序测试：
  * ① correctIndex 重映射正确性 ② 确定性 ③ 集合不变且不改源对象 ④ 真实题库分布守卫。
+ * 分布守卫覆盖全部三变体（standard / short-deck / heads-up）题库。
  */
 import { describe, it, expect } from 'vitest';
 import { orderTheoryQuizQuestion } from './quizOrder';
-import { THEORY_LEVELS } from '../data/levels';
+import { ALL_VARIANT_THEORY_LEVELS } from '../data/levels/variants';
 import type { TheoryQuizQuestion } from '../types';
 
-const ALL_QUIZ: TheoryQuizQuestion[] = THEORY_LEVELS.flatMap((level) =>
+const ALL_QUIZ: TheoryQuizQuestion[] = ALL_VARIANT_THEORY_LEVELS.flatMap((level) =>
   level.chapters.flatMap((c) => c.quiz)
 );
 

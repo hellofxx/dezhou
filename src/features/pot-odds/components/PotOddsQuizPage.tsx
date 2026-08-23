@@ -33,9 +33,12 @@ import { useIsMobile } from '@/shared/hooks/useIsMobile';
 // 错误级别判定：wrong / blunder 为严重错误（默认展开决策分析、显示再看一题）
 const isSevereGrade = (grade: DecisionFeedback['grade']) => grade === 'wrong' || grade === 'blunder';
 
-// 题库数据见 ../data/quizQuestions（19 题）。模块顶层一次性完成选项排序：
-// 数值选项题（outs 计算）按数值升序，其余按题目 id 种子洗牌（确定性，跨用户一致）。
-const ORDERED_QUIZ_QUESTIONS: PotOddsQuizQuestion[] = QUIZ_QUESTIONS.map((q) => orderQuizOptions(q));
+// 题库数据见 ../data/quizQuestions（19 题）。选项排序出口位于组件渲染期（useMemo）：
+// i18n-key 型题库须在 t() 解析后判定数值选项集（AGENTS.md 选项排序治理）——
+// 模块顶层执行时 i18n 资源可能尚未就绪（lazyPage 与 preloadI18n 并行加载），
+// 且 key 恒不以数字开头，直接用 key 判定会使数值升序分支永不触发。
+// 数值选项题（outs 计算）按解析文本数值升序（zh/en 数值一致，顺序不随语言变化），
+// 其余按题目 id 种子洗牌（确定性，跨用户一致）。
 
 // 存 i18n key，渲染时经 t() 解析（potOdds.quiz.*）
 const CATEGORY_LABELS: Record<string, string> = {
@@ -89,13 +92,22 @@ export default function PotOddsQuizPage() {
   const [rescueUsed, setRescueUsed] = useState(false);
   const [rescueQuestions, setRescueQuestions] = useState<PotOddsQuizQuestion[]>([]);
 
+  // 选项排序出口：t() 解析后判定数值选项集（数值题升序），其余按 id 种子洗牌。
+  // 依赖 t：语言切换时重算，但两类分支的顺序在 zh/en 下一致（数值升序语言无关、
+  // 洗牌种子为 id），满足"顺序不得随语言变化"的治理约束。
+  const orderedQuizQuestions = useMemo<PotOddsQuizQuestion[]>(
+    () => QUIZ_QUESTIONS.map((q) =>
+      orderQuizOptions(q, undefined, q.options.map((o) => t(o.text)))),
+    [t],
+  );
+
   // 实际生效的题目序列：已排序的 19 题（最后一题被替换为简单题）+ 可选的补救题
   const effectiveQuestions = useMemo<PotOddsQuizQuestion[]>(() => {
-    if (ORDERED_QUIZ_QUESTIONS.length === 0) return [];
-    const base = ORDERED_QUIZ_QUESTIONS.slice(0, ORDERED_QUIZ_QUESTIONS.length - 1);
+    if (orderedQuizQuestions.length === 0) return [];
+    const base = orderedQuizQuestions.slice(0, orderedQuizQuestions.length - 1);
     const easyLast: PotOddsQuizQuestion = { ...getEasyOddsQuestion(), id: EASY_LAST_QUESTION_ID };
     return [...base, easyLast, ...rescueQuestions];
-  }, [rescueQuestions]);
+  }, [orderedQuizQuestions, rescueQuestions]);
 
   const totalQuestions = effectiveQuestions.length;
   const currentQuestion = effectiveQuestions[currentIndex]!;
@@ -259,9 +271,9 @@ export default function PotOddsQuizPage() {
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4 mb-8">
             <p className="text-sm text-[var(--ivory-dim)]">
               {accuracy >= 90 ? t('potOdds.quiz.gradeExcellent') :
-               accuracy >= 70 ? t('potOdds.quiz.gradeGood') :
-               accuracy >= 50 ? t('potOdds.quiz.gradeFair') :
-               t('potOdds.quiz.gradePoor')}
+                accuracy >= 70 ? t('potOdds.quiz.gradeGood') :
+                  accuracy >= 50 ? t('potOdds.quiz.gradeFair') :
+                    t('potOdds.quiz.gradePoor')}
             </p>
             {lastQuestionCorrect && (
               <p className="text-xs text-[var(--sage)] mt-2 font-display">
@@ -375,7 +387,7 @@ export default function PotOddsQuizPage() {
                     )}
                     animate={
                       showWrong ? { x: [0, -4, 4, -4, 4, 0] } :
-                      showCorrect ? { scale: [1, 1.01, 1] } : {}
+                        showCorrect ? { scale: [1, 1.01, 1] } : {}
                     }
                     transition={transitionSlow}
                     whileHover={!isAnswered ? { scale: 1.01 } : {}}
@@ -385,12 +397,12 @@ export default function PotOddsQuizPage() {
                       <span className={cn(
                         'w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold shrink-0',
                         showCorrect ? 'border-[var(--success)] text-[var(--success)]' :
-                        showWrong ? 'border-[var(--danger)] text-[var(--danger)]' :
-                        'border-[var(--ivory-dim)]/40 text-[var(--ivory-muted)]'
+                          showWrong ? 'border-[var(--danger)] text-[var(--danger)]' :
+                            'border-[var(--ivory-dim)]/40 text-[var(--ivory-muted)]'
                       )}>
                         {showCorrect ? <CheckCircle2 className="w-4 h-4" /> :
-                         showWrong ? <XCircle className="w-4 h-4" /> :
-                         String.fromCharCode(65 + i)}
+                          showWrong ? <XCircle className="w-4 h-4" /> :
+                            String.fromCharCode(65 + i)}
                       </span>
                       <span className="font-medium">{t(option.text)}</span>
                     </div>

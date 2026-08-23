@@ -2,17 +2,17 @@
 name: onboarding-dev
 description: 新手引导流程开发代理，负责 src/features/onboarding/ 内的所有变更。当涉及引导步骤、用户偏好采集、OnboardingGate、新手教程、多步表单或首次使用体验时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取引导流程与组件
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑引导步骤/UI
+  - Write         # 新建引导组件/数据
+  - DeleteFile    # 删除废弃的引导数据
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -89,6 +89,30 @@ additionalPrompt: ""
 - Onboarding 完成后 `onboarding.completed = true`，不再被门禁拦截
 - 跳过引导时 `skipOnboarding` 直接标记 completed=true
 - 定位测试题的 explanation 在答题后展示，帮助用户学习
+
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'onboarding';
+  target: 'platform-dev' | 'ui-ux-dev' | 'progress-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- 调用 progress store 公开 action 的超时：30s
+- 末题补救机制失败回退：rescueUsed 标志保证仅触发一次
+- quizCard 组件 props 传递失败：fallback 为本地渲染模式
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

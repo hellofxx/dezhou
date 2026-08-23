@@ -42,6 +42,8 @@ export interface HandHistory {
     amount: number;
     hand?: string;
   };
+  /** hero（"Dealt to" 玩家）在 players 中的索引；旧数据/无底牌局为 undefined（消费方回退启发式） */
+  heroPlayerId?: number;
   annotations: Record<string, string>;
 }
 

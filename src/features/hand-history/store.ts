@@ -157,6 +157,7 @@ interface HandHistoryStore {
   nextAction: () => void;
   prevAction: () => void;
   jumpToStreet: (street: 'preflop' | 'flop' | 'turn' | 'river' | 'showdown') => void;
+  jumpToAction: (street: ReplayState['currentStreet'], actionIndex: number) => void;
   setPlaybackSpeed: (speed: number) => void;
 
   // Annotations
@@ -376,6 +377,17 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
     set({ replayState: newState });
   },
 
+  jumpToAction: (street, actionIndex) => {
+    const { currentHand, replayState } = get();
+    if (!currentHand) return;
+    const totalActions = getCurrentActions(currentHand, street);
+    const clamped = Math.max(0, Math.min(actionIndex, totalActions));
+    const newState = computeReplayState(currentHand, street, clamped);
+    newState.isPlaying = false;
+    newState.playbackSpeed = replayState.playbackSpeed;
+    set({ replayState: newState });
+  },
+
   setPlaybackSpeed: (speed) => {
     set((state) => ({
       replayState: { ...state.replayState, playbackSpeed: speed },
@@ -385,7 +397,14 @@ export const useHandHistoryStore = create<HandHistoryStore>((set, get) => ({
   addAnnotation: async (handId, key, note) => {
     const hand = get().hands.find(h => h.id === handId);
     if (!hand) return;
-    const updated = { ...hand, annotations: { ...hand.annotations, [key]: note } };
+    // 空批注视为删除该 key（此前空值被直接忽略，已保存批注无法清除）
+    const annotations = { ...hand.annotations };
+    if (note.trim()) {
+      annotations[key] = note;
+    } else {
+      delete annotations[key];
+    }
+    const updated = { ...hand, annotations };
     try {
       await dbPut([updated]);
       set((state) => ({

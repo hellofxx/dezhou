@@ -25,7 +25,9 @@
     "nextAction": "下一步",
     "nextStreet": "下一街",
     "play": "播放",
-    "pause": "暂停"
+    "pause": "暂停",
+    "noHandLoaded": "尚未加载牌局",
+    "pot": "底池"
   },
   "streets": {
     "preflop": "翻前",
@@ -37,6 +39,7 @@
     "noActions": "无动作"
   },
   "list": {
+    "pageTitle": "牌局历史",
     "tabsHands": "牌局列表",
     "tabsStats": "我的统计",
     "import": "导入",
@@ -67,10 +70,17 @@
     "suggestion": "建议",
     "vpipLow": "偏低，建议 {{range}}%",
     "vpipHigh": "偏高，建议 {{range}}%",
-    "positionFeedback": "你的 {{position}} VPIP {{vpip}}%{{feedback}}"
+    "positionFeedback": "你的 {{position}} VPIP {{vpip}}%{{feedback}}",
+    "byPositionTitle": "按位置的 VPIP / PFR",
+    "colPosition": "位置",
+    "colHands": "手数",
+    "basedOn": "基于 {{count}} 手已分析牌局"
   },
   "annotation": {
-    "export": "导出"
+    "export": "导出",
+    "notes": "批注 - {{street}}",
+    "placeholder": "为{{street}}添加批注...",
+    "save": "保存"
   },
   "replayPage": {
     "notFound": "未找到该牌局",

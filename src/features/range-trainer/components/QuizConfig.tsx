@@ -13,8 +13,21 @@ import {
 import { HelpCircle, Zap, Clock, Hash, Lock } from 'lucide-react';
 import { useProgressStore } from '@/features/progress/store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
+import { getPositionsForPlayerCount } from '@/shared/types/position';
 import { useRangeTrainerStore } from '../store';
-import { SIX_MAX_POSITIONS, ACTION_TYPES, POSITION_UNLOCK_THRESHOLDS, isPositionUnlocked } from '../constants';
+import { ACTION_TYPES, POSITION_UNLOCK_THRESHOLDS, isPositionUnlocked } from '../constants';
+import type { RangePreset } from '../types';
+
+/**
+ * RNG-004 修复：测验位置选项 = 当前人数的有效位置 ∩ 存在预置范围的位置。
+ * 修复前用 SIX_MAX_POSITIONS 硬编码过滤，导致 standard 2/3 人桌显示 6 个
+ * 桌位不存在的位置（UTG/HJ/CO/SB），与 RangeSelector（按人数契约过滤）不一致。
+ */
+export function getQuizPositionOptions(playerCount: number, presets: RangePreset[]): Position[] {
+  return getPositionsForPlayerCount(playerCount).filter((pos) =>
+    presets.some((p) => p.position === pos),
+  );
+}
 
 const TIME_OPTIONS = [
   { value: '0' }, { value: '5' }, { value: '10' },
@@ -76,13 +89,12 @@ export function QuizConfig({
 }: QuizConfigProps) {
   const { t } = useTranslation();
   const presets = useRangeTrainerStore((s) => s.presets);
+  const playerCount = useRangeTrainerStore((s) => s.playerCount);
   const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
-  // 按当前变体 presets 实际存在的组合过滤位置与动作类型
-  const positionOptions: Position[] = SIX_MAX_POSITIONS.filter((pos) =>
-    presets.some((p) => p.position === pos)
-  );
+  // 按当前人数契约 + 变体 presets 实际存在的组合过滤位置与动作类型
+  const positionOptions: Position[] = getQuizPositionOptions(playerCount, presets);
   const actionOptions = ACTION_TYPES.filter((at) =>
     presets.some((p) => p.position === position && p.actionType === at.value)
   );

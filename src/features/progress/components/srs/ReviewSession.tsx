@@ -28,7 +28,7 @@ import { Button } from '@/shared/components/ui/button';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useProgressStore } from '../../store';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
-import { processReview, getTodayReviewItems } from '@/shared/utils/spacedRepetition';
+import { processReview, getTodayReviewItems, FAST_ANSWER_SECONDS } from '@/shared/utils/spacedRepetition';
 
 interface ReviewSessionProps {
   open: boolean;
@@ -53,8 +53,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   gto: 'review.category.gto',
 };
 
-/** SRS 快速作答阈值（5 秒内答对计"快速"质量分），PROG-04 魔法数字命名化 */
-const QUICK_ANSWER_MS = 5000;
+/** SRS 快速作答阈值（5 秒内答对计"快速"质量分）；秒级单源见 shared FAST_ANSWER_SECONDS */
+const QUICK_ANSWER_MS = FAST_ANSWER_SECONDS * 1000;
 
 interface AnswerRecord {
   itemId: string;
@@ -293,9 +293,8 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded ${
-                    CATEGORY_COLORS[currentItem.category] ?? CATEGORY_COLORS.strategy
-                  }`}
+                  className={`text-[10px] px-1.5 py-0.5 rounded ${CATEGORY_COLORS[currentItem.category] ?? CATEGORY_COLORS.strategy
+                    }`}
                 >
                   {t(CATEGORY_LABELS[currentItem.category] ?? 'review.category.strategy')}
                 </span>
@@ -308,8 +307,8 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                   {currentItem.metadata?.front
                     ? t(currentItem.metadata.front, currentItem.metadata.params ?? {})
                     : t('review.defaultFront', {
-                        defaultValue: '请回忆该知识点的关键内容，然后点击"显示答案"自评。',
-                      })}
+                      defaultValue: '请回忆该知识点的关键内容，然后点击"显示答案"自评。',
+                    })}
                 </p>
               </div>
             </div>

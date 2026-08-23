@@ -14,17 +14,20 @@ import type { RangeAction } from '@/shared/types/poker';
 import type { QuizQuestion, QuestionFeedback } from '@/shared/types/quiz';
 
 // 首次微训练题目（从简单到稍难，最后一题必须是最简单的"必对题"）
+// 每题携带稳定 id：QuizCard 动画 key 为 hand+id 复合，相邻同 hand 也能正常切换
 export const DRILL_QUESTIONS: QuizQuestion[] = [
-  { hand: 'AA', position: Position.BTN, correctAction: 'raise', context: 'BTN Open' },
-  { hand: '72o', position: Position.UTG, correctAction: 'fold', context: 'UTG Open' },
-  { hand: 'KK', position: Position.UTG, correctAction: 'raise', context: 'UTG Open' },
+  { id: 'onb-1', hand: 'AA', position: Position.BTN, correctAction: 'raise', context: 'BTN Open' },
+  { id: 'onb-2', hand: '72o', position: Position.UTG, correctAction: 'fold', context: 'UTG Open' },
+  { id: 'onb-3', hand: 'KK', position: Position.UTG, correctAction: 'raise', context: 'UTG Open' },
   // 最后一题：超级简单，确保用户以正确收尾
-  { hand: 'AA', position: Position.CO, correctAction: 'raise', context: 'CO Open' },
+  { id: 'onb-4', hand: 'AA', position: Position.CO, correctAction: 'raise', context: 'CO Open' },
 ];
 
-// 补救题：如果用户最后一题答错，追加这道更简单的题（仅一次）
+// 补救题：如果用户最后一题答错，追加这道更简单的题（仅一次）。
+// QuizCard 动画 key 已复合化（hand+id），补救题与末题同 hand 也能正常切换
 export const RESCUE_QUESTION: QuizQuestion = {
-  hand: 'AA',
+  id: 'onb-rescue',
+  hand: 'QQ',
   position: Position.BTN,
   correctAction: 'raise',
   context: 'BTN Open',

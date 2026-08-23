@@ -36,6 +36,14 @@ function wrongActionFor(s: DrillState): RangeAction {
 }
 
 describe('drillFlow 基础流程', () => {
+  it('全部题目携带稳定且唯一的 id（QuizCard hand+id 复合动画 key 唯一性防回归）', () => {
+    const all = [...DRILL_QUESTIONS, RESCUE_QUESTION];
+    for (const q of all) {
+      expect(q.id).toBeTruthy();
+    }
+    expect(new Set(all.map((q) => q.id)).size).toBe(all.length);
+  });
+
   it('初始状态：4 题原题库、rescueUsed=false、无反馈', () => {
     const s = createDrillState();
     expect(s.questions).toHaveLength(4);

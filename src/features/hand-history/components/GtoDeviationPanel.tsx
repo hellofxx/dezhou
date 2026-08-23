@@ -53,6 +53,9 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
     if (cached) {
       setResult(cached);
       setSummary(getDeviationSummary(cached));
+      // 上一手牌的分析仍在进行时切到已缓存手牌：若不重置 loading，
+      // 旧的 then 回调已被 cancelled 短路，面板将永久停留在 loading 态
+      setLoading(false);
       return;
     }
 

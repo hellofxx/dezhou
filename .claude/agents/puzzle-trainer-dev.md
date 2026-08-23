@@ -2,17 +2,17 @@
 name: puzzle-trainer-dev
 description: 谜题训练模块开发代理，负责 src/features/puzzle-trainer/ 内的所有变更。当涉及谜题三模式、快速训练、冻结卡、谜题生成逻辑、QuickDrill 或连续答题机制时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取谜题数据与组件
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑谜题/UI/组件
+  - Write         # 新建谜题/组件/i18n 文件
+  - DeleteFile    # 删除废弃的谜题数据
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -47,7 +47,7 @@ additionalPrompt: ""
 ## Capabilities
 - 三种模式：Puzzle Rush（限时冲刺）/ Daily Puzzle（日期种子）/ Theme Drill（主题专攻）
 - 日期种子算法 + 选项语义排序（`optionOrder.ts`）+ 独立 store
-- 五级反馈复用 + 快速训练 Best Record 持久化
+- 五级反馈复用
 - 主题分类（10 主题，4 大类）
 
 > 注：SRS 复习队列混合（`composeDailyMix`，progress/utils/dailyTrainingMix.ts）与连续 7 天快速训练奖励冻结卡（`awardStreakFreeze`，progress store）均由 progress 模块持有（见 AGENTS.md §跨模块能力归属登记表）；strategy-academy/QuickDrill 与本模块均为消费方，不持有该逻辑。
@@ -83,7 +83,7 @@ additionalPrompt: ""
 跨模块依赖：
 - src/shared/types/decisionFeedback.ts — 五级反馈类型与 calculateGrade 评级函数
 
-> 注：`composeDailyMix`（progress/utils） / `quickDrillStreak` / `awardStreakFreeze`（progress store）由 progress 模块持有（见 AGENTS.md §跨模块能力归属登记表），本模块与 strategy-academy 均为消费方；`quickDrillBest` 仍由本模块 store 独立持久化。
+> 注：`composeDailyMix`（progress/utils） / `quickDrillStreak` / `awardStreakFreeze` / `quickDrillBest`（含 `submitQuickDrillResult`，progress store）由 progress 模块持有（见 AGENTS.md §跨模块能力归属登记表），本模块与 strategy-academy 均为消费方。
 
 ## Workflows
 1. 添加新主题时：在 types.ts 的 `PuzzleTheme` 添加值 → puzzleBank.ts 添加题目 → PuzzleHome 主题卡片自动渲染
@@ -113,6 +113,31 @@ additionalPrompt: ""
 - **五级反馈复用**：复用 `DecisionFeedback` 与 `GRADE_DISPLAY_CONFIG`，根据 EV 损失自动评级；禁止自定义评级。反馈样式为牌室化：`GRADE_DISPLAY_CONFIG.color` 引用 globals.css `.grade-*` 类，禁止内联 Tailwind 霓虹类（由 `designTokenGuard.test.ts` 守卫）
 - **自适应难度**（可选）：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准）可显示降级提示（puzzle 模式本身有难度递增机制，该提示为辅助）
 
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'puzzle-trainer';
+  target: 'platform-dev' | 'ui-ux-dev' | 'progress-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- 调用 progress store 公开 action 的超时：30s
+- Puzzle Rush 高频场景批处理阈值：连续 5 题合并一次 emotion 更新
+- 日期种子计算失败回退：使用 `Date.now()` 作为 fallback 种子
+- trainingEvents.emit 失败不阻断训练完成流程（fire-and-forget 语义）
+
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
 - [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `puzzle.*`）
@@ -121,7 +146,6 @@ additionalPrompt: ""
 - [ ] 题库出口已应用语义排序（puzzleBank.optionOrder.test.ts 全部通过：全量可解析 / 尺度升序 / 分布守卫）
 - [ ] index.ts barrel 未导出原始 PUZZLE_BANK
 - [ ] 题库短 id 全库唯一（puzzleBank.ids.test.ts 守卫）；若接入 SRS，注册处拼 `puzzle:{theme}:{questionId}` 前缀
-- [ ] submitQuickDrillResult 正确判定破纪录（score > previousBest.bestScore）
 - [ ] 五级反馈复用 calculateGrade（不自定义评级）
 - [ ] 三模式经共享的 `usePuzzleSession` 单处 emit（session 完成时调用）
 - [ ] 会话完成时已调用 recordTrainingDay，每题作答已调用 recordAnswer（消费 progress 公开 action）

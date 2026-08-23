@@ -54,9 +54,9 @@ export function formatHandSummary(hand: HandHistory): string {
   return `#${hand.handNumber} - ${hand.stakes.smallBlind}/${hand.stakes.bigBlind} - ${date} - Winner: ${winner} ($${hand.pot})`;
 }
 
-/** Format date for display */
-export function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleString('zh-CN', {
+/** Format date for display（locale 缺省 zh-CN；调用方传 i18n.language 实现语言跟随） */
+export function formatDate(timestamp: number, locale = 'zh-CN'): string {
+  return new Date(timestamp).toLocaleString(locale, {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

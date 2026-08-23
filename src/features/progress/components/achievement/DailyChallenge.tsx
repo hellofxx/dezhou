@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/shared/components/ui/card';
 import { Trophy, Flame, ArrowRight, CheckCircle2, Circle, Puzzle } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 import { useProgressStore } from '../../store';
+import type { TrainingRecord } from '../../types';
 // 今日任务卡：合并每日挑战（训练器引导）与每日谜题入口；streak 统一读 progress store
 // 依赖倒置：每日谜题完成状态经 achievementRegistry 查询，日期 key 复用 shared toLocalDateKey
 import { getAchievementSources } from '@/shared/stores/achievementRegistry';
@@ -26,6 +27,27 @@ function getDayOfYear(date: Date): number {
   const start = new Date(date.getFullYear(), 0, 0);
   const diff = date.getTime() - start.getTime();
   return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+/**
+ * 判定今日挑战是否达成（口径与文案承诺一致）：
+ * 「完成 count 题且正确率 > accuracy%」按今日该模块累计答题数与加权正确率计算。
+ * 修复：原判定只要求今日存在该模块任意记录，答 1 题即虚标"已完成"。
+ */
+export function isDailyChallengeCompleted(
+  records: TrainingRecord[],
+  moduleName: string,
+  dateStr: string,
+  target: { count: number; accuracy?: number },
+): boolean {
+  const todaysRecords = records.filter(
+    (r) => toLocalDateKey(r.createdAt) === dateStr && r.module === moduleName,
+  );
+  const totalQuestions = todaysRecords.reduce((sum, r) => sum + r.result.totalQuestions, 0);
+  if (totalQuestions < target.count) return false;
+  if (target.accuracy === undefined) return true;
+  const correct = todaysRecords.reduce((sum, r) => sum + r.result.correctAnswers, 0);
+  return totalQuestions > 0 && correct / totalQuestions > target.accuracy / 100;
 }
 
 /** 基于日期种子生成每日挑战 */
@@ -70,14 +92,12 @@ export default function DailyChallenge() {
   const dayOfYear = getDayOfYear(today);
   const challenge = useMemo(() => generateDailyChallenge(dateStr, dayOfYear), [dateStr, dayOfYear]);
 
-  // Check if today's challenge is completed
+  // Check if today's challenge is completed（口径：今日累计题数与加权正确率达成为准）
   const todayCompleted = useMemo(() => {
     const types: string[] = ['range-trainer', 'pot-odds', 'gto-simulator'];
-    const expectedModule = types[dayOfYear % 3];
-    return records.some((r) => {
-      return toLocalDateKey(r.createdAt) === dateStr && r.module === expectedModule;
-    });
-  }, [records, dateStr, dayOfYear]);
+    const expectedModule = types[dayOfYear % 3]!;
+    return isDailyChallengeCompleted(records, expectedModule, dateStr, challenge.target);
+  }, [records, dateStr, dayOfYear, challenge]);
 
   const descriptionKey = challenge.type === 'range'
     ? 'dailyChallenge.rangeChallenge'

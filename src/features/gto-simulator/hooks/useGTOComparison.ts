@@ -86,61 +86,10 @@ export function getEasyGTOScenario(index: number = 0): Scenario {
 }
 
 /**
- * 根据 previousActions 确定 preflop spot key。
- *
- * 仅返回 GTO 频率表中实际存在的 key；未覆盖场景返回 null，由调用方提示用户
- * "该场景暂未覆盖"，避免错误地降级为 open 场景误导初学者。
- *
- * 覆盖场景（与 preflop-ranges.json 中的 11 个 spot 一致）：
- *   - 0 raise: `${pos}_open`（utg/hj/co/btn/sb open；BB 无 open 场景，返回 null）
- *   - 1 raise + hero=BB: `bb_vs_${opener}_open`（opener ∈ {hj, co, btn}；utg 未覆盖）
- *   - 1 raise + hero=SB: `sb_vs_${opener}_open`（仅 sb_vs_bb_open 命中，6-max 中罕见）
- *   - ≥2 raise: `${pos}_vs_${lastRaiser}_3bet`（仅 btn_vs_co_3bet / co_vs_hj_3bet 命中）
- *
- * 未覆盖场景示例（返回 null）：
- *   - HJ/CO/BTN 冷 call（如 UTG open → HJ 行动）：GTO 表无 `hj_vs_utg_open` 等 key
- *   - SB vs UTG/HJ/CO/BTN open：GTO 表无 `sb_vs_utg_open` 等 key
- *   - BB vs UTG open：GTO 表无 `bb_vs_utg_open`
- *   - 大多数 3bet 场景：仅 btn_vs_co_3bet、co_vs_hj_3bet 命中
- */
-function resolveSpotKey(position: Position, previousActions?: PreviousAction[]): string | null {
-  const pos = position.toLowerCase();
-  const data = (preflopData as PreflopData)['6max_100bb_preflop'];
-  if (!data) return null;
-
-  // 没有任何动作或全是 fold：hero 是 open raiser
-  const raises = previousActions?.filter((a) => a.action === ActionType.Raise) ?? [];
-  if (raises.length === 0) {
-    const key = `${pos}_open`;
-    return data[key] ? key : null;
-  }
-
-  // 面对一个 open（raises.length === 1）：hero 是跟注/3bet 决策者
-  if (raises.length === 1) {
-    const opener = raises[0]!;
-    const openerPos = opener.position.toLowerCase();
-    // BB 防御：bb_vs_${opener}_open
-    if (pos === 'bb') {
-      const key = `bb_vs_${openerPos}_open`;
-      return data[key] ? key : null;
-    }
-    // SB 防御：sb_vs_${opener}_open（GTO 表仅覆盖 sb_vs_bb_open，6-max 中罕见）
-    if (pos === 'sb') {
-      const key = `sb_vs_${openerPos}_open`;
-      return data[key] ? key : null;
-    }
-    // HJ/CO/BTN 冷 call 场景：GTO 表未覆盖，返回 null 由调用方提示
-    return null;
-  }
-
-  // 面对 3bet 及以上（raises.length >= 2）：hero 是 4bet/call/fold 决策者
-  const lastRaiser = raises[raises.length - 1]!;
-  const key = `${pos}_vs_${lastRaiser.position.toLowerCase()}_3bet`;
-  return data[key] ? key : null;
-}
-
-/**
  * GTO策略对比hook
+ *
+ * spot key 解析统一复用 utils/spotKey.ts 的 resolveSpotKey（模块内唯一事实源），
+ * 消除旧本地副本与 P1C-25 修复（hero 自身 open 计入 raises）之间的逻辑漂移。
  */
 export function useGTOComparison(
   heroHand: [Card, Card] | null,
@@ -156,7 +105,7 @@ export function useGTOComparison(
   const gtoStrategy = useMemo((): HandStrategy | null => {
     if (!position || !handNotation) return null;
 
-    const spotKey = resolveSpotKey(position, previousActions);
+    const spotKey = resolveSpotKeyUtil(position, previousActions);
     if (!spotKey) return null; // 场景未覆盖，由 UI 提示用户
 
     const data = (preflopData as PreflopData)['6max_100bb_preflop'];
@@ -172,7 +121,7 @@ export function useGTOComparison(
   const allStrategies = useMemo((): Record<HandNotation, HandStrategy> | null => {
     if (!position) return null;
 
-    const spotKey = resolveSpotKey(position, previousActions);
+    const spotKey = resolveSpotKeyUtil(position, previousActions);
     if (!spotKey) return null; // 场景未覆盖
 
     const data = (preflopData as PreflopData)['6max_100bb_preflop'];

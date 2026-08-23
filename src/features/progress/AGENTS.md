@@ -10,7 +10,7 @@
 
 ## 硬约束
 
-- 跨模块状态禁止分散到各 feature store（唯一例外：puzzle-trainer 的 `quickDrillBest` 独立持久化）
+- 跨模块状态禁止分散到各 feature store（`quickDrillBest` / `quickDrillStreak` 等 QuickDrill 状态亦集中于本 store）
 - "记录完成" action 必须幂等：`recordTrainingDay()` / `recordQuickDrillCompletion()` 同日均不重复计数（puzzle-trainer 的每日谜题标记 `markDailyCompleted()` 归属其自身 store，同样须幂等）
 - 自适应难度唯一入口：`shouldDownshiftDifficulty()`（无参调用），禁止各模块自行判定
 - 数据迁移：递增 version + 编写 migrate（防御性合并默认值）+ CHANGELOG 记录，老用户数据零丢失

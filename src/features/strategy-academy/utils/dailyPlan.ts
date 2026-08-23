@@ -26,10 +26,10 @@ const ABILITY_LESSON_MAP: Record<string, string[]> = {
  * 本函数返回单一焦点计划（一个 focusArea + 一门新课程 + 复习 + 练习），
  * 用于 AcademyHome 的 DailyPlanCard。
  *
- * 与 progress/utils/dailyTrainingPlan.ts 的 generateDailyPlan 区别：
+ * 与 progress/utils/dailyTrainingPlan.ts 的 generateCrossModuleDailyPlan 区别：
  *   - 本函数：学院内焦点计划，DailyPlan 类型，推荐 1 门新课 + 复习 + 练习
  *   - 另一函数：跨模块推荐列表，DailyRecommendation[] 类型，覆盖 range/odds/gto 多模块
- * 两者服务于不同 UI 场景，非重复实现。
+ * 两者服务于不同 UI 场景，非重复实现（命名已区分，禁止混用）。
  */
 export function generateDailyPlan(
   completedLessons: string[],

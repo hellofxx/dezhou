@@ -10,6 +10,8 @@ export interface QuizQuestion {
   position: Position;
   context?: string;
   correctAction: RangeAction;
+  /** 题目稳定标识：QuizCard 动画 key 为 hand+id 复合，相邻同 hand 题目也能正常切换 */
+  id?: string;
 }
 
 /** 单题答题反馈 */

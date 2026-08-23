@@ -3,39 +3,7 @@ import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HoleCards } from '@/shared/types/poker';
-import { parseCardString, parseBoardCards, parseAmount } from './common';
-
-// Position assignment for 6-max and full ring
-function assignPositions(playerCount: number, buttonSeat: number, seats: number[]): Position[] {
-  // Order: starting from left of button (SB, BB, UTG...)
-  const positions6: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.HJ, Position.CO];
-  // 9-max: BTN, SB, BB, UTG, UTG+1, MP, MP+1(LJ), HJ, CO
-  const positions9: Position[] = [
-    Position.BTN, Position.SB, Position.BB,
-    Position.UTG, Position.UTG1, Position.MP, Position.MP, Position.HJ, Position.CO
-  ];
-
-  // Build ordered list starting from button
-  const ordered = [...seats];
-  const btnIdx = ordered.indexOf(buttonSeat);
-  if (btnIdx >= 0) {
-    const reordered = [...ordered.slice(btnIdx), ...ordered.slice(0, btnIdx)];
-    ordered.length = 0;
-    ordered.push(...reordered);
-  }
-
-  const posMap = new Map<number, Position>();
-  const posList = playerCount <= 6 ? positions6 : positions9;
-
-  // BTN is first in ordered (seat at button)
-  // Then SB, BB, UTG... follow
-  for (let i = 0; i < ordered.length; i++) {
-    const pos = posList[i % posList.length] ?? Position.MP;
-    posMap.set(ordered[i]!, pos);
-  }
-
-  return seats.map(s => posMap.get(s) ?? Position.MP);
-}
+import { parseCardString, parseBoardCards, parseAmount, assignPositions } from './common';
 
 function parseActionLine(line: string, playerNameToIndex: Map<string, number>): PlayerAction | null {
   // "PlayerName: folds"
@@ -224,7 +192,9 @@ export function parsePokerStarsHand(text: string): HandHistory {
       continue;
     }
 
-    if (line === '*** SHOWDOWN ***') {
+    // 真实 PokerStars 格式为 "*** SHOW DOWN ***"（两个词）；此前仅匹配 "SHOWDOWN" 导致
+    // showdown 段从未激活、shows/collected 行全部丢失
+    if (/^\*{3}\s*SHOW\s*DOWN\s*\*{3}$/i.test(line)) {
       currentStreet = 'showdown';
       continue;
     }
@@ -263,8 +233,9 @@ export function parsePokerStarsHand(text: string): HandHistory {
       const action = parseActionLine(line, playerNameToIndex);
       if (action) riverActions.push(action);
     } else if (currentStreet === 'showdown') {
-      // "Player4: shows [As Qd] (a pair of Queens)"
-      const showMatch = line.match(/^(.+?):\s+shows\s+\[([^\]]+)\]/);
+      // "Player4: shows [As Qd] (a pair of Queens)" 或 "Seat 2: Player4 shows [As Qd]"（Seat 前缀格式）
+      let showMatch = line.match(/^(.+?):\s+shows\s+\[([^\]]+)\]/);
+      if (!showMatch) showMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+shows\s+\[([^\]]+)\]/);
       if (showMatch) {
         const name = showMatch[1]!.trim();
         const idx = playerNameToIndex.get(name);
@@ -275,8 +246,8 @@ export function parsePokerStarsHand(text: string): HandHistory {
           }
         }
       }
-      // "Player4 collected $45 from pot"
-      const collectMatch = line.match(/^(.+?)\s+collected\s+\$?([\d,.]+)\s+from\s+pot/);
+      // "Player4 collected $45 from pot"（可带 "Seat N: " 前缀）
+      const collectMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+\$?([\d,.]+)\s+from\s+pot/);
       if (collectMatch) {
         const name = collectMatch[1]!.trim();
         const idx = playerNameToIndex.get(name);
@@ -289,22 +260,44 @@ export function parsePokerStarsHand(text: string): HandHistory {
       // Total pot
       const potMatch = line.match(/Total pot\s+\$?([\d,.]+)/);
       if (potMatch) pot = parseAmount(potMatch[1]!);
+      // 收池局（bet&fold，无 SHOW DOWN 段）的 collected 行出现在 SUMMARY：
+      // 此前仅在 showdown 段解析导致大部分手牌 winner 丢失
+      const collectMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+\$?([\d,.]+)/);
+      if (collectMatch) {
+        const name = collectMatch[1]!.trim();
+        const idx = playerNameToIndex.get(name);
+        if (idx !== undefined) {
+          winnerId = idx;
+          winnerAmount = parseAmount(collectMatch[2]!);
+        }
+      }
     }
   }
 
   // Set hero cards on the player
+  let heroPlayerId: number | undefined;
   if (heroName) {
     const heroIdx = playerNameToIndex.get(heroName);
-    if (heroIdx !== undefined && heroCards) {
-      players[heroIdx]!.holeCards = heroCards;
+    if (heroIdx !== undefined) {
+      heroPlayerId = heroIdx;
+      if (heroCards) {
+        players[heroIdx]!.holeCards = heroCards;
+      }
     }
   }
 
-  // Try to extract winning hand description
-  const showdownLine = lines.find(l => l.match(/shows.*\((.+)\)/));
-  if (showdownLine) {
-    const handMatch = showdownLine.match(/\(([^)]+)\)/);
-    if (handMatch) winnerHand = handMatch[1]!.trim();
+  // Try to extract winning hand description（优先赢家的 shows 行，避免取到第一个摊牌输家）
+  if (winnerAmount > 0) {
+    const winnerName = players[winnerId]?.name;
+    const showsRe = /shows.*\(([^)]+)\)/;
+    const winnerShowLine = winnerName !== undefined
+      ? lines.find(l => l.includes(winnerName) && showsRe.test(l))
+      : undefined;
+    const showLine = winnerShowLine ?? lines.find(l => showsRe.test(l));
+    if (showLine) {
+      const handMatch = showLine.match(/\(([^)]+)\)/);
+      if (handMatch) winnerHand = handMatch[1]!.trim();
+    }
   }
 
   if (!pot) pot = winnerAmount;
@@ -328,6 +321,7 @@ export function parsePokerStarsHand(text: string): HandHistory {
     },
     pot,
     winner: winnerAmount > 0 ? { playerId: winnerId, amount: winnerAmount, hand: winnerHand } : undefined,
+    heroPlayerId,
     annotations: {},
   };
 }

@@ -3,8 +3,8 @@
  * Day 2-3: 游戏变体支持扩展
  *
  * 机械校验固化为常驻门禁：ID 全局唯一性（与标准系列隔离）、T1-T9 全覆盖、
- * 每个 Level 至少 1 个章节、ID 格式正确性（t{level}{suffix}-）。
- * 骨架阶段允许 content/quiz 为空，完整内容阶段由各变体专属守卫接管。
+ * 每个 Level 至少 1 个章节、ID 格式正确性（t{level}{suffix}-），
+ * 以及完整内容阶段校验（quiz 判分合法性 / content 非空，对齐标准系列守卫口径）。
  */
 import { describe, it, expect } from 'vitest';
 import { shortDeckLevels, headsUpLevels } from './index';
@@ -115,6 +115,57 @@ describe('variant theory integrity: 章节结构合法性', () => {
     for (const levels of Object.values(VARIANTS)) {
       for (const l of levels) {
         if (l.tier !== tierOf(l.level)) bad.push(`${l.id}: tier=${l.tier}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+});
+
+describe('variant theory integrity: 完整内容阶段校验（对齐标准系列守卫口径）', () => {
+  // 骨架阶段注释承诺"完整内容阶段由各变体专属守卫接管"——
+  // 本组断言即该接管：与 data/theoryIntegrity.test.ts 的判分校验同口径。
+  const allVariantChapters: TheoryChapter[] = Object.values(VARIANTS).flatMap((levels) =>
+    levels.flatMap((l) => l.chapters),
+  );
+
+  it('quiz id 全局唯一且以所属章节 id 为前缀', () => {
+    const seen = new Set<string>();
+    const bad: string[] = [];
+    for (const chapter of allVariantChapters) {
+      for (const q of chapter.quiz) {
+        if (seen.has(q.id)) bad.push(`${q.id}: 重复`);
+        seen.add(q.id);
+        if (!q.id.startsWith(`${chapter.id}-`)) bad.push(`${q.id}: 前缀不符`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('quiz：correctIndex 界内、选项 ≥2 且无重复、题干/解析非空、每章 3-5 题', () => {
+    const bad: string[] = [];
+    for (const chapter of allVariantChapters) {
+      if (chapter.quiz.length < 3 || chapter.quiz.length > 5) {
+        bad.push(`${chapter.id}: 题数=${chapter.quiz.length}`);
+      }
+      for (const q of chapter.quiz) {
+        if (q.options.length < 2) bad.push(`${q.id}: 选项不足`);
+        if (new Set(q.options).size !== q.options.length) bad.push(`${q.id}: 选项重复`);
+        if (q.correctIndex < 0 || q.correctIndex >= q.options.length) bad.push(`${q.id}: correctIndex 越界`);
+        if (!q.explanation.trim()) bad.push(`${q.id}: explanation 为空`);
+        if (!q.question.trim()) bad.push(`${q.id}: question 为空`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('content 非空且无空段落，objectives 不为空数组/无空条目', () => {
+    const bad: string[] = [];
+    for (const chapter of allVariantChapters) {
+      if (chapter.content.length === 0) bad.push(`${chapter.id}: content 为空`);
+      if (chapter.content.some((s) => !s.content.trim())) bad.push(`${chapter.id}: 存在空段落`);
+      if (chapter.objectives !== undefined) {
+        if (chapter.objectives.length === 0) bad.push(`${chapter.id}: objectives 为空数组`);
+        if (chapter.objectives.some((o) => !o.trim())) bad.push(`${chapter.id}: objectives 存在空条目`);
       }
     }
     expect(bad).toEqual([]);

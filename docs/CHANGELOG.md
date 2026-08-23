@@ -6,6 +6,37 @@
 
 ---
 
+## [Unreleased] - 2026-08-23
+
+### 全模块 bug 排查行动（shared 层 + 10 模块全量扫描，跨模块问题集中分诊闭环）
+
+> 依据 module-bug-sweep-plan 对 shared 层与全部 feature 模块执行系统化 bug 排查（基线 98 文件 659 用例全绿），模块内问题由各模块代理就近修复，跨模块问题统一登记于 `.trae/specs/module-bug-sweep-plan/reports/cross-module-issues.md`（XMOD-001~012）并由 platform-dev 集中分诊：4 项当轮修复、5 项转待办、3 项待产品决策，登记表无「待分诊」遗留。
+
+- **当轮修复 4 项（platform-dev，均含回归测试/守卫验证）**：LiveDot `aria-label="live"` 硬编码改 i18n（新增 `common.ui.live` 双语 key，zh 实时 / en Live）；`renderMentorFeedback` 非法 grade 防御回退 'wrong' 档模板（mentorStyles 新增 2 个脏数据回归用例，消除 `t(undefined).replace` TypeError）；quickDrillBest 文档漂移修正（根 AGENTS.md 两处 + progress/AGENTS.md 一处，对齐「已迁至 progress store」代码事实）；QuizCard 动画 key 复合化（QuizQuestion 新增可选 `id`，key 改 hand+id 复合，onboarding 首训 5 题接入稳定 id，解除「相邻题 hand 不得重复」隐含约束）。
+- **分诊去向**：XMOD-001/002/006/007/008 转待办（Position 枚举扩展 / getPlayerCountOptions 单一事实源收敛 / preset 数据补充 / shared rangeParser 健壮性 / isDigitBearingOptionSet 重复实现上收，各附建议责任代理与修复方向，见登记表指派方列）；XMOD-009/010/012 待产品决策（2 人桌位置解锁阈值语义 / onboarding 完成当日进度展示口径 / IndexedDB 牌局数据是否纳入备份链路）。
+- **验证**：`node node_modules/typescript/bin/tsc --noEmit` 与 `pnpm lint` exit 0；4 项修复相关测试路径过滤全绿（mentorStyles 5 / drillFlow 10 / localeParity 33 / staticKeyGuard 2 / FirstDrillStep 2 / range-trainer 41，共 93 用例）；全量 `pnpm verify` 由主协调方统一验收。
+
+---
+
+## [Unreleased] - 2026-08-22
+
+### Agent 编排与文档体系优化（子代理编排逻辑全面优化 + AGENTS.md / AI_GUIDE.md 去冗余）
+
+> 对子代理编排逻辑与两份核心文档（AGENTS.md / docs/AI_GUIDE.md）进行系统优化，消除冗余、强化单点事实源、修复资产层缺陷。
+
+- **model 字段引用修复**：12 个 feature agent frontmatter 的 `[DeepSeek-V4-Flash](dfmodel)` / `[Qwen3.8-Max](qmodel_38max)` / `[Qwen3.7-Plus](qmodel)` 断裂链接 → 干净模型标识（better-harness 资产基线 custom-agent-missing-local-reference 归零）。
+- **tools 字段精细化**：12 个 agent 的 tools 列表逐项添加 `# 用途注释`（说明每项工具的读取/编辑/新建/删除场景）；help-center-dev 移除 DeleteFile 收窄为只读复核型（与 ui-ux-dev 同档）；`scripts/validate-agent-tools.ts` 支持行内注释解析并补充 help-center 收窄声明（12 agent 全合规）。
+- **并行编排工作流**（platform-dev）：新增 Orchestration Workflows 章节——跨模块变更并行流水线（mermaid 图）、并行分支分配规则、失败处理与分级重试策略（typecheck/lint 重试 1 次、test 重试 2 次）、超时控制表、并行验证策略（PowerShell Start-Job 三路并行）。
+- **ReviewRequest 协作契约**：10 个 feature agent 统一新增 `## Orchestration` 章节（ReviewRequest 接口 + 模块特定超时/重试/失败隔离策略）。
+- **五大系统批处理设计提案**（progress-dev）：新增 Batch Processing Optimization 设计指引（标注为未实现设计提案，`shared/utils/trainingBatch.ts` 尚未创建）——Emotion 每 5 题合并 / ELO 每 3 题合并 / SRS session 末批量提交 / 失败隔离（连续 3 次失败回退单步模式）。
+- **verify 并行变体**：package.json 新增 `verify:parallel`（`scripts/parallel-verify.ps1`，三路 Start-Job 并行，exit code 在 Job 内经 `$LASTEXITCODE` 捕获 + 分级重试 + 超时控制 300s/300s/900s）；`verify` 保持串行短路组合不变（唯一事实源仍为 package.json）。
+- **AGENTS.md 去冗余**：① 编码规范（摘要）压缩为一行索引（指向 AI_GUIDE.md 与 §子代理共享基线条款 §全局约束）；② 标准路径步骤 3/4 的测试后缀与 verify 描述改为引用（消除与 §质量门禁的重复）；③ 关键约束补充 progress 设计内引用例外 + ALLOWED_CROSS_IMPORTS 当前快照；④ 工具权限分配补充 help-center 收窄声明与当前收窄清单。
+- **AI_GUIDE.md 去冗余**：① persist version 表加注「name 仅作快速索引，不替代代码事实源」；② 删除硬编码版本号 v1.3.2（设计契约权威源改为「以其当前版本为准」）。
+- **ui-ux-dev 反霓虹约束去重**：Color System 反霓虹硬约束改为引用 AI_GUIDE.md 单源；Constraints 中删除与 Color System 重复的纯黑/纯白/霓虹约束行。
+- **验证**：`node scripts/validate-agent-tools.ts` 12 agent 全合规；`pnpm verify:parallel` 三路门禁全过（typecheck / lint / test 3/3，83 个测试文件 561 个测试全绿，40.2s）。期间修复了本地 node_modules 大面积损坏（expect-type 缺 overloads.js、framer-motion 包本体与 50 处 react peer 链接缺失，经隔离旧目录全新 `pnpm install` 重建）。
+
+---
+
 ## [Unreleased] - 2026-08-14
 
 ### elo 兼容层退役收尾（消费方迁移 + 内存镜像移除，progress persist v14）

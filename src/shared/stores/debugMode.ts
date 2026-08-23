@@ -6,10 +6,11 @@ import { persist } from 'zustand/middleware';
  *
  * 在设置页「开发者选项」输入激活码后 `unlockAll` 置真，全局解除以下门禁：
  *   - 策略学院 Level 解锁（isLevelUnlocked / isLevelEntryUnlocked）
+ *   - 策略学院本土课节点解锁（ConceptGraph isLocalLessonUnlocked）
  *   - 理论学院 Level 解锁与章节 URL 直达门禁（isTheoryLevelUnlocked / TheoryChapterView）
- *   - range-trainer 位置渐进解锁（RangeSelector）
+ *   - range-trainer 位置渐进解锁（RangeSelector / QuizConfig）
  *   - 学习轨道前置（LearningTracksView）
- *   - 课程 URL 直达门禁（CourseView）
+ *   - 课程 URL 直达门禁（CourseView 本土课与课程级门禁）
  *   - 每日题量上限（SessionLimitGuard）
  *
  * 状态独立持久化于自身 store，不并入 progress store（避免 persist 形状/版本连带变更）。

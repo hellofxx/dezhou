@@ -4,14 +4,11 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
-import { useAcademyStore } from '../store';
+import { useAcademyStore, REQUIRED_ACCURACY } from '../store';
 import { LEVELS } from '../data/courses';
 // P1E-09: 题目集构建抽出为种子化纯函数（重试重置种子即重洗）
 import { buildCertificationExam } from '../utils/certificationExam';
 import { resolveQuizQuestion } from '../utils/contentKeys';
-
-/** 认证通过基准正确率（%），与 store 自适应算法（70%-84%）的基准一致；ACAD-04 */
-const BASE_REQUIRED_ACCURACY = 80;
 
 export default function LevelCertification() {
   const { t } = useTranslation();
@@ -19,6 +16,9 @@ export default function LevelCertification() {
   const navigate = useNavigate();
   const { certifications, attemptCertification, progress } = useAcademyStore();
   const level = parseInt(levelParam ?? '1', 10);
+  // 认证有效态判定复用 store 口径（含 validUntil 过期校验），与成就系统保持一致
+  // （组件旧实现只查 certifiedAt，认证过期后仍显示"已通过"）
+  const isCertified = useAcademyStore((s) => s.isCertified(level));
   // 审计 1.2：合并同 level 的全部条目（如 Level 4 = 4A + 4B），题池与进度均按合并口径
   const levelEntries = useMemo(() => LEVELS.filter((l) => l.level === level), [level]);
   const mergedLessons = useMemo(() => levelEntries.flatMap((e) => e.lessons), [levelEntries]);
@@ -34,10 +34,9 @@ export default function LevelCertification() {
   const [sessionSeed, setSessionSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
 
   const certification = certifications[level];
-  const isCertified = !!certification?.certifiedAt;
-  // ACAD-04 修复：通过标准与 store 的 attemptCertification 自适应 requiredAccuracy 对齐。
-  // 已有认证记录时读取其阈值；首次尝试用基准 80%（与 store 动态算法 70%-84% 的基准一致）。
-  const requiredAccuracy = certification?.requiredAccuracy ?? BASE_REQUIRED_ACCURACY;
+  // ACAD-04 修复（补齐）：通过标准与 store 的 attemptCertification 判定共用
+  // REQUIRED_ACCURACY 单一事实源（旧实现组件基准 80% vs store 动态 70%-71.4% 双口径不一致）。
+  const requiredAccuracy = certification?.requiredAccuracy ?? REQUIRED_ACCURACY;
 
   // 从该级别全部条目的所有课程中收集测验题（种子化洗牌取最多 20 题 + 选项重排）
   // 渲染层 key 覆盖：先解析各课 quiz 文案（key 缺失回退数据层中文），再进入种子化构建

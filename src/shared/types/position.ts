@@ -22,6 +22,8 @@ export function getPositionsForPlayerCount(count: number): Position[] {
       return [Position.BTN, Position.SB, Position.BB];
     case 4: // 4-Max
       return [Position.BTN, Position.CO, Position.SB, Position.BB];
+    case 5: // 5-Max（6-Max 去掉 UTG：HJ 为最早行动位）
+      return [Position.HJ, Position.CO, Position.BTN, Position.SB, Position.BB];
     case 6: // 6-Max
       return [Position.UTG, Position.HJ, Position.CO, Position.BTN, Position.SB, Position.BB];
     case 9: // Full Ring

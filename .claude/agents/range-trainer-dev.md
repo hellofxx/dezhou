@@ -2,17 +2,17 @@
 name: range-trainer-dev
 description: 范围训练模块开发代理，负责 src/features/range-trainer/ 内的所有变更。当涉及范围解析、13×13 范围网格、位置训练、范围测验、翻前范围或范围可视化组件时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取范围数据与组件代码
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑范围/测验/组件
+  - Write         # 新建组件/数据/i18n 文件
+  - DeleteFile    # 删除废弃的范围数据
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -98,6 +98,31 @@ additionalPrompt: ""
 - **范围嵌套关系**：预置范围必须满足位置嵌套关系 UTG ⊂ HJ ⊂ CO ⊂ BTN（Open Raise 场景）。修改任一位置范围时必须验证嵌套关系不被破坏。
 - **范围与 GTO 频率表一致性**：`constants.ts` 中的预置范围必须与 `gto-simulator/data/preflop-ranges.json` 一致，以 JSON 为权威数据源。
 - **答题按钮色阶**：`QuizCard` 的 fold/call/raise 为三平权选项，须三色相并立且都明显浮于呢面：fold=陶土红透底+红字+红边、call=胡桃木不透明实色 `--walnut-raised`+象牙字、raise=黄铜渐变；不套「一亮 CTA+两沉底」CTA 色阶（否则暗按钮糊在一起）。反馈样式与 hex 合规由 `designTokenGuard.test.ts` 守卫，禁止 Tailwind 霓虹类。
+
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'range-trainer';
+  target: 'platform-dev' | 'ui-ux-dev' | 'progress-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- 调用 progress store 公开 action 的超时：30s
+- 答题三同步（ELO/SRS/Emotion）的最大延迟：单次答题 ≤500ms
+- 末题补救机制失败回退：rescueUsed 标志保证仅触发一次，不重试
+- trainingEvents.emit 失败不阻断训练完成流程（fire-and-forget 语义）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

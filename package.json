@@ -11,7 +11,8 @@
     "lint": "eslint src",
     "test": "vitest run",
     "size:check": "node scripts/check-bundle-size.mjs",
-    "verify": "pnpm typecheck && pnpm lint && pnpm test"
+    "verify": "pnpm typecheck && pnpm lint && pnpm test",
+    "verify:parallel": "pwsh -NoProfile -File scripts/parallel-verify.ps1"
   },
   "keywords": [],
   "author": "",

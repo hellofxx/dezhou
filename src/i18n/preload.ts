@@ -6,6 +6,7 @@
 
 import i18n from './config';
 import {
+  CORE_MODULES,
   FEATURE_GROUPS,
   loadModule,
   type I18nLanguage,
@@ -16,6 +17,13 @@ import {
 const loadedKeys = new Set<string>();
 /** 任意语言下请求过的模块 key（语言切换时用于补加载新语言） */
 const touchedKeys = new Set<I18nModuleKey>();
+/**
+ * academy-course 内部课程文件集合标记（不在 I18nModuleKey 枚举中，
+ * 由 loadAcademyCourses 整批加载，语言切换补加载时经 preloadTouched 特殊分流）
+ */
+const COURSE_BUNDLE_KEY = 'academy-course' as unknown as I18nModuleKey;
+/** academy-course 加载 Promise 缓存（in-flight 复用：并发调用共享同一加载，完成后幂等返回） */
+const courseLoadPromises = new Map<I18nLanguage, Promise<void>>();
 
 function normalizeLanguage(lng: string | undefined): I18nLanguage {
   return lng === 'en' ? 'en' : 'zh';
@@ -23,6 +31,14 @@ function normalizeLanguage(lng: string | undefined): I18nLanguage {
 
 function bundleId(lng: I18nLanguage, key: I18nModuleKey): string {
   return `${lng}:${key}`;
+}
+
+// core 模块由 config.ts 静态注入双语，标记为已加载使 preloadI18n 真正幂等跳过
+// （否则 FEATURE_GROUPS 引用 core 的路由每次导航都重复 addResourceBundle，触发全局重渲染事件）
+for (const lng of ['zh', 'en'] as const) {
+  for (const key of CORE_MODULES) {
+    loadedKeys.add(bundleId(lng, key));
+  }
 }
 
 async function loadOne(lng: I18nLanguage, key: I18nModuleKey): Promise<void> {
@@ -96,24 +112,37 @@ async function mergeAcademyCourses(
 export async function preloadFeature(group: keyof typeof FEATURE_GROUPS): Promise<void> {
   // P0-02: /academy/lesson/:lessonId 需要额外加载 academy-course 子模块
   if (group === '/academy/lesson/:lessonId') {
-    await loadAcademyCourses(i18n.language as I18nLanguage);
+    await loadAcademyCourses(normalizeLanguage(i18n.language));
   }
   return preloadI18n(FEATURE_GROUPS[group]);
 }
 
 /**
  * 动态加载并合并 academy-course 所有课程文案到 academy.lessonContent.* 命名空间
- * 调用时机：首次访问 /academy/lesson/:lessonId 路由时（preloadFeature 中触发）
+ * 调用时机：首次访问 /academy/lesson/:lessonId 路由时（preloadFeature 中触发）；
+ * 语言切换时由 preloadTouched 分流补加载目标语言。
+ * 幂等：同语言并发/重复调用共享同一 in-flight Promise，失败清除缓存允许重试。
  */
-export async function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
+export function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
+  const inflight = courseLoadPromises.get(lng);
+  if (inflight) return inflight;
+  const task = doLoadAcademyCourses(lng).catch((err: unknown) => {
+    // 失败清除缓存，允许下次重试
+    courseLoadPromises.delete(lng);
+    throw err;
+  });
+  courseLoadPromises.set(lng, task);
+  return task;
+}
+
+async function doLoadAcademyCourses(lng: I18nLanguage): Promise<void> {
   try {
     const courseModules = lng === 'zh'
-      ? await import.meta.glob('./locales/zh/academy-course/*.json', { import: 'default' })
-      : await import.meta.glob('./locales/en/academy-course/*.json', { import: 'default' });
-    
-    // 将 academy-course 标记为已触及，确保语言切换时补加载
-    // 注意：academy-course 是内部课程文件集合，不在 I18nModuleKey 枚举中，用 (key as unknown as I18nModuleKey)
-    touchedKeys.add('academy-course' as unknown as I18nModuleKey);
+      ? import.meta.glob('./locales/zh/academy-course/*.json', { import: 'default' })
+      : import.meta.glob('./locales/en/academy-course/*.json', { import: 'default' });
+
+    // 将 academy-course 标记为已触及，语言切换时经 preloadTouched 分流补加载
+    touchedKeys.add(COURSE_BUNDLE_KEY);
     // glob 返回类型为 Record<string, () => Promise<unknown>>，需转换为 content 对象
     // 关键修复：保持原始嵌套结构，不要用 Object.assign 平铺顶层 key
     const contents: Record<string, unknown> = {};
@@ -124,7 +153,7 @@ export async function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
       const filename = filePath.split('/').pop()?.replace('.json', '') || 'unknown';
       contents[filename] = content;
     }
-    
+
     const merged = await mergeAcademyCourses(
       {},
       contents as unknown as Record<string, Record<string, unknown>>
@@ -137,10 +166,24 @@ export async function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
   }
 }
 
+/**
+ * 语言切换补加载：普通模块走 preloadI18n（loadModule 注册表）；
+ * academy-course 集合不在注册表中，须整批走 loadAcademyCourses，否则静默漏加载
+ * （切换后课程正文滞留 fallback 语言）。
+ */
+async function preloadTouched(lang: I18nLanguage): Promise<void> {
+  const keys = [...touchedKeys].filter((key) => key !== COURSE_BUNDLE_KEY);
+  const tasks: Promise<void>[] = [preloadI18n(keys, lang)];
+  if (touchedKeys.has(COURSE_BUNDLE_KEY)) {
+    // 课程内容加载失败不阻断语言切换（fallbackLng 'zh' 兜底，与 loadOne 失败策略一致）
+    tasks.push(loadAcademyCourses(lang).catch(() => undefined));
+  }
+  await Promise.all(tasks);
+}
+
 // 语言切换：对已请求过的模块补加载目标语言（幂等，已加载的语言键自动跳过）
 i18n.on('languageChanged', (lng: string) => {
-  const lang = normalizeLanguage(lng);
-  void preloadI18n([...touchedKeys], lang);
+  void preloadTouched(normalizeLanguage(lng));
 });
 
 /**
@@ -150,6 +193,6 @@ i18n.on('languageChanged', (lng: string) => {
  * 注：若目标语言资源加载失败仍会切换语言，由 fallbackLng('zh') 兜底。
  */
 export async function switchLanguage(next: I18nLanguage): Promise<void> {
-  await preloadI18n([...touchedKeys], next);
+  await preloadTouched(next);
   await i18n.changeLanguage(next);
 }

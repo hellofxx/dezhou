@@ -3,30 +3,7 @@ import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HoleCards } from '@/shared/types/poker';
-import { parseCardString, parseBoardCards, parseAmount } from './common';
-
-function assignPositions(playerCount: number, buttonSeat: number, seats: number[]): Position[] {
-  const positions6: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.HJ, Position.CO];
-  const positions9: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.UTG1, Position.MP, Position.MP, Position.HJ, Position.CO];
-
-  const ordered = [...seats];
-  const btnIdx = ordered.indexOf(buttonSeat);
-  if (btnIdx >= 0) {
-    const reordered = [...ordered.slice(btnIdx), ...ordered.slice(0, btnIdx)];
-    ordered.length = 0;
-    ordered.push(...reordered);
-  }
-
-  const posMap = new Map<number, Position>();
-  const posList = playerCount <= 6 ? positions6 : positions9;
-
-  for (let i = 0; i < ordered.length; i++) {
-    const pos = posList[i % posList.length] ?? Position.MP;
-    posMap.set(ordered[i]!, pos);
-  }
-
-  return seats.map(s => posMap.get(s) ?? Position.MP);
-}
+import { parseCardString, parseBoardCards, parseAmount, assignPositions } from './common';
 
 /** Strip emoji from player names for consistent matching */
 function stripEmoji(name: string): string {
@@ -105,6 +82,7 @@ export function parseGGPokerHand(text: string): HandHistory {
   let winnerId = 0;
   let winnerAmount = 0;
   let pot = 0;
+  let heroPlayerId: number | undefined;
   let currentStreet: 'header' | 'preflop' | 'flop' | 'turn' | 'river' | 'showdown' | 'summary' = 'header';
   const seatNumbers: number[] = [];
 
@@ -250,7 +228,8 @@ export function parseGGPokerHand(text: string): HandHistory {
       const action = parseGGActionLine(line, playerNameToIndex);
       if (action) riverActions.push(action);
     } else if (currentStreet === 'showdown') {
-      const showMatch = line.match(/^(.+?):\s+shows\s+\[([^\]]+)\]/);
+      let showMatch = line.match(/^(.+?):\s+shows\s+\[([^\]]+)\]/);
+      if (!showMatch) showMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+shows\s+\[([^\]]+)\]/);
       if (showMatch) {
         const name = showMatch[1]!.trim();
         let idx = playerNameToIndex.get(name);
@@ -262,7 +241,7 @@ export function parseGGPokerHand(text: string): HandHistory {
           }
         }
       }
-      const collectMatch = line.match(/^(.+?)\s+collected\s+\$?([\d,.]+)/);
+      const collectMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+\$?([\d,.]+)/);
       if (collectMatch) {
         const name = collectMatch[1]!.trim();
         let idx = playerNameToIndex.get(name);
@@ -275,14 +254,29 @@ export function parseGGPokerHand(text: string): HandHistory {
     } else if (currentStreet === 'summary') {
       const potMatch = line.match(/Total pot\s+\$?([\d,.]+)/);
       if (potMatch) pot = parseAmount(potMatch[1]!);
+      // 收池局（bet&fold，无 SHOW DOWN 段）的 collected 行出现在 SUMMARY：
+      // 此前仅在 showdown 段解析导致大部分手牌 winner 丢失
+      const collectMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+\$?([\d,.]+)/);
+      if (collectMatch) {
+        const name = collectMatch[1]!.trim();
+        let idx = playerNameToIndex.get(name);
+        if (idx === undefined) idx = playerNameToIndex.get(stripEmoji(name));
+        if (idx !== undefined) {
+          winnerId = idx;
+          winnerAmount = parseAmount(collectMatch[2]!);
+        }
+      }
     }
   }
 
-  if (heroName && heroCards) {
+  if (heroName) {
     let heroIdx = playerNameToIndex.get(heroName);
     if (heroIdx === undefined) heroIdx = playerNameToIndex.get(stripEmoji(heroName));
     if (heroIdx !== undefined) {
-      players[heroIdx]!.holeCards = heroCards;
+      heroPlayerId = heroIdx;
+      if (heroCards) {
+        players[heroIdx]!.holeCards = heroCards;
+      }
     }
   }
 
@@ -307,6 +301,7 @@ export function parseGGPokerHand(text: string): HandHistory {
     },
     pot,
     winner: winnerAmount > 0 ? { playerId: winnerId, amount: winnerAmount } : undefined,
+    heroPlayerId,
     annotations: {},
   };
 }

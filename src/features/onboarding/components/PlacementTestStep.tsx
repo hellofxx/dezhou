@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
 import { useProgressStore } from '@/features/progress/store';
 import { placementQuestions } from '../data/placementQuestions';
+import { orderPlacementOptions } from '../utils/optionOrder';
 import type { PlacementDimension } from '../types';
 
 // 正确率（0-1）映射到 30-70 区间
@@ -30,6 +31,12 @@ export default function PlacementTestStep() {
 
   const question = placementQuestions[currentIdx]!;
   const isLast = currentIdx === placementQuestions.length - 1;
+
+  // 答案位置偏差治理：t() 解析后、渲染前对选项重排（数值升序 / hash(id) 种子洗牌）
+  const orderedOptions = useMemo(
+    () => orderPlacementOptions(question, (o) => t(o.text)),
+    [question, t],
+  );
 
   const handleSelect = (optionId: string) => {
     if (answered) return;
@@ -87,7 +94,7 @@ export default function PlacementTestStep() {
       </h2>
 
       <div className="w-full space-y-3 mb-6">
-        {question.options.map((option) => {
+        {orderedOptions.map((option) => {
           const isSelected = selectedOption === option.id;
           const showCorrect = answered && option.isCorrect;
           const showWrong = answered && isSelected && !option.isCorrect;

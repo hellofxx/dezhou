@@ -126,12 +126,12 @@
   "result": {
     "title": "Training Results",
     "subtitle": "GTO Simulation Results",
-    "subtitleDetail": "{{count}} scenarios · {{position}} · {{stack}}BB",
+    "subtitleDetail": "{{count}} decisions · {{position}} · {{stack}}BB",
     "score": "Total Score",
     "accuracy": "Accuracy",
     "correctCount": "Correct",
     "totalScenarios": "Total Scenarios",
-    "statTotalScenarios": "Total Scenarios",
+    "statTotalScenarios": "Total Decisions",
     "statOptimal": "Optimal",
     "statNonOptimal": "Suboptimal",
     "statAvgTime": "Avg Time",
@@ -152,7 +152,7 @@
   "home": {
     "lastTraining": "Last Training",
     "optimalRate": "Optimal Decision Rate",
-    "scenariosCount": "{{count}} scenarios · EV loss {{ev}} BB/100",
+    "scenariosCount": "{{count}} decisions · EV loss {{ev}} BB/100",
     "scenarioCount": "scenarios",
     "title": "GTO Decision Simulator",
     "subtitle": "Learn game-theoretic optimal strategy and sharpen your poker decisions",
@@ -177,7 +177,8 @@
     "nodeLabel": "Decision Point",
     "empty": "No decision data yet",
     "history": "Action History",
-    "emptyHeroTurn": "Everyone folded to Hero"
+    "emptyHeroTurn": "Everyone folded to Hero",
+    "waitingDecision": "Waiting for decision…"
   },
   "nodeDesc": {
     "preflop": "Hero faces preflop action from {{position}}",

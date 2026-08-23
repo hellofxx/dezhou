@@ -65,6 +65,25 @@ describe('renderMentorFeedback 防御回退（P0B-06）', () => {
     expect(result).toBe(renderMentorFeedback('encouraging', 'wrong', { evLoss: 3, correctAction: 'Call' }, mockT));
   });
 
+  it('非法 grade 不 throw，且回退 wrong 档模板渲染结果', () => {
+    const params = { evLoss: 1.8, correctAction: 'Fold' };
+    for (const style of Object.keys(MENTOR_FEEDBACK_TEMPLATES) as MentorStyle[]) {
+      const invalidGrade = 'not-a-grade' as DecisionGrade;
+      expect(() => renderMentorFeedback(style, invalidGrade, params, mockT)).not.toThrow();
+      expect(renderMentorFeedback(style, invalidGrade, params, mockT)).toBe(
+        renderMentorFeedback(style, 'wrong', params, mockT),
+      );
+    }
+  });
+
+  it('undefined grade（脏持久化数据形态）同样回退 wrong 档模板', () => {
+    const grade = undefined as unknown as DecisionGrade;
+    const params = { evLoss: 2.2, correctAction: 'Call' };
+    const result = renderMentorFeedback('strict-math', grade, params, mockT);
+    expect(typeof result).toBe('string');
+    expect(result).toBe(renderMentorFeedback('strict-math', 'wrong', params, mockT));
+  });
+
   it('合法风格不受回退影响（三风格 × 五评级模板齐全且占位符被替换）', () => {
     const styles = Object.keys(MENTOR_FEEDBACK_TEMPLATES) as MentorStyle[];
     expect(styles).toHaveLength(3);

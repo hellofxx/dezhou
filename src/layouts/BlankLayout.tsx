@@ -28,9 +28,9 @@ export default function BlankLayout() {
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
-      // Don't trigger if typing in input
+      // Don't trigger if typing in input or editable region
       const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return;
       e.preventDefault();
       setShowShortcuts((prev) => !prev);
     }

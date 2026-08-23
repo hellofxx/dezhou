@@ -25,7 +25,9 @@
     "nextAction": "Next action",
     "nextStreet": "Next street",
     "play": "Play",
-    "pause": "Pause"
+    "pause": "Pause",
+    "noHandLoaded": "No hand loaded",
+    "pot": "Pot"
   },
   "streets": {
     "preflop": "Preflop",
@@ -37,6 +39,7 @@
     "noActions": "No actions"
   },
   "list": {
+    "pageTitle": "Hand History",
     "tabsHands": "Hands",
     "tabsStats": "My Stats",
     "import": "Import",
@@ -67,10 +70,17 @@
     "suggestion": "Suggestion",
     "vpipLow": "Low, suggest {{range}}%",
     "vpipHigh": "High, suggest {{range}}%",
-    "positionFeedback": "Your {{position}} VPIP {{vpip}}%{{feedback}}"
+    "positionFeedback": "Your {{position}} VPIP {{vpip}}%{{feedback}}",
+    "byPositionTitle": "VPIP / PFR by Position",
+    "colPosition": "Position",
+    "colHands": "Hands",
+    "basedOn": "Based on {{count}} hands analyzed"
   },
   "annotation": {
-    "export": "Export"
+    "export": "Export",
+    "notes": "Notes - {{street}}",
+    "placeholder": "Add notes for {{street}}...",
+    "save": "Save"
   },
   "replayPage": {
     "notFound": "Hand not found",

@@ -18,11 +18,19 @@ export function ActionSelector({
   onDecision,
   disabled = false,
 }: ActionSelectorProps) {
-  const [raiseAmount, setRaiseAmount] = useState(2.5);
+  const [raiseAmount, setRaiseAmount] = useState(() =>
+    Math.min(Math.max(2.5, callAmount ? callAmount * 2 : 2), effectiveStack)
+  );
   const [showRaiseSlider, setShowRaiseSlider] = useState(false);
 
   const minRaise = callAmount ? callAmount * 2 : 2;
   const maxRaise = effectiveStack;
+
+  /** 提交前把加注尺寸约束到合法区间 [minRaise, maxRaise] */
+  const clampRaise = useCallback(
+    (v: number) => Math.min(Math.max(v, minRaise), maxRaise),
+    [minRaise, maxRaise]
+  );
 
   // 快捷键
   const handleKeyDown = useCallback(
@@ -39,7 +47,7 @@ export function ActionSelector({
           if (!showRaiseSlider) {
             setShowRaiseSlider(true);
           } else {
-            onDecision({ action: ActionType.Raise, amount: raiseAmount });
+            onDecision({ action: ActionType.Raise, amount: clampRaise(raiseAmount) });
           }
           break;
         case '4':
@@ -47,7 +55,7 @@ export function ActionSelector({
           break;
       }
     },
-    [disabled, callAmount, effectiveStack, raiseAmount, showRaiseSlider, onDecision]
+    [disabled, callAmount, effectiveStack, raiseAmount, showRaiseSlider, onDecision, clampRaise]
   );
 
   useEffect(() => {
@@ -63,7 +71,7 @@ export function ActionSelector({
   ];
 
   const handleRaiseSubmit = () => {
-    onDecision({ action: ActionType.Raise, amount: raiseAmount });
+    onDecision({ action: ActionType.Raise, amount: clampRaise(raiseAmount) });
     setShowRaiseSlider(false);
   };
 
@@ -127,7 +135,7 @@ export function ActionSelector({
             {quickRaises.map((qr) => (
               <button
                 key={qr.label}
-                onClick={() => setRaiseAmount(Math.min(qr.value, maxRaise))}
+                onClick={() => setRaiseAmount(clampRaise(qr.value))}
                 className={cn(
                   'flex-1 py-1.5 rounded text-xs font-medium transition-all font-numeric',
                   Math.abs(raiseAmount - qr.value) < 0.1

@@ -16,7 +16,8 @@ const FEATURE_DEV_TOOLS: ToolSet = [
   'Bash', 'GetTerminalOutput',
 ];
 
-const UI_UX_DEV_TOOLS: ToolSet = [
+// 只读复核型代理收窄（移除 DeleteFile；清单与 AGENTS.md §工具权限分配保持一致）
+const READ_ONLY_REVIEW_TOOLS: ToolSet = [
   'Read', 'Glob', 'Grep', 'LSP', 'GetProblems',
   'SearchReplace', 'Write',
   'Bash', 'GetTerminalOutput',
@@ -24,7 +25,7 @@ const UI_UX_DEV_TOOLS: ToolSet = [
 
 function getExpectedTools(moduleName: string): ToolSet {
   const base = moduleName.replace(/-dev\.md$/, '');
-  return base === 'ui-ux' ? UI_UX_DEV_TOOLS : FEATURE_DEV_TOOLS;
+  return base === 'ui-ux' || base === 'help-center' ? READ_ONLY_REVIEW_TOOLS : FEATURE_DEV_TOOLS;
 }
 
 function extractTools(filePath: string): string[] | null {
@@ -41,7 +42,8 @@ function extractTools(filePath: string): string[] | null {
   return toolsLines
     .map(t => t.trim())
     .filter(t => t.startsWith('-'))
-    .map(t => t.slice(1).trim());
+    // 支持行内注释（`- Read          # 用途说明`），剥离 `#` 后的注释部分
+    .map(t => t.slice(1).split('#')[0].trim());
 }
 
 // Native fs implementation (no external dependencies)

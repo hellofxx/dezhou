@@ -73,7 +73,16 @@ export function generatePreviousActions(
   }
 
   // 翻后：模拟翻前 open + call（可含 multiway）
-  const aggressorIdx = Math.max(0, heroIdx - 1);
+  // hero 是翻前首个行动位（如 UTG）时，"前一位"就是 hero 自己——旧实现会生成
+  // [hero raise, hero call] 的自相矛盾序列。改为 hero open、紧邻下家跟注。
+  if (heroIdx === 0) {
+    const caller = playersAfter[0] ?? actionOrder[actionOrder.length - 1]!;
+    return [
+      { position, action: ActionType.Raise, amount: 2.5 },
+      { position: caller, action: ActionType.Call, amount: 2.5 },
+    ];
+  }
+  const aggressorIdx = heroIdx - 1;
   const postActions: PreviousAction[] = [
     { position: actionOrder[aggressorIdx]!, action: ActionType.Raise, amount: 2.5 },
     { position, action: ActionType.Call, amount: 2.5 },

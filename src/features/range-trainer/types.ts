@@ -66,7 +66,7 @@ export interface QuizSessionState {
   rescueUsed: boolean;
 }
 
-// 测验模式 store 切片接口（实现见 storeQuizSlice.ts）
+// 测验模式 store 切片接口（实现见 store.ts 测验模式章节）
 export interface QuizSlice {
   quizState: QuizSessionState;
 

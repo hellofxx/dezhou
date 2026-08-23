@@ -128,7 +128,7 @@
       "s1": "How to use",
       "s1-steps": {
         "0": "Daily Puzzle: one question per day, compete with players worldwide",
-        "1": "Rush: answer as many as possible in 60 seconds, chase your best record",
+        "1": "Rush: answer as many as possible within a timed 3 or 5 minutes, chase your best record",
         "2": "Theme Drill: select specific themes (e.g., RFI, 3-bet) for focused practice",
         "3": "Track your consecutive correct streak to maintain momentum"
       },
@@ -159,7 +159,7 @@
         "1": "Enter detailed stats pages to see per-module accuracy trends",
         "2": "Check weakness analysis — the system recommends areas needing improvement"
       },
-      "s2": "Tip: Daily consistent training is more effective than occasional marathon sessions. The system tracks your streak — ELO decays if you stop.",
+      "s2": "Tip: Daily consistent training is more effective than occasional marathon sessions. The system tracks your streak — if it breaks, ELO scores stay unchanged and only the streak count resets.",
       "s3": "View progress"
     }
   },
@@ -173,11 +173,11 @@
     "subtitle": "Brief explanations of the six core systems",
     "elo": {
       "title": "ELO Rating System",
-      "body": "Each training module has an independent ELO score. Correct answers add points, wrong answers subtract — harder questions cause larger swings. Ranks range from 'Novice' to 'Grandmaster' across 8 tiers."
+      "body": "ELO is rated across five skill dimensions (preflop / postflop / math / hand reading / mental), tracked separately per game variant. Correct answers add points, wrong answers subtract — harder questions cause larger swings. Ranks range from 'Novice' to 'Expert' across 6 tiers."
     },
     "streak": {
       "title": "Streak & Freeze Cards",
-      "body": "Your training streak tracks learning consistency. Missing a day resets it to zero. Freeze cards protect one day without training — earn them by maintaining a 7-day streak."
+      "body": "Your training streak tracks learning consistency. Missing a day resets it to zero. Freeze cards protect one day without training — earn them by hitting streak milestones (3/7/30/100 days)."
     },
     "srs": {
       "title": "SRS Spaced Repetition",
@@ -193,7 +193,7 @@
     },
     "dataStorage": {
       "title": "Data Storage & Export",
-      "body": "All data is stored in browser localStorage. Export a JSON backup from Settings, and import it on a new device. Clearing browser data will erase your records."
+      "body": "Settings and state such as ELO and streaks are stored in browser localStorage, while training records and hand history data are kept in browser IndexedDB — all locally. Export a JSON backup of training records and settings from Settings (hand history not yet included) and import it on a new device. Clearing browser data will erase your records."
     }
   },
   "faq": {
@@ -201,11 +201,11 @@
     "subtitle": "Common questions about data, language, offline, freeze cards",
     "q0": {
       "question": "Where is my data stored?",
-      "answer": "All training data is stored in your browser's localStorage and is never uploaded to any server. Clearing browser data or switching browsers will cause data loss — export backups regularly from Settings."
+      "answer": "Settings and state such as ELO and streaks are stored in your browser's localStorage, while training records and hand history data are kept in your browser's IndexedDB — nothing is ever uploaded to a server. Clearing browser data or switching browsers will cause data loss — export backups regularly from Settings."
     },
     "q1": {
       "question": "How do I migrate data to a new device?",
-      "answer": "Click 'Export Data' in Settings on your old device to download a JSON file, then click 'Import Data' on the new device and select that file to restore all training records."
+      "answer": "Click 'Export Data' in Settings on your old device to download a JSON file, then click 'Import Data' on the new device and select that file to restore your training records and settings (hand history data is not yet included in migration)."
     },
     "q2": {
       "question": "Does it work offline?",
@@ -217,11 +217,11 @@
     },
     "q4": {
       "question": "How do I get and use freeze cards?",
-      "answer": "Maintain a 7-day training streak to automatically earn 1 freeze card. When you can't train one day, click 'Use Freeze Card' in Settings to protect your streak. Maximum 1 per day."
+      "answer": "Hitting streak milestones automatically earns freeze cards: 1 card at 3 consecutive days, 2 at 7 days, 3 at 30 days, and 5 at 100 days. When you can't train one day, click 'Use Freeze Card' in Settings to protect your streak. Maximum 1 per day."
     },
     "q5": {
       "question": "What happens if my streak breaks?",
-      "answer": "Your streak resets to 0. ELO scores don't reset but will decay slightly. After a break, start with easier questions to rebuild momentum."
+      "answer": "Your streak resets to 0, while ELO scores are unaffected. After a break, start with easier questions to rebuild momentum."
     },
     "q6": {
       "question": "What is debug unlock?",

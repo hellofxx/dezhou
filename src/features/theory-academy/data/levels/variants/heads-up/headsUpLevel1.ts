@@ -30,7 +30,7 @@ export const HEADS_UP_LEVEL_1: TheoryLevelInfo = {
       duration: '10 min',
       eloDimension: 'math',
       objectives: [
-        '掌握单挑结构差异（SB 强制 Ante、BB 翻前最后行动、翻后 SB 先行动）对概率框架的影响',
+        '掌握单挑结构差异（SB 兼具按钮位、SB 翻前先行动、翻后 BB 先行动）对概率框架的影响',
         '理解单挑起手牌胜率重排：只需打败一个对手时，高张与同花连张的价值上升',
         '会用组合数推导"对手拿 A"等单挑关键概率，并建立三档胜率锚点',
       ],
@@ -39,7 +39,7 @@ export const HEADS_UP_LEVEL_1: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            '单挑（Heads-Up）只有两名玩家，每手牌你与对手互为 SB 与 BB。结构差异深刻影响概率框架：SB 强制投入 0.5（兼具 Ante 性质）、BB 投入 1；翻前 BB 永远最后行动，SB 的加注无法"偷走"盲注；翻后 SB 先行动，BB 拥有翻后位置优势。由此，可玩起手牌比例从满员桌的约 15%-20% 飙升到约 50% 以上——因为你要打败的只有一个对手。',
+            '单挑（Heads-Up）只有两名玩家，每手牌你与对手互为 SB 与 BB。结构差异深刻影响概率框架：SB 强制投入 0.5（兼具 Ante 性质，且 SB 即按钮位）、BB 投入 1；翻前 SB 先行动、BB 最后行动，SB 的加注无法"偷走"盲注；翻后 BB 先行动，SB（按钮位）最后行动并拥有翻后位置优势。由此，可玩起手牌比例从满员桌的约 15%-20% 飙升到约 50% 以上——因为你要打败的只有一个对手。',
         },
         {
           type: 'key-point',
@@ -101,13 +101,13 @@ export const HEADS_UP_LEVEL_1: TheoryLevelInfo = {
           id: 't1hu-probability-q3',
           question: '关于单挑盲注结构，下列哪项描述正确？',
           options: [
-            'SB 强制投入 0.5，BB 翻前最后行动，翻后 SB 先行动',
+            'SB 强制投入 0.5，BB 翻前最后行动，翻后 BB 先行动',
             'SB 翻前最后行动，可以免费看翻牌',
             'BB 每手强制投入 0.5 且翻后最后行动',
             'SB 与 BB 翻后行动顺序随机',
           ],
           correctIndex: 0,
-          explanation: '单挑中 SB 强制投入 0.5（兼具 Ante 性质）、BB 翻前最后行动、翻后 SB 先行动（BB 获得翻后位置优势）。其余选项均与单挑规则相反。',
+          explanation: '单挑中 SB 强制投入 0.5（兼具 Ante 性质，SB 即按钮位）：翻前 SB 先行动、BB 最后行动；翻后 BB 先行动，SB（按钮位）最后行动并获得位置优势。其余选项均与单挑规则相反。',
         },
         {
           id: 't1hu-probability-q4',
@@ -300,7 +300,7 @@ export const HEADS_UP_LEVEL_1: TheoryLevelInfo = {
             '单挑翻牌后没有下注',
           ],
           correctIndex: 0,
-          explanation: 'SB 已投入 0.5，补 0.5 到 1 就能看翻牌（赔率 1:3，跟注 0.5 争夺 1.5 底池）；且 BB 翻前最后行动意味着 SB 的 limp 不会被加注后失去位置——因此单挑几乎每手都进翻牌，决策密度极高。其余选项与单挑规则不符。',
+          explanation: 'SB 已投入 0.5，补 0.5 到 1 就能看翻牌（赔率 1:3，跟注 0.5 争夺 1.5 底池）；即使被 BB 翻前加注，SB（按钮位）翻后仍最后行动、保有位置优势——因此单挑几乎每手都进翻牌，决策密度极高。其余选项与单挑规则不符。',
         },
         {
           id: 't1hu-variance-q4',

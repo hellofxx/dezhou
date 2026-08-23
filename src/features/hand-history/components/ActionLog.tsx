@@ -42,6 +42,9 @@ function StreetSection({
         return (
           <button
             key={idx}
+            // data-active 供 ActionLog 自动滚动定位（querySelector('[data-active="true"]')），
+            // 缺失该属性时自动滚动永远找不到目标元素
+            data-active={isCurrentAction ? 'true' : undefined}
             onClick={() => onJump?.(streetKey, idx + 1)}
             className={cn(
               'block w-full text-left text-xs py-1 px-2 rounded transition-colors',

@@ -155,7 +155,7 @@ function MultiStepTree({
               )}
               {isCurrent && (
                 <div className="mt-1 text-[10px] text-[var(--brass-bright)] font-display animate-pulse">
-                  ● 等待决策…
+                  ● {t('gto.tree.waitingDecision')}
                 </div>
               )}
             </div>

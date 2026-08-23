@@ -12,7 +12,7 @@ const MIN_HANDS_FOR_STATS = 20;
 
 export default function HandHistoryList() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { hands, filter, setFilter, getFilteredHands, deleteHand, clearAll, loaded, loadFromDB, dbError } = useHandHistoryStore();
   const [confirmClear, setConfirmClear] = useState(false);
   const [activeTab, setActiveTab] = useState<'list' | 'stats'>('list');
@@ -22,11 +22,14 @@ export default function HandHistoryList() {
     if (!loaded) loadFromDB();
   }, [loaded, loadFromDB]);
 
-  // Auto-detect hero name from first hand with hole cards
+  // Auto-detect hero name：优先解析器记录的 heroPlayerId（"Dealt to" 玩家），
+  // 旧数据无该字段时回退「第一个有底牌的玩家」启发式（hero 弃牌局可能选中对手）
   useEffect(() => {
     if (!heroName && hands.length > 0) {
       for (const hand of hands) {
-        const heroPlayer = hand.players.find(p => p.holeCards);
+        const heroPlayer = hand.heroPlayerId !== undefined
+          ? hand.players[hand.heroPlayerId]
+          : hand.players.find(p => p.holeCards);
         if (heroPlayer) {
           setHeroName(heroPlayer.name);
           break;
@@ -47,8 +50,8 @@ export default function HandHistoryList() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="section-eyebrow">Hand History</p>
-          <h1 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">Hand History</h1>
+          <p className="section-eyebrow">{t('handHistory.list.pageTitle')}</p>
+          <h1 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">{t('handHistory.list.pageTitle')}</h1>
           <p className="text-sm text-[var(--ivory-muted)] mt-1 font-numeric">
             {t('handHistory.list.importedCount', { count: hands.length })}
           </p>
@@ -195,7 +198,7 @@ export default function HandHistoryList() {
                       </span>
                     </div>
                     <div className="text-xs text-[var(--ivory-muted)] font-numeric">
-                      {hand.gameType} · ${hand.stakes.smallBlind}/${hand.stakes.bigBlind} · {hand.players.length} {t('handHistory.list.players')} · {formatDate(hand.timestamp)}
+                      {hand.gameType} · ${hand.stakes.smallBlind}/${hand.stakes.bigBlind} · {hand.players.length} {t('handHistory.list.players')} · {formatDate(hand.timestamp, i18n.language)}
                     </div>
                   </div>
 

@@ -12,7 +12,7 @@ tools:
   - DeleteFile
   - Bash
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -155,6 +155,48 @@ shared/ 依赖（维护职责见 Authority）：
 - 多步场景（GTO）仅首决策节点记录 ELO / SRS / Emotion，避免重复计数
 - 反馈必须复用 `calculateGrade(evLoss)`（禁自定义评级），wrong / blunder 携带 `relatedLessonId` 并显示"去复习"链接
 - 跨模块状态集中 progress store，禁止各 trainer 直接写 elo 字段或 persist schema
+
+## Batch Processing Optimization（高频场景批处理）
+
+### 批处理合并规则
+为降低高频答题场景（Puzzle Rush / QuickDrill）中五大系统的同步调用开销，支持延迟批处理模式：
+
+| 系统 | 批处理策略 | 合并时机 |
+|------|-----------|---------|
+| Emotion | 连续 5 题合并一次 `recordAnswer` | 每 5 题触发或 session 结束时 flush |
+| ELO | 连续 3 题合并一次 `updateElo`（取平均难度） | 每 3 题触发或 session 结束时 flush |
+| SRS | 累积 `ReviewItem` 批量提交 | session 结束时一次 `updateReviewItem` |
+| Streak | session 完成时单次调用 `recordTrainingDay` | 幂等，已是最优 |
+| Mentor | 仅最终反馈时渲染 | 已是最优 |
+
+### 批处理工具函数契约
+落地时在 `shared/utils/trainingBatch.ts` 中实现以下批处理工具：
+
+```typescript
+interface BatchRecord {
+  answers: Array<{ isCorrect: boolean; timestamp: number }>;
+  eloUpdates: Array<{ dimension: EloDimension; isCorrect: boolean; difficulty: number }>;
+  srsItems: ReviewItem[];
+}
+
+function shouldFlushByTime(firstRecord: number, flushInterval: number = 3000): boolean {
+  return Date.now() - firstRecord >= flushInterval;
+}
+
+function shouldFlushByCount(count: number, threshold: number = 5): boolean {
+  return count >= threshold;
+}
+```
+
+### 消费方
+- puzzle-trainer `usePuzzleEngine`（Puzzle Rush 30 题场景）
+- strategy-academy QuickDrill（5 题 + SRS 混合场景）
+- range-trainer `useQuizEngine`（连续答题场景）
+
+### 失败隔离
+- progress store action 调用失败不阻断答题流程（降级为仅本地记录）
+- trainingEvents.emit 失败不阻断训练完成流程（fire-and-forget 语义）
+- 连续 3 次失败则禁用批处理，回退到单步模式
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

@@ -850,7 +850,7 @@
       "Short-deck combo basics (36 cards, 9 per suit):\nTotal starting hands = C(36,2) = 36×35÷2 = 630\nPocket-pair combos = 9 ranks × C(4,2) = 9×6 = 54\nAny two unpaired ranks (e.g. AK) = 4×4 = 16\n\nCompared with full ring (52 cards): 1326 starting hands, 78 pocket pairs, AK still 16\n\nKey difference: the \"pair share of starting hands\" rises from 78/1326 ≈ 5.9% to 54/630 ≈ 8.6% — pairs are more common, but their relative strength changes due to the hand-ranking reshuffle (detailed in T3). (Concept from: Short Deck Hold'em: The Ultimate Guide / 6+ Hold'em rules)",
       "The more important combinatorial difference is in flop structure: short deck has only 9 ranks, so the \"connectivity\" of flops hitting straight/flush draws is far higher than full ring. For example, a 9-8-7 flop is extremely wet in short deck (TJ, T6, 65 all make straights), as in full ring but with a bigger combo base. The key — \"connected flops\" occur more often in short deck because you draw from a smaller rank pool.",
       "Example: In short deck you hold A♠K♠ and read the opponent's range as {pocket pairs, AK, AQ}. Counting combos: 54 pocket pairs, AK 16 (after your A♠, AK drops to 3×3=9), AQ 16. The AQ you beat is 16 of (54+9+16) ≈ 20%. But note — in short deck AK is the strongest non-pair, running about 43%-45% against any pocket pair preflop all-in (full ring ≈ 43%), and the rule \"pocket pairs > AK\" (trips > straights, plus high pair density) makes this comparison even more subtle.",
-      "Example 2 (outs density): Short-deck flop 9♥8♣3♠, you hold 7♣6♣. You draw to 5 or T for a straight: about 8 outs accounting for seen cards. Compare full ring's same 8 outs — but short deck has ~33 remaining cards (36−3 flop−...), so single-street hit rate is about 8/33 ≈ 24%, noticeably above full ring's 8/47 ≈ 17%. Short-deck \"draws get there more often\" is mathematical necessity, not illusion.",
+      "Example 2 (outs density): Short-deck flop 9♥8♣3♠, you hold 7♣6♣. You draw to 5 or T for a straight: about 8 outs accounting for seen cards. Compare full ring's same 8 outs — but only 31 cards remain unknown in short deck after the flop (36−2 hole−3 flop), so single-street hit rate is about 8/31 ≈ 26%, noticeably above full ring's 8/47 ≈ 17%. Short-deck \"draws get there more often\" is mathematical necessity, not illusion.",
       "Counterintuitive point: in short deck AK is the \"strongest non-pair\" but usually trails any pocket pair preflop all-in (about 43%-45%). The correct reading of \"AK is strong\" is \"it dominates other non-pairs\", not \"it beats pairs\". Directly transplanting the full-ring memory \"AK is the strongest under pairs\" overestimates AK's preflop value.",
       "Short-deck combo quick reference: 630 starting hands, 54 pocket pairs (8.6%), 4 suited / 12 offsuit per unpaired pair. When counting \"how many pairs are in his range\" at the table, remember short-deck pair density is higher — this directly affects your calling and bluffing frequencies."
     ],
@@ -859,12 +859,12 @@
       "The definition of outs doesn't change — unknown cards that let your hand overtake the opponent. But short deck must recalculate the outs base on a 36-card deck: only 9 cards per suit, so a flush draw's outs are no longer full ring's 9, but 9 minus the seen cards of that suit. This \"subtraction\" is the core of short-deck outs math; directly applying the standard hold'em outs table systematically overestimates your equity.",
       "Short-deck outs rule: flush draw outs = 9 − seen cards of that suit. Holding 2 hearts + 2 hearts on board → flush outs = 9 − 4 = 5, not full ring's 9.",
       "Short-Deck Equity Calculation and the 2/4 Rule Correction",
-      "Short-deck flush draw outs recalculated (holding 2 hearts, 2 hearts on board, 4 seen):\nFlush outs = 9 − 4 = 5\n\nSingle-street hit rate (turn): 5 ÷ 33 ≈ 15% (full ring same line 9÷47 ≈ 19%)\nTwo-street hit rate (flop to river): 1 − (28/33)×(27/32) ≈ 1 − 0.716 ≈ 28.4%\n\nThe 2/4 rule estimate: 5×4 = 20%, below the exact 28.4%? — wrong!\nShort deck's 2/4 rule must adjust the base to 36 cards:\nExact two-street ≈ 5×2 + 5×1.5 ≈ 17.5% (approximating by per-suit density)\nA more accurate rough estimate in short deck is outs×2 for one street only; using full-ring's outs×4 for two streets overestimates\n\nKey conclusion: short-deck draw equity is lower than full ring for the same outs, because fewer cards remain and each individual out carries less weight. (Concept from: 6+ Hold'em math framework and Short Deck Poker outs recalculation)",
+      "Short-deck flush draw outs recalculated (holding 2 hearts, 2 hearts on board, 4 seen):\nFlush outs = 9 − 4 = 5\n\nUnknown cards after the flop = 36 − 2 (your hole cards) − 3 (flop) = 31\nSingle-street hit rate (turn): 5 ÷ 31 ≈ 16% (full ring same line 9÷47 ≈ 19%)\nTwo-street hit rate (flop to river): 1 − (26/31)×(25/30) ≈ 1 − 0.699 ≈ 30%\n\nThe 2/4 rule (5×4 = 20%) systematically underestimates in short deck:\nthe denominator shrinks from full ring's 47/46 to 31/30, so the same number of outs hits more often than in full ring\n(full ring 5 outs two-street: 1 − (42/47)×(41/46) ≈ 20%; short deck 5 outs two-street ≈ 30%).\n\nKey conclusion: the reason short-deck draws have \"lower absolute equity\" is that the outs count itself shrinks (flush 5 vs full ring 9),\nnot because each out carries less weight — quite the opposite, each out hits more often with a smaller denominator.\nRe-evaluate draw EV on three factors: fewer outs × higher per-out hit rate × higher made-hand value. (Concept from: 6+ Hold'em math framework and Short Deck Poker outs recalculation)",
       "But \"lower absolute equity\" doesn't mean \"lower value\" — in short deck, when draws get there they are usually nuts or near-nuts (straight/flush value rises due to the hand-ranking reshuffle). So short-deck draws have excellent implied odds and semi-bluffs are amplified. In practice the key is: don't do mental math with the full-ring outs table; recalculate on 36 cards, then judge whether to chase based on the high value of short-deck made hands.",
-      "Example: Short deck, you hold A♥K♥ on a 9♥7♥2♣ flop. You draw to the flush: seen hearts A♥K♥ + 9♥7♥ = 4, so flush outs = 9 − 4 = 5. Plus A/K each have 3 overcard outs (counting backdoors). The opponent bets 2 ante into a 6-ante pot; you need 25%. Your 5 flush outs are about 15% on one street, plus 4-6 overcard outs → about 30%+ on two streets, and a made flush is nut-tier. Calling is +EV, and a raise-semi-bluff is worth considering (short-deck flush value is huge).",
-      "Example 2 (straight outs): Short deck, you hold T♠J♠ on an 8♦9♣2♥ flop. You draw to 7 or Q for a straight: 4 each = 8 outs (8/9 already on board). Short deck has ~33 remaining cards, single-street 8/33 ≈ 24%, two-street about 44% — short-deck straight draws are very strong, and a made straight can beat the opponent's two pair or even trips (trips < straight? No — in short deck trips > straight, so be careful).",
+      "Example: Short deck, you hold A♥K♥ on a 9♥7♥2♣ flop. You draw to the flush: seen hearts A♥K♥ + 9♥7♥ = 4, so flush outs = 9 − 4 = 5. Plus A/K each have 3 overcard outs (counting backdoors). The opponent bets 2 ante into a 6-ante pot; you need 25%. Your 5 flush outs are about 16% on one street, plus 4-6 overcard outs → about 30%+ on two streets, and a made flush is nut-tier. Calling is +EV, and a raise-semi-bluff is worth considering (short-deck flush value is huge).",
+      "Example 2 (straight outs): Short deck, you hold T♠J♠ on an 8♦9♣2♥ flop. You draw to 7 or Q for a straight: 4 each = 8 outs (8/9 already on board). Only 31 cards remain unknown after the flop, single-street 8/31 ≈ 26%, two-street about 46% — short-deck straight draws are very strong, and a made straight beats the opponent's two pair but not trips (in short deck trips > straight, so be careful).",
       "Counterintuitive point: short-deck flush draws have only 5 outs (full ring 9) and lower absolute equity — but a flush is a super-strong hand in short deck (beats full houses), basically locking the pot once made. So \"few outs\" doesn't mean \"weak draw\"; the key is the relative strength once made. Using the full-ring intuition \"more outs = stronger draw\" misjudges short-deck flush draws.",
-      "Short-deck outs quick math: flush = 9 − seen cards of the suit; straight = connecting ranks ×4 (minus seen); single-street hit rate approximated by \"outs ÷ 33\" (after flop) or \"outs ÷ 32\" (after turn). Memorize 5 outs ≈ 15% single-street, 8 outs ≈ 24% — faster than counting at the table."
+      "Short-deck outs quick math: flush = 9 − seen cards of the suit; straight = connecting ranks ×4 (minus seen); single-street hit rate approximated by \"outs ÷ 31\" (after flop) or \"outs ÷ 30\" (after turn). Memorize 5 outs ≈ 16% single-street, 8 outs ≈ 26% — faster than counting at the table."
     ],
     "t1sd-variance": [
       "Short Deck: A Game of Amplified Variance",
@@ -1102,7 +1102,7 @@
     ],
     "t1hu-probability": [
       "From Full Ring to Heads-Up: Everything Changes",
-      "Heads-Up (HU) has only two players: each hand you and the opponent alternate as SB and BB. The structural differences deeply reshape the probability framework: the SB forces 0.5 (which also acts as an ante), the BB forces 1; preflop the BB always acts last, so the SB's raise can't \"steal\" blinds; postflop the SB acts first and the BB has positional advantage. As a result, the playable starting-hand share jumps from about 15%-20% in full ring to 50%+ — because you only have to beat one opponent.",
+      "Heads-Up (HU) has only two players: each hand you and the opponent alternate as SB and BB. The structural differences deeply reshape the probability framework: the SB forces 0.5 (which also acts as an ante, and the SB is the button), the BB forces 1; preflop the SB acts first and the BB acts last, so the SB's raise can't \"steal\" blinds; postflop the BB acts first, and the SB (button) acts last with positional advantage. As a result, the playable starting-hand share jumps from about 15%-20% in full ring to 50%+ — because you only have to beat one opponent.",
       "A hand's value is decided by \"how many people you must beat\". In heads-up you face one person instead of eight — this single fact reshuffles nearly every hand's win rate.",
       "Starting-Hand Equity Reshuffle",
       "Probability the opponent has at least one Ace (you hold two non-Ace cards):\nRemaining deck 50 cards: 4 Aces, 46 non-Aces\nTotal opponent combos: C(50,2) = 50×49÷2 = 1225\nBoth opponent cards non-Ace: C(46,2) = 46×45÷2 = 1035\nAt least one Ace = 1 − 1035÷1225 ≈ 15.5%\n\nThe comparison that truly shows the heads-up difference is \"the density of strong hands in the opponent's range\". When you hold AA, only 2 Aces remain in 50 cards, so a HU opponent has AA just 1/1225 ≈ 0.08%; in full ring at least one of 8 opponents has AA about 8/1225 ≈ 0.65% — in heads-up your strongest hand's dominance is rarely offset by a \"crash\". More crucially: in heads-up you're ahead of 50%+ of the opponent's range, whereas full ring you're ahead of at most 3-4 people — the \"density\" difference is what truly drives decisions. (Concepts from: The Theory of Poker, David Sklansky Ch.1 hand value and number of opponents; Modern Poker Theory, Michael Acevedo Ch.1 heads-up range narrowing)",
@@ -3019,7 +3019,7 @@
         "The rules allow more outs",
         "Better luck"
       ],
-      "explanation": "Short deck's smaller rank pool (9 ranks) makes connected flops more common, and fewer remaining cards make outs hit rates (like 8/33) relatively higher than full ring."
+      "explanation": "Short deck's smaller rank pool (9 ranks) makes connected flops more common, and fewer remaining cards make outs hit rates (like 8/31) relatively higher than full ring."
     },
     "t1sd-combinatorics-q5": {
       "question": "AK's preflop all-in equity against any pocket pair in short deck is about:",
@@ -3055,11 +3055,11 @@
       "question": "The mental-math baseline for single-street hit rate after a short-deck flop is:",
       "options": [
         "outs ÷ 47",
-        "outs ÷ 33",
+        "outs ÷ 31",
         "outs ÷ 36",
         "outs ÷ 52"
       ],
-      "explanation": "After a short-deck flop about 33 cards remain, so single-street hit rate ≈ outs ÷ 33. 47 is full ring."
+      "explanation": "After a short-deck flop, unknown cards = 36 − 2 (hole cards) − 3 (flop) = 31, so single-street hit rate ≈ outs ÷ 31. 47 is full ring."
     },
     "t1sd-outs-q4": {
       "question": "A short-deck flush draw (5 outs) has lower absolute equity than full ring but is still valuable, because:",
@@ -3075,11 +3075,11 @@
       "question": "A short-deck straight draw (e.g. open-ended, 8 outs) hits about ___ on one street:",
       "options": [
         "About 17%",
-        "About 24%",
+        "About 26%",
         "About 35%",
         "About 15%"
       ],
-      "explanation": "8 ÷ 33 ≈ 24%. Full ring 8/47 ≈ 17%; short deck hits more because fewer cards remain."
+      "explanation": "8 ÷ 31 ≈ 26%. Full ring 8/47 ≈ 17%; short deck hits more because fewer cards remain."
     },
     "t1sd-variance-q1": {
       "question": "The main reason short-deck variance exceeds standard hold'em is:",
@@ -4104,12 +4104,12 @@
     "t1hu-probability-q3": {
       "question": "Which statement about the HU blind structure is correct?",
       "options": [
-        "SB posts 0.5, BB acts last preflop, SB acts first postflop",
+        "SB posts 0.5, BB acts last preflop, BB acts first postflop",
         "SB acts last preflop and sees the flop for free",
         "BB posts 0.5 and acts last postflop",
         "SB and BB postflop order is random"
       ],
-      "explanation": "In heads-up the SB posts 0.5 (also acting as an ante), the BB acts last preflop, and the SB acts first postflop (the BB gains postflop positional advantage). The other options contradict HU rules."
+      "explanation": "In heads-up the SB posts 0.5 (doubling as an ante; the SB is the button): preflop the SB acts first and the BB last; postflop the BB acts first, and the SB (button) acts last with positional advantage. The other options contradict HU rules."
     },
     "t1hu-probability-q4": {
       "question": "Compared with a nine-handed table, the probability your AA gets counterfeited by another AA in heads-up is:",
@@ -4189,7 +4189,7 @@
         "HU blinds are smaller than full ring",
         "There is no postflop betting in HU"
       ],
-      "explanation": "The SB has already posted 0.5 and only completes 0.5 to 1 to see the flop (odds 1:3, calling 0.5 to contest a 1.5 pot); and because the BB acts last preflop, an SB limp can't be raised off position — so HU nearly every hand sees a flop, with extremely high decision density. The other options contradict HU rules."
+      "explanation": "The SB has already posted 0.5 and only completes 0.5 to 1 to see the flop (odds 1:3, calling 0.5 to contest a 1.5 pot); even if the BB raises preflop, the SB (button) still acts last postflop and keeps positional advantage — so HU nearly every hand sees a flop, with extremely high decision density. The other options contradict HU rules."
     },
     "t1hu-variance-q4": {
       "question": "For bankroll management, the suggested buy-in count for HU cash games is about:",
@@ -5219,7 +5219,7 @@
       "Learn to distill reusable methodologies from professional short-deck cases"
     ],
     "t1hu-probability": [
-      "Master how the heads-up structural differences (SB forced ante, BB acts last preflop, SB acts first postflop) affect the probability framework",
+      "Master how the heads-up structural differences (SB doubles as the button, SB acts first preflop, BB acts first postflop) affect the probability framework",
       "Understand the heads-up starting-hand equity reshuffle: high cards and suited connectors rise when beating only one opponent",
       "Use combinatorics to derive key heads-up probabilities like \"opponent has an A\" and build three-tier equity anchors"
     ],

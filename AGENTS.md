@@ -81,16 +81,14 @@ src/
 
 ### 关键约束
 
-- **模块间禁止直接引用**：必须通过 `shared/` 层或 `trainingEvents` 事件总线
+- **模块间禁止直接引用**：必须通过 `shared/` 层或 `trainingEvents` 事件总线；唯一例外为 progress（跨模块状态中枢，各模块引用其公开 API 属设计内）；允许边清单以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（当前快照：全部 feature 仅允许 → progress；hand-history / help-center / progress 无出边）
 - **shared/ 层准入门槛**：被 ≥2 个模块使用才可放入；单模块使用的代码留在模块内
 - **跨模块状态集中管理**：Streak / ELO / SRS / Emotion / Mentor 五大系统统一在 `src/features/progress/store.ts`（persist version 以该文件配置为准），禁止分散到各 feature store
-- **唯一例外**：puzzle-trainer store 持有 `quickDrillBest`（快速训练最佳记录，独立持久化）；`quickDrillStreak` 连续天数计数器位于 progress store，由 `recordQuickDrillCompletion()` 维护并在连续 7 天时触发 `awardStreakFreeze(1)`
+- **QuickDrill 状态归属**：`quickDrillBest`（快速训练最佳记录，由 `submitQuickDrillResult()` 维护）与 `quickDrillStreak`（连续天数计数器，由 `recordQuickDrillCompletion()` 维护，连续 7 天触发 `awardStreakFreeze(1)`）均位于 progress store
 - **文件语义归属登记**：新增文件必须直接放入语义归属模块，避免物理位置与语义归属分裂；已存在分裂时以**实际消费方实证归属**（唯一消费方所在模块即归属方），并把归属结论同步到相关模块代理与 `platform-dev`（案例：`src/features/hand-history/workers/gtoWorker.ts` 实证归属 hand-history，唯一消费方为本模块 `utils/gtoDeviation.ts`）
-## 编码规范（摘要，详见 docs/AI_GUIDE.md）
+## 编码规范
 
-- TypeScript strict + noUncheckedIndexedAccess，禁止 any；路径别名 `@/*`
-- 组件 PascalCase.tsx / Hook use 前缀 / 工具 camelCase / 路由 kebab-case
-- 单文件 ≤ 300 行（硬约束；豁免见 docs/AI_GUIDE.md）
+> 完整规范见 `docs/AI_GUIDE.md` §编码规范；子代理侧单源约束见 §子代理共享基线条款 §全局约束（禁止在此重述）。React 渲染约定（数组不可变 / 条件渲染 / Effect 治理 / 组件定义 / 事件监听）见下文：
 
 ### React 渲染约定
 
@@ -235,7 +233,7 @@ src/
 - **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行。全局级守卫：i18n 双语键对称（`src/i18n/localeParity.test.ts`）、i18n 静态 key 引用（`src/i18n/staticKeyGuard.test.ts`，兜底 zh/en 双方都缺 key 的盲区）、UI 颜色合规（`src/designTokenGuard.test.ts` 全量扫描 src，禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）。模块级数据完整性守卫由各 feature 模块自持（课程结构 / 题库 id / 理论结构 / 选项排序分布等），`pnpm test` 全量运行时强制，清单以各模块实际测试文件为准
 - **构建验证**：`pnpm build` 成功产出 `dist/`
 - **测试后缀速查**（`vitest.config.ts` 双项目划分）：`.test.ts` = unit 项目，Node 环境（纯函数 / store migrate）；`.test.tsx` = component 项目，jsdom 环境（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
-- **每次代码变更后必须运行 `pnpm verify`**（即 `pnpm typecheck && pnpm lint && pnpm test`串行短路组合，任一失败即中止；唯一事实源为 `package.json` 的 `verify` script）
+- **每次代码变更后必须运行 `pnpm verify`**（唯一事实源为 `package.json` 的 `verify` script，当前为 `typecheck && lint && test` 串行短路组合，任一失败即中止；另提供 `verify:parallel` 并行变体，独立捕获 exit code 并支持分级重试）
 - **子智能体 tools 字段验证**：修改 `.claude/agents/*.md` 时建议运行 `node scripts/validate-agent-tools.ts` 校验 tools 字段合规性（可选但推荐，非强制门禁）
 
 ### Feature PR Checklist（建议补充到 CI 或模板）
@@ -300,8 +298,8 @@ src/
 
 1. 在 `src/features/<module>/components/` 创建 `PascalCase.tsx`（按模块最小结构约定）
 2. 若引入新文案，同时更新 `src/i18n/locales/zh/<module>.json` 与 `en/<module>.json`（双语缺一不可，key 命名 `<module>.<context>.<field>`）
-3. 若新增测试，按 `vitest.config.ts` 双项目选后缀：纯函数 / store migrate 用 `.test.ts`（Node），组件冒烟用 `.test.tsx`（jsdom）
-4. 运行 `pnpm verify`（= typecheck && lint && test）确保门禁通过
+3. 若新增测试，按 `vitest.config.ts` 双项目选后缀（规则见 §质量门禁「测试后缀速查」，禁止在此重述）
+4. 运行 `pnpm verify` 确保门禁通过（唯一事实源为 `package.json` 的 `verify` script）
 5. 若新增路由页面，由 `platform-dev` 在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册
 6. 若涉及全局视觉 / 共享组件 / 布局 / 导航 / 主题色，由 `ui-ux-dev` 复核（质量清单以 `poker-ui-demo/DESIGN_LANGUAGE.md` 为准）
 
@@ -335,7 +333,7 @@ src/
 
 | 能力 | Owner agent | 消费方 / 说明 |
 |---|---|---|
-| QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `progress-dev` | 状态与逻辑定义于 progress store（quickDrillStreak / awardStreakFreeze / recordQuickDrillCompletion）与 progress/utils（composeDailyMix）；strategy-academy（QuickDrill 界面）与 puzzle-trainer 为消费方；quickDrillBest 由 puzzle-trainer store 独立持久化 |
+| QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `progress-dev` | 状态与逻辑定义于 progress store（quickDrillBest / quickDrillStreak / awardStreakFreeze / recordQuickDrillCompletion / submitQuickDrillResult）与 progress/utils（composeDailyMix）；strategy-academy（QuickDrill 界面）与 puzzle-trainer 为消费方 |
 | 五大系统集成（Streak / ELO / SRS / Emotion / Mentor）统一提交入口 | `progress-dev` | 全部 trainer 经 progress store 公开 API 提交训练结果（契约见 progress-dev；禁止各模块自写集成） |
 | trainingEvents emit / 订阅 | `progress-dev`（总线实现）+ 各模块自 emit | hand-history、help-center 合理豁免 emit |
 | 调试解锁（9 处门禁） | `platform-dev` 协调 | 全局旁路，清单见 AGENTS.md §调试解锁 |
@@ -346,8 +344,8 @@ src/
 ### 工具权限分配
 
 - **feature-dev 标准工具集（10 项）**：`Read / Glob / Grep / LSP / GetProblems / SearchReplace / Write / DeleteFile / Bash / GetTerminalOutput`
-- **只读复核型代理收窄**：移除 `DeleteFile`（先例：ui-ux-dev），删除文件需求转交 `platform-dev` 协调
-- **声明规则**：`tools` 字段必须显式声明最小工具集，禁止通配符与省略声明（等同继承全部工具）；文件名必须与 frontmatter `name` 字段一致
+- **只读复核型代理收窄**：移除 `DeleteFile`（先例：ui-ux-dev、help-center-dev），删除文件需求转交 `platform-dev` 协调
+- **声明规则**：`tools` 字段必须显式声明最小工具集，禁止通配符与省略声明（等同继承全部工具）；文件名必须与 frontmatter `name` 字段一致；实际工具清单以各 agent 文件为事实源（当前收窄清单：ui-ux-dev / help-center-dev 各 9 项）
 
 ### 边界约束
 

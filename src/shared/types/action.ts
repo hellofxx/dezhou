@@ -23,11 +23,3 @@ export interface Decision {
   action: ActionType;
   amount?: number;
 }
-
-// 决策反馈（对比结果）
-export interface DecisionFeedback {
-  isCorrect: boolean;
-  optimalAction: Decision;
-  evDifference: number; // EV差异（BB/100）
-  explanation: string;
-}

@@ -44,11 +44,14 @@ export const GRADE_THRESHOLDS = {
 } as const;
 
 // 根据 EV 损失计算 grade（边界值归入更严重的等级）
+// NaN 防御：非法 EV 损失按 0 处理（与 pokerMath 的边界防御口径一致），
+// 防止调用方计算失误（如 0/0）把 NaN 一路漏进比较链末端误判为 blunder。
 export function calculateGrade(evLoss: number): DecisionGrade {
-  if (evLoss <= GRADE_THRESHOLDS.best) return 'best';
-  if (evLoss < GRADE_THRESHOLDS.correct) return 'correct';
-  if (evLoss <= GRADE_THRESHOLDS.inaccuracy) return 'inaccuracy';
-  if (evLoss <= GRADE_THRESHOLDS.wrong) return 'wrong';
+  const safeLoss = Number.isNaN(evLoss) ? 0 : evLoss;
+  if (safeLoss <= GRADE_THRESHOLDS.best) return 'best';
+  if (safeLoss < GRADE_THRESHOLDS.correct) return 'correct';
+  if (safeLoss <= GRADE_THRESHOLDS.inaccuracy) return 'inaccuracy';
+  if (safeLoss <= GRADE_THRESHOLDS.wrong) return 'wrong';
   return 'blunder';
 }
 

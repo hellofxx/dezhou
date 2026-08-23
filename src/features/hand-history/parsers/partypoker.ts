@@ -3,30 +3,7 @@ import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HoleCards } from '@/shared/types/poker';
-import { parseCardString, parseBoardCards, parseAmount } from './common';
-
-function assignPositions(playerCount: number, buttonSeat: number, seats: number[]): Position[] {
-  const positions6: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.HJ, Position.CO];
-  const positions9: Position[] = [Position.BTN, Position.SB, Position.BB, Position.UTG, Position.UTG1, Position.MP, Position.MP, Position.HJ, Position.CO];
-
-  const ordered = [...seats];
-  const btnIdx = ordered.indexOf(buttonSeat);
-  if (btnIdx >= 0) {
-    const reordered = [...ordered.slice(btnIdx), ...ordered.slice(0, btnIdx)];
-    ordered.length = 0;
-    ordered.push(...reordered);
-  }
-
-  const posMap = new Map<number, Position>();
-  const posList = playerCount <= 6 ? positions6 : positions9;
-
-  for (let i = 0; i < ordered.length; i++) {
-    const pos = posList[i % posList.length] ?? Position.MP;
-    posMap.set(ordered[i]!, pos);
-  }
-
-  return seats.map(s => posMap.get(s) ?? Position.MP);
-}
+import { parseCardString, parseBoardCards, parseAmount, assignPositions } from './common';
 
 function parsePartyActionLine(line: string, playerNameToIndex: Map<string, number>): PlayerAction | null {
   // partypoker formats:
@@ -272,10 +249,14 @@ export function parsePartyPokerHand(text: string): HandHistory {
   }
 
   // Set hero cards on the player
-  if (heroName && heroCards) {
+  let heroPlayerId: number | undefined;
+  if (heroName) {
     const heroIdx = playerNameToIndex.get(heroName);
     if (heroIdx !== undefined) {
-      players[heroIdx]!.holeCards = heroCards;
+      heroPlayerId = heroIdx;
+      if (heroCards) {
+        players[heroIdx]!.holeCards = heroCards;
+      }
     }
   }
 
@@ -300,6 +281,7 @@ export function parsePartyPokerHand(text: string): HandHistory {
     },
     pot,
     winner: winnerAmount > 0 ? { playerId: winnerId, amount: winnerAmount } : undefined,
+    heroPlayerId,
     annotations: {},
   };
 }

@@ -20,12 +20,14 @@ function lazyPage(loader: PageLoader, group: keyof typeof FEATURE_GROUPS) {
 }
 
 /**
- * 特殊路由懒加载：支持 preloadFeature（用于 academy-course 动态注入）
+ * 特殊路由懒加载：支持 preloadFeature（用于 academy-course 动态注入）。
+ * group 收窄为字面量类型：当前仅课程路由需要额外 preloadFeature 分流
+ * （ academy-course 课程内容加载失败会 reject，路由层须有 ErrorBoundary 兜底防白屏）。
  */
-function lazyPageWithFeature(loader: PageLoader, group: keyof typeof FEATURE_GROUPS) {
+function lazyPageWithFeature(loader: PageLoader, group: '/academy/lesson/:lessonId') {
   return lazy(() => Promise.all([
     loader(),
-    preloadFeature(group as '/academy/lesson/:lessonId')
+    preloadFeature(group)
   ]).then(([mod]) => mod));
 }
 
@@ -95,7 +97,7 @@ export const router = createBrowserRouter([
       { path: 'academy/tracks', element: <LazyWrapper><LearningTracksView /></LazyWrapper> },
       { path: 'academy/quick-drill', element: <LazyWrapper><QuickDrill /></LazyWrapper> },
       { path: 'academy/certification/:level', element: <LazyWrapper><LevelCertification /></LazyWrapper> },
-      { path: 'academy/lesson/:lessonId', element: <LazyWrapper><CourseView /></LazyWrapper> },
+      { path: 'academy/lesson/:lessonId', element: <LazyWrapper><ErrorBoundary><CourseView /></ErrorBoundary></LazyWrapper> },
       { path: 'theory', element: <LazyWrapper><ErrorBoundary><TheoryHome /></ErrorBoundary></LazyWrapper> },
       { path: 'theory/chapter/:chapterId', element: <LazyWrapper><TheoryChapterView /></LazyWrapper> },
       { path: 'puzzle', element: <LazyWrapper><PuzzleHome /></LazyWrapper> },

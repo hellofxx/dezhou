@@ -2,17 +2,17 @@
 name: gto-simulator-dev
 description: GTO 模拟器模块开发代理，负责 src/features/gto-simulator/ 内的所有变更。当涉及 GTO 策略数据、场景引擎、EV 损失计算、策略矩阵、翻前/翻后范围或 Spot 训练时使用；此类任务应主动委派给本代理。
 tools:
-  - Read
-  - Glob
-  - Grep
-  - LSP
-  - GetProblems
-  - SearchReplace
-  - Write
-  - DeleteFile
-  - Bash
+  - Read          # 读取 GTO 策略数据
+  - Glob          # 查找文件路径
+  - Grep          # 搜索代码内容
+  - LSP           # 符号导航
+  - GetProblems   # 检查编译错误
+  - SearchReplace # 编辑场景/策略/组件
+  - Write         # 新建组件/数据/i18n 文件
+  - DeleteFile    # 删除废弃的策略数据
+  - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "DeepSeek-V4-Flash"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -97,6 +97,31 @@ additionalPrompt: ""
 - **反馈闭环 relatedLessonId**：`GTOSessionPage` 必须根据 `scenario.street` 推导 `relatedLessonId`（preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`），调用 `buildGtoFeedback` 时传入；wrong/blunder 显示"去复习"链接
 - **自适应难度**：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，数据源与阈值以 progress store 实现为准）显示降级提示 banner；禁止自行判定降级条件
 - **范围与 GTO 频率表一致性**：`preflop-ranges.json` 是权威数据源，`range-trainer/constants.ts` 必须与之对齐；修改频率表时必须同步通知 `range-trainer-dev`
+
+## Orchestration
+### 交互契约（Cross-Module ReviewRequest）
+当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
+
+```typescript
+interface ReviewRequest {
+  type: 'cross-module' | 'design-review' | 'state-coordination';
+  origin: 'gto-simulator';
+  target: 'platform-dev' | 'ui-ux-dev' | 'progress-dev';
+  scope: string[];           // 受影响文件路径列表
+  description: string;       // 变更描述（≤200字）
+  retryPolicy: {
+    maxRetries: number;      // 默认 1
+    timeout: number;         // 默认 120000ms
+    fallback: 'rollback' | 'warn-only' | 'defer';
+  };
+}
+```
+
+### 超时与重试
+- 调用 progress store 公开 action 的超时：30s
+- 首决策节点 ELO/SRS/Emotion 同步的最大延迟：单次答题 ≤500ms
+- 末题补救机制失败回退：rescueUsed 标志保证仅触发一次
+- trainingEvents.emit 失败不阻断训练完成流程（fire-and-forget 语义）
 
 ## Quality Checklist
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0

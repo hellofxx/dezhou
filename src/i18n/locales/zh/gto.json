@@ -126,12 +126,12 @@
   "result": {
     "title": "训练结果",
     "subtitle": "GTO 模拟训练成绩",
-    "subtitleDetail": "{{count}} 个场景 · {{position}} · {{stack}}BB",
+    "subtitleDetail": "{{count}} 个决策 · {{position}} · {{stack}}BB",
     "score": "总得分",
     "accuracy": "正确率",
     "correctCount": "答对",
     "totalScenarios": "总场景",
-    "statTotalScenarios": "总场景数",
+    "statTotalScenarios": "总决策数",
     "statOptimal": "最优决策",
     "statNonOptimal": "非最优",
     "statAvgTime": "平均用时",
@@ -152,7 +152,7 @@
   "home": {
     "lastTraining": "上次训练",
     "optimalRate": "最优决策率",
-    "scenariosCount": "{{count}} 个场景 · EV 损失率 {{ev}} BB/100",
+    "scenariosCount": "{{count}} 个决策 · EV 损失率 {{ev}} BB/100",
     "scenarioCount": "个场景",
     "title": "GTO 决策模拟器",
     "subtitle": "学习博弈论最优策略，提升你的扑克决策能力",
@@ -177,7 +177,8 @@
     "nodeLabel": "决策点",
     "empty": "暂无决策数据",
     "history": "行动历史",
-    "emptyHeroTurn": "前面所有人都 fold，轮到 Hero"
+    "emptyHeroTurn": "前面所有人都 fold，轮到 Hero",
+    "waitingDecision": "等待决策…"
   },
   "nodeDesc": {
     "preflop": "Hero 在 {{position}} 面对翻前行动",

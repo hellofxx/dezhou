@@ -140,6 +140,11 @@ function estimatePostflopEquity(heroHand: [Card, Card], board: Card[]): number {
       break;
     }
   }
+  // wheel 顺子（A-2-3-4-5）：A 按 1 计，窗口检测会漏掉
+  const uniqueRankSet = new Set(uniqueRanks);
+  if (uniqueRankSet.has(14) && uniqueRankSet.has(2) && uniqueRankSet.has(3) && uniqueRankSet.has(4) && uniqueRankSet.has(5)) {
+    hasMadeStraight = true;
+  }
   if (hasMadeStraight) {
     madeStrength = Math.max(madeStrength, 0.72);
   }

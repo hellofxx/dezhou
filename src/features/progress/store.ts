@@ -673,6 +673,10 @@ export const useProgressStore = create<ProgressStore>()(
             streakFreezeUsedToday: false,
           },
         }));
+        // 修复：恢复后可能跨过未庆祝的里程碑（如 6→7）。此处 lastTrainingDate 已置为
+        // 今日，当日后续 recordTrainingDay 会因幂等跳过 checkMilestone，若不在此
+        // 立即检查，庆典与奖励将延迟到次日才补发。
+        get().checkMilestone();
       },
 
       // ===== ELO 能力分级（P1-2）=====

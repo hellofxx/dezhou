@@ -92,6 +92,16 @@ export function HandImporter() {
 
     if (res.hands.length > 0) {
       await addHands(res.hands);
+      // addHands 内部捕获 IndexedDB 错误只写 store.dbError；
+      // 不读取会误报「导入成功」而实际未持久化
+      const dbError = useHandHistoryStore.getState().dbError;
+      if (dbError) {
+        setResult({
+          ...res,
+          success: false,
+          errors: [...res.errors, { key: `handHistory.dbError.${dbError}` }],
+        });
+      }
     }
 
     setImporting(false);
