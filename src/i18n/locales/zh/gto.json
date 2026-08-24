@@ -1,6 +1,9 @@
 {
   "title": "GTO 模拟器",
   "startSession": "开始训练",
+  "action": {
+    "raiseSlider": "加注尺寸"
+  },
   "optimal": "最优决策",
   "evLoss": "EV 损失",
   "feedback": {

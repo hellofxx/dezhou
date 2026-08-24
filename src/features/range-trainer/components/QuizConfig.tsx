@@ -101,7 +101,7 @@ export function QuizConfig({
   const hasPreset = presets.some(
     (p) => p.position === position && p.actionType === actionType
   );
-  const isUnlocked = (pos: Position) => debugUnlock || isPositionUnlocked(pos, preflopElo);
+  const isUnlocked = (pos: Position) => debugUnlock || isPositionUnlocked(pos, preflopElo, playerCount);
 
   // 变体切换后当前选择失效时，自动回退到第一个可用（且已解锁）的组合
   useEffect(() => {

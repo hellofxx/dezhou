@@ -280,7 +280,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
         {/* 进度条 */}
         <div className="h-1.5 bg-[var(--walnut-raised)] rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-[var(--brass)] to-[var(--sage)] rounded-full"
+            className="h-full bg-gradient-to-r from-[var(--brass)] to-[var(--poker-info)] rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
             transition={transitionStandard}
@@ -293,8 +293,9 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded ${CATEGORY_COLORS[currentItem.category] ?? CATEGORY_COLORS.strategy
-                    }`}
+                  className={`text-[10px] px-1.5 py-0.5 rounded ${
+                    CATEGORY_COLORS[currentItem.category] ?? CATEGORY_COLORS.strategy
+                  }`}
                 >
                   {t(CATEGORY_LABELS[currentItem.category] ?? 'review.category.strategy')}
                 </span>
@@ -307,8 +308,8 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                   {currentItem.metadata?.front
                     ? t(currentItem.metadata.front, currentItem.metadata.params ?? {})
                     : t('review.defaultFront', {
-                      defaultValue: '请回忆该知识点的关键内容，然后点击"显示答案"自评。',
-                    })}
+                        defaultValue: '请回忆该知识点的关键内容，然后点击"显示答案"自评。',
+                      })}
                 </p>
               </div>
             </div>

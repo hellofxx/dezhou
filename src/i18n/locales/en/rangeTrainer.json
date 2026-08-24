@@ -25,7 +25,8 @@
     "preset": "Preset Ranges",
     "presetPlaceholder": "Select a preset range...",
     "presetHands": "{{name}} ({{count}} hands)",
-    "unlockRequirement": "Requires preflop ELO ≥ {{threshold}}"
+    "unlockRequirement": "Requires preflop ELO ≥ {{threshold}}",
+    "noData": "No data available for this position"
   },
   "rangeInfo": {
     "title": "Range Info",

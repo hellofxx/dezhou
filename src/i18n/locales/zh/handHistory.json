@@ -40,6 +40,7 @@
   },
   "list": {
     "pageTitle": "牌局历史",
+    "eyebrow": "复盘分析",
     "tabsHands": "牌局列表",
     "tabsStats": "我的统计",
     "import": "导入",

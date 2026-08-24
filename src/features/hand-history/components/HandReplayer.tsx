@@ -169,10 +169,11 @@ export function HandReplayer() {
               <button
                 key={speed}
                 onClick={() => setPlaybackSpeed(speed)}
-                className={`px-2 py-1 text-xs rounded font-numeric transition-colors ${state.playbackSpeed === speed
+                className={`px-2 py-1 text-xs rounded font-numeric transition-colors ${
+                  state.playbackSpeed === speed
                     ? 'bg-[var(--brass)]/15 text-[var(--brass-bright)] border border-[var(--brass)]/40'
                     : 'text-[var(--ivory-muted)] hover:text-[var(--ivory-dim)]'
-                  }`}
+                }`}
               >
                 {speed}x
               </button>

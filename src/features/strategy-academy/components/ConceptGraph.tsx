@@ -158,6 +158,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
       dashArray = undefined;
       break;
     case 'locked':
+      // §12.1 SVG 例外：深墨/黑罩 rgba(0,0,0,0.2)（--felt-deep 方向）
       fill = 'rgba(0,0,0,0.2)';
       stroke = 'var(--ivory-dim)';
       textColor = 'var(--ivory-dim)';
@@ -165,6 +166,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
       break;
     default:
       fill = 'var(--surface-raised)';
+      // §12.1 SVG 例外：ivory 白 25% 浅色描边（--ivory 方向）
       stroke = 'rgba(255,255,255,0.25)';
       textColor = 'var(--ivory)';
       dashArray = undefined;
@@ -261,12 +263,15 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
             width={LAYOUT.nodeWidth + 20}
             height={32}
             rx={6}
+            // §12.1 SVG 例外：深墨标签底 rgba(0,0,0,0.92)（--felt-deep 方向）
             fill="rgba(0,0,0,0.92)"
+            // §12.1 SVG 例外：ivory 白 20% 描边（--ivory 方向）
             stroke="rgba(255,255,255,0.2)"
           />
           <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 27} textAnchor="middle" fill="white" fontSize={10} fontWeight={500}>
             {t(lessonTitleKey(node.id), { defaultValue: node.fullTitle })}
           </text>
+          {/* §12.1 SVG 例外：ivory 白 60%（--ivory 方向） */}
           <text x={node.x + LAYOUT.nodeWidth / 2} y={node.y - 14} textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize={9}>
             {levelInfo
               ? `L${levelInfo.level} · ${t(levelTitleKey(`l${levelInfo.level}`), { defaultValue: levelInfo.title })}`
@@ -530,6 +535,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
                   y={levelY - 8}
                   width={svgDimensions.width}
                   height={LAYOUT.nodeHeight + 16}
+                  // §12.1 SVG 例外：ivory 白 2% 斑马行底（--ivory 方向）
                   fill={levelIdx % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent'}
                   rx={4}
                 />

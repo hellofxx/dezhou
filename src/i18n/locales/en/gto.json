@@ -1,6 +1,9 @@
 {
   "title": "GTO Simulator",
   "startSession": "Start Training",
+  "action": {
+    "raiseSlider": "Raise size"
+  },
   "optimal": "Optimal Decision",
   "evLoss": "EV Loss",
   "feedback": {

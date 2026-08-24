@@ -3,6 +3,7 @@ import {
   shuffleBySeed,
   hashStringToSeed,
   isNumericOptionSet,
+  isDigitBearingOptionSet,
   sortByNumericValue,
 } from './seededShuffle';
 
@@ -90,6 +91,32 @@ describe('isNumericOptionSet', () => {
 
   it('空数组 → false', () => {
     expect(isNumericOptionSet([])).toBe(false);
+  });
+});
+
+describe('isDigitBearingOptionSet', () => {
+  it('数字在开头 → true', () => {
+    expect(isDigitBearingOptionSet(['20%', '25%', '33%'])).toBe(true);
+  });
+
+  it('数字在中间（i18n t() 解析后）→ true', () => {
+    expect(isDigitBearingOptionSet(['20%', 'About 15 (combo draw)'])).toBe(true);
+  });
+
+  it('数字后缀型 → true', () => {
+    expect(isDigitBearingOptionSet(['期限 30 天', '回扣 5%'])).toBe(true);
+  });
+
+  it('陈述句选项集（无数字）→ false', () => {
+    expect(isDigitBearingOptionSet(['是，跟注', '否，弃牌'])).toBe(false);
+  });
+
+  it('空数组 → false', () => {
+    expect(isDigitBearingOptionSet([])).toBe(false);
+  });
+
+  it('存在一个无数字项 → false（宽松唯一致）', () => {
+    expect(isDigitBearingOptionSet(['20%', '不确定'])).toBe(false);
   });
 });
 

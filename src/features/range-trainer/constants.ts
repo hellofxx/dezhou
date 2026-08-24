@@ -173,7 +173,10 @@ export const POSITION_UNLOCK_THRESHOLDS: Partial<Record<Position, number>> = {
 };
 
 /** 判断指定位置是否已解锁（基于 preflop ELO） */
-export function isPositionUnlocked(position: Position, preflopElo: number): boolean {
+export function isPositionUnlocked(position: Position, preflopElo: number, playerCount?: number): boolean {
+  // XMOD-009：低人数桌（≤2-max，HU/2-max 独立学习路径）绕过位置渐进解锁，直接可训。
+  // 不校验收敛位置阈值（BTN/BB 需高 ELO 在 6-max 才合理，2-max 下位置概念不同）。
+  if (playerCount !== undefined && playerCount <= 2) return true;
   const threshold = POSITION_UNLOCK_THRESHOLDS[position];
   // 未配置阈值的位置（如 MP/UTG1）默认解锁
   if (threshold === undefined) return true;
@@ -491,8 +494,21 @@ export function getPresetsForVariant(variant: GameVariant): RangePreset[] {
   }
 }
 
-/** 根据游戏变体和人数获取预置范围（4-Max 特殊处理） */
+/**
+ * 根据游戏变体和人数获取预置范围。
+ *
+ * XMOD-006：显式回落策略 —— 仅 standard 4-max 有专属预置表（FOUR_MAX_PRESET_RANGES），
+ * 其余人数一律回落变体基础预置源（standard → 6-max 口径 PRESET_RANGES + ADVANCED；
+ * 故 9-max 也回落 6-max preset，导致 UTG1/UTG2/MP 三个 9-max 专属位置无任何 preset）。
+ * 无 preset 的位置由 UI 端 hasPresetForPosition 判定并置为禁用「暂无数据」；
+ * 不扩充 9-max 专属数据（避免臆造频率表成为错误教学权威源），采「显式回落 + 无 preset 位置禁用」。
+ */
 export function getPresetsForVariantAndPlayerCount(variant: GameVariant, playerCount: number): RangePreset[] {
   if (variant === 'standard' && playerCount === 4) return FOUR_MAX_PRESET_RANGES;
   return getPresetsForVariant(variant);
+}
+
+/** 判断当前位置在给定（变体，人数）下是否存在可用预置（供位置渲染过滤/禁用） */
+export function hasPresetForPosition(variant: GameVariant, playerCount: number, position: Position): boolean {
+  return getPresetsForVariantAndPlayerCount(variant, playerCount).some((p) => p.position === position);
 }

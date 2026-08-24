@@ -193,7 +193,7 @@
     },
     "dataStorage": {
       "title": "Data Storage & Export",
-      "body": "Settings and state such as ELO and streaks are stored in browser localStorage, while training records and hand history data are kept in browser IndexedDB — all locally. Export a JSON backup of training records and settings from Settings (hand history not yet included) and import it on a new device. Clearing browser data will erase your records."
+      "body": "Settings and state such as ELO and streaks are stored in browser localStorage, while training records and hand history data are kept in browser IndexedDB — all locally. Export a JSON backup of training records, settings and hand history from Settings and import it on a new device. Clearing browser data will erase your records."
     }
   },
   "faq": {
@@ -205,7 +205,7 @@
     },
     "q1": {
       "question": "How do I migrate data to a new device?",
-      "answer": "Click 'Export Data' in Settings on your old device to download a JSON file, then click 'Import Data' on the new device and select that file to restore your training records and settings (hand history data is not yet included in migration)."
+      "answer": "Click 'Export Data' in Settings on your old device to download a JSON file, then click 'Import Data' on the new device and select that file to restore your training records, settings and hand history."
     },
     "q2": {
       "question": "Does it work offline?",

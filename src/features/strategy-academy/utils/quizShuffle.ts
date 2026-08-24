@@ -21,6 +21,7 @@ import {
   shuffleBySeed,
   hashStringToSeed,
   isNumericOptionSet,
+  isDigitBearingOptionSet,
   sortByNumericValue,
 } from '@/shared/utils/seededShuffle';
 
@@ -84,17 +85,6 @@ export function orderDrillOptions(q: DrillQuestion, seed?: number): DrillQuestio
  * （见 drillOptionOrder.test.ts 分布守卫）。
  */
 const DRILL_OPTION_SALT = '@v2';
-
-/** 放宽的数值选项集判定：每个解析后文本都含数字即视为数值集。
- *
- * shared 的 isNumericOptionSet 要求 `/^约?\s*\d/`（数字开头），
- * 对英文 locale（如 '~16%' / 'About 15'）会失配，导致 zh/en 走不同分支。
- * 这里放宽为 `/\d/`（含数字即可），保证两种语言下同走升/降序分支且顺序一致
- * （排序取文本首个数字，与位置无关，zh/en 数值相同 → 顺序相同）。
- */
-function isDigitBearingOptionSet(texts: string[]): boolean {
-  return texts.length > 0 && texts.every((text) => /\d/.test(text));
-}
 
 /** orderResolvedOptions 的返回结构：重排后的选项 + 重映射后的正确索引 */
 export interface OrderedOptions<T> {

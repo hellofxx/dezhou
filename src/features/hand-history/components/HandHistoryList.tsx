@@ -50,7 +50,7 @@ export default function HandHistoryList() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="section-eyebrow">{t('handHistory.list.pageTitle')}</p>
+          <p className="section-eyebrow">{t('handHistory.list.eyebrow')}</p>
           <h1 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">{t('handHistory.list.pageTitle')}</h1>
           <p className="text-sm text-[var(--ivory-muted)] mt-1 font-numeric">
             {t('handHistory.list.importedCount', { count: hands.length })}

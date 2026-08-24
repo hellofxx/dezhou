@@ -8,6 +8,7 @@ import { RangeSelector } from './RangeSelector';
 import { RangeInfo } from './RangeInfo';
 import { useRangeTrainerStore } from '../store';
 import { getPositionsForPlayerCount } from '@/shared/types/position';
+import { getPlayerCountOptions } from '@/shared/constants/poker';
 import type { GameVariant } from '@/shared/types/poker';
 
 const VARIANT_OPTIONS: { value: GameVariant; labelKey: string }[] = [
@@ -15,14 +16,6 @@ const VARIANT_OPTIONS: { value: GameVariant; labelKey: string }[] = [
   { value: 'short-deck', labelKey: 'rangeTrainer.variant.shortDeck' },
   { value: 'heads-up', labelKey: 'rangeTrainer.variant.headsUp' },
 ];
-
-function getPlayerCountOptions(variant: GameVariant): number[] {
-  switch (variant) {
-    case 'standard': return [2, 3, 4, 6, 9];
-    case 'short-deck': return [2, 3, 4, 5, 6];
-    case 'heads-up': return [2];
-  }
-}
 
 export default function RangeTrainerHome() {
   const navigate = useNavigate();
@@ -53,7 +46,12 @@ export default function RangeTrainerHome() {
     [playerCount]
   );
 
-  const playerCountOptions = getPlayerCountOptions(gameVariant);
+  // XMOD-002：人数选项统一由 shared getPlayerCountOptions 推导（GAME_VARIANT_CONFIGS 为唯一事实源）。
+  // standard 额外排除 5：无专属 5-max preset 数据（5-max 回落 6-max preset 缺口），避免选到后无可用范围。
+  const playerCountOptions = getPlayerCountOptions(
+    gameVariant,
+    gameVariant === 'standard' ? [5] : [],
+  );
 
   // 自动选择第一个匹配的预设
   // RNG-002 修复：依赖须含 selectedPreset —— setSelectedPosition/ActionType 会将

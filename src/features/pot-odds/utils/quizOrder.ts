@@ -17,23 +17,14 @@
  * （数值升序语言无关、洗牌种子为 id），顺序不随语言切换变化。
  */
 import {
+  // 宽松判定（`/\d/` 含数字即可，兼容 'About 15 (combo draw)' 等英文文本），
+  // 使 zh/en 同走升序分支且顺序一致（见文件头 i18n 说明）。
+  isDigitBearingOptionSet,
   shuffleBySeed,
   hashStringToSeed,
   sortByNumericValue,
 } from '@/shared/utils/seededShuffle';
 import type { PotOddsQuizQuestion } from '../types';
-
-/** 放宽的数值选项集判定：每个解析后文本都含数字即视为数值集。
- *
- * shared 的 isNumericOptionSet 要求 `/^约?\s*\d/`（数字/"约"+数字开头），
- * 对英文 locale（如 'About 15 (combo draw)'）会失配，导致 zh/en 走不同分支。
- * 与 strategy-academy quizShuffle 的 isDigitBearingOptionSet 同口径：
- * 放宽为 `/\d/`（含数字即可），排序取文本首个数字（与位置无关），
- * zh/en 数值相同 → 两种语言下同走升序分支且顺序一致。
- */
-function isDigitBearingOptionSet(texts: string[]): boolean {
-  return texts.length > 0 && texts.every((text) => /\d/.test(text));
-}
 
 /**
  * 返回选项已重排的新题目对象（不修改入参）。

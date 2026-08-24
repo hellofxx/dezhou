@@ -2,6 +2,7 @@
 export enum Position {
   UTG = 'UTG',   // Under the Gun
   UTG1 = 'UTG1', // UTG+1 (6-max中为MP)
+  UTG2 = 'UTG2', // UTG+2，9 人桌特有
   MP = 'MP',     // Middle Position
   HJ = 'HJ',     // Hijack (LJ in some formats)
   CO = 'CO',     // Cutoff
@@ -27,7 +28,7 @@ export function getPositionsForPlayerCount(count: number): Position[] {
     case 6: // 6-Max
       return [Position.UTG, Position.HJ, Position.CO, Position.BTN, Position.SB, Position.BB];
     case 9: // Full Ring
-      return [Position.UTG, Position.UTG1, Position.MP, Position.HJ, Position.CO, Position.BTN, Position.SB, Position.BB];
+      return [Position.UTG, Position.UTG1, Position.UTG2, Position.MP, Position.HJ, Position.CO, Position.BTN, Position.SB, Position.BB];
     default:
       return [];
   }
@@ -61,6 +62,7 @@ export function getPositionGroup(position: Position): PositionGroup {
   switch (position) {
     case Position.UTG:
     case Position.UTG1:
+    case Position.UTG2:
       return 'early';
     case Position.MP:
     case Position.HJ:

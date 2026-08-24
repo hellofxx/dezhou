@@ -14,6 +14,7 @@ import type { RangePreset } from '../types';
 import { SIX_MAX_POSITIONS, ACTION_TYPES, POSITION_UNLOCK_THRESHOLDS, isPositionUnlocked } from '../constants';
 import { useProgressStore } from '@/features/progress/store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
+import { useRangeTrainerStore } from '../store';
 import { resolvePresetName } from '../utils/presetI18n';
 
 interface RangeSelectorProps {
@@ -40,6 +41,8 @@ export function RangeSelector({
   const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
   // 调试解锁：解除全部位置门禁
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
+  // XMOD-009：低人数桌（≤2-max）绕过位置解锁，使 isPositionUnlocked 短路
+  const playerCount = useRangeTrainerStore((s) => s.playerCount);
 
   // 过滤当前位置+动作类型的预设
   const filteredPresets = presets.filter(
@@ -55,25 +58,30 @@ export function RangeSelector({
         <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">{t('rangeTrainer.rangeSelect.position')}</h3>
         <div className="flex flex-wrap gap-1.5">
           {displayPositions.map((pos) => {
-            const unlocked = debugUnlock || isPositionUnlocked(pos, preflopElo);
+            // XMOD-001：当前 (variant, playerCount) 下无可用 preset 的位置禁用「暂无数据」
+            const hasPreset = presets.some((p) => p.position === pos);
+            const unlocked = debugUnlock || isPositionUnlocked(pos, preflopElo, playerCount);
             const threshold = POSITION_UNLOCK_THRESHOLDS[pos];
             const lockHint = t('rangeTrainer.rangeSelect.unlockRequirement', { threshold });
+            const noDataHint = t('rangeTrainer.rangeSelect.noData');
+            const disabled = !unlocked || !hasPreset;
+            const reason = !hasPreset ? noDataHint : unlocked ? undefined : lockHint;
             return (
               <Button
                 key={pos}
                 variant={selectedPosition === pos ? 'default' : 'outline'}
                 size="sm"
-                disabled={!unlocked}
-                title={unlocked ? pos : lockHint}
-                aria-label={unlocked ? pos : lockHint}
+                disabled={disabled}
+                title={reason ?? pos}
+                aria-label={reason ?? pos}
                 className={cn(
                   'text-xs px-4 min-h-11',
                   selectedPosition === pos && 'bg-[var(--brass)] hover:bg-[var(--brass-bright)]',
-                  !unlocked && 'opacity-50 cursor-not-allowed'
+                  disabled && 'opacity-50 cursor-not-allowed'
                 )}
-                onClick={() => unlocked && onPositionChange(pos)}
+                onClick={() => !disabled && onPositionChange(pos)}
               >
-                {!unlocked && <Lock className="w-3 h-3 mr-1" />}
+                {!unlocked && !hasPreset && <Lock className="w-3 h-3 mr-1" />}
                 {pos}
               </Button>
             );

@@ -25,7 +25,8 @@
     "preset": "预设范围",
     "presetPlaceholder": "选择预设范围...",
     "presetHands": "{{name}} ({{count}} 手牌)",
-    "unlockRequirement": "需 preflop ELO ≥ {{threshold}} 解锁"
+    "unlockRequirement": "需 preflop ELO ≥ {{threshold}} 解锁",
+    "noData": "该位置暂无数据"
   },
   "rangeInfo": {
     "title": "范围信息",

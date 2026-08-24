@@ -114,3 +114,30 @@ export const GAME_VARIANT_CONFIGS: Record<GameVariant, GameVariantConfig> = {
     removedRanks: [],
   },
 };
+
+// 建议人数基准列表（各变体在此基础上按 minPlayers/maxPlayers/exclude 过滤）
+const BASE_PLAYER_COUNTS = [2, 3, 4, 5, 6, 9];
+
+/**
+ * 获取指定变体支持的建议人数选项（列表升序）。
+ *
+ * 由 GAME_VARIANT_CONFIGS 推导（minPlayers / maxPlayers 为唯一事实源），
+ * 过滤掉 n < minPlayers、n > maxPlayers 或 n 命中 exclude 的项。
+ * exclude 供调用方声明"该人数本变体不支持"（如 range-trainer standard 排除 5，
+ * 因无专属 5-max 数据）。
+ *
+ * 示例：
+ * - standard → [2, 3, 4, 5, 6, 9]
+ * - short-deck → [2, 3, 4, 5, 6]
+ * - heads-up → [2]
+ * - standard + exclude [5] → [2, 3, 4, 6, 9]
+ */
+export function getPlayerCountOptions(
+  variant: GameVariant,
+  exclude: number[] = [],
+): number[] {
+  const config = GAME_VARIANT_CONFIGS[variant];
+  return BASE_PLAYER_COUNTS.filter(
+    (n) => n >= config.minPlayers && n <= config.maxPlayers && !exclude.includes(n),
+  );
+}

@@ -199,8 +199,8 @@ export default function GTOSessionPage() {
 
   const streetLabel =
     activeStreet === 'preflop' ? t('gto.session.streetPreflop')
-      : activeStreet === 'flop' ? t('gto.session.streetFlop')
-        : activeStreet === 'turn' ? t('gto.session.streetTurn') : t('gto.session.streetRiver');
+    : activeStreet === 'flop' ? t('gto.session.streetFlop')
+    : activeStreet === 'turn' ? t('gto.session.streetTurn') : t('gto.session.streetRiver');
 
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-6 min-h-screen flex flex-col">

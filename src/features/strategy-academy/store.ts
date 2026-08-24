@@ -393,12 +393,12 @@ export const useAcademyStore = create<AcademyStore>()(
       isCertified: (level) => {
         const cert = get().certifications[level];
         if (!cert?.certifiedAt) return false;
-
+        
         // 如果有有效期限且已过期，也需要重新认证
         if (cert.validUntil && Date.now() > cert.validUntil) {
           return false;
         }
-
+        
         return true;
       },
 

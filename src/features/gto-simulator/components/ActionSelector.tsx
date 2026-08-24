@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActionType } from '@/shared/types/action';
 import type { Decision } from '@/shared/types/action';
 import { cn } from '@/shared/utils';
@@ -18,6 +19,7 @@ export function ActionSelector({
   onDecision,
   disabled = false,
 }: ActionSelectorProps) {
+  const { t } = useTranslation();
   const [raiseAmount, setRaiseAmount] = useState(() =>
     Math.min(Math.max(2.5, callAmount ? callAmount * 2 : 2), effectiveStack)
   );
@@ -77,7 +79,7 @@ export function ActionSelector({
 
   return (
     <div className="space-y-4">
-      {/* 主按钮 — Fold=clay · Call=sage · Raise=brass (card-room action semantics) */}
+      {/* 主按钮 — Fold=陶土赭 danger 系 · Call=深胡桃实底 · Raise=brass (card-room action semantics) */}
       <div className="grid grid-cols-3 gap-3">
         {/* Fold */}
         <button
@@ -85,8 +87,8 @@ export function ActionSelector({
           disabled={disabled}
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
-            'bg-[var(--clay)]/20 text-[var(--clay)] border border-[var(--clay)]/40',
-            'hover:bg-[var(--clay)]/30 hover:border-[var(--clay)]/60',
+            'bg-[var(--poker-terra)]/15 text-[var(--poker-terra-bright)] border border-[var(--poker-terra)]/50',
+            'hover:bg-[var(--poker-terra)]/25 hover:border-[var(--poker-terra)]/70',
             'active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
           )}
         >
@@ -100,8 +102,8 @@ export function ActionSelector({
           disabled={disabled}
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
-            'bg-[var(--sage)]/20 text-[var(--sage)] border border-[var(--sage)]/40',
-            'hover:bg-[var(--sage)]/30 hover:border-[var(--sage)]/60',
+            'bg-[var(--walnut-raised)] text-[var(--ivory-dim)] border border-[var(--walnut-light)]',
+            'hover:bg-[var(--walnut-light)] hover:text-[var(--ivory)]',
             'active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
           )}
         >
@@ -112,6 +114,8 @@ export function ActionSelector({
         {/* Raise */}
         <button
           onClick={() => setShowRaiseSlider(!showRaiseSlider)}
+          aria-expanded={showRaiseSlider}
+          aria-controls="gto-raise-panel"
           disabled={disabled}
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
@@ -129,7 +133,7 @@ export function ActionSelector({
 
       {/* Raise 面板 */}
       {showRaiseSlider && (
-        <div className="p-4 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)] space-y-3">
+        <div id="gto-raise-panel" className="p-4 rounded-md bg-[var(--felt)] border border-[var(--walnut-border)] space-y-3">
           {/* 快捷加注 */}
           <div className="flex gap-2">
             {quickRaises.map((qr) => (
@@ -157,6 +161,7 @@ export function ActionSelector({
               step={0.5}
               value={raiseAmount}
               onChange={(e) => setRaiseAmount(Number(e.target.value))}
+              aria-label={t('gto.action.raiseSlider')}
               className="w-full h-2 bg-[var(--felt-deep)] rounded-full appearance-none cursor-pointer accent-[var(--brass)]"
             />
             <div className="flex justify-between text-xs text-[var(--ivory-muted)] font-numeric">

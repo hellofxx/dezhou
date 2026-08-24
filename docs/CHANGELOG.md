@@ -16,6 +16,32 @@
 - **分诊去向**：XMOD-001/002/006/007/008 转待办（Position 枚举扩展 / getPlayerCountOptions 单一事实源收敛 / preset 数据补充 / shared rangeParser 健壮性 / isDigitBearingOptionSet 重复实现上收，各附建议责任代理与修复方向，见登记表指派方列）；XMOD-009/010/012 待产品决策（2 人桌位置解锁阈值语义 / onboarding 完成当日进度展示口径 / IndexedDB 牌局数据是否纳入备份链路）。
 - **验证**：`node node_modules/typescript/bin/tsc --noEmit` 与 `pnpm lint` exit 0；4 项修复相关测试路径过滤全绿（mentorStyles 5 / drillFlow 10 / localeParity 33 / staticKeyGuard 2 / FirstDrillStep 2 / range-trainer 41，共 93 用例）；全量 `pnpm verify` 由主协调方统一验收。
 
+### 遗留事项落地（转待办 5 项 + 待产品决策 3 项全数闭环，产品决策已确认方向）
+
+> 依产品决策落地跨模块遗留项：XMOD-009/010/012 决策方向分别为「低人数桌绕过解锁」「onboarding 计入当日活跃」「牌局数据纳入备份」；技术项依既定方向实施。所有跨模块问题（XMOD-001~012）至此全数「已闭环」。
+
+- **9-max 位置补全（XMOD-001）**：`Position` 枚举新增 `UTG2`；`getPositionsForPlayerCount(9)` 返回 9 位（UTG/UTG1/UTG2/MP/HJ/CO/BTN/SB/BB）；`getPositionGroup(UTG2)='early'`。保留 9-max 仅修正位置；range/gto 双模块消费天然兼容，`position.test.ts` 更新 9-max 断言。
+- **人数选项单一事实源（XMOD-002）**：`shared/constants/poker.ts` 新增 `getPlayerCountOptions(variant, exclude?)`，由 `GAME_VARIANT_CONFIGS` 单源派生；gto-simulator ScenarioSetup、range-trainer RangeTrainerHome 均改为消费共享函数（range standard 传 `exclude:[5]`）。
+- **9-max preset 缺口（XMOD-006）**：保留回落 6-max 策略并显式注释；新增 `hasPresetForPosition`，RangeSelector/QuizConfig 对无 preset 位置（9-max 的 UTG1/UTG2/MP）禁用「暂无数据」（zh/en `rangeSelect.noData`），杜绝空白训练态。
+- **rangeParser 健壮性（XMOD-007）**：parseRange 非法令牌清洗；getHandGridPosition 非法 rank 返回 `{row:-1,col:-1}` 哨兵；新增 14 用例；gto-simulator 消费确认无越界。
+- **isDigitBearingOptionSet 上收 shared（XMOD-008）**：`seededShuffle.ts` 新增宽松判定作为单一事实源；pot-odds/strategy-academy 删除本地重复改为导入共享；严格版 isNumericOptionSet 保留双语义。
+- **2-max 绕过位置解锁（XMOD-009）**：`isPositionUnlocked` 增可选 `playerCount` 参数，`≤2-max` 直接解锁；RangeSelector/QuizConfig 接入；新增 constants.test.ts 5 用例。
+- **onboarding 计入当日活跃（XMOD-010）**：`FeltArena` 今日进度改为消费当日活跃标记（`streak.lastTrainingDate===today`），引导完成当日与 streak 展示一致；纯展示层派生、幂等、persist 未变更。
+- **牌局数据纳入备份（XMOD-012）**：`progress/utils/handHistoryBackup.ts` 新增 IndexedDB 牌局备份读写；导出文件新增 `hands` 分区并标记 `dataVersion=2`（旧 v1 文件缺 hands 则跳过，向后兼容）；导入按 id `store.put` 去重恢复；zh/en settings.json、help.json 同步文案；新增 3 用例。
+- **验证**：`pnpm verify` 全量 exit 0（typecheck/lint/test 101 文件 695 用例全绿，较基线净增 34 用例）；相关模块测试路径过滤全绿；未引入新依赖，persist schema 除 9-max 位置语义外无破坏性变更（onboarding/备份项均不改 progress persist version）。
+
+### UI 既有债务清理（ui-ux 复核 6 项全数处置）
+
+> 依据 13-uiux-review.md §3 登记的 6 项低优先级既有债务，按最优实践全部处置（非本次排查引入的回归，纯债务清仓，零新增 bug）。
+
+- **ActionSelector 无障碍**：Raise 滑块补 `aria-label=t('gto.action.raiseSlider')`（新增 `gto.action.raiseSlider` 双语 key，zh 加注尺寸 / en Raise size）；Raise 按钮补 `aria-expanded` / `aria-controls="gto-raise-panel"`、滑块面板补 `id`，满足 WCAG 4.1.2。
+- **ActionSelector 色阶对齐 §5.5**：Fold 由 `--clay` 改为 `--poker-terra` 陶土赭 danger 系、Call 由 `--sage` 改为 `--walnut-raised` 深胡桃实底（对齐 range-trainer QuizCard 已落地口径），消风格漂移。
+- **HandHistoryList eyebrow/H1 去重**：新增差异化 key `handHistory.list.eyebrow`（zh 复盘分析 / en Review Analysis），eyebrow 改用之，消除与 H1「牌局历史」同文案叠放。
+- **JSON 末尾换行核实**：4 个文件（zh/en handHistory.json、help.json）经确认均已含末尾换行，无需改动。
+- **ReviewSession 兼容 token 替换**：进度条渐变 `to-[var(--sage)]` → `to-[var(--poker-info)]`。
+- **ConceptGraph SVG 注释锚定**：7 处 SVG rgba/white 字面量补 `§12.1 SVG 例外` token 锚定注释（success/ivory/felt-deep 对应关系），零逻辑改动。
+- **验证**：`pnpm verify` 全量 exit 0（101 文件 695 用例全绿）；相关模块测试 + localeParity/staticKeyGuard/designTokenGuard 全绿；未引入任何/dep 新依赖。
+
 ---
 
 ## [Unreleased] - 2026-08-22

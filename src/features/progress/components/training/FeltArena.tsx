@@ -39,8 +39,12 @@ export default function FeltArena() {
       : 10;
   // 今日进度 = 今日已答题数 / 目标题数；跨日时 dailyQuestionsDate 非今日 → 视为 0（防御昨日残留数据）
   const isToday = emotion.dailyQuestionsDate === getTodayString();
+  // XMOD-010：当日活跃 = 已记训练日（onboarding 完成已调用 recordTrainingDay，或正式训练）。
+  // 当日活跃但无真实答题时（如仅完成引导），今日进度保底为 1，使「今日进度」与 streak（Day N）
+  // 展示一致，消除「今日进度 0/N 但 streak Day 1」的观感矛盾；有真实答题时仍按实际计数。
+  const isTodayActive = streak.lastTrainingDate === getTodayString();
   const dailyProgress = {
-    current: isToday ? emotion.dailyTotal : 0,
+    current: isTodayActive ? Math.max(isToday ? emotion.dailyTotal : 1, 1) : 0,
     total: dailyGoal,
   };
   const progressPercent =

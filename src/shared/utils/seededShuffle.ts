@@ -81,6 +81,19 @@ export function isNumericOptionSet(texts: string[]): boolean {
 }
 
 /**
+ * 判断一组选项文本是否为"内含数字的宽松选项集"（每个文本 `/\d/` 含数字即算）。
+ *
+ * 与严格判定 `isNumericOptionSet`（`/^约?\s*\d/` 开头）互补：
+ * 用于 i18n-key 型题库经 `t()` 解析后的场景——解析出的文本可能以数字开头，
+ * 也可能数字出现在中间（如 "About 15 (combo draw)"），宽松判定保证 zh/en
+ * 走同一分支。空数组返回 false（无从判断，按非数值处理）。
+ */
+export function isDigitBearingOptionSet(texts: string[]): boolean {
+  if (texts.length === 0) return false;
+  return texts.every((text) => /\d/.test(text));
+}
+
+/**
  * 按 getText 返回文本中第一个数字升序排序（稳定，不修改原数组）。
  *
  * - 数字匹配 `/\d+(?:\.\d+)?/`，"约"前缀自然被忽略（只取首个数字）

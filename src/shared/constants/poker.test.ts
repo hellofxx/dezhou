@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RANKS, RANK_DISPLAY, RANK_CARD_FACE_DISPLAY } from './poker';
+import { RANKS, RANK_DISPLAY, RANK_CARD_FACE_DISPLAY, getPlayerCountOptions } from './poker';
 import { Rank } from '@/shared/types/poker';
 
 describe('RANK_DISPLAY（文字 notation / 理论表述）', () => {
@@ -24,5 +24,27 @@ describe('RANK_CARD_FACE_DISPLAY（扑克牌牌面实物渲染）', () => {
     for (const rank of RANKS) {
       expect(RANK_CARD_FACE_DISPLAY[rank]).toBeTruthy();
     }
+  });
+});
+
+describe('getPlayerCountOptions', () => {
+  it('standard → [2,3,4,5,6,9]', () => {
+    expect(getPlayerCountOptions('standard')).toEqual([2, 3, 4, 5, 6, 9]);
+  });
+
+  it('short-deck → [2,3,4,5,6]', () => {
+    expect(getPlayerCountOptions('short-deck')).toEqual([2, 3, 4, 5, 6]);
+  });
+
+  it('heads-up → [2]', () => {
+    expect(getPlayerCountOptions('heads-up')).toEqual([2]);
+  });
+
+  it('exclude 过滤指定人数（standard 排除 5）', () => {
+    expect(getPlayerCountOptions('standard', [5])).toEqual([2, 3, 4, 6, 9]);
+  });
+
+  it('exclude 对非法人数无副作用', () => {
+    expect(getPlayerCountOptions('heads-up', [5])).toEqual([2]);
   });
 });

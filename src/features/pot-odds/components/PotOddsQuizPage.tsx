@@ -271,9 +271,9 @@ export default function PotOddsQuizPage() {
           <div className="rounded-lg bg-[var(--walnut-raised)] p-4 mb-8">
             <p className="text-sm text-[var(--ivory-dim)]">
               {accuracy >= 90 ? t('potOdds.quiz.gradeExcellent') :
-                accuracy >= 70 ? t('potOdds.quiz.gradeGood') :
-                  accuracy >= 50 ? t('potOdds.quiz.gradeFair') :
-                    t('potOdds.quiz.gradePoor')}
+               accuracy >= 70 ? t('potOdds.quiz.gradeGood') :
+               accuracy >= 50 ? t('potOdds.quiz.gradeFair') :
+               t('potOdds.quiz.gradePoor')}
             </p>
             {lastQuestionCorrect && (
               <p className="text-xs text-[var(--sage)] mt-2 font-display">
@@ -387,7 +387,7 @@ export default function PotOddsQuizPage() {
                     )}
                     animate={
                       showWrong ? { x: [0, -4, 4, -4, 4, 0] } :
-                        showCorrect ? { scale: [1, 1.01, 1] } : {}
+                      showCorrect ? { scale: [1, 1.01, 1] } : {}
                     }
                     transition={transitionSlow}
                     whileHover={!isAnswered ? { scale: 1.01 } : {}}
@@ -397,12 +397,12 @@ export default function PotOddsQuizPage() {
                       <span className={cn(
                         'w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold shrink-0',
                         showCorrect ? 'border-[var(--success)] text-[var(--success)]' :
-                          showWrong ? 'border-[var(--danger)] text-[var(--danger)]' :
-                            'border-[var(--ivory-dim)]/40 text-[var(--ivory-muted)]'
+                        showWrong ? 'border-[var(--danger)] text-[var(--danger)]' :
+                        'border-[var(--ivory-dim)]/40 text-[var(--ivory-muted)]'
                       )}>
                         {showCorrect ? <CheckCircle2 className="w-4 h-4" /> :
-                          showWrong ? <XCircle className="w-4 h-4" /> :
-                            String.fromCharCode(65 + i)}
+                         showWrong ? <XCircle className="w-4 h-4" /> :
+                         String.fromCharCode(65 + i)}
                       </span>
                       <span className="font-medium">{t(option.text)}</span>
                     </div>
