@@ -82,7 +82,7 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
           const isActive = level.id === activeId;
           const expanded = level.id === expandedId;
 
-          // 理论→实践桥接（与旧 TheoryLevelCard 口径一致）
+          // 理论→实践桥接：优先推荐轨道，无轨道则取首个推荐课程，派生策略学院链接
           const rec = level.practiceRecommendations;
           const practiceTarget = rec.trackId
             ? `/academy/tracks?track=${rec.trackId}`

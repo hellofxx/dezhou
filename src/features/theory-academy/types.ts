@@ -50,6 +50,10 @@ export interface TheoryChapter {
   objectives?: string[];
   content: TheorySection[];
   quiz: TheoryQuizQuestion[];
+  /** 所属变体标识 */
+  variant: PokerVariant;
+  /** 变体特有规则说明 */
+  variantRules?: VariantRuleInfo;
 }
 
 /** 理论→实践桥接推荐（引用 strategy-academy 课程/轨道 ID 字符串，不产生模块 import） */
@@ -72,6 +76,8 @@ export interface TheoryLevelInfo {
   unlockRequirement: string;
   /** 完成本 Level 后的实践推荐（策略学院课程/轨道） */
   practiceRecommendations: PracticeRecommendation;
+  /** 所属变体 */
+  variant: PokerVariant;
 }
 
 /** 变体规则信息 */
@@ -98,39 +104,6 @@ export interface VariantRuleInfo {
     suitedConnectorsStrength?: 'elevated';
   };
   [key: string]: unknown;
-}
-
-/** 理论章节增强 */
-export interface TheoryChapter {
-  id: string;                       // 全局唯一，前缀 t<level>-（与 l<level>- 隔离）
-  level: TheoryLevelNumber;
-  order: number;
-  title: string;
-  subtitle: string;
-  duration: string;                 // 预计阅读时长，如 '10 min'
-  /** 本章小测答题影响的 ELO 维度 */
-  eloDimension: EloDimension;
-  /** 本章学习目标（先行组织者策略，可选；为空时 UI 不渲染目标卡片） */
-  objectives?: string[];
-  content: TheorySection[];
-  quiz: TheoryQuizQuestion[];
-  variant: PokerVariant;            // ← 新增：所属变体标识
-  variantRules?: VariantRuleInfo;   // ← 新增：变体特有规则说明
-}
-
-/** 理论 Level 信息增强 */
-export interface TheoryLevelInfo {
-  id: string;                       // 't1' ... 't9'
-  level: TheoryLevelNumber;
-  tier: TheoryTier;
-  title: string;
-  description: string;
-  icon: string;
-  chapters: TheoryChapter[];
-  unlockRequirement: string;
-  /** 完成本 Level 后的实践推荐（策略学院课程/轨道） */
-  practiceRecommendations: PracticeRecommendation;
-  variant: PokerVariant;            // ← 新增：所属变体
 }
 
 /** 理论学习进度（持久化）增强 */

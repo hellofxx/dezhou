@@ -14,14 +14,6 @@
   "flagQuestion": "标记此题为疑难",
   "flaggedQuestion": "已标记为疑难",
   "quizProgress": "第 {{current}} / {{total}} 题",
-  "learningMap": {
-    "title": "学习地图",
-    "levelAria": "Theory {{tier}}：{{title}}（{{state}}）",
-    "done": "已完成",
-    "inProgress": "进行中",
-    "locked": "未解锁"
-  },
-  "continueLearning": "继续学习",
   "resume": {
     "eyebrow": "继续你的理论学习",
     "eyebrowFresh": "开启理论研习",
@@ -312,21 +304,6 @@
     "enterTrack": "进入推荐学习轨道",
     "lockedHint": "完成本级剩余章节后解锁：{{title}}",
     "nextChapterLabel": "下一章：{{title}}"
-  },
-  "chapterList": {
-    "chapterAria": "第 {{order}} 章：{{title}}{{revisitable}}",
-    "revisitable": "（已完成，可回访复习）",
-    "chapterOrder": "第 {{order}} 章",
-    "scoreSuffix": " 分"
-  },
-  "levelCard": {
-    "levelAria": "理论 Level {{level}}：{{title}}{{locked}}",
-    "lockedSuffix": "（未解锁）",
-    "doneAria": "{{title}} 已完成，去实践应用",
-    "collapseAria": "收起 {{title}} 章节列表",
-    "expandAria": "展开 {{title}} 章节列表",
-    "chaptersDone": "{{count}}/{{total}} 章完成",
-    "goPractice": "去实践应用"
   },
   "chapterView": {
     "backAria": "返回理论学院",

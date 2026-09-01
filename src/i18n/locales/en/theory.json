@@ -14,14 +14,6 @@
   "flagQuestion": "Flag this question as difficult",
   "flaggedQuestion": "Flagged as difficult",
   "quizProgress": "Question {{current}} of {{total}}",
-  "learningMap": {
-    "title": "Learning Map",
-    "levelAria": "Theory {{tier}}: {{title}} ({{state}})",
-    "done": "completed",
-    "inProgress": "in progress",
-    "locked": "locked"
-  },
-  "continueLearning": "Continue Learning",
   "resume": {
     "eyebrow": "Continue your theory study",
     "eyebrowFresh": "Start your theory study",
@@ -312,21 +304,6 @@
     "enterTrack": "Enter recommended learning track",
     "lockedHint": "Unlocks after finishing the remaining chapters: {{title}}",
     "nextChapterLabel": "Next chapter: {{title}}"
-  },
-  "chapterList": {
-    "chapterAria": "Chapter {{order}}: {{title}}{{revisitable}}",
-    "revisitable": "(Completed, revisitable)",
-    "chapterOrder": "Chapter {{order}}",
-    "scoreSuffix": " pts"
-  },
-  "levelCard": {
-    "levelAria": "Theory Level {{level}}: {{title}}{{locked}}",
-    "lockedSuffix": " (locked)",
-    "doneAria": "{{title}} completed — go practice",
-    "collapseAria": "Collapse {{title}} chapter list",
-    "expandAria": "Expand {{title}} chapter list",
-    "chaptersDone": "{{count}}/{{total}} chapters done",
-    "goPractice": "Go Practice"
   },
   "chapterView": {
     "backAria": "Back to Theory Academy",

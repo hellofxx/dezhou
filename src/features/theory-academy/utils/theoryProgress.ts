@@ -84,7 +84,7 @@ export function isLevelFullyCompleted(levelId: string, completedChapters: string
 
 /**
  * 获取 Level 的学习目标章节（首个未完成章节；全部完成则返回第一章）。
- * TheoryLevelCard 的「继续学习」与 TheoryLearningMap 的节点点击共用此推导，避免口径分叉。
+ * TheoryLadder 的展开直达与 TheoryResume 的「继续阅读」CTA 按同一口径内联实现此推导，保持一致。
  */
 export function getLevelTargetChapter(
   level: TheoryLevelInfo,
