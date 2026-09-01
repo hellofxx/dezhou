@@ -146,6 +146,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
 
   switch (status) {
     case 'completed':
+      // §12.1 SVG 例外：success 绿 15% 完成态节点底（--success 方向）
       fill = 'rgba(127, 184, 131, 0.15)';
       stroke = 'var(--success)';
       textColor = 'var(--poker-success)';

@@ -78,8 +78,8 @@ interface AcademyStore {
   updateAbility: (result: RecentPracticeResult) => void;
   setAdaptiveConfig: (config: Partial<AdaptiveConfig>) => void;
   resetAbility: () => void;
-  // 新增：每日训练计划
-  refreshDailyPlan: (reviewQueue?: string[]) => void;
+  // 新增：每日训练计划（options.force 为用户显式刷新意图，绕过同日新鲜度守卫）
+  refreshDailyPlan: (reviewQueue?: string[], options?: { force?: boolean }) => void;
   // 新增：级别认证
   attemptCertification: (level: number, score: number) => void;
   isCertified: (level: number) => boolean;
@@ -332,10 +332,16 @@ export const useAcademyStore = create<AcademyStore>()(
         }),
 
       // ===== 每日训练计划 =====
-      refreshDailyPlan: (reviewQueue = []) =>
+      refreshDailyPlan: (reviewQueue = [], options) =>
         set((state) => {
-          // 如果今天已生成且未过期，不重复生成
-          if (state.dailyPlan && isDailyPlanFresh(state.dailyPlan.generatedAt)) {
+          // 同日新鲜度守卫只约束自动/惰性生成入口（DailyPlanCard 挂载时的 refreshDailyPlan()）；
+          // 用户显式点击刷新（options.force）属明确意图，绕过守卫强制重新生成 ——
+          // BUG-ACA-006 修复：旧实现守卫一并拦截手动刷新按钮，当天点击完全无效
+          if (
+            !options?.force &&
+            state.dailyPlan &&
+            isDailyPlanFresh(state.dailyPlan.generatedAt)
+          ) {
             return {};
           }
           const plan = generateDailyPlan(

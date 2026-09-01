@@ -74,7 +74,8 @@ export function DailyPlanCard() {
           )}
           <button
             type="button"
-            onClick={() => refreshDailyPlan()}
+            // 用户显式刷新意图：force 绕过同日新鲜度守卫（守卫只约束挂载时的惰性生成入口）
+            onClick={() => refreshDailyPlan([], { force: true })}
             className="p-1.5 rounded hover:bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors"
             aria-label={t('academy.dailyPlan.refresh')}
           >

@@ -119,7 +119,7 @@ additionalPrompt: ""
 2. 添加新 Drill 时：在 drills/ 创建组件 + 题库 → 在 types.ts 的 `DrillComponentName` 添加值 → DrillLessonRouter 注册 lazy → courses.ts 标记 `type: 'drill'` + `drillComponent`
 3. 添加新学习轨道时：编辑 learningTracks.ts（或 localTrack.ts）→ 引用现有 lessonIds → LearningTracksView 自动渲染
 4. 修改难度自适应阈值时：编辑 utils/adaptiveDifficulty.ts 的 DEFAULT_ADAPTIVE_CONFIG
-5. 修改每日计划生成逻辑时：编辑 utils/dailyPlan.ts（reviewQueue 由 SRS 系统提供）
+5. 修改每日计划生成逻辑时：编辑 utils/dailyPlan.ts（reviewQueue 由 SRS 系统提供）；store.refreshDailyPlan 入口分惰性（同日新鲜度守卫生效）与显式刷新（`options.force` 绕过守卫）两路
 6. 修改等级解锁规则时：编辑 store.ts 的 `isLevelUnlocked`（按 level 数字，兼容旧调用）与 `isLevelEntryUnlocked`（按 `LevelInfo.id` 精确判定，区分 l4a/l4b；UI 门禁统一调用此方法）（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 7. 修改快速训练 SRS 混合时：编辑 QuickDrill.tsx 调用 `composeDailyMix` 的参数
 8. 新增测验题 / Drill 题时：选项与 correctIndex 书写顺序不限（渲染前自动重排），但需确认分布守卫测试（quizShuffle.test.ts / drillOptionOrder.test.ts）覆盖新题且通过
@@ -143,6 +143,8 @@ additionalPrompt: ""
 - **QuickDrill 自动降级**：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准）自动降级难度（不低于 beginner）
 - **ABILITY_LESSON_MAP 正确性**：`dailyPlan.ts` 中的 `ABILITY_LESSON_MAP` 必须引用真实存在的 lesson ID（如 `l2-3bet-basics` 而非 `l2-3bet`）；修改时必须验证 ID 有效性
 - **dailyPlan 职责区分**：项目中存在两个 `generateDailyPlan` 函数：`strategy-academy/utils/dailyPlan.ts`（学院焦点课程计划）与 progress 模块中的（跨模块推荐计划）。两者职责不同，禁止混淆
+- **每日计划刷新入口语义**：`refreshDailyPlan` 的新鲜度守卫 `isDailyPlanFresh` 只约束自动/惰性生成入口（如 DailyPlanCard 挂载）；用户显式刷新必须经 `refreshDailyPlan(reviewQueue, { force: true })` 绕过守卫，守卫不得吞掉手动操作
+- **复习推荐主题词表**：`shouldRecommendReview` 的 suggestedTopics 为课程 id（`REVIEW_TOPICS_SEVERE` / `REVIEW_TOPICS_MILD`，语言无关），消费方经 `pickReviewTargetUnit` 按 id 比对定位小节；禁止硬编码自然语言字符串（BUG-ACA-007 zh/en 失配模式）；新增主题 id 必须在课程体系真实存在并登记 `REVIEW_TOPIC_UNIT_ANCHORS`
 - **TiltWarning 三选项**：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节与 TDD 5.9）**：测验与 Drill 选项禁止按题库数据原序直接渲染；课后测验/复习用 id 稳定种子（跨会话顺序不变），认证考试（LevelCertification）用会话随机种子；i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）必须在 `t()` 解析后用 `orderResolvedOptions` 重排，且顺序不得随语言变化；重排必须同步重映射 correctIndex / correctStrategyIndex，判分与结果记录以重排后对象为唯一事实源；源题库数据不手改重排；新增/扩充题库必须被分布守卫测试覆盖
 - **课程内容渲染层 key 覆盖（数据层零改动）**：课程正文/题库/例题/实战/Drill/术语/对手档案为数据层内联中文（data/** 不改），渲染层经 `utils/contentKeys.ts` 的 `t(key, { defaultValue: 数据层中文 })` 覆盖；新增内容 key 必须同步 `src/i18n/locales/{zh,en}/academy.json`（contentI18n.test.ts 双语对称守卫）；quiz/practice/drill 选项在 `t()` 解析后走既有排序出口（顺序不随语言变化）

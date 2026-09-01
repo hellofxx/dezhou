@@ -1,4 +1,4 @@
-import type { PracticeQuestion, QuestionDifficulty, AdaptiveConfig } from '../types';
+import type { PracticeQuestion, QuestionDifficulty, AdaptiveConfig, LessonUnit } from '../types';
 
 // 默认配置
 export const DEFAULT_ADAPTIVE_CONFIG: AdaptiveConfig = {
@@ -78,6 +78,24 @@ export function selectQuestionsByDifficulty(
 }
 
 /**
+ * 降级复习推荐主题（BUG-ACA-007 修复）：统一为课程 id（稳定标识、语言无关）。
+ * 旧实现返回硬编码中文课程标题，en locale 下 LessonContent 的标题包含匹配永远失配，
+ * 「返回复习」定位失效。课程标题展示经 academy.lessonTitle.* i18n key 覆盖（zh/en 齐备）。
+ */
+/** 重度降级（正确率 < 40%）：回炉最基础的规则与位置概念 */
+export const REVIEW_TOPICS_SEVERE: readonly string[] = ['l1-basics', 'l1-position'];
+/** 轻度降级（40% ≤ 正确率 ≤ downgradeThreshold）：巩固翻前基础 */
+export const REVIEW_TOPICS_MILD: readonly string[] = ['l1-hand-selection', 'l2-raise-sizing'];
+
+/** 复习主题锚点：主题课程 id → 命中该课时应跳转的小节 id（锚点小节不存在时回退首节） */
+export const REVIEW_TOPIC_UNIT_ANCHORS: Readonly<Record<string, string>> = {
+  'l1-basics': 'u1',
+  'l1-position': 'u1',
+  'l1-hand-selection': 'u1',
+  'l2-raise-sizing': 'u1',
+};
+
+/**
  * 判断是否需要推荐复习
  */
 export function shouldRecommendReview(
@@ -91,14 +109,10 @@ export function shouldRecommendReview(
   const accuracy = (correctCount / window.length) * 100;
 
   if (accuracy <= config.downgradeThreshold) {
-    const suggestedTopics: string[] = [];
-    if (accuracy < 40) {
-      suggestedTopics.push('基础规则与牌型');
-      suggestedTopics.push('位置的力量');
-    } else {
-      suggestedTopics.push('起手牌选择');
-      suggestedTopics.push('下注大小策略');
-    }
+    // BUG-ACA-007 修复：主题为课程 id（稳定标识、语言无关），消费方按 id 比对，
+    // zh/en 行为一致；旧实现返回硬编码中文标题，en locale 标题匹配永远失配。
+    // 课程标题展示由渲染层 academy.lessonTitle.* i18n key 覆盖（zh/en 双语齐备）。
+    const suggestedTopics = accuracy < 40 ? [...REVIEW_TOPICS_SEVERE] : [...REVIEW_TOPICS_MILD];
     return { shouldReview: true, suggestedTopics };
   }
 
@@ -150,4 +164,27 @@ function shuffleArray<T>(array: T[]): T[] {
     [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
   }
   return shuffled;
+}
+
+/**
+ * 将复习主题（课程 id）映射为当前课程内的小节定位 —— BUG-ACA-007 修复。
+ *
+ * 纯 id 比对，不含任何自然语言字符串匹配，zh/en 行为一致：
+ * - 当前课程命中推荐主题 → 返回该主题的锚点小节（REVIEW_TOPIC_UNIT_ANCHORS）
+ * - 推荐指向其他课程或锚点小节不存在 → 回退当前课程首节
+ *   （跨课程跳转不属本回跳职责，由 relatedLessonId「去复习」链接另行承担）
+ */
+export function pickReviewTargetUnit(
+  lessonId: string,
+  units: readonly LessonUnit[],
+  topicLessonIds: readonly string[],
+): LessonUnit | undefined {
+  if (units.length === 0) return undefined;
+  const matchedTopic = topicLessonIds.find((topicId) => topicId === lessonId);
+  if (matchedTopic !== undefined) {
+    const anchorUnitId = REVIEW_TOPIC_UNIT_ANCHORS[matchedTopic] ?? 'u1';
+    const anchor = units.find((u) => u.id === anchorUnitId);
+    if (anchor) return anchor;
+  }
+  return units[0];
 }

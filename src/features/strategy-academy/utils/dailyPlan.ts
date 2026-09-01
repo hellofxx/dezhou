@@ -171,15 +171,3 @@ export function isDailyPlanFresh(generatedAt: number | undefined): boolean {
   const generated = new Date(generatedAt).toDateString();
   return today === generated;
 }
-
-/** 获取能力维度中文名 */
-export function getAbilityLabel(key: keyof AbilityAssessment | null): string {
-  const labels: Record<string, string> = {
-    rangeKnowledge: '范围知识',
-    oddsCalculation: '赔率计算',
-    gtoUnderstanding: 'GTO 理解',
-    positionalPlay: '位置打法',
-    emotionalControl: '情绪控制',
-  };
-  return key ? (labels[key] ?? '综合能力') : '综合能力';
-}

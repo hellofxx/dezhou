@@ -3,14 +3,15 @@ import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
-import type { Lesson, LessonUnit, PracticeResult } from '../types';
+import type { Lesson, PracticeResult } from '../types';
 import { ContentBlock } from './content';
 import { HandExampleComponent } from './HandExample';
 import { PracticeDrillComponent } from './PracticeDrill';
 import { SectionNav } from './SectionNav';
 import { LessonIntroCard } from './LessonIntroCard';
-import { deriveLessonUnits, resolveUnitTitle } from '../utils/lessonUnits';
+import { deriveLessonUnits } from '../utils/lessonUnits';
 import { lessonContentKey, resolveUnitTitleKeyed } from '../utils/contentKeys';
+import { pickReviewTargetUnit } from '../utils/adaptiveDifficulty';
 import { useAcademyStore } from '../store';
 
 // P4: 无完成记录时返回稳定空数组引用（zustand 默认 Object.is 比较，避免 `?? []` 每次新建引用导致重渲染）
@@ -109,26 +110,18 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
     setView('units');
   }, []);
 
-  // P3: 降级建议复习回跳 — 把建议主题映射到小节锚点：
-  // topic 与 unit.title（resolveUnitTitle 解析后）做双向包含匹配，取第一个命中；无匹配回退第一个 unit
+  // P3: 降级建议复习回跳（BUG-ACA-007 修复）— 建议主题为课程 id（稳定标识、语言无关），
+  // 经 pickReviewTargetUnit 按 id 比对映射到小节锚点，zh/en 行为一致；
+  // 旧实现用中文主题串与 unit 标题双向包含匹配，en locale 永远失配、回退 units[0]
   const handleReviewRequest = useCallback(
-    (topics: string[]) => {
-      const resolveTitle = (u: LessonUnit) => resolveUnitTitle(u, (key) => t(key));
-      const matched = topics
-        .map((topic) =>
-          units.find((u) => {
-            const title = resolveTitle(u);
-            return title.includes(topic) || topic.includes(title);
-          }),
-        )
-        .find((u) => u !== undefined);
-      const target = matched ?? units[0];
+    (topicLessonIds: string[]) => {
+      const target = pickReviewTargetUnit(lesson.id, units, topicLessonIds);
       if (!target) return;
       setView('units');
       // view 切换为异步渲染，延迟到 units DOM 挂载后再滚动到锚点
       window.setTimeout(() => handleNavigateUnit(target.id), 80);
     },
-    [units, handleNavigateUnit, t],
+    [lesson.id, units, handleNavigateUnit],
   );
 
   // 确定 CTA 文案
