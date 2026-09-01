@@ -29,7 +29,7 @@ export default function MobileNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 walnut-panel border-t border-[var(--walnut-border)] safe-area-bottom pb-[env(safe-area-inset-bottom,0px)]">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 walnut-panel border-t border-[var(--walnut-border)] safe-area-bottom pb-[env(safe-area-inset-bottom,0px)]" aria-label={t('nav.mobileNavAria')}>
       <ul className="flex items-center justify-around h-14">
         {items.map((item) => (
           <li key={item.path}>

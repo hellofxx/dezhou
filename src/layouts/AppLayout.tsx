@@ -11,6 +11,7 @@ import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 // P2-5.3: 全局 Tilt 提示组件（监听连续答错数）
 import TiltWarning from '@/features/progress/components/gate/TiltWarning';
 import MilestoneCelebrationHost from '@/features/progress/components/celebration/MilestoneCelebrationHost';
+import PersistErrorNotice from '@/features/progress/components/PersistErrorNotice';
 import MobileNav from './MobileNav';
 import { useThemeApplier } from './useThemeApplier';
 import TableRail from '@/shared/components/layout/TableRail';
@@ -164,7 +165,7 @@ export default function AppLayout() {
   };
 
   const pageTitle: Record<string, string> = {
-    '/': t('dashboard.title', '训练仪表盘'),
+    '/': t('nav.dashboard'),
     '/academy': t('nav.academy'),
     '/academy/basics': t('nav.basics'),
     '/theory': t('nav.theory'),
@@ -213,6 +214,7 @@ export default function AppLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--background)]">
+      <PersistErrorNotice />
       {/* Sidebar — deep walnut card-room rail. Hidden on mobile. */}
       <aside
         className={cn(
@@ -248,7 +250,7 @@ export default function AppLayout() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-6">
+        <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-6" aria-label={t('nav.sidebarNavAria')}>
           <TooltipProvider delayDuration={200}>
             {/* 置顶首页 —— 无分组标签，保持导航层级扁平 */}
             <ul className="space-y-0.5">{renderNavItem(dashboardItem)}</ul>

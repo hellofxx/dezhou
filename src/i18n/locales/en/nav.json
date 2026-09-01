@@ -22,5 +22,7 @@
   "toggleLanguage": "Toggle language",
   "expandSidebar": "Expand sidebar",
   "collapseSidebar": "Collapse sidebar",
+  "sidebarNavAria": "Main navigation",
+  "mobileNavAria": "Mobile navigation",
   "help": "Help Center"
 }
