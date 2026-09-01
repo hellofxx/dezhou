@@ -204,7 +204,7 @@ src/
 │   │   └── types.ts
 │   │
 │   ├── theory-academy/            # 理论学院模块（2026-07 新增，设计见 5.8b）
-│   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLevelCard / PracticeBridgeCard / TheoryLearningMap 等
+│   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLadder / TheoryResume / PracticeBridgeCard 等
 │   │   ├── data/                  # levels/（index.ts 兼容层 + variants/ 三变体子目录 + theoryIntegrity.test.ts）
 │   │   ├── hooks/                 # useTheory
 │   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序出口）/ getLevelTargetChapter
@@ -380,10 +380,17 @@ export enum ActionType {
 // 一个完整的动作
 export interface PlayerAction {
   type: ActionType;
-  amount?: number;       // 加注/跟注的金额
+  amount?: number;       // **to 金额**（该动作后玩家在本街的累计投入），非增量
   playerIndex: number;   // 玩家座位索引
   timestamp?: number;    // 时间戳（用于回放）
 }
+
+// 金额口径契约（hand-history，事实源：src/features/hand-history/types.ts + parsers/common.ts）：
+// - 解析层：各平台解析结果必须经 `normalizeToAmounts(actions)` 归一——Call 累加至 to、
+//   Raise / AllIn 取历史最大投入、Fold / Check 原样透传；强制盲注（posts）归为 Call
+// - 归一按街调用（每街起始 invested 归零），禁止跨街累计
+// - 回放层：筹码扣减用 `delta = max(0, to - 已投入)`、底池累加同一 delta，街级投入取 max(已投入, to)
+// - UI 层：Call 动作显示**增量**（to - 该玩家街内已投入），避免 "call $6" 实为补 $2 的误导
 
 // 下注尺寸类型
 export type BetSizing = 'min' | 'half-pot' | 'pot' | 'custom';
@@ -754,10 +761,13 @@ interface DailyRecommendation {
    evLoss = freqDeficit × potFactor × 2  // 缩放因子
    ```
 
-4. **场景生成引擎** (`useScenarioEngine`)：
-   - 根据 `ScenarioConfig`（位置、人数、难度、筹码深度）批量生成场景
-   - 随机生成 Hero 手牌 + 前置动作（前方玩家 fold 概率 70%）
-   - `generateScenarios(config)` → 启动训练会话
+4. **场景生成引擎**（`useScenarioEngine` → `utils/scenarioGenerator.ts` + `utils/decisionNodes.ts`）：
+   - 根据 `ScenarioConfig`（位置、人数、难度、筹码深度）批量生成场景；`generateScenarios(config)` 启动训练会话
+   - **翻前生成域受策略表约束**（不再按「前方 fold 概率 70%」自由生成动作）：非 BB 位置一律前面全 fold → `{pos}_open`；BB → opener ∈ {HJ, CO, BTN} → `bb_vs_{hj,co,btn}_open`。等效把生成空间收缩到 `preflop-ranges.json` 的 11 个真实 spot key
+   - **出口过滤**：`generateScenario` 对 preflop 且 `resolveSpotKey(...)` 返回 `null` 的场景，强制回退到必然命中的 open 场景，并在 DEV 下打一次性 `console.warn`（`loggedPreflopFallback` 防刷屏）暴露缺口
+   - `PREFLOP_FALLBACK` 常量仅作理论不可达路径的最后兜底，**禁止**作为常规判分来源（产品规格见 PRD §5.3.6）
+   - **确定性生成**：传入 `seed` 时经 `shared/utils/seededShuffle` 的 `seededRandom`（mulberry32）驱动全部随机分支，未传 `seed` 时用 `Math.random`；模块内禁止再实现第二份 PRNG
+   - 决策树构造逻辑位于 `utils/decisionNodes.ts`（自 `scenarioGenerator.ts` 拆出，满足单文件 ≤300 行硬约束）
 
 5. **EV 计算标准化**（v2.1 新增）：
    - `calculateEVFromAction(action, heroEquity, potSize, callAmount, raiseAmount?)` 使用标准 EV 公式：
@@ -783,6 +793,10 @@ interface DailyRecommendation {
    - `GTOSessionPage` 根据 `scenario.street` 推导 `relatedLessonId`：preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`
    - 调用 `buildGtoFeedback` 时传入第三参数 `relatedLessonId`，wrong/blunder 显示"去复习"链接
    - 连续答错 ≥3 次时调用 `progress.shouldDownshiftDifficulty('gto-simulator')`，显示降级提示 banner
+
+9. **动作术语单一来源**（`utils/actionTerms.ts`）：
+   - `ACTION_TERMS` 为 Fold / Check / Call / Raise / All-In 等动作术语的**唯一**常量出口，`actionTerm(action)` 与 `actionLabel(action, amount?)` 为渲染入口，模块内禁止再散落硬编码字面量
+   - 术语**刻意不做 i18n 本地化**（属产品决策，见 PRD §5.20.5），因此该文件不接 `t()`；文件头注释记录此决策，防止后续被当作 i18n 遗漏「修复」
 
 ### 5.4 Hand History（手牌历史）
 
@@ -1145,9 +1159,9 @@ interface DailyRecommendation {
 - 0.35 ≤ 值 < 0.6 → 进阶（warning 色）
 - ≥ 0.6 → 高级（danger 色）
 
-**学习路径地图**（2026-08）：
-- `getLevelTargetChapter(level, completedChapters)` 纯函数：返回首个未完成章节（全完成则返回第一章）
-- TheoryLevelCard「继续学习」与 TheoryLearningMap 节点点击共用此推导
+**目标章节推导**：
+- 口径：「首个未完成章节，全完成则回到第一章」；`TheoryLadder` 的展开直达与 `TheoryResume` 的「继续阅读」CTA 按同一口径**内联实现**
+- `utils/theoryProgress.ts` 保留同口径纯函数 `getLevelTargetChapter(level, completedChapters)`，当前无生产消费方（THY-006 删除 TheoryLearningMap / TheoryLevelCard 后遗留），登记为待收敛/死代码候选
 
 **章节切换骨架屏**（2026-08）：
 - TheoryChapterView 的 trackedChapterId 渲染期重置时同步置位 isTransitioning
@@ -1243,9 +1257,10 @@ interface DailyRecommendation {
 状态字段（`progress.streak: StreakState`）：`currentStreak` / `longestStreak` / `lastTrainingDate`(YYYY-MM-DD) / `streakFreezes` / `streakFreezeUsedToday` / `milestones` / `lastMilestoneCelebrated` / `streakStartDate` / `streakBrokenAt`。
 
 核心机制：
-- **冻结卡扣减**：`gap = 2` 天且 `streakFreezes > 0` 且今日未用时，自动扣减 1 张，streak 继续 +1（同一天仅生效一次）；新用户初始赠送 2 张
+- **冻结卡唯一消耗路径 = 手动请假**：当天尚未训练时主动用 1 张卡为今天"补出勤"（`useStreakFreeze()` → 纯函数 `applyManualFreeze`，同日仅一次、无卡/已训练/已断连 ≥3 天均返回 null）；新用户初始赠送 2 张
+- **自动恢复不扣卡**：`gap = 2`（漏训 1 天）时 `updateStreak` 直接免费续接 streak +1，**不再因持有冻结卡而扣减**（历史上"有卡者反被扣卡、无卡者免费恢复"的负价值设计已废除，产品口径见 PRD §5.8.2）
 - **里程碑奖励**：达成 3 / 7 / 30 / 100 / 365 天分别奖励 1 / 2 / 3 / 5 / 10 张冻结卡
-- **Earn Back 机制**：streak 断裂时记录 `streakBrokenAt`，24 小时内完成训练可恢复
+- **断连口径**：漏训 1 天内自动恢复（免费）；≥2 天无窗口可救，连续天数重置并记录 `streakBrokenAt`
 - **提醒动效**：`StreakTracker` 在 20:00 后未训练时火焰变红闪烁
 - **庆典与分享**：`StreakCelebration.tsx` 全屏 Dialog（CSS keyframes 彩屑 / 烟花 / 光晕）；30 天及以上显示"分享"按钮，调用 `generateStreakShareCanvas` 生成 1080×1080 PNG
 
@@ -1253,12 +1268,10 @@ interface DailyRecommendation {
 
 | Action | 描述 |
 |---|---|
-| `recordTrainingDay()` | 更新 streak（含 Earn Back / 冻结卡自动扣减），今日成功记录时触发 `checkMilestone`（幂等）。计入口径（专批 B 统一）：**任何一次实质训练完成都计入训练日**——含各训练模块会话结算、theory 章节完成、strategy 课程测验/Drill 完成（CourseView）、QuickDrill 快速/普通模式完成 |
-| `useStreakFreeze()` | 手动使用一张冻结卡，返回布尔值 |
+| `recordTrainingDay()` | 更新 streak（含 gap=2 免费自动恢复），今日成功记录时触发 `checkMilestone`（幂等）。计入口径（专批 B 统一）：**任何一次实质训练完成都计入训练日**——含各训练模块会话结算、theory 章节完成、strategy 课程测验/Drill 完成（CourseView）、QuickDrill 快速/普通模式完成 |
+| `useStreakFreeze()` | 手动使用一张冻结卡为今天请假，返回布尔值（判定与状态变更收敛在 `streakCalc.applyManualFreeze`） |
 | `checkMilestone()` | 检查并标记新达成的里程碑，返回里程碑天数或 null |
 | `awardStreakFreeze(count?)` | 奖励指定数量冻结卡（默认 1） |
-| `canEarnBack()` | 判断是否处于 Earn Back 24 小时窗口期 |
-| `earnBackStreak(previousStreak)` | 恢复 streak 为 previousStreak + 1，清除 `streakBrokenAt` |
 
 **ELO 能力分级（五维评分 / 六段位 / 动态 K 因子）**
 
@@ -1581,6 +1594,8 @@ manualChunks(id) {
 > 语言切换通过顶部导航的 `i18n.changeLanguage` 实现（未接入 LanguageDetector，默认 zh）；用户语言偏好字段 `settings.language` 随 progress store 持久化。
 >
 > 语言切换重渲染机制：core 模块（zh/en 静态同置内存）经 `languageChanged` 事件即时切换；feature 懒加载模块由 `preload.ts` 的 `languageChanged` 监听器异步补加载目标语言资源，`config.ts` 配置 `react.bindI18nStore: 'added removed'`，使 `addResourceBundle` 注入完成后触发所有 `useTranslation` 组件重渲染（默认值不订阅 store 事件会导致文案滞留 fallback 语言直至下次任意渲染）。
+>
+> **模块资源加载缓存语义**（事实源：`src/i18n/preload.ts` 的 `loadOne`）：`loadedKeys`（已完成集合）与 `loadPromises`（in-flight Map）双表协作——① 同一模块 key 的并发请求共享 `loadPromises` 中的同一个 Promise，不重复 `import()`；② `loadedKeys.add` **只在** `addResourceBundle` 成功之后执行，加载失败时 `.catch` 仅告警并允许下次重试（失败即标记会使该模块文案在会话余下时间永久滞留 fallback 语言）；③ `.finally` 清除 in-flight 条目。新增任何"加载 + 缓存"型工具须遵循同一顺序（成功才入缓存、失败可重试、并发共享句柄）。
 
 ### 9.2 IndexedDB
 

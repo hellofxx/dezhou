@@ -1,0 +1,74 @@
+// ============================================================================
+// PokerLab · 风险簇与影响路径（评审配套图）
+// 生成：risk-quality-reviewer + graphviz
+// 基线：工作树 @ c966912（85 项未提交改动），2026-08-30
+// 本图回答：哪些架构元素共同构成一个风险，失败会沿哪条路径传到学员身上。
+// 编号与 architecture-review.md 一致（R1–R11）。
+// 灰虚线节点 = 推断的失败后果（未观测）；红边 = 风险传导路径。
+// ============================================================================
+digraph pokerlab_risks {
+
+  graph [rankdir=TB, fontname="Microsoft YaHei, Helvetica", labelloc=t,
+         label="PokerLab 风险簇 → 影响路径（P0 红 / P1 橙 / P2 灰）\n实线=代码实测 ｜ 灰虚线=推断后果（未观测）",
+         nodesep=0.3, ranksep=0.65, dpi=140, newrank=true];
+  node  [fontname="Microsoft YaHei, Helvetica", fontsize=11, shape=box, style="rounded,filled",
+         fillcolor="#f7f4ee", color="#3f3a33", margin="0.14,0.08"];
+  edge  [fontname="Microsoft YaHei, Helvetica", fontsize=9, arrowsize=0.6, color="#3f3a33"];
+
+  // ---------------------------------------------------------------- 簇 1：有界性做了一半
+  subgraph cluster_bounds {
+    label="风险簇 A｜有界性与失败可见性只有一半（P0）"; fontsize=12; style="rounded"; color="#a83232"; fillcolor="#fbeaea";
+    r1 [label="R1 reviewItems 无上限增长\nstore.ts:535-539 仅 append\n对照：accuracyHistory slice(-7) :812\nrecords cleanup(1000) :472", fillcolor="#ffd9d9"];
+    r1b [label="R1 同根因：persist 无配额兜底\nstore.ts:971-990 无 storage 覆写\n全仓 grep QuotaExceeded = 空", fillcolor="#ffd9d9"];
+    precedent [label="同类问题已真实发生过\nP2-01 把 records 外迁 IndexedDB\n（store.ts:985-987 注释）", fillcolor="#fff3d6"];
+  }
+
+  // ---------------------------------------------------------------- 簇 2：共享库无版本治理
+  subgraph cluster_idb {
+    label="风险簇 B｜共享 IndexedDB 缺版本治理（P0）"; fontsize=12; style="rounded"; color="#a83232"; fillcolor="#fbeaea";
+    r2 [label="R2 hand-history-db 两份 open 实现\nhand-history/store.ts:13-30\nprogress/utils/handHistoryBackup.ts:11-27\n两处均无 onblocked / onversionchange", fillcolor="#ffd9d9"];
+    r2b [label="R2 放大因子：_dbPromise 模块级缓存\n失败或 pending 后无重试路径", fillcolor="#ffe9e9"];
+  }
+
+  // ---------------------------------------------------------------- 簇 3：不变量无守卫
+  subgraph cluster_guards {
+    label="风险簇 C｜写下来的不变量没有守卫（P1）"; fontsize=12; style="rounded"; color="#b45309"; fillcolor="#fdf3e3";
+    r3 [label="R3 ≤300 行『硬约束』零自动化\nAI_GUIDE.md:28 vs eslint 仅 2 条规则\n实测 33 个越界 / 7 个非豁免越界", fillcolor="#ffe9c6"];
+    r4 [label="R4 契约噪声\nTrainingRecord.module 含 'hand-history'\n该模块按设计不 emit（store.ts:7-10）", fillcolor="#ffe9c6"];
+    r5 [label="R5 五大系统接线矩阵只活在代码\ntheory 不写 SRS；strategy 不直接 updateElo\n无一条测试承载这些决策", fillcolor="#ffe9c6"];
+    r6 [label="R6 自适应难度只降不升\ngrep upshift = 空；产品意图未记录", fillcolor="#fff2d9"];
+    good [label="对照组：有守卫的约束都活得很好\neslintCrossImports 快照 / localeParity\ndesignTokenGuard / persist-shape\ngtoWorkerThresholds parity", fillcolor="#e2f1e8", color="#2f6f6a"];
+  }
+
+  // ---------------------------------------------------------------- 架构元素
+  ls   [label="localStorage\npoker-training-progress v15", shape=cylinder];
+  idb  [label="IndexedDB hand-history-db v1", shape=cylinder];
+  lean [label="学员｜不可再生数据\n进度 · ELO · 复习队列 · 牌局库", fillcolor="#e5e7eb"];
+  gate [label="pnpm verify\n（typecheck + lint + test）", fillcolor="#e9eef7", color="#31568f"];
+  ui   [label="控制台 console.error（无 UI 反馈）\nmain.tsx:43 .catch(()=>{})\ntrainingEvents.ts:22", fillcolor="#f0f0f0"];
+
+  // ---------------------------------------------------------------- 传导路径
+  edge [color="#a83232", penwidth=1.4];
+  r1  -> ls  [label="配额打满"];
+  r1b -> ls  [label="setItem 抛错被吞"];
+  ls  -> lean [label="刷新后进度回退", style=dashed, color="#6b7280"];
+  r2  -> idb [label="未来 DB_VERSION 提升"];
+  r2 -> r2b;
+  idb -> lean [label="牌局列表与备份同时永久加载", style=dashed, color="#6b7280"];
+  r1b -> ui [label="只有日志没人看见"];
+
+  edge [color="#b45309"];
+  precedent -> r1 [label="同一失效模式，只修了一处", style=dashed];
+  r3 -> gate [label="不会变红 → 约束失去可信度", style=dashed];
+  r4 -> gate [label="无一致性检查", style=dashed];
+  r5 -> gate [label="新模块漏接不会变红", style=dashed];
+
+  edge [color="#2f6f6a", style=dashed];
+  good -> r3 [label="现成范式可复用\n（快照 + 只降不升基线）"];
+
+  { rank=same; r1; r1b; precedent; }
+  { rank=same; r2; r2b; }
+  { rank=same; r3; r4; r5; r6; good; }
+  { rank=same; ls; idb; ui; }
+  { rank=same; lean; gate; }
+}

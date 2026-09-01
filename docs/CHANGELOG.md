@@ -6,6 +6,35 @@
 
 ---
 
+## [Unreleased] - 2026-08-27
+
+### 持久化写失败可见化（persistError + safe storage 包装层）
+
+> localStorage.setItem 在配额打满时同步抛 QuotaExceededError，而 zustand persist 中间件的 action 包装先更新内存再调 setItem，导致内存已更新、UI 正常但数据实际未落盘——用户下次刷新才发现进度回退。学习进度不可再生（零云端备份），必须让失败可见。
+
+- **progress（persistError 运行时标记）**：新增 `persistError: { reason, at } | null` 运行时标记（不持久化）与 `setPersistError` action，经 partialize 排除出 localStorage，**不递增 version、不编写 migrate**（partialize 已注释说明）。
+- **安全包装层（`src/features/progress/utils/persistStorage.ts`）**：包裹 window.localStorage 的字符串型 StateStorage，setItem/getItem/removeItem 均 try/catch（失败不向外抛，不破坏 action 事务），按 reason 分类 + `setPersistFailureHandler` 单回调通知 + 模块级去重。
+- **用户提示（`PersistErrorNotice.tsx`）**：AppLayout 全局渲染，监听 persistError 非空时展示醒目横幅，指引用户到设置→数据管理导出备份。
+- **测试**：`persistStorage.test.ts` 5 用例（正常写、QuotaExceededError 不抛、handler 分类上报、同一 reason 去重、handler 置 null 后不再触发）；`store.persist-shape.test.ts` 新增 `persistError 不出现在 partialize 结果中` 断言。
+- **文档**：TDD.md §9.5 新节记录设计实现；CHANGELOG 本条目。
+
+### 排查遗留问题追加闭环（22 项模块内待修复 + 低代价观察项，零遗留）
+
+> 以 `.trae/specs/module-bug-sweep-plan/reports/final-report.md` §8 为清单逐项对**代码**复核（不采信报告陈述）后全量修复。三项争议项由产品决策定向：GTO-009「生成侧约束 + 出口过滤，严禁伪造策略数据」、GTO-010「动作术语保留英文但收口单一来源」、PRG-008「自动恢复不扣卡」。高代价观察项（HH-023 座位坐标 / HH-024 列表 memo / HH-027 欧式数字等）经评估后明确不修。
+
+- **gto-simulator（GTO-009/010/011/012 + UI a11y）**：preflop 场景生成域收缩至 `preflop-ranges.json` 的 11 个可达 spot key（非 BB 位置全 fold → `{pos}_open`；BB → `bb_vs_{hj,co,btn}_open`），`generateScenario` 出口对 `resolveSpotKey` 返回 null 时回退保证命中的 open 场景并以 DEV 一次性 warn 暴露缺口，`PREFLOP_FALLBACK` 降级为理论不可达兜底（不再静默伪造判分），新增策略表命中率守卫测试；动作英文术语收口到 `utils/actionTerms.ts`（`ACTION_TERMS` / `actionTerm` / `actionLabel`，文件头注明产品决策）；决策节点逻辑拆至 `utils/decisionNodes.ts` 使主文件 223 行达标；种子 RNG 复用 `shared/utils/seededShuffle#seededRandom`（mulberry32）删除本地重复；ActionSelector 滑块 `aria-valuetext` + 动作按钮 `aria-label`。
+- **progress（PRG-005~011）**：删除 `earnBackStreak` / `canEarnBack` / `resetElo` 三个零消费 action（实际恢复路径为 `updateStreak` gap=2 分支）；`checkDownswing()` 补相邻日期守卫，非连续日期不再误报下风期；**冻结卡语义变更（PRG-008）**——gap=2 自动恢复一律不扣卡，卡仅在 `applyManualFreeze` 手动请假时消耗，消除「有卡者反被扣、无卡者免费恢复」的负价值设计；`dailyTrainingPlan.ts` 恒真条件死代码清理；成就 `elo` 条件改按 `eloByVariant` 三变体 overall 取最大值判定（不再随 `activeVariant` 切换漂移）；`store.migrate.test.ts` 补 v10→v15 各段专项迁移用例。
+- **strategy-academy（ACA-006/007/008）**：`refreshDailyPlan` 增 `options.force` 并由 DailyPlanCard 传入，解除同日幂等导致的「刷新无反应」；`REVIEW_TOPICS_SEVERE/MILD` 由硬编码中文课程名改为课程 id（配 `REVIEW_TOPIC_UNIT_ANCHORS`），修复 en 界面「返回复习」定位失效；删除零消费方的 `getAbilityLabel` 死导出。
+- **theory-academy（THY-006/007）**：4 个零消费组件（`TheoryLearningMap` / `TheoryLevelCard` / `TheoryChapterList` / `ProTipBox`）已**清空为待删 tombstone**（仅注释 + `export {}`）——物理删除受工具权限阻塞（Bash 分类器故障、无删除工具），而保留原实现会让 `src/i18n/staticKeyGuard.test.ts` 变红（该守卫全量扫描 `src/**` 静态 `t()` 字面量，这 4 个组件正是已删除死 key 的唯一残余引用方），收尾仅需 `git rm` 4 个空文件；`locales/{zh,en}/theory.json` 各移除 `learningMap` / `continueLearning` / `chapterList` / `levelCard` 四组死 key（保留在用的 `ladder.chapterList`）；修正 `theoryProgress.ts` / `TheoryLadder.tsx` 指向已删组件的失效注释；`types.ts` 重复接口声明合并；`.claude/agents/theory-academy-dev.md` 组件清单同步。附登记：`getLevelTargetChapter` 随 `TheoryLearningMap` 清空成为零消费方，列为后续死代码候选。
+- **puzzle-trainer（PZL-003）**：`ThemeDrill` 外层仅校验 `themeId`，会话主体以 `key={theme}` 挂载——同路由切换主题时整棵子树重挂载、引擎随之重建，解除「换主题后仍停留在旧主题会话」；新增 `ThemeDrill.test.tsx` 组件级守卫。
+- **range-trainer（RNG-007）**：末题「简单题」由固定 `AA@BTN open` 改为跟随会话语境（`getEasyQuestion(position, actionType)`，AA 在任何翻前语境均 continue 激进故 `correctAction` 恒为 raise），末题答错后追加的救援题同源；`storeQuizSlice.test.ts` 新增两条锁定用例并强化既有断言。
+- **hand-history（HH-020/021/022）**：`PlayerAction.amount` 统一为「to 金额」单口径——新增 `normalizeToAmounts`（Call 累加至 to、Raise/AllIn 取最大），三平台按街接入，回放扣减改 `max(0, to - 已投入)`，口径写入 `types.ts` 注释与子代理 Workflow；partypoker 无 showdown 街道的 `shows` 行丢失（状态机新增 showdown 街道，复用 `common.ts#parseShowCards/parseCollected`）与 PokerStars 现代 SUMMARY `showed [...] and won ($X)` 合并行解析补齐（含 `collected ($Y)` 括号式），两者均按平台格式惯例实现，待真实脱敏样例回归。
+- **路由/布局/i18n（PLT-004 + 低代价观察项）**：`preload.ts` 重做为 `loadOne` + `loadPromises` in-flight 共享，`loadedKeys` 仅在 `addResourceBundle` 成功后置位、失败 `.catch` 告警并允许重试、`.finally` 清理（修复「加载失败被永久标记为已加载」），新增 `preloadFailure.test.ts` 4 用例；AppLayout 面包屑去掉硬编码中文 fallback；侧边栏与底部导航补 `aria-label`（新增 `nav.sidebarNavAria` / `nav.mobileNavAria` 双语 key）；14 个 locale JSON 补末尾换行。
+- **文档同步**：PRD 新增 §5.8.2 冻结卡唯一消耗路径与「自动恢复与卡数解耦」验收、§5.3.6 情景合法性（禁止伪造 GTO 数据，翻前情景须 100% 命中策略表真实数据）、§5.20.5 动作术语不本地化（产品决策）；TDD 同步 GTO 确定性生成链、`PlayerAction.amount` 单口径、i18n in-flight 缓存语义；总报告 §3/§4/§7/§8/§10 更新并新增 §11 追加闭环清单。
+- **验证状态（诚实记录）**：本批次代码与文档变更**尚未经 `pnpm verify` 实跑验证**——`node_modules` 存在损坏（`vitest/package.json`、`@radix-ui/react-select` 缺失）阻塞门禁，所有新增测试均为静态写就未运行。作为替代，已对全部新测试做**断言与实现逐行对齐的静态复核**，发现并修复 2 个真缺陷：`preloadFailure.test.ts` 因 `loadedKeys` 模块级单例使第 3 用例沦为 0-vs-0 平凡断言（已改为每用例 `vi.resetModules()` + 非平凡计数）；`ThemeDrill.test.tsx` 误以为 `engine.answer()` 会推进题号（实际仅 `next()` 推进，已补 `onNext` 驱动）。死组件按 tombstone 处理，避免「key 已删 / 组件仍在」的半完成状态把 `staticKeyGuard` 变红。剩余收尾动作以 final-report §11.3 为唯一清单（`pnpm install` → `git rm` 4 个空文件 + 4 个根目录临时脚本 → 全量 `pnpm verify`）；实跑通过前不得声称门禁绿。
+
+---
+
 ## [Unreleased] - 2026-08-23
 
 ### 全模块 bug 排查行动（shared 层 + 10 模块全量扫描，跨模块问题集中分诊闭环）
@@ -37,7 +66,7 @@
 - **ActionSelector 无障碍**：Raise 滑块补 `aria-label=t('gto.action.raiseSlider')`（新增 `gto.action.raiseSlider` 双语 key，zh 加注尺寸 / en Raise size）；Raise 按钮补 `aria-expanded` / `aria-controls="gto-raise-panel"`、滑块面板补 `id`，满足 WCAG 4.1.2。
 - **ActionSelector 色阶对齐 §5.5**：Fold 由 `--clay` 改为 `--poker-terra` 陶土赭 danger 系、Call 由 `--sage` 改为 `--walnut-raised` 深胡桃实底（对齐 range-trainer QuizCard 已落地口径），消风格漂移。
 - **HandHistoryList eyebrow/H1 去重**：新增差异化 key `handHistory.list.eyebrow`（zh 复盘分析 / en Review Analysis），eyebrow 改用之，消除与 H1「牌局历史」同文案叠放。
-- **JSON 末尾换行核实**：4 个文件（zh/en handHistory.json、help.json）经确认均已含末尾换行，无需改动。
+- **JSON 末尾换行核实**：4 个文件（zh/en handHistory.json、help.json）当时经确认含末尾换行。**该结论已于 2026-08-27 更正**：全量复扫实测 14 个 locale JSON 缺末尾换行（gto / help / handHistory 各 zh+en、academy-course 4 篇 ×zh+en），当时判定「无需改动」系检测手段不可靠导致的误判；14 个文件已在 2026-08-27 批次全部补齐。
 - **ReviewSession 兼容 token 替换**：进度条渐变 `to-[var(--sage)]` → `to-[var(--poker-info)]`。
 - **ConceptGraph SVG 注释锚定**：7 处 SVG rgba/white 字面量补 `§12.1 SVG 例外` token 锚定注释（success/ivory/felt-deep 对应关系），零逻辑改动。
 - **验证**：`pnpm verify` 全量 exit 0（101 文件 695 用例全绿）；相关模块测试 + localeParity/staticKeyGuard/designTokenGuard 全绿；未引入任何/dep 新依赖。

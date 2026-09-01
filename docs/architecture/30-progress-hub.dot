@@ -1,0 +1,111 @@
+// ============================================================================
+// PokerLab · progress 状态中枢接口面与内部子系统（当前态细节图）
+// 生成：system-modeler + graphviz
+// 证据基线：工作树 @ HEAD c966912（含未提交改动），采集 2026-08-30
+// 本图回答：中枢对外暴露哪些写接口、谁在调、状态落在哪、读侧谁消费。
+// ============================================================================
+digraph pokerlab_progress_hub {
+
+  graph [rankdir=TB, fontname="Microsoft YaHei, Helvetica", labelloc=t,
+         label="progress 中枢（store.ts 995 行 / persist 'poker-training-progress' v15）\n写入方 → 子系统 → 落盘 → 读侧",
+         nodesep=0.26, ranksep=0.6, dpi=140, newrank=true];
+  node  [fontname="Microsoft YaHei, Helvetica", fontsize=11, shape=box, style="rounded,filled",
+         fillcolor="#f7f4ee", color="#3f3a33", margin="0.14,0.08"];
+  edge  [fontname="Microsoft YaHei, Helvetica", fontsize=9, arrowsize=0.6];
+
+  // ------------------------------------------------------------ 写入方
+  subgraph cluster_writers {
+    label="写入方（各训练/学习模块，全部经 progress 公开 API）"; fontsize=12; style="rounded"; color="#2f6f6a"; fillcolor="#e9f2f0";
+    w_range  [label="range-trainer\nuseQuizEngine.ts:105/106/109/111/210-212\nRangeQuizPage.tsx:31"];
+    w_odds   [label="pot-odds\nuseOddsCalculation.ts:68/69/93-95/164\nPotOddsQuizPage.tsx:68/80/225"];
+    w_gto    [label="gto-simulator\nuseGTOComparison.ts:176-189/209-211/288\nGTOSessionPage.tsx"];
+    w_puzzle [label="puzzle-trainer\nusePuzzleSession.ts:35/36/51/67"];
+    w_strat  [label="strategy-academy\ncompleteCourse.ts:99/103\nQuickDrill.tsx:118-121/182-198\nstore.bootstrap.ts:51 syncEloFromAcademyAbility"];
+    w_theory [label="theory-academy\nTheoryQuiz.tsx:36-37/72\nTheoryChapterView.tsx:46\nstore.ts:79-94（emit）"];
+    w_onb    [label="onboarding\nPlacementTestStep.tsx:60-79\nGoalSettingStep.tsx:23-24"];
+  }
+
+  // ------------------------------------------------------------ 五大子系统
+  subgraph cluster_hub {
+    label="progress store：跨模块状态五大系统 + 记录"; fontsize=12; style="rounded"; color="#a86a1f"; fillcolor="#ffe9c6";
+
+    a_streak [label="Streak 连续训练\nrecordTrainingDay():586（同日幂等）\nuseStreakFreeze():600 / checkMilestone():614\nstreakFreezes · milestones · pendingMilestone\nutils/streakCalc.ts:145 updateStreak / :267 applyManualFreeze"];
+    a_elo    [label="ELO 能力评级（按游戏变体分桶）\nupdateElo():667 / syncEloFromAcademyAbility():686\nswitchActiveVariant():701\neloByVariant + activeVariant + eloRankUp\n算法：shared/utils/elo.ts + shared/types/elo.ts"];
+    a_srs    [label="SRS 间隔复习\naddReviewItem():532 / updateReviewItem():525\nreviewItems · dismissedRecommendations\n算法：shared/utils/spacedRepetition.ts"];
+    a_emo    [label="Emotion 情绪与负荷\nrecordAnswer():775 → consecutiveWrongCount\ncheckDownswing():839 / shouldDownshiftDifficulty():902\n组件：TiltWarning · SessionLimitGuard · DownswingAlert · MoodTracker"];
+    a_mentor [label="Mentor 导师人格化\nsetMentorStyle():759 + mentorStyle\n文案模板：shared/constants/mentorStyles.ts"];
+    a_rec    [label="训练记录 records（内存态）\naddRecord():455（partialize 已排除，:987）"];
+    a_qd     [label="QuickDrill 记录\nrecordQuickDrillCompletion():712（连续 7 天 → awardStreakFreeze(1)）\nsubmitQuickDrillResult():741"];
+    a_misc   [label="其他：settings · currentGameVariant · focusModule\nonboarding(completeOnboardingStep:557)\nfreezeCardFragments · unlockedAchievements(:931)"];
+    a_mig    [label="表驱动 MIGRATIONS :122-290\nv0 → v15 共 15 段（v13/v14 删除旧 elo 键）\nonRehydrate 兜底清洗标签 :995", fillcolor="#fff3d6"];
+  }
+
+  // ------------------------------------------------------------ 通道
+  bus [label="shared/stores/trainingEvents.ts\nprogress/store.bootstrap.ts:49-53 订阅", fillcolor="#d1e7e3", color="#0f766e"];
+  ach [label="shared/stores/achievementRegistry.ts\ngetAchievementSources()（store.ts:41，:1036-1105 消费）", fillcolor="#e5dbf2", color="#6b4f8a"];
+  ads [label="shared/stores/academyDataSourceRegistry.ts\n消费方 = utils/dailyTrainingPlan.ts:10,:93 +\ncomponents/replay/ProgressReplay.tsx:7（非 store.ts）", fillcolor="#e5dbf2", color="#6b4f8a"];
+  defs [label="data/achievements.ts —— 26 条成就定义", fillcolor="#fff3d6"];
+
+  // ------------------------------------------------------------ 落盘
+  subgraph cluster_storage {
+    label="落盘"; fontsize=12; style="rounded"; color="#a83232"; fillcolor="#f8eaea";
+    ls  [label="localStorage\npoker-training-progress v15\n（五大系统 + settings + 成就）", shape=cylinder];
+    idb [label="IndexedDB poker-training-records v1\nutils/recordDatabase.ts（cleanup 保留 1000 条）\nbootstrap :33 读回 / :68 回写", shape=cylinder];
+    idb2[label="IndexedDB hand-history-db v1\nutils/handHistoryBackup.ts 打开同库做备份/恢复\n[注意] 与 hand-history/store.ts 共享库名", shape=cylinder, style="rounded,filled,dashed"];
+    idb3[label="IndexedDB poker-training v1 (records/hands)\n[low] 仅 utils/indexedDB.ts 定义并经 index.ts 导出，\n未见内部消费方 → 待确认是否遗留", shape=cylinder, style="rounded,filled,dashed"];
+  }
+
+  // ------------------------------------------------------------ 读侧
+  subgraph cluster_readers {
+    label="读侧（同模块组件 + 跨模块 hook）"; fontsize=12; style="rounded"; color="#6b4f8a"; fillcolor="#f0ebf5";
+    r_dash  [label="dashboard/Dashboard · FeltArena(:37 读 dailyGoalMinutes)\nreplay/ProgressPage · achievement/Leaderboard"];
+    r_elo   [label="stats/VariantEloOverview · WeaknessAnalysis\ncelebration/RankUpCelebration"];
+    r_srs   [label="srs/* 复习面板 · utils/dailyTrainingMix\nutils/dailyTrainingPlan.ts:125 generateCrossModuleDailyPlan"];
+    r_gate  [label="gate/OnboardingGate(:20-27) · SessionLimitGuard\nstatsAggregator.ts 统计聚合"];
+    r_hook  [label="shared/hooks/useModuleLabel（模块标签跨模块读取）"];
+  }
+
+  // ------------------------------------------------------------ 写入边
+  edge [color="#a86a1f"];
+  w_range  -> a_elo, a_srs, a_emo;
+  w_range  -> a_streak [label="recordTrainingDay"];
+  w_odds   -> a_elo, a_srs, a_emo, a_streak;
+  w_gto    -> a_elo, a_srs, a_emo;
+  w_puzzle -> a_emo, a_streak;
+  w_strat  -> a_srs, a_qd, a_elo [label="仅经 syncEloFromAcademyAbility\n无直接 updateElo 调用"];
+  w_theory -> a_elo, a_emo, a_streak [label="不写 SRS"];
+  w_onb    -> a_misc, a_streak;
+
+  edge [color="#0f766e"];
+  w_range  -> bus [style=dashed, label="emit"];
+  w_odds   -> bus [style=dashed];
+  w_gto    -> bus [style=dashed];
+  w_puzzle -> bus [style=dashed];
+  w_strat  -> bus [style=dashed];
+  w_theory -> bus [style=dashed];
+  bus      -> a_rec [label="订阅 → addRecord"];
+
+  // ------------------------------------------------------------ 注册表与落盘
+  edge [color="#6b4f8a", style=dashed];
+  ach  -> a_misc [label="成就达成判定"];
+  defs -> a_misc;
+  ads  -> r_srs  [label="取下一节课程"];
+
+  edge [color="#b45309"];
+  a_streak -> ls; a_elo -> ls; a_srs -> ls; a_emo -> ls; a_mentor -> ls; a_misc -> ls;
+  a_mig    -> ls [label="migrate / partialize", style=dashed];
+  a_rec    -> idb [label="addRecord 副作用 :471 + cleanup :472"];
+  a_misc   -> idb2 [label="handHistoryBackup", style=dashed, color="#a83232"];
+  a_misc   -> idb3 [label="[low] 未见调用", style=dashed, color="#9ca3af"];
+
+  // ------------------------------------------------------------ 读边
+  edge [color="#6b4f8a", constraint=false];
+  ls  -> r_dash, r_elo, r_gate;
+  idb -> r_srs  [label="历史聚合"];
+
+  { rank=same; w_range; w_odds; w_gto; w_puzzle; }
+  { rank=same; w_strat; w_theory; w_onb; bus; }
+  { rank=same; a_elo; a_srs; a_emo; a_streak; a_mentor; a_qd; a_rec; a_misc; }
+  { rank=same; ls; idb; idb2; idb3; }
+  { rank=same; r_dash; r_elo; r_srs; r_gate; r_hook; }
+}

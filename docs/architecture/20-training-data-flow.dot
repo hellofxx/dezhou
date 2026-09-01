@@ -1,0 +1,137 @@
+// ============================================================================
+// PokerLab · 一次训练答题的端到端数据流（当前态）
+// 生成：system-modeler + graphviz；本图回答"学员答完一题后，数据到底去了哪里"。
+// 证据基线：工作树 @ HEAD c966912（含未提交改动），采集时间 2026-08-30
+//
+// 泳道：学员 → 训练模块 UI → 模块 store（多为非持久）→ shared 纯函数层
+//       → progress 中枢（persist v15 + IndexedDB）→ 派生视图（Dashboard/统计）
+// 每条边都标注了实测文件:行；[unknown] 表示证据不足，需下一步验证。
+// ============================================================================
+digraph pokerlab_training_flow {
+
+  graph [rankdir=TB, fontname="Microsoft YaHei, Helvetica", labelloc=t,
+         label="一次答题的端到端数据流（range-trainer 为例，其余 5 个训练模块同构）\n实线=已证据化的调用 ｜ 灰虚线=运行时/订阅 ｜ 红虚线=低置信待验证",
+         nodesep=0.3, ranksep=0.55, dpi=140, compound=true, newrank=true];
+  node  [fontname="Microsoft YaHei, Helvetica", fontsize=11, shape=box, style="rounded,filled",
+         fillcolor="#f7f4ee", color="#3f3a33", margin="0.15,0.09"];
+  edge  [fontname="Microsoft YaHei, Helvetica", fontsize=9, arrowsize=0.6];
+
+  // ---------------------------------------------------------------- 泳道
+  subgraph cluster_actor {
+    label="学员"; fontsize=12; style="rounded"; color="#6b7280"; fillcolor="#f2f2f2";
+    player [label="学员（PC / 移动端）\n在 13×13 网格或选项卡上作答", shape=box, fillcolor="#e5e7eb"];
+  }
+
+  subgraph cluster_ui {
+    label="训练模块 UI 层（features/*/components）"; fontsize=12; style="rounded"; color="#2f6f6a"; fillcolor="#e9f2f0";
+    quizpage [label="RangeQuizPage.tsx\n门禁：SessionLimitGuard（shared/gate）"];
+    quizcard [label="shared/components/business/QuizCard\n选项顺序来自 seededShuffle"];
+    feedback [label="shared/components/feedback/*\nDecisionAnalysis · TryAgainButton\nMobileFeedbackSheet · RelatedLessonChip"];
+  }
+
+  subgraph cluster_engine {
+    label="模块答题引擎（features/*/hooks + utils）"; fontsize=12; style="rounded"; color="#31568f"; fillcolor="#e9eef7";
+    engine  [label="useQuizEngine.ts\n题目生成 → 判定 → 反馈装配"];
+    grade   [label="shared/types/decisionFeedback.ts\ncalculateGrade(evLoss)\nbest|correct|inaccuracy|wrong|blunder\n阈值 0 / 0.5 / 2 / 5 BB"];
+    mentor  [label="shared/constants/mentorStyles.ts\nrenderMentorFeedback(style,grade,params)"];
+    shuffle [label="shared/utils/seededShuffle.ts\nhash(题目id) 种子洗牌 + 答案位重映射"];
+  }
+
+  subgraph cluster_store {
+    label="模块 store（会话态，range/pot-odds/gto 均无持久化）"; fontsize=12; style="rounded"; color="#8a6a3f"; fillcolor="#f6efe4";
+    modstore [label="range-trainer/store.ts\nstartQuiz / answerQuestion / nextQuestion / endQuiz\n（纯内存，刷新即丢）"];
+  }
+
+  subgraph cluster_hub {
+    label="progress 跨模块状态中枢（store.ts，persist v15）"; fontsize=12; style="rounded"; color="#a86a1f"; fillcolor="#ffe9c6";
+    elo      [label="ELO 系统\nupdateElo(variant, dim, isCorrect)\n分维度：preflop/postflop/math"];
+    srs      [label="SRS 间隔复习\naddReviewItem / updateReviewItem\n（shared/utils/spacedRepetition）"];
+    emotion  [label="Emotion 系统\nrecordAnswer(isCorrect)\n→ consecutiveWrongCount"];
+    streak   [label="Streak 系统\nrecordTrainingDay()（同日幂等）"];
+    adaptive [label="shouldDownshiftDifficulty()\n自适应难度唯一入口（无参）"];
+    mentorS  [label="Mentor 偏好\nsettings.mentorStyle"];
+    records  [label="训练记录 records\naddRecord → recordDatabase"];
+  }
+
+  subgraph cluster_data {
+    label="落盘"; fontsize=12; style="rounded"; color="#a83232"; fillcolor="#f8eaea";
+    ls  [label="localStorage\npoker-training-progress v15", shape=cylinder];
+    idb [label="IndexedDB poker-training-records\ncleanup 保留最近 1000 条", shape=cylinder];
+  }
+
+  subgraph cluster_derived {
+    label="派生消费方（读侧）"; fontsize=12; style="rounded"; color="#6b4f8a"; fillcolor="#f0ebf5";
+    dash    [label="progress/Dashboard\n首页：连续天数/等级/成就"];
+    stats   [label="progress/stats\nRangeStatsPage · GTOStatsPage"];
+    review  [label="SRS 复习面板 / 去复习链接\nfeedback.RelatedLessonChip → academy 课程"];
+    achieve [label="成就检查（debounce）\nstore.bootstrap.ts → getAchievementSources()"];
+  }
+
+  // ---------------------------------------------------------------- 主流程
+  edge [color="#2f6f6a"];
+  player   -> quizpage [label="1. 作答"];
+  quizpage -> quizcard [label="2. 渲染选项"];
+  shuffle  -> quizcard [label="选项顺序（渲染前纯函数）", color="#31568f"];
+  quizcard -> engine   [label="3. 提交答案"];
+  engine   -> modstore [label="4. answerQuestion / nextQuestion", color="#8a6a3f"];
+  engine   -> grade    [label="5. evLoss → 五级评级", color="#31568f"];
+  grade    -> feedback [label="6. 反馈卡片（含 grade / 正确动作 / EV 损失）", color="#31568f"];
+  mentorS  -> mentor   [label="风格", color="#a86a1f", constraint=false];
+  grade    -> mentor   [label="grade", color="#31568f"];
+  mentor   -> feedback [label="导师人格化文案", color="#31568f"];
+  feedback -> player   [label="7. 即时反馈 + （wrong/blunder）去复习", color="#6b7280"];
+
+  // ---------------------------------------------------------------- 中枢写入
+  edge [color="#a86a1f"];
+  engine   -> elo      [label="updateElo\nuseQuizEngine.ts:105"];
+  engine   -> srs      [label="addReviewItem/updateReviewItem\n:210-212"];
+  engine   -> emotion  [label="recordAnswer\n:109"];
+  engine   -> adaptive [label="shouldDownshiftDifficulty\n:111 → 读 consecutiveWrongCount :112"];
+  quizpage -> streak   [label="recordTrainingDay\nRangeQuizPage.tsx:31"];
+  adaptive -> engine   [label="回灌下一题难度", style=dashed, color="#7c3aed"];
+  mentorS  -> quizcard [label="mentorStyle（QuizCard.tsx:13）", style=dashed];
+
+  // ---------------------------------------------------------------- 事件总线（训练完成）
+  edge [color="#0f766e"];
+  quizpage -> bus [label="8. trainingEvents.emit(TrainingRecord)\nRangeQuizPage.tsx:47\n{id,module:'range-trainer',mode,result,createdAt}", color="#31568f"];
+  bus [label="shared/stores/trainingEvents.ts\n（订阅者异常被 try/catch 隔离）", fillcolor="#d1e7e3", color="#0f766e"];
+  bus  -> records [label="progress 订阅 → addRecord\nstore.ts:471", color="#a83232"];
+  records -> idb  [label="副作用写库 + cleanup(1000)", color="#a83232"];
+
+  // ---------------------------------------------------------------- 持久化
+  edge [color="#b45309", constraint=false];
+  elo      -> ls;
+  srs      -> ls;
+  emotion  -> ls;
+  streak   -> ls;
+  mentorS  -> ls;
+
+  // ---------------------------------------------------------------- 读侧
+  edge [color="#6b4f8a", style=dashed, constraint=false];
+  ls      -> dash    [label="重挂载后读回"];
+  records -> stats;
+  records -> achieve [label="debounce 成就检查"];
+  srs     -> review;
+  review  -> player  [label="跳转 /academy/lesson/:id", color="#6b7280"];
+
+  // ---------------------------------------------------------------- 待验证
+  edge [color="#a83232", style=dashed, constraint=false];
+  unknown1 [label="[unknown] 会话中断/刷新时的训练记录\nrange/pot-odds/gto store 无持久化，\n未结束会话的答题是否留下记录 → 未见证据", fillcolor="#fbe4e4"];
+  engine   -> unknown1 [label="?"];
+
+  // ---------------------------------------------------------------- 每日计划（证据化）
+  edge [color="#6b4f8a", constraint=false];
+  plan [label="跨模块每日计划\ngenerateCrossModuleDailyPlan()\nprogress/utils/dailyTrainingPlan.ts:125\n:93 经 getAcademyDataSource().findNextLesson()"];
+  mix  [label="QuickDrill 题组\ncomposeDailyMix()（progress/utils/dailyTrainingMix）\n调用方 strategy-academy/utils/quickDrillMix.ts:11,68"];
+  ls     -> plan  [label="读 streak/elo/reviewItems", style=solid, color="#b45309"];
+  plan   -> dash  [label="DailyPlanCard / 每日任务展示", style=solid, color="#6b4f8a"];
+  emotion-> plan  [label="shouldDownshiftDifficulty 影响题量与难度", style=solid, color="#a86a1f"];
+  mix    -> ls    [style=solid, color="#b45309", label="submitQuickDrillResult\nrecordQuickDrillCompletion(:712,:741)"];
+
+  { rank=same; player; }
+  { rank=same; quizpage; quizcard; feedback; }
+  { rank=same; engine; grade; mentor; shuffle; modstore; }
+  { rank=same; elo; srs; emotion; streak; adaptive; mentorS; records; bus; }
+  { rank=same; ls; idb; }
+  { rank=same; dash; stats; review; achieve; }
+}
