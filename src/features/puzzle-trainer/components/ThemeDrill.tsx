@@ -3,6 +3,8 @@
  *
  * - 完成后显示该主题的正确率与建议
  * - 主题题目数 15-30 题（P1 阶段每主题 15 题）
+ * - 外层 ThemeDrill 只负责 themeId 校验，会话主体以 key={theme} 挂载：
+ *   同一路由内切换主题时整棵子树重挂载，引擎随之重建
  */
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,19 +28,35 @@ export default function ThemeDrill() {
   const navigate = useNavigate();
   const { themeId } = useParams<{ themeId: string }>();
 
-  // 验证 themeId 是否有效
   const theme = useMemo<PuzzleTheme | null>(() => {
     if (!themeId) return null;
     const valid = PUZZLE_THEMES.find((th) => th.id === themeId);
     return valid ? (valid.id as PuzzleTheme) : null;
   }, [themeId]);
 
-  const themeMeta = useMemo(() => (theme ? getThemeMeta(theme) : null), [theme]);
+  if (!theme) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center gap-3 text-[var(--ivory-muted)]">
+        <p>{t('puzzle.theme.unknownTheme')}</p>
+        <Button variant="outline" onClick={() => navigate('/puzzle')}>
+          {t('puzzle.common.backHome')}
+        </Button>
+      </div>
+    );
+  }
+
+  return <ThemeDrillSession key={theme} theme={theme} />;
+}
+
+function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const themeMeta = getThemeMeta(theme);
   const themeLabel = themeMeta
     ? t(themeMeta.nameKey, themeMeta.fallbackName)
     : t('puzzle.theme.unknownTheme');
 
-  const engine = usePuzzleEngine({ mode: 'theme', theme: theme ?? undefined });
+  const engine = usePuzzleEngine({ mode: 'theme', theme });
   const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
   // P2-5.4: 每日题量上限（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
@@ -55,17 +73,6 @@ export default function ThemeDrill() {
   // 早退位于全部 hooks 之后，避免守卫翻转触发 hooks 数量变化崩溃
   if (!finalResult && sessionLimitReached) {
     return <SessionLimitGuard />;
-  }
-
-  if (!theme) {
-    return (
-      <div className="h-full flex flex-col items-center justify-center gap-3 text-[var(--ivory-muted)]">
-        <p>{t('puzzle.theme.unknownTheme')}</p>
-        <Button variant="outline" onClick={() => navigate('/puzzle')}>
-          {t('puzzle.common.backHome')}
-        </Button>
-      </div>
-    );
   }
 
   if (finalResult) {
