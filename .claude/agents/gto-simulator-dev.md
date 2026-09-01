@@ -46,6 +46,7 @@ additionalPrompt: ""
 - 169 手牌频率热力图（StrategyMatrix）+ Spot 反复练习
 - 五级反馈集成 + 末题简单 + 补救机制
 - ELO / SRS / Emotion / Mentor 记录器（colocated in `useGTOComparison.ts`）
+- 表内可达 spot 约束的场景生成 + 可复现（seeded）训练
 
 > 注：`useGtoEloRecorder` / `useGtoSrsRecorder` / `useGtoEmotionRecorder` 均为 `useGTOComparison.ts` 内的 colocated 导出，非独立 hook 文件。
 
@@ -63,14 +64,15 @@ additionalPrompt: ""
   - `shared/types/decisionFeedback.ts`（五级反馈类型 + `calculateGrade` 评级函数 + GRADE_THRESHOLDS）
   - `shared/utils/pokerMath.ts`（扑克数学计算）
   - `shared/utils/deck.ts`（牌组操作）
+  - `shared/utils/seededShuffle.ts`（`seededRandom` / `hashStringToSeed`：场景可复现的种子 RNG 基础设施，BUG-GTO-012 复用，禁止重复实现第二套 RNG）
   - `shared/types/poker.ts`（扑克基础类型）
 - **多步场景规则**：SRS/Emotion 仅在首决策节点记录，避免多步场景重复计数；ELO 同样仅在首决策节点触发。
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 - src/features/gto-simulator/ — 模块根（types.ts / store.ts / index.ts）
-- src/features/gto-simulator/data/ — GTO 预计算数据（preflop-ranges.json 为翻前权威数据源；postflop-ranges.json 翻后数据）
-- src/features/gto-simulator/utils/ — 策略比较与场景生成工具（strategyCompare.ts 含 PREFLOP_EQUITY 表；scenarioGenerator.ts 场景生成；handDifficulty.ts 169 手难度分类）
+- src/features/gto-simulator/data/ — GTO 预计算数据（preflop-ranges.json 为翻前权威数据源；postflop-ranges.json 翻后数据；仅 11 个 preflop spot，见 spotKey.ts）
+- src/features/gto-simulator/utils/ — 策略比较与场景生成工具（strategyCompare.ts 含 PREFLOP_EQUITY 表；scenarioGenerator.ts 场景组装 + generatePreviousActions 前置动作约束 + pickStreet；decisionNodes.ts 多步节点生成 + computePreflopPot，自 scenarioGenerator 拆出（BUG-GTO-011）；handDifficulty.ts 169 手难度分类；actionTerms.ts 扑克动作术语英文单源（BUG-GTO-010）；spotKey.ts resolveSpotKey 表覆盖解析）
 - src/features/gto-simulator/hooks/ — 场景引擎与策略比较（useScenarioEngine.ts 场景编排 + 末题简单，场景生成逻辑在 utils/scenarioGenerator.ts；useGTOComparison.ts 含 ELO/SRS/Emotion 记录器 colocated）
 - src/features/gto-simulator/components/ — 训练页面与展示组件（GTOFeedback.tsx 为五级反馈 + 导师文案渲染入口）
 
@@ -80,6 +82,7 @@ additionalPrompt: ""
 3. 添加新位置数据时：在 JSON 中添加对应位置的策略映射
 4. 答题后集成跨模块系统：调用 ELO/SRS/Emotion 记录器（仅首决策节点避免多步场景重复计数）
 5. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
+6. 新增 preflop 场景生成：必须在 preflop-ranges.json 实际存在的 spot key 内约束（见 Constraints BUG-GTO-009），禁止伪造/凭空生成策略数据
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
@@ -97,6 +100,9 @@ additionalPrompt: ""
 - **反馈闭环 relatedLessonId**：`GTOSessionPage` 必须根据 `scenario.street` 推导 `relatedLessonId`（preflop→`l4-gto-basics`, flop→`l3-cbet`, turn/river→`l3-multistreet`），调用 `buildGtoFeedback` 时传入；wrong/blunder 显示"去复习"链接
 - **自适应难度**：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，数据源与阈值以 progress store 实现为准）显示降级提示 banner；禁止自行判定降级条件
 - **范围与 GTO 频率表一致性**：`preflop-ranges.json` 是权威数据源，`range-trainer/constants.ts` 必须与之对齐；修改频率表时必须同步通知 `range-trainer-dev`
+- **preflop 生成表覆盖约束（BUG-GTO-009）**：`generatePreviousActions`/`generateDecisionNodes` 的 preflop 分支只在表内可达 spot 生成——非 BB 前面全 fold 得 `{pos}_open`；BB 仅 `bb_vs_{hj,co,btn}_open`（opener ∈ {HJ,CO,BTN}）。禁生成无表的 open-by-BB / 非公开面前冷 call / multiway / 不可达 3bet 分支。`PREFLOP_FALLBACK` 仅作理论不可达的最后兜底，正常不得命中。禁止伪造或凭空生成任何 GTO 策略数据（preflop-ranges.json 是权威数据源）。守卫测试 `utils/scenarioSpotGuard.test.ts` 断言 preflop spot 命中率 100%
+- **可复现训练（BUG-GTO-012）**：`generateScenario(config, index, seed?)` 接受可选 seed，提供时用 `shared/utils/seededShuffle.ts` 的 `seededRandom` 派生确定性 RNG（不重复实现 RNG），同一 config+index+seed 产出完全相同的训练内容；缺省保留 `Math.random` 现网随机。新增随机点时须把可选 rng 参数沿 drawCards/generatePreviousActions/pickStreet 链路由顶向下注入
+- **扑克动作术语英文单源（BUG-GTO-010）**：动作词（Fold/Check/Call/Raise/All-In）刻意保留英文（产品决策），统一取自 `utils/actionTerms.ts`（`actionTerm`/`actionLabel`），DecisionTree / ActionSelector / StrategyMatrix / GTOFeedback 共用同一来源，禁止在各组件再散落硬编码字面量
 
 ## Orchestration
 ### 交互契约（Cross-Module ReviewRequest）
@@ -137,3 +143,5 @@ interface ReviewRequest {
 - [ ] resolveSpotKey 未覆盖场景返回 null（非 'open'）
 - [ ] GTO 反馈携带 relatedLessonId，"去复习"链接可跳转
 - [ ] 连续答错 3 次时显示降级提示 banner
+- [ ] preflop 场景必命中表内 spot（守卫测试命中率 100%）
+- [ ] 动作词均取自 utils/actionTerms.ts 英文单源

@@ -5,6 +5,7 @@ import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { ActionType } from '@/shared/types/action';
 import type { Position } from '@/shared/types/position';
 import { cn } from '@/shared/utils';
+import { actionLabel } from '../utils/actionTerms';
 
 interface DecisionTreeProps {
   actions?: PreviousAction[];
@@ -14,16 +15,6 @@ interface DecisionTreeProps {
   currentNodeIndex?: number;
   userDecisions?: Array<{ nodeIndex: number; action: string }>;
   className?: string;
-}
-
-function actionLabel(action: ActionType, amount?: number): string {
-  switch (action) {
-    case ActionType.Fold: return 'Fold';
-    case ActionType.Check: return 'Check';
-    case ActionType.Call: return amount ? `Call ${amount}BB` : 'Call';
-    case ActionType.Raise: return amount ? `Raise ${amount}BB` : 'Raise';
-    case ActionType.AllIn: return `All-In ${amount ?? ''}BB`;
-  }
 }
 
 function actionColor(action: ActionType): string {

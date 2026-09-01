@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ActionType } from '@/shared/types/action';
 import type { Decision } from '@/shared/types/action';
 import { cn } from '@/shared/utils';
+import { actionTerm, actionLabel } from '../utils/actionTerms';
 
 interface ActionSelectorProps {
   potSize: number;
@@ -77,6 +78,9 @@ export function ActionSelector({
     setShowRaiseSlider(false);
   };
 
+  // BUG-GTO-010：动作词统一取 shared 级扑克动作术语源（actionTerms），刻意保留英文。
+  const callLabel = callAmount ? actionLabel(ActionType.Call, callAmount) : actionTerm(ActionType.Check);
+
   return (
     <div className="space-y-4">
       {/* 主按钮 — Fold=陶土赭 danger 系 · Call=深胡桃实底 · Raise=brass (card-room action semantics) */}
@@ -85,6 +89,7 @@ export function ActionSelector({
         <button
           onClick={() => onDecision({ action: ActionType.Fold })}
           disabled={disabled}
+          aria-label={actionTerm(ActionType.Fold)}
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
             'bg-[var(--poker-terra)]/15 text-[var(--poker-terra-bright)] border border-[var(--poker-terra)]/50',
@@ -93,13 +98,14 @@ export function ActionSelector({
           )}
         >
           <span className="absolute top-1 left-2 text-[10px] text-[var(--ivory-muted)] font-numeric">1</span>
-          Fold
+          {actionTerm(ActionType.Fold)}
         </button>
 
         {/* Call */}
         <button
           onClick={() => onDecision({ action: ActionType.Call, amount: callAmount })}
           disabled={disabled}
+          aria-label={callLabel}
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
             'bg-[var(--walnut-raised)] text-[var(--ivory-dim)] border border-[var(--walnut-light)]',
@@ -108,7 +114,7 @@ export function ActionSelector({
           )}
         >
           <span className="absolute top-1 left-2 text-[10px] text-[var(--ivory-muted)] font-numeric">2</span>
-          {callAmount ? `Call ${callAmount}BB` : 'Check'}
+          {callLabel}
         </button>
 
         {/* Raise */}
@@ -116,6 +122,7 @@ export function ActionSelector({
           onClick={() => setShowRaiseSlider(!showRaiseSlider)}
           aria-expanded={showRaiseSlider}
           aria-controls="gto-raise-panel"
+          aria-label={actionTerm(ActionType.Raise)}
           disabled={disabled}
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
@@ -127,7 +134,7 @@ export function ActionSelector({
           )}
         >
           <span className="absolute top-1 left-2 text-[10px] text-[var(--ivory-muted)] font-numeric">3</span>
-          Raise
+          {actionTerm(ActionType.Raise)}
         </button>
       </div>
 
@@ -152,7 +159,7 @@ export function ActionSelector({
             ))}
           </div>
 
-          {/* 滑块 */}
+          {/* 滑块（a11y：aria-valuetext 读屏播报当前加注尺寸，遵循 WCAG 与 DESIGN_LANGUAGE） */}
           <div className="space-y-1">
             <input
               type="range"
@@ -162,6 +169,7 @@ export function ActionSelector({
               value={raiseAmount}
               onChange={(e) => setRaiseAmount(Number(e.target.value))}
               aria-label={t('gto.action.raiseSlider')}
+              aria-valuetext={`${raiseAmount.toFixed(1)} BB`}
               className="w-full h-2 bg-[var(--felt-deep)] rounded-full appearance-none cursor-pointer accent-[var(--brass)]"
             />
             <div className="flex justify-between text-xs text-[var(--ivory-muted)] font-numeric">
@@ -177,7 +185,7 @@ export function ActionSelector({
             disabled={disabled}
             className="w-full py-2.5 rounded-md bg-[var(--brass)] text-[var(--primary-foreground)] font-display font-semibold hover:bg-[var(--brass-bright)] transition-all active:scale-95"
           >
-            Raise {raiseAmount.toFixed(1)} BB
+            {actionTerm(ActionType.Raise)} {raiseAmount.toFixed(1)} BB
           </button>
         </div>
       )}
@@ -186,6 +194,7 @@ export function ActionSelector({
       <button
         onClick={() => onDecision({ action: ActionType.AllIn, amount: effectiveStack })}
         disabled={disabled}
+        aria-label={actionLabel(ActionType.AllIn, effectiveStack)}
         className={cn(
           'relative w-full py-3 rounded-md font-display font-semibold text-lg transition-all',
           'bg-gradient-to-r from-[var(--clay)]/35 to-[var(--brass)]/35 text-[var(--brass-bright)] border border-[var(--brass)]/40',
@@ -194,7 +203,7 @@ export function ActionSelector({
         )}
       >
         <span className="absolute top-1 left-3 text-[10px] text-[var(--ivory-muted)] font-numeric">4</span>
-        All-In ({effectiveStack} BB)
+        {actionLabel(ActionType.AllIn, effectiveStack)}
       </button>
     </div>
   );

@@ -5,6 +5,8 @@ import { getHandFromGrid } from '@/shared/utils/rangeParser';
 import { GRID_RANKS } from '@/shared/constants/poker';
 import { cn } from '@/shared/utils';
 import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
+import { ActionType } from '@/shared/types/action';
+import { actionTerm } from '../utils/actionTerms';
 
 interface StrategyMatrixProps {
   strategies: Record<HandNotation, HandStrategy> | null;
@@ -109,6 +111,11 @@ export function StrategyMatrix({
     onCellClick?.(hand);
   };
 
+  // BUG-GTO-010：图例动作词统一取自扑克动作术语源（刻意保留英文）
+  const raiseTerm = actionTerm(ActionType.Raise);
+  const callTerm = actionTerm(ActionType.Call);
+  const foldTerm = actionTerm(ActionType.Fold);
+
   return (
     <div className={cn('w-full', className)}>
       {/* 列标题 */}
@@ -153,15 +160,15 @@ export function StrategyMatrix({
       <div className="flex items-center justify-center gap-4 mt-3 text-[10px] text-[var(--ivory-muted)] font-numeric">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm bg-[var(--brass)]/70" />
-          <span>Raise</span>
+          <span>{raiseTerm}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm bg-[var(--sage)]/70" />
-          <span>Call</span>
+          <span>{callTerm}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded-sm bg-[var(--clay)]/30" />
-          <span>Fold</span>
+          <span>{foldTerm}</span>
         </div>
       </div>
     </div>

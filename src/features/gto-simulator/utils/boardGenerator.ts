@@ -67,20 +67,28 @@ export function buildRemainingDeck(exclude: Card[], variant: GameVariant = 'stan
   return deck;
 }
 
-/** 从剩余牌堆随机抽取 count 张（不放回） */
-export function drawCards(count: number, exclude: Card[] = [], variant: GameVariant = 'standard'): Card[] {
+/**
+ * 从剩余牌堆随机抽取 count 张（不放回）。
+ * BUG-GTO-012：接受可选 rng（默认 Math.random 保持现网行为；传种子 RNG 可实现可复现场景）。
+ */
+export function drawCards(
+  count: number,
+  exclude: Card[] = [],
+  variant: GameVariant = 'standard',
+  rng: () => number = Math.random
+): Card[] {
   const deck = buildRemainingDeck(exclude, variant);
   const drawn: Card[] = [];
   for (let i = 0; i < count && deck.length > 0; i++) {
-    const idx = Math.floor(Math.random() * deck.length);
+    const idx = Math.floor(rng() * deck.length);
     drawn.push(deck.splice(idx, 1)[0]!);
   }
   return drawn;
 }
 
 /** 随机生成 Hero 手牌（2 张，不重复） */
-export function randomHeroHand(variant: GameVariant = 'standard'): [Card, Card] {
-  const [c1, c2] = drawCards(2, [], variant);
+export function randomHeroHand(variant: GameVariant = 'standard', rng: () => number = Math.random): [Card, Card] {
+  const [c1, c2] = drawCards(2, [], variant, rng);
   return [c1!, c2!];
 }
 
@@ -90,18 +98,29 @@ export function randomHeroHand(variant: GameVariant = 'standard'): [Card, Card] 
  */
 export function generateFlop(
   variant: GameVariant,
-  excludeCards: Card[] = []
+  excludeCards: Card[] = [],
+  rng: () => number = Math.random
 ): { cards: Card[]; texture: BoardTexture } {
-  const cards = drawCards(3, excludeCards, variant);
+  const cards = drawCards(3, excludeCards, variant, rng);
   return { cards, texture: classifyBoardTexture(cards) };
 }
 
 /** 生成转牌（P1C-01：excludeCards 传入 Hero 手牌等场外已用牌） */
-export function generateTurnCard(existingBoard: Card[], variant: GameVariant, excludeCards: Card[] = []): Card {
-  return drawCards(1, [...existingBoard, ...excludeCards], variant)[0]!;
+export function generateTurnCard(
+  existingBoard: Card[],
+  variant: GameVariant,
+  excludeCards: Card[] = [],
+  rng: () => number = Math.random
+): Card {
+  return drawCards(1, [...existingBoard, ...excludeCards], variant, rng)[0]!;
 }
 
 /** 生成河牌（P1C-01：excludeCards 传入 Hero 手牌等场外已用牌） */
-export function generateRiverCard(existingBoard: Card[], variant: GameVariant, excludeCards: Card[] = []): Card {
-  return generateTurnCard(existingBoard, variant, excludeCards);
+export function generateRiverCard(
+  existingBoard: Card[],
+  variant: GameVariant,
+  excludeCards: Card[] = [],
+  rng: () => number = Math.random
+): Card {
+  return generateTurnCard(existingBoard, variant, excludeCards, rng);
 }

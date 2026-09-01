@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import type { HandStrategy } from '../types';
-import type { Decision } from '@/shared/types/action';
 import type { HandNotation } from '@/shared/types/poker';
 import { cn } from '@/shared/utils';
 import { getOpponentProfile } from '@/shared/data/opponentProfiles';
@@ -9,6 +8,8 @@ import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 import { useProgressStore } from '@/features/progress/store';
+import { ActionType } from '@/shared/types/action';
+import { actionTerm } from '../utils/actionTerms';
 
 interface GTOFeedbackProps {
   isOptimal: boolean;
@@ -25,7 +26,7 @@ interface GTOFeedbackProps {
   /** 五级反馈（可选）。提供时优先使用五级显示，否则降级为旧的二元显示 */
   feedback?: DecisionFeedback | null;
   /** 用户选择的动作（用于决策分析对比） */
-  userAction?: Decision | null;
+  userAction?: { action: string; amount?: number } | null;
   /** 再做一题回调（wrong/blunder 反馈底部） */
   onTryAgain?: () => void;
 }
@@ -48,6 +49,10 @@ export function GTOFeedback({
 }: GTOFeedbackProps) {
   const { t } = useTranslation();
   const opponent = selectedOpponent ? getOpponentProfile(selectedOpponent) : null;
+
+  const raiseTerm = actionTerm(ActionType.Raise);
+  const callTerm = actionTerm(ActionType.Call);
+  const foldTerm = actionTerm(ActionType.Fold);
 
   // 五级反馈配置（feedback 提供时使用）
   const grade = feedback?.grade ?? null;
@@ -75,38 +80,29 @@ export function GTOFeedback({
       }, t)
     : '';
   const gradeMessage = mentorMessage || (feedback && grade
-    ? t(`feedback.message.${grade}`, {
-        evLoss: (feedback.evLoss ?? 0).toFixed(2),
-      })
+    ? t(`feedback.message.${grade}`, { evLoss: (feedback.evLoss ?? 0).toFixed(2) })
     : '');
-  const gradeTitle = gradeConfig
-    ? t(gradeConfig.titleKey)
-    : '';
+  const gradeTitle = gradeConfig ? t(gradeConfig.titleKey) : '';
 
-  // 容器样式：五级反馈优先使用 GRADE_DISPLAY_CONFIG 的 color/textColor，否则用旧二元
   const containerClass = gradeConfig && feedback
     ? cn('p-4 rounded-md border space-y-4', gradeConfig.color, gradeConfig.textColor)
     : cn('p-4 rounded-md border space-y-4', legacyStatusColor);
 
   return (
     <div className={containerClass}>
-      {/* 状态头部：五级反馈优先，否则降级为旧二元显示 */}
       {gradeConfig && feedback ? (
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="font-display text-2xl">{gradeConfig.icon}</span>
             <div>
               <div className="font-display font-semibold">{gradeTitle}</div>
-              {handNotation && (
-                <div className="text-xs opacity-80 font-numeric">{handNotation}</div>
-              )}
+              {handNotation && <div className="text-xs opacity-80 font-numeric">{handNotation}</div>}
             </div>
           </div>
           <div className="text-right">
             <div className="text-xs opacity-80">{t('feedback.evLossLabel')}</div>
             <div className="text-lg font-bold font-numeric">{Math.max(0, feedback.evLoss).toFixed(2)} BB</div>
           </div>
-          {/* 非 best 级显示最优动作 */}
           {grade !== 'best' && feedback.correctAction && (
             <div className="text-right">
               <div className="text-xs opacity-80">{t('feedback.correctAction')}</div>
@@ -120,9 +116,7 @@ export function GTOFeedback({
             <span className="font-display text-2xl">{legacyStatusIcon}</span>
             <div>
               <div className="font-display font-semibold">{legacyStatusLabel}</div>
-              {handNotation && (
-                <div className="text-xs opacity-80 font-numeric">{handNotation}</div>
-              )}
+              {handNotation && <div className="text-xs opacity-80 font-numeric">{handNotation}</div>}
             </div>
           </div>
           <div className="text-right">
@@ -132,15 +126,11 @@ export function GTOFeedback({
         </div>
       )}
 
-      {/* 真实 EV 数值 */}
       {(userEV !== undefined || optimalEV !== undefined) && (
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="rounded-lg bg-black/20 p-2">
             <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">{t('gto.feedback.yourEV')}</div>
-            <div className={cn(
-              'font-numeric font-bold text-sm',
-              (userEV ?? 0) >= 0 ? 'text-[var(--sage)]' : 'text-[var(--clay)]'
-            )}>
+            <div className={cn('font-numeric font-bold text-sm', (userEV ?? 0) >= 0 ? 'text-[var(--sage)]' : 'text-[var(--clay)]')}>
               {(userEV ?? 0) >= 0 ? '+' : ''}{(userEV ?? 0).toFixed(2)} BB
             </div>
           </div>
@@ -152,19 +142,15 @@ export function GTOFeedback({
           </div>
           <div className="rounded-lg bg-black/20 p-2">
             <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">{t('gto.feedback.heroEquity')}</div>
-            <div className="font-numeric font-bold text-sm text-[var(--ivory)]">
-              {Math.round((heroEquity ?? 0) * 100)}%
-            </div>
+            <div className="font-numeric font-bold text-sm text-[var(--ivory)]">{Math.round((heroEquity ?? 0) * 100)}%</div>
           </div>
         </div>
       )}
 
-      {/* 接近最优标记（仅旧二元模式显示） */}
       {!isOptimal && evLoss < 0.3 && !feedback && (
         <div className="text-xs text-[var(--sage)] font-display">{t('gto.feedback.nearOptimal')}</div>
       )}
 
-      {/* 对手信息（Exploit 模式） */}
       {exploitMode && opponent && (
         <div className="flex items-center gap-2 rounded-lg bg-black/20 px-3 py-2">
           <span className="text-lg">{opponent.icon}</span>
@@ -182,40 +168,31 @@ export function GTOFeedback({
         </div>
       )}
 
-      {/* 频率条形图 — Raise=brass, Call=sage, Fold=clay */}
+      {/* 频率条形图 — Raise=brass, Call=sage, Fold=clay（术语源自 actionTerms，英文单源） */}
       {gtoStrategy && (
         <div className="space-y-2">
           <div className="text-xs font-medium opacity-80">{t('gto.feedback.frequencyDistribution')}</div>
           <div className="flex h-6 rounded overflow-hidden">
             {gtoStrategy.raise > 0 && (
-              <div
-                className="bg-[var(--brass)] flex items-center justify-center text-[10px] font-bold text-[var(--primary-foreground)] transition-all font-numeric"
-                style={{ width: `${gtoStrategy.raise * 100}%` }}
-              >
+              <div className="bg-[var(--brass)] flex items-center justify-center text-[10px] font-bold text-[var(--primary-foreground)] transition-all font-numeric" style={{ width: `${gtoStrategy.raise * 100}%` }}>
                 {gtoStrategy.raise >= 0.15 && `${Math.round(gtoStrategy.raise * 100)}%`}
               </div>
             )}
             {gtoStrategy.call > 0 && (
-              <div
-                className="bg-[var(--sage)] flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric"
-                style={{ width: `${gtoStrategy.call * 100}%` }}
-              >
+              <div className="bg-[var(--sage)] flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${gtoStrategy.call * 100}%` }}>
                 {gtoStrategy.call >= 0.15 && `${Math.round(gtoStrategy.call * 100)}%`}
               </div>
             )}
             {gtoStrategy.fold > 0 && (
-              <div
-                className="bg-[var(--clay)]/70 flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric"
-                style={{ width: `${gtoStrategy.fold * 100}%` }}
-              >
+              <div className="bg-[var(--clay)]/70 flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${gtoStrategy.fold * 100}%` }}>
                 {gtoStrategy.fold >= 0.15 && `${Math.round(gtoStrategy.fold * 100)}%`}
               </div>
             )}
           </div>
           <div className="flex justify-between text-[10px] font-numeric">
-            <span className="text-[var(--brass-bright)]">Raise {Math.round(gtoStrategy.raise * 100)}%</span>
-            <span className="text-[var(--sage)]">Call {Math.round(gtoStrategy.call * 100)}%</span>
-            <span className="text-[var(--clay)]">Fold {Math.round(gtoStrategy.fold * 100)}%</span>
+            <span className="text-[var(--brass-bright)]">{raiseTerm} {Math.round(gtoStrategy.raise * 100)}%</span>
+            <span className="text-[var(--sage)]">{callTerm} {Math.round(gtoStrategy.call * 100)}%</span>
+            <span className="text-[var(--clay)]">{foldTerm} {Math.round(gtoStrategy.fold * 100)}%</span>
           </div>
           {gtoStrategy.raiseAmount && gtoStrategy.raise > 0 && (
             <div className="text-xs text-[var(--ivory-muted)] font-numeric">
@@ -225,58 +202,39 @@ export function GTOFeedback({
         </div>
       )}
 
-      {/* Exploit 策略对比（Exploit 模式） */}
       {exploitMode && exploitStrategy && gtoStrategy && (
         <div className="space-y-2">
           <div className="text-xs font-medium opacity-80">{t('gto.feedback.exploitSuggestion', { name: opponent?.shortName ?? t('gto.feedback.opponentPrefix') })}</div>
           <div className="flex h-6 rounded overflow-hidden">
             {exploitStrategy.raise > 0 && (
-              <div
-                className="bg-[var(--brass)] flex items-center justify-center text-[10px] font-bold text-[var(--primary-foreground)] transition-all font-numeric"
-                style={{ width: `${exploitStrategy.raise * 100}%` }}
-              >
+              <div className="bg-[var(--brass)] flex items-center justify-center text-[10px] font-bold text-[var(--primary-foreground)] transition-all font-numeric" style={{ width: `${exploitStrategy.raise * 100}%` }}>
                 {exploitStrategy.raise >= 0.15 && `${Math.round(exploitStrategy.raise * 100)}%`}
               </div>
             )}
             {exploitStrategy.call > 0 && (
-              <div
-                className="bg-[var(--sage)] flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric"
-                style={{ width: `${exploitStrategy.call * 100}%` }}
-              >
+              <div className="bg-[var(--sage)] flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${exploitStrategy.call * 100}%` }}>
                 {exploitStrategy.call >= 0.15 && `${Math.round(exploitStrategy.call * 100)}%`}
               </div>
             )}
             {exploitStrategy.fold > 0 && (
-              <div
-                className="bg-[var(--clay)]/70 flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric"
-                style={{ width: `${exploitStrategy.fold * 100}%` }}
-              >
+              <div className="bg-[var(--clay)]/70 flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${exploitStrategy.fold * 100}%` }}>
                 {exploitStrategy.fold >= 0.15 && `${Math.round(exploitStrategy.fold * 100)}%`}
               </div>
             )}
           </div>
           <div className="flex justify-between text-[10px] font-numeric">
-            <span className="text-[var(--brass-bright)]">Raise {Math.round(exploitStrategy.raise * 100)}%</span>
-            <span className="text-[var(--sage)]">Call {Math.round(exploitStrategy.call * 100)}%</span>
-            <span className="text-[var(--clay)]">Fold {Math.round(exploitStrategy.fold * 100)}%</span>
+            <span className="text-[var(--brass-bright)]">{raiseTerm} {Math.round(exploitStrategy.raise * 100)}%</span>
+            <span className="text-[var(--sage)]">{callTerm} {Math.round(exploitStrategy.call * 100)}%</span>
+            <span className="text-[var(--clay)]">{foldTerm} {Math.round(exploitStrategy.fold * 100)}%</span>
           </div>
           <div className="text-[10px] text-[var(--ivory-muted)]">
-            {t('gto.feedback.gtoRatio', {
-              r: Math.round(gtoStrategy.raise * 100),
-              c: Math.round(gtoStrategy.call * 100),
-              f: Math.round(gtoStrategy.fold * 100),
-            })}
+            {t('gto.feedback.gtoRatio', { r: Math.round(gtoStrategy.raise * 100), c: Math.round(gtoStrategy.call * 100), f: Math.round(gtoStrategy.fold * 100) })}
             {' → '}
-            {t('gto.feedback.exploitRatio', {
-              r: Math.round(exploitStrategy.raise * 100),
-              c: Math.round(exploitStrategy.call * 100),
-              f: Math.round(exploitStrategy.fold * 100),
-            })}
+            {t('gto.feedback.exploitRatio', { r: Math.round(exploitStrategy.raise * 100), c: Math.round(exploitStrategy.call * 100), f: Math.round(exploitStrategy.fold * 100) })}
           </div>
         </div>
       )}
 
-      {/* 解释文字 / 决策分析区（§13.4.1）：wrong/blunder 默认展开 */}
       {gradeConfig && feedback ? (
         <>
           <div className="text-sm opacity-95">{gradeMessage}</div>

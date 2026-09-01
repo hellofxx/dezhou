@@ -135,19 +135,24 @@ export function notationToHand(notation: string): [Card, Card] | null {
  * 按难度选一副手牌：从目标难度池随机选 notation 后反向构造，
  * 保证 100% 命中目标难度（旧实现为 50 次随机重试，存在小概率出圈）。
  * short-deck 变体下过滤掉含 2-5 的 notation（该牌组中不存在）。
+ * BUG-GTO-012：接受可选 rng（默认 Math.random 保持现网行为）。
  */
-export function selectHandForDifficulty(difficulty: string, variant: GameVariant = 'standard'): [Card, Card] {
+export function selectHandForDifficulty(
+  difficulty: string,
+  variant: GameVariant = 'standard',
+  rng: () => number = Math.random
+): [Card, Card] {
   let targetHands: string[];
   switch (difficulty) {
     case 'beginner': targetHands = STRONG_HANDS; break;
     case 'intermediate': targetHands = INTERMEDIATE_HANDS; break;
     case 'advanced': targetHands = ADVANCED_HANDS; break;
-    default: return randomHeroHand(variant);
+    default: return randomHeroHand(variant, rng);
   }
   const pool = variant === 'short-deck'
     ? targetHands.filter((h) => RANK_VALUE[h[0]!]! >= 6 && RANK_VALUE[h[1]!]! >= 6)
     : targetHands;
-  if (pool.length === 0) return randomHeroHand(variant);
-  const notation = pool[Math.floor(Math.random() * pool.length)]!;
-  return notationToHand(notation) ?? randomHeroHand(variant);
+  if (pool.length === 0) return randomHeroHand(variant, rng);
+  const notation = pool[Math.floor(rng() * pool.length)]!;
+  return notationToHand(notation) ?? randomHeroHand(variant, rng);
 }
