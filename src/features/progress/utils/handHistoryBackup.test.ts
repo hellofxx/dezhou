@@ -2,7 +2,8 @@
  * handHistoryBackup.test.ts
  *
  * Node unit 环境无原生 indexedDB，此处用极简 in-memory mock 覆盖 handHistoryBackup
- * 用到的能力（open + getAll + put），验证：读取回写、按 id 幂等去重。
+ * 用到的能力（open + getAll + put），验证：读取回写、按 id 幂等去重、
+ * open 被其他标签页阻塞时 reject 且可重试。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { loadAllHands, saveAllHands } from './handHistoryBackup';
@@ -98,5 +99,36 @@ describe('handHistoryBackup', () => {
     expect(hands).toHaveLength(2);
     const h1 = hands.find((h) => h.id === 'h1');
     expect(h1?.pot).toBe(999);
+  });
+});
+
+/** 只触发 onblocked 的假 factory：模拟另一标签页持有旧版本连接。 */
+function createBlockingIndexedDB(): IDBFactory {
+  const openReq = {
+    onblocked: null as null | (() => void),
+    onupgradeneeded: null as null | (() => void),
+    onsuccess: null as null | (() => void),
+    onerror: null as null | (() => void),
+  };
+  return {
+    open: () => {
+      queueMicrotask(() => openReq.onblocked?.());
+      return openReq;
+    },
+  } as unknown as IDBFactory;
+}
+
+describe('handHistoryBackup open blocked', () => {
+  it('open 被其他标签页阻塞时 reject（不永久 pending），关闭后可重试成功', async () => {
+    // resetModules 取一个 _db / _dbPromise 均为空的全新实例
+    vi.resetModules();
+    vi.stubGlobal('indexedDB', createBlockingIndexedDB());
+    const blocked = await import('./handHistoryBackup');
+    await expect(blocked.loadAllHands()).rejects.toThrow(/IDB_BLOCKED/);
+
+    // 失败路径必须清掉缓存的 pending promise，否则重试会永远拿到同一个 pending
+    vi.stubGlobal('indexedDB', createFakeIndexedDB());
+    await expect(blocked.loadAllHands()).resolves.toEqual([]);
+    vi.resetModules();
   });
 });

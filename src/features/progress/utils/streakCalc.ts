@@ -130,9 +130,8 @@ export function isEarnBackActive(streakBrokenAt: number | null, now: number = Da
  * 2. 历史断裂状态（streakBrokenAt 非空，旧版本产生）：24h 内 → Earn Back 恢复 +1；过期 → 重置为 1
  * 3. 首次训练（lastTrainingDate === null）→ 直接启动 Day 1：currentStreak = 1
  * 4. 如果昨天训练过 → currentStreak + 1
- * 5. 前天训练过但昨天没训练（gap=2）：
- *    - 有冻结卡且今日未用过 → 自动使用冻结卡，streak + 1
- *    - 无冻结卡 → Earn Back 恢复：streak 断裂于今日 0 点，仍在 24h 窗口内，恢复为原天数 + 1
+ * 5. 前天训练过但昨天没训练（gap=2）：免费 Earn Back 恢复（streak 断裂于今日 0 点，
+ *    仍在 24h 窗口内，恢复为原天数 + 1）。自动恢复一律不扣冻结卡（PRG-008）。
  * 6. 断签 ≥ 2 天（gap ≥ 3）→ 断裂时刻（漏训首日 24 点）距今已超 24h → 重置为 1
  *
  * 设计说明：纯前端无后台任务，断裂只能在下一次训练时被发现。Earn Back 窗口以
@@ -206,21 +205,10 @@ export function updateStreak(state: StreakState): StreakState {
 
   const gap = daysBetween(state.lastTrainingDate, today);
 
-  // 5. 前天训练过但昨天没训练（gap=2，漏训 1 天）
+  // 5. 前天训练过但昨天没训练（gap=2，漏训 1 天）：
+  // PRG-008 自动恢复一律不扣卡 → 统一走免费 Earn Back（streak 断裂于今日 0 点，
+  // 仍处 24h 窗口内），恢复为原天数 + 1。冻结卡不因漏训自动消耗。
   if (gap === 2) {
-    if (state.streakFreezes > 0 && !state.streakFreezeUsedToday) {
-      // 冻结卡保护：无感续接
-      const newStreak = state.currentStreak + 1;
-      return {
-        ...state,
-        currentStreak: newStreak,
-        longestStreak: Math.max(state.longestStreak, newStreak),
-        streakFreezes: state.streakFreezes - 1,
-        streakFreezeUsedToday: true,
-        lastTrainingDate: today,
-      };
-    }
-    // 无冻结卡：断裂发生于今日 0 点，仍在 24h Earn Back 窗口内 → 恢复为原天数 + 1
     const newStreak = state.currentStreak + 1;
     return {
       ...state,
@@ -268,7 +256,8 @@ export function checkNewMilestone(
 /**
  * 手动使用冻结卡：为"今天"补一张出勤卡（主动请假）。
  *
- * 与自动扣减（updateStreak 的 gap=2 分支，事后补救昨天）不同，手动使用的语义是
+ * PRG-008 起冻结卡只有这一条消耗路径：updateStreak 的 gap=2 分支已改为免费自动
+ * 恢复（不扣卡）。手动使用的语义是
  * "今天不想/没空训练，提前花 1 张卡保住连续性"：将 lastTrainingDate 置为今天
  * （currentStreak 不 +1，避免用卡与训练等价），明日训练即按"昨日已训"续接 +1。
  *
@@ -295,11 +284,12 @@ export function applyManualFreeze(state: StreakState): StreakState | null {
 
 /**
  * 断裂发现检测（应用打开 / 首页挂载时调用）：
- * 昨日漏训（gap=2）且无冻结卡可自动保护时，返回断裂时刻（今日 0 点 =
- * 漏训日结束时刻）供写入 streakBrokenAt，驱动 UI 展示"⚡ Earn Back 窗口期"提示。
+ * 昨日漏训（gap=2）时返回断裂时刻（今日 0 点 = 漏训日结束时刻）供写入
+ * streakBrokenAt，驱动 UI 展示"⚡ Earn Back 窗口期"提示。
  *
  * 窗口语义与 updateStreak 严格一致：今天全天（距今日 0 点 < 24h）训练可恢复；
- * 明天（gap=3）则窗口必已过期、重置为 1。有冻结卡时不标记（自动扣减会无感兑底）。
+ * 明天（gap=3）则窗口必已过期、重置为 1。PRG-008 起自动恢复一律免费不扣卡，
+ * 冻结卡数量不影响 Earn Back 提示（无论是否有卡，gap=2 均处免费恢复窗口）。
  *
  * @returns 断裂时刻时间戳；无需标记时返回 null
  */
@@ -308,7 +298,6 @@ export function computeStreakBrokenAt(state: StreakState): number | null {
   if (state.streakBrokenAt !== null) return null;              // 已标记
   if (state.currentStreak <= 0 || state.lastTrainingDate === null) return null;
   if (state.lastTrainingDate === today) return null;           // 今日已训
-  if (state.streakFreezes > 0 && !state.streakFreezeUsedToday) return null; // 有卡，自动保护兑底
   const gap = daysBetween(state.lastTrainingDate, today);
   if (gap !== 2) return null;                                  // 仅漏训 1 天的挡救窗口
   const midnight = new Date();

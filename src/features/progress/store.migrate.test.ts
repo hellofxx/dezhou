@@ -57,3 +57,85 @@ describe('progress store migrate (v0 → v9)', () => {
     await new Promise((resolve) => setTimeout(resolve, 20));
   });
 });
+
+/**
+ * PRG-011 补盲：v10~v15 各步迁移专项用例（原测试仅覆盖 v0→v9 全链路冒烟）。
+ * 直接调用 persist 配置的 migrate(seed, fromVersion) 逐段驱动，断言迁移结果形状与数据保全。
+ */
+describe('progress store migrate 分步（v10→v15）', () => {
+  const loadMigrate = async (seed: Record<string, unknown>, fromVersion: number) => {
+    const storageStub = createLocalStorageStub();
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+    const { useProgressStore } = await import('./store');
+    const migrate = useProgressStore.persist.getOptions().migrate!;
+    return migrate(seed as never, fromVersion) as unknown as {
+      eloByVariant?: Record<string, { overall: number; gamesPlayed: number; variant: string }>;
+      activeVariant?: string;
+      reviewItems?: Array<{ label?: string }>;
+      quickDrillBest?: unknown;
+      focusModule?: unknown;
+      elo?: unknown;
+    };
+  };
+
+  it('v10：top-level elo → eloByVariant.standard 克隆，short-deck/heads-up 继承，activeVariant=standard', async () => {
+    const result = await loadMigrate(
+      { elo: { overall: 1234, gamesPlayed: 20, variant: 'standard' as never } },
+      9,
+    );
+    expect(result.eloByVariant!.standard!.overall).toBe(1234);
+    expect(result.eloByVariant!.standard!.gamesPlayed).toBe(20);
+    expect(result.eloByVariant!['short-deck']!.gamesPlayed).toBe(0);
+    expect(result.eloByVariant!['heads-up']!.gamesPlayed).toBe(0);
+    expect(result.activeVariant).toBe('standard');
+    // v12 后 top-level elo 已被退役，快速验证最终态无残留
+    expect('elo' in (result as object)).toBe(false);
+  });
+
+  it('v11：GTO 标签尾部" 决策"清洗 → label 被 sanitize', async () => {
+    const result = await loadMigrate(
+      { reviewItems: [{ label: 'BTN Turn 决策' }, { label: 'clean' }] },
+      10,
+    );
+    expect(result.reviewItems![0]!.label).toBe('BTN Turn');
+    expect(result.reviewItems![1]!.label).toBe('clean');
+  });
+
+  it('v12：quickDrillBest 缺失 → 注入 null（P2-02 迁入）', async () => {
+    const result = await loadMigrate({}, 11);
+    expect(result.quickDrillBest).toBeNull();
+  });
+
+  it('v13：退役顶层 elo，统一 eloByVariant.standard（数据保全分点）', async () => {
+    const result = await loadMigrate(
+      {
+        elo: { overall: 900, gamesPlayed: 5, variant: 'standard' as never },
+        eloByVariant: {
+          standard: { overall: 900, gamesPlayed: 5, variant: 'standard' as never },
+          'short-deck': { overall: 500, gamesPlayed: 0, variant: 'short-deck' as never },
+          'heads-up': { overall: 500, gamesPlayed: 0, variant: 'heads-up' as never },
+        },
+      },
+      12,
+    );
+    expect('elo' in (result as object)).toBe(false);
+    expect(result.eloByVariant!.standard!.overall).toBe(900); // 变体数据保全
+  });
+
+  it('v14：清理 elo 内存兼容层残留键（防御性删除）', async () => {
+    const result = await loadMigrate(
+      {
+        elo: { overall: 888, gamesPlayed: 1, variant: 'standard' as never },
+        eloByVariant: { standard: { overall: 888, gamesPlayed: 1, variant: 'standard' as never }, 'short-deck': {}, 'heads-up': {} } as never,
+      },
+      13,
+    );
+    expect('elo' in (result as object)).toBe(false);
+  });
+
+  it('v15：focusModule 缺失 → 注入 null（学习焦点模式 §13.6.2）', async () => {
+    const result = await loadMigrate({}, 14);
+    expect(result.focusModule).toBeNull();
+  });
+});

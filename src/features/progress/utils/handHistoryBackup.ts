@@ -24,6 +24,10 @@ function openDB(): Promise<IDBDatabase> {
         db.createObjectStore(STORE_NAME, { keyPath: 'id' });
       }
     };
+    // 另一标签页持有旧版本连接时，open 会停在 blocked 态而非报错；不在此 reject
+    // 则该 Promise 永不 settle，getDB 缓存的 _dbPromise 会连带卡死后续所有调用。
+    req.onblocked = () =>
+      reject(new Error('IDB_BLOCKED: hand-history-db open blocked by another tab'));
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });

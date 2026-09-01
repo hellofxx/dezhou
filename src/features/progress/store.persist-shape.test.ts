@@ -15,6 +15,9 @@ import { buildPersistedShape } from '@/shared/utils/persistShape';
  * P2-01 阶段 A（v13）：records 外迁 IndexedDB，经 partialize 排除出 localStorage
  * （快照中不再包含 records 键；持久化由 recordDatabase 承担，见 utils/recordDatabase.ts）。
  * v14：elo 内存兼容层移除，快照中不再包含顶层 elo 键（ELO 以 eloByVariant 为单一事实源）。
+ *
+ * v15（新增 persistError）：persistError 与 setPersistError 为运行时标记，
+ * 经 partialize 排除出 localStorage，因此不 bump version 且快照不变。
  */
 describe('progress store persisted shape', () => {
   it('持久化键结构与当前快照一致（变化即需 bump version + migrate）', async () => {
@@ -137,6 +140,33 @@ describe('progress store persisted shape', () => {
     `);
 
     // 等待模块底部 setTimeout 副作用执行完毕，避免 teardown 后悬挂 timer
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  });
+
+  it('persistError 不出现在 partialize 结果中', async () => {
+    const storageStub = createLocalStorageStub();
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+
+    const { useProgressStore } = await import('./store');
+    const { partialize } = useProgressStore.persist.getOptions();
+    const state = useProgressStore.getState();
+
+    // 设置 persistError（模拟存储失败）
+    state.setPersistError({ reason: 'quota', at: Date.now() });
+    const updatedState = useProgressStore.getState();
+    expect(updatedState.persistError).toBeTruthy();
+
+    // partialize 后应不包含 persistError 与 setPersistError
+    const persisted = partialize ? partialize(updatedState) : updatedState;
+    expect(persisted).not.toHaveProperty('persistError');
+    expect(persisted).not.toHaveProperty('setPersistError');
+
+    // 验证字符串化后也不出现
+    const json = JSON.stringify(persisted);
+    expect(json).not.toContain('persistError');
+
+    // 等待模块底部 setTimeout 副作用执行完毕
     await new Promise((resolve) => setTimeout(resolve, 20));
   });
 });

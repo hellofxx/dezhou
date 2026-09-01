@@ -143,12 +143,12 @@ describe('updateStreak', () => {
     expect(next.lastTrainingDate).toBe(getTodayString());
   });
 
-  it('gap=2 且有冻结卡 → 自动扣 1 张续接', () => {
+  it('gap=2 且有冻结卡 → 免费 Earn Back 恢复，不扣卡（PRG-008 自动恢复一律不扣卡）', () => {
     const state = baseState({ currentStreak: 5, longestStreak: 5, lastTrainingDate: relDayStr(-2), streakFreezes: 2 });
     const next = updateStreak(state);
     expect(next.currentStreak).toBe(6);
-    expect(next.streakFreezes).toBe(1);
-    expect(next.streakFreezeUsedToday).toBe(true);
+    expect(next.streakFreezes).toBe(2);      // 冻结卡不被扣减
+    expect(next.streakFreezeUsedToday).toBe(false);
     expect(next.lastTrainingDate).toBe(getTodayString());
   });
 
@@ -280,8 +280,8 @@ describe('computeStreakBrokenAt（断裂发现检测）', () => {
     expect(isEarnBackActive(brokenAt!)).toBe(true);
   });
 
-  it('有冻结卡 → 不标记（自动扣减兑底）', () => {
-    expect(computeStreakBrokenAt(baseState({ streakFreezes: 2 }))).toBeNull();
+  it('有冻结卡 → 仍标记（PRG-008 自动恢复免费不扣卡，卡数不影响 Earn Back 提示）', () => {
+    expect(computeStreakBrokenAt(baseState({ streakFreezes: 2 }))).not.toBeNull();
   });
 
   it('今日已训 / 昨日已训（未断） → 不标记', () => {

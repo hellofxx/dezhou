@@ -185,5 +185,10 @@
   },
   "ring": {
     "aria": "{{pct}}% complete"
+  },
+  "persistError": {
+    "title": "Progress Cannot Be Saved",
+    "description": "Local storage is full. Progress may be lost. Go to Settings → Data Management to export a backup.",
+    "action": "Go to Settings"
   }
 }

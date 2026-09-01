@@ -62,7 +62,7 @@ additionalPrompt: ""
 
 ### progress store 五大系统对外暴露
 - **Streak**：
-  - `recordTrainingDay()`（幂等，同一日重复调用不重复计数）
+  - `recordTrainingDay()`（幂等，同一日重复调用不重复计数；gap=2 漏训 1 天自动恢复**免费不扣冻结卡**，PRG-008 新语义——冻结卡仅经手动 `useStreakFreeze`（applyManualFreeze）消耗）
   - `awardStreakFreeze(n)`（发放 n 张冻结卡）
   - `recordQuickDrillCompletion()`（快速训练打卡，幂等）
 - **ELO**：
@@ -76,7 +76,7 @@ additionalPrompt: ""
   - `recordAnswer(isCorrect)`（记录答题正误，更新今日情绪计数）
   - `setTodayMood(mood)`（手动设置今日心情）
   - `setDailyQuestionLimit(limit)`（设置每日题量上限）
-  - `checkDownswing()`（下风期检测）
+  - `checkDownswing()`（下风期检测：最近 3 个自然日日期相邻且正确率单调下降，PRG-006；不相邻不下风期判定）
   - `resetDailyCounters()`（每日 0 点重置计数器）
 - **Mentor**：
   - `setMentorStyle(style)`（切换导师风格：strict-math / old-school / encouraging）

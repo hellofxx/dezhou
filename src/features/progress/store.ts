@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { progressPersistStorage, setPersistFailureHandler } from './utils/persistStorage';
 import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState, QuickDrillBestRecord } from './types';
 import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
@@ -8,11 +9,11 @@ import { recordDatabase } from './utils/recordDatabase';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import {
   updateStreak,
-  isEarnBackActive,
   applyManualFreeze,
   computeStreakBrokenAt,
   getTodayString,
   getYesterdayString as getYesterdayStringFromStreak,
+  daysBetween,
 } from './utils/streakCalc';
 import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
@@ -345,11 +346,6 @@ interface ProgressStore {
   clearPendingMilestone: () => void;
   /** 奖励冻结卡（默认 +1，可指定数量） */
   awardStreakFreeze: (count?: number) => void;
-  /** 判断是否处于 Earn Back 窗口期（streakBrokenAt 在 24h 内） */
-  canEarnBack: () => boolean;
-  /** 恢复 streak：currentStreak = previousStreak + 1，清除 streakBrokenAt */
-  earnBackStreak: (previousStreak: number) => void;
-
   // ELO 能力分级（P1-2）
   /** 段位升级事件（非 null 时表示刚发生升级，Dashboard 监听并弹 Dialog）*/
   eloRankUp: RankUpEvent | null;
@@ -359,8 +355,6 @@ interface ProgressStore {
     isCorrect: boolean,
     difficulty: number
   ) => void;
-  /** 重置 ELO 为默认值（gamesPlayed 清零）*/
-  resetElo: () => void;
   /** 清空段位升级事件（关闭 Dialog 后调用）*/
   clearEloRankUp: () => void;
   /** 从 strategy-academy 的 abilityAssessment 同步初始 ELO（仅当 gamesPlayed=0 时生效）*/
@@ -452,6 +446,9 @@ interface ProgressStore {
    * @returns newFragments 合成后剩余碎片数；synthesized 是否触发了合成
    */
   earnFragment: () => { newFragments: number; synthesized: boolean };
+  // 持久化写失败标记（不持久化，仅运行时提示，见 persistStorage.ts）
+  persistError: { reason: 'quota' | 'unavailable' | 'unknown'; at: number } | null;
+  setPersistError: (error: { reason: 'quota' | 'unavailable' | 'unknown'; at: number } | null) => void;
 }
 
 export const useProgressStore = create<ProgressStore>()(
@@ -659,26 +656,6 @@ export const useProgressStore = create<ProgressStore>()(
           },
         })),
 
-      canEarnBack: () => isEarnBackActive(get().streak.streakBrokenAt),
-
-      earnBackStreak: (previousStreak) => {
-        const restored = previousStreak + 1;
-        set((state) => ({
-          streak: {
-            ...state.streak,
-            currentStreak: restored,
-            longestStreak: Math.max(state.streak.longestStreak, restored),
-            streakBrokenAt: null,
-            lastTrainingDate: getTodayString(),
-            streakFreezeUsedToday: false,
-          },
-        }));
-        // 修复：恢复后可能跨过未庆祝的里程碑（如 6→7）。此处 lastTrainingDate 已置为
-        // 今日，当日后续 recordTrainingDay 会因幂等跳过 checkMilestone，若不在此
-        // 立即检查，庆典与奖励将延迟到次日才补发。
-        get().checkMilestone();
-      },
-
       // ===== ELO 能力分级（P1-2）=====
       // eloByVariant 为 ELO 单一事实源（顶层 elo 镜像已移除，persist v14）
       eloRankUp: null,
@@ -707,16 +684,6 @@ export const useProgressStore = create<ProgressStore>()(
             : get().eloRankUp,
         });
       },
-
-      resetElo: () =>
-        // 重置 standard 变体 ELO（gamesPlayed 清零；eloByVariant 单一事实源）
-        set({
-          eloByVariant: {
-            ...get().eloByVariant,
-            standard: { ...DEFAULT_ELO, variant: 'standard' as PokerVariant, lastUpdated: Date.now() },
-          },
-          eloRankUp: null,
-        }),
 
       clearEloRankUp: () => set({ eloRankUp: null }),
 
@@ -888,8 +855,19 @@ export const useProgressStore = create<ProgressStore>()(
         if (prev.dailyQuestionsAnswered < 3) {
           return prev.isDownswing;
         }
-        // 取最近 3 天，按日期升序比较
+        // PRG-006：取最近 3 天，必须先验证日期相邻（连续 3 个自然日均训练）
+        // 才允许下风期判定，避免间隔多日归来的非连续日期误报。
         const last3 = history.slice(-3);
+        const datesAdjacent =
+          daysBetween(last3[0]!.date, last3[1]!.date) === 1 &&
+          daysBetween(last3[1]!.date, last3[2]!.date) === 1;
+        if (!datesAdjacent) {
+          // 不连续：无法构成持续下滑，清除下风期标记
+          if (prev.isDownswing) {
+            set((state) => ({ emotion: { ...state.emotion, isDownswing: false } }));
+          }
+          return false;
+        }
         const isDownswing =
           last3[1]!.accuracy < last3[0]!.accuracy &&
           last3[2]!.accuracy < last3[1]!.accuracy;
@@ -946,6 +924,9 @@ export const useProgressStore = create<ProgressStore>()(
         return { newFragments: current, synthesized: false };
       },
 
+      persistError: null,
+      setPersistError: (error) => set({ persistError: error }),
+
       // ===== P1-3: 成就/徽章系统 =====
       unlockedAchievements: [],
       achievementUnlockDates: {},
@@ -997,6 +978,7 @@ export const useProgressStore = create<ProgressStore>()(
     {
       name: 'poker-training-progress',
       version: 15,
+      storage: progressPersistStorage ?? undefined,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。
         // 表驱动调度：MIGRATIONS[i] 对应 v(i) → v(i+1)（即原 if (fromVersion < i+1) 段），
@@ -1007,11 +989,13 @@ export const useProgressStore = create<ProgressStore>()(
         }
         return next as unknown as ProgressStore;
       },
+      // persistError 与 setPersistError 为运行时标记，不写入 localStorage，
+      // 因此新增 persistError 不需要递增 version + 编写 migrate。
       // P2-01 阶段 A：records 外迁 IndexedDB —— 排除在 localStorage 之外，
       // 避免无上限 records 数组导致每次 set() 全量 JSON.stringify 阻塞主线程。
       // records 持久化由 addRecord 等 action 的 side-effect 统一写入 recordDatabase。
       partialize: (state) => {
-        const { records, ...rest } = state;
+        const { records, persistError, setPersistError, ...rest } = state;
         return rest as Partial<ProgressStore>;
       },
       // 启动时（hydration 完成后）兜底清洗历史遗留的 GTO 标签中文"决策"后缀。
@@ -1077,8 +1061,11 @@ async function checkCondition(
     }
 
     case 'elo':
-      // 以当前活动变体的 ELO 为判定源（eloByVariant 单一事实源）
-      return state.eloByVariant[state.activeVariant].overall >= condition.minScore;
+      // PRG-010：按各变体 overall 的最高分判定（成就反映用户达过的最高水平），
+      // 不随 activeVariant 切换漂移。eloByVariant 为 ELO 单一事实源
+      return Math.max(
+        ...(Object.values(state.eloByVariant).map((v) => v.overall)),
+      ) >= condition.minScore;
 
     case 'certification': {
       for (const source of getAchievementSources()) {
@@ -1141,6 +1128,12 @@ async function checkCondition(
       return false;
   }
 }
+
+// ===== 持久化写失败可见化：订阅 safe storage 上报的错误 =====
+setPersistFailureHandler((failure) => {
+  useProgressStore.getState().setPersistError({ reason: failure.reason, at: failure.at });
+});
+
 
 // ===== 冻结卡碎片：概率获取辅助函数 =====
 // 每日最多获得 2 个碎片，跨日自动重置计数器

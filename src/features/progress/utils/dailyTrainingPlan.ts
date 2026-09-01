@@ -184,7 +184,7 @@ export function generateCrossModuleDailyPlan(
   const accuracyMap = calculateModuleAccuracy(trainingRecords);
   const weakestModule = getWeakestModule(accuracyMap);
 
-  if (weakestModule && !usedTypes.has('range-quiz') && !usedTypes.has('pot-odds-quiz')) {
+  if (weakestModule) {
     const accuracy = accuracyMap.get(weakestModule);
     const type = weakestModule === 'range-trainer' ? 'range-quiz' : 'pot-odds-quiz';
     const title = weakestModule === 'range-trainer'
