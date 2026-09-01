@@ -24,6 +24,12 @@ const touchedKeys = new Set<I18nModuleKey>();
 const COURSE_BUNDLE_KEY = 'academy-course' as unknown as I18nModuleKey;
 /** academy-course 加载 Promise 缓存（in-flight 复用：并发调用共享同一加载，完成后幂等返回） */
 const courseLoadPromises = new Map<I18nLanguage, Promise<void>>();
+/**
+ * 普通模块加载 Promise 缓存（in-flight 复用，防并发重复请求）。
+ * 与 loadedKeys 分工：loadedKeys 只在**加载成功**后置位（失败可重试），
+ * 本 Map 负责去重正在进行的加载并在 settle 后清理。
+ */
+const loadPromises = new Map<string, Promise<void>>();
 
 function normalizeLanguage(lng: string | undefined): I18nLanguage {
   return lng === 'en' ? 'en' : 'zh';
@@ -44,20 +50,29 @@ for (const lng of ['zh', 'en'] as const) {
 async function loadOne(lng: I18nLanguage, key: I18nModuleKey): Promise<void> {
   const id = bundleId(lng, key);
   if (loadedKeys.has(id)) return;
-  loadedKeys.add(id);
+  const inflight = loadPromises.get(id);
+  if (inflight) return inflight;
   touchedKeys.add(key);
-  const loader = loadModule[lng]?.[key];
-  if (!loader) {
-    // 未知模块/语言：放弃加载，依赖 fallbackLng('zh') 兜底
-    return;
-  }
-  try {
+  const task: Promise<void> = (async () => {
+    const loader = loadModule[lng]?.[key];
+    if (!loader) {
+      // 未知模块/语言：放弃加载，依赖 fallbackLng('zh') 兜底
+      return;
+    }
     const bundle = await loader();
     // 单一 translation 命名空间，包裹顶层 key 后深层合并注入（deep=true 扩展 + overwrite=true 覆盖）
     i18n.addResourceBundle(lng, 'translation', { [key]: bundle.default }, true, true);
-  } catch (err) {
-    console.warn(`[i18n] 加载翻译模块失败 ${lng}/${key}`, err);
-  }
+    // 仅在注入成功后置位：失败时不写缓存，下次调用可重试（弱网下单次失败不再永久缺失该模块）
+    loadedKeys.add(id);
+  })()
+    .catch((err: unknown) => {
+      console.warn(`[i18n] 加载翻译模块失败 ${lng}/${key}`, err);
+    })
+    .finally(() => {
+      loadPromises.delete(id);
+    });
+  loadPromises.set(id, task);
+  return task;
 }
 
 /**
