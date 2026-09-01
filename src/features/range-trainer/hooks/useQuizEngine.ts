@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import type { RangeAction } from '@/shared/types/poker';
-import { Position } from '@/shared/types/position';
+import type { Position } from '@/shared/types/position';
 import type { TrainingResult, QuestionResult } from '@/shared/types/common';
 import type { QuizQuestion } from '../types';
 import { useRangeTrainerStore } from '../store';
@@ -15,15 +15,17 @@ import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { buildDecisionFeedback } from '@/shared/types/decisionFeedback';
 
 /**
- * 返回最简单的题目（"AA 在 BTN 是否应该开池？"，答案=raise）。
+ * 返回当前训练语境下最简单的题目（AA，答案=raise）。
  * 用于"最后一题简单"策略：让用户以正确结束训练。
+ * 位置与语境跟随本次训练配置——AA 在 open / 3bet / 4bet / call-vs-raise
+ * 任意翻前场景都是继续激进，故 correctAction 恒为 raise。
  */
-export function getEasyQuestion(): QuizQuestion {
+export function getEasyQuestion(position: Position, actionType: string): QuizQuestion {
   return {
     hand: 'AA',
-    position: Position.BTN,
+    position,
     correctAction: 'raise',
-    context: 'BTN open',
+    context: `${position} ${actionType}`,
   };
 }
 

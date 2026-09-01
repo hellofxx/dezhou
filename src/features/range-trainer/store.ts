@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { HandNotation, GameVariant } from '@/shared/types/poker';
 import { Position } from '@/shared/types/position';
 import type { RangePreset, QuizSessionState, LearnState, QuizSlice } from './types';
-import { PRESET_RANGES, getPresetsForVariantAndPlayerCount } from './constants';
+import { getPresetsForVariantAndPlayerCount } from './constants';
 import { generateQuestions } from './utils/questionGenerator';
 import { getEasyQuestion } from './hooks/useQuizEngine';
 
@@ -107,7 +107,11 @@ export const useRangeTrainerStore = create<RangeTrainerStore>((set, get) => ({
       learnState: { ...state.learnState, highlightedHand: hand },
     })),
 
-  presets: PRESET_RANGES,
+  // RNG-007 修复：初始 presets 对齐 standard 6-max 完整预置
+  // （PRESET_RANGES + ADVANCED_PRESET_RANGES），与 setGameVariant/setPlayerCount
+  // 的初始化路径一致；此前仅含 open 类 preset，导致首次加载（未切换变体）时
+  // CO+3bet 等进阶组合无题库、startQuiz 返回 false。
+  presets: getPresetsForVariantAndPlayerCount('standard', 6),
 
   getPresetsByPosition: (position) => {
     return get().presets.filter((p) => p.position === position);
@@ -124,7 +128,10 @@ export const useRangeTrainerStore = create<RangeTrainerStore>((set, get) => ({
 
     if (generated.length === 0) return false;
 
-    const questions = [...generated.slice(0, generated.length - 1), getEasyQuestion()];
+    const questions = [
+      ...generated.slice(0, generated.length - 1),
+      getEasyQuestion(position, actionType),
+    ];
 
     set({
       quizState: {
@@ -187,7 +194,7 @@ export const useRangeTrainerStore = create<RangeTrainerStore>((set, get) => ({
 
   nextQuestion: () => {
     const { quizState } = get();
-    const { currentIndex, questions, answers, isCorrect, timePerQuestion, rescueUsed } = quizState;
+    const { currentIndex, questions, answers, isCorrect, timePerQuestion, rescueUsed, position, actionType } = quizState;
 
     if (currentIndex < questions.length - 1) {
       set({
@@ -204,8 +211,8 @@ export const useRangeTrainerStore = create<RangeTrainerStore>((set, get) => ({
     const lastAnswered = answers[currentIndex] !== null;
     const lastCorrect = isCorrect[currentIndex] ?? false;
 
-    if (lastAnswered && !lastCorrect && !rescueUsed) {
-      const rescueQuestion = getEasyQuestion();
+    if (lastAnswered && !lastCorrect && !rescueUsed && position) {
+      const rescueQuestion = getEasyQuestion(position, actionType);
       set({
         quizState: {
           ...quizState,

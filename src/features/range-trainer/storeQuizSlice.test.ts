@@ -57,10 +57,39 @@ describe('range-trainer quiz store（P1-A 修复回归）', () => {
       const { quizState } = useRangeTrainerStore.getState();
       expect(quizState.status).toBe('running');
       expect(quizState.questions.length).toBeGreaterThan(0);
-      // 末题为简单题 AA@BTN raise
+      // RNG-007：末题为简单题 AA，位置与语境跟随本次训练配置
       const last = quizState.questions[quizState.questions.length - 1]!;
       expect(last.hand).toBe('AA');
       expect(last.correctAction).toBe('raise');
+      expect(last.position).toBe(Position.UTG);
+      expect(last.context).toBe('UTG open');
+    });
+  });
+
+  // ─── RNG-007：简单题/救援题跟随会话位置与语境 ──────────────────
+  describe('RNG-007 简单题位置语境', () => {
+    it('CO + 3bet 会话末题为 AA@CO（而非固定 BTN open）', () => {
+      const ok = useRangeTrainerStore.getState().startQuiz(Position.CO, '3bet', 10, 10);
+      expect(ok).toBe(true);
+      const { questions } = useRangeTrainerStore.getState().quizState;
+      const last = questions[questions.length - 1]!;
+      expect(last.hand).toBe('AA');
+      expect(last.position).toBe(Position.CO);
+      expect(last.context).toBe('CO 3bet');
+    });
+
+    it('末题答错后追加的救援题沿用会话 position/actionType', () => {
+      setRunningState(foldQuestion, { actionType: '3bet' });
+      useRangeTrainerStore.getState().answerQuestion('call');
+      useRangeTrainerStore.getState().nextQuestion();
+
+      const { quizState } = useRangeTrainerStore.getState();
+      expect(quizState.rescueUsed).toBe(true);
+      expect(quizState.questions).toHaveLength(2);
+      const rescue = quizState.questions[1]!;
+      expect(rescue.hand).toBe('AA');
+      expect(rescue.position).toBe(Position.UTG);
+      expect(rescue.context).toBe('UTG 3bet');
     });
   });
 
