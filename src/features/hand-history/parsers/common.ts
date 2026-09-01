@@ -1,5 +1,8 @@
 import { Card, Suit, Rank, GameVariant } from '@/shared/types/poker';
 import { Position } from '@/shared/types/position';
+import { ActionType } from '@/shared/types/action';
+import type { PlayerAction } from '@/shared/types/action';
+import type { Player } from '../types';
 
 const CHAR_TO_SUIT: Record<string, Suit> = {
   h: Suit.Hearts,
@@ -97,6 +100,80 @@ export function assignPositions(playerCount: number, buttonSeat: number, seats: 
   }
 
   return seats.map(s => posMap.get(s) ?? Position.MP);
+}
+
+/**
+ * 从摊牌 / SUMMARY 行解析「Name shows [cards]」并写入玩家手牌。
+ * 支持 Seat N: 前缀（pokerstars/gg）、逗号分隔（partypoker，如 "[ Qd, Js ]"）。
+ * 三平台共用，避免摊牌解析的第三份重复实现（HH-021）。
+ * @returns 是否成功解析并写入
+ */
+export function parseShowCards(
+  line: string,
+  nameToIndex: Map<string, number>,
+  players: Player[],
+  resolveIdx?: (name: string) => number | undefined
+): boolean {
+  const showRe = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+shows?\s+\[([^\]]+)\]/i);
+  if (!showRe) return false;
+  const name = showRe[1]!.trim();
+  const idx = resolveIdx ? resolveIdx(name) : nameToIndex.get(name);
+  if (idx === undefined) return false;
+  const cardsStr = showRe[2]!.replace(/,/g, ' ').trim();
+  const cards = cardsStr.split(/\s+/).filter(Boolean);
+  if (cards.length >= 2) {
+    players[idx]!.holeCards = [parseCardString(cards[0]!), parseCardString(cards[1]!)];
+    return true;
+  }
+  return false;
+}
+
+/**
+ * 从一行解析收集底池赢家「Name collected $X ...」。
+ * 支持 Seat N: 前缀、USD 后缀、from pot、括号式金额（"( $45 )"）。
+ * @returns { playerId, amount } 或在无匹配时 undefined
+ */
+export function parseCollected(
+  line: string,
+  nameToIndex: Map<string, number>,
+  resolveIdx?: (name: string) => number | undefined
+): { playerId: number; amount: number } | undefined {
+  const collectRe = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+\(?\$?([\d,.]+)\)?\s*(?:USD)?\s*(?:from pot)?/i);
+  if (!collectRe) return undefined;
+  const name = collectRe[1]!.trim();
+  const idx = resolveIdx ? resolveIdx(name) : nameToIndex.get(name);
+  if (idx === undefined) return undefined;
+  return { playerId: idx, amount: parseAmount(collectRe[2]!) };
+}
+
+/**
+ * 将一街动作序列的金额统一为「to 金额」（该动作结束后该玩家在本街的累计总投注额）。
+ *
+ * 语义约定（HH-020）：
+ *  - `Call`（含 post 盲注 / ante）：parser 存的数量是**增量** → 累加为累计 to。
+ *  - `Raise` / `AllIn`：parser 存的数量已是对手可跟注的 **to 总额**（pokerstars/gg
+ *    "raises $X to $Y"、partypoker "raises [$Y]"、all-in 的 "$Y"）→ 直接作为累计 to。
+ *  - `Fold` / `Check`：不带金额，原样返回。
+ *
+ * 三平台解析器解析完每街动作后统一调用，消除「pokerstars/gg 存 to、partypoker 存增量」
+ * 的跨平台口径分裂，`computeReplayState` 才能按 `max(0, to - 本街已投入)` 正确扣减。
+ */
+export function normalizeToAmounts(actions: PlayerAction[]): PlayerAction[] {
+  const invested = new Map<number, number>();
+  return actions.map(a => {
+    if (a.type === ActionType.Call && a.amount !== undefined) {
+      const prev = invested.get(a.playerIndex) ?? 0;
+      const to = prev + a.amount;
+      invested.set(a.playerIndex, to);
+      return { ...a, amount: to };
+    }
+    if (a.type === ActionType.Raise || a.type === ActionType.AllIn) {
+      if (a.amount !== undefined) {
+        invested.set(a.playerIndex, Math.max(invested.get(a.playerIndex) ?? 0, a.amount));
+      }
+    }
+    return a;
+  });
 }
 
 /**

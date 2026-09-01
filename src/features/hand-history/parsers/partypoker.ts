@@ -3,7 +3,15 @@ import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HoleCards } from '@/shared/types/poker';
-import { parseCardString, parseBoardCards, parseAmount, assignPositions } from './common';
+import {
+  parseCardString,
+  parseBoardCards,
+  parseAmount,
+  assignPositions,
+  normalizeToAmounts,
+  parseShowCards,
+  parseCollected,
+} from './common';
 
 function parsePartyActionLine(line: string, playerNameToIndex: Map<string, number>): PlayerAction | null {
   // partypoker formats:
@@ -39,8 +47,11 @@ function parsePartyActionLine(line: string, playerNameToIndex: Map<string, numbe
     case 'calls':
       return { type: ActionType.Call, amount: extractAmount(), playerIndex };
     case 'bets':
+      // partypoker "bets [$10]"：从 0 起下注，增量 = to = 10（存入 to 总额，normalize 内作为 to 处理）
       return { type: ActionType.Raise, amount: extractAmount(), playerIndex };
     case 'raises':
+      // HH-020：partypoker "raises [$X]" 的括号金额按「to 总额」解读（与 pokerstars/gg 的 to 口径对齐），
+      // 避免增量/to 口径分裂；该解读按导出惯例实现，未经真实样例回归验证。
       return { type: ActionType.Raise, amount: extractAmount(), playerIndex };
     case 'is all-in':
       return { type: ActionType.AllIn, amount: extractAmount(), playerIndex };
@@ -84,6 +95,7 @@ export function parsePartyPokerHand(text: string): HandHistory {
   let winnerAmount = 0;
   let pot = 0;
 
+  // HH-021：增加 showdown 街（涉及对手 shows 手牌解析）
   let currentStreet: 'header' | 'preflop' | 'flop' | 'turn' | 'river' | 'showdown' | 'summary' = 'header';
   const seatNumbers: number[] = [];
 
@@ -194,6 +206,12 @@ export function parsePartyPokerHand(text: string): HandHistory {
       continue;
     }
 
+    // HH-021：partypoker 摊牌段标记（SHOW DOWN / SHOWDOWN 两种写法，容错空白与大小写）
+    if (/^\*{2,3}\s*SHOW\s*DOWN\s*\*{2,3}/i.test(line) || /^\*{2,3}\s*SHOWDOWN\s*\*{2,3}/i.test(line)) {
+      currentStreet = 'showdown';
+      continue;
+    }
+
     if (/\*\*\s*Summary\s*\*\*/i.test(line)) {
       currentStreet = 'summary';
       continue;
@@ -231,16 +249,19 @@ export function parsePartyPokerHand(text: string): HandHistory {
     } else if (currentStreet === 'river') {
       const action = parsePartyActionLine(line, playerNameToIndex);
       if (action) riverActions.push(action);
+    } else if (currentStreet === 'showdown') {
+      // HH-021：复用 common 的摊牌解析（shows 手牌 + collected 赢家），不再写重复实现
+      parseShowCards(line, playerNameToIndex, players);
+      const collected = parseCollected(line, playerNameToIndex);
+      if (collected) {
+        winnerId = collected.playerId;
+        winnerAmount = collected.amount;
+      }
     } else if (currentStreet === 'summary') {
-      // "Player4 collected $45.00 USD from pot"
-      const collectMatch = line.match(/^(.+?)\s+collected\s+\$?([\d,.]+)\s*(?:USD)?\s*(?:from pot)?/i);
-      if (collectMatch) {
-        const name = collectMatch[1]!.trim();
-        const idx = playerNameToIndex.get(name);
-        if (idx !== undefined) {
-          winnerId = idx;
-          winnerAmount = parseAmount(collectMatch[2]!);
-        }
+      const collected = parseCollected(line, playerNameToIndex);
+      if (collected) {
+        winnerId = collected.playerId;
+        winnerAmount = collected.amount;
       }
       // Total pot line: "Total Pot: $45.00"
       const potMatch = line.match(/Total Pot[:\s]+\$?([\d,.]+)/i);
@@ -274,10 +295,10 @@ export function parsePartyPokerHand(text: string): HandHistory {
     players,
     board,
     streets: {
-      preflop: preflopActions,
-      flop: { cards: flopCards, actions: flopActions },
-      turn: { cards: turnCards, actions: turnActions },
-      river: { cards: riverCards, actions: riverActions },
+      preflop: normalizeToAmounts(preflopActions),
+      flop: { cards: flopCards, actions: normalizeToAmounts(flopActions) },
+      turn: { cards: turnCards, actions: normalizeToAmounts(turnActions) },
+      river: { cards: riverCards, actions: normalizeToAmounts(riverActions) },
     },
     pot,
     winner: winnerAmount > 0 ? { playerId: winnerId, amount: winnerAmount } : undefined,

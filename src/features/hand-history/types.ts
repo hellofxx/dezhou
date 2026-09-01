@@ -3,6 +3,17 @@ import type { Position } from '@/shared/types/position';
 import type { PlayerAction } from '@/shared/types/action';
 import type { Stakes } from '@/shared/types/common';
 
+// ─── PlayerAction.amount 统一语义（HH-020）─────────────────
+// `PlayerAction.amount`（定义于 shared/types/action.ts）在 hand-history 模块内约定为：
+//   amount = 该动作结束后，该玩家在本街（preflop/flop/turn/river）的**累计总投注额（to 金额）**。
+// - `Call`（含 post 盲注/ante）：parser 存增量，由 `parsers/common.ts#normalizeToAmounts` 累加为 to。
+// - `Raise` / `AllIn`：parser 存的就是 to 总额（"raises $X to $Y" 取 $Y、partypoker "raises [$Y]" 取 $Y），
+//   直接作为 to。
+// 因此回放扣减必须用 `computeReplayState.processActions` 的 `max(0, to - 本街该玩家已投入)`，
+// 禁止对 Raise/AllIn 直接扣减 `amount`（会把「先 call 再 raise to」重复扣减）。
+// UI 文本展示（formatAction / AnnotationPanel）对 Call 显示增量（amount - 本街先前投入），
+// 对 Raise/AllIn 显示 to 总额，详见 utils/handNotation.ts 与 components/AnnotationPanel.tsx。
+
 // 玩家信息
 export interface Player {
   id: number;

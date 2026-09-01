@@ -57,21 +57,25 @@ additionalPrompt: ""
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
 - src/features/hand-history/ — 模块根（types.ts / store.ts 含 IndexedDB 封装 / index.ts）
-- src/features/hand-history/parsers/ — 多平台手牌历史解析器（common.ts 为格式检测 + 公共工具，其余按平台一文件）
+- src/features/hand-history/parsers/ — 多平台手牌历史解析器（common.ts 为格式检测 + 公共工具，其余按平台一文件；含 HH-020 金额归一 `normalizeToAmounts`、HH-021 摊牌公共解析 `parseShowCards`/`parseCollected`）
+- src/features/hand-history/parsers/amountDeduction.test.ts — HH-020 金额口径与回放扣减回归
+- src/features/hand-history/parsers/extraVariants.test.ts — HH-021/022 摊牌与 SUMMARY 变体回归
 - src/features/hand-history/workers/ — GTO 策略查找与 EV 计算 Worker（gtoWorker.ts，消费方为 utils/gtoDeviation.ts；内复制 GRADE_THRESHOLDS 阈值副本）
 - src/features/hand-history/hooks/ — 回放引擎（useHandReplay.ts）
 - src/features/hand-history/utils/ — 牌局记法与统计工具
 - src/features/hand-history/components/ — 导入 / 回放 / 标注 / 统计展示组件
 
 ## Workflows
-1. 添加新平台解析器时：创建 parsers/new-site.ts → 实现 parse 函数 → 在 common.ts detectFormat 中注册
+1. 添加新平台解析器时：创建 parsers/new-site.ts → 实现 parse 函数 → 在 common.ts detectFormat 中注册 → 用 `normalizeToAmounts` 统一每街金额为「to 金额」
 2. 调整回放速度时：修改 useHandReplay.ts 的 setInterval 间隔
 3. 修改牌桌布局时：调整 PlayerSeats.tsx 的 CSS absolute 定位
 4. 添加新标注类型时：扩展 annotations 类型和 AnnotationPanel 组件
 5. 添加牌局统计指标时：扩展 handStats.ts 工具函数 + HandStatsPanel 展示
 6. 修改 GTO 偏差计算时：编辑 workers/gtoWorker.ts 的消息处理与策略查找逻辑（其中阈值常量副本必须与 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 保持一致；阈值变更时需同步通知 platform-dev 并更新副本）
 7. 同步评级阈值：当 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 变更时，立即同步更新 `workers/gtoWorker.ts`内的副本以保持两者一致
-7. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
+8. **金额语义（HH-020，模块核心约定）**：`PlayerAction.amount` 统一为「该动作结束后该玩家在本街的累计总投注额（to 金额）」。三平台解析器必须在解析层把增量口径补齐为 to（`parsers/common.ts#normalizeToAmounts`，Call=增量累加、Raise/AllIn=to 总额）；`store.ts` `computeReplayState` 用 `max(0, to - 本街已投入)` 扣减，禁止直接扣 `amount`。UI 展示（`formatAction`/AnnotationPanel）对 Call 显示增量。新增金额动作或平台时必须沿用此口径，禁止引入增量/to 混用。
+9. 新增摊牌/收池解析时：复用 `parsers/common.ts` 的 `parseShowCards`/`parseCollected`（避免每平台再写一份重复实现），并按需在状态机加 showdown 街道。
+10. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
@@ -83,6 +87,7 @@ additionalPrompt: ""
 - 椭圆形牌桌布局用 CSS absolute 定位（不用图片）
 - 标注系统支持每决策点文字笔记（types.ts 的 Annotation 类型）
 - `workers/gtoWorker.ts` 内复制的评级阈值常量必须与 `shared/types/decisionFeedback.ts` 的 GRADE_THRESHOLDS 保持一致（Worker 独立执行上下文无法直接导入 shared）；阈值变更时同步更新副本
+- **金额归一**：新增/修改解析器时，每街动作必须经 `normalizeToAmounts` 归一为 to 金额（HH-020），与 `computeReplayState` 的 `max(0, to - 已投入)` 扣减配套，否则回放 stack/pot 出错
 
 ## Orchestration
 ### 交互契约（Cross-Module ReviewRequest）
@@ -115,3 +120,4 @@ interface ReviewRequest {
 - [ ] 解析器异常不崩溃（返回错误信息）
 - [ ] IndexedDB 操作 Promise 化（不阻塞主线程）
 - [ ] 回放步进/回退/自动播放/速度控制正确
+- [ ] 每街金额经 `normalizeToAmounts` 归一为 to 金额；回放扣减用 `max(0, to - 已投入)`（HH-020）

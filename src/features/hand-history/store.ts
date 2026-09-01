@@ -23,6 +23,10 @@ function createDB(): Promise<IDBDatabase> {
         db.createObjectStore(STORE_NAME, { keyPath: 'id' });
       }
     };
+    // 另一标签页持有旧版本连接时，open 会停在 blocked 态而非报错；不在此 reject
+    // 则该 Promise 永不 settle，getDB 缓存的 _dbPromise 会连带卡死牌局列表与回放。
+    req.onblocked = () =>
+      reject(new Error('IDB_BLOCKED: hand-history-db open blocked by another tab'));
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });
@@ -186,13 +190,20 @@ function computeReplayState(hand: HandHistory, street: ReplayState['currentStree
   // Preflop: track blinds
   const preflopActions = hand.streets.preflop;
 
+  // HH-020：PlayerAction.amount 统一语义为「to 金额」（本街该玩家累计总投注额）。
+  // 每街按玩家追踪已投入；对每个扣款动作仅扣减 delta = max(0, to - 已投入)，
+  // 避免「先 call 再 raise to」把 raise 的 to 总额重复扣减（原实现直接把 to 全额扣掉）。
   const processActions = (actions: PlayerAction[], limit: number): void => {
+    const streetInvested = new Array<number>(stacks.length).fill(0);
     for (let i = 0; i < limit; i++) {
       const a = actions[i]!;
-      const amt = a.amount ?? 0;
       if (a.type === ActionType.Call || a.type === ActionType.Raise || a.type === ActionType.AllIn) {
-        stacks[a.playerIndex] = (stacks[a.playerIndex] ?? 0) - amt;
-        pot += amt;
+        const to = a.amount ?? 0;
+        const prev = streetInvested[a.playerIndex] ?? 0;
+        const delta = Math.max(0, to - prev);
+        streetInvested[a.playerIndex] = Math.max(prev, to);
+        stacks[a.playerIndex] = (stacks[a.playerIndex] ?? 0) - delta;
+        pot += delta;
       }
     }
   };

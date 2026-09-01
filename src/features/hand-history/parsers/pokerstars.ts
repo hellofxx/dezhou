@@ -3,7 +3,7 @@ import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HoleCards } from '@/shared/types/poker';
-import { parseCardString, parseBoardCards, parseAmount, assignPositions } from './common';
+import { parseCardString, parseBoardCards, parseAmount, assignPositions, normalizeToAmounts } from './common';
 
 function parseActionLine(line: string, playerNameToIndex: Map<string, number>): PlayerAction | null {
   // "PlayerName: folds"
@@ -271,6 +271,36 @@ export function parsePokerStarsHand(text: string): HandHistory {
           winnerAmount = parseAmount(collectMatch[2]!);
         }
       }
+      // HH-022：真实 PS 现代 SUMMARY 变体 "Seat N: Name showed [Ah As] and won ($X)"
+      // 合并「摊牌 + 收池」为单行；记录玩家手牌并使该玩家成为赢家。
+      const showedWonMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+showed\s+\[([^\]]+)\]\s+and\s+won\s+\(\$?([\d,.]+)\)/);
+      if (showedWonMatch) {
+        const name = showedWonMatch[1]!.trim();
+        const idx = playerNameToIndex.get(name);
+        if (idx !== undefined) {
+          if (!players[idx]!.holeCards) {
+            const cards = showedWonMatch[2]!.trim().split(/\s+/);
+            if (cards.length >= 2) {
+              players[idx]!.holeCards = [parseCardString(cards[0]!), parseCardString(cards[1]!)];
+            }
+          }
+          winnerId = idx;
+          winnerAmount = parseAmount(showedWonMatch[3]!);
+        }
+      }
+      // HH-022：纯收池变体 "Seat N: Name collected ()"（无手牌，仅收池）由 collective 正则以外
+      // 的括号式金额补全（若上面 collectMatch 已命中则跳过，避免重复覆盖）。
+      if (!collectMatch && !showedWonMatch) {
+        const wonOnlyMatch = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+\(\$?([\d,.]+)\)/);
+        if (wonOnlyMatch) {
+          const name = wonOnlyMatch[1]!.trim();
+          const idx = playerNameToIndex.get(name);
+          if (idx !== undefined) {
+            winnerId = idx;
+            winnerAmount = parseAmount(wonOnlyMatch[2]!);
+          }
+        }
+      }
     }
   }
 
@@ -294,7 +324,9 @@ export function parsePokerStarsHand(text: string): HandHistory {
       ? lines.find(l => l.includes(winnerName) && showsRe.test(l))
       : undefined;
     const showLine = winnerShowLine ?? lines.find(l => showsRe.test(l));
-    if (showLine) {
+    // HH-022：showed ... and won 合并行内括号内容为牌面（如 "[Ah As]"），非 "a pair of" 描述，
+    // 不在此提取 winnerHand 文字描述（手工牌与 holeCards 均已记录）。
+    if (showLine && !showLine.includes('and won')) {
       const handMatch = showLine.match(/\(([^)]+)\)/);
       if (handMatch) winnerHand = handMatch[1]!.trim();
     }
@@ -314,10 +346,10 @@ export function parsePokerStarsHand(text: string): HandHistory {
     players,
     board,
     streets: {
-      preflop: preflopActions,
-      flop: { cards: flopCards, actions: flopActions },
-      turn: { cards: turnCards, actions: turnActions },
-      river: { cards: riverCards, actions: riverActions },
+      preflop: normalizeToAmounts(preflopActions),
+      flop: { cards: flopCards, actions: normalizeToAmounts(flopActions) },
+      turn: { cards: turnCards, actions: normalizeToAmounts(turnActions) },
+      river: { cards: riverCards, actions: normalizeToAmounts(riverActions) },
     },
     pot,
     winner: winnerAmount > 0 ? { playerId: winnerId, amount: winnerAmount, hand: winnerHand } : undefined,

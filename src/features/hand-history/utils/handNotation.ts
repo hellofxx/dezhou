@@ -24,8 +24,14 @@ export function cardsToNotation(cards: Card[]): string {
   return cards.map(cardToNotation).join('');
 }
 
-/** Format a player action to human-readable text */
-export function formatAction(action: PlayerAction, players: Player[]): string {
+/**
+ * Format a player action to human-readable text。
+ * HH-020 后 amount 为「to 金额」（本街累计总投注额），故文本展示需还原为可见增量：
+ *  - Call：显示增量 `calls $<amount - priorAmount>`（priorAmount 为本街该玩家先前累计投入，缺省 0）
+ *  - Raise：显示 to 总额 `raises to $<amount>`
+ *  - AllIn：显示总额 `all-in $<amount>`
+ */
+export function formatAction(action: PlayerAction, players: Player[], priorAmount = 0): string {
   const player = players[action.playerIndex];
   const name = player?.name ?? `Seat ${action.playerIndex + 1}`;
 
@@ -35,7 +41,7 @@ export function formatAction(action: PlayerAction, players: Player[]): string {
     case ActionType.Check:
       return `${name}: checks`;
     case ActionType.Call:
-      return `${name}: calls $${action.amount ?? 0}`;
+      return `${name}: calls $${Math.max(0, (action.amount ?? 0) - priorAmount)}`;
     case ActionType.Raise:
       return `${name}: raises to $${action.amount ?? 0}`;
     case ActionType.AllIn:

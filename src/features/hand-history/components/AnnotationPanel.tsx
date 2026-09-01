@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { HandHistory, ReplayState } from '../types';
+import type { PlayerAction } from '@/shared/types/action';
+import { ActionType } from '@/shared/types/action';
 import { useHandHistoryStore } from '../store';
 import { MessageSquare, Save, Download } from 'lucide-react';
 
@@ -34,6 +36,26 @@ function exportAnnotationsJSON(hand: HandHistory) {
   downloadBlob(blob, `hand-${hand.handNumber}-annotations.json`);
 }
 
+// HH-020：amount 为「to 金额」，导出文本中 Call 显示增量、Raise 显示 to 总额，
+// 保持与 formatAction 一致的可见语义。prior 计算该玩家在本街先前金额动作的最后 to 值。
+function actionDeltaAmount(action: PlayerAction, actions: PlayerAction[], idx: number): number {
+  if (action.type === ActionType.Raise || action.type === ActionType.AllIn) {
+    return action.amount ?? 0;
+  }
+  let prior = 0;
+  for (let j = 0; j < idx; j++) {
+    const prev = actions[j]!;
+    if (
+      prev.playerIndex === action.playerIndex &&
+      prev.amount !== undefined &&
+      (prev.type === ActionType.Call || prev.type === ActionType.Raise || prev.type === ActionType.AllIn)
+    ) {
+      prior = prev.amount;
+    }
+  }
+  return Math.max(0, (action.amount ?? 0) - prior);
+}
+
 function formatActions(hand: HandHistory): string {
   let md = '';
   const actionTypeLabel: Record<string, string> = {
@@ -44,38 +66,37 @@ function formatActions(hand: HandHistory): string {
     'all-in': 'is all-in',
   };
 
+  const renderStreet = (title: string, actions: PlayerAction[]) => {
+    if (actions.length === 0) return;
+    md += `\n### ${title}\n`;
+    actions.forEach((a, idx) => {
+      const player = hand.players[a.playerIndex];
+      const label = actionTypeLabel[a.type] ?? a.type;
+      const amount = actionDeltaAmount(a, actions, idx);
+      md += `- ${player?.name ?? `Player ${a.playerIndex}`} ${label}${amount ? ` $${amount}` : ''}\n`;
+    });
+  };
+
   md += `### Preflop\n`;
-  for (const a of hand.streets.preflop) {
-    const player = hand.players[a.playerIndex];
-    const label = actionTypeLabel[a.type] ?? a.type;
-    md += `- ${player?.name ?? `Player ${a.playerIndex}`} ${label}${a.amount ? ` $${a.amount}` : ''}\n`;
+  if (hand.streets.preflop.length === 0) {
+    md += '';
+  } else {
+    hand.streets.preflop.forEach((a, idx) => {
+      const player = hand.players[a.playerIndex];
+      const label = actionTypeLabel[a.type] ?? a.type;
+      const amount = actionDeltaAmount(a, hand.streets.preflop, idx);
+      md += `- ${player?.name ?? `Player ${a.playerIndex}`} ${label}${amount ? ` $${amount}` : ''}\n`;
+    });
   }
 
   if (hand.streets.flop.cards.length > 0) {
-    md += `\n### Flop\n`;
-    for (const a of hand.streets.flop.actions) {
-      const player = hand.players[a.playerIndex];
-      const label = actionTypeLabel[a.type] ?? a.type;
-      md += `- ${player?.name ?? `Player ${a.playerIndex}`} ${label}${a.amount ? ` $${a.amount}` : ''}\n`;
-    }
+    renderStreet('Flop', hand.streets.flop.actions);
   }
-
   if (hand.streets.turn.cards.length > 0) {
-    md += `\n### Turn\n`;
-    for (const a of hand.streets.turn.actions) {
-      const player = hand.players[a.playerIndex];
-      const label = actionTypeLabel[a.type] ?? a.type;
-      md += `- ${player?.name ?? `Player ${a.playerIndex}`} ${label}${a.amount ? ` $${a.amount}` : ''}\n`;
-    }
+    renderStreet('Turn', hand.streets.turn.actions);
   }
-
   if (hand.streets.river.cards.length > 0) {
-    md += `\n### River\n`;
-    for (const a of hand.streets.river.actions) {
-      const player = hand.players[a.playerIndex];
-      const label = actionTypeLabel[a.type] ?? a.type;
-      md += `- ${player?.name ?? `Player ${a.playerIndex}`} ${label}${a.amount ? ` $${a.amount}` : ''}\n`;
-    }
+    renderStreet('River', hand.streets.river.actions);
   }
 
   return md;

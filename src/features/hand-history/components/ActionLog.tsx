@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { HandHistory, ReplayState } from '../types';
+import type { PlayerAction } from '@/shared/types/action';
+import { ActionType } from '@/shared/types/action';
 import { formatAction } from '../utils/handNotation';
 import { cn } from '@/shared/utils/cn';
 
@@ -9,6 +11,24 @@ interface ActionLogProps {
   currentStreet: ReplayState['currentStreet'];
   currentActionIndex: number;
   onJumpToAction?: (street: ReplayState['currentStreet'], actionIndex: number) => void;
+}
+
+// HH-020：amount 为「to 金额」（本街累计总投注额），UI 展示 Call 需还原为增量。
+// 对每条金额动作，先扫前面该玩家的金额动作取最后 to 值作为 prior，供 formatAction 计算增量。
+function priorAmountFor(actions: PlayerAction[], targetIdx: number): number {
+  const a = actions[targetIdx]!;
+  let prior = 0;
+  for (let j = 0; j < targetIdx; j++) {
+    const prev = actions[j]!;
+    if (
+      prev.playerIndex === a.playerIndex &&
+      prev.amount !== undefined &&
+      (prev.type === ActionType.Call || prev.type === ActionType.Raise || prev.type === ActionType.AllIn)
+    ) {
+      prior = prev.amount;
+    }
+  }
+  return prior;
 }
 
 function StreetSection({
@@ -21,7 +41,7 @@ function StreetSection({
   onJump,
 }: {
   label: string;
-  actions: import('@/shared/types/action').PlayerAction[];
+  actions: PlayerAction[];
   players: HandHistory['players'];
   isActive: boolean;
   currentIdx: number;
@@ -53,7 +73,7 @@ function StreetSection({
                 : 'text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]/60'
             )}
           >
-            {formatAction(action, players)}
+            {formatAction(action, players, priorAmountFor(actions, idx))}
           </button>
         );
       })}

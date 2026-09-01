@@ -3,7 +3,7 @@ import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
 import type { PlayerAction } from '@/shared/types/action';
 import type { HoleCards } from '@/shared/types/poker';
-import { parseCardString, parseBoardCards, parseAmount, assignPositions } from './common';
+import { parseCardString, parseBoardCards, parseAmount, assignPositions, normalizeToAmounts } from './common';
 
 /** Strip emoji from player names for consistent matching */
 function stripEmoji(name: string): string {
@@ -294,10 +294,10 @@ export function parseGGPokerHand(text: string): HandHistory {
     players,
     board,
     streets: {
-      preflop: preflopActions,
-      flop: { cards: flopCards, actions: flopActions },
-      turn: { cards: turnCards, actions: turnActions },
-      river: { cards: riverCards, actions: riverActions },
+      preflop: normalizeToAmounts(preflopActions),
+      flop: { cards: flopCards, actions: normalizeToAmounts(flopActions) },
+      turn: { cards: turnCards, actions: normalizeToAmounts(turnActions) },
+      river: { cards: riverCards, actions: normalizeToAmounts(riverActions) },
     },
     pot,
     winner: winnerAmount > 0 ? { playerId: winnerId, amount: winnerAmount } : undefined,
