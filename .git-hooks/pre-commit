@@ -17,6 +17,10 @@ if git diff --name-only HEAD | grep -q '\.claude/agents/.*-dev\.md'; then
     exit 1
   elif [ $RESULT -eq 0 ]; then
     echo "✅ Agent tools validation passed (warnings allowed)"
+  else
+    echo "❌ Agent tools validation errored (exit code $RESULT)"
+    echo "Treating unexpected exit code as failure to avoid fail-open."
+    exit 1
   fi
 else
   echo "✓ No agent file changes detected, skipping validation."

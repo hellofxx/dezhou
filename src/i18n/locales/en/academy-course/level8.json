@@ -7,7 +7,7 @@
       "Typical Pool Tendencies by Stake",
       "Micro-stakes (NL2-NL10):\n• Call too much, rarely fold\n• Response: pure value betting, almost no bluffs\n\nLow-stakes (NL25-NL50):\n• Preflop becoming reasonable but weak postflop\n• Response: more C-Bets, more double barrels\n\nMid-stakes (NL100-NL200):\n• Strategy close to GTO but still has leaks\n• Response: precise node locking + small exploitation",
       "Don't use high-stakes strategies against micro-stakes. At micro-stakes, pure value betting and abandoning bluffs may make more than GTO.",
-      "Exploitation adjustment-size formula:\nOptimal deviation = observable deviation × (1 - opponent adjustment probability)\n\nExample: opponent river fold rate 70% (equilibrium ~50%)\nObservable deviation = +20%\nAssume opponent adjustment probability = 30% (low-stakes players adjust slowly)\nOptimal deviation = 20% × (1-0.3) = 14%\n\nThis means you can raise your bluff frequency by about 14 percentage points,\nbut be ready to return to baseline (if the opponent starts adjusting)\n\nExploitation magnitude isn't \"bigger is better\" — it's capped by \"not being counter-exploited\"",
+      "Exploitation adjustment-size formula:\nSafe deviation = observable deviation × (1 - opponent adjustment probability)\n\nExample: opponent river fold rate 70% (equilibrium ~50%)\nObservable deviation = +20%\nAssume opponent adjustment probability = 30% (low-stakes players adjust slowly)\nSafe deviation = 20% × (1-0.3) = 14%\n\nThis means you can raise your bluff frequency by about 14 percentage points,\nbut be ready to return to baseline (if the opponent starts adjusting)\n\nExploitation magnitude isn't \"bigger is better\" — it's capped by \"not being counter-exploited\"",
       "Theory reference: the full framework of player typology and exploitation adjustments is in Theory Academy T7 Chapter 4 \"Exploitative Adjustment Mapping\". HUD metric combination interpretation is in T7 Chapters 1-2. The GTO-exploitation unified framework is in T9 Chapter 4.",
       "Counter-intuitive: the bigger your exploitation, the easier you get counter-exploited. When you deviate heavily from the GTO baseline to exploit an opponent, your own strategy develops obvious leaks that experienced opponents can exploit in turn. That's why exploitative adjustments should be \"minimum necessary deviations\" — capturing profit while keeping room to pivot."
     ],
@@ -27,8 +27,8 @@
       "vs a Nit (ultra-tight):\n• Steal blinds relentlessly\n• Fold immediately when he raises\n• Don't bluff him\n\nvs a Calling Station:\n• Pure value betting, never bluff\n• Slightly larger bet sizing\n• Respect his raises\n\nvs a Maniac:\n• Patiently wait for strong hands\n• Call down with medium strength\n• Don't bluff him\n• Control pot size",
       "The Risk of Exploitation",
       "Exploitative strategies are inherently \"unbalanced\":\n• If the opponent notices and adjusts, you can lose\n• Don't over-exploit strong opponents\n• Regularly check whether your exploitation still works",
-      "The best strategy is: 80% GTO + 20% exploitation. Use GTO as a protective baseline and make small exploitative adjustments when clearly profitable.",
-      "The GTO-exploitation unified framework:\nStrategy = GTO baseline + directional deviation × magnitude cap\n\nDirectional deviation rules:\n1. Opponent folds too much → increase bluff frequency\n2. Opponent calls too much → tighten value range, reduce bluffs\n3. Opponent raises too much → narrow your continuing range\n4. Opponent raises too little → bet with a wider range\n\nMagnitude cap formula:\nSafe deviation = observable deviation × 0.5 (half-Kelly principle)\n\nExample: opponent flop C-Bet frequency 80% (equilibrium 60%, deviation +20%)\nYour response: increase fold-to-C-Bet rate about 10%\nWithin the safe range, even if the opponent adjusts, you won't get counter-exploited",
+      "Use GTO as the default baseline and deviate only on opponent leaks that are backed by enough hands and point in one clear direction; size the deviation by \"observable deviation × (1 - opponent adjustment probability)\" — derivation in the formula below.",
+      "The GTO-exploitation unified framework:\nStrategy = GTO baseline + directional deviation × magnitude cap\n\nDirectional deviation rules:\n1. Opponent folds too much → increase bluff frequency\n2. Opponent calls too much → tighten value range, reduce bluffs\n3. Opponent raises too much → narrow your continuing range\n4. Opponent raises too little → bet with a wider range\n\nMagnitude cap formula:\nSafe deviation = observable deviation × (1 - opponent adjustment probability)\n\nExample: opponent flop C-Bet frequency 80% (equilibrium 60%, deviation +20%)\nAssume opponent adjustment probability = 50% (mid-stakes players gradually notice your deviation)\nSafe deviation = 20% × (1-0.5) = 10%\nYour response: increase fold-to-C-Bet rate about 10%\nWithin the safe range, even if the opponent adjusts, you won't get counter-exploited\n\n(Note: the higher the opponent's adjustment probability, the smaller the allowed deviation; as it approaches 1, pull the deviation back and return to the GTO baseline)",
       "Theory reference: the full theory of the GTO-exploitation unified framework is in Theory Academy T9 Chapter 4 \"The GTO-Exploitation Unified Framework\", including the execution methodology of \"using GTO as a baseline and making disciplined directional deviations based on observable deviations\".",
       "Counter-intuitive: GTO baseline + exploitative deviation = the optimal mixed strategy. This isn't choosing between GTO and exploitation — it's \"starting from GTO and making minimal necessary deviations when spotting weaknesses\". Deviation magnitude isn't \"bigger is better\"; operate within the range where \"you still don't lose after the opponent adjusts\"."
     ]
@@ -179,10 +179,10 @@
       "options": [
         "Pure GTO",
         "Pure exploitation",
-        "80% GTO + 20% exploitation",
+        "GTO as the baseline, small deviations at spotted leaks",
         "50/50"
       ],
-      "explanation": "80% GTO baseline protects you + 20% exploitation maximizes profit."
+      "explanation": "Keep GTO as the default baseline to protect yourself, and deviate only on leaks backed by enough hands in one clear direction; size the deviation by \"observable deviation × (1 - opponent adjustment probability)\"."
     }
   },
   "lessonPractice": {

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createLocalStorageStub } from '@/shared/utils/localStorageStub';
 import { buildPersistedShape } from '@/shared/utils/persistShape';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 
 /**
  * progress store 持久化形状快照测试。
@@ -18,6 +19,12 @@ import { buildPersistedShape } from '@/shared/utils/persistShape';
  *
  * v15（新增 persistError）：persistError 与 setPersistError 为运行时标记，
  * 经 partialize 排除出 localStorage，因此不 bump version 且快照不变。
+ *
+ * v16（理论复习项 key 化）：仅改写已有 reviewItems 元素的**值**（中文原文 → i18n key），
+ * 未新增/删除任何持久化键，亦未改变 ReviewItem 字段形状，故本快照与下方元素形状断言均不变。
+ *
+ * v17（策略复习项 key 化）：同 v16，仅把 category==='strategy' 项的 label 值由中文课名
+ * 改写为 academy.lessonTitle.<lessonId> key，持久化键与 ReviewItem 字段形状均不变。
  */
 describe('progress store persisted shape', () => {
   it('持久化键结构与当前快照一致（变化即需 bump version + migrate）', async () => {
@@ -167,6 +174,70 @@ describe('progress store persisted shape', () => {
     expect(json).not.toContain('persistError');
 
     // 等待模块底部 setTimeout 副作用执行完毕
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  });
+
+  it('reviewItems 元素形状锁定 ReviewItem 契约（顶层快照只记 "array"，内部字段变更须由此检出）', async () => {
+    const storageStub = createLocalStorageStub();
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+
+    const { useProgressStore } = await import('./store');
+    const { createReviewItem, processReview } = await import('@/shared/utils/spacedRepetition');
+    const { partialize } = useProgressStore.persist.getOptions();
+
+    // 以理论学院错题项为探针：它携带本批新增的 metadata.route
+    useProgressStore.getState().addReviewItem(
+      createReviewItem('theory:t1-combinatorics-q1', '题面摘要', 'theory', {
+        source: 'theory',
+        route: '/theory/chapter/t1-combinatorics',
+        front: '题干原文',
+        back: '解析原文',
+      }),
+    );
+    const persisted = (partialize ? partialize(useProgressStore.getState()) : useProgressStore.getState()) as {
+      reviewItems: unknown[];
+    };
+    const probe = persisted.reviewItems.find(
+      (r) => (r as { id?: string }).id === 'theory:t1-combinatorics-q1',
+    );
+
+    expect(buildPersistedShape(probe)).toEqual({
+      id: 'string',
+      label: 'string',
+      category: 'string',
+      easeFactor: 'number',
+      interval: 'number',
+      repetitions: 'number',
+      nextReviewDate: 'string',
+      metadata: {
+        source: 'string',
+        route: 'string',
+        front: 'string',
+        back: 'string',
+      },
+    });
+    // 新建项尚未复习：lastReviewedAt 为 undefined，不得被序列化进 localStorage
+    expect(JSON.stringify(probe)).not.toContain('lastReviewedAt');
+
+    // 复习推进一次后契约扩展：lastReviewedAt 变为数值
+    expect(buildPersistedShape(processReview(probe as ReviewItem, 4))).toEqual({
+      id: 'string',
+      label: 'string',
+      category: 'string',
+      easeFactor: 'number',
+      interval: 'number',
+      repetitions: 'number',
+      nextReviewDate: 'string',
+      lastReviewedAt: 'number',
+      metadata: {
+        source: 'string',
+        route: 'string',
+        front: 'string',
+        back: 'string',
+      },
+    });
+
     await new Promise((resolve) => setTimeout(resolve, 20));
   });
 });

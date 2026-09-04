@@ -216,17 +216,17 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'formula',
         content:
-          '翻前偷盲 EV（SB min-raise 到 2BB，BB 弃牌率 f）：\nEV(steal) = f×1 − (1−f)×1.5\n\n翻后位置 EV 锚点：\n单挑位置价值约 0.5-1BB/手（BB 每手翻后 IP）\n\n实例：BB 面对 SB min-raise，跟注 1BB 争夺 2BB：\n所需胜率 = 1/(2+1) ≈ 33.3%\nBB 面对 SB 约 80% 开池范围，边缘牌胜率常超 40% → 跟注 +EV',
+          '翻前偷盲 EV（SB min-raise 到 2BB，BB 弃牌率 f）：\nEV(steal) = f×1 − (1−f)×1.5\n\n翻后位置 EV 锚点：\n单挑位置价值约 0.5-1BB/手（BB 每手翻后 IP）\n\n实例：BB 面对 SB min-raise（SB 总投入 2BB，BB 已投 1BB）：\n通式：所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）\n代入：1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n（当前底池 1.5 = SB 0.5 + BB 自己已投的 1，这 1BB 是死钱但仍在分母里，不可漏算；对手下注 1.5 = SB 补到 2BB 的加注额；跟注额 1 = BB 需补的差额。等价于跟注后总底池 4BB，1÷4=25%）\nBB 面对 SB 约 80% 开池范围，边缘牌胜率常超 40% → 跟注 +EV',
       },
       {
         type: 'text',
         content:
-          '单挑 EV 调整的实践含义：面对 SB 的宽范围，BB 的跟注门槛大幅降低。满员桌面对 UTG 范围 15% 时 40% 的跟注线，在单挑面对 SB 范围 80% 时降到约 33%，且因为位置优势实际胜率更高。这就是为什么单挑 BB 能防守 60%+——不是"宽松"，而是"EV 计算的结果"。',
+          '单挑 EV 调整的实践含义：面对 SB 的宽范围，BB 的跟注门槛大幅降低。满员桌面对 UTG 范围 15% 时 40% 的跟注线，在单挑面对 SB 范围 80% 时降到 25%（再跟 1BB ÷ 跟注后总底池 4BB），且因为位置优势实际胜率更高。这就是为什么单挑 BB 能防守 60%+——不是"宽松"，而是"EV 计算的结果"。',
       },
       {
         type: 'example',
         content:
-          '实例：单挑盲注 0.5/1，翻前 SB min-raise 2BB，你（BB）持 K♠7♠。跟注 1BB 争夺 SB 投入的 2BB，所需胜率 33.3%。K7s 对 SB 约 80% 的开池范围胜率约 48%，富余约 15 个百分点。翻后你 IP：出 K 可薄价值、出同花/顺子可便宜追、完全 miss 可放弃。跟注的 EV 为正——满员桌 K7s 面对 UTG 是弃牌，但单挑面对 SB 宽范围是 +EV 跟注。',
+          '实例：单挑盲注 0.5/1，翻前 SB min-raise 2BB，你（BB）持 K♠7♠。跟注 1BB，跟注后总底池 = SB 2 + BB 已投 1 + 你的跟注 1 = 4BB，所需胜率 = 1 ÷ 4 = 25%。K7s 对 SB 约 80% 的开池范围胜率约 48%，富余约 23 个百分点。翻后你 IP：出 K 可薄价值、出同花/顺子可便宜追、完全 miss 可放弃。跟注的 EV 为正——满员桌 K7s 面对 UTG 是弃牌，但单挑面对 SB 宽范围是 +EV 跟注。',
       },
       {
         type: 'example',
@@ -257,10 +257,10 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         id: 'l4hu-ev-adjustments-q2',
-        question: 'SB min-raise 到 2BB，BB 跟注 1BB 争夺 SB 投入的 2BB，所需胜率约为：',
-        options: ['25%', '33.3%', '40%', '50%'],
+        question: 'SB min-raise 到 2BB（BB 已投 1BB），BB 还需跟注 1BB，所需胜率约为：',
+        options: ['33.3%', '25%', '40%', '50%'],
         correctIndex: 1,
-        explanation: '所需胜率 = 1/(2+1) ≈ 33.3%。单挑死钱占比高，比满员桌 BTN 跟注 40% 更便宜。',
+        explanation: '所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）= 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%。分母必须含 BB 自己已入池的 1BB 死钱（1/(2+1)≈33.3% 正是漏算它得到的错值）。单挑死钱占比高，比满员桌 BTN 跟注 40% 更便宜。',
       },
       {
         id: 'l4hu-ev-adjustments-q3',
@@ -272,7 +272,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           '规则要求',
         ],
         correctIndex: 1,
-        explanation: '面对 SB 约 80% 宽范围，跟注门槛降至约 33%，且 IP 权益实现率超 100%，故可宽防守——是 EV 计算的结果而非"宽松"。',
+        explanation: '面对 SB 约 80% 宽范围，跟注门槛降至 25%（再跟 1BB ÷ 跟注后总底池 4BB），且 IP 权益实现率超 100%，故可宽防守——是 EV 计算的结果而非"宽松"。',
       },
       {
         id: 'l4hu-ev-adjustments-q4',
@@ -316,7 +316,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           amount: '1BB',
           reasoning: [
             'Q6s 面对 SB 约 80% 开池范围胜率约 45%',
-            '跟注 1BB 争夺 2BB，所需胜率约 33.3%，富余约 12 个百分点',
+            '跟注 1BB 进入 4BB 总底池（SB 2 + BB 1 + 跟注 1），所需胜率 = 1÷4 = 25%，富余约 20 个百分点',
             'BB 翻后 IP，权益实现率超 100%，边缘牌也可盈利',
           ],
         },
@@ -525,7 +525,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           amount: '1BB',
           reasoning: [
             '65s 面对 SB 约 80% 开池范围胜率约 42%',
-            '跟注 1BB 争夺 2BB，所需胜率约 33.3%，富余约 9 个百分点',
+            '跟注 1BB 进入 4BB 总底池（SB 2 + BB 1 + 跟注 1），所需胜率 = 1÷4 = 25%，富余约 17 个百分点',
             'BB 翻后 IP，同花连张可玩性好，是均衡防守范围成员',
           ],
         },

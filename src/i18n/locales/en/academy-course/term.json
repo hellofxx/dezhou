@@ -171,6 +171,54 @@
     "t-icm": {
       "chinese": "独立筹码模型",
       "explanation": "Independent Chip Model — converts chips into real monetary value in tournaments"
+    },
+    "t-mdf": {
+      "chinese": "最小防御频率",
+      "explanation": "Minimum Defense Frequency — the lowest fraction of your range you must continue with (call or raise, never fold) facing a bet, so the opponent cannot auto-profit bluffing with any two cards. Formula: MDF = 1 - bet/(pot + bet), equivalently pot/(pot + bet); with b = bet as a fraction of pot, MDF = 1/(1+b). Example: facing a 1/2-pot bet, MDF = 1/1.5 = 67%. The larger the bet, the lower the frequency you must continue at. MDF is a safety net against over-folding, not a rule to follow blindly."
+    },
+    "t-alpha": {
+      "chinese": "诈唬保本弃牌率",
+      "explanation": "Alpha — the fold frequency a pure bluff needs from the opponent in order to break even (EV = 0); this is the attacker's side of the same coin as MDF. Formula: Alpha = bet/(pot + bet), i.e. b/(1+b). Example: a 1/2-pot bluff needs Alpha = 33% folds to be automatically profitable. Alpha and MDF are complements (MDF + Alpha = 1) and point in opposite directions: MDF belongs to the defender, Alpha to the aggressor. Do not confuse either with the equity needed to call, bet/(pot + 2*bet), which has a different denominator."
+    },
+    "t-spr": {
+      "chinese": "筹码底池比",
+      "explanation": "Stack-to-Pot Ratio — formula: SPR = effective stack / pot size. Bands: SPR below 4 is low (top pair is worth committing), 4-10 is medium (standard play), above 10 is high (deep stacks, speculative hands such as suited connectors gain value). Example: 200BB effective against a 15BB pot on the flop gives SPR = 13.3. 3-Bet pots usually play at SPR 3-6 while single-raised pots sit around 8-15."
+    },
+    "t-polarized": {
+      "chinese": "极化范围",
+      "explanation": "One of the two basic range shapes: it contains only strong hands (the nuts or near-nuts) plus bluff hands that are air and carry blockers, and no medium-strength hands (polarized = strong + weak, nothing in between). Typical spots: large river bets and overbets, preflop 3-bet/4-bet, check-raise. Rule: the bigger the sizing, the more polarized the range; the smaller the sizing, the more merged it is. A polarized range pairs with large sizings (above 2/3 pot)."
+    },
+    "t-mergedrange": {
+      "chinese": "合并范围",
+      "explanation": "Merged / Linear range — the shape opposite to polarized: a continuous distribution from strong down to medium strength (strong + medium, no air), bet at mixed frequency. Rule: small sizings (below 1/2 pot) suit merged ranges, since the goal is to charge the opponent's entire continuation range at the lowest possible cost and take thin value, while keeping a cheap showdown path for your own medium-strength hands."
+    },
+    "t-overbet": {
+      "chinese": "超池下注",
+      "explanation": "A bet sized larger than the current pot (typically 125%-200% pot). Its core precondition is a nuts advantage: your range contains super-strong hands that cannot exist in the opponent's range. The range must be polarized (top value plus bluff hands with blockers), with a value-to-bluff ratio around 2:1 — facing a 150% pot overbet the opponent's MDF is only 40%, so you cannot bluff too much."
+    },
+    "t-blocker": {
+      "chinese": "阻断牌",
+      "explanation": "Cards in your hand that remove combinations of specific hands from the opponent's range. Example: there are only four aces, so holding one ace cuts the opponent's AA combos from 6 to 3 and AK from 16 to 12. This is why A5s makes a better 3-bet bluff than 76s. In bluff catching: blocking the opponent's value range means they are more likely to be bluffing, so you lean to calling; blocking their bluff range means they are more likely to have value, so you lean to folding."
+    },
+    "t-equityrealization": {
+      "chinese": "权益实现率",
+      "explanation": "Equity Realization — the share of your raw equity you actually get to cash in. This is the essence of position advantage: the same 50% raw equity realizes above 100% in position and typically only 80-90% out of position. A second dimension: the deeper the stacks, the less high pairs (AA/KK) realize postflop, while suited connectors gain playability."
+    },
+    "t-semibluff": {
+      "chinese": "半诈唬",
+      "explanation": "Betting or raising with a draw — you are not ahead right now, but you have outs to overtake on a later street. Two ways to win: the opponent folds and you take the pot immediately (fold equity), or they call and you improve to the best hand and win a large pot (equity realization). Best to worst bluff hands: combination draws (flush + straight) > flush draws > open-ended straight draws > gutshots."
+    },
+    "t-foldequity": {
+      "chinese": "弃牌权益",
+      "explanation": "Fold Equity — the share of expectation you earn when the opponent folds and you take the pot outright. Calculation: fold equity = probability the opponent folds x pot size. It is one of the two profit sources when betting with draws and air hands (the other is equity realization), and it is exactly what the pure-bluff break-even threshold Alpha = bet/(pot + bet) measures."
+    },
+    "t-rangeadvantage": {
+      "chinese": "范围优势",
+      "explanation": "Range Advantage — on a given board texture one player's whole range has a higher average equity than the other's. It drives sizing and frequency: a dry high-card board (such as K-7-2 rainbow) usually gives the preflop aggressor a range advantage, allowing a small sizing across the whole range at high frequency. It often moves together with a nuts advantage but not always, so judge them separately."
+    },
+    "t-nutsadvantage": {
+      "chinese": "坚果优势",
+      "explanation": "Nuts Advantage — one player's range contains the strongest possible combinations (sets, big two pairs, nut flushes) that cannot exist in the opponent's range. Example: you check-raise a K-7-2 flop and the turn is another K, so your range holds KK/77 while the opponent's cannot. This is the core precondition for overbetting. Unlike a range advantage, which compares average equity, a nuts advantage compares density at the very top of the range."
     }
   }
 }

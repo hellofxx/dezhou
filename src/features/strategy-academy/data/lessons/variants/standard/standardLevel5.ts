@@ -46,7 +46,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           {
             type: 'theory-reference',
             content: '理论支撑：Kelly 准则在扑克资金管理中的量化应用详见理论学院 T8 第 2 章"资金心理与量化管理"。T8 全面覆盖了扑克心理学中的资金管理方法论。',
-            data: { theoryLevelId: 't8', theoryChapterId: 't8-psychology' },
+            data: { theoryLevelId: 't8', theoryChapterId: 't8-bankroll-psych' },
           },
           {
             type: 'counter-intuitive',
@@ -605,10 +605,10 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           },
         ],
         quiz: [
-          { id: 'l5-sr-q1', question: 'Session Review 的第一步是？', options: ['计算赢输', '标记关键手牌', '兘开GTO求解器', '发朋友圈'], correctIndex: 1, explanation: '复盘首先要标记出需要分析的关键牌局，然后再深入分析。' },
+          { id: 'l5-sr-q1', question: 'Session Review 的第一步是？', options: ['计算赢输', '标记关键手牌', '打开GTO求解器', '发朋友圈'], correctIndex: 1, explanation: '复盘首先要标记出需要分析的关键牌局，然后再深入分析。' },
           { id: 'l5-sr-q2', question: '复盘时应该关注什么？', options: ['单手牌的输赢结果', '决策质量而非结果', '只看大底池', '对手的表情'], correctIndex: 1, explanation: '质量复盘关注的是决策过程是否正确，而非单次结果。' },
         
-          { id: 'l5-sr-q3', question: '复盘应该关注什么？', options: ['单手输赢', '决策质量', '对手运气', '牌桌风水'], correctIndex: 1, explanation: '复盘关注决策质量而非结果。' },
+          { id: 'l5-sr-q3', question: '按 Session A/B/C 档框架，出现 C 档（疲劳状态）信号时应如何处理？', options: ['继续打完预定的局数', '立即结束本次 Session', '加大注码把输的赢回来', '开更多桌分散注意力'], correctIndex: 1, explanation: '本课的 Session A/B/C 档框架规定：C 档表现为注意力下降、直觉代替分析，出现信号即强制结束。继续打或加大注码都会在劣化的决策上放大亏损；开更多桌只会进一步稀释注意力，而预定局数属于事前计划，不能凌驾于当下的状态信号之上。' },
           { id: 'l5-sr-q4', question: '每次Session应标记几手关键牌？', options: ['所有手牌', '3-5手', '1手', '不标记'], correctIndex: 1, explanation: '每次Session结束后标记3-5手"不确定"的牌。' },
           { id: 'l5-sr-q5', question: '复盘的第5步是？', options: ['计算赢输', '标记手牌', '制定改进计划', '对比GTO'], correctIndex: 2, explanation: '复盘第5步是制定改进计划。' },],
         practice: {
@@ -631,7 +631,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         duration: '10 min',
         content: [
           { type: 'heading', content: '用数据找到你的漏洞' },
-          { type: 'text', content: '属于自己的统计数据是最客观的镜子。通过分析你的 VPIP、PFR、C-Bet %、各位置赢率等数据，可以精确定位藄弱点。' },
+          { type: 'text', content: '属于自己的统计数据是最客观的镜子。通过分析你的 VPIP、PFR、C-Bet %、各位置赢率等数据，可以精确定位弱点。' },
           { type: 'heading', content: '关键指标解读' },
           { type: 'text', content: 'VPIP/PFR 差距过大（>8）：跟注太多、加注太少\nC-Bet % < 50%：翻后不够激进\n各位置赢率差异大：某些位置的策略有问题\nShowdown % > 35%：跟注太多到河牌' },
           { type: 'key-point', content: '修复漏洞的优先级：先修频率最高的场景（如翻前范围），再修低频场景。一个翻前 Leak 每手都影响你，一个河牌 Leak 可能很少发生。' },

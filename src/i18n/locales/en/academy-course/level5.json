@@ -250,14 +250,14 @@
       "explanation": "Quality review focuses on whether the decision process was correct, not the single result."
     },
     "l5-sr-q3": {
-      "question": "What should review focus on?",
+      "question": "Per the Session A/B/C framework, what should you do when C-tier (fatigue) signals appear?",
       "options": [
-        "Single-hand wins",
-        "Decision quality",
-        "Opponent luck",
-        "Table feng shui"
+        "Play on until the planned number of hands is done",
+        "End the session immediately",
+        "Raise stakes to win back what you lost",
+        "Add more tables to spread your attention"
       ],
-      "explanation": "Review focuses on decision quality, not results."
+      "explanation": "This lesson's Session A/B/C framework defines C tier as dropping attention with intuition replacing analysis — force-stop the session as soon as the signals show. Playing on or raising stakes only compounds losses under degraded decisions; adding tables further dilutes attention; and a pre-set hand quota cannot override what your current state is telling you."
     },
     "l5-sr-q4": {
       "question": "How many key hands should you mark per session?",
@@ -1215,174 +1215,174 @@
   },
   "drill": {
     "d-l5-tilt-q1": {
-      "scenario": "Emotion recognition",
-      "question": "Your AA got rivered by K7 (bad beat). What state are you most likely in now?",
+      "scenario": "You just lost a big pot to a bad beat",
+      "question": "What should you do next?",
       "option": [
-        "Calm",
-        "Anger tilt",
-        "Excited"
+        "Deal the next hand right away",
+        "Take a 5-10 minute break and reset your emotions",
+        "Move up stakes to win it back"
       ],
-      "explanation": "The most typical reaction after a bad beat is anger. If you feel angry and want to \"win it back\", you're in anger tilt. Stop or rest immediately."
+      "explanation": "Tilt is likely after a bad beat. Take a few minutes to let the emotion settle so you are not making decisions in an emotional state."
     },
     "d-l5-tilt-q2": {
-      "scenario": "Emotion recognition",
-      "question": "After being bluffed 3 hands in a row, you start over-folding. Which tilt is this?",
+      "scenario": "You notice you have called large bets with weak hands three times in a row",
+      "question": "What kind of signal is this?",
       "option": [
-        "Anger",
-        "Fear tilt",
-        "Revenge"
+        "Normal variance",
+        "A tilt warning - you need to stop",
+        "A strategy adjustment"
       ],
-      "explanation": "Not daring to bet and over-folding after losses is classic fear tilt."
+      "explanation": "Calling big bets with weak hands repeatedly is a classic tilt behaviour. Stop immediately and check your emotional state."
     },
     "d-l5-tilt-q3": {
-      "scenario": "Emotion recognition",
-      "question": "One opponent has beaten you several hands. You now only raise against him. Which tilt is this?",
+      "scenario": "You just lost a big pot and now want revenge",
+      "question": "What does that thought belong to?",
       "option": [
-        "Revenge tilt",
-        "Boredom",
-        "Urgency"
+        "A normal competitive mindset",
+        "A typical sign of tilt",
+        "A strategy adjustment"
       ],
-      "explanation": "Irrational actions targeting one specific opponent is revenge tilt."
+      "explanation": "A revenge mindset is a typical sign of tilt. It makes you decide for the wrong reasons instead of based on EV."
     },
     "d-l5-tilt-q4": {
-      "scenario": "Stop-loss decision",
-      "question": "Your stop-loss is 2 buy-ins and you've lost 1.8. What should you do?",
+      "scenario": "You notice your heart racing and your breathing getting faster",
+      "question": "These are the physiological signals of what?",
       "option": [
-        "Keep playing",
-        "Near the stop-loss — prepare to stop",
-        "Buy in bigger"
+        "Focus",
+        "Emotional agitation / a tilt warning",
+        "Fatigue"
       ],
-      "explanation": "Near the stop-loss, prepare to stop. Stop when reached — don't \"one more hand\"."
+      "explanation": "A racing heart and faster breathing are physiological signals of emotional agitation. This is a tilt warning - stop and take deep breaths."
     },
     "d-l5-tilt-q5": {
-      "scenario": "Stop-loss decision",
-      "question": "You've lost 5 hands in a row and are clearly emotional. What should you do?",
+      "scenario": "You have lost three sessions in a row",
+      "question": "What should you do?",
       "option": [
-        "Keep playing",
-        "Stop and check emotions",
-        "Raise in revenge"
+        "Keep playing, you will win it back eventually",
+        "Stop playing and take a day off",
+        "Move up stakes to recover the losses"
       ],
-      "explanation": "When clearly emotional, stop and check your emotional state."
+      "explanation": "Playing on after losing sessions in a row easily triggers tilt. Take a day off to let the emotions settle instead of deciding in an emotional state."
     },
     "d-l5-tilt-q6": {
-      "scenario": "Emotion recognition",
-      "question": "You've won for 2 hours straight and start thinking \"I can never lose\". Which tilt is this?",
+      "scenario": "You catch yourself cursing at opponents or complaining out loud",
+      "question": "What signal is this?",
       "option": [
-        "Urgency",
-        "Ego tilt",
-        "Self-destructive"
+        "Normal emotional release",
+        "A sign of tilt - you need to stop",
+        "A sign of focus"
       ],
-      "explanation": "Overconfidence after consecutive wins is ego tilt."
+      "explanation": "Cursing at opponents or venting is a sign of tilt. It shows your emotions are already affecting your decisions, so stop immediately."
     },
     "d-l5-tilt-q7": {
-      "scenario": "Stop-loss decision",
-      "question": "After 1 hour of play you keep checking your phone, attention dropping. What should you do?",
+      "scenario": "An opponent has successfully bluffed you three times in a row",
+      "question": "What should you do next?",
       "option": [
-        "Keep playing",
-        "Rest 5-10 minutes",
-        "Bet bigger"
+        "Call him wider next time",
+        "Check your own emotions and take a break if needed",
+        "Fight back immediately and re-raise him next time"
       ],
-      "explanation": "Dropping attention is a boredom-tilt signal. Rest 5-10 minutes every hour."
+      "explanation": "Being bluffed repeatedly easily triggers tilt. Check your emotional state first, and take a break if you are angry. Never decide out of emotion."
     },
     "d-l5-tilt-q8": {
-      "scenario": "Emotion recognition",
-      "question": "You catch yourself doing \"out-of-character\" actions (e.g. raising 72o). What should you do?",
+      "scenario": "You notice you are playing looser than usual",
+      "question": "What is the reason?",
       "option": [
-        "Keep playing",
-        "Stop immediately",
-        "Raise bigger"
+        "A strategy adjustment",
+        "It is probably caused by tilt",
+        "Bad luck"
       ],
-      "explanation": "Out-of-character actions are a tilt stop signal — stop immediately."
+      "explanation": "Playing looser than usual is a classic sign of tilt. Emotion makes you relax your starting-hand standards and enter pots with weak hands."
     },
     "d-l5-session-q1": {
-      "scenario": "Session planning",
-      "question": "What is your optimal daily training duration?",
+      "scenario": "You have lost three big pots in a row and your emotions are starting to swing",
+      "question": "What should you do now?",
       "option": [
-        "60 minutes",
-        "180 minutes",
-        "5 hours straight"
+        "Keep playing, luck will turn around",
+        "Execute your stop-loss immediately and end the session",
+        "Move up stakes to win the money back"
       ],
-      "explanation": "No session over 60 minutes, rest 5 minutes every 30."
+      "explanation": "Emotional swings after losing big pots in a row are a tilt warning. The stop-loss is the key discipline that protects both your bankroll and your mental game. End the session right away and play another day."
     },
     "d-l5-session-q2": {
-      "scenario": "Session planning",
-      "question": "You're in C-tier (fatigued). What should you do?",
+      "scenario": "You sit down at a table and find it is full of TAG players",
+      "question": "Facing a table full of TAGs, how should you choose?",
       "option": [
-        "Keep playing",
-        "Stop immediately",
-        "Add more questions"
+        "Stay and play to prove yourself",
+        "Change tables and look for one with a calling station",
+        "Move up stakes"
       ],
-      "explanation": "C-tier is fatigue — attention drops and intuition replaces analysis. Stop immediately."
+      "explanation": "A table full of TAGs leaves an almost negligible edge. The core of game selection is finding tables with more weak players, so changing tables is a +EV decision."
     },
     "d-l5-session-q3": {
-      "scenario": "Session planning",
-      "question": "What is your daily question cap?",
+      "scenario": "You planned a 4-hour session; after 3 hours you feel tired",
+      "question": "What should you do once you feel fatigued?",
       "option": [
-        "Unlimited",
-        "0/50/100/200 four tiers",
-        "1000 questions"
+        "Push through the planned time",
+        "End the session now or at least take a 15-minute break",
+        "Drink an energy drink and keep playing"
       ],
-      "explanation": "Daily caps are divided into 0/50/100/200 four tiers to prevent overtraining."
+      "explanation": "Fatigue drags down attention and decision quality, so playing on while tired is -EV. End the session or rest until you have recovered."
     },
     "d-l5-session-q4": {
-      "scenario": "Session planning",
-      "question": "When should review happen?",
+      "scenario": "Your bankroll is $2000 and you currently play NL100 ($100 buy-in)",
+      "question": "Is your bankroll management sound?",
       "option": [
-        "A week later",
-        "Immediately after the session",
-        "Never"
+        "Yes, 20 buy-ins is enough",
+        "No, drop to NL50 or lower and keep at least 30-50 buy-ins",
+        "You should move up to NL200"
       ],
-      "explanation": "Review immediately after the session while memory is fresh."
+      "explanation": "$2000 at NL100 is only 20 buy-ins, below the standard 30-50 buy-in requirement. Drop to NL50 (40 buy-ins) to withstand variance."
     },
     "d-l5-session-q5": {
-      "scenario": "Session planning",
-      "question": "How many key hands should you mark per session?",
+      "scenario": "You won a big session (+10 buy-ins) and feel pumped up",
+      "question": "What should you do after winning a big session?",
       "option": [
-        "All hands",
-        "3-5 hands",
-        "1 hand"
+        "Ride the hot streak into another session",
+        "Finish playing, take notes and keep your normal routine",
+        "Move up stakes - winners should take risks"
       ],
-      "explanation": "Mark 3-5 \"uncertain\" hands after each session."
+      "explanation": "A big win easily breeds overconfidence (the positive version of the gambler's fallacy). The right move is to wrap up, record the lessons and rest normally. Do not change your plan just because you won."
     },
     "d-l5-session-q6": {
-      "scenario": "Session planning",
-      "question": "What should review focus on?",
+      "scenario": "Two online tables are available: table A averages a $15 pot, table B averages $8",
+      "question": "You are a winning NL25 player - which table should you pick?",
       "option": [
-        "Single-hand wins",
-        "Decision quality",
-        "Opponent luck"
+        "Table A (bigger pots), it must be more profitable",
+        "Observe both tables first and choose the one with more weak players",
+        "Just pick either one"
       ],
-      "explanation": "Review focuses on decision quality, not results."
+      "explanation": "A bigger average pot does not automatically mean more profit. What matters is player type - tables with more weak players are the profitable ones. Observe before you sit."
     },
     "d-l5-session-q7": {
-      "scenario": "Session planning",
-      "question": "What is B-tier (normal state) suited for?",
+      "scenario": "You set your session stop-loss at 3 buy-ins",
+      "question": "Why do you need a stop-loss line?",
       "option": [
-        "Complex decisions",
-        "Routine training",
-        "Stop immediately"
+        "It stops you losing more when you are off your game",
+        "It limits how fast you win",
+        "It has no practical meaning"
       ],
-      "explanation": "B-tier (normal) suits routine training."
+      "explanation": "The stop-loss is core bankroll-management discipline. It keeps a bad session (tilt or fatigue) from costing you more than you planned to risk."
     },
     "d-l5-session-q8": {
-      "scenario": "Session planning",
-      "question": "The correct response to C-tier is?",
+      "scenario": "You just finished a session for -5 buy-ins and a friend invites you to a home game",
+      "question": "Should you go play the home game right after losing a big session?",
       "option": [
-        "Keep training",
-        "Force-end",
-        "Train more"
+        "Yes, a home game is an easy way to win it back",
+        "No - rest and review the session instead",
+        "Yes, but at higher stakes"
       ],
-      "explanation": "C-tier (fatigue) should force-end the training."
+      "explanation": "Do not jump straight back into play after losing a big session. Rest, review and reset your mindset. Carrying negative emotion into a home game easily leads to tilt."
     },
     "d-l5-session-q9": {
-      "scenario": "Session planning",
-      "question": "What is A-tier (best state) suited for?",
+      "scenario": "You play 20 hours of poker a week and lately your win rate has dropped",
+      "question": "What might explain the falling win rate, and how should you adjust?",
       "option": [
-        "Complex decisions",
-        "Close the training",
-        "Rest"
+        "Bad luck - no adjustment needed",
+        "Probably over-play / fatigue - cut play hours and add study and rest",
+        "Move up stakes to make up the losses"
       ],
-      "explanation": "A-tier (best state) suits complex decisions."
+      "explanation": "A falling win rate usually points to fatigue or lower-quality play. Cutting hours and adding study and rest is the right adjustment; do not try to make it up at higher stakes."
     }
   }
 }

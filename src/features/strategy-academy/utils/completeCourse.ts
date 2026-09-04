@@ -11,6 +11,7 @@ import { useAcademyStore } from '../store';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { useProgressStore } from '@/features/progress/store';
 import { createReviewItem, toLocalDateString } from '@/shared/utils/spacedRepetition';
+import { lessonTitleKey } from './titleKeys';
 import type { Lesson } from '../types';
 import type { DrillResult } from '../components/drills/types';
 
@@ -89,7 +90,9 @@ export function completeCourse(params: CompleteCourseParams): void {
 
   // 创建/更新复习项（仅当 lesson 对象存在时）
   if (lesson) {
-    const reviewItem = createReviewItem(lesson.id, lesson.title, 'strategy');
+    // label 存 i18n key（academy.lessonTitle.<id>）而非中文原文：复习队列渲染 t(item.label)，
+    // 存原文会让英文界面回显中文（契约见 AGENTS.md / PRD §12.4.3「复习态必须存 key」）
+    const reviewItem = createReviewItem(lesson.id, lessonTitleKey(lesson.id), 'strategy');
     if (score >= 90) {
       reviewItem.interval = 3;
       const date = new Date();

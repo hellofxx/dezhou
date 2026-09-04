@@ -19,6 +19,7 @@ import DailyChallenge from '../achievement/DailyChallenge';
 import DailyTrainingPlan from '../training/DailyTrainingPlan';
 import SpacedRepetitionPanel from '../srs/SpacedRepetitionPanel';
 import ReviewSession from '../srs/ReviewSession';
+import { useEnsureReviewSourceI18n } from '../srs/useEnsureReviewSourceI18n';
 import FirstVisitBanner from './FirstVisitBanner';
 import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
 import { getTodayReviewItems, getTodayString } from '@/shared/utils/spacedRepetition';
@@ -116,6 +117,11 @@ export default function Dashboard() {
     [reviewItems]
   );
 
+  // PRD §12.4.3 配对要求：复习态存的是 i18n key，渲染前须确保来源包就绪。
+  // 原先仅靠同页 SpacedRepetitionPanel 顺带补加载，计划卡/学习路径卡对其形成隐式依赖；
+  // 在此按 Dashboard 自身渲染的复习项再确保一次（preloadI18n 幂等，不会重复拉取）。
+  useEnsureReviewSourceI18n(todayReviewItems);
+
   // 生成每日推荐
   const recommendations = useMemo(() => {
     const allRecommendations = generateCrossModuleDailyPlan(
@@ -137,18 +143,10 @@ export default function Dashboard() {
 
   // §13.6.1 新手收敛：totalSessions < 5 时隐藏训练场网格，展示单一学习路径卡
   const isNewbie = summary.totalSessions < 5;
-  const pathCard = useMemo(() => {
-    const rec = recommendations[0];
-    if (!rec) {
-      return { title: t('dashboard.progressive.newbieTitle'), description: '', route: '/academy' };
-    }
-    // title/description 为 i18n key（渲染端 t() 解析，key 缺失回退 titleParams.title）
-    const resolvedTitle =
-      t(rec.title, rec.titleParams) === rec.title
-        ? String(rec.titleParams?.title ?? rec.title)
-        : t(rec.title, rec.titleParams);
-    return { title: resolvedTitle, description: t(rec.description, rec.descParams), route: rec.route };
-  }, [recommendations, t]);
+  // 只透传推荐对象，文案由 NewbiePathCard 经共享解析器出（与计划卡同一口径）。
+  // 原先在此把 title/description 提前 t() 成字符串传给卡片，那份解析漏了复习项 label 的
+  // 逐条 t()，于是 "theory.quiz.*" 裸键直接进了 DOM；解析口径收敛到一处即从根上防住复发。
+  const pathRecommendation = recommendations[0] ?? null;
 
   return (
     <div className="h-full overflow-auto">
@@ -348,11 +346,7 @@ export default function Dashboard() {
         {/* Section 8: Training Grounds — 6 个训练模块入口（最后，作为完整目录）
             §13.6.1 新手收敛：totalSessions < 5 时替换为单一学习路径卡 */}
         {isNewbie ? (
-          <NewbiePathCard
-            title={pathCard.title}
-            description={pathCard.description}
-            route={pathCard.route}
-          />
+          <NewbiePathCard recommendation={pathRecommendation} />
         ) : (
           <div className="mb-5">
             <div className="flex items-center justify-between mb-3">

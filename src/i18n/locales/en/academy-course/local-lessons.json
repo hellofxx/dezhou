@@ -52,12 +52,12 @@
       "An ante is a small mandatory contribution preflop from every player (usually 0.1-0.25BB). Domestic clubs often introduce antes in cash games to boost pots and action.\n\nThe ante changes pot odds: the initial pot is bigger (e.g. a 6-handed table + 0.2BB ante = 1.2BB antes + 1.5BB blinds = 2.7BB), so calling odds improve and you should enter with a wider range.",
       "Core effects of the ante: ① bigger initial pot; ② better calling odds (widen ranges); ③ higher steal value (bigger pot to steal); ④ lower fold-rate requirement for short-stack shoves.",
       "Preflop Range Adjustments",
-      "Under the ante structure, widen ranges overall:\n\n• Opening range: widen about 15% (e.g. UTG from 12% → 14%)\n• Steal range: BTN can widen to 45-50% (standard is 35-40%)\n• 3-Bet range: slightly wider, but value-oriented\n• Big blind defense: widen the calling range (better odds)\n\nKey formula: the bigger the ante, the better the pot odds, and the wider the call/defense ranges should be.",
+      "Under the ante structure, widen ranges overall:\n\n• Opening range: every position widens one tier above standard (UTG stays the tightest tier)\n• Steal range: the BTN widens further above its already-widest opening tier (about 35%)\n• 3-Bet range: slightly wider, but value-oriented\n• Big blind defense: widen the calling range (better odds)\n\nKey formula: the bigger the ante, the better the pot odds, and the wider the call/defense ranges should be.",
       "Example: 6-handed, 0.2BB ante, NL100\nWithout ante: pot = SB 0.5 + BB 1 = 1.5BB\nWith ante: pot = SB 0.5 + BB 1 + antes 1.2 = 2.7BB\n\nBTN steal raises 2.5BB:\n• No ante: BB calls 1.5BB to win 4BB (37.5% odds)\n• With ante: BB calls 1.5BB to win 5.2BB (28.8% odds)\n\nConclusion: in ante games the BB's defense range should widen noticeably (required equity drops from 37.5% to 28.8%).",
       "Steal Strategy in Ante Games",
       "The ante makes stealing more profitable:\n• The stolen pot is bigger (includes antes)\n• The BB's defense range is wider but the average hand is weaker\n• CO/BTN/SB should all raise steal frequency\n\nBut note: the ante also makes 3-Bet-stealing players' ranges wider, so you can counter with strong-hand 4-Bets.",
       "The most common ante-game error: still playing the tight no-ante ranges. Under an ante structure you should clearly widen, especially steals and big-blind defense.",
-      "The bigger the ante, the more aggressive you should be. In big-ante games (like 0.5BB+), the BTN opening range can widen to 55-60% because the pot odds are excellent."
+      "The bigger the ante, the more aggressive you should be. In big-ante games (like 0.5BB+), the BTN opens well beyond its standard widest tier because the pot odds are excellent."
     ],
     "local-deep-implied-odds": [
       "The Implied-Odds Revolution of Deep Stacks",
@@ -112,7 +112,7 @@
       "The Nit is a common conservative player at domestic mid-stakes (NL50-NL200), with these features:\n\n• VPIP 8-12% (extremely tight)\n• PFR 6-10% (almost only raises strong hands)\n• AF 2.0-3.0 (neither aggressive nor passive)\n• Fold to C-Bet 65-80% (folds to C-Bets at high frequency)\n• Fold BB to Steal 70%+ (extremely tight big-blind defense)\n\nTypical behavior: only plays AA/KK/QQ/AK; few preflop opens; folds a lot to raises; folds when missing postflop.",
       "Core nit traits: super tight, easy to fold, rarely active. Exploitation principles — steal blinds relentlessly, C-Bet bluff, and fold when he raises.",
       "Exploitation Strategy: Blind Stealing and Bluffing",
-      "The profit formula vs a nit: steal his blinds, bluff his misses, and never value-bet into him.\n\nBlind-stealing strategy:\n• CO/BTN open with an extremely wide range (like 50%+)\n• When the nit is in BB/SB, your steal success is 70%+\n• Even when called, he folds a lot postflop to C-Bets\n\nPostflop bluffing:\n• High-frequency C-Bet (nit Fold to C-Bet 65-80%)\n• C-Bet 1/3 pot on almost any board as a probe\n• When he calls a C-Bet it usually means top pair+ — you can fold\n\nNever value-bet weak hands:\n• A nit calling your bet = he has top pair+\n• Your top pair weak kicker is worthless against him\n• Only two pair+ can value-bet against him",
+      "The profit formula vs a nit: steal his blinds, bluff his misses, and never value-bet into him.\n\nBlind-stealing strategy:\n• CO/BTN open with a range far wider than the standard opening range\n• When the nit is in BB/SB, your steal success is 70%+\n• Even when called, he folds a lot postflop to C-Bets\n\nPostflop bluffing:\n• High-frequency C-Bet (nit Fold to C-Bet 65-80%)\n• C-Bet 1/3 pot on almost any board as a probe\n• When he calls a C-Bet it usually means top pair+ — you can fold\n\nNever value-bet weak hands:\n• A nit calling your bet = he has top pair+\n• Your top pair weak kicker is worthless against him\n• Only two pair+ can value-bet against him",
       "Example hand: NL50, nit in BB (VPIP 10), you're CO with 7♠8♠\n\nPreflop:\n• Nit in BB; you CO open 2.5BB (steal)\n• Nit calls (rare — his range tightens to 99+/AQ+)\n\nFlop: K♦5♣2♥ (dry, unfavorable to the nit's range)\n• Nit checks\n• You C-Bet 2BB (1/3 pot, probe)\n• Nit folds (he missed the K, and you might C-Bet even when missing)\n\nAnalysis:\n• Nit's range 99+/AQ+; on K52 only AK/KK hit\n• Your 78s completely missed, but C-Bet success is 70%+\n• EV: 0.7 × 5.5 - 0.3 × 2 = +3.25BB\n\nWrong play: limping preflop against the nit, letting him see the flop cheaply (missing the steal value)",
       "What a Nit's Raise Means",
       "Nits raise very rarely; when they do, it represents an extremely strong hand:\n\n• Preflop raise: AA/KK/QQ/AK (basically just these)\n• Preflop 3-Bet: AA/KK (occasionally QQ)\n• Postflop raise: usually a set or stronger\n• River raise: almost always the nuts\n\nResponse: when a nit raises, immediately fold top pair, two pair, and other medium strength. Don't \"verify\" his hand — that just wastes chips.",
@@ -132,6 +132,7 @@
       "The key vs a LAG: maintain positional advantage. Sit to his left, call his opens from BTN/CO, and use the positional information edge to judge his range strength. Out of position, tighten your range to avoid being dragged into his rhythm."
     ],
     "local-gto-vs-exploit": [
+      "💡 This lesson connects to Level 4's \"GTO Basics\" (l4-gto-basics) and \"Frequency Balance\" (l4-frequency-balance) — finish those first. Here we apply GTO thinking to low-stakes games, focusing on the practical decision of when (and how much) to deviate.",
       "The Nature of GTO vs Exploitation",
       "GTO (Game Theory Optimal): the game-theoretically optimal strategy whose goal is \"not being exploited\". When you don't know the opponent's tendencies, GTO is the best default.\n\nExploitative: adjusting strategy against a specific opponent weakness, with the goal of \"maximizing EV\". When you know the opponent's tendencies, exploitation makes more money than GTO.\n\nKey insight: GTO isn't the \"strongest strategy\" but the \"strategy no strategy can beat\". Against an opponent with weaknesses, pure GTO actually has lower EV than targeted exploitation.",
       "Decision framework: opponent data sufficient + clear weakness → exploit; data insufficient or opponent is high-level → GTO. They aren't opposites but dynamically switchable.",
@@ -141,22 +142,22 @@
       "When to Use Exploitation",
       "Switch to exploitation in these scenarios:\n\n• Opponent data sufficient (>100 hands): VPIP/PFR/AF/Fold to C-Bet are reliable\n• Clear opponent tendencies: e.g. Fold to C-Bet 70%+ (add C-Bet bluffs)\n• Online low stakes (NL2-NL50): the pool broadly deviates from GTO, big exploitation room\n• Live clubs: distinct player types (many stations/maniacs), high exploitation returns\n• Heads-up: 1v1 exploits a single opponent most directly\n\nExploitation advantages: higher EV ceiling than GTO, squeezing opponent weaknesses.",
       "The core GTO-vs-exploitation tradeoff: GTO has a high floor (won't lose badly) and low ceiling (won't win much); exploitation has a low floor (can be counter-exploited) and high ceiling (can win a lot). The less data, the more you lean GTO; the more data, the more you lean exploitation.",
-      "Practical recommendation: 80% GTO + 20% exploitation. Use GTO as the base framework to protect yourself, and make small exploitative adjustments when clearly profitable. This balances stability and profit ceiling.",
-      "Practical recommendation: 80% GTO + 20% exploitation. Use GTO as the base framework to protect yourself, and make small exploitative adjustments when clearly profitable. This balances stability with a higher profit ceiling."
+      "In practice: keep GTO as the default baseline to protect yourself, and deviate only on opponent leaks that are backed by enough hands and point in one clear direction. Size the deviation as “observable deviation × (1 - opponent adjustment probability)” — the more likely the opponent is to adjust, the smaller the deviation. There is no universally valid fixed GTO/exploitation split; it follows from sample size and opponent type."
     ],
     "local-when-to-deviate": [
       "The Criteria for Deviating From GTO",
-      "Deviating from GTO isn't \"by feel\" but based on the opponent's statistical deviations. The criteria:\n\n1. Sufficient data: at least 50 hands of sample (100+ is better)\n2. Significant deviation: a statistic deviates 20%+ from the GTO baseline\n3. One-directional deviation: the opponent's deviation is \"one-way\" (e.g. always calls too much, not random)\n\nGTO baseline references:\n• VPIP/PFR: about 22/18 (6-max)\n• Fold to C-Bet: about 45-50%\n• 3-Bet: about 7-9%\n• Fold to 3-Bet: about 55%",
+      "Deviating from GTO isn't \"by feel\" but based on the opponent's statistical deviations. The criteria:\n\n1. Sufficient data: at least 50 hands of sample (100+ is better)\n2. Significant deviation: a statistic deviates 20%+ from its reference baseline\n3. One-directional deviation: the opponent's deviation is \"one-way\" (e.g. always calls too much, not random)\n\nReference baselines (two different sources — don't conflate them):\n• VPIP/PFR: about 22/18 (6-max) — a common population stat for regulars (REG), not a Nash equilibrium output\n• Fold to C-Bet: about 45-50% (typical equilibrium range)\n• 3-Bet: about 7-9% (typical equilibrium range)\n• Fold to 3-Bet: about 55% (typical equilibrium range)",
       "Deviation principle: adjust in the \"opposite direction\" of the opponent's deviation. Opponent calls a lot → more value, less bluff; opponent folds a lot → more bluff, less value.",
       "Common Deviation Scenarios",
-      "Scenario 1: opponent Fold to C-Bet 65%+ (GTO 45-50%)\n• Deviation: folds too much (+15-20%)\n• Adjust: increase C-Bet frequency (including bluffs), reduce C-Bet size\n• Extreme: 100% C-Bet 1/3 pot with almost any two cards\n\nScenario 2: opponent Fold to C-Bet under 25% (GTO 45-50%)\n• Deviation: calls too much (-20%)\n• Adjust: cut C-Bet bluffs, only value C-Bet, size up\n• Extreme: pure value 2/3 pot+, never bluff\n\nScenario 3: opponent 3-Bet 15%+ (GTO 7-9%)\n• Deviation: 3-Bets too much (+6-8%)\n• Adjust: tighten the opening range, 4-Bet value with strong hands\n• Extreme: open only the top 12% (premium hands), making his 3-Bet bluffs worthless\n\nScenario 4: opponent Fold to 3-Bet 75%+ (GTO 55%)\n• Deviation: folds too much (+20%)\n• Adjust: increase 3-Bet bluff frequency (with blockers like A2s-A5s, K9s)\n• Extreme: expand the 3-Bet range from 8% to 18% (with plenty of bluffs)",
-      "Example hand: opponent sample 200 hands, Fold to C-Bet 68% (GTO 50%)\nYou're BTN with 8♣9♦ (weak, missed), open 2.5BB, opponent calls from the BB\nFlop: K♠5♦2♥ (dry, you completely missed)\nOpponent checks\n\nGTO strategy: about 60% C-Bet (mixing value and bluffs)\nExploitation strategy: 100% C-Bet 1/3 pot (2BB)\n\nEV analysis:\n• Opponent Fold to C-Bet 68%, C-Bet success 68%\n• EV = 0.68 × 5.5 - 0.32 × 2 = +3.16BB\n• GTO mixed strategy EV about +1.5BB\n• Exploitation EV improves +110%\n\nConclusion: the opponent's Fold-to-C-Bet deviation is significant (+18%) — clearly deviate from GTO toward exploitation",
+      "Scenario 1: opponent Fold to C-Bet 65%+ (common equilibrium band about 45-50%)\n• Deviation: folds too much (+15-20%)\n• Adjust: increase C-Bet frequency (including bluffs), reduce C-Bet size\n• Extreme: 100% C-Bet 1/3 pot with almost any two cards\n\nScenario 2: opponent Fold to C-Bet under 25% (common equilibrium band about 45-50%)\n• Deviation: calls too much (-20%)\n• Adjust: cut C-Bet bluffs, only value C-Bet, size up\n• Extreme: pure value 2/3 pot+, never bluff\n\nScenario 3: opponent 3-Bet 15%+ (common equilibrium band about 7-9%)\n• Deviation: 3-Bets too much (+6-8%)\n• Adjust: tighten the opening range, 4-Bet value with strong hands\n• Extreme: open only premium hands, making his 3-Bet bluffs worthless\n\nScenario 4: opponent Fold to 3-Bet 75%+ (common equilibrium band about 55%)\n• Deviation: folds too much (+20%)\n• Adjust: increase 3-Bet bluff frequency (with blockers like A2s-A5s, K9s)\n• Extreme: widen the 3-Bet range markedly (with plenty of bluffs)",
+      "Example hand: opponent sample 200 hands, Fold to C-Bet 68% (well above the typical equilibrium range)\nYou're BTN with 8♣9♦ (weak, missed), open 2.5BB, opponent calls from the BB\nFlop: K♠5♦2♥ (dry, you completely missed)\nOpponent checks\n\nBalanced strategy (illustrative, not a solver output): C-Bet at a fairly high frequency (mixing value and bluffs)\nExploitation strategy: 100% C-Bet 1/3 pot (2BB)\n\nEV analysis (recomputed only from the numbers given in this example):\n• Opponent Fold to C-Bet 68%, C-Bet success 68%\n• EV = 0.68 × 5.5 - 0.32 × 2 = 3.74 - 0.64 = +3.10BB\n• Comparison baseline: assume the mixed-strategy EV of this C-Bet decision under equilibrium is about +1.5BB (an illustrative figure used to show the order of magnitude of the gain from deviating — not a solver output)\n• Against that illustrative baseline, the exploitative line gains roughly (3.10 - 1.5) / 1.5 ≈ +107%\n\nConclusion: the opponent folds far more than the typical equilibrium range — clearly deviate from GTO toward exploitation",
       "The Risks and Boundaries of Deviation",
       "Deviating from GTO isn't unlimited; watch out for:\n\n• Data sample: statistics under 50 hands are unreliable — avoid premature deviation\n• Opponent adaptation: strong opponents detect your deviation and counter-exploit — check periodically\n• Multiway spots: deviation risk is higher multiway, be more conservative\n• Your own balance: still keep some balance when deviating, avoiding being read to death\n\nDeviation check: re-examine the opponent's statistics every 50-100 hands to confirm the deviation persists. If the opponent adjusts, return to GTO or re-deviate.",
-      "The most deadly deviation error: deviating based on \"small samples\" or \"intuition\". Seeing a 20-hand sample of Fold to C-Bet 80% and bluffing wildly — only to find he's actually a 50% GTO player and getting counter-exploited.",
+      "The most deadly deviation error: deviating based on \"small samples\" or \"intuition\". Seeing a 20-hand sample of Fold to C-Bet 80% and bluffing wildly — only to find his Fold to C-Bet actually sits in the common equilibrium band (about half) — and getting counter-exploited.",
       "When using a HUD, watch the \"sample size\" indicator. VPIP/PFR are reliable after about 20 hands, but Fold to C-Bet/3-Bet need 100+ hands to stabilize. Don't use under-threshold statistics as a basis for deviation."
     ],
     "local-mental-tilt-recognition": [
+      "💡 This lesson connects to Level 5's \"Tilt Control\" (l5-tilt); finish that first. It targets low-stakes games in our local player pools, focusing on real in-session tilt triggers and responses, plus stop-loss discipline.",
       "What Is Tilt?",
       "Tilt is a poker player's biggest enemy. It refers to emotional swings from negative events (bad beats, losing streaks, opponent provocation, etc.) that lead to irrational decisions.\n\nDomestic low-stakes players tilt especially easily: high rake, large variance, and lucky opponents (stations hitting miracles with junk) all trigger emotional loss of control.\n\nKey insight: tilt won't make you \"feel\" out of control; it makes you \"think\" you're making correct decisions while actually deviating from optimal strategy.",
       "The nature of tilt: the emotional system hijacks the rational decision system. You're not \"deliberately\" playing badly — your brain auto-selects a suboptimal strategy under emotional pressure.",
@@ -166,8 +167,7 @@
       "Tilt Types and Responses",
       "Different tilt types need different responses:\n\n1. Loss tilt (most common): wanting to \"chase back\" after consecutive losses\n• Response: leave the table and review decisions (not results)\n\n2. Injustice tilt: feeling \"unfair\" after bad beats\n• Response: remember variance is poker's nature; long-term skill wins\n\n3. Helplessness tilt: feeling you can't affect results\n• Response: drop to a lower stake for a few hands to regain control\n\n4. Revenge tilt: wanting to \"teach a specific opponent a lesson\"\n• Response: change tables and avoid tangling with him\n\n5. Fatigue tilt: decision quality drops after long sessions\n• Response: rest regularly; sessions no longer than 2 hours",
       "The most deadly tilt cognitive error: thinking \"I can control myself\". Tilt is the subconscious taking over decisions — you feel rational but are actually out of control. The best response is \"prevention\" — set hard stop-losses and leave on schedule.",
-      "Use a session log to record emotional states: after each session mark \"today's mood (1-5)\" and correlate with profit/loss. Long-term data reveals that \"poor mood correlates with heavy losses\", building emotional-management awareness.",
-      "Use a session log to record emotional states: after each session mark \"today's mood (1-5)\" and correlate it with profit/loss. Long-term data reveals that \"poor mood correlates with heavy losses\", building emotional-management awareness."
+      "Use a session log to record emotional states: after each session mark \"today's mood (1-5)\" and correlate with profit/loss. Long-term data reveals that \"poor mood correlates with heavy losses\", building emotional-management awareness."
     ],
     "local-mental-stop-loss": [
       "Why Do You Need a Stop-Loss?",
@@ -340,12 +340,12 @@
     "local-ante-q2": {
       "question": "How should the BTN steal range adjust in ante games?",
       "options": [
-        "Tighten to 25%",
-        "Widen to 45-50%",
-        "Keep 35%",
+        "Tighten it",
+        "Widen it",
+        "Keep it unchanged",
         "Never steal"
       ],
-      "explanation": "The ante makes stealing more profitable (bigger pot), so the BTN steal range should widen to 45-50%."
+      "explanation": "The ante makes stealing more profitable (bigger pot), so the BTN steal range should widen further above its standard widest tier."
     },
     "local-ante-q3": {
       "question": "On a 0.2BB-ante 6-handed table, after the BTN raises 2.5BB, the BB's call odds are about:",
@@ -530,12 +530,12 @@
     "local-exploit-nit-q2": {
       "question": "Against a nit in the BB, what should the CO steal range be?",
       "options": [
-        "Tighten to 10%",
-        "Widen to 50%+",
-        "Keep 25%",
+        "Tighten the steal range",
+        "Widen the steal range substantially",
+        "Keep it unchanged",
         "Only AA"
       ],
-      "explanation": "The nit's Fold to Steal is 70%+, so the CO should widen the steal range to 50%+ — almost any two cards can steal."
+      "explanation": "The nit's Fold to Steal is 70%+, so the CO should widen the steal range as far as it can — almost any two cards can steal."
     },
     "local-exploit-nit-q3": {
       "question": "A nit raising postflop usually represents:",
@@ -628,14 +628,14 @@
       "explanation": "Fold to C-Bet 70%+ means he folds too much — increase C-Bet frequency (including bluffs) to exploit the over-folding."
     },
     "local-gto-vs-exploit-q4": {
-      "question": "The recommended practical GTO-to-exploitation ratio is:",
+      "question": "Which statement about deviating between GTO and exploitation is correct?",
       "options": [
-        "100% GTO",
-        "50% GTO + 50% exploitation",
-        "80% GTO + 20% exploitation",
-        "100% exploitation"
+        "Stick to GTO regardless of sample size",
+        "Deviate heavily as soon as an opponent feels weak",
+        "Keep GTO as the default baseline and deviate only on leaks backed by enough hands with a clear direction",
+        "Switch to pure exploitation at all times"
       ],
-      "explanation": "Recommended 80% GTO + 20% exploitation — GTO as the base to protect yourself, with small exploitative adjustments when clearly profitable."
+      "explanation": "Deviation requires a large enough sample and a clearly directional leak, and its size shrinks with the opponent's adjustment probability via “observable deviation × (1 - opponent adjustment probability)”. Pure GTO hands up exploitative profit; feeling-based deviation is effectively betting on a small sample and invites counter-exploitation; pure exploitation drops baseline protection and bleeds against strong regulars. Claims of a fixed GTO/exploitation ratio have no basis."
     },
     "local-when-to-deviate-q1": {
       "question": "Which is NOT a criterion for deviating from GTO?",
@@ -648,7 +648,7 @@
       "explanation": "Deviating from GTO is based on the opponent's statistical deviations, not his fame. The criteria are sufficient data, significant deviation, and one-directional deviation."
     },
     "local-when-to-deviate-q2": {
-      "question": "Opponent Fold to C-Bet 65%+ (GTO 50%); how should you deviate?",
+      "question": "Opponent Fold to C-Bet 65%+ (common equilibrium band about 50%); how should you deviate?",
       "options": [
         "C-Bet less",
         "Increase C-Bet frequency (including bluffs)",
@@ -658,7 +658,7 @@
       "explanation": "He folds too much — increase C-Bet frequency (including bluffs) to exploit the over-folding, and reduce the size to 1/3 pot."
     },
     "local-when-to-deviate-q3": {
-      "question": "Opponent 3-Bet 15%+ (GTO 8%); how should you deviate?",
+      "question": "Opponent 3-Bet 15%+ (common equilibrium band about 7-9%); how should you deviate?",
       "options": [
         "Widen the opening range",
         "Tighten the opening range, 4-Bet value with strong hands",

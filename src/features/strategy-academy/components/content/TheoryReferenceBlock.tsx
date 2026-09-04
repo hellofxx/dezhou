@@ -8,9 +8,19 @@ interface TheoryReferenceBlockProps {
   contentKey?: string;
 }
 
-/** 跳转目标解析：data.lessonId 存在（string）时生成跳转链接；target 决定路径形态 */
+/**
+ * 跳转目标解析（优先理论章节，回退学院课时；二者皆无 → null 渲染为纯文本标签）：
+ *  - data.theoryChapterId（非空字符串）→ `/theory/chapter/<id>`：当前课时数据的实际形态，
+ *    目标存在性由 data/theoryReferenceIntegrity.test.ts 守卫
+ *  - data.lessonId（非空字符串）→ 旧形态向后兼容：data.target === 'theory' 走理论章节路径，
+ *    其他/缺失走学院课程路径
+ */
 function resolveLink(data: Record<string, unknown> | undefined): string | null {
   if (!data) return null;
+  const chapterId = data.theoryChapterId;
+  if (typeof chapterId === 'string' && chapterId.trim() !== '') {
+    return `/theory/chapter/${chapterId}`;
+  }
   const lessonId = data.lessonId;
   if (typeof lessonId !== 'string' || lessonId.trim() === '') return null;
   // data.target === 'theory' → 理论学院章节路径；其他/缺失 → 学院课程路径
@@ -19,7 +29,7 @@ function resolveLink(data: Record<string, unknown> | undefined): string | null {
     : `/academy/lesson/${lessonId}`;
 }
 
-/** 理论支撑块：info 系边框 + ExternalLink 图标；data.lessonId 存在时标签可点击跳转 */
+/** 理论支撑块：info 系边框 + ExternalLink 图标；data.theoryChapterId / data.lessonId 存在时标签可点击跳转 */
 export function TheoryReferenceBlock({ section, contentKey }: TheoryReferenceBlockProps) {
   const { t } = useTranslation();
   const href = resolveLink(section.data);

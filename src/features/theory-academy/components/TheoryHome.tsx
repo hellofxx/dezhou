@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpenCheck, Flame, Target } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, BookOpenCheck, ChevronRight, Flag, Flame, Target } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
+import { cn } from '@/shared/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useTheoryStore } from '../store';
 import { getTotalChapterCount } from '../utils/theoryProgress';
@@ -160,15 +161,22 @@ function ReadingStats({
             <span className="font-numeric text-sm text-[var(--ivory)]">{s.value}</span>
           </div>
         ))}
-        <div className="flex items-center gap-3 pt-2 border-t border-[var(--walnut-border)]/60">
+        <Link
+          to="/theory/review"
+          aria-label={t('theory.stats.flaggedEntryAria', { count: flaggedCount })}
+          className="group flex items-center gap-3 pt-2 mt-0.5 border-t border-[var(--walnut-border)]/60 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 hover:bg-[var(--felt-raised)]/40 transition-colors"
+        >
           <span className="w-7 h-7 rounded-md bg-[var(--poker-terra)]/15 flex items-center justify-center text-[var(--poker-terra-bright)] shrink-0">
-            {flaggedCount > 0 ? <Target className="w-3.5 h-3.5" /> : <Target className="w-3.5 h-3.5 opacity-50" />}
+            <Flag className={cn('w-3.5 h-3.5', flaggedCount === 0 && 'opacity-50')} />
           </span>
-          <span className="flex-1 text-xs text-[var(--ivory-muted)]">{t('theory.stats.flaggedLabel')}</span>
+          <span className="flex-1 text-xs text-[var(--ivory-muted)] group-hover:text-[var(--ivory)] transition-colors">
+            {t('theory.stats.flaggedLabel')}
+          </span>
           <span className="font-numeric text-sm text-[var(--ivory)]">
             {flaggedCount > 0 ? flaggedCount : t('theory.stats.flaggedNone')}
           </span>
-        </div>
+          <ChevronRight className="w-3.5 h-3.5 text-[var(--ivory-dim)] group-hover:text-[var(--brass-bright)] transition-colors shrink-0" />
+        </Link>
       </div>
     </motion.section>
   );

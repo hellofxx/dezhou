@@ -24,7 +24,7 @@ const L1_POSITION_U2_SECTIONS: LessonSection[] = [
   {
     type: 'highlight',
     content:
-      '同样的手牌，在 BTN 的价值远高于在 UTG。例如 KJo 在 BTN 是标准 open，在 UTG 通常应该弃牌（保守玩家约 15% 范围）。',
+      '同样的手牌，在 BTN 的价值远高于在 UTG。例如 KJo 在 BTN 是标准 open，在 UTG 通常应该弃牌——UTG 只开最强的一小撮牌。',
   },
   {
     type: 'pro-tip',
@@ -38,16 +38,16 @@ const L1_POSITION_U3_SECTIONS: LessonSection[] = [
   {
     type: 'text',
     content:
-      '1. 翻前：后位可以偷盲（Steal Blinds），用更宽的范围开牌\n2. 翻后：后位可以控制底池大小，做出更精确的价值下注\n3. 信息优势：看到对手的行动后再决策，减少犯错概率',
+      '1. 翻前：后位可以偷盲（Steal Blinds），用更宽的范围开牌\n2. 翻后：后位可以控制底池大小，做出更精确的价值下注\n3. 信息优势：看到对手的行动后再决策，减少犯错概率\n\n各位置范围的精确构成与混合频率，以范围训练模块与 GTO 策略表为准（翻前唯一事实源）。',
   },
   {
     type: 'formula',
-    content: '位置权益实现率：\nBTN 开牌范围约 40-50%（Sklansky-Murr 经典理论建议 35%，现代 solver 输出可达 50%）\nUTG 开牌范围约 10-15%，但由于翻后 OOP，权益实现率仅约 80-90%\n\n量化规律：后位每多一个位置，范围可放宽约 5-8 个百分点，翻后权益实现率提升约 5-10%。',
+    content: '位置与开池宽度的相对关系：UTG 只开最强的一小撮牌，HJ 略宽，CO 明显放宽（近三成），BTN 是 6 人桌开池最宽的位置（约三成半），SB 与 BTN 同档（约三成半）。\n\n位置权益实现率：BTN 翻后有位置，权益实现率更高；UTG 翻后 OOP，权益实现率仅约 80-90%。\n\n规律：越往后位可开范围越宽、翻后权益实现率越高；但相邻位置之间的宽度增量并不等距——前位之间收紧，到 CO/BTN 才明显放宽。',
   },
   {
     type: 'theory-reference',
     content: '理论支撑：位置价值的量化分析见理论学院 T3 第 1 章“位置价值与权益实现率”，Gap Concept 的现代修正见 T3 第 2 章，Sklansky 基本定理见 T3 第 3 章。',
-    data: { theoryLevelId: 't3', theoryChapterId: 't3-position' },
+    data: { theoryLevelId: 't3', theoryChapterId: 't3-position-value' },
   },
   {
     type: 'counter-intuitive',
@@ -63,6 +63,12 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '德州扑克规则与牌型',
         subtitle: '从零基础开始，理解游戏的基本运作',
         duration: '8 min',
+        objectives: [
+          '复述一手牌从翻前到摊牌的完整顺序，并说出翻牌/转牌/河牌各发出几张公共牌',
+          '按强度从强到弱排列 10 种牌型，并指出同花与顺子谁更大',
+          '用 C(52,2) 计算起手牌总组合数，并给出口袋对子/同花牌/非同花牌各自的组合数',
+          '区分 169 个手牌类别与 1326 种实际组合，说明概率计算为何必须用 1326',
+        ],
         content: [
           { type: 'heading', content: '什么是德州扑克？' },
           {
@@ -277,7 +283,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             question: 'KJo 在 UTG 位置应该？',
             options: ['加注开牌', '跟注', '弃牌', '全下'],
             correctIndex: 2,
-            explanation: 'KJo 在 UTG 是边缘牌（约 15% 范围），现代策略中可以 open（但偏松）。更保守打法仍建议弃牌。',
+            explanation: 'KJo 在 UTG 是边缘牌（已贴近 UTG 开池范围的上沿），现代策略中可以 open（但偏松）。更保守打法仍建议弃牌。',
           },
           {
             id: 'l1-pos-q3',
@@ -300,10 +306,10 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Fold',
               reasoning: [
-                'KJo 在 UTG 是边缘牌（约 15% 范围），可以 open 但偏松。保守打法仍建议弃牌。',
+                'KJo 在 UTG 是边缘牌（已贴近 UTG 开池范围的上沿），可以 open 但偏松。保守打法仍建议弃牌。',
                 '前位行动意味着你信息最少，后面还有5个玩家可能加注',
                 'KJo 容易被支配（对手可能有 AK、KQ、AJ）',
-                '在前位只打最强约10%的手牌',
+                '在前位只打最强的一小撮牌',
               ],
             },
             commonMistake: {
@@ -330,7 +336,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
               amount: '2.5BB',
               reasoning: [
                 'T8s 在 BTN 面对全 fold 是标准开牌',
-                'BTN 位置可以最宽范围开牌（约 40-50% 手牌）',
+                'BTN 是 6 人桌开池最宽的位置（约三成半手牌）',
                 '同花连牌有很好的翻后可玩性',
                 '只剩 SB 和 BB，很可能直接赢得盲注',
               ],
@@ -357,7 +363,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: true, explanation: 'A9s 在UTG属于边缘牌，前位应该弃牌。容易被支配（对手可能有AQ、AJ、AT）。', evImpact: '0 BB/100' },
-                { action: 'Raise', amount: '2.5BB', isCorrect: false, explanation: 'A9s 在UTG开牌太松。前位只打最强的10-12%手牌，A9s不在此列。', evImpact: '-0.7 BB/100' },
+                { action: 'Raise', amount: '2.5BB', isCorrect: false, explanation: 'A9s 在UTG开牌太松。UTG 只开最强的一小撮牌，A9s 不在此列。', evImpact: '-0.7 BB/100' },
                 { action: 'Call', isCorrect: false, explanation: 'UTG没有加注可以跟注，而且A9s在前位不值得入局。', evImpact: '-0.5 BB/100' },
               ],
             },
@@ -639,7 +645,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         {
           type: 'theory-reference',
           content: '理论支撑：资金管理的量化模型与 Kelly 准则在扑克中的应用详见理论学院 T8 第 2 章"资金心理与量化管理"。T8 全面覆盖了扑克心理学中的资金管理方法论。',
-          data: { theoryLevelId: 't8', theoryChapterId: 't8-psychology' },
+          data: { theoryLevelId: 't8', theoryChapterId: 't8-bankroll-psych' },
         },
         ],
         quiz: [
@@ -659,9 +665,9 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           { type: 'heading', content: '为什么识别错误比学习技巧更重要？' },
           { type: 'text', content: '修正一个错误带来的收益往往大于学习一个新技巧。以下是初学者最常犯的 10 个错误（Leaks），从最严重到最轻排列：' },
           { type: 'heading', content: 'Leak #1：打太多手牌（VPIP过高）' },
-          { type: 'text', content: '新手通常参与 40-60% 的牌局，而赢利玩家通常只打 20-28%。\n\n修正方法：严格遵守翻前范围表，只打"值得打"的牌。' },
+          { type: 'text', content: '新手通常参与 40-60% 的牌局，而赢利玩家通常只打 20-25%。\n\n修正方法：严格遵守翻前范围（各位置的精确构成与频率以范围训练模块与 GTO 策略表为准），只打"值得打"的牌。' },
           { type: 'heading', content: 'Leak #2：位置意识缺失' },
-          { type: 'text', content: '在不利位置打太多牌，忽视位置优势。\n\n修正方法：前位（UTG/HJ）只打最强的 15% 手牌，后位（CO/BTN）可以放宽到 25-35%。' },
+          { type: 'text', content: '在不利位置打太多牌，忽视位置优势。\n\n修正方法：UTG 与 HJ 只开最强的一小撮牌，CO 明显放宽（近三成），BTN 是 6 人桌开池最宽的位置（约三成半）。各位置的精确构成以范围训练模块与 GTO 策略表为准。' },
           { type: 'heading', content: 'Leak #3：被动跟注（太多Call，太少Raise）' },
           { type: 'text', content: '"Call是最弱的行动"——大多数时候你应该选择加注或弃牌，而不是被动跟注。' },
           { type: 'heading', content: 'Leak #4：下注尺度不合理' },
@@ -681,7 +687,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         },
         ],
         quiz: [
-          { id: 'l1-leaks-q1', question: '赢利玩家的 VPIP 通常在什么范围？', options: ['40-60%', '30-40%', '20-28%', '10-15%'], correctIndex: 2, explanation: '6-max 赢利玩家通常 VPIP 在 20-28% 之间，具体取决于位置和打法风格。' },
+          { id: 'l1-leaks-q1', question: '赢利玩家的 VPIP 通常在什么范围？', options: ['40-60%', '30-40%', '20-25%', '10-15%'], correctIndex: 2, explanation: '6-max 赢利玩家通常 VPIP 在 20-25% 之间，具体取决于位置和打法风格。' },
           { id: 'l1-leaks-q2', question: '以下哪个不是常见的新手错误？', options: ['打太多手牌', '严格遵守范围表', '总是跟注不加注', '忽视位置'], correctIndex: 1, explanation: '严格遵守范围表是正确的做法，不是错误。' },
           { id: 'l1-leaks-q3', question: '翻牌的标准下注尺度是？', options: ['1/4 pot', '1/3 到 2/3 pot', '满池', '2倍池'], correctIndex: 1, explanation: '翻牌标准下注为 1/3 到 2/3 底池，根据牌面质地和范围优势调整。' },
         ],

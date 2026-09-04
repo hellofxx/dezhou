@@ -29,7 +29,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           {
             type: 'theory-reference',
             content: '理论支撑：SPR 与筹码深度的量化关系详见理论学院 T6 第 3 章"SPR 与三街几何尺度"。深筹码下的隐含赔率与反向隐含赔率分析见 T2 第 3-4 章。',
-            data: { theoryLevelId: 't6', theoryChapterId: 't6-spr' },
+            data: { theoryLevelId: 't6', theoryChapterId: 't6-geometric' },
           },
           {
             type: 'counter-intuitive',
@@ -402,12 +402,12 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: '很多玩家在 straddle 底池中犯的最大错误：用 100BB 的思维打 50BB 的游戏。记住，有效筹码减半了，你的策略也要相应调整。' },
           {
             type: 'formula',
-            content: 'Straddle 下的翻前范围调整：\nStraddle = 大盲的 2 倍（通常为 2BB）\n有效筹码相对调整：\n表面 100BB → 实际有效筹码 = 100BB/2BB = 50 个 Straddle\n\n翻前范围调整：\n- 开牌范围应收紧约 20-30%（因为底池中多了 Straddle 的死钱）\n- 3Bet 尺度应调整为 4-5 倍 Straddle\n- Straddle 位置玩家的防御范围应放宽（已经投入 2BB）\n\n注意：Straddle 不是额外下注，而是盲注的扩大——有效筹码按 Big Blind 计算，而非 Straddle',
+            content: 'Straddle 下的翻前范围调整：\nStraddle = 大盲的 2 倍（通常为 2BB）\n有效筹码相对调整：\n表面 100BB → 实际有效筹码 = 100BB/2BB = 50 个 Straddle\n\n翻前范围调整：\n- 开牌范围应相应收紧（因为底池中多了 Straddle 的死钱，有效筹码相对变浅）\n- 3Bet 尺度应调整为 4-5 倍 Straddle\n- Straddle 位置玩家的防御范围应放宽（已经投入 2BB）\n\n注意：Straddle 不是额外下注，而是盲注的扩大——有效筹码按 Big Blind 计算，而非 Straddle',
           },
           {
             type: 'theory-reference',
             content: '理论支撑：Straddle 结构下的位置价值变化与翻前范围调整的理论基础见理论学院 T3 第 1 章"位置价值与权益实现率"。',
-            data: { theoryLevelId: 't3', theoryChapterId: 't3-position' },
+            data: { theoryLevelId: 't3', theoryChapterId: 't3-position-value' },
           },
           {
             type: 'counter-intuitive',

@@ -18,6 +18,7 @@
     "strategy": "Strategy",
     "range": "Range",
     "odds": "Odds",
-    "gto": "GTO"
+    "gto": "GTO",
+    "theory": "Theory"
   }
 }

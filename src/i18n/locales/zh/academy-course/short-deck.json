@@ -9,10 +9,10 @@
       "短牌牌型等级（从弱到强）：\n\n1. 高牌\n2. 一对\n3. 两对\n4. 顺子\n5. 三条\n6. 葫芦\n7. 同花\n8. 四条\n9. 同花顺\n10. 皇家同花顺\n\n对照标准德州：顺子与三条、葫芦与同花的相对位置互换。",
       "最容易犯的错误：拿着三条以为自己接近坚果而重注。短牌中三条只压过顺子，输给葫芦和同花——湿润牌面上必须警惕对手的更强成牌。",
       "短牌策略调整要点",
-      "1. 手牌价值变化:\n• 口袋对与大高张（AA/KK/QQ/AK）相对价值上升，AK 是最强的非对子起手牌\n• 小口袋对 set mine 价值下降——三条牌级低于葫芦/同花，隐含赔率变差\n• 同花连牌（JTs、98s 等）可玩性好、听牌机会多，但不属于顶级梯队，不能按\"约等于标准德州 AKs\"来对待\n• 同花价值显著提升——短牌中同花 beats 葫芦\n\n2. 翻牌率更高：\n• 36 张牌意味着更容易翻牌击中\n\n3. 更多听牌和 action：\n• 顺子听牌更常见\n• 底池通常更大（前注制 + 更多跟注）\n• 波动更大，资金管理需要更保守",
+      "1. 手牌价值变化:\n• 口袋对与大高张（AA/KK/QQ/AK）相对价值上升，AK 是最强的非对子起手牌\n• 小口袋对 set mine 价值下降——三条牌级低于葫芦/同花，隐含赔率变差\n• 同花连牌（JTs、98s 等）可玩性好、听牌机会多，但不属于顶级梯队，不能按“约等于标准德州 AKs”来对待\n• 同花价值显著提升——短牌中同花 beats 葫芦\n\n2. 翻牌率更高：\n• 36 张牌意味着更容易翻牌击中\n\n3. 更多听牌和 action：\n• 顺子听牌更常见\n• 底池通常更大（前注制 + 更多跟注）\n• 波动更大，资金管理需要更保守",
       "短牌数学修正：Outs 按 36 张牌计",
       "短牌每个花色只有 9 张牌，听牌 outs 必须重算：\n\n- 同花听牌 outs = 9 - 已见的该花色张数。例：手持 2 张红心、牌面有 2 张红心 → 同花 outs = 9 - 4 = 5（标准德州同口径为 13 - 4 = 9）\n- 2/4 法则仍可粗估胜率，但 outs 基数必须按 36 张牌组计算，直接套用标准德州的 outs 表会系统性高估胜率",
-      "短牌德州的关键是理解牌型等级与手牌价值的同步变化。标准德州中的\"标准打法\"在短牌中可能是严重错误。建议在低额短牌桌上先练习，适应牌型等级变化和范围调整后再升级。"
+      "短牌德州的关键是理解牌型等级与手牌价值的同步变化。标准德州中的“标准打法”在短牌中可能是严重错误。建议在低额短牌桌上先练习，适应牌型等级变化和范围调整后再升级。"
     ],
     "l3sd-cbet": [
       "短牌 C-Bet：干燥面高频、湿滑面大注",
@@ -1134,13 +1134,13 @@
       "correctAction": "Call",
       "correctAmount": "2.5 ante",
       "reasoning": [
-        "A♥K♥ 同花听牌 5 outs（9 − 4 已见红心）",
-        "短牌同花 beats 葫芦，成牌后是坚果级",
-        "双街约 28%，加隐含赔率后跟注 +EV"
+        "AK 同花听牌：已见 4 张红心，outs = 9 − 4 = 5",
+        "双街约 28% + A/K 高张 Outs，隐含赔率极佳",
+        "成同花是坚果（beats 葫芦），值得追逐"
       ],
-      "mistakeAction": "Fold",
-      "mistakeReasoning": "短牌同花听牌成牌是坚果（beats 葫芦），隐含赔率极佳，fold 太紧。",
-      "mistakeEvLoss": "-1.2 ante"
+      "mistakeAction": "Fold（\"outs 太少\"）",
+      "mistakeReasoning": "短牌同花 outs 少但成牌是坚果，隐含赔率极佳，fold 浪费高价值听牌。",
+      "mistakeEvLoss": "-1.5 ante"
     },
     "l4sd-blocker-bluff-ex1": {
       "title": "短牌 A 高阻断同花的诈唬",
@@ -1355,7 +1355,7 @@
           "evImpact": "-3.0 ante"
         },
         {
-          "action": "Raise",
+          "action": "Raise 6 ante",
           "amount": "6 ante",
           "explanation": "KK在短牌中是顶级强牌，3-Bet获取价值。",
           "evImpact": "+2.5 ante"
@@ -1375,7 +1375,7 @@
           "evImpact": "-1.5 ante"
         },
         {
-          "action": "Raise",
+          "action": "Raise 5 ante",
           "amount": "5 ante",
           "explanation": "短牌中三条只压过顺子，输给葫芦与同花；牌面两张红心听牌很多，必须加注建立底池并保护手牌。",
           "evImpact": "+2.0 ante"
@@ -1395,7 +1395,7 @@
           "evImpact": "-0.8 ante"
         },
         {
-          "action": "Bet",
+          "action": "Bet 1.7 ante（1/3 pot）",
           "amount": "1.7 ante（1/3 pot）",
           "explanation": "干燥 Q 高面，AK 有高牌 + 后门改进空间，1/3 池持续施压。",
           "evImpact": "+1.0 ante"
@@ -1411,13 +1411,13 @@
     "l3sd-cbet-p2": {
       "option": [
         {
-          "action": "Bet",
+          "action": "Bet 1.7 ante（1/3 pot）",
           "amount": "1.7 ante（1/3 pot）",
           "explanation": "湿滑面小注给听牌太便宜，短牌应大注保护。",
           "evImpact": "-0.5 ante"
         },
         {
-          "action": "Bet",
+          "action": "Bet 3.3 ante（2/3 pot）",
           "amount": "3.3 ante（2/3 pot）",
           "explanation": "湿润连接面超对易被反超，2/3 池大注保护并让听牌付费。",
           "evImpact": "+1.5 ante"
@@ -1438,7 +1438,7 @@
           "evImpact": "-1.0 ante"
         },
         {
-          "action": "Bet",
+          "action": "Bet 1.7 ante（1/3 pot）",
           "amount": "1.7 ante（1/3 pot）",
           "explanation": "78 有顺子听牌，1/3 池半诈唬持续施压，短牌听牌成牌价值高。",
           "evImpact": "+1.0 ante"
@@ -1635,18 +1635,18 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A♥K♥ 同花听牌价值高，fold 太弱。",
+          "explanation": "AK 同花听牌（outs 5）+ A/K 高张，价值高，fold 太弱。",
           "evImpact": "-1.5 ante"
         },
         {
-          "action": "Call",
-          "explanation": "同花听牌 5 outs + 高张，跟注 25% 赔率正 EV。",
+          "action": "Call 2.5 ante",
+          "explanation": "同花听牌 5 outs + 高张，隐含赔率极佳，跟注追坚果。",
           "evImpact": "+1.2 ante"
         },
         {
           "action": "All-in",
-          "explanation": "听牌 All-in 过度，跟注或加注半诈唬即可。",
-          "evImpact": "-0.8 ante"
+          "explanation": "深筹码听牌 All-in 过度，跟注或半诈唬加注即可。",
+          "evImpact": "-1.2 ante"
         }
       ],
       "tableDesc": "短牌现金桌"
@@ -1654,8 +1654,28 @@
     "l4sd-nuts-equity-p2": {
       "option": [
         {
+          "action": "Check-Fold",
+          "explanation": "89 在 6-7-2 面有顺子听牌（5/T 共 8 outs），fold 太弱。",
+          "evImpact": "-1.0 ante"
+        },
+        {
+          "action": "Check-Raise 半诈唬",
+          "explanation": "顺子听牌 8 outs 双街约 44%，x/r 半诈唬保护并施压。",
+          "evImpact": "+1.2 ante"
+        },
+        {
+          "action": "All-in",
+          "explanation": "听牌 All-in 过度，x/r 建立优势即可。",
+          "evImpact": "-1.2 ante"
+        }
+      ],
+      "tableDesc": "短牌现金桌"
+    },
+    "l4sd-nuts-equity-p3": {
+      "option": [
+        {
           "action": "Check",
-          "explanation": "顺子听牌 8 outs + 后门同花，应主动下注半诈唬。",
+          "explanation": "78 有顺子听牌（5/T 共 8 outs）+ 后门同花，应主动下注半诈唬。",
           "evImpact": "-0.8 ante"
         },
         {
@@ -1666,26 +1686,6 @@
         {
           "action": "All-in",
           "explanation": "听牌 All-in 过度，半池建立优势即可。",
-          "evImpact": "-1.2 ante"
-        }
-      ],
-      "tableDesc": "短牌现金桌"
-    },
-    "l4sd-nuts-equity-p3": {
-      "option": [
-        {
-          "action": "Fold",
-          "explanation": "78 有顺子听牌（5/T 共 8 outs）+ 后门同花，fold 太弱。",
-          "evImpact": "-1.0 ante"
-        },
-        {
-          "action": "Check-Raise 半诈唬",
-          "explanation": "78 有顺子听牌 + 后门同花，x/r 半诈唬保护并施压。",
-          "evImpact": "+1.2 ante"
-        },
-        {
-          "action": "All-in",
-          "explanation": "听牌 All-in 过度，x/r 建立优势即可。",
           "evImpact": "-1.2 ante"
         }
       ],

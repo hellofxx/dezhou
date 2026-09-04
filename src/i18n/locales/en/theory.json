@@ -127,7 +127,7 @@
     "t3-fundamental-theorem": "Sklansky's Fundamental Theorem & Initiative",
     "t4-range-thinking": "Range Thinking: From a Single Hand to a Probability Distribution",
     "t4-combinatorics": "Combinatorics & Blockers",
-    "t4-range-advantage": "Range Advantage & Nut Advantage",
+    "t4-range-advantage": "Range Advantage & Nuts Advantage",
     "t5-game-theory": "Zero-Sum Games & Nash Equilibrium",
     "t5-gto-concept": "GTO vs Exploitation: Two Kinds of 'Optimal'",
     "t5-mdf-alpha": "MDF & Alpha: Critical Frequencies of Defense and Attack",
@@ -146,7 +146,7 @@
     "t9-mop": "The Mathematics of Poker (MOP): Core Ideas",
     "t9-icm": "ICM Theory: When Chips Stop Being Money",
     "t9-multiway": "Multiway Pot Theory",
-    "t9-alpha": "Alpha (Advantage Ratio) Explained",
+    "t9-alpha": "Alpha (Bluff Break-Even Fold Rate) in Exploitative Play",
     "t9-unified": "The Unified GTO & Exploitation Framework",
     "t1sd-combinatorics": "Combinatorics",
     "t1sd-outs": "Quick Outs Estimation",
@@ -292,7 +292,27 @@
     "chaptersReadLabel": "Chapters read",
     "levelsCompletedLabel": "Levels completed",
     "flaggedLabel": "Flagged questions",
-    "flaggedNone": "No flagged questions"
+    "flaggedNone": "No flagged questions",
+    "flaggedEntryAria": "Open the flagged question review list ({{count}} items)"
+  },
+  "flagged": {
+    "title": "Flagged Questions",
+    "subtitle": "Every question you flagged during a chapter quiz lives here — go back to its chapter to reread the explanation.",
+    "backAria": "Back to Theory Academy",
+    "listAria": "Flagged question list",
+    "count": "{{count}} questions to review",
+    "gotoChapter": "Go to chapter",
+    "gotoChapterAria": "Go to chapter: {{chapter}}",
+    "unflag": "Remove flag",
+    "unflagAria": "Remove flag: {{question}}",
+    "srsInQueue": "In your review queue",
+    "srsLastReviewed": "Last reviewed {{date}}",
+    "srsNextReview": "Next review {{date}}",
+    "srsNotQueued": "Not in the review queue yet (answered wrong in a quiz adds it automatically)",
+    "gradingNote": "This page only lists and navigates — scoring and spaced-repetition scheduling happen in the chapter quiz.",
+    "emptyTitle": "No flagged questions yet",
+    "emptyDescription": "Open any chapter quiz and tap the flag icon on a question to keep it here for later.",
+    "emptyCta": "Pick a chapter"
   },
   "bridge": {
     "title": "Theory → Practice",
@@ -449,7 +469,7 @@
       "Starting-hand value comes from four dimensions: (1) high-card strength — AK-type hands that win with a pair; (2) pairing potential — pocket pairs that win big pots with sets; (3) connectivity — connected cards that make straights; (4) suitedness — suited cards that make flushes. What truly decides entry isn't \"does this hand look good\", but its EV in the current position, stack depth, and opponent structure.",
       "Hand strength roughly splits into three classes: made-hand types (big pairs/big high cards, prefer small heads-up pots), speculative types (small pairs/suited connectors, prefer cheap multiway deep-stack entry), and garbage (neither high-card strength nor potential). The same hand can move between classes at different stack depths.",
       "Starting-hand EV tiers (illustrative magnitudes for 100bb cash, unopened pot): Tier 1 \"auto-enter\" — AA, KK, QQ, JJ, AK-type, +0.6~+1.5bb per hand; Tier 2 \"situational enter\" — TT-77, AQ, KQs, etc., EV depends on position and opponents; Tier 3 \"conditional speculation\" — small pairs, suited connectors, positive when entering cheap deep, negative shallow or expensive; Tier 4 \"negative EV\" — dominated hands like K9o, Q8s, losing to open from any position (except special steal spots). Replace the \"pretty/ugly\" binary with \"this hand's EV tier in this position, stack, and opponent context\". (Concepts from: Harrington on Hold'em Vol.1 Ch.5 starting-hand groupings)",
-      "Starting-hand entry EV = showdown value + made-hand potential × implied odds + positional bonus × equity realization − domination-risk penalty\nExample (100bb cash, unopened): AA ≈ +1.2bb/hand; 77 ≈ deep +0.2bb, shallow −0.3bb; K9o in UTG ≈ −0.3bb\nCore: the same hand's EV shifts continuously with position, stack depth, and opponent strength — the mathematical basis for \"tiers\" replacing \"fixed tables\"",
+      "Recomputable version (set-mining with 77; probability and odds follow the T2 implied-odds chapter):\nYou call C to see a flop. Chance of hitting a set: p = 1 − C(47,2)/C(50,2) = 1 − 1081/1225 ≈ 11.8% (about 12%, i.e. 1-in-8.5, odds of roughly 7.5:1).\nEV = p × W − (1 − p) × C, where W = what you net from the opponent when you hit (excluding the C you already invested). EV ≥ 0 ⇒ W ≥ ((1−p)/p) × C ≈ 7.5 C — about 8.5× your call back in total to break even.\nPlug in the tuition: 200bb effective, 3bb call ⇒ you only need 22.5bb more from him and he still has roughly 197bb behind (11% of his stack), a hurdle he clears easily ⇒ EV > 0. 25bb effective, 3bb call ⇒ at most the 22bb left behind him can ever reach you, which is already below 7.5×3 = 22.5bb, so even the theoretical ceiling misses break-even; add the discount for \"hitting does not guarantee getting paid\" (T2's 15-20× rule of thumb) ⇒ EV < 0.\nCore: the value of a speculative hand is a function of depth ÷ tuition, not of the cards themselves — this is the maths behind the same 77 sliding across the four tiers as stack depth changes.",
       "Gap Concept",
       "David Sklansky's Gap Concept: the hand strength needed to call someone's opening raise is higher than what you need to open-raise yourself. Two reasons: (1) the raiser has already shown strength — you face a stronger range; (2) opening carries Fold Equity (opponents may fold and you win the blinds), while calling doesn't — you lose one winning path.",
       "Example: A9o can open-raise from the CO (has Fold Equity + position), but after a UTG open you should fold the same A9o in the CO — A9o is severely dominated vs the UTG range (mostly AQ/AK/big pairs): hitting an A can even lose big money, which is reverse implied odds (T2) manifesting preflop.",
@@ -484,7 +504,7 @@
       "Three levels of hand reading: Level 1 only looks at your own cards; Level 2 guesses the opponent's \"one hand\"; Level 3 builds a range for the opponent and updates it with every action. All serious strategy discussion happens at Level 3.",
       "The Narrative of a Range: Actions Are Filters",
       "Every action filters the opponent's range: a UTG open narrows it to roughly the top 15%; a flop C-Bet keeps the betting range and removes the folding range; a turn check removes most strong value... By the river, a logically consistent player's range has been compressed to something very specific. Reading isn't telepathy — it's set operations along the action sequence.",
-      "Example: A tight-aggressive player opens UTG, the BTN calls. Flop K♠7♦2♣, UTG C-Bets, BTN calls. Turn 3♥, UTG fires again, BTN calls again. River 2♦, UTG shoves — his range narrative is \"claiming K+ strength on all three streets\": AK, KK, AA, and 77 dominate, with an occasional AQ bluff. Your KQ becomes a bluff catcher, and the decision shifts from \"I have a pretty big pair of K\" to \"does his shoving range bluff enough to cover 25%?\"",
+      "Example: A tight-aggressive player opens UTG, the BTN calls. Flop K♠7♦2♣, UTG C-Bets, BTN calls. Turn 3♥, UTG fires again, BTN calls again. River 2♦, UTG shoves — his range narrative is \"claiming K+ strength on all three streets\": AK, KK, AA, and 77 dominate, with an occasional AQ bluff. Your KQ becomes a bluff catcher, and the decision shifts from \"I have a pretty big pair of K\" to \"does his shoving range hold enough bluffs for the win rate my call requires\" (the sizing sets the bar: a pot-size shove needs 33%, only a half-pot shove needs 25%).",
       "Example 2 (preflop range construction): You open ~40% on the BTN and BB 3Bets to 3x. His action filters his range into {QQ+, AK, some AQo, a few A5s-A4s balancing 3Bets} — of your 40% opening range, only the top 8-10% has the right to continue (4Bet or call) right now. Range thinking starts preflop: opening width directly determines your fold-to-3Bet rate, and that fold rate is precisely where the opponent's 3Bet profit comes from.",
       "Example 3 (street-by-street range updating): Flop Q♠8♦3♣, you bet and the opponent calls; his range is mainly {Qx, 88, 33, small/medium pairs, two-overcard draws}. The turn 2♥ is a blank — his range narrative barely changes, so you can keep firing to represent Q+. But if the turn were 9♠ (completing draws like 89s/97s in his calling range), the combos that \"suddenly got strong\" multiply and your double-barrel frequency should drop — range updating is a set operation done street by street, not a one-shot guess.",
       "Range vs Range, Not Hand vs Hand",
@@ -497,26 +517,26 @@
       "Translating Ranges Into Combo Counts",
       "The quantitative tool of range analysis is the combinatorics you learned in T1: a pair has 6 combos, a suited hand 4, an offsuit hand 12, and any two unpaired ranks 16. When the opponent shoves the river and you must judge the \"value:bluff\" ratio, counting combos on both sides one by one is the only rigorous method.",
       "Pocket pair = C(4,2) = 6 combos; when one card of that rank is on board = C(3,2) = 3 combos\nSuited hand (e.g. AKs) = 4; offsuit (AKo) = 12; total (AK) = 4×4 = 16\nBluff ratio = bluff combos ÷ (value combos + bluff combos), compare with the required equity for the answer",
-      "Example: Board K♠9♦4♣2♥7♠, the opponent shoves the river and you read his value range as {KK, 99, 44, K9s} and bluffs as {A♠Q♠, A♠J♠ class missed backdoors}. Value combos = KK 3 (one K on board) + 99 3 + 44 3 + K9s 2 = 11; bluffs about 6. Bluff ratio 6/17 ≈ 35% > required 25% equity (facing a pot bet), so the call is correct — notice the conclusion comes entirely from counting, not feel.",
+      "Example: Board K♠9♦4♣2♥7♠, the opponent shoves the river and you read his value range as {KK, 99, 44, K9s} and bluffs as {A♠Q♠, A♠J♠ class missed backdoors}. Value combos = KK 3 (one K on board) + 99 3 + 44 3 + K9s 2 = 11; bluffs about 6 ⇒ bluff ratio 6/17 ≈ 35%. Required equity when calling a pot-sized bet = pot ÷ (pot + his bet + your call) = P ÷ (P+P+P) = 33% (25% is the number for a **half-pot** bet, not a pot-sized one). 35% sits only 2 points above 33% ⇒ at best this is a **marginally +EV** call: on the river there is no further betting left to win, so implied odds are zero and cannot cover the gap — the only genuine reasons to call come from blockers (does your hand remove his value combos, or leave his bluff combos alive?) and from range-reading error. The conclusion still comes entirely from counting rather than feel; counting just returns a thin profit here, not a fat one.",
       "Every card on the board trims related combos: with one K on board, KK drops from 6 to C(3,2)=3 and AK from 16 to 12. You must count combos \"looking at the board\".",
       "Blockers: Your Cards Are Information",
       "A blocker is a card you hold that reduces the count of specific opponent combos. When you hold A♠, the opponent's nut-flush combos like A♠X♠ drop to zero — you \"block\" it. Blockers turn your hole cards from mere hand strength into information about the opponent's range.",
       "Two classic blocker applications: (1) bluff selection — bluff when holding a nut-flush blocker (e.g. a lone A♠ on a three-spade board), because the opponent's strongest calling hands are blocked and your fold equity rises; (2) bluff-catching / over-folding — when your hand blocks the opponent's bluff combos, his range skews more toward value and you should lean fold (only call when you unblock bluffs).",
       "Example: A three-heart board and you hold A♥ (but no flush). Against a big shove, you happen to block every A♥X♥ nut-flush combo — half of the \"claimed\" strongest hands are falsified, boosting the credibility and success rate of both your raise-bluff and hero call.",
-      "Example 2 (preflop 4Bet spot): You hold A♠K♣ and read the opponent's 4Bet range as {AA, KK, QQ, AK}. Without a blocker the total is 6+6+6+16 = 34; holding AK: AA drops to C(3,2)=3, KK to 3, QQ stays 6, AK drops to 3×3=9 → 21 total. QQ (where you're ahead) rises from 6/34 ≈ 18% to 6/21 ≈ 29% — blockers turn \"ahead/behind weight\" into precisely computable inputs, giving preflop all-in EV a foundation.",
+      "Example 2 (preflop 4Bet spot): You hold A♠K♣ and read the opponent's 4Bet range as {AA, KK, QQ, AK}. Without a blocker the total is 6+6+6+16 = 34; holding AK: AA drops to C(3,2)=3, KK to 3, QQ stays 6, AK drops to 3×3=9 → 21 total. Do not read the rising share as good news: AKo leads none of those overpairs (AKo vs QQ ≈ 43%, dominated; the same against AA and KK), and the combos you removed are precisely AA and KK — his two strongest branches — so the QQ that dominates you climbs from 6/34 ≈ 18% to 6/21 ≈ 29%, and what is left actually raises the strength of his remaining range. Blockers turn \"ahead/behind weight\" into precisely computable inputs (here the computation delivers bad news), and that is what gives preflop all-in EV a foundation.",
       "The blocker effect is marginal: it adjusts combo ratios, not rewrites the whole range. Before letting a blocker talk you into a wild play, confirm the base range analysis supports the direction.",
       "Off-the-table drill: set up a random board, assign the opponent a range, and time yourself counting value and bluff combos. Once fluent, you only need to count the key branches in play — you can get the ratio in under 10 seconds."
     ],
     "t4-range-advantage": [
       "Defining the Two Advantages",
-      "Range advantage: on a given board, one side's overall average equity is higher. Nut advantage: one side's range contains more of the strongest combos (sets, big two pairs, nut flushes, etc.). They often point the same way but not always — distinguishing them is the key to modern postflop strategy.",
+      "Range advantage: on a given board, one side's overall average equity is higher. Nuts advantage: one side's range contains more of the strongest combos (sets, big two pairs, nut flushes, etc.). They often point the same way but not always — distinguishing them is the key to modern postflop strategy.",
       "Example 1: A♠K♦7♣ board, UTG opener vs BB caller. UTG's range is full of AK/AQ/AA/KK, while most of BB's strong Ax already 3Bet out of range — UTG holds both range and nut advantage and can C-Bet small and frequently with his entire range.",
       "Example 2: 6♥5♥4♠ board, again UTG vs BB. UTG's big pairs still have overall equity (range advantage shrinks but persists), but combos like 87s, 53s, and 22 (straights/sets) live almost exclusively in BB's defense range — BB has the nut advantage. UTG's C-Bet frequency must drop sharply, while BB earns the license to check-raise and lead.",
       "Example 3 (3Bet pot and turn flip): In a 3Bet pot you're IP on J♠T♠4♦. BB's defense range holds plenty of Jx/Tx, straight draws, and flush draws, but your range (the 3Better) has overpairs, AJ/KJ/QJ, and nut draws — double advantage on your side, so bet frequently. The turn 9♣ completes QT straights — QT is far more common in your range than BB's (his defense range barely contains pure QT), and the nut advantage tilts further toward you; you can even overbet directly.",
       "Quick judgment: high boards (A/K high) favor the preflop raiser; low connected boards (small/medium connectors) favor the preflop caller (especially BB, whose defense range keeps all the small cards). The wetter the board, the more important nut-advantage ownership becomes.",
-      "Quantitative framework (compute per flop):\nRange advantage = your overall range equity vs the opponent's (you have it when your range-vs-range equity > 50%)\nNut advantage = the density of your \"top 5% strongest\" combos ÷ the opponent's same density (> 1 means you own more nuts)\nEvaluate both dimensions independently, then synthesize: double advantage → bet small and often; nut advantage alone → overbet license; neither → check frequently (concept from: Applications of NLHE Range Construction board-ownership analysis)",
+      "Quantitative framework (compute per flop):\nRange advantage = your overall range equity vs the opponent's (you have it when your range-vs-range equity > 50%)\nNuts advantage = the density of your \"top 5% strongest\" combos ÷ the opponent's same density (> 1 means you own more nuts)\nEvaluate both dimensions independently, then synthesize: double advantage → bet small and often; nut advantage alone → overbet license; neither → check frequently (concept from: Applications of NLHE Range Construction board-ownership analysis)",
       "How Advantage Translates Into Strategy",
-      "Range advantage sets betting frequency: the bigger your advantage, the more often you can bet (even small bets with your whole range). Nut advantage sets the sizing ceiling: only the side with more nuts earns the right to apply oversized (overbet) pressure, because the opponent's strongest hands can only respond passively. With neither advantage, the standard play is to check frequently and control the pot.",
+      "Range advantage sets betting frequency: the bigger your advantage, the more often you can bet (even small bets with your whole range). Nuts advantage sets the sizing ceiling: only the side with more nuts earns the right to apply oversized (overbet) pressure, because the opponent's strongest hands can only respond passively. With neither advantage, the standard play is to check frequently and control the pot.",
       "The same framework explains turn/river \"board changes\": when the turn completes draws in the caller's range (e.g. a low connected board makes a fourth connected card), nut advantage changes hands and the aggressor should contract; when the turn is a blank, the existing advantage persists and you can keep firing.",
       "Common mistake: treating \"I have top pair\" as a reason to bet. The correct order is to first decide whose range the board belongs to, then decide what role your specific hand plays under that strategy.",
       "Before every flop, spend two seconds asking: \"whose range does this board hit, and who holds more nut combos?\" The answers basically determine this hand's frequency and sizing framework."
@@ -539,6 +559,7 @@
       "What GTO Is and Isn't",
       "GTO (Game Theoretically Optimal) refers to poker's Nash equilibrium strategy. Solvers approximate it through massive iteration: given preflop ranges, stack depth, and available sizings, they output each hand's action frequency at every node. GTO is the \"origin of the coordinate system\" for strategy — not an answer to copy verbatim, but the benchmark for measuring every deviation.",
       "Intuitive features of GTO: every bet is composed of value and bluffs in a specific ratio; every calling range makes the opponent's bluffs exactly break even; every sizing choice makes all opponent responses indifferent. It is \"exactly right\" everywhere — no more, no less.",
+      "Value:Bluff Ratio and Bet Sizing",
       "Value:bluff ratio derivation (pot P, bet bP, opponent has a bluff catcher):\nOpponent call EV = f×(P+2bP) − (1−f)×bP, set = 0 (indifferent) → f = b/(1+2b) (f = your bluff share of the betting range)\nExample: full pot b=1 → bluffs 1/3 (value:bluff = 2:1); half pot b=0.5 → bluffs 25% (3:1) (concept from: Modern Poker Theory Ch.2-3 GTO structure)",
       "This ratio exactly equals the pot odds the opponent needs to call — making his call and fold EV with a bluff catcher identical (indifferent). The bigger the bet, the more bluffs it can carry: the mathematical root of \"big size = polarization\" (detailed in T6). On the turn and flop, because more streets remain, bluff share can be higher (some bluffs later give up or convert).",
       "Example: On the river you full-pot bet; your range should be about 2/3 value + 1/3 bluffs. If you actually \"only bet nuts\" (0% bluffs), the opponent can exploit you by folding everything to your bets; if you bluff more than half, he exploits you by calling everything. The equilibrium ratio is the only construction that leaves the opponent helpless either way.",
@@ -546,8 +567,7 @@
       "The Correct Relationship Between GTO and Exploitation",
       "The mature framework in practice: use GTO as the baseline to understand what each node \"should\" look like, then make minimal necessary deviations based on the opponent's observable biases (Maximally Exploitative in direction, Minimally Exploitative in magnitude). The baseline gives you invincibility; the deviations give you profit. Exploitation without GTO is running naked; GTO without deviation is self-shackling.",
       "Common misreading: \"GTO is playing tight\" or \"GTO is balancing to the point of boredom\". In fact solver strategies are full of high-frequency bluffs, overbet shoves, and thin value — it just keeps all of it at ratios the opponent can't counter.",
-      "When studying solver outputs, don't memorize frequencies; ask three whys: why this sizing on this board? Why does this hand go into the betting range and that one into the checking range? Why did the frequency change on the turn? Understand the structure and the frequencies will remember themselves.",
-      "When studying solver output, don't memorize frequencies — ask three whys: why this sizing on this board? Why does this hand enter the betting range and that one check? Why did the frequency change on the turn? Understand the structure and the frequencies will remember themselves."
+      "When studying solver outputs, don't memorize frequencies; ask three whys: why this sizing on this board? Why does this hand go into the betting range and that one into the checking range? Why did the frequency change on the turn? Understand the structure and the frequencies will remember themselves."
     ],
     "t5-mdf-alpha": [
       "MDF: Minimum Defense Frequency",
@@ -617,8 +637,8 @@
       "Geometric Sizing: The Art of Uniform Scaling",
       "Geometric sizing: when you plan to get the effective stack in across three streets, use the same pot percentage each street so the pot grows geometrically and the river shove lands exactly. This is the mathematical solution to value maximization: uniform pressure makes the opponent's calling price identical at every call, with no cheap \"brake\" on any street.",
       "Three-street geometric sizing derivation (pot P, effective stack S, SPR = S/P, bet fraction x of pot each street):\nThe pot scales by (1+2x)³, and a three-street all-in requires P(1+2x)³ = P + 2S → x = ((1 + 2·SPR)^(1/3) − 1) / 2\nExample: SPR=7.5 → 16^(1/3) ≈ 2.52, x ≈ 0.76 (about 76% pot each street)\nBet 76 on the flop → pot 252; bet 191 on the turn → pot 635; shove the remaining 483 on the river — exactly cleared (concept from: The Mathematics of Poker Ch.9 geometric planning of multi-street betting)",
-      "Example: You flop a set in a 3Bet pot at SPR ≈ 4. Geometric planning only needs ~60-70% pot each street to shove by the river — no overbet scare on any street needed. Conversely, if you only bet 1/3 pot on flop and turn, the river will have 1.5x pot left, forcing an abrupt overbet shove that instantly tightens the opponent's calling range.",
-      "Example 2 (low-SPR quick clearing): Flop pot 200, effective 400 (SPR=2). With two-street geometric x = ((1+4)^(1/2) − 1)/2 ≈ 62%: bet 124 on the flop → pot 448, shove the remaining 276 (about 62% pot) on the turn — exactly cleared. Compare the wrong line: betting only 1/3 pot on the flop leaves the turn pot at ~330 with 267 behind, needing an abrupt ~80% pot bet to clear — in low-SPR pots the discipline of \"enter the geometric line directly\" matters more than the sizing itself.",
+      "Example: You flop a set in a 3Bet pot at SPR ≈ 4. Geometric planning needs only about 54% pot on each street to be all-in by the river (the quick anchor rounds it to 55%; exactly, x = ((1+2×4)^(1/3) − 1)/2 ≈ 54%) — no overbet scare on any street. Conversely, if you bet only 1/3 pot on both flop and turn: with pot 100 and 400 effective, the pot grows to about 167 on the flop and 278 on the turn while you still have 400−33−56 = 311 behind, so the river forces an abrupt 311÷278 ≈ 1.1x pot overbet shove that instantly tightens the opponent's calling range.",
+      "Example 2 (low-SPR quick clearing): Flop pot 200, effective 400 (SPR=2). With two-street geometric x = ((1+4)^(1/2) − 1)/2 ≈ 62%: bet 124 on the flop → pot 448, then shove the remaining 276 (400−124, about 62% pot) on the turn — exactly cleared. Compare the wrong line: bet only 1/3 pot (67) on the flop and get called, the turn pot is about 334 while your remaining stack is 400−67 = 333 (his 67 went into the pot; it is never subtracted from your stack), so clearing now demands an abrupt 333÷334 ≈ 100% pot overbet shove — in low-SPR pots the discipline of \"enter the geometric line directly\" matters more than the sizing itself.",
       "The Link Between Frequency and Sizing",
       "The multi-street view also reveals frequency decay: the flop betting range contains many \"one-shot\" semi-bluffs and equity-denial bets; the range that keeps firing on the turn naturally narrows and strengthens (the industry's \"turn is the watershed\"), and the three-barrel river range is the most polarized. Understanding this decay lets you read the sudden attack window when \"opponent calls the flop, then checks the turn\" — his range just exposed its ceiling.",
       "Planning starts on the flop: the first thing when you see the flop isn't deciding \"bet or not\" but asking \"if I'm playing three streets, is the goal all-in or pot control?\" The answer back-solves this street's sizing. A bet with no destination is a random walk.",
@@ -751,7 +771,7 @@
       "Bill Chen and Jerrod Ankenman's The Mathematics of Poker (2006) is the intellectual source of the solver era. Its methodology: rather than studying complex real poker directly, construct precisely solvable \"toy games\", and distill structural regularities that still hold in real hands. The bluff ratio b/(1+2b), MDF, and indifference principle you learned in T5 all originate from this line.",
       "The [0,1] Game and the AKQ Game",
       "One classic toy game is the AKQ game: the deck has only A, K, Q, each player gets one card in a single-street showdown. The equilibrium solution reveals three timeless roles: A (the nuts) always value-bets; Q (air) bluffs at a precise frequency; K (the medium hand) never bets — it can only be a bluff catcher, calling at an indifferent frequency. Every real hand at every node plays one of these three roles; this is the theoretical prototype of the \"three-tier range structure\" (value / medium / air).",
-      "AKQ equilibrium solution (fixed bet B, pot P; A always bets, Q bluffs at frequency f, K calls at frequency c):\n① K's call EV = f×P − (1−f)×B; set equal to fold EV(=0): f×P = (1−f)×B → f = B/(P+B)\n② Q's bluff EV = c×P − (1−c)×B; set equal to check EV(=0): c×P = (1−c)×B → c = B/(P+B)\n③ Equilibrium: f = c = B/(P+B) — bluff frequency and call frequency are equal, both equal to the bet's share of \"pot + bet\"\nExample: bet = pot (B=P) → f = c = 1/2; betting 1/3 pot → f = c = 1/4\nThis is the isomorphic source of MDF and Alpha in the minimal model (T5): defender call frequency and attacker bluff frequency share the same formula. (Concept from: The Mathematics of Poker Ch.5 toy games and the AKQ equilibrium)",
+      "AKQ equilibrium solution (fixed bet B, pot P; A always bets, Q bluffs at frequency f — defined as bluff combos ÷ value combos — and K calls at frequency c):\n① Make K indifferent (call EV = fold EV = 0): the bluff share y of the betting range satisfies y×(P+B) = (1−y)×B → y = B/(P+2B), which as a bluff ÷ value ratio is f = y/(1−y) = B/(P+B)\n② Make Q's bluff indifferent (bluff EV = check EV = 0): (1−c)×P = c×B → c = P/(P+B) — exactly the defender's MDF\n③ Equilibrium: f = B/(P+B) and c = P/(P+B) — same denominator, numerators swapped, so f + c = 1: bluff frequency and call frequency are complements, not equals\nExample: bet = pot (B=P) → f = 1/2, c = 1/2 (they coincide numerically at this one size only); betting 1/3 pot → f = 1/4, c = 3/4\nThis is the isomorphic source of MDF and Alpha in the minimal model (T5): f = Alpha = b/(1+b), c = MDF = 1/(1+b), while the bluff share inside the betting range follows its own formula y = b/(1+2b). (Concept from: The Mathematics of Poker Ch.5 toy games and the AKQ equilibrium)",
       "Example 2 (mapping AKQ to real hands): On the river you hold medium strength (the K role) and the opponent bets one pot. In equilibrium his bluff frequency f = 1/2, so you should call with K-type hands at c = 1/2 (with MDF, fully derived in T5). If the opponent is observed to never bluff (f far below 1/2), lower your call frequency accordingly — the toy game provides the baseline for adjustment; real hand reading provides the deviation direction.",
       "Example 3 (the preflop version of the three roles): Preflop BTN opens, BB defends. BB's calling range against the open has three classes: strong hands (A role, continue 3Betting or slow-play), medium hands (K role, only call to showdown), bluff candidates (Q role, occasionally 3Bet-bluffing). MOP's three-tier structure is the skeleton of range construction — for every hand preflop you must first ask: \"is this hand an A, K, or Q in this spot?\"",
       "The deepest conclusion of the AKQ game: the correct strategy for medium strength is passivity (check/call); betting belongs to the two poles. This conclusion cuts through every level — \"betting medium hands\" remains the most common amateur leak (T6 argued the same thing from a sizing angle).",
@@ -792,17 +812,17 @@
     ],
     "t9-alpha": [
       "Alpha's Definition and Formula",
-      "Alpha = bet ÷ (pot + bet) — the break-even fold rate the opponent needs for your bluff\n\nExample: when you bet 1/2 pot (bet=0.5pot)\n- Alpha = 0.5/(1+0.5) = 33%\n- The opponent's fold rate must exceed 33% for your bluff to profit\n\nThis is the \"price tag\" from the attacker's perspective, answering: \"what minimum share of hands must the opponent fold for my bluff to break even?\"",
+      "Alpha = bet ÷ (pot + bet) — **the break-even fold rate YOUR OWN bluff needs** (an attacker-side number, not a threshold about how the opponent bluffs)\n\nExample: when you bet 1/2 pot (bet=0.5pot)\n- Alpha = 0.5/(1+0.5) = 33%\n- The opponent's fold rate must exceed 33% for your bluff to profit\n\nThis is the \"price tag\" from the attacker's perspective, answering: \"what minimum share of hands must the opponent fold for my bluff to break even?\"",
       "The Dual Relationship With MDF",
       "MDF and Alpha are the two sides of the same game tree, revealing the essence of game theory:\n- MDF = pot/(pot+bet) — **your defense frequency** (defender's view)\n- Alpha = bet/(pot+bet) — **the fold rate the opponent needs** (attacker's view)\n- **Key finding**: MDF + Alpha = 1 (they are complements)\n\nThis duality shows that one side's optimal strategy exactly cancels the other side's exploitation space. The defender's MDF determines the attacker's Alpha, and vice versa. They share the same denominator (pot+bet) mathematically, differing only in numerator (pot vs bet).",
       "Proof of MDF + Alpha = 1: pot/(pot+bet) + bet/(pot+bet) = (pot+bet)/(pot+bet) = 1",
       "Alpha's Practical Application",
-      "Alpha's core value is providing a **quantitative view** to evaluate whether the opponent's bluff frequency is high enough to justify calling. Concrete steps:\n1. **Compute Alpha**: calculate Alpha from your bet size and current pot\n2. **Observe the opponent's fold rate**: via stats like C-Bet fold rate, big river bet fold rate\n3. **Compare Alpha with his fold rate**: if his fold rate exceeds Alpha, calling profits; otherwise fold\n\nThis quantitative view lets you decide more objectively rather than by intuition or experience.",
-      "Example: You bet 1/3 pot, Alpha = 1/4. The opponent's C-Bet fold rate is 30%, below Alpha. This means his bluff frequency isn't high enough — you should fold. Conversely, if his fold rate is 40%, above Alpha, you should call.",
-      "Example 2: You bet 1/2 pot, Alpha = 1/3. The opponent's big river bet fold rate is 25%, below Alpha. You should fold. If his fold rate is 35%, above Alpha, you should call.",
-      "Example 3: You bet 1/4 pot, Alpha = 1/5. The opponent's C-Bet fold rate is 20%, below Alpha. You should fold. If his fold rate is 25%, above Alpha, you should call.",
-      "Alpha's application principle: **quantitative comparison**, not intuition. Through Alpha you can more objectively evaluate the opponent's bluff frequency and make more accurate decisions.",
-      "Self-test your depth: can you use Alpha to explain to a friend \"why you should fold in certain situations\"? If you can explain this clearly, you've grasped Alpha's essence."
+      "Alpha answers one **attacker-side** question: \"does this bluff of mine break even?\" —\n- **My bluff profits ⇔ the opponent's actual fold rate > Alpha**\n- It does **not** answer \"should I call?\" That is a defender-side question, settled by **required equity** = my call ÷ (pot + his bet + my call), which you then compare against your hand's equity versus his range (derivation in t5-mdf-alpha).\n\nThree practical steps: 1) compute Alpha for the size you intend to use; 2) estimate his real fold rate on that street from stats (fold-to-c-bet, fold-to-big-river-bet and the like); 3) fold rate above Alpha ⇒ bluffing this size profits automatically, no showdown value required; below Alpha ⇒ this size burns money consistently.",
+      "Example 1: You bet 1/3 pot, Alpha = (1/3)÷(1+1/3) = 1/4 = 25%. His actual fold rate on this street is 30%, **above** 25% ⇒ your bluff profits. Recompute (pot = 1, bet = 1/3): EV = 0.30×1 − 0.70×(1/3) = +0.067, i.e. every bluff wins 6.7% of a pot on average; if he really folds only 20%, the same bluff becomes 0.20 − 0.80×(1/3) = −0.067.",
+      "Example 2: You bet 1/2 pot, Alpha = 0.5÷1.5 = 1/3 ≈ 33%. His fold rate is only 25%, **below** 33% ⇒ bluffing this size loses: EV = 0.25×1 − 0.75×0.5 = −0.125 (12.5% of a pot per bluff). The fix is to bluff less often (only bet when you still carry showdown value or improvement equity) or to size **down** — note Alpha climbs monotonically with size (1/4 pot 20%, 1/3 pot 25%, half pot 33%, pot 50%), so betting bigger only lifts the break-even hurdle higher; a larger size becomes an exploit once you have confirmed his fold rate rises faster than Alpha does.",
+      "Example 3: You bet 1/4 pot, Alpha = 0.25÷1.25 = 1/5 = 20%. His fold rate is exactly 20%, equal to Alpha ⇒ **pure break-even, EV = 0**: 0.20×1 − 0.80×0.25 = 0. Don't mistake this size for \"a free bet that cannot lose\" — it earns nothing at all; yet any fold rate above 20% makes it automatically profitable, which is precisely why balanced strategies pack so many bluffs into small, frequent sizes: the lowest break-even hurdle.",
+      "Alpha's application principle: **quantitative comparison**, not intuition. But what it measures is \"how many folds my bluff at this size needs to break even\", not \"does he bluff enough for me to call\" — reading an attacker-side metric as a defend-or-fold rule is the most common way this concept gets used backwards.",
+      "Self-test your depth: can you use Alpha to explain to a friend \"why the very same 1/3-pot bet is a money printer against an opponent who folds 30% and a bonfire against one who folds 20%\", and why \"should I call?\" requires a different formula? If you can cover both, you've grasped Alpha's essence."
     ],
     "t9-unified": [
       "The End of the False Dichotomy",
@@ -1165,14 +1185,14 @@
       "BB: The Most Profitable Seat in Heads-Up",
       "The full-ring BB is a long-term losing seat: acting last preflop is the only comfort, and being permanently OOP postflop makes 85%-92% equity realization the norm. The HU BB is completely different — acting last preflop AND acting last postflop: the SB speaks first, you speak last. Two \"act-last\" effects stacked make the BB the best-positioned, widest-ranging, and most profitable seat in heads-up. The essence of the position reversal: every hand in heads-up gives one side the double bonus of \"preflop information advantage + postflop positional advantage\", and the BB is that side. (Concepts from: Heads-Up No-Limit Hold'em, Collin Moshman Ch.2 position and equity; Easy Game, Andrew Seidman Ch.4 position)",
       "BB's defense floor vs an SB 3BB open (MDF):\n\nPerspective 1 (dead-money): SB's total 3BB is the risk, both blinds 1.5BB the prize\nSB automatic-profit fold rate f* = 3 ÷ (1.5+3) = 3 ÷ 4.5 ≈ 66.7%\nBB minimum defense frequency MDF = 1 − 66.7% ≈ 33.3%\n\nPerspective 2 (raise amount): SB's raise amount 2.5BB, pre-bet pot 1.5BB\nMDF = 1 − 2.5 ÷ (1.5+2.5) = 1 − 2.5 ÷ 4 = 37.5%\n\nBoth perspectives give the same conclusion: BB's defense floor is about 33%-38% — below this the SB auto-profits opening any two cards. (Concepts from: Applications of No-Limit Hold'em, Matthew Janda Ch.3 blind games and MDF; Heads-Up No-Limit Hold'em, Collin Moshman Ch.3 preflop odds calculation)",
-      "But MDF is only the floor that \"stops auto-profit\", not the optimal defense frequency. Solvers show the HU BB actually defends about 60%-70% against an SB open (calls ~35%-50% + 3Bets ~15%-25%), far above the 33%-38% floor, for three reasons: (1) postflop position — the BB is IP with equity realization over 100%, so the call EV exceeds the zero assumed by the MDF model; (2) dead money — the SB's 0.5 makes calls cheap: vs a min-raise, calling 1BB contests the SB's invested 2BB (BB view), required equity = 1 ÷ (2+1) ≈ 33.3%; note the call-odds denominator only counts the opponent's dead money, not your own blind — consistent with t2hu's EV(call) = E×(P+B) − (1−E)×B formula (P is the opponent's invested part); (3) the SB's range is wide and weak — the HU SB opens about 80% of hands, so the BB's weak hands naturally have decent equity against a wide range. MDF answers \"how little must I defend\"; position and dead money answer \"how much more can I defend\" — the HU BB's 60%+ is the sum of the two.",
+      "But MDF is only the floor that \"stops auto-profit\", not the optimal defense frequency. Solvers show the HU BB actually defends about 60%-70% against an SB open (calls ~35%-50% + 3Bets ~15%-25%), far above the 33%-38% floor, for three reasons: (1) postflop position — the BB is IP with equity realization over 100%, so the call EV exceeds the zero assumed by the MDF model; (2) dead money — the SB's 0.5 makes calls cheap: vs a min-raise the BB only needs 1BB more, required equity = call ÷ (current pot + opponent's bet + your call) = 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25% (the current pot of 1.5 already contains the BB's own 1BB — dead money, yes, but still in the denominator, never drop it); the same result follows from t2hu's EV(call) = E×(P+B) − (1−E)×B with P = the opponent's total investment 2BB and B = your call 1BB: setting EV=0 gives E = B ÷ (P + 2B) = 1 ÷ (2 + 2) = 25%; (3) the SB's range is wide and weak — the HU SB opens about 80% of hands, so the BB's weak hands naturally have decent equity against a wide range. MDF answers \"how little must I defend\"; position and dead money answer \"how much more can I defend\" — the HU BB's 60%+ is the sum of the two.",
       "The HU BB's \"60%+ defense\" is defense with position: you act last preflop and last postflop, so calling with marginal hands costs far less than in full ring. Transplanting the full-ring intuition \"BB must play tight\" into heads-up is throwing away positional advantage.",
       "Call vs 3Bet: The Two Legs of Defense",
       "Against an SB open, the BB's defense range splits into two piles. The call pile: small/medium pairs (22-TT), suited connectors (65s+), weak suited Aces (A2s-A9s), weak suited Kings (K6s-K9s) — these realize equity through position and implied odds, winning without showdown. The 3Bet pile has two layers: value (JJ+, AK — clearly ahead of the SB's wide range, and also compress the SB's steal frequency) and bluff (blocker-bearing combos like A5s, A4s, K8s — blocking AA/KK/AK, making the SB harder to 4Bet). Facing a 3Bet the SB either 4Bets or folds, so the bluff layer must pick hands that \"can fold cleanly to a 4Bet\". The Gap Concept corrected for the HU BB: full ring requires stronger hands to call a raise (the gap), but the HU BB has already posted 1BB dead money and has postflop position, so he can push well past the gap — this is the source of the 60%+ BB defense vs the 25%-50% full-ring BB defense. (Concepts from: The Theory of Poker, David Sklansky Ch.2-3 Gap Concept; Heads-Up No-Limit Hold'em, Collin Moshman Ch.3 preflop strategy)",
-      "Example: HU 100BB deep, SB min-raises to 2BB, you (BB) hold K♠7♠. K7s is a typical marginal hand in solver BB calling ranges: calling 1BB contests the SB's invested 2BB (BB view), required equity = 1 ÷ (2+1) ≈ 33.3%; K7s vs the SB's ~80% open range wins about 48% — about 15 points of surplus. Postflop you're IP: a K flop lets you bet thin value, flush/straight draws chase cheaply, and a complete miss can fold. Folding gives up 48% equity at 33% odds — the most typical HU BB error: importing the full-ring memory \"K7s is a bad hand\". Facing a full-ring UTG open K7s is indeed a fold, but vs the HU SB's 80% range it's a +EV call.",
+      "Example: HU 100BB deep, SB min-raises to 2BB, you (BB) hold K♠7♠. K7s is a typical marginal hand in solver BB calling ranges: calling 1BB makes the total pot SB 2 + the BB's own 1 + your call 1 = 4BB, required equity = 1 ÷ 4 = 25% (general formula: call ÷ (current pot 1.5 + opponent's bet 1.5 + your call 1)); K7s vs the SB's ~80% open range wins about 48% — about 23 points of surplus. Postflop you're IP: a K flop lets you bet thin value, flush/straight draws chase cheaply, and a complete miss can fold. Folding gives up 48% equity that can be contested at 25% odds — the most typical HU BB error: importing the full-ring memory \"K7s is a bad hand\". Facing a full-ring UTG open K7s is indeed a fold, but vs the HU SB's 80% range it's a +EV call.",
       "Example 2 (isolate): SB limps (completes 0.5), you (BB) hold A♠8♠, 100BB deep, and the SB folds to a raise about 55%. Isolate-raise to 4BB: EV ≈ 0.55×1.5 (win dead money on a fold) + 0.45×(+0.5) (IP positional advantage about +0.5BB when called) ≈ +1.05BB; while checking is only about +0.7BB (small pot, letting the SB realize a weak range for free). Isolating earns about 0.8BB more than checking. But note: isolating isn't blind-stealing — the SB's limp already exposed a weak range, and your raise is \"punishing the weak range + seizing initiative\"; when called, A8s's showdown value leaves you comfortable postflop. The higher the opponent's limp-fold frequency, the higher your isolate frequency should be.",
       "Counterintuitive point: BB defending 60%+ isn't \"calling station\". A real station has no 3Bet pile and no isolating raises — while the HU BB's 60% consists of calls, 3Bet value, and 3Bet bluffs, each moving with the SB's tendencies. Defense width and defense passivity are two different things.",
-      "BB defense three-step quick check: (1) call the pot odds — calling line ≈33% vs a 2BB open, 33% vs 3BB; (2) split piles — in-position call pile, strong-made 3Bet value, blocker-bluff 3Bet; (3) watch the SB — raise 3Bet frequency vs an over-folder, raise isolate frequency vs a big limper, narrow the call pile vs a frequent 3Better. After three steps, 60% defense is structured choice rather than \"reluctant to fold\"."
+      "BB defense three-step quick check: (1) call the pot odds — calling line 25% vs a 2BB open (1BB more into a 4BB total pot), 33.3% vs a 3BB open (2BB more into a 6BB total pot); (2) split piles — in-position call pile, strong-made 3Bet value, blocker-bluff 3Bet; (3) watch the SB — raise 3Bet frequency vs an over-folder, raise isolate frequency vs a big limper, narrow the call pile vs a frequent 3Better. After three steps, 60% defense is structured choice rather than \"reluctant to fold\"."
     ],
     "t3hu-position-reversal": [
       "Position Reversal: The Unique Identity Swap in Heads-Up",
@@ -1193,7 +1213,7 @@
       "In heads-up \"wide\" isn't an error but the default. The full-ring dogma \"wait for good hands preflop\" bleeds money slowly in heads-up — because every fold hands the opponent 0.5-1BB of dead money. Range width is heads-up's first discipline.",
       "SB Opening Width: Where the ~80% Comes From",
       "The SB opening range contains all hands with \"at least 40% equity vs the BB's random range\", plus marginal hands realized by postflop positional advantage:\n\nOpenable hands (about 80%):\nStrong hands (JJ+/AK/AQ) + suited connectors + suited Ax + any pair + most suited hands and some offsuit high cards\n\nFolds (about 20%):\nComplete junk (72o, 83o, etc.) and offsuit weak hands with poor blocker value\n\nThe SB completes 0.5 to see a 1.5BB pot (25% required equity), and any hand against the BB's wide defense range is near or above that line; even when 3Bet, the SB's fold loses only the 1.5BB raise — low-frequency high-risk 3Bet encounters are covered by the high-frequency profit of a wide range. (Concept from: Modern Poker Theory, Michael Acevedo Ch.3 heads-up range narrowing and widening)",
-      "The BB's ~60%+ defense math is just as clear: vs an SB min-raise to 2BB, the BB calls 1BB to contest the SB's 2BB, required equity = 1÷(2+1) ≈ 33.3%; and the BB is the postflop positional-advantage side (IP) with equity realization over 100% — at the same 33% pot odds the HU BB's call is more favorable than full ring. That's why the HU BB can defend above the MDF floor (about 33%-38%) and still profit.",
+      "The BB's ~60%+ defense math is just as clear: vs an SB min-raise to 2BB the BB only needs 1BB more, while the total pot after calling = SB 2 + the BB's own 1 + your call 1 = 4BB, so required equity = 1 ÷ 4 = 25% (general formula: call ÷ (current pot 1.5 + opponent's bet 1.5 + your call 1) — the current pot already contains the BB's own 1BB of dead money); and the BB is the postflop positional-advantage side (IP) with equity realization over 100% — a 25% cheap calling line plus the positional bonus makes the HU BB's call more favorable than full ring. That's why the HU BB can defend above the MDF floor (about 33%-38%) and still profit.",
       "Example: HU 100BB deep, you (SB) hold K♦6♦. By full-ring standards this is a clear fold, but in heads-up: against the BB's ~60% defense range K6s has about 46%-48% preflop equity, plus postflop pot-control ability from the position reversal — K6s is a standard member of the solver's SB opening range. If you fold because \"K6s isn't good enough\", you're letting the opponent win blinds with junk for free.",
       "Example 2 (ranges move with the opponent): The same J♠8♠ — against a BB who 3Bets at a high 25%, after a 3Bet J8s usually only folds and the min-raise steal EV erodes, so consider narrowing the open; against a passive BB 3Betting only 8%, J8s's postflop flush/straight potential realizes fully and it's worth opening. Range width is never a fixed number but a direct response to the opponent's aggression frequency.",
       "Example 3 (the key to postflop realization): You (BB) call the SB's min-raise with 6♠5♠. Flop K♠8♦4♣, SB bets 1/3 pot; your 65s has only a gutshot (2 sevens) + backdoor flush, about 20% equity, below the 25% call line — standard fold. But on a 7♠6♦4♣ flop you have a pair with a straight draw, equity jumping to about 55%, warranting a call or even a check-raise. Wide ranges matter not as \"call anything\" but as \"giving you enough hands to win on the right boards\".",
@@ -1889,24 +1909,24 @@
       "explanation": "Holding A♠ zeroes out his A♠X♠ nut-flush combos, trimming his strongest call/raise-back hands and boosting your bluff's fold equity. Note it trims ratios, not \"definitely no flush\"."
     },
     "t4-combinatorics-q4": {
-      "question": "The opponent's shoving range is 11 value combos and 6 bluff combos, facing a full-pot all-in (needs 25%). Your bluff catcher should:",
+      "question": "The opponent's shoving range is 11 value combos and 6 bluff combos, facing a full-pot all-in (needs 33%). Your bluff catcher should:",
       "options": [
         "Fold — more value combos",
-        "Call — 35% bluffs exceeds the 25% required",
+        "Call — 35% bluffs exceeds the 33% required",
         "Raise",
         "Depends on luck"
       ],
-      "explanation": "Bluff ratio = 6/17 ≈ 35%, above the 25% required by pot odds, so calling profits long-term. The numbers answer directly; no feel needed."
+      "explanation": "Bluff ratio = 6/17 ≈ 35%, and calling a pot-sized bet needs P ÷ (P+P+P) = 33%, so 35% > 33% means the call profits long-term (but by only 2 points — a marginal, thin-profit call, the same arithmetic as the chapter example). \"Fold — more value combos\" compares raw combo counts instead of the bluff share; raising a bluff catcher turns you into the payer for his value range; \"depends on luck\" throws away the countable basis."
     },
     "t4-combinatorics-q5": {
-      "question": "You hold AK and read the opponent's range as {AA, KK, QQ, AK}. After your AK, the share of that range where you're truly ahead is about:",
+      "question": "You hold A♠K♣ and read the opponent's 4Bet range as {AA, KK, QQ, AK}. Once the blockers count, what share of that range is QQ — the part that dominates you?",
       "options": [
         "About 18%",
         "About 29%",
         "About 50%",
         "Impossible to compute"
       ],
-      "explanation": "After blocking, the range total drops from 34 to 21, of which QQ (you're ahead) has 6 combos = 6/21 ≈ 29%. Without a blocker it's 18% — blocking shifts the share upward, a key input to preflop all-in EV."
+      "explanation": "Your AK removes 3 AA combos, 3 KK combos and 7 AK combos, shrinking the range from 34 to 21 combos while QQ stays at 6 ⇒ 6/21 ≈ 29% (about 18% is the unblocked 6/34 — the direction people misread). Do not read this as good news: AKo is behind AA, KK and QQ alike (about 43% versus QQ, i.e. dominated) and chops with AK, so the share where you are truly ahead is 0 combos — the blocker chips away exactly his strongest branches, leaving a remainder that crushes you proportionally more. This ratio is perfectly enumerable and is a key input to preflop all-in EV."
     },
     "t4-range-advantage-q1": {
       "question": "The difference between range advantage and nut advantage is:",
@@ -2756,7 +2776,7 @@
         "2/3",
         "3/4"
       ],
-      "explanation": "c = B/(P+B): when the bet equals the pot (B=P), c = P/(P+P) = 1/2. Call and bluff frequencies share the formula and mirror each other — the toy-model prototype of MDF."
+      "explanation": "The defender's call frequency is c = P/(P+B): with B=P, c = P/(P+P) = 1/2. It shares the denominator with the bluff frequency f = B/(P+B) with the numerators swapped, so f + c = 1 — the toy-model prototype of the MDF/Alpha complementarity (at 1/3 pot they are 3/4 and 1/4, not equal)."
     },
     "t9-icm-q1": {
       "question": "The core problem ICM solves is:",
@@ -2866,17 +2886,17 @@
         "Alpha = bet / (pot + 2×bet)",
         "Alpha = pot / (pot + 2×bet)"
       ],
-      "explanation": "Alpha = bet / (pot + bet), sharing the same denominator as MDF with a different numerator. It's the fold-rate threshold the opponent needs."
+      "explanation": "Alpha = bet / (pot + bet) = b/(1+b): the same denominator as MDF, with the numerator swapped for your own bet size, and the meaning \"how often the opponent must fold for my bluff to break even\". Option 0 is MDF; the two formulas dividing by a denominator containing 2×bet belong to the defender's \"equity needed to call\" (call ÷ (pot + his bet + my call)) — a different question from Alpha."
     },
     "t9-alpha-q2": {
       "question": "The relationship between Alpha and MDF is:",
       "options": [
-        "Alpha = MDF",
-        "Alpha + MDF = 1",
-        "Alpha = 1 - MDF",
-        "Alpha = 1 / MDF"
+        "Alpha = MDF — two names for the same number",
+        "Alpha + MDF = 1 — they are complements",
+        "Alpha and MDF are reciprocals (Alpha × MDF = 1)",
+        "They are unrelated and computed independently"
       ],
-      "explanation": "Alpha + MDF = 1; they're complements. Alpha is the fold rate the opponent needs; MDF is your defense frequency."
+      "explanation": "MDF = pot/(pot+bet) and Alpha = bet/(pot+bet): same denominator, and their two numerators add back up to that denominator, so Alpha + MDF = 1 (equivalently Alpha = 1 − MDF). They are not the same number (they only meet at 50% when b=1, a pot-size bet), not reciprocals, and not independent — both are fixed by the same bet size, and one side's optimal frequency exactly cancels the other side's exploitation room."
     },
     "t9-alpha-q3": {
       "question": "Alpha's core value lies in:",
@@ -2886,27 +2906,27 @@
         "Providing a rule of thumb",
         "Providing an intuition"
       ],
-      "explanation": "Alpha provides a quantitative view to evaluate whether the opponent's bluff frequency is high enough to justify calling."
+      "explanation": "Alpha turns \"how often must the opponent fold for this size of bluff to break even\" into a numeric bar you can compare directly against his stats (1/3 pot → 25%, half pot → 33%, pot-size → 50%), which is what makes any deliberate deviation measurable; a qualitative view, a rule of thumb or intuition offers no checkable boundary. Note it serves the attacker's bluff decision, not \"is he bluffing enough that I should call\" — that second question uses the defender's required-equity formula."
     },
     "t9-alpha-q4": {
       "question": "Alpha's application steps are:",
       "options": [
         "Compute Alpha → observe opponent fold rate → compare Alpha with his fold rate",
-        "Observe fold rate → compute Alpha → compare Alpha with fold rate",
+        "Observe fold rate → compute Alpha → compare Alpha with his fold rate",
         "Compare Alpha with fold rate → compute Alpha → observe fold rate",
         "Observe fold rate → compare Alpha with fold rate → compute Alpha"
       ],
-      "explanation": "Alpha's application steps: compute Alpha → observe the opponent's fold rate → compare Alpha with his fold rate."
+      "explanation": "The starting point can only be \"which size am I going to use\": Alpha is entirely determined by your own bet size (b/(1+b)), so without a size there is no Alpha and no bar to compare against; then you take his actual fold rate on that street, and finally compare — only a fold rate above Alpha makes the bluff profitable. The other three put observation or comparison before the calculation, i.e. reading data without a baseline, which cannot answer \"does bluffing this size break even\"."
     },
     "t9-alpha-q5": {
-      "question": "You bet 1/3 pot, Alpha = 1/4. The opponent's C-Bet fold rate is 30%. You should:",
+      "question": "You plan to bluff 1/3 pot (Alpha = 1/4 = 25%), and your stats show the opponent folds 30% on this street. The conclusion is:",
       "options": [
-        "Call",
-        "Fold",
-        "Raise",
-        "Shove"
+        "This size of bluff does not break even — stop using it",
+        "This size of bluff breaks even and profits, EV ≈ +0.067 pot",
+        "Size up to a pot-size bet instead — the bigger the bluff, the more it earns",
+        "Switch to MDF and decide whether to call"
       ],
-      "explanation": "The opponent's fold rate is below Alpha, so you should fold."
+      "explanation": "Fold rate 30% > Alpha 25% ⇒ EV = 0.30×1 − 0.70×(1/3) ≈ +0.067 pot, so this bluff profits without needing any showdown value (the same arithmetic as Example 1 in the chapter). \"Does not break even\" compares the two numbers backwards; \"size up to pot\" points the wrong way — a pot-size bet needs Alpha = 50%, so unless his fold rate rises faster than that, the same bluff becomes a steady loss; MDF and required equity handle the defender's calling question and say nothing about whether this bluff breaks even."
     },
     "t9-unified-q1": {
       "question": "The relationship between GTO and exploitation in the unified framework is:",
@@ -4436,7 +4456,7 @@
         "The HU BB doesn't need to defend",
         "Full-ring rules forbid wide BB defense"
       ],
-      "explanation": "The position reversal makes the HU BB act last postflop (IP) with equity realization over 100%, and the SB's 0.5 dead money makes calls cheap (33.3%). The full-ring BB is permanently OOP postflop and must tighten defense."
+      "explanation": "The position reversal makes the HU BB act last postflop (IP) with equity realization over 100%, and the SB's 0.5 dead money makes calls cheap (vs a min-raise the BB puts in 1BB more into a 4BB total pot after calling = 25%). The full-ring BB is permanently OOP postflop and must tighten defense."
     },
     "t4hu-range-width-q3": {
       "question": "The most accurate understanding of the SB's ~80% opening range is:",

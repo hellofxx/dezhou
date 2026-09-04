@@ -5,7 +5,8 @@
     "strategy": "Strategy",
     "range": "Range",
     "odds": "Odds",
-    "gto": "GTO"
+    "gto": "GTO",
+    "theory": "Theory"
   },
   "defaultFront": "Recall the key points of this item, then click \"Show Answer\" to self-rate.",
   "answerLabel": "Answer",

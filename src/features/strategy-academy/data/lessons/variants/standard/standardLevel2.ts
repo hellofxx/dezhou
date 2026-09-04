@@ -30,7 +30,7 @@ const L2_3BET_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'formula',
-    content: '3Bet 范围组合计数：\\n对手 3Bet 范围 = {AA, KK, QQ, AKs, A5s}\\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\\n总计 = 26 种组合\\n\\nBlocker 影响：当你持有 A♠ 时，\\nAA 从 6 种减为 3 种，AKs 从 4 种减为 3 种\\n3Bet 范围组合数从 26 降为 22',
+    content: '3Bet 范围组合计数：\n对手 3Bet 范围 = {AA, KK, QQ, AKs, A5s}\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\n总计 = 26 种组合\n\nBlocker 影响：当你持有 A♠ 时，\nAA 从 6 种减为 3 种，AKs 从 4 种减为 3 种\n3Bet 范围组合数从 26 降为 22',
   },
   {
     type: 'theory-reference',
@@ -269,6 +269,12 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         title: '3-Bet 基础',
         subtitle: '理解再加注的策略逻辑',
         duration: '8 min',
+        objectives: [
+          '说明 3-Bet 中"3"的计数口径：盲注为第 1 次下注、开牌加注为第 2 次、再加注为第 3 次',
+          '列举 3-Bet 的四个目的：价值、弃牌权益、主动权、隔离',
+          '比较线性 3-Bet 范围与极化 3-Bet 范围，并给出新手阶段的使用先后顺序',
+          '计算 3-Bet 范围的组合数并说明 Blocker 的影响：{AA,KK,QQ,AKs,A5s} 共 26 种，持 A♠ 时降为 22 种',
+        ],
         content: [...L2_3BET_U1_SECTIONS, ...L2_3BET_U2_SECTIONS],
         quiz: [
           {
@@ -489,7 +495,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: '4-Bet 前先想好：如果对手 5-Bet All-in，我怎么办？没有计划就 4-Bet 是灾难的开始。低级别用线性 4-Bet 范围（只强牌），高级别再加 bluff。' },
           {
             type: 'formula',
-            content: '4Bet 盈亏平衡分析：\\n4Bet bluff 所需弃牌率 = 4Bet 额 ÷ (底池 + 4Bet 额)\\n例：你 3Bet 到 7.5BB，对手 4Bet 到 18BB\\n所需弃牌率 = 18 ÷ (7.5+18) ≈ 70.6%\\n\\n这意味着对手 4Bet bluff 时，你需要至少 70.6% 的弃牌率才能让 4Bet bluff 盈亏平衡。',
+            content: '4Bet 盈亏平衡分析：\n4Bet bluff 所需弃牌率 = 4Bet 额 ÷ (底池 + 4Bet 额)\n例：你 3Bet 到 7.5BB，对手 4Bet 到 18BB\n所需弃牌率 = 18 ÷ (7.5+18) ≈ 70.6%\n\n含义：70.6% 是对手 4Bet bluff 的保本弃牌率——你弃得比它更多，他的 bluff 就从零 EV 变成正 EV。所以你的弃牌率必须低于 70.6%，即至少以约 29.4% 的频率继续防御（3Bet 或跟注）。',
           },
           {
             type: 'theory-reference',
@@ -691,18 +697,18 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         content: [
           { type: 'heading', content: 'BB 的特殊性' },
           { type: 'text', content: '大盲位（BB）已投入 1BB，面对 Open 只需补差额即可 Call。例如：Open 2.5BB → BB Call 只需 1.5BB。这给了 BB 极好的底池赔率，应该用更宽范围防守。' },
-          { type: 'key-point', content: 'BB 防守频率参考：vs BTN Open 约 50-55% | vs CO Open 约 40-45% | vs HJ Open 约 35-40% | vs UTG Open 约 25-30%。位置越靠前，防守越紧。' },
+          { type: 'key-point', content: 'BB 防守宽度的相对关系：面对 BTN Open 最宽，面对 CO 次之，面对 HJ 更紧，面对 UTG 最紧。对手开池位置越靠前，你的防守范围应收得越紧；精确构成以范围训练模块与 GTO 策略表为准。' },
           { type: 'heading', content: 'Call vs 3-Bet 的选择' },
           { type: 'text', content: 'Call：有翻后潜力但不适合 3-Bet 的牌（同花连牌/小对子/宽同花牌）。3-Bet：极化范围 — 强价值牌（AA/KK/QQ/AKs）+ Bluff（A5s/A4s 等 Ax blocker）。' },
           { type: 'highlight', content: 'Blind Defense Frequency：如果防守 < 40%，对手可任意偷盲获利。如果 > 60%，过度防守会被价值下注惩罚。根据对手 Open 范围调整。' },
           { type: 'pro-tip', content: '面对紧对手（NIT/UTG Open）防守要紧，面对松对手（LAG/BTN Open）防守要宽。对手 Open 范围越宽，你的防守范围也应越宽。' },
         ],
         quiz: [
-          { id: 'l2-bb-q1', question: 'BB 面对 BTN Open 2.5BB，应该防守约多少范围？', options: ['20-25%', '35-40%', '50-55%', '70-80%'], correctIndex: 2, explanation: 'BB vs BTN Open 应防守约 50-55%。BTN Open 范围最宽，BB 已投入 1BB 有好赔率。' },
+          { id: 'l2-bb-q1', question: 'BB 面对 BTN Open 2.5BB，防守范围应处于哪一档？', options: ['最紧一档，只留强牌', '偏紧一档', '最宽一档，含大量中等牌力', '几乎不弃牌'], correctIndex: 2, explanation: 'BTN 是 6 人桌开池最宽的位置，BB 又已投入 1BB、补差额赔率极好，因此这是各位置中防守最宽的一档。' },
           { id: 'l2-bb-q2', question: 'BB 面对 Open 2.5BB，Call 需要补多少？', options: ['0.5BB', '1BB', '1.5BB', '2.5BB'], correctIndex: 2, explanation: 'BB 已投入 1BB，面对 2.5BB Open 只需补 1.5BB 即可 Call，底池赔率极好。' },
-          { id: 'l2-bb-q3', question: 'BB 面对 UTG Open，应该防守约多少范围？', options: ['25-30%', '40-45%', '50-55%', '60-70%'], correctIndex: 0, explanation: 'UTG Open 范围最强（前位），BB 应防守约 25-30%，只用强牌防守。' },
+          { id: 'l2-bb-q3', question: 'BB 面对 UTG Open，防守范围应处于哪一档？', options: ['最紧一档，只用强牌', '偏宽一档', '最宽一档', '几乎不弃牌'], correctIndex: 0, explanation: 'UTG 只开最强的一小撮牌，BB 面对这种最强的开池范围应收得最紧，只用强牌防守。' },
           { id: 'l2-bb-q4', question: 'BB防守时，哪手牌适合3-Bet bluff？', options: ['98s', 'A4s', 'KJo', '76s'], correctIndex: 1, explanation: 'A4s有A blocker，降低对手持AA/AK概率，是经典3-Bet bluff手牌。' },
-          { id: 'l2-bb-q5', question: 'BB面对BTN Open应该用多宽范围防守？', options: ['25-30%', '35-40%', '50-55%', '70-80%'], correctIndex: 2, explanation: 'BTN Open范围最宽，BB已投入1BB有好赔率，应防守约50-55%。' },
+          { id: 'l2-bb-q5', question: '与其他开池位置相比，BB 面对 BTN Open 的防守范围应该？', options: ['与面对 UTG 一样紧', '比面对 CO 更紧', '各位置中最宽', '一律跟注不加注'], correctIndex: 2, explanation: 'BTN 开池最宽、BB 已投入 1BB 赔率好，所以面对 BTN 的防守在各位置中最宽。' },
         ],
         examples: [
           {
@@ -711,7 +717,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'SB', action: 'fold' }],
             street: 'preflop', effectiveStack: 98, potSize: 4,
             opponent: OPPONENT_PROFILES['lag'],
-            correctDecision: { action: 'Call', reasoning: ['K9s 面对 BTN Open 应该 Call 防守', 'BTN Open 范围宽（约 40%），K9s 有足够胜率', '只需补 1.5BB，底池赔率极好（约 2.5:1）', '同花高牌有翻后潜力（顶对/同花）'] },
+            correctDecision: { action: 'Call', reasoning: ['K9s 面对 BTN Open 应该 Call 防守', 'BTN 是 6 人桌开池最宽的位置，K9s 有足够胜率', '只需补 1.5BB，底池赔率极好（约 2.5:1）', '同花高牌有翻后潜力（顶对/同花）'] },
             commonMistake: { action: 'Fold', reasoning: 'K9s 面对 BTN Open 弃牌太紧。BTN 范围宽，BB 赔率好，应该宽防守。', evLoss: '-0.5 BB/100' },
           },
           {
@@ -787,19 +793,19 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         duration: '10 min',
         content: [
           { type: 'heading', content: '为什么盲注战争是最高频的对抗？' },
-          { type: 'text', content: '在6-max中，SB vs BB是发生频率最高的对抗场景。当前位所有玩家都弃牌时，小盲面临选择：是尽量偏缀还是放弃半个盲注？' },
-          { type: 'key-point', content: 'SB Open范围通常在 40-50%，因为只需击败一个对手。BB面对SB的防御范围可以很宽，因为已投入 1BB 且对手范围弱。' },
+          { type: 'text', content: '在6-max中，SB vs BB是发生频率最高的对抗场景。当前位所有玩家都弃牌时，小盲面临选择：是尽量拼搏还是放弃半个盲注？' },
+          { type: 'key-point', content: 'SB 开池范围与 BTN 同档（约三成半），因为只需击败一个对手。BB 面对 SB 的防御范围可以放得很宽，因为已投入 1BB 且对手范围偏弱。' },
           { type: 'heading', content: 'SB 策略：Open 或 Fold' },
-          { type: 'text', content: '现代策略中，SB对抵抗BB通常采用纯加注策略（不平跟）：\n• Open加注尺度：2.5-3BB（较大，因为没有位置优势）\n• 范围：大约 40-50% 的手牌\n• 包括所有强牌 + 大量中等牌 + 部分同花弱牌（作为bluff）' },
+          { type: 'text', content: '现代策略中，SB对抵抗BB通常采用纯加注策略（不平跟）：\n• Open加注尺度：2.5-3BB（较大，因为没有位置优势）\n• 范围：很宽一档，约三成半的手牌\n• 包括所有强牌 + 大量中等牌 + 部分同花弱牌（作为bluff）' },
           { type: 'heading', content: 'BB 防御策略' },
-          { type: 'text', content: 'BB面对SB的Open应该用较宽的范围防御：\n• 3-Bet：约 12-15%（强牌值 + 轻型3-Bet bluff）\n• Call：约 35-40%（大量中等牌力手牌）\n• Fold：仅弃最弱的牌（约 45-50%）' },
+          { type: 'text', content: 'BB面对SB的Open应该用较宽的范围防御：\n• 3-Bet：只占防御范围的一小部分（强价值 + 轻型 3-Bet bluff）\n• Call：防御范围的主体（大量中等牌力手牌）\n• Fold：仅弃最弱的牌' },
           { type: 'highlight', content: '盲注战争中位置劣势（SB翻后先行动）是关键因素。SB应该选择“能强势打的手牌”而不是“边缘手牌”。' },
-          { type: 'pro-tip', content: '如果BB中的对手折3-Bet很多，可以稍微缩紧SB的Open范围，但保留足够的强牌做4-Bet Bluff。' },
+          { type: 'pro-tip', content: '如果BB中的对手弃3-Bet很多，可以稍微缩紧SB的Open范围，但保留足够的强牌做4-Bet Bluff。' },
         ],
         quiz: [
-          { id: 'l2-blind-q1', question: 'SB vs BB 单挑时，SB的标准Open范围大约是？', options: ['20-25%', '30-35%', '40-50%', '60-70%'], correctIndex: 2, explanation: 'SB只需击败BB一个对手，因此可以打很宽的范围，通常 40-50%。' },
-          { id: 'l2-blind-q2', question: 'BB面对SB Open的防御率大约是多少？', options: ['30%', '40%', '50-55%', '70%'], correctIndex: 2, explanation: 'BB已投入1BB，且对手范围弱，应防御约 50-55%（3-Bet+Call）。' },
-          { id: 'l2-blind-q3', question: 'SB Open的标准尺度是多少？', options: ['2BB', '2.5-3BB', '4BB', '5BB'], correctIndex: 1, explanation: 'SB没有翻后位置优势，所以用较大的尺度（2.5-3BB）来降低BB的防御頻率。' },
+          { id: 'l2-blind-q1', question: 'SB vs BB 单挑时，SB 的标准 Open 范围应处于哪一档？', options: ['与前位开池一样紧', '只开强牌一档', '很宽一档（约三成半）', '几乎任意两张牌'], correctIndex: 2, explanation: 'SB 只需击败 BB 一个对手，因此开池属于很宽的一档（约三成半）；精确构成见范围训练模块与 GTO 策略表。' },
+          { id: 'l2-blind-q2', question: 'BB 面对 SB Open 的防御范围应该？', options: ['很紧，只防强牌', '与面对 BTN Open 一样紧', '放得很宽（3-Bet + Call 合计）', '大部分牌直接弃掉'], correctIndex: 2, explanation: 'BB 已投入 1BB 且 SB 的范围偏弱，应把防御面放得很宽（3-Bet + Call 合计）。' },
+          { id: 'l2-blind-q3', question: 'SB Open的标准尺度是多少？', options: ['2BB', '2.5-3BB', '4BB', '5BB'], correctIndex: 1, explanation: 'SB没有翻后位置优势，所以用较大的尺度（2.5-3BB）来降低BB的防御频率。' },
           { id: 'l2-blind-q4', question: 'SB Open时应该采用什么策略？', options: ['Raise or Fold', 'Limp or Fold', 'Raise or Call', '随机策略'], correctIndex: 0, explanation: 'SB应该用raise-or-fold策略，避免limp。Limp让BB免费看牌，丧失主动权。' },
           { id: 'l2-blind-q5', question: '盲注战争中SB位置劣势体现在？', options: ['翻前劣势', '翻后先行动', '筹码劣势', '没有劣势'], correctIndex: 1, explanation: 'SB翻后先行动（OOP），缺乏信息优势。这是盲注战争的核心挑战。' },
         ],
@@ -869,13 +875,13 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         content: [
           { type: 'heading', content: '什么是短筹码策略？' },
           { type: 'text', content: '当有效筹码在 20-50BB 时，策略与 100BB 深筹码完全不同。筹码越浅，翻后决策越少，翻前决策越重要。' },
-          { type: 'key-point', content: '核心原则：筹码越浅，手牌的“可打性”（Playability）越不重要，“原始胜率”（Raw Equity）越重要。同花连牌购值下降，大牌价值上升。' },
+          { type: 'key-point', content: '核心原则：筹码越浅，手牌的“可打性”（Playability）越不重要，“原始胜率”（Raw Equity）越重要。同花连牌价值下降，大牌价值上升。' },
           { type: 'heading', content: '20BB 打法：Push/Fold' },
-          { type: 'text', content: '∞ 当筹码 ≤ 20BB 时，大多数情况只有两个选择：\n• All-In（Push）：手牌足够强\n• Fold：手牌不够强\n\nPush范围的考量因素：\n1. 位置（后位更宽）\n2. 剩余筹码（15BB vs 20BB 范围差异大）\n3. 后面还有几个玩家' },
+          { type: 'text', content: '当筹码 ≤ 20BB 时，大多数情况只有两个选择：\n• All-In（Push）：手牌足够强\n• Fold：手牌不够强\n\nPush范围的考量因素：\n1. 位置（后位更宽）\n2. 剩余筹码（15BB vs 20BB 范围差异大）\n3. 后面还有几个玩家' },
           { type: 'heading', content: '30-50BB 打法：调整Open尺度' },
           { type: 'text', content: '筹码在 30-50BB 时：\n• Open Raise尺度减小为 2-2.2BB\n• 3-Bet几乎进入全进“加注/全下”模式\n• 避免用同花小连牌跟注（没有足够的隐含赔率）\n• 增加大对和大牌的比重' },
           { type: 'highlight', content: '短筹码时最常见的错误是用100BB的思维打短筹码。例如，35BB时仍然用98s跟注3-Bet是大错，因为集合的可实现性太低。' },
-          { type: 'pro-tip', content: '在锦标赛中筹码会不断变化，營得策略在不同筹码深度之间切换是必备技能。' },
+          { type: 'pro-tip', content: '在锦标赛中筹码会不断变化，熟练地在不同筹码深度之间切换策略是必备技能。' },
         ],
         quiz: [
           { id: 'l2-short-q1', question: '筹码 ≤20BB 时应采用什么策略？', options: ['小加注+跟注', 'Push/Fold', '仅打AA/KK', '和100BB一样'], correctIndex: 1, explanation: '20BB以下策略简化为Push或Fold，没有中间地带。' },
@@ -1093,7 +1099,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
                 { id: 'b', text: 'Fold', isCorrect: false },
                 { id: 'c', text: 'Limp', isCorrect: false },
               ],
-              explanation: 'JTs在UTG是open范围的边缘牌。现代策略中UTG open约15-20%的手牌，JTs刚好在范围内。',
+              explanation: 'JTs在UTG是open范围的边缘牌。UTG 只开最强的一小撮牌，JTs 刚好挤在范围上沿。',
               difficulty: 2,
             },
             {
@@ -1121,7 +1127,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
                 { id: 'b', text: 'Fold', isCorrect: false },
                 { id: 'c', text: 'Limp', isCorrect: false },
               ],
-              explanation: 'ATs在BTN是轻松open。BTN open范围约40-50%，ATs远在此范围内。',
+              explanation: 'ATs在BTN是轻松open。BTN 是 6 人桌开池最宽的位置（约三成半），ATs 远在这条线之内。',
               difficulty: 1,
             },
             {
@@ -1149,7 +1155,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
                 { id: 'b', text: 'Fold', isCorrect: false },
                 { id: 'c', text: 'Limp', isCorrect: false },
               ],
-              explanation: 'Q9s在CO是标准open。CO open范围约25-30%，Q9s在范围内。',
+              explanation: 'Q9s在CO是标准open。CO 的开池明显放宽（近三成），Q9s 属于其中的标准一员。',
               difficulty: 2,
             },
             {

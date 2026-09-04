@@ -65,12 +65,12 @@ export const STRADDLE_LESSONS: Lesson[] = [
       { type: 'text', content: 'Ante 是每位玩家翻前强制投入的小额筹码（通常是 0.1-0.25BB）。国内俱乐部常在现金局引入 Ante 来增加底池和动作频率。\n\nAnte 改变了底池赔率：初始底池更大（如 6 人桌 + 0.2BB Ante = 1.2BB Ante + 1.5BB 盲注 = 2.7BB），跟注的赔率更好，应该用更宽的范围入池。' },
       { type: 'key-point', content: 'Ante 的核心影响：①初始底池更大；②跟注赔率更好（应放宽范围）；③偷盲价值提升（偷到的底池更大）；④短码 All-in 的弃牌率要求降低。' },
       { type: 'heading', content: '翻前范围调整' },
-      { type: 'text', content: 'Ante 结构下应整体放宽范围：\n\n• 开牌范围：放宽约 15%（如 UTG 从 12% → 14%）\n• 偷盲范围：BTN 可放宽到 45-50%（标准是 35-40%）\n• 3-Bet 范围：略微放宽，但保持价值为主\n• 大盲防守：跟注范围放宽（赔率更好）\n\n关键公式：Ante 越大，底池赔率越好，跟注/防守范围应越宽。' },
+      { type: 'text', content: 'Ante 结构下应整体放宽范围：\n\n• 开牌范围：每个位置都在标准宽度上放宽一档（UTG 仍是最紧的一档）\n• 偷盲范围：BTN 在开池最宽档（约三成半）之上再放宽\n• 3-Bet 范围：略微放宽，但保持价值为主\n• 大盲防守：跟注范围放宽（赔率更好）\n\n关键公式：Ante 越大，底池赔率越好，跟注/防守范围应越宽。' },
       { type: 'example', content: '示例：6 人桌，0.2BB Ante，NL100\n无 Ante 时：底池 = SB 0.5 + BB 1 = 1.5BB\n有 Ante 时：底池 = SB 0.5 + BB 1 + Ante 1.2 = 2.7BB\n\nBTN 偷盲加注 2.5BB：\n• 无 Ante：BB 跟注 1.5BB 赢 4BB（37.5% 赔率）\n• 有 Ante：BB 跟注 1.5BB 赢 5.2BB（28.8% 赔率）\n\n结论：Ante 局 BB 防守范围应明显放宽（所需胜率从 37.5% 降到 28.8%）。' },
       { type: 'heading', content: 'Ante 局的偷盲策略' },
       { type: 'text', content: 'Ante 让偷盲更赚钱：\n• 偷到的底池更大（含 Ante）\n• BB 防守范围更宽，但平均牌力更弱\n• CO/BTN/SB 都应提升偷盲频率\n\n但注意：Ante 也让 3-Bet 偷盲的玩家范围更宽，可以用强牌 4-Bet 反击。' },
       { type: 'highlight', content: 'Ante 局最常见的错误：仍用无 Ante 的紧范围打。Ante 结构下你应该明显放宽，特别是偷盲和大盲防守。' },
-      { type: 'pro-tip', content: 'Ante 越大，越应该激进。Big Ante（如 0.5BB+）的局，BTN 开牌范围可以放宽到 55-60%，因为底池赔率极佳。' },
+      { type: 'pro-tip', content: 'Ante 越大，越应该激进。Big Ante（如 0.5BB+）的局，BTN 开池要在标准最宽档之上再明显放宽，因为底池赔率极佳。' },
     ],
     quiz: [
       {
@@ -83,9 +83,9 @@ export const STRADDLE_LESSONS: Lesson[] = [
       {
         id: 'local-ante-q2',
         question: 'Ante 局中 BTN 偷盲范围应如何调整？',
-        options: ['收紧到 25%', '放宽到 45-50%', '保持 35% 不变', '完全不偷'],
+        options: ['应当收紧', '应当放宽', '保持不变', '完全不偷'],
         correctIndex: 1,
-        explanation: 'Ante 让偷盲更赚钱（底池更大），BTN 偷盲范围应放宽到 45-50%。',
+        explanation: 'Ante 让偷盲更赚钱（底池更大），BTN 偷盲范围应在标准最宽档之上进一步放宽。',
       },
       {
         id: 'local-ante-q3',

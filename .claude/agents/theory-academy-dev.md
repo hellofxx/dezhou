@@ -12,7 +12,7 @@ tools:
   - DeleteFile    # 删除废弃的课程数据
   - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "Qwen3.8-Max"
+model: "[DeepSeek-V4-Flash](dfmodel)"
 skills: []
 mcpServers: []
 additionalPrompt: ""
@@ -108,7 +108,7 @@ additionalPrompt: ""
    - Step 5 立即运行 integrity + quizOrder 测试（确保结构合法）
    - Step 6 人工复核数学准确性（抽算每个公式数值）
    - Step 7 运行质量门禁，通过后进入下一章
-   - 扩充硬性契约：每章 content 覆盖全部 7 类段落（禁止纯 text 堆砌）；关键公式展示推导过程；每章至少 2-3 个不同场景实战牌例；标注反直觉点与认知误区（highlight）；教材对照索引见 PRD 5.27「经典教材对照」
+   - 内容质量门槛与版权合规边界：见 PRD §6.7.1 / §6.7.2（单源，禁止在此重述明细）；教材对照基线见 PRD §5.27.4，章节级出处以正文内联「（概念源自：教材名 章节）」为唯一事实源
 7. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints

@@ -67,7 +67,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         
           { id: 'l4-range-q3', question: '范围缩减是指什么？', options: ['对手弃牌', '随着每个行动对手可能的牌集合变小', '自己的牌变少', '底池变小'], correctIndex: 1, explanation: '范围缩减是随着每个行动，对手可能持有的牌集合逐渐变小。' },
           { id: 'l4-range-q4', question: 'UTG open后翻牌A-9-4，UTG的范围包含什么？', options: ['只有小牌', '很多Ax强牌', '只有同花', '随机牌'], correctIndex: 1, explanation: 'UTG开牌范围本身就偏强，A-9-4面命中了很多Ax组合。' },
-          { id: 'l4-range-q5', question: 'BTN开牌范围比UTG更宽还是更窄？', options: ['更窄', '一样宽', '更宽', '不确定'], correctIndex: 2, explanation: 'BTN有位置优势，开牌范围比UTG宽得多（约40-50% vs 10-15%）。' },],
+          { id: 'l4-range-q5', question: 'BTN开牌范围比UTG更宽还是更窄？', options: ['更窄', '一样宽', '更宽', '不确定'], correctIndex: 2, explanation: 'BTN有位置优势，是 6 人桌开池最宽的位置；UTG 只开最强的一小撮牌，两者宽度差距很大。' },],
         examples: [
           {
             id: 'l4-range-ex1',
@@ -86,7 +86,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Call（跟注 C-Bet）',
               reasoning: [
-                'UTG open 范围很窄（约10%）：AA-TT, AKs-AQs, AKo',
+                'UTG open 范围很窄（只开最强的一小撮牌）：AA-TT, AKs-AQs, AKo',
                 'A-9-4 面很可能击中了 UTG 的范围（Ax 很多）',
                 '但你的 KQs 有后门同花和顺子潜力',
                 '跟注一枪看转牌，不要过度投入',
@@ -115,7 +115,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Check-Call',
               reasoning: [
-                'BTN open 范围很宽（约45%），很多牌没有击中T面',
+                'BTN 是 6 人桌开池最宽的位置，很多牌没有击中T面',
                 '你击中了顶对（T），对BTN的宽范围有很好的胜率',
                 'Check-Call 让对手的bluff和弱牌继续下注',
                 '不要 Check-Raise，因为BTN范围太宽，很多弱牌会弃牌',
@@ -410,9 +410,9 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 effectiveStack: 89.5,
               },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: 'AKs 面对CO的4-Bet All-in，底池赔率极好。你需要约 40% 胜率，AKs对CO的4-Bet范围通常有 40%+。', evImpact: '-5.0 BB/100' },
-                { action: 'Call', isCorrect: true, explanation: 'AKs 面对CO的4-Bet All-in应该Call。底池赔率要求约 40% 胜率，AKs对CO的4-Bet范围（QQ+, AK）有约 40%。', evImpact: '+2.0 BB/100' },
-                { action: 'Tank then Fold', isCorrect: false, explanation: '长时间思考后弃牌和直接弃牌一样，都是-EV的。AKs在这里有足够的胜率跟注。', evImpact: '-5.0 BB/100' },
+                { action: 'Fold', isCorrect: true, explanation: '弃牌。复算：题面底池 105（CO 全下 97 + 你已投入的 7.5 + 盲注，按题面取 105），你还需跟 89.5（= 97 - 7.5），故跟注保本所需胜率 = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0%（本仓口径：calculatePotOdds 的 potSize 须已含对手本次下注，见 shared/utils/pokerMath）。你的 A♣K♣ 对 CO 的 4-Bet 全下范围 QQ+/AK，含阻断后共 21 组合（QQ 6 + KK 3 + AA 3 + AK 9，组合数推导见理论学院 T4），加权胜率 ≈ (6×43% + 3×32% + 3×12% + 9×50%) ÷ 21 ≈ 40%。40% < 46.0% ⇒ 跟注 -EV，正解是弃牌。另注意别把 Alpha（b ÷ (pot + bet)，进攻方纯诈唬的保本弃牌率）当成跟注线，两者口径相反（见 L4B 与 T5 的 MDF/Alpha 章）。', evImpact: '0 BB（不再投入；避开约 -11.7BB 的跟注负 EV）' },
+                { action: 'Call', isCorrect: false, explanation: '跟注 -EV：约 40% 的实得胜率低于 46.0% 的保本线（89.5 ÷ 194.5）。典型错因是把「AKs 对 QQ 单口约 43%」当成对整个 4-Bet 全下范围的胜率——43% 只成立于 QQ 这一个分支，范围里还有 KK（约 32%）与 AA（约 12%）两个把平均值拉低的分支。何况 43% 本身也已低于 46.0%，即便按最乐观的单口读数同样不该跟。按 40% 计：EV = 0.40 × 105 - 0.60 × 89.5 ≈ -11.7BB，远差于弃牌的 0。', evImpact: '-11.7BB（按 40% 胜率：0.40×105 - 0.60×89.5）' },
+                { action: 'Tank then Fold', isCorrect: false, explanation: '结论与 Fold 相同，但作为独立选项它是次选：矩阵上 EV 与直接弃牌一致（不再投入），额外付出的只是时序信息——长时间思考后再弃牌会泄露你手里有「差点就跟注」的强牌。它也不是本题的判定依据：对错只取决于 46.0% 保本线与约 40% 实得的比较，与思考时长无关。反直觉点在于：多数人凭「AKs 很强」直接下结论，而不是先算阈值再比大小——AKs 面对 QQ+/AK 本来就是落后的一方。', evImpact: '同弃牌 EV（额外代价是时序信息泄露）' },
               ],
             },
           
@@ -466,7 +466,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             question: 'Case E2 中，Hero T♥J♥在 floop 有组合听牌应该？',
             options: ['Check', 'C-bet semi-bluff', 'Fold', 'Raise'],
             correctIndex: 1,
-            explanation: '组合听牌的价值在于 fold equity + showdown equity 双重来源。EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB.',
+            explanation: '组合听牌的价值在于 fold equity + showdown equity 双重来源。EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB。',
           },
         ],
         practice: { id: 'l4-ev-real-practice', questions: [] },
@@ -501,7 +501,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
           {
             type: 'theory-reference',
             content: '理论支撑：HUD 指标解读与玩家类型学的完整分析见理论学院 T7 第 1-2 章。读牌四步法见 T7 第 3 章"读牌流程"。剥削调整映射见 T7 第 4 章。',
-            data: { theoryLevelId: 't7', theoryChapterId: 't7-reading-process' },
+            data: { theoryLevelId: 't7', theoryChapterId: 't7-hand-reading' },
           },
           {
             type: 'counter-intuitive',
@@ -773,7 +773,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 '对手不可能有 A♥x♥ 的坚果同花（你有 A♥）',
                 '对手的 value 范围被你的 blocker 显著削弱',
                 'TAG 在 river 的 bluff 频率虽然低，但你的 blocker 使 value 组合减少',
-                'Pot odds: 需要 20/(27+20) ≈ 43% 胜率，有 blocker 后对手 bluff 比例足够',
+                'Pot odds: 需要 20/(27+20+20) ≈ 30% 胜率，有 blocker 后对手 bluff 比例足够',
               ],
             },
             commonMistake: {
@@ -939,7 +939,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 { id: 'b', text: '边缘open牌', isCorrect: false },
                 { id: 'c', text: '核心open牌', isCorrect: false },
               ],
-              explanation: 'J8s太弱，不在UTG open范围内。UTG只open约15-20%的手牌，J8s远不在此范围。',
+              explanation: 'J8s太弱，不在UTG open范围内。UTG 只开最强的一小撮牌，J8s 远不在此范围。',
               difficulty: 1,
             },
             {
@@ -953,7 +953,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 { id: 'b', text: '边缘open牌', isCorrect: true },
                 { id: 'c', text: '核心open牌', isCorrect: false },
               ],
-              explanation: 'Q9s在BTN open范围内，但属于边缘部分。BTN open约40-50%，Q9s在范围的下半部分。',
+              explanation: 'Q9s在BTN open范围内，但属于边缘部分。BTN 是 6 人桌开池最宽的位置（约三成半），Q9s 在范围的下半部分。',
               difficulty: 2,
             },
             {
@@ -995,7 +995,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 { id: 'b', text: '边缘open牌', isCorrect: true },
                 { id: 'c', text: '核心open牌', isCorrect: false },
               ],
-              explanation: 'T9s在SB open范围内，但属于边缘部分。SB open约30-40%，T9s在范围的下半部分。',
+              explanation: 'T9s在SB open范围内，但属于边缘部分。SB 的开池与 BTN 同档（约三成半），T9s 在范围的下半部分。',
               difficulty: 2,
             },
             {
@@ -1080,14 +1080,14 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             },
             {
               id: 'd-l4-ev-q4',
-              scenario: 'Flop, 底池10BB, 你有同花听牌',
+              scenario: 'Flop, 底池10BB（对手全下前）, 你有同花听牌',
               question: '对手全下8BB，你跟注。你有35%胜率。跟注的EV是多少？',
               options: [
-                { id: 'a', text: '+3.9BB', isCorrect: true },
+                { id: 'a', text: '+1.1BB', isCorrect: true },
                 { id: 'b', text: '-1.1BB', isCorrect: false },
                 { id: 'c', text: '+1.5BB', isCorrect: false },
               ],
-              explanation: '标准 EV 公式：你跟注 8BB，可能赢得"底池 10BB + 对手全下 8BB"=18BB。EV = 0.35×18BB - 0.65×8BB = 6.3BB - 5.2BB = +1.1BB...更正：底池实际包含你已投入的部分，最终总回报是底池 10BB+ 对手 8BB=18BB，但你已在这手牌中有一定权益。更清晰算法：EV = 0.35×(10+8)BB - 0.65×8BB = 6.3BB - 5.2BB = +1.1BB? 仍不符。重新理解题意：标准 EV= 胜率×总 pot−失败率×跟注额 = 0.35×(10+8+8) − 0.65×8 = 0.35×26 − 5.2 = 9.1 − 5.2 = +3.9BB。正确选项 +3.9BB。',
+              explanation: '跟注 EV = 成牌率 × 可赢总额 − 未成牌率 × 跟注额。对手全下前底池 10BB，加上对手全下的 8BB，可赢总额 18BB；未成牌时损失你跟注的 8BB。EV = 0.35×18BB − 0.65×8BB = 6.3BB − 5.2BB = +1.1BB。复算（另一种口径）：跟注后总底池 26BB，EV = 0.35×26BB − 8BB = 9.1BB − 8BB = +1.1BB，两法一致。选项 b 的 −1.1BB 金额全对，只是把公式两项顺序写反（0.65×8BB − 0.35×18BB），符号错了结论就反了。选项 c 的 +1.5BB 需要约 36.5% 胜率才成立——胜率每高估 1 个百分点，EV 虚增 0.26BB，这是把 9 个 outs 的同花听牌按 outs×4 经验法则再往上取整的结果。另有两类错法会直接得出相反结论：漏把对手全下的 8BB 计入可赢额（0.35×10BB − 0.65×8BB = −1.7BB），或误用单街成牌率（9 outs 转牌成牌约 19%，0.19×18BB − 0.81×8BB ≈ −3.1BB），都会把一个正确跟注判成弃牌。',
               difficulty: 3,
             },
             {
@@ -1131,11 +1131,11 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               scenario: 'Flop, 底池5BB',
               question: '你有OESD（8 outs），对手下注3BB。跟注的EV是多少？（假设无隐含赔率）',
               options: [
-                { id: 'a', text: '+1.5BB', isCorrect: true },
+                { id: 'a', text: '+1.5BB', isCorrect: false },
                 { id: 'b', text: '-0.4BB', isCorrect: false },
-                { id: 'c', text: '+0.5BB', isCorrect: false },
+                { id: 'c', text: '+0.5BB', isCorrect: true },
               ],
-              explanation: 'OESD 有 8 outs，转牌或河牌成牌概率≈8/47×2≈34%（更精确约 32%）。你用 3BB 跟注去争夺"底池 5BB + 对手下注 3BB"=8BB。EV = 0.32×8BB - 0.68×3BB = 2.56BB - 2.04BB ≈ +0.52BB...题目意图用单街概率：32% 胜率×8BB−68%×3BB=2.56−2.04=+0.52BB，或近似为 +0.5BB。但选项中 +1.5BB 更接近合理估计（考虑隐含赔率和潜在胜率）。经重新计算，正确答案应为 +1.5BB（考虑两街成牌后的额外价值）。',
+              explanation: 'OESD 有 8 个 outs，两条街成牌率按 outs×4 经验法则约 32%（精确算法 1 − 39/47 × 38/46 ≈ 31.5%，本题用两条街口径）。题面已排除隐含赔率，成牌时只能赢下已经在桌上的钱：底池 5BB + 对手刚下注的 3BB = 8BB；未成牌时损失你跟注的 3BB。EV = 0.32×8BB − 0.68×3BB = 2.56BB − 2.04BB = +0.52BB ≈ +0.5BB。复算（另一种口径）：跟注后总底池 11BB，EV = 0.32×11BB − 3BB = 3.52BB − 3BB = +0.52BB，两法一致。选项 a 的 +1.5BB 需要假设成牌后还能再从对手身上多赢约 3BB，正是题面明确排除的隐含赔率——一边写着无隐含赔率一边把它偷偷加回去。选项 b 的 −0.4BB 则是漏把对手刚下注的 3BB 计入可赢底池（0.32×5BB − 0.68×3BB = 1.6BB − 2.04BB = −0.44BB），会把一个正确的跟注判成弃牌。',
               difficulty: 3,
             },
           ],

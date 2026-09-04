@@ -272,7 +272,7 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         },
         {
           id: 't2hu-risk-q2',
-          question: '底池 6BB，对手下注 3BB，检查 - 加注到 9BB 的盈亏平衡弃牌率是：',
+          question: '底池 6BB，对手下注 3BB，检查-加注到 9BB 的盈亏平衡弃牌率是：',
           options: ['20%', '33.3%', '45%', '55%'],
           correctIndex: 1,
           explanation: '纯诈唬假设下（摊牌必输），EV(check-raise) = f×9 − (1−f)×9 = 18f − 9；EV(check-call) = −3（跟注 3 必输）。令 18f − 9 = −3，得 f = 33.3%。补充说明：若 check-raise 有摊牌价值（W>0），盈亏平衡弃牌率更低。选项 B 正确。',

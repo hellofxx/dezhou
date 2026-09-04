@@ -18,7 +18,9 @@ export interface ReviewItemMetadata {
     isCorrect: boolean;
     explanation?: string;
   }>;
-  source?: 'range' | 'odds' | 'gto' | 'strategy';  // 来源模块
+  source?: 'range' | 'odds' | 'gto' | 'strategy' | 'theory';  // 来源模块
+  /** 复习项跳转目标路由（如理论错题 → 所属章节页）；可选，缺省时消费端按 category 回退，不得生成死链 */
+  route?: string;
   scenario?: string;                       // 场景描述（如 pot-odds 的 scenario 文本）
   /** i18n 插值参数：front/options.text 为带 {{var}} 的 key 时透传给 t() */
   params?: Record<string, string | number>;

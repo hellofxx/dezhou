@@ -449,7 +449,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         type: 'pro-tip',
-        content: 'BB 防守速查三步：(1) 报底池赔率——SB 开池 2BB 时跟注线约 33%；(2) 分叠——强成牌价值 3Bet、阻断牌诈唬 3Bet、中等牌跟注；(3) 看 SB——弃牌多的 SB 提高 3Bet，limp 多的提高 isolate，C-Bet 过频的提高 x/r。',
+        content: 'BB 防守速查三步：(1) 报底池赔率——SB 开池 2BB 时跟注线 25%（SB 2 + 你已投 1 = 底池 3，再跟 1BB，1÷(3+1)=25%）；(2) 分叠——强成牌价值 3Bet、阻断牌诈唬 3Bet、中等牌跟注；(3) 看 SB——弃牌多的 SB 提高 3Bet，limp 多的提高 isolate，C-Bet 过频的提高 x/r。',
       },
     ],
     quiz: [
@@ -526,7 +526,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           amount: '1BB',
           reasoning: [
             'K7s 面对 SB 约 80% 开池范围胜率约 48%',
-            '跟注 1BB 争夺 SB 投入的 2BB，所需胜率约 33%，富余约 15 个百分点',
+            '跟注 1BB 进入 4BB 总底池（SB 2 + BB 已投 1 + 跟注 1），所需胜率 = 1÷4 = 25%，富余约 23 个百分点',
             'BB 翻后 IP，权益实现率超 100%，边缘牌也可盈利防守',
           ],
         },
@@ -556,7 +556,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           },
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'J9s 面对 SB 宽范围可玩性好，fold 太紧浪费 BB 位置。', evImpact: '-1.0 BB/100', evLoss: 1 },
-            { action: 'Call', isCorrect: true, explanation: 'J9s 同花连张翻后 IP 可玩性好，跟注 1BB 争夺 2BB，标准防守。', evImpact: '+1.0 BB/100', evLoss: 0 },
+            { action: 'Call', isCorrect: true, explanation: 'J9s 同花连张翻后 IP 可玩性好，跟注 1BB 进入 4BB 总底池（所需胜率 25%），标准防守。', evImpact: '+1.0 BB/100', evLoss: 0 },
             { action: '3-Bet', isCorrect: false, explanation: 'J9s 偏投机，3-Bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l3hu-bb-defense',

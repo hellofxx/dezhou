@@ -17,6 +17,8 @@ import {
 } from './utils/streakCalc';
 import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
+import { migrateTheoryReviewItems } from './utils/migrateTheoryReviewKeys';
+import { migrateStrategyReviewItems } from './utils/migrateStrategyReviewKeys';
 import type { GameVariant } from '@/shared/types/poker';
 // P1-2: ELO 能力分级
 import type { EloRating, EloDimension, RankUpEvent, PokerVariant } from '@/shared/types/elo';
@@ -286,6 +288,31 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
   (s) => {
     if (s.focusModule === undefined) {
       s.focusModule = null;
+    }
+  },
+  // v15 → v16：理论学院存量复习项的 label / metadata.front / metadata.back
+  // 由「数据层中文原文」改写为 i18n key（theory.quiz.<questionId>.*）。
+  // 复习项存 localStorage，而 i18next 未命中 key 时原样回显入参，
+  // 故早期实现写入的中文原文会让英文界面复习队列显示中文题干/解析（详见 utils/migrateTheoryReviewKeys.ts）。
+  // questionId 从 `theory:<questionId>` 形式的 id 无损反解，复习进度字段全部原样保留。
+  (s) => {
+    const migrated = migrateTheoryReviewItems(s.reviewItems);
+    // 仅回写数组：老存档可能完全没有 reviewItems 键，
+    // 若把 undefined 写回去会在 hydration merge 时覆盖默认 []
+    if (Array.isArray(migrated)) {
+      s.reviewItems = migrated;
+    }
+  },
+  // v16 → v17：策略学院存量复习项的 label 由「课时中文原文」改写为 i18n key
+  // （academy.lessonTitle.<lessonId>）。与 v16 同一失效模式：复习项存 localStorage，
+  // 而 SpacedRepetitionPanel 渲染 t(item.label)，i18next 未命中 key 时原样回显入参，
+  // 故早期 completeCourse 写入的中文课名会在英文界面回显中文（详见 utils/migrateStrategyReviewKeys.ts）。
+  // lessonId 从复习项 id（即 lesson.id）无损反解，复习进度字段全部原样保留。
+  (s) => {
+    const migrated = migrateStrategyReviewItems(s.reviewItems);
+    // 同 v16：仅在确实是数组时回写，避免 undefined 覆盖默认 []
+    if (Array.isArray(migrated)) {
+      s.reviewItems = migrated;
     }
   },
 ];
@@ -977,7 +1004,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 15,
+      version: 17,
       storage: progressPersistStorage ?? undefined,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。

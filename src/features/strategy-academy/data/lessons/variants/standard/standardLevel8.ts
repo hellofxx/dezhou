@@ -17,7 +17,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: '不要用对付高额玩家的策略去打微额。在微额，纯粹的价值下注和放弃 bluff 可能比 GTO 更赚钱。' },
           {
             type: 'formula',
-            content: '剥削调整幅度公式：\n最优偏离幅度 = 可观测偏差 × (1 - 对手调整概率)\n\n例：对手河牌弃牌率 70%（均衡约 50%）\n可观测偏差 = +20%\n假设对手调整概率 = 30%（低级别玩家调整慢）\n最优偏离幅度 = 20% × (1-0.3) = 14%\n\n这意味着你可以将诈唬频率提高约 14 个百分点，\n但需要随时准备回到基线（如果对手开始调整）\n\n剥削调整的幅度不是越大越好，而是以"不被对手反制"为上限',
+            content: '剥削调整幅度公式：\n安全偏离幅度 = 可观测偏差 × (1 - 对手调整概率)\n\n例：对手河牌弃牌率 70%（均衡约 50%）\n可观测偏差 = +20%\n假设对手调整概率 = 30%（低级别玩家调整慢）\n安全偏离幅度 = 20% × (1-0.3) = 14%\n\n这意味着你可以将诈唬频率提高约 14 个百分点，\n但需要随时准备回到基线（如果对手开始调整）\n\n剥削调整的幅度不是越大越好，而是以"不被对手反制"为上限',
           },
           {
             type: 'theory-reference',
@@ -92,18 +92,18 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
           { type: 'text', content: 'GTO 策略是“不可被剥削”的防御策略；而 Exploitative 策略是“最大化利用对手弱点”的进攻策略。在实战中，两者应该结合使用。' },
           { type: 'key-point', content: '何时用 GTO：对手未知、对手很强、多人底池。\n何时剥削：对手有明显漏洞、你有充足数据、单挑场景。' },
           { type: 'heading', content: '常见剥削调整示例' },
-          { type: 'text', content: '面对 Nit（超紧玩家）：\n• 疑狂偷盲注\n• 他加注时立即弃牌\n• 不要 bluff 他\n\n面对 Calling Station：\n• 纯价值下注，永远不 bluff\n• 下注尺度可以稍大\n• 他加注时要重视\n\n面对 Maniac：\n• 耐心等待强牌\n• 用中等牌力 Call 到底\n• 不要对他 bluff\n• 控制底池大小' },
+          { type: 'text', content: '面对 Nit（超紧玩家）：\n• 疯狂偷盲注\n• 他加注时立即弃牌\n• 不要 bluff 他\n\n面对 Calling Station：\n• 纯价值下注，永远不 bluff\n• 下注尺度可以稍大\n• 他加注时要重视\n\n面对 Maniac：\n• 耐心等待强牌\n• 用中等牌力 Call 到底\n• 不要对他 bluff\n• 控制底池大小' },
           { type: 'heading', content: '剥削的风险' },
           { type: 'text', content: '剥削策略本身是“不平衡”的，这意味着：\n• 如果对手发现并调整，你反而会输\n• 不要对较强的对手过度剥削\n• 定期检查你的剥削是否仍然有效' },
-          { type: 'pro-tip', content: '最好的策略是：80% GTO + 20% 剥削。用 GTO 作为基层保护自己，在明确有利可图时进行小幅剥削调整。' },
+          { type: 'pro-tip', content: '以 GTO 为默认基线，仅在样本足够且方向明确的对手漏洞上偏离；偏离幅度按「可观测偏差 × (1 - 对手调整概率)」递减（推导见下方公式）。' },
           {
             type: 'formula',
-            content: 'GTO-剥削统一框架：\n策略 = GTO 基线 + 方向性偏离 × 幅度限制\n\n方向性偏离规则：\n1. 对手弃牌过多 → 增加诈唬频率\n2. 对手跟注过多 → 收缩价值范围、减少诈唬\n3. 对手加注过多 → 收窄继续范围\n4. 对手加注过少 → 用更宽的范围下注\n\n幅度限制公式：\n安全偏离幅度 = 可观测偏差 × 0.5（半凯利原则）\n\n例：对手翻牌 C-Bet 频率 80%（均衡 60%，偏差 +20%）\n你的应对：提高对 C-Bet 的弃牌率约 10%\n安全幅度内，即使对手开始调整，你也不会被反制',
+            content: 'GTO-剥削统一框架：\n策略 = GTO 基线 + 方向性偏离 × 幅度限制\n\n方向性偏离规则：\n1. 对手弃牌过多 → 增加诈唬频率\n2. 对手跟注过多 → 收缩价值范围、减少诈唬\n3. 对手加注过多 → 收窄继续范围\n4. 对手加注过少 → 用更宽的范围下注\n\n幅度限制公式：\n安全偏离幅度 = 可观测偏差 × (1 - 对手调整概率)\n\n例：对手翻牌 C-Bet 频率 80%（均衡 60%，偏差 +20%）\n假设对手调整概率 = 50%（中级别玩家会逐步察觉你的偏离）\n安全偏离幅度 = 20% × (1-0.5) = 10%\n你的应对：提高对 C-Bet 的弃牌率约 10%\n安全幅度内，即使对手开始调整，你也不会被反制\n\n（注：对手调整概率越高，允许的偏离越小；调整概率接近 1 时应收回偏离、回归 GTO 基线）',
           },
           {
             type: 'theory-reference',
             content: '理论支撑：GTO-剥削统一框架的完整理论详见理论学院 T9 第 4 章"GTO-剥削统一框架"。包括"以 GTO 为基线、按可观测偏差做有方向有纪律的偏离"的执行方法论。',
-            data: { theoryLevelId: 't9', theoryChapterId: 't9-gto-exploit' },
+            data: { theoryLevelId: 't9', theoryChapterId: 't9-unified' },
           },
           {
             type: 'counter-intuitive',
@@ -115,8 +115,8 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
           { id: 'l8-exploit-q2', question: '面对 Calling Station 应该怎么打？', options: ['纯价值下注，不 bluff', '多 bluff', '打得更紧', 'GTO 不变'], correctIndex: 0, explanation: 'Calling Station 不弃牌，所以 bluff 无效。应该纯粹价值下注让他们用弱牌跟注。' },
           { id: 'l8-exploit-q3', question: '剥削策略的主要风险是？', options: ['太多赢钱', '如果对手发现并调整，你反而会输', '没有风险', 'Rake太高'], correctIndex: 1, explanation: '剥削策略是不平衡的，如果对手识破并反剥削，你会亏损。' },
         
-          { id: 'l8-exploit-q4', question: '面对Nit应该？', options: ['多bluff', '疑狂偷盲注，他加注时弃牌', '和他对打', '用GTO'], correctIndex: 1, explanation: 'Nit太紧，应该偷他盲注，他加注时立即弃牌（他有强牌）。' },
-          { id: 'l8-exploit-q5', question: '最好的策略组合是？', options: ['纯GTO', '纯剥削', '80% GTO + 20% 剥削', '50/50'], correctIndex: 2, explanation: '80% GTO基层保护自己 + 20%剥削最大化利润。' },],
+          { id: 'l8-exploit-q4', question: '面对Nit应该？', options: ['多bluff', '疯狂偷盲注，他加注时弃牌', '和他对打', '用GTO'], correctIndex: 1, explanation: 'Nit太紧，应该偷他盲注，他加注时立即弃牌（他有强牌）。' },
+          { id: 'l8-exploit-q5', question: '最好的策略组合是？', options: ['纯GTO', '纯剥削', 'GTO 为基线，按对手漏洞小幅偏离', '50/50'], correctIndex: 2, explanation: '以 GTO 为默认基线保护自己，只在样本足够且方向明确的漏洞上做小幅偏离；偏离幅度按「可观测偏差 × (1 - 对手调整概率)」递减。' },],
         practice: {
           id: 'l8-exploit-practice',
           questions: [

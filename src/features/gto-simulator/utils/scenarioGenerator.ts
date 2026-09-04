@@ -107,7 +107,6 @@ function warnPreflopFallbackOnce(position: Position): void {
   if (!import.meta.env.DEV) return;
   if (loggedPreflopFallback) return;
   loggedPreflopFallback = true;
-  // eslint-disable-next-line no-console
   console.warn(
     `[gto-simulator] BUG-GTO-009: 生成的 preflop 场景未命中 GTO 表（resolveSpotKey 返回 null）。` +
       `hero=${position}。该 spot 无 GTO 数据，已过滤该场景。若高频出现说明生成约束与表覆盖仍有缺口，需检查 scenarioGenerator.generatePreviousActions。`

@@ -605,7 +605,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，三张红桃' },
           },
           options: [
-            { action: 'Check-Call', isCorrect: false, explanation: 'KQ 同花听牌 + 高张，x/r 半诈唬更优（阻断 A♥ 坚果？不，K♥ 未阻断坚果 A♥）。', evImpact: '+0.5 ante', evLoss: 0.5 },
+            { action: 'Check-Call', isCorrect: false, explanation: 'KQ 同花听牌 + 高张，x/r 半诈唬更优。', evImpact: '+0.5 ante', evLoss: 0.5 },
             { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: 'K♥ 阻断对手 K♥X♥ 同花，同花听牌 6 outs（9−3已见），半诈唬保护。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'Fold', isCorrect: false, explanation: 'KQ 同花听牌价值高，fold 太弱。', evImpact: '-1.5 ante', evLoss: 1.5 },
           ],

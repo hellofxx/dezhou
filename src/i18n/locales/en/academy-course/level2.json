@@ -88,7 +88,7 @@
         "Fold",
         "Limp"
       ],
-      "explanation": "JTs in UTG is at the edge of the open range. In modern strategy UTG opens about 15-20% of hands — JTs just makes the cut."
+      "explanation": "JTs in UTG is at the edge of the open range. UTG opens only the very strongest slice of hands — JTs just makes the cut."
     },
     "d-l2-pos-q2": {
       "scenario": "NL100, 6-max, 100BB",
@@ -108,7 +108,7 @@
         "Fold",
         "Limp"
       ],
-      "explanation": "ATs on the BTN is an easy open. The BTN opens about 40-50% — ATs is well within range."
+      "explanation": "ATs on the BTN is an easy open. The BTN is the widest opening position at a 6-max table (about 35%) — ATs is well within range."
     },
     "d-l2-pos-q4": {
       "scenario": "NL100, 6-max, 100BB",
@@ -128,7 +128,7 @@
         "Fold",
         "Limp"
       ],
-      "explanation": "Q9s in CO is a standard open. The CO opens about 25-30% — Q9s is in range."
+      "explanation": "Q9s in CO is a standard open. The CO widens noticeably (nearly 30%) — Q9s is in range."
     },
     "d-l2-pos-q6": {
       "scenario": "NL100, 6-max, 100BB",
@@ -192,7 +192,7 @@
       "Standard 4-Bet size: 2.2-2.5x the 3-Bet. Example: Open 2.5BB → 3-Bet 7.5BB → 4-Bet 16-19BB. IP can go slightly smaller (2.2x), OOP slightly bigger (2.5x).",
       "Decision framework facing a 4-Bet: 1) 5-Bet All-in: AA/KK (always shove) 2) Call: QQ/AKs (strong but not unbeatable) 3) Fold: fold medium hands against a tight 4-Bet range.",
       "Think ahead before 4-Betting: if opponent 5-Bet All-ins, what do I do? 4-Betting without a plan is the start of disaster. Use a linear 4-Bet range (strong hands only) at low stakes, add bluffs at higher stakes.",
-      "4Bet break-even analysis:\nRequired fold rate for a 4Bet bluff = 4Bet amount ÷ (pot + 4Bet amount)\nExample: you 3Bet to 7.5BB, opponent 4Bets to 18BB\nRequired fold rate = 18 ÷ (7.5+18) ≈ 70.6%\n\nThat means when your opponent 4-Bet bluffs, you need at least a 70.6% fold rate for the 4Bet bluff to break even.",
+      "4Bet break-even analysis:\nRequired fold rate for a 4Bet bluff = 4Bet amount ÷ (pot + 4Bet amount)\nExample: you 3Bet to 7.5BB, opponent 4Bets to 18BB\nRequired fold rate = 18 ÷ (7.5+18) ≈ 70.6%\n\nMeaning: 70.6% is the fold rate your opponent needs for a 4Bet bluff to break even — fold more often than that and their bluff turns from zero EV into positive EV. So your own fold rate must stay below 70.6%, i.e. continue (3Bet or call) at least about 29.4% of the time.",
       "Theory reference: range construction and game-theory principles in 4Bet spots are in Theory Academy T4 Chapter 1 \"Range Thinking: From Single Hands to Probability Distributions\". Preflop range filtering is closely tied to responses to a 4-Bet.",
       "Counter-intuitive: a 4Bet Bluff needs an extremely high opponent fold rate (about 70%) to break even. That means it's not a strategy you can use frequently — it only works in specific spots (when opponents fold too much)."
     ],
@@ -208,7 +208,7 @@
     "l2-bb-defense": [
       "The Uniqueness of the BB",
       "The big blind (BB) has already posted 1BB, so facing an Open it only needs to top up the difference to call. Example: Open 2.5BB → BB needs only 1.5BB to call. This gives the BB excellent pot odds — defend with a wider range.",
-      "BB defense frequency reference: vs BTN Open about 50-55% | vs CO Open about 40-45% | vs HJ Open about 35-40% | vs UTG Open about 25-30%. The earlier the position, the tighter the defense.",
+      "BB defense width in relative terms: widest against a BTN Open, then CO, tighter vs HJ, tightest vs UTG. The earlier the opponent opens, the tighter your defense should be; the exact composition is defined by the Range Trainer module and the GTO strategy chart.",
       "Call vs 3-Bet Choice",
       "Call: hands with postflop potential but not suited to 3-Betting (suited connectors/small pairs/wide suited hands). 3-Bet: polarized range — strong value (AA/KK/QQ/AKs) + Bluffs (A5s/A4s etc. Ax blockers).",
       "Blind Defense Frequency: if you defend < 40%, opponents can profitably steal any time. If > 60%, over-defense gets punished by value bets. Adjust based on the opponent's Open range.",
@@ -217,11 +217,11 @@
     "l2-blind-war": [
       "Why Is the Blind War the Highest-Frequency Battle?",
       "In 6-max, SB vs BB is the most frequent confrontation. When everyone before folds, the small blind faces a choice: compete or give up half a blind?",
-      "The SB open range is usually 40-50%, because it only needs to beat one opponent. The BB can defend very wide against the SB, having posted 1BB with a weak opponent range.",
+      "The SB's open range is in the same tier as the BTN (about 35%), because it only needs to beat one opponent. The BB can defend very wide against the SB, having posted 1BB against a weaker range.",
       "SB Strategy: Open or Fold",
-      "Modern strategy uses a pure raise-or-fold approach from the SB (no limping):\n• Open raise size: 2.5-3BB (bigger, since there's no positional advantage)\n• Range: about 40-50% of hands\n• Includes all strong hands + many medium hands + some suited weak hands (as bluffs)",
+      "Modern strategy uses a pure raise-or-fold approach from the SB (no limping):\n• Open raise size: 2.5-3BB (bigger, since there's no positional advantage)\n• Range: a very wide tier, about 35% of hands\n• Includes all strong hands + many medium hands + some suited weak hands (as bluffs)",
       "BB Defense Strategy",
-      "The BB should defend a wide range against the SB's Open:\n• 3-Bet: about 12-15% (value hands + light 3-Bet bluffs)\n• Call: about 35-40% (many medium-strength hands)\n• Fold: only the weakest hands (about 45-50%)",
+      "The BB should defend a wide range against the SB's Open:\n• 3-Bet: only a small slice of the defense range (value hands + light 3-Bet bluffs)\n• Call: the bulk of the defense range (many medium-strength hands)\n• Fold: only the weakest hands",
       "Positional disadvantage (the SB acts first postflop) is the key factor in the blind war. The SB should choose hands it can \"play strongly\", not \"marginal hands\".",
       "If the opponent in the BB folds to 3-Bets a lot, tighten the SB open range slightly, but keep enough strong hands for 4-Bet bluffs."
     ],
@@ -439,14 +439,14 @@
       "explanation": "AA is the core 4-Bet hand — 4-Bet for value against a Squeeze. Don't slowplay AA."
     },
     "l2-bb-q1": {
-      "question": "Facing a BTN Open to 2.5BB, how much should the BB defend?",
+      "question": "Facing a BTN Open to 2.5BB, which defense tier should the BB use?",
       "options": [
-        "20-25%",
-        "35-40%",
-        "50-55%",
-        "70-80%"
+        "Tightest tier — strong hands only",
+        "One step tighter than average",
+        "Widest tier, including many medium-strength hands",
+        "Never fold anything"
       ],
-      "explanation": "BB should defend about 50-55% vs a BTN Open. The BTN opens the widest and the BB already has 1BB invested with good odds."
+      "explanation": "The BTN is the widest opening position at a 6-max table, and the BB has already posted 1BB with excellent odds to top up — so this is the widest defense tier of all positions."
     },
     "l2-bb-q2": {
       "question": "Facing an Open to 2.5BB, how much does the BB need to top up to call?",
@@ -459,14 +459,14 @@
       "explanation": "The BB has 1BB invested, so against a 2.5BB Open it only needs 1.5BB to call — excellent pot odds."
     },
     "l2-bb-q3": {
-      "question": "Facing a UTG Open, how much should the BB defend?",
+      "question": "Facing a UTG Open, which defense tier should the BB use?",
       "options": [
-        "25-30%",
-        "40-45%",
-        "50-55%",
-        "60-70%"
+        "Tightest tier — strong hands only",
+        "A somewhat wider tier",
+        "The widest tier",
+        "Never fold anything"
       ],
-      "explanation": "The UTG Open range is the strongest (early position), so the BB should defend about 25-30% with strong hands only."
+      "explanation": "UTG opens only the very strongest slice of hands, so the BB should defend its tightest range here, mostly with strong hands."
     },
     "l2-bb-q4": {
       "question": "In the BB, which hand suits a 3-Bet bluff?",
@@ -479,34 +479,34 @@
       "explanation": "A4s has an A blocker that lowers the odds of AA/AK — the classic 3-Bet bluff hand."
     },
     "l2-bb-q5": {
-      "question": "How wide should the BB defend against a BTN Open?",
+      "question": "Compared with other opening positions, how should the BB's defense vs a BTN Open rank?",
       "options": [
-        "25-30%",
-        "35-40%",
-        "50-55%",
-        "70-80%"
+        "As tight as vs a UTG open",
+        "Tighter than vs a CO open",
+        "The widest of all positions",
+        "Always call, never raise"
       ],
-      "explanation": "The BTN opens the widest and the BB has 1BB invested with good odds — defend about 50-55%."
+      "explanation": "The BTN opens the widest and the BB has 1BB invested with good odds, so its defense vs the BTN is the widest of all positions."
     },
     "l2-blind-q1": {
-      "question": "Heads-up SB vs BB, what is the SB's standard open range?",
+      "question": "Heads-up SB vs BB, which tier is the SB's standard open range?",
       "options": [
-        "20-25%",
-        "30-35%",
-        "40-50%",
-        "60-70%"
+        "As tight as an early-position open",
+        "Only the strong-hand tier",
+        "A very wide tier (about 35%)",
+        "Almost any two cards"
       ],
-      "explanation": "The SB only needs to beat one opponent, so it can play a wide range — usually 40-50%."
+      "explanation": "The SB only needs to beat one opponent, so its opening belongs to a very wide tier (about 35%); the exact composition is defined by the Range Trainer module and the GTO strategy chart."
     },
     "l2-blind-q2": {
-      "question": "What is the BB's defense rate against an SB Open?",
+      "question": "How wide should the BB's defense range be against an SB Open?",
       "options": [
-        "30%",
-        "40%",
-        "50-55%",
-        "70%"
+        "Very tight — strong hands only",
+        "As tight as vs a BTN Open",
+        "Very wide (3-Bet + Call together)",
+        "Fold most hands"
       ],
-      "explanation": "The BB has 1BB invested and the opponent's range is weak — defend about 50-55% (3-Bet + Call)."
+      "explanation": "The BB has 1BB invested and the SB's range is weak, so the defense should be very wide (3-Bet + Call combined)."
     },
     "l2-blind-q3": {
       "question": "What is the standard SB Open size?",
@@ -705,7 +705,7 @@
       "correctAction": "Call",
       "reasoning": [
         "K9s should Call and defend against a BTN Open",
-        "The BTN opens a wide range (about 40%) — K9s has enough equity",
+        "The BTN is the widest opening position at a 6-max table — K9s has enough equity",
         "Only 1.5BB to top up — excellent pot odds (about 2.5:1)",
         "Suited high cards have postflop potential (top pair/flush)"
       ],
@@ -1437,5 +1437,13 @@
       "u1": "What Is a 3-Bet?",
       "u2": "The Purpose of a 3-Bet"
     }
+  },
+  "lessonObjectives": {
+    "l2-3bet-basics": [
+      "Explain how the \"3\" in 3-Bet is counted: the blinds are bet 1, the open raise is bet 2, the re-raise is bet 3",
+      "List the four purposes of a 3-bet: value, fold equity, initiative and isolation",
+      "Compare a linear 3-bet range with a polarized 3-bet range, and state the order beginners should adopt them in",
+      "Count the combos in a 3-bet range and explain the blocker effect: {AA,KK,QQ,AKs,A5s} is 26 combos, dropping to 22 when you hold A-spades"
+    ]
   }
 }

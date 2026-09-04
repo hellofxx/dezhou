@@ -20,11 +20,11 @@
       "Golden rule: the button (BTN) is the best position — you act last and have the most information.",
       "Position Categories",
       "Early: UTG, UTG+1 — act first with the least information, need the strongest hands\nMiddle: MP, HJ — middle positions, can widen slightly\nLate: CO, BTN — act late with the most information, widest range\nBlinds: SB, BB — have chips committed, but act first postflop",
-      "The same hand is worth far more on the BTN than in UTG. For example, KJo is a standard open on the BTN but should usually fold in UTG (about 15% range for conservative players).",
+      "The same hand is worth far more on the BTN than in UTG. For example, KJo is a standard open on the BTN but should usually fold in UTG — UTG opens only the very strongest slice of hands.",
       "Pro players strictly adjust their starting-hand range by position. Only a few hands (AA/KK/QQ/AKs) are playable \"in any position\"; everything else must be adjusted by position.",
       "How Position Advantage Shows Up",
-      "1. Preflop: late position can steal blinds and open a wider range\n2. Postflop: late position controls pot size and makes more precise value bets\n3. Information edge: decide after seeing opponents' actions, reducing error rate",
-      "Equity realization by position:\nBTN opens about 40-50% (Sklansky-Murr classic theory suggests 35%, modern solver outputs up to 50%)\nUTG opens about 10-15%, but being OOP postflop cuts equity realization to roughly 80-90%\n\nQuantitative rule: each additional position of late position lets you widen the range about 5-8 percentage points and raises postflop equity realization by about 5-10%.",
+      "1. Preflop: late position can steal blinds and open a wider range\n2. Postflop: late position controls pot size and makes more precise value bets\n3. Information edge: decide after seeing opponents' actions, reducing error rate\n\nThe exact composition and mixing frequencies of every position's range are defined by the Range Trainer module and the GTO strategy chart (the single source of truth for preflop).",
+      "Relative opening width by position:\nUTG opens only the very strongest slice of hands, HJ slightly wider, CO noticeably wider (nearly 30%), the BTN is the widest opening position at a 6-max table (about 35%), and the SB is in the same tier as the BTN (about 35%).\n\nEquity realization: the BTN has position postflop and realizes its equity better; UTG is out of position postflop, realizing only about 80-90%.\n\nRule: the later your position, the wider you may open and the better your postflop equity realization — but the width steps between adjacent positions are not uniform: they stay tight up front and only widen markedly at CO/BTN.",
       "Theory reference: quantitative analysis of position value is in Theory Academy T3 Chapter 1 \"Position Value and Equity Realization\"; the modern revision of the Gap Concept is in T3 Chapter 2; Sklansky's Fundamental Theorem is in T3 Chapter 3.",
       "Counter-intuitive: BTN's positional advantage is mainly postflop, not preflop. Preflop BTN only acts last; but postflop BTN acts last on every street — meaning you can see all opponents' actions before deciding, which is a huge information advantage."
     ],
@@ -58,9 +58,9 @@
       "Why Is Identifying Errors More Important Than Learning Techniques?",
       "Fixing one error usually gains more than learning one new technique. Here are the 10 most common beginner leaks, ordered from most severe to least:",
       "Leak #1: Playing Too Many Hands (VPIP Too High)",
-      "Beginners usually play 40-60% of hands, while winning players play only 20-28%.\n\nFix: strictly follow the preflop range chart — only play hands \"worth playing\".",
+      "Beginners are usually involved in 40-60% of deals, while winning players keep it to about 20-25%.\n\nHow to fix: stick strictly to your preflop ranges (the Range Trainer and the GTO strategy tables are the source of truth for each position's exact composition and frequencies) — only play hands worth playing.",
       "Leak #2: Missing Position Awareness",
-      "Playing too many hands from bad position and ignoring positional advantage.\n\nFix: in early position (UTG/HJ) only play the strongest 15%; in late position (CO/BTN) you can widen to 25-35%.",
+      "Playing too many hands from bad position and ignoring positional advantage.\n\nFix: UTG and HJ open only the very strongest slice of hands, CO widens noticeably (nearly 30%), and the BTN is the widest opening position at a 6-max table (about 35%). The exact composition of each position's range is defined by the Range Trainer module and the GTO strategy chart.",
       "Leak #3: Passive Calling (Too Many Calls, Too Few Raises)",
       "\"Call is the weakest action\" — most of the time you should raise or fold instead of passively calling.",
       "Leak #4: Poor Bet Sizing",
@@ -122,7 +122,7 @@
         "Fold",
         "All-in"
       ],
-      "explanation": "KJo in UTG is a marginal hand (about 15% range); modern strategy allows a loose open, but conservative play still suggests folding."
+      "explanation": "KJo in UTG is a marginal hand (right at the upper edge of the UTG opening range); modern strategy allows a loose open, but conservative play still suggests folding."
     },
     "l1-pos-q3": {
       "question": "What is the biggest advantage of late position?",
@@ -199,10 +199,10 @@
       "options": [
         "40-60%",
         "30-40%",
-        "20-28%",
+        "20-25%",
         "10-15%"
       ],
-      "explanation": "Winning 6-max players typically have a VPIP of 20-28%, depending on position and style."
+      "explanation": "Winning 6-max players typically run a VPIP around 20-25%, varying by position and style."
     },
     "l1-leaks-q2": {
       "question": "Which of these is NOT a common beginner mistake?",
@@ -256,10 +256,10 @@
       "title": "Same hand, different position: KJo in UTG vs BTN",
       "correctAction": "Fold",
       "reasoning": [
-        "KJo in UTG is a marginal hand (about 15% range) — an open is loose; conservative play still suggests folding",
+        "KJo in UTG is a marginal hand (right at the upper edge of the UTG opening range) — an open is loose; conservative play still suggests folding",
         "Acting first means you have the least information, and 5 more players behind can raise",
         "KJo is easily dominated (opponents may hold AK, KQ, AJ)",
-        "In early position only play the strongest ~10% of hands"
+        "In early position, only the very strongest slice of hands gets played"
       ],
       "mistakeAction": "Open-raising with KJo in UTG",
       "mistakeReasoning": "KJo looks decent, but it's too weak in early position. If someone behind 3-Bets, you'll be in a very tough spot.",
@@ -271,7 +271,7 @@
       "correctAmount": "2.5BB",
       "reasoning": [
         "T8s on the BTN facing all folds is a standard open",
-        "BTN can open the widest range (about 40-50% of hands)",
+        "The BTN is the widest opening position at a 6-max table (about 35% of hands)",
         "Suited connectors play very well postflop",
         "Only SB and BB remain — you may win the blinds outright"
       ],
@@ -378,7 +378,7 @@
         {
           "action": "Raise",
           "amount": "2.5BB",
-          "explanation": "Opening A9s from UTG is too loose. Early position only plays the strongest 10-12% — A9s isn't in it.",
+          "explanation": "Opening A9s from UTG is too loose. UTG opens only the very strongest slice of hands — A9s isn't in it.",
           "evImpact": "-0.7 BB/100"
         },
         {
@@ -495,5 +495,13 @@
       "u2": "Position Categories",
       "u3": "How Positional Advantage Shows Up"
     }
+  },
+  "lessonObjectives": {
+    "l1-basics": [
+      "Recite the full order of a hand from preflop to showdown, and state how many community cards the flop, turn and river each deal",
+      "Rank the 10 hand types from strongest to weakest, and say whether a flush or a straight wins",
+      "Compute the total number of starting-hand combos with C(52,2), and give the combo counts for pocket pairs, suited and offsuit hands",
+      "Distinguish the 169 hand categories from the 1326 distinct combos, and explain why probabilities must use 1326"
+    ]
   }
 }

@@ -1,6 +1,6 @@
 ---
 name: strategy-academy-dev
-description: 策略学院模块开发代理，负责 src/features/strategy-academy/ 内的所有变更。当涉及课程内容、Drill 练习、QuickDrill、三段式互动教学、学习进度、8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）或教学场景演示时使用；此类任务应主动委派给本代理。
+description: 策略学院模块开发代理，负责 src/features/strategy-academy/ 内的所有变更。当涉及课程内容、Drill 练习、QuickDrill、小节锚点式微观闭环教学、学习进度、8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）或教学场景演示时使用；此类任务应主动委派给本代理。
 tools:
   - Read          # 读取课程数据与组件代码
   - Glob          # 查找文件路径
@@ -34,7 +34,7 @@ additionalPrompt: ""
 
 ## Authority
 - **可决策范围**：
-  - 三段式互动教学流程（概念讲解 → 实例演示 → 实践测验）
+  - 小节锚点式微观闭环教学流程（先行组织者路线图 → 小节序列 → 综合实战 → 课后测验）
   - 8 级课程体系内容建设（L4 拆分为 4A/4B，共 9 个 Level 节点；data/levels/ 目录 + courses.ts re-export 兼容层）
   - Drill 组件开发与注册（components/drills/）
   - 3 分钟快速训练（QuickDrill）逻辑与 SRS 混合
@@ -49,10 +49,11 @@ additionalPrompt: ""
   - 不修改全局路由配置（src/app/routes.tsx），新增路由需通过 platform-dev
 
 ## Capabilities
-- **三段式互动教学**：概念讲解 → 实例演示 → 实践测验
+- **小节锚点式微观闭环教学**：先行组织者路线图 → 小节序列（锚点导航 + 牌例同屏）→ 综合实战 → 课后测验
+- **内容质量门槛与版权合规**：见 PRD §6.7.1 / §6.7.2（单源，禁止在此重述明细）
 - **8 级课程体系（L4 拆分为 4A/4B，共 9 个 Level 节点）**
 - **基础 Drill 内容建设**：
-  - HandRankingDrill（10 题）/ PositionDrill（8 题）/ OutsDrill（8 题）/ PotOddsDrill（6 题）/ OpponentDrill（对手形象）
+  - HandRankingDrill（牌型识别）/ PositionDrill（位置意识）/ OutsDrill（听牌计数）/ PotOddsDrill（赔率计算）/ OpponentDrill（对手形象）；各 Drill 题量以 `components/drills/` 下题库数据为唯一事实源
   - 统一 `DrillProps` 接口（`onComplete(result)` / `onExit()`）
   - 复用 CardSVG / HandDisplay 组件，不引入新依赖
 - **3 分钟快速训练**：
@@ -111,7 +112,7 @@ additionalPrompt: ""
 - src/features/strategy-academy/data/localLessons/ — 本土低级别盈利路径课程内容
 - src/features/strategy-academy/utils/ — 难度自适应（adaptiveDifficulty.ts）/ 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具 / 选项排序治理（quizShuffle.ts）
 - src/features/strategy-academy/hooks/ — useAcademy 等消费 hook
-- src/features/strategy-academy/components/ — 首页 / 课程视图（CourseView.tsx 含双层门禁 + Drill 路由）/ 三段式内容 / 测验 / 认证 / QuickDrill 等页面组件
+- src/features/strategy-academy/components/ — 首页 / 课程视图（CourseView.tsx 含双层门禁 + Drill 路由）/ 小节化内容渲染（LessonContent / SectionNav / LessonIntroCard）/ 测验 / 认证 / QuickDrill 等页面组件
 - src/features/strategy-academy/components/drills/ — Drill 组件与题库（DrillLessonRouter.tsx 统一 lazy 路由；ChoiceDrillRenderer.tsx 通用选择题渲染；types.ts 定义 DrillProps / DrillResult）
 
 ## Workflows

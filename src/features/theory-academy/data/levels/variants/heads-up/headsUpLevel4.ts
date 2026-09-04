@@ -55,7 +55,7 @@ export const HEADS_UP_LEVEL_4: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            'BB 防守约 60%+ 的数学同样清晰：面对 SB min-raise 到 2BB，BB 跟注 1BB 争夺 SB 投入的 2BB，所需胜率 = 1÷(2+1) ≈ 33.3%；而 BB 翻后是位置优势方（IP），权益实现率超过 100%——同样 33% 的底池赔率，单挑 BB 的跟注比满员桌更有利。这就是为什么单挑 BB 可以防守超过 MDF 底线（约 33%-38%）而仍然盈利。',
+            'BB 防守约 60%+ 的数学同样清晰：面对 SB min-raise 到 2BB，BB 只需再跟 1BB，而跟注后总底池 = SB 2 + BB 已投 1 + 你的跟注 1 = 4BB，所需胜率 = 1 ÷ 4 = 25%（通式：跟注额 ÷（当前底池 1.5 + 对手下注 1.5 + 自己跟注 1），当前底池含 BB 自己那 1BB 死钱）；而 BB 翻后是位置优势方（IP），权益实现率超过 100%——25% 的廉价跟注线叠加位置加成，单挑 BB 的跟注比满员桌更有利。这就是为什么单挑 BB 可以防守超过 MDF 底线（约 33%-38%）而仍然盈利。',
         },
         {
           type: 'example',
@@ -101,7 +101,7 @@ export const HEADS_UP_LEVEL_4: TheoryLevelInfo = {
             '满员桌规则禁止 BB 宽防守',
           ],
           correctIndex: 0,
-          explanation: '位置反转让单挑 BB 翻后最后行动（IP），权益实现率超 100%，且 SB 的 0.5 死钱让跟注价格便宜（33.3%）。满员桌 BB 翻后永远 OOP，防守必须收紧。',
+          explanation: '位置反转让单挑 BB 翻后最后行动（IP），权益实现率超 100%，且 SB 的 0.5 死钱让跟注价格便宜（面对 min-raise 再跟 1BB ÷ 跟注后总底池 4BB = 25%）。满员桌 BB 翻后永远 OOP，防守必须收紧。',
         },
         {
           id: 't4hu-range-width-q3',

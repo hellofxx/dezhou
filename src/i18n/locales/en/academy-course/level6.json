@@ -34,8 +34,8 @@
       "Tournament vs Cash Push/Fold Differences",
       "Cash games:\n- Push/Fold rarely used (except extremely short)\n- Can use min-raise to keep postflop playability\n\nTournaments:\n- ICM pressure widens push ranges (opponents call tighter)\n- Push ranges can be wider than Nash on the bubble\n- Push wider when final-table pay jumps are big",
       "Push/Fold is the core short-stack skill in tournaments. Remember: at 10BB the BTN can push 40%+ of hands — much wider than most people's intuition.",
-      "ICM Bubble Factor definition:\nBF = required equity to call / required equity in cash\n\nExplanation: on the bubble, survival weight > immediate EV, so the Bubble Factor is usually 1.5-3.0x. You need higher equity to call because folding might mean survival ($EV > 0).\n\nExample: 4-player SNG bubble (prizes 50%/30%/20%)\n- Chip distribution: you 40%, MP 35%, CO 20%, BTN 5%\n- Your $EV(fold) = 35% (securing 2nd)\n- Your $EV(call, win) = 50%\n- Your $EV(call, lose) = 0\n- Break-even: 35 <= p×50% + (1-p)×0 → p >= 70%\n- In cash you'd only need: pot odds (e.g. 43%)\n- Bubble Factor ≈ 70%/43% ≈ 1.6x",
-      "Nash Push/Fold equilibrium ranges (10BB spot):\nSB Push range (vs BB):\n- All pairs 22+\n- All Ax\n- All suited Kx\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- Total about 70-80% of hands\n\nBB Call range (vs SB Push):\n- All pairs 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- Total about 35-40% of hands\n\nBreak-even calculation:\nBB calls 10BB to win 12BB (incl. blinds)\nRequired equity = 9/(9+12) ≈ 43%",
+      "ICM Bubble Factor definition:\nBF = required equity to call / required equity in cash\n\nExplanation: on the bubble, survival weight > immediate EV, so the Bubble Factor is usually 1.5-3.0x. You need higher equity to call: losing an all-in busts you ($EV = 0), while folding still keeps your in-the-money $EV.\n\nExample: 4-player SNG bubble (prizes 50%/30%/20%)\n- Chip distribution: you 40%, MP 35%, CO 20%, BTN 5%\n- Your $EV(fold) = 35% (securing 2nd)\n- Your $EV(call, win) = 50%\n- Your $EV(call, lose) = 0\n- Break-even: 35 <= p×50% + (1-p)×0 → p >= 70%\n- Cash-game required equity (taken as 43% here) is an ILLUSTRATIVE value: it follows from none of the lines above and only conveys the order of magnitude of BF. A real number has to be recomputed from that hand's actual pot and call amount, using call ÷ (pot that already includes the opponent's bet + call) (see L4B required-to-call equity; this lesson's own l6-pushfold-p5 is a recomputable instance: 9 ÷ (12 + 9) ≈ 43%)\n- Bubble Factor ≈ 70%/43% ≈ 1.6x (the denominator is that illustrative value, so this 1.6x is likewise order-of-magnitude only, not the exact equilibrium for the hand)",
+      "Nash Push/Fold equilibrium ranges (10BB spot):\nSB Push range (vs BB):\n- All pairs 22+\n- All Ax\n- All suited Kx\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- Total about 70-80% of hands\n\nBB Call range (vs SB Push):\n- All pairs 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- Total about 35-40% of hands\n\nBreak-even calculation (premise: 10BB effective stacks, blinds SB 0.5 / BB 1, no ante):\nAfter SB shoves 10BB the pot = SB's 10 + BB's dead 1 = 11BB\nBB already has 1BB in, so the extra call costs 10 - 1 = 9BB\nRequired equity = 9 ÷ (11 + 9) = 9/20 = 45%",
       "Theory reference: the full derivation of Nash Push/Fold equilibrium ranges is in Theory Academy T9 Chapter 2 \"ICM Theory\". Tournament ICM pressure and Push/Fold decisions are closely related.",
       "Counter-intuitive: UTG's push range at 10BB is nearly wide open (about 70-80%), not \"tight\". Many players think short-stacked UTG should only push strong hands, but Nash equilibrium shows UTG at 10BB can push an extremely wide range — because folding means blinds get eaten, while pushing captures fold equity."
     ],
@@ -44,7 +44,7 @@
       "The bubble is the stage with only 1-3 eliminations left before the money. For example:\n- 100 players, top 15 get paid\n- When only 16-18 remain, it's the bubble\n\nThis is the stage with the highest ICM pressure, because:\n- Eliminating 1-3 more players enters the money\n- Elimination = zero prize\n- Entering the money = at least min-cash",
       "The bubble is the stage with the highest ICM pressure in a tournament, and the stage where big stacks profit the most.",
       "Big-Stack Bubble Strategy",
-      "If you're one of the top 3 big stacks:\n\n1. Aggressive pressure\n   - Open wide (40-50%)\n   - 3-bet wide (especially vs medium stacks)\n   - Exploit medium stacks' ICM fear\n\n2. Target selection\n   - Attack medium stacks first (they fear elimination most)\n   - Short stacks may \"fight back\" (nothing left to lose)\n\n3. Position exploitation\n   - Apply maximum pressure from BTN/CO\n   - Medium stacks in the blinds face the toughest decisions",
+      "If you're one of the top 3 big stacks:\n\n1. Aggressive pressure\n   - Open with a very wide range\n   - 3-bet wide (especially vs medium stacks)\n   - Exploit medium stacks' ICM fear\n\n2. Target selection\n   - Attack medium stacks first (they fear elimination most)\n   - Short stacks may \"fight back\" (nothing left to lose)\n\n3. Position exploitation\n   - Apply maximum pressure from BTN/CO\n   - Medium stacks in the blinds face the toughest decisions",
       "Medium-Stack Bubble Strategy",
       "If you're a medium stack:\n\n1. Avoid clashing with big stacks\n   - When a big stack opens, 3-bet/call with a tighter range\n   - Don't \"prove yourself\" — survival first\n\n2. Pressure short stacks\n   - Open/3-bet wide against short stacks\n   - Short stacks need very tight calling ranges\n\n3. Position awareness\n   - Play tighter behind big stacks\n   - Play wider behind short stacks",
       "Short-Stack Bubble Strategy",
@@ -60,7 +60,7 @@
       "Dynamic Adjustment by Chip Distribution",
       "Adjust strategy by table chip distribution:\n\n1. You're a big stack (top 2-3)\n   - Apply pressure with wide opens/3-bets\n   - Exploit medium stacks' ICM fear\n   - Goal: accumulate chips, chase 1st place\n\n2. You're a medium stack\n   - Avoid clashing with big stacks\n   - Pressure short stacks\n   - Goal: survive, wait for a better spot\n\n3. You're a short stack\n   - Seek the best shove spot\n   - Don't passively wait\n   - Goal: double up or bust",
       "Steal Strategy",
-      "When to steal:\n- Blinds are big (relative to stacks)\n- Opponents are tight (high fold-to-steal)\n- You're in position (BTN/CO)\n\nSteal range:\n- BTN: 40-50% (any Ax, any pair, most suited hands)\n- CO: 30-40%\n\nSteal size:\n- Min-raise (2-2.2x) is most common\n- Gives opponents the worst odds\n- Reduces your own risk",
+      "When to steal:\n- Blinds are big (relative to stacks)\n- Opponents are tight (high fold-to-steal)\n- You're in position (BTN/CO)\n\nSteal range:\n- BTN: the widest opening tier (about 35%; any Ax, any pair, most suited hands)\n- CO: noticeably wider but still tightened (nearly 30%; BTN plus both blinds still act behind you, so don't open CO at BTN width)\n\nSteal size:\n- Min-raise (2-2.2x) is most common\n- Gives opponents the worst odds\n- Reduces your own risk",
       "Re-Steal",
       "Re-stealing is 3-betting all-in from the blinds against a stealer:\n\nWhen to re-steal:\n- The opponent steals often (open > 40%)\n- You have 15-25BB (too little = no fold equity, too much = wasteful)\n- You have blockers (Ax, Kx)\n\nHand selection:\n- Ax: block the opponent's Ax combos\n- Suited hands: postflop playability\n- Avoid \"dominated\" hands (KJ, QT)",
       "Heads-Up Strategy Intro",
@@ -241,14 +241,14 @@
       "explanation": "Final-table pay jumps are big — every elimination changes prizes significantly, so ICM pressure remains strong."
     },
     "l6-finaltable-q2": {
-      "question": "What is BTN's typical steal range?",
+      "question": "Which tier is BTN's typical steal range?",
       "options": [
-        "10-15%",
-        "20-25%",
-        "40-50%",
-        "80-90%"
+        "The strong-hands-only tier",
+        "A medium-tight tier",
+        "The widest opening tier (about 35%)",
+        "Almost any two cards"
       ],
-      "explanation": "BTN's steal range is typically 40-50%, including any Ax, any pair, and most suited hands."
+      "explanation": "BTN's steal belongs to the widest opening tier (about 35%), including any Ax, any pair and most suited hands; the exact composition is defined by the Range Trainer module and the GTO strategy chart."
     },
     "l6-finaltable-q3": {
       "question": "What is the ideal stack for a re-steal?",
@@ -387,7 +387,7 @@
         "SB's push range is wide (50-55%)",
         "A8s has great equity vs a wide range (~55%)",
         "The A blocker reduces the chance the opponent has Ax",
-        "Pot odds: SB pushes 10BB, hero BB calls 9BB, total pot 21BB. Required equity = 9/21 ≈ 43%",
+        "Pot odds (premise: blinds SB 0.5 / BB 1, no ante): SB pushes 10BB, so the pot is 10 + 1 = 11BB; hero BB already has 1BB in and must call 9BB more, making the total pot 20BB after the call. Required equity = 9 ÷ 20 = 45%",
         "Even without ICM pressure this is a clear call"
       ],
       "mistakeAction": "Fold",
@@ -448,7 +448,7 @@
       "title": "Re-Steal",
       "correctAction": "Re-raise all-in",
       "reasoning": [
-        "BTN's open range is wide (40%+)",
+        "BTN's open range is the widest opening tier",
         "You have 20BB — the ideal re-steal stack",
         "A5s has the A blocker (reducing the chance of opponent Ax)",
         "BTN needs a very tight calling range (~15%)",
@@ -582,12 +582,12 @@
       "option": [
         {
           "action": "Call",
-          "explanation": "Although 77 has decent equity vs BTN's wide push range, bubble ICM pressure makes the call's $EV negative. Let the short stacks get eliminated first.",
+          "explanation": "In pure chip EV, 77 is ahead of BTN's wide push range: pot 12BB, you must call 10 - 1 = 9BB, so break-even equity = 9 ÷ (12 + 9) ≈ 43%. But bubble ICM pressure makes the call's $EV negative — let the 2 shorter stacks be eliminated first.",
           "evImpact": "-$20"
         },
         {
           "action": "Fold",
-          "explanation": "Bubble ICM pressure is extreme. You're a medium stack with 2 shorter stacks. Folding 77 is the correct ICM decision.",
+          "explanation": "Bubble ICM pressure is extreme. You are the medium stack (12BB) with 2 players at 5BB behind you, so the ICM value of staying alive outweighs the chip gain of calling — folding 77 is the correct ICM decision. Premise behind the 12BB pot (same caliber as this lesson's \"blinds SB 0.5 / BB 1, no ante\"): BTN's 10 shove + the 0.5 SB leaves behind after folding + the 1 you already have in BB = 11.5BB, rounded to 12 in the question data; you must call 10 - 1 = 9BB ⇒ break-even equity = 9 ÷ (12 + 9) ≈ 43%, a chip-EV bar 77 actually clears (about 52%) — what vetoes the call is ICM, not the price.",
           "evImpact": "+$15"
         },
         {
@@ -629,7 +629,7 @@
         },
         {
           "action": "Push all-in",
-          "explanation": "KK is a premium hand at 12BB — shove for maximum value.",
+          "explanation": "KK is a premium hand at 12BB — shove for maximum value. Premise behind the 1.5BB pot: blinds SB 0.5 + BB 1, no ante, and UTG/MP have both folded, so no one has raised and the pot is only 1.5BB.",
           "evImpact": "+2BB"
         },
         {
@@ -644,12 +644,12 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "AJs has enough equity vs BTN's 10BB push range (40%+). Without ICM pressure, it's a clear call.",
+          "explanation": "AJs has enough equity vs BTN's 10BB push range (40%+). Without ICM pressure, it's a clear call. Premise behind the 12BB pot (same caliber as this lesson's \"blinds SB 0.5 / BB 1, no ante\"): BTN's 10 shove + the 0.5 SB leaves behind after folding + the 1 you already have in BB = 11.5BB, rounded to 12 in the question data.",
           "evImpact": "-2BB"
         },
         {
           "action": "Call",
-          "explanation": "AJs has about 60% equity vs a wide push range. No ICM pressure — standard call.",
+          "explanation": "AJs has about 60% equity vs a wide push range. You must call 10 - 1 = 9BB ⇒ break-even equity = 9 ÷ (12 + 9) ≈ 43%, and 60% sits far above that line; with no ICM pressure (far from the money) this is a standard call.",
           "evImpact": "+2BB"
         }
       ],

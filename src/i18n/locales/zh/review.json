@@ -5,7 +5,8 @@
     "strategy": "策略",
     "range": "范围",
     "odds": "赔率",
-    "gto": "GTO"
+    "gto": "GTO",
+    "theory": "理论"
   },
   "defaultFront": "请回忆该知识点的关键内容，然后点击\"显示答案\"自评。",
   "answerLabel": "答案",

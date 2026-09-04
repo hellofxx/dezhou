@@ -557,7 +557,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           {
             type: 'theory-reference',
             content: '理论支撑：SPR 与几何尺度下注的完整推导见理论学院 T6 第 3 章"SPR 与三街几何尺度"。多街玩法中的下注规划与范围构建密切相关。',
-            data: { theoryLevelId: 't6', theoryChapterId: 't6-spr' },
+            data: { theoryLevelId: 't6', theoryChapterId: 't6-geometric' },
           },
           {
             type: 'counter-intuitive',
@@ -1432,7 +1432,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 { id: 'b', text: '约 25%', isCorrect: true },
                 { id: 'c', text: '约 33%', isCorrect: false },
               ],
-              explanation: '跟注5BB赢15BB+5BB=20BB，赔率5:20=1:4，需要1/(4+1)=20%胜率。但实际是跟注5BB，总底池20BB，需要5/20=25%。',
+              explanation: '跟注 5BB，跟注后总底池 = 15BB + 5BB = 20BB，所需胜率 = 5/20 = 25%。底池赔率表述为"可赢额 : 跟注额 = 15:5 = 3:1"，对应的保本胜率即 1/(3+1) = 25%——两种算法同一个数。',
               difficulty: 2,
             },
             {
@@ -1487,7 +1487,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           {
             type: 'text',
             content:
-              '3-Bet 底池与单次加注底池有本质区别。由于翻前底池更大，翻后的 SPR（筹码底池比）显著降低。这意味着：\n\n- 有效筹码相对底池更小，决策空间被压缩\n- 范围更窄（3-Bet 范围通常只有 5-15%）\n- 每个决策的 EV 影响更大\n- 更容易在翻牌全下（SPR 通常 3-6）',
+              '3-Bet 底池与单次加注底池有本质区别。由于翻前底池更大，翻后的 SPR（筹码底池比）显著降低。这意味着：\n\n- 有效筹码相对底池更小，决策空间被压缩\n- 范围更窄（3-Bet 范围远比开池范围窄）\n- 每个决策的 EV 影响更大\n- 更容易在翻牌全下（SPR 通常 3-6）',
           },
           {
             type: 'key-point',
@@ -1546,7 +1546,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           {
             id: 'l3-3bet-pf-q5',
             question: '3-Bet 底池中低 SPR 的主要影响是？',
-            options: ['翻后决策更简单', '需要更多筹码', ' bluff 更有威力', '位置不重要了'],
+            options: ['翻后决策更简单', '需要更多筹码', 'bluff 更有威力', '位置不重要了'],
             correctIndex: 0,
             explanation: '低 SPR 意味着决策空间被压缩，很多情况下顶对就能打光，翻后决策相对更简单。',
           },

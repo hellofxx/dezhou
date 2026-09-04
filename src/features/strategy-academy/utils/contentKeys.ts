@@ -58,6 +58,23 @@ export function resolveUnitTitleKeyed(t: TFunction, lesson: Lesson, unit: Lesson
   });
 }
 
+// ===== 学习目标（Lesson.objectives，索引型数组）=====
+
+export function lessonObjectivesKey(lessonId: string, index: number): string {
+  return `academy.lessonObjectives.${lessonId}.${index}`;
+}
+
+/** 解析学习目标数组（按索引派生 key，defaultValue 兜底数据层中文原文） */
+export function resolveLessonObjectives(
+  t: TFunction,
+  lessonId: string,
+  objectives: readonly string[],
+): string[] {
+  return objectives.map((obj, i) =>
+    t(lessonObjectivesKey(lessonId, i), { defaultValue: obj }),
+  );
+}
+
 // ===== 课后测验（QuizQuestion 有稳定 id）=====
 
 export function quizQuestionKey(questionId: string): string {

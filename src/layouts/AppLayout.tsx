@@ -169,6 +169,7 @@ export default function AppLayout() {
     '/academy': t('nav.academy'),
     '/academy/basics': t('nav.basics'),
     '/theory': t('nav.theory'),
+    '/theory/review': t('nav.theoryReview'),
     '/range-trainer': t('nav.rangeTrainer'),
     '/pot-odds': t('nav.potOdds'),
     '/gto-simulator': t('nav.gtoSimulator'),

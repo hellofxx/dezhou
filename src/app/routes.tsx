@@ -63,6 +63,8 @@ const DailyPuzzle = lazyPage(() => import('@/features/puzzle-trainer/components/
 const ThemeDrill = lazyPage(() => import('@/features/puzzle-trainer/components/ThemeDrill'), '/puzzle/theme/:themeId');
 const TheoryHome = lazyPage(() => import('@/features/theory-academy/components/TheoryHome'), '/theory');
 const TheoryChapterView = lazyPage(() => import('@/features/theory-academy/components/TheoryChapterView'), '/theory/chapter/:chapterId');
+// 疑难标记复习清单：仅消费 theory.* 文案，故复用 '/theory' 分组（页面本体已在该分组内）
+const TheoryFlaggedReview = lazyPage(() => import('@/features/theory-academy/components/TheoryFlaggedReview'), '/theory');
 const HelpHome = lazyPage(() => import('@/features/help-center/components/HelpHome'), '/help');
 const HelpArticle = lazyPage(() => import('@/features/help-center/components/HelpArticle'), '/help/article/:articleId');
 
@@ -100,6 +102,7 @@ export const router = createBrowserRouter([
       { path: 'academy/lesson/:lessonId', element: <LazyWrapper><ErrorBoundary><CourseView /></ErrorBoundary></LazyWrapper> },
       { path: 'theory', element: <LazyWrapper><ErrorBoundary><TheoryHome /></ErrorBoundary></LazyWrapper> },
       { path: 'theory/chapter/:chapterId', element: <LazyWrapper><TheoryChapterView /></LazyWrapper> },
+      { path: 'theory/review', element: <LazyWrapper><TheoryFlaggedReview /></LazyWrapper> },
       { path: 'puzzle', element: <LazyWrapper><PuzzleHome /></LazyWrapper> },
       { path: 'puzzle/rush', element: <LazyWrapper><PuzzleRush /></LazyWrapper> },
       { path: 'puzzle/daily', element: <LazyWrapper><DailyPuzzle /></LazyWrapper> },

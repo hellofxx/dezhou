@@ -11,7 +11,7 @@ tools:
   - Write         # 新建组件/CSS 文件
   - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "Qwen3.7-Plus"
+model: "[DeepSeek-V4-Flash](dfmodel)"
 skills:
   - frontend-design
 mcpServers: []

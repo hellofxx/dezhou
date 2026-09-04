@@ -328,11 +328,11 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'formula',
-            content: 'ICM Bubble Factor 定义：\nBF = call 所需 equity / 现金局所需 equity\n\n解释：泡沫期（bubble）存活权重 > 即时 EV，Bubble Factor 通常 1.5-3.0x。意味着你需要更高的胜率才能 call，因为弃牌可能意味着淘汰（$EV = 0）。\n\n示例：4 人 SNG 泡沫期（奖金结构 50%/30%/20%）\n- 筹码分布：你 40%, MP 35%, CO 20%, BTN 5%\n- 你的 $EV(fold) = 35% (确保第二名)\n- 你的 $EV(call, win) = 50%\n- 你的 $EV(call, lose) = 0\n- 盈亏平衡：35 <= p×50% + (1-p)×0 → p >= 70%\n- 现金局只需：pot odds 计算（如 43%）\n- Bubble Factor ≈ 70%/43% ≈ 1.6x',
+            content: 'ICM Bubble Factor 定义：\nBF = call 所需 equity / 现金局所需 equity\n\n解释：泡沫期（bubble）存活权重 > 即时 EV，Bubble Factor 通常 1.5-3.0x。意味着你需要更高的胜率才能 call：跟注失败即被淘汰（$EV = 0），而弃牌仍保留晋级的 $EV。\n\n示例：4 人 SNG 泡沫期（奖金结构 50%/30%/20%）\n- 筹码分布：你 40%, MP 35%, CO 20%, BTN 5%\n- 你的 $EV(fold) = 35% (确保第二名)\n- 你的 $EV(call, win) = 50%\n- 你的 $EV(call, lose) = 0\n- 盈亏平衡：35 <= p×50% + (1-p)×0 → p >= 70%\n- 现金局所需胜率（本例取 43%）＝示意值：它不由上面任何一行推出，只用于说明 BF 的量级。真实值须按那一手的具体底池与跟注额现算，口径为「跟注额 ÷（已含对手本次下注的底池 + 跟注额）」（见 L4B 跟注所需胜率；本课 l6-pushfold-p5 的 9 ÷ (12 + 9) ≈ 43% 即是一例可复算取值）\n- Bubble Factor ≈ 70%/43% ≈ 1.6x（分母沿用上面的示意值，故该 1.6x 同为量级示意，不是这一手的精确均衡结论）',
           },
           {
             type: 'formula',
-            content: 'Nash Push/Fold 均衡范围（10BB 场景）：\nSB Push 范围（面对 BB）：\n- 所有对子 22+\n- 所有 Ax\n- 所有 Kx 同花\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- 总计约 70-80% 手牌\n\nBB Call 范围（面对 SB Push）：\n- 所有对子 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- 总计约 35-40% 手牌\n\n盈亏平衡计算：\nBB call 10BB 赢 12BB（含盲注）\n所需胜率 = 9/(9+12) ≈ 43%',
+            content: 'Nash Push/Fold 均衡范围（10BB 场景）：\nSB Push 范围（面对 BB）：\n- 所有对子 22+\n- 所有 Ax\n- 所有 Kx 同花\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- 总计约 70-80% 手牌\n\nBB Call 范围（面对 SB Push）：\n- 所有对子 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- 总计约 35-40% 手牌\n\n盈亏平衡计算（前提：有效筹码 10BB，盲注 SB 0.5 / BB 1，无前注）：\nSB 全下 10BB 后底池 = SB 10 + BB 已投入 1 = 11BB\nBB 已投入 1BB，还需跟 10 - 1 = 9BB\n所需胜率 = 9 ÷ (11 + 9) = 9/20 = 45%',
           },
           {
             type: 'theory-reference',
@@ -427,14 +427,14 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
             ],
             street: 'preflop',
             effectiveStack: 10,
-            potSize: 12,
+            potSize: 11,
             correctDecision: {
               action: 'Call',
               reasoning: [
                 'SB 的 push 范围很宽（50-55%）',
                 'A8s 对抗宽范围有很好的胜率（~55%）',
                 'A 的阻断效果减少对手有 Ax 的概率',
-                '底池赔率：SB push 10BB，hero BB 追加 call 成本 9BB，总底池 21BB。所需胜率 = 9/21 ≈ 43%',
+                '底池赔率（前提：盲注 SB 0.5 / BB 1，无前注）：SB push 10BB，底池 = 10 + 1 = 11BB，hero BB 已投入 1BB、追加 call 成本 9BB，跟注后总底池 20BB。所需胜率 = 9 ÷ 20 = 45%',
                 '即使没有 ICM 压力，这也是明显的 call',
               ],
             },
@@ -509,8 +509,8 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
                 },
               },
               options: [
-                { action: 'Call', isCorrect: false, explanation: '虽然 77 对抗 BTN 的宽 push 范围胜率不错，但泡沫期 ICM 压力让 call 的 $EV 为负。让短筹码先被淘汰。', evImpact: '-$20' },
-                { action: 'Fold', isCorrect: true, explanation: '泡沫期 ICM 压力极大。你是中等筹码，有 2 个更短的筹码。Fold 77 是正确的 ICM 决策。', evImpact: '+$15' },
+                { action: 'Call', isCorrect: false, explanation: '纯筹码 EV 上 77 领先 BTN 的宽 push 范围：底池 12BB、你还需跟 10 - 1 = 9BB，保本所需胜率 = 9 ÷ (12 + 9) ≈ 43%。但泡沫期 ICM 压力让 call 的 $EV 为负，让 2 个更短筹码先被淘汰。', evImpact: '-$20' },
+                { action: 'Fold', isCorrect: true, explanation: '泡沫期 ICM 压力极大。你是中等筹码（12BB），桌上还有 2 个 5BB 短筹码，弃牌的上位价值高于跟注的筹码增益，Fold 77 是正确的 ICM 决策。底池 12BB 的前提口径（与本课「盲注 SB 0.5 / BB 1、无前注」一致）：BTN 全下 10 + SB 弃牌留下的 0.5 + 你 BB 已投入的 1 = 11.5BB，题面取整为 12；你还需跟 10 - 1 = 9BB ⇒ 保本所需胜率 = 9 ÷ (12 + 9) ≈ 43%，这一筹码门槛 77 本来能达到（约 52%），被否决的原因是 ICM 而非赔率。', evImpact: '+$15' },
                 { action: 'Re-raise all-in', isCorrect: false, explanation: '你没有足够的筹码做 3-bet，而且 ICM 压力不支持这样做。', evImpact: '-$25' },
               ],
               relatedLessonId: 'l6-pushfold',
@@ -544,8 +544,8 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
               relatedLessonId: 'l6-pushfold',
             },
           
-            { id: 'l6-pushfold-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ks', 'Kc'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'fold' }, { player: 'MP', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 12, gameContext: { gameType: 'mtt', tableDescription: 'MTT中期，你12BB' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'KK在12BB是顶级强牌，不能fold。', evImpact: '-3BB' }, { action: 'Push all-in', isCorrect: true, explanation: 'KK在12BB是顶级强牌，全下获取最大价值。', evImpact: '+2BB' }, { action: 'Min-raise 2BB', isCorrect: false, explanation: '12BB时min-raise没有意义，被3-bet很尴尬。直接push。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-pushfold' },
-            { id: 'l6-pushfold-p5', difficulty: 'advanced', scenario: { heroHand: ['Ad', 'Jd'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise all-in 10BB' }, { player: 'SB', action: 'fold' }], street: 'preflop', potSize: 12, effectiveStack: 10, gameContext: { gameType: 'mtt', icmPressure: 'low', tableDescription: 'MTT早期，距奖金圈远' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AJs对抗BTN 10BB push范围（40%+）胜率足够。没有ICM压力，明显call。', evImpact: '-2BB' }, { action: 'Call', isCorrect: true, explanation: 'AJs对抗宽push范围胜率约60%。无ICM压力，标准call。', evImpact: '+2BB' }], relatedLessonId: 'l6-pushfold' },],
+            { id: 'l6-pushfold-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ks', 'Kc'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'fold' }, { player: 'MP', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 12, gameContext: { gameType: 'mtt', tableDescription: 'MTT中期，你12BB' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'KK在12BB是顶级强牌，不能fold。', evImpact: '-3BB' }, { action: 'Push all-in', isCorrect: true, explanation: 'KK在12BB是顶级强牌，全下获取最大价值。底池 1.5BB 的前提口径：盲注 SB 0.5 + BB 1，无前注，且 UTG/MP 均已弃牌（无人加注，故底池只有 1.5BB）。', evImpact: '+2BB' }, { action: 'Min-raise 2BB', isCorrect: false, explanation: '12BB时min-raise没有意义，被3-bet很尴尬。直接push。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-pushfold' },
+            { id: 'l6-pushfold-p5', difficulty: 'advanced', scenario: { heroHand: ['Ad', 'Jd'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise all-in 10BB' }, { player: 'SB', action: 'fold' }], street: 'preflop', potSize: 12, effectiveStack: 10, gameContext: { gameType: 'mtt', icmPressure: 'low', tableDescription: 'MTT早期，距奖金圈远' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AJs对抗BTN 10BB push范围（40%+）胜率足够。没有ICM压力，明显call。底池 12BB 的前提口径（同本课「盲注 SB 0.5 / BB 1、无前注」）：BTN 全下 10 + SB 弃牌留下的 0.5 + 你 BB 已投入的 1 = 11.5BB，题面取整为 12。', evImpact: '-2BB' }, { action: 'Call', isCorrect: true, explanation: 'AJs对抗宽push范围胜率约60%。你还需跟 10 - 1 = 9BB ⇒ 保本所需胜率 = 9 ÷ (12 + 9) ≈ 43%，60% 远高于该线，且无 ICM 压力（距奖金圈远），标准 call。', evImpact: '+2BB' }], relatedLessonId: 'l6-pushfold' },],
         },
       },
       {
@@ -570,7 +570,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           {
             type: 'text',
             content:
-              '如果你是桌上前 3 的大筹码：\n\n1. 激进施压\n   - 用宽范围 open（40-50%）\n   - 用宽范围 3-bet（尤其是针对中筹码）\n   - 利用中筹码的 ICM 恐惧\n\n2. 目标选择\n   - 优先攻击中筹码（他们最怕被淘汰）\n   - 短筹码反而可能“拼命”（已经没什么可失去的）\n\n3. 位置利用\n   - 在 BTN/CO 位置施加最大压力\n   - 中筹码在盲注位置最难决策',
+              '如果你是桌上前 3 的大筹码：\n\n1. 激进施压\n   - 用很宽的范围 open\n   - 用宽范围 3-bet（尤其是针对中筹码）\n   - 利用中筹码的 ICM 恐惧\n\n2. 目标选择\n   - 优先攻击中筹码（他们最怕被淘汰）\n   - 短筹码反而可能“拼命”（已经没什么可失去的）\n\n3. 位置利用\n   - 在 BTN/CO 位置施加最大压力\n   - 中筹码在盲注位置最难决策',
           },
           { type: 'heading', content: '中筹码的泡沫策略' },
           {
@@ -824,7 +824,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           {
             type: 'text',
             content:
-              '何时偷盲：\n- 盲注大（相对于筹码）\n- 对手紧（fold to steal 高）\n- 你有位置（BTN/CO）\n\n偷盲范围：\n- BTN：40-50%（任何 Ax、任何对子、大部分 suited 牌）\n- CO：30-40%\n\n偷盲大小：\n- Min-raise（2-2.2x）最常用\n- 给对手最差的赔率\n- 减少自己的风险',
+              '何时偷盲：\n- 盲注大（相对于筹码）\n- 对手紧（fold to steal 高）\n- 你有位置（BTN/CO）\n\n偷盲范围：\n- BTN：开池最宽的一档（约三成半；任何 Ax、任何对子、大部分 suited 牌）\n- CO：明显放宽但仍要收紧（近三成；CO 之后仍有 BTN 与两盲注行动，不宜按 BTN 的宽度开池）\n\n偷盲大小：\n- Min-raise（2-2.2x）最常用\n- 给对手最差的赔率\n- 减少自己的风险',
           },
           { type: 'heading', content: 'Re-Steal（反偷）' },
           {
@@ -854,10 +854,10 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             id: 'l6-finaltable-q2',
-            question: 'BTN 的偷盲范围通常是？',
-            options: ['10-15%', '20-25%', '40-50%', '80-90%'],
+            question: 'BTN 的偷盲范围通常处于哪一档？',
+            options: ['只开强牌的一档', '中等偏紧的一档', '开池最宽的一档（约三成半）', '几乎任意两张牌'],
             correctIndex: 2,
-            explanation: 'BTN 的偷盲范围通常是 40-50%，包括任何 Ax、任何对子、大部分 suited 牌。',
+            explanation: 'BTN 偷盲属于开池最宽的一档（约三成半），包括任何 Ax、任何对子、大部分 suited 牌；精确构成见范围训练模块与 GTO 策略表。',
           },
           {
             id: 'l6-finaltable-q3',
@@ -926,7 +926,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Re-raise all-in',
               reasoning: [
-                'BTN 的 open 范围很宽（40%+）',
+                'BTN 的 open 范围是开池最宽的一档',
                 '你有 20BB，是 re-steal 的理想筹码量',
                 'A5s 有 A 的阻断效果（减少对手有 Ax 的概率）',
                 'BTN 需要用很紧的范围 call（~15%）',

@@ -28,10 +28,12 @@ import {
   resolveTheoryLevelTitle,
 } from '../utils/titleKeys';
 import { resolveTheoryObjectives, theoryContentKey } from '../utils/contentKeys';
+import { buildTheoryReviewItems } from '../utils/theorySrs';
 
 /**
  * 理论章节页：URL 直达门禁（所属 Level 未解锁则重定向回主页）+ 讲解 + 章末小测。
- * 小测完成 → completeChapter（幂等，内部 emit 训练事件）+ recordTrainingDay。
+ * 小测完成 → completeChapter（幂等，内部 emit 训练事件）+ recordTrainingDay
+ * + 章末错题写入 SRS 复习队列（theory:<questionId>）。
  */
 export default function TheoryChapterView() {
   const { t } = useTranslation();
@@ -44,6 +46,7 @@ export default function TheoryChapterView() {
   const completedChapters = useTheoryStore((s) => s.progress.completedChapters);
   const quizScores = useTheoryStore((s) => s.progress.quizScores);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+  const addReviewItem = useProgressStore((s) => s.addReviewItem);
   // Session 止损：小测消耗每日题量预算（recordAnswer），达上限时禁止进入小测
   const sessionLimitReached = useSessionLimitReached();
 
@@ -114,9 +117,18 @@ export default function TheoryChapterView() {
   const chapterCompleted = completedChapters.includes(chapter.id);
   const bestScore = quizScores[chapter.id];
 
-  const handleQuizComplete = (score: number, correctAnswers: number, totalQuestions: number) => {
+  const handleQuizComplete = (
+    score: number,
+    correctAnswers: number,
+    totalQuestions: number,
+    wrongQuestionIds: string[],
+  ) => {
     completeChapter(chapter.id, score, totalQuestions, correctAnswers);
     recordTrainingDay();
+    // 章末错题进 SRS 复习队列。刻意放在 completeChapter 的 alreadyCompleted 早退**之外**
+    // （故记在视图层而非 store 内），重测答错同样入队；addReviewItem 按 item.id 整体 upsert，
+    // 重复重测不堆积。此处不触碰 recordAnswer —— 每题作答已在 TheoryQuiz 内计数，禁止二次计数。
+    buildTheoryReviewItems(chapter, wrongQuestionIds).forEach((item) => addReviewItem(item));
     setResult({ score, correct: correctAnswers, total: totalQuestions });
     setPhase('done');
   };

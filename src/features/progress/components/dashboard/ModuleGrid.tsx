@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useProgressStore } from '../../store';
+import type { DailyRecommendation } from '../../utils/dailyTrainingPlan';
+import { resolveRecommendationText } from '../../utils/recommendationText';
 
 /** 模块入口配置（§5.18 + §13.5.1 纹理变体） */
 interface ModuleEntry {
@@ -191,18 +193,24 @@ export default function ModuleGrid() {
 /**
  * NewbiePathCard — §13.6.1 新手学习路径卡。
  * walnut-raised 底 + 1px walnut-border + 顶边黄铜发线 + 黄铜渐变"开始学习"按钮。
+ *
+ * 本卡接收**推荐对象**并自行经共享解析器出文案，而非接收调用方算好的字符串：
+ * title/description 与复习项 label 都是 i18n key，解析口径必须与计划卡共用一份
+ * （见 utils/recommendationText）。旧写法由调用方各自 t()，学习路径卡那份漏了
+ * 复习 label 的逐条 t()，于是裸键直接显示给用户。
  */
 export function NewbiePathCard({
-  title,
-  description,
-  route,
+  recommendation,
 }: {
-  title: string;
-  description: string;
-  route: string;
+  recommendation: DailyRecommendation | null;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const text = recommendation ? resolveRecommendationText(recommendation, t) : null;
+  const title = text?.title ?? t('dashboard.progressive.newbieTitle');
+  const description = text?.description ?? '';
+  const route = recommendation?.route ?? '/academy';
 
   return (
     <div className="relative overflow-hidden rounded-[var(--poker-radius-md)] border border-[var(--poker-walnut-border)] bg-[var(--poker-walnut-raised)] px-5 py-6">

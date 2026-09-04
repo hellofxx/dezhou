@@ -5,6 +5,8 @@ import { Button } from '@/shared/components/ui/button';
 import { RefreshCw, ArrowRight, CheckCircle2, BookOpen, GraduationCap, PlayCircle } from 'lucide-react';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import { getDaysSinceLastReview, getReviewStats } from '@/shared/utils/spacedRepetition';
+import { getReviewRoute } from '../../utils/reviewRoute';
+import { useEnsureReviewSourceI18n } from './useEnsureReviewSourceI18n';
 
 interface SpacedRepetitionPanelProps {
   reviewItems: ReviewItem[];
@@ -19,22 +21,8 @@ const CATEGORY_COLORS: Record<string, string> = {
   range: 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]',
   odds: 'text-[var(--poker-success)] bg-[var(--poker-success-bg)]',
   gto: 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15',
+  theory: 'text-[var(--poker-frost)] bg-[var(--poker-frost-bg)]',
 };
-
-/** P2-C: 根据复习项 category 映射导航路由 */
-function getReviewRoute(item: ReviewItem): string {
-  switch (item.category) {
-    case 'range':
-      return '/range-trainer';
-    case 'odds':
-      return '/pot-odds';
-    case 'gto':
-      return '/gto-simulator';
-    case 'strategy':
-    default:
-      return `/academy/lesson/${item.id}`;
-  }
-}
 
 export default function SpacedRepetitionPanel({
   reviewItems,
@@ -44,6 +32,8 @@ export default function SpacedRepetitionPanel({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const stats = getReviewStats(reviewItems);
+  // label 可能是跨模块 i18n key（如理论复习项），本路由未预加载其翻译包 → 按需补加载
+  useEnsureReviewSourceI18n(todayItems);
 
   // P1-3.4: 进度计算 — 今日已复习数（基于 lastReviewedAt 落在今日） / 今日待复习总数
   // 说明：getTodayReviewItems 会过滤掉 nextReviewDate > today 的项，

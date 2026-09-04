@@ -171,7 +171,7 @@ graph TD
 |---------|---------|------|
 | typecheck | 300s | 轻量级，纯类型检查 |
 | lint | 300s | 轻量级，两条规则 |
-| test | 900s | 中等，含 jsdom 组件测试，83 个测试文件全量运行 |
+| test | 900s | 中等，含 jsdom 组件测试，全量运行所有测试文件（数量以 `pnpm test` 输出为准） |
 | feature-dev 变更 | 120-300s | 按变更复杂程度定 |
 | cross-module 通信 | 30s | 等待其他 agent 响应 |
 

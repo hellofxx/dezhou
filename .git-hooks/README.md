@@ -4,7 +4,7 @@
 
 ## 安装 Pre-commit Hook
 
-项目使用 [`scripts/pre-commit`](./scripts/pre-commit) 作为 git hook，仅在检测到 `.claude/agents/*.md` 变更时触发代理工具校验。
+项目使用 [`.git-hooks/pre-commit`](./pre-commit) 作为 git hook，仅在检测到 `.claude/agents/*.md` 变更时触发代理工具校验。
 
 ### Windows 安装（PowerShell）
 
@@ -62,6 +62,6 @@ git cm -m "message"
 
 ## 参考文档
 
-- [`scripts/validate-agent-tools.ts`](./scripts/validate-agent-tools.ts) — 验证脚本实现
-- [`docs/agent-tools-guard-design.md`](./docs/agent-tools-guard-design.md) — Agent Tools Guard 设计规格
+- [`scripts/validate-agent-tools.ts`](../scripts/validate-agent-tools.ts) — 验证脚本实现
+- [`docs/agent-tools-guard-design.md`](../docs/agent-tools-guard-design.md) — Agent Tools Guard 设计规格
 - [`AGENTS.md`](../AGENTS.md) — Feature PR Checklist 章节

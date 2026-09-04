@@ -139,3 +139,147 @@ describe('progress store migrate 分步（v10→v15）', () => {
     expect(result.focusModule).toBeNull();
   });
 });
+
+/**
+ * v15 → v16 接线用例：只验证 persist 迁移链**确实调用**了理论复习项 key 化辅助，
+ * 以及回写的防御性边界（不得写入 undefined 键）。
+ * 改写规则本身（幂等 / 进度保全 / 脏数据容错 / key 镜像与 theory-academy 单源一致）
+ * 由纯函数侧用例覆盖，见 utils/migrateTheoryReviewKeys.test.ts。
+ */
+describe('progress store migrate 分步（v15→v16 理论复习项 key 化接线）', () => {
+  const runMigrate = async (
+    seed: Record<string, unknown>,
+    fromVersion: number,
+  ): Promise<Record<string, unknown>> => {
+    const storageStub = createLocalStorageStub();
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+    const { useProgressStore } = await import('./store');
+    const migrate = useProgressStore.persist.getOptions().migrate!;
+    const result = migrate(seed as never, fromVersion) as unknown as Record<string, unknown>;
+    // 等待模块底部副作用执行完毕，避免 teardown 后悬挂 timer
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    return result;
+  };
+
+  const legacyItem = () => ({
+    id: 'theory:t1-combinatorics-q1',
+    label: '从 5 张牌中任选 2 张的组合数是多少？',
+    category: 'theory',
+    easeFactor: 2.3,
+    interval: 7,
+    repetitions: 3,
+    nextReviewDate: '2026-01-01',
+    metadata: {
+      source: 'theory',
+      route: '/theory/chapter/t1-combinatorics',
+      front: '从 5 张牌中任选 2 张的组合数是多少？',
+      back: 'C(5,2) = 10。',
+    },
+  });
+
+  it('v16：迁移链调用生效 → 中文原文 label/front/back 改写为 i18n key', async () => {
+    const result = await runMigrate({ reviewItems: [legacyItem()] }, 15);
+    const item = (result.reviewItems as Array<Record<string, unknown>>)[0]!;
+    expect(item.label).toBe('theory.quiz.t1-combinatorics-q1.question');
+    expect(item.metadata).toEqual({
+      source: 'theory',
+      route: '/theory/chapter/t1-combinatorics',
+      front: 'theory.quiz.t1-combinatorics-q1.question',
+      back: 'theory.quiz.t1-combinatorics-q1.explanation',
+    });
+    // 复习进度原样穿过 store 的迁移调度
+    expect(item.interval).toBe(7);
+    expect(item.easeFactor).toBe(2.3);
+    expect(item.repetitions).toBe(3);
+    expect(item.nextReviewDate).toBe('2026-01-01');
+  });
+
+  it('v16：老存档无 reviewItems 键时不得凭空写入（undefined 会在 merge 时覆盖默认 []）', async () => {
+    const result = await runMigrate({}, 15);
+    expect('reviewItems' in result).toBe(false);
+  });
+
+  it('全链路（v0 → v16）脏理论项穿越全部迁移步骤：改写生效且早期注入字段齐备', async () => {
+    const result = await runMigrate(
+      {
+        records: [],
+        lastTrainingDate: new Date(2024, 0, 15, 12).getTime(),
+        reviewItems: [legacyItem()],
+      },
+      0,
+    );
+    const item = (result.reviewItems as Array<Record<string, unknown>>)[0]!;
+    expect(item.label).toBe('theory.quiz.t1-combinatorics-q1.question');
+    expect(item.nextReviewDate).toBe('2026-01-01');
+    // v2 / v15 等其余步骤照常生效
+    expect((result.streak as { lastTrainingDate?: string }).lastTrainingDate).toBe('2024-01-15');
+    expect(result.focusModule).toBeNull();
+  });
+});
+
+/**
+ * v16 → v17 接线用例：只验证 persist 迁移链**确实调用**了策略复习项 key 化辅助，
+ * 以及回写的防御性边界（不得写入 undefined 键）。
+ * 改写规则本身（幂等 / 进度保全 / 脏数据容错 / key 镜像与 strategy-academy 单源一致）
+ * 由纯函数侧用例覆盖，见 utils/migrateStrategyReviewKeys.test.ts。
+ */
+describe('progress store migrate 分步（v16→v17 策略复习项 key 化接线）', () => {
+  const runMigrate = async (
+    seed: Record<string, unknown>,
+    fromVersion: number,
+  ): Promise<Record<string, unknown>> => {
+    const storageStub = createLocalStorageStub();
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+    const { useProgressStore } = await import('./store');
+    const migrate = useProgressStore.persist.getOptions().migrate!;
+    const result = migrate(seed as never, fromVersion) as unknown as Record<string, unknown>;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    return result;
+  };
+
+  const legacyItem = () => ({
+    id: 'l3-cbet',
+    label: '持续下注（C-Bet）',
+    category: 'strategy',
+    easeFactor: 2.3,
+    interval: 7,
+    repetitions: 3,
+    nextReviewDate: '2026-01-01',
+  });
+
+  it('v17：迁移链调用生效 → 中文课名 label 改写为 academy.lessonTitle key，复习进度不变', async () => {
+    const result = await runMigrate({ reviewItems: [legacyItem()] }, 16);
+    const item = (result.reviewItems as Array<Record<string, unknown>>)[0]!;
+    expect(item.label).toBe('academy.lessonTitle.l3-cbet');
+    expect(item.interval).toBe(7);
+    expect(item.easeFactor).toBe(2.3);
+    expect(item.repetitions).toBe(3);
+    expect(item.nextReviewDate).toBe('2026-01-01');
+  });
+
+  it('v17：已是 key 形态与非 strategy 项原样穿过；老存档无 reviewItems 键时不凭空写入', async () => {
+    const keyed = { id: 'l4-mdf', label: 'academy.lessonTitle.l4-mdf', category: 'strategy' };
+    const theory = { id: 'theory:x-q1', label: '题干中文', category: 'theory' };
+    const result = await runMigrate({ reviewItems: [keyed, theory] }, 16);
+    expect(result.reviewItems).toEqual([keyed, theory]);
+    expect('reviewItems' in (await runMigrate({}, 16))).toBe(false);
+  });
+
+  it('全链路（v0 → v17）脏策略项穿越全部迁移步骤：改写生效且早期注入字段齐备', async () => {
+    const result = await runMigrate(
+      {
+        records: [],
+        lastTrainingDate: new Date(2024, 0, 15, 12).getTime(),
+        reviewItems: [legacyItem()],
+      },
+      0,
+    );
+    const item = (result.reviewItems as Array<Record<string, unknown>>)[0]!;
+    expect(item.label).toBe('academy.lessonTitle.l3-cbet');
+    expect(item.nextReviewDate).toBe('2026-01-01');
+    expect((result.streak as { lastTrainingDate?: string }).lastTrainingDate).toBe('2024-01-15');
+    expect(result.focusModule).toBeNull();
+  });
+});

@@ -13,8 +13,17 @@ import type { TheoryChapter } from '../types';
 
 interface TheoryQuizProps {
   chapter: TheoryChapter;
-  /** 全部题目作答完成时回调（score 0-100） */
-  onComplete: (score: number, correctAnswers: number, totalQuestions: number) => void;
+  /**
+   * 全部题目作答完成时回调（score 0-100）。
+   * wrongQuestionIds 为本章答错题目的稳定题 id 列表（供上层写入 SRS 复习队列）；
+   * 仅作额外上报，不改变 score/correct/total 的判分口径。
+   */
+  onComplete: (
+    score: number,
+    correctAnswers: number,
+    totalQuestions: number,
+    wrongQuestionIds: string[],
+  ) => void;
 }
 
 /**
@@ -42,6 +51,9 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  // 答错的题 id（供上层写 SRS 复习队列）。用 ref 而非 state：只在事件处理器内追加、
+  // 不参与渲染，且组件由上层 key={retryCount} 重挂载即可自然重置，无需手动清空。
+  const wrongQuestionIdsRef = useRef<string[]>([]);
 
   // 防御：空题库（理论章节无小测）时自动按完成处理，避免 onComplete 永不触发导致卡死在空白小测页。
   // 用 effect 触发（而非渲染期调用父 setState）；完成后父组件切至 done 会卸载本组件，不会循环。
@@ -53,7 +65,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   useEffect(() => {
     if (isEmpty && !completedRef.current) {
       completedRef.current = true;
-      onComplete(100, 0, 0);
+      onComplete(100, 0, 0, []);
     }
   }, [isEmpty, onComplete]);
 
@@ -68,6 +80,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
     setShowExplanation(true);
     const correct = index === question.correctIndex;
     if (correct) setCorrectCount((c) => c + 1);
+    else wrongQuestionIdsRef.current = [...wrongQuestionIdsRef.current, question.id];
     // 理论掌握度进入 ELO 与情绪系统（答题时同步调用，不走事件总线）
     updateElo(chapter.eloDimension, correct, getChapterDifficulty(chapter.level));
     recordAnswer(correct);
@@ -81,7 +94,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
     } else {
       // 最后一题：得分交由父组件（TheoryChapterView 的 done 阶段）统一展示
       const score = Math.round((correctCount / orderedQuestions.length) * 100);
-      onComplete(score, correctCount, orderedQuestions.length);
+      onComplete(score, correctCount, orderedQuestions.length, [...wrongQuestionIdsRef.current]);
     }
   };
 

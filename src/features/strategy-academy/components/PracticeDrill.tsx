@@ -22,11 +22,10 @@ import { orderPracticeOptions } from '../utils/practiceOptionOrder';
 import { resolvePracticeQuestion } from '../utils/contentKeys';
 // P1E-13: 超时判分口径（超时恒判错，对齐 range-trainer P1A-02）
 import { gradePracticeSelection, pickTimeoutFallbackOption } from '../utils/practiceGrading';
-// P2-03: 五级反馈事实源（只读消费，禁止修改 shared 层）
-import {
-  calculateGrade,
-  GRADE_DISPLAY_CONFIG,
-} from '@/shared/types/decisionFeedback';
+// P2-03: 五级反馈呈现（三态诚实渲染，shared 层评级事实源由该 util 内部消费）
+import { resolvePracticeFeedbackView } from '../utils/practiceFeedbackView';
+// evImpact 自由文本着色（禁 startsWith('+') 误判零值与叙述值）
+import { evImpactToneClass } from '../utils/evImpactTone';
 // P2-03: 难度变化阶梯图（结果页展示）
 import { DifficultyStairChart, type DifficultyChange } from './DifficultyStairChart';
 
@@ -576,14 +575,13 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   const correctOption = options.find((o) => o.isCorrect);
   const questionDifficulty = currentQuestion.difficulty ?? 'beginner';
 
-  // P2-03: 五级反馈分级（仅非超时路径；超时无真实决策，保持"系统代选"提示）。
-  // 默认值与 buildDecisionFeedback 一致：答对无数据→0→best，答错无数据→3→wrong。
-  const feedbackGrade = !isTimedOut && selectedOption
-    ? calculateGrade(selectedOption.evLoss ?? (selectedOption.isCorrect ? 0 : 3))
-    : null;
-  const gradeConfig = feedbackGrade ? GRADE_DISPLAY_CONFIG[feedbackGrade] : null;
-  const gradeLabel = gradeConfig && feedbackGrade
-    ? t(gradeConfig.titleKey, { defaultValue: GRADE_FALLBACK_LABELS[feedbackGrade] })
+  // P2-03 → 三态诚实渲染：仅当数据侧提供真实数值 evLoss 才展示五级等级与 EV 损失。
+  // 标准课时 practice 选项的数值型 evLoss 覆盖率为 0（棘轮见 utils/evCalibration.test.ts），
+  // 旧实现的 `?? (isCorrect ? 0 : 3)` 兜底会把所有答错一律渲染成 wrong 档 —— 属伪造精度（PRD §5.3.6）。
+  // 判分链路（对错 / 连击 / SRS / ELO）不受影响，此处只改呈现。
+  const feedbackView = !isTimedOut ? resolvePracticeFeedbackView(selectedOption) : null;
+  const gradeLabel = feedbackView?.grade && feedbackView.gradeTitleKey
+    ? t(feedbackView.gradeTitleKey, { defaultValue: GRADE_FALLBACK_LABELS[feedbackView.grade] })
     : '';
 
   return (
@@ -898,7 +896,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                 'rounded-lg border p-4',
                 isTimedOut
                   ? 'border-[var(--danger)]/40 bg-[var(--danger)]/10'
-                  : cn(gradeConfig?.color, gradeConfig?.textColor)
+                  : feedbackView?.containerClass
               )}
             >
               <div className="flex items-center gap-2 mb-2">
@@ -917,9 +915,20 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                   </>
                 ) : (
                   <>
-                    {/* P2-03: 五级反馈 — grade 图标 + 五级标签（i18n feedback.grade.* 优先，缺失时中文兜底） */}
-                    <span className="text-base leading-none">{gradeConfig?.icon}</span>
-                    <span className="text-sm font-bold">{gradeLabel}</span>
+                    {/* P2-03 三态诚实渲染：有真实 evLoss → 五级图标 + 等级标签；
+                        无 evLoss → 只显示「正确 / 错误」（禁兜底伪造等级），解析文本照常展示 */}
+                    {feedbackView?.gradeIcon ? (
+                      <>
+                        <span className="text-base leading-none">{feedbackView.gradeIcon}</span>
+                        <span className="text-sm font-bold">{gradeLabel}</span>
+                      </>
+                    ) : (
+                      <span className="text-sm font-bold">
+                        {feedbackView?.mode === 'correct'
+                          ? t('academy.drill.correct')
+                          : t('academy.drill.incorrect')}
+                      </span>
+                    )}
                     {!selectedOption.isCorrect && correctOption && (
                       <span className="text-xs text-[var(--ivory-muted)] ml-1">
                         {t('academy.drill.correctAnswerPrefix')}{correctOption.action}{correctOption.amount ? ` ${correctOption.amount}` : ''}
@@ -927,22 +936,22 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                     )}
                   </>
                 )}
-                {/* P2-03: evLoss 数值徽章（BB 损失；>0 用 danger 色突出损失，0 用 success 色） */}
-                {!isTimedOut && selectedOption.evLoss !== undefined && (
+                {/* P2-03: evLoss 数值徽章（仅真实标定数据可展示；>0 用 danger 突出损失，0 用 success） */}
+                {feedbackView && feedbackView.evLoss !== null && (
                   <span
                     className={cn(
                       'ml-auto text-xs font-numeric font-semibold shrink-0',
-                      selectedOption.evLoss > 0 ? 'text-[var(--danger)]' : 'text-[var(--success)]'
+                      feedbackView.evLoss > 0 ? 'text-[var(--danger)]' : 'text-[var(--success)]'
                     )}
                   >
-                    {selectedOption.evLoss > 0 ? '+' : ''}{selectedOption.evLoss.toFixed(1)} {t('academy.drill.evLossBB')}
+                    {feedbackView.evLoss > 0 ? '+' : ''}{feedbackView.evLoss.toFixed(1)} {t('academy.drill.evLossBB')}
                   </span>
                 )}
                 {selectedOption.evImpact && (
                   <span
                     className={cn(
                       'ml-auto text-xs font-mono',
-                      selectedOption.evImpact.startsWith('+') ? 'text-[var(--success)]' : 'text-[var(--danger)]'
+                      evImpactToneClass(selectedOption.evImpact)
                     )}
                   >
                     {selectedOption.evImpact}

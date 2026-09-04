@@ -25,7 +25,7 @@ export const HEADS_UP_LEVEL_7_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          'HU 翻前范围比 6-max 大幅拓宽：\n\nBTN open 范围：约 50-70%（vs 6-max 的 30-40%）\n- 任何对子都是强牌\n- 任何 Ax 都是强牌\n- 同花连牌、小对子都可以 open\n\n3-Bet 范围：\n- 更宽（约 10-15%）\n- 包括强牌 + 部分 bluff\n- 平衡性更重要',
+          'HU 翻前范围比 6-max 大幅拓宽：\n\nBTN open 范围：约 50-70%（远高于 6-max BTN 开池的最宽档）\n- 任何对子都是强牌\n- 任何 Ax 都是强牌\n- 同花连牌、小对子都可以 open\n\n3-Bet 范围：\n- 更宽（约 10-15%）\n- 包括强牌 + 部分 bluff\n- 平衡性更重要',
       },
       { type: 'heading', content: '翻后策略调整' },
       {
@@ -54,7 +54,7 @@ export const HEADS_UP_LEVEL_7_LESSONS: Lesson[] = [
         question: 'HU 中 BTN 的 open 范围约是多少？',
         options: ['20-30%', '30-40%', '50-70%', '80%+'],
         correctIndex: 2,
-        explanation: 'HU 中 BTN open 范围约 50-70%，比 6-max 的 30-40% 大幅拓宽。',
+        explanation: 'HU 中 BTN open 范围约 50-70%，比 6-max BTN 开池的最宽档（约三成半）大幅拓宽。',
       },
       {
         id: 'l7hu-stakes-q2',

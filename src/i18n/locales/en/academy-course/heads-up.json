@@ -30,7 +30,7 @@
       "Example: HU 100BB deep, SB min-raises to 2BB, you (BB) call with 7♠6♠, pot 4BB. Flop 8♣5♦2♠. SB C-Bets 1.3BB (half pot). You have a double-gutshot (4 sixes + 4 nines) + backdoor flush — a standard x/r semi-bluff. Raise to about 4BB: if the SB folds you win 5.3BB directly; if called you have 8+ outs of improvement. The x/r both protects your draw and makes the SB's wide-range C-Bet pay.",
       "Example 2 (disadvantaged-position control): Same pot, you (BB) hold A♠K♠ on a K♦8♣3♥ flop (dry top pair). You're IP; the SB C-Bets 1.3BB. Top pair top kicker on a dry board tends toward calling rather than raising — calling keeps the SB's bluffs while you control later streets in position. An x/r instead scares off the SB's weak hands, wasting top pair's thin value. The IP advantage is \"calling to watch the opponent keep firing, or betting thin value yourself\".",
       "Counterintuitive point: wide BB defense isn't a calling station. A real station has no x/r and no 3Bet pile; the HU BB's 60% consists of calls, 3Bet value, 3Bet bluffs, and x/r — each moving with the SB's tendencies. Defense width and defense passivity are two different things.",
-      "BB defense three-step quick check: (1) call the pot odds — calling line about 33% vs a 2BB SB open; (2) split piles — strong made hands 3Bet value, blockers 3Bet bluff, medium hands call; (3) watch the SB — raise 3Bet vs an over-folder, raise isolate vs a big limper, raise x/r vs an over-frequent C-Better."
+      "BB defense three-step quick check: (1) call the pot odds — calling line 25% vs a 2BB SB open (SB 2 + your own 1 = pot 3, then call 1 more, 1÷(3+1)=25%); (2) split piles — strong made hands 3Bet value, blockers 3Bet bluff, medium hands call; (3) watch the SB — raise 3Bet vs an over-folder, raise isolate vs a big limper, raise x/r vs an over-frequent C-Better."
     ],
     "l4hu-bn-opening": [
       "Opening Near 100%: The HU Button's Offense",
@@ -49,9 +49,9 @@
       "HU has only two-player pots, so EV calculation is simpler than full ring, but the numeric meaning is amplified. Simplified: no multiway splitting, no \"one of my outs gives another opponent a flush\" dilution — your equity is closer to \"equity vs a single range\". Amplified: dead money share is high (SB 0.5) and the opponent's range is wide, so the same EV differences are repeated at high frequency in HU, accumulating into bigger long-term returns. Understanding these two changes is the core of HU EV adjustments.",
       "The core HU EV formula is unchanged, but the inputs are clearer: EV(call) = E×(P+B) − (1−E)×B. The difference is \"wider opponent range, higher dead-money share\", turning more marginal calls +EV.",
       "Preflop Steal EV and Postflop Positional EV",
-      "Preflop steal EV (SB min-raise to 2BB, BB fold rate f):\nEV(steal) = f×1 − (1−f)×1.5\n\nPostflop positional EV anchor:\nHU positional value about 0.5-1BB/hand (the BB is IP postflop every hand)\n\nExample: BB facing an SB min-raise calls 1BB to contest 2BB:\nRequired equity = 1/(2+1) ≈ 33.3%\nMarginal hands often have 40%+ vs the SB's ~80% opening range → call is +EV",
-      "The practical meaning of HU EV adjustments: against the SB's wide range, the BB's call bar drops sharply. Full ring's 40% call line vs a 15% UTG range drops to about 33% in HU vs an 80% SB range, and with positional advantage the actual equity is even higher. That's why the HU BB can defend 60%+ — not \"loose\" but \"the result of EV calculation\".",
-      "Example: HU blinds 0.5/1, preflop SB min-raises 2BB, you (BB) hold K♠7♠. Calling 1BB contests the SB's 2BB, required equity 33.3%. K7s has about 48% equity vs the SB's ~80% opening range — a surplus of about 15 points. Postflop you're IP: a K lets you bet thin value, flushes/straights chase cheaply, and a complete miss can fold. The call is +EV — full-ring K7s vs UTG is a fold, but HU vs the SB's wide range it's a +EV call.",
+      "Preflop steal EV (SB min-raise to 2BB, BB fold rate f):\nEV(steal) = f×1 − (1−f)×1.5\n\nPostflop positional EV anchor:\nHU positional value about 0.5-1BB/hand (the BB is IP postflop every hand)\n\nExample: BB facing an SB min-raise (SB has 2BB in, the BB already has 1BB in):\nGeneral formula: required equity = call ÷ (current pot + opponent's bet + your call)\nSubstitute: 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n(Current pot 1.5 = SB's 0.5 + the BB's own 1 — that 1BB is dead money yet still belongs in the denominator; opponent's bet 1.5 = SB's increment up to 2BB; your call 1 = the BB top-up. Equivalently the total pot after you call is 4BB, so 1÷4 = 25%)\nMarginal hands often have 40%+ vs the SB's ~80% opening range → call is +EV",
+      "The practical meaning of HU EV adjustments: against the SB's wide range, the BB's call bar drops sharply. Full ring's 40% call line vs a 15% UTG range drops to 25% in HU vs an 80% SB range (1BB more into a 4BB pot after the call), and with positional advantage the actual equity is even higher. That's why the HU BB can defend 60%+ — not \"loose\" but \"the result of EV calculation\".",
+      "Example: HU blinds 0.5/1, preflop SB min-raises 2BB, you (BB) hold K♠7♠. Calling 1BB makes the total pot SB 2 + the BB's own 1 + your call 1 = 4BB, so required equity = 1 ÷ 4 = 25%. K7s has about 48% equity vs the SB's ~80% opening range — a surplus of about 23 points. Postflop you're IP: a K lets you bet thin value, flushes/straights chase cheaply, and a complete miss can fold. The call is +EV — full-ring K7s vs UTG is a fold, but HU vs the SB's wide range it's a +EV call.",
       "Example 2 (postflop EV decision): Flop pot 4BB, you (BB IP) hold 7♠6♠, the SB (OOP) bets 2BB (half pot). Required equity to call = 2/(4+2+2) = 25%. Your 76 on a 9♠8♦3♣ board has a double-gutshot + backdoor flush, about 8 outs at 17% single-street — not enough at 25% alone, but adding implied odds (win 2.5BB more when the straight hits) turns the call +EV. HU draw calls rely more on implied odds because the opponent's range is wide with high payment willingness.",
       "Counterintuitive point: in HU \"small cards\" aren't junk. 9-high can still win postflop in HU — the opponent's calling range is extremely wide, so 9-high's showdown value far exceeds full ring. At the same 25% pot odds, 9-high may be ahead 40%+ of the time in HU vs only 15%-20% in full ring.",
       "HU EV quick anchors: half-pot bet needs 25%, 1/3 pot 20%, full pot 33.3%; limp to see a flop 25%, call a 3BB open 33.3%. Memorize these — faster than counting at the table."
@@ -119,7 +119,7 @@
       "Heads-Up is poker's purest form. Compared with 6-max or full ring, HU has these characteristics:\n\n1. Bigger positional value: the BTN has positional advantage every hand\n2. Much wider ranges: any pair is strong, any Ax is strong\n3. More frequent postflop decisions: more often only two players contest the pot\n4. More important exploitative adjustments: you can quickly identify and exploit opponent weaknesses",
       "Core concept: positional value is huge in HU. The BTN has positional advantage every hand. Any pair is strong in HU, and any Ax is strong.",
       "Preflop Range Adjustments",
-      "HU preflop ranges are much wider than 6-max:\n\nBTN open range: about 50-70% (vs 6-max's 30-40%)\n- Any pair is strong\n- Any Ax is strong\n- Suited connectors and small pairs can all open\n\n3-Bet range:\n- Wider (about 10-15%)\n- Includes strong hands + some bluffs\n- Balance matters more",
+      "HU preflop ranges are much wider than 6-max:\n\nBTN open range: about 50-70% (far above the widest 6-max BTN opening tier)\n- Any pair is strong\n- Any Ax is strong\n- Suited connectors and small pairs can all open\n\n3-Bet range:\n- Wider (about 10-15%)\n- Includes strong hands + some bluffs\n- Balance matters more",
       "Postflop Strategy Adjustments",
       "The key HU postflop adjustments:\n\n1. More C-Bets: the BTN has range advantage and should C-Bet at high frequency\n2. Wider value bets: top pair weak kicker is also a strong hand\n3. More bluffs: the opponent's range is wider, easier to bluff off\n4. Positional use: with position you can value-bet and bluff more frequently",
       "Adapting to Different HU Opponent Types",
@@ -352,14 +352,14 @@
       "explanation": "The EV formula is unchanged, but HU two-player pots have no dilution, the SB's dead money share is high, and the opponent's range is wide — turning more marginal calls +EV and amplifying the meaning."
     },
     "l4hu-ev-adjustments-q2": {
-      "question": "SB min-raises to 2BB; the BB calls 1BB to contest the SB's 2BB. Required equity is about:",
+      "question": "SB min-raises to 2BB (the BB already has 1BB in); the BB still has to call 1BB. Required equity is about:",
       "options": [
-        "25%",
         "33.3%",
+        "25%",
         "40%",
         "50%"
       ],
-      "explanation": "Required equity = 1/(2+1) ≈ 33.3%. HU's dead-money share is higher, cheaper than the full-ring BTN call at 40%."
+      "explanation": "Required equity = call ÷ (current pot + opponent's bet + your call) = 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%. The denominator must include the BB's own 1BB already in the pot (1/(2+1) ≈ 33.3% is exactly the value you get by omitting it). HU's dead-money share is high — cheaper than the full-ring BTN call at 40%."
     },
     "l4hu-ev-adjustments-q3": {
       "question": "The root reason the HU BB defends 60%+ is:",
@@ -369,7 +369,7 @@
         "The BB must defend",
         "Rules require it"
       ],
-      "explanation": "Vs the SB's ~80% wide range the call bar drops to about 33%, and IP equity realization exceeds 100% — hence wide defense, the result of EV calculation rather than \"looseness\"."
+      "explanation": "Vs the SB's ~80% wide range the call bar drops to 25% (1BB more into a 4BB pot after the call), and IP equity realization exceeds 100% — hence wide defense, the result of EV calculation rather than \"looseness\"."
     },
     "l4hu-ev-adjustments-q4": {
       "question": "HU draw calls (like double-gutshots) rely on implied odds because:",
@@ -649,7 +649,7 @@
         "50-70%",
         "80%+"
       ],
-      "explanation": "The HU BTN open range is about 50-70%, much wider than 6-max's 30-40%."
+      "explanation": "The HU BTN open range is about 50-70%, far wider than the widest 6-max BTN opening tier (about 35%)."
     },
     "l7hu-stakes-q2": {
       "question": "Which hand type rises most in value in HU?",
@@ -775,7 +775,7 @@
       "correctAmount": "1BB",
       "reasoning": [
         "K7s has about 48% equity vs the SB's ~80% opening range",
-        "Calling 1BB contests the SB's 2BB, needing about 33% — a surplus of about 15 points",
+        "Calling 1BB into a 4BB total pot (SB 2 + the BB's own 1 + the call 1) needs 1÷4 = 25% — a surplus of about 23 points",
         "The BB is IP postflop with equity realization over 100%, so marginal hands defend profitably"
       ],
       "mistakeAction": "Fold (\"K7s is a bad hand\")",
@@ -801,7 +801,7 @@
       "correctAmount": "1BB",
       "reasoning": [
         "Q6s has about 45% equity vs the SB's ~80% opening range",
-        "Calling 1BB contests 2BB, needing about 33.3% — a surplus of about 12 points",
+        "Calling 1BB into a 4BB total pot (SB 2 + BB 1 + the call 1) needs 1÷4 = 25% — a surplus of about 20 points",
         "The BB is IP postflop with equity realization over 100%, so marginal hands profit"
       ],
       "mistakeAction": "Fold (\"Q6s is too weak\")",
@@ -814,7 +814,7 @@
       "correctAmount": "1BB",
       "reasoning": [
         "65s has about 42% equity vs the SB's ~80% opening range",
-        "Calling 1BB contests 2BB, needing about 33.3% — a surplus of about 9 points",
+        "Calling 1BB into a 4BB total pot (SB 2 + BB 1 + the call 1) needs 1÷4 = 25% — a surplus of about 17 points",
         "The BB is IP postflop; suited connectors play well — a member of the equilibrium defense range"
       ],
       "mistakeAction": "Fold (\"65s is too weak\")",
@@ -1031,7 +1031,7 @@
         },
         {
           "action": "Call",
-          "explanation": "J9s suited connector plays well IP postflop — calling 1BB contests 2BB, standard defense.",
+          "explanation": "J9s suited connector plays well IP postflop — calling 1BB into a 4BB total pot (required equity 25%) is standard defense.",
           "evImpact": "+1.0 BB/100"
         },
         {

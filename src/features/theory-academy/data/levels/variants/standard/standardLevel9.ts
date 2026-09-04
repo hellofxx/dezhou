@@ -27,7 +27,7 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
       {
         type: 'formula',
         content:
-          'AKQ 博弈均衡求解（固定下注额 B、底池 P，A 必下注、Q 以频率 f 诈唬、K 以频率 c 跟注）：\n① K 的跟注 EV = f×P − (1−f)×B；令其与弃牌 EV(=0) 相等：f×P = (1−f)×B → f = B/(P+B)\n② Q 的诈唬 EV = c×P − (1−c)×B；令其与过牌 EV(=0) 相等：c×P = (1−c)×B → c = B/(P+B)\n③ 均衡解：f = c = B/(P+B)——诈唬频率与跟注频率相等，都等于下注额占"底池+下注"的比例\n例：下注额 = 底池（B=P）→ f = c = 1/2；下注 1/3 池 → f = c = 1/4\n这就是 T5 中 MDF 与 Alpha 在最小模型里的同构来源：防守方跟注频率、进攻方诈唬频率共享同一个公式。（概念源自：The Mathematics of Poker Ch.5 玩具博弈与 AKQ 均衡）',
+          'AKQ 博弈均衡求解（固定下注额 B、底池 P，A 必下注、Q 以频率 f 诈唬（f = 诈唬组合数 ÷ 价值组合数）、K 以频率 c 跟注）：\n① 让 K 无差别（跟注 EV = 弃牌 EV = 0）：下注范围中的诈唬占比 y 满足 y×(P+B) = (1−y)×B → y = B/(P+2B)，换算成"诈唬 ÷ 价值"比即 f = y/(1−y) = B/(P+B)\n② 让 Q 的诈唬无差别（诈唬 EV = 过牌 EV = 0）：(1−c)×P = c×B → c = P/(P+B)——这正是防守方的 MDF\n③ 均衡解：f = B/(P+B)、c = P/(P+B)：两式同分母、分子互换，f + c = 1，诈唬频率与跟注频率互为补集而非相等\n例：B=P（满池）→ f = 1/2、c = 1/2（仅此一个尺度上两者数值恰好相等）；下注 1/3 池 → f = 1/4、c = 3/4\n这就是 T5 中 MDF 与 Alpha 的同构来源：f = Alpha = b/(1+b)、c = MDF = 1/(1+b)，而"下注范围里的诈唬占比"另有其式 y = b/(1+2b)。（概念源自：The Mathematics of Poker Ch.5 玩具博弈与 AKQ 均衡）',
       },
       {
         type: 'example',
@@ -117,7 +117,7 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
         question: 'AKQ 博弈中，K（中等牌）面对 1 个底池下注的均衡跟注频率是：',
         options: ['1/3', '1/2', '2/3', '3/4'],
         correctIndex: 1,
-        explanation: 'c = B/(P+B)：下注额等于底池（B=P）时 c = P/(P+P) = 1/2。跟注频率与诈唬频率同公式、互为镜像，这正是 MDF 的玩具模型原型。',
+        explanation: '防守方跟注频率 c = P/(P+B)：B=P 时 c = P/(P+P) = 1/2。它与诈唬频率 f = B/(P+B) 同分母、分子互换，f + c = 1，正是 MDF 与 Alpha 的互补关系在玩具模型里的原型（1/3 池时两者分别为 3/4 与 1/4，并不相等）。',
       },
     ],
   },
@@ -361,8 +361,8 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
     id: 't9-alpha',
     level: 9,
     variant: 'standard',
-    order: 1.5,
-    title: 'Alpha（优势比例）详解',
+    order: 5,
+    title: 'Alpha（诈唬盈亏平衡弃牌率）的剥削应用',
     subtitle: 'MDF 的对偶概念与实战应用',
     duration: '10 min',
     eloDimension: 'math',
@@ -370,7 +370,7 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
       { type: 'heading', content: 'Alpha 的定义与公式' },
       {
         type: 'text',
-        content: 'Alpha = bet ÷ (pot + bet) —— 对手诈唬的盈亏平衡弃牌率\n\n举例说明：当你下注 1/2 池时（bet=0.5pot）\n- Alpha = 0.5/(1+0.5) = 33%\n- 意味着对手的弃牌率必须超过 33% 你的 bluff 才盈利\n\n这是从进攻方视角看的"价格标签",回答的是"对手至少要弃掉多少比例的牌我的 bluff 才能保本"这个问题。',
+        content: 'Alpha = bet ÷ (pot + bet) —— **你自己 bluff 的保本弃牌率**（进攻方视角，不是对手诈唬的门槛）\n\n举例说明：当你下注 1/2 池时（bet=0.5pot）\n- Alpha = 0.5/(1+0.5) = 33%\n- 意味着对手的弃牌率必须超过 33% 你的 bluff 才盈利\n\n这是从进攻方视角看的"价格标签"，回答的是"对手至少要弃掉多少比例的牌，我的 bluff 才能保本"这个问题。',
       },
       { type: 'heading', content: '与 MDF 的对偶关系' },
       {
@@ -381,30 +381,30 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
       { type: 'heading', content: 'Alpha 的实战应用' },
       {
         type: 'text',
-        content: 'Alpha 的核心价值在于它提供了一个**定量的视角**，帮助你评估对手的诈唬频率是否足够高，从而决定是否跟注。具体步骤如下：\n1. **计算 Alpha**：根据你的下注额和当前底池大小计算 Alpha\n2. **观察对手的弃牌率**：通过统计对手的 C-Bet 弃牌率、河牌大注弃牌率等数据\n3. **比较 Alpha 与对手弃牌率**：如果对手的弃牌率高于 Alpha，你的跟注是盈利的；反之则应弃牌\n\n这个定量的视角让你能够更客观地做出决策，而不是依赖直觉或经验。',
+        content: 'Alpha 回答的是一个**进攻方**问题："我这次 bluff 能不能保本"——\n- **我的 bluff 盈利 ⇔ 对手的实际弃牌率 > Alpha**\n- 它**不**回答"我该不该跟注"。后者是防守方问题，用**所需胜率** = 我的跟注额 ÷（底池 + 对手下注 + 我的跟注），再拿它跟我的牌对抗对手范围的胜率比较（推导见 t5-mdf-alpha）。\n\n实操三步：1) 按你打算使用的尺度算出 Alpha；2) 用对手统计（对 C-Bet 弃牌率、面对河牌大注弃牌率等）估计他在这条街的实际弃牌率；3) 弃牌率高于 Alpha ⇒ 这个尺度的 bluff 自动盈利，甚至不需要任何摊牌价值；低于 Alpha ⇒ 这个尺度的 bluff 是稳定烧钱。',
       },
       {
         type: 'example',
         content:
-          '实例：你下注 1/3 池，Alpha = 1/4。对手的 C-Bet 弃牌率是 30%，低于 Alpha。这意味着对手的诈唬频率不够高，你应该弃牌。相反，如果对手的弃牌率是 40%，高于 Alpha，你应该跟注。',
+          '实例一：你下注 1/3 池，Alpha = (1/3)÷(1+1/3) = 1/4 = 25%。对手在这条街的实际弃牌率是 30%，**高于** 25% ⇒ 你的 bluff 盈利。复算（底池记作 1，下注 1/3）：EV = 0.30×1 − 0.70×(1/3) = +0.067，即每手 bluff 平均赢下 6.7% 池；若他其实只弃 20%，同一手 bluff 就变成 0.20 − 0.80×(1/3) = −0.067。',
       },
       {
         type: 'example',
         content:
-          '实例二：你下注 1/2 池，Alpha = 1/3。对手的河牌大注弃牌率是 25%，低于 Alpha。你应该弃牌。如果对手的弃牌率是 35%，高于 Alpha，你应该跟注。',
+          '实例二：你下注 1/2 池，Alpha = 0.5÷1.5 = 1/3 ≈ 33%。对手弃牌率只有 25%，**低于** 33% ⇒ 这个尺度的 bluff 亏损：EV = 0.25×1 − 0.75×0.5 = −0.125（每手输 12.5% 池）。修正方向：缩小 bluff 频率（只在还带摊牌价值或改进潜力时下注），或改用更小尺度——注意 Alpha 随尺度单调上升（1/4 池 20%、1/3 池 25%、半池 33%、满池 50%），直接把注加大会把保本门槛抬得更高，只有当你确认对手的弃牌率随尺度上升得比 Alpha 更快时，更大尺度才是剥削。',
       },
       {
         type: 'example',
         content:
-          '实例三：你下注 1/4 池，Alpha = 1/5。对手的 C-Bet 弃牌率是 20%，低于 Alpha。你应该弃牌。如果对手的弃牌率是 25%，高于 Alpha，你应该跟注。',
+          '实例三：你下注 1/4 池，Alpha = 0.25÷1.25 = 1/5 = 20%。对手弃牌率恰好 20%，等于 Alpha ⇒ **正好盈亏平衡，EV = 0**：0.20×1 − 0.80×0.25 = 0。别把这个尺度当成"反正不亏的免费下注"，它一分不赚；而任何高于 20% 的弃牌率都会让它自动盈利——这正是均衡里小尺度高频下注能塞进大量诈唬的原因：保本门槛最低。',
       },
       {
         type: 'highlight',
-        content: 'Alpha 的应用原则：**定量比较**，而不是依赖直觉。通过 Alpha，你可以更客观地评估对手的诈唬频率，从而做出更准确的决策。',
+        content: 'Alpha 的应用原则：**定量比较**，而不是依赖直觉。但它衡量的是"我的某个尺度的 bluff 需要多少弃牌率才保本"，而不是"对手诈唬够不够多所以我该跟注"——把进攻方指标当成防守方的跟/弃依据，是这个概念最常见的用反方式。',
       },
       {
         type: 'pro-tip',
-        content: '自测理解深度：能否用 Alpha 向朋友解释"为什么在某些情况下你应该弃牌"？能讲清楚这一点，你就掌握了 Alpha 的精髓。',
+        content: '自测理解深度：能否用 Alpha 向朋友解释"同样是 1/3 池下注，面对弃牌率 30% 的对手是印钞机、面对弃牌率 20% 的对手就是烧钱"，以及为什么"该不该跟注"要换另一条公式？能讲清楚这两点，你就掌握了 Alpha 的精髓。',
       },
     ],
     quiz: [
@@ -413,21 +413,21 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
         question: 'Alpha 的公式是？',
         options: ['Alpha = pot / (pot + bet)', 'Alpha = bet / (pot + bet)', 'Alpha = bet / (pot + 2×bet)', 'Alpha = pot / (pot + 2×bet)'],
         correctIndex: 1,
-        explanation: 'Alpha = bet / (pot + bet)，与 MDF 共享相同分母，只是分子不同。这是对手需要弃牌的概率阈值。',
+        explanation: 'Alpha = bet / (pot + bet) = b/(1+b)：与 MDF 同分母，只把分子从 pot 换成自己的下注额，含义是"我的 bluff 需要对手弃牌多少比例才保本"。选项 0 写的是 MDF；分母带 2×bet 的两式属于防守方的"跟注所需胜率"（跟注额 ÷（底池 + 对手下注 + 自己跟注）），与 Alpha 不是同一个问题。',
       },
       {
         id: 't9-alpha-q2',
         question: 'Alpha 与 MDF 的关系是？',
-        options: ['Alpha = MDF', 'Alpha + MDF = 1', 'Alpha = 1 - MDF', 'Alpha = 1 / MDF'],
+        options: ['Alpha = MDF，两者是同一个数字的两种叫法', 'Alpha + MDF = 1，两者互为补集', 'Alpha 与 MDF 互为倒数（Alpha × MDF = 1）', '两者互不相关，各自独立计算'],
         correctIndex: 1,
-        explanation: 'Alpha + MDF = 1，两者互为补集。Alpha 是对手需要的弃牌率，MDF 是你的防御频率。',
+        explanation: 'MDF = pot/(pot+bet)、Alpha = bet/(pot+bet)：同分母而分子相加恰等于分母，故 Alpha + MDF = 1（等价写法 Alpha = 1 − MDF）。它们不是同一个数字（只有 b=1 即满池时才都是 50%），也不构成倒数关系，更不能各算各的——两者都由同一个下注尺度唯一决定，一侧的最优频率正好抵消另一侧的剥削空间。',
       },
       {
         id: 't9-alpha-q3',
         question: 'Alpha 的核心价值在于？',
         options: ['提供一个定量的视角', '提供一个定性的视角', '提供一个经验法则', '提供一个直觉'],
         correctIndex: 0,
-        explanation: 'Alpha 提供了一个定量的视角，帮助你评估对手的诈唬频率是否足够高，从而决定是否跟注。',
+        explanation: 'Alpha 把"我这个尺度的 bluff 需要多少弃牌率才保本"变成一个可与对手统计直接比较的数值门槛（1/3 池 → 25%、半池 → 33%、满池 → 50%），这才谈得上判断偏离基线的幅度；定性视角、经验法则与直觉都给不出可复核的边界。注意它服务的是进攻方的 bluff 决策，不是"对手诈唬够不够多所以我该跟注"——后者要用防守方的所需胜率公式。',
       },
       {
         id: 't9-alpha-q4',
@@ -439,14 +439,19 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
           '观察对手的弃牌率 → 比较 Alpha 与对手弃牌率 → 计算 Alpha',
         ],
         correctIndex: 0,
-        explanation: 'Alpha 的应用步骤是：计算 Alpha → 观察对手的弃牌率 → 比较 Alpha 与对手弃牌率。',
+        explanation: '起点只能是"你打算使用哪个尺度"：Alpha 完全由自己的下注尺度决定（b/(1+b)），没有尺度就没有 Alpha，也就没有可比的门槛；算出后取对手在这条街的实际弃牌率，最后比较，弃牌率 > Alpha 才 bluff。其余三把观察或比较放在计算之前，等于在没有基准线时先读数据，无法得出"这个尺度的 bluff 是否保本"的结论。',
       },
       {
         id: 't9-alpha-q5',
-        question: '你下注 1/3 池，Alpha = 1/4。对手的 C-Bet 弃牌率是 30%，你应该？',
-        options: ['跟注', '弃牌', '加注', '全下'],
+        question: '你计划用 1/3 池尺度 bluff（Alpha = 1/4 = 25%），统计显示对手在这条街的实际弃牌率是 30%。结论是：',
+        options: [
+          '这个尺度的 bluff 不保本，应当停用',
+          '这个尺度的 bluff 保本且盈利，EV ≈ +0.067 池',
+          '应当把尺度放大到满池，注越大 bluff 越赚',
+          '应当改用 MDF 判断这手牌该不该跟注',
+        ],
         correctIndex: 1,
-        explanation: '对手的弃牌率低于 Alpha，你应该弃牌。',
+        explanation: '弃牌率 30% > Alpha 25% ⇒ 复算 EV = 0.30×1 − 0.70×(1/3) ≈ +0.067 池，这个尺度的 bluff 无需摊牌价值即盈利（正文实例一同款）。"不保本应停用"把两个数的大小比反了；"放大到满池"方向恰好相反——满池的 Alpha = 50%，对手弃牌率不随之上升时同一手 bluff 立刻变成稳定烧钱；MDF 与所需胜率处理的是防守方的跟注问题，与这次 bluff 是否保本无关。',
       },
     ],
   },

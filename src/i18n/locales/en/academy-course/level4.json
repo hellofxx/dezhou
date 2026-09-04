@@ -100,7 +100,7 @@
       "Frequency balance means keeping a certain proportion among your actions (bet/check/raise) in a given spot, so the opponent cannot exploit you by adjusting their strategy.",
       "GTO's core is frequency balance. When your strategy is balanced, no adjustment by the opponent profits; when it's unbalanced, they extract extra profit by exploiting.",
       "Bluff/Value Ratio",
-      "The most important frequency balance is the bluff-to-value ratio when betting:\n\n• River full-pot bet: opponent needs 33% equity to call\n  → your bluff share should be 33% (value:bluff = 2:1)\n\n• River 2/3-pot bet: opponent needs 40% equity to call\n  → your bluff share ≈ 28.6% (value:bluff ≈ 2.5:1)\n\n• River 1/2-pot bet: opponent needs 25% equity to call\n  → your bluff share = 25% (value:bluff = 3:1)\n\nKey distinctions:\n- Bluff share (of your betting range) = bet / (pot + 2×bet)\n- MDF (your defense frequency as the defender) = pot / (pot + bet)\n- Required equity (single-call break-even) = bet / (pot + 2×bet)\n\nNote: MDF, required equity, and bluff share look formally similar but apply in completely different situations! Confusing these three is the most common beginner mistake.",
+      "The most important frequency balance is the bluff-to-value ratio when betting:\n\n• River full-pot bet: opponent needs 33% equity to call\n  → your bluff share should be 33% (value:bluff = 2:1)\n\n• River 2/3-pot bet: opponent needs 28.6% equity to call\n  → your bluff share ≈ 28.6% (value:bluff ≈ 2.5:1)\n\n• River 1/2-pot bet: opponent needs 25% equity to call\n  → your bluff share = 25% (value:bluff = 3:1)\n\nKey distinctions:\n- Bluff share (of your betting range) = bet / (pot + 2×bet)\n- MDF (your defense frequency as the defender) = pot / (pot + bet)\n- Required equity (single-call break-even) = bet / (pot + 2×bet)\n\nNote: MDF, required equity, and bluff share look formally similar but apply in completely different situations! Confusing these three is the most common beginner mistake.",
       "How to Apply in Practice",
       "You don't need exact frequencies, but be aware:\n• If your last 5 bluffs were all caught, you may be bluffing too much\n• If you never bluff, opponents will only call your bets with the strongest hands\n• Keep the unpredictability of \"sometimes bluff, sometimes value\"",
       "Against strong players, frequency balance is your shield; against weak players, you can break balance for pure exploitation. The key is knowing when to balance and when to deviate.",
@@ -165,15 +165,15 @@
     ],
     "l4-bluffcatching": [
       "What Is Bluff Catching?",
-      "Bluff catching is calling with a hand that can only beat the opponent's bluffs.\n\nExample: the opponent shoves the river, you have a pair, and judge he bluffs often enough → Call.\n\nFeatures of a bluff catcher:\n- Can't beat the opponent's value range\n- But can beat the opponent's bluff range\n- The decision is purely about opponent bluff frequency vs your minimum required equity",
-      "The core logic of bluff catching: if the opponent's bluff frequency > your minimum required equity (bet/(pot+bet)), calling is +EV.",
+      "Bluff catching is calling with a hand that can only beat the opponent's bluffs.\n\nExample: the opponent shoves the river, you have a pair, and judge he bluffs often enough → Call.\n\nFeatures of a bluff catcher:\n- Can't beat the opponent's value range\n- But can beat the opponent's bluff range\n- The decision is purely about opponent bluff frequency vs the minimum equity your call needs",
+      "The core logic of bluff catching: if the opponent's bluff frequency > the minimum equity your call needs (bet / (pot + 2×bet), i.e. call amount ÷ total pot after you call), calling is +EV.",
       "The Hero Call Decision Framework",
-      "Step 1: assess the opponent's bluff frequency (based on image/action line)\n\nStep 2: calculate minimum required equity = bet / (pot + bet)\nExample: opponent bets 2/3 pot → you need > 40% equity\n\nStep 3: compare the opponent's bluff frequency vs required equity\nIf opponent's bluff frequency 50% > required 40% → Call\n\nStep 4: consider blockers\nDo you block the opponent's value range? (reduces reasons to call)\nDo you block the opponent's bluff range? (increases reasons to call)",
+      "Step 1: assess the opponent's bluff frequency (based on image/action line)\n\nStep 2: calculate the minimum equity your call needs = call amount ÷ (pot + opponent's bet + your own call) = b / (pot + 2×bet)\nExample: pot 1, opponent bets 2/3 pot → 0.667 / (1 + 1.333) ≈ 28.6% equity\n\nDon't mix the formulas: b / (pot + bet) gives you Alpha — the break-even fold frequency for the aggressor's pure bluff (40% at a 2/3-pot size). It answers \"how often must my bluff make them fold to break even\", not \"should I call\". Opposite perspectives, different denominators; see the MDF & Alpha chapter of Theory Academy T5.\n\nStep 3: compare the opponent's bluff frequency vs the equity your call needs\nIf opponent's bluff frequency 50% > required 28.6% → Call\n\nStep 4: consider blockers\nDo you block the opponent's value (including nuts) combos? → their value part thins out and the bluff share rises → a reason to call MORE\nDo you block the opponent's bluff combos? → their bluff part thins out and the value share rises → a reason to call LESS",
       "A hero call isn't \"guessing\" — it's math. Compare the opponent's bluff frequency with the pot odds; call above the threshold, fold below it.",
       "How Opponent Image Affects Bluff Catching",
       "vs Maniac/LAG: bluff catching frequency increases\n- Their bluff ranges are wide; you can call with weaker hands\n- Example: LAG bets pot on the river, you can call with top pair weak kicker\n\nvs Nit/TAG: bluff catching frequency decreases\n- Their bluff frequency is low; you need stronger hands to call\n- Example: Nit bets pot on the river, you need two pair+ to call\n\nvs Unknown: use MDF as the baseline\n- MDF = 1 - bet/(pot+bet)\n- Example: opponent bets pot, MDF = 50% (call with 50% of your range)",
       "Blockers in Bluff Catching",
-      "Blocker principles:\n\n1. Holding a blocker to the opponent's value range → increase calling\n   Because you block their strong hands, they're more likely bluffing\n\n2. Holding a blocker to the opponent's bluff range → reduce calling\n   Because you block their bluffs, they're more likely to have value\n\nExample: holding an A on a monotone board\n→ blocks the opponent's nut flush (value) → they're more likely bluffing → lean call",
+      "Blocker principles:\n\n1. Holding a blocker to the opponent's value range → call MORE\n   Because you block their strong hands: their value combos thin out, the bluff share rises, so \"they're bluffing\" becomes the likelier story\n\n2. Holding a blocker to the opponent's bluff range → call LESS\n   Because you block their bluffs: their bluff combos thin out, the value share rises, so their bet looks more like real strength\n\nExample: holding A♠ on a monotone ♠ board\n→ blocks the opponent's nut flush (value) → they're more likely bluffing → lean call",
       "Blocker thinking is the heart of advanced bluff catching. Don't just look at how strong your hand is — look at what your hand does to the opponent's range.",
       "Detecting and Exploiting Over-Bluffing",
       "Signals of over-bluffing:\n- Opponent C-Bet frequency > 70%\n- Turn barrel frequency > 50%\n- River bet frequency > 40%\n- The opponent still bets frequently in multiway pots\n\nExploitation:\n- Widen your bluff-catching range and call with weaker hands\n- Don't raise with medium strength (let them keep bluffing)\n- Trap: call with strong hands instead of raising, letting them bluff the river\n\nNote: over-bluffers are the most common \"money machines\" at low stakes. Identify them, then call them wide."
@@ -228,7 +228,7 @@
         "Wider",
         "Uncertain"
       ],
-      "explanation": "BTN has a positional advantage and opens much wider than UTG (about 40-50% vs 10-15%)."
+      "explanation": "BTN has a positional advantage and is the widest opening position at a 6-max table; UTG opens only the very strongest slice of hands — the gap in width is large."
     },
     "l4-ev-q1": {
       "question": "Pot is $100, opponent bets $50. What equity do you need to profitably call?",
@@ -557,7 +557,7 @@
         "38%",
         "50%"
       ],
-      "explanation": "MDF = pot/(pot+bet) = 21/(21+13) = 21/34 ≈ 62%. This is the minimum range share to stop exploitation. Note: the call required equity is bet/(pot+bet) = 13/34 ≈ 38%."
+      "explanation": "MDF = pot/(pot+bet) = 21/(21+13) = 21/34 ≈ 62%. This is the minimum range share to stop exploitation. Note: 13/34 ≈ 38% is Alpha — the break-even fold frequency for the aggressor's bluff, not your calling number. The equity your call needs is bet/(pot+2×bet) = 13/(21+26) ≈ 28%, a third figure; don't swap it with Alpha."
     },
     "l4-mdf-q4": {
       "question": "What does MDF stand for?",
@@ -626,7 +626,7 @@
         "28%",
         "60%"
       ],
-      "explanation": "MDF = pot/(pot+bet) = 10/(10+15) = 10/25 = 40%. The required equity to call = bet/(pot+bet) = 15/25 = 60%. Different — don't confuse them!"
+      "explanation": "MDF = pot/(pot+bet) = 10/(10+15) = 10/25 = 40%. That is your minimum defense frequency. Note: 15/25 = 60% is Alpha — the aggressor's bluff break-even fold rate, not a calling figure; the equity your call needs is bet/(pot+2×bet) = 15/(10+30) = 37.5%. MDF, Alpha and required call equity have different denominators and different jobs — don't confuse them!"
     },
     "l4-overbet-q4": {
       "question": "When an overbet gets called, what does it usually mean?",
@@ -699,24 +699,24 @@
       "explanation": "Building a range requires considering board structure, opponent tendencies, and position."
     },
     "l4-bc-q1": {
-      "question": "Opponent bets 1/2 pot on the river. What minimum equity do you need to call?",
+      "question": "Opponent bets 1/2 pot on the river. What is the minimum equity your call needs?",
       "options": [
         "20%",
         "25%",
         "33%",
         "50%"
       ],
-      "explanation": "Minimum equity = bet/(pot+bet). Betting 1/2 pot means calling 0.5pot to win 1.5pot, pot odds = 0.5/1.5 = 33%. Need at least 33%."
+      "explanation": "Required call equity = bet/(pot + 2×bet). Facing 1/2 pot with pot 1 and a 0.5 call, the total pot after you call is 1 + 0.5 + 0.5 = 2 → 0.5/2 = 25%. So you need at least 25% equity to call. Note that 0.5/(1+0.5) ≈ 33% is Alpha — the break-even fold frequency for the aggressor's bluff, not the caller's number."
     },
     "l4-bc-q2": {
-      "question": "Holding an A on a monotone board with the opponent shoving the river, you should?",
+      "question": "Holding A♠ on a monotone ♠ board with the opponent shoving the river, you should?",
       "options": [
-        "Lean Fold (A blocks the flush)",
+        "Lean Fold (A♠ blocks the flush)",
         "Lean Call (blocks the opponent's nut-flush value)",
         "Doesn't matter",
         "Must Raise"
       ],
-      "explanation": "Your A blocks the opponent's nut flush (Ax), reducing their value range and increasing the relative bluff proportion — lean call."
+      "explanation": "Your A♠ blocks the opponent's nut flush (Ax♠), reducing their value range and increasing the relative bluff proportion — lean call."
     },
     "l4-bc-q3": {
       "question": "Facing a Nit's big river bet, you should?",
@@ -734,7 +734,7 @@
       "title": "Narrowing the range from actions: UTG Open + C-Bet",
       "correctAction": "Call (call the C-Bet)",
       "reasoning": [
-        "UTG's opening range is narrow (about 10%): AA-TT, AKs-AQs, AKo",
+        "UTG's opening range is narrow (only the very strongest slice of hands): AA-TT, AKs-AQs, AKo",
         "The A-9-4 board likely hits UTG's range (many Ax)",
         "But your KQs has backdoor flush and straight potential",
         "Call one street and see the turn — don't over-invest"
@@ -747,7 +747,7 @@
       "title": "Range thinking: BTN's wide open range",
       "correctAction": "Check-Call",
       "reasoning": [
-        "BTN's open range is wide (about 45%) — many hands missed the T board",
+        "The BTN is the widest opening position at a 6-max table — many hands missed the T board",
         "You flopped top pair (T), with great equity against BTN's wide range",
         "Check-Call lets the opponent's bluffs and weak hands keep betting",
         "Don't Check-Raise, because BTN's range is too wide — many weak hands will fold"
@@ -835,7 +835,7 @@
         "The opponent cannot have the A♥x♥ nut flush (you hold A♥)",
         "The opponent's value range is significantly weakened by your blocker",
         "TAG's river bluff frequency is low, but your blocker reduces his value combos",
-        "Pot odds: need 20/(27+20) ≈ 43% equity; with the blocker, his bluff share is sufficient"
+        "Pot odds: need 20/(27+20+20) ≈ 30% equity; with the blocker, his bluff share is sufficient"
       ],
       "mistakeAction": "Fold (not considering the blocker)",
       "mistakeReasoning": "Without blocker thinking, players overestimate the opponent's flush probability. Your A♥ means the opponent is missing the strongest flush combo.",
@@ -861,7 +861,7 @@
       "reasoning": [
         "98s in the BB should Call vs a BTN 2.5BB open",
         "The BB has already posted 1BB, only needing 1.5BB more to see the flop",
-        "GTO requires the BB to defend about 50-55% of hands to stop the BTN from infinitely stealing",
+        "If the BB defends too tightly, the BTN can profit by stealing with any two cards, so a balanced strategy requires the BB to widen its defense",
         "98s suited connectors have great postflop playability — a core part of the defense range"
       ],
       "mistakeAction": "Fold",
@@ -961,11 +961,11 @@
       "title": "Hero call: blocking the opponent's value range",
       "correctAction": "Call",
       "reasoning": [
-        "BTN bets three streets and shoves 28BB (pot) on the river",
+        "BTN bets three streets and shoves 33BB on the river — the pot before the bet was exactly 33BB, i.e. a pot-sized shove",
         "You hold AK, blocking the opponent's nut flush (Ax)",
         "BTN's value range (nut flush) is reduced because you hold the A",
         "BTN's bluff range (missed draws, air) is relatively increased",
-        "Facing a pot bet you need 33% equity; TAG's bluff frequency is about 35-40% → Call is +EV"
+        "Facing a pot-sized bet you need 33% equity (33 ÷ (66+33) = 33%); TAG's bluff frequency is about 35-40% → Call is +EV"
       ],
       "mistakeAction": "Fold",
       "mistakeReasoning": "Folding is too tight. The A is the perfect bluff-catcher blocker, blocking the opponent's strongest value combos. Given TAG's bluff frequency, calling is +EV.",
@@ -1134,18 +1134,18 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "AKs facing CO's 4-Bet all-in has excellent pot odds. You need about 40% equity, and AKs usually has 40%+ vs CO's 4-Bet range.",
-          "evImpact": "-5.0 BB/100"
+          "explanation": "Fold. Recompute: the stated pot is 105 (CO's 97 shove + your 7.5 already in + the blinds, taken as 105 per the question) and you must call 89.5 (= 97 - 7.5), so the break-even equity for a call = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0% (repo convention: calculatePotOdds expects a potSize that already includes the opponent's bet — see shared/utils/pokerMath). Your A♣K♣ against CO's 4-bet shove range QQ+/AK leaves 21 combos after blocking (QQ 6 + KK 3 + AA 3 + AK 9; combo derivation in Theory Academy T4), giving roughly (6×43% + 3×32% + 3×12% + 9×50%) ÷ 21 ≈ 40%. 40% < 46.0% ⇒ calling is -EV, so folding is the answer. And do not borrow Alpha (b ÷ (pot + bet), the fold frequency a pure bluff itself must elicit to break even — attacker side) as a call threshold — opposite side of the bet, different denominator (see L4B and T5 MDF/Alpha).",
+          "evImpact": "0 BB (no more money in; avoids roughly -11.7BB from calling)"
         },
         {
           "action": "Call",
-          "explanation": "Call AKs vs CO's 4-Bet all-in. Pot odds require about 40% equity, and AKs vs CO's 4-Bet range (QQ+, AK) has about 40%.",
-          "evImpact": "+2.0 BB/100"
+          "explanation": "Calling is -EV: about 40% realised equity falls short of the 46.0% break-even line (89.5 ÷ 194.5). The classic mistake is reading \"AKs has about 43% against QQ alone\" as the equity against the whole 4-bet shove range — 43% only holds for the QQ branch, while KK (about 32%) and AA (about 12%) drag the average down. Note that even 43% is already below 46.0%, so the most optimistic single-matchup reading still says fold. At 40%: EV = 0.40 × 105 - 0.60 × 89.5 ≈ -11.7BB, far worse than the 0 of folding.",
+          "evImpact": "-11.7BB (at 40% equity: 0.40×105 - 0.60×89.5)"
         },
         {
           "action": "Tank then Fold",
-          "explanation": "Tanking then folding is the same as folding directly — both -EV. AKs has enough equity to call here.",
-          "evImpact": "-5.0 BB/100"
+          "explanation": "Same conclusion as Fold, but as its own option it is the inferior one: on the matrix it banks exactly what folding banks (no further investment), and the only extra cost is timing information — a long tank followed by a fold signals a hand that nearly called. It is also not what this question grades: correctness comes down to comparing the 46.0% break-even line with the ~40% you actually have, never to how long you thought. The counter-intuitive part: most players decide from \"AKs is strong\" instead of computing the threshold first — AKs is simply behind QQ+/AK.",
+          "evImpact": "Same EV as folding (extra cost: a timing tell)"
         }
       ]
     },
@@ -2091,7 +2091,7 @@
         "Marginal open hand",
         "Core open hand"
       ],
-      "explanation": "J8s is too weak — not in the UTG open range. UTG only opens about 15-20% of hands; J8s is far below."
+      "explanation": "J8s is too weak — not in the UTG open range. UTG opens only the very strongest slice of hands; J8s is far below that."
     },
     "d-l4-range-q3": {
       "scenario": "Preflop decision",
@@ -2101,7 +2101,7 @@
         "Marginal open hand",
         "Core open hand"
       ],
-      "explanation": "Q9s is in the BTN open range but is a marginal part. BTN opens about 40-50%; Q9s is in the lower half."
+      "explanation": "Q9s is in the BTN open range but is a marginal part. The BTN is the widest opening position at a 6-max table (about 35%); Q9s sits in the lower half."
     },
     "d-l4-range-q4": {
       "scenario": "Preflop decision",
@@ -2131,7 +2131,7 @@
         "Marginal open hand",
         "Core open hand"
       ],
-      "explanation": "T9s is in the SB open range but is marginal. SB opens about 30-40%; T9s is in the lower half."
+      "explanation": "T9s is in the SB open range but is marginal. The SB's open range is in the same tier as the BTN (about 35%); T9s is in the lower half."
     },
     "d-l4-range-q7": {
       "scenario": "Preflop decision",
@@ -2184,14 +2184,14 @@
       "explanation": "EV = 0.82×100BB - 0.18×100BB = 82BB - 18BB = +64BB. AA vs KK has a huge EV edge."
     },
     "d-l4-ev-q4": {
-      "scenario": "Flop, pot 10BB, you have a flush draw",
+      "scenario": "Flop, pot 10BB (before the opponent shoves), you have a flush draw",
       "question": "The opponent shoves 8BB and you call. You have 35% equity. What is the call's EV?",
       "option": [
-        "+3.9BB",
+        "+1.1BB",
         "-1.1BB",
         "+1.5BB"
       ],
-      "explanation": "Standard EV formula: you call 8BB to potentially win \"pot 10BB + opponent shove 8BB\" = 18BB. EV = 0.35×(10+8+8) − 0.65×8 = 0.35×26 − 5.2 = 9.1 − 5.2 = +3.9BB. The correct answer is +3.9BB."
+      "explanation": "Call EV = hit rate × total you can win − miss rate × call amount. The pot is 10BB before the shove; adding the opponent's all-in 8BB, you win 18BB when you hit and lose your own 8BB call when you miss. EV = 0.35×18BB − 0.65×8BB = 6.3BB − 5.2BB = +1.1BB. Cross-check the gross way: after your call the total pot is 26BB, so EV = 0.35×26BB − 8BB = +1.1BB — same answer. Option b (−1.1BB) has every amount right but swaps the two terms (0.65×8BB − 0.35×18BB); the flipped sign turns a profitable call into a loss. Option c (+1.5BB) only holds at roughly 36.5% equity — every overestimated percentage point inflates EV by 0.26BB, the usual result of rounding the 9-out flush draw above the outs×4 shortcut. Two further mistakes reach the opposite conclusion: leaving the shove out of the win amount (0.35×10BB − 0.65×8BB = −1.7BB), or using a single-street hit rate (about 19% to hit on the turn, 0.19×18BB − 0.81×8BB ≈ −3.1BB)."
     },
     "d-l4-ev-q5": {
       "scenario": "River, pot 20BB",
@@ -2231,7 +2231,7 @@
         "-0.4BB",
         "+0.5BB"
       ],
-      "explanation": "An OESD has 8 outs, about 34% chance to hit by turn or river. You call 3BB for \"pot 5BB + opponent bet 3BB\" = 8BB. Considering the extra value after two streets of completion, the correct answer is +1.5BB."
+      "explanation": "An OESD has 8 outs; over both remaining streets the outs×4 shortcut gives about 32% (exactly 1 − 39/47 × 38/46 ≈ 31.5%, and the two-street figure is what applies here). The question rules out implied odds, so when you hit you can only win what is already in the middle: pot 5BB + the opponent's 3BB bet = 8BB; when you miss you lose your 3BB call. EV = 0.32×8BB − 0.68×3BB = 2.56BB − 2.04BB = +0.52BB ≈ +0.5BB. Cross-check the gross way: after your call the pot is 11BB, so EV = 0.32×11BB − 3BB = +0.52BB — same answer. Option a (+1.5BB) assumes you win roughly 3BB extra after hitting, i.e. precisely the implied odds the question excludes. Option b (−0.4BB) forgets to credit the opponent's 3BB bet to the pot you can win (0.32×5BB − 0.68×3BB = 1.6BB − 2.04BB = −0.44BB) and turns a correct call into a fold."
     },
     "d-l4-gto-q1": {
       "scenario": "NL10, 6-max, unknown opponent",
@@ -2385,13 +2385,13 @@
     },
     "d-l4b-freq-q8": {
       "scenario": "NL100, you're in the BB vs a BTN open",
-      "question": "BTN opens 2.5BB. What defense frequency (call or raise) should you have in the BB?",
+      "question": "BTN opens 2.5BB. How should you defend (call or raise) from the BB?",
       "option": [
-        "About 30%",
-        "About 50-55%",
-        "About 80%"
+        "Fold everything but the absolute strongest hands",
+        "Defend with a considerably wide range so the BTN cannot steal at will",
+        "Call with any two cards"
       ],
-      "explanation": "GTO requires the BB to defend about 50-55% to stop the BTN from infinitely stealing. Too tight or too loose gets exploited."
+      "explanation": "If the BB defends too tightly, the BTN can profit by stealing with any two cards, so a balanced strategy requires the BB to widen its defense. Too tight or too loose gets exploited."
     },
     "d-l4b-freq-q9": {
       "scenario": "NL50, your last 5 C-Bets were all called",
@@ -2403,5 +2403,13 @@
       ],
       "explanation": "Getting called repeatedly may mean your C-Bet frequency is too high or the sizing is off. Lower the frequency and check if the opponent is adjusting."
     }
+  },
+  "lessonObjectives": {
+    "l4-mdf": [
+      "Use MDF = pot / (pot + bet) to compute the minimum frequency you must continue at against any bet size",
+      "List the MDF values for 1/3 pot (75%), 1/2 pot (67%), pot (50%) and 150% pot (40%), and explain why the required frequency falls as the bet grows",
+      "Judge which spots call for deviating below MDF by folding more (an opponent who rarely bluffs, a range short of strong hands, a line representing extreme strength)",
+      "Tell MDF, Alpha and the equity needed to call apart by their denominators and what each one is used for"
+    ]
   }
 }

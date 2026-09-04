@@ -133,9 +133,11 @@ export interface PracticeOption {
   explanation: string;
   evImpact?: string;
   /**
-   * P2-03：EV 损失（BB，相对最优动作）。
-   * 五级反馈分级输入（calculateGrade(evLoss ?? (isCorrect ? 0 : 3))，
-   * 与 buildDecisionFeedback 默认值语义一致）；evImpact 字符串保留兼容，二者并存。
+   * P2-03：EV 损失（BB，相对最优动作），五级反馈分级的唯一输入。
+   * 呈现为三态（见 utils/practiceFeedbackView.ts）：仅当本字段是有限数值时才渲染
+   * 等级与 EV 徽章；缺省时如实显示「正确 / 错误 + 解析」，禁止再用 isCorrect 兜底
+   * 造出一个假档位（依据 PRD §5.3.6「严禁伪造策略数据展示给用户」）。
+   * evImpact 为展示用自由文本，着色判定见 utils/evImpactTone.ts。
    */
   evLoss?: number;
 }
@@ -233,6 +235,12 @@ export interface Lesson {
    * 未声明时由 deriveLessonUnits 视图层派生，实现数据零迁移。
    */
   units?: LessonUnit[];
+  /**
+   * 学习目标（先行组织者，可选）。语义与理论学院 TheoryChapter.objectives 对齐。
+   * 未声明时 LessonIntroCard 整块不渲染该区域（不渲染空列表）。
+   * 文案规范见 PRD §6.7.1「学习目标对齐」：须用可观察行为动词，且正文确有对应教学内容。
+   */
+  objectives?: string[];
   /**
    * P2 变体支持：所属游戏变体标识。
    * 缺省视为 'standard'（与 shared/types/elo DEFAULT_VARIANT 语义一致），

@@ -168,7 +168,12 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
           lessonId={lesson.id}
         />
         <div className="mt-4 space-y-4 max-w-4xl mx-auto">
-          <LessonIntroCard units={units} duration={lesson.duration} />
+          <LessonIntroCard
+            lessonId={lesson.id}
+            units={units}
+            duration={lesson.duration}
+            objectives={lesson.objectives}
+          />
           {units.map((unit, i) => (
             <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
               <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
@@ -217,7 +222,12 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
       />
       <div className="mt-4 space-y-4 max-w-4xl mx-auto">
         {/* 先行组织者卡 */}
-        <LessonIntroCard units={units} duration={lesson.duration} />
+        <LessonIntroCard
+          lessonId={lesson.id}
+          units={units}
+          duration={lesson.duration}
+          objectives={lesson.objectives}
+        />
 
         {/* 小节序列 */}
         {units.map((unit, i) => {

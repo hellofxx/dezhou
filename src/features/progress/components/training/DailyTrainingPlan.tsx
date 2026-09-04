@@ -5,7 +5,12 @@ import { Card, CardContent } from '@/shared/components/ui/card';
 import { ArrowRight, X, ClipboardList, PartyPopper } from 'lucide-react';
 import { transitionFast } from '@/shared/utils/motion';
 import type { DailyRecommendation } from '../../utils/dailyTrainingPlan';
-import { getReasonColor, getTypeIcon, getPriorityColor } from '../../utils/dailyTrainingPlan';
+import {
+  getReasonColor,
+  getTypeIcon,
+  getPriorityColor,
+} from '../../utils/dailyTrainingPlan';
+import { resolveRecommendationText } from '../../utils/recommendationText';
 
 interface DailyTrainingPlanProps {
   recommendations: DailyRecommendation[];
@@ -43,7 +48,10 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
         ) : (
           <div className="space-y-2">
             <AnimatePresence mode="popLayout">
-              {recommendations.map((rec) => (
+              {recommendations.map((rec) => {
+                // 渲染期解析（勿 useMemo 固化），口径见 utils/dailyTrainingPlan.resolveRecommendationText
+                const { title, description } = resolveRecommendationText(rec, t);
+                return (
                 <motion.div
                   key={rec.id}
                   layout
@@ -61,18 +69,14 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-medium text-[var(--ivory)] truncate">
-                          {(() => {
-                            const resolved = t(rec.title, rec.titleParams);
-                            // i18n key 缺失回退：若 i18next 返回原 key 字符串，使用 titleParams.title（数据层硬编码兜底）
-                            return resolved === rec.title ? (rec.titleParams?.title ?? resolved) : resolved;
-                          })()}
+                          {title}
                         </span>
                         <span className={`text-[10px] px-1.5 py-0.5 rounded ${getReasonColor(rec.reason)}`}>
                           {t(`dashboard.dataPlan.reason.${rec.reason}`)}
                         </span>
                       </div>
                       <p className="text-xs text-[var(--ivory-muted)] mt-0.5 line-clamp-1">
-                        {t(rec.description, rec.descParams)}
+                        {description}
                       </p>
                       <div className="flex items-center gap-3 mt-2">
                         <span className="text-[10px] text-[var(--ivory-dim)]">
@@ -103,7 +107,8 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
                     </button>
                   </div>
                 </motion.div>
-              ))}
+                );
+              })}
             </AnimatePresence>
           </div>
         )}

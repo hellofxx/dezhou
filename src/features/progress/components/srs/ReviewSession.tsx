@@ -10,6 +10,11 @@
  *      由用户自评"记得 / 不记得"，对应 quality 5 / 1）
  *   3. metadata 缺失 → 退化自评模式，仅展示 label
  *
+ * 语言契约：label 与 metadata.front / options[].text / back 存的都是 **i18n key**
+ *   （持久化载荷必须语言中立，见 theory-academy/utils/theorySrs.ts 同款说明），
+ *   由本组件 t() 解析；其所属模块翻译包可能未随本路由预加载，
+ *   故渲染前经 useEnsureReviewSourceI18n 按需补加载。
+ *
  * 完成后显示"今日复习已完成 ✓"总结页（正确数 / 总数 / 用时）。
  */
 
@@ -29,6 +34,7 @@ import { transitionStandard } from '@/shared/utils/motion';
 import { useProgressStore } from '../../store';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import { processReview, getTodayReviewItems, FAST_ANSWER_SECONDS } from '@/shared/utils/spacedRepetition';
+import { useEnsureReviewSourceI18n } from './useEnsureReviewSourceI18n';
 
 interface ReviewSessionProps {
   open: boolean;
@@ -43,6 +49,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   range: 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]',
   odds: 'text-[var(--poker-success)] bg-[var(--poker-success-bg)]',
   gto: 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15',
+  theory: 'text-[var(--poker-frost)] bg-[var(--poker-frost-bg)]',
 };
 
 // PROG-04：存 i18n key（review.category.*），渲染时 t() 解析
@@ -51,6 +58,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   range: 'review.category.range',
   odds: 'review.category.odds',
   gto: 'review.category.gto',
+  theory: 'review.category.theory',
 };
 
 /** SRS 快速作答阈值（5 秒内答对计"快速"质量分）；秒级单源见 shared FAST_ANSWER_SECONDS */
@@ -72,6 +80,10 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
     if (initialItems && initialItems.length > 0) return initialItems;
     return getTodayReviewItems(storeReviewItems);
   }, [initialItems, storeReviewItems]);
+
+  // front / back / label 存的是跨模块 i18n key，本组件渲染于 Dashboard 路由（其分组不含这些包）
+  // → 按需补加载，注入后由 bindI18nStore:'added' 触发重渲染，t() 即命中译文
+  useEnsureReviewSourceI18n(todayItems);
 
   // 会话状态
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -299,7 +311,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                 >
                   {t(CATEGORY_LABELS[currentItem.category] ?? 'review.category.strategy')}
                 </span>
-                <span className="text-xs text-[var(--ivory-muted)]">{t(currentItem.label)}</span>
+                <span className="min-w-0 truncate text-xs text-[var(--ivory-muted)]">{t(currentItem.label)}</span>
               </div>
 
               {/* 题干 */}

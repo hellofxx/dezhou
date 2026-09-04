@@ -29,6 +29,13 @@ interface BaseRecommendation {
 export interface ReviewRecommendation extends BaseRecommendation {
   type: 'review';
   descParams: { items: string; count?: number };
+  /**
+   * 前 3 项复习项 label（多为跨模块 i18n key，如 theory.quiz.<id>.question）。
+   * 渲染端须逐条 t() 后以「、」拼接覆盖 descParams.items ——
+   * i18next 不递归翻译插值值，直接把 key 塞进 items 会原样显示 key 字面量。
+   * items 保留未解析的拼接结果，仅作为字面文本 label（range/odds/gto 老数据）的兜底。
+   */
+  itemLabels: string[];
 }
 
 /** 学院下一课推荐 */
@@ -121,6 +128,11 @@ function getWeakestModule(accuracyMap: Map<string, number>): string | null {
 
 /**
  * 根据用户数据生成今日推荐（3-5项）
+ *
+ * 保持纯函数：刻意不在这里解析复习项 label —— Dashboard 对推荐结果做了 useMemo，
+ * 而复习项 label 是跨模块 i18n key（theory.quiz.* 等），其翻译包在首页路由分组里并未预加载，
+ * 由 srs 组件按需补加载（useEnsureReviewSourceI18n）。若在生成端翻译，冷启动首帧会把
+ * key 字面量固化进 memo，包注入后也不会重算。故这里只透传 label，翻译留给渲染端逐条 t()。
  */
 export function generateCrossModuleDailyPlan(
   completedLessons: readonly string[],
@@ -137,10 +149,9 @@ export function generateCrossModuleDailyPlan(
     // P0C：清洗历史遗留的硬编码中文"决策"后缀（GTO 场景 name 曾为 "BTN Turn 决策"）。
     // 不依赖 persist migrate 时机，渲染端兜底保证英文界面不再出现中英混杂。
     // 统一口径：shared/utils/sanitizeReviewLabel（与 migrate / onRehydrateStorage 共用）
-    const firstItems = todayReviews
+    const reviewLabels = todayReviews
       .slice(0, 3)
-      .map((item) => sanitizeReviewLabel(item.label))
-      .join('、');
+      .map((item) => sanitizeReviewLabel(item.label));
     recommendations.push({
       id: 'review-today',
       type: 'review',
@@ -150,8 +161,10 @@ export function generateCrossModuleDailyPlan(
         ? 'dashboard.dataPlan.descReviewMore'
         : 'dashboard.dataPlan.descReview',
       descParams: todayReviews.length > 3
-        ? { items: firstItems, count: todayReviews.length }
-        : { items: firstItems },
+        ? { items: reviewLabels.join('、'), count: todayReviews.length }
+        : { items: reviewLabels.join('、') },
+      // 逐条 label（多为 i18n key）：渲染端 t() 后再拼接，见 ReviewRecommendation.itemLabels
+      itemLabels: reviewLabels,
       route: '/academy',
       priority: 'high',
       estimatedTime: `${Math.min(todayReviews.length * 3, 15)} min`,

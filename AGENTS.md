@@ -110,6 +110,8 @@ src/
 - 默认中文（zh），支持 zh/en；新增 key 必须同时更新双语，缺一不可
 - key 命名：`<module>.<context>.<field>`；静态 key 一律 camelCase（如 `selectVariant` / `rulesDifference`）；kebab-case 仅用于与枚举值/路由参数一一对应的动态 key（如 `variant.name.short-deck`）
 - 模块注册表 `src/i18n/moduleRegistry.ts` 为唯一契约源：模块增删须同步 `I18nModuleKey` / `ALL_MODULES` / `loadModule`（/ `CORE_MODULES` / `FEATURE_GROUPS`）
+- **课程内容走双轨**：数据层保留中文原文 + 渲染层 i18n key 覆盖，zh 侧存在与原文**逐字一致的镜像 key**；新增/修改课程文本必须同批同步 zh 与 en。改课程时**正文 / 选项 / 解析 / 小测 / 双语 locale 是同一原子变更单元**（规则见 PRD §6.7.4，口径见 §12.4.3）
+- **复习类持久状态必须存 i18n key**（间隔重复队列的 label 与 `metadata.front/back` 等），禁止存任何语言的原文；且渲染于首页的复习界面必须保证来源包按需可得——两者是**配对要求**，只做其一比原状更糟（PRD §12.4.3）
 
 ## UI/UX 设计系统（摘要，详见 docs/AI_GUIDE.md）
 
@@ -142,6 +144,8 @@ src/
 - 边界归入更严重等级（具体边界规则见 `calculateGrade` 实现）
 - 所有训练模块的答题反馈必须复用此系统，禁止自定义评级
 - `buildDecisionFeedback` 内部统一调用 `calculateGrade(evLoss)`，禁止用 `isCorrect` 掩盖真实 EV 损失
+- **登记豁免**：theory-academy 章末小测为概念判断题、无 EV 语义，恒以「正确 / 错误 + 解析」二态呈现（规格与理由见 PRD §5.9.2 / §5.27.5）
+- **呈现诚实性**：选项无真实 EV 标定时不得渲染五级徽章与 EV 数值（判分链路的对错 / 连击 / SRS / ELO 不受影响）；判据见 PRD §6.7.1「EV 标定诚实性」，覆盖率由 `strategy-academy/utils/evCalibration.test.ts` 棘轮追踪
 
 ### 反馈闭环
 
