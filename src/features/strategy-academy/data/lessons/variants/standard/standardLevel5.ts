@@ -8,6 +8,12 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: '资金管理',
         subtitle: '没有资金管理，技术再好也会破产',
         duration: '7 min',
+        objectives: [
+          '计算给定级别与买入额下的最低与推荐资金（如 $1/$2 买入 $200 → 最低 20 个买入 = $4,000）',
+          '判断升级与降级的量化条件（资金达下一级 30 个买入才升级、降至当前级 20 个买入即降级）',
+          '识别危险资金行为（混用生活费、借钱打牌、拒绝降级），并给出专款专用等替代做法',
+          '用 Kelly 公式 f* = (bp − q) / b 计算最优资金比例（60% 胜率 1:1 赔率 → 20%），并说明 Half Kelly 更保守',
+        ],
         content: [
           { type: 'heading', content: '为什么资金管理如此重要？' },
           {
@@ -205,6 +211,11 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: '情绪管理（Tilt Control）',
         subtitle: '控制情绪是长期盈利的关键',
         duration: '8 min',
+        objectives: [
+          '识别四种 Tilt 类型（愤怒/恐惧/报复/绝望）与 Tendler 7 型 Tilt 档案的触发信号',
+          '给出五项防 Tilt 策略（止损线、定时休息、自我觉察、长期视角、停止信号），并判断自己当前的情绪状态',
+          '判断正确率下降超过 15% 或连续做「不像自己」的行动时应立即停止训练而非继续',
+        ],
         content: [
           { type: 'heading', content: '什么是 Tilt？' },
           {
@@ -401,6 +412,11 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: '游戏选择与长期思维',
         subtitle: '选择正确的战场，用长期视角看待扑克',
         duration: '6 min',
+        objectives: [
+          '识别好桌子的四个特征（休闲玩家 VPIP > 30%、平均底池大、翻牌率高、互动多），并比较桌上第 1 好 vs 第 6 好玩家的赢率差异',
+          '判断评估水平至少需要 10,000+ 手牌样本，说明短期结果受方差支配',
+          '说明持续 +EV 决策比单手结果更值得关注，并判断不应因短期下风改变正确策略',
+        ],
         content: [
           { type: 'heading', content: '游戏选择' },
           {
@@ -521,9 +537,9 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
                 gameContext: { gameType: 'cash', tableDescription: '多人激进加注，可能是职业牌手桌' },
               },
               options: [
-                { action: '这是一张好桌子，留下来', isCorrect: false, explanation: '多人加注、3-Bet、大底池 = 可能是职业牌手桌。这种桌子很难打，技术优势小。', evImpact: '-2 BB/100' },
+                { action: '这是一张好桌子，留下来', isCorrect: false, explanation: '多人加注、3-bet、大底池 = 可能是职业牌手桌。这种桌子很难打，技术优势小。', evImpact: '-2 BB/100' },
                 { action: '考虑换桌子（对手太强）', isCorrect: true, explanation: '多人激进加注说明对手水平较高。寻找更被动的桌子（多人limp）更有利可图。', evImpact: '+3 BB/100' },
-                { action: 'All-in（“我不怕”）', isCorrect: false, explanation: 'ATs 面对 3-Bet 和多人跟注应该弃牌。这不是勇气问题，是数学问题。', evImpact: '-15 BB/100' },
+                { action: 'All-in（“我不怕”）', isCorrect: false, explanation: 'ATs 面对 3-bet 和多人跟注应该弃牌。这不是勇气问题，是数学问题。', evImpact: '-15 BB/100' },
               ],
               relatedLessonId: 'l5-game-selection',
             },
@@ -583,6 +599,11 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: 'Session Review 方法论',
         subtitle: '学会系统化复盘每次打牌，从实战中学习',
         duration: '9 min',
+        objectives: [
+          '排列复盘五步法（标记关键手牌 → 分析决策点 → 对比 GTO → 记录得失 → 制定改进计划），并说出每步的具体动作',
+          '判断复盘应关注决策质量而非结果，并说明赢钱的 session 可能掩盖错误、输钱的 session 是最好的学习机会',
+          '用 Session A/B/C 档框架判断当前状态（C 档疲劳信号出现即强制结束），并说出单次训练不超过 60 分钟的纪律',
+        ],
         content: [
           { type: 'heading', content: '为什么复盘比打牌更重要？' },
           { type: 'text', content: '许多玩家花大量时间打牌却很少复盘。研究表明，每小时打牌 + 30分钟复盘的进步速度，远超 2 小时纯打牌。' },
@@ -629,6 +650,11 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: '数据驱动的漏洞修补',
         subtitle: '用统计数据识别并修复你最大的策略漏洞',
         duration: '10 min',
+        objectives: [
+          '说明关键统计指标的异常区间（VPIP/PFR 差 > 8 被动跟注过多、C-Bet % < 50% 翻后不激进、Showdown % > 35% 跟注到河牌过多）',
+          '判断漏洞修复的优先级：先修高频场景（翻前每手都发生）再修低频场景',
+          '判断各位置赢率差异指向薄弱位置的策略问题，并说出每月做一次数据体检追踪进步',
+        ],
         content: [
           { type: 'heading', content: '用数据找到你的漏洞' },
           { type: 'text', content: '属于自己的统计数据是最客观的镜子。通过分析你的 VPIP、PFR、C-Bet %、各位置赢率等数据，可以精确定位弱点。' },
@@ -663,6 +689,10 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: '情绪识别 Drill',
         subtitle: '识别 Tilt 前兆',
         duration: '3分钟',
+        objectives: [
+          '识别 tilt 前兆场景（被 bad beat、连续弱牌跟大注、想报仇、连续输钱）并给出休息或停止的正确响应',
+          '区分 tilt 应对与危险应对（加大级别追回损失、立即开始下一手都属于危险动作）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -776,6 +806,10 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: '扑克分析工具入门',
         subtitle: '善用工具加速学习，但不要被工具绑架',
         duration: '8分钟',
+        objectives: [
+          '区分三类工具的用途（PioSOLVER/GTO+ 求解场景 GTO 策略、Equilab 计算范围胜率、Hand2Note/HRM 追踪分析历史数据）',
+          '判断工具使用的正确姿势（先理解原理再用工具验证），并识别同时开多个工具、只看结果不问逻辑等错误用法',
+        ],
         content: [
           { type: 'heading', content: '为什么需要使用工具？' },
           {
@@ -791,7 +825,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           {
             type: 'text',
             content:
-              'PioSOLVER / GTO+：\n- 用途：求解特定场景的GTO策略\n- 适用：翻后策略分析、频率平衡研究\n- 学习建议：从简单场景开始（如单挑翻牌圈），逐步增加复杂度\n\nEquilab（免费）：\n- 用途：计算手牌对阵范围的胜率\n- 适用：翻前范围分析、底池赔率计算\n- 学习建议：熟悉常用范围的胜率，培养直觉\n\nHand2Note / Holdem Resource Manager：\n- 用途：追踪和分析你的历史数据\n- 适用：发现策略漏洞、监控表现\n- 学习建议：关注关键指标（VPIP/PFR/3-Bet%），不要过度分析',
+              'PioSOLVER / GTO+：\n- 用途：求解特定场景的GTO策略\n- 适用：翻后策略分析、频率平衡研究\n- 学习建议：从简单场景开始（如单挑翻牌圈），逐步增加复杂度\n\nEquilab（免费）：\n- 用途：计算手牌对阵范围的胜率\n- 适用：翻前范围分析、底池赔率计算\n- 学习建议：熟悉常用范围的胜率，培养直觉\n\nHand2Note / Holdem Resource Manager：\n- 用途：追踪和分析你的历史数据\n- 适用：发现策略漏洞、监控表现\n- 学习建议：关注关键指标（VPIP/PFR/3-bet%），不要过度分析',
           },
           {
             type: 'pro-tip',
@@ -989,6 +1023,11 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: '线上与线下扑克差异',
         subtitle: '适应不同环境，成为全能型牌手',
         duration: '8分钟',
+        objectives: [
+          '比较线上与线下的节奏差异（每小时约 60-80 手 vs 25-35 手）与各自的盈利逻辑（线上靠速度与数量、线下靠质量与耐心）',
+          '判断 HUD 的用途（快速识别对手类型与漏洞）与反 HUD 策略核心（平衡自己的数据不让对手利用）',
+          '判断速度扑克适合 GTO 策略（无法针对特定对手调整），而线下可利用 Tell 阅读与形象管理做剥削',
+        ],
         content: [
           { type: 'heading', content: '节奏差异' },
           {
@@ -1010,7 +1049,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           {
             type: 'text',
             content:
-              'HUD（Heads-Up Display）是线上特有的工具：\n\n利用 HUD：\n- 快速识别对手类型（VPIP/PFR/3-Bet%）\n- 发现对手的漏洞（如面对 C-Bet 弃牌率过高）\n- 做出数据驱动的决策\n\n反 HUD 策略：\n- 平衡你的数据（不要让数据过于极端）\n- 利用对手依赖 HUD 的弱点（如频繁 3-Bet 对付 HUD 显示紧的玩家）\n- 定期改变打法，让数据失效',
+              'HUD（Heads-Up Display）是线上特有的工具：\n\n利用 HUD：\n- 快速识别对手类型（VPIP/PFR/3-bet%）\n- 发现对手的漏洞（如面对 C-Bet 弃牌率过高）\n- 做出数据驱动的决策\n\n反 HUD 策略：\n- 平衡你的数据（不要让数据过于极端）\n- 利用对手依赖 HUD 的弱点（如频繁 3-bet 对付 HUD 显示紧的玩家）\n- 定期改变打法，让数据失效',
           },
           { type: 'heading', content: '速度扑克（Zoom/Blitz）' },
           {
@@ -1042,7 +1081,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
             question: 'HUD 的主要用途是？',
             options: ['计算胜率', '快速识别对手类型和数据', '分析翻后策略', '管理资金'],
             correctIndex: 1,
-            explanation: 'HUD 可以快速显示对手的 VPIP/PFR/3-Bet% 等数据，帮助识别对手类型。',
+            explanation: 'HUD 可以快速显示对手的 VPIP/PFR/3-bet% 等数据，帮助识别对手类型。',
           },
           {
             id: 'l5-online-vs-live-q3',
@@ -1220,6 +1259,11 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
         title: 'Session 管理 Drill',
         subtitle: '游戏选择、止损与 Session 规划',
         duration: '3分钟',
+        objectives: [
+          '判断 session 管理场景的正确决策（连续输大底池执行止损、满桌 TAG 主动换桌、疲劳时立即结束或休息）',
+          '计算 bankroll 与级别的匹配（$2000 打 NL100 只有 20 个买入 → 应降至 NL50 或更低保持 30-50 个买入）',
+          '识别赢大钱后与输大钱后的正确行为（记录笔记正常休息、拒绝立刻再战）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',

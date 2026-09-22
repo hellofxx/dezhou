@@ -9,7 +9,7 @@ const STAT_ITEMS: { key: keyof OpponentStats; label: string }[] = [
   { key: 'vpip', label: 'VPIP' },
   { key: 'pfr', label: 'PFR' },
   { key: 'af', label: 'AF' },
-  { key: 'threeBetPercent', label: '3-Bet' },
+  { key: 'threeBetPercent', label: '3-bet' },
   { key: 'foldToCBet', label: 'Fold vs CBet' },
   { key: 'cbetFrequency', label: 'CBet' },
 ];

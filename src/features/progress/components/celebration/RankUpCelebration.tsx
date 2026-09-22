@@ -11,7 +11,7 @@ import {
   DialogDescription,
 } from '@/shared/components/ui/dialog';
 import type { RankUpEvent } from '@/shared/types/elo';
-import { getRankForScore } from '@/shared/utils/elo';
+import { getRankForScore } from '../../utils/elo';
 
 interface RankUpCelebrationProps {
   rankUp: RankUpEvent | null;

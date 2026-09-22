@@ -29,7 +29,7 @@ const L3_CBET_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'formula',
-    content: 'C-Bet EV 公式（含弃牌权益与摊牌权益）：\n下注 EV = 对手弃牌率 × 当前底池 + (1-弃牌率) × (胜率 × 新底池 - 败率 × 下注额)\n\n例：底池 6BB，C-Bet 4BB，对手弃牌率 40%，胜率 20%\nEV = 0.4×6 + 0.6×(0.2×14 - 0.8×4) = 2.4 + 0.6×(2.8-3.2) = 2.4 - 0.24 = +2.16BB',
+    content: 'C-Bet EV 公式（含弃牌权益与摊牌权益）：\n下注 EV = 对手弃牌率 × 当前底池 + (1-弃牌率) × (胜率 × 净赢额 - 败率 × 下注额)\n其中净赢额 = 新底池 - 你的下注额（自己的下注被跟注后会收回，不计入赢利）\n\n例：底池 6BB，C-Bet 4BB，对手弃牌率 40%，胜率 20%\n净赢额 = (6+4+4) - 4 = 10BB\nEV = 0.4×6 + 0.6×(0.2×10 - 0.8×4) = 2.4 + 0.6×(2.0-3.2) = 2.4 - 0.72 = +1.68BB',
   },
   {
     type: 'theory-reference',
@@ -90,6 +90,12 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '持续下注（C-Bet）',
         subtitle: '翻前加注者的翻后第一武器',
         duration: '7 min',
+        objectives: [
+          '用「翻前攻击者有范围优势」说明 C-Bet 的核心逻辑，并说明 C-Bet 不需要强牌（弃牌权益足够即 +EV）',
+          '判断干燥面（K-7-2 彩虹用 33-50%）与湿润面（J-T-9 两花用 66-75%）的 C-Bet 尺度差异',
+          '用下注 EV 公式（含弃牌率与胜率）代入底池、下注额、对手弃牌率与胜率，计算一次 C-Bet 的期望值',
+          '判断何时不应 C-Bet（牌面对对手范围更有利的湿润连接面），改用 Check',
+        ],
         content: [...L3_CBET_U1_SECTIONS, ...L3_CBET_U2_SECTIONS],
         quiz: [
           {
@@ -316,6 +322,12 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '听牌处理',
         subtitle: '学会正确打好各种听牌',
         duration: '8 min',
+        objectives: [
+          '列出常见听牌的 outs 数与翻牌到河牌胜率：同花听牌 9 outs 约 35%、两头顺 8 outs 约 31%、卡顺 4 outs 约 16%、双高牌 6 outs',
+          '运用二四法则估算成牌概率（单街 ×2%、两街 ×4%），并说出 outs ≤ 9 时误差在 1 个百分点内',
+          '比较自己的成牌概率与底池赔率，判断听牌跟注是否 +EV',
+          '区分听牌的三种打法（被动跟注、半诈唬、全下），并识别组合听牌是极佳的半诈唬候选',
+        ],
         content: [...L3_DRAWS_U1_SECTIONS, ...L3_DRAWS_U2_SECTIONS],
         quiz: [
           {
@@ -542,6 +554,12 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '多街计划',
         subtitle: '学会制定 Turn 和 River 的连贯策略',
         duration: '12 min',
+        objectives: [
+          '说明多街思维（在 flop 决策时规划 turn/river 计划）并说出 Double Barrel 的定义与约 50-60% 的频率',
+          '判断转牌应继续 Barrel（转牌增强你的牌、空白牌、对手弃牌率高）还是放弃（完成明显听牌、对手加注、无胜率提升）',
+          '用 SPR = 有效筹码 ÷ 底池大小 计算 SPR，并说出低/中/高 SPR 的策略倾向（SPR < 4 顶对可全下）',
+          '用三街几何尺度构建每街约 60-70% 底池的下注序列，使三条街总量逼近有效筹码',
+        ],
         content: [
           { type: 'heading', content: '多街思维' },
           { type: 'text', content: '多街思维（Multi-Street Planning）是指在 flop 决策时就规划 turn/river 的计划。不是 "走一步看一步"，而是 "这手牌我准备打几条街？什么牌面继续？什么牌面放弃？"' },
@@ -654,6 +672,12 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: 'Check-Raise',
         subtitle: '掌握翻后最有力的攻击武器',
         duration: '10 min',
+        objectives: [
+          '区分价值 Check-Raise（两对以上/Set 在湿润面）与 Bluff Check-Raise（强组合听牌），并说出各自的收益来源',
+          '计算 Check-Raise 大小（C-Bet 额的 2.5-3 倍），如面对 4BB C-Bet 给出 10-12BB',
+          '判断面对 Check-Raise 的分类应对：弱牌弃、顶对好踢脚/超对跟、坚果牌与组合听牌再加注',
+          '说出 BB vs C-Bet 的 Check-Raise 频率约 10-15%，并判断为何干燥面不适合 Check-Raise bluff',
+        ],
         content: [
           { type: 'heading', content: 'Check-Raise 的两种用途' },
           { type: 'text', content: 'Check-Raise = 先 Check，面对对手下注时 Raise。价值 Check-Raise：两对以上/Set 在湿润面（保护强牌 + 建立大底池）。Bluff Check-Raise：强听牌（同花+顺子组合听牌，有胜率 + 弃牌权益）。' },
@@ -753,6 +777,11 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: 'Float 与 Probe Bet',
         subtitle: '利用位置优势和对手弱点获利',
         duration: '8 min',
+        objectives: [
+          '区分 Float（Call C-Bet 后 Turn 偷底）与 Probe Bet（对手翻牌 Check 后 Turn 下注）两个场景',
+          '判断 Float 的适用条件（对手 C-Bet 高但 Turn 放弃多、你有位置、牌面适合 Bluff），并说出 Float 手牌选择（后门听牌/高牌/弱对，排除纯空气）',
+          '判断哪些对手不适合 Float/Probe（Calling Station 不会弃牌），并给出替代打法',
+        ],
         content: [
           { type: 'heading', content: 'Float（浮动跟注）' },
           { type: 'text', content: 'Float = 翻牌 Call C-Bet，计划 Turn 对手 Check 时下注偷底。适用于：1) 对手 C-Bet 频率高但 Turn give-up 多 2) 你有位置优势 3) 牌面适合 Bluff（干燥面/对手范围弱）。' },
@@ -852,6 +881,12 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '下注尺度理论',
         subtitle: '选择正确的下注大小是高级技能的核心',
         duration: '10 min',
+        objectives: [
+          '列出五档下注尺度及适用场景（小注 25-33% 干燥面、中注 50-66% 标准价值、大注 75-100% 湿润面、Overbet 125-200% River 坚果优势）',
+          '用 MDF = pot ÷ (pot + bet) 与 Alpha = bet ÷ (pot + bet) 计算常见尺度的防御频率与诈唬保本弃牌率，并说明两者互补（MDF + Alpha = 1）',
+          '判断下注尺度与下注范围的关系（小注宽范围、大注窄范围），并说明为何不能固定单一尺度',
+          '识别 River 坚果优势且对手范围封顶的 Overbet 场景（如同花成牌面用 160% pot）',
+        ],
         content: [
           { type: 'heading', content: '下注尺度分类' },
           { type: 'text', content: '小注（25-33% pot）：干燥面/范围优势时。中注（50-66% pot）：标准价值下注。大注（75-100% pot）：湿润面/极化范围。Overbet（125-200% pot）：River 坚果优势面（现代 GTO 核心概念）。' },
@@ -964,6 +999,12 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '诈唬的艺术',
         subtitle: '掌握正确的诈唬时机、频率和尺度',
         duration: '12 min',
+        objectives: [
+          '用 Bluff EV = Fold% × Pot - Call% × Bet 计算诈唬期望值，并判断对手弃牌率是否超过 bet/(pot+bet) 的盈亏平衡点（2/3 池需 > 40%）',
+          '排列三条街诈唬频率的递减顺序（Flop > Turn > River），并说出每条街继续诈唬所需的更强理由（更好的 blocker、更一致的叙事）',
+          '区分 Semi-Bluff 的双重盈利方式（弃牌权益 + 成牌权益），并按半诈唬优先级排列听牌（组合听牌 > 同花 > OESD > 卡顺）',
+          '计算 River 理论 bluff-to-value 比例（下注 pot 为 1:2），并判断诈唬尺度是否与价值下注尺度一致',
+        ],
         content: [
           { type: 'heading', content: '诈唬的数学基础' },
           { type: 'text', content: '诈唬不是"偷鸡"，而是有严格数学基础的+EV决策。\n\nFold Equity（弃牌权益）公式：\nFE = 对手弃牌概率 × 底池大小\n\n诈唬盈亏平衡点：\n当对手弃牌率 > bet / (pot + bet) 时，诈唬为+EV。\n\n例：下注 2/3 pot → 需要对手弃牌率 > 40%\n下注 1/2 pot → 需要对手弃牌率 > 33%\n下注 pot → 需要对手弃牌率 > 50%' },
@@ -1069,6 +1110,11 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '牌面质地分析',
         subtitle: '学会读懂翻牌面的特征并调整策略',
         duration: '10 min',
+        objectives: [
+          '识别牌面质地的三个维度（连接性、花色分布、高低张），并据此把给定翻牌归入干燥或湿润',
+          '判断干燥面用小注（1/3 pot）让弱牌弃牌、湿润面用大注（2/3-full pot）让听牌付出代价的尺度调整',
+          '比较高张干燥面（AK2r 利于翻前加注者）与低张湿润面（876ss 利于跟注者）的范围优势归属',
+        ],
         content: [
           { type: 'heading', content: '什么是牌面质地（Board Texture）？' },
           { type: 'text', content: '牌面质地指公共牌的结构特征：连接性、花色分布、高低张等。不同质地的牌面需要完全不同的策略。' },
@@ -1107,7 +1153,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               options: [
                 { action: 'Bet 2BB（33% pot）', isCorrect: false, explanation: 'T98两花是极湿润面，小注给对手听牌太好价格。', evImpact: '-1.0 BB/100' },
                 { action: 'Bet 4-5BB（75-100% pot）', isCorrect: true, explanation: 'T98两花是极湿润面，需要大注让听牌付出代价。', evImpact: '+1.5 BB/100' },
-                { action: 'Check', isCorrect: false, explanation: 'QJ有卡顺潜力，但湿润面应该主动下注保护。', evImpact: '-0.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'QJ 在 T98 面已成顺（Q-J-T-9-8 底顺），湿润面对手可能已有更高顺，应该主动下注保护。', evImpact: '-0.5 BB/100' },
               ],
               relatedLessonId: 'l3-texture',
             },
@@ -1154,6 +1200,11 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '过牌范围构建',
         subtitle: '学会在何时过牌以及如何构建平衡的过牌范围',
         duration: '9 min',
+        objectives: [
+          '列出平衡过牌范围的三层构成（强牌 15-20%、中等牌 40-50%、弱牌 30-40%）及各自的用途',
+          '判断应过牌的五种场景（无范围优势、中等牌控制底池、Check-Raise 陷阱、强牌无需保护、多人底池非最后行动）',
+          '说明过牌范围中保留强牌的防御意义（防止对手无限攻击你的过牌），并比较 OOP 过牌范围应比 IP 更宽',
+        ],
         content: [
           { type: 'heading', content: '为什么需要过牌范围？' },
           { type: 'text', content: '如果你每次有强牌都下注、没牌都过牌，对手很容易读到你的策略。构建平衡的过牌范围是保护自己不被剥削的关键。' },
@@ -1241,6 +1292,11 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: 'C-Bet 决策训练',
         subtitle: '不同牌面的持续下注判断',
         duration: '3分钟',
+        objectives: [
+          '判断给定牌面质地（干燥/湿润/同花连牌面）下应 C-Bet 的尺度（1/3 或 2/3 底池）还是 Check',
+          '识别超对/顶对在湿润连接面应 Check 控制底池的场景（如 KQ 在三同花面）',
+          '比较 OOP 与 IP 的 C-Bet 策略差异（OOP 顶对用较大注保护）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -1369,6 +1425,11 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         title: '听牌赔率速算 Drill',
         subtitle: '各种听牌的 Outs 和赔率计算',
         duration: '3分钟',
+        objectives: [
+          '用二四法则计算常见听牌的命中率（同花 9 outs 约 35%、OESD 8 outs 约 32%、Gutshot 4 outs 约 16%）',
+          '区分单街与两街口径：Turn 到 River 单街用 ×2（9 outs 约 19%），Flop 到 River 两街用 ×4，并说出组合听牌 15 outs 实际约 54%',
+          '给定底池与跟注额计算所需胜率（如跟 5BB 赢 15BB 需 25%），并与听牌胜率比较判断跟注或弃牌',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -1377,14 +1438,14 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           questions: [
             {
               id: 'd-l3-odds-q1',
-              scenario: 'Flop, 你有 AK 两高牌听牌 (4 outs)',
-              question: '你有 AK 两高牌听牌 (4 outs)，Flop→Turn 成牌的概率约为多少？',
+              scenario: 'Flop, 你有 AK 两高牌听牌 (6 outs)',
+              question: '你有 AK 两高牌听牌 (6 outs)，Flop→Turn 成牌的概率约为多少？',
               options: [
-                { id: 'a', text: '约 9%', isCorrect: true },
-                { id: 'b', text: '约 17%', isCorrect: false },
-                { id: 'c', text: '约 4%', isCorrect: false },
+                { id: 'a', text: '约 9%', isCorrect: false },
+                { id: 'b', text: '约 13%', isCorrect: true },
+                { id: 'c', text: '约 17%', isCorrect: false },
               ],
-              explanation: 'Flop→Turn 单街概率≈outs/47=4/47≈8.5%，四舍五入约 9%。注意："2/4 法则"是两街累计概率估算，不适用于单街。',
+              explanation: 'AK 两高牌听牌有 6 个 outs（3 张 A + 3 张 K）。Flop→Turn 单街概率 ≈ outs/47 = 6/47 ≈ 12.8%，四舍五入约 13%。注意："2/4 法则"是两街累计概率估算，不适用于单街。',
               difficulty: 1,
             },
             {
@@ -1474,40 +1535,45 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           ],
         },
       },
-      // ===== 3-Bet 底池翻后策略 =====
+      // ===== 3-bet 底池翻后策略 =====
       {
         id: 'l3-3bet-postflop',
         level: 3,
         order: 12,
-        title: '3-Bet 底池的翻后策略',
+        title: '3-bet 底池的翻后策略',
         subtitle: 'SPR 更低、范围更窄、每个决策更关键',
         duration: '8 min',
+        objectives: [
+          '计算 SPR = 有效筹码 ÷ 底池大小，并说出 3-bet 底池的 SPR 通常在 3-6（远低于单次加注底池的 8-15）',
+          '判断低 SPR（< 4）下顶对级别牌力可舒适全下的打光阈值',
+          '区分 3-bet 底池中的过度牌面（J-T-9 两花：降低 C-Bet 频率、超对谨慎）与安全牌面（A-7-2 彩虹：高频 C-Bet）',
+        ],
         content: [
-          { type: 'heading', content: '3-Bet 底池的独特性' },
+          { type: 'heading', content: '3-bet 底池的独特性' },
           {
             type: 'text',
             content:
-              '3-Bet 底池与单次加注底池有本质区别。由于翻前底池更大，翻后的 SPR（筹码底池比）显著降低。这意味着：\n\n- 有效筹码相对底池更小，决策空间被压缩\n- 范围更窄（3-Bet 范围远比开池范围窄）\n- 每个决策的 EV 影响更大\n- 更容易在翻牌全下（SPR 通常 3-6）',
+              '3-bet 底池与单次加注底池有本质区别。由于翻前底池更大，翻后的 SPR（筹码底池比）显著降低。这意味着：\n\n- 有效筹码相对底池更小，决策空间被压缩\n- 范围更窄（3-bet 范围远比开池范围窄）\n- 每个决策的 EV 影响更大\n- 更容易在翻牌全下（SPR 通常 3-6）',
           },
           {
             type: 'key-point',
-            content: '核心概念：3-Bet 底池的 SPR 通常在 3-6 之间，远低于单次加注底池的 8-15。低 SPR 意味着顶对级别的牌力就足以打光筹码。',
+            content: '核心概念：3-bet 底池的 SPR 通常在 3-6 之间，远低于单次加注底池的 8-15。低 SPR 意味着顶对级别的牌力就足以打光筹码。',
           },
           { type: 'heading', content: '过度牌面 vs 安全牌面' },
           {
             type: 'text',
             content:
-              '在 3-Bet 底池中，牌面分类更加关键：\n\n过度牌面（Wet/Connected）：如 J♠T♠9♣、8♥7♥6♣\n- 对防守方范围非常有利\n- 3-Bet 者应降低 C-Bet 频率\n- AA/KK 等超对需要谨慎对待\n\n安全牌面（Dry/Static）：如 A♠7♣2♦、K♣8♥3♠\n- 对 3-Bet 者范围有利（高牌多）\n- 应该高频 C-Bet\n- 超对仍然是最强牌',
+              '在 3-bet 底池中，牌面分类更加关键：\n\n过度牌面（Wet/Connected）：如 J♠T♠9♣、8♥7♥6♣\n- 对防守方范围非常有利\n- 3-bet 者应降低 C-Bet 频率\n- AA/KK 等超对需要谨慎对待\n\n安全牌面（Dry/Static）：如 A♠7♣2♦、K♣8♥3♠\n- 对 3-bet 者范围有利（高牌多）\n- 应该高频 C-Bet\n- 超对仍然是最强牌',
           },
-          { type: 'heading', content: '常见场景：大对在 3-Bet 底池的应对' },
+          { type: 'heading', content: '常见场景：大对在 3-bet 底池的应对' },
           {
             type: 'text',
             content:
-              'AA/KK 在 3-Bet 底池中的翻后策略：\n\n1. 干燥面（A-high 或 K-high）：自信价值下注，准备打光\n2. 中等连接面（如 Q-J-7）：C-Bet 但准备好面对抵抗时减速\n3. 湿润连接面（如 T-9-8 两花）：Check 控制底池，放弃过度攻击\n\n记住：3-Bet 底池中 SPR 低，顶对好踢脚通常足以全下。但在湿润面要警惕两对+的牌力。',
+              'AA/KK 在 3-bet 底池中的翻后策略：\n\n1. 干燥面（A-high 或 K-high）：自信价值下注，准备打光\n2. 中等连接面（如 Q-J-7）：C-Bet 但准备好面对抵抗时减速\n3. 湿润连接面（如 T-9-8 两花）：Check 控制底池，放弃过度攻击\n\n记住：3-bet 底池中 SPR 低，顶对好踢脚通常足以全下。但在湿润面要警惕两对+的牌力。',
           },
           {
             type: 'pro-tip',
-            content: '3-Bet 底池中最常见的错误是在湿润牌面过度执着于超对。AA 在 J-T-9 两花牌面只值一个 Check，不要为了"保护"而下大注。',
+            content: '3-bet 底池中最常见的错误是在湿润牌面过度执着于超对。AA 在 J-T-9 两花牌面只值一个 Check，不要为了"保护"而下大注。',
           },
           {
             type: 'highlight',
@@ -1517,35 +1583,35 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         quiz: [
           {
             id: 'l3-3bet-pf-q1',
-            question: '3-Bet 底池的 SPR 通常在什么范围？',
+            question: '3-bet 底池的 SPR 通常在什么范围？',
             options: ['1-2', '3-6', '10-15', '20+'],
             correctIndex: 1,
-            explanation: '3-Bet 底池由于翻前底池较大，SPR 通常在 3-6 之间，远低于单次加注底池。',
+            explanation: '3-bet 底池由于翻前底池较大，SPR 通常在 3-6 之间，远低于单次加注底池。',
           },
           {
             id: 'l3-3bet-pf-q2',
-            question: '在 3-Bet 底池中，SPR 为 3 时顶对的正确打法通常是？',
+            question: '在 3-bet 底池中，SPR 为 3 时顶对的正确打法通常是？',
             options: ['Check-Fold', '控制底池只打一条街', '可以舒适地全下', '只能 Check-Call'],
             correctIndex: 2,
             explanation: 'SPR < 4 时，顶对级别的牌力已经可以舒适地全下，因为筹码相对底池已经不够深。',
           },
           {
             id: 'l3-3bet-pf-q3',
-            question: 'AA 在 3-Bet 底池面对 J-T-9 两花牌面应该？',
+            question: 'AA 在 3-bet 底池面对 J-T-9 两花牌面应该？',
             options: ['All-in 保护', 'C-Bet 75% pot', 'Check 控制底池', 'Fold'],
             correctIndex: 2,
             explanation: 'J-T-9 两花是过度牌面，对防守方范围极有利。AA 虽然超对但应该 Check 控制底池，避免被两对/顺子套住。',
           },
           {
             id: 'l3-3bet-pf-q4',
-            question: '以下哪个牌面对 3-Bet 者最有利？',
+            question: '以下哪个牌面对 3-bet 者最有利？',
             options: ['J♠T♠9♣', 'A♠7♣2♦', '8♥7♥6♣', 'Q♥T♥9♠'],
             correctIndex: 1,
-            explanation: 'A-7-2 彩虹是干燥面，对 3-Bet 者范围最有利（大量高牌 Ax），应该高频 C-Bet。',
+            explanation: 'A-7-2 彩虹是干燥面，对 3-bet 者范围最有利（大量高牌 Ax），应该高频 C-Bet。',
           },
           {
             id: 'l3-3bet-pf-q5',
-            question: '3-Bet 底池中低 SPR 的主要影响是？',
+            question: '3-bet 底池中低 SPR 的主要影响是？',
             options: ['翻后决策更简单', '需要更多筹码', 'bluff 更有威力', '位置不重要了'],
             correctIndex: 0,
             explanation: '低 SPR 意味着决策空间被压缩，很多情况下顶对就能打光，翻后决策相对更简单。',
@@ -1554,7 +1620,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         examples: [
           {
             id: 'l3-3bet-pf-ex1',
-            title: 'AA 在 3-Bet 底池的干燥面',
+            title: 'AA 在 3-bet 底池的干燥面',
             heroHand: ['As', 'Ah'],
             heroPosition: 'BTN',
             previousActions: [
@@ -1568,12 +1634,12 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             effectiveStack: 80,
             potSize: 18.5,
             opponent: OPPONENT_PROFILES['tag'],
-            gameContext: { gameType: 'cash', tableDescription: '标准100BB现金桌，3-Bet底池SPR约4.3' },
+            gameContext: { gameType: 'cash', tableDescription: '标准100BB现金桌，3-bet底池SPR约4.3' },
             correctDecision: {
               action: 'Bet',
               amount: '8-10BB（约50% pot）',
               reasoning: [
-                'A-7-2 彩虹是极干燥面，对 3-Bet 者范围极有利',
+                'A-7-2 彩虹是极干燥面，对 3-bet 者范围极有利',
                 'AA 是坚果级别，SPR 4.3 完全可以打光',
                 'TAG 范围中有 Ax/中等对子会跟注',
                 '50% pot 下注既能获取价值又不会吓跑所有弱牌',
@@ -1587,7 +1653,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           },
           {
             id: 'l3-3bet-pf-ex2',
-            title: 'KK 在 3-Bet 底池的湿润面',
+            title: 'KK 在 3-bet 底池的湿润面',
             heroHand: ['Kd', 'Kc'],
             heroPosition: 'BTN',
             previousActions: [
@@ -1601,7 +1667,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             effectiveStack: 80,
             potSize: 19.5,
             opponent: OPPONENT_PROFILES['tag'],
-            gameContext: { gameType: 'cash', tableDescription: '标准100BB现金桌，3-Bet底池SPR约4.1' },
+            gameContext: { gameType: 'cash', tableDescription: '标准100BB现金桌，3-bet底池SPR约4.1' },
             correctDecision: {
               action: 'Check',
               reasoning: [
@@ -1640,7 +1706,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['tag'],
               },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'K-8-3 干燥面对 3-Bet 者极有利，AA 应该下注获取价值。Check 错失价值。', evImpact: '-1.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'K-8-3 干燥面对 3-bet 者极有利，AA 应该下注获取价值。Check 错失价值。', evImpact: '-1.5 BB/100' },
                 { action: 'Bet 8BB（约45% pot）', isCorrect: true, explanation: '干燥面 AA 是坚果级别，SPR 约 4.3。中等下注获取价值，为后续打光做准备。', evImpact: '+2.0 BB/100' },
                 { action: 'All-in 80BB', isCorrect: false, explanation: 'SPR 4.3 直接 All-in 过度。中等下注可以让更宽范围跟注，All-in 只被强牌跟。', evImpact: '-0.5 BB/100' },
               ],
@@ -1714,8 +1780,8 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['tag'],
               },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'A-J-5 有两花但仍是高牌面，对 3-Bet 者有利。AK 顶对顶踢脚应该下注。', evImpact: '-1.0 BB/100' },
-                { action: 'Bet 8BB（约45% pot）', isCorrect: true, explanation: 'A-J-5 虽有两花但高牌面对 3-Bet 者有利。AK 顶对顶踢脚应该中等下注获取价值。', evImpact: '+1.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'A-J-5 有两花但仍是高牌面，对 3-bet 者有利。AK 顶对顶踢脚应该下注。', evImpact: '-1.0 BB/100' },
+                { action: 'Bet 8BB（约45% pot）', isCorrect: true, explanation: 'A-J-5 虽有两花但高牌面对 3-bet 者有利。AK 顶对顶踢脚应该中等下注获取价值。', evImpact: '+1.5 BB/100' },
                 { action: 'Bet 16BB（满池）', isCorrect: false, explanation: '满池下注过大。A-J-5 有一定连接性，中等下注即可。大注只被更强牌跟注。', evImpact: '-0.3 BB/100' },
               ],
               relatedLessonId: 'l3-3bet-postflop',
@@ -1737,7 +1803,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 potSize: 18.5,
                 effectiveStack: 80,
                 opponent: OPPONENT_PROFILES['tag'],
-                gameContext: { gameType: 'cash', tableDescription: '3-Bet底池，Turn牌面T-8-3-2' },
+                gameContext: { gameType: 'cash', tableDescription: '3-bet底池，Turn牌面T-8-3-2' },
               },
               options: [
                 { action: 'Bet 14BB（75% pot）', isCorrect: true, explanation: 'JJ 在 T-8-3-2 牌面仍然是强牌。TAG Turn Check 后应该下注保护，阻止 Q9/97 等听牌实现胜率。', evImpact: '+1.5 BB/100' },

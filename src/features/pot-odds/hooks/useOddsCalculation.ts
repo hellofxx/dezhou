@@ -14,6 +14,7 @@ import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { buildDecisionFeedback } from '@/shared/types/decisionFeedback';
 // 答案位置偏差治理：选项顺序统一由 orderQuizOptions 处理
 import { orderQuizOptions } from '../utils/quizOrder';
+import { buildOddsReviewItemInput } from '../utils/oddsSrs';
 
 /**
  * 返回最简单的赔率题：底池 100，下注 0，跟注 0，胜率 0% 即可盈利，应该跟注吗？答案=是。
@@ -84,8 +85,9 @@ export function useOddsEloRecorder() {
  * P1-3.2: pot-odds SRS 记录器
  *
  * 调用方（PotOddsQuizPage）在答题后调用返回的 recordSrsForAnswer 函数。
- * 题目 → ReviewItem 映射：使用 `odds:${question.id}` 作为 id，metadata 携带
- * 完整选项数据，复习模式可直接渲染为选择题。
+ * 题目 → ReviewItem 载荷映射由纯函数 `utils/oddsSrs.buildOddsReviewItemInput` 承担
+ * （id 用 `odds:<questionId>` 命名空间，metadata 携带完整选项，复习模式可渲染为选择题；
+ * label / front / back 一律存完整 i18n key，禁止摘要截断）。
  *
  * quality 评分：答对且用时<5秒→5，答对→4，答错→1
  */
@@ -96,19 +98,7 @@ export function useOddsSrsRecorder() {
 
   return useCallback(
     (question: PotOddsQuizQuestion, isCorrect: boolean, timeTakenMs: number) => {
-      const id = `odds:${question.id}`;
-      const label = `${question.scenario.slice(0, 40)}${question.scenario.length > 40 ? '…' : ''}`;
-      const metadata = {
-        front: question.question,
-        back: question.options.find((o) => o.isCorrect)?.text ?? '',
-        options: question.options.map((o) => ({
-          text: o.text,
-          isCorrect: o.isCorrect,
-          explanation: o.explanation,
-        })),
-        source: 'odds' as const,
-        scenario: question.scenario,
-      };
+      const { id, label, metadata } = buildOddsReviewItemInput(question);
 
       const { item: updated, isNew } = upsertReviewItem(
         reviewItems,

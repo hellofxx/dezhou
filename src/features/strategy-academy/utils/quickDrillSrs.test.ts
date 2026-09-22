@@ -10,7 +10,7 @@ import type { PracticeAnswerDetail } from '../types';
 
 /**
  * P1E-05（专批 B）：QuickDrill review-* 复习题 SRS 回写纯函数测试。
- * 验证 quality 映射（对+快→5 / 对→4 / 错→1）与 processReview 推进/重置闭环。
+ * 验证 quality 映射（对+快→5 / 对→4 / 错→1）与 processReview 推进/有界回退闭环。
  */
 
 function ans(questionId: string, isCorrect: boolean, timeTaken: number): PracticeAnswerDetail {
@@ -55,7 +55,7 @@ describe('quickDrillSrs（专批 B）', () => {
     expect(updated[0]!.interval).toBeGreaterThanOrEqual(3);
   });
 
-  it('答错：重置（repetitions 0 / interval 1）', () => {
+  it('答错：有界回退（repetitions 退 1 步 / interval 退一档，不清零）', () => {
     const item = {
       ...createReviewItem('lesson-3', '底池赔率', 'odds'),
       repetitions: 3,
@@ -65,8 +65,8 @@ describe('quickDrillSrs（专批 B）', () => {
     const updated = computeReviewWriteBacks([item], [ans('review-lesson-3', false, 6)]);
 
     expect(updated).toHaveLength(1);
-    expect(updated[0]!.repetitions).toBe(0);
-    expect(updated[0]!.interval).toBe(1);
+    expect(updated[0]!.repetitions).toBe(2);
+    expect(updated[0]!.interval).toBe(3);
   });
 
   it('非 review-* 题目忽略；找不到对应 ReviewItem 静默跳过', () => {

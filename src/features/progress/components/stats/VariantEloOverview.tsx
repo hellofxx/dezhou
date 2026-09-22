@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { useProgressStore } from '../../store';
 import { VARIANT_CONFIG, ALL_VARIANTS } from '@/shared/types/elo';
-import { getRankForScore } from '@/shared/utils/elo';
+import { getRankForScore } from '@/features/progress/utils/elo';
 
 /**
  * 多变体 ELO 进度概览（P2 变体支持，Week 4）

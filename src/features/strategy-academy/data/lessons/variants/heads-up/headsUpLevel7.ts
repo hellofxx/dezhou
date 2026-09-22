@@ -8,6 +8,11 @@ export const HEADS_UP_LEVEL_7_LESSONS: Lesson[] = [
     title: '单挑策略基础',
     subtitle: '位置价值更大、范围更宽、决策更频繁',
     duration: '8 min',
+    objectives: [
+      '列举单挑与 6-max 的核心差异（位置价值极大、任何对子与 Ax 都是强牌、翻后决策更频繁、剥削调整更重要）',
+      '判断 HU BTN/SB 的 open 范围约 80%，并说出顶对弱踢脚在 HU 中应更宽地价值下注',
+      '区分四类 HU 对手的应对（紧弱型高频 C-Bet 多 bluff、松被动型多价值少 bluff、松凶型平衡+陷阱、紧凶型避免过度冲突）',
+    ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante', stackDepth: 100 },
     content: [
@@ -25,7 +30,7 @@ export const HEADS_UP_LEVEL_7_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          'HU 翻前范围比 6-max 大幅拓宽：\n\nBTN open 范围：约 50-70%（远高于 6-max BTN 开池的最宽档）\n- 任何对子都是强牌\n- 任何 Ax 都是强牌\n- 同花连牌、小对子都可以 open\n\n3-Bet 范围：\n- 更宽（约 10-15%）\n- 包括强牌 + 部分 bluff\n- 平衡性更重要',
+          'HU 翻前范围比 6-max 大幅拓宽：\n\nBTN/SB open 范围：约 80%（远高于 6-max BTN 开池的最宽档）\n- 任何对子都是强牌\n- 任何 Ax 都是强牌\n- 同花连牌、小对子都可以 open\n\n3-bet 范围：\n- 更宽（约 10-15%）\n- 包括强牌 + 部分 bluff\n- 平衡性更重要',
       },
       { type: 'heading', content: '翻后策略调整' },
       {
@@ -51,10 +56,10 @@ export const HEADS_UP_LEVEL_7_LESSONS: Lesson[] = [
     quiz: [
       {
         id: 'l7hu-stakes-q1',
-        question: 'HU 中 BTN 的 open 范围约是多少？',
-        options: ['20-30%', '30-40%', '50-70%', '80%+'],
-        correctIndex: 2,
-        explanation: 'HU 中 BTN open 范围约 50-70%，比 6-max BTN 开池的最宽档（约三成半）大幅拓宽。',
+        question: 'HU 中 BTN/SB 的 open 范围约是多少？',
+        options: ['20-30%', '30-40%', '50-70%', '约 80%'],
+        correctIndex: 3,
+        explanation: 'HU 中 BTN/SB open 范围约 80%，比 6-max BTN 开池的最宽档（约三成半）大幅拓宽。',
       },
       {
         id: 'l7hu-stakes-q2',
@@ -197,7 +202,7 @@ export const HEADS_UP_LEVEL_7_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌' },
           },
           options: [
-            { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: '98 在 T-7-2 面有卡顺 + 后门同花，Check-Raise 半诈唬是标准打法。', evImpact: '+1.5 BB/100' },
+            { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: '98 在 T-7-2 面有双向卡顺（6/J 各 4 张）+ 同花听牌（10 outs），Check-Raise 半诈唬是标准打法。', evImpact: '+1.5 BB/100' },
             { action: 'Check-Fold', isCorrect: false, explanation: '98 有卡顺听牌，fold 太弱。应该 Check-Raise 半诈唬。', evImpact: '-1.0 BB/100' },
             { action: 'Donk Bet', isCorrect: false, explanation: 'Donk Bet 不是标准打法。应该 Check 让对手先行动，然后 Check-Raise。', evImpact: '-0.5 BB/100' },
           ],
@@ -219,10 +224,10 @@ export const HEADS_UP_LEVEL_7_LESSONS: Lesson[] = [
             street: 'flop',
             potSize: 18.5,
             effectiveStack: 80,
-            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-Bet 底池' },
+            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-bet 底池' },
           },
           options: [
-            { action: 'Bet 8BB（约45% pot）', isCorrect: true, explanation: 'KQ 在 K-8-3 面是顶对好踢脚，3-Bet 底池 SPR 低，应该下注获取价值。', evImpact: '+2.0 BB/100' },
+            { action: 'Bet 8BB（约45% pot）', isCorrect: true, explanation: 'KQ 在 K-8-3 面是顶对好踢脚，3-bet 底池 SPR 低，应该下注获取价值。', evImpact: '+2.0 BB/100' },
             { action: 'Check', isCorrect: false, explanation: 'KQ 在干燥面是强牌，check 太被动。应该下注获取价值。', evImpact: '-1.0 BB/100' },
             { action: 'All-in', isCorrect: false, explanation: 'SPR 4.3，All-in 过度。中等下注即可，让对手用更宽范围跟注。', evImpact: '-0.5 BB/100' },
           ],

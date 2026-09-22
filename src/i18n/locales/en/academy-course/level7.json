@@ -37,21 +37,21 @@
       "A straddle is an optional extra blind posted by the UTG (or BTN) player before the deal, usually 2BB (twice the big blind).\n\nEffects of a straddle:\n- Effective stack halves: 100BB becomes 50BB effective (relative to the straddle)\n- Bigger pot: preflop pot goes from 1.5BB to 3.5BB\n- Lower SPR: less stack depth relative to the pot\n- Action-order change: the straddler acts last preflop",
       "Core effect of the straddle: the effective stack halves. 100BB in a straddle game is equivalent to 50BB — adjust strategy accordingly.",
       "Strategy Adjustments",
-      "Strategy changes in straddle games:\n\n1. Tighten ranges:\n   - Less stack depth = less speculative-hand value\n   - Small pocket pairs and suited connectors drop in value (set-mining doesn't pay)\n   - Strong hands (AA-JJ, AK) gain relative value\n\n2. Raise-size adjustment:\n   - Baseline is the straddle: 2x straddle = 4BB\n   - Standard open becomes 4-5BB (instead of 2.5BB)\n   - 3-Bets grow accordingly\n\n3. Exploit the straddler's positional disadvantage:\n   - The straddler acts last preflop but first postflop\n   - You can pressure the straddler postflop",
+      "Strategy changes in straddle games:\n\n1. Tighten ranges:\n   - Less stack depth = less speculative-hand value\n   - Small pocket pairs and suited connectors drop in value (set-mining doesn't pay)\n   - Strong hands (AA-JJ, AK) gain relative value\n\n2. Raise-size adjustment:\n   - Baseline is the straddle: 2x straddle = 4BB\n   - Standard open becomes 4-5BB (instead of 2.5BB)\n   - 3-bets grow accordingly\n\n3. Exploit the straddler's positional disadvantage:\n   - The straddler acts last preflop but first postflop\n   - You can pressure the straddler postflop",
       "Mississippi Straddle vs BTN Straddle",
       "Two common straddle forms:\n\nMississippi Straddle (UTG straddle):\n- UTG posts 2BB\n- Action: starts at UTG+1, straddler acts last preflop\n- Postflop: straddler acts first (positional disadvantage)\n\nBTN Straddle:\n- BTN posts 2BB\n- Action: starts at SB, BTN acts last preflop\n- Postflop: BTN still acts last (positional advantage retained)\n- The BTN straddle favors the BTN (keeps positional advantage)",
       "Practical Advice",
       "Practical straddle-game tips:\n\n- Don't over-adjust: the straddle just changes stack depth; the basic framework stays\n- Track effective stacks: always compute effective stacks relative to the straddle\n- Use position: if the straddler is OOP postflop, pressure him\n- Avoid big pots: don't stack off in straddle pots unless you have a strong hand\n- Observe opponents: some players play looser and more aggressively after straddling",
       "The essence of a straddle game: it's a 50BB game (not 100BB). Play with 50BB thinking, not 100BB.",
       "The biggest mistake many players make in straddle pots: using 100BB thinking in a 50BB game. Remember, the effective stack halved — adjust your strategy accordingly.",
-      "Preflop range adjustments under a straddle:\nStraddle = 2x the big blind (usually 2BB)\nEffective-stack adjustment:\nApparent 100BB → actual effective = 100BB/2BB = 50 straddles\n\nPreflop range adjustments:\n- Tighten the opening range accordingly (the straddle adds dead money to the pot, so effective stacks are relatively shallower)\n- 3Bet sizing should adjust to 4-5x the straddle\n- The straddle-position player's defense range should widen (already posted 2BB)\n\nNote: the straddle isn't an extra bet but an expansion of the blind — effective stacks are computed in Big Blinds, not straddles",
+      "Preflop range adjustments under a straddle:\nStraddle = 2x the big blind (usually 2BB)\nEffective-stack adjustment:\nApparent 100BB → actual effective = 100BB/2BB = 50 straddles\n\nPreflop range adjustments:\n- Tighten the opening range accordingly (the straddle adds dead money to the pot, so effective stacks are relatively shallower)\n- 3-bet sizing should adjust to 4-5x the straddle\n- The straddle-position player's defense range should widen (already posted 2BB)\n\nNote: the straddle isn't an extra bet but an expansion of the blind — effective stacks are computed in Big Blinds, not straddles",
       "Theory reference: the theoretical basis of position-value changes and preflop range adjustments under straddle structures is in Theory Academy T3 Chapter 1 \"Position Value and Equity Realization\".",
       "Counter-intuitive: a straddle isn't extra chips invested — it's a temporary expansion of the blind. Effective stacks are still computed by the big blind, not the straddle amount. That means actual stack depth in a straddle game is shallower than it appears, with lower SPR."
     ],
     "l7-rake": [
       "What Is Rake and Why Does It Matter?",
       "Rake is the service fee taken by the platform/casino from each pot. It directly affects your win rate: every hand you're playing against an \"invisible opponent\" (the house).",
-      "In a high-rake environment:\n• Play tighter (fewer marginal hands)\n• Reduce calls (calls get the most EV eroded by rake)\n• Increase iso-raises and 3-Bets (reduce multiway pots)",
+      "In a high-rake environment:\n• Play tighter (fewer marginal hands)\n• Reduce calls (calls get the most EV eroded by rake)\n• Increase iso-raises and 3-bets (reduce multiway pots)",
       "Responding to Different Rake Structures",
       "• Micro-stakes online (NL2-NL10): rake can hit 8-12 BB/100 — you must play very tight\n• Mid-stakes online (NL25-NL100): rake drops to 4-6 BB/100 — can loosen up moderately\n• Live cash: usually has a Cap (rake ceiling), so big pots have relatively lower rake",
       "At micro-stakes, rake may be your biggest \"opponent\". Choose platforms with reasonable rake structures and take full advantage of rakeback policies."
@@ -240,11 +240,11 @@
       "question": "What should you increase under high rake?",
       "options": [
         "Calls",
-        "Iso-raises and 3-Bets",
+        "Iso-raises and 3-bets",
         "Bluffs",
         "Multiway pots"
       ],
-      "explanation": "Increase iso-raises and 3-Bets to reduce multiway pots — multiway pots have the highest rake cost."
+      "explanation": "Increase iso-raises and 3-bets to reduce multiway pots — multiway pots have the highest rake cost."
     },
     "l7-rake-q4": {
       "question": "What does live cash-game rake usually have?",
@@ -429,7 +429,7 @@
         {
           "action": "Raise",
           "amount": "10BB",
-          "explanation": "3-Betting 87s at deep stacks isn't ideal. If 4-Bet you're forced to fold, wasting implied odds. Calling suits speculative hands.",
+          "explanation": "3-betting 87s at deep stacks isn't ideal. If 4-Bet you're forced to fold, wasting implied odds. Calling suits speculative hands.",
           "evImpact": "+0.2 BB/100"
         }
       ]
@@ -489,7 +489,7 @@
         },
         {
           "action": "Raise 10BB",
-          "explanation": "3-Betting 66 at deep stacks isn't ideal. Calling suits speculative hands.",
+          "explanation": "3-betting 66 at deep stacks isn't ideal. Calling suits speculative hands.",
           "evImpact": "+0.2 BB/100"
         }
       ]
@@ -638,18 +638,18 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A5s has an A blocker + flush potential. After a BTN straddle you have positional advantage (act last postflop) — a 3-Bet bluff works.",
+          "explanation": "A5s has an A blocker + flush potential. After a BTN straddle you have positional advantage (act last postflop) — a 3-bet bluff works.",
           "evImpact": "-0.3 BB/100"
         },
         {
           "action": "Call",
-          "explanation": "Calling is OK but not optimal. After a BTN straddle you have positional advantage — A5s's blocker effect makes it better suited to a 3-Bet bluff.",
+          "explanation": "Calling is OK but not optimal. After a BTN straddle you have positional advantage — A5s's blocker effect makes it better suited to a 3-bet bluff.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "15BB",
-          "explanation": "After a BTN straddle you have positional advantage (act last postflop). A5s has the A blocker — a 3-Bet bluff fits. At 50BB, 3-Betting to 15BB is the standard size.",
+          "explanation": "After a BTN straddle you have positional advantage (act last postflop). A5s has the A blocker — a 3-bet bluff fits. At 50BB, 3-betting to 15BB is the standard size.",
           "evImpact": "+1.5 BB/100"
         }
       ]
@@ -678,17 +678,17 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "AK at 50BB depth is a premium hand. You should 3-Bet.",
+          "explanation": "AK at 50BB depth is a premium hand. You should 3-bet.",
           "evImpact": "-1 BB/100"
         },
         {
           "action": "Raise 15BB",
-          "explanation": "AK at 50BB is a premium hand. 3-Bet to 15BB (3x straddle) is the standard size.",
+          "explanation": "AK at 50BB is a premium hand. 3-bet to 15BB (3x straddle) is the standard size.",
           "evImpact": "+2 BB/100"
         },
         {
           "action": "Call 5BB",
-          "explanation": "AK is too strong to just call. 3-Bet for value.",
+          "explanation": "AK is too strong to just call. 3-bet for value.",
           "evImpact": "+0.5 BB/100"
         }
       ]
@@ -707,7 +707,7 @@
         },
         {
           "action": "Raise 15BB",
-          "explanation": "65s doesn't suit a 3-Bet bluff. Too weak vs an MP open range.",
+          "explanation": "65s doesn't suit a 3-bet bluff. Too weak vs an MP open range.",
           "evImpact": "-1 BB/100"
         }
       ]
@@ -754,17 +754,17 @@
       "option": [
         {
           "action": "Call 2.5BB",
-          "explanation": "Under high rake, passive calls get the most EV eroded. 3-Bet is better.",
+          "explanation": "Under high rake, passive calls get the most EV eroded. 3-bet is better.",
           "evImpact": "-0.3 BB/100"
         },
         {
-          "action": "Raise 8BB (3-Bet)",
-          "explanation": "Under high rake, 3-Bet beats calling. Reduces multiway pots and takes initiative. A5s has bluff potential.",
+          "action": "Raise 8BB (3-bet)",
+          "explanation": "Under high rake, 3-bet beats calling. Reduces multiway pots and takes initiative. A5s has bluff potential.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Fold",
-          "explanation": "A5s on the BTN has bluff potential — a 3-Bet is +EV.",
+          "explanation": "A5s on the BTN has bluff potential — a 3-bet is +EV.",
           "evImpact": "-0.5 BB/100"
         }
       ]
@@ -773,17 +773,17 @@
       "option": [
         {
           "action": "Call 1.5BB",
-          "explanation": "Calling from the SB under high rake leads to multiway pots. 3-Bet or fold instead.",
+          "explanation": "Calling from the SB under high rake leads to multiway pots. 3-bet or fold instead.",
           "evImpact": "-0.5 BB/100"
         },
         {
-          "action": "Raise 8BB (3-Bet)",
-          "explanation": "Under high rake, 3-Bet reduces multiway pots. 98s has postflop playability.",
+          "action": "Raise 8BB (3-bet)",
+          "explanation": "Under high rake, 3-bet reduces multiway pots. 98s has postflop playability.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Fold",
-          "explanation": "98s has postflop potential from the SB — a 3-Bet is +EV.",
+          "explanation": "98s has postflop potential from the SB — a 3-bet is +EV.",
           "evImpact": "-0.3 BB/100"
         }
       ]
@@ -792,17 +792,17 @@
       "option": [
         {
           "action": "Call 2.5BB",
-          "explanation": "Calling under high rake leads to multiway pots. 3-Bet or fold instead.",
+          "explanation": "Calling under high rake leads to multiway pots. 3-bet or fold instead.",
           "evImpact": "-0.5 BB/100"
         },
         {
-          "action": "Raise 10BB (3-Bet)",
-          "explanation": "Under high rake, 3-Bet to isolate and reduce multiway pots. QJs is strong enough to 3-Bet.",
+          "action": "Raise 10BB (3-bet)",
+          "explanation": "Under high rake, 3-bet to isolate and reduce multiway pots. QJs is strong enough to 3-bet.",
           "evImpact": "+0.8 BB/100"
         },
         {
           "action": "Fold",
-          "explanation": "QJs in CO is strong enough to 3-Bet. Don't fold.",
+          "explanation": "QJs in CO is strong enough to 3-bet. Don't fold.",
           "evImpact": "-0.5 BB/100"
         }
       ]
@@ -851,7 +851,7 @@
       "option": [
         {
           "action": "Call 9BB",
-          "explanation": "Frequent 3-Bets on a REG table make calling dangerous. Consider changing tables.",
+          "explanation": "Frequent 3-bets on a REG table make calling dangerous. Consider changing tables.",
           "evImpact": "-1 BB/100"
         },
         {
@@ -865,7 +865,7 @@
           "evImpact": "-3 BB/100"
         }
       ],
-      "tableDesc": "Multiple REGs at the table who 3Bet frequently"
+      "tableDesc": "Multiple REGs at the table who 3-bet frequently"
     },
     "l7-ts-p4": {
       "option": [
@@ -965,7 +965,7 @@
       "option": [
         "Fold (position OK but hand too weak)",
         "Call",
-        "3-Bet"
+        "3-bet"
       ],
       "explanation": "At 200BB, 54s should fold vs an MP open from the BTN. Mainstream strategy calls Q9s+, 54s is too weak."
     },
@@ -1069,5 +1069,42 @@
       ],
       "explanation": "3-way, KJ is only top pair medium kicker. Play tighter multiway — check to control the pot is best."
     }
+  },
+  "lessonObjectives": {
+    "l7-deepstack": [
+      "Compare hand-value rankings at deep stacks (200BB+) versus standard (100BB): small pairs and suited connectors gain value while AKo/AQo lose it",
+      "Use SPR = effective stack ÷ pot to judge deep-stack states (e.g. 200BB with a 15BB flop pot gives SPR about 13.3)",
+      "Spot the deep-stack postflop trap: top pair top kicker no longer gets 200BB in, so control the pot instead of building a big one early",
+      "Compute the bankroll requirement for deep-stack games (30-40 buy-ins) and explain that reverse implied odds bite twice as hard at depth"
+    ],
+    "l7-multiway": [
+      "Compute the equity dilution in multiway pots (top pair: 70-80% heads-up, 40-50% three-way, 25-35% four-way) and judge that hand standards must rise sharply",
+      "Judge the multiway postflop adjustments: falling C-bet frequencies (40-50% three-way, 30-40% four-way plus) and top pair shrinking to 1-2 value streets",
+      "Compute multiway bluff success with the multiplicative effect (at 40% folds each, three players all folding is only 6.4%) and judge against C-betting pure air",
+      "Judge positional value in multiway pots (BTN best, squeezed seats worst) and apply the golden rule of checking when unsure"
+    ],
+    "l7-straddle": [
+      "Compute the straddle's effect on effective stacks (100BB becomes 50BB) and judge that speculative hands (small pairs, suited connectors) lose value while strong hands gain it",
+      "Compute the standard open size after a straddle (2-2.5x the straddle = 4-5BB) and judge that 3-bets grow accordingly",
+      "Tell Mississippi straddle and BTN straddle apart by position (the straddler acts first postflop versus BTN keeping position) and pressure the straddler who is out of position postflop"
+    ],
+    "l7-rake": [
+      "Compare rake structures across stakes (micro NL2-NL10 up to 8-12 BB/100, mid NL25-NL100 down to 4-6 BB/100, live usually capped)",
+      "Judge the three adjustments in high-rake games (play tighter, cut passive calls, use iso-raises and 3-bets to avoid multiway pots)",
+      "Judge when iso-raising or 3-betting replaces calling under high rake (e.g. 3-betting 98s from SB versus a BTN open instead of calling)"
+    ],
+    "l7-table-selection": [
+      "Identify the four marks of a good table (high average pot, Players/Flop above 30%, clear weak players with high VPIP low PFR, no cluster of known strong players)",
+      "Judge the live table-selection routine (watch 5-10 minutes, sit to the fish's left, walk away from an all-REG table) and explain win rate = your edge × their weakness",
+      "Judge whether to stay or leave a given table (stay and exploit the fish from good position, consider changing when REGs are 3-betting constantly)"
+    ],
+    "drill-l7-deepstack": [
+      "Judge opening decisions by position at 200BB+ depth (standard opens with suited connectors and suited Ax from BTN/CO/MP)",
+      "Compare how implied odds change speculative-hand eligibility at depth (Q9s opens from UTG at 200BB while 54s folds from BTN against an MP open)"
+    ],
+    "drill-l7-multiway": [
+      "Judge betting or checking decisions in 3-4 way pots postflop (top pair medium kicker checks for control, sets value bet small)",
+      "Compare value-bet sizing heads-up versus multiway (small 1/3-pot bets multiway, avoiding pot-sized bets)"
+    ]
   }
 }

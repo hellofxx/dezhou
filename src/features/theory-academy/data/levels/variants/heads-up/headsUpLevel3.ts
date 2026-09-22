@@ -50,12 +50,12 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         {
           type: 'formula',
           content:
-            'SB min-raise 到 2BB 的数学（SB 已投 0.5，额外风险 1.5BB；BB 已投 1，可弃牌或再补 1）：\n\n纯偷盲模型：SB 额外风险 1.5BB，目标奖池 1BB（BB 的盲注）\nEV(raise) = f×1 − (1−f)×1.5（f = BB 弃牌率）\n盈亏平衡：f×1 = (1−f)×1.5 → f = 1.5÷2.5 = 60%\n即 BB 弃牌率超过 60% 时，SB 用任意两张牌 min-raise 都自动盈利；\n等价地，BB 的最小防守频率 MDF = 1 − 60% = 40%。\n\n开池尺度对比（SB 额外风险 → 盈亏平衡弃牌率）：\nmin-raise 2BB：1.5BB → 1.5÷2.5 = 60%\n2.5BB：2BB → 2÷3 ≈ 66.7%\n3BB：2.5BB → 2.5÷3.5 ≈ 71.4%\n\n结论：尺度越小，自动盈利的门槛越低；单挑中 BB 实际防守 60%-70% 以上，min-raise 的纯偷盲部分接近盈亏平衡——盈利的大头在翻后。（概念源自：《Applications of No-Limit Hold’em》Matthew Janda Ch.3 盲注博弈；《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
+            'SB min-raise 到 2BB 的数学（SB 已投 0.5，额外风险 1.5BB；BB 已投 1，可弃牌或再补 1）：\n\n纯偷盲模型（以 SB 直接弃牌为基准，0.5 死钱已沉没）：SB 额外风险 1.5BB，BB 弃牌则赢得整个 1.5BB 底池\nEV(raise) = f×1.5 − (1−f)×1.5（f = BB 弃牌率）\n盈亏平衡：f×1.5 = (1−f)×1.5 → f = 50%\n即 BB 弃牌率超过 50% 时，SB 用任意两张牌 min-raise 的纯偷盲部分开始盈利；\n等价地，BB 的最小防守频率 MDF = 1 − 50% = 50%。\n\n开池尺度对比（SB 额外风险 → 盈亏平衡弃牌率）：\nmin-raise 2BB：1.5BB → 1.5÷3 = 50%\n2.5BB：2BB → 2÷3.5 ≈ 57.1%\n3BB：2.5BB → 2.5÷4 = 62.5%\n\n结论：尺度越小，自动盈利的门槛越低；单挑中 BB 实际防守 60%-70% 以上（弃牌仅 30%-40%），min-raise 的纯偷盲部分为负——盈利的大头在翻后。（概念源自：《Applications of No-Limit Hold’em》Matthew Janda Ch.3 盲注博弈；《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
         },
         {
           type: 'text',
           content:
-            '为什么单挑开池以 min-raise 为主？三点：(1) 偷盲门槛低——2BB 只需 60% 弃牌率，而单挑 BB 面对 min-raise 的真实弃牌率只有约 30%-40%，纯偷盲几乎不盈利，所以开池的价值不在偷盲而在翻后，尺度越小翻后越容易控池；(2) 大尺度在单挑是"自我惩罚"——BB 的跟注范围随尺度收窄，你花 3BB 只换来一个更强、更有位置的跟注范围，翻后 OOP 打大底池的代价远高于满员桌；(3) 频率与平衡——min-raise 让你能用约 80% 的手牌开池，范围足够宽才能覆盖翻后的各种牌面。满员桌"偷盲要加大尺度"的经验在单挑要反过来用：尺度服务于翻后，而不是服务于偷盲。',
+            '为什么单挑开池以 min-raise 为主？三点：(1) 偷盲门槛低——2BB 只需 50% 弃牌率，而单挑 BB 面对 min-raise 的真实弃牌率只有约 30%-40%，纯偷盲几乎不盈利，所以开池的价值不在偷盲而在翻后，尺度越小翻后越容易控池；(2) 大尺度在单挑是"自我惩罚"——BB 的跟注范围随尺度收窄，你花 3BB 只换来一个更强、更有位置的跟注范围，翻后 OOP 打大底池的代价远高于满员桌；(3) 频率与平衡——min-raise 让你能用约 80% 的手牌开池，范围足够宽才能覆盖翻后的各种牌面。满员桌"偷盲要加大尺度"的经验在单挑要反过来用：尺度服务于翻后，而不是服务于偷盲。',
         },
         {
           type: 'text',
@@ -65,12 +65,12 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例：单挑 100BB 深，你（SB）持 A♠5♠。先给牌分档：强成牌（JJ+、AK）进 raise 叠，靠价值与偷盲双重收益；投机牌（小对子、同花连张、A5s 类）在 limp 叠与 raise 叠之间混合；垃圾牌（K8o、Q6o）直接弃牌。A5s 的归属取决于 BB 的 3bet 频率：BB 3bet 约 15% 时，A5s 被 3bet 的概率约 15%，被 3bet 后 A5s 通常只能弃牌——min-raise 的 EV 被侵蚀约 0.15×1.5 ≈ 0.23BB，此时把 A5s 放进 limp 叠更划算；BB 3bet 低于 8% 时，A5s 的阻断价值（对手更少 AA/AK）和翻后坚果听牌潜力让 min-raise 成为更优选择。同一手牌，对手的 3bet 频率决定它的归属——这是"范围随对手移动"的第一次实战。',
+            '实例：单挑 100BB 深，你（SB）持 A♠5♠。先给牌分档：强成牌（JJ+、AK）进 raise 叠，靠价值与偷盲双重收益；投机牌（小对子、同花连张、A5s 类）在 limp 叠与 raise 叠之间混合；垃圾牌（K8o、Q6o）直接弃牌。A5s 的归属取决于 BB 的 3-bet 频率：BB 3-bet 约 15% 时，A5s 被 3-bet 的概率约 15%，被 3-bet 后 A5s 通常只能弃牌——min-raise 的 EV 被侵蚀约 0.15×1.5 ≈ 0.23BB，此时把 A5s 放进 limp 叠更划算；BB 3-bet 低于 8% 时，A5s 的阻断价值（对手更少 AA/AK）和翻后坚果听牌潜力让 min-raise 成为更优选择。同一手牌，对手的 3-bet 频率决定它的归属——这是"范围随对手移动"的第一次实战。',
         },
         {
           type: 'example',
           content:
-            '实例二：你（SB）持 7♥6♥，100BB 深。对手是跟注站（翻后几乎不弃牌）：min-raise 的偷盲 EV = 0.35×1 − 0.65×1.5 ≈ −0.63BB（纯偷盲口径），而 limp 后 76s 对 BB 随机范围约有 43% 胜率，深筹码下中顺子/同花对手照单全收——limp 进翻牌（甚至直接弃掉边缘牌）明显优于 raise。换一个对手：BB 是 nit（弃牌率约 70%），min-raise 的偷盲 EV = 0.7×1 − 0.3×1.5 = +0.25BB，此时 76s 也值得 raise。同一手 76s，跟注站面前 limp、nit 面前 raise——单挑 SB 的尺度与行动不是固定的，而是对 BB 防守频率的直接响应。',
+            '实例二：你（SB）持 7♥6♥，100BB 深。对手是跟注站（翻后几乎不弃牌）：min-raise 的偷盲 EV = 0.35×1.5 − 0.65×1.5 ≈ −0.45BB（纯偷盲口径），而 limp 后 76s 对 BB 随机范围约有 43% 胜率，深筹码下中顺子/同花对手照单全收——limp 进翻牌（甚至直接弃掉边缘牌）明显优于 raise。换一个对手：BB 是 nit（弃牌率约 70%），min-raise 的偷盲 EV = 0.7×1.5 − 0.3×1.5 = +0.6BB，此时 76s 也值得 raise。同一手 76s，跟注站面前 limp、nit 面前 raise——单挑 SB 的尺度与行动不是固定的，而是对 BB 防守频率的直接响应。',
         },
         {
           type: 'highlight',
@@ -80,7 +80,7 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         {
           type: 'pro-tip',
           content:
-            'SB 开池速记三叠：raise 叠（JJ+、AK、A5s 等阻断牌）、limp 叠（中小对子、同花连张、弱同花 Ax）、弃牌叠（K8o 以下的垃圾）。每 50 手检查一次：你的 limp 叠里是否混入了足够强牌？BB 的 3bet 是否正在把你赶出 raise 叠？两个答案决定下一轮的频率调整。',
+            'SB 开池速记三叠：raise 叠（JJ+、AK、A5s 等阻断牌）、limp 叠（中小对子、同花连张、弱同花 Ax）、弃牌叠（K8o 以下的垃圾）。每 50 手检查一次：你的 limp 叠里是否混入了足够强牌？BB 的 3-bet 是否正在把你赶出 raise 叠？两个答案决定下一轮的频率调整。',
         },
       ],
       quiz: [
@@ -98,10 +98,10 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         },
         {
           id: 't3hu-sb-strategy-q2',
-          question: 'SB min-raise 到 2BB，假设被跟注或 3bet 时 EV 为零，BB 弃牌率达到多少时 SB 用任意两张牌都自动盈利：',
+          question: 'SB min-raise 到 2BB，假设被跟注或 3-bet 时 EV 为零，BB 弃牌率达到多少时 SB 用任意两张牌都自动盈利：',
           options: ['约 40%', '约 50%', '约 60%', '约 75%'],
-          correctIndex: 2,
-          explanation: 'SB 额外风险 1.5BB、目标奖池 1BB：f×1 = (1−f)×1.5 → f = 1.5/2.5 = 60%。40% 是 BB 的最小防守频率（MDF），50% 与 75% 均与推导不符。',
+          correctIndex: 1,
+          explanation: '以 SB 直接弃牌为基准（0.5 已沉没）：f×1.5 = (1−f)×1.5 → f = 50% 保本。GTO 中 BB 实际只弃约 30%-40%，纯偷盲为负——开池价值在翻后。40%/60%/75% 均与推导不符。',
         },
         {
           id: 't3hu-sb-strategy-q3',
@@ -142,7 +142,7 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
       objectives: [
         '理解单挑 BB 的双重优势（翻前最后行动 + 翻后位置）如何把满员桌的亏损位变成盈利位',
         '掌握 MDF 的计算，区分防守底线与最优防守频率，理解 60%+ 防守的数学依据',
-        '学会跟注防守与 3Bet 防守的划分，掌握面对 SB limp 的 isolate 策略',
+        '学会跟注防守与 3-bet 防守的划分，掌握面对 SB limp 的 isolate 策略',
       ],
       content: [
         { type: 'heading', content: 'BB：单挑中最赚钱的位置' },
@@ -159,18 +159,18 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            '但 MDF 只是"阻止自动盈利"的底线，不是最优防守频率。求解器中单挑 BB 面对 SB 开池的实际防守约 60%-70%（跟注约 35%-50% + 3Bet 约 15%-25%），远高于 33%-38% 的底线，原因有三：(1) 翻后位置——BB 是 IP，权益实现率超过 100%，跟注的 EV 高于 MDF 模型假设的零；(2) 死钱——SB 的 0.5 让跟注价格便宜，面对 min-raise 只需再跟 1BB，所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）= 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%（当前底池 1.5 里含 BB 自己已投的 1BB，它是死钱但仍在分母中，不可剔除）；同一结论可由 t2hu 的 EV(call) = E×(P+B) − (1−E)×B 复算：P = 对手总投入 2BB、B = 你的跟注额 1BB，令 EV=0 得 E = B ÷ (P + 2B) = 1 ÷ (2 + 2) = 25%；(3) SB 范围宽且弱——单挑 SB 开池约 80% 的手牌，BB 的弱牌对宽范围的胜率天然高。MDF 回答"最少防守多少"，位置与死钱回答"还能多防守多少"——单挑 BB 的 60%+ 是这两者之和。',
+            '但 MDF 只是"阻止自动盈利"的底线，不是最优防守频率。求解器中单挑 BB 面对 SB 开池的实际防守约 60%-70%（跟注约 35%-50% + 3-bet 约 15%-25%），远高于 33%-38% 的底线，原因有三：(1) 翻后位置——BB 是 IP，权益实现率超过 100%，跟注的 EV 高于 MDF 模型假设的零；(2) 死钱——SB 的 0.5 让跟注价格便宜，面对 min-raise 只需再跟 1BB，所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）= 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%（当前底池 1.5 里含 BB 自己已投的 1BB，它是死钱但仍在分母中，不可剔除）；同一结论可由 t2hu 的 EV(call) = E×(P+B) − (1−E)×B 复算：P = 对手总投入 2BB、B = 你的跟注额 1BB，令 EV=0 得 E = B ÷ (P + 2B) = 1 ÷ (2 + 2) = 25%；(3) SB 范围宽且弱——单挑 SB 开池约 80% 的手牌，BB 的弱牌对宽范围的胜率天然高。MDF 回答"最少防守多少"，位置与死钱回答"还能多防守多少"——单挑 BB 的 60%+ 是这两者之和。',
         },
         {
           type: 'key-point',
           content:
             '单挑 BB 的"60%+ 防守"是有位置的防守：你翻前最后行动、翻后最后行动，用边缘牌跟注的代价远低于满员桌。把满员桌"BB 只能打紧"的直觉搬进单挑，等于把位置优势白白扔掉。',
         },
-        { type: 'heading', content: '跟注 vs 3Bet：防守的两条腿' },
+        { type: 'heading', content: '跟注 vs 3-bet：防守的两条腿' },
         {
           type: 'text',
           content:
-            '面对 SB 开池，BB 的防守范围分两叠。跟注叠：中小对子（22-TT）、同花连张（65s 以上）、弱 A 同花（A2s-A9s）、弱 K 同花（K6s-K9s）——这些牌靠位置与隐含赔率实现权益，跟注不摊牌也能赢。3Bet 叠分两层：价值层（JJ+、AK，对 SB 宽范围领先明显，打价值也压缩 SB 的偷盲频率）与诈唬层（A5s、A4s、K8s 等带阻断牌的组合——阻断 AA/KK/AK，让 SB 更难反加）。面对 3Bet，SB 要么 4Bet 要么弃牌，所以诈唬层必须选择"被 4Bet 可以干净弃牌"的牌。Gap Concept 在单挑 BB 的修正：满员桌跟注加注需要更强牌（Gap），但单挑 BB 已投 1BB 死钱且翻后有位置，可以大幅突破 Gap——这就是 BB 防守 60%+ 与满员桌 BB 防守 25%-50% 的差距来源。（概念源自：《The Theory of Poker》David Sklansky Ch.2-3 Gap Concept；《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
+            '面对 SB 开池，BB 的防守范围分两叠。跟注叠：中小对子（22-TT）、同花连张（65s 以上）、弱 A 同花（A2s-A9s）、弱 K 同花（K6s-K9s）——这些牌靠位置与隐含赔率实现权益，跟注不摊牌也能赢。3-bet 叠分两层：价值层（JJ+、AK，对 SB 宽范围领先明显，打价值也压缩 SB 的偷盲频率）与诈唬层（A5s、A4s、K8s 等带阻断牌的组合——阻断 AA/KK/AK，让 SB 更难反加）。面对 3-bet，SB 要么 4Bet 要么弃牌，所以诈唬层必须选择"被 4Bet 可以干净弃牌"的牌。Gap Concept 在单挑 BB 的修正：满员桌跟注加注需要更强牌（Gap），但单挑 BB 已投 1BB 死钱且翻后有位置，可以大幅突破 Gap——这就是 BB 防守 60%+ 与满员桌 BB 防守 25%-50% 的差距来源。（概念源自：《The Theory of Poker》David Sklansky Ch.2-3 Gap Concept；《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
         },
         {
           type: 'example',
@@ -180,17 +180,17 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例二（isolate）：SB limp（补 0.5 看翻牌），你（BB）持 A♠8♠，100BB 深，SB 面对加注弃牌约 55%。isolate 加注到 4BB：EV ≈ 0.55×1.5（对手弃牌赢死钱）+ 0.45×(+0.5)（被跟注后 IP 位置优势约 +0.5BB）≈ +1.05BB；而 check 的 EV 只有约 +0.7BB（底池小、让 SB 免费实现弱范围）。isolate 比 check 多赚约 0.8BB。但注意：isolate 不是偷盲——SB 的 limp 已经暴露弱范围，你的加注是在"惩罚弱范围 + 夺取主动权"，被跟注后 A8s 的摊牌价值让你翻后游刃有余。对手 limp-fold 频率越高，isolate 的频率就该越高。',
+            '实例二（isolate）：SB limp（补 0.5 看翻牌），你（BB）持 A♠8♠，100BB 深，SB 面对加注弃牌约 55%。isolate 加注到 4BB：EV ≈ 0.55×1.5（对手弃牌赢死钱）+ 0.45×(+0.5)（被跟注后 IP 位置优势约 +0.5BB）≈ +1.05BB；而 check 的 EV 只有约 +0.7BB（底池小、让 SB 免费实现弱范围）。isolate 比 check 多赚约 0.35BB。但注意：isolate 不是偷盲——SB 的 limp 已经暴露弱范围，你的加注是在"惩罚弱范围 + 夺取主动权"，被跟注后 A8s 的摊牌价值让你翻后游刃有余。对手 limp-fold 频率越高，isolate 的频率就该越高。',
         },
         {
           type: 'highlight',
           content:
-            '反直觉点：BB 防守 60%+ 不等于"跟注站"。真正的跟注站没有 3Bet 叠、没有隔离加注——而单挑 BB 的 60% 由跟注、3Bet 价值、3Bet 诈唬三部分构成，每一部分都随 SB 的倾向移动。防守的宽度与防守的被动是两回事。',
+            '反直觉点：BB 防守 60%+ 不等于"跟注站"。真正的跟注站没有 3-bet 叠、没有隔离加注——而单挑 BB 的 60% 由跟注、3-bet 价值、3-bet 诈唬三部分构成，每一部分都随 SB 的倾向移动。防守的宽度与防守的被动是两回事。',
         },
         {
           type: 'pro-tip',
           content:
-            'BB 防守速查三步：(1) 报底池赔率——SB 开池 2BB 时跟注线 25%（再跟 1BB ÷ 跟注后总池 4BB），3BB 时 33.3%（再跟 2BB ÷ 跟注后总池 6BB）；(2) 分叠——有位置跟注叠、强成牌价值 3Bet、阻断牌诈唬 3Bet；(3) 看 SB——弃牌多的 SB 提高 3Bet 频率，limp 多的 SB 提高 isolate 频率，3Bet 多的 SB 收窄跟注叠。三步走完，60% 的防守就是有结构的选择，而不是"舍不得弃牌"。',
+            'BB 防守速查三步：(1) 报底池赔率——SB 开池 2BB 时跟注线 25%（再跟 1BB ÷ 跟注后总池 4BB），3BB 时 33.3%（再跟 2BB ÷ 跟注后总池 6BB）；(2) 分叠——有位置跟注叠、强成牌价值 3-bet、阻断牌诈唬 3-bet；(3) 看 SB——弃牌多的 SB 提高 3-bet 频率，limp 多的 SB 提高 isolate 频率，3-bet 多的 SB 收窄跟注叠。三步走完，60% 的防守就是有结构的选择，而不是"舍不得弃牌"。',
         },
       ],
       quiz: [
@@ -199,7 +199,7 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
           question: '单挑中 BB 面对 SB 开池的典型防守频率约为：',
           options: ['15%-25%', '30%-40%', '60%-70%', '85%-95%'],
           correctIndex: 2,
-          explanation: '求解器显示单挑 BB 防守约 60%-70%（跟注 35%-50% + 3Bet 15%-25%）。15%-25% 是满员桌面对紧位置的量级，85%-95% 是被动跟注站的量级，两者都不是 GTO 防守。',
+          explanation: '求解器显示单挑 BB 防守约 60%-70%（跟注 35%-50% + 3-bet 15%-25%）。15%-25% 是满员桌面对紧位置的量级，85%-95% 是被动跟注站的量级，两者都不是 GTO 防守。',
         },
         {
           id: 't3hu-bb-defense-q2',
@@ -280,7 +280,7 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例二（river 位置价值）：单挑盲注 0.5/1，翻前 SB min-raise 2BB、BB 跟注，底池 4BB。翻牌 Q♠8♦3♣，BB 下注 2BB、SB 跟注，底池 8BB。转牌 2♥，BB 下注 4BB、SB 跟注，底池 16BB。河牌 9♠，双方都持 K♠Q♠（顶对 Q + K 踢脚）。场景 A——你在 BB（IP）：SB 过牌，你下注 1/3 池约 5BB 薄价值，被加注可以安全弃牌（SB 范围里的 88/33/99 都是合理加注），净赚约 5BB；场景 B——你在 SB（OOP）：你过牌，BB 下注 8BB，你的顶对沦为"跟注抓诈或弃牌"的二选一；你主动下注 8BB，被加注时顶对 Q 在 100BB 深局中很难弃。同一手牌、同一条下注线，IP 兑现 5BB 薄价值，OOP 只能被动响应——河牌 57% 的位置价值占比，在这里变成真金白银。',
+            '实例二（river 位置价值）：单挑盲注 0.5/1，翻前 SB min-raise 2BB、BB 跟注，底池 4BB。翻牌 Q♠8♦3♣，BB 下注 2BB、SB 跟注，底池 8BB。转牌 2♥，BB 下注 4BB、SB 跟注，底池 16BB。河牌 9♠，双方各持一张 Q 配 K 踢脚（如你持 K♦Q♦、对手持 K♥Q♥，顶对 Q + K 踢脚）。场景 A——你在 BB（IP）：SB 过牌，你下注 1/3 池约 5BB 薄价值，被加注可以安全弃牌（SB 范围里的 88/33/99 都是合理加注），净赚约 5BB；场景 B——你在 SB（OOP）：你过牌，BB 下注 8BB，你的顶对沦为"跟注抓诈或弃牌"的二选一；你主动下注 8BB，被加注时顶对 Q 在 100BB 深局中很难弃。同一手牌、同一条下注线，IP 兑现 5BB 薄价值，OOP 只能被动响应——河牌 57% 的位置价值占比，在这里变成真金白银。',
         },
         {
           type: 'highlight',

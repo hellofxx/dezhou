@@ -4,6 +4,18 @@
   "action": {
     "raiseSlider": "Raise size"
   },
+  "review": {
+    "label": "{{position}} {{hand}}",
+    "front": "{{position}} with {{hand}}, {{players}}-handed, pot {{pot}} BB, effective stack {{stack}} BB",
+    "back": {
+      "fold": "Fold",
+      "check": "Check",
+      "call": "Call",
+      "raise": "Raise to {{amount}} BB",
+      "all-in": "All-in {{amount}} BB",
+      "unavailable": "See GTO strategy"
+    }
+  },
   "optimal": "Optimal Decision",
   "evLoss": "EV Loss",
   "feedback": {

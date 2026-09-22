@@ -12,14 +12,14 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
       vpip: 18,                 // 自愿入池率 18%
       pfr: 15,                  // 翻前加注率 15%
       af: 3.5,                  // 激进度因子 3.5
-      threeBetPercent: 6,       // 3-Bet 频率 6%
+      threeBetPercent: 6,       // 3-bet 频率 6%
       foldToCBet: 55,           // 面对C-Bet弃牌率 55%
       cbetFrequency: 70,        // C-Bet频率 70%
     },
     tendencies: [
       '起手牌范围紧，主要是强牌',
       '翻后持续下注频率高',
-      '面对3-Bet通常弃牌（除顶级牌外）',
+      '面对3-bet通常弃牌（除顶级牌外）',
       '很少bluff，但价值下注很重',
     ],
     exploitableBy: [
@@ -45,7 +45,7 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
     },
     tendencies: [
       '起手牌范围很宽',
-      '频繁3-Bet和加注',
+      '频繁3-bet和加注',
       '翻后C-Bet频率极高',
       '经常bluff，但也有强牌',
     ],
@@ -173,7 +173,7 @@ export interface OpponentDrillQuestion {
   scenario: string;            // 场景描述（如"NL25 现金桌，对手数据如下"）
   stats: OpponentStats;        // 对手统计数据
   sampleSize: number;          // 样本手数
-  recentActions: string[];     // 最近行为描述（如"过去 5 手 3-Bet 了 2 次"）
+  recentActions: string[];     // 最近行为描述（如"过去 5 手 3-bet 了 2 次"）
   // 第 1 问：判断对手类型
   typeOptions: string[];       // 对手类型选项（profile id 列表）
   correctType: string;         // 正确的对手类型（profile id）
@@ -218,7 +218,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
       '高频诈唬，让他弃牌',
       '纯价值下注，加大尺度，绝不诈唬',
       '收紧开牌范围，等待 AA/KK',
-      '频繁 3-Bet bluff',
+      '频繁 3-bet bluff',
     ],
     correctStrategyIndex: 1,
     explanation:
@@ -247,7 +247,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
       '用顶对弱踢脚打光全部筹码',
       '用宽范围价值下注 2-3 条街，加大尺度',
       '只打 AA/KK，其他全弃',
-      '高频 3-Bet 诈唬',
+      '高频 3-bet 诈唬',
     ],
     correctStrategyIndex: 1,
     explanation:
@@ -266,7 +266,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
     },
     sampleSize: 124,
     recentActions: [
-      '过去 10 手 3-Bet 了 3 次',
+      '过去 10 手 3-bet 了 3 次',
       '翻后连续 triple barrel',
       '曾用 K7o 5-Bet All-in',
     ],
@@ -280,7 +280,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
     ],
     correctStrategyIndex: 0,
     explanation:
-      'VPIP 48% / PFR 38% / AF 6.5 / 3-Bet 16% 是典型 Maniac：极松极凶、高频诈唬。正确策略是收紧范围，用强牌（QQ+/AK）4-Bet 价值或跟注陷阱，让他自己送筹码过来。绝不诈唬（他不弃牌）。换桌是逃避，错失了 Maniac 是最赚钱对手的机会。',
+      'VPIP 48% / PFR 38% / AF 6.5 / 3-bet 16% 是典型 Maniac：极松极凶、高频诈唬。正确策略是收紧范围，用强牌（QQ+/AK）4-Bet 价值或跟注陷阱，让他自己送筹码过来。绝不诈唬（他不弃牌）。换桌是逃避，错失了 Maniac 是最赚钱对手的机会。',
   },
   {
     id: 'opp-drill-q4',
@@ -334,7 +334,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
       '疯狂偷盲，C-Bet 诈唬，他加注时弃牌',
       '用顶对价值下注三条街',
       '只打更强的牌',
-      '频繁 3-Bet 诈唬',
+      '频繁 3-bet 诈唬',
     ],
     correctStrategyIndex: 0,
     explanation:
@@ -353,7 +353,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
     },
     sampleSize: 178,
     recentActions: [
-      '频繁 3-Bet（含 A5s、K9s 等 blocker）',
+      '频繁 3-bet（含 A5s、K9s 等 blocker）',
       '翻后 double barrel 频率高',
       '会根据对手调整策略',
     ],
@@ -367,7 +367,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
     ],
     correctStrategyIndex: 0,
     explanation:
-      'VPIP 28% / PFR 24% / AF 4.2 / 3-Bet 11% 是典型 LAG：松凶但有逻辑、会弃牌。正确策略是 TT+/AQ+ 积极 4-Bet 价值（他 3-Bet 范围宽），用 AA/KK 跟注陷阱，利用位置压制他的宽范围。弃掉中等牌力是错的——LAG 范围宽，顶对/中等对子仍有价值。',
+      'VPIP 28% / PFR 24% / AF 4.2 / 3-bet 11% 是典型 LAG：松凶但有逻辑、会弃牌。正确策略是 TT+/AQ+ 积极 4-Bet 价值（他 3-bet 范围宽），用 AA/KK 跟注陷阱，利用位置压制他的宽范围。弃掉中等牌力是错的——LAG 范围宽，顶对/中等对子仍有价值。',
   },
   {
     id: 'opp-drill-q7',
@@ -384,7 +384,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
     recentActions: [
       '开牌范围合理（约 16%）',
       '翻后 C-Bet 频率标准',
-      '面对 3-Bet 会根据位置弃牌',
+      '面对 3-bet 会根据位置弃牌',
     ],
     typeOptions: ['tag', 'lag', 'calling_station', 'maniac'],
     correctType: 'tag',
@@ -396,7 +396,7 @@ export const OPPONENT_DRILL_QUESTIONS: OpponentDrillQuestion[] = [
     ],
     correctStrategyIndex: 0,
     explanation:
-      'VPIP 19% / PFR 16% / AF 3.2 / 3-Bet 6% 是典型 TAG（紧凶）：范围合理、C-Bet 标准、会根据位置调整。TAG 是难剥削的对手，应使用 GTO 策略，仅小幅剥削他的 Fold to C-Bet 55%（略高于 GTO 50%，可适度增加 C-Bet bluff）。疯狂诈唬是错的（他 Fold to C-Bet 55% 不够高），只 value 不诈唬也错（他弃牌率足以支撑适度诈唬）。',
+      'VPIP 19% / PFR 16% / AF 3.2 / 3-bet 6% 是典型 TAG（紧凶）：范围合理、C-Bet 标准、会根据位置调整。TAG 是难剥削的对手，应使用 GTO 策略，仅小幅剥削他的 Fold to C-Bet 55%（略高于 GTO 50%，可适度增加 C-Bet bluff）。疯狂诈唬是错的（他 Fold to C-Bet 55% 不够高），只 value 不诈唬也错（他弃牌率足以支撑适度诈唬）。',
   },
   {
     id: 'opp-drill-q8',

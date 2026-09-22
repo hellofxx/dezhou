@@ -12,7 +12,7 @@ tools:
   - DeleteFile    # 删除废弃的引导数据
   - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "DeepSeek-V4-Flash"
+model: "[Qwen3.8-Flash](qfmodel)"
 skills: []
 mcpServers: []
 additionalPrompt: ""

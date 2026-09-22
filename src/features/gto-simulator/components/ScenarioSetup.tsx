@@ -124,7 +124,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   <div className="flex gap-3 text-xs font-numeric text-[var(--ivory-dim)]">
                     <span>VPIP: {selectedProfile.stats.vpip}%</span>
                     <span>PFR: {selectedProfile.stats.pfr}%</span>
-                    <span>3-Bet: {selectedProfile.stats.threeBetPercent}%</span>
+                    <span>3-bet: {selectedProfile.stats.threeBetPercent}%</span>
                   </div>
                 </div>
               )}

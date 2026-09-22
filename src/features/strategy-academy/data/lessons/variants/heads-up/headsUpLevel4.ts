@@ -8,6 +8,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
     title: '按钮位开局加注',
     subtitle: '单挑按钮位接近 100% 的开局频率与尺度调整',
     duration: '8 min',
+    objectives: [
+      '推导 SB min-raise 2BB 的纯偷盲盈亏平衡弃牌率（以弃牌为基准：f×1.5 = (1−f)×1.5 → f = 50%），并说出尺度越大自动盈利门槛越高',
+      '判断单挑开池以 min-raise 为主的原因（偷盲门槛低、尺度小翻后易控池、支撑约 80%-100% 宽范围）',
+      '说明 BB 面对 min-raise 的真实弃牌率约 30%-40%，并判断纯偷盲不盈利时开池价值主要来自翻后',
+      '判断面对高频 3-bet 的 BB 应收窄开池范围（剔除被 3-bet 后只能弃牌的边缘牌）',
+    ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante' },
     content: [
@@ -19,13 +25,13 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         type: 'key-point',
-        content: '按钮位开池的核心是"尺度服务翻后"，不是"尺度服务偷盲"。单挑中用 min-raise（2BB）为主：偷盲门槛低（需 60% 弃牌率）、尺度小让翻后更容易控池，范围够宽才能覆盖各种牌面。',
+        content: '按钮位开池的核心是"尺度服务翻后"，不是"尺度服务偷盲"。单挑中用 min-raise（2BB）为主：偷盲门槛低（需 50% 弃牌率）、尺度小让翻后更容易控池，范围够宽才能覆盖各种牌面。',
       },
       { type: 'heading', content: '开池尺度的数学：为什么 min-raise 是主武器' },
       {
         type: 'formula',
         content:
-          'SB min-raise 到 2BB 的数学（SB 已投 0.5，额外风险 1.5BB；BB 已投 1，可弃或补 1）：\n\n纯偷盲模型：SB 额外风险 1.5BB，目标奖池 1BB\nEV(raise) = f×1 − (1−f)×1.5（f = BB 弃牌率）\n盈亏平衡：f = 1.5/2.5 = 60%\n\n即 BB 弃牌率超过 60% 时，SB 用任意两张牌 min-raise 自动盈利。\n尺度对比：min-raise 2BB → 60%；2.5BB → 66.7%；3BB → 71.4%。\n\n结论：尺度越小，自动盈利门槛越低。单挑中开池价值在翻后，尺度越小越容易控池。',
+          'SB min-raise 到 2BB 的数学（SB 已投 0.5，再投 1.5BB；BB 已投 1，可弃或补 1）：\n\n纯偷盲模型（以 SB 直接弃牌为基准，0.5 死钱已沉没）：\nBB 弃牌 → SB 收下现有底池 1.5BB；BB 跟注 → SB 再输增量 1.5BB\nEV(raise) = f×1.5 − (1−f)×1.5（f = BB 弃牌率）\n盈亏平衡：f = 1.5/(1.5+1.5) = 50%\n\n即 BB 弃牌率超过 50% 时，SB 用任意两张牌 min-raise 自动盈利。\n尺度对比：min-raise 2BB → 50%；2.5BB（再投 2）→ 2/3.5 ≈ 57.1%；3BB（再投 2.5）→ 2.5/4 = 62.5%。\n\n结论：尺度越大，自动盈利门槛越高。单挑中开池价值在翻后，尺度越小越容易控池。',
       },
       {
         type: 'text',
@@ -40,7 +46,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例二（随对手调整尺度）：你观察到 BB 面对 min-raise 弃牌率高达 55%。此时即使 min-raise 的纯偷盲 EV = 0.55×1 − 0.45×1.5 = −0.125BB（仍微亏，靠翻后补），但你可以提高开池频率至接近 100%，因为 BB 的弃牌率让偷盲利润上升。反过来，若 BB 3Bet 频繁，你应收窄范围、减少被 3Bet 后只能弃牌的边缘牌。',
+          '实例二（随对手调整尺度）：你观察到 BB 面对 min-raise 弃牌率高达 55%。此时 min-raise 的纯偷盲 EV = 0.55×1.5 − 0.45×1.5 = +0.15BB（微利，主要利润仍来自翻后），你可以提高开池频率至接近 100%，因为 BB 的弃牌率让偷盲利润上升。反过来，若 BB 3-bet 频繁，你应收窄范围、减少被 3-bet 后只能弃牌的边缘牌。',
       },
       {
         type: 'highlight',
@@ -48,7 +54,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         type: 'pro-tip',
-        content: '按钮位开池速查：默认 min-raise 2BB，用约 80%-100% 范围开池；顶端 15% 强牌 + 中段同花连张/Ax + 底部垃圾混合。每 50 手检查：BB 的 3Bet 是否正在把你赶出开池范围？BB 的弃牌率是否支持你开到 100%？',
+        content: '按钮位开池速查：默认 min-raise 2BB，用约 80%-100% 范围开池；顶端 15% 强牌 + 中段同花连张/Ax + 底部垃圾混合。每 50 手检查：BB 的 3-bet 是否正在把你赶出开池范围？BB 的弃牌率是否支持你开到 100%？',
       },
     ],
     quiz: [
@@ -63,13 +69,13 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
         id: 'l4hu-bn-opening-q2',
         question: '单挑按钮位开池为什么以 min-raise（2BB）为主？',
         options: [
-          'min-raise 偷盲门槛低（60% 弃牌率）且翻后容易控池',
+          'min-raise 偷盲门槛低（50% 弃牌率）且翻后容易控池',
           'min-raise 让对手更容易弃牌',
           '大尺度更好偷盲',
           'min-raise 让牌更强',
         ],
         correctIndex: 0,
-        explanation: 'min-raise 偷盲盈亏平衡 60% 弃牌率、尺度小翻后易控池，且能支持约 80% 的宽范围。大尺度在单挑是自我惩罚。',
+        explanation: 'min-raise 偷盲盈亏平衡 50% 弃牌率、尺度小翻后易控池，且能支持约 80% 的宽范围。大尺度在单挑是自我惩罚。',
       },
       {
         id: 'l4hu-bn-opening-q3',
@@ -92,15 +98,15 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         id: 'l4hu-bn-opening-q5',
-        question: '面对 BB 3Bet 频繁的对手，按钮位应如何调整开池？',
+        question: '面对 BB 3-bet 频繁的对手，按钮位应如何调整开池？',
         options: [
           '保持 80% 不变',
-          '收窄范围，减少被 3Bet 后只能弃牌的边缘牌',
+          '收窄范围，减少被 3-bet 后只能弃牌的边缘牌',
           '开到 100%',
           '完全停止开池',
         ],
         correctIndex: 1,
-        explanation: '高频 3Bet 侵蚀偷盲 EV，边缘牌被 3Bet 后只能弃牌。正确调整是收窄范围；完全停止是过度反应。',
+        explanation: '高频 3-bet 侵蚀偷盲 EV，边缘牌被 3-bet 后只能弃牌。正确调整是收窄范围；完全停止是过度反应。',
       },
     ],
     examples: [
@@ -166,7 +172,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'A8o 面对弃牌多的 BB 是可开池牌，fold 太紧。', evImpact: '-1.2 BB/100', evLoss: 1.2 },
             { action: 'Min-raise', isCorrect: true, explanation: 'A8o 面对弃牌率 55% 的 BB，min-raise 偷盲 + A 高翻后价值，标准开池。', evImpact: '+1.0 BB/100', evLoss: 0 },
-            { action: '3-Bet', isCorrect: false, explanation: '首开池用 min-raise 而非 3-Bet，3-Bet 无意义。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
+            { action: '3-bet', isCorrect: false, explanation: '首开池用 min-raise 而非 3-bet，3-bet 无意义。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],
           relatedLessonId: 'l4hu-bn-opening',
         },
@@ -180,12 +186,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
             street: 'preflop',
             potSize: 1.5,
             effectiveStack: 100,
-            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，BB 3-Bet 频率 20%' },
+            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，BB 3-bet 频率 20%' },
           },
           options: [
-            { action: 'Min-raise', isCorrect: false, explanation: 'BB 3-Bet 20% 很高，Q5s 被 3-Bet 后只能弃牌，开池 EV 被侵蚀。', evImpact: '-0.8 BB/100', evLoss: 0.8 },
-            { action: 'Fold', isCorrect: true, explanation: '面对高频 3-Bet，Q5s 这类边缘同花牌应弃牌，收窄开池范围。', evImpact: '+0 BB/100', evLoss: 0 },
-            { action: 'Limp', isCorrect: false, explanation: 'Limp 会让 BB 轻松 isolate，且 Q5s 面对高频 3-Bet 翻后难发挥。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
+            { action: 'Min-raise', isCorrect: false, explanation: 'BB 3-bet 20% 很高，Q5s 被 3-bet 后只能弃牌，开池 EV 被侵蚀。', evImpact: '-0.8 BB/100', evLoss: 0.8 },
+            { action: 'Fold', isCorrect: true, explanation: '面对高频 3-bet，Q5s 这类边缘同花牌应弃牌，收窄开池范围。', evImpact: '+0 BB/100', evLoss: 0 },
+            { action: 'Limp', isCorrect: false, explanation: 'Limp 会让 BB 轻松 isolate，且 Q5s 面对高频 3-bet 翻后难发挥。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l4hu-bn-opening',
         },
@@ -199,6 +205,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
     title: 'EV 调整',
     subtitle: '单挑两人底池的 EV 计算差异与决策简化',
     duration: '8 min',
+    objectives: [
+      '用所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）计算 BB 面对 SB min-raise 的跟注线（1÷4 = 25%），并说出分母必须含 BB 已入池的死钱',
+      '说明单挑 EV 的三个放大因素（无多人稀释、死钱占比高、对手范围宽），并判断更多边缘牌跟注转 +EV 的原因',
+      '判断单挑听牌跟注依赖隐含赔率的机制（对手范围宽、支付意愿高），并给出半池 25%、1/3 池 20%、满池 33.3% 的速算锚点',
+      '区分位置价值的统计期望语义（BB 每手约多 0.5-1BB 长期期望，而非单手保证）',
+    ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante' },
     content: [
@@ -216,7 +228,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'formula',
         content:
-          '翻前偷盲 EV（SB min-raise 到 2BB，BB 弃牌率 f）：\nEV(steal) = f×1 − (1−f)×1.5\n\n翻后位置 EV 锚点：\n单挑位置价值约 0.5-1BB/手（BB 每手翻后 IP）\n\n实例：BB 面对 SB min-raise（SB 总投入 2BB，BB 已投 1BB）：\n通式：所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）\n代入：1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n（当前底池 1.5 = SB 0.5 + BB 自己已投的 1，这 1BB 是死钱但仍在分母里，不可漏算；对手下注 1.5 = SB 补到 2BB 的加注额；跟注额 1 = BB 需补的差额。等价于跟注后总底池 4BB，1÷4=25%）\nBB 面对 SB 约 80% 开池范围，边缘牌胜率常超 40% → 跟注 +EV',
+          '翻前偷盲 EV（SB min-raise 到 2BB，BB 弃牌率 f，以弃牌为基准）：\nEV(steal) = f×1.5 − (1−f)×1.5（保本 f = 50%）\n\n翻后位置 EV 锚点：\n单挑位置价值约 0.5-1BB/手（BB 每手翻后 IP）\n\n实例：BB 面对 SB min-raise（SB 总投入 2BB，BB 已投 1BB）：\n通式：所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）\n代入：1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n（当前底池 1.5 = SB 0.5 + BB 自己已投的 1，这 1BB 是死钱但仍在分母里，不可漏算；对手下注 1.5 = SB 补到 2BB 的加注额；跟注额 1 = BB 需补的差额。等价于跟注后总底池 4BB，1÷4=25%）\nBB 面对 SB 约 80% 开池范围，边缘牌胜率常超 40% → 跟注 +EV',
       },
       {
         type: 'text',
@@ -347,7 +359,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'J8s 面对 SB 宽范围可玩性好，fold 太紧。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'Call', isCorrect: true, explanation: 'J8s 同花连张翻后 IP 可玩性好，跟注 EV 为正。', evImpact: '+1.0 BB/100', evLoss: 0 },
-            { action: '3-Bet', isCorrect: false, explanation: 'J8s 偏投机，3-Bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
+            { action: '3-bet', isCorrect: false, explanation: 'J8s 偏投机，3-bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l4hu-ev-adjustments',
         },
@@ -408,6 +420,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
     title: '单挑 GTO 基础',
     subtitle: '单挑均衡策略的结构差异、频率基准与位置对称性',
     duration: '9 min',
+    objectives: [
+      '说明单挑（忽略抽水）是纯二人零和博弈，纳什均衡「不可剥削」的保证在此严格成立',
+      '计算河牌满池下注的均衡诈唬占比（b/(1+2b) = 1/3，价值:诈唬 2:1），并列出半池 25% 与 MDF = 1/(1+b) 的对应数值',
+      '说明单挑 GTO 与满员桌的频率差异（范围宽、下注频率高、诈唬密度大），并判断「GTO 就是打得紧」是误读',
+      '判断单挑位置对称性（每手牌互换 SB/BB），说出你既要会打 SB 也要会打 BB 的原因',
+    ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante' },
     content: [
@@ -556,7 +574,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'T9s 面对 SB 宽范围可玩性好，fold 太紧。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'Call', isCorrect: true, explanation: 'T9s 同花连张翻后 IP 可玩性好，均衡防守范围成员。', evImpact: '+1.0 BB/100', evLoss: 0 },
-            { action: '3-Bet', isCorrect: false, explanation: 'T9s 偏投机，3-Bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
+            { action: '3-bet', isCorrect: false, explanation: 'T9s 偏投机，3-bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l4hu-gto-basics',
         },
@@ -575,7 +593,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
             street: 'flop',
             potSize: 12,
             effectiveStack: 90,
-            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-Bet 底池' },
+            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-bet 底池' },
           },
           options: [
             { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AK 顶对顶踢脚，IP 小注薄价值让 SB 弱牌跟注。', evImpact: '+2.0 BB/100', evLoss: 0 },
@@ -617,6 +635,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
     title: '反制策略',
     subtitle: '针对单挑对手常见偏离的 GTO 反制与再调整框架',
     duration: '9 min',
+    objectives: [
+      '识别四类单挑偏离（弃牌过多、跟注过松、3-bet 过频、C-Bet 过频），并说明识别依赖跨 50-100 手的频率统计',
+      '针对弃牌过多的对手推导偷盲 EV 的变化（f=0.6 时 EV ≈ +0.3BB、f=0.7 时 +0.6BB），并判断偏离幅度以「对手修正后你仍不亏」为限',
+      '区分四类偏离的对应反制（弃牌多→提开池/C-Bet 频率、跟注松→薄价值减诈唬、3-bet 频→收窄范围+4Bet 价值、C-Bet 频→提高 x/r 与 float）',
+      '说明节点锁定（Node Locking）的作用（把对手偏离锁定为固定频率重解最优应对），并判断反制过头的风险',
+    ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante' },
     content: [
@@ -624,7 +648,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '单挑反制策略（Counter-Strategy）的核心是：先识别对手偏离均衡的倾向，再用 GTO 基线校准出针对该漏洞的最优应对。常见的单挑偏离有四类：弃牌过多（面对 C-Bet 弃牌率超高）、跟注过松（跟注站）、3Bet 过频、C-Bet 过频。识别依赖跨 50-100 手的频率统计，而非单手牌印象。',
+          '单挑反制策略（Counter-Strategy）的核心是：先识别对手偏离均衡的倾向，再用 GTO 基线校准出针对该漏洞的最优应对。常见的单挑偏离有四类：弃牌过多（面对 C-Bet 弃牌率超高）、跟注过松（跟注站）、3-bet 过频、C-Bet 过频。识别依赖跨 50-100 手的频率统计，而非单手牌印象。',
       },
       {
         type: 'key-point',
@@ -634,12 +658,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'formula',
         content:
-          '针对弃牌过多的对手提高偷盲（SB min-raise 到 2BB，BB 弃牌率 f）：\nEV(steal) = f×1 − (1−f)×1.5\n\n均衡弃牌率约 40%（f=0.4）→ EV = 0.4×1 − 0.6×1.5 = −0.5BB（不盈利，需翻后补）\n若对手弃牌率 60%（f=0.6）→ EV = 0.6×1 − 0.4×1.5 = +0BB（纯偷盲接近持平）\n若对手弃牌率 70%（f=0.7）→ EV = 0.7×1 − 0.3×1.5 = +0.25BB（自动盈利）\n\n结论：对手弃牌率越高，偷盲频率越应上调，但幅度以"他若修正到 50% 你仍不亏"为限。',
+          '针对弃牌过多的对手提高偷盲（SB min-raise 到 2BB，BB 弃牌率 f，以弃牌为基准 1.5/1.5 口径）：\nEV(steal) = f×1.5 − (1−f)×1.5\n\n均衡弃牌率约 40%（f=0.4）→ EV = 0.4×1.5 − 0.6×1.5 = −0.3BB（不盈利，需翻后补）\n若对手弃牌率 60%（f=0.6）→ EV = 0.6×1.5 − 0.4×1.5 = +0.3BB（纯偷盲自动盈利）\n若对手弃牌率 70%（f=0.7）→ EV = 0.7×1.5 − 0.3×1.5 = +0.6BB（利润扩大）\n\n结论：对手弃牌率越高，偷盲频率越应上调，但幅度以"他若修正到 50% 你仍不亏"为限。',
       },
       {
         type: 'text',
         content:
-          '四类偏离的反制方向：(1) 弃牌过多 → 提高开池/C-Bet 频率，用更多半诈唬；(2) 跟注过松（跟注站）→ 减少纯诈唬，改用价值下注薄价值（顶对弱踢脚也能下注收钱）；(3) 3Bet 过频 → 收窄开池范围、增加 4Bet 价值；(4) C-Bet 过频 → 提高 x/r 频率与 float。每一类都从"识别 → 反制 → 复核"闭环推进。',
+          '四类偏离的反制方向：(1) 弃牌过多 → 提高开池/C-Bet 频率，用更多半诈唬；(2) 跟注过松（跟注站）→ 减少纯诈唬，改用价值下注薄价值（顶对弱踢脚也能下注收钱）；(3) 3-bet 过频 → 收窄开池范围、增加 4Bet 价值；(4) C-Bet 过频 → 提高 x/r 频率与 float。每一类都从"识别 → 反制 → 复核"闭环推进。',
       },
       {
         type: 'example',
@@ -676,7 +700,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           '随机猜测',
         ],
         correctIndex: 1,
-        explanation: '单挑反制依赖跨 50-100 手的频率统计（弃牌率/3Bet 率等），单手牌印象是噪声，不足为据。',
+        explanation: '单挑反制依赖跨 50-100 手的频率统计（弃牌率/3-bet 率等），单手牌印象是噪声，不足为据。',
       },
       {
         id: 'l4hu-counter-strategies-q2',

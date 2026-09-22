@@ -8,7 +8,7 @@ export interface DailyGoalCardProps {
   total: number;
   /** 今日学习分钟数（可选） */
   minutes?: number;
-  /** 目标描述（如"掌握 CO 位置 3-Bet 范围"） */
+  /** 目标描述（如"掌握 CO 位置 3-bet 范围"） */
   goalLabel?: string;
   className?: string;
 }

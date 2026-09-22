@@ -3,7 +3,7 @@ export interface OpponentStats {
   vpip: number;           // 自愿入池率（%）
   pfr: number;            // 翻前加注率（%）
   af: number;             // 激进度因子
-  threeBetPercent: number; // 3-Bet频率（%）
+  threeBetPercent: number; // 3-bet频率（%）
   foldToCBet: number;     // 面对C-Bet弃牌率（%）
   cbetFrequency: number;  // C-Bet频率（%）
 }

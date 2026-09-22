@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Target, Gauge, Flame, Timer } from 'lucide-react';
 import { useProgressStore } from '../../store';
-import { getRankForScore } from '@/shared/utils/elo';
+import { getRankForScore } from '../../utils/elo';
 import type { StatsSummary } from '../../types';
 
 interface ProgressHeroProps {

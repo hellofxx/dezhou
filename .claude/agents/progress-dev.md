@@ -12,7 +12,7 @@ tools:
   - DeleteFile
   - Bash
   - GetTerminalOutput
-model: "DeepSeek-V4-Flash"
+model: "[Qwen3.8-Flash](qfmodel)"
 skills: []
 mcpServers: []
 additionalPrompt: ""

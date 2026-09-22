@@ -1322,7 +1322,7 @@ body::after {
   font-variation-settings: 'opsz' 144;
   color: inherit;
   line-height: 1.25;
-  /* 防止过长（如"3bet 全下 15BB"）撑破布局 */
+  /* 防止过长（如"3-bet 全下 15BB"）撑破布局 */
   word-break: keep-all;
 }
 

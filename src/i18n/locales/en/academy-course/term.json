@@ -90,7 +90,7 @@
     },
     "t-4bet": {
       "chinese": "反再加注",
-      "explanation": "A re-raise against a 3-Bet"
+      "explanation": "A re-raise against a 3-bet"
     },
     "t-cbet": {
       "chinese": "持续下注",
@@ -182,7 +182,7 @@
     },
     "t-spr": {
       "chinese": "筹码底池比",
-      "explanation": "Stack-to-Pot Ratio — formula: SPR = effective stack / pot size. Bands: SPR below 4 is low (top pair is worth committing), 4-10 is medium (standard play), above 10 is high (deep stacks, speculative hands such as suited connectors gain value). Example: 200BB effective against a 15BB pot on the flop gives SPR = 13.3. 3-Bet pots usually play at SPR 3-6 while single-raised pots sit around 8-15."
+      "explanation": "Stack-to-Pot Ratio — formula: SPR = effective stack / pot size. Bands: SPR below 4 is low (top pair is worth committing), 4-10 is medium (standard play), above 10 is high (deep stacks, speculative hands such as suited connectors gain value). Example: 200BB effective against a 15BB pot on the flop gives SPR = 13.3. 3-bet pots usually play at SPR 3-6 while single-raised pots sit around 8-15."
     },
     "t-polarized": {
       "chinese": "极化范围",

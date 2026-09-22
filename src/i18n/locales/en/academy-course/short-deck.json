@@ -16,12 +16,12 @@
     ],
     "l3sd-cbet": [
       "Short-Deck C-Bets: High Frequency on Dry, Big Sizes on Wet",
-      "The basic logic of the short-deck continuation bet (C-Bet) is the same as standard hold'em, with two short-deck-specific adjustments: (1) on dry high boards (like K♠7♦2♣) you can C-Bet at high frequency — the opponent rarely hits and a small bet steals or bets thin value; (2) on wet connected boards (like 9♦8♣3♥) short-deck draw density is high, so you must protect with big sizes rather than small bets.",
+      "The basic logic of the short-deck continuation bet (C-Bet) is the same as standard hold'em, with two short-deck-specific adjustments: (1) on dry high boards (like K♠7♦J♣) you can C-Bet at high frequency — the opponent rarely hits and a small bet steals or bets thin value; (2) on wet connected boards (like 9♦8♣6♥) short-deck draw density is high, so you must protect with big sizes rather than small bets.",
       "Short-deck C-Bet rule: dry boards 1/3 pot at high frequency (about 70%+); wet boards 2/3+ pot at low frequency (about 30-40%). On wet boards small bets give draws too cheap a price, and short-deck draws get there easily — protect with big bets.",
       "High Frequency on Dry vs Big Sizes on Wet",
-      "On dry high boards (like A♠9♦2♣) the raiser's range dominates and the opponent rarely hits — use 1/3-pot small bets at high frequency to make the wide-range weak hands fold or bet thin value. On wet connected boards (like 9♦8♣3♥, 6♦7♣5♥) short-deck straight/draw combo density is extremely high, the raiser's nut advantage drops, C-Bet frequency falls to 30-40%, and you use 2/3+ pot big bets to protect overpairs and strong made hands, charging the draws.",
-      "Example: Short deck, you (BTN) open and the BB calls; flop K♠7♦2♣ (dry). You're the aggressor with plenty of Kx and the opponent rarely hits a K. Use 1/3-pot small bets at high frequency: KQ/KJ bet thin value, A-high semi-bluffs, small pairs also bet — the whole range pressures and the BB's weak hands fold.",
-      "Example 2 (big size on wet): Same pot, flop 9♦8♣3♥. The BB's defense range holds plenty of 9x/8x/draws and the nut advantage tilts to the BB. You hold K♠K♦ (overpair): still ahead but easily outdrawn by straights/two pair — use a 2/3+ pot big bet (pot 6, bet 4+) to protect and charge the straight/flush draws, not a cheap price. A-high and small pairs should check for pot control.",
+      "On dry high boards (like A♠9♦6♣) the raiser's range dominates and the opponent rarely hits — use 1/3-pot small bets at high frequency to make the wide-range weak hands fold or bet thin value. On wet connected boards (like 9♦8♣6♥, 6♦7♣8♥) short-deck straight/draw combo density is extremely high, the raiser's nut advantage drops, C-Bet frequency falls to 30-40%, and you use 2/3+ pot big bets to protect overpairs and strong made hands, charging the draws.",
+      "Example: Short deck, you (BTN) open and the BB calls; flop K♠7♦J♣ (dry). You're the aggressor with plenty of Kx and the opponent rarely hits a K. Use 1/3-pot small bets at high frequency: KQ/KJ bet thin value, A-high semi-bluffs, small pairs also bet — the whole range pressures and the BB's weak hands fold.",
+      "Example 2 (big size on wet): Same pot, flop 9♦8♣6♥. The BB's defense range holds plenty of 9x/8x/draws and the nut advantage tilts to the BB. You hold K♠K♦ (overpair): still ahead but easily outdrawn by straights/two pair — use a 2/3+ pot big bet (pot 6, bet 4+) to protect and charge the straight/flush draws, not a cheap price. A-high and small pairs should check for pot control.",
       "Counterintuitive point: small C-Bets on wet short-deck boards are an error. Because draw density is high and draws get there easily, a small bet gives draws too cheap a price — effectively a free chase. On wet boards you must protect made hands with big sizes; small bets are only right on dry boards.",
       "Short-deck C-Bet quick memory: dry boards 1/3 pot at high frequency; wet boards 2/3+ pot at low frequency. First judge board wetness — the more connected and wet, the lower the C-Bet frequency and the bigger the size."
     ],
@@ -31,8 +31,8 @@
       "Short-deck donk rule: only use it on specific boards where \"OOP's range clearly dominates and nut combos are dense\" (e.g. OOP has high two-pair/straight density in a limp pot). Otherwise default to checking to keep the x/r lever.",
       "When to Donk and the Risks",
       "Two short-deck donk timings: (1) boards favoring OOP's range — when the OOP defense range holds more two-pair/straight/flush combos, lead to protect equity; (2) wet-board protection — OOP hits strong and donks to charge the opponent's draws. Risk: the donk range is naturally strong, can't balance when raised, and gives up the x/r lever. So the donk is an exception, not the norm.",
-      "Example: Short deck, you (BB) call a BTN open; flop 6♠7♦4♣ (wet connected). You hold 7♠8♠ (middle pair + straight draw); your defense range has plenty of 6x/7x/8x and straight draws — nut combos dense. The BTN (IP) mostly has big cards that miss here. You donk half pot: protecting your middle pair/draw and making the BTN's big cards fold or pay. OOP's range dominates this board, so the donk is reasonable.",
-      "Example 2 (donk risk): Short deck, you (BB) call and flop A♠K♦2♣ (dry high). The IP BTN's range holds plenty of Ax/Kx and your OOP range is at a disadvantage. If you donk, you're torn when raised and give up the x/r. Correct play is checking and letting the BTN bet before you decide. OOP is at a range disadvantage on dry boards — donking is an error.",
+      "Example: Short deck, you (BB) call a BTN open; flop 6♠7♦9♣ (wet connected). You hold 7♠8♠ (middle pair + straight draw); your defense range has plenty of 6x/7x/8x and straight draws — nut combos dense. The BTN (IP) mostly has big cards that miss here. You donk half pot: protecting your middle pair/draw and making the BTN's big cards fold or pay. OOP's range dominates this board, so the donk is reasonable.",
+      "Example 2 (donk risk): Short deck, you (BB) call and flop A♠K♦6♣ (dry high). The IP BTN's range holds plenty of Ax/Kx and your OOP range is at a disadvantage. If you donk, you're torn when raised and give up the x/r. Correct play is checking and letting the BTN bet before you decide. OOP is at a range disadvantage on dry boards — donking is an error.",
       "Counterintuitive point: the short-deck donk isn't a universal \"aggressive protection\" tool but a specific \"board ownership\" choice. It's reasonable when OOP's range dominates, otherwise check to keep the x/r. Mindless donking advertises range imbalance for free.",
       "Short-deck donk three questions: (1) does OOP's range dominate this board? (2) can I handle being raised after my donk? (3) is checking to keep the x/r better? Only donk when the range dominates and draw density is high; otherwise check."
     ],
@@ -43,42 +43,42 @@
       "The Math and Application of the x/r",
       "Short-deck x/r semi-bluff break-even (pot P, opponent C-Bet B, your raise R):\n\nEV(x/r) = f×P − (1−f)×[(1−E_win)×R − E_win×(P+R)]\n(f = opponent fold rate vs x/r, E_win = equity when called)\n\nExample: pot 6, opponent C-Bets 2, you x/r to 6; fold rate 50%, your straight-draw equity when called 35%:\nEV = 0.5×6 − 0.5×[0.65×6 − 0.35×(6+6)] = 3 − 0.5×[3.9 − 4.2] = 3 + 0.15 = 3.15\n\nThe short-deck semi-bluff x/r EV is higher because made draws (flushes/straights) carry great value. (Concept from: Short Deck Poker x/r and semi-bluffs)",
       "Short-deck x/r applications: on wet boards (high draw density) where OOP's range dominates, x/r semi-bluff with straight/flush draws; on dry boards x/r strong made hands for value. The x/r both protects your draws and makes the opponent's wide-range C-Bets pay.",
-      "Example: Short deck, you (BB) call a BTN open; flop 9♦7♣3♠. You hold 8♠9♠ (top pair + straight draw). BTN C-Bets 2 ante, you x/r to 6 ante. If he folds you win the 8 ante pot directly; if called you have top pair + straight-draw improvement room. On wet short-deck boards the x/r semi-bluff protects your marginal made hand while suppressing the BTN's C-Bet frequency.",
-      "Example 2 (dry-board x/r): Short-deck flop A♠K♦2♣, you (BB) hold 22 (set). BTN C-Bets and you x/r for value — his range has plenty of Ax/Kx that will call your set's value bet. Short-deck sets aren't the nuts (lose to full houses/flushes), but on a dry board they're strong and the x/r value bet is sound.",
+      "Example: Short deck, you (BB) call a BTN open; flop 9♦7♣6♠. You hold 8♠9♠ (top pair + straight draw). BTN C-Bets 2 ante, you x/r to 6 ante. If he folds you win the 8 ante pot directly; if called you have top pair + straight-draw improvement room. On wet short-deck boards the x/r semi-bluff protects your marginal made hand while suppressing the BTN's C-Bet frequency.",
+      "Example 2 (dry-board x/r): Short-deck flop A♠K♦6♣, you (BB) hold 22 (set). BTN C-Bets and you x/r for value — his range has plenty of Ax/Kx that will call your set's value bet. Short-deck sets aren't the nuts (lose to full houses/flushes), but on a dry board they're strong and the x/r value bet is sound.",
       "Counterintuitive point: the short-deck x/r isn't \"fighting back with strong hands\" but \"building a polarized range\". It must include both strong made hands and strong-draw semi-bluffs, or the opponent will figure out that your x/r is only nuts and fold, or only draws and call.",
       "Short-deck x/r three questions: (1) is my x/r range polarized? (strong made + strong draws) (2) is the opponent's C-Bet frequency high? (if so, the x/r is more effective) (3) do I have improvement room when called? After three questions, build a balanced x/r range."
     ],
     "l4sd-preflop-ranges": [
       "Short-Deck Preflop Ranges: Starting-Hand Value Reshuffled",
-      "In the 36-card short-deck environment, starting-hand values are reshuffled: pocket pairs rise (trips rank high, 17.6% hit probability), AK is the strongest non-pair but doesn't beat pairs, and suited connectors play well but are secondary. Short-deck preflop ranges therefore favor \"pairs and suited hands, with offsuit big high cards relatively devalued\".",
+      "In the 36-card short-deck environment, starting-hand values are reshuffled: pocket pairs rise (trips rank high, about 17.1% hit probability), AK is the strongest non-pair but doesn't beat pairs, and suited connectors play well but are secondary. Short-deck preflop ranges therefore favor \"pairs and suited hands, with offsuit big high cards relatively devalued\".",
       "Short-deck preflop range rule: pairs (including small pairs) and suited hands first; AK secondary; offsuit AX relatively devalued. Build ranges with more combos allocated to pairs/suited connectors.",
       "Short-Deck Opening Range Tiers",
-      "Short-deck preflop opening tiers: (1) top tier — AA/KK/QQ (pair value high, dominating AK); (2) secondary value — JJ-TT/AK (strongest non-pair); (3) speculative tier — 99-22 (set mining, trips value) / suited connectors JTs+ / suited Ax. Compared with standard hold'em, small pairs and suited connectors carry more weight while offsuit AX drops in relative value.",
+      "Short-deck preflop opening tiers: (1) top tier — AA/KK/QQ (pair value high, dominating AK); (2) secondary value — JJ-TT/AK (strongest non-pair); (3) speculative tier — 66-99 (set mining, trips value) / suited connectors JTs+ / suited Ax. Compared with standard hold'em, small pairs and suited connectors carry more weight while offsuit AX drops in relative value.",
       "Example: Short deck, BTN opens and you (BB) hold T♠9♠. T9s is in the speculative tier of short-deck ranges — it can make flushes (beating full houses) and straights, playing well. Against the BTN's ~60% opening range T9s has decent equity and big postflop potential — a standard call. Holding A♠K♦ (offsuit) instead puts it in secondary value — it can make top pair, but with high flop pair density, top-pair value is below standard hold'em.",
-      "Example 2 (3Bet range): Short deck, you face a BTN open and consider a 3Bet. The 3Bet range splits into value (JJ+/AK) and bluff (blocker-bearing hands like A5s — blocking AA/AK, folding cleanly to a 4Bet). Short-deck pair density is high, so the 3Bet value layer should carry more pairs (pairs > AK).",
-      "Counterintuitive point: in short deck AK isn't a \"slight coin-flip favorite\" strong shove. It dominates all non-pairs and can flop top pair, but preflop all-in it trails any pocket pair about 43%-45%. Treating AK as a top-tier strong hand is the biggest standard-hold'em-inertia misjudgment.",
-      "Short-deck preflop range quick memory: top pairs (AA/KK/QQ) + secondary AK + speculative pairs/suited connectors. Open about 50%-60% (BTN), pairs and suited hands first. Facing a 3Bet, tighten small pairs and suited connectors (speculative value needs implied odds)."
+      "Example 2 (3-bet range): Short deck, you face a BTN open and consider a 3-bet. The 3-bet range splits into value (JJ+/AK) and bluff (blocker-bearing hands like A6s — blocking AA/AK, folding cleanly to a 4Bet). Short-deck pair density is high, so the 3-bet value layer should carry more pairs (pairs > AK).",
+      "Counterintuitive point: in short deck AK's all-in standing differs from full-ring hold'em. It dominates all non-pairs and can flop top pair; preflop all-in it is a slight favorite vs mid pocket pairs like 66-QQ (exact enumeration: AKs vs QQ ≈ 53.7% ahead), and only clearly behind vs AA/KK. Importing the full-ring \"AK trails any pocket pair 43%-45%\" into short deck is the biggest misjudgment.",
+      "Short-deck preflop range quick memory: top pairs (AA/KK/QQ) + secondary AK + speculative pairs/suited connectors. Open about 50%-60% (BTN), pairs and suited hands first. Facing a 3-bet, tighten small pairs and suited connectors (speculative value needs implied odds)."
     ],
     "l4sd-nuts-equity": [
       "Short-Deck Equity: Chasing High-Value Draws",
-      "The core equity calculation adjustment in short deck is recalculating outs on 36 cards (9 per suit). Flush-draw outs = 9 − seen cards of that suit, and single-street hit rate is estimated by \"outs ÷ 33\". Short-deck outs are absolutely lower, but made-hand value is high (flushes/straights are often nuts), so chasing nut draws has excellent implied odds.",
+      "The core equity calculation adjustment in short deck is recalculating outs on 36 cards (9 per suit). Flush-draw outs = 9 − seen cards of that suit, and single-street hit rate is estimated by \"outs ÷ 31\" (unknown cards after the flop = 36 − 2 − 3 = 31). Short-deck outs are absolutely lower, but made-hand value is high (flushes/straights are often nuts), so chasing nut draws has excellent implied odds.",
       "Short-deck equity rule: recalculate outs on 36 cards (flush = 9 − seen cards of that suit), but made-hand value is high (flush beats full house) → chasing nut draws has excellent implied odds.",
       "Short-Deck Equity Correction and Made-Hand Probability",
-      "Short-deck outs and equity correction:\n\nFlush-draw outs = 9 − seen cards of that suit (holding 2 + 2 on board → 5)\nSingle-street hit rate = outs ÷ 33 (after the flop)\n\nExample: flush draw 5 outs → 5/33 ≈ 15% single-street, about 28% two-street\nStraight draw 8 outs → 8/33 ≈ 24% single-street, about 44% two-street\n\nThe 2/4 rule on 36 cards: \"outs × 2\" for one street is more accurate; outs×4 for two streets overestimates.\n\nMade-hand value: flushes (beat full houses) / straights are often nuts → excellent implied odds when chasing. (Concept from: Short Deck Poker outs and equity)",
+      "Short-deck outs and equity correction:\n\nFlush-draw outs = 9 − seen cards of that suit (holding 2 + 2 on board → 5)\nSingle-street hit rate = outs ÷ 31 (unknown cards after the flop: 31 = 36 − 2 − 3)\n\nExample: flush draw 5 outs → 5/31 ≈ 16% single-street, about 30% two-street\nStraight draw 8 outs → 8/31 ≈ 26% single-street, about 46% two-street\n\nThe 2/4 rule on 36 cards: each out is worth about 3.2% (1/31) single-street, so use \"outs × 3\"; two-street equity is higher (8 outs → about 46%) — memorize the base table instead.\n\nMade-hand value: flushes (beat full houses) / straights are often nuts → excellent implied odds when chasing. (Concept from: Short Deck Poker outs and equity)",
       "Short-deck equity practice: although short-deck draw equity is absolutely lower than full ring (fewer outs), made-hand value is high — flushes/straights are often nut-tier. So chasing nut draws (flushes/straights) has excellent implied odds and both calls and semi-bluffs are profitable. The key is using short-deck-corrected outs, not the full-ring outs table.",
-      "Example: Short deck, you hold A♥K♥ on a 9♥7♥2♣ flop. You draw to the flush: seen hearts A♥K♥ + 9♥7♥ = 4, so flush outs = 9 − 4 = 5. The opponent bets half pot and you need 25%. Your 5 flush outs are 15% single-street but about 28% two-street, and a made flush is the nuts (beats full houses). Adding implied odds (extract a big pot when made), the call is +EV and even a raise-semi-bluff is worth considering.",
-      "Example 2 (nut chase): Short deck, you hold 8♠9♠ on a 6♦7♣2♥ flop. You draw to 5 or T for a straight (8 outs; 6/7 seen, 5/T have 4 each = 8). This straight (5-6-7-8-9 or 6-7-8-9-T) is a strong short-deck straight, losing only to full houses/flushes/trips. About 44% two-street and near-nuts when made — both calls and semi-bluffs are excellent.",
+      "Example: Short deck, you hold A♥K♥ on a 9♥7♥6♣ flop. You draw to the flush: seen hearts A♥K♥ + 9♥7♥ = 4, so flush outs = 9 − 4 = 5. The opponent bets half pot and you need 25%. Your 5 flush outs are 16% single-street but about 30% two-street, and a made flush is the nuts (beats full houses). Adding implied odds (extract a big pot when made), the call is +EV and even a raise-semi-bluff is worth considering.",
+      "Example 2 (nut chase): Short deck, you hold T♠J♠ on a 8♦9♣6♥ flop. You draw to 7 or Q for a straight (8 outs; 7/Q have 4 each = 8). This straight (7-8-9-T-J or 9-T-J-Q-K) is a strong short-deck straight, losing only to full houses/flushes/trips. About 46% two-street and near-nuts when made — both calls and semi-bluffs are excellent.",
       "Counterintuitive point: short-deck flush draws have only 5 outs (full ring 9) and absolutely lower equity — but the made hand is nut-tier (beats full houses), basically locking the pot once made. \"Few outs\" doesn't mean \"weak draw\"; the key is the relative strength when made.",
-      "Short-deck equity quick math: flush 5 outs ≈ 15% single-street, 28% two-street; straight 8 outs ≈ 24% single-street, 44% two-street. Memorize these, then combine with \"made hands are nuts\" to judge whether to chase."
+      "Short-deck equity quick math: flush 5 outs ≈ 16% single-street, 30% two-street; straight 8 outs ≈ 26% single-street, 46% two-street. Memorize these, then combine with \"made hands are nuts\" to judge whether to chase."
     ],
     "l4sd-blocker-bluff": [
       "Short-Deck Blockers: Value in a Dense Strong-Hand Environment",
       "A blocker is a card you hold that reduces specific opponent combos. Blocker value is amplified in short deck: because flush value is enormous (beats full houses) and pair density is high, blocking the opponent's flush/pair combos impacts bluffing and calling decisions more. Holding A♠ completely blocks the opponent's A♠X♠ nut flush — extremely valuable in short deck.",
       "Short-deck blocker rule: holding an A blocks the nut flush (opponent's A♥X♥ combos = 0); holding a pair blocks the opponent's pairs. Short-deck flushes/pairs are valuable, so blocking them massively impacts bluff success.",
       "Applying Blocker Bluffs",
-      "Short-deck blocker-bluff applications: (1) bluff blocking — holding A♠ zeros the opponent's A♠X♠ nut flush, raising bluff success; (2) preflop 3Bet selection — holding an A blocks AA/AK, lowering the 4Bet probability. Short-deck flush/pair value is high, so these blocking effects are amplified and bluff selections should prefer blocker-bearing hands.",
-      "Example: Short-deck flop K♠9♠4♠ (three spades), you hold A♦A♣ (no spade A). You block no flushes — the opponent can have the A♠X♠ nut flush or a smaller flush. Your AA's bluff-catching value drops; lean fold. Conversely, holding A♠ (no flush made) blocks every A♠X♠ nut-flush combo and the opponent's \"strongest hand\" is falsified — your bluff or call success rises.",
-      "Example 2 (preflop blocking): Short deck, you (BB) face a BTN open and consider a 3Bet bluff. The difference between A♦5♦ and 7♦6♦: A5s's A blocks the opponent's AA and AK (fewer top hands, lower 4Bet probability) and folds cleanly to a 4Bet; 76s blocks no strong hands and runs into QQ+ more often when 4Bet. Short-deck pair density is high, so the A blocker is more valuable.",
+      "Short-deck blocker-bluff applications: (1) bluff blocking — holding A♠ zeros the opponent's A♠X♠ nut flush, raising bluff success; (2) preflop 3-bet selection — holding an A blocks AA/AK, lowering the 4Bet probability. Short-deck flush/pair value is high, so these blocking effects are amplified and bluff selections should prefer blocker-bearing hands.",
+      "Example: Short-deck flop K♠9♠6♠ (three spades), you hold A♦A♣ (no spade A). You block no flushes — the opponent can have the A♠X♠ nut flush or a smaller flush. Your AA's bluff-catching value drops; lean fold. Conversely, holding A♠ (no flush made) blocks every A♠X♠ nut-flush combo and the opponent's \"strongest hand\" is falsified — your bluff or call success rises.",
+      "Example 2 (preflop blocking): Short deck, you (BB) face a BTN open and consider a 3-bet bluff. The difference between A♦6♦ and 7♦6♦: A6s's A blocks the opponent's AA and AK (fewer top hands, lower 4Bet probability) and folds cleanly to a 4Bet; 76s blocks no strong hands and runs into QQ+ more often when 4Bet. Short-deck pair density is high, so the A blocker is more valuable.",
       "Counterintuitive point: short-deck blockers are a marginal tool, not a master key. Holding A♠ raises bluff success but doesn't guarantee it; using it to overturn base range analysis is abuse. Its value in short deck is large (high flush/pair value) but remains \"icing after the base range is right\".",
       "Short-deck blocker quick memory: on a three-suited board holding A♠ → blocks the nut flush, bonus for bluffing/calling; holding a pair → blocks the opponent's pairs. Off-the-table drill: set up random three-suited boards and count the difference in \"opponent nut-flush combos\" with and without your A♠."
     ],
@@ -100,7 +100,7 @@
       "Reading short-deck solvers — three questions: why this sizing on this board? Why is this hand in the betting range? Why did the frequency change on the turn? Understand the structure and the frequencies remember themselves.",
       "Short-Deck Solver Output Features",
       "Common features of short-deck solver outputs: (1) betting ranges more polarized — strong made hands + strong-draw semi-bluffs, middle hands check; (2) sizes on the big side — 2/3+ pot on wet boards to protect made hands; (3) high semi-bluff frequency — flush/straight draws are valuable and retain improvement room when called. Recognizing these features lets you convert solver outputs into live strategy.",
-      "Example: A short-deck solver on a 9♦8♣3♥ flop (wet) outputs: overpairs (KK/QQ) bet 2/3+ pot to protect, A-high and small/medium pairs check, straight/flush draws mix semi-bluff bets. Distill into: on wet boards big-bet protect strong made hands, semi-bluff draws, check middle hands. That's converting the solver into executable strategy.",
+      "Example: A short-deck solver on a 9♦8♣6♥ flop (wet) outputs: overpairs (KK/QQ) bet 2/3+ pot to protect, A-high and small/medium pairs check, straight/flush draws mix semi-bluff bets. Distill into: on wet boards big-bet protect strong made hands, semi-bluff draws, check middle hands. That's converting the solver into executable strategy.",
       "Example 2 (turn frequency change): A short-deck solver lowers firing frequency when the turn completes the opponent's draws (a flush/straight card). Distill into: when the turn/river changes hands, even if you're ahead, lower betting frequency — because the combos beating you in his range have multiplied.",
       "Counterintuitive point: a solver isn't an \"answer\" but a \"coordinate system\". Memorizing solver frequencies gets forgotten; understanding structure transfers to different boards. The mark of a short-deck pro is \"using the solver to understand why\", not \"copying what it does\".",
       "Five-step solver reading: (1) look at the betting-range structure (value/semi-bluff/check ratios); (2) look at the size distribution (why this size); (3) look at street changes (how frequencies shift on the turn/river); (4) distill one reusable principle; (5) validate live. Each board read makes your short-deck framework more complete."
@@ -124,7 +124,7 @@
       "Recognizing Downswings and Discipline Training",
       "Recognizing short-deck downswings: losing multiple 45%-55% all-ins in a row is mathematical normalcy (0.5^8 ≈ 0.4%), but short deck has frequent all-ins per hour, so downswings arrive faster. After recognition, distinguish \"mathematical variance\" from \"strategy errors\" — record each key decision's reasoning in a decision log, asking only EV not results. Discipline training: preset the stop-loss, leave at the line, review only process.",
       "Example: Short deck, you lose 6 consecutive 50% all-ins (0.5^6 ≈ 1.6%, encountered several times an hour in short deck). Your mind knows \"I played right\" but emotions want \"to get even\". If you size up to chase losses, that's a tilt loop. The right move: recognize the revenge impulse → pause 10 minutes → restart with \"what is this hand's EV\".",
-      "Example 2 (process vs result): Short deck, you shove AK vs 55 (short-deck AK vs 55 ≈ 43%-45%) and 55 wins. You lost the result, but the process: with proper pot odds, calling was +EV — you played right. Short-deck pros review only process: \"was this decision EV-correct?\" Tilters review only results: \"I lost to junk again.\"",
+      "Example 2 (process vs result): Short deck, you shove AK vs 66 (exact enumeration: AKs is a slight favorite vs small-mid pocket pairs) and 66 wins. You lost the result, but the process: with proper pot odds, shoving was +EV — you played right. Short-deck pros review only process: \"was this decision EV-correct?\" Tilters review only results: \"I lost to junk again.\"",
       "Counterintuitive point: the most dangerous tilt in short deck isn't \"impulse when losing\" but \"letting your guard down after winning\". After winning a few hands, players relax, play marginal hands, and give the edge back. Short-deck discipline must be consistent throughout, win or lose.",
       "Short-deck tilt-control triad: (1) emotional red light — pause after N consecutive hands wanting revenge; (2) preset stop-loss — leave after losing 40-50BB; (3) process attribution — review only EV. Build all three off the table so they're ready when tilt hits."
     ],
@@ -134,7 +134,7 @@
       "Short-deck MTT golden rule: the shallower your stack and the higher the blind share, the more frequent preflop shoves. Short-deck variance is high, so tournaments must balance \"survival\" and \"aggression\", avoiding unnecessary variance.",
       "Chip Rhythm and Preflop Attack/Defense",
       "Short-deck MTT chip rhythm by stage: (1) deep stacks (50BB+) — cash-style play, wide ranges, more postflop; (2) medium stacks (20-50BB) — min-raise + postflop; (3) short stacks (under 20BB) — preflop shoves dominate. Because short-deck variance is high, in shallow stages you should actively shove with equity to steal blinds and double up.",
-      "Example: Short-deck MTT medium stack, you hold A♠Q♠ and the opponent (BB) 3Bets. AQ is secondary value in short deck (non-pair but strong). Facing a 3Bet, look at stack depth and opponent tendencies: deep-stacked call to see postflop; shallow-stacked (under 20BB) shove directly (AQ has good equity vs a wide range). Chip rhythm decides how the same hand is played.",
+      "Example: Short-deck MTT medium stack, you hold A♠Q♠ and the opponent (BB) 3-bets. AQ is secondary value in short deck (non-pair but strong). Facing a 3-bet, look at stack depth and opponent tendencies: deep-stacked call to see postflop; shallow-stacked (under 20BB) shove directly (AQ has good equity vs a wide range). Chip rhythm decides how the same hand is played.",
       "Example 2 (survival strategy): Short-deck MTT bubble, you (BB) hold K♦Q♠ facing a BTN shove. Short-deck KQ is a non-pair, about 35%-40% vs the BTN's shoving range (pairs/strong Ax). Under bubble ICM pressure, a healthy stack leans fold to survive; a short stack calls to double. Short-deck tournaments balance survival and aggression.",
       "Counterintuitive point: in short-deck MTT the ICM logic of \"conservative when ahead, aggressive when behind\" differs from cash's \"always max EV\". In tournaments only the final finish matters — survival sometimes outranks a single hand's EV.",
       "Short-deck MTT chip-rhythm quick memory: deep 50BB+ cash-style, medium 20-50BB min-raise + postflop, short under-20BB shoves dominate. Bubble survival first; deep stacks avoid unnecessary variance."
@@ -156,7 +156,7 @@
       "Short-deck deep-stack rule: strong made hands (flushes/straights/two pair) fire three barrels for value; marginal made hands pot-control and stop-loss (deep stacks amplify RIO). Use big sizes so the pot grows geometrically and the river shove lands.",
       "Deep-Stack Sizing and Nut Confrontation",
       "Short-deck deep stacks (high SPR): strong made hands need big sizes (2/3+ pot) so the pot grows geometrically street by street and the river shove extracts value. Meanwhile, in nut confrontation — short-deck flush/straight value is high, so deep-stacked you should actively build the pot, letting the opponent's weak made hands (top pair/two pair) call your nuts.",
-      "Example: Short deck, 150BB deep, you (BTN) hold A♥K♥ on a 9♥7♥2♣ flop with a flush draw. Turn 5♥ — you make the flush! You have the nut flush (beats full houses). Deep-stacked, use big bets to extract — flop 2/3 pot, big turn bet, river overbet or shove — letting the opponent's top pair/two pair call your nut flush. Short-deck flush value is high; deep-stacked value extraction is maximized.",
+      "Example: Short deck, 150BB deep, you (BTN) hold A♥K♥ on a 9♥7♥6♣ flop with a flush draw. Turn J♥ — you make the flush! You have the nut flush (beats full houses). Deep-stacked, use big bets to extract — flop 2/3 pot, big turn bet, river overbet or shove — letting the opponent's top pair/two pair call your nut flush. Short-deck flush value is high; deep-stacked value extraction is maximized.",
       "Example 2 (marginal made-hand control): Short deck, deep-stacked, you hold A♠Q♠ on a Q♦9♣8♠ flop (top pair + straight-draw board). Deep-stacked top pair has high RIO (the opponent may have 9x/8x/straight draws) — pot control and stop-loss, small bets or checks, avoiding a big pot then getting outdrawn. Deep stacks amplify RIO, so marginal made hands must be conservative.",
       "Counterintuitive point: deep-stacked short deck makes the contrast between \"fast-play strong hands\" and \"pot-control marginal hands\" more extreme. Deep stacks amplify both made-hand value (strong hands extract more) and RIO (marginal hands lose more) — go to both extremes.",
       "Short-deck deep-stack quick memory: strong made hands fire three barrels for extraction (river shove); marginal made hands pot-control and stop-loss. At high SPR, every street first ask \"is my hand nut-tier or marginal\", then decide extract or control."
@@ -189,9 +189,9 @@
       "Short-deck's high variance makes exploitation a dynamic game: variance is large, win-loss alternates fast, and opponents adjust frequently. Short-deck exploitation (II) focuses on using table dynamics (who's tilting, who's deep, who's passive) and targeted counter-responses (returning to baseline when the opponent adjusts). Exploitation isn't one-shot but a \"deviate → get detected → return to baseline\" loop.",
       "Short-deck dynamic exploitation rule: identify table dynamics (tilt/stack/passivity), harvest with targeted strategies, and return to the GTO baseline when the opponent adjusts. Exploitation is a dynamic game — aim at the leak with minimal magnitude.",
       "Using Table Dynamics and Targeted Counter-Responses",
-      "Short-deck table-dynamic usage: (1) tilting opponents — recognize and pressure aggressively, because they play marginal hands to chase losses; (2) short-stacked opponents — pressure with a wide range because they fear elimination; (3) passive opponents — bet at high frequency because they won't raise back. Targeted counter-responses: when the opponent adjusts against you (e.g. raising his 3Bet frequency), return to the GTO baseline and narrow your range.",
+      "Short-deck table-dynamic usage: (1) tilting opponents — recognize and pressure aggressively, because they play marginal hands to chase losses; (2) short-stacked opponents — pressure with a wide range because they fear elimination; (3) passive opponents — bet at high frequency because they won't raise back. Targeted counter-responses: when the opponent adjusts against you (e.g. raising his 3-bet frequency), return to the GTO baseline and narrow your range.",
       "Example: Short deck, you notice an opponent starts tilting after consecutive losses — playing marginal hands, mindless chases, losing sizing control. Exploit: value-bet against him with a wider range and call tighter — he over-chases and your value bets get overpaid. Recognizing and harvesting a tilting opponent is a classic short-deck dynamic exploitation.",
-      "Example 2 (targeted counter-response): After you raise your steal frequency against an opponent, he starts 3Betting frequently in response — he's discovered your deviation. Now you must return to the GTO baseline (narrow the steal range, reduce pure bluffs), or your newly opened leaks get harvested in reverse. Exploitation is a dynamic game: deviate → get detected → return to baseline.",
+      "Example 2 (targeted counter-response): After you raise your steal frequency against an opponent, he starts 3-betting frequently in response — he's discovered your deviation. Now you must return to the GTO baseline (narrow the steal range, reduce pure bluffs), or your newly opened leaks get harvested in reverse. Exploitation is a dynamic game: deviate → get detected → return to baseline.",
       "Example 3 (short-stack pressure): Short deck, you're deep (100 ante) vs a short stack (30 ante). The short stack fears elimination, so you shove/raise with a wide range to pressure — his ICM pressure keeps him from risking. Short-deck's high variance makes deep-stack pressure on shorts more effective.",
       "Counterintuitive point: the biggest risk of short-deck dynamic exploitation is \"over-exploiting and becoming the leak yourself\". When you identify the opponent's adjustment, you must return to baseline — short-deck/HU pros always keep one hand on the GTO baseline wheel while harvesting.",
       "Short-deck dynamic exploitation in five steps: (1) identify table dynamics (who's tilting / who's short / who's passive); (2) adjust against the leak (pressure/value/counter); (3) observe the opponent's reaction; (4) return to baseline when he adjusts; (5) re-check every 500 hands. A dynamic game, advanced in loops."
@@ -249,7 +249,7 @@
       "explanation": "Short-deck rankings: straight < trips < full house < flush. Of the four options only a flush beats a full house (short-deck flush > full house, opposite of standard hold'em)."
     },
     "l3sd-cbet-q1": {
-      "question": "On a dry high short-deck board (K♠7♦2♣), the C-Bet tendency is:",
+      "question": "On a dry high short-deck board (K♠7♦J♣), the C-Bet tendency is:",
       "options": [
         "1/3-pot small bets at high frequency",
         "Check everything",
@@ -259,7 +259,7 @@
       "explanation": "The opponent rarely hits a dry board; 1/3-pot small bets at high frequency make the wide-range weak hands fold or bet thin value."
     },
     "l3sd-cbet-q2": {
-      "question": "On a wet connected short-deck board (9♦8♣3♥), the correct C-Bet handling is:",
+      "question": "On a wet connected short-deck board (9♦8♣6♥), the correct C-Bet handling is:",
       "options": [
         "1/3-pot small bets at high frequency",
         "2/3+ pot big bets at low frequency, protecting made hands",
@@ -279,7 +279,7 @@
       "explanation": "Wet short-deck boards have extremely high straight/draw combo density, the raiser's nut advantage drops, and C-Bet frequency falls while sizes grow for protection."
     },
     "l3sd-cbet-q4": {
-      "question": "Holding an overpair (K♠K♦) on a short-deck 9♦8♣3♥ board, the correct size is:",
+      "question": "Holding an overpair (K♠K♦) on a short-deck 9♦8♣6♥ board, the correct size is:",
       "options": [
         "1/3-pot small bet",
         "2/3+ pot big bet for protection",
@@ -309,7 +309,7 @@
       "explanation": "The short-deck donk is an exception, not the norm — only on specific boards where OOP's range dominates and nuts are dense."
     },
     "l3sd-donk-q2": {
-      "question": "On a short-deck 6♠7♦4♣ wet connected board, the BB (OOP) holding a straight draw donking is reasonable because:",
+      "question": "On a short-deck 6♠7♦9♣ wet connected board, the BB (OOP) holding a straight draw donking is reasonable because:",
       "options": [
         "The BB has a stronger hand",
         "The BB's defense range holds many two-pair/straight combos — OOP's range dominates",
@@ -319,7 +319,7 @@
       "explanation": "On wet connected boards the BB's defense range holds many 6x/7x/straight draws and OOP's range dominates — the donk reasonably protects equity."
     },
     "l3sd-donk-q3": {
-      "question": "On a dry high board (A♠K♦2♣) the BB (OOP) with a weak hand donking is risky because:",
+      "question": "On a dry high board (A♠K♦6♣) the BB (OOP) with a weak hand donking is risky because:",
       "options": [
         "No risk",
         "OOP is at a range disadvantage — being raised leaves you torn and you give up the x/r lever",
@@ -369,7 +369,7 @@
       "explanation": "The short-deck x/r range is polarized: strong made hands for value + strong draws as semi-bluffs, with improvement room when called."
     },
     "l3sd-check-raise-q3": {
-      "question": "On a wet short-deck board (9♦7♣3♠) OOP holding top pair + a straight draw, the x/r value is:",
+      "question": "On a wet short-deck board (9♦7♣6♠) OOP holding top pair + a straight draw, the x/r value is:",
       "options": [
         "No value",
         "Protecting a marginal made hand and suppressing the opponent's C-Bet frequency",
@@ -379,7 +379,7 @@
       "explanation": "OOP with top pair + straight draw on a wet board — the x/r protects the marginal made hand, suppresses C-Bet frequency, and the semi-bluff has improvement room."
     },
     "l3sd-check-raise-q4": {
-      "question": "On a dry short-deck board (A♠K♦2♣) holding a set, the x/r function is:",
+      "question": "On a dry short-deck board (A♠K♦6♣) holding a set, the x/r function is:",
       "options": [
         "Protecting a draw",
         "Extracting value — the opponent's Ax/Kx calls",
@@ -412,41 +412,41 @@
       "question": "The speculative tier of the short-deck preflop range mainly includes:",
       "options": [
         "AA/KK",
-        "99-22 pairs + suited connectors JTs+ + suited Ax",
+        "66-99 pairs + suited connectors JTs+ + suited Ax",
         "Offsuit AK/AQ",
         "Junk"
       ],
-      "explanation": "The short-deck speculative tier is small pairs (set mining) + suited connectors + suited Ax, exploiting trips and flush value."
+      "explanation": "The short-deck speculative tier is small pairs (66-99, set mining) + suited connectors + suited Ax, exploiting trips and flush value. No 2-5 exist in short deck, so 22-55 are impossible."
     },
     "l4sd-preflop-ranges-q3": {
       "question": "Facing a short-deck BTN open, the correct handling of T9s is:",
       "options": [
         "Fold",
         "A standard call/open hand — it can make flushes and straights",
-        "Only 3Bet",
+        "Only 3-bet",
         "Completely useless"
       ],
       "explanation": "T9s plays well in short deck (flushes/straights) — a standard call/open hand."
     },
     "l4sd-preflop-ranges-q4": {
-      "question": "The value layer of a short-deck 3Bet range should include:",
+      "question": "The value layer of a short-deck 3-bet range should include:",
       "options": [
         "Only AK",
         "More pairs (pairs > AK) + AK",
         "Only suited connectors",
         "Only small pairs"
       ],
-      "explanation": "Short-deck pairs > AK, so the 3Bet value layer should carry more pairs (JJ+/AK), because pairs are stronger preflop all-in."
+      "explanation": "Short-deck pairs > AK, so the 3-bet value layer should carry more pairs (JJ+/AK), because pairs are stronger preflop all-in."
     },
     "l4sd-preflop-ranges-q5": {
-      "question": "AK's preflop all-in equity against a pocket pair in short deck is about:",
+      "question": "AKs' preflop all-in equity against QQ in short deck is about:",
       "options": [
-        "About 55%",
-        "About 43%-45%",
-        "About 70%",
+        "About 46% (behind)",
+        "About 54% (ahead)",
+        "About 43%-45% (behind)",
         "About 35%"
       ],
-      "explanation": "Short-deck AK vs a pocket pair is about 43%-45% behind; AK is the strongest non-pair but doesn't beat pairs."
+      "explanation": "Exact short-deck enumeration (full): AKs vs QQ ≈ 53.7%/46.3% — AK is a slight favorite vs mid pocket pairs (AKo vs QQ is also about 51.8%), and only clearly behind vs AA/KK. \"AK trails any pocket pair 43%-45%\" is the full-ring legacy figure."
     },
     "l4sd-nuts-equity-q1": {
       "question": "The correct way to calculate short-deck flush-draw outs is:",
@@ -471,12 +471,12 @@
     "l4sd-nuts-equity-q3": {
       "question": "A short-deck straight draw (8 outs) hits about ___ on two streets:",
       "options": [
-        "About 24%",
-        "About 44%",
+        "About 26%",
+        "About 46%",
         "About 30%",
         "About 55%"
       ],
-      "explanation": "Short-deck 8-outs straight hits about 44% on two streets, far above the single-street 24%."
+      "explanation": "Short-deck 8-outs straight hits about 46% on two streets (1−(23/31)×(22/30) ≈ 45.6%), far above the single-street 26% (8/31)."
     },
     "l4sd-nuts-equity-q4": {
       "question": "A short-deck flush draw (5 outs) has lower equity but high value because:",
@@ -492,11 +492,11 @@
       "question": "The mental-math baseline for single-street hit rate after a short-deck flop is:",
       "options": [
         "outs ÷ 47",
-        "outs ÷ 33",
+        "outs ÷ 31",
         "outs ÷ 36",
         "outs ÷ 52"
       ],
-      "explanation": "About 33 cards remain after a short-deck flop, so single-street hit rate ≈ outs ÷ 33. 47 is full ring."
+      "explanation": "31 cards remain after a short-deck flop (36 − 2 − 3), so single-street hit rate ≈ outs ÷ 31. 47 is full ring."
     },
     "l4sd-blocker-bluff-q1": {
       "question": "The special value of blockers in short deck comes from:",
@@ -519,14 +519,14 @@
       "explanation": "Holding A♠ zeroes the opponent's A♠X♠ nut-flush combos, trimming his strongest call/raise-back hands and raising bluff success."
     },
     "l4sd-blocker-bluff-q3": {
-      "question": "For a short-deck preflop 3Bet bluff, why is A5s better than 76s?",
+      "question": "For a short-deck preflop 3-bet bluff, why is A6s better than 76s?",
       "options": [
-        "A5s blocks AA/AK, lowering the 4Bet probability",
+        "A6s blocks AA/AK, lowering the 4Bet probability",
         "76s blocks more strong hands",
-        "A5s is a stronger hand",
+        "A6s is a stronger hand",
         "No difference"
       ],
-      "explanation": "A5s's A blocks the opponent's AA/AK, lowering 4Bet frequency; 76s blocks no strong hands and runs into QQ+ more often."
+      "explanation": "A6s's A blocks the opponent's AA/AK, lowering 4Bet frequency; 76s blocks no strong hands and runs into QQ+ more often."
     },
     "l4sd-blocker-bluff-q4": {
       "question": "The applicability boundary of short-deck blockers is:",
@@ -619,7 +619,7 @@
       "explanation": "Memorizing frequencies gets forgotten; understanding structure (why this size / why this hand enters the betting range) transfers to different boards."
     },
     "l4sd-solver-readout-q3": {
-      "question": "On a wet short-deck board (9♦8♣3♥) the solver's output for overpairs is:",
+      "question": "On a wet short-deck board (9♦8♣6♥) the solver's output for overpairs is:",
       "options": [
         "1/3-pot small bet",
         "2/3+ pot big bet for protection",
@@ -1019,7 +1019,7 @@
       "explanation": "A tilting opponent plays marginal hands and chases mindlessly — harvest with a wider value range and tighter calls."
     },
     "l8sd-exploit-ii-q3": {
-      "question": "After you raise steal frequency, the opponent starts 3Betting frequently. The correct move is:",
+      "question": "After you raise steal frequency, the opponent starts 3-betting frequently. The correct move is:",
       "options": [
         "Keep increasing steals",
         "Return to the GTO baseline and narrow the range",
@@ -1095,7 +1095,7 @@
       "correctAction": "Donk Bet",
       "correctAmount": "2.5 ante (half pot)",
       "reasoning": [
-        "78s on 6-9-4 has a double-gutshot + backdoor flush",
+        "78s on 6-9-8 has a gutshot (T) + backdoor flush",
         "The BB defense range holds plenty of 6x/7x/9x — OOP's range dominates",
         "On wet short-deck boards leading protects equity, making the IP's big cards fold or pay"
       ],
@@ -1122,7 +1122,7 @@
       "correctAmount": "2 ante",
       "reasoning": [
         "77's set-mining value rises in short deck (trips rank high)",
-        "Flopping trips about 17.6% (full ring 12%)",
+        "Flopping trips about 17.1% (full ring about 12%)",
         "Against the BTN's wide open, implied odds suffice — call"
       ],
       "mistakeAction": "Fold (\"77 is too small\")",
@@ -1174,7 +1174,7 @@
       "correctAmount": "3.3 ante (2/3 pot)",
       "reasoning": [
         "The short-deck solver outputs big bets to protect overpairs on wet boards",
-        "KK on 9-8-3 is easily outdrawn by straights/two pair; 2/3 pot charges the draws",
+        "KK on 9-8-6 is easily outdrawn by straights/two pair; 2/3 pot charges the draws",
         "Short-deck made-hand value is high; big sizes on wet boards are solver consensus"
       ],
       "mistakeAction": "Bet 1/3 pot",
@@ -1296,13 +1296,13 @@
         },
         {
           "action": "Call",
-          "explanation": "Calling is too passive. JTs has enough playability in short deck to 3-Bet semi-bluff.",
+          "explanation": "Calling is too passive. JTs has enough playability in short deck to 3-bet semi-bluff.",
           "evImpact": "+0.5 ante"
         },
         {
           "action": "Raise",
           "amount": "6 ante",
-          "explanation": "JTs plays well — 3-Bet to build a big pot and exploit postflop playability. Note: it isn't top tier in short deck (AA/KK/QQ/AK are); know when to let go against strong resistance.",
+          "explanation": "JTs plays well — 3-bet to build a big pot and exploit postflop playability. Note: it isn't top tier in short deck (AA/KK/QQ/AK are); know when to let go against strong resistance.",
           "evImpact": "+2.5 ante"
         }
       ]
@@ -1357,12 +1357,12 @@
         {
           "action": "Raise 6 ante",
           "amount": "6 ante",
-          "explanation": "KK is top-tier in short deck — 3-Bet for value.",
+          "explanation": "KK is top-tier in short deck — 3-bet for value.",
           "evImpact": "+2.5 ante"
         },
         {
           "action": "Call",
-          "explanation": "KK is strong enough to 3-Bet; calling is too passive.",
+          "explanation": "KK is strong enough to 3-bet; calling is too passive.",
           "evImpact": "+1.0 ante"
         }
       ]
@@ -1434,7 +1434,7 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "78 on 6-9-2 has a double-gutshot + backdoor flush; folding is too weak.",
+          "explanation": "78 on 6-9-8 has a gutshot (T) + backdoor flush; folding is too weak.",
           "evImpact": "-1.0 ante"
         },
         {
@@ -1455,7 +1455,7 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "89 on 7-6-2 has a double-gutshot + backdoor flush; folding is too weak.",
+          "explanation": "89 on 7-6-8 has a gutshot (T) + backdoor flush; folding is too weak.",
           "evImpact": "-1.0 ante"
         },
         {
@@ -1495,12 +1495,12 @@
       "option": [
         {
           "action": "Check-Raise",
-          "explanation": "An x/r is also possible on a wet board, but 67's double-gutshot value makes the donk the more direct equity protection.",
+          "explanation": "An x/r is also possible on a wet board, but 67's gutshot value makes the donk the more direct equity protection.",
           "evImpact": "+0.5 ante"
         },
         {
           "action": "Donk Bet half pot",
-          "explanation": "67 on 8-9-4 has a straight draw; the BB's range dominates — the donk reasonably protects.",
+          "explanation": "67 on 8-9-6 has a straight draw (T); the BB's range dominates — the donk reasonably protects.",
           "evImpact": "+1.2 ante"
         },
         {
@@ -1515,7 +1515,7 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "67 on 8-5-2 has a double-gutshot + backdoor flush; folding is too weak.",
+          "explanation": "67 on 8-9-6 has a gutshot (T) + backdoor flush; folding is too weak.",
           "evImpact": "-1.0 ante"
         },
         {
@@ -1584,8 +1584,8 @@
           "evImpact": "+1.0 ante"
         },
         {
-          "action": "3-Bet",
-          "explanation": "99 is speculative; calling to set mine is better; a 3Bet can mix occasionally.",
+          "action": "3-bet",
+          "explanation": "99 is speculative; calling to set mine is better; a 3-bet can mix occasionally.",
           "evImpact": "+0.3 ante"
         }
       ],
@@ -1595,7 +1595,7 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "AK is the strongest non-pair; don't fold after a 3Bet.",
+          "explanation": "AK is the strongest non-pair; don't fold after a 3-bet.",
           "evImpact": "-2.0 ante"
         },
         {
@@ -1605,7 +1605,7 @@
         },
         {
           "action": "All-in",
-          "explanation": "AK trails pocket pairs; if the BTN's 4Bet range has many pairs, shoving needs caution.",
+          "explanation": "AK is a slight favorite vs 66-QQ but plays OOP when called; if the BTN's 4Bet range is heavy on AA/KK, shoving needs caution.",
           "evImpact": "-0.5 ante"
         }
       ],
@@ -1615,21 +1615,21 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A5s is a standard 3Bet-bluff hand (blocks AA/AK) backed by fold rate.",
+          "explanation": "A6s is a standard 3-bet-bluff hand (blocks AA/AK) backed by fold rate.",
           "evImpact": "-0.8 ante"
         },
         {
           "action": "Call",
-          "explanation": "A5s folds cleanly to a 4Bet after a 3Bet; calling isn't its main purpose.",
+          "explanation": "A6s folds cleanly to a 4Bet after a 3-bet; calling isn't its main purpose.",
           "evImpact": "+0.3 ante"
         },
         {
-          "action": "3-Bet",
-          "explanation": "A5s blocks AA/AK and the BTN folds a lot — a standard 3Bet bluff.",
+          "action": "3-bet",
+          "explanation": "A6s blocks AA/AK and the BTN folds a lot — a standard 3-bet bluff.",
           "evImpact": "+1.5 ante"
         }
       ],
-      "tableDesc": "Short-deck cash game; the BTN has a high fold-to-3Bet rate"
+      "tableDesc": "Short-deck cash game; the BTN has a high fold-to-3-bet rate"
     },
     "l4sd-nuts-equity-p1": {
       "option": [
@@ -1655,7 +1655,7 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "89 has a straight draw on a 6-7-2 board (5s and Ts = 8 outs); folding is too weak.",
+          "explanation": "TJ has a straight draw on a 8-9-6 board (7s and Qs = 8 outs); folding is too weak.",
           "evImpact": "-1.0 ante"
         },
         {
@@ -1675,12 +1675,12 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "78 has a straight draw (5s and Ts = 8 outs) plus a backdoor flush — you should lead a semi-bluff.",
+          "explanation": "78 has a straight draw (T, 4 outs) plus a flush draw (6 outs = 9−3 seen) — you should lead a semi-bluff.",
           "evImpact": "-0.8 ante"
         },
         {
           "action": "Bet 2.5 ante (half pot)",
-          "explanation": "Straight draw 8 outs + backdoor flush — a half-pot semi-bluff; short-deck made hands carry a lot of value.",
+          "explanation": "Straight + flush multi-draw (about 9 effective outs) — a half-pot semi-bluff; short-deck made hands carry a lot of value.",
           "evImpact": "+1.2 ante"
         },
         {
@@ -1695,7 +1695,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "A6 has a backdoor flush + overcards — a semi-bluff is available; checking is too passive.",
+          "explanation": "A6 has a flush draw (6 outs = 9−3 seen) + overcards — a semi-bluff is available; checking is too passive.",
           "evImpact": "-0.8 ante"
         },
         {
@@ -1715,21 +1715,21 @@
       "option": [
         {
           "action": "Call",
-          "explanation": "A5s is a standard 3Bet-bluff hand; calling wastes the blocker advantage.",
+          "explanation": "A6s is a standard 3-bet-bluff hand; calling wastes the blocker advantage.",
           "evImpact": "+0.3 ante"
         },
         {
-          "action": "3-Bet",
-          "explanation": "A5s blocks AA/AK and the BTN folds a lot — a standard 3Bet bluff.",
+          "action": "3-bet",
+          "explanation": "A6s blocks AA/AK and the BTN folds a lot — a standard 3-bet bluff.",
           "evImpact": "+1.5 ante"
         },
         {
           "action": "Fold",
-          "explanation": "A5s has blocker value plus fold-rate support; folding is too tight.",
+          "explanation": "A6s has blocker value plus fold-rate support; folding is too tight.",
           "evImpact": "-0.8 ante"
         }
       ],
-      "tableDesc": "Short-deck cash game; the BTN has a high fold-to-3Bet rate"
+      "tableDesc": "Short-deck cash game; the BTN has a high fold-to-3-bet rate"
     },
     "l4sd-blocker-bluff-p3": {
       "option": [
@@ -1740,7 +1740,7 @@
         },
         {
           "action": "Check-Raise semi-bluff",
-          "explanation": "K♥ blocks the opponent's K♥X♥ flushes; flush draw 6 outs (9−3 seen) — the x/r semi-bluff protects.",
+          "explanation": "K♥ blocks the opponent's K♥X♥ flushes; flush draw 5 outs (9−4 seen) — the x/r semi-bluff protects.",
           "evImpact": "+1.2 ante"
         },
         {
@@ -1764,8 +1764,8 @@
           "evImpact": "+1.0 ante"
         },
         {
-          "action": "3-Bet",
-          "explanation": "99 is speculative; calling to set mine is better; a 3Bet can mix occasionally.",
+          "action": "3-bet",
+          "explanation": "99 is speculative; calling to set mine is better; a 3-bet can mix occasionally.",
           "evImpact": "+0.3 ante"
         }
       ],
@@ -1789,7 +1789,7 @@
           "evImpact": "-0.5 ante"
         }
       ],
-      "tableDesc": "Short-deck cash game; 3Bet pot"
+      "tableDesc": "Short-deck cash game; 3-bet pot"
     },
     "l4sd-gto-fundamentals-p3": {
       "option": [
@@ -1835,12 +1835,12 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "78 on 6-9-2 has a straight draw — the solver semi-bluffs; folding is too weak.",
+          "explanation": "TJ on 6-9-Q has a straight draw (8/K, 8 outs) — the solver semi-bluffs; folding is too weak.",
           "evImpact": "-1.0 ante"
         },
         {
           "action": "Check-Raise semi-bluff",
-          "explanation": "78 has a straight draw — the solver tends toward an x/r semi-bluff (high made-draw value).",
+          "explanation": "TJ has a straight draw — the solver tends toward an x/r semi-bluff (high made-draw value).",
           "evImpact": "+1.2 ante"
         },
         {
@@ -2015,7 +2015,7 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "T9 on 8-7-2 has a straight draw; folding is too weak.",
+          "explanation": "T9 on 8-7-J has a straight draw (two-way, 6/Q); folding is too weak.",
           "evImpact": "-1.0 ante"
         },
         {
@@ -2349,7 +2349,95 @@
           "evImpact": "-2.0 ante"
         }
       ],
-      "tableDesc": "Short-deck cash game; the BTN started 3Betting frequently to counter your steals"
+      "tableDesc": "Short-deck cash game; the BTN started 3-betting frequently to counter your steals"
     }
+  },
+  "lessonObjectives": {
+    "l3sd-intro": [
+      "Recite the core rule differences of short deck (a 36-card deck with 2-5 removed, trips>straights and flushes>full houses as the two ranking flips, antes replacing blinds)",
+      "Order the short-deck hand rankings (high card/one pair/two pair/straight/trips/full house/flush/quads/straight flush/royal flush) and point out the two spots inverted vs standard hold'em",
+      "Judge the short-deck hand-value shifts (pocket pairs and big high cards rise, small pairs lose set-mining value, flush value rises sharply) and state that the smallest straight A-6-7-8-9 is legal",
+      "Compute the short-deck outs correction (flush outs = 9 minus seen cards of that suit) and judge that reusing the standard-hold'em outs table systematically overestimates equity"
+    ],
+    "l3sd-cbet": [
+      "Judge the contrast between dry high boards in short deck (like K-7-2 rainbow: 1/3-pot small bets at about 70%+ frequency) and wet connected boards (2/3-pot-plus big bets at about 30-40% frequency)",
+      "Explain why small C-Bets on wet short-deck boards are an error (draw density is high and draws get there easily, so small bets price them too cheaply)",
+      "Judge that an overpair on wet connected boards should protect with a 2/3-pot-plus bet, and state the quick rule that board wetness sets C-Bet frequency and size"
+    ],
+    "l3sd-donk": [
+      "Explain the conditions for a short-deck donk (specific boards where OOP's range clearly dominates and nut combos are dense) and its relation to checking by default to keep the x/r lever",
+      "Judge that an OOP donk is reasonable on wet connected boards (like 6-7-4 two-tone) but an error on dry high boards",
+      "Apply the donk three questions (does the range dominate? can you handle a raise? is checking better?) to decide whether to lead, and tell the donk apart from a universal aggressive-protection tool"
+    ],
+    "l3sd-check-raise": [
+      "Build a polarized short-deck x/r range (strong made hands: nut pairs/two pair/straights/flushes plus strong draws: flush/straight-draw semi-bluffs)",
+      "Plug into EV(x/r) = f×P − (1−f)×[(1−E_win)×R − E_win×(P+R)] to compute a semi-bluff x/r expectation (about 3.15 with a 50% fold rate and 35% equity when called)",
+      "Judge the x/r three questions (is the range polarized? is the opponent's C-Bet frequency high? is there improvement when called?), and explain why short-deck semi-bluff x/r EV is amplified by the made value of draws"
+    ],
+    "l4sd-preflop-ranges": [
+      "Build short-deck opening ranges in tiers (top AA/KK/QQ, secondary JJ-TT/AK, speculative small pairs/suited connectors/suited Ax) and state that pairs and suited hands lead while offsuit AX devalues",
+      "Judge AK's true standing in short deck (strongest non-pair; a slight favorite preflop all-in vs 66-QQ pocket pairs, clearly behind only vs AA/KK) and tell it apart from the full-ring basis",
+      "Apply blockers to pick the 3-bet bluff layer (A6s blocks AA/AK and lowers 4Bet probability) and judge that small pairs and suited connectors should tighten facing a 3-bet"
+    ],
+    "l4sd-nuts-equity": [
+      "Compute draw outs and equity on the short-deck basis (flush outs = 9 minus seen cards of that suit, single-street hit rate = outs / 31, e.g. 5 outs is about 16% one street and 30% two streets)",
+      "Judge the short-deck logic that \"few outs does not mean a weak draw\" (the made hand is nut-tier since a flush beats a full house, so implied odds are excellent)",
+      "Compare short-deck and full-ring outs bases (5 flush outs vs 9) and judge that reusing the full-ring outs table systematically overestimates equity"
+    ],
+    "l4sd-blocker-bluff": [
+      "Explain why blocker value is amplified in short deck (a flush beats a full house and pair density is high, so blocking flush/pair combos matters hugely)",
+      "Judge that holding A♠ on a three-suited board zeroes the opponent's nut-flush combos, and tell the weighted difference for bluffing and bluff-catching with and without A♠ apart",
+      "Apply blockers to preflop 3-bet selection (A6s blocks AA/AK, lowering 4Bet probability) and judge that blockers are \"icing after the base range is right\""
+    ],
+    "l4sd-gto-fundamentals": [
+      "Explain the source of short-deck GTO differences from standard hold'em (high pair density, huge flush value, common draws -> higher equilibrium betting frequency, clearer polarization, bigger sizes)",
+      "Compute the value:bluff ratio (full pot f = b/(1+2b) = 1/3, i.e. 2:1; half pot 25%, i.e. 3:1) and MDF (1/(1+b): 67% vs half pot, 50% vs full pot), and state the short-deck adjustments (bigger value bets, slightly denser bluffs)",
+      "Judge that \"short-deck GTO means playing tight\" is a misread, and apply the minimum-necessary-deviation discipline (capped by \"still not losing if the opponent corrects\")"
+    ],
+    "l4sd-solver-readout": [
+      "List the three features of short-deck solver output (more polarized betting ranges, larger sizes, higher semi-bluff frequency) and their causes",
+      "Apply the three reading questions (why this size? why is this hand in the betting range? why did frequencies change on the turn?) and the five steps to distill reusable principles",
+      "Judge why the solver lowers firing frequency when the turn completes the opponent's draws (the board shifts and more combos beat you)"
+    ],
+    "l5sd-bankroll": [
+      "Compute the short-deck bankroll requirement (at least 150 buy-ins, e.g. 750 ante at the 5-ante level) and explain why it is more conservative than standard hold'em's 50-100 (all-in equity sits around 45%-55%, higher standard deviation)",
+      "Apply the move rules (move up only at double the funds, move down as soon as funds fall below the current level's buy-ins) and judge the risk of \"moving up too fast while winning\"",
+      "Judge that hitting the variance budget (say, losing 30 buy-ins in a session) calls for pausing to review rather than chasing losses"
+    ],
+    "l5sd-tilt-control": [
+      "List the three sources of short-deck tilt (outcome dependence, dashed expectations, revenge impulses) and compute the probability of losing six 50% all-ins in a row (0.5^6, about 1.6%) to explain why high variance triggers tilt more easily",
+      "Apply the three tilt-defense lines (red-light self-awareness, preset stop-loss, process attribution that only asks EV) and judge that raising sizes to chase losses after a losing streak is the tilt loop",
+      "Tell \"mathematical variance\" and \"strategy errors\" apart (losing the AK-vs-55 all-in with positive EV was played right), and judge that post-win slack is as dangerous as the losing-streak impulse"
+    ],
+    "l6sd-tourney-i": [
+      "Tell short-deck MTTs and cash games apart (rising blinds, limited chips, ICM pressure) and state the three stack-rhythm stages (50BB+ cash-style, 20-50BB min-raise plus postflop, preflop shoving below 20BB)",
+      "Judge how the same hand (like AQ facing a 3-bet) plays differently by stack depth (call and see a flop when deep, shove when shallow)",
+      "Judge that on the bubble under ICM pressure KQ (a non-pair) should lean fold with healthy chips against a BTN shove (about 35%-40% equity) to preserve survival"
+    ],
+    "l6sd-tourney-ii": [
+      "Explain the core of ICM (chip value is non-linear and grows starker near the money) and judge that short-deck's high variance makes ICM pressure sharper",
+      "Judge bubble role strategies (healthy stacks avoid unnecessary all-in swings to preserve survival, short stacks shove aggressively to steal blinds and flip)",
+      "Apply wide-range pressure from a deep stack on short stacks at the final table (their ICM pressure deters risk) and tell \"conservative when leading\" apart from cash games' \"always maximize EV\""
+    ],
+    "l7sd-deep-stack": [
+      "Judge that strong made hands (flushes/straights/two pair) at 100BB+ in short deck should use 2/3-pot-plus sizes so the pot grows geometrically street by street, firing all three barrels for value",
+      "Judge that depth amplifies RIO (reverse implied odds), so marginal made hands (like top pair on a straight-draw board) should control the pot instead of building a big one",
+      "Use SPR = effective stack / pot to frame each street's decision (at high SPR first ask \"nut-tier or marginal\", then choose extraction or pot control)"
+    ],
+    "l7sd-shallow-stack": [
+      "Judge that complex postflop play fails below 30BB in short deck and preflop shoving becomes the main weapon, while weak offsuit hands (like K8o at about 30% equity) must not shove",
+      "Plug into the Push/Fold break-even formula to compute shove EV (e.g. shove 15 ante, 40% fold rate, KQs called at 45% -> EV about +1.11)",
+      "Build shove ranges in layers (value: pairs/strong Ax; semi-bluff: strong suited connectors) and explain why high pair density raises the value of shoving pairs in short deck"
+    ],
+    "l8sd-exploit-i": [
+      "List the four standard-hold'em inertia biases of casual short-deck players (miscounting outs, undervaluing flushes, overvaluing AK, loose set mining) and the exploitation direction for each",
+      "Judge that against an opponent chasing draws on the full-ring outs table (flush as 9 outs when it is 5) you should tighten your calls and enlarge your value bets",
+      "Apply the exploitation of \"opponents undervaluing flush rank\" (value-bet more actively on flush boards, since they will misjudge full house > flush)"
+    ],
+    "l8sd-exploit-ii": [
+      "Identify the three table dynamics (tilted opponents, short stacks, passive opponents) and the pressure direction matching each",
+      "Judge that after the opponent counter-adjusts (say, 3-betting frequently against your steals) you should return to the GTO baseline and tighten, describing the \"deviate - detected - return\" loop",
+      "Apply the five steps of dynamic exploitation (spot the dynamic -> adjust targeted -> watch the reaction -> return to baseline -> recheck every 500 hands)"
+    ]
   }
 }

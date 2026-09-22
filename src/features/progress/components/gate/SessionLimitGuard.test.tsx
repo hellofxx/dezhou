@@ -4,7 +4,7 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { useSessionLimitReached } from '@/shared/components/gate/SessionLimitGuard';
+import { useSessionLimitReached } from './SessionLimitGuard';
 import { useProgressStore } from '../../store';
 import { getTodayString } from '@/shared/utils/spacedRepetition';
 import { useDebugModeStore } from '@/shared/stores/debugMode';

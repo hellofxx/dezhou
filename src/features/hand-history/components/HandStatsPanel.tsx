@@ -70,7 +70,7 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
       <div className="grid grid-cols-4 gap-3">
         <StatCard label="VPIP" value={stats.vpip} />
         <StatCard label="PFR" value={stats.pfr} />
-        <StatCard label="3-Bet%" value={stats.threeBetPercent} />
+        <StatCard label="3-bet%" value={stats.threeBetPercent} />
         <StatCard label="AFq" value={stats.afq} />
       </div>
 

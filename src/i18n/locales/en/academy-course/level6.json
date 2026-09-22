@@ -11,7 +11,7 @@
       "Bubble Factor: Measuring ICM Pressure",
       "Bubble Factor measures the strength of ICM pressure:\n- Bubble Factor = 1: no ICM pressure (like cash games)\n- Bubble Factor > 1: ICM pressure exists (tournaments)\n- Highest on the bubble, reaching 1.5-2.0\n\nThe higher the Bubble Factor, the tighter your calling range should be.",
       "ICM Calculation Example",
-      "### Minimal example: SNG prize structure\nAssume a 4-player SNG: 1st=$50, 2nd=$30, 3rd=$20, 4th=$0\nChip distribution: A=40BB, B=30BB, C=20BB, D=10BB\n\n**Step 1: each player's win probability ≈ chip share**\n- P(A wins) = 40/(40+30+20+10) = 40%\n\n**Step 2: probability of two-player final**\n- P(A & B finish top 2) = combination calculation...\n- P(A 2nd) = Σ(P(X 1st) × P(A 2nd | X 1st))\n\n**Step 3: final $EV**\n- A's $EV = Σ(P(i wins at position j) × prize_j)\n- = 0.4×$50 + 0.32×$30 + 0.2×$20 = $36.6\n\nThat means 40BB of chips has an expected value of $36.6 in this SNG",
+      "### Minimal example: SNG prize structure\nAssume a 4-player SNG: 1st=$50, 2nd=$30, 3rd=$20, 4th=$0\nChip distribution: A=40BB, B=30BB, C=20BB, D=10BB\n\n**Step 1: each player's win probability ≈ chip share**\n- P(A wins) = 40/(40+30+20+10) = 40%\n\n**Step 2: probability of two-player final**\n- P(A & B finish top 2) = combination calculation...\n- P(A 2nd) = Σ(P(X 1st) × P(A 2nd | X 1st))\n\n**Step 3: final $EV**\n- A's $EV = Σ(P(i wins at position j) × prize_j)\n- = 0.4×$50 + 0.32×$30 + 0.2×$20 = $33.6\n\nThat means 40BB of chips has an expected value of $33.6 in this SNG",
       "Bubble Factor (BF) Explained",
       "### Definition and formula\nBubble Factor = required equity for call / required equity in a cash game\n\n### Example\n- In a cash game facing a 50% pot bet, you need 27% equity to call\n- In ICM, BF can reach 1.5-2.0 (higher in extreme cases)\n- Actual required equity = 27% × 1.5 = 40.5%\n\nThis means on the bubble you must fold with a wider range, even hands you'd call in cash games.",
       "ICM's Impact on Ranges",
@@ -72,7 +72,7 @@
       "In Progressive Knockout (PKO) tournaments, every player carries a bounty. Eliminating an opponent awards half their bounty; the other half is added to your own head. This completely changes strategy.",
       "Bounties make \"eliminating\" valuable in itself. When covering an opponent, your calling/raising range should be wider than in a normal tournament, because there's bounty value beyond the pot.",
       "Adjustment Principles",
-      "• When covering short stacks: significantly widen your calling/raising range (bounty value is high)\n• When covered: play normally — don't get \"excited\" by opponents' 3-Bets\n• When your bounty is big: opponents will raise at you more aggressively\n• Calculate \"bounty-adjusted odds\":\n  Effective odds = (pot + opponent bounty/2) : call amount",
+      "• When covering short stacks: significantly widen your calling/raising range (bounty value is high)\n• When covered: play normally — don't get \"excited\" by opponents' 3-bets\n• When your bounty is big: opponents will raise at you more aggressively\n• Calculate \"bounty-adjusted odds\":\n  Effective odds = (pot + opponent bounty/2) : call amount",
       "The most common PKO mistake is completely ignoring bounty value (playing too tight) or over-chasing bounties (shoving garbage hands). Balance is key.",
       "Bounty tournament $EV adjustment formula:\nEffective bounty value = fixed bounty × elimination probability\nAdjusted call required equity = original required equity × (1 - bounty discount factor)\n\nExample: bounty $20, opponent chips 5000, total chips 50000\nElimination probability = 5000/50000 = 10%\nBounty $EV contribution = 0.1 × $20 = $2\n\nThis means your calling range can widen about 5-10%, depending on bounty size and chip distribution",
       "Theory reference: multiway equity dilution and bounty-tournament $EV adjustments are in Theory Academy T9 Chapter 3 \"Multiway Pots and the GTO-Exploitation Unified Framework\". Bounty strategy is ICM theory extended to a special format.",
@@ -314,7 +314,7 @@
       "question": "When covered, how should you play?",
       "options": [
         "More conservative",
-        "Play normally, don't get excited by 3-Bets",
+        "Play normally, don't get excited by 3-bets",
         "Shove all hands",
         "Fold all hands"
       ],
@@ -1122,5 +1122,43 @@
       ],
       "explanation": "AKs in MP at 12BB is a premium hand. Shoving is best — don't give opponents a free flop."
     }
+  },
+  "lessonObjectives": {
+    "l6-icm": [
+      "Explain the core of ICM (in tournaments Chip EV does not equal $EV and chip value has diminishing margins) and judge that 10,000 chips are not worth twice 5,000",
+      "Compute $EV from an SNG example (e.g. A at $33.6 with a 40% chance of winning) and judge that doubling your chips does not double your prize",
+      "Measure ICM pressure with Bubble Factor = equity needed to call ÷ equity needed in cash, and judge that the higher the factor the tighter your calling range",
+      "Judge the role strategies on the bubble: middle stacks avoid big stacks while big stacks shove wider at short stacks"
+    ],
+    "l6-pushfold": [
+      "Judge the stack thresholds for push/fold mode (start considering below 15BB, must use it below 10BB, look for shoves everywhere below 8BB)",
+      "Compute the Nash push ranges at 10BB by position (BTN about 40-45%, SB about 50-55%) and state that at 15BB they tighten to 25-30%",
+      "Judge how the BB calling range versus a shove shifts with the shover's position (about 30-35% versus a BTN 10BB shove, about 15-20% versus UTG)",
+      "Compute the calling equity for an SB 10BB shove as 9 ÷ (11 + 9) = 45%, and tell the illustrative Bubble Factor apart from the exact value for the hand"
+    ],
+    "l6-bubble": [
+      "Judge that the bubble (1-3 eliminations from the money) carries the heaviest ICM pressure, with busting worth zero and min-cashing locked in once inside",
+      "Tell the three stack-based bubble strategies apart: big stacks pressure middle stacks, middle stacks avoid big stacks and lean on short stacks, short stacks shove actively at 10-15BB",
+      "Judge the post-bubble shift: ICM pressure drops sharply, ranges widen, and play moves back toward cash-like strategy"
+    ],
+    "l6-finaltable": [
+      "Explain how final-table payout jumps shape strategy (every elimination moves real money, ICM pressure stays high)",
+      "Judge when to steal (blinds big relative to stack, high fold-to-steal, in position) and the sizing (min-raise 2-2.2x gives the worst odds)",
+      "Judge the best stack depth for a re-steal (15-25BB) and the hand selection (Ax blockers, suited playability, avoiding dominated KJ/QT types)",
+      "State the widths of heads-up play (SB opens 70-80%, BB defends 60-70%) and why aggression decides the match"
+    ],
+    "l6-bounty": [
+      "Compute the $EV of a bounty contribution (fixed bounty × knockout probability, e.g. $20 × 10% = $2) and widen your calling range by about 5-10% accordingly",
+      "Judge the adjustment directions: widen a lot when covering short stacks, play normally when covered, expect to be attacked when your own bounty is big",
+      "Spot the two classic PKO mistakes (ignoring bounty value and playing too tight, or chasing bounties with trash hands) and the counter-intuition that a big-bounty opponent is hard to bust so chasing them blindly loses"
+    ],
+    "drill-l6-icm": [
+      "Judge shove/raise/fold decisions across stages and depths (bubble, final table, out of the money), e.g. AJs shoves from BTN at 15BB on the bubble while 76s folds at 20BB",
+      "Compare how marginal hands are treated under ICM pressure (short stacks shove for fold equity, stacks with room fold the fringe hands)"
+    ],
+    "drill-l6-pushfold": [
+      "Judge push/fold decisions across depths of 8-20BB and positions (e.g. AQs shoves from UTG at 15BB while 87s folds from UTG at 18BB)",
+      "Tell how push ranges shift with depth (K9s shoves from CO at 10BB, 54s does not shove from BTN at 20BB)"
+    ]
   }
 }

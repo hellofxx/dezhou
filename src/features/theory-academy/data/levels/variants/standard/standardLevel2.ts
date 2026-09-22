@@ -50,7 +50,7 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
       },
       {
         type: 'formula',
-        content: '下注 EV = 对手弃牌率 × 当前底池 + (1−弃牌率) × (胜率 × 新底池 − 败率 × 下注额)',
+        content: '下注 EV = 对手弃牌率 × 当前底池 + (1−弃牌率) × (胜率 × (当前底池 + 下注额) − 败率 × 下注额)',
       },
       {
         type: 'key-point',
@@ -263,7 +263,7 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
       },
       {
         type: 'formula',
-        content: '隐含赔率补足额 = 让跟注保本所需的未来赢款\n所需未来赢款 = (所需胜率 × 总池 − 当前可赢额) ÷ 命中概率（粗估：跟注额 ÷ 命中率 − 当前总池）',
+        content: '隐含赔率补足额 = 让跟注保本所需的未来赢款\n所需未来赢款 X 满足：命中率 × (当前可赢额 + X) = (1 − 命中率) × 跟注额\n解得 X = 跟注额 ÷ 命中率 − 当前总池（当前总池含你的跟注）',
       },
       {
         type: 'formula',
@@ -282,7 +282,7 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
       },
       {
         type: 'key-point',
-        content: 'Set Mining 法则：用小口袋对子跟注开局加注，中暗三条概率约 12%（约 1/7.5），一般要求有效筹码 ≥ 跟注额的 15-20 倍才有利可图（考虑命中后不一定能全额收割）。',
+        content: 'Set Mining 法则：用小口袋对子跟注开局加注，中暗三条概率约 12%（赔率约 7.5:1，即约每 8.5 手一次），一般要求有效筹码 ≥ 跟注额的 15-20 倍才有利可图（考虑命中后不一定能全额收割）。',
       },
       {
         type: 'formula',
@@ -291,7 +291,7 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
       {
         type: 'example',
         content:
-          '实例（深/浅筹码对照）：对手 CO 开局 3bb，你 BTN 持 55。有效筹码 150bb：跟注 3bb，命中概率 11.76%，只需命中后平均再赢约 3×7.5 ≈ 22bb 即保本，150bb 深度给了巨大空间——跟注。有效筹码仅 25bb（不足 8.5 倍）：即使命中 set 也拿不到足够支付，翻后还常被剥夺权益——弃牌或 3Bet 更优。同一手牌，筹码深度直接改写 EV。',
+          '实例（深/浅筹码对照）：对手 CO 开局 3bb，你 BTN 持 55。有效筹码 150bb：跟注 3bb，命中概率 11.76%，只需命中后平均净赢约 3×7.5 = 22.5bb 即保本，150bb 深度给了巨大空间——跟注。有效筹码仅 25bb（不足 8.5 倍）：即使命中 set 也拿不到足够支付，翻后还常被剥夺权益——弃牌或 3-bet 更优。同一手牌，筹码深度直接改写 EV。',
       },
       { type: 'heading', content: '反向隐含赔率：会咬人的第二名' },
       {
@@ -347,7 +347,7 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
         question: 'Set Mining（小对子挖暗三条）一般要求有效筹码至少是跟注额的：',
         options: ['5 倍', '10 倍', '15-20 倍', '50 倍'],
         correctIndex: 2,
-        explanation: '中 Set 概率约 1/7.5，且命中后未必能全额收割对手筹码，因此经验标准是 15-20 倍（比理论 7.5 倍留出充分余量）。',
+        explanation: '中 Set 概率约 1/8.5（赔率约 7.5:1），且命中后未必能全额收割对手筹码，因此经验标准是 15-20 倍（比理论 7.5 倍留出充分余量）。',
       },
       {
         id: 't2-implied-odds-q4',

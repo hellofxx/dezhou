@@ -82,14 +82,4 @@ export function isLevelFullyCompleted(levelId: string, completedChapters: string
   return level.chapters.every((c) => completedChapters.includes(c.id));
 }
 
-/**
- * 获取 Level 的学习目标章节（首个未完成章节；全部完成则返回第一章）。
- * TheoryLadder 的展开直达与 TheoryResume 的「继续阅读」CTA 按同一口径内联实现此推导，保持一致。
- */
-export function getLevelTargetChapter(
-  level: TheoryLevelInfo,
-  completedChapters: string[],
-): TheoryChapter | undefined {
-  const firstIncomplete = level.chapters.find((c) => !completedChapters.includes(c.id));
-  return firstIncomplete ?? level.chapters[0];
-}
+

@@ -177,9 +177,9 @@ describe('WTSD 摊牌判定', () => {
   });
 });
 
-// ─── 3-Bet（分母口径修复）─────────────────────────────────
+// ─── 3-bet（分母口径修复）─────────────────────────────────
 
-describe('3-Bet 分母', () => {
+describe('3-bet 分母', () => {
   function threeBetPlayers(): Player[] {
     return [
       makePlayer(0, 'UTG', Position.UTG),
@@ -191,7 +191,7 @@ describe('3-Bet 分母', () => {
     ];
   }
 
-  it('面对加注弃牌计入分母（修复前 fold 不算 facedRaise，3bet% 虚高）', () => {
+  it('面对加注弃牌计入分母（修复前 fold 不算 facedRaise，3-bet% 虚高）', () => {
     // 手牌 A：hero 面对加注弃牌（分母 +1）
     const foldHand = makeHand(1, threeBetPlayers(), [
       { type: ActionType.Raise, amount: 6, playerIndex: 0 }, // UTG open raise
@@ -207,7 +207,7 @@ describe('3-Bet 分母', () => {
       { type: ActionType.Raise, amount: 18, playerIndex: 1 }, // hero 3-bet
       { type: ActionType.Fold, playerIndex: 0 },
     ], { winnerId: 1 });
-    // 手牌 C：hero 无加注直接 open raise（既非 3bet 也不该入分母）
+    // 手牌 C：hero 无加注直接 open raise（既非 3-bet 也不该入分母）
     const openHand = makeHand(1, threeBetPlayers(), [
       { type: ActionType.Call, amount: 2, playerIndex: 0 }, // UTG limp（非加注）
       { type: ActionType.Raise, amount: 8, playerIndex: 1 }, // hero iso raise

@@ -50,7 +50,7 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例：单挑盲注 0.5/1，你持 Q♠J♠。翻前 SB limp（补 0.5），你（BB）check。翻牌 T♦8♣3♥，你听两头顺。转牌 A♠，底池 2.5BB，BB 下注 1.25BB（半池）。你跟注 1.25，所需胜率 = 1.25 ÷ (2.5+1.25+1.25) = 1.25÷5 = 25%。QJ 在 T83A 面仍有 K+9=8 Outs ≈ 17%（只看河牌）；加上顶对的 2 个 Outs（剩余 Q 和 J 各 1 张），合计 10 Outs ≈ 21.7%。单街不足 25%，弃牌或 check-raise。这个例子展示：即使底池赔率便宜（25%），若你的手牌权益不足以覆盖，仍需弃牌。关键是把赔率和胜率分别计算，而不是模糊判断。',
+            '实例：单挑盲注 0.5/1，你持 Q♠J♠。翻前 SB limp（补 0.5），你（BB）check。翻牌 T♦8♣3♥，你听卡顺（9 成 89TJQ，K 为后门宽卡）。转牌 A♠，底池 2.5BB，BB 下注 1.25BB（半池）。你跟注 1.25，所需胜率 = 1.25 ÷ (2.5+1.25+1.25) = 1.25÷5 = 25%。QJ 在 T83A 面已有 K+9=8 Outs ≈ 17%（只看河牌；Q/J 成对不足以稳定反超，不计入干净 Outs）。单街不足 25%，弃牌或 check-raise。这个例子展示：即使底池赔率便宜（25%），若你的手牌权益不足以覆盖，仍需弃牌。关键是把赔率和胜率分别计算，而不是模糊判断。',
         },
         {
           type: 'example',
@@ -151,7 +151,7 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例二（limp vs raise EV 对比）：SB 持 Q♠J♠，100BB 深。选项 A（limp）：BB 加注率 30%（你弃牌损失 -0.3BB 或跟注 -0.1）、BB check 率 70%（翻后 EV +0.5BB）。EV(limp) = 0.7×0.5 − 0.3×0.2 = 0.35 − 0.06 = +0.29BB。选项 B（raise 2.5BB）：BB 弃牌率 60%（+1.5BB）、BB 跟注率 30%（你无位置，-0.4BB）、BB 3Bet 率 10%（-2.5BB 弃牌，损失全部 2.5BB 加注额）。EV(raise) = 0.6×1.5 + 0.3×(−0.4) + 0.1×(−2.5) = 0.9 − 0.12 − 0.25 = +0.53BB。结论：raise > limp（0.53 > 0.29）。原因是 SB 死钱带来的 steal EV（弃牌率 60% 直接赢 1.5BB），以及 raise 的范围优势。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
+            '实例二（limp vs raise EV 对比）：SB 持 Q♠J♠，100BB 深。选项 A（limp）：BB 加注率 30%（你弃牌损失 -0.3BB 或跟注 -0.1）、BB check 率 70%（翻后 EV +0.5BB）。EV(limp) = 0.7×0.5 − 0.3×0.2 = 0.35 − 0.06 = +0.29BB。选项 B（raise 2.5BB）：BB 弃牌率 60%（+1.5BB）、BB 跟注率 30%（你无位置，-0.4BB）、BB 3-bet 率 10%（-2.5BB 弃牌，损失全部 2.5BB 加注额）。EV(raise) = 0.6×1.5 + 0.3×(−0.4) + 0.1×(−2.5) = 0.9 − 0.12 − 0.25 = +0.53BB。结论：raise > limp（0.53 > 0.29）。原因是 SB 死钱带来的 steal EV（弃牌率 60% 直接赢 1.5BB），以及 raise 的范围优势。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
         },
         {
           type: 'formula',
@@ -234,12 +234,12 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         {
           type: 'formula',
           content:
-            'check-raise vs check-call 的 EV 对比：\n\n设定：底池 = 6BB，SB（OOP）下注 3BB，BB（IP）可选择 check-call 或 check-raise。\n\nOption A (check-call): BB 跟注 3BB\n• 若赢：盈利 = 底池 + 对手下注 + 你的跟注 = 6+3 = 9BB（不含你的 3BB 成本，净盈利 6BB）\n• 若输：损失 = 3BB（跟注额）\n• 胜率 = W\n• EV(CC) = W×9 − (1−W)×3 = 9W − 3 + 3W = 12W − 3\n\nOption B (check-raise to 9BB): BB 加注到 9BB（比跟注多投 6BB）\n• 若 SB 弃牌（概率 f）：BB 赢 6+3 = 9BB\n• 若 SB 跟注（1−f）：BB 总投入 9BB，最终底池 = 6+3+9+6 = 24BB（SB 跟注 6）\n• BB 净盈利 = W×24 − 9\n• EV(CR) = f×9 + (1−f)×(24W − 9)\n\n对比：CR 的优势在于 f×9 杠杆项（弃牌直接收池），代价是多投 6BB 的被跟注风险。\n参数测试：W=35%, f=60% → EV(CC)=12×0.35−3=4.2−3=+1.2BB\n                    EV(CR)=0.6×9+0.4×(24×0.35−9)=5.4+0.4×(8.4−9)=5.4−0.24=+5.16BB\n当弃牌率高时，CR >> CC。（概念源自：《Applications of No-Limit Hold’em》Matthew Janda Ch.6 半诈唬与组合听牌）',
+            'check-raise vs check-call 的 EV 对比：\n\n设定：底池 = 6BB，SB（OOP）下注 3BB，BB（IP）可选择 check-call 或 check-raise。\n\nOption A (check-call): BB 跟注 3BB\n• 若赢：盈利 = 底池 + 对手下注 = 6+3 = 9BB（你的 3BB 跟注随胜收回，净盈利 9BB）\n• 若输：损失 = 3BB（跟注额）\n• 胜率 = W\n• EV(CC) = W×9 − (1−W)×3 = 9W − 3 + 3W = 12W − 3\n\nOption B (check-raise to 9BB): BB 加注到 9BB（比跟注多投 6BB）\n• 若 SB 弃牌（概率 f）：BB 赢 6+3 = 9BB\n• 若 SB 跟注（1−f）：BB 总投入 9BB，最终底池 = 6+3+9+6 = 24BB（SB 跟注 6）\n• BB 净盈利 = W×24 − 9\n• EV(CR) = f×9 + (1−f)×(24W − 9)\n\n对比：CR 的优势在于 f×9 杠杆项（弃牌直接收池），代价是多投 6BB 的被跟注风险。\n参数测试：W=35%, f=60% → EV(CC)=12×0.35−3=4.2−3=+1.2BB\n                    EV(CR)=0.6×9+0.4×(24×0.35−9)=5.4+0.4×(8.4−9)=5.4−0.24=+5.16BB\n当弃牌率高时，CR >> CC。（概念源自：《Applications of No-Limit Hold’em》Matthew Janda Ch.6 半诈唬与组合听牌）',
         },
         {
           type: 'example',
           content:
-            '实例一：盲注 0.5/1，有效筹码 100BB。你（BB）持 7♠6♠，SB 开池 2.5BB，你跟注。底池 5BB。翻牌 8♣5♦2♠（双卡顺听牌）。SB cbet 2.5BB（半池）。\n\nOption A (call)：EV(CC) ≈ 双卡顺 8 outs × 1/47 ≈ 17% × (5+2.5) − 83% × 2.5 ≈ 1.275 − 2.075 = -0.8BB（单街简化）\n\nOption B (check-raise to 8BB)：\n• SB 弃牌率 55%（HU 中 SB cbet 范围广，面对 raise 弃牌率高）\n• 被跟注时 BB 胜率 32%（双卡顺 + 后门花）\n• EV(CR) = 0.55×7.5 + 0.45×(15.5×0.32 − 8) = 4.125 + 0.45×(4.96 − 8) = 4.125 − 1.398 = +2.73BB\n\n对比：CR (+2.73) > call (-0.8)。结论：BB 利用弃牌率杠杆，用 check-raise 将听牌转化为立即盈利的工具。这是位置优势方的标准操作。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.4 听牌对抗策略）',
+            '实例一：盲注 0.5/1，有效筹码 100BB。你（BB）持 7♠6♠，SB 开池 2.5BB，你跟注。底池 5BB。翻牌 8♣5♦2♠（双卡顺听牌）。SB cbet 2.5BB（半池）。\n\nOption A (call)：EV(CC) ≈ 双卡顺 8 outs × 1/47 ≈ 17% × (5+2.5) − 83% × 2.5 ≈ 1.275 − 2.075 = -0.8BB（单街简化）\n\nOption B (check-raise to 8BB)：\n• SB 弃牌率 55%（HU 中 SB cbet 范围广，面对 raise 弃牌率高）\n• 被跟注时 BB 胜率 32%（双卡顺 + 后门花）\n• EV(CR) = 0.55×7.5 + 0.45×(13×0.32 − 8) = 4.125 + 0.45×(4.16 − 8) = 4.125 − 1.728 = +2.4BB\n\n对比：CR (+2.4) > call (-0.8)。结论：BB 利用弃牌率杠杆，用 check-raise 将听牌转化为立即盈利的工具。这是位置优势方的标准操作。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.4 听牌对抗策略）',
         },
         {
           type: 'example',

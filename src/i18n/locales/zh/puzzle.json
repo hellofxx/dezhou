@@ -8,7 +8,7 @@
   "themes": {
     "preflop-rfi": "翻前 RFI",
     "big-blind-defense": "大盲防守",
-    "three-bet": "3Bet 策略",
+    "three-bet": "3-bet 策略",
     "c-bet": "C-Bet 持续下注",
     "flush-draw": "同花听牌",
     "river-value": "河牌价值下注",
@@ -25,7 +25,7 @@
   },
   "home": {
     "title": "扑克谜题",
-    "subtitle": "通过趣味谜题场景训练决策能力，覆盖翻前 RFI、大盲防守、3Bet、C-Bet、同花听牌、河牌价值、诈唬、短筹码、ICM、多人底池 10 大主题。",
+    "subtitle": "通过趣味谜题场景训练决策能力，覆盖翻前 RFI、大盲防守、3-bet、C-Bet、同花听牌、河牌价值、诈唬、短筹码、ICM、多人底池 10 大主题。",
     "hero": {
       "ariaLabel": "谜题台",
       "eyebrow": "谜题台 · PUZZLE DESK",

@@ -8,6 +8,11 @@ export const SHORT_DECK_LEVEL_7_LESSONS: Lesson[] = [
     title: '短牌深筹码',
     subtitle: '100BB+ 短牌深筹码策略、强牌价值提取与坚果对抗',
     duration: '9 min',
+    objectives: [
+      '判断短牌深筹码（100BB+）下强成牌（同花/顺子/两对）应用 2/3 池以上大注让底池逐街几何增长、连开三枪榨取价值',
+      '判断深筹码放大 RIO（反向隐含赔率），边缘成牌（如顶对 + 顺子听牌面）应控池止损而非建立大底池',
+      '用 SPR = 有效筹码 ÷ 底池 判断每街决策（SPR 高时先问「我的牌是坚果级还是边缘」，再决定榨取还是控池）',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 150 },
     content: [
@@ -30,7 +35,7 @@ export const SHORT_DECK_LEVEL_7_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：短牌深筹码 150BB，你（BTN）持 A♥K♥，翻牌 9♥7♥2♣，中同花听牌。转牌 5♥ 成同花！你成坚果同花（beats 葫芦）。深筹码下用大注榨取——翻牌 2/3 池、转牌大注、河牌超池或全下，让对手的顶对/两对跟注你的坚果同花。短牌同花价值高，深筹码下价值提取最大化。',
+          '实例：短牌深筹码 150BB，你（BTN）持 A♥K♥，翻牌 9♥7♥6♣，中同花听牌。转牌 J♥ 成同花！你成坚果同花（beats 葫芦）。深筹码下用大注榨取——翻牌 2/3 池、转牌大注、河牌超池或全下，让对手的顶对/两对跟注你的坚果同花。短牌同花价值高，深筹码下价值提取最大化。',
       },
       {
         type: 'example',
@@ -118,7 +123,7 @@ export const SHORT_DECK_LEVEL_7_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['9h', '7h', '2c'],
+        board: ['9h', '7h', '6c'],
         street: 'flop',
         effectiveStack: 150,
         potSize: 5,
@@ -151,7 +156,7 @@ export const SHORT_DECK_LEVEL_7_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9d', '8d', '2h'],
+            board: ['9d', '8d', '6h'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 150,
@@ -220,6 +225,11 @@ export const SHORT_DECK_LEVEL_7_LESSONS: Lesson[] = [
     title: '短牌浅筹码',
     subtitle: '30BB 以下短筹码的 Push/Fold 与翻前全下策略',
     duration: '8 min',
+    objectives: [
+      '判断短牌浅筹码（30BB 以下）复杂翻后打法失效、翻前全下成为主武器，并避免用弱非同花牌（如 K8o 约 30% 胜率）全下',
+      '代入 Push/Fold 盈亏平衡公式计算全下 EV（如全下 15 ante、弃牌率 40%、KQs 被跟注胜率 45% → EV ≈ +1.11）',
+      '分层构建全下范围（价值层：对子/强 Ax；半诈唬层：强同花连张），并说明短牌对子密度高让对子全下价值更高',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 30 },
     content: [

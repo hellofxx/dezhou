@@ -15,10 +15,11 @@ import {
   getYesterdayString as getYesterdayStringFromStreak,
   daysBetween,
 } from './utils/streakCalc';
-import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
-import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
+import { toLocalDateKey } from './utils/toLocalDateKey';
+import { sanitizeReviewLabel } from './utils/sanitizeReviewLabel';
 import { migrateTheoryReviewItems } from './utils/migrateTheoryReviewKeys';
 import { migrateStrategyReviewItems } from './utils/migrateStrategyReviewKeys';
+import { migrateOddsReviewItems } from './utils/migrateOddsReviewKeys';
 import type { GameVariant } from '@/shared/types/poker';
 // P1-2: ELO 能力分级
 import type { EloRating, EloDimension, RankUpEvent, PokerVariant } from '@/shared/types/elo';
@@ -30,7 +31,7 @@ import {
   abilityToElo,
   computeOverallElo,
   getDynamicKFactor,
-} from '@/shared/utils/elo';
+} from './utils/elo';
 import type { AbilityAssessment } from '@/shared/types/ability';
 // P2-4: 导师角色人格化
 import type { MentorStyle } from '@/shared/types/mentor';
@@ -310,6 +311,19 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
   // lessonId 从复习项 id（即 lesson.id）无损反解，复习进度字段全部原样保留。
   (s) => {
     const migrated = migrateStrategyReviewItems(s.reviewItems);
+    // 同 v16：仅在确实是数组时回写，避免 undefined 覆盖默认 []
+    if (Array.isArray(migrated)) {
+      s.reviewItems = migrated;
+    }
+  },
+  // v17 → v18：赔率复习项载荷归一为完整 i18n key。pot-odds 题库虽早已 key 化，
+  // 但历史入队实现用 scenario.slice(0,40) 做摘要，label 成为 potOdds.quizBank.qN.scenar…
+  // 形式的残缺 key（i18next 未命中即回显裸 key 片段，zh/en 皆然）；更早版本还可能存中文原文。
+  // scenario/question key 从 `odds:<questionId>` 无损反解；back 优先取 options 正确项 key，
+  // 无法修复时清空；options 含原文时整体移除（退化为自评，避免英文界面渲染中文选项）。
+  // 详见 utils/migrateOddsReviewKeys.ts。
+  (s) => {
+    const migrated = migrateOddsReviewItems(s.reviewItems);
     // 同 v16：仅在确实是数组时回写，避免 undefined 覆盖默认 []
     if (Array.isArray(migrated)) {
       s.reviewItems = migrated;
@@ -1004,7 +1018,7 @@ export const useProgressStore = create<ProgressStore>()(
     }),
     {
       name: 'poker-training-progress',
-      version: 17,
+      version: 18,
       storage: progressPersistStorage ?? undefined,
       migrate: (persistedState: unknown, fromVersion: number) => {
         // 兼容老数据：顶层 lastTrainingDate (number 时间戳) 已在 v2 迁移中并入 streak。

@@ -166,7 +166,7 @@ export const HEADS_UP_LEVEL_5: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            '均衡策略不是"这手牌永远这么打"，而是"这手牌在特定节点按某种频率分配动作"。单挑中，范围宽、决策密，频率平衡尤为重要：若你的 C-Bet 频率恒定、3Bet 范围可预测，观察力强的对手会用节点锁定你的模式并反制。混合策略（Mixed Strategy）与无差别原则（Indifference Principle）共同构成频率平衡的数学基础。',
+            '均衡策略不是"这手牌永远这么打"，而是"这手牌在特定节点按某种频率分配动作"。单挑中，范围宽、决策密，频率平衡尤为重要：若你的 C-Bet 频率恒定、3-bet 范围可预测，观察力强的对手会用节点锁定你的模式并反制。混合策略（Mixed Strategy）与无差别原则（Indifference Principle）共同构成频率平衡的数学基础。',
         },
         {
           type: 'key-point',
@@ -182,7 +182,7 @@ export const HEADS_UP_LEVEL_5: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            '单挑中防守不只等于跟注：加注同样计入防守频率。面对高频诈唬者，用加注替代部分跟注既防守又收价值；面对紧弱价值型下注，超额弃牌（低于 MDF）才是剥削。先算总量，再定分配——单挑 BB 的 60%+ 防守由跟注、3Bet 价值、3Bet 诈唬三部分构成，每一部分都随 SB 倾向移动。',
+            '单挑中防守不只等于跟注：加注同样计入防守频率。面对高频诈唬者，用加注替代部分跟注既防守又收价值；面对紧弱价值型下注，超额弃牌（低于 MDF）才是剥削。先算总量，再定分配——单挑 BB 的 60%+ 防守由跟注、3-bet 价值、3-bet 诈唬三部分构成，每一部分都随 SB 倾向移动。',
         },
         {
           type: 'example',
@@ -252,7 +252,7 @@ export const HEADS_UP_LEVEL_5: TheoryLevelInfo = {
             '防守越紧越好',
           ],
           correctIndex: 1,
-          explanation: '防守可由跟注+加注共同构成，BB 的 60%+ 防守含 3Bet 价值与诈唬。面对高频诈唬者用加注替代部分跟注。',
+          explanation: '防守可由跟注+加注共同构成，BB 的 60%+ 防守含 3-bet 价值与诈唬。面对高频诈唬者用加注替代部分跟注。',
         },
         {
           id: 't5hu-frequency-q5',

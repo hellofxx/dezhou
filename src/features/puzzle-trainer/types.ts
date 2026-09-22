@@ -12,7 +12,7 @@ import type { DecisionGrade } from '@/shared/types/decisionFeedback';
 export type PuzzleTheme =
   | 'preflop-rfi' // 翻前 RFI
   | 'big-blind-defense' // 大盲防守
-  | 'three-bet' // 3Bet
+  | 'three-bet' // 3-bet
   | 'c-bet' // C-Bet
   | 'flush-draw' // 同花听牌
   | 'river-value' // 河牌价值下注（P2-3 新增）

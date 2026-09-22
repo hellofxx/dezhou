@@ -8,6 +8,11 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
     title: '短牌剥削（一）',
     subtitle: '针对短牌休闲玩家的范围剥削、下注尺度与频率调整',
     duration: '9 min',
+    objectives: [
+      '列举短牌休闲玩家的四类标准德州惯性偏差（outs 算错、低估同花、高估 AK、set mining 过松）与各自的剥削方向',
+      '判断对手用满员桌 outs 表追听（同花当 9 outs、实际 5）时应收紧跟注并加大价值下注',
+      '运用「对手低估同花牌级」的剥削（同花面价值下注更积极，因对手会误判葫芦 > 同花）',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -118,7 +123,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['Kd', '9h', '3c'],
+        board: ['Kd', '9h', '6c'],
         street: 'flop',
         effectiveStack: 95,
         potSize: 5,
@@ -151,7 +156,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9h', '8s', '3d'],
+            board: ['9h', '8s', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -174,7 +179,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Qh', '7h', '2c'],
+            board: ['Qh', '7h', '6c'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -197,7 +202,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Kh', '8c', '3d'],
+            board: ['Kh', '8c', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -220,6 +225,11 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
     title: '短牌剥削（二）',
     subtitle: '高波动环境的牌桌动态利用与针对性反制',
     duration: '9 min',
+    objectives: [
+      '识别三类牌桌动态（tilt 对手、短筹码对手、被动对手）与各自对应的施压方向',
+      '判断被对手反向调整（如他频繁 3-bet 反击）后应回 GTO 基线收窄范围，并说出「偏离-被察觉-回基线」的循环结构',
+      '运用动态剥削五步（识别动态 → 针对调整 → 观察反应 → 回基线 → 每 500 手复核）',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -237,7 +247,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '短牌牌桌动态利用：(1) tilt 对手——识别后激进施压，因为他会玩边缘牌追回损失；(2) 短筹码对手——用宽范围施压，因为他们害怕被淘汰；(3) 被动对手——高频下注榨取，因为他们不会反加。针对性反制：你被对手反向调整后（如他提高 3Bet），回到 GTO 基线收窄范围。',
+          '短牌牌桌动态利用：(1) tilt 对手——识别后激进施压，因为他会玩边缘牌追回损失；(2) 短筹码对手——用宽范围施压，因为他们害怕被淘汰；(3) 被动对手——高频下注榨取，因为他们不会反加。针对性反制：你被对手反向调整后（如他提高 3-bet），回到 GTO 基线收窄范围。',
       },
       {
         type: 'example',
@@ -247,7 +257,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例二（针对性反制）：你提高对某对手的偷盲频率后，他开始频繁 3Bet 反击——说明他发现了你的偏离。此时必须回到 GTO 基线（收窄偷盲范围、减少纯诈唬），否则你新打开的漏洞会被他反向收割。剥削是动态博弈：偏离-被察觉-回基线。',
+          '实例二（针对性反制）：你提高对某对手的偷盲频率后，他开始频繁 3-bet 反击——说明他发现了你的偏离。此时必须回到 GTO 基线（收窄偷盲范围、减少纯诈唬），否则你新打开的漏洞会被他反向收割。剥削是动态博弈：偏离-被察觉-回基线。',
       },
       {
         type: 'example',
@@ -290,7 +300,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
       },
       {
         id: 'l8sd-exploit-ii-q3',
-        question: '你提高偷盲后对手开始频繁 3Bet 反击，正确做法是：',
+        question: '你提高偷盲后对手开始频繁 3-bet 反击，正确做法是：',
         options: [
           '继续加大偷盲',
           '回到 GTO 基线，收窄范围',
@@ -335,7 +345,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['9h', '8s', '3d'],
+        board: ['9h', '8s', '6d'],
         street: 'flop',
         effectiveStack: 95,
         potSize: 5,
@@ -368,7 +378,7 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Jh', '7c', '2d'],
+            board: ['Jh', '7c', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -410,11 +420,11 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Jh', '8c', '3d'],
+            board: ['Jh', '8c', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
-            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，BTN 开始频繁 3-Bet 反制你的偷盲' },
+            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，BTN 开始频繁 3-bet 反制你的偷盲' },
           },
           options: [
             { action: 'Check-Raise', isCorrect: false, explanation: 'BTN 已开始反制，QJ 顶对可价值下注但不必过度 x/r。', evImpact: '+0.5 ante', evLoss: 0.5 },

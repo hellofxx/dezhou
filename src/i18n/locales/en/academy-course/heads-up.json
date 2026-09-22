@@ -23,33 +23,33 @@
     ],
     "l3hu-bb-defense": [
       "BB: The Best-Positioned But Heaviest-Defending Seat in HU",
-      "The HU BB is the postflop positional-advantage side (IP), but faces the SB's attack every hand preflop, defending at 60%+. This \"60%+ defense\" isn't passive calling but structured defense: a call pile (small/medium pairs, suited connectors, weak Ax) + a 3Bet value pile (strong hands for value) + a 3Bet bluff pile (blockers). Because the BB is IP postflop and the SB's 0.5 dead money makes calls cheap, marginal hands can defend profitably.",
+      "The HU BB is the postflop positional-advantage side (IP), but faces the SB's attack every hand preflop, defending at 60%+. This \"60%+ defense\" isn't passive calling but structured defense: a call pile (small/medium pairs, suited connectors, weak Ax) + a 3-bet value pile (strong hands for value) + a 3-bet bluff pile (blockers). Because the BB is IP postflop and the SB's 0.5 dead money makes calls cheap, marginal hands can defend profitably.",
       "The BB's \"60%+ defense\" is defense with position: acting last preflop + acting last postflop make calling marginal hands far cheaper than full ring. Transplanting the full-ring \"BB must play tight\" into HU throws away positional advantage.",
       "Check-Raise (x/r): The BB's Key Lever",
       "Postflop IP, the BB faces the SB's C-Bet with three choices: call, raise, or fold. The check-raise (x/r) is the key tool for building the BB's range — using strong hands + strong draws to form a polarized x/r range, suppressing the SB's C-Bet frequency and protecting the calling range from exploitation. The x/r math: when the SB's C-Bet frequency is too high and his fold rate insufficient, the BB's x/r semi-bluff auto-profits.",
-      "Example: HU 100BB deep, SB min-raises to 2BB, you (BB) call with 7♠6♠, pot 4BB. Flop 8♣5♦2♠. SB C-Bets 1.3BB (half pot). You have a double-gutshot (4 sixes + 4 nines) + backdoor flush — a standard x/r semi-bluff. Raise to about 4BB: if the SB folds you win 5.3BB directly; if called you have 8+ outs of improvement. The x/r both protects your draw and makes the SB's wide-range C-Bet pay.",
+      "Example: HU 100BB deep, SB min-raises to 2BB, you (BB) call with 7♠6♠, pot 4BB. Flop 8♣5♦2♠. SB C-Bets 1.3BB (half pot). You have a double-gutshot (4 fours + 4 nines) + backdoor flush — a standard x/r semi-bluff. Raise to about 4BB: if the SB folds you win 5.3BB directly; if called you have 8+ outs of improvement. The x/r both protects your draw and makes the SB's wide-range C-Bet pay.",
       "Example 2 (disadvantaged-position control): Same pot, you (BB) hold A♠K♠ on a K♦8♣3♥ flop (dry top pair). You're IP; the SB C-Bets 1.3BB. Top pair top kicker on a dry board tends toward calling rather than raising — calling keeps the SB's bluffs while you control later streets in position. An x/r instead scares off the SB's weak hands, wasting top pair's thin value. The IP advantage is \"calling to watch the opponent keep firing, or betting thin value yourself\".",
-      "Counterintuitive point: wide BB defense isn't a calling station. A real station has no x/r and no 3Bet pile; the HU BB's 60% consists of calls, 3Bet value, 3Bet bluffs, and x/r — each moving with the SB's tendencies. Defense width and defense passivity are two different things.",
-      "BB defense three-step quick check: (1) call the pot odds — calling line 25% vs a 2BB SB open (SB 2 + your own 1 = pot 3, then call 1 more, 1÷(3+1)=25%); (2) split piles — strong made hands 3Bet value, blockers 3Bet bluff, medium hands call; (3) watch the SB — raise 3Bet vs an over-folder, raise isolate vs a big limper, raise x/r vs an over-frequent C-Better."
+      "Counterintuitive point: wide BB defense isn't a calling station. A real station has no x/r and no 3-bet pile; the HU BB's 60% consists of calls, 3-bet value, 3-bet bluffs, and x/r — each moving with the SB's tendencies. Defense width and defense passivity are two different things.",
+      "BB defense three-step quick check: (1) call the pot odds — calling line 25% vs a 2BB SB open (SB 2 + your own 1 = pot 3, then call 1 more, 1÷(3+1)=25%); (2) split piles — strong made hands 3-bet value, blockers 3-bet bluff, medium hands call; (3) watch the SB — raise 3-bet vs an over-folder, raise isolate vs a big limper, raise x/r vs an over-frequent C-Better."
     ],
     "l4hu-bn-opening": [
       "Opening Near 100%: The HU Button's Offense",
       "The HU button (SB) acts last preflop; against the single opponent, the opening frequency can approach 100% — only a few completely junk hands (like 72o, 83o) fold. Because: the SB completes 0.5 to see a 1.5BB pot (25% required equity), and any hand against the BB's wide defense range is near or above that line; plus acting last preflop means you always have the initiative. High-frequency opening isn't \"playing loose\" but \"using frequency to squeeze every marginal EV\".",
-      "The core of button opening is \"sizing serves postflop\", not \"sizing serves the steal\". In HU use min-raise (2BB) as the main weapon: the steal bar is low (needs 60% fold rate), the small size makes postflop pot control easier, and a wide enough range covers various boards.",
+      "The core of button opening is \"sizing serves postflop\", not \"sizing serves the steal\". In HU use min-raise (2BB) as the main weapon: the steal bar is low (needs 50% fold rate), the small size makes postflop pot control easier, and a wide enough range covers various boards.",
       "Opening-Size Math: Why Min-Raise Is the Main Weapon",
-      "SB min-raise to 2BB math (SB already posted 0.5, extra risk 1.5BB; BB posted 1, can fold or complete 1):\n\nPure steal model: SB extra risk 1.5BB, target prize 1BB\nEV(raise) = f×1 − (1−f)×1.5 (f = BB fold rate)\nBreak-even: f = 1.5/2.5 = 60%\n\nSo if the BB folds more than 60%, the SB's min-raise with any two cards auto-profits.\nSize comparison: min-raise 2BB → 60%; 2.5BB → 66.7%; 3BB → 71.4%.\n\nConclusion: the smaller the size, the lower the auto-profit bar. In HU the open's value is postflop, and the smaller the size the easier pot control.",
+      "SB min-raise to 2BB math (SB already posted 0.5, investing 1.5BB more; BB posted 1, can fold or complete 1):\n\nPure steal model (baseline = SB folds directly, the 0.5 dead money already sunk):\nIf the BB folds → SB collects the existing 1.5BB pot; if the BB calls → SB loses another 1.5BB of increment\nEV(raise) = f×1.5 − (1−f)×1.5 (f = BB fold rate)\nBreak-even: f = 1.5/(1.5+1.5) = 50%\n\nSo if the BB folds more than 50%, the SB's min-raise with any two cards auto-profits.\nSize comparison: min-raise 2BB → 50%; 2.5BB (2 more) → 2/3.5 ≈ 57.1%; 3BB (2.5 more) → 2.5/4 = 62.5%.\n\nConclusion: the bigger the size, the higher the auto-profit bar. In HU the open's value is postflop, and the smaller the size the easier pot control.",
       "Why doesn't HU use full ring's \"bigger sizes to steal\"? Three points: (1) the real HU BB fold rate vs min-raise is only about 30%-40%, so pure stealing barely profits — the value is postflop; (2) big sizes are \"self-punishment\" in HU — the BB's calling range narrows with size, so spending 3BB only buys a stronger, in-position calling range; (3) frequency and balance — min-raise lets you open about 80% of hands, and only a wide enough range covers various postflop boards.",
       "Example: HU 100BB deep, you (SB) hold Q♦J♦. This is a marginal full-ring tight-position hand, but in HU QJs has about 52% equity vs the BB's wide defense range — min-raise 2BB is the standard open. Postflop you have flush/straight-draw potential plus the SB's act-last advantage; QJs is an absolute open on the HU button.",
-      "Example 2 (sizing adjusts to the opponent): You observe the BB folds to min-raises at 55%. Even then the min-raise's pure-steal EV = 0.55×1 − 0.45×1.5 = −0.125BB (still slightly negative, recovered postflop), but you can raise the open frequency toward 100% because the BB's fold rate lifts steal profit. Conversely, if the BB 3Bets frequently, narrow your range and reduce the marginal hands that only fold after a 3Bet.",
+      "Example 2 (sizing adjusts to the opponent): You observe the BB folds to min-raises at 55%. The min-raise's pure-steal EV = 0.55×1.5 − 0.45×1.5 = +0.15BB (slightly positive, with most profit still coming postflop), and you can raise the open frequency toward 100% because the BB's fold rate lifts steal profit. Conversely, if the BB 3-bets frequently, narrow your range and reduce the marginal hands that only fold after a 3-bet.",
       "Counterintuitive point: the HU button \"opening near 100%\" isn't greed but math. But note — opening wide doesn't mean investing every street. Postflop, adjust by board fit and let go in time — that's the mature \"participate a lot, invest little\" play.",
-      "Button opening quick check: default min-raise 2BB, opening about 80%-100%; top 15% strong hands + middle suited connectors/Ax + bottom junk mixed. Every 50 hands check: is the BB's 3Bet driving you out of the opening range? Does the BB's fold rate support opening to 100%?"
+      "Button opening quick check: default min-raise 2BB, opening about 80%-100%; top 15% strong hands + middle suited connectors/Ax + bottom junk mixed. Every 50 hands check: is the BB's 3-bet driving you out of the opening range? Does the BB's fold rate support opening to 100%?"
     ],
     "l4hu-ev-adjustments": [
       "Heads-Up Pots: EV Calculation Simplified and Amplified",
       "HU has only two-player pots, so EV calculation is simpler than full ring, but the numeric meaning is amplified. Simplified: no multiway splitting, no \"one of my outs gives another opponent a flush\" dilution — your equity is closer to \"equity vs a single range\". Amplified: dead money share is high (SB 0.5) and the opponent's range is wide, so the same EV differences are repeated at high frequency in HU, accumulating into bigger long-term returns. Understanding these two changes is the core of HU EV adjustments.",
       "The core HU EV formula is unchanged, but the inputs are clearer: EV(call) = E×(P+B) − (1−E)×B. The difference is \"wider opponent range, higher dead-money share\", turning more marginal calls +EV.",
       "Preflop Steal EV and Postflop Positional EV",
-      "Preflop steal EV (SB min-raise to 2BB, BB fold rate f):\nEV(steal) = f×1 − (1−f)×1.5\n\nPostflop positional EV anchor:\nHU positional value about 0.5-1BB/hand (the BB is IP postflop every hand)\n\nExample: BB facing an SB min-raise (SB has 2BB in, the BB already has 1BB in):\nGeneral formula: required equity = call ÷ (current pot + opponent's bet + your call)\nSubstitute: 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n(Current pot 1.5 = SB's 0.5 + the BB's own 1 — that 1BB is dead money yet still belongs in the denominator; opponent's bet 1.5 = SB's increment up to 2BB; your call 1 = the BB top-up. Equivalently the total pot after you call is 4BB, so 1÷4 = 25%)\nMarginal hands often have 40%+ vs the SB's ~80% opening range → call is +EV",
+      "Preflop steal EV (SB min-raise to 2BB, BB fold rate f, baseline = folding directly):\nEV(steal) = f×1.5 − (1−f)×1.5 (break-even f = 50%)\n\nPostflop positional EV anchor:\nHU positional value about 0.5-1BB/hand (the BB is IP postflop every hand)\n\nExample: BB facing an SB min-raise (SB has 2BB in, the BB already has 1BB in):\nGeneral formula: required equity = call ÷ (current pot + opponent's bet + your call)\nSubstitute: 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n(Current pot 1.5 = SB's 0.5 + the BB's own 1 — that 1BB is dead money yet still belongs in the denominator; opponent's bet 1.5 = SB's increment up to 2BB; your call 1 = the BB top-up. Equivalently the total pot after you call is 4BB, so 1÷4 = 25%)\nMarginal hands often have 40%+ vs the SB's ~80% opening range → call is +EV",
       "The practical meaning of HU EV adjustments: against the SB's wide range, the BB's call bar drops sharply. Full ring's 40% call line vs a 15% UTG range drops to 25% in HU vs an 80% SB range (1BB more into a 4BB pot after the call), and with positional advantage the actual equity is even higher. That's why the HU BB can defend 60%+ — not \"loose\" but \"the result of EV calculation\".",
       "Example: HU blinds 0.5/1, preflop SB min-raises 2BB, you (BB) hold K♠7♠. Calling 1BB makes the total pot SB 2 + the BB's own 1 + your call 1 = 4BB, so required equity = 1 ÷ 4 = 25%. K7s has about 48% equity vs the SB's ~80% opening range — a surplus of about 23 points. Postflop you're IP: a K lets you bet thin value, flushes/straights chase cheaply, and a complete miss can fold. The call is +EV — full-ring K7s vs UTG is a fold, but HU vs the SB's wide range it's a +EV call.",
       "Example 2 (postflop EV decision): Flop pot 4BB, you (BB IP) hold 7♠6♠, the SB (OOP) bets 2BB (half pot). Required equity to call = 2/(4+2+2) = 25%. Your 76 on a 9♠8♦3♣ board has a double-gutshot + backdoor flush, about 8 outs at 17% single-street — not enough at 25% alone, but adding implied odds (win 2.5BB more when the straight hits) turns the call +EV. HU draw calls rely more on implied odds because the opponent's range is wide with high payment willingness.",
@@ -70,11 +70,11 @@
     ],
     "l4hu-counter-strategies": [
       "Identifying Deviations: The Prerequisite of HU Counter-Strategies",
-      "The core of HU counter-strategy is: first identify the opponent's deviations from equilibrium, then calibrate with the GTO baseline the optimal response against that leak. The four common HU deviations: folds too much (super-high fold rate vs C-Bets), calls too loose (calling station), 3Bets too often, C-Bets too often. Identification relies on 50-100 hand frequency statistics, not single-hand impressions.",
+      "The core of HU counter-strategy is: first identify the opponent's deviations from equilibrium, then calibrate with the GTO baseline the optimal response against that leak. The four common HU deviations: folds too much (super-high fold rate vs C-Bets), calls too loose (calling station), 3-bets too often, C-Bets too often. Identification relies on 50-100 hand frequency statistics, not single-hand impressions.",
       "The right posture of countering: aim the direction at the opponent's leak (Maximally Exploitative), keep the magnitude minimal (Minimally Exploitative). Every deviation opens your own leaks, so keep the magnitude controlled and return to baseline when the opponent adjusts.",
       "Targeted Counters for the Four Deviations",
-      "Raising steals against an over-folding opponent (SB min-raise to 2BB, BB fold rate f):\nEV(steal) = f×1 − (1−f)×1.5\n\nEquilibrium fold rate about 40% (f=0.4) → EV = 0.4×1 − 0.6×1.5 = −0.5BB (unprofitable, recovered postflop)\nAt 60% fold rate (f=0.6) → EV = 0.6×1 − 0.4×1.5 = +0BB (pure steal near break-even)\nAt 70% (f=0.7) → EV = 0.7×1 − 0.3×1.5 = +0.25BB (auto-profit)\n\nConclusion: the higher the opponent's fold rate, the more your steal frequency should rise, but capped at \"I still don't lose if he corrects to 50%\".",
-      "The counter directions for the four deviations: (1) folds too much → raise open/C-Bet frequency with more semi-bluffs; (2) calls too loose (station) → cut pure bluffs, switch to value-bet thin value (top pair weak kicker bets for money); (3) 3Bets too often → narrow the open range and add 4Bet value; (4) C-Bets too often → raise x/r frequency and float. Each advances in a \"identify → counter → re-check\" loop.",
+      "Raising steals against an over-folding opponent (SB min-raise to 2BB, BB fold rate f, baseline = folding directly, the 1.5/1.5 basis):\nEV(steal) = f×1.5 − (1−f)×1.5\n\nEquilibrium fold rate about 40% (f=0.4) → EV = 0.4×1.5 − 0.6×1.5 = −0.3BB (unprofitable, recovered postflop)\nAt 60% fold rate (f=0.6) → EV = 0.6×1.5 − 0.4×1.5 = +0.3BB (pure steal auto-profits)\nAt 70% (f=0.7) → EV = 0.7×1.5 − 0.3×1.5 = +0.6BB (profit grows)\n\nConclusion: the higher the opponent's fold rate, the more your steal frequency should rise, but capped at \"I still don't lose if he corrects to 50%\".",
+      "The counter directions for the four deviations: (1) folds too much → raise open/C-Bet frequency with more semi-bluffs; (2) calls too loose (station) → cut pure bluffs, switch to value-bet thin value (top pair weak kicker bets for money); (3) 3-bets too often → narrow the open range and add 4Bet value; (4) C-Bets too often → raise x/r frequency and float. Each advances in a \"identify → counter → re-check\" loop.",
       "Example: You observe a HU opponent who folds to C-Bets at 60% (equilibrium ~45%). That's a clear over-folding leak. Counter: raise your flop C-Bet frequency and bluff density overall, even adding weak hands that originally checked to the betting range. But cap it at \"I still don't lose if he tightens to 50%\" — this is \"using GTO as the baseline and making directed, disciplined deviations from observable biases\".",
       "Example 2 (countering a station): The opponent almost never folds postflop (fold rate <25%). Counter: no pure bluffs (he doesn't fold); switch to value-bet thin value — top pair weak kicker also bets for money because he calls with worse. Meanwhile convert bluffs to semi-bluffs or checks. A station is the easiest HU type to extract from, as long as you can resist bluffing.",
       "Example 3 (node locking in practice): In a solver, lock \"this opponent folds to turn double-barrels 55%\" as a fixed frequency and re-solve your optimal response — the solver immediately pushes your turn bluff frequency higher. That's node locking turning countering from \"feel\" into \"calculation\".",
@@ -119,7 +119,7 @@
       "Heads-Up is poker's purest form. Compared with 6-max or full ring, HU has these characteristics:\n\n1. Bigger positional value: the BTN has positional advantage every hand\n2. Much wider ranges: any pair is strong, any Ax is strong\n3. More frequent postflop decisions: more often only two players contest the pot\n4. More important exploitative adjustments: you can quickly identify and exploit opponent weaknesses",
       "Core concept: positional value is huge in HU. The BTN has positional advantage every hand. Any pair is strong in HU, and any Ax is strong.",
       "Preflop Range Adjustments",
-      "HU preflop ranges are much wider than 6-max:\n\nBTN open range: about 50-70% (far above the widest 6-max BTN opening tier)\n- Any pair is strong\n- Any Ax is strong\n- Suited connectors and small pairs can all open\n\n3-Bet range:\n- Wider (about 10-15%)\n- Includes strong hands + some bluffs\n- Balance matters more",
+      "HU preflop ranges are much wider than 6-max:\n\nBTN/SB open range: about 80% (far above the widest 6-max BTN opening tier)\n- Any pair is strong\n- Any Ax is strong\n- Suited connectors and small pairs can all open\n\n3-bet range:\n- Wider (about 10-15%)\n- Includes strong hands + some bluffs\n- Balance matters more",
       "Postflop Strategy Adjustments",
       "The key HU postflop adjustments:\n\n1. More C-Bets: the BTN has range advantage and should C-Bet at high frequency\n2. Wider value bets: top pair weak kicker is also a strong hand\n3. More bluffs: the opponent's range is wider, easier to bluff off\n4. Positional use: with position you can value-bet and bluff more frequently",
       "Adapting to Different HU Opponent Types",
@@ -132,10 +132,10 @@
       "HU exploitative play profits from the opponent's deviations from equilibrium. But HU pros don't \"abandon\" GTO; they \"calibrate\" it: using equilibrium frequencies as the baseline and making minimum necessary deviations against the opponent's clear deviations. HU is the format where reading people is most valuable — facing one opponent, you can quickly identify his leaks and harvest with targeted strategies.",
       "The right posture of exploitation: aim the direction at the opponent's leak (Maximally Exploitative), keep the magnitude minimal (Minimally Exploitative). Every deviation opens your own leaks, so keep the magnitude controlled and return to baseline when the opponent adjusts.",
       "Frequency Reading: From Statistics to Exploitation",
-      "Frequency reading is the foundation of HU exploitation: identify the opponent's four-dimensional tendencies (open rate, fold rate vs C-Bets, 3Bet rate, showdown tendency), then harvest with targeted strategies. Folds too much → raise C-Bet/steal frequency; calls too loose (station) → value-bet thin value and cut pure bluffs; 3Bets too often → narrow the open and add 4Bet; C-Bets too often → raise x/r. Identification relies on 50-100 hand statistics; single-hand impressions don't count.",
+      "Frequency reading is the foundation of HU exploitation: identify the opponent's four-dimensional tendencies (open rate, fold rate vs C-Bets, 3-bet rate, showdown tendency), then harvest with targeted strategies. Folds too much → raise C-Bet/steal frequency; calls too loose (station) → value-bet thin value and cut pure bluffs; 3-bets too often → narrow the open and add 4Bet; C-Bets too often → raise x/r. Identification relies on 50-100 hand statistics; single-hand impressions don't count.",
       "Example: You observe a HU opponent who folds to C-Bets at 62% (equilibrium ~45%). That's a clear over-folding leak. Exploit: raise your flop C-Bet frequency and bluff density overall, even adding weak hands that originally checked to the betting range. But cap it at \"I still don't lose if he tightens to 50%\" — keeping correction room. That's a \"directed, disciplined deviation\".",
       "Example 2 (range polarization): Against a station who calls too loose, polarize your betting range — bet value with the nuts, semi-bluff with strong draws, check middle hands. Because the station calls with weak hands, your wide value range gets overpaid. Meanwhile cut pure bluffs (he doesn't fold) and convert bluffs to semi-bluffs or checks.",
-      "Example 3 (dynamic adjustment): After you raise steal frequency, the opponent starts 3Betting frequently — he's discovered your deviation. Now you must return to the GTO baseline (narrow the steal range, reduce pure bluffs), or your newly opened leaks get harvested in reverse. Exploitation is a dynamic game: deviate → get detected → return to baseline, looping.",
+      "Example 3 (dynamic adjustment): After you raise steal frequency, the opponent starts 3-betting frequently — he's discovered your deviation. Now you must return to the GTO baseline (narrow the steal range, reduce pure bluffs), or your newly opened leaks get harvested in reverse. Exploitation is a dynamic game: deviate → get detected → return to baseline, looping.",
       "Counterintuitive point: the biggest risk of exploitation isn't \"exploiting too little\" but \"over-exploiting and becoming the leak yourself\". HU pros always keep one hand on the GTO baseline wheel while harvesting — the moment the opponent adjusts, they snap back.",
       "Exploitation execution in five steps: (1) HUD-collect enough samples to confirm the leak; (2) lock the node in a solver for the optimal response; (3) compare to baseline and mark the pushed-up frequencies and sizes; (4) execute live; (5) re-check the sample every 500 hands. A \"lock\" without data support is exploitation on paper."
     ]
@@ -249,7 +249,7 @@
         "60%-70%",
         "85%-95%"
       ],
-      "explanation": "The HU BB defends about 60%-70% (calls about 35%-50% + 3Bets about 15%-25%). 15%-25% is a tight full-ring magnitude; 85%-95% is a passive calling station."
+      "explanation": "The HU BB defends about 60%-70% (calls about 35%-50% + 3-bets about 15%-25%). 15%-25% is a tight full-ring magnitude; 85%-95% is a passive calling station."
     },
     "l3hu-bb-defense-q2": {
       "question": "The math basis for the HU BB defending 60%+ is:",
@@ -285,11 +285,11 @@
       "question": "The difference between the HU BB's \"60%+ defense\" and a \"calling station\" is:",
       "options": [
         "No difference",
-        "The BB's defense consists of calls, 3Bet value, 3Bet bluffs, and x/r with structure; a station has none of these levers",
+        "The BB's defense consists of calls, 3-bet value, 3-bet bluffs, and x/r with structure; a station has none of these levers",
         "Stations defend wider",
         "The BB's defense is more passive"
       ],
-      "explanation": "The BB's 60% is a \"structured choice\" (including 3Bet and x/r levers), while a station is passive \"reluctant to fold\". Defense width ≠ defense passivity."
+      "explanation": "The BB's 60% is a \"structured choice\" (including 3-bet and x/r levers), while a station is passive \"reluctant to fold\". Defense width ≠ defense passivity."
     },
     "l4hu-bn-opening-q1": {
       "question": "The HU button (SB) opening frequency range is about:",
@@ -304,12 +304,12 @@
     "l4hu-bn-opening-q2": {
       "question": "Why does the HU button open mainly with min-raise (2BB)?",
       "options": [
-        "The min-raise steal bar is low (60% fold rate) and postflop pot control is easier",
+        "The min-raise steal bar is low (50% fold rate) and postflop pot control is easier",
         "The min-raise makes the opponent fold more easily",
         "Bigger sizes steal better",
         "The min-raise makes hands stronger"
       ],
-      "explanation": "The min-raise's steal break-even is a 60% fold rate, the small size makes postflop pot control easier, and it supports a ~80% wide range. Big sizes are self-punishment in HU."
+      "explanation": "The min-raise's steal break-even is a 50% fold rate, the small size makes postflop pot control easier, and it supports a ~80% wide range. Big sizes are self-punishment in HU."
     },
     "l4hu-bn-opening-q3": {
       "question": "The real HU BB fold rate vs min-raise is about:",
@@ -332,14 +332,14 @@
       "explanation": "Opening wide means \"participate a lot, invest little\" — letting go in time by postflop board fit is the mature play."
     },
     "l4hu-bn-opening-q5": {
-      "question": "Against a BB who 3Bets frequently, the button should adjust its open by:",
+      "question": "Against a BB who 3-bets frequently, the button should adjust its open by:",
       "options": [
         "Keeping 80% unchanged",
-        "Narrowing the range, reducing marginal hands that only fold after a 3Bet",
+        "Narrowing the range, reducing marginal hands that only fold after a 3-bet",
         "Opening to 100%",
         "Stopping opening entirely"
       ],
-      "explanation": "High 3Bet frequency erodes steal EV and marginal hands only fold after a 3Bet. Narrowing is correct; stopping entirely overreacts."
+      "explanation": "High 3-bet frequency erodes steal EV and marginal hands only fold after a 3-bet. Narrowing is correct; stopping entirely overreacts."
     },
     "l4hu-ev-adjustments-q1": {
       "question": "The main difference between HU and full-ring EV calculation is:",
@@ -449,7 +449,7 @@
         "Opponent's appearance",
         "Random guessing"
       ],
-      "explanation": "HU countering relies on 50-100 hand frequency statistics (fold rate/3Bet rate, etc.); single-hand impressions are noise, insufficient evidence."
+      "explanation": "HU countering relies on 50-100 hand frequency statistics (fold rate/3-bet rate, etc.); single-hand impressions are noise, insufficient evidence."
     },
     "l4hu-counter-strategies-q2": {
       "question": "Against an over-folding opponent, the correct counter is:",
@@ -642,14 +642,14 @@
       "explanation": "The medium stage (20-40BB) balances steal and postflop — min-raise plus postflop is reasonable, differing from the shallow-stack shove-dominant approach."
     },
     "l7hu-stakes-q1": {
-      "question": "The HU BTN open range is about:",
+      "question": "The HU BTN/SB open range is about:",
       "options": [
         "20-30%",
         "30-40%",
         "50-70%",
-        "80%+"
+        "About 80%"
       ],
-      "explanation": "The HU BTN open range is about 50-70%, far wider than the widest 6-max BTN opening tier (about 35%)."
+      "explanation": "The HU BTN/SB open range is about 80%, far wider than the widest 6-max BTN opening tier (about 35%)."
     },
     "l7hu-stakes-q2": {
       "question": "Which hand type rises most in value in HU?",
@@ -722,7 +722,7 @@
       "explanation": "A station calls with weak hands so thin value bets get overpaid; pure bluffs are useless (he doesn't fold) — convert to semi-bluffs or checks."
     },
     "l8hu-exploitative-q4": {
-      "question": "After you raise steals, the opponent starts 3Betting frequently. The correct move is:",
+      "question": "After you raise steals, the opponent starts 3-betting frequently. The correct move is:",
       "options": [
         "Keep increasing steals",
         "Return to the GTO baseline and narrow the range",
@@ -739,7 +739,7 @@
         "Opponent's appearance",
         "Random guessing"
       ],
-      "explanation": "Frequency reading relies on 50-100 hand statistics (open rate/fold rate/3Bet rate/showdown tendency); single-hand impressions are noise."
+      "explanation": "Frequency reading relies on 50-100 hand statistics (open rate/fold rate/3-bet rate/showdown tendency); single-hand impressions are noise."
     }
   },
   "lessonExample": {
@@ -946,7 +946,7 @@
       "option": [
         {
           "action": "Bet 1.3BB (1/3 pot)",
-          "explanation": "98 on J-6-2 has a gutshot + backdoor flush — a 1/3-pot semi-bluff continues the pressure.",
+          "explanation": "98 on J-7-2 has a gutshot (T) + backdoor flush — a 1/3-pot semi-bluff continues the pressure.",
           "evImpact": "+1.0 BB/100"
         },
         {
@@ -1006,7 +1006,7 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "76 on 9-5-4 has a double-gutshot + backdoor flush; folding is too weak.",
+          "explanation": "76 on 9-5-4 has a gutshot (8) + backdoor flush; folding is too weak.",
           "evImpact": "-1.0 BB/100"
         },
         {
@@ -1035,8 +1035,8 @@
           "evImpact": "+1.0 BB/100"
         },
         {
-          "action": "3-Bet",
-          "explanation": "J9s is speculative; a 3Bet is too aggressive, just call.",
+          "action": "3-bet",
+          "explanation": "J9s is speculative; a 3-bet is too aggressive, just call.",
           "evImpact": "-0.3 BB/100"
         }
       ],
@@ -1080,7 +1080,7 @@
           "evImpact": "-0.5 BB/100"
         }
       ],
-      "tableDesc": "Heads-up cash game; 3Bet pot"
+      "tableDesc": "Heads-up cash game; 3-bet pot"
     },
     "l4hu-bn-opening-p1": {
       "option": [
@@ -1115,8 +1115,8 @@
           "evImpact": "+1.0 BB/100"
         },
         {
-          "action": "3-Bet",
-          "explanation": "An initial open uses min-raise, not a 3Bet — the 3Bet is meaningless.",
+          "action": "3-bet",
+          "explanation": "An initial open uses min-raise, not a 3-bet — the 3-bet is meaningless.",
           "evImpact": "-0.5 BB/100"
         }
       ],
@@ -1126,21 +1126,21 @@
       "option": [
         {
           "action": "Min-raise",
-          "explanation": "At a 20% BB 3Bet, Q5s only folds after a 3Bet and the open EV erodes.",
+          "explanation": "At a 20% BB 3-bet, Q5s only folds after a 3-bet and the open EV erodes.",
           "evImpact": "-0.8 BB/100"
         },
         {
           "action": "Fold",
-          "explanation": "Against high-frequency 3Bets, marginal suited hands like Q5s should fold — narrow the opening range.",
+          "explanation": "Against high-frequency 3-bets, marginal suited hands like Q5s should fold — narrow the opening range.",
           "evImpact": "+0 BB/100"
         },
         {
           "action": "Limp",
-          "explanation": "Limping lets the BB isolate easily, and Q5s struggles postflop against high-frequency 3Bets.",
+          "explanation": "Limping lets the BB isolate easily, and Q5s struggles postflop against high-frequency 3-bets.",
           "evImpact": "-0.3 BB/100"
         }
       ],
-      "tableDesc": "Heads-up cash game; the BB 3Bets 20%"
+      "tableDesc": "Heads-up cash game; the BB 3-bets 20%"
     },
     "l4hu-ev-adjustments-p1": {
       "option": [
@@ -1155,8 +1155,8 @@
           "evImpact": "+1.0 BB/100"
         },
         {
-          "action": "3-Bet",
-          "explanation": "J8s is speculative; a 3Bet is too aggressive, just call.",
+          "action": "3-bet",
+          "explanation": "J8s is speculative; a 3-bet is too aggressive, just call.",
           "evImpact": "-0.3 BB/100"
         }
       ],
@@ -1215,8 +1215,8 @@
           "evImpact": "+1.0 BB/100"
         },
         {
-          "action": "3-Bet",
-          "explanation": "T9s is speculative; a 3Bet is too aggressive, just call.",
+          "action": "3-bet",
+          "explanation": "T9s is speculative; a 3-bet is too aggressive, just call.",
           "evImpact": "-0.3 BB/100"
         }
       ],
@@ -1240,7 +1240,7 @@
           "evImpact": "-0.5 BB/100"
         }
       ],
-      "tableDesc": "Heads-up cash game; 3Bet pot"
+      "tableDesc": "Heads-up cash game; 3-bet pot"
     },
     "l4hu-gto-basics-p3": {
       "option": [
@@ -1426,7 +1426,7 @@
       "option": [
         {
           "action": "Check-Call",
-          "explanation": "98 middle pair + gutshot — call for control, staying cautious given the SB's abnormal rhythm.",
+          "explanation": "98 middle pair (88) — call for control, staying cautious given the SB's abnormal rhythm.",
           "evImpact": "+1.0 BB/100"
         },
         {
@@ -1436,7 +1436,7 @@
         },
         {
           "action": "Fold",
-          "explanation": "Middle pair + gutshot has improvement room; folding is too weak.",
+          "explanation": "Middle pair has improvement room; folding is too weak.",
           "evImpact": "-1.2 BB/100"
         }
       ],
@@ -1566,7 +1566,7 @@
       "option": [
         {
           "action": "Check-Raise semi-bluff",
-          "explanation": "98 on T-7-2 has a gutshot + backdoor flush; the check-raise semi-bluff is standard.",
+          "explanation": "98 on T-7-2 has a two-way gutshot (6/J, 4 each) + a flush draw (10 outs); the check-raise semi-bluff is standard.",
           "evImpact": "+1.5 BB/100"
         },
         {
@@ -1586,7 +1586,7 @@
       "option": [
         {
           "action": "Bet 8BB (about 45% pot)",
-          "explanation": "KQ on K-8-3 is top pair good kicker; in a 3Bet pot the SPR is low — bet for value.",
+          "explanation": "KQ on K-8-3 is top pair good kicker; in a 3-bet pot the SPR is low — bet for value.",
           "evImpact": "+2.0 BB/100"
         },
         {
@@ -1600,7 +1600,7 @@
           "evImpact": "-0.5 BB/100"
         }
       ],
-      "tableDesc": "Heads-up cash game; 3Bet pot"
+      "tableDesc": "Heads-up cash game; 3-bet pot"
     },
     "l8hu-exploitative-p1": {
       "option": [
@@ -1646,7 +1646,7 @@
       "option": [
         {
           "action": "Bet 4BB (1/3 pot)",
-          "explanation": "A9 has A-high + backdoor flush and the SB's fold rate is high — a 1/3-pot continuation pressures and exploits.",
+          "explanation": "A9 has A-high + a flush draw (10 outs, 3 spades seen) and the SB's fold rate is high — a 1/3-pot continuation pressures and exploits.",
           "evImpact": "+1.5 BB/100"
         },
         {
@@ -1660,7 +1660,76 @@
           "evImpact": "-1.5 BB/100"
         }
       ],
-      "tableDesc": "Heads-up cash game; the SB folds to 3Bet 40% (deviation)"
+      "tableDesc": "Heads-up cash game; the SB folds to 3-bet 40% (deviation)"
     }
+  },
+  "lessonObjectives": {
+    "l3hu-bn-aggression": [
+      "Explain the source of the heads-up SB's frequency edge (last to act preflop, one extra card of information every hand) and state how the ~80% open rate differs from full-ring games",
+      "Judge the C-Bet treatment difference between dry high boards (1/3-pot small bets, about 70%-80% frequency) and wet connected boards (lower frequency plus 2/3-pot big bets)",
+      "Tell \"constant pressure\" and \"mindless firing\" apart: judge when to mix in checks to keep the x/r lever on wet boards or when the turn shifts"
+    ],
+    "l3hu-sb-continuation": [
+      "Explain the heads-up SB's postflop C-Bet discipline OOP (using range and sizing to make the wide BB range fold or pay, not \"representing a strong hand\")",
+      "Judge the frequency difference between dry high boards (SB range advantage -> high-frequency small bets) and wet connected boards (BB nut advantage -> reduced frequency and pot control)",
+      "Judge the meaning of an OOP check (handing the decision to IP, keeping the x/r lever) and tell it apart from weakness"
+    ],
+    "l3hu-bb-defense": [
+      "Explain the math behind the heads-up BB's 60%+ defense (IP postflop, the SB's 0.5 dead money makes calls cheap) and tell it apart from a calling station",
+      "Use the pot-odds formula to compute the BB's calling line vs an SB min-raise (1/(3+1) = 25%)",
+      "Judge that strong draws should x/r semi-bluff vs a C-Bet and that top pair top kicker should call for pot control on dry boards, keeping the SB's bluffs alive"
+    ],
+    "l4hu-bn-opening": [
+      "Derive the break-even fold rate of a pure steal with an SB min-raise to 2BB (baseline = folding directly: f×1.5 = (1−f)×1.5 -> f = 50%) and state that bigger sizes raise the auto-profit threshold",
+      "Judge why heads-up opening relies on min-raising (low steal threshold, small sizes keep postflop pots controlled, supporting a wide 80%-100% range)",
+      "Explain that the BB's real fold rate vs a min-raise is only about 30%-40%, and judge that opening value mostly comes postflop when pure stealing is unprofitable",
+      "Judge that facing a frequent 3-bettor you should tighten the opening range (drop marginal hands that can only fold after a 3-bet)"
+    ],
+    "l4hu-ev-adjustments": [
+      "Compute the BB's calling line vs an SB min-raise with required equity = call / (current pot + bet + call) (1/4 = 25%), stating that the denominator must include the BB's dead money already in the pot",
+      "Explain the three amplified factors of heads-up EV (no multiway dilution, high dead-money share, wide opponent range) and judge why more marginal calls become +EV",
+      "Judge why heads-up draw calls lean on implied odds (wide range, high paying willingness), and give the quick anchors of 25% half pot, 20% one-third pot and 33.3% full pot",
+      "Tell the statistical-expectation semantics of position value apart (the BB earns about 0.5-1BB more per hand in the long run, not a single-hand guarantee)"
+    ],
+    "l4hu-gto-basics": [
+      "Explain that heads-up (ignoring rake) is a pure two-player zero-sum game where the Nash equilibrium's \"unexploitable\" guarantee strictly holds",
+      "Compute the equilibrium bluff share of a full-pot river bet (b/(1+2b) = 1/3, value:bluff 2:1) and list the matching numbers for 25% at half pot and MDF = 1/(1+b)",
+      "Explain how heads-up GTO frequencies differ from full ring (wide ranges, high betting frequency, dense bluffs) and judge that \"GTO means playing tight\" is a misread",
+      "Judge the position symmetry of heads-up (SB/BB swap every hand) and state why you must play both SB and BB well"
+    ],
+    "l4hu-counter-strategies": [
+      "Identify the four classes of heads-up deviation (over-folding, over-calling, over-3-betting, over-C-betting) and explain that identification relies on frequency stats over 50-100 hands",
+      "Derive the steal-EV change against over-folding opponents (EV about +0.3BB at f=0.6 and +0.6BB at f=0.7) and judge that deviation is capped by \"still not losing if he corrects\"",
+      "Tell the counters to the four deviations apart (over-folding -> raise open/C-Bet frequency, over-calling -> thin value with fewer bluffs, over-3-betting -> tighten plus 4Bet value, over-C-betting -> raise x/r and floats)",
+      "Explain what node locking does (locking the opponent's deviation as fixed frequencies and re-solving your best response) and judge the risk of over-countering"
+    ],
+    "l5hu-focus": [
+      "Explain the definition of heads-up focus (keeping the same decision quality at high decision density) and list the four signs of fatigue (playing marginal hands, uncontrolled sizing, basic errors, dulled awareness of opponent tendencies)",
+      "Apply the three heads-up state-management rules as preset discipline (a 60-90 minute session cap, a 40-50BB variance budget, standing up every 100 hands)",
+      "Tell \"fatigue-driven degradation\" and \"strategy errors\" apart, judging that dulled awareness of BB tendencies calls for a pause rather than continuing at old frequencies",
+      "Judge that heads-up discipline must be consistent throughout (post-win slack is as dangerous as losing-streak impulses)"
+    ],
+    "l5hu-opponent-psychology": [
+      "Tell the two classes of heads-up reads apart (behavioral patterns and live signals) and explain that reading means estimating range plus emotion, not guessing a specific hand",
+      "Judge the ambiguous readings of \"betting fast\" and \"thinking long\", and explain that thin samples must be cross-checked with frequency stats over 50-100 hands",
+      "Apply anti-reading practice (actions that leak no range: consistent or deliberately shuffled timing) and judge the readable pattern of \"fast with strong, slow with weak\"",
+      "Explain the sustainable attitude to reads (accepting uncertainty like \"60% confident\" and folding it into equity and odds math)"
+    ],
+    "l6hu-tourney": [
+      "Tell heads-up tournaments and cash games apart on three counts (rising blinds, limited chips, ICM pressure) and state the three stack-rhythm stages (40BB+ cash-style, 20-40BB min-raise plus postflop, shoving below 15BB)",
+      "Judge why shallow stacks replace complex postflop play with preflop shoving (rising blinds inflate waiting costs and shoves auto-profit)",
+      "Explain the ICM character of a heads-up SNG final (winner takes all, lower pressure than full tables but still decisive) and judge the trade-off between conservative play when chip-leading and aggression when behind"
+    ],
+    "l7hu-stakes": [
+      "List the core differences between heads-up and 6-max (far larger position value, every pair and Ax as a strong hand, more frequent postflop decisions, more important exploitative adjustments)",
+      "Judge the HU BTN opening range at about 50%-70%, and state that top pair weak kicker should value-bet much wider in HU",
+      "Tell the four HU opponent types and their counters apart (tight-passive: frequent C-Bets and bluffs; loose-passive: more value, fewer bluffs; loose-aggressive: balanced with traps; tight-aggressive: avoid excessive conflict)"
+    ],
+    "l8hu-exploitative": [
+      "Explain that heads-up exploitation means \"calibrating GTO\" rather than abandoning it (using equilibrium frequencies as the baseline and deviating minimally against clear deviations)",
+      "List the four reading dimensions (open rate, fold-to-C-Bet, 3-bet rate, showdown tendencies) and the exploitation direction matching each",
+      "Judge that against a calling station you should polarize your betting range (nuts for value plus strong-draw semi-bluffs, fewer pure bluffs)",
+      "Apply the five-step exploitation loop (confirm the leak with a HUD -> node lock -> compare to baseline -> execute -> recheck every 500 hands) and judge that you should return to the GTO baseline when the opponent counters"
+    ]
   }
 }

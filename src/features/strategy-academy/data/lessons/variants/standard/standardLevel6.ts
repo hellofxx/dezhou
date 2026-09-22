@@ -9,6 +9,12 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
         title: 'ICM 基础',
         subtitle: '理解锦标赛中筹码的真实价值',
         duration: '12 min',
+        objectives: [
+          '说明 ICM 的核心（锦标赛中 Chip EV ≠ $EV，筹码边际价值递减），并判断 10000 筹码的价值不等于 2 × 5000 筹码',
+          '用 SNG 算例计算 $EV（如 40% 夺冠概率下 A 的 $EV 约 $33.6），并判断筹码翻倍不等于奖金翻倍',
+          '用 Bubble Factor = 跟注所需 equity ÷ 现金局所需 equity 衡量 ICM 压力，并判断 Bubble Factor 越高 call 范围越紧',
+          '判断泡沫期的角色策略：中筹码避免与大筹码对抗、大筹码用更宽范围 push 短筹码',
+        ],
         content: [
           { type: 'heading', content: '什么是 ICM（Independent Chip Model）' },
           {
@@ -42,7 +48,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           {
             type: 'text',
             content:
-              '### 最小算例：SNG 奖金结构\n假设 4 人 SNG 奖金结构：1st=$50, 2nd=$30, 3rd=$20, 4th=$0\n筹码分布：A=40BB, B=30BB, C=20BB, D=10BB\n\n**步骤 1: 每人夺冠概率 ≈ 筹码占比**\n- P(A wins) = 40/(40+30+20+10) = 40%\n\n**步骤 2: 两人决赛的概率**\n- P(A & B finish top 2) = 组合计算...\n- A 得第 2 名的概率 = Σ(P(某玩家得第 1) × P(A 得第 2 | 该玩家得第 1))\n\n**步骤 3: 最终$EV**\n- A 的$EV = Σ(P(i wins at position j) × prize_j)\n- = 0.4×$50 + 0.32×$30 + 0.2×$20 = $36.6\n\n这意味着 40BB 筹码在当前的 SNG 中的期望价值是$36.6',
+              '### 最小算例：SNG 奖金结构\n假设 4 人 SNG 奖金结构：1st=$50, 2nd=$30, 3rd=$20, 4th=$0\n筹码分布：A=40BB, B=30BB, C=20BB, D=10BB\n\n**步骤 1: 每人夺冠概率 ≈ 筹码占比**\n- P(A wins) = 40/(40+30+20+10) = 40%\n\n**步骤 2: 两人决赛的概率**\n- P(A & B finish top 2) = 组合计算...\n- A 得第 2 名的概率 = Σ(P(某玩家得第 1) × P(A 得第 2 | 该玩家得第 1))\n\n**步骤 3: 最终$EV**\n- A 的$EV = Σ(P(i wins at position j) × prize_j)\n- = 0.4×$50 + 0.32×$30 + 0.2×$20 = $33.6\n\n这意味着 40BB 筹码在当前的 SNG 中的期望价值是$33.6',
           },
           { type: 'heading', content: 'Bubble Factor (BF) 详解' },
           {
@@ -286,6 +292,12 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
         title: 'Push/Fold 短筹码策略',
         subtitle: '10-15BB 时的全押/弃牌最优策略',
         duration: '10 min',
+        objectives: [
+          '判断进入 Push/Fold 模式的筹码阈值（15BB 以下开始考虑、10BB 以下必须使用、8BB 以下任何位置寻找 push）',
+          '计算 10BB 时各位置的 Nash push 范围（BTN 约 40-45%、SB 约 50-55%），并说出 15BB 时应收窄至 25-30%',
+          '判断 BB 面对 push 的 call 范围随对手位置变化（面对 BTN 10BB push 约 30-35%、面对 UTG 约 15-20%）',
+          '用 9 ÷ (11 + 9) = 45% 计算 SB 10BB 全下时 BB 的跟注所需胜率，并区分示意性 Bubble Factor 与该手的精确值',
+        ],
         content: [
           { type: 'heading', content: '何时进入 Push/Fold 模式' },
           {
@@ -555,6 +567,11 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
         title: '泡沫期打法',
         subtitle: '最关键阶段的生存与获利策略',
         duration: '10 min',
+        objectives: [
+          '判断泡沫期（距奖金圈只剩 1-3 人淘汰）是 ICM 压力最大的阶段，并说出被淘汰 = 零奖金、进圈 = min-cash 的利害结构',
+          '区分三种筹码量级的泡沫策略：大筹码对中筹码激进施压、中筹码避大压小、短筹码在 10-15BB 主动 push',
+          '判断泡沫爆裂后 ICM 压力骤降、范围随之放宽、打法回归接近现金局的策略转变',
+        ],
         content: [
           { type: 'heading', content: '什么是泡沫期（Bubble）' },
           {
@@ -803,6 +820,12 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
         title: 'Final Table 与偷盲策略',
         subtitle: '决赛桌的动态调整和偷盲艺术',
         duration: '10 min',
+        objectives: [
+          '说明决赛桌 payout 跳跃对策略的影响（每次淘汰都有显著奖金变化，ICM 压力仍然很大）',
+          '判断偷盲的条件（盲注相对筹码大、对手 fold to steal 高、有位置）与尺度（Min-raise 2-2.2x 给对手最差赔率）',
+          '判断 re-steal 的最佳筹码量（15-25BB）与手牌选择（Ax blocker、同花可玩性，避免 KJ/QT 类被压制牌）',
+          '说出 Heads-Up 阶段的范围宽度（SB open 70-80%、BB defend 60-70%）与激进度决定成败的原因',
+        ],
         content: [
           { type: 'heading', content: 'Final Table 的 Payout 结构影响' },
           {
@@ -1049,12 +1072,17 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
         title: 'Bounty 锦标赛策略',
         subtitle: '掌握赏金赛/PKO 的独特策略调整',
         duration: '9 min',
+        objectives: [
+          '计算赏金贡献的 $EV（固定赏金 × 淘汰概率，如 $20 × 10% = $2）并据此将跟注范围放宽约 5-10%',
+          '判断覆盖与被覆盖的调整方向：覆盖短筹码时大幅放宽范围、被覆盖时正常打法、自己赏金大时会被对手针对',
+          '识别 PKO 两大常见错误（完全忽视赏金价值打得太紧、过度追求赏金用垃圾牌全下）与反直觉点（大赏金对手淘汰概率低、不宜盲目追）',
+        ],
         content: [
           { type: 'heading', content: '什么是 Bounty/PKO 锦标赛？' },
           { type: 'text', content: 'Progressive Knockout（PKO）锦标赛中，每个玩家头上有赏金。淘汰对手可获得其一半赏金，另一半加到自己头上。这彻底改变了策略。' },
           { type: 'key-point', content: 'Bounty 使得“淘汰”本身就有价值。当覆盖对手时，你的跟注/加注范围应比普通锦标赛更宽，因为除了底池还有赏金价值。' },
           { type: 'heading', content: '调整原则' },
-          { type: 'text', content: '• 覆盖短筹码时：大幅放宽跟注/加注范围（赏金价值高）\n• 被覆盖时：正常打法，不要因为对手抉3-Bet“开心”\n• 你的赏金很大时：对手会更激进地向你加注\n• 计算“赏金调整后的赔率”：\n  有效赔率 = (底池 + 对手赏金/2) : 跟注金额' },
+          { type: 'text', content: '• 覆盖短筹码时：大幅放宽跟注/加注范围（赏金价值高）\n• 被覆盖时：正常打法，不要因为对手抉3-bet“开心”\n• 你的赏金很大时：对手会更激进地向你加注\n• 计算“赏金调整后的赔率”：\n  有效赔率 = (底池 + 对手赏金/2) : 跟注金额' },
           { type: 'pro-tip', content: 'PKO 中最常见的错误是完全忽视赏金价值（打得太紧）或过度追求赏金（用垃圾手牌 All-In）。平衡是关键。' },
           {
             type: 'formula',
@@ -1075,7 +1103,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           { id: 'l6-bounty-q2', question: '覆盖短筹码时应该怎么调整？', options: ['更保守', '大幅放宽范围', '和普通赛一样', '只打AA/KK'], correctIndex: 1, explanation: '覆盖短筹码时赏金价值高，应大幅放宽跟注/加注范围。' },
         
           { id: 'l6-bounty-q3', question: 'PKO中你的赏金很大时，对手会？', options: ['更保守', '更激进地向你加注', '弃牌更多', '没有变化'], correctIndex: 1, explanation: '你的赏金大时，对手为了获得赏金会更激进地向你加注。' },
-          { id: 'l6-bounty-q4', question: '被覆盖时应该怎么打？', options: ['更保守', '正常打法，不因3-Bet开心', '全下所有手牌', '弃牌所有手牌'], correctIndex: 1, explanation: '被覆盖时正常打法，不要因为对手的激进而情绪化。' },
+          { id: 'l6-bounty-q4', question: '被覆盖时应该怎么打？', options: ['更保守', '正常打法，不因3-bet开心', '全下所有手牌', '弃牌所有手牌'], correctIndex: 1, explanation: '被覆盖时正常打法，不要因为对手的激进而情绪化。' },
           { id: 'l6-bounty-q5', question: 'PKO中最常见的错误是？', options: ['打得太紧', '忽视赏金价值或过度追求赏金', '总是全下', '从不弃牌'], correctIndex: 1, explanation: '最常见的错误是完全忽视赏金价值（太紧）或过度追求赏金（用垃圾牌全下）。' },],
         practice: {
           id: 'l6-bounty-practice',
@@ -1096,6 +1124,10 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
         title: 'ICM 计算 Drill',
         subtitle: '锦标赛 ICM 决策',
         duration: '3分钟',
+        objectives: [
+          '判断泡沫期/决赛桌/钱圈外不同阶段与筹码深度下的全下/加注/弃牌决策（如泡沫期 BTN 15BB 用 AJs 全下、20BB 用 76s 弃牌）',
+          '比较 ICM 压力下边缘手牌的处置差异（短筹码积极全下榨弃牌率 vs 尚有余量时弃掉边缘牌）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -1224,6 +1256,10 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
         title: 'Push/Fold 决策 Drill',
         subtitle: '短筹码全下/弃牌',
         duration: '3分钟',
+        objectives: [
+          '判断不同筹码深度（8-20BB）与位置下的 push/fold 决策（如 15BB UTG 的 AQs 全下、18BB UTG 的 87s 弃牌）',
+          '区分 push 范围随筹码深度的变化（10BB CO 的 K9s 全下、20BB BTN 的 54s 不全下）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',

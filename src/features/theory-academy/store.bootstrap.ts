@@ -8,8 +8,9 @@ import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
 import { useTheoryStore } from './store';
 import { isLevelFullyCompleted } from './utils/theoryProgress';
 
-// 成就检查数据源（仅 theory 专用可选方法；academy 类方法返回安全缺省值）
+// 成就检查数据源（仅 theory 专用可选方法；academy 类方法返回安全缺省值，T7/B4 idempotency）
 registerAchievementSource({
+  id: 'theory-academy',
   isLevelLessonsCompleted: () => false,
   getCertifications: () => ({}),
   areAllLevelsCertified: () => false,

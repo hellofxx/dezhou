@@ -8,6 +8,11 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
     title: '按钮位激进度',
     subtitle: '单挑按钮位的频率优势与翻后持续施压',
     duration: '8 min',
+    objectives: [
+      '说明单挑 SB 的频率优势来源（翻前最后行动、每手牌比 BB 多一手信息），并说出开池约 80% 与满员桌的差异',
+      '判断干燥高牌面（1/3 池小注、约 70%-80% 频率）与湿润连接面（降频 + 2/3 池大注）的 C-Bet 处理差异',
+      '区分「持续施压」与「无脑开火」：判断湿润面或转牌牌面易手时应混合 check 保留 x/r 杠杆',
+    ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante' },
     content: [
@@ -179,7 +184,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'SB', action: 'raise 2BB' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Jd', '6c', '2s'],
+            board: ['Jd', '7c', '2s'],
             street: 'flop',
             potSize: 4,
             effectiveStack: 95,
@@ -202,6 +207,11 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
     title: 'SB 持续下注',
     subtitle: '单挑 SB 翻后延续下注的尺度、频率与范围',
     duration: '7 min',
+    objectives: [
+      '说明单挑 SB 翻后 OOP 的 C-Bet 纪律（用范围与尺度让宽范围 BB 弃牌或付费，而非「代表强牌」）',
+      '判断干燥高牌面（SB 范围优势 → 高频小注）与湿润连接面（BB 坚果优势 → 降频控池）的频率差异',
+      '判断 OOP 的 check 语义（把决策权交给 IP、保留 x/r 杠杆），并区分它与示弱的差异',
+    ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante' },
     content: [
@@ -398,7 +408,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌' },
           },
           options: [
-            { action: 'Check-Fold', isCorrect: false, explanation: '76 在 9-5-4 面有双卡顺 + 后门同花，fold 太弱。', evImpact: '-1.0 BB/100', evLoss: 1 },
+            { action: 'Check-Fold', isCorrect: false, explanation: '76 在 9-5-4 面有卡顺（听 8）+ 后门同花，fold 太弱。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'Bet 1.3BB（1/3 pot）', isCorrect: true, explanation: '76 有顺子听牌，1/3 池半诈唬持续施压，湿润面适合保护权益。', evImpact: '+1.0 BB/100', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: '听牌 All-in 过度，1/3 池半诈唬即可建立优势。', evImpact: '-1.2 BB/100', evLoss: 1.2 },
           ],
@@ -414,6 +424,11 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
     title: 'BB 防守',
     subtitle: '单挑大盲的宽范围防守、过牌加注与不利位置控制',
     duration: '8 min',
+    objectives: [
+      '说明单挑 BB 防守 60%+ 的数学依据（翻后 IP、SB 的 0.5 死钱让跟注便宜），并区分它与跟注站的差异',
+      '用底池赔率公式计算 BB 面对 SB min-raise 的跟注线（1÷(3+1) = 25%）',
+      '判断强听牌面对 C-Bet 应 x/r 半诈唬、顶对顶踢脚在干燥面应跟注控池保留 SB 诈唬',
+    ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_BB', anteStructure: 'sb_ante' },
     content: [
@@ -421,7 +436,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '单挑 BB 翻后是位置优势方（IP），但翻前每手牌都要面对 SB 的进攻，防守频率高达 60%+。这个"60%+ 防守"不是被动跟注，而是有结构的防守：跟注叠（中小对子、同花连张、弱 Ax）+ 3Bet 价值叠（强牌打价值）+ 3Bet 诈唬叠（阻断牌）。因为 BB 翻后 IP 且 SB 的 0.5 死钱让跟注便宜，边缘牌也能盈利地防守。',
+          '单挑 BB 翻后是位置优势方（IP），但翻前每手牌都要面对 SB 的进攻，防守频率高达 60%+。这个"60%+ 防守"不是被动跟注，而是有结构的防守：跟注叠（中小对子、同花连张、弱 Ax）+ 3-bet 价值叠（强牌打价值）+ 3-bet 诈唬叠（阻断牌）。因为 BB 翻后 IP 且 SB 的 0.5 死钱让跟注便宜，边缘牌也能盈利地防守。',
       },
       {
         type: 'key-point',
@@ -436,7 +451,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：单挑 100BB 深，SB min-raise 到 2BB，你（BB）持 7♠6♠ 跟注，底池 4BB。翻牌 8♣5♦2♠。SB C-Bet 1.3BB（半池）。你有双卡顺（4 张 6 + 4 张 9）+ 后门同花，是标准 x/r 半诈唬牌。加注到 4BB 左右：SB 若弃牌你直接赢 5.3BB；被跟注你有 8+ 张 Outs 的改进空间。x/r 既保护你的听牌，又让 SB 的宽范围 C-Bet 付出代价。',
+          '实例：单挑 100BB 深，SB min-raise 到 2BB，你（BB）持 7♠6♠ 跟注，底池 4BB。翻牌 8♣5♦2♠。SB C-Bet 1.3BB（半池）。你有双卡顺（4 张 4 + 4 张 9）+ 后门同花，是标准 x/r 半诈唬牌。加注到 4BB 左右：SB 若弃牌你直接赢 5.3BB；被跟注你有 8+ 张 Outs 的改进空间。x/r 既保护你的听牌，又让 SB 的宽范围 C-Bet 付出代价。',
       },
       {
         type: 'example',
@@ -445,11 +460,11 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         type: 'highlight',
-        content: '反直觉点：BB 防守宽不等于跟注站。真正的跟注站没有 x/r、没有 3Bet 叠；而单挑 BB 的 60% 由跟注、3Bet 价值、3Bet 诈唬、x/r 四部分构成，每一部分都随 SB 倾向移动。防守的宽度与防守的被动是两回事。',
+        content: '反直觉点：BB 防守宽不等于跟注站。真正的跟注站没有 x/r、没有 3-bet 叠；而单挑 BB 的 60% 由跟注、3-bet 价值、3-bet 诈唬、x/r 四部分构成，每一部分都随 SB 倾向移动。防守的宽度与防守的被动是两回事。',
       },
       {
         type: 'pro-tip',
-        content: 'BB 防守速查三步：(1) 报底池赔率——SB 开池 2BB 时跟注线 25%（SB 2 + 你已投 1 = 底池 3，再跟 1BB，1÷(3+1)=25%）；(2) 分叠——强成牌价值 3Bet、阻断牌诈唬 3Bet、中等牌跟注；(3) 看 SB——弃牌多的 SB 提高 3Bet，limp 多的提高 isolate，C-Bet 过频的提高 x/r。',
+        content: 'BB 防守速查三步：(1) 报底池赔率——SB 开池 2BB 时跟注线 25%（SB 2 + 你已投 1 = 底池 3，再跟 1BB，1÷(3+1)=25%）；(2) 分叠——强成牌价值 3-bet、阻断牌诈唬 3-bet、中等牌跟注；(3) 看 SB——弃牌多的 SB 提高 3-bet，limp 多的提高 isolate，C-Bet 过频的提高 x/r。',
       },
     ],
     quiz: [
@@ -458,7 +473,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
         question: '单挑 BB 面对 SB 开池的典型防守频率约为：',
         options: ['15%-25%', '30%-40%', '60%-70%', '85%-95%'],
         correctIndex: 2,
-        explanation: '单挑 BB 防守约 60%-70%（跟注约 35%-50% + 3Bet 约 15%-25%）。15%-25% 是满员桌紧位置的量级，85%-95% 是被动跟注站。',
+        explanation: '单挑 BB 防守约 60%-70%（跟注约 35%-50% + 3-bet 约 15%-25%）。15%-25% 是满员桌紧位置的量级，85%-95% 是被动跟注站。',
       },
       {
         id: 'l3hu-bb-defense-q2',
@@ -501,12 +516,12 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
         question: '单挑 BB 的"60%+ 防守"与"跟注站"的区别是：',
         options: [
           '没有区别',
-          'BB 的防守由跟注、3Bet 价值、3Bet 诈唬、x/r 构成且有结构，跟注站没有这些杠杆',
+          'BB 的防守由跟注、3-bet 价值、3-bet 诈唬、x/r 构成且有结构，跟注站没有这些杠杆',
           '跟注站防守更宽',
           'BB 防守更被动',
         ],
         correctIndex: 1,
-        explanation: 'BB 的 60% 是"有结构的选择"（含 3Bet 与 x/r 杠杆），跟注站是"舍不得弃牌"的被动。防守宽度 ≠ 防守被动。',
+        explanation: 'BB 的 60% 是"有结构的选择"（含 3-bet 与 x/r 杠杆），跟注站是"舍不得弃牌"的被动。防守宽度 ≠ 防守被动。',
       },
     ],
     examples: [
@@ -557,7 +572,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'J9s 面对 SB 宽范围可玩性好，fold 太紧浪费 BB 位置。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'Call', isCorrect: true, explanation: 'J9s 同花连张翻后 IP 可玩性好，跟注 1BB 进入 4BB 总底池（所需胜率 25%），标准防守。', evImpact: '+1.0 BB/100', evLoss: 0 },
-            { action: '3-Bet', isCorrect: false, explanation: 'J9s 偏投机，3-Bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
+            { action: '3-bet', isCorrect: false, explanation: 'J9s 偏投机，3-bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l3hu-bb-defense',
         },
@@ -571,7 +586,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'SB', action: 'raise 2BB' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Jc', '6h', '3s'],
+            board: ['Jc', '9h', '3s'],
             street: 'flop',
             potSize: 4,
             effectiveStack: 95,
@@ -599,7 +614,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
             street: 'flop',
             potSize: 12,
             effectiveStack: 90,
-            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-Bet 底池' },
+            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-bet 底池' },
           },
           options: [
             { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AK 在 K-8-3 干燥面是顶对顶踢脚，IP 小注薄价值让 SB 弱牌跟注。', evImpact: '+2.0 BB/100', evLoss: 0 },

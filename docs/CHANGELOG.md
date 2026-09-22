@@ -6,6 +6,50 @@
 
 ---
 
+## [Unreleased] - 2026-09-05
+
+### 多代理协作收口遗留事项（本轮总计：门禁 132/898 → 142/1021 全绿；全部未 commit）
+
+> 编排者（主代理）+ 项目子代理（platform-dev / progress-dev / gto-simulator-dev / range-trainer-dev / strategy-academy-dev / theory-academy-dev）波次协作。子代理产出均经 git diff 与测试数交叉核验；`progress-dev` 两次空转由主代理接管其任务。
+
+### 契约与体验修复
+
+- **复习项 i18n key 契约收口**：pot-odds 新增 `utils/oddsSrs.ts`（修复 `scenario.slice(0,40)` 产生的残缺 key——题库早已 key 化，真缺陷是截断而非"存原文"，更正上批登记）；gto-simulator 新增 `utils/gtoSrs.ts`（场景运行时生成无现成 key，改存静态 key + `metadata.params`，**删除了向持久化写入 `scenario.description` 动态文本的旧逻辑**）；`gto.json` zh/en 新增 `review.*` 双语键。渲染层补齐 label/back 的 `metadata.params` 插值（`ReviewSession` / `SpacedRepetitionPanel`，+`reviewParams.test.tsx`）。
+- **progress persist v17 → v18**：新增 `utils/migrateOddsReviewKeys.ts`（残缺 key 归一 / 中文原文版 label+front+scenario 归一、含原文 options 整体移除退化为自评、back 优先取 options 正确项 key 否则清空；进度零丢失、幂等、脏数据安全）。
+- **SRS 答错由整项重置改为有界回退**（`shared/utils/spacedRepetition.ts`）：repetitions 退 1 步、interval 退一档（`INTERVAL_SEQUENCE` 回退映射）、easeFactor −0.2 有界下浮；quality 5/4/1 语义不变；+8 测试。
+- **`descReviewMore` 计数修正**：「等 N 项」的 N 由总到期数改为**隐藏数**（不变量：展示条数 + N = 总到期数；+4 测试）。
+- **GTO 预设 BTN 开池宽度 36.08% → 47.12%**：实测确认手工近似（频率形态单调反常、solver 常用手牌缺失），修正为 169 手全量频率表（call=0、raiseAmount 2.5、每手和=1 逐手校验；依据 PreflopWizard 40-45% / Freebetrange 40-48%）；range-trainer `btn-open` preset 同步 76→89 手（+K3s 等 13 手纯新增，标注 ~39%→~44%，纯组合数口径 43.89%）；一致性守卫 10/10 绿。**附带登记**：`bb_vs_btn_open` 与更宽 BTN 开池的联动放宽未动，待后续数据批次。
+
+### 3Bet/3-bet/3bet 词形统一（用户裁定纳入）
+
+- 全部统一为 `3-bet`：theory 数据+locale 344 处（数量守恒 346，`l3-bet-sizing` 等标识符保留）；strategy 数据+locale 全量；puzzleBank 文案约 220 处 + 全仓散点（HUD label、range-trainer label、注释散文）。**新增 `src/i18n/termFormGuard.test.ts` 棘轮守卫：非例外残留锁死为 0**（例外清单全为标识符：kebab id / snake 数据键 / `L2_3BET_*` 常量名，含死条目强制清理）。实测更正：`help.json` / `potOdds.json` 此前已统一。
+
+### objectives 全量补全（用户裁定纳入）
+
+- **121 课时 / 414 条**三批落地（standard 75 课时 252 条含 20 个 drill 型、heads-up+short-deck 29 课时 95 条、localLessons 17 课时 67 条）；zh 镜像逐字一致、en 无汉字，contentAlignment 棘轮零新增漂移；卫生守卫扩至 12 用例（三组清单落地断言互斥覆盖全部课时，禁不可测动词）。实测更正上批「118/121」口径（3 个既有样例 + 实际课时数）。
+- **新登记**：drill 型课时（21 个）的 objectives 数据已落但渲染端不消费（`DrillLessonRouter` 路径不经 `LessonIntroCard`），待 UI 批次接线。
+
+### 阶段 7 全量量化断言审计（全量逐条复算，禁止抽样）
+
+- **theory 侧（两批）**：standard L1-L9 约 240 数值点 + short-deck/heads-up 约 240 点；约 80 处修复（26 错位数值）。系统性错误：**AK 对口袋对权益方向颠倒**（43-45% 落后 → AKs vs QQ≈53.7% 领先，pokerpro.tools 全枚举口径）、**短牌非法牌张 2-5 全量清零**（board/正文/题干 20+ 处）、÷33→÷31、set mining 17.6%→17.1%（1−C(32,3)/C(34,3)）、偷盲保本统一沉没成本口径 50%（原 60% 与 t7hu 分裂）、EV 分解净赢口径 P+b、Set 概率 1/8.5（7.5:1 是赔率非概率）、价值诈唬比 P+bP、多人池 4 人=64%、KQ 双重阻断漏 board K♠（8→6 种）、死钱场景单列复算（Ante 局 BB 22.4%）等。
+- **strategy 侧（两批）**：standard 11 项修复 + 变体/本土课 83 处修复（同源 AK 方向、非法牌张清零、偷盲 50%、15→16 outs、Maniac EV +125→+68、ICM $36.6→$33.6、MDF 44%→56%、4bet 保本 70.6%→57.4% 等）；未修清单 #3-#12（standard L3-L7 正文级改写约 40 处 × 三语）如实保留待下批。**evCalibration 棘轮零变动**（未编造任何 evLoss）。
+- **四份真复算守卫**（theory `standardQuantAudit`/`variantQuantAudit` + strategy 同名，共 72 用例）：判分题数学复算锁定、短牌非法牌张正则扫描、BB min-raise 25% 与偷盲 50% 回归锁、ICM 递归复算；散文数值以人工复核索引记录。
+
+### Wave 3 浏览器实测（webapp-testing / Playwright，真实用户路径）
+
+- **✅ 通过：`<768px` 布局**——home/theory/academy 三页 375px 宽均 0 横向溢出、MobileNav 存在（截图 `.codebuddy/acceptance/acc3-*.png`）。
+- **✅ 通过：三态反馈呈现**——无标定 practice 选项作答后**无 EV 损失徽章渲染**（符合 PRD §6.7.1 呈现诚实性）；顺带验证本轮新增的 objectives 学习目标卡真实渲染于课时页。
+- **⚠️ 基本通过：朗读顺序**——aria snapshot 显示语义化结构完整（complementary/nav/list/listitem/link 均带可访问名、heading 层级正常）；**发现 2 个空可访问名控件**（首页 button/a 无文本无 aria-label），待定位修复（小项）。
+- **❌ 失败（发现真缺陷）：章末小测真实入队断裂**——真实走完「进入小测 → 答题（答对 2/5，含 3 错题）→ 查看结果 → 本章完成」全流程后，`poker-training-progress.reviewItems` **始终为空**（返回目录后同样为空）。上批「自动化脚本未能走到完成态」的未验项本轮走到完成态，暴露断裂。候选根因（待排查）：`completeChapter` 真实路径的 `wrongQuestionIds` 为空 / `buildTheoryReviewItems` 未知题 id 静默跳过全部命中 / 入队调用被 `alreadyCompleted` 分支吞并。**处置**：登记为新 P0 缺陷，本轮未修（验收即目的）。
+
+### 验证状态与遗留（诚实记录）
+
+- **门禁**：`pnpm verify`（typecheck + lint + test）**exit 0，142 文件 / 1021 测试**（本轮起点 132/898）。全部棘轮（contentAlignment 基线空集 / evCalibration 覆盖率 / termFormGuard 锁 0 / lessonObjectives 12 用例）无倒退。**全部变更未 commit**（按模块提交清单见各子任务交付报告；待用户确认后执行）。
+- **浏览器已验**：见上 Wave 3 三项；**未验**：屏幕阅读器真实朗读（仅 aria snapshot 替代检查）、en 界面下的 objectives 与反馈渲染目检、`pnpm build` 产物走查。
+- **登记遗留（本轮新增/顺延）**：① 章末小测入队断裂（P0，见上）；② strategy 未修清单 #3-#12 约 40 处 × 三语；③ drill 型 objectives 渲染接线；④ 首页 2 个空可访问名控件；⑤ `bb_vs_btn_open` 联动放宽；⑥ `4Bet/5Bet` 词形不在 termFormGuard 范围未统一。
+
+---
+
 ## [Unreleased] - 2026-09-04
 
 ### 教学内容守卫层：三类静默失效从"无法发现"变为"提交前拦截"

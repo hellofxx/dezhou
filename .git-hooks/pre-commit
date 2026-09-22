@@ -1,9 +1,35 @@
 #!/usr/bin/env bash
-# Agent Tools Validation Pre-commit Hook
+# Agent Tools Validation + Quality Gate Pre-commit Hook
 # 
-# 仅在 .claude/agents/*.md 有变更时触发验证
-# 警告级非阻塞（exit 0）
+# 1. Agent tools validation (when .claude/agents/*.md changes) - warning non-blocking
+# 2. ESLint verification (always blocking) - prevents forbidden import edges
+#
+# Memory note (Git-Hook 跨平台兼容):
+# - Windows (PowerShell/Git Bash): ensure core.hooksPath points to this dir; chmod +x may not work but Git for Windows usually handles it
+# - Linux/macOS: chmod +x required for script execution, else silently skipped
+#
+# AGENTS.md §质量门禁："每次代码变更后必须运行 pnpm verify"，本 hook 执行 pnpm lint（秒级）而非完整 verify。
 
+echo "🔍 Running quality gate checks..."
+
+# Check if any source files changed
+if ! git diff --name-only HEAD | grep -qE '\.(ts|tsx|js|jsx)$'; then
+  echo "✓ No source code changes detected, skipping lint."
+else
+  echo "⚠️ Linting source files..."
+  cd $(git rev-parse --show-toplevel)
+  pnpm lint
+  RESULT=$?
+  
+  if [ $RESULT -ne 0 ]; then
+    echo "❌ ESLint FAILED. Fix issues before committing."
+    exit 1
+  else
+    echo "✅ ESLint passed."
+  fi
+fi
+
+echo ""
 echo "⚠️ Detecting changes to agent files..."
 
 if git diff --name-only HEAD | grep -q '\.claude/agents/.*-dev\.md'; then

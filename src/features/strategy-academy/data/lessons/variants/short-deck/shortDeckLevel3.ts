@@ -8,6 +8,12 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
     title: '短牌德州入门 (6+ Hold\'em)',
     subtitle: '掌握36张牌组的规则变化和策略调整',
     duration: '12 min',
+    objectives: [
+      '复述短牌的核心规则差异（36 张牌组移除 2-5、三条>顺子与同花>葫芦两处牌级反转、前注制取代盲注）',
+      '排列短牌牌型等级（高牌/一对/两对/顺子/三条/葫芦/同花/四条/同花顺/皇家同花顺），并指出与标准德州相反的两处',
+      '判断短牌手牌价值变化（口袋对与大高张价值上升、小对子 set mine 价值下降、同花价值显著提升），并说出最小顺子 A-6-7-8-9 的合法性',
+      '计算短牌听牌 outs 的修正口径（同花 outs = 9 − 已见该花色张数），并判断直接套用标准德州 outs 表会系统性高估胜率',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100, anteStructure: 'both_ante' },
     content: [
@@ -181,7 +187,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
             {
               action: 'Call',
               isCorrect: false,
-              explanation: 'Call 太被动。JTs 在短牌有足够可玩性做 3-Bet 半诈唬。',
+              explanation: 'Call 太被动。JTs 在短牌有足够可玩性做 3-bet 半诈唬。',
               evImpact: '+0.5 ante',
             },
             {
@@ -189,7 +195,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               amount: '6 ante',
               isCorrect: true,
               explanation:
-                'JTs 可玩性好，3-Bet 建立大底池并利用翻后可玩性。注意：它不属于短牌顶级梯队（AA/KK/QQ/AK），翻后遇到强范围阻力要懂得收手。',
+                'JTs 可玩性好，3-bet 建立大底池并利用翻后可玩性。注意：它不属于短牌顶级梯队（AA/KK/QQ/AK），翻后遇到强范围阻力要懂得收手。',
               evImpact: '+2.5 ante',
             },
           ],
@@ -282,8 +288,8 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
           },
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'KK在短牌中是顶级强牌，不能弃牌。', evImpact: '-3.0 ante' },
-            { action: 'Raise 6 ante', isCorrect: true, explanation: 'KK在短牌中是顶级强牌，3-Bet获取价值。', evImpact: '+2.5 ante' },
-            { action: 'Call', isCorrect: false, explanation: 'KK足够强做3-Bet，Call太被动。', evImpact: '+1.0 ante' },
+            { action: 'Raise 6 ante', isCorrect: true, explanation: 'KK在短牌中是顶级强牌，3-bet获取价值。', evImpact: '+2.5 ante' },
+            { action: 'Call', isCorrect: false, explanation: 'KK足够强做3-bet，Call太被动。', evImpact: '+1.0 ante' },
           ],
           relatedLessonId: 'l3sd-intro',
         },
@@ -317,6 +323,11 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
     title: '短牌持续下注',
     subtitle: '干燥牌面的高频 C-Bet 与短牌特有的湿滑牌面处理',
     duration: '8 min',
+    objectives: [
+      '判断短牌干燥高牌面（如 K♠7♦J♣）用 1/3 池小注高频 C-Bet（约 70%+）与湿滑连接面用 2/3 池以上大注低频（约 30-40%）的处理差异',
+      '说明短牌湿润面小注 C-Bet 是错误的原因（听牌密度高、易成，小注给听牌太便宜）',
+      '判断持超对在湿润连接面应用 2/3 池以上大注保护，并说出牌面湿度决定 C-Bet 频率与尺度的速记规则',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -324,7 +335,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '短牌持续下注（C-Bet）的基本逻辑与标准德州相同，但有两处短牌特有调整：(1) 干燥高牌面（如 K♠7♦2♣）可以高频 C-Bet——对手难中牌，小注即可偷池或薄价值；(2) 湿滑连接面（如 9♦8♣3♥）因短牌听牌密度高，必须用大尺度保护，而不是小注。',
+          '短牌持续下注（C-Bet）的基本逻辑与标准德州相同，但有两处短牌特有调整：(1) 干燥高牌面（如 K♠7♦J♣）可以高频 C-Bet——对手难中牌，小注即可偷池或薄价值；(2) 湿滑连接面（如 9♦8♣6♥）因短牌听牌密度高，必须用大尺度保护，而不是小注。',
       },
       {
         type: 'key-point',
@@ -334,17 +345,17 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '干燥高牌面（如 A♠9♦2♣）上，加注者范围占优、对手难中牌，用 1/3 池小注高频 C-Bet 让宽范围弱牌弃牌或薄价值。湿滑连接面（如 9♦8♣3♥、6♦7♣5♥）上，短牌顺子/听牌组合密度极高，加注者坚果优势下降，C-Bet 频率下调至 30-40%，且用 2/3 池以上大注保护超对与强成牌，让听牌付费。',
+          '干燥高牌面（如 A♠9♦6♣）上，加注者范围占优、对手难中牌，用 1/3 池小注高频 C-Bet 让宽范围弱牌弃牌或薄价值。湿滑连接面（如 9♦8♣6♥、6♦7♣8♥）上，短牌顺子/听牌组合密度极高，加注者坚果优势下降，C-Bet 频率下调至 30-40%，且用 2/3 池以上大注保护超对与强成牌，让听牌付费。',
       },
       {
         type: 'example',
         content:
-          '实例：短牌你（BTN）开池，BB 跟注，翻牌 K♠7♦2♣（干燥）。你是 aggressor，范围含大量 Kx，对手难中 K。用 1/3 池小注高频 C-Bet：KQ/KJ 薄价值、A 高半诈唬、小对子也下注——整个范围持续施压，BB 弱牌只能弃牌。',
+          '实例：短牌你（BTN）开池，BB 跟注，翻牌 K♠7♦J♣（干燥）。你是 aggressor，范围含大量 Kx，对手难中 K。用 1/3 池小注高频 C-Bet：KQ/KJ 薄价值、A 高半诈唬、小对子也下注——整个范围持续施压，BB 弱牌只能弃牌。',
       },
       {
         type: 'example',
         content:
-          '实例二（湿滑面大注）：短牌同一底池，翻牌 9♦8♣3♥。此面 BB 防守范围含大量 9x/8x/听牌，坚果优势倒向 BB。你持 K♠K♦（超对）：仍领先但易被顺子/两对反超，用 2/3 池大注（底池 6 下注 4+）保护——让顺子/同花听牌付费，而不是给便宜价格。A 高、小对子等弱牌应 check 控池。',
+          '实例二（湿滑面大注）：短牌同一底池，翻牌 9♦8♣6♥。此面 BB 防守范围含大量 9x/8x/听牌，坚果优势倒向 BB。你持 K♠K♦（超对）：仍领先但易被顺子/两对反超，用 2/3 池大注（底池 6 下注 4+）保护——让顺子/同花听牌付费，而不是给便宜价格。A 高、小对子等弱牌应 check 控池。',
       },
       {
         type: 'highlight',
@@ -358,7 +369,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
     quiz: [
       {
         id: 'l3sd-cbet-q1',
-        question: '短牌干燥高牌面（K♠7♦2♣）上，C-Bet 的倾向是：',
+        question: '短牌干燥高牌面（K♠7♦J♣）上，C-Bet 的倾向是：',
         options: [
           '1/3 池小注高频',
           '完全过牌',
@@ -370,7 +381,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3sd-cbet-q2',
-        question: '短牌湿滑连接面（9♦8♣3♥）上，C-Bet 的正确处理是：',
+        question: '短牌湿滑连接面（9♦8♣6♥）上，C-Bet 的正确处理是：',
         options: [
           '1/3 池小注高频',
           '2/3 池以上大注低频，保护成牌',
@@ -394,7 +405,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3sd-cbet-q4',
-        question: '短牌湿润面持超对（K♠K♦）在 9♦8♣3♥ 面，正确尺度是：',
+        question: '短牌湿润面持超对（K♠K♦）在 9♦8♣6♥ 面，正确尺度是：',
         options: [
           '1/3 池小注',
           '2/3 池以上大注保护',
@@ -427,7 +438,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['Qs', '8h', '3c'],
+        board: ['Qs', '8h', '6c'],
         street: 'flop',
         effectiveStack: 100,
         potSize: 5,
@@ -460,7 +471,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Qh', '8c', '3s'],
+            board: ['Qh', '8c', '6s'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -483,7 +494,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9h', '8s', '3d'],
+            board: ['9h', '8s', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -506,14 +517,14 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['6d', '9c', '2s'],
+            board: ['6d', '9c', '8s'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌' },
           },
           options: [
-            { action: 'Check-Fold', isCorrect: false, explanation: '78 在 6-9-2 面有双卡顺 + 后门同花，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
+            { action: 'Check-Fold', isCorrect: false, explanation: '78 在 6-9-8 面有卡顺听牌（听 T）+ 后门同花，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
             { action: 'Bet 1.7 ante（1/3 pot）', isCorrect: true, explanation: '78 有顺子听牌，1/3 池半诈唬持续施压，短牌听牌成牌价值高。', evImpact: '+1.0 ante', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: '听牌 All-in 过度，1/3 池半诈唬即可建立优势。', evImpact: '-1.2 ante', evLoss: 1.2 },
           ],
@@ -529,6 +540,11 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
     title: '短牌 Donk 下注',
     subtitle: '短牌翻牌率更高环境下的主动下注时机与频率',
     duration: '7 min',
+    objectives: [
+      '说明短牌 donk 的适用条件（OOP 范围明显占优、坚果组合密集的特定牌面）与默认过牌保留 x/r 杠杆的关系',
+      '判断湿润连接面（如 6♠7♦9♣）OOP donk 合理而干燥高牌面 donk 是错误',
+      '运用 donk 三问（范围占优？被加注能否应对？过牌是否更优？）决定是否主动下注，并区分 donk 与「通用激进保护工具」',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -551,12 +567,12 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：短牌你（BB）跟注 BTN 开池，翻牌 6♠7♦4♣（湿润连接面）。你持 7♠8♠（中对 + 顺子听牌），你的防守范围含大量 6x/7x/8x 与顺子听牌，坚果组合密集。BTN（IP）范围多是大牌，在此面错过。你主动 donk 下注半池：保护你的中对/听牌，让 BTN 的大牌弃牌或付费。此面 OOP 范围占优，donk 是合理选择。',
+          '实例：短牌你（BB）跟注 BTN 开池，翻牌 6♠7♦9♣（湿润连接面）。你持 7♠8♠（中对 + 顺子听牌），你的防守范围含大量 6x/7x/8x 与顺子听牌，坚果组合密集。BTN（IP）范围多是大牌，在此面错过。你主动 donk 下注半池：保护你的中对/听牌，让 BTN 的大牌弃牌或付费。此面 OOP 范围占优，donk 是合理选择。',
       },
       {
         type: 'example',
         content:
-          '实例二（donk 风险）：短牌你（BB）跟注，翻牌 A♠K♦2♣（干燥高牌面）。此面 IP 的 BTN 范围含大量 Ax/Kx，你 OOP 范围劣势。若你 donk，被加注时进退两难、且放弃 x/r。正确做法是过牌，让 BTN 下注你再决定跟/加。干燥面 OOP 范围劣势，donk 是错误。',
+          '实例二（donk 风险）：短牌你（BB）跟注，翻牌 A♠K♦6♣（干燥高牌面）。此面 IP 的 BTN 范围含大量 Ax/Kx，你 OOP 范围劣势。若你 donk，被加注时进退两难、且放弃 x/r。正确做法是过牌，让 BTN 下注你再决定跟/加。干燥面 OOP 范围劣势，donk 是错误。',
       },
       {
         type: 'highlight',
@@ -582,7 +598,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3sd-donk-q2',
-        question: '短牌 6♠7♦4♣ 湿润连接面，BB（OOP）持顺子听牌，donk 合理的原因是：',
+        question: '短牌 6♠7♦9♣ 湿润连接面，BB（OOP）持顺子听牌，donk 合理的原因是：',
         options: [
           'BB 牌更强',
           'BB 防守范围含大量两对/顺子/听牌，OOP 范围占优',
@@ -594,7 +610,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3sd-donk-q3',
-        question: '干燥高牌面（A♠K♦2♣）上 BB（OOP）持弱牌，donk 的风险是：',
+        question: '干燥高牌面（A♠K♦6♣）上 BB（OOP）持弱牌，donk 的风险是：',
         options: [
           '没有风险',
           'OOP 范围劣势，被加注进退两难且放弃 x/r 杠杆',
@@ -639,7 +655,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['6h', '9c', '4d'],
+        board: ['6h', '9c', '8d'],
         street: 'flop',
         effectiveStack: 95,
         potSize: 5,
@@ -647,7 +663,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
           action: 'Donk Bet',
           amount: '2.5 ante（半池）',
           reasoning: [
-            '78s 在 6-9-4 面有双卡顺 + 后门同花',
+            '78s 在 6-9-8 面有卡顺听牌（听 T）+ 后门同花',
             'BB 防守范围含大量 6x/7x/9x，OOP 范围占优',
             '短牌湿润面主动下注保护权益，让 IP 大牌弃牌或付费',
           ],
@@ -672,14 +688,14 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['7h', '6c', '2s'],
+            board: ['7h', '6c', '8s'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，湿润连接面' },
           },
           options: [
-            { action: 'Check-Fold', isCorrect: false, explanation: '89 在 7-6-2 面有双卡顺 + 后门同花，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
+            { action: 'Check-Fold', isCorrect: false, explanation: '89 在 7-6-8 面有卡顺听牌（听 T）+ 后门同花，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
             { action: 'Donk Bet 半池', isCorrect: true, explanation: '湿润连接面 BB 范围占优，89 有顺子听牌价值，donk 保护合理。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: '听牌 All-in 过度，半池 donk 即可建立优势。', evImpact: '-1.2 ante', evLoss: 1.2 },
           ],
@@ -695,7 +711,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Ks', '7c', '2d'],
+            board: ['Ks', '7c', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -718,15 +734,15 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['8d', '9s', '4h'],
+            board: ['8d', '9s', '6h'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌' },
           },
           options: [
-            { action: 'Check-Raise', isCorrect: false, explanation: '湿润面也可考虑 x/r，但 67 双卡顺价值，donk 保护权益更直接。', evImpact: '+0.5 ante', evLoss: 0.5 },
-            { action: 'Donk Bet 半池', isCorrect: true, explanation: '67 在 8-9-4 面有顺子听牌，BB 范围占优，donk 保护合理。', evImpact: '+1.2 ante', evLoss: 0 },
+            { action: 'Check-Raise', isCorrect: false, explanation: '湿润面也可考虑 x/r，但 67 卡顺听牌价值，donk 保护权益更直接。', evImpact: '+0.5 ante', evLoss: 0.5 },
+            { action: 'Donk Bet 半池', isCorrect: true, explanation: '67 在 8-9-6 面有顺子听牌（听 T），BB 范围占优，donk 保护合理。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'Check-Fold', isCorrect: false, explanation: '67 有顺子听牌，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
           ],
           relatedLessonId: 'l3sd-donk',
@@ -741,6 +757,11 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
     title: '短牌过牌加注',
     subtitle: '用 Check-Raise 构建范围、保护强牌并应对高频下注',
     duration: '8 min',
+    objectives: [
+      '构建短牌两极化 x/r 范围（强成牌：坚果对/两对/顺子/同花 + 强听牌：同花/顺子听牌半诈唬）',
+      '代入 EV(x/r) = f×P − (1−f)×[(1−E_win)×R − E_win×(P+R)] 计算半诈唬 x/r 的期望值（弃牌率 50%、被跟注胜率 35% 时 EV ≈ 3.15）',
+      '判断 x/r 三问（范围两极化？对手 C-Bet 频率高？被跟注有改进空间？），并说明短牌半诈唬 x/r 的 EV 被听牌成牌价值放大的原因',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -768,12 +789,12 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：短牌你（BB）跟注 BTN 开池，翻牌 9♦7♣3♠。你持 8♠9♠（顶对 + 顺子听牌）。BTN C-Bet 2 ante，你 x/r 到 6 ante。若 BTN 弃牌你直接赢 8 ante；被跟注你有顶对 + 顺子听牌的改进空间。短牌湿润面 x/r 半诈唬保护你的边缘成牌，同时压制 BTN 的 C-Bet 频率。',
+          '实例：短牌你（BB）跟注 BTN 开池，翻牌 9♦7♣6♠。你持 8♠9♠（顶对 + 顺子听牌）。BTN C-Bet 2 ante，你 x/r 到 6 ante。若 BTN 弃牌你直接赢 8 ante；被跟注你有顶对 + 顺子听牌的改进空间。短牌湿润面 x/r 半诈唬保护你的边缘成牌，同时压制 BTN 的 C-Bet 频率。',
       },
       {
         type: 'example',
         content:
-          '实例二（干燥面 x/r）：短牌翻牌 A♠K♦2♣，你（BB）持 22（暗三）。BTN C-Bet，你 x/r 榨取价值——对手范围含大量 Ax/Kx 会跟注你的暗三价值。短牌暗三虽非坚果（输给葫芦/同花），但在干燥面是强牌，x/r 价值下注合理。',
+          '实例二（干燥面 x/r）：短牌翻牌 A♠K♦6♣，你（BB）持 22（暗三）。BTN C-Bet，你 x/r 榨取价值——对手范围含大量 Ax/Kx 会跟注你的暗三价值。短牌暗三虽非坚果（输给葫芦/同花），但在干燥面是强牌，x/r 价值下注合理。',
       },
       {
         type: 'highlight',
@@ -811,7 +832,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3sd-check-raise-q3',
-        question: '短牌湿润面（9♦7♣3♠）OOP 持顶对 + 顺子听牌，x/r 的价值是：',
+        question: '短牌湿润面（9♦7♣6♠）OOP 持顶对 + 顺子听牌，x/r 的价值是：',
         options: [
           '没有价值',
           '保护边缘成牌并压制对手 C-Bet 频率',
@@ -823,7 +844,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3sd-check-raise-q4',
-        question: '短牌干燥面（A♠K♦2♣）持暗三，x/r 的作用是：',
+        question: '短牌干燥面（A♠K♦6♣）持暗三，x/r 的作用是：',
         options: [
           '保护听牌',
           '榨取价值，对手 Ax/Kx 会跟注',
@@ -856,7 +877,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['9h', '7d', '3c'],
+        board: ['9h', '7d', '6c'],
         street: 'flop',
         effectiveStack: 95,
         potSize: 5,
@@ -889,14 +910,14 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['8d', '5c', '2s'],
+            board: ['8d', '6c', '9s'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌' },
           },
           options: [
-            { action: 'Check-Fold', isCorrect: false, explanation: '67 在 8-5-2 面有双卡顺 + 后门同花，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
+            { action: 'Check-Fold', isCorrect: false, explanation: '67 在 8-9-6 面有卡顺听牌（听 T）+ 后门同花，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
             { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: '67 有顺子听牌，x/r 半诈唬保护并施压。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'Donk Bet', isCorrect: false, explanation: 'OOP 应先 Check 让对手行动再 x/r，Donk 放弃 x/r 杠杆。', evImpact: '-0.5 ante', evLoss: 0.5 },
           ],
@@ -912,7 +933,7 @@ export const SHORT_DECK_LEVEL_3_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Kh', '8c', '3d'],
+            board: ['Kh', '8c', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,

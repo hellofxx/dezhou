@@ -89,24 +89,25 @@ export const PRESET_RANGES: RangePreset[] = [
   },
   {
     id: 'btn-open',
-    name: 'BTN Open Raise (~39%)',
+    name: 'BTN Open Raise (~44%)',
     position: Position.BTN,
     actionType: 'open',
     hands: [
       'AA', 'KK', 'QQ', 'JJ', 'TT', '99', '88', '77', '66', '55', '44', '33', '22',
       'AKs', 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s',
-      'KQs', 'KJs', 'KTs', 'K9s', 'K8s', 'K7s', 'K6s', 'K5s', 'K4s',
-      'QJs', 'QTs', 'Q9s', 'Q8s', 'Q7s',
-      'JTs', 'J9s', 'J8s',
-      'T9s', 'T8s',
-      '98s', '97s',
-      '87s', '86s',
+      'KQs', 'KJs', 'KTs', 'K9s', 'K8s', 'K7s', 'K6s', 'K5s', 'K4s', 'K3s',
+      'QJs', 'QTs', 'Q9s', 'Q8s', 'Q7s', 'Q6s', 'Q5s',
+      'JTs', 'J9s', 'J8s', 'J7s', 'J6s',
+      'T9s', 'T8s', 'T7s', 'T6s',
+      '98s', '97s', '96s',
+      '87s', '86s', '85s',
       '76s', '75s',
       '65s', '64s',
-      '54s',
+      '54s', '53s',
+      '43s',
       'AKo', 'AQo', 'AJo', 'ATo', 'A9o', 'A8o', 'A7o', 'A6o', 'A5o', 'A4o',
-      'KQo', 'KJo', 'KTo', 'K9o',
-      'QJo', 'QTo', 'Q9o',
+      'KQo', 'KJo', 'KTo', 'K9o', 'K8o',
+      'QJo', 'QTo', 'Q9o', 'Q8o',
       'JTo', 'J9o',
       'T9o', 'T8o',
       '98o',
@@ -186,7 +187,7 @@ export function isPositionUnlocked(position: Position, preflopElo: number, playe
 /** 动作类型选项 */
 export const ACTION_TYPES = [
   { value: 'open', label: 'Open Raise' },
-  { value: '3bet', label: '3-Bet' },
+  { value: '3bet', label: '3-bet' },
   { value: '4bet', label: '4-Bet' },
   { value: 'call-vs-raise', label: 'Call vs Raise' },
 ] as const;
@@ -280,7 +281,7 @@ export const HU_PRESET_RANGES: RangePreset[] = [
   },
   {
     id: 'hu-bb-3bet',
-    name: 'HU BB 3-Bet',
+    name: 'HU BB 3-bet',
     position: Position.BB,
     actionType: '3bet',
     hands: [
@@ -380,7 +381,7 @@ export const FOUR_MAX_PRESET_RANGES: RangePreset[] = [
   },
 ];
 
-// ─── 6-Max 3-Bet / BB Defense / 4-Bet 预置范围 ────────────────────────────────
+// ─── 6-Max 3-bet / BB Defense / 4-Bet 预置范围 ────────────────────────────────
 //
 // 数据源定性（2026-07-31 跨模块专批 C，P1A-06 / P1-C 已定性）：
 // - 「发起 3-bet」类 preset（btn-3bet-vs-co / co-3bet-vs-hj）与「通用 4-bet」（4bet-range）
@@ -397,7 +398,7 @@ export const ADVANCED_PRESET_RANGES: RangePreset[] = [
     // 发起 3-bet spot：JSON 无对应表（btn_vs_co_3bet 是「面对 3-bet 响应」不同 spot），
     // 本 preset 为模块自身权威源，不参与 JSON 一致性守卫（专批 C 定性，勿再误判为应对齐）
     id: 'btn-3bet-vs-co',
-    name: 'BTN 3-Bet vs CO Open (~6%)',
+    name: 'BTN 3-bet vs CO Open (~6%)',
     position: Position.BTN,
     actionType: '3bet',
     hands: [
@@ -412,7 +413,7 @@ export const ADVANCED_PRESET_RANGES: RangePreset[] = [
   {
     // 发起 3-bet spot：同上，模块自身权威源，不参与 JSON 一致性守卫
     id: 'co-3bet-vs-hj',
-    name: 'CO 3-Bet vs HJ Open (~5%)',
+    name: 'CO 3-bet vs HJ Open (~5%)',
     position: Position.CO,
     actionType: '3bet',
     hands: [
@@ -455,7 +456,7 @@ export const ADVANCED_PRESET_RANGES: RangePreset[] = [
     // 数据源：JSON `bb_vs_btn_open` 表 raise 频率 ≥ 0.5（BB 面对 BTN open 时 raise 即发起 3-bet，
     // 此 spot JSON 有覆盖，守卫锁定）
     id: 'bb-3bet-vs-btn',
-    name: 'BB 3-Bet vs BTN Open (~5%)',
+    name: 'BB 3-bet vs BTN Open (~5%)',
     position: Position.BB,
     actionType: '3bet',
     hands: [

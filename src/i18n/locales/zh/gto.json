@@ -4,6 +4,18 @@
   "action": {
     "raiseSlider": "加注尺寸"
   },
+  "review": {
+    "label": "{{position}} {{hand}}",
+    "front": "{{position}} 持 {{hand}}，{{players}} 人桌，底池 {{pot}} BB，有效筹码 {{stack}} BB",
+    "back": {
+      "fold": "弃牌",
+      "check": "过牌",
+      "call": "跟注",
+      "raise": "加注到 {{amount}} BB",
+      "all-in": "全下 {{amount}} BB",
+      "unavailable": "参考 GTO 策略"
+    }
+  },
   "optimal": "最优决策",
   "evLoss": "EV 损失",
   "feedback": {

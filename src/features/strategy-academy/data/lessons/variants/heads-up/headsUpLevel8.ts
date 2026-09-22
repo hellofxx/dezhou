@@ -8,6 +8,12 @@ export const HEADS_UP_LEVEL_8_LESSONS: Lesson[] = [
     title: '单挑剥削打法',
     subtitle: '单挑针对性剥削：频率读取、范围极化与动态调整',
     duration: '9 min',
+    objectives: [
+      '说明单挑剥削是「校准 GTO」而非抛弃（以均衡频率为基线、针对明确偏离做最小必要偏离）',
+      '列举频率读取的四维倾向（开池率、面对 C-Bet 弃牌率、3-bet 率、摊牌倾向）与各自对应的剥削方向',
+      '判断面对跟注站应两极化下注范围（坚果打价值 + 强听牌半诈唬、减少纯诈唬）',
+      '运用剥削五步闭环（HUD 确认漏洞 → 节点锁定 → 对比基线 → 实战执行 → 每 500 手复核），并判断对手反击后应回 GTO 基线',
+    ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante', stackDepth: 100 },
     content: [
@@ -25,7 +31,7 @@ export const HEADS_UP_LEVEL_8_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '频率读取是单挑剥削的地基：识别对手的四维倾向（开池率、面对 C-Bet 弃牌率、3Bet 率、摊牌倾向），再用针对性策略收割。弃牌过多 → 提高 C-Bet/偷盲频率；跟注过松（跟注站）→ 价值下注薄价值、减少纯诈唬；3Bet 过频 → 收窄开池、增加 4Bet；C-Bet 过频 → 提高 x/r。识别依赖跨 50-100 手的统计，单手牌印象不作数。',
+          '频率读取是单挑剥削的地基：识别对手的四维倾向（开池率、面对 C-Bet 弃牌率、3-bet 率、摊牌倾向），再用针对性策略收割。弃牌过多 → 提高 C-Bet/偷盲频率；跟注过松（跟注站）→ 价值下注薄价值、减少纯诈唬；3-bet 过频 → 收窄开池、增加 4Bet；C-Bet 过频 → 提高 x/r。识别依赖跨 50-100 手的统计，单手牌印象不作数。',
       },
       {
         type: 'example',
@@ -40,7 +46,7 @@ export const HEADS_UP_LEVEL_8_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例三（动态调整）：你提高偷盲频率后，对手开始频繁 3Bet 反击——说明他发现了你的偏离。此时必须回到 GTO 基线（收窄偷盲范围、减少纯诈唬），否则你新打开的漏洞会被他反向收割。剥削是动态博弈：偏离-被察觉-回基线，循环往复。',
+          '实例三（动态调整）：你提高偷盲频率后，对手开始频繁 3-bet 反击——说明他发现了你的偏离。此时必须回到 GTO 基线（收窄偷盲范围、减少纯诈唬），否则你新打开的漏洞会被他反向收割。剥削是动态博弈：偏离-被察觉-回基线，循环往复。',
       },
       {
         type: 'highlight',
@@ -90,7 +96,7 @@ export const HEADS_UP_LEVEL_8_LESSONS: Lesson[] = [
       },
       {
         id: 'l8hu-exploitative-q4',
-        question: '你提高偷盲后对手开始频繁 3Bet 反击，正确做法是：',
+        question: '你提高偷盲后对手开始频繁 3-bet 反击，正确做法是：',
         options: [
           '继续加大偷盲',
           '回到 GTO 基线，收窄范围',
@@ -110,7 +116,7 @@ export const HEADS_UP_LEVEL_8_LESSONS: Lesson[] = [
           '随机猜测',
         ],
         correctIndex: 1,
-        explanation: '频率读取依赖跨 50-100 手的统计（开池率/弃牌率/3Bet 率/摊牌倾向），单手牌印象是噪声。',
+        explanation: '频率读取依赖跨 50-100 手的统计（开池率/弃牌率/3-bet 率/摊牌倾向），单手牌印象是噪声。',
       },
     ],
     examples: [
@@ -199,10 +205,10 @@ export const HEADS_UP_LEVEL_8_LESSONS: Lesson[] = [
             street: 'flop',
             potSize: 12,
             effectiveStack: 90,
-            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，SB 面对 3-Bet 弃牌 40%（偏离）' },
+            gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，SB 面对 3-bet 弃牌 40%（偏离）' },
           },
           options: [
-            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'A9 有 A 高 + 后门同花，SB 弃牌率高，1/3 池持续施压剥削。', evImpact: '+1.5 BB/100', evLoss: 0 },
+            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'A9 有 A 高 + 同花听牌（10 outs，3 黑桃已见），SB 弃牌率高，1/3 池持续施压剥削。', evImpact: '+1.5 BB/100', evLoss: 0 },
             { action: 'Check', isCorrect: false, explanation: 'SB 弃牌率高应下注施压，check 太被动。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'All-in', isCorrect: false, explanation: 'A 高 All-in 过度，小注施压即可。', evImpact: '-1.5 BB/100', evLoss: 1.5 },
           ],

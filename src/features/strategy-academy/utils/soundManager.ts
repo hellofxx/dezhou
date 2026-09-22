@@ -35,7 +35,7 @@ class SoundManager {
     setTimeout(() => this.playTone(261, 180), 150); // C4
   }
 
-  /** 倒计时滴答声（最后5秒） */
+  /** 倒计时滴答声（最后 5 秒） */
   playTick() {
     this.playTone(800, 30);
   }

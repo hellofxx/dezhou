@@ -9,6 +9,12 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         title: '范围思维',
         subtitle: '从"对手有什么牌"到"对手的范围是什么"',
         duration: '10 min',
+        objectives: [
+          '说明范围思维（思考对手可能持有的手牌集合）区别于猜测具体手牌，并在每个对手行动后问「这个行动排除了哪些牌」',
+          '排列范围缩减的过滤链条：翻前加注 → 开牌范围、翻后 C-Bet → 排除 miss 牌、面对加注 → 只剩强牌或强听牌',
+          '用加权组合公式 Σ(组合占比 × 对范围胜率) 计算范围总权益，如 {AA, KK} 对 {AK} 约 81%',
+          '比较 BTN 宽范围与 UTG 窄范围在 A-9-4 牌面的命中差异，判断谁的范围更受益',
+        ],
         content: [
           { type: 'heading', content: '什么是范围思维？' },
           {
@@ -193,9 +199,9 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['tag'],
               },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: '你击中了顺子（9-8-7-6）！这是极强的牌，绝对不应该弃牌。', evImpact: '-5.0 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: '顺子应该主动下注获取价值。只跟注太被动，错失建立底池的机会。', evImpact: '+1.0 BB/100' },
-                { action: 'Raise', amount: '10BB', isCorrect: true, explanation: '你击中了顺子！UTG范围在7-6面也有强牌（超对、顶对），应该加注建立大底池。', evImpact: '+3.0 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: '你持有 OESD（9-8 配 7-6 板，5 或 T 均成顺，8 个 outs，两街约 31%），绝对不应该弃牌。', evImpact: '-5.0 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: '强听牌应该主动加注获取弃牌权益。只跟注太被动，错失建立底池的机会。', evImpact: '+1.0 BB/100' },
+                { action: 'Raise', amount: '10BB', isCorrect: true, explanation: '你有 OESD（8 个 outs）+ 后门潜力，是标准半诈唬加注。UTG 范围在 7-6 面的超对、顶对会对加注犯错，加注建立大底池。', evImpact: '+3.0 BB/100' },
               ],
             },
           
@@ -230,6 +236,12 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         title: 'EV 思维',
         subtitle: '用期望值框架分析每个决策',
         duration: '8 min',
+        objectives: [
+          '用 EV = P(胜) × (当前底池 + 对手下注) − P(负) × 跟注额 计算跟注期望值，并与弃牌 EV = 0 比较',
+          '判断 +EV 决策输了时决策依然正确（方差不改变决策质量），并说明结果导向思维为何有害',
+          '计算底池赔率对应的所需胜率（如跟 50 进 200 需 25%），并与实际胜率比较判断跟注是否 +EV',
+          '识别沉没成本谬误（已投入的筹码是死钱），说明 EV 只比较未来分支',
+        ],
         content: [
           { type: 'heading', content: '什么是 EV？' },
           {
@@ -331,16 +343,16 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             effectiveStack: 85,
             potSize: 15.5,
             correctDecision: {
-              action: '这手牌输了，但 3-Bet AKs 的决策是正确的',
+              action: '这手牌输了，但 3-bet AKs 的决策是正确的',
               reasoning: [
-                'AKs 3-Bet CO open 是标准 +EV 操作',
+                'AKs 3-bet CO open 是标准 +EV 操作',
                 '这手牌没中是方差（运气）',
-                '长期来看，AKs 3-Bet 会盈利（对手弃牌 + 击中时赢大底池）',
+                '长期来看，AKs 3-bet 会盈利（对手弃牌 + 击中时赢大底池）',
                 '不要因为一次输了就改变正确策略',
               ],
             },
             commonMistake: {
-              action: '“再也不用AK 3-Bet了”',
+              action: '“再也不用AK 3-bet了”',
               reasoning: '结果导向思维是业余玩家的标志。+EV决策输了不代表决策错了，只是方差而已。',
               evLoss: '长期损失大量 EV（放弃+EV操作）',
             },
@@ -447,6 +459,11 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         title: 'EV 思维实战牌例库',
         subtitle: '来自真实牌局的 EV 分析案例',
         duration: '12 min',
+        objectives: [
+          '判断第二好牌在对手范围偏弱时也应价值下注（K♣Q♣ 对 TAG 弱 Ax，EV(bet) 比 check back 高约 5BB）',
+          '计算组合听牌半诈唬的双重 EV 来源（弃牌权益 + 摊牌权益），如 15 outs 的 T♥J♥ 下注 EV 约 +6.3BB 优于过牌',
+          '比较同一决策点的 EV(bet) 与 EV(check)，判断哪个行动的期望值更高',
+        ],
         content: [
           { type: 'heading', content: 'Case E1: River Value Bet with Second Best Hand' },
           { type: 'example', content: 'Hero K♣Q♣ in CO vs TAG on river A♦, Pot 25BB\n\nKeyDecision: Value bet instead of check back\n\nReasoning:\n- TAG\'s river range is mostly weak Ax after calling two streets\n- Your K♣Q♣ is second best but extracts value from weaker Ax\n- EV(bet) ≈ +5BB higher than EV(check-back)\n\nKeyLesson: 第二好牌也要下注获取价值（Kx 在 TAG 范围中很弱）。不要保守地只过牌收底池。\nSource: Upswing Poker Blog #234' },
@@ -479,6 +496,12 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         title: '对手阅读与剥削策略',
         subtitle: '学会识别对手类型并制定针对性策略',
         duration: '15 min',
+        objectives: [
+          '根据 VPIP/PFR/AF 数据区分五种对手类型（TAG、LAG、Nit、Maniac、Calling Station），如 VPIP 12% 且 PFR 10% 属 Nit',
+          '给出针对各类型的剥削策略：偷 Nit 的盲注、对 Maniac 只等强牌、对 Calling Station 只价值下注永不诈唬',
+          '判断何时用 GTO 基准（对手未知/水平高）何时用剥削策略（样本充足且弱点明显），并说出过度剥削被反剥削的风险',
+          '用读牌四步法（构建初始范围 → 逐街过滤 → 计算价值:诈唬比 → 比较所需胜率）判断河牌全下的跟注，如诈唬占比 40% > 所需 33% 时跟注 +EV',
+        ],
         content: [
           { type: 'heading', content: '为什么对手阅读如此重要？' },
           { type: 'text', content: '德州扑克不是和牌打，而是和人打。同样的手牌面对不同类型的对手，最优决策可能完全不同。学会识别对手类型并制定针对性策略，是从“合格玩家”到“盈利玩家”的关键跳跃。' },
@@ -510,7 +533,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         ],
         quiz: [
           { id: 'l4-opp-q1', question: '一个对手 VPIP 12%, PFR 10%，他最可能是？', options: ['LAG', 'TAG', 'Nit', 'Maniac'], correctIndex: 2, explanation: 'VPIP < 15% 且 PFR 接近 VPIP 的玩家是 Nit（超紧）。他只打最顶级的牌。' },
-          { id: 'l4-opp-q2', question: '面对 Calling Station，以下哪个策略正确？', options: ['频繁bluff', '用强牌价值下注', '对他3-Bet bluff', '弃牌等他加注'], correctIndex: 1, explanation: 'Calling Station 很少弃牌但也不加注。正确策略是用强牌下注获取价值，永远不要bluff他。' },
+          { id: 'l4-opp-q2', question: '面对 Calling Station，以下哪个策略正确？', options: ['频繁bluff', '用强牌价值下注', '对他3-bet bluff', '弃牌等他加注'], correctIndex: 1, explanation: 'Calling Station 很少弃牌但也不加注。正确策略是用强牌下注获取价值，永远不要bluff他。' },
           { id: 'l4-opp-q3', question: '什么时候应该主要使用GTO策略？', options: ['对手数据充足时', '对手未知/水平高时', '任何时候', '从不用'], correctIndex: 1, explanation: 'GTO 最适合对手未知（数据不足）或对手水平高（难以剥削）的场景。有足够数据时应结合剥削策略。' },
           { id: 'l4-opp-q4', question: '面对 Maniac 的正确策略是？', options: ['经常bluff他', '用中等牌频繁加注', '耐心等待强牌让他送筹码', '每次都弃牌'], correctIndex: 2, explanation: 'Maniac 几乎不弃牌且大量bluff。正确策略是耐心等待强牌，让他自己把筹码送过来。不要对他bluff！' },
         
@@ -538,7 +561,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               ],
             },
             commonMistake: {
-              action: 'Call 或 3-Bet',
+              action: 'Call 或 3-bet',
               reasoning: '很多新手看到 AJo 就觉得“这手牌够好”。但面对 NIT 时，AJo 的 equity 远低于你以为的。如果你 call 了，翻牌中 A 后你会输给 AK/AQ，损失大量筹码。',
               evLoss: '-1.2 BB/100',
             },
@@ -561,16 +584,16 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               action: 'Call',
               amount: '2BB',
               reasoning: [
-                'QQ 是一手强牌，但面对 Maniac 不建议 3-Bet',
+                'QQ 是一手强牌，但面对 Maniac 不建议 3-bet',
                 'Maniac 的 open 范围极宽（45%+），你的 QQ 遥遥领先',
-                '3-Bet 会建立大底池，但 Maniac 几乎不会弃牌',
+                '3-bet 会建立大底池，但 Maniac 几乎不会弃牌',
                 'Call 让底池保持可控，翻后可以利用位置（你是BB，翻后先行动但可以 check-raise）',
                 '关键：耐心等 Maniac 自己犯错，不要急于建立大底池',
               ],
             },
             commonMistake: {
-              action: '3-Bet 到 10BB',
-              reasoning: '虽然3-Bet在GTO中是标准打法，但面对Maniac时不一定最优。大底池意味着你需要在翻后做出更多复杂决策。Call更简单且同样有利可图——让他自己把钱送进来。',
+              action: '3-bet 到 10BB',
+              reasoning: '虽然3-bet在GTO中是标准打法，但面对Maniac时不一定最优。大底池意味着你需要在翻后做出更多复杂决策。Call更简单且同样有利可图——让他自己把钱送进来。',
               evLoss: '-0.3 BB/100（相对call）',
             },
             gameContext: {
@@ -600,8 +623,8 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'KJs 面对 LAG 的 HJ open 太强了不能弃牌。LAG 范围宽，你的牌在他范围中偏上。', evImpact: '-0.8 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'Call 是可以的，但不是最优。面对 LAG，3-Bet 更有价值——他的宽范围意味着更多弃牌权益。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '8BB', isCorrect: true, explanation: '面对 LAG 的宽范围 open，用 KJs 3-Bet 是高EV打法。你有位置优势 + 好的 blocker + 翻后可玩性。LAG 范围中有大量弱牌会对你的 3-Bet 弃牌。', evImpact: '+1.5 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'Call 是可以的，但不是最优。面对 LAG，3-bet 更有价值——他的宽范围意味着更多弃牌权益。', evImpact: '+0.5 BB/100' },
+                { action: 'Raise', amount: '8BB', isCorrect: true, explanation: '面对 LAG 的宽范围 open，用 KJs 3-bet 是高EV打法。你有位置优势 + 好的 blocker + 翻后可玩性。LAG 范围中有大量弱牌会对你的 3-bet 弃牌。', evImpact: '+1.5 BB/100' },
               ],
             },
             {
@@ -625,7 +648,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: true, explanation: 'A9s 面对 Calling Station 的加注应该 fold。CS 极少加注（PFR仅5%），一旦加注代表非常强的范围。A9s 容易被支配，且 ICM 中等压力下保护筹码更重要。', evImpact: '0 BB/100' },
                 { action: 'Call', isCorrect: false, explanation: '40BB 深度 call 后翻牌不中就是浪费 2.5BB。且 CS 翻后倾向跟注到底，你无法利用位置施压。', evImpact: '-0.5 BB/100' },
-                { action: 'Raise', amount: '7BB', isCorrect: false, explanation: '3-Bet bluff 面对 Calling Station 是-EV的——他几乎不弃牌。且 SNG 后期 ICM 压力下不应冒险做大底池。', evImpact: '-1.0 BB/100' },
+                { action: 'Raise', amount: '7BB', isCorrect: false, explanation: '3-bet bluff 面对 Calling Station 是-EV的——他几乎不弃牌。且 SNG 后期 ICM 压力下不应冒险做大底池。', evImpact: '-1.0 BB/100' },
               ],
             },
             {
@@ -649,7 +672,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'TT 面对 TAG BTN open 在 200BB 深度太浪费了。口袋对有很好的 set mine 价值，尤其在深筹码时。', evImpact: '-1.0 BB/100' },
                 { action: 'Call', isCorrect: true, explanation: '200BB 深度用 TT call 是标准打法。深筹码时 set mine 的隐含赔率极好（中set可赢对手200BB），且 TAG 翻后 C-Bet 频率高，你的 set 可以赚到大量筹码。', evImpact: '+1.8 BB/100' },
-               { action: 'Raise', amount: '9BB', isCorrect: false, explanation: '3-Bet TT 在深筹码中不太理想。如果被4-Bet你被迫弃牌（浪费set mine机会），如果被call则翻后无位置打中等牌力。Call更优。', evImpact: '+0.5 BB/100' },
+               { action: 'Raise', amount: '9BB', isCorrect: false, explanation: '3-bet TT 在深筹码中不太理想。如果被4-Bet你被迫弃牌（浪费set mine机会），如果被call则翻后无位置打中等牌力。Call更优。', evImpact: '+0.5 BB/100' },
               ],
             },
           
@@ -684,23 +707,29 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         title: 'Blocker 效应',
         subtitle: '利用手牌阻断对手范围的关键概念',
         duration: '10 min',
+        objectives: [
+          '计算持有 A 时对手组合数的修正：AA 从 6 种减到 3 种（-50%）、AK 从 16 种减到 12 种（-25%）',
+          '判断 A5s 优于 76s 作为 3-bet bluff 的 blocker 理由（阻断对手 AA/AK 继续范围）',
+          '区分 hero call 中的两类 blocker：持有阻断对手 value 范围的牌倾向 call，持有阻断对手 bluff 范围的牌倾向 fold',
+          '识别常见 blocker 误区（持 K 不减少对手 AA 的组合数），说明只有 A 才阻断 AA',
+        ],
         content: [
           { type: 'heading', content: '什么是 Blocker？' },
           { type: 'text', content: 'Blocker（阻断牌）是指你手中的牌减少了对手持有特定手牌组合的概率。当你持有一张 A 时，对手持有 AA 的组合从 6 种减少到 3 种，持有 AK 的组合从 16 种减少到 12 种。这个看似简单的概念是现代扑克策略的基石之一。' },
           { type: 'key-point', content: '核心原理：一副牌只有 4 张 A。你持有 1 张 A，剩余 3 张 A 在对手手中的组合数大幅减少。' },
           { type: 'heading', content: 'A Blocker 的威力' },
-          { type: 'text', content: '持有 Ax（任何带 A 的手牌）时：\n\n- 对手持有 AA 的组合：从 6 种 → 3 种（减少 50%）\n- 对手持有 AK 的组合：从 16 种 → 12 种（减少 25%）\n- 对手持有 AQ 的组合：从 16 种 → 12 种（减少 25%）\n\n这就是为什么 A5s 比 76s 更适合作为 3-Bet bluff：你阻断了对手最可能继续的强牌（AA、AK），同时保留了对手弃牌的可能性。' },
+          { type: 'text', content: '持有 Ax（任何带 A 的手牌）时：\n\n- 对手持有 AA 的组合：从 6 种 → 3 种（减少 50%）\n- 对手持有 AK 的组合：从 16 种 → 12 种（减少 25%）\n- 对手持有 AQ 的组合：从 16 种 → 12 种（减少 25%）\n\n这就是为什么 A5s 比 76s 更适合作为 3-bet bluff：你阻断了对手最可能继续的强牌（AA、AK），同时保留了对手弃牌的可能性。' },
           { type: 'heading', content: '同花 Blocker' },
           { type: 'text', content: '持有某花色的牌会减少对手持有该花色同花的可能性：\n\n- 你持有 1 张红心：对手持有特定红心同花的概率降低\n- 在考虑 hero call 时特别有用：如果你持有对手可能需要的同花 blocker，他实际持有同花的概率更低\n- 在 bluff 时：持有同花 blocker 意味着对手更不可能有同花来跟注你' },
           { type: 'heading', content: 'Blocker 在 Bluff 中的应用' },
-          { type: 'text', content: '选择 bluff 手牌时，优先选择阻断对手"继续"范围的牌：\n\n3-Bet/4-Bet Bluff 选择：\n- A5s > 76s（A blocker 减少对手 AA/AK 组合）\n- A4s > 98s（同理，且 A5s/A4s 有同花潜力）\n\nRiver Bluff 选择：\n- 持有阻断对手 call 范围的牌（如阻断对手可能跟注的同花/顺子）\n- 不持有阻断对手 fold 范围的牌' },
+          { type: 'text', content: '选择 bluff 手牌时，优先选择阻断对手"继续"范围的牌：\n\n3-bet/4-Bet Bluff 选择：\n- A5s > 76s（A blocker 减少对手 AA/AK 组合）\n- A4s > 98s（同理，且 A5s/A4s 有同花潜力）\n\nRiver Bluff 选择：\n- 持有阻断对手 call 范围的牌（如阻断对手可能跟注的同花/顺子）\n- 不持有阻断对手 fold 范围的牌' },
           { type: 'heading', content: 'Blocker 在 Hero Call 中的应用' },
           { type: 'text', content: '当你考虑是否跟注对手的大额下注时：\n\n- 如果你持有阻断对手 value 范围的牌 → 更倾向于 call\n  例：你持有 A♠，对手不太可能有 AA/AKs 等顶级 value\n- 如果你持有阻断对手 bluff 范围的牌 → 更倾向于 fold\n  例：你持有对手可能用来 bluff 的同花 blocker\n\n量化思维：每个 blocker 大约减少对手相关组合 25-50%。' },
           { type: 'highlight', content: 'Blocker 效应是"边际优势"——不会完全改变决策，但在接近的决策点（close decision）中，blocker 可以成为决定性因素。' },
           { type: 'pro-tip', content: '职业牌手在每一个 bluff 和 hero call 决策中都会考虑 blocker。养成习惯：在做困难决策时，先看自己手中阻断了什么。' },
           {
             type: 'formula',
-            content: 'Blocker 对组合数的修正：\n无 Blocker 时：AA = C(4,2) = 6 种\n持有一张 A 时：AA = C(3,2) = 3 种（减少 50%）\n\nAK 组合数修正：\n无 Blocker 时：AK = 4×4 = 16 种\n持有 A♠ 时：AK = 3×4 = 12 种（减少 25%）\n持有 A♠K♣ 时：AK = 3×3 = 9 种（减少 44%）\n\nBlocker 对范围比例的影响：\n对手 3Bet 范围 = {AA, KK, AK}，共 6+6+16=28 种\n你持 AK 时 → 3+3+9=15 种，你领先的 QQ 占比从 0 升至实质比例',
+            content: 'Blocker 对组合数的修正：\n无 Blocker 时：AA = C(4,2) = 6 种\n持有一张 A 时：AA = C(3,2) = 3 种（减少 50%）\n\nAK 组合数修正：\n无 Blocker 时：AK = 4×4 = 16 种\n持有 A♠ 时：AK = 3×4 = 12 种（减少 25%）\n持有 A♠K♣ 时：AK = 3×3 = 9 种（减少 44%）\n\nBlocker 对范围比例的影响：\n对手 3-bet 范围 = {AA, KK, AK}，共 6+6+16=28 种\n你持 AK 时 → 3+3+9=15 种，你领先的 QQ 占比从 0 升至实质比例',
           },
           {
             type: 'theory-reference',
@@ -714,13 +743,13 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         ],
         quiz: [
           { id: 'l4-blockers-q1', question: '你持有一张 A，对手持有 AA 的组合数从多少减少到多少？', options: ['从 6 种减少到 3 种', '从 6 种减少到 1 种', '从 4 种减少到 2 种', '从 16 种减少到 12 种'], correctIndex: 0, explanation: 'AA 的组合数为 C(4,2)=6。你持有 1 张 A 后，剩余 3 张 A，组合数为 C(3,2)=3，减少了 50%。' },
-          { id: 'l4-blockers-q2', question: '为什么 A5s 比 76s 更适合作为 3-Bet bluff？', options: ['A5s 牌力更强', 'A blocker 减少对手 AA/AK 的组合', 'A5s 翻后更好打', '76s 没有同花潜力'], correctIndex: 1, explanation: 'A5s 中的 A 阻断了对手最可能继续（call/4-bet）的强牌组合（AA、AK），使对手更可能弃牌，提高了 bluff 的成功率。' },
+          { id: 'l4-blockers-q2', question: '为什么 A5s 比 76s 更适合作为 3-bet bluff？', options: ['A5s 牌力更强', 'A blocker 减少对手 AA/AK 的组合', 'A5s 翻后更好打', '76s 没有同花潜力'], correctIndex: 1, explanation: 'A5s 中的 A 阻断了对手最可能继续（call/4-bet）的强牌组合（AA、AK），使对手更可能弃牌，提高了 bluff 的成功率。' },
           { id: 'l4-blockers-q3', question: '在 hero call 决策中，你持有阻断对手 value 范围的牌意味着？', options: ['应该立即弃牌', '对手更可能有强牌', '对手持有强牌的概率降低，更倾向 call', '没有任何影响'], correctIndex: 2, explanation: '如果你的手牌阻断了对手的 value 范围（如你持有 A 减少了对手 AA/AK 的可能），对手实际持有强牌的概率降低，使得 call 更有利。' },
         ],
         examples: [
           {
             id: 'l4-blockers-ex1',
-            title: 'A Blocker 在 3-Bet Bluff 中的应用',
+            title: 'A Blocker 在 3-bet Bluff 中的应用',
             heroHand: ['Ah', '5h'],
             heroPosition: 'BTN',
             previousActions: [
@@ -734,14 +763,14 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               action: 'Raise',
               amount: '8BB',
               reasoning: [
-                'A5s 是优秀的 3-Bet bluff 候选：A blocker 减少对手 AA/AK 组合',
-                'TAG 面对 3-Bet 会弃掉大量中等牌（JJ-88, AQ-AT）',
+                'A5s 是优秀的 3-bet bluff 候选：A blocker 减少对手 AA/AK 组合',
+                'TAG 面对 3-bet 会弃掉大量中等牌（JJ-88, AQ-AT）',
                 '即使被 call，A5s 有良好的翻后可玩性（同花+顺子潜力）',
                 '相比 76s，A5s 的 blocker 效应使 bluff 成功率更高',
               ],
             },
             commonMistake: {
-              action: '用 76s 替代 A5s 作为 3-Bet bluff',
+              action: '用 76s 替代 A5s 作为 3-bet bluff',
               reasoning: '76s 没有 A blocker，对手持有 AA/AK 的概率更高，意味着对手更可能继续（call 或 4-bet），bluff 成功率降低。',
               evLoss: '-0.4 BB/100',
             },
@@ -802,8 +831,8 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'A4s 面对 BTN open 太强不能弃牌。你有 A blocker + 同花潜力。', evImpact: '-0.6 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'Call 可以但不是最优。SB 位置 call 后翻后无位置，且 A4s 的 blocker 效应使其更适合 3-Bet bluff。', evImpact: '+0.3 BB/100' },
-                { action: 'Raise', amount: '9BB', isCorrect: true, explanation: 'A4s 是经典的 3-Bet bluff：A blocker 减少对手继续的范围，同花潜力提供翻后 equity，且在 SB 位置主动建立底池比被动 call 更好。', evImpact: '+1.2 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'Call 可以但不是最优。SB 位置 call 后翻后无位置，且 A4s 的 blocker 效应使其更适合 3-bet bluff。', evImpact: '+0.3 BB/100' },
+                { action: 'Raise', amount: '9BB', isCorrect: true, explanation: 'A4s 是经典的 3-bet bluff：A blocker 减少对手继续的范围，同花潜力提供翻后 equity，且在 SB 位置主动建立底池比被动 call 更好。', evImpact: '+1.2 BB/100' },
               ],
             },
             {
@@ -843,9 +872,9 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['nit'],
               },
               options: [
-                { action: 'Call', isCorrect: false, explanation: 'KK 面对 NIT open 只 call 太被动。你有极强的 blocker 效应（减少对手 AA 从 6→1 组合），应该 3-Bet 获取价值。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '8BB', isCorrect: true, explanation: 'KK 是明确的 3-Bet for value。你的 K blocker 使对手持有 AA 的概率极低（仅 1 种组合）。NIT 的 open 范围中 AK/AQ/JJ 都会对你的 3-Bet 做出反应。', evImpact: '+2.5 BB/100' },
-                { action: 'Raise', amount: '12BB', isCorrect: false, explanation: '过大的 3-Bet 会让 NIT 弃掉所有非 AA/KK 的牌。标准 3x 大小（8BB）能保持对手的弱范围继续。', evImpact: '+1.5 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'KK 面对 NIT open 只 call 太被动。你有极强的 blocker 效应（减少对手 AA 从 6→1 组合），应该 3-bet 获取价值。', evImpact: '+0.5 BB/100' },
+                { action: 'Raise', amount: '8BB', isCorrect: true, explanation: 'KK 是明确的 3-bet for value。你的 K blocker 使对手持有 AA 的概率极低（仅 1 种组合）。NIT 的 open 范围中 AK/AQ/JJ 都会对你的 3-bet 做出反应。', evImpact: '+2.5 BB/100' },
+                { action: 'Raise', amount: '12BB', isCorrect: false, explanation: '过大的 3-bet 会让 NIT 弃掉所有非 AA/KK 的牌。标准 3x 大小（8BB）能保持对手的弱范围继续。', evImpact: '+1.5 BB/100' },
               ],
             },
             {
@@ -908,6 +937,11 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         title: '范围识别 Drill',
         subtitle: '判断手牌属于哪个范围',
         duration: '3分钟',
+        objectives: [
+          '判断给定手牌属于指定位置范围的哪个部分（核心/边缘/不在范围内）',
+          '比较不同位置的 3-bet 与 4-Bet 范围归属（如 KQs 是 CO vs BTN 的边缘 3-bet 候选、AA 是核心 4-Bet）',
+          '识别 Ax 同花在 BTN/SB 边缘 open 中的 blocker 与可玩性价值',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -961,13 +995,13 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               scenario: '翻前决策',
               hand: 'KcQc',
               position: 'CO',
-              question: 'KQs属于CO 3-Bet范围的哪个部分（面对BTN open）？',
+              question: 'KQs属于CO 3-bet范围的哪个部分（面对BTN open）？',
               options: [
-                { id: 'a', text: '不在3-Bet范围', isCorrect: false },
-                { id: 'b', text: '边缘3-Bet候选', isCorrect: true },
-                { id: 'c', text: '核心3-Bet牌', isCorrect: false },
+                { id: 'a', text: '不在3-bet范围', isCorrect: false },
+                { id: 'b', text: '边缘3-bet候选', isCorrect: true },
+                { id: 'c', text: '核心3-bet牌', isCorrect: false },
               ],
-              explanation: 'KQs在CO vs BTN是边缘3-Bet候选。它不够强作为价值3-Bet，但可以作为混合策略的一部分。',
+              explanation: 'KQs在CO vs BTN是边缘3-bet候选。它不够强作为价值3-bet，但可以作为混合策略的一部分。',
               difficulty: 2,
             },
             {
@@ -975,7 +1009,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               scenario: '翻前决策',
               hand: 'AcAc',
               position: 'BB',
-              question: 'AA属于BB 4-Bet范围的哪个部分（面对BTN 3-Bet）？',
+              question: 'AA属于BB 4-Bet范围的哪个部分（面对BTN 3-bet）？',
               options: [
                 { id: 'a', text: '不在4-Bet范围', isCorrect: false },
                 { id: 'b', text: '边缘4-Bet牌', isCorrect: false },
@@ -1036,6 +1070,11 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
         title: 'EV 估算 Drill',
         subtitle: '简单 EV 计算',
         duration: '3分钟',
+        objectives: [
+          '用 EV = P(胜) × 可赢额 − P(负) × 投入额 计算价值下注与跟注的期望值（如 0.6×15BB − 0.4×5BB = +7BB）',
+          '区分下注与跟注的「可赢额」口径：跟注时可赢额含当前底池加对手下注，下注被跟时含底池加自己的下注',
+          '识别把单街成牌率（9 outs 约 19%）误用两街口径（约 35%）以及漏计对手下注导致的 EV 符号错误',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -1095,11 +1134,11 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
               scenario: 'River, 底池20BB',
               question: '你下注15BB，对手跟注。你赢的概率70%。下注的EV是多少？',
               options: [
-                { id: 'a', text: '+6BB', isCorrect: true },
+                { id: 'a', text: '+20BB', isCorrect: true },
                 { id: 'b', text: '+10.5BB', isCorrect: false },
-                { id: 'c', text: '+4.5BB', isCorrect: false },
+                { id: 'c', text: '+6BB', isCorrect: false },
               ],
-              explanation: '下注EV = 0.7×15BB - 0.3×15BB = 10.5BB - 4.5BB = +6BB。下注是正确的。',
+              explanation: '与 q1 同一口径：赢时净赢 = 底池 20BB + 对手跟注 15BB = 35BB（自己的下注被跟后收回，不计入赢利），输时损失下注 15BB。EV = 0.7×35BB − 0.3×15BB = 24.5BB − 4.5BB = +20BB。选项 b（+10.5BB）是只按下注额计可赢额的口径错误。下注是正确的。',
               difficulty: 2,
             },
             {

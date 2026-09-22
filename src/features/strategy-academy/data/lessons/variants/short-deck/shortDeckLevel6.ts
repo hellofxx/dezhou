@@ -8,6 +8,11 @@ export const SHORT_DECK_LEVEL_6_LESSONS: Lesson[] = [
     title: '短牌锦标赛（一）',
     subtitle: '短牌 MTT 的筹码节奏、翻前攻防与生存策略',
     duration: '8 min',
+    objectives: [
+      '区分短牌 MTT 与现金桌的差异（盲注上涨、筹码有限、ICM 压力），并说出筹码节奏三阶段策略（50BB+ 现金桌式、20-50BB min-raise+翻后、20BB 以下翻前全下为主）',
+      '判断同一手牌（如 AQ 面对 3-bet）的打法随筹码深度变化（深筹码可跟注看翻后、浅筹码可直接全下）',
+      '判断泡沫期 ICM 压力下 KQ 非对子面对 BTN 全下（约 35%-40% 胜率）筹码健康应倾向弃牌保生存',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 50 },
     content: [
@@ -30,7 +35,7 @@ export const SHORT_DECK_LEVEL_6_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：短牌 MTT 中筹码，你持 A♠Q♠，对手（BB）3Bet。AQ 短牌次级价值（非对子但强），面对 3Bet 要看筹码深度与对手倾向：深筹码可跟注看翻后，浅筹码（20BB 以下）可直接全下（AQ 对宽范围胜率不错）。筹码节奏决定同一手牌的打法。',
+          '实例：短牌 MTT 中筹码，你持 A♠Q♠，对手（BB）3-bet。AQ 短牌次级价值（非对子但强），面对 3-bet 要看筹码深度与对手倾向：深筹码可跟注看翻后，浅筹码（20BB 以下）可直接全下（AQ 对宽范围胜率不错）。筹码节奏决定同一手牌的打法。',
       },
       {
         type: 'example',
@@ -166,14 +171,14 @@ export const SHORT_DECK_LEVEL_6_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['8h', '7c', '2s'],
+            board: ['8h', '7c', 'Js'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 45,
             gameContext: { gameType: 'mtt', tableDescription: '短牌 MTT，中筹码 45 ante' },
           },
           options: [
-            { action: 'Check-Fold', isCorrect: false, explanation: 'T9 在 8-7-2 面有顺子听牌，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
+            { action: 'Check-Fold', isCorrect: false, explanation: 'T9 在 8-7-J 面有顺子听牌（缺 6/Q 双向），fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
             { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: 'T9 有顺子听牌，中筹码 x/r 半诈唬保护。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: '听牌 All-in 过度，x/r 建立优势即可。', evImpact: '-1.2 ante', evLoss: 1.2 },
           ],
@@ -210,6 +215,11 @@ export const SHORT_DECK_LEVEL_6_LESSONS: Lesson[] = [
     title: '短牌锦标赛（二）',
     subtitle: '短牌 MTT 的 ICM、泡沫期与决赛桌调整',
     duration: '8 min',
+    objectives: [
+      '说明 ICM 的核心（筹码实际价值非线性，越靠近钱圈越明显），并判断短牌高波动让 ICM 压力更明显',
+      '判断泡沫期角色策略（筹码健康者避免不必要的全下波动保生存、短筹码者激进抢盲翻盘）',
+      '运用决赛桌深筹码对短筹码的宽范围施压（对手 ICM 压力大不敢冒险），并区分「领先时保守」与现金桌「永远最大 EV」',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 40 },
     content: [

@@ -18,8 +18,7 @@ async function loadAllowedCrossImports(): Promise<CrossImportMap> {
 // 当前依赖图精确快照（10 个模块键）：
 // progress 边为 AGENTS.md 设计内的跨模块状态中枢引用，其余 peer 边为存量债务。
 // theory-academy 引用 progress（中枢）；
-// progress 的成就检查与学院课程数据源已全部依赖倒置
-// （achievementRegistry + academyDataSourceRegistry），不再静态 import 任何 trainer store。
+// T1/A1: persistWrapperProbe.test.ts 越界边已移除至 theory 模块内，progress 出边保持为空。
 // help-center 为纯静态教程模块，无任何 feature 引用（纳入守卫防未来漂移）。
 const EXPECTED_SNAPSHOT: CrossImportMap = {
   'gto-simulator': ['progress'],

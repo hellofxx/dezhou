@@ -311,7 +311,10 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                 >
                   {t(CATEGORY_LABELS[currentItem.category] ?? 'review.category.strategy')}
                 </span>
-                <span className="min-w-0 truncate text-xs text-[var(--ivory-muted)]">{t(currentItem.label)}</span>
+                {/* label 与 front 同属一个复习项，共用 metadata.params 插值 */}
+                <span className="min-w-0 truncate text-xs text-[var(--ivory-muted)]">
+                  {t(currentItem.label, currentItem.metadata?.params ?? {})}
+                </span>
               </div>
 
               {/* 题干 */}
@@ -391,7 +394,9 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                         {t('review.answerLabel', { defaultValue: '答案' })}
                       </div>
                       <p className="text-sm text-[var(--ivory)] leading-relaxed">
-                        {currentItem.metadata?.back ? t(currentItem.metadata.back) : ''}
+                        {currentItem.metadata?.back
+                          ? t(currentItem.metadata.back, currentItem.metadata?.params ?? {})
+                          : ''}
                       </p>
                     </div>
                   ) : (

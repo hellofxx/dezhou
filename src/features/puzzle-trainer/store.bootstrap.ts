@@ -7,8 +7,9 @@
 import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
 import { usePuzzleStore } from './store';
 
-// 成就检查数据源：progress store 的 checkCondition 经注册表查询
+// 成就检查数据源：progress store 的 checkCondition 经注册表查询（T7/B4 idempotency）
 registerAchievementSource({
+  id: 'puzzle-trainer',
   isLevelLessonsCompleted: () => false,
   getCertifications: () => ({}),
   areAllLevelsCertified: () => false,

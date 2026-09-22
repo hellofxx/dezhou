@@ -1,6 +1,6 @@
 import type { TrainingRecord, StreakState, StreakMilestones } from '../types';
 import { MILESTONE_DAYS } from '../types';
-import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+import { toLocalDateKey } from './toLocalDateKey';
 import { toLocalDateString } from '@/shared/utils/spacedRepetition';
 
 /** 计算当前连续训练天数 */

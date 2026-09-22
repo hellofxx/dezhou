@@ -8,9 +8,14 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
         title: 'Pool Tendencies 分析',
         subtitle: '识别和利用特定级别玩家池的共同弱点',
         duration: '10 min',
+        objectives: [
+          '说明剥削的核心（找到对手偏离 GTO 的方向并向相反方向调整），如对手跟注太多时增价值减 bluff',
+          '区分各级别玩家池的典型倾向与应对（微额纯价值几乎不 bluff、低额多 C-Bet 与 double barrel、中额精确节点锁定小幅剥削）',
+          '用安全偏离幅度 = 可观测偏差 × (1 − 对手调整概率) 计算剥削幅度（如偏差 +20%、调整概率 30% → 偏离 14%），并说出以不被反制为上限',
+        ],
         content: [
           { type: 'heading', content: '什么是 Player Pool Tendencies？' },
-          { type: 'text', content: '每个级别的玩家池（Player Pool）都有特定的共同倾向。例如微额玩家通常跟注太多、不够激进；而中额玩家可能 3-Bet 太多但翻后放弃太快。' },
+          { type: 'text', content: '每个级别的玩家池（Player Pool）都有特定的共同倾向。例如微额玩家通常跟注太多、不够激进；而中额玩家可能 3-bet 太多但翻后放弃太快。' },
           { type: 'key-point', content: '剥削的核心：找到对手/玩家池偏离 GTO 的方向，然后向相反方向调整。对手跟注太多？增加价值下注、减少 bluff。对手弃牌太多？增加 bluff 频率。' },
           { type: 'heading', content: '各级别 Pool 的典型倾向' },
           { type: 'text', content: '微额（NL2-NL10）：\n• 跟注太多，几乎不弃牌\n• 应对：纯价值下注，几乎不 bluff\n\n低额（NL25-NL50）：\n• 翻前开始合理但翻后弱\n• 应对：多 C-Bet、多 double barrel\n\n中额（NL100-NL200）：\n• 策略接近 GTO 但仍有漏洞\n• 应对：精确的节点锁定 + 小幅剥削' },
@@ -54,25 +59,30 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
         title: 'Population Analysis',
         subtitle: '用统计数据批量识别玩家类型并制定对策',
         duration: '11 min',
+        objectives: [
+          '判断关键群体指标的含义与应对（Fold to C-Bet 65% → 加频 C-Bet、Fold to 3-bet 70% → 扩大 3-bet bluff、WTSD 28% → 减少多街 bluff）',
+          '区分个体分析与群体分析（Population Analysis 用级别平均倾向作默认假设），并说出随样本积累转向个体化剥削的路径',
+          '判断不同级别的策略差异（NL5 用纯价值下注、NL100 用精确节点锁定加小幅剥削）',
+        ],
         content: [
           { type: 'heading', content: '从个体分析到群体分析' },
           { type: 'text', content: '当你没有特定对手的数据时，可以用该级别玩家的「平均倾向」作为默认假设。这就是 Population Analysis——分析特定玩家池的统计倾向。' },
-          { type: 'key-point', content: '关键统计指标：\n• Pool 平均 VPIP/PFR：确定玩家池的松紧度\n• Fold to C-Bet %：决定你的 C-Bet 频率\n• Fold to 3-Bet %：决定你的 3-Bet bluff 频率\n• WTSD%（Went to Showdown）：判断多街 bluff 的效果' },
+          { type: 'key-point', content: '关键统计指标：\n• Pool 平均 VPIP/PFR：确定玩家池的松紧度\n• Fold to C-Bet %：决定你的 C-Bet 频率\n• Fold to 3-bet %：决定你的 3-bet bluff 频率\n• WTSD%（Went to Showdown）：判断多街 bluff 的效果' },
           { type: 'heading', content: '应用实例' },
-          { type: 'text', content: '如果 Pool 平均 Fold to C-Bet = 65%（远高于GTO的 45%）：\n→ 你应该 C-Bet 更频繁（甚至 100% 在干燥牌面）\n\n如果 Pool 平均 Fold to 3-Bet = 70%：\n→ 你可以大幅增加 3-Bet bluff 范围\n\n如果 Pool 平均 WTSD = 28%（较高）：\n→ 减少多街 bluff，增加价值下注' },
+          { type: 'text', content: '如果 Pool 平均 Fold to C-Bet = 65%（远高于GTO的 45%）：\n→ 你应该 C-Bet 更频繁（甚至 100% 在干燥牌面）\n\n如果 Pool 平均 Fold to 3-bet = 70%：\n→ 你可以大幅增加 3-bet bluff 范围\n\n如果 Pool 平均 WTSD = 28%（较高）：\n→ 减少多街 bluff，增加价值下注' },
           { type: 'pro-tip', content: '用 Population 数据作为“默认假设”，然后随着对特定对手的了解加深，逐渐转向个体化剥削。' },
         ],
         quiz: [
           { id: 'l8-pop-q1', question: '如果 Pool 平均 Fold to C-Bet = 65%，你应该？', options: ['减少 C-Bet', '大幅增加 C-Bet 频率', '保持 GTO 频率', '只用强牌 C-Bet'], correctIndex: 1, explanation: 'Pool 弃牌率远高于 GTO，意味着你的 C-Bet bluff 很赚钱，应增加频率。' },
           { id: 'l8-pop-q2', question: 'Population Analysis 的核心是？', options: ['分析单个对手', '分析整个玩家池的平均倾向', '只看自己的数据', '计算EV'], correctIndex: 1, explanation: 'Population Analysis 分析特定级别整个玩家群体的平均倾向。' },
         
-          { id: 'l8-pop-q3', question: '如果Pool平均Fold to 3-Bet = 70%，你应该？', options: ['减少3-Bet', '大幅增加3-Bet bluff', '保持GTO', '只value 3-Bet'], correctIndex: 1, explanation: 'Pool弃牌率70%给3-Bet，大幅增加bluff范围。' },
+          { id: 'l8-pop-q3', question: '如果Pool平均Fold to 3-bet = 70%，你应该？', options: ['减少3-bet', '大幅增加3-bet bluff', '保持GTO', '只value 3-bet'], correctIndex: 1, explanation: 'Pool弃牌率70%给3-bet，大幅增加bluff范围。' },
           { id: 'l8-pop-q4', question: 'WTSD%高说明什么？', options: ['对手经常弃牌', '对手跟注到摊牌', '对手bluff多', '对手打得紧'], correctIndex: 1, explanation: 'WTSD%高说明对手跟注到摊牌，多街bluff效果差。' },
           { id: 'l8-pop-q5', question: 'Population数据应该作为什么使用？', options: ['最终决策', '默认假设', '不需要', '唯一参考'], correctIndex: 1, explanation: 'Population数据作为"默认假设"，随了解加深转向个体化剥削。' },],
         practice: {
           id: 'l8-pop-practice',
           questions: [
-            { id: 'l8-pop-p1', difficulty: 'intermediate', scenario: { heroHand: ['As', '5s'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'NL50，Pool平均fold to 3-bet 70%' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'Pool fold to 3-bet 70%，应该用宽范围3-Bet bluff。', evImpact: '-0.5 BB/100' }, { action: 'Raise 2.5BB', isCorrect: false, explanation: 'Pool fold to 3-bet 70%，3-Bet bluff更赚钱。', evImpact: '+0.5 BB/100' }, { action: 'Raise 2.5BB然后准备3-Bet bluff如果被4-Bet就弃牌', isCorrect: true, explanation: 'Pool弃牌率70%，open后如果被3-Bet可以用A5s做3-Bet bluff re-raise。', evImpact: '+1.5 BB/100' }], relatedLessonId: 'l8-population-analysis' },
+            { id: 'l8-pop-p1', difficulty: 'intermediate', scenario: { heroHand: ['As', '5s'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'NL50，Pool平均fold to 3-bet 70%' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'Pool fold to 3-bet 70%，应该用宽范围3-bet bluff。', evImpact: '-0.5 BB/100' }, { action: 'Raise 2.5BB', isCorrect: false, explanation: 'Pool fold to 3-bet 70%，3-bet bluff更赚钱。', evImpact: '+0.5 BB/100' }, { action: 'Raise 2.5BB然后准备3-bet bluff如果被4-Bet就弃牌', isCorrect: true, explanation: 'Pool弃牌率70%，open后如果被3-bet可以用A5s做3-bet bluff re-raise。', evImpact: '+1.5 BB/100' }], relatedLessonId: 'l8-population-analysis' },
             { id: 'l8-pop-p2', difficulty: 'advanced', scenario: { heroHand: ['Qd', 'Jd'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }], street: 'flop', board: ['Kc', '8h', '3d'], potSize: 6.5, effectiveStack: 95, gameContext: { gameType: 'cash', tableDescription: 'NL25，Pool WTSD% = 30%（较高）' } }, options: [{ action: 'Multi-street bluff', isCorrect: false, explanation: 'WTSD%高说明对手跟注到摊牌。多街bluff效果差。', evImpact: '-1.5 BB/100' }, { action: 'Give up after one bet', isCorrect: true, explanation: 'WTSD%高，对手不爱弃牌。减少多街bluff，一手牌bluff一次就够了。', evImpact: '0 BB/100' }, { action: 'All-in bluff', isCorrect: false, explanation: 'WTSD%高时all-in bluff更不赚钱。对手会call到底。', evImpact: '-3 BB/100' }], relatedLessonId: 'l8-population-analysis' },
             { id: 'l8-pop-p3', difficulty: 'advanced', scenario: { heroHand: ['Kh', 'Qh'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'NL100，Pool平均VPIP 22%, PFR 18%' } }, options: [{ action: '用微额策略（纯价值不bluff）', isCorrect: false, explanation: 'NL100接近GTO，需要精确剥削而非纯价值。', evImpact: '-0.5 BB/100' }, { action: '精确节点锁定+小幅剥削', isCorrect: true, explanation: 'NL100策略接近GTO但有漏洞。用精确节点锁定小幅剥削。', evImpact: '+1 BB/100' }, { action: '完全GTO', isCorrect: false, explanation: '完全GTO放弃剥削机会。应该小幅剥削。', evImpact: '-0.3 BB/100' }], relatedLessonId: 'l8-population-analysis' },
             { id: 'l8-pop-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ts', '9s'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'fold' }], street: 'flop', board: ['Ac', '7d', '3h'], potSize: 6.5, effectiveStack: 95, gameContext: { gameType: 'cash', tableDescription: 'NL5，Pool平均fold to cbet 65%' } }, options: [{ action: 'Check', isCorrect: false, explanation: 'Pool fold to cbet 65%，C-Bet bluff很赚钱。', evImpact: '-1 BB/100' }, { action: 'C-Bet 3BB', isCorrect: true, explanation: 'Pool fold to cbet 65%远高于GTO的45%。C-Bet bluff赚钱。', evImpact: '+1.5 BB/100' }, { action: 'C-Bet 6BB', isCorrect: false, explanation: '小注就够了。大注让中等牌call。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l8-population-analysis' },
@@ -87,6 +97,12 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
         title: 'Exploitative Adjustments',
         subtitle: '掌握针对特定对手类型的最大化剥削策略',
         duration: '12 min',
+        objectives: [
+          '判断 GTO 与剥削的适用场景（对手未知/很强/多人底池用 GTO；样本充足且漏洞明显时剥削）',
+          '给出针对三类对手的剥削方案（对 Nit 疯狂偷盲他加注即弃、对 Calling Station 纯价值不 bluff、对 Maniac 等强牌控池）',
+          '用 GTO-剥削统一框架（策略 = GTO 基线 + 方向性偏离 × 幅度限制）计算安全偏离（如偏差 +20%、调整概率 50% → 10%），并说出调整概率趋近 1 时回归基线',
+          '识别剥削的风险（策略不平衡、对手调整后被反剥削），并说出定期检验剥削是否仍有效的纪律',
+        ],
         content: [
           { type: 'heading', content: 'GTO vs Exploitative：何时用哪个？' },
           { type: 'text', content: 'GTO 策略是“不可被剥削”的防御策略；而 Exploitative 策略是“最大化利用对手弱点”的进攻策略。在实战中，两者应该结合使用。' },
@@ -123,7 +139,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
             { id: 'l8-exploit-p1', difficulty: 'intermediate', scenario: { heroHand: ['Ah', 'Qh'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'SB是Nit（VPIP 10%）' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AQs在BTN是强牌。SB是Nit就偷他盲注。', evImpact: '-1 BB/100' }, { action: 'Raise 2.5BB', isCorrect: true, explanation: 'SB是Nit，他fold太多。AQs在BTN标准open偷盲。', evImpact: '+1.5 BB/100' }, { action: 'Raise 5BB', isCorrect: false, explanation: 'Min-raise就够了。Nitfold太多不需要大注。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l8-exploitative-adjustments' },
             { id: 'l8-exploit-p2', difficulty: 'advanced', scenario: { heroHand: ['Ks', 'Qs'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'SB', action: 'fold' }], street: 'flop', board: ['9c', '7h', '2d'], potSize: 6.5, effectiveStack: 95, gameContext: { gameType: 'cash', tableDescription: 'BTN是Calling Station（VPIP 60%）' } }, options: [{ action: 'C-Bet bluff', isCorrect: false, explanation: 'Calling Station不bluff无效。Check。', evImpact: '-1 BB/100' }, { action: 'Check/Give up', isCorrect: true, explanation: 'Calling Station不弃牌，bluff无效。KQ高牌放弃。', evImpact: '0 BB/100' }, { action: 'All-in', isCorrect: false, explanation: 'K高all-in对Calling Station毫无意义。', evImpact: '-5 BB/100' }], relatedLessonId: 'l8-exploitative-adjustments' },
             { id: 'l8-exploit-p3', difficulty: 'advanced', scenario: { heroHand: ['As', 'Ks'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 3BB' }], street: 'preflop', potSize: 5.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'CO是Maniac（VPIP 70%, PFR 50%）' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AKs面对Maniac是顶级强牌。应该4-Bet获取价值。', evImpact: '-2 BB/100' }, { action: '4-Bet 12BB', isCorrect: true, explanation: 'AKs面对Maniac是顶级强牌。4-Bet获取价值，Maniac会用弱牌call。', evImpact: '+3 BB/100' }, { action: 'Call', isCorrect: false, explanation: 'AKs应该4-Bet获取价值。Call让Maniac看到便宜flop。', evImpact: '+1 BB/100' }], relatedLessonId: 'l8-exploitative-adjustments' },
-            { id: 'l8-exploit-p4', difficulty: 'intermediate', scenario: { heroHand: ['Jd', 'Td'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 3BB' }], street: 'preflop', potSize: 4.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'UTG是Nit（VPIP 8%）' } }, options: [{ action: 'Call', isCorrect: false, explanation: 'Nit UTG open范围极强（QQ+/AK）。JTs胜率不足。', evImpact: '-1 BB/100' }, { action: 'Fold', isCorrect: true, explanation: 'Nit UTG open范围极强。JTs胜率不足，fold。', evImpact: '0 BB/100' }, { action: '3-Bet', isCorrect: false, explanation: 'Nit UTG范围太强，3-Bet bluff不赚钱。', evImpact: '-1 BB/100' }], relatedLessonId: 'l8-exploitative-adjustments' },
+            { id: 'l8-exploit-p4', difficulty: 'intermediate', scenario: { heroHand: ['Jd', 'Td'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 3BB' }], street: 'preflop', potSize: 4.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'UTG是Nit（VPIP 8%）' } }, options: [{ action: 'Call', isCorrect: false, explanation: 'Nit UTG open范围极强（QQ+/AK）。JTs胜率不足。', evImpact: '-1 BB/100' }, { action: 'Fold', isCorrect: true, explanation: 'Nit UTG open范围极强。JTs胜率不足，fold。', evImpact: '0 BB/100' }, { action: '3-bet', isCorrect: false, explanation: 'Nit UTG范围太强，3-bet bluff不赚钱。', evImpact: '-1 BB/100' }], relatedLessonId: 'l8-exploitative-adjustments' },
             { id: 'l8-exploit-p5', difficulty: 'advanced', scenario: { heroHand: ['Qh', 'Jh'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }], street: 'flop', board: ['Kd', '8c', '3h'], potSize: 6.5, effectiveStack: 95, gameContext: { gameType: 'cash', tableDescription: '对手是未知玩家' } }, options: [{ action: '纯剥削策略', isCorrect: false, explanation: '对手未知应该用GTO保护自己。', evImpact: '-0.5 BB/100' }, { action: 'GTO为主，观察后小幅剥削', isCorrect: true, explanation: '对手未知时用GTO保护自己。观察几手牌后再调整。', evImpact: '+0.5 BB/100' }, { action: '完全随机', isCorrect: false, explanation: '完全随机不是策略。应该用GTO。', evImpact: '-3 BB/100' }], relatedLessonId: 'l8-exploitative-adjustments' },
           ],
         },
@@ -136,6 +152,10 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
         title: '剥削调整 Drill',
         subtitle: '根据对手倾向调整策略',
         duration: '3分钟',
+        objectives: [
+          '判断给定对手统计（VPIP/PFR/fold to 3-bet/C-Bet 频率）对应的剥削方向（如 fold to 3-bet 75% → 更多 3-bet bluff、C-Bet 90% → 更宽范围跟注/加注）',
+          '区分对强对手与弱对手的策略选择（职业选手 GTO 为主小幅剥削、Maniac 等强牌 call 到底、从不 check-raise 的对手每次 check 就下注）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -157,13 +177,13 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
             {
               id: 'd-l8-exploit-q2',
               scenario: 'NL100, 对手fold to 3-bet 75%',
-              question: '发现对手fold to 3-Bet 75%，你应该怎么调整？',
+              question: '发现对手fold to 3-bet 75%，你应该怎么调整？',
               options: [
-                { id: 'a', text: '减少3-Bet', isCorrect: false },
-                { id: 'b', text: '用更多手牌3-Bet bluff', isCorrect: true },
+                { id: 'a', text: '减少3-bet', isCorrect: false },
+                { id: 'b', text: '用更多手牌3-bet bluff', isCorrect: true },
                 { id: 'c', text: '继续GTO策略', isCorrect: false },
               ],
-              explanation: '对手75%弃牌给3-Bet，用更多手牌3-Bet bluff是+EV。这是明显的剥削机会。',
+              explanation: '对手75%弃牌给3-bet，用更多手牌3-bet bluff是+EV。这是明显的剥削机会。',
               difficulty: 2,
             },
             {
@@ -249,6 +269,10 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
         title: 'Pool Tendencies 识别 Drill',
         subtitle: '根据统计数据判断对手群体倾向并选择剥削策略',
         duration: '3分钟',
+        objectives: [
+          '根据群体统计数据判断剥削方向（VPIP 45%/PFR 12% 纯价值、fold to cbet 65% 宽范围 C-Bet、river bet 8% 尊重其下注）',
+          '判断群体倾向对防守端的影响（3-bet 频率 8% 偏 value 应紧范围应对、fold to steal 40% 应减少偷盲、open 偏小应放宽 defend）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -281,14 +305,14 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
             },
             {
               id: 'd-l8-pool-q3',
-              scenario: 'NL200 级别，该级别玩家平均 3-Bet 频率 8%',
-              question: 'NL200 群体 3-Bet 频率 8%，你 open 后面对 3-Bet 应该怎么调整？',
+              scenario: 'NL200 级别，该级别玩家平均 3-bet 频率 8%',
+              question: 'NL200 群体 3-bet 频率 8%，你 open 后面对 3-bet 应该怎么调整？',
               options: [
                 { id: 'a', text: '用宽范围 4-Bet bluff', isCorrect: false },
-                { id: 'b', text: '尊重 3-Bet，用紧范围应对（群体 3-Bet 偏 value）', isCorrect: true },
+                { id: 'b', text: '尊重 3-bet，用紧范围应对（群体 3-bet 偏 value）', isCorrect: true },
                 { id: 'c', text: '每次都 fold', isCorrect: false },
               ],
-              explanation: '8% 3-Bet 频率说明群体 3-Bet 范围偏 value（非 polarized）。面对 value-heavy 的 3-Bet 应该用紧范围应对，弃掉中等牌力。',
+              explanation: '8% 3-bet 频率说明群体 3-bet 范围偏 value（非 polarized）。面对 value-heavy 的 3-bet 应该用紧范围应对，弃掉中等牌力。',
               difficulty: 2,
             },
             {
@@ -332,7 +356,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
               scenario: 'NL100 级别，该级别玩家平均 open raise 大小 2.2BB',
               question: '群体 open 仅 2.2BB（偏小），你在 BB 应该怎么调整？',
               options: [
-                { id: 'a', text: '用更紧的范围 3-Bet', isCorrect: false },
+                { id: 'a', text: '用更紧的范围 3-bet', isCorrect: false },
                 { id: 'b', text: '用更宽的范围 defend（因为赔率更好）', isCorrect: true },
                 { id: 'c', text: '不需要调整', isCorrect: false },
               ],

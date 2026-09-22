@@ -8,6 +8,11 @@ export const SHORT_DECK_LEVEL_5_LESSONS: Lesson[] = [
     title: '短牌资金管理',
     subtitle: '高波动短牌局的风险控制、资金规则与升/降级纪律',
     duration: '7 min',
+    objectives: [
+      '计算短牌资金要求（≥150 个买入，如打 5 ante 级别需 750 ante），并说明比标准德州 50-100 买入更保守的原因（全下胜率多落在 45%-55%、标准差更高）',
+      '运用升/降级纪律（资金达 2 倍才升级、跌破当前级买入数即降级），并判断「盈利时升级过快」的风险',
+      '判断输到波动预算（如一场输 30 个买入）时应暂停复盘而非翻本追加',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -166,7 +171,7 @@ export const SHORT_DECK_LEVEL_5_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9h', '8s', '3d'],
+            board: ['9h', '8s', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -208,6 +213,11 @@ export const SHORT_DECK_LEVEL_5_LESSONS: Lesson[] = [
     title: '短牌情绪控制',
     subtitle: '短牌大底池波动的情绪管理、下风期识别与纪律训练',
     duration: '7 min',
+    objectives: [
+      '列举短牌 tilt 的三个来源（结果依赖、期望落空、报复心理），并计算连输 6 个 50% 全下的概率（0.5^6 ≈ 1.6%）说明高波动为何更易触发',
+      '运用情绪控制三防线（情绪红灯自我觉察、预设止损点、过程归因只问 EV），并判断连输后加大尺度追回损失即 tilt 循环',
+      '区分「数学波动」与「策略错误」（AK 对 66 全下五五开偏上、输掉但 EV 为正即打对），并判断赢钱后的松懈与输钱冲动同样危险',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -235,7 +245,7 @@ export const SHORT_DECK_LEVEL_5_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例二（过程 vs 结果）：短牌你持 AK 对 55 全下（短牌 AK 对 55 约 43%-45%），55 胜出。结果你输了，但过程：若底池赔率合适，跟注 +EV，打对了。短牌高手复盘只看过程："这个决策 EV 对吗？"而 tilt 玩家只看结果："我又输给垃圾牌了。"',
+          '实例二（过程 vs 结果）：短牌你持 AK 对 66 全下（精确枚举 AKs vs 中小口袋对五五开偏上），66 胜出。结果你输了，但过程：若底池赔率合适，全下 +EV，打对了。短牌高手复盘只看过程："这个决策 EV 对吗？"而 tilt 玩家只看结果："我又输给垃圾牌了。"',
       },
       {
         type: 'highlight',
@@ -366,7 +376,7 @@ export const SHORT_DECK_LEVEL_5_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9h', '8s', '3d'],
+            board: ['9h', '8s', '6d'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,

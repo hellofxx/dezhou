@@ -59,7 +59,7 @@
       "Modern poker has entered the data age. Analysis tools help you:\n\n1. Verify intuition: use math to check whether your play is correct\n2. Find leaks: discover strategy leaks through data\n3. Learn GTO: understand the theoretical optimal as a reference baseline\n4. Track progress: record and analyze your long-term performance",
       "Tools are great learning aids, but over-reliance hinders intuition. Correct usage: understand the principle first, then use the tool to verify.",
       "Core Tools Introduction",
-      "PioSOLVER / GTO+:\n- Purpose: solve the GTO strategy for a specific spot\n- Use: postflop strategy analysis, frequency-balance research\n- Learning tip: start with simple spots (e.g. heads-up flop), gradually add complexity\n\nEquilab (free):\n- Purpose: calculate a hand's equity vs a range\n- Use: preflop range analysis, pot-odds calculation\n- Learning tip: familiarize yourself with common range equities to build intuition\n\nHand2Note / Holdem Resource Manager:\n- Purpose: track and analyze your historical data\n- Use: find strategy leaks, monitor performance\n- Learning tip: focus on key metrics (VPIP/PFR/3-Bet%), don't over-analyze",
+      "PioSOLVER / GTO+:\n- Purpose: solve the GTO strategy for a specific spot\n- Use: postflop strategy analysis, frequency-balance research\n- Learning tip: start with simple spots (e.g. heads-up flop), gradually add complexity\n\nEquilab (free):\n- Purpose: calculate a hand's equity vs a range\n- Use: preflop range analysis, pot-odds calculation\n- Learning tip: familiarize yourself with common range equities to build intuition\n\nHand2Note / Holdem Resource Manager:\n- Purpose: track and analyze your historical data\n- Use: find strategy leaks, monitor performance\n- Learning tip: focus on key metrics (VPIP/PFR/3-bet%), don't over-analyze",
       "The most effective learning path: use tools to analyze your problem hands, understand the correct play, then deliberately practice it live. Don't just look at results — understand the reasoning behind them.",
       "Warning: don't open multiple tools at once while learning. Focused understanding of one spot beats skimming 100 spots."
     ],
@@ -70,7 +70,7 @@
       "Multi-Tabling (MTT)",
       "Online multi-tabling tips:\n- Start with 2-4 tables, gradually increase\n- Choose tables at different positions (avoid acting simultaneously)\n- Use quick decisions, reduce thinking time\n- Note: multi-tabling lowers per-table focus — suited to standard hands\n\nLive single-table tips:\n- Focus on observing each opponent\n- More time to read tells and images\n- Suited to exploitative play",
       "HUD Data Usage and Counter-HUD",
-      "The HUD (Heads-Up Display) is an online-specific tool:\n\nUsing the HUD:\n- Quickly identify opponent types (VPIP/PFR/3-Bet%)\n- Find opponent leaks (e.g. excessive fold-to-C-Bet)\n- Make data-driven decisions\n\nCounter-HUD strategy:\n- Balance your data (don't let it get extreme)\n- Exploit opponents who over-rely on HUD (e.g. frequent 3-Bets vs players the HUD shows as tight)\n- Vary your play regularly to make the data stale",
+      "The HUD (Heads-Up Display) is an online-specific tool:\n\nUsing the HUD:\n- Quickly identify opponent types (VPIP/PFR/3-bet%)\n- Find opponent leaks (e.g. excessive fold-to-C-Bet)\n- Make data-driven decisions\n\nCounter-HUD strategy:\n- Balance your data (don't let it get extreme)\n- Exploit opponents who over-rely on HUD (e.g. frequent 3-bets vs players the HUD shows as tight)\n- Vary your play regularly to make the data stale",
       "Fast-Fold Poker (Zoom/Blitz)",
       "Fast-fold poker features:\n- New table every hand, extremely fast pace\n- Can't adjust to specific opponents\n- Suited to GTO play\n- Needs fast decisions\n\nAdaptation strategy:\n- Simplify decision processes\n- Rely on standard play\n- Don't try to over-exploit in fast-fold",
       "Live Tell Reading and Image Management",
@@ -397,7 +397,7 @@
         "Analyze postflop strategy",
         "Manage bankroll"
       ],
-      "explanation": "A HUD shows opponent VPIP/PFR/3-Bet% etc. to identify opponent types."
+      "explanation": "A HUD shows opponent VPIP/PFR/3-bet% etc. to identify opponent types."
     },
     "l5-online-vs-live-q3": {
       "question": "What strategy suits fast-fold poker (Zoom/Blitz)?",
@@ -732,7 +732,7 @@
       "option": [
         {
           "action": "Great table — stay",
-          "explanation": "Frequent raising, 3-Bets, big pots = likely a pro table. Hard to play; small skill edge.",
+          "explanation": "Frequent raising, 3-bets, big pots = likely a pro table. Hard to play; small skill edge.",
           "evImpact": "-2 BB/100"
         },
         {
@@ -742,7 +742,7 @@
         },
         {
           "action": "All-in (\"I'm not afraid\")",
-          "explanation": "ATs facing a 3-Bet and multiple calls should fold. This isn't about courage — it's math.",
+          "explanation": "ATs facing a 3-bet and multiple calls should fold. This isn't about courage — it's math.",
           "evImpact": "-15 BB/100"
         }
       ],
@@ -1384,5 +1384,51 @@
       ],
       "explanation": "A falling win rate usually points to fatigue or lower-quality play. Cutting hours and adding study and rest is the right adjustment; do not try to make it up at higher stakes."
     }
+  },
+  "lessonObjectives": {
+    "l5-bankroll": [
+      "Compute the minimum and recommended bankroll for a given stake and buy-in (e.g. $1/$2 with $200 buy-ins means a floor of 20 buy-ins = $4,000)",
+      "Judge the quantitative moving rules: move up only with 30 buy-ins at the next stake, move down as soon as you fall below 20 buy-ins at the current stake",
+      "Spot dangerous bankroll habits (mixing living money, borrowing to play, refusing to move down) and give replacements such as a fully separate poker bankroll",
+      "Compute the optimal bankroll fraction with the Kelly formula f* = (bp − q) / b (60% edge at even money gives 20%) and explain why Half Kelly is more conservative"
+    ],
+    "l5-tilt": [
+      "Identify the four tilt types (anger, fear, revenge, desperation) and the triggers of the Tendler 7-type tilt profiles",
+      "Give the five anti-tilt tactics (a stop-loss line, scheduled breaks, self-awareness, long-term view, stop signals) and judge your own current emotional state",
+      "Judge that a win-rate drop beyond 15% or a run of out-of-character actions means stopping the session now, not grinding on"
+    ],
+    "l5-game-selection": [
+      "Identify the four marks of a good table (recreational players above 30% VPIP, large average pots, high flop rate, lots of action) and compare being the best versus the sixth-best player at the table",
+      "Judge that at least 10,000+ hands are needed to assess skill, and explain that short-term results are variance-dominated",
+      "Explain that sustained +EV decisions matter more than any single outcome, and judge against changing a correct strategy after a short downswing"
+    ],
+    "l5-session-review": [
+      "Order the five-step review flow (mark key hands, analyze decision points, compare with GTO, record takeaways, plan improvements) and state what each step involves",
+      "Judge that reviews should grade decision quality over results, and explain why winning sessions can hide mistakes while losing sessions teach the most",
+      "Use the Session A/B/C framework to judge your state (C-grade fatigue signals force a stop) and state the 60-minute per-session cap"
+    ],
+    "l5-data-driven": [
+      "State the abnormal bands of key stats (a VPIP-PFR gap over 8 means too many passive calls, C-bet under 50% means not aggressive enough postflop, showdown above 35% means calling down too light)",
+      "Judge the repair priority: fix the highest-frequency spots first (preflop happens every hand) before low-frequency spots",
+      "Judge that win-rate gaps by position point to weak-position strategy problems, and state the monthly data check-up to track progress"
+    ],
+    "drill-l5-tilt": [
+      "Identify pre-tilt scenarios (a bad beat, calling big bets with weak hands, wanting revenge, a losing streak) and give the right response of resting or stopping",
+      "Tell tilt responses from dangerous ones (moving up to win it back or starting the next hand immediately are both hazardous)"
+    ],
+    "l5-tools": [
+      "Tell the three tool classes apart (PioSOLVER/GTO+ for solving GTO strategies, Equilab for range equity, Hand2Note/HRM for tracking and analyzing history)",
+      "Judge the right way to use tools (understand the principle first, then verify with the tool) and spot misuse such as running many tools at once or reading outputs without the logic"
+    ],
+    "l5-online-vs-live": [
+      "Compare online and live pacing (about 60-80 hands per hour versus 25-35) and their profit logics (speed and volume online, quality and patience live)",
+      "Judge what a HUD is for (rapidly reading opponent types and leaks) and the core of anti-HUD play (balancing your own stats so they cannot be used against you)",
+      "Judge that fast-fold poker suits GTO strategies (no specific opponent to exploit) while live play can exploit through tell reading and image management"
+    ],
+    "drill-l5-session": [
+      "Judge the right session-management decisions (stop-loss after losing big pots in a row, table-changing from a full TAG lineup, ending or resting when fatigued)",
+      "Compute the bankroll-to-stake match ($2,000 at NL100 is only 20 buy-ins, so drop to NL50 or lower to hold 30-50 buy-ins)",
+      "Spot the right behavior after big wins and big losses (take notes and rest as normal, refuse to jump straight back in)"
+    ]
   }
 }

@@ -8,6 +8,12 @@ export const HEADS_UP_LEVEL_5_LESSONS: Lesson[] = [
     title: '单挑专注力',
     subtitle: '单挑高速决策节奏下的专注、状态管理与疲劳控制',
     duration: '7 min',
+    objectives: [
+      '说明单挑专注力的定义（对高频决策保持同样的质量），并列举疲劳的四类征兆（玩边缘牌、尺度失控、低级错误、对对手倾向的觉察钝化）',
+      '运用单挑状态管理三原则预设纪律（session 60-90 分钟上限、输 40-50BB 波动预算、每 100 手起身一次）',
+      '区分「疲劳决策劣化」与「策略错误」，判断察觉 BB 倾向变化觉察钝化时应暂停而非按旧频率继续',
+      '判断单挑纪律必须全程一致（赢钱后的松懈与输钱时的冲动同样危险）',
+    ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante' },
     content: [
@@ -207,6 +213,12 @@ export const HEADS_UP_LEVEL_5_LESSONS: Lesson[] = [
     title: '对手心理',
     subtitle: '单挑心理博弈：下注节奏、反应时间与行为模式解读',
     duration: '8 min',
+    objectives: [
+      '区分单挑读人的两类信号（行为模式与实时信号），并说明读人是估范围 + 估情绪而非猜手牌',
+      '判断「下注过快」「思考太久」的多义解读，并说明样本不足时须与跨 50-100 手的频率统计交叉验证',
+      '运用反读取练习（动作不泄露范围：节奏一致或刻意打乱），判断「强牌快、弱牌慢」的暴露模式',
+      '说明读取的可持续态度（承认「60% 把握」这类不确定性并折入胜率与赔率计算）',
+    ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante' },
     content: [
@@ -404,9 +416,9 @@ export const HEADS_UP_LEVEL_5_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，SB 下注节奏反常' },
           },
           options: [
-            { action: 'Check-Call', isCorrect: true, explanation: '98 中对 + 卡顺，跟注控池，结合 SB 节奏反常保持谨慎。', evImpact: '+1.0 BB/100', evLoss: 0 },
+            { action: 'Check-Call', isCorrect: true, explanation: '98 中对（88），跟注控池，结合 SB 节奏反常保持谨慎。', evImpact: '+1.0 BB/100', evLoss: 0 },
             { action: 'Check-Raise', isCorrect: false, explanation: '中对牌力不足以 x/r，跟注更合理。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
-            { action: 'Fold', isCorrect: false, explanation: '中对 + 卡顺有改进空间，fold 太弱。', evImpact: '-1.2 BB/100', evLoss: 1.2 },
+            { action: 'Fold', isCorrect: false, explanation: '中有对子有改进空间，fold 太弱。', evImpact: '-1.2 BB/100', evLoss: 1.2 },
           ],
           relatedLessonId: 'l5hu-opponent-psychology',
         },

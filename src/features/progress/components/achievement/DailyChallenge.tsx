@@ -10,7 +10,7 @@ import type { TrainingRecord } from '../../types';
 // 今日任务卡：合并每日挑战（训练器引导）与每日谜题入口；streak 统一读 progress store
 // 依赖倒置：每日谜题完成状态经 achievementRegistry 查询，日期 key 复用 shared toLocalDateKey
 import { getAchievementSources } from '@/shared/stores/achievementRegistry';
-import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+import { toLocalDateKey } from '../../utils/toLocalDateKey';
 
 interface DailyChallenge {
   id: string;

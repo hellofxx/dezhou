@@ -110,7 +110,21 @@ export function processReview(item: ReviewItem, quality: number): ReviewItem {
       lastReviewedAt: Date.now(),
     };
   } else {
-    // 失败，重置间隔为1天，降低 easeFactor
+    // 失败（quality < 3），有界回退（bounded fallback）：
+    // 旧实现将 repetitions 清零 + interval 硬置 1 天（整项重置），单次答错即抹掉
+    // 全部调度进度（已到 30 天档的项须从 1 天重新连对 5 次才能爬回），故改为仅退一档：
+    //   - repetitions：回退 1 步（下限 0），连续正确计数不清零
+    //   - interval：回退到「下次答对所得基准」的上一档，即
+    //     INTERVAL_SEQUENCE[max(0, min(rolledBackRep - 1, 序列末档))]，下限 1 天
+    //     （rolledBackRep=0/1 → 1 天；2 → 3；3 → 7；4 → 14；≥5 → 30）
+    //   - easeFactor：仅有限下调 0.2（下限 MIN_EASE_FACTOR），不清回默认值 2.5；
+    //     多次答错时经成功路径的间隔换算（baseInterval × easeFactor / 2.5）自然收缩
+    const rolledBackRep = Math.max(0, item.repetitions - 1);
+    const rollbackIndex = Math.max(
+      0,
+      Math.min(rolledBackRep - 1, INTERVAL_SEQUENCE.length - 1)
+    );
+    const rollbackInterval = INTERVAL_SEQUENCE[rollbackIndex]!;
     const newEaseFactor = Math.max(
       MIN_EASE_FACTOR,
       item.easeFactor - 0.2
@@ -118,10 +132,10 @@ export function processReview(item: ReviewItem, quality: number): ReviewItem {
 
     return {
       ...item,
-      repetitions: 0,
-      interval: 1,
+      repetitions: rolledBackRep,
+      interval: rollbackInterval,
       easeFactor: newEaseFactor,
-      nextReviewDate: getDateAfterDays(1),
+      nextReviewDate: getDateAfterDays(rollbackInterval),
       lastReviewedAt: Date.now(),
     };
   }

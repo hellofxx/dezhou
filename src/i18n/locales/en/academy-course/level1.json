@@ -34,13 +34,13 @@
       "The most common beginner mistake: playing too many hands. In 6-max, you should only play about 20-25% of hands.",
       "Hand Categories",
       "Tier 1 (playable in any position): AA, KK, QQ, AKs\nTier 2 (playable from middle position on): JJ, TT, AQs, AQo, AJs\nTier 3 (playable from late position/blinds): 99-22, KQs, KJs, QJs, JTs, T9s, 98s\nGarbage (fold in any position): unsuited small hands like 72o, 83o, 94o",
-      "s = suited, o = offsuit. Suited hands are worth about 3-4% more than offsuit hands.",
+      "s = suited, o = offsuit. Suited hands are worth about 2-3% more than offsuit hands.",
       "Selection Principles",
       "1. High-card value: A/K/Q/J combinations are stronger\n2. Connectivity: connected cards (e.g. JTs) have straight potential\n3. Suitedness: suited cards have flush potential\n4. Domination: avoid easily dominated hands (e.g. K3o vs KQo)",
       "Pro players' starting ranges are far tighter than recreational players'. Better to play fewer good hands than to lose big chips in marginal spots. Discipline is one of the most important qualities of a professional player.",
       "Starting-hand combinatorics (atomic units):\nAny pocket pair (e.g. AA) = C(4,2) = 6 combinations\nAny suited hand (e.g. AKs) = 4 combinations\nAny offsuit hand (e.g. AKo) = 4×4-4 = 12 combinations\nAny two different ranks = 16 combinations\n\nProbability of any pocket pair = 78/1326 ≈ 5.9% (about once every 17 hands)\nProbability of AA = 6/1326 ≈ 0.45% (about once every 221 hands)",
       "Theory reference: starting-hand probability and combinatorics are detailed in Theory Academy T1 Chapter 1. The relationship between starting-hand EV tiers and position is in T3 Chapter 1.",
-      "Counter-intuitive: AKs has only 4 combinations while AA has 6. Although AK looks the most \"imposing\", its combination weight is lower than a pocket pair's. In range analysis, pairs in an opponent's 3-Bet range usually outweigh AK in combination weight — a quantitative bias many beginners overlook."
+      "Counter-intuitive: AKs has only 4 combinations while AA has 6. Although AK looks the most \"imposing\", its combination weight is lower than a pocket pair's. In range analysis, pairs in an opponent's 3-bet range usually outweigh AK in combination weight — a quantitative bias many beginners overlook."
     ],
     "l1-bankroll": [
       "Why Is Bankroll Management So Important?",
@@ -236,7 +236,7 @@
       ],
       "mistakeAction": "Folding, thinking the opponent's straight is stronger",
       "mistakeReasoning": "Beginners often confuse the strength of flushes and straights. Remember: Flush > Straight!",
-      "mistakeEvLoss": "Lose the entire pot (about 8BB)"
+      "mistakeEvLoss": "Lose the entire pot (12.5BB)"
     },
     "l1-basics-ex2": {
       "title": "Identify the hand: making a Full House",
@@ -262,7 +262,7 @@
         "In early position, only the very strongest slice of hands gets played"
       ],
       "mistakeAction": "Open-raising with KJo in UTG",
-      "mistakeReasoning": "KJo looks decent, but it's too weak in early position. If someone behind 3-Bets, you'll be in a very tough spot.",
+      "mistakeReasoning": "KJo looks decent, but it's too weak in early position. If someone behind 3-bets, you'll be in a very tough spot.",
       "mistakeEvLoss": "-0.8 BB/100"
     },
     "l1-position-ex2": {
@@ -502,6 +502,50 @@
       "Rank the 10 hand types from strongest to weakest, and say whether a flush or a straight wins",
       "Compute the total number of starting-hand combos with C(52,2), and give the combo counts for pocket pairs, suited and offsuit hands",
       "Distinguish the 169 hand categories from the 1326 distinct combos, and explain why probabilities must use 1326"
+    ],
+    "l1-position": [
+      "List the four position segments of 6-max (early/middle/late/blinds) and state that BTN opens widest with the most information",
+      "Compare opening decisions for the same hand (e.g. KJo) at UTG versus BTN, and explain how the information edge widens the range",
+      "Judge whether a given seat should open tighter or wider, and give the reasoning",
+      "Tell the preflop benefit (stealing blinds) and postflop benefit (higher equity realization) of position apart, and explain why BTN's edge mainly shows postflop"
+    ],
+    "l1-hand-selection": [
+      "Compute the combo counts for pocket pairs (6), suited hands (4) and offsuit hands (12), and calculate that AA arrives about 0.45% of the time",
+      "Sort common hands into the four tiers by position (any position / middle on / late and blinds / trash) and state the sane 6-max play rate of 20-25%",
+      "Compare the ~2-3% value gap between suited and offsuit same-rank hands, and spot dominated holdings like K3o",
+      "Judge whether a given hand is worth opening at a given position, citing high-card value, connectivity, suitedness and domination"
+    ],
+    "l1-bankroll": [
+      "Compute the minimum and recommended bankroll for a given stake and buy-in (e.g. NL10 with $10 buy-ins means $200-$300)",
+      "Tell cash-game (20-30 buy-ins) and tournament (50-100 buy-ins) bankroll requirements apart, and state the moving-down line (below 20 buy-ins at the current stake)",
+      "Judge dangerous practices such as borrowing to chase losses or playing with living money, and give replacements (a dedicated bankroll, a stop-loss)",
+      "Plug win rate and odds into the Kelly formula f* = (bp − q) / b to compute the optimal bankroll fraction, and explain why Half Kelly is more conservative"
+    ],
+    "l1-leaks": [
+      "List the first five of the top-10 beginner leaks (playing too many hands, missing position, passive calling, bad bet sizing, ignoring pot size)",
+      "Compare beginner VPIP (40-60%) with winning-player VPIP (20-25%) and state the fix for playing too loose (sticking to preflop ranges)",
+      "Spot leaks in your own play (too many calls, unbalanced bluffing, no review) and give the matching correction",
+      "Judge the difference between a bad outcome and a bad decision, and use EV to explain why a +EV call stays correct through a losing streak"
+    ],
+    "drill-hand-ranking": [
+      "Identify the hand type (flush, straight, full house, etc.) of a given 5-card hand",
+      "Compare two made hands and correctly pick the stronger one",
+      "Rank the 10 hand types and state key comparison rules such as flush beating straight"
+    ],
+    "drill-position": [
+      "Click to identify the six 6-max seats UTG/MP/CO/BTN/SB/BB on the table diagram",
+      "Order the 6-max acting sequence (UTG first, BTN late, blinds first postflop)",
+      "Judge whether a given seat is early or late relative to the button"
+    ],
+    "drill-outs": [
+      "Count outs for a flush draw (9), an open-ended straight draw (8) and a gutshot (4)",
+      "Apply the rule of 2 and 4 to convert outs into equity (×4 flop-to-river, ×2 one street)",
+      "Identify outs in edge cases such as top pair with AK (the remaining 3 aces plus 3 kings, 6 outs)"
+    ],
+    "drill-pot-odds": [
+      "Given pot, bet and call sizes, compute the equity required by the pot odds",
+      "Compare known equity with required equity and judge call or fold",
+      "State the required equity for common bet sizes (about 25% vs a half-pot bet, about 33% vs a pot-sized bet)"
     ]
   }
 }

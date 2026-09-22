@@ -53,16 +53,16 @@
       "A blocker is a card in your hand that reduces the probability the opponent holds a specific combination. When you hold an A, the opponent's AA combos drop from 6 to 3, and AK from 16 to 12. This seemingly simple concept is a cornerstone of modern poker strategy.",
       "Core principle: there are only 4 aces in the deck. Holding 1 ace dramatically reduces the combinations of the remaining 3 aces in the opponent's hand.",
       "The Power of the A Blocker",
-      "When holding Ax (any hand with an A):\n\n- Opponent's AA combos: from 6 → 3 (reduced 50%)\n- Opponent's AK combos: from 16 → 12 (reduced 25%)\n- Opponent's AQ combos: from 16 → 12 (reduced 25%)\n\nThat's why A5s is a better 3-Bet bluff than 76s: you block the strong hands opponents most likely continue with (AA, AK) while keeping the possibility they fold.",
+      "When holding Ax (any hand with an A):\n\n- Opponent's AA combos: from 6 → 3 (reduced 50%)\n- Opponent's AK combos: from 16 → 12 (reduced 25%)\n- Opponent's AQ combos: from 16 → 12 (reduced 25%)\n\nThat's why A5s is a better 3-bet bluff than 76s: you block the strong hands opponents most likely continue with (AA, AK) while keeping the possibility they fold.",
       "Suit Blockers",
       "Holding a card of a suit reduces the chance the opponent holds a flush of that suit:\n\n- Hold 1 heart: the probability of a specific heart flush drops\n- Especially useful for hero calls: if you hold the flush blocker the opponent would need, he's less likely to actually have the flush\n- When bluffing: holding the suit blocker means the opponent is less likely to have a flush to call you with",
       "Blockers in Bluffing",
-      "When choosing bluff hands, prefer hands that block the opponent's \"continuing\" range:\n\n3-Bet/4-Bet bluff choices:\n- A5s > 76s (A blocker reduces AA/AK combos)\n- A4s > 98s (same reason, plus A5s/A4s have flush potential)\n\nRiver bluff choices:\n- Hold cards that block the opponent's calling range (e.g. block flushes/straights they might call with)\n- Don't hold cards that block the opponent's folding range",
+      "When choosing bluff hands, prefer hands that block the opponent's \"continuing\" range:\n\n3-bet/4-Bet bluff choices:\n- A5s > 76s (A blocker reduces AA/AK combos)\n- A4s > 98s (same reason, plus A5s/A4s have flush potential)\n\nRiver bluff choices:\n- Hold cards that block the opponent's calling range (e.g. block flushes/straights they might call with)\n- Don't hold cards that block the opponent's folding range",
       "Blockers in Hero Calls",
       "When deciding whether to call a large bet:\n\n- If you block the opponent's value range → lean toward call\n  Example: you hold A♠, so the opponent is unlikely to have AA/AKs for value\n- If you block the opponent's bluff range → lean toward fold\n  Example: you hold the flush blocker the opponent would bluff with\n\nQuantitative thinking: each blocker reduces relevant opponent combos by roughly 25-50%.",
       "The blocker effect is a \"marginal advantage\" — it doesn't completely change decisions, but at close decision points, blockers can be the deciding factor.",
       "Pros consider blockers on every bluff and hero call. Build the habit: when facing a tough decision, first look at what your hand blocks.",
-      "Blocker correction of combination counts:\nWithout blocker: AA = C(4,2) = 6 combos\nHolding one A: AA = C(3,2) = 3 combos (reduced 50%)\n\nAK combos corrected:\nWithout blocker: AK = 4×4 = 16 combos\nHolding A♠: AK = 3×4 = 12 combos (reduced 25%)\nHolding A♠K♣: AK = 3×3 = 9 combos (reduced 44%)\n\nBlocker effect on range proportions:\nOpponent 3Bet range = {AA, KK, AK}: 6+6+16=28 combos\nWhen you hold AK → 3+3+9=15 combos, and the share of QQ you're ahead of rises from 0 to a real proportion",
+      "Blocker correction of combination counts:\nWithout blocker: AA = C(4,2) = 6 combos\nHolding one A: AA = C(3,2) = 3 combos (reduced 50%)\n\nAK combos corrected:\nWithout blocker: AK = 4×4 = 16 combos\nHolding A♠: AK = 3×4 = 12 combos (reduced 25%)\nHolding A♠K♣: AK = 3×3 = 9 combos (reduced 44%)\n\nBlocker effect on range proportions:\nOpponent 3-bet range = {AA, KK, AK}: 6+6+16=28 combos\nWhen you hold AK → 3+3+9=15 combos, and the share of QQ you're ahead of rises from 0 to a real proportion",
       "Theory reference: the quantitative application of blockers and combination-count correction is fully derived in Theory Academy T4 Chapter 2 \"Combinatorics and Blockers\", including preflop 4Bet spots and postflop river bluff-catching examples.",
       "Counter-intuitive: holding a K does not reduce AA combos, only AK combos. Many beginners think \"I have a K, so the opponent is less likely to have AA\" — wrong. K is a blocker for A, but only an A blocks AA."
     ],
@@ -150,7 +150,7 @@
       "In poker, your betting/raising range has two basic shapes:\n\n1. Polarized: only strong hands and bluffs, no medium hands\n2. Merged/Linear: a continuous range from strong to medium\n\nThe choice depends on position, street, bet size, and opponent type.",
       "Polarized = strong + weak (no middle)\nMerged = strong + medium (no weak)\nChoice depends on: the bigger the bet, the more polarized; the smaller the bet, the more merged.",
       "Polarized Ranges",
-      "A polarized range only contains two categories:\n- Strong hands (Value): the nuts or near-nuts\n- Bluffs: air with blockers\n\nUse when:\n- Large river bets/Overbets\n- 3-Bets/4-Bets (preflop)\n- Check-Raises\n\nExample: BTN 3-Bet range\n- Value: AA, KK, QQ, AKs, AKo\n- Bluff: A5s, A4s, A3s, K9s\n- Excludes: JJ, TT, AQ (these call)",
+      "A polarized range only contains two categories:\n- Strong hands (Value): the nuts or near-nuts\n- Bluffs: air with blockers\n\nUse when:\n- Large river bets/Overbets\n- 3-bets/4-Bets (preflop)\n- Check-Raises\n\nExample: BTN 3-bet range\n- Value: AA, KK, QQ, AKs, AKo\n- Bluff: A5s, A4s, A3s, K9s\n- Excludes: JJ, TT, AQ (these call)",
       "Merged/Linear Ranges",
       "A merged range includes a continuous range from strong to medium:\n- Strong hands + medium hands, no pure air\n\nUse when:\n- Flop C-Bets (small)\n- Open raises (preflop)\n- Calling ranges\n\nExample: BTN Open range\n- A broad continuous range from AA down to 54s\n- Includes all strong hands, medium hands, and speculative hands with potential\n- Excludes pure garbage (like 72o, 83o)",
       "How to Choose a Range Shape",
@@ -315,7 +315,7 @@
       "options": [
         "Bluff frequently",
         "Value bet with strong hands",
-        "3-Bet bluff him",
+        "3-bet bluff him",
         "Fold and wait for his raise"
       ],
       "explanation": "A Calling Station rarely folds but rarely raises. The right strategy is value betting with strong hands — never bluff him."
@@ -361,7 +361,7 @@
       "explanation": "AA has C(4,2)=6 combos. With one A in your hand, 3 aces remain → C(3,2)=3, reduced 50%."
     },
     "l4-blockers-q2": {
-      "question": "Why is A5s a better 3-Bet bluff than 76s?",
+      "question": "Why is A5s a better 3-bet bluff than 76s?",
       "options": [
         "A5s is stronger",
         "The A blocker reduces the opponent's AA/AK combos",
@@ -659,14 +659,14 @@
       "explanation": "A river overbet is the classic polarized spot: only nut-level value and blocker bluffs, no medium hands."
     },
     "l4-rc-q2": {
-      "question": "In the BTN 3-Bet range, which hand belongs to the bluff part?",
+      "question": "In the BTN 3-bet range, which hand belongs to the bluff part?",
       "options": [
         "AA",
         "AKs",
         "A5s",
         "QQ"
       ],
-      "explanation": "A5s is the classic 3-Bet bluff: A blocker + flush potential, but not strong enough to value 3-bet. AA/AKs/QQ are value."
+      "explanation": "A5s is the classic 3-bet bluff: A blocker + flush potential, but not strong enough to value 3-bet. AA/AKs/QQ are value."
     },
     "l4-rc-q3": {
       "question": "Against a Calling Station, your betting range should be?",
@@ -772,14 +772,14 @@
     },
     "l4-ev-ex2": {
       "title": "EV thinking: don't be results-oriented",
-      "correctAction": "This hand lost, but 3-Betting AKs was the correct decision",
+      "correctAction": "This hand lost, but 3-betting AKs was the correct decision",
       "reasoning": [
-        "3-Betting AKs against a CO open is a standard +EV play",
+        "3-betting AKs against a CO open is a standard +EV play",
         "Missing this board is variance (luck)",
-        "Long-term, 3-Betting AKs profits (opponent folds + big pots when you hit)",
+        "Long-term, 3-betting AKs profits (opponent folds + big pots when you hit)",
         "Don't change a correct strategy because of one loss"
       ],
-      "mistakeAction": "\"I'll never 3-Bet AK again\"",
+      "mistakeAction": "\"I'll never 3-bet AK again\"",
       "mistakeReasoning": "Results-oriented thinking is the mark of an amateur. A +EV decision losing doesn't mean it was wrong — it's just variance.",
       "mistakeEvLoss": "Long-term loss of huge EV (abandoning a +EV play)"
     },
@@ -792,7 +792,7 @@
         "AJo is severely dominated in this range (kicker crushed vs AQ/AK)",
         "Against a Nit, folding dominated hands is correct — their raise means strength"
       ],
-      "mistakeAction": "Call or 3-Bet",
+      "mistakeAction": "Call or 3-bet",
       "mistakeReasoning": "Many beginners see AJo and think \"good enough\". But vs a Nit, AJo's equity is far lower than you think. If you call and an A comes, you lose to AK/AQ.",
       "mistakeEvLoss": "-1.2 BB/100"
     },
@@ -801,29 +801,29 @@
       "correctAction": "Call",
       "correctAmount": "2BB",
       "reasoning": [
-        "QQ is a strong hand, but 3-Betting isn't recommended vs a Maniac",
+        "QQ is a strong hand, but 3-betting isn't recommended vs a Maniac",
         "The Maniac's open range is ultra-wide (45%+), your QQ is way ahead",
-        "A 3-Bet builds a big pot, but the Maniac almost never folds",
+        "A 3-bet builds a big pot, but the Maniac almost never folds",
         "Calling keeps the pot manageable; postflop you can use position (as BB, you act first but can check-raise)",
         "Key: patiently wait for the Maniac to make mistakes — don't rush to build a big pot"
       ],
-      "mistakeAction": "3-Bet to 10BB",
-      "mistakeReasoning": "While 3-Betting is standard GTO, it may not be optimal vs a Maniac. A big pot means more complex postflop decisions. Calling is simpler and equally profitable — let him donate.",
+      "mistakeAction": "3-bet to 10BB",
+      "mistakeReasoning": "While 3-betting is standard GTO, it may not be optimal vs a Maniac. A big pot means more complex postflop decisions. Calling is simpler and equally profitable — let him donate.",
       "mistakeEvLoss": "-0.3 BB/100 (vs calling)",
       "tableDesc": "This opponent raised 14 of the last 20 hands — very aggressive",
       "opponentHistory": "This maniac C-Bet every flop after his last 3 raises"
     },
     "l4-blockers-ex1": {
-      "title": "A blocker in a 3-Bet bluff",
+      "title": "A blocker in a 3-bet bluff",
       "correctAction": "Raise",
       "correctAmount": "8BB",
       "reasoning": [
-        "A5s is an excellent 3-Bet bluff candidate: the A blocker reduces the opponent's AA/AK combos",
-        "TAG folds many medium hands to 3-Bets (JJ-88, AQ-AT)",
+        "A5s is an excellent 3-bet bluff candidate: the A blocker reduces the opponent's AA/AK combos",
+        "TAG folds many medium hands to 3-bets (JJ-88, AQ-AT)",
         "Even when called, A5s has good postflop playability (flush+straight potential)",
         "Compared to 76s, A5s's blocker effect gives a higher bluff success rate"
       ],
-      "mistakeAction": "Using 76s instead of A5s as the 3-Bet bluff",
+      "mistakeAction": "Using 76s instead of A5s as the 3-bet bluff",
       "mistakeReasoning": "76s has no A blocker — the opponent's AA/AK probability is higher, meaning they're more likely to continue (call or 4-bet), lowering the bluff's success rate.",
       "mistakeEvLoss": "-0.4 BB/100"
     },
@@ -887,7 +887,7 @@
       "title": "Deviating from MDF against a Nit",
       "correctAction": "Fold",
       "reasoning": [
-        "Although MDF suggests continuing about 44% (facing 80% pot), the opponent is a Nit",
+        "Although MDF suggests continuing about 56% (facing an 80% pot: 25 ÷ (25+20) ≈ 56%), the opponent is a Nit",
         "The Nit's large river bets are extremely value-heavy (AA, JJ, 99, etc.)",
         "The Nit almost never bluffs the river (low AF, extremely low bluff frequency)",
         "QQ is only third pair on this board — badly behind the Nit's value range",
@@ -928,18 +928,18 @@
       "mistakeEvLoss": "-2.5 BB/100"
     },
     "l4-rc-ex1": {
-      "title": "Polarized range in practice: river 3-Bet",
+      "title": "Polarized range in practice: river 3-bet",
       "correctAction": "Raise",
       "correctAmount": "8BB",
       "reasoning": [
-        "A5s belongs in the bluff part of the BTN 3-Bet range",
+        "A5s belongs in the bluff part of the BTN 3-bet range",
         "Polarized range: Value = {AA-JJ, AKs, AKo}, Bluff = {A5s, A4s, A3s, K9s}",
         "A5s has an A blocker (reduces the opponent's AA/AK) + flush/straight potential",
         "JJ/TT/AQ are excluded (they call — medium strength)",
         "This is the polarized range in practice"
       ],
-      "mistakeAction": "3-Betting JJ (should call)",
-      "mistakeReasoning": "JJ belongs in the \"middle ground\" of the polarized 3-Bet range — not strong enough to value 3-bet (awkward when 4-bet), and not suited to bluff. The correct play is call.",
+      "mistakeAction": "3-betting JJ (should call)",
+      "mistakeReasoning": "JJ belongs in the \"middle ground\" of the polarized 3-bet range — not strong enough to value 3-bet (awkward when 4-bet), and not suited to bluff. The correct play is call.",
       "mistakeEvLoss": "-0.5 BB/100"
     },
     "l4-rc-ex2": {
@@ -1031,18 +1031,18 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "You flopped a straight (9-8-7-6)! Extremely strong — never fold.",
+          "explanation": "You hold an OESD (9-8 on a 7-6 board, a 5 or T completes the straight, 8 outs, about 31% by the river) — never fold.",
           "evImpact": "-5.0 BB/100"
         },
         {
           "action": "Call",
-          "explanation": "A straight should bet actively for value. Only calling is too passive and misses building the pot.",
+          "explanation": "A strong draw should raise actively to gain fold equity. Only calling is too passive and misses building the pot.",
           "evImpact": "+1.0 BB/100"
         },
         {
           "action": "Raise",
           "amount": "10BB",
-          "explanation": "You flopped a straight! UTG's range also has strong hands on the 7-6 board (overpairs, top pair) — raise to build a big pot.",
+          "explanation": "You have an OESD (8 outs) plus backdoor potential — a standard semi-bluff raise. UTG's overpairs and top pairs will make mistakes against a raise on the 7-6 board.",
           "evImpact": "+3.0 BB/100"
         }
       ]
@@ -1197,13 +1197,13 @@
         },
         {
           "action": "Call",
-          "explanation": "Calling is fine but not optimal. Vs a LAG, 3-Betting is more valuable — his wide range means more fold equity.",
+          "explanation": "Calling is fine but not optimal. Vs a LAG, 3-betting is more valuable — his wide range means more fold equity.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "8BB",
-          "explanation": "3-Betting KJs vs a LAG's wide open is high-EV. You have position + good blockers + postflop playability. The LAG's range has many weak hands that fold to your 3-Bet.",
+          "explanation": "3-betting KJs vs a LAG's wide open is high-EV. You have position + good blockers + postflop playability. The LAG's range has many weak hands that fold to your 3-bet.",
           "evImpact": "+1.5 BB/100"
         }
       ]
@@ -1223,7 +1223,7 @@
         {
           "action": "Raise",
           "amount": "7BB",
-          "explanation": "3-Bet bluffing a Calling Station is -EV — he almost never folds. Also, in the SNG late game with ICM pressure, don't risk building a big pot.",
+          "explanation": "3-bet bluffing a Calling Station is -EV — he almost never folds. Also, in the SNG late game with ICM pressure, don't risk building a big pot.",
           "evImpact": "-1.0 BB/100"
         }
       ],
@@ -1244,7 +1244,7 @@
         {
           "action": "Raise",
           "amount": "9BB",
-          "explanation": "3-Betting TT deep isn't ideal. If 4-Bet you're forced to fold (wasting the set-mining chance); if called you play a medium pair OOP postflop. Calling is better.",
+          "explanation": "3-betting TT deep isn't ideal. If 4-Bet you're forced to fold (wasting the set-mining chance); if called you play a medium pair OOP postflop. Calling is better.",
           "evImpact": "+0.5 BB/100"
         }
       ],
@@ -1298,13 +1298,13 @@
         },
         {
           "action": "Call",
-          "explanation": "Calling is fine but not optimal. In the SB, calling is OOP postflop, and A4s's blocker effect suits a 3-Bet bluff better.",
+          "explanation": "Calling is fine but not optimal. In the SB, calling is OOP postflop, and A4s's blocker effect suits a 3-bet bluff better.",
           "evImpact": "+0.3 BB/100"
         },
         {
           "action": "Raise",
           "amount": "9BB",
-          "explanation": "A4s is the classic 3-Bet bluff: the A blocker reduces the opponent's continuing range, flush potential provides postflop equity, and from the SB building the pot actively beats passive calling.",
+          "explanation": "A4s is the classic 3-bet bluff: the A blocker reduces the opponent's continuing range, flush potential provides postflop equity, and from the SB building the pot actively beats passive calling.",
           "evImpact": "+1.2 BB/100"
         }
       ]
@@ -1333,19 +1333,19 @@
       "option": [
         {
           "action": "Call",
-          "explanation": "Only calling KK vs a NIT open is too passive. You have a huge blocker effect (AA drops from 6 to 1 combo) — 3-Bet for value.",
+          "explanation": "Only calling KK vs a NIT open is too passive. You have a huge blocker effect (AA drops from 6 to 1 combo) — 3-bet for value.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "8BB",
-          "explanation": "KK is a clear 3-Bet for value. Your K blocker makes the opponent's AA extremely unlikely (only 1 combo). NIT's open range (AK/AQ/JJ) will react to your 3-Bet.",
+          "explanation": "KK is a clear 3-bet for value. Your K blocker makes the opponent's AA extremely unlikely (only 1 combo). NIT's open range (AK/AQ/JJ) will react to your 3-bet.",
           "evImpact": "+2.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "12BB",
-          "explanation": "An oversized 3-Bet folds all non-AA/KK hands from the NIT. The standard 3x size (8BB) keeps his weak range continuing.",
+          "explanation": "An oversized 3-bet folds all non-AA/KK hands from the NIT. The standard 3x size (8BB) keeps his weak range continuing.",
           "evImpact": "+1.5 BB/100"
         }
       ]
@@ -1423,7 +1423,7 @@
         {
           "action": "Raise",
           "amount": "7BB",
-          "explanation": "K5o isn't strong enough to 3-Bet. BTN's 3-Bet bluff range should choose better blockers (like A5s, A4s).",
+          "explanation": "K5o isn't strong enough to 3-bet. BTN's 3-bet bluff range should choose better blockers (like A5s, A4s).",
           "evImpact": "-1.2 BB/100"
         }
       ]
@@ -1432,18 +1432,18 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "Folding A5s is too wasteful. It has excellent 3-Bet bluff value (A blocker + postflop potential).",
+          "explanation": "Folding A5s is too wasteful. It has excellent 3-bet bluff value (A blocker + postflop potential).",
           "evImpact": "-0.3 BB/100"
         },
         {
           "action": "Call",
-          "explanation": "A5s can call but isn't optimal. In GTO, this hand prefers 3-Betting from the BTN.",
+          "explanation": "A5s can call but isn't optimal. In GTO, this hand prefers 3-betting from the BTN.",
           "evImpact": "+0.2 BB/100"
         },
         {
           "action": "Raise",
           "amount": "7.5BB",
-          "explanation": "A5s is the classic BTN 3-Bet bluff vs an HJ open. The A blocker reduces AA/AK probability, and being suited provides postflop value.",
+          "explanation": "A5s is the classic BTN 3-bet bluff vs an HJ open. The A blocker reduces AA/AK probability, and being suited provides postflop value.",
           "evImpact": "+0.8 BB/100"
         }
       ]
@@ -1463,7 +1463,7 @@
         {
           "action": "Raise",
           "amount": "9BB",
-          "explanation": "88 isn't strong enough to 3-Bet. Medium pocket pairs usually don't suit bluff 3-Bets — calling is better.",
+          "explanation": "88 isn't strong enough to 3-bet. Medium pocket pairs usually don't suit bluff 3-bets — calling is better.",
           "evImpact": "-0.2 BB/100"
         }
       ]
@@ -1885,13 +1885,13 @@
         },
         {
           "action": "Call",
-          "explanation": "TT belongs in the \"middle ground\" of the polarized 3-Bet range. Not strong enough to value 3-bet (awkward when 4-bet) and not suited to bluff. Calling is standard — use position postflop.",
+          "explanation": "TT belongs in the \"middle ground\" of the polarized 3-bet range. Not strong enough to value 3-bet (awkward when 4-bet) and not suited to bluff. Calling is standard — use position postflop.",
           "evImpact": "+1.2 BB/100"
         },
         {
           "action": "Raise",
           "amount": "8BB",
-          "explanation": "3-Betting TT in a polarized range isn't ideal. If 4-Bet you're forced to fold (lose 8BB); if called you play a medium pair postflop. TT is better called (medium strength in a merged range).",
+          "explanation": "3-betting TT in a polarized range isn't ideal. If 4-Bet you're forced to fold (lose 8BB); if called you play a medium pair postflop. TT is better called (medium strength in a merged range).",
           "evImpact": "+0.3 BB/100"
         }
       ]
@@ -1961,17 +1961,17 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "98 made a straight — value-bet the river.",
+          "explanation": "98 missed its OESD on the 7-6-2-K-3 board (neither 5 nor T came) and is left with 9-high air. Checking gives up fold equity.",
           "evImpact": "-1.0 BB/100"
         },
         {
           "action": "Bet 10BB",
-          "explanation": "98 made a straight — standard river value bet. TAG has many weak hands that call.",
+          "explanation": "98 missed its OESD and is air in a polarized range. A pot-sized bluff represents the 5x/Tx straight narrative — TAG's medium hands fold.",
           "evImpact": "+1.5 BB/100"
         },
         {
           "action": "All-in",
-          "explanation": "A straight but not the nuts — all-in is excessive.",
+          "explanation": "All-in is excessive — a pot-sized bet already applies enough pressure.",
           "evImpact": "-0.5 BB/100"
         }
       ]
@@ -2105,17 +2105,17 @@
     },
     "d-l4-range-q4": {
       "scenario": "Preflop decision",
-      "question": "Which part of the CO 3-Bet range does KQs belong to (vs a BTN open)?",
+      "question": "Which part of the CO 3-bet range does KQs belong to (vs a BTN open)?",
       "option": [
-        "Not in the 3-Bet range",
-        "Marginal 3-Bet candidate",
-        "Core 3-Bet hand"
+        "Not in the 3-bet range",
+        "Marginal 3-bet candidate",
+        "Core 3-bet hand"
       ],
-      "explanation": "KQs in CO vs BTN is a marginal 3-Bet candidate. Not strong enough as a value 3-Bet, but can be part of a mixed strategy."
+      "explanation": "KQs in CO vs BTN is a marginal 3-bet candidate. Not strong enough as a value 3-bet, but can be part of a mixed strategy."
     },
     "d-l4-range-q5": {
       "scenario": "Preflop decision",
-      "question": "Which part of the BB 4-Bet range does AA belong to (vs a BTN 3-Bet)?",
+      "question": "Which part of the BB 4-Bet range does AA belong to (vs a BTN 3-bet)?",
       "option": [
         "Not in the 4-Bet range",
         "Marginal 4-Bet hand",
@@ -2197,11 +2197,11 @@
       "scenario": "River, pot 20BB",
       "question": "You bet 15BB and the opponent calls. You win 70%. What is the bet's EV?",
       "option": [
-        "+6BB",
+        "+20BB",
         "+10.5BB",
-        "+4.5BB"
+        "+6BB"
       ],
-      "explanation": "Bet EV = 0.7×15BB - 0.3×15BB = 10.5BB - 4.5BB = +6BB. The bet is correct."
+      "explanation": "Same convention as q1: when you win, the net win = pot 20BB + opponent's call 15BB = 35BB (your own bet is returned when called and is not counted as profit); when you lose, you lose your 15BB bet. EV = 0.7×35BB − 0.3×15BB = 24.5BB − 4.5BB = +20BB. Option b (+10.5BB) uses the wrong convention of counting only the bet as the winnable amount. The bet is correct."
     },
     "d-l4-ev-q6": {
       "scenario": "River, pot 10BB",
@@ -2259,7 +2259,7 @@
       "option": [
         "Call with the GTO range",
         "Call with a tight range, respect his raise",
-        "3-Bet bluff more"
+        "3-bet bluff more"
       ],
       "explanation": "The Nit's range is strong — respect his raise. Call with a tight range; don't bluff him."
     },
@@ -2321,7 +2321,7 @@
         "1:2 (33% bluff)",
         "1:3 (25% bluff)"
       ],
-      "explanation": "Balanced value:bluff = pot : bet = 1 : 0.5 = 2:1, so bluff share = 1/(2+1) = 1/3 ≈ 33%. Note: 1:3 (25%) is wrong."
+      "explanation": "Half-pot bet: bluff share = b/(1+2b) = 0.5/(1+1) = 25%, i.e. value:bluff = 3:1. Note: 1:2 (33% bluff) is the ratio for a pot-sized bet — don't mix up the sizings."
     },
     "d-l4b-freq-q2": {
       "scenario": "NL100, river betting full pot",
@@ -2344,14 +2344,14 @@
       "explanation": "On a dry board with a huge range advantage, GTO recommends high-frequency small C-Bets (about 60-70%). Not 100% — you need some checks for protection."
     },
     "d-l4b-freq-q4": {
-      "scenario": "NL50, your BTN 3-Bet frequency",
-      "question": "Vs a CO open, what shape should your BTN 3-Bet range be?",
+      "scenario": "NL50, your BTN 3-bet frequency",
+      "question": "Vs a CO open, what shape should your BTN 3-bet range be?",
       "option": [
-        "Merged (only 3-Bet strong)",
+        "Merged (only 3-bet strong)",
         "Polarized (strong + bluff)",
         "Random"
       ],
-      "explanation": "The 3-Bet range should be polarized: Value (AA/KK/QQ/AKs) + Bluffs (A5s/A4s with blockers). Medium hands (JJ/AQ) call."
+      "explanation": "The 3-bet range should be polarized: Value (AA/KK/QQ/AKs) + Bluffs (A5s/A4s with blockers). Medium hands (JJ/AQ) call."
     },
     "d-l4b-freq-q5": {
       "scenario": "NL100, river facing a 2/3 pot bet",
@@ -2379,9 +2379,9 @@
       "option": [
         "1:1 (50% bluff)",
         "1:2 (33% bluff)",
-        "About 2:5 (about 28% bluff)"
+        "About 3:5 (about 37.5% bluff)"
       ],
-      "explanation": "Overbetting 150% pot means the opponent's MDF = 40%. bluff:value is roughly the inverse of (1-0.4):0.4 — about 28% bluff and 72% value."
+      "explanation": "Overbetting 150% pot: bluff share = b/(1+2b) = 1.5/(1+3) = 37.5%, i.e. bluff:value ≈ 3:5 (matching the opponent's MDF of 40%). Note: a pot-sized bet (100% pot) is 1:2 (33% bluff)."
     },
     "d-l4b-freq-q8": {
       "scenario": "NL100, you're in the BB vs a BTN open",
@@ -2410,6 +2410,95 @@
       "List the MDF values for 1/3 pot (75%), 1/2 pot (67%), pot (50%) and 150% pot (40%), and explain why the required frequency falls as the bet grows",
       "Judge which spots call for deviating below MDF by folding more (an opponent who rarely bluffs, a range short of strong hands, a line representing extreme strength)",
       "Tell MDF, Alpha and the equity needed to call apart by their denominators and what each one is used for"
+    ],
+    "l4-range-thinking": [
+      "Explain range thinking (reasoning over the set of hands the opponent could hold) as distinct from guessing a single hand, and after each action ask which hands it removes",
+      "Order the range-narrowing filter chain: preflop raise to an opening range, flop C-bet removes missed hands, facing a raise leaves only strong hands or strong draws",
+      "Compute total range equity with the weighted formula (combo share × equity versus the range), e.g. {AA, KK} versus {AK} at about 81%",
+      "Compare how a wide BTN range and a narrow UTG range connect with an A-9-4 board and judge which range benefits more"
+    ],
+    "l4-ev-thinking": [
+      "Compute call EV with P(win) × (pot + opponent bet) − P(lose) × call amount, and compare it with fold EV = 0",
+      "Judge that a +EV decision stays correct when it loses (variance does not change decision quality), and explain why result-oriented thinking is harmful",
+      "Compute the required equity set by pot odds (calling 50 to win 200 needs 25%) and compare it with your actual equity to judge the call",
+      "Spot the sunk-cost fallacy (chips already in the pot are dead money) and explain that EV only compares future branches"
+    ],
+    "l4-ev-real-cases": [
+      "Judge that second-best hands should value bet when the opponent's range is weak (K♣Q♣ versus a TAG's weak Ax, bet EV about 5BB above check-back)",
+      "Compute the two EV sources of a combo-draw semi-bluff (fold equity plus showdown equity), e.g. 15-out T♥J♥ betting at about +6.3BB, beating checking",
+      "Compare EV(bet) with EV(check) at the same decision point and judge which action has higher expectation"
+    ],
+    "l4-opponent-reading": [
+      "Tell the five opponent types apart (TAG, LAG, Nit, Maniac, Calling Station) from VPIP/PFR/AF, e.g. VPIP 12% with PFR 10% is a Nit",
+      "Give the exploitative counter per type: steal the Nit's blinds, wait for strong hands against the Maniac, value bet the Calling Station and never bluff them",
+      "Judge when to fall back on the GTO baseline (unknown or strong opponents) versus exploiting (enough sample, obvious leak), and name the risk of over-exploiting into a counter-exploit",
+      "Work the four-step hand-reading flow (build the initial range, filter street by street, count value-to-bluff combos, compare required equity) for a river shove, e.g. 40% bluffs above the required 33% makes calling +EV"
+    ],
+    "l4-blockers": [
+      "Compute the combo corrections when holding an ace: AA falls from 6 combos to 3 (-50%) and AK from 16 to 12 (-25%)",
+      "Judge the blocker reason A5s beats 76s as a 3-bet bluff (blocking the AA/AK continue range)",
+      "Tell the two blocker categories in a hero call apart: holding a value blocker favors calling, holding a bluff blocker favors folding",
+      "Spot the common blocker misconception (a king does not reduce the opponent's AA combos) and state that only an ace blocks AA"
+    ],
+    "drill-l4-range-id": [
+      "Judge which part of a position's range a given hand belongs to (core / fringe / out of range)",
+      "Compare 3-bet and 4-bet range membership across positions (e.g. KQs is a fringe CO-vs-BTN 3-bet candidate, AA is a core 4-bet)",
+      "Spot the blocker and playability value of suited Ax in fringe BTN/SB opens"
+    ],
+    "drill-l4-ev": [
+      "Compute the EV of value bets and calls with P(win) × amount won − P(lose) × amount risked (e.g. 0.6×15BB − 0.4×5BB = +7BB)",
+      "Tell the amount-won conventions for betting and calling apart: when calling it includes the pot plus the opponent's bet; when bet and called it includes the pot plus your own bet",
+      "Spot EV sign errors from using the one-street rate (9 outs about 19%) as if it were the two-street rate (about 35%) or from omitting the opponent's bet"
+    ],
+    "l4-gto-basics": [
+      "Explain GTO as the unexploitable baseline (no adjustment by the opponent can profit against it) and state the division of labor with exploitation (GTO is the floor, exploitation the ceiling)",
+      "Judge when to lean on GTO (unknown or strong opponents) and when to lean on exploitation (low-stakes opponents make many mistakes)",
+      "State the three core GTO concepts (range balance, mixed strategy, minimum defense frequency) and tell a mixed strategy apart from indecision",
+      "Read the color semantics of a 13×13 GTO matrix (dark green = high raise, yellow = call, grey = fold) and give the actions for AA and 72o"
+    ],
+    "l4-game-tree": [
+      "Compute node EV with the sum of branch probability × downstream EV, e.g. a C-bet node at 0.4×6 + 0.6×3 = +4.2BB",
+      "State the four in-game game-tree questions (what if he raises, what is my plan for later streets, do I have a backup when called, what branches follow)",
+      "Judge the use of node locking (fix the opponent's deviation, then recompute the best response), e.g. folding more bluff catchers versus a river player who never bluffs"
+    ],
+    "l4-frequency-balance": [
+      "Compute the river bluff share = bet ÷ (pot + 2×bet), e.g. a pot-sized bet pairs with 33% bluffs (value:bluff = 2:1)",
+      "Tell the three look-alike formulas apart: MDF (defender continue frequency), required equity (call break-even) and bluff share (attacker's betting range composition)",
+      "Judge the signals of an unbalanced strategy (caught bluffing repeatedly means too many bluffs, never bluffing invites wide calls) and keep frequencies unpredictable",
+      "Judge when breaking balance pays (exploitative adjustment against an opponent who clearly deviates from GTO)"
+    ],
+    "l4-mdf-real-cases": [
+      "Judge that a high-bluff opponent (a Maniac at 65% bluffs, far above the 33% Alpha threshold) can be defended wider than MDF",
+      "Judge that against a Nit (almost never bluffing) you should fold below what MDF requires (QQ trails about 95% of his river shove range)",
+      "Compare the two directions of deviating from MDF on opponent reads: widen upward versus a Maniac, tighten downward versus a Nit"
+    ],
+    "l4-overbet": [
+      "Spot the core precondition of an overbet (nut advantage: your range holds super-strength hands the opponent cannot have) and its three typical spots (nut advantage, river polarization, capped opponent)",
+      "Compute the MDF against a 150% pot overbet (40%) and state that the overbet range must be polarized (value:bluff about 2:1)",
+      "Tell the value part of an overbet range (nuts only) from the bluff part (blocked air) and state that middling hands stay out",
+      "Judge that being called by an overbet usually means strength, and that overbetting a calling station is wrong"
+    ],
+    "l4-range-construction": [
+      "Tell a polarized range (strong hands plus bluffs, no middle) from a merged range (a continuous strong-to-medium span, no pure air) by definition and composition",
+      "Judge the four factors behind range shape (bet size, street, position, opponent type): small bets lean merged, big river bets lean polarized, merging versus stations, polarizing versus nits",
+      "Judge which part of a BTN 3-bet polarized range a given hand belongs to (AA/KK/AKs value, A5s bluff, JJ/AQ call)",
+      "Compute the value:bluff ratio for common bet sizes (about 3:1 at half pot, about 2:1 at pot)"
+    ],
+    "l4-bluffcatching": [
+      "Compute the minimum calling equity = b / (pot + 2×bet) (25% at half pot, 33% at pot) and tell the Alpha convention b / (pot + bet) apart - it answers the attacker's bluff break-even, not the call decision",
+      "Compare the opponent's bluff frequency with required equity to judge a hero call (e.g. a LAG triple-barreling bluffs at 50-60% above the 33% threshold - call with 99)",
+      "Judge the two-way blocker effect on bluff catching: a value blocker (like A♠ blocking the nut flush) favors calling, a bluff blocker favors folding",
+      "Spot over-bluffing signals (C-bet above 70%, river bet frequency above 40%) and give the response: call wide rather than raise"
+    ],
+    "drill-l4-gto": [
+      "Judge whether a given opponent profile (unknown/pro/nit/maniac/calling station) calls for the GTO baseline or an exploitative deviation",
+      "Give the exploitative direction per profile (fire any two cards at 80% fold-to-C-bet, respect a nit's raises, wait for strong hands against a maniac)",
+      "Spot the risk of over-exploiting with insufficient information (adjustments built on wrong assumptions lose money)"
+    ],
+    "drill-l4b-frequency": [
+      "Judge the GTO value:bluff ratio option that matches a given bet size (e.g. a pot-sized bet carries about 33% bluffs)",
+      "Judge the sane frequency of small high-frequency C-bets on dry boards (about 60-70%) as distinct from 100% or betting strong hands only",
+      "Tell the betting range shape for different spots apart (e.g. a BTN 3-bet is a polarized range)"
     ]
   }
 }

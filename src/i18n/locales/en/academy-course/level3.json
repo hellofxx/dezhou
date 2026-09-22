@@ -7,7 +7,7 @@
       "C-Bet Size",
       "Standard C-Bet size: 50-75% of the pot\nDry boards (e.g. K-7-2 rainbow): 33-50% pot\nWet boards (e.g. J-T-9 two-tone): 66-75% pot",
       "Don't C-Bet 100% of the time. The right approach is to C-Bet on favorable boards and Check on unfavorable ones. Cultivate \"selective aggression\".",
-      "C-Bet EV formula (including fold equity and showdown equity):\nBet EV = opponent fold rate × current pot + (1-fold rate) × (equity × new pot - loss rate × bet size)\n\nExample: pot 6BB, C-Bet 4BB, fold rate 40%, equity 20%\nEV = 0.4×6 + 0.6×(0.2×14 - 0.8×4) = 2.4 + 0.6×(2.8-3.2) = 2.4 - 0.24 = +2.16BB",
+      "C-Bet EV formula (including fold equity and showdown equity):\nBet EV = opponent fold rate × current pot + (1-fold rate) × (equity × net win - loss rate × bet size)\nwhere net win = new pot − your bet size (your own bet is returned when called and is not counted as profit)\n\nExample: pot 6BB, C-Bet 4BB, fold rate 40%, equity 20%\nNet win = (6+4+4) − 4 = 10BB\nEV = 0.4×6 + 0.6×(0.2×10 - 0.8×4) = 2.4 + 0.6×(2.0-3.2) = 2.4 - 0.72 = +1.68BB",
       "Theory reference: the theoretical analysis of C-Bet EV construction and betting purposes is in Theory Academy T5 Chapter 2 \"GTO vs Exploitative: Two Kinds of Optimal\" and T6 Chapter 1 \"Betting Purposes\". Under the GTO framework, C-Bet frequency and range selection are closely related.",
       "Counter-intuitive: a C-Bet doesn't need a strong hand. As long as you have enough fold equity (the opponent folds often enough), even if your hand completely missed the board, the C-Bet is still +EV. That's why GTO strategies can C-Bet at up to 60-70% frequency, including plenty of bluffs."
     ],
@@ -101,14 +101,14 @@
       "Out of position (OOP), your checking range should be wider than in position (IP), because you must decide without knowing the opponent's action."
     ],
     "l3-3bet-postflop": [
-      "The Uniqueness of 3-Bet Pots",
-      "3-Bet pots are fundamentally different from single-raised pots. Because the preflop pot is bigger, the postflop SPR (Stack-to-Pot Ratio) drops significantly. This means:\n\n- The effective stack is smaller relative to the pot, compressing decision space\n- The range is narrower (a 3-Bet range is far narrower than an opening range)\n- Each decision has a bigger EV impact\n- It's easier to get all-in on the flop (SPR usually 3-6)",
-      "Core concept: the SPR in a 3-Bet pot is usually 3-6, far below the 8-15 of a single-raised pot. Low SPR means top-pair-strength hands are enough to stack off.",
+      "The Uniqueness of 3-bet Pots",
+      "3-bet pots are fundamentally different from single-raised pots. Because the preflop pot is bigger, the postflop SPR (Stack-to-Pot Ratio) drops significantly. This means:\n\n- The effective stack is smaller relative to the pot, compressing decision space\n- The range is narrower (a 3-bet range is far narrower than an opening range)\n- Each decision has a bigger EV impact\n- It's easier to get all-in on the flop (SPR usually 3-6)",
+      "Core concept: the SPR in a 3-bet pot is usually 3-6, far below the 8-15 of a single-raised pot. Low SPR means top-pair-strength hands are enough to stack off.",
       "Overconnected Boards vs Safe Boards",
-      "In 3-Bet pots, board classification matters more:\n\nOverconnected (Wet/Connected): e.g. J♠T♠9♣, 8♥7♥6♣\n- Very favorable to the defender's range\n- The 3-Better should lower C-Bet frequency\n- Overpairs like AA/KK need caution\n\nSafe (Dry/Static): e.g. A♠7♣2♦, K♣8♥3♠\n- Favorable to the 3-Better's range (many high cards)\n- C-Bet frequently\n- Overpairs are still the strongest hands",
-      "Common Scenario: Big Pairs in 3-Bet Pots",
-      "Postflop strategy for AA/KK in a 3-Bet pot:\n\n1. Dry board (A-high or K-high): confident value betting, ready to stack off\n2. Medium-connected board (e.g. Q-J-7): C-Bet but slow down against resistance\n3. Wet-connected board (e.g. T-9-8 two-tone): Check to control the pot, give up over-aggression\n\nRemember: in 3-Bet pots the SPR is low, so top pair good kicker is usually enough to stack off. But on wet boards beware of two pair+ hands.",
-      "The most common 3-Bet pot mistake is clinging too hard to an overpair on a wet board. AA on a J-T-9 two-tone board is only worth a Check — don't bet big just to \"protect\".",
+      "In 3-bet pots, board classification matters more:\n\nOverconnected (Wet/Connected): e.g. J♠T♠9♣, 8♥7♥6♣\n- Very favorable to the defender's range\n- The 3-better should lower C-Bet frequency\n- Overpairs like AA/KK need caution\n\nSafe (Dry/Static): e.g. A♠7♣2♦, K♣8♥3♠\n- Favorable to the 3-better's range (many high cards)\n- C-Bet frequently\n- Overpairs are still the strongest hands",
+      "Common Scenario: Big Pairs in 3-bet Pots",
+      "Postflop strategy for AA/KK in a 3-bet pot:\n\n1. Dry board (A-high or K-high): confident value betting, ready to stack off\n2. Medium-connected board (e.g. Q-J-7): C-Bet but slow down against resistance\n3. Wet-connected board (e.g. T-9-8 two-tone): Check to control the pot, give up over-aggression\n\nRemember: in 3-bet pots the SPR is low, so top pair good kicker is usually enough to stack off. But on wet boards beware of two pair+ hands.",
+      "The most common 3-bet pot mistake is clinging too hard to an overpair on a wet board. AA on a J-T-9 two-tone board is only worth a Check — don't bet big just to \"protect\".",
       "Key formula: SPR = effective stack ÷ pot size. When SPR < 4, top-pair strength can comfortably get all-in. When SPR > 6, you need a stronger hand to stack off."
     ]
   },
@@ -564,17 +564,17 @@
       "explanation": "In position with a clear range advantage, bet for value rather than giving a free card."
     },
     "l3-3bet-pf-q1": {
-      "question": "What SPR range do 3-Bet pots usually have?",
+      "question": "What SPR range do 3-bet pots usually have?",
       "options": [
         "1-2",
         "3-6",
         "10-15",
         "20+"
       ],
-      "explanation": "Because the preflop pot is bigger, the SPR in a 3-Bet pot is usually 3-6, far below a single-raised pot."
+      "explanation": "Because the preflop pot is bigger, the SPR in a 3-bet pot is usually 3-6, far below a single-raised pot."
     },
     "l3-3bet-pf-q2": {
-      "question": "In a 3-Bet pot with SPR 3, how should top pair typically be played?",
+      "question": "In a 3-bet pot with SPR 3, how should top pair typically be played?",
       "options": [
         "Check-Fold",
         "Control the pot, one street only",
@@ -584,7 +584,7 @@
       "explanation": "When SPR < 4, top-pair strength can comfortably get all-in, because the stack is already shallow relative to the pot."
     },
     "l3-3bet-pf-q3": {
-      "question": "What should AA do on a J-T-9 two-tone board in a 3-Bet pot?",
+      "question": "What should AA do on a J-T-9 two-tone board in a 3-bet pot?",
       "options": [
         "All-in to protect",
         "C-Bet 75% pot",
@@ -594,17 +594,17 @@
       "explanation": "J-T-9 two-tone is an overconnected board that strongly favors the defender. AA is an overpair but should Check to control the pot and avoid being trapped by two pair/straights."
     },
     "l3-3bet-pf-q4": {
-      "question": "Which board favors the 3-Better most?",
+      "question": "Which board favors the 3-better most?",
       "options": [
         "J♠T♠9♣",
         "A♠7♣2♦",
         "8♥7♥6♣",
         "Q♥T♥9♠"
       ],
-      "explanation": "A-7-2 rainbow is a dry board that most favors the 3-Better's range (many high Ax) — C-Bet frequently."
+      "explanation": "A-7-2 rainbow is a dry board that most favors the 3-better's range (many high Ax) — C-Bet frequently."
     },
     "l3-3bet-pf-q5": {
-      "question": "What is the main effect of low SPR in a 3-Bet pot?",
+      "question": "What is the main effect of low SPR in a 3-bet pot?",
       "options": [
         "Postflop decisions get simpler",
         "Need more chips",
@@ -814,11 +814,11 @@
       "mistakeEvLoss": "-1.5 BB/100"
     },
     "l3-3bet-pf-ex1": {
-      "title": "AA on a dry board in a 3-Bet pot",
+      "title": "AA on a dry board in a 3-bet pot",
       "correctAction": "Bet",
       "correctAmount": "8-10BB (about 50% pot)",
       "reasoning": [
-        "A-7-2 rainbow is an extremely dry board — very favorable to the 3-Better",
+        "A-7-2 rainbow is an extremely dry board — very favorable to the 3-better",
         "AA is the nuts level — at SPR 4.3 it can fully stack off",
         "TAG's range contains Ax/medium pairs that will call",
         "A 50% pot bet gains value without scaring off all weak hands"
@@ -826,10 +826,10 @@
       "mistakeAction": "Check (slowplay)",
       "mistakeReasoning": "Slowplaying on a dry board is unnecessary. The SPR is low — bet directly to build the pot.",
       "mistakeEvLoss": "-2.0 BB/100",
-      "tableDesc": "Standard 100BB cash game; 3Bet pot with SPR around 4.3"
+      "tableDesc": "Standard 100BB cash game; 3-bet pot with SPR around 4.3"
     },
     "l3-3bet-pf-ex2": {
-      "title": "KK on a wet board in a 3-Bet pot",
+      "title": "KK on a wet board in a 3-bet pot",
       "correctAction": "Check",
       "reasoning": [
         "Q-J-8 two-tone is an overconnected board — very favorable to CO's defense range",
@@ -840,7 +840,7 @@
       "mistakeAction": "C-Bet 15BB (about 75% pot)",
       "mistakeReasoning": "Big C-Betting on an overconnected board is a serious mistake. When called you're almost always behind; when raised you face a tough decision.",
       "mistakeEvLoss": "-3.5 BB/100",
-      "tableDesc": "Standard 100BB cash game; 3Bet pot with SPR around 4.1"
+      "tableDesc": "Standard 100BB cash game; 3-bet pot with SPR around 4.1"
     }
   },
   "lessonPractice": {
@@ -1578,7 +1578,7 @@
         },
         {
           "action": "Check",
-          "explanation": "QJ has gutshot potential, but on a wet board you should bet to protect.",
+          "explanation": "QJ has already made a straight on T98 (Q-J-T-9-8, the bottom straight) — opponents may already hold higher straights on this wet board, so bet to protect.",
           "evImpact": "-0.5 BB/100"
         }
       ]
@@ -1745,7 +1745,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "K-8-3 is a dry board very favorable to the 3-Better — AA should bet for value. Checking misses value.",
+          "explanation": "K-8-3 is a dry board very favorable to the 3-better — AA should bet for value. Checking misses value.",
           "evImpact": "-1.5 BB/100"
         },
         {
@@ -1802,12 +1802,12 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "A-J-5 is two-tone but still a high-card board favorable to the 3-Better. AK top pair top kicker should bet.",
+          "explanation": "A-J-5 is two-tone but still a high-card board favorable to the 3-better. AK top pair top kicker should bet.",
           "evImpact": "-1.0 BB/100"
         },
         {
           "action": "Bet 8BB (about 45% pot)",
-          "explanation": "A-J-5 has some two-tone but is a high-card board favorable to the 3-Better. AK top pair top kicker — medium bet for value.",
+          "explanation": "A-J-5 has some two-tone but is a high-card board favorable to the 3-better. AK top pair top kicker — medium bet for value.",
           "evImpact": "+1.5 BB/100"
         },
         {
@@ -1835,7 +1835,7 @@
           "evImpact": "-1.5 BB/100"
         }
       ],
-      "tableDesc": "3Bet pot; turn board T-8-3-2"
+      "tableDesc": "3-bet pot; turn board T-8-3-2"
     }
   },
   "drill": {
@@ -1920,14 +1920,14 @@
       "explanation": "A9 on 9-6-2 is top pair with a backdoor flush draw — bet 1/3 pot small for value while protecting."
     },
     "d-l3-odds-q1": {
-      "scenario": "Flop, you have AK two overcards (4 outs)",
-      "question": "AK two overcards (4 outs): what is the hit rate from Flop to Turn?",
+      "scenario": "Flop, you have AK two overcards (6 outs)",
+      "question": "AK two overcards (6 outs): what is the hit rate from Flop to Turn?",
       "option": [
         "About 9%",
-        "About 17%",
-        "About 4%"
+        "About 13%",
+        "About 17%"
       ],
-      "explanation": "Flop→Turn single-street probability ≈ outs/47 = 4/47 ≈ 8.5%, rounded to about 9%. Note: the \"2/4 rule\" estimates two-street cumulative probability, not a single street."
+      "explanation": "AK two overcards have 6 outs (3 remaining Aces + 3 remaining Kings). Flop→Turn single-street probability ≈ outs/47 = 6/47 ≈ 12.8%, rounded to about 13%. Note: the \"2/4 rule\" estimates two-street cumulative probability, not a single street."
     },
     "d-l3-odds-q2": {
       "scenario": "Flop, you have a flush draw",
@@ -2009,5 +2009,73 @@
       "u1": "Common Draw Types",
       "u2": "Playing Draws"
     }
+  },
+  "lessonObjectives": {
+    "l3-cbet": [
+      "Explain the core logic of a C-bet (the preflop aggressor has a range advantage) and state that a C-bet needs no real hand - fold equity alone makes it +EV",
+      "Judge the C-bet size difference between dry boards (K-7-2 rainbow, 33-50%) and wet boards (J-T-9 two-tone, 66-75%)",
+      "Plug pot, bet, fold frequency and equity into the bet EV formula to compute the expected value of one C-bet",
+      "Judge when not to C-bet (wet connected boards that favor the caller's range) and check instead"
+    ],
+    "l3-draws": [
+      "List the outs and flop-to-river equity of common draws: flush draw 9 outs about 35%, open-ender 8 outs about 31%, gutshot 4 outs about 16%, two overcards 6 outs",
+      "Apply the rule of 2 and 4 (×2% one street, ×4% two streets) and state that for 9 or fewer outs the error stays within one percentage point",
+      "Compare your equity with the pot odds and judge whether calling with a draw is +EV",
+      "Tell the three ways to play a draw apart (passive call, semi-bluff, shove) and spot combo draws as prime semi-bluff candidates"
+    ],
+    "l3-multistreet": [
+      "Explain multi-street planning (setting the turn/river plan at the flop) and state the definition of a double barrel and its roughly 50-60% frequency",
+      "Judge whether to keep barreling on the turn (turn improves you, a blank, high fold frequency) or give up (a draw completes, opponent raises, no equity gain)",
+      "Compute SPR = effective stack ÷ pot and state the low/mid/high SPR tendencies (top pair can shove below SPR 4)",
+      "Build a geometric three-street betting sequence of roughly 60-70% pot per street so the total approaches the effective stack"
+    ],
+    "l3-checkraise": [
+      "Tell value check-raises (two pair plus / a set on wet boards) from bluff check-raises (strong combo draws) and state what each earns",
+      "Compute the check-raise size (2.5-3x the C-bet), e.g. 10-12BB against a 4BB C-bet",
+      "Judge the categorized response to a check-raise: fold weak hands, call top-pair good kicker and overpairs, re-raise nuts and combo draws",
+      "State the BB versus C-bet check-raise frequency of about 10-15% and judge why dry boards are poor spots for bluff check-raises"
+    ],
+    "l3-float-probe": [
+      "Tell the float spot (call the C-bet, steal the turn) from the probe-bet spot (bet the turn after the preflop raiser checks the flop)",
+      "Judge when floating applies (opponent C-bets high but gives up on turn, you have position, bluffable board) and name float candidates (backdoor draws, overcards, weak pairs - never pure air)",
+      "Judge which opponents floating and probing fail against (a calling station never folds) and give the alternative"
+    ],
+    "l3-bet-sizing": [
+      "List the five sizing tiers and their spots (small 25-33% dry boards, mid 50-66% standard value, large 75-100% wet boards, overbet 125-200% river nut advantage)",
+      "Compute the defend frequency (MDF = pot ÷ (pot + bet)) and the bluff break-even (Alpha = bet ÷ (pot + bet)) for common sizes, and state that they complement each other (MDF + Alpha = 1)",
+      "Judge the link between sizing and range (small bet wide range, large bet narrow range) and explain why a single fixed size must be avoided",
+      "Spot the river overbet spot with nut advantage and a capped opponent range (e.g. 160% pot on a completed flush board)"
+    ],
+    "l3-bluffing": [
+      "Compute bluff EV with Fold% × Pot - Call% × Bet and judge whether the fold frequency clears the bet/(pot+bet) break-even (a 2/3-pot bet needs over 40%)",
+      "Order bluff frequency across streets (flop above turn above river) and state the stronger justification each later street needs (better blockers, more consistent story)",
+      "Tell the two ways a semi-bluff pays (fold equity plus made-hand equity) apart and rank draws for semi-bluffing (combo draw above flush draw above open-ender above gutshot)",
+      "Compute the theoretical river bluff-to-value ratio (1:2 for a pot-sized bet) and judge whether bluff sizing matches value sizing"
+    ],
+    "l3-texture": [
+      "Identify the three texture dimensions (connectedness, suitedness, high/low cards) and classify a given flop as dry or wet",
+      "Judge the sizing adjustment: small bets (1/3 pot) to fold out weak hands on dry boards, large bets (2/3 to full pot) to charge draws on wet boards",
+      "Compare range advantage on high-card dry boards (AK2r favors the raiser) with low-card wet boards (876ss favors the caller)"
+    ],
+    "l3-check-range": [
+      "List the three layers of a balanced checking range (strong 15-20%, medium 40-50%, weak 30-40%) and what each is for",
+      "Judge the five check-first spots (no range advantage, medium-strength pot control, check-raise trap, unprotected strong hands, multiway without last action)",
+      "Explain why strong hands must stay in your checking range (so your checks cannot be attacked at will) and compare out-of-position check ranges (wider than in position)"
+    ],
+    "drill-l3-cbet": [
+      "Judge whether to C-bet at 1/3 or 2/3 pot, or check, given the board texture (dry/wet/monotone-connected)",
+      "Spot spots where overpairs or top pair should check and control on wet connected boards (e.g. KQ on a three-flush board)",
+      "Compare in-position and out-of-position C-bet strategy (OOP top pair bets larger for protection)"
+    ],
+    "drill-l3-odds": [
+      "Compute hit rates for common draws with the rule of 2 and 4 (flush 9 outs about 35%, open-ender 8 outs about 32%, gutshot 4 outs about 16%)",
+      "Tell the one-street and two-street conventions apart: ×2 turn-to-river (9 outs about 19%) versus ×4 flop-to-river, and state that a 15-out combo draw actually makes about 54%",
+      "Compute required equity from pot and call sizes (calling 5BB to win 15BB needs 25%) and compare it with draw equity to call or fold"
+    ],
+    "l3-3bet-postflop": [
+      "Compute SPR = effective stack ÷ pot and state that 3-bet pots usually run at SPR 3-6 (far below the 8-15 of single-raised pots)",
+      "Judge the SPR 4 threshold below which top-pair-strength hands can comfortably get stacks in",
+      "Tell wet overboards in 3-bet pots (J-T-9 two-tone: cut C-bet frequency, treat overpairs carefully) from safe boards (A-7-2 rainbow: C-bet at high frequency)"
+    ]
   }
 }

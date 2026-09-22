@@ -6,7 +6,7 @@
         "Bluff frequently to make him fold",
         "Pure value betting, larger sizing, never bluff",
         "Tighten the opening range and wait for AA/KK",
-        "Frequent 3-Bet bluffs"
+        "Frequent 3-bet bluffs"
       ],
       "recentActions": [
         "Limp 5 of the last 10 hands",
@@ -21,7 +21,7 @@
         "Stack off with top pair, weak kicker",
         "Value-bet two to three streets with a wide range at larger sizing",
         "Only play AA/KK, fold everything else",
-        "Frequent 3-Bet bluffs"
+        "Frequent 3-bet bluffs"
       ],
       "recentActions": [
         "Limps preflop and still calls a raise",
@@ -39,11 +39,11 @@
         "Only play AA/KK"
       ],
       "recentActions": [
-        "3-Bet 3 of the last 10 hands",
+        "3-bet 3 of the last 10 hands",
         "Continuously triple barrels postflop",
         "Once 5-Bet shoved with K7o"
       ],
-      "explanation": "VPIP 48% / PFR 38% / AF 6.5 / 3-Bet 16% is a classic Maniac: extremely loose-aggressive with high bluff frequency. The right strategy is to tighten your range and 4-Bet for value with strong hands (QQ+/AK) or call and trap, letting him donate chips. Never bluff (he won't fold). Changing tables is escaping — you'd miss the chance to profit from the most exploitable opponent."
+      "explanation": "VPIP 48% / PFR 38% / AF 6.5 / 3-bet 16% is a classic Maniac: extremely loose-aggressive with high bluff frequency. The right strategy is to tighten your range and 4-Bet for value with strong hands (QQ+/AK) or call and trap, letting him donate chips. Never bluff (he won't fold). Changing tables is escaping — you'd miss the chance to profit from the most exploitable opponent."
     },
     "opp-drill-q4": {
       "scenario": "NL50 cash game — opponent stats:",
@@ -66,7 +66,7 @@
         "Steal blinds relentlessly, bluff C-Bet, fold when he raises",
         "Value-bet top pair for three streets",
         "Only play stronger hands",
-        "Frequent 3-Bet bluffs"
+        "Frequent 3-bet bluffs"
       ],
       "recentActions": [
         "Opened only 2 of the last 20 hands (AA and AK)",
@@ -84,11 +84,11 @@
         "Frequent limp traps"
       ],
       "recentActions": [
-        "Frequent 3-Bets (including blocker hands like A5s, K9s)",
+        "Frequent 3-bets (including blocker hands like A5s, K9s)",
         "High double-barrel frequency postflop",
         "Adjusts strategy based on opponents"
       ],
-      "explanation": "VPIP 28% / PFR 24% / AF 4.2 / 3-Bet 11% is a classic LAG: loose-aggressive but logical and capable of folding. The right strategy is to 4-Bet for value aggressively with TT+/AQ+ (his 3-Bet range is wide), call and trap with AA/KK, and use position to pressure his wide range. Folding medium-strength hands is wrong — the LAG's range is wide, so top pair / medium pairs still have value."
+      "explanation": "VPIP 28% / PFR 24% / AF 4.2 / 3-bet 11% is a classic LAG: loose-aggressive but logical and capable of folding. The right strategy is to 4-Bet for value aggressively with TT+/AQ+ (his 3-bet range is wide), call and trap with AA/KK, and use position to pressure his wide range. Folding medium-strength hands is wrong — the LAG's range is wide, so top pair / medium pairs still have value."
     },
     "opp-drill-q7": {
       "scenario": "NL50 cash game — opponent stats:",
@@ -101,9 +101,9 @@
       "recentActions": [
         "Reasonable opening range (about 16%)",
         "Standard postflop C-Bet frequency",
-        "Folds to 3-Bets depending on position"
+        "Folds to 3-bets depending on position"
       ],
-      "explanation": "VPIP 19% / PFR 16% / AF 3.2 / 3-Bet 6% is a classic TAG (tight-aggressive): reasonable range, standard C-Bets, adjusts by position. TAGs are hard to exploit — use GTO strategy with only mild exploitation of his Fold to C-Bet 55% (slightly above the GTO 50%, so you can add a few C-Bet bluffs). Relentless bluffing is wrong (55% Fold to C-Bet isn't high enough), and value-only is also wrong (his fold rate supports reasonable bluffs)."
+      "explanation": "VPIP 19% / PFR 16% / AF 3.2 / 3-bet 6% is a classic TAG (tight-aggressive): reasonable range, standard C-Bets, adjusts by position. TAGs are hard to exploit — use GTO strategy with only mild exploitation of his Fold to C-Bet 55% (slightly above the GTO 50%, so you can add a few C-Bet bluffs). Relentless bluffing is wrong (55% Fold to C-Bet isn't high enough), and value-only is also wrong (his fold rate supports reasonable bluffs)."
     },
     "opp-drill-q8": {
       "scenario": "NL25 cash game — opponent stats (small sample):",

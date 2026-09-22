@@ -49,7 +49,7 @@ export const SHORT_DECK_LEVEL_7: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            '四类最常见的短牌玩家错误：(1) outs 算错——用满员桌 outs 表，同花听牌当 9 outs（实际短牌 5），会高估胜率；(2) 低估同花——以为葫芦 > 同花，用标准德州价值排序，会错判强弱；(3) 高估 AK——以为 AK 翻硬币偏上，实际对子都落后；(4) set mining 过松——用满员桌门槛，短牌三条价值低。识别后针对性剥削。',
+            '四类最常见的短牌玩家错误：(1) outs 算错——用满员桌 outs 表，同花听牌当 9 outs（实际短牌 5），会高估胜率；(2) 低估同花——以为葫芦 > 同花，用标准德州价值排序，会错判强弱；(3) 误判 AK——短牌"flip 反转"：AK 对 66-QQ 约五五开偏上、对 AA/KK 才明显落后，套用满员桌任一方向的记忆都会错判；(4) set mining 过松——用满员桌门槛，短牌三条价值低。识别后针对性剥削。',
         },
         {
           type: 'example',
@@ -64,7 +64,7 @@ export const SHORT_DECK_LEVEL_7: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例三（高估 AK）：对手以为 AK 翻前翻硬币偏上，频繁全下 AK。剥削：你用口袋对跟注他的全下，因为短牌对子 > AK（43%-45%），你小幅领先。识别他对 AK 的高估，你的对子跟注变 +EV。',
+            '实例三（误判 AK）：对手用满员桌记忆判断 AK（或以为 AK 对任何口袋对都占优、或按旧口径频繁弃牌），全下与防守频率都会偏离。剥削：你用 AA/KK 陷阱跟注——短牌 AA vs AK 约 70%、KK vs AK 约 65%-68%，他的 AK 全下对大对子严重落后。识别他对 AK 的错判，你的大对子跟注变 +EV。',
         },
         {
           type: 'highlight',
@@ -116,15 +116,15 @@ export const SHORT_DECK_LEVEL_7: TheoryLevelInfo = {
         },
         {
           id: 't7sd-mistakes-q4',
-          question: '对手频繁全下 AK（高估其翻前价值），正确应对是：',
+          question: '对手频繁全下 AK（误判其翻前价值），正确应对是：',
           options: [
             '弃牌',
-            '用口袋对跟注，因为短牌对子 > AK',
+            '用 AA/KK 类大对子跟注，短牌 AK 对它们仍明显落后',
             '用更差的非对子跟注',
             '无脑反加',
           ],
           correctIndex: 1,
-          explanation: '短牌对子 > AK（43%-45%），对手高估 AK 时，用口袋对跟注其全下小幅领先。',
+          explanation: '短牌 AK 对 66-QQ 约五五开偏上，但 AA vs AK 约 70%、KK vs AK 约 65%-68%——误判 AK 的对手与大对子硬碰是严重落后。',
         },
         {
           id: 't7sd-mistakes-q5',
@@ -175,12 +175,12 @@ export const SHORT_DECK_LEVEL_7: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例（思维转换）：你在标准德州习惯"AK 是强牌全下"。转短牌后，面对对手的全下，你要意识到 AK 对口袋对约 43%-45%（落后）。若底池赔率只需 40%，跟注；需 45%，弃牌。用短牌修正后的胜率而非满员桌直觉。',
+            '实例（思维转换）：你在标准德州习惯"AK 对对子落后"。转短牌后，面对对手的全下，你要意识到 AK 对中小口袋对约五五开偏上、仅对 AA/KK 明显落后。若对手范围以中小对子为主且底池赔率只需约 45%，跟注 +EV；范围含大量 AA/KK 则谨慎弃牌。用短牌修正后的胜率而非满员桌直觉。',
         },
         {
           type: 'example',
           content:
-            '实例二（追听转换）：标准德州同花听牌 9 outs，你习惯追。短牌同花 5 outs（单街 15%），看似不值得——但成同花是坚果（beats 葫芦），隐含赔率极佳。所以短牌追同花不是"outs 少就弃"，而是"outs 少但成牌价值高，看隐含赔率"。这是思维转换的典型。',
+            '实例二（追听转换）：标准德州同花听牌 9 outs，你习惯追。短牌同花 5 outs（单街约 16%），看似不值得——但成同花是坚果（beats 葫芦），隐含赔率极佳。所以短牌追同花不是"outs 少就弃"，而是"outs 少但成牌价值高，看隐含赔率"。这是思维转换的典型。',
         },
         {
           type: 'highlight',
@@ -223,12 +223,12 @@ export const SHORT_DECK_LEVEL_7: TheoryLevelInfo = {
           question: '短牌中 AK 面对口袋对全下的正确判断是：',
           options: [
             'AK 领先',
-            '约 43%-45% 落后，看底池赔率决定',
+            '对中小对子约五五开偏上，对 AA/KK 明显落后，看范围与底池赔率决定',
             'AK 完胜',
             '必输',
           ],
           correctIndex: 1,
-          explanation: '短牌 AK 对口袋对约 43%-45% 落后，根据底池赔率（需 40% 跟、45% 弃）决定。',
+          explanation: '短牌 AK 对 66-QQ 约五五开偏上（精确枚举 AKs vs QQ ≈ 53.7%）、对 AA/KK 约 28%-35% 落后——按对手范围与底池赔率决定。',
         },
         {
           id: 't7sd-adjustment-q4',

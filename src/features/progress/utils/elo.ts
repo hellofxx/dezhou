@@ -17,7 +17,7 @@ import { RANKS } from '@/shared/types/elo';
  *
  * @param currentRating 当前分数
  * @param isCorrect 是否答对（0 或 1）
- * @param questionDifficulty 题目难度 (0=最简单, 1=最难)
+ * @param questionDifficulty 题目难度 (0=最简单，1=最难)
  * @param kFactor K 因子（默认 32，新手 48，高分 24）
  * @returns ELO 变化量（可为负，未做边界 clamp，调用方决定如何应用）
  */

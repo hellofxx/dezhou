@@ -22,7 +22,7 @@ export interface OptionSortKey {
    *  3 = Limp
    *  4 = Bet / C-bet（带尺度的下注）
    *  5 = Raise / 3bet / 4bet / 5bet（非全下的加注类）
-   *  6 = 全下类（文本含"全下"，如 '全下 20BB'、'3bet 全下 15BB'、'5bet 全下'）
+   *  6 = 全下类（文本含"全下"，如 '全下 20BB'、'3-bet 全下 15BB'、'5bet 全下'）
    * 99 = 无法识别（排最后，稳定排序保持原相对顺序）
    */
   category: number;
@@ -43,6 +43,7 @@ const CATEGORY_PREFIXES: ReadonlyArray<readonly [prefix: string, category: numbe
   ['bet', 4],
   ['raise', 5],
   ['3bet', 5],
+  ['3-bet', 5],
   ['4bet', 5],
   ['5bet', 5],
 ];
@@ -54,7 +55,7 @@ const FIRST_NUMBER_RE = /\d+(?:\.\d+)?/;
  * 解析选项文本 → 排序键。
  *
  * 规则：
- *  - 文本含"全下"一律归类 6（覆盖 '全下 XBB'、'3bet 全下 15BB'、'5bet 全下'）；
+ *  - 文本含"全下"一律归类 6（覆盖 '全下 XBB'、'3-bet 全下 15BB'、'5bet 全下'）；
  *  - 否则按前缀匹配（大小写不敏感）：Fold(0) / Check(1) / Call(2) / Limp(3) /
  *    Bet·C-bet(4) / Raise·3bet·4bet·5bet(5)；
  *  - 无法识别返回 category: 99；

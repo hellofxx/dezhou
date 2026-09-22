@@ -3,7 +3,7 @@
 // 目标：随机生成 N 个 preflop 场景，断言 resolveSpotKey 命中率 = 100%。
 // 理由：generatePreviousActions 已按表内可达 spot 约束（非 BB open / BB vs {HJ,CO,BTN}），
 // 生成的 preflop 前置动作理论上必然命中 GTO 表；因此 100% 是一个明确、可达的硬阈值。
-// 若未来改判放宽 3bet/multiway 生成而未补数据，此测试将在命中率 < 100% 时立即变红。
+// 若未来改判放宽 3-bet/multiway 生成而未补数据，此测试将在命中率 < 100% 时立即变红。
 //
 // BUG-GTO-012 守卫测试：同 seed 产出完全相同场景（可复现训练）。
 

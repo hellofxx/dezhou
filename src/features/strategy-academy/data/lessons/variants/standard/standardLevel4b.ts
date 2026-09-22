@@ -9,6 +9,12 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: 'GTO 基础入门',
         subtitle: '理解博弈论最优策略的核心思想',
         duration: '12 min',
+        objectives: [
+          '说明 GTO 是不可被剥削的基准策略（对手任何调整都无法获利），并说出它与剥削策略的分工（GTO 保底、剥削上限）',
+          '判断何时以 GTO 为主（对手未知/水平高）何时以剥削为主（低级别对手错误多）',
+          '说出 GTO 的三个核心概念（范围平衡、混合策略、最小防御频率），并区分混合策略与犹豫不决',
+          '读取 13×13 GTO 策略矩阵的颜色语义（深绿=高频 Raise、黄=Call、灰=Fold），并给出 AA 与 72o 的对应行动',
+        ],
         content: [
           { type: 'heading', content: '什么是 GTO？' },
           { type: 'text', content: 'GTO（Game Theory Optimal，博弈论最优策略）是一种不可被剥削的策略。当你使用GTO策略时，无论对手如何调整，他们都无法从你身上获得正EV。GTO并不是“最好的策略”，而是“不可能被打败的策略”。' },
@@ -142,7 +148,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: true, explanation: 'K5o 面对CO open应该弃牌。这手牌被支配性太强（Kx对阵时 kicker 太弱），不在BTN的防御范围内。', evImpact: '0 BB/100' },
                 { action: 'Call', isCorrect: false, explanation: 'K5o 面对CO open跟注是-EV的。你的kicker太弱，容易被支配。', evImpact: '-0.6 BB/100' },
-                { action: 'Raise', amount: '7BB', isCorrect: false, explanation: 'K5o 不够强做3-Bet。BTN的3-Bet bluff范围应该选择更好的blocker牌（如A5s, A4s）。', evImpact: '-1.2 BB/100' },
+                { action: 'Raise', amount: '7BB', isCorrect: false, explanation: 'K5o 不够强做3-bet。BTN的3-bet bluff范围应该选择更好的blocker牌（如A5s, A4s）。', evImpact: '-1.2 BB/100' },
               ],
             },
             {
@@ -160,9 +166,9 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
                 effectiveStack: 97,
               },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: 'A5s 太浪费了。这手牌有很好的3-Bet bluff价值（A blocker + 翻后潜力）。', evImpact: '-0.3 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'A5s 可以call但不是最优选择。GTO中这手牌在BTN更倾向3-Bet。', evImpact: '+0.2 BB/100' },
-                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'A5s 是BTN面对HJ open的经典3-Bet bluff手牌。A blocker减少了对手AA/AK的概率，同花 suited 提供翻后价值。', evImpact: '+0.8 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: 'A5s 太浪费了。这手牌有很好的3-bet bluff价值（A blocker + 翻后潜力）。', evImpact: '-0.3 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'A5s 可以call但不是最优选择。GTO中这手牌在BTN更倾向3-bet。', evImpact: '+0.2 BB/100' },
+                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'A5s 是BTN面对HJ open的经典3-bet bluff手牌。A blocker减少了对手AA/AK的概率，同花 suited 提供翻后价值。', evImpact: '+0.8 BB/100' },
               ],
             },
             {
@@ -182,7 +188,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: '88 是中等口袋对，面对BTN宽范围open不应该弃牌。GTO防御频率要求你继续。', evImpact: '-0.4 BB/100' },
                 { action: 'Call', isCorrect: true, explanation: '88 在BB面对BTN open应该Call。口袋对有set mine价值（约12%概率翻牌中三条），且只需补1.5BB。', evImpact: '+0.6 BB/100' },
-                { action: 'Raise', amount: '9BB', isCorrect: false, explanation: '88 做3-Bet不够强。中等口袋对通常不适合做bluff 3-Bet，call是更好的选择。', evImpact: '-0.2 BB/100' },
+                { action: 'Raise', amount: '9BB', isCorrect: false, explanation: '88 做3-bet不够强。中等口袋对通常不适合做bluff 3-bet，call是更好的选择。', evImpact: '-0.2 BB/100' },
               ],
             },
           
@@ -206,6 +212,11 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: '博弈树思维',
         subtitle: '用博弈树的视角理解每个决策点',
         duration: '11 min',
+        objectives: [
+          '用节点 EV = Σ(各分支概率 × 后续累计 EV) 计算决策点期望值，如 C-Bet 节点 0.4×6 + 0.6×3 = +4.2BB',
+          '说明博弈树思维在实战中的四个提问（对手加注我怎么办/后续街计划/被 Call 后的后手/考虑后续树枝）',
+          '判断节点锁定的用途（固定对手策略偏差后重算最优应对），如对手河牌从不诈唬时可弃掉更多 bluff catcher',
+        ],
         content: [
           { type: 'heading', content: '什么是博弈树（Game Tree）？' },
           { type: 'text', content: '博弈树是将每手牌的所有可能行动序列以树状结构展示。每个“节点”代表一个决策点，每个“分支”代表一个可能的行动。GTO 求解器就是通过遍历博弈树找到每个节点的最优策略。' },
@@ -254,6 +265,12 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: '频率平衡',
         subtitle: '理解为什么“不可预测”是最好的防御',
         duration: '10 min',
+        objectives: [
+          '计算河牌下注的诈唬占比 = bet ÷ (pot + 2×bet)，如满池下注对应 33%（value:bluff = 2:1）',
+          '区分三个相似公式的不同用途：MDF（防守方继续频率）、所需胜率（跟注保本线）、bluff 占比（进攻方下注范围构成）',
+          '判断策略失衡的信号（连续被 catch 说明 bluff 过多、从不 bluff 会被宽范围跟注惩罚），保持行动频率不可预测',
+          '判断何时打破平衡（面对明显偏离 GTO 的弱手做剥削调整更赚钱）',
+        ],
         content: [
           { type: 'heading', content: '什么是频率平衡？' },
           { type: 'text', content: '频率平衡是指在特定场景下，你的各种行动（下注/过牌/加注）保持一定的比例，使得对手无法通过调整策略来剥削你。' },
@@ -400,7 +417,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Fold',
               reasoning: [
-                '虽然 MDF 建议继续约 44%（面对 80% pot），但对手是 NIT',
+                '虽然 MDF 建议继续约 56%（面对 80% pot：25 ÷ (25+20) ≈ 56%），但对手是 NIT',
                 'NIT 在 river 大额下注的范围极度偏 value（AA、JJ、99 等）',
                 'NIT 几乎不在 river bluff（AF 低，bluff 频率极低）',
                 'QQ 在这个牌面只是第三对，面对 NIT 的 value 范围严重落后',
@@ -496,6 +513,11 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: 'MDF 实战牌例库',
         subtitle: '最小防御频率的真实案例分析',
         duration: '12 min',
+        objectives: [
+          '判断面对高 bluff 频率对手（Maniac，65% bluff 远超 33% Alpha 阈值）可以用比 MDF 更宽的范围继续防守',
+          '判断面对 Nit（几乎从不诈唬）时应弃牌至低于 MDF 要求（QQ 在其河牌全下范围中落后约 95% 组合）',
+          '比较基于对手信息偏离 MDF 的两个方向：对 Maniac 向上加宽防守、对 Nit 向下收紧防守',
+        ],
         content: [
           { type: 'heading', content: 'Case M1: Over defending against Maniac' },
           { type: 'example', content: 'BB vs Maniac on Q-4-2 dry board, Pot 6BB\n\nScenario:\n- Maniac raises 2.5BB from BTN\n- BB calls with A-T\n- Flop: Q-4-2, Maniac C-bets 3BB (50% pot)\n\nKey Decision: Call using wider than standard range\n\nAnalysis:\n- Maniac bluff frequency: ~65% (AF 7.0+)\n- Alpha for 50% pot bet = 0.5/(1+0.5) = 33%\n- Maniac fold rate to C-bets: only ~25%\n- Your A-T beats his entire bluff range\n\nWhy call wider than MDF?\n- MDF suggests calling 67%, but your read says he bluffs too much\n- With 65% bluff frequency >> 33% Alpha threshold, value betting becomes dominant\n- EV(call with A-T) approx +2.0BB (beats 65% of his range)\n- Expected outcome: Exploit Maniac over-playing tendencies\n\nKeyLesson: 面对高 bluff 频率对手（Maniac）时，可以安全地用更宽范围继续防守。你的顶对能击败他的整个诈唬范围。\nSource: Derived from LAG statistics analysis',
@@ -530,6 +552,12 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: 'Overbet 策略',
         subtitle: '现代 GTO 中最具威力的武器',
         duration: '10 min',
+        objectives: [
+          '识别 Overbet 的核心前提（坚果优势：范围包含对手不可能有的超强牌）与三类典型场景（坚果优势、River 极化、对手范围封顶）',
+          '计算面对 150% pot overbet 的 MDF（40%），并说出 overbet 范围应为极化形状（value:bluff 约 2:1）',
+          '区分 overbet 范围的 value 部分（仅坚果级）与 bluff 部分（带 blocker 的空气牌），说明中等牌力不进 overbet',
+          '判断 Overbet 被跟通常意味着对手有强牌、面对 Calling Station 不应 overbet',
+        ],
         content: [
           { type: 'heading', content: '什么是 Overbet？' },
           { type: 'text', content: 'Overbet 是指下注超过当前底池大小的下注（通常 125%-200% pot）。这是现代 solver 策略中最重要的武器之一，在特定场景下能产生巨大的 EV。' },
@@ -709,12 +737,18 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: '范围建构：极化 vs 合并',
         subtitle: '理解不同场景下的最优范围形状',
         duration: '12 min',
+        objectives: [
+          '区分极化范围（强牌 + bluff、无中间牌力）与合并范围（强到中等连续、无纯空气）的定义与构成',
+          '判断选择范围形状的四个因素（下注大小、街道、位置、对手类型）：小注偏合并、River 大注偏极化、对 Calling Station 合并、对 Nit 极化',
+          '判断给定手牌在 BTN 3-bet 极化范围中的正确部分（AA/KK/AKs 属 value、A5s 属 bluff、JJ/AQ 用 call）',
+          '计算面对不同下注尺度的 value:bluff 比例（50% 池约 3:1、满池约 2:1）',
+        ],
         content: [
           { type: 'heading', content: '两种范围形状' },
           { type: 'text', content: '在德州扑克中，你的下注/加注范围有两种基本形状：\n\n1. 极化范围（Polarized）：只有强牌和 bluff，没有中等牌力\n2. 合并范围（Merged/Linear）：从强到中等的连续范围\n\n选择哪种形状取决于位置、街道、下注大小和对手类型。' },
           { type: 'key-point', content: '极化 = 强 + 弱（无中间）\n合并 = 强 + 中（无弱）\n选择取决于：下注越大越极化，下注越小越合并。' },
           { type: 'heading', content: '极化范围（Polarized）' },
-          { type: 'text', content: '极化范围只包含两类牌：\n- 强牌（Value）：坚果或接近坚果\n- Bluff：有 blocker 的空气牌\n\n使用场景：\n- River 大额下注/Overbet\n- 3-Bet/4-Bet（翻前）\n- Check-Raise\n\n示例：BTN 3-Bet 范围\n- Value: AA, KK, QQ, AKs, AKo\n- Bluff: A5s, A4s, A3s, K9s\n- 不包含: JJ, TT, AQ（这些用 call）' },
+          { type: 'text', content: '极化范围只包含两类牌：\n- 强牌（Value）：坚果或接近坚果\n- Bluff：有 blocker 的空气牌\n\n使用场景：\n- River 大额下注/Overbet\n- 3-bet/4-Bet（翻前）\n- Check-Raise\n\n示例：BTN 3-bet 范围\n- Value: AA, KK, QQ, AKs, AKo\n- Bluff: A5s, A4s, A3s, K9s\n- 不包含: JJ, TT, AQ（这些用 call）' },
           { type: 'heading', content: '合并范围（Merged/Linear）' },
           { type: 'text', content: '合并范围包含从强到中等的连续牌力：\n- 强牌 + 中等牌力，不包含纯空气\n\n使用场景：\n- Flop C-Bet（小注）\n- Open Raise（翻前开牌）\n- 跟注范围\n\n示例：BTN Open 范围\n- 从 AA 到 54s 的宽泛连续范围\n- 包含所有强牌、中等牌、有潜力的投机牌\n- 不包含纯垃圾牌（如 72o, 83o）' },
           { type: 'heading', content: '如何选择范围形状' },
@@ -739,7 +773,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         ],
         quiz: [
           { id: 'l4-rc-q1', question: '以下哪个场景最适合使用极化范围？', options: ['Flop 小注 C-Bet', '翻前 Open Raise', 'River Overbet', '跟注对手 open'], correctIndex: 2, explanation: 'River Overbet 是典型的极化范围场景：只有坚果级别的 value 和有 blocker 的 bluff，不包含中等牌力。' },
-          { id: 'l4-rc-q2', question: 'BTN 3-Bet 范围中，以下哪手牌属于 bluff 部分？', options: ['AA', 'AKs', 'A5s', 'QQ'], correctIndex: 2, explanation: 'A5s 是经典的 3-Bet bluff：有 A blocker + 同花潜力，但牌力不够强到直接 value 3-bet。AA/AKs/QQ 属于 value 部分。' },
+          { id: 'l4-rc-q2', question: 'BTN 3-bet 范围中，以下哪手牌属于 bluff 部分？', options: ['AA', 'AKs', 'A5s', 'QQ'], correctIndex: 2, explanation: 'A5s 是经典的 3-bet bluff：有 A blocker + 同花潜力，但牌力不够强到直接 value 3-bet。AA/AKs/QQ 属于 value 部分。' },
           { id: 'l4-rc-q3', question: '面对 Calling Station，你的下注范围应该？', options: ['更极化（更多 bluff）', '更合并（更多 value，少 bluff）', '完全不变', '只 bluff'], correctIndex: 1, explanation: 'Calling Station 很少弃牌，bluff 无效。应该用更合并的范围：增加 value 下注的频率和范围，减少 bluff。' },
           { id: 'l4-rc-q4', question: '面对 100% pot 的下注，理想的 value:bluff 比例约为？', options: ['1:1', '2:1', '3:1', '4:1'], correctIndex: 1, explanation: '面对满池下注，MDF = 50%。为了让对手 indifferent，value:bluff 比例约为 2:1（67% value, 33% bluff）。' },
         
@@ -747,7 +781,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         examples: [
           {
             id: 'l4-rc-ex1',
-            title: '极化范围实战：River 3-Bet',
+            title: '极化范围实战：River 3-bet',
             heroHand: ['As', '5s'],
             heroPosition: 'BTN',
             previousActions: [
@@ -761,7 +795,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               action: 'Raise',
               amount: '8BB',
               reasoning: [
-                'A5s 在 BTN 3-Bet 范围中属于 bluff 部分',
+                'A5s 在 BTN 3-bet 范围中属于 bluff 部分',
                 '极化范围：Value = {AA-JJ, AKs, AKo}，Bluff = {A5s, A4s, A3s, K9s}',
                 'A5s 有 A blocker（减少对手 AA/AK）+ 同花/顺子潜力',
                 '不包含 JJ/TT/AQ（这些用 call，属于中等牌力）',
@@ -769,8 +803,8 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               ],
             },
             commonMistake: {
-              action: '用 JJ 做 3-Bet（应该 call）',
-              reasoning: 'JJ 在极化 3-Bet 范围中属于"中间地带"——不够强到 value 3-bet（被 4-bet 后很尴尬），也不适合做 bluff。正确做法是 call。',
+              action: '用 JJ 做 3-bet（应该 call）',
+              reasoning: 'JJ 在极化 3-bet 范围中属于"中间地带"——不够强到 value 3-bet（被 4-bet 后很尴尬），也不适合做 bluff。正确做法是 call。',
               evLoss: '-0.5 BB/100',
             },
             gameContext: { gameType: 'cash' },
@@ -827,8 +861,8 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'TT 面对 CO open 太强不能弃牌。在 BTN 有位置优势，TT 有明确的价值。', evImpact: '-1.0 BB/100' },
-                { action: 'Call', isCorrect: true, explanation: 'TT 在极化 3-Bet 范围中属于"中间地带"。不够强到 value 3-bet（被 4-bet 很尴尬），也不适合做 bluff。Call 是标准打法，翻后利用位置。', evImpact: '+1.2 BB/100' },
-                { action: 'Raise', amount: '8BB', isCorrect: false, explanation: '3-Bet TT 在极化范围中不太合适。如果被 4-Bet 你被迫弃牌（损失 8BB），如果被 call 则翻后打中等牌力。TT 更适合 call（合并范围中的中等牌力）。', evImpact: '+0.3 BB/100' },
+                { action: 'Call', isCorrect: true, explanation: 'TT 在极化 3-bet 范围中属于"中间地带"。不够强到 value 3-bet（被 4-bet 很尴尬），也不适合做 bluff。Call 是标准打法，翻后利用位置。', evImpact: '+1.2 BB/100' },
+                { action: 'Raise', amount: '8BB', isCorrect: false, explanation: '3-bet TT 在极化范围中不太合适。如果被 4-Bet 你被迫弃牌（损失 8BB），如果被 call 则翻后打中等牌力。TT 更适合 call（合并范围中的中等牌力）。', evImpact: '+0.3 BB/100' },
               ],
             },
             {
@@ -875,7 +909,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
             },
           
             { id: 'l4-rc-p4', difficulty: 'advanced', scenario: { heroHand: ['Ac', 'Kc'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['Jh', 'Th', '9c'], street: 'flop', potSize: 6.5, effectiveStack: 97, opponent: OPPONENT_PROFILES['lag'] }, options: [{ action: 'Check', isCorrect: true, explanation: 'AK在JT9两花面没有对子，对手范围很有利。Check控制底池。', evImpact: '+0.5 BB/100' }, { action: 'Bet 5BB', isCorrect: false, explanation: '湿润面对手范围有利，大注C-Bet风险高。', evImpact: '-1.0 BB/100' }, { action: 'Bet 2BB', isCorrect: false, explanation: '即使小注在这个面也不太好。Check更好。', evImpact: '-0.3 BB/100' }], relatedLessonId: 'l4-range-construction' },
-            { id: 'l4-rc-p5', difficulty: 'advanced', scenario: { heroHand: ['9s', '8s'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['7s', '6d', '2h', 'Kd', '3c'], street: 'river', potSize: 13, effectiveStack: 85, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Check', isCorrect: false, explanation: '98顺子成牌，River应该价值下注。', evImpact: '-1.0 BB/100' }, { action: 'Bet 10BB', isCorrect: true, explanation: '98顺子成牌，River标准价值下注。TAG有很多弱牌会Call。', evImpact: '+1.5 BB/100' }, { action: 'All-in', isCorrect: false, explanation: '顺子但非坚果，All-in过度。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-range-construction' },],
+            { id: 'l4-rc-p5', difficulty: 'advanced', scenario: { heroHand: ['9s', '8s'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['7s', '6d', '2h', 'Kd', '3c'], street: 'river', potSize: 13, effectiveStack: 85, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Check', isCorrect: false, explanation: '98 在 7-6-2-K-3 面错过 OESD（5/T 都没来），只剩 9-high 空气。Check 放弃了弃牌权益。', evImpact: '-1.0 BB/100' }, { action: 'Bet 10BB', isCorrect: true, explanation: '98 错过 OESD，是极化范围中的空气牌。满池 bluff 代表 5x/Tx 成顺叙事，TAG 的中等牌会弃。', evImpact: '+1.5 BB/100' }, { action: 'All-in', isCorrect: false, explanation: 'All-in 过度，满池尺度已足够施压。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-range-construction' },],
         },
       },
       {
@@ -885,6 +919,12 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: 'Bluff Catching 与 Hero Call',
         subtitle: '学会在正确的时机做出勇敢的跟注',
         duration: '10 min',
+        objectives: [
+          '计算跟注所需最低胜率 = b / (pot + 2×bet)（1/2 池 25%、满池 33%），并区分 Alpha 口径 b / (pot + bet) 回答的是进攻方诈唬保本弃牌率、不用于跟注决策',
+          '比较对手 bluff 频率与所需胜率判断 hero call（如 LAG 三条街 barrel bluff 约 50-60% > 33% 阈值 → 用 99 call）',
+          '判断 blocker 对 bluff catching 的双向影响：持有 value blocker（如 A♠ 阻断坚果同花）倾向 call，持有 bluff blocker 倾向 fold',
+          '识别过度诈唬对手的信号（C-Bet 频率 > 70%、river 下注频率 > 40%），并给出宽范围 call 而非 raise 的应对',
+        ],
         content: [
           { type: 'heading', content: '什么是 Bluff Catching' },
           { type: 'text', content: 'Bluff Catching 是指用仅能赢过对手 bluff 的牌来 Call。\n\n例：对手 River 全押，你有一对，判断他 bluff 足够多 → Call。\n\nBluff Catcher 的特征：\n- 赢不了对手的价值范围\n- 但能赢对手的 bluff 范围\n- 决策纯粹基于对手 bluff 频率 vs 你跟注所需的最低胜率' },
@@ -986,6 +1026,11 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: 'GTO 决策 Drill',
         subtitle: 'GTO vs 剥削选择',
         duration: '3分钟',
+        objectives: [
+          '判断给定对手画像（未知/职业/Nit/Maniac/Calling Station）应以 GTO 基准还是剥削偏离为主',
+          '给出对各对手类型的剥削方向（对 fold to C-Bet 80% 任意两张开枪、对 Nit 尊重其加注、对 Maniac 等强牌 Call 到底）',
+          '识别信息不足时过度剥削的风险（基于错误假设的调整反而亏钱）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -1025,7 +1070,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '用GTO范围跟注', isCorrect: false },
                 { id: 'b', text: '紧的跟注范围，尊重他的加注', isCorrect: true },
-                { id: 'c', text: '3-Bet bluff更多', isCorrect: false },
+                { id: 'c', text: '3-bet bluff更多', isCorrect: false },
               ],
               explanation: 'Nit的范围很强，应该尊重他的加注。用紧的范围跟注，不要bluff他。',
               difficulty: 2,
@@ -1101,6 +1146,11 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         title: '频率平衡决策训练',
         subtitle: 'GTO 频率平衡判断',
         duration: '3分钟',
+        objectives: [
+          '判断给定下注尺度对应的 GTO value:bluff 比例选项（如满池下注诈唬应占约 33%）',
+          '判断干燥面高频小注 C-Bet 的合理频率（约 60-70%）区别于 100% 或只 bet 强牌',
+          '区分不同场景的下注范围形状（如 BTN 3-bet 用极化范围）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -1113,10 +1163,10 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               question: '对手下注 1/2 pot，GTO 要求你的诈唬与价值比例约为？',
               options: [
                 { id: 'a', text: '1:1（50% bluff）', isCorrect: false },
-                { id: 'b', text: '1:2（33% bluff）', isCorrect: true },
-                { id: 'c', text: '1:3（25% bluff）', isCorrect: false },
+                { id: 'b', text: '1:2（33% bluff）', isCorrect: false },
+                { id: 'c', text: '1:3（25% bluff）', isCorrect: true },
               ],
-              explanation: '平衡时 value:bluff = pot : bet = 1 : 0.5 = 2:1，所以 bluff 占比 = 1/(2+1) = 1/3 ≈ 33%。注意：1:3(25%) 是错误的。',
+              explanation: '半池下注：bluff 占比 = b/(1+2b) = 0.5/(1+1) = 25%，即 value:bluff = 3:1。注意：1:2（33% bluff）是满池下注的比例，不要用错尺度。',
               difficulty: 2,
             },
             {
@@ -1145,14 +1195,14 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
             },
             {
               id: 'd-l4b-freq-q4',
-              scenario: 'NL50, 你在 BTN 3-Bet 的频率',
-              question: '面对 CO open，你在 BTN 的 3-Bet 范围应该是什么形状？',
+              scenario: 'NL50, 你在 BTN 3-bet 的频率',
+              question: '面对 CO open，你在 BTN 的 3-bet 范围应该是什么形状？',
               options: [
-                { id: 'a', text: '合并范围（只 3-Bet 强牌）', isCorrect: false },
+                { id: 'a', text: '合并范围（只 3-bet 强牌）', isCorrect: false },
                 { id: 'b', text: '极化范围（强牌 + bluff）', isCorrect: true },
                 { id: 'c', text: '随机范围', isCorrect: false },
               ],
-              explanation: '3-Bet 范围应该是极化的：Value 部分（AA/KK/QQ/AKs）+ Bluff 部分（A5s/A4s 等有 blocker 的牌），中等牌力（JJ/AQ）用 Call。',
+              explanation: '3-bet 范围应该是极化的：Value 部分（AA/KK/QQ/AKs）+ Bluff 部分（A5s/A4s 等有 blocker 的牌），中等牌力（JJ/AQ）用 Call。',
               difficulty: 2,
             },
             {
@@ -1186,9 +1236,9 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '1:1（50% bluff）', isCorrect: false },
                 { id: 'b', text: '1:2（33% bluff）', isCorrect: false },
-                { id: 'c', text: '约 2:5（约 28% bluff）', isCorrect: true },
+                { id: 'c', text: '约 3:5（约 37.5% bluff）', isCorrect: true },
               ],
-              explanation: 'Overbet 150% pot 时对手 MDF = 40%。bluff:value ≈ (1-0.4):0.4 的倒数关系，约 28% bluff、72% value。',
+              explanation: 'Overbet 150% pot：bluff 占比 = b/(1+2b) = 1.5/(1+3) = 37.5%，即 bluff:value ≈ 3:5（对手 MDF = 40% 与之对应）。注意：满池（100% pot）才是 1:2（33% bluff）。',
               difficulty: 3,
             },
             {

@@ -8,6 +8,7 @@ import type { HandStrategy, PreviousAction, Scenario } from '../types';
 import { ActionType } from '@/shared/types/action';
 import { getOptimalAction, isPureStrategy, compareDecision } from '../utils/strategyCompare';
 import { resolveSpotKey as resolveSpotKeyUtil } from '../utils/spotKey';
+import { buildGtoReviewItemInput } from '../utils/gtoSrs';
 import type { Decision } from '@/shared/types/action';
 import preflopData from '../data/preflop-ranges.json';
 import { useProgressStore } from '@/features/progress/store';
@@ -212,24 +213,14 @@ export function useGtoSrsRecorder() {
 
   return useCallback(
     (scenario: Scenario, isOptimal: boolean, timeTakenMs: number) => {
-      // P1C-07: 稳定语义键（不含时间戳），确保同一 spot+手牌 能去重
-      const spotKey = resolveSpotKeyUtil(scenario.position, scenario.previousActions) ?? 'unknown';
-      const handNotation = classifyHand(scenario.heroHand[0], scenario.heroHand[1]);
-      const id = `gto:${spotKey}:${handNotation}`;
-      const label = scenario.name || scenario.description.slice(0, 40);
-      // 最优动作描述：从首决策节点取 gtoStrategy 推断
+      // 载荷构造抽为纯函数（utils/gtoSrs.buildGtoReviewItemInput）：
+      // id 沿用稳定语义键（不含时间戳，同一 spot+手牌可去重）；
+      // 场景为运行时生成、无现成 locale key，故 label/front/back 一律存**静态 key**，
+      // 位置/手牌/底池/筹码/金额等存入 metadata.params 由渲染层 t(key, params) 组装。
+      // 禁止把 scenario.description / name 等动态文本写入持久化载荷（跨语言会裸显原文）。
       const firstNode = scenario.decisionNodes?.[0];
-      const optimalActionText = firstNode
-        ? getOptimalAction(firstNode.gtoStrategy)
-        : null;
-      const metadata = {
-        front: scenario.description,
-        back: optimalActionText
-          ? `${optimalActionText.action}${optimalActionText.amount ? ` ${optimalActionText.amount}BB` : ''}`
-          : '（参考 GTO 策略）',
-        source: 'gto' as const,
-        scenario: scenario.description,
-      };
+      const optimal = firstNode ? getOptimalAction(firstNode.gtoStrategy) : null;
+      const { id, label, metadata } = buildGtoReviewItemInput(scenario, optimal);
 
       const { item: updated, isNew } = upsertReviewItem(
         reviewItems,

@@ -44,7 +44,7 @@ const TAG_OPPONENT: OpponentProfile = {
   icon: '🎯',
   stats: { vpip: 18, pfr: 14, af: 3.2, threeBetPercent: 6, foldToCBet: 60, cbetFrequency: 62 },
   tendencies: ['翻前加注范围偏紧'],
-  exploitableBy: ['用更宽的 3-Bet 频率施压'],
+  exploitableBy: ['用更宽的 3-bet 频率施压'],
 };
 
 function findButton(container: HTMLElement, text: string): HTMLButtonElement {

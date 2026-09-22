@@ -24,10 +24,10 @@ import { seededRandom } from '@/shared/utils/seededShuffle';
  *   - open 分支 hero = BB（bb_open 无表）
  *   - "面对 open" 且 hero 非 BB，或 opener ∉ {HJ,CO,BTN}（表未覆盖）
  *   - multiway（表无 multiway spot）
- *   - 3bet 分支：表内仅 btn_vs_co_3bet / co_vs_hj_3bet 两个 key，其"villain 为最后一个
- *     非 hero raiser"的语境需 CO/HJ 先 open 再遭 3bet 之类序列，本生成器
- *     "hero open 后后位 3bet"的配置在行动顺序上不可达，且数据语义需确认
- *     （P1A-06 挂起）——故暂停生成 3bet 分支。
+ *   - 3-bet 分支：表内仅 btn_vs_co_3bet / co_vs_hj_3bet 两个 key，其"villain 为最后一个
+ *     非 hero raiser"的语境需 CO/HJ 先 open 再遭 3-bet 之类序列，本生成器
+ *     "hero open 后后位 3-bet"的配置在行动顺序上不可达，且数据语义需确认
+ *     （P1A-06 挂起）——故暂停生成 3-bet 分支。
  */
 export function generatePreviousActions(
   street: 'preflop' | 'flop' | 'turn' | 'river',
@@ -61,7 +61,7 @@ export function generatePreviousActions(
       );
     }
 
-    // 非 BB：前面全 fold，hero 第一个行动（{pos}_open 有表），无 3bet/multiway 分支。
+    // 非 BB：前面全 fold，hero 第一个行动（{pos}_open 有表），无 3-bet/multiway 分支。
     return playersBefore.map((pos) => ({ position: pos, action: ActionType.Fold }));
   }
 

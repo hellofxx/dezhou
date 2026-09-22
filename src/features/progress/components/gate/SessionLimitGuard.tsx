@@ -1,7 +1,7 @@
 /**
- * Session 止损守卫组件 - 共享工具
+ * Session 止损守卫组件 - Progress 模块内组件
  * 
- * @module shared/components/gate/SessionLimitGuard
+ * @module progress/components/gate/SessionLimitGuard
  * @description 跨模块复用每日题量上限门禁逻辑（strategy-academy/puzzle-trainer/pot-odds/range-trainer）
  * @see progress store emotion 字段为状态持有方
  */
@@ -13,7 +13,7 @@ import { ShieldAlert, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressStore } from '../../store';
 import { getTodayString } from '@/shared/utils/spacedRepetition';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { transitionStandard } from '@/shared/utils/motion';

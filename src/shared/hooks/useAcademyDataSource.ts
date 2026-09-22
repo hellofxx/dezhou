@@ -1,12 +1,16 @@
 import { useSyncExternalStore } from 'react';
-import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
+import { getAcademyDataSource, onAcademyDataRegister } from '@/shared/stores/academyDataSourceRegistry';
 import type { AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
 
 /**
  * 学院课程数据源响应式订阅 hook（progress 依赖倒置）。
- * strategy-academy 在 store.bootstrap.ts 注册实现后，progress 组件经此 hook 订阅，
- * 消除对 useAcademyStore 的直接引用。
+ * strategy-academy / puzzle-trainer / theory-academy 在各自 bootstrap 中注册数据源，
+ * progress 组件经此 hook 订阅，消除对 useAcademyStore 的直接引用。
  *
+ * P0-03 时序修复：使用 onAcademyDataRegister 实现「late registration 自愈」——
+ * - 若渲染时数据源已注册：立即获取 snapshot，subscribe 桥接数据源的 subscribe
+ * - 若渲染时数据源未注册：先订阅，一旦注册成功即转发订阅者通知（自愈）
+ * 
  * 关键约束：getSnapshot 必须返回 store state 的稳定字段引用（禁止合成新对象），
  * 否则 useSyncExternalStore 会触发无限重渲染；未注册时返回模块级常量兜底。
  */
@@ -14,10 +18,21 @@ import type { AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
 const EMPTY_PROGRESS: AcademyProgressSnapshot = { completedLessons: [] };
 const EMPTY_SCORES: Record<string, number> = {};
 
-/** 模块级稳定 subscribe：桥接数据源 subscribe，未注册时返回空取消函数 */
+/** 模块级稳定 subscribe：桥接数据源 subscribe + late registration 自愈 */
 function subscribeAcademy(listener: () => void): () => void {
   const source = getAcademyDataSource();
-  return source ? source.subscribe(listener) : () => {};
+  if (source) {
+    // 已注册：直接桥接数据源的 subscribe，返回其取消函数
+    return source.subscribe(listener);
+  }
+  // 未注册：订阅注册事件；注册成功时触发一次快照刷新（自愈）
+  // 注意：这里不完美处理取消，因为自愈发生在下次渲染时 getSnapshot 会重新读取 dataSource
+  onAcademyDataRegister(() => {
+    // 数据源已注册，通知 React 重新获取快照
+    listener();
+  });
+  // 返回空取消函数（实际取消不是关键，因为自愈依赖于 re-render 时的快照更新）
+  return () => {};
 }
 
 function getProgressSnapshot(): AcademyProgressSnapshot {

@@ -3,16 +3,16 @@ import type { Lesson, LessonSection } from '../../../../types';
 
 // ===== l2-3bet-basics 分段常量（引用相等契约：content 与手写 units.sections 共享同一批对象） =====
 const L2_3BET_U1_SECTIONS: LessonSection[] = [
-  { type: 'heading', content: '什么是 3-Bet？' },
+  { type: 'heading', content: '什么是 3-bet？' },
   {
     type: 'text',
     content:
-      '3-Bet 是指在翻前对开牌加注的再加注（re-raise）。"3" 来自于盲注算第一次下注，开牌加注算第二次，再加注算第三次。',
+      '3-bet 是指在翻前对开牌加注的再加注（re-raise）。"3" 来自于盲注算第一次下注，开牌加注算第二次，再加注算第三次。',
   },
 ];
 
 const L2_3BET_U2_SECTIONS: LessonSection[] = [
-  { type: 'heading', content: '3-Bet 的目的' },
+  { type: 'heading', content: '3-bet 的目的' },
   {
     type: 'text',
     content:
@@ -21,25 +21,25 @@ const L2_3BET_U2_SECTIONS: LessonSection[] = [
   {
     type: 'highlight',
     content:
-      '新手应该先用"线性3-Bet范围"（只用强牌3-Bet），熟练后再加入"极化3-Bet范围"（强牌+部分弱牌作为bluff）。',
+      '新手应该先用"线性3-bet范围"（只用强牌3-bet），熟练后再加入"极化3-bet范围"（强牌+部分弱牌作为bluff）。',
   },
   {
     type: 'pro-tip',
     content:
-      '3-Bet 频率是衡量玩家攻击性的重要指标。过于被动（很少3-Bet）会让你错失很多价值，过于激进则容易被对手利用。',
+      '3-bet 频率是衡量玩家攻击性的重要指标。过于被动（很少3-bet）会让你错失很多价值，过于激进则容易被对手利用。',
   },
   {
     type: 'formula',
-    content: '3Bet 范围组合计数：\n对手 3Bet 范围 = {AA, KK, QQ, AKs, A5s}\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\n总计 = 26 种组合\n\nBlocker 影响：当你持有 A♠ 时，\nAA 从 6 种减为 3 种，AKs 从 4 种减为 3 种\n3Bet 范围组合数从 26 降为 22',
+    content: '3-bet 范围组合计数：\n对手 3-bet 范围 = {AA, KK, QQ, AKs, A5s}\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\n总计 = 26 种组合\n\nBlocker 影响：当你持有 A♠ 时，\nAA 从 6 种减为 3 种，AKs 从 4 种减为 3 种\n3-bet 范围组合数从 26 降为 22',
   },
   {
     type: 'theory-reference',
-    content: '理论支撑：3Bet 的范围构建与组合计数详见理论学院 T4 第 2 章"组合数学与 Blockers"。Blocker 在翻前 3Bet/4Bet 场景中的定量应用有详细推导。',
+    content: '理论支撑：3-bet 的范围构建与组合计数详见理论学院 T4 第 2 章"组合数学与 Blockers"。Blocker 在翻前 3-bet/4Bet 场景中的定量应用有详细推导。',
     data: { theoryLevelId: 't4', theoryChapterId: 't4-combinatorics' },
   },
   {
     type: 'counter-intuitive',
-    content: '反直觉点：持有 A5s 时做 3Bet，AA 的组合数从 6 降到 3（因为 A 被阻断），但 K 的数量完全不受影响。这意味着持有 A5s 时对手持有 AA 的概率减半，以此为 3Bet Bluff 提供数学依据。',
+    content: '反直觉点：持有 A5s 时做 3-bet，AA 的组合数从 6 降到 3（因为 A 被阻断），但 K 的数量完全不受影响。这意味着持有 A5s 时对手持有 AA 的概率减半，以此为 3-bet Bluff 提供数学依据。',
   },
 ];
 
@@ -51,6 +51,12 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         title: '加注大小',
         subtitle: '学习标准的翻前加注策略',
         duration: '6 min',
+        objectives: [
+          '说出 6 人桌线上现金局的标准翻前加注大小（2.5BB），并说明统一加注大小如何隐藏手牌强度',
+          '用所需胜率 = 跟注额 ÷ (底池 + 对手下注 + 跟注额) 计算面对 1/2 池下注的保本胜率（25%）',
+          '列出常用下注尺度对应的所需胜率（1/3 池 20%、1/2 池 25%、2/3 池 28.6%、满池 33.3%）',
+          '判断加注大小与对手跟注率的关系，并说明 min-raise 给对手太好底池赔率的问题',
+        ],
         content: [
           { type: 'heading', content: '标准加注大小' },
           {
@@ -266,39 +272,39 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         id: 'l2-3bet-basics',
         level: 2,
         order: 2,
-        title: '3-Bet 基础',
+        title: '3-bet 基础',
         subtitle: '理解再加注的策略逻辑',
         duration: '8 min',
         objectives: [
-          '说明 3-Bet 中"3"的计数口径：盲注为第 1 次下注、开牌加注为第 2 次、再加注为第 3 次',
-          '列举 3-Bet 的四个目的：价值、弃牌权益、主动权、隔离',
-          '比较线性 3-Bet 范围与极化 3-Bet 范围，并给出新手阶段的使用先后顺序',
-          '计算 3-Bet 范围的组合数并说明 Blocker 的影响：{AA,KK,QQ,AKs,A5s} 共 26 种，持 A♠ 时降为 22 种',
+          '说明 3-bet 中"3"的计数口径：盲注为第 1 次下注、开牌加注为第 2 次、再加注为第 3 次',
+          '列举 3-bet 的四个目的：价值、弃牌权益、主动权、隔离',
+          '比较线性 3-bet 范围与极化 3-bet 范围，并给出新手阶段的使用先后顺序',
+          '计算 3-bet 范围的组合数并说明 Blocker 的影响：{AA,KK,QQ,AKs,A5s} 共 26 种，持 A♠ 时降为 22 种',
         ],
         content: [...L2_3BET_U1_SECTIONS, ...L2_3BET_U2_SECTIONS],
         quiz: [
           {
             id: 'l2-3bet-q1',
-            question: '3-Bet 中的"3"代表什么？',
+            question: '3-bet 中的"3"代表什么？',
             options: ['3次加注', '第3次下注行为', '3个大盲注', '3个玩家'],
             correctIndex: 1,
-            explanation: '3-Bet 的"3"表示这是翻前的第3次下注行为：盲注(1)→开牌加注(2)→再加注(3)。',
+            explanation: '3-bet 的"3"表示这是翻前的第3次下注行为：盲注(1)→开牌加注(2)→再加注(3)。',
           },
           {
             id: 'l2-3bet-q2',
-            question: '初学者应该使用什么类型的3-Bet范围？',
+            question: '初学者应该使用什么类型的3-bet范围？',
             options: ['极化范围', '线性范围', '随机范围', '只用AA'],
             correctIndex: 1,
-            explanation: '初学者应先用线性范围（只用强牌3-Bet），熟练后再学习极化范围。',
+            explanation: '初学者应先用线性范围（只用强牌3-bet），熟练后再学习极化范围。',
           },
-          { id: 'l2-3bet-q3', question: '3-Bet的主要目的不包括？', options: ['获取价值', '迫使对手弃牌', '节省筹码', '获得主动权'], correctIndex: 2, explanation: '3-Bet的目的是获取价值、弃牌权益、主动权和隔离。节省筹码不是3-Bet的目的。' },
-          { id: 'l2-3bet-q4', question: '面对UTG open，哪个手牌最适合3-Bet？', options: ['76s', 'KJs', 'AA', 'A5s'], correctIndex: 2, explanation: 'AA是最强的起手牌，面对任何open都应该3-Bet获取价值。' },
-          { id: 'l2-3bet-q5', question: '3-Bet大小通常是原始加注的多少倍？', options: ['1.5倍', '2倍', '3倍', '5倍'], correctIndex: 2, explanation: '标准3-Bet大小是原始加注的3倍左右。例如面对2.5BB open，3-Bet到7.5BB。' },
+          { id: 'l2-3bet-q3', question: '3-bet的主要目的不包括？', options: ['获取价值', '迫使对手弃牌', '节省筹码', '获得主动权'], correctIndex: 2, explanation: '3-bet的目的是获取价值、弃牌权益、主动权和隔离。节省筹码不是3-bet的目的。' },
+          { id: 'l2-3bet-q4', question: '面对UTG open，哪个手牌最适合3-bet？', options: ['76s', 'KJs', 'AA', 'A5s'], correctIndex: 2, explanation: 'AA是最强的起手牌，面对任何open都应该3-bet获取价值。' },
+          { id: 'l2-3bet-q5', question: '3-bet大小通常是原始加注的多少倍？', options: ['1.5倍', '2倍', '3倍', '5倍'], correctIndex: 2, explanation: '标准3-bet大小是原始加注的3倍左右。例如面对2.5BB open，3-bet到7.5BB。' },
         ],
         examples: [
           {
             id: 'l2-3bet-ex1',
-            title: '价值 3-Bet：QQ 面对 CO Open',
+            title: '价值 3-bet：QQ 面对 CO Open',
             heroHand: ['Qh', 'Qd'],
             heroPosition: 'BTN',
             previousActions: [
@@ -311,24 +317,24 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             potSize: 4,
             opponent: OPPONENT_PROFILES['tag'],
             correctDecision: {
-              action: 'Raise (3-Bet)',
+              action: 'Raise (3-bet)',
               amount: '7.5BB',
               reasoning: [
-                'QQ 是顶级强牌，面对 CO open 应该 3-Bet 获取价值',
-                '3-Bet 到 7.5BB（原始加注的3倍）是标准大小',
+                'QQ 是顶级强牌，面对 CO open 应该 3-bet 获取价值',
+                '3-bet 到 7.5BB（原始加注的3倍）是标准大小',
                 '建立大底池，为翻后的全下做准备',
                 'CO 的开牌范围很宽，QQ 远远领先',
               ],
             },
             commonMistake: {
               action: 'Call（平跟）',
-              reasoning: 'QQ 平跟太被动。这手牌足够强做价值 3-Bet，平跟会让多人入池，降低 QQ 的胜率。',
+              reasoning: 'QQ 平跟太被动。这手牌足够强做价值 3-bet，平跟会让多人入池，降低 QQ 的胜率。',
               evLoss: '-0.8 BB/100',
             },
           },
           {
             id: 'l2-3bet-ex2',
-            title: '不应该 3-Bet 的场景：中等牌力',
+            title: '不应该 3-bet 的场景：中等牌力',
             heroHand: ['Kd', 'Jd'],
             heroPosition: 'BTN',
             previousActions: [
@@ -343,15 +349,15 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Call',
               reasoning: [
-                'KJs 面对 UTG open 应该 Call 而不是 3-Bet',
-                'UTG 的开牌范围很强（前位），KJs 不够强做价值 3-Bet',
-                '3-Bet 会被 UTG 的强范围跟注或 4-Bet，你将处于困难境地',
+                'KJs 面对 UTG open 应该 Call 而不是 3-bet',
+                'UTG 的开牌范围很强（前位），KJs 不够强做价值 3-bet',
+                '3-bet 会被 UTG 的强范围跟注或 4-Bet，你将处于困难境地',
                 'Call 保持底池可控，翻后利用位置优势',
               ],
             },
             commonMistake: {
-              action: '3-Bet 到 7.5BB',
-              reasoning: 'KJs 面对UTG强范围做3-Bet是-EV的。你被跟注时通常落后，被4-Bet时只能弃牌。',
+              action: '3-bet 到 7.5BB',
+              reasoning: 'KJs 面对UTG强范围做3-bet是-EV的。你被跟注时通常落后，被4-Bet时只能弃牌。',
               evLoss: '-1.2 BB/100',
             },
           },
@@ -374,8 +380,8 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'AKs 是最强的起手牌之一，绝对不应该弃牌。', evImpact: '-3.0 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'AKs 足够强做价值 3-Bet。平跟太被动，错失建立大底池的机会。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'AKs 面对CO open是经典的价值 3-Bet。建立大底池，对CO的宽范围有巨大优势。', evImpact: '+2.0 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'AKs 足够强做价值 3-bet。平跟太被动，错失建立大底池的机会。', evImpact: '+0.5 BB/100' },
+                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'AKs 面对CO open是经典的价值 3-bet。建立大底池，对CO的宽范围有巨大优势。', evImpact: '+2.0 BB/100' },
               ],
             },
             {
@@ -396,7 +402,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: '98s 有位置优势，面对UTG open可以call看flop。弃牌太紧。', evImpact: '-0.3 BB/100' },
                 { action: 'Call', isCorrect: true, explanation: '98s 面对UTG强范围应该Call。同花连牌有很好的隐含赔率，翻后可以用位置优势操作。', evImpact: '+0.4 BB/100' },
-                { action: 'Raise', amount: '7.5BB', isCorrect: false, explanation: '98s 不够强做 3-Bet。面对UTG强范围，3-Bet 会被跟注或 4-Bet，你将处于困难境地。', evImpact: '-0.8 BB/100' },
+                { action: 'Raise', amount: '7.5BB', isCorrect: false, explanation: '98s 不够强做 3-bet。面对UTG强范围，3-bet 会被跟注或 4-Bet，你将处于困难境地。', evImpact: '-0.8 BB/100' },
               ],
             },
             {
@@ -414,8 +420,8 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'JJ 是强牌，面对MP open绝对不应该弃牌。', evImpact: '-2.0 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'JJ 足够强做 3-Bet。平跟会让多人入池，降低JJ的胜率。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'JJ 面对MP open是标准价值 3-Bet。JJ对MP的开牌范围有很强胜率，应该建立大底池。', evImpact: '+1.5 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'JJ 足够强做 3-bet。平跟会让多人入池，降低JJ的胜率。', evImpact: '+0.5 BB/100' },
+                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'JJ 面对MP open是标准价值 3-bet。JJ对MP的开牌范围有很强胜率，应该建立大底池。', evImpact: '+1.5 BB/100' },
               ],
             },
             {
@@ -434,8 +440,8 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'AKs是最强的起手牌之一，绝对不应该弃牌。', evImpact: '-3.0 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'AKs足够强做价值3-Bet。平跟太被动，错失建立大底池的机会。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'AKs面对UTG open是经典的价值3-Bet。建立大底池，对UTG的范围有巨大优势。', evImpact: '+2.0 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'AKs足够强做价值3-bet。平跟太被动，错失建立大底池的机会。', evImpact: '+0.5 BB/100' },
+                { action: 'Raise', amount: '7.5BB', isCorrect: true, explanation: 'AKs面对UTG open是经典的价值3-bet。建立大底池，对UTG的范围有巨大优势。', evImpact: '+2.0 BB/100' },
               ],
               relatedLessonId: 'l2-3bet-basics',
             },
@@ -454,8 +460,8 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'QJs在SB面对BTN open有足够胜率，不应该弃牌。', evImpact: '-0.5 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'QJs 在 SB 应该 3-Bet，利用弃牌权益和牌力保护。', evImpact: '+0.3 BB/100' },
-                { action: 'Raise', amount: '9BB', isCorrect: true, explanation: 'QJs 在 SB vs BTN 是标准 3-Bet。虽 OOP 但 QJs 足够强，尺度约 3.5-4x（9-10BB）补偿位置劣势。', evImpact: '+1.2 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'QJs 在 SB 应该 3-bet，利用弃牌权益和牌力保护。', evImpact: '+0.3 BB/100' },
+                { action: 'Raise', amount: '9BB', isCorrect: true, explanation: 'QJs 在 SB vs BTN 是标准 3-bet。虽 OOP 但 QJs 足够强，尺度约 3.5-4x（9-10BB）补偿位置劣势。', evImpact: '+1.2 BB/100' },
               ],
               relatedLessonId: 'l2-3bet-basics',
             },
@@ -464,12 +470,12 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         units: [
           {
             id: 'u1',
-            title: '什么是 3-Bet？',
+            title: '什么是 3-bet？',
             sections: L2_3BET_U1_SECTIONS,
           },
           {
             id: 'u2',
-            title: '3-Bet 的目的',
+            title: '3-bet 的目的',
             sections: L2_3BET_U2_SECTIONS,
             exampleId: 'l2-3bet-ex1',
             checkpoint: true,
@@ -483,19 +489,25 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         title: '4-Bet 策略',
         subtitle: '掌握翻前最强武器的使用时机',
         duration: '10 min',
-        // P4 修复（4.1-P2-1）：4-Bet 依赖 3-Bet 基础
+        objectives: [
+          '区分价值 4-Bet（AA/KK/QQ/AKs）与 4-Bet Bluff（A5s 系），并说明 A blocker 如何降低对手持有 AA/AK 的概率',
+          '用 4-Bet 增量 ÷ (4Bet 前底池 + 4-Bet 增量) 计算对手 4-Bet Bluff 的保本弃牌率（约 57.4%），并据此给出自己至少约 42.6% 的继续防御频率',
+          '判断面对 4-Bet 的分类应对：AA/KK 走 5-Bet 全下、QQ/AKs 可跟注、中等牌面对紧范围弃牌',
+          '计算标准 4-Bet 大小（3-bet 额的 2.2-2.5 倍），并在 4-Bet 前先给出被 5-Bet 全下时的应对计划',
+        ],
+        // P4 修复（4.1-P2-1）：4-Bet 依赖 3-bet 基础
         prerequisites: ['l2-3bet-basics'],
         content: [
           { type: 'heading', content: '什么是 4-Bet？' },
-          { type: 'text', content: '4-Bet 是指面对 3-Bet 时的再加注。翻前下注序列：盲注(1)→Open(2)→3-Bet(3)→4-Bet(4)。4-Bet 是翻前最强大的武器，代表极强的牌力或精心设计的诈唬。' },
+          { type: 'text', content: '4-Bet 是指面对 3-bet 时的再加注。翻前下注序列：盲注(1)→Open(2)→3-bet(3)→4-Bet(4)。4-Bet 是翻前最强大的武器，代表极强的牌力或精心设计的诈唬。' },
           { type: 'key-point', content: '4-Bet 的两种类型：价值 4-Bet（AA/KK/QQ/AKs — 永远 4-bet）和 4-Bet Bluff（A5s/A4s/A3s — 有 A blocker + 翻后可玩性）。' },
           { type: 'heading', content: '4-Bet 大小' },
-          { type: 'text', content: '标准 4-Bet 大小：3-Bet 额的 2.2-2.5 倍。例如：Open 2.5BB → 3-Bet 7.5BB → 4-Bet 16-19BB。IP 可稍小（2.2x），OOP 稍大（2.5x）。' },
+          { type: 'text', content: '标准 4-Bet 大小：3-bet 额的 2.2-2.5 倍。例如：Open 2.5BB → 3-bet 7.5BB → 4-Bet 16-19BB。IP 可稍小（2.2x），OOP 稍大（2.5x）。' },
           { type: 'highlight', content: '面对 4-Bet 的决策框架：1) 5-Bet All-in：AA/KK（永远全下）2) Call：QQ/AKs（强但非无敌）3) Fold：面对紧 4-Bet 范围时弃掉中等牌。' },
           { type: 'pro-tip', content: '4-Bet 前先想好：如果对手 5-Bet All-in，我怎么办？没有计划就 4-Bet 是灾难的开始。低级别用线性 4-Bet 范围（只强牌），高级别再加 bluff。' },
           {
             type: 'formula',
-            content: '4Bet 盈亏平衡分析：\n4Bet bluff 所需弃牌率 = 4Bet 额 ÷ (底池 + 4Bet 额)\n例：你 3Bet 到 7.5BB，对手 4Bet 到 18BB\n所需弃牌率 = 18 ÷ (7.5+18) ≈ 70.6%\n\n含义：70.6% 是对手 4Bet bluff 的保本弃牌率——你弃得比它更多，他的 bluff 就从零 EV 变成正 EV。所以你的弃牌率必须低于 70.6%，即至少以约 29.4% 的频率继续防御（3Bet 或跟注）。',
+            content: '4Bet 盈亏平衡分析：\n4Bet bluff 保本弃牌率 = 4Bet 增量 ÷ (4Bet 前底池 + 4Bet 增量)\n例：盲注 1.5 + Open 2.5 + 你 3-bet 7.5 = 4Bet 前底池 11.5BB；对手 Open 2.5 已沉没，4Bet 到 18BB 的增量风险 = 18 − 2.5 = 15.5BB\n保本弃牌率 = 15.5 ÷ (11.5 + 15.5) = 15.5/27 ≈ 57.4%\n\n含义：57.4% 是对手 4Bet bluff 的保本弃牌率——你弃得比它更多，他的 bluff 就从零 EV 变成正 EV。所以你的弃牌率必须低于 57.4%，即至少以约 42.6% 的频率继续防御（3-bet 或跟注）。',
           },
           {
             type: 'theory-reference',
@@ -504,34 +516,34 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           },
           {
             type: 'counter-intuitive',
-            content: '反直觉点：4Bet Bluff 需要对手有极高的弃牌率（约 70%）才能盈亏平衡。这意味着 4Bet Bluff 并不是一个可以频繁使用的策略，只在特定场合（对手弃牌过多时）才有效。',
+            content: '反直觉点：4Bet Bluff 需要对手有相当高的弃牌率（约 57%）才能盈亏平衡。这意味着 4Bet Bluff 并不是一个可以频繁使用的策略，只在特定场合（对手弃牌过多时）才有效。',
           },
         ],
         quiz: [
           { id: 'l2-4bet-q1', question: '以下哪手牌最适合作为 4-Bet Bluff？', options: ['KQo', 'A5s', '99', 'JTs'], correctIndex: 1, explanation: 'A5s 有 A blocker（降低对手持 AA/AK 概率）+ 翻后可玩性（同花/顺子潜力），是经典 4-Bet Bluff 手牌。' },
-          { id: 'l2-4bet-q2', question: '标准 4-Bet 大小通常是 3-Bet 额的多少倍？', options: ['1.5-2x', '2.2-2.5x', '3-3.5x', '4-5x'], correctIndex: 1, explanation: '标准 4-Bet 为 3-Bet 额的 2.2-2.5 倍，如 3-Bet 7.5BB → 4-Bet 16-19BB。' },
+          { id: 'l2-4bet-q2', question: '标准 4-Bet 大小通常是 3-bet 额的多少倍？', options: ['1.5-2x', '2.2-2.5x', '3-3.5x', '4-5x'], correctIndex: 1, explanation: '标准 4-Bet 为 3-bet 额的 2.2-2.5 倍，如 3-bet 7.5BB → 4-Bet 16-19BB。' },
           { id: 'l2-4bet-q3', question: '面对 TAG 的 4-Bet，你持有 JJ 应该如何？', options: ['永远 Fold', '5-Bet All-in', 'Call 看 flop', '根据情况 Call 或 Fold'], correctIndex: 3, explanation: 'JJ 面对 TAG 4-Bet 需判断：TAG 范围紧（AA/KK/AKs）→ Fold；若含 bluff → Call。没有绝对答案，需读对手。' },
           { id: 'l2-4bet-q4', question: '面对紧玩家的4-Bet，应该弃掉哪手牌？', options: ['AA', 'KK', 'QQ', 'AKs'], correctIndex: 2, explanation: 'QQ面对紧玩家的4-Bet可以弃牌，因为紧玩家范围主要是AA/KK。但面对宽范围玩家应该Call。' },
           { id: 'l2-4bet-q5', question: '4-Bet Bluff的主要优势是？', options: ['赢更多钱', '有A blocker降低对手强牌概率', '看起来更专业', '规则要求'], correctIndex: 1, explanation: '4-Bet Bluff手牌通常有A blocker，降低对手持有AA/AK的概率，增加弃牌权益。' },
         ],
         examples: [
           {
-            id: 'l2-4bet-ex1', title: '价值 4-Bet：AKs 面对 3-Bet',
+            id: 'l2-4bet-ex1', title: '价值 4-Bet：AKs 面对 3-bet',
             heroHand: ['As', 'Ks'], heroPosition: 'BTN',
-            previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'raise 7.5BB (3-Bet)' }, { player: 'CO', action: 'raise 18BB (4-Bet)' }],
+            previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'raise 7.5BB (3-bet)' }, { player: 'CO', action: 'raise 18BB (4-Bet)' }],
             street: 'preflop', effectiveStack: 82, potSize: 27,
             opponent: OPPONENT_PROFILES['lag'],
             correctDecision: { action: 'Call', reasoning: ['AKs 面对 LAG 4-Bet 应该 Call，LAG 范围宽（AA/KK/QQ/AKs + bluff）', 'AKs 对 LAG 4-Bet 范围有约 40% 胜率，Call 保持底池可控', '5-Bet All-in 也可接受，但 Call 让 LAG 的 bluff 继续', '翻后利用位置优势操作'] },
             commonMistake: { action: 'Fold', reasoning: 'AKs 面对 LAG 4-Bet 弃牌太紧。LAG 范围宽，AKs 有足够胜率继续。', evLoss: '-2.5 BB/100' },
           },
           {
-            id: 'l2-4bet-ex2', title: '3-Bet 后 C-Bet 延续诈唬',
+            id: 'l2-4bet-ex2', title: '3-bet 后 C-Bet 延续诈唬',
             heroHand: ['Ah', '5h'], heroPosition: 'BTN',
-            previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'raise 8BB (3-Bet)' }, { player: 'CO', action: 'call' }],
+            previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'raise 8BB (3-bet)' }, { player: 'CO', action: 'call' }],
             street: 'flop', effectiveStack: 91, potSize: 18.5, board: ['Kh', '8d', '3c'],
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'C-Bet 翻牌', amount: '6BB', reasoning: ['翻牌 Kh8d3c，CO check', '你翻前 3-Bet 代表强范围（AK/QQ/AKs），C-Bet 持续施压', 'TAG 面对 3-Bet 后翻牌 C-Bet 弃牌率高（约 55%）', '即使被 Call，A5 有后门同花 + 卡顺潜力'] },
-            commonMistake: { action: 'Check back', reasoning: '翻前 3-Bet 后翻牌不 C-Bet 太被动，错失弃牌权益。TAG 弃牌率高，应该持续施压。', evLoss: '-1.0 BB/100' },
+            correctDecision: { action: 'C-Bet 翻牌', amount: '6BB', reasoning: ['翻牌 Kh8d3c，CO check', '你翻前 3-bet 代表强范围（AK/QQ/AKs），C-Bet 持续施压', 'TAG 面对 3-bet 后翻牌 C-Bet 弃牌率高（约 55%）', '即使被 Call，A5 有后门同花 + 卡顺潜力'] },
+            commonMistake: { action: 'Check back', reasoning: '翻前 3-bet 后翻牌不 C-Bet 太被动，错失弃牌权益。TAG 弃牌率高，应该持续施压。', evLoss: '-1.0 BB/100' },
           },
         ],
         practice: {
@@ -550,8 +562,8 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               id: 'l2-4bet-p2',
               scenario: { heroHand: ['As', '5s'], heroPosition: 'BTN', previousActions: [{ player: 'MP', action: 'raise 2.5BB' }, { player: 'CO', action: 'raise 7.5BB' }], street: 'preflop', potSize: 11.5, effectiveStack: 92, opponent: OPPONENT_PROFILES['tag'] },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: 'A5s 面对 3-Bet 可以 Fold，但错失 4-Bet bluff 机会。有 A blocker + 可玩性，4-Bet 是 +EV。', evImpact: '-0.3 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'A5s Call 3-Bet 偏被动，翻后 OOP 对 TAG 难操作。4-Bet bluff 更好。', evImpact: '+0.2 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: 'A5s 面对 3-bet 可以 Fold，但错失 4-Bet bluff 机会。有 A blocker + 可玩性，4-Bet 是 +EV。', evImpact: '-0.3 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'A5s Call 3-bet 偏被动，翻后 OOP 对 TAG 难操作。4-Bet bluff 更好。', evImpact: '+0.2 BB/100' },
                 { action: '4-Bet', amount: '18BB', isCorrect: true, explanation: 'A5s 是经典 4-Bet bluff：A blocker 降低对手 AA/AK 概率，TAG 面对 4-Bet 弃牌率高，被 Call 有同花/顺子潜力。', evImpact: '+1.2 BB/100' },
               ],
             },
@@ -594,20 +606,26 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         order: 4,
         title: 'Squeeze Play',
         subtitle: '利用多人入池的挤压加注获利',
-        // P4 修复（4.1-P2-1）：Squeeze 是 3-Bet 的特殊形式，依赖 3-Bet 基础
+        // P4 修复（4.1-P2-1）：Squeeze 是 3-bet 的特殊形式，依赖 3-bet 基础
         prerequisites: ['l2-3bet-basics'],
         duration: '8 min',
+        objectives: [
+          '判断何时构成 Squeeze 场景（1 个 Open + 1 个或多个 Call），并说出它区别于普通 3-bet 的三个价值来源（死钱、弃牌率、隔离）',
+          '计算 Squeeze 大小（Open 额的 4-5 倍，每多一个 Caller 加 1 倍），如面对 2.5BB Open 给出 10-12BB',
+          '区分 Squeeze 价值牌（AA/KK/QQ/AKs/AQs）与 Bluff 牌（A5s 系 Ax blocker），并识别最佳时机（宽 Open + 弱 Call 者）',
+          '面对 Squeeze 时给出分类应对：AA/KK 4-Bet、QQ/AKs 跟注、弱 Call 范围面对大 Squeeze 弃牌',
+        ],
         content: [
           { type: 'heading', content: '什么是 Squeeze？' },
-          { type: 'text', content: 'Squeeze（挤压）是指面对 1 个 Open + 1 个或多个 Call 时的 3-Bet。"挤压" 形象地描述了中间玩家被 Open 者和 Call 者 "夹击" 的困境。' },
-          { type: 'key-point', content: 'Squeeze 的价值：1) 死钱多（Open + Call 的筹码已在底池）2) 弃牌率高（Call 者范围弱，面对 3-Bet 常弃牌）3) 隔离 Open 者（单挑有利位置）。' },
+          { type: 'text', content: 'Squeeze（挤压）是指面对 1 个 Open + 1 个或多个 Call 时的 3-bet。"挤压" 形象地描述了中间玩家被 Open 者和 Call 者 "夹击" 的困境。' },
+          { type: 'key-point', content: 'Squeeze 的价值：1) 死钱多（Open + Call 的筹码已在底池）2) 弃牌率高（Call 者范围弱，面对 3-bet 常弃牌）3) 隔离 Open 者（单挑有利位置）。' },
           { type: 'heading', content: 'Squeeze 范围与大小' },
           { type: 'text', content: 'Squeeze 范围（极化）：价值牌（AA/KK/QQ/AKs/AQs）+ Bluff（A5s/A4s/A3s 等 Ax blocker）。大小：Open 额的 4-5x（如 Open 2.5BB → Squeeze 10-12BB），每多一个 Caller 加 1x。' },
           { type: 'highlight', content: '面对 Squeeze 的防守：1) 4-Bet：AA/KK 2) Call：强牌但非顶级（QQ/AKs）3) Fold：弱 Call 范围（小对子/同花连牌面对大 Squeeze 弃牌）。' },
           { type: 'pro-tip', content: 'Squeeze 最佳时机：Open 者范围宽（CO/BTN）+ Call 者是弱玩家（不会 4-Bet bluff）。避免对紧 UTG Open 做 Squeeze bluff。' },
         ],
         quiz: [
-          { id: 'l2-squeeze-q1', question: 'Squeeze Play 是指什么情况？', options: ['面对 Open 的 3-Bet', '面对 1 Open + 1+ Call 的 3-Bet', '面对 4-Bet 的 5-Bet', '翻后的 Check-Raise'], correctIndex: 1, explanation: 'Squeeze 特指面对 1 个 Open + 1 个或多个 Call 时的 3-Bet，利用死钱和弃牌率获利。' },
+          { id: 'l2-squeeze-q1', question: 'Squeeze Play 是指什么情况？', options: ['面对 Open 的 3-bet', '面对 1 Open + 1+ Call 的 3-bet', '面对 4-Bet 的 5-Bet', '翻后的 Check-Raise'], correctIndex: 1, explanation: 'Squeeze 特指面对 1 个 Open + 1 个或多个 Call 时的 3-bet，利用死钱和弃牌率获利。' },
           { id: 'l2-squeeze-q2', question: 'Open 2.5BB + 1 Call 后，标准 Squeeze 大小是？', options: ['5-6BB', '7.5-8BB', '10-12BB', '15-18BB'], correctIndex: 2, explanation: 'Squeeze 通常为 Open 额的 4-5x，有 Caller 时适当增加。2.5BB Open → 10-12BB Squeeze。' },
           { id: 'l2-squeeze-q3', question: '以下哪手牌最适合作为 Squeeze Bluff？', options: ['KJo', 'A4s', '88', 'QTs'], correctIndex: 1, explanation: 'A4s 有 A blocker + 翻后可玩性（同花/顺子潜力），是经典 Squeeze bluff 手牌。' },
           { id: 'l2-squeeze-q4', question: 'Squeeze的最佳时机是？', options: ['UTG Open + Call', 'BTN Open + Call', 'CO Open + 2 Calls', 'SB Open + Call'], correctIndex: 1, explanation: 'BTN Open范围宽+Call者范围弱，Squeeze弃牌率最高。避免对紧UTG Open做Squeeze bluff。' },
@@ -620,7 +638,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             previousActions: [{ player: 'MP', action: 'raise 2.5BB' }, { player: 'CO', action: 'call' }],
             street: 'preflop', effectiveStack: 95, potSize: 6.5,
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'Squeeze 3-Bet', amount: '12BB', reasoning: ['QQ 是顶级强牌，面对 Open + Call 应该 Squeeze 获取价值', '底池已有 6.5BB 死钱，Squeeze 可直接赢取', 'MP 和 CO 面对 Squeeze 弃牌率高', '即使被 Call，QQ 对两个范围都有很好胜率'] },
+            correctDecision: { action: 'Squeeze 3-bet', amount: '12BB', reasoning: ['QQ 是顶级强牌，面对 Open + Call 应该 Squeeze 获取价值', '底池已有 6.5BB 死钱，Squeeze 可直接赢取', 'MP 和 CO 面对 Squeeze 弃牌率高', '即使被 Call，QQ 对两个范围都有很好胜率'] },
             commonMistake: { action: 'Call（平跟）', reasoning: 'QQ 平跟太被动，让 SB/BB 便宜看 flop。Squeeze 可获取死钱 + 弃牌权益。', evLoss: '-1.0 BB/100' },
           },
           {
@@ -629,7 +647,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'SB', action: 'call' }],
             street: 'preflop', effectiveStack: 96, potSize: 6,
             opponent: OPPONENT_PROFILES['lag'],
-            correctDecision: { action: 'Squeeze 3-Bet', amount: '11BB', reasoning: ['CO Open 范围宽 + SB Call 范围弱，Squeeze 弃牌率高', 'A5s 有 A blocker，降低对手持 AA/AK 概率', '底池 6BB 死钱值得争夺', '被 Call 有同花/顺子潜力，翻后可操作'] },
+            correctDecision: { action: 'Squeeze 3-bet', amount: '11BB', reasoning: ['CO Open 范围宽 + SB Call 范围弱，Squeeze 弃牌率高', 'A5s 有 A blocker，降低对手持 AA/AK 概率', '底池 6BB 死钱值得争夺', '被 Call 有同花/顺子潜力，翻后可操作'] },
             commonMistake: { action: 'Call（平跟）', reasoning: 'A5s 平跟让底池变多人，降低胜率。Squeeze 可利用弃牌率直接获利。', evLoss: '-0.8 BB/100' },
           },
         ],
@@ -651,7 +669,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'A4s 有可玩性，面对 MP+CO 可以 Squeeze bluff 或 Call。Fold 太紧。', evImpact: '-0.3 BB/100' },
                 { action: 'Call', isCorrect: false, explanation: 'A4s Call 可以但错失 Squeeze 机会。MP 是 NIT（Open 范围紧），Squeeze 弃牌率高。', evImpact: '+0.3 BB/100' },
-                { action: 'Squeeze', amount: '12BB', isCorrect: true, explanation: 'A4s 面对 NIT Open + Call 是好的 Squeeze bluff。NIT 面对 3-Bet 弃牌率极高（70%），A blocker 降低被 4-Bet 概率。', evImpact: '+1.5 BB/100' },
+                { action: 'Squeeze', amount: '12BB', isCorrect: true, explanation: 'A4s 面对 NIT Open + Call 是好的 Squeeze bluff。NIT 面对 3-bet 弃牌率极高（70%），A blocker 降低被 4-Bet 概率。', evImpact: '+1.5 BB/100' },
               ],
             },
             {
@@ -694,12 +712,18 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         title: '大盲防守',
         subtitle: '学会在BB位正确防御，避免被偷盲',
         duration: '10 min',
+        objectives: [
+          '计算 BB 面对 2.5BB Open 只需补 1.5BB 跟注的底池赔率，并说明为何 BB 应该用更宽范围防守',
+          '判断 BB 防守范围随对手开池位置的相对变化（面对 BTN 最宽、面对 UTG 最紧），并据此收紧或放宽',
+          '区分 BB 的 Call 范围（同花连牌/小对子等有翻后潜力但不 3-bet 的牌）与 3-bet 极化范围（AA/KK/QQ/AKs + A5s 系）',
+          '判断自己的盲注防守频率是否落在合理区间（约 40-60%），说出防守过低会被任意偷盲、过高会被价值下注惩罚',
+        ],
         content: [
           { type: 'heading', content: 'BB 的特殊性' },
           { type: 'text', content: '大盲位（BB）已投入 1BB，面对 Open 只需补差额即可 Call。例如：Open 2.5BB → BB Call 只需 1.5BB。这给了 BB 极好的底池赔率，应该用更宽范围防守。' },
           { type: 'key-point', content: 'BB 防守宽度的相对关系：面对 BTN Open 最宽，面对 CO 次之，面对 HJ 更紧，面对 UTG 最紧。对手开池位置越靠前，你的防守范围应收得越紧；精确构成以范围训练模块与 GTO 策略表为准。' },
-          { type: 'heading', content: 'Call vs 3-Bet 的选择' },
-          { type: 'text', content: 'Call：有翻后潜力但不适合 3-Bet 的牌（同花连牌/小对子/宽同花牌）。3-Bet：极化范围 — 强价值牌（AA/KK/QQ/AKs）+ Bluff（A5s/A4s 等 Ax blocker）。' },
+          { type: 'heading', content: 'Call vs 3-bet 的选择' },
+          { type: 'text', content: 'Call：有翻后潜力但不适合 3-bet 的牌（同花连牌/小对子/宽同花牌）。3-bet：极化范围 — 强价值牌（AA/KK/QQ/AKs）+ Bluff（A5s/A4s 等 Ax blocker）。' },
           { type: 'highlight', content: 'Blind Defense Frequency：如果防守 < 40%，对手可任意偷盲获利。如果 > 60%，过度防守会被价值下注惩罚。根据对手 Open 范围调整。' },
           { type: 'pro-tip', content: '面对紧对手（NIT/UTG Open）防守要紧，面对松对手（LAG/BTN Open）防守要宽。对手 Open 范围越宽，你的防守范围也应越宽。' },
         ],
@@ -707,7 +731,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { id: 'l2-bb-q1', question: 'BB 面对 BTN Open 2.5BB，防守范围应处于哪一档？', options: ['最紧一档，只留强牌', '偏紧一档', '最宽一档，含大量中等牌力', '几乎不弃牌'], correctIndex: 2, explanation: 'BTN 是 6 人桌开池最宽的位置，BB 又已投入 1BB、补差额赔率极好，因此这是各位置中防守最宽的一档。' },
           { id: 'l2-bb-q2', question: 'BB 面对 Open 2.5BB，Call 需要补多少？', options: ['0.5BB', '1BB', '1.5BB', '2.5BB'], correctIndex: 2, explanation: 'BB 已投入 1BB，面对 2.5BB Open 只需补 1.5BB 即可 Call，底池赔率极好。' },
           { id: 'l2-bb-q3', question: 'BB 面对 UTG Open，防守范围应处于哪一档？', options: ['最紧一档，只用强牌', '偏宽一档', '最宽一档', '几乎不弃牌'], correctIndex: 0, explanation: 'UTG 只开最强的一小撮牌，BB 面对这种最强的开池范围应收得最紧，只用强牌防守。' },
-          { id: 'l2-bb-q4', question: 'BB防守时，哪手牌适合3-Bet bluff？', options: ['98s', 'A4s', 'KJo', '76s'], correctIndex: 1, explanation: 'A4s有A blocker，降低对手持AA/AK概率，是经典3-Bet bluff手牌。' },
+          { id: 'l2-bb-q4', question: 'BB防守时，哪手牌适合3-bet bluff？', options: ['98s', 'A4s', 'KJo', '76s'], correctIndex: 1, explanation: 'A4s有A blocker，降低对手持AA/AK概率，是经典3-bet bluff手牌。' },
           { id: 'l2-bb-q5', question: '与其他开池位置相比，BB 面对 BTN Open 的防守范围应该？', options: ['与面对 UTG 一样紧', '比面对 CO 更紧', '各位置中最宽', '一律跟注不加注'], correctIndex: 2, explanation: 'BTN 开池最宽、BB 已投入 1BB 赔率好，所以面对 BTN 的防守在各位置中最宽。' },
         ],
         examples: [
@@ -717,17 +741,17 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'SB', action: 'fold' }],
             street: 'preflop', effectiveStack: 98, potSize: 4,
             opponent: OPPONENT_PROFILES['lag'],
-            correctDecision: { action: 'Call', reasoning: ['K9s 面对 BTN Open 应该 Call 防守', 'BTN 是 6 人桌开池最宽的位置，K9s 有足够胜率', '只需补 1.5BB，底池赔率极好（约 2.5:1）', '同花高牌有翻后潜力（顶对/同花）'] },
+            correctDecision: { action: 'Call', reasoning: ['K9s 面对 BTN Open 应该 Call 防守', 'BTN 是 6 人桌开池最宽的位置，K9s 有足够胜率', '只需补 1.5BB，底池赔率极好（约 2.7:1，4 ÷ 1.5）', '同花高牌有翻后潜力（顶对/同花）'] },
             commonMistake: { action: 'Fold', reasoning: 'K9s 面对 BTN Open 弃牌太紧。BTN 范围宽，BB 赔率好，应该宽防守。', evLoss: '-0.5 BB/100' },
           },
           {
-            id: 'l2-bb-ex2', title: 'BB 3-Bet：A5s 面对 CO Open',
+            id: 'l2-bb-ex2', title: 'BB 3-bet：A5s 面对 CO Open',
             heroHand: ['As', '5s'], heroPosition: 'BB',
             previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'fold' }, { player: 'SB', action: 'fold' }],
             street: 'preflop', effectiveStack: 97, potSize: 4,
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: '3-Bet', amount: '9BB', reasoning: ['A5s 面对 CO Open 适合做 3-Bet bluff', 'A blocker 降低对手持 AA/AK 概率', 'TAG 面对 3-Bet 弃牌率高（约 55%）', '被 Call 有同花/顺子潜力，翻后可操作'] },
-            commonMistake: { action: 'Call', reasoning: 'A5s Call 可以但偏被动。3-Bet 可获取弃牌权益 + 主动权，更 +EV。', evLoss: '-0.4 BB/100' },
+            correctDecision: { action: '3-bet', amount: '9BB', reasoning: ['A5s 面对 CO Open 适合做 3-bet bluff', 'A blocker 降低对手持 AA/AK 概率', 'TAG 面对 3-bet 弃牌率高（约 55%）', '被 Call 有同花/顺子潜力，翻后可操作'] },
+            commonMistake: { action: 'Call', reasoning: 'A5s Call 可以但偏被动。3-bet 可获取弃牌权益 + 主动权，更 +EV。', evLoss: '-0.4 BB/100' },
           },
         ],
         practice: {
@@ -739,7 +763,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: '98s 面对 BTN Open 应该 Call。同花连牌有翻后潜力，BB 赔率好。Fold 太紧。', evImpact: '-0.4 BB/100' },
                 { action: 'Call', isCorrect: true, explanation: '98s 面对 BTN Open 是标准 Call 防守。同花连牌有隐含赔率，翻后可中顺子/同花。', evImpact: '+0.6 BB/100' },
-                { action: '3-Bet', amount: '9BB', isCorrect: false, explanation: '98s 做 3-Bet bluff 偏激进。没有 A blocker，被 Call 后 OOP 难操作。Call 更好。', evImpact: '-0.3 BB/100' },
+                { action: '3-bet', amount: '9BB', isCorrect: false, explanation: '98s 做 3-bet bluff 偏激进。没有 A blocker，被 Call 后 OOP 难操作。Call 更好。', evImpact: '-0.3 BB/100' },
               ],
             },
             {
@@ -747,8 +771,8 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               scenario: { heroHand: ['Ad', 'Kd'], heroPosition: 'BB', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'fold' }, { player: 'SB', action: 'fold' }], street: 'preflop', potSize: 4, effectiveStack: 97, opponent: OPPONENT_PROFILES['tag'] },
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'AKs 是最强起手牌之一，绝对不应该 Fold。', evImpact: '-3.0 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'AKs Call 可以但偏被动。3-Bet 建立大底池 + 获取主动权更 +EV。', evImpact: '+0.8 BB/100' },
-                { action: '3-Bet', amount: '9BB', isCorrect: true, explanation: 'AKs 面对 CO Open 是经典价值 3-Bet。建立大底池，对 CO 宽范围有巨大优势。', evImpact: '+2.0 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'AKs Call 可以但偏被动。3-bet 建立大底池 + 获取主动权更 +EV。', evImpact: '+0.8 BB/100' },
+                { action: '3-bet', amount: '9BB', isCorrect: true, explanation: 'AKs 面对 CO Open 是经典价值 3-bet。建立大底池，对 CO 宽范围有巨大优势。', evImpact: '+2.0 BB/100' },
               ],
             },
             {
@@ -757,7 +781,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: true, explanation: '75s 面对 UTG（NIT）Open 应该 Fold。UTG 范围极紧（前位强牌），75s 胜率不足，即使 BB 赔率好也不够。', evImpact: '+0.1 BB/100' },
                 { action: 'Call', isCorrect: false, explanation: '75s 面对 UTG 强范围 Call 是-EV。即使有隐含赔率，UTG 范围太强，翻后难获利。', evImpact: '-0.5 BB/100' },
-                { action: '3-Bet', amount: '9BB', isCorrect: false, explanation: '75s 面对 UTG NIT 做 3-Bet 是灾难。NIT 只跟/4-Bet 强牌，你完全被碾压。', evImpact: '-2.0 BB/100' },
+                { action: '3-bet', amount: '9BB', isCorrect: false, explanation: '75s 面对 UTG NIT 做 3-bet 是灾难。NIT 只跟/4-Bet 强牌，你完全被碾压。', evImpact: '-2.0 BB/100' },
               ],
               relatedLessonId: 'l2-bb-defense',
             },
@@ -767,7 +791,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: 'KTs面对CO Open应该Call防守。同花高牌有翻后潜力，BB赔率好。', evImpact: '-0.5 BB/100' },
                 { action: 'Call', isCorrect: true, explanation: 'KTs面对CO Open是标准Call防守。同花高牌有顶对/同花潜力，翻后可操作。', evImpact: '+0.6 BB/100' },
-                { action: '3-Bet', amount: '9BB', isCorrect: false, explanation: 'KTs做3-Bet bluff偏激进。没有A blocker，被Call后OOP难操作。Call更好。', evImpact: '-0.3 BB/100' },
+                { action: '3-bet', amount: '9BB', isCorrect: false, explanation: 'KTs做3-bet bluff偏激进。没有A blocker，被Call后OOP难操作。Call更好。', evImpact: '-0.3 BB/100' },
               ],
               relatedLessonId: 'l2-bb-defense',
             },
@@ -775,9 +799,9 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               id: 'l2-bb-p5',
               scenario: { heroHand: ['As', '4s'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'SB', action: 'fold' }], street: 'preflop', potSize: 4, effectiveStack: 97, opponent: OPPONENT_PROFILES['lag'] },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: 'A4s面对BTN Open应该防守。有A blocker，可以3-Bet bluff或Call。', evImpact: '-0.5 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'A4s Call可以但3-Bet bluff更+EV。A blocker+BTN宽范围，3-Bet弃牌权益高。', evImpact: '+0.3 BB/100' },
-                { action: '3-Bet', amount: '9BB', isCorrect: true, explanation: 'A4s面对BTN Open是经典3-Bet bluff。A blocker降低对手强牌概率，BTN宽范围弃牌率高。', evImpact: '+1.2 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: 'A4s面对BTN Open应该防守。有A blocker，可以3-bet bluff或Call。', evImpact: '-0.5 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'A4s Call可以但3-bet bluff更+EV。A blocker+BTN宽范围，3-bet弃牌权益高。', evImpact: '+0.3 BB/100' },
+                { action: '3-bet', amount: '9BB', isCorrect: true, explanation: 'A4s面对BTN Open是经典3-bet bluff。A blocker降低对手强牌概率，BTN宽范围弃牌率高。', evImpact: '+1.2 BB/100' },
               ],
               relatedLessonId: 'l2-bb-defense',
             },
@@ -791,6 +815,12 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         title: '盲注战争（SB vs BB）',
         subtitle: '掌握小盲注与大盲注的对抗策略',
         duration: '10 min',
+        objectives: [
+          '说出 SB vs BB 是 6-max 中发生频率最高的对抗，并判断 SB 应采用 raise-or-fold 而非 limp 策略',
+          '比较 SB 与 BTN 的开池宽度（同档约三成半），并说明 SB 需要更大尺度（2.5-3BB）的原因是翻后无位置',
+          '判断 BB 面对 SB Open 的防御结构：Call 是主体、3-bet 只占一小部分、仅弃最弱牌',
+          '识别盲注战争中的关键因素是 SB 翻后先行动的位置劣势，并据此选择能强势打的手牌',
+        ],
         content: [
           { type: 'heading', content: '为什么盲注战争是最高频的对抗？' },
           { type: 'text', content: '在6-max中，SB vs BB是发生频率最高的对抗场景。当前位所有玩家都弃牌时，小盲面临选择：是尽量拼搏还是放弃半个盲注？' },
@@ -798,13 +828,13 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { type: 'heading', content: 'SB 策略：Open 或 Fold' },
           { type: 'text', content: '现代策略中，SB对抵抗BB通常采用纯加注策略（不平跟）：\n• Open加注尺度：2.5-3BB（较大，因为没有位置优势）\n• 范围：很宽一档，约三成半的手牌\n• 包括所有强牌 + 大量中等牌 + 部分同花弱牌（作为bluff）' },
           { type: 'heading', content: 'BB 防御策略' },
-          { type: 'text', content: 'BB面对SB的Open应该用较宽的范围防御：\n• 3-Bet：只占防御范围的一小部分（强价值 + 轻型 3-Bet bluff）\n• Call：防御范围的主体（大量中等牌力手牌）\n• Fold：仅弃最弱的牌' },
+          { type: 'text', content: 'BB面对SB的Open应该用较宽的范围防御：\n• 3-bet：只占防御范围的一小部分（强价值 + 轻型 3-bet bluff）\n• Call：防御范围的主体（大量中等牌力手牌）\n• Fold：仅弃最弱的牌' },
           { type: 'highlight', content: '盲注战争中位置劣势（SB翻后先行动）是关键因素。SB应该选择“能强势打的手牌”而不是“边缘手牌”。' },
-          { type: 'pro-tip', content: '如果BB中的对手弃3-Bet很多，可以稍微缩紧SB的Open范围，但保留足够的强牌做4-Bet Bluff。' },
+          { type: 'pro-tip', content: '如果BB中的对手弃3-bet很多，可以稍微缩紧SB的Open范围，但保留足够的强牌做4-Bet Bluff。' },
         ],
         quiz: [
           { id: 'l2-blind-q1', question: 'SB vs BB 单挑时，SB 的标准 Open 范围应处于哪一档？', options: ['与前位开池一样紧', '只开强牌一档', '很宽一档（约三成半）', '几乎任意两张牌'], correctIndex: 2, explanation: 'SB 只需击败 BB 一个对手，因此开池属于很宽的一档（约三成半）；精确构成见范围训练模块与 GTO 策略表。' },
-          { id: 'l2-blind-q2', question: 'BB 面对 SB Open 的防御范围应该？', options: ['很紧，只防强牌', '与面对 BTN Open 一样紧', '放得很宽（3-Bet + Call 合计）', '大部分牌直接弃掉'], correctIndex: 2, explanation: 'BB 已投入 1BB 且 SB 的范围偏弱，应把防御面放得很宽（3-Bet + Call 合计）。' },
+          { id: 'l2-blind-q2', question: 'BB 面对 SB Open 的防御范围应该？', options: ['很紧，只防强牌', '与面对 BTN Open 一样紧', '放得很宽（3-bet + Call 合计）', '大部分牌直接弃掉'], correctIndex: 2, explanation: 'BB 已投入 1BB 且 SB 的范围偏弱，应把防御面放得很宽（3-bet + Call 合计）。' },
           { id: 'l2-blind-q3', question: 'SB Open的标准尺度是多少？', options: ['2BB', '2.5-3BB', '4BB', '5BB'], correctIndex: 1, explanation: 'SB没有翻后位置优势，所以用较大的尺度（2.5-3BB）来降低BB的防御频率。' },
           { id: 'l2-blind-q4', question: 'SB Open时应该采用什么策略？', options: ['Raise or Fold', 'Limp or Fold', 'Raise or Call', '随机策略'], correctIndex: 0, explanation: 'SB应该用raise-or-fold策略，避免limp。Limp让BB免费看牌，丧失主动权。' },
           { id: 'l2-blind-q5', question: '盲注战争中SB位置劣势体现在？', options: ['翻前劣势', '翻后先行动', '筹码劣势', '没有劣势'], correctIndex: 1, explanation: 'SB翻后先行动（OOP），缺乏信息优势。这是盲注战争的核心挑战。' },
@@ -838,7 +868,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: '97s面对SB Open应该Call防守。同花连牌有翻后潜力，BB赔率好。', evImpact: '-0.4 BB/100' },
                 { action: 'Call', isCorrect: true, explanation: '97s面对SB Open是标准Call防守。同花连牌有隐含赔率，翻后可操作。', evImpact: '+0.5 BB/100' },
-                { action: '3-Bet', amount: '9BB', isCorrect: false, explanation: '97s做3-Bet bluff偏激进。没有A blocker，被Call后OOP难操作。Call更好。', evImpact: '-0.2 BB/100' },
+                { action: '3-bet', amount: '9BB', isCorrect: false, explanation: '97s做3-bet bluff偏激进。没有A blocker，被Call后OOP难操作。Call更好。', evImpact: '-0.2 BB/100' },
               ],
               relatedLessonId: 'l2-blind-war',
             },
@@ -846,9 +876,9 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               id: 'l2-blind-p4',
               scenario: { heroHand: ['As', '3s'], heroPosition: 'BB', previousActions: [{ player: 'SB', action: 'raise 2.5BB' }], street: 'preflop', potSize: 4, effectiveStack: 98 },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: 'A3s面对SB Open应该防守。有A blocker，可以3-Bet bluff。', evImpact: '-0.5 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'A3s Call可以但3-Bet bluff更+EV。A blocker+SB宽范围，3-Bet弃牌权益高。', evImpact: '+0.3 BB/100' },
-                { action: '3-Bet', amount: '9BB', isCorrect: true, explanation: 'A3s面对SB Open是经典3-Bet bluff。A blocker降低对手强牌概率，SB宽范围弃牌率高。', evImpact: '+1.0 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: 'A3s面对SB Open应该防守。有A blocker，可以3-bet bluff。', evImpact: '-0.5 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'A3s Call可以但3-bet bluff更+EV。A blocker+SB宽范围，3-bet弃牌权益高。', evImpact: '+0.3 BB/100' },
+                { action: '3-bet', amount: '9BB', isCorrect: true, explanation: 'A3s面对SB Open是经典3-bet bluff。A blocker降低对手强牌概率，SB宽范围弃牌率高。', evImpact: '+1.0 BB/100' },
               ],
               relatedLessonId: 'l2-blind-war',
             },
@@ -872,6 +902,12 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         title: '短筹码翻前策略',
         subtitle: '掌握 20-50BB 筹码深度下的特殊打法',
         duration: '9 min',
+        objectives: [
+          '判断 20BB 以下应采用 Push/Fold 策略，并说出 Push 范围的三个考量因素（位置、剩余筹码、后方人数）',
+          '比较深浅筹码下手牌价值排序的变化：筹码越浅同花连牌可打性越不重要、大牌原始胜率越重要',
+          '计算 30-50BB 时的开池尺度调整（减小为 2-2.2BB），并判断避免用同花小连牌跟 3-bet（隐含赔率不足）',
+          '识别用 100BB 思维打短筹码的典型错误，如 35BB 时用 98s 跟注 3-bet',
+        ],
         content: [
           { type: 'heading', content: '什么是短筹码策略？' },
           { type: 'text', content: '当有效筹码在 20-50BB 时，策略与 100BB 深筹码完全不同。筹码越浅，翻后决策越少，翻前决策越重要。' },
@@ -879,8 +915,8 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { type: 'heading', content: '20BB 打法：Push/Fold' },
           { type: 'text', content: '当筹码 ≤ 20BB 时，大多数情况只有两个选择：\n• All-In（Push）：手牌足够强\n• Fold：手牌不够强\n\nPush范围的考量因素：\n1. 位置（后位更宽）\n2. 剩余筹码（15BB vs 20BB 范围差异大）\n3. 后面还有几个玩家' },
           { type: 'heading', content: '30-50BB 打法：调整Open尺度' },
-          { type: 'text', content: '筹码在 30-50BB 时：\n• Open Raise尺度减小为 2-2.2BB\n• 3-Bet几乎进入全进“加注/全下”模式\n• 避免用同花小连牌跟注（没有足够的隐含赔率）\n• 增加大对和大牌的比重' },
-          { type: 'highlight', content: '短筹码时最常见的错误是用100BB的思维打短筹码。例如，35BB时仍然用98s跟注3-Bet是大错，因为集合的可实现性太低。' },
+          { type: 'text', content: '筹码在 30-50BB 时：\n• Open Raise尺度减小为 2-2.2BB\n• 3-bet几乎进入全进“加注/全下”模式\n• 避免用同花小连牌跟注（没有足够的隐含赔率）\n• 增加大对和大牌的比重' },
+          { type: 'highlight', content: '短筹码时最常见的错误是用100BB的思维打短筹码。例如，35BB时仍然用98s跟注3-bet是大错，因为集合的可实现性太低。' },
           { type: 'pro-tip', content: '在锦标赛中筹码会不断变化，熟练地在不同筹码深度之间切换策略是必备技能。' },
         ],
         quiz: [
@@ -951,9 +987,14 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         id: 'drill-l2-3bet',
         level: 2,
         order: 8,
-        title: '3-Bet 决策训练',
-        subtitle: '不同位置/场景的 3-Bet 判断',
+        title: '3-bet 决策训练',
+        subtitle: '不同位置/场景的 3-bet 判断',
         duration: '3分钟',
+        objectives: [
+          '判断给定位置与手牌面对 Open 应 3-bet、跟注还是弃牌',
+          '计算标准 3-bet 尺度（约 Open 额的 3 倍，如面对 2.5BB Open 给出 7.5-8BB）',
+          '区分价值 3-bet 与防守跟注的适用手牌（强牌 3-bet、边缘有位置牌跟注）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -965,13 +1006,13 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               scenario: 'NL100, 6-max, 有效筹码100BB',
               hand: 'AsQs',
               position: 'CO',
-              question: 'MP open(2.5BB), 你在 CO 位持有 AsQs，应如何 3-Bet？',
+              question: 'MP open(2.5BB), 你在 CO 位持有 AsQs，应如何 3-bet？',
               options: [
                 { id: 'a', text: '弃牌', isCorrect: false },
                 { id: 'b', text: '跟注', isCorrect: false },
-                { id: 'c', text: '3-Bet 到 7.5-8BB', isCorrect: true },
+                { id: 'c', text: '3-bet 到 7.5-8BB', isCorrect: true },
               ],
-              explanation: 'AsQs 面对 MP open 是强 3-Bet 候选。有阻断对手 AA/KK/AK，标准尺度约 3x open+（7.5-8BB）。',
+              explanation: 'AsQs 面对 MP open 是强 3-bet 候选。有阻断对手 AA/KK/AK，标准尺度约 3x open+（7.5-8BB）。',
               difficulty: 2,
             },
             {
@@ -979,13 +1020,13 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               scenario: 'NL100, 6-max, 有效筹码100BB',
               hand: 'KsTs',
               position: 'BB',
-              question: 'MP open(2.5BB), CO 3-Bet to 8BB, hero BB 持 AJs 是否跟注或弃牌？',
+              question: 'MP open(2.5BB), CO 3-bet to 8BB, hero BB 持 AJs 是否跟注或弃牌？',
               options: [
                 { id: 'a', text: '弃牌', isCorrect: false },
                 { id: 'b', text: '跟注', isCorrect: true },
                 { id: 'c', text: '4-Bet bluff', isCorrect: false },
               ],
-              explanation: 'AJs 在 BB vs CO 3-Bet 有位置优势（翻后 IP），跟注是标准选择。隐含赔率足够且 AJs 可打翻后。',
+              explanation: 'AJs 在 BB vs CO 3-bet 有位置优势（翻后 IP），跟注是标准选择。隐含赔率足够且 AJs 可打翻后。',
               difficulty: 2,
             },
             {
@@ -997,9 +1038,9 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '弃牌', isCorrect: false },
                 { id: 'b', text: '跟注', isCorrect: false },
-                { id: 'c', text: '3-Bet 到 8BB', isCorrect: true },
+                { id: 'c', text: '3-bet 到 8BB', isCorrect: true },
               ],
-              explanation: 'AK 在 BTN 面对 CO open 是标准 3-Bet。有位置优势，AK 是顶级价值 3-Bet 手牌。IP 3-Bet 标准尺度为 7.5-8BB（约 3-3.2x）。',
+              explanation: 'AK 在 BTN 面对 CO open 是标准 3-bet。有位置优势，AK 是顶级价值 3-bet 手牌。IP 3-bet 标准尺度为 7.5-8BB（约 3-3.2x）。',
               difficulty: 1,
             },
             {
@@ -1011,9 +1052,9 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '弃牌', isCorrect: false },
                 { id: 'b', text: '跟注', isCorrect: false },
-                { id: 'c', text: '3-Bet bluff 到 10BB', isCorrect: true },
+                { id: 'c', text: '3-bet bluff 到 10BB', isCorrect: true },
               ],
-              explanation: '76s 在 SB vs BTN 是经典 3-Bet bluff 候选。它有位置劣势但手牌有良好的翻后可玩性，3-Bet 可以获取弃牌权益。OOP 3-Bet 标准尺度为 9-10BB（约 3.5-4x）。',
+              explanation: '76s 在 SB vs BTN 是经典 3-bet bluff 候选。它有位置劣势但手牌有良好的翻后可玩性，3-bet 可以获取弃牌权益。OOP 3-bet 标准尺度为 9-10BB（约 3.5-4x）。',
               difficulty: 3,
             },
             {
@@ -1025,7 +1066,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '弃牌', isCorrect: true },
                 { id: 'b', text: '跟注', isCorrect: false },
-                { id: 'c', text: '3-Bet', isCorrect: false },
+                { id: 'c', text: '3-bet', isCorrect: false },
               ],
               explanation: '面对UTG的强open范围，AJ在CO位太弱。UTG范围很强（TT+, AQs+, AK），AJ容易被dominate。',
               difficulty: 2,
@@ -1039,9 +1080,9 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '弃牌', isCorrect: false },
                 { id: 'b', text: '跟注', isCorrect: true },
-                { id: 'c', text: '3-Bet到11BB', isCorrect: false },
+                { id: 'c', text: '3-bet到11BB', isCorrect: false },
               ],
-              explanation: 'AJs在BTN vs MP有位置优势，跟注是最佳选择。3-Bet也可以但跟注更能利用位置优势打翻后。',
+              explanation: 'AJs在BTN vs MP有位置优势，跟注是最佳选择。3-bet也可以但跟注更能利用位置优势打翻后。',
               difficulty: 2,
             },
             {
@@ -1053,9 +1094,9 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '弃牌', isCorrect: false },
                 { id: 'b', text: '跟注', isCorrect: false },
-                { id: 'c', text: '3-Bet 到 8BB', isCorrect: true },
+                { id: 'c', text: '3-bet 到 8BB', isCorrect: true },
               ],
-              explanation: 'QQ 是顶级强牌，面对 UTG open 应该 3-Bet 获取价值。不要慢打 QQ，让太多牌看到 flop。IP 3-Bet 尺度为 7.5-8BB（约 3-3.2x）。',
+              explanation: 'QQ 是顶级强牌，面对 UTG open 应该 3-bet 获取价值。不要慢打 QQ，让太多牌看到 flop。IP 3-bet 尺度为 7.5-8BB（约 3-3.2x）。',
               difficulty: 1,
             },
             {
@@ -1067,7 +1108,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: '弃牌', isCorrect: false },
                 { id: 'b', text: '跟注', isCorrect: true },
-                { id: 'c', text: '3-Bet bluff', isCorrect: false },
+                { id: 'c', text: '3-bet bluff', isCorrect: false },
               ],
               explanation: '54s 在 BTN vs CO 有绝佳位置，跟注是利用位置和隐含赔率的正确选择。同花连牌翻后可玩性强。',
               difficulty: 2,
@@ -1082,6 +1123,11 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
         title: '位置 vs 范围 Drill',
         subtitle: '不同位置的 RFI 范围判断',
         duration: '3分钟',
+        objectives: [
+          '判断给定手牌在指定位置（UTG/MP/CO/BTN/SB）应 Open Raise 还是 Fold',
+          '比较各位置开池范围的相对宽度（UTG 最紧、CO 明显放宽、BTN 最宽）',
+          '识别同花与非同花对开池资格的影响（如 87s 可开而 87o 弃）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',

@@ -6,7 +6,7 @@ import MottoEngraved from '@/shared/components/business/MottoEngraved';
 import DailyGoalCard from '@/shared/components/business/DailyGoalCard';
 import { CardBack } from '@/shared/components/poker/CardBack';
 import { Chip } from '@/shared/components/poker/Chip';
-import { getRankForScore } from '@/shared/utils/elo';
+import { getRankForScore } from '@/features/progress/utils/elo';
 import { useProgressStore } from '../../store';
 import { useProgress } from '../../hooks/useProgress';
 import { getTodayString } from '../../utils/streakCalc';

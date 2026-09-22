@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { findChapterById } from '@/features/theory-academy/utils/theoryProgress';
 import {
   THEORY_REVIEW_ID_PREFIX,
   buildTheoryReviewItems,
@@ -206,5 +207,28 @@ describe('理论复习项 key ↔ 双语内容资源契约', () => {
     expect(zh && HAN.test(zh)).toBe(true);
     expect(en && HAN.test(en)).toBe(false);
     expect(en).not.toBe(zh);
+  });
+});
+
+/**
+ * P0-入队断裂复验探针：验证理论章节所有 quiz id 均能通过 buildTheoryReviewItems（无静默跳过）。
+ * 
+ * 背景：originally persisted in src/features/progress/persistWrapperProbe.test.ts:58-70 as test 2,
+ * then migrated here because: (1) this is a theory-specific data integrity guard; (2) moving it
+ * resolves the forbidden edge `progress -> theory-academy` in eslintCrossImports snapshot.
+ * Progress store's persist shape is tested separately in persistWrapperProbe.test.ts:test 1.
+ */
+describe('theory chapter quiz guard — no silent skips in buildTheoryReviewItems', () => {
+  it('真实章节数据的 quiz id 与 buildTheoryReviewItems 守卫匹配（排除静默跳过）', async () => {
+    const chapter = findChapterById('t1-combinatorics');
+    expect(chapter).toBeTruthy();
+    const quizIds = chapter!.quiz.map((q) => q.id);
+    expect(quizIds.length).toBeGreaterThan(0);
+    // 全部 quiz id 均应通过 buildTheoryReviewItems 的守卫（不被静默跳过）
+    const wrongIds = quizIds; // 假设全部答错
+    const items = buildTheoryReviewItems(chapter as TheoryChapter, wrongIds);
+    expect(items).toHaveLength(quizIds.length);
+    expect(items[0]!.id).toMatch(/^theory:/);
+    expect(items[0]!.metadata?.front).toMatch(/^theory\.quiz\./);
   });
 });

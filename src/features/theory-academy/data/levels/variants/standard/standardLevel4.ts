@@ -36,7 +36,7 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
       {
         type: 'example',
         content:
-          '实例二（翻前范围构建）：你在 BTN 用约 40% 范围开局，BB 3Bet 到 3 倍。他的动作把范围过滤成 {QQ+、AK、部分 AQo、少量 A5s-A4s 平衡型 3Bet}——你的 40% 开局范围里，此刻只有顶端的 8-10% 有继续的资格（4Bet 或跟注）。范围思维在翻前就已开始：开局宽度直接决定面对 3Bet 的弃牌率，而弃牌率正是对手 3Bet 的利润来源。',
+          '实例二（翻前范围构建）：你在 BTN 用约 40% 范围开局，BB 3-bet 到 3 倍。他的动作把范围过滤成 {QQ+、AK、部分 AQo、少量 A5s-A4s 平衡型 3-bet}——你的 40% 开局范围里，此刻只有顶端的 8-10% 有继续的资格（4Bet 或跟注）。范围思维在翻前就已开始：开局宽度直接决定面对 3-bet 的弃牌率，而弃牌率正是对手 3-bet 的利润来源。',
       },
       {
         type: 'example',
@@ -52,7 +52,7 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
       {
         type: 'formula',
         content:
-          '范围 vs 范围的定量工具：你的总体权益 = Σ(各组合占比 × 该组合对对手范围的胜率)\n例：你的范围 = {AA 6 种, KK 6 种}，对手范围 = {AK 16 种}\nAA 对 AK 约 93%，KK 对 AK 约 70% → 总体权益 = 0.5×93% + 0.5×70% ≈ 81%\n这种加权计算取代"我这手牌"，才能回答"整个范围在这个节点该不该出手"（概念源自：MSSA Ch.1-4 范围构建方法论）',
+          '范围 vs 范围的定量工具：你的总体权益 = Σ(各组合占比 × 该组合对对手范围的胜率)\n例：你的范围 = {AA 6 种, KK 6 种}，对手范围 = {AK 16 种}\nAA 对 AK 约 91%，KK 对 AK 约 69% → 总体权益 = 0.5×91% + 0.5×69% ≈ 80%\n这种加权计算取代"我这手牌"，才能回答"整个范围在这个节点该不该出手"（概念源自：MSSA Ch.1-4 范围构建方法论）',
       },
       {
         type: 'highlight',
@@ -114,15 +114,15 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
       },
       {
         id: 't4-range-thinking-q5',
-        question: '对手翻前 3Bet 你后，判断"他的范围如何变化"最准确的说法是：',
+        question: '对手翻前 3-bet 你后，判断"他的范围如何变化"最准确的说法是：',
         options: [
           '他的范围完全不可知',
           '动作把范围过滤收窄到强牌与平衡型诈唬的集合，你的继续范围也随之收窄',
-          '3Bet 说明他一定有 AA',
-          '3Bet 后范围反而变宽',
+          '3-bet 说明他一定有 AA',
+          '3-bet 后范围反而变宽',
         ],
         correctIndex: 1,
-        explanation: '3Bet 是强过滤动作：范围收窄到极化强牌集合，你的开局范围必须相应收缩到有资格继续的部分——这正是"动作是过滤器"在翻前的应用。',
+        explanation: '3-bet 是强过滤动作：范围收窄到极化强牌集合，你的开局范围必须相应收缩到有资格继续的部分——这正是"动作是过滤器"在翻前的应用。',
       },
     ],
   },
@@ -252,7 +252,7 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
       {
         type: 'example',
         content:
-          '实例一：A♠K♦7♣ 牌面，UTG 开局加注者 vs BB 跟注者。UTG 范围充满 AK/AQ/AA/KK，BB 的强 Ax 大多已 3Bet 离开范围——UTG 同时拥有范围优势与坚果优势，可以高频小额 C-Bet 整个范围。',
+          '实例一：A♠K♦7♣ 牌面，UTG 开局加注者 vs BB 跟注者。UTG 范围充满 AK/AQ/AA/KK，BB 的强 Ax 大多已 3-bet 离开范围——UTG 同时拥有范围优势与坚果优势，可以高频小额 C-Bet 整个范围。',
       },
       {
         type: 'example',
@@ -262,7 +262,7 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
       {
         type: 'example',
         content:
-          '实例三（3Bet 底池与转牌易手）：3Bet 底池你 IP，翻牌 J♠T♠4♦，BB 防守范围含大量 Jx/Tx/顺子听牌与同花听牌，但你的范围（3Bet 方）有超对、AJ/KJ/QJ 与坚果听牌，双重优势都在你这边，可高频下注。转牌 9♣ 完成 QT 顺子——QT 在你的范围里远多于 BB（他防守范围几乎不含纯 QT），坚果优势进一步倒向你，此时甚至可以直接超池下注。',
+          '实例三（3-bet 底池与转牌易手）：3-bet 底池你 IP，翻牌 J♠T♠4♦，BB 防守范围含大量 Jx/Tx/顺子听牌与同花听牌，但你的范围（3-bet 方）有超对、AJ/KJ/QJ 与坚果听牌，双重优势都在你这边，可高频下注。转牌 9♣ 完成 KQ 顺子——KQ 在你的范围里远多于 BB（他防守范围几乎不含纯 KQ），坚果优势进一步倒向你，此时甚至可以直接超池下注。',
       },
       {
         type: 'key-point',

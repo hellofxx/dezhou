@@ -36,7 +36,7 @@ vi.mock('@/shared/stores/trainingEvents', () => ({
   trainingEvents: { emit: () => undefined },
 }));
 
-vi.mock('@/shared/components/gate/SessionLimitGuard', () => ({
+vi.mock('@/features/progress/components/gate/SessionLimitGuard', () => ({
   default: () => null,
   useSessionLimitReached: () => false,
 }));

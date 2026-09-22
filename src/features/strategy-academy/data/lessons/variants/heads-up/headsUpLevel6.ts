@@ -8,6 +8,11 @@ export const HEADS_UP_LEVEL_6_LESSONS: Lesson[] = [
     title: '单挑锦标赛',
     subtitle: '单挑 SNG / MTT 决赛桌的筹码节奏、ICM 与盲注攻防',
     duration: '8 min',
+    objectives: [
+      '区分单挑锦标赛与现金桌的三个差异（盲注上涨、筹码有限、ICM 压力），并说出筹码节奏三阶段策略（40BB+ 现金桌式、20-40BB min-raise+翻后、15BB 以下全下为主）',
+      '判断浅筹码下全下替代复杂翻后打法的原因（盲注上涨让等待成本飙升、全下抢盲自动盈利）',
+      '说明单挑 SNG 决赛桌 ICM 的特点（赢家拿全部奖金、压力相对满员桌低但仍影响决策），并判断深筹码领先时保守、落后时激进的取舍',
+    ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante', stackDepth: 40 },
     content: [

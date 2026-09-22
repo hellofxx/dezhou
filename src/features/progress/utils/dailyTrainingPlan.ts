@@ -5,7 +5,7 @@
 
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
-import { sanitizeReviewLabel } from '@/shared/utils/sanitizeReviewLabel';
+import { sanitizeReviewLabel } from './sanitizeReviewLabel';
 import type { TrainingRecord } from '../types';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import type { AcademyLessonMeta } from '@/shared/types/academyDataSource';
@@ -161,7 +161,9 @@ export function generateCrossModuleDailyPlan(
         ? 'dashboard.dataPlan.descReviewMore'
         : 'dashboard.dataPlan.descReview',
       descParams: todayReviews.length > 3
-        ? { items: reviewLabels.join('、'), count: todayReviews.length }
+        ? // 「等 N 项」的 N 必须是隐藏数（总到期 − 已展示 3 条），而非总到期数：
+          // 否则展示 3 条 + N 会重复计数（CHANGELOG 2026-09-04 登记遗留项）
+          { items: reviewLabels.join('、'), count: todayReviews.length - reviewLabels.length }
         : { items: reviewLabels.join('、') },
       // 逐条 label（多为 i18n key）：渲染端 t() 后再拼接，见 ReviewRecommendation.itemLabels
       itemLabels: reviewLabels,

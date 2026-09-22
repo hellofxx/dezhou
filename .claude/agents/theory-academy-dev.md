@@ -12,7 +12,7 @@ tools:
   - DeleteFile    # 删除废弃的课程数据
   - Bash          # 运行 pnpm verify 等命令
   - GetTerminalOutput
-model: "[DeepSeek-V4-Flash](dfmodel)"
+model: "[Qwen3.8-Max](qmodel_38max)"
 skills: []
 mcpServers: []
 additionalPrompt: ""

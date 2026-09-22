@@ -10,6 +10,12 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
         title: '深筹码策略 (200BB+)',
         subtitle: '筹码越深，翻后技巧越重要',
         duration: '10 min',
+        objectives: [
+          '比较深筹码（200BB+）与标准筹码（100BB）下手牌价值排序的变化（小对与同花连牌价值提升、AKo/AQo 价值下降）',
+          '用 SPR = 有效筹码 ÷ 底池大小 判断深筹码状态（如 200BB 翻牌底池 15BB → SPR ≈ 13.3）',
+          '判断深筹码翻后陷阱：顶对顶踢脚不再能打光 200BB，应控制底池而非过早建立大底池',
+          '计算深筹码的资金管理要求（30-40 个 buy-in），并说明反向隐含赔率的杀伤力随筹码深度成倍增加',
+        ],
         content: [
           { type: 'heading', content: '深筹码 vs 标准筹码' },
           { type: 'text', content: '深筹码（200BB+）与标准筹码（100BB）的关键差异：\n\n- 翻前：小口袋对和同花连牌价值提升（set mine 和大底池潜力）\n- 翻后：更多多街操作空间，隐含赔率更重要\n- 牌力标准：顶对顶踢脚不再是"绝对强牌"\n- Bluff 价值：深筹码 bluff 更有威力（可以施加更大压力）\n- 位置价值：位置优势在深筹码中更显著' },
@@ -130,7 +136,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
               options: [
                 { action: 'Fold', isCorrect: false, explanation: '87s 在 300BB 深度有极好的隐含赔率。同花/顺子潜力在深筹码中价值极高。', evImpact: '-0.5 BB/100' },
                 { action: 'Call', isCorrect: true, explanation: '300BB 深度，87s 的隐含赔率极好。中同花/顺子后可赢对手 300BB。同花连牌在深筹码中价值大幅提升。有位置优势加成。', evImpact: '+1.0 BB/100' },
-                { action: 'Raise', amount: '10BB', isCorrect: false, explanation: '3-Bet 87s 在深筹码中不太理想。如果被 4-Bet 你被迫弃牌，浪费隐含赔率机会。Call 更适合投机牌。', evImpact: '+0.2 BB/100' },
+                { action: 'Raise', amount: '10BB', isCorrect: false, explanation: '3-bet 87s 在深筹码中不太理想。如果被 4-Bet 你被迫弃牌，浪费隐含赔率机会。Call 更适合投机牌。', evImpact: '+0.2 BB/100' },
               ],
               relatedLessonId: 'l7-deepstack',
             },
@@ -180,7 +186,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
               relatedLessonId: 'l7-deepstack',
             },
           
-            { id: 'l7-deep-p4', difficulty: 'advanced', scenario: { heroHand: ['6h', '6d'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 3BB' }], street: 'preflop', potSize: 4.5, effectiveStack: 300 }, options: [{ action: 'Fold', isCorrect: false, explanation: '66在300BB深度set mine价值极高。隐含赔率极好。', evImpact: '-0.5 BB/100' }, { action: 'Call', isCorrect: true, explanation: '300BB深度，66的set mine隐含赔率极好。投入2BB（SB已投1BB）有机会赢300BB。', evImpact: '+1.0 BB/100' }, { action: 'Raise 10BB', isCorrect: false, explanation: '3-Bet 66在深筹码中不理想。Call更适合投机牌。', evImpact: '+0.2 BB/100' }], relatedLessonId: 'l7-deepstack' },
+            { id: 'l7-deep-p4', difficulty: 'advanced', scenario: { heroHand: ['6h', '6d'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 3BB' }], street: 'preflop', potSize: 4.5, effectiveStack: 300 }, options: [{ action: 'Fold', isCorrect: false, explanation: '66在300BB深度set mine价值极高。隐含赔率极好。', evImpact: '-0.5 BB/100' }, { action: 'Call', isCorrect: true, explanation: '300BB深度，66的set mine隐含赔率极好。投入2BB（SB已投1BB）有机会赢300BB。', evImpact: '+1.0 BB/100' }, { action: 'Raise 10BB', isCorrect: false, explanation: '3-bet 66在深筹码中不理想。Call更适合投机牌。', evImpact: '+0.2 BB/100' }], relatedLessonId: 'l7-deepstack' },
             { id: 'l7-deep-p5', difficulty: 'advanced', scenario: { heroHand: ['Ah', 'Jh'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 3BB' }, { player: 'MP', action: 'fold' }], street: 'flop', board: ['Kh', '9h', '4d'], potSize: 7.5, effectiveStack: 240 }, options: [{ action: 'Check', isCorrect: false, explanation: '你有坚果同花听牌+高牌。深筹码中应该半诈唬下注。', evImpact: '-0.5 BB/100' }, { action: 'Bet 5BB', isCorrect: true, explanation: '坚果同花听牌在240BB深度应该半诈唬下注。深筹码bluff更有威力。', evImpact: '+1.5 BB/100' }, { action: 'Push all-in', isCorrect: false, explanation: '240BB深度用听牌全下过度。半诈唬小注就够了。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-deepstack' },],
         },
       },
@@ -191,6 +197,12 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
         title: '多人底池策略',
         subtitle: '3+ 人入池时的策略调整',
         duration: '8 min',
+        objectives: [
+          '计算多人底池的胜率稀释（顶对胜率：单挑 70-80%、三人 40-50%、四人 25-35%），并判断牌力标准需显著提高',
+          '判断多人底池的翻后调整：C-Bet 频率递减（3 人 40-50%、4+ 人 30-40%）、顶对 value 街道减为 1-2 条街',
+          '用乘法效应计算多人底池的 bluff 成功率（每人 40% 弃牌率时 3 人全弃仅 6.4%），判断避免用空气牌 C-Bet',
+          '判断多人底池中的位置价值（BTN 最有利、夹心位置最困难），并应用不确定就 check 的黄金法则',
+        ],
         content: [
           { type: 'heading', content: '多人底池 vs 单挑的核心差异' },
           { type: 'text', content: '当 3 个或更多玩家入池时，策略需要重大调整：\n\n- 范围更紧：面对多对手，你需要更强的牌才能继续\n- Bluff 更少：多对手中有人 call 的概率更高\n- 价值下注更纯粹：需要更强的牌才能 value bet\n- 位置更重要：多人底池中位置优势更显著\n- Pot odds 改善：底池更大，但 implied odds 和 reverse implied odds 都增大' },
@@ -388,12 +400,17 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
         title: 'Straddle 游戏调整',
         subtitle: '应对额外盲注的策略变化',
         duration: '8 min',
+        objectives: [
+          '计算 straddle 对有效筹码的影响（100BB 变 50BB effective），并判断投机牌（小对/同花连牌）价值降低、强牌价值提升',
+          '计算 straddle 后的标准 open 尺度（以 straddle 为基准 2-2.5 倍 = 4-5BB），并判断 3-bet 相应变大',
+          '区分 Mississippi Straddle 与 BTN Straddle 的位置差异（straddler 翻后先行动 vs BTN 保留位置优势），并据此对翻后无位置的 straddler 施压',
+        ],
         content: [
           { type: 'heading', content: '什么是 Straddle？' },
           { type: 'text', content: 'Straddle 是在发牌前，UTG（或 BTN）位置的玩家自愿投入的额外盲注，通常是 2BB（大盲注的 2 倍）。\n\nStraddle 的影响：\n- 有效筹码减半：100BB 变成 50BB effective（相对于 straddle）\n- 底池更大：翻前底池从 1.5BB 变成 3.5BB\n- SPR 更低：更少的筹码深度相对于底池\n- 行动顺序变化：straddler 翻前最后行动' },
           { type: 'key-point', content: 'Straddle 的核心影响：有效筹码减半。100BB 在 straddle 游戏中相当于 50BB，策略要相应调整。' },
           { type: 'heading', content: '策略调整' },
-          { type: 'text', content: 'Straddle 游戏中的策略变化：\n\n1. 范围收紧：\n   - 更少的筹码深度 = 更少的投机牌价值\n   - 小口袋对和同花连牌价值降低（set mine 不划算）\n   - 强牌（AA-JJ, AK）价值相对提升\n\n2. 加注大小调整：\n   - 以 straddle 为基准：2x straddle = 4BB\n   - 标准 open 变为 4-5BB（而不是 2.5BB）\n   - 3-Bet 相应变大\n\n3. 利用 Straddler 的位置劣势：\n   - Straddler 翻前最后行动，但翻后第一个行动\n   - 可以在翻后对 straddler 施加压力' },
+          { type: 'text', content: 'Straddle 游戏中的策略变化：\n\n1. 范围收紧：\n   - 更少的筹码深度 = 更少的投机牌价值\n   - 小口袋对和同花连牌价值降低（set mine 不划算）\n   - 强牌（AA-JJ, AK）价值相对提升\n\n2. 加注大小调整：\n   - 以 straddle 为基准：2x straddle = 4BB\n   - 标准 open 变为 4-5BB（而不是 2.5BB）\n   - 3-bet 相应变大\n\n3. 利用 Straddler 的位置劣势：\n   - Straddler 翻前最后行动，但翻后第一个行动\n   - 可以在翻后对 straddler 施加压力' },
           { type: 'heading', content: 'Mississippi Straddle vs BTN Straddle' },
           { type: 'text', content: '两种常见 Straddle 形式：\n\nMississippi Straddle（UTG Straddle）：\n- UTG 投入 2BB\n- 行动顺序：UTG+1 开始，straddler 翻前最后行动\n- 翻后：straddler 第一个行动（位置劣势）\n\nBTN Straddle：\n- BTN 投入 2BB\n- 行动顺序：SB 开始，BTN 翻前最后行动\n- 翻后：BTN 仍然最后行动（位置优势保留）\n- BTN Straddle 对 BTN 更有利（保留位置优势）' },
           { type: 'heading', content: '实战建议' },
@@ -402,7 +419,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: '很多玩家在 straddle 底池中犯的最大错误：用 100BB 的思维打 50BB 的游戏。记住，有效筹码减半了，你的策略也要相应调整。' },
           {
             type: 'formula',
-            content: 'Straddle 下的翻前范围调整：\nStraddle = 大盲的 2 倍（通常为 2BB）\n有效筹码相对调整：\n表面 100BB → 实际有效筹码 = 100BB/2BB = 50 个 Straddle\n\n翻前范围调整：\n- 开牌范围应相应收紧（因为底池中多了 Straddle 的死钱，有效筹码相对变浅）\n- 3Bet 尺度应调整为 4-5 倍 Straddle\n- Straddle 位置玩家的防御范围应放宽（已经投入 2BB）\n\n注意：Straddle 不是额外下注，而是盲注的扩大——有效筹码按 Big Blind 计算，而非 Straddle',
+            content: 'Straddle 下的翻前范围调整：\nStraddle = 大盲的 2 倍（通常为 2BB）\n有效筹码相对调整：\n表面 100BB → 实际有效筹码 = 100BB/2BB = 50 个 Straddle\n\n翻前范围调整：\n- 开牌范围应相应收紧（因为底池中多了 Straddle 的死钱，有效筹码相对变浅）\n- 3-bet 尺度应调整为 4-5 倍 Straddle\n- Straddle 位置玩家的防御范围应放宽（已经投入 2BB）\n\n注意：Straddle 不是额外下注，而是盲注的扩大——有效筹码按 Big Blind 计算，而非 Straddle',
           },
           {
             type: 'theory-reference',
@@ -530,9 +547,9 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['tag'],
               },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: 'A5s 有 A blocker + 同花潜力。在 BTN straddle 后你有位置优势（翻后最后行动），可以 3-Bet bluff。', evImpact: '-0.3 BB/100' },
-                { action: 'Call', isCorrect: false, explanation: 'Call 可以但不是最优。BTN straddle 后你有位置优势，A5s 的 blocker 效应使其更适合 3-Bet bluff。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '15BB', isCorrect: true, explanation: 'BTN straddle 后你有位置优势（翻后最后行动）。A5s 有 A blocker，适合 3-Bet bluff。50BB 深度 3-Bet 到 15BB 是标准大小。', evImpact: '+1.5 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: 'A5s 有 A blocker + 同花潜力。在 BTN straddle 后你有位置优势（翻后最后行动），可以 3-bet bluff。', evImpact: '-0.3 BB/100' },
+                { action: 'Call', isCorrect: false, explanation: 'Call 可以但不是最优。BTN straddle 后你有位置优势，A5s 的 blocker 效应使其更适合 3-bet bluff。', evImpact: '+0.5 BB/100' },
+                { action: 'Raise', amount: '15BB', isCorrect: true, explanation: 'BTN straddle 后你有位置优势（翻后最后行动）。A5s 有 A blocker，适合 3-bet bluff。50BB 深度 3-bet 到 15BB 是标准大小。', evImpact: '+1.5 BB/100' },
               ],
               relatedLessonId: 'l7-straddle',
             },
@@ -559,8 +576,8 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
               relatedLessonId: 'l7-straddle',
             },
           
-            { id: 'l7-straddle-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ah', 'Kh'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'straddle 2BB' }, { player: 'CO', action: 'raise 5BB' }], street: 'preflop', potSize: 8.5, effectiveStack: 50 }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AK在50BB深度是顶级强牌。应该3-Bet。', evImpact: '-1 BB/100' }, { action: 'Raise 15BB', isCorrect: true, explanation: 'AK在50BB是顶级强牌。3-Bet到15BB（3x straddle）标准大小。', evImpact: '+2 BB/100' }, { action: 'Call 5BB', isCorrect: false, explanation: 'AK太强不应该只是call。3-Bet获取价值。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l7-straddle' },
-            { id: 'l7-straddle-p5', difficulty: 'advanced', scenario: { heroHand: ['7h', '6h'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'straddle 2BB' }, { player: 'MP', action: 'raise 5BB' }], street: 'preflop', potSize: 8.5, effectiveStack: 50 }, options: [{ action: 'Fold', isCorrect: true, explanation: '65s在50BB面对MP open价值降低。Straddle后隐含赔率变差，fold。', evImpact: '0 BB/100' }, { action: 'Call 5BB', isCorrect: false, explanation: '50BB深度call 5BB=10%筹码，中牌后最多赢50BB。隐含赔率不足。', evImpact: '-0.5 BB/100' }, { action: 'Raise 15BB', isCorrect: false, explanation: '65s不适合3-Bet bluff。面对MP open范围太弱。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-straddle' },],
+            { id: 'l7-straddle-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ah', 'Kh'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'straddle 2BB' }, { player: 'CO', action: 'raise 5BB' }], street: 'preflop', potSize: 8.5, effectiveStack: 50 }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AK在50BB深度是顶级强牌。应该3-bet。', evImpact: '-1 BB/100' }, { action: 'Raise 15BB', isCorrect: true, explanation: 'AK在50BB是顶级强牌。3-bet到15BB（3x straddle）标准大小。', evImpact: '+2 BB/100' }, { action: 'Call 5BB', isCorrect: false, explanation: 'AK太强不应该只是call。3-bet获取价值。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l7-straddle' },
+            { id: 'l7-straddle-p5', difficulty: 'advanced', scenario: { heroHand: ['7h', '6h'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'straddle 2BB' }, { player: 'MP', action: 'raise 5BB' }], street: 'preflop', potSize: 8.5, effectiveStack: 50 }, options: [{ action: 'Fold', isCorrect: true, explanation: '65s在50BB面对MP open价值降低。Straddle后隐含赔率变差，fold。', evImpact: '0 BB/100' }, { action: 'Call 5BB', isCorrect: false, explanation: '50BB深度call 5BB=10%筹码，中牌后最多赢50BB。隐含赔率不足。', evImpact: '-0.5 BB/100' }, { action: 'Raise 15BB', isCorrect: false, explanation: '65s不适合3-bet bluff。面对MP open范围太弱。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-straddle' },],
         },
       },
       {
@@ -570,10 +587,15 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
         title: 'Rake 对策略的影响',
         subtitle: '理解抽水如何改变最优策略',
         duration: '8 min',
+        objectives: [
+          '比较不同级别的 rake 结构（微额 NL2-NL10 达 8-12 BB/100、中额 NL25-NL100 降至 4-6 BB/100、线下通常有 Cap）',
+          '判断高 rake 环境的三项调整（打得更紧、减少被动跟注、用 iso-raise 和 3-bet 减少多人底池）',
+          '判断给定场景在高 rake 下应以 iso-raise/3-bet 替代跟注（如 SB 面对 BTN open 用 98s 3-bet 而非 call）',
+        ],
         content: [
           { type: 'heading', content: 'Rake 是什么？为什么重要？' },
           { type: 'text', content: 'Rake（抽水）是平台/赌场从每个底池中抽取的服务费。它直接影响你的赢率：每手牌你都在跟“看不见的对手”（平台）打。' },
-          { type: 'key-point', content: '在高 Rake 的环境中：\n• 应该打得更紧（少打边缘牌）\n• 减少跟注（Call 的 EV 被 Rake 侵蚀最多）\n• 增加 iso-raise 和 3-Bet（减少多人底池）' },
+          { type: 'key-point', content: '在高 Rake 的环境中：\n• 应该打得更紧（少打边缘牌）\n• 减少跟注（Call 的 EV 被 Rake 侵蚀最多）\n• 增加 iso-raise 和 3-bet（减少多人底池）' },
           { type: 'heading', content: '不同 Rake 结构的应对' },
           { type: 'text', content: '• 线上微额（NL2-NL10）：Rake 可达 8-12 BB/100，必须打得非常紧\n• 线上中额（NL25-NL100）：Rake 降至 4-6 BB/100，可以适度放宽\n• 线下现金：通常有 Cap（抽水上限），大底池相对 Rake 更低' },
           { type: 'pro-tip', content: '在微额级别，Rake 可能是你最大的“对手”。选择 Rake 结构合理的平台，并充分利用返水（Rakeback）政策。' },
@@ -582,7 +604,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           { id: 'l7-rake-q1', question: '高 Rake 环境下应该怎么调整？', options: ['打得更松', '打得更紧，减少跟注', '增加 bluff', '不受影响'], correctIndex: 1, explanation: 'Rake 侵蚀边缘牌的 EV，高 Rake 下应更紧并减少被动跟注。' },
           { id: 'l7-rake-q2', question: '线上微额（NL2-NL10）的 Rake 大约多少？', options: ['1-2 BB/100', '4-6 BB/100', '8-12 BB/100', '20 BB/100'], correctIndex: 2, explanation: '微额级别的 Rake 通常高达 8-12 BB/100，是赢率的巨大拖累。' },
         
-          { id: 'l7-rake-q3', question: '高Rake应该增加什么？', options: ['跟注', 'iso-raise和3-Bet', 'bluff', '多人底池'], correctIndex: 1, explanation: '高Rake应增加iso-raise和3-Bet减少多人底池，因为多人底池的Rake成本最高。' },
+          { id: 'l7-rake-q3', question: '高Rake应该增加什么？', options: ['跟注', 'iso-raise和3-bet', 'bluff', '多人底池'], correctIndex: 1, explanation: '高Rake应增加iso-raise和3-bet减少多人底池，因为多人底池的Rake成本最高。' },
           { id: 'l7-rake-q4', question: '线下现金桌的Rake通常有？', options: ['无上限', 'Cap（抽水上限）', '更高比例', '没有Rake'], correctIndex: 1, explanation: '线下通常有Cap（抽水上限），大底池相对Rake更低。' },
           { id: 'l7-rake-q5', question: '中额级别（NL25-NL100）的Rake约？', options: ['1-2 BB/100', '4-6 BB/100', '8-12 BB/100', '20 BB/100'], correctIndex: 1, explanation: '中额级别Rake降至4-6 BB/100，可以适度放宽。' },],
         practice: {
@@ -590,9 +612,9 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           questions: [
             { id: 'l7-rake-p1', difficulty: 'intermediate', scenario: { heroHand: ['Kd', 'Qd'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'call 1BB' }], street: 'preflop', potSize: 2.5, effectiveStack: 100 }, options: [{ action: 'Call 1BB', isCorrect: false, explanation: '高Rake环境下应该减少被动跟注。iso-raise更好。', evImpact: '-0.5 BB/100' }, { action: 'Raise 4BB (iso-raise)', isCorrect: true, explanation: '高Rake环境下iso-raise优于call。减少多人底池，降低Rake成本。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'KQs在CO太强不能fold。iso-raise获取价值。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-rake' },
             { id: 'l7-rake-p2', difficulty: 'intermediate', scenario: { heroHand: ['Jh', 'Th'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'call 1BB' }, { player: 'MP', action: 'call 1BB' }], street: 'preflop', potSize: 3.5, effectiveStack: 100 }, options: [{ action: 'Limp', isCorrect: false, explanation: '高Rake环境下limp导致多人底池，Rake成本最高。', evImpact: '-1 BB/100' }, { action: 'Raise 5BB', isCorrect: true, explanation: '高Rake环境下应该iso-raise减少入池人数。JTs足够强raise。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'JTs在BTN太强不能fold。iso-raise。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-rake' },
-            { id: 'l7-rake-p3', difficulty: 'advanced', scenario: { heroHand: ['As', '5s'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }], street: 'preflop', potSize: 4, effectiveStack: 100 }, options: [{ action: 'Call 2.5BB', isCorrect: false, explanation: '高Rake环境下被动跟注的EV被Rake侵蚀最多。3-Bet更好。', evImpact: '-0.3 BB/100' }, { action: 'Raise 8BB (3-Bet)', isCorrect: true, explanation: '高Rake环境下3-Bet优于call。减少多人底池，获取主动权。A5s有bluff潜力。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'A5s在BTN有bluff潜力，3-Bet是+EV。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l7-rake' },
-            { id: 'l7-rake-p4', difficulty: 'advanced', scenario: { heroHand: ['9s', '8s'], heroPosition: 'SB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }], street: 'preflop', potSize: 4, effectiveStack: 100 }, options: [{ action: 'Call 1.5BB', isCorrect: false, explanation: '高Rake环境下SB call导致多人底池。应该3-Bet或fold。', evImpact: '-0.5 BB/100' }, { action: 'Raise 8BB (3-Bet)', isCorrect: true, explanation: '高Rake环境下3-Bet减少多人底池。98s有翻后可玩性。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '98s在SB有翻后潜力，3-Bet是+EV。', evImpact: '-0.3 BB/100' }], relatedLessonId: 'l7-rake' },
-            { id: 'l7-rake-p5', difficulty: 'advanced', scenario: { heroHand: ['Qh', 'Jh'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 2.5BB' }, { player: 'MP', action: 'call 2.5BB' }], street: 'preflop', potSize: 6.5, effectiveStack: 100 }, options: [{ action: 'Call 2.5BB', isCorrect: false, explanation: '高Rake环境下call导致多人底池。应该3-Bet或fold。', evImpact: '-0.5 BB/100' }, { action: 'Raise 10BB (3-Bet)', isCorrect: true, explanation: '高Rake环境下3-Bet隔离，减少多人底池。QJs足够强3-Bet。', evImpact: '+0.8 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'QJs在CO足够强3-Bet。不要fold。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l7-rake' },
+            { id: 'l7-rake-p3', difficulty: 'advanced', scenario: { heroHand: ['As', '5s'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }], street: 'preflop', potSize: 4, effectiveStack: 100 }, options: [{ action: 'Call 2.5BB', isCorrect: false, explanation: '高Rake环境下被动跟注的EV被Rake侵蚀最多。3-bet更好。', evImpact: '-0.3 BB/100' }, { action: 'Raise 8BB (3-bet)', isCorrect: true, explanation: '高Rake环境下3-bet优于call。减少多人底池，获取主动权。A5s有bluff潜力。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'A5s在BTN有bluff潜力，3-bet是+EV。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l7-rake' },
+            { id: 'l7-rake-p4', difficulty: 'advanced', scenario: { heroHand: ['9s', '8s'], heroPosition: 'SB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }], street: 'preflop', potSize: 4, effectiveStack: 100 }, options: [{ action: 'Call 1.5BB', isCorrect: false, explanation: '高Rake环境下SB call导致多人底池。应该3-bet或fold。', evImpact: '-0.5 BB/100' }, { action: 'Raise 8BB (3-bet)', isCorrect: true, explanation: '高Rake环境下3-bet减少多人底池。98s有翻后可玩性。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '98s在SB有翻后潜力，3-bet是+EV。', evImpact: '-0.3 BB/100' }], relatedLessonId: 'l7-rake' },
+            { id: 'l7-rake-p5', difficulty: 'advanced', scenario: { heroHand: ['Qh', 'Jh'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 2.5BB' }, { player: 'MP', action: 'call 2.5BB' }], street: 'preflop', potSize: 6.5, effectiveStack: 100 }, options: [{ action: 'Call 2.5BB', isCorrect: false, explanation: '高Rake环境下call导致多人底池。应该3-bet或fold。', evImpact: '-0.5 BB/100' }, { action: 'Raise 10BB (3-bet)', isCorrect: true, explanation: '高Rake环境下3-bet隔离，减少多人底池。QJs足够强3-bet。', evImpact: '+0.8 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'QJs在CO足够强3-bet。不要fold。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l7-rake' },
           ],
         },
       },
@@ -603,6 +625,11 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
         title: 'Table Selection',
         subtitle: '学会选桌——选对桌子比提升技术更重要',
         duration: '8 min',
+        objectives: [
+          '识别好桌子的四个标志（高平均底池、Players/Flop % > 30%、有明显弱玩家高 VPIP 低 PFR、没有多个已知强玩家）',
+          '判断线下选桌的流程（先观察 5-10 分钟、坐弱玩家左边、全桌 REG 则放弃），并说明赢率 = 技术优势 × 对手弱点',
+          '判断给定桌况的去留（有弱玩家时留在好位置利用、多 REG 且频繁 3-bet 时考虑换桌）',
+        ],
         content: [
           { type: 'heading', content: '为什么 Table Selection 是最被低估的技能？' },
           { type: 'text', content: '选择一张有鱼（弱玩家）的桌子，对赢率的提升可能超过几个月的技术练习。职业牌手花大量时间选桌，这不是丢人的事。' },
@@ -623,7 +650,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           questions: [
             { id: 'l7-ts-p1', difficulty: 'intermediate', scenario: { heroHand: ['Ah', 'Kh'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'call 1BB' }, { player: 'MP', action: 'call 1BB' }], street: 'preflop', potSize: 3.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: '桌上有2个明显弱玩家（高VPIP）' } }, options: [{ action: '离开这张桌子', isCorrect: false, explanation: '有弱玩家的桌子是好桌子！应该留下盈利。', evImpact: '-2 BB/100' }, { action: 'Raise 6BB，隔离弱玩家', isCorrect: true, explanation: '有弱玩家的好桌子！用强牌加注隔离。', evImpact: '+2.5 BB/100' }, { action: 'Limp', isCorrect: false, explanation: 'AKs应该加注而不是limp。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l7-table-selection' },
             { id: 'l7-ts-p2', difficulty: 'advanced', scenario: { heroHand: ['Ks', 'Qs'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: '刚入座，观察到桌上有一个喝酒的玩家' } }, options: [{ action: '继续打，观察该玩家', isCorrect: true, explanation: '喝酒的玩家可能是弱玩家。先观察确认，然后利用。', evImpact: '+1 BB/100' }, { action: '立即离开', isCorrect: false, explanation: '喝酒的玩家可能是弱玩家，这是好桌子的标志。', evImpact: '-1 BB/100' }, { action: '针对他all-in', isCorrect: false, explanation: '先观察再决策。不要冲动。', evImpact: '-2 BB/100' }], relatedLessonId: 'l7-table-selection' },
-            { id: 'l7-ts-p3', difficulty: 'advanced', scenario: { heroHand: ['Jd', 'Td'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'raise 3BB' }, { player: 'MP', action: 'raise 9BB' }], street: 'preflop', potSize: 13.5, effectiveStack: 90, gameContext: { gameType: 'cash', tableDescription: '桌上有多个REG，频繁3-Bet' } }, options: [{ action: 'Call 9BB', isCorrect: false, explanation: 'REG桌上频繁3-Bet，call很危险。考虑换桌。', evImpact: '-1 BB/100' }, { action: 'Fold，考虑换桌', isCorrect: true, explanation: '多个REG的桌子很难盈利。Fold JTs，考虑换到有弱玩家的桌子。', evImpact: '+0.5 BB/100' }, { action: '4-Bet all-in', isCorrect: false, explanation: 'JTs不适合4-Bet。REG桌上应该更紧。', evImpact: '-3 BB/100' }], relatedLessonId: 'l7-table-selection' },
+            { id: 'l7-ts-p3', difficulty: 'advanced', scenario: { heroHand: ['Jd', 'Td'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'raise 3BB' }, { player: 'MP', action: 'raise 9BB' }], street: 'preflop', potSize: 13.5, effectiveStack: 90, gameContext: { gameType: 'cash', tableDescription: '桌上有多个REG，频繁3-bet' } }, options: [{ action: 'Call 9BB', isCorrect: false, explanation: 'REG桌上频繁3-bet，call很危险。考虑换桌。', evImpact: '-1 BB/100' }, { action: 'Fold，考虑换桌', isCorrect: true, explanation: '多个REG的桌子很难盈利。Fold JTs，考虑换到有弱玩家的桌子。', evImpact: '+0.5 BB/100' }, { action: '4-Bet all-in', isCorrect: false, explanation: 'JTs不适合4-Bet。REG桌上应该更紧。', evImpact: '-3 BB/100' }], relatedLessonId: 'l7-table-selection' },
             { id: 'l7-ts-p4', difficulty: 'intermediate', scenario: { heroHand: ['Qh', 'Jh'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: '弱玩家在你右边' } }, options: [{ action: '换到弱玩家左边的位置', isCorrect: false, explanation: '弱玩家已经在右边了，你在他后面行动=有位置。这很好。', evImpact: '0' }, { action: '留在这个位置，利用对弱玩家的位置', isCorrect: true, explanation: '弱玩家在右边意味着你经常对他有位置。这是理想位置。', evImpact: '+1.5 BB/100' }, { action: '离开桌子', isCorrect: false, explanation: '有弱玩家在你右边是好位置，应该留下。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-table-selection' },
             { id: 'l7-ts-p5', difficulty: 'advanced', scenario: { heroHand: ['As', 'Ts'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 100, gameContext: { gameType: 'cash', tableDescription: 'Players/Flop% = 45%，有明显弱玩家' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'ATs在BTN是好牌。好桌子应该积极参与。', evImpact: '-1 BB/100' }, { action: 'Raise 2.5BB', isCorrect: true, explanation: 'Players/Flop%高=好桌子。ATs在BTN是标准open。', evImpact: '+1.5 BB/100' }, { action: 'Limp', isCorrect: false, explanation: 'ATs应该加注而不是limp。', evImpact: '+0.3 BB/100' }], relatedLessonId: 'l7-table-selection' },
           ],
@@ -637,6 +664,10 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
         title: '深筹码决策 Drill',
         subtitle: '200BB+ 深度策略',
         duration: '3分钟',
+        objectives: [
+          '判断 200BB+ 深度下各位置的开池决策（同花连牌与 Ax 同花在 BTN/CO/MP 的标准 open）',
+          '比较深筹码隐含赔率对投机牌资格的改变（200BB 时 Q9s 在 UTG 可开、54s 在 BTN 面对 MP open 弃牌）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -722,7 +753,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
               options: [
                 { id: 'a', text: 'Fold（位置尚可但牌力太弱）', isCorrect: true },
                 { id: 'b', text: 'Call', isCorrect: false },
-                { id: 'c', text: '3-Bet', isCorrect: false },
+                { id: 'c', text: '3-bet', isCorrect: false },
               ],
               explanation: '200BB 深度时，54s 在 BTN 面对 MP open 应该弃牌。主流策略 Q9s+ call，54s 太弱。',
               difficulty: 2,
@@ -765,6 +796,10 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
         title: '多人底池 Drill',
         subtitle: '3+ 人底池翻后决策',
         duration: '3分钟',
+        objectives: [
+          '判断多人底池（3-4 人）翻后的下注或 check 决策（顶对中等踢脚 check 控制、暗三条小注 value）',
+          '比较单挑与多人底池的价值下注尺度差异（多人底池用 1/3 底池小注、避免满池）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',

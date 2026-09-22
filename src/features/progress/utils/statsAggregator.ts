@@ -1,6 +1,6 @@
 import type { TrainingRecord, StatsSummary, DailyStats, ModuleStats } from '../types';
 import { calculateCurrentStreak, calculateLongestStreak } from './streakCalc';
-import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+import { toLocalDateKey } from './toLocalDateKey';
 
 /** 从训练记录聚合统计数据 */
 export function aggregateStats(records: TrainingRecord[]): StatsSummary {

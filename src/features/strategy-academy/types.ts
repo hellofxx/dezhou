@@ -59,7 +59,7 @@ export type { OpponentStats, OpponentProfile };
 export interface GameContext {
   gameType: 'cash' | 'mtt' | 'sng';      // 游戏类型
   tableDescription?: string;              // 桌风描述如 "桌上连续3把无人加注"
-  opponentHistory?: string;               // 对手近期数据如 "该对手过去20手3-Bet了4次"
+  opponentHistory?: string;               // 对手近期数据如 "该对手过去20手3-bet了4次"
   icmPressure?: 'low' | 'medium' | 'high'; // ICM 压力级别（锦标赛）
   stackDistribution?: string;             // 筹码分布描述如 "桌上有2个短筹码"
   bubbleFactor?: boolean;                 // 是否在泡沫期

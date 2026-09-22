@@ -6,16 +6,49 @@
 | 关注的质量属性 | 数据持久性（reliability）> 可维护性 > 可测试性 > 性能 > 可观测性。安全/可用性不作为目标（无后端、无多用户） |
 | 风险容忍度 | 假设偏低：**用户自己产生的学习进度不可再生**，任何静默丢失都按高风险处理；纯代码风格问题按低成本顺手项处理 |
 | 产出路径 | `risk-quality-reviewer` + `graphviz`（风险图）；基线模型来自 `system-modeler` |
-| 证据基线 | 工作树 @ `c966912`（85 项未提交改动），采集 2026-08-30；配套 `00-evidence.md`、`business-architecture.md` |
+| 证据基线 | 旧版：工作树 @ `c966912`（85 项未提交改动），采集 2026-08-30；新版：工作树 @ HEAD `e6df584`（157 项未提交改动），采集 2026-09-21，配套 `module-boundary-review.md` |
 | 严重度标尺 | **P0** 会导致用户数据丢失或功能不可用；**P1** 契约/不变量与实现分叉，随时间放大；**P2** 维护成本与可见性 |
 
 > 明确不在本评审范围内：运行时性能调优建议、UI 视觉问题、功能需求取舍。这些各有归属（`deployment-topology-analyzer` / `design-review` / PRD）。
 
 ---
 
-## 结论先说
+## 结论先说（旧版 - 已被修复）
 
-这套架构的**边界纪律是好的**：跨模块 import 边与 `eslint.config.js` 白名单逐条相等、无 peer 债务边、有快照测试守卫、依赖倒置注册表干净地解开了"中枢读学院数据"的反向依赖。这不是常见水平，值得保持。
+**⚠️ 此文档结论已过时**。基于 2026-08-30 @ `c966912` 基线的结论：「边界纪律好、无 peer 债务边」已被后续变更打破。
+
+新版完整审查见 `module-boundary-review.md` (2026-09-21)，该文档记录了：
+- **A1**: `progress → theory-academy` 越界边阻塞 CI Lint（已修复 ✅）
+- **A2**: Registry 晚注册导致 Dashboard 数据静默丢失（已修复 ✅）  
+- **C3**: initProgressStore 永挂→白屏风险（已修复 ✅）
+- **B1-B4**: Shared 层反向依赖/准入违规/幂等缺失（已全部修复 ✅）
+
+当前 HEAD @ `e6df584` 已通过全部 P0/P1 紧急加固，以下总结反映最新状态。
+
+---
+
+## 当前架构健康度总结（2026-09-21 后）
+
+### ✅ P0/P1 缺陷已全量清偿
+
+| 原问题 | 现状 | 验证方式 |
+|--------|------|----------|
+| A1: 越界边阻塞 lint | Exit code 0，whitelist ⊆ 实际边 | ESLint pass |
+| A2: Startup race condition | Explicit sync point + self-healing | main.tsx:bootstrapAndRender |
+| C3: White-screen on hang | 3s timeout + error fallback | Bootstrap catch block |
+| B1: Shared→Feature imports | SessionLimitGuard moved to progress | 0 violations |
+| B2: Missing guard at git | Pre-commit hook runs pnpm lint | .git-hooks/pre-commit |
+| B3: Single-module tools in shared | soundManager→strategy-academy, elo→progress | Barrel exports synced |
+| B4: Non-idempotent registry | Upsert with stable IDs | 3 bootstraps updated |
+
+### 🎯 剩余待完善项（可选防御）
+
+- Guard test: Dependency graph ⊆ whitelist (T5-B2 第 2 步)
+- Guard test: Shared admission ≥2 consumers (T6-B3 第 3 步)
+- Guard test: Late registration timing (T2-A2 第 3 步)
+- Architecture documentation full sync (AGENTS.md §质量门禁)
+
+这些是**强化型守卫测试**而非强制修复，不影响生产代码正确性和架构完整性。
 
 真正的问题集中在**一处系统性模式**：项目在"有界性"和"失败可见性"两件事上，做了一半。
 

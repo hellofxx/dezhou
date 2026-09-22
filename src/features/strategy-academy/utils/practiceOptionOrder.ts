@@ -9,7 +9,7 @@
  * 分流规则（对齐 AGENTS.md《答题选项排序治理》/ PRD 5.26 / TDD 5.9）：
  * 1. 动作类选项集（全部选项可识别为扑克动作语义）：
  *    按"消极→激进"canonical 固定排序（Fold → Check → Call → Limp →
- *    Bet/C-Bet/Donk → Raise/3-Bet/4-Bet/5-Bet → All-in/全下），
+ *    Bet/C-Bet/Donk → Raise/3-bet/4-Bet/5-Bet → All-in/全下），
  *    同类别按尺度数值升序 —— 与 puzzle-trainer utils/optionOrder.ts 同规范；
  * 2. 数值类选项集：按数值单调升序（复用 shared 判定与排序）；
  * 3. 其余（含无法全量识别动作语义的文字陈述混合集）：
@@ -41,7 +41,7 @@ const UNKNOWN_CATEGORY = 99;
 /**
  * 动作类别前缀匹配表（大小写不敏感，按声明顺序尝试）：
  * 0=Fold 1=Check（含 Check-Raise 等 check 前缀变体，与 puzzle-trainer 同口径）
- * 2=Call 3=Limp 4=Bet/C-Bet/Donk 5=Raise/3-Bet/4-Bet/5-Bet
+ * 2=Call 3=Limp 4=Bet/C-Bet/Donk 5=Raise/3-bet/4-Bet/5-Bet
  */
 const CATEGORY_PREFIXES: ReadonlyArray<readonly [prefix: string, category: number]> = [
   ['fold', 0],

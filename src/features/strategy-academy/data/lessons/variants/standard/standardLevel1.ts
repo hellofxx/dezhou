@@ -163,7 +163,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             commonMistake: {
               action: '误以为对手的顺子更强而弃牌',
               reasoning: '初学者常混淆同花和顺子的大小。记住：同花 > 顺子！',
-              evLoss: '损失整个底池（约 8BB）',
+              evLoss: '损失整个底池（12.5BB）',
             },
           },
           {
@@ -265,6 +265,12 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '位置的力量',
         subtitle: '理解为什么位置是德州扑克最重要的概念',
         duration: '7 min',
+        objectives: [
+          '列举 6-max 的前位/中位/后位/盲注位四个区段，并说出 BTN 是开池最宽、信息最多的位置',
+          '比较同一手牌（如 KJo）在 UTG 与 BTN 的开池决策差异，说明信息优势如何改变范围宽度',
+          '判断给定座位应收紧还是放宽开池范围，并给出理由',
+          '区分位置的翻前收益（偷盲）与翻后收益（权益实现率更高），说明 BTN 的优势主要在翻后',
+        ],
         content: [
           ...L1_POSITION_U1_SECTIONS,
           ...L1_POSITION_U2_SECTIONS,
@@ -314,7 +320,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             },
             commonMistake: {
               action: '在UTG用KJo开牌加注',
-              reasoning: 'KJo看起来不错，但在前位太弱。如果后位有人3-Bet，你将处于非常困难的境地。',
+              reasoning: 'KJo看起来不错，但在前位太弱。如果后位有人3-bet，你将处于非常困难的境地。',
               evLoss: '-0.8 BB/100',
             },
           },
@@ -437,6 +443,12 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '起手牌选择',
         subtitle: '学会在正确的时机打正确的牌',
         duration: '10 min',
+        objectives: [
+          '计算口袋对子（6 组合）、同花牌（4 组合）、非同花牌（12 组合）的组合数，并计算拿到 AA 的概率约 0.45%',
+          '按位置把常见手牌归入四个梯队（任何位置可打/中位以后/后位与盲注/垃圾牌），并说出 6 人桌合理的参与率区间 20-25%',
+          '比较同花与非同花同点数手牌的价值差（约 2-3%），并识别 K3o 等易被支配的手牌',
+          '判断给定手牌在指定位置是否值得开池，并给出高牌价值、连接性、同花性、支配性四个依据',
+        ],
         content: [
           { type: 'heading', content: '起手牌选择的重要性' },
           {
@@ -456,7 +468,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           },
           {
             type: 'highlight',
-            content: 's = suited（同花），o = offsuit（非同花）。同花牌比非同花牌价值高约3-4%。',
+            content: 's = suited（同花），o = offsuit（非同花）。同花牌比非同花牌价值高约2-3%。',
           },
           { type: 'heading', content: '选择原则' },
           {
@@ -480,7 +492,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           },
           {
             type: 'counter-intuitive',
-            content: '反直觉点：AKs 只有 4 种组合，而 AA 有 6 种组合。虽然 AK 看起来"气势最足"，但它的组合数比重不如口袋对子。在范围分析中，对手 3Bet 范围里对子的组合权重往往远超 AK，这是很多初学者会忽略的定量偏差。',
+            content: '反直觉点：AKs 只有 4 种组合，而 AA 有 6 种组合。虽然 AK 看起来"气势最足"，但它的组合数比重不如口袋对子。在范围分析中，对手 3-bet 范围里对子的组合权重往往远超 AK，这是很多初学者会忽略的定量偏差。',
           },
         ],
         quiz: [
@@ -629,6 +641,12 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '资金管理入门',
         subtitle: '保护你的扑克资金，避免破产风险',
         duration: '7 min',
+        objectives: [
+          '计算给定级别与买入额下的最低与推荐资金（如 NL10、买入 $10 对应 $200-$300）',
+          '区分现金桌（20-30 个买入）与锦标赛（50-100 个买入）的资金要求，并说出降级线（低于当前级别 20 个买入）',
+          '判断借钱翻本、动用生活费等危险做法并给出替代方案（专款专用、设置止损线）',
+          '用 Kelly 公式 f* = (bp − q) / b 代入胜率与赔率计算最优资金比例，并说明 Half Kelly 为何更保守',
+        ],
         content: [
           { type: 'heading', content: '为什么资金管理如此重要？' },
           { type: 'text', content: '资金管理（Bankroll Management）是所有成功牌手的基石。无论你的技术多好，如果没有合理的资金管理，方差（Variance）迟早会让你破产。' },
@@ -661,6 +679,12 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '常见新手错误 Top 10',
         subtitle: '识别并修正初学者最常犯的十大致命错误',
         duration: '9 min',
+        objectives: [
+          '列出新手十大 Leak 的前五个（打太多手牌、位置意识缺失、被动跟注、下注尺度不合理、不关注底池大小）',
+          '比较新手（VPIP 40-60%）与赢利玩家（20-25%）的手牌参与率，并说出过松的修正方法（严格遵守翻前范围）',
+          '识别自己牌局中存在的 Leak（如太多 Call、诈唬频率失衡、不做复盘），并给出对应的修正动作',
+          '判断「单次结果差」与「决策错误」的区别，用 EV 概念说明为什么 +EV 决策连续亏损仍然正确',
+        ],
         content: [
           { type: 'heading', content: '为什么识别错误比学习技巧更重要？' },
           { type: 'text', content: '修正一个错误带来的收益往往大于学习一个新技巧。以下是初学者最常犯的 10 个错误（Leaks），从最严重到最轻排列：' },
@@ -701,6 +725,11 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '牌力排名闪电战',
         subtitle: '10 道快题，秒判牌型与牌力大小',
         duration: '3 min',
+        objectives: [
+          '识别给定 5 张牌的牌型名称（同花、顺子、葫芦等）',
+          '比较两手成牌的强弱并正确指出更大的一方',
+          '区分 10 种牌型的强度排序，说出同花大于顺子等关键比较规则',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -713,6 +742,11 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '位置认知训练',
         subtitle: '8 道交互题，点击 6-max 桌位识别 UTG/MP/CO/BTN/SB/BB',
         duration: '2 min',
+        objectives: [
+          '在 6-max 桌面图上点击识别 UTG/MP/CO/BTN/SB/BB 六个座位',
+          '排列 6-max 座位的行动顺序（UTG 最先行动、BTN 靠后、盲注翻后最先）',
+          '判断给定座位相对按钮位属于前位还是后位',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -725,6 +759,11 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: 'Outs 速算',
         subtitle: '8 道题，覆盖同花/OESD/Gutshot/二四法则',
         duration: '3 min',
+        objectives: [
+          '计算同花听牌（9 outs）、两端顺子听牌 OESD（8 outs）、卡顺 Gutshot（4 outs）的补牌数',
+          '运用二四法则把 outs 换算成翻牌到河牌（×4）与单街（×2）的成牌概率',
+          '识别 AK 命中顶对等边缘场景的 outs 数量（剩余 3 张 A 加 3 张 K 共 6 outs）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',
@@ -737,6 +776,11 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         title: '底池赔率直觉',
         subtitle: '6 道图形化赔率计算与跟注/弃牌决策',
         duration: '3 min',
+        objectives: [
+          '给定底池、下注额与跟注额，计算底池赔率对应的所需胜率百分比',
+          '比较已知胜率与所需胜率，判断该跟注还是弃牌',
+          '说出常见下注尺度对应的所需胜率（半池约 25%、满池约 33%）',
+        ],
         content: [],
         quiz: [],
         type: 'drill',

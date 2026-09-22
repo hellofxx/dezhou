@@ -7,7 +7,7 @@
       "tendencies": [
         "Tight starting-hand range, mostly strong hands",
         "High postflop continuation-bet frequency",
-        "Usually folds to 3-Bets (except premium hands)",
+        "Usually folds to 3-bets (except premium hands)",
         "Rarely bluffs, but value-bets heavily"
       ],
       "exploitable": [
@@ -22,7 +22,7 @@
       "description": "Loose and aggressive: plays many hands and raises frequently",
       "tendencies": [
         "Very wide starting-hand range",
-        "Frequent 3-Bets and raises",
+        "Frequent 3-bets and raises",
         "Extremely high postflop C-Bet frequency",
         "Bluffs often, but also has strong hands"
       ],

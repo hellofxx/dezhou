@@ -24,7 +24,7 @@ const GAME_KEY = '6max_100bb_preflop';
  * 未覆盖场景示例（返回 null）：
  *   - HJ/CO/BTN 冷 call（如 UTG open → HJ 行动）：GTO 表无 `hj_vs_utg_open` 等 key
  *   - SB vs UTG/HJ/CO/BTN open、BB vs UTG open
- *   - 大多数 3bet 场景（3-bet spot 数据补齐挂起 P1A-06 专批）
+ *   - 大多数 3-bet 场景（3-bet spot 数据补齐挂起 P1A-06 专批）
  */
 export function resolveSpotKey(position: Position, previousActions?: PreviousAction[]): string | null {
   const pos = position.toLowerCase();
@@ -38,7 +38,7 @@ export function resolveSpotKey(position: Position, previousActions?: PreviousAct
     return data[key] ? key : null;
   }
 
-  // 面对一个 open（raises.length === 1）：hero 是跟注/3bet 决策者
+  // 面对一个 open（raises.length === 1）：hero 是跟注/3-bet 决策者
   if (raises.length === 1) {
     const opener = raises[0]!;
     const openerPos = opener.position.toLowerCase();
@@ -54,7 +54,7 @@ export function resolveSpotKey(position: Position, previousActions?: PreviousAct
     return null;
   }
 
-  // 面对 3bet 及以上（raises.length >= 2）：hero 是 4bet/call/fold 决策者
+  // 面对 3-bet 及以上（raises.length >= 2）：hero 是 4bet/call/fold 决策者
   const lastRaiser = raises[raises.length - 1]!;
   // P1C-25 后 hero 自己的 open 也在 raises 中，最后一个非 hero 的 raiser 才是 3-bettor
   const villainRaiser = lastRaiser.position === position

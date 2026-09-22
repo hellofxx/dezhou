@@ -8,6 +8,11 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
     title: '短牌翻前范围',
     subtitle: '36 张牌环境下的起手牌价值重排与开局范围构建',
     duration: '9 min',
+    objectives: [
+      '分层构建短牌开池范围（顶级 AA/KK/QQ、次级 JJ-TT/AK、投机层小对子/同花连牌/同花 Ax），并说明对子与同花优先、非同花 AX 相对降值',
+      '判断 AK 在短牌的真实地位（最强非对子、翻前全下对 66-QQ 等口袋对五五开偏上，仅对 AA/KK 明显落后），并区分它与满员桌口径的差异',
+      '运用阻断牌选择 3-bet 诈唬层（A6s 阻断 AA/AK、被 4Bet 概率下降），并判断面对 3-bet 时小对子与同花连牌应收紧',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -15,7 +20,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '短牌 36 张牌环境下，起手牌价值被重排：口袋对价值上升（三条牌级高、中牌概率 17.6%）、AK 是最强非对子但不击败对子、同花连牌可玩性好但次级。短牌翻前范围因此"对子与同花优先、非同花大高张相对降值"。',
+          '短牌 36 张牌环境下，起手牌价值被重排：口袋对价值上升（三条牌级高、中牌概率约 17.1%）、AK 是最强非对子但不击败对子、同花连牌可玩性好但次级。短牌翻前范围因此"对子与同花优先、非同花大高张相对降值"。',
       },
       {
         type: 'key-point',
@@ -25,7 +30,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '短牌翻前开局范围分层：(1) 顶级——AA/KK/QQ（对子价值高，压制 AK）；(2) 次级价值——JJ-TT/AK（最强非对子）；(3) 投机层——99-22（set mining，三条价值高）/同花连牌 JTs+/同花 Ax。相比标准德州，短牌中小对子与同花连牌的比重上升，非同花 AX 的相对价值下降。',
+          '短牌翻前开局范围分层：(1) 顶级——AA/KK/QQ（对子价值高，压制 AK）；(2) 次级价值——JJ-TT/AK（最强非对子）；(3) 投机层——66-99（set mining，三条价值高）/同花连牌 JTs+/同花 Ax。相比标准德州，短牌中小对子与同花连牌的比重上升，非同花 AX 的相对价值下降。',
       },
       {
         type: 'example',
@@ -35,15 +40,15 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例二（3Bet 范围）：短牌你面对 BTN 开池，考虑 3Bet。3Bet 范围分两层：价值层（JJ+/AK）+ 诈唬层（A5s 等带阻断牌的牌——阻断 AA/AK，被 4Bet 可弃牌）。短牌中对子密度高，3Bet 价值层应含更多对子（因为对子 > AK）。',
+          '实例二（3-bet 范围）：短牌你面对 BTN 开池，考虑 3-bet。3-bet 范围分两层：价值层（JJ+/AK）+ 诈唬层（A6s 等带阻断牌的牌——阻断 AA/AK，被 4Bet 可弃牌）。短牌中对子密度高，3-bet 价值层应含更多对子（因为对子 > AK）。',
       },
       {
         type: 'highlight',
-        content: '反直觉点：短牌中 AK 不是"翻硬币偏上"的强全下牌。它压制所有非对子、翻后能中顶对，但翻前全下对任何口袋对约 43%-45% 落后。把 AK 当成顶级强牌是标准德州惯性的最大误判。',
+        content: '反直觉点：短牌中 AK 的全下地位与满员桌不同。它压制所有非对子、翻后能中顶对，翻前全下对 66-QQ 等中等口袋对五五开偏上（精确枚举 AKs vs QQ 约 53.7% 领先），仅对 AA/KK 明显落后。把"AK 对口袋对 43%-45% 落后"的满员桌口径搬进短牌是最大误判。',
       },
       {
         type: 'pro-tip',
-        content: '短牌翻前范围速记：顶级对子（AA/KK/QQ）+ 次级 AK + 投机对子/同花连牌。开池约 50%-60%（BTN），对子与同花优先。面对 3Bet 时，小对子与同花连牌应收紧（投机价值需隐含赔率）。',
+        content: '短牌翻前范围速记：顶级对子（AA/KK/QQ）+ 次级 AK + 投机对子/同花连牌。开池约 50%-60%（BTN），对子与同花优先。面对 3-bet 时，小对子与同花连牌应收紧（投机价值需隐含赔率）。',
       },
     ],
     quiz: [
@@ -64,12 +69,12 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
         question: '短牌翻前范围中，投机层主要包括：',
         options: [
           'AA/KK',
-          '99-22 对子 + 同花连牌 JTs+ + 同花 Ax',
+          '66-99 对子 + 同花连牌 JTs+ + 同花 Ax',
           '非同花 AK/AQ',
           '垃圾牌',
         ],
         correctIndex: 1,
-        explanation: '短牌投机层是小对子（set mining）+ 同花连牌 + 同花 Ax，利用三条与同花价值。',
+        explanation: '短牌投机层是小对子（66-99，set mining）+ 同花连牌 + 同花 Ax，利用三条与同花价值。短牌无 2-5，22-55 不存在。',
       },
       {
         id: 'l4sd-preflop-ranges-q3',
@@ -77,7 +82,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
         options: [
           '弃牌',
           '标准跟注/开池牌，能成同花与顺子',
-          '只 3Bet',
+          '只 3-bet',
           '完全没用',
         ],
         correctIndex: 1,
@@ -85,7 +90,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         id: 'l4sd-preflop-ranges-q4',
-        question: '短牌 3Bet 范围的价值层应包含：',
+        question: '短牌 3-bet 范围的价值层应包含：',
         options: [
           '只用 AK',
           '更多对子（对子 > AK）+ AK',
@@ -93,14 +98,14 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           '只用小对子',
         ],
         correctIndex: 1,
-        explanation: '短牌对子 > AK，3Bet 价值层应含更多对子（JJ+/AK），因为对子翻前全下更强。',
+        explanation: '短牌对子 > AK，3-bet 价值层应含更多对子（JJ+/AK），因为对子翻前全下更强。',
       },
       {
         id: 'l4sd-preflop-ranges-q5',
-        question: '短牌中 AK 翻前全下对口袋对的胜率约为：',
-        options: ['约 55%', '约 43%-45%', '约 70%', '约 35%'],
+        question: '短牌中 AKs 翻前全下对 QQ 的胜率约为：',
+        options: ['约 46%（落后）', '约 54%（领先）', '约 43%-45%（落后）', '约 35%'],
         correctIndex: 1,
-        explanation: '短牌 AK 对口袋对约 43%-45% 落后，AK 是最强非对子但不击败对子。',
+        explanation: '短牌精确枚举（全量）AKs vs QQ ≈ 53.7%/46.3%——AK 对中等口袋对五五开偏上（AKo vs QQ 也有约 51.8%），仅对 AA/KK 明显落后。"AK 对口袋对 43%-45% 落后"是满员桌旧口径。',
       },
     ],
     examples: [
@@ -120,7 +125,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           amount: '2 ante',
           reasoning: [
             '77 短牌 set mining 价值上升（三条牌级高）',
-            '中三条概率约 17.6%（满员桌 12%）',
+            '中三条概率约 17.1%（满员桌约 12%）',
             '面对 BTN 宽开池，隐含赔率足够，跟注',
           ],
         },
@@ -151,7 +156,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           options: [
             { action: 'Fold', isCorrect: false, explanation: '99 短牌 set mining 价值高，fold 太紧。', evImpact: '-1.0 ante', evLoss: 1 },
             { action: 'Call', isCorrect: true, explanation: '99 小对子短牌价值上升，面对 BTN 宽开池跟注 set mining。', evImpact: '+1.0 ante', evLoss: 0 },
-            { action: '3-Bet', isCorrect: false, explanation: '99 偏投机，跟注 set mining 更优，3-Bet 可偶尔混合。', evImpact: '+0.3 ante', evLoss: 0.3 },
+            { action: '3-bet', isCorrect: false, explanation: '99 偏投机，跟注 set mining 更优，3-bet 可偶尔混合。', evImpact: '+0.3 ante', evLoss: 0.3 },
           ],
           relatedLessonId: 'l4sd-preflop-ranges',
         },
@@ -171,9 +176,9 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌' },
           },
           options: [
-            { action: 'Fold', isCorrect: false, explanation: 'AK 是最强非对子，3Bet 后不应弃牌。', evImpact: '-2.0 ante', evLoss: 2 },
+            { action: 'Fold', isCorrect: false, explanation: 'AK 是最强非对子，3-bet 后不应弃牌。', evImpact: '-2.0 ante', evLoss: 2 },
             { action: 'Call 4 ante', isCorrect: true, explanation: 'AK 面对 BTN 4Bet 范围，跟注看翻后（中顶对价值），或 5Bet 全下看对手。', evImpact: '+1.2 ante', evLoss: 0 },
-            { action: 'All-in', isCorrect: false, explanation: 'AK 对口袋对落后，若 BTN 4Bet 范围含多对子，全下需谨慎。', evImpact: '-0.5 ante', evLoss: 0.5 },
+            { action: 'All-in', isCorrect: false, explanation: 'AK 对 66-QQ 五五开偏上但被跟注后无位置，若 BTN 4Bet 范围含 AA/KK 占比高，全下需谨慎。', evImpact: '-0.5 ante', evLoss: 0.5 },
           ],
           relatedLessonId: 'l4sd-preflop-ranges',
         },
@@ -181,7 +186,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           id: 'l4sd-preflop-ranges-p3',
           difficulty: 'advanced',
           scenario: {
-            heroHand: ['Ad', '5d'],
+            heroHand: ['Ad', '6d'],
             heroPosition: 'BB',
             previousActions: [
               { player: 'BTN', action: 'raise 2 ante' },
@@ -190,12 +195,12 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
             street: 'preflop',
             potSize: 9,
             effectiveStack: 90,
-            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，BTN 面对 3-Bet 弃牌率高' },
+            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，BTN 面对 3-bet 弃牌率高' },
           },
           options: [
-            { action: 'Fold', isCorrect: false, explanation: 'A5s 是标准 3Bet 诈唬牌（阻断 AA/AK），有弃牌率支撑。', evImpact: '-0.8 ante', evLoss: 0.8 },
-            { action: 'Call', isCorrect: false, explanation: 'A5s 3Bet 后被 4Bet 可干净弃牌，跟注不是主要用途。', evImpact: '+0.3 ante', evLoss: 0.3 },
-            { action: '3-Bet', isCorrect: true, explanation: 'A5s 阻断 AA/AK，BTN 弃牌率高，3Bet 诈唬标准。', evImpact: '+1.5 ante', evLoss: 0 },
+            { action: 'Fold', isCorrect: false, explanation: 'A6s 是标准 3-bet 诈唬牌（阻断 AA/AK），有弃牌率支撑。', evImpact: '-0.8 ante', evLoss: 0.8 },
+            { action: 'Call', isCorrect: false, explanation: 'A6s 3-bet 后被 4Bet 可干净弃牌，跟注不是主要用途。', evImpact: '+0.3 ante', evLoss: 0.3 },
+            { action: '3-bet', isCorrect: true, explanation: 'A6s 阻断 AA/AK，BTN 弃牌率高，3-bet 诈唬标准。', evImpact: '+1.5 ante', evLoss: 0 },
           ],
           relatedLessonId: 'l4sd-preflop-ranges',
         },
@@ -209,6 +214,11 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
     title: '坚果与权益计算',
     subtitle: '短牌高权益环境下的坚果追逐、胜率修正与成牌概率',
     duration: '8 min',
+    objectives: [
+      '用短牌口径计算听牌 outs 与胜率（同花 outs = 9 − 已见该花色张数、单街命中率 = outs ÷ 31，如 5 outs ≈ 16% 单街、30% 双街）',
+      '判断短牌「outs 少不等于听牌弱」的逻辑（成牌是坚果级——同花 beats 葫芦，隐含赔率极佳）',
+      '比较短牌与满员桌的 outs 口径差异（同花 5 outs vs 9 outs），并判断直接套用满员桌 outs 表会系统性高估胜率',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -216,7 +226,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '短牌中权益（Equity）计算的核心调整是 outs 按 36 张牌重算（每花色 9 张）。同花听牌 outs = 9 − 已见该花色数，单街命中率用"outs ÷ 33"估算。短牌虽 outs 绝对数字低，但成牌价值高（同花/顺子常是坚果），追逐坚果的隐含赔率极佳。',
+          '短牌中权益（Equity）计算的核心调整是 outs 按 36 张牌重算（每花色 9 张）。同花听牌 outs = 9 − 已见该花色数，单街命中率用"outs ÷ 31"估算（翻牌后未知牌 = 36 − 2 − 3 = 31 张）。短牌虽 outs 绝对数字低，但成牌价值高（同花/顺子常是坚果），追逐坚果的隐含赔率极佳。',
       },
       {
         type: 'key-point',
@@ -226,7 +236,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'formula',
         content:
-          '短牌 outs 与胜率修正：\n\n同花听牌 outs = 9 − 已见该花色数（手持 2 + 牌面 2 → 5）\n单街命中率 = outs ÷ 33（翻牌后）\n\n实例：同花听牌 5 outs → 单街 5/33 ≈ 15%，双街约 28%\n顺子听牌 8 outs → 单街 8/33 ≈ 24%，双街约 44%\n\n2/4 法则按 36 张修正：短牌用"outs × 2"看单街更准，双街 outs×4 会高估。\n\n成牌价值：同花（beats 葫芦）/顺子常是坚果 → 追逐的隐含赔率极佳。（概念源自：《Short Deck Poker》outs 与权益）',
+          '短牌 outs 与胜率修正：\n\n同花听牌 outs = 9 − 已见该花色数（手持 2 + 牌面 2 → 5）\n单街命中率 = outs ÷ 31（翻牌后未知牌 31 = 36 − 2 − 3）\n\n实例：同花听牌 5 outs → 单街 5/31 ≈ 16%，双街约 30%\n顺子听牌 8 outs → 单街 8/31 ≈ 26%，双街约 46%\n\n2/4 法则按 36 张修正：短牌每 outs 单街约 3.2%（1/31），用"outs × 3"估算单街；双街比例更高（8 outs → 约 46%），建议直接记基准表。\n\n成牌价值：同花（beats 葫芦）/顺子常是坚果 → 追逐的隐含赔率极佳。（概念源自：《Short Deck Poker》outs 与权益）',
       },
       {
         type: 'text',
@@ -236,12 +246,12 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：短牌你持 A♥K♥，翻牌 9♥7♥2♣。你听同花：已见红心 A♥K♥ + 牌面 9♥7♥ = 4 张，同花 outs = 9 − 4 = 5。对手下注半池，你跟注需 25% 胜率。你的同花 5 outs 单街 15%，但双街约 28%，且成同花是坚果（beats 葫芦）。加隐含赔率（成同花后榨取大锅），跟注 +EV，甚至可考虑加注半诈唬。',
+          '实例：短牌你持 A♥K♥，翻牌 9♥7♥6♣。你听同花：已见红心 A♥K♥ + 牌面 9♥7♥ = 4 张，同花 outs = 9 − 4 = 5。对手下注半池，你跟注需 25% 胜率。你的同花 5 outs 单街 16%，但双街约 30%，且成同花是坚果（beats 葫芦）。加隐含赔率（成同花后榨取大锅），跟注 +EV，甚至可考虑加注半诈唬。',
       },
       {
         type: 'example',
         content:
-          '实例二（坚果追逐）：短牌你持 8♠9♠，翻牌 6♦7♣2♥。你听 5 或 T 组成顺子（8 个 Outs，但 6、7 已见，5/T 各 4 张 = 8）。此顺子（5-6-7-8-9 或 6-7-8-9-T）是短牌强顺，只输给葫芦/同花/三条。双街约 44%，且成顺后接近坚果。跟注与半诈唬都极佳。',
+          '实例二（坚果追逐）：短牌你持 T♠J♠，翻牌 8♦9♣6♥。你听 7 或 Q 组成顺子（8 个 Outs，7/Q 各 4 张 = 8）。此顺子（7-8-9-T-J 或 9-T-J-Q-K）是短牌强顺，只输给葫芦/同花/三条。双街约 46%，且成顺后接近坚果。跟注与半诈唬都极佳。',
       },
       {
         type: 'highlight',
@@ -249,7 +259,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         type: 'pro-tip',
-        content: '短牌权益速算：同花 5 outs ≈ 15% 单街、28% 双街；顺子 8 outs ≈ 24% 单街、44% 双街。背熟后结合"成牌是坚果"判断追不追。',
+        content: '短牌权益速算：同花 5 outs ≈ 16% 单街、30% 双街；顺子 8 outs ≈ 26% 单街、46% 双街。背熟后结合"成牌是坚果"判断追不追。',
       },
     ],
     quiz: [
@@ -275,9 +285,9 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         id: 'l4sd-nuts-equity-q3',
         question: '短牌顺子听牌（8 outs）双街命中率约为：',
-        options: ['约 24%', '约 44%', '约 30%', '约 55%'],
+        options: ['约 26%', '约 46%', '约 30%', '约 55%'],
         correctIndex: 1,
-        explanation: '短牌顺子 8 outs 双街约 44%，远高于单街的 24%。',
+        explanation: '短牌顺子 8 outs 双街约 46%（1−(23/31)×(22/30) ≈ 45.6%），远高于单街的 26%（8/31）。',
       },
       {
         id: 'l4sd-nuts-equity-q4',
@@ -294,9 +304,9 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         id: 'l4sd-nuts-equity-q5',
         question: '短牌翻牌后单街命中率的口算基准是：',
-        options: ['outs ÷ 47', 'outs ÷ 33', 'outs ÷ 36', 'outs ÷ 52'],
+        options: ['outs ÷ 47', 'outs ÷ 31', 'outs ÷ 36', 'outs ÷ 52'],
         correctIndex: 1,
-        explanation: '短牌翻牌后剩余约 33 张，单街命中率用 outs ÷ 33 粗估。47 是满员桌的。',
+        explanation: '短牌翻牌后剩余 31 张（36 − 2 − 3），单街命中率用 outs ÷ 31 粗估。47 是满员桌的。',
       },
     ],
     examples: [
@@ -309,7 +319,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['9h', '7h', '2c'],
+        board: ['9h', '7h', '6c'],
         street: 'flop',
         effectiveStack: 95,
         potSize: 5,
@@ -318,7 +328,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           amount: '2.5 ante',
           reasoning: [
             'AK 同花听牌：已见 4 张红心，outs = 9 − 4 = 5',
-            '双街约 28% + A/K 高张 Outs，隐含赔率极佳',
+            '双街约 30% + A/K 高张 Outs，隐含赔率极佳',
             '成同花是坚果（beats 葫芦），值得追逐',
           ],
         },
@@ -342,7 +352,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9d', '8d', '2h'],
+            board: ['9d', '8d', '6h'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -359,20 +369,20 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           id: 'l4sd-nuts-equity-p2',
           difficulty: 'intermediate',
           scenario: {
-            heroHand: ['8s', '9s'],
+            heroHand: ['Td', 'Jd'],
             heroPosition: 'BB',
             previousActions: [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['6d', '7c', '2h'],
+            board: ['8d', '9c', '6h'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌' },
           },
           options: [
-            { action: 'Check-Fold', isCorrect: false, explanation: '89 在 6-7-2 面有顺子听牌（5/T 共 8 outs），fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
+            { action: 'Check-Fold', isCorrect: false, explanation: 'TJ 在 8-9-6 面有顺子听牌（7/Q 共 8 outs），fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
             { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: '顺子听牌 8 outs 双街约 44%，x/r 半诈唬保护并施压。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: '听牌 All-in 过度，x/r 建立优势即可。', evImpact: '-1.2 ante', evLoss: 1.2 },
           ],
@@ -388,15 +398,15 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9h', '6d', '3s'],
+            board: ['9h', '6d', 'Js'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌' },
           },
           options: [
-            { action: 'Check', isCorrect: false, explanation: '78 有顺子听牌（5/T 共 8 outs）+ 后门同花，应主动下注半诈唬。', evImpact: '-0.8 ante', evLoss: 0.8 },
-            { action: 'Bet 2.5 ante（半池）', isCorrect: true, explanation: '顺子听牌 8 outs + 后门同花，半池半诈唬，短牌成牌价值高。', evImpact: '+1.2 ante', evLoss: 0 },
+            { action: 'Check', isCorrect: false, explanation: '78 有顺子听牌（听 T，4 outs）+ 同花听牌（6 outs = 9−3 已见），应主动下注半诈唬。', evImpact: '-0.8 ante', evLoss: 0.8 },
+            { action: 'Bet 2.5 ante（半池）', isCorrect: true, explanation: '顺子 + 同花多重听牌（约 9 个有效 outs），半池半诈唬，短牌成牌价值高。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: '听牌 All-in 过度，半池建立优势即可。', evImpact: '-1.2 ante', evLoss: 1.2 },
           ],
           relatedLessonId: 'l4sd-nuts-equity',
@@ -411,6 +421,11 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
     title: '阻断牌诈唬',
     subtitle: '短牌强牌密集环境下的阻断牌价值与诈唬选择',
     duration: '8 min',
+    objectives: [
+      '说明短牌阻断牌价值被放大的原因（同花 beats 葫芦、对子密度高，阻断对手同花/对子组合影响巨大）',
+      '判断三张同花面持 A♠ 时对手坚果同花组合归零，并区分持/不持 A♠ 对诈唬与抓诈决策的加权差异',
+      '运用翻前 3-bet 的阻断选择（A6s 阻断 AA/AK、被 4Bet 概率下降），并判断阻断牌是「基础范围对了之后的锦上添花」',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -422,23 +437,23 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         type: 'key-point',
-        content: '短牌阻断牌铁律：持 A 高阻断坚果同花（对手 A♥X♥ 组合为 0）；持对子阻断对手对子。短牌同花/对子价值高，阻断它们对诈唬成功率影响巨大。',
+        content: '短牌阻断牌铁律：持 A♠ 阻断坚果同花（对手 A♠X♠ 组合为 0）；持对子阻断对手对子。短牌同花/对子价值高，阻断它们对诈唬成功率影响巨大。',
       },
       { type: 'heading', content: '阻断牌诈唬的运用' },
       {
         type: 'text',
         content:
-          '短牌阻断牌诈唬的运用：(1) 诈唬阻断——持 A♠ 时对手坚果同花 A♠X♠ 为 0，诈唬成功率上升；(2) 翻前 3Bet 选择——持 A 高阻断 AA/AK，被 4Bet 概率下降。短牌因同花/对子价值高，这些阻断效果被放大，诈唬选择要优先带阻断牌的牌。',
+          '短牌阻断牌诈唬的运用：(1) 诈唬阻断——持 A♠ 时对手坚果同花 A♠X♠ 为 0，诈唬成功率上升；(2) 翻前 3-bet 选择——持 A 高阻断 AA/AK，被 4Bet 概率下降。短牌因同花/对子价值高，这些阻断效果被放大，诈唬选择要优先带阻断牌的牌。',
       },
       {
         type: 'example',
         content:
-          '实例：短牌翻牌三张黑桃 K♠9♠4♠，你持 A♦A♣（无黑桃 A）。你不阻断任何同花，对手可能有 A♠X♠ 坚果同花或更小同花。你的 AA 抓诈唬价值下降，倾向弃牌。相反，若你持 A♠（无黑桃成牌），你阻断了坚果同花 A♠X♠ 全部组合，对手"最强牌"被证伪——你的诈唬或跟注成功率上升。',
+          '实例：短牌翻牌三张黑桃 K♠9♠6♠，你持 A♦A♣（无黑桃 A）。你不阻断任何同花，对手可能有 A♠X♠ 坚果同花或更小同花。你的 AA 抓诈唬价值下降，倾向弃牌。相反，若你持 A♠（无黑桃成牌），你阻断了坚果同花 A♠X♠ 全部组合，对手"最强牌"被证伪——你的诈唬或跟注成功率上升。',
       },
       {
         type: 'example',
         content:
-          '实例二（翻前阻断）：短牌你（BB）面对 BTN 开池，考虑 3Bet 诈唬。持 A♦5♦ 与 7♦6♦ 的区别：A5s 的 A 阻断对手的 AA 与 AK（顶级强牌变少，被 4Bet 概率下降），且被 4Bet 后 A5s 可干净弃牌；76s 不阻断任何强牌，被 4Bet 时更常撞上 QQ+。短牌中对子密度高，A 高阻断价值更明显。',
+          '实例二（翻前阻断）：短牌你（BB）面对 BTN 开池，考虑 3-bet 诈唬。持 A♦6♦ 与 7♦6♦ 的区别：A6s 的 A 阻断对手的 AA 与 AK（顶级强牌变少，被 4Bet 概率下降），且被 4Bet 后 A6s 可干净弃牌；76s 不阻断任何强牌，被 4Bet 时更常撞上 QQ+。短牌中对子密度高，A 高阻断价值更明显。',
       },
       {
         type: 'highlight',
@@ -476,15 +491,15 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         id: 'l4sd-blocker-bluff-q3',
-        question: '短牌翻前 3Bet 诈唬，为什么 A5s 优于 76s？',
+        question: '短牌翻前 3-bet 诈唬，为什么 A6s 优于 76s？',
         options: [
-          'A5s 阻断 AA/AK，被 4Bet 概率下降',
+          'A6s 阻断 AA/AK，被 4Bet 概率下降',
           '76s 阻断更多强牌',
-          'A5s 牌力更强',
+          'A6s 牌力更强',
           '没有区别',
         ],
         correctIndex: 0,
-        explanation: 'A5s 的 A 阻断对手 AA/AK，降低被 4Bet 频率；76s 不阻断强牌，撞上 QQ+ 概率更高。',
+        explanation: 'A6s 的 A 阻断对手 AA/AK，降低被 4Bet 频率；76s 不阻断强牌，撞上 QQ+ 概率更高。',
       },
       {
         id: 'l4sd-blocker-bluff-q4',
@@ -515,13 +530,13 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         id: 'l4sd-blocker-bluff-ex1',
         title: '短牌 A 高阻断同花的诈唬',
-        heroHand: ['As', '5d'],
+        heroHand: ['As', '6d'],
         heroPosition: 'BTN',
         previousActions: [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['Ks', '9s', '4h'],
+        board: ['Ks', '9s', '6h'],
         street: 'flop',
         effectiveStack: 95,
         potSize: 5,
@@ -554,15 +569,15 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Qd', '8d', '3s'],
+            board: ['Qd', '8d', '6s'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，两张方块' },
           },
           options: [
-            { action: 'Check', isCorrect: false, explanation: 'A6 有后门同花 + 高张，可半诈唬，check 太被动。', evImpact: '-0.8 ante', evLoss: 0.8 },
-            { action: 'Bet 1.7 ante（1/3 pot）', isCorrect: true, explanation: 'A6 高牌 + 后门同花，1/3 池半诈唬，短牌成牌价值高。', evImpact: '+1.0 ante', evLoss: 0 },
+            { action: 'Check', isCorrect: false, explanation: 'A6 有同花听牌（6 outs = 9−3 已见）+ 高张，可半诈唬，check 太被动。', evImpact: '-0.8 ante', evLoss: 0.8 },
+            { action: 'Bet 1.7 ante（1/3 pot）', isCorrect: true, explanation: 'A6 高牌 + 同花听牌（6 outs），1/3 池半诈唬，短牌成牌价值高。', evImpact: '+1.0 ante', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: 'A 高 All-in 过度，小注半诈唬即可。', evImpact: '-1.5 ante', evLoss: 1.5 },
           ],
           relatedLessonId: 'l4sd-blocker-bluff',
@@ -571,7 +586,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           id: 'l4sd-blocker-bluff-p2',
           difficulty: 'intermediate',
           scenario: {
-            heroHand: ['As', '5s'],
+            heroHand: ['As', '6s'],
             heroPosition: 'BB',
             previousActions: [
               { player: 'BTN', action: 'raise 2 ante' },
@@ -579,12 +594,12 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
             street: 'preflop',
             potSize: 3,
             effectiveStack: 100,
-            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，BTN 面对 3-Bet 弃牌率高' },
+            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，BTN 面对 3-bet 弃牌率高' },
           },
           options: [
-            { action: 'Call', isCorrect: false, explanation: 'A5s 是标准 3Bet 诈唬牌，跟注浪费阻断优势。', evImpact: '+0.3 ante', evLoss: 0.3 },
-            { action: '3-Bet', isCorrect: true, explanation: 'A5s 阻断 AA/AK，BTN 弃牌率高，3Bet 诈唬标准。', evImpact: '+1.5 ante', evLoss: 0 },
-            { action: 'Fold', isCorrect: false, explanation: 'A5s 有阻断价值 + 弃牌率支撑，fold 太紧。', evImpact: '-0.8 ante', evLoss: 0.8 },
+            { action: 'Call', isCorrect: false, explanation: 'A6s 是标准 3-bet 诈唬牌，跟注浪费阻断优势。', evImpact: '+0.3 ante', evLoss: 0.3 },
+            { action: '3-bet', isCorrect: true, explanation: 'A6s 阻断 AA/AK，BTN 弃牌率高，3-bet 诈唬标准。', evImpact: '+1.5 ante', evLoss: 0 },
+            { action: 'Fold', isCorrect: false, explanation: 'A6s 有阻断价值 + 弃牌率支撑，fold 太紧。', evImpact: '-0.8 ante', evLoss: 0.8 },
           ],
           relatedLessonId: 'l4sd-blocker-bluff',
         },
@@ -598,7 +613,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['9h', '7h', '2c'],
+            board: ['9h', '7h', '6c'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -606,7 +621,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           },
           options: [
             { action: 'Check-Call', isCorrect: false, explanation: 'KQ 同花听牌 + 高张，x/r 半诈唬更优。', evImpact: '+0.5 ante', evLoss: 0.5 },
-            { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: 'K♥ 阻断对手 K♥X♥ 同花，同花听牌 6 outs（9−3已见），半诈唬保护。', evImpact: '+1.2 ante', evLoss: 0 },
+            { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: 'K♥ 阻断对手 K♥X♥ 同花，同花听牌 5 outs（9−4 已见），半诈唬保护。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'Fold', isCorrect: false, explanation: 'KQ 同花听牌价值高，fold 太弱。', evImpact: '-1.5 ante', evLoss: 1.5 },
           ],
           relatedLessonId: 'l4sd-blocker-bluff',
@@ -622,6 +637,11 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
     title: '短牌 GTO 基础',
     subtitle: '短牌博弈树差异、频率基准与 GTO 策略的适用边界',
     duration: '9 min',
+    objectives: [
+      '说明短牌 GTO 与标准德州的差异来源（对子密度高、同花价值大、听牌常见 → 均衡下注频率更高、极化更明显、尺度可更大）',
+      '计算价值:诈唬比（满池 f = b/(1+2b) = 1/3 即 2:1、半池 25% 即 3:1）与 MDF（1/(1+b)，半池防 67%、满池防 50%），并说出短牌的调整点（价值下注可更大、诈唬密度可略高）',
+      '判断「短牌 GTO 就是打得紧」是误读，并运用最小必要偏离纪律（幅度以对手修正后你仍不亏为限）',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -765,7 +785,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           options: [
             { action: 'Fold', isCorrect: false, explanation: '99 短牌价值高，fold 太紧。', evImpact: '-1.0 ante', evLoss: 1 },
             { action: 'Call', isCorrect: true, explanation: '99 小对子短牌 set mining 价值上升，均衡防守。', evImpact: '+1.0 ante', evLoss: 0 },
-            { action: '3-Bet', isCorrect: false, explanation: '99 偏投机，跟注 set mining 更优，3-Bet 可偶尔混合。', evImpact: '+0.3 ante', evLoss: 0.3 },
+            { action: '3-bet', isCorrect: false, explanation: '99 偏投机，跟注 set mining 更优，3-bet 可偶尔混合。', evImpact: '+0.3 ante', evLoss: 0.3 },
           ],
           relatedLessonId: 'l4sd-gto-fundamentals',
         },
@@ -780,11 +800,11 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
               { player: 'BB', action: '3-bet to 6 ante' },
               { player: 'BTN', action: 'call' },
             ],
-            board: ['Kd', '8c', '3h'],
+            board: ['Kd', '8c', '6h'],
             street: 'flop',
             potSize: 13,
             effectiveStack: 90,
-            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，3-Bet 底池' },
+            gameContext: { gameType: 'cash', tableDescription: '短牌现金桌，3-bet 底池' },
           },
           options: [
             { action: 'Bet 4.3 ante（1/3 pot）', isCorrect: true, explanation: 'AK 顶对顶踢脚，短牌成牌价值高，IP 小注薄价值。', evImpact: '+2.0 ante', evLoss: 0 },
@@ -803,7 +823,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Jd', '7c', '2h'],
+            board: ['Jd', '7c', '6h'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -826,6 +846,11 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
     title: 'Solver 结果解读',
     subtitle: '阅读短牌 Solver 输出并提炼为可执行的实战策略',
     duration: '9 min',
+    objectives: [
+      '列举短牌 Solver 输出的三个特征（下注范围更极化、尺度偏大、半诈唬频率高）与各自的成因',
+      '运用解读三问（为何这个尺度？这手牌为何进下注范围？转牌后频率为何变？）与五步法提炼可复用原则',
+      '判断转牌完成对手听牌时 Solver 下调开火频率的逻辑（牌面易手、对手能击败你的组合变多）',
+    ],
     variant: 'short-deck',
     variantContext: { stackDepth: 100 },
     content: [
@@ -848,7 +873,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：短牌 Solver 在翻牌 9♦8♣3♥（湿润面）输出：超对（KK/QQ）用 2/3 池以上下注保护，A 高与中小对子过牌，顺子/同花听牌混合半诈唬下注。理解后提炼为：湿润面强成牌大注保护、听牌半诈唬、中等牌过牌。这就是把 Solver 转化为可执行策略。',
+          '实例：短牌 Solver 在翻牌 9♦8♣6♥（湿润面）输出：超对（KK/QQ）用 2/3 池以上下注保护，A 高与中小对子过牌，顺子/同花听牌混合半诈唬下注。理解后提炼为：湿润面强成牌大注保护、听牌半诈唬、中等牌过牌。这就是把 Solver 转化为可执行策略。',
       },
       {
         type: 'example',
@@ -891,7 +916,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
       },
       {
         id: 'l4sd-solver-readout-q3',
-        question: '短牌湿润面（9♦8♣3♥）Solver 对超对的输出是：',
+        question: '短牌湿润面（9♦8♣6♥）Solver 对超对的输出是：',
         options: [
           '1/3 池小注',
           '2/3 池以上大注保护',
@@ -936,7 +961,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           { player: 'BTN', action: 'raise 2 ante' },
           { player: 'BB', action: 'call' },
         ],
-        board: ['9h', '8s', '3d'],
+        board: ['9h', '8s', '6d'],
         street: 'flop',
         effectiveStack: 95,
         potSize: 5,
@@ -945,7 +970,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           amount: '3.3 ante（2/3 pot）',
           reasoning: [
             '短牌 Solver 在湿润面对超对输出大注保护',
-            'KK 在 9-8-3 面易被顺子/两对反超，2/3 池让听牌付费',
+            'KK 在 9-8-6 面易被顺子/两对反超，2/3 池让听牌付费',
             '短牌成牌价值高，湿润面大尺度是 Solver 共识',
           ],
         },
@@ -969,7 +994,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Qh', '8c', '3s'],
+            board: ['Qh', '8c', '6s'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
@@ -986,21 +1011,21 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
           id: 'l4sd-solver-readout-p2',
           difficulty: 'intermediate',
           scenario: {
-            heroHand: ['7d', '8d'],
+            heroHand: ['Td', 'Jd'],
             heroPosition: 'BB',
             previousActions: [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['6h', '9c', '2s'],
+            board: ['6h', '9c', 'Qs'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,
             gameContext: { gameType: 'cash', tableDescription: '短牌现金桌' },
           },
           options: [
-            { action: 'Check-Fold', isCorrect: false, explanation: '78 在 6-9-2 面有顺子听牌，Solver 会半诈唬，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
-            { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: '78 有顺子听牌，Solver 倾向 x/r 半诈唬（成牌价值高）。', evImpact: '+1.2 ante', evLoss: 0 },
+            { action: 'Check-Fold', isCorrect: false, explanation: 'TJ 在 6-9-Q 面有顺子听牌（8/K 共 8 outs），Solver 会半诈唬，fold 太弱。', evImpact: '-1.0 ante', evLoss: 1 },
+            { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: 'TJ 有顺子听牌，Solver 倾向 x/r 半诈唬（成牌价值高）。', evImpact: '+1.2 ante', evLoss: 0 },
             { action: 'All-in', isCorrect: false, explanation: '听牌 All-in 过度，x/r 建立优势即可。', evImpact: '-1.2 ante', evLoss: 1.2 },
           ],
           relatedLessonId: 'l4sd-solver-readout',

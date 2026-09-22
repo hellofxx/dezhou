@@ -11,8 +11,9 @@ import { useProgressStore } from '@/features/progress/store';
 import { LEVELS } from './data/courses';
 import { findLessonById } from './utils/courseProgress';
 
-// 成就检查数据源：progress store 的 checkCondition 经注册表查询
+// 成就检查数据源：progress store 的 checkCondition 经注册表查询（T7/B4 idempotency）
 registerAchievementSource({
+  id: 'strategy-academy',
   isLevelLessonsCompleted: (level) => useAcademyStore.getState().isLevelLessonsCompleted(level),
   getCertifications: () => useAcademyStore.getState().certifications,
   areAllLevelsCertified: () => useAcademyStore.getState().areAllLevelsCertified(),

@@ -2,23 +2,23 @@
   "drill": {
     "d-l2-3bet-q1": {
       "scenario": "NL100, 6-max, 100BB effective",
-      "question": "MP open(2.5BB), you hold AsQs in CO — how should you 3-Bet?",
+      "question": "MP open(2.5BB), you hold AsQs in CO — how should you 3-bet?",
       "option": [
         "Fold",
         "Call",
-        "3-Bet to 7.5-8BB"
+        "3-bet to 7.5-8BB"
       ],
-      "explanation": "AsQs vs an MP open is a strong 3-Bet candidate. It blocks AA/KK/AK — the standard size is about 3x the open+ (7.5-8BB)."
+      "explanation": "AsQs vs an MP open is a strong 3-bet candidate. It blocks AA/KK/AK — the standard size is about 3x the open+ (7.5-8BB)."
     },
     "d-l2-3bet-q2": {
       "scenario": "NL100, 6-max, 100BB effective",
-      "question": "MP open(2.5BB), CO 3-Bets to 8BB, hero in BB holds AJs — call or fold?",
+      "question": "MP open(2.5BB), CO 3-bets to 8BB, hero in BB holds AJs — call or fold?",
       "option": [
         "Fold",
         "Call",
         "4-Bet bluff"
       ],
-      "explanation": "AJs in BB vs a CO 3-Bet has a positional advantage (IP postflop) — calling is standard. Enough implied odds and AJs plays well postflop."
+      "explanation": "AJs in BB vs a CO 3-bet has a positional advantage (IP postflop) — calling is standard. Enough implied odds and AJs plays well postflop."
     },
     "d-l2-3bet-q3": {
       "scenario": "NL100, 6-max, 100BB effective",
@@ -26,9 +26,9 @@
       "option": [
         "Fold",
         "Call",
-        "3-Bet to 8BB"
+        "3-bet to 8BB"
       ],
-      "explanation": "AK on the BTN vs a CO open is a standard 3-Bet. With positional advantage, AK is a premium value 3-Bet. The IP 3-Bet size is 7.5-8BB (about 3-3.2x)."
+      "explanation": "AK on the BTN vs a CO open is a standard 3-bet. With positional advantage, AK is a premium value 3-bet. The IP 3-bet size is 7.5-8BB (about 3-3.2x)."
     },
     "d-l2-3bet-q4": {
       "scenario": "NL100, 6-max, 100BB effective",
@@ -36,9 +36,9 @@
       "option": [
         "Fold",
         "Call",
-        "3-Bet bluff to 10BB"
+        "3-bet bluff to 10BB"
       ],
-      "explanation": "76s in SB vs BTN is a classic 3-Bet bluff candidate. It has a positional disadvantage but good postflop playability — the 3-Bet captures fold equity. The OOP 3-Bet size is 9-10BB (about 3.5-4x)."
+      "explanation": "76s in SB vs BTN is a classic 3-bet bluff candidate. It has a positional disadvantage but good postflop playability — the 3-bet captures fold equity. The OOP 3-bet size is 9-10BB (about 3.5-4x)."
     },
     "d-l2-3bet-q5": {
       "scenario": "NL100, 6-max, 100BB effective",
@@ -46,7 +46,7 @@
       "option": [
         "Fold",
         "Call",
-        "3-Bet"
+        "3-bet"
       ],
       "explanation": "Against the strong UTG open range, AJ in CO is too weak. The UTG range is strong (TT+, AQs+, AK) — AJ is easily dominated."
     },
@@ -56,9 +56,9 @@
       "option": [
         "Fold",
         "Call",
-        "3-Bet to 11BB"
+        "3-bet to 11BB"
       ],
-      "explanation": "AJs on the BTN vs MP has positional advantage — calling is the best choice. A 3-Bet is also possible, but calling better exploits position postflop."
+      "explanation": "AJs on the BTN vs MP has positional advantage — calling is the best choice. A 3-bet is also possible, but calling better exploits position postflop."
     },
     "d-l2-3bet-q7": {
       "scenario": "NL100, 6-max, 100BB effective",
@@ -66,9 +66,9 @@
       "option": [
         "Fold",
         "Call",
-        "3-Bet to 8BB"
+        "3-bet to 8BB"
       ],
-      "explanation": "QQ is a premium hand — 3-Bet for value against a UTG open. Don't slowplay QQ and let too many hands see the flop. The IP 3-Bet size is 7.5-8BB (about 3-3.2x)."
+      "explanation": "QQ is a premium hand — 3-bet for value against a UTG open. Don't slowplay QQ and let too many hands see the flop. The IP 3-bet size is 7.5-8BB (about 3-3.2x)."
     },
     "d-l2-3bet-q8": {
       "scenario": "NL100, 6-max, 100BB effective",
@@ -76,7 +76,7 @@
       "option": [
         "Fold",
         "Call",
-        "3-Bet bluff"
+        "3-bet bluff"
       ],
       "explanation": "54s on the BTN vs CO has a great position — calling uses position and implied odds correctly. Suited connectors play strongly postflop."
     },
@@ -174,32 +174,32 @@
       "Counter-intuitive: the bigger your raise, the more opponents fold — but your success rate isn't necessarily higher. A larger raise makes calling more expensive, but it also risks more to win a limited pot. 2.5BB is the optimized balance point."
     ],
     "l2-3bet-basics": [
-      "What Is a 3-Bet?",
-      "A 3-Bet is a re-raise against an open raise preflop. The \"3\" comes from the blinds counting as the first bet, the open raise as the second, and the re-raise as the third.",
-      "The Purpose of 3-Betting",
+      "What Is a 3-bet?",
+      "A 3-bet is a re-raise against an open raise preflop. The \"3\" comes from the blinds counting as the first bet, the open raise as the second, and the re-raise as the third.",
+      "The Purpose of 3-betting",
       "1. Value: build a big pot with strong hands (AA/KK/QQ/AKs)\n2. Fold equity: force folds and win the pot directly\n3. Initiative: take control of postflop betting (initiative)\n4. Isolation: play heads-up against a specific opponent, avoiding multiway pots",
-      "Beginners should start with a \"linear 3-Bet range\" (3-Betting only strong hands), then add a \"polarized 3-Bet range\" (strong hands + some weak hands as bluffs) once comfortable.",
-      "3-Bet frequency is a key indicator of aggression. Being too passive (rarely 3-Betting) loses value; being too aggressive lets opponents exploit you.",
-      "3Bet range combinatorics:\nOpponent 3Bet range = {AA, KK, QQ, AKs, A5s}\nAA = 6, KK = 6, QQ = 6, AKs = 4, A5s = 4\nTotal = 26 combinations\n\nBlocker effect: when you hold A♠,\nAA drops from 6 to 3, AKs from 4 to 3\nThe 3Bet range drops from 26 to 22",
-      "Theory reference: 3Bet range construction and combinatorics are detailed in Theory Academy T4 Chapter 2 \"Combinatorics and Blockers\", with a full derivation of Blocker applications in preflop 3Bet/4Bet spots.",
-      "Counter-intuitive: when you 3-Bet holding A5s, AA drops from 6 to 3 combinations (blocked by your A), but the K count is completely unaffected. That means holding A5s halves the probability your opponent has AA — the mathematical basis for 3-Bet bluffing with A5s."
+      "Beginners should start with a \"linear 3-bet range\" (3-betting only strong hands), then add a \"polarized 3-bet range\" (strong hands + some weak hands as bluffs) once comfortable.",
+      "3-bet frequency is a key indicator of aggression. Being too passive (rarely 3-betting) loses value; being too aggressive lets opponents exploit you.",
+      "3-bet range combinatorics:\nOpponent 3-bet range = {AA, KK, QQ, AKs, A5s}\nAA = 6, KK = 6, QQ = 6, AKs = 4, A5s = 4\nTotal = 26 combinations\n\nBlocker effect: when you hold A♠,\nAA drops from 6 to 3, AKs from 4 to 3\nThe 3-bet range drops from 26 to 22",
+      "Theory reference: 3-bet range construction and combinatorics are detailed in Theory Academy T4 Chapter 2 \"Combinatorics and Blockers\", with a full derivation of Blocker applications in preflop 3-bet/4Bet spots.",
+      "Counter-intuitive: when you 3-bet holding A5s, AA drops from 6 to 3 combinations (blocked by your A), but the K count is completely unaffected. That means holding A5s halves the probability your opponent has AA — the mathematical basis for 3-bet bluffing with A5s."
     ],
     "l2-4bet-strategy": [
       "What Is a 4-Bet?",
-      "A 4-Bet is the re-raise against a 3-Bet. Preflop betting sequence: blinds (1) → Open (2) → 3-Bet (3) → 4-Bet (4). The 4-Bet is the most powerful weapon preflop, representing extremely strong hands or carefully designed bluffs.",
+      "A 4-Bet is the re-raise against a 3-bet. Preflop betting sequence: blinds (1) → Open (2) → 3-bet (3) → 4-Bet (4). The 4-Bet is the most powerful weapon preflop, representing extremely strong hands or carefully designed bluffs.",
       "Two types of 4-Bets: value 4-Bet (AA/KK/QQ/AKs — always 4-bet) and 4-Bet Bluff (A5s/A4s/A3s — A blocker + postflop playability).",
       "4-Bet Size",
-      "Standard 4-Bet size: 2.2-2.5x the 3-Bet. Example: Open 2.5BB → 3-Bet 7.5BB → 4-Bet 16-19BB. IP can go slightly smaller (2.2x), OOP slightly bigger (2.5x).",
+      "Standard 4-Bet size: 2.2-2.5x the 3-bet. Example: Open 2.5BB → 3-bet 7.5BB → 4-Bet 16-19BB. IP can go slightly smaller (2.2x), OOP slightly bigger (2.5x).",
       "Decision framework facing a 4-Bet: 1) 5-Bet All-in: AA/KK (always shove) 2) Call: QQ/AKs (strong but not unbeatable) 3) Fold: fold medium hands against a tight 4-Bet range.",
       "Think ahead before 4-Betting: if opponent 5-Bet All-ins, what do I do? 4-Betting without a plan is the start of disaster. Use a linear 4-Bet range (strong hands only) at low stakes, add bluffs at higher stakes.",
-      "4Bet break-even analysis:\nRequired fold rate for a 4Bet bluff = 4Bet amount ÷ (pot + 4Bet amount)\nExample: you 3Bet to 7.5BB, opponent 4Bets to 18BB\nRequired fold rate = 18 ÷ (7.5+18) ≈ 70.6%\n\nMeaning: 70.6% is the fold rate your opponent needs for a 4Bet bluff to break even — fold more often than that and their bluff turns from zero EV into positive EV. So your own fold rate must stay below 70.6%, i.e. continue (3Bet or call) at least about 29.4% of the time.",
+      "4Bet break-even analysis:\nBreak-even fold rate for a 4Bet bluff = 4Bet increment ÷ (pot before the 4Bet + 4Bet increment)\nExample: blinds 1.5 + open 2.5 + your 3-bet 7.5 = pot of 11.5BB before the 4Bet; the opponent's opening 2.5 is already sunk, so raising to 18BB risks an increment of 18 − 2.5 = 15.5BB\nBreak-even fold rate = 15.5 ÷ (11.5 + 15.5) = 15.5/27 ≈ 57.4%\n\nMeaning: 57.4% is the fold rate your opponent needs for a 4Bet bluff to break even — fold more often than that and their bluff turns from zero EV into positive EV. So your own fold rate must stay below 57.4%, i.e. continue (3-bet or call) at least about 42.6% of the time.",
       "Theory reference: range construction and game-theory principles in 4Bet spots are in Theory Academy T4 Chapter 1 \"Range Thinking: From Single Hands to Probability Distributions\". Preflop range filtering is closely tied to responses to a 4-Bet.",
-      "Counter-intuitive: a 4Bet Bluff needs an extremely high opponent fold rate (about 70%) to break even. That means it's not a strategy you can use frequently — it only works in specific spots (when opponents fold too much)."
+      "Counter-intuitive: a 4Bet Bluff needs a fairly high opponent fold rate (about 57%) to break even. That means it's not a strategy you can use frequently — it only works in specific spots (when opponents fold too much)."
     ],
     "l2-squeeze": [
       "What Is a Squeeze?",
-      "A Squeeze is a 3-Bet against 1 Open + 1 or more Calls. \"Squeeze\" vividly describes the middle player squeezed between the Opener and the Caller(s).",
-      "The value of Squeezing: 1) lots of dead money (the Open + Call chips are already in the pot) 2) high fold rate (Callers have weak ranges and often fold to 3-Bets) 3) isolating the Opener (heads-up in position).",
+      "A Squeeze is a 3-bet against 1 Open + 1 or more Calls. \"Squeeze\" vividly describes the middle player squeezed between the Opener and the Caller(s).",
+      "The value of Squeezing: 1) lots of dead money (the Open + Call chips are already in the pot) 2) high fold rate (Callers have weak ranges and often fold to 3-bets) 3) isolating the Opener (heads-up in position).",
       "Squeeze Range and Size",
       "Squeeze range (polarized): value hands (AA/KK/QQ/AKs/AQs) + Bluffs (A5s/A4s/A3s etc. Ax blockers). Size: 4-5x the Open (e.g. Open 2.5BB → Squeeze 10-12BB), plus 1x for each additional Caller.",
       "Defending against a Squeeze: 1) 4-Bet: AA/KK 2) Call: strong but not premium (QQ/AKs) 3) Fold: weak call range (small pairs/suited connectors fold to a big Squeeze).",
@@ -209,8 +209,8 @@
       "The Uniqueness of the BB",
       "The big blind (BB) has already posted 1BB, so facing an Open it only needs to top up the difference to call. Example: Open 2.5BB → BB needs only 1.5BB to call. This gives the BB excellent pot odds — defend with a wider range.",
       "BB defense width in relative terms: widest against a BTN Open, then CO, tighter vs HJ, tightest vs UTG. The earlier the opponent opens, the tighter your defense should be; the exact composition is defined by the Range Trainer module and the GTO strategy chart.",
-      "Call vs 3-Bet Choice",
-      "Call: hands with postflop potential but not suited to 3-Betting (suited connectors/small pairs/wide suited hands). 3-Bet: polarized range — strong value (AA/KK/QQ/AKs) + Bluffs (A5s/A4s etc. Ax blockers).",
+      "Call vs 3-bet Choice",
+      "Call: hands with postflop potential but not suited to 3-betting (suited connectors/small pairs/wide suited hands). 3-bet: polarized range — strong value (AA/KK/QQ/AKs) + Bluffs (A5s/A4s etc. Ax blockers).",
       "Blind Defense Frequency: if you defend < 40%, opponents can profitably steal any time. If > 60%, over-defense gets punished by value bets. Adjust based on the opponent's Open range.",
       "Defend tight against tight opponents (NIT/UTG Open), defend wide against loose opponents (LAG/BTN Open). The wider the opponent's Open range, the wider your defense should be."
     ],
@@ -221,9 +221,9 @@
       "SB Strategy: Open or Fold",
       "Modern strategy uses a pure raise-or-fold approach from the SB (no limping):\n• Open raise size: 2.5-3BB (bigger, since there's no positional advantage)\n• Range: a very wide tier, about 35% of hands\n• Includes all strong hands + many medium hands + some suited weak hands (as bluffs)",
       "BB Defense Strategy",
-      "The BB should defend a wide range against the SB's Open:\n• 3-Bet: only a small slice of the defense range (value hands + light 3-Bet bluffs)\n• Call: the bulk of the defense range (many medium-strength hands)\n• Fold: only the weakest hands",
+      "The BB should defend a wide range against the SB's Open:\n• 3-bet: only a small slice of the defense range (value hands + light 3-bet bluffs)\n• Call: the bulk of the defense range (many medium-strength hands)\n• Fold: only the weakest hands",
       "Positional disadvantage (the SB acts first postflop) is the key factor in the blind war. The SB should choose hands it can \"play strongly\", not \"marginal hands\".",
-      "If the opponent in the BB folds to 3-Bets a lot, tighten the SB open range slightly, but keep enough strong hands for 4-Bet bluffs."
+      "If the opponent in the BB folds to 3-bets a lot, tighten the SB open range slightly, but keep enough strong hands for 4-Bet bluffs."
     ],
     "l2-short-stack": [
       "What Is Short-Stack Strategy?",
@@ -232,8 +232,8 @@
       "Playing 20BB: Push/Fold",
       "When the stack is ≤ 20BB, most situations offer only two choices:\n• All-In (Push): the hand is strong enough\n• Fold: the hand isn't strong enough\n\nPush-range considerations:\n1. Position (wider from late position)\n2. Remaining stack (the difference between 15BB and 20BB is big)\n3. How many players are left to act",
       "Playing 30-50BB: Adjust the Open Size",
-      "At 30-50BB:\n• Reduce the Open raise size to 2-2.2BB\n• 3-Bets move toward a \"raise/shove\" mode\n• Avoid calling with small suited connectors (not enough implied odds)\n• Increase the share of big pairs and big cards",
-      "The most common short-stack mistake is using 100BB thinking. For example, calling a 3-Bet with 98s at 35BB is a big error — the set-mining realizability is too low.",
+      "At 30-50BB:\n• Reduce the Open raise size to 2-2.2BB\n• 3-bets move toward a \"raise/shove\" mode\n• Avoid calling with small suited connectors (not enough implied odds)\n• Increase the share of big pairs and big cards",
+      "The most common short-stack mistake is using 100BB thinking. For example, calling a 3-bet with 98s at 35BB is a big error — the set-mining realizability is too low.",
       "In tournaments your stack constantly changes; switching strategy across stack depths is an essential skill."
     ]
   },
@@ -289,7 +289,7 @@
       "explanation": "2.5BB balances risk and reward: big enough to fold weak hands, small enough not to risk too much."
     },
     "l2-3bet-q1": {
-      "question": "What does the \"3\" in 3-Bet represent?",
+      "question": "What does the \"3\" in 3-bet represent?",
       "options": [
         "3 raises",
         "The 3rd betting action",
@@ -299,44 +299,44 @@
       "explanation": "The \"3\" means it's the 3rd preflop betting action: blinds(1) → open(2) → re-raise(3)."
     },
     "l2-3bet-q2": {
-      "question": "What type of 3-Bet range should beginners use?",
+      "question": "What type of 3-bet range should beginners use?",
       "options": [
         "Polarized",
         "Linear",
         "Random",
         "AA only"
       ],
-      "explanation": "Beginners should start with a linear range (3-Betting only strong hands), then learn the polarized range."
+      "explanation": "Beginners should start with a linear range (3-betting only strong hands), then learn the polarized range."
     },
     "l2-3bet-q3": {
-      "question": "Which is NOT a purpose of 3-Betting?",
+      "question": "Which is NOT a purpose of 3-betting?",
       "options": [
         "Gain value",
         "Force folds",
         "Save chips",
         "Take initiative"
       ],
-      "explanation": "3-Betting is for value, fold equity, initiative, and isolation. Saving chips is not a purpose."
+      "explanation": "3-betting is for value, fold equity, initiative, and isolation. Saving chips is not a purpose."
     },
     "l2-3bet-q4": {
-      "question": "Against a UTG open, which hand is best to 3-Bet?",
+      "question": "Against a UTG open, which hand is best to 3-bet?",
       "options": [
         "76s",
         "KJs",
         "AA",
         "A5s"
       ],
-      "explanation": "AA is the strongest starting hand — 3-Bet for value against any open."
+      "explanation": "AA is the strongest starting hand — 3-bet for value against any open."
     },
     "l2-3bet-q5": {
-      "question": "How big is a standard 3-Bet relative to the original raise?",
+      "question": "How big is a standard 3-bet relative to the original raise?",
       "options": [
         "1.5x",
         "2x",
         "3x",
         "5x"
       ],
-      "explanation": "The standard 3-Bet is about 3x the original raise — e.g. 3-Bet to 7.5BB against a 2.5BB open."
+      "explanation": "The standard 3-bet is about 3x the original raise — e.g. 3-bet to 7.5BB against a 2.5BB open."
     },
     "l2-4bet-q1": {
       "question": "Which hand is best as a 4-Bet Bluff?",
@@ -349,14 +349,14 @@
       "explanation": "A5s has an A blocker (reducing the odds of AA/AK) plus postflop playability (flush/straight potential) — the classic 4-Bet Bluff hand."
     },
     "l2-4bet-q2": {
-      "question": "How big is a standard 4-Bet relative to the 3-Bet?",
+      "question": "How big is a standard 4-Bet relative to the 3-bet?",
       "options": [
         "1.5-2x",
         "2.2-2.5x",
         "3-3.5x",
         "4-5x"
       ],
-      "explanation": "The standard 4-Bet is 2.2-2.5x the 3-Bet — e.g. 3-Bet 7.5BB → 4-Bet 16-19BB."
+      "explanation": "The standard 4-Bet is 2.2-2.5x the 3-bet — e.g. 3-bet 7.5BB → 4-Bet 16-19BB."
     },
     "l2-4bet-q3": {
       "question": "Facing a TAG's 4-Bet with JJ, what should you do?",
@@ -391,12 +391,12 @@
     "l2-squeeze-q1": {
       "question": "What is a Squeeze Play?",
       "options": [
-        "A 3-Bet against an Open",
-        "A 3-Bet against 1 Open + 1+ Call",
+        "A 3-bet against an Open",
+        "A 3-bet against 1 Open + 1+ Call",
         "A 5-Bet against a 4-Bet",
         "A postflop Check-Raise"
       ],
-      "explanation": "A Squeeze specifically means 3-Betting against 1 Open + 1 or more Calls, profiting from dead money and fold equity."
+      "explanation": "A Squeeze specifically means 3-betting against 1 Open + 1 or more Calls, profiting from dead money and fold equity."
     },
     "l2-squeeze-q2": {
       "question": "After an Open 2.5BB + 1 Call, what's the standard Squeeze size?",
@@ -469,14 +469,14 @@
       "explanation": "UTG opens only the very strongest slice of hands, so the BB should defend its tightest range here, mostly with strong hands."
     },
     "l2-bb-q4": {
-      "question": "In the BB, which hand suits a 3-Bet bluff?",
+      "question": "In the BB, which hand suits a 3-bet bluff?",
       "options": [
         "98s",
         "A4s",
         "KJo",
         "76s"
       ],
-      "explanation": "A4s has an A blocker that lowers the odds of AA/AK — the classic 3-Bet bluff hand."
+      "explanation": "A4s has an A blocker that lowers the odds of AA/AK — the classic 3-bet bluff hand."
     },
     "l2-bb-q5": {
       "question": "Compared with other opening positions, how should the BB's defense vs a BTN Open rank?",
@@ -503,10 +503,10 @@
       "options": [
         "Very tight — strong hands only",
         "As tight as vs a BTN Open",
-        "Very wide (3-Bet + Call together)",
+        "Very wide (3-bet + Call together)",
         "Fold most hands"
       ],
-      "explanation": "The BB has 1BB invested and the SB's range is weak, so the defense should be very wide (3-Bet + Call combined)."
+      "explanation": "The BB has 1BB invested and the SB's range is weak, so the defense should be very wide (3-bet + Call combined)."
     },
     "l2-blind-q3": {
       "question": "What is the standard SB Open size?",
@@ -619,34 +619,34 @@
       "mistakeEvLoss": "-0.3 BB/100"
     },
     "l2-3bet-ex1": {
-      "title": "Value 3-Bet: QQ facing a CO Open",
-      "correctAction": "Raise (3-Bet)",
+      "title": "Value 3-bet: QQ facing a CO Open",
+      "correctAction": "Raise (3-bet)",
       "correctAmount": "7.5BB",
       "reasoning": [
-        "QQ is a premium hand — 3-Bet for value against a CO open",
-        "3-Bet to 7.5BB (3x the original raise) is the standard size",
+        "QQ is a premium hand — 3-bet for value against a CO open",
+        "3-bet to 7.5BB (3x the original raise) is the standard size",
         "Build a big pot to set up a postflop shove",
         "The CO opens a wide range — QQ is way ahead"
       ],
       "mistakeAction": "Call (flat)",
-      "mistakeReasoning": "Flatting QQ is too passive. This hand is strong enough for a value 3-Bet; flatting brings more players in and lowers QQ's win rate.",
+      "mistakeReasoning": "Flatting QQ is too passive. This hand is strong enough for a value 3-bet; flatting brings more players in and lowers QQ's win rate.",
       "mistakeEvLoss": "-0.8 BB/100"
     },
     "l2-3bet-ex2": {
-      "title": "When NOT to 3-Bet: medium-strength hands",
+      "title": "When NOT to 3-bet: medium-strength hands",
       "correctAction": "Call",
       "reasoning": [
-        "KJs against a UTG open should Call, not 3-Bet",
-        "The UTG opening range is strong (early position) — KJs isn't strong enough for a value 3-Bet",
-        "A 3-Bet gets called or 4-Bet by the strong UTG range, putting you in a tough spot",
+        "KJs against a UTG open should Call, not 3-bet",
+        "The UTG opening range is strong (early position) — KJs isn't strong enough for a value 3-bet",
+        "A 3-bet gets called or 4-Bet by the strong UTG range, putting you in a tough spot",
         "Calling keeps the pot manageable and uses position postflop"
       ],
-      "mistakeAction": "3-Bet to 7.5BB",
-      "mistakeReasoning": "3-Betting KJs against a strong UTG range is -EV. When called you're usually behind; when 4-Bet you can only fold.",
+      "mistakeAction": "3-bet to 7.5BB",
+      "mistakeReasoning": "3-betting KJs against a strong UTG range is -EV. When called you're usually behind; when 4-Bet you can only fold.",
       "mistakeEvLoss": "-1.2 BB/100"
     },
     "l2-4bet-ex1": {
-      "title": "Value 4-Bet defense: AKs facing a 3-Bet",
+      "title": "Value 4-Bet defense: AKs facing a 3-bet",
       "correctAction": "Call",
       "reasoning": [
         "AKs should Call a LAG's 4-Bet — the LAG range is wide (AA/KK/QQ/AKs + bluffs)",
@@ -659,22 +659,22 @@
       "mistakeEvLoss": "-2.5 BB/100"
     },
     "l2-4bet-ex2": {
-      "title": "Continuing bluff: C-Bet after 3-Betting",
+      "title": "Continuing bluff: C-Bet after 3-betting",
       "correctAction": "C-Bet the flop",
       "correctAmount": "6BB",
       "reasoning": [
         "Flop Kh8d3c, CO checks",
-        "Your preflop 3-Bet represents a strong range (AK/QQ/AKs) — C-Bet keeps the pressure on",
-        "TAG folds to postflop C-Bets after 3-Betting at a high rate (about 55%)",
+        "Your preflop 3-bet represents a strong range (AK/QQ/AKs) — C-Bet keeps the pressure on",
+        "TAG folds to postflop C-Bets after 3-betting at a high rate (about 55%)",
         "Even when called, A5 has backdoor flush + gutshot potential"
       ],
       "mistakeAction": "Check back",
-      "mistakeReasoning": "Not C-Betting after a preflop 3-Bet is too passive and forfeits fold equity. The TAG folds a lot — keep pressuring.",
+      "mistakeReasoning": "Not C-Betting after a preflop 3-bet is too passive and forfeits fold equity. The TAG folds a lot — keep pressuring.",
       "mistakeEvLoss": "-1.0 BB/100"
     },
     "l2-squeeze-ex1": {
       "title": "Value Squeeze: QQ facing an Open + Call",
-      "correctAction": "Squeeze 3-Bet",
+      "correctAction": "Squeeze 3-bet",
       "correctAmount": "12BB",
       "reasoning": [
         "QQ is a premium hand — Squeeze for value against an Open + Call",
@@ -688,7 +688,7 @@
     },
     "l2-squeeze-ex2": {
       "title": "Squeeze Bluff: A5s facing a wide Open + Call",
-      "correctAction": "Squeeze 3-Bet",
+      "correctAction": "Squeeze 3-bet",
       "correctAmount": "11BB",
       "reasoning": [
         "The CO opens wide + the SB calls weak — the Squeeze fold rate is high",
@@ -706,7 +706,7 @@
       "reasoning": [
         "K9s should Call and defend against a BTN Open",
         "The BTN is the widest opening position at a 6-max table — K9s has enough equity",
-        "Only 1.5BB to top up — excellent pot odds (about 2.5:1)",
+        "Only 1.5BB to top up — excellent pot odds (about 2.7:1, 4 ÷ 1.5)",
         "Suited high cards have postflop potential (top pair/flush)"
       ],
       "mistakeAction": "Fold",
@@ -714,17 +714,17 @@
       "mistakeEvLoss": "-0.5 BB/100"
     },
     "l2-bb-ex2": {
-      "title": "BB 3-Bet: A5s facing a CO Open",
-      "correctAction": "3-Bet",
+      "title": "BB 3-bet: A5s facing a CO Open",
+      "correctAction": "3-bet",
       "correctAmount": "9BB",
       "reasoning": [
-        "A5s suits a 3-Bet bluff against a CO Open",
+        "A5s suits a 3-bet bluff against a CO Open",
         "The A blocker lowers the odds of AA/AK",
-        "TAG folds to 3-Bets at a high rate (about 55%)",
+        "TAG folds to 3-bets at a high rate (about 55%)",
         "When called, there's flush/straight potential postflop"
       ],
       "mistakeAction": "Call",
-      "mistakeReasoning": "Calling A5s is OK but passive. A 3-Bet gains fold equity + initiative — more +EV.",
+      "mistakeReasoning": "Calling A5s is OK but passive. A 3-bet gains fold equity + initiative — more +EV.",
       "mistakeEvLoss": "-0.4 BB/100"
     }
   },
@@ -843,13 +843,13 @@
         },
         {
           "action": "Call",
-          "explanation": "AKs is strong enough for a value 3-Bet. Flatting is too passive and misses the chance to build a big pot.",
+          "explanation": "AKs is strong enough for a value 3-bet. Flatting is too passive and misses the chance to build a big pot.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "7.5BB",
-          "explanation": "AKs vs a CO open is the classic value 3-Bet. Build a big pot — huge advantage over the CO's wide range.",
+          "explanation": "AKs vs a CO open is the classic value 3-bet. Build a big pot — huge advantage over the CO's wide range.",
           "evImpact": "+2.0 BB/100"
         }
       ]
@@ -869,7 +869,7 @@
         {
           "action": "Raise",
           "amount": "7.5BB",
-          "explanation": "98s isn't strong enough to 3-Bet. Against a strong UTG range you'll get called or 4-Bet into a tough spot.",
+          "explanation": "98s isn't strong enough to 3-bet. Against a strong UTG range you'll get called or 4-Bet into a tough spot.",
           "evImpact": "-0.8 BB/100"
         }
       ]
@@ -883,13 +883,13 @@
         },
         {
           "action": "Call",
-          "explanation": "JJ is strong enough to 3-Bet. Flatting brings more players in and lowers JJ's win rate.",
+          "explanation": "JJ is strong enough to 3-bet. Flatting brings more players in and lowers JJ's win rate.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "7.5BB",
-          "explanation": "JJ vs an MP open is a standard value 3-Bet. JJ has strong equity against the MP range — build a big pot.",
+          "explanation": "JJ vs an MP open is a standard value 3-bet. JJ has strong equity against the MP range — build a big pot.",
           "evImpact": "+1.5 BB/100"
         }
       ]
@@ -903,13 +903,13 @@
         },
         {
           "action": "Call",
-          "explanation": "AKs is strong enough for a value 3-Bet. Flatting is too passive and misses building a big pot.",
+          "explanation": "AKs is strong enough for a value 3-bet. Flatting is too passive and misses building a big pot.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "7.5BB",
-          "explanation": "AKs vs a UTG open is the classic value 3-Bet. Build a big pot — huge advantage over the UTG range.",
+          "explanation": "AKs vs a UTG open is the classic value 3-bet. Build a big pot — huge advantage over the UTG range.",
           "evImpact": "+2.0 BB/100"
         }
       ]
@@ -923,13 +923,13 @@
         },
         {
           "action": "Call",
-          "explanation": "QJs in the SB should 3-Bet, using fold equity and hand protection.",
+          "explanation": "QJs in the SB should 3-bet, using fold equity and hand protection.",
           "evImpact": "+0.3 BB/100"
         },
         {
           "action": "Raise",
           "amount": "9BB",
-          "explanation": "QJs in SB vs BTN is a standard 3-Bet. Though OOP, QJs is strong enough; size about 3.5-4x (9-10BB) compensates for position.",
+          "explanation": "QJs in SB vs BTN is a standard 3-bet. Though OOP, QJs is strong enough; size about 3.5-4x (9-10BB) compensates for position.",
           "evImpact": "+1.2 BB/100"
         }
       ]
@@ -957,12 +957,12 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A5s can fold to a 3-Bet, but it misses a 4-Bet bluff chance. With an A blocker + playability, 4-Betting is +EV.",
+          "explanation": "A5s can fold to a 3-bet, but it misses a 4-Bet bluff chance. With an A blocker + playability, 4-Betting is +EV.",
           "evImpact": "-0.3 BB/100"
         },
         {
           "action": "Call",
-          "explanation": "Calling the 3-Bet with A5s is passive and OOP postflop vs a TAG. A 4-Bet bluff is better.",
+          "explanation": "Calling the 3-bet with A5s is passive and OOP postflop vs a TAG. A 4-Bet bluff is better.",
           "evImpact": "+0.2 BB/100"
         },
         {
@@ -1066,7 +1066,7 @@
         {
           "action": "Squeeze",
           "amount": "12BB",
-          "explanation": "A4s vs a NIT Open + Call is a good Squeeze bluff. NITs fold to 3-Bets at an extreme rate (70%), and the A blocker lowers the 4-Bet chance.",
+          "explanation": "A4s vs a NIT Open + Call is a good Squeeze bluff. NITs fold to 3-bets at an extreme rate (70%), and the A blocker lowers the 4-Bet chance.",
           "evImpact": "+1.5 BB/100"
         }
       ]
@@ -1144,9 +1144,9 @@
           "evImpact": "+0.6 BB/100"
         },
         {
-          "action": "3-Bet",
+          "action": "3-bet",
           "amount": "9BB",
-          "explanation": "3-Bet bluffing with 98s is too aggressive. No A blocker — OOP postflop when called is hard to play. Calling is better.",
+          "explanation": "3-bet bluffing with 98s is too aggressive. No A blocker — OOP postflop when called is hard to play. Calling is better.",
           "evImpact": "-0.3 BB/100"
         }
       ]
@@ -1160,13 +1160,13 @@
         },
         {
           "action": "Call",
-          "explanation": "Calling AKs is OK but passive. A 3-Bet builds a big pot + takes initiative — more +EV.",
+          "explanation": "Calling AKs is OK but passive. A 3-bet builds a big pot + takes initiative — more +EV.",
           "evImpact": "+0.8 BB/100"
         },
         {
-          "action": "3-Bet",
+          "action": "3-bet",
           "amount": "9BB",
-          "explanation": "AKs vs a CO Open is the classic value 3-Bet. Build a big pot — huge advantage over the CO's wide range.",
+          "explanation": "AKs vs a CO Open is the classic value 3-bet. Build a big pot — huge advantage over the CO's wide range.",
           "evImpact": "+2.0 BB/100"
         }
       ]
@@ -1184,9 +1184,9 @@
           "evImpact": "-0.5 BB/100"
         },
         {
-          "action": "3-Bet",
+          "action": "3-bet",
           "amount": "9BB",
-          "explanation": "3-Betting 75s against a UTG NIT is a disaster. The NIT only calls/4-Bets strong hands — you're crushed.",
+          "explanation": "3-betting 75s against a UTG NIT is a disaster. The NIT only calls/4-Bets strong hands — you're crushed.",
           "evImpact": "-2.0 BB/100"
         }
       ]
@@ -1204,9 +1204,9 @@
           "evImpact": "+0.6 BB/100"
         },
         {
-          "action": "3-Bet",
+          "action": "3-bet",
           "amount": "9BB",
-          "explanation": "3-Bet bluffing KTs is too aggressive. No A blocker — OOP postflop when called is hard. Calling is better.",
+          "explanation": "3-bet bluffing KTs is too aggressive. No A blocker — OOP postflop when called is hard. Calling is better.",
           "evImpact": "-0.3 BB/100"
         }
       ]
@@ -1215,18 +1215,18 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A4s should defend vs a BTN Open. With an A blocker you can 3-Bet bluff or Call.",
+          "explanation": "A4s should defend vs a BTN Open. With an A blocker you can 3-bet bluff or Call.",
           "evImpact": "-0.5 BB/100"
         },
         {
           "action": "Call",
-          "explanation": "Calling A4s is OK, but a 3-Bet bluff is more +EV. A blocker + wide BTN range = high fold equity.",
+          "explanation": "Calling A4s is OK, but a 3-bet bluff is more +EV. A blocker + wide BTN range = high fold equity.",
           "evImpact": "+0.3 BB/100"
         },
         {
-          "action": "3-Bet",
+          "action": "3-bet",
           "amount": "9BB",
-          "explanation": "A4s vs a BTN Open is the classic 3-Bet bluff. The A blocker lowers strong-hand odds and the wide BTN range folds a lot.",
+          "explanation": "A4s vs a BTN Open is the classic 3-bet bluff. The A blocker lowers strong-hand odds and the wide BTN range folds a lot.",
           "evImpact": "+1.2 BB/100"
         }
       ]
@@ -1284,9 +1284,9 @@
           "evImpact": "+0.5 BB/100"
         },
         {
-          "action": "3-Bet",
+          "action": "3-bet",
           "amount": "9BB",
-          "explanation": "3-Bet bluffing with 97s is too aggressive. No A blocker — OOP postflop when called is hard. Calling is better.",
+          "explanation": "3-bet bluffing with 97s is too aggressive. No A blocker — OOP postflop when called is hard. Calling is better.",
           "evImpact": "-0.2 BB/100"
         }
       ]
@@ -1295,18 +1295,18 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A3s should defend vs an SB Open. With an A blocker you can 3-Bet bluff.",
+          "explanation": "A3s should defend vs an SB Open. With an A blocker you can 3-bet bluff.",
           "evImpact": "-0.5 BB/100"
         },
         {
           "action": "Call",
-          "explanation": "Calling A3s is OK, but a 3-Bet bluff is more +EV. A blocker + wide SB range = high fold equity.",
+          "explanation": "Calling A3s is OK, but a 3-bet bluff is more +EV. A blocker + wide SB range = high fold equity.",
           "evImpact": "+0.3 BB/100"
         },
         {
-          "action": "3-Bet",
+          "action": "3-bet",
           "amount": "9BB",
-          "explanation": "A3s vs an SB Open is the classic 3-Bet bluff. The A blocker lowers strong-hand odds and the wide SB range folds a lot.",
+          "explanation": "A3s vs an SB Open is the classic 3-bet bluff. The A blocker lowers strong-hand odds and the wide SB range folds a lot.",
           "evImpact": "+1.0 BB/100"
         }
       ]
@@ -1434,16 +1434,62 @@
   },
   "unitTitle": {
     "l2-3bet-basics": {
-      "u1": "What Is a 3-Bet?",
-      "u2": "The Purpose of a 3-Bet"
+      "u1": "What Is a 3-bet?",
+      "u2": "The Purpose of a 3-bet"
     }
   },
   "lessonObjectives": {
     "l2-3bet-basics": [
-      "Explain how the \"3\" in 3-Bet is counted: the blinds are bet 1, the open raise is bet 2, the re-raise is bet 3",
+      "Explain how the \"3\" in 3-bet is counted: the blinds are bet 1, the open raise is bet 2, the re-raise is bet 3",
       "List the four purposes of a 3-bet: value, fold equity, initiative and isolation",
       "Compare a linear 3-bet range with a polarized 3-bet range, and state the order beginners should adopt them in",
       "Count the combos in a 3-bet range and explain the blocker effect: {AA,KK,QQ,AKs,A5s} is 26 combos, dropping to 22 when you hold A-spades"
+    ],
+    "l2-raise-sizing": [
+      "State the standard online 6-max preflop open size (2.5BB) and explain how a single uniform open size hides hand strength",
+      "Use required equity = call ÷ (pot + opponent bet + call) to compute the break-even equity against a half-pot bet (25%)",
+      "List the required equity for common bet sizes (1/3 pot 20%, 1/2 pot 25%, 2/3 pot 28.6%, pot 33.3%)",
+      "Judge how bet size affects the opponent's calling frequency, and explain why a min-raise gives the opponent too good a price"
+    ],
+    "l2-4bet-strategy": [
+      "Tell value 4-bets (AA/KK/QQ/AKs) and 4-bet bluffs (A5s-type) apart, and explain how an A blocker cuts the chance the opponent holds AA/AK",
+      "Use the 4-bet increment ÷ (pot before the 4Bet + 4-bet increment) to compute the fold frequency an opponent's 4-bet bluff needs (about 57.4%), and from it give your own continue-and-defend frequency of at least about 42.6%",
+      "Judge the categorized responses to a 4-bet: AA/KK go for a 5-bet shove, QQ/AKs can call, medium hands fold against tight ranges",
+      "Compute the standard 4-bet size (2.2-2.5x the 3-bet) and give your plan if shoved on before you pull the trigger"
+    ],
+    "l2-squeeze": [
+      "Judge when a spot qualifies as a squeeze (one open plus one or more callers), and state the three value sources that set it apart from a plain 3-bet (dead money, fold equity, isolation)",
+      "Compute the squeeze size (4-5x the open, plus 1x per extra caller), e.g. 10-12BB against a 2.5BB open",
+      "Tell squeeze value hands (AA/KK/QQ/AKs/AQs) from squeeze bluffs (A5s-type Ax blockers), and spot the best timing (a wide open plus a weak caller)",
+      "Give the categorized defense against a squeeze: 4-bet AA/KK, call QQ/AKs, fold weak calling ranges to a large squeeze"
+    ],
+    "l2-bb-defense": [
+      "Compute the pot odds when the big blind only adds 1.5BB to call a 2.5BB open, and explain why BB should defend wide",
+      "Judge how the BB defending range shifts with the opener's position (widest vs BTN, tightest vs UTG) and adjust accordingly",
+      "Tell the BB calling range (suited connectors, small pairs - postflop potential without 3-betting) from the polarized 3-bet range (AA/KK/QQ/AKs plus A5s-type)",
+      "Judge whether your blind-defense frequency sits in the sane band (about 40-60%), stating that defending too little invites blind steals and too much invites value bets"
+    ],
+    "l2-blind-war": [
+      "State that SB vs BB is the most frequent confrontation in 6-max, and judge that SB should play raise-or-fold rather than limp",
+      "Compare SB's opening width with BTN's (the same tier, about a third of hands), and explain why SB uses a larger size (2.5-3BB): no postflop position",
+      "Judge the structure of BB's defense versus an SB open: calling is the bulk, 3-bets are a small slice, only the weakest hands fold",
+      "Spot the SB's out-of-position disadvantage (acting first postflop) as the key factor, and pick hands that can play aggressively because of it"
+    ],
+    "l2-short-stack": [
+      "Judge that 20BB and below calls for push/fold, and state the three factors shaping the push range (position, stack depth, players behind)",
+      "Compare how hand values shift with depth: the shallower the stack, the less playability matters and the more raw equity of big cards matters",
+      "Compute the open-size adjustment at 30-50BB (down to 2-2.2BB) and judge against calling 3-bets with small suited connectors (not enough implied odds)",
+      "Spot the classic mistake of playing a short stack with 100BB thinking, e.g. calling a 3-bet with 98s at 35BB"
+    ],
+    "drill-l2-3bet": [
+      "Judge whether a given hand at a given position should 3-bet, call or fold against an open",
+      "Compute the standard 3-bet size (about 3x the open, e.g. 7.5-8BB against a 2.5BB open)",
+      "Tell value 3-bets from defensive calls (strong hands 3-bet, marginal hands with position call)"
+    ],
+    "drill-l2-position-range": [
+      "Judge whether a given hand should open-raise or fold at a given position (UTG/MP/CO/BTN/SB)",
+      "Compare the relative width of opening ranges by position (UTG tightest, CO clearly wider, BTN widest)",
+      "Spot how suitedness changes opening eligibility (e.g. 87s opens while 87o folds)"
     ]
   }
 }
