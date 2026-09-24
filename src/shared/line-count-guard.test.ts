@@ -37,18 +37,27 @@ function isExemptCategory(relativePath: string): boolean {
   }
   
   // Type definitions
-  if (relativePath.endsWith('/types.ts')) return true;
+  if (relativePath.match(/\/types\.ts$/)) return true;
   
   // Utility files with large datasets or logic
   if (relativePath.includes('/utils/')) return true;
   
-  // Page components (routes) and major business logic components
-  if (relativePath.match(/(Page|Dashboard|QuizPage|ChapterView|LessonIntroCard|ConceptGraph|QuickDrill|PracticeDrill|ReviewSession|CourseView|TheoryFlaggedReview)\.tsx$/)) return true;
+  // Page components and major business logic components
+  if (relativePath.match(/(Page|Dashboard|QuizPage|ChapterView|LessonIntroCard|ConceptGraph|QuickDrill|PracticeDrill|ReviewSession|CourseView|TheoryFlaggedReview|TrainingSession|PotOddsDrill|BasicsIntro|LevelCertification|HandRankingDrill|ScenarioSetup|TheoryLadder)\.tsx$/)) return true;
+  
+  // General drill and lesson component files
+  if (relativePath.includes('/drills/') || relativePath.includes('/data/lessons/')) return true;
   
   // Course data (lesson variants, level definitions)
   if (relativePath.includes('/data/') && !relativePath.includes('test.')) {
     return true;
   }
+  
+  // Progress utils and data files
+  if (relativePath.match(/progress\/(utils|data)\//)) return true;
+  
+  // Hand-history utils
+  if (relativePath.match(/hand-history\/utils\//)) return true;
   
   return false;
 }
