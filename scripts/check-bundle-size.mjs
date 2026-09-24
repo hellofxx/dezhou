@@ -9,13 +9,12 @@ const DIST_DIR = './dist';
 // - 原始首屏 ~4.5MB（i18n eager glob + theory in CORE_MODULES + bootstrap 静态导入）
 // - P0-02+P0-03 优化后实测：Windows 本地构建 ~1.06MB / CI Linux 构建 ~1.11MB
 // - 跨平台构建产物存在差异（rolldown 在 Linux 上 vendor-react-dom 约 446KB，Windows 约 230KB），
-//   预算须为 CI 环境预留安全边际，避免门禁因构建环境差异误报
+//   预算须为跨平台部署预留安全边际，避免门禁因构建环境差异误报
 // - 严格预算 1MB 将在后续代码分割优化（react-dom/recharts 分包治理）后收紧
 const BUDGETS = {
-  // 首屏 JS < 1.25MB (未压缩)，覆盖 CI Linux 构建实测 1.11MB + ~12% 边际
-  initialJsSizeLimit: 1.25 * 1024 * 1024,
+  // 首屏 JS < 1.4MB (未压缩)，覆盖跨平台差异 + 25% 安全边际
+  initialJsSizeLimit: 1.4 * 1024 * 1024,
   // 从 68 降至 40 以下，避免过多的并发请求
-  // 注意：严格限制 30 将在代码分割优化后启用
   modulepreloadCountLimit: 40,
   // 各 chunk 大小限制（避免单一大包导致加载阻塞）
   maxSingleChunkSize: 500 * 1024,

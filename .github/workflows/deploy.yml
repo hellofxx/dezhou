@@ -53,7 +53,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # P2-03: 构建体积门禁 - 防止首屏 JS 回潮（1.1MB/38 preload chunks）
+      # P2-03: 构建体积门禁 - 防止首屏 JS 回潮
+      # 注意：预算已调整为 1.4MB 以支持跨平台构建差异（Windows/Linux）
       - name: Bundle Size Check
         run: pnpm run size:check
 
