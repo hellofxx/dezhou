@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 /**
  * Shared 层准入门槛棘轮守卫（T6-B3 step 3）。
