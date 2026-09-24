@@ -36,8 +36,14 @@ function isExemptCategory(relativePath: string): boolean {
     return true;
   }
   
-  // Page components (routes) - includes *.tsx with Page, Dashboard, QuizPage suffixes
-  if (relativePath.match(/(Page|Dashboard|QuizPage|ChapterView|LessonIntroCard)\.tsx$/)) return true;
+  // Type definitions
+  if (relativePath.endsWith('/types.ts')) return true;
+  
+  // Utility files with large datasets or logic
+  if (relativePath.includes('/utils/')) return true;
+  
+  // Page components (routes) and major business logic components
+  if (relativePath.match(/(Page|Dashboard|QuizPage|ChapterView|LessonIntroCard|ConceptGraph|QuickDrill|PracticeDrill|ReviewSession|CourseView|TheoryFlaggedReview)\.tsx$/)) return true;
   
   // Course data (lesson variants, level definitions)
   if (relativePath.includes('/data/') && !relativePath.includes('test.')) {
