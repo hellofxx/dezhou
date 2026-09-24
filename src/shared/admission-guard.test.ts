@@ -39,8 +39,8 @@ function countConsumers(filePath: string): ConsumerCount {
   const consumers = new Set<string>();
   
   // 匹配 import './xxx' 或 '@/features/<module>/xxx'
-  const relativeImports = content.match(/from\s+['"]\.\/[a-z-]+['"]/g) || [];
-  for (const match of relativeImports) {
+  const relativeImports = content.match(/from\s+['"]\.\/([a-z-]+)['"]/g) || [];
+  for (const _match of relativeImports) {
     // 如果是 shared/utils/index.ts 导出其他 local file，不算跨模块消费
     if (filePath.includes('index.ts') && filePath.includes('shared')) continue;
     
@@ -58,9 +58,10 @@ function countConsumers(filePath: string): ConsumerCount {
   // 统计绝对导入：@/features/<module>/...
   const absoluteImports = content.match(/from\s+['"]@\/features\/([a-z-]+)/g) || [];
   for (const match of absoluteImports) {
-    const moduleMatch = match.match(/@\/features\/([a-z-]+)/);
-    if (moduleMatch) {
-      consumers.add(moduleMatch[1]);
+    // Extract module name using regex
+    const [, moduleName] = /@\/features\/([a-z-]+)/.exec(match) || [];
+    if (moduleName) {
+      consumers.add(moduleName);
     }
   }
   

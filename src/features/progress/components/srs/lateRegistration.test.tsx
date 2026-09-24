@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { useAcademyProgressSnapshot } from '@/shared/hooks/useAcademyDataSource';
-import { registerAcademyDataSource, getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
+import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import type { AcademyDataSource } from '@/shared/types/academyDataSource';
 import { act } from 'react';
 
@@ -38,13 +38,15 @@ describe('Registry late registration self-healing', () => {
   it('模拟 Dashboard 先挂载、registry 后注册 → 断言学院进度最终非空（自愈）', async () => {
     // Step 1: Create a mock data source
     const mockSource: AcademyDataSource = {
-      subscribe: vi.fn((listener) => {
+      subscribe: vi.fn((_listener) => {
         // No-op subscriber
         return () => {};
       }),
       getAcademyProgressSnapshot: () => ({ completedLessons: ['l3-cbet-q1'] }),
       getFirstAttemptScoresSnapshot: () => ({}),
       getLastAttemptScoresSnapshot: () => ({}),
+      findNextLesson: () => null,
+      getLessonMeta: () => null,
     };
 
     // Step 2: Mount component BEFORE registration (simulating race condition)
@@ -76,14 +78,16 @@ describe('Registry late registration self-healing', () => {
   it('已注册场景下直接订阅 → 立即获取数据（正常路径）', async () => {
     // Pre-register before mounting (normal case)
     const mockSource: AcademyDataSource = {
-      subscribe: vi.fn((listener) => {
+      subscribe: vi.fn(() => {
         // Immediately call listener when subscribed
-        setTimeout(listener, 0);
+        setTimeout(() => {}, 0);
         return () => {};
       }),
       getAcademyProgressSnapshot: () => ({ completedLessons: ['l4-gto-basics-1'] }),
       getFirstAttemptScoresSnapshot: () => ({}),
       getLastAttemptScoresSnapshot: () => ({}),
+      findNextLesson: () => null,
+      getLessonMeta: () => null,
     };
 
     registerAcademyDataSource(mockSource);
