@@ -1,0 +1,345 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90mF:/code/dezhou/.tmp-verify[39m
+
+ [32m✓[39m [30m[45m component [49m[39m src/features/puzzle-trainer/components/ActionBoard.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/puzzle-trainer/components/ThemeDrill.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/strategy-academy/components/HandExample.interactive.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 352[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/progress/components/dashboard/ModuleGrid.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 236[2mms[22m[39m
+[90mstdout[2m | src/i18n/languageSwitchRecalc.test.tsx[2m > [22m[2m语言切换后 useMemo([t]) 内容重算复现[2m > [22m[2m答题 (useMemo([t]))：切换 en 后应显示英文
+[22m[39mquiz after en switch => Which hand is the strongest? | Straight
+
+[90mstdout[2m | src/i18n/languageSwitchRecalc.test.tsx[2m > [22m[2m语言切换后 useMemo([t]) 内容重算复现[2m > [22m[2m正文 (useMemo([t]))：切换 en 后应显示英文
+[22m[39mcontent after en switch => What is Texas Hold'em?
+
+[90mstdout[2m | src/i18n/languageSwitchRecalc.test.tsx[2m > [22m[2m语言切换后 useMemo([t]) 内容重算复现[2m > [22m[2m浏览器懒加载 preloadI18n(academy) 后 en 课程内容仍可解析
+[22m[39m[TEST] loading zh academy courses...
+
+[90mstdout[2m | src/i18n/languageSwitchRecalc.test.tsx[2m > [22m[2m语言切换后 useMemo([t]) 内容重算复现[2m > [22m[2m浏览器懒加载 preloadI18n(academy) 后 en 课程内容仍可解析
+[22m[39m[TEST] zh lessonContent.l1-basics.0 => 什么是德州扑克？
+
+[90mstdout[2m | src/i18n/languageSwitchRecalc.test.tsx[2m > [22m[2m语言切换后 useMemo([t]) 内容重算复现[2m > [22m[2m浏览器懒加载 preloadI18n(academy) 后 en 课程内容仍可解析
+[22m[39m[TEST] loading en academy courses...
+
+[90mstdout[2m | src/i18n/languageSwitchRecalc.test.tsx[2m > [22m[2m语言切换后 useMemo([t]) 内容重算复现[2m > [22m[2m浏览器懒加载 preloadI18n(academy) 后 en 课程内容仍可解析
+[22m[39mafter preload en => What is Texas Hold'em?
+
+ [32m✓[39m [30m[45m component [49m[39m src/i18n/languageSwitchRecalc.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1923[2mms[22m[39m
+     [33m[2m✓[22m[39m 答题 (useMemo([t]))：切换 en 后应显示英文 [33m 1902[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/theory-academy/components/TheoryQuiz.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 252[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/range-trainer/components/RangeTrainerHome.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 936[2mms[22m[39m
+     [33m[2m✓[22m[39m RNG-002：点击已选中的位置按钮，预设自动恢复而非永久清空 [33m 583[2mms[22m[39m
+     [33m[2m✓[22m[39m RNG-003：短牌变体下 Home 页范围占比按 630 组合计算 [33m 350[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/theory-academy/components/TheoryFlaggedReview.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 306[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/theory-academy/components/theoryReviewI18n.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 941[2mms[22m[39m
+     [33m[2m✓[22m[39m zh 语言下同一复习项解析为中文（回切不残留英文） [33m 401[2mms[22m[39m
+     [33m[2m✓[22m[39m en 语言下自评卡片题干与答案均为英文，无中文原文回显 [33m 312[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/onboarding/components/PlacementTestStep.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 176[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/onboarding/components/FirstDrillStep.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1626[2mms[22m[39m
+     [33m[2m✓[22m[39m 全对完成微训练：recordTrainingDay 恰好一次，且在 completeOnboardingStep(3) 前 [33m 832[2mms[22m[39m
+     [33m[2m✓[22m[39m 末题答错走补救：显示 rescueHint，补救题作答后完成仍只记一次 [33m 791[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/puzzle-trainer/hooks/usePuzzleSession.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/theory-academy/components/TheoryChapterView.srs.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 2211[2mms[22m[39m
+     [33m[2m✓[22m[39m 首次完成：5 题答错 3 题 → reviewItems 新增 3 条 theory:<questionId> [33m 892[2mms[22m[39m
+     [33m[2m✓[22m[39m 重测（章节已完成）：错题同样入队，不因 completeChapter 的 alreadyCompleted 早退而丢失 [33m 1317[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/progress/components/srs/useEnsureReviewSourceI18n.wiring.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 580[2mms[22m[39m
+     [33m[2m✓[22m[39m 打开复习会话时同样请求 theory 包（自评卡片 front/back 依赖它） [33m 400[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/strategy-academy/components/CourseDoneView.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/strategy-academy/components/LessonIntroCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/progress/components/srs/SpacedRepetitionPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 223[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/range-trainer/components/TrainingSession.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 561[2mms[22m[39m
+     [33m[2m✓[22m[39m 反馈期间暂停：自动跳题定时器被清除，暂停遮罩下不切题 [33m 558[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/progress/components/training/DailyTrainingPlan.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 620[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/gto-simulator/components/ActionSelector.a11y.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 128[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/i18n/languageSwitch.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 636[2mms[22m[39m
+     [33m[2m✓[22m[39m core 模块立即切换；懒加载模块在 addResourceBundle 注入后自动刷新 [33m 634[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/progress/components/gate/SessionLimitGuard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 112[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/strategy-academy/components/SectionNav.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/progress/components/srs/reviewParams.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/data/lessons/variants/standardQuantAudit.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/data/levels/variants/variantQuantAudit.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/data/lessons/variants/variantQuantAudit.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/data/levels/variants/standard/standardQuantAudit.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/shared/components/feedback/GradeBadge.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 101[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/strategy-academy/components/drills/DrillLessonRouter.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/strategy-academy/components/content/TheoryReferenceBlock.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 114[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/onboarding/components/CelebrationStep.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 138[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/streakCalc.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/shared/components/ui/dialog.a11y.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 516[2mms[22m[39m
+     [33m[2m✓[22m[39m has no axe violations when open with title + description [33m 469[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/data/curriculumIntegrity.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/lessonObjectives.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/store.persist-shape.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/range-trainer/storeQuizSlice.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/store.migrate.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 931[2mms[22m[39m
+     [33m[2m✓[22m[39m 老版本数据自动注入全部默认字段，顶层 lastTrainingDate 迁入 streak [33m 694[2mms[22m[39m
+[90mstdout[2m | src/features/strategy-academy/utils/drillOptionOrder.test.ts[2m > [22m[2morderResolvedOptions — ③ 真实题库重排后分布守卫（任一索引 ≤60%）[2m > [22m[2mouts（8 题）
+[22m[39m[drill 分布守卫] outs 共 8 题（≤4 选项）→ B: 4 (50.0%), C: 4 (50.0%)
+
+[90mstdout[2m | src/features/strategy-academy/utils/drillOptionOrder.test.ts[2m > [22m[2morderResolvedOptions — ③ 真实题库重排后分布守卫（任一索引 ≤60%）[2m > [22m[2mpotOdds（6 题）
+[22m[39m[drill 分布守卫] potOdds 共 6 题（≤4 选项）→ A: 2 (33.3%), B: 2 (33.3%), C: 2 (33.3%)
+
+[90mstdout[2m | src/features/strategy-academy/utils/drillOptionOrder.test.ts[2m > [22m[2morderResolvedOptions — ③ 真实题库重排后分布守卫（任一索引 ≤60%）[2m > [22m[2mopponent 第 2 问（8 题）
+[22m[39m[drill 分布守卫] opponent 第 2 问 共 8 题（≤4 选项）→ A: 2 (25.0%), B: 3 (37.5%), C: 1 (12.5%), D: 2 (25.0%)
+
+[90mstdout[2m | src/features/strategy-academy/utils/drillOptionOrder.test.ts[2m > [22m[2morderResolvedOptions — ③ 真实题库重排后分布守卫（任一索引 ≤60%）[2m > [22m[2mhandRanking（10 题，一致性接入）
+[22m[39m[drill 分布守卫] handRanking 共 10 题（≤4 选项）→ A: 4 (40.0%), B: 3 (30.0%), C: 1 (10.0%), D: 2 (20.0%)
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/drillOptionOrder.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ [32m✓[39m [30m[45m component [49m[39m src/layouts/MobileNav.a11y.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 749[2mms[22m[39m
+     [33m[2m✓[22m[39m has no axe violations — each nav item exposes an accessible name [33m 685[2mms[22m[39m
+[90mstdout[2m | src/features/pot-odds/utils/quizOrder.test.ts[2m > [22m[2mpot-odds 题库选项排序（quizOrder）[2m > [22m[2m解析路径（传 t() 解析后文本）：页面真实行为[2m > [22m[2m处理后正确答案索引分布：任一索引占比 < 60%
+[22m[39m[pot-odds 排序分布·解析路径] 共 19 题 → 索引0: 9 题 (47.4%), 索引1: 7 题 (36.8%), 索引2: 1 题 (5.3%), 索引3: 2 题 (10.5%)
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/pot-odds/utils/quizOrder.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/help-center/components/HelpHome.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 475[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/hand-history/utils/handStats.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[45m component [49m[39m src/features/progress/components/streak/StreakTracker.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 315[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/migrateTheoryReviewKeys.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/spacedRepetition.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/data/levels/variants/theoryIntegrity.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+[90mstdout[2m | src/features/puzzle-trainer/data/puzzleBank.optionOrder.test.ts[2m > [22m[2mpuzzleBank 选项语义固定排序[2m > [22m[2m正确答案索引分布：全库任一索引占比 < 60%
+[22m[39m[语义排序分布] 共 205 题 → 索引0: 38 题 (18.5%), 索引1: 62 题 (30.2%), 索引2: 105 题 (51.2%)
+
+[90mstdout[2m | src/features/puzzle-trainer/data/puzzleBank.optionOrder.test.ts[2m > [22m[2mpuzzleBank 选项语义固定排序[2m > [22m[2mP1D-10 分主题分布：动作类只验语义排序（输出分布供监控），文字类断言 ≤60%
+[22m[39m[P1D-10] preflop-rfi: 动作类 30 题 (idx0=23% idx2=77%)，文字类 0 题
+[P1D-10] big-blind-defense: 动作类 25 题 (idx0=20% idx1=64% idx2=16%)，文字类 0 题
+[P1D-10] three-bet: 动作类 20 题 (idx0=10% idx1=25% idx2=65%)，文字类 0 题
+[P1D-10] c-bet: 动作类 20 题 (idx0=15% idx1=45% idx2=40%)，文字类 0 题
+[P1D-10] flush-draw: 动作类 20 题 (idx0=10% idx1=45% idx2=45%)，文字类 0 题
+[P1D-10] river-value: 动作类 20 题 (idx0=20% idx1=30% idx2=50%)，文字类 0 题
+[P1D-10] bluff: 动作类 15 题 (idx0=33% idx2=67%)，文字类 0 题
+[P1D-10] short-stack: 动作类 20 题 (idx0=10% idx1=15% idx2=75%)，文字类 0 题
+[P1D-10] icm: 动作类 15 题 (idx0=27% idx1=33% idx2=40%)，文字类 0 题
+[P1D-10] multiway: 动作类 20 题 (idx0=20% idx1=45% idx2=35%)，文字类 0 题
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/data/puzzleBank.optionOrder.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+[90mstdout[2m | src/features/strategy-academy/utils/quizShuffle.test.ts[2m > [22m[2morderQuizQuestion[2m > [22m[2m⑤ 分布守卫：levels + localLessons 处理后正确答案索引分布任一 <50%
+[22m[39m[quizShuffle 分布守卫] 共 315 题 → A: 68 (21.6%), B: 86 (27.3%), C: 99 (31.4%), D: 62 (19.7%)
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/quizShuffle.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/lessonUnits.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/hand-history/parsers/amountDeduction.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/utils/theorySrs.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/migrateOddsReviewKeys.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/data/theoryIntegrity.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/rangePresetGtoConsistency.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/utils/theoryProgress.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/hand-history/parsers/pokerstars.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/migrateStrategyReviewKeys.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/onboarding/utils/drillFlow.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/constants/mentorStyles.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/strategyCompare.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/store.migrate.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 382[2mms[22m[39m
+     [33m[2m✓[22m[39m v0 数据 progress 部分缺失时防御性合并默认值，已有字段不被触碰 [33m 342[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/hooks/puzzleEngineCore.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/utils/flaggedReviewModel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/scenarioSpotGuard.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/statsAggregator.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/gtoSrs.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/utils/seededShuffle.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/handHistoryBackup.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/help-center/data/helpContent.integrity.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/preload.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1439[2mms[22m[39m
+     [33m[2m✓[22m[39m switchLanguage 后课程内容自动注入目标语言，无需手动 loadAcademyCourses [33m 1350[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/pot-odds/utils/oddsMath.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/utils/pokerMath.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/postflopStrategy.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/contentI18n.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/persistStorage.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+[90mstdout[2m | src/features/onboarding/utils/optionOrder.test.ts[2m > [22m[2morderPlacementOptions 排序出口[2m > [22m[2m⑤ 分布守卫：全题库重排后正确答案索引任一占比 <60%
+[22m[39m[onboarding optionOrder 分布守卫] 共 5 题 → 索引0:1次 索引1:2次 索引2:1次 索引3:1次
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/onboarding/utils/optionOrder.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/contentAlignment.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/store.migrate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 795[2mms[22m[39m
+     [33m[2m✓[22m[39m v0 数据注入进步回放得分记录默认值，已有字段不被触碰 [33m 677[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/store.attemptCertification.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 629[2mms[22m[39m
+     [33m[2m✓[22m[39m score 达到 REQUIRED_ACCURACY 通过认证：certifiedAt/validUntil 从当次时间起算 30 天 [33m 440[2mms[22m[39m
+stderr | src/i18n/preloadFailure.test.ts > preloadI18n 加载失败后可重试（BUG-PLT-004） > 首次失败不污染已加载缓存，且 loadOne 不向外抛出
+[i18n] 加载翻译模块失败 zh/probe Error: 模拟 chunk 加载失败
+    at loader (F:/code/dezhou/.tmp-verify/src/i18n/preloadFailure.test.ts:40:25)
+    at F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:62:26
+    at loadOne (F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:67:4)
+    at F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:87:39
+    at Array.map (<anonymous>)
+    at preloadI18n (F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:87:26)
+    at F:/code/dezhou/.tmp-verify/src/i18n/preloadFailure.test.ts:71:18
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+[90mstdout[2m | src/shared/stores/trainingEvents.error-isolation.test.ts[2m > [22m[2mtrainingEvents error isolation (P1-02)[2m > [22m[2msubscriber 抛错不应中断主线程循环
+[22m[39m✓ Valid subscriber processed: [33m1[39m
+✓ Valid subscriber processed: [33m2[39m
+✓ Valid subscriber processed: [33m3[39m
+
+stderr | src/shared/stores/trainingEvents.error-isolation.test.ts > trainingEvents error isolation (P1-02) > subscriber 抛错不应中断主线程循环
+[trainingEvents] subscriber failed Error: Simulated subscriber failure
+    at brokenCb (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:54:13)
+    at Object.emit (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.ts:22:9)
+    at F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:64:22
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+[trainingEvents] subscriber failed Error: Simulated subscriber failure
+    at brokenCb (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:54:13)
+    at Object.emit (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.ts:22:9)
+    at F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:67:22
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+[trainingEvents] subscriber failed Error: Simulated subscriber failure
+    at brokenCb (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:54:13)
+    at Object.emit (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.ts:22:9)
+    at F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:70:22
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+
+stderr | src/i18n/preloadFailure.test.ts > preloadI18n 加载失败后可重试（BUG-PLT-004） > 失败后再次调用可成功注入（旧实现此处永久跳过）
+[i18n] 加载翻译模块失败 zh/probe Error: 模拟 chunk 加载失败
+    at loader (F:/code/dezhou/.tmp-verify/src/i18n/preloadFailure.test.ts:40:25)
+    at F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:62:26
+    at loadOne (F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:67:4)
+    at F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:87:39
+    at Array.map (<anonymous>)
+    at preloadI18n (F:/code/dezhou/.tmp-verify/src/i18n/preload.ts:87:26)
+    at F:/code/dezhou/.tmp-verify/src/i18n/preloadFailure.test.ts:78:11
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+stderr | src/shared/stores/trainingEvents.error-isolation.test.ts > trainingEvents error isolation (P1-02) > 多个订阅者中单个失败不影响其他订阅者
+[trainingEvents] subscriber failed Error: CB2 failed
+    at cb2 (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:108:48)
+    at Object.emit (F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.ts:22:9)
+    at F:/code/dezhou/.tmp-verify/src/shared/stores/trainingEvents.error-isolation.test.ts:115:20
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/stores/trainingEvents.error-isolation.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/preloadFailure.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/hand-history/parsers/extraVariants.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/quickDrillMix.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/adaptiveDifficulty.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/store.downswing.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 239[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/store.rescue.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/completeCourse.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 430[2mms[22m[39m
+     [33m[2m✓[22m[39m quiz 完成后入队的 label 为 academy.lessonTitle.<id>，而非中文原文 [33m 424[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/handDifficulty.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 62[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/quickDrillSrs.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/store.callAmount.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/store.checkMilestone.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/practiceOptionOrder.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 206[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/evImpactTone.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/utils/rangeParser.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+[90mstdout[2m | src/features/strategy-academy/utils/evCalibration.test.ts[2m > [22m[2m五级反馈 EV 标定覆盖率（棘轮）[2m > [22m[2m标准课时携带数值型 evLoss 的选项数只增不减
+[22m[39m[evCalibration] standard practice options=743 calibrated(evLoss)=0 coverage=0.0%
+
+[90mstdout[2m | src/features/strategy-academy/utils/evCalibration.test.ts[2m > [22m[2m五级反馈 EV 标定覆盖率（棘轮）[2m > [22m[2m非标准变体（heads-up / short-deck）已标定，覆盖率不得倒退
+[22m[39m[evCalibration] heads-up=99/114 short-deck=144/159
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/evCalibration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/data/theoryReferenceIntegrity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/components/achievement/DailyChallenge.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1190[2mms[22m[39m
+     [33m[2m✓[22m[39m 今日仅 1 条记录（5 题 < 15）→ 未完成（修复前虚标完成） [33m 1184[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/reviewRoute.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/store.refreshDailyPlan.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 356[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/pot-odds/utils/oddsSrs.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/practiceFeedbackView.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/utils/elo.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/utils/deck.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/range-trainer/constants.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/range-trainer/utils/questionGenerator.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/localeParity.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/store.achievementElo.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/store.persist-shape.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 253[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/store.markUnitCompleted.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 386[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/utils/trainingRecord.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+stderr | src/features/progress/store.addRecord.test.ts > progress store addRecord 空会话拒收兜底（专批 B） > totalQuestions <= 0 的记录被拒收；正常记录照常入账；重复 id 去重
+[progress] 训练记录写入 IndexedDB 失败 ReferenceError: indexedDB is not defined
+    at F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:22:17
+    at new Promise (<anonymous>)
+    at openDB (F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:21:10)
+    at getDB (F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:42:16)
+    at Object.add (F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:57:22)
+    at F:/code/dezhou/.tmp-verify/src/features/progress/store.ts:516:34
+    at addRecord (F:/code/dezhou/.tmp-verify/src/features/progress/store.ts:521:10)
+    at F:/code/dezhou/.tmp-verify/src/features/progress/store.addRecord.test.ts:49:5
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+[progress] 训练记录写入 IndexedDB 失败 ReferenceError: indexedDB is not defined
+    at F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:22:17
+    at new Promise (<anonymous>)
+    at openDB (F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:21:10)
+    at getDB (F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:42:16)
+    at Object.add (F:/code/dezhou/.tmp-verify/src/features/progress/utils/recordDatabase.ts:57:22)
+    at F:/code/dezhou/.tmp-verify/src/features/progress/store.ts:516:34
+    at addRecord (F:/code/dezhou/.tmp-verify/src/features/progress/store.ts:521:10)
+    at F:/code/dezhou/.tmp-verify/src/features/progress/store.addRecord.test.ts:49:5
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at file:///F:/code/dezhou/.tmp-verify/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:20
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/store.addRecord.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/range-trainer/components/QuizConfig.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/utils/dailyTrainingPlan.reviewMore.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+[90mstdout[2m | src/features/theory-academy/utils/quizOrder.test.ts[2m > [22m[2morderTheoryQuizQuestion[2m > [22m[2m④ 分布守卫：全题库处理后正确答案索引分布任一 <50%
+[22m[39m[theory quizOrder 分布守卫] 共 371 题 → A: 87 (23.5%), B: 99 (26.7%), C: 98 (26.4%), D: 87 (23.5%)
+
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/utils/quizOrder.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/hand-history/parsers/common.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/types/position.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/types/decisionFeedback.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/certificationExam.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/progress/components/srs/useEnsureReviewSourceI18n.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/boardGenerator.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/theory-academy/store.persist-shape.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/scenarioGenerator.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/gto-simulator/utils/scenarioI18n.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/data/rushQuestions.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/range-trainer/utils/rangeCombos.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/data/learningTracks.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/practiceGrading.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/range-trainer/utils/handClassifier.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/store.persist-shape.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/data/puzzleBank.ids.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/store.migrate.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/puzzle-trainer/data/dailyPuzzles.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/hand-history/utils/gtoDeviation.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/shared/constants/poker.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/strategy-academy/utils/opponentScoring.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/features/hand-history/workers/gtoWorkerThresholds.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+[90mstdout[2m | src/i18n/unitRef.test.ts[2m > [22m[2munits.sections 与 lesson.content 引用一致性[2m > [22m[2mALL_VARIANT_LESSONS 无引用不一致
+[22m[39mvariant 引用不一致课程: []
+
+[90mstdout[2m | src/i18n/unitRef.test.ts[2m > [22m[2munits.sections 与 lesson.content 引用一致性[2m > [22m[2mLOCAL_LESSONS 无引用不一致
+[22m[39mlocal 引用不一致课程: []
+
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/unitRef.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/designTokenGuard.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 109[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/termFormGuard.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 182[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/eslintCrossImports.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 3610[2mms[22m[39m
+     [33m[2m✓[22m[39m 白名单与精确快照完全一致（新增边必然变红，删除边需同步更新快照） [33m 3607[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m src/i18n/staticKeyGuard.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 99[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m143 passed[39m[22m[90m (143)[39m
+[2m      Tests [22m [1m[32m1023 passed[39m[22m[90m (1023)[39m
+[2m   Start at [22m 20:04:02
+[2m   Duration [22m 24.50s[2m (transform 60.70s, setup 16.35s, import 82.06s, tests 29.10s, environment 63.05s)[22m
+

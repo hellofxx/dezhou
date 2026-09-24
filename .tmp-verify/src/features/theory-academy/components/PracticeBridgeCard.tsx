@@ -1,0 +1,61 @@
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import { Swords, Route, ChevronRight } from 'lucide-react';
+import type { PracticeRecommendation } from '../types';
+
+interface PracticeBridgeCardProps {
+  recommendations: PracticeRecommendation;
+}
+
+/**
+ * "去实践"推荐卡：理论→实践闭环出口。
+ * 仅通过路由字符串跳转 strategy-academy（不产生跨模块 import）；
+ * 引用完整性由 strategy-academy curriculumIntegrity 测试守卫。
+ */
+export function PracticeBridgeCard({ recommendations }: PracticeBridgeCardProps) {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="rounded-lg border border-[var(--brass)]/30 bg-[var(--felt-deep)] p-5"
+    >
+      <div className="flex items-center gap-2 mb-1">
+        <Swords className="w-4 h-4 text-[var(--brass-bright)]" />
+        <h3 className="font-display text-[16px] text-[var(--ivory)]">{t('theory.bridge.applyPractice')}</h3>
+      </div>
+      <p className="text-xs text-[var(--ivory-muted)] mb-4">
+        {t('theory.bridge.subtitle')}
+      </p>
+      <div className="space-y-2">
+        {recommendations.lessons.map((lesson) => (
+          <button
+            key={lesson.id}
+            onClick={() => navigate(`/academy/lesson/${lesson.id}`)}
+            aria-label={t('theory.bridge.gotoLesson', {
+              title: t(`academy.lessonTitle.${lesson.id}`, { defaultValue: lesson.title }),
+            })}
+            className="w-full flex min-h-11 items-center justify-between px-4 py-2.5 rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 transition-all text-sm text-[var(--ivory-dim)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          >
+            <span>{t(`academy.lessonTitle.${lesson.id}`, { defaultValue: lesson.title })}</span>
+            <ChevronRight className="w-4 h-4 text-[var(--ivory-muted)]" />
+          </button>
+        ))}
+        {recommendations.trackId && (
+          <button
+            // P1F-04：携带 ?track= 参数，LearningTracksView（P1E-01）消费后滚动高亮目标轨道
+            onClick={() => navigate(`/academy/tracks?track=${recommendations.trackId}`)}
+            aria-label={t('theory.bridge.gotoTrack')}
+            className="w-full flex min-h-11 items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          >
+            <Route className="w-4 h-4" />
+            {t('theory.bridge.enterTrack')}
+          </button>
+        )}
+      </div>
+    </motion.div>
+  );
+}

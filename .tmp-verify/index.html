@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#0e1a14" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg" />
+    <title>德州扑克训练平台</title>
+    <!-- 字体自托管：三款字体已放 public/fonts/，经 globals.css @font-face + font-display:swap 引入（4.2-fonts） -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- 主题预渲染：React 加载前从 persist 读取 settings.theme，避免首屏浅色/深色闪烁。
+         settings.theme 事实源：progress store persist (poker-training-progress) -->
+    <script>
+      (function () {
+        try {
+          var theme = 'dark';
+          var raw = localStorage.getItem('poker-training-progress');
+          if (raw) {
+            var state = JSON.parse(raw).state || {};
+            var saved = state.settings && state.settings.theme;
+            if (saved === 'light' || saved === 'dark' || saved === 'system') theme = saved;
+          }
+          if (theme === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          }
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#e9e1cd' : '#0e1a14');
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

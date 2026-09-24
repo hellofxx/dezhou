@@ -1,0 +1,8 @@
+{
+  "title": "Daily Limit Reached",
+  "message": "You've answered {{answered}} / {{limit}} questions today. Consider resting — long-term progress matters more than short-term sprints.",
+  "backHome": "Back to Dashboard",
+  "settingLabel": "Daily Question Limit",
+  "settingHint": "Training will be blocked when the limit is reached. 0 = unlimited",
+  "unlimited": "Unlimited"
+}

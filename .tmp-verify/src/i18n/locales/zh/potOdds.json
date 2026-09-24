@@ -1,0 +1,378 @@
+{
+  "title": "底池赔率计算器",
+  "potSize": "底池大小",
+  "betSize": "下注金额",
+  "outs": "Outs 数量",
+  "profitable": "跟注有利可图",
+  "notProfitable": "不建议跟注",
+  "page": {
+    "title": "底池赔率与 EV 计算器",
+    "subtitle": "计算底池赔率、估算胜率、分析期望值，帮助你做出更好的跟注决策",
+    "tabOdds": "底池赔率",
+    "tabEv": "EV 分析"
+  },
+  "calculator": {
+    "standard": "标准德州",
+    "shortDeck": "短牌德州 (6+)",
+    "paramsTitle": "参数设置",
+    "variantLabel": "游戏变体",
+    "shortDeckHint": "短牌模式基于 36 张牌组计算，胜率估算使用实际剩余牌数。",
+    "opponentBet": "对手下注",
+    "currentStreet": "当前街道",
+    "streetFlop": "翻牌后 (Flop)",
+    "streetTurn": "转牌后 (Turn)",
+    "ruleFourHint": "还有2张牌要来，使用 ×4 法则",
+    "ruleTwoHint": "还有1张牌要来，使用 ×2 法则",
+    "impliedOdds": "隐含赔率（高级选项）",
+    "expectedExtra": "预期额外收益"
+  },
+  "ev": {
+    "title": "EV 计算",
+    "equity": "胜率",
+    "potWin": "底池大小（赢时获得）",
+    "callCost": "跟注金额（输时损失）",
+    "resultLabel": "期望值 (EV)",
+    "resultDesc": "每次跟注的长期平均收益",
+    "breakevenLabel": "盈亏平衡胜率：",
+    "currentEquity": "当前胜率",
+    "breakeven": "平衡点",
+    "profitable": "盈利",
+    "breakEven": "盈亏平衡",
+    "losing": "亏损",
+    "chartTitle": "EV 随胜率变化曲线",
+    "xAxisLabel": "胜率 %",
+    "tooltipEquity": "胜率: {{label}}%",
+    "breakevenLine": "平衡点"
+  },
+  "oddsDisplay": {
+    "title": "底池赔率",
+    "needEquity": "你需要至少 {{equity}} 的胜率来盈利",
+    "requiredEquity": "需要胜率",
+    "estimatedEquity": "估算胜率",
+    "evLabel": "期望值 (EV)",
+    "margin": "安全边际",
+    "callTitle": "建议跟注",
+    "callDesc": "你的估算胜率 ({{est}}) 高于底池赔率 ({{req}})，长期有利可图",
+    "foldTitle": "建议弃牌",
+    "foldDesc": "你的估算胜率 ({{est}}) 低于底池赔率 ({{req}})，跟注会亏损"
+  },
+  "equityChart": {
+    "requiredEquity": "需要胜率",
+    "estimatedEquity": "估算胜率",
+    "title": "权益对比",
+    "diffLabel": "差值: {{diff}}%"
+  },
+  "draws": {
+    "title": "常见听牌参考",
+    "subtitle": "点击可快速填入 Outs 到计算器",
+    "openEndedStraight": "顺子听牌（两头）",
+    "openEndedStraightDesc": "如 56 在 78x 面",
+    "flushDraw": "同花听牌",
+    "flushDrawDesc": "持有4张同花，还需1张",
+    "comboDraw": "同花+顺子组合听牌",
+    "comboDrawDesc": "同花听牌+两头顺",
+    "overcards": "高牌（两张overcard）",
+    "overcardsDesc": "两张高牌配对",
+    "gutshot": "顺子听牌（卡顺）",
+    "gutshotDesc": "如 56 在 79x 面",
+    "setMine": "口袋对凑三条",
+    "setMineDesc": "口袋对子凑set",
+    "pairDraw": "单张凑对",
+    "pairDrawDesc": "单张高牌配对",
+    "backdoorFlush": "后门同花听牌",
+    "backdoorFlushDesc": "需要两张同花"
+  },
+  "quiz": {
+    "categoryJudgment": "赔率判断",
+    "categoryOuts": "Outs 计算",
+    "categoryImplied": "隐含赔率",
+    "categoryReverse": "反向隐含赔率",
+    "doneTitle": "训练完成！",
+    "doneSubtitle": "赔率速算训练结果",
+    "accuracy": "正确率",
+    "avgTime": "平均用时",
+    "correctCount": "答对",
+    "gradeExcellent": "🎯 出色！你的赔率计算能力非常扎实！",
+    "gradeGood": "👍 不错！继续练习可以更加熟练。",
+    "gradeFair": "📚 还需要加强，建议复习赔率计算基础。",
+    "gradePoor": "💡 建议先学习底池赔率和 Outs 计算的基础知识。",
+    "lastCorrect": "✓ 最后一题答对，以成功收尾！",
+    "restart": "再来一轮",
+    "backToCalc": "返回计算器",
+    "back": "返回",
+    "title": "赔率速算训练",
+    "correct": "正确！",
+    "incorrect": "不正确",
+    "correctAnswer": "正确答案：{{answer}}",
+    "reviewLink": "去复习相关课程 →",
+    "downshiftHint": "检测到连续答错 3 次以上，建议放慢节奏，先复习基础课程再继续训练。",
+    "viewResult": "查看成绩",
+    "next": "下一题"
+  },
+  "quizBank": {
+    "q1": {
+      "scenario": "底池 $100，对手下注 $50，你有同花听牌（9 outs）。Flop 发出，还有两张牌要来。",
+      "question": "底池赔率是否支持跟注？",
+      "optA": {
+        "text": "是，跟注有利可图",
+        "explanation": "底池赔率 = 50/(100+50+50) = 25%。同花听牌 flop 后 equity ≈ 35%（9 outs × 4）。35% > 25%，跟注是 +EV。"
+      },
+      "optB": {
+        "text": "否，应该弃牌",
+        "explanation": "赔率足够，不应弃牌。同花听牌在 flop 后有约 35% 的 equity，远超所需的 25%。"
+      }
+    },
+    "q2": {
+      "scenario": "你持有 8♠9♠，翻牌是 T♠J♥2♠。",
+      "question": "你大约有多少个 outs？",
+      "optA": {
+        "text": "8 个（两头顺）",
+        "explanation": "你不仅有顺子听牌，还有同花听牌。"
+      },
+      "optB": {
+        "text": "9 个（同花听牌）",
+        "explanation": "你不仅有同花听牌，还有顺子听牌。"
+      },
+      "optC": {
+        "text": "约 15 个（组合听牌）",
+        "explanation": "同花听牌 9 outs + 两头顺子 8 outs - 重叠约 2 = 约 15 outs。这是强组合听牌，equity 约 54%。"
+      },
+      "optD": {
+        "text": "4 个（卡顺）",
+        "explanation": "你的听牌远强于卡顺，你有同花+两头顺的组合听牌。"
+      }
+    },
+    "q3": {
+      "scenario": "底池 $20，对手下注 $15。你持有小口袋对（set mine）。有效筹码 $200。",
+      "question": "直接底池赔率不支持跟注，但考虑隐含赔率呢？",
+      "optA": {
+        "text": "跟注，隐含赔率足够",
+        "explanation": "直接赔率 = 15/(20+15+15) = 30%，set mine 约 12% 不够。但隐含赔率：中 set 可赢取对手更多筹码，有效筹码/跟注 = 200/15 ≈ 13:1，远超所需的约 7.5:1。"
+      },
+      "optB": {
+        "text": "弃牌，赔率不够",
+        "explanation": "忽略了深筹码下的隐含赔率。Set mine 在深筹码情况下是经典的隐含赔率玩法。"
+      }
+    },
+    "q4": {
+      "scenario": "你持有 K♠Q♠，翻牌是 K♥7♦3♣。对手在湿润面上大额下注。",
+      "question": "这里可能面临什么问题？",
+      "optA": {
+        "text": "反向隐含赔率 — 顶对可能被支配",
+        "explanation": "KQ 中了顶对但 kicker 不是最强。如果对手有 AK 或 KK，你投入越多筹码损失越大。这就是反向隐含赔率的典型场景。"
+      },
+      "optB": {
+        "text": "没有风险，顶对很强",
+        "explanation": "KQ 的 kicker 不是最强（AK 支配你），大额下注暗示超强范围，需要警惕。"
+      }
+    },
+    "q5": {
+      "scenario": "底池 $80，对手下注 $80（满池下注）。你有两头顺子听牌（8 outs），Turn 发出，只剩一张牌。",
+      "question": "你应该跟注吗？",
+      "optA": {
+        "text": "跟注，赔率刚好够",
+        "explanation": "8 outs 在 turn 后只有约 17% equity。需要赔率 = 80/(80+80+80) = 33%。17% < 33%，直接赔率不够。"
+      },
+      "optB": {
+        "text": "弃牌，赔率不够",
+        "explanation": "底池赔率需要 33%，但 8 outs 在 turn 后只有约 17%（8×2+1）。除非有巨大隐含赔率，否则应该弃牌。"
+      }
+    },
+    "q6": {
+      "scenario": "你持有 A♥K♥，翻牌是 2♥7♥9♣。你有坚果同花听牌 + 两张高牌。",
+      "question": "你大约有多少个 outs？",
+      "optA": {
+        "text": "9 个（仅同花）",
+        "explanation": "别忘了你还有两张高牌（A 和 K）可以配对。"
+      },
+      "optB": {
+        "text": "约 15 个",
+        "explanation": "同花听牌 9 outs + 高牌配对 6 outs（3张A + 3张K）= 15 outs。这是非常强的听牌，equity 约 54%。"
+      },
+      "optC": {
+        "text": "6 个（仅高牌）",
+        "explanation": "你还有坚果同花听牌，远不止高牌 outs。"
+      },
+      "optD": {
+        "text": "12 个",
+        "explanation": "同花 9 + 高牌 6 = 15，不是 12。"
+      }
+    },
+    "q7": {
+      "scenario": "底池 $60，对手下注 $20（1/3 底池）。你有卡顺听牌（4 outs），Flop 发出。",
+      "question": "底池赔率是否支持跟注？",
+      "optA": {
+        "text": "是，小注给了好赔率",
+        "explanation": "底池赔率 = 20/(60+20+20) = 20%。卡顺 flop 后 equity ≈ 16%（4×4）。虽然接近，但加上隐含赔率（中顺子可赢更多），跟注是合理的。"
+      },
+      "optB": {
+        "text": "否，4 outs 太少",
+        "explanation": "虽然只有 4 outs，但对手给了很好的价格（只需 20% equity），加上隐含赔率，跟注是 +EV。"
+      }
+    },
+    "q8": {
+      "scenario": "你持有 5♦5♣，UTG open 到 $15，有效筹码 $300。你在 BTN。",
+      "question": "Set mine 在这里是否有利可图？",
+      "optA": {
+        "text": "是，深筹码隐含赔率极佳",
+        "explanation": "Set mine 需要约 15-20 倍跟注额的隐含筹码。$300/$15 = 20 倍，满足条件。中 set 后大概率能赢大底池。"
+      },
+      "optB": {
+        "text": "否，口袋对太弱",
+        "explanation": "小口袋对 set mine 在深筹码下是经典盈利玩法，20 倍隐含赔率足够。"
+      }
+    },
+    "q9": {
+      "scenario": "你持有 A♣T♣，翻牌是 A♦8♣5♠。对手 check-raise 你的下注。",
+      "question": "为什么这里要小心？",
+      "optA": {
+        "text": "反向隐含赔率：AT 的顶对被更强 Ax 支配",
+        "explanation": "Check-raise 通常代表强牌。对手可能有 AK、AQ、AJ 或 set。你的 AT 顶对中等 kicker 面临严重的反向隐含赔率——赢小输大。"
+      },
+      "optB": {
+        "text": "顶对顶踢脚，应该全下",
+        "explanation": "AT 不是顶对顶踢脚（AK/AQ/AJ 都支配你），面对 check-raise 需要谨慎。"
+      }
+    },
+    "q10": {
+      "scenario": "底池 $200，对手全下 $100。你有同花+卡顺组合听牌（约 12 outs），Turn 发出。",
+      "question": "你应该跟注吗？",
+      "optA": {
+        "text": "跟注，赔率足够",
+        "explanation": "底池赔率 = 100/(200+100+100) = 25%。12 outs 在 turn 后约 24%（12×2）。非常接近，加上可能的后门机会，跟注基本持平或微利。"
+      },
+      "optB": {
+        "text": "弃牌，不够",
+        "explanation": "12 outs 约 24% 非常接近所需的 25%，考虑到可能的额外 outs 和精确计算，这是一个边际跟注。"
+      }
+    },
+    "q11": {
+      "scenario": "你持有 J♠T♠，翻牌是 Q♠9♠3♦。你有同花听牌 + 两头顺子听牌。",
+      "question": "注意重叠后，你大约有多少个有效 outs？",
+      "optA": {
+        "text": "17 个（直接相加）",
+        "explanation": "不能直接相加 9+8=17，因为有重叠的牌（如 K♠ 和 8♠ 同时完成同花和顺子）。"
+      },
+      "optB": {
+        "text": "约 15 个",
+        "explanation": "同花 9 + 顺子 8 - 重叠 2（K♠ 和 8♠）= 15 个有效 outs。这是极强的组合听牌。"
+      },
+      "optC": {
+        "text": "8 个",
+        "explanation": "你还有同花听牌的 outs，远不止 8 个。"
+      },
+      "optD": {
+        "text": "9 个",
+        "explanation": "你还有两头顺子听牌的 outs，远不止 9 个。"
+      }
+    },
+    "q12": {
+      "scenario": "你持有 7♣6♣，对手在 CO open 到 $10。有效筹码 $80。你在 BB。",
+      "question": "跟注 set mine / 投机牌的隐含赔率够吗？",
+      "optA": {
+        "text": "不够，筹码太浅",
+        "explanation": "隐含赔率需要约 15-20 倍：$80/$10 = 8 倍，远低于所需。同花顺子投机牌在浅筹码下很难盈利，应该弃牌或 3-bet。"
+      },
+      "optB": {
+        "text": "够，投机牌总是能赢大池",
+        "explanation": "8 倍隐含赔率远远不够。需要至少 15 倍以上才能让投机牌有利可图。"
+      }
+    },
+    "q13": {
+      "scenario": "底池 $150，对手下注 $37.5（1/4 底池）。你有坚果同花听牌（9 outs），Flop 发出。",
+      "question": "面对这个小注，你应该？",
+      "optA": {
+        "text": "跟注，极好的赔率",
+        "explanation": "底池赔率 = 37.5/(150+37.5+37.5) = 16.7%。同花听牌 flop 后约 35% equity。35% >> 16.7%，这是极好的跟注机会。甚至可以考虑加注。"
+      },
+      "optB": {
+        "text": "弃牌，小注代表强牌",
+        "explanation": "无论对手牌力如何，你只需要 16.7% equity 就能跟注，而你有 35%。数学上必须跟注。"
+      }
+    },
+    "q14": {
+      "scenario": "你持有 A♠J♠，翻牌是 A♥T♦4♣。对手持续下注，你 call。Turn 是 2♣，对手再次大额下注。",
+      "question": "连续两条街的大额下注暗示什么？",
+      "optA": {
+        "text": "反向隐含赔率加剧：对手可能有 AK/AQ/两对/set",
+        "explanation": "连续两条街大额下注（double barrel）通常代表强范围。AJ 的顶对中等 kicker 面临严重反向隐含赔率——你赢的时候对手牌弱，输的时候对手牌极强。"
+      },
+      "optB": {
+        "text": "对手在诈唬，应该加注",
+        "explanation": "虽然可能是诈唬，但连续两条街的大额下注更常代表价值牌。AJ 在这里是典型的抓诈牌，但反向隐含赔率风险很高。"
+      }
+    },
+    "q15": {
+      "scenario": "底池 $40，对手超池下注 $120（3 倍底池）。你有卡顺听牌（4 outs），Turn 发出，只剩一张牌。",
+      "question": "你应该跟注吗？",
+      "optA": {
+        "text": "跟注，中了顺子就是大底池",
+        "explanation": "所需胜率 = 120/(40+120+120) = 42.9%，而 4 outs 在 turn 后只有约 8.7%（4/46，Rule of 2 估算 4×2=8%）。缺口巨大，\"中了赢很多\"不能弥补 34 个百分点的差距。"
+      },
+      "optB": {
+        "text": "弃牌，赔率远远不够",
+        "explanation": "所需胜率 = 120/(40+120+120) = 42.9%。卡顺在 turn 后只剩约 8.7% equity（4/46）。超池下注把价格抬到听牌完全无法承受的水平，这是清晰的弃牌。"
+      }
+    },
+    "q16": {
+      "scenario": "河牌圈，底池 $100，对手下注 $100（满池）。你只有第三对，没有任何听牌，只能赢对手的诈唬。根据其行动线估计对手诈唬频率约 20%。",
+      "question": "用底池赔率衡量，这次 bluff catch 应该跟吗？",
+      "optA": {
+        "text": "不该跟注，胜率低于所需赔率",
+        "explanation": "所需胜率 = 100/(100+100+100) = 33.3%。你只能赢诈唬，胜率 ≈ 对手诈唬频率 20%。20% < 33.3%，跟注是 -EV：EV = 0.2×$200 - 0.8×$100 = -$40，应该弃牌。"
+      },
+      "optB": {
+        "text": "跟注，不能被对手随便推走",
+        "explanation": "\"不想被诈唬\"不是数学理由。河牌无后续牌，胜率就是对手的诈唬频率 20%，低于所需的 33.3%，长期跟注必然亏损。"
+      }
+    },
+    "q17": {
+      "scenario": "底池 $50，对手下注 $50，下注后对手只剩 $20 筹码。你有同花听牌（9 outs），Flop 发出，本次跟注只看一张 Turn。",
+      "question": "直接赔率不够，隐含赔率能救回这次跟注吗？",
+      "optA": {
+        "text": "能，同花听牌值得追",
+        "explanation": "隐含赔率的上限是对手剩余筹码。打平需要中牌后额外再赢约 $113（50/0.19 ≈ 263，263-150 = 113），而对手只剩 $20，缺口无法弥补。"
+      },
+      "optB": {
+        "text": "不能，对手筹码太浅，应弃牌",
+        "explanation": "直接赔率 = 50/(50+50+50) = 33.3%，看一张牌的胜率 ≈ 19%（9/47）。打平需要中牌后额外赢约 $113（50/0.19 ≈ 263，减去现有底池 150），但对手只剩 $20。隐含赔率被浅筹码封死，弃牌。"
+      }
+    },
+    "q18": {
+      "scenario": "你持有 6♥5♥，翻牌是 K♥9♥9♣（对子面）。底池 $60，对手下注 $60（满池）。",
+      "question": "你的低同花听牌该继续吗？",
+      "optA": {
+        "text": "继续跟注，9 个同花 outs 足够",
+        "explanation": "名义 9 outs × 4 ≈ 36% 看似够 33.3%，但对子面上部分 outs 是\"脏 outs\"：对手若持 9x/K9，你成花他成葫芦；6 高同花还可能被更大红心支配。有效 equity 需大幅打折。"
+      },
+      "optB": {
+        "text": "弃牌，反向隐含赔率太差",
+        "explanation": "所需胜率 = 60/(60+60+60) = 33.3%。名义 9 outs（≈36%）在对子面上要打折：中花仍可能输给葫芦（对手持 9x/K9），6 高同花还可能被更大红心听牌支配，有效 outs 约 6 个（≈24%）。低于所需且中牌也可能付出更多，弃牌。"
+      }
+    },
+    "q19": {
+      "scenario": "底池 $60，一名超紧的岩石型对手下注 $60（满池）。你有卡顺听牌（4 outs），Flop 发出，本次跟注只看一张 Turn。",
+      "question": "指望隐含赔率跟注卡顺，可行吗？",
+      "optA": {
+        "text": "不可行，应该弃牌",
+        "explanation": "直接赔率 = 60/(60+60+60) = 33.3%，看一张牌的胜率 ≈ 8.5%（4/47）。打平需要中顺后额外再赢约 $526（60/0.085 ≈ 706，减去现有底池 180），而岩石型玩家在明显危险牌面几乎不会大额支付。隐含赔率是幻觉，弃牌。"
+      },
+      "optB": {
+        "text": "可行，卡顺很隐蔽，中了能赢大池",
+        "explanation": "\"隐蔽\"不等于\"能收到钱\"。缺口需要中牌后额外赢约 $526 才能打平，超紧对手不会支付这种规模。对紧手谈隐含赔率要格外保守。"
+      }
+    },
+    "easy": {
+      "scenario": "底池 100，对手过牌（下注 0），你跟注 0 即可看到下一张牌。",
+      "question": "此时跟注是否盈利？",
+      "optA": {
+        "text": "是，免费看牌永远盈利",
+        "explanation": "跟注金额为 0，所需胜率 = 0/(100+0+0) = 0%。任何手牌都满足，跟注（实际为过牌）永远是 +EV。"
+      },
+      "optB": {
+        "text": "否，应该弃牌",
+        "explanation": "跟注 0 不需要任何胜率，弃牌反而放弃了免费看牌的机会。"
+      }
+    }
+  }
+}

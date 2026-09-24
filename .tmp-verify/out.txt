@@ -1,0 +1,32 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90mF:/code/dezhou/.tmp-verify[39m
+
+ [32m✓[39m [30m[45m component [49m[39m src/src/features/theory-academy/components/TheoryChapterView.srs.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1361[2mms[22m[39m
+     [33m[2m✓[22m[39m 首次完成：5 题答错 3 题 → reviewItems 新增 3 条 theory:<questionId> [33m 512[2mms[22m[39m
+     [33m[2m✓[22m[39m 重测（章节已完成）：错题同样入队，不因 completeChapter 的 alreadyCompleted 早退而丢失 [33m 849[2mms[22m[39m
+ [31m❯[39m [30m[45m component [49m[39m src/features/theory-academy/components/TheoryChapterView.srs.test.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 3997[2mms[22m[39m
+     [33m[2m✓[22m[39m 首次完成：5 题答错 3 题 → reviewItems 新增 3 条 theory:<questionId> [33m 511[2mms[22m[39m
+[31m     [31m×[31m 重测（章节已完成）：错题同样入队，不因 completeChapter 的 alreadyCompleted 早退而丢失[39m[33m 3485[2mms[22m[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL   component  src/features/theory-academy/components/TheoryChapterView.srs.test.tsx > TheoryChapterView 章末错题入 SRS 队列 > 重测（章节已完成）：错题同样入队，不因 completeChapter 的 alreadyCompleted 早退而丢失
+Error: 等待超时：按钮「重考小测」（现有：["理论学院 · 🎲 概率论基础","返回目录","重新挑战小测","下一章：Outs 与 2/4 法则"]）
+ ❯ waitUntil src/features/theory-academy/components/TheoryChapterView.srs.test.tsx:50:9
+     48|     });
+     49|   }
+     50|   throw new Error(`等待超时：${hint}`);
+       |         ^
+     51| }
+     52|
+ ❯ clickByText src/features/theory-academy/components/TheoryChapterView.srs.test.tsx:55:3
+ ❯ src/features/theory-academy/components/TheoryChapterView.srs.test.tsx:147:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 20:01:25
+[2m   Duration [22m 6.86s[2m (transform 3.36s, setup 805ms, import 2.75s, tests 5.36s, environment 1.80s)[22m
+

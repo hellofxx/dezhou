@@ -1,0 +1,158 @@
+{
+  "title": "Achievements",
+  "wall": "Achievement Wall",
+  "locked": "Locked",
+  "unlocked": "Unlocked",
+  "progress": "{{current}}/{{total}} Unlocked",
+  "newUnlock": "New Achievement!",
+  "badges": {
+    "firstTraining": {
+      "requirement": "Complete 1 training"
+    },
+    "streak7": {
+      "requirement": "7-day training streak"
+    },
+    "hundredSessions": {
+      "name": "Iron Forged",
+      "description": "Complete 100 trainings",
+      "requirement": "Complete 100 trainings"
+    },
+    "sharpshooter": {
+      "name": "Sharpshooter",
+      "description": "Reach 90% accuracy in any module",
+      "requirement": "90% accuracy in any module"
+    },
+    "gtoMaster": {
+      "name": "GTO Master",
+      "description": "Reach 80% accuracy in GTO simulator",
+      "requirement": "80% GTO accuracy"
+    },
+    "perfectionist": {
+      "name": "Perfectionist",
+      "description": "Score 100% in a single training (20+ questions)",
+      "requirement": "Perfect 20-question session"
+    },
+    "allRounder": {
+      "name": "All-Rounder",
+      "description": "Complete at least 10 trainings in every module",
+      "requirement": "10+ sessions per module"
+    },
+    "speedKing": {
+      "name": "Speed King",
+      "description": "Average answer time under 5 seconds",
+      "requirement": "Avg time < 5s"
+    }
+  },
+  "categories": {
+    "learning": "Learning",
+    "streak": "Streak",
+    "skill": "Skill",
+    "milestone": "Milestone"
+  },
+  "items": {
+    "firstTraining": {
+      "title": "First Steps",
+      "description": "Complete your first training session"
+    },
+    "completeLevel1": {
+      "title": "Level 1 Graduate",
+      "description": "Complete all Level 1 lessons"
+    },
+    "completeLevel2": {
+      "title": "Level 2 Graduate",
+      "description": "Complete all Level 2 lessons"
+    },
+    "completeLevel3": {
+      "title": "Level 3 Graduate",
+      "description": "Complete all Level 3 lessons"
+    },
+    "certificationAny": {
+      "title": "Certified",
+      "description": "Complete any level certification"
+    },
+    "certificationAll": {
+      "title": "Master of All",
+      "description": "Complete all level certifications"
+    },
+    "streak3": {
+      "title": "3-Day Streak",
+      "description": "Train for 3 consecutive days"
+    },
+    "streak7": {
+      "title": "Weekly Warrior",
+      "description": "Train for 7 consecutive days"
+    },
+    "streak30": {
+      "title": "Monthly Master",
+      "description": "Train for 30 consecutive days"
+    },
+    "streak100": {
+      "title": "Century Legend",
+      "description": "Train for 100 consecutive days"
+    },
+    "quickDrill7": {
+      "title": "Lightning Streak",
+      "description": "Quick drill for 7 consecutive days"
+    },
+    "perfect10": {
+      "title": "Sharpshooter",
+      "description": "100% accuracy in a single session (≥10 questions)"
+    },
+    "perfect20": {
+      "title": "Flawless",
+      "description": "100% accuracy in a single session (≥20 questions)"
+    },
+    "eloBeginner": {
+      "title": "Beginner Player",
+      "description": "Reach ELO 500+"
+    },
+    "eloIntermediate": {
+      "title": "Intermediate Player",
+      "description": "Reach ELO 800+"
+    },
+    "eloAdvanced": {
+      "title": "Advanced Player",
+      "description": "Reach ELO 1200+"
+    },
+    "eloExpert": {
+      "title": "Expert Player",
+      "description": "Reach ELO 2000+"
+    },
+    "firstPuzzle": {
+      "title": "Puzzle Novice",
+      "description": "Complete your first puzzle"
+    },
+    "firstDailyPuzzle": {
+      "title": "Daily Challenger",
+      "description": "Complete your first daily puzzle"
+    },
+    "completeTrackAny": {
+      "title": "Path Explorer",
+      "description": "Complete any learning track"
+    },
+    "completeTrackLocal": {
+      "title": "Local Pioneer",
+      "description": "Complete the localization track"
+    },
+    "allAchievements": {
+      "title": "Achievement Hunter",
+      "description": "Unlock all achievements"
+    },
+    "firstTheoryChapter": {
+      "title": "Theory Initiate",
+      "description": "Complete your first theory chapter"
+    },
+    "theoryBasics": {
+      "title": "Math Foundation",
+      "description": "Complete all Basic tier (T1-T3) theory chapters"
+    },
+    "theoryIntermediate": {
+      "title": "Game Theorist",
+      "description": "Complete all Intermediate tier (T4-T6) theory chapters"
+    },
+    "theoryMaster": {
+      "title": "Theory Master",
+      "description": "Complete all 9 levels of the Theory Academy"
+    }
+  }
+}

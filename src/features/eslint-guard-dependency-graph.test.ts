@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { ALLOWED_CROSS_IMPORTS } from '../../../eslint.config.js';
 
 /**
  * 实际依赖图 ⊆ 白名单守卫（T5-B2 step 2）。
@@ -23,8 +22,7 @@ async function loadAllowedCrossImports(): Promise<CrossImportMap> {
 
 // 静态扫描一个模块文件的全部 import 语句
 function scanModuleImports(filePath: string): string[] {
-  const fs = require('fs');
-  const content = fs.readFileSync(filePath, 'utf-8');
+  const content = require('fs').readFileSync(filePath, 'utf-8');
   const lines = content.split('\n');
   const imports: string[] = [];
   
@@ -62,13 +60,11 @@ function scanModuleImports(filePath: string): string[] {
 
 // 递归扫描模块目录的所有源码文件
 function scanModuleDirectory(dirPath: string): string[] {
-  const fs = require('fs');
-  const path = require('path');
   let files: string[] = [];
   
-  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+  const entries = require('fs').readdirSync(dirPath, { withFileTypes: true });
   for (const entry of entries) {
-    const fullPath = path.join(dirPath, entry.name);
+    const fullPath = require('path').join(dirPath, entry.name);
     if (entry.isDirectory()) {
       if (!['node_modules', 'dist', '.git'].includes(entry.name)) {
         files = files.concat(scanModuleDirectory(fullPath));
@@ -88,12 +84,12 @@ async function aggregateActualEdges(): Promise<ActualEdges> {
   const modules = require('fs').readdirSync(featuresDir);
   
   for (const moduleName of modules) {
-    const moduleDir = path.join(featuresDir, moduleName);
+    const moduleDir = require('path').join(featuresDir, moduleName);
     if (!require('fs').statSync(moduleDir).isDirectory()) continue;
     
-    const files = scanModuleDirectory(moduleDir);
     edges.set(moduleName, new Set());
     
+    const files = scanModuleDirectory(moduleDir);
     for (const filePath of files) {
       const importedModules = scanModuleImports(filePath);
       for (const target of importedModules) {

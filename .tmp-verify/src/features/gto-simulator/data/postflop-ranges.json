@@ -1,0 +1,83 @@
+{
+  "cbet_frequencies": {
+    "dry_single_raised": {
+      "cbet_frequency": 0.70,
+      "sizing": "33% pot",
+      "sizingMultiplier": 0.33,
+      "description": "干燥单加注底池：高频小注C-Bet，利用位置优势"
+    },
+    "wet_single_raised": {
+      "cbet_frequency": 0.55,
+      "sizing": "66% pot",
+      "sizingMultiplier": 0.66,
+      "description": "湿润单加注底池：中等频率大注，保护手牌价值"
+    },
+    "paired_single_raised": {
+      "cbet_frequency": 0.60,
+      "sizing": "33% pot",
+      "sizingMultiplier": 0.33,
+      "description": "对子公共牌：中频小注，对手难以击中"
+    },
+    "monotone_single_raised": {
+      "cbet_frequency": 0.40,
+      "sizing": "50% pot",
+      "sizingMultiplier": 0.50,
+      "description": "全同花公共牌：低频中注，谨慎处理同花威胁"
+    },
+    "connected_single_raised": {
+      "cbet_frequency": 0.50,
+      "sizing": "66% pot",
+      "sizingMultiplier": 0.66,
+      "description": "连牌公共牌：中频大注，防止对手免费看牌"
+    }
+  },
+  "multiway_adjustments": {
+    "three_way_pot": {
+      "cbet_frequency_multiplier": 0.75,
+      "bluff_reduction": 0.30,
+      "description": "三人底池：降低C-Bet频率，减少bluff，价值导向"
+    },
+    "four_plus_way_pot": {
+      "cbet_frequency_multiplier": 0.60,
+      "bluff_reduction": 0.50,
+      "description": "四人以上底池：大幅降低C-Bet，仅用强牌下注"
+    }
+  },
+  "texture_strategy": {
+    "dry": {
+      "strong_hand": { "fold": 0, "call": 0.55, "raise": 0.45, "raiseAmount": 3 },
+      "medium_hand": { "fold": 0.05, "call": 0.75, "raise": 0.20, "raiseAmount": 2.5 },
+      "draw_hand": { "fold": 0.15, "call": 0.50, "raise": 0.35, "raiseAmount": 2.5 },
+      "weak_hand": { "fold": 0.30, "call": 0.55, "raise": 0.15, "raiseAmount": 2.5 },
+      "air": { "fold": 0.40, "call": 0.30, "raise": 0.30, "raiseAmount": 2.5 }
+    },
+    "wet": {
+      "strong_hand": { "fold": 0, "call": 0.30, "raise": 0.70, "raiseAmount": 5 },
+      "medium_hand": { "fold": 0.15, "call": 0.65, "raise": 0.20, "raiseAmount": 4 },
+      "draw_hand": { "fold": 0.10, "call": 0.45, "raise": 0.45, "raiseAmount": 4 },
+      "weak_hand": { "fold": 0.50, "call": 0.40, "raise": 0.10, "raiseAmount": 4 },
+      "air": { "fold": 0.60, "call": 0.20, "raise": 0.20, "raiseAmount": 4 }
+    },
+    "paired": {
+      "strong_hand": { "fold": 0, "call": 0.60, "raise": 0.40, "raiseAmount": 3 },
+      "medium_hand": { "fold": 0.10, "call": 0.70, "raise": 0.20, "raiseAmount": 2.5 },
+      "draw_hand": { "fold": 0.15, "call": 0.55, "raise": 0.30, "raiseAmount": 3 },
+      "weak_hand": { "fold": 0.40, "call": 0.50, "raise": 0.10, "raiseAmount": 2.5 },
+      "air": { "fold": 0.55, "call": 0.25, "raise": 0.20, "raiseAmount": 2.5 }
+    },
+    "monotone": {
+      "strong_hand": { "fold": 0, "call": 0.40, "raise": 0.60, "raiseAmount": 4.5 },
+      "medium_hand": { "fold": 0.20, "call": 0.60, "raise": 0.20, "raiseAmount": 4 },
+      "draw_hand": { "fold": 0.10, "call": 0.40, "raise": 0.50, "raiseAmount": 4.5 },
+      "weak_hand": { "fold": 0.55, "call": 0.35, "raise": 0.10, "raiseAmount": 3.5 },
+      "air": { "fold": 0.70, "call": 0.15, "raise": 0.15, "raiseAmount": 3.5 }
+    },
+    "connected": {
+      "strong_hand": { "fold": 0, "call": 0.35, "raise": 0.65, "raiseAmount": 5 },
+      "medium_hand": { "fold": 0.15, "call": 0.60, "raise": 0.25, "raiseAmount": 4 },
+      "draw_hand": { "fold": 0.10, "call": 0.45, "raise": 0.45, "raiseAmount": 4 },
+      "weak_hand": { "fold": 0.45, "call": 0.40, "raise": 0.15, "raiseAmount": 4 },
+      "air": { "fold": 0.55, "call": 0.20, "raise": 0.25, "raiseAmount": 4 }
+    }
+  }
+}

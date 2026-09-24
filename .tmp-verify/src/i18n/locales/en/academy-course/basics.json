@@ -1,0 +1,57 @@
+{
+  "basicsContent": {
+    "basics-goal": [
+      "What is Texas Hold'em?",
+      "Texas Hold'em is the world's most popular poker variant, widely played in casinos, online platforms, and home games. Each player combines 2 hole cards and 5 community cards to make the best 5-card hand and compete for the pot.",
+      "Core goal: not to win every hand, but to make better decisions (+EV decisions) and win more chips than your opponents over the long run.",
+      "The Complete Flow of a Hand",
+      "1. Blinds: SB and BB post forced bets to create the initial pot\n2. Deal: each player receives 2 face-down hole cards\n3. Preflop: action starts from UTG and proceeds in turn\n4. Flop: 3 community cards are dealt + one betting round\n5. Turn: the 4th community card + one betting round\n6. River: the 5th community card + one betting round\n7. Showdown: remaining players reveal their hands to compare",
+      "Each betting round starts from the leftmost active player and proceeds clockwise.",
+      "Pro players don't change their strategy because of a single hand's win or loss. Remember: poker is a long-term game — short-term results are driven by luck, long-term results by skill."
+    ],
+    "basics-hands": [
+      "The 10 Hand Rankings (Weakest to Strongest)",
+      "Texas Hold'em uses a standard 52-card deck with no jokers. Here are all possible 5-card hand rankings:",
+      "10. High Card\n    Example: A♠ K♥ 9♦ 5♣ 2♠\n    No combination — compare by the highest card\n\n9. One Pair\n    Example: K♠ K♥ 9♦ 5♣ 2♠\n    Two cards of the same rank\n\n8. Two Pair\n    Example: K♠ K♥ 9♦ 9♣ 2♠\n    Two different pairs\n\n7. Three of a Kind\n    Example: K♠ K♥ K♦ 5♣ 2♠\n    Three cards of the same rank\n\n6. Straight\n    Example: 9♠ 8♥ 7♦ 6♣ 5♠\n    Five consecutive ranks (any suits)\n\n5. Flush\n    Example: A♥ K♥ 9♥ 5♥ 2♥\n    Five cards of the same suit\n\n4. Full House\n    Example: K♠ K♥ K♦ 9♣ 9♠\n    Three of a kind + one pair\n\n3. Four of a Kind\n    Example: K♠ K♥ K♦ K♣ 2♠\n    Four cards of the same rank\n\n2. Straight Flush\n    Example: 9♥ 8♥ 7♥ 6♥ 5♥\n    Five consecutive + same suit\n\n1. Royal Flush\n    Example: A♠ K♠ Q♠ J♠ T♠\n    A-K-Q-J-T same suit — the strongest hand",
+      "Mnemonic: High-Pair-Two-Trips-Straight-Flush-Boat-Quads-Straight-Flush-Royal. Remember especially: Flush beats Straight!",
+      "When two players have the same hand type, compare the Kicker. For example, if both have a pair of Ks, compare the next highest card."
+    ],
+    "basics-actions": [
+      "The 5 Basic Actions",
+      "On your turn, you can choose one of the following actions:",
+      "Fold 🚫\n  Give up this hand and stop playing it\n  When to use: your hand is too weak and continuing costs more than it's worth\n\nCheck ✋\n  Bet nothing and pass the action on\n  Requirement: nobody has bet yet (you're in the BB or everyone before you checked)\n\nCall 📞\n  Match the current highest bet\n  When to use: your hand is worth continuing but you don't want to raise\n\nRaise ⬆️\n  Increase the bet above the current highest\n  Minimum raise = the last raise increment\n  When to use: strong hand — build a big pot or force folds\n\nAll-In 🔥\n  Put all your chips into the pot\n  When to use: very strong hand (value all-in) or very weak hand (bluff all-in)",
+      "In each betting round, once everyone has \"matched action\" (all checked, or all called up to the highest bet), the round ends.",
+      "The most common beginner mistakes are calling too much (too passive) and raising too little (not aggressive enough). Good players actively raise at the right times to control the table.",
+      "The Big Blind (BB) Unit",
+      "In Texas Hold'em, chip amounts are usually measured in \"Big Blinds\" (BB). This lets strategy discussions stay consistent whether you're playing $0.01/$0.02 or $5/$10 stakes.\n\nFor example:\n- \"Raise to 2.5BB\" at $1/$2 = raise to $5\n- \"100BB effective stack\" at $1/$2 = $200\n- \"The pot is 8BB\" at $1/$2 = $16",
+      "Common stack depth references:\n\n20BB — Short Stack: push/fold strategy\n50BB — Medium stack: suited to aggressive short-stack play\n100BB — Standard depth: the standard buy-in for most cash games\n200BB+ — Deep stack: postflop skills matter even more",
+      "Stack depth directly affects strategy: the deeper the stack, the more postflop skill matters; the shorter it is, the more common preflop shove decisions become. 100BB is the baseline depth for learning standard strategy."
+    ],
+    "basics-positions": [
+      "6-Max Table Positions",
+      "In a 6-max table, positions clockwise from the dealer button (BTN) are:",
+      "BTN (Button) → acts last postflop — the best position\nSB (Small Blind) → posts 0.5BB, acts first postflop\nBB (Big Blind) → posts 1BB, acts last preflop\nUTG (Under the Gun) → acts first preflop — the tightest position\nHJ (Hijack) → middle-late position, can widen slightly\nCO (Cutoff) → just before BTN — the second-best position",
+      "Order of Action",
+      "Preflop: UTG → HJ → CO → BTN → SB → BB\nPostflop (Flop/Turn/River): SB → BB → UTG → HJ → CO → BTN\n\nNote: preflop and postflop action orders differ! Preflop starts from UTG (because SB/BB have already posted blinds), postflop starts from SB.",
+      "BTN is the best position — you almost always act last and can see everyone else's actions before deciding. That's \"position advantage\".",
+      "Remember: \"position is power.\" The same hand is worth far more on the BTN than in UTG. That's why you should play more hands on the BTN and only the strongest hands in UTG.",
+      "Opponent Types Preview",
+      "In later lessons you'll learn that different opponent types need different strategies. Here are the five main types you'll meet:\n\n• TAG (Tight-Aggressive): plays good hands, plays them hard\n• LAG (Loose-Aggressive): plays many hands, raises often\n• Nit: only plays the strongest hands\n• Maniac: raises and bluffs constantly\n• Calling Station: loves to call but never raises\n\nIdentifying opponent types is the foundation of advanced strategy. Don't worry if you can't remember it all now — we'll go deep in Level 4!"
+    ],
+    "basics-pot": [
+      "Main Pot",
+      "The main pot is the core pot that all players compete for. Every participant's bets go into it, and the winner takes the entire main pot.",
+      "Side Pot",
+      "A side pot is created when one player goes All-In with fewer chips than other players' bets:\n\nExample: Player A All-Ins 50BB, Player B bets 100BB, Player C calls 100BB\n- Main pot: 50+50+50 = 150BB (A, B, C can all win)\n- Side pot: 50+50 = 100BB (only B and C can win)\n\nEven with the best hand, Player A can only win the 150BB main pot.",
+      "The side-pot rule ensures \"you can't win more than you put in.\" An all-in player's winning ceiling is the amount they committed.",
+      "Why Pot Size Matters",
+      "Pot size directly affects your betting decisions:\n- Big pot → call with a wider range (better odds)\n- Small pot → need a stronger hand to continue\n- Your bet size is usually measured as a percentage of the pot (e.g. 1/2 pot, 2/3 pot, pot)",
+      "Pro players constantly track pot size because it determines pot-odds math. Building the habit of asking \"how much is in the pot?\" is an important step toward playing professionally."
+    ],
+    "basics-glossary": [
+      "Why Do You Need Poker Terminology?",
+      "Poker has its own \"language.\" Mastering core terms helps you: understand lesson content, discuss hands with others, and read strategy articles. The next page shows the complete glossary, with search and category browsing.",
+      "You don't need to memorize every term at once. You'll naturally get familiar through repeated exposure during your learning."
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "freeze": {
+    "label": "冻结卡",
+    "used": "今日已使用冻结卡",
+    "awarded": "获得 {{count}} 张冻结卡",
+    "empty": "冻结卡不足",
+    "settingLabel": "冻结卡",
+    "settingHint": "今天没空训练？用 1 张冻结卡为今天请假，保住连续训练（每日限 1 张），当前剩余 {{count}} 张",
+    "useNow": "使用冻结卡",
+    "useSuccess": "已使用 1 张，今日连续性已保护 ✓",
+    "useFail": "不可用（今日已训/已用、无卡或无可保护连续）"
+  },
+  "share": {
+    "title": "🔥 连续训练",
+    "dayUnit": "天",
+    "statsLine": "正确率 {{accuracy}}%  ·  获得 {{count}} 枚徽章",
+    "currentLine": "当前连续 {{current}} 天  ·  最长记录 {{longest}} 天",
+    "productName": "德州扑克训练平台"
+  },
+  "celebration": {
+    "hiddenTitle": "Streak 里程碑庆典：{{days}} 天",
+    "hiddenDesc": "你已达成连续训练 {{days}} 天的里程碑",
+    "bronzeTitle": "铜徽章达成！",
+    "bronzeSubtitle": "3 天连续训练，习惯正在养成",
+    "flameTitle": "金色火焰！",
+    "flameSubtitle": "7 天连续训练，你已经进入状态",
+    "trophyTitle": "奖杯到手！",
+    "trophySubtitle": "30 天连续训练，你已是认真玩家",
+    "diamondTitle": "钻石徽章！",
+    "diamondSubtitle": "100 天连续训练，少数人的领域",
+    "legendTitle": "传奇达成！",
+    "legendSubtitle": "365 天连续训练，你已是传奇",
+    "congrats": "恭喜！你已连续训练 {{days}} 天！",
+    "freezeReward": "获得 {{count}} 张冻结卡",
+    "share": "分享给好友",
+    "sharing": "生成中...",
+    "continue": "继续训练"
+  },
+  "earnBack": {
+    "windowHint": "Earn Back 窗口期",
+    "restored": "Streak 已恢复！",
+    "expired": "Earn Back 窗口已过期，Streak 已重置"
+  },
+  "endingSoon": "你的 Streak 即将熄灭，快来训练保住它！",
+  "fragment": {
+    "title": "冻结卡碎片",
+    "progress": "{current}/5",
+    "earned": "获得 1 个碎片！",
+    "synthesized": "碎片合成了一张冻结卡！",
+    "dailyLimit": "今日碎片已达上限"
+  }
+}

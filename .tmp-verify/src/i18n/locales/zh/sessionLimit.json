@@ -1,0 +1,8 @@
+{
+  "title": "今日已达题量上限",
+  "message": "你今天已经答了 {{answered}} / {{limit}} 题。建议休息一下，明天再继续 — 长期进步比短期冲刺更重要。",
+  "backHome": "返回 Dashboard",
+  "settingLabel": "每日题量上限",
+  "settingHint": "达到上限后将禁止继续训练，0 = 无限",
+  "unlimited": "无限"
+}
