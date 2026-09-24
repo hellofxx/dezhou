@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 /**
  * File line count guard (T5-B2 step 1, P1-3).
