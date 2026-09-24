@@ -89,8 +89,7 @@ function scanModuleDirectory(dirPath: string): string[] {
 // 聚合实际依赖边
 async function aggregateActualEdges(): Promise<ActualEdges> {
   const edges = new Map<string, Set<string>>();
-  // 从当前目录（src/features/）往上两级的 parentDir 得到 src/features/
-  import.meta.url 在 CI 中是 file:///home/runner/work/dezhou/dezhou/src/features/xxx.test.ts
+  // import.meta.url 在 CI 中是 file:///home/runner/work/dezhou/dezhou/src/features/xxx.test.ts
   // 需要解析出 src/features/ 目录
   const currentPath = import.meta.url.replace('/src/features/eslint-guard-dependency-graph.test.ts', '');
   const featuresDir = join(currentPath, '..').replace(/file:\/\//, '').replace(/\\/g, '/');
