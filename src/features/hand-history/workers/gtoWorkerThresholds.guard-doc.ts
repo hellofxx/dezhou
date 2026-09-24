@@ -21,7 +21,6 @@ describe('GRADE_THRESHOLDS parity guard', () => {
     // - Lines 16-19: NaN handling parity → returns 'best' 
     // - Lines 21-26: Boundary values (0/0.5/2/5) + interval tests
     
-    const existingTestPath = '../src/features/hand-history/workers/gtoWorkerThresholds.test.ts';
     const coverage = {
       thresholds: true,
       nanHandling: true,

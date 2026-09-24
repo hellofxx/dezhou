@@ -10,6 +10,9 @@ import { describe, expect, it } from 'vitest';
  * 这补齐了 eslintGuard 的盲区：动态 import 同样构成编译期依赖边。
  */
 
+import { readFileSync, readdirSync, statSync } from 'fs';
+import { join } from 'path';
+
 type CrossImportMap = Record<string, string[]>;
 type ActualEdges = Map<string, Set<string>>;
 
@@ -22,7 +25,7 @@ async function loadAllowedCrossImports(): Promise<CrossImportMap> {
 
 // 静态扫描一个模块文件的全部 import 语句
 function scanModuleImports(filePath: string): string[] {
-  const content = require('fs').readFileSync(filePath, 'utf-8');
+  const content = readFileSync(filePath, 'utf-8');
   const lines = content.split('\n');
   const imports: string[] = [];
   
@@ -62,9 +65,9 @@ function scanModuleImports(filePath: string): string[] {
 function scanModuleDirectory(dirPath: string): string[] {
   let files: string[] = [];
   
-  const entries = require('fs').readdirSync(dirPath, { withFileTypes: true });
+  const entries = readdirSync(dirPath, { withFileTypes: true });
   for (const entry of entries) {
-    const fullPath = require('path').join(dirPath, entry.name);
+    const fullPath = join(dirPath, entry.name);
     if (entry.isDirectory()) {
       if (!['node_modules', 'dist', '.git'].includes(entry.name)) {
         files = files.concat(scanModuleDirectory(fullPath));
@@ -81,11 +84,11 @@ function scanModuleDirectory(dirPath: string): string[] {
 async function aggregateActualEdges(): Promise<ActualEdges> {
   const edges = new Map<string, Set<string>>();
   const featuresDir = new URL('../../../src/features/', import.meta.url).pathname;
-  const modules = require('fs').readdirSync(featuresDir);
+  const modules = readdirSync(featuresDir);
   
   for (const moduleName of modules) {
-    const moduleDir = require('path').join(featuresDir, moduleName);
-    if (!require('fs').statSync(moduleDir).isDirectory()) continue;
+    const moduleDir = join(featuresDir, moduleName);
+    if (!statSync(moduleDir).isDirectory()) continue;
     
     edges.set(moduleName, new Set());
     
