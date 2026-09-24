@@ -18,7 +18,7 @@ type ActualEdges = Map<string, Set<string>>;
 
 // tsconfig 未开 allowJs，改用运行时 URL 导入 JS 配置
 async function loadAllowedCrossImports(): Promise<CrossImportMap> {
-  const configUrl = new URL('../eslint.config.js', import.meta.url).href;
+  const configUrl = new URL('../../eslint.config.js', import.meta.url).href;
   const mod = await import(configUrl) as { ALLOWED_CROSS_IMPORTS: CrossImportMap };
   return mod.ALLOWED_CROSS_IMPORTS;
 }
