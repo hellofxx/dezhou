@@ -25,43 +25,46 @@ function countLines(filePath: string): number {
 }
 
 function isExemptCategory(relativePath: string): boolean {
+  // Normalize path separators for cross-platform compatibility (Windows/Linux)
+  const normalizedPath = relativePath.replace(/\\/g, '/');
+  
   // Store files
-  if (relativePath.includes('/store.ts')) return true;
+  if (normalizedPath.includes('/store.ts')) return true;
   
   // Parser files
-  if (relativePath.includes('/parsers/')) return true;
-  
+  if (normalizedPath.includes('/parsers/')) return true;
+    
   // Constants
-  if (relativePath.includes('/constants/') && relativePath.endsWith('.ts') && !relativePath.includes('test.')) {
+  if (normalizedPath.includes('/constants/') && normalizedPath.endsWith('.ts') && !normalizedPath.includes('test.')) {
     return true;
   }
-  
+    
   // Type definitions
-  if (relativePath.match(/\/types\.ts$/)) return true;
-  
+  if (normalizedPath.match(/\/types\.ts$/)) return true;
+    
   // Utility files with large datasets or logic
-  if (relativePath.includes('/utils/')) return true;
-  
+  if (normalizedPath.includes('/utils/')) return true;
+    
   // Page components and major business logic components
-  if (relativePath.match(/(Page|Dashboard|QuizPage|ChapterView|LessonIntroCard|ConceptGraph|QuickDrill|PracticeDrill|ReviewSession|CourseView|TheoryFlaggedReview|TrainingSession|PotOddsDrill|BasicsIntro|LevelCertification|HandRankingDrill|ScenarioSetup|TheoryLadder)\.tsx$/)) return true;
-  
+  if (normalizedPath.match(/(Page|Dashboard|QuizPage|ChapterView|LessonIntroCard|ConceptGraph|QuickDrill|PracticeDrill|ReviewSession|CourseView|TheoryFlaggedReview|TrainingSession|PotOddsDrill|BasicsIntro|LevelCertification|HandRankingDrill|ScenarioSetup|TheoryLadder)\.tsx$/)) return true;
+    
   // General drill and lesson component files
-  if (relativePath.includes('/drills/') || relativePath.includes('/data/lessons/')) return true;
-  
+  if (normalizedPath.includes('/drills/') || normalizedPath.includes('/data/lessons/')) return true;
+    
   // Course data (lesson variants, level definitions)
-  if (relativePath.includes('/data/') && !relativePath.includes('test.')) {
+  if (normalizedPath.includes('/data/') && !normalizedPath.includes('test.')) {
     return true;
   }
-  
+    
   // Progress utils and data files
-  if (relativePath.match(/progress\/(utils|data)\//)) return true;
-  
+  if (normalizedPath.match(/progress\/(utils|data)/)) return true;
+    
   // Hand-history utils
-  if (relativePath.match(/hand-history\/utils\//)) return true;
-  
+  if (normalizedPath.match(/hand-history\/utils/)) return true;
+    
   // Catch-all: any ts/tsx file in src/features is exempted if >300 lines and follows our patterns
   // This handles edge cases like puzzleBank.ts, variants data files, etc.
-  if (relativePath.includes('/data/') || relativePath.includes('/variants/')) return true;
+  if (normalizedPath.includes('/data/') || normalizedPath.includes('/variants/')) return true;
   
   return false;
 }
