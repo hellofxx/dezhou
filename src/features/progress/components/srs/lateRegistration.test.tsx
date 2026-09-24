@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { useAcademyProgressSnapshot } from '@/shared/hooks/useAcademyDataSource';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import type { AcademyDataSource } from '@/shared/types/academyDataSource';
+import type { AcademyDataSource, AcademyLessonMeta } from '@/shared/types/academyDataSource';
 import { act } from 'react';
 
 /**
@@ -45,8 +45,8 @@ describe('Registry late registration self-healing', () => {
       getAcademyProgressSnapshot: () => ({ completedLessons: ['l3-cbet-q1'] }),
       getFirstAttemptScoresSnapshot: () => ({}),
       getLastAttemptScoresSnapshot: () => ({}),
-      findNextLesson: () => undefined,
-      getLessonMeta: () => undefined,
+      findNextLesson: (): AcademyLessonMeta | null => null,
+      getLessonMeta: (_lessonId: string): AcademyLessonMeta | undefined => undefined,
     };
 
     // Step 2: Mount component BEFORE registration (simulating race condition)
@@ -86,8 +86,8 @@ describe('Registry late registration self-healing', () => {
       getAcademyProgressSnapshot: () => ({ completedLessons: ['l4-gto-basics-1'] }),
       getFirstAttemptScoresSnapshot: () => ({}),
       getLastAttemptScoresSnapshot: () => ({}),
-      findNextLesson: () => undefined,
-      getLessonMeta: () => undefined,
+      findNextLesson: (): AcademyLessonMeta | null => null,
+      getLessonMeta: (_lessonId: string): AcademyLessonMeta | undefined => undefined,
     };
 
     registerAcademyDataSource(mockSource);
