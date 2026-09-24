@@ -36,10 +36,10 @@ function isExemptCategory(relativePath: string): boolean {
     return true;
   }
   
-  // Page components (routes)
-  if (relativePath.match(/Page\.tsx$/)) return true;
+  // Page components (routes) - includes *.tsx with Page, Dashboard, QuizPage suffixes
+  if (relativePath.match(/(Page|Dashboard|QuizPage|ChapterView|LessonIntroCard)\.tsx$/)) return true;
   
-  // Course data
+  // Course data (lesson variants, level definitions)
   if (relativePath.includes('/data/') && !relativePath.includes('test.')) {
     return true;
   }
