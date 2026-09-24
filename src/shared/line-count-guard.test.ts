@@ -61,7 +61,7 @@ function isExemptCategory(relativePath: string): boolean {
   
   // Catch-all: any ts/tsx file in src/features is exempted if >300 lines and follows our patterns
   // This handles edge cases like puzzleBank.ts, variants data files, etc.
-  if (relativePath.includes('/data/') || relativePath.match(/variants\//)) return true;
+  if (relativePath.includes('/data/') || relativePath.includes('/variants/')) return true;
   
   return false;
 }
