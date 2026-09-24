@@ -50,7 +50,10 @@ function countConsumers(filePath: string): ConsumerCount {
       const parts = parentDir.split(path.sep);
       const featureIndex = parts.indexOf('features');
       if (featureIndex >= 0 && featureIndex < parts.length - 1) {
-        consumers.add(parts[featureIndex + 1]);
+        const moduleName = parts[featureIndex + 1];
+        if (moduleName) {
+          consumers.add(moduleName);
+        }
       }
     }
   }

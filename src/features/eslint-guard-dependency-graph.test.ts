@@ -36,7 +36,10 @@ function scanModuleImports(filePath: string): string[] {
     // 别名形式：@/features/<module>
     const aliasMatch = line.match(/from\s+['"]@\/features\/([a-z-]+)/);
     if (aliasMatch) {
-      imports.push(aliasMatch[1]);
+      const moduleName = aliasMatch[1];
+      if (moduleName) {
+        imports.push(moduleName);
+      }
       continue;
     }
     
@@ -46,7 +49,7 @@ function scanModuleImports(filePath: string): string[] {
       // 提取最后的文件夹名作为模块名
       const parts = relativeMatch[0].split('/');
       const moduleName = parts[parts.length - 1];
-      if (/^[a-z-]+$/.test(moduleName)) {
+      if (moduleName && /^[a-z-]+$/.test(moduleName)) {
         imports.push(moduleName);
       }
     }
@@ -54,7 +57,10 @@ function scanModuleImports(filePath: string): string[] {
     // 动态 import: import('@/features/xxx')
     const dynamicMatch = line.match(/import\(['"]@\/features\/([a-z-]+)/);
     if (dynamicMatch) {
-      imports.push(dynamicMatch[1]);
+      const moduleName = dynamicMatch[1];
+      if (moduleName) {
+        imports.push(moduleName);
+      }
     }
   }
   
