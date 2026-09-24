@@ -45,8 +45,8 @@ describe('Registry late registration self-healing', () => {
       getAcademyProgressSnapshot: () => ({ completedLessons: ['l3-cbet-q1'] }),
       getFirstAttemptScoresSnapshot: () => ({}),
       getLastAttemptScoresSnapshot: () => ({}),
-      findNextLesson: () => null,
-      getLessonMeta: () => null,
+      findNextLesson: () => undefined,
+      getLessonMeta: () => undefined,
     };
 
     // Step 2: Mount component BEFORE registration (simulating race condition)
@@ -86,8 +86,8 @@ describe('Registry late registration self-healing', () => {
       getAcademyProgressSnapshot: () => ({ completedLessons: ['l4-gto-basics-1'] }),
       getFirstAttemptScoresSnapshot: () => ({}),
       getLastAttemptScoresSnapshot: () => ({}),
-      findNextLesson: () => null,
-      getLessonMeta: () => null,
+      findNextLesson: () => undefined,
+      getLessonMeta: () => undefined,
     };
 
     registerAcademyDataSource(mockSource);
