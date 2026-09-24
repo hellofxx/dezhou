@@ -89,10 +89,13 @@ function scanModuleDirectory(dirPath: string): string[] {
 // 聚合实际依赖边
 async function aggregateActualEdges(): Promise<ActualEdges> {
   const edges = new Map<string, Set<string>>();
-  // import.meta.url 在 CI 中是 file:///home/runner/work/dezhou/dezhou/src/features/xxx.test.ts
-  // 需要解析出 src/features/ 目录
-  const currentPath = import.meta.url.replace('/src/features/eslint-guard-dependency-graph.test.ts', '');
-  const featuresDir = join(currentPath, '..').replace(/file:\/\//, '').replace(/\\/g, '/');
+  // import.meta.url 在 CI 中是 file:///home/runner/work/dezhou/dezhou/src/features/eslint-guard-dependency-graph.test.ts
+  // 直接提取父目录得到 features 目录
+  const currentUrl = import.meta.url;
+  const featuresDir = currentUrl
+    .replace('file://', '') // 移除 protocol
+    .replace('/src/features/eslint-guard-dependency-graph.test.ts', '/src/features')
+    .replace(/\\/g, '/'); // 统一使用正斜杠（兼容 Windows 和 Linux）
   
   const modules = readdirSync(featuresDir);
   
