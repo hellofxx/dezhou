@@ -8,6 +8,16 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-09-25 GitHub Pages 部署连续失败的根因修复（已提交 `48cad4d` / `6905ec1` / 本轮）
+
+连续 9 次 CI 红（`35963310235`…`35965691565`），前 5 个 commit 全是在盲改豁免清单。三处根因：
+
+- **守卫测试路径解析在 Windows 下失效**：`new URL(...).pathname` 产出 `/F:/...`，被解析成 `F:\F:\...` 直接 ENOENT；`eslint-guard-dependency-graph.test.ts` 则手工裁剪 `file://` 前缀踩同一坑。影响 `line-count-guard` / `admission-guard` / `eslint-guard-dependency-graph` 三个守卫——**本地恒红、Linux CI 结论不同**，开发者看不到违规文件只能猜。统一改 `fileURLToPath`；line-count-guard 增加扫描自检（`allFiles.length > 300`）防路径失效时断言空洞通过，断言改为直接比对路径数组使 diff 自解释。
+- **line-count-guard 阈值口径**：对齐 `docs/AI_GUIDE.md` §编码规范「超过 400 行需拆分」，硬失败线 300 → 400，300–400 为非阻断灰区（原 300 线下的豁免清单已膨胀为组件名枚举）；补齐模块根 `constants.ts` 豁免（旧规则只覆盖 `constants/` 目录）。整改后 >400 的 36 个文件全部落在正当豁免类别。
+- **`useAcademyDataSource` late registration 真实产品缺陷**：自愈路径只触发一次快照刷新、未补桥接真实数据源的 `subscribe`，导致「Dashboard 先挂载、学院数据源后注册」时组件拿到一次性快照后**不再响应学院进度变更**；且丢弃 `onAcademyDataRegister` 返回的取消函数造成监听器泄漏。测试侧 mock 每次合成新快照对象，违反 `AcademyDataSource` 稳定引用契约，是 "Maximum update depth exceeded" 的直接触发点，两侧同时修。
+
+**元根因（本轮追加修复）**：`.git-hooks/pre-commit` 的 lint 门禁 **fail-open**——`command -v pnpm` 失败即 `exit 0` 放行。pnpm 实际不在 hook 的 PATH 上（本机 pnpm 位于 `F:\dev\pnpm`，未入 PATH），所以门禁静默空转，`git status` 却显示检查通过；上文「全部 8 个提交逐一通过 pre-commit」即其产物。改为：`pnpm` → `corepack pnpm`（按 `packageManager` 取锁定版本，本机可解析到 11.18.0）→ `$APPDATA` 下 `eslint.cmd` → **三者皆无则 `exit 1` 中止提交**；检测口径由 `git diff HEAD` 修正为 `git diff --cached`（只校验将要提交的内容）；`cd` 仓库根目录失败时同样阻断。同步更正 `.git-hooks/README.md`——原文把门禁写成「仅校验 agent 文件」「警告级非阻塞」，与代码双重不符。三分支均已实测：正常放行、lint 错误阻断（exit 1）、无包管理器 fail-closed（exit 1）。
+
 ### 多代理协作收口遗留事项（本轮总计：门禁 132/898 → 142/1021 全绿；全部未 commit）
 
 > 编排者（主代理）+ 项目子代理（platform-dev / progress-dev / gto-simulator-dev / range-trainer-dev / strategy-academy-dev / theory-academy-dev）波次协作。子代理产出均经 git diff 与测试数交叉核验；`progress-dev` 两次空转由主代理接管其任务。
