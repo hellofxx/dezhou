@@ -25,14 +25,17 @@ function subscribeAcademy(listener: () => void): () => void {
     // 已注册：直接桥接数据源的 subscribe，返回其取消函数
     return source.subscribe(listener);
   }
-  // 未注册：订阅注册事件；注册成功时触发一次快照刷新（自愈）
-  // 注意：这里不完美处理取消，因为自愈发生在下次渲染时 getSnapshot 会重新读取 dataSource
-  onAcademyDataRegister(() => {
-    // 数据源已注册，通知 React 重新获取快照
+  // 未注册：订阅注册事件；注册成功时补桥接真实数据源的 subscribe，再触发一次快照刷新（自愈）。
+  // 必须补桥接——否则自愈后组件只拿到一次性快照，后续学院进度变更不再触发重渲染。
+  let unsubscribeSource: (() => void) | undefined;
+  const unsubscribeRegister = onAcademyDataRegister(() => {
+    unsubscribeSource = getAcademyDataSource()?.subscribe(listener);
     listener();
   });
-  // 返回空取消函数（实际取消不是关键，因为自愈依赖于 re-render 时的快照更新）
-  return () => {};
+  return () => {
+    unsubscribeRegister();
+    unsubscribeSource?.();
+  };
 }
 
 function getProgressSnapshot(): AcademyProgressSnapshot {

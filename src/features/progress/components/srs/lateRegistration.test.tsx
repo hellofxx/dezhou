@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { useAcademyProgressSnapshot } from '@/shared/hooks/useAcademyDataSource';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import type { AcademyDataSource, AcademyLessonMeta } from '@/shared/types/academyDataSource';
+import type { AcademyDataSource, AcademyLessonMeta, AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
 import { act } from 'react';
 
 /**
@@ -23,6 +23,14 @@ function TestComponent() {
   );
 }
 
+/**
+ * AcademyDataSource 契约要求快照返回稳定引用（见 shared/types/academyDataSource.ts）；
+ * 每次调用合成新对象会让 useSyncExternalStore 判定 store 恒变，触发无限重渲染。
+ */
+const EMPTY_SCORES: Record<string, number> = {};
+const PROGRESS_LATE: AcademyProgressSnapshot = { completedLessons: ['l3-cbet-q1'] };
+const PROGRESS_READY: AcademyProgressSnapshot = { completedLessons: ['l4-gto-basics-1'] };
+
 describe('Registry late registration self-healing', () => {
   beforeEach(() => {
     cleanup();
@@ -42,9 +50,9 @@ describe('Registry late registration self-healing', () => {
         // No-op subscriber
         return () => {};
       }),
-      getAcademyProgressSnapshot: () => ({ completedLessons: ['l3-cbet-q1'] }),
-      getFirstAttemptScoresSnapshot: () => ({}),
-      getLastAttemptScoresSnapshot: () => ({}),
+      getAcademyProgressSnapshot: () => PROGRESS_LATE,
+      getFirstAttemptScoresSnapshot: () => EMPTY_SCORES,
+      getLastAttemptScoresSnapshot: () => EMPTY_SCORES,
       findNextLesson: (): AcademyLessonMeta | null => null,
       getLessonMeta: (_lessonId: string): AcademyLessonMeta | undefined => undefined,
     };
@@ -83,9 +91,9 @@ describe('Registry late registration self-healing', () => {
         setTimeout(() => {}, 0);
         return () => {};
       }),
-      getAcademyProgressSnapshot: () => ({ completedLessons: ['l4-gto-basics-1'] }),
-      getFirstAttemptScoresSnapshot: () => ({}),
-      getLastAttemptScoresSnapshot: () => ({}),
+      getAcademyProgressSnapshot: () => PROGRESS_READY,
+      getFirstAttemptScoresSnapshot: () => EMPTY_SCORES,
+      getLastAttemptScoresSnapshot: () => EMPTY_SCORES,
       findNextLesson: (): AcademyLessonMeta | null => null,
       getLessonMeta: (_lessonId: string): AcademyLessonMeta | undefined => undefined,
     };
