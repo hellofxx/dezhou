@@ -12,6 +12,7 @@ import { describe, expect, it } from 'vitest';
 
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
+import { fileURLToPath } from 'node:url';
 
 type CrossImportMap = Record<string, string[]>;
 type ActualEdges = Map<string, Set<string>>;
@@ -89,13 +90,9 @@ function scanModuleDirectory(dirPath: string): string[] {
 // 聚合实际依赖边
 async function aggregateActualEdges(): Promise<ActualEdges> {
   const edges = new Map<string, Set<string>>();
-  // import.meta.url 在 CI 中是 file:///home/runner/work/dezhou/dezhou/src/features/eslint-guard-dependency-graph.test.ts
-  // 直接提取父目录得到 features 目录
-  const currentUrl = import.meta.url;
-  const featuresDir = currentUrl
-    .replace('file://', '') // 移除 protocol
-    .replace('/src/features/eslint-guard-dependency-graph.test.ts', '/src/features')
-    .replace(/\\/g, '/'); // 统一使用正斜杠（兼容 Windows 和 Linux）
+  // 本测试文件即位于 src/features/ 下，取自身所在目录即得 features 目录。
+  // fileURLToPath 而非字符串裁剪 file:// 前缀：后者在 Windows 产出 /F:/... 会被解析成 F:\F:\...
+  const featuresDir = fileURLToPath(new URL('.', import.meta.url));
   
   const modules = readdirSync(featuresDir);
   

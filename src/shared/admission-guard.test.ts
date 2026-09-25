@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /**
  * Shared 层准入门槛棘轮守卫（T6-B3 step 3）。
@@ -78,7 +79,8 @@ function countConsumers(filePath: string): ConsumerCount {
 
 describe('Shared 层准入门槛 ≥2 消费者', () => {
   it('src/shared/*.ts (不含 index.ts barrel) 至少被≥2 个 feature 模块消费（只降不升基线）', async () => {
-    const sharedUtilsDir = new URL('../../src/shared/utils/', import.meta.url).pathname;
+    // fileURLToPath 而非 .pathname：后者在 Windows 产出 /F:/... 会被解析成 F:\F:\...
+    const sharedUtilsDir = fileURLToPath(new URL('./utils/', import.meta.url));
     const testFiles = scanDirectory(sharedUtilsDir);
     const violations: string[] = [];
     const baselineMap: Record<string, number> = {
