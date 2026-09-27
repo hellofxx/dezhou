@@ -192,7 +192,8 @@
     "t8hu-reads": "Psychological Reads",
     "t9hu-mastery": "Full Integration",
     "t9hu-pro-study": "Pro Player Study",
-    "t4-preflop-structure": "Preflop Structural Theory: 3-bet / 4-bet and Building a Defending Range"
+    "t4-preflop-structure": "Preflop Structural Theory: 3-bet / 4-bet and Building a Defending Range",
+    "t6-equity-realization": "Board Texture and Equity Realization: How Much of Your Equity Actually Lands"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -271,7 +272,8 @@
     "t8hu-reads": "Techniques of observation and counter-observation",
     "t9hu-mastery": "Building a personal heads-up theory system",
     "t9hu-pro-study": "Decision logic of top HU players",
-    "t4-preflop-structure": "Upgrading preflop from “is my hand good enough” to “what does my range look like”"
+    "t4-preflop-structure": "Upgrading preflop from “is my hand good enough” to “what does my range look like”",
+    "t6-equity-realization": "All-in equity is the sticker price; realized equity is what you take home"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1395,6 +1397,22 @@
       "The most common way to think wrong: “I 3-bet for value.” That treats preflop as a one-street decision. The actual mechanism is that a 3-bet’s α runs as high as 66%-74%; if the opponent does not fold, your value branch has to cash out through postflop equity realization — and OOP realization is lower (T6), so a value-only 3-bet range bleeds systematically the moment the opponent defends wider. Conversely, with enough bluffs in the range the opponent is forced to widen their defence, and only then do your genuine value hands collect what they are owed.",
       "Three-step check for building any preflop range: ① write down the combo count of the value branch (e.g. {QQ+, AK} = 6+6+6+16 = 34 combos); ② attach the bluff branch, preferring “low equity + high blocking + high realization potential” hands such as A5s (only 4 combos, and the suited ace also blocks the opponent’s nut flushes), not offhand picks like KTo that block nothing and are easily dominated; ③ ask “what do I do if I am moved all-in” — any hand that cannot answer the third question does not belong in this range.",
       "3-bet and 4-bet sizings are not style but the solution of α and MDF: compute the required fold frequency first, then decide which range widths can carry it\nPosition changes realization rate, and realization rate changes sizing: OOP needs a bigger 3-bet to buy the same immediate fold pressure\nWith SPR near 2 the 4-bet pot is structurally jam-or-fold, so the range must be polarised and the marginal hands (AQo / JJ) stay one tier lower\nBluffs exist not only to profit on their own, but to stop the opponent from defending only against your value branch for free"
+    ],
+    "t6-equity-realization": [
+      "The Equity of One Street Is Not the Equity This Hand Can Actually Collect",
+      "T1 and T2 taught us to count outs and to compute the equity a call requires — all of which rest on one assumption: the hand goes to showdown. In reality most pots never reach one. Someone folds on the flop, someone gives up on the turn, someone checks the whole way down and only collects on the river. So “my all-in equity is this much” is merely a sticker price; what decides long-term profit is how much the hand actually collects through its interaction with future betting, position and stack depths. That discount factor is equity realization.",
+      "Realization is in effect a discount applied to one multiplication: realized equity = all-in equity × realization rate. All-in equity is the only quantity you can compute directly (by enumerating every board); the realization rate can only be inferred from structure — position, SPR, board type, and which range owns the nuts are four variables that jointly determine it.",
+      "Definition: realized equity = all-in (raw) equity × realization rate R, where 0 < R ≤ 1.\n\nThe only condition for R = 1: the hand goes all-in immediately. Then every possible board is fully cashed in, and there is no “part I folded before I could collect”.\nCorollary: as long as further betting remains possible, R is strictly below 1; the farther from showdown and the easier it is to be forced out, the smaller R.\n\nThis is why “my hand has 52% equity” is not a decision-relevant statement in a single-raised pot — it never says how many of those 52 percentage points can be collected. (Concept from: Applications of No-Limit Hold’em board texture and realized equity)",
+      "Turning the Threshold Around: How Strong Does Your Hand Have to Be",
+      "Convention from T2: required equity = amount to call ÷ pot after the call. Fold in the realization rate and you get the all-in equity threshold.\n\nPot-sized bet (b = P): call P into a pot of 3P → required equity = 1/3 = 33.3%\nOut of position, single-raised pot, medium strength: realization is typically around 0.85 → required all-in equity = 33.3% ÷ 0.85 ≈ 39%\n\nHalf-pot bet (b = 0.5P): call 0.5P into a pot of 2P → required equity = 25%\nWith R = 0.8 → required all-in equity = 25% ÷ 0.8 ≈ 31%\n\nHow to read it: pot odds state the threshold for *realizable* equity, while the only number you actually hold is all-in equity, so the two must be reconciled by scaling once with 1/R. Skip that step and you are judging the price you pay by the sticker price, systematically overrating your hand in pots that never reach showdown. (Concepts from: The Theory of Poker implied and reverse implied odds; Modern Poker Theory multi-street betting and equity realization)",
+      "Example 1 (the same A♠K♠, two take-home prices): BTN opens, BB calls, the flop is J♥8♦4♣ with no flush draw. The two overcards give A♠K♠ about 55% all-in equity against BB’s continuing range. In position, BTN chooses how many streets to play: pot it cheap when the opponent shows weakness, stop when they show strength — realization about 0.85 → realized equity roughly 47%. The same cards in BB (out of position) act first every street, surrendering information and initiative, easily pushed off by check-raises and never collecting thin value — realization about 0.65 → realized equity roughly 36%. Same cards, same equity, same pot; only position differs. That is the exact price tag on T3’s claim that position has value.",
+      "Two Independent Variables: SPR and Board Texture",
+      "The first variable is SPR (section three of this level): the smaller the SPR, the closer the hand runs to a forced all-in, and the closer R gets to 1. At SPR ≈ 2 (flops in 3-bet pots) almost every hand reaches an all-in, so “what is my all-in equity” is the right question; at SPR ≈ 13 in a deep-stacked single-raised pot, one pair often collects a single bet before being forced off, and R is clearly below 1. The same middle pair is an asset in a 3-bet pot and a liability in a deep-stacked multiway pot.\nThe second variable is board texture: connected, wet boards keep reordering who is ahead, giving the weaker side more chances to exit early and leaving more equity on paper; dry, high-card boards settle strength early, so equity cashes in more easily. A hand from the range-advantaged side (T4) whose marginal hands are reverse-dominated has a lower R — because it should fold the moment it meets resistance.",
+      "Example 2 (who collects equity on the same wet board): single-raised pot, flop 9♠7♠2♥, effective stacks about seven times the pot. Q♠J♠ holds the nut flush draw, an open-ended straight draw and a backdoor straight; even when behind, some street will carry it to showdown or force the opponent off, so R approaches 1 — sticker price and take-home price nearly coincide. K♠9♦ has only a pair with a weak kicker: any spade, any card above 9, any 8/6/5 on the turn removes a reason to continue, so R is clearly below 1. The difference is not the size of the equity but its cashability: a large slice of K9o’s equity belongs to branches that are never collected. This is the real reason T3’s starting-hand theory rejects weak-kicker broadways, and the equity-level restatement of T2’s reverse implied odds.",
+      "Example 3 (a multiway pot compresses realization again): four players see the flop and AA’s all-in equity drops from about 85% heads-up to about 64% (same convention as T9’s multiway chapter, a typical table value). But the real damage is two-layered: besides the lower sticker price, R shrinks as well — one more bet and one more raise to face, and any street can force you off the hand that is “best right now”. So what a four-way pot takes from AA is harsher than 85% → 64% suggests. Conversely, the more a hand type needs showdown to cash in (small pairs set-mining, suited connectors), the more it suffers from that second layer — T9 gathers this thread up formally.",
+      "The most common way to think wrong: treat all-in equity as realizable equity, then call down on it. Why does this happen? Because an enumerator’s percentage is precise, immediate and pretty, while “will this reach showdown” is a fuzzy structural judgement — and the brain defaults to deciding with the precise number. The cost is systematic: in pots where you are out of position, deep-stacked, and the opponent’s range owns the nuts, you keep paying for equity you will never collect.",
+      "Three on-the-spot checks: ① How many streets of cooperation does this hand need to reach showdown? The more, the larger the realization discount. ② If we were all-in right now, what is my equity — and is that the ceiling of what I can collect (almost always yes, unless the hand really does go all-in now). ③ When the next scary card lands, am I the raiser or the one being squeezed? Hands with “being squeezed” identity get a full tier off their R.",
+      "Realized equity = all-in equity × realization rate; R = 1 only when the hand goes all-in immediately\nPot odds state the threshold for realizable equity, so scale the all-in equity threshold by 1/R before comparing\nFour variables set R: out of position is lower, deep stacks are lower, wet connected boards favour draws and punish weak pairs, and the range-advantaged side’s marginal hands have the lowest R\n“My hand has 52% equity” is not a decision input; “how much of it can I collect” is"
     ]
   },
   "quiz": {
@@ -5162,6 +5180,56 @@
         "As long as the opponent’s 4-bet range contains bluffs, any two cards can call a jam"
       ],
       "explanation": "Threshold = 80 ÷ 201.5 = 39.7%. KK’s ~47% clears it, so call; AQo’s ~30% and JJ’s ~37% do not, so fold — that boundary is exactly the test for “a hand may enter the 4-bet value branch only if it survives a re-jam”. Option one conflates “not good enough to jam” with “not good enough to call”, which are different thresholds; option three turns an equity threshold into a frequency quota; option four treats “bluffs exist” as a licence to call, ignoring that the bluff branch’s combo count is usually far smaller than the value branch’s and cannot lift the threshold."
+    },
+    "t6-equity-realization-q1": {
+      "question": "Facing a pot-sized bet (required equity 33.3%), out of position in a single-raised pot with a realization rate of about 0.85, roughly how much all-in equity is equivalent?",
+      "options": [
+        "about 29%",
+        "about 33%",
+        "about 39%",
+        "about 45%"
+      ],
+      "explanation": "33.3% ÷ 0.85 ≈ 39%. 33% treats the realization rate as 1, i.e. assumes a showdown that never happens; 29% applies the discount the wrong way round as 33.3% × 0.85; 45% charges the discount twice."
+    },
+    "t6-equity-realization-q2": {
+      "question": "What is the only condition under which the realization rate equals 100%?",
+      "options": [
+        "The board is completely dry with no draws",
+        "The hand goes all-in immediately, so every possible board is fully cashed in",
+        "You hold both the position and the range advantage",
+        "The opponent is a purely passive calling station"
+      ],
+      "explanation": "Only an immediate all-in removes the “folded before collecting” branches, so R equals 1 exactly, independent of board, position or opponent type. Options one, three and four are conditions that push R closer to 1 but are not sufficient: while any mid-hand exit remains possible, some equity is still uncollectable."
+    },
+    "t6-equity-realization-q3": {
+      "question": "Facing a half-pot bet (required equity 25%) with a realization rate of about 0.8, how much all-in equity do you need?",
+      "options": [
+        "about 20%",
+        "about 31%",
+        "about 35%",
+        "about 40%"
+      ],
+      "explanation": "25% ÷ 0.8 ≈ 31%. 20% multiplies the discount the wrong way (25% × 0.8); 35% and 40% correspond to much lower realization rates of about 0.71 and 0.62, i.e. the wrong R was plugged in."
+    },
+    "t6-equity-realization-q4": {
+      "question": "The same “one pair” in a 3-bet pot at SPR ≈ 2 versus a deep-stacked single-raised pot at SPR ≈ 13. The most accurate difference:",
+      "options": [
+        "Realization is the same in both; only the pot size differs",
+        "The former runs close to a forced all-in with R near 1, so a pair is an asset; the latter often folds early, so a pair is a liability",
+        "The latter is better, because deep stacks offer more room to play",
+        "The former is worse, because a shallow stack cannot bluff"
+      ],
+      "explanation": "R approaches 1 as SPR shrinks, and a pair’s value comes from “best now but easily overtaken”, so the more it depends on reaching showdown the worse it fares — only a small SPR suits it. Option one denies this chapter’s main variable; options three and four treat “room to play” as an unqualified good, ignoring that deep stacks let new boards threaten a pair continuously while a shallow SPR nearly guarantees a showdown — the only setting where a pair is comfortable."
+    },
+    "t6-equity-realization-q5": {
+      "question": "Why is AA’s loss in a four-way pot “harsher than 85% → 64%”?",
+      "options": [
+        "Because AA simply cannot be played multiway",
+        "Besides the drop in all-in equity, the realization rate falls too: more bets and raises to face, and more chances of being forced off early",
+        "Because the blind structure of multiway pots dilutes profit",
+        "Because opponents in multiway pots steal the blinds collectively"
+      ],
+      "explanation": "The damage is two-layered: sticker price and discount rate worsen together, and hand types that need showdown to cash in suffer most from the second layer. Option one inflates “discount” into “unplayable”; option three swaps a structural factor for a cost factor unrelated to this chapter; option four is a tactical assumption irrelevant to the question."
     }
   },
   "chapterObjectives": {
@@ -5405,6 +5473,11 @@
       "Given an opening size and a 3-bet size, independently compute the defender’s MDF and the equity needed to call",
       "Explain why 3-bet and 4-bet sizings must move with position (IP / OOP)",
       "Sort a marginal hand (the AQo / JJ kind) correctly into all-in, call or fold, and state the equity basis"
+    ],
+    "t6-equity-realization": [
+      "Distinguish all-in equity from realized equity and state the only condition under which the realization rate equals 100%",
+      "Given a realization rate, work backwards to the all-in equity threshold a hand needs",
+      "Judge whether a hand’s realization rate is high or low from position, SPR and board texture"
     ]
   }
 }
