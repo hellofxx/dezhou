@@ -96,8 +96,13 @@ additionalPrompt: ""
 
 ## Workflows
 1. 新增章节时：在对应 variants/standard/standardLevelN.ts（标准变体）或 variants/short-deck/shortDeckLevelN.ts / variants/heads-up/headsUpLevelN.ts（变体）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验
+   - **locale 只能追加**：正文段落 key 是下标型（`theory.content.<chapterId>.<sectionIndex>`，无稳定 id），在已有章节中间插段会让 zh/en 数组静默错位且 `contentAlignment.baseline.ts` 棘轮基线为空集（无自救余地）；补段一律追加到数据数组与 zh/en 两份 locale 数组的**末尾**，且三者下标顺序必须一致
+   - **每章小测固定 3-5 题**：已有 5 题的章节不得再加题（`theoryIntegrity.test.ts` 断言上界）
+   - **量化口径不得自立第二套**：涉及 Alpha / MDF / 跟注所需权益 / Kelly / 显著性样本量 / 破产概率的正文数字，一律取 `utils/theoryFormulas.ts` 的函数口径，并在 `standardQuantAudit.test.ts`（变体为 `variantQuantAudit.test.ts`）登记复算块与文件头人工复核索引（`[正确]` / `[示意值]` 分类，PRD §6.7.1 诚实性）
 2. 新增 Level 时：新建 variants/<variant>/<variant>LevelN.ts → 在对应 variants/<variant>/index.ts 注册（含 practiceRecommendations）→ 更新 unlockRequirement 链
 3. 调整实践推荐时：编辑 variants/standard/index.ts（standard）或 variants/<variant>/index.ts（变体）的 practiceRecommendations → 同步 strategy-academy curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS（须经 platform-dev）
+   - **变体桥接 id 无守卫兜底**：`variants/theoryIntegrity.test.ts` 不校验 practiceRecommendations，两份 ID 镜像清单的事实源都只是 `THEORY_LEVELS`（standard）；改 short-deck / heads-up 的推荐课时 ID 时须逐个 grep 确认目标课时在 strategy-academy 源码真实存在，且**不得**把变体课时 id（如 `l8hu-exploitative`）加进 `CROSS_MODULE_LESSON_IDS`（curriculumIntegrity 断言变体课不得混入 LEVELS，加了必红）
+   - `{ id, title }` 的 title 只是 `academy.lessonTitle.<id>` 缺失时的回退，须与策略学院权威标题一致
 4. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate（仅注入新字段默认值）+ 更新 store.persist-shape.test.ts 快照与 store.migrate.test.ts 迁移用例
 5. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `theory.*` 命名空间
 6. **内容扩充标准工作流（每章 7 步）**：

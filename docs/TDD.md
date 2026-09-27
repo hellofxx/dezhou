@@ -1136,10 +1136,10 @@ interface DailyRecommendation {
 1. **数据模型**（`theory-academy/types.ts`）：
    - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
    - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）
-   - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）
+   - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
-2. **内容体系**：章节数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件放宽 200 行限制），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。变体课程位于 `data/levels/variants/{short-deck,heads-up}/`。
+2. **内容体系**：章节数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件属行数守卫豁免类别，阈值与豁免清单以 `src/shared/line-count-guard.test.ts` 与 `docs/AI_GUIDE.md` 为唯一事实源），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。变体课程位于 `data/levels/variants/{short-deck,heads-up}/`。
    - **章数与题量不在本文档维护副本**：以 `data/levels/variants/**` 与理论结构守卫测试（`theoryIntegrity.test.ts`）为唯一事实源
    - **内容编辑准则（段落类型覆盖、公式须含推导、牌例数量下限、误区显式化、解析须解释错误选项）见 `docs/PRD.md` §6.7.1**，本文件只记录其判定落点：段落类型枚举以 `types.ts` 的 `TheorySectionType` 为准，题量区间与内容非空由 `theoryIntegrity.test.ts` 断言
    - **教材对照基线与版权合规边界见 `docs/PRD.md` §5.27.4 / §6.7.2**；实现侧仅约定标注落点：出处以内联「（概念源自：教材名 章节）」写在 `content` 段落文本中（无独立结构化字段），如需按教材聚合统计请对 `data/levels/variants/**` 做文本检索
@@ -1167,6 +1167,9 @@ interface DailyRecommendation {
     - **载荷语言中立**：`label` / `metadata.front` / `metadata.back` 存 `theory.quiz.<questionId>.question` / `.explanation` i18n key（复用 `utils/contentKeys.ts` 单源生成函数），禁止写入任何语言的原文或译文；双语齐备性由 `contentI18n.test.ts` 与 `contentAlignment.test.ts` 断言，渲染层 `t()` 解析（见 §5.9 SRS 段）
     - **重测可入队**：SRS 记录写在 `completeChapter` 的 `alreadyCompleted` 早退之外（视图层），故首次答错与重测答错均可入队；`metadata.route` 指向所属章节页，`metadata.options` 刻意不传，使复习走自评模式而非多选
     - **本模块 persist version 未变更**：SRS 状态归 progress store 持有，理论侧只在视图层写入，不新增持久化字段
+
+11. **量化口径单源**（`utils/theoryFormulas.ts`，模块内自持）：`calculateAlpha` / `calculateMDF` / `requiredEquity` / `kellyFraction`（+ `halfKellyFraction`）/ `requiredHandsForEdge` / `riskOfRuin` 六个纯函数，是正文公式段与 `standardQuantAudit.test.ts` 复算块的共同口径源（锚点断言见 `utils/theoryFormulas.test.ts`）。**不下沉 `shared/utils/pokerMath.ts`**：当前仅本模块消费，未达 shared 层 ≥2 模块准入门槛；若策略学院（`MDFVisualizer` 等）将来复用再上收。参数语义须与审计口径一致——`betSize` 指该街下注总额，跟注类门槛一律用「需补入额 ÷ 跟注后底池」。
+12. **零基础先修引导**：`TheoryHome` 侧栏私有组件 `BasicsPrerequisiteCard`，仅在当前变体 `completedChapters` 为空时渲染，以 `<Link to="/academy/basics">` 对接策略学院入门向导。因 `ALLOWED_CROSS_IMPORTS` 禁止 theory→strategy 边，该卡片**不读取**对方 `basicsProgress` 完成态、不构成门禁、不新增本模块持久化字段（jsdom 冒烟见 `components/TheoryHome.basicsGuide.test.tsx`）。
 
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
