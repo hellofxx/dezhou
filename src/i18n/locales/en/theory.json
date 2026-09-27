@@ -191,7 +191,8 @@
     "t8hu-pressure": "Pressure Management",
     "t8hu-reads": "Psychological Reads",
     "t9hu-mastery": "Full Integration",
-    "t9hu-pro-study": "Pro Player Study"
+    "t9hu-pro-study": "Pro Player Study",
+    "t4-preflop-structure": "Preflop Structural Theory: 3-bet / 4-bet and Building a Defending Range"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -269,7 +270,8 @@
     "t8hu-pressure": "Handling heads-up's sustained tension",
     "t8hu-reads": "Techniques of observation and counter-observation",
     "t9hu-mastery": "Building a personal heads-up theory system",
-    "t9hu-pro-study": "Decision logic of top HU players"
+    "t9hu-pro-study": "Decision logic of top HU players",
+    "t4-preflop-structure": "Upgrading preflop from “is my hand good enough” to “what does my range look like”"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1376,6 +1378,23 @@
       "Example 3 (emotional discipline): Top players still decide with the same framework after losing 10 consecutive 60% all-ins — because they treat \"variance\" as an uncontrollable external variable and control only \"decision quality\". This is T8's \"process vs result\" separation manifested at the professional level.",
       "Counterintuitive point: the value of studying pros isn't \"how great they are\" but \"how replicable their systems are\". An amateur drilling the pro framework for a month often improves faster than \"ten years of memorized feel\" — because systems are trainable and feel isn't replicable.",
       "Pro hand-study process: (1) record all actions of a hand; (2) deconstruct layer by layer with the decision loop (range/math/betting/exploitation/psychology); (3) compare with your own handling to find gaps; (4) distill one reusable principle into your notes. Every 10 hands studied makes your decision framework more complete."
+    ],
+    "t4-preflop-structure": [
+      "Preflop Is the First Shaping of Range Structure, Not a Verdict on One Hand",
+      "The starting-hand standards in T3 answer “can this hand open the pot”. The genuinely professional question comes later: which range does this hand live in, what is the value-to-bluff ratio inside that range, and what shape has your action filtered the opponent’s range into. Every 3-bet and 4-bet does not merely announce “I am strong” — it publishes “my range looks like this”, and the opponent can act on that. This is why a 3-bet range must carry both a value branch and a bluff branch: a value-only range is readable, and a readable range is exploitable.",
+      "Build a range in a fixed order: define the value branch first, then attach a bluff branch, and finally ask “what happens if I get moved all-in”. A range that skips the third step is transparent to your opponent: they only need to fold everything but the nuts against your raise, and your bluff branch goes bankrupt on its own.",
+      "The Mathematics of the 3-bet: α and MDF Land Preflop",
+      "Convention (identical to T5): P = pot before the action, b = what the bettor puts in this street; α = b ÷ (P + b) (the fold frequency a bluff needs to break even), MDF = P ÷ (P + b) (the minimum frequency the defender must continue).\n\nSpot: CO opens 2.5 (blinds 0.5 + 1), BTN 3-bets to 8.\nP = 0.5 + 1 + 2.5 = 4, b = 8\nα = 8 ÷ (4 + 8) = 66.7% → BTN needs CO to fold about two thirds of the time for any two cards to bluff profitably\nMDF(CO) = 4 ÷ 12 = 33.3% → CO must continue at least a third of their opening range\nCO calling risks 5.5 (8 − 2.5) into a pot of 17.5 after the call → required equity = 5.5 ÷ 17.5 = 31.4%\n\nThe three numbers cross-check each other: the 33.3% CO continues with must actually survive the 31.4% equity threshold, otherwise MDF is compliance in name and donated money in substance. (Concepts from: Modern Poker Theory Ch.4 preflop range construction; The Mathematics of Poker Ch.5 the bet-fold subgame)",
+      "Example 1 (CO holds A♠Q♦, BTN 3-bets to 8, 100bb effective): calling needs 31.4% equity. AQo has about 30% against BTN’s value branch {QQ+, AK} (roughly 34 combos) and is ahead of his bluff branch — the problem is that when value dominates BTN’s 3-bets, your 30% is equity against the nuts with no positional compensation postflop. So the three-way verdict becomes explicit: calling is conditioned on the opponent’s 3-bet range being wide enough to carry bluffs; otherwise AQo belongs in the “fold” bucket, not the “call” bucket. Defaulting it to “call” replaces a range-structure judgement with an attachment to one hand.",
+      "Position Sets Sizing: OOP Must 3-bet Bigger",
+      "Same table, move the aggressor out of position: BTN opens 2.5, and after SB folds the pot is 3.5.\nBB needs only 1.5 more to call → required equity = 1.5 ÷ 5 = 30% → this is why BB’s defending range can stretch to thirty-forty percent.\nBB 3-bets to 11 (already has 1, increment b = 10): α = 10 ÷ (3.5 + 10) = 74.1%\nCompare BTN’s IP 3-bet to 8, which needs only 66.7% folds.\n\nThe gap is not style, it is structure: the out-of-position player acts last on every street, so their equity realization is lower (detailed in T6) and they must buy more immediate fold pressure and a bigger pot to stop the same value hand from running behind. (Concept from: Applications of No-Limit Hold’em 3-bet pots)",
+      "Example 2 (BB holds 7♠6♠: how opening size squeezes the defending range): BTN opens 2.5, SB folds, the pot is 3.5 and BB needs 1.5 to see a flop → required equity 1.5 ÷ 5 = 30%, while 7♠6♠ holds about forty percent against BTN’s wide opening range, so the call is effortless. Switch the open to 5: the pot becomes 6, BB must add 4, and the pot after the call is 10 → required equity 4 ÷ 10 = 40%. The hand’s equity is unchanged, the threshold has climbed from 30% to 40%, and a 5bb opening range is narrower and stronger, which knocks a further notch off this hand’s real equity. Threshold up, equity down: suited connectors such as 7♠6♠ are among the first hands kicked out of the defence. That is the concrete meaning of “sizing is a range tool” — opening bigger not only charges more for value, it actively surrenders the right to defend weak hands.",
+      "4-bet: Polarisation Forced by the SPR Collapse",
+      "After BTN 3-bets to 8, CO 4-bets to 20 (already has 2.5, increment b = 17.5); the pot before the action is P = 4 + 8 = 12.\nα(4-bet) = 17.5 ÷ (12 + 17.5) = 59.3%\nBTN must call 20 − 8 = 12 into a pot of 12 + 17.5 + 12 = 41.5 → required equity = 12 ÷ 41.5 = 28.9%\nWith 100bb effective stacks, both players have 80bb behind after the call → SPR = 80 ÷ 41.5 ≈ 1.9\n\nSPR ≈ 2 means there is no room left to play postflop: three streets of betting plans collapse into “mostly all-in by the flop”. A 4-bet pot is therefore a jam-or-fold structure, not a pot you can take slowly. (Concepts from: Modern Poker Theory Ch.4; Applications of No-Limit Hold’em 4-bet pots)",
+      "Example 3 (the equity flip for K♣K♦ in a 4-bet pot): after CO 4-bets to 20, BTN jams to 100. CO must add 80 more, and the pot after the call is 100 + 100 + 1.5 in blinds = 201.5 → required equity = 80 ÷ 201.5 = 39.7% (about 40%). Once KK removes its own combos from the equation it holds roughly 47% against {QQ+, AK} — that clears the threshold, so calling is right. The same threshold shuts out AQo (about 30%) and JJ (about 37%): they cannot call a jam and were never worth 4-betting, so they drop back to the 3-bet or flat tiers. And if the 4-bet value branch consisted only of hands that survive a jam, it would still have to be paired with a bluff branch, or the opponent strips you cleanly with “jam anything you 4-bet, fold everything else”.",
+      "The most common way to think wrong: “I 3-bet for value.” That treats preflop as a one-street decision. The actual mechanism is that a 3-bet’s α runs as high as 66%-74%; if the opponent does not fold, your value branch has to cash out through postflop equity realization — and OOP realization is lower (T6), so a value-only 3-bet range bleeds systematically the moment the opponent defends wider. Conversely, with enough bluffs in the range the opponent is forced to widen their defence, and only then do your genuine value hands collect what they are owed.",
+      "Three-step check for building any preflop range: ① write down the combo count of the value branch (e.g. {QQ+, AK} = 6+6+6+16 = 34 combos); ② attach the bluff branch, preferring “low equity + high blocking + high realization potential” hands such as A5s (only 4 combos, and the suited ace also blocks the opponent’s nut flushes), not offhand picks like KTo that block nothing and are easily dominated; ③ ask “what do I do if I am moved all-in” — any hand that cannot answer the third question does not belong in this range.",
+      "3-bet and 4-bet sizings are not style but the solution of α and MDF: compute the required fold frequency first, then decide which range widths can carry it\nPosition changes realization rate, and realization rate changes sizing: OOP needs a bigger 3-bet to buy the same immediate fold pressure\nWith SPR near 2 the 4-bet pot is structurally jam-or-fold, so the range must be polarised and the marginal hands (AQo / JJ) stay one tier lower\nBluffs exist not only to profit on their own, but to stop the opponent from defending only against your value branch for free"
     ]
   },
   "quiz": {
@@ -5093,6 +5112,56 @@
         "Imitating their luck"
       ],
       "explanation": "Layer-by-layer deconstruction (range/math/betting/exploitation/psychology) + comparing gaps + distilling principles converts the pro framework into your own system."
+    },
+    "t4-preflop-structure-q1": {
+      "question": "CO opens 2.5 and BTN 3-bets to 8. Roughly how often must BTN’s 3-bet make CO fold for it to break even as a bluff?",
+      "options": [
+        "about 33%",
+        "about 50%",
+        "about 67%",
+        "about 75%"
+      ],
+      "explanation": "α = b ÷ (P + b) = 8 ÷ (4 + 8) = 66.7% (here a 2x-pot 3-bet). 33% is CO’s MDF — the frequency they must continue, complementary to α and the easiest pair of numbers to swap; 50% is the α of a pot-sized bet (b = P); 75% needs roughly a 3x-pot sizing, because the fold requirement rises monotonically with bet size and never falls."
+    },
+    "t4-preflop-structure-q2": {
+      "question": "Continuing: if CO calls (risking 5.5 into a pot of 17.5 after the call), what is the minimum equity required?",
+      "options": [
+        "about 23%",
+        "about 31%",
+        "about 40%",
+        "about 50%"
+      ],
+      "explanation": "Required equity = amount to call ÷ pot after the call = 5.5 ÷ 17.5 = 31.4%. 40% comes from mistaking the risk for the opponent’s full bet of 8: 8 ÷ (4 + 8 + 8) = 40%; 23% comes from adding the bet twice: 5.5 ÷ (12 + 2 × 5.5) = 23.9%; 50% reuses the pot-sized-bet α as if it were a calling threshold — three of the most common slips inside one question."
+    },
+    "t4-preflop-structure-q3": {
+      "question": "Both are 3-bets, yet BB’s OOP 3-bet to 11 demands a higher fold rate (74% vs 67%) than BTN’s IP 3-bet to 8. The root cause is:",
+      "options": [
+        "BB’s cards are worse, so it needs more folds",
+        "OOP has a lower postflop equity realization rate, so it must buy immediate fold pressure and a bigger pot with a larger sizing",
+        "BB has position and can slow-play",
+        "Sizing is purely a matter of personal style"
+      ],
+      "explanation": "Realization rate is the independent variable behind sizing: acting last on every street, the out-of-position player struggles to reach showdown, so the same value hand needs more immediate compensation. Option one confuses hand strength with a structural requirement on the range; option three is backwards (BB is out of position); option four demotes a structural question to personal taste."
+    },
+    "t4-preflop-structure-q4": {
+      "question": "After the 4-bet the SPR is about 1.9. The direct consequence is:",
+      "options": [
+        "There is plenty of postflop room to keep playing slowly",
+        "The structure is close to jam-or-fold, so the 4-bet range must be polarised",
+        "Hands like AQo are exactly the right 4-bet candidates",
+        "SPR has nothing to do with how a 4-bet range is built"
+      ],
+      "explanation": "At SPR ≈ 2 three streets compress into a single all-in, so marginal hands are too weak to call a jam and not strong enough to 4-bet — they leave, and only strong value plus bluffs remain, which is polarisation. Option one contradicts “almost no chips behind relative to the pot”; option three names the textbook dominated hand as the ideal 4-bet candidate; option four denies the causal chain of this section."
+    },
+    "t4-preflop-structure-q5": {
+      "question": "From Example 3: CO must add 80 into a pot of 201.5 facing the jam (threshold about 40%), while KK holds roughly 47% against {QQ+, AK} once its own blockers are removed. The correct conclusion is:",
+      "options": [
+        "KK never reaches the break-even jam point, so it should fold",
+        "KK clears the 40% threshold and should call; AQo and JJ do not, which shows the 4-bet value branch must itself survive a re-jam",
+        "40% is an MDF, so KK may call with 40% frequency",
+        "As long as the opponent’s 4-bet range contains bluffs, any two cards can call a jam"
+      ],
+      "explanation": "Threshold = 80 ÷ 201.5 = 39.7%. KK’s ~47% clears it, so call; AQo’s ~30% and JJ’s ~37% do not, so fold — that boundary is exactly the test for “a hand may enter the 4-bet value branch only if it survives a re-jam”. Option one conflates “not good enough to jam” with “not good enough to call”, which are different thresholds; option three turns an equity threshold into a frequency quota; option four treats “bluffs exist” as a licence to call, ignoring that the bluff branch’s combo count is usually far smaller than the value branch’s and cannot lift the threshold."
     }
   },
   "chapterObjectives": {
@@ -5331,6 +5400,11 @@
       "Study professional HU players' decision frameworks and range-construction habits",
       "Understand the shared traits of top players: frequency balance, range consistency, emotional stability",
       "Learn to distill reusable methodologies from pros' public strategies and hand examples"
+    ],
+    "t4-preflop-structure": [
+      "Given an opening size and a 3-bet size, independently compute the defender’s MDF and the equity needed to call",
+      "Explain why 3-bet and 4-bet sizings must move with position (IP / OOP)",
+      "Sort a marginal hand (the AQo / JJ kind) correctly into all-in, call or fold, and state the equity basis"
     ]
   }
 }
