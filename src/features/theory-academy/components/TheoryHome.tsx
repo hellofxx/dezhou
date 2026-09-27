@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpenCheck, ChevronRight, Flag, Flame, Target } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, ChevronRight, Flag, Flame, GraduationCap, Target } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { useTranslation } from 'react-i18next';
@@ -100,6 +100,7 @@ export default function TheoryHome() {
           </motion.div>
 
           <aside className="space-y-4 lg:sticky lg:top-2">
+            {completedCount === 0 && <BasicsPrerequisiteCard />}
             <ReadingStats
               completedCount={completedCount}
               totalChapters={totalChapters}
@@ -208,6 +209,40 @@ function PracticeBridge() {
           <ArrowRight className="w-3.5 h-3.5" />
         </span>
       </button>
+    </motion.section>
+  );
+}
+
+/**
+ * 先修引导：T1 直接从组合计数开场，规则/牌型/位置/术语在策略学院入门向导（/academy/basics）。
+ * 跨模块禁止 import，故只以路由字符串对接，且其完成态对本模块不可读。
+ */
+function BasicsPrerequisiteCard() {
+  const { t } = useTranslation();
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ ...transitionStandard, delay: 0.1 }}
+      aria-label={t('theory.basicsGuide.title')}
+    >
+      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold mb-2.5 px-1">
+        {t('theory.basicsGuide.title')}
+      </h2>
+      <Link
+        to="/academy/basics"
+        className="block rounded-lg border border-[var(--walnut-border)] bg-gradient-to-b from-[var(--walnut)] to-[var(--felt-deep)] p-3.5 hover:border-[var(--brass)]/50 transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+      >
+        <span className="flex items-start gap-2.5">
+          <GraduationCap className="w-4 h-4 text-[var(--brass-bright)] shrink-0 mt-0.5" />
+          <span className="flex-1 text-xs text-[var(--ivory)] leading-relaxed">{t('theory.basicsGuide.body')}</span>
+        </span>
+        <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] group-hover:gap-2.5 transition-all">
+          {t('theory.basicsGuide.cta')}
+          <ArrowRight className="w-3.5 h-3.5" />
+        </span>
+      </Link>
     </motion.section>
   );
 }

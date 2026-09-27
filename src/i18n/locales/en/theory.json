@@ -318,6 +318,11 @@
     "emptyDescription": "Open any chapter quiz and tap the flag icon on a question to keep it here for later.",
     "emptyCta": "Pick a chapter"
   },
+  "basicsGuide": {
+    "title": "Prerequisite: Absolute Basics",
+    "body": "Theory Academy opens with combinatorics. If you still want to confirm hand rankings, position names, betting actions and terminology, spend a few minutes on the Strategy Academy basics wizard first — it does not count toward theory progress, but it makes every chapter after T1 easier.",
+    "cta": "Do the basics wizard first"
+  },
   "bridge": {
     "title": "Theory → Practice",
     "subtitle": "Turn the theory you've read into decisions at the table",
