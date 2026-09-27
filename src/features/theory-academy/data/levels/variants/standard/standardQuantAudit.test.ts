@@ -20,6 +20,13 @@
 import { describe, it, expect } from 'vitest';
 import { THEORY_LEVELS } from '../../index';
 import type { TheoryChapter, TheoryQuizQuestion } from '../../../../types';
+import {
+  calculateAlpha,
+  calculateMDF,
+  requiredEquity,
+  requiredHandsForEdge,
+  riskOfRuin,
+} from '../../../../utils/theoryFormulas';
 
 /*
  * ========================= 人工复核索引（正文散文数值，批次 1 复算结论） =========================
@@ -40,6 +47,11 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../../types';
  *        idx6：翻倍 μ=120/σ≈342；idx7：90×√100=900bb>500bb；idx8：AA vs KK≈81%、0.19³≈0.69%→0.7%、
  *        200 次「连输三输」窗口 ≈1−e^(−n·p³·(1−p))≈67%>60%
  * [示意值] t1-variance idx5：胜率 5bb/100、标准差 80-100bb/100、5 万-10 万手（业界典型，正文已用「通常」）
+ * [正确] t1-variance idx15/16（显著性手数，本次新增）：μ=5/100=0.05、σ=80/10=8 →
+ *        n=(1.96×8÷0.05)²=313.6²=98,344.96→约 98,300；z=1.645→263.2²=69,274→约 69,300；
+ *        胜率翻倍 μ=0.1→(1.96×80)²=24,586→约 24,600；
+ *        2 万手：期望 1000bb、累计 σ=8×√20000≈1131bb>1000bb（仍在噪声内）；
+ *        10 万手：期望 5000bb、σ=8×√100000≈2530bb、5000÷2530≈1.98σ
  *
  * —— standardLevel2.ts ——
  * [正确] t2-ev idx5：0.60×90−0.40×60=30、保本 f=60/150=40%（Alpha=b/(P+b) 口径正确）；
@@ -63,6 +75,13 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../../types';
  *        t4-combinatorics idx0：KK 3+99 3+44 3+K9s 2（board K♠9♦ 阻断两个同花组合）=11、6/17≈35.3%>33%；
  *        idx2：AK 16→12；idx3：4bet 场景 34→21（3+3+6+9）、QQ 6/34≈17.6%→18%、6/21≈28.6%→29%、AKo vs QQ≈43%
  * [示意值] t4-range-advantage idx3：范围优势/坚果优势密度框架（>50%、前 5% 为方法示意）
+ * [正确] t4-preflop-structure idx4/idx7/idx10（翻前结构性理论，本次新增）：
+ *        α(4,8)=8/12=66.7%、MDF=4/12=33.3%、CO 跟注门槛 5.5÷17.5=31.4%（三式互验）；
+ *        BB 防守门槛 1.5÷5=30%；α(3.5,10)=10/13.5=74.1% > α(4,8)（OOP 尺度更大的依据）；
+ *        4-bet α=17.5÷29.5=59.3%、BTN 跟注 12÷41.5=28.9%、SPR=80÷41.5=1.93≈1.9；
+ *        被 5-bet 全下门槛 80÷201.5=39.7%≈40%；{QQ+、AK}=6+6+6+16=34 种、A5s=4 种
+ * [示意值] t4-preflop-structure idx6/idx9/idx12：AQo 对 {QQ+,AK} 约 30%、KK 约 47%、JJ 约 37%
+ *        （手牌权益依赖范围定义，正文与题面均以「约」表述）
  *
  * —— standardLevel5.ts ——
  * [正确] t5-game-theory idx4：混合 p=1/2 无差别、博弈值 ±0.5；t5-gto-concept idx3 例值（满池 1/3=2:1、半池 25%=3:1）；
@@ -79,6 +98,11 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../../types';
  *        idx5：两街 √5−1)/2≈61.8%→62%、124/448/276、1/3 池 67/334/333≈100%
  * [示意值] t6-geometric idx9：SPR≈2→约 60%（精确两街 61.8%）、SPR≈4→约 55%（精确 54%）、SPR≈7→约 3/4（精确 73.3%），
  *          正文已标注为速算经验值并给出精确公式；SPR≤3/6-13/20+ 单对-两对-坚果承诺阈（业界锚点）
+ * [正确] t6-equity-realization idx3/idx5（权益实现，本次新增）：实现率 R=1 当且仅当牌局立即全下；
+ *        门槛倒推 (1/3)÷0.85=39.21%→约 39%、25%÷0.8=31.25%→约 31%；
+ *        本体口径与 T2 一致：满池 100÷300=33.3%、半池 50÷200=25%
+ * [示意值] t6-equity-realization idx6/idx9/idx11：实现率 0.85（IP 中等牌力）/0.65（OOP 高牌）/0.8、
+ *        A♠K♠ 55%×0.85≈47%、55%×0.65≈36%、AA 四人池约 64%（实现率与表值依赖统计口径，正文均以「约/典型量级」表述）
  *
  * —— standardLevel7.ts ——
  * [示意值] t7-stats idx1-3：VPIP<18/22-28/>32、AF<1.5/2-3/>4、WTSD>32/<22、3-bet<2/3-5/>7（业界参考线）；
@@ -94,6 +118,10 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../../types';
  * [示意值] t8-tilt idx0：Tendler「80% 亏损来自 20% Tilt 时间」（文献主张）；
  *          t8-bankroll-psych idx0：下风期 10-20 买入、现金 20-40、锦标赛 100+；idx4：3bb/100→半 Kelly 30-40 买入；
  *          损失厌恶系数 ≈2（Kahneman-Tversky ≈2.25 取整）
+ * [正确] t8-bankroll-psych idx15/16（破产概率 ROR，本次新增）：μ=0.05bb/手、σ²=8²=64bb² →
+ *        10 买入 exp(−1.5625)=20.96%→约 21%、20 买入 exp(−3.125)=4.39%→约 4.4%、
+ *        30 买入 exp(−4.6875)=0.92%→约 0.9%；每多 10 买入的比值 0.2096/0.0439=0.0439/0.0092≈4.8→正文「约 1/5」；
+ *        与 idx0「现金 20-40 买入」、idx2 Kelly 上限口径互相印证（Kelly 给下注上限，ROR 给资金分布下界）
  *
  * —— standardLevel9.ts ——
  * [正确] t9-mop idx1：AKQ 均衡 y=B/(P+2B)、f=y/(1−y)=B/(P+B)、c=P/(P+B)、f+c=1、满池 f=c=1/2、1/3 池 f=1/4/c=3/4；
@@ -343,5 +371,46 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     const example2 = sections[3]?.content ?? '';
     expect(example2).toContain('约 64%');
     expect(example2).not.toContain('约 56%');
+  });
+
+  it('t4-preflop-structure：3-bet / 4-bet 的 α、MDF、跟注门槛与 SPR 互验', () => {
+    // CO 开 2.5（含盲注 P=4）被 BTN 3-bet 到 8
+    expect(calculateAlpha(4, 8)).toBeCloseTo(0.6667, 4);
+    expect(calculateMDF(4, 8)).toBeCloseTo(0.3333, 4);
+    expectAnswerIs('t4-preflop-structure', 't4-preflop-structure-q1', '约 67%');
+    // CO 跟注：补 5.5 进跟注后底池 4+8+5.5=17.5
+    expect(requiredEquity(5.5, 4 + 8 + 5.5)).toBeCloseTo(0.3143, 4);
+    expectAnswerIs('t4-preflop-structure', 't4-preflop-structure-q2', '约 31%');
+    // BB 防守 2.5 开池的门槛；OOP 的 3-bet 必须比 IP 要求更高弃牌率
+    expect(requiredEquity(1.5, 3.5 + 1.5)).toBeCloseTo(0.3, 6);
+    expect(calculateAlpha(3.5, 10)).toBeGreaterThan(calculateAlpha(4, 8));
+    // BTN 对 4-bet 到 20 的跟注门槛与 SPR、被 5-bet 全下的门槛
+    expect(requiredEquity(12, 12 + 17.5 + 12)).toBeCloseTo(0.2892, 4);
+    expect((100 - 20) / 41.5).toBeCloseTo(1.93, 2);
+    expect(requiredEquity(80, 201.5)).toBeCloseTo(0.397, 3);
+    // 价值分支组合数与诈唬分支组合数
+    expect(6 + 6 + 6 + 16).toBe(34);
+  });
+
+  it('t6-equity-realization：所需全下权益 = 底池门槛 ÷ 实现率', () => {
+    expect(requiredEquity(100, 300)).toBeCloseTo(1 / 3, 6);
+    expect(requiredEquity(50, 200)).toBeCloseTo(0.25, 6);
+    expect(1 / 3 / 0.85).toBeCloseTo(0.392, 3);
+    expectAnswerIs('t6-equity-realization', 't6-equity-realization-q1', '约 39%');
+    expect(0.25 / 0.8).toBeCloseTo(0.3125, 4);
+    expectAnswerIs('t6-equity-realization', 't6-equity-realization-q3', '约 31%');
+  });
+
+  it('t1-variance / t8-bankroll-psych 新增推导段：样本量与破产概率可复算', () => {
+    expect(requiredHandsForEdge(5, 80, 1.96)).toBeCloseTo(98345, 0);
+    expect(requiredHandsForEdge(5, 80, 1.645)).toBeCloseTo(69274, 0);
+    expect(requiredHandsForEdge(10, 80, 1.96)).toBeCloseTo(24586, 0);
+    // 2 万手仍在噪声内：累计 σ > 累计期望
+    expect(8 * Math.sqrt(20000)).toBeGreaterThan(20000 * 0.05);
+    // 10 万手≈2σ
+    expect(5000 / (8 * Math.sqrt(100000))).toBeCloseTo(1.98, 2);
+    expect(riskOfRuin({ winrateBB100: 5, sdBB100: 80, bankrollBB: 1000 })).toBeCloseTo(0.21, 2);
+    expect(riskOfRuin({ winrateBB100: 5, sdBB100: 80, bankrollBB: 2000 })).toBeCloseTo(0.044, 3);
+    expect(riskOfRuin({ winrateBB100: 5, sdBB100: 80, bankrollBB: 3000 })).toBeCloseTo(0.009, 3);
   });
 });
