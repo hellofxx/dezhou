@@ -16,7 +16,7 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
   practiceRecommendations: {
     lessons: [
       { id: 'l4hu-ev-adjustments', title: 'EV 调整' },
-      { id: 'l7hu-stakes', title: '单挑策略基础' },
+      { id: 'l3hu-bn-aggression', title: '按钮位激进度' },
     ],
     trackId: undefined,
   },

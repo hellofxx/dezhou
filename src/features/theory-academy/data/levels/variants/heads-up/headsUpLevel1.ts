@@ -16,7 +16,7 @@ export const HEADS_UP_LEVEL_1: TheoryLevelInfo = {
   practiceRecommendations: {
     lessons: [
       { id: 'l1-basics', title: '德州扑克规则与牌型' },
-      { id: 'l7hu-stakes', title: '单挑策略基础' },
+      { id: 'l1-hand-selection', title: '起手牌选择' },
     ],
     trackId: undefined,
   },

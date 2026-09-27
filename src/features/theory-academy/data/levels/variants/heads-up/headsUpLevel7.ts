@@ -16,7 +16,7 @@ export const HEADS_UP_LEVEL_7: TheoryLevelInfo = {
   practiceRecommendations: {
     lessons: [
       { id: 'l4hu-counter-strategies', title: '反制策略' },
-      { id: 'l8hu-exploitative', title: '剥削性打法' },
+      { id: 'l8hu-exploitative', title: '单挑剥削打法' },
     ],
     trackId: undefined,
   },
