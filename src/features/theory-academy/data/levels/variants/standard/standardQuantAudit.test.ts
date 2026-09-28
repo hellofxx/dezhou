@@ -120,7 +120,11 @@ import {
  *
  * —— standardLevel7.ts ——
  * [示意值] t7-stats idx1-3：VPIP<18/22-28/>32、AF<1.5/2-3/>4、WTSD>32/<22、3-bet<2/3-5/>7（业界参考线）；
- *          idx6/7 画像 45/12/0.8/38、24/20/2.8/27/6、38/6/1.2/35/1；idx10-11 样本量阈值 50-100/300+ 手
+ *          idx6/7 画像 45/12/0.8/38、24/20/2.8/27/6、38/6/1.2/35/1；idx10-11 样本量阈值 50-100/300+ 手；
+ *          t7-exploit idx15「级别越高漂移越快」标注为经验规律（无外部定理可引）
+ * [正确] t7-exploit idx16（元游戏漂移段，本次新增）：纯诈唬 EV = f×P − (1−f)×b（P=100、b=50）→
+ *        f=0.65 得 +47.5、0.60 得 +40.0、0.55 得 +32.5（缩水 (47.5−32.5)/47.5≈31.6%→正文「约三成」）、
+ *        f=α=50/150=33.3% 得 0；与 T5 的 α 口径同源，可由 multiwayBluffEv(defenders=1) 复算
  * [正确] t7-hand-reading idx0：0.75 池所需胜率 0.75/2.5=30%（b/(P+2b)）
  * [示意值] t7-exploit idx6：过牌加注 12%→30%；t7-player-types idx8-10 漂移画像数字
  *
@@ -513,5 +517,26 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     expect(diffusion).toContain('66.7% ÷ 2 = 33.4%');
     const protection = chapter.content[11]?.content ?? '';
     expect(protection).toContain('示意');
+  });
+
+  it('t7-exploit 元游戏漂移段：纯诈唬 EV 随弃牌率衰减 +47.5→+32.5→0', () => {
+    const ev = (foldRate: number) =>
+      multiwayBluffEv({ potBeforeBet: 100, betSize: 50, foldRate, defenders: 1 });
+    expect(ev(0.65)).toBeCloseTo(47.5, 10);
+    expect(ev(0.6)).toBeCloseTo(40, 10);
+    expect(ev(0.55)).toBeCloseTo(32.5, 10);
+    // 65%→55% 掉 10 个百分点的弃牌率，利润缩水约三成
+    expect((ev(0.65) - ev(0.55)) / ev(0.65)).toBeCloseTo(0.316, 3);
+    // 漂到保本弃牌率 α 时期望归零
+    const alpha = calculateAlpha(100, 50);
+    expect(alpha).toBeCloseTo(1 / 3, 6);
+    expect(ev(alpha)).toBeCloseTo(0, 10);
+    // 正文口径守卫：衰减段必须落在 idx16（含 heading 的 0 起点），并给出 α 的算式
+    const drift = chapters.find((x) => x.id === 't7-exploit') as TheoryChapter;
+    const decayExample = drift.content[16]?.content ?? '';
+    expect(decayExample).toContain('+47.5');
+    expect(decayExample).toContain('+32.5');
+    expect(decayExample).toContain('50 ÷ 150');
+    expect(drift.content[17]?.type).toBe('takeaway');
   });
 });
