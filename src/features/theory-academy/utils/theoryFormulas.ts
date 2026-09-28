@@ -103,3 +103,38 @@ export function multiwayBluffEv(params: {
   const allFold = multiwayAllFold(foldRate, defenders);
   return allFold * potBeforeBet - (1 - allFold) * betSize;
 }
+
+/**
+ * Outs → 命中权益（T1『Outs 与 2/4 法则』的精确口径，非 ×2/×4 估算）：
+ * 一张牌 = outs/47；两张牌 = 1 − ((47−outs)/47)·((46−outs)/46)。
+ * cardsToCome 只接受 1 或 2，其余返回 NaN（2/4 法则本身不适用于第三张牌）。
+ */
+export function outsToEquity(outs: number, cardsToCome: 1 | 2): number {
+  if (outs <= 0) return 0;
+  if (outs > 47) return Number.NaN;
+  if (cardsToCome === 1) return outs / 47;
+  if (cardsToCome === 2) return 1 - ((47 - outs) / 47) * ((46 - outs) / 46);
+  return Number.NaN;
+}
+
+/**
+ * 口袋对子档位的组合数（T4『组合数学与 Blockers』）：
+ * 一个未在牌面出现的对子档位 = C(4,2) = 6 种；牌面已见该点数一张时 = C(3,2) = 3 种。
+ * boardCardsOnThoseRanks 要求不超过 tiers，且每张属不同档位（同档两张则该档归零，不在本口径内）。
+ */
+export function pairTierCombos(tiers: number, boardCardsOnThoseRanks: number): number {
+  if (tiers < 0 || boardCardsOnThoseRanks < 0 || boardCardsOnThoseRanks > tiers) return Number.NaN;
+  return (tiers - boardCardsOnThoseRanks) * 6 + boardCardsOnThoseRanks * 3;
+}
+
+/** 激进度 AF = (下注次数 + 加注次数) ÷ 跟注次数（T7『统计指标』原式）；跟注数为 0 时无定义 */
+export function aggressionFactor(bets: number, raises: number, calls: number): number {
+  if (calls <= 0) return Number.NaN;
+  return (bets + raises) / calls;
+}
+
+/** VPIP = 主动投钱入池手数 ÷ 总手数 × 100（T7『统计指标』原式） */
+export function vpipPercent(voluntaryHands: number, totalHands: number): number {
+  if (totalHands <= 0) return Number.NaN;
+  return (voluntaryHands / totalHands) * 100;
+}

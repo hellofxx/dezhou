@@ -42,6 +42,11 @@ function buttonByText(text: string): HTMLButtonElement | undefined {
   return Array.from(container.querySelectorAll('button')).find((b) => (b.textContent ?? '').includes(text));
 }
 
+/** 每个槽位（li）自带一组按钮，顺序固定为「判定 / 换一题」，跨槽位作答须按 li 取 */
+function submitButton(slotIndex: number): HTMLButtonElement | undefined {
+  return container.querySelectorAll('li')[slotIndex]?.querySelector('button') ?? undefined;
+}
+
 async function type(value: string, index = 0) {
   const el = input(index);
   // React 19 会缓存上一次的 value，直接赋值再派发 input 会被去重；必须走原生 setter
@@ -182,5 +187,50 @@ describe('TheoryCalcDrill', () => {
     for (const id of describedBy) {
       expect(document.getElementById(id), `aria-describedby 指向 ${id} 必须存在`).not.toBeNull();
     }
+  });
+
+  it('新单位渲染：AF 的 ratio 标签与判分、组合数的 count 精确容差', async () => {
+    await mount('t7-stats');
+    const statsText = container.textContent ?? '';
+    expect(statsText).toContain(i18n.t('theory.drill.unit.ratio'));
+    expect(statsText).not.toContain('theory.drill.');
+    const afDrill = buildCalcDrill('t7-stats', 1, 0);
+    expect(afDrill?.unit).toBe('ratio');
+    await type(String(afDrill!.expected), 1);
+    await click(submitButton(1));
+    expect(container.textContent).toContain(i18n.t('theory.drill.correct'));
+    expect(container.textContent).not.toMatch(/EV\s*[0-9-]+/);
+
+    await mount('t4-combinatorics');
+    const comboDrill = buildCalcDrill('t4-combinatorics', 0, 0);
+    expect(comboDrill?.unit).toBe('count');
+    const comboText = container.textContent ?? '';
+    expect(comboText).toContain(i18n.t('theory.drill.unit.count'));
+    expect(comboText).not.toContain('theory.drill.');
+    // 组合数是整数计数，容差为 0：精确值判正确，±1 判错误
+    await type(String(comboDrill!.expected));
+    await click(submitButton(0));
+    expect(container.textContent).toContain(i18n.t('theory.drill.correct'));
+    await type(String(comboDrill!.expected + 1));
+    await click(submitButton(0));
+    expect(container.textContent).toContain(i18n.t('theory.drill.incorrect'));
+  });
+
+  it('英文界面下单位标签为英文且无汉字', async () => {
+    await preloadI18n(['theory'], 'en');
+    await i18n.changeLanguage('en');
+    await mount('t4-combinatorics');
+    const text = container.textContent ?? '';
+    expect(text).toContain('combos');
+    expect(HAN.test(text)).toBe(false);
+    expect(text).not.toContain('theory.drill.');
+  });
+
+  it('t9-cash-vs-mtt 刻意不挂演练槽位，演练区整体缺席', async () => {
+    expect(CHAPTER_DRILL_SLOTS['t9-cash-vs-mtt']).toBeUndefined();
+    expect(buildCalcDrill('t9-cash-vs-mtt', 0)).toBeNull();
+    await mount('t9-cash-vs-mtt');
+    expect(container.querySelector('input')).toBeNull();
+    expect(container.textContent).toBe('');
   });
 });

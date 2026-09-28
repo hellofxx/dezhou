@@ -344,7 +344,9 @@
     "answered": "{{correct}} of {{total}} correct",
     "unit": {
       "percent": "%",
-      "hands": "hands"
+      "hands": "hands",
+      "ratio": "×",
+      "count": "combos"
     },
     "template": {
       "alpha": "Pot {{pot}} bb, villain bets {{bet}} bb. What fold frequency (in %) must villain have for your bluff to break even?",
@@ -354,7 +356,11 @@
       "halfKelly": "Win rate {{winrate}}%, net odds {{odds}}x. What share of your bankroll (in %) does half Kelly suggest?",
       "requiredHands": "You win {{edge}} bb/100 with a standard deviation of {{sd}} bb/100 at z = {{z}}. Roughly how many hands separate that edge from noise?",
       "riskOfRuin": "Win rate {{winrate}} bb/100, std deviation {{sd}} bb/100, bankroll {{buyins}} buy-ins of 100 bb. Under the diffusion approximation, what is the risk of ruin (in %)?",
-      "multiwayBluffFold": "Pot {{pot}} bb and you bet {{bet}} bb. If each of the {{defenders}} players still to act folds at exactly the break-even rate, what is the all-fold probability (in %)?"
+      "multiwayBluffFold": "Pot {{pot}} bb and you bet {{bet}} bb. If each of the {{defenders}} players still to act folds at exactly the break-even rate, what is the all-fold probability (in %)?",
+      "outsEquity": "You have {{outs}} outs. With {{streets}} card(s) still to come, what is the exact hit probability (in %)? Use the exact formula, not the ×2/×4 rule.",
+      "pairCombos": "Villain's range consists of {{tiers}} distinct pocket-pair ranks, and the board shows {{boardHits}} of those ranks (one card each). How many combos is the range?",
+      "af": "A player's hand log records {{bets}} bets, {{raises}} raises and {{calls}} calls. What is his aggression factor?",
+      "vpip": "This player voluntarily put money in the pot {{hands}} times out of {{total}} hands. What is his VPIP (in %)?"
     },
     "hint": {
       "alpha": "alpha = b / (P + b)",
@@ -364,7 +370,11 @@
       "halfKelly": "half Kelly = f* / 2, with f* = (b*p - q) / b",
       "requiredHands": "n = (z * sigma / mu)^2; sigma = std dev (bb/100) / 10, mu = winrate (bb/100) / 100",
       "riskOfRuin": "ROR = exp(-2 * mu * B / sigma^2)",
-      "multiwayBluffFold": "all-fold rate = product of the individual fold rates = alpha raised to the number of defenders"
+      "multiwayBluffFold": "all-fold rate = product of the individual fold rates = alpha raised to the number of defenders",
+      "outsEquity": "one card: outs ÷ 47; two cards: 1 − ((47−outs)÷47) × ((46−outs)÷46)",
+      "pairCombos": "a rank not seen on the board has 6 combos (C(4,2)); once one card of that rank is visible it has 3 (C(3,2))",
+      "af": "AF = (bets + raises) ÷ calls",
+      "vpip": "VPIP = voluntarily invested hands ÷ total hands × 100"
     }
   },
   "bridge": {

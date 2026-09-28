@@ -344,7 +344,9 @@
     "answered": "答对 {{correct}} / {{total}}",
     "unit": {
       "percent": "%",
-      "hands": "手"
+      "hands": "手",
+      "ratio": "倍",
+      "count": "种"
     },
     "template": {
       "alpha": "底池 {{pot}} bb，对手下注 {{bet}} bb。诈唬要保本，对手至少得弃掉百分之多少？",
@@ -354,7 +356,11 @@
       "halfKelly": "胜率 {{winrate}}%、净赔率 {{odds}} 倍。半 Kelly 应投入资金的百分之多少？",
       "requiredHands": "你的胜率 {{edge}} bb/100、标准差 {{sd}} bb/100，置信倍数 z = {{z}}。要让这项优势与波动区分开，大约需要打多少手？",
       "riskOfRuin": "胜率 {{winrate}} bb/100、标准差 {{sd}} bb/100、资金 {{buyins}} 个买入（每买入 100 bb）。按扩散近似，破产概率约为百分之多少？",
-      "multiwayBluffFold": "底池 {{pot}} bb，你下注 {{bet}} bb。{{defenders}} 名尚未行动的对手都恰好按保本频率弃牌时，全弃率约为百分之多少？"
+      "multiwayBluffFold": "底池 {{pot}} bb，你下注 {{bet}} bb。{{defenders}} 名尚未行动的对手都恰好按保本频率弃牌时，全弃率约为百分之多少？",
+      "outsEquity": "你持有 {{outs}} 个 Outs。再看 {{streets}} 张牌时，命中的精确概率约为百分之多少？（用精确式而非 ×2/×4 估算）",
+      "pairCombos": "对手的范围由 {{tiers}} 个不同的口袋对子档位组成，牌面露出了其中 {{boardHits}} 张（各属不同档位）。这个范围共有多少种组合？",
+      "af": "某玩家记录了 {{bets}} 次下注、{{raises}} 次加注与 {{calls}} 次跟注。他的激进度 AF 是多少？",
+      "vpip": "该玩家 {{total}} 手里有 {{hands}} 手主动把钱投入底池。他的 VPIP 约为百分之多少？"
     },
     "hint": {
       "alpha": "α = b ÷ (P + b)",
@@ -364,7 +370,11 @@
       "halfKelly": "半 Kelly = f* ÷ 2，其中 f* = (b·p − q) ÷ b",
       "requiredHands": "n = (z × σ ÷ μ)²；σ = 标准差(bb/100) ÷ 10，μ = 胜率(bb/100) ÷ 100",
       "riskOfRuin": "ROR = exp(−2μB ÷ σ²)",
-      "multiwayBluffFold": "全弃率 = ∏ 各人弃牌率 = α 的防守者人数次方"
+      "multiwayBluffFold": "全弃率 = ∏ 各人弃牌率 = α 的防守者人数次方",
+      "outsEquity": "一张牌：outs ÷ 47；两张牌：1 − ((47−outs)÷47) × ((46−outs)÷46)",
+      "pairCombos": "未露出的档位每档 6 种（C(4,2)），牌面见过该点数一张后每档只剩 3 种（C(3,2)）",
+      "af": "AF = (下注次数 + 加注次数) ÷ 跟注次数",
+      "vpip": "VPIP = 主动入池手数 ÷ 总手数 × 100"
     }
   },
   "bridge": {

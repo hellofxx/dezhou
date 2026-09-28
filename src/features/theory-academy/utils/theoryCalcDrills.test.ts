@@ -16,6 +16,10 @@ import {
   requiredHandsForEdge,
   riskOfRuin,
   multiwayAllFold,
+  outsToEquity,
+  pairTierCombos,
+  aggressionFactor,
+  vpipPercent,
 } from './theoryFormulas';
 
 /**
@@ -52,6 +56,14 @@ const independentExpected = (drill: CalcDrill): number => {
         calculateAlpha(p.pot as number, p.bet as number),
         p.defenders as number
       ) * 100;
+    case 'outsEquity':
+      return outsToEquity(p.outs as number, p.streets === 2 ? 2 : 1) * 100;
+    case 'pairCombos':
+      return pairTierCombos(p.tiers as number, p.boardHits as number);
+    case 'af':
+      return aggressionFactor(p.bets as number, p.raises as number, p.calls as number);
+    case 'vpip':
+      return vpipPercent(p.hands as number, p.total as number);
   }
 };
 
@@ -140,6 +152,25 @@ describe('theoryCalcDrills 题源', () => {
         for (const match of template.matchAll(/\{\{(\w+)\}\}/g)) {
           expect(keys.has(match[1] as string), `${side}·${drill.formula} 占位符 {{${match[1]}}} 不在 params 中`).toBe(true);
         }
+      }
+    }
+  });
+
+  // 单位标签同样是动态 key（`theory.drill.unit.${unit}`），staticKeyGuard 覆盖不到，
+  // 缺 key 会让判分行渲染成键面字（如 "19.1theory.drill.unit.ratio"），故在此兜住。
+  it('每个 drill 的单位标签在双语 locale 中必须存在且非空', () => {
+    const sides = ['zh', 'en'] as const;
+    const units = new Set(drills.map((d) => d.unit));
+    expect(units.size, '题源应覆盖多个单位，否则本守卫无意义').toBeGreaterThan(1);
+    for (const side of sides) {
+      const json = JSON.parse(fs.readFileSync(`src/i18n/locales/${side}/theory.json`, 'utf8')) as {
+        drill?: { unit?: Record<string, string> };
+      };
+      const labels = json.drill?.unit;
+      expect(labels, `${side} 缺 theory.drill.unit`).toBeDefined();
+      for (const unit of units) {
+        const label = labels?.[unit] ?? '';
+        expect(label, `${side} 缺单位标签 theory.drill.unit.${unit}`).toBeTruthy();
       }
     }
   });

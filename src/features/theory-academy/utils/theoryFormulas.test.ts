@@ -10,6 +10,10 @@ import {
   multiwayAllFold,
   perDefenderRequiredDefense,
   multiwayBluffEv,
+  outsToEquity,
+  pairTierCombos,
+  aggressionFactor,
+  vpipPercent,
 } from './theoryFormulas';
 
 /**
@@ -99,5 +103,26 @@ describe('theoryFormulas 口径锚点', () => {
     expect(Number.isNaN(perDefenderRequiredDefense(0, 2))).toBe(true);
     expect(Number.isNaN(perDefenderRequiredDefense(1, 2))).toBe(true);
     expect(Number.isNaN(perDefenderRequiredDefense(0.5, 0))).toBe(true);
+  });
+
+  it('outs / 组合数 / HUD 三族口径与已发布正文一致', () => {
+    // t1-outs idx5：9 outs 单街 9/47 ≈ 19.1%；×4 法则估 18%
+    expect(outsToEquity(9, 1)).toBeCloseTo(0.1915, 4);
+    // t1-outs idx6 精确值表：4 outs 16.5%（精确 16.47%）、15 outs 54.1%
+    expect(outsToEquity(4, 2)).toBeCloseTo(0.16466, 5);
+    expect(outsToEquity(15, 2)).toBeCloseTo(0.541, 3);
+    expect(outsToEquity(9, 2)).toBeCloseTo(0.3497, 3);
+    // t4-combinatorics idx2：对子 6 种、牌面见一张 = C(3,2) = 3 种
+    expect(pairTierCombos(3, 0)).toBe(18);
+    expect(pairTierCombos(4, 1)).toBe(21);
+    expect(pairTierCombos(6, 2)).toBe(30);
+    // t7-stats idx6：AF = (下注 + 加注) ÷ 跟注；VPIP = 主动入池手数 ÷ 总手数
+    expect(aggressionFactor(60, 30, 30)).toBe(3);
+    expect(vpipPercent(35, 150)).toBeCloseTo(23.33, 2);
+    // 非法输入不静默产出可用数值
+    expect(Number.isNaN(outsToEquity(0, 1))).toBe(false);
+    expect(Number.isNaN(pairTierCombos(2, 3))).toBe(true);
+    expect(Number.isNaN(aggressionFactor(10, 10, 0))).toBe(true);
+    expect(Number.isNaN(vpipPercent(10, 0))).toBe(true);
   });
 });
