@@ -65,6 +65,9 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   // T8 心理管理
   't8sd-variance': { lessons: [lesson('l5sd-bankroll', '短牌资金管理')] },
   't8sd-tilt': { lessons: [lesson('l5sd-tilt-control', '短牌情绪控制')] },
+  't8sd-bankroll': {
+    lessons: [lesson('l5sd-bankroll', '短牌资金管理'), lesson('l5sd-tilt-control', '短牌情绪控制')],
+  },
 
   // T9 理论整合
   't9sd-integration': {

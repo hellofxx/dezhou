@@ -199,7 +199,8 @@
     "t9-cash-vs-mtt": "Cash Versus Tournament Structure, Side by Side",
     "t5sd-mixed-strategy": "Short-Deck Mixed Strategies and Indifference",
     "t6sd-equity-realization": "Short-Deck Equity Realization",
-    "t7sd-hud": "Short-Deck HUD Metrics and Sample Size"
+    "t7sd-hud": "Short-Deck HUD Metrics and Sample Size",
+    "t8sd-bankroll": "Short-Deck Bankroll Thresholds and Losing Streaks"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -285,7 +286,8 @@
     "t9-cash-vs-mtt": "Two ledgers for the same hand: utility function, depth drift and the form of the take",
     "t5sd-mixed-strategy": "Copy the equations, recompute the equities",
     "t6sd-equity-realization": "Quoted at 30.1%, collected at 25.6%",
-    "t7sd-hud": "Recalibrate the baseline, back-solve the sample"
+    "t7sd-hud": "Recalibrate the baseline, back-solve the sample",
+    "t8sd-bankroll": "Turning \"150 buy-ins\" from a slogan into a range"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1589,6 +1591,22 @@
       "Worked example (put the interval in the note): do not write \"his VPIP is 30%\", write \"30% over 100 hands, ±9 points, direction loose\". Every adjustment from it must be rewriteable as a robustness test: even if the true value is at the lower bound of 21%, this adjustment still makes money. If you cannot write that sentence you are deciding against noise — writing it is the step that turns a HUD from superstition into a decision.",
       "One line to keep: the short-deck HUD needs no new formulas, it needs two resets — re-stamp the baseline for a 36-card deck (pairs alone lift the floor 2.7 points) and back-solve the sample from ±1.96 x SE (about 896 hands to resolve six points, about 86,400 hands to prove a 10bb/100 edge).",
       "Three executable disciplines: one HUD file per variant; frequency stats under 300 hands count as direction, not band; whenever a reading triggers an adjustment, write down whether it still pays at the lower bound of the interval — if it does not, wait for the hands."
+    ],
+    "t8sd-bankroll": [
+      "The Bankroll Threshold Is a Function of Variance, Not a Slogan",
+      "The standard-track chapter \"Bankroll Management Psychology\" gives the rules and the psychological job they do. This chapter handles one conversion only: where the buy-in numbers come from once variance sits behind them, and where the threshold moves when that variance is swapped for short deck. After the conversion, \"short deck needs 150+ buy-ins\" stops being a slogan and becomes a range you can test.",
+      "Ruin risk (diffusion / continuous approximation, which gives a lower bound; discrete buy-in structures push the real probability higher):\n\nROR = exp(-2 μ B / σ²)\nStated in bb/100: μ = winrate / 100, σ = volatility / 10, B = bankroll measured in bb.\n\nSubstitute: winrate 5bb/100, sigma = 150bb/100, bankroll 15,000bb (150 buy-ins of 100bb)\n  -> ROR = exp(-6.67) ≈ 0.13%\nSame money and winrate at sigma = 100bb/100 -> exp(-15), effectively zero\n\nSame bankroll, same edge: change only the volatility from 100 to 150 and the risk climbs two orders of magnitude.",
+      "Rearrange that expression into a threshold: hold μ and the target ROR fixed and the bankroll you need is proportional to sigma squared. The buy-in requirement is a function of variance, not of feeling — this single proportionality is the whole reason short deck needs a higher threshold, and the reason it can be converted straight from holdem numbers.",
+      "Turning \"150+ buy-ins\" from slogan into range",
+      "If the holdem habit is 50 buy-ins at sigma = 100bb/100 (about 0.005% ruin risk, see the next item), the short-deck conversion by B ∝ σ² is:\n\nsigma = 150bb/100 -> 50 x (150/100)^2 = 112.5 ≈ 113 buy-ins\nsigma = 220bb/100 -> 50 x (220/100)^2 = 242 buy-ins\n\nSo \"150 or more\" sits inside 113-242: conservative for a volatility band of 150-220 without being extravagant. It is not a universal constant. Estimate your own sigma at 220 and 150 buy-ins only buys exp(-3.10) ≈ 4.5% ruin risk; pushing back under 1% takes about 223 buy-ins.",
+      "Worked example (the same money carries different risk in the two games): you have 10,000bb — 100 buy-ins — and an edge of 5bb/100.\nHoldem at sigma = 100: ROR = exp(-10) ≈ 0.005%\nShort deck at sigma = 150: ROR = exp(-4.44) ≈ 1.2%\nSame bankroll, same edge, ruin risk roughly two orders of magnitude apart. That is the computable version of \"short deck needs a thicker buffer\": the distribution is wider, the mindset is not weaker.",
+      "Stop-loss budgets convert the same way and should be written as multiples of sigma. Short-deck sigma = 150bb/100 means 15bb per hand, so one 100-hand unit accumulates 15 x sqrt(100) = 150bb. The rule of thumb \"pause after losing 40bb\" therefore sits at z = (-40 - 5) / 150 = -0.30 for a player who genuinely wins 5bb/100 — by the standard normal table roughly 38% of all 100-hand units reach that point. The rule is an emotional circuit-breaker, not a verdict on your play.",
+      "Write the budget as a multiple of sigma and the trigger frequency comes straight off the table:\n\nDaily budget = 1 sigma of a 100-hand unit (150bb = 1.5 buy-ins) -> one-sided about 16%, so it fires roughly every 6.3 units\nDaily budget = 2 sigma (300bb) -> one-sided about 2.3%, roughly every 43 units\n\nThe same sentence \"stop when it gets bad\" means two quite different disciplines at 1σ versus 2σ. An absolute buy-in number will never tell you that; a sigma multiple will.",
+      "Counter-intuitive point: the threshold tracks variance squared, not variance. Move volatility from 100 to 150 (+50%) and the threshold has to move 2.25 times (+125%). Most people adjust by +50%, so they are permanently short — and the shortfall is most expensive precisely during the high-variance stretches.",
+      "Losing streaks are not a verdict: convert the result into a probability",
+      "Worked example (where an eight-loss streak actually sits): short-deck all-in collisions cluster in the 45%-55% coinflip band, so streaks decouple from real skill. At p = 0.5, eight straight losses is 0.5^8 ≈ 0.4% and ten is about 0.1%. At a pace of dozens of all-ins per session these events answer \"how often\", not \"whether\" — reading one as a technical signal and changing strategy is treating noise as data.",
+      "One line to keep: write the bankroll as a function of sigma (B ∝ σ², so 50 holdem buy-ins become 113-242 in short deck, with \"150+\" sitting inside that range); write the stop-loss as a multiple of sigma (1σ fires about 16% of the time, 2σ about 2.3%); write the losing streak as a probability (0.5^8 ≈ 0.4%). All three are computable, so none of them has to be executed by feel.",
+      "Checklist: keep the conversion table to hand (50 holdem buy-ins -> 113-242 short-deck); before moving money, write down which sigma you used; when you are down, compute z before deciding whether to change strategy and treat anything with |z| < 1 as noise. Writing the sigma down forces your real assumption into the open instead of letting \"it feels solid\" decide for you."
     ]
   },
   "quiz": {
@@ -5706,6 +5724,56 @@
         "No comparable figure"
       ],
       "explanation": "n = (z * sigma / mu)^2 grows with the square of volatility: (150/100)^2 = 2.25, matching about 86,400 hands against 38,416."
+    },
+    "t8sd-bankroll-q1": {
+      "question": "With the edge and the target ruin probability fixed, the bankroll you need is proportional to:",
+      "options": [
+        "sigma",
+        "sigma squared",
+        "the square root of sigma",
+        "the buy-in count itself"
+      ],
+      "explanation": "ROR = exp(-2 μ B / σ²) forces B ∝ σ² once μ and the target ROR are held constant — the threshold is a function of variance."
+    },
+    "t8sd-bankroll-q2": {
+      "question": "The holdem habit \"50 buy-ins at sigma = 100\" converts to roughly how many buy-ins at sigma = 150?",
+      "options": [
+        "75",
+        "113",
+        "150",
+        "242"
+      ],
+      "explanation": "50 x (150/100)^2 = 112.5, so about 113 buy-ins; the 242 figure only applies at sigma = 220."
+    },
+    "t8sd-bankroll-q3": {
+      "question": "Bankroll 10,000bb, edge 5bb/100, sigma = 150bb/100. The continuous-approximation ruin risk is about:",
+      "options": [
+        "0.005%",
+        "0.13%",
+        "1.2%",
+        "4.5%"
+      ],
+      "explanation": "ROR = exp(-2 x 0.05 x 10000 / 15²) = exp(-4.44) ≈ 1.2%; the same bankroll at sigma = 100 gives about 0.005%."
+    },
+    "t8sd-bankroll-q4": {
+      "question": "With short-deck sigma = 150bb/100, the cumulative standard deviation over a 100-hand unit is about:",
+      "options": [
+        "15bb",
+        "50bb",
+        "150bb",
+        "450bb"
+      ],
+      "explanation": "Per-hand sigma is 150 / 10 = 15bb, so 100 hands accumulate 15 x sqrt(100) = 150bb."
+    },
+    "t8sd-bankroll-q5": {
+      "question": "Setting the daily stop-loss at 150bb (exactly 1 sigma) fires, on the one-sided normal approximation, about:",
+      "options": [
+        "once every 6.3 units",
+        "once every 43 units",
+        "almost never",
+        "every single time"
+      ],
+      "explanation": "A one-sided tail of about 16% means 1 / 0.159 ≈ 6.3 units; it is 2 sigma (300bb) that drops to about 2.3% and roughly every 43 units."
     }
   },
   "chapterObjectives": {
@@ -6163,6 +6231,12 @@
       "Use the binomial standard error and the ±1.96 band to decide which conclusion a HUD reading can support",
       "Back-solve the sample size behind \"resolving a six-point VPIP gap takes about 896 hands\"",
       "Use n = (z * sigma / mu)^2 to show why proving the same edge in short deck costs about 2.25 times the sample"
+    ],
+    "t8sd-bankroll": [
+      "Compute the ruin probability with ROR = exp(-2 μ B / σ²) for a given edge and volatility, and read the continuous approximation as a lower bound",
+      "Convert a holdem buy-in threshold to short deck using B ∝ σ² (50 buy-ins become 113 at sigma 150 and 242 at sigma 220)",
+      "Express a daily stop-loss as a multiple of cumulative sigma and estimate its trigger frequency from the one-sided normal (1σ about 16%, 2σ about 2.3%)",
+      "Place a losing streak on a probability scale with 0.5^n and separate psychological signals from technical ones"
     ]
   }
 }

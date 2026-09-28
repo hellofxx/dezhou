@@ -31,6 +31,7 @@ import {
   calculateMDF,
   requiredEquity,
   requiredHandsForEdge,
+  riskOfRuin,
   vpipPercent,
   aggressionFactor,
 } from '../../../utils/theoryFormulas';
@@ -60,7 +61,8 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
  * [示意值] t1sd-combinatorics q5（原版）/idx5：AK 对任意口袋对 43%-45%——已按精确枚举修正，
  *          不再保留旧口径
  * [正确] t1sd-variance idx3/4/5：σ=√(p(1−p))×池底 框架（池底=总注入的伯努利近似）；
- *        0.5^8≈0.39%→0.4%；标准差 150-220、50/150 买入（业界典型，正文标"典型/建议"）
+ *        0.5^8≈0.39%→0.4%；标准差 150-220、50/150 买入（业界典型，正文标"典型/建议"，
+ *        该量级经 t8sd-bankroll 换算后由单点口号变为可复算区间 113–242 买入，仍依赖 σ 估计）
  * [正确] t2sd-potodds idx2/4/6：4/(8+4+4)=25%；5/(10+5+5)=25%；b/(P+2b) 口径全对；
  *        修复后 5 outs 单街 16%（5/31）、双街 30.1%→30%；8 outs 单街 26%、双街 45.6%→46%
  * [正确] t2sd-implied idx2/4（修复后）：set mining = 1−C(32,3)/C(34,3)=1−4960/5984≈17.12%→17.1%
@@ -113,6 +115,17 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
  * [示意值] t7sd-hud idx8 的量级侧：σ=150 / 220bb/100 沿用 t1sd-variance 的典型量级
  *        （该处已登记 [示意值]），故 86,400 / 185,900 手继承该不确定性，只作量级不作承诺；
  *        对照锚 σ=100 → 38,416 手为精确复算
+ * [正确] t8sd-bankroll idx2/6：ROR=exp(−2μB/σ²) 逐项复算——(5bb/100, σ150, 15,000bb)→exp(−6.67)
+ *        =0.13%；(σ100, 10,000bb)→exp(−10)=0.005%；(σ150, 10,000bb)→exp(−4.44)=1.2%；
+ *        (σ220, 15,000bb)→exp(−3.10)=4.5%
+ * [正确] t8sd-bankroll idx5：门槛换算 50×(150÷100)²=112.5≈113、50×(220÷100)²=242 ⇒
+ *        "≥150 买入"落在 113–242 内；σ=220 要压回 1% 需 B ≥ σ_h²·ln100 ÷ (2μ) = 22,289bb ≈ 223 买入
+ * [正确] t8sd-bankroll idx7/8：单手 σ=150÷10=15bb、100 手累计 σ=15×√100=150bb；
+ *        z=(−40−5)÷150=−0.30；1σ 单尾 ⇒ 1÷0.159≈6.3 个单位一次、2σ ⇒ 1÷0.023≈43 个单位一次
+ * [查表值] t8sd-bankroll idx6/7/8/12：正态单尾 15.9% / 2.3% 与 Φ(−0.30)≈38% 为标准正态表值，
+ *        本模块不推导 CDF；测试只锁 z 与倍数关系（可算部分），表值按引用登记
+ * [示意值] t8sd-bankroll idx2/5/6 的 σ=150 / 220 量级沿用 t1sd-variance，ROR 与门槛结论
+ *        随该量级线性/平方移动，正文一律写"约 / 若你把 σ 估在"，不得当承诺引用
  * [正确] t6sd-sizing idx2/q5：f=b/(1+2b)：1/3 池 20%、半池 25%、满池 33%、2 倍池 40% ✓
  * [正确] t6sd-barrel idx2（修复后）：P=6 逐街 2/3 池几何 14→32.67→76.22（32.7/21.8/76.2），
  *        原 32.6/21.7/75.9 累计截断误差
@@ -394,6 +407,37 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
     expect(Math.round(p2 * 10) / 10).toBe(32.7);
     expect(Math.round(bet(p2) * 10) / 10).toBe(21.8);
     expect(Math.round(p3 * 10) / 10).toBe(76.2);
+  });
+
+  it('t8sd-bankroll：ROR 复算、B ∝ σ² 门槛换算与止损触发频率逐项复算', () => {
+    const ror = (sd: number, bankrollBB: number) => riskOfRuin({ winrateBB100: 5, sdBB100: sd, bankrollBB });
+    expect((ror(150, 15000) * 100).toFixed(2)).toBe('0.13');
+    expect((ror(100, 10000) * 100).toFixed(3)).toBe('0.005');
+    expect((ror(150, 10000) * 100).toFixed(1)).toBe('1.2');
+    expect((ror(220, 15000) * 100).toFixed(1)).toBe('4.5');
+    // 优势为 0 时口径退化为必然破产（防止把无优势资金表写成低风险）
+    expect(riskOfRuin({ winrateBB100: 0, sdBB100: 150, bankrollBB: 10000 })).toBe(1);
+    // 门槛换算：B ∝ σ²
+    expect(50 * (150 / 100) ** 2).toBe(112.5);
+    expect(50 * (220 / 100) ** 2).toBeCloseTo(242, 6);
+    // σ=220 时把 ROR 压回 1% 以内所需资金（bb → 买入）
+    const sigmaHand220 = 220 / 10;
+    expect(Math.ceil((sigmaHand220 ** 2 * Math.log(100)) / (2 * 0.05) / 100)).toBe(223);
+    // 止损侧：累计 σ 与 z
+    expect(150 / 10).toBe(15);
+    expect(15 * Math.sqrt(100)).toBe(150);
+    expect(((-40 - 5) / 150).toFixed(2)).toBe('-0.30');
+    expect((1 / 0.159).toFixed(1)).toBe('6.3');
+    expect((1 / 0.023).toFixed(0)).toBe('43');
+    // 连败侧：与 t1sd-variance 同一 0.5^n 口径
+    expect((0.5 ** 8 * 100).toFixed(1)).toBe('0.4');
+    expect((0.5 ** 10 * 100).toFixed(1)).toBe('0.1');
+    // 判分题锁定
+    expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q1', '与 σ² 成正比');
+    expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q2', '113 个');
+    expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q3', '1.2%');
+    expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q4', '150bb');
+    expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q5', '约每 6.3 个 100 手单位一次');
   });
 
   it('t8sd-variance：σ=50、50×√50≈354、0.5^8≈0.4%（判分题锁定）', () => {
