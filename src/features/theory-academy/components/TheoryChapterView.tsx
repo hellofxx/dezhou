@@ -116,6 +116,15 @@ export default function TheoryChapterView() {
   // 已完成章节回访复习：阅读页提供免重考导航（返回目录/下一章），重考取历史最高分无数据风险
   const chapterCompleted = completedChapters.includes(chapter.id);
   const bestScore = quizScores[chapter.id];
+  // 章节粒度桥接与 Level 粒度共存时的去重：章节推荐若已被 Level 推荐覆盖且本级已全部完成，
+  // 只保留更宽的 Level 卡，避免同一列表在同屏重复渲染两次
+  const chapterRecommendations = chapter.practiceRecommendations;
+  const chapterCoveredByLevel =
+    !!chapterRecommendations &&
+    levelCompleted &&
+    chapterRecommendations.lessons.every((lesson) =>
+      level.practiceRecommendations.lessons.some((item) => item.id === lesson.id)
+    );
 
   const handleQuizComplete = (
     score: number,
@@ -314,6 +323,13 @@ export default function TheoryChapterView() {
                 </p>
                 <p className="font-numeric text-3xl text-[var(--brass-bright)]">{t('theory.chapterView.score', { score: result.score })}</p>
               </div>
+            )}
+            {/* 章节粒度实践推荐（被 Level 推荐覆盖时不重复展示） */}
+            {chapterRecommendations && !chapterCoveredByLevel && (
+              <PracticeBridgeCard
+                recommendations={chapterRecommendations}
+                subtitleKey="theory.bridge.chapterSubtitle"
+              />
             )}
             {/* Level 全部完成时展示实践桥接推荐 */}
             {levelCompleted && <PracticeBridgeCard recommendations={level.practiceRecommendations} />}

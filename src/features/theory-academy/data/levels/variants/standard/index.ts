@@ -1,4 +1,5 @@
-import type { TheoryLevelInfo } from '../../../../types';
+import type { TheoryChapter, TheoryLevelInfo } from '../../../../types';
+import { CHAPTER_PRACTICE_RECOMMENDATIONS } from './chapterPracticeMap';
 import { STANDARD_LEVEL_1_CHAPTERS } from './standardLevel1';
 import { STANDARD_LEVEL_2_CHAPTERS } from './standardLevel2';
 import { STANDARD_LEVEL_3_CHAPTERS } from './standardLevel3';
@@ -10,7 +11,18 @@ import { STANDARD_LEVEL_8_CHAPTERS } from './standardLevel8';
 import { STANDARD_LEVEL_9_CHAPTERS } from './standardLevel9';
 
 // practiceRecommendations 引用 strategy-academy 课程/轨道 ID 字符串（不产生模块 import）。
-// 引用完整性由 strategy-academy/data/curriculumIntegrity.test.ts 的 CROSS_MODULE_LESSON_IDS 守卫。
+// Level 粒度引用的完整性由 strategy-academy/data/curriculumIntegrity.test.ts 的
+// CROSS_MODULE_LESSON_IDS 守卫；章节粒度引用见 ./chapterPracticeMap，
+// 由 data/theoryIntegrity.test.ts 断言其为 Level 白名单的子集。
+
+/** 把章节级实践推荐附加到章节对象（章节数据文件本身不声明该字段） */
+function withChapterPractice(chapters: TheoryChapter[]): TheoryChapter[] {
+  return chapters.map((chapter) => {
+    const recommendation = CHAPTER_PRACTICE_RECOMMENDATIONS[chapter.id];
+    return recommendation ? { ...chapter, practiceRecommendations: recommendation } : chapter;
+  });
+}
+
 export const standardLevels: TheoryLevelInfo[] = [
   {
     id: 't1',
@@ -21,7 +33,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🎲',
     variant: 'standard',
     unlockRequirement: '无',
-    chapters: STANDARD_LEVEL_1_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_1_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l1-basics', title: '德州扑克规则与牌型' },
@@ -39,7 +51,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '⚖️',
     variant: 'standard',
     unlockRequirement: '完成 T1 所有章节',
-    chapters: STANDARD_LEVEL_2_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_2_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-ev-thinking', title: 'EV 思维' },
@@ -56,7 +68,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🧭',
     variant: 'standard',
     unlockRequirement: '完成 T2 所有章节',
-    chapters: STANDARD_LEVEL_3_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_3_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l1-position', title: '位置的力量' },
@@ -73,7 +85,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🗺️',
     variant: 'standard',
     unlockRequirement: '完成 T3 所有章节',
-    chapters: STANDARD_LEVEL_4_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_4_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-range-thinking', title: '范围思维' },
@@ -91,7 +103,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '♟️',
     variant: 'standard',
     unlockRequirement: '完成 T4 所有章节',
-    chapters: STANDARD_LEVEL_5_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_5_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-gto-basics', title: 'GTO 基础入门' },
@@ -110,7 +122,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '💠',
     variant: 'standard',
     unlockRequirement: '完成 T5 所有章节',
-    chapters: STANDARD_LEVEL_6_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_6_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l3-bet-sizing', title: '下注尺度理论' },
@@ -128,7 +140,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🔍',
     variant: 'standard',
     unlockRequirement: '完成 T6 所有章节',
-    chapters: STANDARD_LEVEL_7_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_7_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-opponent-reading', title: '对手阅读与剥削策略' },
@@ -145,7 +157,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🧠',
     variant: 'standard',
     unlockRequirement: '完成 T7 所有章节',
-    chapters: STANDARD_LEVEL_8_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_8_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l5-tilt', title: '情绪管理（Tilt Control）' },
@@ -163,7 +175,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🏛️',
     variant: 'standard',
     unlockRequirement: '完成 T8 所有章节',
-    chapters: STANDARD_LEVEL_9_CHAPTERS,
+    chapters: withChapterPractice(STANDARD_LEVEL_9_CHAPTERS),
     practiceRecommendations: {
       lessons: [
         { id: 'l6-icm', title: 'ICM 基础' },

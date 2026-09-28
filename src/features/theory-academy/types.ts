@@ -54,6 +54,12 @@ export interface TheoryChapter {
   variant: PokerVariant;
   /** 变体特有规则说明 */
   variantRules?: VariantRuleInfo;
+  /**
+   * 本章对应的实践推荐（章节粒度桥接）。
+   * 仅数据层字段，不进 TheoryProgress 持久化；由 standard/index.ts 在聚合时从
+   * chapterPracticeMap 附加，因此 standardLevelN.ts 内不直接书写。
+   */
+  practiceRecommendations?: PracticeRecommendation;
 }
 
 /** 理论→实践桥接推荐（引用 strategy-academy 课程/轨道 ID 字符串，不产生模块 import） */

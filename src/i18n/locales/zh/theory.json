@@ -328,6 +328,7 @@
   "bridge": {
     "title": "理论 → 实践",
     "subtitle": "把读过的理论变成牌桌上的决策",
+    "chapterSubtitle": "这一章对应的实战课时——读完就练，别等到整级结束",
     "cta": "前往策略学院",
     "applyPractice": "去实践应用",
     "gotoLesson": "前往实践课程：{{title}}",

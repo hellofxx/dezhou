@@ -12,6 +12,20 @@ import type { TheoryChapter } from '../types';
 const ELO_DIMENSIONS = new Set(['preflop', 'postflop', 'math', 'handReading', 'mental']);
 const allChapters: TheoryChapter[] = THEORY_LEVELS.flatMap((level) => level.chapters);
 
+/**
+ * Level 粒度实践推荐引用的策略学院课时 ID 白名单（跨模块引用登记面）。
+ * 与 strategy-academy curriculumIntegrity.test.ts 的 CROSS_MODULE_LESSON_IDS 互为镜像：
+ * 本文件防"引用未登记"，那边防"登记的 id 不存在"。章节粒度推荐只能复用本白名单。
+ */
+const EXPECTED_PRACTICE_LESSON_IDS = [
+  'l1-basics', 'l1-hand-selection', 'l1-position', 'l2-raise-sizing',
+  'l3-draws', 'l4-ev-thinking', 'l4-range-thinking', 'l4-range-construction',
+  'l4-blockers', 'l4-gto-basics', 'l4-mdf', 'l4-frequency-balance',
+  'l3-bet-sizing', 'l3-cbet', 'l4-overbet', 'l4-opponent-reading',
+  'l8-exploitative-adjustments', 'l5-tilt', 'l5-bankroll', 'l5-session-review',
+  'l6-icm', 'l7-multiway', 'l8-pool-tendencies',
+].sort();
+
 describe('theory integrity: ID 唯一性与前缀规范', () => {
   it('章节 id 全局唯一，且前缀为 t<level>-', () => {
     const seen = new Set<string>();
@@ -110,19 +124,26 @@ describe('theory integrity: 实践推荐结构合法性', () => {
   // 避免未来新增推荐后忘记登记导致 PracticeBridgeCard 无拦截的悬空跳转。
   // （因模块隔离，theory-academy 测试不能直接 import strategy-academy 数据，故用白名单镜像式守卫）
   it('实践推荐引用的课程 ID 集与白名单一致（变化时需同步 curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS）', () => {
-    const EXPECTED_PRACTICE_LESSON_IDS = [
-      'l1-basics', 'l1-hand-selection', 'l1-position', 'l2-raise-sizing',
-      'l3-draws', 'l4-ev-thinking', 'l4-range-thinking', 'l4-range-construction',
-      'l4-blockers', 'l4-gto-basics', 'l4-mdf', 'l4-frequency-balance',
-      'l3-bet-sizing', 'l3-cbet', 'l4-overbet', 'l4-opponent-reading',
-      'l8-exploitative-adjustments', 'l5-tilt', 'l5-bankroll', 'l5-session-review',
-      'l6-icm', 'l7-multiway', 'l8-pool-tendencies',
-    ].sort();
     const actual = [
       ...new Set(
         THEORY_LEVELS.flatMap((level) => level.practiceRecommendations.lessons.map((l) => l.id))
       ),
     ].sort();
     expect(actual).toEqual(EXPECTED_PRACTICE_LESSON_IDS);
+  });
+
+  // 章节粒度桥接（chapterPracticeMap）刻意只复用 Level 白名单里的课时，不扩大跨模块引用面，
+  // 因此用子集断言而非等值：章节集合必然 ⊆ Level 集合，等值会在 Level 未覆盖某课时时误报。
+  // 同时断言章节集合非空——防止聚合链（standard/index.ts 的 withChapterPractice）被误删后静默失效。
+  it('章节级实践推荐的课程 ID 必须是 Level 白名单的子集且非空', () => {
+    const chapterLessonIds = [
+      ...new Set(
+        allChapters.flatMap((chapter) =>
+          (chapter.practiceRecommendations?.lessons ?? []).map((lesson) => lesson.id)
+        )
+      ),
+    ];
+    expect(chapterLessonIds.length).toBeGreaterThan(0);
+    expect(chapterLessonIds.filter((id) => !EXPECTED_PRACTICE_LESSON_IDS.includes(id))).toEqual([]);
   });
 });

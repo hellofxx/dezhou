@@ -328,6 +328,7 @@
   "bridge": {
     "title": "Theory → Practice",
     "subtitle": "Turn the theory you've read into decisions at the table",
+    "chapterSubtitle": "The practice lessons that match this chapter — read it, then drill it",
     "cta": "Go to Strategy Academy",
     "applyPractice": "Apply in practice",
     "gotoLesson": "Go to practice lesson: {{title}}",

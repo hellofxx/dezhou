@@ -6,14 +6,17 @@ import type { PracticeRecommendation } from '../types';
 
 interface PracticeBridgeCardProps {
   recommendations: PracticeRecommendation;
+  /** 副标题 key：章节粒度传 theory.bridge.chapterSubtitle，缺省沿用 Level 粒度文案 */
+  subtitleKey?: string;
 }
 
 /**
- * "去实践"推荐卡：理论→实践闭环出口。
+ * "去实践"推荐卡：理论→实践闭环出口，Level 粒度与章节粒度共用。
  * 仅通过路由字符串跳转 strategy-academy（不产生跨模块 import）；
- * 引用完整性由 strategy-academy curriculumIntegrity 测试守卫。
+ * Level 粒度引用完整性由 strategy-academy curriculumIntegrity 测试守卫，
+ * 章节粒度由 theory-academy data/theoryIntegrity 的子集断言守卫。
  */
-export function PracticeBridgeCard({ recommendations }: PracticeBridgeCardProps) {
+export function PracticeBridgeCard({ recommendations, subtitleKey = 'theory.bridge.subtitle' }: PracticeBridgeCardProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -28,7 +31,7 @@ export function PracticeBridgeCard({ recommendations }: PracticeBridgeCardProps)
         <h3 className="font-display text-[16px] text-[var(--ivory)]">{t('theory.bridge.applyPractice')}</h3>
       </div>
       <p className="text-xs text-[var(--ivory-muted)] mb-4">
-        {t('theory.bridge.subtitle')}
+        {t(subtitleKey)}
       </p>
       <div className="space-y-2">
         {recommendations.lessons.map((lesson) => (
