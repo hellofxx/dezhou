@@ -94,8 +94,15 @@ describe('theory integrity: 判分数据合法性', () => {
       if (chapter.content.length === 0) bad.push(`${chapter.id}: content 为空`);
       if (!ELO_DIMENSIONS.has(chapter.eloDimension)) bad.push(`${chapter.id}: eloDimension=${chapter.eloDimension}`);
       if (chapter.content.some((s) => !s.content.trim())) bad.push(`${chapter.id}: 存在空段落`);
-      if (chapter.objectives !== undefined) {
+      // 学习目标为必填：类型上可选只为兼容旧数据与共用类型，缺漏由本断言拦下。
+      // 条数上界 5、下界 3 与现役 37 章（3-4 条）一致，防止"凑数一条"或整段悬空。
+      if (chapter.objectives === undefined) {
+        bad.push(`${chapter.id}: 缺少 objectives（每章须声明 3-5 条学习目标）`);
+      } else {
         if (chapter.objectives.length === 0) bad.push(`${chapter.id}: objectives 为空数组`);
+        if (chapter.objectives.length < 3 || chapter.objectives.length > 5) {
+          bad.push(`${chapter.id}: objectives 条数 ${chapter.objectives.length} 不在 3-5 区间`);
+        }
         if (chapter.objectives.some((o) => !o.trim())) bad.push(`${chapter.id}: objectives 存在空条目`);
       }
     }

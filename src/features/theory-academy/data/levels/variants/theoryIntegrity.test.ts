@@ -163,8 +163,14 @@ describe('variant theory integrity: 完整内容阶段校验（对齐标准系�
     for (const chapter of allVariantChapters) {
       if (chapter.content.length === 0) bad.push(`${chapter.id}: content 为空`);
       if (chapter.content.some((s) => !s.content.trim())) bad.push(`${chapter.id}: 存在空段落`);
-      if (chapter.objectives !== undefined) {
+      // 与标准侧同源约束：类型可选、守卫必填（变体 44 章本就全部声明，缺漏应被拦下而非静默通过）
+      if (chapter.objectives === undefined) {
+        bad.push(`${chapter.id}: 缺少 objectives（每章须声明 3-5 条学习目标）`);
+      } else {
         if (chapter.objectives.length === 0) bad.push(`${chapter.id}: objectives 为空数组`);
+        if (chapter.objectives.length < 3 || chapter.objectives.length > 5) {
+          bad.push(`${chapter.id}: objectives 条数 ${chapter.objectives.length} 不在 3-5 区间`);
+        }
         if (chapter.objectives.some((o) => !o.trim())) bad.push(`${chapter.id}: objectives 存在空条目`);
       }
     }
