@@ -9,6 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import { THEORY_LEVELS } from '../data/levels';
 import { headsUpLevels } from '../data/levels/variants/heads-up';
+import { shortDeckLevels } from '../data/levels/variants/short-deck';
 import {
   getAllChapters,
   getNextChapter,
@@ -158,5 +159,46 @@ describe('变体 isLevelFullyCompleted', () => {
   it('标准系列 isLevelFullyCompleted 仍正确', () => {
     const completed = t1.chapters.map((c) => c.id);
     expect(isLevelFullyCompleted(t1.id, completed)).toBe(true);
+  });
+});
+
+// ========== 两变体参数化不变式 ==========
+// 上面的 HU 专属用例覆盖了同一代码路径，但短牌高级段从每级 2 章增到 3 章后，
+// 顺延与解锁链的形状只在短牌侧被真正改变；按变体参数化覆盖，免得再靠"同一路径"推断。
+describe.each([
+  ['heads-up', headsUpLevels, 22],
+  ['short-deck', shortDeckLevels, 27],
+] as const)('变体学习流不变式：%s', (_name, levels, chapterCount) => {
+  const all = levels.flatMap((l) => l.chapters);
+
+  it('守卫确实取到该变体全部章节（防空数组使下列断言空跑）', () => {
+    expect(all.length).toBeGreaterThanOrEqual(chapterCount);
+  });
+
+  it('每级至少 2 章，且章节序列的 level 只允许持平或 +1（不跳级、不回退）', () => {
+    for (const level of levels) {
+      expect(level.chapters.length, `${level.id} 章节数`).toBeGreaterThanOrEqual(2);
+    }
+    const ordered = levels.flatMap((l) => l.chapters.map((c) => c.level));
+    for (let i = 1; i < ordered.length; i++) {
+      // 允许本级内同级，跨级时只允许 +1（不顺延到下下级、不回到上级）
+      expect(ordered[i]! - ordered[i - 1]!).toBeLessThanOrEqual(1);
+      expect(ordered[i]! - ordered[i - 1]!).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it('顺序学完前置章节后，下一章所属 Level 必已解锁（正常流不出现锁定提示）', () => {
+    const completed: string[] = [];
+    for (const chapter of all) {
+      completed.push(chapter.id);
+      const next = getNextChapter(chapter.id);
+      if (!next) continue;
+      const nextLevel = findLevelByChapterId(next.id)!;
+      expect(isLevelUnlockedByCompleted(nextLevel.id, completed), `${chapter.id} → ${next.id}`).toBe(true);
+    }
+  });
+
+  it('变体末章无下一章（不跨变体顺延）', () => {
+    expect(getNextChapter(all[all.length - 1]!.id)).toBeUndefined();
   });
 });
