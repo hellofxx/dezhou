@@ -97,6 +97,7 @@ additionalPrompt: ""
 ## Workflows
 1. 新增章节时：在对应 variants/standard/standardLevelN.ts（标准变体）或 variants/short-deck/shortDeckLevelN.ts / variants/heads-up/headsUpLevelN.ts（变体）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验
    - **每章必须声明 3–5 条 `objectives`**（类型可选、守卫必填，缺漏或条数越界即门禁红）。写法：以动词开头、单句、句末无句号、**不复述任何精确数值**——量化一致性只由 `content` 与 `quiz` 两处承担，目标里写数字会造出第三个需要同步维护的地方；每条必须能指回该章某个具体段落（下标 0 起、含 heading 段），禁止凭标题或常识编造
+   - **正文禁用四类写法（已由卫生守卫强制）**：`**粗体**`（`TheorySectionRenderer` 按纯文本渲染，星号会显示给用户）、"本级第 N 章 / 本章第 3 章"式**编号交叉引用**（加章或调序即指错）、用《》包章节名（《》只用于教材书名，章节名一律 `『…』`）、正文出现裸章节 id。跨章引用一律写成「见 T5『MDF 与 Alpha』章」——守卫读 `ALL_VARIANT_THEORY_LEVELS` 覆盖三变体全部章节的正文/目标/小测文本，判定书名号是否误用以其内容命中某章 `title` 为准
    - **locale 只能追加**：正文段落 key 是下标型（`theory.content.<chapterId>.<sectionIndex>`，无稳定 id），在已有章节中间插段会让 zh/en 数组静默错位且 `contentAlignment.baseline.ts` 棘轮基线为空集（无自救余地）；补段一律追加到数据数组与 zh/en 两份 locale 数组的**末尾**，且三者下标顺序必须一致
    - **每章小测固定 3-5 题**：已有 5 题的章节不得再加题（`theoryIntegrity.test.ts` 断言上界）
    - **量化口径不得自立第二套**：涉及 Alpha / MDF / 跟注所需权益 / Kelly / 显著性样本量 / 破产概率 / outs 权益 / 组合计数 / HUD 比率的正文数字，一律取 `utils/theoryFormulas.ts` 的函数口径，并在 `standardQuantAudit.test.ts`（变体为 `variantQuantAudit.test.ts`）登记复算块与文件头人工复核索引（`[正确]` / `[示意值]` 分类，PRD §6.7.1 诚实性）
