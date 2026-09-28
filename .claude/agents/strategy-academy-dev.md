@@ -139,6 +139,7 @@ additionalPrompt: ""
 - strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》
 - **课程双层门禁**：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（按 lesson 所属 `LevelInfo` 条目调用 `isLevelEntryUnlocked`，区分 l4a/l4b；本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）；调试解锁激活时（`shared/stores/debugMode.ts`）两道门禁均放行
 - **课程数据完整性守卫**：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；新增/改名课程后此测试必须全绿
+- **变体课时改名/删除的第二处守卫**：`data/theoryVariantBridgeIntegrity.test.ts`（反向存在性）扫描理论学院变体数据源码里被引用的课时 id，对 `ALL_VARIANT_LESSONS` 与 `LEVELS` 两个全集分别断言（变体专属课必须存在且不在 `LEVELS`；三变体共享地基课必须存在于 `LEVELS`），并比对引用点自带的回退标题与 `academy.lessonTitle.*` 权威值。**改名或删除任何 `l<n>sd-*` / `l<n>hu-*` 课时、或修改 `academy.lessonTitle` 权威标题，必须同批更新理论侧 `data/levels/variants/{short-deck,heads-up}/chapterPracticeMap.ts`**，否则该守卫即红（变体课时进不了任何白名单，这是它唯一的兜底）
 - **mental-tilt-recognition 例外**：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
 - **Lesson.prerequisites 字段**：`Lesson` 类型含 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）；声明 prerequisite 时必须确保引用的课程 ID 存在
 - **QuickDrill 自动降级**：达到降级条件时（由 `progress.shouldDownshiftDifficulty()` 判定，无参调用，阈值以 progress store 实现为准）自动降级难度（不低于 beginner）

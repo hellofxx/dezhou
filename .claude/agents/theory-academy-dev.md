@@ -104,8 +104,8 @@ additionalPrompt: ""
    - **全下 / ICM 实例必须先定覆盖关系**：写"输了归零"之前要确认被跟的一方筹码 ≥ 跟注方，否则归零不成立、且期望式必须含输分支的持有值而非 0（曾有实例因漏算输分支而结论反转，且被复核索引登记为「正确」）。复核索引的下标以 **0 起、含 heading 段**计
 2. 新增 Level 时：新建 variants/<variant>/<variant>LevelN.ts → 在对应 variants/<variant>/index.ts 注册（含 practiceRecommendations）→ 更新 unlockRequirement 链
 3. 调整实践推荐时：编辑 variants/standard/index.ts（standard）或 variants/<variant>/index.ts（变体）的 practiceRecommendations → 同步 strategy-academy curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS（须经 platform-dev）
-   - **变体桥接 id 无守卫兜底**：`variants/theoryIntegrity.test.ts` 不校验 practiceRecommendations，两份 ID 镜像清单的事实源都只是 `THEORY_LEVELS`（standard）；改 short-deck / heads-up 的推荐课时 ID 时须逐个 grep 确认目标课时在 strategy-academy 源码真实存在，且**不得**把变体课时 id（如 `l8hu-exploitative`）加进 `CROSS_MODULE_LESSON_IDS`（curriculumIntegrity 断言变体课不得混入 LEVELS，加了必红）。**要成规模地做变体章节级桥接之前，先建反向存在性守卫**：仿 `strategy-academy/data/theoryReferenceIntegrity.test.ts` 的方向，用 `import.meta.glob('?raw')` 扫理论变体数据源码提出被引用的课时 id，再对 `ALL_VARIANT_LESSONS` 的 id 全集断言存在——否则 44 章的引用完整性只能靠人工核验，必然漂移
-   - `{ id, title }` 的 title 只是 `academy.lessonTitle.<id>` 缺失时的回退，须与策略学院权威标题一致
+   - **变体桥接由两层守卫兜住，不再靠人工 grep**：内层 `data/levels/variants/theoryIntegrity.test.ts` 断言**每个变体章节都带非空章节级推荐**且 id 只属 `l<n>hu|sd-*`（变体专属）或 `l<n>-*`（三变体共享地基课）两种命名空间；外层 strategy-academy `data/theoryVariantBridgeIntegrity.test.ts` 经 `import.meta.glob('?raw')` 扫变体数据源码，对变体专属 id 断言存在于 `ALL_VARIANT_LESSONS` 且**不在** `LEVELS`、对共享地基课 id 断言**在** `LEVELS` 内可解析，并把引用点自带的回退标题与 `academy.lessonTitle.*` 权威值比对。变体课时 id 仍**不得**写进 `EXPECTED_PRACTICE_LESSON_IDS` 或 `CROSS_MODULE_LESSON_IDS`（两处白名单的事实源都是 `LEVELS`，加了必红）
+   - `{ id, title }` 的 title 只是 `academy.lessonTitle.<id>` 缺失时的回退，须与策略学院权威标题一致（守卫会剥掉尾部消歧括号后比对，允许省略括号但不允许词根不同）
 4. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate（仅注入新字段默认值）+ 更新 store.persist-shape.test.ts 快照与 store.migrate.test.ts 迁移用例
 5. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `theory.*` 命名空间
 6. **内容扩充标准工作流（每章 7 步）**：
@@ -118,11 +118,14 @@ additionalPrompt: ""
    - Step 7 运行质量门禁，通过后进入下一章
    - 内容质量门槛与版权合规边界：见 PRD §6.7.1 / §6.7.2（单源，禁止在此重述明细）；教材对照基线见 PRD §5.27.4，章节级出处以正文内联「（概念源自：教材名 章节）」为唯一事实源
 7. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
-8. 调整章节级实践推荐时：编辑 `data/levels/variants/standard/chapterPracticeMap.ts`（章节文件本身不声明 `practiceRecommendations`，由 `standard/index.ts` 的 `withChapterPractice()` 聚合时附加）→ 课时 id 必须仍在 Level 白名单内（`data/theoryIntegrity.test.ts` 子集断言），新增越界 id 需按 Workflows 第 3 条同步两份镜像清单。章节推荐缺省时演练/桥接卡不渲染，变体（短牌/单挑）本表暂不覆盖。
+8. 调整章节级实践推荐时：标准侧编辑 `data/levels/variants/standard/chapterPracticeMap.ts`（章节文件本身不声明 `practiceRecommendations`，由 `standard/index.ts` 的 `withChapterPractice()` 聚合时附加）→ 课时 id 必须仍在 Level 白名单内（`data/theoryIntegrity.test.ts` 子集断言），新增越界 id 需按 Workflows 第 3 条同步两份镜像清单。变体侧同名文件 `data/levels/variants/{heads-up,short-deck}/chapterPracticeMap.ts` 覆盖本变体**全部**章节，由 `variants/<v>/index.ts` 的 `withChapterPractice(levels)` 附加，守卫结构见第 3 条（无白名单，改为覆盖率 + 反向存在性两层）。章节推荐缺省时桥接卡不渲染。
    - **白名单扩容是"只能等于"的强约束，须三处同一 commit 同步**：某个 Level 的 `practiceRecommendations.lessons`（否则 Level 级 `toEqual` 红）+ `theoryIntegrity.test.ts` 的 `EXPECTED_PRACTICE_LESSON_IDS` + 对面 `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS`。课时 id 前缀守卫接受 `l<level>-` 与本土课 `local-` 两种命名空间（本土课已并入策略学院 LEVELS，路由 `/academy/lesson/:id` 可解析）。
 9. 新增/修改章内计算演练时：题源在 `utils/theoryCalcDrills.ts`（`CHAPTER_DRILL_SLOTS` 决定哪章有哪些公式槽位），期望值必须调 `utils/theoryFormulas.ts` 现算，**禁止在题源里出现任何硬编码答案或第二套口径**；`drillId` 用 `${chapterId}#d${slot}` 形式，**不得**使用 `-qN` 后缀（SRS 与疑难清单按 `-q\d+$` 反解章节 id，撞名会误判）；演练组件不得接入 `recordAnswer` / `updateElo` / `addReviewItem` / `completeChapter` / `trainingEvents.emit`（PRD §5.27.10 的零持久决策，已被 `theoryCalcDrills.test.ts` 的源码守卫与 `TheoryCalcDrill.test.tsx` 的状态快照断言双向锁定）。纯数值填空无 `correctIndex`，不属选项排序治理面，无需接 `quizOrder.ts`。
    - **单位与标签**：`DrillUnit` 现有 `percent / hands / ratio / count` 四种，容差按单位分档且只在生成器内定义（percent 绝对 0.5、ratio 绝对 0.05、count 绝对 0、hands 相对 5%）。新增单位必须同批补 `theory.drill.unit.<unit>` 双语——该 key 由 `t(\`theory.drill.unit.${unit}\`)` 动态拼接，`staticKeyGuard` 覆盖不到，缺 key 会把判分行渲染成键面字；由 `theoryCalcDrills.test.ts` 的单位标签守卫兜住。新增公式族同理须保证模板里的每个 `{{占位符}}` 都出现在该 drill 的 `params` 键集内（同一测试断言）。
    - **不挂槽是判断不是疏漏**：某章若无可口算对象（如 Tilt / 心态章），或其唯一可算量需要多步带小数的分数运算（如三人 ICM 递归，越出"参数取自友好网格、答案可口算复核"纪律），就让它返回 null 并在 `theoryCalcDrills.ts` 文件头写明理由，不要为凑覆盖率搬别章公式。
+10. **新增变体章节是 5 文件原子单元**（缺一即门禁红或静默失配）：① `variants/<变体>/<变体>LevelN.ts` 追加章节（`order` 取数组末尾的下一个连续值，变体守卫断言 order 为 1..n；`duration` 形如 `13 min`；`eloDimension` 取五维之一；3–5 条 `objectives`；至少一段 `takeaway`）② 同变体的 `chapterPracticeMap.ts` 登记章节级桥接（覆盖率守卫会拦住漏登记）③ zh locale：`chapterTitle` / `chapterSubtitle` / `content.<id>` 数组 / `chapterObjectives.<id>` 数组 / `quiz.<qid>`，**逐字镜像数据原文** ④ en locale 同结构译文（不得含汉字）⑤ `variantQuantAudit.test.ts` 追加复算 `it` 块 + 文件头人工复核索引（段号 **0 起、含 heading 段**）。跨章引用只按标题写 `『…』`，被引用的章节若属后续批次，须先把标题定下来再写，避免引用悬空（散文引用无机器守卫）。
+    - **变体量化口径**：与牌堆无关的量（Alpha / MDF / 跟注所需权益 / 保本弃牌率）在变体间逐字相同，直接调 `utils/theoryFormulas.ts`；随牌堆变的量必须重算——outs 权益一律走 `outsToEquity(outs, streets, SHORT_DECK_UNKNOWN_CARDS)`（短牌 31/30），组合数按每花色 9 张、9 个点数档位算。标准主线靠默认 `[47, 46]` 零改动，`theoryFormulas.test.ts` 有"默认值逐位等于旧口径"的回归锁，改默认参数会让它立刻红
+    - **登记分类不止两态**：复核索引须把数值归为 `[正确]`（可独立复算）/ `[查表值]`（外部标准表，如正态分位，本模块不推导）/ `[示意值]`（经验量级，正文标"约/典型"）/ `[定性]`（机制陈述无数值）/ `[假设]`（教学结构设定，声明"数字随结构变、关系不变"）/ `[规则集说明]`（变体规则约定）；**由示意值导出的结论继承示意标签**（PRD §6.7.1「数值来源分类登记」）
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
