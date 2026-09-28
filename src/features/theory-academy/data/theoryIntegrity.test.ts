@@ -7,6 +7,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { THEORY_LEVELS } from './levels';
+import { ALL_VARIANT_THEORY_LEVELS } from './levels/variants';
 import type { TheoryChapter } from '../types';
 
 const ELO_DIMENSIONS = new Set(['preflop', 'postflop', 'math', 'handReading', 'mental']);
@@ -105,6 +106,39 @@ describe('theory integrity: 判分数据合法性', () => {
         }
         if (chapter.objectives.some((o) => !o.trim())) bad.push(`${chapter.id}: objectives 存在空条目`);
       }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  /**
+   * 正文排版与跨章引用的卫生检查，覆盖三变体全部章节（81 章）。
+   * 四条禁令各对应一类已被实测证实会坏掉或显示错的写法：
+   * - `**x**`：`TheorySectionRenderer` 以纯文本节点渲染，星号会原样出现在页面上
+   * - "本级第 N 章 / 本章第 3 章"式编号引用：加章或调序即指向错的章，且"本章第 3 章"自相矛盾
+   * - 用《》包章节名：与"《》只用于教材书名"的惯例冲突（章节名一律用『』）
+   * - 正文里直接写章节 id：id 是内部标识，读者看不懂且改名即失效
+   * 跨章引用一律写成"（见 T5『MDF 与 Alpha』章）"式标题引用；标题本身是本模块数据的 title 字段。
+   */
+  it('正文不含 markdown 标记、编号交叉引用、书名号包裹的章节名与裸章节 id', () => {
+    const chapters = ALL_VARIANT_THEORY_LEVELS.flatMap((level) => level.chapters);
+    const titles = new Set(chapters.map((chapter) => chapter.title));
+    const bad: string[] = [];
+    const proseOf = (chapter: TheoryChapter): string[] => [
+      ...chapter.content.map((section) => section.content),
+      ...chapter.objectives ?? [],
+      ...chapter.quiz.flatMap((q) => [q.question, ...q.options, q.explanation]),
+    ];
+    for (const chapter of chapters) {
+      proseOf(chapter).forEach((text, i) => {
+        if (/\*\*/.test(text)) bad.push(`${chapter.id}[${i}]: 含 markdown 粗体标记`);
+        const numbered = text.match(/(本级|本章|上一章|下一章)?第 ?[0-9一二三四五六七八九] ?章/);
+        if (numbered) bad.push(`${chapter.id}[${i}]: 编号交叉引用「${numbered[0]}」，应改为按章节标题引用`);
+        for (const bracket of text.matchAll(/《([^》]{2,24})》/g)) {
+          if (titles.has(bracket[1] as string)) bad.push(`${chapter.id}[${i}]: 章节名用了书名号《${bracket[1]}》，应为『…』`);
+        }
+        const rawId = text.match(/\bt[1-9](hu|s)?-[a-z0-9-]{2,}\b/);
+        if (rawId) bad.push(`${chapter.id}[${i}]: 正文出现裸章节 id「${rawId[0]}」`);
+      });
     }
     expect(bad).toEqual([]);
   });
