@@ -196,7 +196,8 @@
     "t6-equity-realization": "Board Texture and Equity Realization: How Much of Your Equity Actually Lands",
     "t5-multiway-frequency": "Multiway Pot Frequencies and Sizings",
     "t4-structure-economics": "The Economics of Table Structure: Rake, Antes and Straddles",
-    "t9-cash-vs-mtt": "Cash Versus Tournament Structure, Side by Side"
+    "t9-cash-vs-mtt": "Cash Versus Tournament Structure, Side by Side",
+    "t5sd-mixed-strategy": "Short-Deck Mixed Strategies and Indifference"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -279,7 +280,8 @@
     "t6-equity-realization": "All-in equity is the sticker price; realized equity is what you take home",
     "t5-multiway-frequency": "When the opposition goes from one to two, MDF and bluff frequencies must be recomputed from scratch",
     "t4-structure-economics": "Treat table parameters as independent variables in the equation, not as background noise",
-    "t9-cash-vs-mtt": "Two ledgers for the same hand: utility function, depth drift and the form of the take"
+    "t9-cash-vs-mtt": "Two ledgers for the same hand: utility function, depth drift and the form of the take",
+    "t5sd-mixed-strategy": "Copy the equations, recompute the equities"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1531,6 +1533,24 @@
       "The classic mistake: \"Which one pays more - just look at the buy-ins and the profit figures.\" The two profit streams are not in the same unit. Cash is bb/100 × hands, with linear utility and a withdrawable balance; a tournament is a per-entry $EV distribution, concentrated at the top and needing tens to hundreds of entries to converge. Comparing the amounts directly is comparing kilometres with kilograms. The workable version converts both to the same time unit (per hour) and the same risk yardstick (risk adjusted), and only then asks which is larger.",
       "A transfer-training order: drill the decision tree in cash first - unlimited re-entry, stable depth, feedback you can verify on the spot; then train the two tournament-only skills separately, Push/Fold charts below 15bb and bubble ICM judgement, reviewed off-line with a calculator rather than by feel at the table. Finally bring one habit across: check the structure before you sit. Rake at this table, fee at that event, and how often the blinds move - three tables are three different equations.",
       "Two structures, two ledgers: the cash ledger counts hands and μ under linear utility, the tournament ledger counts $EV under non-linear utility with an M that collapses one way. The same 55% hand is a call worth +300 chips on one side and 22.6 against 32.8, a fold, on the other. The split does not come from skill but from which ledger you are computing in - so confirm the ledger before every decision."
+    ],
+    "t5sd-mixed-strategy": [
+      "Short-Deck Mixed Strategies: Same Equations, Different Inputs",
+      "The standard-track chapter \"Mixed Strategies, the Indifference Principle and Node Locking\" already gives the proof from first principles: a hand is split across several actions if and only if every one of those actions has exactly the same expected value. This chapter does not repeat that proof. It solves a translation problem instead — move the same equations onto a 36-card deck and ask which quantities carry over and which must be recomputed. The answer is a clean split: bet size determines frequencies, the deck determines equity.",
+      "Four quantities that depend only on bet size and are identical in both games:\n\nDefence obligation MDF = P / (P+b):\n  half pot 66.7%, pot size 50.0%, double pot 33.3%\n\nAlpha, the threshold where a bluff stops being exploitable = b / (P+b):\n  half pot 33.3%, pot size 50.0%, double pot 66.7%\n\nThe break-even fold rate of a bluff is the same expression read the other way round\n\nEquity needed to call = amount to call / pot after you call:\n  pot 8 facing a bet of 4: 4 / 16 = 25.0%\n\nIf the size stays the same, not one of these numbers moves — short deck does not shift the half-pot defence obligation away from 66.7%.\n(Concept from: Modern Poker Theory, Ch.3 mixed strategies and indifference)",
+      "This gives the single most transferable judgement of the chapter: short deck needs no second set of frequency formulas. Whenever you are told that \"MDF works differently in short deck\", something about the size or the equity input was changed — not the indifference equation itself. Conflating the two means filing an input difference under \"a different theory\".",
+      "What the deck changes is equity and combo counts",
+      "Unknown cards in short deck = 36 - 2 hole cards - 3 community cards = 31 (30 after the turn), versus 47 / 46 in holdem.\nA flush draw in short deck is always 5 outs (only 9 cards per suit, four already visible), versus 9 outs in holdem.\n\nExact two-street equity (1 - probability both streets miss):\n  short deck 5 outs: 30.1%   short deck 8 outs: 45.6%\n  holdem 9 outs: 35.0%\n\nSingle street:\n  short deck 5 outs: 16.1%   short deck 8 outs: 25.8%   holdem 9 outs: 19.1%\n\nNote that the short-deck flush draw is weaker in raw equity (about four points lower); the compensation sits on the value side once it does arrive — a flush ranks above a full house.",
+      "Worked example (the same indifference equation, opposite answers on two streets): pot 8, opponent bets 4, you call 4 making 16, so the threshold is 25.0% equity. On the flop your flush draw has two streets left: 30.1% > 25.0%, the call holds. On the turn the same draw has one street left: 16.1% < 25.0%, and the identical hand at the identical price flips from call to fold. Holdem with 9 outs also falls short on a single street (19.1%), so the rule is not short-deck specific; what is specific is that the two-street side only reaches 30.1%, shrinking the safety margin from ten points to five.",
+      "Since frequencies come from the equations and equities from the deck, every mixed node in short deck needs its inputs recomputed. Combo counts collapse just as sharply: with three spades on the flop, the chance that one given opponent holds at least one spade (already a flush) = 1 - C(27,2) / C(33,2) = 33.5%, and holding exactly two spades is only C(6,2) = 15 combos out of 528 (2.8%); the same calculation in holdem gives 37.0% and C(10,2) = 45 combos. Rarer made hands and fewer combos per draw are the other face of the same coin that puts a flush above a full house.",
+      "Worked example (splitting a frequency across a readable feature): flop Ks9s6s in short deck, you hold As8d. The solver may mix 60% raise / 40% call here. Humans cannot generate true randomness, so split it by an explainable feature: the branch holding As — which blocks the nut flush, since five of those 15 combos contain As and all drop to zero, leaving C(5,2) = 10 — raises 100%; the branch without it calls 100%. The overall frequency is unchanged, but each branch carries a stated reason, and execution error is far smaller than rolling dice in your head.",
+      "Counter-intuitive point: short-deck solver output looks more extreme than holdem — bigger sizes, higher frequencies — yet the indifference points at a given size sit exactly where they sit in holdem. Every difference comes from the inputs (equity and combo counts), not from the strategic principle. Memorising \"short deck means playing aggressive\" as a principle leads you to run the same frequencies in holdem and discover you are donating.",
+      "Data discipline for node locking in short deck",
+      "Node locking — freeze the opponent's observed tendency at a node, then re-solve your maximally exploitative response — only works if the tendency you lock comes from enough hands. The discipline is stricter in short deck: with fewer cards the outcomes cluster more sharply, so at the same sample size the observed frequency is noisier, and confirming one fold-rate leak takes no fewer hands than in holdem. As a rule of scale, hands required grow with (variance / edge) squared — halving the effect you are chasing costs four times the sample. The short-deck HUD baseline and its sample sizes are in this level's chapter \"Short-Deck HUD Metrics and Sample Size\".",
+      "Worked example: you notice a short-deck opponent folding 60% to half-pot continuation bets on the flop, while the defence obligation at that size is 66.7% — a systematic under-defence of 6.7 points. Locking that node and re-solving pushes your bluff frequency up and adds weak draws that would otherwise purely check. Hold on to the ceiling as well: the harvest is bounded by exactly those 6.7 points. An opponent under-defending by one point is not worth abandoning your baseline for, because the hole you open is bigger than the one you collect.",
+      "The computable part of the review routine (pot 8, bet 4):\n\nDefence obligation MDF = 8 / (8+4) = 66.7%  ->  opponent measured at 60%, under-defending by 6.7 points\nBreak-even fold rate of a bluff = 4 / (8+4) = 33.3%  ->  at 60% folds you sit far above the profit line\nSo whether to bluff at all is never the question here; which hands to bluff with, and how wide to lock the range, is.\n\nRun these two before you lock anything and you avoid the classic mistake — spending an already-profitable action to \"exploit\" an opponent who barely deviates.",
+      "One line to keep: size gives the frequency (MDF, Alpha and the break-even fold rate are identical in both games), the deck gives the equity (31/30 unknown cards, flush draws always 5 outs, made-hand combos collapse), and sample size gives the discipline (confirm you have enough hands before locking a tendency). Blur the three and you will file an input difference under \"short deck has its own theory\".",
+      "How to spend practice time: on a mixed node a single wrong pick costs almost zero expected value, so do not agonise over it. What is genuinely expensive is a wrong input — treating 5 outs as 9, reading the turn as if it were the flop, estimating short-deck combo counts with a 52-card deck. After each session review only the inputs you miscounted, not the frequencies you never had to decide."
     ]
   },
   "quiz": {
@@ -5498,6 +5518,56 @@
         "Look at which format has the higher ITM rate, since that is the profitable one"
       ],
       "explanation": "Cash is measured in bb/100 × hands with linear utility; a tournament is a per-entry $EV distribution, top-heavy and slow to converge. The only comparable form is same time unit, same risk adjustment, each net of its own mechanism of the take. Option 2 divides two non-comparable distributions; option 3 substitutes an extreme value for an expectation, which simply rewards whichever format has more variance; option 4 mistakes frequent cashing for profit, while a high ITM rate usually means the pay jumps are small."
+    },
+    "t5sd-mixed-strategy-q1": {
+      "question": "Compared with holdem, the defence obligation MDF facing a half-pot bet in short deck is:",
+      "options": [
+        "Lower, because the deck has only 36 cards",
+        "Higher, because there are more draws",
+        "Identical: P/(P+b), still about 66.7%",
+        "Not derivable from the bet size"
+      ],
+      "explanation": "MDF depends only on pot and bet size, not on the deck; short deck changes the equity inputs, not the frequency equation."
+    },
+    "t5sd-mixed-strategy-q2": {
+      "question": "Pot 8, opponent bets 4, you call 4. The equity you need is about:",
+      "options": [
+        "16.7%",
+        "20.0%",
+        "25.0%",
+        "33.3%"
+      ],
+      "explanation": "Amount to call divided by the pot after you call: 4 / 16 = 25.0%."
+    },
+    "t5sd-mixed-strategy-q3": {
+      "question": "With three cards to a suit on a short-deck flop, your flush draw is normally:",
+      "options": [
+        "9 outs",
+        "8 outs",
+        "6 outs",
+        "5 outs"
+      ],
+      "explanation": "Short deck has only 9 cards per suit (6 through ace) and four are already visible, so a flush draw is always 5 outs rather than the 9 of holdem."
+    },
+    "t5sd-mixed-strategy-q4": {
+      "question": "With three spades on the flop, how does the chance that one opponent holds at least one spade compare between short deck and holdem?",
+      "options": [
+        "About 33.5% in short deck, below about 37.0% in holdem",
+        "About 37.0% in short deck, above 33.5% in holdem",
+        "Roughly 50% in both",
+        "Not computable in short deck"
+      ],
+      "explanation": "Short deck: 1 - C(27,2)/C(33,2) = 33.5%; holdem: 1 - C(39,2)/C(49,2) = 37.0%. The smaller deck makes made flushes rarer per combo."
+    },
+    "t5sd-mixed-strategy-q5": {
+      "question": "Before exploiting an opponent through node locking, the most important discipline is:",
+      "options": [
+        "Modelling the highest-stakes opponent first",
+        "Confirming the tendency comes from a large enough sample",
+        "Locking the same node in a holdem solver first",
+        "Splitting the mixed frequency across suit features"
+      ],
+      "explanation": "A locked tendency must come from enough hands; short deck is noisier at the same sample size, and locking an imagined leak swaps your bulletproof vest for paper."
     }
   },
   "chapterObjectives": {
@@ -5937,6 +6007,12 @@
       "Rate the quality of the observed sample and scale the deviation from equilibrium accordingly",
       "Run the full loop from baseline through deviation, monitoring adaptation, and pulling back",
       "Assemble the theory from earlier levels into the analysis of one single hand"
+    ],
+    "t5sd-mixed-strategy": [
+      "Separate the size-only frequency quantities (MDF, Alpha, break-even fold rate) from the deck-dependent equity inputs (unknown cards, outs, combo counts)",
+      "Recompute whether a short-deck draw clears its threshold on the flop and on the turn using the 31/30 unknown-card baseline",
+      "Split mixed frequencies across explainable features (blockers, suit) instead of relying on unexecutable \"true randomness\"",
+      "Explain why node locking needs stricter sample discipline in short deck, and how the size of a leak bounds the harvest"
     ]
   }
 }

@@ -40,6 +40,9 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't5sd-bluff': {
     lessons: [lesson('l4sd-blocker-bluff', '阻断牌诈唬'), lesson('l4sd-gto-fundamentals', '短牌 GTO 基础')],
   },
+  't5sd-mixed-strategy': {
+    lessons: [lesson('l4sd-solver-readout', 'Solver 结果解读'), lesson('l4sd-gto-fundamentals', '短牌 GTO 基础')],
+  },
 
   // T6 下注策略
   't6sd-sizing': { lessons: [lesson('l3sd-cbet', '短牌持续下注')] },

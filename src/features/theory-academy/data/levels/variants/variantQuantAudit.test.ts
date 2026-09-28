@@ -24,7 +24,13 @@
  */
 import { describe, it, expect } from 'vitest';
 import { shortDeckLevels, headsUpLevels } from './index';
-import { outsToEquity, SHORT_DECK_UNKNOWN_CARDS } from '../../../utils/theoryFormulas';
+import {
+  outsToEquity,
+  SHORT_DECK_UNKNOWN_CARDS,
+  calculateAlpha,
+  calculateMDF,
+  requiredEquity,
+} from '../../../utils/theoryFormulas';
 import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
 
 /*
@@ -72,6 +78,18 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
  *        MDF=1/(1+b)：半池 67%、满池 50% ✓
  * [正确] t5sd-bluff idx2：半诈唬 EV 公式 f×P−(1−f)(1−E)B+(1−f)E(P+B)；代入 f=0.5/P=8/B=4/
  *        E=0.35 → 4−1.3+2.1=4.8 ✓；纯空气 0.5×8−0.5×4=2 ✓；"高 2-3 倍"≈2.4× ✓
+ * [正确] t5sd-mixed-strategy idx2/13：只依赖尺度的四个口径两牌制同值——MDF 8÷12=66.7%、
+ *        8÷16=50.0%、8÷24=33.3%；α=4÷12=33.3%、16÷24=66.7%；门槛 4÷16=25.0%；
+ *        保本弃牌率 = α（同一式子）；66.7%−60%=6.7 个百分点欠防 ✓
+ * [正确] t5sd-mixed-strategy idx5/6：outsToEquity(5,·,[31,30]) 单街 16.1%、双街 30.1%；
+ *        8 outs 25.8%/45.6%；标准 9 outs 19.1%/35.0%；30.1%>25%>16.1% ⇒ 同一手牌两街相反答案 ✓
+ * [正确] t5sd-mixed-strategy idx7/8：C(33,2)=528、C(6,2)=15（15/528=2.8%）、
+ *        1−C(27,2)/C(33,2)=33.5%；标准 1−C(39,2)/C(49,2)=37.0%、C(10,2)=45；
+ *        持 A♠ 阻断后对手同花组合 15→C(5,2)=10 ✓
+ * [规则集说明] t5sd-mixed-strategy idx5/idx9：同花压制葫芦（flushBeatsFullHouse）为 house rule，
+ *        "成牌更稀有 ⇄ 成牌价值更高"是该规则的两侧表述，非独立可算结论
+ * [正确] t5sd-mixed-strategy idx11：所需手数 ∝ (σ/μ)²，效应估计减半需 4 倍样本——
+ *        只引用比例关系（standardQuantAudit 的 n=(zσ/μ)² 单源），未给短牌具体 σ，故不涉示意值
  * [正确] t6sd-sizing idx2/q5：f=b/(1+2b)：1/3 池 20%、半池 25%、满池 33%、2 倍池 40% ✓
  * [正确] t6sd-barrel idx2（修复后）：P=6 逐街 2/3 池几何 14→32.67→76.22（32.7/21.8/76.2），
  *        原 32.6/21.7/75.9 累计截断误差
@@ -231,6 +249,41 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
     expect(evAir).toBeCloseTo(2, 6);
     expect(evSemi / evAir).toBeGreaterThan(2);
     expect(evSemi / evAir).toBeLessThan(3);
+  });
+
+  it('t5sd-mixed-strategy：尺度给频率、牌堆给权益（MDF/α/门槛/outs/组合数逐项复算）', () => {
+    // 只依赖尺度的四个口径：短牌与标准局逐字相同，方程不因牌堆改变
+    expect(calculateMDF(8, 4)).toBeCloseTo(2 / 3, 6);
+    expect(calculateAlpha(8, 4)).toBeCloseTo(1 / 3, 6);
+    expect(calculateMDF(8, 8)).toBe(0.5);
+    expect(calculateMDF(8, 16)).toBeCloseTo(1 / 3, 6);
+    expect(calculateAlpha(8, 16)).toBeCloseTo(2 / 3, 6);
+    expect(requiredEquity(4, 16)).toBe(0.25);
+    // 权益侧：短牌听牌两街之间必须重算，标准局对照
+    const pct = (x: number) => Math.round(x * 1000) / 10;
+    expect(pct(outsToEquity(5, 2, SHORT_DECK_UNKNOWN_CARDS))).toBe(30.1);
+    expect(pct(outsToEquity(5, 1, SHORT_DECK_UNKNOWN_CARDS))).toBe(16.1);
+    expect(pct(outsToEquity(8, 1, SHORT_DECK_UNKNOWN_CARDS))).toBe(25.8);
+    expect(pct(outsToEquity(9, 2))).toBe(35.0);
+    expect(pct(outsToEquity(9, 1))).toBe(19.1);
+    // 正文结论的可算内核：同一手牌在 25.0% 门槛前翻牌过、转牌不过
+    expect(outsToEquity(5, 2, SHORT_DECK_UNKNOWN_CARDS) > 0.25).toBe(true);
+    expect(outsToEquity(5, 1, SHORT_DECK_UNKNOWN_CARDS) > 0.25).toBe(false);
+    // 组合数：翻牌三张同花色（短牌每花色 9 张，牌面已见 4 张 → 剩 6 张）
+    expect((33 * 32) / 2).toBe(528);
+    expect((6 * 5) / 2).toBe(15);
+    expect(pct(1 - (27 * 26) / 2 / 528)).toBe(33.5);
+    expect((10 * 9) / 2).toBe(45);
+    expect(pct(1 - ((39 * 38) / 2 / ((49 * 48) / 2)))).toBe(37.0);
+    expect(pct(15 / 528)).toBe(2.8);
+    // A♠ 在我手上：对手 15 种同花组合里带 A♠ 的 5 种归零，剩 C(5,2)=10
+    expect((5 * 4) / 2).toBe(10);
+    // 判分题锁定
+    expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q1', '完全相同：P÷(P+b)，半池仍是约 66.7%');
+    expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q2', '25.0%');
+    expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q3', '5');
+    expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q4', '短牌约 33.5%，低于标准局的约 37.0%');
+    expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q5', '确认该倾向来自足够样本的真实观察');
   });
 
   it('t6sd-sizing：诈唬占比 f=b/(1+2b) 表 20/25/33/40%', () => {
