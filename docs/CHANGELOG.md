@@ -8,6 +8,19 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-09-28 理论学院第二批：计算演练 + 章节级桥接 + 多人底池前置章 + 仓库清理（8 个 commit）
+
+接上一批的 ICE 排序，闭合剩余三项高优先级（#7 演练 / #4 桥接粒度 / #5 多人底池位置），并修掉本批查出的三处缺陷。
+
+- **#7 章内即时计算演练（ICE #7，出口断层）**：题源 `utils/theoryCalcDrills.ts` 从离散友好网格出数值题，期望值一律调 `theoryFormulas` 现算（题源零硬编码答案），按单位分档容差判分；组件 `components/TheoryCalcDrill.tsx`（179 行）挂在 reading 阶段正文之后，形成"读→算→测"微闭环。**零持久为显式产品决策**（PRD §5.27.10）：`recordAnswer` 无幂等且直连全局连错计数（自适应难度唯一入口）与每日题量预算，把"允许试错"的练习计入会把自我纠错当漏洞；该决策由组件测试的状态快照不变断言 + `import.meta.glob('?raw')` 源码级 token 禁用双向锁定。`drillId` 用 `chapterId#dN` 而非 `-qN`，避开 SRS/疑难清单的章节反解契约。新增 3 个多人公式口径（`multiwayAllFold` / `perDefenderRequiredDefense` / `multiwayBluffFold`）。
+- **#4 桥接下沉到章节粒度（ICE #4）**：`TheoryChapter.practiceRecommendations?` 新字段 + `chapterPracticeMap.ts` 集中维护标准 35 章映射（22 个课时，全部复用 Level 已登记白名单），`standard/index.ts` 聚合时附加；章节卡优先、被 Level 覆盖且本级完成时不重复渲染。守卫新增**子集**断言（非等值，因章节集合必然 ⊆ Level 集合）+ 非空断言（防聚合链被误删后静默失效）。**更正上一批的估计**：该字段属数据层、`TheoryProgress` 不存它，故 persist version 仍为 3、`store.persist-shape.test.ts` 快照未动——不需要 schema 迁移。
+- **#5 新增第 36 章 `t5-multiway-frequency`（ICE #5，不改名方案）**：把多人底池的**频率与尺度**前移到 T5，正好收拢 `t5-game-theory` 与 `t5-mdf-alpha` 两处早已埋下的伏笔（各追加指向本章的指针，下标型 key 原位替换）。核心结论：全弃率是乘积而非平均（半池进两人 11.1%、进三人 3.7%）、EV 由 0 塌到 −33.3/−44.4、放大尺度反而更差（满池进两人 −50）、防守义务按 `d = 1 − α^(1/n)` 分摊（两人 42.3%）而非除以人数（33.4% 是系统性欠防）。`t9-multiway` 原地保留——改名需 theory v3→4 **加** progress v18→19 并迁移四处已发布 id 与复习项 key/route，本仓库无先例。
+- **修 T9 order 错号**：`t9-alpha` 声明 5 却排第 4、`t9-unified` 声明 4 却排第 5，章节眉编号与"下一章"链自相矛盾；改为 [1,2,3,4,5]。
+- **策略学院 9 处理论引用去编号化**：审计全仓 45 处"Tn 第 k 章"散文引用后，修正 9 处语义错位（含被上述 order 修正改坏的 2 处），统一改为按章节标题引用，并把 `l6-bounty` 拆清为《多人底池理论》+《ICM 理论》两个指针；zh 逐字镜像与 en 译文同批改（`academy-course/level{1,5,6,7,8}.json`）。**方法论结论**：编号写法会被后续加章打穿，跨模块指针应引用标题。
+- **仓库清理**：删除误入库的 `.tmp-verify/` 过期镜像（707 个跟踪文件，含整棵 src 副本与两个 vitest 日志），`.gitignore` 补条目防复发。删除前逐项核对：4 个"仅存在于镜像"的模块与现居处逐字节等价，唯一独有的 `elo.test.ts` 先救回（12 项断言对现役 API 直接通过，补上了 elo.ts 迁移时丢失的回归覆盖）；确认无任何 tsconfig/vitest/eslint/glob 扫描该目录，删除前后 `pnpm verify` 均为同一结论。
+- **文档**：PRD 新增 §5.27.10（演练与其零持久决策）、§5.27.6 扩为"每级与每章"、T5 覆盖范围与教材基线更新；TDD §5.8b 补第 13/14 条（演练四约束、口径不下沉 shared 的理由）并修正桥接条目；`theory-academy-dev` 新增 Workflows 第 8/9 条。
+- **验证**：`pnpm verify` 152 文件 / 1062 测试全绿，`pnpm build` 通过；演练卡 7 项 jsdom 断言含判分三态、零持久快照、换题保持公式族、en 无汉字与键面泄漏、label/aria 关联。**未覆盖**：真实浏览器下的视觉与 <768px 布局（本会话仍不能启动 dev server），仅以组件级渲染代替；`t5-multiway-frequency` 的范围/概率结论仍需非作者复核（PRD §6.7.3）。
+
 ### 2026-09-27 理论学院课程修复：两处枢纽章 + 量化闭环 + 零基础先修（内容层，7 个 commit）
 
 对理论学院做了"初学者→职业牌手"路径实测评审后，按结论补齐三处结构性断层（评审结论：九级主线骨架完整、每 Level 教材引用 ≥2 达标，但入口/中场/出口有洞）。

@@ -1135,7 +1135,7 @@ interface DailyRecommendation {
 
 1. **数据模型**（`theory-academy/types.ts`）：
    - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
-   - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）
+   - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）/ `practiceRecommendations?`（章节粒度桥接，**数据层字段、不进持久化**，由 `standard/index.ts` 聚合时从 `chapterPracticeMap` 附加，章节文件本身不书写）
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
@@ -1160,7 +1160,7 @@ interface DailyRecommendation {
 
 8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫，反方向（策略课时 `theory-reference` → 理论章节）由 strategy-academy `data/theoryReferenceIntegrity.test.ts` 守卫（见 §5.8 第 15 条）。
 
-9. **理论→实践桥接**：每 Level 完成后 `PracticeBridgeCard` 展示推荐课程/轨道（路由字符串跳转），各 Level 的 practiceRecommendations 定向推荐仅指向 track-beginner / track-gto / track-cash-game；strategy-academy `learningTracks.ts` 的 `track-theory-bridge`（“理论到实践”轨道）为经 `/academy/tracks` 泛浏览发现的通用衔接入口（按理论支柱顺序串联实战课程），不是各 Level 的定向推荐目标（P1F-05 定性，专批 A 2026-07-31）。
+9. **理论→实践桥接**：两级粒度并存——Level 粒度在各 Level 的 `practiceRecommendations` 声明、`PracticeBridgeCard` 于本级全部章节完成时展示（定向推荐仅指向 track-beginner / track-gto / track-cash-game）；章节粒度集中在 `data/levels/variants/standard/chapterPracticeMap.ts`，由 `standard/index.ts` 的 `withChapterPractice()` 在聚合时附加到章节对象，`TheoryChapterView` 优先展示章节卡、当章节推荐被 Level 推荐覆盖且本级已完成时不重复渲染。章节映射刻意只复用 Level 已登记的课时白名单，故 `data/theoryIntegrity.test.ts` 对章节粒度用**子集**断言（并断言非空，防聚合链被误删后静默失效），Level 粒度的等值断言保持不变。strategy-academy `learningTracks.ts` 的 `track-theory-bridge`（“理论到实践”轨道）为经 `/academy/tracks` 泛浏览发现的通用衔接入口（按理论支柱顺序串联实战课程），不是各 Level 的定向推荐目标（P1F-05 定性，专批 A 2026-07-31）。
 
 10. **章末错题接入 SRS**：`utils/theorySrs.ts` 纯函数 `buildTheoryReviewItems(chapter, wrongQuestionIds)` 把章末错题转为复习项，由 `TheoryChapterView` 在小测完成回调里逐项 `progress.addReviewItem`。三条实现约束：
     - **id 命名空间**：复习项 id 一律 `theory:<questionId>`（`addReviewItem` 按 id 整体 upsert，裸 questionId 会与策略学院以 lessonId 为键的复习项互相吞并）
@@ -1170,11 +1170,19 @@ interface DailyRecommendation {
 
 11. **量化口径单源**（`utils/theoryFormulas.ts`，模块内自持）：`calculateAlpha` / `calculateMDF` / `requiredEquity` / `kellyFraction`（+ `halfKellyFraction`）/ `requiredHandsForEdge` / `riskOfRuin` 六个纯函数，是正文公式段与 `standardQuantAudit.test.ts` 复算块的共同口径源（锚点断言见 `utils/theoryFormulas.test.ts`）。**不下沉 `shared/utils/pokerMath.ts`**：当前仅本模块消费，未达 shared 层 ≥2 模块准入门槛；若策略学院（`MDFVisualizer` 等）将来复用再上收。参数语义须与审计口径一致——`betSize` 指该街下注总额，跟注类门槛一律用「需补入额 ÷ 跟注后底池」。
 12. **零基础先修引导**：`TheoryHome` 侧栏私有组件 `BasicsPrerequisiteCard`，仅在当前变体 `completedChapters` 为空时渲染，以 `<Link to="/academy/basics">` 对接策略学院入门向导。因 `ALLOWED_CROSS_IMPORTS` 禁止 theory→strategy 边，该卡片**不读取**对方 `basicsProgress` 完成态、不构成门禁、不新增本模块持久化字段（jsdom 冒烟见 `components/TheoryHome.basicsGuide.test.tsx`）。
+13. **章内即时计算演练**：题源 `utils/theoryCalcDrills.ts`（`CHAPTER_DRILL_SLOTS` 声明哪些章节有哪些公式槽位；`buildCalcDrill(chapterId, slotIndex, attempt)` 从离散参数网格出题、期望值一律调 `theoryFormulas` 现算、`gradeCalcDrill` 按单位容差判分），组件 `components/TheoryCalcDrill.tsx` 挂在 reading 阶段正文之后（读→算→测微闭环，不新增 phase 状态）。四条实现约束：
+    - **seed 只由「章节 + 槽位 + 换题次数」决定**，不掺日期与用户——§5.26.4 的"同题同序"契约只约束每日谜题，掺日期会让回访时题面漂移
+    - **零持久**（PRD §5.27.10 的产品决策落地）：组件不调 `recordAnswer` / `updateElo` / `completeChapter` / `addReviewItem` / `recordTrainingDay` / `trainingEvents.emit`，因为 `recordAnswer` 无幂等且直连全局连错计数（自适应难度唯一入口）与每日题量预算。双向守卫：组件测试断言五类持久状态快照在混合作答后逐字节不变，`theoryCalcDrills.test.ts` 用 `import.meta.glob('?raw')` 从源码层面禁用上述 token
+    - **id 空间隔离**：`drillId` 形如 `${chapterId}#d${slot}`，刻意不用 `-qN` 后缀——`flaggedReviewModel` 与 SRS 按 `-q\d+$` 反解章节 id，撞名会把演练题误当小测题处理
+    - **不属选项排序治理面**：纯数值填空无 `correctIndex`，故不经 `quizOrder.ts` 出口（依据 AGENTS.md 选项排序治理与 PRD §5.26.2 的适用范围），此判断写在该组件与生成器文件头，防后来者误判为漏接
+    - 演练卡为**零持久、无 EV 标定**，反馈按 §5.9 登记豁免采二态呈现，不复用 `FeedbackGrade` / `GradeBadge`（二者 grade 必填且会渲染 EV 数值）
+14. **量化口径单源归属**：`utils/theoryFormulas.ts`（含多人 `multiwayAllFold` / `perDefenderRequiredDefense` / `multiwayBluffEv`）与 `utils/theoryCalcDrills.ts` 均留在模块内，**不下沉 shared**：当前仅 theory-academy 消费，未达 shared 层 ≥2 模块准入门槛；策略学院（`MDFVisualizer` 等）复用后再上收。
 
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
 - 新增幂等 action `toggleFlagQuestion(questionId)` / `switchVariant(variant)`
 - 迁移版本演进历史见 `docs/CHANGELOG.md`
+- 章节级桥接（`TheoryChapter.practiceRecommendations`）与章内计算演练**均未新增持久化字段**：前者是数据层字段、后者只有组件内 `useState`，`TheoryProgress` 形状不变（`store.persist-shape.test.ts` 快照未动即为证据），故 persist version 不递增
 
 **章节难度标签阈值**（2026-08 定义）：
 - `getChapterDifficulty(level)` 返回值 < 0.35 → 基础（success 色）

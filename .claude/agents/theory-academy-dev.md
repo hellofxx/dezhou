@@ -115,6 +115,8 @@ additionalPrompt: ""
    - Step 7 运行质量门禁，通过后进入下一章
    - 内容质量门槛与版权合规边界：见 PRD §6.7.1 / §6.7.2（单源，禁止在此重述明细）；教材对照基线见 PRD §5.27.4，章节级出处以正文内联「（概念源自：教材名 章节）」为唯一事实源
 7. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
+8. 调整章节级实践推荐时：编辑 `data/levels/variants/standard/chapterPracticeMap.ts`（章节文件本身不声明 `practiceRecommendations`，由 `standard/index.ts` 的 `withChapterPractice()` 聚合时附加）→ 课时 id 必须仍在 Level 白名单内（`data/theoryIntegrity.test.ts` 子集断言），新增越界 id 需按 Workflows 第 3 条同步两份镜像清单。章节推荐缺省时演练/桥接卡不渲染，变体（短牌/单挑）本表暂不覆盖。
+9. 新增/修改章内计算演练时：题源在 `utils/theoryCalcDrills.ts`（`CHAPTER_DRILL_SLOTS` 决定哪章有哪些公式槽位），期望值必须调 `utils/theoryFormulas.ts` 现算，**禁止在题源里出现任何硬编码答案或第二套口径**；`drillId` 用 `${chapterId}#d${slot}` 形式，**不得**使用 `-qN` 后缀（SRS 与疑难清单按 `-q\d+$` 反解章节 id，撞名会误判）；演练组件不得接入 `recordAnswer` / `updateElo` / `addReviewItem` / `completeChapter` / `trainingEvents.emit`（PRD §5.27.10 的零持久决策，已被 `theoryCalcDrills.test.ts` 的源码守卫与 `TheoryCalcDrill.test.tsx` 的状态快照断言双向锁定）。纯数值填空无 `correctIndex`，不属选项排序治理面，无需接 `quizOrder.ts`。
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
