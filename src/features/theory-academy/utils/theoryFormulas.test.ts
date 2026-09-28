@@ -11,6 +11,7 @@ import {
   perDefenderRequiredDefense,
   multiwayBluffEv,
   outsToEquity,
+  SHORT_DECK_UNKNOWN_CARDS,
   pairTierCombos,
   aggressionFactor,
   vpipPercent,
@@ -124,5 +125,28 @@ describe('theoryFormulas 口径锚点', () => {
     expect(Number.isNaN(pairTierCombos(2, 3))).toBe(true);
     expect(Number.isNaN(aggressionFactor(10, 10, 0))).toBe(true);
     expect(Number.isNaN(vpipPercent(10, 0))).toBe(true);
+  });
+
+  // 参数化 unknownCards 后，标准主线必须逐位不变：题面数值、演练判分容差、
+  // standardQuantAudit 的复算块全都建立在默认 47/46 口径上，这里是它唯一的回归锁。
+  it('unknownCards 默认值与旧硬编码 47/46 口径逐位一致', () => {
+    for (let outs = 1; outs <= 20; outs++) {
+      expect(outsToEquity(outs, 1)).toBe(outs / 47);
+      expect(outsToEquity(outs, 2)).toBe(1 - ((47 - outs) / 47) * ((46 - outs) / 46));
+      expect(outsToEquity(outs, 1, [47, 46])).toBe(outsToEquity(outs, 1));
+      expect(outsToEquity(outs, 2, [47, 46])).toBe(outsToEquity(outs, 2));
+    }
+  });
+
+  it('短牌 [31, 30] 口径复算已公布值（t1sd-outs / t2sd-potodds / t7sd-adjustment）', () => {
+    // 5/31 ≈ 16.1%、8/31 ≈ 25.8%（正文与题面一律取整为 16% / 26%）
+    expect(outsToEquity(5, 1, SHORT_DECK_UNKNOWN_CARDS)).toBeCloseTo(0.1613, 4);
+    expect(outsToEquity(8, 1, SHORT_DECK_UNKNOWN_CARDS)).toBeCloseTo(0.2581, 4);
+    // 双街 5 outs 30.1%、8 outs 45.6% → 题面 30% / 46%
+    expect(outsToEquity(5, 2, SHORT_DECK_UNKNOWN_CARDS)).toBeCloseTo(0.3011, 4);
+    expect(outsToEquity(8, 2, SHORT_DECK_UNKNOWN_CARDS)).toBeCloseTo(0.4559, 4);
+    expect(Math.round(outsToEquity(8, 2, SHORT_DECK_UNKNOWN_CARDS) * 100)).toBe(46);
+    // 未知牌数变小后合法上界随之下移：48 outs 在 52 张口径下即非法
+    expect(Number.isNaN(outsToEquity(32, 1, SHORT_DECK_UNKNOWN_CARDS))).toBe(true);
   });
 });

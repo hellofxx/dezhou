@@ -14,6 +14,8 @@
  * - 36 张牌（6-A，每花色 9 张）：C(36,2)=630、口袋对 9×6=54（占 8.57%）
  * - 翻牌后未知牌 = 31（36−2−3）；转牌后 = 30；单张 outs 单街 = 1/31 ≈ 3.2%
  * - 5 outs 双街 1−(26/31)(25/30) ≈ 30.1%；8 outs 双街 1−(23/31)(22/30) ≈ 45.6%
+ *   （本批起 outs 口径由 `theoryFormulas.outsToEquity(outs, streets, SHORT_DECK_UNKNOWN_CARDS)`
+ *   单源提供，下面的复算块一律调函数而非重写分数；52 张主线走默认 [47, 46] 不受影响）
  * - set mining = 1−C(32,3)/C(34,3) ≈ 17.1%（与满员桌 1−C(48,3)/C(50,3) 同口径）
  * - 权威精确枚举（pokerpro.tools，2026-08 全枚举）：AKs vs QQ 53.7%/46.3%、
  *   AKo vs QQ 51.8%/48.2%、AA vs KK 74.6%/25.4%——AK 对中小口袋对五五开偏上
@@ -22,6 +24,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { shortDeckLevels, headsUpLevels } from './index';
+import { outsToEquity, SHORT_DECK_UNKNOWN_CARDS } from '../../../utils/theoryFormulas';
 import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
 
 /*
@@ -174,10 +177,12 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
   it('t1sd-outs：同花 outs=9−4=5、未知牌 31、8 outs 单街 26%/双街 46%', () => {
     expect(9 - 4).toBe(5);
     expect(36 - 2 - 3).toBe(31);
-    expect(5 / 31).toBeGreaterThan(0.16);
-    expect(5 / 31).toBeLessThan(0.162);
-    expect(8 / 31).toBeGreaterThan(0.257);
-    expect(8 / 31).toBeLessThan(0.259);
+    // 口径下沉到 theoryFormulas：短牌不再各处手写 outs/31 分数，与 52 张口径共用一个函数
+    expect(outsToEquity(5, 1, SHORT_DECK_UNKNOWN_CARDS)).toBeGreaterThan(0.16);
+    expect(outsToEquity(5, 1, SHORT_DECK_UNKNOWN_CARDS)).toBeLessThan(0.162);
+    expect(outsToEquity(8, 1, SHORT_DECK_UNKNOWN_CARDS)).toBeGreaterThan(0.257);
+    expect(outsToEquity(8, 1, SHORT_DECK_UNKNOWN_CARDS)).toBeLessThan(0.259);
+    expect(Math.round(outsToEquity(8, 1, SHORT_DECK_UNKNOWN_CARDS) * 100)).toBe(26);
     // q1/q2/q3/q5：判分选项锁定
     expectAnswerIs('t1sd-outs', 't1sd-outs-q1', '9 − 已见该花色张数');
     expectAnswerIs('t1sd-outs', 't1sd-outs-q2', '5');
@@ -188,8 +193,8 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
   it('t2sd-potodds：b/(P+2b)=25%、5 outs 单街 16%（÷31 非÷33）、8 outs 双街 46%', () => {
     expect(4 / (8 + 4 + 4)).toBe(0.25);
     // 短牌双街精确：5 outs 与 8 outs
-    const flushTwo = 1 - ((31 - 5) / 31) * ((30 - 5) / 30);
-    const straightTwo = 1 - ((31 - 8) / 31) * ((30 - 8) / 30);
+    const flushTwo = outsToEquity(5, 2, SHORT_DECK_UNKNOWN_CARDS);
+    const straightTwo = outsToEquity(8, 2, SHORT_DECK_UNKNOWN_CARDS);
     expect(flushTwo).toBeGreaterThan(0.30);
     expect(flushTwo).toBeLessThan(0.302);
     expect(Math.round(straightTwo * 100)).toBe(46);

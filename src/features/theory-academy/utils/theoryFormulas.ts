@@ -106,16 +106,30 @@ export function multiwayBluffEv(params: {
 
 /**
  * Outs → 命中权益（T1『Outs 与 2/4 法则』的精确口径，非 ×2/×4 估算）：
- * 一张牌 = outs/47；两张牌 = 1 − ((47−outs)/47)·((46−outs)/46)。
+ * 一张牌 = outs/未知牌数；两张牌 = 1 − ((U1−outs)/U1)·((U2−outs)/U2)。
  * cardsToCome 只接受 1 或 2，其余返回 NaN（2/4 法则本身不适用于第三张牌）。
+ *
+ * unknownCards 为「翻牌后 / 转牌后未知牌数」，默认 52 张牌堆的 [47, 46]
+ * （= 52 − 2 手牌 − 3 公共牌，再减转牌 1 张）；短牌传 `SHORT_DECK_UNKNOWN_CARDS`。
+ * 变体正文里已公布的 31/30 口径由本参数收编，不再各处手写分数。
  */
-export function outsToEquity(outs: number, cardsToCome: 1 | 2): number {
+export function outsToEquity(
+  outs: number,
+  cardsToCome: 1 | 2,
+  unknownCards: readonly [number, number] = [47, 46],
+): number {
+  const [afterFlop, afterTurn] = unknownCards;
   if (outs <= 0) return 0;
-  if (outs > 47) return Number.NaN;
-  if (cardsToCome === 1) return outs / 47;
-  if (cardsToCome === 2) return 1 - ((47 - outs) / 47) * ((46 - outs) / 46);
+  if (outs > afterFlop) return Number.NaN;
+  if (cardsToCome === 1) return outs / afterFlop;
+  if (cardsToCome === 2) {
+    return 1 - ((afterFlop - outs) / afterFlop) * ((afterTurn - outs) / afterTurn);
+  }
   return Number.NaN;
 }
+
+/** 短牌（36 张）翻牌后 / 转牌后未知牌数 = 36−2−3 / 再减 1；与 variantQuantAudit 的 31 断言同源 */
+export const SHORT_DECK_UNKNOWN_CARDS: readonly [number, number] = [31, 30];
 
 /**
  * 口袋对子档位的组合数（T4『组合数学与 Blockers』）：
