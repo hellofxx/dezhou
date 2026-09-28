@@ -34,7 +34,11 @@ import {
 /*
  * ========================= 人工复核索引（正文散文数值，批次 1 复算结论） =========================
  * 锚点：文件:章节 id + content 数组索引（行号为批次 1 修改后状态，仅供快速定位）。
+ * 索引口径：0 起、**含 heading 段**；批次 1 的部分条目按"只数正文段"计，与真实下标差 1，
+ * 后续批次以真实下标登记并在改动处顺手校正旧条目（发现即修，不批量重排以免噪声 diff）。
  * 「正确」= 复算与原文一致；「示意值」= 依赖外部统计/经验常数，正文已标注，保留不改。
+ * 诚实性提醒：本标签是作者自评——曾有登记为「正确」的 ICM 推导被查出本身有误（见下方 t9-icm idx5），
+ * 故「已登记」不等于「已验证」，数值类内容仍需非作者复核（PRD §6.7.3）。
  *
  * —— standardLevel1.ts ——
  * [正确] t1-combinatorics idx1/3/4/5：C(52,2)=1326；169=13+78+78；对子6/同花4/非同花12(4×4−4)；
@@ -135,8 +139,13 @@ import {
  *
  * —— standardLevel9.ts ——
  * [正确] t9-mop idx1：AKQ 均衡 y=B/(P+2B)、f=y/(1−y)=B/(P+B)、c=P/(P+B)、f+c=1、满池 f=c=1/2、1/3 池 f=1/4/c=3/4；
- *        t9-icm idx1：亚军概率 0.3×5/7+0.2×5/8≈0.339、0.375、0.286；$EV 38.4/32.8/28.9 守恒≈100；
- *        idx4：8000 筹码 $EV=0.8×50+0.16×30+0.04×20=45.6→约 46、0.55×46≈25.3<38.4
+ *        t9-icm idx3（修正下标，原登记写作 idx1）：亚军概率 0.3×5/7+0.2×5/8≈0.339、0.375、0.286；
+ *        $EV 38.4/32.8/28.9 守恒≈100；
+ *        t9-icm idx5（本次修复，原登记写作 idx4 且推导有误）：中筹码 M=3000 被 5000 覆盖 →
+ *        弃牌 $EV=32.8；跟注且赢 6000/2000/2000 → P=0.6/0.3/0.1、$EV=0.6×50+0.3×30+0.1×20=41.0；
+ *        期望 0.55×41.0+0.45×0=22.6 < 32.8 ⇒ 弃牌；现金桌同一手 0.55×3000−0.45×3000=+300 筹码 ⇒ 跟注。
+ *        原实例写"A=5000 全下 B=3000、输光归零、0.55×46≈25.3<38.4"三处不成立：B 只覆盖 3000，
+ *        A 输了剩 2000（$EV 31.9）而非归零；期望式漏掉输分支；补回后 39.6>38.4 结论反转
  * [正确] t9-multiway idx0/idx3：四人底池=AA 对 3 对手→表值约 64%（本次修复：原误写 55%/56%，为 vs4 口径）
  * [示意值] t9-multiway idx1 胜率表（AA 85/73/64/56/49、KK 82/69/59/51、AKs 67/50/40、87s 41/30/24，与常见数据源一致，正文标「典型」）；
  *          t9-unified idx4：C-Bet 弃牌 65% vs 均衡约 45%
@@ -366,6 +375,58 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     expect(evA).toBeGreaterThan(38.3);
     expect(evA).toBeLessThan(38.5);
     expectAnswerIs('t9-icm', 't9-icm-q5', '38.4');
+  });
+
+  it('t9-icm 实例三：中筹码被覆盖时跟注 $EV 22.6 < 弃牌 32.8（递归复算）', () => {
+    // 3 人奖池 50/30/20 的 ICM 递归：P(第 1 名)=筹码占比，其余名次对剩余子集递归
+    const icm = (shares: readonly number[], payouts: readonly number[]): number[] => {
+      if (shares.length === 1) return [payouts[0] as number];
+      const total = shares.reduce((a, b) => a + b, 0);
+      const out: number[] = shares.map(() => 0);
+      shares.forEach((_, champ) => {
+        const pChamp = (shares[champ] as number) / total;
+        const top = payouts[0] as number;
+        out[champ] = (out[champ] as number) + pChamp * top;
+        const rest = shares.filter((_, i) => i !== champ);
+        const sub = icm(rest, payouts.slice(1));
+        let rank = 0;
+        shares.forEach((_, i) => {
+          if (i === champ) return;
+          out[i] = (out[i] as number) + pChamp * (sub[rank] as number);
+          rank += 1;
+        });
+      });
+      return out;
+    };
+    const pay = [50, 30, 20];
+    // 弃牌分支：M 持 3000（A=5000/C=2000），正文取 32.8
+    const fold = icm([5000, 3000, 2000], pay)[1] as number;
+    expect(fold).toBeCloseTo(32.75, 2);
+    // 跟注且赢分支：M 变 6000，大筹码剩 2000、小筹码 2000
+    const win = icm([6000, 2000, 2000], pay)[0] as number;
+    expect(win).toBeCloseTo(41, 6);
+    // 跟注且输分支：被覆盖 → 归零，故期望只含赢分支
+    const call = 0.55 * win + 0.45 * 0;
+    expect(call).toBeCloseTo(22.55, 2);
+    expect(call).toBeLessThan(fold);
+    // 同一手牌在现金桌：冒 3000 赢 3000、55% 胜率 → +300 筹码
+    expect(0.55 * 3000 - 0.45 * 3000).toBeCloseTo(300, 6);
+    // 反向守卫：大筹码 A=5000 全下短筹码 B=3000 时 A 输了仍剩 2000，
+    // 补回输分支后期望 39.6 > 弃牌 38.4，该配置根本推不出"ICM 弃牌"（旧版正文误用此配置）
+    const aLose = icm([2000, 3000, 2000], pay)[0] as number;
+    expect(0.55 * (icm([8000, 2000], [50, 30])[0] as number) + 0.45 * aLose).toBeGreaterThan(
+      icm([5000, 3000, 2000], pay)[0] as number,
+    );
+    // 正文与题库不得回退到旧实例
+    const intro = chapters.find((c) => c.id === 't9-icm') as TheoryChapter;
+    const example3 = intro.content[5]?.content ?? '';
+    expect(example3).toContain('M 变 6000');
+    expect(example3).toContain('22.6');
+    expect(example3).not.toContain('输光则归零');
+    expect(example3).not.toContain('25.3');
+    const q5 = getQuiz('t9-icm', 't9-icm-q5');
+    expect(q5.options).not.toContain('25.3');
+    expect(q5.options).toContain('22.6');
   });
 
   it('t9-multiway：4 人池=AA 对 3 个对手 → 表值约 64%（非 56%）', () => {
