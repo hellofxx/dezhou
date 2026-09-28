@@ -5763,6 +5763,102 @@
       "Use M = effective stack ÷ big blind to describe the one-way collapse of tournament depth and how it cancels the postflop sizing family",
       "Separate per-pot rake from per-entry tournament fee, and name the behaviour each one punishes (volume played vs number of entries)",
       "Convert both formats to the same time unit and the same risk yardstick before comparing them"
+    ],
+    "t2-ev": [
+      "Split a decision into every outcome branch, weight each by probability, and pick the action with the highest EV",
+      "Derive the break-even condition for calling an all-in and for a pure bluff, and name what each is compared against",
+      "Decompose bet EV into fold equity and showdown equity, and separate bluffs, value bets and semi-bluffs on that basis",
+      "Explain why money already in the pot is dead money, and separate decision quality from the outcome of one hand"
+    ],
+    "t2-pot-odds": [
+      "Derive required equity as the call amount divided by the pot after calling, and explain why the denominator includes your own call",
+      "Given any bet size, compute the equity needed to call and compare it with an estimate from outs to decide call or fold",
+      "Apply pot odds to a preflop all-in and to bluff-catching on the river, naming the two numbers compared in each",
+      "Explain how pot odds translate into a defense obligation, and distinguish MDF from the call threshold of one specific hand"
+    ],
+    "t2-implied-odds": [
+      "Write the break-even equation that counts money won after hitting, and solve for the future winnings it requires",
+      "Assess implied odds by stating separately what stack depth, willingness to pay and draw concealment each contribute",
+      "Derive the stack-depth multiple that makes set mining profitable, and decide call or fold when stacks are shallow",
+      "Identify draws that remain dominated after hitting, and explain reverse implied odds together with the error of expecting a due win"
+    ],
+    "t3-position-value": [
+      "State how to tell whether you are in position or out of it, and name the two seats that lose money over the long run",
+      "Break the positional edge into information, pot control and equity realization, pairing each with one postflop scenario",
+      "Using realized equity as raw equity times a realization rate, judge how the EV of one hand moves when position changes",
+      "Explain why opening ranges widen in later position, and how a multiway pot dilutes that advantage"
+    ],
+    "t3-starting-hands": [
+      "List the four value dimensions of high card strength, pairing potential, connectivity and suitedness, and classify a hand with them",
+      "Sort a hand into premium, speculative or junk, and explain how stack depth moves it between tiers",
+      "State the Gap Concept and explain it through range filtering, equity realization loss and reverse implied odds",
+      "Decide whether to raise or flat-call first into the pot, and sort a marginal hand into 3-bet, call or fold"
+    ],
+    "t3-fundamental-theorem": [
+      "Restate the fundamental theorem of poker, and show that profit comes from errors in opponent decisions rather than from the result of one hand",
+      "Multiply the probability an opponent errs by the amount given up each time to estimate the expected profit of a line",
+      "Judge whether an opponent deviates by calling too much or folding too much, and shift value and bluff emphasis accordingly",
+      "Explain why the initiative grants a structural license to bluff, and where the theorem stops working in multiway pots"
+    ],
+    "t4-range-thinking": [
+      "Distinguish the three levels of reading: your own cards only, guessing a single hand, and constructing a range",
+      "Treat every opponent action as a filter and narrow their range street by street along the sequence of actions",
+      "Rewrite whether to call as a comparison between the bluff share of the opponent range and the equity you need",
+      "Explain that the right question about a bet is how the whole range splits across actions, not what this one hand should do"
+    ],
+    "t4-combinatorics": [
+      "Split a range into pairs, suited and offsuit combos, count each part and total them",
+      "Identify how every board card reduces the combos it touches, and correct the count accordingly",
+      "Compute the bluff share of a betting range and compare it with the equity needed to call before deciding",
+      "State the two directions of the Blocker effect, for bluffing and for bluff-catching, and accept when it counts out bad news"
+    ],
+    "t4-range-advantage": [
+      "Distinguish range advantage, which is average equity, from nut advantage, which is the density of strongest combos",
+      "Judge which side a high board and a low connected board each favour, and give the reason",
+      "Map range advantage onto betting frequency and nut advantage onto the ceiling of bet sizing",
+      "Explain how the original bettor and the caller should each adjust when a turn transfers the nut advantage"
+    ],
+    "t5-game-theory": [
+      "Explain why a zero-sum game necessarily has a strategy pair that neither player can improve by deviating alone",
+      "Separate the guaranteed expectation an equilibrium locks in from the ceiling an exploitative line could extract",
+      "Explain why a deterministic strategy gets decoded, and how mixing makes you unreadable at that node",
+      "Judge why the unexploitability guarantee of a Nash equilibrium breaks down once a third player joins"
+    ],
+    "t5-gto-concept": [
+      "Explain that GTO is the yardstick against which every deviation is measured, not a script to copy",
+      "Derive how the bluff share of a betting range rises monotonically with bet size",
+      "Judge what exploitation each of two errors invites: betting only nuts, and carrying too many bluffs",
+      "Explain what decides the direction and the size of a deviation when GTO is used as the baseline"
+    ],
+    "t5-mdf-alpha": [
+      "Derive the minimum frequency the defender must continue so that bluffing with any two cards stops profiting",
+      "Explain why alpha and MDF are complements and which equilibrium point they lock in together",
+      "Split the required defense across calls and raises, and say which split suits which opponent",
+      "Judge why folding far below MDF is optimal against an opponent who almost never bluffs"
+    ],
+    "t5-mixed-strategy": [
+      "Derive the condition for a hand to be mixed across actions: every option must have exactly equal expectation",
+      "Separate the pure-strategy hands that carry most of the expectation from the mixed hands that keep you unexploitable",
+      "Judge the cost of picking wrongly once at a mixed node, and choose practice time and execution method accordingly",
+      "Explain how node locking turns a measured opponent bias into a maximum exploit, and what sample discipline it demands"
+    ],
+    "t6-bet-purpose": [
+      "Judge whether a bet extracts value or forces better hands to fold, and prefer checking when it does neither",
+      "Rewrite the standard for a value bet from \"I might be ahead\" into a comparison of how strong the calling range is",
+      "Explain when protection is a real reason to bet and when it is a pseudo-reason",
+      "Explain which part of your own range is protected by mixing strong hands into the checking frequency"
+    ],
+    "t6-sizing-theory": [
+      "Classify a betting range as polarized or linear and choose the sizing family that follows from the classification",
+      "Explain why bluff capacity rising with size makes a polarized range prefer large bets",
+      "Judge why mixing medium-strength hands into an overbet range loses on both ends",
+      "State which range structure a blocking bet depends on, and what it must be mixed with to survive a raise"
+    ],
+    "t6-geometric": [
+      "Compute SPR and judge which strength tier is worth playing for effective stacks",
+      "Distinguish hand types favoured in 3-bet pots from those favoured in limped pots, and show how SPR is shaped preflop",
+      "Derive the pot fraction to use on each street when the plan is to stack off over three streets",
+      "Explain why the turn becomes the frequency watershed, and read the ceiling of the opponent range from it"
     ]
   }
 }

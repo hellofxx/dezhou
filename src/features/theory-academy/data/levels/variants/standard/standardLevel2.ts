@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
     subtitle: '把每个决策翻译成一个数字，然后选最大的那个',
     duration: '12 min',
     eloDimension: 'math',
+    objectives: [
+      '把决策拆成所有可能结果分支，按概率加权求和算出各行动 EV 并取最大',
+      '推导出跟注全下与纯诈唬两类场景各自的盈亏平衡条件，并说明比较对象',
+      '把下注的 EV 分解为弃牌收益与摊牌收益，据此区分诈唬、价值下注与半诈唬',
+      '解释为什么已投入底池的筹码属于死钱，并区分决策质量与单次结果',
+    ],
     content: [
       { type: 'heading', content: 'EV 的定义' },
       {
@@ -137,6 +143,12 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
     subtitle: '底池给你的价格 vs 你的胜率，一个除法解决跟注问题',
     duration: '10 min',
     eloDimension: 'math',
+    objectives: [
+      '推导出所需胜率等于跟注额除以跟注后总底池，并说明分母为何含自己的跟注',
+      '给定任意下注尺度算出跟注所需胜率，与用 Outs 估出的胜率比较得出跟或弃',
+      '把底池赔率分别用于翻前全下与河牌抓诈唬两类场景，指出各自要比的两个数字',
+      '说明底池赔率如何换算成防守义务，并区分 MDF 与单手持牌跟注门槛的用途',
+    ],
     content: [
       { type: 'heading', content: '底池赔率的定义' },
       {
@@ -254,6 +266,12 @@ export const STANDARD_LEVEL_2_CHAPTERS: TheoryChapter[] = [
     subtitle: '把未来的钱算进现在的决策',
     duration: '11 min',
     eloDimension: 'math',
+    objectives: [
+      '写出把命中后的未来赢款计入赔率的保本方程，并算出所需未来赢款',
+      '评估隐含赔率时说明筹码深度、对手支付意愿与听牌隐蔽性各自的作用',
+      '推导出小对子挖暗三条成立所需的筹码深度倍数，并判定浅筹码时该跟还是该弃',
+      '识别命中后仍然落后的牌型，说明反向隐含赔率与赌徒谬误分别造成什么损失',
+    ],
     content: [
       { type: 'heading', content: '隐含赔率：底池赔率的延伸' },
       {

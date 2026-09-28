@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_6_CHAPTERS: TheoryChapter[] = [
     subtitle: '价值、诈唬、保护——以及三个都不占时为什么该过牌',
     duration: '11 min',
     eloDimension: 'postflop',
+    objectives: [
+      '判定一次下注是在收价值还是在逼更好的牌弃牌，两者皆不占时改判过牌',
+      '把价值下注的标准从我可能领先改写成对手跟注范围强弱的比较',
+      '说明保护作为下注理由何时才有分量、何时是伪命题',
+      '说明强牌按频率混入过牌线保护的是自己哪一段范围',
+    ],
     content: [
       { type: 'heading', content: '下注的两个根本目的' },
       {
@@ -130,6 +136,12 @@ export const STANDARD_LEVEL_6_CHAPTERS: TheoryChapter[] = [
     subtitle: '下多大不是风格，是范围结构的函数',
     duration: '12 min',
     eloDimension: 'postflop',
+    objectives: [
+      '把一个下注范围判定为极化或线性，并据此选定尺度族',
+      '解释诈唬容量随尺度上升为何让极化范围偏好大注',
+      '判定中等牌力混入超池大注范围为什么两头受损',
+      '说明阻塞注依赖什么范围结构，又需混入什么才不被加注剥削',
+    ],
     content: [
       { type: 'heading', content: '两种范围结构' },
       {
@@ -264,6 +276,12 @@ export const STANDARD_LEVEL_6_CHAPTERS: TheoryChapter[] = [
     subtitle: '从"这条街下多少"升级为"三条街怎么把钱全放进去"',
     duration: '12 min',
     eloDimension: 'postflop',
+    objectives: [
+      '算出 SPR，并判定哪一档牌力值得为全部筹码而战',
+      '区分 3-bet 底池与平跟底池各自利好的牌型，并说明 SPR 如何在翻前被塑造',
+      '推导出三条街把有效筹码打光时每街应采用的底池百分比',
+      '解释转牌成为频率分水岭的原因，并据此读出对手的范围上限',
+    ],
     content: [
       { type: 'heading', content: 'SPR：底池承诺的标尺' },
       {

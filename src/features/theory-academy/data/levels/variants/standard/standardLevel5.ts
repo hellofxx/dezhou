@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_5_CHAPTERS: TheoryChapter[] = [
     subtitle: '从冯·诺依曼到扑克桌：均衡为什么存在',
     duration: '12 min',
     eloDimension: 'postflop',
+    objectives: [
+      '解释零和博弈为何必然存在谁都无法单方面偏离获益的策略对',
+      '区分均衡策略锁定的保底期望与剥削策略可能榨取的上限',
+      '说明确定性策略为何会被破译，以及混合成分如何让对手无从下手',
+      '判定纳什均衡的不可剥削保证在多人底池为何失效',
+    ],
     content: [
       { type: 'heading', content: '扑克是一个零和博弈' },
       {
@@ -125,6 +131,12 @@ export const STANDARD_LEVEL_5_CHAPTERS: TheoryChapter[] = [
     subtitle: '理解求解器时代的策略坐标系',
     duration: '11 min',
     eloDimension: 'postflop',
+    objectives: [
+      '说明 GTO 是衡量一切偏离的基准，而不是必须照抄的答案',
+      '推导出下注范围中诈唬占比随尺度单调上升的关系',
+      '判定只用坚果下注与诈唬占比过高各自会遭到怎样的剥削',
+      '说明以 GTO 为基线做偏离时，方向与幅度分别由什么决定',
+    ],
     content: [
       { type: 'heading', content: 'GTO 是什么、不是什么' },
       {
@@ -234,6 +246,12 @@ export const STANDARD_LEVEL_5_CHAPTERS: TheoryChapter[] = [
     subtitle: '两个公式，锁定"下注-弃牌"攻防的数学边界',
     duration: '11 min',
     eloDimension: 'postflop',
+    objectives: [
+      '推导出使对手任意两手牌诈唬无利可图时防守方的最低继续频率',
+      '说明 α 与 MDF 为何互补，以及它们共同锁定的均衡点',
+      '把防守总量在跟注与加注之间分配，并说明各自适合什么对手',
+      '判定面对几乎从不诈唬的对手时，为何大幅低于 MDF 弃牌才最优',
+    ],
     content: [
       { type: 'heading', content: 'MDF：最小防御频率' },
       {
@@ -347,6 +365,12 @@ export const STANDARD_LEVEL_5_CHAPTERS: TheoryChapter[] = [
     subtitle: '读懂求解器输出的三把钥匙',
     duration: '12 min',
     eloDimension: 'postflop',
+    objectives: [
+      '推导一手牌被混合分配的充要条件：各动作期望值完全相等',
+      '区分贡献绝大部分期望值的纯策略牌与维持不可剥削的混合牌',
+      '判定混合节点上单次选错的代价，据此分配练习时间与执行方式',
+      '说明节点锁定如何把对手偏差转为最大剥削策略，并给出样本纪律',
+    ],
     content: [
       { type: 'heading', content: '混合策略与无差别原则' },
       {

@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
     subtitle: '职业与业余之间最重要的一次思维升级',
     duration: '12 min',
     eloDimension: 'preflop',
+    objectives: [
+      '区分只看自己的牌、猜测单手牌与构建范围这三种读牌层次',
+      '把对手的每个动作当作过滤器，沿动作序列逐街收窄其范围',
+      '把能否跟注的判断改写成对手范围中诈唬占比与所需胜率的比较',
+      '说明评估下注的正确问法是整个范围的动作分配，而非这手牌该不该下注',
+    ],
     content: [
       { type: 'heading', content: '什么是范围' },
       {
@@ -135,6 +141,12 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
     subtitle: '数组合：把范围从名词变成数字',
     duration: '11 min',
     eloDimension: 'handReading',
+    objectives: [
+      '把一个范围按对子、同花与非同花拆成组合数并合计总量',
+      '识别牌面每张牌对相关组合的削减，并据此修正计数',
+      '算出下注范围中诈唬占比，再与跟注所需胜率比较得出跟弃',
+      '说明 Blocker 在诈唬与抓诈唬两端的方向，并判定它有时算出的是坏消息',
+    ],
     content: [
       { type: 'heading', content: '把范围翻译成组合数' },
       {
@@ -242,6 +254,12 @@ export const STANDARD_LEVEL_4_CHAPTERS: TheoryChapter[] = [
     subtitle: '为什么有的牌面属于加注者，有的属于跟注者',
     duration: '11 min',
     eloDimension: 'postflop',
+    objectives: [
+      '区分整体平均胜率的范围优势与最强组合密度的坚果优势',
+      '判定高牌面与低连接面各自偏向哪一方，并说明依据',
+      '把范围优势对应到下注频率、坚果优势对应到下注尺度上限',
+      '说明转牌让坚果优势易手时，原下注方与跟注方各自该如何调整',
+    ],
     content: [
       { type: 'heading', content: '两种优势的定义' },
       {

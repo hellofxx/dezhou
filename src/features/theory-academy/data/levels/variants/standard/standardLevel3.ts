@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_3_CHAPTERS: TheoryChapter[] = [
     subtitle: '为什么"最后说话"本身就是一种筹码',
     duration: '11 min',
     eloDimension: 'preflop',
+    objectives: [
+      '给出一手牌处于 IP 还是 OOP 的判定依据，并指出哪两个座位长期必然亏损',
+      '把位置优势分解为信息、底池控制权与权益实现三项，并各配一个翻后场景',
+      '用实际权益等于原始胜率乘以实现率的口径，判断同一手牌换位置后的 EV 变化',
+      '解释位置越靠后开局范围越宽的原因，并说明多人底池怎样稀释位置优势',
+    ],
     content: [
       { type: 'heading', content: '位置是什么' },
       {
@@ -133,6 +139,12 @@ export const STANDARD_LEVEL_3_CHAPTERS: TheoryChapter[] = [
     subtitle: '进池标准不是一张表，而是一套随情境移动的逻辑',
     duration: '11 min',
     eloDimension: 'preflop',
+    objectives: [
+      '列出高牌力、成对潜力、连接性与同花性四个维度并据此给一手起手牌定性',
+      '把一手牌归入成牌型、投机型或垃圾型，并说明筹码深度怎样让它跨档移动',
+      '陈述 Gap Concept，并用范围过滤、权益实现折损与反向隐含赔率解释其成因',
+      '判定首入底池该加注还是平跟，并把边缘牌正确归入 3-bet、跟注或弃牌三档',
+    ],
     content: [
       { type: 'heading', content: '起手牌的价值维度' },
       {
@@ -260,6 +272,12 @@ export const STANDARD_LEVEL_3_CHAPTERS: TheoryChapter[] = [
     subtitle: '扑克盈利的第一性原理：让对手犯错',
     duration: '10 min',
     eloDimension: 'preflop',
+    objectives: [
+      '复述扑克基本定理，说明利润来自对手的决策偏离而不是单局输赢结果',
+      '用对手犯错概率与每次让出的金额相乘，算出某条决策线的期望利润',
+      '判定对手的偏离属于跟注过多还是弃牌过多，据此调整价值下注与诈唬的侧重',
+      '解释主动权为何构成结构性诈唬许可，并指出定理在多人底池失效的边界',
+    ],
     content: [
       { type: 'heading', content: '扑克基本定理' },
       {
