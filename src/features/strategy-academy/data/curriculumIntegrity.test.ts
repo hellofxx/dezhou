@@ -40,6 +40,7 @@ const CROSS_MODULE_LESSON_IDS = [
   'l4-mdf', 'l4-frequency-balance', 'l4-overbet', 'l4-opponent-reading',
   'l5-tilt', 'l5-bankroll', 'l5-session-review',
   'l7-multiway', 'l8-exploitative-adjustments', 'l8-pool-tendencies',
+  'l6-bounty', 'l7-rake', 'local-ante',
 ];
 
 const allLessons: Lesson[] = LEVELS.flatMap((level) => level.lessons);

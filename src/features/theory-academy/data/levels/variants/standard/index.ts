@@ -91,6 +91,8 @@ export const standardLevels: TheoryLevelInfo[] = [
         { id: 'l4-range-thinking', title: '范围思维' },
         { id: 'l4-range-construction', title: '范围建构：极化 vs 合并' },
         { id: 'l4-blockers', title: 'Blocker 效应' },
+        { id: 'l7-rake', title: 'Rake 对策略的影响' },
+        { id: 'local-ante', title: 'Ante 结构的翻前调整' },
       ],
     },
   },
@@ -179,6 +181,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     practiceRecommendations: {
       lessons: [
         { id: 'l6-icm', title: 'ICM 基础' },
+        { id: 'l6-bounty', title: 'Bounty 锦标赛策略' },
         { id: 'l7-multiway', title: '多人底池策略' },
         { id: 'l8-pool-tendencies', title: 'Pool Tendencies 分析' },
       ],

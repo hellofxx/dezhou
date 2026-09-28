@@ -16,6 +16,9 @@ const allChapters: TheoryChapter[] = THEORY_LEVELS.flatMap((level) => level.chap
  * Level 粒度实践推荐引用的策略学院课时 ID 白名单（跨模块引用登记面）。
  * 与 strategy-academy curriculumIntegrity.test.ts 的 CROSS_MODULE_LESSON_IDS 互为镜像：
  * 本文件防"引用未登记"，那边防"登记的 id 不存在"。章节粒度推荐只能复用本白名单。
+ * 扩容须三处同步：某个 Level 的 practiceRecommendations、本清单、对面清单——漏一处即红。
+ * 变体课时（l4hu-* / l1s-* 等）不得加入：变体课程不在 LEVELS 内，对面的存在性断言会失败。
+ * local-* 为本土课，已由对面的"LOCAL_LESSONS 全部并入 LEVELS"断言保证可解析。
  */
 const EXPECTED_PRACTICE_LESSON_IDS = [
   'l1-basics', 'l1-hand-selection', 'l1-position', 'l2-raise-sizing',
@@ -23,7 +26,8 @@ const EXPECTED_PRACTICE_LESSON_IDS = [
   'l4-blockers', 'l4-gto-basics', 'l4-mdf', 'l4-frequency-balance',
   'l3-bet-sizing', 'l3-cbet', 'l4-overbet', 'l4-opponent-reading',
   'l8-exploitative-adjustments', 'l5-tilt', 'l5-bankroll', 'l5-session-review',
-  'l6-icm', 'l7-multiway', 'l8-pool-tendencies',
+  'l6-icm', 'l6-bounty', 'l7-multiway', 'l7-rake', 'l8-pool-tendencies',
+  'local-ante',
 ].sort();
 
 describe('theory integrity: ID 唯一性与前缀规范', () => {
@@ -108,7 +112,10 @@ describe('theory integrity: 实践推荐结构合法性', () => {
       const rec = level.practiceRecommendations;
       if (rec.lessons.length === 0) bad.push(`${level.id}: lessons 为空`);
       for (const lesson of rec.lessons) {
-        if (!/^l\d/.test(lesson.id)) bad.push(`${level.id} → ${lesson.id}: 非 l<level>- 前缀`);
+        // 课时 id 命名空间：标准分级课 l<level>-* 与本土课 local-*（后者已并入策略学院 LEVELS）
+        if (!/^l\d/.test(lesson.id) && !lesson.id.startsWith('local-')) {
+          bad.push(`${level.id} → ${lesson.id}: 非 l<level>- / local- 前缀`);
+        }
         if (!lesson.title.trim()) bad.push(`${level.id} → ${lesson.id}: title 为空`);
       }
       if (rec.trackId !== undefined && !rec.trackId.startsWith('track-')) {
