@@ -5859,6 +5859,84 @@
       "Distinguish hand types favoured in 3-bet pots from those favoured in limped pots, and show how SPR is shaped preflop",
       "Derive the pot fraction to use on each street when the plan is to stack off over three streets",
       "Explain why the turn becomes the frequency watershed, and read the ceiling of the opponent range from it"
+    ],
+    "t7-stats": [
+      "State which behavioural dimension VPIP, PFR, AF and WTSD each measures, and how each is computed",
+      "Combine several stats into one reading and turn that reading into an actionable plan against the opponent",
+      "Given a hand count, judge whether the stats can support a conclusion and label the confidence attached to it",
+      "Collect live-session behavioural evidence to build the same profile without a HUD"
+    ],
+    "t7-player-types": [
+      "Place an opponent into the right quadrant by entering width and action style, and give the evidence",
+      "State the leak list and the standard attack plan for each quadrant",
+      "Recognize the quadrant drift triggered by winning or losing streaks and switch plans immediately",
+      "Audit whether a profile has gone stale and refresh it with the most recent observed actions"
+    ],
+    "t7-hand-reading": [
+      "Run the full reading pipeline from starting range down to combo counts",
+      "Remove the combos that make no logical sense in either the betting or the checking direction",
+      "Count the value-to-bluff ratio left in the range and settle the call or fold from it",
+      "Rank range analysis against physical tells for information value in a marginal decision"
+    ],
+    "t7-exploit": [
+      "Convert an opponent deviation from equilibrium into a directed counter-deviation of your own",
+      "Assess how fast the opponent adapts in order to size the maximum exploitative deviation you can tolerate",
+      "Complete the exploit loop from profiling to pulling back, and spot the signals of being counter-exploited",
+      "Judge whether an exploit conclusion has passed its best-before date and schedule the re-measurement"
+    ],
+    "t8-tilt": [
+      "Classify an episode into the matching Tilt type by its trigger and its remedy",
+      "Identify the shared fuse of treating variance as injustice, and restate the situation in variance language",
+      "Catch your own physiological and behavioural warning signs and fix them into a checklist",
+      "Estimate the expected loss saved by stopping early rather than playing through, and execute the break"
+    ],
+    "t8-session": [
+      "Decompose one session profit into addable parts by the state tier of each stretch",
+      "Run a pre-session warm-up check that rules out sleep debt and leftover emotion",
+      "Decide whether to keep playing from table quality and current state alone, never from the day",
+      "Select what to review by decision difficulty instead of pot size"
+    ],
+    "t8-bankroll-psych": [
+      "Explain the dual function of bankroll management and set the level by whichever side is stricter, mathematical or emotional",
+      "Given winrate, standard deviation and roll size, judge which risk-of-ruin band you are in",
+      "Identify the specific ways scared money distorts a single decision",
+      "Write move-up and move-down rules mechanically, and refuse to treat won money differently"
+    ],
+    "t8-mindset": [
+      "Sort each wrong judgement found in a review into the matching cognitive bias entry",
+      "Grade the quality of a decision using only the information available before it was made",
+      "Rewrite an outcome goal polluted by variance into process actions you control",
+      "Test whether a study activity actually changed the next decision"
+    ],
+    "t9-mop": [
+      "Explain the trade-off behind solving toy games instead of real hands as a method",
+      "Derive the frequency conditions that make medium hands and air each indifferent",
+      "Assign every hand at a given node to a role: value, medium or air",
+      "Separate the tactical single-hand question from the strategic range-construction question"
+    ],
+    "t9-icm": [
+      "Explain why the existence of a prize ladder makes the marginal value of chips decrease",
+      "Convert each stack share through the recursion into placement probabilities and prize expectation",
+      "Judge one shove separately under the cEV and the $EV ledgers and report both conclusions",
+      "Describe how ICM pressure hits each stack tier at the bubble, and where the model stops holding"
+    ],
+    "t9-multiway": [
+      "Explain how each added opponent dilutes showdown equity and raises the bar for what is playable",
+      "Re-rank starting hands by nut potential rather than by made strength",
+      "Judge why the unexploitability guarantee of an equilibrium breaks down with more than two players",
+      "Assess how the protection value of betting and the cost of slow-playing change as more live hands remain"
+    ],
+    "t9-alpha": [
+      "Explain why Alpha answers only the attacker question of whether this size bluffs at a profit",
+      "Derive that alpha and MDF are complements at the same bet size",
+      "Compare alpha with the observed fold rate on this street to settle whether to bluff",
+      "Separate the break-even fold threshold question from the equity-needed-to-call question"
+    ],
+    "t9-unified": [
+      "Explain why equilibrium and exploitation are two modes of one system rather than rival schools",
+      "Rate the quality of the observed sample and scale the deviation from equilibrium accordingly",
+      "Run the full loop from baseline through deviation, monitoring adaptation, and pulling back",
+      "Assemble the theory from earlier levels into the analysis of one single hand"
     ]
   }
 }

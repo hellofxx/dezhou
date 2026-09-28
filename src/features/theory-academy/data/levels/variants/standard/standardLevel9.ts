@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
     subtitle: '从玩具博弈出发，看清真实扑克的骨架',
     duration: '12 min',
     eloDimension: 'math',
+    objectives: [
+      '说明用玩具博弈替代真实牌局求解这一方法论的取舍',
+      '推导让中等牌与空气牌各自无差别所要求的频率条件',
+      '把每手牌在给定节点归入价值、中等或空气的角色定位',
+      '区分战术层的单手牌问题与战略层的范围构造问题',
+    ],
     content: [
       { type: 'heading', content: 'MOP 的方法论革命' },
       {
@@ -130,6 +136,12 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
     subtitle: '锦标赛决策的第二套坐标系',
     duration: '12 min',
     eloDimension: 'math',
+    objectives: [
+      '解释奖金阶梯的存在为何让筹码的边际价值递减',
+      '把各玩家的筹码占比递归折算为名次概率与奖金期望',
+      '判定一手全下在 cEV 与 $EV 两套账下各自的结论',
+      '说明 ICM 压力对泡沫期各筹码段的影响及其模型边界',
+    ],
     content: [
       { type: 'heading', content: '筹码效用的非线性' },
       {
@@ -247,6 +259,12 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
     subtitle: '当博弈从二人变成 N 人，哪些定律要重写',
     duration: '11 min',
     eloDimension: 'postflop',
+    objectives: [
+      '解释对手数量增加如何稀释摊牌胜率并抬高成牌门槛',
+      '把起手牌按坚果潜力而非现成牌力重新排优先级',
+      '判定均衡的不可剥削保证在多人博弈里为何失效',
+      '评估活牌对手增多时下注的保护价值与慢打代价的变化',
+    ],
     content: [
       { type: 'heading', content: '胜率的稀释与门槛的抬升' },
       {
@@ -366,6 +384,12 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
     subtitle: 'MDF 的对偶概念与实战应用',
     duration: '10 min',
     eloDimension: 'math',
+    objectives: [
+      '说明 Alpha 为何只回答进攻方这个尺度的诈唬能否保本',
+      '推导同一尺度下 Alpha 与 MDF 互为补集的关系',
+      '比较 Alpha 与对手在这条街的实际弃牌率以判定诈唬取舍',
+      '区分保本门槛问题与防守方跟注所需胜率问题的适用边界',
+    ],
     content: [
       { type: 'heading', content: 'Alpha 的定义与公式' },
       {
@@ -464,6 +488,12 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
     subtitle: '九个 Level 的收束：一套完整的决策操作系统',
     duration: '12 min',
     eloDimension: 'handReading',
+    objectives: [
+      '说明均衡与剥削为何是同一系统的两个模式而非对立流派',
+      '评估观察样本的质量并据此缩放偏离均衡的幅度',
+      '跑完从基线出发到监控适应再回撤的完整运行循环',
+      '把先前各 Level 的理论装配到同一手牌的分析里',
+    ],
     content: [
       { type: 'heading', content: '假对立的终结' },
       {

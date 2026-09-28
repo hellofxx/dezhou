@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_8_CHAPTERS: TheoryChapter[] = [
     subtitle: '情绪不是性格问题，而是可分类、可干预的技术漏洞',
     duration: '12 min',
     eloDimension: 'mental',
+    objectives: [
+      '把一次发作按触发器与应对归入相应的 Tilt 类型',
+      '识别把方差当成不公正这一共同引信并改写成方差语言',
+      '捕捉自身生理与行为层面的 Tilt 前兆并固化成清单',
+      '评估提前干预相比放任到底所节省的期望损失并执行中断',
+    ],
     content: [
       { type: 'heading', content: 'Tilt 是最贵的漏洞' },
       {
@@ -135,6 +141,12 @@ export const STANDARD_LEVEL_8_CHAPTERS: TheoryChapter[] = [
     subtitle: '什么时候打、打多久、什么时候必须离开',
     duration: '10 min',
     eloDimension: 'mental',
+    objectives: [
+      '把一次 Session 的收益按状态档拆成可累加的部分',
+      '执行进桌前的热身检查以排除睡眠与情绪残留',
+      '判定去留时只用桌质与当前状态而不看当日盈亏',
+      '筛出每次复盘的对象时以决策难度取代底池大小',
+    ],
     content: [
       { type: 'heading', content: 'A-Game 的资源观' },
       {
@@ -259,6 +271,12 @@ export const STANDARD_LEVEL_8_CHAPTERS: TheoryChapter[] = [
     subtitle: '资金规则是给情绪上的保险，不是给数学上的',
     duration: '10 min',
     eloDimension: 'mental',
+    objectives: [
+      '说明资金管理的双重功能并取数学与心理更严的一侧定级别',
+      '给定胜率与标准差与资金规模判定破产风险落在哪一档',
+      '识别 Scared Money 对一手决策的具体扭曲表现',
+      '把升降级判据写成机械规则并拒绝把赢来的钱特殊化',
+    ],
     content: [
       { type: 'heading', content: '资金管理的双重功能' },
       {
@@ -401,6 +419,12 @@ export const STANDARD_LEVEL_8_CHAPTERS: TheoryChapter[] = [
     subtitle: '大脑出厂设置里的 Bug，以及职业玩家的补丁',
     duration: '11 min',
     eloDimension: 'mental',
+    objectives: [
+      '把一次复盘里的错误判断归入对应的认知偏差条目',
+      '评估一手决策的质量时只以事前可得的信息为准',
+      '把被方差污染的结果目标改写为自己可控的过程动作',
+      '检验一项学习活动是否真的改变了下一次的决策',
+    ],
     content: [
       { type: 'heading', content: '扑克桌上的四大认知偏差' },
       {

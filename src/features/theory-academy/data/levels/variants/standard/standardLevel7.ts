@@ -11,6 +11,12 @@ export const STANDARD_LEVEL_7_CHAPTERS: TheoryChapter[] = [
     subtitle: '用四个数字给对手拍 X 光片',
     duration: '12 min',
     eloDimension: 'handReading',
+    objectives: [
+      '说明 VPIP、PFR、AF、WTSD 各度量的行为维度与计算口径',
+      '把多项指标组合解读，转成一份可执行的对敌方案',
+      '给定手数判定指标能否支撑结论并标注置信度',
+      '采集线下行为证据以替代 HUD 完成同维度画像',
+    ],
     content: [
       { type: 'heading', content: '为什么需要统计指标' },
       {
@@ -146,6 +152,12 @@ export const STANDARD_LEVEL_7_CHAPTERS: TheoryChapter[] = [
     subtitle: 'TAG、LAG、NIT、跟注站——以及每一类的标准收割方案',
     duration: '11 min',
     eloDimension: 'handReading',
+    objectives: [
+      '把对手按入池宽度与行动风格划入对应象限并说出依据',
+      '分别说明各象限玩家的漏洞清单与标准收割方案',
+      '识别输赢状态触发的跨象限漂移并即时换方案',
+      '复核画像是否过期并用最近的行为证据更新它',
+    ],
     content: [
       { type: 'heading', content: '松紧 × 主被动：四象限' },
       {
@@ -266,6 +278,12 @@ export const STANDARD_LEVEL_7_CHAPTERS: TheoryChapter[] = [
     subtitle: '把 T4 的范围理论装配成实战流水线',
     duration: '12 min',
     eloDimension: 'handReading',
+    objectives: [
+      '执行从起点范围到组合计数的整条读牌流水线',
+      '把下注与过牌两个方向上不合逻辑的组合剔除掉',
+      '数清剩余范围里的价值与诈唬组合比并据此定跟弃',
+      '区分范围分析与物理 Tell 在临界决策中的信息优先级',
+    ],
     content: [
       { type: 'heading', content: '读牌是流程，不是灵感' },
       {
@@ -387,6 +405,12 @@ export const STANDARD_LEVEL_7_CHAPTERS: TheoryChapter[] = [
     subtitle: '发现漏洞 → 定向偏离 → 防备反剥削的完整循环',
     duration: '11 min',
     eloDimension: 'handReading',
+    objectives: [
+      '把对手对均衡的偏离转成己方反方向的定向偏离',
+      '评估对手的适应能力以确定可承受的最大剥削幅度',
+      '跑完从建档到回撤的剥削循环并识别被反剥削的信号',
+      '判定一条剥削结论是否已过保质期并择时重测',
+    ],
     content: [
       { type: 'heading', content: '剥削的基本形式' },
       {
