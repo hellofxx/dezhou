@@ -44,7 +44,7 @@ export const HEADS_UP_LEVEL_3: TheoryLevelInfo = {
         {
           type: 'key-point',
           content:
-            '单挑中 SB 的 0.5 是"强制 Ante"：它不是可以放弃的沉没成本，而是你与 BB 争夺的奖池的一部分。翻前你最后行动——这是满员桌 SB 梦寐以求的待遇，代价是翻后第一个说话（位置反转，第三章详述）。',
+            '单挑中 SB 的 0.5 是"强制 Ante"：它不是可以放弃的沉没成本，而是你与 BB 争夺的奖池的一部分。翻前你最后行动——这是满员桌 SB 梦寐以求的待遇，代价是翻后第一个说话（位置反转，详见本级『位置反转』章）。',
         },
         { type: 'heading', content: '开池尺度：min-raise 是主武器' },
         {
