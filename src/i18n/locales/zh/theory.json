@@ -325,6 +325,44 @@
     "body": "理论学院从组合计数开场。若你还需要确认牌型大小、位置名称、下注动作与术语，先去策略学院的入门向导花几分钟过一遍——它不计入理论进度，但会让 T1 之后的每一章都更省力。",
     "cta": "先完成入门向导"
   },
+  "drill": {
+    "title": "动手算",
+    "subtitle": "用刚读到的公式当场算一遍。不计入进度，答错可以换题重算",
+    "disclaimer": "不计入进度与能力分",
+    "answerLabel": "你的答案",
+    "submit": "判定",
+    "nextProblem": "换一题",
+    "correct": "正确",
+    "incorrect": "不在容差内，按提示的公式再算一次",
+    "invalidInput": "请输入数字",
+    "progress": "第 {{done}} / {{total}} 题",
+    "summaryTitle": "本轮小结",
+    "answered": "答对 {{correct}} / {{total}}",
+    "unit": {
+      "percent": "%",
+      "hands": "手"
+    },
+    "template": {
+      "alpha": "底池 {{pot}} bb，对手下注 {{bet}} bb。诈唬要保本，对手至少得弃掉百分之多少？",
+      "mdf": "底池 {{pot}} bb，对手下注 {{bet}} bb。为了不让对手用任意两手牌诈唬盈利，你至少要拿百分之多少的频率继续（跟注或加注）？",
+      "requiredEquity": "底池 {{pot}} bb，对手下注 {{bet}} bb。你跟注至少需要百分之多少的权益？",
+      "kelly": "某次机会胜率 {{winrate}}%，赢时净收 {{odds}} 倍于输时投入。全 Kelly 建议投入资金的百分之多少？",
+      "halfKelly": "胜率 {{winrate}}%、净赔率 {{odds}} 倍。半 Kelly 应投入资金的百分之多少？",
+      "requiredHands": "你的胜率 {{edge}} bb/100、标准差 {{sd}} bb/100，置信倍数 z = {{z}}。要让这项优势与波动区分开，大约需要打多少手？",
+      "riskOfRuin": "胜率 {{winrate}} bb/100、标准差 {{sd}} bb/100、资金 {{buyins}} 个买入（每买入 100 bb）。按扩散近似，破产概率约为百分之多少？",
+      "multiwayBluffFold": "底池 {{pot}} bb，你下注 {{bet}} bb。{{defenders}} 名尚未行动的对手都恰好按保本频率弃牌时，全弃率约为百分之多少？"
+    },
+    "hint": {
+      "alpha": "α = b ÷ (P + b)",
+      "mdf": "MDF = P ÷ (P + b)，与 α 互补",
+      "requiredEquity": "所需权益 = 需补入额 ÷ 跟注后底池 = b ÷ (P + 2b)",
+      "kelly": "f* = (b·p − q) ÷ b",
+      "halfKelly": "半 Kelly = f* ÷ 2，其中 f* = (b·p − q) ÷ b",
+      "requiredHands": "n = (z × σ ÷ μ)²；σ = 标准差(bb/100) ÷ 10，μ = 胜率(bb/100) ÷ 100",
+      "riskOfRuin": "ROR = exp(−2μB ÷ σ²)",
+      "multiwayBluffFold": "全弃率 = ∏ 各人弃牌率 = α 的防守者人数次方"
+    }
+  },
   "bridge": {
     "title": "理论 → 实践",
     "subtitle": "把读过的理论变成牌桌上的决策",

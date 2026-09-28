@@ -325,6 +325,44 @@
     "body": "Theory Academy opens with combinatorics. If you still want to confirm hand rankings, position names, betting actions and terminology, spend a few minutes on the Strategy Academy basics wizard first — it does not count toward theory progress, but it makes every chapter after T1 easier.",
     "cta": "Do the basics wizard first"
   },
+  "drill": {
+    "title": "Do the Math",
+    "subtitle": "Apply the formula you just read. It is not scored, and you can reroll a problem and try again",
+    "disclaimer": "Not counted toward progress or rating",
+    "answerLabel": "Your answer",
+    "submit": "Check",
+    "nextProblem": "New problem",
+    "correct": "Correct",
+    "incorrect": "Outside the tolerance — run the formula in the hint once more",
+    "invalidInput": "Please enter a number",
+    "progress": "Problem {{done}} of {{total}}",
+    "summaryTitle": "This round",
+    "answered": "{{correct}} of {{total}} correct",
+    "unit": {
+      "percent": "%",
+      "hands": "hands"
+    },
+    "template": {
+      "alpha": "Pot {{pot}} bb, villain bets {{bet}} bb. What fold frequency (in %) must villain have for your bluff to break even?",
+      "mdf": "Pot {{pot}} bb, villain bets {{bet}} bb. To stop villain bluffing with any two cards, what minimum frequency (in %) must you continue?",
+      "requiredEquity": "Pot {{pot}} bb, villain bets {{bet}} bb. What equity (in %) do you need to call?",
+      "kelly": "A spot wins {{winrate}}% of the time and pays {{odds}} times your risked amount when it hits. What share of your bankroll (in %) does full Kelly recommend?",
+      "halfKelly": "Win rate {{winrate}}%, net odds {{odds}}x. What share of your bankroll (in %) does half Kelly suggest?",
+      "requiredHands": "You win {{edge}} bb/100 with a standard deviation of {{sd}} bb/100 at z = {{z}}. Roughly how many hands separate that edge from noise?",
+      "riskOfRuin": "Win rate {{winrate}} bb/100, std deviation {{sd}} bb/100, bankroll {{buyins}} buy-ins of 100 bb. Under the diffusion approximation, what is the risk of ruin (in %)?",
+      "multiwayBluffFold": "Pot {{pot}} bb and you bet {{bet}} bb. If each of the {{defenders}} players still to act folds at exactly the break-even rate, what is the all-fold probability (in %)?"
+    },
+    "hint": {
+      "alpha": "alpha = b / (P + b)",
+      "mdf": "MDF = P / (P + b), complementary to alpha",
+      "requiredEquity": "required equity = amount to call / pot after the call = b / (P + 2b)",
+      "kelly": "f* = (b*p - q) / b",
+      "halfKelly": "half Kelly = f* / 2, with f* = (b*p - q) / b",
+      "requiredHands": "n = (z * sigma / mu)^2; sigma = std dev (bb/100) / 10, mu = winrate (bb/100) / 100",
+      "riskOfRuin": "ROR = exp(-2 * mu * B / sigma^2)",
+      "multiwayBluffFold": "all-fold rate = product of the individual fold rates = alpha raised to the number of defenders"
+    }
+  },
   "bridge": {
     "title": "Theory → Practice",
     "subtitle": "Turn the theory you've read into decisions at the table",

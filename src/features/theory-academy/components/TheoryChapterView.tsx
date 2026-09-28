@@ -20,6 +20,7 @@ import {
 } from '../utils/theoryProgress';
 import { TheorySectionRenderer } from './TheorySectionRenderer';
 import { TheoryQuiz } from './TheoryQuiz';
+import { TheoryCalcDrill } from './TheoryCalcDrill';
 import { PracticeBridgeCard } from './PracticeBridgeCard';
 import { NextChapterNav } from './NextChapterNav';
 import {
@@ -270,6 +271,8 @@ export default function TheoryChapterView() {
                 />
               ))}
             </div>
+            {/* 读→算→测微闭环：正文之后、小测之前给当场计算；未登记演练槽的章节不渲染 */}
+            <TheoryCalcDrill key={chapter.id} chapterId={chapter.id} />
             {chapterCompleted ? (
               // 已完成章节：免重考复习导航（返回目录/下一章）+ 可选重考（幂等，取历史最高分）
               // 三按钮(返回目录 / 重考小测 / 下一章)窄屏纵向堆叠，桌面端左/右双簇对齐
