@@ -12,6 +12,10 @@ import fs from 'node:fs';
  *
  * 引用只能以 ID 字符串存在（ALLOWED_CROSS_IMPORTS 禁止两模块互相 import），
  * 所以目标存在性必须由源码扫描保证；被引用集与课时全集都即时从源码/数据求得，不留手工镜像。
+ *
+ * 引用面含两种命名空间，各自对面不同全集校验：变体专属课 `l<n>hu|sd-*`（只存在于
+ * `ALL_VARIANT_LESSONS`，且必须**不在** `LEVELS` 内）与三变体共享地基课 `l<n>-*`
+ * （变体章节的 T1/T2 桥接复用，必须**在** `LEVELS` 内）。
  */
 
 /** 理论变体数据源码（含 Level 文件与 chapterPracticeMap） */
@@ -27,8 +31,11 @@ const theoryVariantSources = {
 import { ALL_VARIANT_LESSONS } from './lessons/variants';
 import { LEVELS } from './levels';
 
-/** 引号内的变体课时 id：只认数据引用形态（`{ id: '…' }` / `lesson('…', …)`），不认散文里的裸 id */
-const REFERENCE_RE = /'(l\d+(?:hu|sd)-[a-z0-9-]+)'/g;
+/** 引号内的课时 id：只认数据引用形态（`{ id: '…' }` / `lesson('…', …)`），不认散文里的裸 id */
+const REFERENCE_RE = /'(l\d+(?:hu|sd)?-[a-z0-9-]+)'/g;
+
+/** 变体专属课时（进不了任何白名单，本守卫的唯一对象）vs 三变体共享地基课（在 LEVELS 内） */
+const isVariantLessonId = (id: string) => /^l\d+(?:hu|sd)-/.test(id);
 
 interface BridgeRef {
   at: string;
@@ -42,15 +49,17 @@ interface BridgeRef {
  * `{ id: 'l…', title: '…' }`（Level 级）与 `lesson('l…', '…')`（章节级 map）。
  */
 const PAIRED_REF_RES = [
-  /\{ id: '(l\d+(?:hu|sd)-[a-z0-9-]+)', title: '([^']+)' \}/g,
-  /lesson\('(l\d+(?:hu|sd)-[a-z0-9-]+)', '([^']+)'\)/g,
+  /\{ id: '(l\d+(?:hu|sd)?-[a-z0-9-]+)', title: '([^']+)' \}/g,
+  /lesson\('(l\d+(?:hu|sd)?-[a-z0-9-]+)', '([^']+)'\)/g,
 ];
 
 function collectRefs(): BridgeRef[] {
   const refs: BridgeRef[] = [];
   for (const [file, src] of Object.entries(theoryVariantSources)) {
     if (file.endsWith('.test.ts')) continue;
-    const shortName = file.split('/').pop() ?? file;
+    // 取末两段路径：两个变体目录下的 chapterPracticeMap.ts 同名，只留 basename 会让定位歧义。
+    const parts = file.split('/');
+    const shortName = parts.slice(-2).join('/');
     const titles = new Map<string, string>();
     for (const re of PAIRED_REF_RES) {
       for (const m of src.matchAll(re)) if (m[1] && m[2]) titles.set(m[1], m[2]);
@@ -79,6 +88,17 @@ describe('理论学院变体章节 → 策略学院变体课时 引用完整性'
     expect(variantLessonIds.size).toBeGreaterThan(100);
   });
 
+  // 章节级桥接落地后，引用面来自两个不同形态的文件（Level 级 `{ id, title }` 与章节级 `lesson()`）。
+  // 只断言总数会让"chapterPracticeMap 整体没被扫到"这类失配静默通过，故按来源分档断言。
+  it('章节级 map 与 Level 级推荐两个来源都被扫到', () => {
+    for (const variantDir of ['heads-up', 'short-deck']) {
+      const fromMap = refs.filter((r) => r.at.startsWith(`${variantDir}/chapterPracticeMap.ts`));
+      expect(fromMap.length, `${variantDir} 章节级 map 未产生引用`).toBeGreaterThanOrEqual(22);
+      const fromLevels = refs.filter((r) => !r.at.startsWith(`${variantDir}/chapterPracticeMap.ts`));
+      expect(fromLevels.length, `${variantDir} Level 级推荐未产生引用`).toBeGreaterThan(0);
+    }
+  });
+
   it('每个被引用的变体课时都真实存在于 ALL_VARIANT_LESSONS', () => {
     const dangling = refs
       .filter((r) => !variantLessonIds.has(r.lessonId))
@@ -86,11 +106,23 @@ describe('理论学院变体章节 → 策略学院变体课时 引用完整性'
     expect({ dangling, danglingCount: dangling.length }).toEqual({ dangling: [], danglingCount: 0 });
   });
 
-  it('变体课时确实不在 LEVELS 内（解释为何它们不能进 CROSS_MODULE_LESSON_IDS）', () => {
+  it('变体专属课时确实不在 LEVELS 内（解释为何它们不能进 CROSS_MODULE_LESSON_IDS）', () => {
     const leakedIntoLevelWhitelist = refs
+      .filter((r) => isVariantLessonId(r.lessonId))
       .filter((r) => standardLevelLessonIds.has(r.lessonId))
       .map((r) => r.lessonId);
     expect([...new Set(leakedIntoLevelWhitelist)]).toEqual([]);
+  });
+
+  // 章节级 map 里 T1 类章节会复用三变体共享地基课（策略学院变体课程从 L3 起，L1/L2 回退标准课）。
+  // 这类 id 不受上一条保护，也不属于任何变体白名单，故单独断言它们在 LEVELS 内可解析——
+  // 否则"把标准课 id 打错一个字母"是本页唯一无人拦截的漂移路径。
+  it('共享地基课引用（l<n>-*）在 LEVELS 内可解析', () => {
+    const unresolved = refs
+      .filter((r) => !isVariantLessonId(r.lessonId))
+      .map((r) => r.lessonId)
+      .filter((id) => !standardLevelLessonIds.has(id));
+    expect([...new Set(unresolved)]).toEqual([]);
   });
 
   it('引用自带的回退标题与策略学院权威 lessonTitle 一致（忽略尾部括号后缀）', () => {

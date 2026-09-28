@@ -14,7 +14,9 @@ interface PracticeBridgeCardProps {
  * "去实践"推荐卡：理论→实践闭环出口，Level 粒度与章节粒度共用。
  * 仅通过路由字符串跳转 strategy-academy（不产生跨模块 import）；
  * Level 粒度引用完整性由 strategy-academy curriculumIntegrity 测试守卫，
- * 章节粒度由 theory-academy data/theoryIntegrity 的子集断言守卫。
+ * 标准章节粒度由 theory-academy data/theoryIntegrity 的子集断言守卫，
+ * 变体章节粒度（l&lt;n&gt;hu|sd-* 与共享地基课）由 strategy-academy
+ * theoryVariantBridgeIntegrity 测试守卫。
  */
 export function PracticeBridgeCard({ recommendations, subtitleKey = 'theory.bridge.subtitle' }: PracticeBridgeCardProps) {
   const navigate = useNavigate();

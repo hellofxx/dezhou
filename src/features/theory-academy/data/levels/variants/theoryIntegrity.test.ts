@@ -177,3 +177,35 @@ describe('variant theory integrity: 完整内容阶段校验（对齐标准系�
     expect(bad).toEqual([]);
   });
 });
+
+describe('variant theory integrity: 章节级实践推荐桥接', () => {
+  // 变体课时不在策略学院 LEVELS 内，进不了任何白名单，标准侧那条"子集 + 非空"断言在此无从复用。
+  // 这里能机器校验的只剩两件事：**覆盖率**（防 chapterPracticeMap 漏章，或聚合链
+  // variants/<v>/index.ts 的 withChapterPractice 被误删后静默失效）与**命名空间**。
+  // 被引用的 id 是否真实存在由 strategy-academy/data/theoryVariantBridgeIntegrity.test.ts 反向断言。
+  const bridgeChapters: TheoryChapter[] = Object.values(VARIANTS).flatMap((levels) =>
+    levels.flatMap((l) => l.chapters),
+  );
+
+  it('每个变体章节都携带非空的章节级实践推荐', () => {
+    const uncovered = bridgeChapters
+      .filter((chapter) => (chapter.practiceRecommendations?.lessons.length ?? 0) === 0)
+      .map((chapter) => `${chapter.id} (t${chapter.level})`);
+    expect({ uncovered, uncoveredCount: uncovered.length }).toEqual({ uncovered: [], uncoveredCount: 0 });
+  });
+
+  it('章节级推荐引用的课时 id 只能是变体专属课或三变体共享地基课', () => {
+    // l<n>hu-* / l<n>sd-* 为变体专属；l<n>-* 为策略学院三变体共用的通用地基课。
+    // 出现第三种形态说明把标准侧 Level 白名单里的 id 误抄进了变体表。
+    const bad: string[] = [];
+    for (const chapter of bridgeChapters) {
+      for (const lesson of chapter.practiceRecommendations?.lessons ?? []) {
+        if (!/^l\d(hu|sd)-/.test(lesson.id) && !/^l\d-[a-z0-9-]+$/.test(lesson.id)) {
+          bad.push(`${chapter.id} → ${lesson.id}: 非 l<n>hu|sd- / l<n>- 前缀`);
+        }
+        if (!lesson.title.trim()) bad.push(`${chapter.id} → ${lesson.id}: title 为空`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+});
