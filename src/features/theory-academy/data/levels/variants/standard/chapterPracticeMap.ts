@@ -1,7 +1,7 @@
 import type { PracticeRecommendation } from '../../../../types';
 
 /**
- * 标准变体 35 章的章节级实践推荐（理论→实践桥接的章节粒度层）。
+ * 标准变体全部章节的章节级实践推荐（理论→实践桥接的章节粒度层）。
  *
  * 之所以集中在此而非内联进 standardLevelN.ts：章节正文是只增不改的发布内容
  * （id 进 URL 与持久化），而桥接边会随策略学院课程树调整重排；集中一处便于整表复核，
@@ -42,6 +42,9 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   },
   't4-preflop-structure': {
     lessons: [lesson('l2-raise-sizing', '加注大小'), lesson('l4-mdf', '最小防御频率 (MDF)')],
+  },
+  't4-structure-economics': {
+    lessons: [lesson('l7-rake', 'Rake 对策略的影响'), lesson('local-ante', 'Ante 结构的翻前调整')],
   },
 
   // T5 博弈论基础

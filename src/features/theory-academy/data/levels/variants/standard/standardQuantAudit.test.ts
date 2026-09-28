@@ -89,6 +89,14 @@ import {
  *        被 5-bet 全下门槛 80÷201.5=39.7%≈40%；{QQ+、AK}=6+6+6+16=34 种、A5s=4 种
  * [示意值] t4-preflop-structure idx6/idx9/idx12：AQo 对 {QQ+,AK} 约 30%、KK 约 47%、JJ 约 37%
  *        （手牌权益依赖范围定义，正文与题面均以「约」表述）
+ * [正确] t4-structure-economics idx4/idx5/idx6（结构经济学，本次新增）：
+ *        α(1.5,2.25)=60.0% / MDF=40.0% → 大盲前注后 α(2.5,2.25)=2.25÷4.75=47.4% / MDF=52.6%；
+ *        大盲收价 1.25÷5.0=25.0% → 0.25÷5.0=5.0%（前注已投在池内，需补额下降而底池不变）；
+ *        BB 3-bet 到 8：α(3.75,8)=68.1% / MDF=31.9% → α(4.75,8)=62.7% / MDF=37.3%，每对互补为 1；
+ *        idx9：n(8bb/100)=(1.96×9÷0.08)²≈48,620、n(3bb/100)≈345,744、比值 (8/3)²≈7.11；
+ *        ROR σ=9bb/手、B=2000bb：exp(−3.95)≈1.9% → exp(−1.48)≈22.7%
+ * [示意值] t4-structure-economics idx8 末句（忽略抽水对 σ 的轻微削减）、idx9 抽水档位「约 5bb/100」、
+ *          idx10 pro-tip 只给口径不给平台数值表
  *
  * —— standardLevel5.ts ——
  * [正确] t5-game-theory idx4：混合 p=1/2 无差别、博弈值 ±0.5；t5-gto-concept idx3 例值（满池 1/3=2:1、半池 25%=3:1）；
@@ -538,5 +546,39 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     expect(decayExample).toContain('+32.5');
     expect(decayExample).toContain('50 ÷ 150');
     expect(drift.content[17]?.type).toBe('takeaway');
+  });
+
+  it('t4-structure-economics：前注改 P、抽水改 μ 的全部数值可复算', () => {
+    // 实例一：无 ante vs 大盲前注 1bb（BTN 开 2.25 尺度取同值以隔离 ante 效应）
+    expect(calculateAlpha(1.5, 2.25)).toBeCloseTo(0.6, 10);
+    expect(calculateMDF(1.5, 2.25)).toBeCloseTo(0.4, 10);
+    expect(calculateAlpha(2.5, 2.25)).toBeCloseTo(0.4737, 4);
+    expect(calculateMDF(2.5, 2.25)).toBeCloseTo(0.5263, 4);
+    expectAnswerIs('t4-structure-economics', 't4-structure-economics-q1', '约 47.4%');
+    // 大盲收价：需补 1.25 → 0.25，跟注后底池同为 5.0bb
+    expect(requiredEquity(1.25, 5)).toBeCloseTo(0.25, 10);
+    expect(requiredEquity(0.25, 5)).toBeCloseTo(0.05, 10);
+    // 实例二：BB 3-bet 到 8 的两套 α/MDF，且每对互补为 1
+    expect(calculateAlpha(3.75, 8)).toBeCloseTo(0.6809, 4);
+    expect(calculateMDF(3.75, 8)).toBeCloseTo(0.3191, 4);
+    expect(calculateAlpha(4.75, 8)).toBeCloseTo(0.6275, 4);
+    expect(calculateAlpha(4.75, 8) + calculateMDF(4.75, 8)).toBeCloseTo(1, 10);
+    // 实例三：抽水把 μ 由 8 压到 3 → 样本量按 (8/3)² 放大、ROR 放大一个数量级
+    expect(requiredHandsForEdge(8, 90, 1.96)).toBeCloseTo(48620, 0);
+    expect(requiredHandsForEdge(3, 90, 1.96)).toBeCloseTo(345744, 0);
+    expect(requiredHandsForEdge(3, 90, 1.96) / requiredHandsForEdge(8, 90, 1.96)).toBeCloseTo(7.111, 2);
+    expectAnswerIs('t4-structure-economics', 't4-structure-economics-q3', '变成原来的约 7.1 倍');
+    expect(riskOfRuin({ winrateBB100: 8, sdBB100: 90, bankrollBB: 2000 })).toBeCloseTo(0.019, 3);
+    expect(riskOfRuin({ winrateBB100: 3, sdBB100: 90, bankrollBB: 2000 })).toBeCloseTo(0.227, 3);
+    // 正文口径守卫：误区段必须同时给出改前/改后两组数，且不得回退成"多送 1bb"式表述
+    const chapter = chapters.find((x) => x.id === 't4-structure-economics') as TheoryChapter;
+    const myth = chapter.content[12]?.content ?? '';
+    expect(myth).toContain('60.0% 掉到 47.4%');
+    expect(myth).toContain('40.0% 升到 52.6%');
+    expect(myth).toContain('1.25bb 变成补 0.25bb');
+    const rakeExample = chapter.content[9]?.content ?? '';
+    expect(rakeExample).toContain('7.1 倍');
+    expect(rakeExample).toContain('22.7%');
+    expect(chapter.content[9]?.type).toBe('example');
   });
 });

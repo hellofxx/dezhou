@@ -72,6 +72,7 @@ export const CHAPTER_DRILL_SLOTS: Readonly<Record<string, readonly DrillFormula[
   't2-implied-odds': ['requiredEquity'],
   't3-fundamental-theorem': ['requiredEquity'],
   't4-preflop-structure': ['alpha', 'mdf'],
+  't4-structure-economics': ['alpha', 'mdf'],
   't5-game-theory': ['mdf'],
   't5-gto-concept': ['alpha'],
   't5-mdf-alpha': ['alpha', 'mdf'],

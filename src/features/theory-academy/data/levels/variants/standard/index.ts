@@ -81,7 +81,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     level: 4,
     tier: 'intermediate',
     title: '范围理论',
-    description: '范围思维、组合数学与 Blockers、范围优势与坚果优势',
+    description: '范围思维、组合数学与 Blockers、范围优势与坚果优势、结构经济学（抽水 / 前注 / Straddle）',
     icon: '🗺️',
     variant: 'standard',
     unlockRequirement: '完成 T3 所有章节',

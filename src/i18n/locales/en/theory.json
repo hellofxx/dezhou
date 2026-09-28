@@ -61,7 +61,7 @@
     "t1": "Combinatorics, outs, the rule of 2 and 4, and a long-term view of variance",
     "t2": "EV math, pot odds, implied odds and reverse implied odds",
     "t3": "Position value, the Gap Concept, Sklansky's theorem and initiative",
-    "t4": "Range thinking, combinatorics, blockers, range and nut advantage",
+    "t4": "Range thinking, combinatorics, blockers, range and nut advantage, the economics of table structure (rake, antes, straddles)",
     "t5": "Nash equilibrium, GTO concepts, MDF and Alpha, mixed strategies and node locking, multiway pot frequencies and sizings",
     "t6": "Betting purposes, polarized vs linear sizing, SPR and geometric sizing",
     "t7": "VPIP/PFR/AF/WTSD stats, player typology, hand reading and exploitation",
@@ -194,7 +194,8 @@
     "t9hu-pro-study": "Pro Player Study",
     "t4-preflop-structure": "Preflop Structural Theory: 3-bet / 4-bet and Building a Defending Range",
     "t6-equity-realization": "Board Texture and Equity Realization: How Much of Your Equity Actually Lands",
-    "t5-multiway-frequency": "Multiway Pot Frequencies and Sizings"
+    "t5-multiway-frequency": "Multiway Pot Frequencies and Sizings",
+    "t4-structure-economics": "The Economics of Table Structure: Rake, Antes and Straddles"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -275,7 +276,8 @@
     "t9hu-pro-study": "Decision logic of top HU players",
     "t4-preflop-structure": "Upgrading preflop from “is my hand good enough” to “what does my range look like”",
     "t6-equity-realization": "All-in equity is the sticker price; realized equity is what you take home",
-    "t5-multiway-frequency": "When the opposition goes from one to two, MDF and bluff frequencies must be recomputed from scratch"
+    "t5-multiway-frequency": "When the opposition goes from one to two, MDF and bluff frequencies must be recomputed from scratch",
+    "t4-structure-economics": "Treat table parameters as independent variables in the equation, not as background noise"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1482,6 +1484,23 @@
       "Division of labour with T9: frequencies are computed here, discipline is set there",
       "This chapter covers only the recomputation of frequencies and sizings: the product law for all-fold rates, the diffusion of defending responsibility, and the value/bluff asymmetry. The dilution of equity itself (AA falling from about 85% heads-up to about 64% four-way), the first law (\"hands that can make the nuts gain value, easily dominated hands lose it\"), and the full multiway discipline list are developed in T9 “Multiway Pot Theory”; the equity-realization layer is in T6 “Board Texture and Equity Realization”. All three use the same product structure, on different objects.",
       "All-fold rate is the product of the defenders’ fold rates: a half pot into two players leaves 11.1%, into three leaves 3.7%\nBluff EV collapses with headcount (0 → −33.3 → −44.4), and bigger sizings make it worse (pot-sized into two: −50)\nDefending obligations diffuse as d = 1 − α^(1/n): 42.3% each with two defenders, 30.7% with three; dividing MDF by headcount (33.4%) is systematic under-defence\nValue and bluffs are asymmetric: with more players the chance that at least one calls goes up, so value gets thicker while pure bluffs leave the pot"
+    ],
+    "t4-structure-economics": [
+      "Structure Is an Independent Variable, Not Background",
+      "Every frequency and threshold in the earlier levels rests on two table parameters: how much money is already in the pot, and how much of each pot is taken away. Most players treat antes, straddles and rake as scenery - never checked when sitting down, never recomputed when changing tables. From a professional viewpoint they are independent variables in an equation: change P (the pot before an opponent acts) and α, MDF and every call threshold move with it; change μ (net winrate per 100 hands) and all the conclusions about how many hands prove an edge and how many buy-ins are safe get rewritten. This chapter fixes where each of the three parameters lands: antes and straddles move P, rake moves μ.",
+      "Do not mix the two classes of parameter. Dead-money parameters (antes, straddles, blinds already posted) change the pot P, so all frequencies and thresholds shift at once. Rake-type parameters change your net expectation μ, so everything about sample size and risk of ruin is rewritten. Mis-classify them and you reach for the wrong formula - explaining \"why stealing stopped working\" with a change in μ, or \"why I win less\" with a change in P, is the same mistake twice.",
+      "Dead Money: How Antes and Straddles Rewrite α and MDF",
+      "Same convention as the preflop structure chapter of this level: P = the pot before the opponent acts (dead money included), b = the bet size as placed, not the amount still needed to match.\nBreak-even fold frequency for a bluff: α = b ÷ (P + b)\nDefense obligation: MDF = P ÷ (P + b)\nEquity needed to call = amount still to put in ÷ pot after calling.\nWhen P rises the direction is fixed: α falls (bluffs break even more easily), MDF rises (defense gets heavier), equity needed to call falls (the price improves). They move together by construction - all three describe the same pot. (Conceptual framing: Modern Poker Theory on ante formats)",
+      "Example 1 (an ante improves both the steal and the defense): 50/100, no ante, pot 1.5bb, BTN opens 2.25bb. α = 2.25 ÷ 3.75 = 60.0%, MDF = 40.0%; the big blind still has to put in 1.25bb to see a flop in a pot of 5.0bb, so 25.0% equity is needed. Switch to a 1bb big-blind ante (only the big blind posts it): the pot is 2.5bb, BTN still opens 2.25bb (sizing held constant to isolate the ante effect). α = 2.25 ÷ 4.75 = 47.4%, MDF = 52.6%; and because the big blind already has 1bb of blind plus 1bb of ante invested, only 0.25bb is still needed into that same 5.0bb pot, so required equity falls to 5.0%. Read the two layers together: the break-even bar for stealing drops, but getting fought back now costs more in practice - with a 5.0% threshold the big blind can defend extremely wide, so opening ranges must not loosen just because α went down. Check whether the back of your range survives a much wider defense.",
+      "Example 2 (quantifying the position gap with the same cards): after a 2.25bb open the pot is 3.75bb with no ante; the big blind 3-bets to 8bb, giving α = 8 ÷ 11.75 = 68.1% and an MDF of 31.9% for BTN. Add the 1bb big-blind ante and the pot is 4.75bb; the same 3-bet to 8bb yields α = 8 ÷ 12.75 = 62.7% and MDF = 37.3%. Out of position the bluff 3-bet now needs 5.4 fewer points of fold equity to break even, while the opener has to defend 5.4 points higher. That 68.1% + 31.9% = 100% and 62.7% + 37.3% = 100% is no coincidence: α and MDF are the two sides of a single break-even line, and moving one necessarily moves the other.",
+      "Rake: The Only Parameter That Eats μ Directly",
+      "Net winrate = gross winrate − the amount taken per 100 hands. It feeds straight into two results already derived in T1 and T8:\nhands needed for significance n = (z·σ ÷ μ)², with μ in the denominator and squared, so n ∝ 1/μ²\nrisk of ruin under the diffusion approximation ROR = exp(−2μB ÷ σ²), shrunk by μ and by bankroll B, inflated by σ²\nConvert to per-hand units before using them: μ(hand) = μ(100 hands) ÷ 100 and σ(hand) = σ(100 hands) ÷ 10. Ignoring the mild variance compression rake also brings is a deliberate simplification - the 1/μ² blow-up dwarfs that relief.",
+      "Example 3 (same skill, two different tables): you genuinely play 8bb/100, but at a micro stakes table taking about 5bb/100 you keep only 3bb/100 (rake shown as an indicative magnitude). How many hands prove the edge? With z = 1.96 and σ = 90bb/100: at 8bb/100 it takes (1.96×9 ÷ 0.08)² ≈ 48,600 hands, at 3bb/100 it takes (1.96×9 ÷ 0.03)² ≈ 345,700 hands - the ratio is exactly (8/3)² ≈ 7.1 times, which at 2000 hands a week turns half a year into three and a half. Risk of ruin on the same parameters is sharper still: σ = 9bb per hand (σ² = 81bb²) and a bankroll of B = 2000bb give exp(−2×0.08×2000 ÷ 81) = exp(−3.95) ≈ 1.9% versus exp(−1.48) ≈ 22.7%, a full order of magnitude. So the real cost of rake is not five fewer big blinds per hundred; it turns a negligible downswing into a likely one and pushes down the stakes you should be playing. (Conceptual framing: Applications of NLHE on game selection and rake impact)",
+      "Once μ is compressed, the first actions to stop paying are the ones whose single-iteration edge is tiny and which rely on mass repetition: thin 3-bet bluffs, marginal calls, small continuation aggression, and every premium you pay to keep a range balanced. What survives are thick value lines and high fold equity lines. A heavy-rake game therefore rewards a tighter, more value-forward strategy that leans on hand strength rather than on fine frequency balance. One corollary is routinely ignored: table selection is itself a source of revenue - the same skill on a softer or cheaper table is often worth more than learning another 4-bet chart.",
+      "Three questions before you sit down: 1) Does this table have an ante, and of which form (each player, big blind only, button extra)? What does P become? 2) What are the rake level and the cap, and is there any return scheme? After converting to bb/100, how much net μ do I keep? 3) Is straddle common here? Answer all three before choosing opening and defense ranges - a new table is a new equation. (Concrete rake and return percentages vary by site and stakes; this chapter gives the framework, not a lookup table.)",
+      "The classic mistake: \"An ante or a straddle is just one more big blind, so the strategy does not change.\" The error is reading the ante as a cost instead of as a pot parameter. α = b ÷ (P + b) and MDF = P ÷ (P + b) both take P as an independent variable: a big-blind ante lifts P from 1.5bb to 2.5bb, which drops the break-even fold frequency for a steal from 60.0% to 47.4%, raises the big blind defense obligation from 40.0% to 52.6%, and cuts the price of defending from 1.25bb to 0.25bb. That is a change in frequencies, not a small overpayment - keep stealing at the old sizing and it stops working, keep defending at the old price and you hand pots away.",
+      "Hence the recomputation discipline: whenever a structural parameter changes, re-run three things - the α for steals and bluffs, MDF at each position, and the equity needed to call (count the ante inside P, and subtract what you have already posted from the amount still to put in). Before trusting any preflop chart, ask one question: under which structure was this table computed? A range chart without a structure label is a map of somebody else’s table.",
+      "Structure is an independent variable in the equation: antes and straddles lift P, which makes bluffing cheaper, defense obligations heavier and calling prices better; rake cuts μ, which makes the cost of proving the same edge rise as 1/μ² and risk of ruin expand as exp(−2μB ÷ σ²). Read the structure before you play; recompute when it changes."
     ]
   },
   "quiz": {
@@ -5349,6 +5368,56 @@
         "Exactly as with bluffs: value decays exponentially with headcount"
       ],
       "explanation": "A bluff needs \"everyone folds\" (squeezed by the exponent) while a value bet needs \"at least one calls\" (pushed up by it) — two sides of the same expression. Options one and four confuse the two sides, ignoring that being called is a gain for a value bet; option three voluntarily gives up the higher call probability a multiway pot offers, i.e. it plays a value hand like a bluff."
+    },
+    "t4-structure-economics-q1": {
+      "question": "50/100 with a 1bb big-blind ante (pot 2.5bb); BTN opens to 2.25bb. The break-even fold frequency α for this steal is about:",
+      "options": [
+        "47.4%",
+        "60.0%",
+        "40.0%",
+        "33.3%"
+      ],
+      "explanation": "α = b ÷ (P + b) = 2.25 ÷ 4.75 = 47.4%. The 60.0% figure is the same sizing with no ante (P = 1.5), which is exactly the comparison made above; 40.0% is the no-ante MDF, mixing up two different quantities; 33.3% comes from betting 50 into a pot of 100, a different ratio than this one."
+    },
+    "t4-structure-economics-q2": {
+      "question": "Which statement about a 1bb big-blind ante and the big blind defense is correct:",
+      "options": [
+        "The amount still to put in falls from 1.25bb to 0.25bb, required equity drops from 25.0% to 5.0%, so the actual defense range should widen",
+        "The ante makes defending harder for the big blind, so the range should tighten",
+        "The ante only changes the size of the pot, not any defense frequency",
+        "Required equity rises from 5.0% to 25.0%, so only stronger hands may call"
+      ],
+      "explanation": "The ante is already in the pot, so the amount still needed falls while the pot after calling stays the same (5.0bb either way): 0.25 ÷ 5.0 = 5.0%, and a better price justifies a wider defense. Option 2 reads a higher MDF as \"harder to defend\", which is the opposite direction; option 3 denies that P is an argument of α and MDF, contradicting the whole chapter; option 4 swaps the two numbers and calls an improvement a worsening."
+    },
+    "t4-structure-economics-q3": {
+      "question": "Gross winrate 8bb/100 is compressed to a net 3bb/100 by rake, with σ and the confidence multiplier unchanged. The hands needed to prove that edge become about:",
+      "options": [
+        "about 1/7 of the original",
+        "about 7.1 times the original",
+        "essentially unchanged, you just win less per hundred",
+        "about 2.7 times the original"
+      ],
+      "explanation": "In n = (z·σ ÷ μ)² the μ sits in the denominator and is squared, so the multiplier is (8 ÷ 3)² ≈ 7.11. The 2.7 answer is 8/3, treating a squared relation as linear; the 1/7 answer inverts the ratio; \"unchanged\" forgets that μ is simultaneously the profit and the yardstick of significance - compress it and both proving the edge and surviving on it get harder at once."
+    },
+    "t4-structure-economics-q4": {
+      "question": "A big-blind ante and a 1bb straddle both lift the pot from 1.5bb to 2.5bb. The key difference between them is:",
+      "options": [
+        "A straddle is a bet while an ante is not, so only the straddle changes α",
+        "They are exactly equivalent, with no strategic difference",
+        "A straddle additionally buys one player the last preflop action, like paying 1bb for position; an ante does not change the order of action",
+        "Antes only exist in tournaments while straddles only exist in cash games"
+      ],
+      "explanation": "The dead-money effect is identical - α 47.4% and MDF 52.6% carry over between the two. The real difference is order of action: the straddler acts last preflop, so their own range can widen while the opener faces an extra opponent with position and must tighten somewhat. Option 1 treats the straddle as a bet branch, but it only enters P and never changes b; option 2 denies a difference that does change ranges; option 4 reverses how the two are actually distributed across formats."
+    },
+    "t4-structure-economics-q5": {
+      "question": "At a heavy-rake micro stakes table taking about 5bb/100, which kind of action stops being profitable first?",
+      "options": [
+        "Shoving KK into a 4-bet pot",
+        "Calling an all-in with AA from the big blind",
+        "Value betting a nut flush draw",
+        "Thin 3-bet bluffs and marginal calls, where the single-iteration edge is tiny"
+      ],
+      "explanation": "Rake takes a percentage of every pot, so the first casualties are actions that earn next to nothing per iteration and depend on enormous repetition - thin 3-bet bluffs and marginal calls are exactly that class. The other three share one property: the single-iteration win dwarfs the rake on that pot, whether it is thick value with an extreme hand or value betting a monster draw."
     }
   },
   "chapterObjectives": {
@@ -5602,6 +5671,12 @@
       "Use the product law to compute the all-fold rate and expected value of a bluff facing n defenders who have not acted",
       "Use d = 1 − α^(1/n) to compute each defender’s minimum defending frequency after diffusion, and explain why \"divide MDF by the number of players\" is wrong",
       "Explain why a larger bet size cannot rescue a bluff into a multiway pot, and adjust the value-to-bluff ratio accordingly"
+    ],
+    "t4-structure-economics": [
+      "Recompute the break-even fold frequency α and the defense obligation MDF for any ante / straddle structure, and state the direction of each change",
+      "Separate dead-money parameters (pot P) from profit parameters (net μ), and explain why only rake rewrites significance and risk of ruin",
+      "Quantify how rake amplifies bankroll requirements and downswings using n ∝ 1/μ² and ROR = exp(−2μB/σ²)",
+      "Distinguish what a straddle shares with an ante and what differs, and adjust opening and defense ranges accordingly"
     ]
   }
 }
