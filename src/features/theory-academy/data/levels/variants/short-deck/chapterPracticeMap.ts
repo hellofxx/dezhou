@@ -58,6 +58,9 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't7sd-adjustment': {
     lessons: [lesson('l8sd-exploit-i', '短牌剥削（一）'), lesson('l8sd-exploit-ii', '短牌剥削（二）')],
   },
+  't7sd-hud': {
+    lessons: [lesson('l8sd-exploit-i', '短牌剥削（一）'), lesson('l8sd-exploit-ii', '短牌剥削（二）')],
+  },
 
   // T8 心理管理
   't8sd-variance': { lessons: [lesson('l5sd-bankroll', '短牌资金管理')] },

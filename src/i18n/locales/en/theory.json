@@ -198,7 +198,8 @@
     "t4-structure-economics": "The Economics of Table Structure: Rake, Antes and Straddles",
     "t9-cash-vs-mtt": "Cash Versus Tournament Structure, Side by Side",
     "t5sd-mixed-strategy": "Short-Deck Mixed Strategies and Indifference",
-    "t6sd-equity-realization": "Short-Deck Equity Realization"
+    "t6sd-equity-realization": "Short-Deck Equity Realization",
+    "t7sd-hud": "Short-Deck HUD Metrics and Sample Size"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -283,7 +284,8 @@
     "t4-structure-economics": "Treat table parameters as independent variables in the equation, not as background noise",
     "t9-cash-vs-mtt": "Two ledgers for the same hand: utility function, depth drift and the form of the take",
     "t5sd-mixed-strategy": "Copy the equations, recompute the equities",
-    "t6sd-equity-realization": "Quoted at 30.1%, collected at 25.6%"
+    "t6sd-equity-realization": "Quoted at 30.1%, collected at 25.6%",
+    "t7sd-hud": "Recalibrate the baseline, back-solve the sample"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1570,6 +1572,23 @@
       "Worked example (reverse the relationship instead of calling): facing a pot-size bet on a short-deck flop, calling pays a 33.3% threshold with a 30.1% quote, before any realization discount — the call is mispriced on its own terms. Only two honest options remain: raise to push the opponent fold rate up (the semi-bluff accounting is in the \"Bluff Frequency\" chapter at this level), or accept that this hand has no call branch at this size. \"Call and see the turn\" is not a compromise, it is paying for the same mistake twice.",
       "One line to keep: short deck pays more per out (3.2% against 2.1%) and gives the flush draw fewer of them (5 against 9); the realization rate turns a 30.1% quote into a 25.6% payout, and the two back-solved lines — 29.4% and 39.2% — are the thresholds that actually decide a call. A stronger made hand is never an excuse for a cheaper draw.",
       "Review checklist for short deck: check only three inputs — did you count outs against nine cards per suit, did you use 31/30 unknown cards rather than 47/46, and did position and later streets eat your realization rate. Get those right before discussing frequency or sizing, because almost every \"something feels wrong in short deck\" traces back to one of these three."
+    ],
+    "t7sd-hud": [
+      "Short-Deck HUD: Same Formulas, Two Things to Reset",
+      "The standard-track chapter \"Statistical Metrics: VPIP / PFR / AF / WTSD\" supplies the definitions and the population bands. Not one word of those definitions changes in short deck. What has to be reset is twofold: where the baseline sits, and how many hands a reading actually needs. Moving the holdem band table over unchanged is the most common way transfer players fool themselves.",
+      "Carry the definitions over verbatim (the computable version):\n\nVPIP = hands voluntarily in the pot / total hands   example: 35 / 150 = 23.3%\nAF = (bets + raises) / calls                        example: (60 + 30) / 30 = 3.0\n\nNeither expression contains a deck parameter such as 47 or 52, so neither belongs to the part short deck rewrites. What changes is the range structure behind the numerator: the same instinct about playable hands maps to a wider range on 36 cards.",
+      "Why the baseline has to be re-stamped for the deck",
+      "Count pairs alone and the short-deck deal frequency is already higher:\n\nShort deck pocket pairs = 9 rank tiers x C(4,2) = 54 combos out of C(36,2) = 630 -> 8.6%\nHoldem pocket pairs = 78 combos out of C(52,2) = 1326 -> 5.9%\n\nGap: 8.6% - 5.9% = 2.7 points.\nA player who changes nothing except always playing pairs has lifted their own VPIP floor by about 2.7 points, so the holdem bands of 22% / 28% / 35% cannot simply be moved over.",
+      "Turn the conclusion into an operating rule: keep HUD files per variant and stamp a separate baseline table for each. Reusing one table across variants reads normal as loose, and you then exploit-adjust against a hand that was perfectly standard for the deck — you think you are harvesting a leak, you are correcting noise.",
+      "Worked example (how much the same reading is worth at different sample sizes): an opponent shows 30% VPIP over 100 hands. The standard error of a frequency reading is SE = sqrt(p(1-p)/n), and the 95% band is ±1.96 x SE with p near 0.30:\n100 hands: SE = 4.58 points, ±9.0 — the true value sits somewhere in 21%-39%\n300 hands: SE = 2.65, ±5.2\n500 hands: SE = 2.05, ±4.0\nAt 100 hands alone a 30% calling station and a 24% regular live inside the same interval; the table cannot separate them, only more hands can.",
+      "Short deck carries an extra handicap on sample size: outcomes cluster more sharply and results per hour are more volatile, so at a given hand count the noise in an observed frequency is no smaller than in a grindy holdem game. Invert the test — to resolve a six-point VPIP gap reliably you need ±1.96 x SE down to three points, which solves to n >= 1.96^2 x 0.3 x 0.7 / 0.03^2 ≈ 896 hands. That figure does not mean enough to look at, it means just enough to tell apart.",
+      "The hands needed to prove a real edge are more extreme still (same source as the variance chapter at this level, n = (z * sigma / mu)^2):\n\nEdge 10bb/100 with volatility sigma = 150bb/100 at 1.96 confidence -> about 86,400 hands\nSame edge at sigma = 220bb/100 -> about 185,900 hands\nHoldem at sigma = 100bb/100 -> 38,416 hands\n\nn grows with sigma squared: push volatility to 1.5 times and you owe 1.5^2 = 2.25 times the sample. That ratio is exactly the price short deck charges for the same confidence.",
+      "Counter-intuitive point: \"I have been winning for weeks\" is not evidence in short deck. A 2.25 times sample requirement means the same confidence costs double the time, and if you keep your holdem review habits you will make your largest strategy changes exactly when the noise is loudest — the most expensive kind of change there is.",
+      "Three disciplines for collecting and de-noising",
+      "First, keep separate HUD files and separate baseline tables per variant, and treat any cross-variant annotation as expired. Second, below 300 hands a frequency stat (VPIP, fold rate, W$SD) is only good for direction, never for banding or for locking a node. Third, log intervals instead of point values for high-noise items such as all-in behaviour and AF, and write the hand count next to the reading.",
+      "Worked example (put the interval in the note): do not write \"his VPIP is 30%\", write \"30% over 100 hands, ±9 points, direction loose\". Every adjustment from it must be rewriteable as a robustness test: even if the true value is at the lower bound of 21%, this adjustment still makes money. If you cannot write that sentence you are deciding against noise — writing it is the step that turns a HUD from superstition into a decision.",
+      "One line to keep: the short-deck HUD needs no new formulas, it needs two resets — re-stamp the baseline for a 36-card deck (pairs alone lift the floor 2.7 points) and back-solve the sample from ±1.96 x SE (about 896 hands to resolve six points, about 86,400 hands to prove a 10bb/100 edge).",
+      "Three executable disciplines: one HUD file per variant; frequency stats under 300 hands count as direction, not band; whenever a reading triggers an adjustment, write down whether it still pays at the lower bound of the interval — if it does not, wait for the hands."
     ]
   },
   "quiz": {
@@ -5637,6 +5656,56 @@
         "Raise to double pot to make up the equity"
       ],
       "explanation": "The pot-size threshold is 8 / 24 = 33.3% while the two-street quote is 30.1%, so the call is mispriced before any discount."
+    },
+    "t7sd-hud-q1": {
+      "question": "Compared with holdem, the formulas for VPIP and AF in short deck are:",
+      "options": [
+        "Completely different and must be redefined",
+        "Unchanged — what changes is the baseline and the sample needed",
+        "VPIP must be renormalised for nine cards per suit",
+        "AF is meaningless in short deck"
+      ],
+      "explanation": "Neither formula contains a deck parameter; short deck resets where the baseline sits and how many hands a reading needs."
+    },
+    "t7sd-hud-q2": {
+      "question": "An opponent shows 30% VPIP over 100 hands. The half-width of the 95% band is about:",
+      "options": [
+        "±3 points",
+        "±5 points",
+        "±9 points",
+        "±13 points"
+      ],
+      "explanation": "SE = sqrt(0.3 x 0.7 / 100) = 4.58 points, so ±1.96 x SE is about ±9.0 points: the true value sits roughly between 21% and 39%."
+    },
+    "t7sd-hud-q3": {
+      "question": "Roughly how many hands reliably resolve a six-point VPIP gap around p = 30%?",
+      "options": [
+        "About 100",
+        "About 300",
+        "About 500",
+        "About 896"
+      ],
+      "explanation": "Requiring 1.96 x SE to fall within three points gives n >= 1.96^2 x 0.3 x 0.7 / 0.03^2 ≈ 896 hands."
+    },
+    "t7sd-hud-q4": {
+      "question": "Which combinatorial fact lifts the short-deck VPIP floor by about 2.7 points?",
+      "options": [
+        "Pocket pairs are dealt 8.6% of the time (54/630) against 5.9% (78/1326) in holdem",
+        "Flush draws have 9 outs",
+        "The pot-size threshold becomes 50%",
+        "MDF is higher in short deck"
+      ],
+      "explanation": "Nine rank tiers x C(4,2) = 54 pair combos out of C(36,2) = 630 is 8.6%, about 2.7 points above holdem 5.9%."
+    },
+    "t7sd-hud-q5": {
+      "question": "Proving a 10bb/100 edge in short deck (sigma about 150bb/100) versus holdem (sigma 100bb/100) takes:",
+      "options": [
+        "The same number of hands, since the edge is equal",
+        "About 1.5 times the hands",
+        "About 2.25 times the hands, since n grows with sigma squared",
+        "No comparable figure"
+      ],
+      "explanation": "n = (z * sigma / mu)^2 grows with the square of volatility: (150/100)^2 = 2.25, matching about 86,400 hands against 38,416."
     }
   },
   "chapterObjectives": {
@@ -6088,6 +6157,12 @@
       "Separate all-in equity from realized equity and back-solve the minimum all-in equity a call needs as threshold / realization rate",
       "Judge a short-deck flush draw against the half-pot and pot-size thresholds (30.1% against 25.0% and 33.3%)",
       "Explain how fewer unknown cards widen a pair lead over a flush draw (83.9% against 80.9%)"
+    ],
+    "t7sd-hud": [
+      "Re-stamp the VPIP/PFR/AF baseline for a 36-card deck, using pocket-pair deal frequency (8.6% against 5.9%) to show why the floor rises",
+      "Use the binomial standard error and the ±1.96 band to decide which conclusion a HUD reading can support",
+      "Back-solve the sample size behind \"resolving a six-point VPIP gap takes about 896 hands\"",
+      "Use n = (z * sigma / mu)^2 to show why proving the same edge in short deck costs about 2.25 times the sample"
     ]
   }
 }

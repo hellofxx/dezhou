@@ -30,6 +30,9 @@ import {
   calculateAlpha,
   calculateMDF,
   requiredEquity,
+  requiredHandsForEdge,
+  vpipPercent,
+  aggressionFactor,
 } from '../../../utils/theoryFormulas';
 import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
 
@@ -101,6 +104,15 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
  *        禁止当精确值引用
  * [定性] t6sd-equity-realization idx7：实现率由位置、主动权与后续街复杂度决定——机制陈述，
  *        不含可复算数值
+ * [正确] t7sd-hud idx2：VPIP 35÷150=23.3%、AF (60+30)÷30=3.0（vpipPercent / aggressionFactor 单源）
+ * [正确] t7sd-hud idx4：口袋对 54÷630=8.6%、78÷1326=5.9%，差 2.7 个百分点
+ *        ——与 t1sd-combinatorics 同一组合口径，VPIP 下限抬高的量级即此差
+ * [正确] t7sd-hud idx6/7：SE=√(p(1−p)÷n)、95% 宽 =1.96SE；p=0.3 时 n=100/300/500
+ *        → ±9.0 / ±5.2 / ±4.0 个点；分辨 6 个点需 n ≥ 1.96²×0.3×0.7÷0.03² ≈ 896 手
+ * [正确] t7sd-hud idx8 的比例侧：n 与 σ² 成正比 ⇒ (150÷100)²=2.25，86,436÷38,416=2.25 精确成立
+ * [示意值] t7sd-hud idx8 的量级侧：σ=150 / 220bb/100 沿用 t1sd-variance 的典型量级
+ *        （该处已登记 [示意值]），故 86,400 / 185,900 手继承该不确定性，只作量级不作承诺；
+ *        对照锚 σ=100 → 38,416 手为精确复算
  * [正确] t6sd-sizing idx2/q5：f=b/(1+2b)：1/3 池 20%、半池 25%、满池 33%、2 倍池 40% ✓
  * [正确] t6sd-barrel idx2（修复后）：P=6 逐街 2/3 池几何 14→32.67→76.22（32.7/21.8/76.2），
  *        原 32.6/21.7/75.9 累计截断误差
@@ -332,6 +344,35 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
     expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q3', '33.3%');
     expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q4', '25.6%');
     expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q5', '标价就不够：30.1% 低于 33.3% 的门槛');
+  });
+
+  it('t7sd-hud：VPIP/AF 定义、基线抬高量级与样本量反解逐项复算', () => {
+    // 定义侧（与牌堆无关，函数单源）
+    expect(Math.round(vpipPercent(35, 150) * 10) / 10).toBe(23.3);
+    expect(aggressionFactor(60, 30, 30)).toBe(3);
+    // 基线侧：只对子一项就把 VPIP 下限抬高 2.7 个点（组合口径与 t1sd-combinatorics 同源）
+    expect(pct(54 / 630)).toBe(8.6);
+    expect(pct(78 / 1326)).toBe(5.9);
+    expect(pct(54 / 630 - 78 / 1326)).toBe(2.7);
+    // 样本侧：二项标准误与 95% 区间半宽
+    const se = (p: number, n: number) => Math.sqrt((p * (1 - p)) / n);
+    expect(pct(se(0.3, 100))).toBe(4.6);
+    expect(pct(1.96 * se(0.3, 100))).toBe(9.0);
+    expect(pct(1.96 * se(0.3, 300))).toBe(5.2);
+    expect(pct(1.96 * se(0.3, 500))).toBe(4.0);
+    // 反解：要分辨 6 个百分点（半宽收到 3 个点以内）所需手数
+    expect(Math.round((1.96 ** 2 * 0.3 * 0.7) / 0.03 ** 2)).toBe(896);
+    // 优势验证侧：n ∝ σ²
+    expect(Math.round(requiredHandsForEdge(10, 150, 1.96))).toBe(86436);
+    expect(Math.round(requiredHandsForEdge(10, 220, 1.96))).toBe(185933);
+    expect(requiredHandsForEdge(10, 100, 1.96)).toBe(38416);
+    expect(Math.round((86436 / 38416) * 100) / 100).toBe(2.25);
+    // 判分题锁定
+    expectAnswerIs('t7sd-hud', 't7sd-hud-q1', '定义不变，变的是基线位置与所需样本');
+    expectAnswerIs('t7sd-hud', 't7sd-hud-q2', '±9 个点');
+    expectAnswerIs('t7sd-hud', 't7sd-hud-q3', '约 896 手');
+    expectAnswerIs('t7sd-hud', 't7sd-hud-q4', '口袋对发牌概率 8.6%（54÷630）对标准局 5.9%（78÷1326）');
+    expectAnswerIs('t7sd-hud', 't7sd-hud-q5', '约 2.25 倍手数，因为 n 与 σ² 成正比');
   });
 
   it('t6sd-sizing：诈唬占比 f=b/(1+2b) 表 20/25/33/40%', () => {
