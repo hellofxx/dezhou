@@ -7,6 +7,9 @@ import {
   halfKellyFraction,
   requiredHandsForEdge,
   riskOfRuin,
+  multiwayAllFold,
+  perDefenderRequiredDefense,
+  multiwayBluffEv,
 } from './theoryFormulas';
 
 /**
@@ -66,5 +69,35 @@ describe('theoryFormulas 口径锚点', () => {
     expect(riskOfRuin({ winrateBB100: 0, sdBB100: 80, bankrollBB: 1000 })).toBe(1);
     expect(riskOfRuin({ winrateBB100: 5, sdBB100: 80, bankrollBB: 0 })).toBe(1);
     expect(riskOfRuin({ winrateBB100: 5, sdBB100: 0, bankrollBB: 1000 })).toBe(0);
+  });
+
+  it('多人防守：乘积律、责任分摊与尺度上调的反效果', () => {
+    // 半池下注进单挑：α=1/3 恰为保本弃牌率 → EV=0
+    expect(calculateAlpha(100, 50)).toBeCloseTo(1 / 3, 6);
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 50, foldRate: 1 / 3, defenders: 1 })).toBeCloseTo(0, 10);
+    // 两名各按 MDF(66.7%) 防守的对手：全弃率 (1/3)² = 11.1%
+    expect(multiwayAllFold(1 / 3, 2)).toBeCloseTo(0.1111, 4);
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 50, foldRate: 1 / 3, defenders: 2 })).toBeCloseTo(-33.33, 2);
+    // 三名：(1/3)³ = 3.7%
+    expect(multiwayAllFold(1 / 3, 3)).toBeCloseTo(0.037, 3);
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 50, foldRate: 1 / 3, defenders: 3 })).toBeCloseTo(-44.44, 2);
+    // 责任分摊：每人只需防守 1−α^(1/n)，两人 42.3%、三人 30.7%
+    expect(perDefenderRequiredDefense(1 / 3, 2)).toBeCloseTo(0.4226, 4);
+    expect(perDefenderRequiredDefense(1 / 3, 3)).toBeCloseTo(0.3066, 4);
+    // 常见错算：把单挑 MDF 66.7% 除以人数得 33.4% —— 低于真实义务
+    expect(0.6667 / 2).toBeLessThan(perDefenderRequiredDefense(1 / 3, 2));
+    // 恒等式：分摊后"至少一人拦住"的概率仍等于单挑 MDF
+    const d2 = perDefenderRequiredDefense(1 / 3, 2);
+    expect(1 - (1 - d2) ** 2).toBeCloseTo(calculateMDF(100, 50), 10);
+    // 放大尺度不救诈唬：满池进两人（各弃 50%）EV 更差
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 100, foldRate: 0.5, defenders: 2 })).toBeCloseTo(-50, 10);
+  });
+
+  it('多人函数边界不静默产出 NaN/Infinity', () => {
+    expect(Number.isNaN(multiwayAllFold(1.2, 2))).toBe(true);
+    expect(multiwayAllFold(0.5, 0)).toBe(1);
+    expect(Number.isNaN(perDefenderRequiredDefense(0, 2))).toBe(true);
+    expect(Number.isNaN(perDefenderRequiredDefense(1, 2))).toBe(true);
+    expect(Number.isNaN(perDefenderRequiredDefense(0.5, 0))).toBe(true);
   });
 });

@@ -75,3 +75,31 @@ export function riskOfRuin(params: {
   const variancePerHand = perHandStdDev(sdBB100) ** 2;
   return Math.exp((-2 * muPerHand * bankrollBB) / variancePerHand);
 }
+
+/** 诈唬面对多名未行动者时全部弃牌的概率：∏ f_i（各人弃牌率相同则 f^n） */
+export function multiwayAllFold(foldRate: number, defenders: number): number {
+  if (foldRate < 0 || foldRate > 1) return Number.NaN;
+  if (defenders <= 0) return 1;
+  return foldRate ** defenders;
+}
+
+/**
+ * 多人防守的责任分摊：n 名防守者共同使诈唬无利可图时，每人所需的最低防守频率 d = 1 − α^(1/n)。
+ * 不是把单挑 MDF 除以人数——防守要求是乘积结构，除半会系统性少防守。
+ */
+export function perDefenderRequiredDefense(alpha: number, defenders: number): number {
+  if (alpha <= 0 || alpha >= 1 || defenders <= 0) return Number.NaN;
+  return 1 - alpha ** (1 / defenders);
+}
+
+/** 诈唬进多人池的期望值：全弃概率 × 现有底池 − 被拦概率 × 下注额 */
+export function multiwayBluffEv(params: {
+  potBeforeBet: number;
+  betSize: number;
+  foldRate: number;
+  defenders: number;
+}): number {
+  const { potBeforeBet, betSize, foldRate, defenders } = params;
+  const allFold = multiwayAllFold(foldRate, defenders);
+  return allFold * potBeforeBet - (1 - allFold) * betSize;
+}

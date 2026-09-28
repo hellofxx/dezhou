@@ -87,7 +87,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     level: 5,
     tier: 'intermediate',
     title: '博弈论基础',
-    description: '纳什均衡、GTO 概念、MDF 与 Alpha、混合策略与节点锁定',
+    description: '纳什均衡、GTO 概念、MDF 与 Alpha、混合策略与节点锁定、多人底池的频率与尺度',
     icon: '♟️',
     variant: 'standard',
     unlockRequirement: '完成 T4 所有章节',

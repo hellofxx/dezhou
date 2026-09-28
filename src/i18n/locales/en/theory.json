@@ -62,7 +62,7 @@
     "t2": "EV math, pot odds, implied odds and reverse implied odds",
     "t3": "Position value, the Gap Concept, Sklansky's theorem and initiative",
     "t4": "Range thinking, combinatorics, blockers, range and nut advantage",
-    "t5": "Nash equilibrium, GTO concepts, MDF & Alpha, mixed strategies and node locking",
+    "t5": "Nash equilibrium, GTO concepts, MDF and Alpha, mixed strategies and node locking, multiway pot frequencies and sizings",
     "t6": "Betting purposes, polarized vs linear sizing, SPR and geometric sizing",
     "t7": "VPIP/PFR/AF/WTSD stats, player typology, hand reading and exploitation",
     "t8": "Tilt recognition, session management, bankroll psychology and long-term mindset",
@@ -193,7 +193,8 @@
     "t9hu-mastery": "Full Integration",
     "t9hu-pro-study": "Pro Player Study",
     "t4-preflop-structure": "Preflop Structural Theory: 3-bet / 4-bet and Building a Defending Range",
-    "t6-equity-realization": "Board Texture and Equity Realization: How Much of Your Equity Actually Lands"
+    "t6-equity-realization": "Board Texture and Equity Realization: How Much of Your Equity Actually Lands",
+    "t5-multiway-frequency": "Multiway Pot Frequencies and Sizings"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -273,7 +274,8 @@
     "t9hu-mastery": "Building a personal heads-up theory system",
     "t9hu-pro-study": "Decision logic of top HU players",
     "t4-preflop-structure": "Upgrading preflop from “is my hand good enough” to “what does my range look like”",
-    "t6-equity-realization": "All-in equity is the sticker price; realized equity is what you take home"
+    "t6-equity-realization": "All-in equity is the sticker price; realized equity is what you take home",
+    "t5-multiway-frequency": "When the opposition goes from one to two, MDF and bluff frequencies must be recomputed from scratch"
   },
   "ladder": {
     "title": "Theory Path",
@@ -564,7 +566,7 @@
       "Example 2 (minimax in a toy game): You write 1 or 2, the opponent guesses; if he guesses right you lose 1, if wrong you win 2. When you mix 50/50, his expectation guessing 1 = 0.5×1 + 0.5×(−2) = −0.5, and guessing 2 = 0.5×(−2) + 0.5×1 = −0.5 — both sides equal, so you lock in +0.5. Any deviation lets him pick the favorable side and push your expectation down. Poker solvers do exactly the same thing: at each node find the mixing ratio that makes all opponent responses indifferent.",
       "Why Poker Needs \"Randomness\"",
       "If your strategy is deterministic (same spot, same action forever), observant opponents will eventually decipher and counter it. An equilibrium strategy therefore must include mixed components: the same hand at the same node splits across actions by certain probabilities (detailed in this level's chapter 4). Randomizing isn't indecisiveness — it's a mathematical weapon that makes any opponent guess unprofitable.",
-      "Important multiway warning: the Nash \"unexploitable\" guarantee strictly holds only for two-player zero-sum games. In pots with three or more, even if everyone plays \"equilibrium\", coalition effects can damage one side. Theoretical tools all have applicability boundaries.",
+      "Important multiway warning: the Nash \"unexploitable\" guarantee strictly holds only for two-player zero-sum games. In pots with three or more, even if everyone plays \"equilibrium\", coalition effects can damage one side. Theoretical tools all have applicability boundaries. How multiway frequencies and sizings are recomputed appears in chapter 5 of this level, “Multiway Pot Frequencies and Sizings”; the full discussion of why the equilibrium guarantee fails is in T9 “Multiway Pot Theory”.",
       "Think of equilibrium as a \"bulletproof vest\", not a \"weapon\": wear it against strong and unknown opponents for safety, take it off and switch to a knife (exploitation) once you identify weaknesses — knowing when to wear it and when to take it off is the real skill."
     ],
     "t5-gto-concept": [
@@ -592,7 +594,7 @@
       "Example 2 (overbets and MDF): Pot 100, opponent shoves 200 (b=2). MDF = 100/300 ≈ 33%, greatly reducing your defense burden; meanwhile the overbet's equilibrium bluff share b/(1+2b) = 2/5 = 40%, i.e. his range should be 60% value + 40% bluffs. Judging whether his \"value:bluff\" matches 3:2 matters more than mechanically memorizing MDF: if he's actually 90% value, your defense should drop below 33% — this is the correct combination of MDF and exploitation.",
       "Defense isn't only calling: raises also count toward defense frequency. Against high-frequency bluffers, substitute some calls with raises to both defend and collect value; against tight-passive value bettors, over-folding (below MDF) is the exploitation. First compute the total, then allocate.",
       "MDF's Applicability Boundaries",
-      "MDF is the floor against \"balanced bluffing opponents\", not a universal prescription: (1) against opponents who almost never bluff (many low-stakes players' big river bets), folding well below MDF is actually optimal exploitation; (2) in multiway pots the defense burden is shared — not everyone needs to hit MDF; (3) with a raise option, defense can be built from calls plus raises. Remember: equilibrium frequencies are the bulletproof vest when you lack opponent information; exploit first when you have information.",
+      "MDF is the floor against \"balanced bluffing opponents\", not a universal prescription: (1) against opponents who almost never bluff (many low-stakes players' big river bets), folding well below MDF is actually optimal exploitation; (2) in multiway pots the defense burden is shared (each player’s obligation = 1 − α^(1/n); see chapter 5 of this level, “Multiway Pot Frequencies and Sizings”) — not everyone needs to hit MDF; (3) with a raise option, defense can be built from calls plus raises. Remember: equilibrium frequencies are the bulletproof vest when you lack opponent information; exploit first when you have information.",
       "Memorize three practical anchors: defend 75% vs 1/3-pot bets, 67% vs half-pot, 50% vs full-pot. Whatever sits below the anchor is automatic profit you're handing the opponent.",
       "The easiest leak to self-audit in review: track your actual fold rate against big turn/river bets. The vast majority of players fold far above equilibrium — which is why the opponent's big bets always seem to \"just happen\" to make you fold."
     ],
@@ -1418,6 +1420,25 @@
       "The most common way to think wrong: treat all-in equity as realizable equity, then call down on it. Why does this happen? Because an enumerator’s percentage is precise, immediate and pretty, while “will this reach showdown” is a fuzzy structural judgement — and the brain defaults to deciding with the precise number. The cost is systematic: in pots where you are out of position, deep-stacked, and the opponent’s range owns the nuts, you keep paying for equity you will never collect.",
       "Three on-the-spot checks: ① How many streets of cooperation does this hand need to reach showdown? The more, the larger the realization discount. ② If we were all-in right now, what is my equity — and is that the ceiling of what I can collect (almost always yes, unless the hand really does go all-in now). ③ When the next scary card lands, am I the raiser or the one being squeezed? Hands with “being squeezed” identity get a full tier off their R.",
       "Realized equity = all-in equity × realization rate; R = 1 only when the hand goes all-in immediately\nPot odds state the threshold for realizable equity, so scale the all-in equity threshold by 1/R before comparing\nFour variables set R: out of position is lower, deep stacks are lower, wet connected boards favour draws and punish weak pairs, and the range-advantaged side’s marginal hands have the lowest R\n“My hand has 52% equity” is not a decision input; “how much of it can I collect” is"
+    ],
+    "t5-multiway-frequency": [
+      "More Defenders Means More Independent Checkpoints",
+      "The α and MDF in chapter 3 of this level rest on an implicit premise: exactly one opponent has not decided yet. As soon as two players are still to act after the flop, your bluff faces two separate \"should I stop this\" judgements. The defenders need no coordination — if either one is willing to call, your bluff fails. That turns the clean break-even line from heads-up play into a product problem.",
+      "All-fold probability is the product of the defenders’ fold rates, not their average: with n players still to act each folding at rate f, all-fold = fⁿ. Every extra defender raises f to one more power.",
+      "Conventions identical to chapter 3: P = pot before the bet, b = bet size, α = b ÷ (P + b), MDF = P ÷ (P + b).\n\nBaseline (heads-up): pot 100, bet 50 (half pot) → α = 50 ÷ 150 = 33.3%, MDF = 100 ÷ 150 = 66.7%.\nMeaning: the opponent folding 33.3% of the time already makes any two cards break even for you; defending 66.7% makes bluffing worthless.\n\nWith n players still to act, each defending at the heads-up MDF (fold rate 33.3%):\nall-fold = 0.333² = 11.1% (two defenders)\nall-fold = 0.333³ = 3.7% (three defenders)\n(Concepts from: The Mathematics of Poker Ch.5 the bet-fold subgame; Multiway Theory equity distribution in multiway pots)",
+      "EV Collapse: What a Half-Pot Bluff Into Two Players Is Actually Worth",
+      "Bluff EV = all-fold rate × current pot − (1 − all-fold rate) × bet size. With P=100, b=50 and each defender folding 1/3:\n\n1 defender: 0.333 × 100 − 0.667 × 50 = 33.3 − 33.3 = 0 (break-even, exactly the definition of α)\n2 defenders: 0.111 × 100 − 0.889 × 50 = 11.1 − 44.4 = −33.3\n3 defenders: 0.037 × 100 − 0.963 × 50 = 3.7 − 48.1 = −44.4\n\nNow test \"does a bigger sizing rescue it\": switch to a pot-sized bet b=100, so α = 100 ÷ 200 = 50%, and two defenders each fold 50%:\nall-fold = 0.5² = 25%, EV = 0.25 × 100 − 0.75 × 100 = −50\nConclusion: raising the sizing does not rescue the bluff — it scales the loss when called at the same time. Bluffs into multiway pots are not fixed by playing more aggressively.",
+      "Example 1 (a turn bluff with no showdown value): flop Q♥7♦2♠, turn 4♥, pot 100, you are on the BTN with A♣5♣ (no pair, no draw, only overcards). CO and BB are both still to act. The heads-up instinct \"bet 50 and I need him to fold a third of the time\" fails completely here: if both defend at chapter 3’s MDF, your all-fold rate is only 11.1% and each attempt is −33.3bb. The correct action is not to bet bigger but to admit this hand has no bluffing licence in a multiway pot — check or fold, and keep the bluff budget for single-opponent spots.",
+      "Diffusion of Responsibility: How Each Defender’s Obligation Is Recomputed",
+      "Look at it from the other side: the bluffing player must clear two checkpoints, which is good news for the defenders — the two can free-ride on each other. If the other player is willing to stop the bluff, you do not have to. So each individual’s minimum defending frequency drops well below the heads-up MDF. But the drop is not \"divide by the number of players\", because the condition is not an allocation of quotas — it is the multiplicative requirement that at least one defender stops it often enough.",
+      "Let each defender call/defend with frequency d; then all-fold = (1 − d)ⁿ. Set it equal to the heads-up break-even fold rate α:\n(1 − d)ⁿ = α → d = 1 − α^(1/n)\n\nHalf pot into a pot of 100: α = 1/3\nTwo defenders: d = 1 − (1/3)^(1/2) = 1 − 0.577 = 42.3% (heads-up was 66.7%)\nThree defenders: d = 1 − (1/3)^(1/3) = 1 − 0.693 = 30.7%\n\nIdentity check: 1 − (1 − 0.423)² = 1 − 0.333 = 66.7% = the heads-up MDF.\nThat is the whole mechanism: each person defends less, yet the probability that at least one of them stops you is unchanged.\nThe common miscount: 66.7% ÷ 2 = 33.4%, nine points below the true obligation — a gap opponents collect directly by bluffing into you multiply.\n(Concepts from: Multiway Theory diffusion of responsibility in multiway pots; Applications of No-Limit Hold’em multiway defending frequencies)",
+      "Example 2 (BB’s defending arithmetic facing a half-pot bet): BTN opens, CO calls, the flop is 9♠7♠2♥ and BTN bets 50 into 100. You are BB with A♦6♦ — a gutshot-plus-overcards hand with one diamond, mediocre equity. Heads-up you would need roughly 66.7% defending to stop BTN bluffing any two cards; but CO has not acted, so your obligation falls to 42.3%. Reasonable inference: CO’s range contains plenty of flushes and 9/7 type hands, so the \"stopping\" job is likely done by him, and you can fold this hand — that is not timidity but the optimal division of labour under a product structure. What is wrong is halving the obligation again to 33.4%: then you and CO both under-defend and BTN’s any two cards print.",
+      "Example 3 (the opposite conclusion for the value bettor): on the same board you hold Q♦Q♣, top pair top kicker, and BTN bets 50 into 100 with CO and BB still to act. The bluffer’s all-fold rate is crushed to 11.1% by the exponent, but a value bet wants the opposite event: at least one caller, which happens 66.7% of the time — far above the roughly one-third call rate heads-up. So the same product law yields two disciplines: in multiway pots value bets are worth making and worth making thick, while pure bluffs fall out. Add the protection dimension: with three opponents holding six cards between them, approximating nine flush outs, the chance that at least one of them improves on the next card is roughly 1 − (1 − 9/47)³ ≈ 47% (an illustrative estimate that treats opponent hands as random; the real number shifts with range), so the cost of slow-playing a free card rises with the number of live hands.",
+      "Two common ways to think wrong. First: \"in multiway pots the opponents eliminate each other, so I can bluff more often\" — that treats \"the defenders may stop each other\" as \"the number of defenders is unchanged\", while in reality your bluff must pass n checkpoints and the all-fold rate is squeezed by the exponent; and the callers in multiway pots have stronger continuing ranges, so the effective α is harder than the 1/n power already suggests. Second: \"with more defenders my own obligation divides by the number of players\" — the requirement is the product condition \"at least one of us stops it\", and dividing under-defends systematically (66.7% ÷ 2 = 33.4% versus the correct 42.3%). Both errors come from the same source: reading a multiplicative relation as a linear one.",
+      "Three questions before and after you enter the pot: ① How many players still have not decided on this street? Write down n and estimate all-fold as fⁿ. ② Is my range section bluffing or collecting value? The first loses value fast with n, the second gains. ③ If I am the defender, my obligation is 1 − α^(1/n), not MDF ÷ n. All three are mental arithmetic — the table does not need a solver.",
+      "Division of labour with T9: frequencies are computed here, discipline is set there",
+      "This chapter covers only the recomputation of frequencies and sizings: the product law for all-fold rates, the diffusion of defending responsibility, and the value/bluff asymmetry. The dilution of equity itself (AA falling from about 85% heads-up to about 64% four-way), the first law (\"hands that can make the nuts gain value, easily dominated hands lose it\"), and the full multiway discipline list are developed in T9 “Multiway Pot Theory”; the equity-realization layer is in T6 “Board Texture and Equity Realization”. All three use the same product structure, on different objects.",
+      "All-fold rate is the product of the defenders’ fold rates: a half pot into two players leaves 11.1%, into three leaves 3.7%\nBluff EV collapses with headcount (0 → −33.3 → −44.4), and bigger sizings make it worse (pot-sized into two: −50)\nDefending obligations diffuse as d = 1 − α^(1/n): 42.3% each with two defenders, 30.7% with three; dividing MDF by headcount (33.4%) is systematic under-defence\nValue and bluffs are asymmetric: with more players the chance that at least one calls goes up, so value gets thicker while pure bluffs leave the pot"
     ]
   },
   "quiz": {
@@ -5235,6 +5256,56 @@
         "Because opponents in multiway pots steal the blinds collectively"
       ],
       "explanation": "The damage is two-layered: sticker price and discount rate worsen together, and hand types that need showdown to cash in suffer most from the second layer. Option one inflates “discount” into “unplayable”; option three swaps a structural factor for a cost factor unrelated to this chapter; option four is a tactical assumption irrelevant to the question."
+    },
+    "t5-multiway-frequency-q1": {
+      "question": "Pot 100, you bet 50 (half pot) and two players still to act each defend at the heads-up MDF. Your all-fold rate is about:",
+      "options": [
+        "about 3.7%",
+        "about 11%",
+        "about 25%",
+        "about 33%"
+      ],
+      "explanation": "Each defender’s fold rate is α = 1/3, so two of them give (1/3)² = 11.1%. 33% is the heads-up case; 25% is the pot-sized bet into two defenders folding 50% each; 3.7% is three defenders. All four figures appear in the text — the confusion comes from treating headcount as an additive condition."
+    },
+    "t5-multiway-frequency-q2": {
+      "question": "Does increasing the sizing from half pot to pot size make bluffing into a multiway pot profitable again?",
+      "options": [
+        "Yes — the bigger the bet, the higher the fold rate",
+        "No: pot-sized into two defenders folding 50% each gives 25% all-fold while doubling the loss when called, so EV gets worse",
+        "No, because pot odds dilute as players are added",
+        "Yes, provided one of the opponents is tight"
+      ],
+      "explanation": "EV = 0.25×100 − 0.75×100 = −50, worse than the −33.3 of a half pot into two: a larger sizing raises both the loss when called and the defenders’ fold rate, while all-fold stays under multiplicative pressure. Option one ignores that defending frequency rises with size; option three makes the odds offered to callers the deciding factor, but profit depends on the ratio of all-fold rate to risk; option four turns \"one opponent happens to be tight\" into something sizing can fix."
+    },
+    "t5-multiway-frequency-q3": {
+      "question": "Facing a half-pot bet with two defenders, roughly what is each one’s minimum defending frequency?",
+      "options": [
+        "about 33.4%",
+        "about 37.5%",
+        "about 42.3%",
+        "about 66.7%"
+      ],
+      "explanation": "d = 1 − α^(1/2) = 1 − (1/3)^(1/2) = 42.3%. 33.4% is precisely the common \"66.7% ÷ 2\" miscount; 66.7% is the heads-up obligation (everyone defending that much would leave the bluffer no hope); 37.5% is an unsourced intermediate value."
+    },
+    "t5-multiway-frequency-q4": {
+      "question": "Why does \"each person defends less, yet at least one of them stops the bluff just as often\" hold?",
+      "options": [
+        "Because defenders can agree out loud to take turns",
+        "Because 1 − (1 − d)ⁿ returns exactly to the heads-up MDF — the requirement itself is multiplicative",
+        "Because the pot grows with headcount, so each player can invest less",
+        "Because bluffs are simply rare in multiway pots"
+      ],
+      "explanation": "The identity 1 − (1 − 0.423)² = 66.7% is the entire mechanism. Option one mistook a structural diffusion for collusion; option three conflates pot size with a frequency obligation; option four states a consequence as if it were the cause — it is precisely because bluffing becomes unprofitable that the defending obligation falls."
+    },
+    "t5-multiway-frequency-q5": {
+      "question": "For a value bet, the same product law means:",
+      "options": [
+        "Value bets should also decrease with headcount, since the pot is harder to win",
+        "Value bets are worth making more often: the chance at least one player calls (66.7% with two defenders facing a half pot) exceeds the heads-up call rate",
+        "Value bets should be converted into checks so opponents act first",
+        "Exactly as with bluffs: value decays exponentially with headcount"
+      ],
+      "explanation": "A bluff needs \"everyone folds\" (squeezed by the exponent) while a value bet needs \"at least one calls\" (pushed up by it) — two sides of the same expression. Options one and four confuse the two sides, ignoring that being called is a gain for a value bet; option three voluntarily gives up the higher call probability a multiway pot offers, i.e. it plays a value hand like a bluff."
     }
   },
   "chapterObjectives": {
@@ -5483,6 +5554,11 @@
       "Distinguish all-in equity from realized equity and state the only condition under which the realization rate equals 100%",
       "Given a realization rate, work backwards to the all-in equity threshold a hand needs",
       "Judge whether a hand’s realization rate is high or low from position, SPR and board texture"
+    ],
+    "t5-multiway-frequency": [
+      "Use the product law to compute the all-fold rate and expected value of a bluff facing n defenders who have not acted",
+      "Use d = 1 − α^(1/n) to compute each defender’s minimum defending frequency after diffusion, and explain why \"divide MDF by the number of players\" is wrong",
+      "Explain why a larger bet size cannot rescue a bluff into a multiway pot, and adjust the value-to-bluff ratio accordingly"
     ]
   }
 }

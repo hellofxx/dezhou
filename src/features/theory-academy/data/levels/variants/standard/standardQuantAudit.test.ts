@@ -26,6 +26,9 @@ import {
   requiredEquity,
   requiredHandsForEdge,
   riskOfRuin,
+  multiwayAllFold,
+  perDefenderRequiredDefense,
+  multiwayBluffEv,
 } from '../../../../utils/theoryFormulas';
 
 /*
@@ -89,6 +92,13 @@ import {
  *        idx1：Alpha=b/(1+b)、半池 33.3%/满池 50%；idx4：0.60×100−0.40×50=40；idx5：b/(1+2b)=2/5=40%、3:2；
  *        idx6：1/3 池防 75%、半池 67%、满池 50%
  * [示意值] t5-mixed-strategy idx3：跟注站「跟 50%/弃 50%」混合示意；idx6：弃牌 55% vs 均衡约 45%
+ * [正确] t5-multiway-frequency idx3/idx5/idx8/idx9（多人频率与尺度，本次新增）：
+ *        α(100,50)=1/3、MDF=2/3；全弃率 (1/3)²=11.11%→约 11%、(1/3)³=3.70%→约 3.7%；
+ *        诈唬 EV = fⁿ·P −(1−fⁿ)·b：1 人 0、2 人 −33.33、3 人 −44.44；
+ *        满池对照 α(100,100)=1/2 → 全弃 25%、EV=−50（尺度上调无救，正文以此立论）；
+ *        责任分摊 d=1−α^(1/n)：2 人 42.26%→约 42.3%、3 人 30.66%→约 30.7%；
+ *        恒等式 1−(1−0.4226)²=66.67%=MDF；常见错算 66.7%÷2=33.35% < 42.26%（正文点名）
+ * [示意值] t5-multiway-frequency idx10：1−(1−9/47)³≈47.15%（把对手手牌视作随机的保护近似，正文已标注假设与「示意」）
  *
  * —— standardLevel6.ts ——
  * [正确] t6-bet-purpose idx1：w>B/(P+2B)、半池 25%/满池 33%；t6-sizing-theory idx3：f=b/(1+2b) 与 w=b/(1+2b) 对偶；
@@ -412,5 +422,35 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     expect(riskOfRuin({ winrateBB100: 5, sdBB100: 80, bankrollBB: 1000 })).toBeCloseTo(0.21, 2);
     expect(riskOfRuin({ winrateBB100: 5, sdBB100: 80, bankrollBB: 2000 })).toBeCloseTo(0.044, 3);
     expect(riskOfRuin({ winrateBB100: 5, sdBB100: 80, bankrollBB: 3000 })).toBeCloseTo(0.009, 3);
+  });
+
+  it('t5-multiway-frequency：乘积律、EV 塌方与责任分摊互验', () => {
+    // 半池基线
+    expect(calculateAlpha(100, 50)).toBeCloseTo(1 / 3, 6);
+    expect(calculateMDF(100, 50)).toBeCloseTo(2 / 3, 6);
+    // 全弃率与判分题
+    expect(multiwayAllFold(1 / 3, 2)).toBeCloseTo(0.1111, 4);
+    expectAnswerIs('t5-multiway-frequency', 't5-multiway-frequency-q1', '约 11%');
+    expect(multiwayAllFold(1 / 3, 3)).toBeCloseTo(0.037, 3);
+    // EV：1 人保本、2 人 −33.3、3 人 −44.4；满池进两人 −50（尺度上调更差）
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 50, foldRate: 1 / 3, defenders: 1 })).toBeCloseTo(0, 10);
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 50, foldRate: 1 / 3, defenders: 2 })).toBeCloseTo(-33.33, 2);
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 50, foldRate: 1 / 3, defenders: 3 })).toBeCloseTo(-44.44, 2);
+    expect(multiwayBluffEv({ potBeforeBet: 100, betSize: 100, foldRate: 0.5, defenders: 2 })).toBeCloseTo(-50, 10);
+    // 责任分摊 d = 1 − α^(1/n) 与"除以人数"错算的方向关系
+    const d2 = perDefenderRequiredDefense(1 / 3, 2);
+    expect(d2).toBeCloseTo(0.4226, 4);
+    expectAnswerIs('t5-multiway-frequency', 't5-multiway-frequency-q3', '约 42.3%');
+    expect(perDefenderRequiredDefense(1 / 3, 3)).toBeCloseTo(0.3066, 4);
+    expect(0.6667 / 2).toBeLessThan(d2);
+    // 恒等式：分摊后至少一人拦住的概率 = 单挑 MDF
+    expect(1 - (1 - d2) ** 2).toBeCloseTo(calculateMDF(100, 50), 10);
+    // 正文口径守卫：必须同时给出正确值与错算值，且不得把错算当结论
+    const chapter = chapters.find((x) => x.id === 't5-multiway-frequency') as TheoryChapter;
+    const diffusion = chapter.content[9]?.content ?? '';
+    expect(diffusion).toContain('42.3%');
+    expect(diffusion).toContain('66.7% ÷ 2 = 33.4%');
+    const protection = chapter.content[11]?.content ?? '';
+    expect(protection).toContain('示意');
   });
 });
