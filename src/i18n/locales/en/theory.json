@@ -197,7 +197,8 @@
     "t5-multiway-frequency": "Multiway Pot Frequencies and Sizings",
     "t4-structure-economics": "The Economics of Table Structure: Rake, Antes and Straddles",
     "t9-cash-vs-mtt": "Cash Versus Tournament Structure, Side by Side",
-    "t5sd-mixed-strategy": "Short-Deck Mixed Strategies and Indifference"
+    "t5sd-mixed-strategy": "Short-Deck Mixed Strategies and Indifference",
+    "t6sd-equity-realization": "Short-Deck Equity Realization"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -281,7 +282,8 @@
     "t5-multiway-frequency": "When the opposition goes from one to two, MDF and bluff frequencies must be recomputed from scratch",
     "t4-structure-economics": "Treat table parameters as independent variables in the equation, not as background noise",
     "t9-cash-vs-mtt": "Two ledgers for the same hand: utility function, depth drift and the form of the take",
-    "t5sd-mixed-strategy": "Copy the equations, recompute the equities"
+    "t5sd-mixed-strategy": "Copy the equations, recompute the equities",
+    "t6sd-equity-realization": "Quoted at 30.1%, collected at 25.6%"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1551,6 +1553,23 @@
       "The computable part of the review routine (pot 8, bet 4):\n\nDefence obligation MDF = 8 / (8+4) = 66.7%  ->  opponent measured at 60%, under-defending by 6.7 points\nBreak-even fold rate of a bluff = 4 / (8+4) = 33.3%  ->  at 60% folds you sit far above the profit line\nSo whether to bluff at all is never the question here; which hands to bluff with, and how wide to lock the range, is.\n\nRun these two before you lock anything and you avoid the classic mistake — spending an already-profitable action to \"exploit\" an opponent who barely deviates.",
       "One line to keep: size gives the frequency (MDF, Alpha and the break-even fold rate are identical in both games), the deck gives the equity (31/30 unknown cards, flush draws always 5 outs, made-hand combos collapse), and sample size gives the discipline (confirm you have enough hands before locking a tendency). Blur the three and you will file an input difference under \"short deck has its own theory\".",
       "How to spend practice time: on a mixed node a single wrong pick costs almost zero expected value, so do not agonise over it. What is genuinely expensive is a wrong input — treating 5 outs as 9, reading the turn as if it were the flop, estimating short-deck combo counts with a 52-card deck. After each session review only the inputs you miscounted, not the frequencies you never had to decide."
+    ],
+    "t6sd-equity-realization": [
+      "Short-Deck Equity Realization: the Gap Between the Quote and the Payout",
+      "The standard-track chapter \"Board Structure and Equity Realization\" already fixes the terms: realized equity = all-in equity x realization rate, and the rate equals 1 if and only if the hand goes all-in immediately — after which nothing can force you to abandon it. This chapter does not re-derive that. It swaps the input to a 36-card deck and follows where the same back-solve lands.",
+      "Each out is worth more in short deck, yet there are fewer of them to count:\n\nMarginal equity of one out: after the flop 1 / 31 = 3.2%, after the turn 1 / 30 = 3.3%\nHoldem for comparison: 1 / 47 = 2.1%, 1 / 46 = 2.2%\n\nOuts on a flush draw: short deck 5 (9 cards per suit minus 4 already visible) = 30.1% over two streets; holdem 9 = 35.0% over two streets\n\nA single short-deck out is worth roughly 1.5 holdem outs — but the flush draw only has five of them.",
+      "So short deck does not mean \"draws are worth more\". The real relationship is: every card that helps you is more valuable, there are fewer of them to count, and the net effect is that a draw sits about five points lower in all-in equity. Importing the holdem 9-out instinct records 30.1% as 35.0%, and that single error straddles the half-pot threshold — so it costs real money.",
+      "What the realization rate turns 30.1% into",
+      "Worked example (the half-pot line): pot 8, opponent bets 4, threshold = 4 / 16 = 25.0%. On the flop your flush draw quotes 30.1% all-in, a margin of 5.1 points. If the hand has to survive three streets and you are forced off it on the turn, take a realization rate of 0.85: 30.1% x 0.85 = 25.6%, leaving six tenths of a point. At the same price with the same hand, the decision no longer lives in the draw — it lives in whether you still get to act afterwards.",
+      "Back-solving the threshold (this side is deck-independent):\n\nMinimum all-in equity you can call with = threshold equity / realization rate\n\nHalf-pot threshold 25.0% / 0.85 = 29.4%  ->  the short-deck flush draw at 30.1% just clears it\nHalf-pot threshold 25.0% / 0.80 = 31.3%  ->  one notch worse in realization and it no longer does\nPot-size threshold 33.3% / 0.85 = 39.2%  ->  30.1% fails on the raw quote, discount or no discount",
+      "The realization rate is not a property of the deck but of whether this hand survives to showdown, so it is set by position, initiative and how messy the later streets are. Short deck raises the weight of all three: made hands are stronger and the board turns over more often (see the \"Continuous Betting\" chapter at this level), so falling behind is harder to recover from and being ahead is easier to overtake with one card. Carrying equity to the end is itself worth more.",
+      "Worked example (a pair is further ahead, and no safer): on a short-deck turn you hold a pair against a flush draw, one street to come, five outs against you, so you lead 1 - 5 / 31 = 83.9%; the same spot in holdem is 1 - 9 / 47 = 80.9%. That sounds like good news, and the reverse is equally true — when you challenge a pair with a draw, short deck is more completely dead to one card, with four fewer outs to save you.",
+      "Counter-intuitive point: \"weaker\" and \"more valuable\" hold at the same time in short-deck draws. Each out carries about 1.5 times the marginal equity of a holdem out, yet only five of them exist, so total equity is lower while every individual card matters more. That is precisely why short-deck draws live on the raise-and-shove branch rather than the call branch.",
+      "Which line sizing pushes a draw into",
+      "One short-deck flush draw (30.1% quoted over two streets), read three ways:\n\nPot 8, bet 4 (half pot): threshold 25.0% — the quote clears, and 25.6% after a 0.85 realization still scrapes by\nPot 8, bet 8 (pot size): threshold 8 / 24 = 33.3% — the quote is already 3.2 points short, so the realization rate never gets a vote\nThe same pot-size threshold against holdem 9 outs at 35.0%: still 1.6 points to spare\n\nOne and the same pot-size bet lets a draw through in holdem and turns it away in short deck. The interaction between sizing and deck lives in those few points.",
+      "Worked example (reverse the relationship instead of calling): facing a pot-size bet on a short-deck flop, calling pays a 33.3% threshold with a 30.1% quote, before any realization discount — the call is mispriced on its own terms. Only two honest options remain: raise to push the opponent fold rate up (the semi-bluff accounting is in the \"Bluff Frequency\" chapter at this level), or accept that this hand has no call branch at this size. \"Call and see the turn\" is not a compromise, it is paying for the same mistake twice.",
+      "One line to keep: short deck pays more per out (3.2% against 2.1%) and gives the flush draw fewer of them (5 against 9); the realization rate turns a 30.1% quote into a 25.6% payout, and the two back-solved lines — 29.4% and 39.2% — are the thresholds that actually decide a call. A stronger made hand is never an excuse for a cheaper draw.",
+      "Review checklist for short deck: check only three inputs — did you count outs against nine cards per suit, did you use 31/30 unknown cards rather than 47/46, and did position and later streets eat your realization rate. Get those right before discussing frequency or sizing, because almost every \"something feels wrong in short deck\" traces back to one of these three."
     ]
   },
   "quiz": {
@@ -5568,6 +5587,56 @@
         "Splitting the mixed frequency across suit features"
       ],
       "explanation": "A locked tendency must come from enough hands; short deck is noisier at the same sample size, and locking an imagined leak swaps your bulletproof vest for paper."
+    },
+    "t6sd-equity-realization-q1": {
+      "question": "In short deck, the marginal equity of one out after the flop is about:",
+      "options": [
+        "2.1%",
+        "2.6%",
+        "3.2%",
+        "4.3%"
+      ],
+      "explanation": "Only 31 cards remain unknown after a short-deck flop, so one out is 1 / 31 = 3.2%; holdem gives 1 / 47 = 2.1%."
+    },
+    "t6sd-equity-realization-q2": {
+      "question": "How does the exact two-street equity of a short-deck flush draw (5 outs) compare with holdem 9 outs?",
+      "options": [
+        "About 30.1%, below about 35.0% in holdem",
+        "About 35.0%, above holdem",
+        "Exactly the same",
+        "Not computable in short deck"
+      ],
+      "explanation": "1 - (26/31)(25/30) = 30.1% against 1 - (38/47)(37/46) = 35.0%: each out is worth more, but there are four fewer of them."
+    },
+    "t6sd-equity-realization-q3": {
+      "question": "Pot 8 facing a pot-size bet of 8. The equity needed to call is:",
+      "options": [
+        "25.0%",
+        "33.3%",
+        "40.0%",
+        "50.0%"
+      ],
+      "explanation": "Amount to call over the pot after calling: 8 / 24 = 33.3%, independent of the deck."
+    },
+    "t6sd-equity-realization-q4": {
+      "question": "An all-in equity of 30.1% realized at a rate of 0.85 is about:",
+      "options": [
+        "21.5%",
+        "24.0%",
+        "25.6%",
+        "28.0%"
+      ],
+      "explanation": "Realized equity = all-in equity x realization rate = 30.1% x 0.85 = 25.6%, leaving six tenths of a point of half-pot margin."
+    },
+    "t6sd-equity-realization-q5": {
+      "question": "Facing a pot-size bet on a short-deck flop with a flush draw, the correct read is:",
+      "options": [
+        "Call, since a flush is worth so much",
+        "The raw quote already fails: 30.1% is under the 33.3% threshold",
+        "Fold, since you have zero outs",
+        "Raise to double pot to make up the equity"
+      ],
+      "explanation": "The pot-size threshold is 8 / 24 = 33.3% while the two-street quote is 30.1%, so the call is mispriced before any discount."
     }
   },
   "chapterObjectives": {
@@ -6013,6 +6082,12 @@
       "Recompute whether a short-deck draw clears its threshold on the flop and on the turn using the 31/30 unknown-card baseline",
       "Split mixed frequencies across explainable features (blockers, suit) instead of relying on unexecutable \"true randomness\"",
       "Explain why node locking needs stricter sample discipline in short deck, and how the size of a leak bounds the harvest"
+    ],
+    "t6sd-equity-realization": [
+      "Compute the marginal equity of a single short-deck out using 1/31 and 1/30, and contrast it with 1/47 in holdem",
+      "Separate all-in equity from realized equity and back-solve the minimum all-in equity a call needs as threshold / realization rate",
+      "Judge a short-deck flush draw against the half-pot and pot-size thresholds (30.1% against 25.0% and 33.3%)",
+      "Explain how fewer unknown cards widen a pair lead over a flush draw (83.9% against 80.9%)"
     ]
   }
 }

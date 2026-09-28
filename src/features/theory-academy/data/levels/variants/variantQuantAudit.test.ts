@@ -90,6 +90,17 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
  *        "成牌更稀有 ⇄ 成牌价值更高"是该规则的两侧表述，非独立可算结论
  * [正确] t5sd-mixed-strategy idx11：所需手数 ∝ (σ/μ)²，效应估计减半需 4 倍样本——
  *        只引用比例关系（standardQuantAudit 的 n=(zσ/μ)² 单源），未给短牌具体 σ，故不涉示意值
+ * [正确] t6sd-equity-realization idx2：单张 out 边际权益 1÷31=3.2%、1÷30=3.3%（标准 2.1%/2.2%）；
+ *        同花听牌 5 outs 双街 30.1% 对标准 9 outs 35.0%
+ * [正确] t6sd-equity-realization idx5/6：门槛 4÷16=25.0%、8÷24=33.3%；倒推 25.0÷0.85=29.4%、
+ *        25.0÷0.80=31.3%、33.3÷0.85=39.2%；实现权益 30.1%×0.85=25.6%（安全边际 5.1→0.6 个点）
+ * [正确] t6sd-equity-realization idx8/11：一对领先 1−5÷31=83.9%（标准 1−9÷47=80.9%）；
+ *        满池门槛侧短牌差 3.2 个点、标准局富余 1.6 个点
+ * [示意值] t6sd-equity-realization idx5/6/13：实现率 0.85 / 0.80 本身无标定依据（与标准局
+ *        t6-equity-realization 同一处置），正文写"按 0.85 计/再差一档"，倒推结论随该值线性移动，
+ *        禁止当精确值引用
+ * [定性] t6sd-equity-realization idx7：实现率由位置、主动权与后续街复杂度决定——机制陈述，
+ *        不含可复算数值
  * [正确] t6sd-sizing idx2/q5：f=b/(1+2b)：1/3 池 20%、半池 25%、满池 33%、2 倍池 40% ✓
  * [正确] t6sd-barrel idx2（修复后）：P=6 逐街 2/3 池几何 14→32.67→76.22（32.7/21.8/76.2），
  *        原 32.6/21.7/75.9 累计截断误差
@@ -171,6 +182,9 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
     const q = getQuiz(chapterId, questionId);
     expect(q.options[q.correctIndex], `${questionId} 复算后的正确选项`).toBe(answer);
   };
+
+  /** 复算值取到十分位百分比，与正文"约 xx.x%"的书写精度一致 */
+  const pct = (x: number) => Math.round(x * 1000) / 10;
 
   it('t1sd-combinatorics：C(36,2)=630、口袋对 54 占 8.6%、AKs vs QQ 权威口径', () => {
     expect((36 * 35) / 2).toBe(630);
@@ -260,7 +274,6 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
     expect(calculateAlpha(8, 16)).toBeCloseTo(2 / 3, 6);
     expect(requiredEquity(4, 16)).toBe(0.25);
     // 权益侧：短牌听牌两街之间必须重算，标准局对照
-    const pct = (x: number) => Math.round(x * 1000) / 10;
     expect(pct(outsToEquity(5, 2, SHORT_DECK_UNKNOWN_CARDS))).toBe(30.1);
     expect(pct(outsToEquity(5, 1, SHORT_DECK_UNKNOWN_CARDS))).toBe(16.1);
     expect(pct(outsToEquity(8, 1, SHORT_DECK_UNKNOWN_CARDS))).toBe(25.8);
@@ -284,6 +297,41 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
     expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q3', '5');
     expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q4', '短牌约 33.5%，低于标准局的约 37.0%');
     expectAnswerIs('t5sd-mixed-strategy', 't5sd-mixed-strategy-q5', '确认该倾向来自足够样本的真实观察');
+  });
+
+  it('t6sd-equity-realization：out 单价、实现率倒推与两尺度门槛逐项复算', () => {
+    // 单张 out 的边际权益：短牌 31/30 对标准 47/46
+    expect(pct(1 / 31)).toBe(3.2);
+    expect(pct(1 / 30)).toBe(3.3);
+    expect(pct(1 / 47)).toBe(2.1);
+    expect(pct(1 / 46)).toBe(2.2);
+    // 门槛侧与牌堆无关
+    expect(pct(requiredEquity(4, 16))).toBe(25.0);
+    expect(pct(requiredEquity(8, 24))).toBe(33.3);
+    // 门槛 ÷ 实现率 = 可跟注的最低全下权益
+    expect(pct(requiredEquity(4, 16) / 0.85)).toBe(29.4);
+    expect(pct(requiredEquity(4, 16) / 0.8)).toBe(31.3);
+    expect(pct(requiredEquity(8, 24) / 0.85)).toBe(39.2);
+    // 实现权益与两侧安全边际
+    const drawTwo = outsToEquity(5, 2, SHORT_DECK_UNKNOWN_CARDS);
+    expect(pct(drawTwo * 0.85)).toBe(25.6);
+    expect(pct(drawTwo - requiredEquity(4, 16))).toBe(5.1);
+    expect(pct(drawTwo * 0.85 - requiredEquity(4, 16))).toBe(0.6);
+    // 同一手牌在半池过、在满池不过；标准局 9 outs 在满池仍过
+    expect(drawTwo > requiredEquity(4, 16)).toBe(true);
+    expect(drawTwo > requiredEquity(8, 24)).toBe(false);
+    expect(outsToEquity(9, 2) > requiredEquity(8, 24)).toBe(true);
+    expect(pct(requiredEquity(8, 24) - drawTwo)).toBe(3.2);
+    expect(pct(outsToEquity(9, 2) - requiredEquity(8, 24))).toBe(1.6);
+    // 一对领先同花听牌（只剩一街）：短牌 83.9% 对标准 80.9%
+    expect(pct(1 - outsToEquity(5, 1, SHORT_DECK_UNKNOWN_CARDS))).toBe(83.9);
+    expect(pct(1 - outsToEquity(9, 1))).toBe(80.9);
+    // 判分题锁定
+    expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q1', '3.2%');
+    expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q2', '约 30.1%，低于标准局的约 35.0%');
+    expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q3', '33.3%');
+    expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q4', '25.6%');
+    expectAnswerIs('t6sd-equity-realization', 't6sd-equity-realization-q5', '标价就不够：30.1% 低于 33.3% 的门槛');
   });
 
   it('t6sd-sizing：诈唬占比 f=b/(1+2b) 表 20/25/33/40%', () => {

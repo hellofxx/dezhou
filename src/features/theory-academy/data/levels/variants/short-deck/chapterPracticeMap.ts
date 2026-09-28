@@ -49,6 +49,9 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't6sd-barrel': {
     lessons: [lesson('l3sd-cbet', '短牌持续下注'), lesson('l3sd-check-raise', '短牌过牌加注')],
   },
+  't6sd-equity-realization': {
+    lessons: [lesson('l4sd-nuts-equity', '坚果与权益计算'), lesson('l7sd-deep-stack', '短牌深筹码')],
+  },
 
   // T7 对手阅读
   't7sd-mistakes': { lessons: [lesson('l8sd-exploit-i', '短牌剥削（一）')] },
