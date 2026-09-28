@@ -158,6 +158,12 @@ import {
  *        期望 0.55×41.0+0.45×0=22.6 < 32.8 ⇒ 弃牌；现金桌同一手 0.55×3000−0.45×3000=+300 筹码 ⇒ 跟注。
  *        原实例写"A=5000 全下 B=3000、输光归零、0.55×46≈25.3<38.4"三处不成立：B 只覆盖 3000，
  *        A 输了剩 2000（$EV 31.9）而非归零；期望式漏掉输分支；补回后 39.6>38.4 结论反转
+ * [正确] t9-cash-vs-mtt idx4/idx7/idx10（现金与锦标赛的结构对照，本次新增）：
+ *        锚点复用 t9-icm 已复算数字——现金 0.55×3000−0.45×3000=+300 筹码、锦标赛 0.55×41.0=22.6<32.8；
+ *        M=10000÷200=50 → 10000÷1000=10（盲注 5 倍、M 降到 1/5）；
+ *        服务费比例 1/10=10%、20/500=4%、100/2000=5%；平方律 σ×2 ⇒ n×4（requiredHandsForEdge 比值）
+ * [示意值] t9-cash-vs-mtt idx10/idx11 的抽水与服务费档位（各平台结构不同，正文标「量级示意」）、
+ *          idx12「锦标赛等效 σ 约为现金数倍」（方向与平方律正确，倍数不给具体值）
  * [正确] t9-multiway idx0/idx3：四人底池=AA 对 3 对手→表值约 64%（本次修复：原误写 55%/56%，为 vs4 口径）
  * [示意值] t9-multiway idx1 胜率表（AA 85/73/64/56/49、KK 82/69/59/51、AKs 67/50/40、87s 41/30/24，与常见数据源一致，正文标「典型」）；
  *          t9-unified idx4：C-Bet 弃牌 65% vs 均衡约 45%
@@ -580,5 +586,35 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     expect(rakeExample).toContain('7.1 倍');
     expect(rakeExample).toContain('22.7%');
     expect(chapter.content[9]?.type).toBe('example');
+  });
+
+  it('t9-cash-vs-mtt：深度单向塌缩、抽成比例与方差平方律可复算', () => {
+    // M = 有效筹码 ÷ 大盲：同一堆筹码在盲注上涨后换了一种游戏
+    expect(10000 / 200).toBe(50);
+    expect(10000 / 1000).toBe(10);
+    // 两套账的分歧（锚点复用 t9-icm 实例三的已复算数字）
+    expect(0.55 * 3000 - 0.45 * 3000).toBeCloseTo(300, 10);
+    expectAnswerIs(
+      't9-cash-vs-mtt',
+      't9-cash-vs-mtt-q1',
+      '现金跟（期望 +300 筹码），锦标赛弃（跟注期望 22.6 < 弃牌持有 32.8）',
+    );
+    // 服务费按买入的比例（档位为示意，但比例本身可复算）
+    expect(1 / 10).toBeCloseTo(0.1, 10);
+    expect(20 / 500).toBeCloseTo(0.04, 10);
+    expect(100 / 2000).toBeCloseTo(0.05, 10);
+    // 平方律：等效 σ 翻倍 → 所需样本量 ×4（μ、z 不变）
+    expect(
+      requiredHandsForEdge(5, 160, 1.96) / requiredHandsForEdge(5, 80, 1.96),
+    ).toBeCloseTo(4, 6);
+    // 正文口径守卫：锚点段必须同时给出两套账与相反指令，误区段不得含糊单位
+    const chapter = chapters.find((x) => x.id === 't9-cash-vs-mtt') as TheoryChapter;
+    const anchor = chapter.content[4]?.content ?? '';
+    expect(anchor).toContain('+300 筹码');
+    expect(anchor).toContain('22.6 < 32.8');
+    expect(chapter.content[7]?.content).toContain('M = 50');
+    const myth = chapter.content[13]?.content ?? '';
+    expect(myth).toContain('bb/100 × 手数');
+    expect(myth).toContain('公里和公斤');
   });
 });

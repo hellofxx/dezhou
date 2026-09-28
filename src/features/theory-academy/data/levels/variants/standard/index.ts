@@ -173,7 +173,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     level: 9,
     tier: 'advanced',
     title: '经典理论综合',
-    description: 'MOP 要义、ICM 理论、多人底池与 GTO-剥削统一框架',
+    description: 'MOP 要义、ICM 理论、多人底池与 GTO-剥削统一框架、现金与锦标赛的结构对照',
     icon: '🏛️',
     variant: 'standard',
     unlockRequirement: '完成 T8 所有章节',

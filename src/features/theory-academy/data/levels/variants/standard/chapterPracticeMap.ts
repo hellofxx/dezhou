@@ -100,4 +100,7 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't9-unified': {
     lessons: [lesson('l8-pool-tendencies', 'Pool Tendencies 分析'), lesson('l4-gto-basics', 'GTO 基础入门')],
   },
+  't9-cash-vs-mtt': {
+    lessons: [lesson('l6-icm', 'ICM 基础'), lesson('l6-bounty', 'Bounty 锦标赛策略')],
+  },
 };

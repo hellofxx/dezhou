@@ -66,7 +66,7 @@
     "t6": "Betting purposes, polarized vs linear sizing, SPR and geometric sizing",
     "t7": "VPIP/PFR/AF/WTSD stats, player typology, hand reading and exploitation",
     "t8": "Tilt recognition, session management, bankroll psychology and long-term mindset",
-    "t9": "MOP essentials, ICM theory, multiway pots and a unified GTO-exploitation framework",
+    "t9": "MOP essentials, ICM theory, multiway pots and a unified GTO-exploitation framework, cash versus tournament structure",
     "t1sd": "Master short deck's unique probability calculations and outs estimation",
     "t2sd": "Odds calculations and decisions in short deck situations",
     "t3sd": "Understand short deck starting hand strength reshuffling and position value",
@@ -195,7 +195,8 @@
     "t4-preflop-structure": "Preflop Structural Theory: 3-bet / 4-bet and Building a Defending Range",
     "t6-equity-realization": "Board Texture and Equity Realization: How Much of Your Equity Actually Lands",
     "t5-multiway-frequency": "Multiway Pot Frequencies and Sizings",
-    "t4-structure-economics": "The Economics of Table Structure: Rake, Antes and Straddles"
+    "t4-structure-economics": "The Economics of Table Structure: Rake, Antes and Straddles",
+    "t9-cash-vs-mtt": "Cash Versus Tournament Structure, Side by Side"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -277,7 +278,8 @@
     "t4-preflop-structure": "Upgrading preflop from “is my hand good enough” to “what does my range look like”",
     "t6-equity-realization": "All-in equity is the sticker price; realized equity is what you take home",
     "t5-multiway-frequency": "When the opposition goes from one to two, MDF and bluff frequencies must be recomputed from scratch",
-    "t4-structure-economics": "Treat table parameters as independent variables in the equation, not as background noise"
+    "t4-structure-economics": "Treat table parameters as independent variables in the equation, not as background noise",
+    "t9-cash-vs-mtt": "Two ledgers for the same hand: utility function, depth drift and the form of the take"
   },
   "ladder": {
     "title": "Theory Path",
@@ -1501,6 +1503,24 @@
       "The classic mistake: \"An ante or a straddle is just one more big blind, so the strategy does not change.\" The error is reading the ante as a cost instead of as a pot parameter. α = b ÷ (P + b) and MDF = P ÷ (P + b) both take P as an independent variable: a big-blind ante lifts P from 1.5bb to 2.5bb, which drops the break-even fold frequency for a steal from 60.0% to 47.4%, raises the big blind defense obligation from 40.0% to 52.6%, and cuts the price of defending from 1.25bb to 0.25bb. That is a change in frequencies, not a small overpayment - keep stealing at the old sizing and it stops working, keep defending at the old price and you hand pots away.",
       "Hence the recomputation discipline: whenever a structural parameter changes, re-run three things - the α for steals and bluffs, MDF at each position, and the equity needed to call (count the ante inside P, and subtract what you have already posted from the amount still to put in). Before trusting any preflop chart, ask one question: under which structure was this table computed? A range chart without a structure label is a map of somebody else’s table.",
       "Structure is an independent variable in the equation: antes and straddles lift P, which makes bluffing cheaper, defense obligations heavier and calling prices better; rake cuts μ, which makes the cost of proving the same edge rise as 1/μ² and risk of ruin expand as exp(−2μB ÷ σ²). Read the structure before you play; recompute when it changes."
+    ],
+    "t9-cash-vs-mtt": [
+      "Two Ledgers for the Same Hand",
+      "Cash and tournaments are usually described as the same game played two ways. What actually differs is three things: the mapping from chips to money, the way the structure moves through time, and the form in which the house takes its cut. Those three are enough to make the same hand produce opposite answers. This chapter does not ask which format pays more - that needs a common unit first - it lays the two decision ledgers side by side so you always know which one you are computing in.",
+      "The comparison needs only six axes: effective depth (constant vs one-way collapse), chip utility (linear vs non-linear), form of the take (per pot vs per entry), player pool (drifts fast vs errors that stay put), time structure (blind levels that never change vs levels that always change) and variance shape (per-pot swings vs results concentrated in the finish). Switching axis by axis explains a profit gap better than \"which format I am used to\".",
+      "The Anchor: One Hand, Two Conclusions",
+      "Keep the same table already recomputed in the ICM chapter of this level: prizes 50/30/20, stacks 5000/3000/2000. The medium stack M = 3000 faces a shove from the big stack of 5000 and you judge 55% equity.\nCash: risk 3000 to win 3000, expectation = 0.55×3000 − 0.45×3000 = +300 chips, so call.\nTournament: M is fully covered, losing means out. Folding keeps a computed $EV of 32.8; calling and winning leaves 6000/2000/2000 whose recursion gives $EV = 41.0, so the expectation is 0.55×41.0 + 0.45×0 = 22.6 < 32.8, so fold.\nThe same 55% produces opposite instructions in the two ledgers.",
+      "Example 1 (why they disagree): in cash the 3001st chip is worth exactly the first chip, so any equity above 50% makes a fifty-fifty gamble worthwhile. In a tournament that is not true - after folding, M still holds a certain 32.8, and calling trades that 32.8 for a shot at 41.0, which is only about 25% more, not enough to pay for a 45% chance of zero. The disagreement comes from whether the chips-to-money curve is a straight line, not from nerve or skill. This is exactly where the ICM chapter said the model is a map and not the territory: change the map and the same mountain has a different height.",
+      "Is Depth Constant, or Does It Flow One Way",
+      "In cash the effective depth is a constant: you sit down with 100 big blinds and you stay near 100 big blinds all night. In a tournament M = effective stack ÷ big blind is an independent variable that moves in one direction only: blind levels rise on a clock while stacks do not grow by themselves. A stack of 10,000 is M = 50 at 100/200 and only M = 10 at 500/1000 - the same chips, a few levels later, are a different game. The real consequence of a collapsing M is not simply \"play tighter\": it deletes the sizing family. Below about 15bb the three postflop streets compress into a single shove and Push/Fold charts take over the decision (see the ICM chapter), while the check-raises, three-barrel fire and geometric sizings you drilled at 100bb simply do not exist in that M band.",
+      "Example 2 (one hand, two fates): A♠5♦ in a 100bb cash game is a speculative hand worth opening with position, with many streets left to realise equity; the same card at tournament M = 8 has only two actions available, and the test becomes \"does its all-in equity clear the Push threshold for this position\" rather than \"how much equity can I realise postflop\". The hand did not get worse - the mechanism by which it earns (implied equity) was removed by the structure. Symmetrically, a player who only ever practised 100bb cash will bleed at M = 8, because the postflop he is waiting for never arrives.",
+      "Rake and Tournament Fee: Same Name, Different Mechanism",
+      "Cash: net μ = gross μ − the amount taken per 100 hands. Rake is charged as a percentage of each pot (see T4, The Economics of Table Structure), so it punishes volume - every pot pays.\nTournament: net $EV per entry = $EV per entry − the fee. The fee is charged once per buy-in, independently of how many pots you play, so it punishes entries.\nTo compare them, write both over the same denominator: convert the cash result into per hour per buy-in, and spread the fee over hours. Both then answer the same question - how much does one hour of skilled play cost in toll.",
+      "Example 3 (the illusion of a fixed percentage): a fee of $10+$1 is 10% of the buy-in, $500+$20 is 4%, $2,000+$100 is 5% (indicative magnitudes only; structures differ by site). This explains two things that cause each other: the lowest buy-ins tax skill the hardest, and precisely for that reason their pools are the softest. A heavy-rake cash game (about 5bb/100, indicative) cannot be dodged by paying a smaller fee at all, because rake follows pots - the only hedges are fewer marginal participations and changing tables. The same sentence \"this game is hard to beat\" points at two different actions in the two structures: change table, or change buy-in.",
+      "Pools and drift also come in two forms (this is where the metagame drift of T7 lands). A cash pool is a continuous market: the same regulars sit across from you all month, exploitation conclusions have a short shelf life because opponents adapt within the session, and the remedy is constant re-measurement. A low-stakes tournament pool is a recurring novice market: the structural errors are extremely stable (ignoring the blind clock, folding too much at the bubble, and the opposite version of refusing to fold), but each tournament lasts a few hours, so the goal is not to teach an opponent on the spot - it is to repeat the same exploitation over a thousand entries. The first is a depreciable asset, the second an amortisable one; the amortisation period is long, which is why tournament exploitation knowledge is actually the more durable of the two.",
+      "The classic mistake: \"Which one pays more - just look at the buy-ins and the profit figures.\" The two profit streams are not in the same unit. Cash is bb/100 × hands, with linear utility and a withdrawable balance; a tournament is a per-entry $EV distribution, concentrated at the top and needing tens to hundreds of entries to converge. Comparing the amounts directly is comparing kilometres with kilograms. The workable version converts both to the same time unit (per hour) and the same risk yardstick (risk adjusted), and only then asks which is larger.",
+      "A transfer-training order: drill the decision tree in cash first - unlimited re-entry, stable depth, feedback you can verify on the spot; then train the two tournament-only skills separately, Push/Fold charts below 15bb and bubble ICM judgement, reviewed off-line with a calculator rather than by feel at the table. Finally bring one habit across: check the structure before you sit. Rake at this table, fee at that event, and how often the blinds move - three tables are three different equations.",
+      "Two structures, two ledgers: the cash ledger counts hands and μ under linear utility, the tournament ledger counts $EV under non-linear utility with an M that collapses one way. The same 55% hand is a call worth +300 chips on one side and 22.6 against 32.8, a fold, on the other. The split does not come from skill but from which ledger you are computing in - so confirm the ledger before every decision."
     ]
   },
   "quiz": {
@@ -5418,6 +5438,56 @@
         "Thin 3-bet bluffs and marginal calls, where the single-iteration edge is tiny"
       ],
       "explanation": "Rake takes a percentage of every pot, so the first casualties are actions that earn next to nothing per iteration and depend on enormous repetition - thin 3-bet bluffs and marginal calls are exactly that class. The other three share one property: the single-iteration win dwarfs the rake on that pot, whether it is thick value with an extreme hand or value betting a monster draw."
+    },
+    "t9-cash-vs-mtt-q1": {
+      "question": "The medium stack of 3000 faces a shove from the 5000 big stack with 55% equity (prizes 50/30/20, short stack 2000). What are the correct cash and tournament conclusions?",
+      "options": [
+        "Call in both, since 55% is ahead",
+        "Call in cash (expectation +300 chips), fold in the tournament (call 22.6 vs fold 32.8)",
+        "Fold in cash (too risky), call in the tournament (more chips means more aggression)",
+        "Fold in both, because the tournament conclusion should be carried back into cash"
+      ],
+      "explanation": "Cash risks 3000 to win 3000: 0.55×3000 − 0.45×3000 = +300 chips, so call. In the tournament M is fully covered: folding holds 32.8 while calling expects 0.55×41.0 = 22.6, so fold. Option 1 assumes 55% means the same thing in both ledgers, which is exactly the point at issue; option 3 inverts risk and depth (the covered short side is the one that must refuse); option 4 force-unifies the two ledgers, treating a non-linear-utility conclusion as portable into a linear one."
+    },
+    "t9-cash-vs-mtt-q2": {
+      "question": "A 10,000 stack goes from blinds 100/200 to 500/1000, so M falls from 50 to 10. The most direct consequence is:",
+      "options": [
+        "Only the number changes; the shape of the strategy stays the same",
+        "Start making more small continuation bets",
+        "More streets of firing become available because the pots are relatively bigger",
+        "The sizing family collapses: below about 15bb the decision is taken over by shove-or-fold"
+      ],
+      "explanation": "M = effective stack ÷ big blind, so falling from 50 to 10 removes almost every postflop betting branch and the decision degenerates into shove or fold. Option 1 denies that depth determines strategy shape; option 2 reads shallower stacks as \"slow play small bets\", but small-bet branches need stack depth to be paid off; option 3 inverts SPR - with shallower stacks there is less room for multi-street firing and geometric sizings, not more."
+    },
+    "t9-cash-vs-mtt-q3": {
+      "question": "Which statement about cash rake and tournament fees is correct?",
+      "options": [
+        "Rake is charged per pot and punishes volume; the fee is charged per entry and punishes entries",
+        "They are equivalent: both just take money from winnings",
+        "The fee is charged per pot, so the longer you play the more you pay",
+        "Rake exists only at micro stakes; regular levels have none"
+      ],
+      "explanation": "The difference is the mechanism, not the size: rake accrues with every pot, so calling more pots costs more, while the fee is fixed the moment you buy in and is independent of pots played. Option 2 erases that mechanism and with it the two different countermeasures - fewer marginal participations versus fewer entries. Option 3 swaps the two. Option 4 is false: rake exists at all levels, only the percentage and the cap differ."
+    },
+    "t9-cash-vs-mtt-q4": {
+      "question": "What does the difference between a $10+$1 fee (10%) and a $500+$20 fee (4%) tell you?",
+      "options": [
+        "Higher buy-in games always have softer fields",
+        "Low buy-ins cost more in fees, so no profit is possible there",
+        "At the low end the fixed fee is a larger share of the buy-in, so the same skill edge is taxed away in a larger proportion",
+        "The percentage does not matter, only the absolute amount"
+      ],
+      "explanation": "The fee is a percentage of the buy-in and that percentage is highest at the low end, so an identical edge loses a tenth of itself at $10+$1 but only a twentieth at $500+$20. Option 2 overshoots - low buy-ins also have softer fields, and net profit depends on both. Option 1 equates high buy-ins with soft fields, which usually runs the other way (higher stakes are harder). Option 4 abandons the common denominator: two different sized games cannot be compared by absolute fee."
+    },
+    "t9-cash-vs-mtt-q5": {
+      "question": "To compare \"do I make more from cash or from tournaments\", the method must:",
+      "options": [
+        "Compare total buy-ins against total winnings over the same period and pick the higher ratio",
+        "Convert both to the same time unit and the same risk yardstick, after subtracting each format’s own form of the take",
+        "Compare the single biggest cash hour against the single biggest tournament score",
+        "Look at which format has the higher ITM rate, since that is the profitable one"
+      ],
+      "explanation": "Cash is measured in bb/100 × hands with linear utility; a tournament is a per-entry $EV distribution, top-heavy and slow to converge. The only comparable form is same time unit, same risk adjustment, each net of its own mechanism of the take. Option 2 divides two non-comparable distributions; option 3 substitutes an extreme value for an expectation, which simply rewards whichever format has more variance; option 4 mistakes frequent cashing for profit, while a high ITM rate usually means the pay jumps are small."
     }
   },
   "chapterObjectives": {
@@ -5677,6 +5747,12 @@
       "Separate dead-money parameters (pot P) from profit parameters (net μ), and explain why only rake rewrites significance and risk of ruin",
       "Quantify how rake amplifies bankroll requirements and downswings using n ∝ 1/μ² and ROR = exp(−2μB/σ²)",
       "Distinguish what a straddle shares with an ante and what differs, and adjust opening and defense ranges accordingly"
+    ],
+    "t9-cash-vs-mtt": [
+      "Compute both the cash and the tournament expectation for the same hand, and explain why they can issue opposite instructions",
+      "Use M = effective stack ÷ big blind to describe the one-way collapse of tournament depth and how it cancels the postflop sizing family",
+      "Separate per-pot rake from per-entry tournament fee, and name the behaviour each one punishes (volume played vs number of entries)",
+      "Convert both formats to the same time unit and the same risk yardstick before comparing them"
     ]
   }
 }
