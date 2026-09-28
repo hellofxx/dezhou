@@ -96,13 +96,14 @@ additionalPrompt: ""
 
 ## Workflows
 1. 新增章节时：在对应 variants/standard/standardLevelN.ts（标准变体）或 variants/short-deck/shortDeckLevelN.ts / variants/heads-up/headsUpLevelN.ts（变体）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验
+   - **每章必须声明 3–5 条 `objectives`**（类型可选、守卫必填，缺漏或条数越界即门禁红）。写法：以动词开头、单句、句末无句号、**不复述任何精确数值**——量化一致性只由 `content` 与 `quiz` 两处承担，目标里写数字会造出第三个需要同步维护的地方；每条必须能指回该章某个具体段落（下标 0 起、含 heading 段），禁止凭标题或常识编造
    - **locale 只能追加**：正文段落 key 是下标型（`theory.content.<chapterId>.<sectionIndex>`，无稳定 id），在已有章节中间插段会让 zh/en 数组静默错位且 `contentAlignment.baseline.ts` 棘轮基线为空集（无自救余地）；补段一律追加到数据数组与 zh/en 两份 locale 数组的**末尾**，且三者下标顺序必须一致
    - **每章小测固定 3-5 题**：已有 5 题的章节不得再加题（`theoryIntegrity.test.ts` 断言上界）
    - **量化口径不得自立第二套**：涉及 Alpha / MDF / 跟注所需权益 / Kelly / 显著性样本量 / 破产概率 / outs 权益 / 组合计数 / HUD 比率的正文数字，一律取 `utils/theoryFormulas.ts` 的函数口径，并在 `standardQuantAudit.test.ts`（变体为 `variantQuantAudit.test.ts`）登记复算块与文件头人工复核索引（`[正确]` / `[示意值]` 分类，PRD §6.7.1 诚实性）
    - **全下 / ICM 实例必须先定覆盖关系**：写"输了归零"之前要确认被跟的一方筹码 ≥ 跟注方，否则归零不成立、且期望式必须含输分支的持有值而非 0（曾有实例因漏算输分支而结论反转，且被复核索引登记为「正确」）。复核索引的下标以 **0 起、含 heading 段**计
 2. 新增 Level 时：新建 variants/<variant>/<variant>LevelN.ts → 在对应 variants/<variant>/index.ts 注册（含 practiceRecommendations）→ 更新 unlockRequirement 链
 3. 调整实践推荐时：编辑 variants/standard/index.ts（standard）或 variants/<variant>/index.ts（变体）的 practiceRecommendations → 同步 strategy-academy curriculumIntegrity 的 CROSS_MODULE_LESSON_IDS（须经 platform-dev）
-   - **变体桥接 id 无守卫兜底**：`variants/theoryIntegrity.test.ts` 不校验 practiceRecommendations，两份 ID 镜像清单的事实源都只是 `THEORY_LEVELS`（standard）；改 short-deck / heads-up 的推荐课时 ID 时须逐个 grep 确认目标课时在 strategy-academy 源码真实存在，且**不得**把变体课时 id（如 `l8hu-exploitative`）加进 `CROSS_MODULE_LESSON_IDS`（curriculumIntegrity 断言变体课不得混入 LEVELS，加了必红）
+   - **变体桥接 id 无守卫兜底**：`variants/theoryIntegrity.test.ts` 不校验 practiceRecommendations，两份 ID 镜像清单的事实源都只是 `THEORY_LEVELS`（standard）；改 short-deck / heads-up 的推荐课时 ID 时须逐个 grep 确认目标课时在 strategy-academy 源码真实存在，且**不得**把变体课时 id（如 `l8hu-exploitative`）加进 `CROSS_MODULE_LESSON_IDS`（curriculumIntegrity 断言变体课不得混入 LEVELS，加了必红）。**要成规模地做变体章节级桥接之前，先建反向存在性守卫**：仿 `strategy-academy/data/theoryReferenceIntegrity.test.ts` 的方向，用 `import.meta.glob('?raw')` 扫理论变体数据源码提出被引用的课时 id，再对 `ALL_VARIANT_LESSONS` 的 id 全集断言存在——否则 44 章的引用完整性只能靠人工核验，必然漂移
    - `{ id, title }` 的 title 只是 `academy.lessonTitle.<id>` 缺失时的回退，须与策略学院权威标题一致
 4. 持久化升级时：调整 store.ts 的 persist version + 编写 migrate（仅注入新字段默认值）+ 更新 store.persist-shape.test.ts 快照与 store.migrate.test.ts 迁移用例
 5. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `theory.*` 命名空间

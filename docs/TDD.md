@@ -1135,7 +1135,7 @@ interface DailyRecommendation {
 
 1. **数据模型**（`theory-academy/types.ts`）：
    - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
-   - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）/ `practiceRecommendations?`（章节粒度桥接，**数据层字段、不进持久化**，由 `standard/index.ts` 聚合时从 `chapterPracticeMap` 附加，章节文件本身不书写）
+   - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ `objectives?`（**类型可选、守卫必填**：完整性测试要求每章 3–5 条非空，类型保持可选是因为标准与变体共用该接口且旧数据缺字段不影响反序列化；渲染侧 `resolveTheoryObjectives` 按下标取 `theory.chapterObjectives.<id>.<i>`，defaultValue 回退数据原文）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）/ `practiceRecommendations?`（章节粒度桥接，**数据层字段、不进持久化**，由 `standard/index.ts` 聚合时从 `chapterPracticeMap` 附加，章节文件本身不书写）
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
