@@ -76,4 +76,7 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't9sd-case-study': {
     lessons: [lesson('l8sd-exploit-ii', '短牌剥削（二）'), lesson('l6sd-tourney-i', '短牌锦标赛（一）')],
   },
+  't9sd-tournament-structure': {
+    lessons: [lesson('l6sd-tourney-i', '短牌锦标赛（一）'), lesson('l6sd-tourney-ii', '短牌锦标赛（二）')],
+  },
 };

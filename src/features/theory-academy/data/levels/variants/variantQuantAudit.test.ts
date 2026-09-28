@@ -126,6 +126,19 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../../../types';
  *        本模块不推导 CDF；测试只锁 z 与倍数关系（可算部分），表值按引用登记
  * [示意值] t8sd-bankroll idx2/5/6 的 σ=150 / 220 量级沿用 t1sd-variance，ROR 与门槛结论
  *        随该量级线性/平方移动，正文一律写"约 / 若你把 σ 估在"，不得当承诺引用
+ * [正确] t9sd-tournament-structure idx2/5/6/11：前注制价格表逐项复算——死钱 1.5+0.6=2.1bb；
+ *        Alpha(1.5,2.2)=59.5% → Alpha(2.1,2.2)=51.2%（差 8.3 点）；BB 门槛 1.2÷4.9=24.5% →
+ *        1.2÷5.5=21.8%（差 2.7 点）；10bb 全下 9÷20.5=43.9% → 9÷21.1=42.7%（差 1.2 点）
+ * [正确] t9sd-tournament-structure idx6：M = 10÷2.1 = 4.8 对 10÷1.5 = 6.7，
+ *        压缩率 1 − 1.5÷2.1 = 28.6%（等于死钱比的倒数关系，与筹码无关）
+ * [假设] t9sd-tournament-structure idx2/5/6/11 的结构设定：6 人桌、每人 0.1bb 前注、
+ *        2.2bb 开池、10bb 有效筹码。具体数字随结构表变化，"门槛只读底池与尺度"这一关系不变
+ * [示意值] t9sd-tournament-structure idx7：短牌全下碰撞 45%–55% 沿用 t1sd-variance 量级，
+ *        本段仅做"盈余 1–7 个点 vs 门槛 43–44%"的区间对照，不引入新数值
+ * [定性] t9sd-tournament-structure idx9：成牌更强 ⇒ 薄价值更少、持续下注收成与被反制损失同向放大——
+ *        结构性判断，正文已明写"别把它写成公式"
+ * [规则集说明] t9sd-tournament-structure idx9：无 2-5、同花 > 葫芦、顺子更难做成，
+ *        均来自 shortDeckRules 约定而非推导
  * [正确] t6sd-sizing idx2/q5：f=b/(1+2b)：1/3 池 20%、半池 25%、满池 33%、2 倍池 40% ✓
  * [正确] t6sd-barrel idx2（修复后）：P=6 逐街 2/3 池几何 14→32.67→76.22（32.7/21.8/76.2），
  *        原 32.6/21.7/75.9 累计截断误差
@@ -438,6 +451,71 @@ describe('variant 量化断言审计：short-deck 组合与概率判分题复算
     expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q3', '1.2%');
     expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q4', '150bb');
     expectAnswerIs('t8sd-bankroll', 't8sd-bankroll-q5', '约每 6.3 个 100 手单位一次');
+  });
+
+  it('t9sd-tournament-structure：前注改死钱不改公式（α/门槛/M 值逐项复算）', () => {
+    // 死钱构成：6 人 × 0.1bb 前注 + 盲注 1.5bb
+    expect(0.1 * 6 + 1.5).toBe(2.1);
+    // 开池保本弃牌率（BTN 开池 2.2bb）
+    expect(pct(calculateAlpha(1.5, 2.2))).toBe(59.5);
+    expect(pct(calculateAlpha(2.1, 2.2))).toBe(51.2);
+    expect(pct(calculateAlpha(1.5, 2.2) - calculateAlpha(2.1, 2.2))).toBe(8.3);
+    // BB 关闭价格：已贴 1bb，需再跟 1.2bb
+    expect(1.5 + 2.2 + 1.2).toBe(4.9);
+    expect(2.1 + 2.2 + 1.2).toBeCloseTo(5.5, 6);
+    expect(pct(requiredEquity(1.2, 4.9))).toBe(24.5);
+    expect(pct(requiredEquity(1.2, 5.5))).toBe(21.8);
+    expect(pct(requiredEquity(1.2, 4.9) - requiredEquity(1.2, 5.5))).toBe(2.7);
+    // 10bb 档：BTN 全下 10、BB 还 9（门槛对前注几乎不敏感是本段的结论）
+    expect(pct(requiredEquity(9, 20.5))).toBe(43.9);
+    expect(pct(requiredEquity(9, 21.1))).toBe(42.7);
+    expect(pct(requiredEquity(9, 20.5) - requiredEquity(9, 21.1))).toBe(1.2);
+    // M 值时钟：压缩率即死钱比
+    expect((10 / 2.1).toFixed(1)).toBe('4.8');
+    expect((10 / 1.5).toFixed(1)).toBe('6.7');
+    expect(pct(1 - 1.5 / 2.1)).toBe(28.6);
+    // 判分题锁定
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q1', '2.1bb');
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q2', '51.2%');
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q3', '21.8%');
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q4', '4.8');
+    expectAnswerIs(
+      't9sd-tournament-structure',
+      't9sd-tournament-structure-q5',
+      '10bb 档门槛只降约 1.2 个点，前注主要改变的是未全下的街',
+    );
+  });
+
+  it('t9sd-tournament-structure：前注改死钱不改公式（α/门槛/M 值逐项复算）', () => {
+    // 死钱构成：6 人 × 0.1bb 前注 + 盲注 1.5bb
+    expect(0.1 * 6 + 1.5).toBe(2.1);
+    // 开池保本弃牌率：2.2bb 开池
+    expect(pct(calculateAlpha(1.5, 2.2))).toBe(59.5);
+    expect(pct(calculateAlpha(2.1, 2.2))).toBe(51.2);
+    expect(pct(calculateAlpha(1.5, 2.2) - calculateAlpha(2.1, 2.2))).toBe(8.3);
+    // BB 关闭价格：需再跟 1.2bb
+    expect(1.5 + 2.2 + 1.2).toBe(4.9);
+    expect(pct(requiredEquity(1.2, 4.9))).toBe(24.5);
+    expect(pct(requiredEquity(1.2, 5.5))).toBe(21.8);
+    expect(pct(requiredEquity(1.2, 4.9) - requiredEquity(1.2, 5.5))).toBe(2.7);
+    // 10bb 全下档：BB 已贴 1bb，还需跟 9bb
+    expect(pct(requiredEquity(9, 20.5))).toBe(43.9);
+    expect(pct(requiredEquity(9, 21.1))).toBe(42.7);
+    expect(pct(requiredEquity(9, 20.5) - requiredEquity(9, 21.1))).toBe(1.2);
+    // M 值时钟：死钱比即压缩率
+    expect((10 / 2.1).toFixed(1)).toBe('4.8');
+    expect((10 / 1.5).toFixed(1)).toBe('6.7');
+    expect(pct(1 - 1.5 / 2.1)).toBe(28.6);
+    // 判分题锁定
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q1', '2.1bb');
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q2', '51.2%');
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q3', '21.8%');
+    expectAnswerIs('t9sd-tournament-structure', 't9sd-tournament-structure-q4', '4.8');
+    expectAnswerIs(
+      't9sd-tournament-structure',
+      't9sd-tournament-structure-q5',
+      '10bb 档门槛只降约 1.2 个点，前注主要改变的是未全下的街',
+    );
   });
 
   it('t8sd-variance：σ=50、50×√50≈354、0.5^8≈0.4%（判分题锁定）', () => {
