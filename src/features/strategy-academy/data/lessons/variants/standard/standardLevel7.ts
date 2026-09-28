@@ -221,7 +221,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：多人底池的胜率分布与策略调整详见理论学院 T9 第 3 章"多人底池与 GTO-剥削统一框架"。包括多人底池胜率表和"纳什均衡在多人底池中的适用边界"警告。',
+            content: '理论支撑：多人底池的胜率分布与策略调整详见理论学院 T9《多人底池理论》。包括多人底池胜率表和"纳什均衡在多人底池中的适用边界"警告。',
             data: { theoryLevelId: 't9', theoryChapterId: 't9-multiway' },
           },
           {
@@ -423,7 +423,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：Straddle 结构下的位置价值变化与翻前范围调整的理论基础见理论学院 T3 第 1 章"位置价值与权益实现率"。',
+            content: '理论支撑：Straddle 结构下的位置价值变化与翻前范围调整的理论基础见理论学院 T3《位置价值的来源》。',
             data: { theoryLevelId: 't3', theoryChapterId: 't3-position-value' },
           },
           {

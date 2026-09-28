@@ -29,7 +29,7 @@
       "Multiway golden rule: if you're not sure your hand is strong enough, check. Mistakes cost far more multiway than heads-up.",
       "Many winning players lose money in multiway pots because they use heads-up thinking. Remember: a 3-way pot isn't 3 heads-up pots — it's a completely different game.",
       "Multiway equity dilution formula:\nHeads-up pot: top pair equity ≈ 70-80%\n3-way pot: top pair equity ≈ 40-50%\n4-way pot: top pair equity ≈ 25-35%\n\nEach additional opponent dilutes your equity to roughly 60-70% of before\n\nMultiway betting adjustments:\n- Value bets need stronger hands (at least two pair+)\n- Bluff frequency drops sharply (need all opponents to fold)\n- Flush-draw value drops (multiple opponents drawing to the same flush is more likely)",
-      "Theory reference: multiway equity distribution and strategy adjustments are in Theory Academy T9 Chapter 3 \"Multiway Pots and the GTO-Exploitation Unified Framework\", including multiway equity tables and the \"Nash equilibrium applicability boundary in multiway pots\" warning.",
+      "Theory reference: multiway equity distribution and strategy adjustments are in Theory Academy T9 “Multiway Pot Theory”, including multiway equity tables and the \"Nash equilibrium applicability boundary in multiway pots\" warning.",
       "Counter-intuitive: your equity is diluted in a 3-way pot, but your pot odds improve. When facing a bet in a 3-way pot, the dead money of another player makes your odds better. But note: your hand must beat two opponents, and equity can fall faster than odds improve."
     ],
     "l7-straddle": [
@@ -45,7 +45,7 @@
       "The essence of a straddle game: it's a 50BB game (not 100BB). Play with 50BB thinking, not 100BB.",
       "The biggest mistake many players make in straddle pots: using 100BB thinking in a 50BB game. Remember, the effective stack halved — adjust your strategy accordingly.",
       "Preflop range adjustments under a straddle:\nStraddle = 2x the big blind (usually 2BB)\nEffective-stack adjustment:\nApparent 100BB → actual effective = 100BB/2BB = 50 straddles\n\nPreflop range adjustments:\n- Tighten the opening range accordingly (the straddle adds dead money to the pot, so effective stacks are relatively shallower)\n- 3-bet sizing should adjust to 4-5x the straddle\n- The straddle-position player's defense range should widen (already posted 2BB)\n\nNote: the straddle isn't an extra bet but an expansion of the blind — effective stacks are computed in Big Blinds, not straddles",
-      "Theory reference: the theoretical basis of position-value changes and preflop range adjustments under straddle structures is in Theory Academy T3 Chapter 1 \"Position Value and Equity Realization\".",
+      "Theory reference: the theoretical basis of position-value changes and preflop range adjustments under straddle structures is in Theory Academy T3 “Where Position Value Comes From”.",
       "Counter-intuitive: a straddle isn't extra chips invested — it's a temporary expansion of the blind. Effective stacks are still computed by the big blind, not the straddle amount. That means actual stack depth in a straddle game is shallower than it appears, with lower SPR."
     ],
     "l7-rake": [

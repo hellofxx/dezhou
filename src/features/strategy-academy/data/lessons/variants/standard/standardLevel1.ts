@@ -46,7 +46,7 @@ const L1_POSITION_U3_SECTIONS: LessonSection[] = [
   },
   {
     type: 'theory-reference',
-    content: '理论支撑：位置价值的量化分析见理论学院 T3 第 1 章“位置价值与权益实现率”，Gap Concept 的现代修正见 T3 第 2 章，Sklansky 基本定理见 T3 第 3 章。',
+    content: '理论支撑：位置价值的量化分析见理论学院 T3《位置价值的来源》，权益如何随位置与牌面被兑现见 T6《牌面结构与权益实现》，Gap Concept 的现代修正见 T3《起手牌理论与 Gap Concept》，Sklansky 基本定理见 T3《Sklansky 基本定理与主动权》。',
     data: { theoryLevelId: 't3', theoryChapterId: 't3-position-value' },
   },
   {
@@ -662,7 +662,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         },
         {
           type: 'theory-reference',
-          content: '理论支撑：资金管理的量化模型与 Kelly 准则在扑克中的应用详见理论学院 T8 第 2 章"资金心理与量化管理"。T8 全面覆盖了扑克心理学中的资金管理方法论。',
+          content: '理论支撑：资金管理的量化模型与 Kelly 准则在扑克中的应用详见理论学院 T8《资金管理心理学》。T8 全面覆盖了扑克心理学中的资金管理方法论。',
           data: { theoryLevelId: 't8', theoryChapterId: 't8-bankroll-psych' },
         },
         ],

@@ -1090,7 +1090,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：多人底池的胜率稀释与赏金赛的 $EV 调整见理论学院 T9 第 3 章“多人底池与 GTO-剥削统一框架”。赏金赛策略是 ICM 理论在特殊赛制下的扩展应用。',
+            content: '理论支撑：多人底池的胜率稀释见理论学院 T9《多人底池理论》，赏金赛的 $EV 调整见 T9《ICM 理论》。赏金赛策略是 ICM 理论在特殊赛制下的扩展应用。',
             data: { theoryLevelId: 't9', theoryChapterId: 't9-multiway' },
           },
           {
