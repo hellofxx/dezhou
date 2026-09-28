@@ -44,3 +44,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 一次性验证快照目录（历史误入库，禁止再次跟踪）
+.tmp-verify/
