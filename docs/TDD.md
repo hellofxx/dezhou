@@ -1186,6 +1186,13 @@ interface DailyRecommendation {
     - 渲染面另有一条组件级证据：`components/PracticeBridgeCard.variant.test.tsx` 逐个挂载全部变体章节推荐，断言课时卡数量、标题实际取到 i18n 权威值（回退字面量静默生效 = key 缺失，两侧数据守卫都看不见）、跳转拼装为 `/academy/lesson/:id`，en 侧无汉字与键面字泄漏
     - **新增变体章节必须同批登记桥接**：内层覆盖率断言会立刻拦住未登记的章节；`theoryVariantBridgeIntegrity` 的按来源分档断言（章节级 map 与 Level 级各 ≥ 下限）防止整张 map 失配
 
+16. **变体规则性事实的方向守卫**：`src/huPositionOrderGuard.test.ts`（src 根级，与 `designTokenGuard` 同级）。防的缺陷类型是**规则性事实写反**而非数值近似——单挑的「翻后谁先行动 / 谁持有位置」曾在两学院正文里同时存在正反两种陈述（实测 152 处含 locale），读者看到的是自相矛盾。实现要点：
+    - **判据单源**是 `variantRules.ts` 的 `headsUpRules`（SB 即按钮位、翻前 SB 先行动、翻后 BB 先行动）；守卫除扫正文外还断言该区块自身保留 `sbFirstActionPreflop: true` / `bbFirstActionPostflop: true` 与散文一致，防止单源自己被改反而让正文"对着错的参照修"
+    - **子句级三元组判定**（盲注主语 + 街道 + 方向谓语）而非全文正则：跨子句匹配会把「翻前 SB 先行动、BB 最后行动」这类正确句误判；子句无街道标记时继承段落，段落同时含翻前与翻后标记则判为不可判（不产生假绿）。谓语正则覆盖中英双语
+    - **两处刻意豁免**：小测 `options` 字段（干扰项按设计就是假命题，扫它会禁止出题）与**子句自身**点名满员桌/6-max 的对比句（满员桌 SB 确实翻后先行动且 OOP，跨子句不豁免）
+    - **扫描面为 4 份 HU locale**（theory zh/en + academy-course/heads-up zh/en）而非数据源码：zh locale 与数据层由 `contentAlignment` 逐字镜像锁定，故覆盖数据层且能拿到结构化字段以做上述豁免；内置"扫描字符串数 > 700"自检，locale 路径解析失效时不得空洞通过（教训见 2026-09-25 守卫路径修复）
+    - **判定器自检用例**锁强度：7 条已知倒置必须判红、6 条已知正确句必须判绿，否则后续放宽正则会把守卫悄悄变成空操作
+
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
 - 新增幂等 action `toggleFlagQuestion(questionId)` / `switchVariant(variant)`
