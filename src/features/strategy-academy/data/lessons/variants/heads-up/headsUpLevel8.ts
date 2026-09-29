@@ -186,7 +186,7 @@ export const HEADS_UP_LEVEL_8_LESSONS: Lesson[] = [
           options: [
             { action: 'Check-Fold', isCorrect: false, explanation: '76 有双卡顺，且 SB 弃牌率高，应 x/r 剥削。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: 'SB 面对 x/r 弃牌 60%，双卡顺半诈唬 x/r 剥削，弃牌率支撑盈利。', evImpact: '+1.5 BB/100', evLoss: 0 },
-            { action: 'Donk Bet', isCorrect: false, explanation: 'IP 应 Check 让对手先行动再 x/r，Donk 不是标准打法。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
+            { action: 'Donk Bet', isCorrect: false, explanation: 'BB 应先 Check，面对 SB 的 C-Bet 再 x/r，Donk 不是标准打法。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],
           relatedLessonId: 'l8hu-exploitative',
         },

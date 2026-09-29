@@ -9,41 +9,41 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
     subtitle: '单挑按钮位的频率优势与翻后持续施压',
     duration: '8 min',
     objectives: [
-      '说明单挑 SB 的频率优势来源（翻前最后行动、每手牌比 BB 多一手信息），并说出开池约 80% 与满员桌的差异',
+      '说明单挑 SB 的频率优势来源（只面对一个对手、翻后最后行动持有位置），并说出开池约 80% 与满员桌的差异',
       '判断干燥高牌面（1/3 池小注、约 70%-80% 频率）与湿润连接面（降频 + 2/3 池大注）的 C-Bet 处理差异',
-      '区分「持续施压」与「无脑开火」：判断湿润面或转牌牌面易手时应混合 check 保留 x/r 杠杆',
+      '区分「持续施压」与「无脑开火」：判断湿润面或转牌牌面易手时应混合 check 控制底池、防范 BB 的 x/r 反打',
     ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante' },
     content: [
-      { type: 'heading', content: '单挑按钮位：翻前最后行动的频率优势' },
+      { type: 'heading', content: '单挑按钮位：翻后最后行动的位置优势' },
       {
         type: 'text',
         content:
-          '单挑中按钮位（SB）是翻前最后行动的一方，这是你每手牌都能享受到的频率优势。因为只有一个对手，你可以用约 80% 的手牌开池——任何对子、任何 Ax、同花连牌都可以玩。这个优势的关键不是"牌更强"，而是"频率更高"：你抢走主动权、让对手持续被动回应，对手的防守成本会随你的激进度快速上升。',
+          '单挑中按钮位（SB）翻前先开池、翻后才轮到最后行动，这是你每手牌都能享受到的位置优势。因为只有一个对手，你可以用约 80% 的手牌开池——任何对子、任何 Ax、同花连牌都可以玩。这个优势的关键不是"牌更强"，而是"频率更高 + 翻后有位置"：你抢走主动权、让对手持续被动回应，对手的防守成本会随你的激进度快速上升。',
       },
       {
         type: 'key-point',
-        content: '按钮位的激进不是"打得更松"，而是"更积极地抢主动权"。每手牌你翻前最后行动，意味着你比 BB 多一手信息——用这个优势持续施压，而不是浪费在等待好牌。',
+        content: '按钮位的激进不是"打得更松"，而是"更积极地抢主动权"。每手牌你翻后最后行动，意味着 BB 每条街都必须先做决定——用这个优势持续施压，而不是浪费在等待好牌。',
       },
       { type: 'heading', content: '翻后持续施压：C-Bet 的频率与尺度' },
       {
         type: 'text',
         content:
-          '翻后你（SB）虽然先行动（位置反转，OOP），但翻前的主动权让 C-Bet 仍具价值。单挑中 C-Bet 频率远高于满员桌：因为对手防守范围宽、中牌率低，你的连续下注能高频偷走底池。干燥高牌面用 1/3 池小注高频（约 70%-80% 频率），湿润连接面用 2/3 池以上大注保护权益。关键在于——单挑 C-Bet 的价值是"让宽范围的弱牌弃牌 + 薄价值"，而非"代表强牌"。',
+          '翻后你（SB）最后行动、持有位置，翻前的主动权叠加翻后的位置红利，让 C-Bet 价值更高。单挑中 C-Bet 频率远高于满员桌：因为对手防守范围宽、中牌率低，你的连续下注能高频偷走底池。干燥高牌面用 1/3 池小注高频（约 70%-80% 频率），湿润连接面用 2/3 池以上大注保护权益。关键在于——单挑 C-Bet 的价值是"让宽范围的弱牌弃牌 + 薄价值"，而非"代表强牌"。',
       },
       {
         type: 'example',
         content:
-          '实例：单挑 100BB 深，你（SB）持 A♠5♠ min-raise 到 2BB，BB 跟注，底池 4BB。翻牌 K♠7♦2♣。你是翻前 aggressor 但翻后 OOP。干燥高牌面，BB 范围极少中 K，你下注 1/3 池约 1.3BB：A5 的高牌 + 后门同花有足够权益支持持续施压，同时让 BB 的垃圾牌付费。BB 若弃牌你直接赢 4BB，若跟注你有 A 高作为后续改进空间。',
+          '实例：单挑 100BB 深，你（SB）持 A♠5♠ min-raise 到 2BB，BB 跟注，底池 4BB。翻牌 K♠7♦2♣。你是翻前 aggressor，且翻后最后行动（IP）。干燥高牌面，BB 范围极少中 K，你下注 1/3 池约 1.3BB：A5 的高牌 + 后门同花有足够权益支持持续施压，同时让 BB 的垃圾牌付费。BB 若弃牌你直接赢 4BB，若跟注你有 A 高作为后续改进空间。',
       },
       {
         type: 'highlight',
-        content: '反直觉点：单挑按钮位"持续施压"不等于"每街都下注"。翻后你 OOP（先行动），面对湿润牌面或转牌牌面易手时，要懂得混合 check 保留过牌加注（x/r）杠杆——激进是频率优势，不是无脑开火。',
+        content: '反直觉点：单挑按钮位"持续施压"不等于"每街都下注"。翻后你虽是最后行动的一方，面对湿润牌面或转牌牌面易手时，仍要懂得混合 check 控制底池，提防先行动的 BB 用 x/r 反打——激进是频率优势，不是无脑开火。',
       },
       {
         type: 'pro-tip',
-        content: '按钮位激进度速记：翻前开池约 80%，翻后干燥面 C-Bet 约 70%-80%（1/3 池），湿润面降频用大注。每 50 手检查一次：你的 C-Bet 频率是否太低让 BB 无限 check-float？你的开池是否太紧浪费了最后行动优势？',
+        content: '按钮位激进度速记：翻前开池约 80%，翻后干燥面 C-Bet 约 70%-80%（1/3 池），湿润面降频用大注。每 50 手检查一次：你的 C-Bet 频率是否太低让 BB 的弱牌廉价看到转牌？你的开池是否太紧浪费了翻后有位置的优势？',
       },
     ],
     quiz: [
@@ -51,20 +51,20 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
         id: 'l3hu-bn-aggression-q1',
         question: '单挑中按钮位（SB）的核心频率优势是：',
         options: [
+          '翻后最后行动（IP），每条街多一手信息',
           '翻前最后行动，每手牌都多一手信息',
-          '翻后最后行动',
           '每手牌都能免费看翻牌',
           '起手牌必然更好',
         ],
         correctIndex: 0,
-        explanation: '单挑 SB 翻前最后行动（有翻前位置），这是它最核心的优势；翻后反而先行动（OOP）。C 是 SB 补足盲注看翻牌，不属于"最后行动优势"。',
+        explanation: 'SB 即按钮位：它翻前先开池，翻后才轮到它最后行动（IP），这才是最核心的优势。"翻前最后行动"是满员桌按钮位思维，搬进单挑就是本题的陷阱。C 是 SB 补足盲注看翻牌，不属于位置优势。',
       },
       {
         id: 'l3hu-bn-aggression-q2',
         question: '单挑按钮位（SB）的典型开池频率约为：',
         options: ['约 30%', '约 50%', '约 80%', '100%'],
         correctIndex: 2,
-        explanation: '单挑 SB 开池约 80%，因为只面对一个对手、任何对子与 Ax 都是强牌、翻前最后行动。100% 虽接近但非 GTO（仍有垃圾需弃）。',
+        explanation: '单挑 SB 开池约 80%，因为只面对一个对手、任何对子与 Ax 都是强牌、翻后有位置。100% 虽接近但非 GTO（仍有垃圾需弃）。',
       },
       {
         id: 'l3hu-bn-aggression-q3',
@@ -83,12 +83,12 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
         question: '单挑按钮位"持续施压"的正确含义是：',
         options: [
           '每街都无脑下注',
-          '以高频开池与 C-Bet 抢主动权，但湿润面懂得混合 check 保留 x/r 杠杆',
+          '以高频开池与 C-Bet 抢主动权，但湿润面懂得混合 check 控制底池',
           '永远下注到河牌',
           '只诈唬不价值',
         ],
         correctIndex: 1,
-        explanation: '持续施压是频率优势，不是无脑开火。湿润牌面或转牌易手时混合 check 保留 x/r 杠杆才是正确姿势。',
+        explanation: '持续施压是频率优势，不是无脑开火。湿润牌面或转牌易手时混合 check 控制底池、提防 BB 的先行动反打才是正确姿势。',
       },
       {
         id: 'l3hu-bn-aggression-q5',
@@ -100,7 +100,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           '底池更大',
         ],
         correctIndex: 0,
-        explanation: '单挑只面对一个对手，任何对子、Ax、同花连牌对宽范围都有足够权益，加上翻前最后行动，故可高频开池。',
+        explanation: '单挑只面对一个对手，任何对子、Ax、同花连牌对宽范围都有足够权益，加上翻后有位置，故可高频开池。',
       },
     ],
     examples: [
@@ -118,13 +118,13 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           amount: '2BB',
           reasoning: [
             'Q7s 在单挑中是标准开池牌，面对 BB 约 60% 防守范围有足够权益',
-            'SB 翻前最后行动，min-raise 以 1.5BB 风险争夺 1BB 盲注',
+            'SB 翻前先开池，min-raise 以 1.5BB 风险争夺 1BB 盲注',
             '同花牌翻后潜力好，深筹码下可以持续施压',
           ],
         },
         commonMistake: {
           action: 'Fold（"Q7s 不够好"）',
-          reasoning: '用满员桌标准打单挑会浪费按钮位最后行动的频率优势。Q7s 在单挑中是标准 open。',
+          reasoning: '用满员桌标准打单挑会浪费按钮位的频率与位置优势。Q7s 在单挑中是标准 open。',
           evLoss: '-1.5 BB/100',
         },
       },
@@ -147,7 +147,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'J8s 在单挑中是标准开池牌，fold 太紧浪费按钮位优势。', evImpact: '-1.5 BB/100', evLoss: 1.5 },
             { action: 'Call', isCorrect: false, explanation: 'Limp 太被动，单挑 SB 应积极 min-raise 抢主动权。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
-            { action: 'Min-raise', isCorrect: true, explanation: 'J8s 在单挑中可玩性好，SB 翻前最后行动，应 min-raise 开池。', evImpact: '+1.0 BB/100', evLoss: 0 },
+            { action: 'Min-raise', isCorrect: true, explanation: 'J8s 在单挑中可玩性好，SB 翻前先行动、翻后再由你最后决策，应 min-raise 开池。', evImpact: '+1.0 BB/100', evLoss: 0 },
           ],
           relatedLessonId: 'l3hu-bn-aggression',
         },
@@ -208,33 +208,33 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
     subtitle: '单挑 SB 翻后延续下注的尺度、频率与范围',
     duration: '7 min',
     objectives: [
-      '说明单挑 SB 翻后 OOP 的 C-Bet 纪律（用范围与尺度让宽范围 BB 弃牌或付费，而非「代表强牌」）',
+      '说明单挑 SB 翻后最后行动（IP）的 C-Bet 纪律（用范围与尺度让宽范围 BB 弃牌或付费，而非「代表强牌」）',
       '判断干燥高牌面（SB 范围优势 → 高频小注）与湿润连接面（BB 坚果优势 → 降频控池）的频率差异',
-      '判断 OOP 的 check 语义（把决策权交给 IP、保留 x/r 杠杆），并区分它与示弱的差异',
+      '判断 BB 的 check 语义（OOP 方保留 x/r 杠杆、把决策权交给 IP），并区分它与示弱的差异',
     ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante' },
     content: [
-      { type: 'heading', content: 'SB 的 C-Bet：OOP 的持续下注纪律' },
+      { type: 'heading', content: 'SB 的 C-Bet：有位置的持续施压纪律' },
       {
         type: 'text',
         content:
-          '单挑中 SB 翻后先行动（OOP），这意味着你的 C-Bet 不是"代表强牌"，而是"用正确的范围与尺度让宽范围的 BB 弃牌或付费"。与满员桌 BTN 不同，SB 的 C-Bet 面对 IP 的 BB 时成本更高：被加注时进退两难。因此 SB 的 C-Bet 范围更依赖牌面与范围优势——干燥高牌面高频、湿润连接面降频，并混合 check 保留 x/r 杠杆。',
+          '单挑中 SB 翻后最后行动、持有位置，这意味着你的 C-Bet 不是"代表强牌"，而是"用正确的范围与尺度让宽范围的 BB 弃牌或付费"。BB 必须先做决定，你把决策留在手里：可以对过牌下注薄价值，可以控制底池，也可以在危险面便宜收手。SB 的 C-Bet 频率由牌面与范围优势决定——干燥高牌面高频、湿润连接面降频，并混合 check 控制底池。',
       },
       {
         type: 'key-point',
-        content: 'OOP 的 C-Bet 核心纪律：先判断"这个牌面击中谁的范围"。干燥面 SB 范围优势大 → 高频小注；湿润面 BB 坚果优势 → 降频控池。不要因为"我是 aggressor"就无脑开火。',
+        content: '有位置的 C-Bet 核心纪律：先判断"这个牌面击中谁的范围"。干燥面 SB 范围优势大 → 高频小注；湿润面 BB 坚果优势 → 降频控池。不要因为"我是 aggressor"就无脑开火。',
       },
       { type: 'heading', content: '尺度与范围：何时继续、何时 check' },
       {
         type: 'text',
         content:
-          'SB 翻后持续下注的选择分三层：(1) 干燥高牌面（如 K♠7♦2♣）——SB 开池范围含大量 Kx，范围优势明显，用 1/3 池小注高频 C-Bet（约 70%-80%），让 BB 的宽范围弱牌弃牌或薄价值；(2) 湿润连接面（如 9♠8♥6♣）——BB 防守范围含大量顺子/听牌，坚果优势倒向 BB，SB 应降频（约 30%-40%）并混合 check；(3) 无范围优势的中性面——SB 用中小对子 check-call、强听牌 check-raise，构建平衡范围。',
+          'SB 翻后持续下注的选择分三层：(1) 干燥高牌面（如 K♠7♦2♣）——SB 开池范围含大量 Kx，范围优势明显，用 1/3 池小注高频 C-Bet（约 70%-80%），让 BB 的宽范围弱牌弃牌或薄价值；(2) 湿润连接面（如 9♠8♥6♣）——BB 防守范围含大量顺子/听牌，坚果优势倒向 BB，SB 应降频（约 30%-40%）并混合 check；(3) 无范围优势的中性面——SB 用强牌与好听牌下中小注薄价值，空气与弱对 check 过牌收池，构建平衡范围。',
       },
       {
         type: 'example',
         content:
-          '实例：单挑 100BB 深，你（SB）min-raise 到 2BB，BB 跟注，底池 4BB。翻牌 Q♦8♣3♠（干燥）。你是 OOP。你的开池范围含大量 Qx，BB 防守范围难中 Q，范围优势在你。下注 1/3 池约 1.3BB：QJ/QT 薄价值、A 高半诈唬、小对子也下注——整个范围高频 C-Bet，BB 的弱牌只能弃牌。',
+          '实例：单挑 100BB 深，你（SB）min-raise 到 2BB，BB 跟注，底池 4BB。翻牌 Q♦8♣3♠（干燥）。BB 先过牌，轮到你最后决策。你的开池范围含大量 Qx，BB 防守范围难中 Q，范围优势在你。下注 1/3 池约 1.3BB：QJ/QT 薄价值、A 高半诈唬、小对子也下注——整个范围高频 C-Bet，BB 的弱牌只能弃牌。',
       },
       {
         type: 'example',
@@ -243,29 +243,29 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         type: 'highlight',
-        content: '反直觉点：OOP 的 C-Bet 不等于"主动权的宣告"。翻前 aggressor 翻后 OOP 时，check 不是示弱，而是把决策权交给 IP 再决定接不接。混合 check 保留 x/r 杠杆，才是单挑 SB 的成熟打法。',
+        content: '反直觉点：有位置的 C-Bet 不等于"主动权的宣告"。你最后行动，check 就不是示弱，而是主动收池、消化 BB 翻后先行动透露的信息。x/r 杠杆真正握在 OOP 的 BB 手里——SB 混合 check 恰恰是为了让自己的高频 C-Bet 更难被反打，这才是单挑 SB 的成熟打法。',
       },
       {
         type: 'pro-tip',
-        content: 'SB C-Bet 决策三问：(1) 牌面击中谁的范围？(2) 我的牌是价值、半诈唬还是纯空气？(3) 被加注我能否应对？三问走完，OOP 的持续下注就从惯性变成结构。',
+        content: 'SB C-Bet 决策三问：(1) 牌面击中谁的范围？(2) 我的牌是价值、半诈唬还是纯空气？(3) 翻后 BB 先行动反打时我能否应对？三问走完，有位置的持续下注就从惯性变成结构。',
       },
     ],
     quiz: [
       {
         id: 'l3hu-sb-continuation-q1',
-        question: '单挑中 SB 翻后先行动（OOP），其 C-Bet 的核心特征是：',
+        question: '单挑中 SB 翻后最后行动（IP），其 C-Bet 的核心特征是：',
         options: [
           '无脑代表强牌',
-          '依赖牌面范围优势，混合 check 保留 x/r 杠杆',
+          '按牌面范围优势定频率，混合 check 控制底池',
           '永远过牌',
           '每街都大注',
         ],
         correctIndex: 1,
-        explanation: 'SB 翻后 OOP，C-Bet 成本高。正确姿势是按牌面范围优势决定频率，并混合 check 保留 x/r 杠杆。',
+        explanation: 'SB 翻后最后行动且持有 IP，C-Bet 成本低、底池由你掌控。正确姿势是按牌面范围优势决定频率，混合 check 控池并防范 BB 的 x/r 反打。',
       },
       {
         id: 'l3hu-sb-continuation-q2',
-        question: '干燥高牌面（K♠7♦2♣）上，SB（OOP）的 C-Bet 频率倾向是：',
+        question: '干燥高牌面（K♠7♦2♣）上，SB（IP）的 C-Bet 频率倾向是：',
         options: [
           '高频（约 70%-80%）1/3 池小注',
           '完全过牌',
@@ -277,7 +277,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3hu-sb-continuation-q3',
-        question: '湿润连接面（9♠8♥6♣）上，SB（OOP）的 C-Bet 频率应：',
+        question: '湿润连接面（9♠8♥6♣）上，SB（IP）的 C-Bet 频率应：',
         options: [
           '保持高频',
           '大幅下降（约 30%-40%），因为 BB 有坚果优势',
@@ -289,15 +289,15 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
       },
       {
         id: 'l3hu-sb-continuation-q4',
-        question: 'OOP 的 check 在单挑中的正确理解是：',
+        question: '单挑中 BB（翻后要先行动的一方）的过牌，正确理解是：',
         options: [
           '示弱，表示没有牌',
-          '把决策权交给 IP，保留 x/r 杠杆，是成熟打法',
+          '保留 x/r 杠杆，把决策权交给 IP 的 SB，是成熟打法',
           '永远错误',
           '只在河牌使用',
         ],
         correctIndex: 1,
-        explanation: 'OOP 的 check 不是示弱，而是把球踢给 IP 再决定接不接，同时保留 x/r 杠杆——这是单挑 SB 的成熟姿势。',
+        explanation: 'BB 翻后要先行动，它的过牌不是示弱，而是保留过牌加注的威胁、把球踢给最后行动的你——SB 必须为这种 x/r 风险定价。这是单挑 BB 的成熟姿势。',
       },
       {
         id: 'l3hu-sb-continuation-q5',
@@ -332,12 +332,12 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           reasoning: [
             'QJ 在 Q-8-3 干燥面是顶对，范围优势在 SB',
             '1/3 池小注薄价值 + 让 BB 宽范围弱牌弃牌',
-            'OOP 但翻前主动权支持持续施压',
+            '翻后你最后行动，翻前主动权与位置共同支持持续施压',
           ],
         },
         commonMistake: {
           action: 'Check',
-          reasoning: '干燥面顶对是 SB 范围的标准 C-Bet 牌，check 让 BB 免费实现弱范围，浪费范围优势。',
+          reasoning: '干燥面顶对是 SB 范围的标准 C-Bet 牌，check 让 BB 廉价实现弱范围，浪费范围优势。',
           evLoss: '-1.0 BB/100',
         },
       },
@@ -425,38 +425,38 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
     subtitle: '单挑大盲的宽范围防守、过牌加注与不利位置控制',
     duration: '8 min',
     objectives: [
-      '说明单挑 BB 防守 60%+ 的数学依据（翻后 IP、SB 的 0.5 死钱让跟注便宜），并区分它与跟注站的差异',
+      '说明单挑 BB 防守 60%+ 的数学依据（翻前最后行动、已投 1BB 死钱带来的底池赔率），并区分它与跟注站的差异',
       '用底池赔率公式计算 BB 面对 SB min-raise 的跟注线（1÷(3+1) = 25%）',
       '判断强听牌面对 C-Bet 应 x/r 半诈唬、顶对顶踢脚在干燥面应跟注控池保留 SB 诈唬',
     ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_BB', anteStructure: 'sb_ante' },
     content: [
-      { type: 'heading', content: 'BB：单挑中位置最好但防守最重的座位' },
+      { type: 'heading', content: 'BB：翻前信息最全、翻后要先行动的防守位' },
       {
         type: 'text',
         content:
-          '单挑 BB 翻后是位置优势方（IP），但翻前每手牌都要面对 SB 的进攻，防守频率高达 60%+。这个"60%+ 防守"不是被动跟注，而是有结构的防守：跟注叠（中小对子、同花连张、弱 Ax）+ 3-bet 价值叠（强牌打价值）+ 3-bet 诈唬叠（阻断牌）。因为 BB 翻后 IP 且 SB 的 0.5 死钱让跟注便宜，边缘牌也能盈利地防守。',
+          '单挑中 SB 先开池、BB 翻前最后再做决定，每手牌都要面对进攻，防守频率高达 60%+。这个"60%+ 防守"不是被动跟注，而是有结构的防守：跟注叠（中小对子、同花连张、弱 Ax）+ 3-bet 价值叠（强牌打价值）+ 3-bet 诈唬叠（阻断牌）。宽防守的数学依据是翻前信息优势加已投 1BB 死钱带来的底池赔率：SB min-raise 到 2BB 时你只需再跟 1BB。要清醒的是，翻后 BB 要先行动，权益实现率超 100% 的红利属于持有位置的 SB——BB 得用 check-call 与控池来补偿位置劣势。',
       },
       {
         type: 'key-point',
-        content: 'BB 的"60%+ 防守"是有位置的防守：翻前最后行动 + 翻后最后行动，让边缘牌跟注的代价远低于满员桌。把满员桌"BB 只能打紧"搬进单挑，等于白白扔掉位置优势。',
+        content: 'BB 的"60%+ 防守"是有结构的防守：翻前最后做决定 + 已投 1BB 死钱，让边缘牌跟注的代价远低于满员桌。把满员桌"BB 只能打紧"搬进单挑，等于白白扔掉信息与赔率优势；但翻后 BB 要先行动，宽必须配上 check-call 与控池的纪律。',
       },
       { type: 'heading', content: '过牌加注（x/r）：BB 的关键杠杆' },
       {
         type: 'text',
         content:
-          'BB 翻后 IP，面对 SB 的 C-Bet 有三个选择：跟注、加注、弃牌。过牌加注（x/r）是 BB 构建范围的关键工具——用强牌 + 强听牌构成两极化 x/r 范围，压制 SB 的 C-Bet 频率，保护跟注范围不被剥削。x/r 的数学依据：当 SB 的 C-Bet 频率过高、弃牌率不足时，BB 的 x/r 半诈唬自动盈利。',
+          'BB 翻后要先行动，过牌后常面对 SB 的 C-Bet：跟注、过牌加注、弃牌。过牌加注（x/r）是 BB 构建范围的关键工具——用强牌 + 强听牌构成两极化 x/r 范围，压制 SB 的 C-Bet 频率，保护跟注范围不被剥削。x/r 的数学依据：当 SB 的 C-Bet 频率过高、弃牌率不足时，BB 的 x/r 半诈唬自动盈利。',
       },
       {
         type: 'example',
         content:
-          '实例：单挑 100BB 深，SB min-raise 到 2BB，你（BB）持 7♠6♠ 跟注，底池 4BB。翻牌 8♣5♦2♠。SB C-Bet 1.3BB（半池）。你有双卡顺（4 张 4 + 4 张 9）+ 后门同花，是标准 x/r 半诈唬牌。加注到 4BB 左右：SB 若弃牌你直接赢 5.3BB；被跟注你有 8+ 张 Outs 的改进空间。x/r 既保护你的听牌，又让 SB 的宽范围 C-Bet 付出代价。',
+          '实例：单挑 100BB 深，SB min-raise 到 2BB，你（BB）持 7♠6♠ 跟注，底池 4BB。翻牌 8♣5♦2♠。你过牌，SB C-Bet 1.3BB（半池）。你有双卡顺（4 张 4 + 4 张 9）+ 后门同花，是标准 x/r 半诈唬牌。加注到 4BB 左右：SB 若弃牌你直接赢 5.3BB；被跟注你有 8+ 张 Outs 的改进空间。x/r 既保护你的听牌，又让 SB 的宽范围 C-Bet 付出代价。',
       },
       {
         type: 'example',
         content:
-          '实例二（不利位置控制）：同一底池，你（BB）持 A♠K♠，翻牌 K♦8♣3♥（干燥顶对）。你 IP，SB C-Bet 1.3BB。顶对顶踢脚在干燥面倾向跟注而非加注——用跟注保留 SB 的诈唬，同时你在 IP 可以控制后续街。x/r 反而会把 SB 的弱牌赶走，浪费顶对的薄价值。IP 的优势就是"跟注看对手继续开火，或薄价值自己下注"。',
+          '实例二（不利位置的控制）：同一底池，你（BB）持 A♠K♠，翻牌 K♦8♣3♥（干燥顶对）。你翻后先过牌，SB C-Bet 1.3BB。顶对顶踢脚在干燥面倾向跟注而非加注——用跟注保留 SB 的诈唬、同时避免在无位置时把底池造大。x/r 反而会把 SB 的弱牌赶走，浪费顶对的薄价值。OOP 的纪律是"用 check-call 实现强牌，不轻易造大底池"。',
       },
       {
         type: 'highlight',
@@ -480,12 +480,12 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
         question: '单挑 BB 防守 60%+ 的数学依据是：',
         options: [
           'BB 每手牌都更好',
-          'BB 翻后 IP、跟注价格便宜（SB 死钱）',
+          'BB 翻前最后做决定，已投 1BB 死钱带来底池赔率',
           'BB 必须阻止 SB 用任何牌偷盲',
           '规则要求',
         ],
         correctIndex: 1,
-        explanation: 'BB 翻后 IP 权益实现率超 100%，且 SB 的 0.5 死钱让跟注价格便宜，故可防守超过 MDF 底线且仍盈利。',
+        explanation: 'BB 翻前最后做决定，且 SB 的 0.5 死钱让你跟注便宜，故可防守超过 MDF 底线且仍盈利。权益实现率超 100% 的红利属于持有位置的 SB，BB 要靠结构与赔率补偿翻后的先行动。',
       },
       {
         id: 'l3hu-bb-defense-q3',
@@ -504,12 +504,12 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
         question: 'BB 持顶对顶踢脚在干燥面面对 SB C-Bet，正确做法是：',
         options: [
           '过牌加注赶走弱牌',
-          '跟注，保留 SB 诈唬并在 IP 控池',
+          '跟注，保留 SB 的诈唬；自己在 OOP 控池',
           '直接弃牌',
           '全下',
         ],
         correctIndex: 1,
-        explanation: 'IP 顶对倾向跟注而非 x/r：跟注保留 SB 的诈唬，同时 IP 可控制后续街，x/r 反而赶走弱牌浪费薄价值。',
+        explanation: 'BB 翻后要先行动，顶对顶踢脚倾向跟注而非 x/r：跟注保留 SB 的诈唬，也在无位置时控制底池；x/r 反而赶走弱牌浪费薄价值。',
       },
       {
         id: 'l3hu-bb-defense-q5',
@@ -542,12 +542,12 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           reasoning: [
             'K7s 面对 SB 约 80% 开池范围胜率约 48%',
             '跟注 1BB 进入 4BB 总底池（SB 2 + BB 已投 1 + 跟注 1），所需胜率 = 1÷4 = 25%，富余约 23 个百分点',
-            'BB 翻后 IP，权益实现率超 100%，边缘牌也可盈利防守',
+            'BB 翻前最后做决定、赔率便宜，边缘牌即可盈利防守；翻后先用 check-call 补偿位置',
           ],
         },
         commonMistake: {
           action: 'Fold（"K7s 是烂牌"）',
-          reasoning: '用满员桌标准打单挑会丢掉 BB 的位置优势。K7s 面对 SB 宽范围是 +EV 的跟注。',
+          reasoning: '用满员桌标准打单挑会丢掉 BB 的翻前信息优势与底池赔率。K7s 面对 SB 宽范围是 +EV 的跟注。',
           evLoss: '-1.0 BB/100',
         },
       },
@@ -570,8 +570,8 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌' },
           },
           options: [
-            { action: 'Fold', isCorrect: false, explanation: 'J9s 面对 SB 宽范围可玩性好，fold 太紧浪费 BB 位置。', evImpact: '-1.0 BB/100', evLoss: 1 },
-            { action: 'Call', isCorrect: true, explanation: 'J9s 同花连张翻后 IP 可玩性好，跟注 1BB 进入 4BB 总底池（所需胜率 25%），标准防守。', evImpact: '+1.0 BB/100', evLoss: 0 },
+            { action: 'Fold', isCorrect: false, explanation: 'J9s 面对 SB 宽范围可玩性好，fold 太紧浪费底池赔率。', evImpact: '-1.0 BB/100', evLoss: 1 },
+            { action: 'Call', isCorrect: true, explanation: 'J9s 同花连张，跟注 1BB 进入 4BB 总底池（所需胜率 25%），赔率富余足以补偿翻后先行动的弱势，标准防守。', evImpact: '+1.0 BB/100', evLoss: 0 },
             { action: '3-bet', isCorrect: false, explanation: 'J9s 偏投机，3-bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l3hu-bb-defense',
@@ -595,7 +595,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
           options: [
             { action: 'Check-Fold', isCorrect: false, explanation: '87 有卡顺 + 后门同花，fold 太弱。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: '87 有卡顺听牌，x/r 半诈唬压制 SB C-Bet 并保护听牌。', evImpact: '+1.2 BB/100', evLoss: 0 },
-            { action: 'Donk Bet', isCorrect: false, explanation: 'Donk 不是标准打法，IP 应 Check 让对手先行动。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
+            { action: 'Donk Bet', isCorrect: false, explanation: 'Donk 不是标准打法，BB 应先 Check，面对 SB 的 C-Bet 再 x/r。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],
           relatedLessonId: 'l3hu-bb-defense',
         },
@@ -617,7 +617,7 @@ export const HEADS_UP_LEVEL_3_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-bet 底池' },
           },
           options: [
-            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AK 在 K-8-3 干燥面是顶对顶踢脚，IP 小注薄价值让 SB 弱牌跟注。', evImpact: '+2.0 BB/100', evLoss: 0 },
+            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AK 在 K-8-3 干燥面是顶对顶踢脚，3-bet 底池主动小注薄价值；SB 的弱牌只能廉价跟注或弃牌。', evImpact: '+2.0 BB/100', evLoss: 0 },
             { action: 'Check', isCorrect: false, explanation: '顶对顶踢脚应下注薄价值，check 太被动。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'All-in', isCorrect: false, explanation: '干燥面顶对 All-in 过度，小注薄价值即可。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],

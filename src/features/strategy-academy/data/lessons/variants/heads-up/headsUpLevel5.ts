@@ -370,7 +370,7 @@ export const HEADS_UP_LEVEL_5_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌' },
           },
           options: [
-            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AQ 顶对顶踢脚，IP 小注薄价值。', evImpact: '+1.5 BB/100', evLoss: 0 },
+            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AQ 顶对顶踢脚，3-bet 底池主动小注薄价值。', evImpact: '+1.5 BB/100', evLoss: 0 },
             { action: 'Check', isCorrect: false, explanation: '顶对顶踢脚应下注，check 太被动。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'All-in', isCorrect: false, explanation: '干燥面顶对 All-in 过度，小注即可。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],

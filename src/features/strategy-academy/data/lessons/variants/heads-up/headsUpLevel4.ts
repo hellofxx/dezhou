@@ -12,7 +12,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       '推导 SB min-raise 2BB 的纯偷盲盈亏平衡弃牌率（以弃牌为基准：f×1.5 = (1−f)×1.5 → f = 50%），并说出尺度越大自动盈利门槛越高',
       '判断单挑开池以 min-raise 为主的原因（偷盲门槛低、尺度小翻后易控池、支撑约 80%-100% 宽范围）',
       '说明 BB 面对 min-raise 的真实弃牌率约 30%-40%，并判断纯偷盲不盈利时开池价值主要来自翻后',
-      '判断面对高频 3-bet 的 BB 应收窄开池范围（剔除被 3-bet 后只能弃牌的边缘牌）',
+      '判断 SB（按钮位）面对 BB 高频 3-bet 时应收窄开池范围（剔除被 3-bet 后只能弃牌的边缘牌）',
     ],
     variant: 'heads-up',
     variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante' },
@@ -21,7 +21,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '单挑按钮位（SB）是翻前最后行动的一方，面对唯一的对手，开池频率可以接近 100%——只有极少数完全垃圾的牌（如 72o、83o）弃牌。这是因为：SB 补 0.5 即可看 1.5BB 底池（所需胜率 25%），任何牌对 BB 宽防守范围都接近或超过这条线；且翻前最后行动让你永远有主动权。高频开池不是"玩得松"，而是"用频率榨取每一个边缘 EV"。',
+          '单挑按钮位（SB）翻前先开池、翻后才轮到最后行动，面对唯一的对手，开池频率可以接近 100%——只有极少数完全垃圾的牌（如 72o、83o）弃牌。这是因为：SB 补 0.5 即可看 1.5BB 底池（所需胜率 25%），任何牌对 BB 宽防守范围都接近或超过这条线；且翻后由你最后行动、持有位置，主动权能一路延伸到后两条街。高频开池不是"玩得松"，而是"用频率榨取每一个边缘 EV"。',
       },
       {
         type: 'key-point',
@@ -36,12 +36,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'text',
         content:
-          '为什么单挑不用满员桌的"偷盲要加大尺度"？三点：(1) 单挑 BB 面对 min-raise 的真实弃牌率只有约 30%-40%，纯偷盲几乎不盈利，价值在翻后；(2) 大尺度在单挑是"自我惩罚"——BB 的跟注范围随尺度收窄，你花 3BB 只换来一个更强、更有位置的跟注范围；(3) 频率与平衡——min-raise 让你能用约 80% 的手牌开池，范围够宽才能覆盖翻后各种牌面。',
+          '为什么单挑不用满员桌的"偷盲要加大尺度"？三点：(1) 单挑 BB 面对 min-raise 的真实弃牌率只有约 30%-40%，纯偷盲几乎不盈利，价值在翻后；(2) 大尺度在单挑是"自我惩罚"——BB 的跟注范围随尺度收窄，你花 3BB 只换来一个更强的跟注范围；(3) 频率与平衡——min-raise 让你能用约 80% 的手牌开池，范围够宽才能覆盖翻后各种牌面。',
       },
       {
         type: 'example',
         content:
-          '实例：单挑 100BB 深，你（SB）持 Q♦J♦。这是满员桌的紧位置边缘牌，但单挑中 QJs 面对 BB 宽防守范围胜率约 52%，min-raise 2BB 是标准开池。翻后你有同花/顺子听牌潜力 + SB 最后行动优势，QJs 在单挑按钮位是绝对的开池牌。',
+          '实例：单挑 100BB 深，你（SB）持 Q♦J♦。这是满员桌的紧位置边缘牌，但单挑中 QJs 面对 BB 宽防守范围胜率约 52%，min-raise 2BB 是标准开池。翻后你有同花/顺子听牌潜力 + 最后行动的位置红利，QJs 在单挑按钮位是绝对的开池牌。',
       },
       {
         type: 'example',
@@ -63,7 +63,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
         question: '单挑按钮位（SB）的开池频率范围约为：',
         options: ['约 30%', '约 50%', '约 80%-100%', '约 10%'],
         correctIndex: 2,
-        explanation: '单挑 SB 开池约 80%-100%，只有极少数完全垃圾弃牌。因为补 0.5 即可看 1.5BB 底池、翻前最后行动。',
+        explanation: '单挑 SB 开池约 80%-100%，只有极少数完全垃圾弃牌。因为补 0.5 即可看 1.5BB 底池、翻后由你最后行动。',
       },
       {
         id: 'l4hu-bn-opening-q2',
@@ -125,7 +125,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           reasoning: [
             '98s 在单挑按钮位是标准开池牌，面对 BB 宽防守范围胜率约 48%',
             'min-raise 偷盲 + 翻后同花/顺子潜力',
-            'SB 翻前最后行动，尺度小让翻后易控池',
+            'SB 翻后最后行动、有位置，尺度小让翻后易控池',
           ],
         },
         commonMistake: {
@@ -152,7 +152,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           },
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'K7s 在单挑按钮位是标准开池牌，fold 太紧。', evImpact: '-1.0 BB/100', evLoss: 1 },
-            { action: 'Min-raise', isCorrect: true, explanation: 'K7s 有高张 + 同花潜力，SB 翻前最后行动，应 min-raise 开池。', evImpact: '+1.0 BB/100', evLoss: 0 },
+            { action: 'Min-raise', isCorrect: true, explanation: 'K7s 有高张 + 同花潜力，SB 翻后最后行动有位置，应 min-raise 开池。', evImpact: '+1.0 BB/100', evLoss: 0 },
             { action: 'Call', isCorrect: false, explanation: 'Limp 太被动，单挑 SB 应积极 min-raise 抢主动权。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],
           relatedLessonId: 'l4hu-bn-opening',
@@ -209,7 +209,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       '用所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）计算 BB 面对 SB min-raise 的跟注线（1÷4 = 25%），并说出分母必须含 BB 已入池的死钱',
       '说明单挑 EV 的三个放大因素（无多人稀释、死钱占比高、对手范围宽），并判断更多边缘牌跟注转 +EV 的原因',
       '判断单挑听牌跟注依赖隐含赔率的机制（对手范围宽、支付意愿高），并给出半池 25%、1/3 池 20%、满池 33.3% 的速算锚点',
-      '区分位置价值的统计期望语义（BB 每手约多 0.5-1BB 长期期望，而非单手保证）',
+      '区分位置价值的统计期望语义（SB 每手约多 0.5-1BB 长期期望，而非单手保证）',
     ],
     variant: 'heads-up',
     variantContext: { anteStructure: 'sb_ante' },
@@ -228,22 +228,22 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'formula',
         content:
-          '翻前偷盲 EV（SB min-raise 到 2BB，BB 弃牌率 f，以弃牌为基准）：\nEV(steal) = f×1.5 − (1−f)×1.5（保本 f = 50%）\n\n翻后位置 EV 锚点：\n单挑位置价值约 0.5-1BB/手（BB 每手翻后 IP）\n\n实例：BB 面对 SB min-raise（SB 总投入 2BB，BB 已投 1BB）：\n通式：所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）\n代入：1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n（当前底池 1.5 = SB 0.5 + BB 自己已投的 1，这 1BB 是死钱但仍在分母里，不可漏算；对手下注 1.5 = SB 补到 2BB 的加注额；跟注额 1 = BB 需补的差额。等价于跟注后总底池 4BB，1÷4=25%）\nBB 面对 SB 约 80% 开池范围，边缘牌胜率常超 40% → 跟注 +EV',
+          '翻前偷盲 EV（SB min-raise 到 2BB，BB 弃牌率 f，以弃牌为基准）：\nEV(steal) = f×1.5 − (1−f)×1.5（保本 f = 50%）\n\n翻后位置 EV 锚点：\n单挑位置价值约 0.5-1BB/手（SB 每手翻后 IP）\n\n实例：BB 面对 SB min-raise（SB 总投入 2BB，BB 已投 1BB）：\n通式：所需胜率 = 跟注额 ÷（当前底池 + 对手下注 + 跟注额）\n代入：1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n（当前底池 1.5 = SB 0.5 + BB 自己已投的 1，这 1BB 是死钱但仍在分母里，不可漏算；对手下注 1.5 = SB 补到 2BB 的加注额；跟注额 1 = BB 需补的差额。等价于跟注后总底池 4BB，1÷4=25%）\nBB 面对 SB 约 80% 开池范围，边缘牌胜率常超 40% → 跟注 +EV',
       },
       {
         type: 'text',
         content:
-          '单挑 EV 调整的实践含义：面对 SB 的宽范围，BB 的跟注门槛大幅降低。满员桌面对 UTG 范围 15% 时 40% 的跟注线，在单挑面对 SB 范围 80% 时降到 25%（再跟 1BB ÷ 跟注后总底池 4BB），且因为位置优势实际胜率更高。这就是为什么单挑 BB 能防守 60%+——不是"宽松"，而是"EV 计算的结果"。',
+          '单挑 EV 调整的实践含义：面对 SB 的宽范围，BB 的跟注门槛大幅降低。满员桌面对 UTG 范围 15% 时 40% 的跟注线，在单挑面对 SB 范围 80% 时降到 25%（再跟 1BB ÷ 跟注后总底池 4BB），且对手范围宽到约 80% 时，边缘牌的现实胜率本身就更高。这就是为什么单挑 BB 能防守 60%+——不是"宽松"，而是"EV 计算的结果"。',
       },
       {
         type: 'example',
         content:
-          '实例：单挑盲注 0.5/1，翻前 SB min-raise 2BB，你（BB）持 K♠7♠。跟注 1BB，跟注后总底池 = SB 2 + BB 已投 1 + 你的跟注 1 = 4BB，所需胜率 = 1 ÷ 4 = 25%。K7s 对 SB 约 80% 的开池范围胜率约 48%，富余约 23 个百分点。翻后你 IP：出 K 可薄价值、出同花/顺子可便宜追、完全 miss 可放弃。跟注的 EV 为正——满员桌 K7s 面对 UTG 是弃牌，但单挑面对 SB 宽范围是 +EV 跟注。',
+          '实例：单挑盲注 0.5/1，翻前 SB min-raise 2BB，你（BB）持 K♠7♠。跟注 1BB，跟注后总底池 = SB 2 + BB 已投 1 + 你的跟注 1 = 4BB，所需胜率 = 1 ÷ 4 = 25%。K7s 对 SB 约 80% 的开池范围胜率约 48%，富余约 23 个百分点。翻后你先过牌、以 check-call 为主：出 K 可薄价值、出同花/顺子可便宜追、完全 miss 可放弃。跟注的 EV 为正——满员桌 K7s 面对 UTG 是弃牌，但单挑面对 SB 宽范围是 +EV 跟注。',
       },
       {
         type: 'example',
         content:
-          '实例二（翻后 EV 决策）：翻牌底池 4BB，你（BB IP）持 7♠6♠，SB（OOP）下注 2BB（半池）。你跟注所需胜率 = 2/(4+2+2) = 25%。你的 76 在 9♠8♦3♣ 面有双卡顺 + 后门同花，约 8 个 Outs 单街 17%——单看不足 25%，但加隐含赔率（中顺后能再赢 2.5BB）跟注转 +EV。单挑听牌跟注更常依赖隐含赔率，因为对手范围宽、支付意愿高。',
+          '实例二（翻后 EV 决策）：翻牌底池 4BB，你（BB）先行动，SB（IP）下注 2BB（半池）。你跟注所需胜率 = 2/(4+2+2) = 25%。你的 76 在 9♠8♦3♣ 面有双卡顺 + 后门同花，约 8 个 Outs 单街 17%——单看不足 25%，但加隐含赔率（中顺后能再赢 2.5BB）跟注转 +EV。单挑听牌跟注更常依赖隐含赔率，因为对手范围宽、支付意愿高。',
       },
       {
         type: 'highlight',
@@ -279,12 +279,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
         question: '单挑 BB 防守 60%+ 的根本原因是：',
         options: [
           'BB 牌更好',
-          '面对 SB 宽范围跟注门槛低且位置优势使实际胜率更高',
+          '面对 SB 宽范围跟注门槛低，且翻前最后做决定信息更全',
           'BB 必须防守',
           '规则要求',
         ],
         correctIndex: 1,
-        explanation: '面对 SB 约 80% 宽范围，跟注门槛降至 25%（再跟 1BB ÷ 跟注后总底池 4BB），且 IP 权益实现率超 100%，故可宽防守——是 EV 计算的结果而非"宽松"。',
+        explanation: '面对 SB 约 80% 宽范围，跟注门槛降至 25%（再跟 1BB ÷ 跟注后总底池 4BB），且 BB 翻前最后做决定、已投死钱赔率便宜，故可宽防守——是 EV 计算的结果而非"宽松"；权益实现率超 100% 的红利属于持有位置的 SB，不在 BB 名下。',
       },
       {
         id: 'l4hu-ev-adjustments-q4',
@@ -303,12 +303,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
         question: '单挑位置价值约 0.5-1BB/手，最准确的理解是：',
         options: [
           'BB 每手翻牌都能多赚 1BB',
-          '长期来看 BB 位比 SB 位每手多 0.5-1BB 期望收益',
+          '长期来看 SB 位比 BB 位每手多 0.5-1BB 期望收益',
           '翻前位置的价值',
           '只在锦标赛成立',
         ],
         correctIndex: 1,
-        explanation: '位置价值是长期期望差异：BB 有翻后信息优势，平均每手多赢 0.5-1BB，是统计期望而非单手保证。',
+        explanation: '位置价值是长期期望差异：SB 翻后最后行动、持有 IP，平均每手多赢 0.5-1BB，是统计期望而非单手保证。',
       },
     ],
     examples: [
@@ -329,12 +329,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           reasoning: [
             'Q6s 面对 SB 约 80% 开池范围胜率约 45%',
             '跟注 1BB 进入 4BB 总底池（SB 2 + BB 1 + 跟注 1），所需胜率 = 1÷4 = 25%，富余约 20 个百分点',
-            'BB 翻后 IP，权益实现率超 100%，边缘牌也可盈利',
+            'BB 翻前最后做决定、已投死钱带来赔率，边缘牌也可盈利防守',
           ],
         },
         commonMistake: {
           action: 'Fold（"Q6s 太弱"）',
-          reasoning: '单挑面对 SB 宽范围，Q6s 的 +EV 跟注被满员桌记忆掩盖。BB 位置优势让边缘牌可防守。',
+          reasoning: '单挑面对 SB 宽范围，Q6s 的 +EV 跟注被满员桌记忆掩盖。BB 翻前最后做决定与底池赔率让边缘牌可防守。',
           evLoss: '-1.0 BB/100',
         },
       },
@@ -358,7 +358,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           },
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'J8s 面对 SB 宽范围可玩性好，fold 太紧。', evImpact: '-1.0 BB/100', evLoss: 1 },
-            { action: 'Call', isCorrect: true, explanation: 'J8s 同花连张翻后 IP 可玩性好，跟注 EV 为正。', evImpact: '+1.0 BB/100', evLoss: 0 },
+            { action: 'Call', isCorrect: true, explanation: 'J8s 同花连张跟注便宜、可玩性好，跟注 EV 为正。', evImpact: '+1.0 BB/100', evLoss: 0 },
             { action: '3-bet', isCorrect: false, explanation: 'J8s 偏投机，3-bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l4hu-ev-adjustments',
@@ -443,7 +443,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'formula',
         content:
-          '河牌满池下注的均衡价值:诈唬比（底池 P、下注 P）：\n诈唬占比 f = b/(1+2b) = 1/(1+2) = 1/3\n即价值:诈唬 = 2:1。\n\n半池（b=0.5）：f = 0.5/2 = 25%，价值:诈唬 = 3:1。\n\nMDF（最小防御频率）= 1/(1+b)：\n半池 → 67%；满池 → 50%；2 倍池 → 33%。\n\n单挑中 BB 防守 60%+ 远超 MDF 底线（约 33%-38%），因为翻后位置让跟注本身 +EV。',
+          '河牌满池下注的均衡价值:诈唬比（底池 P、下注 P）：\n诈唬占比 f = b/(1+2b) = 1/(1+2) = 1/3\n即价值:诈唬 = 2:1。\n\n半池（b=0.5）：f = 0.5/2 = 25%，价值:诈唬 = 3:1。\n\nMDF（最小防御频率）= 1/(1+b)：\n半池 → 67%；满池 → 50%；2 倍池 → 33%。\n\n单挑中 BB 防守 60%+ 远超 MDF 底线（约 33%-38%），因为翻前最后做决定与已投死钱赔率让跟注本身 +EV。',
       },
       {
         type: 'text',
@@ -453,12 +453,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
       {
         type: 'example',
         content:
-          '实例：单挑 SB 面对 BB，求解器会告诉你 SB 用约 80% 范围开池、BB 用约 60%+ 防守，翻后 OOP 的 SB 高频过牌、IP 的 BB 高频下注。这些频率看似"松"，但都是均衡的一部分——任何一方偏离（如 SB 只开池 50%），另一方都能通过加宽防守或提高偷盲频率来剥削。',
+          '实例：单挑 SB 面对 BB，求解器会告诉你 SB 用约 80% 范围开池、BB 用约 60%+ 防守，翻后 OOP 的 BB 高频过牌、IP 的 SB 高频下注。这些频率看似"松"，但都是均衡的一部分——任何一方偏离（如 SB 只开池 50%），另一方都能通过加宽防守或提高偷盲频率来剥削。',
       },
       {
         type: 'example',
         content:
-          '实例二（位置对称性）：单挑每手牌双方互换 SB/BB，位置不是固定的——SB 翻前最后行动（有翻前位置）、翻后先行动（OOP）；BB 恰好相反。GTO 均衡会同时包含两个方向的位置策略，位置对称性意味着你既要会打 SB 也要会打 BB，不能用满员桌"固定位置"的思维。',
+          '实例二（位置对称性）：单挑每手牌双方互换 SB/BB，位置不是固定的——SB 翻前先开池、翻后才轮到最后行动；BB 恰好相反。GTO 均衡会同时包含两个方向的位置策略，位置对称性意味着你既要会打 SB 也要会打 BB，不能用满员桌"固定位置"的思维。',
       },
       {
         type: 'highlight',
@@ -506,12 +506,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
         question: '单挑中 BB 防守 60%+ 远超 MDF 底线（约 33%-38%）的原因是：',
         options: [
           'BB 每手牌更好',
-          'BB 翻后位置优势让跟注本身 +EV',
+          'BB 翻前最后做决定，已投 1BB 死钱让跟注便宜',
           'BB 必须防守',
           'MDF 公式在翻前不适用',
         ],
         correctIndex: 1,
-        explanation: 'MDF 只保证"阻止纯诈唬自动盈利"，而 BB 跟注的正 EV 来自翻后位置（权益实现率 >100%），故可防守超过底线且仍盈利。',
+        explanation: 'MDF 只保证"阻止纯诈唬自动盈利"，而 BB 跟注的正 EV 来自翻前最后做决定与已投死钱赔率，故可防守超过底线且仍盈利。权益实现率超 100% 的红利属于持有位置的 SB。',
       },
       {
         id: 'l4hu-gto-basics-q5',
@@ -523,7 +523,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           '只有 SB 有位置',
         ],
         correctIndex: 1,
-        explanation: '单挑每手牌双方互换 SB/BB，位置反转（SB 翻前最后、翻后先；BB 相反），GTO 均衡同时包含两个方向的位置策略。',
+        explanation: '单挑每手牌双方互换 SB/BB，位置反转（SB 翻前先开池、翻后最后行动；BB 相反），GTO 均衡同时包含两个方向的位置策略。',
       },
     ],
     examples: [
@@ -544,12 +544,12 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           reasoning: [
             '65s 面对 SB 约 80% 开池范围胜率约 42%',
             '跟注 1BB 进入 4BB 总底池（SB 2 + BB 1 + 跟注 1），所需胜率 = 1÷4 = 25%，富余约 17 个百分点',
-            'BB 翻后 IP，同花连张可玩性好，是均衡防守范围成员',
+            'BB 翻前最后做决定、跟注便宜，同花连张可玩性好，是均衡防守范围成员',
           ],
         },
         commonMistake: {
           action: 'Fold（"65s 太弱"）',
-          reasoning: '单挑 BB 面对 SB 宽范围应宽防守，65s 是标准跟注牌。满员桌标准会丢掉位置优势。',
+          reasoning: '单挑 BB 面对 SB 宽范围应宽防守，65s 是标准跟注牌。满员桌标准会丢掉翻前信息与底池赔率优势。',
           evLoss: '-1.0 BB/100',
         },
       },
@@ -573,7 +573,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           },
           options: [
             { action: 'Fold', isCorrect: false, explanation: 'T9s 面对 SB 宽范围可玩性好，fold 太紧。', evImpact: '-1.0 BB/100', evLoss: 1 },
-            { action: 'Call', isCorrect: true, explanation: 'T9s 同花连张翻后 IP 可玩性好，均衡防守范围成员。', evImpact: '+1.0 BB/100', evLoss: 0 },
+            { action: 'Call', isCorrect: true, explanation: 'T9s 同花连张跟注便宜、可玩性好，均衡防守范围成员。', evImpact: '+1.0 BB/100', evLoss: 0 },
             { action: '3-bet', isCorrect: false, explanation: 'T9s 偏投机，3-bet 太激进，跟注即可。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
           ],
           relatedLessonId: 'l4hu-gto-basics',
@@ -596,7 +596,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，3-bet 底池' },
           },
           options: [
-            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AK 顶对顶踢脚，IP 小注薄价值让 SB 弱牌跟注。', evImpact: '+2.0 BB/100', evLoss: 0 },
+            { action: 'Bet 4BB（1/3 pot）', isCorrect: true, explanation: 'AK 顶对顶踢脚，3-bet 底池主动小注薄价值；SB 的弱牌只能廉价跟注。', evImpact: '+2.0 BB/100', evLoss: 0 },
             { action: 'Check', isCorrect: false, explanation: '顶对顶踢脚应下注薄价值，check 太被动。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'All-in', isCorrect: false, explanation: '干燥面顶对 All-in 过度，小注即可。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],
@@ -619,7 +619,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
             gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌' },
           },
           options: [
-            { action: 'Check-Call', isCorrect: true, explanation: 'QJ 顶对，IP 跟注保留 SB 诈唬，干燥面控制底池。', evImpact: '+1.2 BB/100', evLoss: 0 },
+            { action: 'Check-Call', isCorrect: true, explanation: 'QJ 顶对，BB 先过牌再跟注，保留 SB 诈唬，干燥面控制底池。', evImpact: '+1.2 BB/100', evLoss: 0 },
             { action: 'Check-Raise', isCorrect: false, explanation: '顶对 x/r 赶走 SB 诈唬，浪费薄价值，应跟注。', evImpact: '-0.8 BB/100', evLoss: 0.8 },
             { action: 'Fold', isCorrect: false, explanation: 'QJ 顶对是强牌，fold 太弱。', evImpact: '-2.0 BB/100', evLoss: 2 },
           ],
@@ -841,7 +841,7 @@ export const HEADS_UP_LEVEL_4_LESSONS: Lesson[] = [
           options: [
             { action: 'Check-Fold', isCorrect: false, explanation: '76 有双卡顺，且 SB 弃牌率高，应 x/r 反制。', evImpact: '-1.0 BB/100', evLoss: 1 },
             { action: 'Check-Raise 半诈唬', isCorrect: true, explanation: 'SB 面对 x/r 弃牌 55%，双卡顺半诈唬 x/r 反制，弃牌率支撑盈利。', evImpact: '+1.5 BB/100', evLoss: 0 },
-            { action: 'Donk Bet', isCorrect: false, explanation: 'IP 应 Check 让对手先行动再 x/r，Donk 不是标准打法。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
+            { action: 'Donk Bet', isCorrect: false, explanation: 'BB 应先 Check，面对 SB 的 C-Bet 再 x/r，Donk 不是标准打法。', evImpact: '-0.5 BB/100', evLoss: 0.5 },
           ],
           relatedLessonId: 'l4hu-counter-strategies',
         },

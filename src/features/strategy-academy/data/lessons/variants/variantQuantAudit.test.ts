@@ -69,6 +69,13 @@ import type { Lesson, QuizQuestion } from '../../../types';
  * [已修] l8hu-p3：「后门同花」→ 同花听牌 10 outs（板 3s 已见 1 黑桃）
  * [已修] l3hu-bb-defense 25% 回归锁：SB min-raise 跟注线 1÷(1.5+1.5+1)=25%（含死钱），
  *        pro-tip/objectives/ex1/formula 四处口径一致，无 33.3% 残留（CHANGELOG 记载曾修，本批全量复核清零）
+ * [已修] HU 翻前/翻后位置归属批量纠偏（本批，纯语义无数值变更；判据单源 theory-academy variantRules.headsUpRules）：
+ *        SB=按钮位（翻前先行动、翻后最后行动=IP），BB（翻前最后行动、翻后先行动=OOP）。
+ *        重写 l3hu-bn-aggression / l3hu-sb-continuation（SB 持续施压改立在 IP 侧，x/r 杠杆归 BB）/
+ *        l3hu-bb-defense（宽防守立论改为翻前最后行动+1BB 死钱赔率，权益实现率超 100% 红利移至 SB）/
+ *        l4hu-bn-opening / l4hu-ev-adjustments（0.5-1BB 位置价值归属 SB）/ l4hu-gto-basics（高频过牌归 BB、
+ *        高频下注归 SB）与 l5hu/l8hu 两处 Donk 解析；全部频率%/BB 尺度/EV/outs 数值未动；
+ *        25%/50% 回归锁锚点字符串（1÷(3+1)=25%、所需胜率 = 1÷4 = 25%、约 80% 选项文本）保持命中。
  * [示意值] l6hu A4s≈50%/A7o≈55%/KQs≈58%（vs 全下范围示意）；l5hu 疲劳征兆、session 时长；
  *          l7hu SPR 4.3（80/18.5 翻前有效口径，自洽）
  *
