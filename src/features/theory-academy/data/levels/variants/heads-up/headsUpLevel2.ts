@@ -133,7 +133,7 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            '扑克中的所有决策都可以分解为三个分支：弃牌、跟注、加注。每个分支都有独立的 EV 计算公式，最优策略是选择 EV 最大的行动。单挑中 EV 计算的特殊之处在于：范围极宽（60%+），死钱占比高（0.5BB SB 死钱），位置优势明显（BB 位每手都有翻后信息优势）。这些因素都会影响分支 EV 的大小，但不改变 EV 的计算逻辑本身。（概念源自：《The Theory of Poker》David Sklansky Ch.6 期望值基础）',
+            '扑克中的所有决策都可以分解为三个分支：弃牌、跟注、加注。每个分支都有独立的 EV 计算公式，最优策略是选择 EV 最大的行动。单挑中 EV 计算的特殊之处在于：范围极宽（60%+），死钱占比高（0.5BB SB 死钱），位置优势明显（SB 位每手都有翻后信息优势）。这些因素都会影响分支 EV 的大小，但不改变 EV 的计算逻辑本身。（概念源自：《The Theory of Poker》David Sklansky Ch.6 期望值基础）',
         },
         {
           type: 'formula',
@@ -151,11 +151,11 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例二（limp vs raise EV 对比）：SB 持 Q♠J♠，100BB 深。选项 A（limp）：BB 加注率 30%（你弃牌损失 -0.3BB 或跟注 -0.1）、BB check 率 70%（翻后 EV +0.5BB）。EV(limp) = 0.7×0.5 − 0.3×0.2 = 0.35 − 0.06 = +0.29BB。选项 B（raise 2.5BB）：BB 弃牌率 60%（+1.5BB）、BB 跟注率 30%（你无位置，-0.4BB）、BB 3-bet 率 10%（-2.5BB 弃牌，损失全部 2.5BB 加注额）。EV(raise) = 0.6×1.5 + 0.3×(−0.4) + 0.1×(−2.5) = 0.9 − 0.12 − 0.25 = +0.53BB。结论：raise > limp（0.53 > 0.29）。原因是 SB 死钱带来的 steal EV（弃牌率 60% 直接赢 1.5BB），以及 raise 的范围优势。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
+            '实例二（limp vs raise EV 对比）：SB 持 Q♠J♠，100BB 深。选项 A（limp）：BB 加注率 30%（你弃牌损失 -0.3BB 或跟注 -0.1）、BB check 率 70%（翻后 EV +0.5BB）。EV(limp) = 0.7×0.5 − 0.3×0.2 = 0.35 − 0.06 = +0.29BB。选项 B（raise 2.5BB）：BB 弃牌率 60%（+1.5BB）、BB 跟注率 30%（你的宽范围被跟注后权益偏薄，-0.4BB）、BB 3-bet 率 10%（-2.5BB 弃牌，损失全部 2.5BB 加注额）。EV(raise) = 0.6×1.5 + 0.3×(−0.4) + 0.1×(−2.5) = 0.9 − 0.12 − 0.25 = +0.53BB。结论：raise > limp（0.53 > 0.29）。原因是 SB 死钱带来的 steal EV（弃牌率 60% 直接赢 1.5BB），以及 raise 的范围优势。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.3 翻前策略）',
         },
         {
           type: 'formula',
-          content: '位置价值量化：\n研究估计单挑中位置优势约 0.5-1BB/手。推导思路：\n• BB 每手翻后最后行动（有信息优势），SB 每手先行动（无位置）\n• 位置价值来自三点：a) 信息优势（看到 SB 行动再决定）b) 控池能力（cheap realization）c) 免费看牌（check to the aggressor）\n\n量化模型：位置差体现在单手的期望差异上。例如同一手 98s，你在 BB 位平均每手 +0.75BB，在 SB 位 -0.25BB，差值 1BB。100 手累计约 100BB 差异，但由于胜率本身的波动（±15bb/100），位置贡献约占总收益的 25%-50%。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.2 位置与权益）',
+          content: '位置价值量化：\n研究估计单挑中位置优势约 0.5-1BB/手。推导思路：\n• SB 每手翻后最后行动（有信息优势），BB 每手先行动（无位置）\n• 位置价值来自三点：a) 信息优势（看到 BB 行动再决定）b) 控池能力（cheap realization）c) 免费看牌（BB 过牌后你随后过牌）\n\n量化模型：位置差体现在单手的期望差异上。例如同一手 98s，你在 SB 位平均每手 +0.75BB，在 BB 位 -0.25BB，差值 1BB。100 手累计约 100BB 差异，但由于胜率本身的波动（±15bb/100），位置贡献约占总收益的 25%-50%。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.2 位置与权益）',
         },
         {
           type: 'highlight',
@@ -192,13 +192,13 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
           id: 't2hu-ev-q3',
           question: '单挑中位置价值约 0.5-1BB/手，这个估值的含义是：',
           options: [
-            'BB 位每手翻牌都能多赚 1BB',
-            '长期来看 BB 位比 SB 位每手多 0.5-1BB 期望收益',
+            'SB 位每手翻牌都能多赚 1BB',
+            '长期来看 SB 位比 BB 位每手多 0.5-1BB 期望收益',
             '翻前位置的价值',
             '只在锦标赛中成立',
           ],
           correctIndex: 1,
-          explanation: '位置价值是长期期望差异：BB 位因为有翻后信息优势，平均每手多赢 0.5-1BB。这不是单手保证的收益，而是统计意义上的期望值。',
+          explanation: '位置价值是长期期望差异：SB 位因为有翻后信息优势，平均每手多赢 0.5-1BB。这不是单手保证的收益，而是统计意义上的期望值。',
         },
         {
           id: 't2hu-ev-q4',
@@ -220,7 +220,7 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
       duration: '10 min',
       eloDimension: 'math',
       objectives: [
-        '理解单挑中翻后位置劣势方（SB 翻前最后行动但翻后先行动）的风险暴露',
+        '理解单挑中翻后位置劣势方（BB 翻前最后行动，翻后却最先行动）的风险暴露',
         '掌握 check-raise 作为补偿工具，对比 check-call 的风险收益',
         '评估隐含赔率在单挑中的变化：宽范围导致支付密度低→反向隐含赔率上升',
       ],
@@ -229,17 +229,17 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         {
           type: 'text',
           content:
-            '单挑的关键规则事实：SB 翻前最后行动（有翻前位置），BB 翻前最后行动；但翻后，SB 先行动（无位置），BB 最后行动（有位置）。这意味着：SB 是翻后位置劣势方（Out-of Position, OOP），BB 是有位置方（In Position, IP）。位置劣势的风险在于：信息不对称（你不知道 BB 会做什么）、被迫做第一个决定、难以实现权益（容易被 raise 驱逐）。位置优势的价值在于：你可以看到对手的行动后再决定、可以用更便宜的价格实现权益、可以控制底池大小。单挑中位置劣势的风险需要策略补偿，这就是本章的核心。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.2 位置理论）',
+            '单挑的关键规则事实：SB 即按钮位；翻前由 SB 率先行动、BB 在翻前最后行动；翻后由 BB 率先行动（无位置）、SB 在翻后最后行动（有位置）。这意味着：BB 是翻后位置劣势方（Out-of Position, OOP），SB 是有位置方（In Position, IP）。位置劣势的风险在于：信息不对称（你不知道 SB 会做什么）、被迫做第一个决定、难以实现权益（容易被 raise 驱逐）。位置优势的价值在于：你可以看到对手的行动后再决定、可以用更便宜的价格实现权益、可以控制底池大小。单挑中位置劣势的风险需要策略补偿，这就是本章的核心。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.2 位置理论）',
         },
         {
           type: 'formula',
           content:
-            'check-raise vs check-call 的 EV 对比：\n\n设定：底池 = 6BB，SB（OOP）下注 3BB，BB（IP）可选择 check-call 或 check-raise。\n\nOption A (check-call): BB 跟注 3BB\n• 若赢：盈利 = 底池 + 对手下注 = 6+3 = 9BB（你的 3BB 跟注随胜收回，净盈利 9BB）\n• 若输：损失 = 3BB（跟注额）\n• 胜率 = W\n• EV(CC) = W×9 − (1−W)×3 = 9W − 3 + 3W = 12W − 3\n\nOption B (check-raise to 9BB): BB 加注到 9BB（比跟注多投 6BB）\n• 若 SB 弃牌（概率 f）：BB 赢 6+3 = 9BB\n• 若 SB 跟注（1−f）：BB 总投入 9BB，最终底池 = 6+3+9+6 = 24BB（SB 跟注 6）\n• BB 净盈利 = W×24 − 9\n• EV(CR) = f×9 + (1−f)×(24W − 9)\n\n对比：CR 的优势在于 f×9 杠杆项（弃牌直接收池），代价是多投 6BB 的被跟注风险。\n参数测试：W=35%, f=60% → EV(CC)=12×0.35−3=4.2−3=+1.2BB\n                    EV(CR)=0.6×9+0.4×(24×0.35−9)=5.4+0.4×(8.4−9)=5.4−0.24=+5.16BB\n当弃牌率高时，CR >> CC。（概念源自：《Applications of No-Limit Hold’em》Matthew Janda Ch.6 半诈唬与组合听牌）',
+            'check-raise vs check-call 的 EV 对比：\n\n设定：底池 = 6BB，SB（IP）下注 3BB，BB（OOP）可选择 check-call 或 check-raise。\n\nOption A (check-call): BB 跟注 3BB\n• 若赢：盈利 = 底池 + 对手下注 = 6+3 = 9BB（你的 3BB 跟注随胜收回，净盈利 9BB）\n• 若输：损失 = 3BB（跟注额）\n• 胜率 = W\n• EV(CC) = W×9 − (1−W)×3 = 9W − 3 + 3W = 12W − 3\n\nOption B (check-raise to 9BB): BB 加注到 9BB（比跟注多投 6BB）\n• 若 SB 弃牌（概率 f）：BB 赢 6+3 = 9BB\n• 若 SB 跟注（1−f）：BB 总投入 9BB，最终底池 = 6+3+9+6 = 24BB（SB 跟注 6）\n• BB 净盈利 = W×24 − 9\n• EV(CR) = f×9 + (1−f)×(24W − 9)\n\n对比：CR 的优势在于 f×9 杠杆项（弃牌直接收池），代价是多投 6BB 的被跟注风险。\n参数测试：W=35%, f=60% → EV(CC)=12×0.35−3=4.2−3=+1.2BB\n                    EV(CR)=0.6×9+0.4×(24×0.35−9)=5.4+0.4×(8.4−9)=5.4−0.24=+5.16BB\n当弃牌率高时，CR >> CC。（概念源自：《Applications of No-Limit Hold’em》Matthew Janda Ch.6 半诈唬与组合听牌）',
         },
         {
           type: 'example',
           content:
-            '实例一：盲注 0.5/1，有效筹码 100BB。你（BB）持 7♠6♠，SB 开池 2.5BB，你跟注。底池 5BB。翻牌 8♣5♦2♠（双卡顺听牌）。SB cbet 2.5BB（半池）。\n\nOption A (call)：EV(CC) ≈ 双卡顺 8 outs × 1/47 ≈ 17% × (5+2.5) − 83% × 2.5 ≈ 1.275 − 2.075 = -0.8BB（单街简化）\n\nOption B (check-raise to 8BB)：\n• SB 弃牌率 55%（HU 中 SB cbet 范围广，面对 raise 弃牌率高）\n• 被跟注时 BB 胜率 32%（双卡顺 + 后门花）\n• EV(CR) = 0.55×7.5 + 0.45×(13×0.32 − 8) = 4.125 + 0.45×(4.16 − 8) = 4.125 − 1.728 = +2.4BB\n\n对比：CR (+2.4) > call (-0.8)。结论：BB 利用弃牌率杠杆，用 check-raise 将听牌转化为立即盈利的工具。这是位置优势方的标准操作。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.4 听牌对抗策略）',
+            '实例一：盲注 0.5/1，有效筹码 100BB。你（BB）持 7♠6♠，SB 开池 2.5BB，你跟注。底池 5BB。翻牌 8♣5♦2♠（双卡顺听牌）。SB cbet 2.5BB（半池）。\n\nOption A (call)：EV(CC) ≈ 双卡顺 8 outs × 1/47 ≈ 17% × (5+2.5) − 83% × 2.5 ≈ 1.275 − 2.075 = -0.8BB（单街简化）\n\nOption B (check-raise to 8BB)：\n• SB 弃牌率 55%（HU 中 SB cbet 范围广，面对 raise 弃牌率高）\n• 被跟注时 BB 胜率 32%（双卡顺 + 后门花）\n• EV(CR) = 0.55×7.5 + 0.45×(13×0.32 − 8) = 4.125 + 0.45×(4.16 − 8) = 4.125 − 1.728 = +2.4BB\n\n对比：CR (+2.4) > call (-0.8)。结论：BB 利用弃牌率杠杆，用 check-raise 将听牌转化为立即盈利的工具。这是 OOP 一方利用先行动权（check-raise 杠杆）补偿位置劣势的标准操作。（概念源自：《Heads-Up No-Limit Hold’em》Collin Moshman Ch.4 听牌对抗策略）',
         },
         {
           type: 'example',
@@ -249,17 +249,17 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         {
           type: 'formula',
           content:
-            'SPR（Stack-to-Pot Ratio）与风险暴露：\nSPR = 有效筹码 ÷ 底池\n\n解读：\n• SPR < 4：低 SPR，顶对价值上升。翻牌圈基本锁定所有筹码，位置劣势的影响减小（因为底池小）。\n• SPR 4-12：中风险，需要权衡位置与牌力。无位置方倾向于 check-call 或 small bet，避免被 raise 挤压。\n• SPR > 12：高风险，深筹码放大位置劣势。无位置方需要更紧地玩 top pair，依赖位置优势的玩家可以 exploit（例如 float turn）。\n\n实例：100BB 深，SB raise 2.5BB，BB call。底池 5BB，SPR = 97.5/5 ≈ 19.5。翻牌 K♥9♦3♣，SB（OOP）持 K♠Q♦。无位置 + 高 SPR → 顶对风险大，容易被更好的 Kx（AK/QK）碾压。正确策略：small bet 或 check-back，避免建立大底池。\n对比短筹码：15BB 深，同样局面，SPR = 12.5/5 = 2.5。此时顶对直接打光，位置劣势被"SPR 低"中和——你不必担心后续街的控制问题。（概念源自：Harrington on Hold’em Vol.1 Ch.4 SPR 理论）',
+            'SPR（Stack-to-Pot Ratio）与风险暴露：\nSPR = 有效筹码 ÷ 底池\n\n解读：\n• SPR < 4：低 SPR，顶对价值上升。翻牌圈基本锁定所有筹码，位置劣势的影响减小（因为底池小）。\n• SPR 4-12：中风险，需要权衡位置与牌力。无位置方倾向于 check-call 或 small bet，避免被 raise 挤压。\n• SPR > 12：高风险，深筹码放大位置劣势。无位置方需要更紧地玩 top pair，依赖位置优势的玩家可以 exploit（例如 float turn）。\n\n实例：100BB 深，SB raise 2.5BB，BB call。底池 5BB，SPR = 97.5/5 ≈ 19.5。翻牌 K♥9♦3♣，BB（OOP）持 K♠Q♦。无位置 + 高 SPR → 顶对风险大，容易被更好的 Kx（AK/QK）碾压。正确策略：small bet 或 check-back，避免建立大底池。\n对比短筹码：15BB 深，同样局面，SPR = 12.5/5 = 2.5。此时顶对直接打光，位置劣势被"SPR 低"中和——你不必担心后续街的控制问题。（概念源自：Harrington on Hold’em Vol.1 Ch.4 SPR 理论）',
         },
         {
           type: 'highlight',
           content:
-            '反直觉点：在单挑中，位置优势方（BB）经常用 check-call 而非 check-raise。因为你有位置，不需要冒险 raise 来补偿劣势——check-call 让对手继续诈唬或价值下注，而你保留 fold 的权利。位置就是低风险高收益的工具。',
+            '反直觉点：在单挑中，即使握有 check-raise 杠杆，翻后先行动的一方（BB）也常常选择 check-call 而非 check-raise。因为 raise 要多投 6BB，被跟注后你依然无位置、底池还更大；check-call 让对手继续诈唬或价值下注，而你保留 fold 的权利。位置才是低风险高收益的工具——没有位置时，控权比加注便宜。',
         },
         {
           type: 'pro-tip',
           content:
-            '决策流程：1) 报 SPR：SPR < 4 打光、4-12 中风险、>12 控池；2) 报位置：OOP 优先 raise 补偿，IP 优先 check-call 控权；3) 评估牌力：坚果听牌 favor raise，中等牌 favor call。这三个步骤形成肌肉记忆。',
+            '决策流程：1) 报 SPR：SPR < 4 打光、4-12 中风险、>12 控池；2) 报位置：OOP 用 check-raise 杠杆补偿，IP 用随后过牌与小注控权；3) 评估牌力：坚果听牌 favor raise，中等牌 favor call。这三个步骤形成肌肉记忆。',
         },
       ],
       quiz: [
@@ -267,8 +267,8 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
           id: 't2hu-risk-q1',
           question: '单挑中翻后谁先行动？',
           options: ['BB', 'SB', '根据按钮移动', '随机'],
-          correctIndex: 1,
-          explanation: 'SB 是翻后位置劣势方（先行动），BB 是位置优势方（后行动）。这是单挑的基本规则事实，决定了翻后决策的所有数学基础。',
+          correctIndex: 0,
+          explanation: '翻后 BB 先行动、SB 最后行动——SB 即按钮位，所以 BB 是翻后位置劣势方，SB 是位置优势方。这是单挑的基本规则事实，决定了翻后决策的所有数学基础。',
         },
         {
           id: 't2hu-risk-q2',
@@ -291,7 +291,7 @@ export const HEADS_UP_LEVEL_2: TheoryLevelInfo = {
         },
         {
           id: 't2hu-risk-q4',
-          question: 'SPR > 12 时，无位置方（SB）的最优策略倾向是：',
+          question: 'SPR > 12 时，无位置方（BB）的最优策略倾向是：',
           options: [
             '用顶对激进打光筹码',
             '控池（small bet/check-back）',

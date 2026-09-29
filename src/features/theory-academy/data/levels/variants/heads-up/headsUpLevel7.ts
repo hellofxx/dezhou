@@ -55,7 +55,7 @@ export const HEADS_UP_LEVEL_7: TheoryLevelInfo = {
         {
           type: 'example',
           content:
-            '实例：某单挑对手翻前开池 85%（宽），但面对 C-Bet 弃牌 60%（过度弃牌）。画像：开池宽+弃牌多 = "宽范围 + 弱防守"的结合。剥削方向：翻后你作为 IP 应高频 C-Bet 偷池，因为他的弃牌率高；同时他的开池宽说明你 BB 的防守也能加宽。两个漏洞一次收割。',
+            '实例：某单挑对手翻前开池 85%（宽），但面对 C-Bet 弃牌 60%（过度弃牌）。画像：开池宽+弃牌多 = "宽范围 + 弱防守"的结合。剥削方向：你在按钮位那一手高频 C-Bet 偷池，因为他的弃牌率高；而他的开池宽说明你在 BB 时防守也能加宽。两个漏洞一次收割。',
         },
         {
           type: 'example',
@@ -101,7 +101,7 @@ export const HEADS_UP_LEVEL_7: TheoryLevelInfo = {
             '没有漏洞可剥削',
           ],
           correctIndex: 1,
-          explanation: '开池宽 + 弃牌多 = 宽范围弱防守，IP 高频 C-Bet 偷池 + BB 加宽防守，两个漏洞同时收割。',
+          explanation: '开池宽 + 弃牌多 = 宽范围弱防守：握有按钮位的一方高频 C-Bet 偷池，防守方则应加宽防守，两个漏洞同时收割。',
         },
         {
           id: 't7hu-patterns-q3',
