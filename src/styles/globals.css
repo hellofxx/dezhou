@@ -2620,9 +2620,11 @@ html[data-theme="light"] .streak-rail {
   font-size: 13px; font-weight: 600;
   border: 1px solid var(--brass-dark);
   box-shadow: 0 3px 10px rgba(201,162,94,0.25), inset 0 1px 0 rgba(255,240,200,0.55);
-  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  transition: transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard),
+              filter var(--poker-duration-fast) var(--poker-ease-standard);
   cursor: pointer;
-  min-height: 38px;
+  min-height: 44px;
 }
 .help-hero-cta:hover {
   filter: brightness(1.08);
@@ -2656,7 +2658,7 @@ html[data-theme="light"] .streak-rail {
   color: var(--stable-ink);
   transform: rotateY(-7deg) rotateX(2deg);
   transform-origin: 50% 100%;
-  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  transition: transform var(--poker-duration-slow) var(--poker-ease-standard);
 }
 .help-hero-plaque-wrap:hover .house-rules-card,
 .help-hero-plaque-wrap:focus-within .house-rules-card {
@@ -2696,9 +2698,12 @@ html[data-theme="light"] .streak-rail {
   border: 1px solid rgba(201,162,94,0.2);
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background var(--poker-duration-fast) var(--poker-ease-standard),
+              border-color var(--poker-duration-fast) var(--poker-ease-standard),
+              transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
   color: var(--stable-ink);
-  min-height: 40px;
+  min-height: 44px;
 }
 .house-rules-item:hover {
   background: rgba(26,19,8,0.15);
@@ -2807,7 +2812,11 @@ html[data-theme="light"] .streak-rail {
   font-family: var(--font-display);
   font-size: 13px; font-weight: 700;
   font-variant-numeric: tabular-nums;
-  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  transition: background var(--poker-duration-fast) var(--poker-ease-standard),
+              color var(--poker-duration-fast) var(--poker-ease-standard),
+              border-color var(--poker-duration-fast) var(--poker-ease-standard),
+              transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 .quick-path-node:hover .quick-path-node-num,
@@ -2860,7 +2869,9 @@ html[data-theme="light"] .streak-rail {
   border-radius: 10px;
   background: linear-gradient(135deg, rgba(38,28,16,0.75) 0%, rgba(28,20,12,0.85) 100%);
   border: 1px solid rgba(201,162,94,0.12);
-  transition: all 0.25s ease;
+  transition: border-color var(--poker-duration-fast) var(--poker-ease-standard),
+              transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
   position: relative;
   overflow: hidden;
   min-height: 110px;
@@ -2908,7 +2919,8 @@ html[data-theme="light"] .streak-rail {
   border-radius: 0 8px 8px 0;
   background: linear-gradient(180deg, rgba(38,28,16,0.7) 0%, rgba(28,20,12,0.85) 100%);
   overflow: hidden;
-  transition: border-left-color 0.25s ease, background 0.25s ease;
+  transition: border-left-color var(--poker-duration-fast) var(--poker-ease-standard),
+              background var(--poker-duration-fast) var(--poker-ease-standard);
 }
 .faq-item:hover { border-left-color: var(--brass-dark); }
 .faq-item.open { border-left-color: var(--brass); background: linear-gradient(180deg, rgba(38,28,16,0.85) 0%, rgba(28,20,12,0.95) 100%); }
@@ -2945,7 +2957,8 @@ html[data-theme="light"] .streak-rail {
 .faq-item-chevron {
   flex-shrink: 0;
   color: var(--ivory-dim);
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform var(--poker-duration-fast) var(--poker-ease-standard),
+              color var(--poker-duration-fast) var(--poker-ease-standard);
 }
 .faq-item-chevron.open {
   transform: rotate(180deg);
