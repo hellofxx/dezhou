@@ -53,18 +53,27 @@ additionalPrompt: ""
 - 本模块为静态教程页，**豁免 trainingEvents emit**（豁免口径集中登记于 AGENTS.md §跨模块能力归属登记表）
 
 ### 路由跳转
-- 仅通过路由字符串跳转各模块（`modulePath` 字段），禁止 import 其他 feature 模块
+- 仅通过路由字符串跳转各模块（`modulePath` / `to` 字段），禁止 import 其他 feature 模块
+- 页内跳转一律用 react-router `Link`（`Button` 需 `asChild` 包裹），不用 `useNavigate` + `button`：链接须可被中键/新标签打开并携带 href
+- Hero 的四个锚点 section 属页内滚动而非路由跳转，保持 `button` + `scrollIntoView`（并按系统减弱动态偏好降级 behavior）
 
 ### shared/ 层依赖
-- 无（本模块不消费 shared stores 或 shared utils）
+- `@/shared/utils/motion`：动效参数单源（Hero 入场引用 `SLIDE_DOWN` 预设，FAQ 折叠引用 `MOTION_DURATION` / `MOTION_EASE`），禁止内联字面量
+- `@/shared/components/feedback/EmptyState`：文章不存在时的统一空态（其 `action` 只接受 `onClick`，是本页唯一保留 `useNavigate` 的场景）
+- `@/shared/components/ui/button`：文章页返回与"去使用"按钮外壳（配 `asChild` 包 Link）
+- 不消费 shared stores、不读 progress store（纯静态模块）
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源。
 
 模块内：
-- src/features/help-center/ — 模块根（types.ts 含 HelpArticle / HelpSection / FaqItem / HelpAccent / HelpSectionType；index.ts）
-- src/features/help-center/data/ — helpContent.ts（HELP_ARTICLES / QUICK_START_STEPS / CONCEPT_CARDS / FAQ_ITEMS）+ helpContent.integrity.test.ts
-- src/features/help-center/components/ — HelpHome / HelpArticle / QuickStartPath / FaqAccordion / ModuleEntryCard + HelpHome.test.tsx
+- src/features/help-center/ — 模块根（types.ts 含 HelpArticle / HelpSection / HelpSectionType / FaqItem / HelpAccent / ConceptIconKey / ConceptCard；index.ts）
+- src/features/help-center/data/ — helpContent.ts（HELP_ARTICLES / QUICK_START_STEPS / CONCEPT_CARDS / FAQ_ITEMS）+ helpContent.integrity.test.ts（结构 + 双语 key 存在性 + hero.meta 数量绑定 + HelpHero 动效 preset 源码断言）
+- src/features/help-center/components/ — HelpHome / HelpHero / QuickStartPath / ModuleEntryCard / ConceptCard / FaqAccordion / HelpArticle + HelpHome.test.tsx + HelpArticle.test.tsx
+
+模块外但由本模块契约持有：
+- src/styles/globals.css — help 专属段（`.help-hero*` / `.house-rules-*` / `.help-section-head*` / `.quick-path*` / `.concept-card*` / `.faq-*`）；`.module-icon[data-accent]` 强调色变体是 ModuleEntryCard 图标底色的事实源，改 accent 需 CSS 与 `HelpAccent` 类型两侧同步
+- src/designTokenCssGuard.test.ts — 样式层守卫（含 help 段 44px 触摸目标与 transition token 引用断言）
 
 ## Workflows
 1. 新增文章时：在 data/helpContent.ts 的 HELP_ARTICLES 添加 HelpArticle → helpContent.integrity.test.ts 自动校验

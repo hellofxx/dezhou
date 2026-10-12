@@ -8,6 +8,26 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-10-12 帮助中心 Design QA 修复：契约偏差 12 项 + CSS 面填充守卫（7 个 commit）
+
+用 Design Review 插件对 `src/features/help-center/` 做综合走查（契约源 `poker-ui-demo/DESIGN_LANGUAGE.md` v1.7.0）。**结论是缺陷不在"好不好看"，而在实现与已登记契约的偏差长期无人看守**，因此本批既修偏差也补守卫。
+
+- **根因是门禁盲区，不是疏忽**：`designTokenGuard.test.ts` 的 glob 只覆盖 `src/**/*.{ts,tsx}`，globals.css 整个在射程外。象牙卡面上的 `.house-rules-item { background: rgba(255,255,255,0.4) → hover 0.7 }` 叠在 `--stable-ivory #f8f2e2` 上，hover 已越过 §1.2「最亮色 ivory」的上界，而契约对同族元素（§5.9 横幅内部 pill）明明规定了墨色低透 `rgba(26,19,8,0.08)`。改为该族既有的 0.08→0.15 阶，**顺手把 `::before` 顶高光与内描金这类 §4.3/§5.9 授权项列为内容指纹豁免**（用选择器+声明子串，抗行号漂移）。
+- **中文斜体禁令的成立条件比条文更硬**：`HelpArticle` tip 段用 Tailwind `italic`，而三族 `@font-face`（Fraunces/Inter Tight/JetBrains Mono）**只声明了 `font-style: normal`**，仓库未加载任何 italic 面 → 浏览器必然合成伪斜。删 `italic` 即可（tip 本就有左侧 brass 竖条做差异化，无需补偿样式）。刻意**不做**全局 CJK italic reset：`.opponent-avatar` 与庄码 D 的斜体是 §5.3 授权，reset 会误伤。
+- **动效降级此前是空头支票**：TDD §14.6 原写「支持 `prefers-reduced-motion`」，实测全仓库 `MotionConfig` / `useReducedMotion` / `matchMedia('(prefers-reduced-motion')` **零命中**，而 globals.css 的 CSS 兜底只能压 `transition-duration`，压不住 framer-motion 写入的 inline transform。补成三层接管并在 TDD 写清边界：`MotionConfig reducedMotion="user"` 只降级 **transform 类**，opacity 与 **height 仍会过渡**——所以 FAQ 折叠的 `height: 0→auto` 必须组件级 `useReducedMotion()` 置零时长，锚点 `scrollIntoView` 属 JS API 也得单独降 `behavior`。
+- **触摸目标是模块内自相矛盾**：hero CTA 38px / 立牌条目 40px，而同模块的 `ModuleEntryCard`、文章返回、`.faq-item-button`、`.quick-path-node` 全是 44px。统一提到基线 44px（不进媒体查询，桌面也受益）。
+- **Link 语义按"能否安全落地"划界**：`<button onClick={navigate}>` 无 href，中键/Ctrl+点击新标签失效、SR 播报为按钮。帮助中心 17 处跳转全部改为 `Link`（`Button` 走 `asChild` + Radix Slot），并给 `.module-card`/`.quick-path-node` 补防御性 `text-decoration` reset（Tailwind preflight 已让 `a` 继承无下划线，唯一的全局 underline 在 `prefers-contrast: high` 块内且带 `!important`，属 WCAG 刻意增强，保留）。**`ModuleGrid` 不动**：其卡片内嵌 `span[role=button]` 的聚焦 Pin，转 `<a>` 会违反"a 内不得含 interactive content"，正解是 stretched-link 结构重构，单独留批。
+- **`.module-icon` 底色事实源分裂（needs-design-decision）**：CSS 基类无 `background`，仪表盘靠 `module-texture-*` 类、帮助中心靠 JS 内联 `color-mix()`。按用户决定「改代码对齐既有档位」，把 5 种 accent 收进 `.module-icon[data-accent]` 变体，维持 12% 视觉零变化并让亮暗主题经 `var()` 计算值自动联动。**§5.18 规定的「径向渐变底」三处实现都没落地**，仍属契约待决。
+- **字号家族漂移只收自己那一份**：hero 标题 puzzle 27 / help 26 / settings 24，无一在 §3.3 档位。本批把 help 收到 24px 对齐既有 settings 值，puzzle/settings 不动、契约不修订（用户决定），该项作为遗留保留。
+- **help 段 transition 成为全文件首个 token 消费者**：globals.css 36 处 `transition:` 此前 0 处用 `var(--poker-duration-*)`/`var(--poker-ease-*)`（变量只被 `animation:` 用）。本批把 help 段 7 处收口，并把 `transition: all` 收窄为 hover 实际变化的属性（§8.4 避免 layout/paint 抖动）；段外约 30 处裸值留下。
+- **文案数量此前无绑定**：`hero.meta` 硬编码「9 篇 · 6 项 · 8 条」，integrity 测试只锁数组长度（FAQ 还只是 `>=8` 下限），加内容不改文案会静默失效。新增断言从文案**提取数字**与三组长度比对（措辞调整不脆断），zh/en 各一条。
+- **守卫落地方式的两处教训**：① Vitest 默认 `css: false` 会把 CSS 导入 **stub 成空模块**，`import.meta.glob('./styles/**/*.css', {query:'?raw'})` 只拿到 1 行占位——首版守卫因此"5 例全过"其实是空跑；改用 `readFileSync`（沿用 `huPositionOrderGuard.test.ts` 的读取方式）。② 白名单校验用「选择器+声明子串」而非行号。③ 守卫写完做了**变异测试**：把 `.house-rules-item` 底色改回白透，确认它精准报出 `globals.css:2697 .house-rules-item → 白透面填充超过 0.05`，随后还原。
+- **文档**：PRD §5.28 验收标准补 4 条（内容规模一致 / 可寻址链接 / 44px / 尊重减弱动态偏好，均只写 What/Why）；TDD §14.6 把 reduced-motion 改写为三层接管并声明 `MotionConfig` 的属性边界、§14.7 守卫机制拆成源码层与样式层两条；`help-center-dev` 代理文件的「shared/ 层依赖：无」原已过期（Hero 早已 import `shared/utils/motion`），改为登记 motion / EmptyState / button 三项，Key Files 补 help 专属 CSS 段与 CSS 守卫，路由跳转条款改为 Link 口径。
+- **验证**：typecheck / lint exit 0（仅 `i18n/unitRef.test.ts` 两条既有 import-pattern 警告，与本批无关）；`vitest run` **158 文件 / 1121 测试**全绿（本批 +2 文件 / +16 用例，既有用例无一被放宽）；`pnpm verify` 每批各跑一遍。
+- **未覆盖 / 遗留**：① **浏览器视觉全程未验证**（按既有约束不起 dev server、不截图）——立牌 3D 观感、`<768px` 真实布局，以及 `.help-hero-meta` 11px `--ivory-muted` 落在 hero 渐变暗底上的对比度（按 §2.1 色值手算约 4.4–4.6:1，正好卡在 AA 4.5 临界）均需实测才能定论；② `ModuleGrid` 的 Link 化与 stretched-link 重构；③ 其余 124 处内联 framer-motion 字面量与其余 6 处 `behavior: 'smooth'` 未降级；④ help 段外约 30 处 transition 裸值；⑤ hero 标题字号家族（24/27 两处）与 §3.3 档位缺口；⑥ §5.18「径向渐变底」与 §13.5.1 微纹理在 help 侧的落地；⑦ 路由跳转后的焦点迁移（`scrollIntoView` 不会移动焦点，键盘/SR 用户感知不到页面位置变化）；⑧ `poker-ui-demo/DESIGN_LANGUAGE.md` 全程未修订。
+
+---
+
 ### 2026-09-29 理论学院第五批（下半）：单挑位置事实纠错 152 处 + 方向守卫（4 个 commit）
 
 销上一条遗留①（单挑翻后位置标注在两学院正文里被写反）。拆批经用户批准：本批只做纠错与守卫，单挑 T5–T9 补深 5 章留下一批——理由是**新章要按标题写跨章引用，且其位置/权益论述直接依赖修正后的归属**，口径未钉死前先写新章会返工。

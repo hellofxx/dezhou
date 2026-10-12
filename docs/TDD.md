@@ -2018,7 +2018,11 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 - 标准时长：快速 150ms、常规 250ms、慢速 400ms
 - 缓动函数：ease（默认）
 - 翻牌动画：CSS 3D transform + perspective，300ms
-- 支持 `prefers-reduced-motion` 媒体查询，尊重用户减少动画偏好
+- **`prefers-reduced-motion` 三层接管**（单一 CSS 兜底不足以覆盖全部动效通道）：
+  1. CSS 层：`globals.css` 的 `@media (prefers-reduced-motion: reduce)` 把 `transition-duration` / `animation-duration` 压到 0.01ms，覆盖所有 CSS 驱动的动效
+  2. React 层：`src/app/providers.tsx` 以 `<MotionConfig reducedMotion="user">` 包裹全树。该属性只把 **transform 类**（x/y/scale/rotate/layout）降级为瞬时跳变，**opacity 与 height 仍会过渡**
+  3. 组件层：依赖上述两条覆盖不到的通道时须显式处理——`FaqAccordion` 的 `height: 0→auto` 展开用 framer-motion 的 `useReducedMotion()` 置零时长；`HelpHome` 的锚点 `scrollIntoView` 属 JS API（不受 CSS 兜底约束），按同一 hook 把 `behavior` 降为 `auto`
+- 动效参数单源：React 侧引用 `src/shared/utils/motion.ts` 的 `MOTION_DURATION` / `MOTION_EASE` / 预置 variants，CSS 侧引用 `var(--poker-duration-*)` / `var(--poker-ease-*)`，禁止内联字面量与裸时长
 
 ### 14.7 UI 颜色实现规范与守卫（v1.3.2）
 
@@ -2031,7 +2035,10 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 3. **禁止纯黑/纯白 hex 字面量**：`#000`/`#fff` 系
 4. **SVG 例外**：渐变 stop 无法引用 CSS 变量时允许字面值，但必须注释标注对应 token（如 CardBack.tsx / public/cards/back.svg 的胡桃底 stop）
 
-守卫机制：`src/designTokenGuard.test.ts`（vitest，随 `pnpm test` 强制执行）通过 `import.meta.glob('?raw')` 全量扫描 src 源码，断言上述三类零匹配；豁免白名单 `EXEMPT_FILES` 遵循「只删不加」，新增豁免须先在 DESIGN_LANGUAGE.md 登记设计依据。
+守卫机制分两层，源码与样式实现各由一个测试把守（均随 `pnpm test` 强制执行，豁免白名单遵循「只删不加」，新增豁免须先在 DESIGN_LANGUAGE.md 登记设计依据）：
+
+1. **源码层** `src/designTokenGuard.test.ts`：`import.meta.glob('?raw')` 全量扫描 src 的 `.ts/.tsx`，断言霓虹调色板类、纯黑白类、纯黑白 hex 零匹配。
+2. **样式层** `src/designTokenCssGuard.test.ts`：扫描 `src/styles/*.css` 的 `background` / `background-color` 声明，断言 `rgba(255,255,255,α)` 的 α ≤ 0.05（§5.21 仅授权 hover 中性底色 0.03–0.04）、`rgba(0,0,0,α)` 未达实底、无纯黑白 hex。规则只作用于面填充，故 §4.3 牌面内描金（box-shadow 白高光）与 `@media (prefers-contrast: high)` 里刻意提到 `#ffffff` 的 `--ivory` 自定义属性天然不在射程内。该测试经 `readFileSync` 读文件而非 `import.meta.glob('?raw')`——Vitest 默认 `css: false` 会把 CSS 导入 stub 成空模块。同文件附带 help 段的结构断言（44px 触摸目标、transition 引用动效 token）。
 
 ---
 
