@@ -166,7 +166,8 @@
   "article": {
     "back": "Back to Help Center",
     "useModule": "Open Module",
-    "notFound": "Article not found"
+    "notFound": "Article not found",
+    "notFoundHint": "This tutorial may have moved or the link is broken. Return to the Help Center to browse all tutorials."
   },
   "concepts": {
     "title": "System Concepts",

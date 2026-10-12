@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FileQuestion } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
+import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import { HELP_ARTICLES } from '../data/helpContent';
 import type { HelpSection } from '../types';
 
@@ -15,13 +16,12 @@ export default function HelpArticle() {
 
   if (!article) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-[var(--ivory-muted)]">{t('help.article.notFound')}</p>
-        <Button variant="outline" size="sm" className="mt-4" onClick={() => navigate('/help')}>
-          <ArrowLeft size={14} className="mr-1" />
-          {t('help.article.back')}
-        </Button>
-      </div>
+      <EmptyState
+        icon={<FileQuestion size={28} />}
+        title={t('help.article.notFound')}
+        description={t('help.article.notFoundHint')}
+        action={{ label: t('help.article.back'), onClick: () => navigate('/help') }}
+      />
     );
   }
 
@@ -98,7 +98,7 @@ function SectionRenderer({ section }: { section: HelpSection }) {
     case 'tip':
       return (
         <div className="border-l-2 border-[var(--brass)] pl-3 py-1">
-          <p className="text-sm text-[var(--ivory-muted)] leading-relaxed italic">
+          <p className="text-sm text-[var(--ivory-muted)] leading-relaxed">
             {t(`help.${section.key}`)}
           </p>
         </div>

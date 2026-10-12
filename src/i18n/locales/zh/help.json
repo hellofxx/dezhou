@@ -166,7 +166,8 @@
   "article": {
     "back": "返回帮助中心",
     "useModule": "去使用",
-    "notFound": "文章不存在"
+    "notFound": "文章不存在",
+    "notFoundHint": "该教程可能已迁移或链接有误，返回帮助中心查看全部教程。"
   },
   "concepts": {
     "title": "系统概念",
