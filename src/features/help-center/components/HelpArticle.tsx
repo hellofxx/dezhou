@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, FileQuestion } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
@@ -27,15 +27,14 @@ export default function HelpArticle() {
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
-      {/* 返回按钮 */}
-      <button
-        type="button"
-        onClick={() => navigate('/help')}
+      {/* 返回链接 */}
+      <Link
+        to="/help"
         className="inline-flex items-center gap-1.5 text-sm text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors min-h-[44px]"
       >
         <ArrowLeft size={16} />
         {t('help.article.back')}
-      </button>
+      </Link>
 
       {/* 标题 */}
       <h1 className="font-display text-xl text-[var(--ivory)] tracking-wide">
@@ -54,9 +53,11 @@ export default function HelpArticle() {
 
       {/* 底部返回 */}
       <div className="pt-4 border-t border-[var(--walnut-border)]">
-        <Button variant="outline" size="sm" onClick={() => navigate('/help')}>
-          <ArrowLeft size={14} className="mr-1" />
-          {t('help.article.back')}
+        <Button variant="outline" size="sm" asChild>
+          <Link to="/help">
+            <ArrowLeft size={14} className="mr-1" />
+            {t('help.article.back')}
+          </Link>
         </Button>
       </div>
     </div>
@@ -66,7 +67,6 @@ export default function HelpArticle() {
 /** 段落渲染器 */
 function SectionRenderer({ section }: { section: HelpSection }) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   switch (section.type) {
     case 'paragraph':
@@ -114,8 +114,8 @@ function SectionRenderer({ section }: { section: HelpSection }) {
               {t(`help.${section.key}`)}
             </p>
             {to && (
-              <Button variant="outline" size="sm" onClick={() => navigate(to)}>
-                {t('help.article.useModule')}
+              <Button variant="outline" size="sm" asChild>
+                <Link to={to}>{t('help.article.useModule')}</Link>
               </Button>
             )}
           </div>
