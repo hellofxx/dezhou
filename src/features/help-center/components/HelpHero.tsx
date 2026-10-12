@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
-import { transitionSlow } from '@/shared/utils/motion';
+import { SLIDE_DOWN } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
 
@@ -35,9 +35,9 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={transitionSlow}
+      variants={SLIDE_DOWN}
+      initial="hidden"
+      animate="visible"
       className="panel brass-rail help-hero"
       aria-label={t('help.hero.ariaLabel')}
     >

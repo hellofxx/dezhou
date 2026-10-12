@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { FAQ_ITEMS } from '../data/helpContent';
@@ -11,6 +11,12 @@ import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
  */
 export default function FaqAccordion() {
   const { t } = useTranslation();
+  // MotionConfig 的 reducedMotion 只降级 transform，height 展开需显式置零时长
+  const prefersReducedMotion = useReducedMotion();
+  const panelTransition = {
+    duration: prefersReducedMotion ? 0 : MOTION_DURATION.fast,
+    ease: MOTION_EASE.standard,
+  };
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
@@ -51,7 +57,7 @@ export default function FaqAccordion() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.standard }}
+                  transition={panelTransition}
                   className="faq-item-panel-wrap"
                 >
                   <div className="faq-item-panel">

@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Zap, BookOpen, Layers, MessageCircle } from 'lucide-react';
 import { HELP_ARTICLES, CONCEPT_CARDS } from '../data/helpContent';
@@ -11,6 +12,7 @@ import ConceptCard from './ConceptCard';
 /** 帮助中心首页 — Hero（House Rules 立牌）+ 4 个锚点 section */
 export default function HelpHome() {
   const { t } = useTranslation();
+  const prefersReducedMotion = useReducedMotion();
 
   const quickStartRef = useRef<HTMLElement>(null);
   const articlesRef = useRef<HTMLElement>(null);
@@ -25,8 +27,12 @@ export default function HelpHome() {
   };
 
   const handleRuleClick = useCallback((anchor: HelpHeroAnchor) => {
-    anchorMap[anchor].current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
+    anchorMap[anchor].current?.scrollIntoView({
+      // scrollIntoView 是 JS API，不受 globals.css 的 reduced-motion 兜底约束
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
+  }, [prefersReducedMotion]);
 
   return (
     <div className="space-y-7">
