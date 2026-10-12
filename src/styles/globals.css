@@ -775,6 +775,12 @@ body::after {
 .module-card:hover { border-color: rgba(201,162,94,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,162,94,0.1); }
 .module-card:hover::before { opacity: 1; }
 .module-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(201,162,94,0.12); }
+/* 强调色变体（HelpAccent）：底色 = 对应 token 12% 透明 + 图标同色，随 data-theme 的 var() 反转自动联动 */
+.module-icon[data-accent="brass"]   { background: color-mix(in srgb, var(--brass-bright) 12%, transparent); color: var(--brass-bright); }
+.module-icon[data-accent="info"]    { background: color-mix(in srgb, var(--poker-info) 12%, transparent); color: var(--poker-info); }
+.module-icon[data-accent="success"] { background: color-mix(in srgb, var(--poker-success) 12%, transparent); color: var(--poker-success); }
+.module-icon[data-accent="frost"]   { background: color-mix(in srgb, var(--poker-frost) 12%, transparent); color: var(--poker-frost); }
+.module-icon[data-accent="leather"] { background: color-mix(in srgb, var(--poker-leather) 12%, transparent); color: var(--poker-leather); }
 
 /* ---- Quick Drill Card ---- */
 .quick-drill-card {
@@ -2587,7 +2593,7 @@ html[data-theme="light"] .streak-rail {
 .help-hero-copy { min-width: 0; }
 .help-hero-title {
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--ivory);
   line-height: 1.25;
@@ -2663,8 +2669,8 @@ html[data-theme="light"] .streak-rail {
 }
 .house-rules-eyebrow {
   font-family: var(--font-display);
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 0.32em;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--brass-dark);
   text-align: center;
@@ -2686,7 +2692,7 @@ html[data-theme="light"] .streak-rail {
   width: 100%;
   padding: 8px 10px;
   border-radius: 6px;
-  background: rgba(255,255,255,0.4);
+  background: rgba(26,19,8,0.08);
   border: 1px solid rgba(201,162,94,0.2);
   text-align: left;
   cursor: pointer;
@@ -2695,7 +2701,7 @@ html[data-theme="light"] .streak-rail {
   min-height: 40px;
 }
 .house-rules-item:hover {
-  background: rgba(255,255,255,0.7);
+  background: rgba(26,19,8,0.15);
   border-color: rgba(160,125,61,0.5);
   transform: translateX(2px);
   box-shadow: 0 2px 6px rgba(160,125,61,0.18);

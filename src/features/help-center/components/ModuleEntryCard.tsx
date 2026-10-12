@@ -12,7 +12,7 @@ import {
   BarChart3,
   BookOpen,
 } from 'lucide-react';
-import type { HelpArticle, HelpAccent } from '../types';
+import type { HelpArticle } from '../types';
 
 const ICON_MAP: Record<HelpArticle['icon'], React.ComponentType<{ size?: number; className?: string }>> = {
   'target': Target,
@@ -26,33 +26,21 @@ const ICON_MAP: Record<HelpArticle['icon'], React.ComponentType<{ size?: number;
   'book-open': BookOpen,
 };
 
-const ACCENT_TOKEN: Record<HelpAccent, string> = {
-  brass: 'var(--brass-bright)',
-  info: 'var(--poker-info)',
-  success: 'var(--poker-success)',
-  frost: 'var(--poker-frost)',
-  leather: 'var(--poker-leather)',
-};
-
 interface Props {
   article: HelpArticle;
 }
 
-/** 模块入口卡片 — 复用 globals.css module-card / module-icon 类 */
+/** 模块入口卡片 — 复用 globals.css module-card / module-icon 类（强调色走 data-accent 变体） */
 export default function ModuleEntryCard({ article }: Props) {
   const { t } = useTranslation();
   const Icon = ICON_MAP[article.icon];
-  const accentColor = ACCENT_TOKEN[article.accent];
 
   return (
     <Link
       to={`/help/article/${article.id}`}
       className="module-card w-full text-left min-h-[44px]"
     >
-      <span
-        className="module-icon"
-        style={{ background: `color-mix(in srgb, ${accentColor} 12%, transparent)`, color: accentColor }}
-      >
+      <span className="module-icon" data-accent={article.accent}>
         <Icon size={20} />
       </span>
       <span className="flex-1 min-w-0">
