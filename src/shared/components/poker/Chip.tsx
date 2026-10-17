@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 
 interface ChipProps {
@@ -12,7 +13,7 @@ interface ChipProps {
  * Each entry: [base, light-stop, dark-stop, text-color]
  * §5.2 radial gradient circle at 35% 35%, §10.3 chip-red = #a83838 (clay)
  * UI-04：渐变 stop 裸 hex 逐一锚定 token（近似关系，见 DESIGN.md §5.2/§10.3）：
- * - red.light #c85555 / red.dark #7a2828 ≈ --poker-clay 亮/暗 stop（chip-red #a83838 同族）
+ * - red.light #c85555 / red.dark #7a2828 ≈ --clay 亮/暗 stop（chip-red #a83838 同族）
  * - blue.light #5a6a8a / blue.dark #3a4a6a ≈ --poker-indigo 亮/暗 stop
  * - green.light #7aa66a / green.dark #4a6a3a ≈ --poker-moss 亮/暗 stop
  * - black.light #2a1f12 / black.dark #120d07 ≈ --walnut 亮/暗 stop
@@ -20,7 +21,7 @@ interface ChipProps {
  * - frost.light #c8dde6 ≈ --poker-frost 亮 stop；frost.text #0d1b26 ≈ --felt-deep 同族
  */
 const COLOR_MAP = {
-  red:   { base: 'var(--poker-clay)',   light: '#c85555', dark: '#7a2828', text: 'var(--ivory)' },
+  red:   { base: 'var(--clay)',         light: '#c85555', dark: '#7a2828', text: 'var(--ivory)' },
   blue:  { base: 'var(--poker-indigo)', light: '#5a6a8a', dark: '#3a4a6a', text: 'var(--ivory)' },
   green: { base: 'var(--poker-moss)',   light: '#7aa66a', dark: '#4a6a3a', text: 'var(--ivory)' },
   black: { base: 'var(--walnut)',       light: '#2a1f12', dark: '#120d07', text: 'var(--ivory)' },
@@ -41,6 +42,7 @@ const SIZE_MAP = {
  * Different colors represent different denominations.
  */
 export function Chip({ amount, color = 'red', size = 'md', className }: ChipProps) {
+  const { t } = useTranslation();
   const colors = COLOR_MAP[color];
   const { diameter, fontSize, strokeWidth } = SIZE_MAP[size];
   const radius = diameter / 2;
@@ -52,6 +54,9 @@ export function Chip({ amount, color = 'red', size = 'md', className }: ChipProp
   };
 
   const gradientId = `chip-grad-${color}-${size}`;
+  const ariaLabel = showAmount
+    ? t('common.chip.ariaLabel', { amount: formatAmount(amount) })
+    : t('common.chip.label');
 
   return (
     <svg
@@ -60,7 +65,7 @@ export function Chip({ amount, color = 'red', size = 'md', className }: ChipProp
       viewBox={`0 0 ${diameter} ${diameter}`}
       className={cn('block font-numeric', className)}
       role="img"
-      aria-label={`${color} chip${showAmount && amount > 0 ? ` ${amount}` : ''}`}
+      aria-label={ariaLabel}
     >
       <defs>
         {/* §5.2 radial gradient — circle at 35% 35% for 3D chip face */}

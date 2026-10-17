@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Suit, Rank } from '@/shared/types/poker';
 import { SUIT_SYMBOLS, SUIT_COLORS, RANK_CARD_FACE_DISPLAY } from '@/shared/constants/poker';
 
@@ -6,6 +7,8 @@ interface CardSVGProps {
   rank: Rank;
   width?: number;
   height?: number;
+  /** 装饰态：外层容器已提供可访问名称时置 true，避免重复朗读 */
+  decorative?: boolean;
 }
 
 /**
@@ -13,7 +16,8 @@ interface CardSVGProps {
  * Renders rank + suit in corners and a large center suit symbol
  * on an ivory face with subtle paper texture — like a real playing card.
  */
-export function CardSVG({ suit, rank, width = 80, height = 112 }: CardSVGProps) {
+export function CardSVG({ suit, rank, width = 80, height = 112, decorative = false }: CardSVGProps) {
+  const { t } = useTranslation();
   const color = SUIT_COLORS[suit];
   const symbol = SUIT_SYMBOLS[suit];
   const display = RANK_CARD_FACE_DISPLAY[rank];
@@ -28,6 +32,11 @@ export function CardSVG({ suit, rank, width = 80, height = 112 }: CardSVGProps) 
   const gradientId = `card-face-${suit}-${rank}`;
   const paperId = `paper-${suit}-${rank}`;
 
+  const ariaLabel = t('common.card.ariaLabel', {
+    rank: display,
+    suit: t(`common.card.suit.${suit}`),
+  });
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -35,8 +44,9 @@ export function CardSVG({ suit, rank, width = 80, height = 112 }: CardSVGProps) 
       height={height}
       viewBox="0 0 80 112"
       className="block"
-      role="img"
-      aria-label={`${display} of ${suit}`}
+      role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : ariaLabel}
+      aria-hidden={decorative ? true : undefined}
     >
       <defs>
         {/* Subtle paper texture gradient — §5.1 card face #f8f2e2→#e5dcc4 */}
