@@ -61,8 +61,8 @@ export default function GTOResultPage() {
       accuracy={lastResult.accuracy}
       stats={[
         { icon: <Target className="w-4 h-4" />, label: t('gto.result.statTotalScenarios'), value: `${lastResult.scenarios}` },
-        { icon: <span className="text-[var(--sage)] text-sm font-bold">✓</span>, label: t('gto.result.statOptimal'), value: `${lastResult.optimalDecisions}` },
-        { icon: <span className="text-[var(--clay)] text-sm font-bold">✗</span>, label: t('gto.result.statNonOptimal'), value: `${lastResult.scenarios - lastResult.optimalDecisions}` },
+        { icon: <span className="text-[var(--paper-success)] text-sm font-bold">✓</span>, label: t('gto.result.statOptimal'), value: `${lastResult.optimalDecisions}` },
+        { icon: <span className="text-[var(--paper-danger)] text-sm font-bold">✗</span>, label: t('gto.result.statNonOptimal'), value: `${lastResult.scenarios - lastResult.optimalDecisions}` },
         { icon: <Clock className="w-4 h-4" />, label: t('gto.result.statAvgTime'), value: `${avgTimePerDecision}s` },
       ]}
       onRetry={() => navigate('/gto-simulator')}
@@ -101,13 +101,13 @@ export default function GTOResultPage() {
                 {lastResult.worstSpots.map((spot, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-3 rounded-md bg-[var(--clay)]/8 border border-[var(--clay)]/25"
+                    className="flex items-center justify-between p-3 rounded-md bg-[var(--paper-danger)]/8 border border-[var(--paper-danger)]/25"
                   >
                     <div className="flex items-center gap-2">
                       <PositionBadge position={spot.scenario.position} />
                       <span className="text-sm text-[var(--ivory)]">{spot.scenario.name}</span>
                     </div>
-                    <span className="text-sm font-bold text-[var(--clay)] font-numeric">
+                    <span className="text-sm font-bold text-[var(--paper-danger)] font-numeric">
                       -{spot.evLoss.toFixed(2)} BB
                     </span>
                   </div>

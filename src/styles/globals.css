@@ -650,6 +650,50 @@ body::after {
   border-radius: 8px 8px 0 0;
 }
 
+/* ---- Dialog / Sheet 纸张表面入场与退场（DESIGN.md §8 动效规范 / §5.23 发牌员纸条）----
+   为什么用 data-state 驱动：本项目未安装 tailwindcss-animate，`animate-in` /
+   `fade-in-0` / `zoom-in-95` / `slide-in-from-*` 等类全部为空操作；语义改由 Radix 的
+   data-state="open" | "closed" 承接。入场 300ms（standard + ease-out）、退场 200ms
+   （fast + ease-in），参数全部取自 §8.1 的 --poker-duration-* / --poker-ease-*。
+   dialog-paper 关键帧动 translate / scale 长属性而非 transform shorthand：Tailwind v4 的
+   translate-x/y-* 输出的是 translate 属性，二者相乘，若用 shorthand 会把居中位移叠加成
+   双倍偏移；长属性在动画结束后回落到同一基准（translate -50% -50% / scale 1），无跳变。
+   prefers-reduced-motion 由上方全局 kill switch（* + animation-duration !important）统一
+   兜底，本组类同样被覆盖。 */
+.dialog-overlay[data-state="open"] { animation: dialog-fade-in var(--poker-duration-standard) var(--poker-ease-out); }
+.dialog-overlay[data-state="closed"] { animation: dialog-fade-out var(--poker-duration-fast) var(--poker-ease-in); }
+.dialog-content[data-state="open"] { animation: dialog-paper-in var(--poker-duration-standard) var(--poker-ease-out); }
+.dialog-content[data-state="closed"] { animation: dialog-paper-out var(--poker-duration-fast) var(--poker-ease-in); }
+.dealer-slip--sheet[data-state="open"] { animation: sheet-up var(--poker-duration-standard) var(--poker-ease-out); }
+.dealer-slip--sheet[data-state="closed"] { animation: sheet-down var(--poker-duration-fast) var(--poker-ease-in); }
+
+@keyframes dialog-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dialog-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+/* 终态 = 居中基准 translate(-50%, -50%) scale(1)，与 Tailwind translate 基准一致 */
+@keyframes dialog-paper-in {
+  from { opacity: 0; translate: -50% -48%; scale: 0.98; }
+  to { opacity: 1; translate: -50% -50%; scale: 1; }
+}
+@keyframes dialog-paper-out {
+  from { opacity: 1; translate: -50% -50%; scale: 1; }
+  to { opacity: 0; translate: -50% -48%; scale: 0.98; }
+}
+/* Sheet：屏幕底部上滑进场 / 下滑退场（§13.7.2） */
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes sheet-down {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
 /* ---- Motto Engraved ---- */
 .motto-engraved {
   display: flex; align-items: center; justify-content: center; gap: 8px;

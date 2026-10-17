@@ -13,6 +13,8 @@ const DialogPortal = DialogPrimitive.Portal
 
 const DialogClose = DialogPrimitive.Close
 
+// 遮罩入场/退场由 globals.css 的 .dialog-overlay[data-state] 驱动（DESIGN.md §8）：
+// 本项目未启用 tailwindcss-animate，animate-in / fade-in-0 等类为空操作。
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
@@ -20,7 +22,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-[100] bg-[var(--surface-overlay)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "dialog-overlay fixed inset-0 z-[100] bg-[var(--surface-overlay)]",
       className
     )}
     {...props}
@@ -38,11 +40,12 @@ const DialogContent = React.forwardRef<
   return (
     <DialogPortal>
       <DialogOverlay />
-      {/* 发牌员纸条材质（DESIGN.md §5.23 / §6.4）；圆角由 --poker-radius-sm 统一为 4px。 */}
+      {/* 发牌员纸条材质（DESIGN.md §5.23 / §6.4）；圆角由 --poker-radius-sm 统一为 4px。
+          入场/退场动效由 .dialog-content[data-state] 的 CSS keyframes 驱动（§8）。 */}
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          "dealer-slip fixed left-[50%] top-[50%] z-[100] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 rounded-[var(--poker-radius-sm)] p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
+          "dealer-slip dialog-content fixed left-[50%] top-[50%] z-[100] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 rounded-[var(--poker-radius-sm)] p-6",
           className
         )}
         {...props}

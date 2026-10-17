@@ -5,6 +5,8 @@
  * @description 移动端（<768px）底部滑出的反馈面板：dealer-slip 纸张材质（§1.5 / §5.23）
  * + Radix Dialog 提供完整 dialog 语义（Escape 关闭 / 焦点陷阱 / 焦点归还 / 背景滚动锁）。
  * 桌面端展示形式由消费方决定，本组件只负责移动端底部 Sheet 形态。
+ * 入场/退场动效由 globals.css 的 .dialog-overlay / .dealer-slip--sheet[data-state]
+ * keyframes 驱动（§8 / §13.7.2）——未启用 tailwindcss-animate，animate-in 等类为空操作。
  */
 
 import type { ReactNode } from 'react';
@@ -33,10 +35,10 @@ export function MobileFeedbackSheet({
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
         {/* 遮罩：点击关闭由 Radix DismissableLayer（modal 外部指针/点击）接管 */}
-        <DialogPrimitive.Overlay className="fixed inset-0 z-[100] bg-[var(--surface-overlay)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=closed]:duration-200" />
+        <DialogPrimitive.Overlay className="dialog-overlay fixed inset-0 z-[100] bg-[var(--surface-overlay)]" />
         <DialogPrimitive.Content
           aria-describedby={undefined}
-          className="dealer-slip dealer-slip--sheet fixed inset-x-0 bottom-0 z-[100] flex max-h-[70vh] flex-col pb-[env(safe-area-inset-bottom,0px)] duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=closed]:duration-200"
+          className="dealer-slip dealer-slip--sheet fixed inset-x-0 bottom-0 z-[100] flex max-h-[70vh] flex-col pb-[env(safe-area-inset-bottom,0px)]"
         >
           {/* 标题 sr-only：Radix 以 aria-labelledby 关联，保证 Sheet 有可读名称 */}
           <DialogPrimitive.Title className="sr-only">
