@@ -14,7 +14,7 @@ export interface DailyGoalCardProps {
 }
 
 /**
- * DailyGoalCard — 今日学习目标卡（DESIGN_LANGUAGE §13.2.4）。
+ * DailyGoalCard — 今日学习目标卡（DESIGN.md §13.2.4）。
  * 象牙铭牌样式：walnut-raised 底 + 顶边黄铜发线 + brass 进度条。
  */
 export default function DailyGoalCard({

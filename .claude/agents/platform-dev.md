@@ -43,7 +43,7 @@ additionalPrompt: ""
 ### 不可越界
 - 不修改 feature 模块内部业务逻辑，需变更时通过对应 feature-dev 代理
 - 不直接调整 feature 模块内部的 store 字段（除 progress store 作为跨模块状态中枢外）
-- 不绕过 ui-ux-dev 修改全局设计语言（以 poker-ui-demo/DESIGN_LANGUAGE.md 为准）
+- 不绕过 ui-ux-dev 修改全局设计语言（以 DESIGN.md 为准）
 - 不引入新依赖除非确有必要，且必须评估 bundle 体积影响
 
 ## Capabilities
@@ -242,7 +242,7 @@ if ($failedJobs.Count -gt 0) {
 - 新增路由必须使用 React.lazy + LazyWrapper 实现代码分割
 - i18n 翻译 key 使用 camelCase + 模块前缀
 - 所有新组件必须支持暗色主题
-- 移动端断点 < 768px 显示底部 MobileNav、侧边栏隐藏（布局切换归平台层）；移动端像素级细节（训练场 2 列 / 等高取消 / streak-rail 位置 / `!important` 特异性等）以 `poker-ui-demo/DESIGN_LANGUAGE.md` §6.3（移动 <768px）与 §10.5（CSS 特异性规则）为唯一事实源，本文件不维护副本
+- 移动端断点 < 768px 显示底部 MobileNav、侧边栏隐藏（布局切换归平台层）；移动端像素级细节（训练场 2 列 / 等高取消 / streak-rail 位置 / `!important` 特异性等）以 `DESIGN.md` §6.3（移动 <768px）与 §10.5（CSS 特异性规则）为唯一事实源，本文件不维护副本
 - progress store persist version 以 `src/features/progress/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）
 - 跨模块状态（Streak / ELO / SRS / Emotion / Mentor）统一由 progress store 管理，不分散到各 feature store
 - `shared/utils/seededShuffle.ts` 为答题选项排序治理的共享事实源（见 AGENTS.md《答题选项排序治理》）：变更须评估 puzzle-trainer / strategy-academy / pot-odds 三个消费模块影响并通知对应代理；分流规则变更需同步 AGENTS.md / PRD 5.26 / TDD 5.9

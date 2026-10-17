@@ -51,7 +51,7 @@ interface NavGroup {
   items: NavItem[];
 }
 
-// 内容宽度分级 L2（DESIGN_LANGUAGE §6.5）：策略学院概览/课程地图视图展宽，
+// 内容宽度分级 L2（DESIGN.md §6.5）：策略学院概览/课程地图视图展宽，
 // 消除超宽屏 felt 留白；阅读/作答视图（/academy/lesson、/quick-drill 等）保持 L3 收敛，由模块内部自行限宽
 const LAB_OVERVIEW_WIDE_ROUTES = ['/academy', '/academy/tracks', '/academy/concept-graph'];
 
@@ -67,7 +67,7 @@ export default function AppLayout() {
   useThemeApplier();
 
   // 导航层级精简：Dashboard 置顶去分组（原"概览"单项目分组冗余），
-  // 其余按 训练 / 研习 / 数据 / 设置 四组；图标统一 18px 线性风格（DESIGN_LANGUAGE §7）
+  // 其余按 训练 / 研习 / 数据 / 设置 四组；图标统一 18px 线性风格（DESIGN.md §7）
   const navGroups = useMemo<NavGroup[]>(() => [
     {
       title: t('nav.training'),
@@ -139,7 +139,7 @@ export default function AppLayout() {
         )}
         <span className="shrink-0">{item.icon}</span>
         {!collapsed && <span className="truncate">{item.label}</span>}
-        {/* 庄码 D（DESIGN_LANGUAGE §5.3）：展开态斜体 Fraunces；折叠态降级为黄铜小圆点避免与图标重叠 */}
+        {/* 庄码 D（DESIGN.md §5.3）：展开态斜体 Fraunces；折叠态降级为黄铜小圆点避免与图标重叠 */}
         {active && !collapsed && (
           <span aria-hidden="true" className="absolute right-2 w-[22px] h-[22px] rounded-full bg-gradient-to-br from-[var(--brass-bright)] to-[var(--brass)] flex items-center justify-center text-[10px] font-display font-bold italic text-[var(--primary-foreground)]">
             D
@@ -355,7 +355,7 @@ export default function AppLayout() {
 
         {/* Page content */}
         <main className="flex-1 overflow-auto p-4 md:p-6 pb-20 md:pb-6">
-          {/* G1: 全局限宽——操作台/统计页随 main 收敛（L1 1400）；策略学院概览视图走 L2 展宽 1680（DESIGN_LANGUAGE §6.5）；阅读型页面正文由各模块 agent 单独 max-w-prose */}
+          {/* G1: 全局限宽——操作台/统计页随 main 收敛（L1 1400）；策略学院概览视图走 L2 展宽 1680（DESIGN.md §6.5）；阅读型页面正文由各模块 agent 单独 max-w-prose */}
           <div
             className={cn(
               'mx-auto w-full h-full',

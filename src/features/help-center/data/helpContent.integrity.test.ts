@@ -154,7 +154,7 @@ describe('hero.meta 数量与数据源一致', () => {
 });
 
 // ===== 渲染层动效契约（源码级） =====
-// DESIGN_LANGUAGE §8.2 要求 framer-motion 组件引用 motion.ts 预置 variants，
+// DESIGN.md §8.2 要求 framer-motion 组件引用 motion.ts 预置 variants，
 // 禁止内联 initial/animate 字面量。jsdom 断言不到 variants 取值，故扫描源文件。
 
 describe('HelpHero 动效走共享 preset', () => {

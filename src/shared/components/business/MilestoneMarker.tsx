@@ -6,7 +6,7 @@ export interface MilestoneMarkerProps {
 }
 
 /**
- * MilestoneMarker — 进度条上的小菱形里程碑标记（DESIGN_LANGUAGE §13.2.3）。
+ * MilestoneMarker — 进度条上的小菱形里程碑标记（DESIGN.md §13.2.3）。
  * 使用全局类 .milestone-marker（globals.css，6px 菱形 brass-bright），
  * 标注文字位于标记点上方 4px（9px ivory-muted）。
  */

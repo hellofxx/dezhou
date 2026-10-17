@@ -9,7 +9,7 @@ export interface MottoEngravedProps {
 /**
  * MottoEngraved — 黄铜镌刻铭文，两侧带发丝线。
  * 用于 FeltArena hero 区域。
- * 注意：中文文字禁止使用 italic（DESIGN_LANGUAGE §3.2）。
+ * 注意：中文文字禁止使用 italic（DESIGN.md §3.2）。
  */
 export default function MottoEngraved({ text, className }: MottoEngravedProps) {
   return (

@@ -1,8 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.7.0
+> 德州扑克训练平台 UI/UX 设计规范 v1.8.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.8.0 更新：确立材质契约（§1.5 房间/画布/纸条/镶嵌）与纸张色板（§2.6）；新增发牌员纸条 `.dealer-slip`（§5.23）；修订按钮金属族（§5.5）、顶栏胡桃梁与壳层 h1/导航序号（§5.7）、进度条（§5.11）、移动触摸目标与 Z 轴（§6.3/§6.4）、SVG token 锚定（§12.1）、移动端反馈 Sheet 纸张化（§13.7.2）
 > v1.7.0 更新：新增 §13 教育学习设计规范 — 学习进度可视化、课程内容排版增强、反馈教育脚手架、模块教育目的视觉区分、渐进式信息披露、移动端教育体验、教育场景动效
 > v1.6.0 更新：内容宽度分级（§6.5）— 新增三档容器宽度（L1 默认收敛 1400 / L2 概览展宽 1680 / L3 阅读作答收敛），策略学院概览视图走 L2 展宽消除超宽屏 felt 留白（§9 页面模式 7）
 > v1.5.0 更新：动效章节全量规范（§8）— 新增动效 token（缓动/时长）、触发方式、动画类型定义（淡入/滑动/缩放/旋转）、组件状态动画行为矩阵，React 侧共享动效规范 `src/shared/utils/motion.ts` 为单一事实源
@@ -38,8 +39,25 @@
 - **顶部栏 = 牌桌上方横梁**：h-16，薄，仅显示当前页名+状态图标，不承载导航
 - **Table Rail（桌沿铜钉）**：顶部 header 正下方，全宽 14px 高，左右胡桃渐变+中央黄铜铆钉；跨所有页面的视觉锚点，模拟木桌包边，绝不可删
 - **主内容 = 牌桌**：椭圆绿呢为视觉核心，面板环绕"桌下"
-- **弹窗/浮层 = 发牌员递过来的东西**：浮在绿呢上方，带暖色阴影
+- **弹窗/浮层 = 发牌员递过来的纸条**：象牙纸材质浮在绿呢上方，带暖色阴影（材质契约见 §1.5，规格见 §5.23）
 - **移动端底栏**：<768px 替代侧边栏，固定在底；桌面端不出现
+
+### 1.5 材质契约（v1.8.0）
+
+三类材质各自绑定固定角色，不得互相顶替：
+
+| 材质 | 角色 | 承载元素 |
+|---|---|---|
+| **Walnut 胡桃** | 房间 | 侧边栏、顶栏（胡桃梁）、外壳框架（包住绿呢的 L 形木框） |
+| **Felt 绿呢** | 画布 | 页面画布、牌桌、训练台面 |
+| **Ivory paper 象牙纸** | 纸条 | Dialog、移动端反馈 Sheet、ResultSummary、快捷键浮层 |
+| **Brass 黄铜** | 镶嵌 | 只做镶嵌 / 发线 / 主 CTA / 焦点环，不做大面积表面 |
+
+> 核心句：**「牌室是深色的，但发牌员递给你的东西是纸。」**
+
+- 判定规则：任何「发牌员递给你」的一次性信息载体（对话、结果、提示、快捷键）用纸张材质；常驻导航与外壳用胡桃木；训练台面用绿呢。
+- 纸张作用域内必须把 ink / brass / 语义 / 表面 token 重锚为 §2.6 的 paper 值（见 §5.23），禁止逐处写死字面色值。
+- 反模式：把纸张用于常驻导航或大面积页面底色；在纸上直接沿用暗色房间的亮阶语义色。
 
 ---
 
@@ -121,6 +139,32 @@
 - **牌桌绿呢**：多层 radial-gradient 叠加，中心亮边缘暗（见 `.felt-arena`）
 - **深色金属按钮**：`linear-gradient(180deg, #4a3218, #2a1c0a)` + inset 0 1px 0 brass(0.15)
 
+### 2.6 纸张色板（v1.8.0）
+
+「发牌员纸条」专用表面与文字色，独立于 §2.1–§2.4 的暗色房间色板；仅在纸张作用域内生效（重锚方式见 §5.23）。
+
+| Token | Dark（默认） | 用途 |
+|---|---|---|
+| `--paper` | `#f4ecda` | 纸条底 |
+| `--paper-raised` | `#faf4e6` | 纸条内抬升块（表头、代码块） |
+| `--paper-edge` | `#d6c8a8` | 纸条 1px 边、内外分隔 |
+| `--paper-ink` | `#241c10` | 纸条主文字 |
+| `--paper-ink-dim` | `#4f452f` | 纸条次级文字 |
+| `--paper-ink-muted` | `#6f6449` | 纸条说明 / 禁用 |
+| `--paper-rule` | `rgba(90,70,35,.22)` | 纸条内发线 / 分隔线 |
+| `--paper-brass` | `#8a641f` | 纸条上的黄铜强调（深阶） |
+| `--paper-success` | `#2f6b3a` | 纸条语义成功 |
+| `--paper-danger` | `#a63f30` | 纸条语义危险 |
+| `--paper-warning` | `#8a641f` | 纸条语义警告 |
+| `--paper-info` | `#3f6b5c` | 纸条语义信息 |
+
+**Light theme 差异**：仅调底色与边 —— `--paper #fbf6e8` / `--paper-raised #fffaf0` / `--paper-edge #cdbb95` / `--paper-brass #7d5c22`；ink 与四个语义色不变。
+
+硬性要求：
+- 纸上文字对比度 ≥ 4.5:1；主文字（`--paper-ink` 落于 `--paper`）≥ 7:1。
+- 纸上语义色只使用上表深阶值，禁止直接复用暗色房间的亮阶语义色（`--poker-success` 等）作为纸上文字色。
+- 纸条作用域内须重锚 ink / brass / 语义 / 表面 token，含 globals.css alias 与 Tailwind `@theme` 颜色别名。
+
 ---
 
 ## 3. 字体系统
@@ -176,6 +220,7 @@
 | `--poker-shadow` | `0 4px 14px rgba(0,0,0,0.45)` | 面板、按钮默认 |
 | `--poker-shadow-lg` | `0 12px 40px rgba(0,0,0,0.55)` | 弹窗、悬浮面板、牌桌 |
 | `--poker-shadow-brass` | `0 4px 20px rgba(201,162,94,0.15)` | 黄铜高亮（CTA glow） |
+| `--shadow-brass-btn` | `0 2px 6px rgba(0,0,0,.45), 0 6px 18px rgba(201,162,94,.28), inset 0 1px 0 rgba(255,240,200,.55)` | 一级黄铜主 CTA 的金属浮起（§5.5） |
 
 特殊：
 - **牌桌投影**：`0 14px 40px rgba(0,0,0,0.5), 0 30px 60px rgba(0,0,0,0.35)`（双层浮起）
@@ -234,6 +279,16 @@
 | `.pill` 筛选/标签 | transparent+胡桃边 | `--poker-ivory-muted` | 1px `#4a3825` | 位置选择、模式切换 |
 | `.pill.active` | 黄铜渐变 | `#1a1308` | 1px `#8a6b30` | 选中态 |
 
+**按钮金属族（v1.8.0，三级层次）**：主按钮是金属件，不是色块。
+
+| 层级 | 实现 | 规格 | 用途 |
+|---|---|---|---|
+| 一级 主 CTA | `.btn-brass` | 黄铜渐变 `#f0d48a→#c9a25e→#a07d3d` + `--shadow-brass-btn` + 1px `#8a6b30` 边 | 每屏唯一主动作 |
+| 二级 次级 | 深胡桃金属 `.btn-allin` 家族 | `#4a3218→#2a1c0a` 渐变 + 黄铜字 `--poker-brass-bright` + inset 高光 `inset 0 1px 0 rgba(255,240,200,.15)` | 同组次动作、高风险动作 |
+| 三级 quiet | `.btn-ghost` | 透明底、无边，hover 仅 `rgba(255,255,255,0.03)` | 取消 / 跳过 / 链接类 |
+
+- **反模式（v1.8.0）**：纯色平铺主按钮（黄铜实底、无渐变、无投影）一律不合规，必须落回一级金属族。
+
 **行动按钮色阶**：fold=陶土红 → call=深胡桃 → raise=黄铜 → all-in=深胡桃嵌黄铜，按风险递增排列。
 
 **平权答题选项按钮（v1.3.2）**：range-trainer QuizCard 等「三选一」答题场景中，fold/call/raise 是三个**平权选项**（非一个主 CTA + 两个次要动作），须保证三者视觉权重相当且互相可区分——三色相并立、都明显浮于呢面背景之上：
@@ -259,7 +314,11 @@
   - 默认 `--poker-ivory-muted` 无背景
   - Hover `--poker-ivory-dim` + `rgba(255,255,255,0.025)` 底
   - Active `--poker-brass-bright` 文字 + 左侧 8% 黄铜渐变底 + 右侧黄铜庄码 D（22px 圆）
-- **顶栏**：h-16（64px），底部 1px 胡桃边框；左侧 H1 显示当前页名（动态跟随侧边栏激活项），右侧 streak 徽章+通知+设置图标+语言切换；顶栏图标仅作快捷入口，不是主导航
+- **顶栏（胡桃梁，v1.8.0）**：h-16（64px），与侧边栏同胡桃材质——侧边栏 + 顶栏构成包住绿呢画布的 L 形木框；底部 1px 胡桃边框；右侧 streak 徽章+通知+设置图标+语言切换；顶栏图标仅作快捷入口，不是主导航
+- **壳层标题（v1.8.0，全站唯一 h1）**：页名由壳层统一渲染（各页面不得再渲染同级 h1），Fraunces 600，桌面 22px / 移动 19px；标题左侧为 `font-numeric` 9px 黄铜序号眉标 + 1px 发线分隔
+- **导航序号（v1.8.0）**：Dashboard 为 `00`，四个导航分组为 `01–04`（训练 / 研习 / 数据 / 设置）；序号是分组位置的固定标识，不随语言变化
+- **侧边栏折叠态（v1.8.0）**：折叠时隐藏文字，保留序号与图标；序号降级为图标上方 9px 黄铜小字
+- **h1 重复的过渡态（v1.8.0）**：页面内已有 h1 与本条短期允许重复，后续各模块逐步降级，不在本版本一次性清理
 - **桌沿铜钉 `.table-rail`**（v1.1 新增，v1.2 位置调整）：
   - 顶部 header 正下方，全宽，高度 14px
   - 中心胡桃分隔线 + 一颗 8px 黄铜铆钉（radial 渐变+glow）
@@ -289,7 +348,7 @@
 - 开关/checkbox：未选胡桃色，选中黄铜色+辉光
 
 ### 5.11 进度与数据可视化
-- 进度条：track `#2d2214` 圆角 2px，fill 黄铜渐变+glow
+- 进度条：track 使用 `--progress-track`（dark `#2d2214` / light `#d9cdb1`），圆角 2px；fill 用黄铜渐变 `#f0d48a→#c9a25e→#a07d3d` + glow `0 0 6px rgba(232,201,126,.35)`
 - 图表：网格线 `rgba(201,162,94,0.08)`；轴文字 `--poker-ivory-muted` 10–11px；主线 `#e8c97e` 2px tension 0.4；填充 0→30% brass opacity
 - 范围表格 13×13 gap 1px：选中=黄铜三档色阶（对子亮/同花中/杂色暗）；未选=深红棕半透+弱边框
 
@@ -398,6 +457,19 @@
 - **formula / example 等宽规则**：行级 `AsciiMonoText` — 仅含 ASCII 字母/数字的行使用 font-mono，中文行保持无衬线（避免中文等宽无意义）
 - **hand-example 内容优先级**：content → `data.scenario`（string 非空）→ 占位「（手牌示例数据待补充）」
 
+### 5.23 发牌员纸条 `.dealer-slip`（v1.8.0）
+
+承载「发牌员递给你的一次性信息」：Dialog、移动端反馈 Sheet、ResultSummary、快捷键浮层。材质契约见 §1.5，色板见 §2.6。
+
+- **表面**：`--paper` 底、`--paper-edge` 1px 边、4px 圆角（Sheet 变体顶部 8px，见 §13.7.2）；内部抬升块用 `--paper-raised`
+- **顶部内缩黄铜发线** `::before`：`height:1px`，居中 `width:calc(100% - 32px)`，`linear-gradient(90deg, transparent, var(--paper-brass), transparent)`
+- **顶部中央黄铜钉** `::after`：10px 圆点（radial 渐变 + 弱 glow），水平居中、`top:6px`，呼应 TableRail 铆钉（§5.7）
+- **阴影**：暖色纸片投影 `0 18px 40px rgba(20,14,6,.45)` + 内顶高光 `inset 0 1px 0 rgba(255,255,255,.35)`，不用纯黑冷投影
+- **排版作用域**：条目内必须把 `--ink` / `--brass` / `--success` / `--danger` / `--warning` / `--info` / 表面 token 重锚为 §2.6 的 paper 值（含 globals.css alias 与 Tailwind `@theme` 颜色别名）；禁止在纸条内部逐处写死字面色值
+- **入场**：300ms `translateY(8px)` + fade in（缓动 token 见 §8.1.1）；**退场**：200ms fade out；Sheet 变体从屏幕底部上滑
+- **无障碍 / 层级**：尊重 `prefers-reduced-motion: reduce`（去掉位移，仅保留透明度变化或直接切换）；`z-index: 100`（§6.4）
+- **反模式**：纸上复用暗色房间的亮阶语义色（对比度不足）；把纸片用于常驻导航或面板背景
+
 ---
 
 ## 6. 布局系统
@@ -429,11 +501,14 @@
 └─────────┴──────────────────────────────────────────┘
 ```
 
+- **L 形木框（v1.8.0）**：侧边栏与顶栏同为胡桃材质，二者在左上角相接，构成包住绿呢画布的 L 形木框（见 §1.5 / §5.7）。
+
 ### 6.2 平板（768–1023px）
 侧边栏保留，grid 降为 1fr，侧栏堆叠主面板下；Table Rail 保留；训练场网格 2 列；streak-rail 与 arena 间距维持 12px。
 
 ### 6.3 移动（<768px）
 - 侧边栏隐藏→底部 mobile-nav（fixed bottom，≥44px 触摸目标）
+- **触摸目标（v1.8.0）**：所有可点元素最小命中区域 44×44px（图标按钮、Sheet 手柄周边、答题按钮、底栏项均适用）；视觉尺寸可小于 44px，但须用 padding / 伪元素补足命中区
 - Table Rail 保留（视觉锚点不可删），高度可缩至 10px
 - Header 高度 h-16→50px
 - **椭圆牌桌 arena**：border-radius 改为 `50%/28%`，min-height 100px（480px 下 88px），padding `4px 16px 10px`，margin-top -18px 让椭圆骑在 tab 栏下
@@ -458,8 +533,8 @@
 | 5 | 铭牌、卡片（在 felt 上） |
 | 10 | 顶栏、侧栏用户区 |
 | 20 | 侧边栏 |
-| 50 | 移动端底栏、Toast |
-| 100 | 弹窗、Modal、下拉菜单 |
+| 50 | 移动端底栏、Toast（nav 与 toast 同层，浮层不得低于此层） |
+| 100 | 弹窗、Modal、`.dealer-slip` 纸条、下拉菜单 |
 
 ### 6.5 内容宽度分级（v1.6.0 新增）
 
@@ -660,7 +735,9 @@
 - ❌ 系统默认 sans-serif（必须 Inter Tight）
 - ❌ 大段中文 serif（Fraunces 只用于标题/数字/格言）
 - ❌ 中文斜体（必须 `.motto-engraved`）
-- ❌ 扁平纯色按钮（必须渐变，哪怕极微）
+- ❌ 扁平纯色按钮（必须渐变，哪怕极微；主 CTA 纯色平铺违反 §5.5 按钮金属族）
+- ❌ 把纸张材质用于常驻导航或大面积页面底色（材质契约见 §1.5）
+- ❌ 在纸条上沿用暗色房间的亮阶语义色（对比度不足，见 §2.6）
 - ❌ 重要操作做纯文字链接（必须按钮/pill）
 - ❌ 椭圆牌桌用图片（必须 CSS `border-radius`）
 - ❌ 高饱和霓虹色（`#4ade80`/`#f87171`/`#60a5fa`/`#fbbf24`/`#22d3ee`/`#a78bfa`）
@@ -703,9 +780,10 @@ Google Fonts 一次加载 3 族（Fraunces 可变、Inter Tight、JetBrains Mono
 ## 12. 文件结构
 
 ```
+DESIGN.md                      # 本文档（仓库根目录，与 poker-ui-demo/ 平级）
+
 poker-ui-demo/
 ├── poker-ui-demo.design       # Design Canvas 项目
-├── DESIGN_LANGUAGE.md         # 本文档
 └── pages/
     └── index.html             # 单页演示（含全部 CSS/JS）
         ├── <style id="theme-vars">       # §2 色板/字体/半径/阴影变量
@@ -714,7 +792,7 @@ poker-ui-demo/
         ├── <body>
         │   ├── <aside class="sidebar">   # 侧边栏（桌面唯一导航）
         │   ├── <main>
-        │   │   ├── <header>              # 顶栏（页名+状态）
+        │   │   ├── <header>              # 顶栏胡桃梁（页名+状态）
         │   │   ├── .table-rail           # 桌沿铜钉（跨页签名）
         │   │   └── .tab-panel × 7        # 七个页面
         │   └── .mobile-nav               # 移动端底栏（<768px）
@@ -732,6 +810,7 @@ poker-ui-demo/
 - **原子类轨**：布局与一次性样式用 Tailwind 任意值 token 类（如 `bg-[var(--poker-success-bg)]`、`text-[var(--brass-bright)]`），禁止绕开 token 写字面色值
 - **签名元素组件化对应**：`.table-rail` → `shared/components/TableRail.tsx`；`.motto-engraved` → `shared/components/MottoEngraved.tsx`；牌背（§5.1）→ `shared/components/CardBack.tsx`（胡桃底+45°条纹+2px 黄铜边+内描金，SVG 描边直接引用 `var(--brass)`）
 - **SVG 例外**：渐变 stop 无法引用 CSS 变量时允许字面值，但必须注释标注对应 token；独立 SVG 资产（`public/cards/back.svg`）同样以注释锚定 token
+- **硬性要求（v1.8.0）**：字面渐变 stop 必须带 `<!-- 色值 = var(--token) -->` 形式的锚定注释；无锚定注释的字面渐变在评审与守卫中一律视为不合规
 
 ---
 
@@ -755,6 +834,14 @@ background: var(--poker-walnut);        /* 侧栏/深面板 */
 background: var(--poker-felt);          /* 卡片底 */
 background: var(--poker-success-bg);    /* 苔藓绿 12% */
 background: var(--poker-danger-bg);     /* 陶土红 12% */
+
+/* 纸张（§2.6，仅在 .dealer-slip 作用域内重锚） */
+background: var(--paper);
+background: var(--paper-raised);
+color: var(--paper-ink);
+color: var(--paper-ink-dim);
+border-color: var(--paper-edge);
+background: linear-gradient(90deg, transparent, var(--paper-brass), transparent);
 
 /* 边框 */
 border-color: var(--poker-walnut-border);
@@ -814,7 +901,7 @@ border-radius: var(--poker-radius-md); /* 8px */
 
 ## 附录 E：v1.3.1 变更摘要（色板权威源反向对齐）
 
-- **背景**：UI 审查（S2）发现 DESIGN_LANGUAGE.md §2.1 主色板、§2.3 花色与 `src/styles/globals.css`、`poker-ui-demo/colors_and_type.css` 三份色值长期分歧。本次以 `globals.css` 实现值为权威，反向更新本规范文档，消除三份分歧。
+- **背景**：UI 审查（S2）发现 DESIGN.md §2.1 主色板、§2.3 花色与 `src/styles/globals.css`、`poker-ui-demo/colors_and_type.css` 三份色值长期分歧。本次以 `globals.css` 实现值为权威，反向更新本规范文档，消除三份分歧。
 - **主色板对齐**：§2.1 全部 HEX 改为 globals.css 实现值（felt-deep `#0e1a14`、felt `#15301f`、felt-raised `#1d4029`、felt-light `#245035`、walnut `#241a10`、walnut-raised `#3a2a18`、walnut-border `#4a3825`、walnut-light `#4d3a24`、ivory `#f3ebd9`、ivory-dim `#cabf9f`、ivory-muted `#8a8068`、brass-deep `#a07d3d`、brass-dark `#8a6b30`）；新增 `--poker-brass-muted #b09050`。
 - **花色修订**：§2.3 ♣♠ 由深棕近黑 `#1a1308` 改为象牙白 `#f3ebd9`（暗底可见性优先，对比度 ≥7:1）；♥♦ 对齐实现值 `#d04545`。
 - **三不原则引用更新**：§1.2 felt-deep/ivory 引用值同步更新。
@@ -1315,12 +1402,15 @@ CSS 参考：
 
 ```
 规格：
-- 样式：底部 Sheet（从屏幕底部滑入），max-height 70vh
-- 背景：var(--poker-felt) + 顶部 8px 圆角
-- 拖拽手柄：顶部中央 32px × 4px 横条，ivory-muted 40% 透明度
+- 表面：纸张材质（§5.23 .dealer-slip + §2.6 纸张色板），不再使用暗色 felt 底
+- 尺寸：底部 Sheet（从屏幕底部滑入），max-height: 70vh
+- 圆角：顶部 8px（Sheet 变体，区别于桌面 Dialog 的 4px 纸条圆角）
+- 拖拽手柄：顶部中央 32px × 4px 横条，--paper-rule 或 --paper-ink-muted 40% 透明度
 - 手势：下拉关闭（< 30% 高度自动关闭），支持 Rubber-band 回弹
 - 内容区域：滚动（overflow-y: auto），与 §13.4 反馈教育脚手架一致
-- 动画：slide-up 进场 300ms ease-out（§8.2），slide-down 退场 200ms ease-in
+- 动画：上滑进场 300ms ease-out（§8.2）、下滑退场 200ms ease-in；prefers-reduced-motion 时退化为淡入淡出
+- 无障碍：完整 dialog 语义——role="dialog" + aria-modal="true" + sr-only 标题（aria-labelledby）、打开时焦点陷阱与初始焦点、Escape 关闭、关闭后焦点归还触发元素、背景滚动锁
+- 层级：z-index: 100（§6.4）
 - 何时使用：移动端答题结果反馈（正确/错误/严重错误）
 - 何时不用：桌面端仍使用 Modal / 内联反馈卡片
 ```

@@ -28,7 +28,7 @@
 - [ ] 新/修改的功能已编写对应测试
 - [ ] 边界条件已处理（null/undefined/空数组等）
 - [ ] i18n key 同步 zh.json 与 en.json（新增键名）
-- [ ] 中文文案符合品牌调性（参考 DESIGN_LANGUAGE.md）
+- [ ] 中文文案符合品牌调性（参考 DESIGN.md）
 
 ### Agent 协作规范
 

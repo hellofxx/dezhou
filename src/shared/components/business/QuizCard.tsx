@@ -14,7 +14,7 @@ import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { DEFAULT_MENTOR } from '@/shared/types/mentor';
-// 教育脚手架（DESIGN_LANGUAGE §13.4）：决策分析区 / 再看一题 / 相关课程标签
+// 教育脚手架（DESIGN.md §13.4）：决策分析区 / 再看一题 / 相关课程标签
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 // §13.7.2：移动端反馈底部 Sheet
@@ -109,7 +109,7 @@ function getSuitedColor(suited: string): string {
   return 'text-[var(--ivory-muted)]';
 }
 
-// Action palette per DESIGN_LANGUAGE §5.5 risk ladder, tuned for three equal-weight
+// Action palette per DESIGN.md §5.5 risk ladder, tuned for three equal-weight
 // answer options (not one CTA + two muted): each button keeps its card-room hue
 // (fold=terracotta / call=neutral walnut / raise=brass) and sits clearly above the
 // felt background so all three read distinctly.

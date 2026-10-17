@@ -6,7 +6,7 @@
 | 文档版本 | v1.0 |
 | 创建日期 | 2026-08-17 |
 | 基于审阅 | 2026-08-17 设计审阅报告 |
-| 关联文档 | DESIGN_LANGUAGE.md v1.7.0 / PRD.md v2.4 / AI_GUIDE.md |
+| 关联文档 | DESIGN.md v1.8.0 / PRD.md v2.4 / AI_GUIDE.md |
 
 ## 1. 优化目标
 在保持现有 "Private Card Room" 棋牌美学的基础上，增强教育学习场景的视觉语言，让用户从"感觉在牌室"升级为"感觉在进步"。
@@ -25,7 +25,7 @@
 - StreakRail 右侧增加正确率趋势微图（sparkline，8px 高）
 - 知识图谱节点增加进度环（progress-ring，三色：未开始/进行中/已完成）
 **负责代理**：progress-dev（组件）+ ui-ux-dev（视觉复核）
-**设计规范**：DESIGN_LANGUAGE.md §13.2
+**设计规范**：DESIGN.md §13.2
 
 ### 3.2 P0 — 课程阅读体验增强
 **现状**：课程正文缺乏教育特有的排版层次，9 种 content-block 视觉区分度不够
@@ -36,7 +36,7 @@
 - 新增 formula-display 公式展示块（淡黄铜底纹 + 等宽字体）
 - 课程标题增加编号系统（§2.1 格式，eyebrow 样式）
 **负责代理**：strategy-academy-dev + theory-academy-dev（组件）+ ui-ux-dev（视觉复核）
-**设计规范**：DESIGN_LANGUAGE.md §13.3
+**设计规范**：DESIGN.md §13.3
 
 ### 3.3 P1 — 反馈系统教育脚手架
 **现状**：反馈侧重评级和 EV 数字，缺少决策逻辑解释
@@ -47,7 +47,7 @@
 - 反馈卡片底部增加 try-again 按钮（同类型题目巩固）
 - 反馈卡片底部增加 related-lesson-chip（相关课程链接）
 **负责代理**：全部训练模块子代理（range-trainer-dev / pot-odds-dev / gto-simulator-dev / puzzle-trainer-dev）+ ui-ux-dev（反馈组件视觉复核）
-**设计规范**：DESIGN_LANGUAGE.md §13.4
+**设计规范**：DESIGN.md §13.4
 
 ### 3.4 P1 — 模块间教育目的视觉区分
 **现状**：6 大模块主题色同色系低饱和，暗底上区分度有限
@@ -57,7 +57,7 @@
 - 模块卡右下角增加 last-training-badge（"X 天前"或"今日已练"）
 - 模块卡增加教育目的描述标签（如"记忆训练"/"计算训练"/"决策训练"）
 **负责代理**：progress-dev（Dashboard 模块卡）+ ui-ux-dev（视觉复核）
-**设计规范**：DESIGN_LANGUAGE.md §13.5
+**设计规范**：DESIGN.md §13.5
 
 ### 3.5 P2 — 新手引导教育叙事
 **现状**：Onboarding 收集用户水平，但首屏价值主张不够明确
@@ -77,7 +77,7 @@
 - 训练场模块入口按训练次数逐步解锁
 - 增加 learning-focus-mode：用户锁定模块后 Dashboard 自动聚焦
 **负责代理**：progress-dev（Dashboard 逻辑）+ platform-dev（路由门禁）
-**设计规范**：DESIGN_LANGUAGE.md §13.6
+**设计规范**：DESIGN.md §13.6
 
 ### 3.7 P3 — 移动端教育体验微调
 **现状**：移动端适配已有基础（§6.3），但缺少教育场景专属优化
@@ -87,14 +87,14 @@
 - 移动端答题反馈改为底部 Sheet（替代 Modal）
 - 移动端概念图改为纵向列表
 **负责代理**：各模块子代理 + ui-ux-dev（移动端复核）
-**设计规范**：DESIGN_LANGUAGE.md §13.7
+**设计规范**：DESIGN.md §13.7
 
 ## 4. 实施计划
 
 ### 4.1 阶段一：教育设计基础设施（预计 3-5 天）
 | 任务 | 负责代理 | 依赖 |
 |---|---|---|
-| DESIGN_LANGUAGE.md §13 落地 | ui-ux-dev | 无 |
+| DESIGN.md §13 落地 | ui-ux-dev | 无 |
 | globals.css 新增教育 token | ui-ux-dev | §13 定稿 |
 | progress-ring / sparkline / daily-goal-card 组件 | progress-dev | token 就绪 |
 | lesson-takeaway / formula-display 组件 | strategy-academy-dev | token 就绪 |
@@ -145,7 +145,7 @@
 - [ ] 所有新增文案 i18n 双语齐备
 
 ## 6. 风险与注意事项
-- 所有新增视觉元素必须遵守 DESIGN_LANGUAGE.md §1.2 三不原则和 §1.3 反 SaaS 饱和色禁令
+- 所有新增视觉元素必须遵守 DESIGN.md §1.2 三不原则和 §1.3 反 SaaS 饱和色禁令
 - 新增 CSS 类必须走 globals.css 定义，禁止在组件内写内联大段样式
 - 教育场景的 brass 使用量需克制，避免与主 CTA 争夺视觉焦点
 - Dashboard 渐进式披露的 totalSessions 阈值需产品确认（当前建议 5/10/20）

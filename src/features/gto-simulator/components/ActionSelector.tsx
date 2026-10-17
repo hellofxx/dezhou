@@ -159,7 +159,7 @@ export function ActionSelector({
             ))}
           </div>
 
-          {/* 滑块（a11y：aria-valuetext 读屏播报当前加注尺寸，遵循 WCAG 与 DESIGN_LANGUAGE） */}
+          {/* 滑块（a11y：aria-valuetext 读屏播报当前加注尺寸，遵循 WCAG 与 DESIGN.md） */}
           <div className="space-y-1">
             <input
               type="range"

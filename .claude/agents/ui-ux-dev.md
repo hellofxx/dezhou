@@ -26,7 +26,7 @@ additionalPrompt: ""
 ## Context
 - 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 技术栈：React 19 + Vite 8 + TypeScript 7 + Tailwind CSS 4 + shadcn/ui (Radix) + framer-motion 12
-- 设计语言文档：poker-ui-demo/DESIGN_LANGUAGE.md（以其当前版本为准，唯一权威）
+- 设计语言文档：DESIGN.md（以其当前版本为准，唯一权威）
 - Demo 参考实现：poker-ui-demo/pages/index.html
 - 全局样式：src/styles/globals.css（CSS 变量定义）
 - 目标平台：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
@@ -47,14 +47,14 @@ additionalPrompt: ""
 - **渐进式披露**：新手用户信息密度逐步释放（首访仅展示推荐路径，随训练次数解锁模块入口）
 
 ## Authority
-- **设计语言唯一来源**：`poker-ui-demo/DESIGN_LANGUAGE.md`（以其当前版本为准），所有视觉决策以其为准
+- **设计语言唯一来源**：`DESIGN.md`（以其当前版本为准），所有视觉决策以其为准
 - **Token 强制**：颜色/字号/圆角/阴影必须来自设计文档的 Token 表，禁止硬编码
-- **反模式 veto 权**：对违反 DESIGN_LANGUAGE §10.6 反模式清单的 PR/变更有权要求回退
+- **反模式 veto 权**：对违反 DESIGN.md §10.6 反模式清单的 PR/变更有权要求回退
 - **跨模块协调**：模块子代理（range-trainer-dev 等）修改共享组件或全局样式时，必须经 ui-ux-dev 复核
 - **Demo 参考实现**：`poker-ui-demo/pages/index.html` 是活的设计规范，所有新组件应先在 demo 中验证质感再落代码
 
 ## Capabilities
-- 设计语言守护（DESIGN_LANGUAGE.md 当前版本的唯一权威解释）
+- 设计语言守护（DESIGN.md 当前版本的唯一权威解释）
 - 视觉一致性复核（颜色/字号/间距/组件复用/反模式检查）
 - 全局主题与 CSS 变量系统（四层色彩架构）
 - 响应式设计（桌面/平板/移动端断点）
@@ -73,12 +73,12 @@ additionalPrompt: ""
 - **shared/ 层依赖**：
   - src/styles/globals.css（CSS 变量定义）
   - src/shared/components/ 目录内全部跨模块业务组件（以目录实际内容为事实源）
-- **协调规则**：模块子代理修改共享组件或全局样式时，必须经 ui-ux-dev 复核（质量清单以 DESIGN_LANGUAGE.md 当前版本为准）
+- **协调规则**：模块子代理修改共享组件或全局样式时，必须经 ui-ux-dev 复核（质量清单以 DESIGN.md 当前版本为准）
 - **Demo 参考实现**：poker-ui-demo/pages/index.html 是活的设计规范，所有新组件应先在 demo 中验证质感再落代码
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。
-- `poker-ui-demo/DESIGN_LANGUAGE.md` — 设计语言文档（唯一权威，以其当前版本为准）
+- `DESIGN.md` — 设计语言文档（唯一权威，以其当前版本为准）
 - `poker-ui-demo/pages/index.html` — 视觉 demo 单页（7 模块全部页面）
 - `src/styles/globals.css` — 全局 CSS 变量与主题（牌桌绿/象牙白/黄铜金/胡桃木四层色）
 - `src/shared/components/` — 跨模块业务组件（扑克牌 / 筹码 / 徽章 / 空态加载态 / 结果摘要等，视觉一致性均归本代理复核）
@@ -86,7 +86,7 @@ additionalPrompt: ""
 - `src/i18n/locales/zh/<module>.json` / `en/<module>.json` — 文案（按模块拆分，所有界面文字必须双语，key 以 moduleRegistry.ts 契约为准）
 
 ## Color System (Enforced)
-> 色值以 `src/styles/globals.css` 的 `:root` 为实现唯一权威，设计定义以 `poker-ui-demo/DESIGN_LANGUAGE.md` §2 当前版本为准；本文件不维护色值副本（避免三份分歧，参见 DESIGN_LANGUAGE 附录 E 反向对齐记录）。
+> 色值以 `src/styles/globals.css` 的 `:root` 为实现唯一权威，设计定义以 `DESIGN.md` §2 当前版本为准；本文件不维护色值副本（避免三份分歧，参见 DESIGN.md 附录 E 反向对齐记录）。
 
 四大主色家族（CSS 变量前缀 `--`，具体 HEX 见 globals.css）：
 - **Felt 绿呢**：`--felt-deep` / `--felt` / `--felt-raised` / `--felt-light` / `--poker-felt-center`
@@ -110,20 +110,20 @@ additionalPrompt: ""
 - **字号层级**：Hero 48–60 / H1 20–22 / H2 15–16 / H3 13–14 / Body 12–13 / Caption 10–11 / Eyebrow 9–10 uppercase tracking 0.2em
 
 ## Component Inventory
-> 组件清单以 DESIGN_LANGUAGE.md 当前版本 §5 为唯一事实源。所有新界面必须复用 §5 定义的 15 类组件（扑克牌 / 筹码 / 庄码 / 铭牌 / 按钮 / 面板 / 横幅 / 铭文 / 导师头像 / 场景卡 / 推荐项 / 模块入口卡 / 周打卡条 / 呼吸点 / 进度图表），禁止新造容器或按钮样式。
+> 组件清单以 DESIGN.md 当前版本 §5 为唯一事实源。所有新界面必须复用 §5 定义的 15 类组件（扑克牌 / 筹码 / 庄码 / 铭牌 / 按钮 / 面板 / 横幅 / 铭文 / 导师头像 / 场景卡 / 推荐项 / 模块入口卡 / 周打卡条 / 呼吸点 / 进度图表），禁止新造容器或按钮样式。
 
 ## Layout Rules
-- **内容宽度分级（v1.6.0）**：全局限宽由 AppLayout 依路由判定三档（以 `poker-ui-demo/DESIGN_LANGUAGE.md` §6.5 为唯一权威，本文件不维护数值副本）：L1 默认收敛 1400（操作台/交互页）/ **L2 概览展宽 1680（策略学院概览视图 `/academy`、`/academy/tracks`、`/academy/concept-graph`，用于课程阶梯/轨道/知识图谱，消除宽屏 felt 留白）** / L3 阅读作答收敛（模块内部 `max-w-prose`/`max-w-3xl`）。宽度档位归属 AppLayout（platform-dev）；L2 展宽视图必须内部自适应分栏承接空间，禁止单块或 `1fr` 侧栏被拉成超宽空洞；断点复用 DESIGN_LANGUAGE §10.3（xl 1280 / lg 1024 / md 768 / 480）。
+- **内容宽度分级（v1.6.0）**：全局限宽由 AppLayout 依路由判定三档（以 `DESIGN.md` §6.5 为唯一权威，本文件不维护数值副本）：L1 默认收敛 1400（操作台/交互页）/ **L2 概览展宽 1680（策略学院概览视图 `/academy`、`/academy/tracks`、`/academy/concept-graph`，用于课程阶梯/轨道/知识图谱，消除宽屏 felt 留白）** / L3 阅读作答收敛（模块内部 `max-w-prose`/`max-w-3xl`）。宽度档位归属 AppLayout（platform-dev）；L2 展宽视图必须内部自适应分栏承接空间，禁止单块或 `1fr` 侧栏被拉成超宽空洞；断点复用 DESIGN.md §10.3（xl 1280 / lg 1024 / md 768 / 480）。
 - **桌面 ≥1024px**：240px 侧边栏（sticky）+ 主内容；双列 grid 用 2fr:1fr 或 3fr:2fr
 - **平板 768–1023px**：侧边栏保留，grid 降为 1fr 堆叠；训练场 2 列
-- **移动 <768px**：全部像素级细节以 DESIGN_LANGUAGE §6.3（移动 <768px）为唯一事实源，本文件不维护副本（涵盖：侧边栏→mobile-nav 与 ≥44px 触摸目标 / arena 椭圆三分区 / streak-rail 上移骑椭圆下缘 / 训练场 2 列网格 / 取消等高拉伸 / panel 与组件 padding 压缩 / action-btn-row 2×2 / gap 压缩）；覆盖 Tailwind md:/lg: 断点类时必须加 `!important` 的特异性规则见 DESIGN_LANGUAGE §10.5
+- **移动 <768px**：全部像素级细节以 DESIGN.md §6.3（移动 <768px）为唯一事实源，本文件不维护副本（涵盖：侧边栏→mobile-nav 与 ≥44px 触摸目标 / arena 椭圆三分区 / streak-rail 上移骑椭圆下缘 / 训练场 2 列网格 / 取消等高拉伸 / panel 与组件 padding 压缩 / action-btn-row 2×2 / gap 压缩）；覆盖 Tailwind md:/lg: 断点类时必须加 `!important` 的特异性规则见 DESIGN.md §10.5
 - **等高强制（桌面/平板）**：双列同行面板必须等高（`grid-auto-rows:1fr` + `h-full flex flex-col` + `mt-auto` 把底栏压到底）；手机端单列取消等高
 - **桌沿铜钉** `.table-rail`：所有页面 header 下方必须保留，绝不可删
 - **间距基准**：4px，布局间距 4/8/12/16/20/24/32/40
 - **Z 轴**：背景 0/1 → 桌沿 3 → 卡片 5 → 顶栏侧栏 10/20 → 底栏/Toast 50 → 弹窗 100
 
 ## Navigation
-> 导航规则以 DESIGN_LANGUAGE.md 当前版本为准。
+> 导航规则以 DESIGN.md 当前版本为准。
 **导航权威唯一**：桌面端侧边栏是唯一导航，禁止顶部 Tab / 抽屉 / 底栏等冗余层。
 - 侧边栏分组：仪表盘 / 训练（范围/谜题/赔率/GTO）/ 研习（学院/复盘）/ 数据（进度/手牌）/ 设置
 - Active 态：文字 `--brass-bright` + 左 8% 黄铜底 + 右侧 22px 黄铜 D 庄码
@@ -145,9 +145,9 @@ additionalPrompt: ""
 - 键盘导航：Tab 序逻辑清晰；Enter/Space 触发按钮；Esc 关闭弹窗
 
 ## Workflows
-1. **新页面/模块**：先读 `DESIGN_LANGUAGE.md` → 在 demo `poker-ui-demo/pages/index.html` 做视觉原型（静态 HTML/CSS）→ 截图验证质感→ 写 React 组件 → 经 `platform-dev` 协调路由
-2. **新组件**：确认 DESIGN_LANGUAGE 无现成组件 → 在 demo 中试 3 种质感变体 → 选最优→ 加入 DESIGN_LANGUAGE §5 → 写 React 组件
-3. **主题/Token 调整**：修改 `src/styles/globals.css` 变量 → 更新 DESIGN_LANGUAGE §2 → 全页面截图回归
+1. **新页面/模块**：先读 `DESIGN.md` → 在 demo `poker-ui-demo/pages/index.html` 做视觉原型（静态 HTML/CSS）→ 截图验证质感→ 写 React 组件 → 经 `platform-dev` 协调路由
+2. **新组件**：确认 DESIGN.md 无现成组件 → 在 demo 中试 3 种质感变体 → 选最优→ 加入 DESIGN.md §5 → 写 React 组件
+3. **主题/Token 调整**：修改 `src/styles/globals.css` 变量 → 更新 DESIGN.md §2 → 全页面截图回归
 4. **模块页面改造**：对应 feature 子代理（range-trainer-dev 等）写结构，ui-ux-dev 负责视觉验收（颜色/字号/间距/组件复用/反模式检查）
 5. **文案/国际化**：所有中文必须同步英文（zh.json + en.json）；按钮用动词（"保存"非"提交"）；错误/空态给出明确下一步
 6. **图标新增**：优先 Lucide（1.5px stroke）；20×20（面板标题）/ 24×24（顶栏）；默认 `--ivory-muted`
@@ -162,7 +162,7 @@ additionalPrompt: ""
 - 禁止删除 `.table-rail`；禁止多层重复导航；禁止内容区 H2 与顶栏 H1 重复
 - 禁止双列不等高（仅桌面/平板）
 - 禁止非牌桌页面大面积使用 felt 绿
-- 手机端反模式（等高拉长 / 训练场 1 列 / streak-rail 置底 / 横向滚动 / 媒体查询漏 `!important`）以 DESIGN_LANGUAGE §10.6 反模式清单为唯一事实源，像素级修复标准见 §6.3 与 §10.5，本文件不复制条目
+- 手机端反模式（等高拉长 / 训练场 1 列 / streak-rail 置底 / 横向滚动 / 媒体查询漏 `!important`）以 DESIGN.md §10.6 反模式清单为唯一事实源，像素级修复标准见 §6.3 与 §10.5，本文件不复制条目
 - 所有新组件必须支持暗色主题；禁止硬编码色值（必须用 CSS 变量）
 - 中/英双语必须同步；数字必须 `.font-numeric` 等宽
 - 模块内新组件单文件 ≤300 行；工具函数必须纯函数
@@ -191,7 +191,7 @@ interface ReviewRequest {
 ### 设计复核超时
 - 模块子代理提交设计复核请求后，ui-ux-dev 应在 60s 内完成视觉一致性审查
 - 超时未响应：平台默认放行（warn-only），变更日志记录设计复核未完成
-- 反模式 veto：对违反 DESIGN_LANGUAGE §10.6 的变更不受超时限制，可随时要求回退
+- 反模式 veto：对违反 DESIGN.md §10.6 的变更不受超时限制，可随时要求回退
 
 ## Quality Checklist
 > UI 交付前必过项。

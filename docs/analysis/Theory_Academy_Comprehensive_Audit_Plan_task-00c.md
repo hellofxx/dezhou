@@ -172,7 +172,7 @@ Step 7  运行 pnpm verify，通过后进入下一章
 2. 平板（768-1024px）：两栏折行、进度环尺寸
 3. 移动端（<768px）：底部导航"理论学院"入口、触摸目标 ≥44px、章节列表滚动
 4. 键盘可达性：Tab 顺序、Enter/Space 触发卡片、aria-label 完整
-5. 视觉一致性：对照 `poker-ui-demo/DESIGN_LANGUAGE.md`（四层色彩 token、暗色默认、禁霓虹），ui-ux-dev 复核
+5. 视觉一致性：对照 `DESIGN.md`（四层色彩 token、暗色默认、禁霓虹），ui-ux-dev 复核
 6. 公式渲染：formula 段落 font-mono 排版无溢出、换行正确
 
 ### 4.3 性能优化建议
@@ -255,7 +255,7 @@ Phase 4 开始 → PRD 5.27 更新（内容规格定稿后）
 | platform-dev | 评估 shared/ 层接口变更、协调跨模块白名单、复核 TDD 架构描述 | ① quizOrder 需改 seededShuffle 接口 ② practiceRecommendations 新增课程 ID ③ TDD 5.8b 结构性更新 | 接口变更评估、白名单同步、TDD 复核意见 |
 | progress-dev | 验证 ELO/情绪/成就集成不受内容扩充影响 | Phase 1 完成时、Phase 2 每批完成时 | updateElo/recordAnswer/recordTrainingDay 调用链回归结论 |
 | strategy-academy-dev | 验证 CROSS_MODULE_LESSON_IDS 白名单同步 | 仅当 practiceRecommendations 引用变更时（预期本次不变，回归确认） | 白名单一致性确认 |
-| ui-ux-dev | 视觉一致性复核（新增内容渲染效果） | Phase 3 用户体验验证时 | 设计契约合规报告（对照 DESIGN_LANGUAGE.md） |
+| ui-ux-dev | 视觉一致性复核（新增内容渲染效果） | Phase 3 用户体验验证时 | 设计契约合规报告（对照 DESIGN.md） |
 
 ### 6.2 协作流程与接口规范
 #### 接口 A：progress store（设计内中枢引用，无越界）

@@ -16,7 +16,7 @@ type RingStatus = 'idle' | 'in-progress' | 'complete';
 
 /**
  * ProgressRing — 进度环，SVG <circle> + stroke-dasharray 控制完成比例。
- * 用于概念节点 / 课程章节完成度指示（DESIGN_LANGUAGE §13.2.1）。
+ * 用于概念节点 / 课程章节完成度指示（DESIGN.md §13.2.1）。
  * 三色状态：idle walnut-border / in-progress brass / complete success。
  */
 export default function ProgressRing({

@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 /**
- * 设计 token 守卫（DESIGN_LANGUAGE §1.2 三不原则 / §1.3 反 SaaS 饱和色禁令）：
+ * 设计 token 守卫（DESIGN.md §1.2 三不原则 / §1.3 反 SaaS 饱和色禁令）：
  * 1. 禁止 Tailwind 霓虹调色板类（red/green/blue/... -\d{2,3}），语义色必须用 --poker-* token；
  * 2. 禁止纯白/纯黑文字与实底类（text-white / bg-white / text-black / bg-black 实底）；
  *    半透明压暗层 bg-black/NN 属 §4.2「阴影黑调」豁免；
  * 3. 禁止纯黑/纯白十六进制字面量（#000 / #fff 系）。
- * 白名单遵循「只删不加」：新增豁免必须先在 DESIGN_LANGUAGE.md 登记设计依据。
+ * 白名单遵循「只删不加」：新增豁免必须先在 DESIGN.md 登记设计依据。
  */
 
 // 通过 Vite raw glob 载入全部业务源码（排除测试文件本身在下方过滤）

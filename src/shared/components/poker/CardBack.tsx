@@ -13,7 +13,7 @@ const SIZE_MAP = {
 
 /**
  * Card back component using inline SVG.
- * DESIGN_LANGUAGE §5.1：胡桃底 + 45° 条纹 + 2px 黄铜边 + 内描金。
+ * DESIGN.md §5.1：胡桃底 + 45° 条纹 + 2px 黄铜边 + 内描金。
  * 描边/填充直接引用 CSS token（var(--brass) 等）；渐变 stop 需字面值，
  * 注释标注对应 token（#241a10 = --walnut / #1a1308 = walnut 暗阶）。
  */

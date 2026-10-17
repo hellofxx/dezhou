@@ -10,7 +10,7 @@
 
 ### 2026-10-12 帮助中心 Design QA 修复：契约偏差 12 项 + CSS 面填充守卫（7 个 commit）
 
-用 Design Review 插件对 `src/features/help-center/` 做综合走查（契约源 `poker-ui-demo/DESIGN_LANGUAGE.md` v1.7.0）。**结论是缺陷不在"好不好看"，而在实现与已登记契约的偏差长期无人看守**，因此本批既修偏差也补守卫。
+用 Design Review 插件对 `src/features/help-center/` 做综合走查（契约源 `DESIGN.md` v1.7.0）。**结论是缺陷不在"好不好看"，而在实现与已登记契约的偏差长期无人看守**，因此本批既修偏差也补守卫。
 
 - **根因是门禁盲区，不是疏忽**：`designTokenGuard.test.ts` 的 glob 只覆盖 `src/**/*.{ts,tsx}`，globals.css 整个在射程外。象牙卡面上的 `.house-rules-item { background: rgba(255,255,255,0.4) → hover 0.7 }` 叠在 `--stable-ivory #f8f2e2` 上，hover 已越过 §1.2「最亮色 ivory」的上界，而契约对同族元素（§5.9 横幅内部 pill）明明规定了墨色低透 `rgba(26,19,8,0.08)`。改为该族既有的 0.08→0.15 阶，**顺手把 `::before` 顶高光与内描金这类 §4.3/§5.9 授权项列为内容指纹豁免**（用选择器+声明子串，抗行号漂移）。
 - **中文斜体禁令的成立条件比条文更硬**：`HelpArticle` tip 段用 Tailwind `italic`，而三族 `@font-face`（Fraunces/Inter Tight/JetBrains Mono）**只声明了 `font-style: normal`**，仓库未加载任何 italic 面 → 浏览器必然合成伪斜。删 `italic` 即可（tip 本就有左侧 brass 竖条做差异化，无需补偿样式）。刻意**不做**全局 CJK italic reset：`.opponent-avatar` 与庄码 D 的斜体是 §5.3 授权，reset 会误伤。
@@ -24,7 +24,7 @@
 - **守卫落地方式的两处教训**：① Vitest 默认 `css: false` 会把 CSS 导入 **stub 成空模块**，`import.meta.glob('./styles/**/*.css', {query:'?raw'})` 只拿到 1 行占位——首版守卫因此"5 例全过"其实是空跑；改用 `readFileSync`（沿用 `huPositionOrderGuard.test.ts` 的读取方式）。② 白名单校验用「选择器+声明子串」而非行号。③ 守卫写完做了**变异测试**：把 `.house-rules-item` 底色改回白透，确认它精准报出 `globals.css:2697 .house-rules-item → 白透面填充超过 0.05`，随后还原。
 - **文档**：PRD §5.28 验收标准补 4 条（内容规模一致 / 可寻址链接 / 44px / 尊重减弱动态偏好，均只写 What/Why）；TDD §14.6 把 reduced-motion 改写为三层接管并声明 `MotionConfig` 的属性边界、§14.7 守卫机制拆成源码层与样式层两条；`help-center-dev` 代理文件的「shared/ 层依赖：无」原已过期（Hero 早已 import `shared/utils/motion`），改为登记 motion / EmptyState / button 三项，Key Files 补 help 专属 CSS 段与 CSS 守卫，路由跳转条款改为 Link 口径。
 - **验证**：typecheck / lint exit 0（仅 `i18n/unitRef.test.ts` 两条既有 import-pattern 警告，与本批无关）；`vitest run` **158 文件 / 1121 测试**全绿（本批 +2 文件 / +16 用例，既有用例无一被放宽）；`pnpm verify` 每批各跑一遍。
-- **未覆盖 / 遗留**：① **浏览器视觉全程未验证**（按既有约束不起 dev server、不截图）——立牌 3D 观感、`<768px` 真实布局，以及 `.help-hero-meta` 11px `--ivory-muted` 落在 hero 渐变暗底上的对比度（按 §2.1 色值手算约 4.4–4.6:1，正好卡在 AA 4.5 临界）均需实测才能定论；② `ModuleGrid` 的 Link 化与 stretched-link 重构；③ 其余 124 处内联 framer-motion 字面量与其余 6 处 `behavior: 'smooth'` 未降级；④ help 段外约 30 处 transition 裸值；⑤ hero 标题字号家族（24/27 两处）与 §3.3 档位缺口；⑥ §5.18「径向渐变底」与 §13.5.1 微纹理在 help 侧的落地；⑦ 路由跳转后的焦点迁移（`scrollIntoView` 不会移动焦点，键盘/SR 用户感知不到页面位置变化）；⑧ `poker-ui-demo/DESIGN_LANGUAGE.md` 全程未修订。
+- **未覆盖 / 遗留**：① **浏览器视觉全程未验证**（按既有约束不起 dev server、不截图）——立牌 3D 观感、`<768px` 真实布局，以及 `.help-hero-meta` 11px `--ivory-muted` 落在 hero 渐变暗底上的对比度（按 §2.1 色值手算约 4.4–4.6:1，正好卡在 AA 4.5 临界）均需实测才能定论；② `ModuleGrid` 的 Link 化与 stretched-link 重构；③ 其余 124 处内联 framer-motion 字面量与其余 6 处 `behavior: 'smooth'` 未降级；④ help 段外约 30 处 transition 裸值；⑤ hero 标题字号家族（24/27 两处）与 §3.3 档位缺口；⑥ §5.18「径向渐变底」与 §13.5.1 微纹理在 help 侧的落地；⑦ 路由跳转后的焦点迁移（`scrollIntoView` 不会移动焦点，键盘/SR 用户感知不到页面位置变化）；⑧ `DESIGN.md` 全程未修订。
 
 ---
 
@@ -739,11 +739,11 @@ ICE 表最后一项 #11（变体高级段补深）开工。批次中途查出**�
 
 - `pnpm verify` 全绿：typecheck 0 错误、lint 0 错误、68 files 477 tests ✅
 
-### 动效规范全量化（DESIGN_LANGUAGE v1.5.0 §8）
+### 动效规范全量化（DESIGN.md v1.5.0 §8）
 
 > 目标：将设计语言文档 §8 由「典型动效清单」升级为「全量动画规范」，并建立 React 侧共享动效单一事实源，消除组件内散落的内联 duration/ease 字面量漂移。
 
-- **设计文档**：`poker-ui-demo/DESIGN_LANGUAGE.md` 升级 v1.5.0，§8 重构为 4 节：动效原则（缓动 token 表 `--poker-ease-*` / 时长 token 表 `--poker-duration-*` / 触发方式与规则）、动画类型定义（fade / slide-up / slide-down / slide-left / slide-right / scale-in / rotate / pop / shake 9 类）、组件状态动画行为矩阵（12 类组件 × hover/press/active/mount/unmount/反馈循环）、实现约定；附录 H 记录变更摘要。
+- **设计文档**：`DESIGN.md` 升级 v1.5.0，§8 重构为 4 节：动效原则（缓动 token 表 `--poker-ease-*` / 时长 token 表 `--poker-duration-*` / 触发方式与规则）、动画类型定义（fade / slide-up / slide-down / slide-left / slide-right / scale-in / rotate / pop / shake 9 类）、组件状态动画行为矩阵（12 类组件 × hover/press/active/mount/unmount/反馈循环）、实现约定；附录 H 记录变更摘要。
 - **共享规范单一事实源**：新增 `src/shared/utils/motion.ts`（`MOTION_DURATION` / `MOTION_EASE` / `transitionFast|Standard|Slow|Spring` / `FADE_IN` / `SLIDE_UP|DOWN|LEFT|RIGHT` / `SCALE_IN` / `ROTATE_180` / `POP` / `SHAKE` / `PAGE_TRANSITION` / `staggerContainer` / `staggerItem` / `RESULT_NUMBER`），组件动效一律引用，禁止内联字面量。
 - **CSS token**：`src/styles/globals.css` `:root` 新增 `--poker-ease-*` / `--poker-duration-*` 变量；新增通用 `animate-*` 工具类（fade-in / slide-up / slide-down / slide-left / scale-in / pop / shake）与对应 keyframes；`live-pulse` / `panel-glow` 改用 token 变量。
 - **组件统一**：核心组件引用共享规范——`PokerCard`（入场下落+翻面）、`QuizCard`（题目切换 / 反馈 pop+shake）、`FaqAccordion`（折叠展开）、`LevelLadder`（阶梯 stagger）、`LessonQuiz` / `TheoryQuiz`（题目滑动）、`StatsOverview` / `SettingsPage`（列表 stagger）、`AchievementBadges`（徽章 SCALE_IN）、`ResultSummary`（结果页 slow 时序）、`EmptyState`、`GTOResultPage`（延迟淡入）、`AppLayout`（路由 PAGE_TRANSITION）。
@@ -1170,7 +1170,7 @@ ICE 表最后一项 #11（变体高级段补深）开工。批次中途查出**�
 - CourseView 进度条语义改造：Level 徽章 + 第 X/N 课（本 Level 内位置），替换原全局课程位置；行数收敛至 300（抽取 `utils/completeCourse.ts` 统一 drill/quiz 完成管道 + CourseDoneView + CourseLockedView，行为逐字段等价核对）
 - CourseLockedView：锁定页前置课程直达（前置 Level 进度 + 去完成按钮 + 缺失前置课程链接）
 - PracticeDrill 场景面板复用 `.scenario-card`（§5.16 发牌员虚线圈）
-- DESIGN_LANGUAGE.md 升级 v1.4.0：§3.3 阅读字号阶梯、§5.22 教学内容块规范、§5.6 Tab 导航、附录 G
+- DESIGN.md 升级 v1.4.0：§3.3 阅读字号阶梯、§5.22 教学内容块规范、§5.6 Tab 导航、附录 G
 
 ### P2-04 lessonId 重复治理
 

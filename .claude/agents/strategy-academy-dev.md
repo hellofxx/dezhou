@@ -74,7 +74,7 @@ additionalPrompt: ""
 - **学习路径横向推荐**：`LearningTrack` 新增 `relatedTrackIds` 字段，支持跨路径推荐
 - **本土化路径前置条件**：`LearningTrack` 新增 `prerequisiteLevelIds` 字段，本土化路径需完成 L1-L3
 - **选项排序治理**（utils/quizShuffle.ts）：`orderQuizQuestion`（测验题，数值集升序 / 文字题种子洗牌并重映射 correctIndex）/ `orderDrillOptions`（DrillQuestion）/ `orderResolvedOptions`（i18n-key 型题库 `t()` 解析后重排，数值题单调 + 方向哈希）；接入 LessonQuiz（id 稳定种子）/ LevelCertification（会话随机种子）/ ChoiceDrillRenderer / OutsDrill 等 4 个 i18n-key Drill
-- **响应式布局（v1.6.0 · 自适应学习工作台）**：概览视图（Home / Tracks / ConceptGraph）走 L2 概览展宽档（AppLayout 依路由判定，归属 platform-dev），模块内负责自适应分栏承接横向扩展空间——Home `lg:grid-cols-[minmax(0,1fr)_340px]`（主列阶梯自适应 + 侧栏固定 340px）、Tracks `xl:grid-cols-2`、ConceptGraph 概念卡 `xl:grid-cols-4`；阅读/作答视图（课程正文 CourseView / QuickDrill / 认证 / 基础入门）维持在 L3 收敛档，不为展宽所动。规范以 `poker-ui-demo/DESIGN_LANGUAGE.md` §6.5 与 §9 页面模式 7 为唯一权威
+- **响应式布局（v1.6.0 · 自适应学习工作台）**：概览视图（Home / Tracks / ConceptGraph）走 L2 概览展宽档（AppLayout 依路由判定，归属 platform-dev），模块内负责自适应分栏承接横向扩展空间——Home `lg:grid-cols-[minmax(0,1fr)_340px]`（主列阶梯自适应 + 侧栏固定 340px）、Tracks `xl:grid-cols-2`、ConceptGraph 概念卡 `xl:grid-cols-4`；阅读/作答视图（课程正文 CourseView / QuickDrill / 认证 / 基础入门）维持在 L3 收敛档，不为展宽所动。规范以 `DESIGN.md` §6.5 与 §9 页面模式 7 为唯一权威
 - 课程内容排版增强：lesson-takeaway（要点总结卡）、formula-display（公式展示块）、标题编号系统（§2.1 格式）
 - 阅读进度条：移动端课程阅读顶部进度条（reading-progress-bar）
 - 反馈教育脚手架：decision-analysis 折叠区（GTO 推荐 vs 你的动作 + 差异原因）、comparison-view 对比视图、related-lesson-chip 相关课程链接

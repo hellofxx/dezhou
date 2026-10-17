@@ -1,7 +1,7 @@
 /**
  * PuzzleCard 五级反馈面板（P1-D 修复批从 PuzzleCard.tsx 拆出以满足单文件 ≤200 行）。
  *
- * 复用 GRADE_DISPLAY_CONFIG 统一评级展示；接入教育脚手架（DESIGN_LANGUAGE §13.4）：
+ * 复用 GRADE_DISPLAY_CONFIG 统一评级展示；接入教育脚手架（DESIGN.md §13.4）：
  * - DecisionAnalysis 折叠区：你的决策 vs GTO 最优 + 差异原因 + 相关课程链接
  * - TryAgainButton：wrong/blunder 级别底部"再做一题"
  * - RelatedLessonChip：替换原"去复习"文本链接（relatedLessonId 由 usePuzzleEngine 推导）

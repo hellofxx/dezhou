@@ -29,7 +29,7 @@
 
   /* Brass — single accent */
   --brass: #c9a25e;
-  --brass-bright: #e8c97e;    /* aligned with DESIGN_LANGUAGE §2.1 & component usage */
+  --brass-bright: #e8c97e;    /* aligned with DESIGN.md §2.1 & component usage */
   --brass-deep: #a07d3d;
   --brass-dark: #8a6b30;
   --brass-muted: #b09050;
@@ -45,7 +45,7 @@
   /* Module theme color — hand-history leather (§5.18) */
   --poker-leather: #c08a5a;
 
-  /* Semantic colors — aliased to low-saturation card-room variants (DESIGN_LANGUAGE §1.3) */
+  /* Semantic colors — aliased to low-saturation card-room variants (DESIGN.md §1.3) */
   --success: var(--poker-success);           /* 苔藓绿 - 正确反馈、盈利 */
   --success-bg: var(--poker-success-bg);     /* 成功背景（半透明） */
   --danger: var(--poker-danger);             /* 陶土红 - 错误反馈、亏损 */
@@ -59,7 +59,7 @@
   --clay: #a83838;            /* deep danger accent */
   --sage: #6b8e7a;            /* neutral data */
 
-  /* === Low-saturation card-room semantic colors (canonical source — DESIGN_LANGUAGE §1.3/§2.2) === */
+  /* === Low-saturation card-room semantic colors (canonical source — DESIGN.md §1.3/§2.2) === */
   --poker-success: #7fb883;
   --poker-success-bg: rgba(127,184,131,0.12);
   --poker-danger: #c25a4c;
@@ -138,7 +138,7 @@
   --stable-ink: #2a2113;      /* deep brown ink on brass & ivory surfaces */
   --stable-ivory: #f8f2e2;    /* ivory plaque surface (dark text on top) */
 
-  /* === poker- prefixed aliases (DESIGN_LANGUAGE §2 — single source of truth) === */
+  /* === poker- prefixed aliases (DESIGN.md §2 — single source of truth) === */
   --poker-felt-deep: var(--felt-deep);
   --poker-felt: var(--felt);
   --poker-felt-raised: var(--felt-raised);
@@ -163,7 +163,7 @@
   --poker-radius-lg: 12px;
   --poker-radius-xl: 16px;
 
-  /* Shadows — aligned with DESIGN_LANGUAGE §4.2 */
+  /* Shadows — aligned with DESIGN.md §4.2 */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
   --shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
@@ -183,7 +183,7 @@
   --font-body: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
 
-  /* === Motion tokens — DESIGN_LANGUAGE §8 动效（与 src/shared/utils/motion.ts 对齐） === */
+  /* === Motion tokens — DESIGN.md §8 动效（与 src/shared/utils/motion.ts 对齐） === */
   --poker-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);   /* §8.1.1 默认入场/状态过渡 */
   --poker-ease-out: cubic-bezier(0, 0, 0.2, 1);           /* §8.1.1 元素出现（快起慢停） */
   --poker-ease-in: cubic-bezier(0.4, 0, 1, 1);            /* §8.1.1 元素退场（慢入快出） */
@@ -679,7 +679,7 @@ body::after {
 }
 
 /* =========================================================
-   通用动效工具类 — DESIGN_LANGUAGE §8.2 动画类型定义
+   通用动效工具类 — DESIGN.md §8.2 动画类型定义
    仅用于 CSS 侧循环/等待/单次触发；交互动效统一走 framer-motion
    （src/shared/utils/motion.ts）。参数用 token，不写裸数字。
    ========================================================= */

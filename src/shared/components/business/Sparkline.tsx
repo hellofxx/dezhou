@@ -10,7 +10,7 @@ export interface SparklineProps {
 }
 
 /**
- * Sparkline — 迷你折线图，展示 7 日正确率趋势（DESIGN_LANGUAGE §13.2.2）。
+ * Sparkline — 迷你折线图，展示 7 日正确率趋势（DESIGN.md §13.2.2）。
  * 8px 高，无坐标轴 / 网格线 / 数据点，纯装饰性（aria-hidden）。
  * 线条 brass + 下方 8% 透明度渐变填充。
  */

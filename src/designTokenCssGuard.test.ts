@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 /**
- * CSS 面填充守卫（DESIGN_LANGUAGE §1.2 三不原则 / §5.21 交互状态矩阵 / §4.2 阴影黑调）：
+ * CSS 面填充守卫（DESIGN.md §1.2 三不原则 / §5.21 交互状态矩阵 / §4.2 阴影黑调）：
  * designTokenGuard.test.ts 只扫 src/**\/*.{ts,tsx}，globals.css 的样式实现完全在门禁外，
  * 象牙卡面上的 rgba(255,255,255,0.7) 这类"白透底提亮"曾经无人看守（Design QA 2026-10 发现）。
  *
@@ -16,7 +16,7 @@ import { describe, expect, it } from 'vitest';
  * B. rgba(0,0,0,α) 且 α ≥ BLACK_ALPHA_LIMIT → 违规（§4.2 阴影黑调允许压暗层）
  * C. background 里的纯黑/纯白 hex → 违规
  *
- * 豁免白名单遵循「只删不加」：新增豁免必须先在 DESIGN_LANGUAGE.md 登记设计依据。
+ * 豁免白名单遵循「只删不加」：新增豁免必须先在 DESIGN.md 登记设计依据。
  */
 
 /**
@@ -153,7 +153,7 @@ function transitionDecl(body: string): string | undefined {
   return stmt?.replace(/\s+/g, ' ').trim();
 }
 
-describe('CSS 面填充守卫（防纯白/纯黑实底回流，DESIGN_LANGUAGE §1.2）', () => {
+describe('CSS 面填充守卫（防纯白/纯黑实底回流，DESIGN.md §1.2）', () => {
   it('扫描范围有效（应覆盖 styles 下全部 CSS）', () => {
     const files = Object.keys(CSS_FILES);
     expect(files.length).toBeGreaterThanOrEqual(1);
@@ -167,7 +167,7 @@ describe('CSS 面填充守卫（防纯白/纯黑实底回流，DESIGN_LANGUAGE �
 
   it('豁免白名单与契约依据成对登记（只删不加）', () => {
     for (const exempt of EXEMPT_FILLS) {
-      expect(exempt.reason, `豁免项 ${exempt.selector} 缺少 DESIGN_LANGUAGE 依据`).toMatch(/§/);
+      expect(exempt.reason, `豁免项 ${exempt.selector} 缺少 DESIGN.md 依据`).toMatch(/§/);
       expect(ruleBody(exempt.selector), `豁免项 ${exempt.selector} 已不存在，应从白名单删除`).toBeDefined();
     }
   });

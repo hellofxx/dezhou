@@ -1,7 +1,7 @@
 import type { Transition, Variants } from 'framer-motion';
 
 /**
- * 动效规范单一事实源 — DESIGN_LANGUAGE §8 动效。
+ * 动效规范单一事实源 — DESIGN.md §8 动效。
  *
  * 所有 framer-motion 动效参数（时长/缓动/预置 variants）必须以本文件为准，
  * 禁止在组件内内联 duration/ease 字面量（v1.5.0 起）。

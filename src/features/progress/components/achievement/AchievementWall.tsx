@@ -30,7 +30,7 @@ const CATEGORY_TABS: { key: AchievementCategory; icon: string }[] = [
   { key: 'milestone', icon: '🏆' },
 ];
 
-// 四档徽章色对齐牌室色板（DESIGN_LANGUAGE §2.4）：金/铜用 token，银用暖银象牙，钻石用霜钢蓝
+// 四档徽章色对齐牌室色板（DESIGN.md §2.4）：金/铜用 token，银用暖银象牙，钻石用霜钢蓝
 const TIER_COLORS: Record<AchievementTier, string> = {
   bronze: 'var(--poker-bronze)',
   silver: 'var(--ivory-dim)',

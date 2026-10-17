@@ -1,6 +1,6 @@
 /**
  * HelpArticle 组件测试（jsdom）：
- * 锁定 Design QA 修复项 —— tip 段不得再用中文斜体（DESIGN_LANGUAGE §3.2），
+ * 锁定 Design QA 修复项 —— tip 段不得再用中文斜体（DESIGN.md §3.2），
  * 文章不存在时走共享 EmptyState 而非自写空态。
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';

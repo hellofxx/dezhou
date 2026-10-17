@@ -81,7 +81,7 @@ ln -s ../.git-hooks/pre-commit .git/hooks/
 | [`docs/PRD.md`](./docs/PRD.md) | 产品需求规格说明书 |
 | [`docs/TDD.md`](./docs/TDD.md) | 技术设计文档 |
 | [`docs/CHANGELOG.md`](./docs/CHANGELOG.md) | 版本演进记录 |
-| [`poker-ui-demo/DESIGN_LANGUAGE.md`](./poker-ui-demo/DESIGN_LANGUAGE.md) | UI/UX设计语言规范 |
+| [`DESIGN.md`](./DESIGN.md) | UI/UX设计语言规范 |
 
 ## 🏗️ 架构概览
 

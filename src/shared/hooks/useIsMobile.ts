@@ -1,7 +1,7 @@
 /**
  * useIsMobile — 检测视口宽度 < 768px。
  *
- * 与 DESIGN_LANGUAGE §6.3 移动端断点（md: 768px）对齐。
+ * 与 DESIGN.md §6.3 移动端断点（md: 768px）对齐。
  * 使用 window.matchMedia，避免 resize 事件频繁重渲染。
  */
 import { useSyncExternalStore } from 'react';

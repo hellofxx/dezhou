@@ -2026,16 +2026,16 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 
 ### 14.7 UI 颜色实现规范与守卫（v1.3.2）
 
-设计契约权威源为 `poker-ui-demo/DESIGN_LANGUAGE.md`（v1.3.2）；色彩 token 实现权威为 `src/styles/globals.css` 的 `:root`。二者之外的 `poker-ui-demo/colors_and_type.css` 为 demo 单页镜像，三者任一变更须同步。
+设计契约权威源为 `DESIGN.md`（以其当前版本为准，本文件不维护版本副本）；色彩 token 实现权威为 `src/styles/globals.css` 的 `:root`。二者之外的 `poker-ui-demo/colors_and_type.css` 为 demo 单页镜像，三者任一变更须同步。
 
-强制规范（DESIGN_LANGUAGE §1.2 三不原则 / §1.3 反 SaaS 饱和色禁令）：
+强制规范（DESIGN.md §1.2 三不原则 / §1.3 反 SaaS 饱和色禁令）：
 
 1. **禁止 Tailwind 霓虹调色板类**：`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-\d{2,3}`，语义反馈一律用 `--poker-*` / `--success|danger|warning|info` token（映射：green/emerald→success、red→danger、yellow/amber→brass、orange→terra、blue→info、purple→indigo）
 2. **禁止纯白/纯黑文字与实底类**：`text-white`/`bg-white`/`text-black`/`bg-black`（`bg-black/NN` 半透明压暗层按 §4.2 阴影黑调豁免）
 3. **禁止纯黑/纯白 hex 字面量**：`#000`/`#fff` 系
 4. **SVG 例外**：渐变 stop 无法引用 CSS 变量时允许字面值，但必须注释标注对应 token（如 CardBack.tsx / public/cards/back.svg 的胡桃底 stop）
 
-守卫机制分两层，源码与样式实现各由一个测试把守（均随 `pnpm test` 强制执行，豁免白名单遵循「只删不加」，新增豁免须先在 DESIGN_LANGUAGE.md 登记设计依据）：
+守卫机制分两层，源码与样式实现各由一个测试把守（均随 `pnpm test` 强制执行，豁免白名单遵循「只删不加」，新增豁免须先在 DESIGN.md 登记设计依据）：
 
 1. **源码层** `src/designTokenGuard.test.ts`：`import.meta.glob('?raw')` 全量扫描 src 的 `.ts/.tsx`，断言霓虹调色板类、纯黑白类、纯黑白 hex 零匹配。
 2. **样式层** `src/designTokenCssGuard.test.ts`：扫描 `src/styles/*.css` 的 `background` / `background-color` 声明，断言 `rgba(255,255,255,α)` 的 α ≤ 0.05（§5.21 仅授权 hover 中性底色 0.03–0.04）、`rgba(0,0,0,α)` 未达实底、无纯黑白 hex。规则只作用于面填充，故 §4.3 牌面内描金（box-shadow 白高光）与 `@media (prefers-contrast: high)` 里刻意提到 `#ffffff` 的 `--ivory` 自定义属性天然不在射程内。该测试经 `readFileSync` 读文件而非 `import.meta.glob('?raw')`——Vitest 默认 `css: false` 会把 CSS 导入 stub 成空模块。同文件附带 help 段的结构断言（44px 触摸目标、transition 引用动效 token）。

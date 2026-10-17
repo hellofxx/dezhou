@@ -118,7 +118,7 @@ src/
 - 四层色彩 token（`--felt-*` / `--ivory-*` / `--brass-*` / `--walnut-*`，globals.css 为唯一权威）
 - 暗色默认，禁止硬编码颜色；WCAG 2.1 AA
 - 反霓虹硬约束：禁 Tailwind 霓虹类 / 纯黑白，由 designTokenGuard.test.ts 守卫
-- 设计契约权威源：poker-ui-demo/DESIGN_LANGUAGE.md
+- 设计契约权威源：DESIGN.md
 
 ## 路由与代码分割
 
@@ -305,7 +305,7 @@ src/
 3. 若新增测试，按 `vitest.config.ts` 双项目选后缀（规则见 §质量门禁「测试后缀速查」，禁止在此重述）
 4. 运行 `pnpm verify` 确保门禁通过（唯一事实源为 `package.json` 的 `verify` script）
 5. 若新增路由页面，由 `platform-dev` 在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册
-6. 若涉及全局视觉 / 共享组件 / 布局 / 导航 / 主题色，由 `ui-ux-dev` 复核（质量清单以 `poker-ui-demo/DESIGN_LANGUAGE.md` 为准）
+6. 若涉及全局视觉 / 共享组件 / 布局 / 导航 / 主题色，由 `ui-ux-dev` 复核（质量清单以 `DESIGN.md` 为准）
 
 #### 全局约束（单源）
 
@@ -363,7 +363,7 @@ src/
 2. 更新 `docs/TDD.md` 的架构图与跨模块系统章节
 3. 升级 progress store persist version + 编写 migrate（如涉及状态变更）
 4. 通知受影响 feature 模块的子代理更新其文件
-5. 涉及全局样式/共享组件/布局/导航/主题色变更时，通知 `ui-ux-dev` 做视觉一致性复核（质量清单以 `poker-ui-demo/DESIGN_LANGUAGE.md` 当前版本为准）
+5. 涉及全局样式/共享组件/布局/导航/主题色变更时，通知 `ui-ux-dev` 做视觉一致性复核（质量清单以 `DESIGN.md` 当前版本为准）
 6. 更新 `docs/CHANGELOG.md`
 7. 运行 `pnpm verify` 验证
 

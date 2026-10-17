@@ -56,7 +56,7 @@ export function calculateGrade(evLoss: number): DecisionGrade {
 }
 
 // 各级别显示配置
-// 颜色以 globals.css 的 .grade-* 组件类为唯一样式事实源（DESIGN_LANGUAGE §2.2 低饱和牌室化语义色）：
+// 颜色以 globals.css 的 .grade-* 组件类为唯一样式事实源（DESIGN.md §2.2 低饱和牌室化语义色）：
 // 苔藓绿/黄铜/陶土红低透底 + 左侧色条，禁止 Tailwind 霓虹色板类（§1.3 反 SaaS 饱和色禁令）与纯白文字（§1.2）。
 export const GRADE_DISPLAY_CONFIG: Record<DecisionGrade, {
   color: string;       // globals.css .grade-* 类（背景 + 左侧色条 + 基础文字色）

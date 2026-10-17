@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="80" height="112" viewBox="0 0 80 112">
-  <!-- DESIGN_LANGUAGE §5.1 walnut card back: #241a10 = --walnut, #c9a25e = --brass, #e8c97e = --brass-bright -->
+  <!-- DESIGN.md §5.1 walnut card back: #241a10 = --walnut, #c9a25e = --brass, #e8c97e = --brass-bright -->
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#2a1e12"/>
