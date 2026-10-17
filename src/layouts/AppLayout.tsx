@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
 import { PAGE_TRANSITION } from '@/shared/utils/motion';
-import { APP_NAME, APP_VERSION } from '@/shared/constants/app';
+import { APP_VERSION } from '@/shared/constants/app';
 import { switchLanguage } from '@/i18n/preload';
 import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
 import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
@@ -14,6 +14,8 @@ import MilestoneCelebrationHost from '@/features/progress/components/celebration
 import PersistErrorNotice from '@/features/progress/components/PersistErrorNotice';
 import MobileNav from './MobileNav';
 import { useThemeApplier } from './useThemeApplier';
+import { useDocumentTitle } from './useDocumentTitle';
+import { resolveNavSection, resolvePageTitle } from './navSections';
 import TableRail from '@/shared/components/layout/TableRail';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
 import { useProgressStore } from '@/features/progress/store';
@@ -46,6 +48,8 @@ interface NavItem {
 }
 
 interface NavGroup {
+  /** 分组序号（01–04）：分组位置的固定标识，不随语言变化 */
+  index: string;
   title: string;
   i18nKey: string;
   items: NavItem[];
@@ -70,6 +74,7 @@ export default function AppLayout() {
   // 其余按 训练 / 研习 / 数据 / 设置 四组；图标统一 18px 线性风格（DESIGN.md §7）
   const navGroups = useMemo<NavGroup[]>(() => [
     {
+      index: '01',
       title: t('nav.training'),
       i18nKey: 'nav.training',
       items: [
@@ -80,6 +85,7 @@ export default function AppLayout() {
       ],
     },
     {
+      index: '02',
       title: t('nav.study'),
       i18nKey: 'nav.study',
       items: [
@@ -89,6 +95,7 @@ export default function AppLayout() {
       ],
     },
     {
+      index: '03',
       title: t('nav.data'),
       i18nKey: 'nav.data',
       items: [
@@ -97,6 +104,7 @@ export default function AppLayout() {
       ],
     },
     {
+      index: '04',
       title: t('nav.settingsGroup'),
       i18nKey: 'nav.settingsGroup',
       items: [
@@ -114,6 +122,10 @@ export default function AppLayout() {
     i18nKey: 'nav.dashboard',
   };
 
+  const currentPageTitle = resolvePageTitle(location.pathname, t);
+  const section = resolveNavSection(location.pathname, t);
+  useDocumentTitle(currentPageTitle);
+
   const isPathActive = (path: string) =>
     path === '/'
       ? location.pathname === '/'
@@ -125,6 +137,7 @@ export default function AppLayout() {
     const link = (
       <NavLink
         to={item.path}
+        end={item.path === '/'}
         aria-label={item.label}
         title={collapsed ? undefined : item.hint}
         className={cn(
@@ -164,41 +177,6 @@ export default function AppLayout() {
     );
   };
 
-  const pageTitle: Record<string, string> = {
-    '/': t('nav.dashboard'),
-    '/academy': t('nav.academy'),
-    '/academy/basics': t('nav.basics'),
-    '/theory': t('nav.theory'),
-    '/theory/review': t('nav.theoryReview'),
-    '/range-trainer': t('nav.rangeTrainer'),
-    '/pot-odds': t('nav.potOdds'),
-    '/gto-simulator': t('nav.gtoSimulator'),
-    '/hand-history': t('nav.handHistory'),
-    '/progress': t('nav.progress'),
-    '/settings': t('nav.settings'),
-    '/leaderboard': t('nav.leaderboard'),
-    '/puzzle': t('nav.puzzle'),
-    '/help': t('nav.help'),
-  };
-
-  // 子路由前缀兑底（带参数路由如 /academy/lesson/:id 回退到模块名，避免页名断档到 APP_NAME）
-  const prefixTitles: [string, string][] = [
-    ['/academy', t('nav.academy')],
-    ['/theory', t('nav.theory')],
-    ['/puzzle', t('nav.puzzle')],
-    ['/progress', t('nav.progress')],
-    ['/range-trainer', t('nav.rangeTrainer')],
-    ['/pot-odds', t('nav.potOdds')],
-    ['/gto-simulator', t('nav.gtoSimulator')],
-    ['/hand-history', t('nav.handHistory')],
-    ['/help', t('nav.help')],
-  ];
-
-  const currentPageTitle =
-    pageTitle[location.pathname] ??
-    prefixTitles.find(([prefix]) => location.pathname.startsWith(`${prefix}/`))?.[1] ??
-    APP_NAME;
-
   const toggleLanguage = async () => {
     if (switching) return;
     const next = i18n.language === 'zh' ? 'en' : 'zh';
@@ -215,6 +193,13 @@ export default function AppLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--background)]">
+      {/* 跳过导航直达主内容（键盘用户首个可聚焦元素） */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[200] focus:rounded-[var(--radius-sm)] focus:bg-[var(--brass)] focus:px-4 focus:py-2 focus:text-[var(--primary-foreground)] focus:font-semibold"
+      >
+        {t('common.a11y.skipToContent')}
+      </a>
       <PersistErrorNotice />
       {/* Sidebar — deep walnut card-room rail. Hidden on mobile. */}
       <aside
@@ -223,8 +208,8 @@ export default function AppLayout() {
           collapsed ? 'w-16' : 'w-60'
         )}
       >
-        {/* Sidebar header — brass hairline below */}
-        <div className="flex items-center h-14 px-4 border-b border-[var(--walnut-border)] relative brass-rail">
+        {/* Sidebar header — brass hairline below，高度与顶栏胡桃梁对齐 */}
+        <div className="flex items-center h-16 px-4 border-b border-[var(--walnut-border)] relative brass-rail">
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <Spade size={28} className="text-[var(--brass)] shrink-0" />
             {!collapsed && (
@@ -241,7 +226,7 @@ export default function AppLayout() {
           <button
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              'flex items-center justify-center w-7 h-7 rounded-[var(--radius-sm)] hover:bg-[var(--walnut-light)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors',
+              'flex items-center justify-center h-11 w-11 rounded-[var(--radius-sm)] hover:bg-[var(--walnut-light)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors',
               collapsed && 'mx-auto'
             )}
             aria-label={collapsed ? t('nav.expandSidebar') : t('nav.collapseSidebar')}
@@ -258,8 +243,13 @@ export default function AppLayout() {
             <div className={cn('hairline-brass mx-2', collapsed && 'opacity-40')} />
             {navGroups.map((group) => (
               <div key={group.i18nKey}>
-                {!collapsed && (
+                {collapsed ? (
+                  <p aria-hidden="true" className="text-center font-numeric text-[9px] text-[var(--brass)] mb-2">
+                    {group.index}
+                  </p>
+                ) : (
                   <p className="text-[9px] uppercase tracking-[0.2em] text-[var(--ivory-dim)] px-3 mb-2 font-medium">
+                    <span className="font-numeric text-[var(--brass)] mr-2">{group.index}</span>
                     {group.title}
                   </p>
                 )}
@@ -284,7 +274,7 @@ export default function AppLayout() {
               <button
                 onClick={toggleLanguage}
                 disabled={switching}
-                className="flex items-center gap-1 px-2 py-1 rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] hover:bg-[var(--walnut-light)] transition-colors disabled:opacity-50"
+                className="flex items-center gap-1 min-h-11 min-w-11 px-3 py-1 rounded-[var(--radius-sm)] text-xs text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] hover:bg-[var(--walnut-light)] transition-colors disabled:opacity-50"
                 aria-label={t('nav.toggleLanguage')}
               >
                 <Globe size={14} className={cn('transition-transform', switching && 'animate-spin')} />
@@ -296,7 +286,7 @@ export default function AppLayout() {
               <button
                 onClick={toggleLanguage}
                 disabled={switching}
-                className="flex items-center justify-center w-full py-1 text-[10px] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors disabled:opacity-50"
+                className="flex items-center justify-center w-full min-h-11 min-w-11 py-1 text-[10px] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors disabled:opacity-50"
                 aria-label={t('nav.toggleLanguage')}
               >
                 <Globe size={14} className={cn('transition-transform', switching && 'animate-spin')} />
@@ -309,14 +299,18 @@ export default function AppLayout() {
 
       {/* Main content area — bottle-green felt */}
       <div className="flex flex-col flex-1 overflow-hidden felt-ambient">
-        {/* Top bar — surface bg with walnut border below */}
-        <header className="flex items-center h-12 md:h-16 px-4 md:px-6 border-b border-[var(--walnut-border)] bg-[var(--surface)] backdrop-blur-sm shrink-0 relative brass-rail">
-          <p
-            aria-hidden="true"
-            className="font-display text-[17px] text-[var(--ivory)] flex-1 tracking-wide"
-          >
-            {currentPageTitle}
-          </p>
+        {/* Top bar — 胡桃梁：与侧边栏构成包住绿呢画布的 L 形木框（DESIGN.md §5.7） */}
+        <header className="flex items-center h-12 md:h-16 px-4 md:px-6 border-b border-[var(--walnut-border)] walnut-panel shrink-0 relative brass-rail">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <span className="font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass)]">{section.index}</span>
+            <span aria-hidden="true" className="h-px w-6 bg-[var(--brass-deep)]/60" />
+            <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass)]">
+              {section.label}
+            </span>
+            <h1 className="font-display text-[19px] md:text-[22px] text-[var(--ivory)] tracking-wide truncate">
+              {currentPageTitle}
+            </h1>
+          </div>
           {currentStreak > 0 && (
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 mr-2 rounded-md bg-[var(--brass-glow)] border border-[var(--brass-cell-1)]">
               <Flame className="w-4 h-4 text-[var(--brass)]" />
@@ -351,10 +345,17 @@ export default function AppLayout() {
           </button>
         </header>
 
+        {/* 路由播报：SPA 切换后向读屏器播报当前页名 */}
+        <div role="status" aria-live="polite" className="sr-only">{currentPageTitle}</div>
+
         <TableRail />
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-4 md:p-6 pb-20 md:pb-6">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 overflow-auto p-4 md:p-6 pb-20 md:pb-6 outline-none"
+        >
           {/* G1: 全局限宽——操作台/统计页随 main 收敛（L1 1400）；策略学院概览视图走 L2 展宽 1680（DESIGN.md §6.5）；阅读型页面正文由各模块 agent 单独 max-w-prose */}
           <div
             className={cn(
