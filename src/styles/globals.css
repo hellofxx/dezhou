@@ -81,6 +81,22 @@
   --poker-gold: #d4a84b;            /* 金牌/成就徽章（§2.4） */
   --poker-bronze: #cd7f32;          /* 铜牌徽章（§2.4） */
 
+  /* === Paper palette — 发牌员纸条表面与文字（DESIGN.md §2.6） ===
+     独立于暗色房间色板，仅在 .dealer-slip 作用域内经 token 重锚生效。 */
+  --progress-track: #2d2214;         /* 进度条轨道（§5.11） */
+  --paper: #f4ecda;                  /* 纸条底 */
+  --paper-raised: #faf4e6;           /* 纸条内抬升块（表头、代码块） */
+  --paper-edge: #d6c8a8;             /* 纸条 1px 边、内外分隔 */
+  --paper-ink: #241c10;              /* 纸条主文字 */
+  --paper-ink-dim: #4f452f;          /* 纸条次级文字 */
+  --paper-ink-muted: #6f6449;        /* 纸条说明 / 禁用 */
+  --paper-rule: rgba(90,70,35,0.22); /* 纸条内发线 / 分隔线 */
+  --paper-brass: #8a641f;            /* 纸条上的黄铜强调（深阶） */
+  --paper-success: #2f6b3a;          /* 纸条语义成功 */
+  --paper-danger: #a63f30;           /* 纸条语义危险 */
+  --paper-warning: #8a641f;          /* 纸条语义警告 */
+  --paper-info: #3f6b5c;             /* 纸条语义信息 */
+
   /* Suits — for use on dark felt (clubs/spades are ivory for visibility) */
   --suit-heart: #d04545;
   --suit-diamond: #d04545;
@@ -209,7 +225,7 @@
   --color-popover: var(--felt);
   --color-popover-foreground: var(--ivory);
   --color-primary: var(--brass);
-  --color-primary-foreground: #1a1612;
+  --color-primary-foreground: var(--stable-ink);
   --color-secondary: var(--info);
   --color-secondary-foreground: var(--ivory);
   --color-muted: var(--walnut-raised);
@@ -490,6 +506,143 @@ body::after {
 @keyframes panel-glow {
   0%,100% { opacity: 0.6; }
   50% { opacity: 1; }
+}
+
+/* ---- Dealer slip — 发牌员纸条（DESIGN.md §1.5 材质契约 / §5.23） ----
+   Dialog / 移动端反馈 Sheet / ResultSummary / 快捷键浮层的专用纸张材质。
+   为何 canonical 与 alias 都要重锚：CSS 自定义属性在声明处即完成 var() 替换，
+   :root 上的 alias（--success: var(--poker-success)、--primary: var(--brass) 等）
+   不会跟随后代对 canonical token 的重定义，只改一处会让纸上漏出暗色房间的亮阶色。 */
+.dealer-slip {
+  position: relative;
+  background-color: var(--paper);
+  color: var(--paper-ink);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--poker-radius-sm);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,250,235,0.55);
+
+  /* 文字 ink —— canonical + --poker-* / --text-* alias */
+  --ivory: var(--paper-ink);
+  --ivory-dim: var(--paper-ink-dim);
+  --ivory-muted: var(--paper-ink-muted);
+  --poker-ivory: var(--paper-ink);
+  --poker-ivory-dim: var(--paper-ink-dim);
+  --poker-ivory-muted: var(--paper-ink-muted);
+  --text-primary: var(--paper-ink);
+  --text-secondary: var(--paper-ink-dim);
+  --text-muted: var(--paper-ink-muted);
+
+  /* 黄铜 —— 纸上只用深阶（亮阶在纸面对比度不达标） */
+  --brass: var(--paper-brass);
+  --brass-bright: var(--paper-brass);
+  --brass-deep: var(--paper-brass);
+  --brass-dark: var(--paper-brass);
+  --brass-muted: var(--paper-brass);
+  --brass-glow: color-mix(in srgb, var(--paper-brass) 12%, transparent);
+  --poker-brass: var(--paper-brass);
+  --poker-brass-bright: var(--paper-brass);
+  --poker-brass-deep: var(--paper-brass);
+  --poker-brass-dark: var(--paper-brass);
+  --poker-brass-muted: var(--paper-brass);
+  --poker-brass-glow: color-mix(in srgb, var(--paper-brass) 12%, transparent);
+  --primary: var(--paper-brass);
+  --primary-hover: var(--paper-brass);
+
+  /* 语义色 —— 只用 §2.6 深阶，禁止复用暗色房间亮阶 */
+  --poker-success: var(--paper-success);
+  --poker-success-bg: color-mix(in srgb, var(--paper-success) 12%, transparent);
+  --poker-danger: var(--paper-danger);
+  --poker-danger-bg: color-mix(in srgb, var(--paper-danger) 12%, transparent);
+  --poker-warning: var(--paper-warning);
+  --poker-warning-bg: color-mix(in srgb, var(--paper-warning) 12%, transparent);
+  --poker-info: var(--paper-info);
+  --poker-info-bg: color-mix(in srgb, var(--paper-info) 12%, transparent);
+  --success: var(--paper-success);
+  --success-bg: color-mix(in srgb, var(--paper-success) 12%, transparent);
+  --danger: var(--paper-danger);
+  --danger-bg: color-mix(in srgb, var(--paper-danger) 12%, transparent);
+  --warning: var(--paper-warning);
+  --warning-bg: color-mix(in srgb, var(--paper-warning) 12%, transparent);
+  --info: var(--paper-info);
+  --info-bg: color-mix(in srgb, var(--paper-info) 12%, transparent);
+
+  /* 表面 —— 纸条内不再出现绿呢与胡桃 */
+  --felt: var(--paper);
+  --felt-deep: var(--paper);
+  --felt-raised: var(--paper-raised);
+  --felt-light: var(--paper-edge);
+  --walnut: var(--paper-raised);
+  --walnut-raised: var(--paper-raised);
+  --walnut-border: var(--paper-rule);
+  --walnut-light: var(--paper-rule);
+  --poker-felt: var(--paper);
+  --poker-felt-deep: var(--paper);
+  --poker-felt-raised: var(--paper-raised);
+  --poker-felt-light: var(--paper-edge);
+  --poker-walnut: var(--paper-raised);
+  --poker-walnut-raised: var(--paper-raised);
+  --poker-walnut-border: var(--paper-rule);
+  --poker-walnut-light: var(--paper-rule);
+  --surface: var(--paper);
+  --surface-raised: var(--paper-raised);
+  --surface-hover: var(--paper-raised);
+  --background: var(--paper);
+
+  /* Tailwind @theme 颜色别名（实用类经 var(--color-*) 取色） */
+  --color-background: var(--paper);
+  --color-foreground: var(--paper-ink);
+  --color-card: var(--paper);
+  --color-card-foreground: var(--paper-ink);
+  --color-popover: var(--paper);
+  --color-popover-foreground: var(--paper-ink);
+  --color-muted: var(--paper-raised);
+  --color-muted-foreground: var(--paper-ink-muted);
+  --color-accent: var(--paper-raised);
+  --color-accent-foreground: var(--paper-ink);
+  --color-primary: var(--paper-brass);
+  --color-ring: var(--paper-brass);
+  --color-secondary: var(--paper-info);
+  --color-destructive: var(--paper-danger);
+  --color-border: var(--paper-rule);
+  --color-input: var(--paper-rule);
+  --color-success: var(--paper-success);
+  --color-warning: var(--paper-warning);
+  --color-danger: var(--paper-danger);
+  --color-info: var(--paper-info);
+}
+
+/* 顶部内缩黄铜发线（§5.23） */
+.dealer-slip::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--paper-brass), transparent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* 顶部中央黄铜钉 —— 呼应 TableRail 铆钉（§5.7） */
+.dealer-slip::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  /* 三阶由 --paper-brass 派生：作用域内 --brass-bright/deep 已重锚为同值，直取会退化为平色 */
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in srgb, var(--paper-brass) 62%, var(--paper)) 0%,
+    var(--paper-brass) 52%,
+    color-mix(in srgb, var(--paper-brass) 80%, var(--paper-ink)) 100%
+  );
+  box-shadow: var(--shadow-brass-glow-dot);
+  pointer-events: none;
 }
 
 /* ---- Motto Engraved ---- */
@@ -834,21 +987,85 @@ body::after {
 .hover-bright-lg { transition: filter 0.2s ease; }
 .hover-bright-lg:hover { filter: brightness(1.25); }
 
+/* ---- Button metal family —— 主按钮是金属件，不是色块（DESIGN.md §5.5 v1.8.0） ----
+   一级 .btn-brass：黄铜渐变 + --shadow-brass-btn + 1px 深黄铜边（每屏唯一主动作）
+   二级 .btn-metal：深胡桃金属 + 黄铜字 + inset 高光（同组次动作 / 高风险动作）
+   三级 .btn-quiet：透明底、无边，hover 仅中性提亮（取消 / 跳过 / 链接类）
+   :focus-visible 由全局黄铜 outline 统一接管，此处不另设。 */
+.btn-brass,
+.btn-metal,
+.btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background var(--poker-duration-fast) var(--poker-ease-standard),
+    box-shadow var(--poker-duration-fast) var(--poker-ease-standard),
+    color var(--poker-duration-fast) var(--poker-ease-standard),
+    transform var(--poker-duration-fast) var(--poker-ease-standard);
+}
+
+.btn-brass {
+  background: linear-gradient(180deg, var(--grad-brass-bright-soft) 0%, var(--brass) 50%, var(--brass-deep) 100%);
+  color: var(--primary-foreground);
+  border: 1px solid var(--brass-dark);
+  box-shadow: var(--shadow-brass-btn);
+}
+.btn-brass:hover { background: linear-gradient(180deg, var(--grad-brass-hover-1) 0%, var(--grad-brass-light) 50%, var(--grad-brass-light-2) 100%); }
+.btn-brass:active {
+  background: linear-gradient(180deg, var(--grad-brass-light-2) 0%, var(--brass-deep) 55%, var(--brass-dark) 100%);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.28);
+  transform: translateY(1px);
+}
+.btn-brass:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-metal {
+  background: linear-gradient(180deg, var(--grad-walnut-dark-1), var(--grad-walnut-dark-2));
+  color: var(--brass-bright);
+  border: 1px solid color-mix(in srgb, var(--brass) 40%, transparent);
+  box-shadow: inset 0 1px 0 rgba(232,201,126,0.18);
+}
+.btn-metal:hover { background: linear-gradient(180deg, var(--grad-walnut-hover-1), var(--grad-walnut-hover-2)); box-shadow: inset 0 1px 0 rgba(232,201,126,0.28); }
+.btn-metal:active {
+  background: linear-gradient(180deg, var(--grad-walnut-dark-2), var(--grad-walnut-dark-1));
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.35);
+  transform: translateY(1px);
+}
+.btn-metal:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.btn-quiet {
+  padding: 10px 16px;
+  background: transparent;
+  color: var(--ivory-dim);
+  border: none;
+}
+.btn-quiet:hover { background: color-mix(in srgb, var(--ivory) 6%, transparent); color: var(--ivory); }
+.btn-quiet:active { background: color-mix(in srgb, var(--ivory) 10%, transparent); }
+.btn-quiet:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* ---- Pill ---- */
 .pill {
   padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500;
   background: transparent; border: 1px solid var(--walnut-border);
   color: var(--ivory-muted); cursor: pointer; transition: all 0.15s;
 }
-.pill:hover { border-color: rgba(201,162,94,0.3); color: var(--ivory-dim); }
+.pill:hover { border-color: color-mix(in srgb, var(--brass) 30%, transparent); color: var(--ivory-dim); }
 .pill.active {
   background: linear-gradient(180deg, var(--brass-bright), var(--brass)); color: var(--primary-foreground);
   border-color: var(--brass-dark); font-weight: 600;
 }
 
 /* ---- Progress Track ---- */
-.progress-track { background: var(--walnut-border); border-radius: 2px; height: 4px; overflow: hidden; }
-.progress-fill { background: linear-gradient(90deg, var(--brass), var(--brass-bright)); height: 100%; border-radius: 2px; box-shadow: 0 0 6px rgba(232,201,126,0.3); }
+.progress-track { background: var(--progress-track); border-radius: 2px; height: 4px; overflow: hidden; }
+.progress-fill { background: linear-gradient(90deg, var(--brass), var(--brass-bright)); height: 100%; border-radius: 2px; box-shadow: 0 0 6px color-mix(in srgb, var(--brass-bright) 30%, transparent); }
 
 /* ---- Hairline Brass ---- */
 .hairline-brass { height: 1px; background: linear-gradient(90deg, transparent, rgba(201,162,94,0.5), transparent); }
@@ -1696,18 +1913,6 @@ html[data-theme="light"] .settings-nav-item:hover {
 .drill-mini-pill:hover { border-color: var(--brass-deep); color: var(--ivory); background: rgba(201,162,94,0.08); }
 .drill-mini-pill i { width: 14px; height: 14px; color: var(--brass); }
 
-/* ---- SRS Large CTA Button ---- */
-.btn-brass-lg {
-  width: 100%; padding: 13px; border-radius: 8px;
-  background: linear-gradient(180deg, var(--grad-brass-bright-soft), var(--brass) 50%, var(--brass-deep)); /* UI-10 token 化 */
-  color: var(--stable-ink); font-weight: 700; font-size: 14px;
-  border: 1px solid var(--brass-dark); cursor: pointer; transition: all 0.15s;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 3px 10px rgba(201,162,94,0.25), inset 0 1px 0 rgba(255,240,200,0.55);
-  font-family: var(--font-body);
-}
-.btn-brass-lg:hover { background: linear-gradient(180deg, var(--grad-brass-hover-2), var(--grad-brass-light) 50%, var(--grad-brass-hover-3)); box-shadow: 0 5px 16px rgba(201,162,94,0.4); } /* UI-10 token 化 */
-
 /* =========================================================
    Strategy Academy — Home redesign (2026-08-10)
    签名元素「牌桌阶梯」+ 双栏信息架构；全部使用既有 token
@@ -2149,6 +2354,14 @@ html[data-theme="light"] {
   --poker-gold: #9a7626;
   --poker-bronze: #a06a2e;
   --poker-leather: #a9713f;
+
+  /* 纸张色板 light 差异 —— 仅调底/边/黄铜；ink 与四个语义色不翻转（§2.6） */
+  --progress-track: #d9cdb1;
+  --paper: #fbf6e8;
+  --paper-raised: #fffaf0;
+  --paper-edge: #cdbb95;
+  --paper-rule: rgba(90,70,35,0.18);
+  --paper-brass: #7d5c22;
 
   /* Suits — clubs/spades flip to deep ink for light-bg visibility (§2.3) */
   --suit-club: #2a2113;
