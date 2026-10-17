@@ -9,7 +9,7 @@
  * keyframes 驱动（§8 / §13.7.2）——未启用 tailwindcss-animate，animate-in 等类为空操作。
  */
 
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
@@ -30,6 +30,10 @@ export function MobileFeedbackSheet({
 }: MobileFeedbackSheetProps) {
   const { t } = useTranslation();
   const closeLabel = t('common.ui.close');
+  // 本 Sheet 由消费方受控打开、没有 DialogTrigger，Radix 默认的「关闭后焦点归还」
+  // 依赖 triggerRef，无 trigger 时焦点会掉到 body（WCAG 2.4.3 焦点顺序丢失）。
+  // 故在自动聚焦前记录打开者，关闭时显式归还。
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
@@ -39,6 +43,18 @@ export function MobileFeedbackSheet({
         <DialogPrimitive.Content
           aria-describedby={undefined}
           className="dealer-slip dealer-slip--sheet fixed inset-x-0 bottom-0 z-[100] flex max-h-[70vh] flex-col pb-[env(safe-area-inset-bottom,0px)]"
+          onOpenAutoFocus={() => {
+            const active = document.activeElement;
+            restoreFocusRef.current =
+              active instanceof HTMLElement && active !== document.body ? active : null;
+          }}
+          onCloseAutoFocus={(event) => {
+            const target = restoreFocusRef.current;
+            if (target?.isConnected) {
+              event.preventDefault();
+              target.focus();
+            }
+          }}
         >
           {/* 标题 sr-only：Radix 以 aria-labelledby 关联，保证 Sheet 有可读名称 */}
           <DialogPrimitive.Title className="sr-only">

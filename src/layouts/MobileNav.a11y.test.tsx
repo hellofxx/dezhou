@@ -2,27 +2,18 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
-import axe from 'axe-core';
 import MobileNav from '@/layouts/MobileNav';
+import { configureA11yDocument, expectNoA11yViolations } from '@/shared/test/a11y';
 
-const componentAxeConfig = {
-  rules: {
-    region: { enabled: false },
-    'landmark-one-main': { enabled: false },
-    'page-has-heading-one': { enabled: false },
-    'document-title': { enabled: false },
-    'html-has-lang': { enabled: false },
-    'html-lang-valid': { enabled: false },
-    bypass: { enabled: false },
-    'landmark-unique': { enabled: false },
-  },
-} as const;
-
+// 组件级 harness 约定见 shared/test/a11y.ts：渲染进 <main><h1>…</h1>，
+// 使 region / landmark-one-main / page-has-heading-one 真实生效；
+// 仅 bypass（skip link 属整页概念）可带理由豁免。
 describe('MobileNav a11y (WCAG 2.1 AA smoke)', () => {
   let container: HTMLDivElement;
   let root: Root;
 
   beforeEach(() => {
+    configureA11yDocument();
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
@@ -33,26 +24,34 @@ describe('MobileNav a11y (WCAG 2.1 AA smoke)', () => {
     container.remove();
   });
 
-  it('has no axe violations — each nav item exposes an accessible name', async () => {
-    await act(async () => {
-      root.render(
+  const renderHarness = () =>
+    root.render(
+      <main>
+        <h1>Test</h1>
         <MemoryRouter>
           <MobileNav />
-        </MemoryRouter>,
-      );
+        </MemoryRouter>
+      </main>,
+    );
+
+  it('has no axe violations — each nav item exposes an accessible name', async () => {
+    await act(async () => {
+      renderHarness();
     });
 
-    const results = await axe.run(container, componentAxeConfig);
-    expect(results.violations).toEqual([]);
+    await expectNoA11yViolations(container, {
+      disableRules: [
+        {
+          id: 'bypass',
+          reason: 'skip link 是整页跳转概念，组件级 harness 不含页头，规则不适用',
+        },
+      ],
+    });
   });
 
   it('renders a navigation landmark with labelled links', () => {
     act(() => {
-      root.render(
-        <MemoryRouter>
-          <MobileNav />
-        </MemoryRouter>,
-      );
+      renderHarness();
     });
 
     const nav = container.querySelector('nav');

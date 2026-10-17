@@ -17,6 +17,9 @@ const Progress = React.forwardRef<
 >(({ className, value, label, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
+    // value 必须下传：Radix Root 只有在拿到 value 时才输出 aria-valuenow /
+    // aria-valuetext / data-state，否则读屏器只播报「进度条」而无数值。
+    value={value}
     aria-label={label}
     className={cn(
       "relative h-4 w-full overflow-hidden rounded-full bg-[var(--progress-track)]",
