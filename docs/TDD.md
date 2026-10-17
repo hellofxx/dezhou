@@ -221,7 +221,7 @@ src/
 ├── shared/                       # 共享层
 │   ├── components/               # 通用组件（分层组织）
 │   │   ├── ui/                   # shadcn/ui 基础组件（9个：button/card/dialog/input/progress/select/tabs/toast/tooltip）
-│   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / SuitIcon / HandDisplay / PositionBadge）
+│   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge）
 │   │   ├── feedback/             # 反馈与状态组件（FeedbackGrade / ResultSummary / EmptyState / LoadingState）
 │   │   ├── layout/               # 布局组件（TableRail / LiveDot）
 │   │   └── business/             # 业务组件（CasinoPlaque / ErrorBoundary / FreezeChip / GameVariantSelector / MottoEngraved）
@@ -294,6 +294,12 @@ src/
 3. **Shared 不依赖 Feature** — shared 层不引入任何 feature 模块代码
 4. **Layouts 仅依赖 Shared** — 布局组件不直接引用 feature 内部
 5. **App 层** — 通过 `React.lazy` 动态导入 feature 页面组件
+
+### 3.3 共享层材质与交互基础设施
+
+- **移动端反馈 Sheet**：`MobileFeedbackSheet` 由 Radix Dialog 承载（焦点陷阱 / Escape 关闭 / 关闭后焦点归还 / 背景滚动锁），内容面为 `.dealer-slip` 纸张（DESIGN.md §1.5 材质契约 / §5.23 / §13.7.2），入场 300ms、退场 200ms 由 `globals.css` 的 `[data-state]` keyframes 驱动（未启用 tailwindcss-animate，`animate-in` 系列类属空操作）。
+- **网格键盘导航**：`shared/hooks/useRovingGridNav` 取代已删除的 `useGridKeyboardNav`——整张网格只有一个 Tab 停靠点（13×13 网格 169 → 1，三处消费方合计 3），方向键按 `columns` 跨行移动、Home / End 到首尾，Enter / Space 触发 `onSelect`；消费方为 RangeGrid / StrategyMatrix / ConceptGraph，兼容 SVG 项。
+- **纸张作用域**：`.dealer-slip` 在自身作用域内把 ink / brass / 语义 / 表面 token 重锚为 §2.6 的 paper 值（canonical 与 globals.css alias、Tailwind `@theme` 颜色别名一并覆盖），纸面内禁止沿用暗色房间的亮阶色；层级取 z-index 100（§6.4），与弹窗 / Modal / 下拉菜单同层。
 
 ---
 
@@ -2000,7 +2006,7 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 | 侧边栏背景 | .walnut-panel 或 var(--walnut) |
 
 设计约束：
-- Brass 仅用作 1px 发丝线和激活状态，不作为按钮或大表面的填充色
+- Brass 作镶嵌：1px 发丝线、激活状态、焦点环与一级主 CTA 的金属渐变（§5.5），不做大面积表面填充（§1.5 材质契约）
 - 语义色始终使用固定色值，不引用装饰色变量（--gold/--clay/--sage）
 - **答题选项按钮**（range-trainer QuizCard 等三选一场景）为平权选项，须三色相并立且都明显浮于呢面背景：fold=陶土红透底+红字+红边、call=胡桃木不透明实色 `--walnut-raised`+象牙字、raise=黄铜渐变；不套用「一亮 CTA + 两沉底次要」的 CTA 色阶（会导致暗按钮糊在一起、区分度不足）
 

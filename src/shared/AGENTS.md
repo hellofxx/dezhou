@@ -11,7 +11,7 @@
 
 - `types/`：跨模块类型（poker / position / action / elo / mentor / decisionFeedback）
 - `components/` 分层：
-  - `poker/`：扑克领域组件（Card / CardBack / CardSVG / Chip / SuitIcon / HandDisplay / PositionBadge）
+  - `poker/`：扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge）
   - `feedback/`：反馈与状态组件（FeedbackGrade / ResultSummary / EmptyState / LoadingState）
   - `layout/`：布局组件（TableRail / LiveDot）
   - `business/`：业务组件（CasinoPlaque / ErrorBoundary / FreezeChip / GameVariantSelector / MottoEngraved）
@@ -19,7 +19,7 @@
 - `utils/`：纯函数（cn / deck / elo / formatters / handRanking / pokerMath / seededShuffle / shareCard / soundManager）
 - `constants/`：跨模块常量（app / mentorStyles / poker）
 - `stores/`：trainingEvents（事件总线）/ debugMode（调试解锁，激活码以代码为唯一事实源）
-- `hooks/`：跨模块共享 hook
+- `hooks/`：跨模块共享 hook（useIsMobile / useRovingGridNav）
 
 ## 修改规则
 
