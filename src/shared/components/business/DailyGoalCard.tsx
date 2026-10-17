@@ -63,10 +63,17 @@ export default function DailyGoalCard({
         <p className="mt-1 text-xs text-[var(--poker-ivory-dim)]">{goalLabel}</p>
       )}
 
-      {/* 底部进度条 */}
-      <div className="mt-3 h-1 overflow-hidden rounded-[2px] bg-[var(--poker-walnut-border)]">
+      {/* 底部进度条（DESIGN.md §5.11：--progress-track 轨道 + 黄铜渐变填充） */}
+      <div
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        aria-label={t('progress.dailyGoal.eyebrow')}
+        className="mt-3 h-1 overflow-hidden rounded-[2px] bg-[var(--progress-track)]"
+      >
         <div
-          className="h-full rounded-[2px] bg-[var(--poker-brass)] transition-all duration-500"
+          className="h-full rounded-[2px] bg-[linear-gradient(90deg,var(--brass),var(--brass-bright))] shadow-[0_0_6px_color-mix(in_srgb,var(--brass-bright)_35%,transparent)] transition-all duration-500"
           style={{ width: `${percent}%` }}
         />
       </div>

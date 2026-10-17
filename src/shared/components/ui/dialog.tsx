@@ -38,13 +38,11 @@ const DialogContent = React.forwardRef<
   return (
     <DialogPortal>
       <DialogOverlay />
-      {/* 发牌员纸条材质（DESIGN.md §5.23 / §6.4）：
-          .dealer-slip 在 globals.css 中为非分层声明，会压过 utilities 层的 position，
-          故 fixed 用 important 修饰符锁回定位；圆角由 --poker-radius-sm 统一为 4px。 */}
+      {/* 发牌员纸条材质（DESIGN.md §5.23 / §6.4）；圆角由 --poker-radius-sm 统一为 4px。 */}
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          "dealer-slip fixed! left-[50%] top-[50%] z-[100] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 rounded-[var(--poker-radius-sm)] p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
+          "dealer-slip fixed left-[50%] top-[50%] z-[100] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 rounded-[var(--poker-radius-sm)] p-6 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
           className
         )}
         {...props}

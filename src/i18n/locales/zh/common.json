@@ -27,7 +27,25 @@
     "delete": "删除",
     "retry": "再来一次",
     "backHome": "返回首页",
-    "close": "关闭"
+    "close": "关闭",
+    "feedback": "答题反馈"
+  },
+  "a11y": {
+    "skipToContent": "跳到主内容",
+    "trainingPage": "训练"
+  },
+  "card": {
+    "suit": {
+      "hearts": "红桃",
+      "diamonds": "方块",
+      "clubs": "梅花",
+      "spades": "黑桃"
+    },
+    "ariaLabel": "{{suit}}{{rank}}"
+  },
+  "chip": {
+    "label": "筹码",
+    "ariaLabel": "筹码 {{amount}}"
   },
   "resultSummary": {
     "excellent": "优秀！",

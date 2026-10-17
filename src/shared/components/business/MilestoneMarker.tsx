@@ -13,7 +13,8 @@ export interface MilestoneMarkerProps {
 export default function MilestoneMarker({ label, leftPercent }: MilestoneMarkerProps) {
   return (
     <div className="relative h-0" style={{ left: `${leftPercent}%` }}>
-      <span className="milestone-marker" role="img" aria-label={label} />
+      {/* 菱形是装饰图形；标注文字即语义节点，避免与 aria-label 重复播报 */}
+      <span className="milestone-marker" aria-hidden="true" />
       <span className="absolute left-1/2 bottom-[7px] -translate-x-1/2 whitespace-nowrap text-[9px] leading-none tracking-[0.02em] text-[var(--poker-ivory-muted)]">
         {label}
       </span>

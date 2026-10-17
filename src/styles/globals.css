@@ -514,7 +514,7 @@ body::after {
    :root 上的 alias（--success: var(--poker-success)、--primary: var(--brass) 等）
    不会跟随后代对 canonical token 的重定义，只改一处会让纸上漏出暗色房间的亮阶色。 */
 .dealer-slip {
-  position: relative;
+  /* positioning 由使用方负责；::before/::after 需要定位祖先（使用方自加 relative / fixed）。 */
   background-color: var(--paper);
   color: var(--paper-ink);
   border: 1px solid var(--paper-edge);
@@ -643,6 +643,11 @@ body::after {
   );
   box-shadow: var(--shadow-brass-glow-dot);
   pointer-events: none;
+}
+
+/* 移动端反馈 Sheet 变体：顶部 8px 圆角、底部贴边直角（DESIGN.md §13.7.2） */
+.dealer-slip--sheet {
+  border-radius: 8px 8px 0 0;
 }
 
 /* ---- Motto Engraved ---- */
@@ -2748,7 +2753,7 @@ html[data-theme="light"] .streak-rail {
 .error-boundary-card pre {
   font-size: 0.75rem;
   color: var(--ivory-muted, #8a8068); /* token: --ivory-muted */
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: color-mix(in srgb, var(--felt-deep) 45%, transparent); /* token: --felt-deep */
   padding: 0.75rem;
   border-radius: 6px;
   overflow: auto;
@@ -2763,26 +2768,6 @@ html[data-theme="light"] .streak-rail {
   justify-content: center;
 }
 
-.error-boundary-btn {
-  padding: 0.5rem 1.25rem;
-  border-radius: 8px;
-  border: 1px solid var(--walnut-border, #4a3825); /* token: --walnut-border */
-  background-color: var(--walnut-raised, #3a2a18); /* token: --walnut-raised */
-  color: var(--ivory, #f3ebd9); /* token: --ivory */
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-
-.error-boundary-btn-primary {
-  padding: 0.5rem 1.25rem;
-  border-radius: 8px;
-  border: none;
-  background-color: var(--brass, #c9a25e); /* token: --brass */
-  color: #1a1612; /* token: --primary-foreground */
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
 /* =========================================================
    Help Center（2026-08-10）— 签名元素「House Rules 立牌」
    Hero 同家族（academy-hero / theory-hero / rank-plaque-hero），

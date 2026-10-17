@@ -81,7 +81,8 @@
     "noQuestions": "No questions available",
     "correct": "Correct",
     "wrong": "Wrong",
-    "streak": "Streak"
+    "streak": "Streak",
+    "timeRemaining": "Time remaining"
   },
   "daily": {
     "title": "Daily Puzzle",

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { transitionStandard } from '@/shared/utils/motion';
+import { Button } from '@/shared/components/ui/button';
 
 interface EmptyStateProps {
   /** 支持 emoji 字符串或 ReactNode（lucide 图标等） */
@@ -47,13 +48,10 @@ export function EmptyState({ icon, title, description, action, compact = false }
         {description}
       </p>
       {action && (
-        <button
-          onClick={action.onClick}
-          className="px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold hover:bg-[var(--brass-bright)] transition-colors"
-          aria-label={action.label}
-        >
+        // 按钮金属族（DESIGN.md §5.5）：空态行动作走一级主 CTA，移动端自带 44px 触摸目标
+        <Button type="button" onClick={action.onClick} className="font-display" aria-label={action.label}>
           {action.label}
-        </button>
+        </Button>
       )}
     </motion.div>
   );

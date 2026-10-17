@@ -27,7 +27,25 @@
     "delete": "Delete",
     "retry": "Try Again",
     "backHome": "Back to Home",
-    "close": "Close"
+    "close": "Close",
+    "feedback": "Answer feedback"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "trainingPage": "Training"
+  },
+  "card": {
+    "suit": {
+      "hearts": "hearts",
+      "diamonds": "diamonds",
+      "clubs": "clubs",
+      "spades": "spades"
+    },
+    "ariaLabel": "{{rank}} of {{suit}}"
+  },
+  "chip": {
+    "label": "Chip",
+    "ariaLabel": "Chip {{amount}}"
   },
   "resultSummary": {
     "excellent": "Excellent!",

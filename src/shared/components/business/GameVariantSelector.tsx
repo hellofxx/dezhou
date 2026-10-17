@@ -45,6 +45,8 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
           return (
             <button
               key={variant}
+              type="button"
+              aria-pressed={isActive}
               onClick={() => handleSelect(variant)}
               className={cn(
                 'relative flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-all',
@@ -54,7 +56,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
               )}
               aria-label={t(`variant.name.${variant}`)}
             >
-              <span className="text-sm leading-none">{VARIANT_ICONS[variant]}</span>
+              <span className="text-sm leading-none" aria-hidden="true">{VARIANT_ICONS[variant]}</span>
               <span className="hidden sm:inline">
                 {t(`variant.name.${variant}`)}
               </span>
@@ -85,6 +87,8 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
         return (
           <button
             key={variant}
+            type="button"
+            aria-pressed={isActive}
             onClick={() => handleSelect(variant)}
             className={cn(
               'relative flex flex-col items-start gap-1.5 rounded-lg border p-3 text-left transition-all',
@@ -95,7 +99,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
             aria-label={t(`variant.name.${variant}`)}
           >
             <div className="flex items-center gap-2 w-full">
-              <span className="text-xl">{VARIANT_ICONS[variant]}</span>
+              <span className="text-xl" aria-hidden="true">{VARIANT_ICONS[variant]}</span>
               <span className={cn(
                 'text-sm font-semibold',
                 isActive ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory)]'
@@ -108,7 +112,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
                 </span>
               )}
               {isActive && (
-                <span className="ml-auto h-2 w-2 rounded-full bg-[var(--brass-bright)] shadow-[var(--shadow-brass-glow-dot)]" />
+                <span aria-hidden="true" className="ml-auto h-2 w-2 rounded-full bg-[var(--brass-bright)] shadow-[var(--shadow-brass-glow-dot)]" />
               )}
             </div>
             <p className="text-xs text-[var(--ivory-muted)] leading-relaxed">

@@ -40,12 +40,14 @@ export class ErrorBoundary extends Component<Props, State> {
           <div className="error-boundary-card">
             <h1>{t('common.errorBoundary.title')}</h1>
             <p>{t('common.errorBoundary.description')}</p>
-            {this.state.error && <pre>{this.state.error.message}</pre>}
+            {/* 错误原文仅开发环境呈现，生产环境不向用户暴露内部信息 */}
+            {import.meta.env.DEV && this.state.error && <pre>{this.state.error.message}</pre>}
             <div className="error-boundary-actions">
-              <button className="error-boundary-btn" onClick={this.handleReset}>
+              {/* 按钮金属族（DESIGN.md §5.5）：重试走二级、刷新页面走一级主 CTA */}
+              <button type="button" className="btn-metal" onClick={this.handleReset}>
                 {t('common.errorBoundary.retry')}
               </button>
-              <button className="error-boundary-btn-primary" onClick={() => window.location.reload()}>
+              <button type="button" className="btn-brass" onClick={() => window.location.reload()}>
                 {t('common.errorBoundary.reload')}
               </button>
             </div>

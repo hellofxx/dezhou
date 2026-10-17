@@ -23,9 +23,10 @@ export default function CasinoPlaque({ value, label, sub, size = 'md', className
       role="group"
       aria-label={`${label}: ${value}${sub ? ` (${sub})` : ''}`}
     >
-      <span className="casino-plaque-value font-numeric">{value}</span>
-      <span className="casino-plaque-label">{label}</span>
-      {sub && <span className="casino-plaque-sub">{sub}</span>}
+      {/* 视觉三段标记 aria-hidden：名称已由 role="group" 的 aria-label 统一承载，避免同一信息被读两遍 */}
+      <span aria-hidden="true" className="casino-plaque-value font-numeric">{value}</span>
+      <span aria-hidden="true" className="casino-plaque-label">{label}</span>
+      {sub && <span aria-hidden="true" className="casino-plaque-sub">{sub}</span>}
     </div>
   );
 }

@@ -54,15 +54,15 @@ export default function Sparkline({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgba(201,162,94,0.08)" />
-          <stop offset="100%" stopColor="rgba(201,162,94,0)" />
+          <stop offset="0%" stopColor="var(--brass)" stopOpacity={0.08} />
+          <stop offset="100%" stopColor="var(--brass)" stopOpacity={0} />
         </linearGradient>
       </defs>
       <path d={fillPath} fill={`url(#${gradientId})`} />
       <polyline
         points={polylinePoints}
         fill="none"
-        stroke="var(--poker-brass)"
+        stroke="var(--brass)"
         strokeWidth={1}
         strokeLinejoin="round"
         strokeLinecap="round"

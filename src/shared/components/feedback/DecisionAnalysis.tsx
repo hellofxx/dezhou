@@ -7,7 +7,7 @@
  * wrong / blunder 级别默认展开，其余级别默认折叠（由调用方传 defaultOpen）。
  */
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
@@ -37,14 +37,17 @@ export function DecisionAnalysis({
 }: DecisionAnalysisProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(defaultOpen);
+  // aria-controls 需要稳定的内容区 id（多实例共存时不可重复）
+  const panelId = useId();
 
   return (
     <div className="mt-3">
       <button
         type="button"
         aria-expanded={open}
+        aria-controls={open ? panelId : undefined}
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex items-center gap-1.5 rounded border border-[var(--poker-walnut-border)] bg-transparent px-3 py-1.5 text-sm text-[var(--poker-ivory-dim)] transition-colors hover:bg-[var(--poker-walnut-raised)]"
+        className="inline-flex items-center gap-1.5 rounded border border-[var(--poker-walnut-border)] bg-transparent px-3 py-1.5 text-sm text-[var(--poker-ivory-dim)] transition-colors hover:bg-[var(--poker-walnut-raised)] max-md:min-h-11"
       >
         <span>{open ? t('feedback.decisionAnalysis.hideAnalysis') : t('feedback.decisionAnalysis.viewAnalysis')}</span>
         <ChevronDown
@@ -57,6 +60,7 @@ export function DecisionAnalysis({
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
+            id={panelId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}

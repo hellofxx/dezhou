@@ -21,10 +21,11 @@ export function RelatedLessonChip({ lessonId, label }: RelatedLessonChipProps) {
   const navigate = useNavigate();
   const text = label ?? t('feedback.relatedLesson');
 
+  // 移动端 44px 触摸目标（DESIGN.md §6.3）：用 min-height 撑高，不用会与相邻元素重叠的伪元素热区
   return (
     <button
       type="button"
-      className="related-lesson-chip"
+      className="related-lesson-chip max-md:min-h-11"
       aria-label={text}
       onClick={() => navigate(`/academy/lesson/${lessonId}`)}
     >

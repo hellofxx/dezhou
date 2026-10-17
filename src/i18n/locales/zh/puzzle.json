@@ -81,7 +81,8 @@
     "noQuestions": "暂无可用题目",
     "correct": "答对",
     "wrong": "答错",
-    "streak": "连对"
+    "streak": "连对",
+    "timeRemaining": "剩余时间"
   },
   "daily": {
     "title": "每日谜题",

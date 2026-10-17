@@ -280,6 +280,11 @@ export default function CourseView() {
             </span>
             <div className="flex-1">
               <ProgressBar
+                label={t('academy.courseView.lessonOf', {
+                  defaultValue: '第 {{current}}/{{total}} 课',
+                  current: levelEntry.lessons.findIndex((l) => l.id === lesson.id) + 1,
+                  total: levelEntry.lessons.length,
+                })}
                 value={
                   levelEntry.lessons.length > 0
                     ? Math.round(
@@ -310,7 +315,16 @@ export default function CourseView() {
             </span>
           </div>
         ) : (
-          <ProgressBar value={progressPercent} size="sm" className="mb-4" />
+          <ProgressBar
+            value={progressPercent}
+            size="sm"
+            className="mb-4"
+            label={t('academy.courseView.lessonOf', {
+              defaultValue: '第 {{current}}/{{total}} 课',
+              current: progressIdx + 1,
+              total: progressTotal.length,
+            })}
+          />
         )}
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">

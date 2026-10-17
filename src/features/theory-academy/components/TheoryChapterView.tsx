@@ -183,6 +183,10 @@ export default function TheoryChapterView() {
             </span>
             <div className="flex-1 min-w-[160px]">
               <ProgressBar
+                label={t('theory.chapterView.chapterOf', {
+                  current: chapter.order,
+                  total: level.chapters.length,
+                })}
                 value={
                   level.chapters.length > 0
                     ? Math.round(
