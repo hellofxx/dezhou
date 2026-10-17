@@ -8,7 +8,8 @@ import { useAcademyStore } from '../store';
 import { LEVELS } from '../data/courses';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
-import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
+import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';
+import type { RovingGridItemProps } from '@/shared/hooks/useRovingGridNav';
 import ProgressRing from '@/shared/components/business/ProgressRing';
 import { resolveLevelTitle, resolveLessonTitle, lessonTitleKey, levelTitleKey } from '../utils/titleKeys';
 
@@ -124,6 +125,8 @@ interface GraphNodeItemProps {
   levelInfo: { level: number; title: string } | undefined;
   onSelect: (lessonId: string) => void;
   onHover: (id: string | null) => void;
+  /** S-S1: roving tabindex 键盘属性（整张图谱共用一个 Tab 停靠点） */
+  getItemProps: (value: string) => RovingGridItemProps;
 }
 
 /** S-S1: SVG 节点子组件——在组件顶层调 hook，补键盘/读屏可达 + 焦点 tooltip */
@@ -134,9 +137,9 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
   levelInfo,
   onSelect,
   onHover,
+  getItemProps,
 }: GraphNodeItemProps) {
   const { t } = useTranslation();
-  const keyboardProps = useGridKeyboardNav(node.id, onSelect);
 
   // 样式
   let fill: string;
@@ -187,7 +190,7 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
       onMouseLeave={() => onHover(null)}
       onFocus={() => onHover(node.id)}
       onBlur={() => onHover(null)}
-      {...keyboardProps}
+      {...getItemProps(node.id)}
     >
       {/* 节点背景 */}
       <rect
@@ -307,6 +310,14 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
   const { nodes, edges } = useMemo(() => buildGraph(), []);
+
+  // 整张图谱只保留一个 Tab 停靠点（roving tabindex）：节点 id 顺序即移动顺序；
+  // 图谱非矩形（各行节点数不等）故不传 columns，Up/Down 按 ±1 移动
+  const nodeIds = useMemo(() => nodes.map((n) => n.id), [nodes]);
+  const { getItemProps } = useRovingGridNav({
+    values: nodeIds,
+    onSelect: onNodeClick,
+  });
 
   const nodeMap = useMemo(() => {
     const map = new Map<string, GraphNode>();
@@ -614,6 +625,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
               levelInfo={LEVELS.find((l) => l.id === node.levelId)}
               onSelect={onNodeClick}
               onHover={setHoveredNode}
+              getItemProps={getItemProps}
             />
           ))}
         </svg>

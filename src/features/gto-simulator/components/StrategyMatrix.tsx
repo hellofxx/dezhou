@@ -4,7 +4,8 @@ import type { HandStrategy } from '../types';
 import { getHandFromGrid } from '@/shared/utils/rangeParser';
 import { GRID_RANKS } from '@/shared/constants/poker';
 import { cn } from '@/shared/utils';
-import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
+import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';
+import type { RovingGridItemProps } from '@/shared/hooks/useRovingGridNav';
 import { ActionType } from '@/shared/types/action';
 import { actionTerm } from '../utils/actionTerms';
 
@@ -63,6 +64,8 @@ interface MatrixCellProps {
   isHighlighted: boolean;
   onHover: (hand: HandNotation | null) => void;
   onClick: (hand: HandNotation) => void;
+  /** G-G3: roving tabindex 键盘属性（整张矩阵共用一个 Tab 停靠点） */
+  getItemProps: (value: HandNotation) => RovingGridItemProps;
 }
 
 const MatrixCell = React.memo(function MatrixCell({
@@ -71,10 +74,9 @@ const MatrixCell = React.memo(function MatrixCell({
   isHighlighted,
   onHover,
   onClick,
+  getItemProps,
 }: MatrixCellProps) {
   const colorClass = getCellColor(strategy);
-  // G-G3: 键盘/读屏可达（role=button + tabIndex + Enter/Space）
-  const keyboardProps = useGridKeyboardNav(hand, onClick);
 
   return (
     <div
@@ -89,7 +91,7 @@ const MatrixCell = React.memo(function MatrixCell({
       onMouseLeave={() => onHover(null)}
       onClick={() => onClick(hand)}
       title={strategy ? `${hand}: R${Math.round(strategy.raise * 100)}% C${Math.round(strategy.call * 100)}% F${Math.round(strategy.fold * 100)}%` : hand}
-      {...keyboardProps}
+      {...getItemProps(hand)}
     >
       {hand}
     </div>
@@ -110,6 +112,23 @@ export function StrategyMatrix({
   const handleClick = (hand: HandNotation) => {
     onCellClick?.(hand);
   };
+
+  // 13×13 手牌矩阵，行优先顺序；columns=13 让 Up/Down 跨行移动
+  const handValues = React.useMemo(() => {
+    const hands: HandNotation[] = [];
+    for (let row = 0; row < 13; row++) {
+      for (let col = 0; col < 13; col++) {
+        hands.push(getHandFromGrid(row, col));
+      }
+    }
+    return hands;
+  }, []);
+
+  const { getItemProps } = useRovingGridNav({
+    values: handValues,
+    columns: 13,
+    onSelect: handleClick,
+  });
 
   // BUG-GTO-010：图例动作词统一取自扑克动作术语源（刻意保留英文）
   const raiseTerm = actionTerm(ActionType.Raise);
@@ -149,6 +168,7 @@ export function StrategyMatrix({
                   isHighlighted={highlightedHand === hand}
                   onHover={handleHover}
                   onClick={handleClick}
+                  getItemProps={getItemProps}
                 />
               );
             })}

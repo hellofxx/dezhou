@@ -1,7 +1,8 @@
 import React from 'react';
 import type { HandNotation, GameVariant } from '@/shared/types/poker';
 import { cn } from '@/shared/utils';
-import { useGridKeyboardNav } from '@/shared/hooks/useGridKeyboardNav';
+import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';
+import type { RovingGridItemProps } from '@/shared/hooks/useRovingGridNav';
 import { getHandFromGrid } from '../utils/rangeParser';
 import { getHandCategory } from '../utils/handClassifier';
 import { GRID_RANKS, SHORT_DECK_GRID_RANKS } from '../constants';
@@ -25,6 +26,8 @@ interface GridCellProps {
   isHighlighted: boolean;
   onClick?: (hand: HandNotation) => void;
   onHover?: (hand: HandNotation | null) => void;
+  /** R-R1: roving tabindex 键盘属性（整张网格共用一个 Tab 停靠点） */
+  getItemProps: (value: HandNotation) => RovingGridItemProps;
 }
 
 const GridCell = React.memo(function GridCell({
@@ -33,12 +36,11 @@ const GridCell = React.memo(function GridCell({
   isHighlighted,
   onClick,
   onHover,
+  getItemProps,
 }: GridCellProps) {
   const category = getHandCategory(hand);
   const isPair = category === 'pair';
   const isSuited = category === 'suited';
-  // R-R1: 键盘/读屏可达（role=button + tabIndex + Enter/Space）
-  const keyboardProps = useGridKeyboardNav(hand, onClick);
 
   // Inlaid-tile palette: selected = brass fill with ink text;
   // unselected cells are dim ivory tile, with pairs tinted warm (brass-deep)
@@ -67,7 +69,7 @@ const GridCell = React.memo(function GridCell({
       onMouseEnter={() => onHover?.(hand)}
       onMouseLeave={() => onHover?.(null)}
       title={hand}
-      {...keyboardProps}
+      {...getItemProps(hand)}
     >
       {hand}
     </div>
@@ -113,6 +115,14 @@ export function RangeGrid({
     return cells;
   }, [gridSize, isShortDeck]);
 
+  // 整张网格只保留一个 Tab 停靠点（roving tabindex），方向键移动焦点
+  const handValues = React.useMemo(() => grid.map((cell) => cell.hand), [grid]);
+  const { getItemProps } = useRovingGridNav({
+    values: handValues,
+    columns: gridSize,
+    onSelect: onCellClick,
+  });
+
   return (
     <div className={cn('w-full', className)}>
       {/* R-R2: 窄容器下允许横向滚动，min-w 保证 13 列最小可读宽度 */}
@@ -151,6 +161,7 @@ export function RangeGrid({
                   isHighlighted={highlightedHand === cell.hand}
                   onClick={onCellClick}
                   onHover={onCellHover}
+                  getItemProps={getItemProps}
                 />
               );
             })}
