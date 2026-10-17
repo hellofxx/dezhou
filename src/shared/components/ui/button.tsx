@@ -9,21 +9,22 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        // 一级金属件：黄铜渐变 + 投影（每屏唯一主动作，DESIGN.md §5.5）
+        default: "btn-brass",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
           "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        // 二级金属件：深胡桃金属 + 黄铜字（同组次动作，DESIGN.md §5.5）
+        secondary: "btn-metal",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
+        default: "h-10 px-4 py-2 max-md:min-h-11",
+        sm: "h-9 rounded-md px-3 max-md:min-h-11",
         lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        icon: "h-10 w-10 max-md:h-11 max-md:w-11",
       },
     },
     defaultVariants: {

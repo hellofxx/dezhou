@@ -278,7 +278,14 @@ export function TrainingSession({
       </div>
 
       {/* 进度条 */}
-      <Progress value={getProgress} className="h-1 rounded-none" />
+      <Progress
+        value={getProgress}
+        className="h-1 rounded-none"
+        label={t('rangeTrainer.session.question', {
+          current: quizState.currentIndex + 1,
+          total: quizState.questions.length,
+        })}
+      />
 
       {/* P4 修复（4.5-P0）：连续答错降级提示 */}
       {shouldDownshiftDifficulty() && (

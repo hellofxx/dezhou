@@ -146,6 +146,10 @@ export default function DailyPuzzle() {
             <Progress
               value={progressValue}
               className="flex-1 h-1 [&_[class*=indicator]]:bg-[var(--brass-bright)]"
+              label={t('puzzle.card.progress', {
+                current: engine.state.currentIndex + 1,
+                total: engine.state.questions.length,
+              })}
             />
             <span className="font-numeric text-[var(--brass-bright)]">{Math.round(progressValue)}%</span>
           </div>

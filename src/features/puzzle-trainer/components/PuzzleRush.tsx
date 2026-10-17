@@ -139,6 +139,7 @@ export default function PuzzleRush() {
             'h-1.5',
             isUrgent ? '[&_[class*=indicator]]:bg-[var(--clay)]' : '[&_[class*=indicator]]:bg-[var(--brass-bright)]'
           )}
+          label={t('puzzle.rush.title', { minutes: durationMinutes })}
         />
 
         {/* 连续答错降级提示 */}

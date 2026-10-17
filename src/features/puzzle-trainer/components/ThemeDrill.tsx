@@ -126,6 +126,10 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
         <Progress
           value={progressValue}
           className="h-1.5 [&_[class*=indicator]]:bg-[var(--brass-bright)]"
+          label={t('puzzle.card.progress', {
+            current: engine.state.currentIndex + 1,
+            total: engine.state.questions.length,
+          })}
         />
 
         {/* 连续答错降级提示 */}
