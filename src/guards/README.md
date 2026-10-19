@@ -16,7 +16,8 @@
 | `eslintCrossImports.test.ts` | `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 与精确快照一致（新增跨模块边必然变红，收紧时只删不加） | `pnpm test src/guards/eslintCrossImports.test.ts` |
 | `huPositionOrderGuard.test.ts` | 单挑（heads-up）位置方向零容忍：以 `theory-academy` 的 `variantRules.headsUpRules` 为单源，四份 HU locale 与单源本身不得出现「谁先行动 / 谁有位置」倒置 | `pnpm test src/guards/huPositionOrderGuard.test.ts` |
 | `rangePresetGtoConsistency.test.ts` | range-trainer preset 与 gto-simulator `preflop-ranges.json` 频率 ≥ 0.5 的手牌完全一致；预设名称的 `(~N%)` 标注与组合占比偏差 ≤ 1pp | `pnpm test src/guards/rangePresetGtoConsistency.test.ts` |
-| `line-count-guard.test.ts` | 单文件行数硬约束：`src/**/*.ts(x)` 非测试文件不超过 400 行（豁免类别除外） | `pnpm test src/guards/line-count-guard.test.ts` |
+| `line-count-guard.test.ts` | 单文件行数硬约束：`src/**/*.ts(x)` 非测试文件 >400 行失败；既有超大文件逐文件 allowlist 棘轮（只减不增），300–400 行为 warning 灰区 | `pnpm test src/guards/line-count-guard.test.ts` |
+| `cssLineCountGuard.test.ts` | `src/styles/*.css` 平铺扫描：单文件 ≤800 行（`globals.css` 按 allowlist 当前行数锁定，Phase 2 拆分前临时豁免）；CSS 总行数自检防路径失效空跑 | `pnpm test src/guards/cssLineCountGuard.test.ts` |
 
 ## 约定
 

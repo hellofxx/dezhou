@@ -25,7 +25,15 @@
 
 ### 文件大小
 
-单文件 ≤ 300 行（硬约束）；超过 400 行需拆分为子组件 / 工具函数 / 数据文件。以下类型文件可豁免：zustand store（`create()` 单文件约束）、格式解析器（自包含状态机）、页面级组件（内聚性大于拆分收益）。课程内容数据文件亦可放宽。
+单文件目标 ≤ 300 行。守卫 `src/guards/line-count-guard.test.ts` 分三档判定：
+
+- ≤ 300 行：合规
+- 300–400 行：灰区，守卫以 `console.warn` 输出清单，不阻断 CI
+- > 400 行：硬失败，必须拆分为子组件 / 工具函数 / 数据文件
+
+既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。禁止恢复目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增文件不得登记 allowlist，只能拆分。
+
+CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫（平铺扫描 `src/styles/*.css`，Phase 2 拆分的分片文件同样平铺）；`globals.css` 为 Phase 2 拆分前的临时豁免，上限锁定在 `CSS_ALLOWLIST` 中的当前行数，同样只减不增。
 
 ### 函数设计
 
@@ -92,4 +100,3 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - **可访问性**：遵循 WCAG 2.1 AA，交互元素必须有 `aria-label`，对比度 ≥4.5:1
 - **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `DESIGN.md`（以其当前版本为准，不维护版本号副本）
 - **五级反馈样式**：`GRADE_DISPLAY_CONFIG` 的 color 字段引用 globals.css `.grade-best`~`.grade-blunder` 类（样式唯一事实源），禁止内联霓虹类
-
