@@ -30,7 +30,7 @@
 | 装配层 bootstrap | high | `src/main.tsx:10,13-27,30-37,40-47`；`src/App.tsx` |
 | 路由与代码分割 | high | `src/app/routes.tsx:17-32,35-67,77-125`；`src/i18n/preload.ts` |
 | i18n 运行时 | high | `src/i18n/moduleRegistry.ts:9,47,86,102,153`；`config.ts`；`locales/{zh,en}` 各 32 文件 |
-| 设计系统 | high | `src/styles/globals.css`（236 个 CSS 变量）；`src/designTokenGuard.test.ts`；`DESIGN.md` |
+| 设计系统 | high | `src/styles/globals.css`（236 个 CSS 变量）；`src/guards/designTokenGuard.test.ts`；`DESIGN.md` |
 | progress 中枢 | high | `src/features/progress/store.ts`（995 行；persist :972-973；MIGRATIONS :122-290） |
 | range-trainer | high | `types.ts:11,17,39`；`constants.ts`（17 预设）；`store.ts:52`；`hooks/useQuizEngine.ts` |
 | pot-odds | high | `types.ts:3,12,18,26,46`；`data/quizQuestions.ts`（19 题）；`constants.ts`（8 听牌）；`store.ts:24` |

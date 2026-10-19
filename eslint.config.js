@@ -21,7 +21,7 @@ const FEATURES = [
 // 模块间允许的直接引用边（当前依赖图快照，收紧时只删不加）。
 // progress 是 AGENTS.md 定义的跨模块状态中枢，各模块引用它属于设计内；
 // 其余 peer 边为存量债务（绕过 shared/层与事件总线），新增边一律变红。
-// 快照守卫测试：src/eslintCrossImports.test.ts（新增边时 pnpm test 必然变红）。
+// 快照守卫测试：src/guards/eslintCrossImports.test.ts（新增边时 pnpm test 必然变红）。
 export const ALLOWED_CROSS_IMPORTS = {
   'gto-simulator': ['progress'],
   'hand-history': [],

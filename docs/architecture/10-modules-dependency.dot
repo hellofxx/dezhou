@@ -3,7 +3,7 @@
 // 生成：system-modeler + graphviz（architecture-visualization 插件）
 // 证据基线：工作树 @ HEAD c966912（含未提交改动），采集时间 2026-08-30
 // 边证据：代码中 `@/features/*` / `@/shared/*` import 实测 +
-//         eslint.config.js ALLOWED_CROSS_IMPORTS + src/eslintCrossImports.test.ts 快照守卫
+//         eslint.config.js ALLOWED_CROSS_IMPORTS + src/guards/eslintCrossImports.test.ts 快照守卫
 //
 // 本图回答一个问题：谁依赖谁，跨模块通信一共有几条通道。
 //   黑色实线 = 代码实测 import（confidence: high）

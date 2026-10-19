@@ -8,7 +8,7 @@ import type { RangePreset } from './types';
  * 数据源定性（2026-07-31 跨模块专批 C，P1A-06）：
  *   以 gto-simulator `data/preflop-ranges.json`（6max_100bb_preflop）为权威源，
  *   按「raise 频率 ≥ 0.5」阈值离散化生成（call 类 preset 用「call 频率 ≥ 0.5」）。
- *   一致性由跨模块守卫测试 `src/rangePresetGtoConsistency.test.ts` 锁定；
+ *   一致性由跨模块守卫测试 `src/guards/rangePresetGtoConsistency.test.ts` 锁定；
  *   修改本表或 JSON 任一侧都会使守卫变红。
  *   注意：「发起 3-bet」类 preset（见 ADVANCED_PRESET_RANGES 内注释）不在此口径内。
  */
@@ -391,7 +391,7 @@ export const FOUR_MAX_PRESET_RANGES: RangePreset[] = [
 // - 上述三个 preset 以本模块为自身权威源（教学参考范围）；严禁为对齐而臆造 JSON 频率数据
 //   （臆造的求解器频率会成为错误教学权威源，危害大于数据缺口）。
 // - 例外：bb-3bet-vs-btn / bb-call-vs-btn 对应 JSON `bb_vs_btn_open` 表（BB 面对 BTN open，
-//   raise 即发起 3-bet），JSON 有覆盖，已纳入一致性守卫（src/rangePresetGtoConsistency.test.ts）。
+//   raise 即发起 3-bet），JSON 有覆盖，已纳入一致性守卫（src/guards/rangePresetGtoConsistency.test.ts）。
 
 export const ADVANCED_PRESET_RANGES: RangePreset[] = [
   {

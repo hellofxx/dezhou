@@ -135,7 +135,7 @@ src/
 
 - 四层色彩 token（`--felt-*` / `--ivory-*` / `--brass-*` / `--walnut-*`，globals.css 为唯一权威）
 - 暗色默认，禁止硬编码颜色；WCAG 2.1 AA
-- 反霓虹硬约束：禁 Tailwind 霓虹类 / 纯黑白，由 designTokenGuard.test.ts 守卫
+- 反霓虹硬约束：禁 Tailwind 霓虹类 / 纯黑白，由 `src/guards/designTokenGuard.test.ts` 守卫
 - 设计契约权威源：DESIGN.md
 
 ## 路由与代码分割
@@ -257,6 +257,9 @@ src/
   - `@typescript-eslint/no-explicit-any`：禁止 any
   - 注：lint 工具链通过 `.pnpmfile.cjs` 侧载 TS 6 API（typescript-eslint 尚不支持 TS 7.0），不影响 typecheck/build 使用的 TS 7
 - **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行。全局级守卫：i18n 双语键对称（`src/i18n/localeParity.test.ts`）、i18n 静态 key 引用（`src/i18n/staticKeyGuard.test.ts`，兜底 zh/en 双方都缺 key 的盲区）、UI 颜色合规（`src/guards/designTokenGuard.test.ts` 全量扫描 src，禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）、样式层颜色合规（`src/guards/designTokenCssGuard.test.ts` 扫描 `src/styles/*.css` 的 background 声明，禁纯白/纯黑面填充；该测试经 `readFileSync` 而非 `import.meta.glob('?raw')` 载入——Vitest 默认 `css: false` 会把 CSS 导入 stub 成空模块）、单挑位置方向事实（`src/guards/huPositionOrderGuard.test.ts` 零容忍，判据为 theory-academy `variantRules.headsUpRules`，豁免小测 options 与显式满员桌对比句）。模块级数据完整性守卫由各 feature 模块自持（课程结构 / 题库 id / 理论结构 / 选项排序分布等），`pnpm test` 全量运行时强制，清单以各模块实际测试文件为准
+- **守卫目录与规模棘轮**：全局不变式守卫集中在 `src/guards/`（清单、豁免与新增约定以 `src/guards/README.md` 为唯一事实源）；`line-count-guard.test.ts` 对既有超大文件用**逐文件 allowlist 棘轮**（只减不增；300–400 行为灰区 warning，>400 行失败），`cssLineCountGuard.test.ts` 约束 `src/styles/*.css` 单文件 ≤800 行（`globals.css` 在 Phase 2 拆分前按当前行数锁定）
+- **仓库卫生**：`pnpm repo:check`（`scripts/check-repo-hygiene.mjs`）拦截嵌套 git 仓库（如 `docs/.git`）、`scripts/tmp-*` 一次性调试脚本、`poker-ui-demo` 生成物，以及被跟踪的已归档 `docs/analysis` / `docs/superpowers`；已接入 `verify` 与 CI
+- **Agent 模块地图漂移**：`pnpm agents:map:check`（`scripts/generate-agent-map.mjs --check`）校验 `docs/agents/MODULE_MAP.md` 与代码事实（模块 / lazy 路由 / i18n 分组）一致；已接入 `verify`、CI 与 pre-commit（`.git-hooks/pre-commit`），改动路由 / 模块清单 / i18n 注册表后须先运行 `pnpm agents:map`
 - **构建验证**：`pnpm build` 成功产出 `dist/`
 - **测试后缀速查**（`vitest.config.ts` 双项目划分）：`.test.ts` = unit 项目，Node 环境（纯函数 / store migrate）；`.test.tsx` = component 项目，jsdom 环境（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
 - **每次代码变更后必须运行 `pnpm verify`**（唯一事实源为 `package.json` 的 `verify` script，当前为 `typecheck && lint && repo:check && agents:map:check && test` 串行短路组合，任一失败即中止；另提供 `verify:parallel` 并行变体，独立捕获 exit code 并支持分级重试）
@@ -269,7 +272,7 @@ src/
 - [ ] 新增跨模块引用已在 `eslint.config.js`的 `ALLOWED_CROSS_IMPORTS`中登记，且`pnpm test` 守卫未变红
 - [ ] 涉及数据模型/持久化 schema 变更时，persist version 已递增并编写 migrate 函数
 - [ ] 涉及模块数量/版本计数/etc 事实性陈述时，文档采用"以代码为准"单源引用策略，而非硬编码数值
-- [ ] `pnpm verify`全部通过（typecheck + lint + test）
+- [ ] `pnpm verify`全部通过（typecheck + lint + repo:check + agents:map:check + test）
 
 ## 提交粒度
 

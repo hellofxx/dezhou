@@ -38,5 +38,5 @@ dot -Tsvg docs/architecture/30-progress-hub.dot         -o docs/architecture/30-
 - 证据基线：工作树 @ `c966912`（含 85 项未提交改动），采集于 2026-08-30。
 - **模型反映工作树，不是 HEAD**。要与提交对齐，在干净工作区重跑采集。
 - 代码变更后如何刷新：按 `00-evidence.md` §5 的复核命令重跑（跨模块边、persist name/version、事件总线两侧、结构计数），有差异时改图源文本，**不要改导出的图片**。
-- 关键不变量：本模型中"跨模块 import 边"应与 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 逐条相等；若 `pnpm test` 的 `src/eslintCrossImports.test.ts` 变红，本目录的依赖图即为过期信号。
+- 关键不变量：本模型中"跨模块 import 边"应与 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 逐条相等；若 `pnpm test` 的 `src/guards/eslintCrossImports.test.ts` 变红，本目录的依赖图即为过期信号。
 - 文档中的数值（文件数、题目数、路由数、persist version）为**采集时点快照**；仓库自身约定以代码为唯一事实源，长期数值请回读代码。

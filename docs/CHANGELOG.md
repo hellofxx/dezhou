@@ -9,6 +9,19 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-10-19 仓库结构与 Agent 工作流优化 Phase 1（6 个 commit）
+
+Phase 1 只做「不改变产品行为」的工程卫生：把历史包袱移出主仓、把守卫与文档收进有明确归属的位置，并为后续规模治理装上只减不增的棘轮。全部改动经 `pnpm verify` 与 `pnpm build` 终验。
+
+- **仓库卫生**：备份并移除嵌套 `docs/.git`（`.archive/docs-nested.bundle`，730K，本地 gitignore），`docs/` 不再以 gitlink 形式出现在主仓库；删除 `poker-ui-demo` 生成物（`.preflight/`、`runtime-orchestration-summary.json`、`validation-report.json`）与 6 个 `scripts/tmp-*` 一次性脚本；新增 `scripts/check-repo-hygiene.mjs` + `repo:check`，把「嵌套 git 仓库 / 临时脚本 / 生成物 / 被跟踪的已归档 docs」四类违规做成静态门禁，接入 `verify` 与 CI；新增 `poker-ui-demo/README.md` 声明该目录只是静态设计参考、不参与构建。
+- **docs 结构**：新增 `docs/README.md` 统一索引（Current specs → Agents → Architecture → Ops → History → Archive）；运维文档移入 `docs/ops/`；`claude.md` 改为兼容指针（只指向 `AGENTS.md` / `docs/agents/behavior.md` / `docs/README.md`），行为准则全文移 `docs/agents/behavior.md`；`docs/analysis` 与 `docs/superpowers` 归档到本地 `.archive/`（`.archive/docs-analysis/` / `.archive/docs-superpowers/`，gitignore，git 历史保留）；`docs/CHANGELOG.md` 约 198K（202,212 字节）→ 256 行，2026-08 及更早内容归档到 `docs/changelog/2026-08.md`。
+- **守卫归位**：7 个全局不变式守卫集中到 `src/guards/`（`dealerSlip.contrast` / `designTokenCssGuard` / `designTokenGuard` / `eslintCrossImports` / `huPositionOrderGuard` / `line-count-guard` / `rangePresetGtoConsistency`），a11y harness 移 `src/test-utils/a11y.ts`；同步修正守卫内部相对路径与 `termFormGuard` 例外清单；新增 `src/guards/README.md` 登记「保护的不变式 → 运行命令 → 新增约定」；文档 / 代理 / 注释中的旧根路径引用统一为 `src/guards/*`（17 文件 / 20 处）。
+- **规模棘轮**：`src/guards/line-count-guard.test.ts` 删除按类别的宽泛豁免，改为 **39 条逐文件 allowlist**（登记实测行数，只减不增；300–400 行灰区 warning，>400 行未登记即失败）；新增 `src/guards/cssLineCountGuard.test.ts`（`src/styles/*.css` 单文件 ≤800 行，`globals.css` 在 Phase 2 拆分前按 3,398 行临时锁定，并自检扫描面防路径失效空跑）；`docs/AI_GUIDE.md` 补口径。
+- **Agent 地图**：新增 `scripts/generate-agent-map.mjs` 与生成物 `docs/agents/MODULE_MAP.md`（10 模块 / 34 lazy 声明 / 34 行 i18n 分组，覆盖 owner / 入口 / store persist version / 允许跨模块边）；新增手写 `docs/agents/README.md` 任务路由表；`agents:map` / `agents:map:check` 接入 `verify`、CI 与 pre-commit（`.git-hooks/pre-commit`）；`AGENTS.md` 顶部增加任务导航表（任务 → 先读 → 负责代理）。
+- **验证**：`pnpm repo:check` 通过（817 个被跟踪文件中无嵌套 git / 临时脚本 / 生成物 / 归档文档）；`pnpm agents:map:check` 通过（地图与代码事实一致：10 模块 / 34 lazy 声明）；`pnpm verify` **168 文件 / 1176 测试**全绿；`pnpm build` 通过（1.97s，仅既有 chunk >500kB 与 `INEFFECTIVE_DYNAMIC_IMPORT` 警告，无新增失败）。
+- **commit**：1681ead（仓库卫生）/ 67ed79d（docs 重组与月度归档）/ 7d87c5a（守卫与测试工具归位）/ 5541532（规模棘轮）/ 411ae09（Agent 模块地图）+ 本次文档终验 commit。
+- **遗留**：Phase 2 backlog（`globals.css` 拆分 / `puzzleBank` / progress store / 课程数据 / 大组件拆分）本批未执行；历史 `docs/changelog/*` 与 `docs/CHANGELOG.md` 既有条目中的旧守卫路径保留为历史事实，不回改；`eslint.config.js` 仍保留 `docs/analysis` ignore（目录已归档，无实际影响）。
+
 ### 2026-10-17 Design QA 修复 + 发牌员纸条材质 + 设计契约迁移 DESIGN.md v1.8（9 个 commit）
 
 以 Design Review 走查壳层与共享组件，结论与上一批 help-center 同源：**偏差不是"不好看"，而是实现与契约长期无对照**。本批把材质从"深色房间一律深色"升级为角色绑定（DESIGN.md v1.7 → v1.8.0），并修掉一批层级、焦点与 aria 语义缺陷。

@@ -100,7 +100,7 @@ additionalPrompt: ""
 
 花色：♥♦ 酒红 `--suit-heart/--suit-diamond`；♣♠ **象牙白** `--suit-club/--suit-spade`（暗底可见性优先，对比度 ≥7:1；亮底分享卡另行覆盖为深色）。
 
-**反霓虹硬约束**：细则见 `docs/AI_GUIDE.md` §UI/UX 设计系统（反霓虹硬约束），本文件不复制其内容。由 `src/designTokenGuard.test.ts` 守卫（`pnpm test` 强制，全量扫描 src）。五级反馈样式以 globals.css `.grade-best`~`.grade-blunder` 为唯一事实源，`GRADE_DISPLAY_CONFIG.color` 引用之。
+**反霓虹硬约束**：细则见 `docs/AI_GUIDE.md` §UI/UX 设计系统（反霓虹硬约束），本文件不复制其内容。由 `src/guards/designTokenGuard.test.ts` 守卫（`pnpm test` 强制，全量扫描 src）。五级反馈样式以 globals.css `.grade-best`~`.grade-blunder` 为唯一事实源，`GRADE_DISPLAY_CONFIG.color` 引用之。
 
 ## Typography
 - **Display**：Fraunces（opsz=144, SOFT=30, WONK=1）— 标题/品牌/大数字/铭牌

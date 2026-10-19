@@ -67,7 +67,7 @@ F:\code\dezhou\src\features\progress\persistWrapperProbe.test.ts
 
 **契约分叉（这是比红本身更值得修的部分）**
 
-- `src/eslintCrossImports.test.ts:20-22` 注释声称：「progress 的成就检查与学院课程数据源已全部依赖倒置（achievementRegistry + academyDataSourceRegistry），**不再静态 import 任何 trainer store**」。实测存在静态 import → 注释与代码分叉。
+- `src/guards/eslintCrossImports.test.ts:20-22` 注释声称：「progress 的成就检查与学院课程数据源已全部依赖倒置（achievementRegistry + academyDataSourceRegistry），**不再静态 import 任何 trainer store**」。实测存在静态 import → 注释与代码分叉。
 - `architecture-review.md:18`「无 peer 债务边」同样失效。
 
 **修复建议**
@@ -170,7 +170,7 @@ F:\code\dezhou\src\features\progress\persistWrapperProbe.test.ts
 
 **证据（high）**
 
-- `src/eslintCrossImports.test.ts:41-44` 断言的是 `ALLOWED_CROSS_IMPORTS` **常量本身**等于硬编码的 `EXPECTED_SNAPSHOT`。它守卫「白名单不被偷偷放宽」，**不守卫「代码不产生白名单外的边」**。
+- `src/guards/eslintCrossImports.test.ts:41-44` 断言的是 `ALLOWED_CROSS_IMPORTS` **常量本身**等于硬编码的 `EXPECTED_SNAPSHOT`。它守卫「白名单不被偷偷放宽」，**不守卫「代码不产生白名单外的边」**。
 - 后者只能由 eslint 承担，而 `.git-hooks/pre-commit`（`core.hooksPath` 已配置为 `.git-hooks`）全文只做一件事：当 `.claude/agents/*-dev.md` 有变更时跑 `node scripts/validate-agent-tools.ts`。**不含 typecheck / lint / test**。
 
 **失效链条（A1 得以进入 main 的完整解释）**

@@ -127,7 +127,7 @@ additionalPrompt: ""
     - **变体量化口径**：与牌堆无关的量（Alpha / MDF / 跟注所需权益 / 保本弃牌率）在变体间逐字相同，直接调 `utils/theoryFormulas.ts`；随牌堆变的量必须重算——outs 权益一律走 `outsToEquity(outs, streets, SHORT_DECK_UNKNOWN_CARDS)`（短牌 31/30），组合数按每花色 9 张、9 个点数档位算。标准主线靠默认 `[47, 46]` 零改动，`theoryFormulas.test.ts` 有"默认值逐位等于旧口径"的回归锁，改默认参数会让它立刻红
     - **登记分类不止两态**：复核索引须把数值归为 `[正确]`（可独立复算）/ `[查表值]`（外部标准表，如正态分位，本模块不推导）/ `[示意值]`（经验量级，正文标"约/典型"）/ `[定性]`（机制陈述无数值）/ `[假设]`（教学结构设定，声明"数字随结构变、关系不变"）/ `[规则集说明]`（变体规则约定）；**由示意值导出的结论继承示意标签**（PRD §6.7.1「数值来源分类登记」）
 
-11. **单挑（heads-up）正文的规则性事实以 `variantRules.headsUpRules` 为唯一判据**：SB 即按钮位、翻前 SB 先行动 / BB 最后行动、翻后 BB 先行动 / SB 最后行动（⇒ SB=IP、BB=OOP）。改动或新增任何 HU 章节前，凡涉及"谁先行动 / 谁有位置 / 谁持有 BTN"的陈述都须与该单源一致，`src/huPositionOrderGuard.test.ts` 会零容忍拦截（它扫 4 份 HU locale，zh 侧由 `contentAlignment` 逐字镜像锁定数据层）。两条已认可的豁免：小测 `options`（干扰项按设计是假命题）与子句自身点名满员桌/6-max 的对比句。位置归属对调时**数字保持不变**，只把归属与依赖归属的论证搬对；若某数值只在旧归属下成立（如曾把"权益实现率 >100%"记在 BB 名下），删除或改名该论断并在 `variantQuantAudit` 索引注明，**不得自创新数**。
+11. **单挑（heads-up）正文的规则性事实以 `variantRules.headsUpRules` 为唯一判据**：SB 即按钮位、翻前 SB 先行动 / BB 最后行动、翻后 BB 先行动 / SB 最后行动（⇒ SB=IP、BB=OOP）。改动或新增任何 HU 章节前，凡涉及"谁先行动 / 谁有位置 / 谁持有 BTN"的陈述都须与该单源一致，`src/guards/huPositionOrderGuard.test.ts` 会零容忍拦截（它扫 4 份 HU locale，zh 侧由 `contentAlignment` 逐字镜像锁定数据层）。两条已认可的豁免：小测 `options`（干扰项按设计是假命题）与子句自身点名满员桌/6-max 的对比句。位置归属对调时**数字保持不变**，只把归属与依赖归属的论证搬对；若某数值只在旧归属下成立（如曾把"权益实现率 >100%"记在 BB 名下），删除或改名该论断并在 `variantQuantAudit` 索引注明，**不得自创新数**。
 12. **跨语言座位一致性**：en 是人工译文，方向守卫抓不到"座位所指漂移"（zh 改成 SB 而 en 仍写 BB 的 range/call）。改 HU 段落的座位归属时须同键逐条核对 en 侧对应句，不能只靠守卫归零。
 
 ## Constraints

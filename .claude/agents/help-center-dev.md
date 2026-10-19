@@ -73,7 +73,7 @@ additionalPrompt: ""
 
 模块外但由本模块契约持有：
 - src/styles/globals.css — help 专属段（`.help-hero*` / `.house-rules-*` / `.help-section-head*` / `.quick-path*` / `.concept-card*` / `.faq-*`）；`.module-icon[data-accent]` 强调色变体是 ModuleEntryCard 图标底色的事实源，改 accent 需 CSS 与 `HelpAccent` 类型两侧同步
-- src/designTokenCssGuard.test.ts — 样式层守卫（含 help 段 44px 触摸目标与 transition token 引用断言）
+- src/guards/designTokenCssGuard.test.ts — 样式层守卫（含 help 段 44px 触摸目标与 transition token 引用断言）
 
 ## Workflows
 1. 新增文章时：在 data/helpContent.ts 的 HELP_ARTICLES 添加 HelpArticle → helpContent.integrity.test.ts 自动校验

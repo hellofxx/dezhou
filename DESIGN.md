@@ -429,7 +429,7 @@
 | loading | 骨架用 `--walnut-raised` 底 + 呼吸动画；等待用 `.card-wait` / `.live-dot` | LoadingState 组件 |
 | **五级反馈** | 唯一样式事实源为 `.grade-best`~`.grade-blunder`（苔藓绿/黄铜/陶土红低透底+左侧色条）；`GRADE_DISPLAY_CONFIG` 引用这些类，禁止霓虹类 | `shared/types/decisionFeedback.ts` |
 
-**守卫机制（v1.3.2）**：`src/designTokenGuard.test.ts` 在 `pnpm test` 中强制断言 src 内零 Tailwind 霓虹调色板类、零纯黑白类与 hex 字面量；豁免白名单只删不加，新增豁免须先在本文档登记设计依据。
+**守卫机制（v1.3.2）**：`src/guards/designTokenGuard.test.ts` 在 `pnpm test` 中强制断言 src 内零 Tailwind 霓虹调色板类、零纯黑白类与 hex 字面量；豁免白名单只删不加，新增豁免须先在本文档登记设计依据。
 
 ### 5.22 教学内容块 `.content-block`（v1.4.0）
 
@@ -921,7 +921,7 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **Token 登记**：新增 `--poker-bronze #cd7f32`、`--poker-indigo-bright #8ea4c4`、`--poker-terra-bright #c98a63`；`--poker-gold #d4a84b` 落地 globals.css（此前仅存在于文档与 demo 镜像）。
 - **杂项修复**：成就墙四档徽章 token 化（金/铜/暖银/霜钢）；`var(--clay-bright)` 失效引用修复（2 处）；CardSVG 近黑描边改胡桃调；范围网格文案"绿色"→"金色"（对齐 §5.11 黄铜色阶实现）。
 - **新章节**：§5.21 交互状态矩阵、§2.2 hover/active 变体规则与暗底文字亮阶、§12.1 React 落地形态。
-- **守卫机制**：新增 `src/designTokenGuard.test.ts`（vitest 门禁），断言 src 零霓虹类/零纯黑白类与 hex；豁免白名单只删不加。
+- **守卫机制**：新增 `src/guards/designTokenGuard.test.ts`（vitest 门禁），断言 src 零霓虹类/零纯黑白类与 hex；豁免白名单只删不加。
 
 ---
 

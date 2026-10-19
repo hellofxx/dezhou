@@ -74,7 +74,7 @@ PokerLab 是一个**纯前端、零后端、单人本地使用**的德州扑克�
 
 这是本仓库架构上最值得记住的一点 —— 模块隔离不是约定，是**可执行约束**：
 
-1. **直接 import（白名单，最窄）**：实测代码里的跨模块边与 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` **完全一致** —— 7 个模块 → `progress`，`hand-history` / `help-center` / `progress` 零出边，**没有任何 peer 债务边**。新增一条边即 `pnpm lint` 报错，且 `src/eslintCrossImports.test.ts` 快照测试会让 `pnpm test` 变红。
+1. **直接 import（白名单，最窄）**：实测代码里的跨模块边与 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` **完全一致** —— 7 个模块 → `progress`，`hand-history` / `help-center` / `progress` 零出边，**没有任何 peer 债务边**。新增一条边即 `pnpm lint` 报错，且 `src/guards/eslintCrossImports.test.ts` 快照测试会让 `pnpm test` 变红。
 2. **事件总线（异步反向）**：6 个训练/学习模块 `trainingEvents.emit(TrainingRecord)`，`progress/store.bootstrap.ts:49-53` 订阅并记账。总线实现只有 28 行，订阅者异常被 `try/catch` 逐个隔离（`trainingEvents.ts:19-27`），一个订阅者抛错不会连累其他。
 3. **依赖倒置注册表（消除反向 import）**：`achievementRegistry`（成就数据源）与 `academyDataSourceRegistry`（课程数据源）。学院/谜题模块在自己的 `store.bootstrap.ts` 里注册，progress 侧查询 —— 于是"中枢读学院数据"不再需要中枢 import 学院。精确归属：`progress/store.ts:41` 只用 `achievementRegistry`（成就判定 `checkCondition`，:1036-1105）；`academyDataSourceRegistry` 的消费方是 `progress/utils/dailyTrainingPlan.ts:10,:93` 与 `components/replay/ProgressReplay.tsx:7`。
 4. **shared 层（正向下沉）**：类型、纯函数、共享组件、hook。准入门槛 ≥2 模块使用；`TrainingRecord` 从 feature 下沉到 shared 正是为了守住"shared 不依赖 feature"（`shared/types/training.ts` 头部注释 PLAT-01）。

@@ -126,7 +126,7 @@ additionalPrompt: ""
 8. 新增测验题 / Drill 题时：选项与 correctIndex 书写顺序不限（渲染前自动重排），但需确认分布守卫测试（quizShuffle.test.ts / drillOptionOrder.test.ts）覆盖新题且通过
 9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
 10. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
-11. **单挑课时的位置事实引用理论侧单源**：`theory-academy/data/levels/variants/variantRules.ts` 的 `headsUpRules`（SB 即按钮位、翻前 SB 先行动、翻后 BB 先行动 ⇒ SB=IP / BB=OOP）。本模块不得 import 该文件（跨模块边被 lint 锁），只按语义对齐；`src/huPositionOrderGuard.test.ts` 会扫 `academy-course/heads-up.json`（zh 与数据逐字镜像，故覆盖数据层）并不许倒置残留。位置归属对调时数值保持不变，只在旧归属下成立的论断（如"BB 权益实现率 >100%"）改判归属或删述，并在 `variantQuantAudit.test.ts` 文件头索引注明；改 `options`/正确项文本时按第 8 条确认分布守卫。en 是人工译文，须同键逐条核对座位所指，守卫归零不等于 en 未漂移。
+11. **单挑课时的位置事实引用理论侧单源**：`theory-academy/data/levels/variants/variantRules.ts` 的 `headsUpRules`（SB 即按钮位、翻前 SB 先行动、翻后 BB 先行动 ⇒ SB=IP / BB=OOP）。本模块不得 import 该文件（跨模块边被 lint 锁），只按语义对齐；`src/guards/huPositionOrderGuard.test.ts` 会扫 `academy-course/heads-up.json`（zh 与数据逐字镜像，故覆盖数据层）并不许倒置残留。位置归属对调时数值保持不变，只在旧归属下成立的论断（如"BB 权益实现率 >100%"）改判归属或删述，并在 `variantQuantAudit.test.ts` 文件头索引注明；改 `options`/正确项文本时按第 8 条确认分布守卫。en 是人工译文，须同键逐条核对座位所指，守卫归零不等于 en 未漂移。
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。

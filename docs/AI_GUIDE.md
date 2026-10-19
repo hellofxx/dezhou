@@ -98,5 +98,5 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - **主题**：暗色为默认，禁止硬编码颜色值
 - **响应式**：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
 - **可访问性**：遵循 WCAG 2.1 AA，交互元素必须有 `aria-label`，对比度 ≥4.5:1
-- **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `DESIGN.md`（以其当前版本为准，不维护版本号副本）
+- **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/guards/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `DESIGN.md`（以其当前版本为准，不维护版本号副本）
 - **五级反馈样式**：`GRADE_DISPLAY_CONFIG` 的 color 字段引用 globals.css `.grade-best`~`.grade-blunder` 类（样式唯一事实源），禁止内联霓虹类
