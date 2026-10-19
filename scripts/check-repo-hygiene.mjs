@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // 仓库卫生门禁：拦截嵌套 git 仓库、一次性生成物与临时调试脚本入库。
 // 只做静态事实判定（是否存在 / 是否被跟踪），不改动任何文件。
-// 说明：docs/analysis 与 docs/superpowers 的历史归档清理尚未在本批处理，故此处暂不检查。
+// 说明：docs/analysis 与 docs/superpowers 已归档至 .archive/（不入库），被跟踪即视为违规。
 import { execFileSync } from 'node:child_process';
 import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -10,6 +10,7 @@ const LOG_PREFIX = '[repo-hygiene]';
 
 const TMP_SCRIPT_PATTERN = /^scripts\/tmp-/;
 const PREFLIGHT_PATTERN = /^poker-ui-demo\/\.preflight\//;
+const ARCHIVED_DOC_PATTERN = /^docs\/(analysis|superpowers)\//;
 const GENERATED_JSON_FILES = new Set([
   'poker-ui-demo/runtime-orchestration-summary.json',
   'poker-ui-demo/validation-report.json',
@@ -63,6 +64,7 @@ function collectNestedGitViolations(repoRoot) {
 function collectTrackedFileViolations(trackedFiles) {
   const tmpScripts = trackedFiles.filter((path) => TMP_SCRIPT_PATTERN.test(path));
   const preflight = trackedFiles.filter((path) => PREFLIGHT_PATTERN.test(path));
+  const archivedDocs = trackedFiles.filter((path) => ARCHIVED_DOC_PATTERN.test(path));
   const generatedJson = trackedFiles.filter((path) => GENERATED_JSON_FILES.has(path));
 
   const violations = [];
@@ -82,6 +84,15 @@ function collectTrackedFileViolations(trackedFiles) {
       detail: 'poker-ui-demo/.preflight/ 为静态原型的一次性预检产物',
       paths: preflight,
       fix: ['移出版本库：git rm -r poker-ui-demo/.preflight，并在 .gitignore 中忽略该目录'],
+    });
+  }
+
+  if (archivedDocs.length > 0) {
+    violations.push({
+      rule: '已归档文档重新入库',
+      detail: 'docs/analysis/ 与 docs/superpowers/ 已归档至 .archive/（不入库），仅可从 git 历史追溯',
+      paths: archivedDocs,
+      fix: ['移出版本库：git rm -r --cached docs/analysis docs/superpowers（保留本地文件）'],
     });
   }
 
@@ -108,7 +119,9 @@ function report(violations) {
     console.error('');
   });
 
-  console.error(`${LOG_PREFIX} 检查范围：docs/.git、scripts/tmp-*、poker-ui-demo/.preflight/、两份生成 JSON。`);
+  console.error(
+    `${LOG_PREFIX} 检查范围：docs/.git、scripts/tmp-*、poker-ui-demo/.preflight/、docs/analysis/、docs/superpowers/、两份生成 JSON。`,
+  );
 }
 
 function main() {
@@ -137,7 +150,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log(`${LOG_PREFIX} 通过：无嵌套 git 仓库，被跟踪文件（${trackedFiles.length} 个）中无临时脚本与生成物。`);
+  console.log(`${LOG_PREFIX} 通过：无嵌套 git 仓库，被跟踪文件（${trackedFiles.length} 个）中无临时脚本、生成物与已归档文档。`);
   process.exit(0);
 }
 

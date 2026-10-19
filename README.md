@@ -78,6 +78,7 @@ ln -s ../.git-hooks/pre-commit .git/hooks/
 | 文档 | 描述 |
 |---|---|
 | [`AGENTS.md`](./AGENTS.md) | AI 代理协作规范与职责划分 |
+| [`docs/README.md`](./docs/README.md) | 文档索引与推荐阅读顺序 |
 | [`docs/PRD.md`](./docs/PRD.md) | 产品需求规格说明书 |
 | [`docs/TDD.md`](./docs/TDD.md) | 技术设计文档 |
 | [`docs/CHANGELOG.md`](./docs/CHANGELOG.md) | 版本演进记录 |

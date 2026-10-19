@@ -196,10 +196,14 @@ src/
 
 | 文档 | 职责 | 更新时机 |
 |---|---|---|
+| `docs/README.md` | 文档索引与阅读顺序（统一入口） | 新增 / 归档文档时 |
 | `docs/PRD.md` | 产品规格（What / Why） | 功能需求变更时 |
 | `docs/TDD.md` | 技术设计（How） | 架构 / 数据模型 / 模块设计变更时 |
-| `docs/CHANGELOG.md` | 执行历史与版本演进 | 每次版本发布时 |
+| `docs/CHANGELOG.md` | 执行历史与版本演进（近月，倒序） | 每次版本发布时 |
+| `docs/changelog/` | 按月归档的历史变更 | 月份归档时 |
+| `docs/ops/` | 运维：部署清单与流水线排障记录 | 发布流程或排障结论变更时 |
 
+- 文档入口先看 `docs/README.md`：默认只读 Current specs，archive 仅供追溯
 - PRD 不含技术实现细节（文件路径 / store actions / persist version）
 - TDD 不含执行历史
 - 子代理修改代码时必须同步更新对应文档
@@ -369,7 +373,7 @@ src/
 
 ## 行为准则
 
-继承自 `claude.md`：
+准则全文见 `docs/agents/behavior.md`，以下保留内联摘要：
 
 - **Think Before Coding**：不做沉默假设，不确定先问
 - **Simplicity First**：最少代码解决问题，不写投机性代码，不为单次使用做抽象
