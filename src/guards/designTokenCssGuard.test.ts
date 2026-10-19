@@ -23,7 +23,7 @@ import { describe, expect, it } from 'vitest';
  * Vitest 默认 css: false，CSS 导入会被 stub 成空模块，import.meta.glob('?raw') 拿不到源码，
  * 因此走 node fs（同 huPositionOrderGuard.test.ts 的读取方式）。目录扫描，新增 CSS 自动纳入。
  */
-const STYLES_DIR = fileURLToPath(new URL('../src/styles', import.meta.url));
+const STYLES_DIR = fileURLToPath(new URL('../styles', import.meta.url));
 
 const CSS_FILES: Record<string, string> = Object.fromEntries(
   readdirSync(STYLES_DIR)

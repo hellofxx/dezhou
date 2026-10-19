@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest';
  */
 
 // 通过 Vite raw glob 载入全部业务源码（排除测试文件本身在下方过滤）
-const SOURCE_FILES = import.meta.glob<string>('./**/*.{ts,tsx}', {
+const SOURCE_FILES = import.meta.glob<string>('../**/*.{ts,tsx}', {
   query: '?raw',
   import: 'default',
   eager: true,

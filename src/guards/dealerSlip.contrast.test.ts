@@ -17,7 +17,7 @@ import { describe, expect, it } from 'vitest';
  * - .dealer-slip 必须把 canonical 与 alias token 一并重锚到 paper 深阶
  */
 
-const CSS_PATH = fileURLToPath(new URL('./styles/globals.css', import.meta.url));
+const CSS_PATH = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
 const CSS = readFileSync(CSS_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
 interface CssBlock {

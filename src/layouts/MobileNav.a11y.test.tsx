@@ -3,9 +3,9 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import MobileNav from '@/layouts/MobileNav';
-import { configureA11yDocument, expectNoA11yViolations } from '@/shared/test/a11y';
+import { configureA11yDocument, expectNoA11yViolations } from '@/test-utils/a11y';
 
-// 组件级 harness 约定见 shared/test/a11y.ts：渲染进 <main><h1>…</h1>，
+// 组件级 harness 约定见 src/test-utils/a11y.ts：渲染进 <main><h1>…</h1>，
 // 使 region / landmark-one-main / page-has-heading-one 真实生效；
 // 仅 bypass（skip link 属整页概念）可带理由豁免。
 describe('MobileNav a11y (WCAG 2.1 AA smoke)', () => {

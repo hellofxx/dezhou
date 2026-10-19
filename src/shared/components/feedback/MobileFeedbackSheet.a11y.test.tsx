@@ -7,7 +7,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { act, useState } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { MobileFeedbackSheet } from './MobileFeedbackSheet';
-import { configureA11yDocument, expectNoA11yViolations } from '@/shared/test/a11y';
+import { configureA11yDocument, expectNoA11yViolations } from '@/test-utils/a11y';
 
 const flushTimers = async () => {
   await act(async () => {

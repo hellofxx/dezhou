@@ -20,6 +20,9 @@
 - `constants/`：跨模块常量（app / mentorStyles / poker）
 - `stores/`：trainingEvents（事件总线）/ debugMode（调试解锁，激活码以代码为唯一事实源）
 - `hooks/`：跨模块共享 hook（useIsMobile / useRovingGridNav）
+- `data/`：跨模块数据（opponentProfiles：对手画像，gto-simulator / strategy-academy 消费）
+
+> 组件级 a11y 测试工具在 `src/test-utils/`（不在 shared 运行时层；`shared/utils/` 的 localStorageStub / persistShape 为通用测试桩，保留在原位）；全局不变式守卫在 `src/guards/`（清单见 `src/guards/README.md`）。
 
 ## 修改规则
 

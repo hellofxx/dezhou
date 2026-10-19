@@ -16,7 +16,7 @@ import { describe, expect, it } from 'vitest';
  *   raise 即发起 3-bet），JSON 有覆盖，纳入守卫。
  * - 变体 preset（短牌 / HU / 4-Max）无 JSON 对应口径（JSON 仅 6-max 100bb），不参与守卫。
  *
- * 本文件位于 src 根（同 eslintCrossImports.test.ts 先例）：range-trainer 依 ESLint 模块
+ * 本文件位于 src/guards/（全局不变式守卫目录，同 eslintCrossImports.test.ts 先例）：range-trainer 依 ESLint 模块
  * 隔离规则不得引用 gto-simulator，平台级跨模块守卫置于 feature 目录之外。
  */
 import {

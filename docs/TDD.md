@@ -225,6 +225,8 @@ src/
 │   │   ├── feedback/             # 反馈与状态组件（FeedbackGrade / ResultSummary / EmptyState / LoadingState）
 │   │   ├── layout/               # 布局组件（TableRail / LiveDot）
 │   │   └── business/             # 业务组件（CasinoPlaque / ErrorBoundary / FreezeChip / GameVariantSelector / MottoEngraved）
+│   ├── data/
+│   │   └── opponentProfiles.ts   # 跨模块对手画像数据（gto-simulator / strategy-academy 消费）
 │   ├── constants/
 │   │   ├── app.ts                # 应用常量
 │   │   ├── mentorStyles.ts       # 导师文案模板（MENTOR_FEEDBACK_TEMPLATES / renderMentorFeedback）
@@ -268,6 +270,21 @@ src/
 │   ├── BlankLayout.tsx           # 空白布局（全屏训练）
 │   └── MobileNav.tsx             # 移动端底部导航
 │
+├── fonts/                        # 自托管字体源（woff2，经 globals.css @font-face 引入）
+│
+├── guards/                       # 全局不变式测试（跨模块 / 全仓范围）
+│   ├── README.md                 # 守卫清单与新增全局守卫的约定
+│   ├── designTokenGuard.test.ts  # 源码层反霓虹 / 纯黑白
+│   ├── designTokenCssGuard.test.ts # CSS 面填充合规
+│   ├── dealerSlip.contrast.test.ts # 纸条 WCAG AA 对比度
+│   ├── eslintCrossImports.test.ts  # 跨模块导入白名单快照
+│   ├── huPositionOrderGuard.test.ts # 单挑位置方向零容忍
+│   ├── rangePresetGtoConsistency.test.ts # preset 与 GTO JSON 一致性
+│   └── line-count-guard.test.ts  # 单文件行数硬约束
+│
+├── test-utils/                   # 测试专用工具（不进运行时 bundle）
+│   └── a11y.ts                   # 组件级 axe harness（jsdom）
+│
 ├── styles/
 │   └── globals.css               # 全局样式 + CSS 变量
 │
@@ -286,6 +303,9 @@ src/
 | `i18n/` | 国际化资源与配置 |
 | `layouts/` | 页面级布局组件 |
 | `styles/` | 全局样式、CSS 自定义属性 |
+| `guards/` | 全局不变式测试（跨模块 / 全仓范围）；新增全局守卫放此处，清单见 `src/guards/README.md` |
+| `test-utils/` | 测试专用工具（a11y harness 等），仅被测试文件引用，不进运行时 bundle |
+| `fonts/` | 自托管字体源（woff2），由 `styles/globals.css` 的 `@font-face` 引入 |
 
 ### 3.2 模块间依赖规则
 
@@ -642,7 +662,7 @@ interface DailyRecommendation {
 
 **预置范围数据源（2026-07-31 跨模块专批 C，P1A-06/P1A-08 定性）**：
 
-- **open / call 类 preset**（utg/hj/co/btn/sb-open、bb-call-vs-btn）与 **bb-3bet-vs-btn**（BB 面对 BTN open 时 raise 即发起 3-bet，JSON 有覆盖）：以 gto-simulator `data/preflop-ranges.json`（6max_100bb_preflop）为权威源，按「频率 ≥ 0.5」离散化生成；一致性由 `src/rangePresetGtoConsistency.test.ts`（src 根，平台级跨模块守卫，同 eslintCrossImports 先例）锁定
+- **open / call 类 preset**（utg/hj/co/btn/sb-open、bb-call-vs-btn）与 **bb-3bet-vs-btn**（BB 面对 BTN open 时 raise 即发起 3-bet，JSON 有覆盖）：以 gto-simulator `data/preflop-ranges.json`（6max_100bb_preflop）为权威源，按「频率 ≥ 0.5」离散化生成；一致性由 `src/guards/rangePresetGtoConsistency.test.ts`（平台级跨模块守卫，同 eslintCrossImports 先例）锁定
 - **发起 3-bet 类 preset**（btn-3bet-vs-co / co-3bet-vs-hj）与 **4bet-range**：JSON **无**对应频率表（JSON 的 `btn_vs_co_3bet` / `co_vs_hj_3bet` 语义为「Hero open 后面对 3-bet 的响应」，与「发起 3-bet」是不同 spot），这三个 preset 以 range-trainer 模块自身为权威源，**不参与** JSON 一致性校验；严禁为对齐而臆造求解器频率数据
 - **变体 preset**（短牌 / HU / 4-Max）：JSON 口径仅 6-max 100bb，无对应表，模块自身权威源
 - **百分比标注**：preset 名称中的 `(~N%)` 按组合数加权占比（P1A-07 口径，`getRangeComboPercentage`）标注，守卫断言偏差 ≤ 1 个百分点
@@ -1145,7 +1165,7 @@ interface DailyRecommendation {
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
-2. **内容体系**：章节数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件属行数守卫豁免类别，阈值与豁免清单以 `src/shared/line-count-guard.test.ts` 与 `docs/AI_GUIDE.md` 为唯一事实源），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。变体课程位于 `data/levels/variants/{short-deck,heads-up}/`。
+2. **内容体系**：章节数据按 Level 拆分为 `data/levels/variants/standard/standardLevel1.ts ~ standardLevel9.ts`（课程内容数据文件属行数守卫豁免类别，阈值与豁免清单以 `src/guards/line-count-guard.test.ts` 与 `docs/AI_GUIDE.md` 为唯一事实源），`data/levels/variants/standard/index.ts` 聚合为 `standardLevels`（兼容层 `data/levels/index.ts` 再导出 `THEORY_LEVELS`）。变体课程位于 `data/levels/variants/{short-deck,heads-up}/`。
    - **章数与题量不在本文档维护副本**：以 `data/levels/variants/**` 与理论结构守卫测试（`theoryIntegrity.test.ts`）为唯一事实源
    - **内容编辑准则（段落类型覆盖、公式须含推导、牌例数量下限、误区显式化、解析须解释错误选项）见 `docs/PRD.md` §6.7.1**，本文件只记录其判定落点：段落类型枚举以 `types.ts` 的 `TheorySectionType` 为准，题量区间与内容非空由 `theoryIntegrity.test.ts` 断言
    - **教材对照基线与版权合规边界见 `docs/PRD.md` §5.27.4 / §6.7.2**；实现侧仅约定标注落点：出处以内联「（概念源自：教材名 章节）」写在 `content` 段落文本中（无独立结构化字段），如需按教材聚合统计请对 `data/levels/variants/**` 做文本检索
@@ -1192,7 +1212,7 @@ interface DailyRecommendation {
     - 渲染面另有一条组件级证据：`components/PracticeBridgeCard.variant.test.tsx` 逐个挂载全部变体章节推荐，断言课时卡数量、标题实际取到 i18n 权威值（回退字面量静默生效 = key 缺失，两侧数据守卫都看不见）、跳转拼装为 `/academy/lesson/:id`，en 侧无汉字与键面字泄漏
     - **新增变体章节必须同批登记桥接**：内层覆盖率断言会立刻拦住未登记的章节；`theoryVariantBridgeIntegrity` 的按来源分档断言（章节级 map 与 Level 级各 ≥ 下限）防止整张 map 失配
 
-16. **变体规则性事实的方向守卫**：`src/huPositionOrderGuard.test.ts`（src 根级，与 `designTokenGuard` 同级）。防的缺陷类型是**规则性事实写反**而非数值近似——单挑的「翻后谁先行动 / 谁持有位置」曾在两学院正文里同时存在正反两种陈述（实测 152 处含 locale），读者看到的是自相矛盾。实现要点：
+16. **变体规则性事实的方向守卫**：`src/guards/huPositionOrderGuard.test.ts`（全局不变式目录 `src/guards/`，与 `designTokenGuard` 同级）。防的缺陷类型是**规则性事实写反**而非数值近似——单挑的「翻后谁先行动 / 谁持有位置」曾在两学院正文里同时存在正反两种陈述（实测 152 处含 locale），读者看到的是自相矛盾。实现要点：
     - **判据单源**是 `variantRules.ts` 的 `headsUpRules`（SB 即按钮位、翻前 SB 先行动、翻后 BB 先行动）；守卫除扫正文外还断言该区块自身保留 `sbFirstActionPreflop: true` / `bbFirstActionPostflop: true` 与散文一致，防止单源自己被改反而让正文"对着错的参照修"
     - **子句级三元组判定**（盲注主语 + 街道 + 方向谓语）而非全文正则：跨子句匹配会把「翻前 SB 先行动、BB 最后行动」这类正确句误判；子句无街道标记时继承段落，段落同时含翻前与翻后标记则判为不可判（不产生假绿）。谓语正则覆盖中英双语
     - **两处刻意豁免**：小测 `options` 字段（干扰项按设计就是假命题，扫它会禁止出题）与**子句自身**点名满员桌/6-max 的对比句（满员桌 SB 确实翻后先行动且 OOP，跨子句不豁免）
@@ -1781,7 +1801,7 @@ persist(
 
 | 测试目标 | 文件 | 关键用例 |
 |----------|------|----------|
-| 全局守卫 | designTokenGuard.test.ts / eslintCrossImports.test.ts | UI 颜色合规全量扫描 / 跨模块导入白名单 |
+| 全局守卫（`src/guards/`） | designTokenGuard.test.ts / designTokenCssGuard.test.ts / eslintCrossImports.test.ts / huPositionOrderGuard.test.ts / rangePresetGtoConsistency.test.ts / line-count-guard.test.ts / dealerSlip.contrast.test.ts | 源码层反霓虹 / 纯黑白扫描、CSS 面填充合规、跨模块导入白名单快照、单挑位置方向、跨模块 preset 一致性、单文件行数、纸条对比度（清单见 `src/guards/README.md`） |
 | i18n | localeParity.test.ts / contentI18n.test.ts / contentAlignment.test.ts / staticKeyGuard.test.ts | zh/en 键集对称性 / 内容 key 全量遍历 / 内容 key ↔ 数据原文逐字镜像与 orphan（三层断言 + 棘轮基线，单源映射由 `contentKeyEntries.ts` 提供）/ 静态 t() 字面量 key 引用守卫 |
 | 共享层 | pokerMath / elo / deck / seededShuffle / decisionFeedback 各 .test.ts | 赔率与 EV 计算、ELO 变化与段位、牌组生成、种子洗牌、GRADE_THRESHOLDS 边界 |
 | gto-simulator | strategyCompare.test.ts | 最优判定、EV 损失精度 |
@@ -2043,8 +2063,8 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 
 守卫机制分两层，源码与样式实现各由一个测试把守（均随 `pnpm test` 强制执行，豁免白名单遵循「只删不加」，新增豁免须先在 DESIGN.md 登记设计依据）：
 
-1. **源码层** `src/designTokenGuard.test.ts`：`import.meta.glob('?raw')` 全量扫描 src 的 `.ts/.tsx`，断言霓虹调色板类、纯黑白类、纯黑白 hex 零匹配。
-2. **样式层** `src/designTokenCssGuard.test.ts`：扫描 `src/styles/*.css` 的 `background` / `background-color` 声明，断言 `rgba(255,255,255,α)` 的 α ≤ 0.05（§5.21 仅授权 hover 中性底色 0.03–0.04）、`rgba(0,0,0,α)` 未达实底、无纯黑白 hex。规则只作用于面填充，故 §4.3 牌面内描金（box-shadow 白高光）与 `@media (prefers-contrast: high)` 里刻意提到 `#ffffff` 的 `--ivory` 自定义属性天然不在射程内。该测试经 `readFileSync` 读文件而非 `import.meta.glob('?raw')`——Vitest 默认 `css: false` 会把 CSS 导入 stub 成空模块。同文件附带 help 段的结构断言（44px 触摸目标、transition 引用动效 token）。
+1. **源码层** `src/guards/designTokenGuard.test.ts`：`import.meta.glob('?raw')` 全量扫描 src 的 `.ts/.tsx`，断言霓虹调色板类、纯黑白类、纯黑白 hex 零匹配。
+2. **样式层** `src/guards/designTokenCssGuard.test.ts`：扫描 `src/styles/*.css` 的 `background` / `background-color` 声明，断言 `rgba(255,255,255,α)` 的 α ≤ 0.05（§5.21 仅授权 hover 中性底色 0.03–0.04）、`rgba(0,0,0,α)` 未达实底、无纯黑白 hex。规则只作用于面填充，故 §4.3 牌面内描金（box-shadow 白高光）与 `@media (prefers-contrast: high)` 里刻意提到 `#ffffff` 的 `--ivory` 自定义属性天然不在射程内。该测试经 `readFileSync` 读文件而非 `import.meta.glob('?raw')`——Vitest 默认 `css: false` 会把 CSS 导入 stub 成空模块。同文件附带 help 段的结构断言（44px 触摸目标、transition 引用动效 token）。
 
 ---
 

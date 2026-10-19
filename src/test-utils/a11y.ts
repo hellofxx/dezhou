@@ -1,7 +1,7 @@
 /**
  * 组件级 a11y 测试工具（jsdom + axe-core）
  *
- * @module shared/test/a11y
+ * @module test-utils/a11y
  * @description 两个既有 a11y 测试（MobileNav / Dialog）曾整块禁用 8 条 page-level 规则，
  * 导致「元素不在 landmark 内 / 缺 h1 / 缺文档标题」这类真问题在组件测试里永远看不见。
  * 本工具改为**默认启用全部 axe 规则**，并约定组件渲染进

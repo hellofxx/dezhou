@@ -10,7 +10,7 @@ type CrossImportMap = Record<string, string[]>;
 // tsconfig 未开 allowJs 且 include 仅 src，改用运行时 URL 动态导入根目录 JS 配置，
 // 避免静态引用破坏 pnpm typecheck。
 async function loadAllowedCrossImports(): Promise<CrossImportMap> {
-  const configUrl = new URL('../eslint.config.js', import.meta.url).href;
+  const configUrl = new URL('../../eslint.config.js', import.meta.url).href;
   const mod = (await import(configUrl)) as { ALLOWED_CROSS_IMPORTS: CrossImportMap };
   return mod.ALLOWED_CROSS_IMPORTS;
 }

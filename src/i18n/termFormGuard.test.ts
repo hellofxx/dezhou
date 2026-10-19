@@ -95,7 +95,7 @@ const FILE_EXCEPTIONS: ReadonlyArray<{ file: string; pattern: RegExp; reason: st
     reason: 'spot key 模板字符串结尾（运行时数据键生成，与 preflop-ranges.json 键名契约）',
   },
   {
-    file: '/src/rangePresetGtoConsistency.test.ts',
+    file: '/src/guards/rangePresetGtoConsistency.test.ts',
     pattern: /\['3bet', '4bet'\]/,
     reason: 'actionType 数据值断言（含 toContain）',
   },

@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/shared/components/ui/dialog';
-import { configureA11yDocument, expectNoA11yViolations } from '@/shared/test/a11y';
+import { configureA11yDocument, expectNoA11yViolations } from '@/test-utils/a11y';
 
 /** 让 Radix 的 setTimeout(0) 收尾（焦点归还 / 卸载清理）在 act 内跑完 */
 const flushTimers = async () => {

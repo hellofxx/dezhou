@@ -139,7 +139,7 @@ describe('heads-up 翻前/翻后位置方向守卫（PRD §6.7.1 呈现诚实性
     let scanned = 0;
     const found: string[] = [];
     for (const spec of HU_KEYS) {
-      const json = JSON.parse(readFileSync(fileURLToPath(new URL(`../src/${spec.file}`, import.meta.url)), 'utf8'));
+      const json = JSON.parse(readFileSync(fileURLToPath(new URL(`../${spec.file}`, import.meta.url)), 'utf8'));
       const leaves = flatten(json);
       for (const [key, text] of Object.entries(leaves)) {
         if (spec.huOnly && !HU_KEY.test(key)) continue;
@@ -155,7 +155,7 @@ describe('heads-up 翻前/翻后位置方向守卫（PRD §6.7.1 呈现诚实性
 
   it('variantRules 单源自身保持正确方向（SB=按钮、翻后 BB 先行动）', () => {
     const src = readFileSync(
-      fileURLToPath(new URL('../src/features/theory-academy/data/levels/variants/variantRules.ts', import.meta.url)),
+      fileURLToPath(new URL('../features/theory-academy/data/levels/variants/variantRules.ts', import.meta.url)),
       'utf8',
     );
     // 只取 headsUpRules 区块（含其上方 JSDoc）：标准/短牌区描述的是满员桌位置，
