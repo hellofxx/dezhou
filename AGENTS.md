@@ -11,6 +11,20 @@ This file provides guidance to Qoder (qoder.com) when working with code in this 
 
 德州扑克训练平台（Poker Training Platform）——纯前端、零后端依赖的德州扑克系统性训练工具。通过交互式练习、即时反馈与数据可视化，帮助各层级扑克玩家提升决策能力。PWA 支持，离线可用，中英双语。
 
+## 任务导航（先读什么 / 找哪个代理）
+
+> 完整任务路由表见 [`docs/agents/README.md`](docs/agents/README.md)；模块 owner / 入口 / store / i18n / 允许跨模块引用的机器事实见 [`docs/agents/MODULE_MAP.md`](docs/agents/MODULE_MAP.md)（由 `pnpm agents:map` 从代码生成，不要手改）。
+
+| 任务 | 先读 | 负责代理 |
+|---|---|---|
+| UI / 视觉 / 响应式 | `DESIGN.md` + `src/guards/README.md` | `ui-ux-dev` |
+| 新模块 / 路由 / 跨模块协调 | 本文 §代码组织 + `src/app/routes.tsx` | `platform-dev` |
+| store / persist / 五大系统 | `src/features/progress/AGENTS.md` | `progress-dev` |
+| i18n key / 双语同步 | `src/i18n/moduleRegistry.ts` | 对应 feature dev |
+| 守卫 / 质量门禁 | `src/guards/README.md` + 本文 §质量门禁 | `platform-dev` |
+| 模块事实（owner / 入口 / 允许边） | `docs/agents/MODULE_MAP.md` | 表中 owner 列 |
+| 文档全貌与阅读顺序 | `docs/README.md` | `platform-dev` |
+
 ## 环境与命令
 
 - **操作系统**：Windows
@@ -245,7 +259,7 @@ src/
 - **单元测试**：`pnpm test`（即 `vitest run`）必须 exit code 0，部署工作流在构建前强制执行。全局级守卫：i18n 双语键对称（`src/i18n/localeParity.test.ts`）、i18n 静态 key 引用（`src/i18n/staticKeyGuard.test.ts`，兜底 zh/en 双方都缺 key 的盲区）、UI 颜色合规（`src/guards/designTokenGuard.test.ts` 全量扫描 src，禁霓虹调色板类 / 纯黑白类 / 纯黑白 hex）、样式层颜色合规（`src/guards/designTokenCssGuard.test.ts` 扫描 `src/styles/*.css` 的 background 声明，禁纯白/纯黑面填充；该测试经 `readFileSync` 而非 `import.meta.glob('?raw')` 载入——Vitest 默认 `css: false` 会把 CSS 导入 stub 成空模块）、单挑位置方向事实（`src/guards/huPositionOrderGuard.test.ts` 零容忍，判据为 theory-academy `variantRules.headsUpRules`，豁免小测 options 与显式满员桌对比句）。模块级数据完整性守卫由各 feature 模块自持（课程结构 / 题库 id / 理论结构 / 选项排序分布等），`pnpm test` 全量运行时强制，清单以各模块实际测试文件为准
 - **构建验证**：`pnpm build` 成功产出 `dist/`
 - **测试后缀速查**（`vitest.config.ts` 双项目划分）：`.test.ts` = unit 项目，Node 环境（纯函数 / store migrate）；`.test.tsx` = component 项目，jsdom 环境（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
-- **每次代码变更后必须运行 `pnpm verify`**（唯一事实源为 `package.json` 的 `verify` script，当前为 `typecheck && lint && test` 串行短路组合，任一失败即中止；另提供 `verify:parallel` 并行变体，独立捕获 exit code 并支持分级重试）
+- **每次代码变更后必须运行 `pnpm verify`**（唯一事实源为 `package.json` 的 `verify` script，当前为 `typecheck && lint && repo:check && agents:map:check && test` 串行短路组合，任一失败即中止；另提供 `verify:parallel` 并行变体，独立捕获 exit code 并支持分级重试）
 - **子智能体 tools 字段验证**：修改 `.claude/agents/*.md` 时建议运行 `node scripts/validate-agent-tools.ts` 校验 tools 字段合规性（可选但推荐，非强制门禁）
 
 ### Feature PR Checklist（建议补充到 CI 或模板）

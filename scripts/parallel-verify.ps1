@@ -3,7 +3,7 @@
 .SYNOPSIS
     Parallel Verify Runner for PokerLab
 .DESCRIPTION
-    并行运行 typecheck、lint、repo:check、test 四条质量门禁
+    并行运行 typecheck、lint、repo:check、agents:map:check、test 五条质量门禁
     （顺序与 package.json 的 verify 脚本一致），
     各自独立捕获 exit code，并支持分级重试。
 
@@ -13,7 +13,7 @@
     "[ELIFECYCLE] Test failed."，不含 exit code）。
 
     重试策略（超时值为安全网，按需在 $commands 表调整）：
-    - typecheck / lint / repo:check：重试 1 次（超时 300s）
+    - typecheck / lint / repo:check / agents:map:check：重试 1 次（超时 300s）
     - test：重试 2 次（超时 900s，flaky 测试常见）
 #>
 
@@ -24,6 +24,7 @@ $commands = @(
     @{ Name = 'typecheck'; Cmd = 'pnpm typecheck'; MaxRetries = 1; Timeout = 300 }
     @{ Name = 'lint';      Cmd = 'pnpm lint';      MaxRetries = 1; Timeout = 300 }
     @{ Name = 'repo:check'; Cmd = 'pnpm repo:check'; MaxRetries = 1; Timeout = 300 }
+    @{ Name = 'agents:map:check'; Cmd = 'pnpm agents:map:check'; MaxRetries = 1; Timeout = 300 }
     @{ Name = 'test';      Cmd = 'pnpm test';      MaxRetries = 2; Timeout = 900 }
 )
 

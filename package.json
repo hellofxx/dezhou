@@ -12,7 +12,9 @@
     "test": "vitest run",
     "size:check": "node scripts/check-bundle-size.mjs",
     "repo:check": "node scripts/check-repo-hygiene.mjs",
-    "verify": "pnpm typecheck && pnpm lint && pnpm repo:check && pnpm test",
+    "agents:map": "node scripts/generate-agent-map.mjs",
+    "agents:map:check": "node scripts/generate-agent-map.mjs --check",
+    "verify": "pnpm typecheck && pnpm lint && pnpm repo:check && pnpm agents:map:check && pnpm test",
     "verify:parallel": "pwsh -NoProfile -File scripts/parallel-verify.ps1"
   },
   "keywords": [],

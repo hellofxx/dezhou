@@ -3,8 +3,9 @@
 # 
 # 1. Agent tools validation (when .claude/agents/*-dev.md changes) - blocking, warnings allowed
 # 2. ESLint verification (always blocking) - prevents forbidden import edges
+# 3. Agent map check (when .claude/agents/*.md / routes.tsx / moduleRegistry.ts change) - blocking
 #
-# 两条门禁均为 fail-closed：工具链缺失导致「无法执行」时一律 exit 1，
+# 三条门禁均为 fail-closed：工具链缺失导致「无法执行」时一律 exit 1，
 # 绝不把「没跑成」当作「跑过了」。
 #
 # Memory note (Git-Hook 跨平台兼容):
@@ -66,6 +67,24 @@ if git diff --cached --name-only | grep -q '\.claude/agents/.*-dev\.md'; then
   fi
 else
   echo "✓ No agent file changes detected, skipping validation."
+fi
+
+echo ""
+echo "⚠️ Detecting changes to module map sources..."
+
+if git diff --cached --name-only | grep -qE '^\.claude/agents/.*\.md$|^src/app/routes\.tsx$|^src/i18n/moduleRegistry\.ts$'; then
+  echo "🔍 Running agent map check..."
+  cd "$(git rev-parse --show-toplevel)" || { echo "❌ 无法定位仓库根目录，中止提交。"; exit 1; }
+  # 用 node 直调（不依赖 pnpm PATH）；门禁为 fail-closed：无法执行即失败
+  if node scripts/generate-agent-map.mjs --check; then
+    echo "✅ Agent map check passed."
+  else
+    echo "❌ Agent map check FAILED：docs/agents/MODULE_MAP.md 与代码事实不一致。"
+    echo "   修复：pnpm agents:map 后 git add docs/agents/MODULE_MAP.md 再提交。"
+    exit 1
+  fi
+else
+  echo "✓ No module map source changes detected, skipping check."
 fi
 
 exit 0

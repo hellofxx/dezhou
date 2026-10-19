@@ -50,6 +50,10 @@ jobs:
       - name: Repo Hygiene
         run: pnpm repo:check
 
+      # 模块地图门禁：docs/agents/MODULE_MAP.md 必须与代码事实一致（模块 / 路由 / i18n 注册表 / agent 文件）
+      - name: Agent Map Check
+        run: pnpm agents:map:check
+
       # 测试门禁：persist 迁移、i18n 双语对称等回归测试必须通过才允许构建部署
       - name: Test
         run: pnpm test

@@ -13,7 +13,8 @@
 ## Agents
 
 - [`agents/behavior.md`](./agents/behavior.md) — 行为准则历史全文（项目级唯一权威是根 `AGENTS.md`）
-- `agents/README.md`、`agents/MODULE_MAP.md` 由后续批次补入
+- [`agents/README.md`](./agents/README.md) — 任务路由表（任务 → 先读什么 → 找哪个代理）
+- [`agents/MODULE_MAP.md`](./agents/MODULE_MAP.md) — 生成物：模块 / lazy 路由 / i18n 分组事实地图（`pnpm agents:map`，勿手改）
 
 ## Architecture
 
