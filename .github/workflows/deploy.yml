@@ -46,6 +46,10 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # 仓库卫生门禁：禁止嵌套 git 仓库、一次性生成物与临时脚本入库
+      - name: Repo Hygiene
+        run: pnpm repo:check
+
       # 测试门禁：persist 迁移、i18n 双语对称等回归测试必须通过才允许构建部署
       - name: Test
         run: pnpm test
