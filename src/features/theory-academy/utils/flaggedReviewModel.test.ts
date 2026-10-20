@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  buildFlaggedReviewEntries,
+  buildFlaggedReviewEntries as buildWithLevels,
   chapterIdFromQuestionId,
   resolveFlaggedQuestionText,
 } from './flaggedReviewModel';
@@ -22,6 +22,10 @@ const realChapter = ALL_VARIANT_THEORY_LEVELS.flatMap((l) => l.chapters).find(
   (c) => c.quiz.length >= 2,
 )!;
 const [q1, q2] = realChapter.quiz;
+
+/** 测试固定传入全量数据；生产由 useTheoryLevels 按变体懒载后传入 */
+const buildFlaggedReviewEntries = (flagged: string[], items: ReviewItem[]) =>
+  buildWithLevels(flagged, items, ALL_VARIANT_THEORY_LEVELS);
 
 /** 任意一个真实复习项（id 走 theorySrs 的命名空间），用于只读联结断言 */
 function queuedItem(questionId: string, overrides: Partial<ReviewItem> = {}): ReviewItem {

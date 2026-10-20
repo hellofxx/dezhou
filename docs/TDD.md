@@ -1160,6 +1160,7 @@ interface DailyRecommendation {
 与 strategy-academy 并列的独立理论学习模块（产品规格见 PRD 5.27）：理论学院负责知识构建，策略学院负责实践应用，两者形成“理论→实践”闭环。架构完全复刻 strategy-academy 成熟模式。
 
 1. **数据模型**（`theory-academy/types.ts`）：
+   - `TheoryChapterSummary` / `TheoryLevelSummary`：目录层字段（id / order / title / duration / chapters 等，**无 content / quiz / objectives**）；完整类型继承摘要，首页/store 只读摘要
    - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
    - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ `objectives?`（**类型可选、守卫必填**：完整性测试要求每章 3–5 条非空，类型保持可选是因为标准与变体共用该接口且旧数据缺字段不影响反序列化；渲染侧 `resolveTheoryObjectives` 按下标取 `theory.chapterObjectives.<id>.<i>`，defaultValue 回退数据原文）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）/ `practiceRecommendations?`（章节粒度桥接，**数据层字段、不进持久化**，由 `standard/index.ts` 聚合时从 `chapterPracticeMap` 附加，章节文件本身不书写）
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
@@ -1169,6 +1170,7 @@ interface DailyRecommendation {
    - **章数与题量不在本文档维护副本**：以 `data/levels/variants/**` 与理论结构守卫测试（`theoryIntegrity.test.ts`）为唯一事实源
    - **内容编辑准则（段落类型覆盖、公式须含推导、牌例数量下限、误区显式化、解析须解释错误选项）见 `docs/PRD.md` §6.7.1**，本文件只记录其判定落点：段落类型枚举以 `types.ts` 的 `TheorySectionType` 为准，题量区间与内容非空由 `theoryIntegrity.test.ts` 断言
    - **教材对照基线与版权合规边界见 `docs/PRD.md` §5.27.4 / §6.7.2**；实现侧仅约定标注落点：出处以内联「（概念源自：教材名 章节）」写在 `content` 段落文本中（无独立结构化字段），如需按教材聚合统计请对 `data/levels/variants/**` 做文本检索
+   - **目录摘要与完整数据分层**：`data/levels/manifest/`（`pnpm theory:manifest` 生成）提供 Level/章节目录，`utils/theoryMeta.ts` 供 Home/store/成就检查；完整章节数据经 `data/levels/loaders.ts` 按变体动态 import（`useTheoryLevels`），章节页与疑难清单使用。`manifest.parity.test.ts` 与 `loaders.test.ts` 守卫映射一致
 
 3. **Store**（`store.ts`，persist name `theory-academy-progress`，version 以该文件 persist 配置为唯一事实源）：
    - 状态：`progress: { completedChapters / quizScores / currentChapter / startedAt }`
@@ -1182,7 +1184,7 @@ interface DailyRecommendation {
 
 6. **成就集成**：`achievements.ts` 新增 `theoryChapters` / `theoryLevel` 两个 condition type 与 4 项成就；progress store `checkCondition` 通过动态 import `getTheoryStore()`（复刻 `getAcademyStore` 缓存模式）读取进度。
 
-7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁），均 lazy + LazyWrapper；侧边栏“研习”分组入口（`nav.theory`，Library 图标，紧邻策略学院并列，2026-07-30 导航 IA 重构后两学院与牌局复盘同属研习分组），MobileNav 底部导航同步含理论学院项。
+7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁），均 lazy + LazyWrapper；章节页按 chapterId 前缀推断变体后动态加载该变体完整数据，Home 只载摘要；侧边栏“研习”分组入口（`nav.theory`，Library 图标，紧邻策略学院并列，2026-07-30 导航 IA 重构后两学院与牌局复盘同属研习分组），MobileNav 底部导航同步含理论学院项。
 
 8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫，反方向（策略课时 `theory-reference` → 理论章节）由 strategy-academy `data/theoryReferenceIntegrity.test.ts` 守卫（见 §5.8 第 15 条）。
 
@@ -1218,6 +1220,13 @@ interface DailyRecommendation {
     - **两处刻意豁免**：小测 `options` 字段（干扰项按设计就是假命题，扫它会禁止出题）与**子句自身**点名满员桌/6-max 的对比句（满员桌 SB 确实翻后先行动且 OOP，跨子句不豁免）
     - **扫描面为 4 份 HU locale**（theory zh/en + academy-course/heads-up zh/en）而非数据源码：zh locale 与数据层由 `contentAlignment` 逐字镜像锁定，故覆盖数据层且能拿到结构化字段以做上述豁免；内置"扫描字符串数 > 700"自检，locale 路径解析失效时不得空洞通过（教训见 2026-09-25 守卫路径修复）
     - **判定器自检用例**锁强度：7 条已知倒置必须判红、6 条已知正确句必须判绿，否则后续放宽正则会把守卫悄悄变成空操作
+
+17. **加载分层（2026-10）**：理论学院是三处独立懒加载面，禁止任何一处回退为全量静态依赖——
+    - **数据**：`data/levels/manifest/` 是由完整数据生成的目录摘要（`pnpm theory:manifest`），Home/store/成就检查只读它；完整数据由 `data/levels/loaders.ts` 按变体动态 import，章节页与疑难清单经 `useTheoryLevels` 消费。首页 chunk 不得静态引用 `data/levels/variants/**`
+    - **内容语言包**：`theory.json` 只保留目录/UI 文案；正文、题目对象与 objectives 按 level 拆到 `locales/<lng>/theory-content/<levelId>.json`，由 `i18n/theoryContent.ts` 幂等加载（成功才入缓存、失败可重试、并发共享句柄）。章节页和疑难清单在 en 下等待对应 level 内容包后再渲染（zh 数据层原文即中文，直接渲染）；Dashboard 复习项由 `useEnsureReviewSourceI18n` 从 `theory.quiz.*` key 反解题 id 后补加载
+    - **语言切换**：`preloadTouched` 对已访问 level 补加载目标语言内容包；核心包与内容包是同一 `theory.*` 命名空间，注入经 `addResourceBundle` deep merge
+    - **意图预取**：章节阶梯与「继续学习」卡在 hover/focus 时预取当前变体完整数据，点击章节后直接命中缓存
+    - **守卫**：`manifest.parity.test.ts`（摘要 ↔ 完整数据）、`levels/loaders.test.ts`（变体映射 ↔ 摘要）、`contentI18n.test.ts`（theory-content 双语文件集 + 核心包不得残留正文）、`preload.test.ts`（核心包不含正文 / level 注入 / 语言切换补载）
 
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
@@ -1670,6 +1679,8 @@ manualChunks(id) {
 > 语言切换重渲染机制：core 模块（zh/en 静态同置内存）经 `languageChanged` 事件即时切换；feature 懒加载模块由 `preload.ts` 的 `languageChanged` 监听器异步补加载目标语言资源，`config.ts` 配置 `react.bindI18nStore: 'added removed'`，使 `addResourceBundle` 注入完成后触发所有 `useTranslation` 组件重渲染（默认值不订阅 store 事件会导致文案滞留 fallback 语言直至下次任意渲染）。
 >
 > **模块资源加载缓存语义**（事实源：`src/i18n/preload.ts` 的 `loadOne`）：`loadedKeys`（已完成集合）与 `loadPromises`（in-flight Map）双表协作——① 同一模块 key 的并发请求共享 `loadPromises` 中的同一个 Promise，不重复 `import()`；② `loadedKeys.add` **只在** `addResourceBundle` 成功之后执行，加载失败时 `.catch` 仅告警并允许下次重试（失败即标记会使该模块文案在会话余下时间永久滞留 fallback 语言）；③ `.finally` 清除 in-flight 条目。新增任何"加载 + 缓存"型工具须遵循同一顺序（成功才入缓存、失败可重试、并发共享句柄）。
+>
+> **theory 内容包**（`src/i18n/theoryContent.ts`）：同一缓存语义的第二实例——按 level 独立缓存、独立 in-flight；`touchedLevels` 记录已访问 level 供语言切换补载。`useTheoryContentI18n` 以 `isTheoryContentLoaded` 做渲染期同步判断（已缓存不闪骨架），en 未就绪时返回 false 触发骨架；zh 直接渲染数据层中文。
 
 ### 9.2 IndexedDB
 
@@ -1811,7 +1822,7 @@ persist(
 | progress | statsAggregator / streakCalc / reviewRoute / migrateTheoryReviewKeys / store.migrate / store.persist-shape 各 .test.ts，StreakTracker / SpacedRepetitionPanel / useEnsureReviewSourceI18n.wiring 各 .test.tsx | 聚合、连击、复习项跳转路由解析、理论复习项 key 化迁移（含 key 镜像守卫）、复习来源包按需加载与渲染接线、迁移链路、persist 形状、组件冒烟 |
 | puzzle-trainer | puzzleBank.optionOrder.test.ts / store.migrate / store.persist-shape | 选项语义排序、迁移、persist 形状 |
 | strategy-academy | curriculumIntegrity / theoryReferenceIntegrity / practiceFeedbackView / evImpactTone / evCalibration / quizShuffle / drillOptionOrder / opponentScoring / store.migrate / store.persist-shape 各 .test.ts，DrillLessonRouter.test.tsx / TheoryReferenceBlock.test.tsx | 课程数据完整性、反向（策略→理论）引用无悬空、反馈三态诚实渲染、evImpact 着色三态、EV 标定覆盖率棘轮、选项洗牌、对手评分、桥接跳转解析、Drill 路由冒烟 |
-| theory-academy | theoryIntegrity / quizOrder / theorySrs / store.migrate / store.persist-shape 各 .test.ts，theoryReviewI18n.test.tsx | 理论数据完整性、选项重映射与分布守卫、复习项 id 命名空间与 i18n key 载荷、迁移链路、persist 形状、复习文案双语渲染 |
+| theory-academy | theoryIntegrity / quizOrder / theorySrs / store.migrate / store.persist-shape / manifest.parity / levels/loaders 各 .test.ts，theoryReviewI18n.test.tsx | 理论数据完整性、选项重映射与分布守卫、复习项 id 命名空间与 i18n key 载荷、迁移链路、persist 形状、目录摘要与变体懒载映射、复习文案双语渲染 |
 
 ### 11.2 组件测试（jsdom 冒烟）
 

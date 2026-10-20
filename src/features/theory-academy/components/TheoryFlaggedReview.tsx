@@ -5,12 +5,14 @@ import { ArrowLeft, ArrowRight, CalendarClock, Flag, FlagOff } from 'lucide-reac
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
-import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
+import { ComponentSkeleton, ListSkeleton } from '@/shared/components/feedback/LoadingState';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import { toLocalDateString } from '@/shared/utils/spacedRepetition';
 import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
 import { useTheoryContentI18n } from '../hooks/useTheoryContentI18n';
+import { useTheoryLevels } from '../hooks/useTheoryLevels';
+import { inferVariantFromChapterId } from '../utils/theoryMeta';
 import { resolveChapterTitle, resolveTheoryLevelTitle } from '../utils/titleKeys';
 import {
   buildFlaggedReviewEntries,
@@ -34,12 +36,21 @@ export default function TheoryFlaggedReview() {
   const flaggedQuestions = useTheoryStore((s) => s.progress.flaggedQuestions);
   const toggleFlagQuestion = useTheoryStore((s) => s.toggleFlagQuestion);
   const reviewItems = useProgressStore((s) => s.reviewItems);
+  const flaggedChapterIds = useMemo(
+    () => flaggedQuestions.map(chapterIdFromQuestionId),
+    [flaggedQuestions],
+  );
+  const variants = useMemo(
+    () => [...new Set(flaggedChapterIds.map(inferVariantFromChapterId))],
+    [flaggedChapterIds],
+  );
+  const levels = useTheoryLevels(variants);
   // en 下先加载标记题所属 level 的题干内容包（zh 数据层原文即可用）
-  const contentReady = useTheoryContentI18n(flaggedQuestions.map(chapterIdFromQuestionId));
+  const contentReady = useTheoryContentI18n(flaggedChapterIds);
 
   const entries = useMemo(
-    () => buildFlaggedReviewEntries(flaggedQuestions, reviewItems),
-    [flaggedQuestions, reviewItems],
+    () => buildFlaggedReviewEntries(flaggedQuestions, reviewItems, levels ?? []),
+    [flaggedQuestions, reviewItems, levels],
   );
 
   return (
@@ -65,7 +76,9 @@ export default function TheoryFlaggedReview() {
           <p className="text-sm text-[var(--ivory-dim)] max-w-2xl">{t('theory.flagged.subtitle')}</p>
         </motion.div>
 
-        {!contentReady ? (
+        {levels === null ? (
+          <ListSkeleton rows={3} />
+        ) : !contentReady ? (
           <div className="panel">
             <ComponentSkeleton />
           </div>

@@ -21,6 +21,8 @@ export function useTheoryContentI18n(chapterIds: readonly string[]): boolean {
 
   useEffect(() => {
     if (!chapterKey) return;
+    // 已就绪（常见于组件测试预加载 / 同 level 章节切换）时不产生多余状态更新
+    if (isTheoryContentLoaded(chapterKey.split(','), language)) return;
     let cancelled = false;
     void loadTheoryContentForChapters(chapterKey.split(','), language).then(() => {
       if (!cancelled) setConfirmedKey(`${language}:${chapterKey}`);

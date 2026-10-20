@@ -1,34 +1,29 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Clock, CheckCircle2, Target } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/shared/utils/cn';
-import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
-import { transitionStandard } from '@/shared/utils/motion';
-import { ProgressBar } from '@/shared/components/business/ProgressBar';
+import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useProgressStore } from '@/features/progress/store';
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import { useTheoryContentI18n } from '../hooks/useTheoryContentI18n';
+import { useTheoryLevels } from '../hooks/useTheoryLevels';
 import {
-  findChapterById,
-  findLevelByChapterId,
-  getNextChapter,
-} from '../utils/theoryProgress';
-import { getChapterDifficulty, isLevelFullyCompleted } from '../utils/theoryMeta';
+  findChapterSummaryById,
+  findLevelSummaryByChapterId,
+  inferVariantFromChapterId,
+  isLevelFullyCompleted,
+} from '../utils/theoryMeta';
+import { TheoryChapterHeader } from './TheoryChapterHeader';
 import { TheorySectionRenderer } from './TheorySectionRenderer';
 import { TheoryQuiz } from './TheoryQuiz';
 import { TheoryCalcDrill } from './TheoryCalcDrill';
 import { PracticeBridgeCard } from './PracticeBridgeCard';
 import { NextChapterNav } from './NextChapterNav';
-import {
-  resolveChapterTitle,
-  resolveChapterSubtitle,
-  resolveTheoryLevelTitle,
-} from '../utils/titleKeys';
-import { resolveTheoryObjectives, theoryContentKey } from '../utils/contentKeys';
+import { resolveTheoryLevelTitle } from '../utils/titleKeys';
+import { theoryContentKey } from '../utils/contentKeys';
 import { buildTheoryReviewItems } from '../utils/theorySrs';
 
 /**
@@ -51,10 +46,22 @@ export default function TheoryChapterView() {
   // Session 止损：小测消耗每日题量预算（recordAnswer），达上限时禁止进入小测
   const sessionLimitReached = useSessionLimitReached();
 
-  const chapter = useMemo(() => (chapterId ? findChapterById(chapterId) : undefined), [chapterId]);
-  const level = useMemo(() => (chapterId ? findLevelByChapterId(chapterId) : undefined), [chapterId]);
+  // 目录摘要先到（门禁/标题可用），完整正文按变体懒加载
+  const chapterSummary = chapterId ? findChapterSummaryById(chapterId) : undefined;
+  const levelSummary = chapterId ? findLevelSummaryByChapterId(chapterId) : undefined;
+  const levels = useTheoryLevels(
+    chapterId ? [inferVariantFromChapterId(chapterId)] : [],
+  );
+  const chapter = useMemo(
+    () => levels?.flatMap((item) => item.chapters).find((item) => item.id === chapterId),
+    [levels, chapterId],
+  );
+  const level = useMemo(
+    () => levels?.find((item) => item.chapters.some((entry) => entry.id === chapterId)),
+    [levels, chapterId],
+  );
   // en 下先确保本 level 内容包就绪，再渲染正文/小测（zh 数据层原文即可用）
-  const contentReady = useTheoryContentI18n(chapter ? [chapter.id] : []);
+  const contentReady = useTheoryContentI18n(chapterId ? [chapterId] : []);
   const [phase, setPhase] = useState<'reading' | 'quiz' | 'done'>('reading');
   const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null);
   // 重测计数：作为 TheoryQuiz 的 key 强制重挂载，重置内部作答状态（测试效应：多次提取强化长期记忆）
@@ -99,20 +106,34 @@ export default function TheoryChapterView() {
     return () => el.removeEventListener('scroll', update);
   }, [chapter?.id]);
 
-  if (!chapter || !level) return <Navigate to="/theory" replace />;
-  // URL 直达门禁（debug 解锁响应式旁路）
-  if (!debugUnlocked && !isTheoryLevelUnlocked(level.id)) {
+  if (!chapterSummary || !levelSummary) return <Navigate to="/theory" replace />;
+  // URL 直达门禁（debug 解锁响应式旁路）：摘要层即可判定，无需等完整数据
+  if (!debugUnlocked && !isTheoryLevelUnlocked(levelSummary.id)) {
     return <Navigate to="/theory" replace />;
   }
+  // 完整数据加载中：保持页面骨架，避免把「加载中」误判为章节不存在而弹回目录
+  if (levels === null) {
+    return (
+      <div className="py-6">
+        <PageSkeleton />
+      </div>
+    );
+  }
+  if (!chapter || !level) return <Navigate to="/theory" replace />;
   // 达每日题量上限时，进入小测阶段渲染止损守卫（阅读仍可进行，与其他训练模块口径一致）。
   // P1F-01（专批 B：开局判定）：useSessionLimitReached 为 mount 快照冻结，
   // 小测进行中达上限不再中途拦断丢弃作答进度，允许走完结算；新进入章节页时再拦
   if (phase === 'quiz' && sessionLimitReached) return <SessionLimitGuard />;
 
-  const nextChapter = getNextChapter(chapter.id);
-  // P1F-02：getNextChapter 跨 Level 顺延时，目标 Level 未解锁会被上方门禁静默弹回 ——
+  // 下一章在本变体已加载序列内顺延（与旧 getNextChapter 同口径）
+  const sequence = levels.flatMap((item) => item.chapters);
+  const chapterIndex = sequence.findIndex((item) => item.id === chapter.id);
+  const nextChapter = chapterIndex >= 0 ? sequence[chapterIndex + 1] : undefined;
+  // P1F-02：跨 Level 顺延时，目标 Level 未解锁会被上方门禁静默弹回 ——
   // 渲染前校验解锁态（调试解锁旁路），未解锁降级为提示文案（NextChapterNav）
-  const nextChapterLevel = nextChapter ? findLevelByChapterId(nextChapter.id) : undefined;
+  const nextChapterLevel = nextChapter
+    ? levels.find((item) => item.chapters.some((entry) => entry.id === nextChapter.id))
+    : undefined;
   const nextChapterUnlocked =
     !!nextChapterLevel && (debugUnlocked || isTheoryLevelUnlocked(nextChapterLevel.id));
   const levelCompleted = isLevelFullyCompleted(level.id, completedChapters);
@@ -167,96 +188,13 @@ export default function TheoryChapterView() {
           </div>
         ) : (
           <>
-        {/* Header（页内流式，无 panel 外框 —— 与 strategy-academy CourseView 完全一致）。
-    T-T6 撤销 T-T1 给 header 加的 panel 外框：策略学院 header 在 main 流内贴左起步
-    （返回按钮 + pill + 进度条 + 标题 + 元数据均无外框包住）。理论学院同样改为流式布局。 */}
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={transitionStandard}
-          className="mb-6"
-        >
-          <div className="flex flex-wrap items-center gap-3 mb-3">
-            <span className="course-level inline-flex items-center gap-1.5 rounded-full bg-[var(--walnut-raised)] px-3 py-1 text-xs font-medium text-[var(--brass-bright)]">
-              {level.icon} T{level.level} · {resolveTheoryLevelTitle(t, level)}
-            </span>
-            <span className="font-numeric text-xs text-[var(--ivory-muted)]">
-              {t('theory.chapterView.chapterOf', { current: chapter.order, total: level.chapters.length })}
-            </span>
-            <div className="flex-1 min-w-[160px]">
-              <ProgressBar
-                label={t('theory.chapterView.chapterOf', {
-                  current: chapter.order,
-                  total: level.chapters.length,
-                })}
-                value={
-                  level.chapters.length > 0
-                    ? Math.round(
-                        (level.chapters.filter((c) => completedChapters.includes(c.id)).length /
-                          level.chapters.length) *
-                          100
-                      )
-                    : 0
-                }
-                size="sm"
-              />
-            </div>
-          </div>
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <h1 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
-                {resolveChapterTitle(t, chapter)}
-              </h1>
-              <p className="text-sm text-[var(--ivory-dim)]">{resolveChapterSubtitle(t, chapter)}</p>
-            </div>
-            <div className="flex items-center gap-3 text-xs text-[var(--ivory-muted)] shrink-0 pt-1">
-              <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{chapter.duration}</span>
-              {(() => {
-                const diff = getChapterDifficulty(chapter.level);
-                return (
-                  <span className={cn(
-                    'px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide',
-                    diff < 0.35
-                      ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)]'
-                      : diff < 0.6
-                        ? 'bg-[var(--poker-warning-bg)] text-[var(--poker-warning)]'
-                        : 'bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]'
-                  )}>
-                    {diff < 0.35 ? t('theory.difficultyBasic') : diff < 0.6 ? t('theory.difficultyMid') : t('theory.difficultyAdvanced')}
-                  </span>
-                );
-              })()}
-              {chapterCompleted && (
-                <span className="inline-flex items-center gap-1 text-[var(--poker-success)]">
-                  <CheckCircle2 className="w-3.5 h-3.5" />{t('theory.chapterView.completed')}
-                </span>
-              )}
-              {chapterCompleted && typeof bestScore === 'number' && (
-                <span className="font-numeric text-[var(--brass-bright)]">{t('theory.chapterView.bestScore', { score: bestScore })}</span>
-              )}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* 学习目标卡片（先行组织者策略）：章节 objectives 非空时渲染。
-            与下方阅读区正文容器**同宽居中对齐**（max-w-3xl mx-auto）——
-            先行组织者卡与正文构成统一的阅读列，与 strategy-academy 正文列一致。 */}
-        {chapter.objectives && chapter.objectives.length > 0 && (
-          <div className="panel border-[var(--poker-frost)]/40 bg-[var(--poker-frost-bg)] max-w-3xl mx-auto">
-            <h2 className="text-sm font-semibold text-[var(--poker-frost)] mb-2 flex items-center gap-2">
-              <Target className="w-4 h-4 shrink-0" />
-              {t('theory.objectives')}
-            </h2>
-            <ul className="space-y-1">
-              {resolveTheoryObjectives(t, chapter.id, chapter.objectives).map((obj, i) => (
-                <li key={i} className="text-sm text-[var(--ivory-dim)] leading-relaxed flex items-start gap-2">
-                  <span className="text-[var(--poker-frost)] mt-0.5 shrink-0">•</span>
-                  {obj}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <TheoryChapterHeader
+          chapter={chapter}
+          level={level}
+          completedChapters={completedChapters}
+          chapterCompleted={chapterCompleted}
+          bestScore={bestScore}
+        />
 
         {phase === 'reading' && (
           <motion.div

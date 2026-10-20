@@ -5,11 +5,17 @@
 import '@/i18n/config';
 import { loadAllTheoryContent, preloadI18n } from '@/i18n/preload';
 import { ALL_MODULES } from '@/i18n/moduleRegistry';
+import { loadTheoryLevelsForVariants } from '@/features/theory-academy/data/levels/loaders';
 
 // 组件测试会渲染任意 feature 组件并断言真实中文文案，因此预加载全部翻译模块，
 // 与拆分前 zh.json 全局加载行为保持一致（运行时仍按需加载，仅测试环境全量就绪）。
-// theory 正文/题目已按 level 拆分，测试环境同样全量注入。
-await Promise.all([preloadI18n([...ALL_MODULES]), loadAllTheoryContent('zh')]);
+// theory 正文/题目已按 level 拆分，测试环境同样全量注入；
+// 完整数据按变体懒载，测试环境预填缓存以保证组件同步渲染（不闪骨架）。
+await Promise.all([
+  preloadI18n([...ALL_MODULES]),
+  loadAllTheoryContent('zh'),
+  loadTheoryLevelsForVariants(['standard', 'short-deck', 'heads-up']),
+]);
 
 // 标记 React act 环境，允许测试内使用 react 的 act() 而不产生警告
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;

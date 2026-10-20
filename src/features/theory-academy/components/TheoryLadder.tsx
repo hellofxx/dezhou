@@ -10,6 +10,7 @@ import type {
   TheoryLevelSummary,
   TheoryTier,
 } from '../types';
+import { loadTheoryLevelsForVariant } from '../data/levels/loaders';
 import {
   resolveChapterTitle,
   resolveTheoryLevelTitle,
@@ -55,6 +56,11 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
   const { t } = useTranslation();
   const activeId = findActiveTheoryLevelId(levels, completedChapters, isUnlocked);
   const [expandedId, setExpandedId] = useState<string | null>(activeId);
+  // 意图预取：悬停/聚焦章节阶梯时加载当前变体完整数据，点击章节后无需等待
+  const prefetchVariant = () => {
+    const variant = levels[0]?.variant;
+    if (variant) void loadTheoryLevelsForVariant(variant);
+  };
 
   const openChapter = (chapterId: string) => navigate(`/theory/chapter/${chapterId}`);
 
@@ -68,7 +74,11 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
   };
 
   return (
-    <section aria-label={t('theory.ladder.title')}>
+    <section
+      aria-label={t('theory.ladder.title')}
+      onPointerEnter={prefetchVariant}
+      onFocus={prefetchVariant}
+    >
       <div className="px-1 mb-3">
         <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
           {t('theory.ladder.title')}

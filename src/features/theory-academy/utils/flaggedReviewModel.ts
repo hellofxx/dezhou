@@ -2,7 +2,6 @@ import type { TFunction } from 'i18next';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import type { PokerVariant } from '@/shared/types/elo';
 import type { TheoryChapter, TheoryLevelInfo, TheoryQuizQuestion } from '../types';
-import { findChapterById, findLevelByChapterId } from './theoryProgress';
 import { theoryQuizQuestionKey } from './contentKeys';
 import { theoryChapterRoute, theoryReviewItemId } from './theorySrs';
 
@@ -60,25 +59,35 @@ function questionIndex(question: TheoryQuizQuestion, chapter: TheoryChapter): nu
  * 把疑难标记题 id 列表映射为可渲染条目列表。
  * @param flaggedQuestions progress.flaggedQuestions（题 id）
  * @param reviewItems      progress.reviewItems（SRS 队列，只读联结）
+ * @param levels           已按变体加载的完整数据（调用方按需懒载）
  * @returns 按 Level → 章节 order → 题号稳定排序的条目；脏 id 与重复 id 已剔除
  */
 export function buildFlaggedReviewEntries(
   flaggedQuestions: readonly string[],
   reviewItems: readonly ReviewItem[],
+  levels: readonly TheoryLevelInfo[],
 ): FlaggedReviewEntry[] {
   const queueById = new Map<string, ReviewItem>();
   for (const item of reviewItems) queueById.set(item.id, item);
+  const chapterById = new Map<string, TheoryChapter>();
+  const levelByChapterId = new Map<string, TheoryLevelInfo>();
+  for (const level of levels) {
+    for (const chapter of level.chapters) {
+      chapterById.set(chapter.id, chapter);
+      levelByChapterId.set(chapter.id, level);
+    }
+  }
 
   const seen = new Set<string>();
   const entries: FlaggedReviewEntry[] = [];
 
   for (const questionId of flaggedQuestions) {
     if (seen.has(questionId)) continue;
-    const chapter = findChapterById(chapterIdFromQuestionId(questionId));
+    const chapter = chapterById.get(chapterIdFromQuestionId(questionId));
     if (!chapter) continue;
     const question = chapter.quiz.find((q) => q.id === questionId);
     if (!question) continue;
-    const level = findLevelByChapterId(chapter.id);
+    const level = levelByChapterId.get(chapter.id);
     if (!level) continue;
 
     const srsItemId = theoryReviewItemId(questionId);
