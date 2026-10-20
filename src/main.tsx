@@ -2,44 +2,44 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import '@/styles/globals.css'
 import '@/i18n/config'
+import { APP_VERSION } from '@/shared/constants/app'
 import App from './App'
 
-// 启动引导（副作用注册，须在首次渲染前执行）：
-// - progress：事件总线订阅 + 成就检查 debounce（P1 副作用外移）
-// - academy data source registry: achievement & curriculum data source 注册 + initial ELO sync（P2-2 依赖倒置）
-import { initProgressStore } from '@/features/progress/store.bootstrap'
+// 启动引导：
+// - progress：hydration 完成后后台加载 IndexedDB records + 事件总线订阅 + 成就检查 debounce
+// - 三学院 bootstrap：后台注册 achievement & curriculum 数据源 + initial ELO sync
+// 首屏只等待 persist hydration（localStorage 同步层）；records 与数据源就绪后经
+// store 订阅 / useAcademyDataSource 的 late-registration 自愈触发重渲染。
+import { initProgressStore, waitForProgressHydration } from '@/features/progress/store.bootstrap'
 
-// P0-03 T2/A2 时序修复：将三学院 bootstrap 纳入渲染前的同一 async 链，而非 requestIdleCallback。
-// Dashboard（routes.tsx:84）等首屏组件经 useAcademyProgressSnapshot()/getAchievementSources() 读 registry，
-// 若注册晚于挂载则订阅固化为空函数且不自愈。显式 await Promise.all([...]) 建立同步点，
-// 确保所有数据源注册完成后再渲染，消除间歇性静默失效。
-// T3/C3 超时兜底：initProgressStore 依赖 localStorage persist + IndexedDB，若 hydration 回调不触发/IndexedDB 挂起
-// 则 Promise 永挂 → 白屏。Promise.race with 3s timeout 降级渲染（带 visible hint），避免永久等待。
+// 兜底：hydration 回调若因存储异常不触发，3 秒后仍渲染应用，避免永久白屏。
 async function bootstrapAndRender() {
+  // 后台任务与 hydration 并行启动，不阻塞首屏
+  void initProgressStore().catch((err: unknown) => {
+    console.error('[bootstrap] Progress init failed:', err);
+  });
+  void Promise.all([
+    import('@/features/strategy-academy/store.bootstrap'),
+    import('@/features/puzzle-trainer/store.bootstrap'),
+    import('@/features/theory-academy/store.bootstrap'),
+  ]).catch((err: unknown) => {
+    console.error('[bootstrap] Feature data sources failed:', err);
+  });
+
   try {
-    // 先等待 progress store hydration & IndexedDB records 加载（含 3s 超时兜底）
-    const initPromise = initProgressStore();
-    const INIT_TIMEOUT_MS = 3000; // 超时阈值：3 秒后降级渲染
     await Promise.race([
-      initPromise,
-      new Promise<never>((_, reject) => setTimeout(() => reject(new Error('[bootstrap] InitTimeout')), INIT_TIMEOUT_MS)),
+      waitForProgressHydration(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('[bootstrap] HydrationTimeout')), 3000),
+      ),
     ]);
-    
-    // 同时注册三学院数据源（必须全部完成才渲染）
-    await Promise.all([
-      import('@/features/strategy-academy/store.bootstrap'),
-      import('@/features/puzzle-trainer/store.bootstrap'),
-      import('@/features/theory-academy/store.bootstrap'),
-    ]);
-    
-    // Registry 已就位，安全渲染
     createRoot(document.getElementById('root')!).render(
       <StrictMode>
         <App />
       </StrictMode>,
     );
   } catch (err) {
-    // C3 兜底：无论何种异常都渲染应用（可能某些功能不可用），避免白屏
+    // 无论何种异常都渲染应用（可能某些功能不可用），避免白屏
     console.error('[bootstrap] Failed or timed out, rendering anyway:', err);
     createRoot(document.getElementById('root')!).render(
       <StrictMode>
@@ -58,8 +58,7 @@ bootstrapAndRender();
 
 // Register Service Worker（延迟到 bootstrap 后，避免并行竞态）
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    const { APP_VERSION } = await import('@/shared/constants/app');
+  window.addEventListener('load', () => {
     navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js?v=' + APP_VERSION).catch(() => {
       // SW registration failed, app still works normally
     });

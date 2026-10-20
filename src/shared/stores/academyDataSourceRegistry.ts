@@ -5,7 +5,7 @@
  * 
  * T2/A2 P0-03 时序修复：增加 onRegister 订阅机制，支持「late registration 自愈」——
  * 若组件挂载时数据源尚未注册，则订阅注册事件；一旦注册成功即转发订阅，避免 Dashboard 间歇性丢失数据。
- * 注册由应用入口 async Promise.all([...]) 同步触发（见 main.tsx:bootstrapAndRender），非 requestIdleCallback。
+ * 注册由应用入口在首屏渲染后后台触发（见 main.tsx:bootstrapAndRender），依靠上述自愈机制更新已挂载组件。
  */
 import type { AcademyDataSource } from '@/shared/types/academyDataSource';
 

@@ -30,8 +30,18 @@ export async function initProgressStore() {
   // 3. 从 IndexedDB 加载 records 到内存（本地实时查询/统计数据源；IndexedDB 不可用
   //    时降级为内存模式 —— 本次会话新增记录仍可用，仅失去跨会话持久化）
   try {
-    const records = await recordDatabase.getAll();
-    useProgressStore.setState({ records });
+    const stored = await recordDatabase.getAll();
+    // 首屏已先渲染，IDB 读取期间可能已有新记录进入内存；合并而非覆盖，避免丢记录
+    useProgressStore.setState((state) => {
+      if (state.records.length === 0) return { records: stored };
+      const merged = new Map(state.records.map((record) => [record.id, record]));
+      for (const record of stored) {
+        if (!merged.has(record.id)) merged.set(record.id, record);
+      }
+      return {
+        records: [...merged.values()].toSorted((a, b) => a.createdAt - b.createdAt),
+      };
+    });
   } catch (err) {
     console.warn('[progress] 从 IndexedDB 加载 records 失败，降级为内存模式', err);
   }
@@ -54,31 +64,33 @@ export async function initProgressStore() {
 }
 
 /**
- * 等待 persist hydration 完成并将内存 records 迁入 IndexedDB：
+ * 等待 persist hydration 完成（不触碰 IndexedDB）。
+ * 首屏渲染闸门只等这一层；records 加载与事件订阅由 initProgressStore 在后台完成。
+ */
+export function waitForProgressHydration(): Promise<void> {
+  if (useProgressStore.persist.hasHydrated()) return Promise.resolve();
+  return new Promise((resolve) => {
+    const unsub = useProgressStore.persist.onFinishHydration(() => {
+      unsub();
+      resolve();
+    });
+  });
+}
+
+/**
+ * 等待 hydration 完成并将内存 records 迁入 IndexedDB：
  * - 升级首启时，localStorage 遗留 records 在 hydration merge 时进入内存（v13 起
  *   partialize 已排除 records，本次迁移后 localStorage 不再持有 records）；
  * - 先注册 onFinishHydration 再查 hasHydrated，避免 hydration 已完成时的竞态漏触发。
  */
-function waitForHydrationAndMigrateLegacyRecords(): Promise<void> {
-  return new Promise((resolve) => {
-    const migrate = async () => {
-      try {
-        const records = useProgressStore.getState().records;
-        if (records.length > 0) {
-          await recordDatabase.add(records);
-        }
-      } catch (err) {
-        console.warn('[progress] 遗留 records 迁入 IndexedDB 失败', err);
-      }
-      resolve();
-    };
-    if (useProgressStore.persist.hasHydrated()) {
-      void migrate();
-      return;
+async function waitForHydrationAndMigrateLegacyRecords(): Promise<void> {
+  await waitForProgressHydration();
+  try {
+    const records = useProgressStore.getState().records;
+    if (records.length > 0) {
+      await recordDatabase.add(records);
     }
-    const unsub = useProgressStore.persist.onFinishHydration(() => {
-      unsub();
-      void migrate();
-    });
-  });
+  } catch (err) {
+    console.warn('[progress] 遗留 records 迁入 IndexedDB 失败', err);
+  }
 }
