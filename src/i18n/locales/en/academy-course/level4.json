@@ -27,7 +27,7 @@
       "Case E1: River Value Bet with Second Best Hand",
       "Hero K♣Q♣ in CO vs TAG on river A♦, Pot 25BB\n\nKeyDecision: Value bet instead of check back\n\nReasoning:\n- TAG's river range is mostly weak Ax after calling two streets\n- Your K♣Q♣ is second best but extracts value from weaker Ax\n- EV(bet) ≈ +5BB higher than EV(check-back)\n\nKeyLesson: Value bet even with the second-best hand (Kx is weak in TAG's range). Don't passively check to win the pot.\nSource: Upswing Poker Blog #234",
       "Case E2: Semi-bluff on Combined Draw",
-      "Hero T♥J♥ on flop 9♥8♣2♥ vs LAG, Pot 10BB\n\nKeyDecision: C-bet 6BB as semi-bluff\n\nReasoning:\n- Combined draws (~15 outs): flush + OESD\n- Fold equity: LAG folds ~45% to C-bets\n- Showdown equity if called: ~30% by river\n- EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB\n\nKeyLesson: The value of a combo draw comes from both fold equity and showdown equity. Don't shy away from betting just because the draw hasn't completed.\nSource: RIO Video Clip #156"
+      "Hero T♥J♥ on flop 9♥8♣2♥ vs LAG, Pot 10BB\n\nKeyDecision: C-bet 6BB as semi-bluff\n\nReasoning:\n- Combined draws (~15 outs): flush + OESD\n- Fold equity: LAG folds ~45% to C-bets\n- Showdown equity if called: ~54% by river\n- EV(bet) ≈ +7.7BB vs EV(check) ≈ 5.4BB\n\nKeyLesson: The value of a combo draw comes from both fold equity and showdown equity. Don't shy away from betting just because the draw hasn't completed.\nSource: RIO Video Clip #156"
     ],
     "l4-opponent-reading": [
       "Why Is Reading Opponents So Important?",
@@ -62,7 +62,7 @@
       "When deciding whether to call a large bet:\n\n- If you block the opponent's value range → lean toward call\n  Example: you hold A♠, so the opponent is unlikely to have AA/AKs for value\n- If you block the opponent's bluff range → lean toward fold\n  Example: you hold the flush blocker the opponent would bluff with\n\nQuantitative thinking: each blocker reduces relevant opponent combos by roughly 25-50%.",
       "The blocker effect is a \"marginal advantage\" — it doesn't completely change decisions, but at close decision points, blockers can be the deciding factor.",
       "Pros consider blockers on every bluff and hero call. Build the habit: when facing a tough decision, first look at what your hand blocks.",
-      "Blocker correction of combination counts:\nWithout blocker: AA = C(4,2) = 6 combos\nHolding one A: AA = C(3,2) = 3 combos (reduced 50%)\n\nAK combos corrected:\nWithout blocker: AK = 4×4 = 16 combos\nHolding A♠: AK = 3×4 = 12 combos (reduced 25%)\nHolding A♠K♣: AK = 3×3 = 9 combos (reduced 44%)\n\nBlocker effect on range proportions:\nOpponent 3-bet range = {AA, KK, AK}: 6+6+16=28 combos\nWhen you hold AK → 3+3+9=15 combos, and the share of QQ you're ahead of rises from 0 to a real proportion",
+      "Blocker correction of combination counts:\nWithout blocker: AA = C(4,2) = 6 combos\nHolding one A: AA = C(3,2) = 3 combos (reduced 50%)\n\nAK combos corrected:\nWithout blocker: AK = 4×4 = 16 combos\nHolding A♠: AK = 3×4 = 12 combos (reduced 25%)\nHolding A♠K♣: AK = 3×3 = 9 combos (reduced 44%)\n\nBlocker effect on range proportions:\nOpponent 3-bet range = {AA, KK, AK}: 6+6+16=28 combos\nWhen you hold AK → 3+3+9=15 combos; the opponent's AA/KK total 6 combos (40%) and AK 9 combos (60%); your AK is behind AA/KK and roughly even against AK",
       "Theory reference: the quantitative application of blockers and combination-count correction is fully derived in Theory Academy T4 Chapter 2 \"Combinatorics and Blockers\", including preflop 4Bet spots and postflop river bluff-catching examples.",
       "Counter-intuitive: holding a K does not reduce AA combos, only AK combos. Many beginners think \"I have a K, so the opponent is less likely to have AA\" — wrong. K is a blocker for A, but only an A blocks AA."
     ],
@@ -298,7 +298,7 @@
         "Fold",
         "Raise"
       ],
-      "explanation": "The value of a combo draw comes from both fold equity and showdown equity. EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB."
+      "explanation": "The value of a combo draw comes from both fold equity and showdown equity. EV(bet) ≈ +7.7BB vs EV(check) ≈ 5.4BB."
     },
     "l4-opp-q1": {
       "question": "An opponent has VPIP 12%, PFR 10%. Most likely type?",
@@ -1113,7 +1113,7 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "An OESD has 8 outs and 31% equity. Opponent bets 3BB, pot odds about 25% — calling is +EV.",
+          "explanation": "An OESD has 8 outs and 31% equity. Opponent bets 3BB, pot odds about 26% — calling is +EV.",
           "evImpact": "-1.0 BB/100"
         },
         {
@@ -1134,17 +1134,17 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "Fold. Recompute: the stated pot is 105 (CO's 97 shove + your 7.5 already in + the blinds, taken as 105 per the question) and you must call 89.5 (= 97 - 7.5), so the break-even equity for a call = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0% (repo convention: calculatePotOdds expects a potSize that already includes the opponent's bet — see shared/utils/pokerMath). Your A♣K♣ against CO's 4-bet shove range QQ+/AK leaves 21 combos after blocking (QQ 6 + KK 3 + AA 3 + AK 9; combo derivation in Theory Academy T4), giving roughly (6×43% + 3×32% + 3×12% + 9×50%) ÷ 21 ≈ 40%. 40% < 46.0% ⇒ calling is -EV, so folding is the answer. And do not borrow Alpha (b ÷ (pot + bet), the fold frequency a pure bluff itself must elicit to break even — attacker side) as a call threshold — opposite side of the bet, different denominator (see L4B and T5 MDF/Alpha).",
-          "evImpact": "0 BB (no more money in; avoids roughly -11.7BB from calling)"
+          "explanation": "Fold. Recompute: the stated pot is 105 (CO's 97 shove + your 7.5 already in + the blinds, taken as 105 per the question) and you must call 89.5 (= 97 - 7.5), so the break-even equity for a call = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0% (repo convention: calculatePotOdds expects a potSize that already includes the opponent's bet — see shared/utils/pokerMath). Your A♣K♣ against CO's 4-bet shove range QQ+/AK leaves 21 combos after blocking (QQ 6 + KK 3 + AA 3 + AK 9; combo derivation in Theory Academy T4), giving roughly (6×46.3% + 3×34.5% + 3×12.1% + 9×52%) ÷ 21 ≈ 42%. 42% < 46.0% ⇒ calling is -EV, so folding is the answer. And do not borrow Alpha (b ÷ (pot + bet), the fold frequency a pure bluff itself must elicit to break even — attacker side) as a call threshold — opposite side of the bet, different denominator (see L4B and T5 MDF/Alpha).",
+          "evImpact": "0 BB (no more money in; avoids roughly -7.8BB from calling)"
         },
         {
           "action": "Call",
-          "explanation": "Calling is -EV: about 40% realised equity falls short of the 46.0% break-even line (89.5 ÷ 194.5). The classic mistake is reading \"AKs has about 43% against QQ alone\" as the equity against the whole 4-bet shove range — 43% only holds for the QQ branch, while KK (about 32%) and AA (about 12%) drag the average down. Note that even 43% is already below 46.0%, so the most optimistic single-matchup reading still says fold. At 40%: EV = 0.40 × 105 - 0.60 × 89.5 ≈ -11.7BB, far worse than the 0 of folding.",
-          "evImpact": "-11.7BB (at 40% equity: 0.40×105 - 0.60×89.5)"
+          "explanation": "Calling is -EV: about 42% realised equity falls short of the 46.0% break-even line (89.5 ÷ 194.5). The classic mistake is reading \"AKs has about 46.3% against QQ alone\" as the equity against the whole 4-bet shove range — 46.3% only holds for the QQ branch, while KK (about 34.5%) and AA (about 12.1%) drag the average down. 46.3% is only slightly above the 46.0% break-even line, and the range-weighted equity is about 42%, so the call is still -EV. At 42%: EV = 0.42 × 105 - 0.58 × 89.5 ≈ -7.8BB, far worse than the 0 of folding.",
+          "evImpact": "-7.8BB (at 42% equity: 0.42×105 - 0.58×89.5)"
         },
         {
           "action": "Tank then Fold",
-          "explanation": "Same conclusion as Fold, but as its own option it is the inferior one: on the matrix it banks exactly what folding banks (no further investment), and the only extra cost is timing information — a long tank followed by a fold signals a hand that nearly called. It is also not what this question grades: correctness comes down to comparing the 46.0% break-even line with the ~40% you actually have, never to how long you thought. The counter-intuitive part: most players decide from \"AKs is strong\" instead of computing the threshold first — AKs is simply behind QQ+/AK.",
+          "explanation": "Same conclusion as Fold, but as its own option it is the inferior one: on the matrix it banks exactly what folding banks (no further investment), and the only extra cost is timing information — a long tank followed by a fold signals a hand that nearly called. It is also not what this question grades: correctness comes down to comparing the 46.0% break-even line with the ~42% you actually have, never to how long you thought. The counter-intuitive part: most players decide from \"AKs is strong\" instead of computing the threshold first — AKs is simply behind QQ+/AK.",
           "evImpact": "Same EV as folding (extra cost: a timing tell)"
         }
       ]
@@ -1172,7 +1172,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "QJ has backdoor flush + overcards, and TAG checking the turn signals weakness. Float then bet the turn.",
+          "explanation": "QJ has Q-high equity (backdoor flush is dead on the turn), and TAG checking the turn signals weakness. Float then bet the turn.",
           "evImpact": "-0.8 BB/100"
         },
         {
@@ -1254,12 +1254,12 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "AK made a flush — value-bet the river. CS calls with weak hands.",
+          "explanation": "AK is top pair top kicker (TPTK) — value-bet the river. CS calls with weaker Kx/pairs.",
           "evImpact": "-1.5 BB/100"
         },
         {
           "action": "Bet 18BB (70% pot)",
-          "explanation": "AK made a flush — CS calls with weak flushes/pairs. Standard value bet.",
+          "explanation": "AK is top pair top kicker (TPTK) — CS calls with weaker Kx/pairs. Standard value bet.",
           "evImpact": "+2.0 BB/100"
         },
         {
@@ -1333,13 +1333,13 @@
       "option": [
         {
           "action": "Call",
-          "explanation": "Only calling KK vs a NIT open is too passive. You have a huge blocker effect (AA drops from 6 to 1 combo) — 3-bet for value.",
+          "explanation": "Only calling KK vs a NIT open is too passive. Your K blocker halves the opponent's AK from 16 to 8 combos (AA remains 6 combos) — 3-bet for value.",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "8BB",
-          "explanation": "KK is a clear 3-bet for value. Your K blocker makes the opponent's AA extremely unlikely (only 1 combo). NIT's open range (AK/AQ/JJ) will react to your 3-bet.",
+          "explanation": "KK is a clear 3-bet for value. Your K blocker halves the opponent's AK (AA remains 6 combos). NIT's open range (AK/AQ/JJ) will react to your 3-bet.",
           "evImpact": "+2.5 BB/100"
         },
         {
@@ -2425,7 +2425,7 @@
     ],
     "l4-ev-real-cases": [
       "Judge that second-best hands should value bet when the opponent's range is weak (K♣Q♣ versus a TAG's weak Ax, bet EV about 5BB above check-back)",
-      "Compute the two EV sources of a combo-draw semi-bluff (fold equity plus showdown equity), e.g. 15-out T♥J♥ betting at about +6.3BB, beating checking",
+      "Compute the two EV sources of a combo-draw semi-bluff (fold equity plus showdown equity), e.g. 15-out T♥J♥ betting at about +7.7BB, beating checking",
       "Compare EV(bet) with EV(check) at the same decision point and judge which action has higher expectation"
     ],
     "l4-opponent-reading": [

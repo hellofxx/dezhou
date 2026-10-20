@@ -27,7 +27,7 @@
       "Case E1: River Value Bet with Second Best Hand",
       "Hero K♣Q♣ in CO vs TAG on river A♦, Pot 25BB\n\nKeyDecision: Value bet instead of check back\n\nReasoning:\n- TAG's river range is mostly weak Ax after calling two streets\n- Your K♣Q♣ is second best but extracts value from weaker Ax\n- EV(bet) ≈ +5BB higher than EV(check-back)\n\nKeyLesson: 第二好牌也要下注获取价值（Kx 在 TAG 范围中很弱）。不要保守地只过牌收底池。\nSource: Upswing Poker Blog #234",
       "Case E2: Semi-bluff on Combined Draw",
-      "Hero T♥J♥ on flop 9♥8♣2♥ vs LAG, Pot 10BB\n\nKeyDecision: C-bet 6BB as semi-bluff\n\nReasoning:\n- Combined draws (~15 outs): flush + OESD\n- Fold equity: LAG folds ~45% to C-bets\n- Showdown equity if called: ~30% by river\n- EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB\n\nKeyLesson: 组合听牌的价值在于 fold equity + showdown equity 双重来源。不要因为牌没成就不敢下注。\nSource: RIO Video Clip #156"
+      "Hero T♥J♥ on flop 9♥8♣2♥ vs LAG, Pot 10BB\n\nKeyDecision: C-bet 6BB as semi-bluff\n\nReasoning:\n- Combined draws (~15 outs): flush + OESD\n- Fold equity: LAG folds ~45% to C-bets\n- Showdown equity if called: ~54% by river\n- EV(bet) ≈ +7.7BB vs EV(check) ≈ 5.4BB\n\nKeyLesson: 组合听牌的价值在于 fold equity + showdown equity 双重来源。不要因为牌没成就不敢下注。\nSource: RIO Video Clip #156"
     ],
     "l4-opponent-reading": [
       "为什么对手阅读如此重要？",
@@ -62,7 +62,7 @@
       "当你考虑是否跟注对手的大额下注时：\n\n- 如果你持有阻断对手 value 范围的牌 → 更倾向于 call\n  例：你持有 A♠，对手不太可能有 AA/AKs 等顶级 value\n- 如果你持有阻断对手 bluff 范围的牌 → 更倾向于 fold\n  例：你持有对手可能用来 bluff 的同花 blocker\n\n量化思维：每个 blocker 大约减少对手相关组合 25-50%。",
       "Blocker 效应是\"边际优势\"——不会完全改变决策，但在接近的决策点（close decision）中，blocker 可以成为决定性因素。",
       "职业牌手在每一个 bluff 和 hero call 决策中都会考虑 blocker。养成习惯：在做困难决策时，先看自己手中阻断了什么。",
-      "Blocker 对组合数的修正：\n无 Blocker 时：AA = C(4,2) = 6 种\n持有一张 A 时：AA = C(3,2) = 3 种（减少 50%）\n\nAK 组合数修正：\n无 Blocker 时：AK = 4×4 = 16 种\n持有 A♠ 时：AK = 3×4 = 12 种（减少 25%）\n持有 A♠K♣ 时：AK = 3×3 = 9 种（减少 44%）\n\nBlocker 对范围比例的影响：\n对手 3-bet 范围 = {AA, KK, AK}，共 6+6+16=28 种\n你持 AK 时 → 3+3+9=15 种，你领先的 QQ 占比从 0 升至实质比例",
+      "Blocker 对组合数的修正：\n无 Blocker 时：AA = C(4,2) = 6 种\n持有一张 A 时：AA = C(3,2) = 3 种（减少 50%）\n\nAK 组合数修正：\n无 Blocker 时：AK = 4×4 = 16 种\n持有 A♠ 时：AK = 3×4 = 12 种（减少 25%）\n持有 A♠K♣ 时：AK = 3×3 = 9 种（减少 44%）\n\nBlocker 对范围比例的影响：\n对手 3-bet 范围 = {AA, KK, AK}，共 6+6+16=28 种\n你持 AK 时 → 3+3+9=15 种；对手 AA/KK 合计 6 种（40%），AK 9 种（60%）；你的 AK 对 AA/KK 落后、对 AK 大致持平",
       "理论支撑：Blockers 的定量应用与组合数修正的完整推导见理论学院 T4 第 2 章\"组合数学与 Blockers\"。包括翻前 4Bet 场景和翻后河牌抓诈唬的具体算例。",
       "反直觉点：持有 K 不减少 AA 的组合数，只减少 AK 的组合数。很多初学者认为\"我有一张 K，所以对手拿 AA 的概率降低了\"——这是错误的。K 是 A 的 Blocker，只有 A 才能阻断 AA。"
     ],
@@ -298,7 +298,7 @@
         "Fold",
         "Raise"
       ],
-      "explanation": "组合听牌的价值在于 fold equity + showdown equity 双重来源。EV(bet) ≈ +6.3BB vs EV(check) ≈ 4.8BB。"
+      "explanation": "组合听牌的价值在于 fold equity + showdown equity 双重来源。EV(bet) ≈ +7.7BB vs EV(check) ≈ 5.4BB。"
     },
     "l4-opp-q1": {
       "question": "一个对手 VPIP 12%, PFR 10%，他最可能是？",
@@ -1113,7 +1113,7 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "两头顺子听牌有 8 个 outs，31% 胜率。对手下注 3BB，底池赔率约 25%，跟注是+EV。",
+          "explanation": "两头顺子听牌有 8 个 outs，31% 胜率。对手下注 3BB，底池赔率约 26%，跟注是+EV。",
           "evImpact": "-1.0 BB/100"
         },
         {
@@ -1134,17 +1134,17 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "弃牌。复算：题面底池 105（CO 全下 97 + 你已投入的 7.5 + 盲注，按题面取 105），你还需跟 89.5（= 97 - 7.5），故跟注保本所需胜率 = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0%（本仓口径：calculatePotOdds 的 potSize 须已含对手本次下注，见 shared/utils/pokerMath）。你的 A♣K♣ 对 CO 的 4-Bet 全下范围 QQ+/AK，含阻断后共 21 组合（QQ 6 + KK 3 + AA 3 + AK 9，组合数推导见理论学院 T4），加权胜率 ≈ (6×43% + 3×32% + 3×12% + 9×50%) ÷ 21 ≈ 40%。40% < 46.0% ⇒ 跟注 -EV，正解是弃牌。另注意别把 Alpha（b ÷ (pot + bet)，进攻方纯诈唬的保本弃牌率）当成跟注线，两者口径相反（见 L4B 与 T5 的 MDF/Alpha 章）。",
-          "evImpact": "0 BB（不再投入；避开约 -11.7BB 的跟注负 EV）"
+          "explanation": "弃牌。复算：题面底池 105（CO 全下 97 + 你已投入的 7.5 + 盲注，按题面取 105），你还需跟 89.5（= 97 - 7.5），故跟注保本所需胜率 = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0%（本仓口径：calculatePotOdds 的 potSize 须已含对手本次下注，见 shared/utils/pokerMath）。你的 A♣K♣ 对 CO 的 4-Bet 全下范围 QQ+/AK，含阻断后共 21 组合（QQ 6 + KK 3 + AA 3 + AK 9，组合数推导见理论学院 T4），加权胜率 ≈ (6×46.3% + 3×34.5% + 3×12.1% + 9×52%) ÷ 21 ≈ 42%。42% < 46.0% ⇒ 跟注 -EV，正解是弃牌。另注意别把 Alpha（b ÷ (pot + bet)，进攻方纯诈唬的保本弃牌率）当成跟注线，两者口径相反（见 L4B 与 T5 的 MDF/Alpha 章）。",
+          "evImpact": "0 BB（不再投入；避开约 -7.8BB 的跟注负 EV）"
         },
         {
           "action": "Call",
-          "explanation": "跟注 -EV：约 40% 的实得胜率低于 46.0% 的保本线（89.5 ÷ 194.5）。典型错因是把「AKs 对 QQ 单口约 43%」当成对整个 4-Bet 全下范围的胜率——43% 只成立于 QQ 这一个分支，范围里还有 KK（约 32%）与 AA（约 12%）两个把平均值拉低的分支。何况 43% 本身也已低于 46.0%，即便按最乐观的单口读数同样不该跟。按 40% 计：EV = 0.40 × 105 - 0.60 × 89.5 ≈ -11.7BB，远差于弃牌的 0。",
-          "evImpact": "-11.7BB（按 40% 胜率：0.40×105 - 0.60×89.5）"
+          "explanation": "跟注 -EV：约 42% 的实得胜率低于 46.0% 的保本线（89.5 ÷ 194.5）。典型错因是把「AKs 对 QQ 单口约 46.3%」当成对整个 4-Bet 全下范围的胜率——46.3% 只成立于 QQ 这一个分支，范围里还有 KK（约 34.5%）与 AA（约 12.1%）两个把平均值拉低的分支。46.3% 仅略高于 46.0% 的保本线，但范围加权后约 42%，整体仍是 -EV。按 42% 计：EV = 0.42 × 105 - 0.58 × 89.5 ≈ -7.8BB，远差于弃牌的 0。",
+          "evImpact": "-7.8BB（按 42% 胜率：0.42×105 - 0.58×89.5）"
         },
         {
           "action": "Tank then Fold",
-          "explanation": "结论与 Fold 相同，但作为独立选项它是次选：矩阵上 EV 与直接弃牌一致（不再投入），额外付出的只是时序信息——长时间思考后再弃牌会泄露你手里有「差点就跟注」的强牌。它也不是本题的判定依据：对错只取决于 46.0% 保本线与约 40% 实得的比较，与思考时长无关。反直觉点在于：多数人凭「AKs 很强」直接下结论，而不是先算阈值再比大小——AKs 面对 QQ+/AK 本来就是落后的一方。",
+          "explanation": "结论与 Fold 相同，但作为独立选项它是次选：矩阵上 EV 与直接弃牌一致（不再投入），额外付出的只是时序信息——长时间思考后再弃牌会泄露你手里有「差点就跟注」的强牌。它也不是本题的判定依据：对错只取决于 46.0% 保本线与约 42% 实得的比较，与思考时长无关。反直觉点在于：多数人凭「AKs 很强」直接下结论，而不是先算阈值再比大小——AKs 面对 QQ+/AK 本来就是落后的一方。",
           "evImpact": "同弃牌 EV（额外代价是时序信息泄露）"
         }
       ]
@@ -1172,7 +1172,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "QJ有后门同花+高牌，TAG Turn Check表示弱牌。应该Float后Turn下注。",
+          "explanation": "QJ有Q高牌（turn后门同花已失效），TAG Turn Check表示弱牌。应该Float后Turn下注。",
           "evImpact": "-0.8 BB/100"
         },
         {
@@ -1254,12 +1254,12 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "AK同花成牌，River应该价值下注。CS会用弱牌Call。",
+          "explanation": "AK顶对顶踢脚（TPTK），River应该价值下注。CS会用更弱的Kx/对子Call。",
           "evImpact": "-1.5 BB/100"
         },
         {
           "action": "Bet 18BB（70% pot）",
-          "explanation": "AK同花成牌，CS会用弱同花/对子Call。标准价值下注。",
+          "explanation": "AK顶对顶踢脚（TPTK），CS会用更弱的Kx/对子Call。标准价值下注。",
           "evImpact": "+2.0 BB/100"
         },
         {
@@ -1333,13 +1333,13 @@
       "option": [
         {
           "action": "Call",
-          "explanation": "KK 面对 NIT open 只 call 太被动。你有极强的 blocker 效应（减少对手 AA 从 6→1 组合），应该 3-bet 获取价值。",
+          "explanation": "KK 面对 NIT open 只 call 太被动。你的 K blocker 把对手 AK 从 16 降至 8 组合（AA 仍为 6 组合），应该 3-bet 获取价值。",
           "evImpact": "+0.5 BB/100"
         },
         {
           "action": "Raise",
           "amount": "8BB",
-          "explanation": "KK 是明确的 3-bet for value。你的 K blocker 使对手持有 AA 的概率极低（仅 1 种组合）。NIT 的 open 范围中 AK/AQ/JJ 都会对你的 3-bet 做出反应。",
+          "explanation": "KK 是明确的 3-bet for value。你的 K blocker 把对手 AK 减半（AA 仍为 6 组合）。NIT 的 open 范围中 AK/AQ/JJ 都会对你的 3-bet 做出反应。",
           "evImpact": "+2.5 BB/100"
         },
         {
@@ -2425,7 +2425,7 @@
     ],
     "l4-ev-real-cases": [
       "判断第二好牌在对手范围偏弱时也应价值下注（K♣Q♣ 对 TAG 弱 Ax，EV(bet) 比 check back 高约 5BB）",
-      "计算组合听牌半诈唬的双重 EV 来源（弃牌权益 + 摊牌权益），如 15 outs 的 T♥J♥ 下注 EV 约 +6.3BB 优于过牌",
+      "计算组合听牌半诈唬的双重 EV 来源（弃牌权益 + 摊牌权益），如 15 outs 的 T♥J♥ 下注 EV 约 +7.7BB 优于过牌",
       "比较同一决策点的 EV(bet) 与 EV(check)，判断哪个行动的期望值更高"
     ],
     "l4-opponent-reading": [
