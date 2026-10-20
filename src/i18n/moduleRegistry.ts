@@ -5,6 +5,11 @@
 
 export type I18nLanguage = 'zh' | 'en';
 
+/** 语言归一化：未知/缺省一律回退 zh（与 i18next fallbackLng 口径一致） */
+export function normalizeLanguage(lng: string | undefined): I18nLanguage {
+  return lng === 'en' ? 'en' : 'zh';
+}
+
 /** 顶层翻译 key（= locales/{zh,en}/<key>.json 文件名），与拆分产物一一对应 */
 export type I18nModuleKey =
   | 'academy'

@@ -1,0 +1,181 @@
+{
+  "content": {
+    "t1hu-probability": [
+      "From Full Ring to Heads-Up: Everything Changes",
+      "Heads-Up (HU) has only two players: each hand you and the opponent alternate as SB and BB. The structural differences deeply reshape the probability framework: the SB forces 0.5 (which also acts as an ante, and the SB is the button), the BB forces 1; preflop the SB acts first and the BB acts last, so the SB's raise can't \"steal\" blinds; postflop the BB acts first, and the SB (button) acts last with positional advantage. As a result, the playable starting-hand share jumps from about 15%-20% in full ring to 50%+ — because you only have to beat one opponent.",
+      "A hand's value is decided by \"how many people you must beat\". In heads-up you face one person instead of eight — this single fact reshuffles nearly every hand's win rate.",
+      "Starting-Hand Equity Reshuffle",
+      "Probability the opponent has at least one Ace (you hold two non-Ace cards):\nRemaining deck 50 cards: 4 Aces, 46 non-Aces\nTotal opponent combos: C(50,2) = 50×49÷2 = 1225\nBoth opponent cards non-Ace: C(46,2) = 46×45÷2 = 1035\nAt least one Ace = 1 − 1035÷1225 ≈ 15.5%\n\nThe comparison that truly shows the heads-up difference is \"the density of strong hands in the opponent's range\". When you hold AA, only 2 Aces remain in 50 cards, so a HU opponent has AA just 1/1225 ≈ 0.08%; in full ring at least one of 8 opponents has AA about 8/1225 ≈ 0.65% — in heads-up your strongest hand's dominance is rarely offset by a \"crash\". More crucially: in heads-up you're ahead of 50%+ of the opponent's range, whereas full ring you're ahead of at most 3-4 people — the \"density\" difference is what truly drives decisions. (Concepts from: The Theory of Poker, David Sklansky Ch.1 hand value and number of opponents; Modern Poker Theory, Michael Acevedo Ch.1 heads-up range narrowing)",
+      "What does 15.5% mean? In heads-up, about once every 6-7 hands the opponent has at least one Ace — but your hand is also often ahead, because his range is wide and most of the time his Ace is a bare Ace rather than a pair dominating you. What truly demands caution isn't \"he has an Ace\" but \"what kicker is the Ace paired with\". In full ring \"someone has an Ace\" almost equals \"someone has a stronger hand\", but in heads-up that's far from true.",
+      "Example: 100BB deep heads-up, you (SB) hold A♠K♥ and the opponent (BB) has a near-random range. Preflop all-in, AKo vs random is about 65.4%; if you just raise to 3BB and he calls, A-high remains a strong showdown hand postflop. Compare full ring: UTG's AKo facing 8 opponents all-in drops to about 20% — the same hand is crushing in heads-up and marginal in full ring. That's the practical meaning of the \"reshuffle\".",
+      "Heads-up preflop all-in equity anchors vs random cards:\nAA ≈ 85%｜KK ≈ 82%｜QQ ≈ 80%\nAKo ≈ 65%｜AQs ≈ 66%｜KQs ≈ 62%\n22 ≈ 50%｜T9s ≈ 52%｜72o ≈ 35%\nIn a nine-handed all-in the worst hand is left with only about 5%, but in heads-up the worst hand still keeps about 35% — no two cards are dead in heads-up. (Concept from: Heads-Up No-Limit Hold'em, Collin Moshman Ch.1 heads-up starting-hand rankings)",
+      "Example 2: You hold A♠A♥. In heads-up the opponent has AA with probability 1/1225 ≈ 0.08% (after your two Aces only 2 remain in 50 cards); in full ring at least one of 8 opponents has AA about 8/1225 ≈ 0.65%. Meanwhile AA vs random is about 85%, but AA in a nine-handed all-in vs 8 people is only about 35% — in heads-up your strongest hand's dominance is both less often offset by a crash and less diluted by multiway pots.",
+      "Counterintuitive point: in heads-up, \"bad hands\" are far less bad than imagined. 72o still has about 35% equity vs random — no raise by the opponent can \"represent\" a hand much stronger than yours. Carrying the full-ring mindset of \"wait for good hands\" bleeds money slowly in heads-up.",
+      "Build three-tier anchors: big pairs/high cards 65%-85%, small/medium pairs about 50%, garbage about 35%. When facing a preflop all-in, first estimate the spot with these tiers, then talk pot odds — the anchors are your table-side mental math dictionary."
+    ],
+    "t1hu-outs": [
+      "Outs in Heads-Up: First Answer \"Who's Ahead\"",
+      "The definition of outs is unchanged — unknown cards that let your hand overtake the opponent. But heads-up changes the standard of \"clean outs\": the opponent's range is wide, often only one pair or even just high cards, so your overcard outs are rarely reverse-dominated; the full-ring multiway risk of \"one of my outs gives another opponent a flush\" almost disappears in heads-up, and the discount can relax from 70-80% to about 90%.",
+      "Outs are always relative to a range. In heads-up first judge \"am I ahead or behind now\", then decide whose outs to count — getting this order wrong is the biggest math mistake of heads-up beginners.",
+      "The Reversed View: Count the Opponent's Outs",
+      "Classic scenario: you're ahead with high cards, the opponent has two smaller high-card draw cards, giving him 6 outs (3+3). Exact two-street derivation (flop, 45 unknown cards):\nP(hit on turn) = 6÷45 ≈ 13.3%\nP(miss turn, hit river) = (39÷45)×(6÷44) ≈ 11.8%\nP(at least one hit) ≈ 25.2% (the 2/4 rule estimates 24%, about 1 point off)\nYour leading equity ≈ 1 − 25.2% ≈ 74.8% (reverse redraws adjust slightly; magnitude unchanged). (Concepts from: The Mathematics of Poker, Bill Chen / Jeremie Ankenman Ch.5-6 outs and probability trees; Heads-Up No-Limit Hold'em, Collin Moshman Ch.4 heads-up draw confrontations)",
+      "Example: HU blinds 0.5/1, preflop SB completes to 1 and BB checks, pot 2. Flop 9♠7♦2♣, you (BB) hold K♠Q♠ and the opponent (SB) holds J♣T♦. You're ahead with K-high; he has only 6 outs (3 Js + 3 Ts) and overtakes about 25.2% over two streets, giving you about 67% total equity (you still have K/Q redraws after he hits). He bets 1 (half pot). Decision: if you just call 1, he only pays one more bet on the turn to see the river — buying about 25% overtake chance at low cost, a bad starting point; the correct play is to raise to about 3: if he folds you win the 3-pot directly (2+1), and if he calls he's overpaying for his 25% chance. In heads-up, \"protecting when ahead\" appears far more often than in full ring.",
+      "Exact equity of a 15-out combo draw (flop → two cards to river):\n15 outs = flush 9 + overcards 6\nP(both miss) = (32÷47)×(31÷46) ≈ 45.9%\nP(at least one hit) = 1 − 45.9% ≈ 54.1%\nThe 2/4 rule gives 60%, overestimating by about 6 points — for outs ≥ 13 use the corrected formula Outs×4 − (Outs−8) = 53%, or just memorize 54%.",
+      "Example 2: HU blinds 0.5/1, you (BB) hold A♥K♥, call the opponent's (SB) 3-bet, pot 8. Flop 9♥7♥2♣, he (about 5♠5♦) bets 5. You have flush 9 outs + overcards 6 outs = 15 outs, about 54.1% equity, but currently only A-high and behind. Decision: raising or shoving is +EV — if he folds you win 13 directly (pot 8 + bet 5), and if called you still have 54%; his pair is actually the one drawing to two pair/trips. In a full-ring multiway pot this combo draw's equity would dilute below 50%, but in heads-up you can be comfortably aggressive. (Concept from: Applications of No-Limit Hold'em, Matthew Janda Ch.6 semi-bluffs and combo draws)",
+      "Counterintuitive point: in heads-up, draws aren't \"passive waiting\" but offensive weapons. A 15-out combo draw is a coin-flip favorite even when currently behind — whoever is closer to the nuts owns the initiative.",
+      "Table mantra: first ask \"who's ahead\", then count outs. Ahead → count the opponent's outs and make them pay; behind → count your own outs and compute pot odds. Repeat this flow on every heads-up hand — speed decides win rate."
+    ],
+    "t1hu-variance": [
+      "Heads-Up Variance: Faster, Denser, More Violent",
+      "In heads-up you're in a blind (SB or BB) every hand — about 4.5× the blind frequency of a nine-handed table; the SB only needs to complete 0.5 to see a flop, so nearly every hand sees one; online HU can reach 200-300 hands/hour, 2-3× full ring. The same equity edge is \"compressed\" into a shorter time in heads-up — variance isn't a flaw of HU but the mathematical necessity of high-frequency confrontation.",
+      "A heads-up downswing isn't an anomaly but an inevitability: the number of decisions, all-ins, and blind pressure per hour all double, and so does the density of luck's influence.",
+      "Variance Math: The Stacking of High-Frequency All-Ins",
+      "Standard deviation of a single all-in (Bernoulli model: win +100, lose −100 chips, p = 60%):\nσ = √(p×(1−p)) × 100 = √(0.6×0.4) × 100 ≈ 49 chips\nN-hand cumulative: σ_total = σ×√N\n50 hands: σ ≈ 49×√50 ≈ 346; expectation = 50×(0.6−0.4)×100 = 1000\nLoss probability: 1000÷346 ≈ 2.9σ → about 0.2%\nConclusion: even a positive-expectation 1000 chips can end up a loss — 60%-equity all-ins happen daily in heads-up, which is the mathematical root of \"winners also experience long drawdowns\". (Concepts from: The Mathematics of Poker, Bill Chen / Jeremie Ankenman Ch.3 variance and standard deviation; The Mental Game of Poker, Jared Tendler Ch.4 variance tolerance and emotion)",
+      "The intuition of the √N rule: variance grows with the square root of the sample while expectation grows linearly. Doubling the sample only shrinks variance's relative impact to 1/√2 ≈ 70%, and you need 4× the sample to halve it. Heads-up's high-frequency play means you accumulate samples faster — but also experience the full variance cycle faster. This is the mathematical root of \"winners also experience long drawdowns\".",
+      "Example: 55% equity is a common heads-up preflop all-in spot (e.g. small pair vs two overcards ≈ 55:45). Losing 5 in a row = 0.45⁵ ≈ 1.8%, appearing about 3-4 times per hour of 200+ hands; losing 8 in a row ≈ 0.17%, about once every 3 hours. In other words: \"losing a big streak\" in a HU session isn't bad luck but steadily present background noise — treat it like weather, not a verdict.",
+      "Heads-up vs full-ring variance parameters (typical bb/100 magnitudes):\nFull ring: winner 5bb/100, standard deviation 80-100\nHeads-up: winner 5-15bb/100, standard deviation 120-180\nHeads-up's \"variance/expectation\" ratio is higher: the same 5bb edge needs 2-4× the sample to converge reliably — that's why HU players doubt their own skill more easily than full-ring players. (Concept from: Heads-Up No-Limit Hold'em, Collin Moshman Ch.10 bankroll management and variance)",
+      "Example 2 (bankroll simulation): Suppose your HU win rate is 55%, buy-in 100 chips, standard deviation 150 per 100 hands. With only 20 buy-ins (the full-ring standard), there's about a 5% chance of a 20-buy-in (2000-chip) downswing — HU's high-frequency variance can realize such a downswing within weeks; with 50 buy-ins, the same variance consumes only about 40% of the bankroll. Conclusion: HU demands a higher bankroll bar — Moshman suggests at least 50 buy-ins, executed strictly by \"move down/rebuild\" rules rather than \"one more game to get even\".",
+      "Counterintuitive point: in heads-up, \"losing many hands\" almost never proves \"playing badly\". The hourly sample is packed with 55%-60%-equity all-ins; losing 8-10 in a row is mathematical normalcy. Review with a decision log (recording the reasoning of each key decision) instead of a win/loss log, or you'll make your worst strategic adjustments during the most violent variance.",
+      "HU session-management triad: (1) preset a variance budget — in a 100BB-deep game pause and review after losing 40-50BB, a stop-and-restart not a chase; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results — Tendler's \"process vs result\" separation is a survival skill for HU psychology."
+    ]
+  },
+  "quiz": {
+    "t1hu-probability-q1": {
+      "question": "Heads-up, holding AKo vs the opponent's random hole cards, your preflop all-in equity is about:",
+      "options": [
+        "About 55%",
+        "About 65%",
+        "About 75%",
+        "About 85%"
+      ],
+      "explanation": "AKo vs random is about 65.4%. 85% is AA vs random; 55% is near small/medium pair level — treating AKo as 55% undervalues HU high cards."
+    },
+    "t1hu-probability-q2": {
+      "question": "Holding two non-Ace hole cards, the probability the HU opponent has at least one Ace is about:",
+      "options": [
+        "About 4%",
+        "About 8%",
+        "About 15.5%",
+        "About 30%"
+      ],
+      "explanation": "1 − C(46,2)/C(50,2) = 1 − 1035/1225 ≈ 15.5%. 0.65% is the full-ring magnitude for at least one of 8 opponents holding AA (when you hold AA), a different conditional probability. 30% clearly overestimates the Ace frequency."
+    },
+    "t1hu-probability-q3": {
+      "question": "Which statement about the HU blind structure is correct?",
+      "options": [
+        "SB posts 0.5, BB acts last preflop, BB acts first postflop",
+        "SB posts 1BB and the BB posts 0.5BB",
+        "HU's blind structure is identical to full ring's",
+        "SB and BB postflop order is random"
+      ],
+      "explanation": "In heads-up the SB posts 0.5 (doubling as an ante; the SB is the button): preflop the SB acts first and the BB last; postflop the BB acts first, and the SB (button) acts last with positional advantage. The other options contradict HU rules."
+    },
+    "t1hu-probability-q4": {
+      "question": "Compared with a nine-handed table, the probability your AA gets counterfeited by another AA in heads-up is:",
+      "options": [
+        "Higher: opponent has AA about 0.65%",
+        "Lower: opponent has AA about 0.08%",
+        "Exactly the same",
+        "Impossible to compare"
+      ],
+      "explanation": "After your two Aces, only 2 remain in 50 cards, so a HU opponent has AA 1/1225 ≈ 0.08%; in full ring at least one of 8 opponents has AA about 8/1225 ≈ 0.65%. In heads-up your strongest hand's dominance is less often offset by a crash."
+    },
+    "t1hu-outs-q1": {
+      "question": "You're ahead with K♠Q♠ (K-high) vs J♣T♦ (J-high) on a 9♠7♦2♣ flop. The probability the opponent overtakes by the river is about:",
+      "options": [
+        "About 13%",
+        "About 25%",
+        "About 37%",
+        "About 50%"
+      ],
+      "explanation": "The opponent has 6 outs (3 Js + 3 Ts); two-street hit = 6/45 + (39/45)×(6/44) ≈ 25.2%. 13% is the one-card magnitude; 50% clearly overestimates."
+    },
+    "t1hu-outs-q2": {
+      "question": "Heads-up, a 15-out combo draw shoving on the flop has exact equity of about:",
+      "options": [
+        "About 45%",
+        "About 54%",
+        "About 60%",
+        "About 68%"
+      ],
+      "explanation": "1 − (32/47)×(31/46) ≈ 54.1%. The 2/4 rule gives 60%, overestimating by about 6 points; 45% only counts flush outs — exactly why 15 outs needs the corrected formula."
+    },
+    "t1hu-outs-q3": {
+      "question": "Why are straight-draw outs usually \"cleaner\" in heads-up than full ring?",
+      "options": [
+        "Because HU pots are smaller",
+        "Because with only one opponent, the probability that another opponent holds the same draw and discounts your outs is lower",
+        "Because HU straights are bigger hands",
+        "Because HU deals differently"
+      ],
+      "explanation": "The multiway risk of \"one of my outs gives another opponent a flush\" almost disappears in heads-up; the discount relaxes from 70-80% to about 90%. Pot size and dealing don't affect out cleanliness."
+    },
+    "t1hu-outs-q4": {
+      "question": "You hold A♥K♥ behind 5♠5♦ on a 9♥7♥2♣ flop. Your equity is about:",
+      "options": [
+        "About 40%",
+        "About 54%",
+        "About 65%",
+        "About 73%"
+      ],
+      "explanation": "Flush 9 outs + overcards 6 outs = 15 outs; two-street ≈ 54.1% — behind yet a coin-flip favorite, the mathematical basis for aggressive combo-draw shoves. 40% only counts flush outs."
+    },
+    "t1hu-variance-q1": {
+      "question": "Heads-up, you shove 10 consecutive hands at 55% equity. The probability of losing all 10 is about:",
+      "options": [
+        "About 0.03%",
+        "About 0.3%",
+        "About 3%",
+        "About 30%"
+      ],
+      "explanation": "0.45¹⁰ ≈ 0.00034 ≈ 0.03%. Though rare per event, HU has 200+ hands/hour with 55%-60% all-ins recurring, so losing streaks appear in nearly every session — the variance effect of high-frequency confrontation."
+    },
+    "t1hu-variance-q2": {
+      "question": "The typical standard deviation of HU cash games (bb/100) compared with full ring is:",
+      "options": [
+        "Lower, about 40-60",
+        "Similar, about 80-100",
+        "Higher, often 120-180",
+        "Incomparable"
+      ],
+      "explanation": "HU participates in every hand and all-in equity often lands in 50%-60%, so single-result uncertainty is strong; the typical standard deviation is 120-180bb/100, clearly above full ring's 80-100."
+    },
+    "t1hu-variance-q3": {
+      "question": "Why is the SB's low-cost limp-to-see-flop more common in heads-up than full ring?",
+      "options": [
+        "The SB has already posted 0.5 and only completes 0.5 to see the flop, and the BB acts last preflop",
+        "In HU the SB always acts last",
+        "HU blinds are smaller than full ring",
+        "There is no postflop betting in HU"
+      ],
+      "explanation": "The SB has already posted 0.5 and only completes 0.5 to 1 to see the flop (odds 1:3, calling 0.5 to contest a 1.5 pot); even if the BB raises preflop, the SB (button) still acts last postflop and keeps positional advantage — so HU nearly every hand sees a flop, with extremely high decision density. The other options contradict HU rules."
+    },
+    "t1hu-variance-q4": {
+      "question": "For bankroll management, the suggested buy-in count for HU cash games is about:",
+      "options": [
+        "10-15 buy-ins",
+        "20-40 buy-ins",
+        "50+ buy-ins",
+        "2-3 buy-ins"
+      ],
+      "explanation": "HU standard deviation is high and downswings more compressed; Moshman suggests 50+ buy-ins. 20-40 is the full-ring standard and can get blown through by HU variance; 10-15 and 2-3 are far beyond reasonable risk."
+    }
+  },
+  "chapterObjectives": {
+    "t1hu-probability": [
+      "Master how the heads-up structural differences (SB doubles as the button, SB acts first preflop, BB acts first postflop) affect the probability framework",
+      "Understand the heads-up starting-hand equity reshuffle: high cards and suited connectors rise when beating only one opponent",
+      "Use combinatorics to derive key heads-up probabilities like \"opponent has an A\" and build three-tier equity anchors"
+    ],
+    "t1hu-outs": [
+      "Understand the relativity of heads-up outs: first judge ahead or behind, then decide whose outs to count",
+      "Master the two-street exact derivation of 6-out overcards and 15-out combo draws, plus the 2/4-rule error boundary",
+      "Convert heads-up draw equity into semi-bluff and shove decisions"
+    ],
+    "t1hu-variance": [
+      "Understand the math of compressed variance in heads-up high-frequency play (√N rule and 50-60% shove distribution)",
+      "Master the probabilistic intuition of losing streaks, avoiding mistaking variance for a skill problem",
+      "Ground variance awareness into heads-up bankroll (50+ buy-ins) and session-management principles"
+    ]
+  }
+}

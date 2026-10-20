@@ -6,7 +6,7 @@
  */
 import { act } from 'react';
 import i18n from '@/i18n/config';
-import { preloadI18n } from '@/i18n/preload';
+import { loadTheoryContentForLevels, preloadI18n } from '@/i18n/preload';
 import { createReviewItem, getTodayString } from '@/shared/utils/spacedRepetition';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 
@@ -42,7 +42,7 @@ export function buildTheoryReviewFixture(quizId = 't1-combinatorics-q1'): Review
  */
 export async function setLanguage(lng: 'zh' | 'en'): Promise<void> {
   await act(async () => {
-    await preloadI18n(['theory'], lng);
+    await Promise.all([preloadI18n(['theory'], lng), loadTheoryContentForLevels(['t1'], lng)]);
     await i18n.changeLanguage(lng);
   });
 }

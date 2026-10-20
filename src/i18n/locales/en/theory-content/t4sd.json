@@ -1,0 +1,208 @@
+{
+  "content": {
+    "t4sd-range-construction": [
+      "Short-Deck Ranges: Different Structure, Same Logic",
+      "The basic logic of range construction is unchanged in short deck (divide by hand strength into value/medium/bluffs), but the structure differs: pair density is higher (8.6% vs 5.9%), flush value rises, and the AK-vs-pair relationship shifts. Result: \"pairs and suited hands\" weigh more in short-deck ranges, while \"pure big high cards (offsuit AK/AQ)\" fall in relative value.",
+      "Short-deck range feature: pairs and suited hands are more valuable; offsuit big high cards relatively devalue. When constructing ranges, allocate more combos to pairs/suited connectors and reduce reliance on \"offsuit AX\".",
+      "Short-Deck Range Value Distribution",
+      "Short-deck preflop range tiers (adjusted from standard hold'em):\n\nTop: AA / KK / QQ (pairs are valuable and dominate AK)\nSecondary value: JJ-TT / AK (strongest non-pair) / big pairs\nSpeculative tier: 66-99 (set mining, trips value) / suited connectors JTs+ / suited Ax\n\nVersus standard hold'em:\nIn hold'em AK is upper-secondary value; in short deck AK is still secondary but below pairs\nIn hold'em suited connectors are the speculative tier; in short deck, with flush value up, they stay speculative but pay better\n\nPolarization: short-deck betting ranges are more polarized (nut pairs + flush draws/bluffs) because draw density is high and made-hand value is large. (Concept from: Short Deck Poker range construction and 6+ structure)",
+      "Short-deck range practice differs: because draw density is high and made-hand value is large (flushes/straights), short-deck ranges can be more \"polarized\" — bet value with strong made hands (pairs/two pair/flushes), semi-bluff with strong draws (flush/straight draws), and check-control medium hands. Some \"medium hands\" in standard hold'em are better checked in short deck because their RIO is high.",
+      "Example: Short deck, BTN opens and you (BB) hold T♠9♠. T9s belongs to the speculative tier in short-deck ranges: it can make a flush (beats full houses) and straights. Chase draws actively postflop. Holding A♠K♦ (offsuit) instead, it's secondary value — can make top pair, but with high pair density on the flop, top pair is worth less than in standard hold'em.",
+      "Example 2 (polarized range): Short-deck flop 8♥7♥6♠, you (BTN IP) hold two pair (87) and a flush draw (A♥9♥). Two pair bets value (not the nuts in short deck but strong), the flush draw semi-bluffs. Medium hands (like 99) have high RIO on wet boards and are better checked. Short-deck range polarization makes the opponent hard to play against.",
+      "Counterintuitive point: short-deck ranges being more polarized doesn't mean \"more aggressive into chaos\". Polarization means strengthening \"value/bluffs\" and checking \"medium hands\" — because medium hands have high RIO on wet short-deck boards. When both extremes of the range are strong and the middle is empty, the opponent finds you hard to play against.",
+      "Short-deck range quick memory: top pairs + secondary AK + speculative pairs/suited connectors. Betting ranges are polarized (value pairs + semi-bluff draws); medium hands check-control. For every hand, first build your bet/check ratio by \"which boards does my range dominate\"."
+    ],
+    "t4sd-equity": [
+      "Multiway Pots: Short-Deck Equity Dilution",
+      "Short deck is a 6-max game, but with high draw density, multiway pots dilute equity (Equity) significantly. In multiway pots your top pair/two pair face multiple opponents' draws and the win rate gets carved up; the risk of a flush/straight draw's \"one of my outs gives another opponent a stronger hand\" rises. Understanding equity dilution is the foundation of short-deck multiway decisions.",
+      "Short-deck multiway equity rule: every extra opponent dilutes your made-hand equity. Top pair/two pair drop in value multiway, and draws lose \"cleanliness\" (may feed a stronger hand) — tighten and pot-control in multiway pots.",
+      "The Math of Equity Dilution",
+      "Multiway equity dilution example (short deck):\n\nHeads-up: you hold top pair vs a single range, about 60%-70%\nThree-way: add one more opponent, your top pair may drop to 35%-45%\n\nDraw out \"cleanliness\":\nMultiway, your flush-draw outs may be held by another opponent / make a bigger flush, losing value\n\nEquity sums: heads-up U₁+U₂=100%, three-way U₁+U₂+U₃=100%\nYour share falls as opponents increase\n\nConclusion: multiway, the thin value of made hands (top pair/two pair) is diluted and draws' reverse implied odds rise. (Concept from: Short Deck Poker multiway equity and 6+ math)",
+      "Short-deck multiway practice: because pots are usually big and entry rates high, multiway pots are common. In multiway pots: (1) tighten marginal calls (top pair weak kicker's value is diluted); (2) fast-play strong hands (avoid giving multiple opponents free draws); (3) chase draws more cautiously (outs cleanliness drops, RIO rises).",
+      "Example: Short deck, you hold A♠K♠ on an A♦J♣8♥ flop (top pair top kicker) three-way. You have top pair of Aces but two opponents. Heads-up your top pair is strong (about 65%); three-way it may drop to 40%. One opponent holds a J, another an 8 or a draw — either can overtake you. The right play is to bet for protection (fast-play), but realize the bigger the pot, the more your thin value is diluted — control or reassess on the turn and river.",
+      "Example 2 (draw RIO): Short deck, you hold 7♥8♥ on a 9♦T♣A♠ flop, drawing to an open-ended straight (6/J), three-way. Your straight-draw outs get \"diluted\" multiway: if another opponent also draws 6/J, you split the pot or he makes a bigger straight. And if the turn brings the opponent two pair/trips, your straight can lose to bigger hands too. Chase draws more cautiously multiway.",
+      "Counterintuitive point: in short-deck multiway pots, \"I have a strong draw so I chase\" can become donating money. Because outs cleanliness drops (may feed a stronger hand) and RIO rises, your draw equity gets divided among many. Multiway pots are for \"fast-playing strong hands + tightening draw chases\", not \"aggressive draw chasing\".",
+      "Short-deck multiway quick memory: each extra opponent dilutes equity about 10%-20%. A heads-up 60% top pair is about 40% three-way. Multiway: fast-play strong hands for protection, tighten marginal calls, and judge draw chases by outs cleanliness."
+    ],
+    "t4sd-blockers": [
+      "Short-Deck Blockers: A New Dimension of Hand Reading",
+      "A blocker is a card you hold that reduces specific opponent combos. Blockers have special value in short deck: because flush value is enormous (beats full houses) and pair density is high, blocking the opponent's flush/pair combos affects bluffing and calling decisions more. When you hold A♥, the opponent's A♥X♥ nut flush is completely blocked — extremely valuable in short deck.",
+      "Short-deck blocker rule: holding an A blocks the nut flush (opponent's A♥X♥ combos = 0); holding a pair blocks the opponent's pairs. Short-deck flushes/pairs are valuable, so blocking them massively impacts bluff success.",
+      "The Triple Application of Short-Deck Blockers",
+      "Short-deck blockers have triple value: (1) blocking flushes — holding A♠ zeros out the opponent's A♠X♠ nut flush, raising bluff success; (2) blocking pairs — holding a K drops the opponent's KK from 6 to 3 combos; (3) unblocking value — not holding a suit means the opponent is more likely to have a flush and pay your value bet. In short deck these blocking effects are amplified by the high value of flushes/pairs.",
+      "Example: Short-deck flop K♠9♠6♠ (three spades), you hold A♦A♣ (no spade A). You block no flushes — the opponent can have A♠X♠ nut flush or a smaller flush. Your AA's bluff-catching value drops; lean fold. Conversely, if you hold A♠ (no flush made), you block all A♠X♠ nut-flush combos and the opponent's \"strongest hand\" is falsified — your bluff or call success rises.",
+      "Example 2 (preflop blocking): Short deck, you (BB) face an SB open and consider a 3-bet bluff. The difference between A♦6♦ and 7♦6♦: A6s's A blocks the opponent's AA and AK (fewer top hands, lower 4Bet frequency), and after a 4Bet A6s folds cleanly; 76s blocks no strong hands and runs into QQ+ more often when 4Bet. Short-deck pair density is high, so the A blocker is more valuable.",
+      "Counterintuitive point: short-deck blockers are a marginal tool, not a master key. Holding A♠ raises bluff success but doesn't guarantee it; using it to overturn base range analysis is abuse. Blockers carry more weight in short deck (high flush/pair value) but remain the \"icing after the base range is right\".",
+      "Short-deck blocker quick memory: on a three-suited board holding A♠ → blocks the nut flush, bonus for bluffing/calling; holding a pair → blocks the opponent's pairs. Off-the-table drill: set up random three-suited boards and count \"opponent nut-flush combos\" with and without your A♠, until you can judge in 10 seconds in play."
+    ]
+  },
+  "quiz": {
+    "t4sd-range-construction-q1": {
+      "question": "The main structural difference between short-deck and standard hold'em range construction is:",
+      "options": [
+        "No difference",
+        "Higher pair density, higher flush value, offsuit big high cards relatively devalue",
+        "Narrower ranges",
+        "Only play suited"
+      ],
+      "explanation": "Short deck has higher pair density (8.6%), higher flush value, and offsuit big high cards relatively devalue — different range structure."
+    },
+    "t4sd-range-construction-q2": {
+      "question": "The speculative tier of a short-deck preflop range mainly includes:",
+      "options": [
+        "AA/KK",
+        "66-99 pairs + suited connectors JTs+ + suited Ax",
+        "Offsuit AK/AQ",
+        "Junk like 72o"
+      ],
+      "explanation": "The short-deck speculative tier is small pairs (set mining) + suited connectors + suited Ax, exploiting trips and flush value."
+    },
+    "t4sd-range-construction-q3": {
+      "question": "Why are short-deck betting ranges more \"polarized\"?",
+      "options": [
+        "Bigger pots",
+        "High draw density and large made-hand value, with medium hands better checked due to high RIO",
+        "Narrower ranges",
+        "No reason"
+      ],
+      "explanation": "Short-deck draw density is high and made-hand value large; betting ranges use value pairs + semi-bluff draws, while medium hands check due to high RIO."
+    },
+    "t4sd-range-construction-q4": {
+      "question": "Holding a medium hand (99) on a short-deck 8♥7♥6♠ flop, the correct play is:",
+      "options": [
+        "Bet for value",
+        "Check for pot control — high RIO on a wet board",
+        "Shove",
+        "Bluff"
+      ],
+      "explanation": "Short-deck medium hands (99) have high RIO on wet boards — better to check and control than bet for value."
+    },
+    "t4sd-range-construction-q5": {
+      "question": "The relative value of offsuit AK in short deck versus standard hold'em is:",
+      "options": [
+        "Higher",
+        "Lower (high pair density makes top-pair value worse than standard hold'em)",
+        "Unchanged",
+        "Completely useless"
+      ],
+      "explanation": "Short-deck pair density is high, so offsuit AK's top-pair value drops — relatively devalued."
+    },
+    "t4sd-equity-q1": {
+      "question": "The main manifestation of equity dilution in short-deck multiway pots is:",
+      "options": [
+        "Equity increases",
+        "Top pair/two pair win rates get carved up, and draw outs lose cleanliness",
+        "No change",
+        "Draws get stronger"
+      ],
+      "explanation": "Multiway, top pair/two pair win rates are divided among many, and draw outs may feed a stronger hand (losing cleanliness)."
+    },
+    "t4sd-equity-q2": {
+      "question": "A heads-up top pair is about 65%; three-way it may drop to:",
+      "options": [
+        "About 60%",
+        "About 35%-45%",
+        "About 70%",
+        "About 90%"
+      ],
+      "explanation": "Each extra opponent dilutes equity; three-way top pair may drop to 35%-45%."
+    },
+    "t4sd-equity-q3": {
+      "question": "In short-deck multiway pots, the correct handling of strong hands is:",
+      "options": [
+        "Slow-play",
+        "Fast-play and bet for protection, avoiding giving multiple opponents free draws",
+        "Fold immediately",
+        "Check"
+      ],
+      "explanation": "Multiway, multiple opponents may chase draws — strong hands should fast-play and bet for protection, avoiding free chases."
+    },
+    "t4sd-equity-q4": {
+      "question": "Why should draw chases be more cautious in short-deck multiway pots?",
+      "options": [
+        "Draws are stronger",
+        "Outs cleanliness drops (may feed a stronger hand) and RIO rises",
+        "Pots are smaller",
+        "No reason"
+      ],
+      "explanation": "Multiway, draw outs may give another opponent a stronger hand and reverse implied odds rise — chase more cautiously."
+    },
+    "t4sd-equity-q5": {
+      "question": "The correct play for marginal top pair weak kicker in short-deck multiway pots is:",
+      "options": [
+        "Mindless value betting",
+        "Tighten or pot-control — thin value is diluted",
+        "Shove",
+        "Always fold"
+      ],
+      "explanation": "Multiway, top pair weak kicker's thin value is diluted — tighten or pot-control."
+    },
+    "t4sd-blockers-q1": {
+      "question": "The special value of blockers in short deck comes from:",
+      "options": [
+        "Bigger pots",
+        "Extremely high flush value (beats full houses) and high pair density",
+        "Cards are dealt slowly",
+        "No reason"
+      ],
+      "explanation": "Short-deck flushes are extremely valuable (beat full houses) and pair density is high — blocking flushes/pairs is amplified."
+    },
+    "t4sd-blockers-q2": {
+      "question": "Holding A♠ on a three-spade board affects the opponent's nut-flush combos by:",
+      "options": [
+        "No effect",
+        "Completely blocking them (A♠X♠ = 0), raising bluff success",
+        "Increasing their combos",
+        "Making the opponent stronger"
+      ],
+      "explanation": "Holding A♠ zeroes the opponent's A♠X♠ nut-flush combos, trimming his strongest call/raise-back hands and raising bluff success."
+    },
+    "t4sd-blockers-q3": {
+      "question": "For a preflop 3-bet bluff, why is A5s better than 76s?",
+      "options": [
+        "A5s blocks AA/AK, lowering the 4Bet frequency",
+        "76s blocks more strong hands",
+        "A5s is a stronger hand",
+        "No difference"
+      ],
+      "explanation": "A5s's A blocks the opponent's AA/AK, lowering 4Bet frequency; 76s blocks no strong hands and runs into QQ+ more often."
+    },
+    "t4sd-blockers-q4": {
+      "question": "The applicability boundary of short-deck blockers is:",
+      "options": [
+        "Can overturn any base analysis",
+        "A marginal tool on edge spots, requiring a correct base range first",
+        "Only preflop",
+        "Only for calling"
+      ],
+      "explanation": "Blockers adjust combo ratios, not rewrite ranges — icing when the base range is right, unable to save you when the base is wrong."
+    },
+    "t4sd-blockers-q5": {
+      "question": "Holding A♦A♣ (no spade A) on a three-spade board facing a bet, the correct tendency is:",
+      "options": [
+        "Call mindlessly",
+        "Be cautious — you block no flushes, so his calling range skews strong",
+        "Raise-bluff",
+        "Shove"
+      ],
+      "explanation": "Without A♠ you block no flushes; he can have A♠X♠ nuts or a smaller flush, lowering your bluff-catching value."
+    }
+  },
+  "chapterObjectives": {
+    "t4sd-range-construction": [
+      "Understand the structural differences between short-deck and standard hold'em range construction (high pair density, higher flush value)",
+      "Master short-deck preflop/postflop range value distribution and polarization strategy",
+      "Learn to build effective ranges from short-deck-specific starting-hand strength"
+    ],
+    "t4sd-equity": [
+      "Understand the mechanism of equity dilution in short-deck multiway pots",
+      "Master the equity allocation differences between draws and made hands in short-deck multiway pots",
+      "Learn to adjust betting and calling decisions in short-deck multiway pots"
+    ],
+    "t4sd-blockers": [
+      "Understand the special application of blockers in short deck (high pair density, big flush value)",
+      "Master the blocker value of blocking flushes/pairs in short deck",
+      "Learn to optimize short-deck bluff and call decisions with blockers"
+    ]
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "content": {
+    "t9sd-integration": [
+      "From Fragments to a System: The Short-Deck Decision Loop",
+      "Each chapter of T1-T8 is a building block of the short-deck system: T1 probability (36-card combos/outs), T2 odds (ante structure/implied odds), T3 starting hands (pairs>AK/flushes), T4 ranges, T5 GTO, T6 betting, T7 opponents, T8 psychology. The short-deck master doesn't \"memorize each chapter\" but connects them into a decision loop — facing any situation, run automatically through \"range → math → betting → opponent → psychology\".",
+      "Short-deck decision loop: first ask \"does my range dominate this board\" (T4), then compute \"EV and odds\" (T2), then \"what size\" (T6), then \"what short-deck inertia does the opponent have to exploit\" (T7), finally \"am I emotionally stable\" (T8). All five questions, none optional.",
+      "Theory Deforms With the Scenario",
+      "Short-deck theory deforms along two parameters: stack depth and game type. Deep stacks (100BB+): wider ranges, more polarized betting, more aggressive draw chasing (good implied odds). Short stacks (under 20BB): more frequent preflop all-ins, adjusted set-mining thresholds, smaller positional value. Cash: unlimited re-buy, manageable variance, measured in bb/100. Tournaments: finite chips, ICM pressure, strategy shifts by stage (see the “Short Deck Tournament I” lesson).",
+      "Example: Short deck, deep stack 100BB, you hold 7♠8♠ facing a BTN open. Decision loop: range — 78s is the speculative tier in short deck (can make flushes/straights); math — call price vs implied odds (high made value); betting — chase actively but pot-control wet boards; opponent — does he have short-deck inertia (overrating AK / underrating flushes); psychology — don't tilt when outdrawn. One decision, all five questions passed.",
+      "Example 2 (short stack): Short deck, 20BB deep, you hold A♠Q♠. Range — AQ is secondary value in short deck; math — EV of shove vs min-raise; betting — just shove with a short stack; opponent — read the fold rate; psychology — accept variance. Stack depth changes how the same hand plays — short stacks are more direct.",
+      "Counterintuitive point: a short-deck master's \"cleverness\" isn't perfect decisions but \"system stability\". Occasional mistakes are inevitable, but a stable decision loop plus strict emotional discipline keep the long-term expectation curve climbing. Chasing \"every-hand perfection\" instead causes overthinking and tilt.",
+      "Building your short-deck system in four steps: learn (T1-T8 theory) → drill (solver/hand examples) → play (execute the loop live) → review (hand-by-hand review + notes). Four-step loop, and your short-deck level climbs steadily with every session."
+    ],
+    "t9sd-case-study": [
+      "What Professional Short-Deck Players Think",
+      "The core value of studying professional short-deck players (like top Triton Series performers) is understanding their decision framework rather than imitating a specific move. Top short-deck players share: short-deck thinking (outs recalculated, correct rankings), frequency balance (not leaking ranges), range polarization (value pairs + semi-bluff draws), and emotional stability (maintaining quality under high variance).",
+      "The dividing line between pros and amateurs isn't luck but \"decision framework\". Pros rely on systems (short-deck thinking + frequency balance + discipline); amateurs rely on full-ring intuition. Studying pros means learning systems, not copying cards.",
+      "Deconstructing the Pro Short-Deck Decision Framework",
+      "Top short-deck players' frameworks usually have four layers: (1) preflop ranges — pairs and suited hands first, AK next, adjusted by opponent; (2) postflop ranges — bet/check by board ownership (whose range/nut advantage); (3) bet sizing — big sizes on wet boards for protection, small bets on dry; (4) psychology — maintaining decision quality under high variance. Each layer has clear inputs and outputs, not improvisation.",
+      "Example (preflop ranges): A pro short-deck player facing a BB who 3-bets too much narrows his opening range, reducing the marginal hands that only fold after a 3-bet; against an over-folder, he raises the open frequency toward 100%. This is a computable \"micro-adjust range by opponent tendency\" decision, not feel.",
+      "Example 2 (postflop range allocation): A pro short-deck player uses 2/3+ pot big bets to protect overpairs on wet boards (9♦8♣6♥) because short-deck draw density is high and small bets give draws too cheap a price; on relatively dry boards (K♠7♦J♣) he bets small for thin value. Short-deck's signature \"big sizing on wet boards\" is the dividing line between pros and amateurs.",
+      "Example 3 (emotional discipline): Top short-deck players still decide with the same framework after losing 10 consecutive 45%-55% all-ins — they treat variance as an uncontrollable variable and control only decision quality. This is T8's \"process vs result\" separation manifested at the professional level.",
+      "Counterintuitive point: the value of studying pro short-deck players isn't \"how great they are\" but \"how replicable their system is\". An amateur drilling the pro framework for a month often improves faster than \"ten years of full-ring feel\" — because systems are trainable and feel isn't replicable.",
+      "Pro short-deck hand-study process: (1) record all actions of a hand; (2) deconstruct layer by layer with the decision loop (range/math/betting/opponent/psychology); (3) compare with your own handling to find gaps; (4) distill one reusable principle. Every 10 hands studied makes your short-deck framework more complete."
+    ],
+    "t9sd-tournament-structure": [
+      "The Ante Structure Rewrites the Price of a Short-Deck Tournament",
+      "The standard-track chapters \"ICM Theory: When Chips Are Not Money\" and \"Multiway Frequencies and Sizing\" deal with chip value and multiway frequency. This chapter sits one layer earlier, on price. Short-deck tournaments usually run per-player antes and fewer seats, most often six, and both rewrite the pot directly — while the pot is the only input any threshold formula reads.",
+      "Dead money and the break-even fold rate of an open (BTN opens to 2.2bb):\n\nNo antes: dead money = SB + BB = 1.5bb  ->  Alpha = 2.2 / (1.5 + 2.2) = 59.5%\n0.1bb per player across six: dead money = 1.5 + 0.6 = 2.1bb  ->  Alpha = 2.2 / 4.3 = 51.2%\n\nGap: 8.3 points.\nSame hand, same size, and the ante structure pushes the fold rate a steal needs from nearly sixty percent down to just over fifty. Most of what people mean by \"open wider in a short-deck tournament\" is the ante, not the deck.",
+      "The threshold formulas were not rewritten for short deck: Alpha, required defence and the equity needed to call all read only pot and size. What changed is the pot. So when a tournament tip says \"you must open wider / defend wider\", ask first: did an ante raise the dead money? That question locates the adjustment far better than \"which deck is this\".",
+      "The big blind closing price and the short-stack M-ratio",
+      "The big blind faces a 2.2bb open and must call a further 1.2bb:\n\nNo antes: pot after calling = 1.5 + 2.2 + 1.2 = 4.9bb -> threshold 1.2 / 4.9 = 24.5%\nWith 0.6bb of antes: pot after calling = 2.1 + 2.2 + 1.2 = 5.5bb -> threshold 1.2 / 5.5 = 21.8%\n\nThe threshold drops 2.7 points, so the big blind defends wider. Note that both relief numbers come from the same 0.6bb of dead money: the opener break-even fold rate falls 8.3 points, the defender threshold falls 2.7.",
+      "Worked example (the price of a 10bb shove): BTN moves all-in for 10bb, the big blind has 1bb in and must call 9 more.\nNo antes: threshold = 9 / 20.5 = 43.9%\nWith 0.6bb of antes: threshold = 9 / 21.1 = 42.7%\nAdding 0.6bb of dead money moves the threshold only 1.2 points. At short-stack depth the all-in threshold is barely sensitive to antes; what is sensitive is every street where nobody is all-in yet (steals and defence, previous item). \"Antes change everything\" is an illusion: they mainly change the pre-flop game that is still unfinished.",
+      "Put the same dead money on a clock and it is clearer: M = effective stack / dead money per orbit. At a six-handed table with 10bb, without antes each orbit costs 1.5bb so M = 6.7; with 0.6bb of antes it costs 2.1bb so M = 4.8, a compression of 1 - 1.5 / 2.1 ≈ 28.6%, close to a third. A lower M means the forced-shove clock runs earlier, and short deck pre-flop equity plus cheap all-ins stack on top of it, so tournaments reach push-fold mode sooner.",
+      "Worked example (do not copy holdem instincts on the bubble): at 10bb the threshold to call an all-in sits near 43%-44% (previous item), while short-deck all-in collisions cluster in the 45%-55% coinflip band, offering an edge of only one to seven points of equity. Set that sliver against the cost of elimination on the bubble and the conclusion is that being \"slightly ahead\" does not justify a call: you need a structural lead, against ranges weaker than that 55% end. The ICM numbers themselves belong to the chapter \"ICM Theory: When Chips Are Not Money\"; this chapter does not restate them.",
+      "Counter-intuitive point: the ante structure changes the streets where nobody is all-in, not the mathematics of the all-in. Treating a short-deck tournament as \"fold to ICM on every spot\" misses this layer — price amplifies pre-flop stealing and defence, while once both players are all-in the threshold is nearly just a ratio of size to dead money.",
+      "The structural layer: how the deck changes tournament tempo",
+      "Short deck has no 2 through 5, a flush beats a full house and straights are harder to make, so made hands are stronger overall. That thins out marginal value on later streets — a single pair should usually give up earlier in a multiway pot (see the standard-track chapter \"Multiway Frequencies and Sizing\"). On tournament tempo this cuts both ways: continuation bets collect more, and losing to a better made hand costs more. That layer is a structural judgement with no single computable number — resist writing it as a formula.",
+      "Three prices on one table (six-handed, 0.1bb antes, 2.2bb open):\n\nDead money 2.1bb  ->  break-even fold rate of an open Alpha = 51.2% (59.5% without antes)\nBig blind calling 1.2bb  ->  threshold 21.8% (24.5% without antes)\n10bb all-in  ->  threshold 42.7% (43.9% without antes)\n\nNone of these expressions contains a deck parameter. The short-deck character enters through two channels instead: the higher dead money created by antes, and the more extreme equity distribution — stronger made hands, all-ins closer to a coinflip.",
+      "One line to keep: a short-deck tournament is not a second tournament theory. It is the same price arithmetic given more dead money (0.6bb of antes cuts the open break-even fold rate by 8.3 points) and a more extreme equity distribution (45%-55% all-ins, stronger made hands). Adjust pre-flop ranges and tempo, not the formulas, and remember the near-30% compression of M is what makes the clock run earlier.",
+      "Three things to do: check the structure sheet for whether antes are per player, since that sets dead money, and calibrate opening frequencies to 51.2% rather than 59.5%; keep the all-in call threshold in the 43%-44% band and do not let a big ante convince you that calling got much cheaper; at short-stack depth judge the clock from M, not your buy-in from your nerve."
+    ]
+  },
+  "quiz": {
+    "t9sd-integration-q1": {
+      "question": "The correct order of the short-deck decision loop is:",
+      "options": [
+        "Betting → range → math → psychology",
+        "Range → math → betting → opponent → psychology",
+        "Psychology → range → betting → math",
+        "Only look at results"
+      ],
+      "explanation": "The loop: range (T4) → math (T2) → betting (T6) → opponent (T7) → psychology (T8) — all five questions, none optional."
+    },
+    "t9sd-integration-q2": {
+      "question": "The main strategic difference between deep-stacked and short-stacked short deck is:",
+      "options": [
+        "No difference",
+        "Deep stacks: wider ranges, aggressive draw chasing; short stacks: more frequent, more direct preflop all-ins",
+        "Short stacks have wider ranges",
+        "Deep stacks don't chase draws"
+      ],
+      "explanation": "Deep stacks play wider ranges and chase draws aggressively (good implied odds); short stacks shove preflop more, adjust set mining, and play more directly."
+    },
+    "t9sd-integration-q3": {
+      "question": "Short-deck review should focus most on:",
+      "options": [
+        "How much this hand lost",
+        "Whether the decision process (range/EV/size/opponent/emotion) was correct",
+        "How many hands were won",
+        "How strong the opponent is"
+      ],
+      "explanation": "Review only process (decision quality), not results (win/loss), turning every hand into training for continuous improvement."
+    },
+    "t9sd-integration-q4": {
+      "question": "Short-deck short stack (20BB) holding AQs, the most reasonable play is:",
+      "options": [
+        "Complex multi-street betting",
+        "Shove directly or small raise to shorten the decision tree",
+        "Check to see a flop",
+        "Fold"
+      ],
+      "explanation": "With a short stack you don't plan multiple streets; AQ has solid equity against wide ranges — shove or small raise is the standard play."
+    },
+    "t9sd-integration-q5": {
+      "question": "\"System stability\" matters more than \"every-hand perfection\" because:",
+      "options": [
+        "Perfection is impossible",
+        "A stable decision loop plus emotional discipline keeps long-term expectation climbing; chasing perfection causes overthinking and tilt",
+        "System stability is easier",
+        "Opponents prefer it"
+      ],
+      "explanation": "Occasional mistakes are inevitable; a stable loop and discipline keep the long-term expectation curve climbing, while chasing \"every-hand perfection\" causes overthinking and tilt."
+    },
+    "t9sd-case-study-q1": {
+      "question": "The core dividing line between top short-deck players and amateurs is:",
+      "options": [
+        "Luck",
+        "Decision framework (short-deck thinking + frequency balance + discipline)",
+        "Talent",
+        "Chip count"
+      ],
+      "explanation": "Pros rely on systems (short-deck thinking, frequency balance, discipline); amateurs rely on full-ring intuition."
+    },
+    "t9sd-case-study-q2": {
+      "question": "How does a pro short-deck player adjust preflop ranges against a 3-bet-too-much opponent?",
+      "options": [
+        "Widen the open",
+        "Narrow the open, reducing marginal hands that only fold after a 3-bet",
+        "Stop entirely",
+        "Mindless shoving"
+      ],
+      "explanation": "Against a 3-bet-too-much opponent, marginal hands only fold after a 3-bet — narrow the opening range."
+    },
+    "t9sd-case-study-q3": {
+      "question": "A pro short-deck player holding an overpair on a wet board (9♦8♣3♥) should:",
+      "options": [
+        "1/3-pot small bet",
+        "2/3+ pot big bet for protection (short-deck draw density is high)",
+        "Check",
+        "Fold immediately"
+      ],
+      "explanation": "Short-deck wet boards have high draw density; small bets give draws too cheap a price, so pros protect overpairs with big sizes."
+    },
+    "t9sd-case-study-q4": {
+      "question": "Top short-deck players deciding with the same framework after losing multiple all-ins reflects:",
+      "options": [
+        "Stubbornness",
+        "Emotional discipline — treating variance as an uncontrollable variable and controlling only decision quality",
+        "Not caring about winning/losing",
+        "Good luck"
+      ],
+      "explanation": "Top players treat variance as an external variable and control only decision quality — the ultimate form of \"process vs result\" separation."
+    },
+    "t9sd-case-study-q5": {
+      "question": "The most valuable way to study pro short-deck hands is:",
+      "options": [
+        "Copying the moves",
+        "Deconstructing layer by layer with the decision loop and distilling reusable principles",
+        "Only watching how much they win",
+        "Imitating luck"
+      ],
+      "explanation": "Deconstruction + comparing gaps + distilling principles converts the pro framework into your own system."
+    },
+    "t9sd-tournament-structure-q1": {
+      "question": "A six-handed table with a 0.1bb ante per player raises pre-flop dead money from 1.5bb to:",
+      "options": [
+        "1.6bb",
+        "2.1bb",
+        "2.6bb",
+        "6.0bb"
+      ],
+      "explanation": "0.1bb x 6 players = 0.6bb of antes, on top of 1.5bb of blinds, for 2.1bb dead."
+    },
+    "t9sd-tournament-structure-q2": {
+      "question": "The break-even fold rate for a 2.2bb open therefore becomes about:",
+      "options": [
+        "45.2%",
+        "51.2%",
+        "59.5%",
+        "66.7%"
+      ],
+      "explanation": "Alpha = 2.2 / (2.1 + 2.2) = 51.2%; without antes it is 2.2 / 3.7 = 59.5%."
+    },
+    "t9sd-tournament-structure-q3": {
+      "question": "Facing a 2.2bb open, the ante structure pulls the big blind call threshold from 24.5% down to about:",
+      "options": [
+        "18.0%",
+        "21.8%",
+        "25.0%",
+        "27.3%"
+      ],
+      "explanation": "1.2 / (2.1 + 2.2 + 1.2) = 1.2 / 5.5 = 21.8%, 2.7 points below the no-ante figure."
+    },
+    "t9sd-tournament-structure-q4": {
+      "question": "With 10bb effective stack and 0.6bb of antes at six-handed, the M-ratio is about:",
+      "options": [
+        "4.8",
+        "6.7",
+        "10.0",
+        "15.0"
+      ],
+      "explanation": "M = 10 / 2.1 = 4.8; without antes it is 10 / 1.5 = 6.7, so antes compress the clock about 28.6%."
+    },
+    "t9sd-tournament-structure-q5": {
+      "question": "Which statement about antes and all-in thresholds is correct?",
+      "options": [
+        "Antes cut the all-in threshold by more than ten percent",
+        "The threshold formula has to be rewritten for short deck",
+        "At 10bb the threshold moves only about 1.2 points; antes mainly change the streets that are not all-in",
+        "Antes affect the blind structure but not dead money"
+      ],
+      "explanation": "9 / 20.5 = 43.9% against 9 / 21.1 = 42.7%, a difference of 1.2 points; what gets amplified is pre-flop stealing and defence."
+    }
+  },
+  "chapterObjectives": {
+    "t9sd-integration": [
+      "Integrate the T1-T8 short-deck knowledge into a complete decision loop",
+      "Understand how short-deck theory adapts across stack depths and game types",
+      "Build a personal short-deck review and learning system"
+    ],
+    "t9sd-case-study": [
+      "Study professional short-deck players' decision frameworks and short-deck-specific adjustments",
+      "Understand the shared traits of top players: short-deck thinking, frequency balance, emotional stability",
+      "Learn to distill reusable methodologies from professional short-deck cases"
+    ],
+    "t9sd-tournament-structure": [
+      "Compute the dead-money composition under an ante structure and use Alpha = b / (P+b) for the break-even fold rate of an open (59.5% to 51.2%)",
+      "Distinguish how strongly antes affect streets that are not all-in versus the all-in threshold itself (2.7 points against 1.2 points)",
+      "Use M = effective stack / dead money per orbit to show that antes compress the short-stack clock by close to 29%",
+      "Explain why the threshold formulas contain no deck parameter, and through which two channels short-deck character enters instead"
+    ]
+  }
+}

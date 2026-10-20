@@ -1,0 +1,213 @@
+{
+  "content": {
+    "t8sd-variance": [
+      "Short-Deck Variance: The Test of Mental Resilience",
+      "Short-deck variance is significantly higher than standard hold'em (flop rates/draws/pot sizes), making mental resilience a short-deck player's core asset. Losing multiple 45%-55% all-ins in a row is mathematical normalcy in short deck. The key to handling variance isn't \"holding back tears\" but \"treating variance as an uncontrollable external variable and controlling only decision quality\".",
+      "Short-deck variance rule: variance is uncontrollable weather; decision quality is controllable ability. Treat losing streaks as weather, not a verdict, to keep your strategy undistorted through variance.",
+      "Variance Budget and Mental Resilience",
+      "Short-deck variance budget (mental resilience framework):\n\nSingle all-in standard deviation σ = √(p(1−p)) × pot size\nShort-deck all-in equity p often lands in 45%-55%, so σ is relatively high\n\nN-hand cumulative variance = σ×√N, expectation = N×marginal edge×pot size\n\nExample: p=50%, pot 100:\nσ = √(0.5×0.5)×100 = 50\n50-hand cumulative variance = 50×√50 ≈ 354, expectation 0\n\nConclusion: even at EV neutrality, short deck can swing ±350 chips over 50 hands — the variance budget is the mathematical basis of psychological tolerance. (Concept from: The Mathematics of Poker variance framework + short-deck high variance)",
+      "Short-deck resilience practice: preset a variance budget (pause after losing 40-50BB), use a decision log instead of a win/loss log, and accept that \"short-deck variance is structural\". Resilience isn't \"enduring bigger losses\" but \"maintaining the same decision quality while both wins and losses are violent\".",
+      "Example: Short deck, you shove 8 hands in a row at 50% equity (draws vs made hands colliding), and losing all 8 is 0.5^8 ≈ 0.4%; short deck has frequent all-ins per hour, so a session may contain one. Your mind knows \"EV neutral\" but emotions want \"to get even\". The right move: recognize the revenge impulse → pause → restart with \"what is this hand's EV\".",
+      "Example 2 (executing the variance budget): Short deck, you've lost 45BB in a session (near the 50BB budget). Even if the table is still good, execute \"pause at 50BB\" — because continuing may make your worst adjustments during the most violent variance. Stop and restart, don't chase and re-buy.",
+      "Counterintuitive point: the hardest part of handling short-deck variance is \"letting your guard down after winning\". After winning a few hands, players often relax, play marginal hands, and give the edge back. Short-deck discipline must be consistent throughout, win or lose.",
+      "Short-deck variance-handling triad: (1) preset a variance budget (pause after losing 40-50BB); (2) use a decision log instead of a win/loss log; (3) stand up every 100 hands to break losing-streak inertia. These three keep variance from steering your strategy."
+    ],
+    "t8sd-tilt": [
+      "Short-Deck Tilt: The Emotional Trap of High Variance",
+      "Short deck is a tilt hotspot: high variance, high flop rates, big pots, and violent win-loss alternation. Tilt comes from three triggers: result dependence, dashed expectations, and revenge psychology. In short deck, with large variance and common losing streaks, tilt triggers more easily. Tilt distorts your range (opening too loose, calling too wide, chasing too aggressively), systematically deviating from baseline.",
+      "Short-deck tilt-defense triad: self-awareness (set an emotional red light), preset discipline (stop-loss point), and process attribution (only ask EV). Build the defense off the table so it's ready when tilt hits.",
+      "Tilt Mechanisms and Defenses",
+      "Tilt's horror is that it distorts your range: you open looser, call wider, and chase harder — all deviating from equilibrium. Three defenses: (1) self-awareness — set an \"emotional red light\" (N consecutive hands wanting revenge/raise to get even) and force a pause; (2) pre-commitment — set the stop-loss off the table and leave at the line; (3) process attribution — review only whether decision EV was correct, never change play because of results.",
+      "Example: Short deck, you lose 6 consecutive 50% all-ins (0.5^6 ≈ 1.6%, encountered several times an hour in short deck). Your mind knows \"I played right\" but emotions want \"to get even\". If you size up to chase losses, that's a tilt loop. The right move: recognize the revenge impulse → pause 10 minutes → restart with \"what is this hand's EV\".",
+      "Example 2 (process vs result): Short deck, you shove AK vs 66 (short-deck AK vs the smallest pocket pair is roughly a coin flip or better) and 66 wins. You lost the result, but the process: with proper pot odds, calling was +EV — you played right. Short-deck pros review only process: \"was this decision EV-correct?\" Tilters review only results: \"I lost to junk again.\"",
+      "Counterintuitive point: the most dangerous tilt in short deck isn't \"impulse when losing\" but \"letting your guard down after winning\". After winning a few hands, players relax, play marginal hands, and give the edge back. Short-deck discipline must be consistent throughout, win or lose.",
+      "Short-deck tilt-control triad: (1) emotional red light — pause after N consecutive hands wanting revenge; (2) preset stop-loss — leave after losing 40-50BB; (3) process attribution — review only EV. Build all three off the table so they're ready when tilt hits."
+    ],
+    "t8sd-bankroll": [
+      "The Bankroll Threshold Is a Function of Variance, Not a Slogan",
+      "The standard-track chapter \"Bankroll Management Psychology\" gives the rules and the psychological job they do. This chapter handles one conversion only: where the buy-in numbers come from once variance sits behind them, and where the threshold moves when that variance is swapped for short deck. After the conversion, \"short deck needs 150+ buy-ins\" stops being a slogan and becomes a range you can test.",
+      "Ruin risk (diffusion / continuous approximation, which gives a lower bound; discrete buy-in structures push the real probability higher):\n\nROR = exp(-2 μ B / σ²)\nStated in bb/100: μ = winrate / 100, σ = volatility / 10, B = bankroll measured in bb.\n\nSubstitute: winrate 5bb/100, sigma = 150bb/100, bankroll 15,000bb (150 buy-ins of 100bb)\n  -> ROR = exp(-6.67) ≈ 0.13%\nSame money and winrate at sigma = 100bb/100 -> exp(-15), effectively zero\n\nSame bankroll, same edge: change only the volatility from 100 to 150 and the risk climbs two orders of magnitude.",
+      "Rearrange that expression into a threshold: hold μ and the target ROR fixed and the bankroll you need is proportional to sigma squared. The buy-in requirement is a function of variance, not of feeling — this single proportionality is the whole reason short deck needs a higher threshold, and the reason it can be converted straight from holdem numbers.",
+      "Turning \"150+ buy-ins\" from slogan into range",
+      "If the holdem habit is 50 buy-ins at sigma = 100bb/100 (about 0.005% ruin risk, see the next item), the short-deck conversion by B ∝ σ² is:\n\nsigma = 150bb/100 -> 50 x (150/100)^2 = 112.5 ≈ 113 buy-ins\nsigma = 220bb/100 -> 50 x (220/100)^2 = 242 buy-ins\n\nSo \"150 or more\" sits inside 113-242: conservative for a volatility band of 150-220 without being extravagant. It is not a universal constant. Estimate your own sigma at 220 and 150 buy-ins only buys exp(-3.10) ≈ 4.5% ruin risk; pushing back under 1% takes about 223 buy-ins.",
+      "Worked example (the same money carries different risk in the two games): you have 10,000bb — 100 buy-ins — and an edge of 5bb/100.\nHoldem at sigma = 100: ROR = exp(-10) ≈ 0.005%\nShort deck at sigma = 150: ROR = exp(-4.44) ≈ 1.2%\nSame bankroll, same edge, ruin risk roughly two orders of magnitude apart. That is the computable version of \"short deck needs a thicker buffer\": the distribution is wider, the mindset is not weaker.",
+      "Stop-loss budgets convert the same way and should be written as multiples of sigma. Short-deck sigma = 150bb/100 means 15bb per hand, so one 100-hand unit accumulates 15 x sqrt(100) = 150bb. The rule of thumb \"pause after losing 40bb\" therefore sits at z = (-40 - 5) / 150 = -0.30 for a player who genuinely wins 5bb/100 — by the standard normal table roughly 38% of all 100-hand units reach that point. The rule is an emotional circuit-breaker, not a verdict on your play.",
+      "Write the budget as a multiple of sigma and the trigger frequency comes straight off the table:\n\nDaily budget = 1 sigma of a 100-hand unit (150bb = 1.5 buy-ins) -> one-sided about 16%, so it fires roughly every 6.3 units\nDaily budget = 2 sigma (300bb) -> one-sided about 2.3%, roughly every 43 units\n\nThe same sentence \"stop when it gets bad\" means two quite different disciplines at 1σ versus 2σ. An absolute buy-in number will never tell you that; a sigma multiple will.",
+      "Counter-intuitive point: the threshold tracks variance squared, not variance. Move volatility from 100 to 150 (+50%) and the threshold has to move 2.25 times (+125%). Most people adjust by +50%, so they are permanently short — and the shortfall is most expensive precisely during the high-variance stretches.",
+      "Losing streaks are not a verdict: convert the result into a probability",
+      "Worked example (where an eight-loss streak actually sits): short-deck all-in collisions cluster in the 45%-55% coinflip band, so streaks decouple from real skill. At p = 0.5, eight straight losses is 0.5^8 ≈ 0.4% and ten is about 0.1%. At a pace of dozens of all-ins per session these events answer \"how often\", not \"whether\" — reading one as a technical signal and changing strategy is treating noise as data.",
+      "One line to keep: write the bankroll as a function of sigma (B ∝ σ², so 50 holdem buy-ins become 113-242 in short deck, with \"150+\" sitting inside that range); write the stop-loss as a multiple of sigma (1σ fires about 16% of the time, 2σ about 2.3%); write the losing streak as a probability (0.5^8 ≈ 0.4%). All three are computable, so none of them has to be executed by feel.",
+      "Checklist: keep the conversion table to hand (50 holdem buy-ins -> 113-242 short-deck); before moving money, write down which sigma you used; when you are down, compute z before deciding whether to change strategy and treat anything with |z| < 1 as noise. Writing the sigma down forces your real assumption into the open instead of letting \"it feels solid\" decide for you."
+    ]
+  },
+  "quiz": {
+    "t8sd-variance-q1": {
+      "question": "The core of handling short-deck variance is:",
+      "options": [
+        "Holding back tears",
+        "Treating variance as an uncontrollable variable and controlling only decision quality",
+        "Raising to get even",
+        "Stopping entirely"
+      ],
+      "explanation": "Variance is uncontrollable weather; decision quality is controllable ability. Handling variance means keeping strategy undistorted."
+    },
+    "t8sd-variance-q2": {
+      "question": "Losing multiple 50% all-ins in a row in short deck is correctly understood as:",
+      "options": [
+        "Extreme bad luck",
+        "Mathematical normalcy under high-frequency confrontation — maintain decision quality",
+        "Poor play",
+        "Opponent cheating"
+      ],
+      "explanation": "Short deck has frequent all-ins; 0.5^N losing streaks are mathematical normalcy. Maintain decision quality instead of doubting your level."
+    },
+    "t8sd-variance-q3": {
+      "question": "The \"pause at 50BB\" variance budget exists to:",
+      "options": [
+        "Limit the maximum you can lose",
+        "Stop and restart, avoiding chase-style re-buying",
+        "Guarantee every session wins",
+        "Compute expectation"
+      ],
+      "explanation": "A variance budget is stop-loss discipline — pause at the budget line, cutting the \"get even\" impulse and avoiding bad adjustments during violent variance."
+    },
+    "t8sd-variance-q4": {
+      "question": "The hardest situation for short-deck variance tolerance is:",
+      "options": [
+        "Losing streaks",
+        "Letting your guard down after winning (relaxing and playing marginal hands)",
+        "Ties",
+        "Cards being dealt slowly"
+      ],
+      "explanation": "Relaxation after winning is the most dangerous — players let their guard down, play marginal hands, and give the edge back. Short-deck discipline must be consistent throughout."
+    },
+    "t8sd-variance-q5": {
+      "question": "The best review method for short-deck mental resilience is:",
+      "options": [
+        "Only watch wins/losses",
+        "Use a decision log recording reasoning, asking only EV not results",
+        "Only review winning hands",
+        "No review"
+      ],
+      "explanation": "Record each key decision's reasoning with a decision log, asking only EV not results, to maintain quality through variance."
+    },
+    "t8sd-tilt-q1": {
+      "question": "Why is short deck a tilt hotspot?",
+      "options": [
+        "Cards are dealt slowly",
+        "High variance, high flop rates, big pots, and violent win-loss alternation",
+        "Complex rules",
+        "No reason"
+      ],
+      "explanation": "Short deck has high variance, high flop rates, big pots, and violent win-loss alternation — tilt triggers more easily."
+    },
+    "t8sd-tilt-q2": {
+      "question": "Tilt's most typical damage to your range is:",
+      "options": [
+        "Tightening the range",
+        "Opening too loose, calling too wide, chasing too aggressively",
+        "Making play more conservative",
+        "No effect"
+      ],
+      "explanation": "Tilt distorts your range: opening looser, calling wider, chasing harder — systematically deviating from the equilibrium baseline."
+    },
+    "t8sd-tilt-q3": {
+      "question": "The core of separating \"process vs result\" is:",
+      "options": [
+        "Only winning counts",
+        "Review only decision EV, never change play because of results",
+        "Change strategy after losses",
+        "Process doesn't matter"
+      ],
+      "explanation": "Review only process (decision EV) not results (win/loss) to maintain long-term quality."
+    },
+    "t8sd-tilt-q4": {
+      "question": "The short-deck tilt-defense triad is:",
+      "options": [
+        "Emotional red light, preset stop-loss, process attribution",
+        "Willpower alone",
+        "Raising to get even",
+        "Stopping entirely"
+      ],
+      "explanation": "Self-awareness (emotional red light), preset discipline (stop-loss point), process attribution (only ask EV) — built off the table."
+    },
+    "t8sd-tilt-q5": {
+      "question": "The correct statement about when short-deck tilt occurs is:",
+      "options": [
+        "Only during losing streaks",
+        "Relaxation after winning is equally dangerous",
+        "It never happens",
+        "Only in tournaments"
+      ],
+      "explanation": "Relaxation after winning is equally dangerous — letting your guard down to play marginal hands gives the edge back. Discipline must be consistent throughout."
+    },
+    "t8sd-bankroll-q1": {
+      "question": "With the edge and the target ruin probability fixed, the bankroll you need is proportional to:",
+      "options": [
+        "sigma",
+        "sigma squared",
+        "the square root of sigma",
+        "the buy-in count itself"
+      ],
+      "explanation": "ROR = exp(-2 μ B / σ²) forces B ∝ σ² once μ and the target ROR are held constant — the threshold is a function of variance."
+    },
+    "t8sd-bankroll-q2": {
+      "question": "The holdem habit \"50 buy-ins at sigma = 100\" converts to roughly how many buy-ins at sigma = 150?",
+      "options": [
+        "75",
+        "113",
+        "150",
+        "242"
+      ],
+      "explanation": "50 x (150/100)^2 = 112.5, so about 113 buy-ins; the 242 figure only applies at sigma = 220."
+    },
+    "t8sd-bankroll-q3": {
+      "question": "Bankroll 10,000bb, edge 5bb/100, sigma = 150bb/100. The continuous-approximation ruin risk is about:",
+      "options": [
+        "0.005%",
+        "0.13%",
+        "1.2%",
+        "4.5%"
+      ],
+      "explanation": "ROR = exp(-2 x 0.05 x 10000 / 15²) = exp(-4.44) ≈ 1.2%; the same bankroll at sigma = 100 gives about 0.005%."
+    },
+    "t8sd-bankroll-q4": {
+      "question": "With short-deck sigma = 150bb/100, the cumulative standard deviation over a 100-hand unit is about:",
+      "options": [
+        "15bb",
+        "50bb",
+        "150bb",
+        "450bb"
+      ],
+      "explanation": "Per-hand sigma is 150 / 10 = 15bb, so 100 hands accumulate 15 x sqrt(100) = 150bb."
+    },
+    "t8sd-bankroll-q5": {
+      "question": "Setting the daily stop-loss at 150bb (exactly 1 sigma) fires, on the one-sided normal approximation, about:",
+      "options": [
+        "once every 6.3 units",
+        "once every 43 units",
+        "almost never",
+        "every single time"
+      ],
+      "explanation": "A one-sided tail of about 16% means 1 / 0.159 ≈ 6.3 units; it is 2 sigma (300bb) that drops to about 2.3% and roughly every 43 units."
+    }
+  },
+  "chapterObjectives": {
+    "t8sd-variance": [
+      "Understand the test that short-deck high variance poses to mental resilience",
+      "Master the psychological strategies and variance budget for absorbing short-deck variance",
+      "Learn to maintain decision quality under short-deck high-frequency variance"
+    ],
+    "t8sd-tilt": [
+      "Understand why tilt fires frequently under short-deck high variance",
+      "Master the self-awareness and preset discipline to avoid tilt",
+      "Learn to control emotions by separating \"process vs result\""
+    ],
+    "t8sd-bankroll": [
+      "Compute the ruin probability with ROR = exp(-2 μ B / σ²) for a given edge and volatility, and read the continuous approximation as a lower bound",
+      "Convert a holdem buy-in threshold to short deck using B ∝ σ² (50 buy-ins become 113 at sigma 150 and 242 at sigma 220)",
+      "Express a daily stop-loss as a multiple of cumulative sigma and estimate its trigger frequency from the one-sided normal (1σ about 16%, 2σ about 2.3%)",
+      "Place a losing streak on a probability scale with 0.5^n and separate psychological signals from technical ones"
+    ]
+  }
+}

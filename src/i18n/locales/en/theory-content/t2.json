@@ -1,0 +1,229 @@
+{
+  "content": {
+    "t2-ev": [
+      "The Definition of EV",
+      "Expected Value (EV) = the payoff of each possible outcome × the probability of that outcome, summed over all outcomes. It answers: if this spot repeated infinitely, how much would this decision make (or lose) on average per time. All of poker's strategy theory is essentially \"at each decision point, choose the action with the highest EV\".",
+      "EV = Σ (payoffᵢ × probabilityᵢ)\nCall EV = win probability × amount won − loss probability × amount paid",
+      "Deriving the EV formula: split a decision into all possible outcome branches, multiply each branch's \"probability × payoff\", then sum. For \"calling an all-in\", there are only win/lose outcomes: EV(call) = P(win) × amount winnable − P(lose) × call amount. Note \"amount winnable\" only counts the current pot + opponent bet, not the call you're about to put in — that part is just returned, not profit. The EV of folding is always 0, so any call with EV > 0 beats folding; a decision is simply comparing branch EVs and taking the max. This split-branch, weight, sum process is the \"complete EV derivation chain\". (Concepts from: The Theory of Poker Ch.6 EV basics; Harrington on Hold'em Vol.1 Ch.3)",
+      "Example: pot 100, opponent shoves 50, you have 30% equity after calling 50. EV = 0.30×150 − 0.70×50 = 45 − 35 = +10. You lose seven times out of ten, but this is a +EV call averaging +10 each time. \"The correct decision that often loses\" is poker math's most counter-intuitive yet most important lesson.",
+      "Example (bluff branch derivation): river pot 90, you hold unpaired A♣K♣ and the opponent checks. You plan a pure-bluff bet of 60, estimating the opponent folds 60% and calls 40% (you have 0% showdown equity when called). EV = 0.60×90 − 0.40×60 = 54 − 24 = +30. Break-even: required fold rate f satisfies f×90 = (1−f)×60 → 150f = 60 → f = 40%; your estimated 60% far exceeds it, so the +EV holds. Branch breakdown: fold branch wins 90, call branch loses 60, weighted by probability gives the result.",
+      "Example (value-bet comparison): river, you hold the nut flush, pot 100. Checking EV = 100 (you win the pot at showdown); betting 50 with an estimated 30% call / 70% fold gives bet EV = 0.70×100 + 0.30×150 = 70 + 45 = +115. 115 > 100, so betting wins — the EV increment of a value bet comes from the extra 50 contributed by the 30% that calls. Note: if the opponent never calls (0%), bet EV degenerates to 100, equal to checking — then betting just gives away free information.",
+      "EV Breakdown: Fold Equity and Showdown Equity",
+      "A bet's EV has two parts: Fold Equity (winning the pot immediately when the opponent folds) + Showdown Equity (your share of winning at showdown when called). Bluffs rely on the former, value bets on the latter, and semi-bluffs get both — that's why draws are the best bluff candidates (see T6 betting theory).",
+      "Bet EV = opponent fold rate × current pot + (1−fold rate) × (equity × (current pot + bet amount) − loss rate × bet amount)",
+      "A pure bluff's break-even fold rate = bet ÷ (pot + bet). Betting 2/3 pot: if the opponent folds over 40%, the bet is +EV even if your hand always loses at showdown.",
+      "cEV vs $EV",
+      "In cash games chip value is constant, so chip EV (cEV) equals money EV. But in tournaments chips have diminishing marginal value (doubling chips doesn't double the prize), so ICM converts cEV into $EV (see T9). All calculations in this Level assume cash-game spots by default.",
+      "EV is a function of the decision moment, not of the outcome. Once a decision is made, its EV is fixed — whatever cards come after is just variance performing.",
+      "The sunk-cost trap: chips already in the pot are dead money — no longer yours. \"I've already put 100 in; not calling would waste it\" is faulty reasoning — EV only looks at future branches: comparing call EV against fold EV (=0), unrelated to past investment. A pro's folding ability is essentially the discipline of \"not chasing sunk costs\".",
+      "In review, write an EV calculation for every key decision, even a rough estimate. A decision you can write a formula for is a decision you understand; if you can't write one, you're playing on feel."
+    ],
+    "t2-pot-odds": [
+      "The Definition of Pot Odds",
+      "Pot Odds = the amount you need to call ÷ the total pot after calling. It represents \"the price you pay to win the whole pot\", and also the minimum equity needed to break even on a call. It's the most frequently used calculation in poker.",
+      "Required equity = call amount ÷ (current pot + opponent bet + call amount)\nExample: pot 100, opponent bets 50 → required equity = 50÷(100+50+50) = 25%",
+      "Deriving the \"required equity\" formula: let current pot P, opponent bet B, and you call B. If you win (probability E) you net P+B; if you lose (1−E) you net −B. Set the break-even point EV = E×(P+B) − (1−E)×B = 0; expanding: E×(P+B) = (1−E)×B → E×(P+B) = B − E×B → E×(P+B+B) = B → E = B ÷ (P+2B). The denominator is exactly \"current pot + opponent bet + call amount\". Understanding the derivation matters more than memorizing the formula: once you translate both \"price\" and \"equity\" into the same unit (probability), a calling decision becomes a comparison of two numbers. (Concepts from: Harrington on Hold'em Vol.1 Ch.3)",
+      "Memorize the required equity for common bet sizes: 1/3 pot → 20%; 1/2 pot → 25%; 2/3 pot → 28.6%; full pot → 33.3%; 2x pot → 40%. Note the pattern: no matter how big the bet, required equity is always below 50% — because there's already \"dead money\" in the pot.",
+      "Pot Odds × Outs: The Complete Calling Decision",
+      "Example: turn pot 120, opponent bets 60, you hold a flush draw (9 Outs). Required equity = 60÷240 = 25%; your equity ≈ 9×2 = 18%. 18% < 25%, so by pot odds alone you should fold — unless implied odds close the gap (next chapter).",
+      "Example (preflop all-in): SB pot including blinds and antes totals 6bb, BB shoves 30bb, you call 30bb. Required equity = 30 ÷ (6+30+30) = 30÷66 ≈ 45.5%. You hold AK: vs BB's shoving range (mostly big pairs + strong high cards) equity ≈ 55%. 55% > 45.5%, so the call is +EV. A preflop all-in has no further betting and zero implied odds — pot odds are the sole judge; it's the cleanest calling-decision exercise.",
+      "Example (river bluff-catch): pot 120, opponent bets 80, you hold TPTK (can only beat bluffs). Required equity = 80 ÷ (120+80+80) = 80÷280 ≈ 28.6%. Hand reading (T7 process) estimates his shoving range at ~35% bluffs, 65% value → 35% > 28.6%, call. Against an ultra-tight opponent whose range is almost all value (~15% bluffs), then 15% < 28.6%, fold. A bluff-catching call is always a duel between two numbers: \"pot odds vs opponent bluff share\".",
+      "A calling decision = comparing two numbers: the price the pot offers (required equity) vs your hand's equity. If equity > price, call; otherwise fold or raise.",
+      "Pot Odds from the Defensive Perspective",
+      "Pot odds also determine how often you \"must\" defend: the smaller the opponent's bet, the better the price you get and the wider your calling range must be, or the opponent can exploit you by small-betting any two cards. The formalization of this idea is the Minimum Defense Frequency MDF (see T5 game theory).",
+      "One of the most common amateur leaks: folding too much to small bets. Facing a 1/4-pot bet you only need 16.7% equity to call — almost any hand with showdown value or a backdoor draw qualifies.",
+      "MDF misuse trap: Minimum Defense Frequency (MDF) is the defensive floor \"to stop the opponent from small-bet exploiting you with any two cards\", not a profit-maximizing calling standard. Against a tight player with an extremely high value share, calling *below* MDF is correct. MDF answers \"how often to call\", pot odds answer \"whether to call this hand\" — different purposes, don't mix them (full MDF derivation in T5).",
+      "Memorize the \"bet size → required equity\" table to reflex level: 1/3 pot=20%, 1/2 pot=25%, 2/3 pot=28.6%, full pot=33.3%. This conversion must happen within two seconds at the table."
+    ],
+    "t2-implied-odds": [
+      "Implied Odds: An Extension of Pot Odds",
+      "Pot odds only count the current pot, but poker is a multi-street game: after you hit your draw, you can usually win extra money from the opponent. Implied Odds factor this \"future income\" into the decision — it explains why some draws that pot odds say to fold can actually be called.",
+      "Implied-odds shortfall = the future winnings needed to break even on a call\nRequired future winnings X satisfies: hit rate × (current winnable + X) = (1 − hit rate) × call amount\nSolving: X = call amount ÷ hit rate − current total pot (current total pot includes your call)",
+      "Implied odds = (total currently winnable + expected future winnings) ÷ call amount\nExample: pot 120, opponent bets 60, expected to win another 100 after hitting → (120+60+100) ÷ 60 = 4.67 : 1\nConverted required equity = 1 ÷ (4.67+1) ≈ 17.6%, matching a flush draw's 18% — the formulaic source of the previous example's \"call breaks even\" (Concepts from: Harrington on Hold'em Vol.1 Ch.4 implied odds)",
+      "Example: turn pot 120, opponent bets 60, your flush-draw equity is 18% (< 25% required). Call 60; if hitting lets you win another 100+ from the opponent on average, the call turns +EV. The deeper the opponent's stack, the stronger his hand (willing to pay), and the more disguised your draw, the better the implied odds.",
+      "The Three Factors of Implied Odds",
+      "Evaluate implied odds by three points: (1) effective stack depth — if the opponent has no money left there are no implied odds; at deep stacks (150bb+) small pairs and suited connectors surge in value; (2) opponent type — a calling station gives great implied odds, while tight-passive players won't pay after you hit; (3) draw disguise — a pocket pair flopping a set is the most disguised with the best implied odds; an obvious four-to-a-flush is the worst.",
+      "Set Mining rule: calling an opening raise with a small pocket pair, you flop a set ~12% of the time (about 7.5:1 odds, i.e. roughly once every 8.5 flops), and generally need effective stacks ≥ 15-20x the call to be profitable (accounting for not always collecting fully after hitting).",
+      "Set Mining exact probability: holding a small pair, the chance one of the three flop cards is your rank\nP = 1 − C(47,2)/C(50,2) = 1 − 1081/1225 ≈ 11.76% (≈ 7.5:1 odds, i.e. about one in 8.5 flops)\nDerivation: none of the three flop cards matching = C(48,3)/C(50,3) = (48×47×46)/(50×49×48) = 47×46/(50×49) = C(47,2)/C(50,2). ~11.76% probability, often rounded in textbooks to \"about 8:1\" (Concepts from: Harrington on Hold'em Vol.1 Ch.4)",
+      "Example (deep vs shallow stacks): opponent opens CO to 3bb, you hold 55 on the BTN. Effective stacks 150bb: call 3bb, hit 11.76% of the time, needing to net-win about 3×7.5 = 22.5bb on average after hitting to break even — 150bb depth gives huge room, call. Effective stacks only 25bb (less than 8.5x): even hitting a set won't collect enough, and you often get your equity denied postflop — fold or 3-bet is better. Same hand, stack depth directly rewrites the EV.",
+      "Reverse Implied Odds: The Second-Best That Bites",
+      "Reverse Implied Odds are the mirror image of implied odds: you \"hit\" but are still behind and end up losing even more. Typical spots: a non-nut flush draw running into a bigger flush; a weak-kicker top pair (like K7 on a K-high board) — you win small pots when ahead and lose big pots when behind.",
+      "Example: you hold Q♠J♠ with two spades on the flop. Same flush draw, but if the opponent's range contains A♠K♠, A♠x♠ combos, hitting your flush may run directly into the nut flush — these \"hit but lose\" branches must be deducted from EV. That's why low suited connectors should chase flushes cautiously in multiway pots.",
+      "Judgment mnemonic: easily dominated hands (weak-kicker high cards, low flushes, non-nut draws) have bad reverse implied odds — better to play fewer of them; disguised hands that can make the nuts (pocket pairs, nut flush draws) have good implied odds and are worth paying a little \"overprice\" for.",
+      "The gambler's fallacy: three straight missed flush draws, \"the fourth one should hit\" — wrong. Every flop is independent; your set probability is always 11.76% and flush draws always ~36%, never accumulating from previous misses. Implied odds and pot odds are computed from the current hand's independent probabilities only; using \"my turn to hit\" as a calling reason is purely emotional loss-making.",
+      "Before convincing yourself to call on implied odds, ask: \"after I hit, what hands will the opponent pay me with?\" If you can't name specific hand types, you're just finding an excuse for folding fear."
+    ]
+  },
+  "quiz": {
+    "t2-ev-q1": {
+      "question": "Pot is 100, opponent shoves 50, you have 30% equity after calling. The call's EV is:",
+      "options": [
+        "+10",
+        "−5",
+        "+45",
+        "−20"
+      ],
+      "explanation": "EV = 0.30×(100+50) − 0.70×50 = 45 − 35 = +10. Below 50% equity can still be a +EV call because the pot offers odds."
+    },
+    "t2-ev-q2": {
+      "question": "You make a pure-bluff 2/3-pot bet (loses at showdown every time). What minimum fold rate does the opponent need for break-even?",
+      "options": [
+        "33%",
+        "40%",
+        "50%",
+        "67%"
+      ],
+      "explanation": "Break-even fold rate = bet÷(pot+bet) = 0.67÷1.67 ≈ 40%."
+    },
+    "t2-ev-q3": {
+      "question": "A semi-bluff's (e.g. betting a draw) EV comes from:",
+      "options": [
+        "Only the fold equity",
+        "Only the showdown equity",
+        "Both fold and showdown equity",
+        "Whether the opponent sees through you"
+      ],
+      "explanation": "A semi-bluff can win both ways: the opponent folds and you take the pot, or he calls and your draw hits at showdown. That's the math behind it being better than a pure bluff."
+    },
+    "t2-ev-q4": {
+      "question": "\"Once a decision is made, its EV is fixed\" means:",
+      "options": [
+        "Later community cards no longer affect this decision's quality",
+        "You shouldn't change strategy afterward",
+        "High-EV decisions always win",
+        "River decisions have no EV"
+      ],
+      "explanation": "EV is determined at the decision moment by the information then available; cards dealt after are just variance on display and can't retroactively prove the decision right or wrong."
+    },
+    "t2-ev-q5": {
+      "question": "You've already put 80 in the pot and face a turn all-in of 120. The correct attitude when deciding whether to call:",
+      "options": [
+        "The 80 invested should count as cost — not calling wastes it",
+        "Only look forward: compare call EV with fold EV (=0); invested money is irrelevant",
+        "At least call, otherwise your earlier investment is wasted",
+        "Folding is always optimal"
+      ],
+      "explanation": "Invested chips are sunk cost, irrelevant to the current decision. Correctly compute whether \"call EV\" exceeds \"fold EV (always 0)\"; options A/C are sunk-cost fallacies, and D ignores that pot odds may make calling +EV."
+    },
+    "t2-pot-odds-q1": {
+      "question": "Pot is 100, opponent bets 50. The minimum equity you need to call is:",
+      "options": [
+        "20%",
+        "25%",
+        "33%",
+        "50%"
+      ],
+      "explanation": "Required equity = 50÷(100+50+50) = 50÷200 = 25%."
+    },
+    "t2-pot-odds-q2": {
+      "question": "Facing a pot-size bet, the required equity to call is about:",
+      "options": [
+        "25%",
+        "33%",
+        "40%",
+        "50%"
+      ],
+      "explanation": "Full-pot bet: you call P, total pot 3P, required equity = P÷3P = 33.3%."
+    },
+    "t2-pot-odds-q3": {
+      "question": "Why is required equity always below 50% when facing a bet?",
+      "options": [
+        "Because the opponent might be bluffing",
+        "Because there's already \"dead money\" in the pot — you win more than you pay",
+        "Because you have positional advantage",
+        "Because you can improve on later streets"
+      ],
+      "explanation": "Calling wins \"pot + opponent bet + your call\" while you only pay the call amount. The chips already in the pot subsidize your price."
+    },
+    "t2-pot-odds-q4": {
+      "question": "An opponent keeps small-betting 1/4 pot while you only continue with strong hands. This leak is:",
+      "options": [
+        "Folding too much to small bets — any two cards he bets profit",
+        "No leak; caution is correct",
+        "You should raise back every time",
+        "You should shove to punish small bets"
+      ],
+      "explanation": "A 1/4-pot bet only needs 16.7% equity to call. If you fold all medium hands, his small bets become automatically profitable with any two cards."
+    },
+    "t2-pot-odds-q5": {
+      "question": "Facing a 1/3-pot bet, the minimum equity you need to call is about:",
+      "options": [
+        "16.7%",
+        "20%",
+        "25%",
+        "33%"
+      ],
+      "explanation": "Required equity = (1/3) ÷ (1+1/3+1/3) = 1/5 = 20%. Option A's 16.7% is for a 1/4-pot bet and D's 33% for a full-pot bet — this size-to-equity table is the foundation of postflop calling."
+    },
+    "t2-implied-odds-q1": {
+      "question": "Compared to pot odds, what does implied odds additionally consider?",
+      "options": [
+        "The chance the opponent bluffs",
+        "Future chips you can win from the opponent after hitting your draw",
+        "Your positional advantage",
+        "Tournament prize structure"
+      ],
+      "explanation": "Implied odds = pot odds + expected future-street winnings; it makes calling some draws profitable even when current odds are insufficient."
+    },
+    "t2-implied-odds-q2": {
+      "question": "Which situation has the best implied odds?",
+      "options": [
+        "Effective stacks 30bb, opponent is tight-passive",
+        "Effective stacks 200bb, opponent is a calling station, you hold a pocket pair",
+        "Effective stacks 50bb, four-to-a-flush board",
+        "The opponent is already all-in"
+      ],
+      "explanation": "Three factors: deep stacks + a willing-to-pay opponent + a disguised made hand (a set). When the opponent is all-in, implied odds are zero."
+    },
+    "t2-implied-odds-q3": {
+      "question": "Set mining (digging a set with a small pair) generally requires effective stacks of at least how many times the call?",
+      "options": [
+        "5x",
+        "10x",
+        "15-20x",
+        "50x"
+      ],
+      "explanation": "Set probability is ~1/8.5 (about 7.5:1 odds), and you can't always fully collect the opponent's stack after hitting, so the empirical standard is 15-20x (leaving ample margin over the theoretical 7.5x)."
+    },
+    "t2-implied-odds-q4": {
+      "question": "The risk described by reverse implied odds is:",
+      "options": [
+        "Losing the call amount when the draw misses",
+        "Still being behind after hitting, and losing a bigger pot",
+        "Winning too little when the opponent folds",
+        "The pot being too small to participate in"
+      ],
+      "explanation": "Classic reverse implied odds: a non-nut flush hitting into a bigger flush, a weak-kicker top pair into a strong kicker — win small pots when ahead, lose big pots when behind."
+    },
+    "t2-implied-odds-q5": {
+      "question": "Pot 150, opponent bets 75, your flush-draw hit probability is 18% (required 25%). After calling, hitting lets you win X more on average. What minimum X makes the call break even?",
+      "options": [
+        "About 60",
+        "About 90",
+        "About 120",
+        "About 200"
+      ],
+      "explanation": "EV = 0.18×(150+75+X) − 0.82×75 = 0, solving 0.18×(225+X) = 61.5 → X ≈ 117. On a hit you currently win 225; you need ~120 more in future winnings to break even; above that it's +EV. Options A/B make the call lose long-term, and D overestimates the implied odds needed."
+    }
+  },
+  "chapterObjectives": {
+    "t2-ev": [
+      "Split a decision into every outcome branch, weight each by probability, and pick the action with the highest EV",
+      "Derive the break-even condition for calling an all-in and for a pure bluff, and name what each is compared against",
+      "Decompose bet EV into fold equity and showdown equity, and separate bluffs, value bets and semi-bluffs on that basis",
+      "Explain why money already in the pot is dead money, and separate decision quality from the outcome of one hand"
+    ],
+    "t2-pot-odds": [
+      "Derive required equity as the call amount divided by the pot after calling, and explain why the denominator includes your own call",
+      "Given any bet size, compute the equity needed to call and compare it with an estimate from outs to decide call or fold",
+      "Apply pot odds to a preflop all-in and to bluff-catching on the river, naming the two numbers compared in each",
+      "Explain how pot odds translate into a defense obligation, and distinguish MDF from the call threshold of one specific hand"
+    ],
+    "t2-implied-odds": [
+      "Write the break-even equation that counts money won after hitting, and solve for the future winnings it requires",
+      "Assess implied odds by stating separately what stack depth, willingness to pay and draw concealment each contribute",
+      "Derive the stack-depth multiple that makes set mining profitable, and decide call or fold when stacks are shallow",
+      "Identify draws that remain dominated after hitting, and explain reverse implied odds together with the error of expecting a due win"
+    ]
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "content": {
+    "t9hu-mastery": [
+      "From Fragments to a System: The HU Decision Loop",
+      "Each chapter of T1-T8 is a building block: T1 probability basics, T2 odds and EV, T3 position and starting hands, T4 ranges, T5 GTO, T6 betting, T7 exploitation, T8 psychology. The HU master doesn't \"memorize each chapter\" but connects them into a decision loop — facing any situation, automatically running through \"range → math → betting → exploitation → psychology\". This loop makes you at the table no longer \"I memorized the formula for this decision\" but \"I see every dimension of this spot\".",
+      "HU decision loop: first ask \"what are both ranges\" (T4), then compute \"my EV and odds\" (T2), then \"what size to bet\" (T6), then \"what deviation can I exploit\" (T7), finally \"am I emotionally stable\" (T8). All five questions, none optional.",
+      "Theory Deforms With the Scenario",
+      "HU theory isn't monolithic; it deforms along two parameters: stack depth and game type. Deep stacks (100BB+): wider ranges, more polarized betting, greater postflop positional value, and high SPR needs multi-street planning. Short stacks (under 20BB): more frequent preflop all-ins, smaller positional value, more direct betting. Cash: unlimited re-buy, manageable variance, measured in bb/100. Tournaments: chips are a resource, ICM pressure, blinds rise over time, and strategy shifts dynamically by stage (see the “Heads-Up Tournament” lesson).",
+      "Example: Deep stack 100BB, HU SB holds A♠5♠. Decision cycle: range — A5s is in the SB opening range (within ~80%); math — min-raise 2BB, pure steal needs 50% fold rate; betting — deep stacks lean small bets for control + postflop play; exploitation — if the BB folds a lot, raise open frequency; psychology — keep rhythm consistent, don't leak. One decision, all five questions passed.",
+      "Example 2 (short stack): HU 15BB deep, SB holds K♠Q♠. Range — KQs has about 60% equity vs the BB's wide range; math — shove 15BB or min-raise then shove; KQs is clearly ahead of the calling range; betting — short stacks skip multi-street; shove directly or small-raise to induce; exploitation — if the BB over-folds, just push; psychology — accept variance. Short-stack strategy is more direct than deep — stack depth makes the same hand play completely differently.",
+      "Example 3 (review methodology): After a HU session, review hand by hand with the \"decision loop\" — was my range judgment right? Was the EV right? Was the size right? Was the opponent-tendency read right? Did emotion influence me? Five questions turn every hand into training. Tendler emphasizes \"process vs result\": review only process (decision quality), never results (wins/losses).",
+      "Counterintuitive point: the HU master's \"cleverness\" isn't perfect decisions but \"system stability\". Occasional decision errors are inevitable, but a stable decision loop plus strict emotional discipline keeps the long-term expectation curve climbing. Chasing \"every-hand perfection\" instead causes overthinking and tilt.",
+      "Building your personal system in four steps: learn (T1-T8 theory) → drill (solver verification) → play (execute the loop live) → review (hand-by-hand review + notes). Four-step loop, and your HU level climbs steadily with every session."
+    ],
+    "t9hu-pro-study": [
+      "What Top Heads-Up Players Think",
+      "The core value of studying professional HU players (like seasoned HU players in the Moshman system or top solver-era grinders) isn't imitating a move but understanding their decision framework. Top players' common traits are highly consistent: frequency balance (not leaking ranges), range consistency (self-consistent action narratives), emotional stability (unaffected by results), and disciplined execution (strictly following preset strategy).",
+      "The dividing line between pros and amateurs isn't \"luck\" or \"talent\" but \"decision framework\" — amateurs rely on feel, pros rely on systems. Studying pros means learning their systems, not copying their cards.",
+      "Deconstructing the Pro Decision Framework",
+      "Top HU players' decision frameworks usually have four layers: (1) preflop range construction — starting from the GTO baseline, micro-adjusted by opponent tendencies; (2) postflop range allocation — bet/check by board ownership (whose range/nut advantage); (3) bet-sizing discipline — sizes chosen by SPR and hand-strength tier; (4) exploitation switching — switching to maximal exploitation when the opponent deviates and returning to baseline when he adjusts. Every layer has clear inputs and outputs, not improvisation.",
+      "Example (preflop range micro-adjustment): A pro facing a BB who folds too much deliberately raises SB opening frequency toward 100% and lowers the raise size (mostly min-raises), because a wide range plus small sizes maximizes steal EV. This isn't \"feeling like stealing\" but a computable decision \"supported by the opponent's fold-rate statistics\".",
+      "Example 2 (postflop range allocation): On a dry high board A♠8♦3♣ a pro C-Bets the entire betting range at high frequency and small size — because the raiser's range advantage is clear (lots of Ax) and the caller rarely hits an A. On a wet 7♠6♥4♣ board he cuts C-Bet frequency sharply — because the caller's range contains more straights/draws. Range advantage decides betting frequency — a reusable methodology.",
+      "Example 3 (emotional discipline): Top players still decide with the same framework after losing 10 consecutive 60% all-ins — because they treat \"variance\" as an uncontrollable external variable and control only \"decision quality\". This is T8's \"process vs result\" separation manifested at the professional level.",
+      "Counterintuitive point: the value of studying pros isn't \"how great they are\" but \"how replicable their systems are\". An amateur drilling the pro framework for a month often improves faster than \"ten years of memorized feel\" — because systems are trainable and feel isn't replicable.",
+      "Pro hand-study process: (1) record all actions of a hand; (2) deconstruct layer by layer with the decision loop (range/math/betting/exploitation/psychology); (3) compare with your own handling to find gaps; (4) distill one reusable principle into your notes. Every 10 hands studied makes your decision framework more complete."
+    ]
+  },
+  "quiz": {
+    "t9hu-mastery-q1": {
+      "question": "The correct order of the HU decision loop is:",
+      "options": [
+        "Betting → range → math → psychology",
+        "Range → math → betting → exploitation → psychology",
+        "Psychology → range → betting → math",
+        "Only look at results"
+      ],
+      "explanation": "The loop: range (T4) → math (T2) → betting (T6) → exploitation (T7) → psychology (T8) — all five questions, none optional."
+    },
+    "t9hu-mastery-q2": {
+      "question": "The main difference between deep-stacked (100BB) and short-stacked (15BB) HU is:",
+      "options": [
+        "No difference",
+        "Deep stacks: wider ranges, more polarized betting, multi-street planning; short stacks: more frequent, more direct preflop all-ins",
+        "Short stacks have wider ranges",
+        "Deep stacks don't bet"
+      ],
+      "explanation": "Stack depth changes strategy: deep stacks have high SPR requiring multi-street planning and polarized betting; short stacks shove preflop more and play more directly."
+    },
+    "t9hu-mastery-q3": {
+      "question": "HU review should focus most on:",
+      "options": [
+        "How much this hand lost",
+        "Whether the decision process (range/EV/size/exploitation/emotion) was correct",
+        "How many hands were won",
+        "How strong the opponent is"
+      ],
+      "explanation": "Review only process (decision quality), not results (win/loss), turning every hand into training for continuous improvement."
+    },
+    "t9hu-mastery-q4": {
+      "question": "Short-stacked (15BB) HU holding KQs, the most reasonable play is:",
+      "options": [
+        "Complex multi-street betting",
+        "Shove directly or small-raise to induce, shortening the decision tree",
+        "Check to see a flop",
+        "Fold"
+      ],
+      "explanation": "Short stacks skip multi-street planning; KQs has about 60% equity vs a wide range, so shoving or small-raising to induce is the standard play."
+    },
+    "t9hu-mastery-q5": {
+      "question": "\"System stability\" matters more than \"every-hand perfection\" because:",
+      "options": [
+        "Perfection is impossible",
+        "A stable decision loop plus emotional discipline keeps long-term expectation climbing; chasing perfection causes overthinking and tilt",
+        "System stability is easier",
+        "Opponents prefer it"
+      ],
+      "explanation": "Occasional mistakes are inevitable; a stable loop and discipline keep the long-term expectation curve climbing, while chasing \"every-hand perfection\" triggers overthinking and tilt."
+    },
+    "t9hu-pro-study-q1": {
+      "question": "The core dividing line between top HU players and amateurs is:",
+      "options": [
+        "Luck",
+        "Decision framework (systematic vs feel)",
+        "Talent",
+        "Chip count"
+      ],
+      "explanation": "The gap between pros and amateurs is the \"decision framework\" — pros rely on systems (range construction, frequency balance, discipline), amateurs on feel."
+    },
+    "t9hu-pro-study-q2": {
+      "question": "A pro facing a BB who folds too much adjusts preflop strategy by:",
+      "options": [
+        "Opening less",
+        "Raising opening frequency toward 100% and lowering sizes (min-raise) to maximize steal EV",
+        "Only playing the nuts",
+        "Calling more"
+      ],
+      "explanation": "The opponent's fold-rate statistics support \"wide range + small sizes\" to maximize steal EV — a computable decision, not feel."
+    },
+    "t9hu-pro-study-q3": {
+      "question": "On a dry high board A♠8♦3♣, the raiser's C-Bet frequency should:",
+      "options": [
+        "Drop sharply",
+        "Bet the whole range at high frequency and small size",
+        "Check completely",
+        "Only watch your own cards"
+      ],
+      "explanation": "The raiser's range advantage is clear (lots of Ax) and the caller rarely hits an A, so a high-frequency small C-Bet over the whole betting range is correct."
+    },
+    "t9hu-pro-study-q4": {
+      "question": "Top players deciding with the same framework after losing multiple 60% all-ins reflects:",
+      "options": [
+        "Stubbornness",
+        "Emotional discipline — treating variance as an uncontrollable variable and controlling only decision quality",
+        "Not caring about winning/losing",
+        "Good luck"
+      ],
+      "explanation": "Top players treat variance as an external variable and control only decision quality — the ultimate form of \"process vs result\" separation."
+    },
+    "t9hu-pro-study-q5": {
+      "question": "The most valuable way to study pro hand examples is:",
+      "options": [
+        "Copying their moves",
+        "Deconstructing layer by layer with the decision loop and distilling reusable principles",
+        "Only watching how much they win",
+        "Imitating their luck"
+      ],
+      "explanation": "Layer-by-layer deconstruction (range/math/betting/exploitation/psychology) + comparing gaps + distilling principles converts the pro framework into your own system."
+    }
+  },
+  "chapterObjectives": {
+    "t9hu-mastery": [
+      "Integrate the T1-T8 knowledge into a complete HU decision loop: range → math → betting → exploitation → psychology",
+      "Understand how HU theory adapts across stack depths and game types (cash/tournaments)",
+      "Build a personal review and learning system for continuous improvement"
+    ],
+    "t9hu-pro-study": [
+      "Study professional HU players' decision frameworks and range-construction habits",
+      "Understand the shared traits of top players: frequency balance, range consistency, emotional stability",
+      "Learn to distill reusable methodologies from pros' public strategies and hand examples"
+    ]
+  }
+}

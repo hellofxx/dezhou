@@ -1,0 +1,144 @@
+{
+  "content": {
+    "t5hu-gto-he": [
+      "Heads-Up: Game Theory's Purest Laboratory",
+      "Heads-up poker (ignoring rake) is a textbook two-player zero-sum game: one side's profit is exactly the other's loss. John Nash proved such games have equilibrium strategy profiles — when both sides play their equilibrium, neither can improve by deviating unilaterally. This means heads-up has a set of \"unexploitable\" strategies (GTO): no matter how the opponent plays, your long-term expectation is never below the game value. This is a theoretical advantage unique to heads-up; multiway equilibrium guarantees weaken under coalition effects.",
+      "GTO's positioning is a \"bulletproof vest\" not a \"weapon\": it guarantees you're not exploited but doesn't promise maximum profit. Against a leaky opponent, targeted exploitation earns more — at the cost of opening your own leaks. HU pros switch between \"wearing the vest\" and \"switching to the knife\".",
+      "The Mathematical Intuition of Equilibrium",
+      "The minimax theorem (von Neumann 1928):\nthere exists a game value v such that max_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n\nMeaning: an equilibrium strategy guarantees your expectation ≥ v and the opponent can't push it lower unilaterally.\n\nRock-paper-scissors equilibrium: randomize each 1/3. If the opponent always throws rock, the equilibrium still breaks even (expectation 0), but the exploitative \"always paper\" wins every round; however, once you always throw paper you become exploitable too (he switches to scissors). Poker is exactly isomorphic. (Concept from: The Mathematics of Poker, Bill Chen / Jeremie Ankenman Ch.2 basic game theory)",
+      "The difference between HU GTO and full-ring GTO: heads-up ranges are extremely wide (SB opens 80%, BB defends 60%+), so the equilibrium means very high betting frequency and bluff density; in full-ring equilibrium most players can only play tight. Solvers output lots of \"aggressive bets\" and \"polarized ranges\" in heads-up — GTO isn't \"playing tight\" but \"keeping everything at ratios the opponent can't counter\".",
+      "Example: In a HU SB vs BB solver, the SB opens about 80%, the BB defends about 60%+, the OOP BB checks at high frequency postflop, and the IP SB bets at high frequency. These frequencies look \"loose\", but they're all part of equilibrium — any deviation by one side (e.g. the SB opening only 50%) lets the other side exploit it by widening defense or raising steal frequency.",
+      "Example 2 (minimum necessary deviation): You observe a HU opponent who calls big river bets only 25% (equilibrium ~50%). Based on this you can raise your river overbet-bluff frequency overall — but capped at \"I still don't lose if he corrects to 40%\". That's \"using GTO as the baseline and making directed, disciplined deviations from observable biases\", not blind escalation.",
+      "Example 3 (HU GTO's aggressiveness): In solvers, the HU BB facing an SB open check-raises on many boards — pressuring with a polarized range of draws and strong hands. This stems from the check-raise lever that belongs to the side acting first postflop, plus his wide defense. If you only call against an aggressive BB and never raise, your defense frequency is high but harmless — the opponent can keep raising his C-Bet frequency to exploit you.",
+      "Counterintuitive point: \"GTO is playing tight\" is the biggest misreading. HU GTO is full of high-frequency betting, overbet shoves, and thin value — it just keeps all of it at ratios the opponent can't counter. When studying solvers, don't memorize frequencies — ask three whys: why this sizing on this board? Why is this hand in the betting range? Why did the frequency change on the turn?",
+      "HU learning path: first use a solver to understand the equilibrium \"shape\" (why play this way), then use node locking to study \"harvest schemes for common opponent leaks\", finally validate live. The baseline gives you invincibility; deviations give you profit — exploitation without GTO is running naked, and GTO without deviation is self-shackling."
+    ],
+    "t5hu-frequency": [
+      "Frequency: The Language of Equilibrium",
+      "An equilibrium strategy isn't \"this hand always plays this way\" but \"this hand allocates actions at some frequency at a specific node\". In heads-up, with wide ranges and dense decisions, frequency balance is critical: if your C-Bet frequency is constant and your 3-bet range predictable, observant opponents will node-lock your patterns and counter you. Mixed Strategy and the Indifference Principle together form the mathematical foundation of frequency balance.",
+      "Indifference Principle: in equilibrium a hand is mixed only when all its actions have exactly equal EV. The purpose of mixing isn't \"confusion\" but making the opponent's marginal hands (like bluff catchers) exactly indifferent between calling and folding — nothing for him to counter.",
+      "MDF: The Critical Defense Frequency",
+      "MDF (Minimum Defense Frequency) = 1 − fold rate = 1/(1+b) (b = bet/pot)\n\nExample: half pot b=0.5 → defend 67%; full pot b=1 → defend 50%; 2× pot b=2 → defend 33%\n\nAlpha (bluff break-even fold rate) = b/(1+b) = 1 − MDF\n\nHU half-pot bet: the opponent must defend 67%, and your pure bluff needs him to fold ≥33% to break even. (Concept from: The Mathematics of Poker, Bill Chen / Jeremie Ankenman Ch.5-6 bet-fold subgame)",
+      "In heads-up, defense isn't only calling: raises also count toward defense frequency. Against high-frequency bluffers, substitute some calls with raises to both defend and collect value; against tight-passive value bettors, over-folding (below MDF) is the exploitation. First compute the total, then allocate — the HU BB's 60%+ defense consists of calls, 3-bet value, and 3-bet bluffs, each moving with the SB's tendencies.",
+      "Example: HU flop pot 2BB, the BB moves first postflop and checks; the SB (in position) then bets half pot 1BB with a strong+bluff mixed range. You're the BB and need to continue with about 67%. Rank the continuing hands by strength + improvement potential: top pairs and good draws first, pure junk into the folding 33%. If you only defend 40%, the SB's every bluff profits 0.60×2 − 0.40×1 = 0.8BB on average — you're feeding the opponent automatic profit.",
+      "Example 2 (mixed execution): On the river you hold a bluff catcher facing a full-pot bet; in equilibrium the opponent bluffs 1/3 and your required equity is exactly 33% — call and fold have equal EV. Solvers may output \"call 50% / fold 50%\". Practical meaning: the single-decision cost of getting these wrong is about zero, so don't agonize; the real EV differences live in range construction on earlier streets.",
+      "Example 3 (frequency exploitation in HU): You observe a HU opponent who folds to C-Bets 60% on the flop (equilibrium ~45%). This is a clear MDF leak — your flop C-Bet frequency and bluff density can be raised overall because he over-folds. But cap it at \"I still don't lose if he tightens to 50%\", keeping correction room. Frequency balance isn't only defense — it's also a microscope for identifying and harvesting opponent imbalance.",
+      "Counterintuitive point: in heads-up, \"should I mix\" isn't a philosophical question but a mathematical one. Both sides of a mixed node have equal EV, so a single wrong choice costs ≈0; pure-strategy nodes (with a unique clearly-best action) contribute most of the EV. Investing effort in high-EV-difference decisions beats obsessing over the precise execution of a 50% mix.",
+      "Memorize the three frequency anchors: defend 67% vs half-pot, 50% vs full-pot, 33% vs 2× pot; bluff 25% on a half-pot bet, 33% on full-pot. In review, track your actual fold rate against big turn/river bets — most players fold far above equilibrium, which is why the opponent's big bets always seem to \"just happen\" to make you fold."
+    ]
+  },
+  "quiz": {
+    "t5hu-gto-he-q1": {
+      "question": "The Nash \"unexploitable\" guarantee strictly applies in:",
+      "options": [
+        "Pots of any size in player count",
+        "Heads-up (two-player zero-sum)",
+        "Only tournaments",
+        "Only preflop"
+      ],
+      "explanation": "In games with three or more players the equilibrium floor weakens under coalition effects. Heads-up is the strict domain of the Nash \"unexploitable\" guarantee."
+    },
+    "t5hu-gto-he-q2": {
+      "question": "Against a leaky weak opponent, the HU GTO strategy:",
+      "options": [
+        "Wins the most",
+        "Doesn't lose, but earns less than targeted exploitation",
+        "Loses to weak opponents",
+        "Is identical to the exploitative strategy"
+      ],
+      "explanation": "GTO guarantees expectation at or above the game value (a floor) but doesn't actively exploit opponent errors; exploitation extracts more, at the cost of opening your own leaks."
+    },
+    "t5hu-gto-he-q3": {
+      "question": "The main difference between HU GTO and full-ring GTO is:",
+      "options": [
+        "HU GTO is tighter",
+        "HU ranges are extremely wide, so GTO means very high betting frequency and bluff density",
+        "They're identical",
+        "HU has no GTO"
+      ],
+      "explanation": "HU ranges are wide (SB 80%, BB 60%+), so the equilibrium comes with high betting frequency and polarized ranges — not \"playing tight\"."
+    },
+    "t5hu-gto-he-q4": {
+      "question": "\"Minimum necessary deviation\" means:",
+      "options": [
+        "Completely copying GTO frequencies",
+        "Using GTO as the baseline and deviating with direction and a magnitude cap based on observable biases",
+        "Arbitrarily raising bluff frequency",
+        "Always deviating from GTO"
+      ],
+      "explanation": "Deviations need direction (targeting the opponent's leak) and magnitude discipline (still not losing if he corrects), keeping room to return to baseline anytime."
+    },
+    "t5hu-gto-he-q5": {
+      "question": "When studying solver outputs, you should focus more on:",
+      "options": [
+        "Memorizing every frequency number",
+        "Understanding the \"why\" behind frequencies (sizing/range/street logic)",
+        "Only copying bet sizes",
+        "Ignoring all frequencies"
+      ],
+      "explanation": "Memorizing frequencies is worse than understanding structure: why this size, why this hand enters the betting range, why the frequency changes on the turn. Understand the structure and the frequencies remember themselves."
+    },
+    "t5hu-frequency-q1": {
+      "question": "Facing a half-pot bet, MDF (Minimum Defense Frequency) is about:",
+      "options": [
+        "50%",
+        "67%",
+        "75%",
+        "33%"
+      ],
+      "explanation": "MDF = 1/(1+0.5) = 2/3 ≈ 67%. Continue with about the strongest two-thirds, or any opponent bluff becomes profitable."
+    },
+    "t5hu-frequency-q2": {
+      "question": "In equilibrium, a hand is mixed across multiple actions only if:",
+      "options": [
+        "The hand is too hard to decide",
+        "All actions have exactly equal EV",
+        "The solver lacks precision",
+        "It was chosen randomly to confuse the opponent"
+      ],
+      "explanation": "Indifference Principle: when EV differs, a rational strategy picks the higher one. Mixing only occurs on critical hands with equal EV."
+    },
+    "t5hu-frequency-q3": {
+      "question": "You only defend 30% against full-pot bets (MDF should be 50%). The opponent's correct exploitation is:",
+      "options": [
+        "Only bet the nuts",
+        "Raise bluff frequency with any two cards",
+        "Lower bet sizes",
+        "Stop betting"
+      ],
+      "explanation": "A 70% fold rate far exceeds the 50% a full-pot bluff needs to break even — the opponent auto-profits betting any two cards and should aggressively add bluffs."
+    },
+    "t5hu-frequency-q4": {
+      "question": "\"Defense isn't only calling\" in heads-up means:",
+      "options": [
+        "Folding counts as defense",
+        "Raises also count toward defense frequency — compute the total, then allocate",
+        "Defense relies only on betting",
+        "The tighter the defense, the better"
+      ],
+      "explanation": "Defense consists of calls plus raises; the BB's 60%+ includes 3-bet value and bluffs. Against high-frequency bluffers, substitute some calls with raises."
+    },
+    "t5hu-frequency-q5": {
+      "question": "For live players, the most pragmatic attitude toward mixed-strategy nodes is:",
+      "options": [
+        "Precisely execute every frequency",
+        "Recognize that either side loses almost nothing, and invest effort in high-EV-difference decisions",
+        "Always bet",
+        "Avoid all mixed spots"
+      ],
+      "explanation": "Both sides of a mixed node have equal EV, so a single \"wrong choice\" costs ≈0; what actually separates results is pure-strategy nodes and range construction on earlier streets."
+    }
+  },
+  "chapterObjectives": {
+    "t5hu-gto-he": [
+      "Understand that HU is a pure two-player zero-sum game where the Nash \"unexploitable\" guarantee strictly holds",
+      "Master that GTO is \"not being exploited\" rather than \"winning the most\", and its relationship with exploitation",
+      "Learn to use GTO as the HU baseline, identify opponent deviations, and make minimum necessary deviations"
+    ],
+    "t5hu-frequency": [
+      "Understand mixed strategies and the indifference principle: the condition for allocating actions by frequency",
+      "Master MDF and Alpha critical-frequency calculations in HU defense/offense",
+      "Learn to execute frequency balance across wide HU ranges, avoiding exploitable deterministic tendencies"
+    ]
+  }
+}

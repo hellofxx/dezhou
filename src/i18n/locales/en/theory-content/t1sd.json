@@ -1,0 +1,209 @@
+{
+  "content": {
+    "t1sd-combinatorics": [
+      "From 52 Cards to 36: The Reshuffling of the Combo World",
+      "Short Deck (6+ Hold'em) uses 36 cards: the 2, 3, 4, and 5 are removed, leaving only 9 ranks (6-A) per suit. The smaller deck means combo counts plummet, starting hands shrink, and \"draw density\" rises sharply. Understanding these combinatorial changes is the first step to mastering short-deck probability — you no longer face the familiar 52-card world.",
+      "The key to the short-deck combo world: the smaller the deck, the rarer the strong hands and the more common the draws. Starting hands drop from C(52,2)=1326 to C(36,2)=630, and the relative value of every two-card hand is reshuffled — the same hand has a completely different win rate in short deck than in full-ring.",
+      "Quantitative Short-Deck Combinatorics",
+      "Short-deck combo basics (36 cards, 9 per suit):\nTotal starting hands = C(36,2) = 36×35÷2 = 630\nPocket-pair combos = 9 ranks × C(4,2) = 9×6 = 54\nAny two unpaired ranks (e.g. AK) = 4×4 = 16\n\nCompared with full ring (52 cards): 1326 starting hands, 78 pocket pairs, AK still 16\n\nKey difference: the \"pair share of starting hands\" rises from 78/1326 ≈ 5.9% to 54/630 ≈ 8.6% — pairs are more common, but their relative strength changes due to the hand-ranking reshuffle (detailed in T3). (Concept from: Short Deck Hold'em: The Ultimate Guide / 6+ Hold'em rules)",
+      "The more important combinatorial difference is in flop structure: short deck has only 9 ranks, so the \"connectivity\" of flops hitting straight/flush draws is far higher than full ring. For example, a 9-8-7 flop is extremely wet in short deck (TJ, T6, 96 all make straights), as in full ring but with a bigger combo base. The key — \"connected flops\" occur more often in short deck because you draw from a smaller rank pool.",
+      "Example: In short deck you hold A♠K♠ and read the opponent's range as {pocket pairs, AK, AQ}. Counting combos (removing your blockers): 48 pocket pairs (3 left each of AA and KK), AK 3×3=9, AQ 3×4=12. The AQ you beat is 12 of 69 ≈ 17%. But note — in short deck AK is the strongest non-pair, roughly a coin flip or better against small-mid pocket pairs preflop all-in (exact enumeration: AKs vs QQ ≈ 54%), trailing only against AA/KK (about 28%-35%).",
+      "Example 2 (outs density): Short-deck flop 9♥8♣6♠, you hold J♣T♣. You draw to 7 or Q for a straight: 4 each = 8 outs. Compare full ring's same 8 outs — but only 31 cards remain unknown in short deck after the flop (36−2 hole−3 flop), so single-street hit rate is about 8/31 ≈ 26%, noticeably above full ring's 8/47 ≈ 17%. Short-deck \"draws get there more often\" is mathematical necessity, not illusion.",
+      "Counterintuitive point: in short deck, AK's preflop all-in equity runs opposite to full ring — roughly a coin flip or better against small-mid pocket pairs (exact enumeration: AKs vs QQ ≈ 54%, AKo vs QQ ≈ 52%), trailing badly only against AA/KK (about 28%-35%). The correct reading of \"AK is strong\" is \"it dominates other non-pairs and no longer trails small-mid pairs\". Directly transplanting the full-ring memory \"AK trails pairs\" underestimates AK's preflop value.",
+      "Short-deck combo quick reference: 630 starting hands, 54 pocket pairs (8.6%), 4 suited / 12 offsuit per unpaired pair. When counting \"how many pairs are in his range\" at the table, remember short-deck pair density is higher — this directly affects your calling and bluffing frequencies."
+    ],
+    "t1sd-outs": [
+      "Outs Recalculated: Only 9 Cards Per Suit",
+      "The definition of outs doesn't change — unknown cards that let your hand overtake the opponent. But short deck must recalculate the outs base on a 36-card deck: only 9 cards per suit, so a flush draw's outs are no longer full ring's 9, but 9 minus the seen cards of that suit. This \"subtraction\" is the core of short-deck outs math; directly applying the standard hold'em outs table systematically overestimates your equity.",
+      "Short-deck outs rule: flush draw outs = 9 − seen cards of that suit. Holding 2 hearts + 2 hearts on board → flush outs = 9 − 4 = 5, not full ring's 9.",
+      "Short-Deck Equity Calculation and the 2/4 Rule Correction",
+      "Short-deck flush draw outs recalculated (holding 2 hearts, 2 hearts on board, 4 seen):\nFlush outs = 9 − 4 = 5\n\nUnknown cards after the flop = 36 − 2 (your hole cards) − 3 (flop) = 31\nSingle-street hit rate (turn): 5 ÷ 31 ≈ 16% (full ring same line 9÷47 ≈ 19%)\nTwo-street hit rate (flop to river): 1 − (26/31)×(25/30) ≈ 1 − 0.699 ≈ 30%\n\nThe 2/4 rule (5×4 = 20%) systematically underestimates in short deck:\nthe denominator shrinks from full ring's 47/46 to 31/30, so the same number of outs hits more often than in full ring\n(full ring 5 outs two-street: 1 − (42/47)×(41/46) ≈ 20%; short deck 5 outs two-street ≈ 30%).\n\nKey conclusion: the reason short-deck draws have \"lower absolute equity\" is that the outs count itself shrinks (flush 5 vs full ring 9),\nnot because each out carries less weight — quite the opposite, each out hits more often with a smaller denominator.\nRe-evaluate draw EV on three factors: fewer outs × higher per-out hit rate × higher made-hand value. (Concept from: 6+ Hold'em math framework and Short Deck Poker outs recalculation)",
+      "But \"lower absolute equity\" doesn't mean \"lower value\" — in short deck, when draws get there they are usually nuts or near-nuts (straight/flush value rises due to the hand-ranking reshuffle). So short-deck draws have excellent implied odds and semi-bluffs are amplified. In practice the key is: don't do mental math with the full-ring outs table; recalculate on 36 cards, then judge whether to chase based on the high value of short-deck made hands.",
+      "Example: Short deck, you hold A♥K♥ on a 9♥7♥6♣ flop. You draw to the flush: seen hearts A♥K♥ + 9♥7♥ = 4, so flush outs = 9 − 4 = 5. Plus A/K each have 3 overcard outs (counting backdoors). The opponent bets 2 ante into a 6-ante pot; you need 2÷(6+2+2) = 20%. Your 5 flush outs are about 16% on one street, plus 4-6 overcard outs → about 30%+ on two streets, and a made flush is nut-tier. Calling is +EV, and a raise-semi-bluff is worth considering (short-deck flush value is huge).",
+      "Example 2 (straight outs): Short deck, you hold T♠J♠ on an 8♦9♣6♥ flop. You draw to 7 or Q for a straight: 4 each = 8 outs (8/9 already on board). Only 31 cards remain unknown after the flop, single-street 8/31 ≈ 26%, two-street about 46% — short-deck straight draws are very strong, and a made straight beats the opponent's two pair but not trips (in short deck trips > straight, so be careful).",
+      "Counterintuitive point: short-deck flush draws have only 5 outs (full ring 9) and lower absolute equity — but a flush is a super-strong hand in short deck (beats full houses), basically locking the pot once made. So \"few outs\" doesn't mean \"weak draw\"; the key is the relative strength once made. Using the full-ring intuition \"more outs = stronger draw\" misjudges short-deck flush draws.",
+      "Short-deck outs quick math: flush = 9 − seen cards of the suit; straight = connecting ranks ×4 (minus seen); single-street hit rate approximated by \"outs ÷ 31\" (after flop) or \"outs ÷ 30\" (after turn). Memorize 5 outs ≈ 16% single-street, 8 outs ≈ 26% — faster than counting at the table."
+    ],
+    "t1sd-variance": [
+      "Short Deck: A Game of Amplified Variance",
+      "Short-deck variance is significantly higher than standard hold'em for three structural reasons: (1) higher flop rate — with 36 cards, hitting the flop is easier and more hands see one; (2) more common draws — connected flops appear often, outs hit rates are relatively high, and all-ins/chases are frequent; (3) bigger pots on average — ante structure plus more calls. Combined, these make short-deck's \"single-result uncertainty\" far exceed full ring.",
+      "High short-deck variance isn't a flaw; it's the game's structure. Understand it, accept it, and ride it with more conservative bankroll management — rather than doubting your skill mid-variance.",
+      "Variance Math and Bankroll Management",
+      "Short-deck variance magnitude (typical bb/100 values):\nFull-ring hold'em: winner 5bb/100, standard deviation 80-100\nShort-deck 6-max: winner 8-15bb/100, standard deviation 150-220\n\nShort-deck all-in equity often lands in 45%-55% (draws vs made hands colliding constantly), making single results more uncertain.\n\nBankroll advice (more conservative):\nStandard hold'em cash: about 50-100 buy-ins\nShort deck: suggest ≥ 150 buy-ins (higher standard deviation)\n\nDerivation: if single all-in σ≈55, N-hand cumulative variance = σ×√N. Short deck needs a larger sample for expectation to converge, hence a higher bankroll bar. (Concept from: 6+ Hold'em variance research and bankroll frameworks)",
+      "Handling short-deck variance is also psychological: because the flop rate is extreme and nearly every hand sees a flop, your hourly \"win-loss alternation\" is far denser than full ring. Losing 10 all-ins in a row is more common in short deck (since all-in equity often lands in 45%-55%). Treating consecutive losses as mathematical normalcy rather than a skill problem is a survival skill for short-deck players.",
+      "Example: Short deck, you shove 8 hands in a row at 50% equity (draws vs made hands colliding), and the probability of losing all 8 is 0.5^8 ≈ 0.4% — seemingly rare, but short deck has frequent all-ins per hour, so a session may contain one. Your mind knows \"EV neutral\" but your emotions want \"to get even\". The right move: recognize the revenge impulse → pause → restart with \"what is this hand's EV\".",
+      "Example 2 (bankroll simulation): Short deck, your standard deviation per hundred hands is about 180 with an expectation of 10bb/100. With 50 buy-ins, a 50-buy-in (5000bb) downswing is not unlikely; with 150 buy-ins, the same variance consumes only ~30% of the bankroll. Short deck's higher deviation demands a more conservative bankroll bar than standard hold'em.",
+      "Counterintuitive point: in short deck, \"losing many hands\" almost never proves you're \"playing badly\". The hourly sample is packed with 45%-55% equity all-ins and draw chases; losing streaks are mathematical normalcy. Review with a decision log (recording the reasoning of each key decision) instead of a win/loss log, or you'll make your worst strategic adjustments during the most violent variance.",
+      "Short-deck session management triad: (1) preset a variance budget — pause and review after losing 40-50BB, as a stop-and-restart rather than a chase; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results."
+    ]
+  },
+  "quiz": {
+    "t1sd-combinatorics-q1": {
+      "question": "How many cards does Short Deck hold'em use?",
+      "options": [
+        "52",
+        "40",
+        "36",
+        "32"
+      ],
+      "explanation": "Short deck removes 2-5 and uses 36 cards (6-A, 9 per suit). 40 is an old count in some 6+ variants; the mainstream is 36."
+    },
+    "t1sd-combinatorics-q2": {
+      "question": "The total number of starting hands in short deck is about:",
+      "options": [
+        "1,326",
+        "630",
+        "900",
+        "306"
+      ],
+      "explanation": "C(36,2) = 36×35÷2 = 630. 1,326 is the full-ring (52-card) count."
+    },
+    "t1sd-combinatorics-q3": {
+      "question": "The share of pocket pairs among short-deck starting hands is about:",
+      "options": [
+        "About 5.9%",
+        "About 8.6%",
+        "About 12%",
+        "About 4%"
+      ],
+      "explanation": "Short deck 54/630 ≈ 8.6%, above full ring's 78/1326 ≈ 5.9%. Pair density is higher."
+    },
+    "t1sd-combinatorics-q4": {
+      "question": "Short-deck's \"denser\" flop draw environment mainly comes from:",
+      "options": [
+        "Cards are dealt faster",
+        "Fewer ranks (9) make connected flops more frequent and outs hit rates relatively higher",
+        "The rules allow more outs",
+        "Better luck"
+      ],
+      "explanation": "Short deck's smaller rank pool (9 ranks) makes connected flops more common, and fewer remaining cards make outs hit rates (like 8/31) relatively higher than full ring."
+    },
+    "t1sd-combinatorics-q5": {
+      "question": "AKs' preflop all-in equity against QQ in short deck is about:",
+      "options": [
+        "About 46%",
+        "About 54%",
+        "About 70%",
+        "About 35%"
+      ],
+      "explanation": "Exact enumeration: short-deck AKs vs QQ ≈ 53.7% (AK slightly ahead); full-ring AKs vs QQ is only about 46% (trailing) — this \"flip inversion\" is a signature short-deck difference."
+    },
+    "t1sd-outs-q1": {
+      "question": "The correct way to calculate short-deck flush-draw outs is:",
+      "options": [
+        "Always 9",
+        "9 − seen cards of that suit",
+        "13 − seen cards of that suit",
+        "Always 5"
+      ],
+      "explanation": "Short deck has only 9 cards per suit, so flush outs = 9 − seen cards of that suit. 13 is the full-ring base."
+    },
+    "t1sd-outs-q2": {
+      "question": "Holding 2 hearts with 2 hearts on board, your short-deck flush outs are:",
+      "options": [
+        "9",
+        "5",
+        "7",
+        "4"
+      ],
+      "explanation": "9 − 4 (4 hearts seen) = 5. Using 9 directly is the full-ring error."
+    },
+    "t1sd-outs-q3": {
+      "question": "The mental-math baseline for single-street hit rate after a short-deck flop is:",
+      "options": [
+        "outs ÷ 47",
+        "outs ÷ 31",
+        "outs ÷ 36",
+        "outs ÷ 52"
+      ],
+      "explanation": "After a short-deck flop, unknown cards = 36 − 2 (hole cards) − 3 (flop) = 31, so single-street hit rate ≈ outs ÷ 31. 47 is full ring."
+    },
+    "t1sd-outs-q4": {
+      "question": "A short-deck flush draw (5 outs) has lower absolute equity than full ring but is still valuable, because:",
+      "options": [
+        "Short-deck pots are bigger",
+        "A flush is a super-strong hand in short deck (beats full houses), basically locking the pot when made",
+        "Short deck has more outs",
+        "No reason"
+      ],
+      "explanation": "In short deck a flush beats full houses and is near-nuts when made, with excellent implied odds — few outs but high made value."
+    },
+    "t1sd-outs-q5": {
+      "question": "A short-deck straight draw (e.g. open-ended, 8 outs) hits about ___ on one street:",
+      "options": [
+        "About 17%",
+        "About 26%",
+        "About 35%",
+        "About 15%"
+      ],
+      "explanation": "8 ÷ 31 ≈ 26%. Full ring 8/47 ≈ 17%; short deck hits more because fewer cards remain."
+    },
+    "t1sd-variance-q1": {
+      "question": "The main reason short-deck variance exceeds standard hold'em is:",
+      "options": [
+        "Short deck deals better cards",
+        "Higher flop rate, more common draws, bigger pots — higher single-result uncertainty",
+        "Short-deck rules are more complex",
+        "No reason"
+      ],
+      "explanation": "Short deck flops more often, draws are more common, and pots are usually bigger — combined, single-result uncertainty far exceeds full ring."
+    },
+    "t1sd-variance-q2": {
+      "question": "The recommended bankroll bar for short-deck cash games is about:",
+      "options": [
+        "50 buy-ins",
+        "100 buy-ins",
+        "150+ buy-ins",
+        "20 buy-ins"
+      ],
+      "explanation": "Short-deck standard deviation is higher, so the bankroll bar must be more conservative — suggest ≥150 buy-ins. 50-100 is the full-ring magnitude."
+    },
+    "t1sd-variance-q3": {
+      "question": "Short-deck all-in equity often lands in which range, causing high single-result uncertainty?",
+      "options": [
+        "90%-100%",
+        "45%-55%",
+        "70%-80%",
+        "10%-20%"
+      ],
+      "explanation": "Short-deck draws vs made hands collide constantly, so all-in equity often lands in 45%-55%, making single results highly uncertain."
+    },
+    "t1sd-variance-q4": {
+      "question": "Losing multiple 50% all-ins in a row in short deck is correctly understood as:",
+      "options": [
+        "Extreme bad luck",
+        "Mathematical normalcy under high-frequency confrontation — maintain decision quality",
+        "Poor play",
+        "Opponent cheating"
+      ],
+      "explanation": "Short deck has frequent all-ins; 0.5^N losing streaks are mathematical normalcy. Maintain decision quality instead of doubting your level."
+    },
+    "t1sd-variance-q5": {
+      "question": "The most important psychological discipline for short-deck players against high variance is:",
+      "options": [
+        "Relax after winning",
+        "Review only decision EV, never change play because of results",
+        "Raise to get even after losses",
+        "Stop playing entirely"
+      ],
+      "explanation": "Separate \"process vs result\" — review only whether decision EV was correct, never change play by win/loss, to maintain quality through variance."
+    }
+  },
+  "chapterObjectives": {
+    "t1sd-combinatorics": [
+      "Understand the fundamental impact of the 36-card deck (removing 2-5) on combo counting and starting-hand counts",
+      "Master short-deck preflop combo counts and flop-structure differences, experiencing the denser draw environment",
+      "Use combinatorics to derive key short-deck probabilities, such as the frequency of an opponent holding a certain hand"
+    ],
+    "t1sd-outs": [
+      "Master the method of recalculating short-deck outs on the 36-card deck (only 9 per suit)",
+      "Understand the error of the short-deck 2/4 rule and the direction of its correction",
+      "Learn to convert short-deck draw equity into calling and semi-bluff decisions"
+    ],
+    "t1sd-variance": [
+      "Understand the mathematical roots of short-deck high variance (higher flop rate, more common draws, bigger pots)",
+      "Master short-deck's more conservative bankroll principles and variance-tolerance mindset",
+      "Learn to maintain decision quality and emotional stability under short-deck high-frequency variance"
+    ]
+  }
+}

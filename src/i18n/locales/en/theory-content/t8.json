@@ -1,0 +1,296 @@
+{
+  "content": {
+    "t8-tilt": [
+      "Tilt Is the Most Expensive Leak",
+      "Tilt is the collapse of decision quality when emotion overrides reason. Jared Tendler's core claim in The Mental Game of Poker: most players produce 80% of their losses in 20% of their Tilt time. No matter how good the technique, a tilting player executes his worst version of strategy — one psychological leak can cancel all technical advantages.",
+      "The Seven Types of Tilt (Tendler's Classification)",
+      "(1) Bad-luck Tilt — ignited by a Bad Beat, \"why does it always happen to me\"; (2) Injustice Tilt — believing the game is targeting you; (3) Revenge Tilt — locking onto an opponent you must win back against; (4) Can't-lose Tilt — escalating risk to recover losses; (5) Mistake Tilt — self-attack over your own errors, spiraling; (6) Entitlement Tilt — \"I play well so I deserve to win\", most likely when a winner loses; (7) Despair Tilt — giving up after a long downswing. Identifying which types you have is the prerequisite for intervention: different triggers and antidotes.",
+      "Type-by-type breakdown (trigger → response): (1) Bad luck — triggers: river outdraw, AA losing to a fish; response: recite \"this landed in the 20% branch\", use T1's variance language, no excuses, no complaints. (2) Injustice — triggers: consecutive coolers, three Bad Beats; response: leave the table 10 minutes, tell yourself with data that the distribution is uniform and the deck has no memory. (3) Revenge — triggers: humiliating bluffs or slow-rolls by a specific player; response: change tables or leave directly, clear that \"winning back from him is a byproduct, not the goal\". (4) Can't-lose — trigger: starting to size up near the stop-loss line; response: execute the preset stop-loss, the line is non-negotiable. (5) Mistake — trigger: self-blame after misclicking a raise or an erroneous call; response: accept on the spot that \"the error happened\", leave the fix for review, don't punish yourself at the table. (6) Entitlement — trigger: thinking you're better than the opponent yet losing to a fish; response: remind yourself variance doesn't know skill — winners get Bad Beat too. (7) Despair — trigger: giving up resistance after days of downswing; response: preset a \"downswing battle plan\" (move down, reduce volume, reinforce basic training), turning despair into an action plan. (Concept from: The Mental Game of Poker seven-type Tilt classification and intervention)",
+      "Almost every Tilt type shares the same cognitive fuse: mistaking variance for injustice. T1's variance theory closes the loop here — those who truly internalize \"correct decisions also lose in streaks\" see Bad Beats as statistical noise; those who don't light a match every time.",
+      "Recognizing Your Own Tilt Precursors",
+      "Tilt has physiological and behavioral precursors that appear before the decision collapse: heart racing, jaw tightening, leaning forward; faster actions (calling without thinking), starting to play hands you'd normally fold, bet sizes suddenly losing logic, wanting to \"teach someone a lesson\". Build yourself a \"precursor checklist\" and catch the signal 10 minutes before the collapse — that 10 minutes is the stop-loss window.",
+      "Example: After AA gets outdrawn by T9s on the river, you catch yourself raising K4o from UTG the next hand. This isn't strategy; it's a standard revenge-Tilt symptom — the goal has drifted from \"make +EV decisions\" to \"win it back right now\". Players with a checklist execute their plan (leave the table 10 minutes); players without one lose three buy-ins 30 minutes later.",
+      "Example 2 (mistake-Tilt cascade): On the turn you miscalculated pot odds, called a bet you shouldn't have, and lost the river. The next three hands are all decided with a \"I'm so stupid\" mindset — entering with 97o preflop, snap-calling raises. Mistake Tilt's horror is that it's motivated by \"punishing myself\", and the punishment is playing more bad poker. Response: admit the error on the spot and switch the self-blame switch to \"next hand, fresh start\".",
+      "Tilt's expected loss ≈ Tilt hourly rate × duration\nExample: A-Game rate +8bb, Tilt rate −15bb, lasting 1 hour → relative loss (8−(−15))×1 = 23bb\nIf you intervene within 10 minutes of the precursor (leave the table, cool down), duration drops to 0.1h → loss about 2.3bb\nConclusion: the \"investment return\" of intervention isn't a feeling but quantifiable chips — every minute the precursor checklist saves translates directly into money saved. (Concept from: The Mental Game of Poker A-Game state management)",
+      "The standard intervention sequence: recognize the precursor → physical interruption (leave the table, 10 deep breaths, water) → recite the preset script (like \"variance is performing; my EV hasn't changed\") → if you haven't hit the calm line, end the session. The value of interruption isn't relaxation; it's wresting decision authority back from the limbic system to the prefrontal cortex.",
+      "Write your own Tilt file: your 2 most common types, 3 precursor signals, 1 intervention plan. Tape it by the screen or keep it on your phone — when Tilt hits you won't have the ability to design a plan on the spot; you can only execute one."
+    ],
+    "t8-session": [
+      "A-Game as a Resource",
+      "Your decision quality isn't constant: focus, patience, and emotional stability are resources consumed over time. Divide your state into A/B/C tiers (A = best decisions, B = okay, C = leak-ridden). Session management has exactly one goal: play as many hands as possible in A/B, and compress C time to zero. One extra hour of C-Game often costs more than three hours of A-Game profit.",
+      "Pre-table warm-up: enough sleep? Any residual emotion (life stress, last session's bad results)? What's today's strategic focus? Pros warm up like athletes; entering the table with residual emotion is like bringing your own fuse.",
+      "Session expectation = Σ(tier hourly rate × tier duration)\nExample: A tier 3h×+10bb + B tier 1h×+3bb + C tier 0.5h×−20bb = 30+3−10 = +23bb\nIf you end before entering C tier (cutting the 0.5h): +33bb — cutting half an hour of C-Game earns 10bb more\nConclusion: state stop-loss isn't \"quitting\" — it's the arithmetically optimal exit time. (Concept from: The Mental Game of Poker session management)",
+      "The Truth About Stop-Loss Lines and Taking Profits",
+      "Purely mathematically every hand is independent; \"stop when down X\" doesn't change EV. But the stop-loss line manages you, not the cards: after consecutive losses, Tilt probability spikes and decision quality drops — the stop-loss line (commonly 2-3 buy-ins) is essentially a \"state stop-loss\", forcing exit before C-Game. Conversely \"quit early when winning\" has no mathematical basis: when the table is good (fish present) and your state is good, a winning session should actually be extended. Stay or leave depends on exactly two variables: table quality × your own state, unrelated to the day's profit or loss.",
+      "Example: 4 hours into the session, you're up 2 buy-ins, but you've miscalculated pot odds twice and started checking your phone. The textbook answer is to leave — state has slipped into B-/C tier, and continuing is paying for C-Game with A-Game earnings. \"It's a shame to leave while winning\" is entitlement psychology, not strategy.",
+      "Example 2 (executing the state stop-loss): Your rule is \"leave when down 2 buy-ins\". Tonight you're down 1.9, then win an AA all-in, back to −1.2. The thought \"one more orbit and I'm even\" surges — but your heart rate is already up and you keep glancing at the clock. Per the formula: at this moment your state has slipped into B-/C tier, continuing has negative EV, and the point of the stop-loss is precisely not letting \"so close\" hijack decisions.",
+      "Example 3 (table-quality assessment): You're up 3 buy-ins, but the 5 remaining players are all tight-aggressive regulars and the one or two fish just left. Using the \"table quality × state\" formula: table quality dropped (EV down), so continuing is just donating to tougher games. The correct move is to take profit or move to a softer table — stay/leave always depends on the two variables, unrelated to today's profit.",
+      "Review: The Session's Second Profit Source",
+      "Within 24 hours of the session, do a structured review: mark the 2-3 hardest hands (not the biggest pots), write down your reasoning at the time, verify with range analysis or a solver; also review the psychological side — which moment your state dropped a tier and what the trigger was. Technical review improves strategy; psychological review shortens C-Game — together their long-term value is no less than the table itself.",
+      "Fatigue is invisible Tilt: research repeatedly shows sleep deprivation damages judgment comparably to alcohol. The late-night \"one more hour\" decision is almost never made by your A-Game.",
+      "Write down three hard rules for yourself: a fixed pre-session warm-up checklist, an explicit state-exit signal (like two consecutive calculation errors), and a fixed review time. Rules only bind when written; rules kept in your head get rewritten by emotion on the spot."
+    ],
+    "t8-bankroll-psych": [
+      "The Dual Function of Bankroll Management",
+      "Bankroll management's mathematical function is bankruptcy prevention: even long-term winners can see variance create 10-20 buy-in downswings, and insufficient funds turn \"bad luck\" into \"permanently out\". Common benchmarks: 20-40 buy-ins for cash games, 100+ for tournaments because variance is larger. But its equally important second function is psychological: only when a single buy-in's win/loss \"doesn't hurt\" can you execute correct but high-variance decisions.",
+      "Playable stake limit: cash bankroll ≥ 20-40 buy-ins; tournament bankroll ≥ 100 buy-ins\nTrue floor = max(mathematical benchmark, psychological tolerance benchmark), take the stricter\nLoss-aversion coefficient ≈ 2: the pain of losing 100 ≈ the pleasure of winning 200 (Kahneman's prospect theory)",
+      "Kelly criterion (brief): f* = (bp − q) / b\nb = net odds (win b when winning, lose 1 when losing), p = win probability, q = 1 − p\nExample: win rate 55% (q=0.45), odds 1:1 (b=1) → f* = (1×0.55 − 0.45) ÷ 1 = 0.10, i.e. optimal bet fraction = 10% of bankroll\nPractical conclusion: even a clear 55% edge, Kelly suggests only 10% of funds — and it assumes no psychological wear during downswings, so in reality people use half-Kelly (5%) or more conservative. It gives the mathematical ceiling; psychological tolerance gives the floor. (Concept from: The Mental Game of Poker bankroll quantification; Kelly 1956)",
+      "Risk-tolerance check (three steps): (1) would losing 3 buy-ins in one session affect tonight's sleep and tomorrow's judgment? (2) would losing 10 buy-ins in a row distort your strategy? (3) after a 50% bankroll drawdown, can you still play per plan? If any answer is \"yes\", your psychological bankroll floor is above the mathematical one — decide stakes by the psychological floor.",
+      "The Scared Money mechanism: when stakes exceed psychological tolerance, loss aversion (the pain of losing 100 is about twice the pleasure of winning 100 — Kahneman's prospect theory) systematically distorts decisions: draws you should call get folded, bluffing spots go timid, thin river values get checked. The opponent needs no hand reading — just pressure.",
+      "Example: A player with a 10-buy-in bankroll sits at a +EV table and faces a flop all-in coin flip (52% equity, slight favorite). Math says call, but losing would break him — he folds. One hand doesn't cost much, but \"systematically abandoning thin edges out of fear\" accumulates and turns a winner into a loser. A fully bankrolled opponent makes the same decision with no burden — that's bankroll as fighting power.",
+      "Example 2 (Kelly in practice): You estimate a real edge of 3bb/100 at 2/5; half-Kelly converts to an affordable buy-in count of about 30-40. But psychologically you start agonizing over single-bet sizing after losing 8 buy-ins. So your true floor is the psychological 8, not the mathematical 30 — staying at 2/5 means every decision carries a Scared Money discount. The correct move: drop stakes until \"8 buy-ins feels like 30-40\".",
+      "Example 3 (moving down IS profit): Your bankroll drops from 40 buy-ins to 18; the mechanical rule requires moving down a level. You execute — three months later you're back to 60. Meanwhile the opponent who held the original level went from 18 to 6 and busted. Moving down lets you keep running your complete strategy (protecting +EV); holding means every decision is discounted by fear. Moving down isn't admitting failure; it's protecting the environment where +EV can run.",
+      "Discipline for Moving Up and Down",
+      "Healthy take-a-shot posture: try the higher level with an explicit budget (like 3 buy-ins), drop back immediately when gone, no re-buying. The psychological hurdle of moving down is harder: dropping feels like admitting defeat, so many players cling to the original level after drawdowns until bust. Writing promotions/demotions as mechanical rules (move up at X, down at Y) and executing unconditionally is the only way to strip ego out of financial decisions.",
+      "Another high-frequency psychological trap is \"spending winnings\" (the bankroll version of Winner's Tilt): after a win streak you feel like you're \"playing with house money\" and risk appetite surges. Accounting-wise there is no \"house money\" — all chips are equivalent; winnings join the total bankroll and obey the same rules.",
+      "Bankroll and life must be physically separated: table bankroll is earmarked funds; living expenses go in a separate account. Someone playing with rent money has every decision distorted by Scared Money — you've already lost the psychological war before sitting down.",
+      "Self-test: if you lost 3 buy-ins right now, would you sleep tonight? If not, your stakes exceed your psychological bankroll — the true bankroll floor is the stricter of the mathematical benchmark and psychological tolerance.",
+      "Risk of Ruin: Turning Don't-Go-Broke into a Number",
+      "Risk of Ruin (ROR), diffusion approximation:\nROR = exp(−2μB ÷ σ²), where μ = per-hand expectation (bb), σ² = per-hand variance (bb²), B = bankroll (bb)\n\nAt 5bb/100 with 80bb/100 std deviation: μ = 0.05bb, σ = 80 ÷ 10 = 8bb → σ² = 64bb²\n10 buy-ins (1000bb) → exp(−2×0.05×1000 ÷ 64) = exp(−1.5625) ≈ 21%\n20 buy-ins (2000bb) → exp(−3.125) ≈ 4.4%\n30 buy-ins (3000bb) → exp(−4.6875) ≈ 0.9%\n\nHow to read it: every additional 10 buy-ins cuts the ruin probability to about one fifth — the decay is exponential, not linear.\nHonesty note: this continuous approximation is a lower bound. Discrete buy-in structure, the habit of reloading after going broke, and psychological collapse during a downswing all push the real ruin probability above this table — which is exactly why the 20-40 buy-in baseline above still has to be combined with a psychological floor. (Concepts from: The Mathematics of Poker Ch.3 variance and standard deviation; Kelly 1956, whose fraction-of-bankroll result belongs to the same family as the ruin-probability conclusion)",
+      "Example 4 (one skill set, two fates): Alice and Bob both genuinely play 5bb/100 with 80bb/100 variance, and play identically. Alice starts with 10 buy-ins, Bob with 30. By the formula above Alice's long-run ruin probability is about 21%, Bob's about 0.9% — more than one Alice in five is permanently out of the game before her edge ever pays off. A thicker bankroll changes not one hand of your winrate; it only changes how many more chances you get to use it. That is why having enough roll is a skill you can improve independently of your play."
+    ],
+    "t8-mindset": [
+      "The Four Major Cognitive Biases at the Poker Table",
+      "(1) Resulting: judging decision quality by the result — a lucky misplay gets remembered as \"bold genius\", a correct call that lost gets remembered as \"a lesson\". This is the biggest contaminant of the learning curve. (2) Confirmation bias: remembering only evidence that supports your judgment (\"he always bluffs\" — when he was caught only once). (3) Availability bias: recent or most painful memories get overweighted — just got outdrawn by a flush, so you overestimate every draw's threat. (4) Sunk-cost fallacy: \"I've already put so much in the pot\" — invested chips no longer belong to you; calls should only be based on current odds.",
+      "Complete cognitive-bias checklist (8+, for self-audit):\n① Resulting — judging decisions by single results\n② Confirmation bias — collecting only evidence supporting existing judgments\n③ Availability — recent memories over-weighted\n④ Sunk cost — keeping chips you've already invested alive\n⑤ Gambler's fallacy — \"five losses in a row, I'm due\" (confusing independent events)\n⑥ Overconfidence — overestimating the precision of your reads and judgments\n⑦ Hindsight — \"I knew he had AA\" after showdown, contaminating review\n⑧ Anchoring — locked onto the first piece of information (like an opponent label)\nEach has a counter: ① judge EV not results; ② actively seek counterexamples; ③ replace recent memory with long-term frequency; ④ ask \"considering only now, is the money still mine\"; ⑤ reread T1 independent events; ⑥ test confidence with evidence; ⑦ write the decision first, the result after; ⑧ delay judgment and re-evaluate. (Concept from: Thinking in Bets Ch.1-4 decoupling decisions and results)",
+      "Annie Duke's antidote in Thinking in Bets: \"decouple decisions from results\". To evaluate any hand, only ask: given the information available at the time, what was this decision's expected value? Results are only for calibrating probability estimates, never for judging decisions.",
+      "The relationship between decision quality and results (Duke's decoupling quantified):\nSingle result = EV + variance noise\nLong-term result of correct decisions = Σ EV (noise shrinks with sample size, proven in T1)\nBayesian calibration: P(correct decision | lost) ≠ 1 − P(lost | correct decision)\nExample: a 55%-equity call lost; P(lost)=45% — but this doesn't change P(correct)=55%.\nReview formula: only update the \"probability estimate\" (is 45% accurate?), not the \"decision quality\" (is the 55% call right?). (Concept from: Thinking in Bets Ch.2 correcting result-orientation)",
+      "Example: On the river you correctly called a 2:1 pot-odds bluff catch (his range bluffed 40%); this time he showed the nuts. A result-oriented review writes \"shouldn't have called\"; a probability-thinking review writes \"was the 40% bluff-frequency judgment justified? Yes — so the call was correct; this just landed in the 60% branch\". Two review styles, two different skill levels three months later.",
+      "Growth Mindset and Deliberate Practice",
+      "Carol Dweck's mindset theory mapped to poker: a fixed mindset treats losing as evidence of \"I can't do this\", thus avoiding review and strong opponents; a growth mindset treats losing as data for locating leaks, actively seeking discomfort. Combined with the three elements of deliberate practice — focused training on weaknesses (not repeating comfort zones), immediate feedback (solver/coach/review), and spiraling difficulty — the skill gap is fundamentally a practice-quality gap.",
+      "The last piece of the long-term mindset is process goals: result goals (win X this month) are contaminated by variance and uncontrollable; process goals (review 3 hands daily, zero C-Game in a session, learn one theory module weekly) are fully controllable. Watch the process; results are the byproduct — in a variance-dominated game this isn't chicken soup, it's math.",
+      "Beware \"fake learning\": repeatedly watching entertainment hand videos, only reviewing winning hands, bookmarking tutorials without ever practicing — these activities provide the feeling of learning, not learning itself. There's only one test: did it change your next decision?",
+      "Turn this chapter's four biases into a review checklist and run it every review: \"Am I judging decisions by results? Am I ignoring counterexamples? Am I magnifying fear with recent bad memories? Am I clinging to sunk costs?\" — the best tool against bias is a checklist, not willpower.",
+      "Example 2 (hindsight contamination): On the river you fold top pair to an all-in and the opponent shows a bluff. In review you write \"I knew he was bluffing\" — but at the decision moment you didn't have that certainty; hindsight is rewriting the record. Counter: write down your judgment and reasoning at the decision moment (even mentally), compare after showdown, and you'll know your true reading precision.",
+      "Example 3 (anchoring and overconfidence): Your first impression labels the opponent \"tight-passive\", and after three consecutive big bluffs you still respond with the tight-passive model — anchoring makes you ignore counterexamples. Meanwhile you're fully confident in your reading precision, yet stats show your river hero-call win rate is only 30%. Fix: add \"invalidation conditions\" to every opponent label (re-evaluate if X counterexamples appear), and calibrate confidence with actual win rates."
+    ]
+  },
+  "quiz": {
+    "t8-tilt-q1": {
+      "question": "Tendler's core claim about Tilt is:",
+      "options": [
+        "Tilt is innate personality and can't change",
+        "Most players produce most of their losses during a minority of Tilt time",
+        "Only losers tilt",
+        "Tilt increases aggression so it's beneficial"
+      ],
+      "explanation": "80% of losses come from 20% of Tilt time — the cost of emotional leaks is highly concentrated, so psychological training has a very high ROI."
+    },
+    "t8-tilt-q2": {
+      "question": "The shared cognitive fuse of almost all Tilt types is:",
+      "options": [
+        "The opponent is too strong",
+        "Mistaking variance (normal fluctuation) for injustice",
+        "Too few chips",
+        "Playing too long"
+      ],
+      "explanation": "Those who truly internalize \"correct decisions also lose in streaks\" see Bad Beats as noise; mistaking fluctuation for targeted injustice lights the fire every time."
+    },
+    "t8-tilt-q3": {
+      "question": "After AA gets outdrawn, you raise K4o from UTG the next hand. This is most likely:",
+      "options": [
+        "Reasonable image exploitation",
+        "A Tilt symptom: the goal drifted from +EV decisions to \"win it back now\"",
+        "An advanced balancing strategy",
+        "Normal range expansion"
+      ],
+      "explanation": "The decision basis shifting from math to emotion (revenge/can't-lose) is the hallmark of Tilt. Recognizing this kind of behavioral drift is exactly what the precursor checklist does."
+    },
+    "t8-tilt-q4": {
+      "question": "The standard intervention after spotting a Tilt precursor is:",
+      "options": [
+        "Focus harder and keep playing",
+        "Physical interruption (leave the table / breathe), and end the session if you haven't hit the calm line",
+        "Move to another table and continue",
+        "Raise stakes to find your form"
+      ],
+      "explanation": "In an emotionally activated state you can't restore decision quality by willpower; physical interruption is the only reliable tool. The plan must be written in advance; on the spot you only execute."
+    },
+    "t8-tilt-q5": {
+      "question": "A player, after a Bad Beat, starts playing any two suited cards and frequently raising to \"teach the opponent a lesson\". This is:",
+      "options": [
+        "Bad-luck Tilt; only better luck can fix it",
+        "Injustice/Revenge Tilt combined: the goal drifts from +EV to retribution",
+        "Despair Tilt; he should keep playing",
+        "Normal range expansion"
+      ],
+      "explanation": "Attributing losses to \"the game is unfair\" (injustice) while locking onto a revenge target (revenge) is a typical combination. The key signal is the decision basis shifting from EV to emotion — start the precursor plan then."
+    },
+    "t8-session-q1": {
+      "question": "The core goal of session management is:",
+      "options": [
+        "Play 8 hours every day",
+        "Play as many hands as possible in A/B state and compress C-Game time",
+        "Guarantee profit every session",
+        "The longer the better"
+      ],
+      "explanation": "Decision quality is a consumable resource. One hour of C-Game loss often exceeds several hours of A-Game profit; managing state is managing profit."
+    },
+    "t8-session-q2": {
+      "question": "The true function of a stop-loss line (like stopping after losing 2-3 buy-ins) is:",
+      "options": [
+        "Changing mathematical expectation",
+        "Forcing an exit before Tilt and decision-quality collapse (a state stop-loss)",
+        "Protecting luck",
+        "No function at all"
+      ],
+      "explanation": "Every hand is independent; a stop-loss doesn't change EV. It manages you — after consecutive losses the C-Game probability spikes, so the stop-loss is a preset breakwater."
+    },
+    "t8-session-q3": {
+      "question": "The correct basis for deciding whether to keep playing or leave is:",
+      "options": [
+        "Today's profit or loss",
+        "Table quality and your own state",
+        "Whether half the time has passed",
+        "Whether you've recovered losses"
+      ],
+      "explanation": "Extend when fish are present and state is good (even if you're winning a lot); leave when state drops a tier (even if you're winning). Profit/loss is variance on display, not a stay/leave basis."
+    },
+    "t8-session-q4": {
+      "question": "Structured review should prioritize:",
+      "options": [
+        "The biggest pot you lost",
+        "The 2-3 hardest decisions (win or lose) plus moments your state dropped a tier",
+        "The pots you won",
+        "Opponent mistakes"
+      ],
+      "explanation": "Reviewing by pot size gets dragged by variance; reviewing by decision difficulty targets your own knowledge boundaries, and adding the psychological review completes the loop."
+    },
+    "t8-session-q5": {
+      "question": "You're up 3 buy-ins, but all the fish at the table have left and only tight-aggressive regulars remain. You should:",
+      "options": [
+        "Keep playing; leaving while winning is a waste",
+        "Move to a softer table or finish — the table-quality change altered EV",
+        "Size up against the regulars",
+        "Wait for fish to return"
+      ],
+      "explanation": "Stay/leave only depends on \"table quality × your state\": a lower table quality = negative EV for you; continuing is grinding your luck against tougher games, unrelated to whether you're winning."
+    },
+    "t8-bankroll-psych-q1": {
+      "question": "Besides preventing bankruptcy, the equally critical second function of bankroll management is:",
+      "options": [
+        "Maximizing returns",
+        "Making single win/loss \"not hurt\", so you can execute correct high-variance decisions",
+        "Tax convenience",
+        "Improving poker skill"
+      ],
+      "explanation": "When stakes are within psychological tolerance, loss aversion doesn't distort decisions. Under Scared Money your technique can't function normally."
+    },
+    "t8-bankroll-psych-q2": {
+      "question": "The typical behavioral signature of Scared Money is:",
+      "options": [
+        "Bluffing too frequently",
+        "Systematically abandoning thin edges: not calling what you should call, not bluffing what you should bluff",
+        "Bet sizes too large",
+        "Playing too loose"
+      ],
+      "explanation": "Loss aversion makes correct \"might lose\" decisions get avoided — the accumulated abandonment of thin edges is enough to turn a winner into a loser."
+    },
+    "t8-bankroll-psych-q3": {
+      "question": "A healthy \"take a shot\" is:",
+      "options": [
+        "Keep playing higher stakes while it feels good",
+        "Set an explicit budget (like 3 buy-ins), drop back immediately when gone, no re-buy",
+        "Never return once you've won",
+        "Borrow money to climb stakes"
+      ],
+      "explanation": "Budgeted attempts keep the variance of moving up inside your bankroll structure; \"re-buy after losing\" is the bankroll version of can't-lose Tilt."
+    },
+    "t8-bankroll-psych-q4": {
+      "question": "The root reason many players refuse to move down after a drawdown is:",
+      "options": [
+        "Moving down is mathematically worse",
+        "Moving down psychologically feels like admitting defeat, and ego blocks the correct decision",
+        "Lower stakes have no positions",
+        "Rules forbid it"
+      ],
+      "explanation": "Moving down is a purely correct financial move; all resistance comes from self-image. Writing it as a mechanical rule and executing unconditionally is the only solution."
+    },
+    "t8-bankroll-psych-q5": {
+      "question": "The correct understanding of Kelly's criterion and poker bankroll management is:",
+      "options": [
+        "Always bet full Kelly",
+        "Kelly provides the mathematical ceiling; in practice use half-Kelly or more conservative, and psychological tolerance provides the floor",
+        "Kelly only applies off the table",
+        "Kelly is outdated and useless"
+      ],
+      "explanation": "Full Kelly assumes no psychological wear and precisely known edges; most players' real edges can't support it. Half-Kelly or more conservative balances growth and variance, while psychological tolerance (e.g. distorting after losing N buy-ins) sets the actual floor."
+    },
+    "t8-mindset-q1": {
+      "question": "The definition of \"resulting\" is:",
+      "options": [
+        "Over-focusing on long-term results",
+        "Inferring decision quality from a single result",
+        "Ignoring results and only watching process",
+        "Setting goals too high"
+      ],
+      "explanation": "In a variance-dominated game, a single result is almost unrelated to decision quality; judging decisions by results systematically contaminates the learning curve."
+    },
+    "t8-mindset-q2": {
+      "question": "\"I've already put 200 in the pot; folding wastes it\" commits:",
+      "options": [
+        "Confirmation bias",
+        "The sunk-cost fallacy: invested chips aren't yours; only current odds matter",
+        "Availability bias",
+        "No error — with that much invested you should call"
+      ],
+      "explanation": "The chips you've put in the pot are no longer yours. A call decision depends only on the current call amount vs equity and pot odds (T2)."
+    },
+    "t8-mindset-q3": {
+      "question": "After correctly bluff-catching and running into the nuts, the probability-thinking review conclusion is:",
+      "options": [
+        "Never bluff-catch again",
+        "Check whether the frequency judgment was justified; if yes, the decision was correct and just landed in the low-probability branch",
+        "My hand-reading skill is poor",
+        "This opponent can't be bluffed"
+      ],
+      "explanation": "Decouple decision from result: with a 40% bluff frequency the call is correct, and losing 60% of the time is part of the expectation."
+    },
+    "t8-mindset-q4": {
+      "question": "In variance-dominated poker, you should set goals as:",
+      "options": [
+        "Monthly profit amount",
+        "Controllable process goals (review count, state management, learning progress)",
+        "Win-rate percentage",
+        "Beating a specific opponent"
+      ],
+      "explanation": "Result goals are contaminated by variance and uncontrollable; chasing them necessarily triggers emotional swings. Process goals are fully controllable, and results are their long-term byproduct."
+    },
+    "t8-mindset-q5": {
+      "question": "After the showdown you write \"I knew he had AA; I shouldn't have called\". This most likely reflects:",
+      "options": [
+        "Precise hand reading",
+        "Hindsight bias: using the showdown result to rewrite the information state at decision time",
+        "Reasonable review summary",
+        "Normal confirmation bias"
+      ],
+      "explanation": "At the decision moment you didn't know he had AA, otherwise the call's EV would be negative. Hindsight distorts review — the correct practice is recording the judgment before deciding and comparing after showdown to verify true precision."
+    }
+  },
+  "chapterObjectives": {
+    "t8-tilt": [
+      "Classify an episode into the matching Tilt type by its trigger and its remedy",
+      "Identify the shared fuse of treating variance as injustice, and restate the situation in variance language",
+      "Catch your own physiological and behavioural warning signs and fix them into a checklist",
+      "Estimate the expected loss saved by stopping early rather than playing through, and execute the break"
+    ],
+    "t8-session": [
+      "Decompose one session profit into addable parts by the state tier of each stretch",
+      "Run a pre-session warm-up check that rules out sleep debt and leftover emotion",
+      "Decide whether to keep playing from table quality and current state alone, never from the day",
+      "Select what to review by decision difficulty instead of pot size"
+    ],
+    "t8-bankroll-psych": [
+      "Explain the dual function of bankroll management and set the level by whichever side is stricter, mathematical or emotional",
+      "Given winrate, standard deviation and roll size, judge which risk-of-ruin band you are in",
+      "Identify the specific ways scared money distorts a single decision",
+      "Write move-up and move-down rules mechanically, and refuse to treat won money differently"
+    ],
+    "t8-mindset": [
+      "Sort each wrong judgement found in a review into the matching cognitive bias entry",
+      "Grade the quality of a decision using only the information available before it was made",
+      "Rewrite an outcome goal polluted by variance into process actions you control",
+      "Test whether a study activity actually changed the next decision"
+    ]
+  }
+}

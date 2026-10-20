@@ -9,9 +9,19 @@ import {
   CORE_MODULES,
   FEATURE_GROUPS,
   loadModule,
+  normalizeLanguage,
   type I18nLanguage,
   type I18nModuleKey,
 } from './moduleRegistry';
+import { getTouchedTheoryLevels, loadTheoryContentForLevels } from './theoryContent';
+
+export {
+  isTheoryContentLoaded,
+  loadAllTheoryContent,
+  loadTheoryContentForChapters,
+  loadTheoryContentForLevels,
+  loadTheoryContentForQuestionIds,
+} from './theoryContent';
 
 /** 已加载完成的 (lng, key) 缓存 */
 const loadedKeys = new Set<string>();
@@ -30,10 +40,6 @@ const courseLoadPromises = new Map<I18nLanguage, Promise<void>>();
  * 本 Map 负责去重正在进行的加载并在 settle 后清理。
  */
 const loadPromises = new Map<string, Promise<void>>();
-
-function normalizeLanguage(lng: string | undefined): I18nLanguage {
-  return lng === 'en' ? 'en' : 'zh';
-}
 
 function bundleId(lng: I18nLanguage, key: I18nModuleKey): string {
   return `${lng}:${key}`;
@@ -183,8 +189,7 @@ async function doLoadAcademyCourses(lng: I18nLanguage): Promise<void> {
 
 /**
  * 语言切换补加载：普通模块走 preloadI18n（loadModule 注册表）；
- * academy-course 集合不在注册表中，须整批走 loadAcademyCourses，否则静默漏加载
- * （切换后课程正文滞留 fallback 语言）。
+ * academy-course / theory-content 不在注册表中，须整批补加载，否则切换后滞留 fallback 语言。
  */
 async function preloadTouched(lang: I18nLanguage): Promise<void> {
   const keys = [...touchedKeys].filter((key) => key !== COURSE_BUNDLE_KEY);
@@ -192,6 +197,10 @@ async function preloadTouched(lang: I18nLanguage): Promise<void> {
   if (touchedKeys.has(COURSE_BUNDLE_KEY)) {
     // 课程内容加载失败不阻断语言切换（fallbackLng 'zh' 兜底，与 loadOne 失败策略一致）
     tasks.push(loadAcademyCourses(lang).catch(() => undefined));
+  }
+  const touchedTheoryLevels = getTouchedTheoryLevels();
+  if (touchedTheoryLevels.length > 0) {
+    tasks.push(loadTheoryContentForLevels(touchedTheoryLevels, lang));
   }
   await Promise.all(tasks);
 }

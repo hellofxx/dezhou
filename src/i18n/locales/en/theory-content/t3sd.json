@@ -1,0 +1,208 @@
+{
+  "content": {
+    "t3sd-rankings": [
+      "Short-Deck Starting Hands: Strength Reshuffled",
+      "Short-deck starting-hand strength differs fundamentally from standard hold'em, from two rule changes: (1) hand-ranking reshuffle — trips > straights, flushes > full houses; (2) pair density — pocket pairs rise from 5.9% to 8.6% of starting hands. Result: pocket pairs rise in value (easier to make trips, and trips is one of the strongest made hands), while big high-card hands like AK shift subtly in relative value.",
+      "Short-deck starting-hand rule: AA/KK remain top tier; AK is the \"strongest non-pair\", roughly a coin flip or better against small-mid pocket pairs preflop all-in; pocket pairs stand on their made-hand strength after flopping trips (about 17.1%).",
+      "AK vs Pocket Pairs in Short Deck",
+      "Short-deck AK vs pocket-pair preflop all-in comparison (36-card deck, exact-enumeration magnitudes):\n\nAK vs small-mid pocket pairs (66-QQ): about 50%-56% (coin flip or better; AKs vs QQ ≈ 53.7%, AKo vs QQ ≈ 51.8%)\nAK vs KK: about 32%-35% (KK dominates)\nAK vs AA: about 28%-31% (badly behind)\nAK vs AK: about 50% (mostly split pots)\n\nWhy pocket pairs rise in value:\n1. Trips > straights in short deck, so making trips is a very strong hand\n2. High pair density means flopping trips is more likely (about 17.1%)\n3. Full-ring AK trails small pairs; short deck inverts it to slightly ahead — pairs lose their preflop equity edge and stand on made-hand strength after trips\n\nAK's value: still the strongest hand dominating other non-pairs, and it can flop top pair postflop. (Concept from: Short Deck Poker starting-hand strength and 6+ rules; equities are exact-enumeration magnitudes)",
+      "Practical meaning of the short-deck reshuffle: preflop all-in, AK is roughly a coin flip or better against small-mid pocket pairs — short deck's \"flip\" runs opposite to full ring (where AK slightly trails small pairs). Meanwhile, suited connectors (JTs, 98s) are playable because straights/flushes are valuable, but they belong to a secondary tier — they can win big pots (make nuts) yet are weaker preflop than pairs and AK.",
+      "Example: Short deck, you hold A♠K♠ and the opponent 3-bets all-in preflop. Your hand is the \"strongest non-pair\"; against a small-mid pocket pair (e.g. 88) you have about 50%-55% (slightly ahead), but a range containing AA/KK dominates you. The decision depends on pot odds and the opponent's range: if the range is mostly small-mid pairs and you need only ~45%, call is +EV; with lots of AA/KK, fold carefully. The key is short-deck-corrected equity (AK slightly ahead of small-mid pairs, behind AA/KK), not one full-ring intuition.",
+      "Example 2 (small-pair value): Short deck, you hold 7♠7♦ facing a raise preflop. In short deck 77 flops trips about 17.1% of the time (full ring 12%), and trips is a strong made hand (only loses to full houses/flushes). So small pairs (66-99) rise significantly in short-deck value — set mining still needs a higher threshold (T2), but the strength and frequency of made trips both support more calls.",
+      "Counterintuitive point: \"AK is strong\" in short deck needs the right reading. AK dominates all non-pairs and can flop top pair; it's roughly a coin flip or better against small-mid pairs and trails only AA/KK badly. Transplanting the full-ring memory \"AK trails pairs\" into short deck misjudges AK's preflop value.",
+      "Short-deck starting-hand quick memory: AA/KK top tier, other pairs next (trips value), AK strongest non-pair, suited connectors (JTs+) playable but secondary. For preflop all-ins, AK vs small-mid pairs is a slight favorite while pairs vs AA/KK clearly trail — drop both full-ring intuitions."
+    ],
+    "t3sd-suitedness": [
+      "Short Deck: The Rise of Flushes",
+      "In short deck, a flush beats a full house — the fundamental difference from standard hold'em (where full house > flush). The relative value of flushes rises sharply, making them one of the top made hands in short deck. This changes starting-hand strategy: suited connectors (JTs, 98s, etc.) and suited Ax become significantly more playable — they can make both flushes (nut-tier) and straights.",
+      "Short-deck flush rule: flush beats full house — a top-tier made hand. So \"suited hands\" are worth far more in short deck than in full ring — chasing flush draws has excellent implied odds, and once made they basically lock big pots.",
+      "Playability Analysis of Suited Connectors",
+      "Short-deck suited-connector preflop equity (vs random range):\n\nJTs: about 42%-44%\n98s: about 40%-42%\n76s: about 38%-40%\n\nSlightly lower than the same hands in full ring (high pair density), but short-deck made-hand value is high:\n1. Making a flush (beats full house) → nut-tier\n2. Making a straight (connecting across ~8 ranks) → strong hand\n\nExcellent implied odds: chasing flushes/straights deep-stacked pays hugely.\n\nStrategic status: suited connectors are playable but not top tier (AA/KK/QQ/JJ/AK are), so know when to let go against strong preflop resistance. (Concept from: Short Deck Poker flush value and 6+ starting hands)",
+      "Suited Ax also rises in short-deck value: A♠K♠, A♠Q♠, etc., can make a flush (beats full house), flop top pair of Aces, and carry an A blocker. But note — suited Ax's value comes from \"flush-draw nut potential + top pair\", not \"AX itself\", because short-deck pair density is high and Ax gets dominated by pairs more often.",
+      "Example: Short deck, you hold J♠T♠ facing a BTN raise preflop. JTs is playable in short deck: the flop can give a flush draw (high value), a straight draw, or top pair. Though weaker preflop than pairs, its postflop potential is huge. Deep-stacked, actively call or 3-bet-semi-bluff to exploit flush-value implied odds.",
+      "Example 2 (flush chase): Short deck, you hold A♥9♥ on a K♥8♦6♣ flop. You draw to the flush (seen A♥9♥K♥ = 3 hearts, flush outs = 9 − 3 = 6). The opponent bets and you call. If the turn brings a heart, your flush is nut-tier (beats full houses) and extracts lots of chips. Short-deck flush draws have few outs (6) but enormous made value — chasing has excellent implied odds.",
+      "Counterintuitive point: short-deck suited connectors being \"playable\" doesn't mean \"top-tier strong\". They win big pots (making nut flushes/straights) but are weaker preflop than pairs and AK. Treat them as \"high-reward speculative hands\", not \"steady value hands\", to use them correctly.",
+      "Short-deck flush quick memory: flush beats full house → chasing flush draws is hugely valuable; JTs and above suited connectors are playable; suited Ax has both nut potential and top pair. When facing strong preflop resistance (big 3-bet), suited connectors should let go — they're speculative hands."
+    ],
+    "t3sd-position": [
+      "Short-Deck Position: Value Amplified",
+      "Short-deck position value is amplified because draw density is high, decisions are more frequent, and pots are bigger. Being in position (BTN/IP) means you act after seeing the opponent's action, can realize equity more cheaply, and can control pot size. Out of position (BB/OOP) hurts more in short deck — more draws, easier to be outdrawn, and forced into more tough decisions.",
+      "Short-deck position rule: with position on the BTN, chase more draws (cheap equity realization); in the BB without position, tighten marginal calls to avoid high-RIO spots. Position in short deck is both an advantage and a risk regulator.",
+      "BTN and BB Positional Strategies in Short Deck",
+      "BTN (IP) strategy in short deck: open wider and chase draws more aggressively — position lets you realize equity and control pots. BB (OOP) strategy: defend a reasonable range against BTN's wide opens, but pot-control marginal draws (easily outdrawn) to avoid RIO. The core of short-deck OOP play is \"pot control + timely stop-loss\".",
+      "Example: Short deck, you're on the BTN holding 7♠8♠ on a 9♦T♣A♥ flop (open-ended straight draw). IP, betting or calling realizes equity cheaply — make a straight on a 6/J turn, or see a free river/fold when missing. In the BB (OOP) with the same hand, you act first and get squeezed when raised. Position makes the same draw's value completely different.",
+      "Example 2 (OOP pot control): Short deck, you're in the BB holding Q♦J♦ on a Q♣9♦8♠ flop (top pair + gutshot). OOP, you act first. Top pair on a wet board has high RIO and you can't realize equity without position. The right play is pot control (small bet or check) — avoid building a big pot then getting outdrawn by straights/flushes. An in-position BTN can instead bet thin value.",
+      "Counterintuitive point: out of position in short deck, \"aggressively betting to seize the initiative\" can backfire. Because draw density is high and you act first OOP, aggression tends to build a big pot and then land in a high-RIO spot. In short deck position is more a \"pot control and stop-loss\" tool than mindless aggression.",
+      "Short-deck position quick memory: BTN/IP → wide opens + aggressive draw chasing (cheap equity realization); BB/OOP → tighten calls + pot control/stop-loss (avoid RIO). Ask \"do I have position\" for every hand before deciding between aggression and control."
+    ]
+  },
+  "quiz": {
+    "t3sd-rankings-q1": {
+      "question": "The preflop all-in equity of AKs vs QQ in short deck is about:",
+      "options": [
+        "About 46%",
+        "About 54%",
+        "About 70%",
+        "About 35%"
+      ],
+      "explanation": "Exact enumeration: short-deck AKs vs QQ ≈ 53.7% (AK slightly ahead); full-ring AKs vs QQ ≈ 46% (trailing) — this \"flip inversion\" is a short-deck signature."
+    },
+    "t3sd-rankings-q2": {
+      "question": "The fundamental starting-hand reshuffle in short deck is:",
+      "options": [
+        "AK is the strongest",
+        "AK's equity vs small-mid pairs inverts (from trailing to slightly ahead); pairs stand on made-hand value",
+        "Suited connectors are the strongest",
+        "No change"
+      ],
+      "explanation": "Short-deck AK vs 66-QQ is a coin flip or better (trailing in full ring); \"any pocket pair dominates AK\" doesn't hold. Pair value comes from made-hand strength after flopping trips (about 17.1%)."
+    },
+    "t3sd-rankings-q3": {
+      "question": "AK's equity against KK in short deck is about:",
+      "options": [
+        "About 15%",
+        "About 33%",
+        "About 55%",
+        "About 70%"
+      ],
+      "explanation": "AK vs KK is about 32%-35% (exact-enumeration magnitude); KK dominates AK. Full ring is about 30%; short deck rises slightly with more live cards."
+    },
+    "t3sd-rankings-q4": {
+      "question": "Why do small pairs rise in short-deck value?",
+      "options": [
+        "Small pairs are more common",
+        "Trips outrank straights and flopping trips is more likely (about 17.1%)",
+        "Small pairs can make straights",
+        "No reason"
+      ],
+      "explanation": "In short deck trips > straights, and flopping trips is about 17.1% (full ring 12%), significantly raising small-pair value."
+    },
+    "t3sd-rankings-q5": {
+      "question": "The positioning of suited connectors (JTs) in short deck is:",
+      "options": [
+        "Top tier",
+        "Playable but secondary — can win big pots but weaker preflop than pairs and AK",
+        "Completely useless",
+        "The strongest starting hand"
+      ],
+      "explanation": "Suited connectors are playable in short deck (straight/flush value), but they're a secondary tier, weaker preflop than pairs and AK."
+    },
+    "t3sd-suitedness-q1": {
+      "question": "A flush beats a full house in short deck, meaning:",
+      "options": [
+        "Flush value drops",
+        "A flush is a top-tier made hand — chasing flush draws has excellent implied odds",
+        "A flush only beats a straight",
+        "No change"
+      ],
+      "explanation": "Short-deck flush > full house; flushes are top-tier made hands with excellent implied odds, basically locking big pots when made."
+    },
+    "t3sd-suitedness-q2": {
+      "question": "The positioning of JTs in short deck is:",
+      "options": [
+        "Top-tier strong",
+        "Playable but secondary — a high-reward speculative hand",
+        "Completely useless",
+        "The strongest starting hand"
+      ],
+      "explanation": "JTs can make nut flushes/straights (high reward) but is weaker preflop than pairs and AK — a secondary speculative hand."
+    },
+    "t3sd-suitedness-q3": {
+      "question": "Suited Ax's value in short deck mainly comes from:",
+      "options": [
+        "AX itself being strong",
+        "Flush-draw nut potential + top pair of Aces",
+        "Ax beating pairs",
+        "No value"
+      ],
+      "explanation": "Suited Ax's value comes from \"flush-draw nut potential + top pair A\", not Ax itself — pair density is high, so Ax gets dominated more often."
+    },
+    "t3sd-suitedness-q4": {
+      "question": "A♥9♥ on a K♥8♦6♣ board in short deck has ___ flush outs:",
+      "options": [
+        "9",
+        "6",
+        "5",
+        "4"
+      ],
+      "explanation": "Seen hearts A♥9♥K♥ = 3, so flush outs = 9 − 3 = 6."
+    },
+    "t3sd-suitedness-q5": {
+      "question": "The correct attitude for short-deck suited connectors facing a big 3-bet is:",
+      "options": [
+        "Call mindlessly",
+        "Know when to let go — they're speculative hands",
+        "Always shove",
+        "Only play suited connectors"
+      ],
+      "explanation": "Suited connectors are speculative; against strong preflop resistance (big 3-bet) they should let go — not top tier."
+    },
+    "t3sd-position-q1": {
+      "question": "Why is short-deck position value amplified?",
+      "options": [
+        "Pots are smaller",
+        "High draw density, more frequent decisions, and bigger pots",
+        "Position rules differ",
+        "No reason"
+      ],
+      "explanation": "Short deck has high draw density, frequent decisions, and big pots — position (seeing action, controlling pots) is amplified."
+    },
+    "t3sd-position-q2": {
+      "question": "The BTN's (IP) tendency when chasing draws in short deck is:",
+      "options": [
+        "Tighten calls",
+        "Chase aggressively because equity is realized cheaply",
+        "Always fold",
+        "Only play the nuts"
+      ],
+      "explanation": "BTN/IP has position, realizes equity cheaply, and can chase draws more aggressively."
+    },
+    "t3sd-position-q3": {
+      "question": "The BB (OOP) holding top pair on a wet short-deck board should:",
+      "options": [
+        "Bet aggressively to seize the initiative",
+        "Pot control and stop-loss to avoid high RIO",
+        "Shove",
+        "Fold immediately"
+      ],
+      "explanation": "OOP top pair on a wet board has high RIO and poor equity realization — pot control and stop-loss. Aggression tends to build big pots then get outdrawn."
+    },
+    "t3sd-position-q4": {
+      "question": "For the same open-ended straight draw, the value difference between IP and OOP is:",
+      "options": [
+        "No difference",
+        "IP realizes equity cheaply and controls pots; OOP acts first and gets squeezed",
+        "OOP is better",
+        "The cards come differently"
+      ],
+      "explanation": "IP realizes equity cheaply (get paid when hit, fold/see free when miss); OOP acts first and is torn when raised."
+    },
+    "t3sd-position-q5": {
+      "question": "The core strategy out of position in short deck is:",
+      "options": [
+        "Pot control + timely stop-loss",
+        "Mindless aggression",
+        "Always shove",
+        "Only play strong hands"
+      ],
+      "explanation": "Short-deck OOP core is pot control and stop-loss to avoid high-RIO spots, not mindless aggression."
+    }
+  },
+  "chapterObjectives": {
+    "t3sd-rankings": [
+      "Understand the fundamental reshuffle of short-deck starting-hand strength: AK's equity vs small-mid pairs inverts, AK the strongest non-pair",
+      "Master the relative value changes of AK, pocket pairs, and suited connectors in short deck",
+      "Learn to adjust preflop strategy based on the reshuffled starting-hand strength"
+    ],
+    "t3sd-suitedness": [
+      "Understand the root cause of short-deck flush value rising (flush beats full house)",
+      "Master the playability and strategic status of suited connectors and suited Ax in short deck",
+      "Learn to exploit the flush-value rise to optimize preflop ranges and postflop decisions"
+    ],
+    "t3sd-position": [
+      "Understand the amplification of positional value in short deck (high draw density, more frequent decisions)",
+      "Master exploiting the BTN positional advantage and adjusting BB defense in short deck",
+      "Learn to compensate short-deck high-variance risk with positional advantage"
+    ]
+  }
+}

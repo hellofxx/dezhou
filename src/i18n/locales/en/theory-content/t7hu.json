@@ -1,0 +1,143 @@
+{
+  "content": {
+    "t7hu-patterns": [
+      "Heads-Up Is the Battlefield of Reading People",
+      "Heads-up faces one opponent, so reading people is amplified enormously — you don't juggle multiple table images, just this one player. HU player tendencies usually classify into a few types: Calling Station (almost never folds postflop), nit/tight-passive (very narrow range, folds too much), Maniac (aggressive and loose), TAG (balanced but predictable). After identifying the type, your exploitation strategy has direction.",
+      "Reading people isn't guessing hands — it's estimating ranges. \"Calls too much\" means his range skews wide and weak; \"folds too much\" means his range is very narrow and stealable. Inferring ranges from frequencies is the core of pattern recognition.",
+      "From Frequency to Range: Four Key Dimensions",
+      "Watch four frequencies of a HU opponent: (1) preflop open rate — how wide he plays; (2) fold rate vs C-Bets — whether he over-folds; (3) 3-bet rate — his aggression; (4) showdown tendency — calling station or controlled. Cross these four frequencies and you get a fairly complete portrait. Sample at least 50-100 hands; single-hand impressions don't count.",
+      "Example: A HU opponent opens 85% preflop (wide) but folds to C-Bets 60% (over-folds). Portrait: wide open + many folds = \"wide range + weak defense\". Exploitation direction: as the side acting last, C-Bet at high frequency to steal because his fold rate is high; and his wide open means your defense from the BB can also widen. Harvest two leaks at once.",
+      "Example 2 (calling station): The opponent almost never folds postflop (fold rate <25%) but opens moderately. Portrait: calling station. Exploitation: don't use pure bluffs (he doesn't fold); switch to value-bet thin value — top pair weak kicker can also bet for money because he calls with worse. Meanwhile reduce bluff frequency, converting bluffs to semi-bluffs or checks.",
+      "Example 3 (nit): The opponent opens only 30% and folds too much to raises. Portrait: nit. Exploitation: raise steal and raise frequency (his fold rate is automatic profit); but beware his occasional strong-hand re-raise — when a nit enters a pot he's usually strong.",
+      "Counterintuitive point: don't reclassify an opponent because he \"once\" showed the nuts. Heads-up is high-frequency; a single all-in win/loss is noise; only 50-100 hand frequency statistics form an exploitable signal. Concluding from a single-hand impression is exploitation's biggest enemy.",
+      "Build an opponent notebook: every 20 hands record the four frequencies (open rate / fold rate / 3-bet rate / showdown tendency). Among HU pros, \"note-taking while playing\" is the discipline that turns short-term impressions into long-term advantage."
+    ],
+    "t7hu-exploit": [
+      "Exploitation Isn't Abandoning GTO — It's Calibrating It",
+      "Exploitative strategy profits from the opponent's deviations from equilibrium. But HU pros don't \"abandon\" GTO; they \"calibrate\" it: using equilibrium frequencies as the baseline and making minimum necessary deviations against the opponent's clear deviations. The key discipline — every deviation opens your own leaks, so the magnitude must be controlled and you must return to baseline when the opponent adjusts.",
+      "The right posture of exploitation: aim the direction at the opponent's leak (Maximally Exploitative), keep the magnitude minimal (Minimally Exploitative). The goal of deviating is \"earn enough before he corrects\", not \"turn yourself into a leak too\".",
+      "Node Locking: Turning Exploitation Into Calculation",
+      "Node locking is an advanced solver feature: lock the opponent's strategy at a node to the real tendency you observed (e.g. \"this opponent never bluffs the river\" or \"folds to C-Bets 60%\"), then re-solve your optimal response. The output is the maximally exploitative strategy against that leak. This turns exploitation from \"feel\" into \"calculation\".",
+      "Raising steals against an over-folding opponent (SB min-raise to 2BB, BB fold rate f):\n\nEV(steal) = f×1.5 − (1−f)×1.5\n\nEquilibrium fold rate about 40% (f=0.4) → EV = 0.4×1.5 − 0.6×1.5 = −0.3BB (unprofitable, needs postflop recovery)\n\nIf the opponent folds 60% (f=0.6) → EV = 0.6×1.5 − 0.4×1.5 = +0.3BB (pure steal already profits)\n\nConclusion: for every 10% the opponent's fold rate rises, your steal frequency should rise too — but capped at \"I still don't lose if he corrects to 50%\". (Concept from: Applications of No-Limit Hold'em, Matthew Janda Ch.13 exploitative betting and frequencies)",
+      "Example: After locking \"BB folds to turn double-barrel 55% (equilibrium ~45%)\" and re-solving, the solver immediately pushes your turn bluff frequency higher, even adding weak hands that originally checked into the betting range. It precisely shows \"how much you should deviate for every 1% the opponent deviates\" to harvest. Node locking turns exploitation from intuition into calculation.",
+      "Example 2 (value vs the calling station): The opponent calls too loosely postflop (station). After locking this tendency, your value-bet sizes can increase and thin-value hands (top pair weak kicker) all enter the betting range — because the station calls with weak hands, your wide value range gets overpaid.",
+      "Example 3 (when to return to baseline): After you raise steal frequency, the opponent starts 3-betting frequently in response — he's discovered your deviation. Now you must return to the GTO baseline (narrow the steal range, reduce pure bluffs), or your newly opened leaks get harvested in reverse. Exploitation is a dynamic game: deviate → get detected → return to baseline, looping.",
+      "Counterintuitive point: the biggest risk of exploitation isn't \"exploiting too little\" but \"over-exploiting and becoming the leak yourself\". While harvesting the opponent's leaks, HU pros always keep one hand on the GTO baseline wheel — the moment the opponent adjusts, they snap back.",
+      "Exploitation execution in five steps: (1) HUD-collect enough samples to confirm the leak; (2) lock the node in a solver for the optimal response; (3) compare to baseline and mark the pushed-up frequencies and sizes; (4) execute live; (5) re-check the sample every 500 hands. A \"lock\" without data support is exploitation on paper."
+    ]
+  },
+  "quiz": {
+    "t7hu-patterns-q1": {
+      "question": "The correct way to \"read people\" in heads-up is:",
+      "options": [
+        "Guessing the opponent's exact hand",
+        "Inferring the opponent's range from frequencies (open rate / fold rate, etc.)",
+        "Judging by feel",
+        "Only watching single-hand results"
+      ],
+      "explanation": "Reading is estimating ranges, not guessing hands. Cross the four key frequencies (open / fold / 3-bet / showdown) to infer the opponent's portrait."
+    },
+    "t7hu-patterns-q2": {
+      "question": "An opponent opens 85% and folds to C-Bets 60%. The correct judgment is:",
+      "options": [
+        "He's a nit — bet less",
+        "He's \"wide range + weak defense\" — C-Bet at high frequency to steal",
+        "He's a calling station",
+        "No leak to exploit"
+      ],
+      "explanation": "Wide open + many folds = wide range with weak defense. C-Bet at high frequency as the last actor to steal, and widen your defense from the BB — harvest two leaks at once."
+    },
+    "t7hu-patterns-q3": {
+      "question": "Against a calling station who almost never folds postflop, the correct exploitation is:",
+      "options": [
+        "Add pure bluffs",
+        "Value-bet thin value and reduce bluffs",
+        "Stop betting entirely",
+        "Only play the nuts"
+      ],
+      "explanation": "A station doesn't fold, so pure bluffs are useless; switch to thin value bets because he calls with worse hands."
+    },
+    "t7hu-patterns-q4": {
+      "question": "When identifying an opponent type, the sufficient sample size is about:",
+      "options": [
+        "3-5 hands",
+        "10 hands",
+        "50-100 hands",
+        "Any number"
+      ],
+      "explanation": "A single all-in win/loss is noise; only 50-100 hand frequency statistics form a reliable signal. Concluding from single-hand impressions is exploitation's biggest enemy."
+    },
+    "t7hu-patterns-q5": {
+      "question": "An opponent opens only 30% and over-folds to raises (nit). The exploitation direction is:",
+      "options": [
+        "Raise steal and raise frequency",
+        "Reduce aggression",
+        "Only play strong hands",
+        "Call more"
+      ],
+      "explanation": "A nit folds too much, so the fold rate on steals and raises is automatic profit. But note he's usually strong once in a pot — avoid being re-raised by his occasional strong hands."
+    },
+    "t7hu-exploit-q1": {
+      "question": "The discipline of \"minimum necessary deviation\" is:",
+      "options": [
+        "Completely abandoning GTO",
+        "Aiming at the opponent's leak with minimal magnitude, ready to return to baseline anytime",
+        "Always exploiting harder",
+        "Completely copying GTO"
+      ],
+      "explanation": "Deviations open your own leaks, so keep the magnitude controlled; aim at the leak, keep it minimal, and return to baseline when the opponent adjusts."
+    },
+    "t7hu-exploit-q2": {
+      "question": "Against an opponent with a 60% fold rate (equilibrium 40%), the steal EV is:",
+      "options": [
+        "−0.3BB",
+        "+0.3BB",
+        "0",
+        "Impossible to compute"
+      ],
+      "explanation": "EV = 0.6×1.5 − 0.4×1.5 = +0.3BB, pure stealing already profits. The higher the opponent's fold rate, the more your steal frequency should rise."
+    },
+    "t7hu-exploit-q3": {
+      "question": "The purpose of node locking is:",
+      "options": [
+        "Locking your own strategy to prevent misclicks",
+        "Fixing the opponent's strategy to the observed tendency and solving the maximally exploitative response",
+        "Preventing the solver from crashing",
+        "Locking preflop ranges"
+      ],
+      "explanation": "Node locking feeds \"how the opponent actually plays\" into the solver and outputs the optimal harvest scheme for that deviation — turning exploitation from feel into calculation."
+    },
+    "t7hu-exploit-q4": {
+      "question": "Against a station who calls too loosely postflop, the exploitation adjustment is:",
+      "options": [
+        "Increase value bets and put thin-value hands into the betting range",
+        "Add pure bluffs",
+        "Bet less",
+        "Only play the nuts"
+      ],
+      "explanation": "The station calls with weak hands, so your wide value range gets overpaid — increase value-bet sizes and include thin-value hands in the betting range."
+    },
+    "t7hu-exploit-q5": {
+      "question": "After you raise steal frequency, the opponent starts 3-betting frequently. The correct move is:",
+      "options": [
+        "Keep increasing steals",
+        "Return to the GTO baseline and narrow the range",
+        "Stop opening entirely",
+        "Ignore the opponent's reaction"
+      ],
+      "explanation": "The opponent detected your deviation, and your newly opened leaks will be harvested in reverse. You must return to baseline — exploitation is a \"deviate → get detected → return\" dynamic game."
+    }
+  },
+  "chapterObjectives": {
+    "t7hu-patterns": [
+      "Identify the most common HU opponent types: calling station, nit, maniac, TAG",
+      "Master hand-reading by inferring opponent ranges from frequencies and tendencies",
+      "Learn to distinguish \"exploitable tendencies\" from \"one-off actions\", avoiding overreactions"
+    ],
+    "t7hu-exploit": [
+      "Understand the correct framework for shifting from the GTO baseline to exploitation: minimum necessary deviation",
+      "Master the specific adjustments (frequency, size, range) against different opponent types",
+      "Learn to recognize \"when to return to GTO\" — the boundary where exploitation opens your own leaks"
+    ]
+  }
+}

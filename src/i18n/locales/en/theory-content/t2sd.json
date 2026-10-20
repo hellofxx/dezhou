@@ -1,0 +1,208 @@
+{
+  "content": {
+    "t2sd-potodds": [
+      "Short-Deck Pot Odds: The Unique Ante Structure",
+      "Short deck usually uses an ante structure: everyone posts the same ante, and the BTN posts an extra ante. This means no traditional SB/BB blind structure — the pot is built from fixed antes. The pot-odds formula is unchanged (required equity = call ÷ pot), but short deck's specifics matter: pots are usually bigger (ante + more calls) and draw hit rates must be recalculated on 36 cards.",
+      "Pot odds are just numbers, not emotions. Short-deck pots are big and call prices relatively cheap, but you must judge with short-deck-corrected equity (on 36 cards), not the full-ring equity table.",
+      "Required-Equity Correction for Short Deck",
+      "Pot-odds required-equity formula:\nRequired equity = call ÷ (current pot + opponent bet + call)\n\nShort-deck example (ante structure, pot 8 ante, opponent bets 4 ante, you need to call 4):\nRequired equity = 4 ÷ (8+4+4) = 25%\n\nBut your equity must be short-deck corrected:\nFlush draw 5 outs → about 16% single-street, 30% two-street\nStraight draw 8 outs → about 26% single-street, 46% two-street\n\nOnly call when equity ≥ required equity (or with implied odds). (Concept from: Short Deck Poker pot odds and the 6+ math framework)",
+      "Key practical point for short-deck pot odds: because pots are usually larger and call prices cheap, more marginal hands are worth calling; but because draw hit rates are absolutely lower than full ring, you must lean on \"the high value of short-deck made hands\" (flushes/straights are often nuts) to justify calls. Understanding the balance of these two forces is the core of short-deck odds decisions.",
+      "Example: Short-deck pot 10 ante, you (BTN) hold A♥K♥ on a 9♥7♥6♣ flop. The opponent bets 5 ante (half pot); you call 5 into a 20 pot. Required equity = 5/20 = 25%. Your flush draw (5 outs, about 16% single-street) plus A/K overcards ≈ 11 combined outs, about 59% on two streets. 25% odds vs 59% equity → call is +EV; and a made flush is nut-tier with excellent implied odds, so a raise-semi-bluff is even available.",
+      "Example 2 (marginal call): Short-deck pot 6 ante, you hold Q♠J♠ on a 9♣8♦6♥ flop, drawing to a T straight (4 outs — 4 tens). The opponent bets 3 ante (half pot), required equity 25%. Your single-street ≈13% (4/31); two-street ≈25%, roughly level with the required equity, and a T straight can beat the opponent's two pair. With implied odds the call turns +EV — short-deck straight draws carry high implied value.",
+      "Counterintuitive point: short-deck pots are big and odds cheap, but \"cheap\" doesn't mean \"free\". You must judge with short-deck-corrected equity — a flush draw has only 5 outs (about 16% single-street), seemingly not enough to call, but once made it's a super-strong hand. Combining \"cheap odds\" with \"corrected equity\" is the right short-deck odds posture.",
+      "Short-deck odds quick math: half-pot bet needs 25%, 1/3 pot 20%, full pot 33.3%. Memorize these, then combine with \"flush 5 outs ≈ 16% single-street, straight 8 outs ≈ 26% single-street\" to judge whether you qualify."
+    ],
+    "t2sd-implied": [
+      "Short-Deck Implied Odds: The Polarization of Made-Hand Value",
+      "Implied odds ask \"how much more can I win in the future after calling now\". Short-deck implied odds are polarized: on one hand, flushes (beating full houses) and straights are super-strong once made, with excellent implied odds; on the other, sets (trips) have worse implied odds because their hand rank is below full houses and flushes. Understanding this polarization is the core of short-deck implied-odds decisions.",
+      "Short-deck implied-odds rule: chasing flushes/straights → excellent implied odds (nut-tier when made); chasing sets → worse implied odds (trips lose to full houses/flushes).",
+      "Set-Mining Threshold: Why Short Deck Demands More",
+      "Short-deck set-mining threshold derivation:\n\nProbability of flopping trips with a pocket pair:\nEach rank has 4 cards; you hold 2, leaving 2 in the deck; at least 1 of your rank appears among the 3 flop cards\n= 1 − C(32,3)/C(34,3) ≈ 1 − 4960/5984 ≈ 17.1%\n(full ring ≈ 12%; same convention as full ring: 34 unseen cards = 36 − your 2 hole cards)\n\nBut short-deck trips drop in value: trips < full house < flush\n\nSo although the hit rate is higher (17.1% vs 12%), the required payoff ratio is higher:\nShort-deck set mining needs a ≥ 15-20× call-amount recovery threshold\n(full ring ≈ 10-12×)\n\nLogic: after making trips you lose to full houses/flushes more often, discounting implied odds, requiring a bigger multiple to compensate. (Concept from: Short Deck Poker set mining and 6+ math)",
+      "Why are the implied odds of chasing flushes/straights good in short deck? Because once made they're nuts or near-nuts: a flush beats full houses, a straight only loses to trips/full houses/flushes. When the opponent's range contains big pairs or strong hands, making your flush/straight extracts lots of chips. Chasing sets is the opposite — after making trips you can still lose to full houses/flushes, and opponents fold easily too (they know trips aren't the nuts).",
+      "Example: Short deck, you hold 7♥8♥ on a 9♦T♣K♠ flop (open-ended straight draw, 8 outs: 6 and J). The opponent bets half pot; you call 5 ante to see the turn. Your implied odds: if 6 or J makes your straight (6-7-8-9-T or 7-8-9-T-J), it's a strong short-deck straight that can beat the opponent's two pair or anything below trips. If his range has pairs/strong hands, you can win 10+ more ante when you get there. The call's implied odds are excellent.",
+      "Example 2 (set mining comparison): Short deck, you hold 6♠6♦ and call 2 ante preflop. Flop 6♣9♥K♦ — you make trips. It looks like a huge advantage, but in short deck trips lose to full houses (opponent's 99/K9) and flushes. And combos like 99/K9 are more common in short-deck ranges (higher pair density). So even making trips, you must watch for outdraws — exactly why short-deck set implied odds are poor.",
+      "Counterintuitive point: \"making trips\" in short deck is nowhere near as happy as in full ring. Full-ring trips are hidden nuts; short-deck trips only beat straights and lose to full houses and flushes. On wet boards the opponent's stronger made hands can outdraw you at any time, heavily discounting trips' implied odds.",
+      "Short-deck implied-odds quick memory: chasing flushes/straights → nut-tier when made, chase freely; chasing sets → needs a higher threshold (15-20× the call), and stay alert for full houses/flushes after hitting. Always ask first \"is what I make the nuts\"."
+    ],
+    "t2sd-reverse": [
+      "Reverse Implied Odds: Short Deck's Hidden Trap",
+      "Reverse implied odds (RIO) ask \"after calling now, how much more might I lose in the future\". Short-deck RIO is amplified: because of the hand-ranking reshuffle (flush > full house, trips > straight) and high pair density, marginal made hands (top pair, two pair, straights) are more easily dominated by stronger hands. Slow-playing marginal hands or chasing cheap draws can cost you the entire pot on the river.",
+      "Short-deck RIO rule: marginal made hands (top pair, two pair, straights) lose value on wet short-deck boards and are easily dominated by stronger hands. RIO awareness prevents \"winning small pots and losing big ones\".",
+      "Typical High-RIO Spots",
+      "Three classes of high-RIO spots in short deck: (1) top pair weak kicker — losing big pots to the opponent's two pair/straight/flush; (2) marginal straights — dominated by bigger straights, full houses, flushes; (3) slow-playing strong hands and getting outdrawn — short-deck draw density is high, so slow-playing hands the opponent free draws. After recognizing these spots, use \"pot control + timely stop-loss\" to avoid RIO.",
+      "Example: Short deck, you hold A♠K♦ on a K♣9♦8♥ flop. You flop top pair with an A kicker, but the board is wet (98 connected — the opponent can make straights/two pair). He bets half pot and you call. Turn 7♣ completes the TJ straight. Your top pair now loses to many straights and two pairs — this is RIO: you're ahead now but can lose a big pot on later streets. The right move is flop pot control or cautious calling, not slow-playing all the way.",
+      "Example 2 (slow-play trap): Short deck, you hold A♥A♣ on an A♦9♥6♥ flop, making trips of Aces. Looks like the nuts, but in short deck trips < full house < flush, and the board has flush potential. If you slow-play and check, the opponent chases a flush draw for free and makes it on the turn to outdraw you. Short-deck draw density is high — strong hands must bet to protect, avoiding slow-play RIO.",
+      "Counterintuitive point: \"I have top pair / two pair\" is not a reason to slow-play in short deck. The wetter the board and the higher the draw density, the more dangerous your marginal made hand. Fast-playing strong hands for protection plus pot-controlling marginal hands is the core of avoiding RIO.",
+      "Short-deck RIO three questions: (1) is my made hand the nuts? (2) what stronger combos can the opponent have? (3) does slow-playing hand him a free draw? After three questions: fast-play the nuts, pot-control marginal hands, and avoid slow-plays on wet boards."
+    ]
+  },
+  "quiz": {
+    "t2sd-potodds-q1": {
+      "question": "What betting structure does short deck usually use?",
+      "options": [
+        "Standard SB/BB blinds",
+        "An ante structure, with the BTN posting an extra ante",
+        "No forced bets",
+        "Only a BB blind"
+      ],
+      "explanation": "Short deck usually uses an ante structure: everyone posts the same ante and the BTN posts an extra ante — no traditional SB/BB."
+    },
+    "t2sd-potodds-q2": {
+      "question": "Short-deck pot 8 ante, opponent bets 4 ante, you need to call 4. Required equity is about:",
+      "options": [
+        "20%",
+        "25%",
+        "33.3%",
+        "40%"
+      ],
+      "explanation": "4 ÷ (8+4+4) = 4/16 = 25%."
+    },
+    "t2sd-potodds-q3": {
+      "question": "A short-deck flush draw (5 outs) hits about ___ on one street:",
+      "options": [
+        "About 19%",
+        "About 16%",
+        "About 26%",
+        "About 10%"
+      ],
+      "explanation": "5 ÷ 31 ≈ 16%. 19% is full ring's 9-outs single-street value; 26% is the straight 8-outs single-street value."
+    },
+    "t2sd-potodds-q4": {
+      "question": "When short-deck pots are big and odds cheap, the correct basis for a call decision is:",
+      "options": [
+        "Call mindlessly because odds are cheap",
+        "Judge with short-deck-corrected equity, combined with high made-hand value",
+        "Always fold",
+        "Only look at pot size"
+      ],
+      "explanation": "Short-deck calls must correct equity on 36 cards and rely on the high value of flushes/straights when made. Cheap odds don't mean free."
+    },
+    "t2sd-potodds-q5": {
+      "question": "A short-deck straight draw (8 outs) hits about ___ on two streets:",
+      "options": [
+        "About 26%",
+        "About 46%",
+        "About 30%",
+        "About 55%"
+      ],
+      "explanation": "Short-deck 8-outs straight hits 1 − (23/31)×(22/30) ≈ 46% on two streets, far above the single-street 26%."
+    },
+    "t2sd-implied-q1": {
+      "question": "The polarization of short-deck implied odds is shown by:",
+      "options": [
+        "All draws have poor implied odds",
+        "Chasing flushes/straights has excellent implied odds; chasing sets has worse implied odds",
+        "All draws have good implied odds",
+        "No difference"
+      ],
+      "explanation": "Short-deck flushes/straights are nut-tier when made (good implied odds); trips lose to full houses/flushes (poor implied odds)."
+    },
+    "t2sd-implied-q2": {
+      "question": "Short-deck set mining needs a higher threshold than full ring because:",
+      "options": [
+        "Trips are harder to make in short deck",
+        "Short-deck trips rank below full houses/flushes, discounting implied odds",
+        "Short-deck pots are smaller",
+        "No reason"
+      ],
+      "explanation": "Short-deck trips lose to full houses and flushes, reducing made-hand value and requiring a higher payoff ratio — hence the higher threshold."
+    },
+    "t2sd-implied-q3": {
+      "question": "The probability of flopping trips with a pocket pair in short deck is about:",
+      "options": [
+        "About 12%",
+        "About 17.1%",
+        "About 25%",
+        "About 8%"
+      ],
+      "explanation": "Short deck ≈ 17.1% (1 − C(32,3)/C(34,3); full ring ≈ 12%). Though the hit rate is higher, trips lose value, requiring a higher threshold."
+    },
+    "t2sd-implied-q4": {
+      "question": "\"Making trips in short deck isn't as happy as full ring\" because:",
+      "options": [
+        "Trips are weaker hands",
+        "Trips lose to full houses and flushes, and high pair density makes outdraws more common",
+        "Trips can't win money",
+        "No reason"
+      ],
+      "explanation": "Short-deck trips < full house < flush, and pair density is high, so opponent combos like 99/K9 that outdraw you are more common."
+    },
+    "t2sd-implied-q5": {
+      "question": "When chasing a short-deck flush draw, the core of judging call value is:",
+      "options": [
+        "Only look at current odds",
+        "Once made, a flush is nut-tier (beats full houses) with excellent implied odds",
+        "Too few flush outs to be worth it",
+        "Always fold"
+      ],
+      "explanation": "Short-deck flushes beat full houses and are near-nuts when made, with excellent implied odds — few outs but high made value."
+    },
+    "t2sd-reverse-q1": {
+      "question": "Reverse implied odds (RIO) refers to:",
+      "options": [
+        "Winning more in the future after calling now",
+        "Losing more in the future after calling now",
+        "Calculating pot odds",
+        "The opponent's odds"
+      ],
+      "explanation": "RIO is the extra you may lose after calling. Short-deck's ranking reshuffle and draw density amplify RIO."
+    },
+    "t2sd-reverse-q2": {
+      "question": "Why is RIO amplified in short deck?",
+      "options": [
+        "Pots are smaller",
+        "The ranking reshuffle (flush>full house, trips>straight) and high pair density let marginal made hands be dominated more easily",
+        "Cards are dealt slowly",
+        "No reason"
+      ],
+      "explanation": "Short-deck marginal made hands (top pair/straight) are more easily dominated by stronger hands (full houses/flushes), amplifying RIO."
+    },
+    "t2sd-reverse-q3": {
+      "question": "Holding top pair on a wet board (K♣9♦8♥), the correct play is:",
+      "options": [
+        "Slow-play all the way",
+        "Pot control or stay alert — avoid losing big pots to straights/two pair on later streets",
+        "Shove",
+        "Fold immediately"
+      ],
+      "explanation": "Top pair on a wet board has high RIO — pot control or cautious calling, avoiding slow-play and outdraws on later streets."
+    },
+    "t2sd-reverse-q4": {
+      "question": "The main risk of slow-playing strong hands (like trips of Aces) in short deck is:",
+      "options": [
+        "No risk",
+        "Handing the opponent a free flush/straight draw; short-deck draw density makes outdraws easy",
+        "Strong hands should fold",
+        "Slow-playing makes more money"
+      ],
+      "explanation": "Short-deck draw density is high; slow-playing strong hands hands the opponent free draws, and the turn/river can outdraw you with flushes/full houses."
+    },
+    "t2sd-reverse-q5": {
+      "question": "The core strategy for avoiding short-deck RIO is:",
+      "options": [
+        "Fast-play the nuts for protection, pot-control marginal hands, avoid slow-plays on wet boards",
+        "Always slow-play",
+        "Always shove",
+        "Only play the nuts"
+      ],
+      "explanation": "Avoid RIO: fast-play nuts for protection, pot-control marginal made hands, and avoid slow-plays on wet boards that hand free draws."
+    }
+  },
+  "chapterObjectives": {
+    "t2sd-potodds": [
+      "Understand the pot-odds calculation differences under the short-deck ante structure (no standard blinds, ante-based)",
+      "Master fast required-equity estimation for short deck, combining lower draw hit rates into calling decisions",
+      "Learn to correctly evaluate odds and equity in short-deck big-pot environments"
+    ],
+    "t2sd-implied": [
+      "Understand that short-deck flushes/straights are extremely valuable when made, with generally better implied odds",
+      "Master why short-deck set-mining thresholds rise (trips rank below full houses/flushes)",
+      "Learn to use implied odds to support short-deck draw calls and semi-bluffs"
+    ],
+    "t2sd-reverse": [
+      "Understand how reverse implied odds (RIO) amplify in short deck (marginal hands dominated by stronger made hands)",
+      "Master the short-deck hand types and spots prone to domination, avoiding slow-playing marginal hands",
+      "Learn to tighten marginal calls and slow-plays with RIO awareness to protect chips"
+    ]
+  }
+}

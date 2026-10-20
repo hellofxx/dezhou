@@ -12,7 +12,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import i18n from '@/i18n/config';
-import { preloadI18n } from '@/i18n/preload';
+import { loadAllTheoryContent, preloadI18n } from '@/i18n/preload';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import { findChapterById } from '../utils/theoryProgress';
@@ -95,7 +95,7 @@ describe('TheoryChapterView 学习目标卡', () => {
   it('en 侧全部条目为译文：无汉字、非原文回退、无键面字', async () => {
     useTheoryStore.getState().resetProgress();
     useDebugModeStore.setState({ unlockAll: true });
-    await preloadI18n(['theory'], 'en');
+    await Promise.all([preloadI18n(['theory'], 'en'), loadAllTheoryContent('en')]);
     await i18n.changeLanguage('en');
     for (const chapterId of CHAPTERS) {
       const declared = declaredObjectives(chapterId);

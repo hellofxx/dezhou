@@ -37,6 +37,14 @@ const enCourseModules = import.meta.glob<Record<string, unknown>>(
   './locales/en/academy-course/*.json',
   { import: 'default', eager: true },
 );
+const zhTheoryContentModules = import.meta.glob<Record<string, unknown>>(
+  './locales/zh/theory-content/*.json',
+  { import: 'default', eager: true },
+);
+const enTheoryContentModules = import.meta.glob<Record<string, unknown>>(
+  './locales/en/theory-content/*.json',
+  { import: 'default', eager: true },
+);
 
 const HAN_RE = /[一-鿿]/;
 
@@ -57,6 +65,7 @@ function flatten(node: unknown, prefix: string, out: Map<string, string>): void 
 function collectValues(
   main: Record<string, Record<string, unknown>>,
   courseSubdir: Record<string, Record<string, unknown>>,
+  theorySubdir: Record<string, Record<string, unknown>>,
 ): Map<string, string> {
   const out = new Map<string, string>();
   for (const file of Object.keys(main)) {
@@ -66,11 +75,13 @@ function collectValues(
   }
   // academy-course/ 子目录注入 i18n 后才带 academy. 前缀，须补齐再合并
   for (const file of Object.keys(courseSubdir)) flatten(courseSubdir[file], 'academy', out);
+  // theory-content/ 子目录注入后属于 theory 命名空间
+  for (const file of Object.keys(theorySubdir)) flatten(theorySubdir[file], 'theory', out);
   return out;
 }
 
-const zhValues = collectValues(zhModules, zhCourseModules);
-const enValues = collectValues(enModules, enCourseModules);
+const zhValues = collectValues(zhModules, zhCourseModules, zhTheoryContentModules);
+const enValues = collectValues(enModules, enCourseModules, enTheoryContentModules);
 const ENTRIES = generateContentEntries();
 
 /** 弯/直引号归一化：区分「排版差异」与「内容错位」两类性质不同的漂移 */

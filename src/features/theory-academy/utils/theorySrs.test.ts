@@ -16,13 +16,33 @@ import type { TheoryChapter, TheoryQuizQuestion } from '../types';
  * 覆盖三件事：id 命名空间隔离、metadata/label 只存 i18n key（语言中立）、跳转路由指向章节页。
  */
 
-/** 双语内容资源（文件名即 i18next 命名空间前缀，同 src/i18n/contentI18n.test.ts 口径） */
-const localeResources = import.meta.glob<Record<string, unknown>>(
+/** 双语内容资源（核心包 + theory-content 按 level 拆分文件，合并后与拆分前同形） */
+const coreResources = import.meta.glob<Record<string, unknown>>(
   '../../../i18n/locales/{zh,en}/theory.json',
   { import: 'default', eager: true },
 );
-const zhTheory = localeResources['../../../i18n/locales/zh/theory.json']!;
-const enTheory = localeResources['../../../i18n/locales/en/theory.json']!;
+const contentResources = import.meta.glob<Record<string, unknown>>(
+  '../../../i18n/locales/{zh,en}/theory-content/*.json',
+  { import: 'default', eager: true },
+);
+
+function buildTheoryResource(lng: 'zh' | 'en'): Record<string, unknown> {
+  const root = coreResources[`../../../i18n/locales/${lng}/theory.json`]!;
+  const bundles = Object.entries(contentResources)
+    .filter(([file]) => file.includes(`/locales/${lng}/`))
+    .map(([, bundle]) => bundle);
+  const mergePart = (part: string): Record<string, unknown> =>
+    Object.assign({}, ...bundles.map((bundle) => (bundle[part] ?? {}) as Record<string, unknown>));
+  return {
+    ...root,
+    content: mergePart('content'),
+    quiz: { ...(root.quiz as Record<string, unknown>), ...mergePart('quiz') },
+    chapterObjectives: mergePart('chapterObjectives'),
+  };
+}
+
+const zhTheory = buildTheoryResource('zh');
+const enTheory = buildTheoryResource('en');
 
 /** 按 `theory.` 前缀剥离后在资源对象内逐段取值；缺失返回 undefined */
 function resolveLocalized(resource: Record<string, unknown>, fullKey: string): string | undefined {

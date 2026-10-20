@@ -15,8 +15,11 @@ import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 
 const preloadI18n = vi.fn((_keys: readonly unknown[]) => Promise.resolve());
+const loadTheoryContentForQuestionIds = vi.fn((_ids: readonly string[]) => Promise.resolve());
 vi.mock('@/i18n/preload', () => ({
   preloadI18n: (keys: readonly unknown[]) => preloadI18n(keys),
+  loadTheoryContentForQuestionIds: (ids: readonly string[]) =>
+    loadTheoryContentForQuestionIds(ids),
 }));
 
 import SpacedRepetitionPanel from './SpacedRepetitionPanel';
@@ -38,6 +41,7 @@ let root: Root;
 
 beforeEach(() => {
   preloadI18n.mockClear();
+  loadTheoryContentForQuestionIds.mockClear();
   container = document.createElement('div');
   document.body.appendChild(container);
   root = createRoot(container);
@@ -63,6 +67,7 @@ describe('复习渲染触发来源翻译包补加载', () => {
       );
     });
     expect(calledModules()).toContainEqual(['theory']);
+    expect(loadTheoryContentForQuestionIds).toHaveBeenCalledWith(['q1']);
   });
 
   it('打开复习会话时同样请求 theory 包（自评卡片 front/back 依赖它）', () => {
@@ -74,6 +79,7 @@ describe('复习渲染触发来源翻译包补加载', () => {
       );
     });
     expect(calledModules()).toContainEqual(['theory']);
+    expect(loadTheoryContentForQuestionIds).toHaveBeenCalledWith(['q1']);
   });
 
   it('多来源混合时一次请求全部所需包', () => {
@@ -86,6 +92,8 @@ describe('复习渲染触发来源翻译包补加载', () => {
       );
     });
     expect(calledModules()).toContainEqual(['potOdds', 'rangeTrainer', 'theory']);
+    // 只有理论项带 theory.quiz.* key，其余来源不应误触发内容包加载
+    expect(loadTheoryContentForQuestionIds).toHaveBeenCalledWith(['q1']);
   });
 
   it('策略学院复习项不触发加载（academy 属 core，启动即就绪）', () => {
@@ -98,5 +106,6 @@ describe('复习渲染触发来源翻译包补加载', () => {
       );
     });
     expect(preloadI18n).not.toHaveBeenCalled();
+    expect(loadTheoryContentForQuestionIds).not.toHaveBeenCalled();
   });
 });

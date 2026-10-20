@@ -11,6 +11,7 @@ import { useProgressStore } from '@/features/progress/store';
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
+import { useTheoryContentI18n } from '../hooks/useTheoryContentI18n';
 import {
   findChapterById,
   findLevelByChapterId,
@@ -52,6 +53,8 @@ export default function TheoryChapterView() {
 
   const chapter = useMemo(() => (chapterId ? findChapterById(chapterId) : undefined), [chapterId]);
   const level = useMemo(() => (chapterId ? findLevelByChapterId(chapterId) : undefined), [chapterId]);
+  // en 下先确保本 level 内容包就绪，再渲染正文/小测（zh 数据层原文即可用）
+  const contentReady = useTheoryContentI18n(chapter ? [chapter.id] : []);
   const [phase, setPhase] = useState<'reading' | 'quiz' | 'done'>('reading');
   const [result, setResult] = useState<{ score: number; correct: number; total: number } | null>(null);
   // 重测计数：作为 TheoryQuiz 的 key 强制重挂载，重置内部作答状态（测试效应：多次提取强化长期记忆）
@@ -158,7 +161,7 @@ export default function TheoryChapterView() {
           {t('theory.title')} · {level.icon} {resolveTheoryLevelTitle(t, level)}
         </button>
 
-        {isTransitioning ? (
+        {isTransitioning || !contentReady ? (
           <div className="panel">
             <ComponentSkeleton />
           </div>

@@ -6,7 +6,10 @@
  * 漏一个来源即意味着该来源的复习项在冷启动首页显示 key 字面量。
  */
 import { describe, it, expect } from 'vitest';
-import { collectReviewSourceModules } from './useEnsureReviewSourceI18n';
+import {
+  collectReviewSourceModules,
+  collectTheoryQuestionIds,
+} from './useEnsureReviewSourceI18n';
 import { createReviewItem } from '@/shared/utils/spacedRepetition';
 import type { ReviewItem, ReviewItemMetadata } from '@/shared/utils/spacedRepetition';
 
@@ -45,5 +48,30 @@ describe('collectReviewSourceModules', () => {
     const legacy: ReviewItem = createReviewItem('legacy-id', '老知识点', 'strategy');
     expect(collectReviewSourceModules([legacy, itemWithSource('theory')])).toEqual(['theory']);
     expect(collectReviewSourceModules([])).toEqual([]);
+  });
+});
+
+describe('collectTheoryQuestionIds', () => {
+  it('从 label / metadata.front / metadata.back 提取题 id 并去重排序', () => {
+    const items = [
+      createReviewItem('theory:t1-outs-q2', 'theory.quiz.t1-outs-q2.question', 'theory', {
+        source: 'theory',
+        front: 'theory.quiz.t1-outs-q2.question',
+        back: 'theory.quiz.t1-outs-q2.explanation',
+      }),
+      createReviewItem('theory:t1-combinatorics-q1', 'theory.quiz.t1-combinatorics-q1.question', 'theory'),
+    ];
+    expect(collectTheoryQuestionIds(items)).toEqual([
+      't1-combinatorics-q1',
+      't1-outs-q2',
+    ]);
+  });
+
+  it('quiz UI 文案 key 与无 theory 载荷的复习项不会误判为题目', () => {
+    const uiOnly = createReviewItem('x', 'theory.quiz.correct', 'theory', {
+      source: 'theory',
+      front: 'theory.quiz.next',
+    });
+    expect(collectTheoryQuestionIds([uiOnly])).toEqual([]);
   });
 });

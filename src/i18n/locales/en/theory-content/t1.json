@@ -1,0 +1,229 @@
+{
+  "content": {
+    "t1-combinatorics": [
+      "Why Probability Theory Is the Foundation of Texas Hold'em",
+      "Texas Hold'em is an incomplete-information game: you can't see your opponent's hole cards or the upcoming community cards. But the deck's composition is fully known — 52 cards, 4 suits, 13 ranks. This means all \"luck\" can be quantified into precise probabilities. The first dividing line between pro and amateur players is whether you can replace feeling with counting.",
+      "Every \"feeling\" in poker corresponds to a precisely calculable combination count. Master combinatorics and you gain the ability to translate intuition into numbers.",
+      "Total Starting-Hand Combinations",
+      "Taking any 2 of 52 cards as a starting hand gives C(52,2) = 52×51÷2 = 1326 combinations. These 1326 combos group into 169 classes: 13 \"pocket pair\" classes (AA-22), 78 \"suited\" classes (AKs-32s), and 78 \"offsuit\" classes (AKo-32o).",
+      "Any pocket pair (e.g. AA) = C(4,2) = 6 combos\nAny suited hand (e.g. AKs) = 4 combos\nAny offsuit hand (e.g. AKo) = 4×4−4 = 12 combos",
+      "Combination formula and derivation:\nC(n,k) = n! ÷ [k! × (n−k)!]\nDeriving C(52,2): first count \"ordered picks of two\" = 52×51; since order doesn't matter, A♠K♥ and K♥A♠ are the same hand, so divide by 2! (the permutations of two cards) → 52×51 ÷ 2 = 1326\nSimilarly C(4,2) = 4×3 ÷ 2 = 6: order within the pair doesn't count either. (Concepts from: The Mathematics of Poker Ch.1-3 combinatorics; Harrington on Hold'em Vol.1 Ch.2)",
+      "These three numbers (6 / 4 / 12) are the atomic units of range analysis. For example, \"the opponent's 3-bet range has AA, KK, and AKs\" means 6+6+4 = 16 combos. All later range theory (T4) builds on this counting.",
+      "Common Starting-Hand Probabilities",
+      "Probability of any pocket pair = 78/1326 ≈ 5.9% (about once every 17 hands); of AA = 6/1326 ≈ 0.45% (about once every 221 hands); of AK (including suited) = 16/1326 ≈ 1.2%; of any suited hand ≈ 23.5%.",
+      "Example: You've been at a full table for two hours without a big pair. Is that normal? The probability of QQ+ is 18/1326 ≈ 1.36%, about once every 74 hands. Live play deals about 25-30 hands/hour, so ~55 hands in two hours without QQ+ is entirely within normal variance. Understanding base probabilities prevents you from widening your range due to a \"card drought\".",
+      "Example 2 (flop counting): You hold a lone A♠ overcard. The flop deals 3 cards from the remaining 51. The probability at least one A appears = 1 − C(48,3)/C(51,3) = 1 − 17296/20825 ≈ 17%. The difficulty isn't the math but recognizing that \"at least one\" requires 1 minus the complement event — missing the complement is the most common combinatorics pitfall.",
+      "Example 3 (range weighting): An opponent's 3-bet range is marked {AA, KK, QQ, AKs} = 6+6+6+4 = 22 combos. Pocket pairs account for 18 combos (~82%) while AKs is only 4 — \"his range is all AK\" is often an illusion; the real weight is on pairs. Price ranges by combo count, not class count, so you don't overestimate his air.",
+      "Independent Events and Conditional Probability",
+      "Every hand is an independent event: if you got AA last hand, the probability of AA this hand is still 0.45%. But probabilities within a single hand are conditional: holding two hearts changes the probability of hearts on the flop — that's the mathematical basis of Blockers, covered later.",
+      "The gambler's fallacy — \"I've lost five in a row, the next one should win\" — is precisely confusing independent events with conditional probability. The deck has no memory, but your chips do.",
+      "Counter-intuitive point: 169 classes and 1326 combos are two different counts. 169 is the \"equivalent class count\" (pair/suited/offsuit types), while 1326 is the \"distinguishable actual combo count\". Probability math must use 1326 — classes deceive you: suited AK and AA each count as \"1 class\", but their combo weights are 4 and 6 respectively.",
+      "Memorize the 6/4/12 combo counts and the anchor numbers \"a pair once every 17 hands, AA once every 221 hands\". There's no time to calculate at the table — anchor numbers are your mental-math dictionary."
+    ],
+    "t1-outs": [
+      "What Are Outs",
+      "Outs are the unseen cards in the deck that can make your hand surpass the opponent's. Counting Outs is the first step of postflop math: a flush draw has 9 Outs (13 of the suit minus the 4 you see); an open-ended straight draw has 8; a gutshot has 4; a pair drawing to two pair or trips has 5.",
+      "When counting Outs, only count cards that \"make you take the lead\", not cards that \"improve your hand\". Improving to second-best isn't an Out — it's a trap.",
+      "The Rule of 2 and 4",
+      "One card to come (flop→turn or turn→river): equity ≈ Outs × 2%\nTwo cards to come (flop→river, all-in spot): equity ≈ Outs × 4%",
+      "Precise math: after the flop there are 47 unknown cards, so the turn hit rate = Outs/47. With 9 Outs: 9/47 ≈ 19.1%, while the Rule of 2 estimates 18% — error under 1.2 percentage points. The more Outs, the larger the ×4 error (at 15 Outs use the correction: Outs×4 − (Outs−8) ≈ 53%), but within 12 Outs it's accurate enough.",
+      "Rule of 2/4 error analysis (flop→river two-card scenario, exact = 1 − (47−Outs)/47 × (46−Outs)/46):\n4 Outs: ×4 estimates 16% ｜ exact 16.5% ｜ error −0.5\n8 Outs: ×4 estimates 32% ｜ exact 31.5% ｜ error +0.5\n9 Outs: ×4 estimates 36% ｜ exact 35.0% ｜ error +1.0\n12 Outs: ×4 estimates 48% ｜ exact 45.0% ｜ error +3.0\n15 Outs: ×4 estimates 60% ｜ exact 54.1% ｜ error +5.9\nConclusion: for Outs ≤ 9, ×4 error is within 1 percentage point; for Outs ≥ 13 use the correction Outs×4 − (Outs−8), or mentally compute the exact value before a flop shove. (Concepts from: Harrington on Hold'em Vol.1 Ch.2 Outs and the Rule of 2 and 4)",
+      "Example 2 (practical error significance): On the flop you hold J♥10♥ with board 8♥9♦3♣. An open-ended straight (8 Outs) + backdoor flush, the Rule of 4 shove equity ≈ 32%, exact 31.5% — both beat top pair. But at 15 Outs (flush + straight + overcard combo draw), ×4 overestimates by ~6 points, enough to mislead a \"fold\" into a \"call\". Error isn't academic — it's a real decision bias at the table.",
+      "Example 3 (turn scenario): On the turn the pot is 200 and the opponent shoves 100; you need 100/400 = 25% equity to call. You hold a 9-Out flush draw: exact 9/46 ≈ 19.6%, Rule of 2 estimates 18% — both below 25%, so pure math says fold unless implied odds are significant (see T2). Remember: on the turn you only count one card — use Outs×2, not ×4.",
+      "Example: You hold A♥8♥ on a K♥7♥2♠ flop. The flush draw has 9 Outs, and the 3 remaining Aces may also surpass the opponent (if he only has a pair of Kings) — about 12 \"dirty Outs\" total. About 24% for one card, 45% for two — that's why a nut flush draw + overcard showdown value can often semi-bluff shove the flop.",
+      "Discounted Outs",
+      "Not all Outs are \"clean\". If your straight Out also completes an opponent's flush, that card must be discounted or not counted. Rule of thumb: on wet boards, non-nut draw Outs typically get a 20-30% discount. For example, if 2 of an 8-Out OESD complete a potential opponent flush, estimate 6 Outs.",
+      "Common Outs-counting error: counting all cards that \"give you a pair\". If the opponent already has two pair, your pairing Outs are zero — Outs are always relative to the opponent's range.",
+      "Training method: every time you see a flop, mentally state your Outs count and ×2/×4 estimate before acting. After two weeks this becomes a reflex."
+    ],
+    "t1-variance": [
+      "Separating Expected Value from Actual Results",
+      "An 80% favorite shove loses on average once every five times. Variance measures how actual results fluctuate around the expected value. Poker's cruelty: in the short term, luck affects results far more than skill; but over the long term, skill is the only determinant. Both facts hold simultaneously.",
+      "You can't control the result of a single hand — only decision quality. Always evaluate yourself by the decision process (EV), never by a single result.",
+      "Sample Size: How Big Is \"Long Run\"",
+      "For cash games, a winner at 5bb/100 hands typically has a standard deviation of 80-100bb/100. This means even long-term winners have a real chance of losing in a 10,000-hand sample; reliably overcoming variance usually needs 50,000-100,000+ hands. A live player may not reach 30,000 hands in a year — that's why \"I won last month\" says almost nothing.",
+      "Result = expected value (skill) + fluctuation (luck)\nFluctuation's impact ∝ 1/√sample: expanding the sample 100x shrinks luck's relative impact to 1/10",
+      "Variance and standard deviation definitions:\nσ² = Σ(xᵢ − μ)² ÷ n, standard deviation σ = √σ²\nPoker bet-results example: five consecutive bet results +200, −150, +300, −100, +50 (in chips)\nMean μ = (200−150+300−100+50)÷5 = 60\nSquared deviations: 140² + 210² + 240² + 160² + 10² = 19600+44100+57600+25600+100 = 147000\nσ² = 147000÷5 = 29400, σ ≈ 171\nInterpretation: +60 per hand on average, but single results swing ~171 chips around 60 — the standard deviation far exceeds the mean, the mathematical portrait of poker's short-term instability. (Concepts from: The Mathematics of Poker Ch.3 variance and standard deviation)",
+      "Example 2 (variance and bet size): You get five consecutive shove-able spots, each with 60% equity, with per-hand results as above (σ≈171). Doubling each bet doubles both mean and standard deviation (μ=120, σ≈342) — expectation and fluctuation scale proportionally, but \"ruin risk\" scales faster. This explains why bankroll management (detailed in T8) must cap bet sizes within variance tolerance.",
+      "Example 3 (using standard deviation to judge samples): You tracked 1000 hands, averaging +5bb/100 with σ=90bb/100. \"Profitable over 10,000 hands\" doesn't prove you played right: 10,000 hands = 100 hundred-hand samples, cumulative σ = 90×√100 = 900bb, while expected profit is only 500bb — the cumulative standard deviation (900bb) exceeds expected profit (500bb), meaning over 10,000 hands luck can still completely overwhelm skill.",
+      "Example: AA shoving into KK wins ~81%. Losing three in a row is 0.19³ ≈ 0.7% — but if you play this spot 200 times a year, the chance of a \"lost three in a row\" window exceeds 60%. Rare events almost inevitably occur over enough trials; that doesn't mean you misplayed.",
+      "The Practical Meaning of Variance",
+      "Understanding variance yields three practical principles: (1) Bankroll management — your bankroll must absorb normal downswings (a common cash standard is 20-40 buy-ins); (2) Emotional control — attributing bad results to variance rather than self-doubt is the first defense against tilt (see T8); (3) Review standards — ask \"was this decision +EV\" in review, not \"did this hand win\".",
+      "A downswing isn't abnormal — it's a mathematical certainty. Every long-term winner's bankroll curve contains multiple multi-week down stretches. The difference: winners maintain decision quality during drawdowns; losers collapse.",
+      "Keep a \"decision log\" rather than a \"win/loss log\": record your three hardest decisions each day and your reasoning, then revisit a month later. You'll find progress comes from improved decision quality, and the bankroll curve is just its lagging projection.",
+      "From Standard Deviation to Sample Size: Turning Long Run into a Number",
+      "Hands needed for an edge to reach statistical significance:\nPer-hand expectation μ = winrate (bb/100) ÷ 100; per-hand standard deviation σ = stdDev (bb/100) ÷ 10\nn = (z × σ ÷ μ)², with z = 1.645 (90% confidence) or 1.96 (95% confidence)\n\nWorked example at 5bb/100 with 80bb/100 std deviation: μ = 0.05bb, σ = 8bb\nz = 1.96 → n = (1.96 × 8 ÷ 0.05)² = 313.6² ≈ 98,300 hands\nz = 1.645 → n = (1.645 × 8 ÷ 0.05)² = 263.2² ≈ 69,300 hands\n\nDouble the winrate to 10bb/100: n = (1.96 × 8 ÷ 0.1)² ≈ 24,600 hands\nTakeaway: n scales with the inverse square of the winrate — doubling your edge cuts the sample needed to prove it to roughly a quarter. (Concept from: The Mathematics of Poker Ch.3 variance and standard deviation)",
+      "Example 4 (same winrate, two sample sizes): you play 20,000 hands at +5bb/100 and bank +1,000bb. The cumulative standard deviation over 20,000 hands = 8 × √20,000 ≈ 1,131bb, larger than your entire profit — that result sits fully inside the noise band and proves nothing about your skill. Stretch the same winrate to 100,000 hands: cumulative expectation 5,000bb, cumulative standard deviation = 8 × √100,000 ≈ 2,530bb, so expectation is now about twice the standard deviation and the edge finally outweighs the variance. This is the same fact as the roughly 98,300 hands computed above, approached from the other direction."
+    ]
+  },
+  "quiz": {
+    "t1-combinatorics-q1": {
+      "question": "What is the total number of starting-hand combinations in Texas Hold'em?",
+      "options": [
+        "1326",
+        "169",
+        "2652",
+        "1081"
+      ],
+      "explanation": "C(52,2) = 52×51÷2 = 1326. 169 is the class count after grouping by equivalence, not the combo count."
+    },
+    "t1-combinatorics-q2": {
+      "question": "How many combos does a specific offsuit hand (e.g. AKo) have?",
+      "options": [
+        "4",
+        "6",
+        "12",
+        "16"
+      ],
+      "explanation": "AK has 4×4=16 total combos, of which 4 are suited; offsuit = 16−4 = 12."
+    },
+    "t1-combinatorics-q3": {
+      "question": "The claim \"I got AA last hand, so my chance of AA this hand drops\":",
+      "options": [
+        "True — good hands come in turns",
+        "False — every hand is an independent event",
+        "Depends on the shuffle",
+        "Only true online"
+      ],
+      "explanation": "After re-shuffling, every hand is independent; the probability is always 6/1326 ≈ 0.45%. Thinking \"good hands come in turns\" is the classic gambler's fallacy."
+    },
+    "t1-combinatorics-q4": {
+      "question": "An opponent's range is {AA, KK, AKs}. How many total combos?",
+      "options": [
+        "12",
+        "16",
+        "20",
+        "24"
+      ],
+      "explanation": "AA and KK each have 6 (pocket pair C(4,2)=6), AKs has 4: 6+6+4 = 16."
+    },
+    "t1-combinatorics-q5": {
+      "question": "Why divide by 2 when computing C(52,2)?",
+      "options": [
+        "Each card can only be used once",
+        "Combinations don't distinguish internal order — A♠K♥ and K♥A♠ are the same hand",
+        "Hole cards must be one red one black",
+        "To exclude suit differences"
+      ],
+      "explanation": "Picking the 1st of 52 then the 2nd of 51 gives ordered pairs (52×51). But starting hands have no order — each hand is counted 2! = 2 times, hence divide by 2. That's the mathematical meaning of \"combinations are unordered\"."
+    },
+    "t1-outs-q1": {
+      "question": "With an open-ended straight draw on the flop, the hit rate for one card (turn) is about:",
+      "options": [
+        "8%",
+        "16%",
+        "32%",
+        "24%"
+      ],
+      "explanation": "OESD has 8 Outs; one card ≈ 8×2% = 16% (exact 8/47 ≈ 17%). 32% is the two-card (flop to river) estimate."
+    },
+    "t1-outs-q2": {
+      "question": "How many Outs does a flush draw have?",
+      "options": [
+        "13",
+        "9",
+        "8",
+        "10"
+      ],
+      "explanation": "Each suit has 13 cards; your hand and the flop show 4, leaving 13−4 = 9."
+    },
+    "t1-outs-q3": {
+      "question": "When should Outs be discounted?",
+      "options": [
+        "When your out also completes a bigger hand for the opponent",
+        "When the pot is already big",
+        "When you're in late position",
+        "When the opponent has a deeper stack"
+      ],
+      "explanation": "The core of discounted Outs: if an out completes your straight while also giving the opponent a flush, it isn't a clean Out. Position and stack depth don't affect Outs themselves."
+    },
+    "t1-outs-q4": {
+      "question": "In the Rule of 2 and 4, when does \"×4\" apply?",
+      "options": [
+        "Deciding on the flop whether to see one card (turn)",
+        "Facing an all-in on the flop — seeing both turn and river at once",
+        "Computing bluff frequency on the river",
+        "Computing starting-hand equity preflop"
+      ],
+      "explanation": "×4 estimates the total two-card hit rate, only valid for a flop all-in (no more bets needed to see both cards). If more bets follow, evaluate street by street with ×2."
+    },
+    "t1-outs-q5": {
+      "question": "You have 15 Outs and shove on the flop. The ×4 rule (60%) overestimates the exact value (~54%) by about:",
+      "options": [
+        "1 percentage point",
+        "3 percentage points",
+        "6 percentage points",
+        "10 percentage points"
+      ],
+      "explanation": "Exact = 1 − (32/47)×(31/46) ≈ 54.1%; ×4 gives 60%, an overestimate of ~6 points. For Outs ≥ 13 use the correction Outs×4 − (Outs−8)."
+    },
+    "t1-variance-q1": {
+      "question": "You shove as an 80% favorite and lose the hand. This means:",
+      "options": [
+        "Your decision was wrong — you should have folded",
+        "The decision was correct; losing is normal variance",
+        "The opponent reads better than you",
+        "You should lower bet sizes to avoid risk"
+      ],
+      "explanation": "80% equity means losing once per five on average. Decision quality is determined by EV, unrelated to a single result — the core of the long-term view."
+    },
+    "t1-variance-q2": {
+      "question": "For skill to reliably overcome luck in cash games, the typical sample size needed is about:",
+      "options": [
+        "1000 hands",
+        "5000 hands",
+        "10,000 hands",
+        "50,000+ hands"
+      ],
+      "explanation": "With typical win rates and standard deviations, results within 10,000 hands are still heavily luck-driven; usually 50,000-100,000+ hands are needed to reliably reflect true skill."
+    },
+    "t1-variance-q3": {
+      "question": "Expanding the sample 100x, luck's relative impact on results:",
+      "options": [
+        "Shrinks to 1/100",
+        "Shrinks to 1/10",
+        "Unchanged",
+        "Shrinks to 1/2"
+      ],
+      "explanation": "Fluctuation's relative impact is inversely proportional to the square root of the sample: √100 = 10, so it shrinks to 1/10. That's the math behind \"the long run filters out luck\"."
+    },
+    "t1-variance-q4": {
+      "question": "After understanding variance, the correct review standard is:",
+      "options": [
+        "Track how much you won each day",
+        "Check whether each key decision's EV is positive",
+        "Only review lost hands",
+        "Keep winning lines, change losing lines"
+      ],
+      "explanation": "Result = EV + fluctuation. Reviewing by wins/losses treats noise as signal (keeping won-but-wrong lines, discarding lost-but-right lines); only the EV standard filters variance."
+    },
+    "t1-variance-q5": {
+      "question": "The standard deviation of bet results +200, −150, +300, −100, +50 is about:",
+      "options": [
+        "60",
+        "100",
+        "171",
+        "29400"
+      ],
+      "explanation": "First the mean μ=60, then squared deviations sum to 147000, σ²=147000/5=29400, σ=√29400≈171. The mean 60 is the expected value; the standard deviation 171 far exceeds it, showing single results swing violently — the meaning of variance."
+    }
+  },
+  "chapterObjectives": {
+    "t1-combinatorics": [
+      "Master the C(n,k) combinatorics formula and the derivation of the 1326 starting hands",
+      "Use the 6/4/12 anchor combinatorics to price range analysis",
+      "Distinguish independent events from conditional probability to avoid the gambler's fallacy"
+    ],
+    "t1-outs": [
+      "Accurately identify and count Outs for various draws (clean Outs vs. dirty Outs)",
+      "Apply the 2/4 rule to estimate equity and understand its margin of error",
+      "Master the method for discounting Outs"
+    ],
+    "t1-variance": [
+      "Understand that results = expected value + variance, and evaluate decisions by process (EV) rather than single outcomes",
+      "Grasp the relationship between sample size and variance, and how large a \"long run\" really is",
+      "Turn variance awareness into three practical principles: bankroll management, emotional control, and review",
+      "Estimate how many hands an edge needs to reach statistical significance, and judge whether your own sample is large enough to draw conclusions"
+    ]
+  }
+}

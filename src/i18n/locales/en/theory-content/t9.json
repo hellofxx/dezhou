@@ -1,0 +1,435 @@
+{
+  "content": {
+    "t9-mop": [
+      "The Methodological Revolution of MOP",
+      "Bill Chen and Jerrod Ankenman's The Mathematics of Poker (2006) is the intellectual source of the solver era. Its methodology: rather than studying complex real poker directly, construct precisely solvable \"toy games\", and distill structural regularities that still hold in real hands. The bluff ratio b/(1+2b), MDF, and indifference principle you learned in T5 all originate from this line.",
+      "The [0,1] Game and the AKQ Game",
+      "One classic toy game is the AKQ game: the deck has only A, K, Q, each player gets one card in a single-street showdown. The equilibrium solution reveals three timeless roles: A (the nuts) always value-bets; Q (air) bluffs at a precise frequency; K (the medium hand) never bets — it can only be a bluff catcher, calling at an indifferent frequency. Every real hand at every node plays one of these three roles; this is the theoretical prototype of the \"three-tier range structure\" (value / medium / air).",
+      "AKQ equilibrium solution (fixed bet B, pot P; A always bets, Q bluffs at frequency f — defined as bluff combos ÷ value combos — and K calls at frequency c):\n① Make K indifferent (call EV = fold EV = 0): the bluff share y of the betting range satisfies y×(P+B) = (1−y)×B → y = B/(P+2B), which as a bluff ÷ value ratio is f = y/(1−y) = B/(P+B)\n② Make Q's bluff indifferent (bluff EV = check EV = 0): (1−c)×P = c×B → c = P/(P+B) — exactly the defender's MDF\n③ Equilibrium: f = B/(P+B) and c = P/(P+B) — same denominator, numerators swapped, so f + c = 1: bluff frequency and call frequency are complements, not equals\nExample: bet = pot (B=P) → f = 1/2, c = 1/2 (they coincide numerically at this one size only); betting 1/3 pot → f = 1/4, c = 3/4\nThis is the isomorphic source of MDF and Alpha in the minimal model (T5): f = Alpha = b/(1+b), c = MDF = 1/(1+b), while the bluff share inside the betting range follows its own formula y = b/(1+2b). (Concept from: The Mathematics of Poker Ch.5 toy games and the AKQ equilibrium)",
+      "Example 2 (mapping AKQ to real hands): On the river you hold medium strength (the K role) and the opponent bets one pot. In equilibrium his bluff frequency f = 1/2, so you should call with K-type hands at c = 1/2 (with MDF, fully derived in T5). If the opponent is observed to never bluff (f far below 1/2), lower your call frequency accordingly — the toy game provides the baseline for adjustment; real hand reading provides the deviation direction.",
+      "Example 3 (the preflop version of the three roles): Preflop BTN opens, BB defends. BB's calling range against the open has three classes: strong hands (A role, continue 3-betting or slow-play), medium hands (K role, only call to showdown), bluff candidates (Q role, occasionally 3-bet-bluffing). MOP's three-tier structure is the skeleton of range construction — for every hand preflop you must first ask: \"is this hand an A, K, or Q in this spot?\"",
+      "The deepest conclusion of the AKQ game: the correct strategy for medium strength is passivity (check/call); betting belongs to the two poles. This conclusion cuts through every level — \"betting medium hands\" remains the most common amateur leak (T6 argued the same thing from a sizing angle).",
+      "The Stratification of Strategy and Tactics",
+      "MOP also establishes the levels of analysis: the tactical layer solves \"how to play this hand\", the strategic layer solves \"how to construct my whole range\". The book's famous insight: the weak think about single hands, the strong think about ranges, the strongest think about the rules of range construction. Modern solvers are the engineering of this idea: they never tell you \"what to do with this hand\" — they output the whole range's allocation over the game tree.",
+      "Example: MOP's risk-aversion theory also answers a practical question: when you have a significant technical edge, you can moderately avoid small +EV all-ins with high variance (preserving the opportunity to realize your edge); conversely, as the weaker side you should actively embrace variance. This gives a rigorous mathematical statement for \"good players avoid big-coinflip pots with better players\" — not just street wisdom.",
+      "The right way to read MOP: don't derive every page; grasp what variable each toy game isolates and what the conclusion is. Toy games are to poker what inclined-plane experiments are to physics — simplification isn't distortion, it's developing the image.",
+      "Self-test your depth: can you use the AKQ game to explain to a friend \"why medium hands shouldn't bet\" and \"why bluffs must exist\"? If you can explain both clearly, you've grasped MOP's essence."
+    ],
+    "t9-icm": [
+      "The Nonlinearity of Chip Utility",
+      "In cash games, 1 chip is always = 1 unit of money. In tournaments it isn't: the prize ladder (e.g. 30% first, 20% second...) makes chip marginal value decrease — double your chips and your prize expectation is far from double; losing your chips costs all remaining expectation. ICM (Independent Chip Model) is the standard model converting \"chip counts\" into \"prize expectation ($EV)\": it recursively computes the probability of finishing each place by chip share, and weights the prizes for true value.",
+      "ICM's core corollary: an all-in that is \"cEV-neutral or even slightly positive\" in tournament chips can be significantly $EV-negative. Survival itself has value — this is the root of tournament strategy diverging from cash-game strategy.",
+      "ICM recursive algorithm (simplified 3-player SNG, prize 50/30/20, chips A=5000/B=3000/C=2000):\nStep 1 (first-place probability = chip share): P(A)=0.5, P(B)=0.3, P(C)=0.2\nStep 2 (recursive second place): P(A 2nd) = P(B wins)×A/(A+C) + P(C wins)×A/(A+B) = 0.3×5000/7000 + 0.2×5000/8000 ≈ 0.339\nP(B 2nd) = 0.5×3000/5000 + 0.2×3000/8000 = 0.375\nP(C 2nd) = 0.5×2000/5000 + 0.3×2000/7000 ≈ 0.286\nStep 3 (third = 1 minus the first two): P(A 3rd) ≈ 0.161, P(B 3rd) = 0.325, P(C 3rd) ≈ 0.514\nStep 4 (weighted prizes): $EV(A) = 0.5×50 + 0.339×30 + 0.161×20 ≈ 38.4\n$EV(B) = 0.3×50 + 0.375×30 + 0.325×20 ≈ 32.8\n$EV(C) = 0.2×50 + 0.286×30 + 0.514×20 ≈ 28.9\nCheck: 38.4+32.8+28.9 ≈ 100 (prize conservation), and A's $EV share 38.4% < chip share 50% — decreasing marginal value visualized. (Concept from: ICM Theory independent-chip-model recursive definition)",
+      "Example 2 (the intuition of recursion): Step 2's recursion — \"A finishes second\" decomposes into \"if B wins first, A competes with C for second\" + \"if C wins first, A competes with B for second\". Each step asks \"after removing the winner from the table, the rest compete by chips for the next place\". Real ICM calculators repeat this recursion at higher dimensions (6-9 players), done by program when many players remain.",
+      "Example 3 (using the computed results): In the example above, A has 50% of the chips but is worth only 38.4% of the prize pool. To let this change a decision you need a spot where losing really does mean zero — that holds when a big stack shoves on a short stack, not the other way round (A=5000 shoving into B=3000 still leaves A with 2000 after losing, which is hardly zero). Take the medium stack M (3000) facing a shove from the big stack (5000): M is fully covered, so losing is elimination. Folding banks the already computed $EV(M) = 32.8. If M calls and wins (assume 55% equity) M moves to 6000 and the table becomes 6000/2000/2000; the recursion gives P(M 1st)=0.6, P(M 2nd)=0.2×6/8 + 0.2×6/8 = 0.3, P(M 3rd)=0.1, so $EV = 0.6×50 + 0.3×30 + 0.1×20 = 41.0. Calling therefore expects 0.55×41.0 + 0.45×0 = 22.6, below the 32.8 of folding — the quantified demo of \"winning mathematically, folding on ICM\": it's not that 55% is insufficient; it's that chips' marginal value is compressed by the tournament prize structure. Move the same hand to a cash table: risk 3000 to win 3000 at 55% and the expectation is +300 chips, an uncontested call. The two ledgers diverge because of the utility function, not because of nerve.",
+      "Example: On the bubble (one more elimination and everyone gets paid), you're medium-stacked and a big stack shoves on you. Even if you judge 55% equity (clearly +cEV), calling may still be a $EV disaster: winning adds limited chip value, losing zeroes 100% of your prize expectation; and the opponents the big stack can't eliminate are waiting for you two to collide. Conversely this is precisely the big stack's weapon — ICM pressure lets him push every medium stack with an extremely wide range: you \"know he's stealing\", yet mathematically you can only fold.",
+      "ICM's Strategic Implications",
+      "(1) The bubble and money-jump stages are the most distorted: medium stacks play tightest, big stacks most aggressively, and small stacks can play almost normally (they're about to be gone anyway); (2) push/fold charts in shallow stacks (<15bb) are almost entirely determined by ICM and math — memorizable away from the table; (3) the fair baseline for final-table deals is the ICM value — those who don't know ICM lose once at the negotiating table.",
+      "Know ICM's boundaries too: it ignores position, technical edge, and blinds rising (assumes equal skill and immediate settlement), so technically superior players may slightly deviate from ICM's conservative solutions (future edge still realizable), and it also undervalues the big stack's bullying value early in the FT. The model is a map, not the territory.",
+      "The most common ICM disaster isn't miscalculation but disregard: playing the bubble with cash-game intuition, \"I have AJo, why should I fold\" — because of the prize structure. Every tournament decision must run two books: one cEV, one $EV, and the latter governs.",
+      "Training order suggestion: first memorize the sub-15bb push/fold base charts, then review your own bubble decisions with an ICM calculator — these two are the highest-ROI homework for tournament ROI."
+    ],
+    "t9-multiway": [
+      "Equity Dilution and Raised Thresholds",
+      "Each additional opponent dilutes your showdown equity once: AA is about 85% heads-up but falls to ~64% four-way; for \"ranges\" it's crueler — heads-up top pair weak kicker is a good hand, but in a four-way pot it's often just a paying second place. The first law of multiway pots: the made-hand threshold rises across the board, and nuttiness trumps everything — hands that can make the nuts (suited connectors, pocket pairs) appreciate, while dominated hands (weak Ax, KJo class) crash.",
+      "Multiway showdown equity table (typical starting hands vs N random opponents):\nAA: 1 opponent ≈85%｜2 ≈73%｜3 ≈64%｜4 ≈56%｜5 ≈49%\nKK: 1 ≈82%｜2 ≈69%｜3 ≈59%｜4 ≈51%\nAKs: 1 ≈67%｜2 ≈50%｜3 ≈40%\n87s: 1 ≈41%｜2 ≈30%｜3 ≈24%\nPattern: each extra opponent drops equity about 8-12 percentage points; big pairs dilute slowest and suited connectors resist best — because the latter's value comes from nut potential rather than current made strength. (Concept from: Multiway Theory multiway equity allocation)",
+      "Example 2 (using the equity table): You open AA from UTG and three callers make it a 4-way pot. Per the table AA showdown equity is still about 64%, but note this is \"showdown\" equity — every time a street threatens a straight/flush/set from one caller, your \"realizable equity\" drops further. Conclusion: even AA in multiway pots should bet fast to build the pot and control variables, not slow-play and give free cards.",
+      "Example 3 (87s counterintuition): In the table, 87s heads-up is only 41% — looks weak, yet in 3-4-way pots it still holds about 30% — because its value comes entirely from making straights/flushes postflop. This is the quantitative support for \"multiway rewards nut potential\": weak Ax is 55% heads-up but may drop below 25% in a 4-way pot (dominated), while 87s decays much more gently.",
+      "Bluffs depreciate sharply in multiway pots: a bluff needs everyone to fold, and success drops exponentially with player count; plus each extra opponent is another chance someone has hit the board. Multiway fundamentals: cut bluff frequency sharply, while value bets get called more easily — \"play value in multiway, play pressure heads-up\".",
+      "The Failure of Equilibrium Guarantees",
+      "The most important theoretical change (warned in T5): the Nash \"unexploitable\" guarantee only holds for two-player zero-sum games. In multiway games, even if everyone plays \"equilibrium\", two players' strategic interaction can objectively squeeze a third (without collusion); one player's error can also happen to hurt another rather than benefit. So there's no \"copy-and-safe\" GTO multiway — solid fundamentals (tight, value-oriented, position) and reads on specific opponents weigh far more than equilibrium dogma.",
+      "Example: BTN limps behind CO's open, and you're in the BB with A5s facing 2.5bb. Heads-up this is a standard 3-bet-bluff candidate (blocker + nut potential), but now you're squeezed in the middle: a 3-bet must get through two ranges at once, and once called your A5s can't continue on most flops in a 3-way 3-bet pot. Multiway dynamics turn a \"beautiful equilibrium play\" into lighting fireworks — the correct answer retreats to call or fold.",
+      "Protection, Over-Calling, and Responsibility Sharing",
+      "In multiway pots the \"protection\" value of betting rises (the more live hands, the more valuable making equity fold), and the cost of slow-playing rises too — giving three opponents free cards is giving three chances to outdraw. On defense, responsibility is shared: facing a bet, MDF doesn't need to be met by you alone; the player with the best position/hand structure takes more of the defense; in the sandwich spot (between the bettor and yet-to-act players), your calling range must be much tighter than heads-up.",
+      "Multiway discipline checklist: starting hands favor nut potential, bluff less postflop, fast-play strong hands instead of slow-playing, pot-control medium hands, and play tight in the sandwich position. Violating any one of these costs more than heads-up.",
+      "Low-stakes multiway pots are the profit home: opponents bring heads-up mindsets and play top pair weak kicker for all three streets in four-way pots. You need only one thing — be there with a nut-oriented range waiting for them."
+    ],
+    "t9-alpha": [
+      "Alpha's Definition and Formula",
+      "Alpha = bet ÷ (pot + bet) — the break-even fold rate YOUR OWN bluff needs (an attacker-side number, not a threshold about how the opponent bluffs)\n\nExample: when you bet 1/2 pot (bet=0.5pot)\n- Alpha = 0.5/(1+0.5) = 33%\n- The opponent's fold rate must exceed 33% for your bluff to profit\n\nThis is the \"price tag\" from the attacker's perspective, answering: \"what minimum share of hands must the opponent fold for my bluff to break even?\"",
+      "The Dual Relationship With MDF",
+      "MDF and Alpha are the two sides of the same game tree, revealing the essence of game theory:\n- MDF = pot/(pot+bet) — your defense frequency (defender's view)\n- Alpha = bet/(pot+bet) — the fold rate the opponent needs (attacker's view)\n- Key finding: MDF + Alpha = 1 (they are complements)\n\nThis duality shows that one side's optimal strategy exactly cancels the other side's exploitation space. The defender's MDF determines the attacker's Alpha, and vice versa. They share the same denominator (pot+bet) mathematically, differing only in numerator (pot vs bet).",
+      "Proof of MDF + Alpha = 1: pot/(pot+bet) + bet/(pot+bet) = (pot+bet)/(pot+bet) = 1",
+      "Alpha's Practical Application",
+      "Alpha answers one attacker-side question: \"does this bluff of mine break even?\" —\n- My bluff profits ⇔ the opponent's actual fold rate > Alpha\n- It does not answer \"should I call?\" That is a defender-side question, settled by required equity = my call ÷ (pot + his bet + my call), which you then compare against your hand's equity versus his range (derivation in t5-mdf-alpha).\n\nThree practical steps: 1) compute Alpha for the size you intend to use; 2) estimate his real fold rate on that street from stats (fold-to-c-bet, fold-to-big-river-bet and the like); 3) fold rate above Alpha ⇒ bluffing this size profits automatically, no showdown value required; below Alpha ⇒ this size burns money consistently.",
+      "Example 1: You bet 1/3 pot, Alpha = (1/3)÷(1+1/3) = 1/4 = 25%. His actual fold rate on this street is 30%, above 25% ⇒ your bluff profits. Recompute (pot = 1, bet = 1/3): EV = 0.30×1 − 0.70×(1/3) = +0.067, i.e. every bluff wins 6.7% of a pot on average; if he really folds only 20%, the same bluff becomes 0.20 − 0.80×(1/3) = −0.067.",
+      "Example 2: You bet 1/2 pot, Alpha = 0.5÷1.5 = 1/3 ≈ 33%. His fold rate is only 25%, below 33% ⇒ bluffing this size loses: EV = 0.25×1 − 0.75×0.5 = −0.125 (12.5% of a pot per bluff). The fix is to bluff less often (only bet when you still carry showdown value or improvement equity) or to size down — note Alpha climbs monotonically with size (1/4 pot 20%, 1/3 pot 25%, half pot 33%, pot 50%), so betting bigger only lifts the break-even hurdle higher; a larger size becomes an exploit once you have confirmed his fold rate rises faster than Alpha does.",
+      "Example 3: You bet 1/4 pot, Alpha = 0.25÷1.25 = 1/5 = 20%. His fold rate is exactly 20%, equal to Alpha ⇒ pure break-even, EV = 0: 0.20×1 − 0.80×0.25 = 0. Don't mistake this size for \"a free bet that cannot lose\" — it earns nothing at all; yet any fold rate above 20% makes it automatically profitable, which is precisely why balanced strategies pack so many bluffs into small, frequent sizes: the lowest break-even hurdle.",
+      "Alpha's application principle: quantitative comparison, not intuition. But what it measures is \"how many folds my bluff at this size needs to break even\", not \"does he bluff enough for me to call\" — reading an attacker-side metric as a defend-or-fold rule is the most common way this concept gets used backwards.",
+      "Self-test your depth: can you use Alpha to explain to a friend \"why the very same 1/3-pot bet is a money printer against an opponent who folds 30% and a bonfire against one who folds 20%\", and why \"should I call?\" requires a different formula? If you can cover both, you've grasped Alpha's essence."
+    ],
+    "t9-unified": [
+      "The End of the False Dichotomy",
+      "\"GTO camp vs exploitation camp\" is a false dichotomy of the learning stage. In the complete framework both are two modes of one system: equilibrium is optimal without information (bulletproof vest against unknown opponents / strong players / insufficient samples), exploitation is optimal with information (harvest knife when leaks are confirmed). Every decision answers the same question: what my knowledge of the opponent supports — how much deviation, in what direction?",
+      "Decision = equilibrium baseline + f(information quality) × directed deviation\nZero information → pure baseline; complete information and non-adapting opponent → maximal exploitation; in between → scale deviation by confidence (concept from: Applications of NLHE equilibrium-exploitation unified framework)",
+      "The Knowledge Map Across Nine Levels",
+      "Looking back: T1-T2 gave you the measuring system (probability, EV, odds) — the units of all judgment; T3-T4 gave you the coordinate system (position, range) — where you are and what you fight against; T5-T6 gave you the equilibrium baseline (GTO, MDF, sizing theory) — the correct shape without information; T7 gave you the information system (stats, types, hand reading, exploitation) — turning observations into deviation evidence; T8 gave you operational safeguards (psychology, bankroll, state) — keeping the system stable on a real human; T9 assembles everything and annotates each tool's applicability boundary (multiway, ICM, model limits).",
+      "The framework's operating loop: start from the equilibrium baseline → accumulate information through observation → deviate with evidence (exploitation) → monitor opponent adaptation → retreat or counter → escorted throughout by psychology and bankroll systems. This loop has no endpoint — poker is never \"finished\", only versioned.",
+      "Example: One river full-pot bet decision, all nine levels show up — pot odds says you need 33% equity (T2); range filtering + combo counting says he bluffs about 25% (T4/T7); equilibrium says \"should\" be 33% bluffs here (T5); his WTSD and river AF say this player never bluffs big on the river (T7); you just lost a big pot, and the checklist reminds you not to comfort yourself with \"he always bluffs\" (T8) — fold. A decision's quality equals the number of theories correctly invoked behind it.",
+      "Example 2 (confidence-driven deviation): You collect 200 hands and find an opponent folds to C-Bets 65% (far above equilibrium ~45%) — high confidence. Your deviation: raise C-Bet frequency and bluff share, specifically firing at him. But if the sample is only 15 hands, 65% may be noise — at low confidence, return to baseline. Same observation, two different-magnitude decisions; the difference is entirely information quality.",
+      "Example 3 (the adaptation-monitoring loop): Three times in a row you fold bluff catches using the read \"he never bluffs big on the river\". The fourth time he shoves, you fold, and he shows pure air — an adaptation signal. This isn't discarding the read but downgrading it to \"usually true\", returning to the equilibrium baseline while waiting for new samples. Exploitation is a dynamic game: you adjust others, and others adjust you.",
+      "A Roadmap for Going Deeper",
+      "Suggested reading order: The Theory of Poker (Sklansky, intellectual awakening) → The Mental Game of Poker (Tendler, psychological system) → Applications of No-Limit Hold'em (Janda, equilibrium application) → Modern Poker Theory (Acevedo, solver-era synthesis) → The Mathematics of Poker (Chen & Ankenman, mathematical foundation). Toolchain: solver + database + this platform's training modules — theory closes the loop into muscle memory here.",
+      "The final warning is the same as the first principle: theory has value only when executed. Knowing MDF yet over-folding under pressure, understanding variance yet tilting after a Bad Beat — the gap between knowing and doing is the distance between you and your ceiling.",
+      "Graduation assignment: after finishing this level, go to the Strategy Academy and training modules to practice each theory at least once (range training → T3/T4, odds quizzes → T1/T2, GTO simulator → T5/T6). The Theory Academy gives you the map; the training ground lets you walk the path."
+    ],
+    "t9-cash-vs-mtt": [
+      "Two Ledgers for the Same Hand",
+      "Cash and tournaments are usually described as the same game played two ways. What actually differs is three things: the mapping from chips to money, the way the structure moves through time, and the form in which the house takes its cut. Those three are enough to make the same hand produce opposite answers. This chapter does not ask which format pays more - that needs a common unit first - it lays the two decision ledgers side by side so you always know which one you are computing in.",
+      "The comparison needs only six axes: effective depth (constant vs one-way collapse), chip utility (linear vs non-linear), form of the take (per pot vs per entry), player pool (drifts fast vs errors that stay put), time structure (blind levels that never change vs levels that always change) and variance shape (per-pot swings vs results concentrated in the finish). Switching axis by axis explains a profit gap better than \"which format I am used to\".",
+      "The Anchor: One Hand, Two Conclusions",
+      "Keep the same table already recomputed in the ICM chapter of this level: prizes 50/30/20, stacks 5000/3000/2000. The medium stack M = 3000 faces a shove from the big stack of 5000 and you judge 55% equity.\nCash: risk 3000 to win 3000, expectation = 0.55×3000 − 0.45×3000 = +300 chips, so call.\nTournament: M is fully covered, losing means out. Folding keeps a computed $EV of 32.8; calling and winning leaves 6000/2000/2000 whose recursion gives $EV = 41.0, so the expectation is 0.55×41.0 + 0.45×0 = 22.6 < 32.8, so fold.\nThe same 55% produces opposite instructions in the two ledgers.",
+      "Example 1 (why they disagree): in cash the 3001st chip is worth exactly the first chip, so any equity above 50% makes a fifty-fifty gamble worthwhile. In a tournament that is not true - after folding, M still holds a certain 32.8, and calling trades that 32.8 for a shot at 41.0, which is only about 25% more, not enough to pay for a 45% chance of zero. The disagreement comes from whether the chips-to-money curve is a straight line, not from nerve or skill. This is exactly where the ICM chapter said the model is a map and not the territory: change the map and the same mountain has a different height.",
+      "Is Depth Constant, or Does It Flow One Way",
+      "In cash the effective depth is a constant: you sit down with 100 big blinds and you stay near 100 big blinds all night. In a tournament M = effective stack ÷ big blind is an independent variable that moves in one direction only: blind levels rise on a clock while stacks do not grow by themselves. A stack of 10,000 is M = 50 at 100/200 and only M = 10 at 500/1000 - the same chips, a few levels later, are a different game. The real consequence of a collapsing M is not simply \"play tighter\": it deletes the sizing family. Below about 15bb the three postflop streets compress into a single shove and Push/Fold charts take over the decision (see the ICM chapter), while the check-raises, three-barrel fire and geometric sizings you drilled at 100bb simply do not exist in that M band.",
+      "Example 2 (one hand, two fates): A♠5♦ in a 100bb cash game is a speculative hand worth opening with position, with many streets left to realise equity; the same card at tournament M = 8 has only two actions available, and the test becomes \"does its all-in equity clear the Push threshold for this position\" rather than \"how much equity can I realise postflop\". The hand did not get worse - the mechanism by which it earns (implied equity) was removed by the structure. Symmetrically, a player who only ever practised 100bb cash will bleed at M = 8, because the postflop he is waiting for never arrives.",
+      "Rake and Tournament Fee: Same Name, Different Mechanism",
+      "Cash: net μ = gross μ − the amount taken per 100 hands. Rake is charged as a percentage of each pot (see T4, The Economics of Table Structure), so it punishes volume - every pot pays.\nTournament: net $EV per entry = $EV per entry − the fee. The fee is charged once per buy-in, independently of how many pots you play, so it punishes entries.\nTo compare them, write both over the same denominator: convert the cash result into per hour per buy-in, and spread the fee over hours. Both then answer the same question - how much does one hour of skilled play cost in toll.",
+      "Example 3 (the illusion of a fixed percentage): a fee of $10+$1 is 10% of the buy-in, $500+$20 is 4%, $2,000+$100 is 5% (indicative magnitudes only; structures differ by site). This explains two things that cause each other: the lowest buy-ins tax skill the hardest, and precisely for that reason their pools are the softest. A heavy-rake cash game (about 5bb/100, indicative) cannot be dodged by paying a smaller fee at all, because rake follows pots - the only hedges are fewer marginal participations and changing tables. The same sentence \"this game is hard to beat\" points at two different actions in the two structures: change table, or change buy-in.",
+      "Pools and drift also come in two forms (this is where the metagame drift of T7 lands). A cash pool is a continuous market: the same regulars sit across from you all month, exploitation conclusions have a short shelf life because opponents adapt within the session, and the remedy is constant re-measurement. A low-stakes tournament pool is a recurring novice market: the structural errors are extremely stable (ignoring the blind clock, folding too much at the bubble, and the opposite version of refusing to fold), but each tournament lasts a few hours, so the goal is not to teach an opponent on the spot - it is to repeat the same exploitation over a thousand entries. The first is a depreciable asset, the second an amortisable one; the amortisation period is long, which is why tournament exploitation knowledge is actually the more durable of the two.",
+      "The classic mistake: \"Which one pays more - just look at the buy-ins and the profit figures.\" The two profit streams are not in the same unit. Cash is bb/100 × hands, with linear utility and a withdrawable balance; a tournament is a per-entry $EV distribution, concentrated at the top and needing tens to hundreds of entries to converge. Comparing the amounts directly is comparing kilometres with kilograms. The workable version converts both to the same time unit (per hour) and the same risk yardstick (risk adjusted), and only then asks which is larger.",
+      "A transfer-training order: drill the decision tree in cash first - unlimited re-entry, stable depth, feedback you can verify on the spot; then train the two tournament-only skills separately, Push/Fold charts below 15bb and bubble ICM judgement, reviewed off-line with a calculator rather than by feel at the table. Finally bring one habit across: check the structure before you sit. Rake at this table, fee at that event, and how often the blinds move - three tables are three different equations.",
+      "Two structures, two ledgers: the cash ledger counts hands and μ under linear utility, the tournament ledger counts $EV under non-linear utility with an M that collapses one way. The same 55% hand is a call worth +300 chips on one side and 22.6 against 32.8, a fold, on the other. The split does not come from skill but from which ledger you are computing in - so confirm the ledger before every decision."
+    ]
+  },
+  "quiz": {
+    "t9-mop-q1": {
+      "question": "MOP's core methodology is:",
+      "options": [
+        "Statistical analysis of massive real hands",
+        "Constructing precisely solvable toy games and distilling general structural rules",
+        "Interviewing professional players",
+        "Memorizing standard play charts"
+      ],
+      "explanation": "Real poker is too complex to solve directly; the precise solutions of simplified games reveal structures (bluff ratios, MDF, indifference) that still hold in real hands."
+    },
+    "t9-mop-q2": {
+      "question": "In the AKQ game, K (the medium hand) 's equilibrium strategy is:",
+      "options": [
+        "Small probing bets",
+        "Never bet — only call as a bluff catcher at the right frequency",
+        "Bluff occasionally",
+        "Always fold"
+      ],
+      "explanation": "K loses both ways if it bets (A always calls, Q always folds); its only value is catching Q's bluffs. This is the theoretical prototype of \"medium strength should be passive\"."
+    },
+    "t9-mop-q3": {
+      "question": "\"The weak think about single hands, the strong think about ranges\" reflects the stratification of:",
+      "options": [
+        "Luck and skill",
+        "The tactical layer (this hand) and the strategic layer (whole range construction)",
+        "Preflop and postflop",
+        "Cash games and tournaments"
+      ],
+      "explanation": "A single hand's optimal action can only be determined inside range-construction rules — solvers output range-level strategy, not single-hand answers."
+    },
+    "t9-mop-q4": {
+      "question": "Per MOP's risk-aversion theory, a technically superior side should:",
+      "options": [
+        "Embrace every small +EV high-variance all-in",
+        "Moderately avoid small +EV spots with high variance, preserving room to realize the technical edge",
+        "Only play small pots",
+        "Avoid all all-ins"
+      ],
+      "explanation": "The superior side's edge produces EV every hour, so bearing huge variance for tiny immediate EV isn't worth it; the weaker side's logic is reversed and should actively raise variance."
+    },
+    "t9-mop-q5": {
+      "question": "In the AKQ game, K (the medium hand) facing a 1-pot bet calls at an equilibrium frequency of:",
+      "options": [
+        "1/3",
+        "1/2",
+        "2/3",
+        "3/4"
+      ],
+      "explanation": "The defender's call frequency is c = P/(P+B): with B=P, c = P/(P+P) = 1/2. It shares the denominator with the bluff frequency f = B/(P+B) with the numerators swapped, so f + c = 1 — the toy-model prototype of the MDF/Alpha complementarity (at 1/3 pot they are 3/4 and 1/4, not equal)."
+    },
+    "t9-icm-q1": {
+      "question": "The core problem ICM solves is:",
+      "options": [
+        "Computing pot odds",
+        "Converting tournament chip counts into true prize expectation ($EV)",
+        "Deciding blind structure",
+        "Computing opponent ranges"
+      ],
+      "explanation": "The prize ladder makes chip utility nonlinear; ICM computes each-place probabilities by chip share and weights the prizes to get chips' true monetary value."
+    },
+    "t9-icm-q2": {
+      "question": "A \"+cEV but −$EV\" situation means:",
+      "options": [
+        "The model is wrong",
+        "Chip expectation rises but prize expectation falls — survival itself has value in tournaments",
+        "You should act on cEV",
+        "Such situations don't exist"
+      ],
+      "explanation": "Decreasing chip marginal value plus losing all expectation on bust makes chip-slightly-positive gambles negative in prize terms. Tournaments run on $EV."
+    },
+    "t9-icm-q3": {
+      "question": "Under bubble ICM pressure, the typical behavior by stack size is:",
+      "options": [
+        "Everyone tightens",
+        "Medium stacks tightest, big stacks most aggressive, small stacks near normal",
+        "Big stacks tightest",
+        "Unrelated to stack size"
+      ],
+      "explanation": "Medium stacks lose the most prize expectation so are the most suppressed; big stacks bully through this; small stacks have little remaining expectation and the least constraint."
+    },
+    "t9-icm-q4": {
+      "question": "The correct understanding of ICM's model boundaries is:",
+      "options": [
+        "ICM is perfect and must be strictly followed",
+        "It ignores position, skill edge, and blinds rising — technically superior players may deviate moderately from its conservative solutions",
+        "ICM only applies to cash games",
+        "ICM can't be used at final tables"
+      ],
+      "explanation": "ICM assumes equal skill and immediate settlement. With a clear technical edge, future value supports leaning beyond survival/conservative choices. The model is a map, not the territory."
+    },
+    "t9-icm-q5": {
+      "question": "3-player SNG (prize 50/30/20), chips A=5000/B=3000/C=2000. A's $EV is about:",
+      "options": [
+        "50",
+        "38.4",
+        "28.9",
+        "22.6"
+      ],
+      "explanation": "P(A 1st)=0.5, 2nd≈0.339, 3rd≈0.161; $EV = 0.5×50+0.339×30+0.161×20 ≈ 38.4. Note it's well below the 50 his chip share implies — the visible face of decreasing chip marginal value. \"50\" reads the chip share as the prize share (cash-table thinking); \"28.9\" is C's $EV, i.e. the wrong player; \"22.6\" is the post-call expectation of the medium stack in Example 3, not the value A holds right now."
+    },
+    "t9-multiway-q1": {
+      "question": "The pattern of starting-hand value changes in multiway pots is:",
+      "options": [
+        "All hands devalue",
+        "Hands that can make the nuts appreciate; easily dominated hands crash",
+        "High cards appreciate",
+        "Identical to heads-up"
+      ],
+      "explanation": "Equity dilution raises the made-hand threshold: suited connectors/pocket pairs (nut potential) relatively appreciate, while weak Ax/KJo (often second place) crash."
+    },
+    "t9-multiway-q2": {
+      "question": "Bluff frequency in multiway pots should:",
+      "options": [
+        "Rise, because the pot is bigger",
+        "Drop sharply, because everyone must fold and success drops with player count",
+        "Stay the same as heads-up",
+        "Only bluff the last player"
+      ],
+      "explanation": "Bluff success ≈ the product of each opponent's fold rate, decaying exponentially with player count; and more players means more chance someone has hit the board."
+    },
+    "t9-multiway-q3": {
+      "question": "The correct understanding of GTO in multiway pots is:",
+      "options": [
+        "Just copy solver outputs",
+        "The unexploitable guarantee fails; fundamentals and opponent reads weigh more",
+        "Equilibrium is more reliable multiway",
+        "Multiway pots have no theory at all"
+      ],
+      "explanation": "The Nash floor only holds for two-player zero-sum games; multiway dynamics can hurt even \"equilibrium\" players. Tight, value-oriented play and position are more reliable anchors."
+    },
+    "t9-multiway-q4": {
+      "question": "The problem with slow-playing strong hands in multiway pots is:",
+      "options": [
+        "No problem — more players means more reason to trap",
+        "Giving multiple opponents free cards equals giving multiple outdraw chances, and protection value is rising",
+        "It exposes hand strength",
+        "Slow-playing is only a problem heads-up"
+      ],
+      "explanation": "The more live opponents, the higher the cumulative free-card outdraw probability and the greater the value of making equity pay — fast-play strong hands to build the pot multiway."
+    },
+    "t9-multiway-q5": {
+      "question": "AA's showdown equity against 4 random opponents is about:",
+      "options": [
+        "85%",
+        "73%",
+        "64%",
+        "56%"
+      ],
+      "explanation": "AA: 1 opponent ≈85%, 2 ≈73%, 3 ≈64%, 4 ≈56%. Each extra opponent drops about 8-12 points, and realizable equity is even lower — the mathematical basis for fast-playing strong hands and valuing nuttiness multiway."
+    },
+    "t9-alpha-q1": {
+      "question": "What is Alpha's formula?",
+      "options": [
+        "Alpha = pot / (pot + bet)",
+        "Alpha = bet / (pot + bet)",
+        "Alpha = bet / (pot + 2×bet)",
+        "Alpha = pot / (pot + 2×bet)"
+      ],
+      "explanation": "Alpha = bet / (pot + bet) = b/(1+b): the same denominator as MDF, with the numerator swapped for your own bet size, and the meaning \"how often the opponent must fold for my bluff to break even\". Option 0 is MDF; the two formulas dividing by a denominator containing 2×bet belong to the defender's \"equity needed to call\" (call ÷ (pot + his bet + my call)) — a different question from Alpha."
+    },
+    "t9-alpha-q2": {
+      "question": "The relationship between Alpha and MDF is:",
+      "options": [
+        "Alpha = MDF — two names for the same number",
+        "Alpha + MDF = 1 — they are complements",
+        "Alpha and MDF are reciprocals (Alpha × MDF = 1)",
+        "They are unrelated and computed independently"
+      ],
+      "explanation": "MDF = pot/(pot+bet) and Alpha = bet/(pot+bet): same denominator, and their two numerators add back up to that denominator, so Alpha + MDF = 1 (equivalently Alpha = 1 − MDF). They are not the same number (they only meet at 50% when b=1, a pot-size bet), not reciprocals, and not independent — both are fixed by the same bet size, and one side's optimal frequency exactly cancels the other side's exploitation room."
+    },
+    "t9-alpha-q3": {
+      "question": "Alpha's core value lies in:",
+      "options": [
+        "Providing a quantitative view",
+        "Providing a qualitative view",
+        "Providing a rule of thumb",
+        "Providing an intuition"
+      ],
+      "explanation": "Alpha turns \"how often must the opponent fold for this size of bluff to break even\" into a numeric bar you can compare directly against his stats (1/3 pot → 25%, half pot → 33%, pot-size → 50%), which is what makes any deliberate deviation measurable; a qualitative view, a rule of thumb or intuition offers no checkable boundary. Note it serves the attacker's bluff decision, not \"is he bluffing enough that I should call\" — that second question uses the defender's required-equity formula."
+    },
+    "t9-alpha-q4": {
+      "question": "Alpha's application steps are:",
+      "options": [
+        "Compute Alpha → observe opponent fold rate → compare Alpha with his fold rate",
+        "Observe fold rate → compute Alpha → compare Alpha with his fold rate",
+        "Compare Alpha with fold rate → compute Alpha → observe fold rate",
+        "Observe fold rate → compare Alpha with fold rate → compute Alpha"
+      ],
+      "explanation": "The starting point can only be \"which size am I going to use\": Alpha is entirely determined by your own bet size (b/(1+b)), so without a size there is no Alpha and no bar to compare against; then you take his actual fold rate on that street, and finally compare — only a fold rate above Alpha makes the bluff profitable. The other three put observation or comparison before the calculation, i.e. reading data without a baseline, which cannot answer \"does bluffing this size break even\"."
+    },
+    "t9-alpha-q5": {
+      "question": "You plan to bluff 1/3 pot (Alpha = 1/4 = 25%), and your stats show the opponent folds 30% on this street. The conclusion is:",
+      "options": [
+        "This size of bluff does not break even — stop using it",
+        "This size of bluff breaks even and profits, EV ≈ +0.067 pot",
+        "Size up to a pot-size bet instead — the bigger the bluff, the more it earns",
+        "Switch to MDF and decide whether to call"
+      ],
+      "explanation": "Fold rate 30% > Alpha 25% ⇒ EV = 0.30×1 − 0.70×(1/3) ≈ +0.067 pot, so this bluff profits without needing any showdown value (the same arithmetic as Example 1 in the chapter). \"Does not break even\" compares the two numbers backwards; \"size up to pot\" points the wrong way — a pot-size bet needs Alpha = 50%, so unless his fold rate rises faster than that, the same bluff becomes a steady loss; MDF and required equity handle the defender's calling question and say nothing about whether this bluff breaks even."
+    },
+    "t9-unified-q1": {
+      "question": "The relationship between GTO and exploitation in the unified framework is:",
+      "options": [
+        "Two mutually exclusive schools",
+        "Two modes of one system: equilibrium as the floor without information, exploitation by confidence with information",
+        "GTO has eliminated exploitation",
+        "Exploitation has eliminated GTO"
+      ],
+      "explanation": "Decision = equilibrium baseline + directed deviation weighted by information quality. Zero information → pure baseline; complete information → maximal exploitation; in between → scaled by confidence."
+    },
+    "t9-unified-q2": {
+      "question": "The magnitude of deviating from equilibrium to exploit should depend on:",
+      "options": [
+        "Your own mood",
+        "The information quality of the leak (sample and confidence) and the opponent's adaptation ability",
+        "Pot size",
+        "Always maximum magnitude"
+      ],
+      "explanation": "Deviations are justified by confirmed leaks; their upper bound is the opponent's counter-attack ability. Together they set the direction and magnitude of exploitation."
+    },
+    "t9-unified-q3": {
+      "question": "The operating loop of the complete decision framework is:",
+      "options": [
+        "Memorize charts → execute → repeat",
+        "Equilibrium baseline → observe → deviate with evidence → monitor adaptation → retreat/counter",
+        "Feeling → bet → review",
+        "Mimic pros → fix a style"
+      ],
+      "explanation": "This loop integrates T5's equilibrium, T7's information and exploitation, and the adaptation arms race — executed with the psychological system's support from T8."
+    },
+    "t9-unified-q4": {
+      "question": "The ultimate test of theoretical learning is:",
+      "options": [
+        "How many formulas you can recite",
+        "Whether it changed real in-game decisions and can be executed steadily",
+        "How many books you've read",
+        "Whether you win debates"
+      ],
+      "explanation": "The knowing-doing gap is your skill ceiling. Theory must be converted through training into decision habits that survive pressure — exactly the closed loop between the Theory Academy and training modules."
+    },
+    "t9-unified-q5": {
+      "question": "You collect 200 hands showing an opponent folds to C-Bets 65%, and start raising your bluff frequency against him. The basis of this deviation is:",
+      "options": [
+        "My intuition told me",
+        "An observable bias with sufficiently high confidence, the magnitude supported by information quality",
+        "Because equilibrium is boring",
+        "Because he definitely won't adapt"
+      ],
+      "explanation": "The unified framework requires deviations to be justified: sufficient sample (200 hands), a clear bias direction (folds too much), and continuous adaptation monitoring. Information quality sets deviation magnitude — the unified expression of GTO and exploitation."
+    },
+    "t9-cash-vs-mtt-q1": {
+      "question": "The medium stack of 3000 faces a shove from the 5000 big stack with 55% equity (prizes 50/30/20, short stack 2000). What are the correct cash and tournament conclusions?",
+      "options": [
+        "Call in both, since 55% is ahead",
+        "Call in cash (expectation +300 chips), fold in the tournament (call 22.6 vs fold 32.8)",
+        "Fold in cash (too risky), call in the tournament (more chips means more aggression)",
+        "Fold in both, because the tournament conclusion should be carried back into cash"
+      ],
+      "explanation": "Cash risks 3000 to win 3000: 0.55×3000 − 0.45×3000 = +300 chips, so call. In the tournament M is fully covered: folding holds 32.8 while calling expects 0.55×41.0 = 22.6, so fold. Option 1 assumes 55% means the same thing in both ledgers, which is exactly the point at issue; option 3 inverts risk and depth (the covered short side is the one that must refuse); option 4 force-unifies the two ledgers, treating a non-linear-utility conclusion as portable into a linear one."
+    },
+    "t9-cash-vs-mtt-q2": {
+      "question": "A 10,000 stack goes from blinds 100/200 to 500/1000, so M falls from 50 to 10. The most direct consequence is:",
+      "options": [
+        "Only the number changes; the shape of the strategy stays the same",
+        "Start making more small continuation bets",
+        "More streets of firing become available because the pots are relatively bigger",
+        "The sizing family collapses: below about 15bb the decision is taken over by shove-or-fold"
+      ],
+      "explanation": "M = effective stack ÷ big blind, so falling from 50 to 10 removes almost every postflop betting branch and the decision degenerates into shove or fold. Option 1 denies that depth determines strategy shape; option 2 reads shallower stacks as \"slow play small bets\", but small-bet branches need stack depth to be paid off; option 3 inverts SPR - with shallower stacks there is less room for multi-street firing and geometric sizings, not more."
+    },
+    "t9-cash-vs-mtt-q3": {
+      "question": "Which statement about cash rake and tournament fees is correct?",
+      "options": [
+        "Rake is charged per pot and punishes volume; the fee is charged per entry and punishes entries",
+        "They are equivalent: both just take money from winnings",
+        "The fee is charged per pot, so the longer you play the more you pay",
+        "Rake exists only at micro stakes; regular levels have none"
+      ],
+      "explanation": "The difference is the mechanism, not the size: rake accrues with every pot, so calling more pots costs more, while the fee is fixed the moment you buy in and is independent of pots played. Option 2 erases that mechanism and with it the two different countermeasures - fewer marginal participations versus fewer entries. Option 3 swaps the two. Option 4 is false: rake exists at all levels, only the percentage and the cap differ."
+    },
+    "t9-cash-vs-mtt-q4": {
+      "question": "What does the difference between a $10+$1 fee (10%) and a $500+$20 fee (4%) tell you?",
+      "options": [
+        "Higher buy-in games always have softer fields",
+        "Low buy-ins cost more in fees, so no profit is possible there",
+        "At the low end the fixed fee is a larger share of the buy-in, so the same skill edge is taxed away in a larger proportion",
+        "The percentage does not matter, only the absolute amount"
+      ],
+      "explanation": "The fee is a percentage of the buy-in and that percentage is highest at the low end, so an identical edge loses a tenth of itself at $10+$1 but only a twentieth at $500+$20. Option 2 overshoots - low buy-ins also have softer fields, and net profit depends on both. Option 1 equates high buy-ins with soft fields, which usually runs the other way (higher stakes are harder). Option 4 abandons the common denominator: two different sized games cannot be compared by absolute fee."
+    },
+    "t9-cash-vs-mtt-q5": {
+      "question": "To compare \"do I make more from cash or from tournaments\", the method must:",
+      "options": [
+        "Compare total buy-ins against total winnings over the same period and pick the higher ratio",
+        "Convert both to the same time unit and the same risk yardstick, after subtracting each format’s own form of the take",
+        "Compare the single biggest cash hour against the single biggest tournament score",
+        "Look at which format has the higher ITM rate, since that is the profitable one"
+      ],
+      "explanation": "Cash is measured in bb/100 × hands with linear utility; a tournament is a per-entry $EV distribution, top-heavy and slow to converge. The only comparable form is same time unit, same risk adjustment, each net of its own mechanism of the take. Option 2 divides two non-comparable distributions; option 3 substitutes an extreme value for an expectation, which simply rewards whichever format has more variance; option 4 mistakes frequent cashing for profit, while a high ITM rate usually means the pay jumps are small."
+    }
+  },
+  "chapterObjectives": {
+    "t9-mop": [
+      "Explain the trade-off behind solving toy games instead of real hands as a method",
+      "Derive the frequency conditions that make medium hands and air each indifferent",
+      "Assign every hand at a given node to a role: value, medium or air",
+      "Separate the tactical single-hand question from the strategic range-construction question"
+    ],
+    "t9-icm": [
+      "Explain why the existence of a prize ladder makes the marginal value of chips decrease",
+      "Convert each stack share through the recursion into placement probabilities and prize expectation",
+      "Judge one shove separately under the cEV and the $EV ledgers and report both conclusions",
+      "Describe how ICM pressure hits each stack tier at the bubble, and where the model stops holding"
+    ],
+    "t9-multiway": [
+      "Explain how each added opponent dilutes showdown equity and raises the bar for what is playable",
+      "Re-rank starting hands by nut potential rather than by made strength",
+      "Judge why the unexploitability guarantee of an equilibrium breaks down with more than two players",
+      "Assess how the protection value of betting and the cost of slow-playing change as more live hands remain"
+    ],
+    "t9-alpha": [
+      "Explain why Alpha answers only the attacker question of whether this size bluffs at a profit",
+      "Derive that alpha and MDF are complements at the same bet size",
+      "Compare alpha with the observed fold rate on this street to settle whether to bluff",
+      "Separate the break-even fold threshold question from the equity-needed-to-call question"
+    ],
+    "t9-unified": [
+      "Explain why equilibrium and exploitation are two modes of one system rather than rival schools",
+      "Rate the quality of the observed sample and scale the deviation from equilibrium accordingly",
+      "Run the full loop from baseline through deviation, monitoring adaptation, and pulling back",
+      "Assemble the theory from earlier levels into the analysis of one single hand"
+    ],
+    "t9-cash-vs-mtt": [
+      "Compute both the cash and the tournament expectation for the same hand, and explain why they can issue opposite instructions",
+      "Use M = effective stack ÷ big blind to describe the one-way collapse of tournament depth and how it cancels the postflop sizing family",
+      "Separate per-pot rake from per-entry tournament fee, and name the behaviour each one punishes (volume played vs number of entries)",
+      "Convert both formats to the same time unit and the same risk yardstick before comparing them"
+    ]
+  }
+}

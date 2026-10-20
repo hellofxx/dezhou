@@ -43,6 +43,16 @@ const enCourseModules = import.meta.glob<Record<string, unknown>>(
   { import: 'default', eager: true },
 );
 
+// 理论正文/题目/目标按 level 拆分于 theory-content/ 子目录（注入后属于 theory 命名空间）
+const zhTheoryContentModules = import.meta.glob<Record<string, unknown>>(
+  './locales/zh/theory-content/*.json',
+  { import: 'default', eager: true },
+);
+const enTheoryContentModules = import.meta.glob<Record<string, unknown>>(
+  './locales/en/theory-content/*.json',
+  { import: 'default', eager: true },
+);
+
 function flattenKeys(node: unknown, prefix = ''): string[] {
   if (typeof node !== 'object' || node === null) return [prefix];
   return Object.entries(node).flatMap(([key, value]) =>
@@ -53,6 +63,7 @@ function flattenKeys(node: unknown, prefix = ''): string[] {
 function collectContentKeys(
   modules: Record<string, Record<string, unknown>>,
   courseModules: Record<string, Record<string, unknown>>,
+  theoryContentModules: Record<string, Record<string, unknown>>,
 ): string[] {
   const keys: string[] = [];
   for (const file of Object.keys(modules)) {
@@ -71,17 +82,38 @@ function collectContentKeys(
       if (CONTENT_KEY_PREFIXES.some((p) => fullKey.startsWith(p))) keys.push(fullKey);
     }
   }
+  // theory-content 子目录注入后位于 theory.* 命名空间
+  for (const file of Object.keys(theoryContentModules)) {
+    for (const key of flattenKeys(theoryContentModules[file])) {
+      const fullKey = `theory.${key}`;
+      if (CONTENT_KEY_PREFIXES.some((p) => fullKey.startsWith(p))) keys.push(fullKey);
+    }
+  }
   return keys;
 }
 
-const zhKeys = new Set(collectContentKeys(zhModules, zhCourseModules));
-const enKeys = new Set(collectContentKeys(enModules, enCourseModules));
+const zhKeys = new Set(collectContentKeys(zhModules, zhCourseModules, zhTheoryContentModules));
+const enKeys = new Set(collectContentKeys(enModules, enCourseModules, enTheoryContentModules));
 
 describe('课程内容 i18n key 双语对称（渲染层 key 覆盖）', () => {
   it('zh 与 en 的内容 key 集合完全一致（只加单语立即失败）', () => {
     const onlyInZh = [...zhKeys].filter((k) => !enKeys.has(k));
     const onlyInEn = [...enKeys].filter((k) => !zhKeys.has(k));
     expect({ onlyInZh, onlyInEn }).toEqual({ onlyInZh: [], onlyInEn: [] });
+  });
+
+  it('theory-content 双语 level 文件集合一致，且核心包不再残留正文/题目/目标', () => {
+    const fileNames = (modules: Record<string, unknown>) =>
+      Object.keys(modules)
+        .map((path) => path.split('/').pop())
+        .toSorted();
+    expect(fileNames(zhTheoryContentModules)).toEqual(fileNames(enTheoryContentModules));
+
+    const theoryRoot = zhModules['./locales/zh/theory.json'] as Record<string, unknown>;
+    expect(theoryRoot.content).toBeUndefined();
+    expect(theoryRoot.chapterObjectives).toBeUndefined();
+    const quizUi = Object.values((theoryRoot.quiz ?? {}) as Record<string, unknown>);
+    expect(quizUi.every((value) => typeof value === 'string')).toBe(true);
   });
 
   it('内容 key 命名空间前缀已登记（新增命名空间须同步 contentKeyEntries 清单）', () => {

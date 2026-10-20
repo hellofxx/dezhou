@@ -1,0 +1,142 @@
+{
+  "content": {
+    "t8hu-pressure": [
+      "Heads-Up: The Ultimate Test of Emotion",
+      "Heads-up is the most emotionally stressful poker format: you're in a blind every hand, 200+ hands/hour, compressed variance, no teammates to share it, and the opponent watches you the whole time. Losing 8-10 all-ins in a row is mathematical normalcy (T1's 55%-60% all-in equity means a 0.45^8 ≈ 0.17% streak appears often). In this environment, emotion management matters as much as strategy itself — one tilting decision can erase hours of +EV.",
+      "A HU downswing isn't an anomaly but an inevitability. Treating consecutive losses as \"weather\" rather than \"a verdict\" prevents your worst strategic adjustments during the most violent variance.",
+      "The Mechanisms and Defenses of Tilt",
+      "Tilt stems from three triggers: result dependence (happy when winning, hurt when losing), dashed expectations (\"I should have won\"), and revenge psychology (\"I must win it back next hand\"). Tilt's horror is that it distorts your range — you open looser, call wider, chase harder, all deviating from baseline. Three defenses: (1) self-awareness — set an \"emotional red light\" (N consecutive hands wanting revenge or raising to get even) and force a pause; (2) pre-commitment — set the stop-loss off the table and leave at the line; (3) process attribution — review only whether decision EV was correct, never change play because of results.",
+      "Example: You lose 6 consecutive 60%-equity all-ins in HU (0.4^6 ≈ 0.4%, rare but encountered several times an hour). Your mind knows \"I played right\" but emotions want \"to get even\". If you keep sizing up to chase losses, that's a classic tilt loop. The right move: recognize the revenge impulse → pause 10 minutes → restart with \"what is this hand's EV\" rather than \"I must win it back\".",
+      "Example 2 (process vs result): You shove AK vs 55 and 55 wins. Result: you lost. Process: AK vs 55 is about 43% equity; the shove's EV depends on pot odds — with proper odds it's +EV and you played right. HU pros review only process: \"was this decision EV-correct?\" Tilters review only results: \"I lost to junk again.\" The long-term difference between the two is astronomical.",
+      "HU variance budget (Tendler's psychological framework):\n\nSingle all-in standard deviation σ = √(p(1−p)) × pot (Bernoulli approximation)\nN-hand cumulative variance = σ×√N; expectation = N×marginal edge×pot\n\nExample: p=60%, pot 100, edge 20:\nexpectation(50 hands) = 50×0.2×100 = 1000\nvariance(50 hands) = 49×√50 ≈ 346\n\nConclusion: even with positive expectation, \"winners experience long drawdowns\" in heads-up is normal — the mathematical root of psychological pressure and why you need a preset variance budget. (Concept from: The Mental Game of Poker, Jared Tendler Ch.4 variance tolerance and emotion)",
+      "Counterintuitive point: the most dangerous tilt isn't \"impulse when losing\" but \"letting your guard down after winning\". After winning a few hands, players often relax, play marginal hands, and give the edge back. HU discipline must be consistent throughout, win or lose.",
+      "HU session-management triad: (1) preset a variance budget — pause and review after losing 40-50BB, a stop-and-restart not a chase; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results."
+    ],
+    "t8hu-reads": [
+      "Reads: Turning Observation Into Information",
+      "Reads fall into two types: live physical reads (Physical Tells — betting gestures, body, eyes) and online frequency reads (Frequency Reads — betting rhythm, timing, size). In heads-up reads are highly valuable, but the traps are many: physical tells get counterplayed (the opponent acts), frequency tells have insufficient samples. The most reliable is combining \"observation\" with \"action narrative\" — does the opponent's action sequence tell a self-consistent story?",
+      "The best read is \"action consistency\": an opponent who checks the flop and turn then suddenly overbet-shoves the river has the narrative \"I have the nuts\". If this narrative contradicts his frequency statistics, that's a read signal.",
+      "Counter-Reading: Balancing Your Actions",
+      "You read the opponent, and the opponent reads you. Counter-reading (Balanced Play) requires your actions not to leak range information: don't bet fast because \"this hand is strong\" or hesitate because \"I'm bluffing\". In heads-up the opponent watches your every rhythm; unconscious \"bet fast with strong, bet slow with weak\" is a classic leak. Pro counter-reading deliberately keeps action rhythm consistent, or masks with mixed frequencies.",
+      "Example: Online HU, the opponent thought 20 seconds before calling your turn bet. Frequency read: long think = a hard decision, possibly a marginal hand (station trait) or a draw. But with insufficient samples it could be acting. The right approach is cross-verification: his tendency to call big bets, his river showdown choices — judge comprehensively rather than relying on one rhythm alone.",
+      "Example 2 (counter-reading): You hold AA and watch your rhythm when betting the flop. If you bet instantly because \"I have a strong hand\" and hesitate because \"I'm bluffing\", the opponent will quickly crack you. Counter-reading drill: set the same think time for all your bets, or deliberately break rhythm at key moments (hesitate with strong, be decisive with bluffs).",
+      "Example 3 (narrative consistency): The opponent bets the flop, bets the turn, checks the river. Narrative: strength on flop/turn, giving up on the river. If he checks the river but the sizes are odd (big on the flop, small on the river), combined with his frequencies it may be \"thin value\" rather than \"giving up\". Reads must combine \"action sequences\" with \"frequency statistics\" — a single action doesn't count.",
+      "Counterintuitive point: the enemy of reads isn't \"reading wrong\" but \"overconfidence\". HU pros admit \"this read is only 60% sure\" and bet accordingly, rather than \"I know what he has\". Converting reads into probabilities rather than certainties is the sustainable strategy.",
+      "Read discipline: (1) only conclude from statistically significant frequencies (50+ hand samples); (2) cross-verify action narrative with frequency; (3) admit read uncertainty and fold it into equity and pot-odds calculations. After these three, reads go from mysticism to math."
+    ]
+  },
+  "quiz": {
+    "t8hu-pressure-q1": {
+      "question": "Losing multiple 60%-equity all-ins in a row in heads-up is mainly because:",
+      "options": [
+        "Extremely bad luck",
+        "Mathematical necessity under high-frequency confrontation (0.4^N streaks appear often)",
+        "Poor play",
+        "Opponent cheating"
+      ],
+      "explanation": "0.45^8 ≈ 0.17% losing streaks are rare per event, but HU has 200+ hands/hour with 55%-60% all-ins recurring — losing streaks are steadily present background noise."
+    },
+    "t8hu-pressure-q2": {
+      "question": "The core meaning of separating \"process vs result\" is:",
+      "options": [
+        "Only winning counts as playing right",
+        "Review only whether decision EV was correct, never change play because of results",
+        "Adjust strategy after losses",
+        "Process doesn't matter"
+      ],
+      "explanation": "A shove of AK vs 55 is +EV even when it loses. Review process (EV) rather than results (win/loss) to maintain long-term quality."
+    },
+    "t8hu-pressure-q3": {
+      "question": "Tilt's most typical damage to strategy is:",
+      "options": [
+        "Tightening the range",
+        "Opening looser, calling wider, chasing harder — all deviating from baseline",
+        "Making play more conservative",
+        "No effect"
+      ],
+      "explanation": "Tilt distorts your range: opening too loose, calling too wide, chasing too aggressively — systematically deviating from the equilibrium baseline."
+    },
+    "t8hu-pressure-q4": {
+      "question": "The role of a \"preset variance budget\" in a HU session is:",
+      "options": [
+        "Limiting the maximum you can lose",
+        "Pausing for review at the stop-loss point, avoiding chase-style re-buying",
+        "Guaranteeing every session wins",
+        "Computing expectation"
+      ],
+      "explanation": "A variance budget is stop-loss discipline: pause and review at the preset point, cutting the \"get even\" impulse rather than continuing to chase into tilt."
+    },
+    "t8hu-pressure-q5": {
+      "question": "The correct statement about when tilt occurs is:",
+      "options": [
+        "Only during losing streaks",
+        "Relaxation after winning is equally dangerous",
+        "It never happens",
+        "Only in tournaments"
+      ],
+      "explanation": "After winning, players often relax, play marginal hands, and give the edge back. HU discipline must be consistent throughout — no relaxation in either direction."
+    },
+    "t8hu-reads-q1": {
+      "question": "The most reliable HU read is:",
+      "options": [
+        "Watching a single betting rhythm",
+        "Cross-verifying action narrative with frequency statistics",
+        "Relying entirely on physical tells",
+        "Going with intuition"
+      ],
+      "explanation": "A single action or rhythm has insufficient samples to be reliable. Combining \"whether the action sequence is self-consistent\" with \"50+ hand frequency statistics\" is the reliable read."
+    },
+    "t8hu-reads-q2": {
+      "question": "The core of \"counter-reading (Balanced Play)\" is:",
+      "options": [
+        "Hiding your strong hands",
+        "Making actions not leak range information, keeping rhythm consistent",
+        "Always betting instantly",
+        "Making the opponent unable to guess hand strength"
+      ],
+      "explanation": "Counter-reading requires actions not to leak range: no \"bet fast with strong, bet slow with weak\" — deliberately keep rhythm consistent or break it to avoid being cracked."
+    },
+    "t8hu-reads-q3": {
+      "question": "The correct attitude toward HU reads is treating them as:",
+      "options": [
+        "Certain facts",
+        "A probability (like \"60% sure\") folded into decisions",
+        "Always-correct tools",
+        "Ignorable noise"
+      ],
+      "explanation": "Reads carry uncertainty; pros convert them into probabilities rather than certainties, then fold them into equity and pot-odds calculations — the sustainable strategy."
+    },
+    "t8hu-reads-q4": {
+      "question": "An opponent bets the flop and turn then checks the river. The most likely reading is:",
+      "options": [
+        "He's definitely bluffing",
+        "Combined with frequency and size, it may be thin value or giving up",
+        "He definitely has the nuts",
+        "Unreadable"
+      ],
+      "explanation": "The narrative is \"strength on flop/turn, giving up on the river\", but you must combine the river size and frequency statistics — it may be thin value rather than pure giving up; cross-verify."
+    },
+    "t8hu-reads-q5": {
+      "question": "The classic betting leak is:",
+      "options": [
+        "Betting fast with strong hands and slow with weak hands",
+        "Keeping all bet rhythms consistent",
+        "Using the same think time",
+        "Breaking rhythm deliberately"
+      ],
+      "explanation": "\"Fast with strong, slow with weak\" is the classic leak. Counter-reading keeps rhythm consistent or deliberately breaks it so the opponent can't crack your range strength."
+    }
+  },
+  "chapterObjectives": {
+    "t8hu-pressure": [
+      "Understand variance density and emotional triggers under HU high-frequency play",
+      "Master strategies and self-awareness methods to avoid tilt",
+      "Learn to maintain long-term decision quality by separating \"process vs result\""
+    ],
+    "t8hu-reads": [
+      "Understand the difference and limitations between live physical reads (tells) and online frequency reads",
+      "Master counter-reading (balancing your actions to avoid leaking range)",
+      "Learn to judge opponent intent with \"narrative consistency\", avoiding overfitting"
+    ]
+  }
+}

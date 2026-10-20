@@ -18,7 +18,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import i18n from '@/i18n/config';
-import { preloadI18n } from '@/i18n/preload';
+import { loadAllTheoryContent, preloadI18n } from '@/i18n/preload';
 import SpacedRepetitionPanel from '@/features/progress/components/srs/SpacedRepetitionPanel';
 import ReviewSession from '@/features/progress/components/srs/ReviewSession';
 import { buildTheoryReviewItems } from '../utils/theorySrs';
@@ -56,7 +56,10 @@ async function mount(tree: React.ReactElement) {
 
 beforeAll(async () => {
   // 组件 setup 仅按当前语言（zh）预加载全部模块；en 侧须显式补加载，模拟真实路由的按需注入
-  await preloadI18n(['theory', 'review', 'spacedRepetition', 'dashboard', 'common', 'nav'], 'en');
+  await Promise.all([
+    preloadI18n(['theory', 'review', 'spacedRepetition', 'dashboard', 'common', 'nav'], 'en'),
+    loadAllTheoryContent('en'),
+  ]);
 });
 
 afterEach(() => {

@@ -1,0 +1,227 @@
+{
+  "content": {
+    "t3-position-value": [
+      "What Is Position",
+      "Position refers to your relative order in the betting sequence. A seat that acts last on every postflop round is \"In Position\" (IP); otherwise it's \"Out of Position\" (OOP). The button (BTN) is the only seat that's always in position postflop and has the highest long-term win rate; the blinds (SB/BB) are always OOP and are the only two long-term losing seats — a structural fact confirmed by every tracking database.",
+      "Three Sources of Positional Advantage",
+      "(1) Information advantage: the later actor decides after seeing opponents' actions, gaining one more piece of information each round; (2) pot control: the player in position can choose to call and keep the pot small (Pot Control) or raise to inflate it, which OOP players can't do — checking may get bet, betting may get raised; (3) free cards and equity realization: an in-position draw can check to take a free card, while an OOP draw is often forced to decide at unfavorable prices.",
+      "The essence of positional advantage is \"Equity Realization\": with the same 50% raw equity, in position you can realize 100%+ while OOP you often realize only 80-90%. Position directly discounts or boosts your equity.",
+      "Actual equity = raw equity × realization rate (R)\nIn position (IP): R is typically 100%+; Out of position (OOP): R is typically 80-90%\nExample: same 50% raw equity, IP ≈ 50%×105% = 52.5%, OOP ≈ 50%×85% = 42.5%",
+      "Equity-realization magnitude references (common modern estimates): BTN calling an open ≈ 105-110% (over-realization — not just keeping raw equity but squeezing out a bit more from position); CO ≈ 100-105%; BB defense ≈ 85-92% (last to see a free flop, but OOP postflop); SB flat ≈ 80-88%. Three main factors affect R: (1) position — IP realizes high, OOP low; (2) hand type — nut flush/straight draws realize high, middle and weak pairs low (often driven off by later opponent bets); (3) opponent aggression — the more aggressive the opponent, the more often you're forced to forfeit equity, the lower R. Plugging R into \"actual equity = raw equity × R\" is the quantitative form of position value. (Concepts from: Harrington on Hold'em Vol.1 Ch.5 position and equity discussion)",
+      "Example: holding the same 8♠7♠ facing an opening raise. Calling on the BTN: you act last every postflop round — hit a draw and control the pot to chase, hit a pair and thin-value, miss and steal after seeing the opponent show weakness. Calling in the SB: you act first postflop — checking gets half your weak hands bet off by a C-Bet, and betting exposes your range. Same hand, wildly different EV by position — that's why each position's starting range must differ.",
+      "Example (OOP realization loss): you're in the BB with A♣9♣ calling a BTN open, flop 9♠7♦3♣ (top pair weak kicker). You check and BTN bets 2/3 pot — already painful: if you call and the turn brings Q/K/J, BTN's range is full of Qx/Kx and you'll be forced to fold again. Turn Q♥, he bets again, and you fold a hand \"you would have won on the BTN\". The same hand on the BTN: check or small-bet the flop to control, check the turn for a free card, and no loss if you miss. Being OOP slashes medium-strength realization — the intuitive source of that ~85% R.",
+      "Example (position difference in value betting): river, you hold K♥Q♥ having hit a Q-top-pair (board Q♠8♦4♣2♥9♠). In position: opponent checks → you thin-value bet 1/3 pot, fold safely if raised, capturing the thinnest value; out of position: you check → the opponent may bet, reducing your top pair to a passive \"call or fold\" choice; if you bet, you may get raised and can't get away. Same hand — position demotes it from \"active thin value\" to \"passive bluff-catch\". That's positional value showing directly at the showdown street.",
+      "Position Determines Range Width",
+      "Standard Raise First In (RFI) range widths approximate: UTG tightest (~15% or so), widening as position moves back, reaching 40-50% at the BTN. The logic chain: the later the position → fewer opponents to get through behind + more likely to have position postflop → higher marginal-hand EV → wider range. The range-trainer module's positional ranges are exactly this principle in practice.",
+      "The biggest structural leak of beginners is \"playing the same set of hands from every position\". Playing K9o in UTG burns money; folding K9o on the BTN burns opportunity.",
+      "Dilution of positional advantage: in 3+ way pots, the information value of \"acting last\" drops — you must guess three ranges at once, and pot control is compressed (you can only call/fold when others bet, and raising faces multiway responses). Being IP still beats OOP, but the edge shrinks significantly. So tighten your participation range in multiway pots and don't take heads-up positional advantage for granted.",
+      "A self-check habit: before entering a pot, state your position and whether you'll have position postflop. If OOP postflop, cut your intended entering range down a notch."
+    ],
+    "t3-starting-hands": [
+      "The Value Dimensions of Starting Hands",
+      "Starting-hand value comes from four dimensions: (1) high-card strength — AK-type hands that win with a pair; (2) pairing potential — pocket pairs that win big pots with sets; (3) connectivity — connected cards that make straights; (4) suitedness — suited cards that make flushes. What truly decides entry isn't \"does this hand look good\", but its EV in the current position, stack depth, and opponent structure.",
+      "Hand strength roughly splits into three classes: made-hand types (big pairs/big high cards, prefer small heads-up pots), speculative types (small pairs/suited connectors, prefer cheap multiway deep-stack entry), and garbage (neither high-card strength nor potential). The same hand can move between classes at different stack depths.",
+      "Starting-hand EV tiers (illustrative magnitudes for 100bb cash, unopened pot): Tier 1 \"auto-enter\" — AA, KK, QQ, JJ, AK-type, +0.6~+1.5bb per hand; Tier 2 \"situational enter\" — TT-77, AQ, KQs, etc., EV depends on position and opponents; Tier 3 \"conditional speculation\" — small pairs, suited connectors, positive when entering cheap deep, negative shallow or expensive; Tier 4 \"negative EV\" — dominated hands like K9o, Q8s, losing to open from any position (except special steal spots). Replace the \"pretty/ugly\" binary with \"this hand's EV tier in this position, stack, and opponent context\". (Concepts from: Harrington on Hold'em Vol.1 Ch.5 starting-hand groupings)",
+      "Recomputable version (set-mining with 77; probability and odds follow the T2 implied-odds chapter):\nYou call C to see a flop. Chance of hitting a set: p = 1 − C(47,2)/C(50,2) = 1 − 1081/1225 ≈ 11.8% (about 12%, i.e. 1-in-8.5, odds of roughly 7.5:1).\nEV = p × W − (1 − p) × C, where W = your total net win on the hand you hit (including dead money already in the pot, excluding the C you invested). EV ≥ 0 ⇒ W ≥ ((1−p)/p) × C ≈ 7.5 C — about 8.5× your call back in total to break even.\nPlug in the tuition: 200bb effective, 3bb call ⇒ you need a net win of 7.5×3 = 22.5bb to break even; dead money already in the pot (blinds plus the opener's 3bb, 4.5bb total) covers 4.5bb of it, so you only need the opponent to pay another 18bb on average when you hit (about 9% of his remaining 197bb) — a hurdle he clears easily ⇒ EV > 0. 25bb effective, 3bb call ⇒ at most 22bb remains behind him, and you must collect about 18bb of it (82%) just to touch the line; add the discount for \"hitting does not guarantee getting paid\" (T2's 15-20× rule of thumb) ⇒ EV < 0.\nCore: the value of a speculative hand is a function of depth ÷ tuition, not of the cards themselves — this is the maths behind the same 77 sliding across the four tiers as stack depth changes.",
+      "Gap Concept",
+      "David Sklansky's Gap Concept: the hand strength needed to call someone's opening raise is higher than what you need to open-raise yourself. Two reasons: (1) the raiser has already shown strength — you face a stronger range; (2) opening carries Fold Equity (opponents may fold and you win the blinds), while calling doesn't — you lose one winning path.",
+      "Example: A9o can open-raise from the CO (has Fold Equity + position), but after a UTG open you should fold the same A9o in the CO — A9o is severely dominated vs the UTG range (mostly AQ/AK/big pairs): hitting an A can even lose big money, which is reverse implied odds (T2) manifesting preflop.",
+      "Gap Concept's modern theoretical basis (why calling a raise needs stronger hands): (1) range filtering — the raiser's range has already removed its weakest part, so you face an upgraded strength distribution; (2) equity-realization loss — a passive caller has no postflop initiative and may be driven off by later bets, realizing less with the same strength than the aggressor (linking to this chapter's position theory); (3) reverse implied odds — calling with marginal hands builds yourself a \"win small, lose big\" structure. Modern solvers show the Gap's size flexes with position and stacks, but the direction always holds: facing shown strength, your entry bar must move up. (Concepts from: The Theory of Poker Ch.2-3; Harrington on Hold'em Vol.1 Ch.5)",
+      "Example (preflop tiering): BTN opens 2.5bb, you're in the SB. The 3-bet range splits into two piles: the value pile QQ+, AKs/AKo (~2.5%, ahead of BTN's calling range); the bluff pile A5s, KQs-type (~4%, choosing combos with A or K blockers so BTN struggles to re-raise with AA/KK or call with Ax). The calling pile is JJ-22, AQs, 87s, etc. (speculative, relying on implied odds). This is Gap logic applied preflop: against BTN's wide open, you both re-raise harder and give every bluff 3-bet a blocking rationale.",
+      "Example (stack depth changes tiering): shallow 25bb — speculative tier (55, 76s) EV collapses: no depth to cash in sets and straights, and postflop often forced all-in without pot control; made-hand tier (big pairs, AQ+) rises, showdown value dominates. Deep 200bb — roles reverse: speculative tier's value doubles, marginal suited connectors upgrade from \"fold\" to \"call\". Same 77: at 25bb vs a 3bb open it's 3-bet-or-fold; at 200bb it's an easy call to mine a set. Stack depth is the second variable in starting-hand tiering.",
+      "Active vs Passive Entry",
+      "Modern preflop theory's consensus: when first into an unopened pot, raise rather than limp. Raising keeps Fold Equity, builds initiative, and avoids multiway equity dilution. The problem with limping is it only has one winning path (making a hand) and announces to everyone \"my hand isn't worth raising\". The same logic applies to 3-betting: against an open, a \"3-bet or fold\" structure usually beats wide flat-calling (except BB defense, since you've posted a blind and closed the action).",
+      "Modern revision of the Gap Concept: as position and stack depth change, the \"gap\" size flexes — BTN can 3-bet/call very wide vs a CO open, while UTG+1 must be extremely tight vs a UTG open. The principle stands: facing shown strength, your bar must move up.",
+      "The \"pretty hand\" trap: QQ is a pretty hand, but in a 4Bet-then-5Bet shove spot against a Nit who only 5Bets AA/KK, QQ is a -EV \"bad hand\". Starting-hand value isn't an absolute label — it's the joint result of current position, stack depth, and opponent range. Tiered thinking requires repricing every hand in every context.",
+      "To judge whether a hand can call an open, don't ask \"how pretty is it\", ask three questions: Am I dominated? Do I have position? Are stacks deep enough to cash in the potential? Fold if two answers are \"no\"."
+    ],
+    "t3-fundamental-theorem": [
+      "The Fundamental Theorem of Poker",
+      "David Sklansky's Fundamental Theorem of Poker (The Theory of Poker): every time an opponent plays differently from \"how he would play if he could see your hole cards\", you profit; every time you play differently from \"how you would play if you could see the opponent's hole cards\", the opponent profits.",
+      "Poker's profit doesn't come from good cards but from opponent errors — your whole strategy (bets, sizing, bluffs, slowplay) essentially creates situations where opponents are more likely to err.",
+      "The theorem's quantitative form: your profit = Σ expected money from each opponent decision error\nProfit = opponent error probability × EV each error gives up on average\nExample: river value bet 50, opponent calls with a beaten hand 30% → profit = 0.30 × 50 = +15\nExploitation direction: opponent calls too much → increase value-bet sizing; folds too much → increase bluff frequency",
+      "Example: you flat-call preflop with AA and the opponent sees a free flop with T9o and flops two pair. The opponent seeing the flop with T9o was an error (he'd fold if he knew you had AA), but your limp turned that error into a free or even correct play — you fixed the opponent's error for him. That's the mathematical explanation for why \"over-slowplaying\" violates the theorem.",
+      "Example (value-bet direction): river, you hold the nut flush, pot 100. By the theorem, the opponent holding JJ (which you beat) should fold if he could see your cards; but he can't, and calls your 50 bet — the opponent is making a \"call too much\" error, exactly your value bet's profit source. Zoom out: every time your strong hand gets called by a weak hand, the opponent is donating via an error, and your job is to keep creating those spots.",
+      "Example (bluff direction): river, you hold unpaired A♠K♠ on board 8♦6♦4♣3♥2♣, pot 100, you shove 80. If the opponent could see your cards he should call with any pair (you're only high cards); but he can't, and you estimate 70% fold — the opponent is making a \"fold too much\" error, and your bluff profits. The two opposite examples show: identifying which direction the opponent deviates from the theorem decides whether you value-bet more or bluff more (the starting point of T7 exploitation).",
+      "The Two Forms of Errors",
+      "Opponent errors split into two classes: calling too much (paying too much against your value bets) and folding too much (folding too much against your bluffs). No opponent can avoid erring in both directions simultaneously — if he calls a lot, value-bet more and bluff less; if he folds a lot, bluff more and thin your value. Identifying which direction an opponent errs is the entire starting point of exploitative strategy (T7, T9).",
+      "Initiative",
+      "Initiative is the narrative right gained by the last preflop raiser: postflop he can bet first representing the strongest range (Continuation Bet), forcing opponents to decide first without information. Initiative is a kind of \"structural bluff license\" — on the same flop, a bet with initiative carries far more credibility than one without. This is also the deeper reason Gap Concept favors raising over calling: a raise buys not just the current pot but the initiative on every subsequent street.",
+      "Note: the Fundamental Theorem has exceptions in multiway pots (one player's \"correct\" call can hurt both you and a third party), so its strictest application is heads-up pots. This is also an important lesson in theory study — every theorem has an applicability boundary.",
+      "Results-oriented bias: getting called and losing on a shove ≠ wrong decision; the opponent folding and you winning ≠ right decision. The theorem's unit of measurement is \"is the decision correct\", not \"did this hand win\". A single hand's win/loss is variance performing; the theorem's profit comes from accumulating repeated correct decisions long-term — judge the decision first in review, then talk about results (the core claim of Thinking in Bets, detailed in T8).",
+      "Before every action, silently ask: \"if the opponent could see my cards, would he want me to do this?\" If the answer is \"yes\", you're probably making an error."
+    ]
+  },
+  "quiz": {
+    "t3-position-value-q1": {
+      "question": "Which seat has the highest long-term win rate at the table?",
+      "options": [
+        "UTG",
+        "CO",
+        "BTN",
+        "BB"
+      ],
+      "explanation": "BTN is the only seat always last to act postflop, maximizing information and pot-control advantage — the highest win rate in all tracking-database statistics."
+    },
+    "t3-position-value-q2": {
+      "question": "\"Equity Realization\" describes:",
+      "options": [
+        "The starting hand's raw equity",
+        "The share of raw equity actually converted into win rate",
+        "The inverse of pot odds",
+        "The opponent's fold frequency"
+      ],
+      "explanation": "With the same raw equity, in position realizes a higher share (even over-realizing), while OOP is forced to give up part of the equity under unfavorable conditions."
+    },
+    "t3-position-value-q3": {
+      "question": "Why can BTN's opening range be far wider than UTG's?",
+      "options": [
+        "BTN's cards are inherently better",
+        "Fewer opponents behind and position postflop — marginal hands have higher EV",
+        "BTN's blind cost is lower",
+        "Just tradition, no mathematical basis"
+      ],
+      "explanation": "Range width is set by EV: BTN only needs to get through two blinds and always has position postflop, turning many marginal hands from -EV to +EV."
+    },
+    "t3-position-value-q4": {
+      "question": "Which of the following is NOT a source of positional advantage?",
+      "options": [
+        "Information advantage of acting later",
+        "Pot-size control",
+        "The ability to take free cards",
+        "Better starting-hand quality"
+      ],
+      "explanation": "Dealing is random; position doesn't change the cards you get, only how much value the same cards can realize."
+    },
+    "t3-position-value-q5": {
+      "question": "Holding Q♥J♥, calling an open on the BTN vs calling in the SB. Which statement is correct?",
+      "options": [
+        "Both have identical EV because the hand is the same",
+        "The SB call has lower equity realization — OOP and pressured postflop, prone to forfeiting equity",
+        "On the BTN you can take free cards without paying anything",
+        "The SB's blind discount actually raises realization"
+      ],
+      "explanation": "Position determines equity realization: IP QJs can control the pot and chase, still partially realizing under pressure; OOP QJs is often forced to fold, discounting R. Option A ignores position, the biggest realization variable; C makes free cards sound unconditional; D's \"blind discount\" is unrelated to postflop realization."
+    },
+    "t3-starting-hands-q1": {
+      "question": "The core of the Gap Concept is:",
+      "options": [
+        "Adjacent positions have a fixed 5% range gap",
+        "Calling an open requires stronger hands than opening yourself",
+        "The smaller the gap between connectors, the better",
+        "Preflop and postflop strategies must differ"
+      ],
+      "explanation": "The raiser has shown strength and you've lost the Fold Equity winning path, so your calling bar must exceed your opening bar."
+    },
+    "t3-starting-hands-q2": {
+      "question": "Why is raising recommended over limping when first into the pot?",
+      "options": [
+        "Raising looks more imposing",
+        "Raising keeps Fold Equity and initiative; limping only has the made-hand winning path",
+        "Limping is against the rules",
+        "Raising lets you see more community cards"
+      ],
+      "explanation": "Raising can win the blinds outright, builds initiative, and avoids multiway equity dilution; limping gives up these structural advantages."
+    },
+    "t3-starting-hands-q3": {
+      "question": "After a UTG open, you hold A9o in the CO. The theoretically best action is usually:",
+      "options": [
+        "Fold",
+        "Call",
+        "Small 3-bet probe",
+        "All-in"
+      ],
+      "explanation": "A9o is severely dominated by AQ/AK/Ax with big kickers in UTG's strong range — hitting an A can even lose big (reverse implied odds). Standard play is fold."
+    },
+    "t3-starting-hands-q4": {
+      "question": "What environment do small pocket pairs (like 44) prefer for entering?",
+      "options": [
+        "Shallow stacks, heads-up, high preflop investment",
+        "Deep stacks, cheap entry, collecting after flopping a set",
+        "Any environment is the same",
+        "Only seeing the flop free in the BB"
+      ],
+      "explanation": "Small pairs are speculative: the outcome hinges almost entirely on the ~12% set probability, needing deep stacks for implied odds and cheap entry to control cost."
+    },
+    "t3-starting-hands-q5": {
+      "question": "In the spot \"UTG opens, you're in the CO\", which hand usually belongs to the 3-bet range's \"value 3-bet\"?",
+      "options": [
+        "55",
+        "A9s",
+        "AK",
+        "76s"
+      ],
+      "explanation": "Against an open, AK/QQ+ are value 3-bets (ahead of the opponent's calling range and folding his dominated hands); 55, 76s are speculative calls (deep-stack implied odds), A9s marginal. The preflop value/speculative tiering is exactly Gap logic in action."
+    },
+    "t3-fundamental-theorem-q1": {
+      "question": "The Fundamental Theorem states your profit comes from:",
+      "options": [
+        "Getting better cards than opponents",
+        "Opponents playing differently from \"how they'd play seeing your cards\"",
+        "Bluffing as often as possible",
+        "Only playing the strongest starting hands"
+      ],
+      "explanation": "Poker's profit is fundamentally opponent decision errors. Card strength equalizes long-term; poor decision quality is the profit source."
+    },
+    "t3-fundamental-theorem-q2": {
+      "question": "Limping preflop with AA lets the opponent see a free flop. From the theorem's view, the problem is:",
+      "options": [
+        "You exposed your hand strength",
+        "You fixed the error the opponent should have made (paying to enter)",
+        "The pot became too big",
+        "No problem — slowplay is an advanced skill"
+      ],
+      "explanation": "The opponent's weak hand should have paid to enter (erred); your limp lets him realize equity free, returning profit to the opponent."
+    },
+    "t3-fundamental-theorem-q3": {
+      "question": "Opponent errors can only take two directions:",
+      "options": [
+        "Betting too big or too small",
+        "Calling too much or folding too much",
+        "Playing too fast or too slow",
+        "Playing too tight or sitting in the wrong seat"
+      ],
+      "explanation": "Facing a bet there are only call/fold directions — impossible to \"call too much\" and \"fold too much\" simultaneously. Identifying the direction finds the exploitation entry."
+    },
+    "t3-fundamental-theorem-q4": {
+      "question": "The \"initiative\" gained by the last preflop raiser means:",
+      "options": [
+        "You must bet every postflop street",
+        "You can bet first representing the strongest range, forcing opponents to decide first",
+        "You can see opponents' hole cards",
+        "You act first next hand"
+      ],
+      "explanation": "Initiative is narrative right: the raiser's range \"should\" contain the strongest hands, so postflop continuation bets carry built-in credibility. It doesn't mean you must bet."
+    },
+    "t3-fundamental-theorem-q5": {
+      "question": "River, you hold unpaired A♠K♠, the opponent checks, and you bluff-shove into a 100 pot. By the theorem, the correct understanding is:",
+      "options": [
+        "If the opponent could see your cards and correctly call any pair, your bluff is still long-term profitable",
+        "The opponent's fold itself is the profit source — he's making a \"fold too much\" error",
+        "This decision has no EV because there's no showdown yet",
+        "Bluff success depends on your image, unrelated to the theorem"
+      ],
+      "explanation": "Theorem view: if he could see your cards he'd call your high-card bluff with a pair — he can't, and folds, making a \"fold too much\" error you profit from. That's the source of bluff value. Option A is reversed (correct play kills the bluff); C ignores that bluffs have a clear EV structure; D substitutes image for the theorem's mechanism."
+    }
+  },
+  "chapterObjectives": {
+    "t3-position-value": [
+      "State how to tell whether you are in position or out of it, and name the two seats that lose money over the long run",
+      "Break the positional edge into information, pot control and equity realization, pairing each with one postflop scenario",
+      "Using realized equity as raw equity times a realization rate, judge how the EV of one hand moves when position changes",
+      "Explain why opening ranges widen in later position, and how a multiway pot dilutes that advantage"
+    ],
+    "t3-starting-hands": [
+      "List the four value dimensions of high card strength, pairing potential, connectivity and suitedness, and classify a hand with them",
+      "Sort a hand into premium, speculative or junk, and explain how stack depth moves it between tiers",
+      "State the Gap Concept and explain it through range filtering, equity realization loss and reverse implied odds",
+      "Decide whether to raise or flat-call first into the pot, and sort a marginal hand into 3-bet, call or fold"
+    ],
+    "t3-fundamental-theorem": [
+      "Restate the fundamental theorem of poker, and show that profit comes from errors in opponent decisions rather than from the result of one hand",
+      "Multiply the probability an opponent errs by the amount given up each time to estimate the expected profit of a line",
+      "Judge whether an opponent deviates by calling too much or folding too much, and shift value and bluff emphasis accordingly",
+      "Explain why the initiative grants a structural license to bluff, and where the theorem stops working in multiway pots"
+    ]
+  }
+}

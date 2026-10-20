@@ -5,7 +5,13 @@
 
 import { describe, expect, it } from 'vitest';
 import i18n from './config';
-import { preloadI18n, switchLanguage, loadAcademyCourses } from './preload';
+import {
+  isTheoryContentLoaded,
+  loadAcademyCourses,
+  loadTheoryContentForChapters,
+  preloadI18n,
+  switchLanguage,
+} from './preload';
 import {
   ALL_MODULES,
   CORE_MODULES,
@@ -143,6 +149,56 @@ describe('switchLanguage 预加载', () => {
     await switchLanguage('en');
     expect(i18n.language).toBe('en');
     expect(i18n.t('rangeTrainer.title')).not.toBe('rangeTrainer.title');
+  });
+});
+
+describe('theory 内容包按 level 懒加载', () => {
+  it('核心包不含正文；按章节加载后注入 content/quiz/objectives', async () => {
+    await preloadI18n(['theory'], 'zh');
+    expect(i18n.t('theory.title')).not.toBe('theory.title');
+    expect(
+      i18n.getResource('zh', 'translation', 'theory.content.t1-combinatorics.0'),
+    ).toBeUndefined();
+    expect(isTheoryContentLoaded(['t1-combinatorics'], 'zh')).toBe(false);
+
+    await loadTheoryContentForChapters(['t1-combinatorics'], 'zh');
+
+    expect(
+      i18n.getResource('zh', 'translation', 'theory.content.t1-combinatorics.0'),
+    ).toBeTruthy();
+    expect(
+      i18n.getResource('zh', 'translation', 'theory.quiz.t1-combinatorics-q1.question'),
+    ).toBeTruthy();
+    expect(
+      i18n.getResource('zh', 'translation', 'theory.chapterObjectives.t1-combinatorics.0'),
+    ).toBeTruthy();
+    // quiz 下的 UI 文案仍由核心包提供，拆分后不得丢失
+    expect(i18n.getResource('zh', 'translation', 'theory.quiz.correct')).toBeTruthy();
+    expect(isTheoryContentLoaded(['t1-combinatorics'], 'zh')).toBe(true);
+  });
+
+  it('同 level 并发/重复加载幂等，不重复注入', async () => {
+    await Promise.all([
+      loadTheoryContentForChapters(['t3-position-value'], 'zh'),
+      loadTheoryContentForChapters(['t3-fundamental-theorem'], 'zh'),
+    ]);
+    await loadTheoryContentForChapters(['t3-position-value'], 'zh');
+    expect(isTheoryContentLoaded(['t3-position-value'], 'zh')).toBe(true);
+    expect(
+      i18n.getResource('zh', 'translation', 'theory.content.t3-position-value.0'),
+    ).toBeTruthy();
+  });
+
+  it('语言切换按已访问 level 补加载目标语言内容', async () => {
+    await loadTheoryContentForChapters(['t2-ev'], 'zh');
+    expect(isTheoryContentLoaded(['t2-ev'], 'en')).toBe(false);
+
+    await i18n.changeLanguage('en');
+    const enContent = await waitForResource('en', 'theory.content.t2-ev.0');
+    expect(enContent).toBeTruthy();
+    expect(isTheoryContentLoaded(['t2-ev'], 'en')).toBe(true);
+
+    await i18n.changeLanguage('zh');
   });
 });
 

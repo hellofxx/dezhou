@@ -1,0 +1,144 @@
+{
+  "content": {
+    "t6hu-sizing-optimal": [
+      "Sizing: The First Knob of Betting Engineering",
+      "Bet sizing is one of the most important postflop decisions in heads-up. It simultaneously conveys three signals: hand strength (big value vs bluff), range structure (polarized vs linear), and pot-control intent (small keeps the opponent, big contests the pot). The core logic of HU sizing is \"small bets control, big bets polarize\" — similar to full ring but more extreme: because the opponent's range is wide and decisions dense, both the pot-control value of small bets and the polarization value of overbets are amplified.",
+      "Sizing doesn't decide whether you \"have value\" but \"how you realize value\". A straight-flush nuts can overbet-shove to drain the opponent, while top pair weak kicker can only thin-value bet 1/3 pot — choosing the wrong size means choosing the wrong realization method.",
+      "How the Value:Bluff Ratio Changes With Size",
+      "Bet-size value:bluff ratio (pot P, bet bP):\n\nBluff share f = b/(1+2b)\n\nExamples:\n1/3 pot b≈0.33 → f = 0.33/1.66 ≈ 20% (value:bluff = 4:1)\nHalf pot b=0.5 → f = 0.25 (3:1)\nFull pot b=1 → f = 1/3 (2:1)\n2× pot b=2 → f = 0.4 (3:2)\n\nConclusion: the bigger the size, the more bluffs it can carry — the mathematical root of \"big bet = polarization\". (Concept from: Modern Poker Theory, Michael Acevedo Ch.2-3 GTO betting structure)",
+      "Practical HU sizing preferences: dry high boards use high-frequency 1/3-pot small bets (the opponent's wide range rarely hits; a small bet makes him fold or prices marginal hands); wet connected boards use 2/3+ pot bets or overbets (protect equity, polarize). And the HU flop usually leans small (1/3 pot) — because the pot is small, the opponent wide, and your range-advantage large, so a small bet already realizes thin value and steals pots.",
+      "Example: HU flop K♠7♦2♣ (dry), SB min-raises, BB calls, pot 4BB. SB holds A♠K♣ (top pair top kicker). The board is dry and the BB's range rarely has a K, so the SB bets small at 1/3 pot (about 1.3BB): the top-pair K's thin value gets weak hands in the wide range to pay, while not giving the BB's junk a free card. With a full-pot bet the BB only continues with stronger Ks or sets, wasting the K's thin value.",
+      "Example 2 (SPR-planned all-in): HU 100BB deep, preflop SB raises 2.5BB, BB calls, pot 5BB, SPR = 97.5/5 ≈ 19.5. Flop 9♠8♥4♣, SB holds 6♠5♠ (straight draw). At high SPR the SB bets big (about 2/3 pot, 3.3BB) to build the pot — paving the way for a turn/river all-in: pot 11.7BB → turn bet 7.8BB → pot 27.2BB → river shove the remaining 86BB, chips go in naturally. With a 1/3-pot flop bet the pot grows too slowly and the deep stack can't complete an all-in on the river.",
+      "Example 3 (small-bet pot control): Same 9♠8♥4♣ board, the SB holds J♣T♣ (top pair + straight draw, but easily outdrawn). Medium strength doesn't seek to play for all the chips; the SB bets small at 1/3 pot to control pot size, avoiding getting raised by the BB's strong hands into a big pot. A small bet is both \"making weak hands pay\" and \"controlling risk exposure\".",
+      "Counterintuitive point: in heads-up a small bet isn't \"weakness\" but \"precision\" — high-frequency 1/3-pot small bets on dry boards are GTO normal because they maximize the thin-value/steal ratio. The full-ring intuition \"bets must be big to threaten\" becomes wastefulness against wide HU ranges.",
+      "Sizing quick check: (1) call SPR — low SPR plays for stacks, high SPR needs multi-street planning; (2) read the board — dry high boards small bets at high frequency, wet low boards big bets for protection; (3) grade the hand — nuts overbet, top pair small, draws medium. Three steps and your sizing has structure, not feel."
+    ],
+    "t6hu-barrel": [
+      "Multi-Street Betting: One Decision, Three Streets to Reel In",
+      "HU postflop isn't just \"bet or not on this street\" but \"how this hand gets reeled in across three streets\". After a flop bet, whether the turn/river keep barreling or check depends on: your hand-strength tier, how the opponent's range narrows each street, and how the pot grows geometrically each street. A well-designed betting line lets strong hands extract the whole way and bluffs reel in at the right moment.",
+      "The golden rule of multi-street betting: value hands can fire three barrels, semi-bluffs close on the turn, pure bluffs close on the river. But re-evaluate every street — when the turn/river completes the opponent's draw (the board changes hands), your firing frequency must drop accordingly.",
+      "The Mathematical Structure of the Triple Barrel",
+      "HU flop betting-line pot geometry (starting pot P):\n\nTriple-barrel plan (2/3 pot each street):\nflop 2/3P → turn 2/3 × new pot → river 2/3 × new pot\n\nWith P=5BB:\nflop bet 3.3BB, pot → 11.7BB\nturn bet 7.8BB, pot → 27.2BB\nriver bet 18.1BB, pot → 63.5BB\n\nTo shove 97.5BB on the river, the pot must grow geometrically at about 2/3 pot from the flop — a 1/3-pot small bet can't do it. (Concept from: Applications of No-Limit Hold'em, Matthew Janda Ch.9 street-by-street pot management and sizing)",
+      "But a triple barrel isn't mindless betting every street. The three-street firing combination depends on board evolution: relatively dry high boards (like K♠7♦J♣→6♥→9♣) where the opponent's range rarely hits allow high-frequency triple barrels representing strength; wet connected boards (like 9♠8♥4♣→7♦→6♣) easily complete straights/flushes, so beware the turn/river board change and cut firing frequency sharply.",
+      "Example: HU flop K♠7♦2♣, SB bets 1/3 pot with A♠A♣, BB calls (pot 8BB). Turn 5♥ blank, AA still ahead, SB bets half pot 4BB, BB calls (pot 16BB). River 9♣ blank, SB bets 2/3 pot about 10.7BB for value. AA fires all three streets — because the board stays dry, AA's lead holds completely and value is maximized.",
+      "Example 2 (board change): Same SB with A♠A♣ bets the 9♠8♥4♣ flop, BB calls. Turn 7♦ — completes JT, T6, and 65 straights. AA's lead weakens: the BB's wide defense range contains plenty of straight combos. The SB should lower turn betting frequency (mixing checks) because continuing only gets called or raised by stronger hands. AA goes from \"three streets of value\" to \"two streets of value + one street of control\".",
+      "Example 3 (semi-bluff closes on the turn): Flop 8♠6♣2♦, SB bets 1/3 pot with 7♦5♦ (open-ended straight), BB calls. Turn A♠ (blocker + board dries). 75s missed the straight. The turn continues with a half-pot bet representing an A — if BB folds, the SB closes on the turn with a \"near-nut draw\". This is the standard semi-bluff path: bet a draw on the flop, convert to a pure bluff on a favorable turn and take the pot.",
+      "Counterintuitive point: the turn/river \"board change\" matters more than your hand strength. AA is three streets of value on a dry board and two on a wet board — not because AA got weaker, but because the combos in the opponent's range that beat it multiplied. Firing frequency must follow \"how the opponent's range is improved by new cards\", not your own hand.",
+      "Betting-line planning three questions: (1) whose draw does this board improve? (2) how many more streets can the pot sustain? (SPR and the all-in plan) (3) after a call, what's left in the opponent's range? After three questions, your triple barrel goes from \"habit\" to \"plan\"."
+    ]
+  },
+  "quiz": {
+    "t6hu-sizing-optimal-q1": {
+      "question": "As bet size increases, the equilibrium bluff share:",
+      "options": [
+        "Decreases",
+        "Increases",
+        "Stays the same",
+        "Is random"
+      ],
+      "explanation": "f = b/(1+2b) rises monotonically with b: full pot bluffs 33%, 2× pot 40%. The bigger the size, the worse the opponent's calling price, allowing higher bluff density."
+    },
+    "t6hu-sizing-optimal-q2": {
+      "question": "On a dry high board (like K♠7♦2♣), the optimal sizing tendency for top pair is:",
+      "options": [
+        "Full-pot big bet for pressure",
+        "1/3-pot small thin-value bet, avoiding a wide range only continuing with strong hands",
+        "Check",
+        "Overbet shove"
+      ],
+      "explanation": "The opponent rarely hits a dry board; a small bet already realizes thin value from weak hands and controls the pot. A big bet only leaves the BB with stronger hands, wasting the K's thin value."
+    },
+    "t6hu-sizing-optimal-q3": {
+      "question": "At SPR ≈ 19.5 (deep stacks) with a strong draw on the flop, the correct sizing strategy is:",
+      "options": [
+        "Small bets for pot control",
+        "Big bets to build the pot, paving the way for a turn/river all-in",
+        "Check",
+        "Shove directly"
+      ],
+      "explanation": "At high SPR the pot must grow geometrically with big bets to complete an all-in on the river. Small bets grow the pot too slowly to get a deep stack in."
+    },
+    "t6hu-sizing-optimal-q4": {
+      "question": "Medium-strength hands (like top pair with a straight draw) tend toward:",
+      "options": [
+        "Overbet polarization",
+        "Small bets for pot control, limiting risk exposure",
+        "Full-pot big bets",
+        "Always checking"
+      ],
+      "explanation": "Medium hands don't seek to play for stacks; a small bet both realizes thin value and controls the risk of being raised. Overbets/full pots drag medium hands into awkward big pots."
+    },
+    "t6hu-sizing-optimal-q5": {
+      "question": "The equilibrium bluff share of a half-pot bet is about:",
+      "options": [
+        "20%",
+        "25%",
+        "33%",
+        "40%"
+      ],
+      "explanation": "f = 0.5/(1+1) = 0.25, value:bluff = 3:1. 33% is full pot, 20% is 1/3 pot, and 40% is 2× pot."
+    },
+    "t6hu-barrel-q1": {
+      "question": "On a dry high board (like K♠7♦2♣→5♥→9♣), the correct betting line for top pair is:",
+      "options": [
+        "Bet only the flop",
+        "High-frequency triple barrel, because the opponent's range rarely hits and the board stays dry",
+        "Check everything",
+        "Big bets on both turn and river"
+      ],
+      "explanation": "On a dry board the opponent rarely hits and the board never improves draws — top pair keeps its full lead and a triple barrel collects all the value."
+    },
+    "t6hu-barrel-q2": {
+      "question": "On a wet connected board (9♠8♥4♣→7♦→6♣), the correct turn/river firing frequency is:",
+      "options": [
+        "Keep high-frequency barreling",
+        "Cut sharply, because the board changes hands and the opponent's straight combos multiply",
+        "Must fire the turn, must fold the river",
+        "Random"
+      ],
+      "explanation": "Wet boards easily complete straights/flushes; the turn/river board change weakens made hands like AA, so firing frequency must drop accordingly."
+    },
+    "t6hu-barrel-q3": {
+      "question": "Pot 5BB, high SPR. To shove all the chips by the river, the flop size should be:",
+      "options": [
+        "1/3-pot small bet",
+        "About 2/3 pot to grow the pot geometrically",
+        "Check",
+        "Overbet shove"
+      ],
+      "explanation": "High SPR needs about 2/3 pot to grow the pot geometrically street by street and complete the all-in on the river; 1/3 pot grows too slowly to get a deep stack in."
+    },
+    "t6hu-barrel-q4": {
+      "question": "AA bet the 9♠8♥4♣ flop; the turn brings 7♦. The correct adjustment is:",
+      "options": [
+        "Keep shoving for pressure",
+        "Lower turn betting frequency, because the opponent's range was improved by the new card",
+        "Only bet the river",
+        "Fold completely"
+      ],
+      "explanation": "7♦ completes JT, T6, 65, and other straights; the BB's wide range holds plenty of straight combos, weakening AA's lead — pot control rather than continuing to fire."
+    },
+    "t6hu-barrel-q5": {
+      "question": "\"Semi-bluff closes on the turn\" means:",
+      "options": [
+        "Bet a draw on the flop, and on a favorable turn convert to a pure bluff to take the pot",
+        "Always fold the turn",
+        "Shove directly on the flop",
+        "Only bluff the river"
+      ],
+      "explanation": "A semi-bluff bets the flop with a draw; when the turn misses but the card is favorable (like an A blocker), it converts to a pure bluff so the opponent folds and you win the pot directly."
+    }
+  },
+  "chapterObjectives": {
+    "t6hu-sizing-optimal": [
+      "Understand the three sizing factors: hand-strength tier, range advantage, and pot geometry (SPR)",
+      "Master the HU sizing logic of \"small bets control, big bets polarize\" and how the value:bluff ratio changes with size",
+      "Learn to choose flop/turn sizes by stack depth (SPR) and plan the river shove"
+    ],
+    "t6hu-barrel": [
+      "Understand HU multi-street barreling coordination: flop/turn/river size and frequency linkage",
+      "Master triple-barrel conditions and board-change adjustments",
+      "Learn to dynamically allocate per-street bet combos as the opponent's range narrows and the pot grows"
+    ]
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "content": {
+    "t7-stats": [
+      "Why Statistics Matter",
+      "Single-hand impressions are full of noise (the opponent who bluffed you once with 72o isn't necessarily a maniac). Statistics compress large-sample behavior into a stable portrait. The core four metrics established by the online HUD era — VPIP, PFR, AF, WTSD — combine to infer almost a player's entire strategic skeleton. Live, there's no HUD, but the same dimensions can be accumulated manually through observation.",
+      "The Four Core Metrics",
+      "VPIP (Voluntarily Put $ In Pot): share of hands you voluntarily put money in — measures looseness. Table reference: <18% tight, 22-28% standard, >32% loose. PFR (Preflop Raise): preflop raise percentage — measures aggressiveness. The gap between VPIP and PFR is the key signal: a small gap (like 24/20) means raise-when-entering, the hallmark of discipline; a big gap (like 40/8) means lots of passive limping — the fingerprint of a typical fish.",
+      "AF (Aggression Factor) = (bets + raises) ÷ calls, measuring postflop style: <1.5 passive, 2-3 standard aggressive, >4 high-pressure. WTSD (Went To Showdown): share of hands that reached showdown — measures stickiness: >32% signals a calling station (bluffing him = burning money; value bet thin and thick); <22% folds too much (a golden bluff target).",
+      "The fifth key metric, 3-bet%: share of reraises after facing a preflop raise. <2% means he only re-raises super-strong hands (a NIT fingerprint); 3-5% is the standard balanced value; >7% raises often with a polarized range (including many bluff 3-bets). Combining 3-bet with VPIP/PFR distinguishes two superficially similar loose players: \"38/18 + 3-bet 6%\" (loose-aggressive, actively pressures) vs \"38/18 + 3-bet 1%\" (loose but passive, only calls) — without the 3-bet dimension, the counter-plans for these two are completely different. (Concept from: Poker HUDs analysis; Applications of NLHE Ch.7)",
+      "VPIP = hands with voluntary money in ÷ total hands (<18% tight / 22-28% standard / >32% loose)\nPFR = preflop raise hands ÷ total hands; VPIP−PFR gap = passive limp frequency\nAF = (bet count + raise count) ÷ call count; WTSD = showdown hands ÷ flop-seen hands",
+      "Metrics must be read in combination + with sample-size awareness: VPIP/PFR become basically reliable within dozens of hands, while AF/WTSD need hundreds. With insufficient samples, metrics are hypotheses, not conclusions.",
+      "Example: Opponent 45/12, AF 0.8, WTSD 38%. Translation: extremely loose preflop, barely raises, passive postflop, calls everything down — a textbook calling station. The counter-plan auto-generates: value bet down to the river, bigger sizes, stop bluffing entirely, and believe him when he suddenly raises (a passive player's aggression = real strength).",
+      "Example (combined-reading comparison): Player A: VPIP 24, PFR 20, AF 2.8, WTSD 27, 3-bet 6% — VPIP≈PFR means raise-on-entry, high AF postflop aggression, moderate WTSD: a well-trained TAG/LAG, not worth fighting head-on. Player B: VPIP 38, PFR 6, AF 1.2, WTSD 35, 3-bet 1% — lots of limping, passive postflop, shows down everything: a textbook calling station. The \"opponent plans\" for these two are completely opposite, derived from the five-metric combination, not any single number.",
+      "Example (sample-size trap): A certain opponent's first 35 hands show VPIP 38%, PFR 34% — a wild LAG elite. But look closely: in those 35 hands he was dealt QQ+/AK about 5 times in a row — the \"loose-aggressive\" was just an illusion propped up by card luck. Extended to 120 hands, the data settles at a 24/20 TAG truth. If you treat those 35 hands as real and immediately adjust your play, you're making a systematic response to one random fluctuation — the most typical cost of \"treating a small sample as a conclusion\".",
+      "The live \"manual HUD\": count how often the opponent enters a pot per orbit (VPIP), whether entry is a raise or a limp (PFR gap), and postflop whether he bets or calls (AF). Three orbits of observation produce a rough but usable portrait.",
+      "Sample-size warning lines: VPIP/PFR need about 50-100 hands to stabilize; AF/WTSD need 300+. Below the threshold, metrics only support \"directional hypotheses\" — mark confidence and revise after more hands. Better to hold conclusions one session late than define an opponent by the numbers of one random event.",
+      "X-ray yourself first: export or recall your own VPIP/PFR/WTSD. Most losers' problems aren't in reading others but in their own 38/10 or a 15% river WTSD — the first application target of exploitation theory is always your own leaks.",
+      "HUD discipline (practical Poker HUDs advice): read the hand count before reading metrics; only trust the most recent 300-500 hands (opponents adjust; all-time averages lag); put a question mark on low-sample metrics in notes; clear \"expired portraits\" after each session and leave trusted hand counts for the next table."
+    ],
+    "t7-player-types": [
+      "Tight/Loose × Passive/Aggressive: The Four Quadrants",
+      "Using VPIP (looseness) and aggressiveness (PFR/AF) as two axes, players fall into four classic quadrants: tight-aggressive TAG (like 22/18, AF 2.5), loose-aggressive LAG (like 32/26, AF 3.5), tight-passive NIT/rock (like 12/8, AF 1), and loose-passive calling station (like 45/10, AF 0.8). Types aren't a labeling game — each quadrant maps to a clear leak list and harvest plan.",
+      "TAG: strong range, good discipline; fighting head-on is unprofitable. The leak is \"over-honesty\": he gives up easily when his C-Bet meets resistance, and big bets = real hands. Plan: use float and turn attacks more from position, and respect his three barrels. LAG: creates errors with wide ranges and constant pressure — the most dangerous and the most testing for you. Plan: tighten entry ranges but refuse to be pushed around — trap with strong hands so he builds the pot for you, and widen your bluff-catching threshold.",
+      "NIT: only nut-tier starting hands; entry is an alarm. Plan: steal his blinds constantly preflop, and retreat when he shows interest postflop — folding top pair to a NIT is no shame. Calling station: a fish that refuses to fold. Plan: as the previous chapter gave — value to the river, zero bluffs. Of the four, the calling station is the most stable profit source; TAG play is your own default starting point.",
+      "Type dynamics: the same player drifts across quadrants depending on deep/shallow stacks, winning/losing (Tilt), and fresh/tired states. Keep updating the portrait, especially watching for \"NIT turning LAG after losing a big pot\" — Tilt is the #1 driver of type drift.",
+      "Player portrait = f(VPIP, PFR, AF, WTSD, 3-bet)\nQuadrant judgment: VPIP−PFR gap (passivity), AF (postflop aggression), WTSD (stickiness)\nExample: 42/8/0.8/38/1% → loose-passive calling station; 24/20/2.8/27/6% → trained TAG\nDynamic drift: portrait(session) ≠ portrait(long-term) — win/loss states shift metrics short-term and require continuous re-estimation",
+      "Example: The TAG to your right, after losing two big pots, raises his open frequency from 2 to 5 per orbit and showed down a wild J6s bluff. This is no longer that 22/18 — switch immediately: counter with 3-bets/calls from medium-strong hands you'd normally fold, harvest through the type-drift window until he cools down and returns.",
+      "Example (losing-type drift): A calling station starts at 42/8/0.7/36; after losing three big pots it enters \"win it back\" mode: WTSD climbs to 44%, fewer bluffs, more showdowns, top pair calls you to the river. Your value bets should get thicker and bigger — his \"win-it-back\" mindset makes harvesting easier. Watch the reverse too: he may occasionally bluff in desperation, but a station's bluff outbreaks usually subside after one or two, not worth changing the main plan.",
+      "Example (winning-type drift): A rock NIT (11/7), after winning two big pots, sees VPIP climb to 18% and starts stealing blinds with A9o from the CO — the classic House Money Effect (\"playing looser with winnings\"). During the window his blind-steal profit drops, but his 3-bet frequency also rises (trying new lines), and his \"new moves\" are easier to catch bluffing than usual. Recognize winning drift — don't over-fold to the stale \"he never bluffs\" portrait.",
+      "Don't forget the mirror: opponents are profiling you too. Your bluff success rate is higher under a tight-aggressive image, and your value bets get called more after being caught in one big bluff — image is an asset; spend it at the right moments.",
+      "The static-label trap: labeling an opponent TAG and playing him as TAG forever is the biggest death in type theory. Within one session, stack depth, win/loss state, and fatigue all drift players 1-2 quadrants. A label is a snapshot, not an identity — every 30 minutes re-verify with recent behavioral evidence; better to update half a beat late than play the whole table with an expired portrait.",
+      "Homework to finish in the first 15 minutes even without big hands: assign each opponent a four-quadrant initial label plus one concrete behavioral evidence. A table with portraits and a table without are two different games."
+    ],
+    "t7-hand-reading": [
+      "Hand Reading Is a Process, Not Intuition",
+      "TV makes hand reading look like staring into the opponent's pupils. Real hand reading is a trainable pipeline: (1) starting range — set by position and preflop actions (UTG open ≈ top 15%, BB defense ≈ very wide); (2) street-by-street filtering — each action deletes illogical combos; (3) board crossover — re-estimate the strength distribution of the remaining range with board structure; (4) combo counting — count the value:bluff ratio when a precise decision is needed (T4 Ch.2).",
+      "The four-step hand-reading process:\n①Starting range (position × preflop action) → ②street filtering (action elimination) → ③board crossover (strength re-estimate) → ④combo counting\nBluff share = bluff combos ÷ (value combos + bluff combos)\nCall if and only if: bluff share ≥ pot-odds required equity (example: 12 value vs 5 bluffs → 5/17 ≈ 29% < required 30% ⇒ fold)",
+      "The golden filter question: \"if he held X, would he play it this way?\" Note two-way elimination: a bet eliminates \"hands he'd usually check\", and a check also eliminates \"hands he'd usually bet\" — passive actions are information too.",
+      "Example: A tight-aggressive opponent opens CO, you call on BTN. Flop Q♠T♠6♦ he C-Bets (range still wide: overpairs, Qx, Tx, draws, air). Turn 2♣ he double-barrels (range narrows: mostly AQ+, KK+, strong draws — 2♣ changes nothing, anyone still firing has a real plan). River A♦ he stops and checks — the golden question fires: \"would he check AQ/AK? No.\" His range ceiling was just cut off by his own check; your QJ can confidently bet thin value and easily fold to a raise.",
+      "Example (refining step four): 3-bet pot, board K♠8♦5♣2♥3♥, opponent shoves, you hold QQ. Process: starting range (UTG 3-bet defense is tight, mostly 77+, AQ+, KQs) → flop/turn action filtering → river shoving range = {KK, 88, KQ, a few missed-draw bluffs}. Count: KK 3 + 88 3 + KQ 6 = 12 value (KQ is blocked by both the board's K♠ and your two Queens: 3 remaining Kings × 2 remaining Queens); bluffs (QJ, T9 missed) about 5. Bluff share 5/17 ≈ 29%, facing a 0.75-pot bet needing 30% → 29% < 30%, fold. This \"fold\" comes from combo counting and pot odds, not \"I feel beaten\".",
+      "Example (the starting range decides everything): You hold 99, flop 9♥7♠2♦ (top set). Scenario 1: opponent opens BTN, you call BB — his range has plenty of 9x/7x/structured hands; your set is strong but the board needs straight protection. Scenario 2: you open BTN, opponent calls BB — his defense range is very wide (any two cards), your set is close to the nuts and you can confidently bet for value. Same flop, same hand, different starting range → completely different follow-up strategy. Hand reading always starts with \"how did he enter the pot preflop\".",
+      "Physical and Timing Tells",
+      "Reliable hierarchy of live tells (consensus research of Mike Caro and Zachary Elwood): hesitation length before betting, chip-handling manner, and changes in willingness to talk are far more reliable than \"nose-touching, eye-blinking\". Two validated baselines: strong hands tend toward relaxation (willing to chat, natural movements); bluffs tend toward rigidity (holding breath, stillness, deliberate staring). A quick instant call often signals a draw/medium hand (no raise consideration process). Online, watch the timing: snap bets are often preset actions; small bets after a long think are often struggling weak hands.",
+      "Tell discipline: it only deserves \"the tie-breaking vote on a balanced decision\" and can never overturn range analysis. When range says fold and the tell says call, trust the range — tells have noise, math doesn't.",
+      "Over-confident hand reading: \"I must finish by naming one hand (he must have AA)\" is the biggest mistake of beginner reading. The correct output is a weighted range + confidence — locking one hand means abandoning filtering; any single hand is just one sample in the range, and the set of possibilities is the actionable answer.",
+      "Training method: when watching pro hand livestreams, pause on every street, write down your range judgment before watching commentary and showdown. Don't fix wrong answers — record \"which filter step went off\" — all progress in hand reading hides in the deviation log."
+    ],
+    "t7-exploit": [
+      "The Basic Forms of Exploitation",
+      "Exploitation = making a directed deviation opposite to the opponent's deviation from equilibrium. The four most used mappings: opponent folds too much → bluff more; calls too much → add value, remove bluffs; bluffs too much → widen bluff-catching range and use inducing checks; bluffs too little → over-fold to big bets. Each is a direct application of Sklansky's Fundamental Theorem (T3).",
+      "The four exploitation mappings:\nFolds too much → raise bluff frequency; calls too much → add value, remove bluffs\nBluffs too much → widen bluff-catching range, inducing checks; bluffs too little → over-fold to big bets\nCounter-exploitation monitoring: when exploitation profits decay or counter-attack frequency rises → pull back the deviation, restore equilibrium (arms-race loop)",
+      "Maximal vs moderate exploitation: against opponents who don't adapt (the vast majority of low-to-mid-stakes players), go straight to maximal exploitation (e.g. 100% stop bluffing a calling station); against strong opponents who watch you, make smaller deviations while keeping the ability to return — exploitation intensity is inversely proportional to the opponent's adaptability.",
+      "The Cost of Exploitation: You Open Leaks Too",
+      "Every deviation from equilibrium makes you exploitable (the T5 rock-paper-scissors lesson): your strategy of high-frequency blind stealing against tight-passives gets counter-harvested by an opponent who starts defending wide and light-3-betting. So the complete exploitation loop is four steps: observe and profile → directed deviation → monitor whether the opponent adapts → retreat or counter when adaptation appears. Exploitation is a perpetual arms race, not a one-time answer.",
+      "Example: You notice the BTN bets 100% when you check in the BB. Step 1 exploitation: double your check-raise frequency (harvesting his automatic C-Bets). Two orbits later he only bets real hands — adaptation appears. Step 2: pull your check-raises back to equilibrium frequency while starting to check-call wider to catch his shrunk value bets. Every step steps on the opponent's last adjustment.",
+      "Example (over-folding under population tendencies): Statistical consensus of low-stakes pools — river big bets are under-bluffed. You hold TPTK facing a tight-passive's 2x-pot overbet: pure GTO wouldn't fold all top pairs, but in this pool this player's overbet is almost nut-tier strength, so you over-fold — statistically correct exploitation. Log it too: if he starts overbet-bluffing at some point, he's adapting, and you must dial \"over-folding\" back into a calling range. Exploitation always carries a retreat plan.",
+      "Example (signals of being counter-exploited): Your C-Bet's check-raise encounter rate climbs from 12% to 30% — the opponent (or table population) is targeting your \"bets 100% on check\" leak. Fix: lower your automatic betting frequency on check, add a checking range (including strong traps and medium-hand pot control), so his check-raises face a balanced betting range and fail. The arms race is turn-based: he adjusts, you adjust again, there's never a final answer.",
+      "Population Tendencies: Default Exploitation Without Data",
+      "Against an unknown stranger, the best prior isn't pure equilibrium but \"the average leaks of this stake's player pool\" (Population Tendency): acknowledged tendencies of low-to-mid-stakes pools include — river big bets are under-bluffed (can over-fold), facing 3-bets folds too much (can widen bluff 3-bets), small bets defended too little (can collect rent with frequent small bets). Defaulting to population tendencies and overlaying individual profiles is the most efficient information architecture in practice.",
+      "Exploitation priority: first exploit \"big and stable\" leaks (loose-passive preflop, never-bluffing river), then \"small and volatile\" ones (a specific hand's tendency). The former is the vein; the latter is just gold dust.",
+      "Sunk-cost counter-exploitation: \"he's already counter-exploited me for two big pots; this hand I must win back\" is the most expensive comeback mindset. The first question of an exploitation audit isn't \"how do I win it back\" but \"where did my strategy open a leak and has the opponent already adapted\" — focus on fixing the strategy itself, not recovering past losses.",
+      "Do an \"exploitation audit\" every 30 minutes: what deviation am I making against whom? Does the evidence still hold? Is anyone exploiting me in reverse? — the third question is the most ignored and the most expensive.",
+      "The Pool Is Not Static: Metagame Drift",
+      "Exploitation is not a fixed solution but a decay curve: a leak proves profitable → the line gets copied and spread (training sites, hand replays and the growing reach of HUD data all accelerate circulation) → more and more opponents fight back, or simply run the same play themselves → the original exploitation decays until only noise is left. Drift speed usually tracks stakes and how fast information circulates: the higher the stakes and the more active the discussion, the sooner a given conclusion expires (an empirical pattern, not a theorem). So every judgement of the form \"this pool always folds to a 3-bet\" carries a best-before date — when it lapses it isn't that your strategy got worse, it's that the population you were exploiting changed. (Concept from: Applications of No-Limit Hold'em on exploitation and adjustment)",
+      "Example (four ticks on one decay curve): on the turn you bluff 50 into a pot of 100; expectation = fold probability × pot − call probability × bet. Opponent folds 65% → 0.65×100 − 0.35×50 = +47.5; he adjusts to 60% → +40.0; drift continues to 55% → +32.5 — fold equity fell only 10 percentage points and profit is already down about a third; all the way to 33.3%, the break-even fold frequency α = b ÷ (P + b) = 50 ÷ 150 from T5, where a pure bluff is worth exactly zero. The same line goes from \"automatic\" to \"indifferent\" just because the opponent dropped one habit. This is why exploitation must be re-measured rather than learned once.",
+      "Treat every exploitation conclusion as a dated hypothesis: record the sample size it rests on, the window you observed it in and the stakes. Change stakes, change session, even change seats and the judgement has to be re-run — exploitation is a depreciable asset, not one-shot knowledge."
+    ]
+  },
+  "quiz": {
+    "t7-stats-q1": {
+      "question": "A very large VPIP-PFR gap (like 40/8) usually means:",
+      "options": [
+        "A well-trained aggressive player",
+        "A loose-passive player who limps into pots a lot",
+        "A tight player who only plays big pairs",
+        "The data is meaningless"
+      ],
+      "explanation": "The gap = limp frequency. Entering a lot but raising little is the fingerprint of loose-passive; professionals' two values are usually close (like 24/20)."
+    },
+    "t7-stats-q2": {
+      "question": "AF (Aggression Factor) is calculated as:",
+      "options": [
+        "(bets + raises) ÷ calls",
+        "raises ÷ folds",
+        "total bet ÷ pot",
+        "preflop raises ÷ postflop raises"
+      ],
+      "explanation": "AF = (Bet+Raise)/Call, measuring the ratio of postflop active to passive actions. <1.5 passive, >4 high-pressure."
+    },
+    "t7-stats-q3": {
+      "question": "Against an opponent with WTSD as high as 38%, the correct response is:",
+      "options": [
+        "Bluff more often",
+        "Stop bluffing, and make value bets bigger and wider",
+        "Avoid pots with him",
+        "Only play the nuts"
+      ],
+      "explanation": "A player who calls everything to showdown: bluffing is pure money-burning, while thin value on every street gets paid — maximal exploitation toward \"lots of value, zero bluffs\"."
+    },
+    "t7-stats-q4": {
+      "question": "The correct understanding of sample size for metrics is:",
+      "options": [
+        "Ten hands can define a player",
+        "VPIP/PFR are basically reliable within dozens of hands; AF/WTSD need hundreds",
+        "All metrics need tens of thousands of hands",
+        "Sample size doesn't affect interpretation"
+      ],
+      "explanation": "High-frequency events (preflop decisions) converge fast; low-frequency events (showdowns) converge slowly. Under-sampled metrics are only unverified hypotheses."
+    },
+    "t7-stats-q5": {
+      "question": "An opponent's first 35 hands show VPIP 38%, PFR 34%, with about 5 hands in a row of QQ+/AK. The safest judgment is:",
+      "options": [
+        "Confirm he's a loose-aggressive LAG and adjust immediately",
+        "Sample too small — 38/34 may be inflated by card luck; keep observing at least 100 hands",
+        "He's cheating; normal people can't keep getting big hands",
+        "His position selection is very strong"
+      ],
+      "explanation": "35 hands plus a run of big cards inflates VPIP/PFR short-term. Even high-frequency metrics need around 100 hands to stabilize; short-term data is hypothesis, not conclusion. Option A is the classic \"small sample as conclusion\" error; C/D over-explain random phenomena."
+    },
+    "t7-player-types-q1": {
+      "question": "The two axes of the four-quadrant classification are:",
+      "options": [
+        "Stack size and age",
+        "Looseness (VPIP) and activity (PFR/AF)",
+        "Win rate and hand count",
+        "Online and live"
+      ],
+      "explanation": "Entry width (tight/loose) × action style (aggressive/passive) generates TAG/LAG/NIT/calling station, each with its own leak list."
+    },
+    "t7-player-types-q2": {
+      "question": "The standard plan against a NIT (rock) is:",
+      "options": [
+        "Steal his blinds frequently preflop and retreat decisively when he fights back",
+        "Play big pots with him",
+        "Never steal his blinds",
+        "Bluff him with big bets often"
+      ],
+      "explanation": "NITs fold at extremely high rates — blind stealing is steady profit; and when he enters or fights back his range is very strong, so fold marginal hands without a fight."
+    },
+    "t7-player-types-q3": {
+      "question": "Against a LAG's constant pressure, the correct adjustment is:",
+      "options": [
+        "Fight every bet with a wider range",
+        "Tighten entry range, but use strong hands so he builds the pot for you",
+        "Avoid him completely",
+        "Play sloppy like him"
+      ],
+      "explanation": "Against LAGs: raise the entry bar (range solidity), but refuse to be pushed around once in — his high bluff frequency automatically pays for your strong hands."
+    },
+    "t7-player-types-q4": {
+      "question": "The most common trigger of \"type drift\" is:",
+      "options": [
+        "Changing seats",
+        "Tilt after losing a big pot",
+        "Having more chips",
+        "It getting late"
+      ],
+      "explanation": "Emotional swings push players across quadrants (NIT to LAG, TAG to calling station). Recognizing drift windows and switching responses instantly is the daily work of advanced exploitation."
+    },
+    "t7-player-types-q5": {
+      "question": "A TAG at your table, after losing a big pot, starts 3-bet-bluffing frequently and stealing blinds with marginal hands. The correct response is:",
+      "options": [
+        "Keep playing his initial TAG portrait; he's just doing it occasionally",
+        "Recognize the type drift and counter his widened range with medium-strong 3-bets/calls",
+        "Target him with the whole table, raising every bet he makes",
+        "Leave the table to avoid risk"
+      ],
+      "explanation": "The common \"LAG-ification\" drift after a big loss lasts a while. Recognizing the drift and adjusting immediately (tighter counter standards, strong hands to absorb pressure) is correct; option A misses the harvest window with the old portrait, C is an emotional overreaction (backfires), and D gives up high-profit windows."
+    },
+    "t7-hand-reading-q1": {
+      "question": "The correct order of the four-step hand-reading process is:",
+      "options": [
+        "Watch tells → guess the hand → verify → act",
+        "Starting range → street filtering → board crossover → combo counting",
+        "Combo counting → range → filtering → tells",
+        "Intuition → confirm → bet → review"
+      ],
+      "explanation": "Set the starting point from position/preflop actions, filter through the action sequence, re-estimate strength on the board, count combos on key decisions — a trainable pipeline."
+    },
+    "t7-hand-reading-q2": {
+      "question": "\"Checking is also information\" means:",
+      "options": [
+        "A check means giving up",
+        "A check also eliminates \"hands he'd usually bet\", cutting the range ceiling",
+        "A check means nothing",
+        "A check is always a trap"
+      ],
+      "explanation": "Logically consistent players bet their strong hands most of the time; his check therefore removes most strong value — often the attack window for thin value and bluffs."
+    },
+    "t7-hand-reading-q3": {
+      "question": "The correct way to use physical tells is:",
+      "options": [
+        "As the primary decision basis",
+        "Only as a tie-breaker when range analysis is near balanced, never overturning math",
+        "Ignore them completely",
+        "Only trust the eyes"
+      ],
+      "explanation": "Tells have noise and can be faked; ranges and combo counts are hard information. The correct position of tells is an auxiliary weight on marginal decisions."
+    },
+    "t7-hand-reading-q4": {
+      "question": "A validated behavioral baseline is:",
+      "options": [
+        "Strong hands tense, bluffs relaxed",
+        "Strong hands relaxed and natural, bluffs stiff and controlled",
+        "Strong and weak hands behave identically",
+        "Blink rate is proportional to hand strength"
+      ],
+      "explanation": "Caro's classic observation: those holding strength are psychologically safe, hence relaxed and talkative; bluffers fear exposure and hold their breath, going rigid. This is among the few tells stable across populations."
+    },
+    "t7-hand-reading-q5": {
+      "question": "3-bet pot, board K♠8♦5♣2♥3♥, opponent shoves. You count 12 value combos and 5 bluff combos, facing a 0.75-pot bet (needs 30%). The correct decision is:",
+      "options": [
+        "Call — top pair is strong enough",
+        "Fold — bluff share about 29% is below the required 30%",
+        "Raise back",
+        "Decide after watching tells"
+      ],
+      "explanation": "Bluff share = 5/17 ≈ 29% < 30% (required equity); calling loses long-term. Combo counting gives the precise answer; option A judges by hand strength and D by feel, both skipping the quantitative range-vs-pot-odds comparison."
+    },
+    "t7-exploit-q1": {
+      "question": "The opponent folds too much to big bets. The correct exploitation direction is:",
+      "options": [
+        "Bluff less",
+        "Increase bluff frequency",
+        "Only bet the nuts",
+        "Lower bet sizes"
+      ],
+      "explanation": "A fold rate above Alpha means bluffs are automatically profitable (T5) — pressing on the fold leak is the most direct exploitation mapping."
+    },
+    "t7-exploit-q2": {
+      "question": "Exploitation intensity should be inversely proportional to:",
+      "options": [
+        "Pot size",
+        "The opponent's observation and adaptation ability",
+        "Your own stack size",
+        "Table player count"
+      ],
+      "explanation": "Non-adapting opponents allow maximal exploitation; strong opponents who fight back deserve only small deviations while keeping the ability to return — because your deviation opens your own leaks too."
+    },
+    "t7-exploit-q3": {
+      "question": "The complete exploitation loop is:",
+      "options": [
+        "Execute the same deviation forever once a leak is found",
+        "Observe and profile → directed deviation → monitor adaptation → retreat or counter",
+        "Change style on every hand",
+        "Only exploit on the river"
+      ],
+      "explanation": "Exploitation is an arms race: the opponent adapts and your deviation must evolve. A static exploitation strategy eventually gets counter-harvested."
+    },
+    "t7-exploit-q4": {
+      "question": "Against a completely unknown opponent, the optimal default strategy is:",
+      "options": [
+        "Strictly pure equilibrium",
+        "Default to exploiting the average leaks of the player pool at this stake (population tendencies)",
+        "Bluff recklessly to probe",
+        "Only play the nuts"
+      ],
+      "explanation": "Population tendencies are the statistically best prior (e.g. low-stakes river pools under-bluff); individual profiles then gradually override the default."
+    },
+    "t7-exploit-q5": {
+      "question": "You bet 100% when the BB checks, and get check-raised by the BB for two straight orbits (encounter rate from 12% to 30%). The correct adjustment is:",
+      "options": [
+        "Lower your automatic betting frequency in that spot and add a checking range (including strong traps)",
+        "Keep auto-betting; he can't raise forever",
+        "Never enter pots in that position again",
+        "Bet bigger to scare him off"
+      ],
+      "explanation": "A rising check-raise encounter rate is the signal that YOU are being counter-exploited. Fixing your own betting frequency and restoring equilibrium makes his check-raises fail; option B is the classic death of static exploitation (the arms race doesn't end itself), C sacrifices the whole position pointlessly, and D's \"scaring\" treats symptoms."
+    }
+  },
+  "chapterObjectives": {
+    "t7-stats": [
+      "State which behavioural dimension VPIP, PFR, AF and WTSD each measures, and how each is computed",
+      "Combine several stats into one reading and turn that reading into an actionable plan against the opponent",
+      "Given a hand count, judge whether the stats can support a conclusion and label the confidence attached to it",
+      "Collect live-session behavioural evidence to build the same profile without a HUD"
+    ],
+    "t7-player-types": [
+      "Place an opponent into the right quadrant by entering width and action style, and give the evidence",
+      "State the leak list and the standard attack plan for each quadrant",
+      "Recognize the quadrant drift triggered by winning or losing streaks and switch plans immediately",
+      "Audit whether a profile has gone stale and refresh it with the most recent observed actions"
+    ],
+    "t7-hand-reading": [
+      "Run the full reading pipeline from starting range down to combo counts",
+      "Remove the combos that make no logical sense in either the betting or the checking direction",
+      "Count the value-to-bluff ratio left in the range and settle the call or fold from it",
+      "Rank range analysis against physical tells for information value in a marginal decision"
+    ],
+    "t7-exploit": [
+      "Convert an opponent deviation from equilibrium into a directed counter-deviation of your own",
+      "Assess how fast the opponent adapts in order to size the maximum exploitative deviation you can tolerate",
+      "Complete the exploit loop from profiling to pulling back, and spot the signals of being counter-exploited",
+      "Judge whether an exploit conclusion has passed its best-before date and schedule the re-measurement"
+    ]
+  }
+}
