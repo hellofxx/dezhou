@@ -1,10 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore, REQUIRED_ACCURACY } from '../store';
+import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
+import { deriveAcademyCourseFilesForLevel } from '@/i18n/academyCourse';
 import { LEVELS } from '../data/courses';
 // P1E-09: 题目集构建抽出为种子化纯函数（重试重置种子即重洗）
 import { buildCertificationExam } from '../utils/certificationExam';
@@ -16,6 +19,7 @@ export default function LevelCertification() {
   const navigate = useNavigate();
   const { certifications, attemptCertification, progress } = useAcademyStore();
   const level = parseInt(levelParam ?? '1', 10);
+  const contentReady = useAcademyCourseI18n(deriveAcademyCourseFilesForLevel(level));
   // 认证有效态判定复用 store 口径（含 validUntil 过期校验），与成就系统保持一致
   // （组件旧实现只查 certifiedAt，认证过期后仍显示"已通过"）
   const isCertified = useAcademyStore((s) => s.isCertified(level));
@@ -46,7 +50,7 @@ export default function LevelCertification() {
         mergedLessons.map((l) => ({ ...l, quiz: l.quiz.map((q) => resolveQuizQuestion(t, q)) })),
         sessionSeed,
       ),
-    [mergedLessons, sessionSeed, t]
+    [mergedLessons, sessionSeed, t, contentReady]
   );
 
   if (levelEntries.length === 0) {
@@ -56,6 +60,14 @@ export default function LevelCertification() {
         <button onClick={() => navigate('/academy')} className="text-sm text-[var(--brass-bright)] hover:underline">
           {t('academy.levelCertification.backToAcademy')}
         </button>
+      </div>
+    );
+  }
+
+  if (!contentReady) {
+    return (
+      <div className="py-6">
+        <PageSkeleton />
       </div>
     );
   }

@@ -38,3 +38,20 @@ export function getLevelCompletedCount(level: number, completedLessons: string[]
 export function getTotalLessonCount(): number {
   return LEVELS.reduce((sum, level) => sum + level.lessons.length, 0);
 }
+
+/** 课程在所属序列中的进度位置（标准优先；变体课程回退变体全集） */
+export function getLessonProgressMeta(lesson: Lesson): {
+  percent: number;
+  current: number;
+  total: number;
+} {
+  const all = getAllLessons();
+  const standardIndex = all.findIndex((item) => item.id === lesson.id);
+  const sequence = standardIndex >= 0 ? all : ALL_VARIANT_LESSONS;
+  const index = sequence.findIndex((item) => item.id === lesson.id);
+  return {
+    percent: sequence.length > 0 ? ((index + 1) / sequence.length) * 100 : 0,
+    current: index + 1,
+    total: sequence.length,
+  };
+}

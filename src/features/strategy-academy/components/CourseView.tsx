@@ -2,15 +2,17 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
 import { ArrowLeft, Clock, HelpCircle, Zap } from 'lucide-react';
 import { useAcademy } from '../hooks/useAcademy';
+import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
+import { deriveAcademyCourseFilesForLesson } from '@/i18n/academyCourse';
 import { useAcademyStore } from '../store';
-import { findLessonById, getNextLesson, getAllLessons } from '../utils/courseProgress';
+import { findLessonById, getNextLesson, getLessonProgressMeta } from '../utils/courseProgress';
 import { completeCourse } from '../utils/completeCourse';
 import { LEVELS } from '../data/courses';
-import { ALL_VARIANT_LESSONS } from '../data/lessons/variants';
 import { LOCAL_LESSONS } from '../data/localLessons';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { LEARNING_TRACKS } from '../data/learningTracks';
@@ -49,19 +51,11 @@ export default function CourseView() {
   // §13.3.4/§13.7.1: 移动端阅读进度（0-100），scrollTop/(scrollHeight-clientHeight)
   const [readingProgress, setReadingProgress] = useState(0);
   const readingRootRef = useRef<HTMLDivElement>(null);
+  // en 下先确保本课文案文件就绪，再渲染正文/小测（zh 数据层原文即可用）
+  const contentReady = useAcademyCourseI18n(lessonId ? deriveAcademyCourseFilesForLesson(lessonId) : []);
 
   const lesson = lessonId ? findLessonById(lessonId) : undefined;
-  const allLessons = getAllLessons();
-  // ACAD-05：变体课程（short-deck/heads-up）不在标准 allLessons 中，进度按变体课程全集计算
-  const lessonIndex = lesson
-    ? allLessons.findIndex((l) => l.id === lesson.id)
-    : -1;
-  const progressTotal = lessonIndex >= 0 ? allLessons : [...ALL_VARIANT_LESSONS];
-  const progressIdx = lesson
-    ? progressTotal.findIndex((l) => l.id === lesson.id)
-    : -1;
-  const progressPercent =
-    progressTotal.length > 0 ? ((progressIdx + 1) / progressTotal.length) * 100 : 0;
+  const progress = lesson ? getLessonProgressMeta(lesson) : { percent: 0, current: 0, total: 0 };
   const isDrill = lesson?.type === 'drill';
 
   // P4 修复（4.1-P1-1）+ 审计 1.1/2.1：按 lesson 所属 LevelInfo 条目判门禁，防止通过 URL 绕过；
@@ -224,6 +218,8 @@ export default function CourseView() {
     );
   }
 
+  if (!contentReady) return <div className="py-6"><PageSkeleton /></div>;
+
   const nextLesson = getNextLesson(lesson.id);
 
   // 查找当前课程所属路径的关联路径（用于完成页推荐）
@@ -316,13 +312,13 @@ export default function CourseView() {
           </div>
         ) : (
           <ProgressBar
-            value={progressPercent}
+            value={progress.percent}
             size="sm"
             className="mb-4"
             label={t('academy.courseView.lessonOf', {
               defaultValue: '第 {{current}}/{{total}} 课',
-              current: progressIdx + 1,
-              total: progressTotal.length,
+              current: progress.current,
+              total: progress.total,
             })}
           />
         )}

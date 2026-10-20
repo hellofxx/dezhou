@@ -2,6 +2,15 @@ import type { PracticeQuestion, QuestionDifficulty } from '../types';
 import { getAllLessons } from './courseProgress';
 
 /**
+ * 快速训练综合分数：accuracy * 100 + 时间奖励
+ * 时间奖励每比 10s/题 快 1s 得 3 分（上限 30 分）。
+ */
+export function computeQuickDrillScore(accuracy: number, averageTime: number): number {
+  const timeBonus = Math.max(0, Math.round((10 - averageTime) * 3));
+  return Math.round(accuracy * 100) + timeBonus;
+}
+
+/**
  * 从全局题库中按条件筛选快速训练题目
  * 用于"5分钟速训"功能
  */

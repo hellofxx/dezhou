@@ -2,10 +2,12 @@ import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { ChevronLeft, ChevronRight, Search, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useAcademyStore } from '../store';
+import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { BASICS_STEPS, GLOSSARY_TERMS } from '../data/basicsContent';
 import { resolveBasicsStepTitle } from '../utils/titleKeys';
 import { basicsContentKey, resolveTerm } from '../utils/contentKeys';
@@ -25,6 +27,7 @@ export default function BasicsIntro() {
   const [currentStep, setCurrentStep] = useState(basicsProgress.currentStep);
   const [showCompletion, setShowCompletion] = useState(false);
   const [countdown, setCountdown] = useState(3);
+  const contentReady = useAcademyCourseI18n(['basics']);
 
   const totalSteps = BASICS_STEPS.length;
   const step = BASICS_STEPS[currentStep]!;
@@ -62,6 +65,14 @@ export default function BasicsIntro() {
     const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(timer);
   }, [showCompletion, countdown, navigate]);
+
+  if (!contentReady) {
+    return (
+      <div className="py-6">
+        <PageSkeleton />
+      </div>
+    );
+  }
 
   return (
     <div className="h-full overflow-auto">

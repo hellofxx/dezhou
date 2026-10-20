@@ -2,12 +2,15 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionSlow } from '@/shared/utils/motion';
 import { ArrowLeft, Zap, Target, RotateCcw, Trophy, Clock, Award, CheckCircle2, Sparkles, Gift } from 'lucide-react';
 import { useAcademyStore } from '../store';
+import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
+import { deriveAcademyCourseFilesForQuickDrill } from '@/i18n/academyCourse';
 import { useProgressStore } from '@/features/progress/store';
-import { getQuickDrillQuestions } from '../utils/quickDrill';
+import { computeQuickDrillScore, getQuickDrillQuestions } from '../utils/quickDrill';
 // P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
 import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
 import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
@@ -19,18 +22,6 @@ import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 
 type QuickDrillMode = 'range' | 'odds' | 'mixed';
-
-/**
- * P1-4.1: 计算快速训练综合分数。
- *
- * 公式：accuracy * 100 + 时间奖励
- *   - 时间奖励：每比 10s/题 快 1s 得 3 分，最高 30 分（avgTime=0 时）
- *   - 满分约 130（全对 + 极快）
- */
-function computeQuickDrillScore(accuracy: number, averageTime: number): number {
-  const timeBonus = Math.max(0, Math.round((10 - averageTime) * 3));
-  return Math.round(accuracy * 100) + timeBonus;
-}
 
 export default function QuickDrill() {
   const navigate = useNavigate();
@@ -62,6 +53,7 @@ export default function QuickDrill() {
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
 
+  const contentReady = useAcademyCourseI18n(deriveAcademyCourseFilesForQuickDrill());
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [difficulty, setDifficulty] = useState<QuestionDifficulty>('beginner');
@@ -216,6 +208,8 @@ export default function QuickDrill() {
 
   // 止损早退必须位于全部 hooks 之后：守卫状态在挂载期间翻转（答题中达上限/
   // 调试开关切换）时，hooks 数量变化会触发 "Rendered fewer hooks" 崩溃
+  if (!contentReady) return <div className="py-6"><PageSkeleton /></div>;
+
   if (sessionLimitReached) {
     return <SessionLimitGuard />;
   }

@@ -14,6 +14,7 @@ import {
   type I18nModuleKey,
 } from './moduleRegistry';
 import { getTouchedTheoryLevels, loadTheoryContentForLevels } from './theoryContent';
+import { getTouchedAcademyCourseFiles, loadAcademyCourseFiles } from './academyCourse';
 
 export {
   isTheoryContentLoaded,
@@ -22,18 +23,20 @@ export {
   loadTheoryContentForLevels,
   loadTheoryContentForQuestionIds,
 } from './theoryContent';
+export {
+  isAcademyCourseFilesLoaded,
+  loadAcademyBasicsCourse,
+  loadAcademyCourseFiles,
+  loadAcademyCourses,
+  loadAcademyCoursesForLesson,
+  loadAcademyCoursesForLevel,
+  loadAcademyCoursesForQuickDrill,
+} from './academyCourse';
 
 /** 已加载完成的 (lng, key) 缓存 */
 const loadedKeys = new Set<string>();
 /** 任意语言下请求过的模块 key（语言切换时用于补加载新语言） */
 const touchedKeys = new Set<I18nModuleKey>();
-/**
- * academy-course 内部课程文件集合标记（不在 I18nModuleKey 枚举中，
- * 由 loadAcademyCourses 整批加载，语言切换补加载时经 preloadTouched 特殊分流）
- */
-const COURSE_BUNDLE_KEY = 'academy-course' as unknown as I18nModuleKey;
-/** academy-course 加载 Promise 缓存（in-flight 复用：并发调用共享同一加载，完成后幂等返回） */
-const courseLoadPromises = new Map<I18nLanguage, Promise<void>>();
 /**
  * 普通模块加载 Promise 缓存（in-flight 复用，防并发重复请求）。
  * 与 loadedKeys 分工：loadedKeys 只在**加载成功**后置位（失败可重试），
@@ -94,109 +97,24 @@ export async function preloadI18n(
 }
 
 /**
- * 合并 academy-course 课程内容文件（同顶层 key 深合并；数组/叶子直接覆盖）
- * 由 config.ts 中的 mergeCourseBundles 复用（避免重复定义）
- */
-async function mergeAcademyCourses(
-  base: Record<string, unknown>,
-  bundles: Record<string, Record<string, unknown>>,
-): Promise<Record<string, unknown>> {
-  const merged: Record<string, unknown> = { ...base };
-  for (const bundle of Object.values(bundles)) {
-    for (const [key, value] of Object.entries(bundle)) {
-      if (
-        typeof value === 'object' &&
-        value !== null &&
-        !Array.isArray(value) &&
-        typeof merged[key] === 'object' &&
-        merged[key] !== null &&
-        !Array.isArray(merged[key])
-      ) {
-        // 深合并子对象（如 lessonContent.l1-basics + lessonContent.l1-position）
-        merged[key] = {
-          ...(merged[key] as Record<string, unknown>),
-          ...(value as Record<string, unknown>)
-        };
-      } else {
-        // 数组/简单值直接覆盖
-        merged[key] = value;
-      }
-    }
-  }
-  return merged;
-}
-
-/**
  * 预加载某个路由分组（见 FEATURE_GROUPS 映射）。
  * 返回值用于 lazyPage 的 Promise.all 并行加载。
+ * 注：academy-course 课程文案已改为按文件懒加载（见 academyCourse.ts），
+ * 由页面组件按当前课程/Level 触发，不再在此整批加载。
  */
 export async function preloadFeature(group: keyof typeof FEATURE_GROUPS): Promise<void> {
-  // P0-02: /academy/lesson/:lessonId 需要额外加载 academy-course 子模块
-  if (group === '/academy/lesson/:lessonId') {
-    await loadAcademyCourses(normalizeLanguage(i18n.language));
-  }
   return preloadI18n(FEATURE_GROUPS[group]);
 }
 
 /**
- * 动态加载并合并 academy-course 所有课程文案到 academy.lessonContent.* 命名空间
- * 调用时机：首次访问 /academy/lesson/:lessonId 路由时（preloadFeature 中触发）；
- * 语言切换时由 preloadTouched 分流补加载目标语言。
- * 幂等：同语言并发/重复调用共享同一 in-flight Promise，失败清除缓存允许重试。
- */
-export function loadAcademyCourses(lng: I18nLanguage): Promise<void> {
-  const inflight = courseLoadPromises.get(lng);
-  if (inflight) return inflight;
-  const task = doLoadAcademyCourses(lng).catch((err: unknown) => {
-    // 失败清除缓存，允许下次重试
-    courseLoadPromises.delete(lng);
-    throw err;
-  });
-  courseLoadPromises.set(lng, task);
-  return task;
-}
-
-async function doLoadAcademyCourses(lng: I18nLanguage): Promise<void> {
-  try {
-    const courseModules = lng === 'zh'
-      ? import.meta.glob('./locales/zh/academy-course/*.json', { import: 'default' })
-      : import.meta.glob('./locales/en/academy-course/*.json', { import: 'default' });
-
-    // 将 academy-course 标记为已触及，语言切换时经 preloadTouched 分流补加载
-    touchedKeys.add(COURSE_BUNDLE_KEY);
-    // glob 返回类型为 Record<string, () => Promise<unknown>>，需转换为 content 对象
-    // 关键修复：保持原始嵌套结构，不要用 Object.assign 平铺顶层 key
-    const contents: Record<string, unknown> = {};
-    for (const [filePath, module] of Object.entries(courseModules)) {
-      const mod = await module() as { default?: Record<string, unknown> };
-      const content = mod.default || mod;
-      // 将每个文件的内容按文件名作为 key 保存（如 l1-basics, level1, etc.）
-      const filename = filePath.split('/').pop()?.replace('.json', '') || 'unknown';
-      contents[filename] = content;
-    }
-
-    const merged = await mergeAcademyCourses(
-      {},
-      contents as unknown as Record<string, Record<string, unknown>>
-    );
-    // 直接注入整个 merged 对象到 academy 命名空间（保持 lessonContent.lessonQuiz.lessonExample.lessonPractice 等子命名空间）
-    i18n.addResourceBundle(lng, 'translation', { academy: merged }, true, true);
-  } catch (err) {
-    console.warn(`[i18n] 加载课程文案失败 ${lng}/academy-course`, err);
-    throw err; // Re-throw to expose error in test
-  }
-}
-
-/**
  * 语言切换补加载：普通模块走 preloadI18n（loadModule 注册表）；
- * academy-course / theory-content 不在注册表中，须整批补加载，否则切换后滞留 fallback 语言。
+ * academy-course / theory-content 按已访问文件（level）定向补加载，避免整批拉取。
  */
 async function preloadTouched(lang: I18nLanguage): Promise<void> {
-  const keys = [...touchedKeys].filter((key) => key !== COURSE_BUNDLE_KEY);
-  const tasks: Promise<void>[] = [preloadI18n(keys, lang)];
-  if (touchedKeys.has(COURSE_BUNDLE_KEY)) {
-    // 课程内容加载失败不阻断语言切换（fallbackLng 'zh' 兜底，与 loadOne 失败策略一致）
-    tasks.push(loadAcademyCourses(lang).catch(() => undefined));
+  const tasks: Promise<void>[] = [preloadI18n([...touchedKeys], lang)];
+  const touchedCourseFiles = getTouchedAcademyCourseFiles();
+  if (touchedCourseFiles.length > 0) {
+    tasks.push(loadAcademyCourseFiles(touchedCourseFiles, lang));
   }
   const touchedTheoryLevels = getTouchedTheoryLevels();
   if (touchedTheoryLevels.length > 0) {
