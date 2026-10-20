@@ -63,10 +63,10 @@ export default defineConfig({
             return 'puzzle-data';
           }
           // Vendor 库分包
+          // 不要为 recharts 建手动 chunk：其依赖 clsx / use-sync-external-store 被 cn() 与
+          // react-i18next 共享，手动 chunk 会把这两个共享依赖并入图表库，进而使整个
+          // recharts 被首屏静态图引用。交由 Rolldown 自动拆分（图表库只出现在使用页的 chunk）。
           if (id.includes('node_modules')) {
-            if (id.includes('recharts') || id.includes('d3-')) {
-              return 'vendor-recharts';
-            }
             if (id.includes('framer-motion')) {
               return 'vendor-framer';
             }

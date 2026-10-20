@@ -49,9 +49,14 @@ async function checkBundleSize() {
   const preloadMatches = htmlContent.matchAll(/<link[^>]+rel="modulepreload"[^>]*href="([^"]+)"/g);
   const preloadFiles = [...preloadMatches].map(m => m[1]);
   
-  // 同时提取常规 <script type="module"> 入口点
-  const scriptMatches = htmlContent.matchAll(/<script\s+type="module"\s+src="([^"]+)"/g);
-  const entryFiles = [...scriptMatches].map(m => m[1]);
+  // 同时提取常规 <script type="module"> 入口点（属性顺序不固定，须逐标签解析）
+  const entryFiles = [];
+  for (const tagMatch of htmlContent.matchAll(/<script[^>]*>/g)) {
+    const tag = tagMatch[0];
+    if (!tag.includes('type="module"')) continue;
+    const src = /src="([^"]+)"/.exec(tag)?.[1];
+    if (src) entryFiles.push(src);
+  }
   
   // 合并所有需要检查的 JS 文件
   const allJsFiles = new Set([...preloadFiles, ...entryFiles]);
@@ -71,6 +76,7 @@ async function checkBundleSize() {
   let totalSize = 0;
   const chunkStats = [];
   const oversizedChunks = [];
+  const initialChartChunks = [];
   
   for (const file of normalizedFiles) {
     // 去掉可能的根路径前缀
@@ -82,6 +88,13 @@ async function checkBundleSize() {
       totalSize += size;
       
       chunkStats.push({ path: file, size });
+
+      // 图表库守卫：recharts 只允许出现在按页懒载的 chunk。
+      // 其依赖 clsx / use-sync-external-store 与启动层共享，若图表库被并入
+      // 共享 vendor chunk，会经 cn()/react-i18next 被整个拖进首屏。
+      if (readFileSync(fullPath, 'utf-8').includes('defaultTooltipEventType')) {
+        initialChartChunks.push({ path: file, size });
+      }
       
       if (size > BUDGETS.maxSingleChunkSize) {
         oversizedChunks.push({ path: file, size });
@@ -127,6 +140,17 @@ async function checkBundleSize() {
   // 检查单个 chunk 大小
   if (oversizedChunks.length > 0) {
     warnings.push(`⚠️ 发现 ${oversizedChunks.length} 个超大方块 (>500KB)`);
+  }
+
+  // 图表库不得进入首屏静态图（应由页面路由按需加载）
+  if (initialChartChunks.length > 0) {
+    issues.push(
+      `❌ 首屏静态图包含图表库（recharts）：${initialChartChunks
+        .map(({ path, size }) => `${path} (${formatBytes(size)})`)
+        .join(', ')}`,
+    );
+  } else {
+    console.log(`✅ 图表库未进入首屏静态图`);
   }
 
   // 5. 报告结果
