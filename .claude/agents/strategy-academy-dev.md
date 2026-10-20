@@ -109,19 +109,21 @@ additionalPrompt: ""
 - src/features/strategy-academy/data/ — 静态课程与元数据（courses.ts 与 data/levels/index.ts 均为直接 re-export `standardLevels as LEVELS` from `./lessons/variants/standard` 的平行直达入口，不互相级联；实际课程已拆分至 lessons/variants/standard/（每 Level 单文件 standardLevel1~8.ts，L4 拆分为 standardLevel4a/4b.ts）与 lessons/variants/ 变体课程（short-deck/、heads-up/ 子目录，各含每 Level 单文件）；另含基础入门/概念图谱/学习轨道/本土化路径/对手形象数据）
 - **共享基础层契约**：变体（short-deck / heads-up）的 L1/L2 不重复存储，经 `lessons/variants/index.ts` 的 `getLessonsByVariantAndLevel` 回退引用标准共享基础层（L1/L2 为变体无关通用地基），保证变体学习路径贯通 L1-L8 且零内容重复；变体专属课程覆盖 L3-L8。契约由 `data/curriculumIntegrity.test.ts` 守卫固化。新增变体课程时：L1/L2 勿复制标准内容，L3+ 放对应变体 Level 文件即可。
 - src/features/strategy-academy/data/levels/ — 兼容层（index.ts re-export LEVELS，指向 lessons/variants/standard/index.ts）
+- src/features/strategy-academy/data/lessons/manifest/ — 由 `pnpm academy:manifest` 生成的 Level/Lesson 目录摘要（无正文）；首页/store/成就/轨道/图谱只读这一层；`manifest.parity.test.ts` 守卫其与完整数据一致
+- src/features/strategy-academy/data/lessons/loaders.ts — 完整课程按 Level/变体动态加载（L4 合并 4A/4B；变体/本土课各自入口）；课程页、认证、速训唯一完整数据入口
 - src/features/strategy-academy/data/localLessons/ — 本土低级别盈利路径课程内容
-- src/features/strategy-academy/utils/ — 难度自适应（adaptiveDifficulty.ts）/ 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具 / 选项排序治理（quizShuffle.ts）
-- src/features/strategy-academy/hooks/ — useAcademy 等消费 hook
+- src/features/strategy-academy/utils/ — academyMeta.ts（摘要查询）/ trackMeta.ts（轨道前置）/ 难度自适应 / 课程进度 / 每日计划（dailyPlan.ts 含 ABILITY_LESSON_MAP）/ 快速训练工具 / 选项排序治理（quizShuffle.ts）
+- src/features/strategy-academy/hooks/ — useAcademy / useAcademyLessons（按 Level/变体懒载完整课程）/ useAcademyCourseI18n（课程文案就绪态）
 - src/features/strategy-academy/components/ — 首页 / 课程视图（CourseView.tsx 含双层门禁 + Drill 路由）/ 小节化内容渲染（LessonContent / SectionNav / LessonIntroCard）/ 测验 / 认证 / QuickDrill 等页面组件
 - src/features/strategy-academy/components/drills/ — Drill 组件与题库（DrillLessonRouter.tsx 统一 lazy 路由；ChoiceDrillRenderer.tsx 通用选择题渲染；types.ts 定义 DrillProps / DrillResult）
 
 ## Workflows
-1. 添加新课程时：编辑 courses.ts 的对应 Level.lessons → 提供完整 content/quiz → CourseView 自动渲染
-2. 添加新 Drill 时：在 drills/ 创建组件 + 题库 → 在 types.ts 的 `DrillComponentName` 添加值 → DrillLessonRouter 注册 lazy → courses.ts 标记 `type: 'drill'` + `drillComponent`
+1. 添加新课程时：编辑 `data/lessons/variants/<variant>/<variant>LevelN.ts` 的对应 Level.lessons → 提供完整 content/quiz → 运行 `pnpm academy:manifest` 重新生成摘要 → 同步 zh/en `locales/<lng>/academy-course/<levelN|variant>.json` → CourseView 自动渲染
+2. 添加新 Drill 时：在 drills/ 创建组件 + 题库 → 在 types.ts 的 `DrillComponentName` 添加值 → DrillLessonRouter 注册 lazy → 数据文件标记 `type: 'drill'` + `drillComponent` → 重新生成 manifest
 3. 添加新学习轨道时：编辑 learningTracks.ts（或 localTrack.ts）→ 引用现有 lessonIds → LearningTracksView 自动渲染
 4. 修改难度自适应阈值时：编辑 utils/adaptiveDifficulty.ts 的 DEFAULT_ADAPTIVE_CONFIG
-5. 修改每日计划生成逻辑时：编辑 utils/dailyPlan.ts（reviewQueue 由 SRS 系统提供）；store.refreshDailyPlan 入口分惰性（同日新鲜度守卫生效）与显式刷新（`options.force` 绕过守卫）两路
-6. 修改等级解锁规则时：编辑 store.ts 的 `isLevelUnlocked`（按 level 数字，兼容旧调用）与 `isLevelEntryUnlocked`（按 `LevelInfo.id` 精确判定，区分 l4a/l4b；UI 门禁统一调用此方法）（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
+5. 修改每日计划生成逻辑时：编辑 utils/dailyPlan.ts（只消费 academyMeta 摘要；reviewQueue 由 SRS 系统提供）；store.refreshDailyPlan 入口分惰性（同日新鲜度守卫生效）与显式刷新（`options.force` 绕过守卫）两路
+6. 修改等级解锁规则时：编辑 utils/academyMeta.ts 的 `isLevelEntryUnlockedByCompleted` 与 store.ts 的 `isLevelUnlocked`/`isLevelEntryUnlocked`（按 `LevelSummary.id` 精确判定，区分 l4a/l4b；UI 门禁统一调用 `isLevelEntryUnlocked`）（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 7. 修改快速训练 SRS 混合时：编辑 QuickDrill.tsx 调用 `composeDailyMix` 的参数
 8. 新增测验题 / Drill 题时：选项与 correctIndex 书写顺序不限（渲染前自动重排），但需确认分布守卫测试（quizShuffle.test.ts / drillOptionOrder.test.ts）覆盖新题且通过
 9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
@@ -139,7 +141,8 @@ additionalPrompt: ""
 - 等级解锁依赖前置等级所有课程完成（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 - strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》
 - **课程双层门禁**：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（按 lesson 所属 `LevelInfo` 条目调用 `isLevelEntryUnlocked`，区分 l4a/l4b；本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）；调试解锁激活时（`shared/stores/debugMode.ts`）两道门禁均放行
-- **课程数据完整性守卫**：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；新增/改名课程后此测试必须全绿
+- **课程数据完整性守卫**：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；`data/lessons/manifest.parity.test.ts` 校验摘要与完整数据一致（数据改动后必须运行 `pnpm academy:manifest`）；`data/lessons/loaders.test.ts` 校验 Level/变体映射与速训全量。新增/改名课程后三者必须全绿
+- **加载分层硬约束**：首页/store/成就/轨道/图谱禁止静态 import `data/courses`、`data/lessons/variants` 或完整 `Lesson` 数据；只允许 `utils/academyMeta` + `data/lessons/manifest`。完整课程只能经 `data/lessons/loaders.ts` 动态加载（课程页/认证/速训），路由入口禁止整批 `loadAcademyCourses`（详见 TDD §5.8 第 12 条）
 - **变体课时改名/删除的第二处守卫**：`data/theoryVariantBridgeIntegrity.test.ts`（反向存在性）扫描理论学院变体数据源码里被引用的课时 id，对 `ALL_VARIANT_LESSONS` 与 `LEVELS` 两个全集分别断言（变体专属课必须存在且不在 `LEVELS`；三变体共享地基课必须存在于 `LEVELS`），并比对引用点自带的回退标题与 `academy.lessonTitle.*` 权威值。**改名或删除任何 `l<n>sd-*` / `l<n>hu-*` 课时、或修改 `academy.lessonTitle` 权威标题，必须同批更新理论侧 `data/levels/variants/{short-deck,heads-up}/chapterPracticeMap.ts`**，否则该守卫即红（变体课时进不了任何白名单，这是它唯一的兜底）
 - **mental-tilt-recognition 例外**：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）
 - **Lesson.prerequisites 字段**：`Lesson` 类型含 `prerequisites?: string[]` 字段（定义于 `strategy-academy/types.ts`）；声明 prerequisite 时必须确保引用的课程 ID 存在
@@ -150,7 +153,7 @@ additionalPrompt: ""
 - **复习推荐主题词表**：`shouldRecommendReview` 的 suggestedTopics 为课程 id（`REVIEW_TOPICS_SEVERE` / `REVIEW_TOPICS_MILD`，语言无关），消费方经 `pickReviewTargetUnit` 按 id 比对定位小节；禁止硬编码自然语言字符串（BUG-ACA-007 zh/en 失配模式）；新增主题 id 必须在课程体系真实存在并登记 `REVIEW_TOPIC_UNIT_ANCHORS`
 - **TiltWarning 三选项**：`TiltWarning` 组件必须提供三选项："我知道了"（仅关闭）/ "学习情绪管理"（跳转 `mental-tilt-recognition` 课程）/ "休息一下"（返回 Dashboard）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节与 TDD 5.9）**：测验与 Drill 选项禁止按题库数据原序直接渲染；课后测验/复习用 id 稳定种子（跨会话顺序不变），认证考试（LevelCertification）用会话随机种子；i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）必须在 `t()` 解析后用 `orderResolvedOptions` 重排，且顺序不得随语言变化；重排必须同步重映射 correctIndex / correctStrategyIndex，判分与结果记录以重排后对象为唯一事实源；源题库数据不手改重排；新增/扩充题库必须被分布守卫测试覆盖
-- **课程内容渲染层 key 覆盖（数据层零改动）**：课程正文/题库/例题/实战/Drill/术语/对手档案为数据层内联中文（data/** 不改），渲染层经 `utils/contentKeys.ts` 的 `t(key, { defaultValue: 数据层中文 })` 覆盖；新增内容 key 必须同步 `src/i18n/locales/{zh,en}/academy.json`（contentI18n.test.ts 双语对称守卫）；quiz/practice/drill 选项在 `t()` 解析后走既有排序出口（顺序不随语言变化）
+- **课程内容渲染层 key 覆盖（数据层零改动）**：课程正文/题库/例题/实战/Drill/术语/对手档案为数据层内联中文（data/** 不改），渲染层经 `utils/contentKeys.ts` 的 `t(key, { defaultValue: 数据层中文 })` 覆盖；新增内容 key 写入 `src/i18n/locales/<lng>/academy-course/<levelN|variant|local-lessons>.json`（UI chrome 才写 `academy.json`），zh/en 必须同批；quiz/practice/drill 选项在 `t()` 解析后走既有排序出口（顺序不随语言变化）
 - 响应式宽度语义：概览视图可展宽（L2），但内部必须以自适应分栏承接，禁止把单个内容块或侧栏用 `1fr` 拉到超宽；阅读/作答视图保持 L3 收敛（正文 `max-w-prose`，作答视图聚焦居中），禁止跟随概览展宽。宽度切换统一在 AppLayout（platform-dev），模块不做负 margin / 全宽容器 hack
 
 ## Orchestration

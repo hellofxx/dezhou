@@ -1133,9 +1133,15 @@ interface DailyRecommendation {
     - **方案**：渲染层 key 覆盖——模块级 `utils/contentKeys.ts`（strategy-academy 与 theory-academy 各一份，命名空间隔离）提供 key 生成函数，消费组件统一 `t(key, { defaultValue: <数据层中文> })`；英文界面命中 i18n key，中文界面回退数据层原文（行为零变化）。
     - **key 命名**：正文段落（section 无稳定 id）用 `lessonId + content 数组索引` 派生（`academy.lessonContent.<lessonId>.<i>` / `theory.content.<chapterId>.<i>`）；quiz/example/practice/drill 均有稳定 id 直接用 id 派生（`academy.lessonQuiz|lessonExample|lessonPractice|drill|opponentDrill.<id>.*` / `theory.quiz.<id>.*`）；术语 `academy.term.<id>.*`；对手档案 `academy.opponent.<id>.*`（跨模块共享）；Basics `academy.basicsContent.<stepId>.<i>`；unit 标题 `academy.unitTitle.<lessonId>.<unitId>`；theory 学习目标 `theory.chapterObjectives.<chapterId>.<i>`。
     - **命名空间冲突规避**：`academy.content/quiz/practice` 已被 UI chrome 占用，课程内容统一用 `lesson*` 前缀（`lessonContent/lessonQuiz/lessonPractice`）；`theory.objectives` 被 UI 标签占用，改用 `chapterObjectives`；quiz 题库并入现有 UI `quiz` 对象（UI 标签 + 题目共存）。
-    - **翻译文件组织**：`locales/{zh,en}/academy-course/` 子目录按课程代码文件拆分（`level1~8.json` + `short-deck.json` + `heads-up.json` + `local-lessons.json`），`config.ts` `import.meta.glob` eager 加载 + `mergeCourseBundles()` deep 合并注入 `academy` 命名空间，`t()` 路径不变；academy.json 瘦身为 UI chrome。
+    - **翻译文件组织**：`locales/{zh,en}/academy-course/` 子目录按课程代码文件拆分（`level1~8.json` + `short-deck.json` + `heads-up.json` + `local-lessons.json` + 专题文件），由 `i18n/academyCourse.ts` 按文件懒加载并 deep 合并注入 `academy` 命名空间，`t()` 路径不变；academy.json 瘦身为 UI chrome。路由入口不再整批加载（详见第 12 条）。
     - **选项排序治理**：quiz/practice/drill 的 resolve 函数先 `t()` 解析（option 用原始索引派生 key），再由调用方走既有排序出口（`orderQuizQuestion` / `orderPracticeOptions` / `orderTheoryQuizQuestion` / `orderDrillOptions`）重排；种子只依赖 id，zh/en 顺序一致，correctIndex 同步重映射。
     - **守卫**：`src/i18n/contentI18n.test.ts` 强化为全量遍历断言——从数据模块（`ALL_VARIANT_LESSONS` / `LOCAL_LESSONS` / `BASICS_STEPS` / `GLOSSARY_TERMS` / `OPPONENT_PROFILES` / `OPPONENT_DRILL_QUESTIONS` / `ALL_VARIANT_THEORY_LEVELS`）遍历生成全部渲染消费点 key（expectedCount ≈ 12948），断言 zh/en 双语 JSON 均存在；localeParity / curriculumIntegrity / theoryIntegrity / 排序分布守卫保持绿。存在性检查**不覆盖**"文案已改而译文陈旧 / 下标错位"，对齐由 `src/i18n/contentAlignment.test.ts` 逐字镜像断言（见本节第 17 条）
+
+12. **加载分层（2026-10）**：与理论学院同构的三层懒载，禁止任一层回退为全量静态依赖——
+    - **数据**：`data/lessons/manifest/` 是由完整课程生成的目录摘要（`pnpm academy:manifest`），Home/store/成就检查/轨道/图谱/每日计划只读它（`utils/academyMeta.ts` + `utils/trackMeta.ts`）。完整课程由 `data/lessons/loaders.ts` 按「课程 → 所属 Level」动态 import（L4 合并 4A/4B；变体走各自 index；本土课走 localLessons）；`CourseView`/`LevelCertification`/`QuickDrill` 经 `useAcademyLessons` 消费。vite `manualChunks` 按摘要/单 Level/单变体拆分，摘要 import 不得拖入课程正文
+    - **内容语言包**：`i18n/academyCourse.ts` 按文件加载（课程页 = `levelN|变体|local` + `term/opponent/opponentDrill`；Basics = `basics`；认证 = `levelN` + 专题；速训 = 标准全级别），成功才入缓存、失败可重试、并发共享 in-flight；语言切换只补已访问文件。en 下页面经 `useAcademyCourseI18n` 等待目标文件，zh 直接渲染数据层原文
+    - **意图预取**：首页课程阶梯/继续学习卡在 hover/focus 时预取目标课程所属 Level 的完整数据；点击后直接命中缓存
+    - **守卫**：`data/lessons/manifest.parity.test.ts`（摘要 ↔ 完整数据）、`data/lessons/loaders.test.ts`（Level/变体映射与速训全量）、`i18n/academyCourse.test.ts`（课程 id → 文件映射、定向加载、语言切换补载）
 
 11. **新增课程**（v2.1 新增）：
     - `l3-3bet-postflop`：3Bet 翻后策略
@@ -1681,6 +1687,8 @@ manualChunks(id) {
 > **模块资源加载缓存语义**（事实源：`src/i18n/preload.ts` 的 `loadOne`）：`loadedKeys`（已完成集合）与 `loadPromises`（in-flight Map）双表协作——① 同一模块 key 的并发请求共享 `loadPromises` 中的同一个 Promise，不重复 `import()`；② `loadedKeys.add` **只在** `addResourceBundle` 成功之后执行，加载失败时 `.catch` 仅告警并允许下次重试（失败即标记会使该模块文案在会话余下时间永久滞留 fallback 语言）；③ `.finally` 清除 in-flight 条目。新增任何"加载 + 缓存"型工具须遵循同一顺序（成功才入缓存、失败可重试、并发共享句柄）。
 >
 > **theory 内容包**（`src/i18n/theoryContent.ts`）：同一缓存语义的第二实例——按 level 独立缓存、独立 in-flight；`touchedLevels` 记录已访问 level 供语言切换补载。`useTheoryContentI18n` 以 `isTheoryContentLoaded` 做渲染期同步判断（已缓存不闪骨架），en 未就绪时返回 false 触发骨架；zh 直接渲染数据层中文。
+>
+> **academy-course 课程文案**（`src/i18n/academyCourse.ts`）：同一缓存语义的第三实例——按文件（levelN / 变体 / local / basics / 专题）独立缓存与 in-flight；`touchedFiles` 记录已访问文件，语言切换只补目标语言的这些文件。`useAcademyCourseI18n` 负责 en 就绪门禁；zh 直接渲染数据层原文。
 
 ### 9.2 IndexedDB
 
@@ -1821,7 +1829,7 @@ persist(
 | pot-odds | quizOrder.test.ts | 选项排序与分布守卫 |
 | progress | statsAggregator / streakCalc / reviewRoute / migrateTheoryReviewKeys / store.migrate / store.persist-shape 各 .test.ts，StreakTracker / SpacedRepetitionPanel / useEnsureReviewSourceI18n.wiring 各 .test.tsx | 聚合、连击、复习项跳转路由解析、理论复习项 key 化迁移（含 key 镜像守卫）、复习来源包按需加载与渲染接线、迁移链路、persist 形状、组件冒烟 |
 | puzzle-trainer | puzzleBank.optionOrder.test.ts / store.migrate / store.persist-shape | 选项语义排序、迁移、persist 形状 |
-| strategy-academy | curriculumIntegrity / theoryReferenceIntegrity / practiceFeedbackView / evImpactTone / evCalibration / quizShuffle / drillOptionOrder / opponentScoring / store.migrate / store.persist-shape 各 .test.ts，DrillLessonRouter.test.tsx / TheoryReferenceBlock.test.tsx | 课程数据完整性、反向（策略→理论）引用无悬空、反馈三态诚实渲染、evImpact 着色三态、EV 标定覆盖率棘轮、选项洗牌、对手评分、桥接跳转解析、Drill 路由冒烟 |
+| strategy-academy | curriculumIntegrity / theoryReferenceIntegrity / practiceFeedbackView / evImpactTone / evCalibration / quizShuffle / drillOptionOrder / opponentScoring / store.migrate / store.persist-shape / manifest.parity / lessons/loaders 各 .test.ts，DrillLessonRouter.test.tsx / TheoryReferenceBlock.test.tsx | 课程数据完整性、反向（策略→理论）引用无悬空、反馈三态诚实渲染、evImpact 着色三态、EV 标定覆盖率棘轮、选项洗牌、对手评分、桥接跳转解析、Drill 路由冒烟、目录摘要与按 Level 懒载映射 |
 | theory-academy | theoryIntegrity / quizOrder / theorySrs / store.migrate / store.persist-shape / manifest.parity / levels/loaders 各 .test.ts，theoryReviewI18n.test.tsx | 理论数据完整性、选项重映射与分布守卫、复习项 id 命名空间与 i18n key 载荷、迁移链路、persist 形状、目录摘要与变体懒载映射、复习文案双语渲染 |
 
 ### 11.2 组件测试（jsdom 冒烟）

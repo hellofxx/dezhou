@@ -8,6 +8,7 @@ import { transitionSlow } from '@/shared/utils/motion';
 import { ArrowLeft, Zap, Target, RotateCcw, Trophy, Clock, Award, CheckCircle2, Sparkles, Gift } from 'lucide-react';
 import { useAcademyStore } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
+import { useAcademyLessonsForQuickDrill } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForQuickDrill } from '@/i18n/academyCourse';
 import { useProgressStore } from '@/features/progress/store';
 import { computeQuickDrillScore, getQuickDrillQuestions } from '../utils/quickDrill';
@@ -54,6 +55,7 @@ export default function QuickDrill() {
   const sessionLimitReached = useSessionLimitReached();
 
   const contentReady = useAcademyCourseI18n(deriveAcademyCourseFilesForQuickDrill());
+  const lessons = useAcademyLessonsForQuickDrill();
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [difficulty, setDifficulty] = useState<QuestionDifficulty>('beginner');
@@ -65,7 +67,6 @@ export default function QuickDrill() {
   const [freezeRewarded, setFreezeRewarded] = useState(false);
   // P1-4.3: 当前快速训练连续天数（用于结果展示）
   const [currentQuickDrillStreak, setCurrentQuickDrillStreak] = useState(0);
-
   // 根据能力评估确定弱点领域
   const weakAreas = useMemo(() => {
     const areas: string[] = [];
@@ -138,7 +139,12 @@ export default function QuickDrill() {
   // P1E-04: 混合+缺口回填由 composeQuickDrillQuestions 纯函数完成（无 options 的
   // 复习项被丢弃后按缺口从新题池回填，保证快速 5 题 / 普通 8 题的题数契约）
   const { drillQuestions, reviewCount } = useMemo(() => {
-    const newQuestions = getQuickDrillQuestions(modeWeakAreas, effectiveDifficulty, questionCount);
+    const newQuestions = getQuickDrillQuestions(
+      lessons ?? [],
+      modeWeakAreas,
+      effectiveDifficulty,
+      questionCount,
+    );
 
     if (!isQuickMode || todayReviewItems.length === 0) {
       return { drillQuestions: newQuestions, reviewCount: 0 };
@@ -146,7 +152,7 @@ export default function QuickDrill() {
 
     const mixed = composeQuickDrillQuestions(newQuestions, todayReviewItems, questionCount, userAccuracy);
     return { drillQuestions: mixed.questions, reviewCount: mixed.reviewCount };
-  }, [modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy]);
+  }, [lessons, modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy]);
 
   const drill: PracticeDrill = useMemo(() => ({
     id: `quick-drill-${Date.now()}`,
@@ -208,7 +214,7 @@ export default function QuickDrill() {
 
   // 止损早退必须位于全部 hooks 之后：守卫状态在挂载期间翻转（答题中达上限/
   // 调试开关切换）时，hooks 数量变化会触发 "Rendered fewer hooks" 崩溃
-  if (!contentReady) return <div className="py-6"><PageSkeleton /></div>;
+  if (lessons === null || !contentReady) return <div className="py-6"><PageSkeleton /></div>;
 
   if (sessionLimitReached) {
     return <SessionLimitGuard />;

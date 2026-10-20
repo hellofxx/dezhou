@@ -8,12 +8,14 @@ import { transitionStandard } from '@/shared/utils/motion';
 import { ArrowLeft, Clock, HelpCircle, Zap } from 'lucide-react';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
+import { useAcademyLessonsForLesson } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForLesson } from '@/i18n/academyCourse';
 import { useAcademyStore } from '../store';
-import { findLessonById, getNextLesson, getLessonProgressMeta } from '../utils/courseProgress';
 import { completeCourse } from '../utils/completeCourse';
-import { LEVELS } from '../data/courses';
-import { LOCAL_LESSONS } from '../data/localLessons';
+import {
+  findLessonSummaryById, findLevelSummaryById, findLevelSummaryByLessonId,
+  getLessonProgressSummary, getNextLessonSummary,
+} from '../utils/academyMeta';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { LEARNING_TRACKS } from '../data/learningTracks';
 import { LessonContent } from './LessonContent';
@@ -33,9 +35,6 @@ import type { PracticeResult, LearningTrack } from '../types';
 
 type Phase = 'reading' | 'quiz' | 'done';
 
-// P1 修复（审计 2.1）：本土课 ID 集合，门禁按 LOCAL_TRACK 前置口径单独判定
-const LOCAL_LESSON_IDS = new Set(LOCAL_LESSONS.map((l) => l.id));
-
 export default function CourseView() {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
@@ -53,9 +52,13 @@ export default function CourseView() {
   const readingRootRef = useRef<HTMLDivElement>(null);
   // en 下先确保本课文案文件就绪，再渲染正文/小测（zh 数据层原文即可用）
   const contentReady = useAcademyCourseI18n(lessonId ? deriveAcademyCourseFilesForLesson(lessonId) : []);
-
-  const lesson = lessonId ? findLessonById(lessonId) : undefined;
-  const progress = lesson ? getLessonProgressMeta(lesson) : { percent: 0, current: 0, total: 0 };
+  // 完整课程数据按当前课程所属 Level/变体懒载（首页/store 只读 manifest）
+  const loadedLessons = useAcademyLessonsForLesson(lessonId);
+  const lessonSummary = lessonId ? findLessonSummaryById(lessonId) : undefined;
+  const lesson = lessonId
+    ? loadedLessons?.find((item) => item.id === lessonId)
+    : undefined;
+  const progress = lessonId ? getLessonProgressSummary(lessonId) : { percent: 0, current: 0, total: 0 };
   const isDrill = lesson?.type === 'drill';
 
   // P4 修复（4.1-P1-1）+ 审计 1.1/2.1：按 lesson 所属 LevelInfo 条目判门禁，防止通过 URL 绕过；
@@ -67,15 +70,13 @@ export default function CourseView() {
   // 调试解锁：解除本土课与课程级门禁（URL 直达）
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
-  // lesson 所属的 LevelInfo 条目（本土课已并入 l7，但门禁下方单独处理）
-  const levelEntry = lesson
-    ? LEVELS.find((l) => l.lessons.some((x) => x.id === lesson.id))
-    : undefined;
-  const isLocalLesson = !!lesson && LOCAL_LESSON_IDS.has(lesson.id);
+  // lesson 所属的 Level 条目（本土课已并入 l7，但门禁下方单独处理）
+  const levelEntry = lessonId ? findLevelSummaryByLessonId(lessonId) : undefined;
+  const isLocalLesson = !!lessonId?.startsWith('local-');
 
   // 本土课门禁：按 LOCAL_TRACK 前置（l1-l3 全部完成）放行，不继承 l7 的 l3+l5 硬门禁
   const isEntryCompleted = (levelId: string): boolean => {
-    const entry = LEVELS.find((l) => l.id === levelId);
+    const entry = findLevelSummaryById(levelId);
     return !!entry && entry.lessons.every((x) => completedLessons.includes(x.id));
   };
   const localPrereqIds = LOCAL_TRACK.prerequisiteLevelIds ?? [];
@@ -184,7 +185,21 @@ export default function CourseView() {
     [lessonId, lesson]
   );
 
-  if (!lesson) {
+  // P3: 支持 target 参数 — 'practice' 时重挂载 LessonContent 直达实战（接受 drill 重开）
+  const handleRestart = useCallback((target: 'units' | 'practice' = 'units') => {
+    setPhase('reading');
+    setQuizScore(0);
+    setDrillResult(null);
+    setRestartTarget(target);
+    // 清理 hash 残留
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, []);
+
+  // 所有 hooks 之后再分派状态：异步加载中不能提前 return，否则 hook 数量在加载前后不一致
+  if (loadedLessons === null) return <div className="py-6"><PageSkeleton /></div>;
+  if (!lessonSummary || !lesson) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4">
         <p className="text-[var(--ivory-muted)]">
@@ -205,7 +220,7 @@ export default function CourseView() {
     const levelLocked = !isLessonLevelUnlocked;
     // 本土课显示 LOCAL_TRACK 前置；其余按所属 LevelInfo 条目的 prerequisiteLevelIds
     const prereqIds = isLocalLesson ? localPrereqIds : (levelEntry?.prerequisiteLevelIds ?? []);
-    const missingPrereqs = lesson?.prerequisites?.filter((id) => !completedLessons.includes(id)) ?? [];
+    const missingPrereqs = lesson.prerequisites?.filter((id) => !completedLessons.includes(id)) ?? [];
 
     return (
       <CourseLockedView
@@ -220,7 +235,7 @@ export default function CourseView() {
 
   if (!contentReady) return <div className="py-6"><PageSkeleton /></div>;
 
-  const nextLesson = getNextLesson(lesson.id);
+  const nextLesson = getNextLessonSummary(lesson.id);
 
   // 查找当前课程所属路径的关联路径（用于完成页推荐）
   // P2-04: 过滤排除（a）lessonIds 包含当前 lesson.id 的关联轨道；（b）用户已完成全部课程的轨道
@@ -234,18 +249,6 @@ export default function CourseView() {
     const completed = track.lessonIds.filter((id) => completedLessons.includes(id)).length;
     return completed < total;
   });
-
-  // P3: 支持 target 参数 — 'practice' 时重挂载 LessonContent 直达实战（接受 drill 重开）
-  const handleRestart = useCallback((target: 'units' | 'practice' = 'units') => {
-    setPhase('reading');
-    setQuizScore(0);
-    setDrillResult(null);
-    setRestartTarget(target);
-    // 清理 hash 残留
-    if (window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname);
-    }
-  }, []);
 
   return (
     <div ref={readingRootRef} className="pb-16">

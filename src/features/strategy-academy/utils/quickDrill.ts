@@ -1,5 +1,4 @@
-import type { PracticeQuestion, QuestionDifficulty } from '../types';
-import { getAllLessons } from './courseProgress';
+import type { Lesson, PracticeQuestion, QuestionDifficulty } from '../types';
 
 /**
  * 快速训练综合分数：accuracy * 100 + 时间奖励
@@ -15,12 +14,13 @@ export function computeQuickDrillScore(accuracy: number, averageTime: number): n
  * 用于"5分钟速训"功能
  */
 export function getQuickDrillQuestions(
+  lessons: readonly Lesson[],
   weakAreas: string[],
   difficulty: QuestionDifficulty,
   count: number = 10,
   excludeLessons: string[] = []
 ): PracticeQuestion[] {
-  const allQuestions = collectAllPracticeQuestions();
+  const allQuestions = collectAllPracticeQuestions(lessons);
   const candidates: PracticeQuestion[] = [];
 
   // 1. 优先选择与弱点相关的题目
@@ -53,8 +53,10 @@ export function getQuickDrillQuestions(
 /**
  * 收集所有课程中的 practice questions
  */
-export function collectAllPracticeQuestions(): PracticeQuestion[] {
-  const allLessons = getAllLessons();
+export function collectAllPracticeQuestions(
+  lessons: readonly Lesson[],
+): PracticeQuestion[] {
+  const allLessons = lessons;
   const questions: PracticeQuestion[] = [];
 
   for (const lesson of allLessons) {
@@ -69,12 +71,14 @@ export function collectAllPracticeQuestions(): PracticeQuestion[] {
 /**
  * 获取题库统计信息
  */
-export function getQuestionPoolStats(): {
+export function getQuestionPoolStats(
+  lessons: readonly Lesson[],
+): {
   total: number;
   byDifficulty: Record<QuestionDifficulty, number>;
   byStreet: Record<string, number>;
 } {
-  const allQuestions = collectAllPracticeQuestions();
+  const allQuestions = collectAllPracticeQuestions(lessons);
   const byDifficulty: Record<QuestionDifficulty, number> = {
     beginner: 0,
     intermediate: 0,

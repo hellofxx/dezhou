@@ -5,6 +5,7 @@ import { ChevronDown, Lock, CheckCircle2, Award, PlayCircle, Clock } from 'lucid
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import type { LevelSummary } from '../types';
+import { loadAcademyLessonsForLesson } from '../data/lessons/loaders';
 import { ProgressBar } from './ProgressBar';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import {
@@ -43,6 +44,16 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
   const { t } = useTranslation();
   const activeId = findActiveLevelId(levels, completedLessons, isUnlocked);
   const [expandedId, setExpandedId] = useState<string | null>(activeId);
+  // 意图预取：悬停/聚焦当前等级或具体课程时，提前加载该课所属 Level 的完整数据
+  const prefetchLesson = (lessonId: string) => {
+    void loadAcademyLessonsForLesson(lessonId);
+  };
+  const prefetchActive = () => {
+    const active = levels.find((level) => (level.id ?? String(level.level)) === activeId);
+    const target = active?.lessons.find((lesson) => !completedLessons.includes(lesson.id))
+      ?? active?.lessons[0];
+    if (target) prefetchLesson(target.id);
+  };
 
   const openLevel = (level: LevelSummary) => {
     const target = level.lessons.find((l) => !completedLessons.includes(l.id)) ?? level.lessons[0];
@@ -58,7 +69,11 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
   };
 
   return (
-    <section aria-label={t('academy.path.title')}>
+    <section
+      aria-label={t('academy.path.title')}
+      onPointerEnter={prefetchActive}
+      onFocus={prefetchActive}
+    >
       <div className="flex items-end justify-between gap-4 px-1 mb-3">
         <div>
           <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
@@ -198,6 +213,8 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
                             <button
                               type="button"
                               onClick={() => navigate(`/academy/lesson/${lesson.id}`)}
+                              onPointerEnter={() => prefetchLesson(lesson.id)}
+                              onFocus={() => prefetchLesson(lesson.id)}
                               aria-label={`${stateLabel} · ${resolveLessonTitle(t, lesson)}`}
                               className={cn('lesson-chip', done && 'done', isNext && 'current')}
                             >

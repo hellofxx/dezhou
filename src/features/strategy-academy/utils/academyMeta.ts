@@ -102,6 +102,28 @@ export function inferVariantFromLessonId(lessonId: string): PokerVariant {
   return 'standard';
 }
 
+/** 同变体序列内的下一课（目录层，替代旧 getAllLessons 全量推导） */
+export function getNextLessonSummary(lessonId: string): LessonSummary | undefined {
+  const sequence = getVariantLessonSummaries(inferVariantFromLessonId(lessonId));
+  const index = sequence.findIndex((lesson) => lesson.id === lessonId);
+  return index >= 0 ? sequence[index + 1] : undefined;
+}
+
+/** 课程在所属变体序列中的进度位置（目录层，供课程页进度条） */
+export function getLessonProgressSummary(lessonId: string): {
+  percent: number;
+  current: number;
+  total: number;
+} {
+  const sequence = getVariantLessonSummaries(inferVariantFromLessonId(lessonId));
+  const index = sequence.findIndex((lesson) => lesson.id === lessonId);
+  return {
+    percent: sequence.length > 0 ? ((index + 1) / sequence.length) * 100 : 0,
+    current: index + 1,
+    total: sequence.length,
+  };
+}
+
 /**
  * Level 条目解锁判定（摘要层单源）：
  * L1 需完成基础入门；声明 prerequisiteLevelIds 时全部前置 Level 完成；

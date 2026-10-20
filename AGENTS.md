@@ -130,6 +130,7 @@ src/
 - 模块注册表 `src/i18n/moduleRegistry.ts` 为唯一契约源：模块增删须同步 `I18nModuleKey` / `ALL_MODULES` / `loadModule`（/ `CORE_MODULES` / `FEATURE_GROUPS`）
 - **课程内容走双轨**：数据层保留中文原文 + 渲染层 i18n key 覆盖，zh 侧存在与原文**逐字一致的镜像 key**；新增/修改课程文本必须同批同步 zh 与 en。改课程时**正文 / 选项 / 解析 / 小测 / 双语 locale 是同一原子变更单元**（规则见 PRD §6.7.4，口径见 §12.4.3）
 - **理论学院内容分层**：`theory.json` 只保留目录/UI；正文/小测/目标按 level 拆分于 `src/i18n/locales/<lng>/theory-content/`，由章节页/复习出口经 `i18n/theoryContent.ts` 按需加载。首页/store 只读 `data/levels/manifest` 摘要，禁止静态引用完整 `data/levels/variants/**`
+- **策略学院加载分层**：首页/store/轨道/图谱只读 `data/lessons/manifest` 摘要；完整课程经 `data/lessons/loaders.ts` 按 Level/变体懒载。`academy-course` 文案由 `i18n/academyCourse.ts` 按文件加载（课程页 = 所属 Level/变体 + 专题），路由入口禁止整批 `loadAcademyCourses`
 - **复习类持久状态必须存 i18n key**（间隔重复队列的 label 与 `metadata.front/back` 等），禁止存任何语言的原文；且渲染于首页的复习界面必须保证来源包按需可得——两者是**配对要求**，只做其一比原状更糟（PRD §12.4.3）
 
 ## UI/UX 设计系统（摘要，详见 docs/AI_GUIDE.md）

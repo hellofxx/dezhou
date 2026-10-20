@@ -26,7 +26,7 @@
 | `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `variant` | 28 | — | 44 |
 | `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 11 | `progress` | 13 |
 | `range-trainer` | `range-trainer-dev` | `RangeTrainerHome` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 8 | `progress` | 13 |
-| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v5）` | `academy`, `drills`, `gto`, `quickDrill`, `variant` | 33 | `progress` | 46 |
+| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v5）` | `academy`, `drills`, `gto`, `quickDrill`, `variant` | 34 | `progress` | 46 |
 | `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v3）` | `academy`, `theory`, `variant` | 22 | `progress` | 19 |
 
 ## Lazy 路由表

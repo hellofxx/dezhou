@@ -35,8 +35,11 @@ export default defineConfig({
             return 'academy-lessons-heads-up';
           }
           if (id.includes('/strategy-academy/data/lessons/variants/standard/')) {
-            if (/level[1-4]/i.test(id)) return 'academy-lessons-early';
-            return 'academy-lessons-late';
+            const levelMatch = /standardLevel([1-8])([ab])?/i.exec(id);
+            if (levelMatch) {
+              return `academy-lesson-l${levelMatch[1]}${(levelMatch[2] ?? '').toLowerCase()}`;
+            }
+            return 'academy-lessons-standard-index';
           }
           if (id.includes('/strategy-academy/data/localLessons/')) {
             return 'academy-lessons-local';

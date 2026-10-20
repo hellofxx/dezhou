@@ -4,6 +4,7 @@ import { PlayCircle, Sparkles, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import type { LevelSummary } from '../types';
+import { loadAcademyLessonsForLesson } from '../data/lessons/loaders';
 import { resolveLessonTitle } from '../utils/titleKeys';
 
 interface AcademyResumeProps {
@@ -56,6 +57,10 @@ export function AcademyResume({
     navigate('/academy/quick-drill');
   };
 
+  const prefetchNextLesson = () => {
+    if (nextLesson) void loadAcademyLessonsForLesson(nextLesson.id);
+  };
+
   const eyebrowText =
     mode === 'fresh'
       ? t('academy.resume.freshEyebrow')
@@ -95,6 +100,8 @@ export function AcademyResume({
       animate={{ opacity: 1, y: 0 }}
       transition={transitionSlow}
       className="panel brass-rail academy-hero"
+      onPointerEnter={prefetchNextLesson}
+      onFocus={prefetchNextLesson}
     >
       <div className="flex flex-col md:flex-row md:items-center gap-5">
         {/* 左侧：eyebrow + 主 CTA */}

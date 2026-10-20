@@ -10,9 +10,10 @@
  */
 import { describe, it, expect } from 'vitest';
 import { collectAllPracticeQuestions } from './quickDrill';
+import { getAllLessons } from './courseProgress';
 import { orderPracticeOptions } from './practiceOptionOrder';
 
-const BANK = collectAllPracticeQuestions();
+const BANK = collectAllPracticeQuestions(getAllLessons());
 
 describe('practiceOptionOrder 分布守卫（P0B-01）', () => {
   it('题库非空且每题恰有一个正确选项（守卫前提）', () => {

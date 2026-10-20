@@ -7,8 +7,9 @@ import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from '
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore, REQUIRED_ACCURACY } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
+import { useAcademyLessonsForLevel } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForLevel } from '@/i18n/academyCourse';
-import { LEVELS } from '../data/courses';
+import { getLevelSummariesByNumber } from '../utils/academyMeta';
 // P1E-09: 题目集构建抽出为种子化纯函数（重试重置种子即重洗）
 import { buildCertificationExam } from '../utils/certificationExam';
 import { resolveQuizQuestion } from '../utils/contentKeys';
@@ -24,8 +25,9 @@ export default function LevelCertification() {
   // （组件旧实现只查 certifiedAt，认证过期后仍显示"已通过"）
   const isCertified = useAcademyStore((s) => s.isCertified(level));
   // 审计 1.2：合并同 level 的全部条目（如 Level 4 = 4A + 4B），题池与进度均按合并口径
-  const levelEntries = useMemo(() => LEVELS.filter((l) => l.level === level), [level]);
-  const mergedLessons = useMemo(() => levelEntries.flatMap((e) => e.lessons), [levelEntries]);
+  const levelEntries = useMemo(() => getLevelSummariesByNumber(level), [level]);
+  const loadedLessons = useAcademyLessonsForLevel(level);
+  const mergedLessons = loadedLessons ?? [];
 
   const [started, setStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,7 +66,7 @@ export default function LevelCertification() {
     );
   }
 
-  if (!contentReady) {
+  if (loadedLessons === null || !contentReady) {
     return (
       <div className="py-6">
         <PageSkeleton />
