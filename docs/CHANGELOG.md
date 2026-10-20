@@ -9,6 +9,17 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-10-20 理论学院加载性能：目录摘要 / 内容包 / 变体数据三层懒载（3 个 commit）
+
+问题不是单点慢，而是三层全量加载叠加：应用渲染前 `store.bootstrap` 会拉入理论全量章节数据；进入 `/theory` 又拉完整 `theory.json`；章节页与首页共用同一份含全部正文的数据。本批按「目录摘要 → 内容包 → 完整数据」逐层拆开。
+
+- **目录摘要（1822995）**：新增 `data/levels/manifest/`（`pnpm theory:manifest` 由完整数据生成）+ `utils/theoryMeta.ts`；Home/store/成就检查改用摘要，完整数据不再进入启动链路。`manifest.parity.test.ts` 守卫摘要与数据一致。启动依赖图 **815KB → 623KB gzip**（理论全量数据 203KB 移出首屏）。
+- **内容语言包（c8b9f1f）**：`theory.json` 只保留目录/UI 文案，正文/题目/目标拆到 `locales/<lng>/theory-content/<level>.json`（zh 584KB → 24KB，en 656KB → 28KB 核心包）；新增 `i18n/theoryContent.ts`（成功才入缓存 / 失败可重试 / 并发共享 in-flight），章节页按 level 加载，疑难清单按标记题所属 level 加载，Dashboard 复习项从 `theory.quiz.*` key 反解题 id 后补载，语言切换只补已访问 level。`contentI18n` 增加文件集与「核心包不得残留正文」断言。
+- **完整数据按变体（233e9ff）**：`data/levels/loaders.ts` 动态 import 单变体数据（standard 106KB / short-deck 47KB / heads-up 50KB gzip），`useTheoryLevels` 缓存 + 加载态；`/theory` 首页路由增量约 **22KB gzip**（此前约 410KB），章节页首开约 **70–131KB gzip**（视变体），并给章节阶梯/继续学习卡加 hover/focus 意图预取。顺带抽出 `TheoryChapterHeader`，`TheoryChapterView` 回到 300 行量级。
+- **验证**：`pnpm verify` 全绿（170 文件 / 1190 测试）；`pnpm build` 通过；`agents:map` 已同步。
+- **commit**：1822995（manifest）/ c8b9f1f（i18n 拆分）/ 233e9ff（变体懒载 + 预取）。
+- **未覆盖 / 遗留**：真实浏览器视觉、网络面板时序与 <768px 响应式未验证；首屏剩余大头是 strategy-academy bootstrap（约 284KB gzip，含 `academy-levels-late` 与课程数据），不在本批范围；若后续要压首屏，应单独评估其注册时机/摘要化。
+
 ### 2026-10-19 仓库结构与 Agent 工作流优化 Phase 1（6 个 commit）
 
 Phase 1 只做「不改变产品行为」的工程卫生：把历史包袱移出主仓、把守卫与文档收进有明确归属的位置，并为后续规模治理装上只减不增的棘轮。全部改动经 `pnpm verify` 与 `pnpm build` 终验。
