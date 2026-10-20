@@ -1,5 +1,11 @@
 import type { TFunction } from 'i18next';
-import type { BasicsStep, ConceptNode, LearningTrack, LevelInfo, Lesson } from '../types';
+import type {
+  BasicsStep,
+  ConceptNode,
+  LearningTrack,
+  LevelSummary,
+  LessonSummary,
+} from '../types';
 
 /**
  * 渲染层课程/等级标题 i18n key 解析（单源）。
@@ -29,25 +35,25 @@ export function levelUnlockKey(levelId: string): string {
   return `academy.levelUnlock.${levelId}`;
 }
 
-export function resolveLessonTitle(t: TFunction, lesson: Lesson): string {
+export function resolveLessonTitle(t: TFunction, lesson: LessonSummary): string {
   return t(lessonTitleKey(lesson.id), { defaultValue: lesson.title });
 }
 
-export function resolveLessonSubtitle(t: TFunction, lesson: Lesson): string {
+export function resolveLessonSubtitle(t: TFunction, lesson: LessonSummary): string {
   return t(lessonSubtitleKey(lesson.id), { defaultValue: lesson.subtitle });
 }
 
-export function resolveLevelTitle(t: TFunction, level: LevelInfo): string {
+export function resolveLevelTitle(t: TFunction, level: LevelSummary): string {
   return t(levelTitleKey(level.id ?? String(level.level)), { defaultValue: level.title });
 }
 
-export function resolveLevelDescription(t: TFunction, level: LevelInfo): string {
+export function resolveLevelDescription(t: TFunction, level: LevelSummary): string {
   return t(levelDescriptionKey(level.id ?? String(level.level)), {
     defaultValue: level.description,
   });
 }
 
-export function resolveLevelUnlock(t: TFunction, level: LevelInfo): string {
+export function resolveLevelUnlock(t: TFunction, level: LevelSummary): string {
   return t(levelUnlockKey(level.id ?? String(level.level)), {
     defaultValue: level.unlockRequirement,
   });

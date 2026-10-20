@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Lock, Home, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { LEVELS } from '../data/courses';
+import { LEVEL_SUMMARIES as LEVELS } from '../utils/academyMeta';
 import { resolveLevelTitle } from '../utils/titleKeys';
-import type { Lesson } from '../types';
+import type { Lesson, LessonSummary } from '../types';
 
 interface CourseLockedViewProps {
   lesson: Lesson;
@@ -47,7 +47,7 @@ export function CourseLockedView({
   };
 
   // 找某 Level 第一个未完成课程
-  const findFirstIncompleteLesson = (levelId: string): Lesson | undefined => {
+  const findFirstIncompleteLesson = (levelId: string): LessonSummary | undefined => {
     const entry = LEVELS.find((l) => l.id === levelId);
     if (!entry) return undefined;
     return entry.lessons.find((l) => !completedLessons.includes(l.id));

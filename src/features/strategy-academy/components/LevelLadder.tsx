@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown, Lock, CheckCircle2, Award, PlayCircle, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
-import type { LevelInfo } from '../types';
+import type { LevelSummary } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import {
@@ -15,7 +15,7 @@ import {
 } from '../utils/titleKeys';
 
 interface LevelLadderProps {
-  levels: LevelInfo[];
+  levels: LevelSummary[];
   completedLessons: string[];
   isUnlocked: (levelId: string) => boolean;
 }
@@ -25,7 +25,7 @@ interface LevelLadderProps {
  * Hero 的"继续学习"与阶梯默认展开共用此推导，避免口径分叉。
  */
 export function findActiveLevelId(
-  levels: LevelInfo[],
+  levels: LevelSummary[],
   completedLessons: string[],
   isUnlocked: (levelId: string) => boolean
 ): string | null {
@@ -44,12 +44,12 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
   const activeId = findActiveLevelId(levels, completedLessons, isUnlocked);
   const [expandedId, setExpandedId] = useState<string | null>(activeId);
 
-  const openLevel = (level: LevelInfo) => {
+  const openLevel = (level: LevelSummary) => {
     const target = level.lessons.find((l) => !completedLessons.includes(l.id)) ?? level.lessons[0];
     if (target) navigate(`/academy/lesson/${target.id}`);
   };
 
-  const handleHeadClick = (level: LevelInfo, expanded: boolean) => {
+  const handleHeadClick = (level: LevelSummary, expanded: boolean) => {
     if (expanded) {
       openLevel(level);
     } else {

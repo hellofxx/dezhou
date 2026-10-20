@@ -1,7 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { AcademyProgress, BasicsProgress, PracticeResult, AbilityAssessment, AdaptiveConfig, QuestionDifficulty, DailyPlan, LevelCertification } from './types';
-import { LEVELS } from './data/courses';
+import {
+  findLevelSummaryById,
+  getLevelNumbers,
+  getLevelSummaries,
+  getLevelSummariesByNumber,
+  getQuizCountForLevel,
+  isLevelEntryUnlockedByCompleted,
+} from './utils/academyMeta';
 import { LEARNING_TRACKS } from './data/learningTracks';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
@@ -215,7 +222,9 @@ export const useAcademyStore = create<AcademyStore>()(
         if (isDebugUnlockActive()) return true; // 调试解锁：解除全部 Level 门禁
         // ACAD-07：委托逐条目判定，且要求同 level 全部条目都满足才解锁，
         // 消除旧「任一满足即 return true」的 || 旁路（L4A/L4B 同为 level:4 时 4B 被误放行）
-        const entries = LEVELS.filter((l) => l.level === level && typeof l.id === 'string');
+        const entries = getLevelSummaries().filter(
+          (entry) => entry.level === level && typeof entry.id === 'string',
+        );
         if (entries.length === 0) return false;
         return entries.every((entry) => get().isLevelEntryUnlocked(entry.id!));
       },
@@ -224,40 +233,29 @@ export const useAcademyStore = create<AcademyStore>()(
       // isLevelUnlocked(4) “任一条目满足即解锁”导致的 4B 门禁旁路
       isLevelEntryUnlocked: (levelId) => {
         if (isDebugUnlockActive()) return true; // 调试解锁：解除全部 Level 条目门禁
-        const idx = LEVELS.findIndex((l) => l.id === levelId);
-        const levelInfo = idx >= 0 ? LEVELS[idx] : undefined;
+        const levelInfo = findLevelSummaryById(levelId);
         if (!levelInfo) return false;
-        if (levelInfo.level <= 1) return get().basicsProgress.completed;
-        const { completedLessons } = get().progress;
-
-        if (levelInfo.prerequisiteLevelIds && levelInfo.prerequisiteLevelIds.length > 0) {
-          return levelInfo.prerequisiteLevelIds.every((prereqId) => {
-            const prereqLevel = LEVELS.find((l) => l.id === prereqId);
-            if (!prereqLevel) return false;
-            return prereqLevel.lessons.every((l) => completedLessons.includes(l.id));
-          });
-        }
-        // 回退：依赖前一个 LEVELS 条目全部完成
-        return idx === 0
-          ? get().basicsProgress.completed
-          : LEVELS[idx - 1]?.lessons.every((l) => completedLessons.includes(l.id)) ?? false;
+        return isLevelEntryUnlockedByCompleted(
+          levelInfo,
+          get().basicsProgress.completed,
+          get().progress.completedLessons,
+        );
       },
 
       getLevelProgress: (level) => {
         // 合并同一 level 的所有条目（如 L4A + L4B）
-        const entries = LEVELS.filter((l) => l.level === level);
-        const allLessons = entries.flatMap((l) => l.lessons);
+        const allLessons = getLevelSummariesByNumber(level).flatMap((entry) => entry.lessons);
         if (allLessons.length === 0) return 0;
         const { completedLessons } = get().progress;
-        const completed = allLessons.filter((l) => completedLessons.includes(l.id)).length;
+        const completed = allLessons.filter((lesson) => completedLessons.includes(lesson.id)).length;
         return Math.round((completed / allLessons.length) * 100);
       },
 
       getTotalProgress: () => {
-        const allLessons = LEVELS.flatMap((l) => l.lessons);
+        const allLessons = getLevelSummaries().flatMap((entry) => entry.lessons);
         if (allLessons.length === 0) return 0;
         const { completedLessons } = get().progress;
-        const completed = allLessons.filter((l) => completedLessons.includes(l.id)).length;
+        const completed = allLessons.filter((lesson) => completedLessons.includes(lesson.id)).length;
         return Math.round((completed / allLessons.length) * 100);
       },
 
@@ -356,13 +354,9 @@ export const useAcademyStore = create<AcademyStore>()(
       attemptCertification: (level, score) =>
         set((state) => {
           const existing = state.certifications[level];
-          const levelEntries = LEVELS.filter((l) => l.level === level);
 
-          // 任务 A: 动态题量算法
-          const totalQuizQuestions = levelEntries.reduce(
-            (sum, e) => sum + e.lessons.reduce((s, l) => s + l.quiz.length, 0),
-            0
-          );
+          // 任务 A: 动态题量算法（摘要层 quizCount 单源）
+          const totalQuizQuestions = getQuizCountForLevel(level);
 
           // 难度系数：L1=1.0, L2=1.1, ..., L8=1.8
           // ACAD-01 修复：数组补齐 8 个元素，L7/L8 不再回落 1.0
@@ -411,14 +405,14 @@ export const useAcademyStore = create<AcademyStore>()(
       isLevelLessonsCompleted: (level) => {
         const completed = new Set(get().progress.completedLessons);
         // 同 level 数字可能对应多个节点（如 L4 拆为 4A/4B），全部课程都须完成
-        const lessons = LEVELS.filter((l) => l.level === level).flatMap((l) => l.lessons);
+        const lessons = getLevelSummariesByNumber(level).flatMap((entry) => entry.lessons);
         if (lessons.length === 0) return false;
         return lessons.every((lesson) => completed.has(lesson.id));
       },
 
       areAllLevelsCertified: () => {
         const certs = get().certifications;
-        const levelNumbers = [...new Set(LEVELS.map((l) => l.level))];
+        const levelNumbers = getLevelNumbers();
         // ACAD-02 修复：校验 validUntil 过期（过期认证视为未达成）
         const now = Date.now();
         return levelNumbers.every((lv) => {

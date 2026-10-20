@@ -4,38 +4,17 @@ import { Zap, Route, GraduationCap, Network, ChevronRight } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { LevelInfo } from '../types';
-import type { PokerVariant } from '@/shared/types/elo';
-import { LEVELS } from '../data/courses';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyStore } from '../store';
-import { getTotalLessonCount } from '../utils/courseProgress';
+import {
+  getLevelSummariesByVariant,
+  getTotalLessonCount,
+  getVariantLessonSummaries,
+} from '../utils/academyMeta';
 import { AcademyResume } from './AcademyResume';
 import { LevelLadder, findActiveLevelId } from './LevelLadder';
 import { DailyPlanCard } from './DailyPlanCard';
 import { VariantToggle } from '@/shared/components/VariantToggle';
-import { VARIANT_LESSON_INDEX } from '../data/lessons/variants';
-
-/**
- * ACAD-05：按变体构造课程阶梯。
- * - standard：直接返回标准 LEVELS。
- * - short-deck / heads-up：复用 VARIANT_LESSON_INDEX 按 level 分组，
- *   元数据沿用标准 LevelInfo（L1/L2 为共享基础层，标题结构一致），
- *   课程列表替换为变体课程，使变体课程从 UI 可达。
- */
-function buildVariantLevels(variant: PokerVariant): LevelInfo[] {
-  const variantLessons = VARIANT_LESSON_INDEX[variant];
-  const byLevel = new Map<number, LevelInfo['lessons']>();
-  for (const l of variantLessons) {
-    const arr = byLevel.get(l.level) ?? [];
-    arr.push(l);
-    byLevel.set(l.level, arr);
-  }
-  return LEVELS.filter((lv) => byLevel.has(lv.level)).map((lv) => ({
-    ...lv,
-    lessons: byLevel.get(lv.level) ?? lv.lessons,
-  }));
-}
 
 export default function AcademyHome() {
   const { t } = useTranslation();
@@ -49,8 +28,8 @@ export default function AcademyHome() {
   const totalLessons = getTotalLessonCount();
   const completedCount = progress.completedLessons.length;
 
-  // ACAD-05：阶梯按当前变体渲染（standard 原样；short-deck/heads-up 用变体课程列表）
-  const ladderLevels = activeVariant === 'standard' ? LEVELS : buildVariantLevels(activeVariant);
+  // ACAD-05：阶梯按当前变体渲染（manifest 已按变体分组；L1/L2 复用共享基础层）
+  const ladderLevels = getLevelSummariesByVariant(activeVariant);
 
   const activeLevelId = findActiveLevelId(ladderLevels, progress.completedLessons, isLevelEntryUnlocked);
   const activeLevel = ladderLevels.find((l) => (l.id ?? String(l.level)) === activeLevelId) ?? null;
@@ -95,7 +74,7 @@ export default function AcademyHome() {
                 {activeVariant !== 'standard' && (
                   <span className="text-[var(--ivory-dim)]">
                     {' '}
-                    · {VARIANT_LESSON_INDEX[activeVariant].length} {t('academy.lessons')} ·{' '}
+                    · {getVariantLessonSummaries(activeVariant).length} {t('academy.lessons')} ·{' '}
                     {t('academy.variantSkeleton')}
                   </span>
                 )}

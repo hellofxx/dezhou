@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { PlayCircle, Sparkles, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
-import type { LevelInfo } from '../types';
+import type { LevelSummary } from '../types';
 import { resolveLessonTitle } from '../utils/titleKeys';
 
 interface AcademyResumeProps {
   /** 当前活跃等级：首个解锁且仍有未完成课程的等级；全部完成则为 null */
-  activeLevel: LevelInfo | null;
+  activeLevel: LevelSummary | null;
   completedLessons: string[];
   totalProgress: number;
   completedCount: number;

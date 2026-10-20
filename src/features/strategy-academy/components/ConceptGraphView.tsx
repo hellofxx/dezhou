@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Brain, BookOpen, Lock, Link2 } from 'lucide-react';
 import { ConceptGraph } from './ConceptGraph';
 import { useAcademyStore } from '../store';
-import { getTotalLessonCount } from '../utils/courseProgress';
+import { getTotalLessonCount } from '../utils/academyMeta';
 import { CONCEPT_NODES } from '../data/conceptNodes';
 import { resolveConceptName, resolveConceptDescription } from '../utils/titleKeys';
 

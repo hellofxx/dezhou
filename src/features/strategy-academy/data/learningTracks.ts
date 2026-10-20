@@ -1,32 +1,8 @@
 import type { LearningTrack } from '../types';
 import { LOCAL_TRACK } from './localTrack';
-import { LEVELS } from './levels';
 
-/**
- * 检查用户是否已完成指定 Track 的前置 Level。
- *
- * P1E-02: 统一为「课程完成口径」（与 CourseView 本土课门禁一致）：
- * prerequisiteLevelIds 格式为 ['l1', 'l2', 'l3']，按 LevelInfo 条目的
- * 全部课程是否都在 completedLessons 中判定（不再依赖认证 certifications）。
- */
-export function isTrackPrerequisiteMet(
-  track: LearningTrack,
-  completedLessons: readonly string[]
-): boolean {
-  if (!track.prerequisiteLevelIds?.length) return true;
-  const completed = new Set(completedLessons);
-  return track.prerequisiteLevelIds.every((id) => {
-    const entry = LEVELS.find((l) => l.id === id);
-    if (!entry || entry.lessons.length === 0) return false;
-    return entry.lessons.every((lesson) => completed.has(lesson.id));
-  });
-}
-
-/** 生成前置条件未满足时的提示文字 */
-export function getPrerequisiteHint(prerequisiteLevelIds: string[]): string {
-  const labels = prerequisiteLevelIds.map((id) => id.replace(/^l/i, 'Level '));
-  return `建议先完成 ${labels.join('、')} 的课程`;
-}
+// 前置判定已迁至摘要层（utils/trackMeta），此处保留 re-export 兼容既有消费方。
+export { getPrerequisiteHint, isTrackPrerequisiteMet } from '../utils/trackMeta';
 
 export const LEARNING_TRACKS: LearningTrack[] = [
   {

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { useAcademyStore } from '../store';
-import { LEVELS } from '../data/courses';
+import { LEVEL_SUMMARIES as LEVELS } from '../utils/academyMeta';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';

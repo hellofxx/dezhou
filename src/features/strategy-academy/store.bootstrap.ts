@@ -8,8 +8,10 @@ import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import { useAcademyStore } from './store';
 import { useProgressStore } from '@/features/progress/store';
-import { LEVELS } from './data/courses';
-import { findLessonById } from './utils/courseProgress';
+import {
+  findLessonSummaryById,
+  getLevelSummaries,
+} from './utils/academyMeta';
 
 // 成就检查数据源：progress store 的 checkCondition 经注册表查询（T7/B4 idempotency）
 registerAchievementSource({
@@ -24,7 +26,7 @@ registerAchievementSource({
 // 消除 progress → strategy-academy 的直接 import（每日训练计划的「下一课」逻辑回迁本模块）。
 registerAcademyDataSource({
   findNextLesson: (completedLessons) => {
-    for (const level of LEVELS) {
+    for (const level of getLevelSummaries()) {
       for (const lesson of level.lessons) {
         if (!completedLessons.includes(lesson.id)) {
           return { id: lesson.id, title: lesson.title, level: level.level };
@@ -34,7 +36,7 @@ registerAcademyDataSource({
     return null;
   },
   getLessonMeta: (lessonId) => {
-    const lesson = findLessonById(lessonId);
+    const lesson = findLessonSummaryById(lessonId);
     return lesson ? { id: lesson.id, title: lesson.title, level: lesson.level } : undefined;
   },
   getAcademyProgressSnapshot: () => useAcademyStore.getState().progress,

@@ -12,10 +12,11 @@ import {
   resolveTrackAudience,
   resolveTrackDuration,
 } from '../utils/titleKeys';
-import { LEVELS } from '../data/courses';
+import { LEVEL_SUMMARIES as LEVELS } from '../utils/academyMeta';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { ProgressBar } from './ProgressBar';
+
 export default function LearningTracksView() {
   const { t } = useTranslation();
   const navigate = useNavigate();

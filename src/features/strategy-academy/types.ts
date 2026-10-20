@@ -202,14 +202,27 @@ export interface VariantContext {
   [key: string]: unknown;
 }
 
-// 课程章节
-export interface Lesson {
+/**
+ * 课程目录摘要（manifest 层）。
+ * 首页、store、成就检查、轨道/图谱只依赖这一层；正文/小测/示例/练习留在 Lesson。
+ * hasPractice / quizCount 是 manifest 派生字段，完整数据可省略。
+ */
+export interface LessonSummary {
   id: string;
   level: CourseLevel;
   order: number;
   title: string;
   subtitle: string;
   duration: string;
+  type?: 'lesson' | 'drill';
+  variant?: PokerVariant;
+  prerequisites?: string[];
+  hasPractice?: boolean;
+  quizCount?: number;
+}
+
+// 课程章节
+export interface Lesson extends LessonSummary {
   content: LessonSection[];
   quiz: QuizQuestion[];
   examples?: HandExample[];
@@ -221,16 +234,6 @@ export interface Lesson {
   // ChoiceDrill 类型课程的数据
   drillData?: DrillData;
   /**
-   * P4 修复（4.1-P2-1）：细粒度前置课程 ID 列表（可选）。
-   *
-   * 当前主要依赖 Level-based 解锁（isLevelUnlocked），同一 Level 内课程可任意顺序学习。
-   * 对于有强依赖关系的课程（如 l2-4bet-strategy 依赖 l2-3bet-basics），
-   * 可在此字段声明 prerequisite lesson IDs，CourseView 会额外检查。
-   *
-   * 未声明时仅受 Level 解锁约束；声明后需同时满足 Level 解锁与 prerequisite 完成。
-   */
-  prerequisites?: string[];
-  /**
    * 课程小节单元（微观闭环结构）。
    * 未声明时由 deriveLessonUnits 视图层派生，实现数据零迁移。
    */
@@ -241,28 +244,27 @@ export interface Lesson {
    * 文案规范见 PRD §6.7.1「学习目标对齐」：须用可观察行为动词，且正文确有对应教学内容。
    */
   objectives?: string[];
-  /**
-   * P2 变体支持：所属游戏变体标识。
-   * 缺省视为 'standard'（与 shared/types/elo DEFAULT_VARIANT 语义一致），
-   * 现有标准课程数据零迁移；short-deck / heads-up 变体课程必须显式声明。
-   */
-  variant?: PokerVariant;
   /** P2 变体支持：变体特定上下文（如单挑按钮位、Ante 结构、浅筹码深度） */
   variantContext?: VariantContext;
 }
 
-// 级别信息
-export interface LevelInfo {
+/** Level 目录摘要（manifest 层，不含课程正文） */
+export interface LevelSummary {
   /** 唯一标识（如 'l4a' / 'l4b'），用于 prerequisiteLevelIds 引用 */
   id?: string;
   level: CourseLevel;
   title: string;
   description: string;
   icon: string;
-  lessons: Lesson[];
+  lessons: LessonSummary[];
   unlockRequirement: string;
   /** 前置 Level ID 列表，需全部完成才能解锁本 Level */
   prerequisiteLevelIds?: string[];
+}
+
+// 级别信息（完整数据）
+export interface LevelInfo extends LevelSummary {
+  lessons: Lesson[];
 }
 
 // 学习进度

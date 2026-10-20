@@ -23,12 +23,35 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // 大型数据文件独立分包
-          if (id.includes('/strategy-academy/data/levels/')) {
-            if (id.includes('level1') || id.includes('level2') || id.includes('level3') || id.includes('level4')) {
-              return 'academy-levels-early';
-            }
-            return 'academy-levels-late';
+          // 策略学院数据分包：摘要（启动/首页）与课程正文（按变体懒载）必须分离，
+          // 否则摘要 import 会把全量课程拖进启动图。
+          if (id.includes('/strategy-academy/data/lessons/manifest/')) {
+            return 'academy-manifest';
+          }
+          if (id.includes('/strategy-academy/data/lessons/variants/short-deck/')) {
+            return 'academy-lessons-short-deck';
+          }
+          if (id.includes('/strategy-academy/data/lessons/variants/heads-up/')) {
+            return 'academy-lessons-heads-up';
+          }
+          if (id.includes('/strategy-academy/data/lessons/variants/standard/')) {
+            if (/level[1-4]/i.test(id)) return 'academy-lessons-early';
+            return 'academy-lessons-late';
+          }
+          if (id.includes('/strategy-academy/data/localLessons/')) {
+            return 'academy-lessons-local';
+          }
+          if (
+            id.includes('/strategy-academy/data/learningTracks') ||
+            id.includes('/strategy-academy/data/localTrack')
+          ) {
+            return 'academy-tracks-data';
+          }
+          if (id.includes('/strategy-academy/data/basicsContent')) {
+            return 'academy-basics-data';
+          }
+          if (id.includes('/strategy-academy/data/conceptNodes')) {
+            return 'academy-concepts-data';
           }
           if (id.includes('/strategy-academy/data/')) {
             return 'strategy-academy-data';

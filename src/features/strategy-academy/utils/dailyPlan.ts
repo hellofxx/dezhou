@@ -1,5 +1,5 @@
 import type { DailyPlan, AbilityAssessment } from '../types';
-import { getAllLessons } from './courseProgress';
+import { getAllLessonSummaries } from './academyMeta';
 
 const ABILITY_KEYS: (keyof Omit<AbilityAssessment, 'lastUpdated'>)[] = [
   'rangeKnowledge',
@@ -82,7 +82,7 @@ function getNextRecommendedLesson(
   completedLessons: string[],
   weakestArea: keyof AbilityAssessment | null
 ): string | null {
-  const allLessons = getAllLessons();
+  const allLessons = getAllLessonSummaries();
 
   // 优先推荐与弱点相关的未完成课程
   if (weakestArea && weakestArea !== 'lastUpdated') {
@@ -111,7 +111,7 @@ function getPracticeSpotsForWeakArea(
   weakestArea: keyof AbilityAssessment | null,
   completedLessons: string[]
 ): string[] {
-  const allLessons = getAllLessons();
+  const allLessons = getAllLessonSummaries();
   const spots: string[] = [];
 
   // 获取相关课程 ID
@@ -121,7 +121,7 @@ function getPracticeSpotsForWeakArea(
 
   // 优先从弱点相关的已完成课程中选有 practice 的
   for (const lesson of allLessons) {
-    if (lesson.practice && lesson.practice.questions.length > 0) {
+    if (lesson.hasPractice) {
       if (relatedIds.includes(lesson.id) && completedLessons.includes(lesson.id)) {
         spots.push(lesson.id);
       }
@@ -133,8 +133,7 @@ function getPracticeSpotsForWeakArea(
   if (spots.length < 2) {
     for (const lesson of allLessons) {
       if (
-        lesson.practice &&
-        lesson.practice.questions.length > 0 &&
+        lesson.hasPractice &&
         completedLessons.includes(lesson.id) &&
         !spots.includes(lesson.id)
       ) {

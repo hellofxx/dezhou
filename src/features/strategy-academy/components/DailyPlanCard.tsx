@@ -6,7 +6,7 @@ import { transitionStandard } from '@/shared/utils/motion';
 import { BookOpen, Target, Clock, RefreshCw, Sparkles, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAcademyStore } from '../store';
-import { findLessonById } from '../utils/courseProgress';
+import { findLessonSummaryById } from '../utils/academyMeta';
 import { resolveLessonTitle } from '../utils/titleKeys';
 
 const ABILITY_I18N_KEYS: Record<string, string> = {
@@ -41,7 +41,7 @@ export function DailyPlanCard() {
   const hasContent = reviewLessons.length > 0 || newLesson || practiceSpots.length > 0;
   if (!hasContent) return null;
 
-  const newLessonInfo = newLesson ? findLessonById(newLesson) : null;
+  const newLessonInfo = newLesson ? findLessonSummaryById(newLesson) : null;
   const abilityLabel =
     focusArea && ABILITY_I18N_KEYS[focusArea] ? t(ABILITY_I18N_KEYS[focusArea]) : '';
   const timeText =
@@ -103,7 +103,7 @@ export function DailyPlanCard() {
             </span>
             <p className="flex-1 min-w-0 text-xs text-[var(--ivory-dim)] truncate">
               {t('academy.dailyPlan.review')}：
-              {reviewLessons.map((id) => findLessonById(id)?.title ?? id).join('、')}
+              {reviewLessons.map((id) => findLessonSummaryById(id)?.title ?? id).join('、')}
             </p>
           </li>
         )}
