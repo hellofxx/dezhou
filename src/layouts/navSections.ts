@@ -1,5 +1,4 @@
 import type { TFunction } from 'i18next';
-import { APP_NAME } from '@/shared/constants/app';
 
 /** 壳层标题左侧的分组眉标：序号是分组位置的固定标识，不随语言变化（DESIGN.md §5.7） */
 export interface NavSection {
@@ -24,7 +23,7 @@ export function resolveNavSection(pathname: string, t: TFunction): NavSection {
     : { index: '00', label: t('nav.appSubtitle') };
 }
 
-/** 路径 → 页名（壳层 h1 与 document.title 共用），子路由回退到模块名避免断档到 APP_NAME */
+/** 路径 → 页名（壳层 h1 与 document.title 共用），子路由回退到模块名避免断档到应用名 */
 export function resolvePageTitle(pathname: string, t: TFunction): string {
   const pageTitle: Record<string, string> = {
     '/': t('nav.dashboard'),
@@ -58,6 +57,6 @@ export function resolvePageTitle(pathname: string, t: TFunction): string {
   return (
     pageTitle[pathname] ??
     prefixTitles.find(([prefix]) => pathname.startsWith(`${prefix}/`))?.[1] ??
-    APP_NAME
+    t('nav.appSubtitle')
   );
 }

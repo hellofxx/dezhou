@@ -1675,6 +1675,7 @@ manualChunks(id) {
 - **图表懒载**：使用 recharts 的组件（AccuracyChart / WeaknessAnalysis / ModuleStatsPage / HandStatsPanel / EquityChart / pot-odds EVCalculator）统一 `React.lazy` + `Suspense`；图表页首包从 114–118KB 降至 8.5–9.8KB gzip，recharts 在骨架绘制后按需下载。
 - **framer-motion 保留**：`MotionConfig reducedMotion="user"` 是全站 80 个 framer 组件的统一 reduced-motion 接管点，移除会使动画不再遵循用户偏好（WCAG 2.1 AA 回归）；因此首屏保留 vendor-framer（约 42.2KB gzip），作为有意预算项。
 - **体积守卫**：`check-bundle-size.mjs` 除首屏总预算外，额外断言首屏静态图不得包含 recharts；入口 `<script>` 已纳入统计。
+- **实浏览器验证（2026-10）**：Playwright 对生产构建预览验证桌面 1440×900 与移动 390×844 关键页；理论章节页只请求单个 Level 数据包，图表页 recharts 在骨架后加载，无控制台错误与横向溢出。`document.title` 的应用名改用 `nav.appSubtitle`，英文界面不再残留中文平台名。
 
 ---
 

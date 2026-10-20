@@ -19,7 +19,7 @@
 - **学院摘要链解耦（d9c702e）**：`academyCourse` 启动层原本经 `strategy-academy-data` 手动 chunk 带入 Vite 动态 import 预载 helper，进而连带 manifest / tracks / loaders 约 11KB。移除泛化 data chunk 规则，让 helper 与 mapDeps 归入独立共享 chunk；首屏 245.0 → **234.7KB gzip**。course 页仍按需加载摘要与单 Level 数据。
 - **启动非阻塞（7b0839f）**：首屏渲染闸门只等待 persist hydration（localStorage 同步层，3s 兜底）；IndexedDB records 加载、事件总线订阅与三学院 bootstrap 改为后台执行。records 经 zustand selector 更新，数据源经 `useAcademyDataSource` late-registration 自愈，不阻塞首屏；IDB 回填改为合并，避免与首屏后新记录竞态。顺带移除 `APP_VERSION` 的无效动态 import。
 - **图表懒载（3f09852）**：ProgressPage / PotOddsPage / HandHistoryList / 两个统计页的 recharts 组件改为 `React.lazy` + `Suspense`。图表页首包 **114–118KB → 8.5–9.8KB gzip**，页面骨架先绘制，图表库在渲染后按需下载。
-- **验证**：`pnpm verify`、`pnpm build`、`pnpm size:check` 全绿；真实浏览器视觉、网络面板时序与 <768px 响应式未验证。
+- **验证**：`pnpm verify`、`pnpm build`、`pnpm size:check` 全绿；并用 Playwright 对生产构建预览实测：桌面 1440×900（仪表盘 / 策略学院 / 理论首页 / 理论章节 / 赔率计算器含 EV tab / 进度页）与移动 390×844（仪表盘 / 理论章节 / 赔率图表）均无 console error/warning、无横向溢出；理论章节页仅请求 `standardLevel1` + `t1` 内容包，图表页 recharts 在页面骨架后加载。顺带修复英文界面 `<title>` 仍拼中文平台名（改用 `nav.appSubtitle`）。
 - **有意保留**：framer-motion 42.2KB 留在首屏——`MotionConfig reducedMotion="user"` 是全站 80 个 framer 组件的统一降级入口，移除会回归 WCAG 2.1 AA；react-dom 71.5KB 与 i18next 13.1KB 为框架基线。recharts 仍按需下载约 95.9KB（渲染后，不阻塞页面骨架）。
 
 ### 2026-10-20 策略学院加载性能：目录摘要 / 课程文案 / 课程数据三层懒载（3 个 commit）
