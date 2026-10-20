@@ -1,12 +1,16 @@
-import { useEffect, useState, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useHandHistoryStore } from '../store';
 import { formatDate } from '../utils/handNotation';
 import { calculateHeroStats } from '../utils/handStats';
-import { HandStatsPanel } from './HandStatsPanel';
 import { Trash2, Upload, Search, BarChart3, List, AlertCircle } from 'lucide-react';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
+import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
+
+const LazyHandStatsPanel = lazy(() =>
+  import('./HandStatsPanel').then((mod) => ({ default: mod.HandStatsPanel })),
+);
 
 const MIN_HANDS_FOR_STATS = 20;
 
@@ -121,7 +125,9 @@ export default function HandHistoryList() {
               <p className="text-xs text-[var(--ivory-muted)]">{t('handHistory.list.heroNotFoundDesc')}</p>
             </div>
           ) : stats ? (
-            <HandStatsPanel stats={stats} />
+            <Suspense fallback={<ComponentSkeleton />}>
+              <LazyHandStatsPanel stats={stats} />
+            </Suspense>
           ) : null}
         </div>
       )}

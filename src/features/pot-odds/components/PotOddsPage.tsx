@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
 import { OddsCalculator } from './OddsCalculator';
-import { EVCalculator } from './EVCalculator';
 import { DrawsReference } from './DrawsReference';
-import { EquityChart } from './EquityChart';
 import { useOddsCalculation } from '../hooks/useOddsCalculation';
+
+const LazyEquityChart = lazy(() =>
+  import('./EquityChart').then((mod) => ({ default: mod.EquityChart })),
+);
+const LazyEVCalculator = lazy(() =>
+  import('./EVCalculator').then((mod) => ({ default: mod.EVCalculator })),
+);
 
 export default function PotOddsPage() {
   const { t } = useTranslation();
@@ -45,7 +51,12 @@ export default function PotOddsPage() {
         <div className="space-y-6">
           <OddsCalculator />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <EquityChart potOdds={result.requiredEquity} estimatedEquity={result.estimatedEquity} />
+            <Suspense fallback={<div className="min-h-[260px]"><ComponentSkeleton /></div>}>
+              <LazyEquityChart
+                potOdds={result.requiredEquity}
+                estimatedEquity={result.estimatedEquity}
+              />
+            </Suspense>
             <DrawsReference />
           </div>
         </div>
@@ -54,7 +65,9 @@ export default function PotOddsPage() {
       {/* Tab 2: EV Analysis */}
       {activeTab === 'ev' && (
         <div className="space-y-6">
-          <EVCalculator />
+          <Suspense fallback={<div className="min-h-[320px]"><ComponentSkeleton /></div>}>
+            <LazyEVCalculator />
+          </Suspense>
         </div>
       )}
     </div>

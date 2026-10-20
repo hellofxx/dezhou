@@ -1657,7 +1657,7 @@ manualChunks(id) {
 }
 ```
 
-- 主 chunk 从 1204 kB 降至约 291 kB；2026-10 移除 recharts 手动分包、解耦学院摘要链后，首屏预载包为 **234.7KB gzip / 36 个文件**
+- 主 chunk 从 1204 kB 降至约 291 kB；2026-10 移除 recharts 手动分包、解耦学院摘要链后，首屏预载包为 **234.6KB gzip / 37 个文件**
 - 图表库交由 Rolldown 自动拆分，只出现在使用图表的路由 chunk；`check-bundle-size.mjs` 断言首屏静态图不得包含 recharts
 - 不要为 `strategy-academy/data/` 剩余模块建泛化手动 chunk：Vite 的动态 import 预载 helper / mapDeps 会被并入该 chunk，启动层经 `academyCourse` 连带整条学院摘要链；现有规则只按 manifest / 单 Level / 变体等明确边界拆分
 - 课程/题库大数据文件独立 chunk，按需加载
@@ -1668,6 +1668,13 @@ manualChunks(id) {
 - 无 5MB 容量限制
 - 支持异步批量读写
 - 原生事务支持
+
+### 8.5 启动非阻塞与图表懒载（2026-10）
+
+- **首屏闸门**：`main.tsx` 只等待 progress store 的 persist hydration（localStorage 同步层，3s 超时兜底）；`initProgressStore()`（IndexedDB records 回填 + 训练事件订阅）与三学院 `store.bootstrap`（成就/课程数据源注册）在后台并行执行。records 更新经 zustand selector 触发重渲染，数据源经 `useAcademyDataSource` 的 late-registration 自愈接续，无需阻塞首屏。
+- **图表懒载**：使用 recharts 的组件（AccuracyChart / WeaknessAnalysis / ModuleStatsPage / HandStatsPanel / EquityChart / pot-odds EVCalculator）统一 `React.lazy` + `Suspense`；图表页首包从 114–118KB 降至 8.5–9.8KB gzip，recharts 在骨架绘制后按需下载。
+- **framer-motion 保留**：`MotionConfig reducedMotion="user"` 是全站 80 个 framer 组件的统一 reduced-motion 接管点，移除会使动画不再遵循用户偏好（WCAG 2.1 AA 回归）；因此首屏保留 vendor-framer（约 42.2KB gzip），作为有意预算项。
+- **体积守卫**：`check-bundle-size.mjs` 除首屏总预算外，额外断言首屏静态图不得包含 recharts；入口 `<script>` 已纳入统计。
 
 ---
 

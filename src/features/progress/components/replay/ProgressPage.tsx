@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -10,13 +10,15 @@ import { transitionSlow } from '@/shared/utils/motion';
 import { useModuleLabel } from '@/shared/hooks/useModuleLabel';
 import { aggregateByDay } from '../../utils/statsAggregator';
 import { getTrainingCalendar } from '../../utils/streakCalc';
+import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
 import StatsOverview from '../dashboard/StatsOverview';
-import AccuracyChart from '../dashboard/AccuracyChart';
 import StreakTracker from '../streak/StreakTracker';
-import WeaknessAnalysis from '../stats/WeaknessAnalysis';
 import AchievementBadges from '../achievement/AchievementBadges';
 import DifficultyIndicator from '../stats/DifficultyIndicator';
 import ProgressHero from './ProgressHero';
+
+const LazyAccuracyChart = lazy(() => import('../dashboard/AccuracyChart'));
+const LazyWeaknessAnalysis = lazy(() => import('../stats/WeaknessAnalysis'));
 
 export default function ProgressPage() {
   const navigate = useNavigate();
@@ -79,7 +81,9 @@ export default function ProgressPage() {
         {/* 趋势图 + 打卡日历（2:1） */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="md:col-span-2">
-            <AccuracyChart dailyStats={dailyStats} days={14} />
+            <Suspense fallback={<div className="min-h-[260px]"><ComponentSkeleton /></div>}>
+              <LazyAccuracyChart dailyStats={dailyStats} days={14} />
+            </Suspense>
           </div>
           <div>
             <StreakTracker
@@ -93,7 +97,9 @@ export default function ProgressPage() {
         {/* 五维能力雷达图（2）+ 模块统计入口（1） */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="md:col-span-2">
-            <WeaknessAnalysis />
+            <Suspense fallback={<div className="min-h-[300px]"><ComponentSkeleton /></div>}>
+              <LazyWeaknessAnalysis />
+            </Suspense>
           </div>
           <div className="flex flex-col gap-3">
             <button

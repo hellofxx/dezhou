@@ -1,7 +1,14 @@
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import ModuleStatsPage from '../dashboard/ModuleStatsPage';
+import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
+
+const LazyModuleStatsPage = lazy(() => import('../dashboard/ModuleStatsPage'));
 
 export default function GTOStatsPage() {
   const { t } = useTranslation();
-  return <ModuleStatsPage moduleName="gto-simulator" displayName={t('nav.gtoSimulator')} />;
+  return (
+    <Suspense fallback={<ComponentSkeleton />}>
+      <LazyModuleStatsPage moduleName="gto-simulator" displayName={t('nav.gtoSimulator')} />
+    </Suspense>
+  );
 }
