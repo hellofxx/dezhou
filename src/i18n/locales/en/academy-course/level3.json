@@ -18,9 +18,9 @@
       "Passive play (recommended for beginners): call to see the next card, seeing more cards at minimum cost\nSemi-bluff (advanced): bet/raise with a draw, gaining fold equity\nAll-in: when the pot odds are good enough",
       "Always calculate pot odds! If your equity > pot odds, calling is +EV.",
       "Pros choose their draw line based on position and opponent tendencies. Semi-bluffing with draws from position is a very effective strategy.",
-      "The 2/4 Rule and error analysis:\nOne card (turn): equity ≈ Outs × 2%\nTwo cards (all-in on flop): equity ≈ Outs × 4%\n\nError analysis (flop→river two-card scenario):\n4 Outs (gutshot): ×4 estimates 16% | exact 16.5% | error -0.5\n8 Outs (OESD): ×4 estimates 32% | exact 31.4% | error +0.6\n9 Outs (flush): ×4 estimates 36% | exact 35.0% | error +1.0\n12 Outs (combo draw): ×4 estimates 48% | exact 45.0% | error +3.0\n\nConclusion: for Outs ≤ 9, ×4 has error within 1 percentage point; for Outs ≥ 13, use the corrected formula.",
+      "The 2/4 Rule and error analysis:\nOne card (turn): equity ≈ Outs × 2%\nTwo cards (all-in on flop): equity ≈ Outs × 4%\n\nError analysis (flop→river two-card scenario):\n4 Outs (gutshot): ×4 estimates 16% | exact 16.5% | error -0.5\n8 Outs (OESD): ×4 estimates 32% | exact 31.5% | error +0.5\n9 Outs (flush): ×4 estimates 36% | exact 35.0% | error +1.0\n12 Outs (combo draw): ×4 estimates 48% | exact 45.0% | error +3.0\n\nConclusion: for Outs ≤ 9, ×4 has error within 1 percentage point; for Outs ≥ 13, use the corrected formula.",
       "Theory reference: the full derivation of Outs counting and the 2/4 Rule is in Theory Academy T1 Chapter 2 \"Outs and the 2/4 Rule\", including the error analysis table and corrected formula. The EV framework for calling with draws is in T2 Chapter 1.",
-      "Counter-intuitive: combo draws (flush + straight + overcards) have far more equity than intuition suggests. For example, J♥T♥ on a 9♥8♦3♣ board has 15 outs and about 54% equity — actually ahead of most one-pair hands. That's why combo draws are the best semi-bluff candidates."
+      "Counter-intuitive: combo draws (flush + straight + overcards) have far more equity than intuition suggests. For example, J♥T♥ on a 9♥8♥3♣ board has 15 outs and about 54% equity — actually ahead of most one-pair hands. That's why combo draws are the best semi-bluff candidates."
     ],
     "l3-multistreet": [
       "Multi-Street Thinking",
@@ -30,7 +30,7 @@
       "Continue barreling: 1) the turn improves your hand (top pair/draw completes) 2) the turn is a \"blank\" (doesn't change the board structure) 3) the opponent folds to turn bets at a high rate. Give up: 1) the turn completes an obvious draw 2) the opponent raises/donks the turn 3) your hand gains no equity.",
       "Triple Barrel (river all-in bluff) conditions: 1) polarized range (strong hands or pure bluffs) 2) you have Blockers 3) the opponent is not a Calling Station.",
       "Delayed C-Bet: check the flop, bet the turn. Use when: 1) the flop isn't suited to a C-Bet 2) you want to see showdown cheaply 3) the opponent leads the turn frequently after checking the flop.",
-      "SPR (Stack-to-Pot Ratio) formula:\nSPR = effective stack ÷ pot size\n\nSPR tiers and strategy lean:\nSPR < 4 (low): committed play — top pair can get all-in comfortably\nSPR 4-10 (medium): standard play, be careful\nSPR > 10 (high): deep stacks — speculative hands like suited connectors gain value\n\nGeometric sizing over three streets:\nIdeal three-street all-in → about 60-70% pot each street\nExample: pot 6BB, effective 100BB, SPR≈17\nFlop bet 4BB → pot 14BB\nTurn bet 10BB → pot 34BB\nRiver bet 25BB → pot 84BB, total bet 39BB ≈ 40% of effective stack",
+      "SPR (Stack-to-Pot Ratio) formula:\nSPR = effective stack ÷ pot size\n\nSPR tiers and strategy lean:\nSPR < 4 (low): committed play — top pair can get all-in comfortably\nSPR 4-10 (medium): standard play, be careful\nSPR > 10 (high): deep stacks — speculative hands like suited connectors gain value\n\nGeometric sizing over three streets:\nFor a three-street all-in, the per-street ratio x satisfies (1+2x)^3 = 1+2·SPR: about 60-70% at SPR 5-7, about 114% at SPR 17 (the example below bets 60-70% and invests only about 40% of the effective stack, so it is not all-in)\nExample: pot 6BB, effective 100BB, SPR≈17\nFlop bet 4BB → pot 14BB\nTurn bet 10BB → pot 34BB\nRiver bet 25BB → pot 84BB, total bet 39BB ≈ 40% of effective stack",
       "Theory reference: the full derivation of SPR and geometric sizing is in Theory Academy T6 Chapter 3 \"SPR and Three-Street Geometric Sizing\". Betting plans in multi-street play are closely tied to range construction.",
       "Counter-intuitive: at deep stacks (SPR > 10), small suited connectors are worth more than big pairs. AA's postflop realization drops at deep stacks because opponents can apply pressure with wider ranges on later streets, while hands like 98s have better postflop playability and can make many strong hands."
     ],
@@ -83,7 +83,7 @@
       "What Is Board Texture?",
       "Board texture refers to the structural characteristics of the community cards: connectivity, suit distribution, high/low cards, etc. Different textures require completely different strategies.",
       "Dry Boards vs Wet Boards",
-      "Dry board (e.g. K♠72A♠):\n• Few draws or combinations\n• The preflop raiser has a big range advantage\n• Suits small continuation bets (1/3 pot)\n• Turn/river strategy changes little\n\nWet board (e.g. 9♠8♠7♣):\n• Many draws, straights, flushes\n• The defender's range hits hard\n• Suits big bets to protect made hands (2/3-full pot)\n• The turn can completely change the situation",
+      "Dry board (e.g. K♠7♦2♣):\n• Few draws or combinations\n• The preflop raiser has a big range advantage\n• Suits small continuation bets (1/3 pot)\n• Turn/river strategy changes little\n\nWet board (e.g. 9♠8♠7♣):\n• Many draws, straights, flushes\n• The defender's range hits hard\n• Suits big bets to protect made hands (2/3-full pot)\n• The turn can completely change the situation",
       "Three Dimensions of Board Texture",
       "1. Connectedness: does the board form straights/straight draws\n2. Suitedness: is there a flush/flush draw\n3. High/Low: is the board high cards or low cards",
       "High-card dry boards (e.g. AK2r) favor the preflop raiser; low-card wet boards (e.g. 876ss) favor the caller. Decide whether to bet based on who has the bigger range advantage.",
@@ -291,7 +291,7 @@
         "Bottom pair",
         "Air"
       ],
-      "explanation": "A combo flush+straight draw has about 12 outs (40%+ equity) — the best Check-Raise bluff hand."
+      "explanation": "A combo flush+straight draw has about 15 outs (about 54% equity) — the best Check-Raise bluff hand."
     },
     "l3-cr-q4": {
       "question": "How big is a typical Check-Raise relative to the C-Bet?",
@@ -427,7 +427,7 @@
       "question": "Which hand is the best Semi-Bluff candidate?",
       "options": [
         "A-high (no draw)",
-        "Combo flush+gutshot draw",
+        "Combo flush+open-ended draw",
         "Bottom pair",
         "Pure air"
       ],
@@ -467,11 +467,11 @@
       "question": "Which of these is a \"dry board\"?",
       "options": [
         "9♠8♠7♣",
-        "K♠72♠",
+        "K♠7♦2♣",
         "J♠T♠9♠",
         "Q♠J♠8♠"
       ],
-      "explanation": "K♠72♠ has no connectivity, no flush, scattered high/low cards — a classic dry board."
+      "explanation": "K♠7♦2♣ has no connectivity, no flush, scattered high/low cards — a classic dry board."
     },
     "l3-texture-q2": {
       "question": "How should bet size adjust on a wet board?",
@@ -663,7 +663,7 @@
       "correctAmount": "12BB",
       "reasoning": [
         "You have a flush draw + open-ended straight draw (combo draw)",
-        "Combo draws have about 12-15 outs (9 flush + 8 straight, deduplicated), about 45-54% equity",
+        "Combo draws have about 15 outs (9 flush + 8 straight, deduplicated), about 54% equity",
         "Raising gains both fold equity and made-hand value",
         "Even when called, you still have high equity"
       ],
@@ -718,8 +718,8 @@
       "correctAction": "Check-Raise",
       "correctAmount": "12BB",
       "reasoning": [
-        "J♥T♥ on a 9-8-4 two-tone board has a flush + gutshot combo draw",
-        "About 12 outs (40%+ equity) — Check-Raise semi-bluff",
+        "J♥T♥ on a 9♥8♣4♥ board has a flush + open-ended combo draw",
+        "About 15 outs (about 54% equity) — Check-Raise semi-bluff",
         "TAG folds to Check-Raises at a high rate",
         "Even when called you have high equity and can continue on the turn/river"
       ],
@@ -734,7 +734,7 @@
       "reasoning": [
         "Called the flop C-Bet (Float), then CO checks the turn",
         "TAG checking the turn indicates a weak hand (below top pair)",
-        "QJ has backdoor straight potential + overcard equity",
+        "QJ has Q-high equity (backdoor straight is dead on the turn)",
         "A turn bet represents Kx — TAG folds weak hands"
       ],
       "mistakeAction": "Check back",
@@ -748,7 +748,7 @@
       "reasoning": [
         "Both check the flop, then NIT checks the turn again",
         "NIT checking twice indicates extreme weakness",
-        "AT has overcard equity + backdoor flush potential",
+        "AT has A-high equity (backdoor flush is dead on the turn)",
         "A Probe bet represents 9x/6x — NIT folds air"
       ],
       "mistakeAction": "Check back",
@@ -788,14 +788,14 @@
       "correctAction": "Bet",
       "correctAmount": "28BB (pot)",
       "reasoning": [
-        "AQ is only A-high (top pair weak kicker) here, but your range is polarized",
+        "AQ is only top pair weak kicker (A-high + Q kicker) here, but your range is polarized",
         "Three streets of betting represent AK/AA/KK etc. super strong hands",
         "BB's calling range is squeezed to A-kicker/two pair — many fold to a pot bet",
-        "A-high has no showdown value (BB has Kx/Ax stronger) — bluffing is the only way to win",
+        "Top pair weak kicker has no showdown value (BB has Kx/Ax stronger) — bluffing is the only way to win",
         "Fold equity: TAG folds to a three-street pot bet about 55-60%"
       ],
       "mistakeAction": "Check (give up)",
-      "mistakeReasoning": "Checking almost certainly loses (A-high has minimal showdown value). With a consistent three-street narrative, the river bluff is +EV. Giving up wastes the image built on the first two streets.",
+      "mistakeReasoning": "Checking almost certainly loses (top pair weak kicker has minimal showdown value). With a consistent three-street narrative, the river bluff is +EV. Giving up wastes the image built on the first two streets.",
       "mistakeEvLoss": "-3.0 BB/100"
     },
     "l3-bluff-ex2": {
@@ -803,9 +803,9 @@
       "correctAction": "Raise",
       "correctAmount": "10BB",
       "reasoning": [
-        "T♥9♥ is a flush draw (9 outs) + gutshot potential (J completes a straight)",
+        "T♥9♥ is a flush draw (9 outs) + backdoor straight potential (needs J+8, two cards)",
         "Raising the C-Bet is a semi-bluff: the opponent may fold (Fold Equity)",
-        "Even when called, you have about 35% equity (9 flush outs + partial straight outs)",
+        "Even when called, you have about 35% equity (9 flush outs)",
         "On a K-high board, your raise represents Kx/set — consistent narrative",
         "BTN C-Bets often but folds to raises about 45%"
       ],
@@ -931,7 +931,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "AQ on a K-Tc board has top pair + backdoor flush — C-Bet for value.",
+          "explanation": "AQ on K♣T♣4♥ has a flush draw + gutshot (about 12 outs) — C-Bet for value.",
           "evImpact": "-0.8 BB/100"
         },
         {
@@ -972,7 +972,7 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A combo draw (flush + gutshot) has high equity — never fold it.",
+          "explanation": "A combo draw (flush + open-ended) has high equity — never fold it.",
           "evImpact": "-3.0 BB/100"
         },
         {
@@ -983,7 +983,7 @@
         {
           "action": "Raise",
           "amount": "12BB",
-          "explanation": "A flush+gutshot combo draw has about 12 outs and 40%+ equity. A semi-bluff raise gains fold equity and high equity when called.",
+          "explanation": "A flush+open-ended combo draw has about 15 outs and about 54% equity. A semi-bluff raise gains fold equity and high equity when called.",
           "evImpact": "+2.0 BB/100"
         }
       ]
@@ -1034,7 +1034,7 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "A combo draw (flush + gutshot) has high equity — the K doesn't change much. Don't fold.",
+          "explanation": "A combo draw (flush + open-ended) has high equity (about 33% on the turn) — the K doesn't change much. Don't fold.",
           "evImpact": "-2.0 BB/100"
         },
         {
@@ -1046,7 +1046,7 @@
         {
           "action": "Raise",
           "amount": "14BB",
-          "explanation": "87 on 9-6-2 has a flush + gutshot combo draw (about 12 outs) — the K doesn't help much. A semi-bluff raise gains fold equity, with high equity when called.",
+          "explanation": "87 on 9-6-2 has a flush + open-ended combo draw (about 15 outs, about 33% on the turn) — the K doesn't help much. A semi-bluff raise gains fold equity, with high equity when called.",
           "evImpact": "+2.0 BB/100"
         }
       ]
@@ -1176,7 +1176,7 @@
       "option": [
         {
           "action": "Check-Fold",
-          "explanation": "A combo draw (flush + gutshot) has 40%+ equity — never fold it.",
+          "explanation": "A combo draw (flush + open-ended) has about 54% equity — never fold it.",
           "evImpact": "-2.5 BB/100"
         },
         {
@@ -1187,7 +1187,7 @@
         {
           "action": "Check-Raise",
           "amount": "12BB",
-          "explanation": "Q♥J♥ has a flush + gutshot combo draw (about 12 outs) — the Check-Raise semi-bluff is standard. TAG folds a lot, and you have equity when called.",
+          "explanation": "Q♥J♥ has a flush + open-ended combo draw (about 15 outs) — the Check-Raise semi-bluff is standard. TAG folds a lot, and you have equity when called.",
           "evImpact": "+1.8 BB/100"
         }
       ]
@@ -1257,7 +1257,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "KQ has backdoor flush + overcard equity, and TAG checking the turn signals weakness. Float then bet the turn to steal.",
+          "explanation": "KQ has K-high equity (backdoor flush is dead on the turn), and TAG checking the turn signals weakness. Float then bet the turn to steal.",
           "evImpact": "-0.8 BB/100"
         },
         {
@@ -1317,7 +1317,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "AT has backdoor flush + overcard equity, and NIT checking the turn signals weakness. Float then bet the turn to steal.",
+          "explanation": "AT has A-high equity (backdoor flush is dead on the turn), and NIT checking the turn signals weakness. Float then bet the turn to steal.",
           "evImpact": "-1.0 BB/100"
         },
         {
@@ -1453,7 +1453,7 @@
       "option": [
         {
           "action": "Bet 3.5BB (66% pot)",
-          "explanation": "JTs on 9-4-2 has a gutshot (needs Q) plus BTN range advantage. C-Bet as a semi-bluff: TAG folds about 50%, and even when called you have 4 outs to improve. 66% pot is standard.",
+          "explanation": "JTs on 9-4-2 has only backdoor straight/flush potential (no direct straight outs), but BTN has a range advantage. C-Bet as a semi-bluff: TAG folds about 50%, relying mainly on fold equity. 66% pot is standard.",
           "evImpact": "+1.2 BB/100"
         },
         {
@@ -1472,7 +1472,7 @@
       "option": [
         {
           "action": "Bet 7BB (70% pot)",
-          "explanation": "A♦5♦ has the nut flush draw (9 outs) + A-high overcard. Continue the semi-bluff on the turn: consistent narrative (preflop open + flop bet representing Kx), TAG folds to turn barrels about 45%. Even when called you have 35% equity.",
+          "explanation": "A♦5♦ has the nut flush draw (9 outs) + A-high overcard. Continue the semi-bluff on the turn: consistent narrative (preflop open + flop bet representing Kx), TAG folds to turn barrels about 45%. Even when called you have about 20% equity on the turn (9 outs).",
           "evImpact": "+1.8 BB/100"
         },
         {
@@ -1510,12 +1510,12 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "A4s has a flush draw + backdoor overcards, and BTN has a clear range advantage. A semi-bluff C-Bet is +EV.",
+          "explanation": "A4s has a backdoor flush (about 4% by the river) + A-high, and BTN has a clear range advantage. A semi-bluff C-Bet is +EV.",
           "evImpact": "-0.5 BB/100"
         },
         {
           "action": "Bet 2BB (33% pot)",
-          "explanation": "A4s has a flush draw (9 outs) + A-high backdoor — semi-bluff small on the dry board. TAG folds a lot, and you have 35% equity when called.",
+          "explanation": "A4s has a backdoor flush (about 4% by the river) + A-high — semi-bluff small on the dry board. TAG folds a lot; rely mainly on fold equity.",
           "evImpact": "+1.2 BB/100"
         },
         {
@@ -1597,7 +1597,7 @@
         },
         {
           "action": "Check",
-          "explanation": "AK two overcards + backdoor flush should C-Bet for value.",
+          "explanation": "AK two overcards + flush draw (9 outs) should C-Bet for value.",
           "evImpact": "-0.5 BB/100"
         }
       ]
@@ -1811,7 +1811,7 @@
           "evImpact": "+1.5 BB/100"
         },
         {
-          "action": "Bet 16BB (full pot)",
+          "action": "Bet 18.5BB (full pot)",
           "explanation": "A full-pot bet is excessive. A-J-5 has some connectivity — a medium bet works. A big bet only gets called by stronger hands.",
           "evImpact": "-0.3 BB/100"
         }
@@ -1917,7 +1917,7 @@
         "C-Bet 1/3 pot",
         "C-Bet full pot"
       ],
-      "explanation": "A9 on 9-6-2 is top pair with a backdoor flush draw — bet 1/3 pot small for value while protecting."
+      "explanation": "A9 on 9-6-2 is top pair with a flush draw (9 outs) — bet 1/3 pot small for value while protecting."
     },
     "d-l3-odds-q1": {
       "scenario": "Flop, you have AK two overcards (6 outs)",
@@ -2027,7 +2027,7 @@
       "Explain multi-street planning (setting the turn/river plan at the flop) and state the definition of a double barrel and its roughly 50-60% frequency",
       "Judge whether to keep barreling on the turn (turn improves you, a blank, high fold frequency) or give up (a draw completes, opponent raises, no equity gain)",
       "Compute SPR = effective stack ÷ pot and state the low/mid/high SPR tendencies (top pair can shove below SPR 4)",
-      "Build a geometric three-street betting sequence of roughly 60-70% pot per street so the total approaches the effective stack"
+      "Use the geometric sizing formula to compute the per-street bet ratio for the target SPR, and identify that 60-70% per street cannot get all-in at SPR 17 (about 114% per street is needed)"
     ],
     "l3-checkraise": [
       "Tell value check-raises (two pair plus / a set on wet boards) from bluff check-raises (strong combo draws) and state what each earns",

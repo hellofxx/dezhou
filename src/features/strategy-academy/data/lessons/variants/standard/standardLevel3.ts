@@ -69,7 +69,7 @@ const L3_DRAWS_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'formula',
-    content: '2/4 法则与误差分析：\n看一张牌（转牌）：胜率 ≈ Outs × 2%\n看两张牌（翻牌全下）：胜率 ≈ Outs × 4%\n\n误差分析（翻牌→河牌两张牌场景）：\n4 Outs（卡顺）：×4 估 16% | 精确 16.5% | 误差 -0.5\n8 Outs（两头顺）：×4 估 32% | 精确 31.4% | 误差 +0.6\n9 Outs（同花）：×4 估 36% | 精确 35.0% | 误差 +1.0\n12 Outs（组合听牌）：×4 估 48% | 精确 45.0% | 误差 +3.0\n\n结论：Outs ≤ 9 时 ×4 误差在 1 个百分点内，Outs ≥ 13 建议用修正公式',
+    content: '2/4 法则与误差分析：\n看一张牌（转牌）：胜率 ≈ Outs × 2%\n看两张牌（翻牌全下）：胜率 ≈ Outs × 4%\n\n误差分析（翻牌→河牌两张牌场景）：\n4 Outs（卡顺）：×4 估 16% | 精确 16.5% | 误差 -0.5\n8 Outs（两头顺）：×4 估 32% | 精确 31.5% | 误差 +0.5\n9 Outs（同花）：×4 估 36% | 精确 35.0% | 误差 +1.0\n12 Outs（组合听牌）：×4 估 48% | 精确 45.0% | 误差 +3.0\n\n结论：Outs ≤ 9 时 ×4 误差在 1 个百分点内，Outs ≥ 13 建议用修正公式',
   },
   {
     type: 'theory-reference',
@@ -78,7 +78,7 @@ const L3_DRAWS_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'counter-intuitive',
-    content: '反直觉点：组合听牌（如同花+顺子+高张）的胜率远超直觉。例如 J♥T♥ 在 9♥8♦3♣ 面有 15 个 Outs，胜率约 54%，实际上已经是领先大多数一对的牌型——这解释了为什么组合听牌是极佳的半诈唬候选。',
+    content: '反直觉点：组合听牌（如同花+顺子+高张）的胜率远超直觉。例如 J♥T♥ 在 9♥8♥3♣ 面有 15 个 Outs，胜率约 54%，实际上已经是领先大多数一对的牌型——这解释了为什么组合听牌是极佳的半诈唬候选。',
   },
 ];
 
@@ -292,7 +292,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['lag'],
               },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'AQ在KTc面有顶对+后门同花，应该C-Bet获取价值。', evImpact: '-0.8 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'AQ在K♣T♣4♥面有同花听牌+卡顺（约12 outs），应该C-Bet获取价值。', evImpact: '-0.8 BB/100' },
                 { action: 'Bet', amount: '4.5BB', isCorrect: true, explanation: 'KTc两花面较湿润，LAG有很多听牌。用较大注C-Bet保护手牌+获取价值。', evImpact: '+1.5 BB/100' },
                 { action: 'Bet', amount: '1BB', isCorrect: false, explanation: '1BB太小，给对手太好的跟注价格。湿润面应该用较大注。', evImpact: '+0.2 BB/100' },
               ],
@@ -398,7 +398,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               amount: '12BB',
               reasoning: [
                 '你有同花听牌 + 两头顺子听牌（组合听牌）',
-                '组合听牌约 12-15 个 outs（同花 9 + 顺子 8，去重后），胜率约 45-54%',
+                '组合听牌约 15 个 outs（同花 9 + 顺子 8，去重后），胜率约 54%',
                 '加注可以同时获取弃牌权益和成牌价值',
                 '即使被跟注，你仍然有很高胜率',
               ],
@@ -453,9 +453,9 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['calling_station'],
               },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: '组合听牌（同花+卡顺）胜率很高，绝对不应该弃牌。', evImpact: '-3.0 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: '组合听牌（同花+两头顺）胜率很高（约54%），绝对不应该弃牌。', evImpact: '-3.0 BB/100' },
                 { action: 'Call', isCorrect: false, explanation: '组合听牌应该主动加注。只跟注浪费了弃牌权益和主动权。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '12BB', isCorrect: true, explanation: '同花+卡顺组合听牌有约 12 个 outs，胜率超过 40%。半诈唬加注可以获取弃牌权益，被跟注也有很高胜率。', evImpact: '+2.0 BB/100' },
+                { action: 'Raise', amount: '12BB', isCorrect: true, explanation: '同花+两头顺组合听牌有约 15 个 outs，胜率约 54%。半诈唬加注可以获取弃牌权益，被跟注也有很高胜率。', evImpact: '+2.0 BB/100' },
               ],
               relatedLessonId: 'l3-draws',
             },
@@ -524,9 +524,9 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['nit'],
               },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: '组合听牌（同花+卡顺）有很高胜率，K没改变太多。不应该弃牌。', evImpact: '-2.0 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: '组合听牌（同花+两头顺）有很高胜率（turn 单街约33%），K没改变太多。不应该弃牌。', evImpact: '-2.0 BB/100' },
                 { action: 'Call', amount: '6BB', isCorrect: false, explanation: '组合听牌应该加注获取弃牌权益+成牌价值。只跟注太被动。', evImpact: '+0.5 BB/100' },
-                { action: 'Raise', amount: '14BB', isCorrect: true, explanation: '87在962面有同花+卡顺组合听牌（约12 outs），K来没太大帮助。半诈唬加注可获取弃牌权益，被Call也有很高胜率。', evImpact: '+2.0 BB/100' },
+                { action: 'Raise', amount: '14BB', isCorrect: true, explanation: '87在962面有同花+两头顺组合听牌（约15 outs，turn 单街约33%），K来没太大帮助。半诈唬加注可获取弃牌权益，被Call也有很高胜率。', evImpact: '+2.0 BB/100' },
               ],
               relatedLessonId: 'l3-draws',
             },
@@ -558,7 +558,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           '说明多街思维（在 flop 决策时规划 turn/river 计划）并说出 Double Barrel 的定义与约 50-60% 的频率',
           '判断转牌应继续 Barrel（转牌增强你的牌、空白牌、对手弃牌率高）还是放弃（完成明显听牌、对手加注、无胜率提升）',
           '用 SPR = 有效筹码 ÷ 底池大小 计算 SPR，并说出低/中/高 SPR 的策略倾向（SPR < 4 顶对可全下）',
-          '用三街几何尺度构建每街约 60-70% 底池的下注序列，使三条街总量逼近有效筹码',
+          '用三街几何尺度公式计算目标 SPR 下的每街下注比例，并识别 SPR 17 时 60-70% 无法三街全下（需约 114%/街）',
         ],
         content: [
           { type: 'heading', content: '多街思维' },
@@ -570,7 +570,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: 'Delayed C-Bet：翻牌 Check，转牌下注。适用于：1) 翻牌不适合 C-Bet 2) 想低成本看摊牌 3) 对手翻牌 Check 后转牌领先下注频率高。' },
           {
             type: 'formula',
-            content: 'SPR（筹码底池比）公式：\nSPR = 有效筹码 ÷ 底池大小\n\nSPR 分级与策略倾向：\nSPR < 4（低 SPR）：适合 committed 打法，顶对即可全下\nSPR 4-10（中 SPR）：标准玩法，需要谨慎\nSPR > 10（高 SPR）：深筹码，同花连牌等投机牌价值上升\n\n三街几何尺度：\n理想三街全下 → 每街下注约 60-70% 底池\n例：底池 6BB，有效 100BB，SPR≈17\nFlop 下注 4BB → 底池 14BB\nTurn 下注 10BB → 底池 34BB\nRiver 下注 25BB → 底池 84BB，总下注 39BB ≈ 40% 有效筹码',
+            content: 'SPR（筹码底池比）公式：\nSPR = 有效筹码 ÷ 底池大小\n\nSPR 分级与策略倾向：\nSPR < 4（低 SPR）：适合 committed 打法，顶对即可全下\nSPR 4-10（中 SPR）：标准玩法，需要谨慎\nSPR > 10（高 SPR）：深筹码，同花连牌等投机牌价值上升\n\n三街几何尺度：\n三街全下的每街比例由 SPR 决定：SPR 5-7 约 60-70%；SPR 17 约 114%（本例 60-70% 仅投入约 40% 有效筹码，并非全下）\n例：底池 6BB，有效 100BB，SPR≈17\nFlop 下注 4BB → 底池 14BB\nTurn 下注 10BB → 底池 34BB\nRiver 下注 25BB → 底池 84BB，总下注 39BB ≈ 40% 有效筹码',
           },
           {
             type: 'theory-reference',
@@ -690,7 +690,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         quiz: [
           { id: 'l3-cr-q1', question: 'Check-Raise 是指什么？', options: ['先下注再加注', '先 Check 再对对手下注 Raise', '连续两次 Check', 'All-in'], correctIndex: 1, explanation: 'Check-Raise = 先 Check，面对对手下注时 Raise，是翻后最有力的攻击武器。' },
           { id: 'l3-cr-q2', question: 'BB vs C-Bet 的标准 Check-Raise 频率是？', options: ['2-5%', '10-15%', '25-30%', '40-50%'], correctIndex: 1, explanation: 'BB vs C-Bet Check-Raise 频率约 10-15%，范围要平衡（价值 + Bluff）。' },
-          { id: 'l3-cr-q3', question: '以下哪手牌最适合做 Check-Raise Bluff？', options: ['中对', '同花+顺子组合听牌', '底对', '空气牌'], correctIndex: 1, explanation: '同花+顺子组合听牌有约 12 个 outs（40%+ 胜率），是最佳 Check-Raise bluff 手牌。' },
+          { id: 'l3-cr-q3', question: '以下哪手牌最适合做 Check-Raise Bluff？', options: ['中对', '同花+顺子组合听牌', '底对', '空气牌'], correctIndex: 1, explanation: '同花+顺子组合听牌有约 15 个 outs（约 54% 胜率），是最佳 Check-Raise bluff 手牌。' },
           { id: 'l3-cr-q4', question: 'Check-Raise 的典型大小是 C-Bet 额的多少倍？', options: ['1-1.5x', '2.5-3x', '4-5x', '6-7x'], correctIndex: 1, explanation: 'Check-Raise通常为C-Bet额的2.5-3倍，如C-Bet 4BB → Check-Raise 10-12BB。' },
           { id: 'l3-cr-q5', question: '什么时候不应该在干燥面 Check-Raise bluff？', options: ['湿润面', '对手C-Bet范围强时', '对手弃牌率高时', '有组合听牌时'], correctIndex: 1, explanation: '干燥面对手C-Bet范围强（如K-7-2彩虹），Check-Raise弃牌率低，不适合bluff。' },
         ],
@@ -710,7 +710,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }],
             board: ['9h', '8c', '4h'], street: 'flop', effectiveStack: 95, potSize: 5.5,
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'Check-Raise', amount: '12BB', reasoning: ['J♥T♥ 在 9-8-4 两花面有同花+卡顺组合听牌', '约 12 个 outs（40%+ 胜率），Check-Raise 半诈唬', 'TAG 面对 Check-Raise 弃牌率高', '被 Call 也有很高胜率，Turn/River 可继续'] },
+            correctDecision: { action: 'Check-Raise', amount: '12BB', reasoning: ['J♥T♥ 在 9♥8♣4♥ 面有同花+两头顺组合听牌', '约 15 个 outs（约 54% 胜率），Check-Raise 半诈唬', 'TAG 面对 Check-Raise 弃牌率高', '被 Call 也有很高胜率，Turn/River 可继续'] },
             commonMistake: { action: 'Check-Call', reasoning: '组合听牌只 Call 浪费了弃牌权益 + 主动权。Check-Raise 半诈唬更 +EV。', evLoss: '-1.0 BB/100' },
           },
         ],
@@ -731,9 +731,9 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               id: 'l3-cr-p2',
               scenario: { heroHand: ['Qh', 'Jh'], heroPosition: 'BB', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Th', '9c', '4h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] },
               options: [
-                { action: 'Check-Fold', isCorrect: false, explanation: '组合听牌（同花+卡顺）有 40%+ 胜率，绝对不应该 Fold。', evImpact: '-2.5 BB/100' },
+                { action: 'Check-Fold', isCorrect: false, explanation: '组合听牌（同花+两头顺）有约 54% 胜率，绝对不应该 Fold。', evImpact: '-2.5 BB/100' },
                 { action: 'Check-Call', isCorrect: false, explanation: '组合听牌 Call 可以但偏被动。Check-Raise 半诈唬可获取弃牌权益 + 主动权。', evImpact: '+0.5 BB/100' },
-                { action: 'Check-Raise', amount: '12BB', isCorrect: true, explanation: 'Q♥J♥ 有同花+卡顺组合听牌（约 12 outs），Check-Raise 半诈唬是标准打法。TAG 弃牌率高，被 Call 也有胜率。', evImpact: '+1.8 BB/100' },
+                { action: 'Check-Raise', amount: '12BB', isCorrect: true, explanation: 'Q♥J♥ 有同花+两头顺组合听牌（约 15 outs），Check-Raise 半诈唬是标准打法。TAG 弃牌率高，被 Call 也有胜率。', evImpact: '+1.8 BB/100' },
               ],
               relatedLessonId: 'l3-checkraise',
             },
@@ -805,7 +805,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }],
             board: ['Kd', '7c', '2h', '5s'], street: 'turn', effectiveStack: 90, potSize: 13,
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'Bet', amount: '9BB', reasoning: ['翻牌 Call C-Bet（Float），Turn CO Check', 'TAG Turn Check 表示牌力弱（顶对以下）', 'QJ 有后门顺子潜力 + 高牌胜率', 'Turn 下注代表 Kx，TAG 会弃掉弱牌'] },
+            correctDecision: { action: 'Bet', amount: '9BB', reasoning: ['翻牌 Call C-Bet（Float），Turn CO Check', 'TAG Turn Check 表示牌力弱（顶对以下）', 'QJ 有 Q 高牌胜率（turn 后门顺已失效）', 'Turn 下注代表 Kx，TAG 会弃掉弱牌'] },
             commonMistake: { action: 'Check back', reasoning: 'Turn Check 错失偷底机会。TAG Check 表示弱牌，应该下注施压。', evLoss: '-1.0 BB/100' },
           },
           {
@@ -814,7 +814,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }],
             board: ['9c', '6h', '3d', '2s'], street: 'turn', effectiveStack: 95, potSize: 5.5,
             opponent: OPPONENT_PROFILES['nit'],
-            correctDecision: { action: 'Bet', amount: '4BB', reasoning: ['翻牌双方 Check，Turn NIT 再次 Check', 'NIT 连续 Check 表示牌力极弱', 'AT 有高牌胜率 + 后门同花潜力', 'Probe 下注代表 9x/6x，NIT 会弃掉空气牌'] },
+            correctDecision: { action: 'Bet', amount: '4BB', reasoning: ['翻牌双方 Check，Turn NIT 再次 Check', 'NIT 连续 Check 表示牌力极弱', 'AT 有 A 高牌胜率（turn 后门同花已失效）', 'Probe 下注代表 9x/6x，NIT 会弃掉空气牌'] },
             commonMistake: { action: 'Check back', reasoning: 'NIT 连续 Check 是明显弱牌信号，应该 Probe 偷底。Check 错失机会。', evLoss: '-0.8 BB/100' },
           },
         ],
@@ -825,7 +825,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               id: 'l3-fp-p1',
               scenario: { heroHand: ['Kh', 'Qh'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['Ad', '8c', '3s', '6h'], street: 'turn', potSize: 13, effectiveStack: 90, opponent: OPPONENT_PROFILES['tag'] },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'KQ 有后门同花 + 高牌胜率，TAG Turn Check 表示弱牌。应该 Float 后 Turn 下注偷底。', evImpact: '-0.8 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'KQ 有 K 高牌胜率（turn 后门同花已失效），TAG Turn Check 表示弱牌。应该 Float 后 Turn 下注偷底。', evImpact: '-0.8 BB/100' },
                 { action: 'Bet', amount: '9BB', isCorrect: true, explanation: 'KQ 翻牌 Float（Call C-Bet），Turn TAG Check。应该下注偷底，代表 Ax。TAG 会弃掉弱牌。', evImpact: '+1.5 BB/100' },
                 { action: 'All-in', isCorrect: false, explanation: 'Turn All-in 过度。标准下注尺度（66% pot）即可，All-in 只被强牌 Call。', evImpact: '-1.0 BB/100' },
               ],
@@ -855,7 +855,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               id: 'l3-fp-p4',
               scenario: { heroHand: ['Ah', 'Th'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['Kd', '7c', '2h', '5s'], street: 'turn', potSize: 13, effectiveStack: 90, opponent: OPPONENT_PROFILES['nit'] },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'AT有后门同花+高牌胜率，NIT Turn Check表示弱牌。应该Float后Turn下注偷底。', evImpact: '-1.0 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'AT有A高牌胜率（turn后门同花已失效），NIT Turn Check表示弱牌。应该Float后Turn下注偷底。', evImpact: '-1.0 BB/100' },
                 { action: 'Bet', amount: '9BB', isCorrect: true, explanation: 'AT翻牌Float，Turn NIT Check。NIT范围弱，下注代表Kx，NIT会弃掉弱牌。', evImpact: '+1.5 BB/100' },
                 { action: 'All-in', isCorrect: false, explanation: 'Turn All-in过度。NIT只跟强牌，标准尺度即可。', evImpact: '-1.5 BB/100' },
               ],
@@ -1022,7 +1022,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
         ],
         quiz: [
           { id: 'l3-bluff-q1', question: '下注 2/3 pot 时，对手需要至少多少弃牌率才能让诈唬盈亏平衡？', options: ['33%', '40%', '50%', '60%'], correctIndex: 1, explanation: '盈亏平衡公式：bet/(pot+bet) = (2/3)/(1+2/3) = 0.4 = 40%。对手弃牌率 > 40% 时诈唬+EV。' },
-          { id: 'l3-bluff-q2', question: '以下哪手牌是最佳的 Semi-Bluff 候选？', options: ['A-high（无听牌）', '同花听牌+卡顺（组合听牌）', '底对', '纯空气'], correctIndex: 1, explanation: '组合听牌（同花+顺子）有最多 outs（约 15 张），即使被 Call 也有很高概率反超，是最佳 Semi-Bluff 手牌。' },
+          { id: 'l3-bluff-q2', question: '以下哪手牌是最佳的 Semi-Bluff 候选？', options: ['A-high（无听牌）', '同花听牌+两头顺（组合听牌）', '底对', '纯空气'], correctIndex: 1, explanation: '组合听牌（同花+顺子）有最多 outs（约 15 张），即使被 Call 也有很高概率反超，是最佳 Semi-Bluff 手牌。' },
           { id: 'l3-bluff-q3', question: 'River 下注 pot 时，理论的 bluff-to-value ratio 是多少？', options: ['1:1', '1:2', '1:3', '2:1'], correctIndex: 1, explanation: '下注 pot 时对手需要 33% 胜率才能 call。理论比例为 bluff:value = 1:2（每 3 手下注中 1 手 bluff，2 手 value）。' },
           { id: 'l3-bluff-q4', question: '哪条街的诈唬频率应该最高？', options: ['River', 'Turn', 'Flop', '所有街相同'], correctIndex: 2, explanation: 'Flop 对手范围最宽、击中率最低，诈唬成功率最高。随着街数推进，对手范围越来越强，诈唬频率应递减。' },
           { id: 'l3-bluff-q5', question: 'Semi-Bluff的双重盈利方式是什么？', options: ['对手弃牌+成牌赢大底池', '偷底池+规则奖励', '弃牌权益+隐含赔率', '位置优势+范围优势'], correctIndex: 0, explanation: 'Semi-Bluff通过对手弃牌直接赢底池，或被Call后成牌赢大底池两种方式盈利。' },
@@ -1034,8 +1034,8 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }, { player: 'BTN', action: 'bet 4BB' }, { player: 'BB', action: 'call' }, { player: 'BTN', action: 'bet 10BB' }, { player: 'BB', action: 'call' }],
             board: ['Ac', '8s', '3h', 'Kd', '9c'], street: 'river', effectiveStack: 75, potSize: 28,
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'Bet', amount: '28BB (pot)', reasoning: ['AQ 在这个牌面只有 A-high（顶对弱踢脚），但你的范围极化', '你三条街下注代表 AK/AA/KK 等超强牌', 'BB 的 Call 范围被压缩到 A-Kicker/两对，面对 pot 下注很多会弃', 'A-high 没有摊牌价值（BB 有 Kx/Ax 更强），bluff 是唯一赢底池的方式', 'Fold Equity：TAG 面对三条街 pot 下注弃牌率约 55-60%'] },
-            commonMistake: { action: 'Check（放弃）', reasoning: 'Check 几乎必输（A-high 摊牌价值极低）。三条街叙事一致，River bluff 是+EV。放弃浪费了前两条街建立的形象。', evLoss: '-3.0 BB/100' },
+            correctDecision: { action: 'Bet', amount: '28BB (pot)', reasoning: ['AQ 在这个牌面只是顶对弱踢脚（A-high + Q kicker），但你的范围极化', '你三条街下注代表 AK/AA/KK 等超强牌', 'BB 的 Call 范围被压缩到 A-Kicker/两对，面对 pot 下注很多会弃', '顶对弱踢脚没有摊牌价值（BB 有 Kx/Ax 更强），bluff 是唯一赢底池的方式', 'Fold Equity：TAG 面对三条街 pot 下注弃牌率约 55-60%'] },
+            commonMistake: { action: 'Check（放弃）', reasoning: 'Check 几乎必输（顶对弱踢脚摊牌价值极低）。三条街叙事一致，River bluff 是+EV。放弃浪费了前两条街建立的形象。', evLoss: '-3.0 BB/100' },
           },
           {
             id: 'l3-bluff-ex2', title: 'Flop Semi-Bluff：同花听牌 Raise C-Bet',
@@ -1043,7 +1043,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }, { player: 'BTN', action: 'bet 3BB' }],
             board: ['Kh', '7h', '2c'], street: 'flop', effectiveStack: 95, potSize: 8.5,
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'Raise', amount: '10BB', reasoning: ['T♥9♥ 是同花听牌（9 outs）+ 卡顺潜力（J 来成顺）', 'Raise C-Bet 是 Semi-Bluff：对手可能弃牌（Fold Equity）', '即使被 Call，你有约 35% 胜率（9 outs 同花 + 部分顺子 outs）', '在 K-high 牌面，你的 raise 代表 Kx/暗三条，叙事一致', 'BTN C-Bet 频率高但面对 raise 弃牌率约 45%'] },
+            correctDecision: { action: 'Raise', amount: '10BB', reasoning: ['T♥9♥ 是同花听牌（9 outs）+ 后门顺子潜力（需 J+8 等两张）', 'Raise C-Bet 是 Semi-Bluff：对手可能弃牌（Fold Equity）', '即使被 Call，你有约 35% 胜率（9 outs 同花）', '在 K-high 牌面，你的 raise 代表 Kx/暗三条，叙事一致', 'BTN C-Bet 频率高但面对 raise 弃牌率约 45%'] },
             commonMistake: { action: 'Call（被动）', reasoning: 'Call 虽不亏，但放弃了 Fold Equity。Semi-Bluff raise 比被动 Call 多一种赢的方式（对手弃牌），EV 更高约 1.5BB/100。', evLoss: '-1.5 BB/100' },
           },
         ],
@@ -1054,7 +1054,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               id: 'l3-bluff-p1',
               scenario: { heroHand: ['Js', 'Ts'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['9d', '4c', '2h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] },
               options: [
-                { action: 'Bet 3.5BB（66% pot）', isCorrect: true, explanation: 'JTs 在 9-4-2 牌面有卡顺听牌（需要 Q），且 BTN 有范围优势。C-Bet 是 Semi-Bluff：TAG 弃牌率约 50%，即使被 Call 有 4 outs 反超。66% pot 是标准尺度。', evImpact: '+1.2 BB/100' },
+                { action: 'Bet 3.5BB（66% pot）', isCorrect: true, explanation: 'JTs 在 9-4-2 牌面只有后门顺/后门同花潜力（无直接成顺 outs），但 BTN 有范围优势。C-Bet 是 Semi-Bluff：TAG 弃牌率约 50%，即使被 Call 主要靠弃牌权益。66% pot 是标准尺度。', evImpact: '+1.2 BB/100' },
                 { action: 'Check', isCorrect: false, explanation: 'Check 放弃了 Fold Equity 和主动权。BTN 在 9-4-2 牌面有巨大范围优势，应该高频 C-Bet。', evImpact: '-0.5 BB/100' },
                 { action: 'Bet 5BB（100% pot）', isCorrect: false, explanation: '干燥面用满池下注过度。TAG 面对大注只会用强牌继续，弱牌全弃。小注/中注即可达到目的。', evImpact: '-0.3 BB/100' },
               ],
@@ -1064,7 +1064,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               id: 'l3-bluff-p2',
               scenario: { heroHand: ['Ad', '5d'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['Kc', '8d', '3d', 'Jh'], street: 'turn', potSize: 10, effectiveStack: 90, opponent: OPPONENT_PROFILES['tag'] },
               options: [
-                { action: 'Bet 7BB（70% pot）', isCorrect: true, explanation: 'A♦5♦ 有坚果同花听牌（9 outs）+ A-high overcard。Turn 继续 Semi-Bluff：叙事一致（翻前 open + flop bet 代表 Kx），TAG 面对 turn barrel 弃牌率约 45%。即使被 Call 有 35% 胜率。', evImpact: '+1.8 BB/100' },
+                { action: 'Bet 7BB（70% pot）', isCorrect: true, explanation: 'A♦5♦ 有坚果同花听牌（9 outs）+ A-high overcard。Turn 继续 Semi-Bluff：叙事一致（翻前 open + flop bet 代表 Kx），TAG 面对 turn barrel 弃牌率约 45%。即使被 Call 单街约 20% 胜率（9 outs）。', evImpact: '+1.8 BB/100' },
                 { action: 'Check', isCorrect: false, explanation: 'Check 放弃了同花听牌的 Semi-Bluff 价值。你有 9 outs + Fold Equity，check 只实现部分 equity。', evImpact: '-0.8 BB/100' },
                 { action: 'All-in', isCorrect: false, explanation: 'Turn 用听牌 All-in 过度。只有极强听牌（组合听牌）才考虑 All-in。单一同花听牌用标准尺度即可。', evImpact: '-2.0 BB/100' },
               ],
@@ -1084,8 +1084,8 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               id: 'l3-bluff-p4',
               scenario: { heroHand: ['As', '4s'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kh', '7s', '2c'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'A4s有同花听牌+后门高牌，BTN范围优势明显。Semi-Bluff C-Bet是+EV。', evImpact: '-0.5 BB/100' },
-                { action: 'Bet 2BB（33% pot）', isCorrect: true, explanation: 'A4s有同花听牌（9 outs）+ A高后门，干燥面用小注Semi-Bluff。TAG弃牌率高，即使被Call有35%胜率。', evImpact: '+1.2 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'A4s有后门同花（约4% 到河牌）+ A高牌，BTN范围优势明显。Semi-Bluff C-Bet是+EV。', evImpact: '-0.5 BB/100' },
+                { action: 'Bet 2BB（33% pot）', isCorrect: true, explanation: 'A4s有后门同花（约4% 到河牌）+ A高牌，干燥面用小注Semi-Bluff。TAG弃牌率高，主要靠弃牌权益。', evImpact: '+1.2 BB/100' },
                 { action: 'Bet 5BB（100% pot）', isCorrect: false, explanation: '干燥面用满池下注过度。小注即可达到目的。', evImpact: '-0.3 BB/100' },
               ],
               relatedLessonId: 'l3-bluffing',
@@ -1119,14 +1119,14 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           { type: 'heading', content: '什么是牌面质地（Board Texture）？' },
           { type: 'text', content: '牌面质地指公共牌的结构特征：连接性、花色分布、高低张等。不同质地的牌面需要完全不同的策略。' },
           { type: 'heading', content: '干燥牌面 vs 湿润牌面' },
-          { type: 'text', content: '干燥牌面（Dry）：如 K♠72A♠\n• 很少听牌和组合\n• 翻牌前加注者范围优势大\n• 适合小注持续下注（1/3 pot）\n• 转牌/河牌策略变化小\n\n湿润牌面（Wet）：如 9♠8♠7♣\n• 大量听牌、顺子、同花\n• 防御者范围命中率高\n• 适合大注保护成牌（2/3-full pot）\n• 转牌可能完全改变局势' },
+          { type: 'text', content: '干燥牌面（Dry）：如 K♠7♦2♣\n• 很少听牌和组合\n• 翻牌前加注者范围优势大\n• 适合小注持续下注（1/3 pot）\n• 转牌/河牌策略变化小\n\n湿润牌面（Wet）：如 9♠8♠7♣\n• 大量听牌、顺子、同花\n• 防御者范围命中率高\n• 适合大注保护成牌（2/3-full pot）\n• 转牌可能完全改变局势' },
           { type: 'heading', content: '牌面质地的三个维度' },
           { type: 'text', content: '1. 连接性（Connectedness）：牌面是否形成顺子/听顺子\n2. 花色分布（Suitedness）：是否有同花/听同花\n3. 高低张（High/Low）：牌面是高张还是低张' },
           { type: 'key-point', content: '高张干燥牌面（如 AK2r）有利于翻前加注者；低张湿润牌面（如 876ss）有利于跟注者。根据谁的范围优势更大来决定是否下注。' },
           { type: 'pro-tip', content: '在湿润牌面上，你的“没完成的强牌”可能在转牌就变成第二好牌（Second Best）。要么强势下注保护，要么准备好弃牌。' },
         ],
         quiz: [
-          { id: 'l3-texture-q1', question: '以下哪个是“干燥牌面”？', options: ['9♠8♠7♣', 'K♠72♠', 'J♠T♠9♠', 'Q♠J♠8♠'], correctIndex: 1, explanation: 'K♠72♠ 无连接性、无同花、分散的高低张，是典型的干燥牌面。' },
+          { id: 'l3-texture-q1', question: '以下哪个是“干燥牌面”？', options: ['9♠8♠7♣', 'K♠7♦2♣', 'J♠T♠9♠', 'Q♠J♠8♠'], correctIndex: 1, explanation: 'K♠7♦2♣ 无连接性、无同花、分散的高低张，是典型的干燥牌面。' },
           { id: 'l3-texture-q2', question: '湿润牌面上应该怎么调整下注尺度？', options: ['更小（1/4 pot）', '更大（2/3-full pot）', '不下注', '全下'], correctIndex: 1, explanation: '湿润牌面上对手有很多听牌，需要下大注让他们付出代价继续看牌。' },
           { id: 'l3-texture-q3', question: '高张干燥牌面有利于谁？', options: ['跟注者', '翻前加注者', '双方均等', '小盲注'], correctIndex: 1, explanation: '高张干燥牌面（如AK2）为翻前加注者的范围“命中”更多，因为加注者范围中大牌更多。' },
           { id: 'l3-texture-q4', question: '牌面质地的三个维度是什么？', options: ['大小/花色/数字', '连接性/花色分布/高低张', '干湿/快慢/高低', '同花/顺子/三条'], correctIndex: 1, explanation: '牌面质地的三个维度是连接性、花色分布和高低张。' },
@@ -1164,7 +1164,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               options: [
                 { action: 'Bet 4BB（75% pot）', isCorrect: false, explanation: '752两红桃较湿润，但BB范围中同花较少。中等注即可。', evImpact: '+0.3 BB/100' },
                 { action: 'Bet 3BB（50% pot）', isCorrect: true, explanation: '752两红桃有一定湿润度，但BB范围中同花较少。中注平衡价值和保护。', evImpact: '+1.0 BB/100' },
-                { action: 'Check', isCorrect: false, explanation: 'AK两高牌+后门同花，应该C-Bet获取价值。', evImpact: '-0.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'AK两高牌+同花听牌（9 outs），应该C-Bet获取价值。', evImpact: '-0.5 BB/100' },
               ],
               relatedLessonId: 'l3-texture',
             },
@@ -1412,7 +1412,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
                 { id: 'b', text: 'C-Bet 1/3底池', isCorrect: true },
                 { id: 'c', text: 'C-Bet 满池', isCorrect: false },
               ],
-              explanation: 'A9在962面是顶对，有一个后门同花听牌。用1/3底池小注下注获取价值，同时保护手牌。',
+              explanation: 'A9在962面是顶对，并有同花听牌（9 outs）。用1/3底池小注下注获取价值，同时保护手牌。',
               difficulty: 1,
             },
           ],
@@ -1782,7 +1782,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
               options: [
                 { action: 'Check', isCorrect: false, explanation: 'A-J-5 有两花但仍是高牌面，对 3-bet 者有利。AK 顶对顶踢脚应该下注。', evImpact: '-1.0 BB/100' },
                 { action: 'Bet 8BB（约45% pot）', isCorrect: true, explanation: 'A-J-5 虽有两花但高牌面对 3-bet 者有利。AK 顶对顶踢脚应该中等下注获取价值。', evImpact: '+1.5 BB/100' },
-                { action: 'Bet 16BB（满池）', isCorrect: false, explanation: '满池下注过大。A-J-5 有一定连接性，中等下注即可。大注只被更强牌跟注。', evImpact: '-0.3 BB/100' },
+                { action: 'Bet 18.5BB（满池）', isCorrect: false, explanation: '满池下注过大。A-J-5 有一定连接性，中等下注即可。大注只被更强牌跟注。', evImpact: '-0.3 BB/100' },
               ],
               relatedLessonId: 'l3-3bet-postflop',
             },
