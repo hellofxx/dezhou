@@ -1,5 +1,9 @@
 import type { TFunction } from 'i18next';
-import type { TheoryChapter, TheoryLevelInfo } from '../types';
+import type { TheoryChapterSummary, TheoryLevelSummary } from '../types';
+
+type ChapterLabel = Pick<TheoryChapterSummary, 'id' | 'title'>;
+type ChapterSubtitle = Pick<TheoryChapterSummary, 'id' | 'subtitle'>;
+type LevelLabel = Pick<TheoryLevelSummary, 'id' | 'title' | 'description' | 'unlockRequirement'>;
 
 /**
  * 渲染层理论章节/等级标题 i18n key 解析（单源）。
@@ -29,22 +33,22 @@ export function theoryLevelUnlockKey(levelId: string): string {
   return `theory.levelUnlock.${levelId}`;
 }
 
-export function resolveChapterTitle(t: TFunction, chapter: TheoryChapter): string {
+export function resolveChapterTitle(t: TFunction, chapter: ChapterLabel): string {
   return t(chapterTitleKey(chapter.id), { defaultValue: chapter.title });
 }
 
-export function resolveChapterSubtitle(t: TFunction, chapter: TheoryChapter): string {
+export function resolveChapterSubtitle(t: TFunction, chapter: ChapterSubtitle): string {
   return t(chapterSubtitleKey(chapter.id), { defaultValue: chapter.subtitle });
 }
 
-export function resolveTheoryLevelTitle(t: TFunction, level: TheoryLevelInfo): string {
+export function resolveTheoryLevelTitle(t: TFunction, level: LevelLabel): string {
   return t(theoryLevelTitleKey(level.id), { defaultValue: level.title });
 }
 
-export function resolveTheoryLevelDescription(t: TFunction, level: TheoryLevelInfo): string {
+export function resolveTheoryLevelDescription(t: TFunction, level: LevelLabel): string {
   return t(theoryLevelDescriptionKey(level.id), { defaultValue: level.description });
 }
 
-export function resolveTheoryLevelUnlock(t: TFunction, level: TheoryLevelInfo): string {
+export function resolveTheoryLevelUnlock(t: TFunction, level: LevelLabel): string {
   return t(theoryLevelUnlockKey(level.id), { defaultValue: level.unlockRequirement });
 }

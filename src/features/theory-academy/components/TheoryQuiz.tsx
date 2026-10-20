@@ -8,7 +8,7 @@ import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
 import { orderTheoryQuizQuestion } from '../utils/quizOrder';
 import { resolveTheoryQuizQuestion } from '../utils/contentKeys';
-import { getChapterDifficulty } from '../utils/theoryProgress';
+import { getChapterDifficulty } from '../utils/theoryMeta';
 import type { TheoryChapter } from '../types';
 
 interface TheoryQuizProps {

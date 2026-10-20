@@ -6,7 +6,7 @@
  */
 import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
 import { useTheoryStore } from './store';
-import { isLevelFullyCompleted } from './utils/theoryProgress';
+import { isLevelFullyCompleted } from './utils/theoryMeta';
 
 // 成就检查数据源（仅 theory 专用可选方法；academy 类方法返回安全缺省值，T7/B4 idempotency）
 registerAchievementSource({

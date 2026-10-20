@@ -5,7 +5,11 @@ import { ChevronDown, Lock, CheckCircle2, PlayCircle, BookOpen, Swords, Clock } 
 import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
-import type { TheoryChapter, TheoryLevelInfo, TheoryTier } from '../types';
+import type {
+  TheoryChapterSummary,
+  TheoryLevelSummary,
+  TheoryTier,
+} from '../types';
 import {
   resolveChapterTitle,
   resolveTheoryLevelTitle,
@@ -26,7 +30,7 @@ const TIER_CLASS: Record<TheoryTier, string> = {
 };
 
 interface TheoryLadderProps {
-  levels: TheoryLevelInfo[];
+  levels: TheoryLevelSummary[];
   completedChapters: string[];
   quizScores: Record<string, number>;
   isUnlocked: (levelId: string) => boolean;
@@ -34,7 +38,7 @@ interface TheoryLadderProps {
 
 /** 推导当前活跃理论等级：首个解锁且仍有未读章节的等级；全部完成则为 null */
 export function findActiveTheoryLevelId(
-  levels: TheoryLevelInfo[],
+  levels: TheoryLevelSummary[],
   completedChapters: string[],
   isUnlocked: (levelId: string) => boolean,
 ): string | null {
@@ -54,7 +58,7 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
 
   const openChapter = (chapterId: string) => navigate(`/theory/chapter/${chapterId}`);
 
-  const handleHeadClick = (level: TheoryLevelInfo, expanded: boolean) => {
+  const handleHeadClick = (level: TheoryLevelSummary, expanded: boolean) => {
     if (expanded) {
       const target = level.chapters.find((c) => !completedChapters.includes(c.id)) ?? level.chapters[0];
       if (target) openChapter(target.id);
@@ -241,7 +245,7 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
 }
 
 interface TheoryChapterChipProps {
-  chapter: TheoryChapter;
+  chapter: TheoryChapterSummary;
   completed: boolean;
   isNext: boolean;
   score: number | undefined;

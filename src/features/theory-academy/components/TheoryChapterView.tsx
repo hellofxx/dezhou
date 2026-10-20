@@ -14,10 +14,9 @@ import { useTheoryStore } from '../store';
 import {
   findChapterById,
   findLevelByChapterId,
-  getChapterDifficulty,
   getNextChapter,
-  isLevelFullyCompleted,
 } from '../utils/theoryProgress';
+import { getChapterDifficulty, isLevelFullyCompleted } from '../utils/theoryMeta';
 import { TheorySectionRenderer } from './TheorySectionRenderer';
 import { TheoryQuiz } from './TheoryQuiz';
 import { TheoryCalcDrill } from './TheoryCalcDrill';

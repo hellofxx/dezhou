@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, PlayCircle, Swords, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
-import type { TheoryLevelInfo } from '../types';
+import type { TheoryLevelSummary } from '../types';
 import { resolveChapterTitle } from '../utils/titleKeys';
 
 interface TheoryResumeProps {
   /** 当前活跃等级（首个解锁且有未读章节）；全部完成则为 null */
-  activeLevel: TheoryLevelInfo | null;
+  activeLevel: TheoryLevelSummary | null;
   completedChapters: string[];
   totalProgress: number;
   completedCount: number;

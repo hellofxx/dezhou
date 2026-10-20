@@ -36,22 +36,29 @@ export interface TheoryQuizQuestion {
   explanation: string;
 }
 
-/** 理论章节（阅读单元 + 章末小测） */
-export interface TheoryChapter {
+/**
+ * 理论章节摘要（目录层字段）。
+ * 首页/进度/解锁只依赖这一层，正文与小测留在 TheoryChapter，由章节页按需加载。
+ */
+export interface TheoryChapterSummary {
   id: string;                       // 全局唯一，前缀 t<level>-（与 l<level>- 隔离）
   level: TheoryLevelNumber;
   order: number;
   title: string;
   subtitle: string;
   duration: string;                 // 预计阅读时长，如 '10 min'
+  /** 所属变体标识 */
+  variant: PokerVariant;
+}
+
+/** 理论章节（阅读单元 + 章末小测） */
+export interface TheoryChapter extends TheoryChapterSummary {
   /** 本章小测答题影响的 ELO 维度 */
   eloDimension: EloDimension;
   /** 本章学习目标（先行组织者策略，可选；为空时 UI 不渲染目标卡片） */
   objectives?: string[];
   content: TheorySection[];
   quiz: TheoryQuizQuestion[];
-  /** 所属变体标识 */
-  variant: PokerVariant;
   /** 变体特有规则说明 */
   variantRules?: VariantRuleInfo;
   /**
@@ -70,20 +77,25 @@ export interface PracticeRecommendation {
   trackId?: string;
 }
 
-/** 理论 Level 信息 */
-export interface TheoryLevelInfo {
+/** 理论 Level 摘要（目录层字段，不含章节正文） */
+export interface TheoryLevelSummary {
   id: string;                       // 't1' ... 't9'
   level: TheoryLevelNumber;
   tier: TheoryTier;
   title: string;
   description: string;
   icon: string;
-  chapters: TheoryChapter[];
+  chapters: TheoryChapterSummary[];
   unlockRequirement: string;
   /** 完成本 Level 后的实践推荐（策略学院课程/轨道） */
   practiceRecommendations: PracticeRecommendation;
   /** 所属变体 */
   variant: PokerVariant;
+}
+
+/** 理论 Level 信息（完整数据，含章节正文与小测） */
+export interface TheoryLevelInfo extends TheoryLevelSummary {
+  chapters: TheoryChapter[];
 }
 
 /** 变体规则信息 */

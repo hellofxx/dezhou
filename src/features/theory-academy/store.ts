@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { TheoryProgress } from './types';
-import { getTheoryLevelsByVariant } from './data/levels/variants';
-import { ALL_VARIANT_THEORY_LEVELS } from './data/levels/variants';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
-import { isLevelUnlockedByCompleted } from './utils/theoryProgress';
+import {
+  findLevelSummaryById,
+  getLevelSummariesByVariant,
+  isLevelUnlockedByCompleted,
+} from './utils/theoryMeta';
 import type { PokerVariant } from '@/shared/types/elo';
 
 const initialProgress: TheoryProgress = {
@@ -103,7 +105,7 @@ export const useTheoryStore = create<TheoryStore>()(
       },
 
       getLevelProgress: (levelId) => {
-        const level = ALL_VARIANT_THEORY_LEVELS.find((l) => l.id === levelId);
+        const level = findLevelSummaryById(levelId);
         if (!level || level.chapters.length === 0) return 0;
         const { completedChapters } = get().progress;
         const done = level.chapters.filter((c) => completedChapters.includes(c.id)).length;
@@ -116,7 +118,7 @@ export const useTheoryStore = create<TheoryStore>()(
        */
       getTotalProgress: () => {
         const { activeVariant, completedChapters } = get().progress;
-        const levels = getTheoryLevelsByVariant(activeVariant);
+        const levels = getLevelSummariesByVariant(activeVariant);
         const total = levels.reduce((sum, l) => sum + l.chapters.length, 0);
         if (total === 0) return 0;
         const variantChapterIds = new Set(levels.flatMap((l) => l.chapters.map((c) => c.id)));

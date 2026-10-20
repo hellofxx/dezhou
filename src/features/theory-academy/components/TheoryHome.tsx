@@ -5,8 +5,10 @@ import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useTheoryStore } from '../store';
-import { getTotalChapterCount } from '../utils/theoryProgress';
-import { getTheoryLevelsByVariant } from '../data/levels/variants';
+import {
+  getLevelSummariesByVariant,
+  getTotalChapterCount,
+} from '../utils/theoryMeta';
 import type { PokerVariant } from '@/shared/types/elo';
 import { VariantToggle } from '@/shared/components/VariantToggle';
 import { TheoryResume } from './TheoryResume';
@@ -21,7 +23,7 @@ export default function TheoryHome() {
   const activeVariant = useTheoryStore((s) => s.progress.activeVariant);
   const switchVariant = useTheoryStore((s) => s.switchVariant);
 
-  const levels = getTheoryLevelsByVariant(activeVariant);
+  const levels = getLevelSummariesByVariant(activeVariant);
   const totalProgress = getTotalProgress();
   const totalChapters = getTotalChapterCount(activeVariant);
 
@@ -134,7 +136,7 @@ function ReadingStats({
   activeVariant: PokerVariant;
 }) {
   const { t } = useTranslation();
-  const levels = getTheoryLevelsByVariant(activeVariant);
+  const levels = getLevelSummariesByVariant(activeVariant);
 
   const stats = [
     { icon: <BookOpenCheck className="w-3.5 h-3.5" />, label: t('theory.stats.avgScoreLabel'), value: t('theory.stats.avgScoreValue', { score: avgScore }) },
