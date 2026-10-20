@@ -9,7 +9,7 @@
 
 ## [Unreleased] - 2026-09-05
 
-### 2026-10-20 启动分包修复与理论章节按 Level 懒载（7 个 commit）
+### 2026-10-20 启动分包修复与理论章节按 Level 懒载（多 commit）
 
 按「构建分包 → 语言包层级 → 课程数据层级 → 启动时序 → 图表懒载」逐批优化。实测基线首屏 41 个文件 / 382.3KB gzip，优化后 37 个文件 / **234.7KB gzip（-38.6%）**。
 
@@ -18,7 +18,7 @@
 - **理论章节按 Level 懒载（3e78406）**：`data/levels/loaders.ts` 用 `import.meta.glob` 为 27 个 Level 单文件生成独立 chunk（4.6–19.6KB gzip），新增 `loadTheoryLevelById` / `useTheoryLevel`；章节页只加载当前 Level，下一章从 manifest 摘要跨 Level 顺延；首页继续学习卡与阶梯 chips 的意图预取也改为只取目标 Level。旧整变体数据块（标准 106.2 / 短牌 47.3 / 单挑 50.0KB gzip）不再进入运行时。`loaders.test.ts` 增加逐 Level 映射守卫。
 - **学院摘要链解耦（d9c702e）**：`academyCourse` 启动层原本经 `strategy-academy-data` 手动 chunk 带入 Vite 动态 import 预载 helper，进而连带 manifest / tracks / loaders 约 11KB。移除泛化 data chunk 规则，让 helper 与 mapDeps 归入独立共享 chunk；首屏 245.0 → **234.7KB gzip**。course 页仍按需加载摘要与单 Level 数据。
 - **启动非阻塞（7b0839f）**：首屏渲染闸门只等待 persist hydration（localStorage 同步层，3s 兜底）；IndexedDB records 加载、事件总线订阅与三学院 bootstrap 改为后台执行。records 经 zustand selector 更新，数据源经 `useAcademyDataSource` late-registration 自愈，不阻塞首屏；IDB 回填改为合并，避免与首屏后新记录竞态。顺带移除 `APP_VERSION` 的无效动态 import。
-- **图表懒载（本 commit）**：ProgressPage / PotOddsPage / HandHistoryList / 两个统计页的 recharts 组件改为 `React.lazy` + `Suspense`。图表页首包 **114–118KB → 8.5–9.8KB gzip**，页面骨架先绘制，图表库在渲染后按需下载。
+- **图表懒载（3f09852）**：ProgressPage / PotOddsPage / HandHistoryList / 两个统计页的 recharts 组件改为 `React.lazy` + `Suspense`。图表页首包 **114–118KB → 8.5–9.8KB gzip**，页面骨架先绘制，图表库在渲染后按需下载。
 - **验证**：`pnpm verify`、`pnpm build`、`pnpm size:check` 全绿；真实浏览器视觉、网络面板时序与 <768px 响应式未验证。
 - **有意保留**：framer-motion 42.2KB 留在首屏——`MotionConfig reducedMotion="user"` 是全站 80 个 framer 组件的统一降级入口，移除会回归 WCAG 2.1 AA；react-dom 71.5KB 与 i18next 13.1KB 为框架基线。recharts 仍按需下载约 95.9KB（渲染后，不阻塞页面骨架）。
 
