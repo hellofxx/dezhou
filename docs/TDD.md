@@ -1657,8 +1657,9 @@ manualChunks(id) {
 }
 ```
 
-- 主 chunk 从 1204 kB 降至约 291 kB；2026-10 移除 recharts 手动分包后，首屏预载包为 **245.0KB gzip / 38 个文件**
+- 主 chunk 从 1204 kB 降至约 291 kB；2026-10 移除 recharts 手动分包、解耦学院摘要链后，首屏预载包为 **234.7KB gzip / 36 个文件**
 - 图表库交由 Rolldown 自动拆分，只出现在使用图表的路由 chunk；`check-bundle-size.mjs` 断言首屏静态图不得包含 recharts
+- 不要为 `strategy-academy/data/` 剩余模块建泛化手动 chunk：Vite 的动态 import 预载 helper / mapDeps 会被并入该 chunk，启动层经 `academyCourse` 连带整条学院摘要链；现有规则只按 manifest / 单 Level / 变体等明确边界拆分
 - 课程/题库大数据文件独立 chunk，按需加载
 
 ### 8.4 IndexedDB 大容量存储

@@ -25,6 +25,9 @@ export default defineConfig({
         manualChunks(id) {
           // 策略学院数据分包：摘要（启动/首页）与课程正文（按变体懒载）必须分离，
           // 否则摘要 import 会把全量课程拖进启动图。
+          // 不要为 data/ 剩余模块建泛化手动 chunk（如 strategy-academy-data）：
+          // Vite 的动态 import 预载 helper / mapDeps 会被 Rolldown 并入该 chunk，
+          // 启动层 import academyCourse 时就会连带整个学院摘要链。交由自动归置。
           if (id.includes('/strategy-academy/data/lessons/manifest/')) {
             return 'academy-manifest';
           }
@@ -55,9 +58,6 @@ export default defineConfig({
           }
           if (id.includes('/strategy-academy/data/conceptNodes')) {
             return 'academy-concepts-data';
-          }
-          if (id.includes('/strategy-academy/data/')) {
-            return 'strategy-academy-data';
           }
           if (id.includes('/puzzle-trainer/data/puzzleBank')) {
             return 'puzzle-data';
