@@ -10,9 +10,7 @@ import commonZh from './locales/zh/common.json';
 import commonEn from './locales/en/common.json';
 import dashboardZh from './locales/zh/dashboard.json';
 import dashboardEn from './locales/en/dashboard.json';
-import academyZh from './locales/zh/academy.json';
-import academyEn from './locales/en/academy.json';
-// theory / academy-course 经 FEATURE_GROUPS 路由分组懒加载（移至 preload.ts 动态注入）
+// academy / theory / academy-course 经 FEATURE_GROUPS 路由分组懒加载（移至 preload.ts 动态注入）
 import variantZh from './locales/zh/variant.json';
 import variantEn from './locales/en/variant.json';
 import tiltZh from './locales/zh/tilt.json';
@@ -37,8 +35,7 @@ const coreZh = {
   nav: navZh,
   common: commonZh,
   dashboard: dashboardZh,
-  academy: academyZh,
-  // theory / academy-course 经 route-based preload 懒加载
+  // academy / theory / academy-course 经 route-based preload 懒加载
   variant: variantZh,
   tilt: tiltZh,
   streak: streakZh,
@@ -49,8 +46,7 @@ const coreEn = {
   nav: navEn,
   common: commonEn,
   dashboard: dashboardEn,
-  academy: academyEn,
-  // theory / academy-course 经 route-based preload 懒加载
+  // academy / theory / academy-course 经 route-based preload 懒加载
   variant: variantEn,
   tilt: tiltEn,
   streak: streakEn,

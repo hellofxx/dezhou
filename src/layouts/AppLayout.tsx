@@ -89,8 +89,8 @@ export default function AppLayout() {
       title: t('nav.study'),
       i18nKey: 'nav.study',
       items: [
-        { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={18} />, i18nKey: 'nav.academy', hint: t('academy.positioning') },
-        { label: t('nav.theory'), path: '/theory', icon: <Library size={18} />, i18nKey: 'nav.theory', hint: t('theory.positioning') },
+        { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={18} />, i18nKey: 'nav.academy', hint: t('nav.academyHint') },
+        { label: t('nav.theory'), path: '/theory', icon: <Library size={18} />, i18nKey: 'nav.theory', hint: t('nav.theoryHint') },
         { label: t('nav.handHistory'), path: '/hand-history', icon: <ClipboardList size={18} />, i18nKey: 'nav.handHistory' },
       ],
     },

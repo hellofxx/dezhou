@@ -92,7 +92,7 @@ export const CORE_MODULES = [
   'nav',
   'common',
   'dashboard',
-  'academy',
+  // academy 不在 core：仅学院/理论路由消费，导航定位提示已迁至 nav.academyHint。
   // theory / academy-course 经 FEATURE_GROUPS 懒加载（移除 theory 以避免首屏 955KB 内容注入）
   'variant',
   'tilt',
@@ -140,7 +140,8 @@ export const FEATURE_GROUPS = {
   '/academy': ['academy', 'variant'],
   // TheoryChapterView 渲染 PracticeBridgeCard 消费 academy（academy 属 core，启动已加载，此处列出以如实反映渲染树）
   '/theory/chapter/:chapterId': ['theory', 'academy'],
-  '/theory': ['theory', 'variant'],
+  // TheoryHome 的实践桥接渲染 academy.lessonTitle；academy 已移出 core，须在本组显式声明
+  '/theory': ['theory', 'academy', 'variant'],
   // ThemeDrill/PuzzleRush/DailyPuzzle 渲染 PuzzleCard → PuzzleCardFeedback 消费 feedback
   '/puzzle/theme/:themeId': ['puzzle', 'feedback'],
   '/puzzle/rush': ['puzzle', 'feedback'],

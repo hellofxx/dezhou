@@ -117,7 +117,7 @@
 
 | 分组 key | 类型 | i18n 模块 |
 |---|---|---|
-| `CORE_MODULES` | core（启动静态注入） | `nav`, `common`, `dashboard`, `academy`, `variant`, `tilt`, `streak`, `feedback` |
+| `CORE_MODULES` | core（启动静态注入） | `nav`, `common`, `dashboard`, `variant`, `tilt`, `streak`, `feedback` |
 | `/` | feature（随路由并行加载） | `dashboard`, `nav`, `achievements`, `progress`, `dailyChallenge`, `spacedRepetition`, `downswing`, `mood`, `rankUp`, `review` |
 | `/settings` | feature（随路由并行加载） | `settings`, `mentor`, `sessionLimit`, `variant`, `streak` |
 | `/leaderboard` | feature（随路由并行加载） | `leaderboard` |
@@ -143,7 +143,7 @@
 | `/academy/lesson/:lessonId` | feature（随路由并行加载） | `academy`, `drills`, `gto` |
 | `/academy` | feature（随路由并行加载） | `academy`, `variant` |
 | `/theory/chapter/:chapterId` | feature（随路由并行加载） | `theory`, `academy` |
-| `/theory` | feature（随路由并行加载） | `theory`, `variant` |
+| `/theory` | feature（随路由并行加载） | `theory`, `academy`, `variant` |
 | `/puzzle/theme/:themeId` | feature（随路由并行加载） | `puzzle`, `feedback` |
 | `/puzzle/rush` | feature（随路由并行加载） | `puzzle`, `feedback` |
 | `/puzzle/daily` | feature（随路由并行加载） | `puzzle`, `feedback` |
