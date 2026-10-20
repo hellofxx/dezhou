@@ -9,6 +9,17 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-10-20 策略学院加载性能：目录摘要 / 课程文案 / 课程数据三层懒载（3 个 commit）
+
+策略学院此前同样存在三层全量加载：启动 `store.bootstrap` 直接拉 `LEVELS` 全量课程；`academy-course` 虽已按 Level 拆文件，但路由入口一次载入全部 15 个文件；课程页与首页共用同一份含正文/小测/练习的完整数据。本批与理论学院同构拆成三层。
+
+- **目录摘要（6c479be）**：新增 `data/lessons/manifest/`（`pnpm academy:manifest` 生成）+ `utils/academyMeta.ts` / `utils/trackMeta.ts`；store、bootstrap、Home、轨道/图谱/每日计划改用摘要。vite `manualChunks` 按摘要/单 Level/变体/Local 拆开数据块，摘要 import 不再拖入全量课程。启动依赖图 **623KB → 394KB gzip**（策略全量课程数据约 230KB 移出首屏），首页增量约 **14KB gzip**。
+- **课程文案（c258e89）**：`academy-course` 不再在路由入口整批加载；新增 `i18n/academyCourse.ts` 按文件加载（课程页 = 所属 Level/变体 + 术语/对手专题；Basics / 认证 / 速训各自定向），成功才入缓存、失败可重试、并发共享 in-flight；语言切换只补已访问文件。课程页当前语言文案由全量约 220KB gzip 降至单 Level 约 7–37KB + 专题约 5KB。
+- **完整课程（cc7d674）**：`data/lessons/loaders.ts` 按「课程 → 所属 Level」动态加载（L4 合并 4A/4B；变体/本土课各自入口），标准课程分包细化到逐 Level；`CourseView` / `LevelCertification` / `QuickDrill` 经 `useAcademyLessons` 消费。课程路线 = 单个 Level 数据块（8.7–39.2KB gzip）或变体块（27–31KB）+ 单 Level 文案 + CourseView 12.9KB，合计约 **34–95KB gzip**（此前约 468KB）；认证约 19–79KB。首页阶梯与继续学习卡在 hover/focus 时预取目标课程。
+- **验证**：`pnpm verify` 全绿（173 文件 / 1206 测试）；`pnpm build` 通过；`agents:map` 已同步。
+- **commit**：6c479be（manifest）/ c258e89（课程文案按需）/ cc7d674（按 Level 懒载 + 预取）。
+- **未覆盖 / 遗留**：真实浏览器视觉、网络面板时序与 <768px 响应式未验证；L7 数据块较大（含本土课，约 39KB gzip），后续可再拆 local 子块；首屏剩余大头为 vendor-recharts / react-dom / framer（约 237KB gzip），不在本批范围。
+
 ### 2026-10-20 理论学院加载性能：目录摘要 / 内容包 / 变体数据三层懒载（3 个 commit）
 
 问题不是单点慢，而是三层全量加载叠加：应用渲染前 `store.bootstrap` 会拉入理论全量章节数据；进入 `/theory` 又拉完整 `theory.json`；章节页与首页共用同一份含全部正文的数据。本批按「目录摘要 → 内容包 → 完整数据」逐层拆开。
