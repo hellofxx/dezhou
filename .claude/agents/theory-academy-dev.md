@@ -85,10 +85,10 @@ additionalPrompt: ""
 - src/features/theory-academy/ — 模块根（types.ts 含 TheoryChapter / TheoryLevelInfo / TheorySection / PracticeRecommendation 等；store.ts 独立 persist store；index.ts）
 - src/features/theory-academy/data/levels/ — 理论 Level 内容数据（index.ts 为兼容层 re-export THEORY_LEVELS；variants/ 下三变体平级子目录：standard/、short-deck/、heads-up/，各含 standardLevel1~9.ts / shortDeckLevel1~9.ts / headsUpLevel1~9.ts（每 Level 单文件，导出 `<VARIANT>_LEVEL_<N>_CHAPTERS`）与 index.ts 聚合 standardLevels / shortDeckLevels / headsUpLevels；variantRules.ts 集中维护变体规则；index.ts 导出 ALL_VARIANT_THEORY_LEVELS 与 getTheoryLevelsByVariant，附 theoryIntegrity.test.ts）
 - src/features/theory-academy/data/levels/manifest/ — 由 `pnpm theory:manifest` 生成的 Level/章节目录摘要（无正文），首页/store/成就检查只读这一层；`manifest.parity.test.ts` 守卫其与完整数据一致
-- src/features/theory-academy/data/levels/loaders.ts — 完整数据按变体动态加载（缓存 + in-flight 去重）；章节页与疑难清单唯一入口
+- src/features/theory-academy/data/levels/loaders.ts — 完整数据按 Level 动态加载（`import.meta.glob` 每 Level 单文件独立 chunk；缓存 + in-flight 去重）；章节页 `loadTheoryLevelById` 只取当前 Level，疑难清单经 `loadTheoryLevelsForVariant` 逐 Level 组合
 - src/features/theory-academy/data/theoryIntegrity.test.ts — 数据完整性守卫
 - src/features/theory-academy/utils/ — theoryMeta.ts（摘要层查询）+ theoryProgress.ts（完整数据查询）+ quizOrder.ts（选项排序出口）+ quizOrder.test.ts
-- src/features/theory-academy/hooks/ — useTheory.ts / useTheoryLevels.ts（按变体懒载完整数据）/ useTheoryContentI18n.ts（当前 level 内容包就绪态）
+- src/features/theory-academy/hooks/ — useTheory.ts / useTheoryLevel.ts（章节页按 Level 懒载）/ useTheoryLevels.ts（疑难清单按变体组合）/ useTheoryContentI18n.ts（当前 level 内容包就绪态）
 - src/features/theory-academy/components/ — TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLadder / TheoryResume / TheorySectionRenderer / PracticeBridgeCard / NextChapterNav
 
 跨模块依赖：
@@ -137,7 +137,7 @@ additionalPrompt: ""
 
 模块特有约束：
 - 独立 store，不写入 progress store 的 persist schema（仅调用其公开 action）
-- 首页/store/成就检查禁止静态 import `data/levels/variants/**`（会把全量正文带回首屏）；只允许 `utils/theoryMeta` + `data/levels/manifest`。完整数据只能经 `data/levels/loaders.ts` 动态加载（章节页/疑难清单）
+- 首页/store/成就检查禁止静态 import `data/levels/variants/**`（会把全量正文带回首屏）；只允许 `utils/theoryMeta` + `data/levels/manifest`。完整数据只能经 `data/levels/loaders.ts` 动态加载：章节页/首页预取按 Level 单取，禁止回退为整变体加载；只有疑难清单可逐 Level 组合出全变体
 - 章节 ID 规范：前缀 `t<level>-`（如 `t1-combinatorics`），与 strategy-academy 的 `l<level>-` 隔离，确保全局唯一
 - 章末小测答题必须调用 `progress.updateElo`（按章节 eloDimension）与 `recordAnswer`，理论掌握度进入统一 ELO 体系
 - `completeChapter` 必须幂等（同一 chapterId 重复完成不重复计数，quizScores 取历史最高分）

@@ -1,15 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import type { PokerVariant } from '@/shared/types/elo';
 import {
+  getLoadedTheoryLevel,
   getLoadedTheoryLevels,
+  loadTheoryLevelById,
   loadTheoryLevelsForVariant,
   loadTheoryLevelsForVariants,
 } from './loaders';
 import { getLevelSummariesByVariant } from '../../utils/theoryMeta';
 
 /**
- * 完整数据按变体动态加载的映射守卫：
- * 防止 loaders 把某个变体指向错误的模块（首页/manifest 仍会正常，章节页却错内容）。
+ * 完整数据懒加载映射守卫：
+ * - 章节页按 Level 加载，单个 Level 不能串入其他章节；
+ * - 全变体加载（疑难清单）与 manifest 的 Level/章节目录完全一致。
  */
 
 const VARIANTS: PokerVariant[] = ['standard', 'short-deck', 'heads-up'];
@@ -17,6 +20,25 @@ const VARIANTS: PokerVariant[] = ['standard', 'short-deck', 'heads-up'];
 describe('theory 完整数据按变体懒加载', () => {
   it('未加载时 getLoadedTheoryLevels 返回 null，且不会误报已就绪', () => {
     expect(getLoadedTheoryLevels(['short-deck'])).toBeNull();
+  });
+
+  it('按 Level 加载时只返回该 Level 的章节，与 manifest 一致', async () => {
+    for (const variant of VARIANTS) {
+      for (const summary of getLevelSummariesByVariant(variant)) {
+        const level = await loadTheoryLevelById(summary.id);
+        expect(level?.id).toBe(summary.id);
+        expect(level?.variant).toBe(variant);
+        expect(level?.chapters.map((chapter) => chapter.id)).toEqual(
+          summary.chapters.map((chapter) => chapter.id),
+        );
+        expect(getLoadedTheoryLevel(summary.id)).toBe(level);
+      }
+    }
+  });
+
+  it('未知 Level 返回 undefined', async () => {
+    expect(await loadTheoryLevelById('t99')).toBeUndefined();
+    expect(getLoadedTheoryLevel('t99')).toBeUndefined();
   });
 
   it('逐变体加载后与 manifest 的 Level/章节目录完全一致', async () => {

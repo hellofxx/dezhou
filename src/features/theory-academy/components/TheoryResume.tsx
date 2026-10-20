@@ -4,7 +4,7 @@ import { BookOpen, PlayCircle, Swords, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import type { TheoryLevelSummary } from '../types';
-import { loadTheoryLevelsForVariant } from '../data/levels/loaders';
+import { loadTheoryLevelById } from '../data/levels/loaders';
 import { resolveChapterTitle } from '../utils/titleKeys';
 
 interface TheoryResumeProps {
@@ -58,9 +58,9 @@ export function TheoryResume({
     }
   };
 
-  // 意图预取：悬停/聚焦继续学习卡时提前加载当前变体数据
-  const prefetchVariant = () => {
-    if (activeLevel) void loadTheoryLevelsForVariant(activeLevel.variant);
+  // 意图预取：悬停/聚焦继续学习卡时只加载当前 Level
+  const prefetchLevel = () => {
+    if (activeLevel) void loadTheoryLevelById(activeLevel.id);
   };
 
   const eyebrowText =
@@ -99,8 +99,8 @@ export function TheoryResume({
       animate={{ opacity: 1, y: 0 }}
       transition={transitionSlow}
       className="panel brass-rail theory-hero"
-      onPointerEnter={prefetchVariant}
-      onFocus={prefetchVariant}
+      onPointerEnter={prefetchLevel}
+      onFocus={prefetchLevel}
     >
       <div className="flex flex-col md:flex-row md:items-center gap-5">
         {/* 左侧：eyebrow + 主 CTA */}

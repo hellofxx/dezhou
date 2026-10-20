@@ -9,6 +9,16 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-10-20 启动分包修复与理论章节按 Level 懒载（3 个 commit）
+
+按「构建分包 → 语言包层级 → 课程数据层级」三批优化。实测基线首屏 41 个文件 / 382.3KB gzip，优化后 38 个文件 / **245.0KB gzip（-35.9%）**。
+
+- **recharts 启动泄漏（e4ac2f6）**：`vendor-recharts` 手动 chunk 把 recharts 依赖的 `clsx` / `use-sync-external-store` 一并纳入；二者又被 `cn()` 与 `react-i18next` 静态引用，导致整个图表库进入首屏预载。移除手动规则交由 Rolldown 自动拆分，首屏 382.3 → 267.7KB gzip（-114.6KB，-30%）；`check-bundle-size.mjs` 增加「首屏静态图不得含 recharts」断言，并修正入口 `<script>` 未计入统计的旧缺口。
+- **学院语言包降级（b90e8be）**：`academy` 从 `CORE_MODULES` 移出，只在 `/academy`、`/theory` 路由分组加载；`academy.positioning` / `theory.positioning` 迁为 `nav.academyHint` / `nav.theoryHint`（同时修复 theory 提示在首屏回显原始 key 的缺陷）。首屏 267.7 → 245.0KB gzip（-22.7KB）。
+- **理论章节按 Level 懒载（本 commit）**：`data/levels/loaders.ts` 用 `import.meta.glob` 为 27 个 Level 单文件生成独立 chunk（4.6–19.6KB gzip），新增 `loadTheoryLevelById` / `useTheoryLevel`；章节页只加载当前 Level，下一章从 manifest 摘要跨 Level 顺延；首页继续学习卡与阶梯 chips 的意图预取也改为只取目标 Level。旧整变体数据块（标准 106.2 / 短牌 47.3 / 单挑 50.0KB gzip）不再进入运行时。`loaders.test.ts` 增加逐 Level 映射守卫。
+- **验证**：`pnpm verify`、`pnpm build`、`pnpm size:check` 全绿；真实浏览器视觉、网络面板时序与 <768px 响应式未验证。
+- **遗留**：首屏仍含 framer-motion 42.2KB（路由过渡）、react-dom 71.5KB、i18next 13.1KB；图表页按需加载 recharts（约 95.9KB gzip）；i18n 的 `academyCourse` 仍会带出 academy manifest 约 11KB，可后续解耦。
+
 ### 2026-10-20 策略学院加载性能：目录摘要 / 课程文案 / 课程数据三层懒载（3 个 commit）
 
 策略学院此前同样存在三层全量加载：启动 `store.bootstrap` 直接拉 `LEVELS` 全量课程；`academy-course` 虽已按 Level 拆文件，但路由入口一次载入全部 15 个文件；课程页与首页共用同一份含正文/小测/练习的完整数据。本批与理论学院同构拆成三层。

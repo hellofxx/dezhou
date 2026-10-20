@@ -1176,7 +1176,7 @@ interface DailyRecommendation {
    - **章数与题量不在本文档维护副本**：以 `data/levels/variants/**` 与理论结构守卫测试（`theoryIntegrity.test.ts`）为唯一事实源
    - **内容编辑准则（段落类型覆盖、公式须含推导、牌例数量下限、误区显式化、解析须解释错误选项）见 `docs/PRD.md` §6.7.1**，本文件只记录其判定落点：段落类型枚举以 `types.ts` 的 `TheorySectionType` 为准，题量区间与内容非空由 `theoryIntegrity.test.ts` 断言
    - **教材对照基线与版权合规边界见 `docs/PRD.md` §5.27.4 / §6.7.2**；实现侧仅约定标注落点：出处以内联「（概念源自：教材名 章节）」写在 `content` 段落文本中（无独立结构化字段），如需按教材聚合统计请对 `data/levels/variants/**` 做文本检索
-   - **目录摘要与完整数据分层**：`data/levels/manifest/`（`pnpm theory:manifest` 生成）提供 Level/章节目录，`utils/theoryMeta.ts` 供 Home/store/成就检查；完整章节数据经 `data/levels/loaders.ts` 按变体动态 import（`useTheoryLevels`），章节页与疑难清单使用。`manifest.parity.test.ts` 与 `loaders.test.ts` 守卫映射一致
+   - **目录摘要与完整数据分层**：`data/levels/manifest/`（`pnpm theory:manifest` 生成）提供 Level/章节目录，`utils/theoryMeta.ts` 供 Home/store/成就检查；完整章节数据经 `data/levels/loaders.ts` 按 Level 动态 import（章节页 `useTheoryLevel`），需要全变体的疑难清单用 `useTheoryLevels` 逐 Level 组合。`manifest.parity.test.ts` 与 `loaders.test.ts` 守卫映射一致
 
 3. **Store**（`store.ts`，persist name `theory-academy-progress`，version 以该文件 persist 配置为唯一事实源）：
    - 状态：`progress: { completedChapters / quizScores / currentChapter / startedAt }`
@@ -1190,7 +1190,7 @@ interface DailyRecommendation {
 
 6. **成就集成**：`achievements.ts` 新增 `theoryChapters` / `theoryLevel` 两个 condition type 与 4 项成就；progress store `checkCondition` 通过动态 import `getTheoryStore()`（复刻 `getAcademyStore` 缓存模式）读取进度。
 
-7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁），均 lazy + LazyWrapper；章节页按 chapterId 前缀推断变体后动态加载该变体完整数据，Home 只载摘要；侧边栏“研习”分组入口（`nav.theory`，Library 图标，紧邻策略学院并列，2026-07-30 导航 IA 重构后两学院与牌局复盘同属研习分组），MobileNav 底部导航同步含理论学院项。
+7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁），均 lazy + LazyWrapper；章节页按 chapterId 所属 Level 动态加载该 Level 完整数据，Home 只载摘要；侧边栏“研习”分组入口（`nav.theory`，Library 图标，紧邻策略学院并列，2026-07-30 导航 IA 重构后两学院与牌局复盘同属研习分组），MobileNav 底部导航同步含理论学院项。
 
 8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫，反方向（策略课时 `theory-reference` → 理论章节）由 strategy-academy `data/theoryReferenceIntegrity.test.ts` 守卫（见 §5.8 第 15 条）。
 
@@ -1228,11 +1228,11 @@ interface DailyRecommendation {
     - **判定器自检用例**锁强度：7 条已知倒置必须判红、6 条已知正确句必须判绿，否则后续放宽正则会把守卫悄悄变成空操作
 
 17. **加载分层（2026-10）**：理论学院是三处独立懒加载面，禁止任何一处回退为全量静态依赖——
-    - **数据**：`data/levels/manifest/` 是由完整数据生成的目录摘要（`pnpm theory:manifest`），Home/store/成就检查只读它；完整数据由 `data/levels/loaders.ts` 按变体动态 import，章节页与疑难清单经 `useTheoryLevels` 消费。首页 chunk 不得静态引用 `data/levels/variants/**`
+    - **数据**：`data/levels/manifest/` 是由完整数据生成的目录摘要（`pnpm theory:manifest`），Home/store/成就检查只读它；完整数据由 `data/levels/loaders.ts` 按 Level 动态 import（每个 Level 单文件产出独立 chunk），章节页经 `useTheoryLevel` 只取当前 Level，疑难清单经 `useTheoryLevels` 逐 Level 组合。首页 chunk 不得静态引用 `data/levels/variants/**`；首页预取也只允许预取目标 Level
     - **内容语言包**：`theory.json` 只保留目录/UI 文案；正文、题目对象与 objectives 按 level 拆到 `locales/<lng>/theory-content/<levelId>.json`，由 `i18n/theoryContent.ts` 幂等加载（成功才入缓存、失败可重试、并发共享句柄）。章节页和疑难清单在 en 下等待对应 level 内容包后再渲染（zh 数据层原文即中文，直接渲染）；Dashboard 复习项由 `useEnsureReviewSourceI18n` 从 `theory.quiz.*` key 反解题 id 后补加载
     - **语言切换**：`preloadTouched` 对已访问 level 补加载目标语言内容包；核心包与内容包是同一 `theory.*` 命名空间，注入经 `addResourceBundle` deep merge
     - **意图预取**：章节阶梯与「继续学习」卡在 hover/focus 时预取当前变体完整数据，点击章节后直接命中缓存
-    - **守卫**：`manifest.parity.test.ts`（摘要 ↔ 完整数据）、`levels/loaders.test.ts`（变体映射 ↔ 摘要）、`contentI18n.test.ts`（theory-content 双语文件集 + 核心包不得残留正文）、`preload.test.ts`（核心包不含正文 / level 注入 / 语言切换补载）
+    - **守卫**：`manifest.parity.test.ts`（摘要 ↔ 完整数据）、`levels/loaders.test.ts`（逐 Level 映射 ↔ 摘要，含未知 Level 缺省）、`contentI18n.test.ts`（theory-content 双语文件集 + 核心包不得残留正文）、`preload.test.ts`（核心包不含正文 / level 注入 / 语言切换补载）
 
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
@@ -1649,14 +1649,16 @@ manualChunks(id) {
   if (id.includes('/puzzle-trainer/data/puzzleBank')) return 'puzzle-data';
   // Vendor 库分包
   if (id.includes('node_modules')) {
-    if (id.includes('recharts') || id.includes('d3-')) return 'vendor-recharts';
+    // 不要为 recharts 建手动 chunk：其依赖 clsx / use-sync-external-store 被
+    // cn() 与 react-i18next 共享，手动 chunk 会把整库拖进首屏静态图
     if (id.includes('framer-motion')) return 'vendor-framer';
     if (id.includes('react-dom')) return 'vendor-react-dom';
   }
 }
 ```
 
-- 主 chunk 从 1204 kB 降至约 291 kB，最大 vendor chunk（recharts）约 418 kB
+- 主 chunk 从 1204 kB 降至约 291 kB；2026-10 移除 recharts 手动分包后，首屏预载包为 **245.0KB gzip / 38 个文件**
+- 图表库交由 Rolldown 自动拆分，只出现在使用图表的路由 chunk；`check-bundle-size.mjs` 断言首屏静态图不得包含 recharts
 - 课程/题库大数据文件独立 chunk，按需加载
 
 ### 8.4 IndexedDB 大容量存储
@@ -1830,7 +1832,7 @@ persist(
 | progress | statsAggregator / streakCalc / reviewRoute / migrateTheoryReviewKeys / store.migrate / store.persist-shape 各 .test.ts，StreakTracker / SpacedRepetitionPanel / useEnsureReviewSourceI18n.wiring 各 .test.tsx | 聚合、连击、复习项跳转路由解析、理论复习项 key 化迁移（含 key 镜像守卫）、复习来源包按需加载与渲染接线、迁移链路、persist 形状、组件冒烟 |
 | puzzle-trainer | puzzleBank.optionOrder.test.ts / store.migrate / store.persist-shape | 选项语义排序、迁移、persist 形状 |
 | strategy-academy | curriculumIntegrity / theoryReferenceIntegrity / practiceFeedbackView / evImpactTone / evCalibration / quizShuffle / drillOptionOrder / opponentScoring / store.migrate / store.persist-shape / manifest.parity / lessons/loaders 各 .test.ts，DrillLessonRouter.test.tsx / TheoryReferenceBlock.test.tsx | 课程数据完整性、反向（策略→理论）引用无悬空、反馈三态诚实渲染、evImpact 着色三态、EV 标定覆盖率棘轮、选项洗牌、对手评分、桥接跳转解析、Drill 路由冒烟、目录摘要与按 Level 懒载映射 |
-| theory-academy | theoryIntegrity / quizOrder / theorySrs / store.migrate / store.persist-shape / manifest.parity / levels/loaders 各 .test.ts，theoryReviewI18n.test.tsx | 理论数据完整性、选项重映射与分布守卫、复习项 id 命名空间与 i18n key 载荷、迁移链路、persist 形状、目录摘要与变体懒载映射、复习文案双语渲染 |
+| theory-academy | theoryIntegrity / quizOrder / theorySrs / store.migrate / store.persist-shape / manifest.parity / levels/loaders 各 .test.ts，theoryReviewI18n.test.tsx | 理论数据完整性、选项重映射与分布守卫、复习项 id 命名空间与 i18n key 载荷、迁移链路、persist 形状、目录摘要与按 Level 懒载映射、复习文案双语渲染 |
 
 ### 11.2 组件测试（jsdom 冒烟）
 

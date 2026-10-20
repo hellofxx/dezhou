@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Lock } from 'lucide-react';
-import type { TheoryChapter } from '../types';
+import type { TheoryChapterSummary } from '../types';
 import { resolveChapterTitle } from '../utils/titleKeys';
 
 interface NextChapterNavProps {
-  nextChapter: TheoryChapter | undefined;
+  nextChapter: TheoryChapterSummary | undefined;
   /** 下一章所属 Level 是否已解锁（含调试解锁旁路，由父组件计算） */
   unlocked: boolean;
 }

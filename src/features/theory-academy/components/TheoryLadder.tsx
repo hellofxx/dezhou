@@ -10,7 +10,7 @@ import type {
   TheoryLevelSummary,
   TheoryTier,
 } from '../types';
-import { loadTheoryLevelsForVariant } from '../data/levels/loaders';
+import { loadTheoryLevelById } from '../data/levels/loaders';
 import {
   resolveChapterTitle,
   resolveTheoryLevelTitle,
@@ -56,10 +56,9 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
   const { t } = useTranslation();
   const activeId = findActiveTheoryLevelId(levels, completedChapters, isUnlocked);
   const [expandedId, setExpandedId] = useState<string | null>(activeId);
-  // 意图预取：悬停/聚焦章节阶梯时加载当前变体完整数据，点击章节后无需等待
-  const prefetchVariant = () => {
-    const variant = levels[0]?.variant;
-    if (variant) void loadTheoryLevelsForVariant(variant);
+  // 意图预取：只加载当前活跃 Level；展开某 Level 后悬停其章节 chips 时再补该 Level
+  const prefetchLevel = (levelId: string | undefined) => {
+    if (levelId) void loadTheoryLevelById(levelId);
   };
 
   const openChapter = (chapterId: string) => navigate(`/theory/chapter/${chapterId}`);
@@ -76,8 +75,8 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
   return (
     <section
       aria-label={t('theory.ladder.title')}
-      onPointerEnter={prefetchVariant}
-      onFocus={prefetchVariant}
+      onPointerEnter={() => prefetchLevel(activeId ?? levels[0]?.id)}
+      onFocus={() => prefetchLevel(activeId ?? levels[0]?.id)}
     >
       <div className="px-1 mb-3">
         <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
@@ -219,7 +218,12 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
                 {/* 展开的章节 chips */}
                 {unlocked && expanded && (
                   <div className="pl-1 pt-3 mt-1 border-t border-[var(--walnut-border)]/50">
-                    <ul className="lesson-chip-grid" aria-label={t('theory.ladder.chapterList', { title: resolveTheoryLevelTitle(t, level) })}>
+                    <ul
+                      className="lesson-chip-grid"
+                      aria-label={t('theory.ladder.chapterList', { title: resolveTheoryLevelTitle(t, level) })}
+                      onPointerEnter={() => prefetchLevel(level.id)}
+                      onFocus={() => prefetchLevel(level.id)}
+                    >
                       {level.chapters.map((chapter) => (
                         <TheoryChapterChip
                           key={chapter.id}

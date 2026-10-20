@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -9,11 +9,11 @@ import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/c
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import { useTheoryContentI18n } from '../hooks/useTheoryContentI18n';
-import { useTheoryLevels } from '../hooks/useTheoryLevels';
+import { useTheoryLevel } from '../hooks/useTheoryLevel';
 import {
   findChapterSummaryById,
   findLevelSummaryByChapterId,
-  inferVariantFromChapterId,
+  getNextChapterSummary,
   isLevelFullyCompleted,
 } from '../utils/theoryMeta';
 import { TheoryChapterHeader } from './TheoryChapterHeader';
@@ -46,20 +46,11 @@ export default function TheoryChapterView() {
   // Session 止损：小测消耗每日题量预算（recordAnswer），达上限时禁止进入小测
   const sessionLimitReached = useSessionLimitReached();
 
-  // 目录摘要先到（门禁/标题可用），完整正文按变体懒加载
+  // 目录摘要先到（门禁/标题可用），完整正文只加载当前 Level
   const chapterSummary = chapterId ? findChapterSummaryById(chapterId) : undefined;
   const levelSummary = chapterId ? findLevelSummaryByChapterId(chapterId) : undefined;
-  const levels = useTheoryLevels(
-    chapterId ? [inferVariantFromChapterId(chapterId)] : [],
-  );
-  const chapter = useMemo(
-    () => levels?.flatMap((item) => item.chapters).find((item) => item.id === chapterId),
-    [levels, chapterId],
-  );
-  const level = useMemo(
-    () => levels?.find((item) => item.chapters.some((entry) => entry.id === chapterId)),
-    [levels, chapterId],
-  );
+  const level = useTheoryLevel(levelSummary?.id);
+  const chapter = level?.chapters.find((item) => item.id === chapterId);
   // en 下先确保本 level 内容包就绪，再渲染正文/小测（zh 数据层原文即可用）
   const contentReady = useTheoryContentI18n(chapterId ? [chapterId] : []);
   const [phase, setPhase] = useState<'reading' | 'quiz' | 'done'>('reading');
@@ -112,27 +103,25 @@ export default function TheoryChapterView() {
     return <Navigate to="/theory" replace />;
   }
   // 完整数据加载中：保持页面骨架，避免把「加载中」误判为章节不存在而弹回目录
-  if (levels === null) {
+  if (level === undefined) {
     return (
       <div className="py-6">
         <PageSkeleton />
       </div>
     );
   }
-  if (!chapter || !level) return <Navigate to="/theory" replace />;
+  if (level === null || !chapter) return <Navigate to="/theory" replace />;
   // 达每日题量上限时，进入小测阶段渲染止损守卫（阅读仍可进行，与其他训练模块口径一致）。
   // P1F-01（专批 B：开局判定）：useSessionLimitReached 为 mount 快照冻结，
   // 小测进行中达上限不再中途拦断丢弃作答进度，允许走完结算；新进入章节页时再拦
   if (phase === 'quiz' && sessionLimitReached) return <SessionLimitGuard />;
 
-  // 下一章在本变体已加载序列内顺延（与旧 getNextChapter 同口径）
-  const sequence = levels.flatMap((item) => item.chapters);
-  const chapterIndex = sequence.findIndex((item) => item.id === chapter.id);
-  const nextChapter = chapterIndex >= 0 ? sequence[chapterIndex + 1] : undefined;
+  // 下一章从目录摘要跨 Level 顺延（与旧 getNextChapter 同口径，无需加载下一 Level 正文）
+  const nextChapter = chapterId ? getNextChapterSummary(chapterId) : undefined;
   // P1F-02：跨 Level 顺延时，目标 Level 未解锁会被上方门禁静默弹回 ——
   // 渲染前校验解锁态（调试解锁旁路），未解锁降级为提示文案（NextChapterNav）
   const nextChapterLevel = nextChapter
-    ? levels.find((item) => item.chapters.some((entry) => entry.id === nextChapter.id))
+    ? findLevelSummaryByChapterId(nextChapter.id)
     : undefined;
   const nextChapterUnlocked =
     !!nextChapterLevel && (debugUnlocked || isTheoryLevelUnlocked(nextChapterLevel.id));
