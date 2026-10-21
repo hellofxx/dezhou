@@ -29,7 +29,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: 'GTO 是基础，剥削是进阶。在低级别游戏中（如NL10以下），剥削策略往往比GTO更赚钱，因为对手的错误太多。但理解GTO能让你知道"正确的基准是什么"，从而更好地判断何时偏离。' },
         {
           type: 'formula',
-          content: '纳什均衡的数学表述：\n在二人零和博弈中，存在博弈值 v，使\nmax_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n\n均衡策略保证你的期望 ≥ v，且对手无法单方面压低\n这就是"不可被剥削"的数学来源\n\n价值:诈唬比推导（河牌无后续街时）：\n对手跟注 EV = f×(P+2bP) - (1-f)×bP\n令其 = 0 → f = b/(1+2b)\n满池 b=1 → 诈唬 1/3（价值:诈唬 = 2:1）\n半池 b=0.5 → 诈唬 25%（3:1）',
+          content: '纳什均衡的数学表述：\n在二人零和博弈中，存在博弈值 v，使\nmax_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n\n均衡策略保证你的期望 ≥ v，且对手无法单方面压低\n这就是"不可被剥削"的数学来源\n\n价值:诈唬比推导（河牌无后续街时）：\n对手跟注 EV = f×(P+bP) - (1-f)×bP\n令其 = 0 → f = b/(1+2b)\n满池 b=1 → 诈唬 1/3（价值:诈唬 = 2:1）\n半池 b=0.5 → 诈唬 25%（3:1）',
         },
         {
           type: 'theory-reference',
@@ -197,8 +197,8 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
               difficulty: 'advanced',
               scenario: { heroHand: ['As', 'Ks'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kh', '9h', '4c', '2d', '7h'], street: 'river', potSize: 25, effectiveStack: 75 },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'AK同花成牌，River应该价值下注。', evImpact: '-1.5 BB/100' },
-                { action: 'Bet 18BB', isCorrect: true, explanation: 'AK同花成牌，River标准价值下注获取价值。', evImpact: '+2.0 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'AK顶对顶踢脚（TPTK），River应该价值下注。', evImpact: '-1.5 BB/100' },
+                { action: 'Bet 18BB', isCorrect: true, explanation: 'AK顶对顶踢脚（TPTK），River标准价值下注获取价值。', evImpact: '+2.0 BB/100' },
                 { action: 'Overbet 40BB', isCorrect: false, explanation: 'Overbet过度，只有更强牌会Call。', evImpact: '-0.5 BB/100' },
               ],
               relatedLessonId: 'l4-gto-basics',
@@ -251,10 +251,10 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           id: 'l4-gt-practice',
           questions: [
             { id: 'l4-gt-p1', difficulty: 'intermediate', scenario: { heroHand: ['Kd', 'Qd'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Ac', '9d', '4s'], street: 'flop', potSize: 6.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Bet 3BB', isCorrect: true, explanation: 'KQ在A94面有后门同花，小注C-Bet获取弃牌权益。', evImpact: '+0.8 BB/100' }, { action: 'Check', isCorrect: false, explanation: 'KQ有后门潜力，应该C-Bet。', evImpact: '-0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'C-Bet不需要强牌，有后门就够了。', evImpact: '-1.0 BB/100' }], relatedLessonId: 'l4-game-tree' },
-            { id: 'l4-gt-p2', difficulty: 'intermediate', scenario: { heroHand: ['Js', 'Ts'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['9s', '8h', '2s'], street: 'flop', potSize: 6.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Bet 4.5BB', isCorrect: true, explanation: 'JT有同花+卡顺组合听牌，半诈唬下注。', evImpact: '+1.5 BB/100' }, { action: 'Check', isCorrect: false, explanation: '组合听牌应该主动下注获取弃牌权益。', evImpact: '+0.3 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '组合听牌太强不能弃。', evImpact: '-2.0 BB/100' }], relatedLessonId: 'l4-game-tree' },
-            { id: 'l4-gt-p3', difficulty: 'advanced', scenario: { heroHand: ['Ah', 'Qh'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kh', '7c', '2d'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Bet 2BB', isCorrect: true, explanation: 'AQ有同花听牌+顶对潜力，小注C-Bet。', evImpact: '+1.0 BB/100' }, { action: 'Check', isCorrect: false, explanation: 'AQ有同花潜力，应该C-Bet。', evImpact: '-0.5 BB/100' }, { action: 'Bet 5BB', isCorrect: false, explanation: '干燥面不需要大注。', evImpact: '+0.3 BB/100' }], relatedLessonId: 'l4-game-tree' },
+            { id: 'l4-gt-p2', difficulty: 'intermediate', scenario: { heroHand: ['Js', 'Ts'], heroPosition: 'CO', previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'call' }], board: ['9s', '8h', '2s'], street: 'flop', potSize: 6.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Bet 4.5BB', isCorrect: true, explanation: 'JT有同花+两头顺组合听牌（约15 outs），半诈唬下注。', evImpact: '+1.5 BB/100' }, { action: 'Check', isCorrect: false, explanation: '组合听牌应该主动下注获取弃牌权益。', evImpact: '+0.3 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '组合听牌太强不能弃。', evImpact: '-2.0 BB/100' }], relatedLessonId: 'l4-game-tree' },
+            { id: 'l4-gt-p3', difficulty: 'advanced', scenario: { heroHand: ['Ah', 'Qh'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kh', '7c', '2d'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Bet 2BB', isCorrect: true, explanation: 'AQ有后门同花+A高牌（后门顶对），小注C-Bet。', evImpact: '+1.0 BB/100' }, { action: 'Check', isCorrect: false, explanation: 'AQ有后门同花潜力，应该C-Bet。', evImpact: '-0.5 BB/100' }, { action: 'Bet 5BB', isCorrect: false, explanation: '干燥面不需要大注。', evImpact: '+0.3 BB/100' }], relatedLessonId: 'l4-game-tree' },
             { id: 'l4-gt-p4', difficulty: 'advanced', scenario: { heroHand: ['8d', '7d'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['9d', '6d', '2c'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['lag'] }, options: [{ action: 'Check-Raise 12BB', isCorrect: true, explanation: '87有同花+OESD组合听牌，Check-Raise半诈唬。', evImpact: '+2.0 BB/100' }, { action: 'Check-Call', isCorrect: false, explanation: '组合听牌应该加注获取弃牌权益。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '组合听牌太强不能弃。', evImpact: '-3.0 BB/100' }], relatedLessonId: 'l4-game-tree' },
-            { id: 'l4-gt-p5', difficulty: 'advanced', scenario: { heroHand: ['Ac', 'Tc'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kc', '8c', '3h', '2d', '5c'], street: 'river', potSize: 25, effectiveStack: 75, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Bet 18BB', isCorrect: true, explanation: 'AT同花成牌，River标准价值下注。', evImpact: '+1.5 BB/100' }, { action: 'Check', isCorrect: false, explanation: '同花成牌应该价值下注。', evImpact: '-1.5 BB/100' }, { action: 'All-in', isCorrect: false, explanation: '同花但非坚果，All-in过度。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-game-tree' },
+            { id: 'l4-gt-p5', difficulty: 'advanced', scenario: { heroHand: ['Ac', 'Tc'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Kc', '8c', '3h', '2d', '5c'], street: 'river', potSize: 25, effectiveStack: 75, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Bet 18BB', isCorrect: true, explanation: 'AT同花成牌，River标准价值下注。', evImpact: '+1.5 BB/100' }, { action: 'Check', isCorrect: false, explanation: '同花成牌应该价值下注。', evImpact: '-1.5 BB/100' }, { action: 'All-in', isCorrect: false, explanation: '坚果同花，但 All-in 过度（标准尺度更优）。', evImpact: '-0.5 BB/100' }], relatedLessonId: 'l4-game-tree' },
           ],
         },
       },
@@ -502,7 +502,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
             },
           
             { id: 'l4-mdf-p4', difficulty: 'advanced', scenario: { heroHand: ['Kd', 'Qd'], heroPosition: 'BTN', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['Ac', '7c', '2h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['tag'] }, options: [{ action: 'Call 3BB', isCorrect: true, explanation: 'KQ在A72面有后门同花，跟注一枪看转牌。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: 'KQ有后门潜力，MDF足够跟注。', evImpact: '-0.8 BB/100' }, { action: 'Raise 10BB', isCorrect: false, explanation: '面对TAG在A面加注过度。', evImpact: '-1.5 BB/100' }], relatedLessonId: 'l4-mdf' },
-            { id: 'l4-mdf-p5', difficulty: 'advanced', scenario: { heroHand: ['Jh', 'Th'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['9h', '8c', '4h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Check-Raise 12BB', isCorrect: true, explanation: 'JT 有同花 + 卡顺组合听牌，Check-Raise 半诈唬。', evImpact: '+1.8 BB/100' }, { action: 'Check-Call', isCorrect: false, explanation: '组合听牌应该加注获取弃牌权益。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '组合听牌太强不能弃。', evImpact: '-2.5 BB/100' }], relatedLessonId: 'l4-mdf' },],
+            { id: 'l4-mdf-p5', difficulty: 'advanced', scenario: { heroHand: ['Jh', 'Th'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 2.5BB' }, { player: 'BB', action: 'call' }], board: ['9h', '8c', '4h'], street: 'flop', potSize: 5.5, effectiveStack: 95, opponent: OPPONENT_PROFILES['nit'] }, options: [{ action: 'Check-Raise 12BB', isCorrect: true, explanation: 'JT 有同花 + 两头顺组合听牌（约15 outs），Check-Raise 半诈唬。', evImpact: '+1.8 BB/100' }, { action: 'Check-Call', isCorrect: false, explanation: '组合听牌应该加注获取弃牌权益。', evImpact: '+0.5 BB/100' }, { action: 'Fold', isCorrect: false, explanation: '组合听牌太强不能弃。', evImpact: '-2.5 BB/100' }], relatedLessonId: 'l4-mdf' },],
         },
       },
       // Real hand cases library for MDF lesson
@@ -515,15 +515,15 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         duration: '12 min',
         objectives: [
           '判断面对高 bluff 频率对手（Maniac，65% bluff 远超 33% Alpha 阈值）可以用比 MDF 更宽的范围继续防守',
-          '判断面对 Nit（几乎从不诈唬）时应弃牌至低于 MDF 要求（QQ 在其河牌全下范围中落后约 95% 组合）',
+          '判断面对 Nit（几乎从不诈唬）时应弃牌至低于 MDF 要求（QQ 在其河牌全下范围中落后（AA/KK/JJ/KJ））',
           '比较基于对手信息偏离 MDF 的两个方向：对 Maniac 向上加宽防守、对 Nit 向下收紧防守',
         ],
         content: [
           { type: 'heading', content: 'Case M1: Over defending against Maniac' },
-          { type: 'example', content: 'BB vs Maniac on Q-4-2 dry board, Pot 6BB\n\nScenario:\n- Maniac raises 2.5BB from BTN\n- BB calls with A-T\n- Flop: Q-4-2, Maniac C-bets 3BB (50% pot)\n\nKey Decision: Call using wider than standard range\n\nAnalysis:\n- Maniac bluff frequency: ~65% (AF 7.0+)\n- Alpha for 50% pot bet = 0.5/(1+0.5) = 33%\n- Maniac fold rate to C-bets: only ~25%\n- Your A-T beats his entire bluff range\n\nWhy call wider than MDF?\n- MDF suggests calling 67%, but your read says he bluffs too much\n- With 65% bluff frequency >> 33% Alpha threshold, value betting becomes dominant\n- EV(call with A-T) approx +2.0BB (beats 65% of his range)\n- Expected outcome: Exploit Maniac over-playing tendencies\n\nKeyLesson: 面对高 bluff 频率对手（Maniac）时，可以安全地用更宽范围继续防守。你的顶对能击败他的整个诈唬范围。\nSource: Derived from LAG statistics analysis',
+          { type: 'example', content: 'BB vs Maniac on Q-4-2 dry board, Pot 6BB\n\nScenario:\n- Maniac raises 2.5BB from BTN\n- BB calls with A-T\n- Flop: Q-4-2, Maniac C-bets 3BB (50% pot)\n\nKey Decision: Call using wider than standard range\n\nAnalysis:\n- Maniac bluff frequency: ~65% (AF 7.0+)\n- Alpha for 50% pot bet = 0.5/(1+0.5) = 33%\n- Maniac fold rate to C-bets: only ~25%\n- Your A-T beats his entire bluff range\n\nWhy call wider than MDF?\n- MDF suggests calling 67%, but your read says he bluffs too much\n- With 65% bluff frequency >> 33% Alpha threshold, value betting becomes dominant\n- EV(call with A-T) approx +4.8BB (beats 65% of his range)\n- Expected outcome: Exploit Maniac over-playing tendencies\n\nKeyLesson: 面对高 bluff 频率对手（Maniac）时，可以安全地用更宽范围继续防守。你的顶对能击败他的整个诈唬范围。\nSource: Derived from LAG statistics analysis',
           },
           { type: 'heading', content: 'Case M2: Folding below MDF against Nit' },
-          { type: 'example', content: 'BTN vs Nit on J C J D J S 3 D K H board, Pot 25BB\n\nScenario:\n- Nit opens UTG 2.5BB\n- BTN calls\n- Flop: JJJ, Nit leads 8BB, BTN calls\n- Turn: 3, Nit bets 15BB\n- River: K, Nit shoves all-in 40BB into 50BB pot\n- BTN holds QQ, facing river shove\n\nKey Decision: Fold despite MDF suggesting continue\n\nAnalysis:\n- MDF for all-in: 50/(50+40) = 56% defense required\n- But NITS river range analysis:\n  - Value hands only: JJ+, QQ, KK (almost no bluffs)\n  - His AF < 1.0 means extremely rare bluffing\n  - QQ loses to 95% of his range\n\nWhy fold below MDF?\n- Against Nit, actual value:bluff ratio >> theoretical GTO\n- MDF assumes balanced ranges, but Nit is heavily value-heavy\n- EV(fold) = 0 vs EV(call) ≈ -35BB (loses to AA/KK/JJ)\n- Information about opponent overrides pure MDF calculation\n\nKeyLesson: 面对超紧玩家（Nit）的河牌大注时，即使 MDF 建议跟注也应该弃牌。Nit 几乎从不 bluff，你的顶对在他范围中完全落后。\nSource: NIT exploitation framework',
+          { type: 'example', content: 'BTN vs Nit on J C 7 D 3 S 2 D K H board, Pot 25BB\n\nScenario:\n- Nit opens UTG 2.5BB\n- BTN calls\n- Flop: J-7-3, Nit leads 8BB, BTN calls\n- Turn: 2, Nit bets 15BB\n- River: K, Nit shoves all-in 40BB into 50BB pot\n- BTN holds QQ, facing river shove\n\nKey Decision: Fold despite MDF suggesting continue\n\nAnalysis:\n- MDF for all-in: 50/(50+40) = 56% defense required\n- But NITS river range analysis:\n  - Value hands only: AA, KK, JJ, KJ (almost no bluffs)\n  - His AF < 1.0 means extremely rare bluffing\n  - QQ loses to most of his value range (AA/KK/JJ/KJ)\n\nWhy fold below MDF?\n- Against Nit, actual value:bluff ratio >> theoretical GTO\n- MDF assumes balanced ranges, but Nit is heavily value-heavy\n- EV(fold) = 0 vs EV(call) ≈ -35BB (loses to AA/KK/JJ/KJ)\n- Information about opponent overrides pure MDF calculation\n\nKeyLesson: 面对超紧玩家（Nit）的河牌大注时，即使 MDF 建议跟注也应该弃牌。Nit 几乎从不 bluff，你的第二对在他范围中完全落后。\nSource: NIT exploitation framework',
           },
         ],
         quiz: [
@@ -539,7 +539,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
             question: 'M2 案例中，为什么面对 Nit 应该弃牌尽管 MDF 建议跟注？',
             options: ['NIT 几乎从不 bluff，价值范围极强', '弃牌损失更小', 'MDF 计算错误', '我的 QQ 太弱'],
             correctIndex: 0,
-            explanation: 'NIT 的 river 下注几乎全是价值（AA/KK/JJ），他的 AF<1.0 意味着极低 bluff 频率，实际 value:bluff 比远高于理论值。',
+            explanation: 'NIT 的 river 下注几乎全是价值（AA/KK/JJ/KJ），他的 AF<1.0 意味着极低 bluff 频率，实际 value:bluff 比远高于理论值。',
           },
         ],
         practice: { id: 'l4-mdf-real-practice', questions: [] },
@@ -554,7 +554,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         duration: '10 min',
         objectives: [
           '识别 Overbet 的核心前提（坚果优势：范围包含对手不可能有的超强牌）与三类典型场景（坚果优势、River 极化、对手范围封顶）',
-          '计算面对 150% pot overbet 的 MDF（40%），并说出 overbet 范围应为极化形状（value:bluff 约 2:1）',
+          '计算面对 150% pot overbet 的 MDF（40%），并说出 overbet 范围应为极化形状（value:bluff ≈ 5:3（bluff 37.5%））',
           '区分 overbet 范围的 value 部分（仅坚果级）与 bluff 部分（带 blocker 的空气牌），说明中等牌力不进 overbet',
           '判断 Overbet 被跟通常意味着对手有强牌、面对 Calling Station 不应 overbet',
         ],
@@ -565,7 +565,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'heading', content: '何时使用 Overbet' },
           { type: 'text', content: '三种典型 overbet 场景：\n\n1. 坚果优势（Nuts Advantage）\n   你的范围包含对手不可能有的超强牌。\n   例：你在 K-7-2 牌面 check-raise flop，turn 发出 K，你的范围有 KK/77 而对手没有。\n\n2. River 极化场景\n   你的范围要么是坚果要么是空气，没有中等牌力。\n   例：错过的同花听牌在 river 可以 overbet bluff（你要么是坚果同花，要么是空气）。\n\n3. 对手范围 Capped\n   对手的行动表明他不可能有强牌。\n   例：对手在 flop check-call，turn check-call，他的范围被"封顶"在顶对以下。' },
           { type: 'heading', content: 'Overbet 的范围构建' },
-          { type: 'text', content: 'Overbet 使用极化范围（Polarized Range）：\n\n- Value 部分：只有最强的牌（坚果、接近坚果）\n- Bluff 部分：有 blocker 的空气牌\n- 中间牌力：不使用 overbet（用正常大小下注或 check）\n\nValue:Bluff 比例约为 2:1（面对 150% pot overbet，对手 MDF = 40%，所以你的 bluff 不能太多）。' },
+          { type: 'text', content: 'Overbet 使用极化范围（Polarized Range）：\n\n- Value 部分：只有最强的牌（坚果、接近坚果）\n- Bluff 部分：有 blocker 的空气牌\n- 中间牌力：不使用 overbet（用正常大小下注或 check）\n\nValue:Bluff 比例约为 5:3（bluff 37.5%；面对 150% pot overbet，对手 MDF = 40%，所以你的 bluff 不能太多）。' },
           { type: 'heading', content: 'Overbet 的频率' },
           { type: 'text', content: '现代 solver 在特定 river 点使用 30-50% 频率的 overbet：\n\n- 不是每个 river 都 overbet！只在满足条件时使用\n- 典型频率：33% pot（40%）、66% pot（30%）、125% pot（20%）、200% pot（10%）\n- 关键：混合使用不同大小，让对手无法确定你的范围' },
           { type: 'heading', content: '面对 Overbet 的防守' },
@@ -698,9 +698,9 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['unknown'],
               },
               options: [
-                { action: 'Check', isCorrect: false, explanation: 'QJ 是错过的坚果同花听牌。你的范围在这个牌面极化（有同花或空气），适合 overbet bluff。Check 浪费了 bluff 机会。', evImpact: '-1.5 BB/100' },
+                { action: 'Check', isCorrect: false, explanation: 'QJ 是错过的 Q 高同花听牌。你的范围在这个牌面极化（有同花或空气），适合 overbet bluff。Check 浪费了 bluff 机会。', evImpact: '-1.5 BB/100' },
                 { action: 'Bet', amount: '5BB (50% pot)', isCorrect: false, explanation: '小注 bluff 不够有威胁。对手面对小注太容易 call，你的 bluff 成功率低。要么不 bluff，要么用 overbet 施加最大压力。', evImpact: '+0.5 BB/100' },
-                { action: 'Bet', amount: '15BB (150% pot)', isCorrect: true, explanation: 'QJ 是完美的 overbet bluff：你有 A/K 的 blocker（阻断对手坚果同花），你的范围极化（有同花或空气），overbet 让对手的顶对面临极困难决策。', evImpact: '+2.5 BB/100' },
+                { action: 'Bet', amount: '15BB (150% pot)', isCorrect: true, explanation: 'QJ 是完美的 overbet bluff：Q♥/J♥ 阻断对手部分同花组合，你的范围极化（有同花或空气），overbet 让对手的顶对面临极困难决策。', evImpact: '+2.5 BB/100' },
               ],
             },
             {
@@ -754,7 +754,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'heading', content: '如何选择范围形状' },
           { type: 'text', content: '决定范围形状的关键因素：\n\n1. 下注大小：\n   - 小注（25-33% pot）→ 合并范围（宽泛，包含中等牌）\n   - 中注（50-75% pot）→ 混合\n   - 大注（100%+ pot）→ 极化范围\n\n2. 街道：\n   - Flop → 偏合并（还有很多牌要发）\n   - River → 偏极化（没有后续街道）\n\n3. 位置：\n   - 有位置 → 可以用更合并的范围（信息优势）\n   - 无位置 → 偏极化（需要更强的牌或纯 bluff）\n\n4. 对手类型：\n   - 面对 Calling Station → 合并（更多 value，少 bluff）\n   - 面对 NIT → 极化（更多 bluff，他弃牌多）' },
           { type: 'heading', content: '范围平衡' },
-          { type: 'text', content: '范围平衡是确保你的下注范围中 value:bluff 比例合理：\n\n- 面对 50% pot bet：value:bluff ≈ 3:1\n- 面对 100% pot bet：value:bluff ≈ 2:1\n- 面对 150% pot overbet：value:bluff ≈ 2:1\n\n如果你 bluff 太多 → 对手可以频繁 call\n如果你 bluff 太少 → 对手可以频繁 fold\n平衡让对手无论怎么做都无法剥削你。' },
+          { type: 'text', content: '范围平衡是确保你的下注范围中 value:bluff 比例合理：\n\n- 面对 50% pot bet：value:bluff ≈ 3:1\n- 面对 100% pot bet：value:bluff ≈ 2:1\n- 面对 150% pot overbet：value:bluff ≈ 5:3（bluff 37.5%）\n\n如果你 bluff 太多 → 对手可以频繁 call\n如果你 bluff 太少 → 对手可以频繁 fold\n平衡让对手无论怎么做都无法剥削你。' },
           { type: 'highlight', content: '理解极化 vs 合并是从"打单张牌"到"打范围"的关键跳跃。每个决策都应该思考：我的整个范围在这个场景应该是什么形状？' },
           { type: 'pro-tip', content: '实战简化：小注打宽（合并），大注打窄（极化）。翻前 3-bet 用极化范围，翻前 open 用合并范围。记住这个原则就够用了。' },
           {

@@ -78,7 +78,7 @@
       "GTO strategies are often shown as 13×13 matrices, each hand mapping to Fold/Call/Raise frequencies:\n- Green shades = Raise frequency (dark green = 100% raise, light green = mixed raise)\n- Yellow = Call frequency\n- Red/gray = Fold frequency\n\nFor example in a BTN Open spot, AA/KK/QQ are 100% Raise (dark green) while 72o is 100% Fold (gray).",
       "You don't need to memorize exact GTO frequencies! Understand the big picture: raise strong hands, call medium hands, fold weak hands. Mixed strategies appear on marginal hands.",
       "GTO is the foundation, exploitation is the advanced layer. In low-stakes games (below NL10), exploitative strategy usually makes more money than GTO because opponents make so many errors. But understanding GTO tells you \"what is the correct baseline\", helping you decide when to deviate.",
-      "The mathematical statement of Nash equilibrium:\nIn a two-person zero-sum game, there is a game value v such that\nmax_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n\nThe equilibrium strategy guarantees your expectation ≥ v, and the opponent cannot unilaterally push it lower\nThis is the mathematical source of \"unexploitable\"\n\nValue:bluff ratio derivation (river with no further streets):\nOpponent call EV = f×(P+2bP) - (1-f)×bP\nSet = 0 → f = b/(1+2b)\nFull pot b=1 → bluff 1/3 (value:bluff = 2:1)\nHalf pot b=0.5 → bluff 25% (3:1)",
+      "The mathematical statement of Nash equilibrium:\nIn a two-person zero-sum game, there is a game value v such that\nmax_a min_b U₁(a,b) = min_b max_a U₁(a,b) = v\n\nThe equilibrium strategy guarantees your expectation ≥ v, and the opponent cannot unilaterally push it lower\nThis is the mathematical source of \"unexploitable\"\n\nValue:bluff ratio derivation (river with no further streets):\nOpponent call EV = f×(P+bP) - (1-f)×bP\nSet = 0 → f = b/(1+2b)\nFull pot b=1 → bluff 1/3 (value:bluff = 2:1)\nHalf pot b=0.5 → bluff 25% (3:1)",
       "Theory reference: the definition of Nash equilibrium and the minimax theorem are derived in Theory Academy T5 Chapter 1 \"Zero-Sum Games and Nash Equilibrium\". The full analysis of GTO structure and value:bluff ratios is in T5 Chapter 2.",
       "Counter-intuitive: GTO is not the optimal strategy but the unexploitable one. Against a maniac dumping chips, GTO makes less than a targeted exploitative strategy. GTO is the floor, exploitation is the ceiling — understanding this tension is the heart of advanced strategy."
     ],
@@ -126,9 +126,9 @@
     ],
     "l4-mdf-real-cases": [
       "Case M1: Over defending against Maniac",
-      "BB vs Maniac on Q-4-2 dry board, Pot 6BB\n\nScenario:\n- Maniac raises 2.5BB from BTN\n- BB calls with A-T\n- Flop: Q-4-2, Maniac C-bets 3BB (50% pot)\n\nKey Decision: Call using wider than standard range\n\nAnalysis:\n- Maniac bluff frequency: ~65% (AF 7.0+)\n- Alpha for 50% pot bet = 0.5/(1+0.5) = 33%\n- Maniac fold rate to C-bets: only ~25%\n- Your A-T beats his entire bluff range\n\nWhy call wider than MDF?\n- MDF suggests calling 67%, but your read says he bluffs too much\n- With 65% bluff frequency >> 33% Alpha threshold, value betting becomes dominant\n- EV(call with A-T) approx +2.0BB (beats 65% of his range)\n- Expected outcome: Exploit Maniac over-playing tendencies\n\nKeyLesson: Against an opponent with very high bluff frequency (Maniac), you can safely defend with a wider range. Your top pair beats his entire bluffing range.\nSource: Derived from LAG statistics analysis",
+      "BB vs Maniac on Q-4-2 dry board, Pot 6BB\n\nScenario:\n- Maniac raises 2.5BB from BTN\n- BB calls with A-T\n- Flop: Q-4-2, Maniac C-bets 3BB (50% pot)\n\nKey Decision: Call using wider than standard range\n\nAnalysis:\n- Maniac bluff frequency: ~65% (AF 7.0+)\n- Alpha for 50% pot bet = 0.5/(1+0.5) = 33%\n- Maniac fold rate to C-bets: only ~25%\n- Your A-T beats his entire bluff range\n\nWhy call wider than MDF?\n- MDF suggests calling 67%, but your read says he bluffs too much\n- With 65% bluff frequency >> 33% Alpha threshold, value betting becomes dominant\n- EV(call with A-T) approx +4.8BB (beats 65% of his range)\n- Expected outcome: Exploit Maniac over-playing tendencies\n\nKeyLesson: Against an opponent with very high bluff frequency (Maniac), you can safely defend with a wider range. Your top pair beats his entire bluffing range.\nSource: Derived from LAG statistics analysis",
       "Case M2: Folding below MDF against Nit",
-      "BTN vs Nit on J C J D J S 3 D K H board, Pot 25BB\n\nScenario:\n- Nit opens UTG 2.5BB\n- BTN calls\n- Flop: JJJ, Nit leads 8BB, BTN calls\n- Turn: 3, Nit bets 15BB\n- River: K, Nit shoves all-in 40BB into 50BB pot\n- BTN holds QQ, facing river shove\n\nKey Decision: Fold despite MDF suggesting continue\n\nAnalysis:\n- MDF for all-in: 50/(50+40) = 56% defense required\n- But NITS river range analysis:\n  - Value hands only: JJ+, QQ, KK (almost no bluffs)\n  - His AF < 1.0 means extremely rare bluffing\n  - QQ loses to 95% of his range\n\nWhy fold below MDF?\n- Against Nit, actual value:bluff ratio >> theoretical GTO\n- MDF assumes balanced ranges, but Nit is heavily value-heavy\n- EV(fold) = 0 vs EV(call) ≈ -35BB (loses to AA/KK/JJ)\n- Information about opponent overrides pure MDF calculation\n\nKeyLesson: Against an ultra-tight player's (Nit) big river bet, fold even when MDF suggests calling. Nits almost never bluff — your top pair is way behind his range.\nSource: NIT exploitation framework"
+      "BTN vs Nit on J C 7 D 3 S 2 D K H board, Pot 25BB\n\nScenario:\n- Nit opens UTG 2.5BB\n- BTN calls\n- Flop: J-7-3, Nit leads 8BB, BTN calls\n- Turn: 2, Nit bets 15BB\n- River: K, Nit shoves all-in 40BB into 50BB pot\n- BTN holds QQ, facing river shove\n\nKey Decision: Fold despite MDF suggesting continue\n\nAnalysis:\n- MDF for all-in: 50/(50+40) = 56% defense required\n- But NITS river range analysis:\n  - Value hands only: AA, KK, JJ, KJ (almost no bluffs)\n  - His AF < 1.0 means extremely rare bluffing\n  - QQ loses to most of his value range (AA/KK/JJ/KJ)\n\nWhy fold below MDF?\n- Against Nit, actual value:bluff ratio >> theoretical GTO\n- MDF assumes balanced ranges, but Nit is heavily value-heavy\n- EV(fold) = 0 vs EV(call) ≈ -35BB (loses to AA/KK/JJ/KJ)\n- Information about opponent overrides pure MDF calculation\n\nKeyLesson: Against an ultra-tight player's (Nit) big river bet, fold even when MDF suggests calling. Nits almost never bluff — your second pair is way behind his range.\nSource: NIT exploitation framework"
     ],
     "l4-overbet": [
       "What Is an Overbet?",
@@ -137,7 +137,7 @@
       "When to Overbet",
       "Three typical overbet spots:\n\n1. Nuts advantage\n   Your range contains extremely strong hands the opponent can't have.\n   Example: you check-raise the flop on K-7-2, the turn brings a K, and your range has KK/77 while the opponent's doesn't.\n\n2. River polarization\n   Your range is either the nuts or air, with no medium hands.\n   Example: a missed flush draw can overbet bluff the river (you're either the nut flush or air).\n\n3. The opponent's range is capped\n   The opponent's actions show they can't have strong hands.\n   Example: the opponent check-calls the flop and turn — their range is \"capped\" below top pair.",
       "Building an Overbet Range",
-      "Overbets use a polarized range:\n\n- Value part: only the strongest hands (nuts, near-nuts)\n- Bluff part: air with blockers\n- Medium hands: don't overbet (use normal sizing or check)\n\nThe value:bluff ratio is about 2:1 (facing a 150% pot overbet, the opponent's MDF = 40%, so your bluffs can't be too many).",
+      "Overbets use a polarized range:\n\n- Value part: only the strongest hands (nuts, near-nuts)\n- Bluff part: air with blockers\n- Medium hands: don't overbet (use normal sizing or check)\n\nThe value:bluff ratio is about 5:3 (bluff 37.5%; facing a 150% pot overbet, the opponent's MDF = 40%, so your bluffs can't be too many).",
       "Overbet Frequency",
       "Modern solvers use overbets at 30-50% frequency at specific river points:\n\n- Not every river gets overbet! Only when conditions are met\n- Typical frequencies: 33% pot (40%), 66% pot (30%), 125% pot (20%), 200% pot (10%)\n- Key: mix different sizes so the opponent can't pin down your range",
       "Defending Against Overbets",
@@ -156,7 +156,7 @@
       "How to Choose a Range Shape",
       "Key factors in choosing a range shape:\n\n1. Bet size:\n   - Small (25-33% pot) → merged range (broad, includes medium hands)\n   - Medium (50-75% pot) → mixed\n   - Large (100%+ pot) → polarized range\n\n2. Street:\n   - Flop → more merged (many cards still to come)\n   - River → more polarized (no more streets)\n\n3. Position:\n   - In position → more merged range (information advantage)\n   - Out of position → more polarized (need stronger hands or pure bluffs)\n\n4. Opponent type:\n   - vs a Calling Station → merged (more value, fewer bluffs)\n   - vs a Nit → polarized (more bluffs, he folds a lot)",
       "Range Balance",
-      "Range balance keeps the value:bluff ratio of your betting range reasonable:\n\n- Facing 50% pot bet: value:bluff ≈ 3:1\n- Facing 100% pot bet: value:bluff ≈ 2:1\n- Facing 150% pot overbet: value:bluff ≈ 2:1\n\nIf you bluff too much → the opponent can call frequently\nIf you bluff too little → the opponent can fold frequently\nBalance makes the opponent unable to exploit you no matter what they do.",
+      "Range balance keeps the value:bluff ratio of your betting range reasonable:\n\n- Facing 50% pot bet: value:bluff ≈ 3:1\n- Facing 100% pot bet: value:bluff ≈ 2:1\n- Facing 150% pot overbet: value:bluff ≈ 5:3 (bluff 37.5%)\n\nIf you bluff too much → the opponent can call frequently\nIf you bluff too little → the opponent can fold frequently\nBalance makes the opponent unable to exploit you no matter what they do.",
       "Understanding polarized vs merged is the key leap from \"playing single hands\" to \"playing ranges\". Every decision should ask: what shape should my whole range take in this spot?",
       "Simplification for practice: small bets play wide (merged), big bets play narrow (polarized). Use a polarized range for preflop 3-bets and a merged range for preflop opens. Remembering this principle is enough.",
       "Polarized vs merged range formulas:\nPolarized = top value hands + bottom bluff hands (medium hands check/fold)\nMerged = continuous strength distribution (bet at medium frequency)\n\nPolarized ranges should bet bigger (> 2/3 pot) because:\nThe bigger the bet → the higher the equity opponents need to call → you can bluff more\nMerged ranges should bet smaller (< 1/2 pot) to:\nExtract thin value from weaker calling ranges",
@@ -597,7 +597,7 @@
         "MDF was calculated wrong",
         "My QQ is too weak"
       ],
-      "explanation": "The NIT's river bets are almost all value (AA/KK/JJ); AF < 1.0 means an extremely low bluff frequency, so the actual value:bluff ratio far exceeds the theoretical."
+      "explanation": "The NIT's river bets are almost all value (AA/KK/JJ/KJ); AF < 1.0 means an extremely low bluff frequency, so the actual value:bluff ratio far exceeds the theoretical."
     },
     "l4-overbet-q1": {
       "question": "What is the core precondition of an overbet?",
@@ -1472,12 +1472,12 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "AK made a flush — value-bet the river.",
+          "explanation": "AK is top pair top kicker (TPTK) — value-bet the river.",
           "evImpact": "-1.5 BB/100"
         },
         {
           "action": "Bet 18BB",
-          "explanation": "AK made a flush — standard river value bet for value.",
+          "explanation": "AK is top pair top kicker (TPTK) — standard river value bet.",
           "evImpact": "+2.0 BB/100"
         },
         {
@@ -1510,7 +1510,7 @@
       "option": [
         {
           "action": "Bet 4.5BB",
-          "explanation": "JT has a flush + gutshot combo draw — semi-bluff bet.",
+          "explanation": "JT has a flush + open-ended combo draw (about 15 outs) — semi-bluff bet.",
           "evImpact": "+1.5 BB/100"
         },
         {
@@ -1529,12 +1529,12 @@
       "option": [
         {
           "action": "Bet 2BB",
-          "explanation": "AQ has a flush draw + top-pair potential — small C-Bet.",
+          "explanation": "AQ has a backdoor flush + A-high (backdoor top pair) — small C-Bet.",
           "evImpact": "+1.0 BB/100"
         },
         {
           "action": "Check",
-          "explanation": "AQ has flush potential — C-Bet.",
+          "explanation": "AQ has backdoor flush potential — C-Bet.",
           "evImpact": "-0.5 BB/100"
         },
         {
@@ -1577,7 +1577,7 @@
         },
         {
           "action": "All-in",
-          "explanation": "A flush but not the nuts — all-in is excessive.",
+          "explanation": "The nut flush — but all-in is excessive (standard sizing is better).",
           "evImpact": "-0.5 BB/100"
         }
       ]
@@ -1760,7 +1760,7 @@
       "option": [
         {
           "action": "Check-Raise 12BB",
-          "explanation": "JT has a flush + gutshot combo draw — Check-Raise semi-bluff.",
+          "explanation": "JT has a flush + open-ended combo draw (about 15 outs) — Check-Raise semi-bluff.",
           "evImpact": "+1.8 BB/100"
         },
         {
@@ -1800,7 +1800,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "QJ is the missed nut flush draw. Your range is polarized on this board (flush or air) — suited to an overbet bluff. Checking wastes the bluff chance.",
+          "explanation": "QJ is the missed Q-high flush draw. Your range is polarized on this board (flush or air) — suited to an overbet bluff. Checking wastes the bluff chance.",
           "evImpact": "-1.5 BB/100"
         },
         {
@@ -1812,7 +1812,7 @@
         {
           "action": "Bet",
           "amount": "15BB (150% pot)",
-          "explanation": "QJ is the perfect overbet bluff: you block the opponent's A/K (blocking nut flushes), your range is polarized (flush or air), and the overbet forces the opponent's top pair into an extremely tough decision.",
+          "explanation": "QJ is the perfect overbet bluff: Q♥/J♥ block some of the opponent's flush combos, your range is polarized (flush or air), and the overbet forces the opponent's top pair into an extremely tough decision.",
           "evImpact": "+2.5 BB/100"
         }
       ]
@@ -2469,12 +2469,12 @@
     ],
     "l4-mdf-real-cases": [
       "Judge that a high-bluff opponent (a Maniac at 65% bluffs, far above the 33% Alpha threshold) can be defended wider than MDF",
-      "Judge that against a Nit (almost never bluffing) you should fold below what MDF requires (QQ trails about 95% of his river shove range)",
+      "Judge that against a Nit (almost never bluffing) you should fold below what MDF requires (QQ trails his value range (AA/KK/JJ/KJ))",
       "Compare the two directions of deviating from MDF on opponent reads: widen upward versus a Maniac, tighten downward versus a Nit"
     ],
     "l4-overbet": [
       "Spot the core precondition of an overbet (nut advantage: your range holds super-strength hands the opponent cannot have) and its three typical spots (nut advantage, river polarization, capped opponent)",
-      "Compute the MDF against a 150% pot overbet (40%) and state that the overbet range must be polarized (value:bluff about 2:1)",
+      "Compute the MDF against a 150% pot overbet (40%) and state that the overbet range must be polarized (value:bluff about 5:3 (bluff 37.5%))",
       "Tell the value part of an overbet range (nuts only) from the bluff part (blocked air) and state that middling hands stay out",
       "Judge that being called by an overbet usually means strength, and that overbetting a calling station is wrong"
     ],
