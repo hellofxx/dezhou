@@ -128,7 +128,7 @@ export const LIMP_LESSONS: Lesson[] = [
       { type: 'key-point', content: '多人底池策略原则：①收紧价值范围（顶对不再值三条街）；②减少 C-Bet 诈唬（成功率低）；③用听牌便宜看翻牌（隐含赔率好）。' },
       { type: 'heading', content: 'C-Bet 策略调整' },
       { type: 'text', content: '多人底池的 C-Bet 频率应大幅降低（约 30-40%，单挑是 60-70%）：\n\n应该 C-Bet 的场景：\n• 你持有真正的强牌（两对+）→ 价值 C-Bet\n• 牌面干燥（如 K82r）且你击中顶对 → 价值 C-Bet\n• 你是翻前加注者且 heads-up 后位 → 可以选择性 C-Bet\n\n不该 C-Bet 的场景：\n• 牌面湿润（如 T♥9♥8♠）多人底池 → 太容易被加注\n• 你完全 miss 且有多个跟注站 → 诈唬成功率低\n• 中等牌力（顶对弱踢脚）多人底池 → 控制底池更优' },
-      { type: 'example', content: '示例牌局：NL10，4 人底池，BB 翻前 Limp behind\n你持有 8♠9♠ 在 BB，UTG/MP/BTN 都 Limp，你 check\n翻牌：7♠T♠2♦\n\n分析：\n• 你持有 OESD + 同花听牌（共 16 outs：顺子缺 6/J 各 4 张、同花缺 10 张黑桃，重叠 6♠/J♠ 不重复计）\n• 4 人底池，C-Bet 价值低（你不是翻前加注者）\n• 但你可以 check-raise 偷取底池\n\n正确做法：check，若有人下注 1/2 pot 则加注（半诈唬，大量 outs 支撑）\n错误做法：主动 donk bet，暴露牌力且面临多人加注风险' },
+      { type: 'example', content: '示例牌局：NL10，4 人底池，BB 翻前 Limp behind\n你持有 8♠9♠ 在 BB，UTG/MP/BTN 都 Limp，你 check\n翻牌：7♠T♠2♦\n\n分析：\n• 你持有 OESD + 同花听牌（共 15 outs：顺子缺 6/J 各 4 张、同花缺 9 张黑桃，重叠 6♠/J♠ 不重复计）\n• 4 人底池，C-Bet 价值低（你不是翻前加注者）\n• 但你可以 check-raise 偷取底池\n\n正确做法：check，若有人下注 1/2 pot 则加注（半诈唬，大量 outs 支撑）\n错误做法：主动 donk bet，暴露牌力且面临多人加注风险' },
       { type: 'heading', content: '价值下注范围调整' },
       { type: 'text', content: '多人底池中价值下注需要的牌力门槛：\n• 4 人底池：两对起才能多条街价值下注\n• 5+ 人底池：三条起才值得多条街价值\n• 顶对顶踢脚：只能在翻牌下一条街价值，转牌后控制底池\n• 听牌成牌：成花/成顺后可以多条街价值下注\n\n记住：多人底池中"奇怪的两对"（如 87s 在 8-7-2 翻牌）非常常见，TPTK 不再安全。' },
       { type: 'highlight', content: '多人 Limp 底池的黄金法则：当有人主动加注时，几乎可以确定他持有两对或更好的牌。国内 Limp 玩家极少诈唬，加注即代表强牌。' },

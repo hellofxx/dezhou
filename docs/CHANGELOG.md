@@ -9,6 +9,19 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-10-21 策略学院标准德州内容复算：L3-L7 存量清零 + L1/L2/L8/本土课抽查（5 个 commit）
+
+针对标准德州（不含短牌/单挑），逐条复核 `standardQuantAudit.test.ts` 人工复核索引中的 #3-#12，并对 L1/L2/L8 与 17 门本土课做同类数值抽查。全部修改同步数据层中文原文与 zh/en 课程文案；未编造任何数值型 `evLoss`（standard 标定基线仍为 0）。
+
+- **L3（ef1d2e9）**：8 outs 误差表 31.4/+0.6→31.5/+0.5；组合听牌统一 15 outs/54%（QJ/JT/87 的 OESD 场景），turn 单街约 33%；J♥T♥ 反直觉例改板 9♥8♥3♣ 保 15/54；turn 后门同花/顺已失效场景改为高牌权益；A4s 改后门同花约 4%；K♠72A♠→K♠7♦2♣；满池 16BB→18.5BB；三街几何补 SPR 公式（SPR 17 需约 114%/街，60-70% 仅投入约 40%）。
+- **L4A（9cd6868）**：4-Bet 全下加权权益按 AKs vs QQ 46.3 / KK 34.5 / AA 12.1 / AK 52 复算为约 42%，EV −11.7→−7.8BB；ev-p2 底池赔率 25%→26%；E2 组合听牌摊牌权益 30%→54%、EV +6.3→+7.7BB；AK 同花成牌→TPTK；blockers 尾句与 KK 阻断 AA 的 6→1 表述按组合数重写。
+- **L4B（6cfb726）**：诈唬比公式 P+2bP→P+bP；150% overbet value:bluff 2:1→5:3（bluff 37.5%）；M1 跟注 EV +2.0→+4.8BB；M2 改为 J-7-3-2-K 单一 J 牌面，QQ 第二对与价值范围按实际牌力重写；JTs/QJ 组合听牌、AQ 后门同花、AT 坚果同花、AK TPTK、QJ blocker 表述修正。
+- **L5-L7（ea862d7）**：tilt 牌面 Ac→Qd，AA 改为被 Kx 三条反超；ICM $36.5→$37；BF 示例 27%/40.5%→25%/37.5%；SB 10BB 推弃范围与 UTG 反直觉段改为 50-55% / 20-25%，手牌清单标注为非全量示例；bounty 8♥7♥ 非坚果听牌+两头顺约 15 outs；L7 QQ 改 underpair、BTN 66 投入 3BB、T9/QJ 非坚果同花听牌、4 人底池计数、straddle 7.5x 标注。
+- **抽查（本 commit）**：L2 A5「卡顺潜力」→「后门顺子潜力」；本土 `deepStack` / `limp` 的 16 outs（10 同花+6 顺子）纠正为 15 outs（9 同花+6 顺子），单街 34%→32%、两条街 57%→54%、二四法则 64%→60%；`straddle` 的 2BB straddle 底池 1.5→4.5BB 纠正为 1.5→3.5BB（0.5+1+2），覆盖目标/正文/小测。
+- **索引勘误**：原未修清单有数条建议不成立——l4a 93/70/81 保留（88/68/78 是 AKs 单支口径）；l3-draws 原 16/57 与板面不符（改板保 15/54）；l3-bluff-ex1 AQ 是顶对弱踢脚而非纯 A-high；l3-bluff-p1 JTs 无 4/8 个直接 outs；l4-ev-p3 41.3%/−9.2 是 50% 口径；l7-deep-p2 是 underpair 而非「超对」。以上已写入 `standardQuantAudit.test.ts` 头注释。
+- **回归锁**：新增 `standardContentRecalcLocks.test.ts`（10 用例）锁 L3-L7 + L2 修复值；修正 `variantQuantAudit.test.ts` 中把 16 outs 锁成正确值的旧断言，并新增 straddle 3.5BB 锁；`docs/agents/MODULE_MAP.md` 重新生成（strategy-academy 测试文件 34→35）。
+- **验证**：`pnpm verify` 全绿（176 文件 / 1222 测试）；`contentAlignment` / `contentI18n` / `curriculumIntegrity` / `standardQuantAudit` / `variantQuantAudit` / `line-count-guard` 均通过。范围仅标准德州，未改 short-deck / heads-up / theory-academy。
+
 ### 2026-10-20 启动分包修复与理论章节按 Level 懒载（多 commit）
 
 按「构建分包 → 语言包层级 → 课程数据层级 → 启动时序 → 图表懒载」逐批优化。实测基线首屏 41 个文件 / 382.3KB gzip，优化后 37 个文件 / **234.7KB gzip（-38.6%）**。

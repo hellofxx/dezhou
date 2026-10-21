@@ -542,7 +542,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             previousActions: [{ player: 'CO', action: 'raise 2.5BB' }, { player: 'BTN', action: 'raise 8BB (3-bet)' }, { player: 'CO', action: 'call' }],
             street: 'flop', effectiveStack: 91, potSize: 18.5, board: ['Kh', '8d', '3c'],
             opponent: OPPONENT_PROFILES['tag'],
-            correctDecision: { action: 'C-Bet 翻牌', amount: '6BB', reasoning: ['翻牌 Kh8d3c，CO check', '你翻前 3-bet 代表强范围（AK/QQ/AKs），C-Bet 持续施压', 'TAG 面对 3-bet 后翻牌 C-Bet 弃牌率高（约 55%）', '即使被 Call，A5 有后门同花 + 卡顺潜力'] },
+            correctDecision: { action: 'C-Bet 翻牌', amount: '6BB', reasoning: ['翻牌 Kh8d3c，CO check', '你翻前 3-bet 代表强范围（AK/QQ/AKs），C-Bet 持续施压', 'TAG 面对 3-bet 后翻牌 C-Bet 弃牌率高（约 55%）', '即使被 Call，A5 有后门同花 + 后门顺子潜力'] },
             commonMistake: { action: 'Check back', reasoning: '翻前 3-bet 后翻牌不 C-Bet 太被动，错失弃牌权益。TAG 弃牌率高，应该持续施压。', evLoss: '-1.0 BB/100' },
           },
         ],

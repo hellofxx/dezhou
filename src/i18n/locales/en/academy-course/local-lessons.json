@@ -29,7 +29,7 @@
       "Multiway pot principles: ① tighten the value range (top pair no longer worth three streets); ② reduce C-Bet bluffs (low success); ③ see flops cheaply with draws (good implied odds).",
       "C-Bet Strategy Adjustments",
       "C-Bet frequency in multiway pots should drop sharply (about 30-40%, vs 60-70% heads-up):\n\nScenarios to C-Bet:\n• You hold a genuinely strong hand (two pair+) → value C-Bet\n• Dry board (like K82r) and you hit top pair → value C-Bet\n• You're the preflop raiser and heads-up in position → selective C-Bet\n\nScenarios not to C-Bet:\n• Wet board (like T♥9♥8♠) multiway → too easily raised\n• You completely missed with multiple stations behind → low bluff success\n• Medium strength (top pair weak kicker) multiway → pot control is better",
-      "Example hand: NL10, 4-way pot, BB limped behind preflop\nYou hold 8♠9♠ in the BB; UTG/MP/BTN all limp, you check\nFlop: 7♠T♠2♦\n\nAnalysis:\n• You have an OESD + flush draw (16 outs total: straight 6s/Js 4 each + 10 spades, without double-counting 6♠/J♠)\n• 4-way pot, low C-Bet value (you're not the preflop raiser)\n• But you can check-raise to steal the pot\n\nCorrect play: check; if someone bets 1/2 pot, raise (semi-bluff backed by tons of outs)\nWrong play: donk bet, exposing your hand and facing multiway raise risk",
+      "Example hand: NL10, 4-way pot, BB limped behind preflop\nYou hold 8♠9♠ in the BB; UTG/MP/BTN all limp, you check\nFlop: 7♠T♠2♦\n\nAnalysis:\n• You have an OESD + flush draw (15 outs total: straight 6s/Js 4 each + 9 spades, without double-counting 6♠/J♠)\n• 4-way pot, low C-Bet value (you're not the preflop raiser)\n• But you can check-raise to steal the pot\n\nCorrect play: check; if someone bets 1/2 pot, raise (semi-bluff backed by tons of outs)\nWrong play: donk bet, exposing your hand and facing multiway raise risk",
       "Value-Bet Range Adjustments",
       "The hand-strength bar for value betting in multiway pots:\n• 4-way pot: two pair and up can multi-street value bet\n• 5+ way pot: trips and up worth multi-street value\n• Top pair top kicker: one street of value on the flop only; pot control after the turn\n• Made draws: after making a flush/straight, can multi-street value bet\n\nRemember: \"weird two pairs\" (like 87s on an 8-7-2 flop) are very common multiway — TPTK is no longer safe.",
       "The golden rule of multiway limp pots: when someone actively raises, you can almost be sure they hold two pair or better. Domestic limpers rarely bluff — a raise means strength.",
@@ -38,13 +38,13 @@
     "local-straddle": [
       "What Is a Straddle?",
       "A straddle is a voluntary blind posted preflop from UTG (common live) or BTN (common at domestic clubs), usually 2BB. The straddler has the last action preflop (the \"last-raise right\").\n\nDomestic clubs especially favor the BTN straddle: the dealer acts last preflop, giving \"double positional advantage\".",
-      "Core effects of a straddle: ① the preflop pot grows (1.5BB → 4.5BB, SPR drops); ② positional advantage is redistributed; ③ speculative hands drop in value (worse implied odds).",
+      "Core effects of a straddle: ① the preflop pot grows (1.5BB → 3.5BB, SPR drops); ② positional advantage is redistributed; ③ speculative hands drop in value (worse implied odds).",
       "The Special Nature of the BTN Straddle",
       "The BTN straddle is a signature of domestic clubs:\n\n• Preflop action order: SB → BB → UTG → ... → CO → BTN (straddler)\n• The BTN acts last preflop (keeping positional advantage)\n• Postflop action order returns to normal: SB → BB → ... → BTN\n• This means the BTN acts last both preflop and postflop — a huge advantage\n\nCounter-strategy: BTN straddlers usually have a wide range (already invested 2BB), so you can attack them with a wider 3-bet range.",
-      "Example hand: NL50, BTN straddle (2BB), 100BB effective\nYou're UTG with A♣K♦\n\nAnalysis:\n• The straddle is a voluntary extra 2BB blind; the effective stack is still ~100BB. Only the preflop action rules change; the straddler himself has 98BB left.\n• The preflop pot grows from 1.5BB to 4.5BB (0.5+1+2), lowering SPR and worsening implied odds for speculative hands\n• AK is an extremely strong hand in a low-SPR environment\n• UTG opens to 5BB (standard 3-4BB, but straddle games need bigger)\n• BTN straddler calls (wide range, common)\n• About 93BB effective postflop; the pot already contains straddle dead money, so AK can build a big pot on top pair\n\nWrong play: UTG opens only 3BB, gets multiway calls, diluting AK's value",
+      "Example hand: NL50, BTN straddle (2BB), 100BB effective\nYou're UTG with A♣K♦\n\nAnalysis:\n• The straddle is a voluntary extra 2BB blind; the effective stack is still ~100BB. Only the preflop action rules change; the straddler himself has 98BB left.\n• The preflop pot grows from 1.5BB to 3.5BB (0.5+1+2), lowering SPR and worsening implied odds for speculative hands\n• AK is an extremely strong hand in a low-SPR environment\n• UTG opens to 5BB (standard 3-4BB, but straddle games need bigger)\n• BTN straddler calls (wide range, common)\n• About 93BB effective postflop; the pot already contains straddle dead money, so AK can build a big pot on top pair\n\nWrong play: UTG opens only 3BB, gets multiway calls, diluting AK's value",
       "Range Adjustments in Straddle Games",
-      "The straddle lowers SPR (preflop pot 4.5BB), so strategy should tighten overall:\n\nHands that rise in value:\n• Big pairs (QQ+): can confidently build big pots at low SPR\n• AK/AQ: can get it in on top pair, no deep-stack maneuvering needed\n\nHands that drop in value:\n• Small pairs (22-77): set-mine implied odds worsen (low SPR — hard to win a full deep stack when the set hits)\n• Suited connectors: big-pot potential drops\n• Weak Ax: easily dominated",
-      "The most common straddle-game error: still using no-straddle sizing and ranges. With the preflop pot growing from 1.5BB to 4.5BB, small pairs and suited connectors lose implied odds and should be cut dramatically, and strong hands should 3-bet/4-Bet more aggressively.",
+      "The straddle lowers SPR (preflop pot 3.5BB), so strategy should tighten overall:\n\nHands that rise in value:\n• Big pairs (QQ+): can confidently build big pots at low SPR\n• AK/AQ: can get it in on top pair, no deep-stack maneuvering needed\n\nHands that drop in value:\n• Small pairs (22-77): set-mine implied odds worsen (low SPR — hard to win a full deep stack when the set hits)\n• Suited connectors: big-pot potential drops\n• Weak Ax: easily dominated",
+      "The most common straddle-game error: still using no-straddle sizing and ranges. With the preflop pot growing from 1.5BB to 3.5BB, small pairs and suited connectors lose implied odds and should be cut dramatically, and strong hands should 3-bet/4-Bet more aggressively.",
       "If you're the straddler (BTN position), you can mix: mostly check to see a free flop, occasionally check-raise with strong hands (KK/AA) to trap the raiser's chips."
     ],
     "local-ante": [
@@ -77,7 +77,7 @@
       "Suited-connector EV formula (simplified): EV = P(make straight/flush) × average win - P(miss) × investment. Deep stacks hugely raise \"average win\", so even at only 5-8% P(make), overall EV is positive.",
       "Position and Range for Suited Connectors",
       "Recommended deep-stack suited-connector ranges:\n\n• UTG: 54s-T9s (only the strongest, about 6 combos)\n• MP: 43s-JTs (expanded to 10 combos)\n• CO: 32s-QJs (widest, about 12 combos)\n• BTN: all suited connectors + one-gappers (like 86s, 97s)\n\nKey: suited connectors need positional advantage. BTN/CO play the widest; UTG tightens up.",
-      "Example hand: NL200, 500BB effective, BTN holds 8♠7♠\nCO opens 8BB, you call on the BTN (deep + position; 76s/87s etc. are all +EV)\n\nFlop: 6♠9♠T♦\n• You have an OESD (7-8-9-T or 5-6-7-8-9) + flush draw\n• 16 outs total (10 flush + 6 straight, minus the duplicate 5♠/J♠)\n• Make probability: about 34% (one street, 16/47) or 57% (two streets)\n\nCorrect play:\n• CO C-Bets 6BB → you call (excellent implied odds)\n• Turn 5♠ → you make the straight-flush; CO keeps betting → you raise or call to induce a river shove\n\nWrong play: raising the flop exposes your hand, lets CO fold weak hands, and loses deep value",
+      "Example hand: NL200, 500BB effective, BTN holds 8♠7♠\nCO opens 8BB, you call on the BTN (deep + position; 76s/87s etc. are all +EV)\n\nFlop: 6♠9♠T♦\n• You have an OESD (7-8-9-T or 5-6-7-8-9) + flush draw\n• 15 outs total (9 flush + 6 straight, minus the duplicate 5♠/J♠)\n• Make probability: about 32% (one street, 15/47) or 54% (two streets)\n\nCorrect play:\n• CO C-Bets 6BB → you call (excellent implied odds)\n• Turn 5♠ → you make the straight-flush; CO keeps betting → you raise or call to induce a river shove\n\nWrong play: raising the flop exposes your hand, lets CO fold weak hands, and loses deep value",
       "Postflop Strategy for Suited Connectors",
       "Deep-stack suited-connector postflop keys:\n\n• Hit a strong hand (straight/flush/two pair+): don't rush to raise — let the opponent keep betting to build the pot\n• Hit a draw: call rather than raise (good implied odds and hidden value)\n• Complete miss: fold, don't hang on\n• Hit top pair: pot control; top pair devalues deep\n\nCore mindset: suited connectors either make a big hand and win a big pot, or miss and fold. Avoid tangling with medium strength like top pair deep.",
       "The hidden nature of suited connectors is key: when you make a straight (like 76s on a 4-5-8 flop), opponents rarely put you on it and keep value-betting two pair/trips, letting you win all the deep chips.",
@@ -308,7 +308,7 @@
       "explanation": "A BTN straddle makes the BTN act last preflop (straddle right) + last postflop (positional advantage) — \"double positional advantage\"."
     },
     "local-straddle-q2": {
-      "question": "In a straddle game (preflop pot 1.5→4.5BB), which hand type drops most in value?",
+      "question": "In a straddle game (preflop pot 1.5→3.5BB), which hand type drops most in value?",
       "options": [
         "AA/KK",
         "Small pairs and suited connectors",
@@ -428,14 +428,14 @@
       "explanation": "Deep-stacked, keep the straight hidden — call or small-raise to induce more value bets, letting the opponent feed you the chips."
     },
     "local-deep-sc-q4": {
-      "question": "Making an OESD + flush draw (16 outs) on the flop, the two-street make probability is about:",
+      "question": "Making an OESD + flush draw (15 outs) on the flop, the two-street make probability is about:",
       "options": [
-        "About 34%",
-        "About 57%",
+        "About 32%",
+        "About 54%",
         "About 15%",
         "About 95%"
       ],
-      "explanation": "16-outs double draw: about 34% one street (16/47), about 57% two streets (the 2/4 rule estimates 16×4=64%, above the exact value) — an extremely strong draw."
+      "explanation": "15-outs double draw: about 32% one street (15/47), about 54% two streets (the 2/4 rule estimates 15×4=60%, above the exact value) — an extremely strong draw."
     },
     "local-exploit-cs-q1": {
       "question": "The core feature of a calling station is:",
@@ -819,7 +819,7 @@
     ],
     "local-straddle": [
       "Explain the action-order difference between BTN and UTG straddles, and judge that BTN's 'double positional edge' comes from acting last preflop plus postflop position",
-      "Calculate the straddle's effect on SPR (preflop pot 1.5BB → 4.5BB, SPR drops and implied odds worsen), and distinguish hands that gain value (big pairs, AK/AQ) from those that lose it (small pairs, suited connectors, weak Ax)",
+      "Calculate the straddle's effect on SPR (preflop pot 1.5BB → 3.5BB, SPR drops and implied odds worsen), and distinguish hands that gain value (big pairs, AK/AQ) from those that lose it (small pairs, suited connectors, weak Ax)",
       "Give the adjusted opening-raise size in straddle pots (4-5BB) and explain that the larger size prevents multiway calls from diluting strong-hand value",
       "Judge the straddler's mixed strategy (mostly check to see a free flop, occasionally check-raise with KK/AA to pick off the raiser's chips)"
     ],

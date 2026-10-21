@@ -666,7 +666,7 @@
         "翻牌 Kh8d3c，CO check",
         "你翻前 3-bet 代表强范围（AK/QQ/AKs），C-Bet 持续施压",
         "TAG 面对 3-bet 后翻牌 C-Bet 弃牌率高（约 55%）",
-        "即使被 Call，A5 有后门同花 + 卡顺潜力"
+        "即使被 Call，A5 有后门同花 + 后门顺子潜力"
       ],
       "mistakeAction": "Check back",
       "mistakeReasoning": "翻前 3-bet 后翻牌不 C-Bet 太被动，错失弃牌权益。TAG 弃牌率高，应该持续施压。",

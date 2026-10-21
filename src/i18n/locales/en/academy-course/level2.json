@@ -666,7 +666,7 @@
         "Flop Kh8d3c, CO checks",
         "Your preflop 3-bet represents a strong range (AK/QQ/AKs) — C-Bet keeps the pressure on",
         "TAG folds to postflop C-Bets after 3-betting at a high rate (about 55%)",
-        "Even when called, A5 has backdoor flush + gutshot potential"
+        "Even when called, A5 has backdoor flush + backdoor straight potential"
       ],
       "mistakeAction": "Check back",
       "mistakeReasoning": "Not C-Betting after a preflop 3-bet is too passive and forfeits fold equity. The TAG folds a lot — keep pressuring.",

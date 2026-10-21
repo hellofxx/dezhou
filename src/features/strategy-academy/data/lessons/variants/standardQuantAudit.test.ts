@@ -51,23 +51,23 @@ import type { DrillData, DrillQuestion, Lesson } from '../../../types';
  * [正确] l3-bluff 诈唬保本表 40/33/50%（b/(P+b)）✓；bluff-to-value 1:2、1:3 ✓；Semi-Bluff EV 公式 ✓
  * [正确] l3-bet-sizing MDF/Alpha 表 75/67/60/50 与 25/33/40/50 ✓
  * [正确] l3-3bet-postflop ex1/ex2 SPR 4.3/4.1（80/18.5、80/19.5）✓；p3 SPR 2.5 ✓
- * [未修] l3-draws U2 误差表 8 outs「精确 31.4/误差 +0.6」→ 31.45 应记 31.5、+0.5（theory 侧已统一 31.5）
- * [未修] l3-draws counter-intuitive「J♥T♥ 在 9♥8♦3♣ 有 15 outs/54%」→ 板仅 1♥，同花 outs=10、共 16 outs/57%（或改板 9♥8♥3♣ 保 15/54）
- * [未修] l3-draws-ex2 board 9s8h2s + 「12-15 outs/45-54%」→ 同型错误（spade 仅 3 见，16 outs/57%）
- * [未修] 组合听牌「约 12 outs」系统性低估（同花 9+两头顺 8−重叠 2 = 15 outs/约 54%）：
+ * [已修·批次3] l3-draws U2 误差表 8 outs「精确 31.4/误差 +0.6」→ 31.45 应记 31.5、+0.5（theory 侧已统一 31.5）
+ * [已修·批次3] l3-draws counter-intuitive「J♥T♥ 在 9♥8♦3♣ 有 15 outs/54%」→ 原文 15/54 与板面不符（实为 16/57）；本批改板 9♥8♥3♣ 保 15/54
+ * [已修·批次3] l3-draws-ex2 J♥T♥ 配 9♥8♣4♥ 为 15 outs/54%；原文 12-15/45-54 收窄为 15/54
+ * [已修·批次3] 组合听牌「约 12 outs」系统性低估（同花 9+两头顺 8−重叠 2 = 15 outs/约 54%）：
  *        cr-ex2、cr-q3、draws-p2（胜率超 40%）、draws-p5（turn 单街 15 outs≈33%）；「卡顺」标签应为「两头顺」（9-8 配 J-T 类四连）
- * [未修] l3-cbet-p5 Check 选项「顶对+后门同花」→ AQ 于 KTc4h 无对子，4♣ 已见=同花听牌 9+卡顺 3=约 12 outs
- * [未修] l3-fp-ex1/p1/p4/ex2：turn 街「后门同花」→ 3 张该花色已见时河牌单张不可能成花（应删/改为实际牌力）
- * [未修] l3-multistreet formula+objective 三街几何：SPR≈17 时每街 60-70% 池仅投入约 39%，非「三街全下」
+ * [已修·批次3] l3-cbet-p5 Check 选项「顶对+后门同花」→ A♣Q♣ 于 K♣T♣4♥：同花 9 + 卡顺 4 − J♣ 重叠 1 = 12 outs
+ * [已修·批次3] l3-fp-ex1/p1/p4/ex2：turn 街「后门同花」→ 3 张该花色已见时河牌单张不可能成花（应删/改为实际牌力）
+ * [已修·批次3] l3-multistreet formula+objective 三街几何：SPR≈17 时每街 60-70% 池仅投入约 39%，非「三街全下」
  *        （60-70%/街 对应 SPR≈5-7；公式 x=((1+2·SPR)^(1/3)−1)/2，SPR 17 → 约 114%/街）
- * [未修] l3-bluff-ex1「（顶对弱踢脚）」→ AQ 于 Ac8s3hKd9c 仅 A-high（板 A 与手持 A 异花色）
- * [未修] l3-bluff-ex2「卡顺潜力（J 来成顺）/部分顺子 outs」→ T9 于 K72 无单卡顺，应删
- * [未修] l3-bluff-p1「卡顺（需要 Q）/4 outs」→ 9-T 三连两头顺 8 outs（8 或 Q）
- * [未修] l3-bluff-p2 turn「35% 胜率」→ 9 outs 单街 ≈ 19.6% → 约 20%
- * [未修] l3-bluff-p4「同花听牌（9 outs）/35%」→ 3♠ 已见（K 黑桃板）= 后门同花，约 4%
- * [未修] l3-texture「K♠72A♠」（4 张牌）与 q1 选项「K♠72♠」记法混乱 → 应为 K-7-2 彩虹（K♠7♦2♣）
- * [未修] l3-texture-p3「后门同花」→ 7♥5♥ 板 + AK♥ = 4♥ 已见，真同花听牌
- * [未修] l3-3bet-pf-p4「Bet 16BB（满池）」→ 16/18.5 ≈ 86.5%，满池应为 18.5BB
+ * [已修·批次3] l3-bluff-ex1「（顶对弱踢脚）」→ AQ 于 Ac8s3hKd9c 是顶对弱踢脚，不是纯 A-high
+ * [已修·批次3] l3-bluff-ex2「卡顺潜力（J 来成顺）/部分顺子 outs」→ T9 于 K72 无单卡顺，应删
+ * [已修·批次3] l3-bluff-p1「卡顺（需要 Q）/4 outs」→ JTs 于 9-4-2 只有后门顺/后门同花，无直接 outs
+ * [已修·批次3] l3-bluff-p2 turn「35% 胜率」→ 9 outs 单街 ≈ 19.6% → 约 20%
+ * [已修·批次3] l3-bluff-p4「同花听牌（9 outs）/35%」→ 3♠ 已见（K 黑桃板）= 后门同花，约 4%
+ * [已修·批次3] l3-texture「K♠72A♠」（4 张牌）与 q1 选项「K♠72♠」记法混乱 → 应为 K-7-2 彩虹（K♠7♦2♣）
+ * [已修·批次3] l3-texture-p3「后门同花」→ 7♥5♥ 板 + AK♥ = 4♥ 已见，真同花听牌
+ * [已修·批次3] l3-3bet-pf-p4「Bet 16BB（满池）」→ 16/18.5 ≈ 86.5%，满池应为 18.5BB
  * [示意值] C-Bet 尺度带、Double Barrel 50-60%、CR 频率 10-15%、CR 2.5-3x、OOP 过牌范围更宽、五档尺度
  * [元数据] l3-3bet-pf potSize 18.5/19.5/28.5 与动作序列盲注口径差 1（SPR 计算自洽，仅记录）
  *
@@ -77,17 +77,17 @@ import type { DrillData, DrillQuestion, Lesson } from '../../../types';
  * [正确] l4-ev-ex1/p1：4/14.5≈27.6%→28%、EV=0.35×10.5−0.65×4=+1.075 ✓；p2 OESD EV=0.31×8.5−0.69×3=+0.565 ✓
  * [正确] l4-ev-p3（已审固）跟注保本线 89.5/194.5≈46.0%、{QQ6,KK3,AA3,AK9}=21 组合 ✓（口径见下条）
  * [正确] drill-l4-ev q1/q2/q4/q6/q7/q8：EV 口径（净赢=底池+对手跟注）全表复算 ✓；AA vs KK 82% ✓（满员桌 81.9%）
- * [未修] l4-range-thinking formula/objective：AA 对 AK 93%、KK 对 AK 70%、加权 81% →
- *        复算约 88%/68%/78%（AKs 46.3 vs QQ 同源锚点；本批未改）
- * [未修] l4-ev-p2「底池赔率约 25%」→ 3/11.5 ≈ 26.1% → 约 26%
- * [未修] l4-ev-p3 加权胜率：AKs 对 QQ 分支用 43%（AKo 口径）→ AKs 应 46.3%；KK 分支 32% → 约 34.5%；
- *        加权 40% → 约 41.3%；EV −11.7BB → 约 −9.2BB（结论 fold 不变）
- * [未修] l4-ev-p5「后门同花」→ turn 时 3♥ 已见，河牌单张不可能成花
- * [未修] l4-ev-real-cases Case E2/q2/objective：T♥J♥ 15 outs「showdown equity ~30%」→ 两街约 54%；
+ * [已修·批次3] l4-range-thinking formula/objective：AA 对 AK 93%、KK 对 AK 70%、加权 81% →
+ *        保留 93/70/81（88/68/78 是 AKs 单支口径；AA6/KK6 vs AK16 加权仍约 81%）
+ * [已修·批次3] l4-ev-p2「底池赔率约 25%」→ 3/11.5 ≈ 26.1% → 约 26%
+ * [已修·批次3] l4-ev-p3 加权胜率：AKs 对 QQ 分支用 43%（AKo 口径）→ AKs 应 46.3%；KK 分支 32% → 约 34.5%；
+ *        用 AKs vs AKo≈52% 复算：加权约 42%；EV −11.7BB → 约 −7.8BB（结论 fold 不变）
+ * [已修·批次3] l4-ev-p5「后门同花」→ turn 时 3♥ 已见，河牌单张不可能成花
+ * [已修·批次3] l4-ev-real-cases Case E2/q2/objective：T♥J♥ 15 outs「showdown equity ~30%」→ 两街约 54%；
  *        EV(bet) +6.3 → 约 +7.7（0.45×10+0.55×(0.54×16−0.46×6)）；EV(check) 4.8 → 约 5.4
- * [未修] l4-opp-p4：hero AcKc 于 Kh9h4c2d7h「AK 同花成牌」→ 实为 K 对顶踢脚（TPTK），两选项解析需改写
- * [未修] l4-blockers formula 尾句「你领先的 QQ 占比从 0 升至实质比例」→ 语句不通（范围内无 QQ），需重写
- * [未修] l4-blockers-p3「K blocker 使对手 AA 6→1」→ K 不阻断 AA（AA 仍 6 组合，与本课反直觉段自相矛盾）
+ * [已修·批次3] l4-opp-p4：hero AcKc 于 Kh9h4c2d7h「AK 同花成牌」→ 实为 K 对顶踢脚（TPTK），两选项解析需改写
+ * [已修·批次3] l4-blockers formula 尾句「你领先的 QQ 占比从 0 升至实质比例」→ 语句不通（范围内无 QQ），需重写
+ * [已修·批次3] l4-blockers-p3「K blocker 使对手 AA 6→1」→ K 不阻断 AA（AA 仍 6 组合，与本课反直觉段自相矛盾）
  * [示意值] l4-opp 对手画像 VPIP/PFR/AF 锚点、四步法算例（10/25=40%>33%）、p3 200BB set mine
  * [元数据] l4-blockers-p4 potSize 47/effectiveStack 25 与动作序列不自洽（未用于计算，仅记录）
  *
@@ -102,21 +102,21 @@ import type { DrillData, DrillQuestion, Lesson } from '../../../types';
  * [正确] l4-overbet q3：MDF 10/25=40%、Alpha 60%、跟注线 15/40=37.5% ✓；ex1 77 葫芦/150% ✓；ex2 错过坚果同花抽 ✓
  * [正确] l4-bluffcatching q1 25% vs Alpha 33% 辨析 ✓、ex1 33/(66+33)=33% ✓、p4 12/36 ✓、p5 20/62≈32% ✓
  * [正确] l4-rc-p2 AK 两对（A+K 配板）✓、l4-gt-p4 87 于 9d6d 板同花+OESD ✓
- * [未修] l4-gto-basics formula 中间式「f×(P+2bP) − (1−f)×bP = 0」→ 应为 f×(P+bP)（现式解出 f=b/(1+3b)，与结论 1/3 矛盾）
- * [未修] l4-gt-p2「卡顺」→ 两头顺（9-T-J 四连）；gt-p3「同花听牌」→ 后门同花（3♥ 已见）；gt-p5「同花但非坚果」→ Ac 在手=坚果同花
- * [未修] l4-mdf-real-cases M1「EV(call) ≈ +2.0BB」→ 0.65×9−0.35×3 ≈ +4.8BB；
- *        M2「JJJ 板 + QQ 顶对」→ QQ 于 JJJ-3-K 非顶对；「Value: JJ+, QQ, KK」列表需改（JJ=四条）
- * [未修] l4-overbet-p2「错过的坚果同花听牌/A♥ K♥ blocker」→ A♥ 在板上，QJ 抽的是 Q 高同花且不阻断 K♥
- * [未修] l4-overbet/objective 与 l4-range-construction「150% overbet value:bluff 约 2:1」→ 精确 5:3（bluff 37.5%），
+ * [已修·批次3] l4-gto-basics formula 中间式「f×(P+2bP) − (1−f)×bP = 0」→ 应为 f×(P+bP)（现式解出 f=b/(1+3b)，与结论 1/3 矛盾）
+ * [已修·批次3] l4-gt-p2「卡顺」→ 两头顺（9-T-J 四连）；gt-p3「同花听牌」→ 后门同花（3♥ 已见）；gt-p5「同花但非坚果」→ Ac 在手=坚果同花
+ * [已修·批次3] l4-mdf-real-cases M1「EV(call) ≈ +2.0BB」→ 0.65×9−0.35×3 ≈ +4.8BB；
+ *        M2 改为 J-7-3-2-K 单一 J 牌面，QQ 第二对；原 JJJ 板下 QQ 实为葫芦
+ * [已修·批次3] l4-overbet-p2「错过的坚果同花听牌/A♥ K♥ blocker」→ A♥ 在板上，QJ 抽的是 Q 高同花且不阻断 K♥
+ * [已修·批次3] l4-overbet/objective 与 l4-range-construction「150% overbet value:bluff 约 2:1」→ 精确 5:3（bluff 37.5%），
  *        与已修 q7 存在残留不一致（待统一）
- * [未修] l4-freq-p1「QJT9 三面听牌面」措辞混乱（QJ 于 Q-J-9 板为 8/K 两张成顺 = 8 outs）
+ * [已修·批次3] l4-freq-p1「QJT9 三面听牌面」措辞混乱（QJ 于 Q-J-9 板为 8/K 两张成顺 = 8 outs）
  * [示意值] HU SB open 70-80%/BB defend 60-70%、C-Bet 60-70% 频率带、overbet 频率档
  *
  * —— standardLevel5.ts ——
  * [正确] l5-bankroll：$1/$2 买入 $200 → 20/30 个买入 $4000/$6000 ✓、Kelly 60%/1:1 → f*=20%、Half 10% ✓
  *        ex1 NL25 30 买入=$750 ✓、ex2 $900<20×$50 ✓、p2 $800=16 个/降 NL25=32 个 ✓、p5 $1800=36 个 ✓
  * [正确] drill-l5-session q4：$2000@NL100=20 个买入 → 降 NL50=40 个 ✓
- * [未修] l5-tilt-ex1：AA 于 AcKd7h2sKs 实为 A 葫芦（AAA KK），「被 Kx 两对反超」不成立
+ * [已修·批次3] l5-tilt-ex1：AA 于 AcKd7h2sKs 实为 A 葫芦（AAA KK），「被 Kx 两对反超」不成立
  *        → 需改板（如 Ac→Qd：AA 被 Kx 三条反超）并改「两对」为「三条」
  * [示意值] 10,000 手样本、线上 60-80/线下 25-35 手每小时、VPIP/PFR 差 >8、SD% >35%、止损 2 买入
  *
@@ -124,11 +124,11 @@ import type { DrillData, DrillQuestion, Lesson } from '../../../types';
  * [正确] l6-pushfold formula/p2/p5：SB 10BB 全下 → 底池 11（10+1）、跟 9、保本 9/20=45%；
  *        p2 底池 11.5 取整 12 → 9/21≈43%、77 约 52% ✓（口径注释完备）
  * [已修] l6-icm 计算示例/objective：「= $36.6」→ $33.6（0.4×50+0.32×30+0.2×20 = 33.6）
- * [未修] l6-icm formula 块「= $36.5」→ 0.5×50+0.3×30+0.15×20 = $37
- * [未修] l6-icm BF 详解「50% pot bet call 需 27%」→ 25%；「27%×1.5=40.5%」→ 25%×1.5=37.5%
- * [未修] l6-pushfold SB 10BB push 范围内部矛盾：content/quiz/objective 锚 50-55%，formula 清单标「总计约 70-80%」
+ * [已修·批次3] l6-icm formula 块「= $36.5」→ 0.5×50+0.3×30+0.15×20 = $37
+ * [已修·批次3] l6-icm BF 详解「50% pot bet call 需 27%」→ 25%；「27%×1.5=40.5%」→ 25%×1.5=37.5%
+ * [已修·批次3] l6-pushfold SB 10BB push 范围内部矛盾：content/quiz/objective 锚 50-55%，formula 清单标「总计约 70-80%」
  *        （清单逐项合计仅约 31%），counter-intuitive 又把 70-80% 归给 UTG（10BB UTG Nash push 约 20-25%，理由句为 SB 口径）
- * [未修] l6-bounty-p5「坚果同花听牌」→ 9♥6♥ 板 + 8♥7♥ = 普通（非坚果）同花抽+两头顺（约 15 outs）
+ * [已修·批次3] l6-bounty-p5「坚果同花听牌」→ 9♥6♥ 板 + 8♥7♥ = 普通（非坚果）同花抽+两头顺（约 15 outs）
  * [正确] l6-icm 反直觉/结论方向（50% 筹码 $EV<50%、短筹码溢价）✓；ex1 AQ 泡沫 fold ✓
  * [元数据] l6-icm ex1/p1/p4 potSize 与全下动作差 1BB（未用于计算，仅记录）
  *
@@ -136,11 +136,11 @@ import type { DrillData, DrillQuestion, Lesson } from '../../../types';
  * [正确] l7-deepstack：SPR 200/15=13.3 ✓、set mine 12%/125:1（250/2）✓、p3 坚果同花抽 ✓、p5 坚果同花抽（Ah）✓
  * [正确] l7-multiway：乘法效应 0.4³=6.4%（3 对手）、0.5²=25%（2 对手）✓；稀释表 70-80/40-50/25-35%（示意锚点）✓
  * [正确] l7-straddle：底池 1.5→3.5、open 4-5BB=2-2.5x straddle、有效 50 个 straddle ✓
- * [未修] l7-deep-p4「投入 2BB（SB 已投 1BB）」→ hero 是 BTN，面对 3BB open 应投入 3BB（文本为 BB 视角）
- * [未修] l7-deep-p2「QQ 只是第三对」→ QQ 于 A-K-5-2 板是超对（对 K 之上、对 A 之下）
- * [未修] l7-multi-p3「坚果同花听牌」→ 8♥7♥ 板 + T♥9♥ 无 A♥，非坚果抽
- * [未修] l7-multi-p5「Q 高」→ QJd 于 K♦8♦3♥ 有同花听牌（9 outs）
- * [未修] l7-straddle-p4「3-bet 到 15BB（3x straddle）」→ 15BB = 3× CO 的 5BB open（7.5× straddle）
+ * [已修·批次3] l7-deep-p4「投入 2BB（SB 已投 1BB）」→ hero 是 BTN，面对 3BB open 应投入 3BB（文本为 BB 视角）
+ * [已修·批次3] l7-deep-p2「QQ 只是第三对」→ QQ 于 A-K-5-2 板是低于 A/K 的口袋对（underpair）
+ * [已修·批次3] l7-multi-p3「坚果同花听牌」→ 8♥7♥ 板 + T♥9♥ 无 A♥，非坚果抽
+ * [已修·批次3] l7-multi-p5「Q 高」→ QJd 于 K♦8♦3♥ 有同花听牌（9 outs）
+ * [已修·批次3] l7-straddle-p4「3-bet 到 15BB（3x straddle）」→ 15BB = 3× CO 的 5BB open（7.5× straddle）
  * [示意值] rake 8-12/4-6 BB/100、re-steal 15-25BB、选桌 Players/Flop >30%
  *
  * —— standardLevel8.ts ——
@@ -148,23 +148,17 @@ import type { DrillData, DrillQuestion, Lesson } from '../../../types';
  * [正确] p3 4-Bet 12BB = 4× CO 3BB open ✓
  * [示意值] 各级别 pool 倾向锚点（VPIP 45%/PFR 12%、fold to cbet 65%、WTSD 28% 等）
  *
- * —— 未修清单（批次 1 记录，按文件序） ——
- * 【批次 2 处理说明】批次 2 已按任务书完成 short-deck / heads-up / localLessons 三目录全量
- * 复算与修复（见 variantQuantAudit.test.ts 头注释人工复核索引），并清账本清单中的 #1、#2；
- * #3~#12（l3 误差表与组合听牌系统性、l4a 公式与判分、l4b 公式与标签、l5/l6/l7 标签类）
- * 依赖 standard 侧 L3-L7 的正文级改写，本轮上下文未及处理，原样保留待下批次，未做任何数值放宽。
- * #1 l1 ex1 evLoss 8BB→12.5BB；同花溢价 3-4%→约 2-3% 【已修·批次2】
- * #2 l2 bb ex1 2.5:1→约 2.7:1 【已修·批次2】
- * #3 l3 误差表 31.4→31.5/+0.5；counter-intuitive 与 ex2 的 15-outs 组合听牌板面口径（16 outs/57% 或改板）
- * #4 l3 组合听牌 12→15 outs 系统性（cr-ex2/cr-q3/draws-p2/draws-p5）+「卡顺→两头顺」标签
- * #5 l3 cbet-p5「顶对+后门同花」；fp 系列 turn「后门同花」×3；multistreet 三街几何口径；bluff-ex1/ex2/p1/p2/p4
- * #6 l3 texture K♠72A♠/K♠72♠ 记法、p3「后门同花」、3bet-pf-p4 16BB「满池」
- * #7 l4a range formula 93/70/81→约 88/68/78；ev-p2 25%→26%；ev-p3 43/32/40/−11.7→46.3/34.5/41.3/−9.2
- * #8 l4a ev-p5「后门同花」；real-cases E2 30%/6.3/4.8→54%/7.7/5.4；opp-p4「同花」→TPTK；blockers formula 尾句、p3「AA 6→1」
- * #9 l4b gto formula 中间式 P+2bP→P+bP；gt-p2/p3/p5 标签；mdf-real-cases M1 EV/M2 板面；overbet-p2；150% 2:1→5:3（content/objective）
- * #10 l5 tilt-ex1 板面与「两对→三条」
- * #11 l6 icm formula 块 36.5→37；BF 27%→25%；SB push 50-55 vs 70-80 矛盾；bounty-p5「坚果」
- * #12 l7 deep-p4 BB 视角、deep-p2「第三对→超对」、multi-p3/p5「坚果同花听牌/Q 高」、straddle-p4 倍数标签
+ * —— 批次 3 清账与索引勘误（2026-10-21） ——
+ * #3~#12 已全部清账：L3-L7 数据 + zh/en 三语同步；回归锁见 standardContentRecalcLocks.test.ts。
+ * 索引勘误（原清单中的建议并非全部正确，以复算为准）：
+ * 1) l4a 范围权益 93/70/81 保留：88/68/78 是 AKs 单支口径；AA6/KK6 vs AK16 加权仍约 81%。
+ * 2) l3-draws 的 J♥T♥ 改板 9♥8♥3♣ 后为 15 outs/54%（同花 9 + 顺子 8 − 重叠 2）；原“16/57”不采用。
+ * 3) l3-bluff-ex1 AQ 于 A♣8♠3♥K♦9♣ 是顶对弱踢脚，不是纯 A-high。
+ * 4) l3-bluff-p1 JTs 于 9-4-2 只有后门顺/后门同花，无 4/8 个直接 outs。
+ * 5) l4-ev-p3 用 AKs vs AKo≈52% 复算：加权约 42%、EV≈−7.8BB（原 41.3%/−9.2 为 50% 口径）。
+ * 6) l7-deep-p2 QQ 于 A-K-5-2 是低于 A/K 的口袋对（underpair），原索引“超对”亦不准。
+ * 7) l4b mdf-real-cases M2 改为 J-7-3-2-K 单一 J 牌面，QQ 为第二对；原 JJJ 板下 QQ 实为葫芦。
+ * 8) l3 cbet-p5 的 A♣Q♣ 于 K♣T♣4♥：同花 9 + 卡顺 4 − J♣ 重叠 1 = 12 outs（原“4♣ 已见”误）。
  * —— 元数据 nits（potSize/effectiveStack 与动作序列 ±1，均未参与计算）：l2-4bet-ex2 18.5、l2-squeeze-ex2 6.0、
  *    l3-3bet-pf 18.5/19.5/28.5、l4-blockers-p4 47/25、l6-icm 17.5/14.5、l6-finaltable 4.7 —— 仅记录不改。
  */

@@ -85,14 +85,14 @@ import type { Lesson, QuizQuestion } from '../../../types';
  * [已修] local-exploit-calling-station example：open 4BB → 2.5BB（pot 5.5，与 C-Bet 2.5≈1/2、
  *        4≈2/3 pot 自洽）
  * [已修] local-straddle objectives/key-point/content×2/highlight/q2：「有效筹码减半 50BB
- *        effective」→ SPR 口径（2BB straddle 不改有效筹码 ~98-100BB；底池预置 1.5→4.5BB）
+ *        effective」→ SPR 口径（2BB straddle 不改有效筹码 ~98-100BB；底池预置 1.5→3.5BB）
  * [已修] local-ante objectives/content/q3：BB 跟注所需胜率 37.5%/28.8% → 27.3%/22.4%
  *        （1.5/(4+1.5)、1.5/(5.2+1.5)；旧口径漏算 BB 已投 1BB 死钱）
- * [已修] local-limp-multiway example：89s 配 7♠T♠2♦「共 15 outs」→ 16 outs
- *        （8 顺子 + 10 同花 − 重叠 6♠/J♠；与 theory 侧同源修复）
+ * [已修·批次3] local-limp-multiway example：89s 配 7♠T♠2♦ 应为 15 outs（同花 13−4=9 + 顺子 8 − 重叠 2）；批次 2 的 16 outs 为多算同花 out 的错误口径
+ *        （8 顺子 + 9 同花 − 重叠 6♠/J♠；批次 2 的 10 同花为多算）
  * [已修] local-deep-implied example：「跟注 8BB 赢 11.5BB」→ 约 9.5BB（0.5+1+8）
- * [已修] local-deep-suited objectives/content/example/q4：15 outs → 16 outs（10 同花 +
- *        6 顺子 − 5♠/J♠；单街 34%、两条街 57%、二四法则 64%）
+ * [已修·批次3] local-deep-suited objectives/content/example/q4：应为 15 outs（9 同花 +
+ *        6 顺子 − 5♠/J♠；单街 32%、两条街 54%、二四法则 60%）
  * [已修] local-mental-stop-loss example：买入换算链修正（1 buy-in = 100BB = $50；
  *        单 session 300BB、单日 500BB、单周 1000BB；原把 $50 买入当 50BB 计）
  * [已修] local-deep-implied EV：0.12×500−0.88×8 = +53BB 复算自洽 ✓（保留）；
@@ -302,22 +302,28 @@ describe('variant 量化断言审计：localLessons 判分题复算', () => {
     expect(contentText('local-ante')).toContain('1.5/(5.2+1.5) ≈ 22.4%');
   });
 
-  it('local-deep-sc-q4：16 outs 两条街 ≈ 57%（单街 34%，二四法则 64% 对照）', () => {
-    expect(16 / 47).toBeGreaterThan(0.34);
-    expect(16 / 47).toBeLessThan(0.341);
-    const twoStreet = 1 - ((47 - 16) / 47) * ((46 - 16) / 46);
-    expect(twoStreet).toBeGreaterThan(0.569);
-    expect(twoStreet).toBeLessThan(0.571);
-    expectAnswerIs('local-deep-suited-connectors', 'local-deep-sc-q4', '约 57%');
-    // 87♠ 配 6♠9♠T♦ 的 16 outs 组成：同花 13−3=10、顺子非重叠 8−2=6 → 合计 16
-    expect((13 - 3) + (8 - 2)).toBe(16);
+  it('local-deep-sc-q4：15 outs 两条街 ≈ 54%（单街 32%，二四法则 60% 对照）', () => {
+    expect(15 / 47).toBeGreaterThan(0.319);
+    expect(15 / 47).toBeLessThan(0.32);
+    const twoStreet = 1 - ((47 - 15) / 47) * ((46 - 15) / 46);
+    expect(twoStreet).toBeGreaterThan(0.541);
+    expect(twoStreet).toBeLessThan(0.542);
+    expectAnswerIs('local-deep-suited-connectors', 'local-deep-sc-q4', '约 54%');
+    // 87♠ 配 6♠9♠T♦ 的 15 outs 组成：同花 13−4=9、顺子非重叠 8−2=6 → 合计 15
+    expect((13 - 4) + (8 - 2)).toBe(15);
   });
 
-  it('local-limp-multiway：89♠ 配 7♠T♠2♦ 组合听牌 16 outs（15 为漏算口径）', () => {
-    // 顺子缺 6/J 各 4 张 = 8；同花 13−3 = 10；重叠 6♠/J♠ 不重复计 → 16
-    expect(8 + 10 - 2).toBe(16);
-    expect(contentText('local-limp-multiway')).toContain('共 16 outs');
-    expect(contentText('local-limp-multiway')).not.toContain('共 15 outs');
+  it('local-limp-multiway：89♠ 配 7♠T♠2♦ 组合听牌 15 outs（16 为多算同花 out 的错误口径）', () => {
+    // 顺子缺 6/J 各 4 张 = 8；同花 13−4 = 9；重叠 6♠/J♠ 不重复计 → 15
+    expect(8 + 9 - 2).toBe(15);
+    expect(contentText('local-limp-multiway')).toContain('共 15 outs');
+    expect(contentText('local-limp-multiway')).not.toContain('共 16 outs');
+  });
+
+  it('local-straddle：2BB straddle 底池 1.5→3.5BB（禁回退 4.5）', () => {
+    const straddleText = JSON.stringify(getLesson('local-straddle'));
+    expect(straddleText).toContain('1.5BB → 3.5BB');
+    expect(straddleText).not.toContain('4.5BB');
   });
 
   it('local-exploit-maniac：KK 5-Bet 跟注 EV ≈ +68BB（决策点口径，禁回退 +125）', () => {
