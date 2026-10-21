@@ -157,7 +157,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
                 opponent: OPPONENT_PROFILES['tag'],
               },
               options: [
-                { action: 'Check', isCorrect: true, explanation: 'QQ 在 A-K-5-2 牌面只是第三对。230BB 深度不应该建立大底池。Check 控制底池，如果对手下注小可以 call，下注大可以 fold。', evImpact: '0 BB/100' },
+                { action: 'Check', isCorrect: true, explanation: 'QQ 在 A-K-5-2 牌面是低于 A/K 的口袋对（underpair）。230BB 深度不应该建立大底池。Check 控制底池，如果对手下注小可以 call，下注大可以 fold。', evImpact: '0 BB/100' },
                 { action: 'Bet', amount: '8BB', isCorrect: false, explanation: '在 A-K 牌面下注 QQ 很危险。TAG 的 call 范围中大量 Ax/Kx 支配你。深筹码中不要用中等牌力建立大底池。', evImpact: '-1.5 BB/100' },
                 { action: 'Check-Raise if bet', isCorrect: false, explanation: 'QQ 在 A-K 牌面做 check-raise 没有意义。你的牌不够强到 value raise，也不适合做 bluff（没有好的 blocker）。', evImpact: '-2.5 BB/100' },
               ],
@@ -186,7 +186,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
               relatedLessonId: 'l7-deepstack',
             },
           
-            { id: 'l7-deep-p4', difficulty: 'advanced', scenario: { heroHand: ['6h', '6d'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 3BB' }], street: 'preflop', potSize: 4.5, effectiveStack: 300 }, options: [{ action: 'Fold', isCorrect: false, explanation: '66在300BB深度set mine价值极高。隐含赔率极好。', evImpact: '-0.5 BB/100' }, { action: 'Call', isCorrect: true, explanation: '300BB深度，66的set mine隐含赔率极好。投入2BB（SB已投1BB）有机会赢300BB。', evImpact: '+1.0 BB/100' }, { action: 'Raise 10BB', isCorrect: false, explanation: '3-bet 66在深筹码中不理想。Call更适合投机牌。', evImpact: '+0.2 BB/100' }], relatedLessonId: 'l7-deepstack' },
+            { id: 'l7-deep-p4', difficulty: 'advanced', scenario: { heroHand: ['6h', '6d'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 3BB' }], street: 'preflop', potSize: 4.5, effectiveStack: 300 }, options: [{ action: 'Fold', isCorrect: false, explanation: '66在300BB深度set mine价值极高。隐含赔率极好。', evImpact: '-0.5 BB/100' }, { action: 'Call', isCorrect: true, explanation: '300BB深度，66的set mine隐含赔率极好。投入3BB（跟注 CO 的 3BB open）有机会赢300BB。', evImpact: '+1.0 BB/100' }, { action: 'Raise 10BB', isCorrect: false, explanation: '3-bet 66在深筹码中不理想。Call更适合投机牌。', evImpact: '+0.2 BB/100' }], relatedLessonId: 'l7-deepstack' },
             { id: 'l7-deep-p5', difficulty: 'advanced', scenario: { heroHand: ['Ah', 'Jh'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'raise 3BB' }, { player: 'MP', action: 'fold' }], street: 'flop', board: ['Kh', '9h', '4d'], potSize: 7.5, effectiveStack: 240 }, options: [{ action: 'Check', isCorrect: false, explanation: '你有坚果同花听牌+高牌。深筹码中应该半诈唬下注。', evImpact: '-0.5 BB/100' }, { action: 'Bet 5BB', isCorrect: true, explanation: '坚果同花听牌在240BB深度应该半诈唬下注。深筹码bluff更有威力。', evImpact: '+1.5 BB/100' }, { action: 'Push all-in', isCorrect: false, explanation: '240BB深度用听牌全下过度。半诈唬小注就够了。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-deepstack' },],
         },
       },
@@ -383,14 +383,14 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
               },
               options: [
                 { action: 'Check', isCorrect: false, explanation: 'T♥9♥ 在 8♥7♥2♦ 牌面有极强的 equity（同花听牌+顺子听牌+两对潜力）。多人底池中应该下注建立底池。', evImpact: '-1.0 BB/100' },
-                { action: 'Bet', amount: '6BB (66% pot)', isCorrect: true, explanation: 'T9 在这个牌面有极强的 equity（坚果同花听牌+顺子听牌）。多人底池中强听牌应该下注建立底池，且多人底池隐含赔率极好（中牌后赢多人）。', evImpact: '+2.0 BB/100' },
+                { action: 'Bet', amount: '6BB (66% pot)', isCorrect: true, explanation: 'T9 在这个牌面有极强的 equity（同花听牌 9 outs + 两头顺 8 outs，组合约15 outs，非坚果）。多人底池中强听牌应该下注建立底池，且多人底池隐含赔率极好（中牌后赢多人）。', evImpact: '+2.0 BB/100' },
                 { action: 'Check-Raise if bet', isCorrect: false, explanation: 'Check-raise 在多人底池中风险大（后面还有多人未行动）。直接下注更简单有效，且可以控制底池大小。', evImpact: '+0.5 BB/100' },
               ],
               relatedLessonId: 'l7-multiway',
             },
           
             { id: 'l7-multi-p4', difficulty: 'intermediate', scenario: { heroHand: ['As', 'Ks'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'call' }, { player: 'MP', action: 'call' }, { player: 'BTN', action: 'raise 5BB' }, { player: 'BB', action: 'call' }, { player: 'UTG', action: 'call' }, { player: 'MP', action: 'call' }], board: ['Ac', '7c', '2d'], street: 'flop', potSize: 21, effectiveStack: 85 }, options: [{ action: 'Check', isCorrect: false, explanation: 'AK顶对顶踢脚在4人底池值得value bet。', evImpact: '-1 BB/100' }, { action: 'Bet 10BB (50% pot)', isCorrect: true, explanation: 'AK顶对顶踢脚在多人底池值得50% pot的value bet。', evImpact: '+1.5 BB/100' }, { action: 'Bet 18BB (85% pot)', isCorrect: false, explanation: '大注在多人底池中只有强牌才会call。小注更好。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l7-multiway' },
-            { id: 'l7-multi-p5', difficulty: 'advanced', scenario: { heroHand: ['Qd', 'Jd'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'call' }, { player: 'CO', action: 'raise 4BB' }, { player: 'BTN', action: 'call' }, { player: 'BB', action: 'call' }, { player: 'UTG', action: 'call' }], board: ['Kd', '8d', '3h'], street: 'flop', potSize: 17, effectiveStack: 86 }, options: [{ action: 'C-Bet 12BB', isCorrect: false, explanation: '3人底池QJ高牌bluff成功率低。Check等待更好机会。', evImpact: '-1.5 BB/100' }, { action: 'Check', isCorrect: true, explanation: '多人底池Q高bluff成功率极低（需要所有人都弃牌）。Check。', evImpact: '0 BB/100' }, { action: 'Bet 6BB', isCorrect: false, explanation: '多人底池用空气bluff不够好。Check。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-multiway' },],
+            { id: 'l7-multi-p5', difficulty: 'advanced', scenario: { heroHand: ['Qd', 'Jd'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'call' }, { player: 'CO', action: 'raise 4BB' }, { player: 'BTN', action: 'call' }, { player: 'BB', action: 'call' }, { player: 'UTG', action: 'call' }], board: ['Kd', '8d', '3h'], street: 'flop', potSize: 17, effectiveStack: 86 }, options: [{ action: 'C-Bet 12BB', isCorrect: false, explanation: '4 人底池，Q♥J♥ 只有 Q 高同花听牌（9 outs），多人底池半诈唬成功率低。Check 等待更好机会。', evImpact: '-1.5 BB/100' }, { action: 'Check', isCorrect: true, explanation: '多人底池 Q♥J♥ 只有 Q 高同花听牌（9 outs），bluff 成功率极低（需要所有人都弃牌）。Check。', evImpact: '0 BB/100' }, { action: 'Bet 6BB', isCorrect: false, explanation: '多人底池用 Q 高同花听牌半诈唬不够好。Check。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-multiway' },],
         },
       },
       {
@@ -576,7 +576,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
               relatedLessonId: 'l7-straddle',
             },
           
-            { id: 'l7-straddle-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ah', 'Kh'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'straddle 2BB' }, { player: 'CO', action: 'raise 5BB' }], street: 'preflop', potSize: 8.5, effectiveStack: 50 }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AK在50BB深度是顶级强牌。应该3-bet。', evImpact: '-1 BB/100' }, { action: 'Raise 15BB', isCorrect: true, explanation: 'AK在50BB是顶级强牌。3-bet到15BB（3x straddle）标准大小。', evImpact: '+2 BB/100' }, { action: 'Call 5BB', isCorrect: false, explanation: 'AK太强不应该只是call。3-bet获取价值。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l7-straddle' },
+            { id: 'l7-straddle-p4', difficulty: 'intermediate', scenario: { heroHand: ['Ah', 'Kh'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'straddle 2BB' }, { player: 'CO', action: 'raise 5BB' }], street: 'preflop', potSize: 8.5, effectiveStack: 50 }, options: [{ action: 'Fold', isCorrect: false, explanation: 'AK在50BB深度是顶级强牌。应该3-bet。', evImpact: '-1 BB/100' }, { action: 'Raise 15BB', isCorrect: true, explanation: 'AK在50BB是顶级强牌。3-bet 到 15BB（3x CO open，7.5x straddle）标准大小。', evImpact: '+2 BB/100' }, { action: 'Call 5BB', isCorrect: false, explanation: 'AK太强不应该只是call。3-bet获取价值。', evImpact: '+0.5 BB/100' }], relatedLessonId: 'l7-straddle' },
             { id: 'l7-straddle-p5', difficulty: 'advanced', scenario: { heroHand: ['7h', '6h'], heroPosition: 'BTN', previousActions: [{ player: 'UTG', action: 'straddle 2BB' }, { player: 'MP', action: 'raise 5BB' }], street: 'preflop', potSize: 8.5, effectiveStack: 50 }, options: [{ action: 'Fold', isCorrect: true, explanation: '65s在50BB面对MP open价值降低。Straddle后隐含赔率变差，fold。', evImpact: '0 BB/100' }, { action: 'Call 5BB', isCorrect: false, explanation: '50BB深度call 5BB=10%筹码，中牌后最多赢50BB。隐含赔率不足。', evImpact: '-0.5 BB/100' }, { action: 'Raise 15BB', isCorrect: false, explanation: '65s不适合3-bet bluff。面对MP open范围太弱。', evImpact: '-1 BB/100' }], relatedLessonId: 'l7-straddle' },],
         },
       },

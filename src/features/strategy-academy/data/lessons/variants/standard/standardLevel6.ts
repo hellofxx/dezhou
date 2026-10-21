@@ -54,7 +54,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           {
             type: 'text',
             content:
-              '### 定义与公式\nBubble Factor = call 所需 equity / 现金局所需 equity\n\n### 示例\n- 现金局中面对 50% pot bet，call 需 27% 胜率\n- ICM 中 BF 可达 1.5-2.0（极端情况下更高）\n- 实际所需 equity = 27% × 1.5 = 40.5%\n\n这意味着泡沫期必须用更宽范围弃牌，即使现金局会 call。',
+              '### 定义与公式\nBubble Factor = call 所需 equity / 现金局所需 equity\n\n### 示例\n- 现金局中面对 50% pot bet，call 需 25% 胜率\n- ICM 中 BF 可达 1.5-2.0（极端情况下更高）\n- 实际所需 equity = 25% × 1.5 = 37.5%\n\n这意味着泡沫期必须用更宽范围弃牌，即使现金局会 call。',
           },
           { type: 'heading', content: 'ICM 对范围的影响' },
           {
@@ -69,7 +69,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'formula',
-            content: 'ICM 最小算例（4 人 SNG，奖金 50/30/20）：\n筹码分布：A=5000, B=3000, C=1500, D=500（总 10000）\n\nA 的 $EV 计算（简化）：\n第一名概率 ≈ 5000/10000 = 50%，奖金 $50\n第二名概率 ≈ 组合数计算...\n$EV ≈ 0.5×50 + 0.3×30 + 0.15×20 + 0.05×0 = $36.5\n\nBubble Factor（泡沫因子）：\nBF = 跟注所需 equity / 现金局所需 equity\n在泡沫期，BF 可达 1.5-2.0，意味着你需要约 1.5-2 倍的胜率才能跟注\n\n核心结论：筹码翻倍不等于奖金翻倍。5000 筹码的 $EV 不是 2500 的两倍。',
+            content: 'ICM 最小算例（4 人 SNG，奖金 50/30/20）：\n筹码分布：A=5000, B=3000, C=1500, D=500（总 10000）\n\nA 的 $EV 计算（简化）：\n第一名概率 ≈ 5000/10000 = 50%，奖金 $50\n第二名概率 ≈ 组合数计算...\n$EV ≈ 0.5×50 + 0.3×30 + 0.15×20 + 0.05×0 = $37\n\nBubble Factor（泡沫因子）：\nBF = 跟注所需 equity / 现金局所需 equity\n在泡沫期，BF 可达 1.5-2.0，意味着你需要约 1.5-2 倍的胜率才能跟注\n\n核心结论：筹码翻倍不等于奖金翻倍。5000 筹码的 $EV 不是 2500 的两倍。',
           },
           {
             type: 'theory-reference',
@@ -344,7 +344,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'formula',
-            content: 'Nash Push/Fold 均衡范围（10BB 场景）：\nSB Push 范围（面对 BB）：\n- 所有对子 22+\n- 所有 Ax\n- 所有 Kx 同花\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- 总计约 70-80% 手牌\n\nBB Call 范围（面对 SB Push）：\n- 所有对子 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- 总计约 35-40% 手牌\n\n盈亏平衡计算（前提：有效筹码 10BB，盲注 SB 0.5 / BB 1，无前注）：\nSB 全下 10BB 后底池 = SB 10 + BB 已投入 1 = 11BB\nBB 已投入 1BB，还需跟 10 - 1 = 9BB\n所需胜率 = 9 ÷ (11 + 9) = 9/20 = 45%',
+            content: 'Nash Push/Fold 均衡范围（10BB 场景）：\nSB Push 范围（面对 BB）：\n- 所有对子 22+\n- 所有 Ax\n- 所有 Kx 同花\n- KTo+\n- Q9s+, QTo+\n- J9s+, JTo\n- T9s, 98s\n- 以上为核心手牌示例（非全量），完整 Nash 范围约 50-55%\n\nBB Call 范围（面对 SB Push）：\n- 所有对子 44+\n- A7o+, A4s+\n- KTo+, K9s+\n- QJo, QTs+\n- 以上为核心手牌示例（非全量），完整范围约 35-40%\n\n盈亏平衡计算（前提：有效筹码 10BB，盲注 SB 0.5 / BB 1，无前注）：\nSB 全下 10BB 后底池 = SB 10 + BB 已投入 1 = 11BB\nBB 已投入 1BB，还需跟 10 - 1 = 9BB\n所需胜率 = 9 ÷ (11 + 9) = 9/20 = 45%',
           },
           {
             type: 'theory-reference',
@@ -353,7 +353,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'counter-intuitive',
-            content: '反直觉点：UTG 在 10BB 时 Push 范围接近全开（约 70-80%），而非“很紧”。很多玩家认为 UTG 短筹码时应该只推强牌，但实际上 Nash 均衡显示 UTG 在 10BB 时可以用极宽的范围 Push——因为弃牌意味着盲注被蚕食，而 Push 可以获得弃牌权益。',
+            content: '反直觉点：SB 在 10BB 时 Push 范围约 50-55%，比很多人想象中宽；而 UTG 只有约 20-25%。很多玩家把两者混为一谈——位置越靠后、身后未行动者越少，Push 才能越宽；弃牌意味着盲注被蚕食，而 Push 可以获得弃牌权益。',
           },
         ],
         quiz: [
@@ -1112,7 +1112,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
             { id: 'l6-bounty-p2', difficulty: 'advanced', scenario: { heroHand: ['Jh', 'Th'], heroPosition: 'CO', previousActions: [{ player: 'UTG', action: 'fold' }, { player: 'MP', action: 'fold' }], street: 'preflop', potSize: 1.5, effectiveStack: 30, gameContext: { gameType: 'mtt', tableDescription: 'PKO锦标赛，你头上有大赏金' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'JTs在CO是强牌。虽然你头上有赏金，但不要因此打得太紧。', evImpact: '-1BB' }, { action: 'Raise 2.5BB', isCorrect: true, explanation: 'JTs在CO是标准open。不要因为头上有赏金就过度保守。', evImpact: '+1.5BB' }, { action: 'Limp', isCorrect: false, explanation: 'Limp太被动。应该open raise获取主动权。', evImpact: '+0.3BB' }], relatedLessonId: 'l6-bounty' },
             { id: 'l6-bounty-p3', difficulty: 'advanced', scenario: { heroHand: ['As', '5s'], heroPosition: 'BB', previousActions: [{ player: 'BTN', action: 'raise 3BB' }, { player: 'SB', action: 'fold' }], street: 'preflop', potSize: 5.5, effectiveStack: 40, gameContext: { gameType: 'mtt', tableDescription: 'PKO锦标赛，BTN头上有大赏金' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'A5s有A阻断+同花潜力。BTN有大赏金，淘汰他的额外价值让call更优。', evImpact: '-0.5BB' }, { action: 'Call', isCorrect: true, explanation: 'BTN有大赏金，淘汰他可获得额外价值。A5s有阻断效果，call获取赏金价值。', evImpact: '+2BB' }, { action: 'Push all-in', isCorrect: false, explanation: '40BB深度不需要全下。call就够了。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-bounty' },
             { id: 'l6-bounty-p4', difficulty: 'intermediate', scenario: { heroHand: ['Qs', 'Js'], heroPosition: 'BTN', previousActions: [{ player: 'CO', action: 'raise 3BB' }], street: 'preflop', potSize: 5.5, effectiveStack: 35, gameContext: { gameType: 'mtt', tableDescription: 'PKO锦标赛，你头上有大赏金' } }, options: [{ action: 'Fold', isCorrect: false, explanation: 'QJs是强牌，不要因为头上有赏金就弃掉强牌。', evImpact: '-1.5BB' }, { action: 'Call', isCorrect: true, explanation: 'QJs是强牌。虽然你头上有赏金，但牌力足够call。注意对手可能更激进。', evImpact: '+1BB' }, { action: 'Push all-in', isCorrect: false, explanation: '35BB深度不需要全下。call就够了。', evImpact: '+0.3BB' }], relatedLessonId: 'l6-bounty' },
-            { id: 'l6-bounty-p5', difficulty: 'advanced', scenario: { heroHand: ['8h', '7h'], heroPosition: 'SB', previousActions: [{ player: 'BTN', action: 'raise 3BB' }], street: 'flop', board: ['9h', '6h', '2c'], potSize: 8, effectiveStack: 32, gameContext: { gameType: 'mtt', tableDescription: 'PKO锦标赛，BTN头上有大赏金' } }, options: [{ action: 'Check', isCorrect: false, explanation: '你有坚果同花听牌+顺子听牌！应该下注建立底池，尤其是对手有大赏金。', evImpact: '-1BB' }, { action: 'Bet 5BB', isCorrect: true, explanation: '组合听牌极强，下注建立底池。对手有大赏金，淘汰他的额外价值让半诈唬更优。', evImpact: '+2.5BB' }, { action: 'Push all-in', isCorrect: false, explanation: '32BB深度不需要用听牌全下。半诈唬下注就够了。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-bounty' },
+            { id: 'l6-bounty-p5', difficulty: 'advanced', scenario: { heroHand: ['8h', '7h'], heroPosition: 'SB', previousActions: [{ player: 'BTN', action: 'raise 3BB' }], street: 'flop', board: ['9h', '6h', '2c'], potSize: 8, effectiveStack: 32, gameContext: { gameType: 'mtt', tableDescription: 'PKO锦标赛，BTN头上有大赏金' } }, options: [{ action: 'Check', isCorrect: false, explanation: '你有同花听牌（9 outs，非坚果）+ 两头顺（8 outs），组合约15 outs！应该下注建立底池，尤其是对手有大赏金。', evImpact: '-1BB' }, { action: 'Bet 5BB', isCorrect: true, explanation: '组合听牌极强，下注建立底池。对手有大赏金，淘汰他的额外价值让半诈唬更优。', evImpact: '+2.5BB' }, { action: 'Push all-in', isCorrect: false, explanation: '32BB深度不需要用听牌全下。半诈唬下注就够了。', evImpact: '+0.5BB' }], relatedLessonId: 'l6-bounty' },
           ],
         },
       },

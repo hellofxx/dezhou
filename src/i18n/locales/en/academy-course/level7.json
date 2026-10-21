@@ -438,7 +438,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "QQ is only third pair on A-K-5-2. At 230BB don't build a big pot. Check to control — call small bets, fold to big ones.",
+          "explanation": "QQ is an underpair to the A/K on A-K-5-2. At 230BB don't build a big pot. Check to control — call small bets, fold to big ones.",
           "evImpact": "0 BB/100"
         },
         {
@@ -484,7 +484,7 @@
         },
         {
           "action": "Call",
-          "explanation": "At 300BB, set-mining 66 has excellent implied odds. Invest 2BB (SB posted 1BB) for a chance at 300BB.",
+          "explanation": "At 300BB, set-mining 66 has excellent implied odds. Invest 3BB (calling CO's 3BB open) for a chance at 300BB.",
           "evImpact": "+1.0 BB/100"
         },
         {
@@ -565,7 +565,7 @@
         {
           "action": "Bet",
           "amount": "6BB (66% pot)",
-          "explanation": "T9 has extreme equity here (nut flush draw + straight draw). Multiway strong draws should bet to build the pot, and multiway implied odds are excellent (hit and win from many players).",
+          "explanation": "T9 has extreme equity here (flush draw 9 outs + open-ended straight 8 outs, about 15 outs, non-nut). Multiway strong draws should bet to build the pot, and multiway implied odds are excellent (hit and win from many players).",
           "evImpact": "+2.0 BB/100"
         },
         {
@@ -598,17 +598,17 @@
       "option": [
         {
           "action": "C-Bet 12BB",
-          "explanation": "Bluffing Q-high in a 3-way pot has low success. Check and wait for a better spot.",
+          "explanation": "Bluffing Q-high in a 4-way pot has low success; Q♥J♥ has only a Q-high flush draw (9 outs). Check and wait for a better spot.",
           "evImpact": "-1.5 BB/100"
         },
         {
           "action": "Check",
-          "explanation": "Multiway Q-high bluffs have extremely low success (all must fold). Check.",
+          "explanation": "With only a Q-high flush draw (9 outs) in a multiway pot, bluff success is extremely low (all must fold). Check.",
           "evImpact": "0 BB/100"
         },
         {
           "action": "Bet 6BB",
-          "explanation": "Bluffing air multiway isn't good enough. Check.",
+          "explanation": "Semi-bluffing a Q-high flush draw multiway isn't good enough. Check.",
           "evImpact": "-1 BB/100"
         }
       ]
@@ -683,7 +683,7 @@
         },
         {
           "action": "Raise 15BB",
-          "explanation": "AK at 50BB is a premium hand. 3-bet to 15BB (3x straddle) is the standard size.",
+          "explanation": "AK at 50BB is a premium hand. 3-bet to 15BB (3x CO open, 7.5x straddle) is the standard size.",
           "evImpact": "+2 BB/100"
         },
         {

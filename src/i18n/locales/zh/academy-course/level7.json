@@ -438,7 +438,7 @@
       "option": [
         {
           "action": "Check",
-          "explanation": "QQ 在 A-K-5-2 牌面只是第三对。230BB 深度不应该建立大底池。Check 控制底池，如果对手下注小可以 call，下注大可以 fold。",
+          "explanation": "QQ 在 A-K-5-2 牌面是低于 A/K 的口袋对（underpair）。230BB 深度不应该建立大底池。Check 控制底池，如果对手下注小可以 call，下注大可以 fold。",
           "evImpact": "0 BB/100"
         },
         {
@@ -484,7 +484,7 @@
         },
         {
           "action": "Call",
-          "explanation": "300BB深度，66的set mine隐含赔率极好。投入2BB（SB已投1BB）有机会赢300BB。",
+          "explanation": "300BB深度，66的set mine隐含赔率极好。投入3BB（跟注 CO 的 3BB open）有机会赢300BB。",
           "evImpact": "+1.0 BB/100"
         },
         {
@@ -565,7 +565,7 @@
         {
           "action": "Bet",
           "amount": "6BB (66% pot)",
-          "explanation": "T9 在这个牌面有极强的 equity（坚果同花听牌+顺子听牌）。多人底池中强听牌应该下注建立底池，且多人底池隐含赔率极好（中牌后赢多人）。",
+          "explanation": "T9 在这个牌面有极强的 equity（同花听牌 9 outs + 两头顺 8 outs，组合约15 outs，非坚果）。多人底池中强听牌应该下注建立底池，且多人底池隐含赔率极好（中牌后赢多人）。",
           "evImpact": "+2.0 BB/100"
         },
         {
@@ -598,17 +598,17 @@
       "option": [
         {
           "action": "C-Bet 12BB",
-          "explanation": "3人底池QJ高牌bluff成功率低。Check等待更好机会。",
+          "explanation": "4 人底池，Q♥J♥ 只有 Q 高同花听牌（9 outs），多人底池半诈唬成功率低。Check 等待更好机会。",
           "evImpact": "-1.5 BB/100"
         },
         {
           "action": "Check",
-          "explanation": "多人底池Q高bluff成功率极低（需要所有人都弃牌）。Check。",
+          "explanation": "多人底池 Q♥J♥ 只有 Q 高同花听牌（9 outs），bluff 成功率极低（需要所有人都弃牌）。Check。",
           "evImpact": "0 BB/100"
         },
         {
           "action": "Bet 6BB",
-          "explanation": "多人底池用空气bluff不够好。Check。",
+          "explanation": "多人底池用 Q 高同花听牌半诈唬不够好。Check。",
           "evImpact": "-1 BB/100"
         }
       ]
@@ -683,7 +683,7 @@
         },
         {
           "action": "Raise 15BB",
-          "explanation": "AK在50BB是顶级强牌。3-bet到15BB（3x straddle）标准大小。",
+          "explanation": "AK在50BB是顶级强牌。3-bet 到 15BB（3x CO open，7.5x straddle）标准大小。",
           "evImpact": "+2 BB/100"
         },
         {

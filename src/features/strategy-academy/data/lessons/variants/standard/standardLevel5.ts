@@ -287,14 +287,14 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
               { player: 'UTG', action: 'fold' },
               { player: 'MP', action: 'fold' },
             ],
-            board: ['Ac', 'Kd', '7h', '2s', 'Ks'],
+            board: ['Qd', 'Kd', '7h', '2s', 'Ks'],
             street: 'river',
             effectiveStack: 80,
             potSize: 20,
             correctDecision: {
               action: '停下来，检查情绪',
               reasoning: [
-                '你的 AA 被对手的 Kx 在河牌击中两对反超',
+                '你的 AA 被对手的 Kx 在河牌击中三条反超',
                 '这是典型的 bad beat，你做了所有正确的决策',
                 '如果感到愤怒、想“赢回来”，说明你在 tilt',
                 '正确做法：深呼吸，离开桌子 5 分钟，评估情绪',
