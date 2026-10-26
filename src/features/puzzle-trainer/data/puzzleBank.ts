@@ -699,23 +699,6 @@ const BIG_BLIND_DEFENSE: PuzzleQuestion[] = [
     difficulty: 3,
   },
   {
-    id: 'bbd-008',
-    theme: 'big-blind-defense',
-    scenario: '6-max，100BB。CO 加注 2.5BB，你在 SB（非 BB）持有 KQs。',
-    hand: 'KQs',
-    position: 'SB',
-    potSize: 5.5,
-    betSize: 2,
-    stackSize: 100,
-    options: [
-      { id: 'a', text: '3-bet', isCorrect: true, evLoss: 0, explanation: 'SB vs CO 开牌，KQs 应 3-bet 主动隔离。' },
-      { id: 'b', text: 'Call', isCorrect: false, evLoss: 1.0, explanation: 'SB 跟注会引入 BB 多人底池，3-bet 隔离更优。' },
-      { id: 'c', text: 'Fold', isCorrect: false, evLoss: 4.5, explanation: 'KQs 弃牌严重错误。' },
-    ],
-    correctExplanation: 'SB vs CO 开牌时，KQs 应 3-bet（约 12-15BB）隔离 + 主动。SB 跟注会让 BB 免费进池，KQs 在多人底池价值降低。',
-    difficulty: 3,
-  },
-  {
     id: 'bbd-009',
     theme: 'big-blind-defense',
     scenario: '6-max，100BB。UTG 加注 3BB，你在 BB 持有 JJ，底池 6.5BB。',
@@ -1192,7 +1175,7 @@ const THREE_BET: PuzzleQuestion[] = [
       { id: 'b', text: 'Call', isCorrect: false, evLoss: 1.8, explanation: 'AKo 跟注 4bet 翻后难打（无位置 + A/K 高牌难掌控）。' },
       { id: 'c', text: 'Fold', isCorrect: false, evLoss: 3.5, explanation: 'AKo vs 4bet 弃牌过紧，应全下。' },
     ],
-    correctExplanation: 'AKo vs 4bet 是 GTO 全下核心。AKo 阻挡 AA/KK 共 6 组（12 组合），全下价值 + blocker 双重作用。',
+    correctExplanation: 'AKo vs 4bet 是 GTO 全下核心。AKo 阻挡 AA/KK 共 6 组合，全下价值 + blocker 双重作用。',
     difficulty: 2,
   },
   {
@@ -1348,6 +1331,23 @@ const THREE_BET: PuzzleQuestion[] = [
     correctExplanation: '88 vs CO 在 BTN 是稳定跟注（GTO 约 70% 跟注）。3-bet 会被 4bet 难打，跟注利用位置 + set 挖宝。',
     difficulty: 2,
   },
+  {
+    id: 'bbd-008',
+    theme: 'three-bet',
+    scenario: '6-max，100BB。CO 加注 2.5BB，你在 SB（非 BB）持有 KQs。',
+    hand: 'KQs',
+    position: 'SB',
+    potSize: 5.5,
+    betSize: 2,
+    stackSize: 100,
+    options: [
+      { id: 'a', text: '3-bet', isCorrect: true, evLoss: 0, explanation: 'SB vs CO 开牌，KQs 应 3-bet 主动隔离。' },
+      { id: 'b', text: 'Call', isCorrect: false, evLoss: 1.0, explanation: 'SB 跟注会引入 BB 多人底池，3-bet 隔离更优。' },
+      { id: 'c', text: 'Fold', isCorrect: false, evLoss: 4.5, explanation: 'KQs 弃牌严重错误。' },
+    ],
+    correctExplanation: 'SB vs CO 开牌时，KQs 应 3-bet（约 12-15BB）隔离 + 主动。SB 跟注会让 BB 免费进池，KQs 在多人底池价值降低。',
+    difficulty: 3,
+  },
 ];
 
 // ─── 主题：C-Bet 持续下注 ──────────────────────────────────────
@@ -1417,7 +1417,7 @@ const C_BET: PuzzleQuestion[] = [
       { id: 'b', text: 'Check 陷阱', isCorrect: false, evLoss: 1.0, explanation: '顺子 check 让对手免费听同花/J 顺。' },
       { id: 'c', text: 'C-bet 1.5BB', isCorrect: false, evLoss: 1.5, explanation: '小尺度 c-bet 价值不足，对手会廉价跟注听牌。' },
     ],
-    correctExplanation: '76s 在 T-9-8 是 J-7 顺子。但牌面湿润（同花 + 顺子），应 c-bet 大尺度（3/4 池）价值 + 阻断对手听牌。',
+    correctExplanation: '76s 在 T-9-8 是 6-T 顺子（6-7-8-9-T）。但牌面湿润（同花 + 顺子），应 c-bet 大尺度（3/4 池）价值 + 阻断对手听牌。',
     difficulty: 2,
   },
   {
@@ -1457,18 +1457,18 @@ const C_BET: PuzzleQuestion[] = [
   {
     id: 'cbet-007',
     theme: 'c-bet',
-    scenario: '6-max，100BB。你 CO 加注 2.5BB，BB 跟注。翻牌 Q♣ J♣ 9♥，底池 5.5BB，你持有 AKo（顶对 + 顺子听牌）。',
+    scenario: '6-max，100BB。你 CO 加注 2.5BB，BB 跟注。翻牌 Q♣ J♣ 9♥，底池 5.5BB，你持有 AKo（A 高 + 卡顺 T）。',
     hand: 'AKo',
     position: 'CO',
     board: 'Q♣ J♣ 9♥',
     potSize: 5.5,
     stackSize: 97.5,
     options: [
-      { id: 'a', text: 'C-bet 4BB', isCorrect: true, evLoss: 0, explanation: 'AKo 在 Q-J-9 顶对 + 顺子听牌，c-bet 大尺度价值 + 保护。' },
-      { id: 'b', text: 'Check', isCorrect: false, evLoss: 2.0, explanation: '顶对 + 听牌应 c-bet 价值，check 损失。' },
+      { id: 'a', text: 'C-bet 4BB', isCorrect: true, evLoss: 0, explanation: 'AKo 在 Q-J-9 是 A 高 + 卡顺 T，c-bet 大尺度半诈唬 + 保护。' },
+      { id: 'b', text: 'Check', isCorrect: false, evLoss: 2.0, explanation: 'A 高 + 卡顺应半诈唬，check 放弃弃牌率。' },
       { id: 'c', text: 'C-bet 1.8BB', isCorrect: false, evLoss: 0.8, explanation: '小尺度 c-bet 在湿润牌面保护不足。' },
     ],
-    correctExplanation: 'Q-J-9 湿润连张牌面，AKo 顶对 + 顺子听牌（T）。c-bet 大尺度（3/4 池）价值 + 保护，对手会跟 K-T/同花听牌。',
+    correctExplanation: 'Q-J-9 湿润连张牌面，AKo 是 A 高 + 卡顺 T（无对）。c-bet 大尺度（3/4 池）半诈唬 + 保护，对手会跟 K-T/同花听牌。',
     difficulty: 2,
   },
   {
@@ -1491,14 +1491,14 @@ const C_BET: PuzzleQuestion[] = [
   {
     id: 'cbet-009',
     theme: 'c-bet',
-    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 A♠ K♠ Q♥，底池 5.5BB，你持有 JTOff（顺子）。',
+    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 A♠ K♠ Q♥，底池 5.5BB，你持有 JTo（顺子）。',
     hand: 'JTo',
     position: 'BTN',
     board: 'A♠ K♠ Q♥',
     potSize: 5.5,
     stackSize: 97.5,
     options: [
-      { id: 'a', text: 'C-bet 5BB', isCorrect: true, evLoss: 0, explanation: 'JTo 在 A-K-Q 顺子，c-bet 大尺度价值 + 阻挡同花。' },
+      { id: 'a', text: 'C-bet 4BB', isCorrect: true, evLoss: 0, explanation: 'JTo 在 A-K-Q 顺子，c-bet 大尺度价值 + 阻挡同花。' },
       { id: 'b', text: 'Check 陷阱', isCorrect: false, evLoss: 1.5, explanation: '顺子 check 让对手免费听同花/葫芦。' },
       { id: 'c', text: 'C-bet 1.8BB', isCorrect: false, evLoss: 1.0, explanation: '小尺度 c-bet 价值不足。' },
     ],
@@ -1549,11 +1549,11 @@ const C_BET: PuzzleQuestion[] = [
     potSize: 6.5,
     stackSize: 97,
     options: [
-      { id: 'a', text: 'C-bet 2BB', isCorrect: true, evLoss: 0, explanation: 'KK 在 Q-8-3 顶对，c-bet 1/3 池价值 + 保护。' },
+      { id: 'a', text: 'C-bet 2BB', isCorrect: true, evLoss: 0, explanation: 'KK 在 Q-8-3 是超对，c-bet 1/3 池价值 + 保护。' },
       { id: 'b', text: 'C-bet 5BB', isCorrect: false, evLoss: 0.7, explanation: '大尺度过度，对手弱牌会弃。' },
-      { id: 'c', text: 'Check', isCorrect: false, evLoss: 1.5, explanation: '顶对应 c-bet 价值，check 损失。' },
+      { id: 'c', text: 'Check', isCorrect: false, evLoss: 1.5, explanation: '超对应 c-bet 价值，check 损失。' },
     ],
-    correctExplanation: 'Q-8-3 干燥单一高牌，KK 顶对顶 kicker。c-bet 1/3 池（约 2BB）价值 + 保护，对手会跟 Q-x/8-x/小对。',
+    correctExplanation: 'Q-8-3 干燥单一高牌，KK 是超对（overpair）。c-bet 1/3 池（约 2BB）价值 + 保护，对手会跟 Q-x/8-x/小对。',
     difficulty: 1,
   },
   {
@@ -1570,7 +1570,7 @@ const C_BET: PuzzleQuestion[] = [
       { id: 'b', text: 'C-bet 1.8BB', isCorrect: false, evLoss: 1.0, explanation: '小尺度 c-bet 在湿润牌面保护不足。' },
       { id: 'c', text: 'Check', isCorrect: false, evLoss: 1.8, explanation: '顶对 + 听牌应 c-bet 价值。' },
     ],
-    correctExplanation: '9-8-7 湿润连张牌面，T9s 顶对 + J/T 顺子听牌。c-bet 大尺度（3/4 池）价值 + 保护，对手会跟大量听牌。',
+    correctExplanation: '9-8-7 湿润连张牌面，T9s 顶对 + J/6 顺子听牌。c-bet 大尺度（3/4 池）价值 + 保护，对手会跟大量听牌。',
     difficulty: 2,
   },
   {
@@ -1728,7 +1728,7 @@ const FLUSH_DRAW: PuzzleQuestion[] = [
       { id: 'b', text: 'Fold', isCorrect: false, evLoss: 2.5, explanation: '15 outs 听牌弃牌严重错误。' },
       { id: 'c', text: 'Raise', isCorrect: false, evLoss: 0.8, explanation: '加注也可作为半诈唬，但跟注更稳。' },
     ],
-    correctExplanation: '9♥ 7♥ 在 T-8-3 是同花（9 outs）+ 顺子（6 outs J/6）共 15 outs。约 54% 胜率（二四法则 ×2 = 60%），跟注 +EV。',
+    correctExplanation: '9♥ 7♥ 在 T-8-3 是同花（9 outs）+ 顺子（6 outs J/6）共 15 outs。约 54% 胜率（二四法则 ×4 ≈ 60%，精确约 54%），跟注 +EV。',
     difficulty: 2,
   },
   {
@@ -1777,8 +1777,8 @@ const FLUSH_DRAW: PuzzleQuestion[] = [
     betSize: 6,
     stackSize: 97,
     options: [
-      { id: 'a', text: 'Call', isCorrect: true, evLoss: 0, explanation: '7♠ 6♠ 同花 + 顺子听牌（9+4 = 13 outs），跟注 +EV。' },
-      { id: 'b', text: 'Fold', isCorrect: false, evLoss: 1.5, explanation: '13 outs 听牌弃牌过紧。' },
+      { id: 'a', text: 'Call', isCorrect: true, evLoss: 0, explanation: '7♠ 6♠ 同花 + 顺子听牌（9+6 = 15 outs，4♠/9♠ 已计入同花），跟注 +EV。' },
+      { id: 'b', text: 'Fold', isCorrect: false, evLoss: 1.5, explanation: '15 outs 听牌弃牌过紧。' },
       { id: 'c', text: 'Raise', isCorrect: false, evLoss: 0.6, explanation: '加注也可作为半诈唬，但跟注更稳。' },
     ],
     correctExplanation: '7♠ 6♠ 在 8-5-2 是同花听牌（9 outs）+ 顺子听牌（4/9 共 8 outs，但 4♠ 9♠ 已计入同花，实际净增 6 outs）≈ 15 outs。约 54% 胜率，跟注 +EV。',
@@ -1799,7 +1799,7 @@ const FLUSH_DRAW: PuzzleQuestion[] = [
       { id: 'b', text: 'Fold', isCorrect: false, evLoss: 1.0, explanation: '同花听牌弃牌略紧。' },
       { id: 'c', text: 'Raise', isCorrect: false, evLoss: 0.8, explanation: '加注会被 A 高范围 3-bet，风险大。' },
     ],
-    correctExplanation: 'K♦ Q♦ 在 A-9-3 是第二坚果同花听牌（A♦ 阻碍）。9 outs × 2 ≈ 18% 胜率（turn→river），底池赔率 4:16 = 25% 边界，但隐含赔率充足。',
+    correctExplanation: 'K♦ Q♦ 在 A-9-3 是第二坚果同花听牌（A♦ 阻碍）。9 outs × 4 ≈ 36% 胜率（flop→river），底池赔率 4:16 = 25% 已足够，另有隐含赔率。',
     difficulty: 2,
   },
   {
@@ -2084,7 +2084,7 @@ const RIVER_VALUE: PuzzleQuestion[] = [
       { id: 'b', text: 'Check', isCorrect: false, evLoss: 1.0, explanation: '顶对顶 kicker 应价值下注。' },
       { id: 'c', text: 'Bet 11BB', isCorrect: false, evLoss: 1.0, explanation: '大尺度过度，对手弱牌会弃。' },
     ],
-    correctExplanation: 'Q-8-3-5-J 牌面，AQo 顶对顶 kicker 但 J 转牌让对手 K-T 顺子可能。价值下注 1/3 池（约 4BB）薄价值。',
+    correctExplanation: 'Q-8-3-5-J 牌面，AQo 顶对顶 kicker 但 J 河牌让对手 T9 顺子可能。价值下注 1/3 池（约 4BB）薄价值。',
     difficulty: 1,
   },
   {
@@ -2152,24 +2152,24 @@ const RIVER_VALUE: PuzzleQuestion[] = [
       { id: 'b', text: 'Check', isCorrect: false, evLoss: 2.0, explanation: '三条 check 损失大量价值。' },
       { id: 'c', text: 'Bet 4BB', isCorrect: false, evLoss: 1.2, explanation: '小尺度价值不足。' },
     ],
-    correctExplanation: 'J-8-3-T-4 牌面，JJ 顶三条。但 T 转牌让对手 K-Q 顺子可能。价值下注 3/4 池（约 10BB），对手会跟 J-x/T-x/小对。',
+    correctExplanation: 'J-8-3-T-4 牌面，JJ 顶三条。但对手 Q9（8-9-T-J-Q）/97（7-8-9-T-J）已成顺子，KQ 只是 A/9 听牌。价值下注 3/4 池（约 10BB），对手会跟 J-x/T-x/小对。',
     difficulty: 1,
   },
   {
     id: 'rv-007',
     theme: 'river-value',
-    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 A♥ 9♦ 5♣，转牌 7♦，河牌 2♣，底池 11BB，你持有 A9o（顶对弱 kicker）。',
-    hand: 'A9o',
+    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 A♥ 9♦ 5♣，转牌 7♦，河牌 2♣，底池 11BB，你持有 A8o（顶对弱 kicker）。',
+    hand: 'A8o',
     position: 'BTN',
     board: 'A♥ 9♦ 5♣ 7♦ 2♣',
     potSize: 11,
     stackSize: 95,
     options: [
-      { id: 'a', text: 'Check', isCorrect: true, evLoss: 0, explanation: 'A9o 顶对弱 kicker，河牌 check 控池。' },
+      { id: 'a', text: 'Check', isCorrect: true, evLoss: 0, explanation: 'A8o 顶对弱 kicker，河牌 check 控池。' },
       { id: 'b', text: 'Bet 7BB', isCorrect: false, evLoss: 1.5, explanation: '价值下注风险大，被 AT+ 主导。' },
       { id: 'c', text: 'Bet 3BB', isCorrect: false, evLoss: 0.6, explanation: '薄价值下注也可，但 check 更稳。' },
     ],
-    correctExplanation: 'A-9-5-7-2 干燥牌面，A9o 顶对弱 kicker（被 AT+ 主导）。Check 控池 showdown，价值下注风险大于收益。',
+    correctExplanation: 'A-9-5-7-2 干燥牌面，A8o 顶对弱 kicker（被 AT+ 主导）。Check 控池 showdown，价值下注风险大于收益。',
     difficulty: 2,
   },
   {
@@ -2182,28 +2182,28 @@ const RIVER_VALUE: PuzzleQuestion[] = [
     potSize: 11,
     stackSize: 95,
     options: [
-      { id: 'a', text: 'Check', isCorrect: true, evLoss: 0, explanation: 'QTs 顶对被 K 转牌压制，check 控池。' },
+      { id: 'a', text: 'Check', isCorrect: true, evLoss: 0, explanation: 'QTs Q 对被 K 河牌压制，check 控池。' },
       { id: 'b', text: 'Bet 7BB', isCorrect: false, evLoss: 1.8, explanation: '价值下注风险大，被 K-x 主导。' },
       { id: 'c', text: 'Bet 3BB', isCorrect: false, evLoss: 0.8, explanation: '薄价值下注也可，但 check 更稳。' },
     ],
-    correctExplanation: 'Q-9-4-7-K 牌面，QTs 顶对但被 K 转牌压制（对手 K-x 主导）。Check 控池 showdown，价值下注风险大于收益。',
+    correctExplanation: 'Q-9-4-7-K 牌面，QTs Q 对但被 K 河牌压制（对手 K-x 主导）。Check 控池 showdown，价值下注风险大于收益。',
     difficulty: 2,
   },
   {
     id: 'rv-009',
     theme: 'river-value',
-    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 T♠ 8♦ 3♣，转牌 7♥，河牌 J♦，底池 11BB，你持有 T9s（顶对）。',
+    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 T♠ 8♦ 3♣，转牌 2♥，河牌 J♦，底池 11BB，你持有 T9s（顶对）。',
     hand: 'T9s',
     position: 'BTN',
-    board: 'T♠ 8♦ 3♣ 7♥ J♦',
+    board: 'T♠ 8♦ 3♣ 2♥ J♦',
     potSize: 11,
     stackSize: 95,
     options: [
-      { id: 'a', text: 'Check', isCorrect: true, evLoss: 0, explanation: 'T9s 顶对被 J 转牌压制，check 控池。' },
-      { id: 'b', text: 'Bet 7BB', isCorrect: false, evLoss: 1.5, explanation: '价值下注风险大，被 J-x/K-Q 顺子主导。' },
+      { id: 'a', text: 'Check', isCorrect: true, evLoss: 0, explanation: 'T9s 顶对被 J 河牌压制，check 控池。' },
+      { id: 'b', text: 'Bet 7BB', isCorrect: false, evLoss: 1.5, explanation: '价值下注风险大，被 J-x/Q9 顺子主导。' },
       { id: 'c', text: 'Bet 3BB', isCorrect: false, evLoss: 0.7, explanation: '薄价值下注也可，但 check 更稳。' },
     ],
-    correctExplanation: 'T-8-3-7-J 牌面，T9s 顶对但被 J 转牌压制（对手 J-x 主导，K-Q 顺子已成）。Check 控池 showdown。',
+    correctExplanation: 'T-8-3-2-J 牌面，T9s 顶对但被 J 河牌压制（对手 J-x 主导，Q9 顺子可能）。Check 控池 showdown。',
     difficulty: 2,
   },
   {
@@ -2254,24 +2254,24 @@ const RIVER_VALUE: PuzzleQuestion[] = [
       { id: 'b', text: 'Check', isCorrect: false, evLoss: 0.5, explanation: 'Check 也可，但薄价值 EV 略高。' },
       { id: 'c', text: 'Bet 9BB', isCorrect: false, evLoss: 1.2, explanation: '大尺度过度，对手弱牌会弃。' },
     ],
-    correctExplanation: 'Q-J-8-4-2 牌面，QTs 顶对（被 K-9 顺子压制可能）。薄价值下注 1/3 池（约 4BB），对手会跟 Q-x/J-x/小对。',
+    correctExplanation: 'Q-J-8-4-2 牌面，QTs 顶对（被 T9 顺子压制可能）。薄价值下注 1/3 池（约 4BB），对手会跟 Q-x/J-x/小对。',
     difficulty: 2,
   },
   {
     id: 'rv-013',
     theme: 'river-value',
-    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 A♠ Q♦ 9♣，转牌 7♥，河牌 5♦，底池 11BB，你持有 AJT（顶对 + 顺子）。',
-    hand: 'AJT',
+    scenario: '6-max，100BB。你 BTN 加注 2.5BB，BB 跟注。翻牌 A♠ Q♦ 9♣，转牌 7♥，河牌 5♦，底池 11BB，你持有 AJ（顶对 + 卡顺）。',
+    hand: 'AJ',
     position: 'BTN',
     board: 'A♠ Q♦ 9♣ 7♥ 5♦',
     potSize: 11,
     stackSize: 95,
     options: [
-      { id: 'a', text: 'Bet 7BB', isCorrect: true, evLoss: 0, explanation: 'AJT 顶对 + K 顺子听牌（已落空），河牌价值下注 2/3 池。' },
+      { id: 'a', text: 'Bet 7BB', isCorrect: true, evLoss: 0, explanation: 'AJ 顶对 + T 顺子听牌（已落空），河牌价值下注 2/3 池。' },
       { id: 'b', text: 'Check', isCorrect: false, evLoss: 1.2, explanation: '顶对应价值下注。' },
       { id: 'c', text: 'Bet 15BB', isCorrect: false, evLoss: 1.0, explanation: '大尺度过度，对手弱牌会弃。' },
     ],
-    correctExplanation: 'A-Q-9-7-5 牌面，AJT 顶对 + 顺子听牌已落空。价值下注 2/3 池（约 7BB），对手会跟 A-x/Q-x/小对。',
+    correctExplanation: 'A-Q-9-7-5 牌面，AJ 顶对 + T 顺子听牌已落空。价值下注 2/3 池（约 7BB），对手会跟 A-x/Q-x/小对。',
     difficulty: 2,
   },
   {
@@ -2356,7 +2356,7 @@ const RIVER_VALUE: PuzzleQuestion[] = [
       { id: 'b', text: 'Check 陷阱', isCorrect: false, evLoss: 1.8, explanation: '三条 check 让对手免费看牌。' },
       { id: 'c', text: 'Bet 3BB', isCorrect: false, evLoss: 1.2, explanation: '小尺度价值不足。' },
     ],
-    correctExplanation: 'J-8-3-T-4 牌面，JJ 顶三条。但 K-Q 顺子可能。价值下注 3/4 池（约 9BB），对手会跟 J-x/T-x/小对。',
+    correctExplanation: 'J-8-3-T-4 牌面，JJ 顶三条。但对手 Q9（8-9-T-J-Q）/97（7-8-9-T-J）已成顺子，KQ 只是 A/9 听牌。价值下注 3/4 池（约 9BB），对手会跟 J-x/T-x/小对。',
     difficulty: 3,
   },
   {
@@ -2373,7 +2373,7 @@ const RIVER_VALUE: PuzzleQuestion[] = [
       { id: 'b', text: 'Check', isCorrect: false, evLoss: 1.5, explanation: '顺子 check 损失价值。' },
       { id: 'c', text: 'Bet 3BB', isCorrect: false, evLoss: 1.0, explanation: '小尺度价值不足。' },
     ],
-    correctExplanation: '7-5-2-4-6 牌面，89 顺子（5-6-7-8-9）。但 8-9 顺子被 3-6-7-8-9 顺子压制可能。价值下注 3/4 池（约 9BB）。',
+    correctExplanation: '7-5-2-4-6 牌面，89 顺子（5-6-7-8-9）。但 8-9 顺子被 T8（6-7-8-9-T）压制可能。价值下注 3/4 池（约 9BB）。',
     difficulty: 3,
   },
   {
@@ -3606,7 +3606,7 @@ export const PUZZLE_BANK: Record<PuzzleTheme, PuzzleQuestion[]> = {
  * 且顺序 100% 确定，跨日期、跨用户完全一致。
  */
 function withCanonicalOptions(q: PuzzleQuestion): PuzzleQuestion {
-  return { ...q, options: sortOptionsCanonically(q.options) };
+  return { ...q, evBasis: q.evBasis ?? 'none', options: sortOptionsCanonically(q.options) };
 }
 
 /**
