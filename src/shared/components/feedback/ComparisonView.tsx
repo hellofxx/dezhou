@@ -13,9 +13,11 @@ interface ComparisonViewProps {
   userAction?: string;
   /** GTO 推荐动作描述 */
   gtoAction?: string;
+  /** 推荐动作标题（缺省用 feedback.decisionAnalysis.gtoOptimal） */
+  recommendedLabel?: string;
 }
 
-export function ComparisonView({ userAction, gtoAction }: ComparisonViewProps) {
+export function ComparisonView({ userAction, gtoAction, recommendedLabel }: ComparisonViewProps) {
   const { t } = useTranslation();
 
   return (
@@ -31,7 +33,7 @@ export function ComparisonView({ userAction, gtoAction }: ComparisonViewProps) {
       {gtoAction && (
         <div className="flex-1 bg-[var(--poker-brass-glow)] px-4 py-3">
           <div className="text-[10px] uppercase tracking-wide text-[var(--poker-ivory-muted)]">
-            {t('feedback.decisionAnalysis.gtoOptimal')}
+            {recommendedLabel ?? t('feedback.decisionAnalysis.gtoOptimal')}
           </div>
           <div className="mt-1 text-base text-[var(--poker-brass)]">{gtoAction}</div>
         </div>

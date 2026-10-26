@@ -74,7 +74,11 @@
     "fullExplanation": "Full Explanation",
     "correctAnswerPrefix": "Correct answer: {{answer}}",
     "nextQuestion": "Next",
-    "viewResult": "View Result"
+    "viewResult": "View Result",
+    "binaryCorrect": "Correct",
+    "binaryWrong": "Incorrect",
+    "recommendedAction": "Recommended action",
+    "evUncalibratedNote": "No EV calibration is available for this question — showing correct/incorrect only"
   },
   "rush": {
     "title": "{{minutes}}-Minute Rush",

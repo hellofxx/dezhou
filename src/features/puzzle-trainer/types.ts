@@ -31,6 +31,14 @@ export type PuzzleThemeCategory =
 /** 题目难度 */
 export type PuzzleDifficulty = 1 | 2 | 3; // 1 简单 / 2 中等 / 3 难
 
+/**
+ * EV 标定依据（PRD §6.7.1「EV 标定诚实性」）。
+ *
+ * 只有 solver / verified 才允许在反馈中呈现五级评级与 EV 损失数值；
+ * estimate / none 一律降级为「正确 / 错误 + 解析」二态呈现。
+ */
+export type PuzzleEvBasis = 'solver' | 'verified' | 'estimate' | 'none';
+
 /** 单个选项 */
 export interface PuzzleOption {
   id: string;
@@ -65,6 +73,11 @@ export interface PuzzleQuestion {
   /** 完整解析 */
   correctExplanation: string;
   difficulty: PuzzleDifficulty;
+  /**
+   * EV 标定依据；缺省视为 'none'（题库出口统一补默认值）。
+   * 仅 solver / verified 允许呈现五级反馈与 EV 数值，见 PRD §6.7.1。
+   */
+  evBasis?: PuzzleEvBasis;
 }
 
 /** 模式类型 */

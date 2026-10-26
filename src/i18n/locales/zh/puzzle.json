@@ -74,7 +74,11 @@
     "fullExplanation": "完整解析",
     "correctAnswerPrefix": "正确答案：{{answer}}",
     "nextQuestion": "下一题",
-    "viewResult": "查看结果"
+    "viewResult": "查看结果",
+    "binaryCorrect": "回答正确",
+    "binaryWrong": "回答错误",
+    "recommendedAction": "推荐动作",
+    "evUncalibratedNote": "本题未提供 EV 标定，仅显示对错与解析"
   },
   "rush": {
     "title": "{{minutes}} 分钟限时冲刺",

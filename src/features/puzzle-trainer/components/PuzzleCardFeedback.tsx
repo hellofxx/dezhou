@@ -17,6 +17,7 @@ import { RelatedLessonChip } from '@/shared/components/feedback/RelatedLessonChi
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import type { PuzzleAnswerRecord, PuzzleQuestion } from '../types';
+import { hasCalibratedEv } from '../utils/evCalibration';
 
 /** 五级反馈面板 */
 export function PuzzleCardFeedback({
@@ -32,10 +33,13 @@ export function PuzzleCardFeedback({
 }) {
   const { t } = useTranslation();
   const config = GRADE_DISPLAY_CONFIG[record.grade];
+  const calibrated = hasCalibratedEv(question);
   const selectedOption = question.options.find((o) => o.id === record.selectedOptionId);
   const correctOption = question.options.find((o) => o.isCorrect);
-  // 错误级别（wrong/blunder）：默认展开决策分析 + 显示"再做一题"
-  const isErrorGrade = record.grade === 'wrong' || record.grade === 'blunder';
+  // 已标定：沿用 wrong/blunder 默认展开；未标定：任何答错都默认展开，并显示「再做一题」
+  const isErrorGrade = calibrated
+    ? record.grade === 'wrong' || record.grade === 'blunder'
+    : !record.isCorrect;
 
   return (
     <motion.div
@@ -45,15 +49,34 @@ export function PuzzleCardFeedback({
       className="mt-2 rounded-md border border-[var(--walnut-border)]/60 bg-[var(--walnut)]/30 p-3 space-y-2"
     >
       {/* 评级 + 文案 */}
-      <div className="flex items-center gap-2 text-sm">
-        <span className="text-base">{config.icon}</span>
-        <span className={cn('font-display tracking-wide', config.textColor)}>
-          {t(config.titleKey)}
-        </span>
-        {record.evLoss > 0 && (
-          <span className="text-xs text-[var(--ivory-dim)] font-numeric">
-            EV {record.evLoss.toFixed(1)} BB
-          </span>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        {calibrated ? (
+          <>
+            <span className="text-base">{config.icon}</span>
+            <span className={cn('font-display tracking-wide', config.textColor)}>
+              {t(config.titleKey)}
+            </span>
+            {record.evLoss > 0 && (
+              <span className="text-xs text-[var(--ivory-dim)] font-numeric">
+                EV {record.evLoss.toFixed(1)} BB
+              </span>
+            )}
+          </>
+        ) : (
+          <>
+            <span className="text-base">{record.isCorrect ? '✅' : '❌'}</span>
+            <span
+              className={cn(
+                'font-display tracking-wide',
+                record.isCorrect ? 'text-[var(--success)]' : 'text-[var(--clay)]'
+              )}
+            >
+              {t(record.isCorrect ? 'puzzle.card.binaryCorrect' : 'puzzle.card.binaryWrong')}
+            </span>
+            <span className="text-[10px] text-[var(--ivory-muted)]">
+              {t('puzzle.card.evUncalibratedNote')}
+            </span>
+          </>
         )}
       </div>
 
@@ -80,6 +103,7 @@ export function PuzzleCardFeedback({
         gtoAction={correctOption?.text}
         difference={selectedOption?.explanation}
         relatedLessonId={record.relatedLessonId}
+        recommendedLabel={calibrated ? undefined : t('puzzle.card.recommendedAction')}
         defaultOpen={isErrorGrade}
       />
 

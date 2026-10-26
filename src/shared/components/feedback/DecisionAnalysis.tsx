@@ -24,6 +24,8 @@ interface DecisionAnalysisProps {
   difference?: string;
   /** 相关课程 id（用于 related-lesson-chip） */
   relatedLessonId?: string;
+  /** 推荐动作标题（缺省用 feedback.decisionAnalysis.gtoOptimal） */
+  recommendedLabel?: string;
   /** 默认是否展开（wrong/blunder 默认展开） */
   defaultOpen?: boolean;
 }
@@ -33,6 +35,7 @@ export function DecisionAnalysis({
   gtoAction,
   difference,
   relatedLessonId,
+  recommendedLabel,
   defaultOpen = false,
 }: DecisionAnalysisProps) {
   const { t } = useTranslation();
@@ -69,7 +72,11 @@ export function DecisionAnalysis({
           >
             <div className="mt-3 space-y-3">
               {(userAction || gtoAction) && (
-                <ComparisonView userAction={userAction} gtoAction={gtoAction} />
+                <ComparisonView
+                  userAction={userAction}
+                  gtoAction={gtoAction}
+                  recommendedLabel={recommendedLabel}
+                />
               )}
               {difference && (
                 <p className="text-sm text-[var(--poker-ivory-dim)]">

@@ -9,6 +9,16 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-10-26 扑克谜题内容审计 P0：牌面/outs/组合数修正 + EV 标定诚实性（2 个 commit）
+
+对 puzzle-trainer 205 题 / 10 主题做内容审计，本批只处理「可复算错误」与「EV 呈现诚实性」；策略边界题（rfi-020、bbd-002、icm-014 等）与底池/赔率口径统一（bbd / three-bet / icm / multiway 约 60+ 题）留待后续批次，不混入本批。
+
+- **内容修正**：rv-002 的 K-T→T9 顺子、J 转牌→河牌；rv-006/018 的 K-Q→Q9/97；rv-009 保留 T9s 但移除成顺的 7♥（改板 T♠8♦3♣2♥J♦）并把 K-Q→Q9；rv-012 的 K-9→T9；rv-019 的 3-6-7-8-9→T8（6-7-8-9-T）；cbet-004 的 J-7→6-T 顺子；cbet-007 AKo 无对（顶对→A 高 + 卡顺 T）；cbet-012 KK 顶对→超对；rv-007 A9o 两对→A8o 顶对；rv-008 K 转牌→K 河牌、顶对→Q 对；rv-013 非法手牌 AJT→AJ、K 顺子听牌→T 顺子听牌；cbet-009 5BB→4BB 并修正 JTOff 笔误；cbet-013 J/T→J/6；flsh-002 二四法则 ×2→×4；flsh-005 13→15 outs；flsh-006 翻牌 9 outs×2→×4；3bet-011「6 组（12 组合）」→「6 组合」；bbd-008 从 big-blind-defense 移入 three-bet。
+- **回归锁**：新增 `puzzleBank.content.test.ts`（10 用例）锁牌面合法性/街道/同花听牌/解析非空，以及上述错误不得回归。
+- **EV 标定诚实性（PRD §6.7.1）**：`PuzzleQuestion` 新增 `evBasis: solver | verified | estimate | none`，题库出口默认 `none`；新增 `hasCalibratedEv`。未标定题反馈改为二态（正确/错误 + 解析 + 推荐动作），不再显示五级徽章、EV 数值或「GTO 最优」口径；已标定题保留原呈现。新增 `evCalibration.test.ts`（3 用例）与 `PuzzleCardFeedback.test.tsx`（2 用例）。
+- **验证**：`node_modules/.bin/vitest run` 全量 179 文件 / 1237 测试通过；`tsc --noEmit`、改动文件 eslint、`line-count-guard` / `localeParity` / `staticKeyGuard` 均通过。未起 dev server，浏览器视觉未验证。
+- **未覆盖**：B2 学科正确性复核（研究助手未接单）；B4 底池/赔率口径统一；B5 内容多样性/去重/i18n（转牌题 0、205 题全 3 选项、55/89 翻后题手牌简写）。
+
 ### 2026-10-21 策略学院标准德州内容复算：L3-L7 存量清零 + L1/L2/L8/本土课抽查（5 个 commit）
 
 针对标准德州（不含短牌/单挑），逐条复核 `standardQuantAudit.test.ts` 人工复核索引中的 #3-#12，并对 L1/L2/L8 与 17 门本土课做同类数值抽查。全部修改同步数据层中文原文与 zh/en 课程文案；未编造任何数值型 `evLoss`（standard 标定基线仍为 0）。
