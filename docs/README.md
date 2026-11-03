@@ -8,6 +8,7 @@
 - [`TDD.md`](./TDD.md) — 技术设计（How）
 - [`CHANGELOG.md`](./CHANGELOG.md) — 当前变更记录（倒序，仅保留近月内容）
 - [`AI_GUIDE.md`](./AI_GUIDE.md) — 编码与工程实践指南
+- [`testing/README.md`](./testing/README.md) — 测试体系规范（分层 / 命名 / 执行矩阵 / 责任）
 - [`../DESIGN.md`](../DESIGN.md) — UI/UX 设计语言规范（仓库根，唯一设计契约源）
 
 ## Agents

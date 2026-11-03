@@ -8,6 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import { THEORY_LEVELS } from './levels';
 import { ALL_VARIANT_THEORY_LEVELS } from './levels/variants';
+import { SUPPLEMENTAL_CHAPTER_IDS } from './levels/variants/standard/chapterMeta';
 import type { TheoryChapter } from '../types';
 
 const ELO_DIMENSIONS = new Set(['preflop', 'postflop', 'math', 'handReading', 'mental']);
@@ -28,6 +29,7 @@ const EXPECTED_PRACTICE_LESSON_IDS = [
   'l3-bet-sizing', 'l3-cbet', 'l4-overbet', 'l4-opponent-reading',
   'l8-exploitative-adjustments', 'l5-tilt', 'l5-bankroll', 'l5-session-review',
   'l6-icm', 'l6-bounty', 'l7-multiway', 'l7-rake', 'l8-pool-tendencies',
+  'l2-bb-defense', 'l2-3bet-basics', 'l2-4bet-strategy', 'l3-multistreet', 'l3-bluffing',
   'local-ante',
 ].sort();
 
@@ -96,7 +98,7 @@ describe('theory integrity: 判分数据合法性', () => {
       if (!ELO_DIMENSIONS.has(chapter.eloDimension)) bad.push(`${chapter.id}: eloDimension=${chapter.eloDimension}`);
       if (chapter.content.some((s) => !s.content.trim())) bad.push(`${chapter.id}: 存在空段落`);
       // 学习目标为必填：类型上可选只为兼容旧数据与共用类型，缺漏由本断言拦下。
-      // 条数上界 5、下界 3 与现役 37 章（3-4 条）一致，防止"凑数一条"或整段悬空。
+      // 条数上界 5、下界 3 与既有章节的写法一致，防止"凑数一条"或整段悬空。
       if (chapter.objectives === undefined) {
         bad.push(`${chapter.id}: 缺少 objectives（每章须声明 3-5 条学习目标）`);
       } else {
@@ -111,7 +113,7 @@ describe('theory integrity: 判分数据合法性', () => {
   });
 
   /**
-   * 正文排版与跨章引用的卫生检查，覆盖三变体全部章节（81 章）。
+   * 正文排版与跨章引用的卫生检查，覆盖三变体全部章节。
    * 四条禁令各对应一类已被实测证实会坏掉或显示错的写法：
    * - `**x**`：`TheorySectionRenderer` 以纯文本节点渲染，星号会原样出现在页面上
    * - "本级第 N 章 / 本章第 3 章"式编号引用：加章或调序即指向错的章，且"本章第 3 章"自相矛盾
@@ -193,5 +195,32 @@ describe('theory integrity: 实践推荐结构合法性', () => {
     ];
     expect(chapterLessonIds.length).toBeGreaterThan(0);
     expect(chapterLessonIds.filter((id) => !EXPECTED_PRACTICE_LESSON_IDS.includes(id))).toEqual([]);
+  });
+});
+
+describe('theory integrity: 增补章标记', () => {
+  const allVariantChapters: TheoryChapter[] = ALL_VARIANT_THEORY_LEVELS.flatMap((level) => level.chapters);
+
+  // 增补章 id 表是解锁与核心进度过滤的唯一判据（theoryMeta 与 store 都读它），
+  // 一旦有章节带着标记却不在表内（或反之），两种口径会立刻分叉：
+  // 解锁被增补章拖住、或增补章被算进核心进度，两种都是回锁事故。
+  it('SUPPLEMENTAL_CHAPTER_IDS 与实际标为增补的章节集合完全相等（覆盖三变体、双向）', () => {
+    const flagged = allVariantChapters
+      .filter((chapter) => chapter.supplemental === true)
+      .map((chapter) => chapter.id);
+    expect(new Set(flagged)).toEqual(new Set(SUPPLEMENTAL_CHAPTER_IDS));
+    const strayFlags = allVariantChapters
+      .filter((chapter) => !SUPPLEMENTAL_CHAPTER_IDS.has(chapter.id) && chapter.supplemental !== undefined)
+      .map((chapter) => `${chapter.id}: supplemental=${String(chapter.supplemental)}`);
+    expect(strayFlags).toEqual([]);
+  });
+
+  // 主题标签喂给学习路径筛选：增补章缺标签不会报错，只会从所有路径里静默消失。
+  it('每个增补章都带非空主题标签', () => {
+    const missing = [...SUPPLEMENTAL_CHAPTER_IDS].filter((id) => {
+      const chapter = allVariantChapters.find((candidate) => candidate.id === id);
+      return !chapter || (chapter.pathTags?.length ?? 0) === 0;
+    });
+    expect(missing).toEqual([]);
   });
 });

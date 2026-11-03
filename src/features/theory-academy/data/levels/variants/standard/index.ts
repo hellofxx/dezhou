@@ -1,5 +1,13 @@
 import type { TheoryChapter, TheoryLevelInfo } from '../../../../types';
+import { applyStandardChapterMeta } from './chapterMeta';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS } from './chapterPracticeMap';
+import { sixMaxTableChapter } from './chapters/t1-sixmax-table';
+import { blindBattleChapter } from './chapters/t3-blind-battle';
+import { sixMaxRangesChapter } from './chapters/t4-sixmax-ranges';
+import { threeBetPotChapter } from './chapters/t6-3bet-pot';
+import { srpPostflopChapter } from './chapters/t6-srp-postflop';
+import { turnRiverChapter } from './chapters/t6-turn-river';
+import { sixMaxCapstoneChapter } from './chapters/t9-sixmax-capstone';
 import { STANDARD_LEVEL_1_CHAPTERS } from './standardLevel1';
 import { STANDARD_LEVEL_2_CHAPTERS } from './standardLevel2';
 import { STANDARD_LEVEL_3_CHAPTERS } from './standardLevel3';
@@ -23,6 +31,29 @@ function withChapterPractice(chapters: TheoryChapter[]): TheoryChapter[] {
   });
 }
 
+/**
+ * 各 Level 的增补章（6-max 现金主线）。
+ * 增补章独立成文件，避免继续堆高已顶到行数上限的 standardLevelN.ts；
+ * 它们不参与 Level 解锁判定，只追加在核心章之后供选读。
+ */
+const SUPPLEMENTAL_BY_LEVEL: Readonly<Record<number, TheoryChapter[]>> = {
+  1: sixMaxTableChapter,
+  3: blindBattleChapter,
+  4: sixMaxRangesChapter,
+  6: [...srpPostflopChapter, ...threeBetPotChapter, ...turnRiverChapter],
+  9: sixMaxCapstoneChapter,
+};
+
+/**
+ * 核心章 + 增补章按 order 合并，再依次附加章节级实践推荐与增补/主题元数据。
+ * 顺序不可调换：实践映射先落地，meta 打标才能作用在最终对象上。
+ */
+function composeChapters(core: TheoryChapter[], level: number): TheoryChapter[] {
+  const supplemental = SUPPLEMENTAL_BY_LEVEL[level] ?? [];
+  const merged = [...core, ...supplemental].toSorted((a, b) => a.order - b.order);
+  return applyStandardChapterMeta(withChapterPractice(merged));
+}
+
 export const standardLevels: TheoryLevelInfo[] = [
   {
     id: 't1',
@@ -33,7 +64,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🎲',
     variant: 'standard',
     unlockRequirement: '无',
-    chapters: withChapterPractice(STANDARD_LEVEL_1_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_1_CHAPTERS, 1),
     practiceRecommendations: {
       lessons: [
         { id: 'l1-basics', title: '德州扑克规则与牌型' },
@@ -51,7 +82,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '⚖️',
     variant: 'standard',
     unlockRequirement: '完成 T1 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_2_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_2_CHAPTERS, 2),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-ev-thinking', title: 'EV 思维' },
@@ -68,11 +99,12 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🧭',
     variant: 'standard',
     unlockRequirement: '完成 T2 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_3_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_3_CHAPTERS, 3),
     practiceRecommendations: {
       lessons: [
         { id: 'l1-position', title: '位置的力量' },
         { id: 'l2-raise-sizing', title: '加注大小' },
+        { id: 'l2-bb-defense', title: '大盲防守' },
       ],
     },
   },
@@ -85,12 +117,14 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🗺️',
     variant: 'standard',
     unlockRequirement: '完成 T3 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_4_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_4_CHAPTERS, 4),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-range-thinking', title: '范围思维' },
         { id: 'l4-range-construction', title: '范围建构：极化 vs 合并' },
         { id: 'l4-blockers', title: 'Blocker 效应' },
+        { id: 'l2-3bet-basics', title: '3-bet 基础' },
+        { id: 'l2-4bet-strategy', title: '4-Bet 策略' },
         { id: 'l7-rake', title: 'Rake 对策略的影响' },
         { id: 'local-ante', title: 'Ante 结构的翻前调整' },
       ],
@@ -105,7 +139,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '♟️',
     variant: 'standard',
     unlockRequirement: '完成 T4 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_5_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_5_CHAPTERS, 5),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-gto-basics', title: 'GTO 基础入门' },
@@ -124,12 +158,14 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '💠',
     variant: 'standard',
     unlockRequirement: '完成 T5 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_6_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_6_CHAPTERS, 6),
     practiceRecommendations: {
       lessons: [
         { id: 'l3-bet-sizing', title: '下注尺度理论' },
         { id: 'l3-cbet', title: '持续下注（C-Bet）' },
         { id: 'l4-overbet', title: 'Overbet 策略' },
+        { id: 'l3-multistreet', title: '多街计划' },
+        { id: 'l3-bluffing', title: '诈唬的艺术' },
       ],
     },
   },
@@ -142,7 +178,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🔍',
     variant: 'standard',
     unlockRequirement: '完成 T6 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_7_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_7_CHAPTERS, 7),
     practiceRecommendations: {
       lessons: [
         { id: 'l4-opponent-reading', title: '对手阅读与剥削策略' },
@@ -159,7 +195,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🧠',
     variant: 'standard',
     unlockRequirement: '完成 T7 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_8_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_8_CHAPTERS, 8),
     practiceRecommendations: {
       lessons: [
         { id: 'l5-tilt', title: '情绪管理（Tilt Control）' },
@@ -177,7 +213,7 @@ export const standardLevels: TheoryLevelInfo[] = [
     icon: '🏛️',
     variant: 'standard',
     unlockRequirement: '完成 T8 所有章节',
-    chapters: withChapterPractice(STANDARD_LEVEL_9_CHAPTERS),
+    chapters: composeChapters(STANDARD_LEVEL_9_CHAPTERS, 9),
     practiceRecommendations: {
       lessons: [
         { id: 'l6-icm', title: 'ICM 基础' },

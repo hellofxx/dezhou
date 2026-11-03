@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { QUIZ_QUESTIONS } from '../data/quizQuestions';
 import { buildOddsReviewItemInput } from './oddsSrs';
+import type { PotOddsQuizQuestion } from '../types';
 import zhPotOdds from '@/i18n/locales/zh/potOdds.json';
 import enPotOdds from '@/i18n/locales/en/potOdds.json';
 
@@ -47,6 +48,21 @@ describe('buildOddsReviewItemInput（复习项载荷）', () => {
       expect(metadata.back).toBe(correctText);
       expect(metadata.back).not.toBe('');
     }
+  });
+
+  it('题库缺失正确选项时 back 回落为空串（防御性兜底，不写入裸 key）', () => {
+    const malformed: PotOddsQuizQuestion = {
+      id: 999,
+      category: 'odds-judgment',
+      scenario: 'potOdds.quizBank.q1.scenario',
+      question: 'potOdds.quizBank.q1.question',
+      options: [
+        { text: 'potOdds.quizBank.q1.optA.text', isCorrect: false, explanation: 'potOdds.quizBank.q1.optA.explanation' },
+      ],
+    };
+
+    const { metadata } = buildOddsReviewItemInput(malformed);
+    expect(metadata.back).toBe('');
   });
 
   it('全量题目：载荷字段均为完整 i18n key（禁止截断、禁止写入原文）', () => {

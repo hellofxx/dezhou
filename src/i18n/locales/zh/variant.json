@@ -7,7 +7,7 @@
   "description": {
     "standard": "标准德州扑克，52 张牌，最多 9 人桌",
     "short-deck": "短牌德州，36 张牌（移除 2-5），同花>顺子，AA>KQ",
-    "heads-up": "单挑德州，2 人对战，SB 强制 Ante，翻后 SB 先行动"
+    "heads-up": "单挑德州，2 人对战，SB 强制 Ante，翻后 BB 先行动"
   },
   "title": "游戏变体",
   "switchHint": "切换变体后，训练模块的数据和规则将自动调整",
@@ -24,7 +24,7 @@
   "shortDeckRules": {
     "ruleChanges": "规则变化",
     "deckInfo": "36张牌（6-A），移除2-5",
-    "straightBeatsTrips": "顺子 > 三条",
-    "flushBeatsFullHouse": "同花 > 葫芦"
+    "flushBeatsFullHouse": "同花 > 葫芦",
+    "tripsBeatsStraight": "三条 > 顺子"
   }
 }

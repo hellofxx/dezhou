@@ -1,7 +1,7 @@
 /**
  * HelpArticle 组件测试（jsdom）：
  * 锁定 Design QA 修复项 —— tip 段不得再用中文斜体（DESIGN.md §3.2），
- * 文章不存在时走共享 EmptyState 而非自写空态。
+ * 文章不存在时走共享 EmptyState 而非自写空态，且其返回动作导航回 /help。
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
@@ -30,6 +30,8 @@ describe('HelpArticle 组件测试', () => {
         <MemoryRouter initialEntries={[path]}>
           <Routes>
             <Route path="/help/article/:articleId" element={<HelpArticle />} />
+            {/* 帮助中心首页哨兵：用于断言空态返回动作的导航目标 */}
+            <Route path="/help" element={<div id="help-home-sentinel" />} />
           </Routes>
         </MemoryRouter>,
       );
@@ -55,5 +57,20 @@ describe('HelpArticle 组件测试', () => {
     const heading = container.querySelector('h3');
     expect(heading?.textContent).toBe('文章不存在');
     expect(container.querySelector('button[aria-label="返回帮助中心"]')).not.toBeNull();
+  });
+
+  it('未知文章 id 的返回动作导航回 /help 首页', () => {
+    renderAt('/help/article/not-a-real-article');
+
+    // 防假绿：导航前首页哨兵不应存在
+    expect(container.querySelector('#help-home-sentinel')).toBeNull();
+
+    const back = container.querySelector(
+      'button[aria-label="返回帮助中心"]',
+    ) as HTMLButtonElement;
+    act(() => back.click());
+
+    expect(container.querySelector('#help-home-sentinel')).not.toBeNull();
+    expect(container.textContent).not.toContain('文章不存在');
   });
 });

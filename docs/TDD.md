@@ -1167,6 +1167,7 @@ interface DailyRecommendation {
 
 1. **数据模型**（`theory-academy/types.ts`）：
    - `TheoryChapterSummary` / `TheoryLevelSummary`：目录层字段（id / order / title / duration / chapters 等，**无 content / quiz / objectives**）；完整类型继承摘要，首页/store 只读摘要
+   - **核心 / 增补标记**（产品规格见 PRD §5.27.11）：`TheoryChapterSummary` 增 `supplemental?: boolean` 与 `pathTags?: TheoryPathTag[]`；`TheoryPathTag = 'six-max' | 'cash' | 'mtt' | 'foundation' | 'preflop' | 'postflop'`（`pathTags` 只供静态学习路径聚合，**不参与解锁**）。**定义 `core = !supplemental`**——Level 解锁、Level 全完成、Level 进度、总进度、活跃 Level、续学建议、核心统计与掌握度一律只对 core 计算；`TheoryChapter` 继承摘要，故完整章同带这两字段，`supplemental` 缺省即 core（存量章节零改动）
    - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
    - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ `objectives?`（**类型可选、守卫必填**：完整性测试要求每章 3–5 条非空，类型保持可选是因为标准与变体共用该接口且旧数据缺字段不影响反序列化；渲染侧 `resolveTheoryObjectives` 按下标取 `theory.chapterObjectives.<id>.<i>`，defaultValue 回退数据原文）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）/ `practiceRecommendations?`（章节粒度桥接，**数据层字段、不进持久化**，由 `standard/index.ts` 聚合时从 `chapterPracticeMap` 附加，章节文件本身不书写）
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
@@ -1177,12 +1178,17 @@ interface DailyRecommendation {
    - **内容编辑准则（段落类型覆盖、公式须含推导、牌例数量下限、误区显式化、解析须解释错误选项）见 `docs/PRD.md` §6.7.1**，本文件只记录其判定落点：段落类型枚举以 `types.ts` 的 `TheorySectionType` 为准，题量区间与内容非空由 `theoryIntegrity.test.ts` 断言
    - **教材对照基线与版权合规边界见 `docs/PRD.md` §5.27.4 / §6.7.2**；实现侧仅约定标注落点：出处以内联「（概念源自：教材名 章节）」写在 `content` 段落文本中（无独立结构化字段），如需按教材聚合统计请对 `data/levels/variants/**` 做文本检索
    - **目录摘要与完整数据分层**：`data/levels/manifest/`（`pnpm theory:manifest` 生成）提供 Level/章节目录，`utils/theoryMeta.ts` 供 Home/store/成就检查；完整章节数据经 `data/levels/loaders.ts` 按 Level 动态 import（章节页 `useTheoryLevel`），需要全变体的疑难清单用 `useTheoryLevels` 逐 Level 组合。`manifest.parity.test.ts` 与 `loaders.test.ts` 守卫映射一致
+   - **增补章独立单文件**：6-max 现金增补章位于 `data/levels/variants/standard/chapters/t<level>-<topic>.ts`（每文件单章、单数组导出），与 `standardLevelN.ts` 的 core 章分离——Level 文件已触到单文件行数约束，且增补章可整批增删而不改动 core 文件。`standard/index.ts` 按 Level 拼接 `[...core, ...supplemental]`，`toSorted(order)` 后再统一打标，`standardLevels` 与摘要生成因此同源
+   - **集中打标 `chapterMeta.ts`**（位于 `chapters/` 同级的 `variants/standard/` 下，避免被 loader 的 glob 命中）：维护 `SUPPLEMENTAL_CHAPTER_IDS`（据此置 `supplemental: true`）与 `PATH_TAGS`（章节 → 路径标签），导出幂等 `applyStandardChapterMeta(chapters)`。`standard/index.ts` 与 `loaders.ts` 都在「拼接 → 排序 → 附实践推荐」之后调它，故章节文件本身不书写这两个字段
+   - **loader 二次 glob 合并**：`loaders.ts` 在既有 `standardLevel*.ts` glob 之外新增 `import.meta.glob('./variants/standard/chapters/t*-*.ts')`，按 `/chapters\/t(\d+)-[^/]+\.ts$/` 归组到 Level；加载单 Level 时 `Promise.all([base, ...supplemental])` → flatten → `toSorted(order)` → `applyChapterPractice` → `applyStandardChapterMeta`。章节页仍只取当前 Level 的 chunk（增补章与 Level 文件同为独立 chunk），`chapterMeta.ts` 落在一个常驻小 chunk
+   - **目录摘要透传**：`pnpm theory:manifest` 的章节投影增加条件字段 `supplemental` / `pathTags`（无值不写键），`manifest.parity.test.ts` 同步断言，故摘要层足以支撑 core/增补进度、掌握度与路径展示；数据层改动后必须重跑
 
 3. **Store**（`store.ts`，persist name `theory-academy-progress`，version 以该文件 persist 配置为唯一事实源）：
    - 状态：`progress: { completedChapters / quizScores / currentChapter / startedAt }`
    - `completeChapter(id, score, total, correct)`：幂等（重复不重复计数），quizScores 取历史最高分，内部 `trainingEvents.emit`（module `'theory-academy'`）
-   - `isTheoryLevelUnlocked(levelId)`：首行 `isDebugUnlockActive()` 短路；T1 默认解锁，Tn 需 T(n-1) 全部章节完成
-   - `getLevelProgress` / `getTotalProgress` / `resetProgress`
+   - `isTheoryLevelUnlocked(levelId)`：首行 `isDebugUnlockActive()` 短路；T1 默认解锁，Tn 需 T(n-1) 全部**核心**章节完成（增补章不参与判定，完成增补章不回锁）
+   - `getLevelProgress` / `getTotalProgress`：分子与分母都只取 core（增补章完成不改变百分比）；总进度仍按 `activeVariant` 序列自洽统计
+   - `resetProgress`
 
 4. **ELO 集成**：`TheoryQuiz` 每题作答时调用 `progress.updateElo(chapter.eloDimension, isCorrect, getChapterDifficulty(level))` + `progress.recordAnswer(isCorrect)`（难度映射：T1≈0.2 递增至 T9≈0.8）；章节完成调 `progress.recordTrainingDay()`。
 
@@ -1234,11 +1240,44 @@ interface DailyRecommendation {
     - **意图预取**：章节阶梯与「继续学习」卡在 hover/focus 时预取当前变体完整数据，点击章节后直接命中缓存
     - **守卫**：`manifest.parity.test.ts`（摘要 ↔ 完整数据）、`levels/loaders.test.ts`（逐 Level 映射 ↔ 摘要，含未知 Level 缺省）、`contentI18n.test.ts`（theory-content 双语文件集 + 核心包不得残留正文）、`preload.test.ts`（核心包不含正文 / level 注入 / 语言切换补载）
 
+18. **6-max 现金基准双列单源**（产品规格见 PRD §5.27.11）：
+    - 数据落在模块内 `data/sixMaxBenchmarks.ts`：`SIX_MAX_BENCHMARK_SCOPE`（6 座 / 100bb / 无前注）与 `SIX_MAX_RFI_100BB_NO_ANTE` 双列（`standard` / `beginner`，键为 UTG / HJ / CO / BTN / SB）。**不下沉 `shared/`**：仅理论正文与增补章消费，未达 ≥2 模块准入门槛
+    - 单源方向：`standard` 列 = range-trainer `PRESET_RANGES` 中 6-max open 预设名称的 `(~N%)` 标注（守卫逐位置解析比对）；`beginner` 列是入门简化，只受方向约束（不宽于标准列、BTN 仍为标准列最宽）
+    - 守卫 `src/guards/sixMaxBenchmarkGuard.test.ts`（跨模块不变式，登记于 `src/guards/README.md`）：自带扫描面自检（解析到的预设数必须等于位置数），名称格式或预设集合被改动时不得空洞通过；增补章落地后同批断言 T4 章正文的双列行
+    - 正文引用点（T3 / T4 / T7 的 RFI、VPIP、3-bet 口径）一律投影同一基准表，禁止正文自建第二套数字；新手列保留在策略入门课与旧正文作为简化教学
+
+19. **核心 / 增补语义（`core = !supplemental`，产品规格见 PRD §5.27.2）**：
+    | 计算项 | 口径 |
+    |---|---|
+    | Level 解锁（Tn → T(n+1)） | 只看前一级 core 章是否全部完成；仅余增补章未读时下一级**已解锁** |
+    | Level 全完成 / Level 进度 / 总进度 | 分子与分母都只取 core |
+    | 活跃 Level / 续学建议 / 首页统计 / 掌握度 | 只由 core 决定；增补章经理论阶梯或学习路径进入 |
+    | 「6-max 补强」计数 | 增补章完成的独立计数（可选、界面标注不影响解锁） |
+    | 完成记录 / 小测成绩 / ELO / SRS / trainingEvents | 增补章照常写入（学习行为真实发生），只是不计入核心进度 |
+
+    - `utils/theoryMeta.ts` 增 `isSupplementalChapter` / `getCoreChaptersOfLevel` / `getSupplementalChaptersOfLevel` / `getCoreChapterCount` / `getSupplementalChapterCount`；保留 `getTotalChapterCount` 原语义（总章数）以免影响既有调用方
+    - `isLevelUnlockedByCompleted` / `isLevelFullyCompleted` 的 `.every()` 只遍历 core；`getNextChapterSummary`：当前章为 core 时优先同变体下一个 core、无 core 则回退到下一个增补章；当前章为增补章时按扁平顺序取下一章
+    - **不回锁**：core 过滤是纯读取计算，`completedChapters` 里的增补 id 不改变任何判定——老用户数据无需迁移，回滚增补章后残留的增补完成 id 只是孤立数据，core 统计自动忽略
+    - 增补章语义由副标题承载（「6-max 现金局补强（可选，不影响解锁）」），`TheoryChapterView` 的门禁逻辑不变（Level 解锁即可读），避免在已到行数上限的视图里加分支
+
+20. **掌握度与学习路径**（产品规格见 PRD §5.27.12，展示层不门禁）：
+    - `utils/theoryMastery.ts`：`MASTERY_THRESHOLDS = { mastered: 80, passing: 60 }` 与 `getMasteryState(score)`（≥80 已掌握 / 60–79 通过 / <60 待复习 / 无分未测）；`summarizeMastery(coreChapters, quizScores)` 返回 mastered / passing / needsReview / untested / total / weakestChapterId（同分按 manifest 顺序取前者）。**只读 `quizScores`**，不调用任何门禁函数
+    - `data/theoryPaths.ts`：三条静态路径 `sixmax-cash-core` / `postflop-deep` / `mtt-bridge`（id + 主题标签 + 成员章节 id），成员由 `pathTags` 聚合，**不新增解锁条件**，也不扩大跨模块引用面
+    - 组件：`TheoryMasteryCard`（四项计数 + 最低分章复习 CTA，无分时空态改为继续学习）、`TheoryLearningPaths`（仅标准变体渲染、`x/y` 进度、CTA 指向首个未完成且已解锁的成员章、下一章锁定显示锁定提示、全完成显示已完成）；两者只在 Home 展示，不参与路由门禁
+    - 守卫：路径完整性（路径 id 唯一、单路径成员不重复、成员都带对应 `pathTags`、标题与描述 key 双语齐备）+ 掌握度边界用例（79 / 80、59 / 60、无分、weakest 同分 tie-break）
+
+21. **新增守卫与持久化边界**：
+    - `src/guards/sixMaxBenchmarkGuard.test.ts`：6-max 基准跨模块单源（见第 18 条）
+    - 模块内 `theoryTitleKeys` 守卫：每个标准章节在 zh/en `theory.json` 均有非空 `chapterTitle` / `chapterSubtitle`，且 zh 与数据层 `title` / `subtitle` 逐字一致——`staticKeyGuard` 只覆盖静态字面量，动态拼接的目录 key 由它兜底
+    - `data/theoryIntegrity.test.ts` 增「`chapters/` 下的章节必须 `supplemental: true`」断言，防增补章混入 core 造成回锁；`utils/theoryProgress.test.ts` 增「仅缺增补章仍解锁下一级」「增补未读时 `isLevelFullyCompleted` 为真」「`getNextChapterSummary` 三条规则」与 core / 增补计数用例
+    - **无 persist migration**：`supplemental` / `pathTags` 属数据层字段，`TheoryProgress` 形状不变（`store.persist-shape.test.ts` 快照未动即为证据），store persist version 保持原值；掌握度与学习路径全部由既有 `quizScores` / `completedChapters` 派生，不新增持久化字段
+
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
 - 新增幂等 action `toggleFlagQuestion(questionId)` / `switchVariant(variant)`
 - 迁移版本演进历史见 `docs/CHANGELOG.md`
 - 章节级桥接（`TheoryChapter.practiceRecommendations`）与章内计算演练**均未新增持久化字段**：前者是数据层字段、后者只有组件内 `useState`，`TheoryProgress` 形状不变（`store.persist-shape.test.ts` 快照未动即为证据），故 persist version 不递增
+- 6-max 增补层（`supplemental` / `pathTags`）、掌握度卡与学习路径**均未新增持久化字段**：前者是数据层标记，后两者从既有 `quizScores` / `completedChapters` 派生，`TheoryProgress` 形状不变，故 persist version 不递增、不写 migrate
 
 **章节难度标签阈值**（2026-08 定义）：
 - `getChapterDifficulty(level)` 返回值 < 0.35 → 基础（success 色）
@@ -1260,7 +1299,7 @@ interface DailyRecommendation {
 - 内容标准与标准系列同构：每章 content 覆盖全部 7 类段落、公式含推导、实战案例含具体牌面/位置/底池、教材引用采用「（概念源自：《教材名》作者 Ch.XX）」脚注式标注
 - 内容填充进度（2026-08-06）：单挑 T1-T3（t1hu 概率基础 / t2hu 赔率策略 / t3hu 位置与起手牌）已填充完整内容与章末小测，practiceRecommendations 对接单挑实践课程（l7hu-stakes / l4hu-ev-adjustments / l4hu-bn-opening / l3hu-bb-defense）；T4-T9 与短牌系列仍为骨架（content/quiz 空数组，守卫允许骨架阶段为空）
 - 变体实践推荐引用的课程 ID 不纳入标准系列 `CROSS_MODULE_LESSON_IDS` 白名单（该白名单仅对照标准 LEVELS 校验），悬空风险由变体课程自身存在性保证
-- **变体解锁门禁适配**：变体 Level 的解锁链在变体自己的 Level 序列内独立判定（序列内 idx=0 恒解锁，Tn 需前一 Level 全部章节完成），`isLevelUnlockedByCompleted` 通过 `ALL_VARIANT_THEORY_LEVELS` 查找 levelId 所属变体再取该变体序列，标准系列行为完全不变；章节查找（`findChapterById`/`findLevelByChapterId`/`getNextChapter`）均支持变体章节，`getNextChapter` 顺延在同一变体序列内（不跨变体）；进度计算（`getLevelProgress`/`getTotalProgress`）按当前 `activeVariant` 的序列自洽统计
+- **变体解锁门禁适配**：变体 Level 的解锁链在变体自己的 Level 序列内独立判定（序列内 idx=0 恒解锁，Tn 需前一 Level 全部核心章节完成；变体章节均为核心章，增补章仅存在于标准变体，见第 19 条），`isLevelUnlockedByCompleted` 通过 `ALL_VARIANT_THEORY_LEVELS` 查找 levelId 所属变体再取该变体序列，标准系列行为完全不变；章节查找（`findChapterById`/`findLevelByChapterId`/`getNextChapter`）均支持变体章节，`getNextChapter` 顺延在同一变体序列内（不跨变体）；进度计算（`getLevelProgress`/`getTotalProgress`）按当前 `activeVariant` 的序列自洽统计
 
 ### 5.9 跨模块系统设计
 
@@ -1823,40 +1862,36 @@ persist(
 
 ## 11. 测试策略
 
-### 11.1 测试双项目划分（Vitest）
+> 测试分层、文件命名 / 放置、判定标准、执行矩阵、责任与评审以 [`docs/testing/README.md`](./testing/README.md) 为唯一事实源；本节只保留架构级运行拓扑与 E2E 规划。
 
-`vitest.config.ts` 定义两个项目：`unit` 项目在 Node 环境运行 `src/**/*.test.ts`（纯函数 / store migrate，Node 环境测 zustand persist migrate 需 stub `window.localStorage`）；`component` 项目在 jsdom 环境运行 `src/**/*.test.tsx`（组件冒烟，setup 为 `src/setupTests.components.ts`）。
+### 11.1 双项目运行拓扑（Vitest）
 
-测试文件清单（以 `src/**/*.test.ts(x)` 实际文件为准，不维护数值快照；下表按模块归纳**关键守卫**，非穷举清单）：
+`vitest.config.ts` 定义两个项目：
 
-| 测试目标 | 文件 | 关键用例 |
-|----------|------|----------|
-| 全局守卫（`src/guards/`） | designTokenGuard.test.ts / designTokenCssGuard.test.ts / eslintCrossImports.test.ts / huPositionOrderGuard.test.ts / rangePresetGtoConsistency.test.ts / line-count-guard.test.ts / dealerSlip.contrast.test.ts | 源码层反霓虹 / 纯黑白扫描、CSS 面填充合规、跨模块导入白名单快照、单挑位置方向、跨模块 preset 一致性、单文件行数、纸条对比度（清单见 `src/guards/README.md`） |
-| i18n | localeParity.test.ts / contentI18n.test.ts / contentAlignment.test.ts / staticKeyGuard.test.ts | zh/en 键集对称性 / 内容 key 全量遍历 / 内容 key ↔ 数据原文逐字镜像与 orphan（三层断言 + 棘轮基线，单源映射由 `contentKeyEntries.ts` 提供）/ 静态 t() 字面量 key 引用守卫 |
-| 共享层 | pokerMath / elo / deck / seededShuffle / decisionFeedback 各 .test.ts | 赔率与 EV 计算、ELO 变化与段位、牌组生成、种子洗牌、GRADE_THRESHOLDS 边界 |
-| gto-simulator | strategyCompare.test.ts | 最优判定、EV 损失精度 |
-| hand-history | parsers/common.test.ts | 牌面解析、三平台格式检测（含 partypoker） |
-| range-trainer | handClassifier.test.ts | 169 种手牌分类 |
-| pot-odds | quizOrder.test.ts | 选项排序与分布守卫 |
-| progress | statsAggregator / streakCalc / reviewRoute / migrateTheoryReviewKeys / store.migrate / store.persist-shape 各 .test.ts，StreakTracker / SpacedRepetitionPanel / useEnsureReviewSourceI18n.wiring 各 .test.tsx | 聚合、连击、复习项跳转路由解析、理论复习项 key 化迁移（含 key 镜像守卫）、复习来源包按需加载与渲染接线、迁移链路、persist 形状、组件冒烟 |
-| puzzle-trainer | puzzleBank.optionOrder.test.ts / store.migrate / store.persist-shape | 选项语义排序、迁移、persist 形状 |
-| strategy-academy | curriculumIntegrity / theoryReferenceIntegrity / practiceFeedbackView / evImpactTone / evCalibration / quizShuffle / drillOptionOrder / opponentScoring / store.migrate / store.persist-shape / manifest.parity / lessons/loaders 各 .test.ts，DrillLessonRouter.test.tsx / TheoryReferenceBlock.test.tsx | 课程数据完整性、反向（策略→理论）引用无悬空、反馈三态诚实渲染、evImpact 着色三态、EV 标定覆盖率棘轮、选项洗牌、对手评分、桥接跳转解析、Drill 路由冒烟、目录摘要与按 Level 懒载映射 |
-| theory-academy | theoryIntegrity / quizOrder / theorySrs / store.migrate / store.persist-shape / manifest.parity / levels/loaders 各 .test.ts，theoryReviewI18n.test.tsx | 理论数据完整性、选项重映射与分布守卫、复习项 id 命名空间与 i18n key 载荷、迁移链路、persist 形状、目录摘要与按 Level 懒载映射、复习文案双语渲染 |
+- `unit`：Node 环境，收集 `src/**/*.test.ts`（纯函数 / store migrate / 数据完整性 / 全局守卫）。
+- `component`：jsdom 环境，收集 `src/**/*.test.tsx`（组件渲染 / 交互 / a11y），setup 为 `src/setupTests.components.ts`。
 
-### 11.2 组件测试（jsdom 冒烟）
+Node 环境测 zustand persist migrate 需 stub `window.localStorage`（`src/shared/utils/localStorageStub.ts`），persist 形状断言用 `src/shared/utils/persistShape.ts`；hand-history 的 IndexedDB 测试使用 `fake-indexeddb/auto`（`src/features/hand-history/store.indexeddb.test.ts`）。测试文件按内容选后缀，禁止 `.spec.ts(x)` 与 `__tests__/`（不会被双项目收集，由 `testSystem.guard.test.ts` 阻断）。
 
-组件测试清单以 `src/**/*.test.tsx` 实际文件为唯一事实源，本文档不维护枚举（历史枚举随模块增长持续漂移）。典型覆盖面：连击与复习面板（含按需加载接线）、Drill 懒加载路由、理论小测与疑难标记、章节导航、移动端导航与 a11y 断言、语言切换渲染。
+### 11.2 不变式守卫
 
-新增交互组件测试时按内容选择 `.test.tsx` 后缀并入 `component` 项目。
+- 全局不变式集中在 `src/guards/`，清单与新增约定见 `src/guards/README.md`；守卫必须自检扫描面，allowlist 只减不增。
+- i18n 全局守卫位于 `src/i18n/`；模块级数据完整性守卫留在各 feature 内。
+- 测试体系自身由 `src/guards/testSystem.guard.test.ts` 守护：禁止 focused / skipped 测试、校验测试文件命名与放置、含 `describe`/`it` 的非测试文件为零、每个 feature 至少一个测试、persist store 必有 shape / migrate 测试、守卫文件与 README 清单双向一致。
+- 执行入口：`pnpm test:guards`（快速层）与 `pnpm test`（全量）；`pnpm test:coverage` 仅用于覆盖率审计（v8，非门禁；规范见 `docs/testing/README.md` §7）。
 
 ### 11.3 E2E 测试（规划中，未落地）
 
-项目尚未引入 Playwright 等 E2E 框架。若后续引入，优先覆盖以下关键用户流程：
+项目尚未引入 Playwright 等 E2E 框架。在 E2E 落地前，UI / 路由 / 样式变更按 `docs/testing/README.md` §8 做真实浏览器验收并在 PR 记录证据。路由注册清单与 `/help` 静态渲染已由 `src/app/routes.test.tsx` 覆盖；训练路径仍靠手工验收。
+
+若后续引入，优先覆盖以下关键用户流程：
 
 1. **范围训练流程**：首页 → 选择位置 → 开始测验 → 答题 → 查看结果
 2. **GTO 训练流程**：配置场景 → 生成场景 → 提交决策 → 查看反馈 → 完成会话
 3. **手牌导入流程**：粘贴文本 → 检测格式 → 导入 → 列表中可见 → 回放
 4. **进度查看流程**：完成训练 → Dashboard 数据更新 → 图表渲染
+
+进入条件与当前缺口见 `docs/testing/README.md` §11。
 
 ---
 

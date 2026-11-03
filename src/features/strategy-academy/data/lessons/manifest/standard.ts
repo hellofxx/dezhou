@@ -17,7 +17,7 @@ export const STANDARD_LEVEL_SUMMARIES: LevelSummary[] = [
       {"id":"l1-bankroll","level":1,"order":4,"title":"资金管理入门","subtitle":"保护你的扑克资金，避免破产风险","duration":"7 min","variant":"standard","hasPractice":false,"quizCount":3},
       {"id":"l1-leaks","level":1,"order":5,"title":"常见新手错误 Top 10","subtitle":"识别并修正初学者最常犯的十大致命错误","duration":"9 min","variant":"standard","hasPractice":false,"quizCount":3},
       {"id":"drill-hand-ranking","level":1,"order":6,"title":"牌力排名闪电战","subtitle":"10 道快题，秒判牌型与牌力大小","duration":"3 min","type":"drill","variant":"standard","hasPractice":false,"quizCount":0},
-      {"id":"drill-position","level":1,"order":7,"title":"位置认知训练","subtitle":"8 道交互题，点击 6-max 桌位识别 UTG/MP/CO/BTN/SB/BB","duration":"2 min","type":"drill","variant":"standard","hasPractice":false,"quizCount":0},
+      {"id":"drill-position","level":1,"order":7,"title":"位置认知训练","subtitle":"8 道交互题，点击 6-max 桌位识别 UTG/HJ/CO/BTN/SB/BB","duration":"2 min","type":"drill","variant":"standard","hasPractice":false,"quizCount":0},
       {"id":"drill-outs","level":1,"order":8,"title":"Outs 速算","subtitle":"8 道题，覆盖同花/OESD/Gutshot/二四法则","duration":"3 min","type":"drill","variant":"standard","hasPractice":false,"quizCount":0},
       {"id":"drill-pot-odds","level":1,"order":9,"title":"底池赔率直觉","subtitle":"6 道图形化赔率计算与跟注/弃牌决策","duration":"3 min","type":"drill","variant":"standard","hasPractice":false,"quizCount":0},
     ]

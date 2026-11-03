@@ -12,6 +12,10 @@ import type {
 } from '../types';
 import { loadTheoryLevelById } from '../data/levels/loaders';
 import {
+  getCoreChaptersOfLevel,
+  getSupplementalChaptersOfLevel,
+} from '../utils/theoryMeta';
+import {
   resolveChapterTitle,
   resolveTheoryLevelTitle,
   resolveTheoryLevelDescription,
@@ -37,7 +41,10 @@ interface TheoryLadderProps {
   isUnlocked: (levelId: string) => boolean;
 }
 
-/** 推导当前活跃理论等级：首个解锁且仍有未读章节的等级；全部完成则为 null */
+/**
+ * 推导当前活跃理论等级：首个解锁且仍有未读**核心章**的等级；全部核心章读完则为 null。
+ * 增补章不参与活跃判定（补强进度见侧栏卡片与各级展开区的补强计数）。
+ */
 export function findActiveTheoryLevelId(
   levels: TheoryLevelSummary[],
   completedChapters: string[],
@@ -45,7 +52,7 @@ export function findActiveTheoryLevelId(
 ): string | null {
   for (const level of levels) {
     if (!isUnlocked(level.id)) continue;
-    if (level.chapters.some((c) => !completedChapters.includes(c.id))) return level.id;
+    if (getCoreChaptersOfLevel(level).some((c) => !completedChapters.includes(c.id))) return level.id;
   }
   return null;
 }
@@ -65,7 +72,13 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
 
   const handleHeadClick = (level: TheoryLevelSummary, expanded: boolean) => {
     if (expanded) {
-      const target = level.chapters.find((c) => !completedChapters.includes(c.id)) ?? level.chapters[0];
+      // 头部点击优先进入首个未完成核心章；核心章全读完才回退到增补章
+      const core = getCoreChaptersOfLevel(level);
+      const target =
+        core.find((c) => !completedChapters.includes(c.id))
+        ?? getSupplementalChaptersOfLevel(level).find((c) => !completedChapters.includes(c.id))
+        ?? core[0]
+        ?? level.chapters[0];
       if (target) openChapter(target.id);
     } else {
       setExpandedId(level.id);
@@ -88,10 +101,17 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
       <div className="level-ladder space-y-1">
         {levels.map((level, index) => {
           const unlocked = isUnlocked(level.id);
-          const completedInLevel = level.chapters.filter((c) => completedChapters.includes(c.id)).length;
-          const totalInLevel = level.chapters.length;
+          // Level 进度口径 = 核心章（增补章完成不改变 N/N 文案与进度条）
+          const coreChapters = getCoreChaptersOfLevel(level);
+          const supplementalChapters = getSupplementalChaptersOfLevel(level);
+          const completedInLevel = coreChapters.filter((c) => completedChapters.includes(c.id)).length;
+          const totalInLevel = coreChapters.length;
           const progress = totalInLevel > 0 ? Math.round((completedInLevel / totalInLevel) * 100) : 0;
           const allCompleted = progress === 100;
+          const nextCoreId = coreChapters.find((c) => !completedChapters.includes(c.id))?.id;
+          const supplementalDone = supplementalChapters.filter((c) =>
+            completedChapters.includes(c.id)
+          ).length;
           const isActive = level.id === activeId;
           const expanded = level.id === expandedId;
 
@@ -229,13 +249,21 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
                           key={chapter.id}
                           chapter={chapter}
                           completed={completedChapters.includes(chapter.id)}
-                          isNext={!completedChapters.includes(chapter.id) &&
-                            chapter.id === level.chapters.find((c) => !completedChapters.includes(c.id))?.id}
+                          isNext={chapter.id === nextCoreId}
                           score={quizScores[chapter.id]}
                           onOpen={() => openChapter(chapter.id)}
                         />
                       ))}
                     </ul>
+
+                    {supplementalChapters.length > 0 && (
+                      <p className="mt-2 text-[10px] text-[var(--ivory-dim)] font-numeric">
+                        {t('theory.ladder.supplementalProgress', {
+                          done: supplementalDone,
+                          total: supplementalChapters.length,
+                        })}
+                      </p>
+                    )}
 
                     {allCompleted && practiceTarget && (
                       <button
@@ -266,14 +294,17 @@ interface TheoryChapterChipProps {
   onOpen: () => void;
 }
 
-/** 章节 chip：状态图标 + 标题 + 阅读时长 + 小测分徽章 */
+/** 章节 chip：状态图标 + 标题 + 阅读时长 + 小测分徽章（增补章带「可选」标记） */
 function TheoryChapterChip({ chapter, completed, isNext, score, onOpen }: TheoryChapterChipProps) {
   const { t } = useTranslation();
+  const optional = chapter.supplemental === true;
   const stateLabel = completed
     ? t('theory.ladder.chapterStates.done')
-    : isNext
-      ? t('theory.ladder.chapterStates.current')
-      : t('theory.ladder.chapterStates.locked');
+    : optional
+      ? t('theory.ladder.chapterStates.optional')
+      : isNext
+        ? t('theory.ladder.chapterStates.current')
+        : t('theory.ladder.chapterStates.locked');
 
   return (
     <li>
@@ -296,6 +327,11 @@ function TheoryChapterChip({ chapter, completed, isNext, score, onOpen }: Theory
           <span className="block truncate">{resolveChapterTitle(t, chapter)}</span>
         </span>
         <span className="flex items-center gap-1.5 shrink-0">
+          {optional && !completed && (
+            <span className="px-1.5 py-0.5 rounded-full border border-[var(--brass-deep)]/50 text-[9px] font-semibold text-[var(--brass-bright)]">
+              {t('theory.ladder.chapterStates.optional')}
+            </span>
+          )}
           {completed && typeof score === 'number' && (
             <span
               className={cn(

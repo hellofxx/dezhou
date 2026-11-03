@@ -1,15 +1,17 @@
 /**
- * 理论进度纯函数测试（P1F-02 回归 + 变体 Level 解锁门禁缺陷修复）：
+ * 理论进度纯函数测试（P1F-02 回归 + 变体 Level 解锁门禁缺陷修复 + core/增补二分）：
  * 「下一章」跨 Level 顺延时必须先校验目标 Level 解锁态，
  * 否则点击后被章节页门禁 Navigate 静默弹回 /theory。
  * ① getNextChapter 跨 Level 顺延行为 ② isLevelUnlockedByCompleted 解锁判定
  * ③ 跨 Level 未解锁场景（bug 复现路径） ④ 正常顺序学习流不会出现锁定提示
  * ⑤ 变体 Level 解锁链独立于标准序列（t1hu 恒解锁，t2hu 需 t1hu 全完成）
+ * ⑥ core = !supplemental：解锁/全完成/下一章 只认核心章，增补章完成与否不改变任何解锁
  */
 import { describe, it, expect } from 'vitest';
 import { THEORY_LEVELS } from '../data/levels';
 import { headsUpLevels } from '../data/levels/variants/heads-up';
 import { shortDeckLevels } from '../data/levels/variants/short-deck';
+import type { TheoryLevelInfo } from '../types';
 import {
   getAllChapters,
   getNextChapter,
@@ -18,10 +20,25 @@ import {
   isLevelUnlockedByCompleted,
   isLevelFullyCompleted,
 } from './theoryProgress';
+import {
+  getCoreChapterCount,
+  getCoreChaptersOfLevel,
+  getNextChapterSummary,
+  getSupplementalChapterCount,
+  getSupplementalChaptersOfLevel,
+  getTotalChapterCount,
+  isSupplementalChapter,
+} from './theoryMeta';
+
+/** core 章（!supplemental）：解锁与进度的唯一分母口径 */
+const coreOf = (level: TheoryLevelInfo) => level.chapters.filter((c) => !c.supplemental);
+const supplementalOf = (level: TheoryLevelInfo) => level.chapters.filter(isSupplementalChapter);
 
 const t1 = THEORY_LEVELS[0]!;
 const t2 = THEORY_LEVELS[1]!;
 const lastT1Chapter = t1.chapters[t1.chapters.length - 1]!;
+const lastT1Core = coreOf(t1)[coreOf(t1).length - 1]!;
+const firstT1Supplemental = supplementalOf(t1)[0]!;
 
 const t1hu = headsUpLevels[0]!;
 const t2hu = headsUpLevels[1]!;
@@ -58,10 +75,12 @@ describe('isLevelUnlockedByCompleted（标准系列回归）', () => {
     expect(isLevelUnlockedByCompleted(t2.id, completed)).toBe(true);
   });
 
-  it('前一 Level 缺任意一章均不解锁', () => {
-    for (const missing of t1.chapters) {
-      const completed = t1.chapters.filter((c) => c.id !== missing.id).map((c) => c.id);
-      expect(isLevelUnlockedByCompleted(t2.id, completed)).toBe(false);
+  it('前一 Level 缺任意**核心章**均不解锁（增补章不参与该循环）', () => {
+    const core = coreOf(t1);
+    expect(core.length).toBeGreaterThan(1); // 防空样本使循环空跑
+    for (const missing of core) {
+      const completed = core.filter((c) => c.id !== missing.id).map((c) => c.id);
+      expect(isLevelUnlockedByCompleted(t2.id, completed), `缺 ${missing.id}`).toBe(false);
     }
   });
 
@@ -79,6 +98,101 @@ describe('isLevelUnlockedByCompleted（标准系列回归）', () => {
       const nextLevel = findLevelByChapterId(next.id)!;
       expect(isLevelUnlockedByCompleted(nextLevel.id, completed)).toBe(true);
     }
+  });
+});
+
+// ========== core / 增补二分（标准变体的增补章语义） ==========
+
+describe('core 与增补章划分（theoryMeta）', () => {
+  it('每个 Level 的 core 章与增补章互补齐全，且 core 判定为 !supplemental', () => {
+    for (const level of THEORY_LEVELS) {
+      const core = getCoreChaptersOfLevel(level);
+      const supplemental = getSupplementalChaptersOfLevel(level);
+      expect(core.length + supplemental.length, `${level.id} 章节分割`).toBe(level.chapters.length);
+      expect(core.every((c) => !c.supplemental)).toBe(true);
+      expect(supplemental.every((c) => c.supplemental === true)).toBe(true);
+    }
+  });
+
+  it('标准变体确有增补章，单挑/短牌没有（样本非空，避免语义测试空跑）', () => {
+    expect(getSupplementalChapterCount('standard')).toBeGreaterThan(0);
+    expect(getSupplementalChapterCount('heads-up')).toBe(0);
+    expect(getSupplementalChapterCount('short-deck')).toBe(0);
+    // T1 至少含 1 章增补，后续用例依赖该样本
+    expect(supplementalOf(t1).length).toBeGreaterThan(0);
+    expect(isSupplementalChapter(firstT1Supplemental)).toBe(true);
+  });
+
+  it('核心章数 + 增补章数 = 总章数（三变体均成立），且无参调用默认标准系列', () => {
+    for (const variant of ['standard', 'heads-up', 'short-deck'] as const) {
+      expect(
+        getCoreChapterCount(variant) + getSupplementalChapterCount(variant),
+        `${variant} 计数关系`,
+      ).toBe(getTotalChapterCount(variant));
+    }
+    expect(getCoreChapterCount()).toBe(getCoreChapterCount('standard'));
+
+    const manualCore = THEORY_LEVELS.reduce((sum, level) => sum + coreOf(level).length, 0);
+    expect(getCoreChapterCount('standard')).toBe(manualCore);
+  });
+
+  it('仅缺增补章时下一 Level 仍解锁（增补章完成与否不影响解锁）', () => {
+    const coreCompleted = coreOf(t1).map((c) => c.id);
+    // 增补章未读：completed 中不含任何 t1 增补章
+    expect(coreCompleted.some((id) => supplementalOf(t1).some((s) => s.id === id))).toBe(false);
+    expect(isLevelUnlockedByCompleted(t2.id, coreCompleted)).toBe(true);
+  });
+
+  it('isLevelFullyCompleted 只看核心章：增补未读时为 true，核心缺章时为 false', () => {
+    const coreIds = coreOf(t1).map((c) => c.id);
+    expect(isLevelFullyCompleted(t1.id, coreIds)).toBe(true);
+    expect(isLevelFullyCompleted(t1.id, coreIds.slice(1))).toBe(false);
+    // 只完成增补章、核心章一页未读 → 未完成
+    expect(isLevelFullyCompleted(t1.id, supplementalOf(t1).map((c) => c.id))).toBe(false);
+  });
+});
+
+describe('getNextChapterSummary 的 core / 增补续读规则', () => {
+  it('core → 下一个 core：跨过同 Level 的增补章，直接进入下一 Level 核心章', () => {
+    // 先证明扁平顺序上的下一章确实是增补章（否则本用例测不到"跳过"这一行为）
+    const flat = getAllChapters();
+    const flatIdx = flat.findIndex((c) => c.id === lastT1Core.id);
+    expect(isSupplementalChapter(flat[flatIdx + 1]!)).toBe(true);
+
+    const next = getNextChapterSummary(lastT1Core.id);
+    expect(next).toBeDefined();
+    expect(isSupplementalChapter(next!)).toBe(false);
+    expect(findLevelByChapterId(next!.id)?.id).toBe(t2.id);
+  });
+
+  it('core → 增补回退：全变体已无后续核心章时，回退到扁平顺序的第一个增补章', () => {
+    const lastLevel = THEORY_LEVELS[THEORY_LEVELS.length - 1]!;
+    const lastCore = coreOf(lastLevel)[coreOf(lastLevel).length - 1]!;
+    const firstSupplementalAfter = supplementalOf(lastLevel)[0]!;
+    expect(firstSupplementalAfter).toBeDefined();
+
+    const next = getNextChapterSummary(lastCore.id);
+    expect(next).toBeDefined();
+    expect(isSupplementalChapter(next!)).toBe(true);
+    expect(next!.id).toBe(firstSupplementalAfter.id);
+  });
+
+  it('增补 → 扁平下一章：跨 Level 顺延与同类相邻均按扁平顺序', () => {
+    // T1 末位增补章 → 下一 Level 首个核心章
+    expect(getNextChapterSummary(firstT1Supplemental.id)?.id).toBe(t2.chapters[0]!.id);
+    // 同一 Level 内相邻增补章（T6 有 3 章增补）：取第一到第二
+    const t6 = THEORY_LEVELS[5]!;
+    const t6Supplemental = supplementalOf(t6);
+    expect(t6Supplemental.length).toBeGreaterThan(1);
+    expect(getNextChapterSummary(t6Supplemental[0]!.id)?.id).toBe(t6Supplemental[1]!.id);
+  });
+
+  it('序列末尾仍返回 undefined（增补章位于末尾时同样无下一章）', () => {
+    const all = getAllChapters();
+    const last = all[all.length - 1]!;
+    expect(isSupplementalChapter(last)).toBe(true);
+    expect(getNextChapterSummary(last.id)).toBeUndefined();
+    expect(getNextChapterSummary('t99-unknown')).toBeUndefined();
   });
 });
 

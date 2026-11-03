@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import AppLayout from '@/layouts/AppLayout';
 import BlankLayout from '@/layouts/BlankLayout';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
@@ -76,7 +76,7 @@ function LazyWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const router = createBrowserRouter([
+export const appRoutes: RouteObject[] = [
   {
     path: '/',
     element: <AppLayout />,
@@ -122,7 +122,9 @@ export const router = createBrowserRouter([
       { path: 'hand-history/:handId', element: <LazyWrapper><HandReplayPage /></LazyWrapper> },
     ],
   },
-], {
+];
+
+export const router = createBrowserRouter(appRoutes, {
   // GitHub Pages 部署在 /dezhou/ 子路径，复用 Vite base 自动适配 dev('/') 与生产('/dezhou/')
   basename: import.meta.env.BASE_URL,
 });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateHeroStats } from './handStats';
+import { calculateHeroStats, getPositionStats, calculateCBetFrequency } from './handStats';
 import type { HandHistory, Player } from '../types';
 import { Position } from '@/shared/types/position';
 import { ActionType } from '@/shared/types/action';
@@ -217,5 +217,81 @@ describe('3-bet 分母', () => {
     const stats = calculateHeroStats([foldHand, threeBetHand, openHand], HERO);
     // 分母 = 2（A、B），分子 = 1（B）→ 50%（修复前分母 = 1 → 100%）
     expect(stats.threeBetPercent).toBe(50);
+  });
+});
+
+// ─── 按位置统计 / C-bet（公共 API 尾部口径）───────────────
+
+const BTN_PLAYERS = [makePlayer(0, HERO, Position.BTN), makePlayer(1, 'Villain', Position.BB)];
+const BB_PLAYERS = [makePlayer(0, 'Villain', Position.BTN), makePlayer(1, HERO, Position.BB)];
+const CO_PLAYERS = [makePlayer(0, HERO, Position.CO), makePlayer(1, 'Villain', Position.BTN)];
+
+const RAISE_CALL_PREFLOP: PlayerAction[] = [
+  { type: ActionType.Raise, amount: 6, playerIndex: 0 },
+  { type: ActionType.Call, amount: 4, playerIndex: 1 },
+];
+
+// BTN：翻前加注 + 翻牌 c-bet
+const BTN_RAISE_CBET = makeHand(0, BTN_PLAYERS, RAISE_CALL_PREFLOP, {
+  flopActions: [
+    { type: ActionType.Raise, amount: 8, playerIndex: 0 },
+    { type: ActionType.Fold, playerIndex: 1 },
+  ],
+});
+// BTN：翻前加注 + 翻牌 check-check（未 c-bet）
+const BTN_RAISE_CHECK = makeHand(0, BTN_PLAYERS, RAISE_CALL_PREFLOP, {
+  flopActions: [
+    { type: ActionType.Check, playerIndex: 0 },
+    { type: ActionType.Check, playerIndex: 1 },
+  ],
+});
+// BTN：翻前弃牌（无 VPIP / PFR）
+const BTN_FOLD = makeHand(0, BTN_PLAYERS, [{ type: ActionType.Fold, playerIndex: 0 }]);
+// BB：hero 弃牌（用于验证位置过滤）
+const BB_FOLD = makeHand(1, BB_PLAYERS, [
+  { type: ActionType.Raise, amount: 6, playerIndex: 0 },
+  { type: ActionType.Fold, playerIndex: 1 },
+]);
+// CO：翻前加注后被 3-bet 弃牌（翻前加注者但未见翻牌，不计 C-bet 分母）
+const CO_RAISE_FOLD = makeHand(0, CO_PLAYERS, [
+  { type: ActionType.Raise, amount: 6, playerIndex: 0 },
+  { type: ActionType.Raise, amount: 18, playerIndex: 1 },
+  { type: ActionType.Fold, playerIndex: 0 },
+]);
+
+describe('getPositionStats', () => {
+  it('只统计该位置的手牌；无该位置手牌或 hero 不在牌局 → 0/0', () => {
+    const hands = [BTN_RAISE_CBET, BTN_RAISE_CHECK, BTN_FOLD, BTN_FOLD, BB_FOLD];
+
+    // BTN 4 手：2 手加注入池 → 50%；BB 那手被位置过滤排除（否则 2/5 → 40%）
+    expect(getPositionStats(hands, 'BTN', HERO)).toEqual({ vpip: 50, pfr: 50 });
+    // 无 CO 手牌 → 空集兜底
+    expect(getPositionStats(hands, 'CO', HERO)).toEqual({ vpip: 0, pfr: 0 });
+    // hero 不在任何牌局中（analyzeHand 返回 null）
+    expect(getPositionStats([BB_FOLD], 'BB', 'Nobody')).toEqual({ vpip: 0, pfr: 0 });
+  });
+});
+
+describe('calculateCBetFrequency', () => {
+  it('hero 从未翻前加注 → 分母为 0，返回 0', () => {
+    expect(calculateCBetFrequency([BTN_FOLD, BB_FOLD], HERO)).toBe(0);
+  });
+
+  it('分母为「翻前加注且见翻牌」手数；加注后被 3-bet 翻前弃牌不计入分母', () => {
+    // 分母 2（BTN_RAISE_CBET / BTN_RAISE_CHECK），分子 1 → 50%
+    // 若把 CO_RAISE_FOLD 计入分母则为 33%
+    expect(calculateCBetFrequency([BTN_RAISE_CBET, BTN_RAISE_CHECK, CO_RAISE_FOLD], HERO)).toBe(50);
+  });
+});
+
+describe('calculateHeroStats 空输入兜底', () => {
+  it('无手牌或 hero 不匹配时返回全 0 与空位置表', () => {
+    const empty = {
+      totalHands: 0, vpip: 0, pfr: 0, threeBetPercent: 0, afq: 0,
+      cbetFrequency: 0, wtsd: 0, wsd: 0, byPosition: {},
+    };
+    expect(calculateHeroStats([], HERO)).toEqual(empty);
+    // hero 不在任何牌局中（analyzeHand 全部返回 null）
+    expect(calculateHeroStats([BB_FOLD], 'Nobody')).toEqual(empty);
   });
 });

@@ -47,3 +47,8 @@ dist-ssr
 
 # 一次性验证快照目录（历史误入库，禁止再次跟踪）
 .tmp-verify/
+
+# test coverage reports
+coverage/
+coverage-unit/
+coverage-component/

@@ -84,12 +84,16 @@ additionalPrompt: ""
 模块内：
 - src/features/theory-academy/ — 模块根（types.ts 含 TheoryChapter / TheoryLevelInfo / TheorySection / PracticeRecommendation 等；store.ts 独立 persist store；index.ts）
 - src/features/theory-academy/data/levels/ — 理论 Level 内容数据（index.ts 为兼容层 re-export THEORY_LEVELS；variants/ 下三变体平级子目录：standard/、short-deck/、heads-up/，各含 standardLevel1~9.ts / shortDeckLevel1~9.ts / headsUpLevel1~9.ts（每 Level 单文件，导出 `<VARIANT>_LEVEL_<N>_CHAPTERS`）与 index.ts 聚合 standardLevels / shortDeckLevels / headsUpLevels；variantRules.ts 集中维护变体规则；index.ts 导出 ALL_VARIANT_THEORY_LEVELS 与 getTheoryLevelsByVariant，附 theoryIntegrity.test.ts）
-- src/features/theory-academy/data/levels/manifest/ — 由 `pnpm theory:manifest` 生成的 Level/章节目录摘要（无正文），首页/store/成就检查只读这一层；`manifest.parity.test.ts` 守卫其与完整数据一致
-- src/features/theory-academy/data/levels/loaders.ts — 完整数据按 Level 动态加载（`import.meta.glob` 每 Level 单文件独立 chunk；缓存 + in-flight 去重）；章节页 `loadTheoryLevelById` 只取当前 Level，疑难清单经 `loadTheoryLevelsForVariant` 逐 Level 组合
+- src/features/theory-academy/data/levels/variants/standard/chapters/ — 6-max 现金增补章（每文件单章、单数组导出，经 chapterMeta 统一打标为 `supplemental: true`，不参与 Level 解锁与核心进度）
+- src/features/theory-academy/data/levels/variants/standard/chapterMeta.ts — 增补/路径标签集中打标（`SUPPLEMENTAL_CHAPTER_IDS` / `PATH_TAGS` / 幂等 `applyStandardChapterMeta`），置于 `chapters/` 之外以免被 loader 的 glob 命中
+- src/features/theory-academy/data/sixMaxBenchmarks.ts — 6-max 开池双列基准单源（标准列与 range-trainer 6-max open 预设同口径，跨模块一致性由 `src/guards/sixMaxBenchmarkGuard.test.ts` 锁定）
+- src/features/theory-academy/data/theoryPaths.ts — 三条静态学习路径（sixmax-cash-core / postflop-deep / mtt-bridge，展示层，不门禁）
+- src/features/theory-academy/data/levels/manifest/ — 由 `pnpm theory:manifest` 生成的 Level/章节目录摘要（无正文，章节投影透传 `supplemental` / `pathTags`），首页/store/成就检查只读这一层；`manifest.parity.test.ts` 守卫其与完整数据一致
+- src/features/theory-academy/data/levels/loaders.ts — 完整数据按 Level 动态加载（`import.meta.glob` 每 Level 单文件独立 chunk；缓存 + in-flight 去重）；标准 6-max 增补章经二次 glob（`variants/standard/chapters/t*-*.ts`）按 Level 合并，合并后统一 `toSorted(order)` → 附实践推荐 → 打增补/路径标签；章节页 `loadTheoryLevelById` 只取当前 Level，疑难清单经 `loadTheoryLevelsForVariant` 逐 Level 组合
 - src/features/theory-academy/data/theoryIntegrity.test.ts — 数据完整性守卫
-- src/features/theory-academy/utils/ — theoryMeta.ts（摘要层查询）+ theoryProgress.ts（完整数据查询）+ quizOrder.ts（选项排序出口）+ quizOrder.test.ts
+- src/features/theory-academy/utils/ — theoryMeta.ts（摘要层查询，含 core/增补拆分与解锁/进度口径）+ theoryProgress.ts（完整数据查询）+ theoryMastery.ts（掌握度派生：`MASTERY_THRESHOLDS` / `getMasteryState` / `summarizeMastery`，只读 quizScores、不门禁）+ quizOrder.ts（选项排序出口）+ quizOrder.test.ts
 - src/features/theory-academy/hooks/ — useTheory.ts / useTheoryLevel.ts（章节页按 Level 懒载）/ useTheoryLevels.ts（疑难清单按变体组合）/ useTheoryContentI18n.ts（当前 level 内容包就绪态）
-- src/features/theory-academy/components/ — TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLadder / TheoryResume / TheorySectionRenderer / PracticeBridgeCard / NextChapterNav
+- src/features/theory-academy/components/ — TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLadder / TheoryResume / TheorySectionRenderer / PracticeBridgeCard / NextChapterNav / TheoryMasteryCard（掌握度四项计数 + 最低分章复习 CTA）/ TheoryLearningPaths（三条静态路径，仅标准变体）
 
 跨模块依赖：
 - src/shared/utils/seededShuffle.ts — 种子洗牌基础设施
@@ -97,7 +101,7 @@ additionalPrompt: ""
 - src/features/progress/store.ts — 消费 updateElo / recordAnswer / recordTrainingDay（设计内中枢引用）
 
 ## Workflows
-1. 新增章节时：在对应 variants/standard/standardLevelN.ts（标准变体）或 variants/short-deck/shortDeckLevelN.ts / variants/heads-up/headsUpLevelN.ts（变体）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验
+1. 新增核心章节时：在对应 variants/standard/standardLevelN.ts（标准变体）或 variants/short-deck/shortDeckLevelN.ts / variants/heads-up/headsUpLevelN.ts（变体）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验（6-max 现金增补章走第 13 条，不进 Level 文件）
    - **每章必须声明 3–5 条 `objectives`**（类型可选、守卫必填，缺漏或条数越界即门禁红）。写法：以动词开头、单句、句末无句号、**不复述任何精确数值**——量化一致性只由 `content` 与 `quiz` 两处承担，目标里写数字会造出第三个需要同步维护的地方；每条必须能指回该章某个具体段落（下标 0 起、含 heading 段），禁止凭标题或常识编造
    - **正文禁用四类写法（已由卫生守卫强制）**：`**粗体**`（`TheorySectionRenderer` 按纯文本渲染，星号会显示给用户）、"本级第 N 章 / 本章第 3 章"式**编号交叉引用**（加章或调序即指错）、用《》包章节名（《》只用于教材书名，章节名一律 `『…』`）、正文出现裸章节 id。跨章引用一律写成「见 T5『MDF 与 Alpha』章」——守卫读 `ALL_VARIANT_THEORY_LEVELS` 覆盖三变体全部章节的正文/目标/小测文本，判定书名号是否误用以其内容命中某章 `title` 为准
    - **locale 只能追加**：正文段落 key 是下标型（`theory.content.<chapterId>.<sectionIndex>`，无稳定 id），在已有章节中间插段会让 zh/en 数组静默错位且 `contentAlignment.baseline.ts` 棘轮基线为空集（无自救余地）；补段一律追加到数据数组与 zh/en 两份 `theory-content/<levelId>.json` 的 content 数组**末尾**，且三者下标顺序必须一致
@@ -132,11 +136,20 @@ additionalPrompt: ""
 11. **单挑（heads-up）正文的规则性事实以 `variantRules.headsUpRules` 为唯一判据**：SB 即按钮位、翻前 SB 先行动 / BB 最后行动、翻后 BB 先行动 / SB 最后行动（⇒ SB=IP、BB=OOP）。改动或新增任何 HU 章节前，凡涉及"谁先行动 / 谁有位置 / 谁持有 BTN"的陈述都须与该单源一致，`src/guards/huPositionOrderGuard.test.ts` 会零容忍拦截（它扫 4 份 HU locale，zh 侧由 `contentAlignment` 逐字镜像锁定数据层）。两条已认可的豁免：小测 `options`（干扰项按设计是假命题）与子句自身点名满员桌/6-max 的对比句。位置归属对调时**数字保持不变**，只把归属与依赖归属的论证搬对；若某数值只在旧归属下成立（如曾把"权益实现率 >100%"记在 BB 名下），删除或改名该论断并在 `variantQuantAudit` 索引注明，**不得自创新数**。
 12. **跨语言座位一致性**：en 是人工译文，方向守卫抓不到"座位所指漂移"（zh 改成 SB 而 en 仍写 BB 的 range/call）。改 HU 段落的座位归属时须同键逐条核对 en 侧对应句，不能只靠守卫归零。
 
+13. **新增/修改 6-max 现金增补章**（不参与 Level 解锁与核心进度）：
+    - 章节文件放 `data/levels/variants/standard/chapters/`（每文件单章、单数组导出，避免继续加长已顶到行数约束的 `standardLevelN.ts`），并在 `data/levels/variants/standard/chapterMeta.ts` 的 `SUPPLEMENTAL_CHAPTER_IDS` 与 `PATH_TAGS` 登记；两个字段由 `applyStandardChapterMeta()` 统一附加，章节文件本身不书写
+    - 文案按 Workflows 第 5 条同步：`theory.json` 的 `chapterTitle` / `chapterSubtitle`（副标题须写明「6-max 现金局补强（可选，不影响解锁）」）+ `theory-content/<levelId>.json` 的 `content` / `quiz` / `chapterObjectives`；章节实践推荐登记进 `chapterPracticeMap.ts`（课时 id 仍受 Level 白名单子集约束）
+    - **数据改动后必须运行 `pnpm theory:manifest`**：摘要需透传 `supplemental` / `pathTags`，否则 `manifest.parity.test.ts` 变红、首页的 core/增补统计与学习路径取不到标记
+    - 增补章不得进入 core：`data/theoryIntegrity.test.ts` 断言 `chapters/` 下必须 `supplemental: true`；`utils/theoryProgress.test.ts` 断言「仅缺增补章仍解锁下一级」「增补未读时 `isLevelFullyCompleted` 为真」与 `getNextChapterSummary` 的 core→core / core→增补回退 / 增补→扁平下一章三规则
+    - 开池数值一律投影 `data/sixMaxBenchmarks.ts` 的双列基准（标准列 + 新手简化），禁止在正文自建第二套数字；标准列与 range-trainer 预设的一致性由 `src/guards/sixMaxBenchmarkGuard.test.ts` 逐位置锁定
+    - 掌握度（`utils/theoryMastery.ts`）与学习路径（`data/theoryPaths.ts`）只读 `quizScores` / `completedChapters`，**禁止接入任何门禁判定**（遵守 PRD §5.27.2）
+
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - 独立 store，不写入 progress store 的 persist schema（仅调用其公开 action）
+- 6-max 增补层不新增持久化字段：`supplemental` / `pathTags` 是数据层标记，掌握度与学习路径由既有 `quizScores` / `completedChapters` 派生，`TheoryProgress` 形状不变，persist version 不递增、不写 migrate
 - 首页/store/成就检查禁止静态 import `data/levels/variants/**`（会把全量正文带回首屏）；只允许 `utils/theoryMeta` + `data/levels/manifest`。完整数据只能经 `data/levels/loaders.ts` 动态加载：章节页/首页预取按 Level 单取，禁止回退为整变体加载；只有疑难清单可逐 Level 组合出全变体
 - 章节 ID 规范：前缀 `t<level>-`（如 `t1-combinatorics`），与 strategy-academy 的 `l<level>-` 隔离，确保全局唯一
 - 章末小测答题必须调用 `progress.updateElo`（按章节 eloDimension）与 `recordAnswer`，理论掌握度进入统一 ELO 体系

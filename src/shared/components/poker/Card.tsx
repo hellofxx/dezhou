@@ -75,7 +75,9 @@ export function PokerCard({
       }}
       onClick={onClick}
       role={interactive ? 'button' : undefined}
-      tabIndex={interactive ? 0 : undefined}
+      // 显式给 -1：framer-motion 检测到 whileTap 时会自动补 tabIndex=0，
+      // 会让纯展示牌（手牌 / 公共牌）成为无名称的键盘 Tab 停靠点。
+      tabIndex={interactive ? 0 : -1}
       onKeyDown={interactive ? handleKeyDown : undefined}
       aria-label={interactive ? ariaLabel : undefined}
       initial={{ opacity: 0, y: -20, rotate: -5 }}

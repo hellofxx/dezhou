@@ -125,7 +125,13 @@ function extractHeroDecisions(hand: HandHistory, heroName: string): DecisionEntr
 
 let workerRef: Worker | null = null;
 let msgId = 0;
-const pending = new Map<number, (result: unknown) => void>();
+/** 悬挂中的 worker 请求：崩溃时需要用原始 payload 合成 fallback 结果 */
+interface PendingRequest {
+  resolve: (result: unknown) => void;
+  payload: unknown;
+}
+
+const pending = new Map<number, PendingRequest>();
 
 function getWorker(): Worker | null {
   if (workerRef) return workerRef;
@@ -133,9 +139,9 @@ function getWorker(): Worker | null {
     const worker = new Worker(new URL('../workers/gtoWorker.ts', import.meta.url), { type: 'module' });
     worker.onmessage = (e: MessageEvent) => {
       const { id, result } = e.data as { id: number; result: unknown };
-      const resolve = pending.get(id);
-      if (resolve) {
-        resolve(result);
+      const entry = pending.get(id);
+      if (entry) {
+        entry.resolve(result);
         pending.delete(id);
       }
     };
@@ -148,7 +154,10 @@ function getWorker(): Worker | null {
         // ignore terminate errors
       }
       workerRef = null;
-      // 该 worker 的所有悬挂请求走 fallback（清空 pending，超时定时器会自行 resolve fallback），避免永久等待
+      // worker 崩溃时对所有悬挂请求立即解析 fallback。此前只做 pending.clear()，
+      // 超时定时器里的 `pending.has(id)` 随之恒为 false → promise 永不 settle，
+      // 分析管线永久挂起（面板停在 loading 且不再恢复）。
+      for (const entry of pending.values()) entry.resolve(fallbackAnalyze(entry.payload));
       pending.clear();
     };
     workerRef = worker;
@@ -169,9 +178,12 @@ function sendToWorker<T>(type: string, payload: unknown): Promise<T> {
     const id = ++msgId;
     // P1 fix: 超时定时器存于闭包，消息成功返回或 worker 崩溃时 clearTimeout，避免悬挂定时器
     let timer: ReturnType<typeof setTimeout> | null = null;
-    pending.set(id, (result: unknown) => {
-      if (timer !== null) clearTimeout(timer);
-      resolve(result as T);
+    pending.set(id, {
+      payload,
+      resolve: (result: unknown) => {
+        if (timer !== null) clearTimeout(timer);
+        resolve(result as T);
+      },
     });
     worker.postMessage({ type, payload, id });
     timer = setTimeout(() => {

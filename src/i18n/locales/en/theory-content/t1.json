@@ -11,7 +11,7 @@
       "These three numbers (6 / 4 / 12) are the atomic units of range analysis. For example, \"the opponent's 3-bet range has AA, KK, and AKs\" means 6+6+4 = 16 combos. All later range theory (T4) builds on this counting.",
       "Common Starting-Hand Probabilities",
       "Probability of any pocket pair = 78/1326 ≈ 5.9% (about once every 17 hands); of AA = 6/1326 ≈ 0.45% (about once every 221 hands); of AK (including suited) = 16/1326 ≈ 1.2%; of any suited hand ≈ 23.5%.",
-      "Example: You've been at a full table for two hours without a big pair. Is that normal? The probability of QQ+ is 18/1326 ≈ 1.36%, about once every 74 hands. Live play deals about 25-30 hands/hour, so ~55 hands in two hours without QQ+ is entirely within normal variance. Understanding base probabilities prevents you from widening your range due to a \"card drought\".",
+      "Example: You've been at a 6-max table for two hours without a big pair. Is that normal? The probability of QQ+ is 18/1326 ≈ 1.36%, about once every 74 hands. Live play deals about 25-30 hands/hour, so ~55 hands in two hours without QQ+ is entirely within normal variance. Understanding base probabilities prevents you from widening your range due to a \"card drought\".",
       "Example 2 (flop counting): You hold a lone A♠ overcard. The flop deals 3 cards from the remaining 51. The probability at least one A appears = 1 − C(48,3)/C(51,3) = 1 − 17296/20825 ≈ 17%. The difficulty isn't the math but recognizing that \"at least one\" requires 1 minus the complement event — missing the complement is the most common combinatorics pitfall.",
       "Example 3 (range weighting): An opponent's 3-bet range is marked {AA, KK, QQ, AKs} = 6+6+6+4 = 22 combos. Pocket pairs account for 18 combos (~82%) while AKs is only 4 — \"his range is all AK\" is often an illusion; the real weight is on pairs. Price ranges by combo count, not class count, so you don't overestimate his air.",
       "Independent Events and Conditional Probability",
@@ -54,6 +54,20 @@
       "From Standard Deviation to Sample Size: Turning Long Run into a Number",
       "Hands needed for an edge to reach statistical significance:\nPer-hand expectation μ = winrate (bb/100) ÷ 100; per-hand standard deviation σ = stdDev (bb/100) ÷ 10\nn = (z × σ ÷ μ)², with z = 1.645 (90% confidence) or 1.96 (95% confidence)\n\nWorked example at 5bb/100 with 80bb/100 std deviation: μ = 0.05bb, σ = 8bb\nz = 1.96 → n = (1.96 × 8 ÷ 0.05)² = 313.6² ≈ 98,300 hands\nz = 1.645 → n = (1.645 × 8 ÷ 0.05)² = 263.2² ≈ 69,300 hands\n\nDouble the winrate to 10bb/100: n = (1.96 × 8 ÷ 0.1)² ≈ 24,600 hands\nTakeaway: n scales with the inverse square of the winrate — doubling your edge cuts the sample needed to prove it to roughly a quarter. (Concept from: The Mathematics of Poker Ch.3 variance and standard deviation)",
       "Example 4 (same winrate, two sample sizes): you play 20,000 hands at +5bb/100 and bank +1,000bb. The cumulative standard deviation over 20,000 hands = 8 × √20,000 ≈ 1,131bb, larger than your entire profit — that result sits fully inside the noise band and proves nothing about your skill. Stretch the same winrate to 100,000 hands: cumulative expectation 5,000bb, cumulative standard deviation = 8 × √100,000 ≈ 2,530bb, so expectation is now about twice the standard deviation and the edge finally outweighs the variance. This is the same fact as the roughly 98,300 hands computed above, approached from the other direction."
+    ],
+    "t1-sixmax-table": [
+      "Six Seats, a New Set of Coordinates",
+      "A 6-max cash game seats only six players: under the gun (UTG), hijack (HJ), cutoff (CO), button (BTN), small blind (SB) and big blind (BB). The button moves one seat every hand, so every player rotates through all six positions — the stable coordinate is how far you sit from the button, not who happens to be sitting there. Position decides two things: how many players behind you have yet to act preflop, and where you fall in the postflop action order. Together they set how playable the same hand is.",
+      "Preflop and Postflop Action Order",
+      "Preflop the action starts at UTG and moves through HJ, CO, BTN, SB and BB; the blinds have already put money in, yet the last preflop action still belongs to the big blind. Postflop the order changes completely: SB, BB, UTG, HJ, CO, BTN — the blinds speak first and the button speaks last. So \"good position\" means the same thing on both streets: postflop you act after more players and therefore get more information. The small blind speaks second to last preflop, yet is always the first to act after the flop.",
+      "You only need two questions to know your position: preflop, have I been forced to put money in (am I a blind), and postflop, when do I speak? The first decides whether dead money of mine already sits in the pot; the second decides whether I get to watch the opponent act before I choose.",
+      "Standard Naming vs Full-Ring Naming",
+      "6-max naming is defined by distance to the button: UTG acts first, HJ sits two seats before the button, CO one seat before it, BTN is the button, and SB and BB are the blinds. A full ring (nine players) uses a different coordinate system: after UTG come middle seats such as UTG+1 and MP, then HJ, CO, BTN, SB and BB, and some textbooks subdivide the middle even further. The two systems have different seat counts, so do not map them seat by seat — a full-ring middle seat has no counterpart in 6-max, and forcing the mapping imports the tightness of \"two middle players still to act behind me\" onto a table with only two late seats behind, which systematically makes your opening range too tight. Only two pieces of information transfer: distance to the button and how many players are still behind. Actual widths must be recalibrated against the 6-max benchmark (see the chapter T4 \"6-max Preflop Range Benchmarks\").",
+      "Example (the cost of copying a position chart): you own an opening chart written for the full-ring UTG seat and use it from the first seat in 6-max. Three fewer seats mean two things: you are less likely to be re-raised, and fewer players behind must be crossed, so the same marginal hands carry clearly higher EV in 6-max. Copying the full-ring chart is therefore not playing it safe — it actively gives up hands you could open. The label on the seat looks identical; the seat count and the tightness behind it do not.",
+      "Four groups and the direction of width: UTG is early position; HJ is middle; CO and BTN are late; SB and BB are the blinds. Width increases from early to middle to late, because fewer players remain behind and you are more likely to have position postflop. The blinds are the special case: the small blind faces only two players who have yet to act and holds dead money, yet acts first on every postflop street; the big blind has already posted a full blind and only needs to make up the difference, so its defending range can be very wide. Summarising the blinds as \"good position\" leads to the opposite conclusion — the small blind is wide not because its position is good, but because it has to trade aggression for its postflop disadvantage.",
+      "Every 6-max benchmark in this chapter and in this module assumes one explicit scope: 100 big blinds effective, no ante. Change the scope and the ranges must move — with an ante or a forced straddle the pot is naturally larger, both opening and defending get better odds, and participation can widen; with shallower stacks (say 40bb) the postflop room to manoeuvre shrinks, so opening ranges tighten and the all-in versus fold boundary moves up.",
+      "Blind cost per hand = 1.5bb ÷ number of seats\n6-max: 1.5 ÷ 6 = 0.25bb per hand\nFull ring: 1.5 ÷ 9 ≈ 0.17bb per hand\nPlayers still to act behind: five behind UTG in 6-max, eight behind UTG at a full ring\nDirection of the conclusion: the same total blind money spread over fewer hands means a higher entry cost per hand; fewer opponents behind means steals succeed more often. Both push the same way, which is why 6-max opens far more frequently than a full ring.",
+      "Learn position by distance first and by name second: how many players are behind me preflop, and when do I speak postflop. The name is only a coordinate — widths must be recomputed against the 6-max benchmark, and a full-ring chart cannot be copied seat for seat."
     ]
   },
   "quiz": {
@@ -206,6 +220,36 @@
         "29400"
       ],
       "explanation": "First the mean μ=60, then squared deviations sum to 147000, σ²=147000/5=29400, σ=√29400≈171. The mean 60 is the expected value; the standard deviation 171 far exceeds it, showing single results swing violently — the meaning of variance."
+    },
+    "t1-sixmax-table-q1": {
+      "question": "In a 6-max game, which position acts first after the flop?",
+      "options": [
+        "SB (small blind)",
+        "BB (big blind)",
+        "UTG (under the gun)",
+        "BTN (button)"
+      ],
+      "explanation": "Postflop the order is SB, BB, UTG, HJ, CO, BTN: the blinds speak first and the button last. Preflop runs the other way — it starts at UTG and ends with the BB — so the two streets are not the same sequence."
+    },
+    "t1-sixmax-table-q2": {
+      "question": "Which statement about full-ring and 6-max position naming is correct?",
+      "options": [
+        "The seat counts differ, so a full-ring middle seat has no counterpart in 6-max and the two cannot be mapped seat by seat",
+        "The 6-max hijack equals full-ring UTG+1, so the same opening chart can be reused",
+        "The full-ring middle position corresponds to the big blind in 6-max",
+        "The two naming systems are identical and interchangeable"
+      ],
+      "explanation": "Only \"distance to the button\" and \"how many players are behind\" transfer. Because the seat counts differ, the tightness of the same chart has to be recalibrated against the 6-max benchmark, or it will be systematically too tight."
+    },
+    "t1-sixmax-table-q3": {
+      "question": "Why does 6-max rely on blind stealing more than a full ring does?",
+      "options": [
+        "The blind cost per hand is higher and fewer opponents are still to act behind",
+        "Blind amounts are larger in 6-max than at a full ring",
+        "The 6-max button acts first after the flop",
+        "A 6-max table has no big blind"
+      ],
+      "explanation": "The blinds total 1.5bb in both games: spread over six hands that is 0.25bb each, over nine hands about 0.17bb each; and the number of players behind UTG drops from eight to five. Higher entry cost plus fewer opponents resisting makes opening more frequent."
     }
   },
   "chapterObjectives": {
@@ -224,6 +268,11 @@
       "Grasp the relationship between sample size and variance, and how large a \"long run\" really is",
       "Turn variance awareness into three practical principles: bankroll management, emotional control, and review",
       "Estimate how many hands an edge needs to reach statistical significance, and judge whether your own sample is large enough to draw conclusions"
+    ],
+    "t1-sixmax-table": [
+      "State the preflop and postflop action order of every 6-max seat",
+      "Group the seats into early, middle, late and blinds, and explain which way hand width moves across those groups",
+      "Point out how full-ring naming differs from 6-max naming, and why the two cannot be mapped seat by seat"
     ]
   }
 }

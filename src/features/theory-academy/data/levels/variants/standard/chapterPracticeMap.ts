@@ -19,6 +19,10 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't1-variance': {
     lessons: [lesson('l5-bankroll', '资金管理'), lesson('l5-session-review', 'Session Review 方法论')],
   },
+  // T1 增补章（6-max 现金主线）
+  't1-sixmax-table': {
+    lessons: [lesson('l1-position', '位置的力量'), lesson('l2-raise-sizing', '加注大小')],
+  },
 
   // T2 期望值与赔率体系
   't2-ev': { lessons: [lesson('l4-ev-thinking', 'EV 思维')] },
@@ -33,6 +37,10 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't3-fundamental-theorem': {
     lessons: [lesson('l3-cbet', '持续下注（C-Bet）'), lesson('l3-bet-sizing', '下注尺度理论')],
   },
+  // T3 增补章（盲注战）
+  't3-blind-battle': {
+    lessons: [lesson('l2-bb-defense', '大盲防守'), lesson('l1-position', '位置的力量')],
+  },
 
   // T4 范围理论
   't4-range-thinking': { lessons: [lesson('l4-range-thinking', '范围思维')] },
@@ -45,6 +53,14 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   },
   't4-structure-economics': {
     lessons: [lesson('l7-rake', 'Rake 对策略的影响'), lesson('local-ante', 'Ante 结构的翻前调整')],
+  },
+  // T4 增补章（6-max 翻前范围基准）
+  't4-sixmax-ranges': {
+    lessons: [
+      lesson('l2-raise-sizing', '加注大小'),
+      lesson('l2-3bet-basics', '3-bet 基础'),
+      lesson('l2-bb-defense', '大盲防守'),
+    ],
   },
 
   // T5 博弈论基础
@@ -68,6 +84,28 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   't6-geometric': { lessons: [lesson('l4-overbet', 'Overbet 策略')] },
   't6-equity-realization': {
     lessons: [lesson('l3-cbet', '持续下注（C-Bet）'), lesson('l3-draws', '听牌处理')],
+  },
+  // T6 增补章（6-max 现金主线：三种底池类型）
+  't6-srp-postflop': {
+    lessons: [
+      lesson('l3-cbet', '持续下注（C-Bet）'),
+      lesson('l3-bet-sizing', '下注尺度理论'),
+      lesson('l3-multistreet', '多街计划'),
+    ],
+  },
+  't6-3bet-pot': {
+    lessons: [
+      lesson('l2-3bet-basics', '3-bet 基础'),
+      lesson('l2-4bet-strategy', '4-Bet 策略'),
+      lesson('l3-cbet', '持续下注（C-Bet）'),
+    ],
+  },
+  't6-turn-river': {
+    lessons: [
+      lesson('l3-multistreet', '多街计划'),
+      lesson('l3-bluffing', '诈唬的艺术'),
+      lesson('l4-overbet', 'Overbet 策略'),
+    ],
   },
 
   // T7 对手分析理论
@@ -102,5 +140,13 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   },
   't9-cash-vs-mtt': {
     lessons: [lesson('l6-icm', 'ICM 基础'), lesson('l6-bounty', 'Bounty 锦标赛策略')],
+  },
+  // T9 增补章（6-max 现金局综合实战）
+  't9-sixmax-capstone': {
+    lessons: [
+      lesson('l3-multistreet', '多街计划'),
+      lesson('l8-exploitative-adjustments', 'Exploitative Adjustments'),
+      lesson('l4-range-thinking', '范围思维'),
+    ],
   },
 };

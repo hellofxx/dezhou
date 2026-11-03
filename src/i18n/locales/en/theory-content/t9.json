@@ -90,6 +90,20 @@
       "The classic mistake: \"Which one pays more - just look at the buy-ins and the profit figures.\" The two profit streams are not in the same unit. Cash is bb/100 × hands, with linear utility and a withdrawable balance; a tournament is a per-entry $EV distribution, concentrated at the top and needing tens to hundreds of entries to converge. Comparing the amounts directly is comparing kilometres with kilograms. The workable version converts both to the same time unit (per hour) and the same risk yardstick (risk adjusted), and only then asks which is larger.",
       "A transfer-training order: drill the decision tree in cash first - unlimited re-entry, stable depth, feedback you can verify on the spot; then train the two tournament-only skills separately, Push/Fold charts below 15bb and bubble ICM judgement, reviewed off-line with a calculator rather than by feel at the table. Finally bring one habit across: check the structure before you sit. Rake at this table, fee at that event, and how often the blinds move - three tables are three different equations.",
       "Two structures, two ledgers: the cash ledger counts hands and μ under linear utility, the tournament ledger counts $EV under non-linear utility with an M that collapses one way. The same 55% hand is a call worth +300 chips on one side and 22.6 against 32.8, a fold, on the other. The split does not come from skill but from which ledger you are computing in - so confirm the ledger before every decision."
+    ],
+    "t9-sixmax-capstone": [
+      "Compressing Nine Levels Into One Decision Chain",
+      "By the end of the theory, every decision at the table breaks into five steps: read your position and effective stack, assign the opponent a range, judge whose range the board belongs to, read what his line on each street removes from that range, and only then decide whether to deviate from equilibrium for an exploit. The order cannot be reversed — deciding to exploit before defining ranges means picking evidence for a conclusion, and your review will never find the step where it went wrong. The cash-versus-tournament split lands on the first step too: the same chip count carries a different risk weight in the two formats, so the hands you can commit differ.",
+      "The five-step decision chain\n1) Position and effective stack → compute the SPR and decide how many chips this hand is willing to fight for\n2) Opponent range → derive width and strength distribution from his raise and call frequencies and from his position\n3) Board → who holds more top pair or better, and who holds more nutted combos\n4) Line → what each check, bet and call removes from his range on each street\n5) Exploit → which direction to deviate and by how much\nHow you are scored: if the first four steps are wrong, an elegant fifth step is still wrong",
+      "One Hand Through All Five Steps",
+      "Steps one and two (6-max, 100bb, no ante): the hero opens to 2.5bb from the hijack with A♣Q♥, the button calls and both blinds fold. Pot = 0.5 + 1.0 + 2.5 + 2.5 = 6.5bb, each player has put in 2.5, the effective remaining stack is 97.5bb and SPR = 97.5 ÷ 6.5 = 15.0 — deep enough that a single pair should not be playing for stacks. The read on the opponent: VPIP 32 / PFR 10 / AF 1.0, an opening range on the strong side with almost no postflop raises and almost no bluffs. His flatting range therefore leans to medium pairs, suited connectors and dominated broadways like KQ and AJ, while AA, KK and AK would have raised preflop and are not in it.",
+      "Step three (the board): the flop comes Q♦8♣4♣. The hero holds top pair, top kicker, and the A♣ adds both a backdoor nut flush and a blocker — the opponent cannot hold an A♣-led flush draw. On this board QQ, 88 and AQ are denser in the raiser’s range, while 44, 9♣8♣ and 7♣6♣ sit in the button’s flatting range. With 6.5bb in the pot the hero bets 2bb (about 31%); one reason for the small size is position, since the hijack is out of position against the button and a big bet would collapse his range into two poles. The button calls and the pot becomes 10.5bb. The key information from that line is that he did not raise: sets, two pair and strong draws are all trapped inside a call, so his range is capped.",
+      "Step four (the line): the turn is 9♣. It completes both the flush and the T-J straight, and the hero holds only the A♣ of clubs. The hero checks, the button bets 6bb into 10.5bb (about 57%). The equity needed to call is 6 ÷ (10.5 + 6 + 6) = 6 ÷ 22.5 ≈ 26.7%; the hero has 9 flush cards plus the one remaining queen (the other queen is a club already counted), 10 ÷ 46 ≈ 22% of improvement, plus the times the opponent bets something worse, so the threshold is reachable and he calls. The pot is 22.5bb with 89.5bb behind. What carries the most information here is his bet rather than the hero’s cards: a player with an aggression factor of 1.0 who bets the turn voluntarily is usually already ahead of top pair.",
+      "Step five (exploit and close out): the river is 5♦ and every draw has missed. The hero checks, the button bets 15bb into 22.5bb (about 67%). The equity needed to call is 15 ÷ (22.5 + 15 + 15) = 15 ÷ 52.5 ≈ 28.6%, and the hero folds. The reason is not that top pair is small, it is the range: this board completed every draw, so the value combos that a player who never bluffs can represent across three streets (flushes, sets, straights) far outweigh the bluff combos he might hold; and because the A♣ has been in the hero’s hand the whole time, the opponent cannot even hold the strongest flush draw. Meeting an equity threshold does not force a call — reading the range can turn a call that the pot odds justify into a fold.",
+      "The Leak Checklist and Pool Exploits",
+      "A checklist only works when each item lands on a specific street: did you pick hands preflop because you wanted to play rather than because they were worth playing; when the board got wet did you keep using your flop sizing and treat medium strength as strength; out of position did you chase weak draws as if they were strong ones; on the river did you call because the pot odds said so without counting how many bluff combos he could still hold; and how often did the same mistake appear inside one session. Track frequency rather than money, because money is mixed with variance while frequency is a technical problem you can fix.",
+      "Pool exploits are graded by the opponent’s inverse leak. Against a player who calls too much: increase the size of value bets and cut bluffs to nearly zero, because he does not supply the fold rate a bluff needs. Against a player who folds too much and rarely raises: shrink value sizes and bluff more, since his fold rate sits far above the threshold. Against a chronic over-folder: use more small bets to collect rent and turn every street’s fold into profit. Against an over-aggressive player: bluff less and convert medium strength into bluff-catchers so his frequencies pay you. Every adjustment rests on the first four steps being right — with the range misread, an exploit just doubles the size of the mistake.",
+      "Long-term profit comes from executing the same decision chain again and again, not from the occasional brilliant fold. Fix the process so that every step can be reviewed, then let the checklist surface the one class of mistake that keeps repeating — that changes results more than memorising any range chart."
     ]
   },
   "quiz": {
@@ -392,6 +406,36 @@
         "Look at which format has the higher ITM rate, since that is the profitable one"
       ],
       "explanation": "Cash is measured in bb/100 × hands with linear utility; a tournament is a per-entry $EV distribution, top-heavy and slow to converge. The only comparable form is same time unit, same risk adjustment, each net of its own mechanism of the take. Option 2 divides two non-comparable distributions; option 3 substitutes an extreme value for an expectation, which simply rewards whichever format has more variance; option 4 mistakes frequent cashing for profit, while a high ITM rate usually means the pay jumps are small."
+    },
+    "t9-sixmax-capstone-q1": {
+      "question": "Which step comes first in the five-step decision chain?",
+      "options": [
+        "Confirm position and effective stack, then compute the stack-to-pot ratio",
+        "Guess the two cards the opponent most likely holds",
+        "Decide the sizing for this street",
+        "Decide whether to bluff with this hand"
+      ],
+      "explanation": "Position and effective stack set the parameters for every later step: the stack-to-pot ratio fixes the commitment line, and position fixes equity realisation and action order. Skipping it to guess hands or pick a size means computing inside the wrong coordinate system. Guessing hands and choosing bluffs are outputs of the fourth and fifth steps, and sizing follows from the structure of the range."
+    },
+    "t9-sixmax-capstone-q2": {
+      "question": "Why can the same hand produce different conclusions in cash games and in tournaments?",
+      "options": [
+        "Chips carry a different risk weight, so the same chip count represents a different value",
+        "Cash game decks are more likely to make a flush",
+        "Tournament blind structures do not allow all-in bets",
+        "Cash game opponents always have wider ranges"
+      ],
+      "explanation": "Tournament chips have non-linear value: losing the whole stack costs far more than winning the same amount, so a higher equity is needed before committing. Cash game chips are close to fungible, so the criterion returns to pure expected value. Decks and all-in rules are identical in both formats, and opponent range width is not determined by the format itself."
+    },
+    "t9-sixmax-capstone-q3": {
+      "question": "Against an opponent who calls too much and rarely folds, which way does the exploit point?",
+      "options": [
+        "Increase value bet sizing and cut bluffs to nearly zero",
+        "Bluff more often and make him pay for being loose",
+        "Shrink value sizes to induce more raises",
+        "Raise your opening frequency to widen your range advantage"
+      ],
+      "explanation": "A bluff needs the fold rate α = B/(P+B), which a calling station cannot supply, so any bluff is negative expectation; on the other side he will call wider sizes, so value bets can grow. The second option reverses the direction and is the adjustment for an over-folder; the third and fourth do not address the specific trait of not folding at all."
     }
   },
   "chapterObjectives": {
@@ -430,6 +474,11 @@
       "Use M = effective stack ÷ big blind to describe the one-way collapse of tournament depth and how it cancels the postflop sizing family",
       "Separate per-pot rake from per-entry tournament fee, and name the behaviour each one punishes (volume played vs number of entries)",
       "Convert both formats to the same time unit and the same risk yardstick before comparing them"
+    ],
+    "t9-sixmax-capstone": [
+      "Chain position and stack, opponent range, board ownership, betting line and exploit adjustment into one ordered decision process",
+      "Walk a single hand street by street to show how the range read changes the choice on each one",
+      "Use the leak checklist to locate a repeating systematic error and pick an exploit direction for the pool type"
     ]
   }
 }

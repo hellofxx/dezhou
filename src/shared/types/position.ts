@@ -1,7 +1,7 @@
 // 牌桌位置
 export enum Position {
   UTG = 'UTG',   // Under the Gun
-  UTG1 = 'UTG1', // UTG+1 (6-max中为MP)
+  UTG1 = 'UTG1', // UTG+1：9 人桌专用；6-max 无此座位，第二位是 HJ
   UTG2 = 'UTG2', // UTG+2，9 人桌特有
   MP = 'MP',     // Middle Position
   HJ = 'HJ',     // Hijack (LJ in some formats)

@@ -15,13 +15,17 @@
 | `designTokenCssGuard.test.ts` | `src/styles/*.css` 的 `background` 声明无超阈白透面填充、无纯黑实底；豁免项必须成对登记 DESIGN.md 依据；help 段 44px 触摸目标与 transition 引用动效 token | `pnpm test src/guards/designTokenCssGuard.test.ts` |
 | `eslintCrossImports.test.ts` | `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 与精确快照一致（新增跨模块边必然变红，收紧时只删不加） | `pnpm test src/guards/eslintCrossImports.test.ts` |
 | `huPositionOrderGuard.test.ts` | 单挑（heads-up）位置方向零容忍：以 `theory-academy` 的 `variantRules.headsUpRules` 为单源，四份 HU locale 与单源本身不得出现「谁先行动 / 谁有位置」倒置 | `pnpm test src/guards/huPositionOrderGuard.test.ts` |
+| `variantRuleCopyGuard.test.ts` | 变体规则 UI 文案与单源一致：单挑描述为翻后 BB 先行动（`variant.json` / `elo.ts`），短牌文案为三条 > 顺子（`variant.json` / `rangeTrainer.json`），与 `variantRules.ts` 对齐 | `pnpm test src/guards/variantRuleCopyGuard.test.ts` |
 | `rangePresetGtoConsistency.test.ts` | range-trainer preset 与 gto-simulator `preflop-ranges.json` 频率 ≥ 0.5 的手牌完全一致；预设名称的 `(~N%)` 标注与组合占比偏差 ≤ 1pp | `pnpm test src/guards/rangePresetGtoConsistency.test.ts` |
+| `sixMaxBenchmarkGuard.test.ts` | 理论学院 6-max 开池基准的双列口径：`standard` 列与 range-trainer 6-max open 预设名称的 `(~N%)` 逐位置一致；新手列不宽于标准列且 BTN 最宽 | `pnpm test src/guards/sixMaxBenchmarkGuard.test.ts` |
 | `line-count-guard.test.ts` | 单文件行数硬约束：`src/**/*.ts(x)` 非测试文件 >400 行失败；既有超大文件逐文件 allowlist 棘轮（只减不增），300–400 行为 warning 灰区 | `pnpm test src/guards/line-count-guard.test.ts` |
 | `cssLineCountGuard.test.ts` | `src/styles/*.css` 平铺扫描：单文件 ≤800 行（`globals.css` 按 allowlist 当前行数锁定，Phase 2 拆分前临时豁免）；CSS 总行数自检防路径失效空跑 | `pnpm test src/guards/cssLineCountGuard.test.ts` |
+| `testSystem.guard.test.ts` | 测试体系自身不变式：无 focused / skipped / todo / expected-failure 标记；测试文件只用 `.test.ts(x)` 且不在 `__tests__/`；含 `describe`/`it` 声明的非测试文件（不会被收集）为零；每个 feature 至少一个测试；每个 persist store 有 `<store>.persist-shape.test.ts`（version > 1 还需 `<store>.migrate.test.ts`）；`src/guards` 文件与 README 双向一致；扫描面自检 | `pnpm test src/guards/testSystem.guard.test.ts` |
 
 ## 约定
 
 - **新增全局不变式应放在本目录**：判定对象跨模块或覆盖全仓时，新建 `src/guards/<不变量名>.guard.test.ts` 风格的文件（后缀 `.test.ts` → unit 项目，Node 环境）。
+- **新增守卫必须登记本表**：`testSystem.guard.test.ts` 双向校验文件与清单；未登记或登记了不存在的文件都会变红。
 - 守卫必须**自检扫描面**：路径解析或 glob 失效时以「扫描文件数 / 扫描字段数偏低」的断言变红，禁止空洞通过。移动本目录文件后须重跑对应守卫确认自检未失效。
 - 目录层级变化时同步修正相对路径（守卫距 `src/` 为一层，故读 `src/styles` 用 `../styles`，读仓库根用 `../../`）。
 - 守卫失败即 `pnpm test` 变红，禁止用跳过/放宽断言来"修复"；确需豁免时先在设计文档登记依据（白名单只删不加）。

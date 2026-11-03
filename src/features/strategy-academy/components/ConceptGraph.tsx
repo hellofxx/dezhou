@@ -540,7 +540,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
           {LEVELS.map((levelInfo, levelIdx) => {
             const levelY = LAYOUT.paddingTop + levelIdx * (LAYOUT.nodeHeight + LAYOUT.levelGap);
             return (
-              <g key={`level-${levelInfo.level}`}>
+              <g key={`level-${levelInfo.id ?? levelInfo.level}`}>
                 {/* 行背景 */}
                 <rect
                   x={0}

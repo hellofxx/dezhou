@@ -9,13 +9,34 @@ import {
   STANDARD_LEVEL_SUMMARIES,
 } from './manifest';
 import { inferVariantFromChapterId } from '../../utils/theoryMeta';
-import type { TheoryLevelInfo, TheoryLevelSummary } from '../../types';
+import type {
+  TheoryChapter,
+  TheoryChapterSummary,
+  TheoryLevelInfo,
+  TheoryLevelSummary,
+} from '../../types';
 
 /**
  * 摘要 manifest ↔ 完整数据一致性守卫。
  * 首页/store 只读 manifest；它一旦落后于 variants/*，目录、解锁与进度会静默错位。
  * 失败时运行 `pnpm theory:manifest` 重新生成。
  */
+
+/** 与 scripts/generate-theory-manifest.mjs 的 projectChapter 同构：条件字段缺省不落盘 */
+function projectChapter(chapter: TheoryChapter): TheoryChapterSummary {
+  const projected: TheoryChapterSummary = {
+    id: chapter.id,
+    level: chapter.level,
+    order: chapter.order,
+    title: chapter.title,
+    subtitle: chapter.subtitle,
+    duration: chapter.duration,
+    variant: chapter.variant,
+  };
+  if (chapter.supplemental) projected.supplemental = true;
+  if (chapter.pathTags?.length) projected.pathTags = chapter.pathTags;
+  return projected;
+}
 
 function project(level: TheoryLevelInfo): TheoryLevelSummary {
   return {
@@ -28,15 +49,7 @@ function project(level: TheoryLevelInfo): TheoryLevelSummary {
     unlockRequirement: level.unlockRequirement,
     variant: level.variant,
     practiceRecommendations: level.practiceRecommendations,
-    chapters: level.chapters.map((chapter) => ({
-      id: chapter.id,
-      level: chapter.level,
-      order: chapter.order,
-      title: chapter.title,
-      subtitle: chapter.subtitle,
-      duration: chapter.duration,
-      variant: chapter.variant,
-    })),
+    chapters: level.chapters.map(projectChapter),
   };
 }
 

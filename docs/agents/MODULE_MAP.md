@@ -18,16 +18,16 @@
 
 | 模块 | 负责代理 | 入口组件 | store | i18n 模块 | 测试数 | 允许跨模块引用 | 组件数 |
 |---|---|---|---|---|---|---|---|
-| `gto-simulator` | `gto-simulator-dev` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 11 | `progress` | 10 |
-| `hand-history` | `hand-history-dev` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 7 | — | 12 |
-| `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 3 | — | 9 |
-| `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding` | 5 | `progress` | 9 |
-| `pot-odds` | `pot-odds-dev` | `PotOddsPage` | `store.ts（无 persist）` | `potOdds` | 3 | `progress` | 8 |
-| `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `variant` | 29 | — | 44 |
-| `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 11 | `progress` | 13 |
-| `range-trainer` | `range-trainer-dev` | `RangeTrainerHome` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 8 | `progress` | 13 |
-| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v5）` | `academy`, `drills`, `gto`, `quickDrill`, `variant` | 35 | `progress` | 46 |
-| `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v3）` | `academy`, `theory`, `variant` | 22 | `progress` | 19 |
+| `gto-simulator` | `gto-simulator-dev` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 25 | `progress` | 19 |
+| `hand-history` | `hand-history-dev` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
+| `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
+| `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding` | 8 | `progress` | 12 |
+| `pot-odds` | `pot-odds-dev` | `PotOddsPage` | `store.ts（无 persist）` | `potOdds` | 14 | `progress` | 17 |
+| `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `variant` | 57 | — | 68 |
+| `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 22 | `progress` | 18 |
+| `range-trainer` | `range-trainer-dev` | `RangeTrainerHome` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 12 | `progress` | 17 |
+| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v5）` | `academy`, `drills`, `gto`, `quickDrill`, `variant` | 74 | `progress` | 75 |
+| `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v3）` | `academy`, `theory`, `variant` | 34 | `progress` | 26 |
 
 ## Lazy 路由表
 

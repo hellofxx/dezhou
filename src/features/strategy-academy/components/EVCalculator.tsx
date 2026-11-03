@@ -17,9 +17,13 @@ interface EVVisualizerProps {
 
 export function EVVisualizer({ potSize, betAmount, winRate }: EVVisualizerProps) {
   const { t } = useTranslation();
+  // winRate prop 为 UI 口径的百分比（0-100，与滑块/展示一致）；
+  // calculateEV 的口径是 0-1 概率，边界处统一归一化（旧实现直接传 30 被 clamp 成 100%，
+  // 默认 30% 胜率会显示成 +150BB 而非 +10BB —— 见 EVCalculator.test.tsx 回归锁）。
+  const equityRate = Math.max(0, Math.min(1, winRate / 100));
   const currentEV = useMemo(() => 
-    calculateEV(potSize, betAmount, winRate), 
-    [potSize, betAmount, winRate]
+    calculateEV(potSize, betAmount, equityRate),
+    [potSize, betAmount, equityRate]
   );
 
   // Breakeven point: rate * (pot + bet) - (1 - rate) * bet = 0

@@ -200,7 +200,14 @@
     "t6sd-equity-realization": "短牌权益实现",
     "t7sd-hud": "短牌 HUD 指标与样本量",
     "t8sd-bankroll": "短牌资金门槛与连败解读",
-    "t9sd-tournament-structure": "短牌锦标赛结构与前注制门槛"
+    "t9sd-tournament-structure": "短牌锦标赛结构与前注制门槛",
+    "t1-sixmax-table": "6-max 座位结构与位置分组",
+    "t3-blind-battle": "盲注战：SB 与 BB 的强制博弈",
+    "t4-sixmax-ranges": "6-max 翻前范围基准",
+    "t6-srp-postflop": "单加注底池的翻后打法",
+    "t6-3bet-pot": "3-bet 底池的翻后打法",
+    "t6-turn-river": "转牌与河牌的连续施压",
+    "t9-sixmax-capstone": "6-max 现金局综合实战"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "一切扑克数学的起点：52 张牌能组合出什么",
@@ -288,7 +295,14 @@
     "t6sd-equity-realization": "标价 30.1%，到手价 25.6%",
     "t7sd-hud": "基线按牌堆重设，样本按噪声反解",
     "t8sd-bankroll": "把 150 买入从口号算成区间",
-    "t9sd-tournament-structure": "前注改的是死钱，不是门槛公式"
+    "t9sd-tournament-structure": "前注改的是死钱，不是门槛公式",
+    "t1-sixmax-table": "6-max 现金局补强（可选，不影响解锁）。先把六个座位与行动顺序认准，再谈范围",
+    "t3-blind-battle": "6-max 现金局补强（可选，不影响解锁）。盲注战是 6-max 出现频率最高的一类底池",
+    "t4-sixmax-ranges": "6-max 现金局补强（可选，不影响解锁）。把开池范围从记忆表换成可对照的基准",
+    "t6-srp-postflop": "6-max 现金局补强（可选，不影响解锁）。最常见的底池类型，值得一套标准流程",
+    "t6-3bet-pot": "6-max 现金局补强（可选，不影响解锁）。底池被放大之后，承诺线与尺度都要重算",
+    "t6-turn-river": "6-max 现金局补强（可选，不影响解锁）。筹码真正流动的地方在转牌与河牌",
+    "t9-sixmax-capstone": "6-max 现金局补强（可选，不影响解锁）。把九级理论压进同一条决策链"
   },
   "ladder": {
     "title": "理论进阶之路",
@@ -298,11 +312,53 @@
     "chapterStates": {
       "done": "已读",
       "current": "下一章",
-      "locked": "未解锁"
+      "locked": "未解锁",
+      "optional": "可选"
     },
     "quizScore": "小测 {{score}} 分",
     "chapterList": "章节列表",
-    "applyPractice": "去实践应用"
+    "applyPractice": "去实践应用",
+    "supplementalProgress": "6-max 补强 {{done}}/{{total}}（可选，不影响解锁）"
+  },
+  "supplemental": {
+    "title": "6-max 现金补强",
+    "subtitle": "可选阅读：不影响任何解锁，也不计入核心进度",
+    "progress": "{{done}}/{{total}} 章",
+    "cta": "继续 6-max 补强",
+    "allDone": "6-max 补强已全部读完",
+    "lockedHint": "所属级别解锁后可读"
+  },
+  "mastery": {
+    "title": "掌握度",
+    "subtitle": "按章末小测的最高分统计，只作复习提示，不改变解锁",
+    "mastered": "已掌握",
+    "passing": "通过",
+    "needsReview": "待复习",
+    "untested": "未测",
+    "reviewWeakest": "复习最弱一章",
+    "continue": "继续学习",
+    "empty": "还没有小测成绩，先读完一章并完成章末小测"
+  },
+  "paths": {
+    "title": "学习路径",
+    "subtitle": "按主题挑章节串读，不必等整级读完",
+    "progress": "{{done}}/{{total}} 章",
+    "start": "开始这条路径",
+    "continue": "继续",
+    "done": "已完成",
+    "locked": "所属级别尚未解锁",
+    "sixmax-cash-core": {
+      "title": "6-max 现金主线",
+      "description": "从座位与命名一路走到现金局综合实战，七个增补章串成一条线"
+    },
+    "postflop-deep": {
+      "title": "翻后深挖",
+      "description": "范围优势、下注目的、尺度与转河连续决策的专题串读"
+    },
+    "mtt-bridge": {
+      "title": "锦标赛对照",
+      "description": "ICM、多人底池与现金-锦标赛结构差异的短线桥接"
+    }
   },
   "stats": {
     "title": "阅读统计",

@@ -15,7 +15,7 @@
     "label": "游戏变体",
     "playerCount": "玩家人数",
     "max": "{{count}}-Max",
-    "shortDeckHint": "短牌模式：移除 2-5，共 36 张牌，9×9 范围矩阵。同花 > 葫芦，顺子 > 三条。"
+    "shortDeckHint": "短牌模式：移除 2-5，共 36 张牌，9×9 范围矩阵。同花 > 葫芦，三条 > 顺子。"
   },
   "rangeSelect": {
     "title": "范围选择",

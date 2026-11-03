@@ -19,7 +19,7 @@ const L1_POSITION_U2_SECTIONS: LessonSection[] = [
   {
     type: 'text',
     content:
-      '前位（Early）：UTG, UTG+1 — 最先行动，信息最少，需要最强的牌\n中位（Middle）：MP, HJ — 中间位置，适度放宽范围\n后位（Late）：CO, BTN — 后行动，信息最多，范围最宽\n盲注位（Blinds）：SB, BB — 已投入筹码，但翻后最先行动',
+      '前位（Early）：UTG — 最先行动，信息最少，需要最强的牌\n中位（Middle）：HJ — 中间位置，适度放宽范围\n后位（Late）：CO, BTN — 后行动，信息最多，范围最宽\n盲注位（Blinds）：SB, BB — 已投入筹码，但翻后最先行动',
   },
   {
     type: 'highlight',
@@ -42,7 +42,7 @@ const L1_POSITION_U3_SECTIONS: LessonSection[] = [
   },
   {
     type: 'formula',
-    content: '位置与开池宽度的相对关系：UTG 只开最强的一小撮牌，HJ 略宽，CO 明显放宽（近三成），BTN 是 6 人桌开池最宽的位置（约三成半），SB 与 BTN 同档（约三成半）。\n\n位置权益实现率：BTN 翻后有位置，权益实现率更高；UTG 翻后 OOP，权益实现率仅约 80-90%。\n\n规律：越往后位可开范围越宽、翻后权益实现率越高；但相邻位置之间的宽度增量并不等距——前位之间收紧，到 CO/BTN 才明显放宽。',
+    content: '位置与开池宽度的相对关系（6-max，100bb，无前注）：UTG 只开最强的一小撮牌（新手简化约 15%，标准 19%），HJ 略宽（新手 18%，标准 22%），CO 明显放宽（新手近三成，标准 32%），BTN 是 6 人桌开池最宽的位置（新手约三成半，标准 44%），SB 与 BTN 同档（新手约三成半，标准 38%）。\n\n位置权益实现率：BTN 翻后有位置，权益实现率更高；UTG 翻后 OOP，权益实现率仅约 80-90%。\n\n规律：越往后位可开范围越宽、翻后权益实现率越高；但相邻位置之间的宽度增量并不等距——前位之间收紧，到 CO/BTN 才明显放宽。',
   },
   {
     type: 'theory-reference',
@@ -173,7 +173,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             heroPosition: 'CO',
             previousActions: [
               { player: 'UTG', action: 'fold' },
-              { player: 'MP', action: 'fold' },
+              { player: 'HJ', action: 'fold' },
             ],
             board: ['Kh', '7d', '7s', '2c', '9s'],
             street: 'river',
@@ -206,7 +206,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
                 heroPosition: 'BTN',
                 previousActions: [
                   { player: 'UTG', action: 'fold' },
-                  { player: 'MP', action: 'fold' },
+                  { player: 'HJ', action: 'fold' },
                   { player: 'CO', action: 'fold' },
                 ],
                 street: 'preflop',
@@ -280,7 +280,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           {
             id: 'l1-pos-q1',
             question: '以下哪个位置最好？',
-            options: ['UTG', 'MP', 'BTN', 'SB'],
+            options: ['UTG', 'HJ', 'BTN', 'SB'],
             correctIndex: 2,
             explanation: 'BTN（按钮位）是最佳位置，你几乎总是最后行动，拥有最多信息。',
           },
@@ -331,7 +331,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             heroPosition: 'BTN',
             previousActions: [
               { player: 'UTG', action: 'fold' },
-              { player: 'MP', action: 'fold' },
+              { player: 'HJ', action: 'fold' },
               { player: 'CO', action: 'fold' },
             ],
             street: 'preflop',
@@ -342,7 +342,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
               amount: '2.5BB',
               reasoning: [
                 'T8s 在 BTN 面对全 fold 是标准开牌',
-                'BTN 是 6 人桌开池最宽的位置（约三成半手牌）',
+                'BTN 是 6 人桌开池最宽的位置（新手简化约三成半手牌，标准约 44%）',
                 '同花连牌有很好的翻后可玩性',
                 '只剩 SB 和 BB，很可能直接赢得盲注',
               ],
@@ -380,7 +380,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
                 heroPosition: 'BTN',
                 previousActions: [
                   { player: 'UTG', action: 'fold' },
-                  { player: 'MP', action: 'fold' },
+                  { player: 'HJ', action: 'fold' },
                   { player: 'CO', action: 'fold' },
                 ],
                 street: 'preflop',
@@ -400,7 +400,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
                 heroPosition: 'CO',
                 previousActions: [
                   { player: 'UTG', action: 'fold' },
-                  { player: 'MP', action: 'fold' },
+                  { player: 'HJ', action: 'fold' },
                 ],
                 street: 'preflop',
                 potSize: 1.5,
@@ -521,9 +521,9 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         examples: [
           {
             id: 'l1-hand-ex1',
-            title: '边缘牌判断：A5o 在 MP',
+            title: '边缘牌判断：A5o 在 HJ',
             heroHand: ['Ah', '5c'],
-            heroPosition: 'MP',
+            heroPosition: 'HJ',
             previousActions: [
               { player: 'UTG', action: 'fold' },
             ],
@@ -533,7 +533,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             correctDecision: {
               action: 'Fold',
               reasoning: [
-                'A5o 在 MP 应该弃牌',
+                'A5o 在 HJ 应该弃牌',
                 '虽然有一张A，但 kicker 太弱（5）',
                 '非同花没有同花潜力，连接性也很差',
                 '容易被支配（对手可能有AQ、AJ、AT）',
@@ -552,7 +552,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             heroPosition: 'CO',
             previousActions: [
               { player: 'UTG', action: 'fold' },
-              { player: 'MP', action: 'fold' },
+              { player: 'HJ', action: 'fold' },
             ],
             street: 'preflop',
             effectiveStack: 100,
@@ -584,7 +584,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
                 heroPosition: 'BTN',
                 previousActions: [
                   { player: 'UTG', action: 'fold' },
-                  { player: 'MP', action: 'fold' },
+                  { player: 'HJ', action: 'fold' },
                   { player: 'CO', action: 'fold' },
                 ],
                 street: 'preflop',
@@ -601,7 +601,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
               id: 'l1-hand-p2',
               scenario: {
                 heroHand: ['Qs', 'Js'],
-                heroPosition: 'MP',
+                heroPosition: 'HJ',
                 previousActions: [
                   { player: 'UTG', action: 'fold' },
                 ],
@@ -610,8 +610,8 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
                 effectiveStack: 100,
               },
               options: [
-                { action: 'Fold', isCorrect: false, explanation: 'QJs 在MP是很好的开牌手牌，弃牌太紧。同花高连牌有很强的翻后潜力。', evImpact: '-0.8 BB/100' },
-                { action: 'Raise', amount: '2.5BB', isCorrect: true, explanation: 'QJs 是同花高连牌，在MP是标准开牌。有很好的顺子、同花和高牌潜力。', evImpact: '+1.3 BB/100' },
+                { action: 'Fold', isCorrect: false, explanation: 'QJs 在HJ是很好的开牌手牌，弃牌太紧。同花高连牌有很强的翻后潜力。', evImpact: '-0.8 BB/100' },
+                { action: 'Raise', amount: '2.5BB', isCorrect: true, explanation: 'QJs 是同花高连牌，在HJ是标准开牌。有很好的顺子、同花和高牌潜力。', evImpact: '+1.3 BB/100' },
                 { action: 'Call', isCorrect: false, explanation: '前位没有加注，应该主动加注开牌。', evImpact: '-0.4 BB/100' },
               ],
             },
@@ -691,7 +691,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           { type: 'heading', content: 'Leak #1：打太多手牌（VPIP过高）' },
           { type: 'text', content: '新手通常参与 40-60% 的牌局，而赢利玩家通常只打 20-25%。\n\n修正方法：严格遵守翻前范围（各位置的精确构成与频率以范围训练模块与 GTO 策略表为准），只打"值得打"的牌。' },
           { type: 'heading', content: 'Leak #2：位置意识缺失' },
-          { type: 'text', content: '在不利位置打太多牌，忽视位置优势。\n\n修正方法：UTG 与 HJ 只开最强的一小撮牌，CO 明显放宽（近三成），BTN 是 6 人桌开池最宽的位置（约三成半）。各位置的精确构成以范围训练模块与 GTO 策略表为准。' },
+          { type: 'text', content: '在不利位置打太多牌，忽视位置优势。\n\n修正方法：UTG 与 HJ 只开最强的一小撮牌（标准 19%/22%），CO 明显放宽（新手近三成，标准 32%），BTN 是 6 人桌开池最宽的位置（新手约三成半，标准 44%），SB 标准约 38%。各位置的精确构成以范围训练模块与 GTO 策略表为准。' },
           { type: 'heading', content: 'Leak #3：被动跟注（太多Call，太少Raise）' },
           { type: 'text', content: '"Call是最弱的行动"——大多数时候你应该选择加注或弃牌，而不是被动跟注。' },
           { type: 'heading', content: 'Leak #4：下注尺度不合理' },
@@ -740,10 +740,10 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         level: 1,
         order: 7,
         title: '位置认知训练',
-        subtitle: '8 道交互题，点击 6-max 桌位识别 UTG/MP/CO/BTN/SB/BB',
+        subtitle: '8 道交互题，点击 6-max 桌位识别 UTG/HJ/CO/BTN/SB/BB',
         duration: '2 min',
         objectives: [
-          '在 6-max 桌面图上点击识别 UTG/MP/CO/BTN/SB/BB 六个座位',
+          '在 6-max 桌面图上点击识别 UTG/HJ/CO/BTN/SB/BB 六个座位',
           '排列 6-max 座位的行动顺序（UTG 最先行动、BTN 靠后、盲注翻后最先）',
           '判断给定座位相对按钮位属于前位还是后位',
         ],

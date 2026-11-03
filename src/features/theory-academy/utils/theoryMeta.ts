@@ -11,6 +11,10 @@ import type { TheoryChapterSummary, TheoryLevelSummary } from '../types';
  * 理论学院目录层查询（不含章节正文）。
  * 首页、store、成就检查与 i18n/内容包调度只依赖本模块；
  * 需要 content/quiz 的章节页仍走 utils/theoryProgress 的完整数据版本。
+ *
+ * core / 增补二分（PRD §5.27.2）：`core = !supplemental`。
+ * 解锁、Level 全完成、Level 进度、总进度、活跃 Level 与核心统计一律只看 core；
+ * 增补章在其所属 Level 解锁后即可读，完成与否不影响任何解锁。
  */
 
 const LEVELS_BY_VARIANT: Record<PokerVariant, TheoryLevelSummary[]> = {
@@ -39,6 +43,11 @@ for (const [variant, levels] of Object.entries(LEVELS_BY_VARIANT) as [
     variant,
     levels.flatMap((level) => level.chapters),
   );
+}
+
+/** 变体 Level 序列（缺省取标准系列，与 getTotalChapterCount 的旧口径一致） */
+function getLevelsOfVariant(variant?: PokerVariant): TheoryLevelSummary[] {
+  return variant ? LEVELS_BY_VARIANT[variant] : STANDARD_LEVEL_SUMMARIES;
 }
 
 export function getLevelSummariesByVariant(variant: PokerVariant): TheoryLevelSummary[] {
@@ -86,7 +95,27 @@ export function getAllChapterSummaries(): TheoryChapterSummary[] {
   return [...(CHAPTERS_BY_VARIANT.get('standard') ?? [])];
 }
 
-/** 根据章节 id 查找下一章（同变体序列内顺延，目录层） */
+/** 增补章判定：`supplemental` 缺省视为核心章（存量 37 章零改动即 core） */
+export function isSupplementalChapter(chapter: TheoryChapterSummary): boolean {
+  return chapter.supplemental === true;
+}
+
+/** 某 Level 的核心章节（按 order 原序；解锁与进度唯一分母） */
+export function getCoreChaptersOfLevel(level: TheoryLevelSummary): TheoryChapterSummary[] {
+  return level.chapters.filter((chapter) => !isSupplementalChapter(chapter));
+}
+
+/** 某 Level 的增补章节（6-max 补强，不参与解锁与核心进度） */
+export function getSupplementalChaptersOfLevel(level: TheoryLevelSummary): TheoryChapterSummary[] {
+  return level.chapters.filter(isSupplementalChapter);
+}
+
+/**
+ * 根据章节 id 查找下一章（同变体序列内顺延，目录层）。
+ * - 当前章为核心章：优先顺延到下一个核心章（可跨 Level），本变体再无核心章时才回退到增补章；
+ * - 当前章为增补章：按扁平顺序取下一章（同为补强的相邻章）；
+ * - 序列末尾返回 undefined。
+ */
 export function getNextChapterSummary(
   currentChapterId: string,
 ): TheoryChapterSummary | undefined {
@@ -95,13 +124,32 @@ export function getNextChapterSummary(
   const chapters = getChapterSummariesByVariant(level.variant);
   const idx = chapters.findIndex((chapter) => chapter.id === currentChapterId);
   if (idx === -1 || idx >= chapters.length - 1) return undefined;
-  return chapters[idx + 1];
+  const current = chapters[idx]!;
+  const rest = chapters.slice(idx + 1);
+  if (isSupplementalChapter(current)) return rest[0];
+  return rest.find((chapter) => !isSupplementalChapter(chapter))
+    ?? rest.find(isSupplementalChapter);
 }
 
-/** 获取总章节数（按变体；默认标准系列） */
+/** 获取总章节数（按变体；默认标准系列，含增补章） */
 export function getTotalChapterCount(variant?: PokerVariant): number {
-  const levels = variant ? LEVELS_BY_VARIANT[variant] : STANDARD_LEVEL_SUMMARIES;
-  return levels.reduce((sum, level) => sum + level.chapters.length, 0);
+  return getLevelsOfVariant(variant).reduce((sum, level) => sum + level.chapters.length, 0);
+}
+
+/** 获取核心章总数（不含增补章：核心进度与解锁的分母口径） */
+export function getCoreChapterCount(variant?: PokerVariant): number {
+  return getLevelsOfVariant(variant).reduce(
+    (sum, level) => sum + getCoreChaptersOfLevel(level).length,
+    0,
+  );
+}
+
+/** 获取增补章总数（6-max 补强卡片的 done/total 分母） */
+export function getSupplementalChapterCount(variant?: PokerVariant): number {
+  return getLevelsOfVariant(variant).reduce(
+    (sum, level) => sum + getSupplementalChaptersOfLevel(level).length,
+    0,
+  );
 }
 
 /**
@@ -115,7 +163,7 @@ export function getChapterDifficulty(level: number): number {
 /**
  * 判断 Level 是否按顺序解锁（纯函数）。
  * 变体 Level 的解锁链在变体自己的 Level 序列内判定：
- * 序列内 idx=0 恒解锁，Tn 需前一 Level 全部章节完成。
+ * 序列内 idx=0 恒解锁，Tn 需前一 Level **核心章**全部完成（增补章不参与解锁判定）。
  */
 export function isLevelUnlockedByCompleted(
   levelId: string,
@@ -127,15 +175,19 @@ export function isLevelUnlockedByCompleted(
   if (idx === 0) return true;
   const previous = sequence[idx - 1];
   if (!previous) return false;
-  return previous.chapters.every((chapter) => completedChapters.includes(chapter.id));
+  return getCoreChaptersOfLevel(previous).every((chapter) =>
+    completedChapters.includes(chapter.id),
+  );
 }
 
-/** 判断某 Level 是否全部章节完成（支持所有变体） */
+/** 判断某 Level 的核心章是否全部完成（支持所有变体；增补章未读不影响判定） */
 export function isLevelFullyCompleted(
   levelId: string,
   completedChapters: string[],
 ): boolean {
   const level = LEVEL_BY_ID.get(levelId);
   if (!level || level.chapters.length === 0) return false;
-  return level.chapters.every((chapter) => completedChapters.includes(chapter.id));
+  const core = getCoreChaptersOfLevel(level);
+  if (core.length === 0) return false;
+  return core.every((chapter) => completedChapters.includes(chapter.id));
 }

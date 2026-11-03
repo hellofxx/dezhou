@@ -2,7 +2,7 @@
   "content": {
     "t3-position-value": [
       "What Is Position",
-      "Position refers to your relative order in the betting sequence. A seat that acts last on every postflop round is \"In Position\" (IP); otherwise it's \"Out of Position\" (OOP). The button (BTN) is the only seat that's always in position postflop and has the highest long-term win rate; the blinds (SB/BB) are always OOP and are the only two long-term losing seats — a structural fact confirmed by every tracking database.",
+      "Position refers to your relative order in the betting sequence. A seat that acts last on every postflop round is \"In Position\" (IP); otherwise it's \"Out of Position\" (OOP). The button (BTN) is the only seat that's always in position postflop and has the highest long-term win rate; the SB is always OOP, while the BB has position only on the SB and is OOP to every other seat — together they are the only two long-term losing seats — a structural fact confirmed by every tracking database.",
       "Three Sources of Positional Advantage",
       "(1) Information advantage: the later actor decides after seeing opponents' actions, gaining one more piece of information each round; (2) pot control: the player in position can choose to call and keep the pot small (Pot Control) or raise to inflate it, which OOP players can't do — checking may get bet, betting may get raised; (3) free cards and equity realization: an in-position draw can check to take a free card, while an OOP draw is often forced to decide at unfavorable prices.",
       "The essence of positional advantage is \"Equity Realization\": with the same 50% raw equity, in position you can realize 100%+ while OOP you often realize only 80-90%. Position directly discounts or boosts your equity.",
@@ -12,7 +12,7 @@
       "Example (OOP realization loss): you're in the BB with A♣9♣ calling a BTN open, flop 9♠7♦3♣ (top pair weak kicker). You check and BTN bets 2/3 pot — already painful: if you call and the turn brings Q/K/J, BTN's range is full of Qx/Kx and you'll be forced to fold again. Turn Q♥, he bets again, and you fold a hand \"you would have won on the BTN\". The same hand on the BTN: check or small-bet the flop to control, check the turn for a free card, and no loss if you miss. Being OOP slashes medium-strength realization — the intuitive source of that ~85% R.",
       "Example (position difference in value betting): river, you hold K♥Q♥ having hit a Q-top-pair (board Q♠8♦4♣2♥9♠). In position: opponent checks → you thin-value bet 1/3 pot, fold safely if raised, capturing the thinnest value; out of position: you check → the opponent may bet, reducing your top pair to a passive \"call or fold\" choice; if you bet, you may get raised and can't get away. Same hand — position demotes it from \"active thin value\" to \"passive bluff-catch\". That's positional value showing directly at the showdown street.",
       "Position Determines Range Width",
-      "Standard Raise First In (RFI) range widths approximate: UTG tightest (~15% or so), widening as position moves back, reaching 40-50% at the BTN. The logic chain: the later the position → fewer opponents to get through behind + more likely to have position postflop → higher marginal-hand EV → wider range. The range-trainer module's positional ranges are exactly this principle in practice.",
+      "Standard Raise First In (RFI) range widths (6-max cash, 100bb, no ante) approximate: UTG ~19% (beginner simplification 15%), HJ ~22%, CO ~32%, BTN widest at ~44% (beginner simplification 35%), and SB ~38%. The logic chain: the later the position → fewer opponents to get through behind + more likely to have position postflop → higher marginal-hand EV → wider range. The range-trainer module's positional ranges are exactly this principle in practice.",
       "The biggest structural leak of beginners is \"playing the same set of hands from every position\". Playing K9o in UTG burns money; folding K9o on the BTN burns opportunity.",
       "Dilution of positional advantage: in 3+ way pots, the information value of \"acting last\" drops — you must guess three ranges at once, and pot control is compressed (you can only call/fold when others bet, and raising faces multiway responses). Being IP still beats OOP, but the edge shrinks significantly. So tighten your participation range in multiway pots and don't take heads-up positional advantage for granted.",
       "A self-check habit: before entering a pot, state your position and whether you'll have position postflop. If OOP postflop, cut your intended entering range down a notch."
@@ -31,7 +31,7 @@
       "Example (stack depth changes tiering): shallow 25bb — speculative tier (55, 76s) EV collapses: no depth to cash in sets and straights, and postflop often forced all-in without pot control; made-hand tier (big pairs, AQ+) rises, showdown value dominates. Deep 200bb — roles reverse: speculative tier's value doubles, marginal suited connectors upgrade from \"fold\" to \"call\". Same 77: at 25bb vs a 3bb open it's 3-bet-or-fold; at 200bb it's an easy call to mine a set. Stack depth is the second variable in starting-hand tiering.",
       "Active vs Passive Entry",
       "Modern preflop theory's consensus: when first into an unopened pot, raise rather than limp. Raising keeps Fold Equity, builds initiative, and avoids multiway equity dilution. The problem with limping is it only has one winning path (making a hand) and announces to everyone \"my hand isn't worth raising\". The same logic applies to 3-betting: against an open, a \"3-bet or fold\" structure usually beats wide flat-calling (except BB defense, since you've posted a blind and closed the action).",
-      "Modern revision of the Gap Concept: as position and stack depth change, the \"gap\" size flexes — BTN can 3-bet/call very wide vs a CO open, while UTG+1 must be extremely tight vs a UTG open. The principle stands: facing shown strength, your bar must move up.",
+      "Modern revision of the Gap Concept: as position and stack depth change, the \"gap\" size flexes — BTN can 3-bet/call very wide vs a CO open, while HJ must be extremely tight vs a UTG open. The principle stands: facing shown strength, your bar must move up.",
       "The \"pretty hand\" trap: QQ is a pretty hand, but in a 4Bet-then-5Bet shove spot against a Nit who only 5Bets AA/KK, QQ is a -EV \"bad hand\". Starting-hand value isn't an absolute label — it's the joint result of current position, stack depth, and opponent range. Tiered thinking requires repricing every hand in every context.",
       "To judge whether a hand can call an open, don't ask \"how pretty is it\", ask three questions: Am I dominated? Do I have position? Are stacks deep enough to cash in the potential? Fold if two answers are \"no\"."
     ],
@@ -50,6 +50,20 @@
       "Note: the Fundamental Theorem has exceptions in multiway pots (one player's \"correct\" call can hurt both you and a third party), so its strictest application is heads-up pots. This is also an important lesson in theory study — every theorem has an applicability boundary.",
       "Results-oriented bias: getting called and losing on a shove ≠ wrong decision; the opponent folding and you winning ≠ right decision. The theorem's unit of measurement is \"is the decision correct\", not \"did this hand win\". A single hand's win/loss is variance performing; the theorem's profit comes from accumulating repeated correct decisions long-term — judge the decision first in review, then talk about results (the core claim of Thinking in Bets, detailed in T8).",
       "Before every action, silently ask: \"if the opponent could see my cards, would he want me to do this?\" If the answer is \"yes\", you're probably making an error."
+    ],
+    "t3-blind-battle": [
+      "Why Blind Battles Deserve Their Own Chapter",
+      "The small blind and the big blind have already been forced to put money in, so that 1.5bb is dead money for both: whoever wins the pot takes it, but it is no longer a cost either player has yet to pay. That structure gives blind battles a different decision order — price first, position second, hand strength last. Starting from \"is my hand strong enough\" almost always leads to defending the big blind too tightly and folding the small blind too often. In 6-max an orbit is only six hands, so blind versus blind spots come up more often than at a full ring and deserve dedicated practice.",
+      "The Small Blind: Always Out of Position Postflop",
+      "The postflop action starts with the small blind, so the SB is out of position (OOP) against every other player; the BB has position only on the SB and is OOP to every other seat. Being out of position means the same raw equity realises a smaller share: made hands collect less value, and missed hands get bet off. The standard answer for the small blind is therefore not \"see a cheap flop\" but raise or fold — a raise takes the initiative back and forces the opponent to decide first with their weak hands; limping is reasonable only in specific structures, such as a big blind that almost never raises. Under the standard 6-max scope of 100bb with no ante, the small blind opens about 38% (beginner simplification 35%): that number is range width, the share of all starting combinations played, not a win rate and not \"winning 38% of pots\".",
+      "Example (the hand a raise earns more than a limp): folded to the small blind in 6-max, you hold K♦9♦. Limp: the pot is 2bb, you act first postflop, the flop comes A♥7♣3♠, you check, the big blind bets and you can only fold, paying tuition on the 0.5bb already in. Raise to 2.5bb: if the big blind folds you take down the 1.5bb pot, which nets 1bb after the 0.5bb you had already posted; if the big blind calls, you still hold the initiative and can continue betting on most boards. Same hand, same strength — the difference is who has to make the first postflop decision.",
+      "Big Blind Defense: Price Sets the Range",
+      "The big blind has already posted one big blind. Suppose the cutoff opens to 2.5bb and the small blind folds: the pot is now 0.5 (the folded small blind's) + 1 (yours) + 2.5 (the raise) = 4.0bb; you need only 1.5bb more to see a flop, and calling makes the pot 5.5bb. Required equity = 1.5 ÷ 5.5 ≈ 27.3% — under thirty percent, which is the mathematical reason the big blind can defend very wide. Note that the denominator is the pot after your call, not the pot right now: dividing 1.5 by 4.0 gives 37.5%, which counts money you have not put in yet as profit, the most common odds mistake.",
+      "Required equity = amount to call ÷ pot after the call\nCutoff opens 2.5, small blind folds: pot 4.0, call 1.5 → pot after 5.5 → 1.5 ÷ 5.5 ≈ 27.3%\nCutoff opens 3, small blind folds: pot 4.5, call 2.0 → pot after 6.5 → 2.0 ÷ 6.5 ≈ 30.8%\nThe hand's raw equity did not change, yet the threshold rose from 27.3% to 30.8% — the larger the open, the fewer hands the big blind can defend. (Concepts from: Modern Poker Theory Ch.4 pot odds and defence thresholds)",
+      "Polarised 3-bets and Two Adjustments",
+      "A 3-bet in a blind battle is not built by lining up the strongest hands in a row; it is polarised: a few premium value hands at one end, and blockers that realise poorly postflop at the other (ace-high with backdoor flush potential, small suited connectors). The reason is structural rather than stylistic — the big blind defends a wide range whose top is thin, so the 3-bet earns mainly fold equity; and the small blind is OOP postflop, so 3-betting middle hands filters the opponent's range down to \"fold or continue strong\", exactly the segment where middle hands are most awkward.",
+      "The two adjustments change magnitude, never direction. An ante or a forced straddle makes the pot naturally bigger, improves the odds of both stealing and defending, and raises participation for both players. Rake works the opposite way: it takes a share of the pot, and that share is most conspicuous in small pots, eating the profit of marginal frequencies first. The higher the rake, the more the small blind should narrow its opening range, and the more the big blind's defence should favour hands that can make the nuts and collect full value when the price is right, rather than weak hands defended purely on price.",
+      "Blind battles run price first, position second, hand strength last: the small blind buys initiative with a raise, the big blind buys participation with a price. Getting thresholds like 27.3% right is worth more than memorising a defence chart."
     ]
   },
   "quiz": {
@@ -202,6 +216,36 @@
         "Bluff success depends on your image, unrelated to the theorem"
       ],
       "explanation": "Theorem view: if he could see your cards he'd call your high-card bluff with a pair — he can't, and folds, making a \"fold too much\" error you profit from. That's the source of bluff value. Option A is reversed (correct play kills the bluff); C ignores that bluffs have a clear EV structure; D substitutes image for the theorem's mechanism."
+    },
+    "t3-blind-battle-q1": {
+      "question": "The cutoff opens to 2.5bb, the small blind folds, and the big blind has already posted 1bb. Roughly what equity does the big blind need to call?",
+      "options": [
+        "20.0%",
+        "27.3%",
+        "33.3%",
+        "37.5%"
+      ],
+      "explanation": "The pot is 0.5 + 1 + 2.5 = 4.0; after the big blind adds 1.5 the pot is 5.5, so required equity = 1.5 ÷ 5.5 ≈ 27.3%. Dividing 1.5 by 4.0 to get 37.5% forgets the money you still have to put in."
+    },
+    "t3-blind-battle-q2": {
+      "question": "In 6-max cash, the small blind opens about 38% (beginner simplification 35%). What does that number actually mean?",
+      "options": [
+        "The small blind wins about 38% of the pots it opens with any two cards",
+        "Roughly a third of all starting combinations are opened from the small blind — range width, not a win rate",
+        "The small blind calls a raise 38% of the time",
+        "The small blind's win rate is 38 percentage points higher than the big blind's"
+      ],
+      "explanation": "Range width is the share of starting combinations played, not a win rate in any sense. The same number says nothing about how many pots get won or how often a raise gets called."
+    },
+    "t3-blind-battle-q3": {
+      "question": "In blind battles, why does the small blind prefer raising or folding over limping?",
+      "options": [
+        "Limping lets the big blind see a free flop while the small blind always acts first postflop and realises little equity",
+        "Limping makes the pot too large and therefore doubles the rake",
+        "Raising removes strong hands from the opponent's holding",
+        "Limping from the small blind is an illegal action"
+      ],
+      "explanation": "Limping hands the initiative over the dead money to the opponent and locks you into the worst postflop position. Raising at least buys fold equity and initiative, which is why raise or fold is the default."
     }
   },
   "chapterObjectives": {
@@ -222,6 +266,11 @@
       "Multiply the probability an opponent errs by the amount given up each time to estimate the expected profit of a line",
       "Judge whether an opponent deviates by calling too much or folding too much, and shift value and bluff emphasis accordingly",
       "Explain why the initiative grants a structural license to bluff, and where the theorem stops working in multiway pots"
+    ],
+    "t3-blind-battle": [
+      "Connect the dead money created by forced bets to the equity a call requires, and read the price structure of a blind battle",
+      "Separate the pricing that drives a small blind open from the pricing that drives a big blind defence, and say which way each range moves",
+      "Explain which way an ante and rake adjust participation frequency in blind battles"
     ]
   }
 }

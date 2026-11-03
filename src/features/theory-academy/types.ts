@@ -37,6 +37,18 @@ export interface TheoryQuizQuestion {
 }
 
 /**
+ * 章节主题标签（供学习路径筛选与内容检索；不参与解锁判定）。
+ * 六大主题：6-max 结构 / 现金局 / 锦标赛 / 地基 / 翻前 / 翻后。
+ */
+export type TheoryPathTag =
+  | 'six-max'
+  | 'cash'
+  | 'mtt'
+  | 'foundation'
+  | 'preflop'
+  | 'postflop';
+
+/**
  * 理论章节摘要（目录层字段）。
  * 首页/进度/解锁只依赖这一层，正文与小测留在 TheoryChapter，由章节页按需加载。
  */
@@ -49,6 +61,13 @@ export interface TheoryChapterSummary {
   duration: string;                 // 预计阅读时长，如 '10 min'
   /** 所属变体标识 */
   variant: PokerVariant;
+  /**
+   * 增补章标记：true 表示本章是主线之外的补强内容。
+   * 增补章在其所属 Level 解锁后即可读，但不参与 Level 解锁判定与核心进度统计。
+   */
+  supplemental?: boolean;
+  /** 章节主题标签（由 chapterMeta 统一打标，用于学习路径筛选） */
+  pathTags?: TheoryPathTag[];
 }
 
 /** 理论章节（阅读单元 + 章末小测） */

@@ -29,11 +29,15 @@ export function reorderOptions<T extends QuizOption>(
   mode: 'ascending' | 'shuffle',
   getText?: (opt: T) => string
 ): T[] {
-  const texts = options.map((o) => o.text);
+  // 判定与排序必须共用同一取值源：i18n-key 型题库传给 getText 的是 t() 解析后的文本，
+  // 若判定仍读 option.text（key 恒不含数字语义），数值选项集会被误判为文字集而走洗牌，
+  // 违反"纯数值选项单调排列"契约（见 PRD §5.26）。
+  const resolveText = getText ?? ((o: T) => o.text);
+  const texts = options.map((o) => resolveText(o));
 
   // 数值选项集：按数值单调排列（消除位置偏差 + 符合阅读习惯）
   if (mode === 'ascending' && isNumericOptionSet(texts)) {
-    return sortByNumericValue(options, getText ?? ((o) => o.text));
+    return sortByNumericValue(options, resolveText);
   }
 
   // 文字选项集：种子洗牌（同题跨会话一致、不同题分布互异）

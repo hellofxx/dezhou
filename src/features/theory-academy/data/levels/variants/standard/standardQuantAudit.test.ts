@@ -72,7 +72,8 @@ import {
  *
  * —— standardLevel3.ts ——
  * [示意值] t3-position-value idx1：R 参考值 BTN 105-110%/CO 100-105%/BB 85-92%/SB 80-88%（现代研究量级，正文已标注）；
- *          idx12：UTG≈15%、BTN 40-50%（RFI 示意）；公式 idx2 内 50%×105%=52.5%、50%×85%=42.5% 算术正确
+ *          idx12：UTG 标准 19%/新手 15%、BTN 标准 44%/新手 35%（RFI 双列口径，标准列与 range-trainer 预设一致）；
+ *          公式 idx2 内 50%×105%=52.5%、50%×85%=42.5% 算术正确
  * [示意值] t3-starting-hands idx3：四档 EV 分层 +0.6~+1.5bb（正文已标「示意量级」）；
  *          idx7：价值叠 34/1326≈2.56%→约 2.5%、诈唬叠约 4%
  * [正确] t3-fundamental-theorem idx2：0.30×50=+15（vs 过牌增量口径自洽）
@@ -84,7 +85,8 @@ import {
  * [示意值] t4-range-advantage idx3：范围优势/坚果优势密度框架（>50%、前 5% 为方法示意）
  * [正确] t4-preflop-structure idx4/idx7/idx10（翻前结构性理论，本次新增）：
  *        α(4,8)=8/12=66.7%、MDF=4/12=33.3%、CO 跟注门槛 5.5÷17.5=31.4%（三式互验）；
- *        BB 防守门槛 1.5÷5=30%；α(3.5,10)=10/13.5=74.1% > α(4,8)（OOP 尺度更大的依据）；
+ *        BB 防守门槛 1.5÷5.5≈27.3%（弃牌小盲的 0.5 仍留池）；α(4.0,10)=10/14≈71.4% > α(4,8)（OOP 尺度更大的依据）；
+ *        OOP 翻后最先行动（原文「最后行动」已修正）；
  *        4-bet α=17.5÷29.5=59.3%、BTN 跟注 12÷41.5=28.9%、SPR=80÷41.5=1.93≈1.9；
  *        被 5-bet 全下门槛 80÷201.5=39.7%≈40%；{QQ+、AK}=6+6+6+16=34 种、A5s=4 种
  * [示意值] t4-preflop-structure idx6/idx9/idx12：AQo 对 {QQ+,AK} 约 30%、KK 约 47%、JJ 约 37%
@@ -92,7 +94,7 @@ import {
  * [正确] t4-structure-economics idx4/idx5/idx6（结构经济学，本次新增）：
  *        α(1.5,2.25)=60.0% / MDF=40.0% → 大盲前注后 α(2.5,2.25)=2.25÷4.75=47.4% / MDF=52.6%；
  *        大盲收价 1.25÷5.0=25.0% → 0.25÷5.0=5.0%（前注已投在池内，需补额下降而底池不变）；
- *        BB 3-bet 到 8：α(3.75,8)=68.1% / MDF=31.9% → α(4.75,8)=62.7% / MDF=37.3%，每对互补为 1；
+ *        BB 3-bet 到 8（已投盲注，b 取新增投入）：无前注 α(3.75,7)=65.1% / MDF=34.9% → 有大盲前注 α(4.75,6)=55.8% / MDF=44.2%（b 已扣盲注/前注），每对互补为 1；
  *        idx9：n(8bb/100)=(1.96×9÷0.08)²≈48,620、n(3bb/100)≈345,744、比值 (8/3)²≈7.11；
  *        ROR σ=9bb/手、B=2000bb：exp(−3.95)≈1.9% → exp(−1.48)≈22.7%
  * [示意值] t4-structure-economics idx8 末句（忽略抽水对 σ 的轻微削减）、idx9 抽水档位「约 5bb/100」、
@@ -110,7 +112,9 @@ import {
  *        满池对照 α(100,100)=1/2 → 全弃 25%、EV=−50（尺度上调无救，正文以此立论）；
  *        责任分摊 d=1−α^(1/n)：2 人 42.26%→约 42.3%、3 人 30.66%→约 30.7%；
  *        恒等式 1−(1−0.4226)²=66.67%=MDF；常见错算 66.7%÷2=33.35% < 42.26%（正文点名）
- * [示意值] t5-multiway-frequency idx10：1−(1−9/47)³≈47.15%（把对手手牌视作随机的保护近似，正文已标注假设与「示意」）
+ * [示意值] t5-multiway-frequency idx11：1−(1−9/47)²≈34.6%→35%（两名对手；把对手手牌视作随机的保护近似，正文已标注假设与「示意」）
+ * [正确] t5-multiway-frequency idx11：价值侧「至少一人继续」= 1−(1/3)²=88.9%（两名防守者各按单挑 MDF 弃 1/3）；
+ *        idx6/idx10：诈唬者须为 BB（翻后最先行动），CO/BTN 才可能在身后；原文 BTN 先于 CO/BB 行动已修正
  *
  * —— standardLevel6.ts ——
  * [正确] t6-bet-purpose idx1：w>B/(P+2B)、半池 25%/满池 33%；t6-sizing-theory idx3：f=b/(1+2b) 与 w=b/(1+2b) 对偶；
@@ -127,7 +131,7 @@ import {
  *        A♠K♠ 55%×0.85≈47%、55%×0.65≈36%、AA 四人池约 64%（实现率与表值依赖统计口径，正文均以「约/典型量级」表述）
  *
  * —— standardLevel7.ts ——
- * [示意值] t7-stats idx1-3：VPIP<18/22-28/>32、AF<1.5/2-3/>4、WTSD>32/<22、3-bet<2/3-5/>7（业界参考线）；
+ * [示意值] t7-stats idx1-3：VPIP<20/22-27/>32（28-32% 过渡带）、AF<1.5/2-3/>4、WTSD>32/<22、3-bet<4/6-9/>11（6-max 现金经验参考线）；
  *          idx6/7 画像 45/12/0.8/38、24/20/2.8/27/6、38/6/1.2/35/1；idx10-11 样本量阈值 50-100/300+ 手；
  *          t7-exploit idx15「级别越高漂移越快」标注为经验规律（无外部定理可引）
  * [正确] t7-exploit idx16（元游戏漂移段，本次新增）：纯诈唬 EV = f×P − (1−f)×b（P=100、b=50）→
@@ -470,9 +474,26 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     // CO 跟注：补 5.5 进跟注后底池 4+8+5.5=17.5
     expect(requiredEquity(5.5, 4 + 8 + 5.5)).toBeCloseTo(0.3143, 4);
     expectAnswerIs('t4-preflop-structure', 't4-preflop-structure-q2', '约 31%');
-    // BB 防守 2.5 开池的门槛；OOP 的 3-bet 必须比 IP 要求更高弃牌率
-    expect(requiredEquity(1.5, 3.5 + 1.5)).toBeCloseTo(0.3, 6);
-    expect(calculateAlpha(3.5, 10)).toBeGreaterThan(calculateAlpha(4, 8));
+    // BB 防守 2.5 开池的门槛（弃牌小盲 0.5 仍留池）；OOP 的 3-bet 必须比 IP 要求更高弃牌率
+    expect(requiredEquity(1.5, 4.0 + 1.5)).toBeCloseTo(0.2727, 3);
+    expect(calculateAlpha(4.0, 10)).toBeCloseTo(0.7143, 4);
+    expect(calculateAlpha(4.0, 10)).toBeGreaterThan(calculateAlpha(4, 8));
+    // 正文口径守卫：死钱计入 P、OOP 翻后最先行动、开池尺度示例同步
+    const chapter = chapters.find((c) => c.id === 't4-preflop-structure') as TheoryChapter;
+    const oop = chapter.content[7]?.content ?? '';
+    expect(oop).toContain('27.3%');
+    expect(oop).toContain('71.4%');
+    expect(oop).toContain('最先行动');
+    expect(oop).not.toContain('最后行动');
+    expect(oop).not.toContain('30%');
+    expect(oop).not.toContain('74.1%');
+    const scale = chapter.content[8]?.content ?? '';
+    expect(scale).toContain('38.1%');
+    expect(scale).not.toContain('40%');
+    expect(chapter.content[12]?.content).not.toContain('66%—74%');
+    const q3 = chapter.quiz.find((q) => q.id === 't4-preflop-structure-q3') as TheoryQuizQuestion;
+    expect(q3.question).toContain('71%');
+    expect(q3.explanation).toContain('最先行动');
     // BTN 对 4-bet 到 20 的跟注门槛与 SPR、被 5-bet 全下的门槛
     expect(requiredEquity(12, 12 + 17.5 + 12)).toBeCloseTo(0.2892, 4);
     expect((100 - 20) / 41.5).toBeCloseTo(1.93, 2);
@@ -531,6 +552,22 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     expect(diffusion).toContain('66.7% ÷ 2 = 33.4%');
     const protection = chapter.content[11]?.content ?? '';
     expect(protection).toContain('示意');
+    // 价值侧：两名防守者各弃 1/3 → 至少一人继续 88.9%（不是把 66.7% 当两人的概率）；保护段按两名对手重算 35%
+    expect(protection).toContain('88.9%');
+    expect(protection).toContain('高于单挑时的 66.7%');
+    expect(protection).not.toContain('至少有一人跟注的概率是 66.7%');
+    expect(protection).toContain('35%');
+    expect(protection).not.toContain('47%');
+    expect(protection).toContain('两名对手');
+    expect(protection).not.toContain('三名对手');
+    // 行动顺序：诈唬与价值示例都必须由 BB 先行动，CO/BTN 在身后
+    const bluffExample = chapter.content[6]?.content ?? '';
+    expect(bluffExample).toContain('你在 BB');
+    expect(bluffExample).not.toContain('你在 BTN');
+    expect(bluffExample).toContain('CO 与 BTN 都还没行动');
+    const defenseExample = chapter.content[10]?.content ?? '';
+    expect(defenseExample).toContain('BB 过牌、CO 过牌，BTN 下 50');
+    expect(defenseExample).not.toContain('CO 还没行动');
   });
 
   it('t7-exploit 元游戏漂移段：纯诈唬 EV 随弃牌率衰减 +47.5→+32.5→0', () => {
@@ -564,11 +601,15 @@ describe('standard 量化断言审计：博弈论与 ICM 类判分题复算', ()
     // 大盲收价：需补 1.25 → 0.25，跟注后底池同为 5.0bb
     expect(requiredEquity(1.25, 5)).toBeCloseTo(0.25, 10);
     expect(requiredEquity(0.25, 5)).toBeCloseTo(0.05, 10);
-    // 实例二：BB 3-bet 到 8 的两套 α/MDF，且每对互补为 1
-    expect(calculateAlpha(3.75, 8)).toBeCloseTo(0.6809, 4);
-    expect(calculateMDF(3.75, 8)).toBeCloseTo(0.3191, 4);
-    expect(calculateAlpha(4.75, 8)).toBeCloseTo(0.6275, 4);
-    expect(calculateAlpha(4.75, 8) + calculateMDF(4.75, 8)).toBeCloseTo(1, 10);
+    // 实例二：BB 3-bet 到 8，b 取新增投入（无前注 1bb 盲注→b=7；有大盲前注已投 2bb→b=6）
+    expect(calculateAlpha(3.75, 7)).toBeCloseTo(0.6512, 4);
+    expect(calculateMDF(3.75, 7)).toBeCloseTo(0.3488, 4);
+    expect(calculateAlpha(4.75, 6)).toBeCloseTo(0.5581, 4);
+    expect(calculateAlpha(4.75, 6) + calculateMDF(4.75, 6)).toBeCloseTo(1, 10);
+    const anteChapter = chapters.find((x) => x.id === 't4-structure-economics') as TheoryChapter;
+    const bDefinition = anteChapter.content[4]?.content ?? '';
+    expect(bDefinition).toContain('新增投入');
+    expect(bDefinition).not.toContain('不是"还要补多少"');
     // 实例三：抽水把 μ 由 8 压到 3 → 样本量按 (8/3)² 放大、ROR 放大一个数量级
     expect(requiredHandsForEdge(8, 90, 1.96)).toBeCloseTo(48620, 0);
     expect(requiredHandsForEdge(3, 90, 1.96)).toBeCloseTo(345744, 0);

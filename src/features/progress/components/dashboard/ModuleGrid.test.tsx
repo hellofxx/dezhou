@@ -12,7 +12,9 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter, useLocation } from 'react-router-dom';
-import { NewbiePathCard } from './ModuleGrid';
+import ModuleGrid, { NewbiePathCard } from './ModuleGrid';
+import { useProgressStore } from '../../store';
+import type { TrainingRecord } from '../../types';
 import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
 import {
   buildTheoryReviewFixture,
@@ -107,5 +109,132 @@ describe('学习路径卡（无推荐兜底）', () => {
     expect(text).not.toContain('theory.quiz.');
     expect(text).not.toContain('dashboard.progressive.');
     expect(text).toContain('你的学习路径');
+  });
+});
+
+/* ===== TrainingGrounds 训练场模块网格（§13.5.2 最近训练标记 / §13.6.2 学习焦点模式） ===== */
+
+const DAY = 24 * 60 * 60 * 1000;
+
+function buildGridRecord(module: TrainingRecord['module'], createdAt: number): TrainingRecord {
+  return {
+    id: `${module}-${createdAt}`,
+    module,
+    mode: 'quiz',
+    createdAt,
+    result: {
+      sessionId: `${module}-${createdAt}`,
+      module,
+      totalQuestions: 10,
+      correctAnswers: 7,
+      accuracy: 0.7,
+      averageTime: 4000,
+      timestamp: createdAt,
+      details: [],
+    },
+  };
+}
+
+describe('TrainingGrounds 训练场模块网格', () => {
+  function renderGrid() {
+    act(() => {
+      root.render(
+        <MemoryRouter initialEntries={['/dashboard']}>
+          <ModuleGrid />
+          <LocationProbe />
+        </MemoryRouter>,
+      );
+    });
+  }
+
+  afterEach(() => {
+    act(() => {
+      useProgressStore.setState({ records: [], focusModule: null });
+    });
+  });
+
+  it('渲染六大模块入口与各自的说明文案', () => {
+    renderGrid();
+    const text = container.textContent ?? '';
+
+    for (const label of ['手牌范围训练', '赔率计算器', 'GTO 模拟器', '策略学院', '扑克谜题', '牌局复盘']) {
+      expect(text).toContain(label);
+    }
+    expect(text).toContain('各位置开牌范围记忆与测试');
+    expect(text).toContain('赔率、期望值与补牌速算');
+    expect(container.querySelectorAll('button.module-card')).toHaveLength(6);
+    // 从未训练 → 不展示最近训练标记
+    expect(container.querySelectorAll('.last-training-badge')).toHaveLength(0);
+  });
+
+  it('点击模块卡跳转到对应路由', () => {
+    renderGrid();
+
+    const potOdds = Array.from(container.querySelectorAll('.module-card')).find((el) =>
+      el.textContent?.includes('赔率计算器'),
+    );
+    expect(potOdds).toBeTruthy();
+    act(() => {
+      potOdds!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-probe]')?.textContent).toBe('/pot-odds');
+  });
+
+  it('最近训练标记：今日已练 / N 天前，仅在对应模块卡上出现', () => {
+    const now = Date.now();
+    act(() => {
+      useProgressStore.setState({
+        records: [
+          buildGridRecord('range-trainer', now - 60 * 1000),
+          buildGridRecord('pot-odds', now - 3 * DAY),
+        ],
+      });
+    });
+    renderGrid();
+
+    const badges = Array.from(container.querySelectorAll('.last-training-badge'));
+    expect(badges).toHaveLength(2);
+    const labels = badges.map((b) => b.textContent);
+    expect(labels).toContain('今日已练');
+    expect(labels).toContain('3天前');
+    // 今日标记带 today 修饰类（供样式区分）
+    const todayBadge = badges.find((b) => b.textContent === '今日已练');
+    expect(todayBadge!.className).toContain('today');
+  });
+
+  it('聚焦按钮写入 focusModule 且不触发卡片跳转，其余卡片变暗', () => {
+    renderGrid();
+
+    const cards = Array.from(container.querySelectorAll('.module-card'));
+    const firstCard = cards[0]!;
+    const pin = firstCard.querySelector('[role="button"][aria-label="聚焦此模块"]');
+    expect(pin).toBeTruthy();
+
+    act(() => {
+      pin!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+
+    expect(useProgressStore.getState().focusModule).toBe('range-trainer');
+    expect(pin!.getAttribute('aria-pressed')).toBe('true');
+    // 焦点模式下其他模块卡片降透明度
+    expect((cards[1] as HTMLElement).style.opacity).toBe('0.4');
+    // 聚焦按钮 stopPropagation：未发生路由跳转
+    expect(container.querySelector('[data-probe]')?.textContent).toBe('/dashboard');
+  });
+
+  it('聚焦按钮支持键盘 Enter 切换，再按一次取消聚焦', () => {
+    renderGrid();
+
+    const pin = container.querySelector('[role="button"][aria-label="聚焦此模块"]')!;
+    act(() => {
+      pin.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    });
+    expect(useProgressStore.getState().focusModule).toBe('range-trainer');
+
+    act(() => {
+      pin.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    });
+    expect(useProgressStore.getState().focusModule).toBeNull();
   });
 });

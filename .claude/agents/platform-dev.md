@@ -38,6 +38,7 @@ additionalPrompt: ""
 - 跨模块系统集成（trainingEvents 事件总线 / progress store 五大系统）
 - persist version 升级协调（编写 migrate 函数）
 - 国际化基础设施（i18n config + zh/en locale 结构）
+- 测试基础设施（vitest.config.ts、分层脚本、测试体系守卫与 PR CI；规范见 docs/testing/README.md）
 - 全局样式系统（CSS 变量、暗色主题、响应式断点）
 
 ### 不可越界

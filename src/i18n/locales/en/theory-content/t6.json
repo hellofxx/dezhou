@@ -60,6 +60,47 @@
       "The most common way to think wrong: treat all-in equity as realizable equity, then call down on it. Why does this happen? Because an enumerator’s percentage is precise, immediate and pretty, while “will this reach showdown” is a fuzzy structural judgement — and the brain defaults to deciding with the precise number. The cost is systematic: in pots where you are out of position, deep-stacked, and the opponent’s range owns the nuts, you keep paying for equity you will never collect.",
       "Three on-the-spot checks: ① How many streets of cooperation does this hand need to reach showdown? The more, the larger the realization discount. ② If we were all-in right now, what is my equity — and is that the ceiling of what I can collect (almost always yes, unless the hand really does go all-in now). ③ When the next scary card lands, am I the raiser or the one being squeezed? Hands with “being squeezed” identity get a full tier off their R.",
       "Realized equity = all-in equity × realization rate; R = 1 only when the hand goes all-in immediately\nPot odds state the threshold for realizable equity, so scale the all-in equity threshold by 1/R before comparing\nFour variables set R: out of position is lower, deep stacks are lower, wet connected boards favour draws and punish weak pairs, and the range-advantaged side’s marginal hands have the lowest R\n“My hand has 52% equity” is not a decision input; “how much of it can I collect” is"
+    ],
+    "t6-srp-postflop": [
+      "The Most Common Pot Deserves a Standard Process",
+      "A single-raised pot is the most frequent pot type in cash games: one player raises, one player calls, and both still hold close to a full stack after the flop. Deep stacks mean no single bet decides the hand, so the correct approach is usually to apply pressure in small, frequent doses and make the opponent re-solve the same marginal decision on every street. Widen the sizing and your betting range collapses into two poles: worse hands fold, better hands stay, and everything in between is squeezed out.",
+      "The books on a single-raised pot (6-max, 100bb, no ante):\nSmall blind 0.5 + big blind 1.0 of dead money = 1.5bb; the button opens to 2.5 and the big blind adds 1.5\nFlop pot = 1.5 + 2.5 + 1.5 = 5.5bb\nBoth players have put in 2.5, so the effective remaining stack = 100 − 2.5 = 97.5bb\nSPR = remaining effective stack ÷ flop pot = 97.5 ÷ 5.5 ≈ 17.7 (about 18)\nFor comparison: betting 3/4 pot on all three streets moves only 0.75 × (5.5 + 13.75 + 34.4) ≈ 40bb\n→ A single pair should not be trying to play for stacks here; the pot gets built in layers, not in one shove",
+      "Flop: Read the Board First, Then the Frequency",
+      "Board ownership comes from the two ranges, not from your two cards. The preflop raiser holds more AA, KK, QQ and big broadways like AQ and KQ, so on dry ace-high and king-high boards and on paired boards his density of top pair or better is higher. The caller is loaded with medium pairs, suited connectors and middling connectors, so boards like 7-6-5 two-tone or 9-8-7 suit him better. The test is direct: on this board, whose range holds more combos of top pair or better? That range owns the flop.",
+      "The cost math of a small continuation bet (pot P, bet B, α = B/(P+B) is the fold rate a bluff needs):\n1/4 pot: α = 0.25 ÷ 1.25 = 20%, so the opponent must defend MDF = P/(P+B) = 80%\n1/3 pot: α = 0.3333 ÷ 1.3333 ≈ 25%, so the opponent must defend 75%\n→ On a dry board, as soon as the opponent folds more than about a quarter of the time a range-wide 1/3-pot bet already profits; and ace-high boards are exactly where he struggles to defend that much",
+      "Example (range-wide small bet on a dry board): the button opens with A♠Q♠, the big blind calls, the flop comes A♦7♣2♥ and the pot is 5.5bb. Betting 1.8bb (about a third of the pot) needs no hand-picking — AQ collects value while KQ and JT buy the same fold for the same price, and only both together make the small bet credible. The big blind must defend 75% to stay even, which is hardest for him on a dry ace-high flop. If the turn is a blank like 5♦, the same logic fires again for 3bb (about a third of the 9.1bb pot); with the river pot around 15.1bb, a 2/3-pot thin value bet follows. The counter-example is a wet board like 9♥8♥7♠: the board belongs to the caller, the same A♠Q♠ is reduced to ace-high plus backdoor equity, and the correct action is usually to check and leave the betting to real strong hands and draws.",
+      "Turn: Whose Range Does This Card Raise?",
+      "The turn is the watershed of the hand, so sort the card into one of three buckets first: cards that help you (broadways like an ace or a king, or cards that pair the board and leave the raiser with more top pair or better), cards that help the opponent (middling cards that complete straights and flushes, or that turn his medium pairs into sets), and neutral cards (they change neither the density of strong hands nor the draw structure). Raise your frequency on the first, switch to checking on the second, and on neutral cards ask whether your specific hand needs to deny equity: hands with draws or thin showdown value can keep firing, pure showdown hands should check and control the pot size.",
+      "A second barrel is only meaningful while the value-to-bluff ratio inside your betting range still holds. If this turn card strips your bluffs of equity and adds value hands to the opponent at the same time, the most profitable action is to keep the pot where it is — repeating last street’s aggression is a habit, not a strategy.",
+      "The river asks only two questions: how many worse hands will still call (value), and how much of his range this sizing needs him to fold (α = B/(P+B)). The bar for a value bet is that more than half of his calling range is worse than your hand; below that, shrink the sizing or check. Thin value does not bet on being best, it bets on worse hands calling. A polarised bet (nuts plus busted draws) requires that you actually hold the nuts on this line, otherwise the big sizing only folds out the middle and keeps the top in, which means you chose to play only against better hands.",
+      "In a single-raised pot, ask first whose range owns the board (that sets the frequency), then ask which slice of his range this street is meant to squeeze (that sets the sizing). Frequencies need arithmetic behind them; when the arithmetic is not there, checking is never the worst option."
+    ],
+    "t6-3bet-pot": [
+      "Once the Pot Is Inflated, the Whole Rulebook Is Recomputed",
+      "A 3-bet pot is a different animal from a single-raised pot: after the flop the effective stack is a much smaller multiple of the pot, so two streets of betting are usually enough to move everything in. That means preflop range construction and the postflop commitment threshold have to move together — a hand that can only call in a single-raised pot is often worthless in a 3-bet pot, while a hand that needed a three-street plan here can go straight for the stack. The same flop with the same hand can demand opposite actions in the two pot types, so the order is always: identify the pot type first, then talk about sizing and commitment.",
+      "The books on the two raised pots (6-max, 100bb, no ante, the small blind folds and leaves 0.5 of dead money behind):\n3-bet pot: the button opens to 2.5, the big blind 3-bets to 10, the button calls 7.5\n  Pot = 0.5 + 2.5 + 10 + 7.5 = 20.5bb; each player has put in 10, so the effective remaining stack = 90bb\n  SPR = 90 ÷ 20.5 ≈ 4.4\n4-bet pot: same hand, the button 4-bets to 20, the big blind calls 10\n  Pot = 0.5 + 20 + 20 = 40.5bb; each player has put in 20, so the effective remaining stack = 80bb\n  SPR = 80 ÷ 40.5 ≈ 2.0\n→ A single-raised pot sits near 17.7, a 3-bet pot drops to about 4.4 and a 4-bet pot is down to about 2: every rung up the ladder costs you a street",
+      "3-bet and 4-bet: Who Inflates the Pot, Who Issues the Ultimatum",
+      "The two raises do different jobs: the 3-bet inflates the pot and isolates a range, the 4-bet issues the ultimatum when someone fights back. The variable that shapes a range is position, not a chart of hand strength. Out of position (big blind, small blind) you act first on every postflop street, so equity realisation is naturally low and the 3-bet range leans linear — every hand must survive a 4-bet, so if you would fold to one, leave it out. In position (button, cut-off) you can afford a polarised range: a value core plus blocker bluffs, because position itself raises realisation and offsets the cost of the marginal hands. The 4-bet follows the same logic: a value core plus a few bluffs holding an ace or king blocker, so that calling a 4-bet with medium strength earns the opponent nothing stable.",
+      "An illustrative construction (indicative, not the only answer): the big blind’s linear 3-bet against a 2.5 button open takes TT and better plus AQ and better — AA, KK, QQ, JJ and TT at 6 combos each for 30, AK at 16 and AQ at 16, giving 6 × 5 + 16 + 16 = 62 combos; add A5s and A4s, 8 suited combos carrying an ace blocker, as the bluff segment, for 70 combos in total, about 5.3% of all 1326 starting combos. What matters is not the arithmetic but the escape route of each hand: if the answer to whether you would continue after a 4-bet is no, that hand does not belong in the 3-bet range.",
+      "The Commitment Threshold: Fuller Pots Need Less Equity",
+      "Commitment is not a question of nerve, it is a question of an equity threshold. Whether you can move the rest of your stack in depends on how much equity the hand has against the opponent’s continuing range, not on where the hand ranks in absolute strength. The lower the stack-to-pot ratio, the wider his continuing range and the safer a strong top pair looks; the higher the ratio, the more chips a single shove has to win, and only nutted holdings survive the density of his strong hands.",
+      "Recomputing the commitment threshold (move the rest in and get called):\n3-bet pot: shove 90bb into 20.5bb → required equity = 90 ÷ (20.5 + 90 + 90) = 90 ÷ 200.5 ≈ 44.9%\n4-bet pot: shove 80bb into 40.5bb → required equity = 80 ÷ (40.5 + 80 + 80) = 80 ÷ 200.5 ≈ 39.9%\n→ Starting from the same 100bb, the 4-bet pot threshold is about 5 points lower than the 3-bet pot threshold: the dead money already in the middle pays part of the bill, and that is the arithmetic reason a strong top pair must commit at a low stack-to-pot ratio",
+      "Sizing follows from the pot type as well. In a 20.5bb pot a 1/3-pot continuation bet costs only 7bb; after a call the pot is 34.5bb, the turn takes about 23bb (2/3 pot), and the remaining 60bb goes into an 80.5bb pot on the river — two and a half streets to invest 90bb. That small-medium-large ladder is not a style preference: it breaks the shove into affordable stages and keeps the price of a call identical on every street, so the opponent cannot brake cheaply anywhere.",
+      "In a 3-bet pot, accept two facts before anything else: the stack-to-pot ratio has dropped to around 4, and you only have two streets left. Once you accept them, the sizing ladder and the commitment threshold are pure arithmetic; refuse them and you will play a doubled pot with single-raised-pot instincts."
+    ],
+    "t6-turn-river": [
+      "The Two Streets Where the Chips Actually Move",
+      "A flop bet spends only a fraction of the pot; the turn and the river are where the chips concentrate. Every community card redistributes range advantage and nut advantage: some cards concentrate the aggressor’s strong hands, others let the defender catch up to the nuts. Whether to keep betting is not a question of how much courage the hand has left, it is a question of which side of the range this card pushed the value hands and the bluffs to. If the ratio still holds, fire again; if it collapses, check.",
+      "The Turn: Range Advantage Redistributed",
+      "The turn test splits into two questions. First, whose top pair or better does this card densify: broadways like an ace or a king and paired boards still favour the preflop aggressor, while middle cards (the ones that complete straights and flushes) favour the defender, whose calling range is stuffed with suited connectors and medium pairs. Second, do your bluff candidates still carry equity: if the draws are live the second barrel has two ways to win, and if the card instead completed the draws for him, betting has only the pure bluff route left. Both answers together decide whether the second barrel goes out.",
+      "Example (two endings for the second barrel): the flop pot is 5.5bb, the aggressor bets 1.8bb and gets called, so the turn pot is 9.1bb. If the turn is a broadway like K♠ (it helps the aggressor, whose density of top pair or better keeps climbing), bet again for 6bb (about 2/3 pot) — after a call the river pot is 21.1bb and the sizing is chosen from the value-to-bluff ratio. If the turn is a middle card like 6♣ that completes straights and flush draws (it helps the opponent), the same hand should check: the betting range is now nothing but middle strength, and any sizing gets dominated by his range. Same hand, same street, two different cards, opposite answers.",
+      "The River: Two Rulers, Never Mixed",
+      "The two rulers of the river (pot P, bet B):\n1) The fold rate a bluff needs: α = B/(P+B): 1/2 pot 33.3%, 3/4 pot 42.9%, full pot 50%\n2) The equity the caller needs: B/(P+2B): 1/2 pot 25%, 3/4 pot 30%, full pot 33.3%\n3) The balanced bluff share equals (2): a full-pot bet is one third bluffs (value:bluff = 2:1), a 3/4-pot bet is 30% (about 7:3) and a 1/2-pot bet is 25% (value:bluff = 3:1)\n→ α says how much he must fold, (2) says how much equity he must have; α plus the minimum defence frequency is 100%, while α and (2) are not equal — treating them as the same quantity doubles or halves your bluff frequency",
+      "River value bets come in two flavours. A polarised bet is built from nuts plus busted draws with all the middle strength checking, which is why it can use a large size; a thin value bet is built mostly from medium strength and wagers that worse hands will still call, which is why it needs a small size. One sentence separates them: if more than half of his calling range is worse than your hand the value bet stands, and if not, shrink the sizing or check. Using a polarised size with a thin-value hand folds out every worse hand and gets called only by better ones.",
+      "Example (the ratio picks the size): the river pot is 21.1bb, and on this line you can count 16 value combos and 8 bluff combos for 24 in total — the bluff share is 8 ÷ 24 ≈ 33.3%, exactly the balanced figure for a full-pot bet, so a full pot of about 21bb is justified. If only 4 bluff combos remain against the same 16 value combos, the bluff share is 4 ÷ 20 = 20%, which matches a 1/3-pot sizing (0.3333 ÷ 1.6667 = 20%); forcing a full pot there lets the opponent break even by folding less often.",
+      "A bluff-catch is not justified by how strong your hand looks but by how many legal value combos the opponent can represent on this line. Count the hand classes he can actually bet for value, then subtract with your own cards: holding the A♣ removes a whole block of his nut flushes, which raises the bluff share in his betting range. Conversely, if the board completed all of his draws and his range has no natural bluffs left, your hand is pure showdown value no matter how pretty it is. The minimum defence frequency gives you the long-run floor against being exploited, not a licence that says you must call.",
+      "Three conditions have to hold at the same time for an overbet: nut advantage (his range holds almost nothing stronger than your hand), a capped opponent range (his strong hands already announced themselves by raising on an earlier street) and a blocker in your hand. Take 1.5x pot: α = 1.5 ÷ 2.5 = 60%, so he must fold 60% to stay even; the caller needs 1.5 ÷ (1 + 3) = 37.5% equity, and the balanced bluff share is the same 37.5% (value:bluff = 5:3). Reaching for an overbet without those conditions tells the opponent that only strong hands need to call.",
+      "On the turn ask which range this card strengthens; on the river ask how strong a hand this sizing forces the opponent to continue with. Together the two answers decide the second barrel, and when the arithmetic is unclear, checking is the action that keeps the mistake smallest."
     ]
   },
   "quiz": {
@@ -262,6 +303,96 @@
         "Because opponents in multiway pots steal the blinds collectively"
       ],
       "explanation": "The damage is two-layered: sticker price and discount rate worsen together, and hand types that need showdown to cash in suffer most from the second layer. Option one inflates “discount” into “unplayable”; option three swaps a structural factor for a cost factor unrelated to this chapter; option four is a tactical assumption irrelevant to the question."
+    },
+    "t6-srp-postflop-q1": {
+      "question": "In a single-raised pot, what is the mathematical case for a small continuation bet on the flop?",
+      "options": [
+        "Cheap: a 1/3-pot bet breaks even at only about 25% folds, so the whole range can afford it",
+        "A small bet gets your strong hands called more often",
+        "A small bet stops the opponent from raising the turn",
+        "A small bet guarantees the stacks go in by the river"
+      ],
+      "explanation": "From α = B/(P+B), a 1/3-pot bet breaks even at 0.3333 ÷ 1.3333 ≈ 25% folds, which implies a 75% defending floor; only a cheap bet can be fired with the entire range. The second option overrates the value side, where thin value is a by-product rather than the purpose. The third treats sizing as a way to prevent raises, but raising frequency does not depend on your size. The fourth contradicts stack depth: the SPR here is about 17.7, and three 3/4-pot bets move only about 40bb."
+    },
+    "t6-srp-postflop-q2": {
+      "question": "Which flops favour a high-frequency small continuation bet from the preflop raiser?",
+      "options": [
+        "Dry ace-high and king-high boards, and paired boards",
+        "Low boards with three cards of one suit",
+        "Two-tone low connected boards",
+        "Low boards packed with small pairs"
+      ],
+      "explanation": "The raiser’s range is denser in big cards and big pairs, so on ace-high, king-high and paired boards he holds more top pair or better and the opponent cannot defend enough. The other three all favour the caller: flush and connected boards let his suited connectors and medium pairs make straights and flushes, so raising your frequency there means shovelling chips into a range that is stronger than yours."
+    },
+    "t6-srp-postflop-q3": {
+      "question": "After the turn card arrives, when is it most correct to abandon the second barrel?",
+      "options": [
+        "The card completes the draws in his range while your betting range has no matching value hands",
+        "The card is a blank and his calling range has not improved",
+        "You hold one pair and he only called on the flop",
+        "The pot grew from last street’s bet, so it is worth applying more pressure"
+      ],
+      "explanation": "The second barrel rests on the value-to-bluff ratio still holding. When the turn completes his draws without bringing your range any nutted hands, your betting range is nothing but middle strength, and both his folds and his calls become profitable. A blank that does not improve him is precisely a reason to fire again; a bigger pot is not a reason to bet, it only changes the sizing."
+    },
+    "t6-3bet-pot-q1": {
+      "question": "Compared with a single-raised pot, what most needs recomputing after the flop in a 3-bet pot?",
+      "options": [
+        "The effective stack as a multiple of the pot has shrunk, so commitment lines and sizings both change",
+        "Flops are noticeably more likely to bring a flush draw",
+        "The opponent’s range becomes wider as a result",
+        "The rake percentage changes with the pot type"
+      ],
+      "explanation": "The pot grows while the stacks do not, so the stack-to-pot ratio falls from about 17.7 to about 4.4; the same top pair must decide about stacking off much earlier. The second and third options treat postflop frequencies and range width as functions of the pot type, and neither depends on pot size. The fourth confuses the pot type with the rake structure, which only scales with pot size."
+    },
+    "t6-3bet-pot-q2": {
+      "question": "Why is an out-of-position player’s 3-bet range usually built more linearly?",
+      "options": [
+        "Acting first after the flop lowers equity realisation, so every hand must survive a 4-bet",
+        "Linear ranges bluff more successfully",
+        "Out of position you are harder to raise",
+        "A linear range allows a bigger continuation bet on the flop"
+      ],
+      "explanation": "Out of position every hand acts first with incomplete information, so realisation is lower and the range cannot carry marginal bluffs that would fold to a 4-bet; keeping only hands that survive a re-raise is what makes the 3-bet frequency hold up. Only the in-position player can afford a polarised range with blockers, because position itself raises realisation. This is a positional difference, not a strength difference."
+    },
+    "t6-3bet-pot-q3": {
+      "question": "As the pot grows and the remaining stack shrinks, what happens to the equity needed to shove and get called?",
+      "options": [
+        "It falls, because the dead money already in the pot pays part of your risk along with the caller",
+        "It rises, because the opponent’s calling range gets stronger",
+        "It stays the same, since the threshold depends only on your hand strength",
+        "It falls, because a shove generates more folds"
+      ],
+      "explanation": "Required equity = amount risked ÷ (pot + amount risked × 2). Shoving 90bb into a 20.5bb pot needs about 44.9%, while shoving 80bb into a 40.5bb pot needs only about 39.9% — the more dead money in the denominator, the lower the threshold. The second option confuses a stronger range with a higher threshold, the third ignores the pot size, and the fourth swaps the fold rate for the equity threshold, which are different quantities."
+    },
+    "t6-turn-river-q1": {
+      "question": "On the river, what fold rate does a full-pot bluff need, and what equity does the caller need?",
+      "options": [
+        "A 50% fold rate, and 33.3% equity for the caller",
+        "A 33.3% fold rate, and 50% equity for the caller",
+        "A 50% fold rate, and 50% equity for the caller",
+        "A 33.3% fold rate, and 25% equity for the caller"
+      ],
+      "explanation": "The fold rate a bluff needs is α = B/(P+B) = 1 ÷ (1+1) = 50%; the caller needs B/(P+2B) = 1 ÷ 3 ≈ 33.3%. The two are complementary but not equal: α plus the minimum defence frequency is what adds to 100%. The second option swaps the rulers, the third uses α as the calling equity, and the fourth smuggles in the half-pot numbers."
+    },
+    "t6-turn-river-q2": {
+      "question": "What determines the value-to-bluff mix inside a river betting range?",
+      "options": [
+        "The sizing: the larger the bet, the higher the balanced bluff share",
+        "Your own hand strength: stronger hands should carry more bluffs",
+        "The historical pot size: bigger pots mean more bluffs",
+        "The opponent’s style: looser opponents should be bluffed more"
+      ],
+      "explanation": "The balanced bluff share equals the caller’s required equity B/(P+2B) and rises monotonically with the sizing: about one third for a full pot, 30% at 3/4 pot and 25% at 1/2 pot, giving value-to-bluff ratios near 2:1, 7:3 and 3:1. Stuffing many bluffs into a small sizing lets the opponent profit by folding less. The opponent’s style changes the direction of your deviation, not the ratio itself."
+    },
+    "t6-turn-river-q3": {
+      "question": "What should you actually count when deciding whether to bluff-catch?",
+      "options": [
+        "The legal value combos the opponent can represent on this line",
+        "The absolute strength ranking of your own hand",
+        "The pot size relative to your remaining stack",
+        "How many times the opponent has shown down a hand"
+      ],
+      "explanation": "A bluff-catch compares the value combos and the bluff combos inside his betting range: count the value combos he can really represent, then check how many of them your blockers remove, and let the remaining ratio decide. Absolute strength, pot size and past showdowns do not determine that ratio; the last two only affect pricing and payout structure."
     }
   },
   "chapterObjectives": {
@@ -287,6 +418,21 @@
       "Distinguish all-in equity from realized equity and state the only condition under which the realization rate equals 100%",
       "Given a realization rate, work backwards to the all-in equity threshold a hand needs",
       "Judge whether a hand’s realization rate is high or low from position, SPR and board texture"
+    ],
+    "t6-srp-postflop": [
+      "Explain why the stack-to-pot ratio of a single-raised pot pushes postflop play toward small, high-frequency continuation bets",
+      "Judge whether to bet more, bet less or switch to checking by comparing the board with both ranges",
+      "Separate the criteria for firing again or giving up on the turn, and state when polarised and thin value bets each hold on the river"
+    ],
+    "t6-3bet-pot": [
+      "State the stack-to-pot ratio of 3-bet and 4-bet pots, and explain why it rewrites the postflop sizing choice",
+      "Distinguish when an out-of-position and an in-position 3-bet range leans polarised or linear, and give the reason",
+      "Decide which hands are worth committing the whole stack with at a low stack-to-pot ratio, given the opponent’s continuing range"
+    ],
+    "t6-turn-river": [
+      "Sort a turn card into helps me, helps him or neutral, and choose between firing again and checking on that basis",
+      "Compute the fold rate a bluff needs and the equity a caller needs, and explain why the two cannot be mixed",
+      "Describe what a bluff-catch should count and what blockers do, and list the conditions that justify an overbet"
     ]
   }
 }

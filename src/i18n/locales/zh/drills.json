@@ -119,7 +119,7 @@
       },
       "q8": {
         "prompt": "6-max 中 UTG 之后的下一个位置是？",
-        "explanation": "MP（Middle Position）位于 UTG 之后，比 UTG 稍有位置优势，但仍需谨慎选择起手牌。"
+        "explanation": "HJ（Hijack）位于 UTG 之后，比 UTG 稍有位置优势，但仍需谨慎选择起手牌。"
       }
     }
   },

@@ -133,12 +133,12 @@ export default function Dashboard() {
     return allRecommendations.filter((r) => !dismissedRecommendations.includes(r.id));
   }, [academyProgress, records, reviewItems, summary.currentStreak, dismissedRecommendations]);
 
-  // 时间范围筛选后的训练记录（基于全量 records，展示层再 slice，避免仅统计最近 10 条）
+  // 时间范围筛选后的训练记录（基于全量 records，展示层再 slice）；records 按写入顺序追加，
+  // 「最近训练」须按时间倒序，否则展示窗口内最早的历史记录（与「最近」语义相反）
   const filteredRecentRecords = useMemo(() => {
     const days = TIME_RANGE_DAYS[timeRange];
-    if (days === null) return records;
-    const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
-    return records.filter((r) => r.createdAt >= cutoff);
+    const cutoff = days === null ? -Infinity : Date.now() - days * 24 * 60 * 60 * 1000;
+    return records.filter((r) => r.createdAt >= cutoff).toSorted((a, b) => b.createdAt - a.createdAt);
   }, [records, timeRange]);
 
   // §13.6.1 新手收敛：totalSessions < 5 时隐藏训练场网格，展示单一学习路径卡

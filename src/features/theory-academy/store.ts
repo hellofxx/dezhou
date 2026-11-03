@@ -5,6 +5,7 @@ import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import {
   findLevelSummaryById,
+  getCoreChaptersOfLevel,
   getLevelSummariesByVariant,
   isLevelUnlockedByCompleted,
 } from './utils/theoryMeta';
@@ -33,9 +34,11 @@ interface TheoryStore {
    */
   completeChapter: (chapterId: string, score: number, totalQuestions: number, correctAnswers: number) => void;
   isChapterCompleted: (chapterId: string) => boolean;
-  /** 按 Level ID（'t1'-'t9'）判断解锁：T1 默认解锁，Tn 需 T(n-1) 全部章节完成 */
+  /** 按 Level ID（'t1'-'t9'）判断解锁：T1 默认解锁，Tn 需 T(n-1) 全部核心章完成 */
   isTheoryLevelUnlocked: (levelId: string) => boolean;
+  /** Level 进度（只统计核心章：增补章完成不计入分子分母） */
   getLevelProgress: (levelId: string) => number;
+  /** 变体总进度（只统计核心章：增补章完成不计入分子分母） */
   getTotalProgress: () => number;
   /** 幂等切换题目疑难标记（已标记则移除，未标记则添加） */
   toggleFlagQuestion: (questionId: string) => void;
@@ -78,6 +81,7 @@ export const useTheoryStore = create<TheoryStore>()(
         if (alreadyCompleted) return;
         // 状态提交后再发事件：确保订阅方（progress addRecord / 成就检查）同步读取时
         // 看到的是含本章的最新 completedChapters，也避免 updater 被重放导致重复发事件
+        // 增补章同样 emit（学习行为真实发生），但核心进度统计会忽略它（见下方 getLevelProgress）
         trainingEvents.emit({
           id: `theory-quiz-${chapterId}-${Date.now()}`,
           module: 'theory-academy',
@@ -106,23 +110,29 @@ export const useTheoryStore = create<TheoryStore>()(
 
       getLevelProgress: (levelId) => {
         const level = findLevelSummaryById(levelId);
-        if (!level || level.chapters.length === 0) return 0;
+        if (!level) return 0;
+        // 只统计 core 章：增补章（6-max 补强）不进入分子分母
+        const core = getCoreChaptersOfLevel(level);
+        if (core.length === 0) return 0;
         const { completedChapters } = get().progress;
-        const done = level.chapters.filter((c) => completedChapters.includes(c.id)).length;
-        return Math.round((done / level.chapters.length) * 100);
+        const done = core.filter((c) => completedChapters.includes(c.id)).length;
+        return Math.round((done / core.length) * 100);
       },
 
       /**
-       * 按当前 activeVariant 的序列计算总进度（分母为变体自己的总章节数）。
-       * 分子仅统计当前变体序列内的已完成章节，切换变体后进度统计自洽。
+       * 按当前 activeVariant 的序列计算总进度（分母为该变体的核心章总数）。
+       * 分子仅统计当前变体序列内的已读核心章，切换变体后进度统计自洽；
+       * 增补章完成不入分子，故补强进度只出现在 6-max 补强卡，不扭曲核心进度。
        */
       getTotalProgress: () => {
         const { activeVariant, completedChapters } = get().progress;
         const levels = getLevelSummariesByVariant(activeVariant);
-        const total = levels.reduce((sum, l) => sum + l.chapters.length, 0);
+        const coreChapterIds = new Set(
+          levels.flatMap((l) => getCoreChaptersOfLevel(l).map((c) => c.id)),
+        );
+        const total = coreChapterIds.size;
         if (total === 0) return 0;
-        const variantChapterIds = new Set(levels.flatMap((l) => l.chapters.map((c) => c.id)));
-        const done = completedChapters.filter((id) => variantChapterIds.has(id)).length;
+        const done = completedChapters.filter((id) => coreChapterIds.has(id)).length;
         return Math.round((done / total) * 100);
       },
 

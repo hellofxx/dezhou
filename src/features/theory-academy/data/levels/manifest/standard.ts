@@ -17,6 +17,7 @@ export const STANDARD_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
       {"id":"t1-combinatorics","level":1,"order":1,"title":"组合计数与起手牌概率","subtitle":"一切扑克数学的起点：52 张牌能组合出什么","duration":"12 min","variant":"standard"},
       {"id":"t1-outs","level":1,"order":2,"title":"Outs 与 2/4 法则","subtitle":"把\"我还有机会吗\"变成一个百分数","duration":"10 min","variant":"standard"},
       {"id":"t1-variance","level":1,"order":3,"title":"方差与长期视角","subtitle":"为什么正确的决策也会连续输钱","duration":"10 min","variant":"standard"},
+      {"id":"t1-sixmax-table","level":1,"order":4,"title":"6-max 座位结构与位置分组","subtitle":"6-max 现金局补强（可选，不影响解锁）。先把六个座位与行动顺序认准，再谈范围","duration":"14 min","variant":"standard","supplemental":true,"pathTags":["six-max","foundation"]},
     ]
   },
   {
@@ -44,11 +45,12 @@ export const STANDARD_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "icon": "🧭",
     "unlockRequirement": "完成 T2 所有章节",
     "variant": "standard",
-    "practiceRecommendations": {"lessons":[{"id":"l1-position","title":"位置的力量"},{"id":"l2-raise-sizing","title":"加注大小"}]},
+    "practiceRecommendations": {"lessons":[{"id":"l1-position","title":"位置的力量"},{"id":"l2-raise-sizing","title":"加注大小"},{"id":"l2-bb-defense","title":"大盲防守"}]},
     "chapters": [
       {"id":"t3-position-value","level":3,"order":1,"title":"位置价值的来源","subtitle":"为什么\"最后说话\"本身就是一种筹码","duration":"11 min","variant":"standard"},
       {"id":"t3-starting-hands","level":3,"order":2,"title":"起手牌理论与 Gap Concept","subtitle":"进池标准不是一张表，而是一套随情境移动的逻辑","duration":"11 min","variant":"standard"},
       {"id":"t3-fundamental-theorem","level":3,"order":3,"title":"Sklansky 基本定理与主动权","subtitle":"扑克盈利的第一性原理：让对手犯错","duration":"10 min","variant":"standard"},
+      {"id":"t3-blind-battle","level":3,"order":4,"title":"盲注战：SB 与 BB 的强制博弈","subtitle":"6-max 现金局补强（可选，不影响解锁）。盲注战是 6-max 出现频率最高的一类底池","duration":"16 min","variant":"standard","supplemental":true,"pathTags":["six-max","preflop"]},
     ]
   },
   {
@@ -60,13 +62,14 @@ export const STANDARD_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "icon": "🗺️",
     "unlockRequirement": "完成 T3 所有章节",
     "variant": "standard",
-    "practiceRecommendations": {"lessons":[{"id":"l4-range-thinking","title":"范围思维"},{"id":"l4-range-construction","title":"范围建构：极化 vs 合并"},{"id":"l4-blockers","title":"Blocker 效应"},{"id":"l7-rake","title":"Rake 对策略的影响"},{"id":"local-ante","title":"Ante 结构的翻前调整"}]},
+    "practiceRecommendations": {"lessons":[{"id":"l4-range-thinking","title":"范围思维"},{"id":"l4-range-construction","title":"范围建构：极化 vs 合并"},{"id":"l4-blockers","title":"Blocker 效应"},{"id":"l2-3bet-basics","title":"3-bet 基础"},{"id":"l2-4bet-strategy","title":"4-Bet 策略"},{"id":"l7-rake","title":"Rake 对策略的影响"},{"id":"local-ante","title":"Ante 结构的翻前调整"}]},
     "chapters": [
       {"id":"t4-range-thinking","level":4,"order":1,"title":"范围思维：从单手牌到概率分布","subtitle":"职业与业余之间最重要的一次思维升级","duration":"12 min","variant":"standard"},
       {"id":"t4-combinatorics","level":4,"order":2,"title":"组合数学与 Blockers","subtitle":"数组合：把范围从名词变成数字","duration":"11 min","variant":"standard"},
-      {"id":"t4-range-advantage","level":4,"order":3,"title":"范围优势与坚果优势","subtitle":"为什么有的牌面属于加注者，有的属于跟注者","duration":"11 min","variant":"standard"},
+      {"id":"t4-range-advantage","level":4,"order":3,"title":"范围优势与坚果优势","subtitle":"为什么有的牌面属于加注者，有的属于跟注者","duration":"11 min","variant":"standard","pathTags":["postflop"]},
       {"id":"t4-preflop-structure","level":4,"order":4,"title":"翻前结构性理论：3-bet / 4-bet 与防守范围的构建","subtitle":"把翻前从\"我的牌够不够强\"升级为\"我的范围长什么样\"","duration":"13 min","variant":"standard"},
-      {"id":"t4-structure-economics","level":4,"order":5,"title":"结构经济学：抽水、前注与 Straddle","subtitle":"把牌桌参数当成方程的自变量，而不是背景噪声","duration":"13 min","variant":"standard"},
+      {"id":"t4-structure-economics","level":4,"order":5,"title":"结构经济学：抽水、前注与 Straddle","subtitle":"把牌桌参数当成方程的自变量，而不是背景噪声","duration":"13 min","variant":"standard","pathTags":["cash","mtt"]},
+      {"id":"t4-sixmax-ranges","level":4,"order":6,"title":"6-max 翻前范围基准","subtitle":"6-max 现金局补强（可选，不影响解锁）。把开池范围从记忆表换成可对照的基准","duration":"18 min","variant":"standard","supplemental":true,"pathTags":["six-max","preflop","cash"]},
     ]
   },
   {
@@ -82,9 +85,9 @@ export const STANDARD_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "chapters": [
       {"id":"t5-game-theory","level":5,"order":1,"title":"零和博弈与纳什均衡","subtitle":"从冯·诺依曼到扑克桌：均衡为什么存在","duration":"12 min","variant":"standard"},
       {"id":"t5-gto-concept","level":5,"order":2,"title":"GTO 与剥削：两种\"最优\"","subtitle":"理解求解器时代的策略坐标系","duration":"11 min","variant":"standard"},
-      {"id":"t5-mdf-alpha","level":5,"order":3,"title":"MDF 与 Alpha：防守与进攻的临界频率","subtitle":"两个公式，锁定\"下注-弃牌\"攻防的数学边界","duration":"11 min","variant":"standard"},
+      {"id":"t5-mdf-alpha","level":5,"order":3,"title":"MDF 与 Alpha：防守与进攻的临界频率","subtitle":"两个公式，锁定\"下注-弃牌\"攻防的数学边界","duration":"11 min","variant":"standard","pathTags":["postflop"]},
       {"id":"t5-mixed-strategy","level":5,"order":4,"title":"混合策略、无差别原则与节点锁定","subtitle":"读懂求解器输出的三把钥匙","duration":"12 min","variant":"standard"},
-      {"id":"t5-multiway-frequency","level":5,"order":5,"title":"多人底池的频率与尺度","subtitle":"对手从 1 个变成 2 个，MDF 与诈唬频率要整个重算","duration":"12 min","variant":"standard"},
+      {"id":"t5-multiway-frequency","level":5,"order":5,"title":"多人底池的频率与尺度","subtitle":"对手从 1 个变成 2 个，MDF 与诈唬频率要整个重算","duration":"12 min","variant":"standard","pathTags":["mtt"]},
     ]
   },
   {
@@ -96,12 +99,15 @@ export const STANDARD_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "icon": "💠",
     "unlockRequirement": "完成 T5 所有章节",
     "variant": "standard",
-    "practiceRecommendations": {"lessons":[{"id":"l3-bet-sizing","title":"下注尺度理论"},{"id":"l3-cbet","title":"持续下注（C-Bet）"},{"id":"l4-overbet","title":"Overbet 策略"}]},
+    "practiceRecommendations": {"lessons":[{"id":"l3-bet-sizing","title":"下注尺度理论"},{"id":"l3-cbet","title":"持续下注（C-Bet）"},{"id":"l4-overbet","title":"Overbet 策略"},{"id":"l3-multistreet","title":"多街计划"},{"id":"l3-bluffing","title":"诈唬的艺术"}]},
     "chapters": [
-      {"id":"t6-bet-purpose","level":6,"order":1,"title":"下注的目的：每个筹码都要有理由","subtitle":"价值、诈唬、保护——以及三个都不占时为什么该过牌","duration":"11 min","variant":"standard"},
-      {"id":"t6-sizing-theory","level":6,"order":2,"title":"尺度理论：极化与线性","subtitle":"下多大不是风格，是范围结构的函数","duration":"12 min","variant":"standard"},
-      {"id":"t6-geometric","level":6,"order":3,"title":"SPR 与几何尺度：多街规划","subtitle":"从\"这条街下多少\"升级为\"三条街怎么把钱全放进去\"","duration":"12 min","variant":"standard"},
+      {"id":"t6-bet-purpose","level":6,"order":1,"title":"下注的目的：每个筹码都要有理由","subtitle":"价值、诈唬、保护——以及三个都不占时为什么该过牌","duration":"11 min","variant":"standard","pathTags":["postflop"]},
+      {"id":"t6-sizing-theory","level":6,"order":2,"title":"尺度理论：极化与线性","subtitle":"下多大不是风格，是范围结构的函数","duration":"12 min","variant":"standard","pathTags":["postflop"]},
+      {"id":"t6-geometric","level":6,"order":3,"title":"SPR 与几何尺度：多街规划","subtitle":"从\"这条街下多少\"升级为\"三条街怎么把钱全放进去\"","duration":"12 min","variant":"standard","pathTags":["postflop"]},
       {"id":"t6-equity-realization","level":6,"order":4,"title":"牌面结构与权益实现：你的胜率有多少能真的收到","subtitle":"全下权益是标价，实现权益才是到手价","duration":"12 min","variant":"standard"},
+      {"id":"t6-srp-postflop","level":6,"order":5,"title":"单加注底池的翻后打法","subtitle":"6-max 现金局补强（可选，不影响解锁）。最常见的底池类型，值得一套标准流程","duration":"18 min","variant":"standard","supplemental":true,"pathTags":["six-max","postflop","cash"]},
+      {"id":"t6-3bet-pot","level":6,"order":6,"title":"3-bet 底池的翻后打法","subtitle":"6-max 现金局补强（可选，不影响解锁）。底池被放大之后，承诺线与尺度都要重算","duration":"16 min","variant":"standard","supplemental":true,"pathTags":["six-max","postflop","cash"]},
+      {"id":"t6-turn-river","level":6,"order":7,"title":"转牌与河牌的连续施压","subtitle":"6-max 现金局补强（可选，不影响解锁）。筹码真正流动的地方在转牌与河牌","duration":"18 min","variant":"standard","supplemental":true,"pathTags":["six-max","postflop","cash"]},
     ]
   },
   {
@@ -150,11 +156,12 @@ export const STANDARD_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "practiceRecommendations": {"lessons":[{"id":"l6-icm","title":"ICM 基础"},{"id":"l6-bounty","title":"Bounty 锦标赛策略"},{"id":"l7-multiway","title":"多人底池策略"},{"id":"l8-pool-tendencies","title":"Pool Tendencies 分析"}],"trackId":"track-cash-game"},
     "chapters": [
       {"id":"t9-mop","level":9,"order":1,"title":"《扑克数学》（MOP）核心思想","subtitle":"从玩具博弈出发，看清真实扑克的骨架","duration":"12 min","variant":"standard"},
-      {"id":"t9-icm","level":9,"order":2,"title":"ICM 理论：当筹码不再等于金钱","subtitle":"锦标赛决策的第二套坐标系","duration":"12 min","variant":"standard"},
-      {"id":"t9-multiway","level":9,"order":3,"title":"多人底池理论","subtitle":"当博弈从二人变成 N 人，哪些定律要重写","duration":"11 min","variant":"standard"},
+      {"id":"t9-icm","level":9,"order":2,"title":"ICM 理论：当筹码不再等于金钱","subtitle":"锦标赛决策的第二套坐标系","duration":"12 min","variant":"standard","pathTags":["mtt"]},
+      {"id":"t9-multiway","level":9,"order":3,"title":"多人底池理论","subtitle":"当博弈从二人变成 N 人，哪些定律要重写","duration":"11 min","variant":"standard","pathTags":["mtt"]},
       {"id":"t9-alpha","level":9,"order":4,"title":"Alpha（诈唬盈亏平衡弃牌率）的剥削应用","subtitle":"MDF 的对偶概念与实战应用","duration":"10 min","variant":"standard"},
       {"id":"t9-unified","level":9,"order":5,"title":"GTO 与剥削的统一框架","subtitle":"九个 Level 的收束：一套完整的决策操作系统","duration":"12 min","variant":"standard"},
-      {"id":"t9-cash-vs-mtt","level":9,"order":6,"title":"现金与锦标赛的结构对照","subtitle":"同一手牌的两套账：效用函数、深度漂移与抽成形式","duration":"14 min","variant":"standard"},
+      {"id":"t9-cash-vs-mtt","level":9,"order":6,"title":"现金与锦标赛的结构对照","subtitle":"同一手牌的两套账：效用函数、深度漂移与抽成形式","duration":"14 min","variant":"standard","pathTags":["mtt","cash"]},
+      {"id":"t9-sixmax-capstone","level":9,"order":7,"title":"6-max 现金局综合实战","subtitle":"6-max 现金局补强（可选，不影响解锁）。把九级理论压进同一条决策链","duration":"22 min","variant":"standard","supplemental":true,"pathTags":["six-max","cash"]},
     ]
   },
 ];

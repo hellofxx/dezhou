@@ -15,7 +15,7 @@
     "label": "Game Variant",
     "playerCount": "Players",
     "max": "{{count}}-Max",
-    "shortDeckHint": "Short deck: removes 2-5, 36 cards, 9×9 range matrix. Flush > Full House, Straight > Three of a Kind."
+    "shortDeckHint": "Short deck: removes 2-5, 36 cards, 9×9 range matrix. Flush > Full House, Three of a Kind > Straight."
   },
   "rangeSelect": {
     "title": "Range Selector",

@@ -99,6 +99,14 @@ export function parseGGPokerHand(text: string): HandHistory {
           parseInt(dateMatch[4]!), parseInt(dateMatch[5]!), parseInt(dateMatch[6]!)
         ).getTime();
       }
+
+      // 盲注写在头信息行的括号里（如 "($0.50/$1)"）。此前本行在 stakes 解析前直接
+      // continue，导致 GG 牌局 stakes 恒为 0/0（列表与统计显示 $0/$0）。
+      const headerStakes = line.match(/\(\s*\$?([\d.,]+)\s*\/\s*\$?([\d.,]+)/);
+      if (headerStakes && smallBlind === 0) {
+        smallBlind = parseAmount(headerStakes[1]!);
+        bigBlind = parseAmount(headerStakes[2]!);
+      }
       continue;
     }
 

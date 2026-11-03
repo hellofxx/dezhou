@@ -7,7 +7,7 @@
   "description": {
     "standard": "Standard Texas Hold'em, 52 cards, up to 9 players",
     "short-deck": "Short Deck Hold'em, 36 cards (2-5 removed), Flush > Straight, Pair beats AKo",
-    "heads-up": "Heads-Up Hold'em, 1v1 duel, SB antes, SB acts first postflop"
+    "heads-up": "Heads-Up Hold'em, 1v1 duel, SB antes, BB acts first postflop"
   },
   "title": "Game Variant",
   "switchHint": "Switching variants will automatically adjust training data and rules",
@@ -24,7 +24,7 @@
   "shortDeckRules": {
     "ruleChanges": "Rule Changes",
     "deckInfo": "36 cards (6-A), removing 2-5",
-    "straightBeatsTrips": "Straight > Trips",
-    "flushBeatsFullHouse": "Flush > Full House"
+    "flushBeatsFullHouse": "Flush > Full House",
+    "tripsBeatsStraight": "Trips > Straight"
   }
 }

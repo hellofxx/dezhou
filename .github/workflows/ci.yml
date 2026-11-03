@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+# 最小权限：CI 只读仓库，不发布 Pages
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # 不显式指定 version，由 package.json 的 packageManager 字段决定（唯一事实源）
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 与本地 pnpm verify 同序列：typecheck → lint → repo:check → agents:map:check → test
+      - name: Verify
+        run: pnpm verify
+
+      - name: Build
+        run: pnpm build
+
+      - name: Bundle Size Check
+        run: pnpm size:check

@@ -82,10 +82,9 @@ export default function PotOddsQuizPage() {
   const [decisionFeedback, setDecisionFeedback] = useState<DecisionFeedback | null>(null);
   // §13.7.2：移动端答题反馈底部 Sheet
   const isMobile = useIsMobile();
-  const [sheetOpen, setSheetOpen] = useState(false);
-  useEffect(() => {
-    if (isAnswered) setSheetOpen(true);
-  }, [isAnswered]);
+  // 移动端 Sheet 开合由答题态派生：切题/重开自动关闭，避免空模态遮挡下一题（回归锁见测试）。
+  const [sheetDismissed, setSheetDismissed] = useState(false);
+  const sheetOpen = isAnswered && !sheetDismissed;
 
   // "最后一题简单"策略：将末题替换为最简单的赔率题；
   // rescueUsed 用于避免无限追加补救题。
@@ -114,6 +113,7 @@ export default function PotOddsQuizPage() {
 
   const handleSelect = useCallback((option: PotOddsQuizOption) => {
     if (isAnswered) return;
+    setSheetDismissed(false);
     const elapsed = (Date.now() - startTimeRef.current) / 1000;
     const elapsedMs = elapsed * 1000;
     setTimes((prev) => [...prev, elapsed]);
@@ -413,7 +413,7 @@ export default function PotOddsQuizPage() {
 
             {/* Feedback — §13.7.2：移动端渲染进底部 Sheet，桌面端保持内联展开 */}
             {isMobile ? (
-              <MobileFeedbackSheet open={sheetOpen} onOpenChange={setSheetOpen}>
+              <MobileFeedbackSheet open={sheetOpen} onOpenChange={(open) => { if (!open) setSheetDismissed(true); }}>
                 {renderFeedbackContent()}
               </MobileFeedbackSheet>
             ) : (

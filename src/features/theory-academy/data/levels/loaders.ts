@@ -10,6 +10,7 @@ import {
   SHORT_DECK_LEVEL_SUMMARIES,
   STANDARD_LEVEL_SUMMARIES,
 } from './manifest';
+import { applyStandardChapterMeta } from './variants/standard/chapterMeta';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS as HEADS_UP_PRACTICE } from './variants/heads-up/chapterPracticeMap';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS as SHORT_DECK_PRACTICE } from './variants/short-deck/chapterPracticeMap';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS as STANDARD_PRACTICE } from './variants/standard/chapterPracticeMap';
@@ -20,6 +21,10 @@ import { CHAPTER_PRACTICE_RECOMMENDATIONS as STANDARD_PRACTICE } from './variant
  * 不再一次拉取整变体（standard 全量约 100KB+ gzip）。疑难清单等需要全变体的
  * 场景经 loadTheoryLevelsForVariant 逐 Level 组合，缓存语义为成功才入缓存、
  * 失败可重试、并发共享 in-flight。
+ *
+ * standard 变体的增补章独立成 `chapters/t<level>-*.ts`（每文件单章），
+ * 与所属 Level 的核心章并行加载后按 order 合并；章节级实践推荐与元数据
+ * （supplemental / pathTags）在合并后统一附加，保证目录层与完整数据层口径一致。
  */
 
 const SUMMARIES_BY_VARIANT: Record<PokerVariant, TheoryLevelSummary[]> = {
@@ -58,6 +63,30 @@ function indexLevelLoaders(
   return result;
 }
 
+/**
+ * 增补章按文件名分组到所属 Level。
+ * 先按路径排序再入组：同 Level 多章的加载顺序不依赖 glob 的枚举顺序，
+ * 合并后的最终顺序由调用方的 order 排序决定。
+ */
+function indexSupplementalLoaders(
+  modules: Record<string, LevelLoader>,
+  pattern: RegExp,
+): Map<number, LevelLoader[]> {
+  const result = new Map<number, LevelLoader[]>();
+  const entries = Object.entries(modules).toSorted((left, right) =>
+    left[0].localeCompare(right[0]),
+  );
+  for (const [file, loader] of entries) {
+    const match = pattern.exec(file);
+    if (!match?.[1]) continue;
+    const level = Number(match[1]);
+    const loaders = result.get(level) ?? [];
+    loaders.push(loader);
+    result.set(level, loaders);
+  }
+  return result;
+}
+
 /** 每个 Level 单文件动态 import：Vite 为每个文件产出独立 chunk */
 const LEVEL_LOADERS: Record<PokerVariant, Map<number, LevelLoader>> = {
   standard: indexLevelLoaders(
@@ -73,6 +102,12 @@ const LEVEL_LOADERS: Record<PokerVariant, Map<number, LevelLoader>> = {
     /headsUpLevel(\d)\.ts$/,
   ),
 };
+
+/** standard 增补章：每文件单章，按 `/chapters/t<level>-*.ts` 归组 */
+const STANDARD_SUPPLEMENTAL_LOADERS: Map<number, LevelLoader[]> = indexSupplementalLoaders(
+  import.meta.glob('./variants/standard/chapters/t*-*.ts') as Record<string, LevelLoader>,
+  /chapters\/t(\d+)-[^/]+\.ts$/,
+);
 
 function applyChapterPractice(
   chapters: TheoryChapter[],
@@ -97,18 +132,42 @@ function chaptersFromModule(moduleValue: unknown): TheoryChapter[] | null {
   return null;
 }
 
+/** 取模块里的首个章节数组导出（核心 Level 文件与单章文件都只有一处章节导出） */
+function chaptersOfModule(moduleExports: LevelModule): TheoryChapter[] | null {
+  for (const value of Object.values(moduleExports)) {
+    const chapters = chaptersFromModule(value);
+    if (chapters) return chapters;
+  }
+  return null;
+}
+
+/** 合并 standard 的核心章与增补章，按 order 升序（核心章相对顺序不变） */
+async function mergeStandardSupplemental(
+  level: number,
+  core: TheoryChapter[],
+): Promise<TheoryChapter[]> {
+  const loaders = STANDARD_SUPPLEMENTAL_LOADERS.get(level) ?? [];
+  if (loaders.length === 0) return core;
+  const modules = await Promise.all(loaders.map((load) => load()));
+  const supplemental = modules.flatMap((moduleExports) => chaptersOfModule(moduleExports) ?? []);
+  return [...core, ...supplemental].toSorted((a, b) => a.order - b.order);
+}
+
 async function loadTheoryLevelUncached(levelId: string): Promise<TheoryLevelInfo | undefined> {
   const summary = SUMMARY_BY_ID.get(levelId);
   if (!summary) return undefined;
   const loader = LEVEL_LOADERS[summary.variant].get(summary.level);
   if (!loader) return undefined;
-  const moduleExports = Object.values(await loader());
-  const moduleValue = moduleExports.find((value) => chaptersFromModule(value) !== null);
-  const chapters = chaptersFromModule(moduleValue);
-  if (!chapters) return undefined;
+  const coreChapters = chaptersOfModule(await loader());
+  if (!coreChapters) return undefined;
+  const isStandard = summary.variant === 'standard';
+  const chapters = isStandard
+    ? await mergeStandardSupplemental(summary.level, coreChapters)
+    : coreChapters;
+  const withPractice = applyChapterPractice(chapters, PRACTICE_BY_VARIANT[summary.variant]);
   return {
     ...summary,
-    chapters: applyChapterPractice(chapters, PRACTICE_BY_VARIANT[summary.variant]),
+    chapters: isStandard ? applyStandardChapterMeta(withPractice) : withPractice,
   };
 }
 

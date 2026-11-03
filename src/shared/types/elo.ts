@@ -112,7 +112,7 @@ export const VARIANT_CONFIG: Record<PokerVariant, VariantConfig> = {
     id: 'heads-up',
     name: 'Heads-Up Hold\'em',
     shortName: 'Heads-Up',
-    description: '单挑德州，2 人对战，SB 强制 Ante，翻后 SB 先行动',
+    description: '单挑德州，2 人对战，SB 强制 Ante，翻后 BB 先行动',
     icon: '👤',
     color: '#3b82f6',
     deckSize: 52,

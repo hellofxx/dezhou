@@ -130,7 +130,9 @@ export function parseShowCards(
 
 /**
  * 从一行解析收集底池赢家「Name collected $X ...」。
- * 支持 Seat N: 前缀、USD 后缀、from pot、括号式金额（"( $45 )"）。
+ * 支持 Seat N: 前缀、USD 后缀、from pot、圆括号 / 方括号金额写法
+ * （"( $45 )" / "[ $45.00 USD ]"——partypoker 的金额一律为方括号，
+ * 缺方括号支持会使其 SUMMARY 收池行解析不到赢家，winner 丢失）。
  * @returns { playerId, amount } 或在无匹配时 undefined
  */
 export function parseCollected(
@@ -138,7 +140,9 @@ export function parseCollected(
   nameToIndex: Map<string, number>,
   resolveIdx?: (name: string) => number | undefined
 ): { playerId: number; amount: number } | undefined {
-  const collectRe = line.match(/^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+\(?\$?([\d,.]+)\)?\s*(?:USD)?\s*(?:from pot)?/i);
+  const collectRe = line.match(
+    /^(?:Seat\s+\d+:\s*)?(.+?)\s+collected\s+(?:[(\[]\s*)?\$?([\d,.]+)\s*(?:USD)?\s*[)\]]?\s*(?:from pot)?/i
+  );
   if (!collectRe) return undefined;
   const name = collectRe[1]!.trim();
   const idx = resolveIdx ? resolveIdx(name) : nameToIndex.get(name);

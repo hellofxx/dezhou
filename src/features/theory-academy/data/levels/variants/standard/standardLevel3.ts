@@ -22,7 +22,7 @@ export const STANDARD_LEVEL_3_CHAPTERS: TheoryChapter[] = [
       {
         type: 'text',
         content:
-          '位置（Position）指你在下注顺序中的相对次序。翻后每一轮都最后行动的位置称为"有位置"（In Position, IP），反之为"无位置"（Out of Position, OOP）。按钮（BTN）是全桌唯一翻后永远有位置的座位，也是长期盈利率最高的座位；盲注位（SB/BB）翻后永远无位置，是仅有的两个长期亏损座位——这是所有追踪数据库都验证过的结构性事实。',
+          '位置（Position）指你在下注顺序中的相对次序。翻后每一轮都最后行动的位置称为"有位置"（In Position, IP），反之为"无位置"（Out of Position, OOP）。按钮（BTN）是全桌唯一翻后永远有位置的座位，也是长期盈利率最高的座位；SB 翻后永远无位置，BB 只对 SB 有位置、对其余所有位置都无位置——两者合起来是仅有的两个长期亏损座位，这是所有追踪数据库都验证过的结构性事实。',
       },
       { type: 'heading', content: '位置优势的三个来源' },
       {
@@ -62,7 +62,7 @@ export const STANDARD_LEVEL_3_CHAPTERS: TheoryChapter[] = [
       {
         type: 'text',
         content:
-          '标准的开局加注（RFI）范围宽度大致为：UTG 最紧（约 15% 上下），随位置后移逐渐放宽，到 BTN 可达 40-50%。逻辑链条：位置越靠后 → 身后需要穿越的对手越少 + 翻后越可能有位置 → 边缘牌的 EV 越高 → 范围越宽。范围训练模块的位置范围正是这个原理的落地。',
+          '标准的开局加注（RFI）范围宽度（6-max 现金局、100bb、无前注）大致为：UTG 标准约 19%（新手简化 15%），HJ 约 22%，CO 约 32%，BTN 最宽约 44%（新手简化 35%），SB 约 38%。逻辑链条：位置越靠后 → 身后需要穿越的对手越少 + 翻后越可能有位置 → 边缘牌的 EV 越高 → 范围越宽。范围训练模块的位置范围正是这个原理的落地。',
       },
       {
         type: 'highlight',
@@ -199,7 +199,7 @@ export const STANDARD_LEVEL_3_CHAPTERS: TheoryChapter[] = [
       },
       {
         type: 'highlight',
-        content: 'Gap Concept 的现代修正：随着位置与筹码深度变化，"跳档"的幅度会伸缩——BTN 对 CO 开局的 3-bet/跟注范围可以很宽，UTG+1 对 UTG 开局则要极紧。原则不变：面对已展示的牌力，你的标准必须上移。',
+        content: 'Gap Concept 的现代修正：随着位置与筹码深度变化，"跳档"的幅度会伸缩——BTN 对 CO 开局的 3-bet/跟注范围可以很宽，HJ 对 UTG 开局则要极紧。原则不变：面对已展示的牌力，你的标准必须上移。',
       },
       {
         type: 'highlight',

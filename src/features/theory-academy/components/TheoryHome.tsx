@@ -6,13 +6,17 @@ import { cn } from '@/shared/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useTheoryStore } from '../store';
 import {
+  getCoreChaptersOfLevel,
+  getCoreChapterCount,
   getLevelSummariesByVariant,
-  getTotalChapterCount,
 } from '../utils/theoryMeta';
 import type { PokerVariant } from '@/shared/types/elo';
 import { VariantToggle } from '@/shared/components/VariantToggle';
 import { TheoryResume } from './TheoryResume';
 import { TheoryLadder, findActiveTheoryLevelId } from './TheoryLadder';
+import { TheorySupplementalCard } from './TheorySupplementalCard';
+import { TheoryMasteryCard } from './TheoryMasteryCard';
+import { TheoryLearningPaths } from './TheoryLearningPaths';
 
 export default function TheoryHome() {
   const { t } = useTranslation();
@@ -25,22 +29,25 @@ export default function TheoryHome() {
 
   const levels = getLevelSummariesByVariant(activeVariant);
   const totalProgress = getTotalProgress();
-  const totalChapters = getTotalChapterCount(activeVariant);
+  // 核心章计数：增补章（6-max 补强）不计入任何主统计，单独由补强卡呈现
+  const totalChapters = getCoreChapterCount(activeVariant);
+  const coreChapters = levels.flatMap((l) => getCoreChaptersOfLevel(l));
+  const coreChapterIds = new Set(coreChapters.map((c) => c.id));
 
-  // 当前变体序列内已读章节（跨变体独立统计）
-  const variantChapterIds = new Set(levels.flatMap((l) => l.chapters.map((c) => c.id)));
-  const completedCount = progress.completedChapters.filter((id) => variantChapterIds.has(id)).length;
+  // 当前变体序列内已读核心章（跨变体独立统计）
+  const completedCount = progress.completedChapters.filter((id) => coreChapterIds.has(id)).length;
 
   const activeLevelId = findActiveTheoryLevelId(levels, progress.completedChapters, isTheoryLevelUnlocked);
   const activeLevel = levels.find((l) => l.id === activeLevelId) ?? null;
 
-  const levelsDoneCount = levels.filter(
-    (l) => l.chapters.length > 0 && l.chapters.every((c) => progress.completedChapters.includes(c.id))
-  ).length;
+  const levelsDoneCount = levels.filter((l) => {
+    const core = getCoreChaptersOfLevel(l);
+    return core.length > 0 && core.every((c) => progress.completedChapters.includes(c.id));
+  }).length;
 
-  // 平均小测分：当前变体已读章节的小测分均值（取整）
+  // 平均小测分：当前变体已读核心章的小测分均值（取整；增补章分数不参与）
   const scored = levels
-    .flatMap((l) => l.chapters)
+    .flatMap((l) => getCoreChaptersOfLevel(l))
     .filter((c) => progress.completedChapters.includes(c.id) && typeof progress.quizScores[c.id] === 'number')
     .map((c) => progress.quizScores[c.id] as number);
   const avgScore = scored.length > 0 ? Math.round(scored.reduce((a, b) => a + b, 0) / scored.length) : 0;
@@ -85,7 +92,7 @@ export default function TheoryHome() {
           </div>
         </motion.div>
 
-        {/* Zone C + D：理论阶梯（主列）＋ 侧栏（统计/桥接） */}
+        {/* Zone C + D：理论阶梯（主列）＋ 侧栏（统计/补强/桥接） */}
         <div className="grid gap-5 lg:grid-cols-3 lg:items-start">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -111,15 +118,26 @@ export default function TheoryHome() {
               flaggedCount={progress.flaggedQuestions.length}
               activeVariant={activeVariant}
             />
+            <TheoryMasteryCard chapters={coreChapters} quizScores={progress.quizScores} />
+            {activeVariant === 'standard' && (
+              <TheorySupplementalCard
+                levels={levels}
+                completedChapters={progress.completedChapters}
+                isUnlocked={isTheoryLevelUnlocked}
+              />
+            )}
             <PracticeBridge />
           </aside>
         </div>
+
+        {/* Zone E：主题学习路径（标准变体专有，展示层不新增门禁） */}
+        <TheoryLearningPaths />
       </div>
     </div>
   );
 }
 
-/** 阅读统计面板：平均小测分 / 已读章节 / 完成级别 / 疑难标记 */
+/** 阅读统计面板：平均小测分 / 已读章节 / 完成级别 / 疑难标记（口径 = 核心章） */
 function ReadingStats({
   completedCount,
   totalChapters,

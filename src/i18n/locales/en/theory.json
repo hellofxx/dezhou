@@ -200,7 +200,14 @@
     "t6sd-equity-realization": "Short-Deck Equity Realization",
     "t7sd-hud": "Short-Deck HUD Metrics and Sample Size",
     "t8sd-bankroll": "Short-Deck Bankroll Thresholds and Losing Streaks",
-    "t9sd-tournament-structure": "Short-Deck Tournament Structure and Ante Thresholds"
+    "t9sd-tournament-structure": "Short-Deck Tournament Structure and Ante Thresholds",
+    "t1-sixmax-table": "6-Max Seating and Position Groups",
+    "t3-blind-battle": "Blind Battles: the SB and BB Forced Game",
+    "t4-sixmax-ranges": "6-Max Preflop Range Baselines",
+    "t6-srp-postflop": "Playing the Single-Raised Pot",
+    "t6-3bet-pot": "Playing the 3-Bet Pot",
+    "t6-turn-river": "Turn and River Pressure",
+    "t9-sixmax-capstone": "6-Max Cash Capstone"
   },
   "chapterSubtitle": {
     "t1-combinatorics": "The starting point of all poker math: what 52 cards can make",
@@ -288,7 +295,14 @@
     "t6sd-equity-realization": "Quoted at 30.1%, collected at 25.6%",
     "t7sd-hud": "Recalibrate the baseline, back-solve the sample",
     "t8sd-bankroll": "Turning \"150 buy-ins\" from a slogan into a range",
-    "t9sd-tournament-structure": "Antes change the dead money, not the threshold formula"
+    "t9sd-tournament-structure": "Antes change the dead money, not the threshold formula",
+    "t1-sixmax-table": "6-max cash supplement (optional, does not affect unlocking). Learn the six seats and the action order before touching ranges",
+    "t3-blind-battle": "6-max cash supplement (optional, does not affect unlocking). Blind battles are the most frequent pot type in 6-max",
+    "t4-sixmax-ranges": "6-max cash supplement (optional, does not affect unlocking). Replace memorized open-raise charts with baselines you can compare against",
+    "t6-srp-postflop": "6-max cash supplement (optional, does not affect unlocking). The most common pot type deserves a standard process",
+    "t6-3bet-pot": "6-max cash supplement (optional, does not affect unlocking). Once the pot grows, commitment lines and sizing must be recomputed",
+    "t6-turn-river": "6-max cash supplement (optional, does not affect unlocking). The turn and river are where the chips actually move",
+    "t9-sixmax-capstone": "6-max cash supplement (optional, does not affect unlocking). Compress all nine levels into one decision chain"
   },
   "ladder": {
     "title": "Theory Path",
@@ -298,11 +312,53 @@
     "chapterStates": {
       "done": "Read",
       "current": "Next chapter",
-      "locked": "Locked"
+      "locked": "Locked",
+      "optional": "Optional"
     },
     "quizScore": "Quiz {{score}} pts",
     "chapterList": "Chapter list",
-    "applyPractice": "Apply in practice"
+    "applyPractice": "Apply in practice",
+    "supplementalProgress": "6-max supplement {{done}}/{{total}} (optional, does not affect unlocking)"
+  },
+  "supplemental": {
+    "title": "6-Max Cash Supplement",
+    "subtitle": "Optional reading: it changes no unlock and adds nothing to core progress",
+    "progress": "{{done}}/{{total}} chapters",
+    "cta": "Continue the 6-max supplement",
+    "allDone": "The whole 6-max supplement is read",
+    "lockedHint": "Readable once its level is unlocked"
+  },
+  "mastery": {
+    "title": "Mastery",
+    "subtitle": "Derived from your best quiz score per chapter — a review hint only, never an unlock rule",
+    "mastered": "Mastered",
+    "passing": "Passing",
+    "needsReview": "Needs review",
+    "untested": "Untested",
+    "reviewWeakest": "Review the weakest chapter",
+    "continue": "Keep learning",
+    "empty": "No quiz scores yet — read a chapter and finish its quiz"
+  },
+  "paths": {
+    "title": "Learning Paths",
+    "subtitle": "Pick a theme and read it through, without waiting for a whole level",
+    "progress": "{{done}}/{{total}} chapters",
+    "start": "Start this path",
+    "continue": "Continue",
+    "done": "Completed",
+    "locked": "Its level is not unlocked yet",
+    "sixmax-cash-core": {
+      "title": "6-Max Cash Core",
+      "description": "From seating and naming all the way to the cash capstone, seven supplemental chapters in one line"
+    },
+    "postflop-deep": {
+      "title": "Postflop Deep Dive",
+      "description": "Range advantage, bet purpose, sizing and turn-river chains read as one theme"
+    },
+    "mtt-bridge": {
+      "title": "Tournament Bridge",
+      "description": "A short bridge across ICM, multiway pots and the cash-versus-tournament structural gap"
+    }
   },
   "stats": {
     "title": "Reading Stats",

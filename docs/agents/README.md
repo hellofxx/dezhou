@@ -11,6 +11,7 @@
 | store / persist / 五大系统 | [`src/features/progress/AGENTS.md`](../../src/features/progress/AGENTS.md) + `store.ts` | `progress-dev` |
 | i18n key / 双语同步 | [`src/i18n/moduleRegistry.ts`](../../src/i18n/moduleRegistry.ts) + `docs/PRD.md` §12.4 | 对应 feature dev |
 | 守卫 / 质量门禁 | [`src/guards/README.md`](../../src/guards/README.md) + `AGENTS.md` §质量门禁 | `platform-dev` |
+| 测试体系 / 新增或修改测试 | [`docs/testing/README.md`](../testing/README.md) + [`src/guards/README.md`](../../src/guards/README.md) | 对应 feature dev；基础设施 `platform-dev` |
 | 结构 / 文档 | [`docs/README.md`](../README.md) | `platform-dev` |
 | 模块事实（owner / 入口 / store / i18n / 允许边） | [`MODULE_MAP.md`](./MODULE_MAP.md) | 按表中 owner 列 |
 

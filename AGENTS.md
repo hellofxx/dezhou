@@ -22,6 +22,7 @@ This file provides guidance to Qoder (qoder.com) when working with code in this 
 | store / persist / 五大系统 | `src/features/progress/AGENTS.md` | `progress-dev` |
 | i18n key / 双语同步 | `src/i18n/moduleRegistry.ts` | 对应 feature dev |
 | 守卫 / 质量门禁 | `src/guards/README.md` + 本文 §质量门禁 | `platform-dev` |
+| 测试体系 / 新增或修改测试 | `docs/testing/README.md` + `src/guards/README.md` | 对应 feature dev；基础设施 `platform-dev` |
 | 模块事实（owner / 入口 / 允许边） | `docs/agents/MODULE_MAP.md` | 表中 owner 列 |
 | 文档全貌与阅读顺序 | `docs/README.md` | `platform-dev` |
 
@@ -40,7 +41,12 @@ pnpm build          # tsc -b && vite build
 pnpm preview        # 预览生产构建
 pnpm typecheck      # 仅类型检查（CI 门禁，等价于 node node_modules/typescript/bin/tsc --noEmit）
 pnpm lint           # eslint src（规则清单见「质量门禁」）
-pnpm test           # vitest run（全部单元测试）
+pnpm test           # vitest run（全部测试：unit + component）
+pnpm test:unit      # 仅 unit 项目（Node 环境）
+pnpm test:component # 仅 component 项目（jsdom 环境）
+pnpm test:guards    # 全局不变式守卫（guards + i18n + 跨模块守卫）
+pnpm test:watch     # watch 模式
+pnpm test:coverage  # 覆盖率审计（v8，非门禁）
 ```
 
 运行部分测试：
@@ -129,7 +135,7 @@ src/
 - key 命名：`<module>.<context>.<field>`；静态 key 一律 camelCase（如 `selectVariant` / `rulesDifference`）；kebab-case 仅用于与枚举值/路由参数一一对应的动态 key（如 `variant.name.short-deck`）
 - 模块注册表 `src/i18n/moduleRegistry.ts` 为唯一契约源：模块增删须同步 `I18nModuleKey` / `ALL_MODULES` / `loadModule`（/ `CORE_MODULES` / `FEATURE_GROUPS`）
 - **课程内容走双轨**：数据层保留中文原文 + 渲染层 i18n key 覆盖，zh 侧存在与原文**逐字一致的镜像 key**；新增/修改课程文本必须同批同步 zh 与 en。改课程时**正文 / 选项 / 解析 / 小测 / 双语 locale 是同一原子变更单元**（规则见 PRD §6.7.4，口径见 §12.4.3）
-- **理论学院内容分层**：`theory.json` 只保留目录/UI；正文/小测/目标按 level 拆分于 `src/i18n/locales/<lng>/theory-content/`，由章节页/复习出口经 `i18n/theoryContent.ts` 按需加载。首页/store 只读 `data/levels/manifest` 摘要，禁止静态引用完整 `data/levels/variants/**`
+- **理论学院内容分层**：`theory.json` 只保留目录/UI；正文/小测/目标按 level 拆分于 `src/i18n/locales/<lng>/theory-content/`，由章节页/复习出口经 `i18n/theoryContent.ts` 按需加载。首页/store 只读 `data/levels/manifest` 摘要，禁止静态引用完整 `data/levels/variants/**`。**6-max 现金增补章**位于 `data/levels/variants/standard/chapters/`（每文件单章），目录摘要透传 `supplemental` / `pathTags`；增补章不计入 Level 解锁与核心进度（core = `!supplemental`），完成增补章不回锁，数据改动后须运行 `pnpm theory:manifest`
 - **策略学院加载分层**：首页/store/轨道/图谱只读 `data/lessons/manifest` 摘要；完整课程经 `data/lessons/loaders.ts` 按 Level/变体懒载。`academy-course` 文案由 `i18n/academyCourse.ts` 按文件加载（课程页 = 所属 Level/变体 + 专题），路由入口禁止整批 `loadAcademyCourses`
 - **复习类持久状态必须存 i18n key**（间隔重复队列的 label 与 `metadata.front/back` 等），禁止存任何语言的原文；且渲染于首页的复习界面必须保证来源包按需可得——两者是**配对要求**，只做其一比原状更糟（PRD §12.4.3）
 
@@ -219,6 +225,7 @@ src/
 | `docs/README.md` | 文档索引与阅读顺序（统一入口） | 新增 / 归档文档时 |
 | `docs/PRD.md` | 产品规格（What / Why） | 功能需求变更时 |
 | `docs/TDD.md` | 技术设计（How） | 架构 / 数据模型 / 模块设计变更时 |
+| `docs/testing/README.md` | 测试体系规范（分层 / 命名 / 执行矩阵 / 责任） | 测试分层、门禁、执行流程变更时 |
 | `docs/CHANGELOG.md` | 执行历史与版本演进（近月，倒序） | 每次版本发布时 |
 | `docs/changelog/` | 按月归档的历史变更 | 月份归档时 |
 | `docs/ops/` | 运维：部署清单与流水线排障记录 | 发布流程或排障结论变更时 |
@@ -263,7 +270,8 @@ src/
 - **仓库卫生**：`pnpm repo:check`（`scripts/check-repo-hygiene.mjs`）拦截嵌套 git 仓库（如 `docs/.git`）、`scripts/tmp-*` 一次性调试脚本、`poker-ui-demo` 生成物，以及被跟踪的已归档 `docs/analysis` / `docs/superpowers`；已接入 `verify` 与 CI
 - **Agent 模块地图漂移**：`pnpm agents:map:check`（`scripts/generate-agent-map.mjs --check`）校验 `docs/agents/MODULE_MAP.md` 与代码事实（模块 / lazy 路由 / i18n 分组）一致；已接入 `verify`、CI 与 pre-commit（`.git-hooks/pre-commit`），改动路由 / 模块清单 / i18n 注册表后须先运行 `pnpm agents:map`
 - **构建验证**：`pnpm build` 成功产出 `dist/`
-- **测试后缀速查**（`vitest.config.ts` 双项目划分）：`.test.ts` = unit 项目，Node 环境（纯函数 / store migrate）；`.test.tsx` = component 项目，jsdom 环境（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`
+- **测试后缀速查**（`vitest.config.ts` 双项目划分）：`.test.ts` = unit 项目，Node 环境（纯函数 / store migrate）；`.test.tsx` = component 项目，jsdom 环境（组件冒烟，setup 为 `src/setupTests.components.ts`）。新增测试须按内容选对后缀，Node 环境测 zustand persist migrate 需 stub `window.localStorage`；禁止 `.spec.ts(x)` 与 `__tests__/`（不会被双项目收集）。完整分层、命名与执行矩阵见 `docs/testing/README.md`
+- **测试体系自身守卫**：`src/guards/testSystem.guard.test.ts` 零容忍 focused / skipped / todo / expected-failure 测试，校验测试文件后缀 / 位置、含 `describe`/`it` 的非测试文件为零、每个 feature 至少一个测试、persist store 必有 `<store>.persist-shape.test.ts`（version > 1 还需 `<store>.migrate.test.ts`）、`src/guards` 文件与 README 清单双向一致
 - **每次代码变更后必须运行 `pnpm verify`**（唯一事实源为 `package.json` 的 `verify` script，当前为 `typecheck && lint && repo:check && agents:map:check && test` 串行短路组合，任一失败即中止；另提供 `verify:parallel` 并行变体，独立捕获 exit code 并支持分级重试）
 - **子智能体 tools 字段验证**：修改 `.claude/agents/*.md` 时建议运行 `node scripts/validate-agent-tools.ts` 校验 tools 字段合规性（可选但推荐，非强制门禁）
 
@@ -271,6 +279,10 @@ src/
 
 提交含 feature 模块变更的 PR 时，开发者应自检以下项目：
 - [ ] 对应子智能体文件的 Key Files / Cross-Module Touchpoints / Workflows已同步更新，确保与代码保持镜像一致
+- [ ] 行为变更在正确测试层新增/更新用例；缺陷修复附回归锁（修复前会失败）
+- [ ] 课程/题库/理论内容变更：完整性守卫、选项排序分布、EV 标定诚实性、zh/en 对齐同批通过
+- [ ] UI/路由/样式变更已在真实浏览器验证黄金路径 + 边界，并在 PR 记录证据
+- [ ] 新增全局守卫已登记 `src/guards/README.md`
 - [ ] 新增跨模块引用已在 `eslint.config.js`的 `ALLOWED_CROSS_IMPORTS`中登记，且`pnpm test` 守卫未变红
 - [ ] 涉及数据模型/持久化 schema 变更时，persist version 已递增并编写 migrate 函数
 - [ ] 涉及模块数量/版本计数/etc 事实性陈述时，文档采用"以代码为准"单源引用策略，而非硬编码数值
@@ -291,6 +303,10 @@ src/
 - `.qoder/agents/` 为 Windows Junction 链接，指向 `.claude/agents/`，Qoder 无感兼容读取
 - 重建命令：`scripts/setup-agent-junctions.ps1`（新环境 clone 后执行一次；Junction 本身不入库）
 - 新增 / 修改子代理统一在 `.claude/agents/` 下操作，禁止在 Junction 路径内重建文件
+
+### 批量补测协作（多智能体）
+
+一次补齐多个模块时，按模块拆分给对应 feature-dev 并行执行：子智能体只改本模块测试、只跑定向测试，禁止改 docs / config / package.json；主线负责覆盖率审计、全量 `pnpm test` / `pnpm verify`、MODULE_MAP 与文档同步。流程与约束见 `docs/testing/README.md` §13。
 
 ### 命名规范
 

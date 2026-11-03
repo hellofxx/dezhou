@@ -119,7 +119,7 @@
       },
       "q8": {
         "prompt": "In 6-max, the position immediately after UTG is?",
-        "explanation": "MP (Middle Position) follows UTG, slightly better than UTG but still requires tight ranges."
+        "explanation": "HJ (Hijack) follows UTG — slightly better position than UTG, but still requires tight ranges."
       }
     }
   },

@@ -9,6 +9,63 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-11-03 全仓测试补全与多智能体协同收官
+
+以覆盖率审计驱动、按模块拆分给 feature 子智能体并行补测，最终 `pnpm verify` 全绿（345 个测试文件 / 2437 个用例）。合并 unit + component 覆盖率 **93% 行（10010/10710）**；10 个 feature 模块中 9 个 ≥91%（最低 progress 88%），shared 96% / i18n 92% / layouts 98% / app 98%。唯一 0% 源文件为启动入口 `src/main.tsx`，按规范登记为 L4/间接覆盖豁免。
+
+- **补测范围**：pot-odds 12%→98%、strategy-academy 24%→95%、hand-history 42%→95%、progress 42%→88%、gto-simulator 45%→91%、puzzle-trainer 56%→96%、range-trainer 66%→95%，并补齐 onboarding（100%）、theory-academy（95%）、shared/app/layouts、help-center（98%）的剩余缺口；新增 `debugMode` / progress `indexedDB` / hand-history IDB / 路由注册与 `/help` 渲染等测试。
+- **真实 bug 修复（均带回归锁）**：pot-odds 移动端反馈 Sheet 不随下一题关闭；GG 牌局 stakes 恒为 0/0；worker 崩溃后分析 promise 永久挂起；partypoker `collected` 方括号金额不解析导致 winner 丢失；RankUpCelebration 直接渲染 i18n 语义 key；Dashboard「最近训练」按写入序取最早记录；ConceptGraph L4A/L4B 重复 React key；EVCalculator 百分比胜率被当概率（30%→100%，EV 虚高）；FormulaDisplay `P(win)` 等带右括号变量无法高亮；`formatChipCount` 输出 `1000.0K`；`quizOrder` 对 i18n-key 数值选项误走洗牌；非交互 `PokerCard` 被 framer-motion 补成无名称 Tab 停靠点。
+- **测试体系**：`vitest.config.ts` 增加 v8 覆盖率配置与 `test:coverage`（审计用，非门禁）；`testSystem.guard.test.ts` 新增「含 `describe`/`it` 的非测试文件不可被收集」检查，并清理一个未被收集的占位 guard-doc；`docs/testing/README.md` 新增 §13 多智能体补测协作流程；`docs/TDD.md` §11、`AGENTS.md`、`src/guards/README.md` 同步；`docs/agents/MODULE_MAP.md` 已重生成。
+- **登记豁免/遗留**：Playwright E2E 不在本次目标内（路由测试只覆盖注册结构与 `/help` 静态渲染）；`main.tsx` / `App.tsx` 入口组合壳不做直接单测；真实滚动/动画/响应式/IDB quota/worker 运行时属 L4 手工验收；`detectVariant` 无消费方、`ActionSelector` minRaise > maxRaise 边界与 `ReviewSession` 答错解析回退待产品决策，未擅自改语义。
+
+### 2026-11-02 测试体系补口：路由组合与 hand-history IndexedDB
+
+- **路由冒烟**：`src/app/routes.tsx` 导出 `appRoutes`；新增 `src/app/routes.test.tsx` 锁定 AppLayout / BlankLayout 路径清单、路径唯一性、动态参数、LazyWrapper 包裹，并用 `/help` 渲染验证「壳层 + 新手门禁 + 懒加载页面」接线。
+- **IDB 覆盖**：新增 devDependency `fake-indexeddb`，新增 `src/features/hand-history/store.indexeddb.test.ts`，覆盖空库加载、addHands 持久化 / 幂等、loadFromDB 回读、deleteHand、clearAll、批注持久化 / 空值删除、筛选排序与回放状态推进。
+- **规范同步**：`docs/testing/README.md` 的 IndexedDB 规则改为 `fake-indexeddb`，已知缺口移除「路由组合」与「hand-history IDB」两项；路由增删须同步 `routes.test.tsx` 路径清单。
+
+### 2026-11-02 测试体系规范与执行链路
+
+把分散在 AGENTS.md / TDD §11 / src/guards/README.md 的测试约定收敛为单一规范，并补齐“测试体系自身”的可执行门禁。
+
+- **规范单源**：新增 `docs/testing/README.md`，定义 L0–L4 分层、测试文件后缀 / 放置 / 命名、按变更类型的最小测试要求、确定性 / mock 规则、覆盖棘轮、执行矩阵、责任与 PR 自检；`docs/TDD.md` §11 收缩为运行拓扑与 E2E 规划并链接该规范。
+- **执行入口**：`package.json` 增加 `test:unit` / `test:component` / `test:guards` / `test:watch`；`pnpm verify` 仍为全量门禁（typecheck → lint → repo:check → agents:map:check → test）。
+- **PR 门禁**：新增 `.github/workflows/ci.yml`，对 PR 与非 main 分支执行 `pnpm verify` + `pnpm build` + `pnpm size:check`；main 仍由 deploy 工作流执行同序列后部署。
+- **体系守卫**：新增 `src/guards/testSystem.guard.test.ts` 并登记 `src/guards/README.md`，零容忍 focused / skipped / todo / expected-failure 测试，校验测试文件后缀 / 位置、每个 feature 至少一个测试、persist store 的 shape / migrate 测试、守卫文件与 README 清单双向一致；扫描面自检防止路径失效空跑。
+- **补齐 persist 覆盖**：新增 `src/shared/stores/debugMode.persist-shape.test.ts`，锁住调试解锁 store 的持久化形状；`testSystem.guard.test.ts` 的 persist store 检查从「feature `store.ts`」扩展为「任意含 `persist(` 的非测试源码」。
+- **已知缺口**：E2E 未落地、`src/app` 无路由组合测试、hand-history IndexedDB 层无自动化测试、页面级组件覆盖不均、progress 测试仍有真实计时器等待；处理方向见规范 §11。
+
+### 2026-11-02 理论学院 6-max 现金基准与位置命名对齐
+
+理论正文的开池口径与 range-trainer 的 6-max 预设长期不一致（T1/T3/T4/T7 写 15% / 40–50% / 40%，训练器为 UTG 19 / HJ 22 / CO 32 / BTN 44 / SB 38），策略学院入门课仍用满员桌位置名。本批只对齐「基数值」与「教命名」的入口，不改训练器预设、不动短牌/单挑变体。
+
+- **双列基准单源**：新增模块内 `data/sixMaxBenchmarks.ts`（`SIX_MAX_BENCHMARK_SCOPE` = 6 座 / 100bb / 无前注；`SIX_MAX_RFI_100BB_NO_ANTE` 标准列 19 / 22 / 32 / 44 / 38 与新手列 15 / 18 / 30 / 35 / 35）与全局守卫 `src/guards/sixMaxBenchmarkGuard.test.ts`（解析 range-trainer 预设名称的 `(~N%)` 逐位置比对 + 扫描面自检 + 新手列不宽于标准列、BTN 为标准列最宽），守卫登记进 `src/guards/README.md`。
+- **理论正文（行内改写，行数不变）**：T3 的 RFI 段改双列口径（UTG 标准 19% / 新手 15%、HJ 22%、CO 32%、BTN 最宽 44%、SB 38%）并把「UTG+1 对 UTG」改为「HJ 对 UTG」；T4 的「前 15%」「约 40%」改为 19%（新手简化 15%）/ 44%（新手简化 35%）；T7 的 VPIP 改 6-max 现金参考 `<20 / 22-27 / >32`（标 28–32% 过渡带）、3-bet 改 `<4 / 6-9 / >11`（标经验参考线与过渡带），示例 `3-bet 6%` → `12%` 以保留「松且凶」对比；T1 的「满员桌」改「6-max 桌」；`standardQuantAudit.test.ts` 只同步口径注释，断言未动。
+- **策略学院入口命名**：L1 位置分组改为前位 UTG / 中位 HJ / 后位 CO、BTN / 盲注 SB、BB，`player` / `heroPosition` / A5o 示例 / quiz 干扰项中的 MP 全改 HJ（quiz 正确项仍是 BTN，索引不变）；drill 副标题与目标统一为 UTG/HJ/CO/BTN/SB/BB；`positionQuestions.ts` 的 `SeatId` / `SEAT_LAYOUT` 与 q8 target 同步改 HJ；`shared/types/position.ts` 的 `UTG1` 注释更正为「9 人桌 UTG+1；6-max 无此座位，第二位为 HJ」。zh/en 镜像同批更新，`pnpm academy:manifest` 重生成策略课程摘要。
+- **原子单元**：正文 / 选项 / 解析 / 双语 locale 同批改，`contentAlignment` 与 `contentI18n` 守卫保持绿。
+- **未覆盖 / 遗留**：策略 L2–L7 牌例中的 MP 座位标签（内部牌例标签，全量替换属独立治理项）不在本批。
+
+### 2026-11-02 理论学院 6-max 现金增补章与核心/增补进度拆分
+
+在九级核心主线之外补齐 6-max 现金局主线，并用「核心章 / 增补章」二分把增补层与解锁、进度解耦——增补章不参与 Level 解锁与核心进度，已解锁的老用户不回锁。
+
+- **数据模型**：`TheoryChapterSummary` 增 `supplemental?: boolean` 与 `pathTags?: TheoryPathTag[]`（six-max / cash / mtt / foundation / preflop / postflop），定义 core = !supplemental；完整章继承摘要。
+- **章节组织**：7 个增补章（T1 6-max 牌桌与命名 / T3 盲注战 / T4 6-max 开池范围 / T6 单加注底池 SRP / T6 3-bet 底池 / T6 转河连续下注 / T9 现金综合收束）落在 `variants/standard/chapters/` 的独立单文件；`chapterMeta.ts` 集中维护 `SUPPLEMENTAL_CHAPTER_IDS` 与 `PATH_TAGS` 并幂等打标；`standard/index.ts` 与 `loaders.ts` 按 Level 拼接 core + 增补、`toSorted(order)` 后附实践推荐再打标，loader 新增二次 glob 合并（章节页仍只加载当前 Level 的 chunk）。
+- **core/增补语义**：`theoryMeta.ts` 增 core/增补查询与计数（保留 `getTotalChapterCount` 原语义）；`isLevelUnlockedByCompleted` / `isLevelFullyCompleted` 只遍历 core；`getNextChapterSummary` 按「core→同变体下一 core、core→增补回退、增补→扁平下一章」三规则顺延；store 的 `getLevelProgress` / `getTotalProgress` 分子分母只取 core。**persist version 不变、无 migrate**：schema 未变，旧数据与回滚后残留的增补完成 id 均被 core 统计自动忽略。
+- **UI**：首页主统计改 core 并新增「6-max 补强 x/y」卡（候选全部锁定则给提示而非死链），`avgScore` 与完成级数只看 core；理论阶梯的活跃 Level、分母、全完成与「下一级」判定全部 core-only，增补章渲染为带「可选」状态的 chip 并显示「6-max 补强 x/y（可选，不影响解锁）」；增补章副标题写明「6-max 现金局补强（可选，不影响解锁）」，`TheoryChapterView` 门禁逻辑不变。
+- **摘要与守卫**：`pnpm theory:manifest` 的章节投影透传 `supplemental` / `pathTags`，`manifest.parity` 同步；`theoryIntegrity` 增「`chapters/` 下必须 `supplemental: true`」断言，`theoryProgress.test` 增「仅缺增补章仍解锁下一级」「增补未读仍算 Level 全完成」「下一章三规则」与 core/增补计数用例；新增 `theoryTitleKeys` 守卫（每章 zh/en 目录 key 齐备 + zh 与数据层逐字一致）。
+- **i18n**：7 组 `chapterTitle` / `chapterSubtitle` 与 `theory-content` 的 `content` / `quiz` / `chapterObjectives` 双语同批落地（zh 逐字镜像数据原文、en 非空无汉字），并通过 `contentAlignment` / `contentI18n`。
+
+### 2026-11-02 理论学院掌握度卡与学习路径
+
+章末小测此前只有分数徽章，缺掌握度视图与按主题组织的路径。本批补两块**只展示、不门禁**的能力。
+
+- **掌握度**：`utils/theoryMastery.ts` 以 `MASTERY_THRESHOLDS`（mastered 80 / passing 60）、`getMasteryState`、`summarizeMastery` 从既有 `quizScores` 派生已掌握 / 通过 / 待复习 / 未测四项计数与最低分章；`TheoryMasteryCard` 展示计数与「复习最弱一章」CTA（无分时改为继续学习）。
+- **学习路径**：`data/theoryPaths.ts` 定义三条静态路径 `sixmax-cash-core` / `postflop-deep` / `mtt-bridge`，成员由 `pathTags` 聚合；`TheoryLearningPaths` 仅标准变体渲染，展示 x/y 进度，CTA 指向首个未完成且已解锁的成员章，下一章锁定显示锁定提示、全部完成显示已完成。
+- **不门禁**：两者只读 `quizScores` / `completedChapters`，不新增解锁条件、不改变任何门禁判定（PRD §5.27.2）；`TheoryProgress` 形状不变，**persist version 不递增、不写 migrate**。
+- **守卫**：`theoryMastery` 边界用例（79/80、59/60、无分、最低分同分 tie-break）、`theoryPaths` 完整性（路径 id 与成员不重复、成员都带对应 `pathTags`、标题与描述 key 双语齐备）、两个组件的 jsdom 冒烟。
+- **门禁**：随 `pnpm verify` 全量执行（typecheck + lint + repo:check + agents:map:check + test），新增 i18n key 双语齐备。
+
 ### 2026-10-26 扑克谜题内容审计 P0：牌面/outs/组合数修正 + EV 标定诚实性（2 个 commit）
 
 对 puzzle-trainer 205 题 / 10 主题做内容审计，本批只处理「可复算错误」与「EV 呈现诚实性」；策略边界题（rfi-020、bbd-002、icm-014 等）与底池/赔率口径统一（bbd / three-bet / icm / multiway 约 60+ 题）留待后续批次，不混入本批。

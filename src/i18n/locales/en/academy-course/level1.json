@@ -19,12 +19,12 @@
       "In Texas Hold'em, position refers to where you sit at the table relative to the dealer button. Players acting later have a huge advantage because they can see the actions of everyone before them before deciding.",
       "Golden rule: the button (BTN) is the best position — you act last and have the most information.",
       "Position Categories",
-      "Early: UTG, UTG+1 — act first with the least information, need the strongest hands\nMiddle: MP, HJ — middle positions, can widen slightly\nLate: CO, BTN — act late with the most information, widest range\nBlinds: SB, BB — have chips committed, but act first postflop",
+      "Early: UTG — acts first with the least information, needs the strongest hands\nMiddle: HJ — middle position, can widen slightly\nLate: CO, BTN — act late with the most information, widest range\nBlinds: SB, BB — have chips committed, but act first postflop",
       "The same hand is worth far more on the BTN than in UTG. For example, KJo is a standard open on the BTN but should usually fold in UTG — UTG opens only the very strongest slice of hands.",
       "Pro players strictly adjust their starting-hand range by position. Only a few hands (AA/KK/QQ/AKs) are playable \"in any position\"; everything else must be adjusted by position.",
       "How Position Advantage Shows Up",
       "1. Preflop: late position can steal blinds and open a wider range\n2. Postflop: late position controls pot size and makes more precise value bets\n3. Information edge: decide after seeing opponents' actions, reducing error rate\n\nThe exact composition and mixing frequencies of every position's range are defined by the Range Trainer module and the GTO strategy chart (the single source of truth for preflop).",
-      "Relative opening width by position:\nUTG opens only the very strongest slice of hands, HJ slightly wider, CO noticeably wider (nearly 30%), the BTN is the widest opening position at a 6-max table (about 35%), and the SB is in the same tier as the BTN (about 35%).\n\nEquity realization: the BTN has position postflop and realizes its equity better; UTG is out of position postflop, realizing only about 80-90%.\n\nRule: the later your position, the wider you may open and the better your postflop equity realization — but the width steps between adjacent positions are not uniform: they stay tight up front and only widen markedly at CO/BTN.",
+      "Relative opening width by position (6-max, 100bb, no ante): UTG opens only the very strongest slice of hands (beginner simplification ~15%, standard 19%), HJ is slightly wider (beginner 18%, standard 22%), CO widens noticeably (beginner nearly 30%, standard 32%), the BTN is the widest opening position at a 6-max table (beginner ~35%, standard 44%), and the SB is in the same tier as the BTN (beginner ~35%, standard 38%).\n\nEquity realization: the BTN has position postflop and realizes its equity better; UTG is out of position postflop, realizing only about 80-90%.\n\nRule: the later your position, the wider you may open and the better your postflop equity realization — but the width steps between adjacent positions are not uniform: they stay tight up front and only widen markedly at CO/BTN.",
       "Theory reference: quantitative analysis of position value is in Theory Academy T3 “Where Position Value Comes From”, and how equity is realised across position and board texture in T6 “Board Texture and Equity Realization”; the modern revision of the Gap Concept is in T3 “Starting Hand Theory and the Gap Concept”; Sklansky's Fundamental Theorem is in T3 “Sklansky’s Fundamental Theorem and Initiative”.",
       "Counter-intuitive: BTN's positional advantage is mainly postflop, not preflop. Preflop BTN only acts last; but postflop BTN acts last on every street — meaning you can see all opponents' actions before deciding, which is a huge information advantage."
     ],
@@ -60,7 +60,7 @@
       "Leak #1: Playing Too Many Hands (VPIP Too High)",
       "Beginners are usually involved in 40-60% of deals, while winning players keep it to about 20-25%.\n\nHow to fix: stick strictly to your preflop ranges (the Range Trainer and the GTO strategy tables are the source of truth for each position's exact composition and frequencies) — only play hands worth playing.",
       "Leak #2: Missing Position Awareness",
-      "Playing too many hands from bad position and ignoring positional advantage.\n\nFix: UTG and HJ open only the very strongest slice of hands, CO widens noticeably (nearly 30%), and the BTN is the widest opening position at a 6-max table (about 35%). The exact composition of each position's range is defined by the Range Trainer module and the GTO strategy chart.",
+      "Playing too many hands from bad position and ignoring positional advantage.\n\nFix: UTG and HJ open only the very strongest slice of hands (standard 19%/22%), CO widens noticeably (beginner nearly 30%, standard 32%), the BTN is the widest opening position at a 6-max table (beginner ~35%, standard 44%), and the SB is standard ~38%. The exact composition of each position's range is defined by the Range Trainer module and the GTO strategy chart.",
       "Leak #3: Passive Calling (Too Many Calls, Too Few Raises)",
       "\"Call is the weakest action\" — most of the time you should raise or fold instead of passively calling.",
       "Leak #4: Poor Bet Sizing",
@@ -108,7 +108,7 @@
       "question": "Which position is the best?",
       "options": [
         "UTG",
-        "MP",
+        "HJ",
         "BTN",
         "SB"
       ],
@@ -271,7 +271,7 @@
       "correctAmount": "2.5BB",
       "reasoning": [
         "T8s on the BTN facing all folds is a standard open",
-        "The BTN is the widest opening position at a 6-max table (about 35% of hands)",
+        "The BTN is the widest opening position at a 6-max table (beginner simplification ~35% of hands, standard ~44%)",
         "Suited connectors play very well postflop",
         "Only SB and BB remain — you may win the blinds outright"
       ],
@@ -280,10 +280,10 @@
       "mistakeEvLoss": "-0.6 BB/100"
     },
     "l1-hand-ex1": {
-      "title": "Marginal hand judgement: A5o in MP",
+      "title": "Marginal hand judgement: A5o in HJ",
       "correctAction": "Fold",
       "reasoning": [
-        "A5o should fold in MP",
+        "A5o should fold in HJ",
         "Even with an Ace, the kicker (5) is too weak",
         "Offsuit has no flush potential and poor connectivity",
         "Easily dominated (opponents may hold AQ, AJ, AT)"
@@ -452,13 +452,13 @@
       "option": [
         {
           "action": "Fold",
-          "explanation": "QJs in MP is a good opening hand — folding is too tight. Suited high connectors have strong postflop potential.",
+          "explanation": "QJs in HJ is a good opening hand — folding is too tight. Suited high connectors have strong postflop potential.",
           "evImpact": "-0.8 BB/100"
         },
         {
           "action": "Raise",
           "amount": "2.5BB",
-          "explanation": "QJs is a suited high connector — a standard open in MP with strong straight, flush, and high-card potential.",
+          "explanation": "QJs is a suited high connector — a standard open in HJ with strong straight, flush, and high-card potential.",
           "evImpact": "+1.3 BB/100"
         },
         {
@@ -533,7 +533,7 @@
       "Rank the 10 hand types and state key comparison rules such as flush beating straight"
     ],
     "drill-position": [
-      "Click to identify the six 6-max seats UTG/MP/CO/BTN/SB/BB on the table diagram",
+      "Click to identify the six 6-max seats UTG/HJ/CO/BTN/SB/BB on the table diagram",
       "Order the 6-max acting sequence (UTG first, BTN late, blinds first postflop)",
       "Judge whether a given seat is early or late relative to the button"
     ],

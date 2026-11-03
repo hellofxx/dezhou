@@ -104,7 +104,7 @@ export default function RankUpCelebration({ rankUp, onClose }: RankUpCelebration
                     className="text-xs font-display tracking-wide"
                     style={{ color: rankUp.from.color }}
                   >
-                    {rankUp.from.name}
+                    {t(`progress.rank.${rankUp.from.name}.name`)}
                   </span>
                 </div>
 
@@ -138,14 +138,14 @@ export default function RankUpCelebration({ rankUp, onClose }: RankUpCelebration
                     className="text-sm font-display font-bold tracking-wide"
                     style={{ color: rankUp.to.color }}
                   >
-                    {rankUp.to.name}
+                    {t(`progress.rank.${rankUp.to.name}.name`)}
                   </span>
                 </motion.div>
               </div>
 
               {/* 段位描述 */}
               <p className="text-xs text-[var(--ivory-dim)] mb-4 px-4">
-                {rankUp.to.description}
+                {t(`progress.rank.${rankUp.to.description}.description`)}
               </p>
 
               {/* 继续按钮 */}
