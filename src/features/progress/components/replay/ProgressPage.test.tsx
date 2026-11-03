@@ -11,7 +11,9 @@ import type { TrainingRecord } from '../../types';
  * ProgressPage 进度统计页（jsdom）。
  *
  * 契约：
- * - 四项核心指标与最近训练表格由 progress store 记录派生（空态给引导文案）；
+ * - 四项核心指标只由 ProgressHero 呈现（不再有重复的指标卡网格），最近训练表格由
+ *   progress store 记录派生（空态给引导文案）；
+ * - 模块维度明细只由 ModuleStatsPanel 呈现（含「各模块统计」小标题）；
  * - 难度档位按 DIFFICULTY_THRESHOLDS 判定（与 DifficultyIndicator 单源，避免自相矛盾）；
  * - 两个模块统计入口导航到 /progress/range 与 /progress/gto。
  *
@@ -89,6 +91,8 @@ describe('ProgressPage 进度统计页', () => {
     expect(text).toContain('总训练次数');
     expect(text).toContain('最近训练记录');
     expect(text).toContain('暂无训练记录，开始你的第一次训练吧！');
+    // 无模块数据时不渲染模块统计面板
+    expect(text).not.toContain('各模块统计');
   });
 
   it('有记录时渲染汇总指标与最近训练表格', () => {
@@ -118,6 +122,11 @@ describe('ProgressPage 进度统计页', () => {
     expect(text).toContain('赔率计算器');
     expect(text).toContain('连续天数');
     expect(text).toContain('3');
+    // 模块明细收敛到 ModuleStatsPanel
+    expect(text).toContain('各模块统计');
+    // 去重回归锁：四项指标卡（brass-rail 卡片）已从页面移除，指标只在 ProgressHero
+    expect(container.querySelectorAll('.brass-rail')).toHaveLength(0);
+    expect(container.querySelectorAll('.rank-plaque-hero')).toHaveLength(1);
   });
 
   it('难度档位按 overallAccuracy 阈值判定', () => {

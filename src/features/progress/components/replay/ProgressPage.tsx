@@ -11,7 +11,7 @@ import { useModuleLabel } from '@/shared/hooks/useModuleLabel';
 import { aggregateByDay } from '../../utils/statsAggregator';
 import { getTrainingCalendar } from '../../utils/streakCalc';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
-import StatsOverview from '../dashboard/StatsOverview';
+import ModuleStatsPanel from '../dashboard/ModuleStatsPanel';
 import StreakTracker from '../streak/StreakTracker';
 import AchievementBadges from '../achievement/AchievementBadges';
 import DifficultyIndicator from '../stats/DifficultyIndicator';
@@ -75,8 +75,8 @@ export default function ProgressPage() {
           sessionsCount={summary.totalSessions}
         />
 
-        {/* 四项核心指标卡 */}
-        <StatsOverview stats={summary} moduleStats={moduleStats} />
+        {/* 各模块统计明细（四项核心指标已并入上方 ProgressHero，不再重复） */}
+        <ModuleStatsPanel moduleStats={moduleStats} />
 
         {/* 趋势图 + 打卡日历（2:1） */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">

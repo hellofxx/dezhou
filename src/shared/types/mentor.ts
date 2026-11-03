@@ -12,10 +12,16 @@
 
 export type MentorStyle = 'strict-math' | 'old-school' | 'encouraging';
 
+/**
+ * 导师头像图标标识（纯类型，不含渲染实现）。
+ * 图标映射见 `progress/components/settings/mentorIcons.tsx`。
+ */
+export type MentorIconId = 'calculator' | 'drama' | 'sparkles';
+
 export interface MentorProfile {
   id: MentorStyle;
   name: string;              // 教练名称
-  icon: string;              // emoji
+  iconId: MentorIconId;      // 头像图标（图标 id，渲染见 mentorIcons.tsx）
   description: string;       // 风格描述
   voiceTone: string;         // 语气特点
 }
@@ -32,21 +38,21 @@ export const MENTOR_PROFILES: MentorProfile[] = [
   {
     id: 'strict-math',
     name: '严谨数学派',
-    icon: '🧮',
+    iconId: 'calculator',
     description: 'GTO 导向，注重 EV 计算',
     voiceTone: '冷静、客观、数据驱动',
   },
   {
     id: 'old-school',
     name: '老派牌手',
-    icon: '🎩',
+    iconId: 'drama',
     description: '经验导向，强调实战读牌',
     voiceTone: '直接、犀利、有时粗鲁',
   },
   {
     id: 'encouraging',
     name: '鼓励型教练',
-    icon: '🌟',
+    iconId: 'sparkles',
     description: '正向激励，注重心理建设',
     voiceTone: '温暖、鼓励、建设性',
   },

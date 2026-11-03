@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/shared/components/ui/card';
-import { Trophy, Medal, Award } from 'lucide-react';
+import { Trophy, Medal, Award, Info } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 
 interface LeaderboardEntry {
@@ -14,26 +14,30 @@ interface LeaderboardEntry {
   isUser?: boolean;
 }
 
-const MOCK_PLAYERS = [
-  { name: 'Phil Ivey', score: 9850, accuracy: 0.94, sessions: 312 },
-  { name: 'Daniel Negreanu', score: 9320, accuracy: 0.91, sessions: 287 },
-  { name: 'Doyle Brunson', score: 8910, accuracy: 0.89, sessions: 265 },
-  { name: 'Vanessa Selbst', score: 8640, accuracy: 0.92, sessions: 248 },
-  { name: 'Fedor Holz', score: 8200, accuracy: 0.90, sessions: 231 },
-  { name: 'Jason Koon', score: 7890, accuracy: 0.88, sessions: 219 },
-  { name: 'Bryn Kenney', score: 7560, accuracy: 0.87, sessions: 205 },
-  { name: 'Justin Bonomo', score: 7230, accuracy: 0.86, sessions: 198 },
-  { name: 'Stephen Chidwick', score: 6950, accuracy: 0.89, sessions: 186 },
-  { name: 'Alex Foxen', score: 6720, accuracy: 0.85, sessions: 174 },
-  { name: 'Nick Petrangelo', score: 6430, accuracy: 0.88, sessions: 163 },
-  { name: 'Cary Katz', score: 6100, accuracy: 0.84, sessions: 155 },
-  { name: 'Erik Seidel', score: 5890, accuracy: 0.87, sessions: 148 },
-  { name: 'Antonio Esfandiari', score: 5540, accuracy: 0.83, sessions: 139 },
-  { name: 'Maria Ho', score: 5210, accuracy: 0.86, sessions: 127 },
-  { name: 'Liv Boeree', score: 4980, accuracy: 0.85, sessions: 118 },
-  { name: 'Igor Kurganov', score: 4650, accuracy: 0.84, sessions: 112 },
-  { name: 'Oleksii Kovalchuk', score: 4320, accuracy: 0.82, sessions: 104 },
-  { name: 'David Peters', score: 4010, accuracy: 0.81, sessions: 96 },
+/**
+ * 演示数据：全部为虚构角色，不含任何真实牌手姓名。
+ * 数值仅用于撑起榜单量级，让用户看清自己相对所处的位置。
+ */
+const DEMO_PLAYERS = [
+  { name: 'Vera Kaine', score: 9850, accuracy: 0.94, sessions: 312 },
+  { name: 'Kenji Morowaka', score: 9320, accuracy: 0.91, sessions: 287 },
+  { name: 'Dmitri Volkov', score: 8910, accuracy: 0.89, sessions: 265 },
+  { name: 'Ana Belmonte', score: 8640, accuracy: 0.92, sessions: 248 },
+  { name: 'Silas Reed', score: 8200, accuracy: 0.9, sessions: 231 },
+  { name: 'Noor Haddad', score: 7890, accuracy: 0.88, sessions: 219 },
+  { name: 'Tobias Lindqvist', score: 7560, accuracy: 0.87, sessions: 205 },
+  { name: 'Camila Duarte', score: 7230, accuracy: 0.86, sessions: 198 },
+  { name: 'Ravi Chandrasekar', score: 6950, accuracy: 0.89, sessions: 186 },
+  { name: 'Elena Marchetti', score: 6720, accuracy: 0.85, sessions: 174 },
+  { name: 'Marcus Cole', score: 6430, accuracy: 0.88, sessions: 163 },
+  { name: 'Yuki Tanabe', score: 6100, accuracy: 0.84, sessions: 155 },
+  { name: 'Owen Blackwood', score: 5890, accuracy: 0.87, sessions: 148 },
+  { name: 'Priya Raman', score: 5540, accuracy: 0.83, sessions: 139 },
+  { name: 'Lukas Brenner', score: 5210, accuracy: 0.86, sessions: 127 },
+  { name: 'Isabel Ferreira', score: 4980, accuracy: 0.85, sessions: 118 },
+  { name: 'Tariq Nasser', score: 4650, accuracy: 0.84, sessions: 112 },
+  { name: 'Hana Kobayashi', score: 4320, accuracy: 0.82, sessions: 104 },
+  { name: 'Anton Reyes', score: 4010, accuracy: 0.81, sessions: 96 },
 ];
 
 type TabType = 'score' | 'accuracy' | 'sessions';
@@ -51,28 +55,15 @@ export default function Leaderboard() {
     isUser: true,
   }), [summary, t]);
 
-  const leaderboard = useMemo(() => {
-    let all: LeaderboardEntry[];
-
-    switch (activeTab) {
-      case 'accuracy':
-        all = [...MOCK_PLAYERS, userEntry]
-          .toSorted((a, b) => b.accuracy - a.accuracy)
-          .map((p, i) => ({ ...p, rank: i + 1 }));
-        break;
-      case 'sessions':
-        all = [...MOCK_PLAYERS, userEntry]
-          .toSorted((a, b) => b.sessions - a.sessions)
-          .map((p, i) => ({ ...p, rank: i + 1 }));
-        break;
-      default:
-        all = [...MOCK_PLAYERS, userEntry]
-          .toSorted((a, b) => b.score - a.score)
-          .map((p, i) => ({ ...p, rank: i + 1 }));
-    }
-
-    return all;
+  const leaderboard = useMemo<LeaderboardEntry[]>(() => {
+    const all: Omit<LeaderboardEntry, 'rank'>[] = [...DEMO_PLAYERS, userEntry];
+    const sortKey = activeTab === 'accuracy' ? 'accuracy' : activeTab === 'sessions' ? 'sessions' : 'score';
+    return all
+      .toSorted((a, b) => b[sortKey] - a[sortKey])
+      .map((p, i) => ({ ...p, rank: i + 1 }));
   }, [activeTab, userEntry]);
+
+  const userRanked = leaderboard.find((entry) => entry.isUser) ?? null;
 
   const tabs: { key: TabType; label: string }[] = [
     { key: 'score', label: t('leaderboard.totalScore') },
@@ -108,6 +99,10 @@ export default function Leaderboard() {
           <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">
             {t('leaderboard.title')}
           </h1>
+          <p className="mt-1 flex items-start gap-1.5 text-xs text-[var(--ivory-dim)]">
+            <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            <span>{t('leaderboard.demoNotice')}</span>
+          </p>
         </motion.div>
 
         {/* Tabs */}
@@ -126,6 +121,27 @@ export default function Leaderboard() {
             </button>
           ))}
         </div>
+
+        {/* 我的排名摘要行 */}
+        {userRanked && (
+          <Card className="bg-[var(--surface)] border-[var(--brass)]/35">
+            <CardContent className="p-4 flex flex-wrap items-center gap-3">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--brass-deep)]">
+                {t('leaderboard.myRank')}
+              </span>
+              <span className="font-numeric text-lg font-semibold text-[var(--brass-bright)]">
+                #{userRanked.rank}
+              </span>
+              <span className="flex-1" />
+              <span className="text-xs text-[var(--ivory-muted)]">
+                {tabs.find((tab) => tab.key === activeTab)?.label}
+              </span>
+              <span className="font-numeric text-sm text-[var(--ivory)]">
+                {getValue(userRanked)}
+              </span>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Leaderboard list */}
         <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">

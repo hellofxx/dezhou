@@ -14,7 +14,7 @@ export function useProgress() {
 
   // Streak 全站唯一事实源是 store.streak（含冻结卡/Earn Back 语义）；
   // aggregateStats 从 records 派生的 streak 不感知冻结卡续接，两套数字会漂移，
-  // 故在汇总层统一覆盖，避免各消费方（StatsOverview/StreakTracker/分享卡）各自取数
+  // 故在汇总层统一覆盖，避免各消费方（ProgressHero/StreakTracker/分享卡）各自取数
   const summary = useMemo(() => {
     const base = getStatsSummary();
     return {

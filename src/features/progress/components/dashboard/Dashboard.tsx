@@ -154,9 +154,6 @@ export default function Dashboard() {
       <FeltArena />
 
       <div className="px-0">
-        {/* First visit banner — 首访引导置于首屏，紧随 Hero */}
-        {summary.totalSessions === 0 && <FirstVisitBanner />}
-
         {/* Section 2: Streak Rail — 连续天数 + 周轨道 + 今日正确率（核心进度指标） */}
         <StreakRail />
 
@@ -204,6 +201,9 @@ export default function Dashboard() {
             )}
           </div>
         </div>
+
+        {/* 首访引导 — 让位给 Hero / 连续天数 / 快速训练三块黄金位，落在此处 */}
+        {summary.totalSessions === 0 && <FirstVisitBanner />}
 
         {/* Section 4: 今日任务 + 今日复习（双卡，2:1 主从布局） */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5" style={{ gridAutoRows: '1fr' }}>

@@ -21,5 +21,5 @@
 - `store.ts`：五大系统 + persist（唯一事实源）
 - `types.ts`：状态类型定义
 - `utils/`：statsAggregator（统计聚合）/ streakCalc（连续天数）/ spacedRepetition（SRS）/ dailyTrainingMix / dailyTrainingPlan / indexedDB（牌局大数据）
-- `components/`：Dashboard / ProgressPage / StatsOverview / StreakTracker / SessionLimitGuard 等 20+ 组件
+- `components/`：Dashboard / ProgressPage / ModuleStatsPanel / StreakTracker / SessionLimitGuard 等 20+ 组件
 - `data/achievements.ts`：成就定义

@@ -5,8 +5,8 @@ import { GraduationCap, ArrowRight, Compass } from 'lucide-react';
 /**
  * FirstVisitBanner — 首次访问引导横幅。
  *
- * 仅在 `summary.totalSessions === 0` 时由 Dashboard 渲染，
- * 置于 Hero 下方首屏可见位置，引导新用户从基础入门开始学习。
+ * 仅在 `summary.totalSessions === 0` 时由 Dashboard 渲染；位置在快速训练卡之后
+ * （Hero → 连续天数 → 快速训练 → 首访引导），不再占用首屏黄金位。
  *
  * 桌面：左图标 + 中文案 + 右双 CTA（主"开始基础入门" / 次"浏览全部课程"）
  * 移动：纵向堆叠，图标在上、按钮在下。

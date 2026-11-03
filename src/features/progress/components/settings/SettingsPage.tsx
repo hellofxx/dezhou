@@ -53,8 +53,8 @@ import { MENTOR_PROFILES } from '@/shared/types/mentor';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { cn } from '@/shared/utils/cn';
 import { MOTION_DURATION, staggerContainer, staggerItem, transitionStandard } from '@/shared/utils/motion';
-import SettingsNav from './SettingsNav';
 import { loadAllHands, saveAllHands } from '../../utils/handHistoryBackup';
+import MentorIcon from './mentorIcons';
 
 /** 导出文件格式版本：v1 仅含 records+settings；v2 起新增 hands（IndexedDB 牌局复盘）分区。 */
 const EXPORT_DATA_VERSION = 2;
@@ -150,10 +150,6 @@ export default function SettingsPage() {
     fileInputRef.current?.click();
   };
 
-  // 受控展开：导航点击时把目标分区强制展开（解决 main 内容不可滚动时
-  // scrollIntoView 无效的问题——折叠的 section 不滚动，用户看不到激活项）
-  const [forceOpenId, setForceOpenId] = useState<string | null>(null);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -235,410 +231,395 @@ export default function SettingsPage() {
           </div>
         </motion.div>
 
-        <div className="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-4 lg:items-start">
-          {/* 左侧分区导航（桌面 sticky） */}
-          <div className="hidden lg:block lg:sticky lg:top-0">
-            <SettingsNav
-              sectionIds={['appearance', 'coach', 'training', 'game-streak', 'data', 'developer', 'about']}
-              onActivate={setForceOpenId}
-            />
-          </div>
-
-          <motion.div variants={staggerContainer(0.06)} initial="hidden" animate="visible" className="space-y-3 min-w-0">
-            {/* 外观 */}
-            <motion.div variants={staggerItem}>
-              <SettingsSection
-                id="appearance"
-                forceOpen={forceOpenId === 'appearance'}
-                icon={<Palette className="w-4 h-4" />}
-                title={t('settings.appearance', { defaultValue: '外观' })}
-                hint={t('settings.appearanceHint', { defaultValue: '主题与界面语言' })}
+        <motion.div variants={staggerContainer(0.06)} initial="hidden" animate="visible" className="space-y-3 min-w-0">
+          {/* 外观 */}
+          <motion.div variants={staggerItem}>
+            <SettingsSection
+              id="appearance"
+              defaultOpen
+              icon={<Palette className="w-4 h-4" />}
+              title={t('settings.appearance', { defaultValue: '外观' })}
+              hint={t('settings.appearanceHint', { defaultValue: '主题与界面语言' })}
+            >
+              <SettingRow
+                label={t('settings.themeLabel', { defaultValue: '主题' })}
+                description={t('settings.themeHint', { defaultValue: '选择应用的主题模式' })}
               >
-                <SettingRow
-                  label={t('settings.themeLabel', { defaultValue: '主题' })}
-                  description={t('settings.themeHint', { defaultValue: '选择应用的主题模式' })}
+                <Select
+                  value={settings.theme}
+                  onValueChange={(v) => updateSettings({ theme: v as 'dark' | 'light' | 'system' })}
                 >
-                  <Select
-                    value={settings.theme}
-                    onValueChange={(v) => updateSettings({ theme: v as 'dark' | 'light' | 'system' })}
-                  >
-                    <SelectTrigger className="w-[140px] bg-[var(--background)] border-[var(--walnut-border)]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="dark">{t('settings.themeDark', { defaultValue: '暗色' })}</SelectItem>
-                      <SelectItem value="light">{t('settings.themeLight', { defaultValue: '亮色' })}</SelectItem>
-                      <SelectItem value="system">{t('settings.themeSystem', { defaultValue: '跟随系统' })}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </SettingRow>
+                  <SelectTrigger className="w-[140px] bg-[var(--background)] border-[var(--walnut-border)]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dark">{t('settings.themeDark', { defaultValue: '暗色' })}</SelectItem>
+                    <SelectItem value="light">{t('settings.themeLight', { defaultValue: '亮色' })}</SelectItem>
+                    <SelectItem value="system">{t('settings.themeSystem', { defaultValue: '跟随系统' })}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </SettingRow>
 
-                <SettingRow
-                  label={t('settings.languageLabel', { defaultValue: '语言' })}
-                  description={t('settings.languageHint', { defaultValue: '界面语言，切换后立即生效' })}
-                  icon={<Languages className="w-4 h-4" />}
-                >
-                  <Select
-                    value={settings.language}
-                    onValueChange={(v) => {
-                      const lang = v as 'zh' | 'en';
-                      // 语言偏好事实源：progress store settings.language（persist），同步切换 i18n 实例
-                      updateSettings({ language: lang });
-                      // 预加载目标语言资源后再切换，避免"先 fallback 后跳变"闪烁
-                      void switchLanguage(lang);
-                    }}
-                  >
-                    <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="zh">中文</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </SettingRow>
-              </SettingsSection>
-            </motion.div>
-
-            {/* 教练风格（P2-4 导师角色人格化） */}
-            <motion.div variants={staggerItem}>
-              <SettingsSection
-                id="coach"
-                forceOpen={forceOpenId === 'coach'}
-                icon={<GraduationCap className="w-4 h-4" />}
-                title={t('mentor.settings.title')}
-                hint={t('mentor.settings.hint')}
+              <SettingRow
+                label={t('settings.languageLabel', { defaultValue: '语言' })}
+                description={t('settings.languageHint', { defaultValue: '界面语言，切换后立即生效' })}
+                icon={<Languages className="w-4 h-4" />}
               >
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {MENTOR_PROFILES.map((profile) => {
-                    const selected = profile.id === mentorStyle;
-                    return (
-                      <button
-                        key={profile.id}
-                        type="button"
-                        onClick={() => setMentorStyle(profile.id as MentorStyle)}
-                        aria-pressed={selected}
-                        className={cn(
-                          'flex sm:flex-col items-start sm:items-center gap-3 rounded-md border p-3 text-left sm:text-center transition-all',
-                          selected
-                            ? 'border-[var(--brass)] bg-[var(--brass-glow)] ring-1 ring-[var(--brass)]/40'
-                            : 'border-[var(--walnut-border)] bg-[var(--background)] hover:border-[var(--brass)]/50'
-                        )}
-                      >
-                        <span className="text-2xl leading-none mt-0.5 sm:mt-0">{profile.icon}</span>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2 sm:justify-center">
-                            <span className="text-sm font-display font-semibold text-[var(--ivory)]">
-                              {t(`mentor.profiles.${profile.id}.name`, { defaultValue: profile.name })}
+                <Select
+                  value={settings.language}
+                  onValueChange={(v) => {
+                    const lang = v as 'zh' | 'en';
+                    // 语言偏好事实源：progress store settings.language（persist），同步切换 i18n 实例
+                    updateSettings({ language: lang });
+                    // 预加载目标语言资源后再切换，避免"先 fallback 后跳变"闪烁
+                    void switchLanguage(lang);
+                  }}
+                >
+                  <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="zh">中文</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                  </SelectContent>
+                </Select>
+              </SettingRow>
+            </SettingsSection>
+          </motion.div>
+
+          {/* 教练风格（P2-4 导师角色人格化） */}
+          <motion.div variants={staggerItem}>
+            <SettingsSection
+              id="coach"
+              icon={<GraduationCap className="w-4 h-4" />}
+              title={t('mentor.settings.title')}
+              hint={t('mentor.settings.hint')}
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {MENTOR_PROFILES.map((profile) => {
+                  const selected = profile.id === mentorStyle;
+                  return (
+                    <button
+                      key={profile.id}
+                      type="button"
+                      onClick={() => setMentorStyle(profile.id as MentorStyle)}
+                      aria-pressed={selected}
+                      className={cn(
+                        'flex sm:flex-col items-start sm:items-center gap-3 rounded-md border p-3 text-left sm:text-center transition-all',
+                        selected
+                          ? 'border-[var(--brass)] bg-[var(--brass-glow)] ring-1 ring-[var(--brass)]/40'
+                          : 'border-[var(--walnut-border)] bg-[var(--background)] hover:border-[var(--brass)]/50'
+                      )}
+                    >
+                      <span className="inline-flex leading-none mt-0.5 sm:mt-0">
+                        <MentorIcon iconId={profile.iconId} />
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2 sm:justify-center">
+                          <span className="text-sm font-display font-semibold text-[var(--ivory)]">
+                            {t(`mentor.profiles.${profile.id}.name`, { defaultValue: profile.name })}
+                          </span>
+                          {selected && (
+                            <span className="text-[10px] font-numeric text-[var(--brass-bright)] uppercase tracking-wider">
+                              {t('mentor.settings.selected')}
                             </span>
-                            {selected && (
-                              <span className="text-[10px] font-numeric text-[var(--brass-bright)] uppercase tracking-wider">
-                                {t('mentor.settings.selected')}
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-xs text-[var(--ivory-muted)] mt-0.5">
-                            {t(`mentor.profiles.${profile.id}.description`, { defaultValue: profile.description })}
-                          </div>
-                          <div className="text-[11px] text-[var(--ivory-dim)] mt-1">
-                            {t('mentor.settings.voiceToneLabel')}: {t(`mentor.profiles.${profile.id}.voiceTone`, { defaultValue: profile.voiceTone })}
-                          </div>
+                          )}
                         </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </SettingsSection>
-            </motion.div>
+                        <div className="text-xs text-[var(--ivory-muted)] mt-0.5">
+                          {t(`mentor.profiles.${profile.id}.description`, { defaultValue: profile.description })}
+                        </div>
+                        <div className="text-[11px] text-[var(--ivory-dim)] mt-1">
+                          {t('mentor.settings.voiceToneLabel')}: {t(`mentor.profiles.${profile.id}.voiceTone`, { defaultValue: profile.voiceTone })}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </SettingsSection>
+          </motion.div>
 
-            {/* 训练偏好 */}
-            <motion.div variants={staggerItem}>
-              <SettingsSection
-                id="training"
-                forceOpen={forceOpenId === 'training'}
-                icon={<SlidersHorizontal className="w-4 h-4" />}
-                title={t('settings.training', { defaultValue: '训练偏好' })}
-                hint={t('settings.trainingHint', { defaultValue: '音效、计时与题量' })}
+          {/* 训练偏好 */}
+          <motion.div variants={staggerItem}>
+            <SettingsSection
+              id="training"
+              icon={<SlidersHorizontal className="w-4 h-4" />}
+              title={t('settings.training', { defaultValue: '训练偏好' })}
+              hint={t('settings.trainingHint', { defaultValue: '音效、计时与题量' })}
+            >
+              <SettingRow
+                label={t('settings.soundLabel', { defaultValue: '音效' })}
+                description={t('settings.soundHint', { defaultValue: '训练时播放音效' })}
+                icon={settings.soundEnabled ? (
+                  <Volume2 className="w-4 h-4 text-[var(--success)]" />
+                ) : (
+                  <VolumeX className="w-4 h-4" />
+                )}
               >
-                <SettingRow
-                  label={t('settings.soundLabel', { defaultValue: '音效' })}
-                  description={t('settings.soundHint', { defaultValue: '训练时播放音效' })}
-                  icon={settings.soundEnabled ? (
-                    <Volume2 className="w-4 h-4 text-[var(--success)]" />
-                  ) : (
-                    <VolumeX className="w-4 h-4" />
-                  )}
-                >
-                  <SwitchToggle
-                    checked={settings.soundEnabled}
-                    onChange={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
-                    label={t('settings.soundSwitch')}
-                  />
-                </SettingRow>
-
-                <SettingRow
-                  label={t('settings.quizTimeLabel', { defaultValue: '默认测验时间' })}
-                  description={t('settings.quizTimeHint', { defaultValue: '每题的默认限时' })}
-                  icon={<Clock className="w-4 h-4" />}
-                >
-                  <Select
-                    value={String(settings.defaultQuizTime)}
-                    onValueChange={(v) => updateSettings({ defaultQuizTime: Number(v) })}
-                  >
-                    <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="10">10 {t('settings.unitSecond', { defaultValue: '秒' })}</SelectItem>
-                      <SelectItem value="15">15 {t('settings.unitSecond', { defaultValue: '秒' })}</SelectItem>
-                      <SelectItem value="30">30 {t('settings.unitSecond', { defaultValue: '秒' })}</SelectItem>
-                      <SelectItem value="0">{t('settings.unlimited', { defaultValue: '无限时' })}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </SettingRow>
-
-                <SettingRow
-                  label={t('settings.questionCountLabel', { defaultValue: '默认题目数量' })}
-                  description={t('settings.questionCountHint', { defaultValue: '每次测验的默认题数' })}
-                  icon={<Hash className="w-4 h-4" />}
-                >
-                  <Select
-                    value={String(settings.defaultQuestionCount)}
-                    onValueChange={(v) => updateSettings({ defaultQuestionCount: Number(v) })}
-                  >
-                    <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="10">10 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
-                      <SelectItem value="20">20 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
-                      <SelectItem value="30">30 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
-                      <SelectItem value="50">50 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </SettingRow>
-
-                {/* P2-5.4: Session 止损 — 每日题量上限 */}
-                <SettingRow
-                  label={t('sessionLimit.settingLabel', { defaultValue: '每日题量上限' })}
-                  description={t('sessionLimit.settingHint', { defaultValue: '达到上限后将禁止继续训练，0 = 无限' })}
-                  icon={<ShieldAlert className="w-4 h-4" />}
-                >
-                  <Select
-                    value={String(dailyQuestionLimit)}
-                    onValueChange={(v) => setDailyQuestionLimit(Number(v))}
-                  >
-                    <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">{t('sessionLimit.unlimited', { defaultValue: '无限' })}</SelectItem>
-                      <SelectItem value="50">50 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
-                      <SelectItem value="100">100 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
-                      <SelectItem value="200">200 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </SettingRow>
-              </SettingsSection>
-            </motion.div>
-
-            {/* 游戏与连续性 */}
-            <motion.div variants={staggerItem}>
-              <SettingsSection
-                id="game-streak"
-                forceOpen={forceOpenId === 'game-streak'}
-                icon={<Gamepad2 className="w-4 h-4" />}
-                title={t('variant.title')}
-                hint={t('variant.switchHint')}
-              >
-                <GameVariantSelector
-                  currentVariant={currentGameVariant}
-                  onChange={setGameVariant}
+                <SwitchToggle
+                  checked={settings.soundEnabled}
+                  onChange={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
+                  label={t('settings.soundSwitch')}
                 />
-                <div className="hairline-brass" />
-                <SettingRow
-                  label={t('streak.freeze.settingLabel', { defaultValue: '冻结卡' })}
-                  description={t('streak.freeze.settingHint', {
-                    defaultValue: '今天没空训练？用 1 张冻结卡为今天请假，保住连续训练（每日限 1 张），当前剩余 {{count}} 张',
-                    count: streakFreezes,
-                  })}
-                  icon={<Snowflake className="w-4 h-4 text-[var(--info)]" />}
-                >
-                  <AnimatePresence>
-                    {freezeStatus && (
-                      <motion.span
-                        key={freezeStatus}
-                        initial={{ opacity: 0, y: 4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: MOTION_DURATION.fast }}
-                        className={cn(
-                          'text-xs max-w-[180px] text-right',
-                          freezeStatus === 'success' ? 'text-[var(--success)]' : 'text-[var(--danger)]'
-                        )}
-                      >
-                        {freezeStatus === 'success'
-                          ? t('streak.freeze.useSuccess', { defaultValue: '已使用 1 张，今日连续性已保护 ✓' })
-                          : t('streak.freeze.useFail', { defaultValue: '不可用（今日已训/已用、无卡或无可保护连续）' })}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleUseFreeze}
-                    disabled={streakFreezes <= 0 || streakFreezeUsedToday || trainedToday}
-                    className="gap-1"
-                  >
-                    <Snowflake className="w-4 h-4" />
-                    {t('streak.freeze.useNow', { defaultValue: '使用冻结卡' })}
-                  </Button>
-                </SettingRow>
-              </SettingsSection>
-            </motion.div>
+              </SettingRow>
 
-            {/* 数据管理 */}
-            <motion.div variants={staggerItem}>
-              <SettingsSection
-                id="data"
-                forceOpen={forceOpenId === 'data'}
-                icon={<Database className="w-4 h-4" />}
-                title={t('settings.data', { defaultValue: '数据管理' })}
-                hint={t('settings.dataHint', { defaultValue: '导出、导入或清除训练数据' })}
+              <SettingRow
+                label={t('settings.quizTimeLabel', { defaultValue: '默认测验时间' })}
+                description={t('settings.quizTimeHint', { defaultValue: '每题的默认限时' })}
+                icon={<Clock className="w-4 h-4" />}
+              >
+                <Select
+                  value={String(settings.defaultQuizTime)}
+                  onValueChange={(v) => updateSettings({ defaultQuizTime: Number(v) })}
+                >
+                  <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10 {t('settings.unitSecond', { defaultValue: '秒' })}</SelectItem>
+                    <SelectItem value="15">15 {t('settings.unitSecond', { defaultValue: '秒' })}</SelectItem>
+                    <SelectItem value="30">30 {t('settings.unitSecond', { defaultValue: '秒' })}</SelectItem>
+                    <SelectItem value="0">{t('settings.unlimited', { defaultValue: '无限时' })}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </SettingRow>
+
+              <SettingRow
+                label={t('settings.questionCountLabel', { defaultValue: '默认题目数量' })}
+                description={t('settings.questionCountHint', { defaultValue: '每次测验的默认题数' })}
+                icon={<Hash className="w-4 h-4" />}
+              >
+                <Select
+                  value={String(settings.defaultQuestionCount)}
+                  onValueChange={(v) => updateSettings({ defaultQuestionCount: Number(v) })}
+                >
+                  <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
+                    <SelectItem value="20">20 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
+                    <SelectItem value="30">30 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
+                    <SelectItem value="50">50 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </SettingRow>
+
+              {/* P2-5.4: Session 止损 — 每日题量上限 */}
+              <SettingRow
+                label={t('sessionLimit.settingLabel', { defaultValue: '每日题量上限' })}
+                description={t('sessionLimit.settingHint', { defaultValue: '达到上限后将禁止继续训练，0 = 无限' })}
+                icon={<ShieldAlert className="w-4 h-4" />}
+              >
+                <Select
+                  value={String(dailyQuestionLimit)}
+                  onValueChange={(v) => setDailyQuestionLimit(Number(v))}
+                >
+                  <SelectTrigger className="w-[120px] bg-[var(--background)] border-[var(--walnut-border)]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">{t('sessionLimit.unlimited', { defaultValue: '无限' })}</SelectItem>
+                    <SelectItem value="50">50 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
+                    <SelectItem value="100">100 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
+                    <SelectItem value="200">200 {t('settings.unitQuestion', { defaultValue: '题' })}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </SettingRow>
+            </SettingsSection>
+          </motion.div>
+
+          {/* 游戏与连续性 */}
+          <motion.div variants={staggerItem}>
+            <SettingsSection
+              id="game-streak"
+              icon={<Gamepad2 className="w-4 h-4" />}
+              title={t('variant.title')}
+              hint={t('variant.switchHint')}
+            >
+              <GameVariantSelector
+                currentVariant={currentGameVariant}
+                onChange={setGameVariant}
+              />
+              <div className="hairline-brass" />
+              <SettingRow
+                label={t('streak.freeze.settingLabel', { defaultValue: '冻结卡' })}
+                description={t('streak.freeze.settingHint', {
+                  defaultValue: '今天没空训练？用 1 张冻结卡为今天请假，保住连续训练（每日限 1 张），当前剩余 {{count}} 张',
+                  count: streakFreezes,
+                })}
+                icon={<Snowflake className="w-4 h-4 text-[var(--info)]" />}
               >
                 <AnimatePresence>
-                  {importStatus && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -6 }}
+                  {freezeStatus && (
+                    <motion.span
+                      key={freezeStatus}
+                      initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: MOTION_DURATION.fast }}
-                      className="text-sm text-[var(--brass)] bg-[var(--brass-glow)] rounded-lg px-3 py-2"
+                      className={cn(
+                        'text-xs max-w-[180px] text-right',
+                        freezeStatus === 'success' ? 'text-[var(--success)]' : 'text-[var(--danger)]'
+                      )}
                     >
-                      {importStatus}
-                    </motion.p>
+                      {freezeStatus === 'success'
+                        ? t('streak.freeze.useSuccess', { defaultValue: '已使用 1 张，今日连续性已保护 ✓' })
+                        : t('streak.freeze.useFail', { defaultValue: '不可用（今日已训/已用、无卡或无可保护连续）' })}
+                    </motion.span>
                   )}
                 </AnimatePresence>
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" onClick={handleExport} disabled={dataBusy} className="gap-1">
-                    <Download className="w-4 h-4" />
-                    {t('settings.exportData', { defaultValue: '导出数据' })}
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={handleImport} disabled={dataBusy} className="gap-1">
-                    <Upload className="w-4 h-4" />
-                    {t('settings.importData', { defaultValue: '导入数据' })}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setClearDialogOpen(true)}
-                    className="gap-1 text-[var(--danger)] hover:text-[var(--danger)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    {t('settings.clearAllData', { defaultValue: '清除所有数据' })}
-                  </Button>
-                </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".json"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-                <p className="text-xs text-[var(--ivory-dim)]">
-                  {t('settings.recordCount', { defaultValue: '当前共 {{count}} 条训练记录', count: records.length })}
-                </p>
-              </SettingsSection>
-            </motion.div>
-
-            {/* 开发者选项（默认折叠，保持设置页整洁） */}
-            <motion.div variants={staggerItem}>
-              <SettingsSection
-                id="developer"
-                forceOpen={forceOpenId === 'developer'}
-                icon={<Bug className="w-4 h-4" />}
-                title={t('settings.developer', { defaultValue: '开发者选项' })}
-                hint={t('settings.developerHint', { defaultValue: '调试解锁全部功能' })}
-                defaultOpen={false}
-              >
-                {debugUnlockAll ? (
-                  <>
-                    <div className="flex items-center gap-2 text-sm text-[var(--brass-bright)] bg-[var(--brass-glow)] rounded-lg px-3 py-2">
-                      <Unlock className="w-4 h-4" />
-                      {t('settings.debugUnlocked', { defaultValue: '调试解锁已开启 · 全部功能已解锁' })}
-                    </div>
-                    <Button variant="outline" size="sm" onClick={deactivateDebug} className="gap-1">
-                      <Lock className="w-4 h-4" />
-                      {t('settings.closeDebugUnlock', { defaultValue: '关闭调试解锁' })}
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-xs text-[var(--ivory-dim)]">
-                      {t('settings.developerHint', { defaultValue: '调试解锁全部功能' })}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        inputMode="numeric"
-                        value={debugCodeInput}
-                        onChange={(e) => {
-                          setDebugCodeInput(e.target.value);
-                          if (debugError) setDebugError(false);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') handleDebugActivate();
-                        }}
-                        placeholder={t('settings.debugCodePlaceholder', { defaultValue: '输入调试码' })}
-                        aria-label={t('settings.debugCodePlaceholder', { defaultValue: '输入调试码' })}
-                        aria-invalid={debugError}
-                        className="w-[140px] rounded-md border border-[var(--walnut-border)] bg-[var(--background)] px-3 py-1.5 text-sm text-[var(--ivory)] outline-none focus:border-[var(--brass)]"
-                      />
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleDebugActivate}
-                        disabled={!debugCodeInput.trim()}
-                        className="gap-1"
-                      >
-                        <Unlock className="w-4 h-4" />
-                        {t('settings.activate', { defaultValue: '激活' })}
-                      </Button>
-                    </div>
-                    {debugError && (
-                      <p className="text-xs text-[var(--danger)]">{t('settings.debugCodeError', { defaultValue: '调试码不正确' })}</p>
-                    )}
-                  </>
-                )}
-              </SettingsSection>
-            </motion.div>
-
-            {/* 关于 */}
-            <motion.div variants={staggerItem}>
-              <SettingsSection
-                id="about"
-                forceOpen={forceOpenId === 'about'}
-                icon={<Info className="w-4 h-4" />}
-                title={t('settings.about', { defaultValue: '关于' })}
-              >
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="text-sm text-[var(--ivory-muted)]">
-                    {t('settings.aboutVersion', { defaultValue: '德州扑克训练平台 v{{version}}', version: APP_VERSION })}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate('/help')}
-                    className="gap-1"
-                  >
-                    <HelpCircle className="w-4 h-4" />
-                    {t('settings.helpCenter')}
-                  </Button>
-                </div>
-              </SettingsSection>
-            </motion.div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleUseFreeze}
+                  disabled={streakFreezes <= 0 || streakFreezeUsedToday || trainedToday}
+                  className="gap-1"
+                >
+                  <Snowflake className="w-4 h-4" />
+                  {t('streak.freeze.useNow', { defaultValue: '使用冻结卡' })}
+                </Button>
+              </SettingRow>
+            </SettingsSection>
           </motion.div>
-        </div>
+
+          {/* 数据管理 */}
+          <motion.div variants={staggerItem}>
+            <SettingsSection
+              id="data"
+              icon={<Database className="w-4 h-4" />}
+              title={t('settings.data', { defaultValue: '数据管理' })}
+              hint={t('settings.dataHint', { defaultValue: '导出、导入或清除训练数据' })}
+            >
+              <AnimatePresence>
+                {importStatus && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: MOTION_DURATION.fast }}
+                    className="text-sm text-[var(--brass)] bg-[var(--brass-glow)] rounded-lg px-3 py-2"
+                  >
+                    {importStatus}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={handleExport} disabled={dataBusy} className="gap-1">
+                  <Download className="w-4 h-4" />
+                  {t('settings.exportData', { defaultValue: '导出数据' })}
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleImport} disabled={dataBusy} className="gap-1">
+                  <Upload className="w-4 h-4" />
+                  {t('settings.importData', { defaultValue: '导入数据' })}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setClearDialogOpen(true)}
+                  className="gap-1 text-[var(--danger)] hover:text-[var(--danger)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {t('settings.clearAllData', { defaultValue: '清除所有数据' })}
+                </Button>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <p className="text-xs text-[var(--ivory-dim)]">
+                {t('settings.recordCount', { defaultValue: '当前共 {{count}} 条训练记录', count: records.length })}
+              </p>
+            </SettingsSection>
+          </motion.div>
+
+          {/* 开发者选项（默认折叠，保持设置页整洁） */}
+          <motion.div variants={staggerItem}>
+            <SettingsSection
+              id="developer"
+              icon={<Bug className="w-4 h-4" />}
+              title={t('settings.developer', { defaultValue: '开发者选项' })}
+              hint={t('settings.developerHint', { defaultValue: '调试解锁全部功能' })}
+            >
+              {debugUnlockAll ? (
+                <>
+                  <div className="flex items-center gap-2 text-sm text-[var(--brass-bright)] bg-[var(--brass-glow)] rounded-lg px-3 py-2">
+                    <Unlock className="w-4 h-4" />
+                    {t('settings.debugUnlocked', { defaultValue: '调试解锁已开启 · 全部功能已解锁' })}
+                  </div>
+                  <Button variant="outline" size="sm" onClick={deactivateDebug} className="gap-1">
+                    <Lock className="w-4 h-4" />
+                    {t('settings.closeDebugUnlock', { defaultValue: '关闭调试解锁' })}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs text-[var(--ivory-dim)]">
+                    {t('settings.developerHint', { defaultValue: '调试解锁全部功能' })}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      inputMode="numeric"
+                      value={debugCodeInput}
+                      onChange={(e) => {
+                        setDebugCodeInput(e.target.value);
+                        if (debugError) setDebugError(false);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleDebugActivate();
+                      }}
+                      placeholder={t('settings.debugCodePlaceholder', { defaultValue: '输入调试码' })}
+                      aria-label={t('settings.debugCodePlaceholder', { defaultValue: '输入调试码' })}
+                      aria-invalid={debugError}
+                      className="w-[140px] rounded-md border border-[var(--walnut-border)] bg-[var(--background)] px-3 py-1.5 text-sm text-[var(--ivory)] outline-none focus:border-[var(--brass)]"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleDebugActivate}
+                      disabled={!debugCodeInput.trim()}
+                      className="gap-1"
+                    >
+                      <Unlock className="w-4 h-4" />
+                      {t('settings.activate', { defaultValue: '激活' })}
+                    </Button>
+                  </div>
+                  {debugError && (
+                    <p className="text-xs text-[var(--danger)]">{t('settings.debugCodeError', { defaultValue: '调试码不正确' })}</p>
+                  )}
+                </>
+              )}
+            </SettingsSection>
+          </motion.div>
+
+          {/* 关于 */}
+          <motion.div variants={staggerItem}>
+            <SettingsSection
+              id="about"
+              icon={<Info className="w-4 h-4" />}
+              title={t('settings.about', { defaultValue: '关于' })}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="text-sm text-[var(--ivory-muted)]">
+                  {t('settings.aboutVersion', { defaultValue: '德州扑克训练平台 v{{version}}', version: APP_VERSION })}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/help')}
+                  className="gap-1"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  {t('settings.helpCenter')}
+                </Button>
+              </div>
+            </SettingsSection>
+          </motion.div>
+        </motion.div>
 
         {/* 确认清除对话框 */}
         <Dialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
@@ -679,29 +660,25 @@ function SettingsSection({
   icon,
   title,
   hint,
-  defaultOpen = true,
-  forceOpen = false,
+  defaultOpen = false,
   children,
 }: {
   id: string;
   icon: React.ReactNode;
   title: string;
   hint?: string;
+  /** 手风琴：仅首组默认展开，其余折叠以收敛首屏信息密度 */
   defaultOpen?: boolean;
-  /** 受控强制展开（导航点击时由父组件传入） */
-  forceOpen?: boolean;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(defaultOpen);
-  // forceOpen=true 时覆盖本地状态，但允许用户再手动折叠回去
-  const effectiveOpen = forceOpen || open;
 
   return (
     <div id={`settings-section-${id}`} className="scroll-mt-4 rounded-lg border border-[var(--walnut-border)] bg-[var(--surface)] overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-expanded={effectiveOpen}
+        aria-expanded={open}
         aria-controls={`settings-${id}`}
         className="w-full flex items-center gap-3 px-4 py-3 min-h-[44px] text-left transition-colors hover:bg-[var(--walnut-raised)]/40"
       >
@@ -715,11 +692,11 @@ function SettingsSection({
           )}
         </span>
         <ChevronDown
-          className={cn('w-4 h-4 text-[var(--ivory-muted)] shrink-0 transition-transform duration-300', effectiveOpen && 'rotate-180')}
+          className={cn('w-4 h-4 text-[var(--ivory-muted)] shrink-0 transition-transform duration-300', open && 'rotate-180')}
         />
       </button>
       <AnimatePresence initial={false}>
-        {effectiveOpen && (
+        {open && (
           <motion.div
             key={`settings-${id}-content`}
             id={`settings-${id}`}

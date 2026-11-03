@@ -6,5 +6,7 @@
   "rank": "Rank",
   "name": "Player",
   "score": "Score",
-  "you": "You"
+  "you": "You",
+  "myRank": "My rank",
+  "demoNotice": "Demo data: every opponent here is a fictional character, shown only to illustrate your relative standing."
 }

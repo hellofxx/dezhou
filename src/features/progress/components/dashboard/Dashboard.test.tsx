@@ -132,6 +132,21 @@ describe('Dashboard 新手收敛与训练场', () => {
       '/academy/quick-drill?mode=odds&quick=true',
     );
   });
+
+  it('首屏顺序：Hero → 连续天数 → 快速训练 → 首访引导', () => {
+    const { container } = renderDashboard();
+    const html = container.innerHTML;
+    const hero = html.indexOf('felt-arena');
+    const streak = html.indexOf('streak-rail');
+    const quickDrill = html.indexOf('quick-drill-card');
+    const banner = html.indexOf('first-visit-banner');
+
+    expect(hero).toBeGreaterThan(-1);
+    expect(streak).toBeGreaterThan(hero);
+    // 首访引导让位：排在快速训练之后，不再插在 Hero 与连续天数之间
+    expect(quickDrill).toBeGreaterThan(streak);
+    expect(banner).toBeGreaterThan(quickDrill);
+  });
 });
 
 describe('Dashboard 最近训练时间范围筛选', () => {

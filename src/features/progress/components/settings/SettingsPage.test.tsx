@@ -5,6 +5,7 @@ import SettingsPage from './SettingsPage';
 import { useProgressStore, DEFAULT_STREAK_STATE, DEFAULT_ONBOARDING } from '../../store';
 import { DEFAULT_EMOTION_STATE } from '../../types';
 import { useDebugModeStore, DEBUG_UNLOCK_CODE } from '@/shared/stores/debugMode';
+import { MENTOR_PROFILES } from '@/shared/types/mentor';
 import type { TrainingRecord } from '../../types';
 import { toLocalDateKey } from '../../utils/toLocalDateKey';
 
@@ -12,7 +13,8 @@ import { toLocalDateKey } from '../../utils/toLocalDateKey';
  * SettingsPage 设置页（jsdom 冒烟 + 关键分支）。
  *
  * 契约：
- * - 七个分区恒渲染；教练风格按钮写入 store.mentorStyle；
+ * - 七个分区恒渲染；单栏折叠手风琴，仅首组（外观）默认展开，页面不再有分区导航；
+ * - 教练风格按钮写入 store.mentorStyle，头像为 Lucide 图标（iconId 映射，尺寸与旧 emoji 一致）；
  * - 音效开关直接落到 settings.soundEnabled；
  * - 冻结卡按钮在「已训 / 已用 / 无卡」时禁用，可用时点击写入 streak 并给出成功反馈；
  * - 清除数据需二次确认，确认后 records 清空；
@@ -76,6 +78,14 @@ function renderPage() {
   );
 }
 
+/** 折叠态分区：点击标题按钮展开（手风琴默认只开首组） */
+function openSection(container: HTMLElement, title: string): void {
+  const toggle = Array.from(container.querySelectorAll<HTMLButtonElement>('button[aria-expanded]'))
+    .find((b) => (b.textContent ?? '').includes(title) && b.getAttribute('aria-expanded') === 'false');
+  if (!toggle) throw new Error(`未找到可展开的分区：${title}`);
+  fireEvent.click(toggle);
+}
+
 beforeEach(() => seedStore());
 
 afterEach(() => {
@@ -85,7 +95,7 @@ afterEach(() => {
 });
 
 describe('SettingsPage 分区与偏好', () => {
-  it('渲染七个分区、自动保存铭牌与版本信息', () => {
+  it('渲染七个分区、自动保存铭牌与版本信息，且仅首组默认展开', () => {
     const { container } = renderPage();
     const text = container.textContent ?? '';
 
@@ -95,11 +105,26 @@ describe('SettingsPage 分区与偏好', () => {
     for (const section of ['外观', '教练风格', '训练偏好', '游戏变体', '数据管理', '开发者选项', '关于']) {
       expect(text).toContain(section);
     }
-    expect(text).toContain('帮助中心');
+    // 单栏手风琴：只有首组「外观」默认展开
+    const expanded = Array.from(container.querySelectorAll('button[aria-expanded="true"]'));
+    expect(expanded).toHaveLength(1);
+    expect(expanded[0]!.textContent).toContain('外观');
+    // 分区导航已移除（不再有 nav 侧栏）
+    expect(container.querySelector('nav')).toBeNull();
   });
 
-  it('教练风格按钮写入 store 并切换 aria-pressed', () => {
+  it('教练风格按钮写入 store 并切换 aria-pressed，头像走 Lucide 图标', () => {
     const { container, getByText } = renderPage();
+    openSection(container, '教练风格');
+
+    // 三位教练各一枚 Lucide 图标（无 emoji 文本节点）
+    const profileButtons = Array.from(
+      container.querySelectorAll<HTMLButtonElement>('button[aria-pressed]'),
+    );
+    expect(profileButtons).toHaveLength(MENTOR_PROFILES.length);
+    for (const button of profileButtons) {
+      expect(button.querySelector('svg.lucide')).toBeTruthy();
+    }
 
     const encouraging = getByText('鼓励型教练').closest('button');
     expect(encouraging).toBeTruthy();
@@ -113,7 +138,9 @@ describe('SettingsPage 分区与偏好', () => {
   });
 
   it('音效开关切换 settings.soundEnabled', () => {
-    const { getByRole } = renderPage();
+    const { container, getByRole } = renderPage();
+    openSection(container, '训练偏好');
+
     const toggle = getByRole('switch');
     expect(toggle.getAttribute('aria-checked')).toBe('true');
 
@@ -125,6 +152,7 @@ describe('SettingsPage 分区与偏好', () => {
 
   it('帮助中心按钮跳转 /help', () => {
     const { container, getByText } = renderPage();
+    openSection(container, '关于');
 
     fireEvent.click(getByText('帮助中心'));
 
@@ -137,7 +165,8 @@ describe('SettingsPage 冻结卡请假', () => {
     seedStore({
       streak: { ...DEFAULT_STREAK_STATE, lastTrainingDate: TODAY, currentStreak: 5, streakFreezes: 2 },
     });
-    const { getByText } = renderPage();
+    const { container, getByText } = renderPage();
+    openSection(container, '游戏变体');
 
     expect((getByText('使用冻结卡').closest('button') as HTMLButtonElement).disabled).toBe(true);
   });
@@ -153,6 +182,7 @@ describe('SettingsPage 冻结卡请假', () => {
       },
     });
     const { getByText, container } = renderPage();
+    openSection(container, '游戏变体');
 
     const button = getByText('使用冻结卡').closest('button') as HTMLButtonElement;
     expect(button.disabled).toBe(false);
@@ -177,6 +207,7 @@ describe('SettingsPage 冻结卡请假', () => {
       },
     });
     const { getByText, container } = renderPage();
+    openSection(container, '游戏变体');
 
     fireEvent.click(getByText('使用冻结卡').closest('button')!);
 
@@ -189,6 +220,7 @@ describe('SettingsPage 数据管理', () => {
   it('展示当前训练记录数，清除数据需二次确认', () => {
     seedStore({ records: [buildRecord('r1'), buildRecord('r2')] });
     const { container, getByText, baseElement, getAllByText } = renderPage();
+    openSection(container, '数据管理');
 
     expect(container.textContent).toContain('当前共 2 条训练记录');
 
@@ -204,6 +236,7 @@ describe('SettingsPage 数据管理', () => {
 
   it('导入合法 JSON 后追加记录并提示导入条数', async () => {
     const { container } = renderPage();
+    openSection(container, '数据管理');
     const input = container.querySelector<HTMLInputElement>('input[type="file"]');
     expect(input).toBeTruthy();
 
@@ -220,6 +253,7 @@ describe('SettingsPage 数据管理', () => {
 
   it('导入格式不正确的文件给出错误提示且不写入记录', async () => {
     const { container } = renderPage();
+    openSection(container, '数据管理');
     const input = container.querySelector<HTMLInputElement>('input[type="file"]');
 
     const file = new File(['{"foo":1}'], 'bad.json', { type: 'application/json' });
@@ -238,7 +272,7 @@ describe('SettingsPage 开发者选项', () => {
     // 折叠态：调试码输入框未挂载
     expect(container.querySelector('input[type="number"]')).toBeNull();
 
-    // 左侧分区导航与分区标题同名，取分区折叠按钮（带 aria-expanded）
+    // 分区标题与折叠按钮同名，取分区折叠按钮（带 aria-expanded）
     const sectionToggle = Array.from(
       container.querySelectorAll<HTMLButtonElement>('button[aria-expanded]'),
     ).find((b) => (b.textContent ?? '').includes('开发者选项'));
