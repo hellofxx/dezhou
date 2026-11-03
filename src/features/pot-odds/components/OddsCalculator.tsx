@@ -59,7 +59,7 @@ export function OddsCalculator() {
                   className={`flex-1 py-2 rounded-md text-sm font-medium transition-colors border ${
                     gameVariant === v.value
                       ? v.value === 'short-deck'
-                        ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage)]'
+                        ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage-text)]'
                         : 'bg-[var(--brass)] border-[var(--brass)] text-[var(--primary-foreground)]'
                       : 'bg-[var(--walnut-raised)]/60 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
                   }`}
@@ -69,7 +69,7 @@ export function OddsCalculator() {
               ))}
             </div>
             {gameVariant === 'short-deck' && (
-              <p className="text-xs text-[var(--sage)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
+              <p className="text-xs text-[var(--sage-text)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
                 {t('potOdds.calculator.shortDeckHint')}
               </p>
             )}
@@ -100,7 +100,7 @@ export function OddsCalculator() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm text-[var(--ivory-muted)]">{t('potOdds.outs')}</label>
-              <span className="text-lg font-bold font-mono text-[var(--brass)]">{outs}</span>
+              <span className="text-lg font-bold font-mono text-[var(--brass-text)]">{outs}</span>
             </div>
             <input
               type="range"

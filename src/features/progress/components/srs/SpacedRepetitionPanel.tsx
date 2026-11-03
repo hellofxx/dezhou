@@ -59,7 +59,7 @@ export default function SpacedRepetitionPanel({
         <div className="flex items-center gap-2 mb-3">
           <RefreshCw className="w-5 h-5 text-[var(--brass-bright)]" />
           <h2 className="font-display text-[17px] text-[var(--ivory)] tracking-wide">
-            {t('spacedRepetition.title', { defaultValue: '🔄 今日待复习' })}
+            {t('spacedRepetition.todayReview')}
           </h2>
           {!allDone && (
             <span className="ml-1 px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--poker-terra)]/25 text-[var(--poker-terra-bright)]">
@@ -119,7 +119,7 @@ export default function SpacedRepetitionPanel({
             <CheckCircle2 className="w-8 h-8 text-[var(--poker-success)] mx-auto mb-2" />
             <p className="text-sm text-[var(--ivory-dim)]">
               {t('spacedRepetition.allDoneMessage', {
-                defaultValue: '✅ 今日复习已完成，继续保持节奏！',
+                defaultValue: '今日复习已完成，继续保持节奏！',
               })}
             </p>
           </div>

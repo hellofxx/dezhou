@@ -84,7 +84,7 @@ function getSuggestion(
   if (accuracy > DIFFICULTY_THRESHOLDS.advanced && sessionsCount > DIFFICULTY_THRESHOLDS.upgradeMinSessions) {
     return {
       text: t('progress.difficulty.upgrade'),
-      icon: <ArrowUpCircle className="w-3 h-3 text-[var(--sage)]" />,
+      icon: <ArrowUpCircle className="w-3 h-3 text-[var(--sage-text)]" />,
     };
   }
   if (accuracy < DIFFICULTY_THRESHOLDS.downshift) {
@@ -95,6 +95,6 @@ function getSuggestion(
   }
   return {
     text: t('progress.difficulty.fits'),
-    icon: <Minus className="w-3 h-3 text-[var(--brass)]" />,
+    icon: <Minus className="w-3 h-3 text-[var(--brass-text)]" />,
   };
 }

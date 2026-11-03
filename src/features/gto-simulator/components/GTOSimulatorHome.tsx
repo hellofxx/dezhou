@@ -25,7 +25,7 @@ export default function GTOSimulatorHome() {
       {/* 标题 */}
       <div className="space-y-1">
         <p className="section-eyebrow">GTO Simulator</p>
-        <h1 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">{t('gto.home.title')}</h1>
+        <h2 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">{t('gto.home.title')}</h2>
         <p className="text-sm text-[var(--ivory-muted)]">
           {t('gto.home.subtitle')}
         </p>

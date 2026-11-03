@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Target, Gauge, Flame, Timer } from 'lucide-react';
+import { RankIcon } from '@/shared/components/business/RankIcon';
 import { useProgressStore } from '../../store';
 import { getRankForScore } from '../../utils/elo';
 import type { StatsSummary } from '../../types';
@@ -25,7 +26,7 @@ export default function ProgressHero({ summary }: ProgressHeroProps) {
       <div className="rp-eyebrow">{t('progress.hero.eyebrow')}</div>
       <div className="rp-body">
         <div className="rp-plaque">
-          <span className="rp-plaque-icon" aria-hidden>{rank.icon}</span>
+          <span className="rp-plaque-icon" aria-hidden><RankIcon name={rank.name} size={22} /></span>
           <span className="rp-plaque-name">{t(`progress.rank.${rank.name}.name`)}</span>
           <span className="rp-plaque-score">{hasEloData ? elo.overall : '—'}</span>
           <span className="rp-plaque-label">{t('progress.hero.eloScore')}</span>

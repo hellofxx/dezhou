@@ -41,7 +41,7 @@ const TAG_OPPONENT: OpponentProfile = {
   shortName: 'TAG',
   description: '紧凶',
   color: '#4f8a5b',
-  icon: '🎯',
+  iconId: 'target',
   stats: { vpip: 18, pfr: 14, af: 3.2, threeBetPercent: 6, foldToCBet: 60, cbetFrequency: 62 },
   tendencies: ['翻前加注范围偏紧'],
   exploitableBy: ['用更宽的 3-bet 频率施压'],
@@ -174,7 +174,7 @@ describe('PredictionPrompt 组件', () => {
     expect(container.textContent).toContain('严重错误');
     expect(container.textContent).toContain('正确决策');
     expect(findButton(container, 'Raise 2.5BB').className).toContain('text-[var(--poker-success)]');
-    expect(findButton(container, '弃牌').className).toContain('text-[var(--poker-danger)]');
+    expect(findButton(container, '弃牌').className).toContain('text-[var(--danger-text)]');
     expect(findButton(container, '加注 4-5BB（因为牌强）').className).toContain('opacity-40');
   });
 

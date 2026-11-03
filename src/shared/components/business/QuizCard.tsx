@@ -9,6 +9,7 @@ import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { PokerCard } from '@/shared/components/poker/Card';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
+import { GradeIcon } from '@/shared/components/feedback/GradeIcon';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { DEFAULT_MENTOR } from '@/shared/types/mentor';
@@ -174,7 +175,7 @@ export function QuizCard({
             components={{
               raise: <span className="text-[var(--brass-bright)] font-medium" />,
               call: <span className="text-[var(--ivory-dim)] font-medium" />,
-              fold: <span className="text-[var(--poker-danger)] font-medium" />,
+              fold: <span className="text-[var(--danger-text)] font-medium" />,
             }}
             defaults="这手牌应该 <raise>Raise</raise>、<call>Call</call> 还是 <fold>Fold</fold>？"
           />
@@ -246,7 +247,7 @@ export function QuizCard({
       <button
         type="button"
         onClick={onNext}
-        className="ml-auto inline-flex min-h-11 items-center gap-1.5 rounded border border-[var(--brass)]/40 bg-[var(--brass)]/10 px-4 py-2 text-sm font-medium text-[var(--brass)] transition-colors hover:bg-[var(--brass)]/20"
+        className="ml-auto inline-flex min-h-11 items-center gap-1.5 rounded border border-[var(--brass)]/40 bg-[var(--brass)]/10 px-4 py-2 text-sm font-medium text-[var(--brass-text)] transition-colors hover:bg-[var(--brass)]/20"
       >
         {label}
         <kbd className="hidden rounded border border-current/30 px-1 font-numeric text-[10px] opacity-70 sm:inline">
@@ -270,7 +271,7 @@ export function QuizCard({
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="font-display text-2xl">{gradeConfig.icon}</span>
+                <GradeIcon grade={grade} size={24} />
                 <div className="font-display font-semibold">{gradeTitle}</div>
               </div>
               <div className="text-right">
@@ -311,8 +312,8 @@ export function QuizCard({
             transition={{ duration: MOTION_DURATION.fast, ease: MOTION_EASE.out }}
             className={`w-full p-4 rounded-md border text-center ${
               feedback.isCorrect
-                ? 'bg-[var(--sage)]/12 border-[var(--sage)]/40 text-[var(--sage)]'
-                : 'bg-[var(--clay)]/12 border-[var(--clay)]/40 text-[var(--clay)]'
+                ? 'bg-[var(--sage)]/12 border-[var(--sage)]/40 text-[var(--sage-text)]'
+                : 'bg-[var(--clay)]/12 border-[var(--clay)]/40 text-[var(--clay-text)]'
             }`}
           >
             {feedback.isCorrect ? (

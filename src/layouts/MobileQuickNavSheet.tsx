@@ -45,7 +45,7 @@ export default function MobileQuickNavSheet({ open, onOpenChange }: MobileQuickN
                 onClick={() => onOpenChange(false)}
                 className="flex items-center gap-3 min-h-11 rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--ivory)] transition-colors hover:bg-[var(--surface-raised)]"
               >
-                <Icon size={18} className="shrink-0 text-[var(--brass)]" aria-hidden="true" />
+                <Icon size={18} className="shrink-0 text-[var(--brass-text)]" aria-hidden="true" />
                 <span className="flex-1 truncate">{t(entry.labelKey)}</span>
                 <ChevronRight size={16} className="shrink-0 text-[var(--ivory-muted)]" aria-hidden="true" />
               </Link>

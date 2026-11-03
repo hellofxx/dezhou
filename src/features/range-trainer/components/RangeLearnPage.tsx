@@ -56,7 +56,7 @@ export default function RangeLearnPage() {
             </Button>
             <div>
               <h1 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">
-                <BookOpen className="w-6 h-6 text-[var(--brass)]" />
+                <BookOpen className="w-6 h-6 text-[var(--brass-text)]" />
                 {t('rangeTrainer.learn')}
               </h1>
               <p className="text-sm text-[var(--ivory-dim)] mt-0.5">

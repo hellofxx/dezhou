@@ -178,7 +178,7 @@ export default function ModuleGrid() {
                 }
               }}
               className={`absolute top-2 right-2 z-10 cursor-pointer rounded p-1 transition-colors ${
-                isFocused ? 'text-[var(--brass)]' : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
+                isFocused ? 'text-[var(--brass-text)]' : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
               }`}
             >
               <Pin className="w-3.5 h-3.5" />

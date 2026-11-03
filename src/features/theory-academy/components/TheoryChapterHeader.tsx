@@ -70,9 +70,9 @@ export function TheoryChapterHeader({
         </div>
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h1 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
+            <h2 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
               {resolveChapterTitle(t, chapter)}
-            </h1>
+            </h2>
             <p className="text-sm text-[var(--ivory-dim)]">{resolveChapterSubtitle(t, chapter)}</p>
           </div>
           <div className="flex items-center gap-3 text-xs text-[var(--ivory-muted)] shrink-0 pt-1">
@@ -87,7 +87,7 @@ export function TheoryChapterHeader({
                   ? 'bg-[var(--poker-success-bg)] text-[var(--poker-success)]'
                   : difficulty < 0.6
                     ? 'bg-[var(--poker-warning-bg)] text-[var(--poker-warning)]'
-                    : 'bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]',
+                    : 'bg-[var(--poker-danger-bg)] text-[var(--danger-text)]',
               )}
             >
               {difficulty < 0.35

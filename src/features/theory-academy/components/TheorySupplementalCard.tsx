@@ -49,7 +49,7 @@ export function TheorySupplementalCard({
       onPointerEnter={() => next && void loadTheoryLevelById(next.levelId)}
       onFocus={() => next && void loadTheoryLevelById(next.levelId)}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold mb-2.5 px-1">
+      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
         {t('theory.supplemental.title')}
       </h2>
       <div className="panel space-y-2.5">

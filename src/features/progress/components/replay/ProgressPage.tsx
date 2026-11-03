@@ -108,7 +108,7 @@ export default function ProgressPage() {
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[var(--brass)]/10 flex items-center justify-center shrink-0">
-                  <Target className="w-5 h-5 text-[var(--brass)]" />
+                  <Target className="w-5 h-5 text-[var(--brass-text)]" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold text-[var(--ivory)]">
@@ -187,7 +187,7 @@ export default function ProgressPage() {
                           <td className="py-2 px-2 text-[var(--ivory-muted)] capitalize">
                             {record.mode}
                           </td>
-                          <td className="py-2 px-2 text-right font-numeric text-[var(--brass)]">
+                          <td className="py-2 px-2 text-right font-numeric text-[var(--brass-text)]">
                             {(record.result.accuracy * 100).toFixed(1)}%
                           </td>
                           <td className="py-2 px-2 text-right font-numeric text-[var(--ivory-muted)]">

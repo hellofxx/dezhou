@@ -37,9 +37,9 @@ export default function HelpArticle() {
       </Link>
 
       {/* 标题 */}
-      <h1 className="font-display text-xl text-[var(--ivory)] tracking-wide">
+      <h2 className="font-display text-xl text-[var(--ivory)] tracking-wide">
         {t(`help.${article.titleKey}`)}
-      </h1>
+      </h2>
       <p className="text-sm text-[var(--ivory-muted)]">
         {t(`help.${article.introKey}`)}
       </p>

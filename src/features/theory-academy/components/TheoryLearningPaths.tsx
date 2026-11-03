@@ -65,7 +65,7 @@ export function TheoryLearningPaths() {
       aria-label={t('theory.paths.title')}
     >
       <div className="px-1 mb-3">
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
+        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
           {t('theory.paths.title')}
         </h2>
         <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('theory.paths.subtitle')}</p>

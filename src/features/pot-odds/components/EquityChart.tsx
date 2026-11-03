@@ -21,7 +21,7 @@ export function EquityChart({ potOdds, estimatedEquity }: EquityChartProps) {
       <CardHeader className="pb-2">
         <CardTitle className="text-sm text-[var(--ivory-muted)] font-normal flex items-center justify-between">
           <span>{t('potOdds.equityChart.title')}</span>
-          <span className={`text-xs font-mono px-2 py-0.5 rounded ${diff >= 0 ? 'bg-[var(--success)]/10 text-[var(--success)]' : 'bg-[var(--danger)]/10 text-[var(--danger)]'}`}>
+          <span className={`text-xs font-mono px-2 py-0.5 rounded ${diff >= 0 ? 'bg-[var(--success)]/10 text-[var(--success)]' : 'bg-[var(--danger)]/10 text-[var(--danger-text)]'}`}>
             {t('potOdds.equityChart.diffLabel', { diff: `${diff >= 0 ? '+' : ''}${diff.toFixed(1)}` })}
           </span>
         </CardTitle>

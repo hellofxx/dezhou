@@ -84,7 +84,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
             <ArrowLeft className="w-5 h-5 text-[var(--ivory-muted)]" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-[var(--ivory)]">{displayName}</h1>
+            <h2 className="text-2xl font-bold text-[var(--ivory)]">{displayName}</h2>
             <p className="text-sm text-[var(--ivory-dim)] mt-0.5">{t('progress.moduleStats.subtitle')}</p>
           </div>
         </motion.div>
@@ -92,7 +92,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         {/* Stat cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           <StatCard
-            icon={<Target className="w-4 h-4 text-[var(--brass)]" />}
+            icon={<Target className="w-4 h-4 text-[var(--brass-text)]" />}
             label={t('progress.moduleStats.totalSessions')}
             value={`${stats.sessions}`}
           />
@@ -171,7 +171,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
                       className="flex items-center justify-between py-1.5 border-b border-[var(--surface-raised)]/50 last:border-0"
                     >
                       <span className="text-xs text-[var(--ivory-dim)]">#{idx + 1}</span>
-                      <span className="text-sm font-mono text-[var(--brass)]">
+                      <span className="text-sm font-mono text-[var(--brass-text)]">
                         {(record.result.accuracy * 100).toFixed(1)}%
                       </span>
                       <span className="text-xs font-mono text-[var(--ivory-muted)]">
@@ -207,7 +207,7 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
                         <span className="text-xs text-[var(--ivory-muted)] font-numeric">
                           {t('progress.moduleStats.weakWrong', { wrong: wh.wrongCount, total: wh.totalCount })}
                         </span>
-                        <span className="text-xs font-numeric text-[var(--clay)]">
+                        <span className="text-xs font-numeric text-[var(--clay-text)]">
                           {t('progress.moduleStats.weakRate', { rate: Math.round((wh.wrongCount / wh.totalCount) * 100) })}
                         </span>
                       </div>

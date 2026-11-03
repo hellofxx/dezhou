@@ -240,8 +240,8 @@ export default function HandRankingDrill({ onComplete, onExit }: DrillProps) {
               </>
             ) : (
               <>
-                <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                <span className="text-sm font-bold text-[var(--danger)]">
+                <XCircle className="w-4 h-4 text-[var(--danger-text)]" />
+                <span className="text-sm font-bold text-[var(--danger-text)]">
                   {t('drills.common.wrongFeedback')}
                 </span>
                 <span className="text-xs text-[var(--ivory-muted)] ml-2">

@@ -53,7 +53,7 @@ export default function CelebrationStep() {
 
         {/* Day 1 Streak 徽章 */}
         <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--clay)]/15 border border-[var(--clay)]/40 mb-8">
-          <Flame size={18} className="text-[var(--clay)] animate-pulse" />
+          <Flame size={18} className="text-[var(--clay-text)] animate-pulse" />
           <span className="text-sm text-[var(--ivory)] font-medium">
             {t('onboarding.celebration.streakStarted')}
           </span>

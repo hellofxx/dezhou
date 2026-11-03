@@ -47,7 +47,7 @@ export default function ConceptGraphView() {
                 <Brain className="w-6 h-6 text-[var(--brass-bright)]" />
               </div>
               <div>
-                <h1 className="font-display text-2xl text-[var(--ivory)]">{t('academy.conceptGraph.title')}</h1>
+                <h2 className="font-display text-2xl text-[var(--ivory)]">{t('academy.conceptGraph.title')}</h2>
                 <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
                   {t('academy.conceptGraph.subtitle')}
                 </p>

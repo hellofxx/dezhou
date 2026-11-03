@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, BookOpen } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import { orderQuizQuestion } from '../utils/quizShuffle';
@@ -70,7 +70,11 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
         animate={{ opacity: 1, scale: 1 }}
         className="text-center py-10"
       >
-        <div className="text-5xl mb-4">{score >= 70 ? '🎉' : '📚'}</div>
+        {score >= 70 ? (
+          <Trophy size={44} className="mx-auto mb-4 text-[var(--brass-bright)]" aria-hidden="true" />
+        ) : (
+          <BookOpen size={44} className="mx-auto mb-4 text-[var(--ivory-muted)]" aria-hidden="true" />
+        )}
         <h3 className="font-display text-2xl text-[var(--ivory)] mb-2">
           {score >= 70 ? t('academy.quiz.passed') : t('academy.quiz.keepGoing')}
         </h3>
@@ -145,7 +149,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
                     showExplanation &&
                       isSelected &&
                       !isCorrectOption &&
-                      'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]',
+                      'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--danger-text)]',
                     showExplanation &&
                       !isSelected &&
                       !isCorrectOption &&
@@ -178,7 +182,7 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
                 'mt-4 rounded-lg p-4 text-sm leading-relaxed',
                 isCorrect
                   ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90'
-                  : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
+                  : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--danger-text)]/90'
               )}
             >
               <p className="font-semibold mb-1">{isCorrect ? t('academy.quiz.correctMark') : t('academy.quiz.wrongMark')}</p>

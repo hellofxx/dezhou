@@ -126,9 +126,11 @@ describe('路由渲染冒烟', () => {
     const memoryRouter = createMemoryRouter(appRoutes, { initialEntries: ['/help'] });
     render(<RouterProvider router={memoryRouter} />);
 
+    // 壳层 h1 唯一；Help 内容标题按新规范降为 h2
+    expect(await screen.findByRole('heading', { level: 1 }, { timeout: 5000 })).toBeTruthy();
     const helpHeading = await screen.findByRole(
       'heading',
-      { level: 1, name: '欢迎来到牌室' },
+      { level: 2, name: '欢迎来到牌室' },
       { timeout: 5000 },
     );
     expect(helpHeading.textContent).toBe('欢迎来到牌室');

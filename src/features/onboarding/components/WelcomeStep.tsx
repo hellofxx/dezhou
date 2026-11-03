@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Sparkles, GraduationCap, SkipForward } from 'lucide-react';
+import { Sparkles, GraduationCap, SkipForward, Spade } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { useProgressStore } from '@/features/progress/store';
 
@@ -16,7 +16,7 @@ export default function WelcomeStep() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full px-6 py-10 max-w-3xl mx-auto">
-      <div className="text-5xl mb-4">♠️</div>
+      <Spade size={44} strokeWidth={1.5} className="mb-4 text-[var(--brass-bright)]" aria-hidden="true" />
       <h1 className="font-display text-3xl md:text-4xl text-[var(--ivory)] text-center mb-3">
         {t('onboarding.welcome.valueProp')}
       </h1>
@@ -42,7 +42,7 @@ export default function WelcomeStep() {
           <p className="text-sm text-[var(--ivory-muted)] mb-4">
             {t('onboarding.welcome.beginnerDesc')}
           </p>
-          <span className="text-xs text-[var(--brass)] group-hover:translate-x-1 transition-transform">
+          <span className="text-xs text-[var(--brass-text)] group-hover:translate-x-1 transition-transform">
             {t('onboarding.welcome.beginnerCta')} →
           </span>
         </button>
@@ -61,7 +61,7 @@ export default function WelcomeStep() {
           <p className="text-sm text-[var(--ivory-muted)] mb-4">
             {t('onboarding.welcome.experiencedDesc')}
           </p>
-          <span className="text-xs text-[var(--brass)] group-hover:translate-x-1 transition-transform">
+          <span className="text-xs text-[var(--brass-text)] group-hover:translate-x-1 transition-transform">
             {t('onboarding.welcome.experiencedCta')} →
           </span>
         </button>

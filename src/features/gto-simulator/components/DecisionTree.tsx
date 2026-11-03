@@ -19,11 +19,11 @@ interface DecisionTreeProps {
 
 function actionColor(action: ActionType): string {
   switch (action) {
-    case ActionType.Fold: return 'text-[var(--clay)]';
+    case ActionType.Fold: return 'text-[var(--clay-text)]';
     case ActionType.Check: return 'text-[var(--ivory-muted)]';
-    case ActionType.Call: return 'text-[var(--sage)]';
+    case ActionType.Call: return 'text-[var(--sage-text)]';
     case ActionType.Raise: return 'text-[var(--brass-bright)]';
-    case ActionType.AllIn: return 'text-[var(--brass)]';
+    case ActionType.AllIn: return 'text-[var(--brass-text)]';
   }
 }
 
@@ -104,7 +104,7 @@ function MultiStepTree({
                 <span
                   className={cn(
                     'text-[10px] font-display font-bold uppercase tracking-widest',
-                    isCompleted && 'text-[var(--sage)]',
+                    isCompleted && 'text-[var(--sage-text)]',
                     isCurrent && 'text-[var(--brass-bright)]',
                     !isCompleted && !isCurrent && 'text-[var(--ivory-muted)]'
                   )}
@@ -140,8 +140,8 @@ function MultiStepTree({
 
               {isCompleted && decision && (
                 <div className="mt-1 flex items-center gap-1">
-                  <span className="text-[var(--sage)] text-xs font-bold">✓</span>
-                  <span className="text-xs text-[var(--sage)] font-display">{decision.action}</span>
+                  <span className="text-[var(--sage-text)] text-xs font-bold">✓</span>
+                  <span className="text-xs text-[var(--sage-text)] font-display">{decision.action}</span>
                 </div>
               )}
               {isCurrent && (
@@ -196,7 +196,7 @@ function SingleStepHistory({
           <span className="text-[var(--ivory-muted)] text-xs">→</span>
           <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[var(--sage)]/15 border border-[var(--sage)]/40">
             <PositionBadge position={heroPosition} active />
-            <span className="text-xs font-display font-bold text-[var(--sage)]">Hero</span>
+            <span className="text-xs font-display font-bold text-[var(--sage-text)]">Hero</span>
           </div>
         </div>
       )}

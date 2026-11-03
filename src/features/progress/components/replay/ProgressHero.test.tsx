@@ -3,7 +3,6 @@ import { render, cleanup } from '@testing-library/react';
 import ProgressHero from './ProgressHero';
 import { useProgressStore } from '../../store';
 import { DEFAULT_ELO, type EloRating } from '@/shared/types/elo';
-import { getRankForScore } from '../../utils/elo';
 import type { StatsSummary } from '../../types';
 
 /**
@@ -69,13 +68,12 @@ describe('ProgressHero 战绩牌匾', () => {
 
   it('有 ELO 数据时展示当前分与段位名/描述', () => {
     seedElo(1400, 25);
-    const rank = getRankForScore(1400);
 
     const { container } = render(<ProgressHero summary={SUMMARY} />);
     const text = container.textContent ?? '';
 
     expect(text).toContain('1400');
-    expect(text).toContain(rank.icon);
+    expect(container.querySelector('.rp-plaque-icon svg')).not.toBeNull();
     expect(text).toContain('中级');
     expect(text).toContain('能应用 GTO 基础');
     expect(text).toContain('基于 25 次答题的评分');

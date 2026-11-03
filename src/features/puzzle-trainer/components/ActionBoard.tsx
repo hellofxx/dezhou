@@ -68,7 +68,7 @@ const TIER_DOT: Record<ActionTier, string> = {
 const TIER_ICON_COLOR: Record<ActionTier, string> = {
   passive: 'text-[var(--poker-indigo-bright)]',
   standard: 'text-[var(--brass-bright)]',
-  aggressive: 'text-[var(--clay)]',
+  aggressive: 'text-[var(--clay-text)]',
 };
 
 /** 动作图标键（同时作为 `data-action-icon` 供测试与样式定位） */

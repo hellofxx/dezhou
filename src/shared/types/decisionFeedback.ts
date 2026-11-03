@@ -55,20 +55,28 @@ export function calculateGrade(evLoss: number): DecisionGrade {
   return 'blunder';
 }
 
+/** 五级反馈图标语义 id（渲染层经 shared/components/feedback/GradeIcon 映射到 Lucide 组件） */
+export type GradeIconId =
+  | 'star'
+  | 'circle-check'
+  | 'circle-dashed'
+  | 'circle-alert'
+  | 'triangle-alert';
+
 // 各级别显示配置
 // 颜色以 globals.css 的 .grade-* 组件类为唯一样式事实源（DESIGN.md §2.2 低饱和牌室化语义色）：
 // 苔藓绿/黄铜/陶土红低透底 + 左侧色条，禁止 Tailwind 霓虹色板类（§1.3 反 SaaS 饱和色禁令）与纯白文字（§1.2）。
 export const GRADE_DISPLAY_CONFIG: Record<DecisionGrade, {
   color: string;       // globals.css .grade-* 类（背景 + 左侧色条 + 基础文字色）
   textColor: string;   // token 文字色类（供单独消费 textColor 的场景，如 PuzzleCard）
-  icon: string;        // emoji
+  iconId: GradeIconId; // 图标语义 id（交互 UI 一律 Lucide，禁止 emoji）
   titleKey: string;    // i18n key
 }> = {
-  best:        { color: 'grade-best',       textColor: 'text-[var(--poker-success)]', icon: '🌟', titleKey: 'feedback.grade.best' },
-  correct:     { color: 'grade-correct',    textColor: 'text-[var(--poker-success)]', icon: '✅', titleKey: 'feedback.grade.correct' },
-  inaccuracy:  { color: 'grade-inaccuracy', textColor: 'text-[var(--brass-bright)]',  icon: '🟡', titleKey: 'feedback.grade.inaccuracy' },
-  wrong:       { color: 'grade-wrong',      textColor: 'text-[var(--poker-danger)]',  icon: '🟠', titleKey: 'feedback.grade.wrong' },
-  blunder:     { color: 'grade-blunder',    textColor: 'text-[var(--poker-danger)]',  icon: '🔴', titleKey: 'feedback.grade.blunder' },
+  best:        { color: 'grade-best',       textColor: 'text-[var(--poker-success)]', iconId: 'star',           titleKey: 'feedback.grade.best' },
+  correct:     { color: 'grade-correct',    textColor: 'text-[var(--poker-success)]', iconId: 'circle-check',   titleKey: 'feedback.grade.correct' },
+  inaccuracy:  { color: 'grade-inaccuracy', textColor: 'text-[var(--brass-bright)]',  iconId: 'circle-dashed',  titleKey: 'feedback.grade.inaccuracy' },
+  wrong:       { color: 'grade-wrong',      textColor: 'text-[var(--danger-text)]',  iconId: 'circle-alert',    titleKey: 'feedback.grade.wrong' },
+  blunder:     { color: 'grade-blunder',    textColor: 'text-[var(--danger-text)]',  iconId: 'triangle-alert',  titleKey: 'feedback.grade.blunder' },
 };
 
 /**

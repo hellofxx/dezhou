@@ -81,7 +81,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
     >
       <div className="flex items-end justify-between gap-4 px-1 mb-3">
         <div>
-          <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
+          <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
             {t('academy.path.title')}
           </h2>
           <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.path.subtitle')}</p>

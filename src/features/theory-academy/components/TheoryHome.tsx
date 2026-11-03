@@ -75,7 +75,7 @@ export default function TheoryHome() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
             <div className="min-w-0">
-              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
+              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
                 {t('variant.selectVariant')}
               </h2>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
@@ -169,7 +169,7 @@ function ReadingStats({
       transition={{ ...transitionStandard, delay: 0.12 }}
       aria-label={t('theory.stats.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold mb-2.5 px-1">
+      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
         {t('theory.stats.title')}
       </h2>
       <div className="panel space-y-2.5">
@@ -215,7 +215,7 @@ function PracticeBridge() {
       transition={{ ...transitionStandard, delay: 0.14 }}
       aria-label={t('theory.bridge.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold mb-2.5 px-1">
+      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
         {t('theory.bridge.title')}
       </h2>
       <button
@@ -247,7 +247,7 @@ function BasicsPrerequisiteCard() {
       transition={{ ...transitionStandard, delay: 0.1 }}
       aria-label={t('theory.basicsGuide.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold mb-2.5 px-1">
+      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
         {t('theory.basicsGuide.title')}
       </h2>
       <Link

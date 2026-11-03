@@ -71,7 +71,7 @@ export function getSuitedLabel(t: TFunction, suited: string): string {
 export function getSuitedColor(suited: string): string {
   // Pairs glow warmest (gold); suited hands cool (sage); offsuit dimmest.
   if (suited === 'pair') return 'text-[var(--brass-bright)]';
-  if (suited === 'suited') return 'text-[var(--sage)]';
+  if (suited === 'suited') return 'text-[var(--sage-text)]';
   return 'text-[var(--ivory-muted)]';
 }
 

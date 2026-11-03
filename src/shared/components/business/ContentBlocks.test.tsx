@@ -36,7 +36,7 @@ describe('ContentBlocks', () => {
       render(
         <LabeledBlock
           icon={Sigma}
-          iconClass="text-[var(--brass)]"
+          iconClass="text-[var(--brass-text)]"
           label="关键点"
           labelClass="text-[var(--brass-bright)]"
           wrapClass="bg-[var(--felt-deep)]"
@@ -46,7 +46,7 @@ describe('ContentBlocks', () => {
 
       const wrap = container.querySelector('div.rounded-lg');
       expect(wrap?.classList.contains('bg-[var(--felt-deep)]')).toBe(true);
-      expect(container.querySelector('svg')?.getAttribute('class')).toContain('text-[var(--brass)]');
+      expect(container.querySelector('svg')?.getAttribute('class')).toContain('text-[var(--brass-text)]');
       expect(container.textContent).toContain('关键点');
       // 换行内容原样保留（CSS 负责折行）
       expect(container.textContent).toContain('第一行\n第二行');

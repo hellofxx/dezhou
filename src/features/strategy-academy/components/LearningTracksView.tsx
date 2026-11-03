@@ -55,7 +55,7 @@ export default function LearningTracksView() {
               <ArrowLeft className="w-3.5 h-3.5" />
               {t('academy.tracks.backToAcademy')}
             </button>
-            <h1 className="font-display text-2xl text-[var(--ivory)]">{t('academy.tracks.title')}</h1>
+            <h2 className="font-display text-2xl text-[var(--ivory)]">{t('academy.tracks.title')}</h2>
             <p className="text-sm text-[var(--ivory-dim)] mt-1">
               {t('academy.tracks.subtitle')}
             </p>

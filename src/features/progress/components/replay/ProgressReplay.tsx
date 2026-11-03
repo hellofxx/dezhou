@@ -116,7 +116,7 @@ export default function ProgressReplay() {
                       isProgress
                         ? 'text-[var(--poker-success)]'
                         : isRegression
-                          ? 'text-[var(--poker-danger)]'
+                          ? 'text-[var(--danger-text)]'
                           : 'text-[var(--ivory-muted)]'
                     }`}>
                       {isProgress && <ArrowUpRight className="w-3 h-3" />}
@@ -132,7 +132,7 @@ export default function ProgressReplay() {
             </div>
           ) : (
             <div className="text-center py-6">
-              <div className="text-2xl mb-2">📈</div>
+              <TrendingUp size={24} className="mx-auto mb-2 text-[var(--ivory-muted)]" aria-hidden="true" />
               <p className="text-xs text-[var(--ivory-muted)]">
                 {t('dashboard.progressReplay.empty')}
               </p>

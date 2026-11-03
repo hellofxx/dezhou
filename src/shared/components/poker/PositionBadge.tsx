@@ -25,7 +25,7 @@ const GROUP_LABEL_KEYS: Record<string, string> = {
  */
 const GROUP_COLORS: Record<string, { base: string; active: string }> = {
   early: {
-    base: 'bg-[var(--clay)]/15 text-[var(--clay)] border-[var(--clay)]/30',
+    base: 'bg-[var(--clay)]/15 text-[var(--clay-text)] border-[var(--clay)]/30',
     active: 'bg-[var(--clay)] text-[var(--ivory)] border-[var(--clay)] shadow-[var(--shadow-clay-glow-sm)]',
   },
   middle: {
@@ -33,7 +33,7 @@ const GROUP_COLORS: Record<string, { base: string; active: string }> = {
     active: 'bg-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass-bright)] shadow-[var(--shadow-brass-glow-sm)]',
   },
   late: {
-    base: 'bg-[var(--sage)]/15 text-[var(--sage)] border-[var(--sage)]/30',
+    base: 'bg-[var(--sage)]/15 text-[var(--sage-text)] border-[var(--sage)]/30',
     active: 'bg-[var(--sage)] text-[var(--ivory)] border-[var(--sage)] shadow-[var(--shadow-sage-glow-sm)]',
   },
   blinds: {

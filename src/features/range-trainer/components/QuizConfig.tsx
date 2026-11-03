@@ -124,7 +124,7 @@ export function QuizConfig({
       <Card className="w-full max-w-md bg-[var(--surface)] border-[var(--surface-raised)]">
         <CardHeader className="text-center">
           <div className="mx-auto mb-2 w-12 h-12 rounded-xl bg-[var(--brass)]/10 flex items-center justify-center">
-            <HelpCircle className="w-6 h-6 text-[var(--brass)]" />
+            <HelpCircle className="w-6 h-6 text-[var(--brass-text)]" />
           </div>
           <CardTitle className="text-xl">{t('rangeTrainer.config.title')}</CardTitle>
           <CardDescription>
@@ -184,7 +184,7 @@ export function QuizConfig({
 
           {/* P1A-01 防御兜底：过滤后理论上不可达，仍保留提示避免静默无响应 */}
           {!hasPreset && (
-            <p className="text-xs text-center text-[var(--clay)]">{t('rangeTrainer.config.noPreset')}</p>
+            <p className="text-xs text-center text-[var(--clay-text)]">{t('rangeTrainer.config.noPreset')}</p>
           )}
 
           <Button

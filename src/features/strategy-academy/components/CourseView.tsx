@@ -327,9 +327,9 @@ export default function CourseView() {
         )}
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h1 className="font-display text-[22px] text-[var(--ivory)] leading-tight">
+            <h2 className="font-display text-[22px] text-[var(--ivory)] leading-tight">
               {resolveLessonTitle(t, lesson)}
-            </h1>
+            </h2>
             <p className="text-sm text-[var(--ivory-muted)] mt-1">{resolveLessonSubtitle(t, lesson)}</p>
           </div>
           <div className="flex items-center gap-3 text-xs text-[var(--ivory-muted)] shrink-0 pt-1">

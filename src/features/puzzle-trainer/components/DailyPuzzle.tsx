@@ -155,7 +155,7 @@ export default function DailyPuzzle() {
           </div>
 
           {shouldDownshiftDifficulty() && (
-            <div className="px-3 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+            <div className="px-3 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay-text)]">
               {t('puzzle.common.downshiftHint')}
             </div>
           )}
@@ -185,7 +185,7 @@ export default function DailyPuzzle() {
             <span className="opacity-30">·</span>
             <span>
               {t('puzzle.common.wrong')}:{' '}
-              <span className="font-numeric text-[var(--clay)]">{engine.state.wrongCount}</span>
+              <span className="font-numeric text-[var(--clay-text)]">{engine.state.wrongCount}</span>
             </span>
             <span className="opacity-30">·</span>
             <span className="text-[var(--ivory-dim)]">{t('puzzle.daily.fixedHint')}</span>

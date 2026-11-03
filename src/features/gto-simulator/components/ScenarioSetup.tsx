@@ -6,6 +6,7 @@ import { GAME_VARIANT_CONFIGS, getPlayerCountOptions } from '@/shared/constants/
 import { useGTOSimulatorStore } from '../store';
 import { cn } from '@/shared/utils';
 import { OPPONENT_PROFILES, getOpponentProfile } from '@/shared/data/opponentProfiles';
+import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
 
 // label/desc 存 i18n key（gto.setup.*），渲染时 t() 解析
 const GAME_TYPES: { value: GameType; label: string }[] = [
@@ -74,7 +75,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                 className={cn(
                   'flex-1 px-4 py-2 rounded-lg text-sm font-display font-medium transition-all border',
                   exploitMode
-                    ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage)]'
+                    ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage-text)]'
                     : 'bg-[var(--walnut-raised)]/40 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                 )}
               >
@@ -82,7 +83,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
               </button>
             </div>
             {exploitMode && (
-              <p className="text-xs text-[var(--sage)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
+              <p className="text-xs text-[var(--sage-text)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
                 {t('gto.setup.exploitHint')}
               </p>
             )}
@@ -106,7 +107,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                           : 'border-[var(--walnut-border)]/40 bg-[var(--walnut-raised)]/40 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                       )}
                     >
-                      <span className="mr-1">{profile.icon}</span>
+                      <OpponentGlyph iconId={profile.iconId} size={14} className="mr-1" />
                       {profile.shortName}
                     </button>
                   );
@@ -115,7 +116,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
               {selectedProfile && (
                 <div className="rounded-lg bg-black/20 p-3 space-y-1">
                   <div className="text-xs font-display font-semibold" style={{ color: selectedProfile.color }}>
-                    {selectedProfile.icon}{' '}
+                    <OpponentGlyph iconId={selectedProfile.iconId} size={16} />{' '}
                     {t(`gto.setup.opponentProfile.${selectedProfile.id}.name`, { defaultValue: selectedProfile.name })}
                   </div>
                   <div className="text-xs text-[var(--ivory-muted)]">
@@ -143,7 +144,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                     'flex-1 px-4 py-2 rounded-lg text-sm font-display font-medium transition-all border',
                     config.gameVariant === v.value
                       ? v.value === 'short-deck'
-                        ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage)]'
+                        ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage-text)]'
                         : 'bg-[var(--brass)] border-[var(--brass)] text-[var(--primary-foreground)]'
                       : 'bg-[var(--walnut-raised)]/40 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                   )}
@@ -153,7 +154,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
               ))}
             </div>
             {config.gameVariant === 'short-deck' && (
-              <p className="text-xs text-[var(--sage)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
+              <p className="text-xs text-[var(--sage-text)] bg-[var(--sage)]/10 rounded-md px-3 py-1.5">
                 {t('gto.setup.shortDeckHint')}
               </p>
             )}

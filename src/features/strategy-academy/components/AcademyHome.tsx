@@ -73,7 +73,7 @@ export default function AcademyHome() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
             <div className="min-w-0">
-              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold">
+              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
                 {t('variant.selectVariant')}
               </h2>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
@@ -197,7 +197,7 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
       transition={{ ...transitionStandard, delay: 0.12 }}
       aria-label={t('academy.tools.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-semibold mb-2.5 px-1">
+      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
         {t('academy.tools.title')}
       </h2>
       <div className="grid grid-cols-2 gap-2.5">

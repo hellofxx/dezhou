@@ -166,7 +166,7 @@ export default function PositionDrill({ onComplete, onExit }: DrillProps) {
                 'bg-[var(--walnut-raised)] border-[var(--walnut-border)] text-[var(--ivory)]',
                 !isAnswered && 'hover:scale-110 hover:border-[var(--brass-bright)] hover:bg-[var(--brass-bright)]/10 cursor-pointer',
                 isCorrect && 'bg-[var(--success)]/30 border-[var(--success)] text-[var(--success)] ring-2 ring-[var(--success)]',
-                isWrongSelected && 'bg-[var(--danger)]/30 border-[var(--danger)] text-[var(--danger)] opacity-80',
+                isWrongSelected && 'bg-[var(--danger)]/30 border-[var(--danger)] text-[var(--danger-text)] opacity-80',
                 isAnswered && !isCorrect && !isWrongSelected && 'opacity-50',
               )}
               style={{ top: seat.top, left: seat.left }}
@@ -198,8 +198,8 @@ export default function PositionDrill({ onComplete, onExit }: DrillProps) {
               </>
             ) : (
               <>
-                <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                <span className="text-sm font-bold text-[var(--danger)]">
+                <XCircle className="w-4 h-4 text-[var(--danger-text)]" />
+                <span className="text-sm font-bold text-[var(--danger-text)]">
                   {t('drills.common.wrongFeedback')}
                 </span>
                 <span className="text-xs text-[var(--ivory-muted)] ml-2">

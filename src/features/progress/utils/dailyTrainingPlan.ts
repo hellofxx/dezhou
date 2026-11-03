@@ -3,6 +3,7 @@
  * 根据用户数据生成个性化训练计划
  */
 
+import { BookOpen, Bot, Calculator, ClipboardList, RefreshCw, Target, type LucideIcon } from 'lucide-react';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 import { sanitizeReviewLabel } from './sanitizeReviewLabel';
@@ -281,7 +282,7 @@ export function getReasonColor(reason: string): string {
     case 'nextLesson':
       return 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]';
     case 'weakSpot':
-      return 'text-[var(--poker-danger)] bg-[var(--poker-danger-bg)]';
+      return 'text-[var(--danger-text)] bg-[var(--poker-danger-bg)]';
     case 'streakReward':
       return 'text-[var(--brass-bright)] bg-[var(--poker-warning-bg)]';
     default:
@@ -290,22 +291,22 @@ export function getReasonColor(reason: string): string {
 }
 
 /**
- * 获取类型图标
+ * 获取类型图标（Lucide 组件；交互 UI 一律 Lucide，禁止 emoji）
  */
-export function getTypeIcon(type: DailyRecommendation['type']): string {
+export function getTypeIcon(type: DailyRecommendation['type']): LucideIcon {
   switch (type) {
     case 'academy-lesson':
-      return '📚';
+      return BookOpen;
     case 'range-quiz':
-      return '🎯';
+      return Target;
     case 'pot-odds-quiz':
-      return '🧮';
+      return Calculator;
     case 'gto-practice':
-      return '🤖';
+      return Bot;
     case 'review':
-      return '🔄';
+      return RefreshCw;
     default:
-      return '📋';
+      return ClipboardList;
   }
 }
 

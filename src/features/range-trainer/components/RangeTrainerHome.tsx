@@ -79,7 +79,7 @@ export default function RangeTrainerHome() {
         {/* 顶部标题栏 —— 窄屏纵向堆叠：标题独占一行，副标题不再被按钮组挤成多行 */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <h1 className="text-2xl font-bold text-[var(--ivory)]">{t('rangeTrainer.title')}</h1>
+            <h2 className="text-2xl font-bold text-[var(--ivory)]">{t('rangeTrainer.title')}</h2>
             <p className="text-sm text-[var(--ivory-dim)] mt-1">
               {t('rangeTrainer.subtitle')}
             </p>

@@ -51,6 +51,7 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
               {recommendations.map((rec) => {
                 // 渲染期解析（勿 useMemo 固化），口径见 utils/dailyTrainingPlan.resolveRecommendationText
                 const { title, description } = resolveRecommendationText(rec, t);
+                const TypeIcon = getTypeIcon(rec.type);
                 return (
                 <motion.div
                   key={rec.id}
@@ -63,7 +64,7 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
                 >
                   <div className="flex items-start gap-3">
                     {/* 类型图标 */}
-                    <span className="text-xl shrink-0 mt-0.5">{getTypeIcon(rec.type)}</span>
+                    <TypeIcon size={20} className="shrink-0 mt-0.5 text-[var(--ivory-dim)]" aria-hidden="true" />
 
                     {/* 内容 */}
                     <div className="flex-1 min-w-0">
@@ -84,7 +85,7 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
                         </span>
                         <button
                           onClick={() => navigate(rec.route)}
-                          className="inline-flex items-center gap-1 text-xs font-medium text-[var(--brass-bright)] hover:text-[var(--brass)] transition-colors"
+                          className="inline-flex items-center gap-1 text-xs font-medium text-[var(--brass-bright)] hover:text-[var(--brass-text)] transition-colors"
                         >
                           {t('dashboard.dataPlan.start')}
                           <ArrowRight className="w-3 h-3" />

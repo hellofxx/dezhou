@@ -70,9 +70,9 @@ export default function TheoryFlaggedReview() {
           animate={{ opacity: 1, y: 0 }}
           transition={transitionStandard}
         >
-          <h1 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
+          <h2 className="font-display text-[22px] md:text-[26px] leading-tight text-[var(--ivory)] mb-1">
             {t('theory.flagged.title')}
-          </h1>
+          </h2>
           <p className="text-sm text-[var(--ivory-dim)] max-w-2xl">{t('theory.flagged.subtitle')}</p>
         </motion.div>
 

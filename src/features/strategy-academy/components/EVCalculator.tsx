@@ -78,11 +78,11 @@ export function EVVisualizer({ potSize, betAmount, winRate }: EVVisualizerProps)
       <div className="mt-3 pt-3 border-t border-[var(--walnut-border)] text-xs space-y-1">
         <div className="flex justify-between">
           <span className="text-[var(--ivory-dim)]">{t('academy.evVisualizer.currentEquityLabel')}</span>
-          <span className="font-mono text-[var(--brass)]">{winRate}%</span>
+          <span className="font-mono text-[var(--brass-text)]">{winRate}%</span>
         </div>
         <div className="flex justify-between">
           <span className="text-[var(--ivory-dim)]">{t('academy.evVisualizer.evLabel')}</span>
-          <span className={`font-mono font-bold ${currentEV >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+          <span className={`font-mono font-bold ${currentEV >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'}`}>
             {currentEV >= 0 ? '+' : ''}{currentEV.toFixed(2)}BB
           </span>
         </div>
@@ -149,7 +149,7 @@ export function EVCalculator({
             className="w-full accent-[var(--brass)]"
             aria-label={t('academy.evVisualizer.equityAria')}
           />
-          <div className="text-right font-mono text-[var(--brass)]">{winRate}%</div>
+          <div className="text-right font-mono text-[var(--brass-text)]">{winRate}%</div>
         </div>
       </div>
       <EVVisualizer potSize={potSize} betAmount={betAmount} winRate={winRate} />

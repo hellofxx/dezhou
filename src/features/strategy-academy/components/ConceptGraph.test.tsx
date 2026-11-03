@@ -104,16 +104,16 @@ describe('ConceptGraph：移动端卡片列表', () => {
     const onNodeClick = vi.fn();
     const { container } = render(<ConceptGraph onNodeClick={onNodeClick} />);
 
-    // 等待响应式检测切换到移动端卡片视图（SVG 卸载）
-    await waitFor(() => expect(container.querySelector('svg')).toBeNull());
+    // 等待响应式检测切换到移动端卡片视图（图谱 SVG 卸载；锁标 Lucide 图标仍会渲染）
+    await waitFor(() => expect(container.querySelector('svg.select-none')).toBeNull());
     const lessons = getAllLessonSummaries();
     const buttons = [...container.querySelectorAll('button')];
     expect(buttons.length).toBeGreaterThanOrEqual(lessons.length);
 
     fireEvent.click(buttons[0]!);
     expect(onNodeClick).toHaveBeenCalledWith(lessons[0]!.id);
-    // 未解锁 Level 显示锁标记
-    expect(container.textContent).toContain('🔒');
+    // 未解锁 Level 显示 Lucide 锁标
+    expect(container.querySelector('svg.lucide-lock')).not.toBeNull();
   });
 
   it('调试解锁激活时全部 Level 解锁（无锁标记）', async () => {
@@ -121,7 +121,7 @@ describe('ConceptGraph：移动端卡片列表', () => {
     useDebugModeStore.getState().activateWithCode('1337');
     const { container } = render(<ConceptGraph onNodeClick={() => {}} />);
 
-    await waitFor(() => expect(container.querySelector('svg')).toBeNull());
-    expect(container.textContent).not.toContain('🔒');
+    await waitFor(() => expect(container.querySelector('svg.select-none')).toBeNull());
+    expect(container.querySelector('svg.lucide-lock')).toBeNull();
   });
 });

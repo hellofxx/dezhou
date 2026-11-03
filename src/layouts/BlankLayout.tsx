@@ -60,7 +60,7 @@ export default function BlankLayout() {
         className="absolute top-4 left-4 z-10 flex items-center gap-2 min-h-11 min-w-11 px-3 py-2 rounded-[var(--radius)] text-sm text-[var(--ivory-muted)] hover:text-[var(--ivory)] bg-[var(--surface-overlay)] hover:bg-[var(--surface-raised)] transition-colors"
         aria-label={t('common.ui.back')}
       >
-        <ArrowLeft size={16} className="text-[var(--brass)]" />
+        <ArrowLeft size={16} className="text-[var(--brass-text)]" />
         <span>{t('common.ui.back')}</span>
       </button>
 
@@ -71,7 +71,7 @@ export default function BlankLayout() {
         title={t('common.shortcutsTitle')}
         aria-label={t('common.shortcutsTitle')}
       >
-        <Keyboard size={14} className="text-[var(--brass)]" />
+        <Keyboard size={14} className="text-[var(--brass-text)]" />
         <span className="hidden sm:inline">?</span>
       </button>
 

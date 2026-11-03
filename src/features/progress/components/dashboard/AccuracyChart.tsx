@@ -47,7 +47,7 @@ export default function AccuracyChart({ dailyStats }: AccuracyChartProps) {
           {!hasData ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-2 text-[var(--ivory-dim)]">
               <div className="w-12 h-12 rounded-full bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-[var(--brass-deep)]" />
+                <TrendingUp className="w-5 h-5 text-[var(--brass-text)]" />
               </div>
               <div className="text-sm">{t('progress.chart.empty')}</div>
               <div className="text-xs text-[var(--ivory-muted)]">{t('progress.chart.emptyHint')}</div>

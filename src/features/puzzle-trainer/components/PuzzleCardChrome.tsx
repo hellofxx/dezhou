@@ -28,7 +28,7 @@ export function RushStatusBar({
               className={cn(
                 'w-4 h-4',
                 i < lives
-                  ? 'fill-[var(--clay)] text-[var(--clay)]'
+                  ? 'fill-[var(--clay)] text-[var(--clay-text)]'
                   : 'text-[var(--walnut-border)]'
               )}
             />

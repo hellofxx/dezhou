@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { OPPONENT_DRILL_QUESTIONS, getOpponentProfile } from '../../data/opponentProfiles';
+import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
 import { scoreOpponentAnswer } from '../../utils/opponentScoring';
 import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { resolveOpponentDrillQuestion } from '../../utils/contentKeys';
@@ -148,10 +149,10 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
                   selectedType === null && 'hover:border-[var(--brass-bright)] hover:bg-[var(--brass-bright)]/10 cursor-pointer',
                   isSelected && !isAnswered && 'border-[var(--brass-bright)] bg-[var(--brass-bright)]/10',
                   revealCorrect && 'border-[var(--success)] bg-[var(--success)]/15 text-[var(--success)]',
-                  revealWrong && 'border-[var(--danger)] bg-[var(--danger)]/15 text-[var(--danger)]',
+                  revealWrong && 'border-[var(--danger)] bg-[var(--danger)]/15 text-[var(--danger-text)]',
                 )}
               >
-                <span className="mr-1.5">{profile.icon}</span>
+                <OpponentGlyph iconId={profile.iconId} size={14} className="mr-1.5" />
                 {t(`gto.setup.opponentProfile.${profile.id}.name`, { defaultValue: profile.name })}
               </button>
             );
@@ -179,7 +180,7 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
                     'border-[var(--walnut-border)] bg-[var(--walnut-raised)] text-[var(--ivory)]',
                     !isAnswered && 'hover:border-[var(--brass-bright)] hover:bg-[var(--brass-bright)]/10 cursor-pointer',
                     revealCorrect && 'border-[var(--success)] bg-[var(--success)]/15 text-[var(--success)]',
-                    revealWrong && 'border-[var(--danger)] bg-[var(--danger)]/15 text-[var(--danger)]',
+                    revealWrong && 'border-[var(--danger)] bg-[var(--danger)]/15 text-[var(--danger-text)]',
                   )}
                 >
                   {option}
@@ -204,16 +205,16 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
             <span className="inline-flex items-center gap-1 text-xs font-bold">
               {typeCorrect
                 ? <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-                : <XCircle className="w-4 h-4 text-[var(--danger)]" />}
-              <span className={typeCorrect ? 'text-[var(--success)]' : 'text-[var(--danger)]'}>
+                : <XCircle className="w-4 h-4 text-[var(--danger-text)]" />}
+              <span className={typeCorrect ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'}>
                 {t('drills.opponent.typeLabel')}
               </span>
             </span>
             <span className="inline-flex items-center gap-1 text-xs font-bold">
               {strategyCorrect
                 ? <CheckCircle2 className="w-4 h-4 text-[var(--success)]" />
-                : <XCircle className="w-4 h-4 text-[var(--danger)]" />}
-              <span className={strategyCorrect ? 'text-[var(--success)]' : 'text-[var(--danger)]'}>
+                : <XCircle className="w-4 h-4 text-[var(--danger-text)]" />}
+              <span className={strategyCorrect ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'}>
                 {t('drills.opponent.strategyLabel')}
               </span>
             </span>

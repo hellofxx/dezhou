@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { useProgressStore } from '../../store';
-import { VARIANT_CONFIG, ALL_VARIANTS } from '@/shared/types/elo';
+import { ALL_VARIANTS } from '@/shared/types/elo';
+import { VariantGlyph } from '@/shared/components/business/VariantGlyph';
+import { RankIcon } from '@/shared/components/business/RankIcon';
 import { getRankForScore } from '@/features/progress/utils/elo';
 
 /**
@@ -26,7 +28,6 @@ export function VariantEloOverview() {
       <CardContent>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {ALL_VARIANTS.map((variant) => {
-            const config = VARIANT_CONFIG[variant];
             const elo = eloByVariant[variant];
             const rank = getRankForScore(elo.overall);
             const isActive = variant === activeVariant;
@@ -44,7 +45,7 @@ export function VariantEloOverview() {
                 aria-pressed={isActive}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-lg">{config.icon}</span>
+                  <VariantGlyph variant={variant} size={18} />
                   <span className="text-sm font-medium text-[var(--ivory)]">
                     {t(`variant.name.${variant}`)}
                   </span>
@@ -53,7 +54,7 @@ export function VariantEloOverview() {
                   {elo.overall}
                 </div>
                 <div className="text-xs text-[var(--ivory-muted)] flex items-center gap-1">
-                  <span>{rank.icon}</span>
+                  <RankIcon name={rank.name} size={14} />
                   <span>{t(`progress.rank.${rank.name}.name`)}</span>
                   {elo.gamesPlayed > 0 && <span>· {elo.gamesPlayed} {t('variant.gamesPlayed')}</span>}
                 </div>

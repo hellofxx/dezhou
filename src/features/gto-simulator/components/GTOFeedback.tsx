@@ -4,6 +4,8 @@ import type { HandNotation } from '@/shared/types/poker';
 import { cn } from '@/shared/utils';
 import { getOpponentProfile } from '@/shared/data/opponentProfiles';
 import { GRADE_DISPLAY_CONFIG, type DecisionFeedback } from '@/shared/types/decisionFeedback';
+import { GradeIcon } from '@/shared/components/feedback/GradeIcon';
+import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
@@ -60,9 +62,9 @@ export function GTOFeedback({
 
   // 旧二元显示的样式（feedback 缺省时使用）
   const legacyStatusColor = isOptimal
-    ? 'text-[var(--sage)] border-[var(--sage)]/40 bg-[var(--sage)]/10'
+    ? 'text-[var(--sage-text)] border-[var(--sage)]/40 bg-[var(--sage)]/10'
     : evLoss > 3
-      ? 'text-[var(--clay)] border-[var(--clay)]/40 bg-[var(--clay)]/10'
+      ? 'text-[var(--clay-text)] border-[var(--clay)]/40 bg-[var(--clay)]/10'
       : 'text-[var(--brass-bright)] border-[var(--brass)]/40 bg-[var(--brass)]/10';
   const legacyStatusIcon = isOptimal ? '✓' : evLoss > 3 ? '✗' : '△';
   const legacyStatusLabel = isOptimal
@@ -93,7 +95,7 @@ export function GTOFeedback({
       {gradeConfig && feedback ? (
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-display text-2xl">{gradeConfig.icon}</span>
+            <GradeIcon grade={feedback.grade} size={24} />
             <div>
               <div className="font-display font-semibold">{gradeTitle}</div>
               {handNotation && <div className="text-xs opacity-80 font-numeric">{handNotation}</div>}
@@ -130,7 +132,7 @@ export function GTOFeedback({
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="rounded-lg bg-black/20 p-2">
             <div className="text-[10px] text-[var(--ivory-muted)] mb-0.5">{t('gto.feedback.yourEV')}</div>
-            <div className={cn('font-numeric font-bold text-sm', (userEV ?? 0) >= 0 ? 'text-[var(--sage)]' : 'text-[var(--clay)]')}>
+            <div className={cn('font-numeric font-bold text-sm', (userEV ?? 0) >= 0 ? 'text-[var(--sage-text)]' : 'text-[var(--clay-text)]')}>
               {(userEV ?? 0) >= 0 ? '+' : ''}{(userEV ?? 0).toFixed(2)} BB
             </div>
           </div>
@@ -148,12 +150,12 @@ export function GTOFeedback({
       )}
 
       {!isOptimal && evLoss < 0.3 && !feedback && (
-        <div className="text-xs text-[var(--sage)] font-display">{t('gto.feedback.nearOptimal')}</div>
+        <div className="text-xs text-[var(--sage-text)] font-display">{t('gto.feedback.nearOptimal')}</div>
       )}
 
       {exploitMode && opponent && (
         <div className="flex items-center gap-2 rounded-lg bg-black/20 px-3 py-2">
-          <span className="text-lg">{opponent.icon}</span>
+          <OpponentGlyph iconId={opponent.iconId} size={18} />
           <div className="flex-1">
             <span className="text-xs font-display font-semibold" style={{ color: opponent.color }}>
               {t('gto.feedback.opponentPrefix')}{' '}
@@ -191,8 +193,8 @@ export function GTOFeedback({
           </div>
           <div className="flex justify-between text-[10px] font-numeric">
             <span className="text-[var(--brass-bright)]">{raiseTerm} {Math.round(gtoStrategy.raise * 100)}%</span>
-            <span className="text-[var(--sage)]">{callTerm} {Math.round(gtoStrategy.call * 100)}%</span>
-            <span className="text-[var(--clay)]">{foldTerm} {Math.round(gtoStrategy.fold * 100)}%</span>
+            <span className="text-[var(--sage-text)]">{callTerm} {Math.round(gtoStrategy.call * 100)}%</span>
+            <span className="text-[var(--clay-text)]">{foldTerm} {Math.round(gtoStrategy.fold * 100)}%</span>
           </div>
           {gtoStrategy.raiseAmount && gtoStrategy.raise > 0 && (
             <div className="text-xs text-[var(--ivory-muted)] font-numeric">
@@ -224,8 +226,8 @@ export function GTOFeedback({
           </div>
           <div className="flex justify-between text-[10px] font-numeric">
             <span className="text-[var(--brass-bright)]">{raiseTerm} {Math.round(exploitStrategy.raise * 100)}%</span>
-            <span className="text-[var(--sage)]">{callTerm} {Math.round(exploitStrategy.call * 100)}%</span>
-            <span className="text-[var(--clay)]">{foldTerm} {Math.round(exploitStrategy.fold * 100)}%</span>
+            <span className="text-[var(--sage-text)]">{callTerm} {Math.round(exploitStrategy.call * 100)}%</span>
+            <span className="text-[var(--clay-text)]">{foldTerm} {Math.round(exploitStrategy.fold * 100)}%</span>
           </div>
           <div className="text-[10px] text-[var(--ivory-muted)]">
             {t('gto.feedback.gtoRatio', { r: Math.round(gtoStrategy.raise * 100), c: Math.round(gtoStrategy.call * 100), f: Math.round(gtoStrategy.fold * 100) })}

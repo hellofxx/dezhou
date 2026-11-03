@@ -216,10 +216,10 @@ export default function SettingsPage() {
           <p className="settings-hero-eyebrow">{t('settings.hero.eyebrow', { defaultValue: '牌室设置 · ROOM SETUP' })}</p>
           <div className="flex items-end justify-between gap-4">
             <div className="min-w-0">
-              <h1 className="settings-hero-title">
+              <h2 className="settings-hero-title">
                 <Settings className="w-5 h-5 md:w-6 md:h-6 shrink-0" />
                 {t('settings.title', { defaultValue: '设置' })}
-              </h1>
+              </h2>
               <p className="settings-hero-sub">
                 {t('settings.subtitle', { defaultValue: '个性化你的训练体验，更改会自动保存' })}
               </p>
@@ -460,7 +460,7 @@ export default function SettingsPage() {
                       transition={{ duration: MOTION_DURATION.fast }}
                       className={cn(
                         'text-xs max-w-[180px] text-right',
-                        freezeStatus === 'success' ? 'text-[var(--success)]' : 'text-[var(--danger)]'
+                        freezeStatus === 'success' ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'
                       )}
                     >
                       {freezeStatus === 'success'
@@ -498,7 +498,7 @@ export default function SettingsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: MOTION_DURATION.fast }}
-                    className="text-sm text-[var(--brass)] bg-[var(--brass-glow)] rounded-lg px-3 py-2"
+                    className="text-sm text-[var(--brass-text)] bg-[var(--brass-glow)] rounded-lg px-3 py-2"
                   >
                     {importStatus}
                   </motion.p>
@@ -517,7 +517,7 @@ export default function SettingsPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => setClearDialogOpen(true)}
-                  className="gap-1 text-[var(--danger)] hover:text-[var(--danger)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
+                  className="gap-1 text-[var(--danger-text)] hover:text-[var(--danger-text)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
                 >
                   <Trash2 className="w-4 h-4" />
                   {t('settings.clearAllData', { defaultValue: '清除所有数据' })}
@@ -589,7 +589,7 @@ export default function SettingsPage() {
                     </Button>
                   </div>
                   {debugError && (
-                    <p className="text-xs text-[var(--danger)]">{t('settings.debugCodeError', { defaultValue: '调试码不正确' })}</p>
+                    <p className="text-xs text-[var(--danger-text)]">{t('settings.debugCodeError', { defaultValue: '调试码不正确' })}</p>
                   )}
                 </>
               )}
@@ -642,7 +642,7 @@ export default function SettingsPage() {
                   clearAllRecords();
                   setClearDialogOpen(false);
                 }}
-                className="text-[var(--danger)] border-[var(--danger)]/30 hover:bg-[var(--danger-bg)]"
+                className="text-[var(--danger-text)] border-[var(--danger)]/30 hover:bg-[var(--danger-bg)]"
               >
                 {t('settings.confirmClear', { defaultValue: '确认清除' })}
               </Button>
@@ -682,7 +682,7 @@ function SettingsSection({
         aria-controls={`settings-${id}`}
         className="w-full flex items-center gap-3 px-4 py-3 min-h-[44px] text-left transition-colors hover:bg-[var(--walnut-raised)]/40"
       >
-        <span className="flex items-center justify-center w-8 h-8 rounded-md bg-[var(--brass-glow)] text-[var(--brass)] shrink-0">
+        <span className="flex items-center justify-center w-8 h-8 rounded-md bg-[var(--brass-glow)] text-[var(--brass-text)] shrink-0">
           {icon}
         </span>
         <span className="flex-1 min-w-0">

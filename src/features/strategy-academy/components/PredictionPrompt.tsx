@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2, RotateCcw } from 'lucide-react';
+import { CheckCircle2, RotateCcw, Target, Lightbulb } from 'lucide-react';
 import type { HandExample as HandExampleType } from '../types';
 import {
   calculateGrade,
@@ -8,6 +8,7 @@ import {
   type DecisionGrade,
 } from '@/shared/types/decisionFeedback';
 import { cn } from '@/shared/utils/cn';
+import { GradeIcon } from '@/shared/components/feedback/GradeIcon';
 
 export interface ActionChoice {
   label: string;
@@ -93,7 +94,7 @@ const BUTTON_IDLE =
 const BUTTON_CORRECT =
   'border-[var(--poker-success)] bg-[var(--poker-success)]/10 font-semibold text-[var(--poker-success)]';
 const BUTTON_WRONG =
-  'border-[var(--poker-danger)] bg-[var(--poker-danger)]/10 font-semibold text-[var(--poker-danger)]';
+  'border-[var(--poker-danger)] bg-[var(--poker-danger)]/10 font-semibold text-[var(--danger-text)]';
 const BUTTON_DIM =
   'border-[var(--walnut-border)] bg-[var(--surface)] text-[var(--ivory)] opacity-40';
 
@@ -123,7 +124,8 @@ export function PredictionPrompt({ example, answered, onAnswered }: PredictionPr
     return (
       <div className="rounded-lg border border-[var(--walnut-border)] bg-[var(--surface)]/60 p-4">
         <p className="text-sm font-medium text-[var(--ivory)] mb-3">
-          🎯 {t('academy.checkpoint.predictPrompt')}
+          <Target className="inline-block w-4 h-4 mr-1 -mt-0.5 text-[var(--brass-bright)]" aria-hidden="true" />
+          {t('academy.checkpoint.predictPrompt')}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {choices.map((choice) => (
@@ -183,7 +185,7 @@ export function PredictionPrompt({ example, answered, onAnswered }: PredictionPr
                 gradeConfig.textColor,
               )}
             >
-              {gradeConfig.icon}{' '}
+              <GradeIcon grade={grade} size={14} />{' '}
               {t(gradeConfig.titleKey, { defaultValue: GRADE_FALLBACK_LABELS[grade] })}
             </span>
           )}
@@ -222,7 +224,8 @@ export function PredictionPrompt({ example, answered, onAnswered }: PredictionPr
       {example.opponent && (
         <div className="pt-3 border-t border-[var(--walnut-border)]">
           <p className="text-xs text-[var(--ivory-dim)]">
-            💡 {t('academy.checkpoint.opponentHint', { shortName: example.opponent.shortName, tip: example.opponent.exploitableBy[0] })}
+            <Lightbulb className="inline-block w-3.5 h-3.5 mr-1 -mt-0.5 text-[var(--brass-text)]" aria-hidden="true" />
+            {t('academy.checkpoint.opponentHint', { shortName: example.opponent.shortName, tip: example.opponent.exploitableBy[0] })}
           </p>
         </div>
       )}

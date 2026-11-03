@@ -3,7 +3,6 @@ import { render, cleanup } from '@testing-library/react';
 import WeaknessAnalysis from './WeaknessAnalysis';
 import { useProgressStore } from '../../store';
 import { DEFAULT_ELO, type EloRating } from '@/shared/types/elo';
-import { getRankForScore } from '../../utils/elo';
 
 /**
  * WeaknessAnalysis 五维能力雷达图（jsdom）。
@@ -46,13 +45,12 @@ describe('WeaknessAnalysis 五维能力雷达图', () => {
 
   it('有对局数据时展示题量与当前段位与总分', () => {
     seedElo(1400, 25);
-    const rank = getRankForScore(1400);
 
     const { container } = render(<WeaknessAnalysis />);
     const text = container.textContent ?? '';
 
     expect(text).toContain('累计答题 25 次');
-    expect(text).toContain(rank.icon);
+    expect(text).toContain('中级');
     expect(text).toContain('1400');
     expect(text).not.toContain('暂无 ELO 数据');
   });

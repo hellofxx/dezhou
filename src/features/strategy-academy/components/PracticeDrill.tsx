@@ -11,7 +11,7 @@ import { Position } from '@/shared/types/position';
 import { stringToCard } from '@/shared/utils/deck';
 import { cn } from '@/shared/utils/cn';
 import { formatBB } from '@/shared/utils/formatters';
-import { Chip } from '@/shared/components/poker/Chip';
+import { Chip } from '@/shared/components/poker/Chip'; import { GradeIcon } from '@/shared/components/feedback/GradeIcon'; import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION, MOTION_EASE, transitionStandard, transitionSlow } from '@/shared/utils/motion';
 import { soundManager } from '../utils/soundManager';
@@ -527,7 +527,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         {isPressure && (
           <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
             <div className="rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/30 p-3">
-              <p className="font-numeric text-2xl text-[var(--danger)]">{timeoutCount}</p>
+              <p className="font-numeric text-2xl text-[var(--danger-text)]">{timeoutCount}</p>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.timeouts')}</p>
             </div>
             <div className="rounded-lg bg-[var(--success)]/10 border border-[var(--success)]/30 p-3">
@@ -556,7 +556,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             <p className="text-xs text-[var(--ivory-muted)] mb-2">{t('academy.drill.weakPoints')}</p>
             <div className="flex flex-wrap gap-1.5">
               {[...new Set(weakPoints)].map((wp, i) => (
-                <span key={i} className="rounded bg-[var(--danger)]/15 px-2 py-0.5 text-xs text-[var(--danger)]">
+                <span key={i} className="rounded bg-[var(--danger)]/15 px-2 py-0.5 text-xs text-[var(--danger-text)]">
                   {wp}
                 </span>
               ))}
@@ -671,7 +671,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         )}
         {/* 压力模式标记 */}
         {isPressure && (
-          <span className="inline-flex items-center gap-1 text-xs text-[var(--danger)] font-bold shrink-0">
+          <span className="inline-flex items-center gap-1 text-xs text-[var(--danger-text)] font-bold shrink-0">
             <Zap className="w-3 h-3" /> {t('academy.drill.pressure')}
           </span>
         )}
@@ -729,7 +729,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             transition={{ duration: MOTION_DURATION.loop, ease: MOTION_EASE.standard }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none"
           >
-            <span className="text-3xl font-bold text-[var(--danger)] drop-shadow-lg">{t('academy.drill.timeUp')}</span>
+            <span className="text-3xl font-bold text-[var(--danger-text)] drop-shadow-lg">{t('academy.drill.timeUp')}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -786,7 +786,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           <div className="flex items-center gap-4 text-[11px] text-[var(--ivory-muted)]">
             <span className="inline-flex items-center gap-1.5">
               <Chip amount={scenario.potSize} color="green" size="sm" />
-              {t('academy.drill.potLabel')} <b className="text-[var(--brass)] font-mono">{formatBB(scenario.potSize)}</b>
+              {t('academy.drill.potLabel')} <b className="text-[var(--brass-text)] font-mono">{formatBB(scenario.potSize)}</b>
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Chip amount={scenario.effectiveStack} color="blue" size="sm" />
@@ -797,7 +797,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
           {/* Opponent Badge */}
           {scenario.opponent && (
             <div className="flex items-center gap-2 bg-black/25 rounded-md px-3 py-1.5">
-              <span className="text-base">{scenario.opponent.icon}</span>
+              <OpponentGlyph iconId={scenario.opponent.iconId} size={16} />
               <span
                 className="text-xs font-bold px-1.5 py-0.5 rounded"
                 style={{ backgroundColor: scenario.opponent.color + '30', color: scenario.opponent.color }}
@@ -821,7 +821,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                     : t('academy.gameContext.sng')}
               </span>
               {scenario.gameContext.icmPressure && scenario.gameContext.icmPressure !== 'low' && (
-                <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--poker-danger)]/20 text-[var(--poker-danger)]">
+                <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--poker-danger)]/20 text-[var(--danger-text)]">
                   {t('academy.gameContext.icmPressure')}
                   {scenario.gameContext.icmPressure === 'high' ? t('academy.gameContext.icmHigh') : t('academy.gameContext.icmMedium')}
                 </span>
@@ -903,8 +903,8 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                 {/* P1E-13: 超时路径仅展示"系统代选"，本题计为答错（即使代选项正确）；不显示五级（超时无真实决策） */}
                 {isTimedOut ? (
                   <>
-                    <XCircle className="w-4 h-4 text-[var(--danger)] shrink-0" />
-                    <span className="text-sm font-bold text-[var(--danger)]">
+                    <XCircle className="w-4 h-4 text-[var(--danger-text)] shrink-0" />
+                    <span className="text-sm font-bold text-[var(--danger-text)]">
                       {t('academy.drill.timeoutPick', { action: selectedOption.action })}
                     </span>
                     {correctOption && (
@@ -917,9 +917,9 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                   <>
                     {/* P2-03 三态诚实渲染：有真实 evLoss → 五级图标 + 等级标签；
                         无 evLoss → 只显示「正确 / 错误」（禁兜底伪造等级），解析文本照常展示 */}
-                    {feedbackView?.gradeIcon ? (
+                    {feedbackView?.grade ? (
                       <>
-                        <span className="text-base leading-none">{feedbackView.gradeIcon}</span>
+                        <GradeIcon grade={feedbackView.grade} size={16} />
                         <span className="text-sm font-bold">{gradeLabel}</span>
                       </>
                     ) : (
@@ -941,7 +941,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
                   <span
                     className={cn(
                       'ml-auto text-xs font-numeric font-semibold shrink-0',
-                      feedbackView.evLoss > 0 ? 'text-[var(--danger)]' : 'text-[var(--success)]'
+                      feedbackView.evLoss > 0 ? 'text-[var(--danger-text)]' : 'text-[var(--success)]'
                     )}
                   >
                     {feedbackView.evLoss > 0 ? '+' : ''}{feedbackView.evLoss.toFixed(1)} {t('academy.drill.evLossBB')}

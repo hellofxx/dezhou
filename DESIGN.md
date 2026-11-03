@@ -81,10 +81,10 @@
 | | `--poker-walnut-light` | `#4d3a24` | 边框亮侧、刻印文字 |
 | **Ivory 象牙** | `--poker-ivory` | `#f3ebd9` | 主文字、牌面 |
 | | `--poker-ivory-dim` | `#cabf9f` | 次级文字、按钮默认 |
-| | `--poker-ivory-muted` | `#8a8068` | 说明、禁用、占位 |
-| **Brass 黄铜** | `--poker-brass` | `#c9a25e` | 主强调、CTA 默认、图标 |
+| | `--poker-ivory-muted` | `#b0a68c` | 说明、禁用、占位（felt 5.89:1 / felt-raised 4.78:1，见 §2.7） |
+| **Brass 黄铜** | `--poker-brass` | `#c9a25e` | 主强调、CTA 默认、图标（作文字时用 `--brass-text`，§2.7） |
 | | `--poker-brass-bright` | `#e8c97e` | 高亮态、active、glow |
-| | `--poker-brass-deep` | `#a07d3d` | 黄铜暗侧、按压态 |
+| | `--poker-brass-deep` | `#a07d3d` | 黄铜暗侧、按压态、渐变停靠（不作文字色 —— 文字用 `--brass-text`，§2.7） |
 | | `--poker-brass-dark` | `#8a6b30` | 黄铜最深、暗纹 |
 | | `--poker-brass-muted` | `#b09050` | 黄铜中阶、次级强调 |
 | | `--poker-brass-glow` | `rgba(232,201,126,0.12)` | 黄铜辉光背景 |
@@ -120,8 +120,8 @@
 |---|---|---|
 | `--poker-gold` | `#d4a84b` | 金牌/成就徽章（v1.3.2 已落地 globals.css） |
 | `--poker-bronze` | `#cd7f32` | 铜牌徽章（v1.3.2 新增；银牌用 `--poker-ivory-dim` 暖银、钻石用 `--poker-frost`） |
-| `--poker-clay` | `#a83838` | 红色筹码（黏土红） |
-| `--poker-sage` | `#6b8e7a` | 辅助图表（已被 --poker-info 取代，保留兼容） |
+| `--poker-clay` | `#a83838` | 红色筹码（黏土红）；作文字时用 `--clay-text`（§2.7） |
+| `--poker-sage` | `#6b8e7a` | 辅助图表（已被 --poker-info 取代，保留兼容）；作文字时用 `--sage-text`（§2.7） |
 | `--poker-indigo` / `--poker-indigo-bright` | `#4a5a7a` / `#8ea4c4` | 石板靛（策略/进阶类标签底 / 暗底文字亮阶，v1.3.2） |
 | `--poker-terra` / `--poker-terra-bright` | `#965a3e` / `#c98a63` | 陶土赭（心理/弱项类标签底 / 暗底文字亮阶，v1.3.2） |
 | `--poker-frost` / `--poker-freeze` | `#a8c4cf` | 霜钢蓝（冻结卡） |
@@ -163,7 +163,25 @@
 硬性要求：
 - 纸上文字对比度 ≥ 4.5:1；主文字（`--paper-ink` 落于 `--paper`）≥ 7:1。
 - 纸上语义色只使用上表深阶值，禁止直接复用暗色房间的亮阶语义色（`--poker-success` 等）作为纸上文字色。
-- 纸条作用域内须重锚 ink / brass / 语义 / 表面 token，含 globals.css alias 与 Tailwind `@theme` 颜色别名。
+- 纸条作用域内须重锚 ink / brass / 语义 / 表面 token，含 globals.css alias 与 Tailwind `@theme` 颜色别名；§2.7 的文本色阶同样要重锚（`--clay-text` / `--danger-text` → `--paper-danger`，`--sage-text` → `--paper-success`，`--brass-text` → `--paper-brass`，`--ivory-muted` → `--paper-ink-muted`）。
+
+### 2.7 文本专用色阶（对比度纪律）
+
+部分色板原语兼作「填充 + 文字」，在 felt 上作文字时达不到 AA（`--clay` 2.23:1、`--poker-danger` 3.30:1、`--sage` 3.92:1、`--brass-deep` 3.73:1）；light theme 下 `--brass` 落于羊皮底仅 3.43:1。文字统一改用下列专用阶，原语保留作填充 / 描边 / 渐变停靠。
+
+| Token | Dark（默认） | Light theme | 用途 |
+|---|---|---|---|
+| `--clay-text` | `#e3907b` | `#a8442f` | 文字色：clay 语义文字（felt 5.79:1 / felt-raised 4.70:1） |
+| `--danger-text` | `#e3907b` | `#a63f30` | 文字色：错误 / 亏损 / -EV（felt 5.79:1；danger-bg 底 5.23:1） |
+| `--sage-text` | `#9fc0a9` | `#2f6b3a` | 文字色：中性数据 / 辅助说明（felt 7.18:1 / felt-raised 5.82:1） |
+| `--brass-text` | `#c9a25e` | `#7d5c22` | 文字色：黄铜强调文字（eyebrow / 小标签 / 数值 / 链接）（dark felt 5.98:1、felt-raised 4.85:1；light felt 5.30:1、felt-raised 5.67:1、felt-deep 4.70:1；纸上落 `--paper-brass` 4.55:1） |
+| `--ivory-muted` | `#b0a68c` | `#74694e` | 最低阶说明文字（felt 5.89:1 / felt-raised 4.78:1） |
+
+使用规则：
+- 四个 `*-text` 只用于 `color` / `text-[...]`，**禁止**用作 `bg-*` / `border-*` / `fill-*`；填充、描边、渐变停靠继续用 `--clay` / `--danger` / `--sage` / `--brass` / `--brass-deep` / `--poker-danger` 原值。
+- 黄铜文字一律 `--brass-text`（dark felt 5.98:1 / felt-raised 4.85:1；light felt 5.30:1 / felt-raised 5.67:1），`text-[var(--brass-text)]` 取代 `text-[var(--brass)]`；`--brass` / `--brass-deep` 只作填充、描边、图标与渐变停靠，不得作正文文字色。`--brass-text` 在 dark 与 `--brass` 同值（`#c9a25e`），暗色观感零变化，仅在 light / 纸面 / 高对比档切换。
+- 纸张作用域（`.dealer-slip`）内三者重锚为 `--paper-danger` / `--paper-success`，`--brass-text` 重锚为 `--paper-brass`，`--ivory-muted` 重锚为 `--paper-ink-muted`（§5.23、§2.6）。
+- `prefers-contrast: high` 下再提亮一档（dark）/ 加深一档（light），与 `--ivory-muted` 的高对比处理同步。
 
 ---
 
@@ -318,7 +336,7 @@
 - **壳层标题（v1.8.0，全站唯一 h1）**：页名由壳层统一渲染（各页面不得再渲染同级 h1），Fraunces 600，桌面 22px / 移动 19px；标题左侧为 `font-numeric` 9px 黄铜序号眉标 + 1px 发线分隔
 - **导航序号（v1.8.0）**：Dashboard 为 `00`，四个导航分组为 `01–04`（训练 / 研习 / 数据 / 设置）；序号是分组位置的固定标识，不随语言变化
 - **侧边栏折叠态（v1.8.0）**：折叠时隐藏文字，保留序号与图标；序号降级为图标上方 9px 黄铜小字
-- **h1 重复的过渡态（v1.8.0）**：页面内已有 h1 与本条短期允许重复，后续各模块逐步降级，不在本版本一次性清理
+- **壳层 h1 唯一，内容用 h2**：壳层顶栏 h1 是全站唯一的一级标题；内容区所有区块标题一律降级为 h2（视觉类名保持不变），禁止页面再渲染同级 h1。BlankLayout 训练页（赔率作答 / 范围学习 / 结算 / 欢迎引导）由壳层 `sr-only` h1 承担页名，内容区同样不得重复 h1
 - **桌沿铜钉 `.table-rail`**（v1.1 新增，v1.2 位置调整）：
   - 顶部 header 正下方，全宽，高度 14px
   - 中心胡桃分隔线 + 一颗 8px 黄铜铆钉（radial 渐变+glow）
@@ -561,6 +579,8 @@
 - **默认颜色**：`--poker-ivory-muted` → hover `--poker-ivory-dim` → active `--poker-brass`
 - **彩色图标例外**：语义状态图标跟随语义色；三导师头像按 §5.13 低饱和；知识图谱节点按 §5.12 三色环
 - **品牌 Logo**：♠（Lucide `spade`）32px 黄铜色+品牌名
+- **Emoji 使用边界（交互与首屏一律 Lucide）**：所有交互控件、导航、按钮、徽章、空态、状态反馈与仪表盘/首页首屏的可视图标必须使用 Lucide（1.5px stroke，语义色跟随本节），禁止以 emoji 充当 UI 图标。共享出口：五级反馈用 `GRADE_DISPLAY_CONFIG[grade].iconId` + `GradeIcon`，对手画像用 `OpponentGlyph`，游戏变体用 `VariantGlyph`，ELO 段位用 `RankIcon`（段位徽章 UI 不再读 `Rank.icon`）
+- **Emoji 白名单（仅保留牌室化插画与正文）**：成就体系（`progress/data/achievements.ts` / `AchievementWall` / `AchievementBadges`）、分享卡（`shareCard`）、庆祝插画（`RankUpCelebration` / `StreakCelebration` / onboarding `CelebrationStep`）、课程与理论正文数据（`strategy-academy/data/lessons/**`、`learningTracks.ts`、`localLessons/**`、`basicsContent.ts`、`theory-academy/data/levels/**`）及 `src/i18n/locales/**` 中既有文案。白名单之外新增 emoji 视为反模式，由设计复核拦截
 
 ---
 
@@ -933,6 +953,7 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **Tab 图标化 + sticky**：课程内 Tab 栏 `sticky top-0 z-20` + Lucide 图标+短词（<640px 仅图标），推进 CTA「进入{下一段}」；登记于 §5.6。
 - **场景卡复用**：PracticeDrill 场景面板复用 `.scenario-card`（`p-5 md:p-6` 覆盖 padding 保持宽松；压力模式 `border-[var(--danger)]/30`）；登记于 §5.16。
 - **Emoji→Lucide 模块级约定**：课程内容区图标统一替换为 Lucide 线性图标（1.5px stroke，语义色跟随 §7），禁止以 Emoji 作为内容装饰图标。
+- **Emoji 白名单与交互图标边界（收口）**：§7 已登记唯一白名单——成就 / 分享卡 / 庆祝插画 / 课程正文（含 i18n 既有文案）；交互与首屏一律 Lucide，不再以 emoji 充当可点击或状态图标。五级反馈配置的 `icon` 已改为 `iconId`（`GradeIcon` 唯一渲染出口），后续新增等级/徽章须沿用同一模式。
 
 ---
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
-import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, Trophy, Clock, Target, RotateCcw, Calculator } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, Trophy, Clock, Target, RotateCcw, Calculator, Spade } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { TrainingResult, QuestionResult } from '@/shared/types/common';
@@ -21,7 +21,7 @@ import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/c
 import { useProgressStore } from '@/features/progress/store';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 // P1B-05：评级展示统一走 GRADE_DISPLAY_CONFIG（icon + titleKey i18n + .grade-* 容器类）
-import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
+import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback'; import { GradeIcon } from '@/shared/components/feedback/GradeIcon';
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 // §13.7.2：移动端反馈底部 Sheet
@@ -276,7 +276,7 @@ export default function PotOddsQuizPage() {
                t('potOdds.quiz.gradePoor')}
             </p>
             {lastQuestionCorrect && (
-              <p className="text-xs text-[var(--sage)] mt-2 font-display">
+              <p className="text-xs text-[var(--sage-text)] mt-2 font-display">
                 {t('potOdds.quiz.lastCorrect')}
               </p>
             )}
@@ -354,7 +354,7 @@ export default function PotOddsQuizPage() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
               <div className="relative z-10">
                 <div className="flex items-start gap-3 mb-4">
-                  <span className="text-2xl">🃏</span>
+                  <Spade size={24} className="text-[var(--brass-bright)] shrink-0" aria-hidden="true" />
                   <p className="text-[var(--ivory)] text-base leading-relaxed font-medium">
                     {t(currentQuestion.scenario)}
                   </p>
@@ -397,7 +397,7 @@ export default function PotOddsQuizPage() {
                       <span className={cn(
                         'w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold shrink-0',
                         showCorrect ? 'border-[var(--success)] text-[var(--success)]' :
-                        showWrong ? 'border-[var(--danger)] text-[var(--danger)]' :
+                        showWrong ? 'border-[var(--danger)] text-[var(--danger-text)]' :
                         'border-[var(--ivory-dim)]/40 text-[var(--ivory-muted)]'
                       )}>
                         {showCorrect ? <CheckCircle2 className="w-4 h-4" /> :
@@ -451,8 +451,8 @@ export default function PotOddsQuizPage() {
                   </>
                 ) : (
                   <>
-                    <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                    <span className="text-sm font-bold text-[var(--danger)]">{t('potOdds.quiz.incorrect')}</span>
+                    <XCircle className="w-4 h-4 text-[var(--danger-text)]" />
+                    <span className="text-sm font-bold text-[var(--danger-text)]">{t('potOdds.quiz.incorrect')}</span>
                     {correctOption && (
                       <span className="text-xs text-[var(--ivory-muted)] ml-2">
                         {t('potOdds.quiz.correctAnswer', { answer: t(correctOption.text) })}
@@ -484,7 +484,7 @@ export default function PotOddsQuizPage() {
                       )}
                       role="status"
                     >
-                      <span aria-hidden="true">{gradeConfig.icon}</span>
+                      <GradeIcon grade={decisionFeedback.grade} size={14} />
                       {t(gradeConfig.titleKey)}
                     </span>
                     {isWrong && (
@@ -512,7 +512,7 @@ export default function PotOddsQuizPage() {
 
             {/* P4 修复（4.5-P0）：连续答错降级提示 */}
             {shouldDownshiftDifficulty() && (
-              <div className="mb-4 px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+              <div className="mb-4 px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay-text)]">
                 {t('potOdds.quiz.downshiftHint')}
               </div>
             )}

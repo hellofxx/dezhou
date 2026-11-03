@@ -74,7 +74,7 @@ export default function Leaderboard() {
   const getRankIcon = (rank: number) => {
     if (rank === 1) return <Trophy className="w-4 h-4 text-[var(--brass-bright)]" />;
     if (rank === 2) return <Medal className="w-4 h-4 text-[var(--ivory-dim)]" />;
-    if (rank === 3) return <Award className="w-4 h-4 text-[var(--brass-deep)]" />;
+    if (rank === 3) return <Award className="w-4 h-4 text-[var(--brass-text)]" />;
     return <span className="text-xs text-[var(--ivory-muted)] w-4 text-center font-numeric">{rank}</span>;
   };
 
@@ -96,9 +96,9 @@ export default function Leaderboard() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">
+          <h2 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">
             {t('leaderboard.title')}
-          </h1>
+          </h2>
           <p className="mt-1 flex items-start gap-1.5 text-xs text-[var(--ivory-dim)]">
             <Info className="w-3.5 h-3.5 shrink-0 mt-0.5" />
             <span>{t('leaderboard.demoNotice')}</span>
@@ -126,7 +126,7 @@ export default function Leaderboard() {
         {userRanked && (
           <Card className="bg-[var(--surface)] border-[var(--brass)]/35">
             <CardContent className="p-4 flex flex-wrap items-center gap-3">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--brass-deep)]">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--brass-text)]">
                 {t('leaderboard.myRank')}
               </span>
               <span className="font-numeric text-lg font-semibold text-[var(--brass-bright)]">

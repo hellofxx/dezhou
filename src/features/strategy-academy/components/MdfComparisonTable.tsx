@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TriangleAlert } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MDF_COMPARISON_DATA, CalculationResult, calculateComparisonValues } from '../data/mdfComparison';
 
@@ -76,7 +77,7 @@ const MdfComparisonTable: React.FC<MdfComparisonTableProps> = ({
                 </td>
                 <td className="py-3 px-4 text-sm">
                   <div className="flex items-start space-x-2">
-                    <span className="text-[var(--brass)] text-lg mt-0.5">⚠️</span>
+                    <TriangleAlert className="w-4 h-4 shrink-0 mt-1 text-[var(--brass-text)]" aria-hidden="true" />
                     <span className="text-[var(--warning)]">{t(row.wrongPoint)}</span>
                   </div>
                 </td>

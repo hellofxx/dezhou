@@ -41,7 +41,7 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
           <CardTitle className="text-sm text-[var(--ivory-muted)] font-normal">{t('potOdds.oddsDisplay.title')}</CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className={`text-5xl font-bold ${isProfitable ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+          <div className={`text-5xl font-bold ${isProfitable ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'}`}>
             <AnimatedNumber value={potOdds} />
           </div>
           <p className="mt-2 text-xs text-[var(--ivory-dim)]">
@@ -73,7 +73,7 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
           <CardContent className="p-4">
             <p className="text-xs text-[var(--ivory-dim)] mb-1">{t('potOdds.oddsDisplay.evLabel')}</p>
-            <p className={`text-xl font-bold font-mono ${ev >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+            <p className={`text-xl font-bold font-mono ${ev >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'}`}>
               {ev >= 0 ? '+' : ''}{ev.toFixed(1)}
             </p>
           </CardContent>
@@ -82,7 +82,7 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)]">
           <CardContent className="p-4">
             <p className="text-xs text-[var(--ivory-dim)] mb-1">{t('potOdds.oddsDisplay.margin')}</p>
-            <p className={`text-xl font-bold font-mono ${marginOfSafety >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+            <p className={`text-xl font-bold font-mono ${marginOfSafety >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'}`}>
               {marginOfSafety >= 0 ? '+' : ''}{marginOfSafety.toFixed(1)}%
             </p>
           </CardContent>
@@ -107,9 +107,9 @@ export function OddsDisplay({ potOdds, requiredEquity, estimatedEquity, isProfit
             </>
           ) : (
             <>
-              <XCircle className="w-8 h-8 text-[var(--danger)] shrink-0" />
+              <XCircle className="w-8 h-8 text-[var(--danger-text)] shrink-0" />
               <div>
-                <p className="font-semibold text-[var(--danger)]">{t('potOdds.oddsDisplay.foldTitle')}</p>
+                <p className="font-semibold text-[var(--danger-text)]">{t('potOdds.oddsDisplay.foldTitle')}</p>
                 <p className="text-sm text-[var(--ivory-muted)]">
                   {t('potOdds.oddsDisplay.foldDesc', {
                     est: formatPercentage(estimatedEquity),

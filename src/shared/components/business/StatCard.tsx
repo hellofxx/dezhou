@@ -22,7 +22,7 @@ export function StatCard({
   const accentColor = {
     gold: 'text-[var(--brass-bright)]',
     green: 'text-[var(--success)]',
-    sage: 'text-[var(--sage)]',
+    sage: 'text-[var(--sage-text)]',
     default: 'text-[var(--ivory)]',
   }[accent];
 

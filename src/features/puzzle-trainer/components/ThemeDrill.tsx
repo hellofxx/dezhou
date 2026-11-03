@@ -136,7 +136,7 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
 
         {/* 连续答错降级提示 */}
         {shouldDownshiftDifficulty() && (
-          <div className="px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+          <div className="px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay-text)]">
             {t('puzzle.common.downshiftHint')}
           </div>
         )}
@@ -161,7 +161,7 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
             {t('puzzle.common.correct')}: <span className="font-numeric text-[var(--success)]">{engine.state.correctCount}</span>
           </span>
           <span>
-            {t('puzzle.common.wrong')}: <span className="font-numeric text-[var(--clay)]">{engine.state.wrongCount}</span>
+            {t('puzzle.common.wrong')}: <span className="font-numeric text-[var(--clay-text)]">{engine.state.wrongCount}</span>
           </span>
         </div>
       </div>

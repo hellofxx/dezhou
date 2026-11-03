@@ -17,6 +17,7 @@ import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis'
 import { RelatedLessonChip } from '@/shared/components/feedback/RelatedLessonChip';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
+import { GradeIcon } from '@/shared/components/feedback/GradeIcon';
 import type { PuzzleAnswerRecord, PuzzleQuestion } from '../types';
 import { hasCalibratedEv } from '../utils/evCalibration';
 
@@ -53,7 +54,7 @@ export function PuzzleCardFeedback({
       <div className="flex flex-wrap items-center gap-2 text-sm">
         {calibrated ? (
           <>
-            <span className="text-base">{config.icon}</span>
+            <GradeIcon grade={record.grade} size={16} />
             <span className={cn('font-display tracking-wide', config.textColor)}>
               {t(config.titleKey)}
             </span>
@@ -68,12 +69,12 @@ export function PuzzleCardFeedback({
             {record.isCorrect ? (
               <CircleCheck className="w-4 h-4 text-[var(--success)]" aria-hidden />
             ) : (
-              <CircleX className="w-4 h-4 text-[var(--clay)]" aria-hidden />
+              <CircleX className="w-4 h-4 text-[var(--clay-text)]" aria-hidden />
             )}
             <span
               className={cn(
                 'font-display tracking-wide',
-                record.isCorrect ? 'text-[var(--success)]' : 'text-[var(--clay)]'
+                record.isCorrect ? 'text-[var(--success)]' : 'text-[var(--clay-text)]'
               )}
             >
               {t(record.isCorrect ? 'puzzle.card.binaryCorrect' : 'puzzle.card.binaryWrong')}

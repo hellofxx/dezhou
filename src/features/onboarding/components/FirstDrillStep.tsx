@@ -50,7 +50,7 @@ export default function FirstDrillStep() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full px-6 py-6 max-w-2xl mx-auto">
-      <div className="text-xs text-[var(--brass)] font-numeric tracking-wider mb-1">
+      <div className="text-xs text-[var(--brass-text)] font-numeric tracking-wider mb-1">
         {t('onboarding.drill.questionOf', {
           current: drill.currentIdx + 1,
           total: drill.questions.length,

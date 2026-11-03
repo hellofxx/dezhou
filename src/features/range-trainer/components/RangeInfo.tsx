@@ -42,7 +42,7 @@ export function RangeInfo({ selectedHands, highlightedHand, preset, variant = 's
       {presetName && (
         <div>
           <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-1">{t('rangeTrainer.rangeInfo.currentRange')}</h3>
-          <p className="text-base font-semibold text-[var(--brass)]">{presetName}</p>
+          <p className="text-base font-semibold text-[var(--brass-text)]">{presetName}</p>
         </div>
       )}
 
@@ -51,11 +51,11 @@ export function RangeInfo({ selectedHands, highlightedHand, preset, variant = 's
         <h3 className="text-sm font-medium text-[var(--ivory-muted)] mb-2">{t('rangeTrainer.rangeInfo.stats')}</h3>
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-[var(--surface)] rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-[var(--brass)]">{total}</div>
+            <div className="text-2xl font-bold text-[var(--brass-text)]">{total}</div>
             <div className="text-xs text-[var(--ivory-dim)]">{t('rangeTrainer.rangeInfo.handCount')}</div>
           </div>
           <div className="bg-[var(--surface)] rounded-lg p-3 text-center">
-            <div className="text-2xl font-bold text-[var(--brass)]">{percentage}%</div>
+            <div className="text-2xl font-bold text-[var(--brass-text)]">{percentage}%</div>
             <div className="text-xs text-[var(--ivory-dim)]">{t('rangeTrainer.rangeInfo.rangePercent')}</div>
           </div>
         </div>
@@ -89,8 +89,8 @@ export function RangeInfo({ selectedHands, highlightedHand, preset, variant = 's
             <span
               className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                 isInRange
-                  ? 'bg-[var(--brass)]/20 text-[var(--brass)]'
-                  : 'bg-[var(--danger)]/20 text-[var(--danger)]'
+                  ? 'bg-[var(--brass)]/20 text-[var(--brass-text)]'
+                  : 'bg-[var(--danger)]/20 text-[var(--danger-text)]'
               }`}
             >
               {isInRange ? t('rangeTrainer.rangeInfo.inRange') : t('rangeTrainer.rangeInfo.notInRange')}

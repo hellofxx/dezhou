@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Trophy, BookOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useProgressStore } from '@/features/progress/store';
@@ -252,7 +252,11 @@ export default function TheoryChapterView() {
             {/* 小测得分摘要 */}
             {result && (
               <div className="panel text-center py-6">
-                <div className="text-4xl mb-3">{result.score >= 70 ? '🎉' : '📚'}</div>
+                {result.score >= 70 ? (
+                  <Trophy size={36} className="mx-auto mb-3 text-[var(--brass-bright)]" aria-hidden="true" />
+                ) : (
+                  <BookOpen size={36} className="mx-auto mb-3 text-[var(--ivory-muted)]" aria-hidden="true" />
+                )}
                 <h2 className="font-display text-xl text-[var(--ivory)] mb-1">{t('theory.chapterView.chapterDone')}</h2>
                 <p className="text-sm text-[var(--ivory-dim)] mb-1">
                   {t('theory.chapterView.answered', { correct: result.correct, total: result.total })}

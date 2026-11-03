@@ -90,7 +90,7 @@ export default function SessionLimitGuard() {
         <Card className="bg-[var(--surface)] border-[var(--walnut-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow)]">
           <CardContent className="p-6 text-center space-y-4">
             <div className="mx-auto w-14 h-14 rounded-full bg-[var(--danger)]/15 flex items-center justify-center">
-              <ShieldAlert className="w-7 h-7 text-[var(--danger)]" />
+              <ShieldAlert className="w-7 h-7 text-[var(--danger-text)]" />
             </div>
             <div className="space-y-1.5">
               <h2 className="font-display text-xl text-[var(--ivory)]">

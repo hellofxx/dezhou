@@ -20,11 +20,11 @@ interface GtoDeviationPanelProps {
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 
 const GRADE_CONFIG: Record<string, { labelKey: string; color: string; icon: typeof CheckCircle2 }> = {
-  best:          { labelKey: GRADE_DISPLAY_CONFIG.best.titleKey,       color: 'text-[var(--sage)]',         icon: CheckCircle2 },
-  correct:       { labelKey: GRADE_DISPLAY_CONFIG.correct.titleKey,    color: 'text-[var(--sage)]',         icon: CheckCircle2 },
+  best:          { labelKey: GRADE_DISPLAY_CONFIG.best.titleKey,       color: 'text-[var(--sage-text)]',         icon: CheckCircle2 },
+  correct:       { labelKey: GRADE_DISPLAY_CONFIG.correct.titleKey,    color: 'text-[var(--sage-text)]',         icon: CheckCircle2 },
   inaccuracy:    { labelKey: GRADE_DISPLAY_CONFIG.inaccuracy.titleKey, color: 'text-[var(--brass-bright)]', icon: AlertTriangle },
-  wrong:         { labelKey: GRADE_DISPLAY_CONFIG.wrong.titleKey,      color: 'text-[var(--clay)]',         icon: AlertTriangle },
-  blunder:       { labelKey: GRADE_DISPLAY_CONFIG.blunder.titleKey,    color: 'text-[var(--poker-danger)]', icon: XCircle },
+  wrong:         { labelKey: GRADE_DISPLAY_CONFIG.wrong.titleKey,      color: 'text-[var(--clay-text)]',         icon: AlertTriangle },
+  blunder:       { labelKey: GRADE_DISPLAY_CONFIG.blunder.titleKey,    color: 'text-[var(--danger-text)]', icon: XCircle },
 };
 
 const DEFAULT_GRADE = GRADE_CONFIG.best!;
@@ -153,7 +153,7 @@ export function GtoDeviationPanel({ hand, heroName }: GtoDeviationPanelProps) {
       {/* Overall assessment */}
       {averageEvLoss > 0 && (
         <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-[var(--clay)]/8 border border-[var(--clay)]/20 text-xs text-[var(--ivory-dim)]">
-          <TrendingDown size={13} className="text-[var(--clay)] shrink-0" />
+          <TrendingDown size={13} className="text-[var(--clay-text)] shrink-0" />
           <span>
             {t('handHistory.deviation.avgLossPerHand', { evLoss: averageEvLoss })}
             {worstDecision && t('handHistory.deviation.worstOnStreet', { street: worstDecision.street })}

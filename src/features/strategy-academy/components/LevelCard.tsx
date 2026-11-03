@@ -78,7 +78,7 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
           {/* Content */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--brass-deep)] font-medium">
+              <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--brass-text)] font-medium">
                 Level {level.level}
               </span>
               {allCompleted && (

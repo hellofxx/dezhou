@@ -8,7 +8,7 @@ import {
   ArrowRight,
   Zap,
   History,
-  Clock,
+  Clock, Trophy,
 } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 import { useProgressStore } from '../../store';
@@ -313,7 +313,7 @@ export default function Dashboard() {
             style={{ borderLeft: '3px solid var(--brass)' }}
             aria-label={t('achievements.title')}
           >
-            <div className="text-4xl shrink-0">{latestAchievement?.icon ?? '🏆'}</div>
+            <div className="text-4xl shrink-0">{latestAchievement?.icon ?? <Trophy size={32} className="text-[var(--brass-text)]" aria-hidden="true" />}</div>
             <div className="flex-1 min-w-0">
               <div className="font-display text-[15px] text-[var(--ivory)] tracking-wide">
                 {t('achievements.title')}
@@ -436,7 +436,7 @@ function Metric({
       : accent === 'success'
         ? 'text-[var(--poker-success)]'
         : accent === 'danger'
-          ? 'text-[var(--poker-danger)]'
+          ? 'text-[var(--danger-text)]'
           : 'text-[var(--ivory)]';
   return (
     <div className="flex flex-col items-start">

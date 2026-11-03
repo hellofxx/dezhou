@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { GAME_VARIANT_CONFIGS } from '@/shared/constants/poker';
 import type { GameVariant } from '@/shared/types/poker';
+import { VariantGlyph } from './VariantGlyph';
 
 // PLAT-02 修复：改为受控组件（props 注入 currentVariant/onChange），
 // 解除对 features/progress/store 的直接依赖（shared 不依赖 feature 的分层约束）。
@@ -13,12 +14,6 @@ interface GameVariantSelectorProps {
   /** 变体切换回调，由使用方调用 progress store 的 setGameVariant */
   onChange?: (variant: GameVariant) => void;
 }
-
-const VARIANT_ICONS: Record<GameVariant, string> = {
-  standard: '🃏',
-  'short-deck': '⚡',
-  'heads-up': '🤺',
-};
 
 const VARIANT_BADGES: Partial<Record<GameVariant, string>> = {
   'short-deck': '6+',
@@ -56,7 +51,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
               )}
               aria-label={t(`variant.name.${variant}`)}
             >
-              <span className="text-sm leading-none" aria-hidden="true">{VARIANT_ICONS[variant]}</span>
+              <VariantGlyph variant={variant} size={14} />
               <span className="hidden sm:inline">
                 {t(`variant.name.${variant}`)}
               </span>
@@ -99,7 +94,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
             aria-label={t(`variant.name.${variant}`)}
           >
             <div className="flex items-center gap-2 w-full">
-              <span className="text-xl" aria-hidden="true">{VARIANT_ICONS[variant]}</span>
+              <VariantGlyph variant={variant} size={20} />
               <span className={cn(
                 'text-sm font-semibold',
                 isActive ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory)]'

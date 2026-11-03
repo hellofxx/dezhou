@@ -25,7 +25,7 @@ type CssAllowlistEntry = {
 
 /** 逐文件 allowlist（Phase 2 拆分前临时豁免） */
 const CSS_ALLOWLIST: Record<string, CssAllowlistEntry> = {
-  'globals.css': { maxLines: 3398, reason: 'Phase 2 拆分待执行' },
+  'globals.css': { maxLines: 3374, reason: 'Phase 2 拆分待执行' },
 };
 
 /** 守卫距 src/ 为一层 */

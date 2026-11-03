@@ -112,12 +112,12 @@ export default function BasicsIntro() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--brass-deep)] font-medium mb-1">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-medium mb-1">
             Poker Basics
           </p>
-          <h1 className="font-display text-[24px] md:text-[28px] text-[var(--ivory)] mb-3">
+          <h2 className="font-display text-[24px] md:text-[28px] text-[var(--ivory)] mb-3">
             {t('academy.basicsIntro.title')}
-          </h1>
+          </h2>
           {/* Progress bar */}
           <div className="flex items-center gap-3">
             <div className="flex-1 h-1.5 rounded-full bg-[var(--walnut-raised)] overflow-hidden">

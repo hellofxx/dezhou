@@ -1,12 +1,11 @@
 /**
  * GradeBadge 组件冒烟测试（jsdom）：
- * 验证 5 个评级等级渲染对应的 .grade-* CSS 类与 emoji 图标。
+ * 验证 5 个评级等级渲染对应的 .grade-* CSS 类与 Lucide 图标。
  */
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { GradeBadge } from './GradeBadge';
-import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import type { DecisionGrade } from '@/shared/types/decisionFeedback';
 
 describe('GradeBadge 冒烟测试', () => {
@@ -33,8 +32,8 @@ describe('GradeBadge 冒烟测试', () => {
       });
       const badge = container.querySelector(`.grade-${grade}`);
       expect(badge, `grade-${grade} class 应存在`).not.toBeNull();
-      // emoji 图标渲染
-      expect(container.textContent).toContain(GRADE_DISPLAY_CONFIG[grade].icon);
+      // Lucide 图标渲染（不再使用 emoji）
+      expect(badge?.querySelector('svg')).not.toBeNull();
     }
   });
 

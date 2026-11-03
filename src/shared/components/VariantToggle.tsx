@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
-import { VARIANT_CONFIG, ALL_VARIANTS, DEFAULT_VARIANT } from '@/shared/types/elo';
+import { ALL_VARIANTS, DEFAULT_VARIANT } from '@/shared/types/elo';
+import { VariantGlyph } from './business/VariantGlyph';
 import type { PokerVariant } from '@/shared/types/elo';
 
 interface VariantToggleItemProps {
@@ -11,7 +12,6 @@ interface VariantToggleItemProps {
 
 const VariantToggleItem: React.FC<VariantToggleItemProps> = ({ variant, selected, onClick }) => {
   const { t } = useTranslation();
-  const config = VARIANT_CONFIG[variant];
 
   return (
     <button
@@ -20,9 +20,7 @@ const VariantToggleItem: React.FC<VariantToggleItemProps> = ({ variant, selected
       onClick={onClick}
       aria-pressed={selected}
     >
-      <span className="text-base leading-none" aria-hidden="true">
-        {config.icon}
-      </span>
+      <VariantGlyph variant={variant} size={16} />
       {t(`variant.name.${variant}`)}
     </button>
   );

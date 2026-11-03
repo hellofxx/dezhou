@@ -71,7 +71,7 @@ describe('resolvePracticeFeedbackView', () => {
     expect(view.grade).toBeNull();
     expect(view.evLoss).toBeNull();
     expect(view.containerClass).toBe(
-      'border-[var(--danger)]/40 bg-[var(--danger)]/10 text-[var(--danger)]',
+      'border-[var(--danger)]/40 bg-[var(--danger)]/10 text-[var(--danger-text)]',
     );
   });
 

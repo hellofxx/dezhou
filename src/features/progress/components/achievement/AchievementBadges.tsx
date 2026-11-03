@@ -259,7 +259,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
           {achievement.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <div className={`text-sm font-semibold ${unlocked ? 'text-[var(--brass)]' : 'text-[var(--ivory-dim)]'}`}>
+          <div className={`text-sm font-semibold ${unlocked ? 'text-[var(--brass-text)]' : 'text-[var(--ivory-dim)]'}`}>
             {t(nameKey)}
           </div>
           <div className="text-xs text-[var(--ivory-muted)] truncate">{t(descKey)}</div>
@@ -277,7 +277,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
         </div>
       )}
       {unlocked && (
-        <div className="text-[10px] text-[var(--brass)]/80 font-numeric">
+        <div className="text-[10px] text-[var(--brass-text)]/80 font-numeric">
           {achievement.unlockedAt ? formatDate(achievement.unlockedAt) : t('achievements.unlocked')}
         </div>
       )}

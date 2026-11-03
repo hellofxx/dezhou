@@ -31,7 +31,7 @@ export function EmptyState({ icon, title, description, action, compact = false }
       }`}
     >
       <div
-        className={`rounded-full bg-[var(--walnut-raised)]/40 flex items-center justify-center mb-3 text-[var(--brass)] ${
+        className={`rounded-full bg-[var(--walnut-raised)]/40 flex items-center justify-center mb-3 text-[var(--brass-text)] ${
           compact ? 'w-10 h-10' : 'w-16 h-16 text-3xl mb-4'
         }`}
       >

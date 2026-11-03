@@ -8,6 +8,9 @@ export interface OpponentStats {
   cbetFrequency: number;  // C-Bet频率（%）
 }
 
+/** 对手画像图标语义 id */
+export type OpponentIconId = 'target' | 'flame' | 'snowflake' | 'zap' | 'phone' | 'help';
+
 // 对手形象
 export interface OpponentProfile {
   id: string;             // 'tag' | 'lag' | 'nit' | 'maniac' | 'calling_station' | 'unknown'
@@ -15,7 +18,7 @@ export interface OpponentProfile {
   shortName: string;      // 短标签如 "TAG"
   description: string;    // 一句话描述
   color: string;          // 主题色（hex）
-  icon: string;           // emoji 图标
+  iconId: OpponentIconId; // 图标语义 id（渲染层经 OpponentGlyph 映射为 Lucide）
   stats: OpponentStats;
   tendencies: string[];   // 行为特征列表
   exploitableBy: string[]; // 可利用方式列表

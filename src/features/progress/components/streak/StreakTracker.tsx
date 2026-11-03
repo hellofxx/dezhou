@@ -2,7 +2,7 @@ import { useMemo, useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Flame, Trophy, Snowflake } from 'lucide-react';
+import { Flame, Trophy, Snowflake, Puzzle, Zap, Sparkles } from 'lucide-react';
 import { useProgressStore } from '../../store';
 import { isEarnBackActive, getTodayString } from '../../utils/streakCalc';
 import { transitionSlow } from '@/shared/utils/motion';
@@ -77,10 +77,10 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
 
   // 火焰样式：正常 gold；晚间未训练变陶土红闪烁
   const flameClass = isEndingSoon
-    ? 'w-5 h-5 text-[var(--poker-danger)] animate-pulse'
+    ? 'w-5 h-5 text-[var(--danger-text)] animate-pulse'
     : 'w-5 h-5 text-[var(--brass-bright)]';
   const streakNumClass = isEndingSoon
-    ? 'text-3xl font-bold font-numeric text-[var(--poker-danger)] animate-pulse'
+    ? 'text-3xl font-bold font-numeric text-[var(--danger-text)] animate-pulse'
     : 'text-3xl font-bold font-numeric text-[var(--brass-bright)]';
 
   return (
@@ -110,7 +110,7 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
               </div>
               {/* 碎片进度指示器 */}
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px]">🧩</span>
+                <Puzzle className="w-3 h-3 text-[var(--ivory-muted)]" aria-hidden="true" />
                 <span className="font-numeric text-[var(--ivory)] text-[11px]">
                   {freezeCardFragments}/5
                 </span>
@@ -130,7 +130,7 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
             </div>
             {isEarnBack && (
               <div className="flex items-center gap-1 text-[var(--brass-bright)] font-medium">
-                <span aria-hidden>⚡</span>
+                <Zap className="w-3 h-3" aria-hidden="true" />
                 <span>{t('streak.earnBack.windowHint')}</span>
               </div>
             )}
@@ -145,14 +145,15 @@ export default function StreakTracker({ currentStreak, longestStreak, calendarDa
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="text-center text-xs text-[var(--brass-bright)] font-semibold py-1"
               >
-                ✨ {t('streak.fragment.synthesized')}
+                <Sparkles className="inline-block w-3 h-3 mr-1" aria-hidden="true" />
+                {t('streak.fragment.synthesized')}
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* "即将熄灭" 提示（晚间 20:00 后未训练） */}
           {isEndingSoon && (
-            <div className="text-[11px] text-[var(--poker-danger)] text-center animate-pulse">
+            <div className="text-[11px] text-[var(--danger-text)] text-center animate-pulse">
               {t('streak.endingSoon')}
             </div>
           )}

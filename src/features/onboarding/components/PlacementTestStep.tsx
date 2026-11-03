@@ -86,7 +86,7 @@ export default function PlacementTestStep() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full px-6 py-8 max-w-2xl mx-auto">
-      <div className="text-xs text-[var(--brass)] font-numeric tracking-wider mb-2">
+      <div className="text-xs text-[var(--brass-text)] font-numeric tracking-wider mb-2">
         {t('onboarding.placement.questionOf', { current: currentIdx + 1, total: placementQuestions.length })}
       </div>
       <h2 className="font-display text-2xl text-[var(--ivory)] text-center mb-8">
@@ -113,8 +113,8 @@ export default function PlacementTestStep() {
               )}
             >
               <span className="text-sm text-[var(--ivory)]">{t(option.text)}</span>
-              {showCorrect && <Check size={18} className="text-[var(--sage)] shrink-0" />}
-              {showWrong && <X size={18} className="text-[var(--clay)] shrink-0" />}
+              {showCorrect && <Check size={18} className="text-[var(--sage-text)] shrink-0" />}
+              {showWrong && <X size={18} className="text-[var(--clay-text)] shrink-0" />}
             </button>
           );
         })}
@@ -122,7 +122,7 @@ export default function PlacementTestStep() {
 
       {answered && (
         <div className="w-full p-4 rounded-md bg-[var(--walnut-light)]/30 border border-[var(--walnut-border)] mb-6">
-          <p className="text-xs text-[var(--brass)] font-medium mb-1">
+          <p className="text-xs text-[var(--brass-text)] font-medium mb-1">
             {t('onboarding.placement.explanation')}
           </p>
           <p className="text-sm text-[var(--ivory-muted)]">{t(question.explanation)}</p>

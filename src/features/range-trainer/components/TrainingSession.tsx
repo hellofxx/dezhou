@@ -293,9 +293,9 @@ export function TrainingSession({
             })}
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-[var(--sage)] font-medium font-numeric">{t('rangeTrainer.session.correctCount', { count: getScore.correct })}</span>
+            <span className="text-[var(--sage-text)] font-medium font-numeric">{t('rangeTrainer.session.correctCount', { count: getScore.correct })}</span>
             <span className="text-[var(--ivory-muted)]">/</span>
-            <span className="text-[var(--clay)] font-medium font-numeric">{t('rangeTrainer.session.wrongCount', { count: getScore.wrong })}</span>
+            <span className="text-[var(--clay-text)] font-medium font-numeric">{t('rangeTrainer.session.wrongCount', { count: getScore.wrong })}</span>
           </div>
         </div>
 
@@ -339,7 +339,7 @@ export function TrainingSession({
 
       {/* P4 修复（4.5-P0）：连续答错降级提示 —— 窄屏换行而非把文案压成竖条 */}
       {shouldDownshiftDifficulty() && (
-        <div className="px-6 py-2 bg-[var(--clay)]/15 border-b border-[var(--clay)]/30 text-xs text-[var(--clay)] flex flex-wrap items-center gap-2">
+        <div className="px-6 py-2 bg-[var(--clay)]/15 border-b border-[var(--clay)]/30 text-xs text-[var(--clay-text)] flex flex-wrap items-center gap-2">
           <span className="min-w-0">{t('rangeTrainer.session.downshiftHint')}</span>
           <button
             onClick={onExit}
@@ -384,7 +384,7 @@ export function TrainingSession({
             <Button
               variant="outline"
               onClick={onExit}
-              className="w-full min-h-11 border-[var(--poker-danger)]/40 text-[var(--poker-danger)] hover:bg-[var(--poker-danger)]/10 hover:text-[var(--poker-danger)]"
+              className="w-full min-h-11 border-[var(--poker-danger)]/40 text-[var(--danger-text)] hover:bg-[var(--poker-danger)]/10 hover:text-[var(--danger-text)]"
             >
               {t('rangeTrainer.session.exit')}
             </Button>

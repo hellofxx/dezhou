@@ -66,7 +66,7 @@ export default function TiltWarning() {
       <DialogContent className="bg-[var(--surface)] border-[var(--walnut-border)] max-w-md">
         <DialogHeader>
           <DialogTitle className="text-[var(--ivory)] flex items-center gap-2">
-            <HeartCrack className="w-5 h-5 text-[var(--danger)]" />
+            <HeartCrack className="w-5 h-5 text-[var(--danger-text)]" />
             {t('tilt.title', { defaultValue: '要不要休息一下？' })}
           </DialogTitle>
           <DialogDescription className="text-[var(--ivory-muted)] pt-2">

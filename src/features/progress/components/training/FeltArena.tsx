@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import CasinoPlaque from '@/shared/components/business/CasinoPlaque';
 import MottoEngraved from '@/shared/components/business/MottoEngraved';
+import { RankIcon } from '@/shared/components/business/RankIcon';
 import DailyGoalCard from '@/shared/components/business/DailyGoalCard';
 import { CardBack } from '@/shared/components/poker/CardBack';
 import { Chip } from '@/shared/components/poker/Chip';
@@ -66,7 +67,7 @@ export default function FeltArena() {
           className="elo-rank-badge"
           aria-label={`${t(`progress.rank.${currentRank.name}.name`)} ${elo.overall} ELO`}
         >
-          <span className="elo-suit">{currentRank.icon}</span>
+          <span className="elo-suit"><RankIcon name={currentRank.name} size={20} /></span>
           <span className="elo-meta">
             <span className="elo-name">{t(`progress.rank.${currentRank.name}.name`)}</span>
             <span className="elo-score">{elo.overall} ELO</span>
@@ -132,7 +133,7 @@ export default function FeltArena() {
             size="sm"
           />
           <div className="daily-progress-chip">
-            <div className="text-[8px] uppercase tracking-[0.15em] text-[var(--brass)] font-semibold">
+            <div className="text-[8px] uppercase tracking-[0.15em] text-[var(--brass-text)] font-semibold">
               {t('dashboard.feltArena.todayProgress')}
             </div>
             <div className="font-numeric text-[12px] text-[var(--ivory)] font-semibold mt-0.5">

@@ -45,7 +45,7 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
         {/* 左：文案 + 主 CTA */}
         <div className="help-hero-copy">
           <p className="section-eyebrow">{t('help.hero.eyebrow')}</p>
-          <h1 className="help-hero-title">{t('help.hero.title')}</h1>
+          <h2 className="help-hero-title">{t('help.hero.title')}</h2>
           <p className="help-hero-sub">{t('help.hero.subtitle')}</p>
           <div className="help-hero-actions">
             <button

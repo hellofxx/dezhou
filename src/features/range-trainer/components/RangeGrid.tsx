@@ -133,7 +133,7 @@ export function RangeGrid({
         {ranks.map((rank) => (
           <div
             key={`col-${rank}`}
-            className="text-[10px] text-[var(--brass-deep)] text-center font-semibold pb-1 font-numeric"
+            className="text-[10px] text-[var(--brass-text)] text-center font-semibold pb-1 font-numeric"
           >
             {rank}
           </div>
@@ -145,7 +145,7 @@ export function RangeGrid({
         {Array.from({ length: gridSize }, (_, rowIdx) => (
           <React.Fragment key={`row-${rowIdx}`}>
             {/* 行标题 */}
-            <div className="flex items-center justify-center text-[10px] text-[var(--brass-deep)] font-semibold font-numeric">
+            <div className="flex items-center justify-center text-[10px] text-[var(--brass-text)] font-semibold font-numeric">
               {ranks[rowIdx]}
             </div>
             {/* 各列单元格 */}

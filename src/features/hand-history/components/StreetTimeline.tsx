@@ -47,7 +47,7 @@ export function StreetTimeline({ hand, currentStreet, onJump }: StreetTimelinePr
               className={cn(
                 'flex flex-col items-center px-3 py-1.5 rounded-lg text-xs font-display font-medium transition-all',
                 isCurrent && 'bg-[var(--brass)]/15 text-[var(--brass-bright)] border border-[var(--brass)]/40',
-                isCompleted && 'bg-[var(--sage)]/10 text-[var(--sage)] border border-[var(--sage)]/30',
+                isCompleted && 'bg-[var(--sage)]/10 text-[var(--sage-text)] border border-[var(--sage)]/30',
                 !isCurrent && !isCompleted && 'text-[var(--ivory-muted)] hover:text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]/60'
               )}
             >

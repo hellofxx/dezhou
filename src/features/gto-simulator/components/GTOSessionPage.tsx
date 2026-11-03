@@ -220,7 +220,7 @@ export default function GTOSessionPage() {
 
       {/* P4 修复（4.5-P1-2）：连续答错降级提示 */}
       {shouldDownshiftDifficulty() && (
-        <div className="px-3 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+        <div className="px-3 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay-text)]">
           {t('gto.session.downshiftHint')}
         </div>
       )}

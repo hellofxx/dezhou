@@ -349,7 +349,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                       if (isCorrectOpt) {
                         optionClass = 'border-[var(--poker-success)]/60 bg-[var(--poker-success)]/15 text-[var(--poker-success)]';
                       } else if (isSelected) {
-                        optionClass = 'border-[var(--poker-danger)]/60 bg-[var(--poker-danger)]/15 text-[var(--poker-danger)]';
+                        optionClass = 'border-[var(--poker-danger)]/60 bg-[var(--poker-danger)]/15 text-[var(--danger-text)]';
                       } else {
                         optionClass = 'border-[var(--walnut-border)]/40 bg-[var(--walnut-raised)]/20 opacity-60';
                       }
@@ -366,7 +366,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                           <CheckCircle2 className="w-4 h-4 text-[var(--poker-success)] shrink-0" />
                         )}
                         {showFeedback && isSelected && !isCorrectOpt && (
-                          <XCircle className="w-4 h-4 text-[var(--poker-danger)] shrink-0" />
+                          <XCircle className="w-4 h-4 text-[var(--danger-text)] shrink-0" />
                         )}
                       </button>
                     );
@@ -414,7 +414,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => handleSelfEval(false)}
-                        className="px-3 py-2.5 rounded-md border border-[var(--poker-danger)]/40 bg-[var(--poker-danger-bg)] hover:bg-[var(--poker-danger)]/20 text-sm text-[var(--poker-danger)] font-medium transition-all"
+                        className="px-3 py-2.5 rounded-md border border-[var(--poker-danger)]/40 bg-[var(--poker-danger-bg)] hover:bg-[var(--poker-danger)]/20 text-sm text-[var(--danger-text)] font-medium transition-all"
                       >
                         <XCircle className="w-4 h-4 inline mr-1" />
                         {t('review.forgot', { defaultValue: '不记得' })}
@@ -455,7 +455,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => handleSelfEval(false)}
-                        className="px-3 py-2.5 rounded-md border border-[var(--poker-danger)]/40 bg-[var(--poker-danger-bg)] hover:bg-[var(--poker-danger)]/20 text-sm text-[var(--poker-danger)] font-medium"
+                        className="px-3 py-2.5 rounded-md border border-[var(--poker-danger)]/40 bg-[var(--poker-danger-bg)] hover:bg-[var(--poker-danger)]/20 text-sm text-[var(--danger-text)] font-medium"
                       >
                         {t('review.forgot', { defaultValue: '不记得' })}
                       </button>

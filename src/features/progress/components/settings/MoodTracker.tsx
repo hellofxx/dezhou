@@ -57,7 +57,7 @@ export default function MoodTracker() {
       value: 'bad',
       label: t('mood.bad', { defaultValue: '差' }),
       icon: <Frown className="w-5 h-5" />,
-      activeClass: 'border-[var(--danger)] bg-[var(--danger)]/15 text-[var(--danger)] ring-1 ring-[var(--danger)]/40',
+      activeClass: 'border-[var(--danger)] bg-[var(--danger)]/15 text-[var(--danger-text)] ring-1 ring-[var(--danger)]/40',
     },
   ], [t]);
 

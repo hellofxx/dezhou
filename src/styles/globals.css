@@ -25,7 +25,7 @@
   /* Ivory — text & "card" surfaces */
   --ivory: #f3ebd9;
   --ivory-dim: #cabf9f;
-  --ivory-muted: #8a8068;
+  --ivory-muted: #b0a68c;     /* 说明 / 占位 / 禁用 —— felt 5.89:1、felt-raised 4.78:1（§2.7） */
 
   /* Brass — single accent */
   --brass: #c9a25e;
@@ -58,6 +58,14 @@
   /* Decorative functional colors */
   --clay: #a83838;            /* deep danger accent */
   --sage: #6b8e7a;            /* neutral data */
+
+  /* 文本专用阶（DESIGN.md §2.7）—— 只用于 color / text-[...]；
+     填充、描边、渐变停靠继续用上面的原值，禁止把下列 token 用作 bg / border / fill。
+     暗底房间色板的原语在 felt 上均不足 4.5:1（clay 2.23 / danger 3.30 / sage 3.92 / brass-deep 3.73），文字必须取提亮阶。 */
+  --clay-text: #e3907b;       /* felt 5.79:1 / felt-raised 4.70:1 / 陶土底 5.45:1 */
+  --danger-text: #e3907b;     /* felt 5.79:1 / danger-bg 底 5.23:1 */
+  --sage-text: #9fc0a9;       /* felt 7.18:1 / felt-raised 5.82:1 */
+  --brass-text: #c9a25e;      /* felt 5.98:1 / felt-raised 4.85:1（与 --brass 同值，暗色观感不变） */
 
   /* === Low-saturation card-room semantic colors (canonical source — DESIGN.md §1.3/§2.2) === */
   --poker-success: #7fb883;
@@ -419,6 +427,10 @@ body::after {
     --ivory: #ffffff;
     --ivory-dim: #f2ead4;
     --ivory-muted: #d8cfb4;
+    --clay-text: #f5bcae;
+    --danger-text: #f5bcae;
+    --sage-text: #c6e3cc;
+    --brass-text: #ffd87a;
     --brass: #ffd87a;
     --brass-bright: #ffe9a8;
     --brass-deep: #c9a25e;
@@ -429,6 +441,10 @@ body::after {
     --ivory: #1b150a;
     --ivory-dim: #37301f;
     --ivory-muted: #4f462e;
+    --clay-text: #7d2f20;
+    --danger-text: #7d2f20;
+    --sage-text: #1f4a28;
+    --brass-text: #7a5a1d;
     --brass: #7a5a1d;
     --brass-bright: #5f450f;
     --walnut-border: #8a6b30;
@@ -565,6 +581,12 @@ body::after {
   --warning-bg: color-mix(in srgb, var(--paper-warning) 12%, transparent);
   --info: var(--paper-info);
   --info-bg: color-mix(in srgb, var(--paper-info) 12%, transparent);
+
+  /* 文本专用阶（§2.7）—— 纸上同样取深阶，禁止亮阶文字漏到纸面 */
+  --clay-text: var(--paper-danger);
+  --danger-text: var(--paper-danger);
+  --sage-text: var(--paper-success);
+  --brass-text: var(--paper-brass);
 
   /* 表面 —— 纸条内不再出现绿呢与胡桃 */
   --felt: var(--paper);
@@ -1014,13 +1036,13 @@ body::after {
 .grade-best    { background: rgba(127,184,131,0.1);  border-left-color: var(--poker-success); color: var(--poker-success); }
 .grade-correct { background: rgba(127,184,131,0.06); border-left-color: rgba(127,184,131,0.7); color: var(--poker-success); }
 .grade-inaccuracy { background: rgba(201,162,94,0.08); border-left-color: var(--brass); color: var(--brass-bright); }
-.grade-wrong  { background: rgba(194,90,76,0.06); border-left-color: rgba(194,90,76,0.6); color: var(--poker-danger); }
-.grade-blunder { background: rgba(194,90,76,0.1);  border-left-color: var(--poker-danger); color: var(--poker-danger); }
+.grade-wrong  { background: rgba(194,90,76,0.06); border-left-color: rgba(194,90,76,0.6); color: var(--danger-text); }
+.grade-blunder { background: rgba(194,90,76,0.1);  border-left-color: var(--poker-danger); color: var(--danger-text); }
 
 /* ---- Action Buttons ---- */
 .action-btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
 .action-mini { padding: 8px 12px; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; font-family: var(--font-body); }
-.action-mini.act-fold  { background: var(--poker-danger-bg); color: var(--poker-danger); border-color: rgba(194,90,76,0.25); }
+.action-mini.act-fold  { background: var(--poker-danger-bg); color: var(--danger-text); border-color: rgba(194,90,76,0.25); }
 .action-mini.act-fold:hover { background: rgba(194,90,76,0.18); }
 .action-mini.act-call  { background: rgba(58,44,28,0.6); color: var(--ivory-dim); border-color: rgba(58,44,28,0.9); }
 .action-mini.act-call:hover { background: rgba(58,44,28,0.85); color: var(--ivory); }
@@ -1189,7 +1211,7 @@ body::after {
 }
 .course-level.lv-beginner { background: var(--poker-success-bg); color: var(--poker-success); }
 .course-level.lv-intermediate { background: rgba(201,162,94,0.1); color: var(--brass); }
-.course-level.lv-advanced { background: var(--poker-danger-bg); color: var(--poker-danger); }
+.course-level.lv-advanced { background: var(--poker-danger-bg); color: var(--danger-text); }
 .course-title { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--ivory); font-variation-settings: 'opsz' 144; }
 .course-lessons { font-size: 11px; color: var(--ivory-muted); font-family: var(--font-mono); }
 
@@ -1252,9 +1274,9 @@ body::after {
   border: 1px solid var(--walnut-border);
   font-variant-numeric: tabular-nums;
 }
-.theme-diff-pill.beginner { color: var(--sage); border-color: color-mix(in srgb, var(--sage) 35%, transparent); background: color-mix(in srgb, var(--sage) 10%, transparent); }
+.theme-diff-pill.beginner { color: var(--sage-text); border-color: color-mix(in srgb, var(--sage) 35%, transparent); background: color-mix(in srgb, var(--sage) 10%, transparent); }
 .theme-diff-pill.intermediate { color: var(--brass-bright); border-color: color-mix(in srgb, var(--brass-bright) 35%, transparent); background: color-mix(in srgb, var(--brass-bright) 10%, transparent); }
-.theme-diff-pill.advanced { color: var(--clay); border-color: color-mix(in srgb, var(--clay) 40%, transparent); background: color-mix(in srgb, var(--clay) 12%, transparent); }
+.theme-diff-pill.advanced { color: var(--clay-text); border-color: color-mix(in srgb, var(--clay) 40%, transparent); background: color-mix(in srgb, var(--clay) 12%, transparent); }
 
 /* =========================================================
    Puzzle Hero（2026-08-10）— 签名元素「翻开的谜题牌」
@@ -1287,7 +1309,7 @@ body::after {
 .puzzle-hero-copy { min-width: 0; }
 .puzzle-hero-eyebrow {
   font-size: 9px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.22em; color: var(--brass-deep); margin-bottom: 10px;
+  letter-spacing: 0.22em; color: var(--brass-text); margin-bottom: 10px;
 }
 .puzzle-hero-title {
   font-family: var(--font-display);
@@ -1487,7 +1509,7 @@ body::after {
 }
 .puzzle-question-eyebrow {
   font-size: 9px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.22em; color: var(--brass-deep);
+  letter-spacing: 0.22em; color: var(--brass-text);
   margin: 0;
 }
 .puzzle-question-scenario {
@@ -1644,10 +1666,10 @@ body::after {
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--clay) 15%, var(--walnut-raised)),
     color-mix(in srgb, var(--clay) 6%, var(--walnut)));
-  color: var(--clay);
+  color: var(--clay-text);
 }
 .action-tile-aggressive .action-tile-label {
-  color: var(--clay); font-weight: 700; font-size: 17px;
+  color: var(--clay-text); font-weight: 700; font-size: 17px;
 }
 .action-tile-aggressive .action-tile-gauge .dot {
   background: color-mix(in srgb, var(--clay) 45%, transparent);
@@ -1675,7 +1697,7 @@ body::after {
   background: color-mix(in srgb, var(--clay) 18%, var(--walnut)) !important;
   color: var(--clay) !important;
 }
-.action-tile--wrong .action-tile-label { color: var(--clay); }
+.action-tile--wrong .action-tile-label { color: var(--clay-text); }
 .action-tile--correct-reveal {
   border-color: color-mix(in srgb, var(--poker-success) 70%, var(--walnut-border));
 }
@@ -1707,10 +1729,10 @@ html[data-theme="light"] .action-tile-aggressive {
     color-mix(in srgb, var(--clay) 20%, var(--walnut-raised)),
     color-mix(in srgb, var(--clay) 8%, var(--walnut)));
   border-color: color-mix(in srgb, var(--clay) 55%, var(--walnut-border));
-  color: var(--clay);
+  color: var(--clay-text);
 }
 html[data-theme="light"] .action-tile-aggressive .action-tile-label {
-  color: var(--clay);
+  color: var(--clay-text);
 }
 html[data-theme="light"] .action-tile-aggressive .action-tile-gauge .dot {
   background: color-mix(in srgb, var(--clay) 45%, transparent);
@@ -1751,7 +1773,7 @@ html[data-theme="light"] .action-tile-aggressive .action-tile-gauge .dot--on.dot
 }
 .settings-hero-eyebrow {
   font-size: 9px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.22em; color: var(--brass-deep); margin-bottom: 6px;
+  letter-spacing: 0.22em; color: var(--brass-text); margin-bottom: 6px;
 }
 .settings-hero-title {
   font-family: var(--font-display);
@@ -1775,63 +1797,11 @@ html[data-theme="light"] .action-tile-aggressive .action-tile-gauge .dot--on.dot
   flex-shrink: 0;
 }
 
-/* ---- Settings Nav（分区台卡导航） ---- */
-.settings-nav {
-  padding: 4px 2px;
-}
-.settings-nav-list {
-  list-style: none; margin: 0; padding: 0;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.settings-nav-item {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; padding: 8px 10px; border-radius: 8px;
-  background: transparent; border: 1px solid transparent;
-  color: var(--ivory-muted); font-size: 12.5px;
-  text-align: left; cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 38px;
-  position: relative;
-}
-.settings-nav-item:hover {
-  background: rgba(255,255,255,0.04);
-  color: var(--ivory);
-}
-.settings-nav-item.active {
-  background: rgba(201,162,94,0.12);
-  border-color: rgba(201,162,94,0.3);
-  color: var(--brass-bright);
-}
-.settings-nav-item.active::before {
-  content: ''; position: absolute; left: -1px; top: 50%;
-  transform: translateY(-50%);
-  width: 3px; height: 18px; border-radius: 2px;
-  background: linear-gradient(180deg, var(--brass-bright), var(--brass));
-}
-.settings-nav-icon {
-  display: flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
-  background: var(--walnut-raised);
-  border: 1px solid var(--walnut-border);
-  color: var(--ivory-dim);
-}
-.settings-nav-item.active .settings-nav-icon {
-  background: rgba(201,162,94,0.16);
-  border-color: rgba(201,162,94,0.35);
-  color: var(--brass-bright);
-}
-.settings-nav-label {
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
 /* ---- Settings light theme ---- */
 html[data-theme="light"] .settings-hero {
   background:
     radial-gradient(ellipse 70% 160% at 100% 0%, rgba(161,121,45,0.05), transparent 60%),
     linear-gradient(180deg, var(--felt) 0%, var(--felt-raised) 100%);
-}
-html[data-theme="light"] .settings-nav-item:hover {
-  background: rgba(90,70,35,0.06);
 }
 
 /* ---- Concept Node (Knowledge Graph) ---- */
@@ -1910,7 +1880,7 @@ html[data-theme="light"] .settings-nav-item:hover {
 .mood-btn:hover { transform: translateY(-2px); border-color: var(--walnut-border); }
 .mood-btn.mood-good.active  { background: rgba(127,184,131,0.15); border-color: var(--poker-success); box-shadow: 0 0 12px rgba(127,184,131,0.22); color: var(--poker-success); }
 .mood-btn.mood-meh.active   { background: rgba(201,162,94,0.15); border-color: var(--brass); box-shadow: 0 0 12px rgba(201,162,94,0.22); color: var(--brass); }
-.mood-btn.mood-bad.active   { background: rgba(194,90,76,0.15); border-color: var(--poker-danger); box-shadow: 0 0 12px rgba(194,90,76,0.22); color: var(--poker-danger); }
+.mood-btn.mood-bad.active   { background: rgba(194,90,76,0.15); border-color: var(--poker-danger); box-shadow: 0 0 12px rgba(194,90,76,0.22); color: var(--danger-text); }
 
 /* ---- Tilt Warning ---- */
 .tilt-warning {
@@ -1922,7 +1892,7 @@ html[data-theme="light"] .settings-nav-item:hover {
 }
 .tilt-warning .tilt-icon { color: var(--poker-danger); flex-shrink: 0; }
 .tilt-warning .tilt-msg { flex: 1; font-size: 12px; color: var(--ivory-dim); }
-.tilt-warning .tilt-msg b { color: var(--clay); }
+.tilt-warning .tilt-msg b { color: var(--clay-text); }
 .tilt-warning .tilt-actions { display: flex; gap: 6px; }
 .tilt-warning .btn-tilt-rest { background: var(--poker-success-bg); color: var(--poker-success); border: 1px solid rgba(127,184,131,0.25); border-radius: 5px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
 .tilt-warning .btn-tilt-cont { background: transparent; color: var(--ivory-muted); border: 1px solid var(--walnut-border); border-radius: 5px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
@@ -2080,7 +2050,7 @@ html[data-theme="light"] .settings-nav-item:hover {
 .level-row.locked .level-row-head { opacity: 0.72; }
 .level-kicker {
   font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em;
-  color: var(--brass-deep);
+  color: var(--brass-text);
 }
 
 /* 展开的课程 chips */
@@ -2197,7 +2167,7 @@ html[data-theme="light"] .settings-nav-item:hover {
 }
 .rp-eyebrow {
   font-size: 9px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.22em; color: var(--brass-deep); margin-bottom: 14px;
+  letter-spacing: 0.22em; color: var(--brass-text); margin-bottom: 14px;
 }
 .rp-body { display: flex; align-items: center; gap: 20px; }
 .rp-plaque {
@@ -2278,7 +2248,7 @@ html[data-theme="light"] .settings-nav-item:hover {
 }
 .dl-label {
   font-size: 9px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.16em; color: var(--brass-deep); flex-shrink: 0;
+  letter-spacing: 0.16em; color: var(--brass-text); flex-shrink: 0;
 }
 .dl-track { flex: 1; display: flex; align-items: center; min-width: 200px; }
 .dl-step { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
@@ -2296,9 +2266,9 @@ html[data-theme="light"] .settings-nav-item:hover {
 .dl-step.intermediate.active .dl-dot { --dl-active-bg: rgba(201,162,94,0.28); --dl-active-glow: rgba(201,162,94,0.12); }
 .dl-step.advanced.active .dl-dot { --dl-active-bg: rgba(168,56,56,0.28); --dl-active-glow: rgba(168,56,56,0.12); }
 .dl-step-name { font-size: 10px; color: var(--ivory-muted); white-space: nowrap; }
-.dl-step.beginner.active .dl-step-name { color: var(--sage); }
+.dl-step.beginner.active .dl-step-name { color: var(--sage-text); }
 .dl-step.intermediate.active .dl-step-name { color: var(--brass-bright); }
-.dl-step.advanced.active .dl-step-name { color: var(--clay); }
+.dl-step.advanced.active .dl-step-name { color: var(--clay-text); }
 .dl-line { flex: 1; height: 1px; background: var(--walnut-border); min-width: 16px; }
 .dl-suggestion {
   display: flex; align-items: center; gap: 6px;
@@ -2403,6 +2373,12 @@ html[data-theme="light"] {
   --poker-gold: #9a7626;
   --poker-bronze: #a06a2e;
   --poker-leather: #a9713f;
+
+  /* 文本专用阶 light 深阶（DESIGN.md §2.7）—— 羊皮底 / 抬升底 ≥ 5:1 */
+  --clay-text: #a8442f;       /* felt 5.14:1 / felt-raised 5.50:1 */
+  --danger-text: #a63f30;     /* felt 5.38:1 / felt-raised 5.76:1 */
+  --sage-text: #2f6b3a;       /* felt 5.53:1 / felt-raised 5.92:1 */
+  --brass-text: #7d5c22;      /* felt 5.30:1 / felt-raised 5.67:1（原 --brass 3.43:1） */
 
   /* 纸张色板 light 差异 —— 仅调底/边/黄铜；ink 与四个语义色不翻转（§2.6） */
   --progress-track: #d9cdb1;
@@ -2796,7 +2772,7 @@ html[data-theme="light"] .streak-rail {
 
 .error-boundary-card pre {
   font-size: 0.75rem;
-  color: var(--ivory-muted, #8a8068); /* token: --ivory-muted */
+  color: var(--ivory-muted, #b0a68c); /* token: --ivory-muted */
   background-color: color-mix(in srgb, var(--felt-deep) 45%, transparent); /* token: --felt-deep */
   padding: 0.75rem;
   border-radius: 6px;
@@ -3183,7 +3159,7 @@ html[data-theme="light"] .streak-rail {
 .faq-item-num {
   font-family: var(--font-display);
   font-size: 11px; font-weight: 700;
-  color: var(--brass-deep);
+  color: var(--brass-text);
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
   min-width: 24px;

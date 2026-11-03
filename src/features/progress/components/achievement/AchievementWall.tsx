@@ -184,7 +184,7 @@ function AchievementCard({ achievement, unlocked, unlockDate }: AchievementCardP
 
           {/* Unlock date */}
           {unlocked && unlockDate && (
-            <div className="text-[10px] text-[var(--brass)]/70 mt-1.5 font-numeric">
+            <div className="text-[10px] text-[var(--brass-text)]/70 mt-1.5 font-numeric">
               {formatDate(unlockDate)}
             </div>
           )}

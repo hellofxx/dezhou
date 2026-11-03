@@ -198,7 +198,7 @@ export function HandImporter() {
         <div className={`p-3 rounded-lg border ${result.success ? (result.warnings ? 'bg-[var(--brass)]/10 border-[var(--brass)]/30' : 'bg-[var(--sage)]/10 border-[var(--sage)]/30') : 'bg-[var(--clay)]/10 border-[var(--clay)]/30'}`}>
           {result.success ? (
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-sm text-[var(--sage)]">
+              <div className="flex items-center gap-2 text-sm text-[var(--sage-text)]">
                 <Check size={16} />
                 <span>{t('handHistory.importer.success', { count: result.hands.length, format: result.format ?? '' })}</span>
               </div>
@@ -212,7 +212,7 @@ export function HandImporter() {
           ) : (
             <div className="space-y-1">
               {result.errors.map((err, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm text-[var(--clay)]">
+                <div key={i} className="flex items-center gap-2 text-sm text-[var(--clay-text)]">
                   <AlertCircle size={16} />
                   <span>{t(err.key, err.params)}</span>
                 </div>

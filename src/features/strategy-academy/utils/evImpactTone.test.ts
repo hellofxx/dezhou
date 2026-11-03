@@ -67,7 +67,7 @@ describe('classifyEvImpact', () => {
 
 describe('evImpactToneClass', () => {
   it('三态各自映射到 token 色类（禁硬编码颜色）', () => {
-    expect(evImpactToneClass('-2.0 BB/100')).toBe('text-[var(--danger)]');
+    expect(evImpactToneClass('-2.0 BB/100')).toBe('text-[var(--danger-text)]');
     expect(evImpactToneClass('+2.0 BB/100')).toBe('text-[var(--success)]');
     expect(evImpactToneClass('0 BB/100')).toBe('text-[var(--success)]');
     expect(evImpactToneClass('保护资金安全')).toBe('text-[var(--ivory-muted)]');

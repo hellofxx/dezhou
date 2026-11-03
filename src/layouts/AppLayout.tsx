@@ -211,7 +211,7 @@ export default function AppLayout() {
         {/* Sidebar header — brass hairline below，高度与顶栏胡桃梁对齐 */}
         <div className="flex items-center h-16 px-4 border-b border-[var(--walnut-border)] relative brass-rail">
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
-            <Spade size={28} className="text-[var(--brass)] shrink-0" />
+            <Spade size={28} className="text-[var(--brass-text)] shrink-0" />
             {!collapsed && (
               <div className="min-w-0">
                 <span className="font-display text-[15px] text-[var(--ivory)] truncate tracking-wide block leading-tight">
@@ -244,12 +244,12 @@ export default function AppLayout() {
             {navGroups.map((group) => (
               <div key={group.i18nKey}>
                 {collapsed ? (
-                  <p aria-hidden="true" className="text-center font-numeric text-[9px] text-[var(--brass)] mb-2">
+                  <p aria-hidden="true" className="text-center font-numeric text-[9px] text-[var(--brass-text)] mb-2">
                     {group.index}
                   </p>
                 ) : (
                   <p className="text-[9px] uppercase tracking-[0.2em] text-[var(--ivory-dim)] px-3 mb-2 font-medium">
-                    <span className="font-numeric text-[var(--brass)] mr-2">{group.index}</span>
+                    <span className="font-numeric text-[var(--brass-text)] mr-2">{group.index}</span>
                     {group.title}
                   </p>
                 )}
@@ -302,9 +302,9 @@ export default function AppLayout() {
         {/* Top bar — 胡桃梁：与侧边栏构成包住绿呢画布的 L 形木框（DESIGN.md §5.7） */}
         <header className="flex items-center h-12 md:h-16 px-4 md:px-6 border-b border-[var(--walnut-border)] walnut-panel shrink-0 relative brass-rail">
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <span className="font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass)]">{section.index}</span>
-            <span aria-hidden="true" className="h-px w-6 bg-[var(--brass-deep)]/60" />
-            <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass)]">
+            <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass-text)]">{section.index}</span>
+            <span aria-hidden="true" className="hidden sm:block h-px w-6 bg-[var(--brass-deep)]/60" />
+            <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass-text)]">
               {section.label}
             </span>
             <h1 className="font-display text-[19px] md:text-[22px] text-[var(--ivory)] tracking-wide truncate">
@@ -313,7 +313,7 @@ export default function AppLayout() {
           </div>
           {currentStreak > 0 && (
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 mr-2 rounded-md bg-[var(--brass-glow)] border border-[var(--brass-cell-1)]">
-              <Flame className="w-4 h-4 text-[var(--brass)]" />
+              <Flame className="w-4 h-4 text-[var(--brass-text)]" />
               <span className="text-sm font-semibold text-[var(--brass-bright)] font-numeric">{currentStreak}</span>
             </div>
           )}

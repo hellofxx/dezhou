@@ -143,7 +143,7 @@ export function StrategyMatrix({
         {GRID_RANKS.map((rank) => (
           <div
             key={`col-${rank}`}
-            className="text-[9px] text-[var(--brass-deep)] text-center font-semibold pb-0.5 font-numeric"
+            className="text-[9px] text-[var(--brass-text)] text-center font-semibold pb-0.5 font-numeric"
           >
             {rank}
           </div>
@@ -154,7 +154,7 @@ export function StrategyMatrix({
       <div className="grid gap-[2px]" style={{ gridTemplateColumns: `20px repeat(13, 1fr)` }}>
         {Array.from({ length: 13 }, (_, rowIdx) => (
           <React.Fragment key={`row-${rowIdx}`}>
-            <div className="flex items-center justify-center text-[9px] text-[var(--brass-deep)] font-semibold font-numeric">
+            <div className="flex items-center justify-center text-[9px] text-[var(--brass-text)] font-semibold font-numeric">
               {GRID_RANKS[rowIdx]}
             </div>
             {Array.from({ length: 13 }, (_, colIdx) => {

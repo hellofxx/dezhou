@@ -24,7 +24,7 @@ describe('EquityChart', () => {
 
     const diff = screen.getByText('差值: -20.0%');
     expect(diff).toBeTruthy();
-    expect(diff.classList.contains('text-[var(--danger)]')).toBe(true);
+    expect(diff.classList.contains('text-[var(--danger-text)]')).toBe(true);
   });
 
   it('两者相等：差值显示 +0.0% 且归入非负分支', () => {

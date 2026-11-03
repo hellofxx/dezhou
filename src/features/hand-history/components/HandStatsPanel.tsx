@@ -139,7 +139,7 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
                   <td className="px-3 py-2 font-numeric text-[var(--ivory)]">{row.position}</td>
                   <td className="px-3 py-2 text-center font-numeric text-[var(--ivory-muted)]">{row.hands}</td>
                   <td className="px-3 py-2 text-center font-numeric text-[var(--brass-bright)]">{row.VPIP}%</td>
-                  <td className="px-3 py-2 text-center font-numeric text-[var(--sage)]">{row.PFR}%</td>
+                  <td className="px-3 py-2 text-center font-numeric text-[var(--sage-text)]">{row.PFR}%</td>
                 </tr>
               ))}
             </tbody>
@@ -159,7 +159,7 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
               key={i}
               className="flex items-start gap-2 p-2.5 rounded-lg bg-[var(--clay)]/10 border border-[var(--clay)]/20 text-xs text-[var(--ivory-dim)]"
             >
-              <AlertTriangle size={13} className="text-[var(--clay)] mt-0.5 shrink-0" />
+              <AlertTriangle size={13} className="text-[var(--clay-text)] mt-0.5 shrink-0" />
               <span>
                 {t('handHistory.stats.positionFeedback', {
                   position: fb.position,

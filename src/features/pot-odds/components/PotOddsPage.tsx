@@ -22,7 +22,7 @@ export default function PotOddsPage() {
       {/* Page header */}
       <div>
         <p className="section-eyebrow">Pot Odds & EV</p>
-        <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{t('potOdds.page.title')}</h1>
+        <h2 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{t('potOdds.page.title')}</h2>
         <p className="text-sm text-[var(--ivory-muted)] mt-1">
           {t('potOdds.page.subtitle')}
         </p>

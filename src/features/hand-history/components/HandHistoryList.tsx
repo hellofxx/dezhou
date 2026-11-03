@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useHandHistoryStore } from '../store';
 import { formatDate } from '../utils/handNotation';
 import { calculateHeroStats } from '../utils/handStats';
-import { Trash2, Upload, Search, BarChart3, List, AlertCircle } from 'lucide-react';
+import { Trash2, Upload, Search, BarChart3, List, AlertCircle, ClipboardList } from 'lucide-react';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
 
@@ -55,7 +55,7 @@ export default function HandHistoryList() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <p className="section-eyebrow">{t('handHistory.list.eyebrow')}</p>
-          <h1 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">{t('handHistory.list.pageTitle')}</h1>
+          <h2 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">{t('handHistory.list.pageTitle')}</h2>
           <p className="text-sm text-[var(--ivory-muted)] mt-1 font-numeric">
             {t('handHistory.list.importedCount', { count: hands.length })}
           </p>
@@ -71,7 +71,7 @@ export default function HandHistoryList() {
           {hands.length > 0 && (
             <button
               onClick={() => setConfirmClear(true)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-display font-semibold text-[var(--clay)] hover:bg-[var(--clay)]/10 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-display font-semibold text-[var(--clay-text)] hover:bg-[var(--clay)]/10 transition-colors"
             >
               <Trash2 size={16} />
               {t('handHistory.list.clearAll')}
@@ -82,7 +82,7 @@ export default function HandHistoryList() {
 
       {/* IndexedDB 错误提示：dbError 存类型 key，渲染时翻译（语言切换自动刷新） */}
       {dbError && (
-        <div className="mb-6 flex items-start gap-2 rounded-lg border border-[var(--clay)]/40 bg-[var(--clay)]/10 px-4 py-3 text-sm text-[var(--clay)]">
+        <div className="mb-6 flex items-start gap-2 rounded-lg border border-[var(--clay)]/40 bg-[var(--clay)]/10 px-4 py-3 text-sm text-[var(--clay-text)]">
           <AlertCircle size={16} className="shrink-0 mt-0.5" />
           <span>{t(`handHistory.dbError.${dbError}`)}</span>
         </div>
@@ -173,7 +173,7 @@ export default function HandHistoryList() {
           {filteredHands.length === 0 ? (
             hands.length === 0 ? (
               <EmptyState
-                icon="📋"
+                icon={<ClipboardList size={26} aria-hidden="true" />}
                 title={t('handHistory.list.emptyTitle')}
                 description={t('handHistory.list.emptyDesc')}
                 action={{ label: t('handHistory.list.emptyAction'), onClick: () => navigate('/hand-history/import') }}
@@ -220,7 +220,7 @@ export default function HandHistoryList() {
                     <button
                       onClick={(e) => { e.stopPropagation(); deleteHand(hand.id); }}
                       aria-label={t('common.ui.delete')}
-                      className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)]/70 hover:text-[var(--clay)] hover:bg-[var(--clay)]/10 transition-all"
+                      className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)]/70 hover:text-[var(--clay-text)] hover:bg-[var(--clay)]/10 transition-all"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -247,7 +247,7 @@ export default function HandHistoryList() {
               </button>
               <button
                 onClick={() => { clearAll(); setConfirmClear(false); }}
-                className="px-3 py-1.5 text-xs rounded-lg bg-[var(--clay)]/15 text-[var(--clay)] border border-[var(--clay)]/40 hover:bg-[var(--clay)]/25 transition-colors"
+                className="px-3 py-1.5 text-xs rounded-lg bg-[var(--clay)]/15 text-[var(--clay-text)] border border-[var(--clay)]/40 hover:bg-[var(--clay)]/25 transition-colors"
               >
                 {t('handHistory.list.deleteAll')}
               </button>

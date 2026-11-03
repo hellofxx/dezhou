@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { RankIcon } from '@/shared/components/business/RankIcon';
 import { transitionSlow } from '@/shared/utils/motion';
 // P1-2.6: 从 progress store 读取当前活动变体的 ELO 五维分数（0-3000 量纲）
 import { useProgressStore } from '../../store';
@@ -84,7 +85,7 @@ export default function WeaknessAnalysis() {
                 }}
                 title={t(`progress.rank.${currentRank.name}.description`)}
               >
-                <span className="text-sm leading-none">{currentRank.icon}</span>
+                <RankIcon name={currentRank.name} size={14} />
                 <span className="font-bold">{t(`progress.rank.${currentRank.name}.name`)}</span>
                 <span className="font-numeric text-[var(--ivory)] tabular-nums">
                   {elo.overall}

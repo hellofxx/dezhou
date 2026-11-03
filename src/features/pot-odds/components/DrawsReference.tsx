@@ -27,7 +27,7 @@ export function DrawsReference() {
               }`}
             >
               <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[var(--brass)]/10 flex items-center justify-center">
-                <span className="font-mono font-bold text-sm text-[var(--brass)]">{draw.outs}</span>
+                <span className="font-mono font-bold text-sm text-[var(--brass-text)]">{draw.outs}</span>
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-[var(--ivory)] truncate">{t(draw.name)}</p>

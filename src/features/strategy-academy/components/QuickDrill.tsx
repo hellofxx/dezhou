@@ -302,7 +302,7 @@ export default function QuickDrill() {
               {isNewRecord && (
                 <div className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)]">
                   <Trophy className="w-3.5 h-3.5" />
-                  {t('quickDrill.newRecord', { defaultValue: '🎉 快速训练新纪录！' })}
+                  {t('quickDrill.newRecord', { defaultValue: '快速训练新纪录！' })}
                 </div>
               )}
               {/* P1-4.3: 连续打卡奖励冻结卡（P1E-10: 天数插值实际 quickDrillStreak，14/21 天触发不再硬编码"7 天"） */}
@@ -310,7 +310,7 @@ export default function QuickDrill() {
                 <div className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--success)]">
                   <Gift className="w-3.5 h-3.5" />
                   {t('quickDrill.freezeReward', {
-                    defaultValue: '🎁 连续 {{count}} 天快速训练奖励 1 张冻结卡！',
+                    defaultValue: '连续 {{count}} 天快速训练奖励 1 张冻结卡！',
                     count: currentQuickDrillStreak > 0 ? currentQuickDrillStreak : 7,
                   })}
                 </div>
@@ -386,14 +386,14 @@ export default function QuickDrill() {
             </button>
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-lg bg-[var(--brass)]/10 flex items-center justify-center">
-                <Zap className="w-6 h-6 text-[var(--brass)]" />
+                <Zap className="w-6 h-6 text-[var(--brass-text)]" />
               </div>
               <div>
-                <h1 className="font-display text-2xl text-[var(--ivory)]">
+                <h2 className="font-display text-2xl text-[var(--ivory)]">
                   {isQuickMode
                     ? t('quickDrill.quickTitle', { defaultValue: '3 分钟快速训练' })
                     : t('quickDrill.title', { defaultValue: '5 分钟速训' })}
-                </h1>
+                </h2>
                 <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
                   {isQuickMode
                     ? t('quickDrill.quickSubtitle', {
@@ -455,7 +455,7 @@ export default function QuickDrill() {
           {/* Weak areas info */}
           {!isQuickMode && weakAreas.length > 0 && (
             <div className="flex items-start gap-2 text-xs text-[var(--ivory-muted)]">
-              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--brass)]" />
+              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--brass-text)]" />
               <span>{t('quickDrill.weakAreasHint', { defaultValue: '将优先从你的薄弱领域抽取题目' })}</span>
             </div>
           )}
@@ -463,7 +463,7 @@ export default function QuickDrill() {
           {/* P0-5: 快速模式下显示 mode 信息 */}
           {isQuickMode && (
             <div className="flex items-start gap-2 text-xs text-[var(--ivory-muted)]">
-              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--brass)]" />
+              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--brass-text)]" />
               <span>
                 {t('quickDrill.modeHint', {
                   defaultValue: '当前模式：{{mode}}，已完成今日训练将自动计入连续天数',

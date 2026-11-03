@@ -17,9 +17,9 @@ interface SessionResultProps {
 /** 根据正确率返回颜色和评价 key — uses card-room palette (brass/sage/clay) */
 function getAccuracyInfo(accuracy: number): { color: string; labelKey: string } {
   if (accuracy >= 0.9) return { color: 'text-[var(--brass-bright)]', labelKey: 'rangeTrainer.result.excellent' };
-  if (accuracy >= 0.7) return { color: 'text-[var(--sage)]', labelKey: 'rangeTrainer.result.good' };
-  if (accuracy >= 0.5) return { color: 'text-[var(--brass)]', labelKey: 'rangeTrainer.result.keepGoing' };
-  return { color: 'text-[var(--clay)]', labelKey: 'rangeTrainer.result.morePractice' };
+  if (accuracy >= 0.7) return { color: 'text-[var(--sage-text)]', labelKey: 'rangeTrainer.result.good' };
+  if (accuracy >= 0.5) return { color: 'text-[var(--brass-text)]', labelKey: 'rangeTrainer.result.keepGoing' };
+  return { color: 'text-[var(--clay-text)]', labelKey: 'rangeTrainer.result.morePractice' };
 }
 
 /** 统计薄弱手牌（答错≥2次） */
@@ -120,8 +120,8 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
           transition={{ ...transitionSlow, delay: 0.6 }}
         >
           <StatCard icon={<Target className="w-4 h-4" />} label={t('rangeTrainer.result.total')} value={`${result.totalQuestions}`} />
-          <StatCard icon={<span className="text-[var(--sage)] text-sm font-bold">✓</span>} label={t('rangeTrainer.result.correct')} value={`${result.correctAnswers}`} />
-          <StatCard icon={<span className="text-[var(--clay)] text-sm font-bold">✗</span>} label={t('rangeTrainer.result.wrong')} value={`${result.totalQuestions - result.correctAnswers}`} />
+          <StatCard icon={<span className="text-[var(--sage-text)] text-sm font-bold">✓</span>} label={t('rangeTrainer.result.correct')} value={`${result.correctAnswers}`} />
+          <StatCard icon={<span className="text-[var(--clay-text)] text-sm font-bold">✗</span>} label={t('rangeTrainer.result.wrong')} value={`${result.totalQuestions - result.correctAnswers}`} />
           <StatCard icon={<Clock className="w-4 h-4" />} label={t('rangeTrainer.result.avgTime')} value={`${avgTimeSec}s`} />
         </motion.div>
 
@@ -144,7 +144,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
                   {weakHands.map(({ hand, wrongCount }) => (
                     <span
                       key={hand}
-                      className="px-3 py-1.5 rounded-md bg-[var(--clay)]/12 border border-[var(--clay)]/40 text-[var(--clay)] text-sm font-medium font-numeric"
+                      className="px-3 py-1.5 rounded-md bg-[var(--clay)]/12 border border-[var(--clay)]/40 text-[var(--clay-text)] text-sm font-medium font-numeric"
                     >
                       {hand}
                       <span className="ml-1 text-xs opacity-80">{t('rangeTrainer.result.wrongCount', { count: wrongCount })}</span>
@@ -182,8 +182,8 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
                       {wrongDetails.map((d, i) => (
                         <tr key={i} className="border-b border-[var(--walnut-border)]/40 last:border-0">
                           <td className="py-2 px-2 font-medium text-[var(--ivory)] font-numeric">{d.question}</td>
-                          <td className="py-2 px-2 text-[var(--clay)] capitalize font-numeric">{d.userAnswer}</td>
-                          <td className="py-2 px-2 text-[var(--sage)] capitalize font-numeric">{d.correctAnswer}</td>
+                          <td className="py-2 px-2 text-[var(--clay-text)] capitalize font-numeric">{d.userAnswer}</td>
+                          <td className="py-2 px-2 text-[var(--sage-text)] capitalize font-numeric">{d.correctAnswer}</td>
                           <td className="py-2 px-2 text-right text-[var(--ivory-muted)] font-numeric">
                             {(d.timeTaken / 1000).toFixed(1)}s
                           </td>

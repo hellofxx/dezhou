@@ -29,7 +29,7 @@ export default function PuzzleHero({ dailyCompleted, dailyAccuracy }: PuzzleHero
       <div className="puzzle-hero-grid">
         <div className="puzzle-hero-copy">
           <p className="puzzle-hero-eyebrow">{t('puzzle.home.hero.eyebrow')}</p>
-          <h1 className="puzzle-hero-title">{t('puzzle.home.title')}</h1>
+          <h2 className="puzzle-hero-title">{t('puzzle.home.title')}</h2>
           <p className="puzzle-hero-sub">{t('puzzle.home.subtitle')}</p>
           <div className="puzzle-hero-actions">
             <Link to="/puzzle/daily" className="puzzle-hero-cta">

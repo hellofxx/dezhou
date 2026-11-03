@@ -7,7 +7,7 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
     shortName: 'TAG',
     description: '紧而激进的玩家，只打强牌但打得很凶',
     color: '#4a5a7a',           // 靖蓝（保守偏紧）
-    icon: '🎯',
+    iconId: 'target',
     stats: {
       vpip: 18,                 // 自愿入池率 18%
       pfr: 15,                  // 翻前加注率 15%
@@ -34,7 +34,7 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
     shortName: 'LAG',
     description: '松而激进的玩家，打很多牌且经常加注',
     color: '#c25a4c',           // 陶土红（激进）
-    icon: '🔥',
+    iconId: 'flame',
     stats: {
       vpip: 30,
       pfr: 25,
@@ -61,7 +61,7 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
     shortName: 'NIT',
     description: '极其保守的玩家，只打最顶级的牌',
     color: '#5a6a8a',           // 靖蓝（超保守）
-    icon: '🧊',
+    iconId: 'snowflake',
     stats: {
       vpip: 10,
       pfr: 8,
@@ -88,7 +88,7 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
     shortName: 'MAN',
     description: '极度激进的玩家，不断加注和bluff',
     color: '#9a4a3a',           // 深陶土（极度激进）
-    icon: '💥',
+    iconId: 'zap',
     stats: {
       vpip: 45,
       pfr: 35,
@@ -116,7 +116,7 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
     shortName: 'CS',
     description: '被动玩家，很少加注但喜欢跟注到底',
     color: '#c9a25e',           // 黄铜（被动）
-    icon: '📞',
+    iconId: 'phone',
     stats: {
       vpip: 40,
       pfr: 5,
@@ -143,7 +143,7 @@ export const OPPONENT_PROFILES: Record<string, OpponentProfile> = {
     shortName: '?',
     description: '没有足够数据的对手，使用默认GTO策略',
     color: '#6e6553',           // 象牙灰
-    icon: '❓',
+    iconId: 'help',
     stats: {
       vpip: 25,
       pfr: 18,

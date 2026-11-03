@@ -10,7 +10,7 @@ interface StepProps {
 function Step({ title, children }: StepProps) {
   return (
     <div className="mb-6 last:mb-0">
-      <h4 className="font-semibold text-[var(--brass)] mb-2">{title}</h4>
+      <h4 className="font-semibold text-[var(--brass-text)] mb-2">{title}</h4>
       <div className="pl-4 border-l-2 border-[var(--walnut-border)] space-y-2">
         {children}
       </div>
@@ -50,7 +50,7 @@ interface WarningProps {
 function Warning({ children }: WarningProps) {
   return (
     <div className="mt-2 flex items-start gap-2 text-sm bg-[var(--danger)]/10 rounded p-2">
-      <span className="text-[var(--danger)]">⚠</span>
+      <span className="text-[var(--danger-text)]">⚠</span>
       <span className="text-[var(--ivory-dim)]">{children}</span>
     </div>
   );
@@ -70,7 +70,7 @@ function InteractiveSlider({ label, value, onChange, min, max, step }: Interacti
     <div className="space-y-2 mt-4">
       <div className="flex items-center justify-between">
         <label className="text-xs text-[var(--ivory-muted)]">{label}</label>
-        <span className="font-mono text-sm text-[var(--brass)]">{value}</span>
+        <span className="font-mono text-sm text-[var(--brass-text)]">{value}</span>
       </div>
       <input
         type="range"

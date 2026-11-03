@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Clock } from 'lucide-react';
+import { Clock, Target } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
 import { useProgressStore } from '@/features/progress/store';
@@ -28,7 +28,7 @@ export default function GoalSettingStep() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full px-6 py-10 max-w-2xl mx-auto">
-      <div className="text-4xl mb-3">🎯</div>
+      <Target size={34} strokeWidth={1.5} className="mb-3 text-[var(--brass-bright)]" aria-hidden="true" />
       <h2 className="font-display text-2xl md:text-3xl text-[var(--ivory)] text-center mb-2">
         {t('onboarding.goal.title')}
       </h2>

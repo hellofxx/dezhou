@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'; import { Lock } from 'lucide-react';
 import { useAcademyStore } from '../store';
 import { LEVEL_SUMMARIES as LEVELS } from '../utils/academyMeta';
 import { LOCAL_TRACK } from '../data/localTrack';
@@ -251,11 +251,11 @@ const GraphNodeItem = React.memo(function GraphNodeItem({
         </g>
       )}
 
-      {/* 未解锁 🔒 */}
+      {/* 未解锁：SVG 内以 foreignObject 承载 Lucide 锁标，避免 emoji 字体渲染差异 */}
       {status === 'locked' && (
-        <text x={node.x + LAYOUT.nodeWidth - 16} y={node.y + 14} fontSize={10} fill="var(--ivory-dim)">
-          🔒
-        </text>
+        <foreignObject x={node.x + LAYOUT.nodeWidth - 22} y={node.y + 3} width={16} height={16} pointerEvents="none">
+          <Lock className="h-3.5 w-3.5 text-[var(--ivory-dim)]" aria-hidden="true" />
+        </foreignObject>
       )}
 
       {/* Tooltip */}
@@ -466,7 +466,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
                 <span className="text-xs font-semibold text-[var(--ivory)]">
                   L{levelInfo.level} · {resolveLevelTitle(t, levelInfo)}
                 </span>
-                {!unlocked && <span className="text-[10px] text-[var(--ivory-dim)]">🔒</span>}
+                {!unlocked && <Lock className="w-3 h-3 text-[var(--ivory-dim)]" aria-hidden="true" />}
               </div>
               <div className="space-y-1.5">
                 {lessons.map((lesson) => {

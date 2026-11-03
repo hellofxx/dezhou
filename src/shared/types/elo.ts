@@ -27,7 +27,7 @@ export interface Rank {
   color: string;        // hex 颜色
   /** 语义 key（不是展示文本），渲染端通过 `progress.rank.<key>.description` i18n 解析 */
   description: string;
-  icon: string;         // emoji
+  icon: string;         // 牌室化 emoji（仅 RankUpCelebration 庆祝插画消费；徽章 UI 用 RankIcon）
 }
 
 /** 六段位常量（按 minScore 升序） */
@@ -76,7 +76,6 @@ export interface VariantConfig {
   name: string;
   shortName: string;
   description: string;
-  icon: string;         // emoji
   color: string;        // hex for UI theming
   deckSize: number;
   maxPlayers: number;
@@ -91,7 +90,6 @@ export const VARIANT_CONFIG: Record<PokerVariant, VariantConfig> = {
     name: "Texas Hold'em",
     shortName: 'Hold\'em',
     description: '标准德州扑克，52 张牌，最多 9 人桌',
-    icon: '♠️',
     color: '#c9a25e',
     deckSize: 52,
     maxPlayers: 9,
@@ -102,7 +100,6 @@ export const VARIANT_CONFIG: Record<PokerVariant, VariantConfig> = {
     name: 'Short Deck Hold\'em',
     shortName: 'Short Deck',
     description: '短牌德州，36 张牌（移除 2-5），同花>顺子，AA>KQ',
-    icon: '♦️',
     color: '#ef4444',
     deckSize: 36,
     maxPlayers: 6,
@@ -113,7 +110,6 @@ export const VARIANT_CONFIG: Record<PokerVariant, VariantConfig> = {
     name: 'Heads-Up Hold\'em',
     shortName: 'Heads-Up',
     description: '单挑德州，2 人对战，SB 强制 Ante，翻后 BB 先行动',
-    icon: '👤',
     color: '#3b82f6',
     deckSize: 52,
     maxPlayers: 2,

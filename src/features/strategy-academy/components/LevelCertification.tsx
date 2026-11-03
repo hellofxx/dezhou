@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, BookOpen } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore, REQUIRED_ACCURACY } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
@@ -120,7 +120,11 @@ export default function LevelCertification() {
           animate={{ opacity: 1, scale: 1 }}
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-8 text-center"
         >
-          <div className="text-6xl mb-4">{passed ? '🎉' : '📚'}</div>
+          {passed ? (
+            <Trophy size={52} className="mx-auto mb-4 text-[var(--brass-bright)]" aria-hidden="true" />
+          ) : (
+            <BookOpen size={52} className="mx-auto mb-4 text-[var(--ivory-muted)]" aria-hidden="true" />
+          )}
           <h2 className="font-display text-2xl text-[var(--ivory)] mb-2">
             {passed ? t('academy.levelCertification.passedTitle', { level }) : t('academy.levelCertification.keepGoing')}
           </h2>
@@ -181,9 +185,9 @@ export default function LevelCertification() {
                 <Award className="w-7 h-7 text-[var(--brass-bright)]" />
               </div>
               <div>
-                <h1 className="font-display text-2xl text-[var(--ivory)]">
+                <h2 className="font-display text-2xl text-[var(--ivory)]">
                   {t('academy.levelCertification.title', { level })}
-                </h1>
+                </h2>
                 <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
                   {levelEntries.map((e) => e.title).join(' · ')}
                 </p>
@@ -279,7 +283,7 @@ export default function LevelCertification() {
                   'w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
                   !showExplanation && 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 text-[var(--ivory-dim)]',
                   showExplanation && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
-                  showExplanation && isSelected && !isCorrectOption && 'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]',
+                  showExplanation && isSelected && !isCorrectOption && 'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--danger-text)]',
                   showExplanation && !isSelected && !isCorrectOption && 'opacity-40'
                 )}
               >
@@ -302,7 +306,7 @@ export default function LevelCertification() {
             animate={{ opacity: 1, y: 0 }}
             className={cn(
               'mt-4 rounded-lg p-4 text-sm leading-relaxed',
-              isCorrect ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90' : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
+              isCorrect ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90' : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--danger-text)]/90'
             )}
           >
             <p className="font-semibold mb-1">{isCorrect ? t('academy.quiz.correctMark') : t('academy.quiz.wrongMark')}</p>

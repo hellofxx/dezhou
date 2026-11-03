@@ -45,7 +45,7 @@ export function WrongAnswerList({ entries }: { entries: WrongAnswerEntry[] }) {
                       </span>
                     )}
                     {selectedOption && (
-                      <span className="text-[var(--clay)]">
+                      <span className="text-[var(--clay-text)]">
                         {t('puzzle.result.yourAnswer')}: <span className="font-display">{selectedOption.text}</span>
                       </span>
                     )}

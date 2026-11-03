@@ -167,7 +167,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                     !showExplanation &&
                       'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 text-[var(--ivory-dim)]',
                     showExplanation && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
-                    showExplanation && isSelected && !isCorrectOption && 'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--poker-danger)]',
+                    showExplanation && isSelected && !isCorrectOption && 'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--danger-text)]',
                     showExplanation && !isSelected && !isCorrectOption &&
                       'border-[var(--walnut-border)]/50 bg-[var(--felt)]/50 text-[var(--ivory-muted)] opacity-60'
                   )}
@@ -194,7 +194,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                 'mt-4 rounded-lg p-4 text-sm leading-relaxed',
                 isCorrect
                   ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90'
-                  : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--poker-danger)]/90'
+                  : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--danger-text)]/90'
               )}
             >
               <p className="font-semibold mb-1">{isCorrect ? t('theory.quiz.correct') : t('theory.quiz.incorrect')}</p>

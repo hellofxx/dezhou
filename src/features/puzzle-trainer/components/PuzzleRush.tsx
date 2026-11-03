@@ -123,7 +123,7 @@ export default function PuzzleRush() {
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 rounded-full font-numeric text-lg tracking-wider',
               isUrgent
-                ? 'bg-[var(--clay)]/20 text-[var(--clay)] border border-[var(--clay)]/40'
+                ? 'bg-[var(--clay)]/20 text-[var(--clay-text)] border border-[var(--clay)]/40'
                 : 'bg-[var(--walnut)]/60 text-[var(--brass-bright)] border border-[var(--walnut-border)]'
             )}
           >
@@ -144,7 +144,7 @@ export default function PuzzleRush() {
 
         {/* 连续答错降级提示 */}
         {shouldDownshiftDifficulty() && (
-          <div className="px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay)]">
+          <div className="px-4 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay-text)]">
             {t('puzzle.common.downshiftHint')}
           </div>
         )}
@@ -173,7 +173,7 @@ export default function PuzzleRush() {
             {t('puzzle.rush.correct')}: <span className="font-numeric text-[var(--success)]">{engine.state.correctCount}</span>
           </span>
           <span>
-            {t('puzzle.rush.wrong')}: <span className="font-numeric text-[var(--clay)]">{engine.state.wrongCount}</span>
+            {t('puzzle.rush.wrong')}: <span className="font-numeric text-[var(--clay-text)]">{engine.state.wrongCount}</span>
           </span>
           <span>
             {t('puzzle.rush.streak')}: <span className="font-numeric text-[var(--brass-bright)]">{engine.state.streak}</span>

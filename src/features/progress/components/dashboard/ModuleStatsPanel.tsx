@@ -24,7 +24,7 @@ export default function ModuleStatsPanel({ moduleStats }: ModuleStatsPanelProps)
   return (
     <motion.div variants={staggerContainer(0.1)} initial="hidden" animate="visible">
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--brass-deep)]">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--brass-text)]">
           {t('progress.stats.moduleTitle')}
         </span>
         <span className="flex-1 h-px bg-gradient-to-r from-[var(--brass)]/30 to-transparent" />

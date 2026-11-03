@@ -240,8 +240,8 @@ export default function ChoiceDrillRenderer({ onComplete, onExit, lesson }: Choi
               </>
             ) : (
               <>
-                <XCircle className="w-4 h-4 text-[var(--danger)]" />
-                <span className="text-sm font-bold text-[var(--danger)]">{t('academy.drill.incorrect')}</span>
+                <XCircle className="w-4 h-4 text-[var(--danger-text)]" />
+                <span className="text-sm font-bold text-[var(--danger-text)]">{t('academy.drill.incorrect')}</span>
                 {current.options.find(o => o.isCorrect) && (
                   <span className="text-xs text-[var(--ivory-muted)] ml-2">
                     {t('drills.common.correctAnswerPrefix', { answer: current.options.find(o => o.isCorrect)!.text })}

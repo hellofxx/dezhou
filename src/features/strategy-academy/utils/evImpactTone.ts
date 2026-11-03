@@ -44,7 +44,7 @@ export function classifyEvImpact(raw: string | undefined | null): EvImpactTone {
 export function evImpactToneClass(raw: string | undefined | null): string {
   switch (classifyEvImpact(raw)) {
     case 'negative':
-      return 'text-[var(--danger)]';
+      return 'text-[var(--danger-text)]';
     case 'positive':
       return 'text-[var(--success)]';
     default:

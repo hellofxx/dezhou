@@ -52,7 +52,7 @@ export function EVCalculator() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label htmlFor="ev-equity-slider" className="text-sm text-[var(--ivory-muted)]">{t('potOdds.ev.equity')}</label>
-              <span className="text-lg font-bold font-mono text-[var(--brass)]">{winRate}%</span>
+              <span className="text-lg font-bold font-mono text-[var(--brass-text)]">{winRate}%</span>
             </div>
             <input
               id="ev-equity-slider"
@@ -90,7 +90,7 @@ export function EVCalculator() {
           <div className="border-t border-[var(--walnut-border)] pt-4">
             <div className="text-center">
               <p className="text-sm text-[var(--ivory-dim)] mb-2">{t('potOdds.ev.resultLabel')}</p>
-              <p className={`text-4xl font-bold font-mono ${currentEV >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger)]'}`}>
+              <p className={`text-4xl font-bold font-mono ${currentEV >= 0 ? 'text-[var(--success)]' : 'text-[var(--danger-text)]'}`}>
                 {currentEV >= 0 ? '+' : ''}{currentEV.toFixed(2)}
               </p>
               <p className="mt-2 text-xs text-[var(--ivory-dim)]">

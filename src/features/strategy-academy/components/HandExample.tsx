@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, Lightbulb } from 'lucide-react';
 import type { HandExample as HandExampleType } from '../types';
 import { PokerCard } from '@/shared/components/poker/Card';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
@@ -12,6 +12,7 @@ import { stringToCard } from '@/shared/utils/deck';
 import { formatBB } from '@/shared/utils/formatters';
 import { resolveHandExample, resolveOpponent } from '../utils/contentKeys';
 import { PredictionPrompt } from './PredictionPrompt';
+import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
 
 interface HandExampleProps {
   example: HandExampleType;
@@ -76,7 +77,7 @@ export function HandExampleComponent({
             className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
             style={{ backgroundColor: resolvedOpponent.color + '20', border: `2px solid ${resolvedOpponent.color}` }}
           >
-            {resolvedOpponent.icon}
+            <OpponentGlyph iconId={resolvedOpponent.iconId} size={18} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-medium text-[var(--ivory)]">
@@ -100,7 +101,7 @@ export function HandExampleComponent({
                 : t('academy.gameContext.sng')}
           </span>
           {resolvedExample.gameContext.icmPressure && resolvedExample.gameContext.icmPressure !== 'low' && (
-            <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-danger)]/20 text-[var(--poker-danger)]">
+            <span className="px-2 py-0.5 rounded text-xs bg-[var(--poker-danger)]/20 text-[var(--danger-text)]">
               {t('academy.gameContext.icmPressure')}
               {resolvedExample.gameContext.icmPressure === 'high' ? t('academy.gameContext.icmHigh') : t('academy.gameContext.icmMedium')}
             </span>
@@ -123,7 +124,7 @@ export function HandExampleComponent({
         <div className="relative z-10 flex flex-col items-center gap-4">
           {/* Pot size indicator */}
           <div className="bg-black/40 px-4 py-1.5 rounded-full">
-            <span className="text-[var(--brass)] font-mono text-xs md:text-sm font-bold">Pot: {formatBB(resolvedExample.potSize)}</span>
+            <span className="text-[var(--brass-text)] font-mono text-xs md:text-sm font-bold">Pot: {formatBB(resolvedExample.potSize)}</span>
           </div>
 
           {/* Board cards */}
@@ -227,8 +228,8 @@ export function HandExampleComponent({
         {/* Common Mistake */}
         <div className="rounded-lg border-l-4 border-[var(--danger)] bg-[var(--danger)]/5 p-4 overflow-hidden break-words">
           <div className="flex items-center gap-2 mb-3">
-            <XCircle className="w-4 h-4 text-[var(--danger)]" />
-            <span className="text-sm font-semibold text-[var(--danger)]">{t('academy.content.handExample.commonMistake')}</span>
+            <XCircle className="w-4 h-4 text-[var(--danger-text)]" />
+            <span className="text-sm font-semibold text-[var(--danger-text)]">{t('academy.content.handExample.commonMistake')}</span>
           </div>
           <p className="text-sm font-bold text-[var(--ivory)] mb-2">
             {resolvedExample.commonMistake.action}
@@ -236,7 +237,7 @@ export function HandExampleComponent({
           <p className="text-xs text-[var(--ivory-dim)] leading-relaxed mb-2">
             {resolvedExample.commonMistake.reasoning}
           </p>
-          <span className="inline-block rounded bg-[var(--danger)]/15 px-2 py-0.5 text-xs font-mono text-[var(--danger)]">
+          <span className="inline-block rounded bg-[var(--danger)]/15 px-2 py-0.5 text-xs font-mono text-[var(--danger-text)]">
             EV: {resolvedExample.commonMistake.evLoss}
           </span>
         </div>
@@ -246,7 +247,8 @@ export function HandExampleComponent({
       {resolvedOpponent && (
         <div className="mt-1 pt-3 border-t border-[var(--walnut-border)]">
           <p className="text-xs text-[var(--ivory-dim)]">
-            💡 {t('academy.checkpoint.opponentHint', { shortName: resolvedOpponent.shortName, tip: resolvedOpponent.exploitableBy[0] })}
+            <Lightbulb className="inline-block w-3.5 h-3.5 mr-1 -mt-0.5 text-[var(--brass-text)]" aria-hidden="true" />
+            {t('academy.checkpoint.opponentHint', { shortName: resolvedOpponent.shortName, tip: resolvedOpponent.exploitableBy[0] })}
           </p>
         </div>
       )}

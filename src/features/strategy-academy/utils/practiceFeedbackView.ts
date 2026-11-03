@@ -3,6 +3,7 @@ import {
   calculateGrade,
   GRADE_DISPLAY_CONFIG,
   type DecisionGrade,
+  type GradeIconId,
 } from '@/shared/types/decisionFeedback';
 
 /**
@@ -28,8 +29,8 @@ export interface PracticeFeedbackView {
   mode: PracticeFeedbackMode;
   /** 仅 calibrated 非空：由真实 evLoss 经 calculateGrade 得出 */
   grade: DecisionGrade | null;
-  /** 仅 calibrated 非空：等级 emoji 图标 */
-  gradeIcon: string | null;
+  /** 仅 calibrated 非空：等级图标语义 id（渲染层经 GradeIcon 映射为 Lucide） */
+  gradeIcon: GradeIconId | null;
   /** 仅 calibrated 非空：等级标题 i18n key（feedback.grade.*） */
   gradeTitleKey: string | null;
   /** 仅 calibrated 非空：数据侧真实 EV 损失（BB） */
@@ -41,7 +42,7 @@ export interface PracticeFeedbackView {
 const UNCALIBRATED_CORRECT_CLASS =
   'border-[var(--success)]/40 bg-[var(--success)]/10 text-[var(--success)]';
 const UNCALIBRATED_INCORRECT_CLASS =
-  'border-[var(--danger)]/40 bg-[var(--danger)]/10 text-[var(--danger)]';
+  'border-[var(--danger)]/40 bg-[var(--danger)]/10 text-[var(--danger-text)]';
 
 /**
  * 读取数据侧真实标定的数值型 evLoss。
@@ -69,7 +70,7 @@ export function resolvePracticeFeedbackView(
     return {
       mode: 'calibrated',
       grade,
-      gradeIcon: config.icon,
+      gradeIcon: config.iconId,
       gradeTitleKey: config.titleKey,
       evLoss,
       containerClass: `${config.color} ${config.textColor}`,
