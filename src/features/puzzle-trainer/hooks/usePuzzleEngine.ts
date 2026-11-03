@@ -61,7 +61,7 @@ export interface UsePuzzleEngineReturn {
   currentAnswer: PuzzleAnswerRecord | null;
   /** 构建结果对象（用于持久化与结果页） */
   buildResult: () => PuzzleResult;
-  /** 最近一次连对奖励反馈（毫秒），用于 UI 显示"⚡ +10s" */
+  /** 最近一次连对奖励反馈（毫秒），用于 UI 显示 Zap 图标 + "+10s" */
   lastBonus: number;
   /** 清除最近一次奖励反馈 */
   clearBonus: () => void;

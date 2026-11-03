@@ -18,6 +18,7 @@ import { usePuzzleEngine } from '../hooks/usePuzzleEngine';
 // 会话接线（选中项 / recordAnswer / 完成提交 / emit）下沉至 usePuzzleSession
 import { usePuzzleSession } from '../hooks/usePuzzleSession';
 import { PUZZLE_THEMES, getThemeMeta } from '../data/puzzleBank';
+import { getThemeIcon } from '../utils/themeIcons';
 import { useProgressStore } from '@/features/progress/store';
 // P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
@@ -52,6 +53,7 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const themeMeta = getThemeMeta(theme);
+  const ThemeIcon = getThemeIcon(theme);
   const themeLabel = themeMeta
     ? t(themeMeta.nameKey, themeMeta.fallbackName)
     : t('puzzle.theme.unknownTheme');
@@ -114,7 +116,7 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
             {t('puzzle.common.exit')}
           </Button>
           <h2 className="font-display text-base text-[var(--ivory)] tracking-wide flex items-center gap-2">
-            {themeMeta?.icon && <span>{themeMeta.icon}</span>}
+            <ThemeIcon className="w-4 h-4 shrink-0 text-[var(--brass-bright)]" aria-hidden />
             {themeLabel}
           </h2>
           <div className="text-xs text-[var(--ivory-dim)] font-numeric">

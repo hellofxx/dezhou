@@ -9,9 +9,23 @@
  *
  * 三色与答题反馈色错开：正确=苔藓绿、错误=陶土红，避免答题前被颜色暗示答案。
  * PuzzleCard 不再自己维护 grid 按钮，改委托给 ActionBoard 统一管理。
+ *
+ * 可区分性增强（同档内区分具体动作）：tier 配色保持不变（有意设计，防颜色暗示答案），
+ * 改为在 gauge 同一行（标签上方）追加 Lucide 动作图标，见 ACTION_ICONS。
+ * 图标 14px、`aria-hidden`、无文字替代（动作语义已由标签文本承载），
+ * 无法解析类别时不渲染图标，避免猜测。
  */
 import { useMemo } from 'react';
-import { Check, X } from 'lucide-react';
+import {
+  ArrowUp,
+  Check,
+  Flame,
+  Footprints,
+  HandCoins,
+  ShieldCheck,
+  X,
+  type LucideIcon,
+} from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { parseOptionSortKey } from '../utils/optionOrder';
 import type { PuzzleOption } from '../types';
@@ -47,6 +61,38 @@ const TIER_DOT: Record<ActionTier, string> = {
   aggressive: 'dot--clay',
 };
 
+/**
+ * 动作图标色：与该档 gauge 点色同源（standard 档按钮本体不设 color，
+ * 故显式给黄铜金，避免图标落在中性 ivory 上与其他两档割裂）。
+ */
+const TIER_ICON_COLOR: Record<ActionTier, string> = {
+  passive: 'text-[var(--poker-indigo-bright)]',
+  standard: 'text-[var(--brass-bright)]',
+  aggressive: 'text-[var(--clay)]',
+};
+
+/** 动作图标键（同时作为 `data-action-icon` 供测试与样式定位） */
+type ActionIconKey = 'fold' | 'check' | 'call' | 'limp' | 'bet' | 'raise' | 'allin';
+
+/**
+ * 动作类别（parseOptionSortKey.category）→ 图标。
+ * 同 tier 的多个动作靠图标区分（如 passive 档 Fold=X / Check=ShieldCheck），
+ * 未列出的类别（含 99 无法识别）不渲染图标。
+ */
+const ACTION_ICONS: Readonly<Record<number, { key: ActionIconKey; Icon: LucideIcon }>> = {
+  0: { key: 'fold', Icon: X }, // Fold
+  1: { key: 'check', Icon: ShieldCheck }, // Check
+  2: { key: 'call', Icon: HandCoins }, // Call
+  3: { key: 'limp', Icon: Footprints }, // Limp
+  4: { key: 'bet', Icon: ArrowUp }, // Bet / C-bet
+  5: { key: 'raise', Icon: ArrowUp }, // Raise / 3-bet / 4-bet
+  6: { key: 'allin', Icon: Flame }, // 全下
+};
+
+function getActionIcon(category: number): { key: ActionIconKey; Icon: LucideIcon } | null {
+  return ACTION_ICONS[category] ?? null;
+}
+
 /** 根据选项数量决定列数键值：1/2/3/4 +，CSS 通过 .action-board--cols-N 控制列布局 */
 function pickColsClass(count: number): string {
   if (count <= 1) return 'action-board--cols-1';
@@ -62,13 +108,17 @@ export default function ActionBoard({
   onSelect,
   className,
 }: ActionBoardProps) {
-  // 预解析每个选项的 tier，避免 render 期间重复解析
+  // 预解析每个选项的 tier 与动作图标，避免 render 期间重复解析
   const annotated = useMemo(
     () =>
-      options.map((opt) => ({
-        option: opt,
-        tier: getActionTier(parseOptionSortKey(opt.text).category),
-      })),
+      options.map((opt) => {
+        const { category } = parseOptionSortKey(opt.text);
+        return {
+          option: opt,
+          tier: getActionTier(category),
+          actionIcon: getActionIcon(category),
+        };
+      }),
     [options]
   );
 
@@ -76,10 +126,11 @@ export default function ActionBoard({
 
   return (
     <div className={gridClass}>
-      {annotated.map(({ option: opt, tier }) => {
+      {annotated.map(({ option: opt, tier, actionIcon }) => {
         const isSelected = selectedOptionId === opt.id;
         const showResult = isAnswered && isSelected;
         const showCorrect = isAnswered && opt.isCorrect;
+        const ActionIcon = actionIcon?.Icon;
 
         return (
           <button
@@ -100,15 +151,25 @@ export default function ActionBoard({
               isAnswered && !showResult && !showCorrect && 'action-tile--dim'
             )}
           >
-            {/* 行动强度 gauge：3 颗 dots，按 tier 点亮 1/2/3 颗，颜色取该档固定色 */}
-            <span className="action-tile-gauge" aria-hidden>
-              <span className={cn('dot', 'dot--on', TIER_DOT[tier])} />
-              <span
-                className={cn('dot', tier !== 'passive' && 'dot--on', TIER_DOT[tier])}
-              />
-              <span
-                className={cn('dot', tier === 'aggressive' && 'dot--on', TIER_DOT[tier])}
-              />
+            {/* 顶行：动作图标（同档内区分动作）+ 行动强度 gauge（按 tier 点亮 1/2/3 颗） */}
+            <span className="flex items-center gap-2">
+              {ActionIcon ? (
+                <span className="inline-flex" data-action-icon={actionIcon?.key}>
+                  <ActionIcon
+                    className={cn('w-3.5 h-3.5 shrink-0', TIER_ICON_COLOR[tier])}
+                    aria-hidden
+                  />
+                </span>
+              ) : null}
+              <span className="action-tile-gauge" aria-hidden>
+                <span className={cn('dot', 'dot--on', TIER_DOT[tier])} />
+                <span
+                  className={cn('dot', tier !== 'passive' && 'dot--on', TIER_DOT[tier])}
+                />
+                <span
+                  className={cn('dot', tier === 'aggressive' && 'dot--on', TIER_DOT[tier])}
+                />
+              </span>
             </span>
 
             {/* 主标签 */}

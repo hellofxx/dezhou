@@ -123,6 +123,8 @@ describe('ThemeDrill themeId 原地切换重建引擎（BUG-PZL-003）', () => {
     render();
     expect(questionIdInDom()).toBe(firstQuestionId('preflop-rfi'));
     expect(progressInDom()).toMatch(/^1\//);
+    // 顶部栏主题标题带 Lucide 主题图标（装饰性，不承担语义）
+    expect(container.querySelector('h2 svg[aria-hidden="true"]')).not.toBeNull();
   });
 
   it('themeId 原地变化后引擎重建为新主题首题，进度计数回到 1', () => {

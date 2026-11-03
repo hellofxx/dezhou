@@ -166,4 +166,17 @@ describe('PuzzleHome 谜题首页', () => {
     expect(themeCard?.querySelectorAll('.dot.filled')).toHaveLength(3);
     expect(themeCard?.querySelectorAll('.dot')).toHaveLength(5);
   });
+
+  it('主题卡片渲染 Lucide 主题图标（装饰性 aria-hidden），卡片文本不再含 emoji', () => {
+    render();
+    const cards = [...container.querySelectorAll<HTMLElement>('.theme-card')];
+    expect(cards).toHaveLength(PUZZLE_THEMES.length);
+
+    for (const card of cards) {
+      const icon = card.querySelector('svg[aria-hidden="true"]');
+      expect(icon).not.toBeNull();
+      // emoji 已迁移为 Lucide：卡片文本不含 Emoji_Presentation 字符
+      expect(card.textContent ?? '').not.toMatch(/\p{Emoji_Presentation}/u);
+    }
+  });
 });

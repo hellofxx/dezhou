@@ -10,9 +10,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Zap, CalendarDays, Library, ChevronRight } from 'lucide-react';
+import { Zap, CalendarDays, Library, ChevronRight, Target, Trophy } from 'lucide-react';
 import { PUZZLE_THEMES, PUZZLE_CATEGORIES, getPuzzlesByTheme } from '../data/puzzleBank';
 import { getDailyKey } from '../data/dailyPuzzles';
+import { getThemeIcon } from '../utils/themeIcons';
 import { usePuzzleStore } from '../store';
 import PuzzleHero from './PuzzleHero';
 import { staggerContainer, staggerItem } from '@/shared/utils/motion';
@@ -55,7 +56,10 @@ export default function PuzzleHome() {
               <div className="puzzle-desc flex-1">{t('puzzle.rushDesc')}</div>
               <div className="puzzle-meta">
                 {rushBest && (
-                  <span>🏆 {t('puzzle.home.bestRecord', { score: rushBest.bestScore })}</span>
+                  <span>
+                    <Trophy className="w-3 h-3" aria-hidden />
+                    {t('puzzle.home.bestRecord', { score: rushBest.bestScore })}
+                  </span>
                 )}
                 <span className="flex items-center gap-1">
                   {([3, 5] as const).map((min) => (
@@ -89,7 +93,12 @@ export default function PuzzleHome() {
               <div className="puzzle-meta">
                 <span>{todayKey}</span>
                 {isTodayCompleted && <span className="text-[var(--poker-success)]">✓</span>}
-                {dailyBest && <span>🎯 {Math.round(dailyBest.bestAccuracy * 100)}%</span>}
+                {dailyBest && (
+                  <span>
+                    <Target className="w-3 h-3" aria-hidden />
+                    {Math.round(dailyBest.bestAccuracy * 100)}%
+                  </span>
+                )}
               </div>
             </div>
           </motion.div>
@@ -149,6 +158,7 @@ export default function PuzzleHome() {
                     const diffLevel: 'beginner' | 'intermediate' | 'advanced' =
                       avgDiff < 1.5 ? 'beginner' : avgDiff < 2.5 ? 'intermediate' : 'advanced';
                     const filledDots = best ? Math.min(5, Math.round(best.bestAccuracy * 5)) : 0;
+                    const ThemeIcon = getThemeIcon(theme.id);
                     return (
                       <button
                         key={theme.id}
@@ -156,7 +166,10 @@ export default function PuzzleHome() {
                         className="theme-card text-left"
                       >
                         <div className="flex items-start gap-2 mb-2">
-                          <span className="text-lg">{theme.icon}</span>
+                          <ThemeIcon
+                            className="w-[18px] h-[18px] shrink-0 mt-0.5 text-[var(--brass-bright)]"
+                            aria-hidden
+                          />
                           <div className="flex-1 min-w-0">
                             <div className="theme-name">{label}</div>
                             <div className="theme-diff">

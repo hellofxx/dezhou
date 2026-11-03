@@ -18,8 +18,6 @@ export interface PuzzleThemeMeta {
   fallbackName: string;
   /** 默认中文描述 */
   fallbackDesc: string;
-  /** emoji 图标 */
-  icon: string;
   /** 主题分类（用于 PuzzleHome 分组展示） */
   category: PuzzleThemeCategory;
 }
@@ -30,7 +28,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.preflop-rfi',
     fallbackName: '翻前 RFI',
     fallbackDesc: '各位置开牌范围与边界手牌决策',
-    icon: '🎯',
     category: 'preflop',
   },
   {
@@ -38,7 +35,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.big-blind-defense',
     fallbackName: '大盲防守',
     fallbackDesc: '面对开牌后的 defend / 3-bet / fold 决策',
-    icon: '🛡️',
     category: 'preflop',
   },
   {
@@ -46,7 +42,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.three-bet',
     fallbackName: '3-bet 策略',
     fallbackDesc: '翻前 3-bet 范围与 4bet 应对',
-    icon: '⚡',
     category: 'preflop',
   },
   {
@@ -54,7 +49,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.c-bet',
     fallbackName: 'C-Bet 持续下注',
     fallbackDesc: '翻牌持续下注尺度与频率',
-    icon: '🔫',
     category: 'postflop',
   },
   {
@@ -62,7 +56,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.flush-draw',
     fallbackName: '同花听牌',
     fallbackDesc: '同花听牌的赔率与半诈唬决策',
-    icon: '💧',
     category: 'postflop',
   },
   {
@@ -70,7 +63,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.multiway',
     fallbackName: '多人底池',
     fallbackDesc: '多人底池的范围收缩与紧绑策略',
-    icon: '👥',
     category: 'postflop',
   },
   {
@@ -78,7 +70,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.river-value',
     fallbackName: '河牌价值下注',
     fallbackDesc: '河牌价值下注尺度与范围选择',
-    icon: '💎',
     category: 'river',
   },
   {
@@ -86,7 +77,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.bluff',
     fallbackName: '诈唬时机',
     fallbackDesc: '成功诈唬所需的条件与 blocker',
-    icon: '🎭',
     category: 'river',
   },
   {
@@ -94,7 +84,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.short-stack',
     fallbackName: '短筹码策略',
     fallbackDesc: '20-40BB 筹码下的翻前开牌与全下范围',
-    icon: '📦',
     category: 'tournament',
   },
   {
@@ -102,7 +91,6 @@ export const PUZZLE_THEMES: PuzzleThemeMeta[] = [
     nameKey: 'puzzle.themes.icm',
     fallbackName: 'ICM 基础',
     fallbackDesc: '锦标赛独立芯片模型与决赛桌决策',
-    icon: '🏆',
     category: 'tournament',
   },
 ];

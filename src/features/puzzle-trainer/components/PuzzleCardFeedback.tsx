@@ -7,6 +7,7 @@
  * - RelatedLessonChip：替换原"去复习"文本链接（relatedLessonId 由 usePuzzleEngine 推导）
  */
 import { motion } from 'framer-motion';
+import { CircleCheck, CircleX } from 'lucide-react';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionFast } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
@@ -64,7 +65,11 @@ export function PuzzleCardFeedback({
           </>
         ) : (
           <>
-            <span className="text-base">{record.isCorrect ? '✅' : '❌'}</span>
+            {record.isCorrect ? (
+              <CircleCheck className="w-4 h-4 text-[var(--success)]" aria-hidden />
+            ) : (
+              <CircleX className="w-4 h-4 text-[var(--clay)]" aria-hidden />
+            )}
             <span
               className={cn(
                 'font-display tracking-wide',
