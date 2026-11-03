@@ -11,8 +11,11 @@
 | 文件 | 保护的不变式 | 运行命令 |
 |---|---|---|
 | `dealerSlip.contrast.test.ts` | 发牌员纸条（`.dealer-slip`）文字的 WCAG AA 对比度：`--paper-ink` 于 `--paper` ≥ 7:1，次级/语义色 ≥ 4.5:1；暗色与 light 两套主题同样达标；`.dealer-slip` 把 canonical 与 alias token 重锚到 paper 深阶 | `pnpm test src/guards/dealerSlip.contrast.test.ts` |
+| `feltContrast.test.ts` | 暗底房间与纸条文本的 WCAG AA 对比度（token 层）：`--ivory-muted` / `--clay-text` / `--danger-text` / `--sage-text` / `--brass-text` 于 `--felt`、`--felt-raised` ≥ 4.5:1；`--clay-text` 于 `--clay` 15% 复合底、`--danger-text` 于 `--danger-bg` 复合底 ≥ 4.5:1；paper 四色于 `--paper` ≥ 4.5:1 且 `.dealer-slip` 把四个文本语义 token 重锚到对应 paper 深阶；light 主题四个文本 token 于 light `--paper` / `--paper-raised` ≥ 4.5:1 | `pnpm test src/guards/feltContrast.test.ts` |
 | `designTokenGuard.test.ts` | 全仓源码（`src/**/*.{ts,tsx}`）无 Tailwind 霓虹调色板类、无纯白/纯黑文字与实底类、无纯黑/纯白 hex 字面量（含任意值槽） | `pnpm test src/guards/designTokenGuard.test.ts` |
 | `designTokenCssGuard.test.ts` | `src/styles/*.css` 的 `background` 声明无超阈白透面填充、无纯黑实底；豁免项必须成对登记 DESIGN.md 依据；help 段 44px 触摸目标与 transition 引用动效 token | `pnpm test src/guards/designTokenCssGuard.test.ts` |
+| `pageHeadingGuard.test.ts` | 「一页一个 h1」：`src/layouts` / `src/features` / `src/shared` 非测试 `.ts(x)` 中含 `<h1` 的文件集合 === 8 个整页视图 allowlist；内嵌内容页必须用 h2，新增 h1 须显式登记 | `pnpm test src/guards/pageHeadingGuard.test.ts` |
+| `emojiWhitelist.guard.test.ts` | 交互 UI 不用 emoji：`src/shared/components/**`、`src/features/**/components/**` 与 shared 类型 / 数据点名文件里命中 `\p{Extended_Pictographic}` 的文件集合 === 7 个庆祝 / 徽章插画 allowlist；花色与状态记号走 `TYPOGRAPHIC_GLYPHS` 豁免表 | `pnpm test src/guards/emojiWhitelist.guard.test.ts` |
 | `eslintCrossImports.test.ts` | `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 与精确快照一致（新增跨模块边必然变红，收紧时只删不加） | `pnpm test src/guards/eslintCrossImports.test.ts` |
 | `huPositionOrderGuard.test.ts` | 单挑（heads-up）位置方向零容忍：以 `theory-academy` 的 `variantRules.headsUpRules` 为单源，四份 HU locale 与单源本身不得出现「谁先行动 / 谁有位置」倒置 | `pnpm test src/guards/huPositionOrderGuard.test.ts` |
 | `variantRuleCopyGuard.test.ts` | 变体规则 UI 文案与单源一致：单挑描述为翻后 BB 先行动（`variant.json` / `elo.ts`），短牌文案为三条 > 顺子（`variant.json` / `rangeTrainer.json`），与 `variantRules.ts` 对齐 | `pnpm test src/guards/variantRuleCopyGuard.test.ts` |
@@ -29,3 +32,16 @@
 - 守卫必须**自检扫描面**：路径解析或 glob 失效时以「扫描文件数 / 扫描字段数偏低」的断言变红，禁止空洞通过。移动本目录文件后须重跑对应守卫确认自检未失效。
 - 目录层级变化时同步修正相对路径（守卫距 `src/` 为一层，故读 `src/styles` 用 `../styles`，读仓库根用 `../../`）。
 - 守卫失败即 `pnpm test` 变红，禁止用跳过/放宽断言来"修复"；确需豁免时先在设计文档登记依据（白名单只删不加）。
+
+## 设计层 UI 守卫的 allowlist 规则
+
+`feltContrast.test.ts` / `pageHeadingGuard.test.ts` / `emojiWhitelist.guard.test.ts` 均按「扫描面 + 白名单」判定，统一口径如下（失败信息一律带 `file:line`，可直接定位）：
+
+| 守卫 | 扫描面 | 白名单 / 豁免表 | 失败修复方式 |
+|---|---|---|---|
+| `feltContrast.test.ts` | `src/styles/globals.css` 顶层块（`:root`、`html[data-theme="light"]`、`.dealer-slip`）；颜色值全部从 CSS 解析，守卫里不登记任何色值 | 无文件白名单；`TINTED_SURFACES` 登记语义色铺底的复合口径（`--clay` 15%、`--danger-bg` 自带透明度），`SLIP_REANCHOR` 登记纸条必须重锚的四个 token | 调深文本阶或调亮底色（globals.css token），禁止下调阈值；新增 `color-mix()` 值需先换成字面量否则解析报错（错误信息会指出 token 名与 `var()` 解析链） |
+| `pageHeadingGuard.test.ts` | `src/layouts` / `src/features` / `src/shared` 非测试 `.ts(x)`（含 `.ts`：标题可能以 HTML 字符串形式留在数据文件里）；扫描面 ≥ 300 文件 | `H1_ALLOWLIST`：8 个整页视图（AppLayout / BlankLayout / ErrorBoundary / ResultSummary / WelcomeStep / PotOddsQuizPage / RangeLearnPage / SessionResult），每条附登记理由 | 内嵌内容页把 `<h1>` 降为 `<h2>`；确属整页视图则在 allowlist 显式登记理由。文件删 h1 后必须删除对应条目 |
+| `emojiWhitelist.guard.test.ts` | `src/shared/components/**`、`src/features/**/components/**`（非测试）＋ `shared/types/{elo,mentor,opponent,decisionFeedback}.ts`、`shared/data/opponentProfiles.ts`；扫描面 ≥ 150 文件；判定字符集 `\p{Extended_Pictographic}` | `ILLUSTRATION_ALLOWLIST`：7 个庆祝/徽章/段位插画文件（含 `shared/types/elo.ts` 的段位图标，仅 RankUpCelebration 消费）；`TYPOGRAPHIC_GLYPHS`：花色与状态记号（♠♥♦♣ / ℹ / ⚠ / ⏱）属同一字符集但默认文本呈现，不算插画 emoji | 交互 UI 改用 Lucide 图标；插画类在 allowlist 与 DESIGN.md 登记。豁免表条目在扫描面中消失后必须删除（否则变红） |
+
+- 两个文件白名单都**只减不加**，且带**失效检测**：allowlist 里的文件若已无 h1 / emoji，守卫同样变红，强制删除条目——避免清单腐化成「历史豁免堆积」。
+- 新增豁免的登记顺序：先在设计文档（DESIGN.md / PRD）写清依据，再改守卫白名单，最后在同一次提交里跑 `pnpm test src/guards`。
