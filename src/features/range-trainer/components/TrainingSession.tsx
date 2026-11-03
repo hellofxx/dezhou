@@ -9,6 +9,7 @@ import { QuizCard } from './QuizCard';
 import { QuizTimer } from './QuizTimer';
 import { Button } from '@/shared/components/ui/button';
 import { Progress } from '@/shared/components/ui/progress';
+import { TRAINING_OVERLAY_EVENT } from '@/shared/constants/app';
 import { Pause, X } from 'lucide-react';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 
@@ -52,6 +53,9 @@ export function TrainingSession({
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const feedbackAdvanceModeRef = useRef<'auto' | 'manual'>('auto');
   const completedRef = useRef(false);
+  // 快捷键浮层开合状态 + "本次暂停由浮层触发"标记（关浮层时只恢复浮层造成的暂停）
+  const overlayOpenRef = useRef(false);
+  const pausedByOverlayRef = useRef(false);
 
   const currentQuestion = getCurrentQuestion();
 
@@ -184,6 +188,8 @@ export function TrainingSession({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.defaultPrevented) return;
+      // 快捷键浮层打开期间，Esc/Space 归浮层所有：避免关闭浮层与本组件暂停/跳题双触发
+      if (overlayOpenRef.current) return;
       const target = e.target instanceof HTMLElement ? e.target : null;
       if (target?.closest('[role="dialog"]')) return;
 
@@ -216,6 +222,37 @@ export function TrainingSession({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [quizState.status, showFeedback, pauseQuiz, resumeQuiz, startTimer, handleNext, clearFeedbackTimer, pauseTimer, scheduleFeedbackAdvance]);
+
+  // 快捷键浮层（BlankLayout 经 TRAINING_OVERLAY_EVENT 派发）：浮层是模态，
+  // 打开即暂停会话与倒计时；关闭后仅恢复"由浮层造成"的暂停，并接续被中断的自动推进。
+  useEffect(() => {
+    const handleOverlay = (event: Event) => {
+      const { open } = (event as CustomEvent<{ open?: boolean }>).detail ?? {};
+
+      if (open) {
+        if (overlayOpenRef.current) return;
+        overlayOpenRef.current = true;
+        clearFeedbackTimer();
+        pausedByOverlayRef.current = quizState.status === 'running';
+        pauseQuiz();
+        pauseTimer();
+        return;
+      }
+
+      overlayOpenRef.current = false;
+      if (!pausedByOverlayRef.current) return;
+      pausedByOverlayRef.current = false;
+      resumeQuiz();
+      startTimer();
+      // RNG-005：仅当浮层打断的是自动推进反馈时才重排定时器（手动推进态恢复后不自跳）
+      if (showFeedback && feedbackAdvanceModeRef.current === 'auto') {
+        scheduleFeedbackAdvance(FEEDBACK_AUTO_ADVANCE_MS);
+      }
+    };
+
+    window.addEventListener(TRAINING_OVERLAY_EVENT, handleOverlay);
+    return () => window.removeEventListener(TRAINING_OVERLAY_EVENT, handleOverlay);
+  }, [quizState.status, showFeedback, clearFeedbackTimer, pauseQuiz, pauseTimer, resumeQuiz, startTimer, scheduleFeedbackAdvance]);
 
   // 暂停处理
   const handlePause = () => {
@@ -300,13 +337,13 @@ export function TrainingSession({
         })}
       />
 
-      {/* P4 修复（4.5-P0）：连续答错降级提示 */}
+      {/* P4 修复（4.5-P0）：连续答错降级提示 —— 窄屏换行而非把文案压成竖条 */}
       {shouldDownshiftDifficulty() && (
-        <div className="px-6 py-2 bg-[var(--clay)]/15 border-b border-[var(--clay)]/30 text-xs text-[var(--clay)] flex items-center justify-between">
-          <span>{t('rangeTrainer.session.downshiftHint')}</span>
+        <div className="px-6 py-2 bg-[var(--clay)]/15 border-b border-[var(--clay)]/30 text-xs text-[var(--clay)] flex flex-wrap items-center gap-2">
+          <span className="min-w-0">{t('rangeTrainer.session.downshiftHint')}</span>
           <button
             onClick={onExit}
-            className="text-[var(--clay)] underline hover:opacity-75 transition-opacity"
+            className="shrink-0 underline hover:opacity-75 transition-opacity"
           >
             {t('rangeTrainer.session.switchTraining')}
           </button>
@@ -334,25 +371,23 @@ export function TrainingSession({
         </span>
       </div>
 
-      {/* 暂停遮罩 */}
+      {/* 暂停遮罩：全屏 backdrop 上居中一张发牌员纸条（黄铜主按钮 + 次级退出，均 44px 命中区） */}
       {quizState.status === 'paused' && (
-        <div className="absolute inset-0 bg-[var(--felt-deep)]/85 backdrop-blur-sm flex items-center justify-center z-20">
-          <div className="text-center space-y-4">
-            <div className="font-display text-2xl text-[var(--ivory)] tracking-wide">{t('rangeTrainer.session.paused')}</div>
-            <Button
-              onClick={handleResume}
-              className="bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] px-8"
-            >
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-[var(--felt-deep)]/85 px-4 backdrop-blur-sm">
+          <div className="dealer-slip relative w-full max-w-sm space-y-4 p-6">
+            <div className="text-center font-display text-2xl text-[var(--ivory)] tracking-wide">
+              {t('rangeTrainer.session.paused')}
+            </div>
+            <Button onClick={handleResume} className="w-full min-h-11">
               {t('rangeTrainer.session.resume')}
             </Button>
-            <div>
-              <button
-                onClick={onExit}
-                className="text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] transition-colors"
-              >
-                {t('rangeTrainer.session.exit')}
-              </button>
-            </div>
+            <Button
+              variant="outline"
+              onClick={onExit}
+              className="w-full min-h-11 border-[var(--poker-danger)]/40 text-[var(--poker-danger)] hover:bg-[var(--poker-danger)]/10 hover:text-[var(--poker-danger)]"
+            >
+              {t('rangeTrainer.session.exit')}
+            </Button>
           </div>
         </div>
       )}

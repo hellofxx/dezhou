@@ -7,6 +7,8 @@
  * - 反馈态空格推进下一题、答错「再做一题」立即推进并清除自动跳题定时器
  * - 最后一题结束触发 onComplete（结果分支）
  * - 连续答错降级提示条与「切换训练」、Esc 暂停 / 恢复
+ * - 快捷键浮层（TRAINING_OVERLAY_EVENT）打开即暂停且不跳题，关闭后恢复并接续自动推进
+ * - 暂停遮罩内「退出训练」调用 onExit
  * 不引入 testing-library，直接用 react-dom/client + act 渲染（对齐 TheoryQuiz 测试模式）。
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
@@ -18,6 +20,7 @@ import { Position } from '@/shared/types/position';
 import { DEFAULT_ELO } from '@/shared/types/elo';
 import type { EloRating, PokerVariant } from '@/shared/types/elo';
 import type { TrainingResult } from '@/shared/types/common';
+import { TRAINING_OVERLAY_EVENT } from '@/shared/constants/app';
 import { useProgressStore, DEFAULT_STREAK_STATE } from '@/features/progress/store';
 import { DEFAULT_EMOTION_STATE } from '@/features/progress/types';
 import { TrainingSession } from './TrainingSession';
@@ -46,6 +49,13 @@ function click(el: HTMLElement) {
 function pressKey(key: string) {
   act(() => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+  });
+}
+
+/** 模拟 BlankLayout 派发的快捷键浮层开合事件 */
+function dispatchOverlay(open: boolean) {
+  act(() => {
+    window.dispatchEvent(new CustomEvent(TRAINING_OVERLAY_EVENT, { detail: { open } }));
   });
 }
 
@@ -277,6 +287,52 @@ describe('TrainingSession 会话流程', () => {
     pressKey('Escape');
     expect(quizState().status).toBe('running');
     expect(container.textContent).not.toContain('已暂停');
+  });
+
+  it('暂停遮罩内「退出训练」是按钮且调用 onExit', () => {
+    const onExit = vi.fn();
+    startSession(10, 10);
+    renderSession({ onExit });
+
+    pressKey('Escape');
+    expect(quizState().status).toBe('paused');
+
+    // 次级按钮（非纯文本链接）：命中区 ≥44px 由 min-h-11 保证
+    const exitButton = findButtonByText(container, '退出训练');
+    expect(exitButton.tagName).toBe('BUTTON');
+    expect(exitButton.className).toContain('min-h-11');
+
+    click(exitButton);
+    expect(onExit).toHaveBeenCalledTimes(1);
+  });
+
+  it('快捷键浮层 open 时暂停且不跳题，close 后恢复并继续自动推进', () => {
+    startSession(10, 10);
+    renderSession();
+
+    // 答对 → 反馈 + 1.5 秒自动跳题定时器已排
+    answerCorrect();
+    expect(quizState().status).toBe('running');
+
+    // 浮层打开：暂停会话（暂停遮罩出现），并清除自动跳题定时器
+    dispatchOverlay(true);
+    expect(quizState().status).toBe('paused');
+    expect(container.textContent).toContain('已暂停');
+
+    act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    expect(quizState().currentIndex).toBe(0);
+
+    // 浮层关闭：恢复运行，且重排被中断的自动推进
+    dispatchOverlay(false);
+    expect(quizState().status).toBe('running');
+    expect(container.textContent).not.toContain('已暂停');
+
+    act(() => {
+      vi.advanceTimersByTime(1600);
+    });
+    expect(quizState().currentIndex).toBe(1);
   });
 
   describe('移动端反馈 Sheet', () => {

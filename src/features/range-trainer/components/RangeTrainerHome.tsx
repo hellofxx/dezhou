@@ -76,15 +76,15 @@ export default function RangeTrainerHome() {
   return (
     <div className="h-full overflow-auto">
       <div className="py-6 space-y-6">
-        {/* 顶部标题栏 */}
-        <div className="flex items-center justify-between">
-          <div>
+        {/* 顶部标题栏 —— 窄屏纵向堆叠：标题独占一行，副标题不再被按钮组挤成多行 */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
             <h1 className="text-2xl font-bold text-[var(--ivory)]">{t('rangeTrainer.title')}</h1>
             <p className="text-sm text-[var(--ivory-dim)] mt-1">
               {t('rangeTrainer.subtitle')}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex shrink-0 gap-2">
             <Button
               variant="default"
               size="sm"
