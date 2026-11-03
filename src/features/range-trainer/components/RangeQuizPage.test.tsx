@@ -104,16 +104,14 @@ function trimToSingleQuestion(): void {
   });
 }
 
-/** 答对当前题并推进反馈自动跳题定时器（1s），使会话走完结算 */
+/** 答对当前题并点击「下一题」推进，使会话走完结算（反馈已改为手动推进） */
 function answerCurrentCorrectly(container: HTMLElement): void {
   const qs = rangeStore().quizState;
   const question = qs.questions[qs.currentIndex]!;
   const label =
     question.correctAction === 'fold' ? 'Fold' : question.correctAction === 'call' ? 'Call' : 'Raise';
   fireEvent.click(findButton(container, label));
-  act(() => {
-    vi.advanceTimersByTime(1100);
-  });
+  fireEvent.click(findButton(container, '下一题'));
   // 结算链路（completed → onComplete → 结果页）需再刷一帧 effect
   act(() => {});
 }

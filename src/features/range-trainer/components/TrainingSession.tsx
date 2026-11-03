@@ -12,6 +12,9 @@ import { Progress } from '@/shared/components/ui/progress';
 import { Pause, X } from 'lucide-react';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 
+/** 答对后的反馈自动推进延迟：够确认结果，又不打断连续训练节奏 */
+const FEEDBACK_AUTO_ADVANCE_MS = 1500;
+
 interface TrainingSessionProps {
   position: string;
   actionType: string;
@@ -47,6 +50,7 @@ export function TrainingSession({
   const [decisionFeedback, setDecisionFeedback] = useState<DecisionFeedback | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const feedbackAdvanceModeRef = useRef<'auto' | 'manual'>('auto');
   const completedRef = useRef(false);
 
   const currentQuestion = getCurrentQuestion();
@@ -94,9 +98,9 @@ export function TrainingSession({
     // P2-5.2: 情绪管理 — 记录答错
     recordAnswerForEmotion(false);
 
-    // 1.5 秒后自动进入下一题
-    scheduleFeedbackAdvance(1500);
-  }, [quizState.status, quizState.questionStartTime, quizState.pausedElapsed, feedback, getCurrentQuestion, answerQuestion, scheduleFeedbackAdvance, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion]);
+    // 超时按答错处理：保留反馈与决策分析，等待用户主动下一题
+    feedbackAdvanceModeRef.current = 'manual';
+  }, [quizState.status, quizState.questionStartTime, quizState.pausedElapsed, feedback, getCurrentQuestion, answerQuestion, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion]);
 
   const { timeRemaining, start: startTimer, pause: pauseTimer, reset: resetTimer } = useTimer({
     timeLimit: timeLimit,
@@ -117,6 +121,7 @@ export function TrainingSession({
     setFeedback(null);
     setDecisionFeedback(null);
     setShowFeedback(false);
+    feedbackAdvanceModeRef.current = 'auto';
   }, [quizState.currentIndex, resetTimer]);
 
   // 检测完成
@@ -159,15 +164,15 @@ export function TrainingSession({
       // P2-5.2: 情绪管理 — 记录答题
       recordAnswerForEmotion(isCorrect);
 
-      // 1 秒后自动进入下一题
-      scheduleFeedbackAdvance(1000);
+      // 答对自动推进；答错保留反馈，等待用户下一题 / Space
+      feedbackAdvanceModeRef.current = isCorrect ? 'auto' : 'manual';
+      if (isCorrect) scheduleFeedbackAdvance(FEEDBACK_AUTO_ADVANCE_MS);
     },
     [showFeedback, quizState.status, quizState.questionStartTime, quizState.pausedElapsed, getCurrentQuestion, answerQuestion, scheduleFeedbackAdvance, pauseTimer, recordEloForAnswer, recordSrsForAnswer, recordAnswerForEmotion],
   );
 
-  // §13.4.3 教育脚手架：wrong/blunder 反馈底部"再做一题"→ 清除自动跳转定时器后进入下一题
-  // （range-trainer 会话内题目均为同位置同动作类型，下一题即"同类型新题"，不清除当前反馈记录）
-  const handleTryAgain = useCallback(() => {
+  // 手动推进：答错/超时由用户确认后进入下一题；答对也可提前跳过自动等待
+  const handleNext = useCallback(() => {
     clearFeedbackTimer();
     setShowFeedback(false);
     setFeedback(null);
@@ -175,9 +180,13 @@ export function TrainingSession({
     nextQuestion();
   }, [nextQuestion, clearFeedbackTimer]);
 
-  // 键盘快捷键：Esc 暂停, Space 下一题
+  // 键盘快捷键：Esc 暂停, Space 下一题（Sheet 内交互由 Radix 自行处理）
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return;
+      const target = e.target instanceof HTMLElement ? e.target : null;
+      if (target?.closest('[role="dialog"]')) return;
+
       if (e.key === 'Escape') {
         if (quizState.status === 'running') {
           // RNG-005/006：Esc 暂停与按钮暂停行为对齐——清除反馈跳题定时器 + 同步停表
@@ -189,22 +198,24 @@ export function TrainingSession({
           // P1A-03 修复：恢复时同步重启倒计时（否则倒计时永久冻结）
           resumeQuiz();
           startTimer();
-          if (showFeedback) scheduleFeedbackAdvance(1000);
+          if (showFeedback && feedbackAdvanceModeRef.current === 'auto') {
+            scheduleFeedbackAdvance(FEEDBACK_AUTO_ADVANCE_MS);
+          }
         }
+        return;
       }
+
       if (e.key === ' ' && showFeedback) {
+        // 焦点在可用控件上时交给控件自身，避免按空格激活按钮同时切题
+        if (target?.closest('button:not([disabled]), a[href], input, textarea, select')) return;
         e.preventDefault();
-        clearFeedbackTimer();
-        setShowFeedback(false);
-        setFeedback(null);
-        setDecisionFeedback(null);
-        nextQuestion();
+        handleNext();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [quizState.status, showFeedback, pauseQuiz, resumeQuiz, startTimer, nextQuestion, clearFeedbackTimer, pauseTimer, scheduleFeedbackAdvance]);
+  }, [quizState.status, showFeedback, pauseQuiz, resumeQuiz, startTimer, handleNext, clearFeedbackTimer, pauseTimer, scheduleFeedbackAdvance]);
 
   // 暂停处理
   const handlePause = () => {
@@ -218,8 +229,10 @@ export function TrainingSession({
     // P1A-03 修复：恢复时同步重启倒计时（store 续算由 pausedElapsed 承担，P1A-14）
     resumeQuiz();
     startTimer();
-    // RNG-005：暂停打断了反馈自动跳转，恢复后重新计时（反馈期间暂停不应吞掉跳转）
-    if (showFeedback) scheduleFeedbackAdvance(1000);
+    // RNG-005：暂停打断的是自动推进；手动推进态恢复后不应自行跳题
+    if (showFeedback && feedbackAdvanceModeRef.current === 'auto') {
+      scheduleFeedbackAdvance(FEEDBACK_AUTO_ADVANCE_MS);
+    }
   };
 
   // 清理定时器
@@ -303,7 +316,6 @@ export function TrainingSession({
       {/* 中央区域 */}
       <div className="flex-1 flex items-center justify-center px-6 py-8">
         <QuizCard
-          key={quizState.currentIndex}
           question={currentQuestion}
           onAnswer={handleAnswer}
           timeRemaining={timeRemaining}
@@ -311,7 +323,7 @@ export function TrainingSession({
           feedback={showFeedback ? feedback : null}
           decisionFeedback={showFeedback ? decisionFeedback : null}
           disabled={showFeedback || quizState.status !== 'running'}
-          onTryAgain={handleTryAgain}
+          onNext={handleNext}
         />
       </div>
 

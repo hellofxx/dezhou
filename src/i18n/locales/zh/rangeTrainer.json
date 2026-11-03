@@ -104,6 +104,8 @@
     "inRange": "— 这手牌在标准范围内",
     "notInRange": "— 这手牌不在标准范围内",
     "suitableCall": "— 这手牌适合跟注",
+    "next": "下一题",
+    "viewFeedback": "查看反馈",
     "pair": "对子",
     "suited": "同花",
     "offsuit": "非同花"

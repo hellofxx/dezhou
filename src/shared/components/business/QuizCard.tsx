@@ -1,10 +1,8 @@
 import { useEffect, useCallback, useMemo, useState } from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { RangeAction, Card } from '@/shared/types/poker';
-import { Suit, Rank } from '@/shared/types/poker';
+import type { RangeAction } from '@/shared/types/poker';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import type { QuizQuestion, QuestionFeedback } from '@/shared/types/quiz';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
@@ -14,12 +12,19 @@ import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { DEFAULT_MENTOR } from '@/shared/types/mentor';
-// 教育脚手架（DESIGN.md §13.4）：决策分析区 / 再看一题 / 相关课程标签
+// 教育脚手架（DESIGN.md §13.4）：决策分析区 / 相关课程标签
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
-import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
 // §13.7.2：移动端反馈底部 Sheet
 import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedbackSheet';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import {
+  ACTION_BUTTONS,
+  getActionLabel,
+  getHandDisplayName,
+  getSuitedColor,
+  getSuitedLabel,
+  notationToCards,
+} from './quizCardModel';
 
 export interface QuizCardProps {
   question: QuizQuestion;
@@ -32,93 +37,9 @@ export interface QuizCardProps {
   /** 导师风格（由调用方从 progress store 注入；缺省 strict-math） */
   mentorStyle?: MentorStyle;
   disabled?: boolean;
-  /** §13.4.3 教育脚手架：wrong/blunder 反馈底部"再做一题"回调（由调用方驱动下一题，不清除当前反馈） */
-  onTryAgain?: () => void;
+  /** 手动推进下一题（反馈卡 / 移动 Sheet 底部按钮由调用方驱动） */
+  onNext?: () => void;
 }
-
-/** 将动作映射为展示标签（§13.4 对比视图用） */
-function getActionLabel(t: TFunction, action: string): string {
-  if (action === 'fold') return t('rangeTrainer.srs.optionFold');
-  if (action === 'call') return t('rangeTrainer.srs.optionCall');
-  if (action === 'raise') return t('rangeTrainer.srs.optionRaise');
-  return action;
-}
-
-/** 解析手牌 notation 为展示用名称 */
-function getHandDisplayName(hand: string): { rank1: string; rank2: string; suited: string } {
-  const rankMap: Record<string, string> = {
-    'A': 'A', 'K': 'K', 'Q': 'Q', 'J': 'J', 'T': '10',
-    '9': '9', '8': '8', '7': '7', '6': '6', '5': '5',
-    '4': '4', '3': '3', '2': '2',
-  };
-
-  if (hand.length === 2) {
-    // 对子
-    return { rank1: rankMap[hand[0]!] ?? hand[0]!, rank2: rankMap[hand[1]!] ?? hand[1]!, suited: 'pair' };
-  }
-
-  const rank1 = rankMap[hand[0]!] ?? hand[0]!;
-  const rank2 = rankMap[hand[1]!] ?? hand[1]!;
-  const suited = hand.endsWith('s') ? 'suited' : 'offsuit';
-
-  return { rank1, rank2, suited };
-}
-
-const CHAR_TO_RANK: Record<string, Rank> = {
-  '2': Rank.Two, '3': Rank.Three, '4': Rank.Four, '5': Rank.Five,
-  '6': Rank.Six, '7': Rank.Seven, '8': Rank.Eight, '9': Rank.Nine,
-  'T': Rank.Ten, 'J': Rank.Jack, 'Q': Rank.Queen, 'K': Rank.King, 'A': Rank.Ace,
-};
-
-/** 将手牌 notation 转换为代表性 Card 对象（用于 PokerCard 渲染） */
-function notationToCards(hand: string): Card[] {
-  if (hand.length === 2) {
-    // 对子：两张不同花色的相同点数
-    const rank = CHAR_TO_RANK[hand[0]!] ?? Rank.Ace;
-    return [
-      { suit: Suit.Spades, rank },
-      { suit: Suit.Hearts, rank },
-    ];
-  }
-  const rank1 = CHAR_TO_RANK[hand[0]!] ?? Rank.Ace;
-  const rank2 = CHAR_TO_RANK[hand[1]!] ?? Rank.King;
-  if (hand.endsWith('s')) {
-    // 同花：两张相同花色
-    return [
-      { suit: Suit.Spades, rank: rank1 },
-      { suit: Suit.Spades, rank: rank2 },
-    ];
-  }
-  // 非同花：不同花色
-  return [
-    { suit: Suit.Spades, rank: rank1 },
-    { suit: Suit.Hearts, rank: rank2 },
-  ];
-}
-
-function getSuitedLabel(t: TFunction, suited: string): string {
-  if (suited === 'pair') return t('rangeTrainer.quizCard.pair');
-  if (suited === 'suited') return t('rangeTrainer.quizCard.suited');
-  return t('rangeTrainer.quizCard.offsuit');
-}
-
-function getSuitedColor(suited: string): string {
-  // Pairs glow warmest (gold); suited hands cool (sage); offsuit dimmest.
-  if (suited === 'pair') return 'text-[var(--brass-bright)]';
-  if (suited === 'suited') return 'text-[var(--sage)]';
-  return 'text-[var(--ivory-muted)]';
-}
-
-// Action palette per DESIGN.md §5.5 risk ladder, tuned for three equal-weight
-// answer options (not one CTA + two muted): each button keeps its card-room hue
-// (fold=terracotta / call=neutral walnut / raise=brass) and sits clearly above the
-// felt background so all three read distinctly.
-// RNG-02：fold 陶土红改用 token（--poker-terra 系列），消除 rgba 硬编码
-const ACTION_BUTTONS: { action: RangeAction; label: string; shortcut: string; colorClass: string }[] = [
-  { action: 'fold', label: 'Fold', shortcut: '1', colorClass: 'bg-[var(--poker-terra)]/15 text-[var(--poker-terra-bright)] border-[var(--poker-terra)]/50 hover:bg-[var(--poker-terra)]/25' },
-  { action: 'call', label: 'Call', shortcut: '2', colorClass: 'bg-[var(--walnut-raised)] text-[var(--ivory-dim)] border-[var(--walnut-light)] hover:bg-[var(--walnut-light)] hover:text-[var(--ivory)]' },
-  { action: 'raise', label: 'Raise', shortcut: '3', colorClass: 'hover-bright bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass-dark)]' },
-];
 
 export function QuizCard({
   question,
@@ -127,7 +48,7 @@ export function QuizCard({
   decisionFeedback,
   disabled,
   mentorStyle = DEFAULT_MENTOR,
-  onTryAgain,
+  onNext,
 }: QuizCardProps) {
   const { t } = useTranslation();
   const { suited } = getHandDisplayName(question.hand);
@@ -178,7 +99,8 @@ export function QuizCard({
   const [sheetOpen, setSheetOpen] = useState(false);
   const hasFeedback = !!feedback || (showGradeFeedback && !!decisionFeedback);
   useEffect(() => {
-    if (hasFeedback) setSheetOpen(true);
+    // 反馈出现时自动打开；用户关闭后保持关闭，直到反馈结束/下一题再重置
+    setSheetOpen(hasFeedback);
   }, [hasFeedback]);
 
   // 键盘快捷键
@@ -289,9 +211,50 @@ export function QuizCard({
         ) : (
           <AnimatePresence>{renderFeedbackContent()}</AnimatePresence>
         )}
+
+        {isMobile && hasFeedback && !sheetOpen && (
+          <div className="flex w-full items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSheetOpen(true)}
+              className="min-h-11 rounded border border-[var(--walnut-border)] px-4 py-2 text-sm text-[var(--ivory-dim)] transition-colors hover:bg-[var(--walnut-raised)]"
+            >
+              {t('rangeTrainer.quizCard.viewFeedback')}
+            </button>
+            {onNext && (
+              <button
+                type="button"
+                onClick={onNext}
+                className="min-h-11 rounded bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)]"
+              >
+                {t('rangeTrainer.quizCard.next')}
+              </button>
+            )}
+          </div>
+        )}
       </motion.div>
     </AnimatePresence>
   );
+
+  /** 反馈底部推进按钮：答错沿用「再做一题」语义，答对显示「下一题」 */
+  function renderAdvanceButton() {
+    if (!onNext) return null;
+    const label = isWrongOrBlunder
+      ? t('feedback.tryAgain')
+      : t('rangeTrainer.quizCard.next');
+    return (
+      <button
+        type="button"
+        onClick={onNext}
+        className="ml-auto inline-flex min-h-11 items-center gap-1.5 rounded border border-[var(--brass)]/40 bg-[var(--brass)]/10 px-4 py-2 text-sm font-medium text-[var(--brass)] transition-colors hover:bg-[var(--brass)]/20"
+      >
+        {label}
+        <kbd className="hidden rounded border border-current/30 px-1 font-numeric text-[10px] opacity-70 sm:inline">
+          Space
+        </kbd>
+      </button>
+    );
+  }
 
   /** 反馈内容本体（桌面端内联 / 移动端 Sheet 共用） */
   function renderFeedbackContent() {
@@ -333,9 +296,9 @@ export function QuizCard({
                   defaultOpen
                 />
               )}
-              {isWrongOrBlunder && onTryAgain && (
+              {onNext && (
                 <div className="mt-3 flex justify-end">
-                  <TryAgainButton onTryAgain={onTryAgain} />
+                  {renderAdvanceButton()}
                 </div>
               )}
             </div>
@@ -377,6 +340,11 @@ export function QuizCard({
                     : ` ${t('rangeTrainer.quizCard.suitableCall')}`}
                 </div>
               </motion.div>
+            )}
+            {onNext && (
+              <div className="mt-3 flex justify-end">
+                {renderAdvanceButton()}
+              </div>
             )}
           </motion.div>
         ) : null}

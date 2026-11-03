@@ -104,6 +104,8 @@
     "inRange": "— This hand is in the standard range",
     "notInRange": "— This hand is out of the standard range",
     "suitableCall": "— This hand is suitable for a call",
+    "next": "Next question",
+    "viewFeedback": "View feedback",
     "pair": "Pair",
     "suited": "Suited",
     "offsuit": "Offsuit"

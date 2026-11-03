@@ -102,6 +102,16 @@ describe('TrainingSession 会话流程', () => {
     });
   }
 
+  function answerCorrect() {
+    const correct = quizState().questions[0]!.correctAction;
+    click(findButtonByText(container, correct === 'fold' ? 'Fold' : correct === 'call' ? 'Call' : 'Raise'));
+  }
+
+  function answerWrong() {
+    const correct = quizState().questions[0]!.correctAction;
+    click(findButtonByText(container, correct === 'fold' ? 'Call' : 'Fold'));
+  }
+
   beforeEach(() => {
     vi.useFakeTimers();
     resetRangeStore();
@@ -121,8 +131,8 @@ describe('TrainingSession 会话流程', () => {
     startSession(10, 10);
     renderSession();
 
-    // 答题（Raise）触发反馈与 1 秒自动跳题定时器
-    click(findButtonByText(container, 'Raise'));
+    // 答对触发反馈与 1.5 秒自动跳题定时器
+    answerCorrect();
     expect(quizState().answers[0]).not.toBeNull();
     expect(quizState().status).toBe('running');
 
@@ -132,9 +142,9 @@ describe('TrainingSession 会话流程', () => {
     click(pauseIcon!.closest('button')!);
     expect(quizState().status).toBe('paused');
 
-    // 推进 1.2 秒（覆盖反馈定时器 1s + 余量）
+    // 推进 1.6 秒（覆盖自动推进 1.5s + 余量）；暂停时定时器必须已清除
     act(() => {
-      vi.advanceTimersByTime(1200);
+      vi.advanceTimersByTime(1600);
     });
 
     expect(quizState().currentIndex).toBe(0);
@@ -158,32 +168,50 @@ describe('TrainingSession 会话流程', () => {
     expect(progress().emotion.dailyQuestionsAnswered).toBe(1);
     // 超时反馈（wrong 级别）已渲染
     expect(container.textContent).toContain('错误');
+
+    // 超时按答错处理：反馈常驻，不自动跳题
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+    expect(quizState().currentIndex).toBe(0);
   });
 
   it('反馈态按空格立即进入下一题', () => {
     startSession(10, 10);
     renderSession();
 
-    click(findButtonByText(container, 'Raise'));
+    answerCorrect();
     pressKey(' ');
 
     expect(quizState().currentIndex).toBe(1);
   });
 
-  it('答错后「再做一题」立即推进下一题，并清除自动跳题定时器', () => {
+  it('答错不自动跳题，等待「再做一题」手动推进', () => {
     startSession(10, 10);
     renderSession();
 
-    const correct = quizState().questions[0]!.correctAction;
-    click(findButtonByText(container, correct === 'fold' ? 'Call' : 'Fold'));
+    answerWrong();
     expect(quizState().isCorrect[0]).toBe(false);
+
+    // 答错后反馈常驻：3 秒内不自动切题
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+    expect(quizState().currentIndex).toBe(0);
 
     click(findButtonByText(container, '再做一题'));
     expect(quizState().currentIndex).toBe(1);
+  });
 
-    // 原 1 秒自动跳题定时器已清除：再推进不应继续切题
+  it('答对 1.5 秒后自动进入下一题', () => {
+    startSession(10, 10);
+    renderSession();
+
+    answerCorrect();
+    expect(quizState().isCorrect[0]).toBe(true);
+
     act(() => {
-      vi.advanceTimersByTime(1200);
+      vi.advanceTimersByTime(1600);
     });
     expect(quizState().currentIndex).toBe(1);
   });
@@ -194,10 +222,8 @@ describe('TrainingSession 会话流程', () => {
     startSession(10, 1);
     renderSession({ onComplete });
 
-    click(findButtonByText(container, 'Raise'));
-    act(() => {
-      vi.advanceTimersByTime(1100);
-    });
+    answerCorrect();
+    click(findButtonByText(container, '下一题'));
 
     expect(quizState().status).toBe('completed');
     expect(onComplete).toHaveBeenCalledTimes(1);
@@ -226,16 +252,16 @@ describe('TrainingSession 会话流程', () => {
     startSession(10, 10);
     renderSession();
 
-    click(findButtonByText(container, 'Raise'));
+    answerCorrect();
     click(container.querySelector<HTMLElement>('button svg.lucide-pause')!.closest('button')!);
     expect(quizState().status).toBe('paused');
 
     click(findButtonByText(container, '继续训练'));
     expect(quizState().status).toBe('running');
 
-    // 恢复时若仍在反馈中，重新排 1 秒自动跳题（RNG-005）
+    // 恢复时若仍在自动推进反馈中，重新排 1.5 秒自动跳题（RNG-005）
     act(() => {
-      vi.advanceTimersByTime(1100);
+      vi.advanceTimersByTime(1600);
     });
     expect(quizState().currentIndex).toBe(1);
   });
@@ -251,5 +277,57 @@ describe('TrainingSession 会话流程', () => {
     pressKey('Escape');
     expect(quizState().status).toBe('running');
     expect(container.textContent).not.toContain('已暂停');
+  });
+
+  describe('移动端反馈 Sheet', () => {
+    const originalMatchMedia = window.matchMedia;
+
+    beforeEach(() => {
+      window.matchMedia = ((query: string) => ({
+        matches: query.includes('max-width'),
+        media: query,
+        onchange: null,
+        addListener: () => undefined,
+        removeListener: () => undefined,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+        dispatchEvent: () => false,
+      })) as typeof window.matchMedia;
+    });
+
+    afterEach(() => {
+      window.matchMedia = originalMatchMedia;
+    });
+
+    it('答错后 Sheet 常驻；关闭可重开；手动推进后进入下一题', () => {
+      startSession(10, 10);
+      renderSession();
+
+      answerWrong();
+
+      // 反馈出现后自动打开 Sheet
+      expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+
+      // 3 秒内不自动跳题，Sheet 也不消失
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+      expect(quizState().currentIndex).toBe(0);
+      expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+
+      // 关闭后保留「查看反馈」入口，可重新打开
+      click(document.querySelector<HTMLElement>('[role="dialog"] button[aria-label="关闭"]')!);
+      expect(document.querySelector('[role="dialog"]')).toBeNull();
+      click(findButtonByText(container, '查看反馈'));
+      expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+
+      // 手动推进（Sheet 内的「再做一题」按钮）
+      const nextButton = Array.from(
+        document.querySelectorAll<HTMLButtonElement>('[role="dialog"] button'),
+      ).find((b) => b.textContent?.includes('再做一题'));
+      expect(nextButton).toBeTruthy();
+      click(nextButton!);
+      expect(quizState().currentIndex).toBe(1);
+    });
   });
 });
