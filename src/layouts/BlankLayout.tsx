@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Keyboard } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
+import { TRAINING_OVERLAY_EVENT } from '@/shared/constants/app';
 // 全局训练伴生 Dialog：Tilt 提醒与里程碑庆典（覆盖 BlankLayout 下的训练页，
 // 与 AppLayout 同策略，修复"主训练页连错 3 题无 Tilt 弹窗"的覆盖缺口）
 import TiltWarning from '@/features/progress/components/gate/TiltWarning';
@@ -27,15 +28,24 @@ export default function BlankLayout() {
 
   useDocumentTitle(t('common.a11y.trainingPage'));
 
+  // 快捷键浮层开合的唯一出口（键盘 `?` / 右上角键盘按钮 / Dialog onOpenChange 三处共用）：
+  // 同步派发训练浮层事件，供训练页暂停/恢复计时。首次挂载不派发。
+  const setShortcutsOpen = useCallback((open: boolean) => {
+    setShowShortcuts(open);
+    window.dispatchEvent(
+      new CustomEvent(TRAINING_OVERLAY_EVENT, { detail: { open } }),
+    );
+  }, []);
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
       // Don't trigger if typing in input or editable region
       const target = e.target as HTMLElement;
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) return;
       e.preventDefault();
-      setShowShortcuts((prev) => !prev);
+      setShortcutsOpen(!showShortcuts);
     }
-  }, []);
+  }, [setShortcutsOpen, showShortcuts]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -56,7 +66,7 @@ export default function BlankLayout() {
 
       {/* Keyboard hint button - top right */}
       <button
-        onClick={() => setShowShortcuts(true)}
+        onClick={() => setShortcutsOpen(true)}
         className="absolute top-4 right-4 z-10 flex items-center justify-center gap-1.5 min-h-11 min-w-11 px-2.5 py-2 rounded-[var(--radius)] text-xs text-[var(--ivory-dim)] hover:text-[var(--ivory)] bg-[var(--surface-overlay)] hover:bg-[var(--surface-raised)] transition-colors"
         title={t('common.shortcutsTitle')}
         aria-label={t('common.shortcutsTitle')}
@@ -81,7 +91,7 @@ export default function BlankLayout() {
       <MilestoneCelebrationHost />
 
       {/* Shortcuts — 复用共享 Dialog（纸张材质/关闭按钮/焦点陷阱/Escape 由 primitives 提供） */}
-      <Dialog open={showShortcuts} onOpenChange={setShowShortcuts}>
+      <Dialog open={showShortcuts} onOpenChange={setShortcutsOpen}>
         <DialogContent className="max-w-sm" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 pr-10 font-display text-base font-semibold text-[var(--ivory)]">

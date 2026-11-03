@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
@@ -13,6 +13,7 @@ import TiltWarning from '@/features/progress/components/gate/TiltWarning';
 import MilestoneCelebrationHost from '@/features/progress/components/celebration/MilestoneCelebrationHost';
 import PersistErrorNotice from '@/features/progress/components/PersistErrorNotice';
 import MobileNav from './MobileNav';
+import HeaderQuickActions from './HeaderQuickActions';
 import { useThemeApplier } from './useThemeApplier';
 import { useDocumentTitle } from './useDocumentTitle';
 import { resolveNavSection, resolvePageTitle } from './navSections';
@@ -65,7 +66,6 @@ export default function AppLayout() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const currentStreak = useProgressStore((s) => s.streak.currentStreak);
-  const navigate = useNavigate();
 
   // 主题应用器：settings.theme（含 system）→ <html data-theme> / color-scheme
   useThemeApplier();
@@ -327,22 +327,8 @@ export default function AppLayout() {
             <Globe size={14} className={cn('transition-transform', switching && 'animate-spin')} />
             <span className="font-numeric">{i18n.language === 'zh' ? 'EN' : '中'}</span>
           </button>
-          {/* Mobile help button */}
-          <button
-            onClick={() => navigate('/help')}
-            aria-label={t('nav.help')}
-            className="md:hidden flex items-center justify-center min-h-[44px] min-w-[44px] rounded-[var(--radius-sm)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
-          >
-            <HelpCircle size={16} />
-          </button>
-          {/* Desktop help button */}
-          <button
-            onClick={() => navigate('/help')}
-            aria-label={t('nav.help')}
-            className="hidden md:flex items-center justify-center min-h-[44px] min-w-[44px] rounded-[var(--radius-sm)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors"
-          >
-            <HelpCircle size={16} />
-          </button>
+          {/* 顶栏快捷入口：移动端设置齿轮 + 帮助，桌面端帮助（设置已从底部导航移出） */}
+          <HeaderQuickActions />
         </header>
 
         {/* 路由播报：SPA 切换后向读屏器播报当前页名 */}

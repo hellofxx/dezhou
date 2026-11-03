@@ -161,6 +161,18 @@ describe('AppLayout', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('帮助中心');
   });
 
+  it('移动端顶栏设置齿轮跳转到 /settings，桌面侧边栏设置入口保留', () => {
+    renderLayout('/');
+
+    const settingsButton = screen.getByRole('button', { name: '设置' });
+    // 设置已从底部导航移出：移动端唯一设置入口是顶栏齿轮（md:hidden）
+    expect(settingsButton.className).toContain('md:hidden');
+    expect(within(sidebarNav()).getByRole('link', { name: '设置' })).toBeTruthy();
+
+    fireEvent.click(settingsButton);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('设置');
+  });
+
   it('内容区宽度分级：策略学院概览视图展宽，其余页面收敛（DESIGN §6.5）', () => {
     renderLayout('/academy/concept-graph');
     const wideWrapper = document.getElementById('main-content')?.firstElementChild as HTMLElement;
