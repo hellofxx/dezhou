@@ -21,7 +21,7 @@
 | `gto-simulator` | `gto-simulator-dev` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 25 | `progress` | 19 |
 | `hand-history` | `hand-history-dev` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
 | `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
-| `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding` | 8 | `progress` | 12 |
+| `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 8 | `progress` | 12 |
 | `pot-odds` | `pot-odds-dev` | `PotOddsPage` | `store.ts（无 persist）` | `potOdds` | 14 | `progress` | 17 |
 | `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `variant` | 57 | — | 68 |
 | `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 22 | `progress` | 18 |
@@ -117,7 +117,7 @@
 
 | 分组 key | 类型 | i18n 模块 |
 |---|---|---|
-| `CORE_MODULES` | core（启动静态注入） | `nav`, `common`, `dashboard`, `variant`, `tilt`, `streak`, `feedback` |
+| `CORE_MODULES` | core（启动静态注入） | `nav`, `common`, `dashboard`, `variant`, `tilt`, `streak`, `feedback`, `mentor` |
 | `/` | feature（随路由并行加载） | `dashboard`, `nav`, `achievements`, `progress`, `dailyChallenge`, `spacedRepetition`, `downswing`, `mood`, `rankUp`, `review` |
 | `/settings` | feature（随路由并行加载） | `settings`, `mentor`, `sessionLimit`, `variant`, `streak` |
 | `/leaderboard` | feature（随路由并行加载） | `leaderboard` |
@@ -150,7 +150,7 @@
 | `/puzzle` | feature（随路由并行加载） | `puzzle` |
 | `/help/article/:articleId` | feature（随路由并行加载） | `help` |
 | `/help` | feature（随路由并行加载） | `help` |
-| `/onboarding` | feature（随路由并行加载） | `onboarding` |
+| `/onboarding` | feature（随路由并行加载） | `onboarding`, `rangeTrainer` |
 
 ## 生成统计
 

@@ -19,6 +19,8 @@ import streakZh from './locales/zh/streak.json';
 import streakEn from './locales/en/streak.json';
 import feedbackZh from './locales/zh/feedback.json';
 import feedbackEn from './locales/en/feedback.json';
+import mentorZh from './locales/zh/mentor.json';
+import mentorEn from './locales/en/mentor.json';
 
 // academy-course 课程内容文件移出 eager glob，由 preload.ts 在 /academy/lesson/:lessonId 路由按需合并注入
 // 避免首屏打包 1.5MB 课程文案（见 C1 审查报告）
@@ -40,6 +42,7 @@ const coreZh = {
   tilt: tiltZh,
   streak: streakZh,
   feedback: feedbackZh,
+  mentor: mentorZh,
 } satisfies Record<CoreKey, unknown>;
 
 const coreEn = {
@@ -51,6 +54,7 @@ const coreEn = {
   tilt: tiltEn,
   streak: streakEn,
   feedback: feedbackEn,
+  mentor: mentorEn,
 } satisfies Record<CoreKey, unknown>;
 
 i18n.use(initReactI18next).init({

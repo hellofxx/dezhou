@@ -84,6 +84,11 @@ describe('renderMentorFeedback 防御回退（P0B-06）', () => {
     expect(result).toBe(renderMentorFeedback('strict-math', 'wrong', params, mockT));
   });
 
+  it('翻译缺失（t 返回 key）时返回空串，交由调用方通用反馈兜底', () => {
+    const missingKeyT = (key: string) => key;
+    expect(renderMentorFeedback('strict-math', 'wrong', { evLoss: 3, correctAction: 'Raise' }, missingKeyT)).toBe('');
+  });
+
   it('合法风格不受回退影响（三风格 × 五评级模板齐全且占位符被替换）', () => {
     const styles = Object.keys(MENTOR_FEEDBACK_TEMPLATES) as MentorStyle[];
     expect(styles).toHaveLength(3);

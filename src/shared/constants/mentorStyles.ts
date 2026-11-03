@@ -56,6 +56,8 @@ export function renderMentorFeedback(
   // 避免 styleTemplates[grade] 为 undefined 时 t(undefined).replace 抛 TypeError
   const templateKey = styleTemplates[grade] ?? styleTemplates['wrong'];
   let template = t(templateKey);
+  // i18n 命名空间未加载时 t() 返回 key 本身；清空以触发调用方的通用反馈兜底
+  if (template === templateKey) template = '';
   template = template.replace(/\{evLoss\}/g, String(params.evLoss ?? ''));
   template = template.replace(/\{correctAction\}/g, params.correctAction ?? '');
   return template;

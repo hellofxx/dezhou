@@ -98,6 +98,8 @@ export const CORE_MODULES = [
   'tilt',
   'streak',
   'feedback',
+  // QuizCard / GTOFeedback 是跨模块共享反馈组件，mentor 文案必须在任何答题路由可用
+  'mentor',
 ] as const satisfies readonly I18nModuleKey[];
 
 /**
@@ -150,7 +152,8 @@ export const FEATURE_GROUPS = {
   '/puzzle': ['puzzle'],
   '/help/article/:articleId': ['help'],
   '/help': ['help'],
-  '/onboarding': ['onboarding'],
+  // FirstDrillStep 复用 QuizCard，首练题目/反馈文案来自 rangeTrainer
+  '/onboarding': ['onboarding', 'rangeTrainer'],
 } as const satisfies Record<string, readonly I18nModuleKey[]>;
 
 type JsonBundle = () => Promise<{ default: Record<string, unknown> }>;
