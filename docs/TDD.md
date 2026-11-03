@@ -156,7 +156,7 @@ src/
 │   │
 │   └── progress/                 # 进度追踪模块
 │       ├── components/           # UI 组件（31 个，按功能分组）
-│       │   ├── dashboard/        # Dashboard / StatsOverview / ModuleStatsPage / AccuracyChart
+│       │   ├── dashboard/        # Dashboard / ModuleStatsPanel / ModuleStatsPage / AccuracyChart
 │       │   ├── stats/            # GTOStatsPage / RangeStatsPage / WeaknessAnalysis / DifficultyIndicator
 │       │   ├── streak/           # StreakTracker / StreakCelebration / StreakRail
 │       │   ├── achievement/      # AchievementWall / AchievementBadges / DailyChallenge / Leaderboard

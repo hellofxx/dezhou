@@ -9,6 +9,18 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-11-03 UI/UX 全链路整改（P0→P2）
+
+以 1440×900 / 390×844 双视口实测 15+ 路由，按「止血 → 交互/响应式 → 视觉一致性 → 信息架构/产品内容」四阶段修复。
+
+- **P0 i18n 原始 key**：`mentor` 升入 CORE_MODULES，`/onboarding` 补 `rangeTrainer`；`renderMentorFeedback` 增加缺失 key 兜底；新增 `src/i18n/routeGroupNamespace.test.ts` 静态契约守卫，锁定反馈组件与路由组命名空间覆盖。
+- **P0 反馈闭环**：答对 1.5s 自动推进，答错/超时手动推进；移除 TrainingSession 对 QuizCard 的外部 key，移动 Sheet 常驻，关闭后可「查看反馈 / 再做一题 / 下一题」。
+- **S1 交互/响应式**：移动端 RangeTrainer 头部堆叠、降级条换行、暂停遮罩改发牌员纸条、快捷键浮层打开时暂停计时；新增 `TRAINING_OVERLAY_EVENT` 跨布局/训练页契约。
+- **S2 视觉一致性**：新增文本专用对比度 token（`--ivory-muted #b0a68c`、`--clay-text/--danger-text/--sage-text/--brass-text`）并完成 172 处文本色替换；19 个 AppLayout 页面内容 h1→h2；五级反馈/对手/段位/变体/谜题主题图标 Lucide 化；新增 `feltContrast` / `pageHeadingGuard` / `emojiWhitelist` 三条守卫；globals.css 行数棘轮 3421→3374。
+- **S3 信息架构/产品内容**：移动底栏六项 + 训练快捷 Sheet + 顶栏设置齿轮；设置页单导航；进度页指标去重；排行榜虚构角色 + 演示数据说明 + 我的排名；学院零状态单入口；Basics 阅读列宽收窄；中文页名「牌局历史」统一为「牌局复盘」。
+- **验证**：`pnpm verify` 全绿（350 测试文件 / 2497 用例）；双视口浏览器验收：每页唯一 h1、无原始 i18n key、答错 3s 不跳题、移动 Sheet 常驻、快捷键浮层计时冻结、Lucide 反馈图标生效。
+- **未纳入**：浅色主题「白天牌室」重构、hero 高度压缩、Puzzle tier 配色统一（有意保留防答案暗示）、真实排行榜后端；内容/插画 emoji 白名单见 DESIGN.md §7。
+
 ### 2026-11-03 全仓测试补全与多智能体协同收官
 
 以覆盖率审计驱动、按模块拆分给 feature 子智能体并行补测，最终 `pnpm verify` 全绿（345 个测试文件 / 2437 个用例）。合并 unit + component 覆盖率 **93% 行（10010/10710）**；10 个 feature 模块中 9 个 ≥91%（最低 progress 88%），shared 96% / i18n 92% / layouts 98% / app 98%。唯一 0% 源文件为启动入口 `src/main.tsx`，按规范登记为 L4/间接覆盖豁免。
