@@ -126,6 +126,8 @@ describe('BasicsIntro：完成流程', () => {
     expect(useAcademyStore.getState().basicsProgress.completed).toBe(true);
     expect(screen.getByText('基础入门完成！')).toBeTruthy();
     expect(container.textContent).toContain('即将跳转到第一课... 3s');
+    // 完成遮罩图标为 Lucide 勾选，不再使用 emoji
+    expect(container.textContent).not.toContain(String.fromCodePoint(0x2705));
 
     // 每次 tick 后 React 才重新调度下一轮 setTimeout，需逐秒推进
     for (let i = 0; i < 4; i += 1) {
@@ -134,5 +136,27 @@ describe('BasicsIntro：完成流程', () => {
       });
     }
     expect(screen.getByText(FIRST_LESSON_PROBE)).toBeTruthy();
+  });
+});
+
+describe('BasicsIntro：阅读列宽与图标', () => {
+  it('内容主容器收敛到阅读列宽（max-w-3xl mx-auto），正文与步骤图标不再使用 emoji', () => {
+    const { container } = renderBasics();
+
+    const column = container.querySelector('.max-w-3xl');
+    expect(column).toBeTruthy();
+    expect(column?.className).toContain('mx-auto');
+    // 页头与正文同列收缩
+    expect(column?.textContent).toContain('德州扑克基础入门');
+    expect(column?.textContent).toContain('Step 1 / ' + BASICS_STEPS.length);
+
+    // 数据层步骤图标为语义名，渲染层为 Lucide SVG
+    expect(BASICS_STEPS.every((s) => !/\p{Extended_Pictographic}/u.test(s.icon))).toBe(true);
+    const text = container.textContent ?? '';
+    // 首步含要点（原 emoji 灯泡）与技巧（原 emoji 靶心）两类卡片
+    expect(text).not.toContain(String.fromCodePoint(0x1f4a1));
+    expect(text).not.toContain(String.fromCodePoint(0x1f3af));
+    expect(text).not.toContain(String.fromCodePoint(0x2705));
+    expect(container.querySelectorAll('svg').length).toBeGreaterThan(0);
   });
 });

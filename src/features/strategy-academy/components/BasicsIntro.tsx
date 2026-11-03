@@ -3,7 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
-import { ChevronLeft, ChevronRight, Search, CheckCircle2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  CheckCircle2,
+  Lightbulb,
+  Target,
+  Layers,
+  Coins,
+  Armchair,
+  Trophy,
+  BookOpen,
+  type LucideIcon,
+} from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useAcademyStore } from '../store';
@@ -11,7 +24,7 @@ import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { BASICS_STEPS, GLOSSARY_TERMS } from '../data/basicsContent';
 import { resolveBasicsStepTitle } from '../utils/titleKeys';
 import { basicsContentKey, resolveTerm } from '../utils/contentKeys';
-import type { LessonSection, Term } from '../types';
+import type { BasicsStepIcon, LessonSection, Term } from '../types';
 
 const CATEGORY_TABS = [
   { key: 'basic', labelKey: 'academy.basicsIntro.categoryBasic' },
@@ -19,6 +32,21 @@ const CATEGORY_TABS = [
   { key: 'action', labelKey: 'academy.basicsIntro.categoryAction' },
   { key: 'strategy', labelKey: 'academy.basicsIntro.categoryStrategy' },
 ] as const;
+
+/** 步骤图标语义名 → Lucide 组件（数据层不存 emoji，语义色由调用处 className 决定） */
+const STEP_ICONS: Record<BasicsStepIcon, LucideIcon> = {
+  target: Target,
+  handRanking: Layers,
+  betAction: Coins,
+  position: Armchair,
+  pot: Trophy,
+  glossary: BookOpen,
+};
+
+function StepIcon({ name, className }: { name: BasicsStepIcon; className?: string }) {
+  const Icon = STEP_ICONS[name] ?? Lightbulb;
+  return <Icon className={className} aria-hidden="true" />;
+}
 
 export default function BasicsIntro() {
   const navigate = useNavigate();
@@ -76,7 +104,8 @@ export default function BasicsIntro() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="py-6 flex flex-col min-h-full">
+      {/* 阅读列宽：正文收窄到 768px（约 65ch），页头/步骤条同列以保持层次 */}
+      <div className="py-6 flex flex-col min-h-full w-full max-w-3xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}
@@ -120,7 +149,7 @@ export default function BasicsIntro() {
                     : 'text-[var(--ivory-muted)] hover:text-[var(--ivory-dim)]'
               )}
             >
-              <span>{s.icon}</span>
+              <StepIcon name={s.icon} className="w-3.5 h-3.5 shrink-0" />
               <span className="hidden md:inline">{resolveBasicsStepTitle(t, s)}</span>
             </button>
           ))}
@@ -138,7 +167,7 @@ export default function BasicsIntro() {
           >
             <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-5 md:p-6">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">{step.icon}</span>
+                <StepIcon name={step.icon} className="w-5 h-5 shrink-0 text-[var(--brass-bright)]" />
                 <h2 className="font-display text-lg text-[var(--ivory)]">{resolveBasicsStepTitle(t, step)}</h2>
               </div>
 
@@ -202,7 +231,10 @@ export default function BasicsIntro() {
               transition={{ type: 'spring', damping: 15, stiffness: 300 }}
               className="text-center"
             >
-              <div className="text-6xl mb-4">✅</div>
+              <CheckCircle2
+                className="w-14 h-14 mx-auto mb-4 text-[var(--poker-success)]"
+                aria-hidden="true"
+              />
               <h2 className="font-display text-2xl text-[var(--ivory)] mb-2">
                 {t('academy.basicsIntro.completionTitle')}
               </h2>
@@ -236,8 +268,12 @@ function SectionRenderer({ section, contentKey }: { section: LessonSection; cont
       );
     case 'key-point':
       return (
-        <div className="rounded-md border border-[var(--brass-bright)]/30 bg-[var(--brass-bright)]/5 px-4 py-3 text-sm text-[var(--ivory)]">
-          💡 {content}
+        <div className="flex items-start gap-2 rounded-md border border-[var(--brass-bright)]/30 bg-[var(--brass-bright)]/5 px-4 py-3 text-sm text-[var(--ivory)]">
+          <Lightbulb
+            className="w-4 h-4 mt-0.5 shrink-0 text-[var(--brass-bright)]"
+            aria-hidden="true"
+          />
+          <span>{content}</span>
         </div>
       );
     case 'highlight':
@@ -254,8 +290,9 @@ function SectionRenderer({ section, contentKey }: { section: LessonSection; cont
       );
     case 'pro-tip':
       return (
-        <div className="rounded-md bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 px-4 py-3 text-sm text-[var(--poker-success)]/90">
-          🎯 {content}
+        <div className="flex items-start gap-2 rounded-md bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 px-4 py-3 text-sm text-[var(--poker-success)]/90">
+          <Target className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" />
+          <span>{content}</span>
         </div>
       );
     default:

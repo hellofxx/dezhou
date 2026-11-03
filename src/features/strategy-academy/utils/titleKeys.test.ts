@@ -104,7 +104,7 @@ function makeBasicsStep(overrides: Partial<BasicsStep> = {}): BasicsStep {
   return {
     id: 'basics-goal',
     title: '游戏目标',
-    icon: '🎯',
+    icon: 'target',
     content: [],
     ...overrides,
   };

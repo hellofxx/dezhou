@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Route, GraduationCap, Network, ChevronRight } from 'lucide-react';
-import { transitionStandard } from '@/shared/utils/motion';
-import { useNavigate } from 'react-router-dom';
+import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyStore } from '../store';
@@ -28,6 +28,9 @@ export default function AcademyHome() {
   const totalLessons = getTotalLessonCount();
   const completedCount = progress.completedLessons.length;
 
+  // 零状态（渐进披露 §13.6）：无任何课程进度且未完成基础入门 → 首屏只走「从第一课开始」单一路径
+  const isZeroState = totalProgress === 0 && !basicsProgress.completed;
+
   // ACAD-05：阶梯按当前变体渲染（manifest 已按变体分组；L1/L2 复用共享基础层）
   const ladderLevels = getLevelSummariesByVariant(activeVariant);
 
@@ -45,17 +48,21 @@ export default function AcademyHome() {
   return (
     <div className="h-full overflow-auto">
       <div className="py-6 space-y-5">
-        {/* Zone A：继续学习 Hero */}
-        <AcademyResume
-          activeLevel={activeLevel}
-          completedLessons={progress.completedLessons}
-          totalProgress={totalProgress}
-          completedCount={completedCount}
-          totalLessons={totalLessons}
-          levelsDoneCount={levelsDoneCount}
-          certifiedCount={certifiedCount}
-          basicsCompleted={basicsProgress.completed}
-        />
+        {/* Zone A：零状态 → 单一入口路径卡；有进度 → 继续学习 Hero（含进度环与量化统计） */}
+        {isZeroState ? (
+          <ZeroStateCard />
+        ) : (
+          <AcademyResume
+            activeLevel={activeLevel}
+            completedLessons={progress.completedLessons}
+            totalProgress={totalProgress}
+            completedCount={completedCount}
+            totalLessons={totalLessons}
+            levelsDoneCount={levelsDoneCount}
+            certifiedCount={certifiedCount}
+            basicsCompleted={basicsProgress.completed}
+          />
+        )}
 
         {/* 变体切换：统一面板，副标题随所选变体实时联动 */}
         <motion.div
@@ -96,6 +103,7 @@ export default function AcademyHome() {
               levels={ladderLevels}
               completedLessons={progress.completedLessons}
               isUnlocked={isLevelEntryUnlocked}
+              startLevelId={isZeroState ? ladderLevels[0]?.id : undefined}
             />
           </motion.div>
 
@@ -106,6 +114,43 @@ export default function AcademyHome() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * 零状态首屏：单一「从第一课开始」路径卡。
+ * 复用 AcademyResume 的 hero 视觉（panel + brass-rail + academy-hero）与黄铜渐变 CTA，
+ * 但不渲染 0% 进度环 / 0 课时 / 0 级认证等零值指标，避免新用户首屏出现一片零值统计。
+ */
+function ZeroStateCard() {
+  const { t } = useTranslation();
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={transitionSlow}
+      className="panel brass-rail academy-hero"
+      aria-label={t('academy.zeroState.title')}
+    >
+      <p className="section-eyebrow mb-2">{t('academy.zeroState.eyebrow')}</p>
+
+      <p className="font-display text-[17px] text-[var(--ivory)] leading-snug">
+        {t('academy.zeroState.title')}
+      </p>
+
+      <p className="text-xs text-[var(--ivory-dim)] mt-1 max-w-xl leading-relaxed">
+        {t('academy.zeroState.description')}
+      </p>
+
+      <Link
+        to="/academy/basics"
+        className="hover-bright mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border border-[var(--brass-dark)] shadow-[var(--shadow-brass-btn)] transition-all"
+      >
+        <GraduationCap className="w-4 h-4" />
+        {t('academy.zeroState.cta')}
+      </Link>
+    </motion.section>
   );
 }
 

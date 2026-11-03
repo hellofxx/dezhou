@@ -160,6 +160,14 @@
     "allDone": "恭喜，全部课程已学完！",
     "restartPractice": "进入速训保持手感"
   },
+  "zeroState": {
+    "eyebrow": "零基础起点",
+    "title": "从第一课开始",
+    "description": "还没有学习记录。先花 8 分钟完成基础入门，之后按 Level 顺序逐级解锁。",
+    "cta": "开始基础入门",
+    "startBadge": "起点",
+    "levelHint": "先完成基础入门，即可进入 Level 1"
+  },
   "levelTitle": {
     "l1": "基础入门",
     "l2": "翻前策略",

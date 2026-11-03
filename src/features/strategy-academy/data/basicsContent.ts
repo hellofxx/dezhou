@@ -4,7 +4,7 @@ export const BASICS_STEPS: BasicsStep[] = [
   {
     id: 'basics-goal',
     title: '游戏目标与基本流程',
-    icon: '🎯',
+    icon: 'target',
     content: [
       { type: 'heading', content: '德州扑克是什么？' },
       { type: 'text', content: '德州扑克（Texas Hold\'em）是世界上最流行的扑克变体，在赌场、线上平台和家庭聚会中广泛流行。每位玩家用2张底牌和5张公共牌组成最佳的5张牌组合来竞争底池。' },
@@ -18,7 +18,7 @@ export const BASICS_STEPS: BasicsStep[] = [
   {
     id: 'basics-hands',
     title: '牌型等级完全指南',
-    icon: '🃏',
+    icon: 'handRanking',
     content: [
       { type: 'heading', content: '10 种牌型（从弱到强）' },
       { type: 'text', content: '德州扑克使用标准52张牌，没有大小王。以下是所有可能的5张牌组合排名：' },
@@ -30,7 +30,7 @@ export const BASICS_STEPS: BasicsStep[] = [
   {
     id: 'basics-actions',
     title: '下注动作详解',
-    icon: '💰',
+    icon: 'betAction',
     content: [
       { type: 'heading', content: '5 种基本行动' },
       { type: 'text', content: '在你的回合，你可以选择以下行动之一：' },
@@ -46,7 +46,7 @@ export const BASICS_STEPS: BasicsStep[] = [
   {
     id: 'basics-positions',
     title: '位置与行动顺序',
-    icon: '🪑',
+    icon: 'position',
     content: [
       { type: 'heading', content: '6人桌位置分布' },
       { type: 'text', content: '在6人桌（6-max）中，位置从庄家按钮（BTN）顺时针依次为：' },
@@ -62,7 +62,7 @@ export const BASICS_STEPS: BasicsStep[] = [
   {
     id: 'basics-pot',
     title: '底池与边池',
-    icon: '🏆',
+    icon: 'pot',
     content: [
       { type: 'heading', content: '主池（Main Pot）' },
       { type: 'text', content: '主池是所有玩家共同竞争的核心底池。每位参与者的下注都进入主池，最终赢家获得全部主池筹码。' },
@@ -77,7 +77,7 @@ export const BASICS_STEPS: BasicsStep[] = [
   {
     id: 'basics-glossary',
     title: '核心术语词汇表',
-    icon: '📚',
+    icon: 'glossary',
     content: [
       { type: 'heading', content: '为什么需要术语？' },
       { type: 'text', content: '扑克有自己的"语言"。掌握核心术语能帮助你：理解教学内容、与他人讨论牌局、阅读策略文章。下一页将展示完整的术语表，支持搜索和分类浏览。' },

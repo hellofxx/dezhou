@@ -3,11 +3,14 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter } from 'react-router-dom';
 import AcademyHome from './AcademyHome';
 import { useAcademyStore } from '../store';
+import { getTotalLessonCount } from '../utils/academyMeta';
 
 /**
  * 学院首页组合冒烟：
- * - Hero / 变体切换 / 课程阶梯 / 今日计划 / 学习工具 五区均渲染
- * - 变体切换写入 store 并联动副标题（L1/L2 共享基础层仍可用）
+ * - 零状态（无课程进度且未完成基础入门）：首屏单一「从第一课开始」路径卡，零值指标（0% 环 / 课时 / 认证）不渲染
+ * - 课程阶梯保留，首个 Level 呈现为「起点」而非一片锁定死路（不改 gating）
+ * - 有进度后恢复 Hero 完整布局
+ * - 变体切换写入 store 并联动副标题
  */
 
 function renderHome() {
@@ -23,16 +26,55 @@ afterEach(() => {
   useAcademyStore.getState().resetProgress();
 });
 
-describe('AcademyHome', () => {
+describe('AcademyHome：零状态渐进披露', () => {
+  it('零状态首屏只给单一入口路径卡，CTA 指向基础入门', async () => {
+    const { container } = renderHome();
+    const totalLessons = getTotalLessonCount();
+
+    expect(screen.getByText('从第一课开始')).toBeTruthy();
+    const cta = screen.getByRole('link', { name: /开始基础入门/ });
+    expect(cta.getAttribute('href')).toBe('/academy/basics');
+
+    // 零值指标被隐藏：无 0% 进度环，也无「课时 / 认证」统计
+    expect(container.querySelector('.academy-hero-stats')).toBeNull();
+    expect(screen.queryByText('0%')).toBeNull();
+    expect(screen.queryByText(`${totalLessons} 课时`)).toBeNull();
+    expect(screen.queryByText('0 级认证')).toBeNull();
+
+    // 工具入口与今日计划仍在（非首屏主焦点，但保留可达性）
+    expect(screen.getByText('学习工具')).toBeTruthy();
+    expect(screen.getByText('5 分钟速训')).toBeTruthy();
+    expect(screen.getByText('知识图谱')).toBeTruthy();
+    await waitFor(() => expect(screen.getByText('今日计划')).toBeTruthy());
+  });
+
+  it('零状态保留课程阶梯，首个 Level 呈现为起点并给出入口提示', () => {
+    const { container } = renderHome();
+
+    expect(screen.getByText('课程阶梯')).toBeTruthy();
+
+    const startRow = container.querySelector('[data-start="true"]');
+    expect(startRow).toBeTruthy();
+    expect(startRow?.textContent).toContain('起点');
+    expect(startRow?.textContent).toContain('先完成基础入门，即可进入 Level 1');
+    // 起点行仍按 gating 判定（未完成基础入门时不可展开）
+    expect(startRow?.querySelector('button')?.hasAttribute('disabled')).toBe(true);
+  });
+});
+
+describe('AcademyHome：有进度后恢复完整布局', () => {
   it('渲染 Hero、变体切换、课程阶梯、今日计划与学习工具', async () => {
+    useAcademyStore.getState().completeBasics();
     renderHome();
 
-    expect(screen.getByText('从基础入门开始，掌握牌局基本功')).toBeTruthy();
+    expect(screen.getByText('继续学习：德州扑克规则与牌型')).toBeTruthy();
     expect(screen.getByText('选择游戏变体')).toBeTruthy();
     expect(screen.getByText('课程阶梯')).toBeTruthy();
     expect(screen.getByText('学习工具')).toBeTruthy();
     expect(screen.getByText('5 分钟速训')).toBeTruthy();
     expect(screen.getByText('知识图谱')).toBeTruthy();
+    // 零状态路径卡退出
+    expect(screen.queryByText('从第一课开始')).toBeNull();
 
     // DailyPlanCard 挂载 effect 惰性生成今日计划
     await waitFor(() => expect(screen.getByText('今日计划')).toBeTruthy());
@@ -50,9 +92,11 @@ describe('AcademyHome', () => {
 
   it('基础入门完成后 Hero 进入学习中态，阶梯不再全部锁定', () => {
     useAcademyStore.getState().completeBasics();
-    renderHome();
+    const { container } = renderHome();
 
     expect(screen.getByText('继续学习：德州扑克规则与牌型')).toBeTruthy();
     expect(screen.getByText('你在这里')).toBeTruthy();
+    // 有进度态下不再渲染零状态起点标记
+    expect(container.querySelector('[data-start="true"]')).toBeNull();
   });
 });

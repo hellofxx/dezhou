@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Lock, CheckCircle2, Award, PlayCircle, Clock } from 'lucide-react';
+import { ChevronDown, Lock, CheckCircle2, Award, PlayCircle, Clock, Flag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import type { LevelSummary } from '../types';
@@ -19,6 +19,11 @@ interface LevelLadderProps {
   levels: LevelSummary[];
   completedLessons: string[];
   isUnlocked: (levelId: string) => boolean;
+  /**
+   * 零状态起点等级（首条目）：仅做视觉/文案呈现——黄铜高亮 + 「起点」标记 + 入口提示，
+   * 不改变任何解锁判定（按钮仍按 isUnlocked 判定可点性）。
+   */
+  startLevelId?: string;
 }
 
 /**
@@ -39,7 +44,7 @@ export function findActiveLevelId(
 }
 
 /** 课程阶梯：8 级课程以黄铜铆钉节点 + 发线脊柱呈现，活跃等级自动展开 */
-export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadderProps) {
+export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId }: LevelLadderProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const activeId = findActiveLevelId(levels, completedLessons, isUnlocked);
@@ -93,6 +98,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
           const allCompleted = progress === 100;
           const isActive = id === activeId;
           const expanded = id === expandedId;
+          const isStart = id === startLevelId;
 
           return (
             <motion.div
@@ -102,16 +108,19 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
               transition={{ duration: MOTION_DURATION.standard, ease: MOTION_EASE.standard, delay: 0.1 + index * 0.05 }}
               className={cn(
                 'level-row',
-                unlocked ? 'unlocked' : 'locked',
+                unlocked ? 'unlocked' : isStart ? undefined : 'locked',
                 allCompleted && 'completed',
-                isActive && 'active'
+                (isActive || isStart) && 'active'
               )}
+              data-start={isStart ? 'true' : undefined}
             >
               {/* 节点列：黄铜铆钉 + 发线脊柱 */}
               <div className="level-node flex flex-col items-center">
                 <span className="level-node-badge" aria-hidden="true">
                   {allCompleted ? (
                     <CheckCircle2 className="w-4 h-4" />
+                  ) : isStart ? (
+                    <Flag className="w-3.5 h-3.5" />
                   ) : unlocked ? (
                     <span className="font-numeric text-[11px]">{level.level}</span>
                   ) : (
@@ -143,7 +152,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
                     <span
                       className={cn(
                         'text-xl leading-none mt-0.5 shrink-0',
-                        unlocked ? 'opacity-100' : 'opacity-40 grayscale'
+                        unlocked || isStart ? 'opacity-100' : 'opacity-40 grayscale'
                       )}
                       aria-hidden="true"
                     >
@@ -154,6 +163,11 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
                         <span className="level-kicker">
                           {t('academy.path.levelLabel', { n: level.level })}
                         </span>
+                        {isStart && (
+                          <span className="inline-flex items-center text-[10px] font-semibold text-[var(--brass-bright)]">
+                            {t('academy.zeroState.startBadge')}
+                          </span>
+                        )}
                         {allCompleted && (
                           <span className="inline-flex items-center gap-1 text-[10px] text-[var(--poker-success)]">
                             <CheckCircle2 className="w-3 h-3" />
@@ -170,9 +184,11 @@ export function LevelLadder({ levels, completedLessons, isUnlocked }: LevelLadde
                           unlocked ? 'text-[var(--ivory-muted)]' : 'text-[var(--ivory-muted)]/70'
                         )}
                       >
-                        {unlocked
-                          ? resolveLevelDescription(t, level)
-                          : resolveLevelUnlock(t, level)}
+                        {isStart
+                          ? t('academy.zeroState.levelHint')
+                          : unlocked
+                            ? resolveLevelDescription(t, level)
+                            : resolveLevelUnlock(t, level)}
                       </p>
 
                       {unlocked && !allCompleted && (

@@ -300,10 +300,19 @@ export interface BasicsProgress {
 }
 
 // 基础入门步骤
+/** 步骤图标语义名（渲染层映射为 Lucide 图标；数据层禁止 emoji） */
+export type BasicsStepIcon =
+  | 'target'
+  | 'handRanking'
+  | 'betAction'
+  | 'position'
+  | 'pot'
+  | 'glossary';
+
 export interface BasicsStep {
   id: string;
   title: string;
-  icon: string;
+  icon: BasicsStepIcon;
   content: LessonSection[];
 }
 

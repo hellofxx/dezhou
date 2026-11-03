@@ -160,6 +160,14 @@
     "allDone": "Congratulations — you've completed every lesson!",
     "restartPractice": "Run a Quick Drill to stay sharp"
   },
+  "zeroState": {
+    "eyebrow": "Start from zero",
+    "title": "Start with lesson one",
+    "description": "No learning history yet. Spend 8 minutes on the basics first — every level unlocks in order from there.",
+    "cta": "Start the basics",
+    "startBadge": "Start",
+    "levelHint": "Finish the basics to enter Level 1"
+  },
   "levelTitle": {
     "l1": "The Basics",
     "l2": "Preflop Strategy",
