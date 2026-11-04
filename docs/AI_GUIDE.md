@@ -78,6 +78,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 4. 老用户数据零丢失，首次加载自动迁移
 5. persist version 数值以 store 代码为唯一事实源，文档与子代理文件不维护数值副本（无需同步数值）
 6. 在 `docs/CHANGELOG.md` 的"数据迁移"小节记录
+7. 删除废弃字段同样是迁移动作：先确认新事实源已就绪再删（如策略学院 v8 删除 `abilityAssessment` 与首末次得分镜像，尝试记录 / 进步回放改由 `lessonAttempts` + `AcademyDataSource.getLessonAttemptsSnapshot()` 承担、onboarding 种子化改走 `seedEloFromOnboardingAbility`），只删字段不动进度与认证
 
 ### 幂等性
 
@@ -122,6 +123,14 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ## 跨模块复用契约
 
 > 以下是所有训练模块共享的横向契约；单项事实源以文中路径为准，模块不得自行复制实现。
+
+### 学院共享组件与纯函数
+
+- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyMastery`）。
+- 理论学院与策略学院只允许薄包装消费：路由拼接、数据适配、i18n 文案留在 feature 内；shared 组件只接收 props/callbacks，禁止 import 任何 feature。
+- 理论侧 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 与策略侧对应实现均改为薄包装；行为/视觉/文案以原测试为回归基线。
+- **P2 学习工具同源**：`AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（内容纠错弹层）由 shared 提供，理论 `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` 与策略 `StrategyBookmarksPanel` / `StrategyNotesPanel` / `StrategyContentIssueReport` 只做文案与数据适配；shared 不读 store、不拼路由。
+- 新增共享项须满足 shared ≥2 模块准入门槛，并同步 AGENTS.md 本表与 TDD §5.8 第 23 条。
 
 ### 五级反馈
 

@@ -26,7 +26,7 @@
 | `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `theory`, `variant` | 58 | — | 68 |
 | `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 23 | `progress` | 18 |
 | `range-trainer` | `range-trainer-dev` | `RangeTrainerHome` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 12 | `progress` | 17 |
-| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v5）` | `academy`, `drills`, `gto`, `quickDrill`, `variant` | 74 | `progress` | 75 |
+| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 101 | `progress` | 105 |
 | `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v4）` | `academy`, `theory`, `variant` | 59 | `progress` | 58 |
 
 ## Lazy 路由表
@@ -58,27 +58,32 @@
 | 20 | `BasicsIntro` | `@/features/strategy-academy/components/BasicsIntro` | `/academy/basics` |
 | 21 | `ConceptGraphView` | `@/features/strategy-academy/components/ConceptGraphView` | `/academy/concept-graph` |
 | 22 | `LearningTracksView` | `@/features/strategy-academy/components/LearningTracksView` | `/academy/tracks` |
-| 23 | `QuickDrill` | `@/features/strategy-academy/components/QuickDrill` | `/academy/quick-drill` |
-| 24 | `LevelCertification` | `@/features/strategy-academy/components/LevelCertification` | `/academy/certification/:level` |
-| 25 | `OnboardingFlow` | `@/features/onboarding/components/OnboardingFlow` | `/onboarding` |
-| 26 | `PuzzleHome` | `@/features/puzzle-trainer/components/PuzzleHome` | `/puzzle` |
-| 27 | `PuzzleRush` | `@/features/puzzle-trainer/components/PuzzleRush` | `/puzzle/rush` |
-| 28 | `DailyPuzzle` | `@/features/puzzle-trainer/components/DailyPuzzle` | `/puzzle/daily` |
-| 29 | `ThemeDrill` | `@/features/puzzle-trainer/components/ThemeDrill` | `/puzzle/theme/:themeId` |
-| 30 | `TheoryHome` | `@/features/theory-academy/components/TheoryHome` | `/theory` |
-| 31 | `TheoryChapterView` | `@/features/theory-academy/components/TheoryChapterView` | `/theory/chapter/:chapterId` |
-| 32 | `TheoryFlaggedReview` | `@/features/theory-academy/components/TheoryFlaggedReview` | `/theory` |
-| 33 | `TheoryPlacementPage` | `@/features/theory-academy/components/TheoryPlacementPage` | `/theory` |
-| 34 | `TheoryCheckpointPage` | `@/features/theory-academy/components/TheoryCheckpointPage` | `/theory` |
-| 35 | `TheoryGlossaryPage` | `@/features/theory-academy/components/TheoryGlossaryPage` | `/theory` |
-| 36 | `TheorySearchPage` | `@/features/theory-academy/components/TheorySearchPage` | `/theory` |
-| 37 | `TheoryBibliographyPage` | `@/features/theory-academy/components/TheoryBibliographyPage` | `/theory` |
-| 38 | `HelpHome` | `@/features/help-center/components/HelpHome` | `/help` |
-| 39 | `HelpArticle` | `@/features/help-center/components/HelpArticle` | `/help/article/:articleId` |
+| 23 | `StrategySearchPage` | `@/features/strategy-academy/components/StrategySearchPage` | `/academy` |
+| 24 | `PlacementTestPage` | `@/features/strategy-academy/components/PlacementTestPage` | `/academy` |
+| 25 | `LevelCheckpointPage` | `@/features/strategy-academy/components/LevelCheckpointPage` | `/academy` |
+| 26 | `StrategyBookmarksPage` | `@/features/strategy-academy/components/StrategyBookmarksPage` | `/academy` |
+| 27 | `StrategyBibliographyPage` | `@/features/strategy-academy/components/StrategyBibliographyPage` | `/academy` |
+| 28 | `QuickDrill` | `@/features/strategy-academy/components/QuickDrill` | `/academy/quick-drill` |
+| 29 | `LevelCertification` | `@/features/strategy-academy/components/LevelCertification` | `/academy/certification/:level` |
+| 30 | `OnboardingFlow` | `@/features/onboarding/components/OnboardingFlow` | `/onboarding` |
+| 31 | `PuzzleHome` | `@/features/puzzle-trainer/components/PuzzleHome` | `/puzzle` |
+| 32 | `PuzzleRush` | `@/features/puzzle-trainer/components/PuzzleRush` | `/puzzle/rush` |
+| 33 | `DailyPuzzle` | `@/features/puzzle-trainer/components/DailyPuzzle` | `/puzzle/daily` |
+| 34 | `ThemeDrill` | `@/features/puzzle-trainer/components/ThemeDrill` | `/puzzle/theme/:themeId` |
+| 35 | `TheoryHome` | `@/features/theory-academy/components/TheoryHome` | `/theory` |
+| 36 | `TheoryChapterView` | `@/features/theory-academy/components/TheoryChapterView` | `/theory/chapter/:chapterId` |
+| 37 | `TheoryFlaggedReview` | `@/features/theory-academy/components/TheoryFlaggedReview` | `/theory` |
+| 38 | `TheoryPlacementPage` | `@/features/theory-academy/components/TheoryPlacementPage` | `/theory` |
+| 39 | `TheoryCheckpointPage` | `@/features/theory-academy/components/TheoryCheckpointPage` | `/theory` |
+| 40 | `TheoryGlossaryPage` | `@/features/theory-academy/components/TheoryGlossaryPage` | `/theory` |
+| 41 | `TheorySearchPage` | `@/features/theory-academy/components/TheorySearchPage` | `/theory` |
+| 42 | `TheoryBibliographyPage` | `@/features/theory-academy/components/TheoryBibliographyPage` | `/theory` |
+| 43 | `HelpHome` | `@/features/help-center/components/HelpHome` | `/help` |
+| 44 | `HelpArticle` | `@/features/help-center/components/HelpArticle` | `/help/article/:articleId` |
 
 ## 已声明的 URL 路径
 
-> 从 router 配置提取的 `path:` 字符串与 `index` 路由（源码顺序去重，含 AppLayout 与 BlankLayout 两个分支），共 39 条。
+> 从 router 配置提取的 `path:` 字符串与 `index` 路由（源码顺序去重，含 AppLayout 与 BlankLayout 两个分支），共 44 条。
 
 - `/`
 - `/range-trainer`
@@ -96,6 +101,11 @@
 - `/academy/basics`
 - `/academy/concept-graph`
 - `/academy/tracks`
+- `/academy/search`
+- `/academy/placement`
+- `/academy/checkpoint/:level`
+- `/academy/bookmarks`
+- `/academy/bibliography`
 - `/academy/quick-drill`
 - `/academy/certification/:level`
 - `/academy/lesson/:lessonId`
@@ -149,9 +159,9 @@
 | `/academy/basics` | feature（随路由并行加载） | `academy` |
 | `/academy/concept-graph` | feature（随路由并行加载） | `academy` |
 | `/academy/tracks` | feature（随路由并行加载） | `academy` |
-| `/academy/certification/:level` | feature（随路由并行加载） | `academy` |
-| `/academy/lesson/:lessonId` | feature（随路由并行加载） | `academy`, `drills`, `gto` |
-| `/academy` | feature（随路由并行加载） | `academy`, `variant` |
+| `/academy/certification/:level` | feature（随路由并行加载） | `academy`, `theory` |
+| `/academy/lesson/:lessonId` | feature（随路由并行加载） | `academy`, `drills`, `gto`, `theory` |
+| `/academy` | feature（随路由并行加载） | `academy`, `variant`, `theory` |
 | `/theory/chapter/:chapterId` | feature（随路由并行加载） | `theory`, `academy` |
 | `/theory` | feature（随路由并行加载） | `theory`, `academy`, `variant` |
 | `/puzzle/theme/:themeId` | feature（随路由并行加载） | `puzzle`, `feedback` |
@@ -165,6 +175,6 @@
 ## 生成统计
 
 - 模块数：10（自检阈值 = 10）
-- lazy 声明数：39（自检阈值 >= 21）
+- lazy 声明数：44（自检阈值 >= 21）
 - agent 文件数：12（自检阈值 >= 10）
-- 已声明 URL 数：39
+- 已声明 URL 数：44

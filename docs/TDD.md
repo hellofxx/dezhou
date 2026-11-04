@@ -955,7 +955,7 @@ interface DailyRecommendation {
    - 合成时调用 `synthesizeFreezeCard()` 扣减 5 碎片、增加 1 张冻结卡
 
 9. **进步回放**（v2.1 新增）：
-   - `ProgressReplay` 组件对比用户首次尝试与最近一次的表现（`firstAttemptScores` / `lastAttemptScores`）
+   - `ProgressReplay` 组件对比用户首次尝试与最近一次的表现，数据源为策略学院 `AcademyDataSource.getLessonAttemptsSnapshot()`（`lessonAttempts` 快照，经 shared `useAcademyLessonAttemptsSnapshot` 消费；progress 不 import feature）
    - 按绝对变化幅度降序取前 5 门课程，同时展示进步（`--poker-success`）与退步（`--poker-danger`），可视化成长轨迹
 
 10. **存量理论复习项 key 化迁移**：理论学院早期实现把章末题目的**中文原文**写进复习项的 `label` / `metadata.front` / `metadata.back`，而复习项随 persist 长期存活、渲染层按 i18n key 解析（契约见 §5.8b 第 10 条与 §5.9 SRS 语言契约），故英文界面会显示中文题干/解析。progress store 因此在 persist `version` 递增的同时新增一个 migrate 步骤（版本号以 `store.ts` persist 配置为唯一事实源，本文档不维护数值副本，见 §9.4），调用纯函数 `features/progress/utils/migrateTheoryReviewKeys.ts`：
@@ -1062,7 +1062,7 @@ interface DailyRecommendation {
 | data | courses.ts / learningTracks / levels/ / localLessons/ / opponentProfiles | 课程数据（courses.ts 现为 re-export 兼容层）、学习路径、分级课程数据、本地课程、对手形象 |
 | hooks | useAcademy | 学院进度 hook |
 | utils | courseProgress / lessonUnits | 进度计算工具 / 课程小节派生（显式 units 优先 → heading 分节 → 兜底单 unit → examples 分配 → 综合示例尾节标识符，`resolveUnitTitle` 渲染层翻译） |
-| store | store.ts | Zustand store（含 abilityAssessment） |
+| store | store.ts | Zustand store（lessonAttempts / placement / checkpoints / bookmarkedLessons / lessonNotes；v8 起无 abilityAssessment 与首末次得分镜像） |
 | types.ts | 类型定义 | Course / Lesson / LearningTrack / OpponentProfile 等 |
 
 **关键设计**：
@@ -1096,7 +1096,7 @@ interface DailyRecommendation {
    - L8（高级剥削策略）需完成 L4B
    - 本土低级别盈利路径需完成 L1-L3
 
-   **等级解锁判定（区分 4A/4B）**：store 提供两个方法——`isLevelUnlocked(level: number)`（按 level 数字，同 level 数字任一条目满足即解锁，用于兼容旧调用）与 `isLevelEntryUnlocked(levelId: string)`（按 `LevelInfo.id` 精确判定，如 `l4a`/`l4b`）。UI 门禁（`CourseView` / `ConceptGraph` / `AcademyHome` / `LevelCard`）统一使用 `isLevelEntryUnlocked`，消除 L4A/L4B 同为 `level:4` 时 L4B 门禁被旁路的缺陷。`CourseView` 对本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定。级别认证（`LevelCertification`）题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），`attemptCertification` 的 questionCount 与实考口径统一为 `min(合并题池, 20)`。
+   **等级解锁判定（区分 4A/4B）**：store 提供两个方法——`isLevelUnlocked(level: number)`（按 level 数字，同 level 数字任一条目满足即解锁，用于兼容旧调用）与 `isLevelEntryUnlocked(levelId: string)`（按 `LevelInfo.id` 精确判定，如 `l4a`/`l4b`）。UI 门禁（`CourseView` / `ConceptGraph` / `AcademyHome` / `LevelCard`）统一使用 `isLevelEntryUnlocked`，消除 L4A/L4B 同为 `level:4` 时 L4B 门禁被旁路的缺陷。`CourseView` 对本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定。级别认证（`LevelCertification`）题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），`submitCertificationAttempt` 的 questionCount 以组件实考抽题结果传入，题池上限为 `min(合并题池, 20)`（legacy `attemptCertification` 已于 v8 移除）。
 
 4. **知识图谱**（ConceptGraphView）：
    - 使用 SVG + framer-motion 渲染节点和边
@@ -1106,7 +1106,7 @@ interface DailyRecommendation {
 
 5. **对手形象系统**（`data/opponentProfiles`）：`OpponentProfile` 类型定义对手分类（TAG / LAG / NIT / CALLING_STATION），含 VPIP / PFR / aggressionFactor 统计与应对策略。
 
-6. **能力评估**：`abilityAssessment` 字段记录用户在各维度的能力值（0-100），可与 ELO 系统通过 `abilityToElo()` 映射互转。
+6. **能力评估（v8 收敛）**：用户可见能力画像以 `progress.eloByVariant` 为单一事实源；策略侧自适应难度只读 `recentPracticeResults`（由 `recordPracticeResult` 维护，cap 50）。`abilityAssessment` 随 v8 移除，不再有第二套能力值。
 
 7. **快速训练入口**：`QuickDrill` 组件接收 `quick=true` 参数进入快速模式（固定 5 题、自适应难度），完成时调用 `recordTrainingDay` 计入 Streak，XP 计算（每题 +10 / 全对 +20 奖励）。
 
@@ -1162,6 +1162,31 @@ interface DailyRecommendation {
 16. **理论桥接可点化**：`components/content/TheoryReferenceBlock.tsx` 的跳转解析优先 `data.theoryChapterId` → `/theory/chapter/:id`，回退旧形态 `data.lessonId`（`data.target === 'theory'` 走理论章节路径，否则 `/academy/lesson/:id`），二者皆无时渲染纯文本标签，不生成死链。
 
 17. **内容与测验的原子变更守卫**（落在 `src/i18n/`，两学院共享）：新增单源生成器 `contentKeyEntries.ts`（遍历课程数据产出 key ↔ 原文映射），由 `contentI18n.test.ts`（key **是否存在**）与新增 `contentAlignment.test.ts`（key ↔ 原文**是否对齐**）共同消费，消除两处重复遍历。对齐守卫断言分三层——① 索引族长度对齐与 orphan（locale 残留的下标条目即错位信号）② zh 逐字镜像（locale 值 === 数据层原文）③ en 非空且不含汉字（术语卡 `chinese` 字段例外）。历史漂移冻结在独立文件 `contentAlignment.baseline.ts` 的**棘轮基线**：只允许减少、修复一条删一条，守卫内置「基线卫生」断言禁止为跑绿新增条目。规则口径见 PRD §6.7.4 / §10 R11。
+
+18. **题库分层与评估抽取（2026-11）**：标准课题库从 level/local 文件迁入 `data/lessons/variants/standard/quizBank/level1..8.ts` + `local.ts`（`Record<lessonId, QuizQuestion[]>`）；`utils/applyQuizBank.ts` 薄包装 shared `mergeQuizBank`，在静态聚合与 `loaders.ts` 按 Level 注入。每门非 Drill 标准课 8–12 题；课时测验经 shared `drawByAttempt` 按 `lessonId#attemptNumber` 抽 5 题；Level 认证从该级全题库抽 20 题（`certificationExam.ts`），不再复用固定课时卷。题库文件走 `QUIZ_BANK_ALLOWLIST` 逐文件行数棘轮，理论/策略两套路径由同一 `QUIZ_BANK_PATH_RE` 约束。
+
+19. **Store 评估状态（v8 收敛）**：`lessonAttempts: Record<lessonId, { attempts; firstScore; firstCorrect; firstTotal; bestScore; lastScore; lastAt }>` + `recordLessonAttempt` 是课后尝试的**唯一事实源**（首次成绩计掌握度/ELO，重考只更新 best/last 并进题级 SRS）。v8 已移除 `firstAttemptScores` / `lastAttemptScores` 镜像与 legacy `attemptCertification`；进步回放与掌握度改读同一份数据（`AcademyDataSource.getLessonAttemptsSnapshot()`）。认证记录含 `variant:'standard'` / `totalQuestions` / `poolSize` / `questionIds?`；`getCertificationState` 与 `submitCertificationAttempt` 为唯一认证入口（完成门禁、标准变体、有效期内不可重考、失败 24h 冷却、过期续期）。
+
+20. **ELO 统一写入**：课时测验首考逐题 `progress.updateElo(lessonMeta.eloDimension, correct, difficulty)` + `recordAnswer`；重考不写 ELO/情绪计数。`PracticeDrill` 每答写 ELO（维度取 `relatedLessonId` → `lessonMeta`，兜底 postflop），并以 `recordPracticeResult` 只维护 `recentPracticeResults`（cap 50）作为自适应难度窗口——v8 起不再维护 `abilityAssessment`。基础 Drill 完成时按正确率写一次；认证不写 ELO（凭证不是学习）；Level Checkpoint 首轮写 ELO、重考不写（见第 27 条）。`dailyPlan` 读 `EloRating`；`store.bootstrap` 改调 progress store 的 `seedEloFromOnboardingAbility(onboarding.initialAbility)`（仅 `gamesPlayed === 0` 时播种），`syncEloFromAcademyAbility` 已随 v8 移除。用户可见能力画像以 `eloByVariant` 为单一事实源。
+
+21. **题级 SRS**：`utils/strategySrs.ts` 薄包装 shared `buildQuestionReviewItems`；id 前缀 `strategy:`（与 theory 的 `theory:`、旧 lessonId 裸键隔离），label/front/back 存 `academy.lessonQuiz.<qid>.question/.explanation`，metadata 带 `/academy/lesson/<lessonId>`。`completeCourse` 在每次尝试都 emit + `recordTrainingDay`，按 `wrongQuestionIds` 写题级 SRS；满分或 Drill 保留课时级复习项。`useEnsureReviewSourceI18n` 从 strategy 题级复习项的 route 反解 lessonId，按需加载 `academy-course` 文件。
+
+22. **lessonMeta 与双向桥接**：`data/lessonMeta/` 覆盖 92 门标准课（含 Drill/本土课），每课 `eloDimension` + `theoryAnchors`（≥1 理论章 id）。`lessonMeta.integrity.test.ts` 用 raw glob 扫描理论标准数据断言锚点存在；`theoryReferenceIntegrity.test.ts` 同时校验 inline `theory-reference` 与 lessonMeta 锚点。策略首页/课程完成页/认证失败页用 `TheoryBridgeCard`（薄包装 shared `AcademyBridgeCard`）链到 `/theory/chapter/<id>`；理论 Checkpoint 完成后提供 `/academy/certification/<mappedLevel>` CTA。跨模块只传路由/ID 字符串。
+
+23. **两院共享层（2026-11）**：`shared/types/academy.ts` 统一 `AcademyQuizQuestion` / `AcademyBridgeItem` / `AcademySearchItem` / `MasterySummary`；`shared/utils/academyQuizBank.ts`（`mergeQuizBank`）、`academyQuizDraw.ts`（`drawByAttempt`）、`academySrs.ts`（`buildQuestionReviewItems`）、`academyMastery.ts`（`summarizeMastery`）；`shared/components/academy/` 提供 `AcademyBridgeCard` / `AcademyMasteryCard` / `AcademySearchShell` / `AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（mailto / 剪贴板降级）。理论 S2、策略 T3/T4 与 P2 工具均以薄包装消费，shared 层只接收 items / labels / callbacks，禁止读 store、查目录、拼路由或 import feature；理论原有 ARIA/文案/视觉保持不变。
+
+24. **persist v5 → v8**（`migrateStrategyAcademyState` 纯函数，按 `fromVersion` 逐版顺序执行）：**v6** 由 `firstAttemptScores` / `lastAttemptScores` / `quizScores` / `completedLessons` 反推 `lessonAttempts`，已完成但无分数的课时补 `attempts=1`（避免重考被误判首次），已有 `lessonAttempts` 不覆盖；**v7** 注入 P2 字段默认值（`placement: null` / `checkpoints: {}` / `bookmarkedLessons: []` / `lessonNotes: {}`）；**v8** 删除 `abilityAssessment`、`firstAttemptScores` / `lastAttemptScores` 镜像与 legacy `attemptCertification`（只删字段，不动 `progress` / `certifications` / `lessonAttempts`）。迁移为原地合并，进度 / 认证 / lessonAttempts / P2 字段全程保留；老存档零丢失，回滚只丢失新增字段。
+
+25. **变体认证 de-scope**：本批 `getCertificationState` / `submitCertificationAttempt` 在非 standard 变体返回 `wrong-variant`；`LevelCard` / `LevelLadder` 仅在标准变体展示认证入口；PRD §5.16.8 / §5.17.3 同步声明“标准变体认证已上线、变体认证规划中”。变体认证接入时需新增 variant 维度键并提升 persist version。
+
+26. **策略定位测评（16 题，只放宽解锁）**：题库 `data/placementQuestions.ts`（16 题，`PLACEMENT_TOPICS` 覆盖牌型 / 位置 / 赔率 / 翻前范围 / C-bet / EV / GTO / ICM；选项渲染前经 `orderResolvedOptions` 重排，判分以重排后对象为准）；`utils/placement.ts` 提供 `scoreToRecommendedLevel`（0–4 → L1、5–8 → L2、9–11 → L3、12–14 → L4A、15–16 → L4B，非有限值按 0 分钳制）、`creditLevelsForLevel`（推荐起点之前的 Level 单调前缀）与 `PLACEMENT_MAX_CREDIT_LEVEL = 'l4b'`；`utils/p2State.mergePlacement` 负责 creditLevels 并集与「重测不降级」（取更高起点，未知 id 按低档）。`store.recordPlacement` 只写 `placement`，**绝不写 `completedLessons`**；`isLevelEntryUnlocked` 把 `placement.creditLevels` 作为额外放行条件，**L5+ 条目不接受 credit**。`PlacementTestPage` 负责逐题 / 结果 / 重测，不写 ELO、不写 SRS、不 emit trainingEvents。
+27. **Level Checkpoint（形成性，12 题）**：`utils/checkpoint.ts` 从该 Level 已应用题库抽 `CHECKPOINT_QUESTION_COUNT = 12` 题（题池不足时全量），每题带来源 `lessonId` 与 `eloDimension`；抽题键 `checkpoint-level-<n>`（`getCheckpointDrawKey`），`recordCheckpointAttempt` 只持久化 `checkpoints[level]`（attempts / firstScore / bestScore / lastScore / questionIds / lastAt）。`LevelCheckpointPage` 以 `isLevelLessonsCompleted(level)` 为入口门禁（URL 直达只渲染锁定原因与完成进度）；首轮逐题 `updateElo(sourceDimension, correct, difficulty)` + `recordAnswer`，`utils/checkpointSrs.ts` 按来源课生成 `checkpoint:l<level>:<qid>` 复习项（首轮与重考一致）；重考只更新成绩与 SRS，不写 ELO。**不发证、不解锁下一级、无冷却**，与认证（§5.16.8）分开入口。
+28. **课时工具与内容运营（P2）**：
+    - **书签 / 笔记**：store 字段 `bookmarkedLessons: string[]` / `lessonNotes: Record<lessonId, { text; updatedAt }>`；`toggleLessonBookmark` 幂等，`saveLessonNote` 只存纯文本、trim 后按 `MAX_LESSON_NOTE_LENGTH = 2000` 截断、空文本即删除。UI 由 shared `AcademyBookmarksPanel`（strip / panel 两形态）与 `AcademyNotesPanel`（受控草稿 + 显式保存）承载，策略侧薄包装 `StrategyBookmarksPanel` / `StrategyNotesPanel`，课时页入口 `LessonBookmarkButton` + `/academy/bookmarks` 收藏页。二者均为阅读辅助，不参与门禁、不写进度。
+    - **内容运营**：`data/contentOps.ts` 的 `getLessonContentMeta(lessonId)` 提供 92/92 标准课时的 `lastReviewed`（`YYYY-MM-DD`）与可选 `sources`（引用 bibliography 条目 id），未知课时回退不渲染；`LessonReviewMeta` 展示「最近校对」并挂 shared `ContentIssueReportDialog` 的策略适配 `StrategyContentIssueReport`（mailto / 剪贴板降级，无后端、不记录用户身份）。`data/bibliography.ts` 按 Level 聚合 11 本策略教材（L1–L8 每级至少 1 本），`StrategyBibliographyPage` 只读，不复制理论学院书目数据。
+    - **全文搜索**：`utils/searchIndex.ts` 首次查询 ≥2 字符（`SEARCH_MIN_QUERY_LENGTH`）才经 `loadAcademyLessonsForQuickDrill` 懒加载全量标准课时并缓存索引（并发共享 in-flight、失败清空可重试、`resetLessonSearchIndexCache` 仅测试用）；命中标题 / 副标题 / objectives / 正文 / 小测题干，结果去重、上限 `SEARCH_MAX_RESULTS = 20`、带 `SEARCH_SNIPPET_LENGTH = 80` 片段。`StrategySearchPage` 保留标题/副标题即时结果，正文结果异步补全，加载失败降级为标题搜索，不阻塞首页。
+29. **v8 技术债清理**：删除 `abilityAssessment`、`firstAttemptScores` / `lastAttemptScores` 镜像与 legacy `attemptCertification`（组件只走 `submitCertificationAttempt`）；`recordPracticeResult` 只维护 `recentPracticeResults`，自适应难度行为不变。`AcademyDataSource` 新增 `getLessonAttemptsSnapshot()`（由 `strategy-academy/store.bootstrap.ts` 注册，shared `useAcademyDataSource` 暴露 `useAcademyLessonAttemptsSnapshot`），progress `ProgressReplay` 改读该快照而不 import feature。progress store 新增 `seedEloFromOnboardingAbility(ability)` 取代 `syncEloFromAcademyAbility`（`store.bootstrap` 直接调用，仅 `gamesPlayed === 0` 播种；`emotionalControl` 固定 50）。回归由 `store.migrate.test.ts` / `store.persist-shape.test.ts` / `store.p2.test.ts` / `ProgressReplay.test.tsx` 锁定。
+30. **路由（P2）**：新增 `/academy/placement`（PlacementTestPage）、`/academy/checkpoint/:level`（LevelCheckpointPage）、`/academy/bookmarks`（StrategyBookmarksPage）、`/academy/bibliography`（StrategyBibliographyPage）；`/academy/search` 原地升级为全文搜索（组件 `StrategySearchPage`）。全部经 `React.lazy` + `<LazyWrapper>` 注册，i18n 走 `/academy` 路由分组（`academy.*`）。
 
 ### 5.8b Theory Academy（理论学院，2026-07 新增）
 
@@ -1431,7 +1456,7 @@ Progress Store Actions（从 PRD 5.13 迁入）：
 - `updateElo(dimension, isCorrect, difficulty)` — 应用 ELO 变化到指定维度，重算 overall/kFactor/gamesPlayed，自动检测段位升级并设 `eloRankUp`
 - `resetElo()` — 重置 ELO 为默认值（用于设置页“重置能力评分”）
 - `clearEloRankUp()` — 关闭升段庆祝后清空 `eloRankUp`
-- `syncEloFromAcademyAbility(aa)` — 从 strategy-academy abilityAssessment 同步初始 ELO，仅 `gamesPlayed===0` 时生效
+- `seedEloFromOnboardingAbility(ability)` — 用 onboarding 定位能力（rangeKnowledge / oddsCalculation / positionalPlay / gtoUnderstanding，emotionalControl 固定 50）播种 standard 变体初始 ELO，仅 `gamesPlayed===0` 且存在非默认能力时生效（取代已移除的 `syncEloFromAcademyAbility`；调用方为 strategy-academy `store.bootstrap`）
 
 训练模块维度映射：
 
@@ -1571,7 +1596,7 @@ persist(
 | `useHandHistoryStore` | `hands[]` + `currentHand` + `replayState` + `filter` | IndexedDB |
 | `useProgressStore` | `records[]` + `settings` + `onboarding` + `streak` + `eloByVariant` + `activeVariant` + `quickDrillStreak` + `quickDrillBest` + `mentorStyle` + `emotion` + `unlockedAchievements` + `achievementUnlockDates` + `freezeCardFragments` + `lastFragmentDate` + `fragmentsEarnedToday` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `usePuzzleTrainerStore` | `rushBest` + `dailyBest` + `themeBest` + `dailyCompleted` + `history` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
-| `useStrategyAcademyStore` | `progress` + `practiceResults`（cap 200） + `basicsProgress` + `abilityAssessment` + `adaptiveConfig` + `recentPracticeResults` + `dailyPlan` + `certifications` + `activeTrackId` + `activeVariant` + `firstAttemptScores` + `lastAttemptScores` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
+| `useStrategyAcademyStore` | `progress` + `practiceResults`（cap 200） + `basicsProgress` + `adaptiveConfig` + `recentPracticeResults` + `dailyPlan` + `certifications` + `lessonAttempts` + `placement` + `checkpoints` + `bookmarkedLessons` + `lessonNotes` + `activeTrackId` + `activeVariant`（v8 起无 `abilityAssessment` / `firstAttemptScores` / `lastAttemptScores`） | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `useTheoryAcademyStore` | `progress`（completedChapters / quizScores / currentChapter / startedAt） | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 | `useDebugModeStore` | `unlockAll` | localStorage（persist version 以 store.ts 配置为唯一事实源，见 §9.4） |
 
@@ -1611,6 +1636,11 @@ persist(
 | `/academy/basics` | BasicsIntro | AppLayout |
 | `/academy/concept-graph` | ConceptGraphView | AppLayout |
 | `/academy/tracks` | LearningTracksView | AppLayout |
+| `/academy/search` | StrategySearchPage（标题即时 + 正文全文懒加载） | AppLayout |
+| `/academy/placement` | PlacementTestPage | AppLayout |
+| `/academy/checkpoint/:level` | LevelCheckpointPage | AppLayout |
+| `/academy/bookmarks` | StrategyBookmarksPage | AppLayout |
+| `/academy/bibliography` | StrategyBibliographyPage | AppLayout |
 | `/academy/quick-drill` | QuickDrill | AppLayout |
 | `/academy/certification/:level` | LevelCertification | AppLayout |
 | `/academy/lesson/:lessonId` | CourseView | AppLayout |
@@ -1785,7 +1815,7 @@ persist(
 |---|---|---|---|
 | progress | `poker-training-progress` | 以 `store.ts` persist 配置为唯一事实源 | records / settings / onboarding / streak / eloByVariant / activeVariant / quickDrillStreak / quickDrillBest / mentorStyle / emotion / unlockedAchievements / achievementUnlockDates / freezeCardFragments / lastFragmentDate / fragmentsEarnedToday |
 | puzzle-trainer | `puzzle-trainer-store` | 以 `store.ts`persist 配置为唯一事实源 | rushBest / dailyBest / themeBest / dailyCompleted / history（上限 50 条）|
-| strategy-academy | `strategy-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedLessons / quizScores / currentLesson / startedAt / **completedUnits**）/ practiceResults（cap 200） / basicsProgress / abilityAssessment / adaptiveConfig / recentPracticeResults / dailyPlan / certifications / activeTrackId / activeVariant / firstAttemptScores / lastAttemptScores |
+| strategy-academy | `strategy-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedLessons / quizScores / currentLesson / startedAt / **completedUnits**）/ practiceResults（cap 200） / basicsProgress / adaptiveConfig / recentPracticeResults（cap 50） / dailyPlan / certifications（含 variant/totalQuestions/poolSize/questionIds）/ **lessonAttempts** / **placement**（recommendedLevelId / creditLevels / correct / total / takenAt）/ **checkpoints**（attempts / firstScore / bestScore / lastScore / questionIds / lastAt）/ **bookmarkedLessons** / **lessonNotes**（text / updatedAt，2000 字上限）/ activeTrackId / activeVariant。v8 已移除 abilityAssessment、firstAttemptScores / lastAttemptScores 镜像与 legacy attemptCertification |
 | theory-academy | `theory-academy-progress` | 以 `store.ts`persist 配置为唯一事实源 | progress（completedChapters / quizScores / currentChapter / startedAt / **flaggedQuestions**）/ activeVariant / variantMetadata |
 | debugMode | `poker-debug-mode` | 以 `store.ts`persist 配置为唯一事实源 | unlockAll |
 
@@ -1844,10 +1874,14 @@ persist(
 | v7 → v8 | 冻结卡碎片系统迁移：注入 `freezeCardFragments: 0`、`lastFragmentDate: ''`、`fragmentsEarnedToday: 0` 默认值 |
 | puzzle-trainer v1 → v2 | 快速训练 Best Record：注入 `quickDrillBest: null` 默认值 |
 | puzzle-trainer v2 → v3 | quickDrillBest 迁至 progress store：清理本模块存量字段 |
-| strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值 |
+| strategy-academy v0 → v1 | 进步回放得分记录迁移：注入 `firstAttemptScores: {}` 和 `lastAttemptScores: {}` 默认值（两镜像已于 v8 删除，事实源改为 `lessonAttempts`） |
 | strategy-academy v1 → v2 | practiceResults 裁剪：对超过 200 条的老数据执行 `.slice(-200)` 保留最近记录 |
 | strategy-academy v2 → v3 | 认证系统升级：certifications 逐条注入 `cooldownPeriod: 24` 与 `lastAttemptAt` 默认值（validUntil 保持可选） |
 | strategy-academy v3 → v4 | 小节完成状态持久化：防御性合并 progress（`{ ...initialProgress, ...progress, completedUnits: progress.completedUnits ?? {} }`），注入 `completedUnits: {}`，已有值不覆盖 |
+| strategy-academy v4 → v5 | 变体上下文：注入 `activeVariant` 默认值（standard） |
+| strategy-academy v5 → v6 | 课后尝试记录：由 `firstAttemptScores` / `lastAttemptScores` / `quizScores` / `completedLessons` 反推 `lessonAttempts`，已完成但无分课时补 `attempts=1` |
+| strategy-academy v6 → v7 | P2 字段：注入 `placement: null` / `checkpoints: {}` / `bookmarkedLessons: []` / `lessonNotes: {}`（保留 lessonAttempts 与认证） |
+| strategy-academy v7 → v8 | 技术债清理：删除 `abilityAssessment`、`firstAttemptScores` / `lastAttemptScores` 镜像与 legacy `attemptCertification`；progress / certifications / lessonAttempts / P2 字段原样保留 |
 | theory-academy v0 → v1 | 首版兜底：防御性合并 progress 默认值（新 store，无存量迁移负担） |
 
 ---

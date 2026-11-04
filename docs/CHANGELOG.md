@@ -10,6 +10,27 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-04 策略学院学习工具与形成性评估（P2，非变体）
+
+- **定位测评**：16 题概念测评（牌型 / 位置 / 赔率 / 翻前范围 / C-bet / EV / GTO / ICM），分档 0–4→L1、5–8→L2、9–11→L3、12–14→L4A、15–16→L4B；结果只写 `placement.creditLevels`（放宽条目访问），不写 `completedLessons`、不计进度，重测取并集不降级；最高免修 L4B、L5+ 不接受 credit。路由 `/academy/placement`。
+- **Level Checkpoint**：每级 12 题形成性测评，仅该级核心课全部完成后开放；首轮按题目来源课维度写 ELO 与情绪计数，错题按来源课进题级 SRS（`checkpoint:l<n>:<qid>`），重考只更新成绩；**不发证、不解锁下一级**。路由 `/academy/checkpoint/:level`。
+- **课时工具与内容运营**：课时书签（toggle + 收藏页 `/academy/bookmarks`）、纯文本笔记（2000 字上限、显式保存、空文本即删除）、课时「最近校对」`lastReviewed`（92/92 标准课时，`data/contentOps.ts`）与内容纠错入口（mailto / 剪贴板降级，无后端）；策略参考书目 11 本按 Level 聚合（`/academy/bibliography`，只读，不复制理论书目数据）。
+- **全文搜索**：`/academy/search` 升级为标题即时 + 正文全文；首次查询 ≥2 字符时懒加载全量标准课时并缓存索引，命中标题 / 副标题 / objectives / 正文 / 小测题干，结果去重、上限 20，加载失败降级为标题搜索。
+- **共享层**：`shared/components/academy/` 新增 `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog`，理论（`TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport`）与策略（`StrategyBookmarksPanel` / `StrategyNotesPanel` / `StrategyContentIssueReport`）各自薄包装。
+- **persist 与 v8 清理**：v6 新增 `lessonAttempts`、v7 新增 `placement` / `checkpoints` / `bookmarkedLessons` / `lessonNotes`、v8 删除 `abilityAssessment`、`firstAttemptScores` / `lastAttemptScores` 镜像与 legacy `attemptCertification`；`lessonAttempts` + `submitCertificationAttempt` 成为唯一事实源，`ProgressReplay` 改读 `AcademyDataSource.getLessonAttemptsSnapshot()`，progress 新增 `seedEloFromOnboardingAbility` 取代 `syncEloFromAcademyAbility`。
+- **文档同步**：PRD §5.16.12–5.16.14 与对应验收项；TDD §5.8 修订第 19 / 20 / 23 / 24 条并新增第 26–30 条，§6.4 / §9.4 持久化字段、§7.2 路由表与 persist 迁移记录同步；AGENTS 共享组件契约与 AI_GUIDE 学院共享层补充 P2 工具与 v8 清理记录；strategy-academy-dev / progress-dev / theory-academy-dev 代理文件更新。
+- **验证**：`pnpm verify` 全绿（418 文件 / 3091 用例；typecheck / lint / repo / docs / agents-map 通过）；`pnpm build` 通过；`size:check` 通过（首屏 725.67 KB / gzip ~217.7 KB）。Playwright 1440×900 / 390×844 × 亮/暗实测策略首页、定位测评、Checkpoint、收藏、书目、全文搜索、课时页：0 console error/warn、0 page error、无横向溢出；截图归档 `C:\Users\24533\.qoder\tmp\p2-e2e`。英文文案由 localeParity/staticKeyGuard 与既有英文冒烟覆盖。
+
+### 2026-11-04 策略学院评估与学习闭环整改（P0+P1，标准变体）
+
+- **题库与评估**：标准 70 门非 Drill 课迁入 `quizBank/level1..8.ts` + `local.ts`，目标 8–12 题/课；课时抽 5、Level 认证抽 20；首次成绩计掌握度/ELO，重考只更新 best/last 并进题级 SRS。
+- **认证**：标准变体 70% 通过、30 天有效、失败 24h 冷却、过期续期；完成门禁、变体模式隐藏入口并拒绝 `wrong-variant`；题量按实考记录。短牌/单挑认证明确 de-scope，PRD §5.16.8 / §5.17.3 同步。
+- **能力链路**：策略课时首考/Drill 写 `progress.updateElo`；`dailyPlan` / QuickDrill 弱点改读 ELO；`abilityAssessment` 降为自适应难度内部启发式（同批 P2 的 v8 清理已将其移除）；onboarding 初值种子化 ELO（P2 收敛为 `seedEloFromOnboardingAbility`）。
+- **桥接与工具**：`lessonMeta` 覆盖 92 门标准课（`eloDimension` + `theoryAnchors`）；策略首页/课程完成页/认证失败页/理论 Checkpoint 双向入口；掌握度卡、搜索页、术语入口、leak-fix 动态推荐。
+- **共享层**：新增 `shared/components/academy/*` 与 `shared/utils/academy*`；理论 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `theorySrs` / `applyQuizBank` / `quizDraw` 与策略侧对应实现改为薄包装。
+- **内容修正**：`l2-3bet-basics` 持 A♠ 的 3-bet 范围组合数由 26→22 修正为 26→17（AA 6→3、AKs/A5s 各 4→1）；`standardQuantAudit` 索引同步。
+- **验证**：`pnpm verify` 全绿（397 文件 / 2930 用例；typecheck / lint / repo / docs / agents-map 通过）；`pnpm build` 通过；`size:check` 通过（首屏 724 KB / gzip ~217 KB）。dev server 结构验收：策略首页（掌握度/搜索/术语）、搜索 92 课、认证未完成与变体门禁、课时题库 8 题、理论首页与章节（共享组件）均无 console error/warn；截图因 in-app browser viewport 0x0 不可用，移动端视觉未实机复核。
+
 ### 2026-11-04 理论学院标准课程全量整改
 
 - **独立题库**：全部章末题迁入 `data/levels/variants/standard/quizBank/t1..t9.ts`（标准变体题库 354 题，每章 8–12 题），按章节 + 尝试次数种子抽 5/6 题；题库纯数据文件走 `QUIZ_BANK_ALLOWLIST` 逐文件行数棘轮。

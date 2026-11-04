@@ -53,6 +53,7 @@ additionalPrompt: ""
 - 快速训练连续打卡（quickDrillStreak）+ 新手引导状态管理
 - 用户设置（SettingsPage 语言偏好 / 开发者选项入口）
 - 学习进度可视化组件：progress-ring（进度环）、sparkline（趋势微图）、milestone-marker（里程碑标记）、daily-goal-card（今日目标卡）
+- 进步回放（`ProgressReplay`）：经 `AcademyDataSource.getLessonAttemptsSnapshot()`（shared `useAcademyLessonAttemptsSnapshot`）读策略学院 `lessonAttempts` 快照，按首次/最近成绩差排序；不 import feature、不再读首末次得分镜像
 - Dashboard 教育叙事：首屏学习目标展示 + 正确率趋势 + 薄弱点高亮 + 今日推荐路径
 - 渐进式信息披露：根据 totalSessions 控制训练场模块网格的可见性（新手仅展示推荐路径）
 - learning-focus-mode：模块锁定仪表盘聚焦，自动过滤该模块的进度与推荐
@@ -68,6 +69,7 @@ additionalPrompt: ""
 - **ELO**：
   - `updateElo(dimension, isCorrect, difficulty)`（更新五维中指定维度 ELO；内部调用 `shared/utils/elo.ts` 的 `checkRankUp` 纯函数自动检测段位升级并设置 `eloRankUp` 事件，触发 RankUpCelebration）
   - `eloRankUp`（state 事件，非 null 表示刚升级，Dashboard 监听弹 Dialog）/ `clearEloRankUp()`
+  - `seedEloFromOnboardingAbility(ability)`（用 onboarding 四维定位能力播种 standard 初始 ELO；仅 `gamesPlayed === 0` 且能力非默认时生效，内部经 `mapAcademyAbilityToElo`；取代已移除的 `syncEloFromAcademyAbility`，调用方为 strategy-academy `store.bootstrap`）
 - **SRS**：
   - `updateReviewItem(item)` / `addReviewItem(item)` / `dismissRecommendation(id)` / `clearDailyDismissals()`（store 公开 action）
   - `processReview(item, quality)`（`progress/utils/spacedRepetition.ts` 纯函数，SM-2 算法；store 不暴露）
@@ -125,6 +127,7 @@ shared/ 依赖（维护职责见 Authority）：
 7. 修改 ELO 算法时：编辑 shared/utils/elo.ts 的 calculateEloChange / getDynamicKFactor
 8. 修改 SRS 比例时：编辑 dailyTrainingMix.ts 的 composeDailyMix 阈值
 9. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
+10. **策略学院评估接入（2026-11）**：策略课时首考/Drill 经 `updateElo(dimension, isCorrect, difficulty)` 写入 `eloByVariant`；重考不写 ELO。题级 SRS 使用 shared `buildQuestionReviewItems`，id 前缀 `strategy:`，metadata.route 回 `/academy/lesson/<id>`；`useEnsureReviewSourceI18n` 从 route 反解 lessonId 并按需加载 `academy-course`。策略自适应难度只读 `recentPracticeResults`（`abilityAssessment` 已随 v8 移除，不再作为用户可见能力源）；onboarding 初值改经 `seedEloFromOnboardingAbility(ability)` 在 `store.bootstrap` 种子化 ELO（仅 `gamesPlayed === 0`），与策略学院默认能力保持同源；进步回放经 `AcademyDataSource.getLessonAttemptsSnapshot()` 读 `lessonAttempts` 快照。
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。persist 升级规则与"记录完成"action 幂等要求见 `docs/AI_GUIDE.md` §状态管理，本文件不复制其内容。

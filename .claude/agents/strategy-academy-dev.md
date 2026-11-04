@@ -27,7 +27,7 @@ additionalPrompt: ""
 - 项目路径：工作区根目录（本文件所有路径均为相对工作区路径）
 - 模块路径：src/features/strategy-academy/
 - 技术栈：React 19 + TypeScript 7 + Zustand 5 + Tailwind CSS 4 + framer-motion 12
-- 路由：`/academy` / `/academy/basics` / `/academy/concept-graph` / `/academy/tracks` / `/academy/quick-drill` / `/academy/certification/:level` / `/academy/lesson/:lessonId`
+- 路由：`/academy` / `/academy/basics` / `/academy/concept-graph` / `/academy/tracks` / `/academy/search` / `/academy/placement` / `/academy/checkpoint/:level` / `/academy/bookmarks` / `/academy/bibliography` / `/academy/quick-drill` / `/academy/certification/:level` / `/academy/lesson/:lessonId`
 - 持久化：`strategy-academy-progress`（persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源，含 migrate）
 - 跨模块状态中枢：`src/features/progress/store.ts`（Streak / ELO / SRS / Emotion / Mentor 五大系统）
 - 事件总线：`src/shared/stores/trainingEvents.ts`（practice / basics / quick-drill 完成时 emit）
@@ -66,7 +66,7 @@ additionalPrompt: ""
 - **学习轨道**（Learning Tracks）：按顺序引用现有课程 ID，包括零基础快速入门 + 本土低级别盈利路径
 - **难度自适应**：SM-2 算法简化版，根据正确率动态调整训练难度（85% 升级 / 60% 降级）
 - **每日训练计划**：基于 spaced repetition 生成 reviewLessons + newLesson + practiceSpots
-- **级别认证**：综合测验，80% 正确率通过，最多 20 题；题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），questionCount 与实考口径统一为 `min(合并题池, 20)`
+- **级别认证**：综合测验，70% 正确率通过（`REQUIRED_ACCURACY`）、30 天有效期、失败 24h 冷却，最多 20 题；题池按 `LEVELS.filter(l.level === level)` 合并同 level 全部条目（Level 4 = 4A + 4B），questionCount 以实考抽题结果传入（上限 `min(合并题池, 20)`）
 - **对手形象系统开发**：六类对手数据与统计可视化（分类详见模块知识卡片）
 - **概念图谱**：跨模块关联（pot-odds / range-trainer / gto-simulator / hand-history）
 - **筹码量与下注尺度系统**：20BB / 50BB / 100BB 三档，覆盖 1/3 pot 到 overbet
@@ -129,6 +129,14 @@ additionalPrompt: ""
 9. 调整选项排序规则时：编辑 utils/quizShuffle.ts（需同步更新排序测试与 TDD 5.9；分流规则变更属跨模块规范，需经 platform-dev 协调）
 10. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 11. **单挑课时的位置事实引用理论侧单源**：`theory-academy/data/levels/variants/variantRules.ts` 的 `headsUpRules`（SB 即按钮位、翻前 SB 先行动、翻后 BB 先行动 ⇒ SB=IP / BB=OOP）。本模块不得 import 该文件（跨模块边被 lint 锁），只按语义对齐；`src/guards/huPositionOrderGuard.test.ts` 会扫 `academy-course/heads-up.json`（zh 与数据逐字镜像，故覆盖数据层）并不许倒置残留。位置归属对调时数值保持不变，只在旧归属下成立的论断（如"BB 权益实现率 >100%"）改判归属或删述，并在 `variantQuantAudit.test.ts` 文件头索引注明；改 `options`/正确项文本时按第 8 条确认分布守卫。en 是人工译文，须同键逐条核对座位所指，守卫归零不等于 en 未漂移。
+12. **题库与评估（2026-11）**：标准题在 `data/lessons/variants/standard/quizBank/level1..8.ts` + `local.ts`，level 文件保留 `quiz: []`；注入由 `utils/applyQuizBank.ts`（薄包装 shared `mergeQuizBank`）在静态聚合与 loaders 完成。每门非 Drill 标准课 8–12 题；课时抽 5、认证抽 20 走 shared `drawByAttempt`。新增题必须同步 zh/en `academy-course` 文案与量化审计；题库文件行数走 `QUIZ_BANK_ALLOWLIST` 逐文件棘轮，禁止目录级豁免。
+13. **评估与能力链路**：首次课后测验/Drill 才写 ELO；重考只更新 `lessonAttempts.best/last` 并进题级 SRS。`strategySrs.ts` 薄包装 shared `buildQuestionReviewItems`，id 前缀 `strategy:`，route 回 `/academy/lesson/<id>`。自适应难度只读 `recentPracticeResults`（`recordPracticeResult`，cap 50）；v8 已移除 `abilityAssessment`，用户可见能力以 `progress.eloByVariant` 为单一事实源；`dailyPlan` / QuickDrill 弱点一律读 ELO。
+14. **认证与桥接**：认证只支持标准变体；`getCertificationState` / `submitCertificationAttempt` 负责完成门禁、24h 冷却、30 天有效期与续期；变体模式隐藏入口并在 store 返回 `wrong-variant`。每门标准课在 `data/lessonMeta/` 声明 `eloDimension` + `theoryAnchors`（≥1，锚点存在性由 raw glob 守卫）；跨院只传路由/ID 字符串。两院共享组件/纯函数见 `shared/components/academy/*` 与 `shared/utils/academy*`，本模块只做薄包装。
+15. **定位测评（16 题，只放宽解锁）**：题库 `data/placementQuestions.ts`（覆盖牌型 / 位置 / 赔率 / 翻前范围 / C-bet / EV / GTO / ICM；`options` 渲染前经 `orderResolvedOptions` 重排）。分档与免修范围在 `utils/placement.ts`（0–4→L1、5–8→L2、9–11→L3、12–14→L4A、15–16→L4B；`creditLevels` 为推荐起点之前的单调前缀），写入走 `store.recordPlacement` + `utils/p2State.mergePlacement`（并集、重测不降级）。**只写 `placement.creditLevels`，绝不写 `completedLessons`；最高免修 L4B，L5+ 不接受 credit**；门禁唯一入口仍是 `isLevelEntryUnlocked`。页面不写 ELO / SRS / trainingEvents。
+16. **Level Checkpoint（12 题，形成性）**：`utils/checkpoint.ts` 从该级已应用题库抽 12 题并标注来源课 `eloDimension`；入口门禁 `isLevelLessonsCompleted(level)`（URL 直达只渲染锁定原因与完成进度）。首轮逐题 `progress.updateElo` + `recordAnswer`，`utils/checkpointSrs.ts` 按来源课写 `checkpoint:l<level>:<qid>` 题级 SRS；重考只更新 `checkpoints[level]` 与 SRS、不写 ELO。**不发证、不解锁下一级、无冷却**；成绩在阶梯/掌握度卡展示。
+17. **课时工具与内容运营（P2）**：书签走 `toggleLessonBookmark`（幂等）+ `LessonBookmarkButton` / `StrategyBookmarksPanel` / `StrategyBookmarksPage`；笔记走 `saveLessonNote`（纯文本、`MAX_LESSON_NOTE_LENGTH = 2000` 截断、空文本即删除）+ `StrategyNotesPanel`；两者薄包装 shared `AcademyBookmarksPanel` / `AcademyNotesPanel`，不参与门禁。`CourseView` 集成书签 toggle、笔记入口与 `LessonReviewMeta`（`lastReviewed` + 策略纠错入口 `StrategyContentIssueReport`，底层 shared `ContentIssueReportDialog`）。`data/contentOps.ts` 的 92/92 课时 `lastReviewed` 必须与正文/题库同批刷新，新增课时同步 `LESSON_IDS_BY_GROUP`（`contentOps.test.ts` 双向集合断言）；`data/bibliography.ts` 按 Level 聚合教材，`StrategyBibliographyPage` 只读、不复制理论书目。
+18. **全文搜索**：`utils/searchIndex.ts` 首次查询 ≥2 字符才经 `loadAcademyLessonsForQuickDrill` 懒加载全量标准课时并缓存索引（in-flight 共享、失败可重试）；命中标题 / 副标题 / objectives / 正文 / 小测题干，结果去重、上限 20、带 ~80 字片段。`StrategySearchPage` 标题即时 + 正文异步，失败降级为标题搜索；索引模块不得进入首页 chunk。
+19. **v8 契约（技术债清理后）**：`lessonAttempts` + `submitCertificationAttempt` 是唯一事实源；`abilityAssessment`、`firstAttemptScores` / `lastAttemptScores` 与 legacy `attemptCertification` 已删除，禁止复活或新增平行字段；ELO 种子化由 progress `seedEloFromOnboardingAbility` 在 `store.bootstrap` 调用；进步回放读 `AcademyDataSource.getLessonAttemptsSnapshot()`；自适应难度只读 `recentPracticeResults`。
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
@@ -136,7 +144,7 @@ additionalPrompt: ""
 模块特有约束：
 - 课程内容必须为静态数据（courses.ts / localLessons/*.ts），不引入运行时网络请求
 - Drill 组件必须实现 `DrillProps` 接口（`onComplete(result: DrillResult)` / `onExit()`），便于 DrillLessonRouter 统一路由
-- 能力评估（abilityAssessment）初始值默认 50，仅 `gamesPlayed === 0` 时通过 `abilityToElo` 同步至 ELO
+- 能力画像单一事实源为 `progress.eloByVariant`：`abilityAssessment` 与 `firstAttemptScores` / `lastAttemptScores` 镜像已随 persist v8 移除；onboarding 初值只经 progress `seedEloFromOnboardingAbility` 播种（仅 `gamesPlayed === 0`）
 - 快速训练完成时必须调用 `recordTrainingDay`（启动 Streak）+ `recordQuickDrillCompletion`（更新 quickDrillStreak，幂等）
 - 等级解锁依赖前置等级所有课程完成（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 - strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 `docs/AI_GUIDE.md` §状态管理（Persist Version 升级硬性规则）
@@ -187,7 +195,7 @@ interface ReviewRequest {
 - [ ] Drill 组件实现 DrillProps 接口（onComplete / onExit）
 - [ ] 课程数据为静态 JSON / TS 常量（无运行时网络请求）
 - [ ] 快速训练完成时 recordTrainingDay + recordQuickDrillCompletion 已调用
-- [ ] abilityToElo 仅在 gamesPlayed === 0 时同步（一次性）
+- [ ] onboarding 能力种子化只经 progress `seedEloFromOnboardingAbility`（仅 gamesPlayed === 0，一次性）
 - [ ] DrillLessonRouter 已注册新 Drill（React.lazy）
 - [ ] 等级解锁规则生效（Level 7 需 L3+L5，Level 8 需 L4B；UI 门禁走 isLevelEntryUnlocked 区分 l4a/l4b）
 - [ ] 课程数据守卫测试全绿（curriculumIntegrity.test.ts：id 唯一 / 牌面合法 / 引用无悬空 / native order 无重复）
