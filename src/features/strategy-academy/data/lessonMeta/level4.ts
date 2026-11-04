@@ -28,9 +28,9 @@ export const LEVEL_4_LESSON_META: Record<string, LessonMeta> = {
   'drill-l4-ev': { eloDimension: 'math', theoryAnchors: ['t2-ev', 't9-alpha'] },
   // ===== 4B =====
   // 内联 t5-game-theory
-  'l4-gto-basics': { eloDimension: 'postflop', theoryAnchors: ['t5-game-theory', 't5-gto-concept'] },
+  'l4-gto-basics': { eloDimension: 'math', theoryAnchors: ['t5-game-theory', 't5-gto-concept'] },
   // 内联 t5-mixed-strategy
-  'l4-game-tree': { eloDimension: 'postflop', theoryAnchors: ['t5-mixed-strategy', 't5-game-theory'] },
+  'l4-game-tree': { eloDimension: 'math', theoryAnchors: ['t5-mixed-strategy', 't5-game-theory'] },
   // 内联 t5-gto-concept
   'l4-frequency-balance': {
     eloDimension: 'postflop',

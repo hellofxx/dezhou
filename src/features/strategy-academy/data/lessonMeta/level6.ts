@@ -6,7 +6,7 @@ export const LEVEL_6_LESSON_META: Record<string, LessonMeta> = {
   'l6-icm': { eloDimension: 'math', theoryAnchors: ['t9-icm', 't9-cash-vs-mtt'] },
   'l6-pushfold': { eloDimension: 'preflop', theoryAnchors: ['t9-icm', 't4-preflop-structure'] },
   // 内联 t9-multiway；泡沫期的主要对手是 ICM 压力
-  'l6-bubble': { eloDimension: 'math', theoryAnchors: ['t9-icm', 't9-multiway'] },
+  'l6-bubble': { eloDimension: 'math', theoryAnchors: ['t9-icm', 't9-cash-vs-mtt'] },
   'l6-finaltable': { eloDimension: 'preflop', theoryAnchors: ['t9-icm', 't3-blind-battle'] },
   'l6-bounty': { eloDimension: 'math', theoryAnchors: ['t9-icm', 't2-ev'] },
   'drill-l6-icm': { eloDimension: 'math', theoryAnchors: ['t9-icm', 't9-cash-vs-mtt'] },

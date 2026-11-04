@@ -14,8 +14,8 @@ export const LEVEL_5_LESSON_META: Record<string, LessonMeta> = {
   'l5-tools': { eloDimension: 'math', theoryAnchors: ['t7-stats', 't9-mop'] },
   // 线上线下差异 = 环境/心态差异，兼有抽水结构差异
   'l5-online-vs-live': {
-    eloDimension: 'mental',
-    theoryAnchors: ['t8-mindset', 't4-structure-economics'],
+    eloDimension: 'handReading',
+    theoryAnchors: ['t7-stats', 't4-structure-economics'],
   },
   'drill-l5-session': { eloDimension: 'mental', theoryAnchors: ['t8-session', 't8-tilt'] },
 };

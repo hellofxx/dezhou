@@ -51,8 +51,8 @@ export const LOCAL_LESSON_META: Record<string, LessonMeta> = {
   // 对手画像 Drill：识别靠类型学，校准靠统计指标
   'opp-drill': { eloDimension: 'handReading', theoryAnchors: ['t7-player-types', 't7-stats'] },
   // ===== GTO 与剥削平衡 =====
-  'local-gto-vs-exploit': { eloDimension: 'postflop', theoryAnchors: ['t5-gto-concept', 't9-unified'] },
-  'local-when-to-deviate': { eloDimension: 'postflop', theoryAnchors: ['t7-exploit', 't9-unified'] },
+  'local-gto-vs-exploit': { eloDimension: 'handReading', theoryAnchors: ['t5-gto-concept', 't9-unified'] },
+  'local-when-to-deviate': { eloDimension: 'handReading', theoryAnchors: ['t7-exploit', 't9-unified'] },
   // ===== 情绪管理 =====
   'local-mental-tilt-recognition': {
     eloDimension: 'mental',

@@ -145,12 +145,14 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
 
   it('维度来自 lessonMeta：已登记课时按其 eloDimension 命中', () => {
     const mixed: Lesson[] = [
-      makeLesson('l1-basics', [makeQuestion('l1-basics-q1', { difficulty: 'beginner' })]),
+      makeLesson('l4-bluffcatching', [
+        makeQuestion('l4-bluffcatching-q1', { difficulty: 'beginner' }),
+      ]),
       makeLesson('l-unknown', [makeQuestion('l-unknown-q1', { difficulty: 'beginner' })]),
     ];
-    // l1-basics → handReading（lessonMeta 已登记）；l-unknown → postflop 回退
+    // l4-bluffcatching → handReading（lessonMeta 已登记）；l-unknown → postflop 回退
     const result = getQuickDrillQuestions(mixed, ['handReading'], 'beginner', 1);
-    expect(result.map((q) => q.id)).toEqual(['l1-basics-q1']);
+    expect(result.map((q) => q.id)).toEqual(['l4-bluffcatching-q1']);
   });
 
   it('排除课程前缀生效（候选不足回填阶段同样排除）', () => {

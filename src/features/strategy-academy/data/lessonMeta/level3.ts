@@ -17,7 +17,7 @@ export const LEVEL_3_LESSON_META: Record<string, LessonMeta> = {
   'l3-bet-sizing': { eloDimension: 'postflop', theoryAnchors: ['t6-sizing-theory', 't5-mdf-alpha'] },
   'l3-bluffing': {
     eloDimension: 'postflop',
-    theoryAnchors: ['t9-alpha', 't6-bet-purpose', 't3-fundamental-theorem'],
+    theoryAnchors: ['t9-alpha', 't6-bet-purpose'],
   },
   'l3-texture': {
     eloDimension: 'postflop',
