@@ -20,14 +20,21 @@ describe('theory-academy store persisted shape', () => {
     vi.stubGlobal('window', { localStorage: storageStub });
 
     const { useTheoryStore } = await import('./store');
-    const { partialize } = useTheoryStore.persist.getOptions();
+    const { partialize, version } = useTheoryStore.persist.getOptions();
     const state = useTheoryStore.getState();
     const persisted = partialize ? partialize(state) : state;
+
+    // v4：attempts / checkpoints / placement / bookmarks / notes 落地时的版本号
+    expect(version).toBe(4);
 
     expect(buildPersistedShape(persisted)).toMatchInlineSnapshot(`
       {
         "progress": {
           "activeVariant": "string",
+          "bookmarkedChapters": "array",
+          "chapterAttempts": {},
+          "chapterNotes": {},
+          "checkpoints": {},
           "completedChapters": "array",
           "currentChapter": "null",
           "flaggedQuestions": "array",

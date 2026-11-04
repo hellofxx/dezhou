@@ -33,6 +33,8 @@
 
 既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。禁止恢复目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增文件不得登记 allowlist，只能拆分。
 
+**唯一例外：理论题库纯数据文件**。`features/theory-academy/data/levels/variants/standard/quizBank/t*.ts` 是逐 Level 的纯数据文件，体积随题量增长；它们走 `QUIZ_BANK_ALLOWLIST`（精确路径、逐文件 `maxLines`、只减不增）并从通用硬失败扫描中排除。该例外仅限 quizBank 数据文件，不构成目录/类别级豁免，也不适用于逻辑或 UI 文件；新增题库文件必须登记且不能超过登记行数。
+
 CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫（平铺扫描 `src/styles/*.css`，Phase 2 拆分的分片文件同样平铺）；`globals.css` 为 Phase 2 拆分前的临时豁免，上限锁定在 `CSS_ALLOWLIST` 中的当前行数，同样只减不增。
 
 ### 函数设计

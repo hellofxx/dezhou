@@ -15,7 +15,8 @@
       "The live \"manual HUD\": count how often the opponent enters a pot per orbit (VPIP), whether entry is a raise or a limp (PFR gap), and postflop whether he bets or calls (AF). Three orbits of observation produce a rough but usable portrait.",
       "Sample-size warning lines: VPIP/PFR need about 50-100 hands to stabilize; AF/WTSD need 300+. Below the threshold, metrics only support \"directional hypotheses\" — mark confidence and revise after more hands. Better to hold conclusions one session late than define an opponent by the numbers of one random event.",
       "X-ray yourself first: export or recall your own VPIP/PFR/WTSD. Most losers' problems aren't in reading others but in their own 38/10 or a 15% river WTSD — the first application target of exploitation theory is always your own leaks.",
-      "HUD discipline (practical Poker HUDs advice): read the hand count before reading metrics; only trust the most recent 300-500 hands (opponents adjust; all-time averages lag); put a question mark on low-sample metrics in notes; clear \"expired portraits\" after each session and leave trusted hand counts for the next table."
+      "HUD discipline (practical Poker HUDs advice): read the hand count before reading metrics; only trust the most recent 300-500 hands (opponents adjust; all-time averages lag); put a question mark on low-sample metrics in notes; clear \"expired portraits\" after each session and leave trusted hand counts for the next table.",
+      "Three bands for the four core metrics (6-max cash, empirical magnitudes): VPIP with PFR reveals tightness and passivity; AF and WTSD describe postflop style. Every single metric must be read together with sample size."
     ],
     "t7-player-types": [
       "Tight/Loose × Passive/Aggressive: The Four Quadrants",
@@ -266,6 +267,126 @@
         "Bet bigger to scare him off"
       ],
       "explanation": "A rising check-raise encounter rate is the signal that YOU are being counter-exploited. Fixing your own betting frequency and restoring equilibrium makes his check-raises fail; option B is the classic death of static exploitation (the arms race doesn't end itself), C sacrifices the whole position pointlessly, and D's \"scaring\" treats symptoms."
+    },
+    "t7-stats-q6": {
+      "question": "A player shows VPIP 45% and PFR 8%. The best read is:",
+      "options": [
+        "tight-aggressive",
+        "loose-aggressive",
+        "loose-passive, limping and calling a lot",
+        "the data is unusable"
+      ],
+      "explanation": "The large gap between VPIP and PFR means frequent entry with few raises: a loose-passive station. Exploit by bluffing less and widening value bets."
+    },
+    "t7-stats-q7": {
+      "question": "How many hands do postflop metrics such as AF and WTSD need to stabilize?",
+      "options": [
+        "300+",
+        "about 50",
+        "about 10",
+        "a single hand"
+      ],
+      "explanation": "VPIP and PFR stabilize in about 50-100 hands, while AF and WTSD need 300+. With fewer samples, treat metrics as directional hypotheses with explicit confidence."
+    },
+    "t7-stats-q8": {
+      "question": "Without a HUD live, the right way to build a rough profile is:",
+      "options": [
+        "buy software",
+        "live play cannot replace a HUD",
+        "watch showdown results only",
+        "count entries, raise share and postflop actions"
+      ],
+      "explanation": "A manual HUD counts three things: entries per orbit (VPIP), raise versus call (PFR gap) and postflop aggression (AF). Three orbits yield a usable rough profile."
+    },
+    "t7-player-types-q6": {
+      "question": "The standard exploit against a loose-passive station is:",
+      "options": [
+        "bluff more",
+        "value bet less",
+        "stop bluffing and widen value bets",
+        "play only the nuts"
+      ],
+      "explanation": "Stations fold too little, so fold equity is near zero; they call with worse hands, which widens value bets and makes thin value profitable."
+    },
+    "t7-player-types-q7": {
+      "question": "How does a tight-aggressive image affect bluff success?",
+      "options": [
+        "the image is credible, so bluffs succeed more",
+        "the image is bad, so bluffs always get caught",
+        "no effect",
+        "it only affects value bets"
+      ],
+      "explanation": "Opponents profile you too. A TAG image earns more respect for bets, raising bluff success; getting caught in one big bluff spends that image asset."
+    },
+    "t7-player-types-q8": {
+      "question": "A nit starts raising frequently after losing a big pot. What most likely happened?",
+      "options": [
+        "their skill suddenly improved",
+        "they switched starting charts",
+        "their VPIP changed permanently",
+        "tilt caused a quadrant drift, so the profile must update now"
+      ],
+      "explanation": "Win/loss state, stack depth and fatigue move players one or two quadrants, with tilt the leading cause. A label is a snapshot, not an identity; update it with recent evidence."
+    },
+    "t7-hand-reading-q6": {
+      "question": "The four-step hand-reading process starts with:",
+      "options": [
+        "counting your own outs",
+        "guessing one exact hand",
+        "the preflop starting range, filtered street by street",
+        "reading physical tells"
+      ],
+      "explanation": "Hand reading is a pipeline: begin with a preflop range, filter with every action including checks, then count value versus bluff combos. Skipping the start loses the filtering power."
+    },
+    "t7-hand-reading-q7": {
+      "question": "Bidirectional elimination means:",
+      "options": [
+        "bets remove hands that would usually check, and checks remove hands that would usually bet",
+        "only read betting actions",
+        "only read checking actions",
+        "read two opponents at once"
+      ],
+      "explanation": "Passive actions carry information too. When an opponent checks, strong hands that would usually bet come out of the range; updating only on bets systematically overestimates strength."
+    },
+    "t7-hand-reading-q8": {
+      "question": "When range analysis and a physical tell conflict, the correct priority is:",
+      "options": [
+        "always trust the tell",
+        "split the difference",
+        "flip a coin",
+        "trust the range; the tell is only a tiebreaker"
+      ],
+      "explanation": "Tells are noisy while range analysis is mathematical. A tell only breaks ties and cannot override the range; if the range says fold and the tell says call, trust the range."
+    },
+    "t7-exploit-q6": {
+      "question": "Against a weak opponent who cannot counter-adjust, exploit magnitude should be:",
+      "options": [
+        "maximum exploitation",
+        "a minimal deviation",
+        "unchanged equilibrium",
+        "fully random"
+      ],
+      "explanation": "Exploit size is inversely proportional to the opponent's adaptability. A non-adjusting opponent cannot punish deviations, so maximum exploitation earns the most."
+    },
+    "t7-exploit-q7": {
+      "question": "The principle for prioritizing exploits is:",
+      "options": [
+        "exploit the hardest-to-observe leak first",
+        "exploit a one-hand leak first",
+        "exploit large, stable leaks first",
+        "follow seat order"
+      ],
+      "explanation": "Large stable leaks such as loose-weak preflop play or never bluffing the river are the vein; small fluctuating leaks are crumbs. Limited attention belongs on stable, repeatable biases."
+    },
+    "t7-exploit-q8": {
+      "question": "The right attitude toward the shelf life of an exploit is:",
+      "options": [
+        "once found, valid forever",
+        "valid only within this session",
+        "larger samples mean it never needs retesting",
+        "treat it as a dated hypothesis and retest after changing stakes or tables"
+      ],
+      "explanation": "Exploits are depreciating assets. Re-run the read after changing stakes, time or table, and record the sample size and observation window behind each conclusion."
     }
   },
   "chapterObjectives": {
@@ -293,5 +414,6 @@
       "Complete the exploit loop from profiling to pulling back, and spot the signals of being counter-exploited",
       "Judge whether an exploit conclusion has passed its best-before date and schedule the re-measurement"
     ]
-  }
+  },
+  "block": {}
 }

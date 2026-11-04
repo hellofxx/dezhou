@@ -119,6 +119,24 @@ export function isTheoryContentLoaded(
   return levels.length > 0 && levels.every((levelId) => loadedLevels.has(`${lang}:${levelId}`));
 }
 
+/** 加载非 level 的独立内容包（如 glossary：术语 + 参考书目），幂等 */
+export function loadTheoryContentBundle(
+  bundleId: string,
+  lng?: I18nLanguage,
+): Promise<void> {
+  const lang = lng ?? normalizeLanguage(i18n.language);
+  return loadLevel(lang, bundleId);
+}
+
+/** 独立内容包是否已就绪（渲染期判断，避免已缓存时闪骨架） */
+export function isTheoryContentBundleLoaded(
+  bundleId: string,
+  lng?: I18nLanguage,
+): boolean {
+  const lang = lng ?? normalizeLanguage(i18n.language);
+  return loadedLevels.has(`${lang}:${bundleId}`);
+}
+
 /** 预加载全部 level（测试环境全量就绪；运行时请按需调用） */
 export function loadAllTheoryContent(lng?: I18nLanguage): Promise<void> {
   const lang = lng ?? normalizeLanguage(i18n.language);

@@ -27,7 +27,8 @@
       "(1) The bubble and money-jump stages are the most distorted: medium stacks play tightest, big stacks most aggressively, and small stacks can play almost normally (they're about to be gone anyway); (2) push/fold charts in shallow stacks (<15bb) are almost entirely determined by ICM and math — memorizable away from the table; (3) the fair baseline for final-table deals is the ICM value — those who don't know ICM lose once at the negotiating table.",
       "Know ICM's boundaries too: it ignores position, technical edge, and blinds rising (assumes equal skill and immediate settlement), so technically superior players may slightly deviate from ICM's conservative solutions (future edge still realizable), and it also undervalues the big stack's bullying value early in the FT. The model is a map, not the territory.",
       "The most common ICM disaster isn't miscalculation but disregard: playing the bubble with cash-game intuition, \"I have AJo, why should I fold\" — because of the prize structure. Every tournament decision must run two books: one cEV, one $EV, and the latter governs.",
-      "Training order suggestion: first memorize the sub-15bb push/fold base charts, then review your own bubble decisions with an ICM calculator — these two are the highest-ROI homework for tournament ROI."
+      "Training order suggestion: first memorize the sub-15bb push/fold base charts, then review your own bubble decisions with an ICM calculator — these two are the highest-ROI homework for tournament ROI.",
+      "ICM conversion for a 3-player SNG (prizes 50/30/20, stacks 5000/3000/2000): the larger the stack share, the lower its $EV share — diminishing chip value is exactly where ICM pressure comes from. The three $EV figures sum to 100."
     ],
     "t9-multiway": [
       "Equity Dilution and Raised Thresholds",
@@ -103,7 +104,8 @@
       "The Leak Checklist and Pool Exploits",
       "A checklist only works when each item lands on a specific street: did you pick hands preflop because you wanted to play rather than because they were worth playing; when the board got wet did you keep using your flop sizing and treat medium strength as strength; out of position did you chase weak draws as if they were strong ones; on the river did you call because the pot odds said so without counting how many bluff combos he could still hold; and how often did the same mistake appear inside one session. Track frequency rather than money, because money is mixed with variance while frequency is a technical problem you can fix.",
       "Pool exploits are graded by the opponent’s inverse leak. Against a player who calls too much: increase the size of value bets and cut bluffs to nearly zero, because he does not supply the fold rate a bluff needs. Against a player who folds too much and rarely raises: shrink value sizes and bluff more, since his fold rate sits far above the threshold. Against a chronic over-folder: use more small bets to collect rent and turn every street’s fold into profit. Against an over-aggressive player: bluff less and convert medium strength into bluff-catchers so his frequencies pay you. Every adjustment rests on the first four steps being right — with the range misread, an exploit just doubles the size of the mistake.",
-      "Long-term profit comes from executing the same decision chain again and again, not from the occasional brilliant fold. Fix the process so that every step can be reviewed, then let the checklist surface the one class of mistake that keeps repeating — that changes results more than memorising any range chart."
+      "Long-term profit comes from executing the same decision chain again and again, not from the occasional brilliant fold. Fix the process so that every step can be reviewed, then let the checklist surface the one class of mistake that keeps repeating — that changes results more than memorising any range chart.",
+      "The five-step decision chain for 6-max cash: start from position and stack depth, move through opponent range and board ownership, then land on this street's goal and exploitative adjustment. Skip any step and every later conclusion loses its basis."
     ]
   },
   "quiz": {
@@ -436,6 +438,256 @@
         "Raise your opening frequency to widen your range advantage"
       ],
       "explanation": "A bluff needs the fold rate α = B/(P+B), which a calling station cannot supply, so any bluff is negative expectation; on the other side he will call wider sizes, so value bets can grow. The second option reverses the direction and is the adjustment for an over-folder; the third and fourth do not address the specific trait of not folding at all."
+    },
+    "t9-mop-q6": {
+      "question": "In the AKQ toy game, the medium hand K's equilibrium strategy is:",
+      "options": [
+        "passive: check or call",
+        "always bet",
+        "always fold",
+        "random shove"
+      ],
+      "explanation": "K beats only Q and loses to A, sitting in the middle. It checks and calls at frequency, while betting belongs to the poles (A and Q). Betting medium hands remains the most common amateur leak."
+    },
+    "t9-mop-q7": {
+      "question": "The methodological value of toy games in MOP is:",
+      "options": [
+        "they directly produce real-world charts",
+        "their conclusions extrapolate unconditionally",
+        "isolating one variable so the mechanism becomes visible",
+        "they are closer to luck than real hands"
+      ],
+      "explanation": "Toy games keep one or two variables and simplify to solvability. Simplification is not distortion but development; extrapolation still requires checking the extra variables of real play."
+    },
+    "t9-mop-q8": {
+      "question": "In the AKQ equilibrium, Q's bluff frequency f and K's calling frequency c satisfy:",
+      "options": [
+        "f = 2c",
+        "f = c²",
+        "they are unrelated",
+        "f + c = 1"
+      ],
+      "explanation": "Equilibrium requires f = B/(P+B) and c = P/(P+B), complements summing to 1. At pot size f=c=1/2; at one-third pot f=1/4 and c=3/4."
+    },
+    "t9-icm-q6": {
+      "question": "Chip value diminishes at the margin in tournaments because:",
+      "options": [
+        "prizes are paid in finish-order steps, so doubling chips does not double prize EV",
+        "blinds keep rising",
+        "opponents are stronger",
+        "chips cannot be cashed out"
+      ],
+      "explanation": "The prize structure is nonlinear: moving from third to second is worth far more than a chip double's probability gain. ICM converts that nonlinearity into finish probabilities and prize EV."
+    },
+    "t9-icm-q7": {
+      "question": "A 55% shove can be positive cEV but negative $EV on the bubble because:",
+      "options": [
+        "55% is actually below 50%",
+        "tournament hands are stronger",
+        "the finish-position loss when losing far exceeds the gain when winning",
+        "ICM ignores win rates"
+      ],
+      "explanation": "Losing on the bubble zeroes prize EV, while winning chips adds only a limited prize gain. The same hand calls in cash and folds in a tournament because utility is nonlinear."
+    },
+    "t9-icm-q8": {
+      "question": "Which stack faces the greatest ICM pressure?",
+      "options": [
+        "big stack",
+        "short stack",
+        "all stacks equally",
+        "a medium stack covered by a big stack"
+      ],
+      "explanation": "A medium stack lacks the big stack's leverage yet fears elimination more than a short stack, making it the most likely to fold on the bubble. Big stacks pressure and short stacks must gamble."
+    },
+    "t9-multiway-q6": {
+      "question": "AA against three random opponents wins about:",
+      "options": [
+        "73%",
+        "55%",
+        "64%",
+        "49%"
+      ],
+      "explanation": "AA is about 85% against one, 73% against two and 64% against three. Each extra opponent dilutes equity and raises the made-hand threshold."
+    },
+    "t9-multiway-q7": {
+      "question": "In multiway pots, bluff frequency should:",
+      "options": [
+        "drop sharply",
+        "stay the same",
+        "rise sharply",
+        "rise only on the river"
+      ],
+      "explanation": "A bluff needs everyone to fold, and the all-fold rate falls exponentially with each player; each extra opponent is another chance to connect. Value multiway, pressure heads-up."
+    },
+    "t9-multiway-q8": {
+      "question": "When re-ranking hands for multiway pots, prioritize:",
+      "options": [
+        "made-hand strength",
+        "number of high cards",
+        "suitedness",
+        "nut potential"
+      ],
+      "explanation": "Multiway pots raise the made-hand threshold, increasing the value of nut-making hands such as suited connectors and small pairs while dominating weak top pairs lose value."
+    },
+    "t9-alpha-q6": {
+      "question": "For a 1.5x pot bet, Alpha is:",
+      "options": [
+        "37.5%",
+        "50%",
+        "60%",
+        "66.7%"
+      ],
+      "explanation": "Alpha = 1.5 ÷ 2.5 = 60%, with MDF 40% as its complement; 37.5% is the caller's required equity."
+    },
+    "t9-alpha-q7": {
+      "question": "The relationship between Alpha and MDF is:",
+      "options": [
+        "complements summing to 100%",
+        "always equal",
+        "Alpha always exceeds MDF",
+        "MDF is Alpha squared"
+      ],
+      "explanation": "MDF + Alpha = P/(P+B) + B/(P+B) = 1. At any size the fold rate the aggressor needs and the continue rate the defender must supply are exact complements."
+    },
+    "t9-alpha-q8": {
+      "question": "Why is Alpha the wrong basis for saying the opponent bluffs enough to call?",
+      "options": [
+        "Alpha applies only preflop",
+        "Alpha cannot be computed",
+        "Alpha is unrelated to the pot",
+        "Alpha is an aggressor metric for break-even bluffs, not a caller's standard"
+      ],
+      "explanation": "Alpha answers how much fold rate a bluff at this size needs; calling decisions use pot odds and the opponent's bluff share. Using an aggressor metric for defense is the classic misuse."
+    },
+    "t9-unified-q6": {
+      "question": "The unified GTO-exploit framework writes a decision as:",
+      "options": [
+        "equilibrium baseline + f(information quality) × targeted deviation",
+        "pure equilibrium with no deviation",
+        "pure exploitation with no baseline",
+        "random actions with no formula"
+      ],
+      "explanation": "The equilibrium baseline resists counter-exploitation while the size of the targeted deviation is set by sample quality. They are two modes of one system, not rival schools."
+    },
+    "t9-unified-q7": {
+      "question": "The size of a deviation from equilibrium should be set by:",
+      "options": [
+        "your mood",
+        "the opponent's stack",
+        "observation sample quality and the opponent's adaptability",
+        "the absolute pot size"
+      ],
+      "explanation": "Without enough samples a deviation may be noise, and against an adaptive opponent a large deviation gets countered. Size scales with information quality and inversely with adaptability."
+    },
+    "t9-unified-q8": {
+      "question": "How do the nine levels of theory ultimately create value?",
+      "options": [
+        "memorizing every formula",
+        "collecting more tutorials",
+        "knowing more terms",
+        "being executed: repeating the correct process at the table"
+      ],
+      "explanation": "Knowing MDF yet over-folding under pressure, understanding variance yet tilting anyway: the gap between knowing and doing is your ceiling. Theory has value only when executed."
+    },
+    "t9-cash-vs-mtt-q6": {
+      "question": "In cash, a 55% shove risking and winning 3000 chips has an expected result of:",
+      "options": [
+        "+300 chips",
+        "0 chips",
+        "+600 chips",
+        "−300 chips"
+      ],
+      "explanation": "0.55×3000 − 0.45×3000 = +300 chips. Cash utility is linear, so positive expectation calls; the same hand may fold on a tournament bubble because $EV is negative."
+    },
+    "t9-cash-vs-mtt-q7": {
+      "question": "With 10000 chips and a 200 big blind, M=50. After blinds rise to 1000, M becomes:",
+      "options": [
+        "10",
+        "50",
+        "250",
+        "5"
+      ],
+      "explanation": "M = effective stack ÷ big blind. Five times the blinds cuts M to one fifth: 50 → 10. Tournament depth collapses one way, removing postflop sizing families."
+    },
+    "t9-cash-vs-mtt-q8": {
+      "question": "Entry fees charged per buy-in versus rake charged per pot punish which behaviors?",
+      "options": [
+        "both punish volume",
+        "both punish entries",
+        "fees punish volume, rake punishes entries",
+        "fees punish entries, rake punishes volume"
+      ],
+      "explanation": "Rake takes a share of every pot, punishing volume; an entry fee is charged per buy-in, punishing the number of entries. The forms differ and must be converted before comparing."
+    },
+    "t9-cash-vs-mtt-q9": {
+      "question": "When comparing cash and tournament returns, the right method is:",
+      "options": [
+        "compare total profit directly",
+        "compare buy-in sizes",
+        "convert to the same time unit and risk basis",
+        "look at the top prize only"
+      ],
+      "explanation": "Cash is bb/100 × hands with linear utility; tournaments are per-event finish distributions with concentrated top payouts. Comparing raw amounts is comparing kilometers to kilograms."
+    },
+    "t9-cash-vs-mtt-q10": {
+      "question": "The same 55% hand calls in cash but folds on the bubble because:",
+      "options": [
+        "two ledgers: linear utility versus nonlinear prize utility",
+        "opponents have stronger hands on the bubble",
+        "cash rake is lower",
+        "win rates are computed differently"
+      ],
+      "explanation": "The disagreement is not about skill but about which ledger is open: cEV in cash, $EV in tournaments. Confirm the ledger before every decision."
+    },
+    "t9-sixmax-capstone-q4": {
+      "question": "The first step of the five-step decision chain is:",
+      "options": [
+        "confirm position and stack depth",
+        "judge board ownership immediately",
+        "choose a bet size",
+        "watch for tells"
+      ],
+      "explanation": "Position and depth set the available streets, range width and commitment threshold, the coordinates for every later judgment. Skipping this removes the basis for all conclusions."
+    },
+    "t9-sixmax-capstone-q5": {
+      "question": "Board ownership (range and nut advantage) primarily determines:",
+      "options": [
+        "the opponent's VPIP",
+        "the rake",
+        "this street's betting frequency and sizing ceiling",
+        "your bankroll requirement"
+      ],
+      "explanation": "Range advantage decides whether you can bet often and nut advantage whether you can bet big. Ask whose board it is before assigning your hand a role."
+    },
+    "t9-sixmax-capstone-q6": {
+      "question": "The main purpose of the leak self-check list is to:",
+      "options": [
+        "record wins and losses",
+        "replace range analysis",
+        "prove you played well",
+        "locate repeated systematic errors and pick an exploit direction"
+      ],
+      "explanation": "Long-term profit comes from repeating one decision chain. A self-check list finds the recurring error class, changing results more than memorizing any chart."
+    },
+    "t9-sixmax-capstone-q7": {
+      "question": "Against a loose-passive pool that calls too much, the default exploit is:",
+      "options": [
+        "widen value bets and bluff less",
+        "bluff more",
+        "play only the nuts",
+        "overbet bluff frequently"
+      ],
+      "explanation": "Pool tendencies are the most stable exploit source. A loose-passive pool folds too little, so value bets earn more and bluffs lose, calling for wider value and fewer bluffs."
+    },
+    "t9-sixmax-capstone-q8": {
+      "question": "The main source of long-term 6-max cash profit is:",
+      "options": [
+        "the occasional hero fold",
+        "memorizing more charts",
+        "repeating one reviewable decision chain",
+        "raising single-hand win rate"
+      ],
+      "explanation": "Long-term profit comes from process consistency, not highlights. Fixing a reviewable decision chain and correcting it with a self-check list beats any single trick."
     }
   },
   "chapterObjectives": {
@@ -480,5 +732,18 @@
       "Walk a single hand street by street to show how the range read changes the choice on each one",
       "Use the leak checklist to locate a repeating systematic error and pick an exploit direction for the pool type"
     ]
+  },
+  "block": {
+    "t9-sixmax-capstone": {
+      "0": {
+        "node": {
+          "position": "Preflop: position and stack depth",
+          "range": "Opponent range and action line",
+          "board": "Board ownership: range / nut advantage",
+          "line": "Street goal: value / bluff / pot control",
+          "exploit": "Exploit and retreat"
+        }
+      }
+    }
   }
 }

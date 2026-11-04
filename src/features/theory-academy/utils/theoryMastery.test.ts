@@ -1,12 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import type { TheoryChapterSummary } from '../types';
-import { MASTERY_THRESHOLDS, getMasteryState, summarizeMastery } from './theoryMastery';
+import type { TheoryChapterAttempt, TheoryChapterSummary } from '../types';
+import {
+  MASTERY_THRESHOLDS,
+  getMasteryState,
+  resolveFirstScore,
+  summarizeMastery,
+} from './theoryMastery';
 
 /**
  * 掌握度派生纯函数回归。
  * 阈值是展示口径的唯一事实源（不门禁），因此边界值（79/80、59/60）与
  * "统计范围由入参决定" 这两件事必须锁死：一旦阈值或 tie-break 规则漂移，
  * 首页的「已掌握」数量与「复习最弱一章」指向的章节都会静默变化。
+ * 另锁定首次成绩优先口径：重考刷高 bestScore 不得抬高掌握度。
  */
 
 /** 测试用最小章节摘要（只用到 id 与目录顺序） */
@@ -19,6 +25,19 @@ function chapter(id: string, order: number): TheoryChapterSummary {
     subtitle: '',
     duration: '10 min',
     variant: 'standard',
+  };
+}
+
+/** 测试用最小 attempt 记录 */
+function attempt(firstScore: number, bestScore = firstScore): TheoryChapterAttempt {
+  return {
+    attempts: 1,
+    firstScore,
+    firstCorrect: 0,
+    firstTotal: 0,
+    bestScore,
+    lastScore: bestScore,
+    lastAt: 1,
   };
 }
 
@@ -87,5 +106,39 @@ describe('theoryMastery.summarizeMastery', () => {
 
     expect(summary).toMatchObject({ mastered: 1, passing: 1, needsReview: 0, untested: 0, total: 2 });
     expect(summary.weakestChapterId).toBe('b');
+  });
+});
+
+describe('theoryMastery 首次成绩优先口径', () => {
+  it('resolveFirstScore 优先 firstScore，无 attempts 记录时回退 quizScores', () => {
+    const scores = { a: 95 };
+    const attempts = { a: attempt(50, 95) };
+
+    expect(resolveFirstScore('a', scores, attempts)).toBe(50);
+    expect(resolveFirstScore('a', scores)).toBe(95);
+    expect(resolveFirstScore('b', scores, attempts)).toBeUndefined();
+  });
+
+  it('传入 chapterAttempts 时按首次成绩归类：重考刷高 bestScore 不抬高掌握度', () => {
+    const scores = { a: 95, b: 90 };
+    const attempts = { a: attempt(50, 95), b: attempt(85, 90) };
+
+    const summary = summarizeMastery([chapter('a', 1), chapter('b', 2)], scores, attempts);
+
+    expect(summary).toMatchObject({ mastered: 1, passing: 0, needsReview: 1, untested: 0 });
+    // 最弱章按首次成绩判定：a 首次 50 分
+    expect(summary.weakestChapterId).toBe('a');
+  });
+
+  it('首次成绩为 0 是合法分数（needsReview），不因假值回退成未测', () => {
+    const summary = summarizeMastery([chapter('a', 1)], { a: 100 }, { a: attempt(0, 100) });
+
+    expect(summary).toMatchObject({ mastered: 0, needsReview: 1, untested: 0 });
+  });
+
+  it('省略 chapterAttempts 时保持旧调用行为（quizScores 最高分）', () => {
+    const summary = summarizeMastery([chapter('a', 1), chapter('b', 2)], { a: 95, b: 40 });
+
+    expect(summary).toMatchObject({ mastered: 1, needsReview: 1 });
   });
 });

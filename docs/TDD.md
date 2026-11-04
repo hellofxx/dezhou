@@ -1171,7 +1171,7 @@ interface DailyRecommendation {
    - `TheoryChapterSummary` / `TheoryLevelSummary`：目录层字段（id / order / title / duration / chapters 等，**无 content / quiz / objectives**）；完整类型继承摘要，首页/store 只读摘要
    - **核心 / 增补标记**（产品规格见 PRD §5.27.11）：`TheoryChapterSummary` 增 `supplemental?: boolean` 与 `pathTags?: TheoryPathTag[]`；`TheoryPathTag = 'six-max' | 'cash' | 'mtt' | 'foundation' | 'preflop' | 'postflop'`（`pathTags` 只供静态学习路径聚合，**不参与解锁**）。**定义 `core = !supplemental`**——Level 解锁、Level 全完成、Level 进度、总进度、活跃 Level、续学建议、核心统计与掌握度一律只对 core 计算；`TheoryChapter` 继承摘要，故完整章同带这两字段，`supplemental` 缺省即 core（存量章节零改动）
    - `TheoryLevelInfo`：id（'t1'-'t9'）/ level / tier（`basic` T1-T3 | `intermediate` T4-T6 | `advanced` T7-T9）/ chapters / unlockRequirement / practiceRecommendations
-   - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ `objectives?`（**类型可选、守卫必填**：完整性测试要求每章 3–5 条非空，类型保持可选是因为标准与变体共用该接口且旧数据缺字段不影响反序列化；渲染侧 `resolveTheoryObjectives` 按下标取 `theory.chapterObjectives.<id>.<i>`，defaultValue 回退数据原文）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，3-5 题）/ `practiceRecommendations?`（章节粒度桥接，**数据层字段、不进持久化**，由 `standard/index.ts` 聚合时从 `chapterPracticeMap` 附加，章节文件本身不书写）
+   - `TheoryChapter`：id（全局唯一，前缀 `t<level>-`，与 strategy-academy 的 `l<level>-` 隔离）/ level / order / title / subtitle / duration / **eloDimension**（五维之一）/ `objectives?`（**类型可选、守卫必填**：完整性测试要求每章 3–5 条非空，类型保持可选是因为标准与变体共用该接口且旧数据缺字段不影响反序列化；渲染侧 `resolveTheoryObjectives` 按下标取 `theory.chapterObjectives.<id>.<i>`，defaultValue 回退数据原文）/ content（`TheorySection[]`）/ quiz（`TheoryQuizQuestion[]`，独立 quizBank 合并后的完整题库 8–12 题；抽题与尝试语义见 §5.8b 第 19 条）/ `practiceRecommendations?`（章节粒度桥接，**数据层字段、不进持久化**，由 `standard/index.ts` 聚合时从 `chapterPracticeMap` 附加，章节文件本身不书写）
    - `TheorySection`：type（text/heading/highlight/example/**formula**/pro-tip/key-point/takeaway，8 类，以 `types.ts` 的 `TheorySectionType` 为准）+ content（内联中文，与策略学院课程正文口径一致，渲染层 key 覆盖——`utils/contentKeys.ts` 的 `theoryContentKey(chapterId, sectionIndex)` 派生 key，消费组件 `t(key, { defaultValue: content })` 解析，数据层保持中文原文）。**段落无稳定 id，key 仅按下标**：在已有章节中间插段会让 zh/en 数组静默错位，补段只能追加到 `content` 数组末尾并同步平移两份 locale
    - `PracticeRecommendation`：lessons（{ id, title }[]，引用 strategy-academy 课程）+ trackId?（轨道）——仅字符串引用，不产生模块 import
 
@@ -1186,19 +1186,20 @@ interface DailyRecommendation {
    - **目录摘要透传**：`pnpm theory:manifest` 的章节投影增加条件字段 `supplemental` / `pathTags`（无值不写键），`manifest.parity.test.ts` 同步断言，故摘要层足以支撑 core/增补进度、掌握度与路径展示；数据层改动后必须重跑
 
 3. **Store**（`store.ts`，persist name `theory-academy-progress`，version 以该文件 persist 配置为唯一事实源）：
-   - 状态：`progress: { completedChapters / quizScores / currentChapter / startedAt }`
-   - `completeChapter(id, score, total, correct)`：幂等（重复不重复计数），quizScores 取历史最高分，内部 `trainingEvents.emit`（module `'theory-academy'`）
-   - `isTheoryLevelUnlocked(levelId)`：首行 `isDebugUnlockActive()` 短路；T1 默认解锁，Tn 需 T(n-1) 全部**核心**章节完成（增补章不参与判定，完成增补章不回锁）
-   - `getLevelProgress` / `getTotalProgress`：分子与分母都只取 core（增补章完成不改变百分比）；总进度仍按 `activeVariant` 序列自洽统计
+   - 状态（v4）：`progress: { completedChapters / quizScores / chapterAttempts / checkpoints / placement / bookmarkedChapters / chapterNotes / currentChapter / startedAt / flaggedQuestions / activeVariant / variantMetadata }`
+   - `recordChapterAttempt(id, score, total, correct)`：总是记录 attempts/best/last；首次写 `completedChapters`、`firstScore` 与 `quizScores` 并 `trainingEvents.emit`（module `'theory-academy'`）；重考只做练习（不更新 ELO/recordAnswer/掌握度，仍可进 SRS）。`completeChapter` 已移除
+   - `recordPlacement` / `recordCheckpointAttempt` / `toggleBookmark` / `saveChapterNote`：分别写定位免修（creditLevels 并集）、checkpoint 成绩、书签、笔记（上限 2000 字）
+   - `isTheoryLevelUnlocked(levelId)`：首行 `isDebugUnlockActive()` 短路；T1 默认解锁，Tn 需 T(n-1) 全部**核心**章节完成，或前一 Level 在 `placement.creditLevels` 内（增补章不参与判定，完成增补章不回锁）
+   - `getLevelProgress` / `getTotalProgress`：分子与分母都只取 core（增补章完成不改变百分比）；总进度仍按 `activeVariant` 序列自洽统计；免修不写完成态，故不计入进度
    - `resetProgress`
 
-4. **ELO 集成**：`TheoryQuiz` 每题作答时调用 `progress.updateElo(chapter.eloDimension, isCorrect, getChapterDifficulty(level))` + `progress.recordAnswer(isCorrect)`（难度映射：T1≈0.2 递增至 T9≈0.8）；章节完成调 `progress.recordTrainingDay()`。
+4. **ELO 集成**：`TheoryQuiz` **仅首次作答**调用 `progress.updateElo(chapter.eloDimension, isCorrect, getChapterDifficulty(level))` + `progress.recordAnswer(isCorrect)`（难度映射：T1≈0.2 递增至 T9≈0.8）；重考走练习态、跳过 ELO/recordAnswer。章节完成调 `progress.recordTrainingDay()`（首次与重考都记真实学习日）。
 
 5. **选项排序治理**：`utils/quizOrder.ts` 的 `orderTheoryQuizQuestion` 复用 `shared/utils/seededShuffle`（数值升序 / id 哈希种子洗牌 + correctIndex 重映射），接入 5.9 选项排序治理。
 
 6. **成就集成**：`achievements.ts` 新增 `theoryChapters` / `theoryLevel` 两个 condition type 与 4 项成就；progress store `checkCondition` 通过动态 import `getTheoryStore()`（复刻 `getAcademyStore` 缓存模式）读取进度。
 
-7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁），均 lazy + LazyWrapper；章节页按 chapterId 所属 Level 动态加载该 Level 完整数据，Home 只载摘要；侧边栏“研习”分组入口（`nav.theory`，Library 图标，紧邻策略学院并列，2026-07-30 导航 IA 重构后两学院与牌局复盘同属研习分组），MobileNav 底部导航同步含理论学院项。
+7. **路由**：`/theory`（TheoryHome，含 ErrorBoundary）/ `/theory/chapter/:chapterId`（TheoryChapterView，URL 直达门禁）/ `/theory/review`（疑难清单），以及 2026-11 新增的 `/theory/placement`、`/theory/checkpoint/:levelId`、`/theory/glossary`、`/theory/search`、`/theory/bibliography`；均 lazy + LazyWrapper，复用 `/theory` i18n 分组；章节页按 chapterId 所属 Level 动态加载该 Level 完整数据，Home 只载摘要；侧边栏“研习”分组入口（`nav.theory`，Library 图标，紧邻策略学院并列，2026-07-30 导航 IA 重构后两学院与牌局复盘同属研习分组），MobileNav 底部导航同步含理论学院项。
 
 8. **数据守卫**：`data/theoryIntegrity.test.ts`（ID 唯一与前缀、小测合法性、eloDimension、实践推荐结构）/ `utils/quizOrder.test.ts`（重映射 + 分布守卫 <50%）/ `store.persist-shape.test.ts`；实践推荐课程 ID 悬空由 strategy-academy `curriculumIntegrity.test.ts` 的 `CROSS_MODULE_LESSON_IDS` 守卫，反方向（策略课时 `theory-reference` → 理论章节）由 strategy-academy `data/theoryReferenceIntegrity.test.ts` 守卫（见 §5.8 第 15 条）。
 
@@ -1263,7 +1264,7 @@ interface DailyRecommendation {
     - 增补章语义由副标题承载（「6-max 现金局补强（可选，不影响解锁）」），`TheoryChapterView` 的门禁逻辑不变（Level 解锁即可读），避免在已到行数上限的视图里加分支
 
 20. **掌握度与学习路径**（产品规格见 PRD §5.27.12，展示层不门禁）：
-    - `utils/theoryMastery.ts`：`MASTERY_THRESHOLDS = { mastered: 80, passing: 60 }` 与 `getMasteryState(score)`（≥80 已掌握 / 60–79 通过 / <60 待复习 / 无分未测）；`summarizeMastery(coreChapters, quizScores)` 返回 mastered / passing / needsReview / untested / total / weakestChapterId（同分按 manifest 顺序取前者）。**只读 `quizScores`**，不调用任何门禁函数
+    - `utils/theoryMastery.ts`：`MASTERY_THRESHOLDS = { mastered: 80, passing: 60 }` 与 `getMasteryState(score)`（≥80 已掌握 / 60–79 通过 / <60 待复习 / 无分未测）；`summarizeMastery(coreChapters, quizScores, chapterAttempts?)` 返回 mastered / passing / needsReview / untested / total / weakestChapterId（同分按 manifest 顺序取前者）。**优先读首次成绩 `firstScore`，无记录回退 `quizScores`**（`resolveFirstScore`）；练习最佳分另列展示。不调用任何门禁函数
     - `data/theoryPaths.ts`：三条静态路径 `sixmax-cash-core` / `postflop-deep` / `mtt-bridge`（id + 主题标签 + 成员章节 id），成员由 `pathTags` 聚合，**不新增解锁条件**，也不扩大跨模块引用面
     - 组件：`TheoryMasteryCard`（四项计数 + 最低分章复习 CTA，无分时空态改为继续学习）、`TheoryLearningPaths`（仅标准变体渲染、`x/y` 进度、CTA 指向首个未完成且已解锁的成员章、下一章锁定显示锁定提示、全完成显示已完成）；两者只在 Home 展示，不参与路由门禁
     - 守卫：路径完整性（路径 id 唯一、单路径成员不重复、成员都带对应 `pathTags`、标题与描述 key 双语齐备）+ 掌握度边界用例（79 / 80、59 / 60、无分、weakest 同分 tie-break）
@@ -1272,9 +1273,22 @@ interface DailyRecommendation {
     - `src/guards/sixMaxBenchmarkGuard.test.ts`：6-max 基准跨模块单源（见第 18 条）
     - 模块内 `theoryTitleKeys` 守卫：每个标准章节在 zh/en `theory.json` 均有非空 `chapterTitle` / `chapterSubtitle`，且 zh 与数据层 `title` / `subtitle` 逐字一致——`staticKeyGuard` 只覆盖静态字面量，动态拼接的目录 key 由它兜底
     - `data/theoryIntegrity.test.ts` 增「`chapters/` 下的章节必须 `supplemental: true`」断言，防增补章混入 core 造成回锁；`utils/theoryProgress.test.ts` 增「仅缺增补章仍解锁下一级」「增补未读时 `isLevelFullyCompleted` 为真」「`getNextChapterSummary` 三条规则」与 core / 增补计数用例
-    - **无 persist migration**：`supplemental` / `pathTags` 属数据层字段，`TheoryProgress` 形状不变（`store.persist-shape.test.ts` 快照未动即为证据），store persist version 保持原值；掌握度与学习路径全部由既有 `quizScores` / `completedChapters` 派生，不新增持久化字段
+    - **persist migration**：`supplemental` / `pathTags` 仍属数据层字段；2026-11 整改新增 `chapterAttempts` / `checkpoints` / `placement` / `bookmarkedChapters` / `chapterNotes`，theory store version 3→4（见第 22 条与下方迁移设计）
+
+22. **2026-11 标准课程整改（题库独立 / 尝试语义 / 定位与工具）**：
+    - **题库独立与行数豁免**：全部 quiz 从 `standardLevelN.ts` / `chapters/t*.ts` 迁入 `data/levels/variants/standard/quizBank/t1..t9.ts`（每文件 `Record<chapterId, TheoryQuizQuestion[]>`）；`applyStandardQuizBank` 按 chapterId 注入、按题号排序、去重并校验 `<chapterId>-q<n>`。运行时 `loaders.ts` 用 `import.meta.glob('./variants/standard/quizBank/t*.ts')` 按 Level 懒加载；静态聚合 `variants/standard/index.ts` 直接 import 全部 9 个文件（仅测试/静态路径）。level/chapter 文件保留 `quiz: []` 占位。quizBank 为纯数据文件，走 `line-count-guard.test.ts` 的 `QUIZ_BANK_ALLOWLIST`（逐文件 maxLines、只减不增；专属断言禁止其他路径使用）；该豁免不是目录级豁免，理由与边界见 `docs/AI_GUIDE.md` §文件大小
+    - **抽题**：`utils/quizDraw.ts` 以 `hash(chapterId#attemptNumber)` 为种子，从完整题库抽 5 题（T1–T3）/6 题（T4–T9）；attemptNumber = 已持久化 attempts + 1，刷新稳定、重考换题；选项重排仍走 `quizOrder.ts`
+    - **尝试与掌握度**：`TheoryProgress` v4 增 `chapterAttempts`（attempts/firstScore/firstCorrect/firstTotal/bestScore/lastScore/lastAt）、`checkpoints`、`placement`、`bookmarkedChapters`、`chapterNotes`。`recordChapterAttempt` 总是记录尝试；首次写 `completedChapters`/`firstScore`/`quizScores` 并 emit；重考只更新 best/last 与 SRS，不更新 ELO/recordAnswer/掌握度。`theoryMastery` 优先读 firstScore，老数据回退 quizScores
+    - **定位测评**：`data/placementQuestions.ts`（16 题）+ `utils/placement.ts`；分档 0–5/6–10/11–13/14–16 → T1/T2/T4/T6；`placement.creditLevels` 为推荐起点之前的 Level 并集，只放宽解锁、不写 completedChapters；解锁唯一入口 `isLevelUnlockedByCompleted(levelId, completed, creditLevels)`
+    - **Level checkpoint**：`utils/checkpoint.ts` 从该级核心章抽 12 题并标注来源章/维度；仅 `isLevelFullyCompleted` 可进；`recordCheckpointAttempt` 持久化 score/questionIds；首轮按题更新 ELO，重考不更新；错题按来源章进 SRS；不解锁、不发证
+    - **跨模块数据源**：`shared/types/theoryDataSource.ts` + `shared/stores/theoryDataSourceRegistry.ts`；`theory-academy/store.bootstrap.ts` 注册 `findNextChapter` / `getRecommendedChapter` / `subscribe`。理论 store 的完成态是权威，调用方传入列表仅作补充（progress 传的是策略课时 id）；progress 每日计划消费 registry，不 import theory
+    - **学习工具与内容运营**：`data/glossary.ts`（57 词）、`data/bibliography.ts`（10 本）、`data/contentOps.ts`（44 章 lastReviewed）；术语/书目的文案在 `locales/<lng>/theory-content/glossary.json`，由 `i18n/theoryContent.ts` 的 `loadTheoryContentBundle('glossary')` 显式加载（`useTheoryContentBundle` hook），路由与首页工具弹层都等待就绪后再渲染；`TheorySearch` 目录+术语+书目同步检索，正文按需 `loadTheoryLevelsForVariant('standard')` 并缓存
+    - **富内容块**：`TheorySection.data` 增 table / range-matrix / decision-tree；数据放 `data/levels/variants/standard/blocks/t*.ts`，由 `applyContentBlocks` 追加到正文尾部（不改既有索引）；结构化数据只放语言中立 token/数字，说明文字走既有 content key
+    - **每日计划**：progress `dailyTrainingPlan.ts` 新增 `theory-review`（到期理论 SRS → `/theory/review`）与 `theory-chapter`（registry 下一章）；通用 review 卡排除 theory 项，5 槽上限与 late registration 订阅由 `useTheoryPlanRevision` 处理
+    - **路由**：新增 `/theory/placement`、`/theory/checkpoint/:levelId`、`/theory/glossary`、`/theory/search`、`/theory/bibliography`，均 lazy + LazyWrapper，复用 `/theory` i18n 分组
 
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
+- **2026-11 v3→v4**：新增 `chapterAttempts` / `checkpoints` / `placement` / `bookmarkedChapters` / `chapterNotes`；迁移用 `quizScores` 种子化 `chapterAttempts`（attempts=1、firstScore=score、bestScore=score），其余补默认值；老用户 `completedChapters` / `quizScores` 零丢失，迁移后的已完成章不会被判为首次而重复 emit
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
 - 新增幂等 action `toggleFlagQuestion(questionId)` / `switchVariant(variant)`
 - 迁移版本演进历史见 `docs/CHANGELOG.md`

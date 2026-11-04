@@ -33,7 +33,8 @@
       "Pot odds also determine how often you \"must\" defend: the smaller the opponent's bet, the better the price you get and the wider your calling range must be, or the opponent can exploit you by small-betting any two cards. The formalization of this idea is the Minimum Defense Frequency MDF (see T5 game theory).",
       "One of the most common amateur leaks: folding too much to small bets. Facing a 1/4-pot bet you only need 16.7% equity to call — almost any hand with showdown value or a backdoor draw qualifies.",
       "MDF misuse trap: Minimum Defense Frequency (MDF) is the defensive floor \"to stop the opponent from small-bet exploiting you with any two cards\", not a profit-maximizing calling standard. Against a tight player with an extremely high value share, calling *below* MDF is correct. MDF answers \"how often to call\", pot odds answer \"whether to call this hand\" — different purposes, don't mix them (full MDF derivation in T5).",
-      "Memorize the \"bet size → required equity\" table to reflex level: 1/3 pot=20%, 1/2 pot=25%, 2/3 pot=28.6%, full pot=33.3%. This conversion must happen within two seconds at the table."
+      "Memorize the \"bet size → required equity\" table to reflex level: 1/3 pot=20%, 1/2 pot=25%, 2/3 pot=28.6%, full pot=33.3%. This conversion must happen within two seconds at the table.",
+      "Call-equity quick reference: required equity = call ÷ (pot after calling). Smaller bets offer better prices and lower required equity — this table is the baseline for every postflop call."
     ],
     "t2-implied-odds": [
       "Implied Odds: An Extension of Pot Odds",
@@ -204,6 +205,96 @@
         "About 200"
       ],
       "explanation": "EV = 0.18×(150+75+X) − 0.82×75 = 0, solving 0.18×(225+X) = 61.5 → X ≈ 117. On a hit you currently win 225; you need ~120 more in future winnings to break even; above that it's +EV. Options A/B make the call lose long-term, and D overestimates the implied odds needed."
+    },
+    "t2-ev-q6": {
+      "question": "Bluffing half pot with zero showdown value, what fold rate breaks even?",
+      "options": [
+        "25%",
+        "40%",
+        "33.3%",
+        "50%"
+      ],
+      "explanation": "Break-even fold rate = bet ÷ (pot + bet) = 0.5 ÷ 1.5 ≈ 33.3%. 25% is the caller's required equity, a different question."
+    },
+    "t2-ev-q7": {
+      "question": "On the river with a 100 pot you bet 50; the opponent calls 40% and you always win at showdown. What is the bet's EV?",
+      "options": [
+        "100",
+        "110",
+        "120",
+        "150"
+      ],
+      "explanation": "EV = 0.60×100 + 0.40×150 = 60 + 60 = 120. Folding wins the current pot while calling wins pot plus bet; weight each branch."
+    },
+    "t2-ev-q8": {
+      "question": "Against a station who almost never folds, what drives the EV of a pure bluff?",
+      "options": [
+        "The opponent's fold rate",
+        "Your position",
+        "The absolute pot size",
+        "The opponent's stack"
+      ],
+      "explanation": "A pure bluff earns only fold equity. If the opponent almost never folds, fold equity approaches zero and the bluff is negative EV; stop bluffing and widen value bets instead."
+    },
+    "t2-pot-odds-q6": {
+      "question": "Facing a two-thirds pot bet, the minimum equity to call is about:",
+      "options": [
+        "25%",
+        "33.3%",
+        "28.6%",
+        "40%"
+      ],
+      "explanation": "Required equity = b ÷ (1+2b); with b=2/3 it is (2/3) ÷ (7/3) ≈ 28.6%. 25% is half pot and 33.3% is full pot."
+    },
+    "t2-pot-odds-q7": {
+      "question": "With an 80 pot and a 40 bet, calling 40 requires at least:",
+      "options": [
+        "20%",
+        "33%",
+        "25%",
+        "40%"
+      ],
+      "explanation": "40 ÷ (80+40+40) = 40 ÷ 160 = 25%. The denominator must include your own call, or you overprice the call."
+    },
+    "t2-pot-odds-q8": {
+      "question": "Facing a 1.5x pot overbet, the minimum equity to call is about:",
+      "options": [
+        "30%",
+        "33.3%",
+        "40%",
+        "37.5%"
+      ],
+      "explanation": "With b=1.5 required equity is 1.5 ÷ 4 = 37.5%. An overbet pushes the price toward forty percent, quickly removing the basis for medium-strength calls."
+    },
+    "t2-implied-odds-q6": {
+      "question": "A small pair flops a set about 11.8% of the time, which corresponds to odds of about:",
+      "options": [
+        "5:1",
+        "8:1",
+        "7.5:1",
+        "12:1"
+      ],
+      "explanation": "Odds = (1−0.118) ÷ 0.118 ≈ 7.5:1, roughly once in 8.5 hands. Books often round to 8:1, but the exact figure is 7.5:1."
+    },
+    "t2-implied-odds-q7": {
+      "question": "Which spot has the best implied odds?",
+      "options": [
+        "A non-nut flush draw on a four-flush board",
+        "Top pair with a weak kicker",
+        "The opponent is already all-in",
+        "200bb deep against a station holding a small pair"
+      ],
+      "explanation": "Implied odds need deep stacks, a paying opponent and a disguised hand. Set mining with a small pair satisfies all three, while an all-in opponent offers zero implied odds."
+    },
+    "t2-implied-odds-q8": {
+      "question": "In a 100 pot facing a 50 bet, your draw hits 20%. What future win X makes the call break even?",
+      "options": [
+        "25",
+        "75",
+        "50",
+        "100"
+      ],
+      "explanation": "0.20×(100+50+X) = 0.80×50 gives 150+X = 200, so X = 50. You already win 150; anything above 50 future chips makes the call positive EV."
     }
   },
   "chapterObjectives": {
@@ -225,5 +316,6 @@
       "Derive the stack-depth multiple that makes set mining profitable, and decide call or fold when stacks are shallow",
       "Identify draws that remain dominated after hitting, and explain reverse implied odds together with the error of expecting a due win"
     ]
-  }
+  },
+  "block": {}
 }

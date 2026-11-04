@@ -1,6 +1,8 @@
 import type { TheoryChapter, TheoryLevelInfo } from '../../../../types';
 import { applyStandardChapterMeta } from './chapterMeta';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS } from './chapterPracticeMap';
+import { STANDARD_CONTENT_BLOCKS, applyStandardContentBlocks } from './blocks';
+import { STANDARD_QUIZ_BANK, applyStandardQuizBank } from './quizBank';
 import { sixMaxTableChapter } from './chapters/t1-sixmax-table';
 import { blindBattleChapter } from './chapters/t3-blind-battle';
 import { sixMaxRangesChapter } from './chapters/t4-sixmax-ranges';
@@ -45,13 +47,16 @@ const SUPPLEMENTAL_BY_LEVEL: Readonly<Record<number, TheoryChapter[]>> = {
 };
 
 /**
- * 核心章 + 增补章按 order 合并，再依次附加章节级实践推荐与增补/主题元数据。
- * 顺序不可调换：实践映射先落地，meta 打标才能作用在最终对象上。
+ * 核心章 + 增补章按 order 合并，再依次附加章节级实践推荐、增补/主题元数据、
+ * 追加式富文本块与题库。顺序不可调换：实践映射先落地，meta 打标才能作用在最终对象上；
+ * 块必须在题库前追加（只动 content 尾部），题库最后注入（level/chapter 文件保留 `quiz: []`）。
  */
 function composeChapters(core: TheoryChapter[], level: number): TheoryChapter[] {
   const supplemental = SUPPLEMENTAL_BY_LEVEL[level] ?? [];
   const merged = [...core, ...supplemental].toSorted((a, b) => a.order - b.order);
-  return applyStandardChapterMeta(withChapterPractice(merged));
+  const withMeta = applyStandardChapterMeta(withChapterPractice(merged));
+  const withBlocks = applyStandardContentBlocks(withMeta, STANDARD_CONTENT_BLOCKS);
+  return applyStandardQuizBank(withBlocks, STANDARD_QUIZ_BANK);
 }
 
 export const standardLevels: TheoryLevelInfo[] = [

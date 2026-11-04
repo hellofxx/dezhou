@@ -50,16 +50,11 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
   'features/strategy-academy/data/lessons/variants/heads-up/headsUpLevel4.ts': { maxLines: 852, reason: '课程内容数据' },
   'features/progress/components/settings/SettingsPage.tsx': { maxLines: 804, reason: '页面级组件' },
   'features/strategy-academy/data/lessons/variants/standard/standardLevel1.ts': { maxLines: 790, reason: '课程内容数据' },
-  'features/theory-academy/data/levels/variants/standard/standardLevel9.ts': { maxLines: 751, reason: '课程内容数据' },
+  'features/theory-academy/data/levels/variants/standard/standardLevel9.ts': { maxLines: 415, reason: '课程内容数据' },
   'features/strategy-academy/components/ConceptGraph.tsx': { maxLines: 664, reason: 'Phase 2 拆分待执行' },
-  'features/theory-academy/data/levels/variants/standard/standardLevel4.ts': { maxLines: 639, reason: '课程内容数据' },
   'features/strategy-academy/data/lessons/variants/heads-up/headsUpLevel3.ts': { maxLines: 630, reason: '课程内容数据' },
-  'features/theory-academy/data/levels/variants/standard/standardLevel5.ts': { maxLines: 624, reason: '课程内容数据' },
-  'features/theory-academy/data/levels/variants/standard/standardLevel7.ts': { maxLines: 551, reason: '课程内容数据' },
-  'features/theory-academy/data/levels/variants/standard/standardLevel8.ts': { maxLines: 548, reason: '课程内容数据' },
   'features/pot-odds/components/PotOddsQuizPage.tsx': { maxLines: 536, reason: '页面级组件' },
   'features/strategy-academy/store.ts': { maxLines: 520, reason: 'Phase 2 拆分待执行' },
-  'features/theory-academy/data/levels/variants/standard/standardLevel6.ts': { maxLines: 517, reason: '课程内容数据' },
   'features/progress/components/srs/ReviewSession.tsx': { maxLines: 516, reason: 'Phase 2 拆分待执行' },
   'features/range-trainer/constants.ts': { maxLines: 516, reason: 'Phase 2 拆分待执行（常量数据表）' },
   'features/strategy-academy/components/QuickDrill.tsx': { maxLines: 513, reason: 'Phase 2 拆分待执行' },
@@ -75,6 +70,31 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel5.ts': { maxLines: 415, reason: '课程内容数据' },
   'features/theory-academy/data/levels/variants/short-deck/shortDeckLevel5.ts': { maxLines: 404, reason: '课程内容数据' },
 };
+
+/**
+ * 章节题库数据文件豁免（窄口径）。
+ *
+ * theory-academy 的章末题库按 Level 单文件维护（quizBank/t1..t9.ts），本质是纯数据：
+ * 每条记录是 6 行结构化字面量，拆分只能按题号切文件，反而破坏「按章节 id 注入」的契约。
+ * 因此只对 `quizBank/t<1-9>.ts` 这 9 个精确路径登记逐文件上限（只减不增），
+ * 并从通用 >400 行扫描中排除；禁止扩大到块数据、level 文件或任何目录级豁免。
+ * 专属断言见「QUIZ_BANK_ALLOWLIST 只允许题库路径且不得超过登记行数」。
+ */
+const QUIZ_BANK_ALLOWLIST: Record<string, OversizedEntry> = {
+  'features/theory-academy/data/levels/variants/standard/quizBank/t1.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t2.ts': { maxLines: 181, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t3.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t4.ts': { maxLines: 355, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t5.ts': { maxLines: 297, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t6.ts': { maxLines: 413, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t7.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t8.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/standard/quizBank/t9.ts': { maxLines: 427, reason: '章末题库数据（按 Level 拆分）' },
+};
+
+/** 题库路径的精确形态：恰好 9 个 Level 文件，不接受子目录或其他命名 */
+const QUIZ_BANK_PATH_RE =
+  /^features\/theory-academy\/data\/levels\/variants\/standard\/quizBank\/t[1-9]\.ts$/;
 
 type FileInfo = {
   filePath: string;
@@ -147,7 +167,12 @@ describe('File line count hard constraint（逐文件棘轮）', () => {
     }
 
     const violations = allFiles
-      .filter((f) => f.lineCount > MAX_LINES && LEGACY_OVERSIZED_FILES[f.relativePath] === undefined)
+      .filter(
+        (f) =>
+          f.lineCount > MAX_LINES &&
+          LEGACY_OVERSIZED_FILES[f.relativePath] === undefined &&
+          QUIZ_BANK_ALLOWLIST[f.relativePath] === undefined,
+      )
       .map((f) => `${f.relativePath}: ${f.lineCount} lines（未登记，请拆分或登记 allowlist）`);
 
     // 直接断言数组，失败时 diff 即输出违规文件路径，无需二次排查
@@ -181,5 +206,35 @@ describe('File line count hard constraint（逐文件棘轮）', () => {
     }
 
     expect(violations).toEqual([]);
+  });
+
+  it('QUIZ_BANK_ALLOWLIST 只允许题库路径，且每个题库文件都登记、都不得超过 maxLines', () => {
+    const byPath = new Map(allFiles.map((f) => [f.relativePath, f]));
+    const bad: string[] = [];
+
+    for (const [relativePath, entry] of Object.entries(QUIZ_BANK_ALLOWLIST)) {
+      if (!QUIZ_BANK_PATH_RE.test(relativePath)) {
+        bad.push(`${relativePath}: 非题库路径，禁止使用题库豁免`);
+        continue;
+      }
+      if (!entry.reason.trim()) bad.push(`${relativePath}: reason 为空`);
+      const file = byPath.get(relativePath);
+      if (!file) {
+        bad.push(`${relativePath}: 文件不存在（请删除该 allowlist 条目）`);
+        continue;
+      }
+      if (file.lineCount > entry.maxLines) {
+        bad.push(`${relativePath}: ${file.lineCount} > maxLines ${entry.maxLines}（棘轮：只减不增）`);
+      }
+    }
+
+    // 反向覆盖：磁盘上的 9 个题库文件必须全部登记，防止新增 t10 之类的文件绕过豁免口径
+    const scanned = allFiles
+      .filter((f) => QUIZ_BANK_PATH_RE.test(f.relativePath))
+      .map((f) => f.relativePath)
+      .toSorted();
+    expect(scanned).toEqual(Object.keys(QUIZ_BANK_ALLOWLIST).toSorted());
+    expect(scanned.length).toBe(9);
+    expect(bad).toEqual([]);
   });
 });

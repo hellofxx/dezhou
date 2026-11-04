@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { TheoryProgress } from './types';
+import type {
+  TheoryChapterAttempt,
+  TheoryCheckpointAttempt,
+  TheoryCheckpointResult,
+  TheoryPlacementResult,
+  TheoryProgress,
+} from './types';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
 import {
@@ -9,32 +15,28 @@ import {
   getLevelSummariesByVariant,
   isLevelUnlockedByCompleted,
 } from './utils/theoryMeta';
+import { EMPTY_ATTEMPT, MAX_CHAPTER_NOTE_LENGTH, initialProgress, seedChapterAttempts } from './store.defaults';
 import type { PokerVariant } from '@/shared/types/elo';
 
-const initialProgress: TheoryProgress = {
-  completedChapters: [],
-  quizScores: {},
-  currentChapter: null,
-  startedAt: 0,
-  flaggedQuestions: [],
-  activeVariant: 'standard',
-  variantMetadata: {
-    standard: { lastViewedAt: Date.now(), preferredOrder: 0 },
-    'short-deck': { lastViewedAt: 0, preferredOrder: 1 },
-    'heads-up': { lastViewedAt: 0, preferredOrder: 2 },
-  },
-};
+/** 章节笔记字符上限（单一事实源在 store.defaults，经 store 对外导出） */
+export { MAX_CHAPTER_NOTE_LENGTH } from './store.defaults';
 
 interface TheoryStore {
   progress: TheoryProgress;
   startChapter: (chapterId: string) => void;
   /**
-   * 完成章节（章末小测提交时调用，幂等：重复完成不重复计数）。
-   * quizScores 记录历史最高分；完成时 emit 训练事件供 progress 中枢消费。
+   * 记录一次章末小测提交（取代旧 completeChapter 的单一完成语义）：
+   * 总是更新 chapterAttempts 与 quizScores 最高分；仅首次（attempts 由 0 变 1）写 completedChapters /
+   * firstScore-firstCorrect-firstTotal 并 emit 训练事件，重考不 emit、不改首次成绩。
    */
-  completeChapter: (chapterId: string, score: number, totalQuestions: number, correctAnswers: number) => void;
+  recordChapterAttempt: (
+    chapterId: string,
+    score: number,
+    totalQuestions: number,
+    correctAnswers: number,
+  ) => void;
   isChapterCompleted: (chapterId: string) => boolean;
-  /** 按 Level ID（'t1'-'t9'）判断解锁：T1 默认解锁，Tn 需 T(n-1) 全部核心章完成 */
+  /** 按 Level ID（'t1'-'t9'）判断解锁：T1 默认解锁，Tn 需前一 Level 核心章完成或被定位测评免修 */
   isTheoryLevelUnlocked: (levelId: string) => boolean;
   /** Level 进度（只统计核心章：增补章完成不计入分子分母） */
   getLevelProgress: (levelId: string) => number;
@@ -44,6 +46,14 @@ interface TheoryStore {
   toggleFlagQuestion: (questionId: string) => void;
   /** P2 变体支持：切换当前学习变体上下文（同步更新 variantMetadata.lastViewedAt） */
   switchVariant: (variant: PokerVariant) => void;
+  /** 定位测评结果落库：creditLevels 取历史与本次并集（单调不减，重测不降级） */
+  recordPlacement: (result: TheoryPlacementResult) => void;
+  /** Level checkpoint 提交落库：只记成绩与抽题 id，不解锁下一级 */
+  recordCheckpointAttempt: (levelId: string, result: TheoryCheckpointResult) => void;
+  /** 收藏章节幂等切换 */
+  toggleBookmark: (chapterId: string) => void;
+  /** 保存章节笔记（trim + 2000 字截断；空文本由 UI 自行判空，不做删除语义） */
+  saveChapterNote: (chapterId: string, text: string) => void;
   resetProgress: () => void;
 }
 
@@ -61,27 +71,42 @@ export const useTheoryStore = create<TheoryStore>()(
           },
         })),
 
-      completeChapter: (chapterId, score, totalQuestions, correctAnswers) => {
-        // THY-12：幂等守卫 —— 重测（章节已首次完成）不重复发训练事件，
-        // 避免事件总线累积重复记录；状态侧已幂等（completedChapters 去重 / quizScores 取最高）
-        const alreadyCompleted = get().progress.completedChapters.includes(chapterId);
-        // 先同步提交状态（纯状态归约，不在 updater 内做副作用）
-        set((state) => ({
-          progress: {
-            ...state.progress,
-            completedChapters: state.progress.completedChapters.includes(chapterId)
-              ? state.progress.completedChapters
-              : [...state.progress.completedChapters, chapterId],
-            quizScores: {
-              ...state.progress.quizScores,
-              [chapterId]: Math.max(state.progress.quizScores[chapterId] ?? 0, score),
+      recordChapterAttempt: (chapterId, score, totalQuestions, correctAnswers) => {
+        // attempts === 0 即首次：先读一次快照决定是否发事件（副作用不进 updater）
+        const isFirstAttempt =
+          (get().progress.chapterAttempts?.[chapterId]?.attempts ?? 0) === 0;
+        set((state) => {
+          const attempts = state.progress.chapterAttempts ?? {};
+          const previous = attempts[chapterId] ?? EMPTY_ATTEMPT;
+          const isFirst = previous.attempts === 0;
+          const nextRecord: TheoryChapterAttempt = {
+            attempts: previous.attempts + 1,
+            // 首次成绩锁定掌握度 / ELO 口径，重考不得覆盖
+            firstScore: isFirst ? score : previous.firstScore,
+            firstCorrect: isFirst ? correctAnswers : previous.firstCorrect,
+            firstTotal: isFirst ? totalQuestions : previous.firstTotal,
+            bestScore: Math.max(previous.bestScore, score),
+            lastScore: score,
+            lastAt: Date.now(),
+          };
+          return {
+            progress: {
+              ...state.progress,
+              chapterAttempts: { ...attempts, [chapterId]: nextRecord },
+              completedChapters: state.progress.completedChapters.includes(chapterId)
+                ? state.progress.completedChapters
+                : [...state.progress.completedChapters, chapterId],
+              // 兼容旧字段：quizScores 始终为历史最高分（首页 / 掌握度回退口径）
+              quizScores: {
+                ...state.progress.quizScores,
+                [chapterId]: Math.max(state.progress.quizScores[chapterId] ?? 0, score),
+              },
             },
-          },
-        }));
-        if (alreadyCompleted) return;
-        // 状态提交后再发事件：确保订阅方（progress addRecord / 成就检查）同步读取时
-        // 看到的是含本章的最新 completedChapters，也避免 updater 被重放导致重复发事件
-        // 增补章同样 emit（学习行为真实发生），但核心进度统计会忽略它（见下方 getLevelProgress）
+          };
+        });
+        if (!isFirstAttempt) return;
+        // 首次完成才发事件（状态已提交，订阅方读到含本章的最新进度）；增补章同样 emit，
+        // 但核心进度统计会忽略它（见 getLevelProgress）。
         trainingEvents.emit({
           id: `theory-quiz-${chapterId}-${Date.now()}`,
           module: 'theory-academy',
@@ -104,8 +129,9 @@ export const useTheoryStore = create<TheoryStore>()(
 
       isTheoryLevelUnlocked: (levelId) => {
         if (isDebugUnlockActive()) return true; // 调试解锁：解除全部理论 Level 门禁
-        // 解锁判定委托 utils 纯函数（单源），与「下一章」导航校验（P1F-02）口径一致
-        return isLevelUnlockedByCompleted(levelId, get().progress.completedChapters);
+        // 解锁判定委托 utils 纯函数（单源）；定位测评免修 Level 经 creditLevels 透传
+        const { completedChapters, placement } = get().progress;
+        return isLevelUnlockedByCompleted(levelId, completedChapters, placement?.creditLevels);
       },
 
       getLevelProgress: (levelId) => {
@@ -119,11 +145,7 @@ export const useTheoryStore = create<TheoryStore>()(
         return Math.round((done / core.length) * 100);
       },
 
-      /**
-       * 按当前 activeVariant 的序列计算总进度（分母为该变体的核心章总数）。
-       * 分子仅统计当前变体序列内的已读核心章，切换变体后进度统计自洽；
-       * 增补章完成不入分子，故补强进度只出现在 6-max 补强卡，不扭曲核心进度。
-       */
+      /** 按当前 activeVariant 的核心章总数计算总进度（增补章与他变体章节不计入）。 */
       getTotalProgress: () => {
         const { activeVariant, completedChapters } = get().progress;
         const levels = getLevelSummariesByVariant(activeVariant);
@@ -160,11 +182,58 @@ export const useTheoryStore = create<TheoryStore>()(
           };
         }),
 
+      recordPlacement: (result) =>
+        set((state) => {
+          const previous = state.progress.placement;
+          // 单调并集：重测只增不减，已获得的免修 Level 不会因本次低分被收回
+          const creditLevels = [
+            ...new Set([...(previous?.creditLevels ?? []), ...result.creditLevels]),
+          ];
+          return { progress: { ...state.progress, placement: { ...result, creditLevels } } };
+        }),
+
+      recordCheckpointAttempt: (levelId, result) =>
+        set((state) => {
+          const checkpoints = state.progress.checkpoints ?? {};
+          const previous = checkpoints[levelId];
+          const next: TheoryCheckpointAttempt = {
+            attempts: (previous?.attempts ?? 0) + 1,
+            bestScore: Math.max(previous?.bestScore ?? 0, result.score),
+            lastScore: result.score,
+            lastAt: Date.now(),
+            questionIds: [...result.questionIds],
+          };
+          return { progress: { ...state.progress, checkpoints: { ...checkpoints, [levelId]: next } } };
+        }),
+
+      toggleBookmark: (chapterId) =>
+        set((state) => {
+          const bookmarks = state.progress.bookmarkedChapters ?? [];
+          const next = bookmarks.includes(chapterId)
+            ? bookmarks.filter((id) => id !== chapterId)
+            : [...bookmarks, chapterId];
+          return { progress: { ...state.progress, bookmarkedChapters: next } };
+        }),
+
+      saveChapterNote: (chapterId, text) =>
+        set((state) => ({
+          progress: {
+            ...state.progress,
+            chapterNotes: {
+              ...(state.progress.chapterNotes ?? {}),
+              [chapterId]: {
+                text: text.trim().slice(0, MAX_CHAPTER_NOTE_LENGTH),
+                updatedAt: Date.now(),
+              },
+            },
+          },
+        })),
+
       resetProgress: () => set({ progress: { ...initialProgress } }),
     }),
     {
       name: 'theory-academy-progress',
-      version: 3,
+      version: 4,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<TheoryStore>;
         // v0 → v1：防御性合并进度默认值（新 store 首版，兜底旧异常数据）
@@ -178,6 +247,21 @@ export const useTheoryStore = create<TheoryStore>()(
         // v2 → v3：新增 activeVariant / variantMetadata 变体上下文字段（幂等合并，默认 standard）
         if (fromVersion < 3) {
           next.progress = { ...initialProgress, ...(next.progress ?? {}) };
+        }
+        // v3 → v4：attempts / checkpoints / placement / bookmarks / notes（quizScores 种子化 attempts）
+        if (fromVersion < 4) {
+          const previous: Partial<TheoryProgress> = next.progress ?? {};
+          next.progress = {
+            ...initialProgress,
+            ...previous,
+            chapterAttempts: {
+              ...seedChapterAttempts(previous.quizScores ?? {}),
+              ...(previous.chapterAttempts ?? {}),
+            },
+            checkpoints: previous.checkpoints ?? {},
+            bookmarkedChapters: previous.bookmarkedChapters ?? [],
+            chapterNotes: previous.chapterNotes ?? {},
+          };
         }
         return next as TheoryStore;
       },

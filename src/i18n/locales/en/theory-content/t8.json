@@ -47,7 +47,8 @@
       "Self-test: if you lost 3 buy-ins right now, would you sleep tonight? If not, your stakes exceed your psychological bankroll — the true bankroll floor is the stricter of the mathematical benchmark and psychological tolerance.",
       "Risk of Ruin: Turning Don't-Go-Broke into a Number",
       "Risk of Ruin (ROR), diffusion approximation:\nROR = exp(−2μB ÷ σ²), where μ = per-hand expectation (bb), σ² = per-hand variance (bb²), B = bankroll (bb)\n\nAt 5bb/100 with 80bb/100 std deviation: μ = 0.05bb, σ = 80 ÷ 10 = 8bb → σ² = 64bb²\n10 buy-ins (1000bb) → exp(−2×0.05×1000 ÷ 64) = exp(−1.5625) ≈ 21%\n20 buy-ins (2000bb) → exp(−3.125) ≈ 4.4%\n30 buy-ins (3000bb) → exp(−4.6875) ≈ 0.9%\n\nHow to read it: every additional 10 buy-ins cuts the ruin probability to about one fifth — the decay is exponential, not linear.\nHonesty note: this continuous approximation is a lower bound. Discrete buy-in structure, the habit of reloading after going broke, and psychological collapse during a downswing all push the real ruin probability above this table — which is exactly why the 20-40 buy-in baseline above still has to be combined with a psychological floor. (Concepts from: The Mathematics of Poker Ch.3 variance and standard deviation; Kelly 1956, whose fraction-of-bankroll result belongs to the same family as the ruin-probability conclusion)",
-      "Example 4 (one skill set, two fates): Alice and Bob both genuinely play 5bb/100 with 80bb/100 variance, and play identically. Alice starts with 10 buy-ins, Bob with 30. By the formula above Alice's long-run ruin probability is about 21%, Bob's about 0.9% — more than one Alice in five is permanently out of the game before her edge ever pays off. A thicker bankroll changes not one hand of your winrate; it only changes how many more chances you get to use it. That is why having enough roll is a skill you can improve independently of your play."
+      "Example 4 (one skill set, two fates): Alice and Bob both genuinely play 5bb/100 with 80bb/100 variance, and play identically. Alice starts with 10 buy-ins, Bob with 30. By the formula above Alice's long-run ruin probability is about 21%, Bob's about 0.9% — more than one Alice in five is permanently out of the game before her edge ever pays off. A thicker bankroll changes not one hand of your winrate; it only changes how many more chances you get to use it. That is why having enough roll is a skill you can improve independently of your play.",
+      "Risk-of-ruin quick reference (100bb per buy-in, mu=0.05bb/hand, sigma=8bb/hand): thicker bankrolls cut ruin probability exponentially. 20 buy-ins is about 4.4% and 30 buy-ins is below 1% — the mathematical source of the 20-40 buy-in cash standard."
     ],
     "t8-mindset": [
       "The Four Major Cognitive Biases at the Poker Table",
@@ -265,6 +266,126 @@
         "Normal confirmation bias"
       ],
       "explanation": "At the decision moment you didn't know he had AA, otherwise the call's EV would be negative. Hindsight distorts review — the correct practice is recording the judgment before deciding and comparing after showdown to verify true precision."
+    },
+    "t8-tilt-q6": {
+      "question": "You normally make +8bb per hand but lose 15bb per hand on tilt, playing about 30 hands an hour. The expected loss of one tilted hour is about:",
+      "options": [
+        "230bb",
+        "23bb",
+        "690bb",
+        "69bb"
+      ],
+      "explanation": "The per-hand swing is 8−(−15)=23bb, times 30 hands equals 690bb. Tilt loss = state gap × hands played, which is exactly why early interruption pays."
+    },
+    "t8-tilt-q7": {
+      "question": "The shared cognitive error behind most tilt episodes is:",
+      "options": [
+        "treating variance as injustice",
+        "overestimating opponent hands",
+        "undervaluing pot odds",
+        "overusing mixed strategy"
+      ],
+      "explanation": "A bad beat is statistical noise, but players who have not accepted variance read it as injustice. Restating results in variance language is the first step to defusing tilt."
+    },
+    "t8-tilt-q8": {
+      "question": "The standard tilt intervention sequence is:",
+      "options": [
+        "keep playing until even",
+        "increase stakes to shorten variance",
+        "move to another table",
+        "spot the warning signs → physical break → repeat a scripted line → end the session if still not calm"
+      ],
+      "explanation": "A break returns decision authority from the limbic system to the prefrontal cortex. Playing on, raising stakes or switching tables cannot fix a state already out of control."
+    },
+    "t8-session-q6": {
+      "question": "The correct way to compute session EV is:",
+      "options": [
+        "sum each state's hourly rate times its duration",
+        "A-Game rate times total hours",
+        "record the day's win or loss directly",
+        "average across opponent count"
+      ],
+      "explanation": "State is a resource: A-Game, fatigue and tilt have different hourly rates. Session EV = sum(state rate × duration); using the A-Game rate overestimates every session."
+    },
+    "t8-session-q7": {
+      "question": "The right criterion for leaving a table is:",
+      "options": [
+        "whether you are up on the day",
+        "whether you just lost a big pot",
+        "table quality and current state, not daily profit",
+        "whether a fixed number of hours has passed"
+      ],
+      "explanation": "Daily profit is a result and cannot guide staying. Leave when table quality or your state degrades; staying because you have not won it back is the doorway to tilt."
+    },
+    "t8-session-q8": {
+      "question": "Which statement about fatigue and decisions is correct?",
+      "options": [
+        "fatigue only affects stamina, not judgment",
+        "raising stakes compensates for fatigue",
+        "late-night play is more efficient",
+        "sleep loss impairs judgment comparably to alcohol"
+      ],
+      "explanation": "Research repeatedly shows sleep loss damages judgment like alcohol. The late-night one-more-hour decision is almost never made by A-Game, making fatigue a hidden tilt."
+    },
+    "t8-bankroll-psych-q6": {
+      "question": "The common cash-game bankroll standard is:",
+      "options": [
+        "20-40 buy-ins",
+        "5 buy-ins",
+        "100+ buy-ins",
+        "no upper limit needed"
+      ],
+      "explanation": "Cash games usually require 20-40 buy-ins and tournaments 100+. The bankroll must absorb normal downswings, or scared money distorts decisions."
+    },
+    "t8-bankroll-psych-q7": {
+      "question": "With a 55% win rate at even odds, the Kelly stake is:",
+      "options": [
+        "5%",
+        "20%",
+        "10%",
+        "1%"
+      ],
+      "explanation": "f* = (bp − q)/b = (1×0.55 − 0.45)/1 = 0.10, or 10%; practical play usually uses half Kelly (5%) to reduce variance."
+    },
+    "t8-bankroll-psych-q8": {
+      "question": "The typical distortion of scared money is:",
+      "options": [
+        "bluffing more aggressively",
+        "thin-value betting more",
+        "no effect at all",
+        "folding draws that should call, backing off bluffs and checking rivers that deserve thin value"
+      ],
+      "explanation": "When stakes exceed psychological tolerance, loss aversion systematically biases play toward passivity. Opponents do not need reads, only sustained pressure."
+    },
+    "t8-mindset-q6": {
+      "question": "Annie Duke's decoupling of decisions from results says:",
+      "options": [
+        "judge a decision only with information available at the time",
+        "a winning decision is a good decision",
+        "a losing decision must be changed",
+        "review only hands you won"
+      ],
+      "explanation": "Result = decision + variance. A decision can only be judged with the information available then; results calibrate probability estimates but never judge decisions."
+    },
+    "t8-mindset-q7": {
+      "question": "Saying after showdown that you knew they had AA is which bias?",
+      "options": [
+        "resulting",
+        "confirmation bias",
+        "hindsight bias",
+        "sunk cost"
+      ],
+      "explanation": "Hindsight bias overestimates how accurately you predicted before knowing the result. It corrupts review by making the process look better than it was."
+    },
+    "t8-mindset-q8": {
+      "question": "The only test of whether a learning activity is real learning is:",
+      "options": [
+        "watch time",
+        "number of bookmarks",
+        "whether it felt useful",
+        "whether it changed your next decision"
+      ],
+      "explanation": "Watching entertainment hands, reviewing only wins or hoarding tutorials can all simulate learning. Real learning is judged by behavior change: is the next similar decision different?"
     }
   },
   "chapterObjectives": {
@@ -292,5 +413,6 @@
       "Rewrite an outcome goal polluted by variance into process actions you control",
       "Test whether a study activity actually changed the next decision"
     ]
-  }
+  },
+  "block": {}
 }

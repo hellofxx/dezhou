@@ -1,11 +1,12 @@
-import type { TheoryChapterSummary } from '../types';
+import type { TheoryChapterAttempt, TheoryChapterSummary } from '../types';
 
 /**
  * 理论学院掌握度派生（展示层，不门禁）。
  *
- * 口径唯一事实源：掌握度只从既有持久化字段 `quizScores`（章末小测历史最高分）派生，
- * 不新增状态、不写 store、不参与任何解锁判定（PRD §5.27.2）。
- * 因此本节不引入额外的分数档位，"已掌握 / 通过 / 待复习"三档阈值只在这里定义一次。
+ * 口径（PRD §5.27.2）：掌握度优先取 `chapterAttempts[chapterId].firstScore`（章末小测首次成绩），
+ * 无 attempts 记录（老数据 / 尚未迁移）时回退 `quizScores`（历史最高分）。
+ * 重考只更新 bestScore / lastScore，不影响掌握度；本节不写 store，不参与任何解锁判定。
+ * "已掌握 / 通过 / 待复习"三档阈值只在这里定义一次。
  */
 
 /** 掌握度阈值（唯一事实源）：≥80 已掌握，60–79 通过，<60 待复习 */
@@ -20,6 +21,20 @@ export function getMasteryState(score: number | undefined): MasteryState {
   if (score >= MASTERY_THRESHOLDS.mastered) return 'mastered';
   if (score >= MASTERY_THRESHOLDS.passing) return 'passing';
   return 'needsReview';
+}
+
+/**
+ * 掌握度分数口径（单源）：首次成绩优先，缺失时回退 quizScores 历史最高分。
+ * 迁移种子化记录中的 firstScore 可能为 0，但 0 是合法分数，不回退（避免把「首次考砸」显示成未测）。
+ */
+export function resolveFirstScore(
+  chapterId: string,
+  quizScores: Record<string, number>,
+  chapterAttempts?: Record<string, TheoryChapterAttempt>,
+): number | undefined {
+  const attempt = chapterAttempts?.[chapterId];
+  if (attempt) return attempt.firstScore;
+  return quizScores[chapterId];
 }
 
 /** 掌握度汇总：四项计数 + 总数 + 最弱章（供「复习最弱一章」CTA） */
@@ -39,10 +54,12 @@ export interface MasterySummary {
  *
  * 只统计 `chapters` 里出现的章节（调用方传 core 章节列表，增补章不计入核心掌握度）；
  * 集合外章节即使有分数也不进入任何计数——统计范围由调用方的入参决定，本函数不做二次筛选。
+ * `chapterAttempts` 为可选第三参数：传入时按首次成绩口径，省略时行为与旧版一致（quizScores 最高分）。
  */
 export function summarizeMastery(
   chapters: readonly TheoryChapterSummary[],
   quizScores: Record<string, number>,
+  chapterAttempts?: Record<string, TheoryChapterAttempt>,
 ): MasterySummary {
   const counts: Record<MasteryState, number> = {
     mastered: 0,
@@ -54,7 +71,7 @@ export function summarizeMastery(
   let weakestScore = Number.POSITIVE_INFINITY;
 
   for (const chapter of chapters) {
-    const score = quizScores[chapter.id];
+    const score = resolveFirstScore(chapter.id, quizScores, chapterAttempts);
     counts[getMasteryState(score)] += 1;
     // 严格小于：同分时保留先出现的那一章（传入顺序即目录顺序，结果稳定）
     if (typeof score === 'number' && score < weakestScore) {

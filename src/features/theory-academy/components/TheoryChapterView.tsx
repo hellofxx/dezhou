@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Trophy, BookOpen } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Trophy, BookOpen, ClipboardCheck, Compass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useProgressStore } from '@/features/progress/store';
@@ -22,14 +22,19 @@ import { TheoryQuiz } from './TheoryQuiz';
 import { TheoryCalcDrill } from './TheoryCalcDrill';
 import { PracticeBridgeCard } from './PracticeBridgeCard';
 import { NextChapterNav } from './NextChapterNav';
+import { TheoryNotesPanel } from './TheoryNotesPanel';
+import { ContentIssueReport } from './ContentIssueReport';
+import { getChapterLastReviewed } from './theoryOptionalSources';
 import { resolveTheoryLevelTitle } from '../utils/titleKeys';
 import { theoryContentKey } from '../utils/contentKeys';
 import { buildTheoryReviewItems } from '../utils/theorySrs';
 
 /**
  * 理论章节页：URL 直达门禁（所属 Level 未解锁则重定向回主页）+ 讲解 + 章末小测。
- * 小测完成 → completeChapter（幂等，内部 emit 训练事件）+ recordTrainingDay
+ * 小测完成 → recordChapterAttempt（首次才 emit 训练事件）+ recordTrainingDay
  * + 章末错题写入 SRS 复习队列（theory:<questionId>）。
+ * 本批新增：收藏切换 / 最近校对日期 / 报告问题插槽（评估侧组件在后续批次接入）、
+ * 章节笔记面板、首次作答 / 练习作答横幅、检查点与定位测评入口。
  */
 export default function TheoryChapterView() {
   const { t } = useTranslation();
@@ -38,9 +43,13 @@ export default function TheoryChapterView() {
   const debugUnlocked = useDebugModeStore((s) => s.unlockAll);
   const isTheoryLevelUnlocked = useTheoryStore((s) => s.isTheoryLevelUnlocked);
   const startChapter = useTheoryStore((s) => s.startChapter);
-  const completeChapter = useTheoryStore((s) => s.completeChapter);
+  const recordChapterAttempt = useTheoryStore((s) => s.recordChapterAttempt);
   const completedChapters = useTheoryStore((s) => s.progress.completedChapters);
   const quizScores = useTheoryStore((s) => s.progress.quizScores);
+  const bookmarkedChapters = useTheoryStore((s) => s.progress.bookmarkedChapters ?? []);
+  const toggleBookmark = useTheoryStore((s) => s.toggleBookmark);
+  const chapterAttempts = useTheoryStore((s) => s.progress.chapterAttempts);
+  const hasPlacement = useTheoryStore((s) => s.progress.placement !== undefined);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
   const addReviewItem = useProgressStore((s) => s.addReviewItem);
   // Session 止损：小测消耗每日题量预算（recordAnswer），达上限时禁止进入小测
@@ -129,6 +138,7 @@ export default function TheoryChapterView() {
   // 已完成章节回访复习：阅读页提供免重考导航（返回目录/下一章），重考取历史最高分无数据风险
   const chapterCompleted = completedChapters.includes(chapter.id);
   const bestScore = quizScores[chapter.id];
+  const attempt = chapterAttempts?.[chapter.id];
   // 章节粒度桥接与 Level 粒度共存时的去重：章节推荐若已被 Level 推荐覆盖且本级已全部完成，
   // 只保留更宽的 Level 卡，避免同一列表在同屏重复渲染两次
   const chapterRecommendations = chapter.practiceRecommendations;
@@ -138,6 +148,7 @@ export default function TheoryChapterView() {
     chapterRecommendations.lessons.every((lesson) =>
       level.practiceRecommendations.lessons.some((item) => item.id === lesson.id)
     );
+  const lastReviewed = getChapterLastReviewed(chapter.id);
 
   const handleQuizComplete = (
     score: number,
@@ -145,9 +156,9 @@ export default function TheoryChapterView() {
     totalQuestions: number,
     wrongQuestionIds: string[],
   ) => {
-    completeChapter(chapter.id, score, totalQuestions, correctAnswers);
+    recordChapterAttempt(chapter.id, score, totalQuestions, correctAnswers);
     recordTrainingDay();
-    // 章末错题进 SRS 复习队列。刻意放在 completeChapter 的 alreadyCompleted 早退**之外**
+    // 章末错题进 SRS 复习队列。刻意放在 recordChapterAttempt 的首次判定**之外**
     // （故记在视图层而非 store 内），重测答错同样入队；addReviewItem 按 item.id 整体 upsert，
     // 重复重测不堆积。此处不触碰 recordAnswer —— 每题作答已在 TheoryQuiz 内计数，禁止二次计数。
     buildTheoryReviewItems(chapter, wrongQuestionIds).forEach((item) => addReviewItem(item));
@@ -183,6 +194,10 @@ export default function TheoryChapterView() {
           completedChapters={completedChapters}
           chapterCompleted={chapterCompleted}
           bestScore={bestScore}
+          bookmarked={bookmarkedChapters.includes(chapter.id)}
+          onToggleBookmark={() => toggleBookmark(chapter.id)}
+          {...(lastReviewed ? { lastReviewed } : {})}
+          reportSlot={<ContentIssueReport chapterId={chapter.id} />}
         />
 
         {phase === 'reading' && (
@@ -206,6 +221,12 @@ export default function TheoryChapterView() {
             </div>
             {/* 读→算→测微闭环：正文之后、小测之前给当场计算；未登记演练槽的章节不渲染 */}
             <TheoryCalcDrill key={chapter.id} chapterId={chapter.id} />
+            {/* 作答口径横幅：首次作答计入掌握度与能力分，重考只更新练习成绩 */}
+            <p className="mt-4 rounded-md border border-[var(--walnut-border)]/70 bg-[var(--felt-deep)]/50 px-3 py-2 text-[11px] leading-relaxed text-[var(--ivory-dim)]">
+              {attempt
+                ? `${t('theory.quiz.practiceAttempt')} · ${t('theory.quiz.retryPracticeHint')}`
+                : `${t('theory.quiz.firstAttempt')} · ${t('theory.quiz.firstAttemptHint')}`}
+            </p>
             {chapterCompleted ? (
               // 已完成章节：免重考复习导航（返回目录/下一章）+ 可选重考（幂等，取历史最高分）
               // 三按钮(返回目录 / 重考小测 / 下一章)窄屏纵向堆叠，桌面端左/右双簇对齐
@@ -239,6 +260,33 @@ export default function TheoryChapterView() {
               </div>
             )}
           </motion.div>
+        )}
+
+        {/* 阅读辅助：章节笔记（key 绑定章节，切换时草稿重置） + 检查点/定位入口 */}
+        {phase === 'reading' && (
+          <div className="max-w-3xl mx-auto space-y-3">
+            <TheoryNotesPanel key={chapter.id} chapterId={chapter.id} />
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-1 text-xs">
+              {levelCompleted && (
+                <Link
+                  to={`/theory/checkpoint/${level.id}`}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                >
+                  <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                  {t('theory.level.checkpointEntry')}
+                </Link>
+              )}
+              {!hasPlacement && (
+                <Link
+                  to="/theory/placement"
+                  className="inline-flex min-h-11 items-center gap-1.5 text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                >
+                  <Compass className="w-3.5 h-3.5" aria-hidden="true" />
+                  {t('theory.placement.title')}
+                </Link>
+              )}
+            </div>
+          </div>
         )}
 
         {phase === 'quiz' && (
@@ -294,6 +342,18 @@ export default function TheoryChapterView() {
                 <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
               </div>
             </div>
+            {/* 检查点入口：本级核心章读完后可自查（不解锁下一级、不发证） */}
+            {levelCompleted && (
+              <div className="max-w-3xl mx-auto">
+                <Link
+                  to={`/theory/checkpoint/${level.id}`}
+                  className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                >
+                  <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                  {t('theory.level.checkpointEntry')}
+                </Link>
+              </div>
+            )}
           </motion.div>
         )}
           </>

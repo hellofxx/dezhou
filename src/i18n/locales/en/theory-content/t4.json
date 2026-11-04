@@ -89,7 +89,9 @@
       "Example (one hand, two situations): the button opens and you hold K♠Q♠ in the small blind. The opponent's range is wide with a thin top, so a linear 3-bet for value is sound and you are usually ahead when called. Change the opener to under the gun and the same K♠Q♠ lands in the middle of a tight range: it is not strong enough to 3-bet and still be ahead when called, nor weak enough to be a pure bluff, so the sensible play is to call and see a flop, or simply fold. The cards did not change; only what that seat can open with did.",
       "A 4-bet range is far narrower than a 3-bet range. Value shrinks to the very top (big pairs and AK-type hands), and the bluff portion uses ace blockers to represent that top — an opponent holding the ace you block struggles to continue. Facing a 3-bet, hands in the middle band have no licence to see one more street: SPR is low in a 3-bet pot, the postflop room is small, and middle hands cannot realise equity into a pot that size.",
       "Cold calling (neither 3-betting nor folding) borrows and must be repaid: you hand the initiative to the opponent and have to create value yourself afterwards. Two conditions make the loan affordable — playable position, and a hand that realises enough equity postflop (a middle pair that can flop a set, a suited connector that can make a nut draw). Cold calling an under-the-gun open on the button is acceptable; the same hand cold calling from the small blind usually is not. The big blind is the one exception: it has already posted 1bb and needs only 1.5bb more against a 2.5bb open, roughly 27.3% required equity (see the chapter T3 \"Blind Battles: The Forced Game Between SB and BB\"), so its defending range is naturally the widest. Wide is not the same as indiscriminate, though — being OOP postflop discounts the realisation of many marginal hands, so the big blind's defence is mostly calls, some polarised 3-bets and a few folds.",
-      "A benchmark exists so that before every open you can state a number and a reason: which seat, how wide, tight or loose opponent. Two columns do not ask you to pick a favourite — they tell you which one you are using and why."
+      "A benchmark exists so that before every open you can state a number and a reason: which seat, how wide, tight or loose opponent. Two columns do not ask you to pick a favourite — they tell you which one you are using and why.",
+      "CO opening range matrix (~32%): only the button and the two blinds remain behind, so width sits between the middle position and the button. 100% frequency shown; unlisted hands are folds.",
+      "BTN opening range matrix (~44%): only two blinds remain behind and position is best, so the range is widest. 100% frequency shown; unlisted hands are folds."
     ]
   },
   "quiz": {
@@ -372,6 +374,206 @@
         "Using only minimum raises to test the opponent's strength"
       ],
       "explanation": "The tighter the opponent's range, the less there is to fold out, so a 3-bet has to be carried by premium value and blockers; linear value 3-bets fit wide opens from late position and the blinds."
+    },
+    "t4-range-thinking-q6": {
+      "question": "In the three levels of hand reading, Level 3 produces:",
+      "options": [
+        "focus on your own hand only",
+        "a guess at one exact opponent hand",
+        "a weighted range updated by each action",
+        "a memory of the opponent's last showdown"
+      ],
+      "explanation": "Level 3 maintains a weighted range narrowed street by street instead of naming one hand. All serious strategy discussion lives on this level."
+    },
+    "t4-range-thinking-q7": {
+      "question": "An opponent c-bets the flop then checks the turn. The best range read is:",
+      "options": [
+        "their range is unchanged",
+        "they surely hold the nuts",
+        "they surely have pure air",
+        "their range is capped and top-end density falls"
+      ],
+      "explanation": "Checking the turn removes the strong hands that would usually keep betting, capping the range. Passive actions are filters too; do not update ranges only on bets."
+    },
+    "t4-range-thinking-q8": {
+      "question": "When deciding whether to bet, the correct question is:",
+      "options": [
+        "how should my whole range split its actions at this node",
+        "is my exact hand the strongest",
+        "does the opponent happen to have the nuts",
+        "was I bluffed last hand"
+      ],
+      "explanation": "Range-versus-range thinking first allocates actions across the whole range, then lets each combo play its role. Starting from one hand produces incoherent lines."
+    },
+    "t4-combinatorics-q6": {
+      "question": "With one K on the board, how many AK combos remain in a range?",
+      "options": [
+        "8",
+        "16",
+        "12",
+        "9"
+      ],
+      "explanation": "AK starts at 16 combos; one K on the board leaves 3 kings, so 3×4=12. Always count combos against the visible board."
+    },
+    "t4-combinatorics-q7": {
+      "question": "You hold A♠. How many AA combos remain in the opponent's range?",
+      "options": [
+        "6",
+        "4",
+        "3",
+        "1"
+      ],
+      "explanation": "With one ace in your hand, 3 aces remain and C(3,2)=3. The blocker cuts the opponent's AA combos in half."
+    },
+    "t4-combinatorics-q8": {
+      "question": "On a three-flush river you hold A♠ and consider bluffing. The blocker's effect is to:",
+      "options": [
+        "increase opponent calls",
+        "strengthen their whole range",
+        "have nothing to do with bluffing",
+        "cut their nut-flush combos and raise fold rate"
+      ],
+      "explanation": "A♠ is the key nut-flush blocker: fewer nut-flush combos remain, so your bluff faces less strength. A blocker shifts proportions; it does not rewrite the range."
+    },
+    "t4-range-advantage-q6": {
+      "question": "A dry ace-high flop usually favors:",
+      "options": [
+        "the preflop raiser",
+        "the preflop caller",
+        "the blinds",
+        "neither side"
+      ],
+      "explanation": "The raiser's range holds more AK, AQ and big pairs, so an ace-high board hits it more often; both range and nut advantage lean to the raiser."
+    },
+    "t4-range-advantage-q7": {
+      "question": "A low connected board such as 8-7-5 two-tone usually favors:",
+      "options": [
+        "UTG's opening range",
+        "the preflop 4-bettor",
+        "the big blind's defending range",
+        "the button's opening range"
+      ],
+      "explanation": "The BB's defense keeps all small and medium connectors and suited hands, so a low connected board hits its straights and draws more often."
+    },
+    "t4-range-advantage-q8": {
+      "question": "Nut advantage primarily determines a range's:",
+      "options": [
+        "betting frequency",
+        "checking frequency",
+        "defense frequency",
+        "sizing ceiling"
+      ],
+      "explanation": "Range advantage decides whether you can bet often, while nut advantage decides whether you can bet big: only sufficient nut density supports overbet bluff capacity."
+    },
+    "t4-preflop-structure-q6": {
+      "question": "CO opens 2.5, BTN 3-bets to 8, CO 4-bets to 20. What is BTN's MDF facing the 4-bet?",
+      "options": [
+        "59.3%",
+        "33.3%",
+        "40.7%",
+        "28.9%"
+      ],
+      "explanation": "The pot before the 4-bet is 12 and the increment is 17.5, so MDF = 12 ÷ 29.5 ≈ 40.7% and alpha is 59.3%; the two sum to 100%."
+    },
+    "t4-preflop-structure-q7": {
+      "question": "Out-of-position 3-bets are usually larger because:",
+      "options": [
+        "OOP realizes less equity and needs more immediate fold pressure",
+        "OOP hands are always stronger",
+        "larger sizes reduce rake",
+        "in position you cannot use large sizes"
+      ],
+      "explanation": "A larger size moves more of the profit into the opponent's fold branch, compensating for the lower postflop realization that comes with being out of position."
+    },
+    "t4-preflop-structure-q8": {
+      "question": "A 4-bet pot has an SPR near 2, which means postflop ranges should be:",
+      "options": [
+        "linear with many medium hands",
+        "mostly small continuation bets",
+        "stretched to the river",
+        "polarized, with marginal hands shoving or folding"
+      ],
+      "explanation": "An SPR near 2 commits stacks within two streets, so the structure is jam-or-fold. Marginal hands such as AQo and JJ cannot realize enough equity, forcing polarization."
+    },
+    "t4-structure-economics-q6": {
+      "question": "With a big-blind ante raising the pot P from 1.5bb to 2.5bb, how does the break-even steal fold rate alpha change for a 2.25 open?",
+      "options": [
+        "about 60.0% → 47.4%",
+        "about 47.4% → 60.0%",
+        "unchanged",
+        "about 60% → 70%"
+      ],
+      "explanation": "alpha = b ÷ (P+b): without ante 2.25÷3.75=60.0%, with ante 2.25÷4.75≈47.4%. More dead money makes bluffing cheaper and lowers the fold rate a steal needs."
+    },
+    "t4-structure-economics-q7": {
+      "question": "Rake mainly rewrites which set of conclusions?",
+      "options": [
+        "the alpha and MDF formulas",
+        "the ordering of opening widths",
+        "sample size and risk of ruin",
+        "how SPR is computed"
+      ],
+      "explanation": "Rake lowers net win rate mu, feeding n ∝ 1/mu² and ROR = exp(−2mu B / sigma²): more hands are needed and ruin risk rises. It does not change dead money P, so alpha and MDF are untouched."
+    },
+    "t4-structure-economics-q8": {
+      "question": "Which statement about straddles and antes is correct?",
+      "options": [
+        "both change action order",
+        "both only affect postflop",
+        "antes change action order, straddles do not",
+        "both add dead money, but a straddle also changes action order and position"
+      ],
+      "explanation": "Both raise P and improve prices, but a straddle is an extra blind that inserts a new acting seat and changes preflop order, while an ante does not."
+    },
+    "t4-sixmax-ranges-q4": {
+      "question": "Under the standard 6-max 100bb no-ante baseline, UTG opens about:",
+      "options": [
+        "19%",
+        "22%",
+        "32%",
+        "44%"
+      ],
+      "explanation": "The standard chart is UTG 19 / HJ 22 / CO 32 / BTN 44 / SB 38. More players still to act means a tighter range."
+    },
+    "t4-sixmax-ranges-q5": {
+      "question": "On the same baseline, the beginner-simplified BTN opening range is about:",
+      "options": [
+        "44%",
+        "32%",
+        "38%",
+        "35%"
+      ],
+      "explanation": "BTN is 44% standard and 35% beginner-simplified. The two columns are not a choice but a record of which baseline you are using and why."
+    },
+    "t4-sixmax-ranges-q6": {
+      "question": "Facing a UTG open, the button's 3-bet structure should lean:",
+      "options": [
+        "pure bluffs with any two cards",
+        "entirely small suited connectors",
+        "linear and strength-heavy",
+        "call-only, never 3-bet"
+      ],
+      "explanation": "A UTG range is already tight, so the 3-bet must be linear and strength-heavy; polarized structures fit wider late-position opens."
+    },
+    "t4-sixmax-ranges-q7": {
+      "question": "The debt cold calling owes refers to:",
+      "options": [
+        "cold calling costs nothing",
+        "cold calling is more aggressive than 3-betting",
+        "cold calling only affects preflop",
+        "a capped range that must realize equity from a positional disadvantage"
+      ],
+      "explanation": "A cold call surrenders initiative and often position, facing the raiser's range edge postflop; marginal hands therefore belong in the 3-bet or fold bucket."
+    },
+    "t4-sixmax-ranges-q8": {
+      "question": "The number BTN opens 44% correctly means:",
+      "options": [
+        "the share of all starting combos played",
+        "the hand wins 44% of pots",
+        "opponents fold 44% of the time",
+        "the postflop c-bet frequency"
+      ],
+      "explanation": "Range width is a combo share, not equity. Reading width as win rate miscalculates immediately, for example assuming 44% opens means 44% showdown equity."
     }
   },
   "chapterObjectives": {
@@ -409,5 +611,6 @@
       "Separate the situations the standard scope and the beginner simplification are meant for, and say why they must not be mixed",
       "Choose a linear or a polarised structure for a 3-bet based on the opponent's opening seat, and explain what a cold call has to repay"
     ]
-  }
+  },
+  "block": {}
 }

@@ -1,10 +1,12 @@
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, KeyRound, Lightbulb } from 'lucide-react';
-import type { TheorySection } from '../types';
+import type { TheoryRichBlockData, TheorySection } from '../types';
 import {
   LabeledBlock,
   AsciiMonoText,
 } from '@/shared/components/business/ContentBlocks';
+import { TheoryRichBlock } from './TheoryRichBlock';
 
 interface TheorySectionRendererProps {
   section: TheorySection;
@@ -17,11 +19,26 @@ interface TheorySectionRendererProps {
 }
 
 /**
+ * 段落后挂富文本块：`section.data`（表格 / 范围矩阵 / 决策树）统一渲染在正文之下。
+ * 无 data 时不额外包一层容器，保持既有段落 DOM 结构不变（视觉与测试契约零漂移）。
+ */
+function withRichBlock(data: TheoryRichBlockData | undefined, body: ReactNode) {
+  if (!data) return <>{body}</>;
+  return (
+    <div className="space-y-3">
+      {body}
+      <TheoryRichBlock data={data} />
+    </div>
+  );
+}
+
+/**
  * 理论段落渲染器：按 section type 渲染。
  * 视觉词汇与 strategy-academy ContentBlock 严格对齐（P2-01 统一骨架）：
  * heading text-[20px] / text leading-[1.7] max-w-3xl / LabeledBlock 标签骨架 /
  * formula-display（§13.3.2）/ AsciiMonoText / 语义色图标。
  * §13.3.3：heading 上方渲染 .section-number eyebrow（§{章号}.{节号}）。
+ * 富文本块：section.data 存在时经 TheoryRichBlock 追加在正文之后（同一份数据服务 zh / en）。
  */
 export function TheorySectionRenderer({
   section,
@@ -40,32 +57,36 @@ export function TheorySectionRenderer({
         : undefined;
   switch (section.type) {
     case 'heading':
-      return (
+      return withRichBlock(
+        section.data,
         <div className="mt-6 first:mt-0">
           {sectionNumber !== undefined && <span className="section-number">{sectionNumber}</span>}
           <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
             {content}
           </h2>
-        </div>
+        </div>,
       );
 
     case 'text':
-      return (
+      return withRichBlock(
+        section.data,
         <p className="text-sm text-[var(--ivory-dim)] leading-[1.7] tracking-[0.01em] whitespace-pre-line max-w-3xl">
           {content}
-        </p>
+        </p>,
       );
 
     case 'highlight':
-      return (
+      return withRichBlock(
+        section.data,
         <div className="rounded-lg border border-[var(--warning)]/30 bg-[var(--warning)]/10 p-4 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-[var(--warning)] shrink-0 mt-0.5" />
           <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line">{content}</p>
-        </div>
+        </div>,
       );
 
     case 'key-point':
-      return (
+      return withRichBlock(
+        section.data,
         <LabeledBlock
           icon={KeyRound}
           iconClass="text-[var(--poker-success)]"
@@ -73,26 +94,29 @@ export function TheorySectionRenderer({
           labelClass="text-[var(--poker-success)]"
           wrapClass="border border-[var(--poker-success)]/30 border-l-[3px] border-l-[var(--poker-success)] bg-[var(--poker-success-bg)]"
           content={content}
-        />
+        />,
       );
 
     case 'formula':
-      return (
-        <div className="formula-display whitespace-pre-line">{content}</div>
+      return withRichBlock(
+        section.data,
+        <div className="formula-display whitespace-pre-line">{content}</div>,
       );
 
     case 'takeaway':
-      return <LessonTakeawayBlock content={content} />;
+      return withRichBlock(section.data, <LessonTakeawayBlock content={content} />);
 
     case 'example':
-      return (
+      return withRichBlock(
+        section.data,
         <div className="rounded-lg bg-[var(--felt-deep)] border border-[var(--walnut-border)] p-4">
           <AsciiMonoText content={content} />
-        </div>
+        </div>,
       );
 
     case 'pro-tip':
-      return (
+      return withRichBlock(
+        section.data,
         <LabeledBlock
           icon={Lightbulb}
           iconClass="text-[var(--brass-bright)]"
@@ -100,14 +124,15 @@ export function TheorySectionRenderer({
           labelClass="text-[var(--brass-bright)] uppercase tracking-wider"
           wrapClass="border border-[var(--brass)]/40 border-l-[3px] border-l-[var(--brass)] bg-[var(--brass)]/5"
           content={content}
-        />
+        />,
       );
 
     default:
-      return (
+      return withRichBlock(
+        section.data,
         <p className="text-sm text-[var(--ivory-dim)] leading-relaxed whitespace-pre-line max-w-3xl">
           {content}
-        </p>
+        </p>,
       );
   }
 }

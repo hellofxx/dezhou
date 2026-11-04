@@ -246,6 +246,146 @@
         "Limping from the small blind is an illegal action"
       ],
       "explanation": "Limping hands the initiative over the dead money to the opponent and locks you into the worst postflop position. Raising at least buys fold equity and initiative, which is why raise or fold is the default."
+    },
+    "t3-position-value-q6": {
+      "question": "Which two seats are structurally the biggest long-term losers in 6-max?",
+      "options": [
+        "UTG and HJ",
+        "CO and BTN",
+        "SB and BB",
+        "BTN and SB"
+      ],
+      "explanation": "The blinds post money with the least information and act first postflop; other seats can fold for free, making the blinds the long-term bleed. The button has the highest realization instead."
+    },
+    "t3-position-value-q7": {
+      "question": "A hand has 50% raw equity and an out-of-position realization factor of 0.85. Its realized equity is about:",
+      "options": [
+        "42.5%",
+        "50%",
+        "55%",
+        "58.8%"
+      ],
+      "explanation": "Realized equity = 50% × 0.85 = 42.5%. Being out of position discounts equity proportionally rather than erasing it."
+    },
+    "t3-position-value-q8": {
+      "question": "In a pot with three or more players, positional advantage:",
+      "options": [
+        "disappears completely",
+        "turns into a disadvantage",
+        "stays identical to heads-up",
+        "remains but shrinks clearly"
+      ],
+      "explanation": "Multiway pots require reading several ranges at once and compress pot control, so acting last is worth less. Position still helps, but the edge is diluted and ranges should tighten."
+    },
+    "t3-starting-hands-q6": {
+      "question": "The Gap Concept states that:",
+      "options": [
+        "facing demonstrated strength, the standard for continuing must exceed the opening standard",
+        "wider opening ranges win more",
+        "worse position means calling more",
+        "suited hands always beat offsuit hands"
+      ],
+      "explanation": "A raise has filtered the weak hands out of the opponent's range, so your continuing range must be stronger than an opening range. Position and depth change the size of the gap, not its direction."
+    },
+    "t3-starting-hands-q7": {
+      "question": "Which hand is a classic speculative starting hand?",
+      "options": [
+        "AA",
+        "AKs",
+        "76s",
+        "K9o"
+      ],
+      "explanation": "76s has little made strength but strong straight and flush potential, the definition of a speculative hand that likes cheap deep-stack pots. AA and AKs are made hands and K9o is trash."
+    },
+    "t3-starting-hands-q8": {
+      "question": "A nit only 5-bets AA and KK. Facing their 5-bet shove, you should do what with QQ?",
+      "options": [
+        "Call",
+        "Shove",
+        "Re-raise to a 6-bet",
+        "Fold"
+      ],
+      "explanation": "Hand value is a function of position, depth and opponent range. When the 5-bet range is only AA and KK, QQ falls far short of the required equity, so folding is the only positive-EV choice."
+    },
+    "t3-fundamental-theorem-q6": {
+      "question": "According to the fundamental theorem, your long-term profit mainly comes from:",
+      "options": [
+        "opponents' decision errors",
+        "how often you are dealt good hands",
+        "luck averaging out",
+        "opponents' stack sizes"
+      ],
+      "explanation": "If opponents always played optimally with known information, you could not profit; profit comes from their deviations. Bets, sizings and bluffs all manufacture situations where errors are likelier."
+    },
+    "t3-fundamental-theorem-q7": {
+      "question": "When an opponent calls too much and almost never folds, the correct adjustment is to:",
+      "options": [
+        "bluff more",
+        "value bet less",
+        "widen value bets and bluff less",
+        "stop betting entirely"
+      ],
+      "explanation": "Excess calling makes value bets more profitable and bluffs less so. Exploitation runs opposite to the leak: against too few folds, bluff less and thin-value more."
+    },
+    "t3-fundamental-theorem-q8": {
+      "question": "The strictest boundary of the fundamental theorem is that:",
+      "options": [
+        "it does not apply preflop",
+        "it does not apply to short deck",
+        "it does not apply deep",
+        "multiway pots can create exceptions"
+      ],
+      "explanation": "In multiway pots one player's correct call can hurt two others at once, breaking the heads-up assumption. The theorem applies most strictly to heads-up pots."
+    },
+    "t3-blind-battle-q4": {
+      "question": "CO opens to 2.5bb and the SB folds. What minimum equity does the BB need to call?",
+      "options": [
+        "27.3%",
+        "37.5%",
+        "30.8%",
+        "25%"
+      ],
+      "explanation": "The pot is 0.5+1+2.5=4.0, the BB adds 1.5 for 5.5 total, so equity needed is 1.5÷5.5≈27.3%. 37.5% comes from wrongly using the current 4.0 pot as the denominator."
+    },
+    "t3-blind-battle-q5": {
+      "question": "Why is 1.5÷4.0=37.5% a wrong BB defense threshold?",
+      "options": [
+        "It omits the small blind's blind",
+        "It should use the BB's total, not the amount to call",
+        "It should add the opponent's bet to the numerator",
+        "The denominator is the pre-call pot instead of the post-call pot"
+      ],
+      "explanation": "Required equity divides by the pot after calling (4.0+1.5=5.5). Using the pre-call pot overprices the call and systematically defends too tightly."
+    },
+    "t3-blind-battle-q6": {
+      "question": "Why does the SB prefer raise-or-fold over limping in blind battles?",
+      "options": [
+        "The SB always has a stronger hand",
+        "Limping is against the rules",
+        "The SB is out of position against everyone postflop, so raising buys back the initiative",
+        "Raising costs fewer chips"
+      ],
+      "explanation": "The SB acts first postflop, so limping hands the initiative to the BB. Raising makes the opponent decide first with weak hands, the standard way to recover realization."
+    },
+    "t3-blind-battle-q7": {
+      "question": "After antes are added, participation frequencies in blind battles should:",
+      "options": [
+        "rise for both players",
+        "fall for both",
+        "rise for the SB and fall for the BB",
+        "stay unchanged"
+      ],
+      "explanation": "Antes raise the pot P, lowering the break-even fold rate for steals and improving calling prices, so both aggression and defense increase. Structure, not style, sets the direction."
+    },
+    "t3-blind-battle-q8": {
+      "question": "At a table with high rake, the SB opening range should:",
+      "options": [
+        "stay unchanged",
+        "widen",
+        "become suited hands only",
+        "tighten"
+      ],
+      "explanation": "Rake takes a share of every pot, most painfully from small pots, so marginal frequencies lose their profit first. Higher rake means tighter SB opens and more nut-potential hands from the BB."
     }
   },
   "chapterObjectives": {

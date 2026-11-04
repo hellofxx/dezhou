@@ -17,19 +17,38 @@ import { useProgressStore } from '../../store';
 import type { TrainingRecord } from '../../types';
 import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
 import {
-  buildTheoryReviewFixture,
   setLanguage,
   THEORY_QUESTION_TEXT,
+  theoryQuestionKey,
 } from './reviewLeakFixture';
+import { createReviewItem, toLocalDateString } from '@/shared/utils/spacedRepetition';
+import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 
 function LocationProbe() {
   const location = useLocation();
   return <div data-probe>{location.pathname}</div>;
 }
 
-/** 真实生成链路：含 1 条到期理论复习项的每日计划首项（review 型） */
+/**
+ * 非理论复习项，label 故意是跨模块 i18n key（历史上裸键泄漏的形态）。
+ * 用 theory.quiz.* 作 label 的原因：它是测试环境双语均预加载的唯一跨模块复习 key；
+ * source/category 标为 strategy，确保仍进入通用复习卡。
+ */
+function keyLabelReviewItem(): ReviewItem {
+  const item = createReviewItem('strategy:a', theoryQuestionKey('t1-combinatorics-q1'), 'strategy', {
+    source: 'strategy',
+  });
+  item.nextReviewDate = toLocalDateString();
+  return item;
+}
+
+/**
+ * 真实生成链路：含 1 条到期复习项的每日计划首项（review 型）。
+ * 理论抽查项整改后走独立 theory-review 卡（不渲染题干预览），
+ * label 逐条 t() 的不变量由通用复习卡承载。
+ */
 function firstRecommendation() {
-  return generateCrossModuleDailyPlan([], [], [buildTheoryReviewFixture()], 0)[0] ?? null;
+  return generateCrossModuleDailyPlan([], [], [keyLabelReviewItem()], 0)[0] ?? null;
 }
 
 let container: HTMLDivElement;

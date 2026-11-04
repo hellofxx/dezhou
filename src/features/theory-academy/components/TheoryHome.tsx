@@ -4,12 +4,14 @@ import { ArrowRight, BookOpenCheck, ChevronRight, Flag, Flame, GraduationCap, Ta
 import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { useTranslation } from 'react-i18next';
+import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
 import {
   getCoreChaptersOfLevel,
   getCoreChapterCount,
   getLevelSummariesByVariant,
 } from '../utils/theoryMeta';
+import { getTheoryChapterRecommendation } from '../data/theoryRecommendations';
 import type { PokerVariant } from '@/shared/types/elo';
 import { VariantToggle } from '@/shared/components/VariantToggle';
 import { TheoryResume } from './TheoryResume';
@@ -17,6 +19,10 @@ import { TheoryLadder, findActiveTheoryLevelId } from './TheoryLadder';
 import { TheorySupplementalCard } from './TheorySupplementalCard';
 import { TheoryMasteryCard } from './TheoryMasteryCard';
 import { TheoryLearningPaths } from './TheoryLearningPaths';
+import { TheoryPlacementCard } from './TheoryPlacementCard';
+import { TheoryRecommendationCard } from './TheoryRecommendationCard';
+import { TheoryBookmarksPanel } from './TheoryBookmarksPanel';
+import { TheoryStudyTools } from './TheoryStudyTools';
 
 export default function TheoryHome() {
   const { t } = useTranslation();
@@ -26,6 +32,9 @@ export default function TheoryHome() {
   const isTheoryLevelUnlocked = useTheoryStore((s) => s.isTheoryLevelUnlocked);
   const activeVariant = useTheoryStore((s) => s.progress.activeVariant);
   const switchVariant = useTheoryStore((s) => s.switchVariant);
+  const toggleBookmark = useTheoryStore((s) => s.toggleBookmark);
+  // 五维 ELO 只读快照：反向桥接（ELO → 推荐章节）的唯一输入（progress 为设计内中枢引用）
+  const standardElo = useProgressStore((s) => s.eloByVariant.standard);
 
   const levels = getLevelSummariesByVariant(activeVariant);
   const totalProgress = getTotalProgress();
@@ -45,12 +54,25 @@ export default function TheoryHome() {
     return core.length > 0 && core.every((c) => progress.completedChapters.includes(c.id));
   }).length;
 
-  // 平均小测分：当前变体已读核心章的小测分均值（取整；增补章分数不参与）
+  // 平均首次成绩：当前变体已读核心章的首次正式小测均值（练习最佳不参与；增补章不参与）
   const scored = levels
     .flatMap((l) => getCoreChaptersOfLevel(l))
-    .filter((c) => progress.completedChapters.includes(c.id) && typeof progress.quizScores[c.id] === 'number')
-    .map((c) => progress.quizScores[c.id] as number);
+    .filter((c) => progress.completedChapters.includes(c.id))
+    .map((c) => progress.chapterAttempts?.[c.id]?.firstScore ?? progress.quizScores[c.id])
+    .filter((score): score is number => typeof score === 'number');
   const avgScore = scored.length > 0 ? Math.round(scored.reduce((a, b) => a + b, 0) / scored.length) : 0;
+
+  const bookmarks = progress.bookmarkedChapters ?? [];
+  // 反向桥接只服务标准变体（推荐池是 6-max 理论主线；变体各有独立进度口径）
+  const recommendation =
+    activeVariant === 'standard'
+      ? getTheoryChapterRecommendation({
+          elo: standardElo,
+          completedChapters: progress.completedChapters,
+          creditLevels: progress.placement?.creditLevels ?? [],
+          variant: 'standard',
+        })
+      : null;
 
   return (
     <div className="h-full overflow-auto">
@@ -65,6 +87,19 @@ export default function TheoryHome() {
           levelsDoneCount={levelsDoneCount}
           avgScore={avgScore}
         />
+
+        {/* Zone A2：检索入口 + 收藏书签条（同为阅读辅助，不参与解锁） */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...transitionStandard, delay: 0.04 }}
+          className="space-y-3"
+        >
+          <TheoryStudyTools />
+          {bookmarks.length > 0 && (
+            <TheoryBookmarksPanel variant="strip" bookmarks={bookmarks} />
+          )}
+        </motion.div>
 
         {/* Zone B：变体切换统一面板 */}
         <motion.div
@@ -105,6 +140,10 @@ export default function TheoryHome() {
               completedChapters={progress.completedChapters}
               quizScores={progress.quizScores}
               isUnlocked={isTheoryLevelUnlocked}
+              creditLevels={progress.placement?.creditLevels ?? []}
+              bookmarkedChapters={bookmarks}
+              checkpoints={progress.checkpoints ?? {}}
+              onToggleBookmark={toggleBookmark}
             />
           </motion.div>
 
@@ -118,7 +157,20 @@ export default function TheoryHome() {
               flaggedCount={progress.flaggedQuestions.length}
               activeVariant={activeVariant}
             />
-            <TheoryMasteryCard chapters={coreChapters} quizScores={progress.quizScores} />
+            <TheoryMasteryCard
+              chapters={coreChapters}
+              quizScores={progress.quizScores}
+              chapterAttempts={progress.chapterAttempts}
+              completedChapters={progress.completedChapters}
+              levels={levels}
+              checkpoints={progress.checkpoints}
+            />
+            {activeVariant === 'standard' && (
+              <>
+                <TheoryRecommendationCard recommendation={recommendation} />
+                <TheoryPlacementCard placement={progress.placement} />
+              </>
+            )}
             {activeVariant === 'standard' && (
               <TheorySupplementalCard
                 levels={levels}

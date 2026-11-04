@@ -330,7 +330,7 @@
   },
   "mastery": {
     "title": "掌握度",
-    "subtitle": "按章末小测的最高分统计，只作复习提示，不改变解锁",
+    "subtitle": "按首次正式小测成绩统计；练习最佳单独列出，只作复习提示，不改变解锁",
     "mastered": "已掌握",
     "passing": "通过",
     "needsReview": "待复习",
@@ -362,7 +362,7 @@
   },
   "stats": {
     "title": "阅读统计",
-    "avgScoreLabel": "平均小测分",
+    "avgScoreLabel": "平均首次分",
     "avgScoreValue": "{{score}} 分",
     "chaptersReadLabel": "已读章节",
     "levelsCompletedLabel": "完成级别",
@@ -466,6 +466,317 @@
     "answered": "答对 {{correct}}/{{total}} 题",
     "score": "{{score}} 分"
   },
+  "placement": {
+    "title": "定位测评",
+    "subtitle": "用一组基础题定位起点，免修你已经掌握的级别",
+    "intro": "一组基础题判断你更适合从哪一级开始。测评不写任何章节完成记录，重测只取更宽的免修范围。",
+    "start": "开始定位测评",
+    "questionOf": "第 {{current}} / {{total}} 题",
+    "next": "下一题",
+    "finish": "提交测评",
+    "resultTitle": "定位测评结果",
+    "score": "答对 {{correct}} / {{total}} 题，得分 {{score}}",
+    "recommendedLevel": "推荐起点：{{level}}",
+    "creditLevels": "已免修：{{levels}}",
+    "zeroBasedTitle": "从零开始也没问题",
+    "zeroBasedBody": "没有免修任何级别时，从 T1 按顺序读才是正路：先把概率与赔率的地基补上，后面每一级都会更省力。",
+    "basicsCta": "先看零基础入门",
+    "retake": "重新测评",
+    "disclaimer": "测评只放宽解锁：不计入已读章节，也不改掌握度与能力分。",
+    "creditedBadge": "已免修",
+    "prereq": {
+      "title": "先确认这三件事",
+      "rule": "牌型大小与基本规则",
+      "hand": "起手牌与位置命名",
+      "position": "下注动作与常用术语"
+    },
+    "questions": {
+      "pl-t1-combos": {
+        "question": "AKs（同花 A-K）一共有多少种组合？",
+        "options": [
+          "4 种",
+          "6 种",
+          "12 种",
+          "16 种"
+        ],
+        "explanation": "同花组合数等于花色数：4 种花色各 1 种，合计 4 种；12 种是 AKo 的组合数。"
+      },
+      "pl-t1-outs": {
+        "question": "翻牌圈你有 9 个 outs，看转牌与河牌两张牌时成牌概率约为多少？",
+        "options": [
+          "27%",
+          "45%",
+          "35%",
+          "18%"
+        ],
+        "explanation": "9 个 outs 看两张牌约为 35%（4/2 法则给 9 × 4 = 36，精确值 35.0%）。"
+      },
+      "pl-t1-variance": {
+        "question": "关于方差与长期视角，下列哪项说法正确？",
+        "options": [
+          "赢率高的玩家不会遇到下风期",
+          "样本量越小，结果越能反映真实水平",
+          "正确的决策在短期内也可能连续输钱",
+          "波动只由对手的运气决定"
+        ],
+        "explanation": "正确的决策只保证长期期望为正，短期仍可能连续输钱；正因如此才需要资金管理与样本量意识。"
+      },
+      "pl-t2-ev": {
+        "question": "一个决策的期望值（EV）为正，说明什么？",
+        "options": [
+          "这一手牌一定会赢",
+          "对手一定犯了错误",
+          "只在河牌圈成立",
+          "长期重复该决策总体会盈利"
+        ],
+        "explanation": "EV 是长期平均口径：单次结果可以输，重复足够多次后总体为正。"
+      },
+      "pl-t2-pot-odds": {
+        "question": "底池 100，对手下注 50，你跟注所需的保本权益约为多少？",
+        "options": [
+          "25%",
+          "33%",
+          "50%",
+          "66%"
+        ],
+        "explanation": "跟注 50 之后底池为 200，所需权益 = 50 ÷ 200 = 25%。"
+      },
+      "pl-t2-implied": {
+        "question": "隐含赔率在下列哪种情况下最有价值？",
+        "options": [
+          "你已经在河牌圈且没有后续下注",
+          "你持有已经成型的坚果牌",
+          "你的听牌成牌后还能从对手那里再收到筹码",
+          "底池很小且对手是短码"
+        ],
+        "explanation": "隐含赔率把后续街能收到的额外筹码算进当前决策；听牌成牌后能拿到支付时最有用。"
+      },
+      "pl-t3-position": {
+        "question": "有位置（IP）的主要优势是什么？",
+        "options": [
+          "可以少付盲注",
+          "每条街都在对手之后行动，能拿到更多信息",
+          "抽水比例更低",
+          "可以先看到对手的底牌"
+        ],
+        "explanation": "位置的价值来自信息优势：对手先表态，你的每条街决策都在更多信息下做出。"
+      },
+      "pl-t3-gap": {
+        "question": "Gap Concept 的核心主张是什么？",
+        "options": [
+          "加注需要的牌力强于跟注",
+          "位置比牌力更重要",
+          "任何两张牌都可以平跟进池",
+          "跟注需要的牌力通常强于率先加注"
+        ],
+        "explanation": "Sklansky 的 Gap Concept：跟注一个加注所需的牌力，通常强于自己率先加注所需的牌力。"
+      },
+      "pl-t3-initiative": {
+        "question": "翻前加注带来的主动权，在翻后通常意味着什么？",
+        "options": [
+          "必须每条街都下注",
+          "不能再过牌",
+          "更容易代表强牌并用连续下注施压",
+          "对手必须弃牌"
+        ],
+        "explanation": "主动权是叙事上的优势：加注者的范围里强牌更集中，更容易在翻后代表强牌持续施压。"
+      },
+      "pl-t4-range": {
+        "question": "范围思维与单手牌思维的关键差别是什么？",
+        "options": [
+          "把对手的牌看作一组带权重的组合分布",
+          "先猜一手牌再逐步修正",
+          "只考虑对手的坚果牌",
+          "只看自己的两张牌"
+        ],
+        "explanation": "范围思维把对手的手牌视为一组带权重的组合，并随每条街的动作重新收窄与加权。"
+      },
+      "pl-t4-blockers": {
+        "question": "Blockers（挡牌效应）在诈唬选牌时的作用是什么？",
+        "options": [
+          "让自己的牌更容易成顺",
+          "提高自己的权益实现率",
+          "降低抽水比例",
+          "持有对手弃牌范围里的关键牌，减少其强牌组合数"
+        ],
+        "explanation": "挡牌看的是对手的组合数：你持有的牌若正好是对手强牌的组成部分，对手能继续的强牌组合就变少。"
+      },
+      "pl-t4-range-advantage": {
+        "question": "A 高且干燥的牌面通常更有利于哪一方？",
+        "options": [
+          "翻前跟注者",
+          "翻前加注者",
+          "大盲位玩家",
+          "双方完全均等"
+        ],
+        "explanation": "A 高牌面与翻前加注者的范围更匹配（AA / AK / AQ 更集中），故加注者的范围优势更明显。"
+      },
+      "pl-t5-mdf": {
+        "question": "底池 100，对手下注 100，你的最低防守频率（MDF）是多少？",
+        "options": [
+          "33%",
+          "50%",
+          "66%",
+          "75%"
+        ],
+        "explanation": "MDF = 底池 ÷（底池 + 下注）= 100 ÷ 200 = 50%。"
+      },
+      "pl-t5-mixed": {
+        "question": "混合策略（同一节点按频率执行不同动作）的意义是什么？",
+        "options": [
+          "说明自己还没想清楚",
+          "只适用于娱乐局",
+          "让对手无法通过固定应对稳定获利",
+          "主要目的是降低方差"
+        ],
+        "explanation": "混合策略的核心是不可被剥削：固定应对会被针对，按频率混合让对手的固定反制失去确定性收益。"
+      },
+      "pl-t6-bet-purpose": {
+        "question": "一手牌既没有价值也没有诈唬理由时，通常最好的选择是？",
+        "options": [
+          "过牌",
+          "小注诈唬",
+          "全下施压",
+          "加注对手"
+        ],
+        "explanation": "下注需要理由（价值 / 诈唬 / 保护）；三者都不成立时过牌保留权益、控制底池。"
+      },
+      "pl-t6-spr": {
+        "question": "SPR（筹码底池比）较低时，通常意味着什么？",
+        "options": [
+          "更适合在多条街上精细调整尺度",
+          "对手的弃牌率会更高",
+          "权益实现率会明显下降",
+          "顶对类牌更容易合理地打到全下"
+        ],
+        "explanation": "SPR 低意味着翻后只需一两次下注就能把筹码放进去，顶对类成手牌的承诺价值随之上升。"
+      }
+    }
+  },
+  "checkpoint": {
+    "title": "级别检查点",
+    "subtitle": "读完一级后抽题自查：只看本级核心概念，不设解锁门槛",
+    "entry": "开始本级检查",
+    "lockedHint": "读完本级核心章节后开放",
+    "questionOf": "第 {{current}} / {{total}} 题",
+    "finish": "提交检查",
+    "resultTitle": "检查点结果",
+    "score": "本次 {{score}} 分",
+    "bestScore": "历史最佳 {{score}} 分",
+    "dimensionBreakdown": "各维度表现",
+    "srsHint": "答错的题已加入间隔复习队列",
+    "retry": "再检查一次",
+    "noCertificate": "检查点是自查工具：不发证书，也不解锁下一级",
+    "notReady": "本级暂无检查点题库，先用章节小测自查",
+    "dimension": {
+      "preflop": "翻前",
+      "postflop": "翻后",
+      "math": "数学",
+      "handReading": "读牌",
+      "mental": "心态"
+    }
+  },
+  "notes": {
+    "title": "章节笔记",
+    "placeholder": "记下要点、你自己的例子，或者还没想通的问题",
+    "save": "保存",
+    "saved": "已保存",
+    "empty": "还没有笔记。读到关键处随手记两句，回头复习能省一半时间",
+    "charCount": "{{count}} / {{max}} 字",
+    "clear": "清空",
+    "cleared": "笔记已清空"
+  },
+  "bookmarks": {
+    "title": "收藏章节",
+    "add": "收藏本章",
+    "remove": "取消收藏",
+    "empty": "还没有收藏。把想反复读的章节存下来，随时回到这里",
+    "viewAll": "查看全部收藏"
+  },
+  "search": {
+    "title": "搜索",
+    "placeholder": "搜章节、术语或书目",
+    "results": "{{count}} 条结果",
+    "noResults": "没有匹配内容，换个关键词试试",
+    "fullTextLoading": "正在载入全文索引",
+    "open": "打开",
+    "categories": {
+      "chapters": "章节",
+      "glossary": "术语",
+      "bibliography": "书目"
+    }
+  },
+  "glossary": {
+    "title": "术语表",
+    "subtitle": "正文里出现的术语与缩写，按类别归档",
+    "searchPlaceholder": "搜索术语",
+    "allCategories": "全部类别",
+    "empty": "没有匹配的术语",
+    "relatedChapters": "相关章节",
+    "categories": {
+      "math": "数学与赔率",
+      "preflop": "翻前",
+      "postflop": "翻后",
+      "psychology": "心理与资金",
+      "other": "其他"
+    }
+  },
+  "bibliography": {
+    "title": "参考书目",
+    "subtitle": "本模块理论来源的权威教材，章节内以「概念源自」标注出处",
+    "books": "{{count}} 本",
+    "citedIn": "引用章节",
+    "empty": "暂无书目条目"
+  },
+  "recommendation": {
+    "title": "接下来读什么",
+    "subtitle": "按最近的章末小测与疑难标记，推荐一个更合适的入口",
+    "cta": "去读这一章",
+    "reason": {
+      "math": "数学类题目失分集中，先补组合计数与赔率换算",
+      "preflop": "翻前正确率偏低，先把位置价值与起手牌标准理顺",
+      "postflop": "翻后判断偏弱，从范围优势与下注目的补起",
+      "handReading": "读牌题错得较多，重读从范围到组合的推导流程",
+      "mental": "错题集中在情绪与资金管理，先读心理学章节",
+      "fallback": "章节读得还不多，先按当前进度继续"
+    }
+  },
+  "report": {
+    "title": "报告内容问题",
+    "subtitle": "错字、数字不对、解析说不清，都可以直接报上来",
+    "placeholder": "说明问题所在段落与原因",
+    "copy": "复制报告",
+    "copied": "已复制",
+    "mailto": "用邮件发送",
+    "includeContext": "附带章节与段落信息",
+    "success": "报告已生成，粘贴到任意渠道即可提交",
+    "failure": "复制失败，请手动选中文本复制"
+  },
+  "contentMeta": {
+    "lastReviewed": "最近校对 {{date}}",
+    "reviewedBy": "校对 {{name}}",
+    "reportIssue": "报告问题"
+  },
+  "block": {
+    "table": "表格",
+    "rangeMatrix": "范围矩阵",
+    "decisionTree": "决策树",
+    "legend": "图例",
+    "caption": "图表说明",
+    "action": {
+      "raise": "加注",
+      "bet": "下注",
+      "call": "跟注",
+      "check": "过牌",
+      "fold": "弃牌",
+      "all-in": "全下",
+      "mixed": "混合"
+    }
+  },
+  "level": {
+    "creditedBadge": "已免修",
+    "checkpointEntry": "本级检查点"
+  },
   "proTip": {
     "title": "职业牌手说"
   },
@@ -475,6 +786,16 @@
     "incorrect": "✗ 错误",
     "next": "下一题",
     "viewResult": "查看结果",
-    "optionAria": "选项 {{letter}}: {{option}}"
+    "optionAria": "选项 {{letter}}: {{option}}",
+    "attemptCount": "已测 {{count}} 次",
+    "firstAttempt": "首次作答",
+    "firstAttemptHint": "计入掌握度与能力分",
+    "practiceAttempt": "练习作答（不计入掌握度与能力分）",
+    "firstScoreLabel": "首次成绩",
+    "bestScoreLabel": "历史最佳",
+    "practiceOnly": "练习",
+    "retryPracticeHint": "重考只更新练习成绩，首次成绩与掌握度保持不变",
+    "drawCount": "本次抽取 {{count}} 题",
+    "practiceBanner": "练习模式：本次成绩不计入进度与能力分"
   }
 }

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { createLocalStorageStub, buildPersistPayload } from '@/shared/utils/localStorageStub';
+import { trainingEvents } from '@/shared/stores/trainingEvents';
 
 /**
  * theory-academy store persist migrate 冒烟测试（v0 → v1）。
@@ -32,6 +33,9 @@ describe('theory-academy store migrate (v0 → v1)', () => {
     // 已有字段不被触碰
     expect(state.progress.completedChapters).toEqual(['t1-combinatorics']);
     expect(state.progress.quizScores).toEqual({ 't1-combinatorics': 80 });
+    // v4 兜底：越级迁移同样补齐新字段并通过 quizScores 种子化 attempts
+    expect(state.progress.chapterAttempts?.['t1-combinatorics']?.attempts).toBe(1);
+    expect(state.progress.bookmarkedChapters).toEqual([]);
     // 迁移后 action 可正常读取旧数据
     expect(state.isChapterCompleted('t1-combinatorics')).toBe(true);
   });
@@ -144,5 +148,101 @@ describe('theory-academy store migrate (v2 → v3)', () => {
     expect(progress.currentChapter).toBe('t1-outs');
     expect(progress.startedAt).toBe(2000);
     expect(progress.flaggedQuestions).toEqual(['t1-combinatorics-q2']);
+  });
+});
+
+/**
+ * theory-academy store persist migrate 测试（v3 → v4）。
+ * v4 新增 chapterAttempts / checkpoints / placement / bookmarkedChapters / chapterNotes：
+ * - quizScores 种子化为 attempts=1 的尝试记录（老完成章不得被判为首次 → 不重复 emit 事件）；
+ * - 其余新字段注入防御性默认值；
+ * - 老用户 completedChapters / quizScores / 变体上下文零丢失。
+ */
+describe('theory-academy store migrate (v3 → v4)', () => {
+  let storageStub: ReturnType<typeof createLocalStorageStub>;
+
+  beforeEach(() => {
+    storageStub = createLocalStorageStub({
+      'theory-academy-progress': buildPersistPayload(
+        {
+          progress: {
+            completedChapters: ['t1-combinatorics', 't1-outs'],
+            quizScores: { 't1-combinatorics': 80, 't1-outs': 100 },
+            currentChapter: 't1-outs',
+            startedAt: 2000,
+            flaggedQuestions: ['t1-combinatorics-q2'],
+            activeVariant: 'short-deck',
+            variantMetadata: {
+              standard: { lastViewedAt: 11, preferredOrder: 0 },
+              'short-deck': { lastViewedAt: 22, preferredOrder: 1 },
+              'heads-up': { lastViewedAt: 0, preferredOrder: 2 },
+            },
+          },
+        },
+        3
+      ),
+    });
+    // zustand persist 默认 storage 引用 window.localStorage，需同时 stub window
+    vi.stubGlobal('localStorage', storageStub);
+    vi.stubGlobal('window', { localStorage: storageStub });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.resetModules();
+  });
+
+  it('quizScores 种子化为 attempts=1 的记录，老进度与变体上下文零丢失', async () => {
+    const { useTheoryStore } = await import('./store');
+    const { progress } = useTheoryStore.getState();
+
+    expect(progress.chapterAttempts).toEqual({
+      't1-combinatorics': {
+        attempts: 1,
+        firstScore: 80,
+        firstCorrect: 0,
+        firstTotal: 0,
+        bestScore: 80,
+        lastScore: 80,
+        lastAt: 0,
+      },
+      't1-outs': {
+        attempts: 1,
+        firstScore: 100,
+        firstCorrect: 0,
+        firstTotal: 0,
+        bestScore: 100,
+        lastScore: 100,
+        lastAt: 0,
+      },
+    });
+    expect(progress.checkpoints).toEqual({});
+    expect(progress.placement).toBeUndefined();
+    expect(progress.bookmarkedChapters).toEqual([]);
+    expect(progress.chapterNotes).toEqual({});
+
+    expect(progress.completedChapters).toEqual(['t1-combinatorics', 't1-outs']);
+    expect(progress.quizScores).toEqual({ 't1-combinatorics': 80, 't1-outs': 100 });
+    expect(progress.currentChapter).toBe('t1-outs');
+    expect(progress.startedAt).toBe(2000);
+    expect(progress.flaggedQuestions).toEqual(['t1-combinatorics-q2']);
+    expect(progress.activeVariant).toBe('short-deck');
+    expect(progress.variantMetadata?.standard.lastViewedAt).toBe(11);
+    expect(progress.variantMetadata?.['short-deck'].lastViewedAt).toBe(22);
+  });
+
+  it('迁移后的已完成章再提交视为重考：不重复 emit 事件、首次成绩不被覆盖', async () => {
+    const { useTheoryStore } = await import('./store');
+    const emitted: unknown[] = [];
+    const unsubscribe = trainingEvents.subscribe((record) => emitted.push(record));
+
+    useTheoryStore.getState().recordChapterAttempt('t1-combinatorics', 40, 5, 2);
+    unsubscribe();
+
+    const attempt = useTheoryStore.getState().progress.chapterAttempts?.['t1-combinatorics'];
+    expect(emitted).toHaveLength(0);
+    expect(attempt).toMatchObject({ attempts: 2, firstScore: 80, lastScore: 40, bestScore: 80 });
+    // 兼容字段仍取历史最高分
+    expect(useTheoryStore.getState().progress.quizScores['t1-combinatorics']).toBe(80);
   });
 });

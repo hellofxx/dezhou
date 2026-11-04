@@ -22,6 +22,7 @@ import ReviewSession from '../srs/ReviewSession';
 import { useEnsureReviewSourceI18n } from '../srs/useEnsureReviewSourceI18n';
 import FirstVisitBanner from './FirstVisitBanner';
 import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
+import { useTheoryPlanRevision } from '../../hooks/useTheoryPlanRevision';
 import { getTodayReviewItems, getTodayString } from '@/shared/utils/spacedRepetition';
 import RankUpCelebration from '../celebration/RankUpCelebration';
 import DownswingAlert from '../gate/DownswingAlert';
@@ -102,12 +103,9 @@ export default function Dashboard() {
   }, [lastDismissalDate, clearDailyDismissals]);
 
   // P0-5: 3 分钟快速训练入口
-  const startQuickDrill = useCallback(
-    (mode: 'range' | 'odds' | 'mixed') => {
-      navigate(`/academy/quick-drill?mode=${mode}&quick=true`);
-    },
-    [navigate]
-  );
+  const startQuickDrill = useCallback((mode: 'range' | 'odds' | 'mixed') => {
+    navigate(`/academy/quick-drill?mode=${mode}&quick=true`);
+  }, [navigate]);
 
   const todayCompleted = streak.lastTrainingDate === getTodayString();
 
@@ -122,7 +120,8 @@ export default function Dashboard() {
   // 在此按 Dashboard 自身渲染的复习项再确保一次（preloadI18n 幂等，不会重复拉取）。
   useEnsureReviewSourceI18n(todayReviewItems);
 
-  // 生成每日推荐
+  // 生成每日推荐（theoryRevision：理论数据源晚注册/理论进度变化时重算，理论卡因此可晚到自愈）
+  const theoryRevision = useTheoryPlanRevision();
   const recommendations = useMemo(() => {
     const allRecommendations = generateCrossModuleDailyPlan(
       academyProgress.completedLessons,
@@ -131,7 +130,7 @@ export default function Dashboard() {
       summary.currentStreak
     );
     return allRecommendations.filter((r) => !dismissedRecommendations.includes(r.id));
-  }, [academyProgress, records, reviewItems, summary.currentStreak, dismissedRecommendations]);
+  }, [academyProgress, records, reviewItems, summary.currentStreak, dismissedRecommendations, theoryRevision]);
 
   // 时间范围筛选后的训练记录（基于全量 records，展示层再 slice）；records 按写入顺序追加，
   // 「最近训练」须按时间倒序，否则展示窗口内最早的历史记录（与「最近」语义相反）

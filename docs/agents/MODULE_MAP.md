@@ -23,11 +23,11 @@
 | `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
 | `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 8 | `progress` | 12 |
 | `pot-odds` | `pot-odds-dev` | `PotOddsPage` | `store.ts（无 persist）` | `potOdds` | 14 | `progress` | 17 |
-| `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `variant` | 56 | — | 67 |
+| `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `theory`, `variant` | 58 | — | 68 |
 | `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 23 | `progress` | 18 |
 | `range-trainer` | `range-trainer-dev` | `RangeTrainerHome` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 12 | `progress` | 17 |
 | `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v5）` | `academy`, `drills`, `gto`, `quickDrill`, `variant` | 74 | `progress` | 75 |
-| `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v3）` | `academy`, `theory`, `variant` | 34 | `progress` | 26 |
+| `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v4）` | `academy`, `theory`, `variant` | 59 | `progress` | 58 |
 
 ## Lazy 路由表
 
@@ -68,12 +68,17 @@
 | 30 | `TheoryHome` | `@/features/theory-academy/components/TheoryHome` | `/theory` |
 | 31 | `TheoryChapterView` | `@/features/theory-academy/components/TheoryChapterView` | `/theory/chapter/:chapterId` |
 | 32 | `TheoryFlaggedReview` | `@/features/theory-academy/components/TheoryFlaggedReview` | `/theory` |
-| 33 | `HelpHome` | `@/features/help-center/components/HelpHome` | `/help` |
-| 34 | `HelpArticle` | `@/features/help-center/components/HelpArticle` | `/help/article/:articleId` |
+| 33 | `TheoryPlacementPage` | `@/features/theory-academy/components/TheoryPlacementPage` | `/theory` |
+| 34 | `TheoryCheckpointPage` | `@/features/theory-academy/components/TheoryCheckpointPage` | `/theory` |
+| 35 | `TheoryGlossaryPage` | `@/features/theory-academy/components/TheoryGlossaryPage` | `/theory` |
+| 36 | `TheorySearchPage` | `@/features/theory-academy/components/TheorySearchPage` | `/theory` |
+| 37 | `TheoryBibliographyPage` | `@/features/theory-academy/components/TheoryBibliographyPage` | `/theory` |
+| 38 | `HelpHome` | `@/features/help-center/components/HelpHome` | `/help` |
+| 39 | `HelpArticle` | `@/features/help-center/components/HelpArticle` | `/help/article/:articleId` |
 
 ## 已声明的 URL 路径
 
-> 从 router 配置提取的 `path:` 字符串与 `index` 路由（源码顺序去重，含 AppLayout 与 BlankLayout 两个分支），共 34 条。
+> 从 router 配置提取的 `path:` 字符串与 `index` 路由（源码顺序去重，含 AppLayout 与 BlankLayout 两个分支），共 39 条。
 
 - `/`
 - `/range-trainer`
@@ -97,6 +102,11 @@
 - `/theory`
 - `/theory/chapter/:chapterId`
 - `/theory/review`
+- `/theory/placement`
+- `/theory/checkpoint/:levelId`
+- `/theory/glossary`
+- `/theory/search`
+- `/theory/bibliography`
 - `/puzzle`
 - `/puzzle/rush`
 - `/puzzle/daily`
@@ -118,7 +128,7 @@
 | 分组 key | 类型 | i18n 模块 |
 |---|---|---|
 | `CORE_MODULES` | core（启动静态注入） | `nav`, `common`, `dashboard`, `variant`, `tilt`, `streak`, `feedback`, `mentor` |
-| `/` | feature（随路由并行加载） | `dashboard`, `nav`, `achievements`, `progress`, `dailyChallenge`, `spacedRepetition`, `downswing`, `mood`, `rankUp`, `review` |
+| `/` | feature（随路由并行加载） | `dashboard`, `nav`, `achievements`, `progress`, `dailyChallenge`, `spacedRepetition`, `downswing`, `mood`, `rankUp`, `review`, `theory` |
 | `/settings` | feature（随路由并行加载） | `settings`, `mentor`, `sessionLimit`, `variant`, `streak` |
 | `/leaderboard` | feature（随路由并行加载） | `leaderboard` |
 | `/range-trainer/learn` | feature（随路由并行加载） | `rangeTrainer`, `common` |
@@ -155,6 +165,6 @@
 ## 生成统计
 
 - 模块数：10（自检阈值 = 10）
-- lazy 声明数：34（自检阈值 >= 21）
+- lazy 声明数：39（自检阈值 >= 21）
 - agent 文件数：12（自检阈值 >= 10）
-- 已声明 URL 数：34
+- 已声明 URL 数：39

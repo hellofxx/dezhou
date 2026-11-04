@@ -29,7 +29,8 @@
       "A blocking bet is a ~1/4-pot small lead by the OOP player to \"set the price first\", seeing showdown cheaply or collecting thin value with medium hands, avoiding facing the opponent's big bet after checking. It's the linear-small-bet logic applied OOP — but must avoid being exploited by raises once recognized, so the equilibrium blocking range also needs some strong hands mixed in.",
       "Blocking bet pricing (pot P, you bet 0.25P):\nOpponent's required call equity = 0.25/(1+2×0.25) ≈ 17%, your small bet makes his marginal hands \"a shame to fold, unprofitable to call\"\nIf he raises to 3x (0.75P), his bluff EV = f×1.25P − (1−f)×0.75P; once your fold rate f exceeds 37.5% he profits automatically\n→ Equilibrium requires your blocking range to defend ≥ 62.5%, so it must include enough strong hands (concept from: Modern Poker Theory Sizing blocking-bet equilibrium)",
       "The amateur sizing-leak pattern: big bet = strong hand, small bet = weak probe. An opponent who reads this pattern can respond almost perfectly. The fix isn't \"do the opposite\" — it's making every sizing supported by a structurally complete range (value and bluffs in proportion).",
-      "Sizing selection order: first judge whether my range at this node is polarized or linear (determined by range/nut advantage), then let this specific hand obey the range's sizing — not the other way around, letting the sizing obey this hand's mood."
+      "Sizing selection order: first judge whether my range at this node is polarized or linear (determined by range/nut advantage), then let this specific hand obey the range's sizing — not the other way around, letting the sizing obey this hand's mood.",
+      "A decision tree from range structure to sizing: first classify the betting range as polarized, linear, or medium-only, then pick the size. Medium strength has no bluff capacity to support a large bet, so checking is the default."
     ],
     "t6-geometric": [
       "SPR: The Commitment Yardstick",
@@ -43,7 +44,8 @@
       "The Link Between Frequency and Sizing",
       "The multi-street view also reveals frequency decay: the flop betting range contains many \"one-shot\" semi-bluffs and equity-denial bets; the range that keeps firing on the turn naturally narrows and strengthens (the industry's \"turn is the watershed\"), and the three-barrel river range is the most polarized. Understanding this decay lets you read the sudden attack window when \"opponent calls the flop, then checks the turn\" — his range just exposed its ceiling.",
       "Planning starts on the flop: the first thing when you see the flop isn't deciding \"bet or not\" but asking \"if I'm playing three streets, is the goal all-in or pot control?\" The answer back-solves this street's sizing. A bet with no destination is a random walk.",
-      "Heuristic geometric sizings to memorize: SPR≈2 → about 60% pot on the flop, shove the turn; SPR≈4 → about 55% pot each street; SPR≈7 → about 3/4 pot each street (exact via x = ((1+2·SPR)^(1/3) − 1)/2). Remember the anchors and apply the nearest one in play."
+      "Heuristic geometric sizings to memorize: SPR≈2 → about 60% pot on the flop, shove the turn; SPR≈4 → about 55% pot each street; SPR≈7 → about 3/4 pot each street (exact via x = ((1+2·SPR)^(1/3) − 1)/2). Remember the anchors and apply the nearest one in play.",
+      "Three-street geometric sizing quick reference: given the SPR, bet the same fraction on every street to commit exactly by the river. Higher SPR needs larger fractions; above SPR 10 geometric sizing approaches pot-size bets, so practical play switches to a two-street plan."
     ],
     "t6-equity-realization": [
       "The Equity of One Street Is Not the Equity This Hand Can Actually Collect",
@@ -86,7 +88,8 @@
       "Commitment is not a question of nerve, it is a question of an equity threshold. Whether you can move the rest of your stack in depends on how much equity the hand has against the opponent’s continuing range, not on where the hand ranks in absolute strength. The lower the stack-to-pot ratio, the wider his continuing range and the safer a strong top pair looks; the higher the ratio, the more chips a single shove has to win, and only nutted holdings survive the density of his strong hands.",
       "Recomputing the commitment threshold (move the rest in and get called):\n3-bet pot: shove 90bb into 20.5bb → required equity = 90 ÷ (20.5 + 90 + 90) = 90 ÷ 200.5 ≈ 44.9%\n4-bet pot: shove 80bb into 40.5bb → required equity = 80 ÷ (40.5 + 80 + 80) = 80 ÷ 200.5 ≈ 39.9%\n→ Starting from the same 100bb, the 4-bet pot threshold is about 5 points lower than the 3-bet pot threshold: the dead money already in the middle pays part of the bill, and that is the arithmetic reason a strong top pair must commit at a low stack-to-pot ratio",
       "Sizing follows from the pot type as well. In a 20.5bb pot a 1/3-pot continuation bet costs only 7bb; after a call the pot is 34.5bb, the turn takes about 23bb (2/3 pot), and the remaining 60bb goes into an 80.5bb pot on the river — two and a half streets to invest 90bb. That small-medium-large ladder is not a style preference: it breaks the shove into affordable stages and keeps the price of a call identical on every street, so the opponent cannot brake cheaply anywhere.",
-      "In a 3-bet pot, accept two facts before anything else: the stack-to-pot ratio has dropped to around 4, and you only have two streets left. Once you accept them, the sizing ladder and the commitment threshold are pure arithmetic; refuse them and you will play a doubled pot with single-raised-pot instincts."
+      "In a 3-bet pot, accept two facts before anything else: the stack-to-pot ratio has dropped to around 4, and you only have two streets left. Once you accept them, the sizing ladder and the commitment threshold are pure arithmetic; refuse them and you will play a doubled pot with single-raised-pot instincts.",
+      "Raised-pot ledger (6-max, 100bb, no ante): single-raised pot SPR about 17.7, 3-bet pot about 4.4, 4-bet pot about 2.0. Lower SPR means a lower equity threshold for commitment and a more polarized range."
     ],
     "t6-turn-river": [
       "The Two Streets Where the Chips Actually Move",
@@ -393,6 +396,276 @@
         "How many times the opponent has shown down a hand"
       ],
       "explanation": "A bluff-catch compares the value combos and the bluff combos inside his betting range: count the value combos he can really represent, then check how many of them your blockers remove, and let the remaining ratio decide. Absolute strength, pot size and past showdowns do not determine that ratio; the last two only affect pricing and payout structure."
+    },
+    "t6-bet-purpose-q6": {
+      "question": "A value bet is justified when:",
+      "options": [
+        "more than half of the opponent's calling range is worse than your hand",
+        "you might be ahead",
+        "the opponent might fold",
+        "your hand ranks high on an absolute chart"
+      ],
+      "explanation": "A value bet profits from worse hands calling. If stronger combos dominate the calling range, the bet loses; being possibly ahead is not enough."
+    },
+    "t6-bet-purpose-q7": {
+      "question": "When is protection a real reason to bet?",
+      "options": [
+        "always",
+        "only on the river",
+        "only multiway",
+        "when the opponent's range holds many draws or overcards that improve on the next card"
+      ],
+      "explanation": "Protection charges the opponent's equity hands. Without enough improving cards in their range, protection is an excuse for wanting to bet; value and bluffing remain the real reasons."
+    },
+    "t6-bet-purpose-q8": {
+      "question": "Mixing strong hands into the checking line at some frequency serves to:",
+      "options": [
+        "lower your win rate",
+        "make you easier to read",
+        "protect the checking range so bets cannot exploit it",
+        "save chips"
+      ],
+      "explanation": "If every strong hand bets, the checking range holds only weak hands and opponents can profitably bet any two cards. Strong hands checking at frequency keep the checking range able to fight back."
+    },
+    "t6-sizing-theory-q6": {
+      "question": "Polarized ranges prefer large sizes because:",
+      "options": [
+        "larger sizes allow a higher bluff share, matching a two-pole structure",
+        "larger sizes reduce folds",
+        "larger sizes lower variance",
+        "larger sizes need no bluffs"
+      ],
+      "explanation": "Bluff capacity rises with size (y=b/(1+2b)) and a polarized range has pure bluffs to fill it; a linear range lacks bluffs, so large sizes hurt medium hands on both ends."
+    },
+    "t6-sizing-theory-q7": {
+      "question": "Why do medium hands lose on both ends inside an overbet range?",
+      "options": [
+        "medium hands always lose",
+        "overbets are restricted by rules",
+        "opponents fold too much",
+        "worse hands fold and better hands call, so it earns neither value nor folds"
+      ],
+      "explanation": "An overbet demands a polarized range. Medium hands only drive away worse hands that would pay them while keeping better hands in, the classic range-structure mismatch."
+    },
+    "t6-sizing-theory-q8": {
+      "question": "To avoid being exploited by raises, a blocking bet range must include:",
+      "options": [
+        "more medium hands",
+        "only the nuts",
+        "enough strong hands and bluffs",
+        "more small pairs"
+      ],
+      "explanation": "A blocking bet caps the opponent's raise and bet sizes, but if the range is all medium hands they can raise freely. Strong hands and bluffs make raising costly."
+    },
+    "t6-geometric-q6": {
+      "question": "SPR (stack-to-pot ratio) is defined as:",
+      "options": [
+        "pot ÷ effective stack",
+        "effective stack ÷ bet size",
+        "effective stack ÷ current pot",
+        "bet size ÷ pot"
+      ],
+      "explanation": "SPR = effective stack ÷ current pot. It sets how many streets remain and the equity threshold for committing all chips."
+    },
+    "t6-geometric-q7": {
+      "question": "At SPR 4, the three-street geometric bet size per street is about:",
+      "options": [
+        "33% pot",
+        "45% pot",
+        "54% pot",
+        "76% pot"
+      ],
+      "explanation": "x = ((1+2×SPR)^(1/3)−1)/2 = (9^(1/3)−1)/2 ≈ 54%. Growing 54% per street commits the stack in exactly three streets."
+    },
+    "t6-geometric-q8": {
+      "question": "A 3-bet pot's low SPR structurally favors:",
+      "options": [
+        "single-pair hands such as AA and KK",
+        "suited connectors and small pairs",
+        "weak offsuit broadways",
+        "pure bluffs"
+      ],
+      "explanation": "Low SPR commits stacks in one or two streets, cashing single-pair equity immediately; connectors and small pairs need the implied odds of high SPR and lose value in 3-bet pots."
+    },
+    "t6-equity-realization-q6": {
+      "question": "Realization R equals 100% only when:",
+      "options": [
+        "you are in position",
+        "stacks are deep",
+        "the opponent's range is wide",
+        "the hand goes all-in immediately with no further decisions"
+      ],
+      "explanation": "Any remaining betting or folding can leave equity uncollected; an immediate all-in is the only case where all-in equity is fully realized."
+    },
+    "t6-equity-realization-q7": {
+      "question": "With a 25% realized-equity threshold and R=0.8, the raw all-in equity needed is about:",
+      "options": [
+        "20%",
+        "25%",
+        "31%",
+        "40%"
+      ],
+      "explanation": "Raw threshold = 25% ÷ 0.8 = 31.25%. The realization discount demands higher raw equity or the call loses long term."
+    },
+    "t6-equity-realization-q8": {
+      "question": "Which combination sharply lowers equity realization?",
+      "options": [
+        "out of position with deep stacks",
+        "in position with short stacks",
+        "owning the nut advantage",
+        "heads-up immediate all-in"
+      ],
+      "explanation": "Out of position under-collects when hitting and gets pushed out when missing; deep stacks amplify later-street disadvantages. Together they apply the largest discount to raw equity."
+    },
+    "t6-srp-postflop-q4": {
+      "question": "The flop SPR in a single-raised pot is about:",
+      "options": [
+        "4.4",
+        "2.0",
+        "17.7",
+        "10"
+      ],
+      "explanation": "A 6-max 100bb single-raised pot is about 5.5bb with 97.5bb behind, so SPR ≈ 17.7. A 3-bet pot is about 4.4 and a 4-bet pot about 2.0."
+    },
+    "t6-srp-postflop-q5": {
+      "question": "A one-third pot flop c-bet in a single-raised pot needs a fold rate of about:",
+      "options": [
+        "20%",
+        "33%",
+        "25%",
+        "40%"
+      ],
+      "explanation": "alpha = (1/3) ÷ (1+1/3) = 25%. A small c-bet needs only one fold in four, the math behind small-size high-frequency betting."
+    },
+    "t6-srp-postflop-q6": {
+      "question": "The prerequisite for firing a second barrel on the turn is:",
+      "options": [
+        "the value-to-bluff ratio of the betting range still holds",
+        "the flop bet was called",
+        "you still have chips",
+        "the opponent never raises"
+      ],
+      "explanation": "A second barrel only makes sense while the ratio holds. If the turn kills your bluff equity and adds value to the opponent, keeping the pot small earns the most."
+    },
+    "t6-srp-postflop-q7": {
+      "question": "A river thin-value bet is justified when:",
+      "options": [
+        "you hold the nuts",
+        "the opponent always folds",
+        "the pot is already large",
+        "more than half of the calling range is worse"
+      ],
+      "explanation": "Thin value bets on worse hands calling. Above half it works; below half, size down or check. Using a polarized large size for thin value folds out all worse hands."
+    },
+    "t6-srp-postflop-q8": {
+      "question": "On a dry ace-high single-raised flop, the aggressor's c-bet frequency should be:",
+      "options": [
+        "high",
+        "low",
+        "zero",
+        "raised only on the turn"
+      ],
+      "explanation": "An ace-high board favors the preflop raiser, and that range advantage supports frequent small c-bets; low frequency lets opponents defend with any two cards."
+    },
+    "t6-3bet-pot-q4": {
+      "question": "After BTN opens 2.5 and the BB 3-bets to 10, the flop SPR is about:",
+      "options": [
+        "2.0",
+        "17.7",
+        "4.4",
+        "10"
+      ],
+      "explanation": "The pot is 20.5bb with 90bb behind each, so SPR = 90 ÷ 20.5 ≈ 4.4. A 4-bet pot drops to about 2.0."
+    },
+    "t6-3bet-pot-q5": {
+      "question": "Shoving 80bb into a 40.5bb 4-bet pot and getting called requires about:",
+      "options": [
+        "33%",
+        "44.9%",
+        "39.9%",
+        "50%"
+      ],
+      "explanation": "80 ÷ (40.5+80+80) = 80 ÷ 200.5 ≈ 39.9%. The same calculation in a 3-bet pot is 44.9%; a fuller pot lowers the threshold."
+    },
+    "t6-3bet-pot-q6": {
+      "question": "Which statement about 3-bet range structure is correct?",
+      "options": [
+        "OOP polarized, IP linear",
+        "both linear",
+        "both polarized",
+        "OOP linear, IP polarized"
+      ],
+      "explanation": "Out of position realizes less equity, so the 3-bet range must be linear and every hand must survive a 4-bet; in position a polarized range with blocker bluffs is affordable."
+    },
+    "t6-3bet-pot-q7": {
+      "question": "In a 20.5bb 3-bet pot, a one-third pot c-bet is about:",
+      "options": [
+        "3bb",
+        "15bb",
+        "7bb",
+        "20bb"
+      ],
+      "explanation": "20.5 ÷ 3 ≈ 6.8bb, roughly 7bb. A small-medium-large ladder commits 90bb in about two and a half streets."
+    },
+    "t6-3bet-pot-q8": {
+      "question": "Deciding whether to commit in a 3-bet pot depends on:",
+      "options": [
+        "how much equity your hand has against the opponent's continuing range",
+        "its rank on an absolute chart",
+        "the opponent's VPIP",
+        "whether you just lost a hand"
+      ],
+      "explanation": "Commitment is an equity-threshold question: at low SPR the continuing range is wider and top pair holds up better. Absolute rankings cannot replace equity against that range."
+    },
+    "t6-turn-river-q4": {
+      "question": "The break-even fold rate alpha for a three-quarter pot river bet is about:",
+      "options": [
+        "33.3%",
+        "40%",
+        "42.9%",
+        "50%"
+      ],
+      "explanation": "alpha = 0.75 ÷ 1.75 ≈ 42.9%. The caller's required equity is 0.75 ÷ 2.5 = 30%, a different number that must not be conflated."
+    },
+    "t6-turn-river-q5": {
+      "question": "Facing a three-quarter pot bet, the caller's minimum equity is about:",
+      "options": [
+        "25%",
+        "33.3%",
+        "30%",
+        "42.9%"
+      ],
+      "explanation": "Required equity = 0.75 ÷ 2.5 = 30%. 42.9% is the aggressor's alpha, nearly 13 points higher."
+    },
+    "t6-turn-river-q6": {
+      "question": "When the turn brings a middle card completing both straight and flush draws (clearly helping the opponent), your second barrel should:",
+      "options": [
+        "bet two-thirds pot",
+        "shove",
+        "bet one-quarter pot",
+        "check"
+      ],
+      "explanation": "The card raises the defender's strong-hand density and kills your bluff equity, leaving only medium strength to bet. When the ratio collapses, check and keep the pot small."
+    },
+    "t6-turn-river-q7": {
+      "question": "On the river you count 16 value combos and 4 bluffs (20% bluffs). The matching size is about:",
+      "options": [
+        "pot",
+        "half pot",
+        "one-third pot",
+        "a 2x overbet"
+      ],
+      "explanation": "A 20% bluff share solves b/(1+2b)=20%, giving b≈1/3. Forcing a pot-size bet lets the opponent profit by folding less."
+    },
+    "t6-turn-river-q8": {
+      "question": "You hold A♣ on a three-club board. Its effect on a bluff-catch is:",
+      "options": [
+        "fewer opponent nut flushes, so their betting range holds more bluffs",
+        "more opponent value combos",
+        "no effect",
+        "you must fold immediately"
+      ],
+      "explanation": "A♣ blocks the nut flush, removing legitimate value combos and raising the relative bluff share, which strengthens a bluff-catch. MDF is only a floor, not a license to call."
     }
   },
   "chapterObjectives": {
@@ -434,5 +707,28 @@
       "Compute the fold rate a bluff needs and the equity a caller needs, and explain why the two cannot be mixed",
       "Describe what a bluff-catch should count and what blockers do, and list the conditions that justify an overbet"
     ]
+  },
+  "block": {
+    "t6-sizing-theory": {
+      "0": {
+        "node": {
+          "start": "Range structure?",
+          "polar": "Strong value + pure bluffs",
+          "linear": "Contiguous strength (with medium hands)",
+          "medium": "Medium strength only",
+          "large": "Large / overbet",
+          "small": "Small-medium size",
+          "check": "Check"
+        },
+        "edge": {
+          "polar": "Polarized",
+          "linear": "Linear",
+          "medium": "Medium",
+          "large": "Large bluff capacity",
+          "small": "Small bluff capacity",
+          "check": "No bluff capacity"
+        }
+      }
+    }
   }
 }

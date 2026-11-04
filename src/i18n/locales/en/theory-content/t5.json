@@ -41,7 +41,8 @@
       "MDF's Applicability Boundaries",
       "MDF is the floor against \"balanced bluffing opponents\", not a universal prescription: (1) against opponents who almost never bluff (many low-stakes players' big river bets), folding well below MDF is actually optimal exploitation; (2) in multiway pots the defense burden is shared (each player’s obligation = 1 − α^(1/n); see this level's “Multiway Pot Frequencies and Sizings” chapter) — not everyone needs to hit MDF; (3) with a raise option, defense can be built from calls plus raises. Remember: equilibrium frequencies are the bulletproof vest when you lack opponent information; exploit first when you have information.",
       "Memorize three practical anchors: defend 75% vs 1/3-pot bets, 67% vs half-pot, 50% vs full-pot. Whatever sits below the anchor is automatic profit you're handing the opponent.",
-      "The easiest leak to self-audit in review: track your actual fold rate against big turn/river bets. The vast majority of players fold far above equilibrium — which is why the opponent's big bets always seem to \"just happen\" to make you fold."
+      "The easiest leak to self-audit in review: track your actual fold rate against big turn/river bets. The vast majority of players fold far above equilibrium — which is why the opponent's big bets always seem to \"just happen\" to make you fold.",
+      "MDF, Alpha and required call equity side by side (b = bet as a multiple of the pot): MDF + Alpha = 100%, two sides of one coin; required call equity is always lower than Alpha because a call also wins the opponent's bet."
     ],
     "t5-mixed-strategy": [
       "Mixed Strategies and the Indifference Principle",
@@ -328,6 +329,156 @@
         "Exactly as with bluffs: value decays exponentially with headcount"
       ],
       "explanation": "A bluff needs \"everyone folds\" (squeezed by the exponent: 11.1%) while a value bet needs \"at least one continues\" (pushed up by it: 1 − (1/3)² = 88.9%) — two sides of the same expression. Options one and four confuse the two sides, ignoring that being called is a gain for a value bet; option three voluntarily gives up the higher continuation probability a multiway pot offers, i.e. it plays a value hand like a bluff."
+    },
+    "t5-game-theory-q6": {
+      "question": "A Nash equilibrium strategy guarantees:",
+      "options": [
+        "maximum profit",
+        "winning the pot",
+        "no unilateral deviation helps, an unexploitable floor",
+        "never mixing"
+      ],
+      "explanation": "Equilibrium promises no profitable unilateral deviation, not maximum profit. Exploitative play may earn more against specific opponents but gives up this floor."
+    },
+    "t5-game-theory-q7": {
+      "question": "Poker strategy must include randomness (mixing) because:",
+      "options": [
+        "deterministic strategies get decoded and exploited",
+        "randomness improves luck",
+        "the rules require frequency play",
+        "randomness lowers variance"
+      ],
+      "explanation": "A fixed strategy is readable and counterable over enough samples; frequency mixing prevents opponents from inferring holdings and preserves unexploitability."
+    },
+    "t5-game-theory-q8": {
+      "question": "When does the unexploitability guarantee of Nash equilibrium fail?",
+      "options": [
+        "heads-up preflop",
+        "two-player zero-sum games",
+        "the river",
+        "multiway pots with three or more players"
+      ],
+      "explanation": "The strict guarantee rests on two-player zero-sum games; in a three-way pot even equilibrium play can create coalition effects that hurt one player. Every tool has a boundary."
+    },
+    "t5-gto-concept-q6": {
+      "question": "The equilibrium value-to-bluff ratio for a pot-size bet is about:",
+      "options": [
+        "1:1",
+        "3:1",
+        "2:1",
+        "1:2"
+      ],
+      "explanation": "At pot size the bluff share is y = b/(1+2b) = 1/3, so value to bluff is 2:1. Larger sizes permit a higher bluff share."
+    },
+    "t5-gto-concept-q7": {
+      "question": "The correct role of GTO in practice is:",
+      "options": [
+        "a baseline for measuring deviations, not a script to copy",
+        "the only correct play, any deviation is a mistake",
+        "valid only at high stakes",
+        "the same as playing tight"
+      ],
+      "explanation": "GTO supplies an unexploitable baseline that tells you the direction and size of deviations; against clear leaks, copying equilibrium is often not maximum EV."
+    },
+    "t5-gto-concept-q8": {
+      "question": "How is an opponent who only bets the nuts and never bluffs exploited?",
+      "options": [
+        "opponents raise them",
+        "opponents call more",
+        "opponents shove on them",
+        "opponents fold everything non-nut, so value bets earn no calls"
+      ],
+      "explanation": "A betting range without bluffs can be answered by folding everything, so value hands only win folds. Value and bluffs must stay proportional for a range to be unexploitable."
+    },
+    "t5-mdf-alpha-q6": {
+      "question": "Facing a one-third pot bet, the minimum defense frequency is about:",
+      "options": [
+        "50%",
+        "67%",
+        "75%",
+        "80%"
+      ],
+      "explanation": "MDF = 1 ÷ (1+b); with b=1/3 it is 1 ÷ (4/3) = 75%. Alpha for one-third pot is 25%, the complement."
+    },
+    "t5-mdf-alpha-q7": {
+      "question": "Alpha (the break-even fold rate for a bluff) at one-third pot is:",
+      "options": [
+        "25%",
+        "20%",
+        "33%",
+        "40%"
+      ],
+      "explanation": "Alpha = b ÷ (1+b) = (1/3) ÷ (4/3) = 25%. 20% is the caller's required equity, not the aggressor's needed fold rate."
+    },
+    "t5-mdf-alpha-q8": {
+      "question": "Against a tight, value-only opponent who almost never bluffs, the correct defense frequency is:",
+      "options": [
+        "exactly MDF",
+        "above MDF",
+        "MDF applies only on the river",
+        "well below MDF"
+      ],
+      "explanation": "MDF assumes the opponent bluffs with any two cards. Against almost no bluffs, over-folding is the exploit; defending at MDF donates to their value range."
+    },
+    "t5-mixed-strategy-q6": {
+      "question": "A hand is mixed across actions exactly when:",
+      "options": [
+        "all actions have equal EV",
+        "the hand is always strong",
+        "the hand is always weak",
+        "the opponent never raises"
+      ],
+      "explanation": "The indifference principle: only equal EVs make any frequency mix EV-neutral while hiding your hand. When EVs differ, play the highest-EV action purely."
+    },
+    "t5-mixed-strategy-q7": {
+      "question": "Node-locking for maximum exploit requires:",
+      "options": [
+        "a one-hand impression",
+        "the opponent's self-report",
+        "the opponent's stack size",
+        "a stable tendency supported by enough samples"
+      ],
+      "explanation": "Node locking fixes an observed bias in the solver. Exploiting a one-hand impression trades armor for paper; without sample size the bias may be noise."
+    },
+    "t5-mixed-strategy-q8": {
+      "question": "The main function of mixed strategy in an equilibrium system is to:",
+      "options": [
+        "raise single-hand win rate",
+        "reduce rake",
+        "hide your hand and stay unexploitable",
+        "guarantee every mix profits"
+      ],
+      "explanation": "Mixed hands sit at indifference points; their frequency split is the glue of unexploitability. The result of any single mix is irrelevant."
+    },
+    "t5-multiway-frequency-q6": {
+      "question": "A half-pot bluff faces two defenders who each fold one-third of the time. The all-fold rate is about:",
+      "options": [
+        "25%",
+        "33.3%",
+        "11.1%",
+        "3.7%"
+      ],
+      "explanation": "All-fold rate = (1/3)² = 1/9 ≈ 11.1%. Each extra defender multiplies another 1/3, cutting bluff success exponentially."
+    },
+    "t5-multiway-frequency-q7": {
+      "question": "With a half-pot bet, alpha=1/3 and two defenders, each defender's minimum frequency after splitting responsibility is about:",
+      "options": [
+        "33.3%",
+        "66.7%",
+        "42.3%",
+        "30.7%"
+      ],
+      "explanation": "d = 1 − alpha^(1/n) = 1 − (1/3)^(1/2) ≈ 42.3%. Dividing MDF by player count gives 33.4%, a systematic under-defense."
+    },
+    "t5-multiway-frequency-q8": {
+      "question": "Can a larger sizing rescue a bluff into a multiway pot?",
+      "options": [
+        "Yes, fold rates rise linearly",
+        "Yes, because the pot is bigger",
+        "No, because ranges are stronger",
+        "No, all-fold rate multiplies down and EV gets worse"
+      ],
+      "explanation": "The all-fold rate is a product across defenders; a larger size raises the fold rate each defender must supply but still crosses several checkpoints. A pot-size bluff into two players is EV −50, worse than half pot."
     }
   },
   "chapterObjectives": {
@@ -360,5 +511,6 @@
       "Use d = 1 − α^(1/n) to compute each defender’s minimum defending frequency after diffusion, and explain why \"divide MDF by the number of players\" is wrong",
       "Explain why a larger bet size cannot rescue a bluff into a multiway pot, and adjust the value-to-bluff ratio accordingly"
     ]
-  }
+  },
+  "block": {}
 }

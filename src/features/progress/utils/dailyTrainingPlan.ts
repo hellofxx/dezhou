@@ -3,13 +3,14 @@
  * 根据用户数据生成个性化训练计划
  */
 
-import { BookOpen, Bot, Calculator, ClipboardList, RefreshCw, Target, type LucideIcon } from 'lucide-react';
+import { BookOpen, BookOpenCheck, Bot, Calculator, ClipboardList, GraduationCap, RefreshCw, Target, type LucideIcon } from 'lucide-react';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 import { sanitizeReviewLabel } from './sanitizeReviewLabel';
 import type { TrainingRecord } from '../types';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import type { AcademyLessonMeta } from '@/shared/types/academyDataSource';
+import { buildTheoryChapterRecommendation, buildTheoryReviewRecommendation, findNextTheoryChapter, isTheoryReviewItem } from './theoryPlanRecommendations';
 
 /** 推荐项公共字段 */
 interface BaseRecommendation {
@@ -39,6 +40,25 @@ export interface ReviewRecommendation extends BaseRecommendation {
   itemLabels: string[];
 }
 
+/**
+ * 今日到期理论复习推荐（理论 SRS 项独立成卡）。
+ * 与通用 review 卡互斥切分：理论项归本卡（路由 /theory/review），
+ * 通用 review 卡只保留非理论项（路由 /academy），避免同一批题被两张卡重复推荐。
+ */
+export interface TheoryReviewRecommendation extends BaseRecommendation {
+  type: 'theory-review';
+  descParams: { count: number };
+}
+
+/**
+ * 理论学院下一章推荐（元数据经 theoryDataSourceRegistry 取得，progress 不 import 理论模块）。
+ * title 为注册表 titleKey（theory.chapterTitle.<id>），titleParams.title 为数据层兜底标题。
+ */
+export interface TheoryChapterRecommendation extends BaseRecommendation {
+  type: 'theory-chapter';
+  descParams: { minutes: number };
+}
+
 /** 学院下一课推荐 */
 export interface AcademyLessonRecommendation extends BaseRecommendation {
   type: 'academy-lesson';
@@ -60,6 +80,8 @@ export interface GtoPracticeRecommendation extends BaseRecommendation {
 /** 每日训练推荐项（按 type 窄化的 discriminated union，descParams 结构由类型系统保证） */
 export type DailyRecommendation =
   | ReviewRecommendation
+  | TheoryReviewRecommendation
+  | TheoryChapterRecommendation
   | AcademyLessonRecommendation
   | QuizPracticeRecommendation
   | GtoPracticeRecommendation;
@@ -134,6 +156,9 @@ function getWeakestModule(accuracyMap: Map<string, number>): string | null {
  * 而复习项 label 是跨模块 i18n key（theory.quiz.* 等），其翻译包在首页路由分组里并未预加载，
  * 由 srs 组件按需补加载（useEnsureReviewSourceI18n）。若在生成端翻译，冷启动首帧会把
  * key 字面量固化进 memo，包注入后也不会重算。故这里只透传 label，翻译留给渲染端逐条 t()。
+ *
+ * 理论卡（theory-review / theory-chapter）的章节元数据来自 theoryDataSourceRegistry；
+ * 数据源晚注册（懒加载）时首次调用取不到，由 useTheoryPlanRevision 的版本号触发重算补齐。
  */
 export function generateCrossModuleDailyPlan(
   completedLessons: readonly string[],
@@ -144,36 +169,48 @@ export function generateCrossModuleDailyPlan(
   const recommendations: DailyRecommendation[] = [];
   const usedTypes = new Set<string>();
 
-  // 1. 优先：今日待复习
+  // 1. 优先：今日待复习（理论项与通用项互斥切分，各占一张卡）
   const todayReviews = getTodayReviewItems(reviewItems);
-  if (todayReviews.length > 0) {
+  const theoryReviews = todayReviews.filter(isTheoryReviewItem);
+  const genericReviews = todayReviews.filter((item) => !isTheoryReviewItem(item));
+
+  if (genericReviews.length > 0) {
     // P0C：清洗历史遗留的硬编码中文"决策"后缀（GTO 场景 name 曾为 "BTN Turn 决策"）。
     // 不依赖 persist migrate 时机，渲染端兜底保证英文界面不再出现中英混杂。
     // 统一口径：shared/utils/sanitizeReviewLabel（与 migrate / onRehydrateStorage 共用）
-    const reviewLabels = todayReviews
+    const reviewLabels = genericReviews
       .slice(0, 3)
       .map((item) => sanitizeReviewLabel(item.label));
     recommendations.push({
       id: 'review-today',
       type: 'review',
       title: 'dashboard.dataPlan.titleReview',
-      titleParams: { count: todayReviews.length },
-      description: todayReviews.length > 3
+      titleParams: { count: genericReviews.length },
+      description: genericReviews.length > 3
         ? 'dashboard.dataPlan.descReviewMore'
         : 'dashboard.dataPlan.descReview',
-      descParams: todayReviews.length > 3
+      descParams: genericReviews.length > 3
         ? // 「等 N 项」的 N 必须是隐藏数（总到期 − 已展示 3 条），而非总到期数：
           // 否则展示 3 条 + N 会重复计数（CHANGELOG 2026-09-04 登记遗留项）
-          { items: reviewLabels.join('、'), count: todayReviews.length - reviewLabels.length }
+          { items: reviewLabels.join('、'), count: genericReviews.length - reviewLabels.length }
         : { items: reviewLabels.join('、') },
       // 逐条 label（多为 i18n key）：渲染端 t() 后再拼接，见 ReviewRecommendation.itemLabels
       itemLabels: reviewLabels,
+      // 通用复习卡只承载非理论项 → 学院复习页；理论项见下方 theory-review 卡（/theory/review）
       route: '/academy',
       priority: 'high',
-      estimatedTime: `${Math.min(todayReviews.length * 3, 15)} min`,
+      estimatedTime: `${Math.min(genericReviews.length * 3, 15)} min`,
       reason: 'review',
     });
     usedTypes.add('review');
+  }
+
+  // 1b. 今日到期理论复习（仅在有理论项时出现，避免与通用复习卡重复推荐同一批题）
+  if (theoryReviews.length > 0) {
+    recommendations.push(
+      buildTheoryReviewRecommendation(theoryReviews.length, recommendations.length === 0)
+    );
+    usedTypes.add('theory-review');
   }
 
   // 2. 学院进度 — 推荐下一课
@@ -196,7 +233,18 @@ export function generateCrossModuleDailyPlan(
     usedTypes.add('academy-lesson');
   }
 
-  // 3. 薄弱环节 — 推荐正确率最低的模块
+  // 3. 理论学院 — 下一章（仅当今日无到期理论复习：有复习时复习优先，同模块不并列双卡）
+  if (theoryReviews.length === 0) {
+    const nextChapter = findNextTheoryChapter(completedLessons);
+    if (nextChapter) {
+      recommendations.push(
+        buildTheoryChapterRecommendation(nextChapter, recommendations.length === 0)
+      );
+      usedTypes.add('theory-chapter');
+    }
+  }
+
+  // 4. 薄弱环节 — 推荐正确率最低的模块
   const accuracyMap = calculateModuleAccuracy(trainingRecords);
   const weakestModule = getWeakestModule(accuracyMap);
 
@@ -223,7 +271,7 @@ export function generateCrossModuleDailyPlan(
     usedTypes.add(type);
   }
 
-  // 4. 多样性 — 确保推荐覆盖不同模块
+  // 5. 多样性 — 确保推荐覆盖不同模块
   const availableModules = [
     { module: 'range-trainer', type: 'range-quiz' as const, title: 'dashboard.dataPlan.titlePracticeRange', route: '/range-trainer', time: '10 min' },
     { module: 'pot-odds', type: 'pot-odds-quiz' as const, title: 'dashboard.dataPlan.titlePracticeOdds', route: '/pot-odds', time: '10 min' },
@@ -250,7 +298,7 @@ export function generateCrossModuleDailyPlan(
     }
   }
 
-  // 5. 连续天数奖励 — 连续天数高时推荐挑战更高难度
+  // 6. 连续天数奖励 — 连续天数高时推荐挑战更高难度
   if (streak >= 7 && recommendations.length < 5) {
     recommendations.push({
       id: 'streak-challenge',
@@ -265,7 +313,7 @@ export function generateCrossModuleDailyPlan(
     });
   }
 
-  // 按优先级排序
+  // 按优先级排序（5 卡上限：新增理论卡同样受此约束）
   const priorityOrder = { high: 0, medium: 1, low: 2 };
   return recommendations
     .toSorted((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
@@ -273,13 +321,19 @@ export function generateCrossModuleDailyPlan(
 }
 
 /**
- * 获取分类标签颜色（reason 为语义 key：review/nextLesson/weakSpot/streakReward/dailyPractice）
+ * 获取分类标签颜色（reason 为语义 key：
+ * review / theoryReview / nextLesson / theoryChapter / weakSpot / streakReward / dailyPractice）
  */
 export function getReasonColor(reason: string): string {
   switch (reason) {
     case 'review':
       return 'text-[var(--poker-terra-bright)] bg-[var(--poker-terra)]/15';
+    case 'theoryReview':
+      // 与复习项 category=theory 同色（ReviewSession / SpacedRepetitionPanel 的 frost 口径）
+      return 'text-[var(--poker-frost)] bg-[var(--poker-frost-bg)]';
     case 'nextLesson':
+      return 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]';
+    case 'theoryChapter':
       return 'text-[var(--poker-info)] bg-[var(--poker-info-bg)]';
     case 'weakSpot':
       return 'text-[var(--danger-text)] bg-[var(--poker-danger-bg)]';
@@ -297,6 +351,10 @@ export function getTypeIcon(type: DailyRecommendation['type']): LucideIcon {
   switch (type) {
     case 'academy-lesson':
       return BookOpen;
+    case 'theory-review':
+      return BookOpenCheck;
+    case 'theory-chapter':
+      return GraduationCap;
     case 'range-quiz':
       return Target;
     case 'pot-odds-quiz':

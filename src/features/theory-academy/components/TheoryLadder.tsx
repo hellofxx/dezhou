@@ -1,26 +1,22 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Lock, CheckCircle2, PlayCircle, BookOpen, Swords, Clock } from 'lucide-react';
+import { ChevronDown, Lock, CheckCircle2, ClipboardCheck, Swords, Award } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
-import type {
-  TheoryChapterSummary,
-  TheoryLevelSummary,
-  TheoryTier,
-} from '../types';
+import type { TheoryLevelSummary, TheoryTier } from '../types';
 import { loadTheoryLevelById } from '../data/levels/loaders';
 import {
   getCoreChaptersOfLevel,
   getSupplementalChaptersOfLevel,
 } from '../utils/theoryMeta';
 import {
-  resolveChapterTitle,
   resolveTheoryLevelTitle,
   resolveTheoryLevelDescription,
   resolveTheoryLevelUnlock,
 } from '../utils/titleKeys';
+import { TheoryChapterChip } from './TheoryChapterChip';
 
 const TIER_LABEL_KEY: Record<TheoryTier, string> = {
   basic: 'theory.tierBasic',
@@ -39,6 +35,14 @@ interface TheoryLadderProps {
   completedChapters: string[];
   quizScores: Record<string, number>;
   isUnlocked: (levelId: string) => boolean;
+  /** 定位测评免修的 Level id 列表（渲染「定位免修」徽章，不改变解锁判定） */
+  creditLevels?: readonly string[];
+  /** 已收藏章节 id 列表（渲染书签标记与切换按钮） */
+  bookmarkedChapters?: readonly string[];
+  /** Level checkpoint 记录（levelId → 记录）；有记录时在入口旁显示历史最佳 */
+  checkpoints?: Record<string, { bestScore: number }>;
+  /** 收藏切换回调（store.toggleBookmark）；缺省时不渲染收藏按钮 */
+  onToggleBookmark?: (chapterId: string) => void;
 }
 
 /**
@@ -57,8 +61,21 @@ export function findActiveTheoryLevelId(
   return null;
 }
 
-/** 理论进阶阶梯：T1-T9 以黄铜节点 + 发线脊柱纵向呈现，活跃等级自动展开章节 chips */
-export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked }: TheoryLadderProps) {
+/**
+ * 理论进阶阶梯：T1-T9 以黄铜节点 + 发线脊柱纵向呈现，活跃等级自动展开章节 chips。
+ * 本批新增三种只读标记：定位免修徽章（creditLevels）、本级检查点入口（核心章读完后开放）、
+ * 章节收藏标记与切换（bookmarkedChapters）。三者都不参与解锁判定。
+ */
+export function TheoryLadder({
+  levels,
+  completedChapters,
+  quizScores,
+  isUnlocked,
+  creditLevels = [],
+  bookmarkedChapters = [],
+  checkpoints = {},
+  onToggleBookmark,
+}: TheoryLadderProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const activeId = findActiveTheoryLevelId(levels, completedChapters, isUnlocked);
@@ -114,6 +131,8 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
           ).length;
           const isActive = level.id === activeId;
           const expanded = level.id === expandedId;
+          const credited = creditLevels.includes(level.id);
+          const checkpoint = checkpoints[level.id];
 
           // 理论→实践桥接：优先推荐轨道，无轨道则取首个推荐课程，派生策略学院链接
           const rec = level.practiceRecommendations;
@@ -179,7 +198,7 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
                       {level.icon}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
+                      <div className="flex flex-wrap items-center gap-2 mb-0.5">
                         <span
                           className={cn(
                             'inline-flex items-center px-1.5 py-0.5 rounded-full border text-[9px] font-semibold tracking-wide',
@@ -188,6 +207,12 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
                         >
                           {t(TIER_LABEL_KEY[level.tier])}
                         </span>
+                        {credited && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-[var(--poker-info)]/40 bg-[var(--poker-info)]/12 px-1.5 py-0.5 text-[9px] font-semibold text-[var(--poker-info)]">
+                            <Award className="w-2.5 h-2.5" aria-hidden="true" />
+                            {t('theory.level.creditedBadge')}
+                          </span>
+                        )}
                         {allCompleted && (
                           <span className="inline-flex items-center gap-1 text-[10px] text-[var(--poker-success)]">
                             <CheckCircle2 className="w-3 h-3" />
@@ -251,7 +276,11 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
                           completed={completedChapters.includes(chapter.id)}
                           isNext={chapter.id === nextCoreId}
                           score={quizScores[chapter.id]}
+                          bookmarked={bookmarkedChapters.includes(chapter.id)}
                           onOpen={() => openChapter(chapter.id)}
+                          {...(onToggleBookmark
+                            ? { onToggleBookmark: () => onToggleBookmark(chapter.id) }
+                            : {})}
                         />
                       ))}
                     </ul>
@@ -265,11 +294,27 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
                       </p>
                     )}
 
+                    {/* 本级检查点：核心章读完后开放，形成性自查（不解锁下一级、不发证） */}
+                    {allCompleted && (
+                      <Link
+                        to={`/theory/checkpoint/${level.id}`}
+                        className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                      >
+                        <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
+                        {t('theory.level.checkpointEntry')}
+                        {checkpoint && (
+                          <span className="font-numeric text-[10px] text-[var(--ivory-muted)]">
+                            {t('theory.checkpoint.bestScore', { score: checkpoint.bestScore })}
+                          </span>
+                        )}
+                      </Link>
+                    )}
+
                     {allCompleted && practiceTarget && (
                       <button
                         type="button"
                         onClick={() => navigate(practiceTarget)}
-                        className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
+                        className="mt-3 ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
                       >
                         <Swords className="w-3.5 h-3.5" />
                         {t('theory.ladder.applyPractice')}
@@ -283,73 +328,5 @@ export function TheoryLadder({ levels, completedChapters, quizScores, isUnlocked
         })}
       </div>
     </section>
-  );
-}
-
-interface TheoryChapterChipProps {
-  chapter: TheoryChapterSummary;
-  completed: boolean;
-  isNext: boolean;
-  score: number | undefined;
-  onOpen: () => void;
-}
-
-/** 章节 chip：状态图标 + 标题 + 阅读时长 + 小测分徽章（增补章带「可选」标记） */
-function TheoryChapterChip({ chapter, completed, isNext, score, onOpen }: TheoryChapterChipProps) {
-  const { t } = useTranslation();
-  const optional = chapter.supplemental === true;
-  const stateLabel = completed
-    ? t('theory.ladder.chapterStates.done')
-    : optional
-      ? t('theory.ladder.chapterStates.optional')
-      : isNext
-        ? t('theory.ladder.chapterStates.current')
-        : t('theory.ladder.chapterStates.locked');
-
-  return (
-    <li>
-      <button
-        type="button"
-        onClick={onOpen}
-        aria-label={`${stateLabel} · ${resolveChapterTitle(t, chapter)}`}
-        className={cn('lesson-chip', completed && 'done', isNext && 'current')}
-      >
-        <span className="lesson-chip-icon" aria-hidden="true">
-          {completed ? (
-            <CheckCircle2 className="w-3 h-3" />
-          ) : isNext ? (
-            <PlayCircle className="w-3 h-3" />
-          ) : (
-            <BookOpen className="w-3 h-3" />
-          )}
-        </span>
-        <span className="flex-1 min-w-0">
-          <span className="block truncate">{resolveChapterTitle(t, chapter)}</span>
-        </span>
-        <span className="flex items-center gap-1.5 shrink-0">
-          {optional && !completed && (
-            <span className="px-1.5 py-0.5 rounded-full border border-[var(--brass-deep)]/50 text-[9px] font-semibold text-[var(--brass-bright)]">
-              {t('theory.ladder.chapterStates.optional')}
-            </span>
-          )}
-          {completed && typeof score === 'number' && (
-            <span
-              className={cn(
-                'quiz-score-badge',
-                score >= 80 && 'pass',
-                score >= 60 && score < 80 && 'mid',
-                score < 60 && 'low'
-              )}
-            >
-              {t('theory.ladder.quizScore', { score })}
-            </span>
-          )}
-          <span className="text-[9px] font-numeric opacity-70 inline-flex items-center gap-1 shrink-0">
-            <Clock className="w-2.5 h-2.5" aria-hidden="true" />
-            {chapter.duration.replace(/ ?(min|分钟)$/, '')}
-          </span>
-        </span>
-      </button>
-    </li>
   );
 }

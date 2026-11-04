@@ -74,14 +74,15 @@ describe('theory integrity: ID 唯一性与前缀规范', () => {
 });
 
 describe('theory integrity: 判分数据合法性', () => {
-  it('quiz：correctIndex 界内、选项 ≥2 且无重复、explanation 非空、每章 3-5 题', () => {
+  it('quiz：correctIndex 界内、4 个不重复选项、explanation 非空、每章 8-12 题', () => {
     const bad: string[] = [];
     for (const chapter of allChapters) {
-      if (chapter.quiz.length < 3 || chapter.quiz.length > 5) {
+      if (chapter.quiz.length < 8 || chapter.quiz.length > 12) {
         bad.push(`${chapter.id}: 题数=${chapter.quiz.length}`);
       }
       for (const q of chapter.quiz) {
-        if (q.options.length < 2) bad.push(`${q.id}: 选项不足`);
+        // 独立题库改造后统一四选一：选项数固定 4，判分口径与抽题排序都依赖它。
+        if (q.options.length !== 4) bad.push(`${q.id}: 选项数=${q.options.length}`);
         if (new Set(q.options).size !== q.options.length) bad.push(`${q.id}: 选项重复`);
         if (q.correctIndex < 0 || q.correctIndex >= q.options.length) bad.push(`${q.id}: correctIndex 越界`);
         if (!q.explanation.trim()) bad.push(`${q.id}: explanation 为空`);

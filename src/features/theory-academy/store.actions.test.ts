@@ -16,17 +16,18 @@ import {
  *
  * 覆盖迁移 / persist 形状测试之外的 action 语义：
  * - startChapter：currentChapter + startedAt 只在首次写入
- * - completeChapter：完成计数、历史最高分、训练事件（幂等仅发一次）、除零兜底
- * - isTheoryLevelUnlocked：顺序解锁 + 增补章不解锁 + 未知 Level + 调试解锁短路
+ * - recordChapterAttempt：首次 / 重考口径分离（attempts、firstScore 锁定、bestScore、训练事件仅首发）
+ * - isTheoryLevelUnlocked：顺序解锁 + 定位免修 creditLevels + 增补章不解锁 + 调试解锁短路
  * - getLevelProgress / getTotalProgress：核心章口径（增补章与其它变体不计入）
- * - switchVariant：变体上下文与 lastViewedAt，元数据缺失时的默认值回退
- * - resetProgress：回到初始形状
+ * - recordPlacement / recordCheckpointAttempt / toggleBookmark / saveChapterNote：v4 新字段契约
+ * - switchVariant / resetProgress：变体上下文与初始形状
  *
  * 期望数值一律从 utils/theoryMeta（目录单源）推导，不在测试内硬编码章节数。
  */
 
 type TheoryStoreModule = typeof import('./store');
 
+let storeModule: TheoryStoreModule;
 let useTheoryStore: TheoryStoreModule['useTheoryStore'];
 let pristine: TheoryProgress;
 let emitted: TrainingRecord[] = [];
@@ -48,7 +49,7 @@ function supplementalOf(levelId: string) {
 }
 
 function complete(chapterId: string, score = 100) {
-  useTheoryStore.getState().completeChapter(chapterId, score, 3, 3);
+  useTheoryStore.getState().recordChapterAttempt(chapterId, score, 3, 3);
 }
 
 beforeAll(async () => {
@@ -57,8 +58,8 @@ beforeAll(async () => {
   vi.stubGlobal('localStorage', storageStub);
   vi.stubGlobal('window', { localStorage: storageStub });
 
-  const module = await import('./store');
-  useTheoryStore = module.useTheoryStore;
+  storeModule = await import('./store');
+  useTheoryStore = storeModule.useTheoryStore;
   pristine = structuredClone(useTheoryStore.getState().progress);
 });
 
@@ -95,10 +96,10 @@ describe('startChapter', () => {
   });
 });
 
-describe('completeChapter', () => {
+describe('recordChapterAttempt 首次完成', () => {
   it('首次完成：章节计一次、记录分数并发出一条理论训练事件', () => {
     const chapterId = coreOf('t1')[0]!.id;
-    useTheoryStore.getState().completeChapter(chapterId, 80, 4, 3);
+    useTheoryStore.getState().recordChapterAttempt(chapterId, 80, 4, 3);
 
     const { progress } = useTheoryStore.getState();
     expect(progress.completedChapters).toEqual([chapterId]);
@@ -114,7 +115,35 @@ describe('completeChapter', () => {
     expect(record.result.accuracy).toBeCloseTo(0.75, 10);
   });
 
-  it('重复完成幂等：不重复计数、分数取历史最高、不重复发事件', () => {
+  it('首次写入完整 attempt 记录（firstScore / firstCorrect / firstTotal 锁定首次）', () => {
+    const chapterId = coreOf('t1')[0]!.id;
+    useTheoryStore.getState().recordChapterAttempt(chapterId, 75, 4, 3);
+
+    const attempt = useTheoryStore.getState().progress.chapterAttempts?.[chapterId];
+    expect(attempt).toMatchObject({
+      attempts: 1,
+      firstScore: 75,
+      firstCorrect: 3,
+      firstTotal: 4,
+      bestScore: 75,
+      lastScore: 75,
+    });
+    expect(attempt!.lastAt).toBeGreaterThan(0);
+  });
+
+  it('题量为 0 时准确率兜底为 0（不产生 NaN）', () => {
+    const chapterId = coreOf('t1')[2]!.id;
+    useTheoryStore.getState().recordChapterAttempt(chapterId, 0, 0, 0);
+    expect(emitted[0]!.result.accuracy).toBe(0);
+  });
+
+  it('未完成时 isChapterCompleted 为 false', () => {
+    expect(useTheoryStore.getState().isChapterCompleted(coreOf('t1')[0]!.id)).toBe(false);
+  });
+});
+
+describe('recordChapterAttempt 重考', () => {
+  it('重复提交幂等：不重复计数、quizScores 取历史最高、不重复发事件', () => {
     const chapterId = coreOf('t1')[1]!.id;
     complete(chapterId, 60);
     complete(chapterId, 100);
@@ -126,14 +155,23 @@ describe('completeChapter', () => {
     expect(emitted).toHaveLength(1);
   });
 
-  it('题量为 0 时准确率兜底为 0（不产生 NaN）', () => {
-    const chapterId = coreOf('t1')[2]!.id;
-    useTheoryStore.getState().completeChapter(chapterId, 0, 0, 0);
-    expect(emitted[0]!.result.accuracy).toBe(0);
-  });
+  it('重考只更新练习口径：attempts 累加、bestScore 取最大、首次成绩不变', () => {
+    const chapterId = coreOf('t1')[1]!.id;
+    useTheoryStore.getState().recordChapterAttempt(chapterId, 60, 5, 3);
+    useTheoryStore.getState().recordChapterAttempt(chapterId, 100, 5, 5);
+    useTheoryStore.getState().recordChapterAttempt(chapterId, 40, 5, 2);
 
-  it('未完成时 isChapterCompleted 为 false', () => {
-    expect(useTheoryStore.getState().isChapterCompleted(coreOf('t1')[0]!.id)).toBe(false);
+    const attempt = useTheoryStore.getState().progress.chapterAttempts?.[chapterId];
+    expect(attempt).toMatchObject({
+      attempts: 3,
+      firstScore: 60,
+      firstCorrect: 3,
+      firstTotal: 5,
+      bestScore: 100,
+      lastScore: 40,
+    });
+    // 训练事件仅首次一条
+    expect(emitted).toHaveLength(1);
   });
 });
 
@@ -155,6 +193,24 @@ describe('isTheoryLevelUnlocked', () => {
     for (const chapter of supplemental) complete(chapter.id);
 
     expect(useTheoryStore.getState().isTheoryLevelUnlocked('t2')).toBe(false);
+  });
+
+  it('定位免修 Level 直接解锁，且不写 completedChapters', () => {
+    useTheoryStore.getState().recordPlacement({
+      score: 70,
+      correct: 11,
+      total: 16,
+      recommendedLevelId: 't2',
+      creditLevels: ['t1'],
+      completedAt: 1,
+    });
+
+    expect(useTheoryStore.getState().isTheoryLevelUnlocked('t2')).toBe(true);
+    // 免修是连续前缀：T1 免修只解锁 T2，T3 仍需 T2 核心章完成
+    expect(useTheoryStore.getState().isTheoryLevelUnlocked('t3')).toBe(false);
+    expect(useTheoryStore.getState().progress.completedChapters).toEqual([]);
+    // 免修不影响核心进度分子
+    expect(useTheoryStore.getState().getLevelProgress('t1')).toBe(0);
   });
 
   it('未知 Level id 不解锁', () => {
@@ -201,6 +257,90 @@ describe('getLevelProgress / getTotalProgress', () => {
   });
 });
 
+describe('recordPlacement', () => {
+  it('写入定位结果，creditLevels 取并集（重测不降级、不写 completedChapters）', () => {
+    useTheoryStore.getState().recordPlacement({
+      score: 80,
+      correct: 13,
+      total: 16,
+      recommendedLevelId: 't4',
+      creditLevels: ['t1', 't2', 't3'],
+      completedAt: 1000,
+    });
+
+    expect(useTheoryStore.getState().progress.placement).toMatchObject({
+      recommendedLevelId: 't4',
+      creditLevels: ['t1', 't2', 't3'],
+      completedAt: 1000,
+    });
+
+    // 重测低分：推荐起点可下调，但已获得的免修 Level 不收回
+    useTheoryStore.getState().recordPlacement({
+      score: 30,
+      correct: 5,
+      total: 16,
+      recommendedLevelId: 't1',
+      creditLevels: ['t1'],
+      completedAt: 2000,
+    });
+
+    const placement = useTheoryStore.getState().progress.placement;
+    expect(placement?.recommendedLevelId).toBe('t1');
+    expect(placement?.creditLevels).toEqual(['t1', 't2', 't3']);
+    expect(useTheoryStore.getState().progress.completedChapters).toEqual([]);
+    expect(emitted).toHaveLength(0);
+  });
+});
+
+describe('recordCheckpointAttempt', () => {
+  it('累加 attempts、bestScore 取最大、记录最近一次抽题 id', () => {
+    useTheoryStore.getState().recordCheckpointAttempt('t1', { score: 70, questionIds: ['a', 'b'] });
+    useTheoryStore.getState().recordCheckpointAttempt('t1', { score: 50, questionIds: ['c'] });
+
+    const checkpoint = useTheoryStore.getState().progress.checkpoints?.['t1'];
+    expect(checkpoint).toMatchObject({
+      attempts: 2,
+      bestScore: 70,
+      lastScore: 50,
+      questionIds: ['c'],
+    });
+    expect(checkpoint!.lastAt).toBeGreaterThan(0);
+    // checkpoint 为形成性测评：不解锁、不发训练事件
+    expect(useTheoryStore.getState().isTheoryLevelUnlocked('t2')).toBe(false);
+    expect(emitted).toHaveLength(0);
+  });
+});
+
+describe('toggleBookmark', () => {
+  it('幂等切换：加入一次、移除一次', () => {
+    const chapterId = coreOf('t1')[0]!.id;
+    useTheoryStore.getState().toggleBookmark(chapterId);
+    expect(useTheoryStore.getState().progress.bookmarkedChapters).toEqual([chapterId]);
+
+    useTheoryStore.getState().toggleBookmark(chapterId);
+    expect(useTheoryStore.getState().progress.bookmarkedChapters).toEqual([]);
+    // 收藏不改动完成状态
+    expect(useTheoryStore.getState().isChapterCompleted(chapterId)).toBe(false);
+  });
+});
+
+describe('saveChapterNote', () => {
+  it('trim + 2000 字上限 + updatedAt 写入', () => {
+    const chapterId = coreOf('t1')[0]!.id;
+    useTheoryStore.getState().saveChapterNote(chapterId, '  三条街的底池控制  ');
+
+    const note = useTheoryStore.getState().progress.chapterNotes?.[chapterId];
+    expect(note?.text).toBe('三条街的底池控制');
+    expect(note!.updatedAt).toBeGreaterThan(0);
+
+    const longText = 'x'.repeat(storeModule.MAX_CHAPTER_NOTE_LENGTH + 100);
+    useTheoryStore.getState().saveChapterNote(chapterId, longText);
+    expect(useTheoryStore.getState().progress.chapterNotes?.[chapterId]?.text).toHaveLength(
+      storeModule.MAX_CHAPTER_NOTE_LENGTH,
+    );
+  });
+});
+
 describe('switchVariant', () => {
   it('切换变体写入 activeVariant 并只刷新目标变体的 lastViewedAt', () => {
     const before = useTheoryStore.getState().progress.variantMetadata!;
@@ -244,11 +384,14 @@ describe('switchVariant', () => {
 });
 
 describe('resetProgress', () => {
-  it('清空章节 / 分数 / 标记与变体上下文，回到初始形状', () => {
+  it('清空章节 / 分数 / 标记 / v4 学习工具与变体上下文，回到初始形状', () => {
     const chapterId = coreOf('t1')[0]!.id;
     useTheoryStore.getState().startChapter(chapterId);
     complete(chapterId);
     useTheoryStore.getState().toggleFlagQuestion(`${chapterId}-q1`);
+    useTheoryStore.getState().toggleBookmark(chapterId);
+    useTheoryStore.getState().saveChapterNote(chapterId, 'note');
+    useTheoryStore.getState().recordCheckpointAttempt('t1', { score: 60, questionIds: ['q1'] });
     useTheoryStore.getState().switchVariant('short-deck');
 
     useTheoryStore.getState().resetProgress();
@@ -260,7 +403,12 @@ describe('resetProgress', () => {
     expect(progress.startedAt).toBe(0);
     expect(progress.flaggedQuestions).toEqual([]);
     expect(progress.activeVariant).toBe('standard');
+    expect(progress.chapterAttempts).toEqual({});
+    expect(progress.checkpoints).toEqual({});
+    expect(progress.placement).toBeUndefined();
+    expect(progress.bookmarkedChapters).toEqual([]);
+    expect(progress.chapterNotes).toEqual({});
     // action 不因重置丢失
-    expect(typeof useTheoryStore.getState().completeChapter).toBe('function');
+    expect(typeof useTheoryStore.getState().recordChapterAttempt).toBe('function');
   });
 });

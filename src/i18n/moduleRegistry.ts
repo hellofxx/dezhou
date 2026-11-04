@@ -110,7 +110,8 @@ export const FEATURE_GROUPS = {
   // Dashboard 首页树：FeltArena/VariantEloOverview/FirstVisitBanner 消费 progress；
   // DailyChallenge/SpacedRepetitionPanel/DownswingAlert/MoodTracker 分别消费 dailyChallenge/spacedRepetition/downswing/mood；
   // RankUpCelebration/ReviewSession 由 Dashboard 渲染，分别消费 rankUp/review
-  '/': ['dashboard', 'nav', 'achievements', 'progress', 'dailyChallenge', 'spacedRepetition', 'downswing', 'mood', 'rankUp', 'review'],
+  // Dashboard 每日计划的理论卡消费 theory.chapterTitle.*（progress 经 registry 只传 key，不 import theory）
+  '/': ['dashboard', 'nav', 'achievements', 'progress', 'dailyChallenge', 'spacedRepetition', 'downswing', 'mood', 'rankUp', 'review', 'theory'],
   // MoodTracker 实际由 Dashboard 渲染（settings 分组不含 mood；mood 归属 '/')
   '/settings': ['settings', 'mentor', 'sessionLimit', 'variant', 'streak'],
   '/leaderboard': ['leaderboard'],

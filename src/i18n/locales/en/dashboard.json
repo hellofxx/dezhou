@@ -87,6 +87,7 @@
     "tagSrs": "SRS",
     "tagCourse": "Course",
     "titleReview": "Review {{count}} knowledge points",
+    "titleTheoryReview": "Review {{count}} theory concepts",
     "titleAcademyLesson": "{{title}}",
     "titleWeakRange": "Hand Range Practice",
     "titleWeakOdds": "Pot Odds Practice",
@@ -100,6 +101,9 @@
     "descWeakNone": "Not practiced yet, try it",
     "descPracticeAccuracy": "Current accuracy {{accuracy}}%",
     "descPracticeNone": "Keep your edge",
+    "descTheoryReview": "{{count}} theory concepts due today",
+    "descTheoryChapter": "Next Theory Academy chapter · about {{minutes}} min",
+    "descTheoryChapterNoTime": "Read the next chapter to lock in the fundamentals",
     "descStreakChallenge": "{{streak}} days in a row! Challenge higher difficulty",
     "reasonReview": "Review",
     "reasonNextLesson": "Next lesson",
@@ -108,7 +112,9 @@
     "reasonDailyPractice": "Daily practice",
     "reason": {
       "review": "Review",
+      "theoryReview": "Theory review",
       "nextLesson": "Next lesson",
+      "theoryChapter": "Theory chapter",
       "weakSpot": "Weak spot",
       "streakReward": "Streak reward",
       "dailyPractice": "Daily practice"

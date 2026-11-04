@@ -250,6 +250,146 @@
         "A 6-max table has no big blind"
       ],
       "explanation": "The blinds total 1.5bb in both games: spread over six hands that is 0.25bb each, over nine hands about 0.17bb each; and the number of players behind UTG drops from eight to five. Higher entry cost plus fewer opponents resisting makes opening more frequent."
+    },
+    "t1-combinatorics-q6": {
+      "question": "How many combinations are in QQ+ (QQ, KK, AA)?",
+      "options": [
+        "12 combos",
+        "16 combos",
+        "18 combos",
+        "24 combos"
+      ],
+      "explanation": "Each pocket pair has 6 combinations (C(4,2)=6), so 3×6=18. Counting combos instead of classes reveals the true weight of big pairs in a range."
+    },
+    "t1-combinatorics-q7": {
+      "question": "Among the 169 starting-hand classes, how many are suited?",
+      "options": [
+        "39 classes",
+        "117 classes",
+        "78 classes",
+        "91 classes"
+      ],
+      "explanation": "Choosing two distinct ranks from 13 gives C(13,2)=78 suited classes; offsuit is another 78, plus 13 pocket pairs for exactly 169 classes."
+    },
+    "t1-combinatorics-q8": {
+      "question": "You hold A♠. What is the chance an opponent holds AA?",
+      "options": [
+        "0.24%",
+        "0.45%",
+        "1.2%",
+        "2.4%"
+      ],
+      "explanation": "With one ace in your hand only 3 aces remain, so AA has C(3,2)=3 combos out of C(50,2)=1225, about 0.24%. Known cards change both numerator and denominator: that is conditional probability."
+    },
+    "t1-outs-q6": {
+      "question": "On the flop you have both a flush draw and an open-ended straight draw. How many clean outs is that?",
+      "options": [
+        "12",
+        "14",
+        "15",
+        "17"
+      ],
+      "explanation": "Nine flush outs plus eight straight outs, minus the 2 cards counted twice because they complete both: 9+8−2=15. Double counting is the classic combo-draw mistake."
+    },
+    "t1-outs-q7": {
+      "question": "On the turn with a gutshot, roughly how often do you hit on the river?",
+      "options": [
+        "4%",
+        "17%",
+        "8%",
+        "16%"
+      ],
+      "explanation": "A gutshot has 4 outs; the rule of two gives about 4×2%=8%, exact 4/46≈8.7%. 16% is the estimate for an eight-out open-ender."
+    },
+    "t1-outs-q8": {
+      "question": "On the turn with 9 outs, what is the exact chance of hitting on the river?",
+      "options": [
+        "19.6%",
+        "18.0%",
+        "36.0%",
+        "20.5%"
+      ],
+      "explanation": "With 46 unknown cards the exact value is 9/46≈19.6%; the rule-of-two estimate of 18% is only approximate. 36% is the two-card flop estimate and does not apply on the turn."
+    },
+    "t1-variance-q6": {
+      "question": "If the sample size grows fourfold, the relative impact of luck:",
+      "options": [
+        "shrinks to 1/4",
+        "shrinks to 1/8",
+        "shrinks to 1/2",
+        "stays the same"
+      ],
+      "explanation": "Noise scales with the inverse square root of sample size: √4=2, so it shrinks to 1/2. A hundredfold sample is needed to reach 1/10."
+    },
+    "t1-variance-q7": {
+      "question": "With a 100bb/100 standard deviation, what is the standard deviation of total results over 400 hands?",
+      "options": [
+        "400bb",
+        "100bb",
+        "200bb",
+        "800bb"
+      ],
+      "explanation": "400 hands is 4 hundred-hand samples, so cumulative SD = 100×√4 = 200bb. Variance grows with the square root of sample size, not linearly."
+    },
+    "t1-variance-q8": {
+      "question": "With the same win rate, doubling the standard deviation multiplies the sample needed to prove an edge by:",
+      "options": [
+        "2×",
+        "no change",
+        "1/4",
+        "4×"
+      ],
+      "explanation": "Required hands are n = (z×σ÷μ)², proportional to σ². Doubling σ quadruples σ² and therefore quadruples the required sample."
+    },
+    "t1-sixmax-table-q4": {
+      "question": "In 6-max, which position acts last preflop?",
+      "options": [
+        "UTG",
+        "SB",
+        "CO",
+        "BB"
+      ],
+      "explanation": "Preflop runs UTG, HJ, CO, BTN, SB and ends with BB; despite posting blinds, the big blind still closes the preflop action. Postflop the order becomes SB, BB, UTG, HJ, CO, BTN."
+    },
+    "t1-sixmax-table-q5": {
+      "question": "How many players still to act are behind UTG in 6-max?",
+      "options": [
+        "8",
+        "4",
+        "5",
+        "6"
+      ],
+      "explanation": "Six players total means five remain behind UTG; a full-ring UTG has eight behind. More players behind demands a stronger opening range."
+    },
+    "t1-sixmax-table-q6": {
+      "question": "What is the per-hand blind cost in 6-max?",
+      "options": [
+        "0.17bb",
+        "0.5bb",
+        "0.25bb",
+        "1.5bb"
+      ],
+      "explanation": "1.5bb of blinds spread over six hands is 1.5÷6=0.25bb per hand; full ring gives 1.5÷9≈0.17bb. The higher entry cost is one structural reason 6-max opens wider."
+    },
+    "t1-sixmax-table-q7": {
+      "question": "In the four-group split (early, middle, late, blinds), which seats are late position in 6-max?",
+      "options": [
+        "UTG",
+        "HJ",
+        "CO and BTN",
+        "SB and BB"
+      ],
+      "explanation": "Early is UTG, middle is HJ, late is CO and BTN, and the blinds are SB and BB. Width increases from early to late; the blinds are a price-driven exception."
+    },
+    "t1-sixmax-table-q8": {
+      "question": "When effective stacks drop from 100bb to 40bb, 6-max opening ranges should:",
+      "options": [
+        "stay exactly as the 100bb chart",
+        "shrink to AA and KK only",
+        "tighten",
+        "widen without limit"
+      ],
+      "explanation": "Shallower stacks compress postflop play, pushing the shove-or-fold boundary forward and requiring tighter opens. A 100bb baseline chart does not transfer directly to 40bb."
     }
   },
   "chapterObjectives": {

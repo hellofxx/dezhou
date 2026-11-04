@@ -9,13 +9,19 @@ import { useTheoryStore } from '../store';
 import { orderTheoryQuizQuestion } from '../utils/quizOrder';
 import { resolveTheoryQuizQuestion } from '../utils/contentKeys';
 import { getChapterDifficulty } from '../utils/theoryMeta';
+import {
+  drawQuizQuestions,
+  getChapterAttemptNumber,
+  getQuizDrawSize,
+  isFirstChapterAttempt,
+} from '../utils/quizDraw';
 import type { TheoryChapter } from '../types';
 
 interface TheoryQuizProps {
   chapter: TheoryChapter;
   /**
    * 全部题目作答完成时回调（score 0-100）。
-   * wrongQuestionIds 为本章答错题目的稳定题 id 列表（供上层写入 SRS 复习队列）；
+   * wrongQuestionIds 为本次抽中且答错的稳定题 id 列表（供上层写入 SRS 复习队列）；
    * 仅作额外上报，不改变 score/correct/total 的判分口径。
    */
   onComplete: (
@@ -27,8 +33,14 @@ interface TheoryQuizProps {
 }
 
 /**
- * 章末小测：选项经 quizOrder 重排后渲染（答案位置偏差治理）。
- * 每题作答同步更新 progress 的 ELO（按章节 eloDimension）与情绪计数。
+ * 章末小测：按 Level 抽题（T1–T3 抽 5 题 / T4–T9 抽 6 题，见 utils/quizDraw），
+ * 选项经 quizOrder 重排后渲染（答案位置偏差治理）。
+ *
+ * 首次 / 练习二分（PRD §5.27.6）：
+ * - 唯一判据是持久化的 `chapterAttempts[chapterId].attempts`（本次序号 = attempts + 1）；
+ * - **首次作答**：每题作答调用 progress.updateElo（按章节 eloDimension）与 recordAnswer；
+ * - **重考（练习）**：不碰 ELO、不计入情绪计数，只把成绩交给上层写练习口径（bestScore / lastScore）；
+ *   掌握度取首次成绩，故重考不可能把已掌握的章拉回待复习。
  *
  * 设计豁免（P0-B 2026-07-31 定性，登记于 TDD 5.9 反馈闭环系统）：
  * 章末小测为概念判断题、无 EV 语义，暂不接入五级判分体系
@@ -36,16 +48,28 @@ interface TheoryQuizProps {
  */
 export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   const { t } = useTranslation();
-  // 渲染层 key 覆盖：先 t() 解析（key 缺失回退数据层中文），再重排选项
-  // （数值升序 / id 稳定种子洗牌）——种子只依赖 id，zh/en 顺序一致，源数据不变
-  const orderedQuestions = useMemo(
-    () => chapter.quiz.map((q) => orderTheoryQuizQuestion(resolveTheoryQuizQuestion(t, q))),
-    [chapter.quiz, t],
-  );
+  const chapterAttempts = useTheoryStore((s) => s.progress.chapterAttempts);
   const updateElo = useProgressStore((s) => s.updateElo);
   const recordAnswer = useProgressStore((s) => s.recordAnswer);
   const flaggedQuestions = useTheoryStore((s) => s.progress.flaggedQuestions);
   const toggleFlagQuestion = useTheoryStore((s) => s.toggleFlagQuestion);
+
+  // 本次作答序号（持久化单一事实源）→ 抽题种子与首次 / 练习判定都从这里取
+  const attemptNumber = getChapterAttemptNumber(chapterAttempts, chapter.id);
+  const isPractice = !isFirstChapterAttempt(chapterAttempts, chapter.id);
+  const previousAttempt = chapterAttempts?.[chapter.id];
+
+  // 渲染层 key 覆盖：先 t() 解析（key 缺失回退数据层中文），再抽题，最后重排选项
+  // （数值升序 / id 稳定种子洗牌）——选项种子只依赖题 id，zh/en 顺序一致，源数据不变
+  const orderedQuestions = useMemo(() => {
+    const resolved = chapter.quiz.map((q) => resolveTheoryQuizQuestion(t, q));
+    const drawn = drawQuizQuestions(resolved, {
+      chapterId: chapter.id,
+      attemptNumber,
+      size: getQuizDrawSize(chapter.level),
+    });
+    return drawn.map((q) => orderTheoryQuizQuestion(q));
+  }, [chapter.quiz, chapter.id, chapter.level, attemptNumber, t]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -59,7 +83,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   // 用 effect 触发（而非渲染期调用父 setState）；完成后父组件切至 done 会卸载本组件，不会循环。
   // 正常由 theoryIntegrity 测试保证每章 3-5 题，此为防御性兜底。
   // P1F-03：completedRef 一次性守卫（对齐 TrainingSession 防重入模式）——StrictMode 下 effect
-  // 双跑不会重置 ref，onComplete 仅触发一次，避免 completeChapter 双调、训练事件双 emit。
+  // 双跑不会重置 ref，onComplete 仅触发一次，避免 recordChapterAttempt 双调、训练事件双 emit。
   const isEmpty = orderedQuestions.length === 0;
   const completedRef = useRef(false);
   useEffect(() => {
@@ -81,9 +105,11 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
     const correct = index === question.correctIndex;
     if (correct) setCorrectCount((c) => c + 1);
     else wrongQuestionIdsRef.current = [...wrongQuestionIdsRef.current, question.id];
-    // 理论掌握度进入 ELO 与情绪系统（答题时同步调用，不走事件总线）
-    updateElo(chapter.eloDimension, correct, getChapterDifficulty(chapter.level));
-    recordAnswer(correct);
+    // 理论掌握度进入 ELO 与情绪系统（答题时同步调用，不走事件总线）；仅首次作答计入
+    if (!isPractice) {
+      updateElo(chapter.eloDimension, correct, getChapterDifficulty(chapter.level));
+      recordAnswer(correct);
+    }
   };
 
   const handleNext = () => {
@@ -100,6 +126,34 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
 
   return (
     <div className="space-y-6">
+      {/* 作答状态条：首次 / 练习口径 + 本次抽题数（练习态附带首次成绩作参照） */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-numeric text-[var(--ivory-muted)]">
+        {isPractice ? (
+          <>
+            <span>{t('theory.quiz.attemptCount', { count: attemptNumber - 1 })}</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-[var(--brass-text)]">{t('theory.quiz.practiceAttempt')}</span>
+          </>
+        ) : (
+          <span className="text-[var(--ivory-dim)]">{t('theory.quiz.firstAttempt')}</span>
+        )}
+        <span aria-hidden="true">·</span>
+        <span>{t('theory.quiz.drawCount', { count: orderedQuestions.length })}</span>
+        {isPractice && previousAttempt && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>
+              {t('theory.quiz.firstScoreLabel')} {previousAttempt.firstScore}
+            </span>
+          </>
+        )}
+      </div>
+      {isPractice && (
+        <p className="rounded-lg border border-[var(--brass)]/30 bg-[var(--brass)]/10 px-3 py-2 text-xs text-[var(--ivory-dim)]">
+          {t('theory.quiz.practiceBanner')}
+        </p>
+      )}
+
       <div
         className="flex items-center gap-1.5"
         role="progressbar"

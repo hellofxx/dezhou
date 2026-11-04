@@ -87,6 +87,7 @@
     "tagSrs": "SRS",
     "tagCourse": "课程",
     "titleReview": "复习 {{count}} 个知识点",
+    "titleTheoryReview": "复习 {{count}} 个理论知识点",
     "titleAcademyLesson": "{{title}}",
     "titleWeakRange": "手牌范围练习",
     "titleWeakOdds": "赔率计算练习",
@@ -100,6 +101,9 @@
     "descWeakNone": "尚未练习过，建议尝试",
     "descPracticeAccuracy": "当前正确率 {{accuracy}}%",
     "descPracticeNone": "保持手感",
+    "descTheoryReview": "{{count}} 个理论知识点今日到期",
+    "descTheoryChapter": "理论学院下一章 · 预计 {{minutes}} 分钟",
+    "descTheoryChapterNoTime": "读完下一章，打牢概念基础",
     "descStreakChallenge": "连续训练 {{streak}} 天！挑战更高难度",
     "reasonReview": "待复习",
     "reasonNextLesson": "下一课",
@@ -108,7 +112,9 @@
     "reasonDailyPractice": "日常练习",
     "reason": {
       "review": "待复习",
+      "theoryReview": "理论复习",
       "nextLesson": "下一课",
+      "theoryChapter": "理论章节",
       "weakSpot": "薄弱环节",
       "streakReward": "连续奖励",
       "dailyPractice": "日常练习"

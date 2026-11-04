@@ -10,6 +10,16 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-04 理论学院标准课程全量整改
+
+- **独立题库**：全部章末题迁入 `data/levels/variants/standard/quizBank/t1..t9.ts`（标准变体题库 354 题，每章 8–12 题），按章节 + 尝试次数种子抽 5/6 题；题库纯数据文件走 `QUIZ_BANK_ALLOWLIST` 逐文件行数棘轮。
+- **尝试与掌握度**：首次成绩计掌握度/ELO，重考只做练习并进 SRS；theory store 升至 v4，新增 `chapterAttempts` / `checkpoints` / `placement` / 书签 / 笔记，v3→v4 用 `quizScores` 种子化尝试记录。
+- **定位测评与 Level checkpoint**：16 题定位按分档免修 T1–T5（只写 `creditLevels`，不写完成态）；每级 12 题 checkpoint 仅完成核心章可进，首轮计 ELO、错题回 SRS，不解锁、不发证。
+- **学习工具与富内容**：术语表（57 词）、参考书目（10 本）、全站搜索、章节书签/笔记、章节 lastReviewed 与纠错入口；正文新增只读表格 / 13×13 范围矩阵 / 决策树（追加式，不改既有索引）。
+- **每日计划与反向桥接**：新增理论复习卡（→ `/theory/review`）与下一理论章卡（经 `theoryDataSourceRegistry`，progress 不 import theory）；首页按 ELO 五维推荐理论章节。
+- **路由与加载**：新增 `/theory/placement`、`/theory/checkpoint/:levelId`、`/theory/glossary`、`/theory/search`、`/theory/bibliography`；术语/书目内容包由 `loadTheoryContentBundle('glossary')` 显式加载，避免 key 尾段回退。
+- **验证**：`pnpm verify` 全绿（381 文件 / 2744 用例；typecheck / lint / repo / docs / agents-map 通过）。
+
 ### 2026-11-04 浅色主题「白天牌室」配色与牌桌控件重设计
 
 - **大面黄铜填充**：新增 `--brass-fill` / `--brass-fill-ink` / `--brass-fill-border` / `--brass-fill-gradient*`；light 取柔和蜜金 + 墨色文字，`.btn-brass`、选中态、学院 CTA 与各训练器按钮统一切换，消除浅色下的深芥末色块；dark 沿用原金属渐变。

@@ -65,6 +65,11 @@ const TheoryHome = lazyPage(() => import('@/features/theory-academy/components/T
 const TheoryChapterView = lazyPage(() => import('@/features/theory-academy/components/TheoryChapterView'), '/theory/chapter/:chapterId');
 // 疑难标记复习清单：仅消费 theory.* 文案，故复用 '/theory' 分组（页面本体已在该分组内）
 const TheoryFlaggedReview = lazyPage(() => import('@/features/theory-academy/components/TheoryFlaggedReview'), '/theory');
+const TheoryPlacementPage = lazyPage(() => import('@/features/theory-academy/components/TheoryPlacementPage'), '/theory');
+const TheoryCheckpointPage = lazyPage(() => import('@/features/theory-academy/components/TheoryCheckpointPage'), '/theory');
+const TheoryGlossaryPage = lazyPage(() => import('@/features/theory-academy/components/TheoryGlossaryPage'), '/theory');
+const TheorySearchPage = lazyPage(() => import('@/features/theory-academy/components/TheorySearchPage'), '/theory');
+const TheoryBibliographyPage = lazyPage(() => import('@/features/theory-academy/components/TheoryBibliographyPage'), '/theory');
 const HelpHome = lazyPage(() => import('@/features/help-center/components/HelpHome'), '/help');
 const HelpArticle = lazyPage(() => import('@/features/help-center/components/HelpArticle'), '/help/article/:articleId');
 
@@ -103,6 +108,11 @@ export const appRoutes: RouteObject[] = [
       { path: 'theory', element: <LazyWrapper><ErrorBoundary><TheoryHome /></ErrorBoundary></LazyWrapper> },
       { path: 'theory/chapter/:chapterId', element: <LazyWrapper><TheoryChapterView /></LazyWrapper> },
       { path: 'theory/review', element: <LazyWrapper><TheoryFlaggedReview /></LazyWrapper> },
+      { path: 'theory/placement', element: <LazyWrapper><TheoryPlacementPage /></LazyWrapper> },
+      { path: 'theory/checkpoint/:levelId', element: <LazyWrapper><TheoryCheckpointPage /></LazyWrapper> },
+      { path: 'theory/glossary', element: <LazyWrapper><TheoryGlossaryPage /></LazyWrapper> },
+      { path: 'theory/search', element: <LazyWrapper><TheorySearchPage /></LazyWrapper> },
+      { path: 'theory/bibliography', element: <LazyWrapper><TheoryBibliographyPage /></LazyWrapper> },
       { path: 'puzzle', element: <LazyWrapper><PuzzleHome /></LazyWrapper> },
       { path: 'puzzle/rush', element: <LazyWrapper><PuzzleRush /></LazyWrapper> },
       { path: 'puzzle/daily', element: <LazyWrapper><DailyPuzzle /></LazyWrapper> },

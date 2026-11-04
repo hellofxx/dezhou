@@ -74,7 +74,7 @@ src/
 | 状态 | zustand persist；禁止裸调 localStorage；每个 store 有 name + version；记录完成 action 幂等 | `docs/AI_GUIDE.md` §状态管理 |
 | i18n | zh/en 缺一不可；key 命名 `<module>.<context>.<field>`；课程内容双轨、复习状态存 key | `docs/AI_GUIDE.md` §国际化 |
 | UI/UX | 四层色彩 token；暗色默认；WCAG 2.1 AA；反霓虹；设计契约以 `DESIGN.md` 为准 | `DESIGN.md` + `docs/AI_GUIDE.md` §UI/UX |
-| 文件大小 | 单文件 ≤300 行；>400 行失败；逐文件 allowlist 只减不增；CSS ≤800 行 | `src/guards/line-count-guard.test.ts` |
+| 文件大小 | 单文件 ≤300 行；>400 行失败；逐文件 allowlist 只减不增；quizBank 纯数据文件走专用 `QUIZ_BANK_ALLOWLIST`；CSS ≤800 行 | `src/guards/line-count-guard.test.ts` |
 
 ## 路由、构建与离线
 
@@ -92,6 +92,7 @@ src/
 | 选项排序 | `shared/utils/seededShuffle.ts` | 经模块排序出口；重映射正确答案；每日谜题顺序稳定 |
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |
+| 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory |
 | 调试解锁 | `shared/stores/debugMode.ts` | 9 处门禁；两种短路接法；onboarding 不纳入 |
 
 > 完整契约（含各模块推导函数、阈值、9 处门禁清单与选项排序规则）见 `docs/AI_GUIDE.md` §跨模块复用契约。
@@ -180,6 +181,7 @@ src/
 | 调试解锁（9 处门禁） | `platform-dev` 协调 | 全局旁路，清单见 `docs/AI_GUIDE.md` §调试解锁 |
 | 阈值 / 评级源 | `range-trainer-dev` / `shared/types/decisionFeedback.ts` | 位置解锁以 constants.ts；GRADE_THRESHOLDS 以 decisionFeedback.ts；worker 拷贝须 parity |
 | 每日计划生成（双源已消歧） | `strategy-academy-dev` 持 `generateDailyPlan`（academy 内部）/ `progress-dev` 持 `generateCrossModuleDailyPlan`（跨模块日训） | 两者命名已区分，禁止混用 |
+| 理论数据源 registry | `platform-dev`（注册）+ `progress-dev`（消费） | 每日计划/下一章；theory bootstrap 注册，progress 只消费接口，不 import theory |
 
 ### 边界与协作流程
 

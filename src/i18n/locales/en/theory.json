@@ -330,7 +330,7 @@
   },
   "mastery": {
     "title": "Mastery",
-    "subtitle": "Derived from your best quiz score per chapter — a review hint only, never an unlock rule",
+    "subtitle": "Derived from your first official quiz attempt; practice best is listed separately — a review hint only, never an unlock rule",
     "mastered": "Mastered",
     "passing": "Passing",
     "needsReview": "Needs review",
@@ -362,7 +362,7 @@
   },
   "stats": {
     "title": "Reading Stats",
-    "avgScoreLabel": "Avg quiz score",
+    "avgScoreLabel": "Avg first-attempt score",
     "avgScoreValue": "{{score}} pts",
     "chaptersReadLabel": "Chapters read",
     "levelsCompletedLabel": "Levels completed",
@@ -466,6 +466,317 @@
     "answered": "Correct {{correct}}/{{total}}",
     "score": "{{score}} pts"
   },
+  "placement": {
+    "title": "Placement Check",
+    "subtitle": "Locate your starting point with a short set of fundamentals and skip levels you already know",
+    "intro": "A short set of fundamental questions decides which level suits you best. The check writes no chapter completion records, and a retake only widens the credited range.",
+    "start": "Start the placement check",
+    "questionOf": "Question {{current}} of {{total}}",
+    "next": "Next question",
+    "finish": "Submit the check",
+    "resultTitle": "Placement result",
+    "score": "{{correct}} of {{total}} correct, {{score}} pts",
+    "recommendedLevel": "Recommended start: {{level}}",
+    "creditLevels": "Credited levels: {{levels}}",
+    "zeroBasedTitle": "Starting from zero is fine",
+    "zeroBasedBody": "With no credits granted, reading T1 in order is the right path: a solid base in probability and odds makes every later level easier.",
+    "basicsCta": "Read the basics first",
+    "retake": "Retake the check",
+    "disclaimer": "The check only widens access: it adds no chapters read and leaves mastery and rating untouched.",
+    "creditedBadge": "Credited",
+    "prereq": {
+      "title": "Three things to confirm first",
+      "rule": "Hand rankings and the basic rules",
+      "hand": "Starting hands and position names",
+      "position": "Betting actions and common terms"
+    },
+    "questions": {
+      "pl-t1-combos": {
+        "question": "How many combos does AKs (suited ace-king) have?",
+        "options": [
+          "4 combos",
+          "6 combos",
+          "12 combos",
+          "16 combos"
+        ],
+        "explanation": "Suited combos equal the number of suits: one per suit, so 4. The 12-combo figure belongs to AKo."
+      },
+      "pl-t1-outs": {
+        "question": "You have 9 outs on the flop. Roughly what is your chance of hitting by the river with two cards to come?",
+        "options": [
+          "27%",
+          "45%",
+          "35%",
+          "18%"
+        ],
+        "explanation": "Nine outs with two cards to come is about 35% (the rule of 4 gives 9 x 4 = 36; the exact value is 35.0%)."
+      },
+      "pl-t1-variance": {
+        "question": "Which statement about variance and the long run is correct?",
+        "options": [
+          "A high win rate rules out downswings",
+          "Smaller samples reflect your true skill better",
+          "Correct decisions can still lose money for a long stretch",
+          "Variance is decided only by the opponents luck"
+        ],
+        "explanation": "Correct decisions only guarantee positive expectation in the long run; short stretches can still lose, which is why bankroll and sample-size discipline matter."
+      },
+      "pl-t2-ev": {
+        "question": "What does a positive expected value (EV) decision mean?",
+        "options": [
+          "This particular hand will definitely win",
+          "The opponent must have made a mistake",
+          "It only holds on the river",
+          "Repeating the decision over time profits overall"
+        ],
+        "explanation": "EV is a long-run average: a single trial can lose while the repeat average stays positive."
+      },
+      "pl-t2-pot-odds": {
+        "question": "The pot is 100 and the opponent bets 50. Roughly what equity do you need to break even on a call?",
+        "options": [
+          "25%",
+          "33%",
+          "50%",
+          "66%"
+        ],
+        "explanation": "Calling 50 makes the pot 200, so the required equity is 50 / 200 = 25%."
+      },
+      "pl-t2-implied": {
+        "question": "When are implied odds most valuable?",
+        "options": [
+          "You are already on the river with no bets to come",
+          "You hold an already made nut hand",
+          "Your draw can win extra chips after it hits",
+          "The pot is tiny and the opponent is short"
+        ],
+        "explanation": "Implied odds price in chips you can win on later streets, so they matter most when a made draw gets paid off."
+      },
+      "pl-t3-position": {
+        "question": "What is the main advantage of being in position?",
+        "options": [
+          "You pay smaller blinds",
+          "You act after the opponent on every street and get more information",
+          "The rake percentage is lower",
+          "You get to see the opponents hole cards"
+        ],
+        "explanation": "Position is an information edge: the opponent acts first, so each of your street decisions carries more information."
+      },
+      "pl-t3-gap": {
+        "question": "What is the core claim of the Gap Concept?",
+        "options": [
+          "Raising needs a stronger hand than calling",
+          "Position matters more than hand strength",
+          "Any two cards are worth a limp",
+          "Calling usually needs a stronger hand than opening"
+        ],
+        "explanation": "Sklansky Gap Concept: calling a raise usually demands a stronger hand than opening the betting yourself."
+      },
+      "pl-t3-initiative": {
+        "question": "What does preflop initiative usually buy you after the flop?",
+        "options": [
+          "You must bet every street",
+          "You may no longer check",
+          "An easier story to represent strong hands and keep barreling",
+          "The opponent is forced to fold"
+        ],
+        "explanation": "Initiative is a narrative edge: the raisers range holds more strong hands, so representing strength costs less credibility."
+      },
+      "pl-t4-range": {
+        "question": "What is the key difference between range thinking and single-hand thinking?",
+        "options": [
+          "Treating the opponents cards as a weighted distribution of combos",
+          "Guessing one hand and then correcting it",
+          "Only considering the opponents nuts",
+          "Only looking at your own two cards"
+        ],
+        "explanation": "Range thinking models the opponent as a weighted set of combos that narrows and reweights with each street of action."
+      },
+      "pl-t4-blockers": {
+        "question": "What role do blockers play when choosing bluffs?",
+        "options": [
+          "They make your own hand more likely to complete a straight",
+          "They raise your equity realization",
+          "They lower the rake",
+          "Holding key cards in the opponents folding range cuts their strong combos"
+        ],
+        "explanation": "Blockers are about the opponents combos: cards you hold that sit inside their strong holdings reduce how many of those they can continue with."
+      },
+      "pl-t4-range-advantage": {
+        "question": "A dry ace-high flop usually favors which player?",
+        "options": [
+          "The preflop caller",
+          "The preflop raiser",
+          "The big blind",
+          "Both players equally"
+        ],
+        "explanation": "Ace-high boards connect better with the preflop raisers range (AA, AK and AQ cluster there), so the raiser holds the range advantage."
+      },
+      "pl-t5-mdf": {
+        "question": "The pot is 100 and the opponent bets 100. What is your minimum defense frequency (MDF)?",
+        "options": [
+          "33%",
+          "50%",
+          "66%",
+          "75%"
+        ],
+        "explanation": "MDF = pot / (pot + bet) = 100 / 200 = 50%."
+      },
+      "pl-t5-mixed": {
+        "question": "What is the point of a mixed strategy (same node, different actions by frequency)?",
+        "options": [
+          "It shows you have not decided yet",
+          "It only works in casual games",
+          "It denies the opponent a stable profit from a fixed counter",
+          "Its main purpose is lowering variance"
+        ],
+        "explanation": "Mixing serves unexploitability: a fixed response becomes attackable, while frequency mixing removes the certainty a counter-strategy needs."
+      },
+      "pl-t6-bet-purpose": {
+        "question": "When a hand has neither a value nor a bluff reason to bet, what is usually best?",
+        "options": [
+          "Check",
+          "Bet small as a bluff",
+          "Shove for pressure",
+          "Raise the opponent"
+        ],
+        "explanation": "Bets need a reason (value, bluff or protection); when none applies, checking keeps equity and controls the pot."
+      },
+      "pl-t6-spr": {
+        "question": "What does a low SPR (stack-to-pot ratio) usually mean?",
+        "options": [
+          "You should fine-tune sizing across many streets",
+          "The opponent will fold more often",
+          "Equity realization drops sharply",
+          "Top-pair hands can commit to all-in more comfortably"
+        ],
+        "explanation": "A low SPR means one or two bets get the stacks in, which raises the commitment value of made hands like top pair."
+      }
+    }
+  },
+  "checkpoint": {
+    "title": "Level Checkpoint",
+    "subtitle": "A drawn set of questions after finishing a level: core concepts only, with no unlock gate",
+    "entry": "Start the level check",
+    "lockedHint": "Opens once you finish the core chapters of this level",
+    "questionOf": "Question {{current}} of {{total}}",
+    "finish": "Submit the check",
+    "resultTitle": "Checkpoint result",
+    "score": "This attempt: {{score}} pts",
+    "bestScore": "Best so far: {{score}} pts",
+    "dimensionBreakdown": "By dimension",
+    "srsHint": "Missed questions went into your spaced-repetition queue",
+    "retry": "Retake the check",
+    "noCertificate": "A checkpoint is a self-check: no certificate and no unlock",
+    "notReady": "No checkpoint bank for this level yet — use the chapter quizzes instead",
+    "dimension": {
+      "preflop": "Preflop",
+      "postflop": "Postflop",
+      "math": "Math",
+      "handReading": "Hand reading",
+      "mental": "Mental"
+    }
+  },
+  "notes": {
+    "title": "Chapter notes",
+    "placeholder": "Note the key points, your own examples, or what still feels unclear",
+    "save": "Save",
+    "saved": "Saved",
+    "empty": "No notes yet — two lines at the key moment saves half the time on review",
+    "charCount": "{{count}} / {{max}} characters",
+    "clear": "Clear",
+    "cleared": "Note cleared"
+  },
+  "bookmarks": {
+    "title": "Bookmarked chapters",
+    "add": "Bookmark this chapter",
+    "remove": "Remove bookmark",
+    "empty": "Nothing bookmarked yet — save the chapters worth rereading",
+    "viewAll": "View all bookmarks"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search chapters, terms or bibliography",
+    "results": "{{count}} results",
+    "noResults": "No matches — try another keyword",
+    "fullTextLoading": "Loading the full-text index",
+    "open": "Open",
+    "categories": {
+      "chapters": "Chapters",
+      "glossary": "Glossary",
+      "bibliography": "Bibliography"
+    }
+  },
+  "glossary": {
+    "title": "Glossary",
+    "subtitle": "Terms and abbreviations used across the lessons, grouped by category",
+    "searchPlaceholder": "Search terms",
+    "allCategories": "All categories",
+    "empty": "No matching terms",
+    "relatedChapters": "Related chapters",
+    "categories": {
+      "math": "Math and odds",
+      "preflop": "Preflop",
+      "postflop": "Postflop",
+      "psychology": "Mindset and bankroll",
+      "other": "Other"
+    }
+  },
+  "bibliography": {
+    "title": "Bibliography",
+    "subtitle": "The authoritative texts behind this module; each chapter cites its source in place",
+    "books": "{{count}} books",
+    "citedIn": "Cited in",
+    "empty": "No bibliography entries yet"
+  },
+  "recommendation": {
+    "title": "What to read next",
+    "subtitle": "Based on recent chapter quizzes and flagged questions, a better entry point",
+    "cta": "Read this chapter",
+    "reason": {
+      "math": "Math questions lose the most points — rebuild combinatorics and odds first",
+      "preflop": "Preflop accuracy is low — straighten out position value and starting-hand standards",
+      "postflop": "Postflop judgement is weaker — start from range advantage and bet purpose",
+      "handReading": "Hand-reading questions miss most — reread the pipeline from ranges to combos",
+      "mental": "Missed questions cluster in mindset and bankroll — read the psychology chapters",
+      "fallback": "Not enough chapters read yet — continue from where you are"
+    }
+  },
+  "report": {
+    "title": "Report a content issue",
+    "subtitle": "Typos, wrong numbers or unclear explanations are all worth reporting",
+    "placeholder": "Describe the section and what looks wrong",
+    "copy": "Copy the report",
+    "copied": "Copied",
+    "mailto": "Send by email",
+    "includeContext": "Include chapter and section details",
+    "success": "Report generated — paste it anywhere to submit",
+    "failure": "Copy failed — select the text and copy it manually"
+  },
+  "contentMeta": {
+    "lastReviewed": "Last reviewed {{date}}",
+    "reviewedBy": "Reviewed by {{name}}",
+    "reportIssue": "Report an issue"
+  },
+  "block": {
+    "table": "Table",
+    "rangeMatrix": "Range matrix",
+    "decisionTree": "Decision tree",
+    "legend": "Legend",
+    "caption": "Figure caption",
+    "action": {
+      "raise": "Raise",
+      "bet": "Bet",
+      "call": "Call",
+      "check": "Check",
+      "fold": "Fold",
+      "all-in": "All-in",
+      "mixed": "Mixed"
+    }
+  },
+  "level": {
+    "creditedBadge": "Credited",
+    "checkpointEntry": "Level checkpoint"
+  },
   "proTip": {
     "title": "Pro Tip"
   },
@@ -475,6 +786,16 @@
     "incorrect": "✗ Incorrect",
     "next": "Next",
     "viewResult": "View result",
-    "optionAria": "Option {{letter}}: {{option}}"
+    "optionAria": "Option {{letter}}: {{option}}",
+    "attemptCount": "{{count}} attempts",
+    "firstAttempt": "First attempt",
+    "firstAttemptHint": "Counts toward mastery and rating",
+    "practiceAttempt": "Practice attempt (does not affect mastery or rating)",
+    "firstScoreLabel": "First-attempt score",
+    "bestScoreLabel": "Best score",
+    "practiceOnly": "Practice",
+    "retryPracticeHint": "Retakes update practice scores only; the first-attempt score and mastery stay unchanged",
+    "drawCount": "{{count}} questions drawn",
+    "practiceBanner": "Practice mode: this attempt is not counted toward progress or rating"
   }
 }

@@ -191,7 +191,8 @@ describe('theoryCalcDrills 题源', () => {
       'recordAnswer(',
       'updateElo(',
       'addReviewItem(',
-      'completeChapter(',
+      // 章末小测提交 action 已由 completeChapter 更名为 recordChapterAttempt（Wave 0 契约冻结）
+      'recordChapterAttempt(',
       'trainingEvents.emit',
       'recordTrainingDay(',
     ];

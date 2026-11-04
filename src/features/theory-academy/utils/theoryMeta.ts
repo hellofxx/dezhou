@@ -5,7 +5,7 @@ import {
   SHORT_DECK_LEVEL_SUMMARIES,
   STANDARD_LEVEL_SUMMARIES,
 } from '../data/levels/manifest';
-import type { TheoryChapterSummary, TheoryLevelSummary } from '../types';
+import type { TheoryChapterSummary, TheoryLevelSummary, TheoryProgress } from '../types';
 
 /**
  * 理论学院目录层查询（不含章节正文）。
@@ -161,23 +161,46 @@ export function getChapterDifficulty(level: number): number {
 }
 
 /**
- * 判断 Level 是否按顺序解锁（纯函数）。
+ * 判断 Level 是否按顺序解锁（纯函数，解锁判定唯一入口）。
  * 变体 Level 的解锁链在变体自己的 Level 序列内判定：
- * 序列内 idx=0 恒解锁，Tn 需前一 Level **核心章**全部完成（增补章不参与解锁判定）。
+ * - `creditLevels`（定位测评免修）中的 Level 直接解锁；
+ * - 序列内 idx=0 恒解锁；
+ * - Tn 需前一 Level 被免修，或前一 Level **核心章**全部完成（增补章不参与解锁判定）。
  */
 export function isLevelUnlockedByCompleted(
   levelId: string,
-  completedChapters: string[],
+  completedChapters: readonly string[],
+  creditLevels: readonly string[] = [],
 ): boolean {
   const sequence = getLevelSequence(levelId);
   const idx = sequence.findIndex((level) => level.id === levelId);
   if (idx < 0) return false;
+  if (creditLevels.includes(levelId)) return true;
   if (idx === 0) return true;
   const previous = sequence[idx - 1];
   if (!previous) return false;
+  if (creditLevels.includes(previous.id)) return true;
   return getCoreChaptersOfLevel(previous).every((chapter) =>
     completedChapters.includes(chapter.id),
   );
+}
+
+/**
+ * 下一章推荐（每日计划 / 首页 CTA 的单一推导入口）。
+ * 规则：按当前变体 Level 序列，跳过已免修 Level、未解锁 Level 与已完成章节，
+ * 返回第一个未完成核心章；全部核心章读完（或无可读 Level）时返回 null。
+ */
+export function findNextTheoryChapter(progress: TheoryProgress): TheoryChapterSummary | null {
+  const completed = new Set(progress.completedChapters);
+  const creditLevels = progress.placement?.creditLevels ?? [];
+  const credited = new Set(creditLevels);
+  for (const level of getLevelsOfVariant(progress.activeVariant)) {
+    if (credited.has(level.id)) continue; // 定位免修 Level 不推荐（可随时补读，但不占用每日计划）
+    if (!isLevelUnlockedByCompleted(level.id, progress.completedChapters, creditLevels)) continue;
+    const next = getCoreChaptersOfLevel(level).find((chapter) => !completed.has(chapter.id));
+    if (next) return next;
+  }
+  return null;
 }
 
 /** 判断某 Level 的核心章是否全部完成（支持所有变体；增补章未读不影响判定） */

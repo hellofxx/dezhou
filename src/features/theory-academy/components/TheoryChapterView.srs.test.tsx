@@ -4,7 +4,7 @@
  * 浏览器实测现象：走完「进入章末小测 → 答题（答对 2/5，含 3 道错题）→ 查看结果 →
  * 本章完成」全流程后，localStorage `poker-training-progress` 的 reviewItems 始终为空。
  *
- * 本测试以 jsdom 复现同一路径（真实题库 t1-combinatorics，5 题中刻意答错 3 题），
+ * 本测试以 jsdom 复现同一路径（真实题库 t1-combinatorics，8 题中刻意答错 3 题），
  * 断言 progress store 的 reviewItems 新增 3 条 `theory:<questionId>`。
  * 不引入 testing-library，直接用 react-dom/client + act 渲染（对齐 TheoryQuiz.test.tsx 模式）。
  */
@@ -19,6 +19,7 @@ import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
 import { findChapterById } from '../utils/theoryProgress';
 import { orderTheoryQuizQuestion } from '../utils/quizOrder';
+import { drawQuizQuestions, getQuizDrawSize } from '../utils/quizDraw';
 import { resolveTheoryQuizQuestion } from '../utils/contentKeys';
 import { theoryReviewItemId } from '../utils/theorySrs';
 
@@ -28,10 +29,19 @@ MotionGlobalConfig.skipAnimations = true;
 const CHAPTER_ID = 't1-combinatorics';
 const chapter = findChapterById(CHAPTER_ID)!;
 
-/** 复刻组件内的渲染管线：先 t() 解析，再走 quizOrder 重排（用于按文本定位选项） */
-function displayedQuestions() {
+/**
+ * 复刻组件内的渲染管线：先 t() 解析，再按 Level 抽题（T1–T3 抽 5 题），
+ * 最后走 quizOrder 重排（用于按文本定位选项）。attemptNumber 必须与持久化进度一致。
+ */
+function displayedQuestions(attemptNumber = 1) {
   const t = i18n.t.bind(i18n);
-  return chapter.quiz.map((q) => orderTheoryQuizQuestion(resolveTheoryQuizQuestion(t, q)));
+  const resolved = chapter.quiz.map((q) => resolveTheoryQuizQuestion(t, q));
+  const drawn = drawQuizQuestions(resolved, {
+    chapterId: CHAPTER_ID,
+    attemptNumber,
+    size: getQuizDrawSize(chapter.level),
+  });
+  return drawn.map((q) => orderTheoryQuizQuestion(q));
 }
 
 function buttons(container: HTMLElement): HTMLButtonElement[] {
@@ -75,14 +85,13 @@ async function clickByText(container: HTMLElement, text: string) {
   });
 }
 
-/** 按「答对/答错」计划走完整个小测；wrongMask[i] === true 表示第 i 题刻意答错 */
-async function runQuiz(container: HTMLElement, wrongMask: boolean[]) {
-  const questions = displayedQuestions();
-  expect(questions.length).toBe(wrongMask.length);
+/** 按「答对/答错」计划走完整个小测；wrongIds 中的题刻意答错 */
+async function runQuiz(container: HTMLElement, wrongIds: string[], attemptNumber = 1) {
+  const questions = displayedQuestions(attemptNumber);
 
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i]!;
-    const wantWrong = wrongMask[i]!;
+    const wantWrong = wrongIds.includes(q.id);
     const target = wantWrong ? (q.correctIndex + 1) % q.options.length : q.correctIndex;
     await clickByText(container, q.options[target]!);
     await clickByText(container, i < questions.length - 1 ? '下一题' : '查看结果');
@@ -125,28 +134,27 @@ describe('TheoryChapterView 章末错题入 SRS 队列', () => {
     });
   }
 
-  it('首次完成：5 题答错 3 题 → reviewItems 新增 3 条 theory:<questionId>', async () => {
+  it('首次完成：8 题池抽 5 题，刻意答错 3 题 → reviewItems 新增 3 条 theory:<questionId>', async () => {
     expect(useProgressStore.getState().reviewItems).toEqual([]);
     await mountView();
 
-    // 第 1/3/5 题答错，第 2/4 题答对（对应浏览器实测 2/5 正确）
+    // 抽题后本轮显示 5 题；取本节前 3 题作为错题，避免依赖具体题号顺序
+    const drawnIds = displayedQuestions(1).map((q) => q.id);
+    expect(drawnIds.length).toBe(5);
+    const wrongIds = drawnIds.slice(0, 3);
     await clickByText(container, '进入章末小测');
-    await runQuiz(container, [true, false, true, false, true]);
+    await runQuiz(container, wrongIds, 1);
 
-    const ids = useProgressStore.getState().reviewItems.map((r) => r.id);
-    expect(ids).toEqual([
-      theoryReviewItemId('t1-combinatorics-q1'),
-      theoryReviewItemId('t1-combinatorics-q3'),
-      theoryReviewItemId('t1-combinatorics-q5'),
-    ]);
+    const ids = useProgressStore.getState().reviewItems.map((r) => r.id).toSorted();
+    expect(ids).toEqual(wrongIds.map(theoryReviewItemId).toSorted());
     // 持久化层：localStorage 的 poker-training-progress 必须同步带上这 3 条
-    expect(persistedReviewItemIds()).toEqual(ids);
+    expect(persistedReviewItemIds().toSorted()).toEqual(ids);
   });
 
   it('重测（章节已完成）：错题同样入队，不因 completeChapter 的 alreadyCompleted 早退而丢失', async () => {
     await mountView();
     await clickByText(container, '进入章末小测');
-    await runQuiz(container, [false, false, false, false, false]);
+    await runQuiz(container, [], 1);
     // 首次全对 → 队列为空
     expect(useProgressStore.getState().reviewItems).toEqual([]);
     act(() => root.unmount());
@@ -155,10 +163,12 @@ describe('TheoryChapterView 章末错题入 SRS 队列', () => {
     await mountView();
     // 已完成章节回访：阅读页提供「重考小测」（zh 文案 theory.chapterView.retryQuiz）
     await clickByText(container, '重新挑战小测');
-    await runQuiz(container, [false, true, false, false, false]);
+    // 重考是第 2 次作答：抽题种子与首次不同
+    const retryWrongId = displayedQuestions(2)[0]!.id;
+    await runQuiz(container, [retryWrongId], 2);
 
     const ids = useProgressStore.getState().reviewItems.map((r) => r.id);
-    expect(ids).toEqual([theoryReviewItemId('t1-combinatorics-q2')]);
+    expect(ids).toEqual([theoryReviewItemId(retryWrongId)]);
     expect(persistedReviewItemIds()).toEqual(ids);
   });
 });
