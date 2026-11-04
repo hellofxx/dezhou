@@ -127,7 +127,7 @@ export function ActionSelector({
           className={cn(
             'relative py-4 rounded-md font-display font-semibold text-lg transition-all',
             showRaiseSlider
-              ? 'bg-[var(--brass)] text-[var(--primary-foreground)] border border-[var(--brass)]'
+              ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] border border-[var(--brass-fill-border)]'
               : 'bg-[var(--brass)]/20 text-[var(--brass-bright)] border border-[var(--brass)]/40',
             'hover:bg-[var(--brass)]/30 hover:border-[var(--brass)]/60',
             'active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
@@ -150,7 +150,7 @@ export function ActionSelector({
                 className={cn(
                   'flex-1 py-1.5 rounded text-xs font-medium transition-all font-numeric',
                   Math.abs(raiseAmount - qr.value) < 0.1
-                    ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                    ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                     : 'bg-[var(--walnut-raised)]/60 text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
                 )}
               >
@@ -183,7 +183,7 @@ export function ActionSelector({
           <button
             onClick={handleRaiseSubmit}
             disabled={disabled}
-            className="w-full py-2.5 rounded-md bg-[var(--brass)] text-[var(--primary-foreground)] font-display font-semibold hover:bg-[var(--brass-bright)] transition-all active:scale-95"
+            className="w-full py-2.5 rounded-md bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-semibold hover:[background:var(--brass-fill-gradient-hover)] transition-all active:scale-95"
           >
             {actionTerm(ActionType.Raise)} {raiseAmount.toFixed(1)} BB
           </button>
@@ -197,8 +197,8 @@ export function ActionSelector({
         aria-label={actionLabel(ActionType.AllIn, effectiveStack)}
         className={cn(
           'relative w-full py-3 rounded-md font-display font-semibold text-lg transition-all',
-          'bg-gradient-to-r from-[var(--clay)]/35 to-[var(--brass)]/35 text-[var(--brass-bright)] border border-[var(--brass)]/40',
-          'hover:from-[var(--clay)]/45 hover:to-[var(--brass)]/45',
+          '[background:var(--action-allin-bg)] text-[var(--stable-ivory)] border border-[var(--brass)]/40',
+          'hover:[background:var(--action-allin-bg-hover)]',
           'active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed'
         )}
       >

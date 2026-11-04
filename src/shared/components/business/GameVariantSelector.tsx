@@ -46,7 +46,7 @@ export function GameVariantSelector({ compact = false, currentVariant, onChange 
               className={cn(
                 'relative flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-all',
                 isActive
-                  ? 'bg-[var(--brass-bright)] text-[var(--felt-deep)] shadow-sm'
+                  ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] shadow-sm'
                   : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]'
               )}
               aria-label={t(`variant.name.${variant}`)}

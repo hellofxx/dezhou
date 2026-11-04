@@ -1,5 +1,7 @@
 # Agent Tools Requirements - Automation Guard Design Specification
 
+> 状态：Historical（归档于 2026-11-04）。本设计已由 `scripts/validate-agent-tools.ts` 实现；当前规则以 `AGENTS.md` §Agent 协作与 `.git-hooks/README.md` 为准。
+
 ## Overview
 
 本规范定义如何通过自动化脚本扫描 `.claude/agents/*.md`的 `tools`字段，校验是否为预设集合，作为 PR 前的告警级检查（非门禁级）。虽非必要，但可减少疏忽性漂移。

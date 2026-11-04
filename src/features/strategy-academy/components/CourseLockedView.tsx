@@ -110,7 +110,7 @@ export function CourseLockedView({
                       ) : firstIncomplete ? (
                         <button
                           onClick={() => navigate(`/academy/lesson/${firstIncomplete.id}`)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-xs hover:opacity-90 transition-opacity shrink-0"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-xs hover:opacity-90 transition-opacity shrink-0"
                         >
                           {t('academy.courseView.goComplete', { defaultValue: '去完成' })}
                           <ArrowRight className="w-3 h-3" />
@@ -144,7 +144,7 @@ export function CourseLockedView({
                           }
                         }
                       }}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-xs hover:opacity-90 transition-opacity shrink-0"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-xs hover:opacity-90 transition-opacity shrink-0"
                     >
                       {t('academy.courseView.goComplete', { defaultValue: '去完成' })}
                       <ArrowRight className="w-3 h-3" />
@@ -180,7 +180,7 @@ export function CourseLockedView({
 
       <button
         onClick={() => navigate('/academy')}
-        className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity mt-2"
+        className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity mt-2"
       >
         <Home className="w-4 h-4" />
         {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}

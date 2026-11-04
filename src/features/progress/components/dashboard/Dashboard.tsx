@@ -251,7 +251,7 @@ export default function Dashboard() {
                         onClick={() => setTimeRange(range)}
                         className={`px-2 py-1 text-[10px] font-numeric rounded transition-colors ${
                           active
-                            ? 'bg-[var(--brass)] text-[var(--primary-foreground)] font-semibold'
+                            ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold'
                             : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
                         }`}
                       >

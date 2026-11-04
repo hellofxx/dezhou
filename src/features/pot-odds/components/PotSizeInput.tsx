@@ -71,7 +71,7 @@ export function PotSizeInput({
               className={cn(
                 'px-2.5 py-1 rounded text-xs font-medium transition-colors font-numeric',
                 value === clamp(btn.value)
-                  ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                  ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                   : 'bg-[var(--walnut-raised)]/60 text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15 hover:text-[var(--brass-bright)]'
               )}
             >

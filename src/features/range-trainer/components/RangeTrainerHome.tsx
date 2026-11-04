@@ -88,7 +88,7 @@ export default function RangeTrainerHome() {
             <Button
               variant="default"
               size="sm"
-              className="bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)]"
+              className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)]"
               onClick={() => navigate('/range-trainer/learn')}
             >
               <BookOpen className="w-4 h-4 mr-1" />

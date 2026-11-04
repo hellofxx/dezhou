@@ -136,7 +136,7 @@ export function HandReplayer() {
           <button
             onClick={togglePlay}
             aria-label={state.isPlaying ? t('handHistory.replay.pause') : t('handHistory.replay.play')}
-            className="min-h-12 min-w-12 flex items-center justify-center rounded-full bg-[var(--brass)] text-[var(--primary-foreground)] hover:bg-[var(--brass-bright)] transition-colors shadow-lg"
+            className="min-h-12 min-w-12 flex items-center justify-center rounded-full bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)] transition-colors shadow-lg"
             title={state.isPlaying ? t('handHistory.replay.pause') : t('handHistory.replay.play')}
           >
             {state.isPlaying ? <Pause size={20} /> : <Play size={20} />}

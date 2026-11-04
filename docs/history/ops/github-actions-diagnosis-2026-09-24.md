@@ -1,5 +1,7 @@
 # GitHub Actions 部署失败详细排查报告
 
+> 状态：Historical（归档于 2026-11-04）。当前部署流程以 `docs/ops/DEPLOY_CHECKLIST.md` 与 `.github/workflows/` 为准；本文仅保留当时的排查证据。
+
 **项目**: dezhou (德州扑克训练平台)  
 **部署目标**: GitHub Pages 子路径 `/dezhou/`  
 **生成时间**: 2026-09-24  

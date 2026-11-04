@@ -145,7 +145,7 @@ function ZeroStateCard() {
 
       <Link
         to="/academy/basics"
-        className="hover-bright mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border border-[var(--brass-dark)] shadow-[var(--shadow-brass-btn)] transition-all"
+        className="hover-bright mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold [background:var(--brass-fill-gradient)] text-[var(--brass-fill-ink)] border border-[var(--brass-fill-border)] shadow-[var(--shadow-brass-btn)] transition-all"
       >
         <GraduationCap className="w-4 h-4" />
         {t('academy.zeroState.cta')}

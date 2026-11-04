@@ -123,7 +123,7 @@ export function PuzzleCardFeedback({
           <Button
             onClick={onNext}
             size="sm"
-            className="bg-[var(--brass)] text-[var(--primary-fg)] hover:bg-[var(--brass-bright)]"
+            className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)]"
           >
             {isLastQuestion
               ? t('puzzle.card.viewResult')

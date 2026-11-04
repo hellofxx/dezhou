@@ -63,7 +63,7 @@ export default function DownswingAlert() {
           <div className="shrink-0">
             <Button
               onClick={() => navigate('/academy/lesson/local-mental-tilt-recognition')}
-              className="bg-[var(--brass-bright)] text-[var(--felt-deep)] hover:opacity-90 gap-1.5"
+              className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:opacity-90 gap-1.5"
               size="sm"
             >
               {t('downswing.viewLesson', { defaultValue: '查看应对指南' })}

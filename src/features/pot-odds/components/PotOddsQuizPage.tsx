@@ -285,7 +285,7 @@ export default function PotOddsQuizPage() {
           <div className="flex gap-3 justify-center">
             <button
               onClick={handleRestart}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
             >
               <RotateCcw className="w-4 h-4" /> {t('potOdds.quiz.restart')}
             </button>
@@ -521,7 +521,7 @@ export default function PotOddsQuizPage() {
             <div className="flex justify-end">
               <button
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
               >
                 {currentIndex + 1 >= totalQuestions ? t('potOdds.quiz.viewResult') : t('potOdds.quiz.next')}
                 <ArrowRight className="w-4 h-4" />

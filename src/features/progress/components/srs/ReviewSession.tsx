@@ -205,7 +205,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end pt-2">
-            <Button onClick={handleClose} className="bg-[var(--brass)] text-[var(--primary-foreground)]">
+            <Button onClick={handleClose} className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]">
               {t('common.ui.confirm', { defaultValue: '确认' })}
             </Button>
           </div>
@@ -259,7 +259,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
           </div>
 
           <div className="flex justify-end pt-3">
-            <Button onClick={handleClose} className="bg-[var(--brass)] text-[var(--primary-foreground)]">
+            <Button onClick={handleClose} className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]">
               {t('common.ui.confirm', { defaultValue: '确认' })}
             </Button>
           </div>
@@ -475,7 +475,7 @@ export default function ReviewSession({ open, onOpenChange, initialItems }: Revi
             {(hasAnswered || (showAnswer && answers.length > currentIndex)) && (
               <Button
                 onClick={handleNext}
-                className="w-full bg-[var(--brass)] text-[var(--primary-foreground)] hover:bg-[var(--brass-bright)]"
+                className="w-full bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)]"
               >
                 {currentIndex + 1 >= totalCount
                   ? t('review.finish', { defaultValue: '完成复习' })

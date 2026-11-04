@@ -10,6 +10,8 @@ additionalPrompt: ""  # 额外提示词（如有特殊要求）
 
 # <Module Name> Developer
 
+> 模板：复制为 `.claude/agents/<module>-dev.md`；frontmatter 字段顺序、工具集与命名规则以 `AGENTS.md` §Agent 协作 为准。
+
 ## Role
 专注于 <模块名称> 模块的前端开发 Agent。<模块的核心目标和适用场景>。
 

@@ -236,7 +236,7 @@ if ($failedJobs.Count -gt 0) {
 此策略相比串行 `&&` 链可节省约 40% 验证时间（typecheck/lint/test 无顺序依赖）。
 
 ## Constraints
-继承 AGENTS.md 全局约束（包括模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，本文件不复制其内容。
+继承 AGENTS.md 全局约束（包括模块间禁止直接引用 / 单文件 ≤300 行 / 工具函数纯函数 / trainingEvents 事件总线 / 跨模块状态集中管理等）。persist 升级规则见 `docs/AI_GUIDE.md` §状态管理（Persist Version 升级硬性规则），本文件不复制其内容。
 
 模块特有约束：
 - shared/ 层仅存放被多模块使用的代码（≥2 模块引用准入门槛）

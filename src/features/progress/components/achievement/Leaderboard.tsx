@@ -113,7 +113,7 @@ export default function Leaderboard() {
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 py-2 px-3 rounded text-sm font-medium transition-colors ${
                 activeTab === tab.key
-                  ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                  ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                   : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)]'
               }`}
             >

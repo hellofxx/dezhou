@@ -64,7 +64,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                 className={cn(
                   'flex-1 px-4 py-2 rounded-lg text-sm font-display font-medium transition-all border',
                   !exploitMode
-                    ? 'bg-[var(--brass)] border-[var(--brass)] text-[var(--primary-foreground)]'
+                    ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                     : 'bg-[var(--walnut-raised)]/40 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                 )}
               >
@@ -145,7 +145,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                     config.gameVariant === v.value
                       ? v.value === 'short-deck'
                         ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage-text)]'
-                        : 'bg-[var(--brass)] border-[var(--brass)] text-[var(--primary-foreground)]'
+                        : 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                       : 'bg-[var(--walnut-raised)]/40 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                   )}
                 >
@@ -170,7 +170,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   className={cn(
                     'px-4 py-2 rounded-lg text-sm font-display font-medium transition-all',
                     config.gameType === gt.value
-                      ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                      ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                       : 'bg-[var(--walnut-raised)]/40 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                   )}
                 >
@@ -204,7 +204,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
 
         {/* 右列 */}
         <div className="space-y-6">
-          {/* 位置选择 — sage to differentiate from brass CTAs */}
+          {/* 位置选择 — 选中态走 position-selected token（light = 蜜金，dark = sage 语义色） */}
           <div className="space-y-2">
             <label className="text-sm font-display font-semibold text-[var(--ivory-dim)] tracking-wide">{t('gto.setup.positionLabel')}</label>
             <div className="flex flex-wrap gap-2">
@@ -215,7 +215,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   className={cn(
                     'px-3 py-1.5 rounded-lg text-sm font-display font-bold transition-all',
                     config.position === pos
-                      ? 'bg-[var(--sage)] text-[var(--ivory)]'
+                      ? 'bg-[var(--position-selected-bg)] text-[var(--position-selected-ink)]'
                       : 'bg-[var(--walnut-raised)]/40 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                   )}
                 >
@@ -240,7 +240,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   className={cn(
                     'px-4 py-2 rounded-lg text-sm font-display font-medium transition-all',
                     config.playerCount === count
-                      ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                      ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                       : 'bg-[var(--walnut-raised)]/40 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                   )}
                 >
@@ -283,7 +283,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
                   className={cn(
                     'px-4 py-2 rounded-lg text-sm font-display font-medium font-numeric transition-all',
                     config.scenarioCount === count
-                      ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                      ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                       : 'bg-[var(--walnut-raised)]/40 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
                   )}
                 >
@@ -299,7 +299,7 @@ export function ScenarioSetup({ onStart }: ScenarioSetupProps) {
       {/* 开始按钮 */}
       <button
         onClick={onStart}
-        className="hover-bright w-full py-3 rounded-xl bg-[var(--brass)] text-[var(--primary-foreground)] font-display font-bold text-lg shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+        className="hover-bright w-full py-3 rounded-xl bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-bold text-lg shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
       >
         {t('gto.setup.startGtoTraining')}
       </button>

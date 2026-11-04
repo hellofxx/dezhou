@@ -206,7 +206,7 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
         >
           <Button
             onClick={onRetry}
-            className="bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] px-6"
+            className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)] px-6"
           >
             <RotateCcw className="w-4 h-4 mr-2" />
             {t('rangeTrainer.result.retry')}

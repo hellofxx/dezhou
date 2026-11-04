@@ -38,7 +38,7 @@ export default function GTOResultPage() {
         <div className="text-[var(--ivory-muted)] mb-4">{t('gto.result.noData')}</div>
         <button
           onClick={() => navigate('/gto-simulator')}
-          className="px-4 py-2 rounded-md bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-medium font-display"
+          className="px-4 py-2 rounded-md bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-medium font-display"
         >
           {t('gto.session.backHome')}
         </button>

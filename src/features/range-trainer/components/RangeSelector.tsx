@@ -76,7 +76,7 @@ export function RangeSelector({
                 aria-label={reason ?? pos}
                 className={cn(
                   'text-xs px-4 min-h-11',
-                  selectedPosition === pos && 'bg-[var(--brass)] hover:bg-[var(--brass-bright)]',
+                  selectedPosition === pos && 'bg-[var(--brass-fill)] hover:[background:var(--brass-fill-gradient-hover)]',
                   disabled && 'opacity-50 cursor-not-allowed'
                 )}
                 onClick={() => !disabled && onPositionChange(pos)}
@@ -100,7 +100,7 @@ export function RangeSelector({
               size="sm"
               className={cn(
                 'text-xs px-3 py-1.5 h-auto',
-                selectedActionType === at.value && 'bg-[var(--brass)] hover:bg-[var(--brass-bright)]'
+                selectedActionType === at.value && 'bg-[var(--brass-fill)] hover:[background:var(--brass-fill-gradient-hover)]'
               )}
               onClick={() => onActionTypeChange(at.value)}
             >

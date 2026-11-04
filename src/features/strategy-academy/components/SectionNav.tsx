@@ -31,7 +31,7 @@ export function SectionNav({ units, activeId, completedIds, onNavigate, lessonId
 
             let className = 'px-3 py-2.5 rounded-md text-xs transition-colors whitespace-nowrap ';
             if (isActive) {
-              className += 'bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold';
+              className += 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold';
             } else if (isCompleted) {
               className += 'text-[var(--poker-success)]';
             } else {

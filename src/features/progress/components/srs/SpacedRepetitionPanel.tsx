@@ -100,7 +100,7 @@ export default function SpacedRepetitionPanel({
         {!allDone && onStartReview && (
           <Button
             onClick={onStartReview}
-            className="w-full mb-3 bg-[var(--brass)] text-[var(--primary-foreground)] hover:bg-[var(--brass-bright)] font-display font-semibold"
+            className="w-full mb-3 bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)] font-display font-semibold"
           >
             <PlayCircle className="w-4 h-4 mr-1.5" />
             {t('spacedRepetition.startReview', {

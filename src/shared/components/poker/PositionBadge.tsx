@@ -26,19 +26,19 @@ const GROUP_LABEL_KEYS: Record<string, string> = {
 const GROUP_COLORS: Record<string, { base: string; active: string }> = {
   early: {
     base: 'bg-[var(--clay)]/15 text-[var(--clay-text)] border-[var(--clay)]/30',
-    active: 'bg-[var(--clay)] text-[var(--ivory)] border-[var(--clay)] shadow-[var(--shadow-clay-glow-sm)]',
+    active: 'bg-[var(--clay)] text-[var(--stable-ivory)] border-[var(--clay)] shadow-[var(--shadow-clay-glow-sm)]',
   },
   middle: {
     base: 'bg-[var(--brass)]/15 text-[var(--brass-bright)] border-[var(--brass)]/30',
-    active: 'bg-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass-bright)] shadow-[var(--shadow-brass-glow-sm)]',
+    active: 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] border-[var(--brass-bright)] shadow-[var(--shadow-brass-glow-sm)]',
   },
   late: {
     base: 'bg-[var(--sage)]/15 text-[var(--sage-text)] border-[var(--sage)]/30',
-    active: 'bg-[var(--sage)] text-[var(--ivory)] border-[var(--sage)] shadow-[var(--shadow-sage-glow-sm)]',
+    active: 'bg-[var(--sage-fill)] text-[var(--stable-ivory)] border-[var(--sage)] shadow-[var(--shadow-sage-glow-sm)]',
   },
   blinds: {
     base: 'bg-[var(--brass)]/15 text-[var(--brass-bright)] border-[var(--brass)]/30',
-    active: 'bg-[var(--brass)] text-[var(--primary-foreground)] border-[var(--brass)] shadow-[var(--shadow-brass-glow-sm)]',
+    active: 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] border-[var(--brass)] shadow-[var(--shadow-brass-glow-sm)]',
   },
 };
 

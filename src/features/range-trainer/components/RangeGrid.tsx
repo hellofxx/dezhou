@@ -47,7 +47,7 @@ const GridCell = React.memo(function GridCell({
   // and suited hands tinted cool (sage) so the diagonal reads at a glance.
   let bgClass: string;
   if (isSelected) {
-    bgClass = 'bg-[var(--brass)] text-[var(--primary-foreground)]';
+    bgClass = 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]';
   } else if (isPair) {
     bgClass = 'bg-[var(--brass-deep)]/25 text-[var(--ivory)]';
   } else if (isSuited) {

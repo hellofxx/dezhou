@@ -173,7 +173,7 @@ export function AnnotationPanel({ hand, currentStreet }: AnnotationPanelProps) {
         <button
           onClick={handleSave}
           disabled={!note.trim() && !existingNote}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-display font-semibold rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--brass-bright)] transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-display font-semibold rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] disabled:opacity-40 disabled:cursor-not-allowed hover:[background:var(--brass-fill-gradient-hover)] transition-colors"
         >
           <Save size={12} />
           {t('handHistory.annotation.save')}

@@ -17,11 +17,12 @@
     "test:coverage": "vitest run --coverage",
     "size:check": "node scripts/check-bundle-size.mjs",
     "repo:check": "node scripts/check-repo-hygiene.mjs",
+    "docs:check": "node scripts/check-doc-links.mjs",
     "theory:manifest": "node scripts/generate-theory-manifest.mjs",
     "academy:manifest": "node scripts/generate-academy-manifest.mjs",
     "agents:map": "node scripts/generate-agent-map.mjs",
     "agents:map:check": "node scripts/generate-agent-map.mjs --check",
-    "verify": "pnpm typecheck && pnpm lint && pnpm repo:check && pnpm agents:map:check && pnpm test",
+    "verify": "pnpm typecheck && pnpm lint && pnpm repo:check && pnpm docs:check && pnpm agents:map:check && pnpm test",
     "verify:parallel": "pwsh -NoProfile -File scripts/parallel-verify.ps1"
   },
   "keywords": [],

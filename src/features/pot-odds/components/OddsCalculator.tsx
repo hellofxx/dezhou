@@ -60,7 +60,7 @@ export function OddsCalculator() {
                     gameVariant === v.value
                       ? v.value === 'short-deck'
                         ? 'bg-[var(--sage)]/20 border-[var(--sage)] text-[var(--sage-text)]'
-                        : 'bg-[var(--brass)] border-[var(--brass)] text-[var(--primary-foreground)]'
+                        : 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                       : 'bg-[var(--walnut-raised)]/60 border-transparent text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
                   }`}
                 >
@@ -130,7 +130,7 @@ export function OddsCalculator() {
                   onClick={() => setStreet(s)}
                   className={`flex-1 py-2 rounded-md text-sm font-medium transition-colors ${
                     street === s
-                      ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                      ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                       : 'bg-[var(--walnut-raised)]/60 text-[var(--ivory-dim)] hover:bg-[var(--brass)]/15'
                   }`}
                 >

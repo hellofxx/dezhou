@@ -187,7 +187,7 @@ export function HandImporter() {
       <button
         onClick={handleImport}
         disabled={!text.trim() || importing}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--brass-bright)] transition-colors"
+        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-display font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:[background:var(--brass-fill-gradient-hover)] transition-colors"
       >
         {importing ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
         {t('handHistory.importer.import')}

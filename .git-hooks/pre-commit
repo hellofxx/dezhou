@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Agent Tools Validation + Quality Gate Pre-commit Hook
 # 
-# 1. Agent tools validation (when .claude/agents/*-dev.md changes) - blocking, warnings allowed
-# 2. ESLint verification (always blocking) - prevents forbidden import edges
-# 3. Agent map check (when .claude/agents/*.md / routes.tsx / moduleRegistry.ts change) - blocking
+# 1. ESLint verification (when source changes) - blocking
+# 2. Docs check (when Markdown changes) - blocking
+# 3. Agent tools validation (when .claude/agents/*-dev.md changes) - blocking, warnings allowed
+# 4. Agent map check (when .claude/agents/*.md / routes.tsx / moduleRegistry.ts change) - blocking
 #
-# 三条门禁均为 fail-closed：工具链缺失导致「无法执行」时一律 exit 1，
+# 四条门禁均为 fail-closed：工具链缺失导致「无法执行」时一律 exit 1，
 # 绝不把「没跑成」当作「跑过了」。
 #
 # Memory note (Git-Hook 跨平台兼容):
@@ -44,6 +45,22 @@ else
   else
     echo "✅ ESLint passed."
   fi
+fi
+
+echo ""
+echo "⚠️ Detecting changes to documentation..."
+
+if git diff --cached --name-only | grep -qE '\.md$'; then
+  cd "$(git rev-parse --show-toplevel)" || { echo "❌ 无法定位仓库根目录，中止提交。"; exit 1; }
+  if node scripts/check-doc-links.mjs; then
+    echo "✅ Docs check passed."
+  else
+    echo "❌ Docs check FAILED：文档断链、索引缺失或状态声明缺失。"
+    echo "   修复：pnpm docs:check 查看明细后重新提交。"
+    exit 1
+  fi
+else
+  echo "✓ No documentation changes detected, skipping docs check."
 fi
 
 echo ""

@@ -1,5 +1,7 @@
 # 证据索引（Evidence Index）
 
+> 状态：Snapshot（证据基线 2026-08-30 @ `c966912`）。代码已演进；复核命令见 §5，长期数值以代码为准。
+
 配套 `pokerlab.structurizr.dsl` / `10-modules-dependency.dot` / `20-training-data-flow.dot` / `30-progress-hub.dot` / `business-architecture.md`。
 
 - 采集时间：2026-08-30；基线：工作树 @ `c966912`（含 85 项未提交改动）

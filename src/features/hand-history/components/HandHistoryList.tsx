@@ -63,7 +63,7 @@ export default function HandHistoryList() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate('/hand-history/import')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold hover:bg-[var(--brass-bright)] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-display font-semibold hover:[background:var(--brass-fill-gradient-hover)] transition-colors"
           >
             <Upload size={16} />
             {t('handHistory.list.import')}

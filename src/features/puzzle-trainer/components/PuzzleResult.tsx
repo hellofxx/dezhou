@@ -115,7 +115,7 @@ export function PuzzleResult({ result, isNewRecord, onRetry, onBackHome }: Puzzl
         <div className="flex flex-col sm:flex-row gap-2 pt-2">
           <Button
             onClick={onRetry}
-            className="flex-1 bg-[var(--brass)] text-[var(--primary-fg)] hover:bg-[var(--brass-bright)]"
+            className="flex-1 bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)]"
           >
             <RefreshCw className="w-4 h-4 mr-1" />
             {t('puzzle.result.retry')}

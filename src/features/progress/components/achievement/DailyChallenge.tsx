@@ -153,7 +153,7 @@ export default function DailyChallenge() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate(targetPath)}
-              className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-semibold hover:bg-[var(--brass-bright)] transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-2 rounded-md bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:[background:var(--brass-fill-gradient-hover)] transition-colors"
             >
               {t('dailyChallenge.startChallenge')}
               <ArrowRight className="w-4 h-4" />

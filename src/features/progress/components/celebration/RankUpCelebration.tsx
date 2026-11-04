@@ -151,7 +151,7 @@ export default function RankUpCelebration({ rankUp, onClose }: RankUpCelebration
               {/* 继续按钮 */}
               <button
                 onClick={onClose}
-                className="hover-bright px-6 py-2.5 rounded-[var(--radius)] bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm transition-all shadow-[var(--shadow-brass)]"
+                className="hover-bright px-6 py-2.5 rounded-[var(--radius)] bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm transition-all shadow-[var(--shadow-brass)]"
               >
                 {t('rankUp.continue')}
               </button>

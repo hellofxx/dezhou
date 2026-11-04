@@ -175,7 +175,7 @@ export default function GTOSessionPage() {
         <div className="text-[var(--ivory-muted)] mb-4">{t('gto.session.noActive')}</div>
         <button
           onClick={() => navigate('/gto-simulator')}
-          className="px-4 py-2 rounded-lg bg-[var(--brass)] text-[var(--primary-foreground)] text-sm font-display font-semibold"
+          className="px-4 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-display font-semibold"
         >
           {t('gto.session.backHome')}
         </button>
@@ -212,7 +212,7 @@ export default function GTOSessionPage() {
         </div>
         <div className="h-1.5 bg-[var(--walnut-raised)] rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-[var(--brass)] to-[var(--sage)] rounded-full transition-all duration-300"
+            className="h-full bg-gradient-to-r from-[var(--brass)] to-[var(--brass-bright)] rounded-full transition-all duration-300"
             style={{ width: `${progress.percentage}%` }}
           />
         </div>
@@ -335,7 +335,7 @@ export default function GTOSessionPage() {
         />
         <button
           onClick={handleContinue}
-          className="w-full py-3 rounded-xl bg-[var(--brass)] text-[var(--primary-foreground)] font-display font-bold text-sm hover:bg-[var(--brass-bright)] transition-all active:scale-[0.98]"
+          className="w-full py-3 rounded-xl bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-display font-bold text-sm hover:[background:var(--brass-fill-gradient-hover)] transition-all active:scale-[0.98]"
         >
           {continueLabel}
         </button>

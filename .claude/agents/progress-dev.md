@@ -127,7 +127,7 @@ shared/ 依赖（维护职责见 Authority）：
 9. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 ## Constraints
-继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。persist 升级规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》，"记录完成"action 幂等要求见 AGENTS.md《状态管理 → 幂等性》，本文件不复制其内容。
+继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。persist 升级规则与"记录完成"action 幂等要求见 `docs/AI_GUIDE.md` §状态管理，本文件不复制其内容。
 
 模块特有约束：
 - 成就判定逻辑要考虑边界条件（首次训练、零数据）

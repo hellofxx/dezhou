@@ -200,7 +200,7 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
         <div className="mt-6 flex justify-end">
           <button
             onClick={onComplete}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
           >
             {t('academy.lessonUnit.completeLesson')}
             <ArrowRight className="w-4 h-4" />
@@ -278,7 +278,7 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
         <div className="mt-6 flex justify-end">
           <button
             onClick={handleNext}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
           >
             {nextCtaLabel}
             <ArrowRight className="w-4 h-4" />

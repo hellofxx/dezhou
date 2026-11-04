@@ -139,7 +139,7 @@ additionalPrompt: ""
 - 能力评估（abilityAssessment）初始值默认 50，仅 `gamesPlayed === 0` 时通过 `abilityToElo` 同步至 ELO
 - 快速训练完成时必须调用 `recordTrainingDay`（启动 Streak）+ `recordQuickDrillCompletion`（更新 quickDrillStreak，幂等）
 - 等级解锁依赖前置等级所有课程完成（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
-- strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 AGENTS.md《状态管理 → Persist Version 升级硬性规则》
+- strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 `docs/AI_GUIDE.md` §状态管理（Persist Version 升级硬性规则）
 - **课程双层门禁**：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（按 lesson 所属 `LevelInfo` 条目调用 `isLevelEntryUnlocked`，区分 l4a/l4b；本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）；调试解锁激活时（`shared/stores/debugMode.ts`）两道门禁均放行
 - **课程数据完整性守卫**：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；`data/lessons/manifest.parity.test.ts` 校验摘要与完整数据一致（数据改动后必须运行 `pnpm academy:manifest`）；`data/lessons/loaders.test.ts` 校验 Level/变体映射与速训全量。新增/改名课程后三者必须全绿
 - **加载分层硬约束**：首页/store/成就/轨道/图谱禁止静态 import `data/courses`、`data/lessons/variants` 或完整 `Lesson` 数据；只允许 `utils/academyMeta` + `data/lessons/manifest`。完整课程只能经 `data/lessons/loaders.ts` 动态加载（课程页/认证/速训），路由入口禁止整批 `loadAcademyCourses`（详见 TDD §5.8 第 12 条）

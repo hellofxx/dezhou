@@ -101,7 +101,7 @@ export default function CourseDoneView({
           {nextLesson && (
             <button
               onClick={onNext}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity max-w-full"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity max-w-full"
             >
               <span className="truncate min-w-0 max-w-[10rem] sm:max-w-[14rem]">
                 {t('academy.courseView.nextLesson', {

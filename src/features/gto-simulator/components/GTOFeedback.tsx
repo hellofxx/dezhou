@@ -176,17 +176,17 @@ export function GTOFeedback({
           <div className="text-xs font-medium opacity-80">{t('gto.feedback.frequencyDistribution')}</div>
           <div className="flex h-6 rounded overflow-hidden">
             {gtoStrategy.raise > 0 && (
-              <div className="bg-[var(--brass)] flex items-center justify-center text-[10px] font-bold text-[var(--primary-foreground)] transition-all font-numeric" style={{ width: `${gtoStrategy.raise * 100}%` }}>
+              <div className="bg-[var(--brass-fill)] flex items-center justify-center text-[10px] font-bold text-[var(--brass-fill-ink)] transition-all font-numeric" style={{ width: `${gtoStrategy.raise * 100}%` }}>
                 {gtoStrategy.raise >= 0.15 && `${Math.round(gtoStrategy.raise * 100)}%`}
               </div>
             )}
             {gtoStrategy.call > 0 && (
-              <div className="bg-[var(--sage)] flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${gtoStrategy.call * 100}%` }}>
+              <div className="bg-[var(--sage-fill)] flex items-center justify-center text-[10px] font-bold text-[var(--stable-ivory)] transition-all font-numeric" style={{ width: `${gtoStrategy.call * 100}%` }}>
                 {gtoStrategy.call >= 0.15 && `${Math.round(gtoStrategy.call * 100)}%`}
               </div>
             )}
             {gtoStrategy.fold > 0 && (
-              <div className="bg-[var(--clay)]/70 flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${gtoStrategy.fold * 100}%` }}>
+              <div className="bg-[var(--clay)] flex items-center justify-center text-[10px] font-bold text-[var(--stable-ivory)] transition-all font-numeric" style={{ width: `${gtoStrategy.fold * 100}%` }}>
                 {gtoStrategy.fold >= 0.15 && `${Math.round(gtoStrategy.fold * 100)}%`}
               </div>
             )}
@@ -209,17 +209,17 @@ export function GTOFeedback({
           <div className="text-xs font-medium opacity-80">{t('gto.feedback.exploitSuggestion', { name: opponent?.shortName ?? t('gto.feedback.opponentPrefix') })}</div>
           <div className="flex h-6 rounded overflow-hidden">
             {exploitStrategy.raise > 0 && (
-              <div className="bg-[var(--brass)] flex items-center justify-center text-[10px] font-bold text-[var(--primary-foreground)] transition-all font-numeric" style={{ width: `${exploitStrategy.raise * 100}%` }}>
+              <div className="bg-[var(--brass-fill)] flex items-center justify-center text-[10px] font-bold text-[var(--brass-fill-ink)] transition-all font-numeric" style={{ width: `${exploitStrategy.raise * 100}%` }}>
                 {exploitStrategy.raise >= 0.15 && `${Math.round(exploitStrategy.raise * 100)}%`}
               </div>
             )}
             {exploitStrategy.call > 0 && (
-              <div className="bg-[var(--sage)] flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${exploitStrategy.call * 100}%` }}>
+              <div className="bg-[var(--sage-fill)] flex items-center justify-center text-[10px] font-bold text-[var(--stable-ivory)] transition-all font-numeric" style={{ width: `${exploitStrategy.call * 100}%` }}>
                 {exploitStrategy.call >= 0.15 && `${Math.round(exploitStrategy.call * 100)}%`}
               </div>
             )}
             {exploitStrategy.fold > 0 && (
-              <div className="bg-[var(--clay)]/70 flex items-center justify-center text-[10px] font-bold text-[var(--ivory)] transition-all font-numeric" style={{ width: `${exploitStrategy.fold * 100}%` }}>
+              <div className="bg-[var(--clay)] flex items-center justify-center text-[10px] font-bold text-[var(--stable-ivory)] transition-all font-numeric" style={{ width: `${exploitStrategy.fold * 100}%` }}>
                 {exploitStrategy.fold >= 0.15 && `${Math.round(exploitStrategy.fold * 100)}%`}
               </div>
             )}

@@ -39,7 +39,7 @@ describe('SectionNav 组件', () => {
     expect(buttons[2]!.textContent).toContain('3.');
   });
 
-  it('active 高亮应用 brass-bright 类', () => {
+  it('active 高亮应用 brass-fill 类', () => {
     const units = [makeUnit('u1', '第一节'), makeUnit('u2', '第二节')];
 
     act(() => {
@@ -49,8 +49,8 @@ describe('SectionNav 组件', () => {
     });
 
     const buttons = container.querySelectorAll('button');
-    expect(buttons[0]!.className).toContain('bg-[var(--brass-bright)]');
-    expect(buttons[1]!.className).not.toContain('bg-[var(--brass-bright)]');
+    expect(buttons[0]!.className).toContain('bg-[var(--brass-fill)]');
+    expect(buttons[1]!.className).not.toContain('bg-[var(--brass-fill)]');
   });
 
   it('completed 显示 ✓ 标记', () => {

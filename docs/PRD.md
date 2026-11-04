@@ -1,5 +1,7 @@
 # 德州扑克训练平台（Poker Training Platform）产品需求文档（PRD）
 
+> 状态：Current · 最后复核：2026-11-04
+
 ## 文档信息
 
 | 项目 | 内容 |

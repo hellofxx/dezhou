@@ -1,5 +1,7 @@
 # 补救计划（按优先级与顺序）
 
+> 状态：Historical（归档于 2026-11-04）。部分切片已执行；本计划不再维护。其中「不要拆 progress/store」的决策仍有效，见 `src/guards/line-count-guard.test.ts` 与 `docs/README.md`。
+
 配套 `architecture-review.md`（发现编号 R1–R11）。排序依据：不可再生数据风险 > 潜伏可用性风险 > 契约漂移 > 维护成本。所有切片都以 `pnpm verify` 为出口门禁。
 
 ## 波次 1 · 本周就做（半天量级，各自独立可交付）

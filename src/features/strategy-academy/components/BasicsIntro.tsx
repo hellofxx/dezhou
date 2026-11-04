@@ -205,7 +205,7 @@ export default function BasicsIntro() {
             className={cn(
               'flex items-center gap-1.5 px-5 py-2 rounded-md text-sm font-medium transition-colors',
               isLastStep
-                ? 'bg-[var(--brass-bright)] text-[var(--felt-deep)] hover:bg-[var(--brass)]'
+                ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)]'
                 : 'bg-[var(--walnut-raised)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/80'
             )}
           >

@@ -46,7 +46,7 @@ export function SpotTrainer({ onClose }: SpotTrainerProps) {
               className={cn(
                 'px-3 py-1.5 rounded-md text-sm font-display font-semibold transition-all',
                 selectedPosition === pos
-                  ? 'bg-[var(--brass)] text-[var(--primary-foreground)]'
+                  ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                   : 'bg-[var(--walnut-raised)]/50 text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]'
               )}
             >
@@ -76,7 +76,7 @@ export function SpotTrainer({ onClose }: SpotTrainerProps) {
           <div className="flex h-8 rounded overflow-hidden">
             {selectedStrategy.raise > 0 && (
               <div
-                className="bg-[var(--brass)] flex items-center justify-center text-xs font-bold text-[var(--primary-foreground)] font-numeric"
+                className="bg-[var(--brass-fill)] flex items-center justify-center text-xs font-bold text-[var(--brass-fill-ink)] font-numeric"
                 style={{ width: `${selectedStrategy.raise * 100}%` }}
               >
                 R {Math.round(selectedStrategy.raise * 100)}%

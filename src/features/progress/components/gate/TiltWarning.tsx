@@ -84,7 +84,7 @@ export default function TiltWarning() {
           </Button>
           <Button
             onClick={handleRest}
-            className="bg-[var(--brass-bright)] text-[var(--felt-deep)] hover:opacity-90"
+            className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:opacity-90"
           >
             {t('tilt.rest', { defaultValue: '休息一下' })}
           </Button>

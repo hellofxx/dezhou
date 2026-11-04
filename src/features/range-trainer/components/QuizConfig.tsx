@@ -190,7 +190,7 @@ export function QuizConfig({
           <Button
             onClick={onStart}
             disabled={startDisabled}
-            className="w-full bg-[var(--brass)] hover:bg-[var(--brass-bright)] text-[var(--primary-foreground)] h-12 text-base font-semibold font-display tracking-wide disabled:opacity-40"
+            className="w-full bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)] h-12 text-base font-semibold font-display tracking-wide disabled:opacity-40"
           >
             {t('rangeTrainer.config.start')}
           </Button>

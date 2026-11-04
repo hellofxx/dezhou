@@ -84,7 +84,7 @@ export default function PositionDrill({ onComplete, onExit }: DrillProps) {
         </div>
         <button
           onClick={handleFinish}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
         >
           {t('drills.common.finish')}
           <ArrowRight className="w-4 h-4" />
@@ -214,7 +214,7 @@ export default function PositionDrill({ onComplete, onExit }: DrillProps) {
           <div className="flex justify-end mt-3">
             <button
               onClick={handleNext}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
             >
               {currentIndex + 1 >= TOTAL ? t('drills.common.viewResult') : t('drills.common.next')}
               <ArrowRight className="w-4 h-4" />

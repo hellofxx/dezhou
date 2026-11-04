@@ -108,7 +108,7 @@ export default function SessionLimitGuard() {
             <div className="flex justify-center pt-2">
               <Button
                 onClick={() => navigate('/')}
-                className="bg-[var(--brass-bright)] text-[var(--felt-deep)] hover:opacity-90 gap-1.5"
+                className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:opacity-90 gap-1.5"
               >
                 <Home className="w-4 h-4" />
                 {t('sessionLimit.backHome', { defaultValue: '返回 Dashboard' })}

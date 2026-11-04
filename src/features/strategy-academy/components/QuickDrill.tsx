@@ -342,7 +342,7 @@ export default function QuickDrill() {
               </button>
               <button
                 onClick={() => navigate('/')}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
               >
                 {t('quickDrill.backHome', { defaultValue: '返回首页' })}
               </button>
@@ -437,7 +437,7 @@ export default function QuickDrill() {
                     onClick={() => setDifficulty(d)}
                     className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
                       difficulty === d
-                        ? 'bg-[var(--brass-bright)] text-[var(--felt-deep)]'
+                        ? 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]'
                         : 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
                     }`}
                   >
@@ -499,7 +499,7 @@ export default function QuickDrill() {
           <button
             onClick={() => setIsStarted(true)}
             disabled={drillQuestions.length === 0}
-            className="w-full py-3 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {drillQuestions.length > 0
               ? t('quickDrill.start', { defaultValue: '开始速训' })

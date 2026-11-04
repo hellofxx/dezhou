@@ -44,8 +44,8 @@ export default function OnboardingFlow() {
             <div
               className={cn(
                 'w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium shrink-0 transition-colors',
-                i < currentStep && 'bg-[var(--brass)] text-[var(--primary-foreground)]',
-                i === currentStep && 'bg-[var(--brass-bright)] text-[var(--primary-foreground)] ring-2 ring-[var(--brass)]/40',
+                i < currentStep && 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)]',
+                i === currentStep && 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] ring-2 ring-[var(--brass)]/40',
                 i > currentStep && 'bg-[var(--walnut-light)] text-[var(--ivory-dim)]'
               )}
             >

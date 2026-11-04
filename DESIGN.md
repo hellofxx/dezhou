@@ -216,6 +216,23 @@
 - 对比度：light 房间正文/次级/说明/黄铜/语义文本 ≥ 4.5:1；主文字 ≥ 7:1；说明文字在浅木侧栏 ≥ 4.5:1。
 - PWA `manifest.json` 的 `background_color` 保持品牌深绿（启动屏是品牌时刻）；浏览器 chrome 的 `theme-color` 由 `useThemeApplier` 随主题切换。
 
+### 2.8.1 牌桌控件与金属填充（v1.9.1）
+
+「白天牌室」下大面黄铜不再直接使用 `--brass` 原语（其浅色值为可读深阶，作大面填充会形成深芥末色块），统一改读填充族：
+
+| Token | Dark | Light | 用途 |
+|---|---|---|---|
+| `--brass-fill` | `var(--brass)` | `#c9a25e` | 选中态 / 次按钮的蜜金实底 |
+| `--brass-fill-ink` | `var(--primary-foreground)` | `#241c10` | 蜜金实底上的墨色文字（≥ 7:1） |
+| `--brass-fill-border` | `var(--brass-dark)` | `#96712c` | 蜜金实底 1px 描边 |
+| `--brass-fill-gradient` / `-hover` / `-active` | 既有金属渐变 | 柔和蜜金渐变 | `.btn-brass`、`.action-mini`、streak today、路径/速训横幅 |
+
+- `.btn-brass`、`.pill.active`、`.action-mini`、RangeGrid 选中格、各训练器与学院 CTA 只读填充族；`--brass` / `--brass-text` 继续用于图标、文字、发线与 focus ring。
+- **牌桌物理件**：新增 `--scene-vignette*` / `--scene-drop-*` / `--scene-rail*`。light 下绿呢仍为深色，但去掉近黑收边、改用暖棕投影与胡桃木轨；dark 值等于原实现，观感不变。
+- **位置语义**：`--position-selected-bg/ink` 在 light 下取蜜金（dark 保留 sage）；`--sage-fill`（light `#4f7059`）承载 sage 实底徽章/策略条上的象牙字；`PositionBadge` 的 clay / sage 实底文字改用 `--stable-ivory`，避免 light 下 `--ivory` 翻成深墨导致对比不足。
+- **条带材质**：`.difficulty-ladder` / `.streak-dot.missed` / `.rec-item:hover` / 移动端 `.quick-path-node` 改由 `var(--walnut*)` 混色，不再使用深棕字面 rgba。
+- 守卫白名单不新增：本节全部为 token 声明与既有规则的 token 化，`lightThemeSurfaceGuard` 的 16 个选择器与黑色 rgba 棘轮保持不变。
+
 ---
 
 ## 3. 字体系统

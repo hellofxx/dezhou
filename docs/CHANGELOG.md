@@ -1,5 +1,6 @@
 # 变更日志（CHANGELOG）
 
+> 状态：Historical · 最后复核：2026-11-04
 > 本文件归档德州扑克训练平台的版本演进。
 > 历史月份存档位于 `docs/changelog/` 目录下（如 `docs/changelog/2026-07.md`）。
 > PRD.md 与 TDD.md 仅保留当前规格，执行历史统一汇集于此。
@@ -7,7 +8,27 @@
 
 ---
 
-## [Unreleased] - 2026-09-05
+## [Unreleased] - 2026-11-04
+
+### 2026-11-04 浅色主题「白天牌室」配色与牌桌控件重设计
+
+- **大面黄铜填充**：新增 `--brass-fill` / `--brass-fill-ink` / `--brass-fill-border` / `--brass-fill-gradient*`；light 取柔和蜜金 + 墨色文字，`.btn-brass`、选中态、学院 CTA 与各训练器按钮统一切换，消除浅色下的深芥末色块；dark 沿用原金属渐变。
+- **日间绿呢**：light 覆写 `--grad-felt-*` 与 `--poker-felt-center`，去掉近黑收边；新增 `--scene-vignette*` / `--scene-drop-*` / `--scene-rail*`，`felt-arena` / `mini-felt` 改用暖棕投影与胡桃木轨，dark 数值等价于原实现。
+- **牌桌控件修正**：GTO All-In 改深胡桃墨底 + 象牙字；位置选中态在 light 改蜜金（dark 保留 sage）；`PositionBadge` 的 clay/sage 实底文字与 `GTOFeedback` 三色条文字改用 `--stable-ivory`；GTO 进度条去掉 brass→sage 的橄榄色渐变。
+- **页面材质**：`.difficulty-ladder` / `.streak-dot.missed` / `.rec-item:hover` / 移动端 `.quick-path-node` 由字面深 rgba 改为 `var(--walnut*)` 混色；纸面/浅木 token 轻微去黄提亮，保持羊皮纸身份。
+- **文档与门禁**：DESIGN.md 新增 §2.8.1；`lightThemeSurfaceGuard` 白名单与黑色 rgba 棘轮不变；更新 `SectionNav` / `PotSizeInput` 断言。
+
+### 2026-11-04 文档指导体系精简
+
+- **Current / Historical 分层**：`docs/README.md` 改为唯一索引并引入 Current / Generated / Historical 状态约定；新增 `docs/history/README.md` 归档索引。
+- **遗留材料归档**：一次性报告、架构评审、补救计划、UI/UX 执行记录与部署诊断共 12 份移入 `docs/history/`；`docs/agents/behavior.md` 删除（摘要保留在 AGENTS.md，全文见 git 历史）。
+- **代理文档去重**：`docs/agents/README.md` 删除与 AGENTS.md 重复的任务路由表，改为代理清单 / 命名 / 工具权限的单一位置；模板迁至 `docs/agents/TEMPLATE-dev.md`；`docs/agents-guide/` 移除。
+- **AGENTS.md 精简**：429 → 199 行；编码/状态/i18n/UI 与跨模块复用契约下沉 `docs/AI_GUIDE.md`，代理命名/清单/工具权限下沉 `docs/agents/README.md`；AGENTS.md 只保留常驻路由、硬约束与质量门禁。
+- **文档门禁**：新增 `scripts/check-doc-links.mjs` 与 `pnpm docs:check`（链接、Current/Historical 索引覆盖、状态声明），接入 `verify`、CI、pre-commit 与 `verify:parallel`。
+- **ADR 与架构降级**：新增 `docs/adr/`（纯前端本地优先 / Feature-first 边界 / progress 单中枢）；`docs/architecture/` 从 Current 降级为 Snapshot，并定义刷新触发。
+- **贡献者指南**：新增 `docs/how-to/`（新增模块 / 新增守卫 / 新增或修改测试）并接入任务导航。
+- **过期指导修正**：`docs/AI_GUIDE.md` 更新 i18n 现状与 CORE_MODULES 清单；`docs/ops/DEPLOY_CHECKLIST.md` 重写为现行门禁 / 回滚手册；`docs/knowledge-guide.md` 明确 `.qoder/repowiki` 为本机缓存、不入库；根 README 对齐 Node 22 / pnpm 11.18.0 / 12 代理 / fail-closed hooks / ISC。
+- **验证**：`pnpm verify` 全绿（typecheck / lint / repo:check / docs:check / agents:map:check / 352 文件 2538 用例；lint 0 error，2 条既有 warning）；本次无运行时代码变更。
 
 ### 2026-11-03 第二阶段纯前端 UI/UX 修复（白天牌室 / Hero / ActionTier）
 
@@ -343,7 +364,7 @@ ICE 表最后一项 #11（变体高级段补深）开工。批次中途查出**�
 
 ---
 
-## [Unreleased] - 2026-09-04
+## 2026-09-04
 
 ### 教学内容守卫层：三类静默失效从"无法发现"变为"提交前拦截"
 
@@ -390,7 +411,7 @@ ICE 表最后一项 #11（变体高级段补深）开工。批次中途查出**�
 
 ---
 
-## [Unreleased] - 2026-09-04 · 文档
+## 2026-09-04 · 文档
 
 ### 学习模块内容规格补全与文档撰写规范（PRD v3.1 / TDD 同步，纯文档变更）
 

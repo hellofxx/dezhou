@@ -1,5 +1,7 @@
 # 子智能体文件标准化规范
 
+> 状态：Historical（归档于 2026-11-04）。现行规则以 `AGENTS.md` §Agent 协作与 `docs/agents/TEMPLATE-dev.md` 为准；本文仅保留当时的标准化方案。
+
 本文档定义了 `.claude/agents/*.md` 文件的统一格式和内容规范。
 
 > **重要提示**：

@@ -1,5 +1,6 @@
 # 测试体系规范（TESTING）
 
+> 状态：Current · 最后复核：2026-11-04
 > 地位：本文件是测试**分层、文件放置与命名、判定标准、执行矩阵、责任与评审**的唯一事实源。
 > 不重复维护的事实：运行命令以 `package.json` 为事实源；CI 步骤以 `.github/workflows/*.yml` 为事实源；全局守卫清单以 [`src/guards/README.md`](../../src/guards/README.md) 为事实源；测试文件清单以 `src/**/*.test.ts(x)` 实际文件为准。
 > 变更本规范时同步：`AGENTS.md` §质量门禁、`docs/TDD.md` §11、`docs/agents/README.md`。

@@ -54,7 +54,7 @@ export function PracticeBridgeCard({ recommendations, subtitleKey = 'theory.brid
             // P1F-04：携带 ?track= 参数，LearningTracksView（P1E-01）消费后滚动高亮目标轨道
             onClick={() => navigate(`/academy/tracks?track=${recommendations.trackId}`)}
             aria-label={t('theory.bridge.gotoTrack')}
-            className="w-full flex min-h-11 items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className="w-full flex min-h-11 items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
           >
             <Route className="w-4 h-4" />
             {t('theory.bridge.enterTrack')}

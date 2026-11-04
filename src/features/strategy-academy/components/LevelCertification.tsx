@@ -147,7 +147,7 @@ export default function LevelCertification() {
             {!passed && (
               <button
                 onClick={handleRetry}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
               >
                 <RotateCcw className="w-4 h-4" />
                 {t('academy.levelCertification.retry')}
@@ -233,7 +233,7 @@ export default function LevelCertification() {
             <button
               onClick={() => setStarted(true)}
               disabled={allQuestions.length === 0}
-              className="w-full py-3 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90 disabled:opacity-50"
+              className="w-full py-3 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 disabled:opacity-50"
             >
               {isCertified ? t('academy.levelCertification.retry') : t('academy.levelCertification.start')}
             </button>
@@ -318,7 +318,7 @@ export default function LevelCertification() {
           <div className="mt-5 flex justify-end">
             <button
               onClick={handleNext}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-bright)] text-[var(--felt-deep)] font-semibold text-sm hover:opacity-90"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
             >
               {currentIndex < allQuestions.length - 1 ? t('academy.quiz.next') : t('academy.quiz.viewResult')}
               <ArrowRight className="w-4 h-4" />

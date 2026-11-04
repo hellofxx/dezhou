@@ -207,7 +207,7 @@ export default function LearningTracksView() {
                             ? 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] opacity-50 cursor-not-allowed'
                             : isActive
                               ? 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
-                              : 'bg-[var(--brass-bright)] text-[var(--felt-deep)] font-medium hover:opacity-90'
+                              : 'bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-medium hover:opacity-90'
                         }`}
                       >
                         {!prereqMet && <Lock className="inline w-3 h-3 mr-1" />}

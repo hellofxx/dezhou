@@ -159,8 +159,8 @@ describe('PotSizeInput 滑块与快捷按钮', () => {
       />,
     );
 
-    expect(screen.getByText('Half Pot').classList.contains('bg-[var(--brass)]')).toBe(true);
-    expect(screen.getByText('Pot').classList.contains('bg-[var(--brass)]')).toBe(false);
+    expect(screen.getByText('Half Pot').classList.contains('bg-[var(--brass-fill)]')).toBe(true);
+    expect(screen.getByText('Pot').classList.contains('bg-[var(--brass-fill)]')).toBe(false);
   });
 
   it('未提供快捷按钮时不渲染按钮组', () => {
