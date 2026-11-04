@@ -1,31 +1,71 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, BookOpen } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
+import { drawByAttempt } from '@/shared/utils/academyQuizDraw';
+import { useProgressStore } from '@/features/progress/store';
 import { orderQuizQuestion } from '../utils/quizShuffle';
 import { resolveQuizQuestion } from '../utils/contentKeys';
+import { getLessonEloDifficulty } from '../utils/eloDifficulty';
+import { getLessonMeta } from '../data/lessonMeta';
 import type { QuizQuestion } from '../types';
 
-interface LessonQuizProps {
-  questions: QuizQuestion[];
-  onComplete: (score: number) => void;
+/** 课时测验抽题数（P0：课时统一抽 5 题；题池不足时全量返回）。 */
+export const LESSON_QUIZ_DRAW_SIZE = 5;
+
+/** 本次课时测验结果（total/correct 为实际抽题口径，供 completeCourse 落掌握度与 SRS）。 */
+export interface LessonQuizResult {
+  score: number;
+  correct: number;
+  total: number;
+  /** 本次答错的稳定题 id（题级 SRS 输入） */
+  wrongQuestionIds: string[];
 }
 
-export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
+interface LessonQuizProps {
+  lessonId: string;
+  questions: QuizQuestion[];
+  /** 课时 Level（ELO 难度映射；L1 最易） */
+  level: number;
+  /** 本次作答序号：首次 = 1，重考 = attempts + 1（由 CourseView 从 store 读取） */
+  attemptNumber: number;
+  /** 练习态（非首次作答）：不写 ELO / 情绪计数，只收集错题 id 进 SRS */
+  isPractice: boolean;
+  onComplete: (result: LessonQuizResult) => void;
+}
+
+export function LessonQuiz({
+  lessonId,
+  questions,
+  level,
+  attemptNumber,
+  isPractice,
+  onComplete,
+}: LessonQuizProps) {
   const { t } = useTranslation();
-  // 答案位置偏差治理：渲染前先 t() 解析（key 缺失回退数据层中文），再重排选项
-  // （数值升序 / id 稳定种子洗牌）——种子只依赖 id，zh/en 顺序一致，源数据不变
-  const orderedQuestions = useMemo(
-    () => questions.map((q) => orderQuizQuestion(resolveQuizQuestion(t, q))),
-    [questions, t],
-  );
+  const updateElo = useProgressStore((s) => s.updateElo);
+  const recordAnswer = useProgressStore((s) => s.recordAnswer);
+  // 答案位置偏差治理：渲染前先 t() 解析（key 缺失回退数据层中文），再抽题（lessonId + attempt
+  // 种子稳定、重考换题），最后重排选项（数值升序 / id 稳定种子洗牌）——
+  // 选项种子只依赖题 id，zh/en 顺序一致，源数据不变
+  const orderedQuestions = useMemo(() => {
+    const resolved = questions.map((q) => resolveQuizQuestion(t, q));
+    const drawn = drawByAttempt(resolved, {
+      key: lessonId,
+      attemptNumber,
+      size: LESSON_QUIZ_DRAW_SIZE,
+    });
+    return drawn.map((q) => orderQuizQuestion(q));
+  }, [questions, lessonId, attemptNumber, t]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
+  // 答错题 id（供上层写题级 SRS）。用 ref：只在事件处理器内追加、不参与渲染
+  const wrongQuestionIdsRef = useRef<string[]>([]);
 
   const question = orderedQuestions[currentIndex];
 
@@ -33,12 +73,28 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
 
   const isCorrect = selectedIndex === question.correctIndex;
 
+  const buildResult = (correct: number): LessonQuizResult => ({
+    score: orderedQuestions.length > 0 ? Math.round((correct / orderedQuestions.length) * 100) : 0,
+    correct,
+    total: orderedQuestions.length,
+    wrongQuestionIds: [...wrongQuestionIdsRef.current],
+  });
+
   const handleSelect = (index: number) => {
     if (showExplanation) return;
     setSelectedIndex(index);
     setShowExplanation(true);
-    if (index === question.correctIndex) {
+    const correct = index === question.correctIndex;
+    if (correct) {
       setCorrectCount((c) => c + 1);
+    } else {
+      wrongQuestionIdsRef.current = [...wrongQuestionIdsRef.current, question.id];
+    }
+    // 首次作答才计入 ELO 与情绪系统（重考为练习态：不写 ELO/情绪，只收集错题）
+    // 维度取 lessonMeta（T3 填充；未登记回退 postflop）
+    if (!isPractice) {
+      updateElo(getLessonMeta(lessonId).eloDimension, correct, getLessonEloDifficulty(level));
+      recordAnswer(correct);
     }
   };
 
@@ -48,9 +104,8 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
       setSelectedIndex(null);
       setShowExplanation(false);
     } else {
-      const score = Math.round((correctCount / orderedQuestions.length) * 100);
       setFinished(true);
-      onComplete(score);
+      onComplete(buildResult(correctCount));
     }
   };
 
@@ -59,11 +114,12 @@ export function LessonQuiz({ questions, onComplete }: LessonQuizProps) {
     setSelectedIndex(null);
     setShowExplanation(false);
     setCorrectCount(0);
+    wrongQuestionIdsRef.current = [];
     setFinished(false);
   };
 
   if (finished) {
-    const score = Math.round((correctCount / orderedQuestions.length) * 100);
+    const score = buildResult(correctCount).score;
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}

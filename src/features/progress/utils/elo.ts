@@ -1,6 +1,7 @@
 // ELO 算法工具函数（P1-2.2）
 import type { EloRating, Rank } from '@/shared/types/elo';
-import { RANKS } from '@/shared/types/elo';
+import { DEFAULT_ELO, RANKS } from '@/shared/types/elo';
+import type { AbilityAssessment } from '@/shared/types/ability';
 
 /**
  * 简化 ELO 更新算法
@@ -97,6 +98,41 @@ export function checkRankUp(
  * 计算五维 ELO 的综合分（overall）
  * 简单平均
  */
+/** onboarding/历史能力 → ELO 五维初始映射（单一事实源）。 */
+export function mapAcademyAbilityToElo(aa: AbilityAssessment): EloRating {
+  const elo: EloRating = {
+    ...DEFAULT_ELO,
+    preflop: abilityToElo((aa.rangeKnowledge + aa.positionalPlay) / 2),
+    postflop: abilityToElo((aa.gtoUnderstanding + aa.positionalPlay) / 2),
+    math: abilityToElo(aa.oddsCalculation),
+    handReading: abilityToElo((aa.gtoUnderstanding + aa.rangeKnowledge) / 2),
+    mental: abilityToElo(aa.emotionalControl),
+    lastUpdated: Date.now(),
+  };
+  elo.overall = computeOverallElo(elo);
+  elo.kFactor = getDynamicKFactor(elo.gamesPlayed, elo.overall);
+  return elo;
+}
+
+/** 能力初值是否包含非默认数据（用于判断是否需要播种）。 */
+export function hasNonDefaultAbility(
+  aa: AbilityAssessment | undefined | null,
+): aa is AbilityAssessment {
+  if (!aa) return false;
+  return (
+    typeof aa.rangeKnowledge === 'number' &&
+    typeof aa.oddsCalculation === 'number' &&
+    typeof aa.gtoUnderstanding === 'number' &&
+    typeof aa.positionalPlay === 'number' &&
+    typeof aa.emotionalControl === 'number' &&
+    (aa.rangeKnowledge !== 50 ||
+      aa.oddsCalculation !== 50 ||
+      aa.gtoUnderstanding !== 50 ||
+      aa.positionalPlay !== 50 ||
+      aa.emotionalControl !== 50)
+  );
+}
+
 export function computeOverallElo(elo: Pick<EloRating, 'preflop' | 'postflop' | 'math' | 'handReading' | 'mental'>): number {
   const { preflop, postflop, math, handReading, mental } = elo;
   return Math.round((preflop + postflop + math + handReading + mental) / 5);

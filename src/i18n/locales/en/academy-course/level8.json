@@ -183,6 +183,96 @@
         "50/50"
       ],
       "explanation": "Keep GTO as the default baseline to protect yourself, and deviate only on leaks backed by enough hands in one clear direction; size the deviation by \"observable deviation × (1 - opponent adjustment probability)\"."
+    },
+    "l8-pool-q6": {
+      "question": "An opponent folds to river bets 30 percentage points more often than equilibrium, and you think he adjusts with 20% probability. How much can you raise your bluff frequency?",
+      "options": [
+        "24 percentage points",
+        "30 percentage points",
+        "20 percentage points",
+        "6 percentage points"
+      ],
+      "explanation": "Safe deviation = observed deviation × (1 − adjustment probability) = 30% × (1 − 0.2) = 24 percentage points. The more likely he adjusts, the smaller the allowed deviation."
+    },
+    "l8-pool-q7": {
+      "question": "What characterizes the mid-stakes (NL100-NL200) player pool and how should you respond?",
+      "options": [
+        "Close to GTO but still leaky, so lock exact nodes and exploit slightly",
+        "Calls too much, so bet pure value and almost never bluff",
+        "Fine preflop but weak postflop, so double barrel more",
+        "Fully balanced, so give up all exploitation"
+      ],
+      "explanation": "Mid-stakes pools are near GTO, so large deviations get punished. Lock exact nodes and exploit in small doses, banking the marginal gains."
+    },
+    "l8-pool-q8": {
+      "question": "The closer your exploitation gets to the opponent's full deviation, the most direct risk is:",
+      "options": [
+        "Your own strategy becomes visibly exploitable and strong players counter-exploit you",
+        "Rake goes up",
+        "The site flags you for cheating",
+        "The opponent instantly leaves the table"
+      ],
+      "explanation": "Exploiting means deviating from baseline, and bigger deviations leave bigger holes that experienced opponents can attack. Correct exploitation is the minimum necessary deviation."
+    },
+    "l8-pop-q6": {
+      "question": "The pool's average fold to c-bet is 65% versus a GTO baseline of about 45%. What is the deviation in this lesson's terms?",
+      "options": [
+        "+20 percentage points",
+        "+65 percentage points",
+        "−20 percentage points",
+        "+45 percentage points"
+      ],
+      "explanation": "65% − 45% = +20 percentage points. The direction is over-folding, so widen your c-bet range and add bluffs."
+    },
+    "l8-pop-q7": {
+      "question": "A pool averages VPIP 45% and PFR 12%. What does that say about it?",
+      "options": [
+        "Loose-passive: lots of calling, few raises",
+        "Tight-aggressive",
+        "Near-balanced TAG",
+        "A maniac pool"
+      ],
+      "explanation": "High VPIP with low PFR means many players enter pots but rarely raise: loose-passive. Bet for pure value, bluff less, and respect their sudden raises."
+    },
+    "l8-pop-q8": {
+      "question": "What is the correct order of using population data during play?",
+      "options": [
+        "Start as a default assumption, then shift to individual exploitation as samples grow",
+        "Always use pool averages",
+        "Only use individual stats and ignore the pool",
+        "Use neither, just feel"
+      ],
+      "explanation": "Population data is the default when you have no individual sample; as the sample grows you switch to individual reads. They are sequential, not substitutes."
+    },
+    "l8-exploit-q6": {
+      "question": "An opponent c-bets the flop 25 percentage points more often than equilibrium, and you estimate a 40% chance he adjusts. How much should you raise your fold rate?",
+      "options": [
+        "About 15 percentage points",
+        "About 25 percentage points",
+        "About 10 percentage points",
+        "About 40 percentage points"
+      ],
+      "explanation": "Safe deviation = 25% × (1 − 0.4) = 15 percentage points. The higher the adjustment probability, the smaller the allowed deviation."
+    },
+    "l8-exploit-q7": {
+      "question": "Against a maniac (VPIP 50%, PFR 40%, AF 6), what is the core approach in this lesson?",
+      "options": [
+        "Tighten your opens and trap with strong hands so he donates chips",
+        "Fight fire with fire using any two cards",
+        "Bluff him frequently",
+        "Only play AA and fold everything else"
+      ],
+      "explanation": "A maniac is loose and illogical, never folding and never stopping: tighten your opens, 4-bet QQ+/AK for value, check-call strong hands to induce, and never bluff back."
+    },
+    "l8-exploit-q8": {
+      "question": "You have been exploiting a specific opponent for a while. What is the correct maintenance habit?",
+      "options": [
+        "Recheck his stats regularly and return to GTO once the leak disappears",
+        "Keep exploiting forever once you start",
+        "Only check when you miss the board",
+        "Base it on his screen name"
+      ],
+      "explanation": "Exploitation monetizes a current leak. Once it is fixed, staying deviated is just imbalance, so recheck periodically and pull the deviation back."
     }
   },
   "lessonPractice": {

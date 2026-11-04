@@ -1,23 +1,10 @@
-import type { DailyPlan, AbilityAssessment } from '../types';
+import type { DailyPlan } from '../types';
+import type { EloDimension, EloRating } from '@/shared/types/elo';
 import { getAllLessonSummaries } from './academyMeta';
+import { getLessonMeta } from '../data/lessonMeta';
 
-const ABILITY_KEYS: (keyof Omit<AbilityAssessment, 'lastUpdated'>)[] = [
-  'rangeKnowledge',
-  'oddsCalculation',
-  'gtoUnderstanding',
-  'positionalPlay',
-  'emotionalControl',
-];
-
-// 能力维度 → 相关课程 ID 映射
-// P4 修复（4.2-P2-1）：修正所有引用不存在 lesson ID 的问题，对齐 courses.ts 实际 ID
-const ABILITY_LESSON_MAP: Record<string, string[]> = {
-  rangeKnowledge: ['l1-hand-selection', 'l2-raise-sizing', 'l2-3bet-basics', 'l2-4bet-strategy', 'l2-bb-defense'],
-  oddsCalculation: ['l3-draws', 'l3-bet-sizing', 'l3-multistreet'],
-  gtoUnderstanding: ['l3-cbet', 'l3-bluffing', 'l3-checkraise', 'l4-range-thinking'],
-  positionalPlay: ['l1-position', 'l3-float-probe', 'l2-squeeze'],
-  emotionalControl: ['l5-tilt', 'l1-bankroll'],
-};
+/** ELO 五维（弱点判定的遍历源，顺序即同分 tie-break 顺序） */
+const ELO_DIMENSIONS: readonly EloDimension[] = ['preflop', 'postflop', 'math', 'handReading', 'mental'];
 
 /**
  * 生成每日训练计划（学院焦点版）
@@ -30,19 +17,22 @@ const ABILITY_LESSON_MAP: Record<string, string[]> = {
  *   - 本函数：学院内焦点计划，DailyPlan 类型，推荐 1 门新课 + 复习 + 练习
  *   - 另一函数：跨模块推荐列表，DailyRecommendation[] 类型，覆盖 range/odds/gto 多模块
  * 两者服务于不同 UI 场景，非重复实现（命名已区分，禁止混用）。
+ *
+ * P0 口径：焦点维度 = 标准变体 ELO 五维中最低的一维（focusArea: EloDimension），
+ * 新课/练习按 lessonMeta 的 eloDimension 命中该维度（未登记课时回退 postflop）。
  */
 export function generateDailyPlan(
   completedLessons: string[],
-  abilityAssessment: AbilityAssessment,
+  elo: EloRating,
   reviewQueue: string[]
 ): DailyPlan {
-  // 1. 找出最薄弱的能力维度
-  const weakestArea = findWeakestArea(abilityAssessment);
+  // 1. 找出最薄弱的 ELO 维度（同分按 ELO_DIMENSIONS 顺序取前者）
+  const weakestArea = findWeakestDimension(elo);
 
   // 2. 选择需要复习的课程（最多2个）
   const reviewLessons = reviewQueue.slice(0, 2);
 
-  // 3. 推荐下一门新课程
+  // 3. 推荐与弱点维度匹配的下一门新课程（无匹配时退回顺序推荐）
   const newLesson = getNextRecommendedLesson(completedLessons, weakestArea);
 
   // 4. 基于弱点推荐定向练习（有 practice 的课程）
@@ -61,37 +51,35 @@ export function generateDailyPlan(
   };
 }
 
-/** 找出五维评分中最低的维度 */
-function findWeakestArea(assessment: AbilityAssessment): keyof AbilityAssessment | null {
-  let weakest: keyof Omit<AbilityAssessment, 'lastUpdated'> | null = null;
+/** 找出 ELO 五维中分数最低的维度（全部为默认值时取首维，行为稳定可测） */
+function findWeakestDimension(elo: EloRating): EloDimension {
+  let weakest: EloDimension = ELO_DIMENSIONS[0]!;
   let lowestScore = Infinity;
 
-  for (const key of ABILITY_KEYS) {
-    const score = assessment[key];
+  for (const dimension of ELO_DIMENSIONS) {
+    const score = elo[dimension];
     if (typeof score === 'number' && score < lowestScore) {
       lowestScore = score;
-      weakest = key;
+      weakest = dimension;
     }
   }
 
   return weakest;
 }
 
-/** 根据弱点推荐下一门未完成的新课程 */
+/** 根据弱点维度推荐下一门未完成的新课程 */
 function getNextRecommendedLesson(
   completedLessons: string[],
-  weakestArea: keyof AbilityAssessment | null
+  weakestArea: EloDimension | null
 ): string | null {
   const allLessons = getAllLessonSummaries();
 
-  // 优先推荐与弱点相关的未完成课程
-  if (weakestArea && weakestArea !== 'lastUpdated') {
-    const relatedIds = ABILITY_LESSON_MAP[weakestArea] ?? [];
-    for (const id of relatedIds) {
-      if (!completedLessons.includes(id)) {
-        // 确认该课程存在
-        const exists = allLessons.some((l) => l.id === id);
-        if (exists) return id;
+  // 优先推荐命中弱点维度的未完成课程（维度以 lessonMeta 为准）
+  if (weakestArea) {
+    for (const lesson of allLessons) {
+      if (completedLessons.includes(lesson.id)) continue;
+      if (getLessonMeta(lesson.id).eloDimension === weakestArea) {
+        return lesson.id;
       }
     }
   }
@@ -106,27 +94,23 @@ function getNextRecommendedLesson(
   return null;
 }
 
-/** 获取与弱点相关且有 practice 的课程ID */
+/** 获取与弱点维度相关且有 practice 的已学课程ID */
 function getPracticeSpotsForWeakArea(
-  weakestArea: keyof AbilityAssessment | null,
+  weakestArea: EloDimension | null,
   completedLessons: string[]
 ): string[] {
   const allLessons = getAllLessonSummaries();
   const spots: string[] = [];
 
-  // 获取相关课程 ID
-  const relatedIds = weakestArea && weakestArea !== 'lastUpdated'
-    ? (ABILITY_LESSON_MAP[weakestArea] ?? [])
-    : [];
-
-  // 优先从弱点相关的已完成课程中选有 practice 的
-  for (const lesson of allLessons) {
-    if (lesson.hasPractice) {
-      if (relatedIds.includes(lesson.id) && completedLessons.includes(lesson.id)) {
+  // 优先从命中弱点维度的已完成课程中选有 practice 的
+  if (weakestArea) {
+    for (const lesson of allLessons) {
+      if (spots.length >= 3) break;
+      if (!lesson.hasPractice || !completedLessons.includes(lesson.id)) continue;
+      if (getLessonMeta(lesson.id).eloDimension === weakestArea) {
         spots.push(lesson.id);
       }
     }
-    if (spots.length >= 3) break;
   }
 
   // 不够则从所有已完成课程中补充

@@ -57,9 +57,12 @@ function renderAt(lessonId: string, hash = '', container?: HTMLElement) {
   );
 }
 
-/** 逐题走完课后测验（每题选项按答题区样式定位，切题等 AnimatePresence 退出完成） */
+/**
+ * 逐题走完课后测验（每题选项按答题区样式定位，切题等 AnimatePresence 退出完成）。
+ * P0：课时测验按 lessonId + attempt 抽 5 题，实考题量 = min(题库量, 5)。
+ */
 async function answerQuiz(container: HTMLElement, lessonId: string) {
-  const total = quizCounts.get(lessonId) ?? 0;
+  const total = Math.min(quizCounts.get(lessonId) ?? 0, 5);
   expect(screen.getByText('课后测验')).toBeTruthy();
 
   for (let i = 1; i <= total; i += 1) {

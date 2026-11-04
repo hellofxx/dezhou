@@ -180,7 +180,7 @@
       "1. Value: build a big pot with strong hands (AA/KK/QQ/AKs)\n2. Fold equity: force folds and win the pot directly\n3. Initiative: take control of postflop betting (initiative)\n4. Isolation: play heads-up against a specific opponent, avoiding multiway pots",
       "Beginners should start with a \"linear 3-bet range\" (3-betting only strong hands), then add a \"polarized 3-bet range\" (strong hands + some weak hands as bluffs) once comfortable.",
       "3-bet frequency is a key indicator of aggression. Being too passive (rarely 3-betting) loses value; being too aggressive lets opponents exploit you.",
-      "3-bet range combinatorics:\nOpponent 3-bet range = {AA, KK, QQ, AKs, A5s}\nAA = 6, KK = 6, QQ = 6, AKs = 4, A5s = 4\nTotal = 26 combinations\n\nBlocker effect: when you hold A♠,\nAA drops from 6 to 3, AKs from 4 to 3\nThe 3-bet range drops from 26 to 22",
+      "3-bet range combinatorics:\nOpponent 3-bet range = {AA, KK, QQ, AKs, A5s}\nAA = 6, KK = 6, QQ = 6, AKs = 4, A5s = 4\nTotal = 26 combinations\n\nBlocker effect: when you hold A♠,\nAA drops from 6 to 3, AKs from 4 to 1, A5s from 4 to 1\nThe 3-bet range drops from 26 to 17",
       "Theory reference: 3-bet range construction and combinatorics are detailed in Theory Academy T4 Chapter 2 \"Combinatorics and Blockers\", with a full derivation of Blocker applications in preflop 3-bet/4Bet spots.",
       "Counter-intuitive: when you 3-bet holding A5s, AA drops from 6 to 3 combinations (blocked by your A), but the K count is completely unaffected. That means holding A5s halves the probability your opponent has AA — the mathematical basis for 3-bet bluffing with A5s."
     ],
@@ -288,6 +288,56 @@
       ],
       "explanation": "2.5BB balances risk and reward: big enough to fold weak hands, small enough not to risk too much."
     },
+    "l2-raise-q6": {
+      "question": "The pot is 100, an opponent bets 50 and you call 50. What equity do you need?",
+      "options": [
+        "20%",
+        "25%",
+        "28.6%",
+        "33.3%"
+      ],
+      "explanation": "Required equity = call ÷ (pot + bet + call) = 50 ÷ (100+50+50) = 25%."
+    },
+    "l2-raise-q7": {
+      "question": "Facing a 1/3-pot bet, what equity does a call require?",
+      "options": [
+        "20%",
+        "25%",
+        "28.6%",
+        "33.3%"
+      ],
+      "explanation": "With b = 1/3 pot: required equity = (1/3) ÷ (1 + 2×1/3) ≈ 20%."
+    },
+    "l2-raise-q8": {
+      "question": "Facing a pot-sized bet, what equity does a call require?",
+      "options": [
+        "20%",
+        "25%",
+        "28.6%",
+        "33.3%"
+      ],
+      "explanation": "With b = 1 pot: required equity = 1 ÷ (1 + 2×1) = 1/3 ≈ 33.3%."
+    },
+    "l2-raise-q9": {
+      "question": "Facing a 2/3-pot bet, what equity does a call require?",
+      "options": [
+        "20%",
+        "25%",
+        "28.6%",
+        "33.3%"
+      ],
+      "explanation": "With b = 2/3 pot: required equity = (2/3) ÷ (1 + 4/3) ≈ 28.6%."
+    },
+    "l2-raise-q10": {
+      "question": "What is the main problem with a min-raise (2BB)?",
+      "options": [
+        "It gives the blinds too good pot odds, so weak hands see the flop cheaply",
+        "It makes opponents fold immediately",
+        "It breaks the minimum-raise rule",
+        "It only affects postflop sizing, not preflop"
+      ],
+      "explanation": "A min-raise offers too good a price, so too many weak hands see the flop and your positional edge is diluted."
+    },
     "l2-3bet-q1": {
       "question": "What does the \"3\" in 3-bet represent?",
       "options": [
@@ -337,6 +387,56 @@
         "5x"
       ],
       "explanation": "The standard 3-bet is about 3x the original raise — e.g. 3-bet to 7.5BB against a 2.5BB open."
+    },
+    "l2-3bet-q6": {
+      "question": "How many combinations does the 3-bet range {AA, KK, QQ, AKs, A5s} contain?",
+      "options": [
+        "16",
+        "22",
+        "26",
+        "32"
+      ],
+      "explanation": "AA/KK/QQ are 6 each (18 total) + AKs 4 + A5s 4 = 26 combinations."
+    },
+    "l2-3bet-q7": {
+      "question": "You hold A♠. How many AA combinations does the opponent range have left?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "6"
+      ],
+      "explanation": "With A♠ blocked only 3 aces remain, so C(3,2) = 3 AA combinations — the chance the opponent holds AA is halved."
+    },
+    "l2-3bet-q8": {
+      "question": "What makes up a polarized 3-bet range?",
+      "options": [
+        "Strong hands only",
+        "Strong hands plus some weak hands as bluffs",
+        "Weak hands only",
+        "Pocket pairs only"
+      ],
+      "explanation": "A polarized range is strong hands (value) plus some weak hands as bluffs, with medium hands excluded; a linear range uses strong hands only."
+    },
+    "l2-3bet-q9": {
+      "question": "Against a 2.5BB open, what is a standard 3-bet size?",
+      "options": [
+        "4BB",
+        "5BB",
+        "7.5BB",
+        "12BB"
+      ],
+      "explanation": "A standard 3-bet is about 3x the open: 2.5 × 3 = 7.5BB."
+    },
+    "l2-3bet-q10": {
+      "question": "What does the initiative gained from a 3-bet mean?",
+      "options": [
+        "The right to keep betting and applying pressure postflop",
+        "Winning the pot for sure",
+        "The ability to change cards",
+        "Posting fewer blinds"
+      ],
+      "explanation": "Initiative is the postflop betting pressure owned by the last preflop aggressor — one of the four purposes of a 3-bet (value, fold equity, initiative, isolation)."
     },
     "l2-4bet-q1": {
       "question": "Which hand is best as a 4-Bet Bluff?",
@@ -388,6 +488,56 @@
       ],
       "explanation": "4-Bet Bluff hands usually have an A blocker, reducing the opponent's chance of AA/AK and increasing fold equity."
     },
+    "l2-4bet-q6": {
+      "question": "With 11.5BB in the pot before the 4-bet and a 15.5BB increment, what break-even fold rate does a 4-bet bluff need?",
+      "options": [
+        "About 42.6%",
+        "About 50%",
+        "About 57.4%",
+        "About 70.6%"
+      ],
+      "explanation": "Break-even fold rate = 15.5 ÷ (11.5 + 15.5) = 15.5/27 ≈ 57.4%."
+    },
+    "l2-4bet-q7": {
+      "question": "The opponent 4-bet bluff needs a 57.4% fold rate. What minimum defense frequency must you keep?",
+      "options": [
+        "About 25%",
+        "About 42.6%",
+        "About 57.4%",
+        "About 75%"
+      ],
+      "explanation": "Your fold rate must stay below 57.4%, so you continue at least about 42.6% of the time (1 − 57.4%)."
+    },
+    "l2-4bet-q8": {
+      "question": "After a 2.5BB open and a 7.5BB 3-bet, what is the standard 4-bet size?",
+      "options": [
+        "10-12BB",
+        "13-15BB",
+        "16-19BB",
+        "22-25BB"
+      ],
+      "explanation": "The 4-bet is 2.2-2.5x the 3-bet: 7.5 × 2.2 ≈ 16.5 up to 7.5 × 2.5 ≈ 18.75, i.e. 16-19BB."
+    },
+    "l2-4bet-q9": {
+      "question": "How should AA/KK respond to a 4-bet?",
+      "options": [
+        "Fold",
+        "Call to see a flop",
+        "5-bet all-in",
+        "Call and never raise"
+      ],
+      "explanation": "AA/KK always 5-bet all-in; QQ/AKs can call; medium hands fold against a tight range."
+    },
+    "l2-4bet-q10": {
+      "question": "Why are hands like A5s/A4s preferred as 4-bet bluffs?",
+      "options": [
+        "The A blocker cuts the chance of the opponent holding AA/AK, and they have flush and straight potential postflop",
+        "They have the highest equity against any range",
+        "Because the rules allow another raise",
+        "Because the opponent always folds"
+      ],
+      "explanation": "The A blocker cuts the opponent AA combinations from 6 to 3, and the suited small cards still have flush and straight potential when called."
+    },
     "l2-squeeze-q1": {
       "question": "What is a Squeeze Play?",
       "options": [
@@ -437,6 +587,56 @@
         "JJ"
       ],
       "explanation": "AA is the core 4-Bet hand — 4-Bet for value against a Squeeze. Don't slowplay AA."
+    },
+    "l2-squeeze-q6": {
+      "question": "Against a 2.5BB open, how many times the open is a typical squeeze?",
+      "options": [
+        "1.5-2x",
+        "2.2-2.5x",
+        "4-5x",
+        "8-10x"
+      ],
+      "explanation": "A squeeze is 4-5x the open: 2.5 × 4 = 10BB up to 2.5 × 5 = 12.5BB, i.e. the usual 10-12BB."
+    },
+    "l2-squeeze-q7": {
+      "question": "How should the squeeze size change with each extra caller?",
+      "options": [
+        "Stay the same",
+        "Grow by about 1x the open size",
+        "Shrink by about 1x the open size",
+        "Go all-in"
+      ],
+      "explanation": "Each extra caller adds dead money, so the squeeze grows by about 1x the open to preserve fold equity."
+    },
+    "l2-squeeze-q8": {
+      "question": "What extra value source does a squeeze have over a plain 3-bet?",
+      "options": [
+        "More dead money (both the open and the call are already in the pot)",
+        "Your hand is stronger",
+        "Your position is always better",
+        "The blinds are smaller"
+      ],
+      "explanation": "A squeeze has three value sources: more dead money, a high fold rate (the caller range is weak), and isolating the opener heads-up."
+    },
+    "l2-squeeze-q9": {
+      "question": "Which spot is best for a squeeze bluff?",
+      "options": [
+        "A tight UTG open plus a strong caller",
+        "A wide open (CO/BTN) plus a weak caller",
+        "A four-way limped pot",
+        "BB facing a UTG open"
+      ],
+      "explanation": "The best timing is a wide opener plus a weak caller; avoid squeeze bluffs against a tight UTG open."
+    },
+    "l2-squeeze-q10": {
+      "question": "Facing a squeeze, what should strong-but-not-premium hands like QQ/AKs do?",
+      "options": [
+        "Fold right away",
+        "4-bet all-in",
+        "Call",
+        "Slow-play as a trap"
+      ],
+      "explanation": "Defense taxonomy: 4-bet AA/KK, call QQ/AKs, and fold weak calling hands (small pairs, suited connectors) against a large squeeze."
     },
     "l2-bb-q1": {
       "question": "Facing a BTN Open to 2.5BB, which defense tier should the BB use?",
@@ -488,6 +688,56 @@
       ],
       "explanation": "The BTN opens the widest and the BB has 1BB invested with good odds, so its defense vs the BTN is the widest of all positions."
     },
+    "l2-bb-q6": {
+      "question": "BB faces a 2.5BB open and must call 1.5BB. What equity does that call need?",
+      "options": [
+        "About 21%",
+        "About 27%",
+        "About 33%",
+        "About 38%"
+      ],
+      "explanation": "The pot already holds 1.5 (blinds) + 2.5 (open) = 4BB; calling 1.5BB needs 1.5 ÷ (4 + 1.5) ≈ 27.3%."
+    },
+    "l2-bb-q7": {
+      "question": "What happens if BB defends less than 40%?",
+      "options": [
+        "Opponents can profitably steal with any two cards",
+        "You get punished by value bets",
+        "Your range becomes stronger",
+        "Nothing at all"
+      ],
+      "explanation": "Defending under 40% lets opponents profit by stealing with any two; defending over 60% gets punished by value bets."
+    },
+    "l2-bb-q8": {
+      "question": "What is the problem with defending more than 60%?",
+      "options": [
+        "Opponents can steal with any two",
+        "Over-defending gets punished by value bets",
+        "You are forced to fold",
+        "It affects no decisions"
+      ],
+      "explanation": "Defending above 60% means calling with too many weak hands, and the opponent value bets keep getting paid."
+    },
+    "l2-bb-q9": {
+      "question": "The earlier the opener position, how should the BB defense range change?",
+      "options": [
+        "Wider",
+        "Tighter",
+        "Unchanged",
+        "3-bet only"
+      ],
+      "explanation": "Tightest against UTG, tighter against HJ, looser against CO, widest against BTN — a stronger opener range means tighter defense."
+    },
+    "l2-bb-q10": {
+      "question": "Which hands make up the BB calling range?",
+      "options": [
+        "AA/KK only",
+        "Suited connectors, small pairs and similar hands with postflop potential that are not 3-bets",
+        "Any two cards shoved all-in",
+        "Ace-high hands only"
+      ],
+      "explanation": "The calling range is suited connectors, small pairs and wide suited hands; the 3-bet range is polarized (AA/KK/QQ/AKs plus A5s-type blockers)."
+    },
     "l2-blind-q1": {
       "question": "Heads-up SB vs BB, which tier is the SB's standard open range?",
       "options": [
@@ -538,6 +788,56 @@
       ],
       "explanation": "The SB acts first postflop (OOP) without information advantage — the core challenge of the blind war."
     },
+    "l2-blind-q6": {
+      "question": "Why is the SB open size larger (2.5-3BB) than the BTN open?",
+      "options": [
+        "SB is out of position postflop and needs a larger size to compensate",
+        "SB has more chips",
+        "SB hands are stronger",
+        "The rules require it"
+      ],
+      "explanation": "SB acts first postflop (OOP), so a larger size lowers the BB defense frequency and offsets the positional disadvantage."
+    },
+    "l2-blind-q7": {
+      "question": "Which action dominates the BB defense structure against an SB open?",
+      "options": [
+        "3-bet",
+        "Call",
+        "Fold",
+        "Limp"
+      ],
+      "explanation": "Calling is the bulk of the defense range, 3-bets are only a small slice (strong value plus light bluffs), and only the weakest hands fold."
+    },
+    "l2-blind-q8": {
+      "question": "What is the main problem with limping from the SB in a blind battle?",
+      "options": [
+        "It lets the BB see a free flop and gives up the initiative",
+        "It gives the opponent extra chips",
+        "It breaks the betting rules",
+        "It makes the pot too large"
+      ],
+      "explanation": "Modern SB play is raise-or-fold: a limp lets the BB see a cheap flop while the SB is out of position and hard-pressed postflop."
+    },
+    "l2-blind-q9": {
+      "question": "Which matchup occurs most often in 6-max?",
+      "options": [
+        "UTG vs HJ",
+        "CO vs BTN",
+        "SB vs BB",
+        "BTN vs SB"
+      ],
+      "explanation": "When everyone folds to the blinds only SB and BB remain, so SB vs BB is the most frequent confrontation."
+    },
+    "l2-blind-q10": {
+      "question": "Which hands should the BB fold against an SB open?",
+      "options": [
+        "Only the weakest hands",
+        "All offsuit hands",
+        "Everything except AA/KK",
+        "Everything"
+      ],
+      "explanation": "BB has 1BB invested and the SB range is weak, so only the weakest hands fold; the rest defend with calls and a few 3-bets."
+    },
     "l2-short-q1": {
       "question": "What strategy should you use at ≤20BB?",
       "options": [
@@ -587,6 +887,56 @@
         "60%"
       ],
       "explanation": "At 20BB the BTN push range is about 30-40%, including all big pairs, big cards, and some suited connectors."
+    },
+    "l2-short-q6": {
+      "question": "What are the three factors shaping a push range?",
+      "options": [
+        "Position, remaining stack and how many players are left to act",
+        "Mood, opponent and luck",
+        "Rank, suit and connectedness",
+        "Blind size, time of day and table count"
+      ],
+      "explanation": "The three factors are position (later is wider), remaining stack (15BB differs a lot from 20BB), and how many players are still to act."
+    },
+    "l2-short-q7": {
+      "question": "Why do suited connectors lose value in short-stack play?",
+      "options": [
+        "Their playability (implied odds) cannot be realized and their raw-equity deficit shows",
+        "Suited connectors cannot make straights",
+        "Suited connectors turn into pairs when short",
+        "Because opponents fold"
+      ],
+      "explanation": "Shallower stacks mean fewer postflop decisions, so playability stops paying while the low raw equity of suited connectors shows through."
+    },
+    "l2-short-q8": {
+      "question": "What is the real mistake in calling a 3-bet with 98s at 35BB?",
+      "options": [
+        "Playing short stacks with 100BB thinking",
+        "98s should never open",
+        "The 3-bet size is too small",
+        "You should shove instead"
+      ],
+      "explanation": "At short stacks suited connectors lack implied odds, so calling a 3-bet with deep-stack thinking is the classic error."
+    },
+    "l2-short-q9": {
+      "question": "At 20BB, the more players left to act behind you, your push range should be?",
+      "options": [
+        "Narrower",
+        "Wider",
+        "Unaffected",
+        "Based on your cards alone"
+      ],
+      "explanation": "The number of players left behind is one of the push-range factors: more players means a higher chance of being called, so the range narrows."
+    },
+    "l2-short-q10": {
+      "question": "What is the main 3-bet tendency at 30-50BB?",
+      "options": [
+        "Raises essentially become raise-or-shove",
+        "Only tiny 3-bets",
+        "No 3-bets at all",
+        "Switch everything to limping"
+      ],
+      "explanation": "At 30-50BB opens shrink to 2-2.2BB and 3-bets essentially become raise-or-shove, avoiding awkward postflop spots."
     }
   },
   "lessonExample": {
@@ -1443,7 +1793,7 @@
       "Explain how the \"3\" in 3-bet is counted: the blinds are bet 1, the open raise is bet 2, the re-raise is bet 3",
       "List the four purposes of a 3-bet: value, fold equity, initiative and isolation",
       "Compare a linear 3-bet range with a polarized 3-bet range, and state the order beginners should adopt them in",
-      "Count the combos in a 3-bet range and explain the blocker effect: {AA,KK,QQ,AKs,A5s} is 26 combos, dropping to 22 when you hold A-spades"
+      "Count the combos in a 3-bet range and explain the blocker effect: {AA,KK,QQ,AKs,A5s} is 26 combos, dropping to 17 when you hold A-spades"
     ],
     "l2-raise-sizing": [
       "State the standard online 6-max preflop open size (2.5BB) and explain how a single uniform open size hides hand strength",

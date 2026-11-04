@@ -32,7 +32,8 @@ function makeLesson(overrides: Partial<Lesson> = {}): Lesson {
 async function loadStores() {
   const { completeCourse } = await import('./completeCourse');
   const { useProgressStore } = await import('@/features/progress/store');
-  return { completeCourse, useProgressStore };
+  const { useAcademyStore } = await import('../store');
+  return { completeCourse, useProgressStore, useAcademyStore };
 }
 
 beforeEach(() => {
@@ -80,5 +81,90 @@ describe('completeCourse 复习项 label 语言中立', () => {
     const items = useProgressStore.getState().reviewItems.filter((r) => r.id === lesson.id);
     expect(items).toHaveLength(1);
     expect(items[0]!.label).toBe('academy.lessonTitle.l2-squeeze');
+  });
+});
+
+describe('completeCourse：题级 SRS 与尝试记录（P0 学习闭环）', () => {
+  beforeEach(async () => {
+    const { useProgressStore, useAcademyStore } = await loadStores();
+    useProgressStore.setState({ reviewItems: [] });
+    useAcademyStore.getState().resetProgress();
+  });
+
+  const quiz = [
+    { id: 'q1', question: '题目一', options: ['A', 'B'], correctIndex: 0, explanation: '解析一' },
+    { id: 'q2', question: '题目二', options: ['A', 'B'], correctIndex: 1, explanation: '解析二' },
+  ];
+
+  it('答错题逐条入题级 SRS（strategy:<qid>，label/front/back 为 key，回链所属课时）', async () => {
+    const { completeCourse, useProgressStore } = await loadStores();
+    const lesson = makeLesson({ quiz });
+
+    completeCourse({
+      lessonId: lesson.id,
+      score: 50,
+      mode: 'quiz',
+      lesson,
+      wrongQuestionIds: ['q2'],
+      correctCount: 1,
+      totalQuestions: 2,
+    });
+
+    const item = useProgressStore.getState().reviewItems.find((r) => r.id === 'strategy:q2');
+    expect(item).toBeDefined();
+    expect(item!.label).toBe('academy.lessonQuiz.q2.question');
+    expect(item!.metadata?.front).toBe('academy.lessonQuiz.q2.question');
+    expect(item!.metadata?.back).toBe('academy.lessonQuiz.q2.explanation');
+    expect(item!.metadata?.route).toBe(`/academy/lesson/${lesson.id}`);
+    expect(item!.category).toBe('strategy');
+    // 有错题时不重复建课时级复习项（避免与题级条目重叠）
+    expect(useProgressStore.getState().reviewItems.some((r) => r.id === lesson.id)).toBe(false);
+  });
+
+  it('未知题 id 不产生复习项（无死链）', async () => {
+    const { completeCourse, useProgressStore } = await loadStores();
+    const lesson = makeLesson({ quiz });
+
+    completeCourse({ lessonId: lesson.id, score: 0, mode: 'quiz', lesson, wrongQuestionIds: ['not-in-bank'] });
+
+    expect(useProgressStore.getState().reviewItems.some((r) => r.id.startsWith('strategy:'))).toBe(false);
+  });
+
+  it('满分（无错题）与 Drill 完成仍保留课时级复习项', async () => {
+    const { completeCourse, useProgressStore } = await loadStores();
+    const lesson = makeLesson({ quiz });
+
+    completeCourse({ lessonId: lesson.id, score: 100, mode: 'quiz', lesson, wrongQuestionIds: [], totalQuestions: 2 });
+    completeCourse({
+      lessonId: 'drill-outs',
+      score: 70,
+      mode: 'drill',
+      lesson: makeLesson({ id: 'drill-outs', type: 'drill', quiz: [] }),
+      drillResult: { correct: 7, total: 10, timeTaken: 60 },
+      wrongQuestionIds: ['drill-q1'],
+    });
+
+    const ids = useProgressStore.getState().reviewItems.map((item) => item.id);
+    expect(ids).toContain(lesson.id);
+    expect(ids).toContain('drill-outs');
+  });
+
+  it('每次完成（含重考）都写尝试记录与训练日，首考分不被重考覆盖', async () => {
+    const { completeCourse, useAcademyStore, useProgressStore } = await loadStores();
+    const lesson = makeLesson({ quiz });
+    // 训练日入口每次完成都必须调用（Streak 口径不变），用 spy 锁定调用次数
+    const trainingDaySpy = vi.spyOn(useProgressStore.getState(), 'recordTrainingDay');
+
+    completeCourse({ lessonId: lesson.id, score: 100, mode: 'quiz', lesson, wrongQuestionIds: [], totalQuestions: 2 });
+    completeCourse({ lessonId: lesson.id, score: 50, mode: 'quiz', lesson, wrongQuestionIds: ['q1'], correctCount: 1, totalQuestions: 2 });
+
+    expect(trainingDaySpy).toHaveBeenCalledTimes(2);
+    trainingDaySpy.mockRestore();
+
+    const attempt = useAcademyStore.getState().lessonAttempts[lesson.id]!;
+    expect(attempt.attempts).toBe(2);
+    expect(attempt.firstScore).toBe(100);
+    expect(attempt.lastScore).toBe(50);
+    expect(attempt.bestScore).toBe(100);
   });
 });

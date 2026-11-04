@@ -796,6 +796,686 @@
         "保持 30+ buy-in"
       ],
       "explanation": "追求\"短期暴利\"是最致命错误。今天的 5 个 buy-in 亏损不重要，重要的是做了多少正确决策。长期看正确决策会带来稳定盈利。"
+    },
+    "local-limp-intro-q4": {
+      "question": "Limp 局的 SPR 通常处于什么区间？",
+      "options": [
+        "3-5（中等偏低）",
+        "10-15（极深）",
+        "1 以下",
+        "20 以上"
+      ],
+      "explanation": "Limp 局底池中等、多人入池，SPR 通常 3-5：一到两条街就能打光，适合隐含赔率游戏而不适合深筹多街操作。"
+    },
+    "local-limp-intro-q5": {
+      "question": "Limp 局中为什么不能长期只靠小底池盈利？",
+      "options": [
+        "抽水占比相对高，小底池的收益被抽水吃光",
+        "小底池没人愿意跟注",
+        "小底池会触发强制 Straddle",
+        "小底池的牌力要求更高"
+      ],
+      "explanation": "抽水按底池比例抽取，小底池的抽水占比反而更高。长期在小底池磨牌，赢到的钱会被抽水吃回去。"
+    },
+    "local-limp-intro-q6": {
+      "question": "Limp 局中最常见的错误之一是？",
+      "options": [
+        "AA/KK 也跟着 Limp，结果被多人底池反超",
+        "用强牌隔离加注",
+        "翻后剥削被动玩家",
+        "用投机牌便宜看翻牌"
+      ],
+      "explanation": "强牌不隔离等于放弃主动权和弃牌权益，被 3-5 人底池反超的概率显著上升。Limp 局里强牌的第一选择始终是隔离加注。"
+    },
+    "local-limp-intro-q7": {
+      "question": "Limp 局中位置价值更高的原因是？",
+      "options": [
+        "BTN/CO 可以 Limp behind，翻后最后行动剥削被动玩家",
+        "后位的盲注更便宜",
+        "后位可以先看对手底牌",
+        "前位需要多下盲注"
+      ],
+      "explanation": "多人底池里最后行动的信息优势最大。BTN/CO 可以跟着 Limp 便宜看翻牌，翻后利用位置对付被动的 Limp 玩家。"
+    },
+    "local-limp-intro-q8": {
+      "question": "有效筹码 20BB、翻牌底池 5BB 时，SPR 约为？",
+      "options": [
+        "4",
+        "2",
+        "10",
+        "0.25"
+      ],
+      "explanation": "SPR = 有效筹码 ÷ 底池 = 20 ÷ 5 = 4，正落在 Limp 局常见的 3-5 区间，属于一到两条街就能打光的浅中筹码环境。"
+    },
+    "local-limp-isolate-q4": {
+      "question": "面对单人 Limp，本课推荐的隔离加注尺度是？",
+      "options": [
+        "4-5BB",
+        "1.5-2BB",
+        "10-12BB",
+        "直接 All-in"
+      ],
+      "explanation": "单人 Limp 建议加到 4-5BB（标准 GTO 是 3-4BB）。Limp 玩家范围过宽，小加注赶不走人，需要更大的尺度。"
+    },
+    "local-limp-isolate-q5": {
+      "question": "面对三人 Limp，隔离加注尺度应调整到？",
+      "options": [
+        "8-10BB",
+        "3-4BB",
+        "5-6BB",
+        "20BB 以上"
+      ],
+      "explanation": "Limp 人数每多一人尺度约 +2BB：一人 4-5BB、两人 6-7BB、三人 8-10BB。这样既隔离又用强牌建立底池。"
+    },
+    "local-limp-isolate-q6": {
+      "question": "以下哪类牌不适合隔离加注？",
+      "options": [
+        "AT、KJ、QT 这类中等牌力",
+        "TT+ 与 AQ+",
+        "A2s-A5s",
+        "56s-9Ts"
+      ],
+      "explanation": "中等牌力被跟注后踢脚劣势明显、被 4-Bet 又要弃牌。适合隔离的是强价值牌（TT+/AQ+/KQs）与形态明确的投机牌（A2s-A5s、56s-9Ts）。"
+    },
+    "local-limp-isolate-q7": {
+      "question": "连续 3 次隔离加注都被多人跟注，说明什么、该怎么调？",
+      "options": [
+        "桌风太松，应收紧隔离范围、加大尺度或改用 Limp behind",
+        "你的牌都不够强，继续用同样尺度",
+        "应该完全放弃隔离",
+        "应该改回小尺度 min-raise"
+      ],
+      "explanation": "连续被多人跟注说明这张桌的跟注门槛极低。此时减少边缘牌隔离、加大尺度，或改用 Limp behind 用投机牌便宜看翻牌。"
+    },
+    "local-limp-isolate-q8": {
+      "question": "NL25（$0.25/$0.50）两人 Limp、SB/BB 尚未行动时，底池里已投入多少？",
+      "options": [
+        "3.5BB（SB 0.5 + BB 1 + 两人 Limp 2）",
+        "1.5BB",
+        "5BB",
+        "7BB"
+      ],
+      "explanation": "0.5 + 1 + 1 + 1 = 3.5BB。按本课尺度隔离到 6-7BB，就能在 3.5BB 的死钱上施加足够的隔离压力。"
+    },
+    "local-limp-multiway-q5": {
+      "question": "4 人底池中，要支撑多条街价值下注，至少需要什么牌力？",
+      "options": [
+        "两对起",
+        "顶对顶踢脚",
+        "任何顶对",
+        "A 高牌"
+      ],
+      "explanation": "门槛随人数上升：4 人底池两对起才做多条街价值，5+ 人底池要三条起；顶对只值一条街。"
+    },
+    "local-limp-multiway-q6": {
+      "question": "5 人以上底池中，值得多条街价值下注的最低牌力是？",
+      "options": [
+        "三条起",
+        "两对起",
+        "顶对起",
+        "同花听牌"
+      ],
+      "explanation": "人多时奇怪的两对和更强的组合大量出现，5+ 人底池要三条起才撑得起多街价值，两对就要开始控制底池。"
+    },
+    "local-limp-multiway-q7": {
+      "question": "翻牌有 15 outs 的听牌，转牌单街成牌概率约为？",
+      "options": [
+        "约 32%（15/47）",
+        "约 54%",
+        "约 15%",
+        "约 60%"
+      ],
+      "explanation": "单街成牌 ≈ outs ÷ 剩余牌 = 15/47 ≈ 32%。两条街才是约 54%；二四法则的 60% 是偏高的粗估。"
+    },
+    "local-limp-multiway-q8": {
+      "question": "4 人底池（3 个对手）每人弃牌率都是 40% 时，你的 C-Bet 让所有人弃牌的概率约为？",
+      "options": [
+        "约 6.4%",
+        "约 40%",
+        "约 12%",
+        "约 2.6%"
+      ],
+      "explanation": "0.4 × 0.4 × 0.4 = 0.064 ≈ 6.4%。注意这里只有 3 个对手；若有 4 个对手则为 0.4⁴ ≈ 2.6%。"
+    },
+    "local-straddle-q4": {
+      "question": "BTN Straddle 2BB 的局，翻前初始底池是多少？",
+      "options": [
+        "3.5BB（SB 0.5 + BB 1 + Straddle 2）",
+        "1.5BB",
+        "2.5BB",
+        "5.5BB"
+      ],
+      "explanation": "0.5 + 1 + 2 = 3.5BB。底池预置变大正是 Straddle 局 SPR 下降、投机牌贬值的原因。"
+    },
+    "local-straddle-q5": {
+      "question": "100BB 买入的 Straddle（2BB）局，有效筹码相当于多少个 Straddle？",
+      "options": [
+        "50 个",
+        "100 个",
+        "25 个",
+        "2 个"
+      ],
+      "explanation": "100BB ÷ 2BB = 50 个 Straddle。所以 Straddle 局要按 50BB 的思维打，而不是 100BB。"
+    },
+    "local-straddle-q6": {
+      "question": "为什么可以用更宽的范围 3-bet 攻击 BTN Straddler？",
+      "options": [
+        "他已投入 2BB、范围偏宽，3-bet 的弃牌权益更高",
+        "BTN 的筹码更多",
+        "Straddler 不允许弃牌",
+        "BTN 的抽水更低"
+      ],
+      "explanation": "Straddler 已投入 2BB，防守动机强但范围偏宽；对他 3-bet 既有弃牌权益，也能在翻前把弱牌隔离掉。"
+    },
+    "local-straddle-q7": {
+      "question": "如果你是 BTN Straddler，本课推荐的混合策略是？",
+      "options": [
+        "多数时候 check 看免费翻牌，偶尔用 KK/AA check-raise",
+        "每次都加注建立底池",
+        "每次都弃牌",
+        "只用小对子加注"
+      ],
+      "explanation": "Straddler 已投入 2BB，多数时候 check 就能看牌；保留强牌（KK/AA）做 check-raise，可以在对手偷盲时偷取他的筹码。"
+    },
+    "local-straddle-q8": {
+      "question": "Straddle 局中价值相对提升的牌是？",
+      "options": [
+        "QQ+ 与 AK/AQ（SPR 低，顶对即可全下）",
+        "22-77 小对子",
+        "54s-76s 同花连牌",
+        "弱 Ax"
+      ],
+      "explanation": "SPR 下降后，顶对就能打光的强牌价值提升；小对子与同花连牌靠隐含赔率吃饭，在低 SPR 环境反而贬值。"
+    },
+    "local-ante-q4": {
+      "question": "6 人桌、每人 0.2BB Ante，翻前初始底池是多少？",
+      "options": [
+        "2.7BB（0.5 + 1 + 1.2）",
+        "1.5BB",
+        "3.5BB",
+        "2.0BB"
+      ],
+      "explanation": "SB 0.5 + BB 1 = 1.5BB，再加 6 × 0.2 = 1.2BB Ante，合计 2.7BB。"
+    },
+    "local-ante-q5": {
+      "question": "6 人桌每人 0.5BB Ante 时，翻前初始底池是多少？",
+      "options": [
+        "4.5BB",
+        "2.5BB",
+        "3.5BB",
+        "6.5BB"
+      ],
+      "explanation": "1.5BB 盲注 + 6 × 0.5 = 3BB Ante = 4.5BB。Ante 越大底池越厚、跟注赔率越好，范围应越宽。"
+    },
+    "local-ante-q6": {
+      "question": "Ante 结构下应整体放宽的四个方向不包括？",
+      "options": [
+        "降低开牌尺度以节省筹码",
+        "开牌范围",
+        "偷盲范围",
+        "大盲防守范围"
+      ],
+      "explanation": "Ante 改变的是底池赔率与偷盲价值，四个放宽方向是开牌、偷盲、3-bet 与大盲防守；开牌尺度不在放宽项内。"
+    },
+    "local-ante-q7": {
+      "question": "Ante 局中的 3-bet 范围应该？",
+      "options": [
+        "略微放宽，但保持以价值为主",
+        "放宽到任意两张牌",
+        "完全不变",
+        "完全取消 3-bet"
+      ],
+      "explanation": "Ante 让底池更厚，3-bet 的收益变高，所以可以略微放宽；但对手的 3-bet 范围也在放宽，仍需以价值牌为主体。"
+    },
+    "local-ante-q8": {
+      "question": "Big Ante（0.5BB+）局中，BTN 的开池范围应如何调整？",
+      "options": [
+        "在标准最宽档之上再明显放宽",
+        "收紧到只打 QQ+",
+        "保持无 Ante 时的宽度",
+        "完全放弃偷盲"
+      ],
+      "explanation": "Ante 越大，偷盲成功赢到的底池越厚，BTN 的开池范围应在标准最宽档之上再放宽，因为底池赔率极佳。"
+    },
+    "local-deep-implied-q5": {
+      "question": "NL200、500BB 深度，UTG 开牌 8BB，你 CO 持 77 跟注。按中 set 概率 12% 复算，期望收益约为？",
+      "options": [
+        "约 +53BB",
+        "约 +8BB",
+        "约 −7BB",
+        "约 +500BB"
+      ],
+      "explanation": "EV = 0.12 × 500 − 0.88 × 8 = 60 − 7.04 ≈ +53BB（净赢按中牌后可赢的 500BB 计，不重复计入自己的跟注）。"
+    },
+    "local-deep-implied-q6": {
+      "question": "同样是 12% 中 set、跟注 8BB 的场景，要打平至少需要中牌后赢回多少？",
+      "options": [
+        "约 59BB",
+        "约 8BB",
+        "约 12BB",
+        "约 100BB"
+      ],
+      "explanation": "打平所需赢额 =（0.88 ÷ 0.12）× 8 ≈ 58.7BB。500BB 深度下对手的筹码远超这条线，跟注才有隐含赔率。"
+    },
+    "local-deep-implied-q7": {
+      "question": "深筹码中最典型的反向隐含赔率场景是？",
+      "options": [
+        "用 92s 击中同花但被更大的同花压制",
+        "用 55 中 set 后打光",
+        "用 A5s 击中坚果同花",
+        "用 87s 击中顺子"
+      ],
+      "explanation": "弱同花中花仍可能输给更大的同花，深筹下这种「中牌却输钱」的损失被放大数倍，属于典型反向隐含赔率。"
+    },
+    "local-deep-implied-q8": {
+      "question": "本课对 500BB 深筹码局的资金管理建议是？",
+      "options": [
+        "至少 50 个 buy-in",
+        "5 个 buy-in",
+        "10 个 buy-in",
+        "不需要额外准备"
+      ],
+      "explanation": "500BB 的方差远大于 100BB，本课建议至少 50 个 buy-in 才能承受深筹码的波动。"
+    },
+    "local-deep-sc-q5": {
+      "question": "翻牌 15 outs 的组合听牌，转牌单街成牌概率约为？",
+      "options": [
+        "约 32%（15/47）",
+        "约 54%",
+        "约 15%",
+        "约 60%"
+      ],
+      "explanation": "单街 ≈ 15 ÷ 47 ≈ 32%；两条街才是 54%。二四法则的 15 × 4 = 60% 是偏高的粗估。"
+    },
+    "local-deep-sc-q6": {
+      "question": "同花听牌 9 outs 与两头顺 8 outs 有两张重叠时，组合听牌总 outs 是？",
+      "options": [
+        "15 outs（9 + 8 − 2）",
+        "17 outs",
+        "9 outs",
+        "8 outs"
+      ],
+      "explanation": "重叠的 2 张会同时成花成顺，必须去重：9 + 8 − 2 = 15 outs，对应两条街约 54%。"
+    },
+    "local-deep-sc-q7": {
+      "question": "深筹码中同花连牌在 CO/BTN 的范围可以放宽到？",
+      "options": [
+        "32s-QJs（约 12 组）并加入一间张",
+        "仅 54s-T9s",
+        "仅 AKs/AQs",
+        "任意两张同花"
+      ],
+      "explanation": "位置越靠后越宽：UTG 只打 54s-T9s、MP 到 43s-JTs、CO 到 32s-QJs、BTN 可加一间张。位置是同花连牌的生命线。"
+    },
+    "local-deep-sc-q8": {
+      "question": "深筹码中同花连牌击中听牌后，本课推荐的处理是？",
+      "options": [
+        "跟注而非加注，保留隐藏性并利用隐含赔率",
+        "立即 All-in",
+        "直接弃牌",
+        "做大额 check-raise"
+      ],
+      "explanation": "深筹下听牌隐含赔率极佳，加注会让对手弃掉被你压制的弱牌、损失后续街价值；跟注既保留隐藏性，又能在成牌后赢大底池。"
+    },
+    "local-exploit-cs-q5": {
+      "question": "跟注站 Fold to C-Bet 只有 20%。1/3 底池 C-Bet 的保本弃牌率（Alpha）约 25%，此时诈唬是？",
+      "options": [
+        "负 EV，因为 20% 低于 25% 的保本线",
+        "正 EV，因为 20% 已经很高",
+        "完全中性",
+        "无法判断"
+      ],
+      "explanation": "Alpha = b ÷ (P + b) = 0.33 ÷ 1.33 ≈ 25%。对手只弃 20%，低于保本线，1/3 池的 C-Bet 诈唬是负 EV。"
+    },
+    "local-exploit-cs-q6": {
+      "question": "跟注站翻前突然加注，通常代表？",
+      "options": [
+        "AA/KK/QQ/AK 这类极窄强范围",
+        "任意两张同花",
+        "中等对子",
+        "听牌"
+      ],
+      "explanation": "跟注站极少主动加注，翻前加注范围极窄（AA/KK/QQ/AK）。遇到这种加注要直接收窄自己的继续范围。"
+    },
+    "local-exploit-cs-q7": {
+      "question": "对跟注站，顶对弱踢脚的价值可以打到几条街？",
+      "options": [
+        "三条街（他仍会用更弱的牌跟注）",
+        "只打翻牌一条街",
+        "一条街都不打",
+        "只有坚果才能下注"
+      ],
+      "explanation": "跟注站的跟注范围远比标准对手宽，顶对弱踢脚对他可以三条街价值下注；标准局同样牌力只值 1-2 条街。"
+    },
+    "local-exploit-cs-q8": {
+      "question": "本课对跟注站的桌选与位置建议是？",
+      "options": [
+        "优先选有跟注站的桌子，并坐在他左边",
+        "避开有跟注站的桌子",
+        "坐在他右边",
+        "坐在他对面"
+      ],
+      "explanation": "跟注站是低级别最稳定的利润来源。坐在他左边意味着你经常对他有位置，可以用更宽的范围价值下注。"
+    },
+    "local-exploit-man-q5": {
+      "question": "100BB 有效，你已投入 31BB，Maniac 5-Bet All-in。按 75% 胜率复算，跟注的 EV 约为？",
+      "options": [
+        "约 +68BB",
+        "约 +100BB",
+        "约 −25BB",
+        "约 +31BB"
+      ],
+      "explanation": "需再跟 69BB，决策点底池 113.5BB；EV = 0.75 × 113.5 − 0.25 × 69 ≈ 85.1 − 17.3 ≈ +68BB（净赢不含自己再投入）。"
+    },
+    "local-exploit-man-q6": {
+      "question": "面对 Maniac，JJ/TT/AQ 这类中等牌力的本课打法是？",
+      "options": [
+        "跟注，让他翻后继续诈唬",
+        "直接弃牌",
+        "4-Bet 后准备弃牌",
+        "只在有位置时才打"
+      ],
+      "explanation": "Maniac 的下注范围远宽于中等牌力，JJ/TT/AQ 跟注能让他在翻后继续用空气牌下注，把筹码送给你。"
+    },
+    "local-exploit-man-q7": {
+      "question": "面对 Maniac 时手上的听牌，本课建议？",
+      "options": [
+        "可以跟注，因为他下注额度大、赔率好",
+        "必须弃牌",
+        "只能全下",
+        "只能 check-raise"
+      ],
+      "explanation": "Maniac 的下注尺度大，听牌拿到的赔率反而更好；成牌后他的宽范围还会继续付钱，因此听牌可以跟注。"
+    },
+    "local-exploit-man-q8": {
+      "question": "面对 Maniac 最重要的非技术准备是？",
+      "options": [
+        "情绪管理：接受 bad beat，不 tilt",
+        "准备更多 buy-in 才能跟注",
+        "记下他的每一手牌",
+        "立刻要求换桌"
+      ],
+      "explanation": "Maniac 会用垃圾牌击中奇迹，长期他的筹码仍会流向你。情绪失控（tilt）是与他对局时最大的资金泄漏。"
+    },
+    "local-exploit-nit-q5": {
+      "question": "Nit 在 BB，你在 CO 用 78s 偷盲 2.5BB，翻牌 C-Bet 2BB 进 5.5BB 底池，对手弃牌率 70%。EV 约为？",
+      "options": [
+        "约 +3.25BB",
+        "约 +1.5BB",
+        "约 −0.6BB",
+        "约 +5.5BB"
+      ],
+      "explanation": "EV = 0.7 × 5.5 − 0.3 × 2 = 3.85 − 0.6 = +3.25BB（净赢为底池 5.5BB，不含自注 2BB）。"
+    },
+    "local-exploit-nit-q6": {
+      "question": "Nit 的翻前 3-bet 范围基本是？",
+      "options": [
+        "AA/KK（偶尔 QQ）",
+        "任意两张牌",
+        "所有对子",
+        "所有 Ax"
+      ],
+      "explanation": "Nit 的 3-bet 频率极低，范围基本只有 AA/KK（偶尔 QQ）。被他 3-bet 时应立即弃掉中等牌力。"
+    },
+    "local-exploit-nit-q7": {
+      "question": "对 Nit 过度偷盲的风险是？",
+      "options": [
+        "他偶尔会 3-bet 反击，此时必须立即弃牌",
+        "他会突然变成 Maniac",
+        "抽水会上升",
+        "没有风险"
+      ],
+      "explanation": "Nit 虽然不反击，但偶尔 3-bet 时范围极强。偷盲频率再高也要保留弃牌纪律。"
+    },
+    "local-exploit-nit-q8": {
+      "question": "本课对 Nit 的最优位置与打法组合是？",
+      "options": [
+        "坐他左边 + 高频偷盲与 C-Bet 诈唬",
+        "坐他右边 + 只打坚果",
+        "坐他对面 + 慢打",
+        "避开他所在的桌子"
+      ],
+      "explanation": "有位置 + 他会弃牌 = 偷盲与 C-Bet 诈唬都赚钱。Nit 是低风险高收益的对手，值得主动寻找。"
+    },
+    "local-exploit-lag-q5": {
+      "question": "面对 LAG 的 3-bet，本课推荐的 AA/KK 陷阱打法是？",
+      "options": [
+        "跟注设陷阱，让他翻后继续攻击",
+        "立即 5-Bet All-in",
+        "弃牌等待更好机会",
+        "4-Bet 后弃牌"
+      ],
+      "explanation": "LAG 会持续 C-Bet、double barrel。用 AA/KK 跟注 3-bet、翻后 check-call，可以把他的宽范围诈唬全部收下。"
+    },
+    "local-exploit-lag-q6": {
+      "question": "面对 LAG 翻后完全 miss 时，本课建议？",
+      "options": [
+        "跟一条街试探，他 turn 再 double barrel 就弃牌",
+        "翻牌立即弃牌",
+        "一直跟到河牌",
+        "河牌 All-in 诈唬"
+      ],
+      "explanation": "LAG 的 C-Bet 频率高，翻牌直接弃牌太容易被剥削；跟一条街试探，turn 面对 double barrel 再弃牌更合理。"
+    },
+    "local-exploit-lag-q7": {
+      "question": "LAG 在哪些情况下表现明显变差？",
+      "options": [
+        "无位置时",
+        "深筹码时",
+        "有位置时",
+        "单挑时"
+      ],
+      "explanation": "LAG 的盈利来自位置上的施压。让他无位置，或把座位安排在他左边（你有位置），他的宽范围就变成劣势。"
+    },
+    "local-exploit-lag-q8": {
+      "question": "本课给出的 QQ 对 LAG 4-Bet 宽范围的胜率约为？",
+      "options": [
+        "约 70%",
+        "约 30%",
+        "约 50%",
+        "约 95%"
+      ],
+      "explanation": "LAG 的 4-Bet 范围包含 AQ+/JJ+/诈唬，QQ 对其约 70% 胜率，因此既可以跟注设陷阱，也可以在深筹 5-Bet 全下。"
+    },
+    "local-gto-vs-exploit-q5": {
+      "question": "关于 GTO 与剥削的 EV 结构，正确的是？",
+      "options": [
+        "GTO 下限高上限低，剥削下限低上限高",
+        "GTO 上限高、下限低",
+        "两者上下限相同",
+        "剥削永远优于 GTO"
+      ],
+      "explanation": "GTO 保证不被剥削，所以亏损下限高但赢利上限低；剥削对准弱点，上限高但被反制时下限低。数据越少越靠 GTO。"
+    },
+    "local-gto-vs-exploit-q6": {
+      "question": "本课建议转向剥削所需的最小样本量约为？",
+      "options": [
+        "100 手以上",
+        "5 手",
+        "20 手",
+        "不需要样本"
+      ],
+      "explanation": "VPIP/PFR 在 20 手左右有一点参考性，但 Fold to C-Bet、3-bet 类指标要 100 手以上才稳定，否则容易在小样本上被反剥削。"
+    },
+    "local-gto-vs-exploit-q7": {
+      "question": "以下哪种场景应优先坚守 GTO？",
+      "options": [
+        "多人底池",
+        "对手是已知跟注站",
+        "线下俱乐部",
+        "对手 Fold to C-Bet 75%"
+      ],
+      "explanation": "多人底池中剥削单一对手已很复杂，且被多人反制风险高，GTO 更稳健；其余三项都是明确可剥削的场景。"
+    },
+    "local-gto-vs-exploit-q8": {
+      "question": "观测偏差 30 个百分点、对手调整概率 40%，按本课公式安全偏离幅度约为？",
+      "options": [
+        "约 18 个百分点",
+        "约 30 个百分点",
+        "约 12 个百分点",
+        "约 40 个百分点"
+      ],
+      "explanation": "安全偏离 = 可观测偏差 × (1 − 调整概率) = 30% × (1 − 0.4) = 18 个百分点，对手越可能调整，偏离越小。"
+    },
+    "local-when-to-deviate-q5": {
+      "question": "对手 Fold to C-Bet 68%，你在 5.5BB 底池 C-Bet 2BB。按本课示例复算，EV 约为？",
+      "options": [
+        "约 +3.10BB",
+        "约 +5.5BB",
+        "约 −0.64BB",
+        "约 +1.5BB"
+      ],
+      "explanation": "EV = 0.68 × 5.5 − 0.32 × 2 = 3.74 − 0.64 = +3.10BB（净赢为底池 5.5BB，不含自注 2BB）。"
+    },
+    "local-when-to-deviate-q6": {
+      "question": "对手 Fold to 3-bet 75%+（基准约 55%），偏离方向是？",
+      "options": [
+        "增加 3-bet 诈唬频率",
+        "减少 3-bet 频率",
+        "只做价值 3-bet",
+        "完全不 3-bet"
+      ],
+      "explanation": "弃牌过多意味着 3-bet 的弃牌权益被低估，应加入 A2s-A5s、K9s 等带阻断的牌做 3-bet 诈唬。"
+    },
+    "local-when-to-deviate-q7": {
+      "question": "本课对偏离 GTO 的样本要求是？",
+      "options": [
+        "至少 50 手，100 手以上更佳",
+        "10 手即可",
+        "1 手就能判断",
+        "不需要样本"
+      ],
+      "explanation": "50 手以下的统计不可靠。Fold to C-Bet、3-bet 类指标要 100 手以上才稳定，低于阈值不应据以偏离。"
+    },
+    "local-when-to-deviate-q8": {
+      "question": "偏离后应多久复查一次对手统计？",
+      "options": [
+        "每 50-100 手",
+        "每 1 手",
+        "每个 session 结束后永不复查",
+        "从不复查"
+      ],
+      "explanation": "对手会调整，偏差会消失。每 50-100 手复查一次确认偏差仍存在；被修正时回归 GTO 或重新定向偏离。"
+    },
+    "local-mental-tilt-q5": {
+      "question": "报复 tilt（想教训某个对手）的最佳应对是？",
+      "options": [
+        "换桌，避免与该对手继续纠缠",
+        "加大下注教训他",
+        "在聊天框挑衅他",
+        "立刻升到更高级别"
+      ],
+      "explanation": "报复 tilt 的目标是某个具体对手，只要还和他同桌就会不断被触发。换桌是最直接的切断方式。"
+    },
+    "local-mental-tilt-q6": {
+      "question": "连续 bad beat 后的紧急处理步骤是？",
+      "options": [
+        "离桌 5-10 分钟，用 4-7-8 呼吸法深呼吸 10 次，再评估能否理性决策",
+        "继续打把亏损赢回来",
+        "立刻 All-in 一次换运气",
+        "换到更高额的级别"
+      ],
+      "explanation": "4 秒吸气、7 秒屏息、8 秒呼气，重复 10 次可快速降低生理唤醒。离桌、呼吸、自评是标准的三步。"
+    },
+    "local-mental-tilt-q7": {
+      "question": "以下哪项是 tilt 的身体信号？",
+      "options": [
+        "隧道视觉（视野变窄）",
+        "用 K5o 开牌",
+        "报复性诈唬",
+        "想「把输的赢回来」"
+      ],
+      "explanation": "隧道视觉属于身体信号；开牌范围放宽与报复性诈唬是行为信号；「把输的赢回来」是心理信号。"
+    },
+    "local-mental-tilt-q8": {
+      "question": "「疲劳 tilt」的推荐应对是？",
+      "options": [
+        "定时休息，单次 session 不超过 2 小时",
+        "喝咖啡继续打",
+        "换到节奏更快的桌",
+        "提高下注尺度"
+      ],
+      "explanation": "疲劳 tilt 源于决策力下降，只能靠休息解决。单次 session 控制在 2 小时内并定时休息。"
+    },
+    "local-mental-stop-loss-q5": {
+      "question": "NL50（100BB 买入 = $50）玩家按单日 5 个 buy-in 止损，单日止损额是？",
+      "options": [
+        "$250",
+        "$150",
+        "$500",
+        "$50"
+      ],
+      "explanation": "5 × $50 = $250；对照单 session 3 个买入 = $150、单周 10 个买入 = $500。"
+    },
+    "local-mental-stop-loss-q6": {
+      "question": "金额还没到止损线，但你明显感觉 tilt 时应该？",
+      "options": [
+        "立即停止（情绪止损优先于金额止损）",
+        "打到止损线再停",
+        "换桌继续打",
+        "降低下注尺度继续打"
+      ],
+      "explanation": "情绪止损优先于金额止损：tilt 状态下的每一手牌都是负 EV，等到金额止损线只会亏得更多。"
+    },
+    "local-mental-stop-loss-q7": {
+      "question": "「今天运气差，明天会好」这一心理障碍的正确反驳是？",
+      "options": [
+        "运气不欠你，明天可能继续差；应按长期 EV 决策",
+        "明天一定会赢回来",
+        "运气差就该降级",
+        "运气差说明技术不够"
+      ],
+      "explanation": "牌局独立，坏运气不会产生补偿。按长期 EV 决策并按规定停手，而不是靠对运气的预期决定是否继续。"
+    },
+    "local-mental-stop-loss-q8": {
+      "question": "让止损规则真正被执行的关键是？",
+      "options": [
+        "用定时器、金额提醒等外部工具 + 坚持零破例",
+        "靠当天的自控力",
+        "每次临时决定止损线",
+        "只在赢钱时执行"
+      ],
+      "explanation": "规则的价值在于被无条件执行。用外部工具替代临场判断、坚持「零破例」，否则规则形同虚设。"
+    },
+    "local-mental-session-q5": {
+      "question": "按本课的日程示例，3 个 session × 500 手，单日总手数是？",
+      "options": [
+        "1500 手",
+        "500 手",
+        "1000 手",
+        "3000 手"
+      ],
+      "explanation": "3 × 500 = 1500 手，对应约 6 小时。超过这个量通常以决策质量下降为代价。"
+    },
+    "local-mental-session-q6": {
+      "question": "Session 前的状态自评低于几分就不应该打？",
+      "options": [
+        "低于 3 分（1-5 分制）",
+        "低于 1 分",
+        "低于 5 分",
+        "不需要自评"
+      ],
+      "explanation": "本课建议用 1-5 分自评情绪与体力，低于 3 分不打：状态差时决策质量下降，长期 EV 为负。"
+    },
+    "local-mental-session-q7": {
+      "question": "以下哪项是坏桌子的标志？",
+      "options": [
+        "平均底池不到 40BB、没有明显弱玩家",
+        "Players/Flop 45%",
+        "平均底池 90BB",
+        "桌上有两个跟注站"
+      ],
+      "explanation": "坏桌子 = 平均底池小、全是 REG、没有弱玩家、你没有位置优势。宁可不打，也不打坏桌子。"
+    },
+    "local-mental-session-q8": {
+      "question": "本课的资金管理底线是？",
+      "options": [
+        "保持 30-50 个 buy-in，跌破 20 个立即降级",
+        "保持 5 个 buy-in",
+        "赢了就升级",
+        "不需要资金管理"
+      ],
+      "explanation": "30-50 个 buy-in 才能承受正常波动；跌破 20 个 buy-in 说明级别过高，应立即降级，不要用生活费打牌。"
     }
   },
   "lessonObjectives": {

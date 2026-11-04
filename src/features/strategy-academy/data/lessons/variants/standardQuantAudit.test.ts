@@ -38,7 +38,7 @@ import type { DrillData, DrillQuestion, Lesson } from '../../../types';
  * [已修] l2-4bet-strategy formula/objective/counter-intuitive：4Bet bluff 保本弃牌率 70.6% →
  *        57.4%（4Bet 前底池 11.5 = 1.5+2.5+7.5；对手增量风险 18−2.5 = 15.5；15.5/27 = 57.4%；防御 ≥ 42.6%）
  * [正确] l2-raise-sizing formula：50/(100+50+50)=25%、1/3 池 20%、2/3 池 28.6%、满池 33.3% ✓（b/(P+2b)）
- * [正确] l2-3bet-basics formula：{AA,KK,QQ,AKs,A5s}=26、持 A♠ → 22 ✓；q5 3-bet 3x=7.5BB ✓
+ * [已修·批次4] l2-3bet-basics formula/objective：持 A♠ 时 AKs/A5s 各 4→1、AA 6→3，总数 26→17（原 22 漏算 A5s 自身阻断）；q5 3-bet 3x=7.5BB ✓
  * [已修·批次2] l2-bb-defense ex1「底池赔率约 2.5:1」→ 约 2.7:1（4 ÷ 1.5）（原未修清单 #2，本批清账）
  * [示意值] squeeze 4-5x+1x/caller、BB 防守频率 40-60%、SB open 2.5-3BB、20BB BTN push 30-40%
  * [元数据] l2-4bet-ex1 potSize 27（=11.5+增量 15.5 ✓ 自洽）；l2-4bet-ex2 18.5、l2-squeeze ex2 6.0 未计全盲注（未用于计算，仅记录）

@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
-import { Lock, CheckCircle2, PlayCircle, ChevronRight, Award } from 'lucide-react';
+import { Lock, CheckCircle2, PlayCircle, ChevronRight, Award, Clock } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import type { LevelInfo } from '../types';
+import { useAcademyStore } from '../store';
 import { ProgressBar } from './ProgressBar';
+import { resolveCertificationState } from '../utils/certification';
+import { formatRemainingTime } from '../utils/certificationStatus';
 import {
   resolveLevelTitle,
   resolveLevelDescription,
@@ -23,6 +26,9 @@ interface LevelCardProps {
 export function LevelCard({ level, unlocked, completedLessons, index }: LevelCardProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  // 认证入口只在标准变体（变体认证本批 de-scope）且本条目全部完成时出现
+  const activeVariant = useAcademyStore((s) => s.activeVariant);
+  const cert = useAcademyStore((s) => s.certifications[level.level]);
 
   const firstIncompleteLesson = level.lessons.find((l) => !completedLessons.includes(l.id));
   const targetLesson = firstIncompleteLesson ?? level.lessons[0];
@@ -35,6 +41,14 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
   const progress = totalInEntry > 0 ? Math.round((completedInEntry / totalInEntry) * 100) : 0;
   const allCompleted = progress === 100;
 
+  // 卡片口径的完成度即本条目进度（首页把 store 的 completedLessons 作为 prop 传入）
+  const certState = resolveCertificationState({
+    activeVariant,
+    isLevelCompleted: allCompleted,
+    cert,
+  });
+  const certifiedDate = new Date(certState.validUntil ?? Date.now()).toLocaleDateString();
+
   const handleClick = () => {
     if (unlocked && targetLesson) {
       navigate(`/academy/lesson/${targetLesson.id}`);
@@ -46,6 +60,69 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
     e.stopPropagation();
     e.preventDefault();
     navigate(`/academy/certification/${level.level}`);
+  };
+
+  const certificationBadge = () => {
+    if (certState.status === 'available') {
+      return (
+        <span
+          role="button"
+          tabIndex={0}
+          aria-label={t('academy.levelCard.takeCertification', { level: level.level })}
+          onClick={goCertification}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') goCertification(e);
+          }}
+          className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
+        >
+          <Award className="w-3.5 h-3.5" />
+          {t('academy.levelCard.takeCertification', { level: level.level })}
+        </span>
+      );
+    }
+    if (certState.status === 'expired') {
+      return (
+        <span
+          role="button"
+          tabIndex={0}
+          aria-label={t('academy.levelCard.certExpired', {
+            level: level.level,
+            defaultValue: '认证已过期 · 续期 Level {{level}}',
+          })}
+          onClick={goCertification}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') goCertification(e);
+          }}
+          className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--warning)] hover:underline"
+        >
+          <Award className="w-3.5 h-3.5" />
+          {t('academy.levelCard.certExpired', {
+            level: level.level,
+            defaultValue: '认证已过期 · 续期 Level {{level}}',
+          })}
+        </span>
+      );
+    }
+    if (certState.status === 'cooldown') {
+      return (
+        <span className="mt-1 inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)]">
+          <Clock className="w-3.5 h-3.5" />
+          {t('academy.levelCard.certCooldown', {
+            time: formatRemainingTime((certState.nextAttemptAt ?? Date.now()) - Date.now()),
+            defaultValue: '认证冷却中，{{time}} 后可再考',
+          })}
+        </span>
+      );
+    }
+    return (
+      <span className="mt-1 inline-flex items-center gap-1.5 text-xs text-[var(--poker-success)]">
+        <CheckCircle2 className="w-3.5 h-3.5" />
+        {t('academy.levelCard.certifiedUntil', {
+          date: certifiedDate,
+          defaultValue: '认证有效至 {{date}}',
+        })}
+      </span>
+    );
   };
 
   return (
@@ -97,20 +174,8 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
                   <span className="font-numeric text-[var(--brass-bright)]">{progress}%</span>
                 </div>
                 <ProgressBar value={progress} size="sm" />
-                {allCompleted && (
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    aria-label={t('academy.levelCard.takeCertification', { level: level.level })}
-                    onClick={goCertification}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') goCertification(e);
-                    }}
-                    className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
-                  >
-                    <Award className="w-3.5 h-3.5" />
-                    {t('academy.levelCard.takeCertification', { level: level.level })}
-                  </span>
+                {allCompleted && certState.status !== 'locked' && (
+                  <div className="flex">{certificationBadge()}</div>
                 )}
               </div>
             ) : (

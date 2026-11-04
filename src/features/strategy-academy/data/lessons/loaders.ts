@@ -1,5 +1,6 @@
 import type { PokerVariant } from '@/shared/types/elo';
-import type { Lesson } from '../../types';
+import type { Lesson, QuizQuestion } from '../../types';
+import { applyQuizBank } from '../../utils/applyQuizBank';
 import { inferVariantFromLessonId } from '../../utils/academyMeta';
 
 /**
@@ -23,6 +24,24 @@ const standardLevelLoaders: Record<number, () => Promise<Lesson[]>> = {
   8: () => import('./variants/standard/standardLevel8').then((mod) => mod.STANDARD_LEVEL_8_LESSONS),
 };
 
+type QuizBank = Record<string, QuizQuestion[]>;
+
+const standardBankLoaders: Record<number, () => Promise<QuizBank>> = {
+  1: () => import('./variants/standard/quizBank/level1').then((mod) => mod.LEVEL_1_QUIZ_BANK),
+  2: () => import('./variants/standard/quizBank/level2').then((mod) => mod.LEVEL_2_QUIZ_BANK),
+  3: () => import('./variants/standard/quizBank/level3').then((mod) => mod.LEVEL_3_QUIZ_BANK),
+  4: () => import('./variants/standard/quizBank/level4').then((mod) => mod.LEVEL_4_QUIZ_BANK),
+  5: () => import('./variants/standard/quizBank/level5').then((mod) => mod.LEVEL_5_QUIZ_BANK),
+  6: () => import('./variants/standard/quizBank/level6').then((mod) => mod.LEVEL_6_QUIZ_BANK),
+  // L7 含 16 门本土课，题库 = L7 标准 + 本土
+  7: () =>
+    Promise.all([
+      import('./variants/standard/quizBank/level7'),
+      import('./variants/standard/quizBank/local'),
+    ]).then(([level, local]) => ({ ...level.LEVEL_7_QUIZ_BANK, ...local.LOCAL_QUIZ_BANK })),
+  8: () => import('./variants/standard/quizBank/level8').then((mod) => mod.LEVEL_8_QUIZ_BANK),
+};
+
 const variantLoaders: Record<'short-deck' | 'heads-up', () => Promise<Lesson[]>> = {
   'short-deck': () =>
     import('./variants/short-deck').then((mod) => mod.SHORT_DECK_STRATEGY_COURSES),
@@ -43,7 +62,12 @@ function loadLevel(level: number): Promise<Lesson[]> {
   if (inflight) return inflight;
   const loader = standardLevelLoaders[level];
   if (!loader) return Promise.reject(new Error(`未知 Level: ${level}`));
-  const task = loader()
+  const bankLoader = standardBankLoaders[level];
+  const task = Promise.all([
+    loader(),
+    bankLoader ? bankLoader() : Promise.resolve({} as QuizBank),
+  ])
+    .then(([lessons, bank]) => applyQuizBank(lessons, bank))
     .then((lessons) => {
       levelCache.set(level, lessons);
       return lessons;

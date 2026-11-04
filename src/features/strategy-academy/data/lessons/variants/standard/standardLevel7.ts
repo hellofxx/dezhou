@@ -42,13 +42,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
             content: '反直觉点：深筹码时同花连牌的价值超过高对。AA 在深筹码中看似强大，但翻后实现率下降——因为对手可以在后续街用更宽的范围施加压力，迫使你做出困难的弃牌决策。而 98s 可以形成顺子、同花等多种强牌，有更好的翻后可玩性。',
           },
         ],
-        quiz: [
-          { id: 'l7-deep-q1', question: '深筹码（200BB）中，以下哪类牌的价值提升最多？', options: ['AKo', '小口袋对和同花连牌', 'AQo', 'KQo'], correctIndex: 1, explanation: '深筹码中小口袋对（set mine）和同花连牌（大底池潜力）的价值提升最多，因为中牌后可以赢对手全部 200BB。' },
-          { id: 'l7-deep-q2', question: '深筹码中顶对顶踢脚（TPTK）的正确打法是？', options: ['尽快打光所有筹码', '控制底池大小，不要建立过大底池', '总是 all-in', '立即弃牌'], correctIndex: 1, explanation: '在 200BB 深度，TPTK 不再是"绝对强牌"。应该控制底池大小，避免在只有顶对时打光 200BB。' },
-          { id: 'l7-deep-q3', question: '深筹码 bluff 比标准筹码更有威力的原因是？', options: ['对手更容易弃牌', '可以施加更大的筹码压力', '深筹码对手牌力更弱', '没有任何区别'], correctIndex: 1, explanation: '深筹码时 bluff 可以施加更大的筹码压力（对手面临失去 200BB 的威胁），使 bluff 更有威力。但也意味着被 call 时损失更大。' },
-        
-          { id: 'l7-deep-q4', question: '深筹码中位置价值如何变化？', options: ['不变', '位置优势更显著', '位置不重要', '前位更有利'], correctIndex: 1, explanation: '深筹码中位置优势更显著，因为有更多街的操作空间。' },
-          { id: 'l7-deep-q5', question: '深筹码现金桌至少需要多少个buy-in的资金？', options: ['10个', '20个', '30-40个', '50个'], correctIndex: 2, explanation: '深筹码200BB波动大，至少需要30-40个buy-in的资金管理。' },],
+        quiz: [],
         examples: [
           {
             id: 'l7-deep-ex1',
@@ -229,13 +223,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
             content: '反直觉点：三人底池中你的胜率被稀释，但底池赔率变好。当三人底池中你面对下注时，底池中多了一个人的死钱，赔率更优。但要注意：你的牌需要同时击败两个对手，胜率下降的速度可能快于赔率改善的速度。',
           },
         ],
-        quiz: [
-          { id: 'l7-multi-q1', question: '多人底池中，C-Bet 频率应该？', options: ['提高（更多人可以 bluff）', '降低（被抵抗概率更高）', '不变', '总是 all-in'], correctIndex: 1, explanation: '多人底池中 C-Bet 频率应降低。面对多对手，有人有强牌的概率更高，bluff 成功率下降（需要所有人都弃牌）。' },
-          { id: 'l7-multi-q2', question: '4 人底池中你持有顶对，正确的 value bet 策略是？', options: ['和单挑一样打 3 条街', '减少 value 街道（1-2 条街）', '总是 all-in', '从不 value bet'], correctIndex: 1, explanation: '多人底池中顶对的价值降低。单挑中顶对可以 value bet 3 条街，但多人底池中可能只值 1-2 条街。' },
-          { id: 'l7-multi-q3', question: '多人底池中 bluff 成功率降低的原因是？', options: ['对手牌力更强', '需要所有对手都弃牌（乘法效应）', '底池太小', '位置不重要'], correctIndex: 1, explanation: 'Bluff 成功需要所有对手都弃牌。3 人底池中，即使每人 50% 弃牌率，全部弃牌的概率只有 50%×50% = 25%。' },
-        
-          { id: 'l7-multi-q4', question: '多人底池中顶对的正确策略是？', options: ['和单挑一样', '减少value街道', '总是all-in', '从不value bet'], correctIndex: 1, explanation: '多人底池中顶对价值降低，应该减少value街道（1-2条街）。' },
-          { id: 'l7-multi-q5', question: '多人底池中最安全的位置是？', options: ['UTG', 'BTN（有位置）', 'BB', '无所谓'], correctIndex: 1, explanation: 'BTN有位置优势，可以看到所有对手行动后再决策。' },],
+        quiz: [],
         examples: [
           {
             id: 'l7-multi-ex1',
@@ -431,13 +419,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
             content: '反直觉点：Straddle 不是额外增加的筹码投入，而是盲注的临时扩大。有效筹码仍按大盲计算，而非 Straddle 金额。这意味着 Straddle 局的实际筹码深度比表面看起来更浅，SPR 更低。',
           },
         ],
-        quiz: [
-          { id: 'l7-straddle-q1', question: 'Straddle 对有效筹码的影响是？', options: ['没有影响', '有效筹码减半', '有效筹码翻倍', '只影响翻后'], correctIndex: 1, explanation: 'Straddle（2BB）使有效筹码减半。100BB 在 straddle 游戏中相当于 50BB effective，策略要相应收紧。' },
-          { id: 'l7-straddle-q2', question: 'Straddle 游戏中，以下哪类牌的价值降低？', options: ['AA/KK', 'AK', '小口袋对和同花连牌', 'AQ'], correctIndex: 2, explanation: 'Straddle 使有效筹码减半，小口袋对（set mine）和同花连牌（大底池潜力）的价值降低，因为隐含赔率变差。强牌价值相对提升。' },
-          { id: 'l7-straddle-q3', question: 'BTN Straddle 相比 UTG Straddle 的优势是？', options: ['筹码更多', '翻后保留位置优势', '可以 bluff 更多', '没有区别'], correctIndex: 1, explanation: 'BTN Straddle 后，BTN 翻后仍然最后行动（保留位置优势）。UTG Straddle 后，straddler 翻后第一个行动（位置劣势）。' },
-        
-          { id: 'l7-straddle-q4', question: 'Straddle后标准open变为多少？', options: ['2BB', '2.5BB', '4-5BB', '10BB'], correctIndex: 2, explanation: 'Straddle后标准open变为4-5BB（2-2.5x straddle）。' },
-          { id: 'l7-straddle-q5', question: 'Straddle游戏中翻后应该对straddler？', options: ['更被动', '施加压力', '避免对抗', '没有变化'], correctIndex: 1, explanation: 'Straddler翻后第一个行动（位置劣势），应该对他施加压力。' },],
+        quiz: [],
         examples: [
           {
             id: 'l7-straddle-ex1',
@@ -600,13 +582,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           { type: 'text', content: '• 线上微额（NL2-NL10）：Rake 可达 8-12 BB/100，必须打得非常紧\n• 线上中额（NL25-NL100）：Rake 降至 4-6 BB/100，可以适度放宽\n• 线下现金：通常有 Cap（抽水上限），大底池相对 Rake 更低' },
           { type: 'pro-tip', content: '在微额级别，Rake 可能是你最大的“对手”。选择 Rake 结构合理的平台，并充分利用返水（Rakeback）政策。' },
         ],
-        quiz: [
-          { id: 'l7-rake-q1', question: '高 Rake 环境下应该怎么调整？', options: ['打得更松', '打得更紧，减少跟注', '增加 bluff', '不受影响'], correctIndex: 1, explanation: 'Rake 侵蚀边缘牌的 EV，高 Rake 下应更紧并减少被动跟注。' },
-          { id: 'l7-rake-q2', question: '线上微额（NL2-NL10）的 Rake 大约多少？', options: ['1-2 BB/100', '4-6 BB/100', '8-12 BB/100', '20 BB/100'], correctIndex: 2, explanation: '微额级别的 Rake 通常高达 8-12 BB/100，是赢率的巨大拖累。' },
-        
-          { id: 'l7-rake-q3', question: '高Rake应该增加什么？', options: ['跟注', 'iso-raise和3-bet', 'bluff', '多人底池'], correctIndex: 1, explanation: '高Rake应增加iso-raise和3-bet减少多人底池，因为多人底池的Rake成本最高。' },
-          { id: 'l7-rake-q4', question: '线下现金桌的Rake通常有？', options: ['无上限', 'Cap（抽水上限）', '更高比例', '没有Rake'], correctIndex: 1, explanation: '线下通常有Cap（抽水上限），大底池相对Rake更低。' },
-          { id: 'l7-rake-q5', question: '中额级别（NL25-NL100）的Rake约？', options: ['1-2 BB/100', '4-6 BB/100', '8-12 BB/100', '20 BB/100'], correctIndex: 1, explanation: '中额级别Rake降至4-6 BB/100，可以适度放宽。' },],
+        quiz: [],
         practice: {
           id: 'l7-rake-practice',
           questions: [
@@ -638,13 +614,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           { type: 'text', content: '线下现金桌的选桌更加重要：\n• 观察 5-10 分钟再入座\n• 寻找喝酒/聊天/情绪化的玩家\n• 选择弱玩家左边的位置（能更多地对他有位置）\n• 不要显摇——如果全桌都是 REG，放弃这张桌' },
           { type: 'pro-tip', content: '你的赢率 = 你的技术优势 × 对手的弱点。即使你是世界第 10 名，如果桌上全是前 9 名，你依然是桌上最弱的。' },
         ],
-        quiz: [
-          { id: 'l7-ts-q1', question: '以下哪个是“好桌子”的标志？', options: ['全是REG', '高 Players/Flop %', '低平均底池', '无人玩'], correctIndex: 1, explanation: '高 Players/Flop % 说明很多玩家打得松，意味着桌上有弱玩家。' },
-          { id: 'l7-ts-q2', question: '线下应该坐在弱玩家的哪个位置？', options: ['右边', '左边（对他有位置）', '对面', '无所谓'], correctIndex: 1, explanation: '坐在弱玩家左边意味着你经常在他之后行动，拥有位置优势。' },
-        
-          { id: 'l7-ts-q3', question: '线下选桌应该先观察多久？', options: ['不需要观察', '5-10分钟', '1小时', '直接入座'], correctIndex: 1, explanation: '线下应该观察5-10分钟再入座，寻找弱玩家。' },
-          { id: 'l7-ts-q4', question: '你的赢率等于什么？', options: ['你的技术', '你的技术优势×对手弱点', '运气', 'Rake'], correctIndex: 1, explanation: '赢率 = 技术优势 × 对手弱点。两者缺一不可。' },
-          { id: 'l7-ts-q5', question: '如果全桌都是REG应该？', options: ['继续打', '放弃这张桌', '加倍努力', '换策略'], correctIndex: 1, explanation: '如果全桌都是REG（常规玩家），你的优势很小，应该换桌。' },],
+        quiz: [],
         practice: {
           id: 'l7-ts-practice',
           questions: [

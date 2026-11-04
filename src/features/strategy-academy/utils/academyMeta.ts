@@ -133,19 +133,31 @@ export function isLevelEntryUnlockedByCompleted(
   entry: LevelSummary,
   basicsCompleted: boolean,
   completedLessons: readonly string[],
+  creditLevels: readonly string[] = [],
 ): boolean {
+  const credit = new Set(creditLevels);
+  const entryId = entry.id ?? String(entry.level);
+  // 定位免修只放宽 L1-L4B；L5+ 必须实际完成（credit 不作为其前置旁路）
+  const creditEligible = entry.level <= 4;
+  if (creditEligible && credit.has(entryId)) return true;
   if (entry.level <= 1) return basicsCompleted;
   const completed = new Set(completedLessons);
   if (entry.prerequisiteLevelIds && entry.prerequisiteLevelIds.length > 0) {
     return entry.prerequisiteLevelIds.every((prerequisiteId) => {
+      if (creditEligible && credit.has(prerequisiteId)) return true;
       const prerequisite = LEVEL_BY_ID.get(prerequisiteId);
       return prerequisite ? prerequisite.lessons.every((lesson) => completed.has(lesson.id)) : false;
     });
   }
   const index = STANDARD_LEVEL_SUMMARIES.findIndex(
-    (item) => (item.id ?? String(item.level)) === (entry.id ?? String(entry.level)),
+    (item) => (item.id ?? String(item.level)) === entryId,
   );
   if (index <= 0) return basicsCompleted;
   const previous = STANDARD_LEVEL_SUMMARIES[index - 1];
-  return previous ? previous.lessons.every((lesson) => completed.has(lesson.id)) : false;
+  if (!previous) return false;
+  const previousId = previous.id ?? String(previous.level);
+  return (
+    (creditEligible && credit.has(previousId)) ||
+    previous.lessons.every((lesson) => completed.has(lesson.id))
+  );
 }

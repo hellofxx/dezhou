@@ -2,14 +2,16 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { LevelLadder, findActiveLevelId } from './LevelLadder';
-import type { LevelSummary } from '../types';
+import { useAcademyStore } from '../store';
+import { DAY_MS } from '@/shared/utils/toLocalDateKey';
+import type { LevelSummary, LevelCertification } from '../types';
 
 /**
  * 课程阶梯契约：
  * - 活跃等级 = 首个已解锁且仍有未完成课程的条目（Hero 与阶梯共用派生）
  * - 活跃等级默认展开；点击已展开等级头跳转首个未完成课程，收起态点击仅展开
  * - 未解锁等级禁用并展示解锁条件
- * - 全部完成的等级展开后提供认证入口
+ * - 全部完成的等级展开后：标准变体给认证入口；有效期内显示有效期；过期给续期；冷却给提示
  */
 
 function makeLevel(
@@ -68,9 +70,35 @@ function renderLadder(
   );
 }
 
+function seedCertification(level: number, cert: Partial<LevelCertification>) {
+  const state = useAcademyStore.getState();
+  useAcademyStore.setState({
+    certifications: {
+      ...state.certifications,
+      [level]: {
+        level,
+        requiredAccuracy: 70,
+        cooldownPeriod: 24,
+        lastAttemptAt: Date.now(),
+        questionCount: 20,
+        timeLimit: 0,
+        attempts: 1,
+        bestScore: 85,
+        variant: 'standard',
+        ...cert,
+      },
+    },
+  });
+}
+
 const unlockedFirstTwo = (levelId: string) => levelId === 'test-l1' || levelId === 'test-l2';
 
-afterEach(() => cleanup());
+afterEach(() => {
+  cleanup();
+  const store = useAcademyStore.getState();
+  store.resetProgress();
+  store.switchVariant('standard');
+});
 
 describe('findActiveLevelId：活跃等级派生', () => {
   it('返回首个已解锁且仍有未完成课程的等级', () => {
@@ -131,5 +159,45 @@ describe('LevelLadder：展开与跳转', () => {
     expect(screen.getByText('全部完成')).toBeTruthy();
     fireEvent.click(screen.getByText('参加认证测验'));
     expect(screen.getByTestId('location').textContent).toBe('/academy/certification/1');
+  });
+});
+
+describe('LevelLadder：认证状态呈现', () => {
+  it('非标准变体：不提供认证入口', () => {
+    useAcademyStore.getState().switchVariant('short-deck');
+    renderLadder(levels, ['l1-a', 'l1-b'], unlockedFirstTwo);
+    fireEvent.click(screen.getByText('test-l1 标题').closest('button')!);
+    expect(screen.queryByText('参加认证测验')).toBeNull();
+  });
+
+  it('认证有效：展示有效期，不再提供重考入口', () => {
+    const now = Date.now();
+    seedCertification(1, { certifiedAt: now, validUntil: now + 10 * DAY_MS });
+    const { container } = renderLadder(levels, ['l1-a', 'l1-b'], unlockedFirstTwo);
+    fireEvent.click(screen.getByText('test-l1 标题').closest('button')!);
+    expect(container.textContent).toContain('认证有效至');
+    expect(screen.queryByText('参加认证测验')).toBeNull();
+  });
+
+  it('认证过期：显示续期入口并跳转认证页', () => {
+    const now = Date.now();
+    seedCertification(1, { certifiedAt: now - 40 * DAY_MS, validUntil: now - DAY_MS });
+    const { container } = renderLadder(levels, ['l1-a', 'l1-b'], unlockedFirstTwo);
+    fireEvent.click(screen.getByText('test-l1 标题').closest('button')!);
+    expect(container.textContent).toContain('认证已过期 · 续期 Level 1');
+    fireEvent.click(screen.getByText('认证已过期 · 续期 Level 1'));
+    expect(screen.getByTestId('location').textContent).toBe('/academy/certification/1');
+  });
+
+  it('冷却中：显示冷却提示且无认证入口', () => {
+    seedCertification(1, {
+      lastAttemptAt: Date.now(),
+      certifiedAt: undefined,
+      validUntil: undefined,
+    });
+    const { container } = renderLadder(levels, ['l1-a', 'l1-b'], unlockedFirstTwo);
+    fireEvent.click(screen.getByText('test-l1 标题').closest('button')!);
+    expect(container.textContent).toContain('认证冷却中');
+    expect(screen.queryByText('参加认证测验')).toBeNull();
   });
 });

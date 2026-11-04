@@ -5,6 +5,7 @@ import CourseDoneView from './CourseDoneView';
 import type { LearningTrack } from '../types';
 
 // P3: 完成页按钮组测试 — hasPractice 控制「重新实战」按钮渲染，onRestart 携带 target 回调
+// T3: theoryAnchors 控制「查看理论推导」区块，onNavigateTheory 携带 /theory/chapter/<id> 路由
 describe('CourseDoneView 完成页按钮组', () => {
   let container: HTMLDivElement;
   let root: Root;
@@ -88,5 +89,44 @@ describe('CourseDoneView 完成页按钮组', () => {
       restartButtons[0]!.click();
     });
     expect(onRestart).toHaveBeenCalledWith('units');
+  });
+
+  it('theoryAnchors 非空时渲染「查看理论推导」区块，点击回调 /theory/chapter/<id>', () => {
+    const onNavigateTheory = vi.fn();
+    act(() => {
+      root.render(
+        <CourseDoneView
+          {...baseProps}
+          theoryAnchors={['t3-position-value']}
+          onNavigateTheory={onNavigateTheory}
+        />,
+      );
+    });
+
+    const heading = [...container.querySelectorAll('h3')].find((h) =>
+      h.textContent?.includes('查看理论推导'),
+    );
+    expect(heading).toBeTruthy();
+
+    const row = [...container.querySelectorAll('button')].find((b) =>
+      b.textContent?.includes('位置价值的来源'),
+    );
+    expect(row).toBeTruthy();
+
+    act(() => {
+      row!.click();
+    });
+    expect(onNavigateTheory).toHaveBeenCalledWith('/theory/chapter/t3-position-value');
+  });
+
+  it('theoryAnchors 为空/缺省时不渲染「查看理论推导」区块', () => {
+    act(() => {
+      root.render(<CourseDoneView {...baseProps} theoryAnchors={[]} />);
+    });
+
+    const headings = [...container.querySelectorAll('h3')].filter((h) =>
+      h.textContent?.includes('查看理论推导'),
+    );
+    expect(headings).toHaveLength(0);
   });
 });

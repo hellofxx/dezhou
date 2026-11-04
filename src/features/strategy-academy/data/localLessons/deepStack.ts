@@ -33,36 +33,7 @@ export const DEEP_STACK_LESSONS: Lesson[] = [
       { type: 'highlight', content: '深筹码最致命的错误：用顶对顶踢脚打光 500BB。深筹下顶对是"中等牌力"，应控制底池；只有两对、三条、顺子+ 才能支撑深筹的全下。' },
       { type: 'pro-tip', content: '深筹码局中，资金管理尤其重要。500BB 的波动远大于 100BB，至少需要 50 个 buy-in 的资金才能承受深筹码的方差。' },
     ],
-    quiz: [
-      {
-        id: 'local-deep-implied-q1',
-        question: '500BB 深筹码中，小对子 set mine 的隐含赔率约为？',
-        options: ['33:1（同 100BB）', '166:1', '10:1', '500:1'],
-        correctIndex: 1,
-        explanation: '500BB 深度投入 3BB 跟注，中 set 可赢 500BB，隐含赔率约 166:1，远胜 100BB 的 33:1。',
-      },
-      {
-        id: 'local-deep-implied-q2',
-        question: '深筹码中价值相对降低的牌是？',
-        options: ['小对子', '同花连牌', '顶对顶踢脚（AK 击中顶对）', '同花 Ax'],
-        correctIndex: 2,
-        explanation: '深筹下顶对是中等牌力，容易被两对、三条、顺子反超，价值相对降低。小对子和同花连牌价值提升。',
-      },
-      {
-        id: 'local-deep-implied-q3',
-        question: '深筹码中应避免的"反向隐含赔率"场景是？',
-        options: ['用 55 set mine', '用 87s 同花连牌', '用 A7o 击中顶对 A', '用 76s 顺子听牌'],
-        correctIndex: 2,
-        explanation: 'A7o 击中顶对 A 容易被 AT/AJ dominated，深筹下可能输掉 500BB，是典型的反向隐含赔率陷阱。',
-      },
-      {
-        id: 'local-deep-implied-q4',
-        question: '深筹码中可以支撑全下的最低牌力是？',
-        options: ['顶对顶踢脚', '坚果或接近坚果（AA/KK/坚果同花）', '两对', '顶对弱踢脚'],
-        correctIndex: 1,
-        explanation: '500BB 深度下，建议仅用坚果或接近坚果（AA/KK/坚果同花）全下。两对在潮湿牌面可能面临巨大反向隐含赔率。',
-      },
-    ],
+    quiz: [],
   },
 
   // ===== local-deep-suited-connectors =====
@@ -91,35 +62,6 @@ export const DEEP_STACK_LESSONS: Lesson[] = [
       { type: 'highlight', content: '同花连牌的隐藏性是关键：当你击中顺子时（如 76s 在 4-5-8 翻牌），对手很难将你放在顺子上，会继续用两对/三条 价值下注，让你赢到全部深筹。' },
       { type: 'pro-tip', content: '深筹码中"双 barreling 听牌"是高 EV 策略：flop 跟注 C-Bet，turn 若来额外 outs（如同花听牌加顺子听牌）继续跟注，深筹下隐含赔率支撑这种激进跟注。' },
     ],
-    quiz: [
-      {
-        id: 'local-deep-sc-q1',
-        question: '同花连牌在深筹码中价值提升的核心原因是？',
-        options: ['胜率提升', '中大牌后可赢全部深筹（隐含赔率）', '对手变弱', '抽水降低'],
-        correctIndex: 1,
-        explanation: '同花连牌击中顺子/同花后可赢对手全部深筹，隐含赔率极佳，这是深筹下其价值大幅提升的核心原因。',
-      },
-      {
-        id: 'local-deep-sc-q2',
-        question: '深筹码中同花连牌在 UTG 的推荐范围是？',
-        options: ['所有同花连牌', '54s-T9s（仅最强）', '不打同花连牌', '32s+'],
-        correctIndex: 1,
-        explanation: 'UTG 无位置优势，应仅打最强同花连牌（54s-T9s）。BTN/CO 可以放宽到所有同花连牌。',
-      },
-      {
-        id: 'local-deep-sc-q3',
-        question: '深筹码中击中顺子后应如何打？',
-        options: ['立即 All-in', '跟注或小加注引诱对手继续下注', '立即大加注', '弃牌'],
-        correctIndex: 1,
-        explanation: '深筹中击中顺子应保持隐藏性，跟注或小加注引诱对手继续价值下注，让对手自己把筹码送进来。',
-      },
-      {
-        id: 'local-deep-sc-q4',
-        question: '同花连牌在翻牌击中 OESD + 同花听牌（15 outs）的成牌概率（两条街）约为？',
-        options: ['约 32%', '约 54%', '约 15%', '约 95%'],
-        correctIndex: 1,
-        explanation: '15 outs 双重听牌：转牌单街约 32%（15/47），翻牌到河牌两条街约 54%（二四法则估算 15×4=60%，高于精确值），是极强的听牌。',
-      },
-    ],
+    quiz: [],
   },
 ];

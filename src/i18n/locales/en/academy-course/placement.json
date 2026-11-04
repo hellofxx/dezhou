@@ -1,0 +1,207 @@
+{
+  "placement": {
+    "page": {
+      "back": "Back to Academy",
+      "title": "Placement Test",
+      "subtitle": "16 concept questions to find your starting point",
+      "start": "Start test",
+      "retest": "Retake test",
+      "backAcademy": "Back to Strategy Academy",
+      "progress": "Question {{current}} / {{total}}",
+      "correct": "Correct",
+      "incorrect": "Not quite",
+      "explanation": "Explanation",
+      "next": "Next question",
+      "finish": "See result",
+      "previous": "Previous result: {{level}}",
+      "intro": {
+        "what": "16 concept questions covering hand ranking, position, pot odds, preflop ranges, c-betting, EV, GTO and ICM.",
+        "how": "You get a recommended start level and credit range right away, and you can retake at any time.",
+        "limit": "The result only unlocks access and never marks lessons complete; the highest credit is L4B."
+      },
+      "topicName": {
+        "handRanking": "Hand ranking",
+        "position": "Position",
+        "potOdds": "Pot odds",
+        "preflopRange": "Preflop ranges",
+        "cbet": "C-betting",
+        "ev": "Expected value",
+        "gto": "GTO & MDF",
+        "icm": "ICM & mindset"
+      },
+      "result": {
+        "title": "Placement result",
+        "score": "{{correct}} / {{total}} correct",
+        "recommended": "Recommended start",
+        "credit": "Unlock credit",
+        "creditNone": "No credit — start from the basics",
+        "creditNote": "Unlocks access only, never marks lessons complete",
+        "creditNoteDesc": "Credited levels can be entered directly, but their lessons are not marked complete and no quiz scores or mastery are recorded.",
+        "noL5": "Level 5 and above are never credited — those lessons must be completed for real.",
+        "retestHint": "A retake only keeps the higher result and never downgrades you."
+      }
+    },
+    "question": {
+      "pq-hand-ranking-flush": {
+        "question": "In standard Texas Hold'em, which of these hand ranks is the strongest?",
+        "options": {
+          "0": "Two pair",
+          "1": "Straight",
+          "2": "Flush",
+          "3": "Three of a kind"
+        },
+        "explanation": "Ranks from high to low: straight flush > four of a kind > full house > flush > straight > three of a kind > two pair > one pair > high card. Flush beats straight — the pair most often mixed up."
+      },
+      "pq-kicker-compare": {
+        "question": "The board is K♦ 7♣ 2♠. You hold K♣ Q♠ and your opponent holds K♥ J♦. What is the showdown result?",
+        "options": {
+          "0": "Split pot",
+          "1": "Opponent wins (J kicker)",
+          "2": "You win (Q kicker)",
+          "3": "Cannot tell, wait for the turn"
+        },
+        "explanation": "Both players have a pair of kings, so the kicker decides: your Q beats the opponent's J and you take the pot. The kicker settles identical ranks."
+      },
+      "pq-position-postflop-last": {
+        "question": "In a 6-max game, which position acts last after the flop?",
+        "options": {
+          "0": "Small blind (SB)",
+          "1": "Big blind (BB)",
+          "2": "Under the gun (UTG)",
+          "3": "Button (BTN)"
+        },
+        "explanation": "Postflop action starts with the small blind, so the button (BTN) acts last, seeing every opponent's decision first — the most advantageous seat."
+      },
+      "pq-position-range-width": {
+        "question": "Moving from UTG toward BTN preflop, how should your open-raising range change?",
+        "options": {
+          "0": "Wider as you get later",
+          "1": "Tighter as you get later",
+          "2": "Unchanged across all seats",
+          "3": "Depends only on how you feel today"
+        },
+        "explanation": "The later your position, the more postflop positional advantage you hold, so you can open wider; earlier seats should tighten up to offset playing out of position."
+      },
+      "pq-pot-odds-quarter": {
+        "question": "The pot is 100 and your opponent bets 50, so you must call 50. By pot odds, roughly what equity does the call need?",
+        "options": {
+          "0": "About 25%",
+          "1": "About 33%",
+          "2": "About 40%",
+          "3": "About 50%"
+        },
+        "explanation": "After calling 50 the pot totals 100 + 50 + 50 = 200, so the required equity is 50 / 200 = 25%. Calling profits only above that share."
+      },
+      "pq-mdf-half-pot": {
+        "question": "The pot is 100 and your opponent bets 50. By minimum defence frequency (MDF), roughly what share of your range should continue?",
+        "options": {
+          "0": "About 50%",
+          "1": "About 67%",
+          "2": "About 75%",
+          "3": "About 85%"
+        },
+        "explanation": "MDF = pot / (pot + bet) = 100 / 150 ≈ 67%. Folding more often than that lets the opponent profit with any two cards."
+      },
+      "pq-utg-open-tightest": {
+        "question": "In 6-max preflop, which position usually holds the tightest open-raising range?",
+        "options": {
+          "0": "UTG (under the gun)",
+          "1": "CO (cutoff)",
+          "2": "BTN (button)",
+          "3": "SB (small blind)"
+        },
+        "explanation": "UTG still has the most opponents left to act and the worst postflop position, so its opening range is tightest; ranges widen toward the button."
+      },
+      "pq-ip-after-3bet": {
+        "question": "The BTN opens, the BB 3-bets and the BTN calls. The BTN still acts after the BB postflop, which means?",
+        "options": {
+          "0": "The BB has position",
+          "1": "Both players are equal",
+          "2": "The BTN has position",
+          "3": "Position depends on stack size"
+        },
+        "explanation": "Acting last postflop means having position: the BTN decides after seeing the BB's action, so information is richer and equity easier to realise. Position comes from action order, not stack size."
+      },
+      "pq-cbet-dry-board": {
+        "question": "As the preflop raiser on a dry board like K♣ 7♦ 2♠, your continuation-bet frequency should usually be?",
+        "options": {
+          "0": "Lower than on a draw-heavy board",
+          "1": "Higher than on a draw-heavy board",
+          "2": "Fixed regardless of the board",
+          "3": "Always wait for the turn first"
+        },
+        "explanation": "On dry boards opponents rarely hold strong hands or draws, so a c-bet takes the pot down more often and the frequency is higher; on wet boards you must pick your betting hands more carefully."
+      },
+      "pq-range-bet-board": {
+        "question": "A small range bet (betting your whole range) fits which board best?",
+        "options": {
+          "0": "A board that smashes the opponent's range",
+          "1": "A multiway pot with heavy draws",
+          "2": "A dry board that favours your range",
+          "3": "Any board works equally well"
+        },
+        "explanation": "Range betting relies on a board that favours your overall range and leaves the opponent little counterplay; the drier and more favourable the board, the better it works."
+      },
+      "pq-ev-meaning": {
+        "question": "A decision is \"+EV\" — what does that mean?",
+        "options": {
+          "0": "You will win this time",
+          "1": "Your win rate is above half",
+          "2": "Repeating it earns a profit on average",
+          "3": "It has nothing to do with pot odds"
+        },
+        "explanation": "EV is a long-run average: a single result can lose, but repeating a +EV decision yields a positive average. Results do not retroactively grade decisions."
+      },
+      "pq-equity-vs-price": {
+        "question": "When deciding whether a call is worthwhile, what is the core comparison?",
+        "options": {
+          "0": "Hand strength versus opponent image",
+          "1": "Your equity versus pot odds",
+          "2": "Stack size versus position",
+          "3": "Bet count versus bet sizing"
+        },
+        "explanation": "A call pays off when equity covers the pot odds: equity above the required share is +EV, below it you should fold. Raw hand strength is not the criterion."
+      },
+      "pq-gto-unexploitable": {
+        "question": "What is the defining feature of a GTO (game-theory optimal) strategy?",
+        "options": {
+          "0": "It maximises value for every hand",
+          "1": "No deviation by the opponent profits reliably",
+          "2": "It always bets the largest size",
+          "3": "It only adjusts against weak players"
+        },
+        "explanation": "GTO cannot be exploited: any one-sided deviation by the opponent fails to profit reliably. It is a defensive baseline, not the best play against a specific opponent."
+      },
+      "pq-gto-frequency-mix": {
+        "question": "In a GTO framework, why does the same hand mix actions by frequency?",
+        "options": {
+          "0": "So opponents cannot infer your hand from your range",
+          "1": "Because randomness is mathematically fairer",
+          "2": "To save thinking time",
+          "3": "Because the rules require mixing"
+        },
+        "explanation": "Mixed frequencies keep the range leak-free: if a hand always takes one action, the opponent can read your range and exploit it."
+      },
+      "pq-icm-bubble": {
+        "question": "On the bubble of a tournament with a medium stack, how should you play compared with a cash game?",
+        "options": {
+          "0": "More willing to gamble preflop against big stacks",
+          "1": "More reluctant to flip preflop against big stacks",
+          "2": "Exactly the same as a cash game",
+          "3": "More often shoving any two cards"
+        },
+        "explanation": "Under ICM chip value is non-linear: busting forfeits all remaining prize equity, so high-variance confrontations with big stacks are less attractive, especially on the bubble."
+      },
+      "pq-tilt-chase": {
+        "question": "After losing several pots, widening your calling range to \"win it back\" is an example of?",
+        "options": {
+          "0": "Tilt-driven decision making",
+          "1": "A precise exploitative adjustment",
+          "2": "Standard range balancing",
+          "3": "A normal value bet"
+        },
+        "explanation": "Changing strategy to recover losses is classic tilt: decisions stop following the board and the odds and start following emotion, which lowers expected value over time."
+      }
+    }
+  }
+}

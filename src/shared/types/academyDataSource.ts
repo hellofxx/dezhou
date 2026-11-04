@@ -18,6 +18,13 @@ export interface AcademyProgressSnapshot {
   completedLessons: readonly string[];
 }
 
+/** 课程首次/最近成绩与尝试次数（进步回放只需这三项） */
+export interface AcademyLessonAttemptSnapshot {
+  firstScore: number;
+  lastScore: number;
+  attempts: number;
+}
+
 export interface AcademyDataSource {
   /** 找下一未完成课程（按 LEVELS 顺序遍历标准课程） */
   findNextLesson(completedLessons: readonly string[]): AcademyLessonMeta | null;
@@ -28,8 +35,11 @@ export interface AcademyDataSource {
    * （否则 useSyncExternalStore 触发无限重渲染）。
    */
   getAcademyProgressSnapshot(): AcademyProgressSnapshot;
-  getFirstAttemptScoresSnapshot(): Record<string, number>;
-  getLastAttemptScoresSnapshot(): Record<string, number>;
+  /**
+   * 课后尝试快照（lessonId → 首次/最近分数与次数）。
+   * 同样必须返回稳定引用：实现方需按源对象引用缓存派生结果。
+   */
+  getLessonAttemptsSnapshot(): Record<string, AcademyLessonAttemptSnapshot>;
   /** 订阅状态变化，返回取消订阅函数 */
   subscribe(listener: () => void): () => void;
 }

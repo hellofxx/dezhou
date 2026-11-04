@@ -81,37 +81,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
             content: '反直觉点：筹码翻倍不等于奖金翻倍。在 ICM 模型中，筹码的边际价值递减——从 500 涨到 1000 比从 5000 涨到 5500 价值更大。这就是为什么短筹码玩家在泡沫期应该更激进，而大筹码应该更保守。',
           },
         ],
-        quiz: [
-          {
-            id: 'l6-icm-q1',
-            question: 'ICM 的核心概念是什么？',
-            options: ['筹码价值是线性的', '锦标赛中 Chip EV = $EV', '锦标赛中筹码价值不等于钱', 'ICM 只适用于现金局'],
-            correctIndex: 2,
-            explanation: 'ICM 的核心是锦标赛中筹码的真实价值（$EV）与筹码数量（Chip EV）不相等，因为奖金结构的存在。',
-          },
-          {
-            id: 'l6-icm-q2',
-            question: '在泡沫期，中筹码玩家应该？',
-            options: ['与大筹码对抗', '避免与大筹码冲突', '用任何牌 call all-in', '立即全押'],
-            correctIndex: 1,
-            explanation: '中筹码在泡沫期应该避免与大筹码对抗，因为被淘汰的损失（失去奖金）远大于翻倍筹码的收益。',
-          },
-          {
-            id: 'l6-icm-q3',
-            question: 'Bubble Factor 越高，你的 call 范围应该？',
-            options: ['越宽', '越紧', '不变', '只 call 超强牌'],
-            correctIndex: 1,
-            explanation: 'Bubble Factor 越高，ICM 压力越大，你需要更强的牌才能 call all-in，因为被淘汰的代价更高。',
-          },
-          {
-            id: 'l6-icm-q4',
-            question: '大筹码在泡沫期可以？',
-            options: ['用更紧的范围 push', '用更宽的范围 push 短筹码', '只打超强牌', '避免任何冲突'],
-            correctIndex: 1,
-            explanation: '大筹码可以利用 ICM 压力，用更宽的范围 push 短筹码，因为短筹码需要用更强的牌才能 call。',
-          },
-        
-          { id: 'l6-icm-q5', question: 'ICM压力最大的阶段是？', options: ['比赛开始', '泡沫期', '决赛桌后', '盲注期'], correctIndex: 1, explanation: '泡沫期是ICM压力最大的阶段，因为再淘汰1-3人进入奖金圈。' },],
+        quiz: [],
         examples: [
           {
             id: 'l6-icm-ex1',
@@ -356,37 +326,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
             content: '反直觉点：SB 在 10BB 时 Push 范围约 50-55%，比很多人想象中宽；而 UTG 只有约 20-25%。很多玩家把两者混为一谈——位置越靠后、身后未行动者越少，Push 才能越宽；弃牌意味着盲注被蚕食，而 Push 可以获得弃牌权益。',
           },
         ],
-        quiz: [
-          {
-            id: 'l6-pushfold-q1',
-            question: '通常何时应该进入 Push/Fold 模式？',
-            options: ['< 30BB', '< 20BB', '< 15BB', '< 5BB'],
-            correctIndex: 2,
-            explanation: '当筹码降到 15BB 以下时，应该考虑进入 Push/Fold 模式。< 10BB 时必须使用。',
-          },
-          {
-            id: 'l6-pushfold-q2',
-            question: '10BB 时 BTN 的 Nash push 范围大约是？',
-            options: ['10-15%', '20-25%', '40-45%', '70-80%'],
-            correctIndex: 2,
-            explanation: '10BB 时 BTN 的 Nash push 范围约 40-45%，包括任何 Ax、任何对子、大部分 suited 连牌。',
-          },
-          {
-            id: 'l6-pushfold-q3',
-            question: '泡沫期你的 push 范围应该？',
-            options: ['比 Nash 更紧', '与 Nash 相同', '比 Nash 更宽', '只 push 超强牌'],
-            correctIndex: 2,
-            explanation: '泡沫期 ICM 压力让对手 call 更紧，所以你可以用比 Nash 更宽的范围 push。',
-          },
-          {
-            id: 'l6-pushfold-q4',
-            question: '面对 UTG 的 10BB push，BB 的 call 范围应该？',
-            options: ['非常宽（50%+）', '中等（30-35%）', '很紧（15-20%）', '只 call AA/KK'],
-            correctIndex: 2,
-            explanation: 'UTG 的 push 范围很紧（通常是强牌），所以 BB 应该用很紧的范围 call（15-20%）。',
-          },
-        
-          { id: 'l6-pushfold-q5', question: 'SB 10BB时的push范围约？', options: ['20-25%', '30-35%', '50-55%', '80%+'], correctIndex: 2, explanation: 'SB 10BB时可以push约50-55%的范围，因为只剩BB。' },],
+        quiz: [],
         examples: [
           {
             id: 'l6-pushfold-ex1',
@@ -613,31 +553,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
               '泡沫期是大筹码的“印钞机”。如果你是短筹码，不要害怕在 10-15BB 时 push——等到 5BB 就太晚了。',
           },
         ],
-        quiz: [
-          {
-            id: 'l6-bubble-q1',
-            question: '泡沫期是指？',
-            options: ['比赛刚开始', '距离奖金圈 1-3 人淘汰', '决赛桌', '比赛中间阶段'],
-            correctIndex: 1,
-            explanation: '泡沫期是指距离奖金圈只剩 1-3 人淘汰的阶段，是 ICM 压力最大的时候。',
-          },
-          {
-            id: 'l6-bubble-q2',
-            question: '大筹码在泡沫期应该？',
-            options: ['打得很紧', '激进施压，用宽范围 open/3-bet', '只打超强牌', '避免任何冲突'],
-            correctIndex: 1,
-            explanation: '大筹码应该利用 ICM 压力激进施压，用宽范围 open/3-bet，尤其是针对中筹码。',
-          },
-          {
-            id: 'l6-bubble-q3',
-            question: '中筹码在泡沫期应该？',
-            options: ['与大筹码对抗', '避免与大筹码冲突，压制短筹码', '用任何牌 call', '立即全押'],
-            correctIndex: 1,
-            explanation: '中筹码应该避免与大筹码冲突（被淘汰的损失太大），但可以压制短筹码。',
-          },
-        
-          { id: 'l6-bubble-q4', question: '短筹码在泡沫期应该？', options: ['被动等待', '主动寻找push机会（10-15BB时）', '只打AA', '弃牌所有手牌'], correctIndex: 1, explanation: '短筹码应在10-15BB时主动push，等到5BB就没有弃牌率了。' },
-          { id: 'l6-bubble-q5', question: '泡沫爆裂后ICM压力？', options: ['增大', '骤降', '不变', '消失'], correctIndex: 1, explanation: '泡沫爆裂后所有人都已min-cash，ICM压力骤降。' },],
+        quiz: [],
         examples: [
           {
             id: 'l6-bubble-ex1',
@@ -867,31 +783,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
               '决赛桌是锦标赛中最重要的阶段。记住：大筹码应该利用 payout 跳跃施压，短筹码应该主动寻找 push 机会。',
           },
         ],
-        quiz: [
-          {
-            id: 'l6-finaltable-q1',
-            question: '决赛桌的 payout 跳跃意味着？',
-            options: ['ICM 压力消失', '每次淘汰都有显著奖金变化', '所有人都打得很松', '短筹码应该被动等待'],
-            correctIndex: 1,
-            explanation: '决赛桌 payout 跳跃大，每次淘汰都有显著的奖金变化，所以 ICM 压力仍然很大。',
-          },
-          {
-            id: 'l6-finaltable-q2',
-            question: 'BTN 的偷盲范围通常处于哪一档？',
-            options: ['只开强牌的一档', '中等偏紧的一档', '开池最宽的一档（约三成半）', '几乎任意两张牌'],
-            correctIndex: 2,
-            explanation: 'BTN 偷盲属于开池最宽的一档（约三成半），包括任何 Ax、任何对子、大部分 suited 牌；精确构成见范围训练模块与 GTO 策略表。',
-          },
-          {
-            id: 'l6-finaltable-q3',
-            question: 'Re-steal 的最佳筹码量是？',
-            options: ['5-10BB', '15-25BB', '40-50BB', '100BB+'],
-            correctIndex: 1,
-            explanation: 'Re-steal 的最佳筹码量是 15-25BB：太少没有弃牌率，太多浪费筹码。',
-          },
-        
-          { id: 'l6-finaltable-q4', question: 'Heads-Up中SB(BTN)的open范围约？', options: ['30-40%', '50-60%', '70-80%', '90%+'], correctIndex: 2, explanation: 'Heads-Up中SB(BTN)open约70-80%的范围，范围极宽。' },
-          { id: 'l6-finaltable-q5', question: '偷盲的最佳大小通常是？', options: ['3BB', 'Min-raise(2-2.2x)', '5BB', 'Half pot'], correctIndex: 1, explanation: 'Min-raise给对手最差赔率，减少自己风险，是最常用的偷盲大小。' },],
+        quiz: [],
         examples: [
           {
             id: 'l6-finaltable-ex1',
@@ -1098,13 +990,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
             content: '反直觉点：大赏金对手时反而应该收紧跟注范围。很多人认为“大赏金意味着应该更激进地追赏金”，但数学上大赏金对手被淘汰的概率低，赏金贡献的 $EV 有限。盲目追赏金会导致 -EV 的跟注，得不偿失。',
           },
         ],
-        quiz: [
-          { id: 'l6-bounty-q1', question: 'PKO 中淘汰对手可获得其多少赏金？', options: ['全部', '一半', '四分之一', '没有'], correctIndex: 1, explanation: 'PKO中淘汰对手获得其一半赏金，另一半加到自己头上。' },
-          { id: 'l6-bounty-q2', question: '覆盖短筹码时应该怎么调整？', options: ['更保守', '大幅放宽范围', '和普通赛一样', '只打AA/KK'], correctIndex: 1, explanation: '覆盖短筹码时赏金价值高，应大幅放宽跟注/加注范围。' },
-        
-          { id: 'l6-bounty-q3', question: 'PKO中你的赏金很大时，对手会？', options: ['更保守', '更激进地向你加注', '弃牌更多', '没有变化'], correctIndex: 1, explanation: '你的赏金大时，对手为了获得赏金会更激进地向你加注。' },
-          { id: 'l6-bounty-q4', question: '被覆盖时应该怎么打？', options: ['更保守', '正常打法，不因3-bet开心', '全下所有手牌', '弃牌所有手牌'], correctIndex: 1, explanation: '被覆盖时正常打法，不要因为对手的激进而情绪化。' },
-          { id: 'l6-bounty-q5', question: 'PKO中最常见的错误是？', options: ['打得太紧', '忽视赏金价值或过度追求赏金', '总是全下', '从不弃牌'], correctIndex: 1, explanation: '最常见的错误是完全忽视赏金价值（太紧）或过度追求赏金（用垃圾牌全下）。' },],
+        quiz: [],
         practice: {
           id: 'l6-bounty-practice',
           questions: [

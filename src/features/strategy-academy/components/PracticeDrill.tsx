@@ -18,6 +18,8 @@ import { soundManager } from '../utils/soundManager';
 import { useProgressStore } from '@/features/progress/store';
 import { useAcademyStore } from '../store';
 import { getCurrentDifficulty, selectQuestionsByDifficulty, shouldRecommendReview } from '../utils/adaptiveDifficulty';
+import { getLessonMeta } from '../data/lessonMeta';
+import { getQuestionEloDifficulty } from '../utils/eloDifficulty';
 import { orderPracticeOptions } from '../utils/practiceOptionOrder';
 import { resolvePracticeQuestion } from '../utils/contentKeys';
 // P1E-13: 超时判分口径（超时恒判错，对齐 range-trainer P1A-02）
@@ -41,16 +43,14 @@ interface PracticeDrillProps {
   onReviewRequest?: (topics: string[]) => void;
 }
 
-// UI-06：brass glow 关键帧（--brass 色相 rgba(201,162,94)）。framer-motion 插值需数值 keyframes，
-// CSS 变量无法用于动画插值，故集中为命名常量并锚定语义（仅此一处动画阴影）。
+// UI-06：brass glow 关键帧（--brass 色相 rgba(201,162,94)）；framer-motion 插值需数值 keyframes，CSS 变量不参与插值，故集中为命名常量（仅此一处动画阴影）
 const BRASS_GLOW_KEYFRAMES: string[] = [
   '0 0 0px rgba(201,162,94,0)',
   '0 0 14px rgba(201,162,94,0.45)',
   '0 0 0px rgba(201,162,94,0)',
 ];
 
-// P2-05: 动作按钮语义分类（题库 action 值多样：'fold'/'raise 2.5BB'/'Bet 4BB（33% pot）'/中文等，
-// 精确匹配会让绝大多数选项落入 fallback；按语义关键词归类到 §5.5 平权色阶）
+// P2-05: 动作按钮语义分类（题库 action 值多样，精确匹配会让绝大多数选项落入 fallback；按语义关键词归类到 §5.5 平权色阶）
 const ACTION_STYLES: Record<string, string> = {
   Fold: 'action-mini act-fold !px-4 !py-3 !text-sm !font-bold !rounded-lg',
   Call: 'action-mini act-call !px-4 !py-3 !text-sm !font-bold !rounded-lg',
@@ -212,10 +212,12 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
 
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { adaptiveConfig, updateAbility, recentPracticeResults } = useAcademyStore();
+  const { adaptiveConfig, recordPracticeResult, recentPracticeResults } = useAcademyStore();
   const settings = useProgressStore((s) => s.settings);
   // P2-5.2: 情绪管理 — 记录答题用于连续答错检测与每日题量统计
   const recordAnswerForEmotion = useProgressStore((s) => s.recordAnswer);
+  // P0 学习闭环：实战每题写 ELO（维度取关联课程 lessonMeta，未关联/未登记回退 postflop）
+  const updateElo = useProgressStore((s) => s.updateElo);
 
   // 同步音效开关
   useEffect(() => {
@@ -244,8 +246,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   }, []);
 
   // 自适应模式下动态选择题目
-  // P0B-01：渲染前先 t() 解析（key 缺失回退数据层中文），再统一走 orderPracticeOptions
-  // 排序出口（动作类 canonical / 数值类单调 / 文字类 id 种子洗牌），禁止按题库原序渲染；源题库数据不改。
+  // P0B-01：渲染前先 t() 解析（key 缺失回退数据层中文），再统一走 orderPracticeOptions 排序出口（动作类 canonical / 数值类单调 / 文字类 id 种子洗牌），禁止按题库原序渲染；源题库数据不改。
   const questions = useMemo(() => {
     const resolveOrder = (q: PracticeQuestion) => orderPracticeOptions(resolvePracticeQuestion(t, q));
     if (isPressure) {
@@ -325,8 +326,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
 
       const questionDifficulty = currentQuestion?.difficulty ?? 'beginner';
 
-      // P1E-13: 判分唯一事实源 — 超时恒判错（即使代选项恰好正确也不计对、
-      // 不加连击、不播答对音效），对齐 range-trainer P1A-02 口径
+      // P1E-13: 判分唯一事实源 — 超时恒判错（即使代选项恰好正确也不计对、不加连击、不播答对音效），对齐 range-trainer P1A-02 口径
       const gradedCorrect = gradePracticeSelection(option, isTimeout);
 
       // P1E-05（专批 B）：记录逐题作答明细（复习题 SRS 回写的数据源）
@@ -338,12 +338,9 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         });
       }
 
-      // 更新能力评估
-      updateAbility({
-        isCorrect: gradedCorrect,
-        timeTaken: elapsed,
-        difficulty: questionDifficulty,
-      });
+      // 记录自适应难度窗口（不写能力评估）+ ELO（每题按关联课程维度计一次）
+      recordPracticeResult({ isCorrect: gradedCorrect, timeTaken: elapsed, difficulty: questionDifficulty });
+      updateElo(getLessonMeta(currentQuestion?.relatedLessonId ?? lessonId).eloDimension, gradedCorrect, getQuestionEloDifficulty(questionDifficulty));
 
       // P2-5.2: 情绪管理 — 记录答题
       recordAnswerForEmotion(gradedCorrect);
@@ -387,7 +384,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
         checkDifficultyAdjustment(recentResults);
       }
     },
-    [isAnswered, currentQuestion, times, currentIndex, adaptive, updateAbility, checkDifficultyAdjustment, initSound, timeLimit, consecutiveWrong, isPressure, recordAnswerForEmotion]
+    [isAnswered, currentQuestion, times, currentIndex, adaptive, recordPracticeResult, checkDifficultyAdjustment, initSound, timeLimit, consecutiveWrong, isPressure, recordAnswerForEmotion, updateElo, lessonId]
   );
 
   // 超时处理（P1E-13: 系统代选仅用于展示，判分强制计错 — 见 handleSelect 的 gradedCorrect）

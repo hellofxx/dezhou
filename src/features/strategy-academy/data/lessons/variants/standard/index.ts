@@ -1,4 +1,6 @@
-import type { LevelInfo } from '../../../../types';
+import type { LevelInfo, Lesson } from '../../../../types';
+import { applyQuizBank } from '../../../../utils/applyQuizBank';
+import { STANDARD_QUIZ_BANK, LOCAL_QUIZ_BANK } from './quizBank';
 import { STANDARD_LEVEL_1_LESSONS } from './standardLevel1';
 import { STANDARD_LEVEL_2_LESSONS } from './standardLevel2';
 import { STANDARD_LEVEL_3_LESSONS } from './standardLevel3';
@@ -9,6 +11,10 @@ import { STANDARD_LEVEL_6_LESSONS } from './standardLevel6';
 import { STANDARD_LEVEL_7_LESSONS } from './standardLevel7';
 import { STANDARD_LEVEL_8_LESSONS } from './standardLevel8';
 
+/** 标准 + 本土题库合并后统一注入（未登记课时沿用内联 quiz）。 */
+const ALL_QUIZ_BANK = { ...STANDARD_QUIZ_BANK, ...LOCAL_QUIZ_BANK };
+const withBank = (lessons: Lesson[]): Lesson[] => applyQuizBank(lessons, ALL_QUIZ_BANK);
+
 /** 标准德州（standard）全部 Level */
 export const standardLevels: LevelInfo[] = [
   {
@@ -18,7 +24,7 @@ export const standardLevels: LevelInfo[] = [
     description: '掌握德州扑克的基本规则和核心概念',
     icon: '🌱',
     unlockRequirement: '无',
-    lessons: STANDARD_LEVEL_1_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_1_LESSONS),
   },
   {
     id: 'l2',
@@ -27,7 +33,7 @@ export const standardLevels: LevelInfo[] = [
     description: '掌握翻牌前的关键决策',
     icon: '📈',
     unlockRequirement: '完成 Level 1 所有课程',
-    lessons: STANDARD_LEVEL_2_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_2_LESSONS),
   },
   {
     id: 'l3',
@@ -36,7 +42,7 @@ export const standardLevels: LevelInfo[] = [
     description: '学习翻牌后的核心技术',
     icon: '🎯',
     unlockRequirement: '完成 Level 2 所有课程',
-    lessons: STANDARD_LEVEL_3_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_3_LESSONS),
   },
   {
     id: 'l4a',
@@ -45,7 +51,7 @@ export const standardLevels: LevelInfo[] = [
     description: '培养范围阅读、EV计算和对手分析的能力',
     icon: '🧠',
     unlockRequirement: '完成 Level 3 所有课程',
-    lessons: STANDARD_LEVEL_4A_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_4A_LESSONS),
   },
   {
     id: 'l4b',
@@ -54,7 +60,7 @@ export const standardLevels: LevelInfo[] = [
     description: '掌握GTO理论、博弈树和频率平衡的核心概念',
     icon: '🎲',
     unlockRequirement: '完成 进阶思维·范围与EV 所有课程',
-    lessons: STANDARD_LEVEL_4B_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_4B_LESSONS),
   },
   {
     id: 'l5',
@@ -63,7 +69,7 @@ export const standardLevels: LevelInfo[] = [
     description: '养成职业牌手的核心素质',
     icon: '🏆',
     unlockRequirement: '完成 Level 4 所有课程',
-    lessons: STANDARD_LEVEL_5_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_5_LESSONS),
   },
   {
     id: 'l6',
@@ -72,7 +78,7 @@ export const standardLevels: LevelInfo[] = [
     description: '掌握 MTT/SNG 的核心策略：ICM、Push/Fold、泡沫期打法',
     icon: '🎖️',
     unlockRequirement: '完成 Level 5 所有课程',
-    lessons: STANDARD_LEVEL_6_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_6_LESSONS),
   },
   {
     id: 'l7',
@@ -82,7 +88,7 @@ export const standardLevels: LevelInfo[] = [
     icon: '💰',
     unlockRequirement: '完成 Level 3（翻后策略）和 Level 5（职业素养）所有课程',
     prerequisiteLevelIds: ['l3', 'l5'],
-    lessons: STANDARD_LEVEL_7_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_7_LESSONS),
   },
   {
     id: 'l8',
@@ -92,6 +98,6 @@ export const standardLevels: LevelInfo[] = [
     icon: '🔬',
     unlockRequirement: '完成 Level 4B（GTO与博弈论）所有课程',
     prerequisiteLevelIds: ['l4b'],
-    lessons: STANDARD_LEVEL_8_LESSONS,
+    lessons: withBank(STANDARD_LEVEL_8_LESSONS),
   },
 ];

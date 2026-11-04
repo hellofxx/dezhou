@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { PracticeDrillComponent } from './PracticeDrill';
+import { useProgressStore } from '@/features/progress/store';
+import { getLessonMeta } from '../data/lessonMeta';
 import type { PracticeDrill, PracticeQuestion } from '../types';
 
 /**
@@ -132,5 +134,75 @@ describe('PracticeDrill：答题与结算', () => {
 
     expect(onComplete).toHaveBeenCalledTimes(1);
     expect(onComplete.mock.calls[0]![0].correctAnswers).toBe(1);
+  });
+});
+
+describe('PracticeDrill：ELO 写入口径（P0）', () => {
+  it('每题按 relatedLessonId → lessonMeta 维度写 ELO，情绪计数只记一次', () => {
+    const relatedDrill: PracticeDrill = {
+      id: 'elo-drill',
+      questions: [
+        {
+          ...makeQuestion('e1', [
+            { action: 'Call', isCorrect: true, explanation: '跟注。' },
+            { action: 'Fold', isCorrect: false, explanation: '弃牌。' },
+          ]),
+          relatedLessonId: 'l3-cbet',
+        },
+      ],
+    };
+    const before = useProgressStore.getState().eloByVariant.standard;
+    const beforeEmotion = useProgressStore.getState().emotion.dailyQuestionsAnswered;
+    const dimension = getLessonMeta('l3-cbet').eloDimension;
+
+    render(
+      <MemoryRouter>
+        <PracticeDrillComponent
+          drill={relatedDrill}
+          lessonId="l1-basics"
+          onComplete={vi.fn()}
+          adaptive={false}
+        />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByText('Call'));
+
+    const after = useProgressStore.getState().eloByVariant.standard;
+    expect(after.gamesPlayed).toBe(before.gamesPlayed + 1);
+    expect(after[dimension]).toBeGreaterThan(before[dimension]);
+    // 关联课程维度生效（l3-cbet → postflop，而非 lessonId 的 handReading）
+    expect(dimension).not.toBe(getLessonMeta('l1-basics').eloDimension);
+    // recordAnswer 每题只调一次
+    expect(useProgressStore.getState().emotion.dailyQuestionsAnswered).toBe(beforeEmotion + 1);
+  });
+
+  it('无关联课程且课时未登记 lessonMeta 时回退 postflop', () => {
+    const quickDrill: PracticeDrill = {
+      id: 'elo-fallback',
+      questions: [
+        makeQuestion('f1', [
+          { action: 'Call', isCorrect: true, explanation: '跟注。' },
+          { action: 'Fold', isCorrect: false, explanation: '弃牌。' },
+        ]),
+      ],
+    };
+    const before = useProgressStore.getState().eloByVariant.standard;
+
+    render(
+      <MemoryRouter>
+        <PracticeDrillComponent
+          drill={quickDrill}
+          lessonId="quick-drill"
+          onComplete={vi.fn()}
+          adaptive={false}
+        />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByText('Call'));
+    const after = useProgressStore.getState().eloByVariant.standard;
+    expect(after.gamesPlayed).toBe(before.gamesPlayed + 1);
+    expect(after.postflop).toBeGreaterThan(before.postflop);
   });
 });

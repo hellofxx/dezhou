@@ -54,6 +54,11 @@ const CourseView = lazyPageWithFeature(() => import('@/features/strategy-academy
 const BasicsIntro = lazyPage(() => import('@/features/strategy-academy/components/BasicsIntro'), '/academy/basics');
 const ConceptGraphView = lazyPage(() => import('@/features/strategy-academy/components/ConceptGraphView'), '/academy/concept-graph');
 const LearningTracksView = lazyPage(() => import('@/features/strategy-academy/components/LearningTracksView'), '/academy/tracks');
+const StrategySearchPage = lazyPage(() => import('@/features/strategy-academy/components/StrategySearchPage'), '/academy');
+const PlacementTestPage = lazyPage(() => import('@/features/strategy-academy/components/PlacementTestPage'), '/academy');
+const LevelCheckpointPage = lazyPage(() => import('@/features/strategy-academy/components/LevelCheckpointPage'), '/academy');
+const StrategyBookmarksPage = lazyPage(() => import('@/features/strategy-academy/components/StrategyBookmarksPage'), '/academy');
+const StrategyBibliographyPage = lazyPage(() => import('@/features/strategy-academy/components/StrategyBibliographyPage'), '/academy');
 const QuickDrill = lazyPage(() => import('@/features/strategy-academy/components/QuickDrill'), '/academy/quick-drill');
 const LevelCertification = lazyPage(() => import('@/features/strategy-academy/components/LevelCertification'), '/academy/certification/:level');
 const OnboardingFlow = lazyPage(() => import('@/features/onboarding/components/OnboardingFlow'), '/onboarding');
@@ -102,6 +107,11 @@ export const appRoutes: RouteObject[] = [
       { path: 'academy/basics', element: <LazyWrapper><BasicsIntro /></LazyWrapper> },
       { path: 'academy/concept-graph', element: <LazyWrapper><ConceptGraphView /></LazyWrapper> },
       { path: 'academy/tracks', element: <LazyWrapper><LearningTracksView /></LazyWrapper> },
+      { path: 'academy/search', element: <LazyWrapper><StrategySearchPage /></LazyWrapper> },
+      { path: 'academy/placement', element: <LazyWrapper><PlacementTestPage /></LazyWrapper> },
+      { path: 'academy/checkpoint/:level', element: <LazyWrapper><LevelCheckpointPage /></LazyWrapper> },
+      { path: 'academy/bookmarks', element: <LazyWrapper><StrategyBookmarksPage /></LazyWrapper> },
+      { path: 'academy/bibliography', element: <LazyWrapper><StrategyBibliographyPage /></LazyWrapper> },
       { path: 'academy/quick-drill', element: <LazyWrapper><QuickDrill /></LazyWrapper> },
       { path: 'academy/certification/:level', element: <LazyWrapper><LevelCertification /></LazyWrapper> },
       { path: 'academy/lesson/:lessonId', element: <LazyWrapper><ErrorBoundary><CourseView /></ErrorBoundary></LazyWrapper> },

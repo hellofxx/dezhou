@@ -100,10 +100,9 @@ describe('strategy-academy store gates', () => {
     s.completeLesson('l1-basics');
     s.recordQuizScore('l1-basics', 90);
     s.recordPracticeScore(makePracticeResult() as never);
-    s.updateAbility({ isCorrect: true, timeTaken: 5, difficulty: 'beginner' });
-    s.attemptCertification(1, 90);
+    s.recordPracticeResult({ isCorrect: true, timeTaken: 5, difficulty: 'beginner' });
     s.setActiveTrack('track-beginner');
-    s.recordAttemptScore('l1-basics', 80);
+    s.recordLessonAttempt('l1-basics', { score: 80, correct: 4, total: 5 });
     s.refreshDailyPlan();
 
     useAcademyStore.getState().resetProgress();
@@ -114,11 +113,9 @@ describe('strategy-academy store gates', () => {
     expect(reset.recentPracticeResults).toEqual([]);
     expect(reset.certifications).toEqual({});
     expect(reset.activeTrackId).toBeNull();
-    expect(reset.firstAttemptScores).toEqual({});
-    expect(reset.lastAttemptScores).toEqual({});
+    expect(reset.lessonAttempts).toEqual({});
     expect(reset.dailyPlan).toBeNull();
     expect(reset.basicsProgress).toEqual({ currentStep: 0, completed: false });
-    expect(reset.abilityAssessment.rangeKnowledge).toBe(50);
   });
 
   it('isLevelLessonsCompleted 按合并 level 数字判定全部课程完成', async () => {
@@ -135,10 +132,18 @@ describe('strategy-academy store gates', () => {
   });
 
   it('areAllLevelsCertified 需全部 Level 认证且未过期（ACAD-02）', async () => {
-    const { useAcademyStore, getLevelNumbers } = await load();
+    const { useAcademyStore, getLevelNumbers, getLevelSummariesByNumber } = await load();
     expect(useAcademyStore.getState().areAllLevelsCertified()).toBe(false);
     for (const level of getLevelNumbers()) {
-      useAcademyStore.getState().attemptCertification(level, 90);
+      for (const lesson of getLevelSummariesByNumber(level).flatMap((entry) => entry.lessons)) {
+        useAcademyStore.getState().completeLesson(lesson.id);
+      }
+      expect(
+        useAcademyStore.getState().submitCertificationAttempt(level, {
+          score: 90,
+          totalQuestions: 20,
+        }),
+      ).toEqual({ accepted: true });
     }
     expect(useAcademyStore.getState().areAllLevelsCertified()).toBe(true);
 
@@ -171,20 +176,20 @@ describe('strategy-academy store gates', () => {
     expect(useAcademyStore.getState().activeVariant).toBe('standard');
   });
 
-  it('recordAttemptScore 保留首次分数、刷新最近分数；getProgressForLesson 给出提升幅度', async () => {
+  it('recordLessonAttempt 保留首次分数、刷新最近分数；getProgressForLesson 给出提升幅度', async () => {
     const { useAcademyStore } = await load();
     expect(useAcademyStore.getState().getProgressForLesson('l1-basics')).toBeNull();
 
-    useAcademyStore.getState().recordAttemptScore('l1-basics', 40);
+    useAcademyStore.getState().recordLessonAttempt('l1-basics', { score: 40, correct: 2, total: 5 });
     expect(useAcademyStore.getState().getProgressForLesson('l1-basics')).toEqual({
       first: 40,
       last: 40,
       improvement: 0,
     });
 
-    useAcademyStore.getState().recordAttemptScore('l1-basics', 75);
-    expect(useAcademyStore.getState().firstAttemptScores['l1-basics']).toBe(40);
-    expect(useAcademyStore.getState().lastAttemptScores['l1-basics']).toBe(75);
+    useAcademyStore.getState().recordLessonAttempt('l1-basics', { score: 75, correct: 4, total: 5 });
+    expect(useAcademyStore.getState().lessonAttempts['l1-basics']?.firstScore).toBe(40);
+    expect(useAcademyStore.getState().lessonAttempts['l1-basics']?.lastScore).toBe(75);
     expect(useAcademyStore.getState().getProgressForLesson('l1-basics')).toEqual({
       first: 40,
       last: 75,

@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, ClipboardCheck, Lock, XCircle } from 'lucide-react';
@@ -30,6 +31,26 @@ interface TheoryCheckpointProps {
   onExit?: () => void;
   className?: string;
 }
+
+/**
+ * 检查点 → 策略学院认证 Level 的映射（仅标准变体）。
+ *
+ * 只拼路由字符串，不 import 策略学院、也不读它的 store：
+ * 认证页自身按「Level 已完成 / 标准变体 / 冷却 / 有效期」判定门禁，理论侧只负责把人送过去。
+ * 映射依据理论支柱与认证题池的对应关系：T1/T2 落 L1，T3 落 L2，T4/T5/T7 落 L4（含 4A/4B），
+ * T6 落 L3，T8 落 L5，T9 落 L6。
+ */
+export const CERTIFICATION_LEVEL_BY_THEORY_LEVEL: Record<number, number> = {
+  1: 1,
+  2: 1,
+  3: 2,
+  4: 4,
+  5: 4,
+  6: 3,
+  7: 4,
+  8: 5,
+  9: 6,
+};
 
 interface CheckpointResultView {
   score: number;
@@ -67,6 +88,11 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
   const addReviewItem = useProgressStore((s) => s.addReviewItem);
 
   const unlocked = isCheckpointUnlocked(levelId, completedChapters);
+  // 认证 CTA 只对标准变体出现（短牌/单挑本批无认证）；映射缺失时不渲染，避免拼出死链
+  const certificationLevel =
+    levelSummary?.variant === 'standard'
+      ? CERTIFICATION_LEVEL_BY_THEORY_LEVEL[levelSummary.level]
+      : undefined;
   const attemptNumber = getCheckpointAttemptNumber(checkpoints, levelId);
   const [phase, setPhase] = useState<'idle' | 'quiz' | 'result'>('idle');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -213,6 +239,15 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
         <p className="rounded-lg border border-[var(--brass)]/30 bg-[var(--brass)]/10 px-3 py-2 text-xs text-[var(--ivory-dim)]">
           {t('theory.checkpoint.noCertificate')}
         </p>
+        {certificationLevel !== undefined && (
+          <Link
+            to={`/academy/certification/${certificationLevel}`}
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2.5 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          >
+            {t('theory.checkpoint.certificationCta')}
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </Link>
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={start}

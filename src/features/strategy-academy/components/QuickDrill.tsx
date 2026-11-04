@@ -18,11 +18,15 @@ import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 // P1E-05（专批 B）：review-* 复习题作答后回写 SRS（推进 nextReviewDate）
 import { computeReviewWriteBacks } from '../utils/quickDrillSrs';
 import { PracticeDrillComponent } from './PracticeDrill';
+import type { EloDimension } from '@/shared/types/elo';
 import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types';
 // P2-5.4: Session 止损守卫
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 
 type QuickDrillMode = 'range' | 'odds' | 'mixed';
+
+/** ELO 五维（弱点维度判定与 mode 映射的遍历源） */
+const ELO_DIMENSIONS: readonly EloDimension[] = ['preflop', 'postflop', 'math', 'handReading', 'mental'];
 
 export default function QuickDrill() {
   const navigate = useNavigate();
@@ -37,9 +41,10 @@ export default function QuickDrill() {
       ? modeParam
       : 'mixed';
 
-  const { abilityAssessment, recordPracticeScore } = useAcademyStore();
-  const onboarding = useProgressStore((s) => s.onboarding);
-  const streak = useProgressStore((s) => s.streak);
+  const { recordPracticeScore } = useAcademyStore();
+  // P0 口径：弱点维度与自适应难度改读 progress 标准变体 ELO（eloByVariant 单一事实源），
+  // 不再读 strategy 能力评估 / onboarding.initialAbility
+  const standardElo = useProgressStore((s) => s.eloByVariant.standard);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
   // P1-4.2: SRS 复习队列
   const reviewItems = useProgressStore((s) => s.reviewItems);
@@ -67,39 +72,31 @@ export default function QuickDrill() {
   const [freezeRewarded, setFreezeRewarded] = useState(false);
   // P1-4.3: 当前快速训练连续天数（用于结果展示）
   const [currentQuickDrillStreak, setCurrentQuickDrillStreak] = useState(0);
-  // 根据能力评估确定弱点领域
-  const weakAreas = useMemo(() => {
-    const areas: string[] = [];
-    const threshold = 60;
-    if (abilityAssessment.rangeKnowledge < threshold) areas.push('rangeKnowledge');
-    if (abilityAssessment.oddsCalculation < threshold) areas.push('oddsCalculation');
-    if (abilityAssessment.gtoUnderstanding < threshold) areas.push('gtoUnderstanding');
-    if (abilityAssessment.positionalPlay < threshold) areas.push('positionalPlay');
-    if (abilityAssessment.emotionalControl < threshold) areas.push('emotionalControl');
-    return areas;
-  }, [abilityAssessment]);
+  // 弱点维度（ELO）：低于五维均值的维度；五维齐平（新用户）时无弱点，走全题库。
+  // 维度 → 课时映射由 getQuickDrillQuestions 经 lessonMeta 完成。
+  const weakAreas = useMemo<EloDimension[]>(() => {
+    const dimensions = ELO_DIMENSIONS.filter((dimension) => standardElo[dimension] < standardElo.overall);
+    // 取最低的 2 个维度：弱点过多时仍保留足够候选池（回填兜底见 getQuickDrillQuestions）
+    return [...dimensions]
+      .sort((a, b) => standardElo[a] - standardElo[b])
+      .slice(0, 2);
+  }, [standardElo]);
 
-  // P0-5: 快速模式下根据 onboarding.initialAbility 与 streak 自适应难度
+  // P0-5: 快速模式下按标准变体 ELO 综合分自适应难度（<700 入门 / <1200 进阶 / 其余高级）
   const autoDifficulty = useMemo<QuestionDifficulty>(() => {
-    const { initialAbility } = onboarding;
-    const avgAbility =
-      (initialAbility.rangeKnowledge +
-        initialAbility.oddsCalculation +
-        initialAbility.gtoUnderstanding +
-        initialAbility.positionalPlay) / 4;
-    if (streak.currentStreak >= 7 && avgAbility >= 70) return 'advanced';
-    if (streak.currentStreak < 3 || avgAbility < 50) return 'beginner';
-    return 'intermediate';
-  }, [onboarding, streak.currentStreak]);
+    if (standardElo.overall >= 1200) return 'advanced';
+    if (standardElo.overall >= 700) return 'intermediate';
+    return 'beginner';
+  }, [standardElo.overall]);
 
   // P0-5: 根据 mode 映射到对应的弱点领域过滤
-  const modeWeakAreas = useMemo<string[]>(() => {
+  const modeWeakAreas = useMemo<EloDimension[]>(() => {
     if (!isQuickMode) return weakAreas;
     switch (mode) {
       case 'range':
-        return ['rangeKnowledge'];
+        return ['preflop'];
       case 'odds':
-        return ['oddsCalculation'];
+        return ['math'];
       case 'mixed':
       default:
         return [];

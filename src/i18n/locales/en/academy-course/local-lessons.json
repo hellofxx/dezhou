@@ -796,6 +796,686 @@
         "Keeping 30+ buy-ins"
       ],
       "explanation": "Chasing \"short-term windfalls\" is the deadliest error. Today's 5 buy-in loss doesn't matter; what matters is how many correct decisions you made. Long-term, correct decisions bring steady profit."
+    },
+    "local-limp-intro-q4": {
+      "question": "What SPR range is typical of a limped game?",
+      "options": [
+        "3-5 (medium-low)",
+        "10-15 (very deep)",
+        "Below 1",
+        "Above 20"
+      ],
+      "explanation": "Limped pots are medium sized with many players, so SPR usually sits at 3-5: one or two streets gets stacks in, which favors implied odds over deep multi-street play."
+    },
+    "local-limp-intro-q5": {
+      "question": "Why can you not grind out profit purely from small pots in a limped game?",
+      "options": [
+        "Rake takes a relatively bigger share, so small pots get eaten",
+        "Nobody calls in small pots",
+        "Small pots trigger a forced straddle",
+        "Small pots require stronger hands"
+      ],
+      "explanation": "Rake is a percentage of the pot, so it takes a bigger share of small pots. Grinding small pots long term just hands the winnings back to the house."
+    },
+    "local-limp-intro-q6": {
+      "question": "Which of these is one of the most common limped-game mistakes?",
+      "options": [
+        "Limping along with AA/KK and getting outdrawn in a multiway pot",
+        "Isolating with strong hands",
+        "Exploiting passive players postflop",
+        "Seeing flops cheaply with speculative hands"
+      ],
+      "explanation": "Not isolating with strong hands gives up initiative and fold equity, while the chance of being outdrawn by a 3-5 way pot rises sharply. Isolating is always the first choice with a strong hand."
+    },
+    "local-limp-intro-q7": {
+      "question": "Why is position worth more in a limped game?",
+      "options": [
+        "BTN/CO can limp behind and act last postflop against passive players",
+        "Blinds are cheaper late in the order",
+        "Late positions can peek at opponents' cards",
+        "Early positions must post extra blinds"
+      ],
+      "explanation": "Acting last is worth most in multiway pots. BTN/CO can limp behind to see a cheap flop and then use position against passive limpers."
+    },
+    "local-limp-intro-q8": {
+      "question": "With 20BB effective and a 5BB flop pot, what is the SPR?",
+      "options": [
+        "4",
+        "2",
+        "10",
+        "0.25"
+      ],
+      "explanation": "SPR = effective stack ÷ pot = 20 ÷ 5 = 4, right inside the 3-5 range typical of limped games where stacks go in within one or two streets."
+    },
+    "local-limp-isolate-q4": {
+      "question": "Against a single limper, what isolation size does this lesson recommend?",
+      "options": [
+        "4-5BB",
+        "1.5-2BB",
+        "10-12BB",
+        "Open shove"
+      ],
+      "explanation": "Raise to 4-5BB against one limper (standard GTO is 3-4BB). Limpers call too wide, so a small raise isolates nobody and a bigger size is needed."
+    },
+    "local-limp-isolate-q5": {
+      "question": "Against three limpers, what isolation size should you use?",
+      "options": [
+        "8-10BB",
+        "3-4BB",
+        "5-6BB",
+        "20BB or more"
+      ],
+      "explanation": "Add about 2BB per extra limper: 4-5BB for one, 6-7BB for two, 8-10BB for three. That isolates while building a pot with your strong hand."
+    },
+    "local-limp-isolate-q6": {
+      "question": "Which hands are NOT suitable for isolation raises?",
+      "options": [
+        "Medium hands such as AT, KJ, QT",
+        "TT+ and AQ+",
+        "A2s-A5s",
+        "56s-9Ts"
+      ],
+      "explanation": "Medium hands face kicker trouble when called and must fold to a 4-bet. Isolate with strong value hands (TT+/AQ+/KQs) and clearly defined speculative hands (A2s-A5s, 56s-9Ts)."
+    },
+    "local-limp-isolate-q7": {
+      "question": "Your last three isolation raises all went multiway. What does that tell you and what should you change?",
+      "options": [
+        "The table is too loose: tighten your isolation range, size up, or limp behind instead",
+        "Your hands were just too weak, keep the same size",
+        "Abandon isolating entirely",
+        "Go back to min-raises"
+      ],
+      "explanation": "Three multiway calls in a row means the table's calling threshold is very low. Drop marginal hands from your isolation range, size up, or limp behind for cheap flops with speculative hands."
+    },
+    "local-limp-isolate-q8": {
+      "question": "At NL25 ($0.25/$0.50) two players limp and the blinds have not acted. How much is already in the pot?",
+      "options": [
+        "3.5BB (SB 0.5 + BB 1 + two limps of 1)",
+        "1.5BB",
+        "5BB",
+        "7BB"
+      ],
+      "explanation": "0.5 + 1 + 1 + 1 = 3.5BB. Isolating to 6-7BB per this lesson applies enough pressure on those 3.5BB of dead money."
+    },
+    "local-limp-multiway-q5": {
+      "question": "In a 4-way pot, what is the minimum strength for multi-street value betting?",
+      "options": [
+        "Two pair or better",
+        "Top pair top kicker",
+        "Any top pair",
+        "Ace high"
+      ],
+      "explanation": "The bar rises with players: two pair is the floor for multi-street value in a 4-way pot, three of a kind in 5+ way pots, and top pair is worth only one street."
+    },
+    "local-limp-multiway-q6": {
+      "question": "In a 5-way or larger pot, what is the minimum strength for multi-street value betting?",
+      "options": [
+        "Three of a kind or better",
+        "Two pair or better",
+        "Top pair or better",
+        "A flush draw"
+      ],
+      "explanation": "With many players, odd two pairs and stronger hands show up constantly. Three of a kind is the floor for multi-street value in 5+ way pots, and even two pair should start controlling the pot."
+    },
+    "local-limp-multiway-q7": {
+      "question": "A 15-out draw on the flop: what is the chance it completes on the turn alone?",
+      "options": [
+        "About 32% (15/47)",
+        "About 54%",
+        "About 15%",
+        "About 60%"
+      ],
+      "explanation": "One street ≈ outs ÷ unseen cards = 15/47 ≈ 32%. Two streets is about 54%; the rule-of-four estimate of 60% is a high rough approximation."
+    },
+    "local-limp-multiway-q8": {
+      "question": "In a 4-way pot (three opponents) where each folds 40% of the time, what is the chance your c-bet takes it down?",
+      "options": [
+        "About 6.4%",
+        "About 40%",
+        "About 12%",
+        "About 2.6%"
+      ],
+      "explanation": "0.4 × 0.4 × 0.4 = 0.064, about 6.4%. Note there are only three opponents here; with four it would be 0.4⁴ ≈ 2.6%."
+    },
+    "local-straddle-q4": {
+      "question": "In a game with a 2BB button straddle, how big is the preflop pot to start?",
+      "options": [
+        "3.5BB (SB 0.5 + BB 1 + straddle 2)",
+        "1.5BB",
+        "2.5BB",
+        "5.5BB"
+      ],
+      "explanation": "0.5 + 1 + 2 = 3.5BB. That bigger starting pot is exactly why SPR drops and speculative hands lose value in straddle games."
+    },
+    "local-straddle-q5": {
+      "question": "With a 100BB buy-in and a 2BB straddle, how many straddles is your effective stack?",
+      "options": [
+        "50",
+        "100",
+        "25",
+        "2"
+      ],
+      "explanation": "100BB ÷ 2BB = 50 straddles. Treat a straddle game as a 50BB game, not a 100BB game."
+    },
+    "local-straddle-q6": {
+      "question": "Why can you 3-bet a button straddler with a wider range?",
+      "options": [
+        "He already has 2BB invested and defends wide, so your 3-bet has more fold equity",
+        "The button has more chips",
+        "Straddlers are not allowed to fold",
+        "The button pays less rake"
+      ],
+      "explanation": "The straddler already invested 2BB, so he defends a wide range. A 3-bet both earns fold equity and isolates his weak hands preflop."
+    },
+    "local-straddle-q7": {
+      "question": "If you are the button straddler, what mixed strategy does this lesson recommend?",
+      "options": [
+        "Mostly check to see free flops, occasionally check-raise KK/AA",
+        "Raise every time to build a pot",
+        "Fold every time",
+        "Only raise small pairs"
+      ],
+      "explanation": "As the straddler you already have 2BB in, so checking usually gets you a free look. Saving KK/AA for a check-raise punishes opponents who try to steal."
+    },
+    "local-straddle-q8": {
+      "question": "Which hands gain value in a straddle game?",
+      "options": [
+        "QQ+ and AK/AQ, since low SPR lets top pair play for stacks",
+        "Small pairs 22-77",
+        "Suited connectors 54s-76s",
+        "Weak aces"
+      ],
+      "explanation": "When SPR drops, hands that can stack off with top pair gain value; small pairs and suited connectors live on implied odds and actually lose value in low-SPR spots."
+    },
+    "local-ante-q4": {
+      "question": "In a 6-handed game with a 0.2BB ante, how big is the preflop pot to start?",
+      "options": [
+        "2.7BB (0.5 + 1 + 1.2)",
+        "1.5BB",
+        "3.5BB",
+        "2.0BB"
+      ],
+      "explanation": "SB 0.5 + BB 1 = 1.5BB, plus 6 × 0.2 = 1.2BB of antes, for 2.7BB total."
+    },
+    "local-ante-q5": {
+      "question": "In a 6-handed game with a 0.5BB ante each, how big is the preflop pot to start?",
+      "options": [
+        "4.5BB",
+        "2.5BB",
+        "3.5BB",
+        "6.5BB"
+      ],
+      "explanation": "1.5BB of blinds + 6 × 0.5 = 3BB of antes, so 4.5BB. The bigger the ante, the fatter the pot and the better your calling odds, so play wider."
+    },
+    "local-ante-q6": {
+      "question": "Which of these is NOT one of the four ranges you should widen with antes?",
+      "options": [
+        "Lowering your open size to save chips",
+        "Your open range",
+        "Your steal range",
+        "Your big-blind defend range"
+      ],
+      "explanation": "Antes change pot odds and steal value. The four ranges to widen are opens, steals, 3-bets and big-blind defends; open sizing is not one of them."
+    },
+    "local-ante-q7": {
+      "question": "How should your 3-bet range change with antes?",
+      "options": [
+        "Widen it slightly while keeping it value heavy",
+        "Widen it to any two cards",
+        "Leave it unchanged",
+        "Drop 3-betting altogether"
+      ],
+      "explanation": "Antes fatten the pot so 3-bets win more, which allows a slightly wider range; but opponents widen too, so value hands must stay the core."
+    },
+    "local-ante-q8": {
+      "question": "In a big-ante game (0.5BB+), how should the button adjust its opening range?",
+      "options": [
+        "Widen noticeably beyond the widest standard tier",
+        "Tighten to QQ+",
+        "Keep the no-ante width",
+        "Stop stealing entirely"
+      ],
+      "explanation": "The bigger the ante, the more a successful steal wins, so the button should open wider than the widest standard tier thanks to the excellent pot odds."
+    },
+    "local-deep-implied-q5": {
+      "question": "NL200, 500BB deep: UTG opens 8BB and you call with 77 in the CO. Using a 12% set-mining rate, what is the EV?",
+      "options": [
+        "About +53BB",
+        "About +8BB",
+        "About −7BB",
+        "About +500BB"
+      ],
+      "explanation": "EV = 0.12 × 500 − 0.88 × 8 = 60 − 7.04 ≈ +53BB, counting the 500BB you can win when you flop a set and not counting your own call twice."
+    },
+    "local-deep-implied-q6": {
+      "question": "With the same 12% set rate and an 8BB call, how much must you win when you hit just to break even?",
+      "options": [
+        "About 59BB",
+        "About 8BB",
+        "About 12BB",
+        "About 100BB"
+      ],
+      "explanation": "Break-even win = (0.88 ÷ 0.12) × 8 ≈ 58.7BB. At 500BB deep the opponent has far more behind, which is what creates the implied odds."
+    },
+    "local-deep-implied-q7": {
+      "question": "Which is the most typical reverse-implied-odds spot at deep stacks?",
+      "options": [
+        "Hitting a flush with 92s and losing to a bigger flush",
+        "Stacking off after flopping a set with 55",
+        "Hitting the nut flush with A5s",
+        "Hitting a straight with 87s"
+      ],
+      "explanation": "A weak flush can still lose to a bigger one; at deep stacks this hit-and-lose scenario is magnified several times over, the textbook reverse-implied-odds case."
+    },
+    "local-deep-implied-q8": {
+      "question": "What bankroll does this lesson recommend for 500BB deep games?",
+      "options": [
+        "At least 50 buy-ins",
+        "5 buy-ins",
+        "10 buy-ins",
+        "No extra reserve needed"
+      ],
+      "explanation": "Variance at 500BB is far larger than at 100BB, so this lesson recommends at least 50 buy-ins to survive the swings."
+    },
+    "local-deep-sc-q5": {
+      "question": "A 15-out combo draw on the flop: what is the chance it completes on the turn alone?",
+      "options": [
+        "About 32% (15/47)",
+        "About 54%",
+        "About 15%",
+        "About 60%"
+      ],
+      "explanation": "One street ≈ 15 ÷ 47 ≈ 32%; two streets is 54%. The rule-of-four estimate 15 × 4 = 60% is a high rough approximation."
+    },
+    "local-deep-sc-q6": {
+      "question": "A flush draw (9 outs) and an open-ended straight draw (8 outs) overlap on two cards. How many outs is the combo draw?",
+      "options": [
+        "15 outs (9 + 8 − 2)",
+        "17 outs",
+        "9 outs",
+        "8 outs"
+      ],
+      "explanation": "The two overlapping cards complete both draws, so they must be counted once: 9 + 8 − 2 = 15 outs, about 54% over two streets."
+    },
+    "local-deep-sc-q7": {
+      "question": "At deep stacks, how wide can suited connectors go in the CO/BTN?",
+      "options": [
+        "32s-QJs (about 12 combos) plus one-gappers",
+        "Only 54s-T9s",
+        "Only AKs/AQs",
+        "Any two suited cards"
+      ],
+      "explanation": "The later the position, the wider: UTG keeps to 54s-T9s, MP up to 43s-JTs, CO up to 32s-QJs, and BTN can add one-gappers. Position is what makes suited connectors live."
+    },
+    "local-deep-sc-q8": {
+      "question": "When a deep-stack suited connector flops a draw, what does this lesson recommend?",
+      "options": [
+        "Call rather than raise, keeping disguise and using implied odds",
+        "Shove immediately",
+        "Fold right away",
+        "Make a big check-raise"
+      ],
+      "explanation": "Draws have great implied odds at depth; raising folds out the weak hands you dominate and kills later-street value. Calling keeps your hand disguised and wins a big pot when you get there."
+    },
+    "local-exploit-cs-q5": {
+      "question": "A calling station folds to c-bets only 20% of the time. A 1/3-pot c-bet needs about 25% folds (Alpha) to break even, so bluffing is:",
+      "options": [
+        "Negative EV, because 20% is below the 25% break-even line",
+        "Positive EV, because 20% is already high",
+        "Exactly neutral",
+        "Impossible to tell"
+      ],
+      "explanation": "Alpha = b ÷ (P + b) = 0.33 ÷ 1.33 ≈ 25%. He only folds 20%, below the break-even line, so a 1/3-pot c-bet bluff is negative EV."
+    },
+    "local-exploit-cs-q6": {
+      "question": "What does a preflop raise from a calling station usually mean?",
+      "options": [
+        "A very narrow strong range such as AA/KK/QQ/AK",
+        "Any two suited cards",
+        "A medium pair",
+        "A draw"
+      ],
+      "explanation": "Calling stations almost never raise on their own, so a preflop raise is a razor-thin range (AA/KK/QQ/AK). Narrow your continuing range immediately."
+    },
+    "local-exploit-cs-q7": {
+      "question": "Against a calling station, how many streets of value is a weak-kicker top pair worth?",
+      "options": [
+        "Three streets, because he keeps calling with worse",
+        "Only the flop",
+        "None",
+        "Only the nuts can bet"
+      ],
+      "explanation": "A calling station calls far wider than a normal opponent, so a weak-kicker top pair can be bet for value on all three streets; against a regular it is worth only one or two."
+    },
+    "local-exploit-cs-q8": {
+      "question": "What table-selection and position advice does this lesson give for calling stations?",
+      "options": [
+        "Prefer tables with calling stations and sit on their left",
+        "Avoid tables with calling stations",
+        "Sit on their right",
+        "Sit directly across from them"
+      ],
+      "explanation": "Calling stations are the most reliable profit source at low stakes. Sitting on their left means you routinely have position and can value bet wider."
+    },
+    "local-exploit-man-q5": {
+      "question": "100BB effective, you already have 31BB in, and a maniac 5-bet shoves. Assuming 75% equity, what is the EV of calling?",
+      "options": [
+        "About +68BB",
+        "About +100BB",
+        "About −25BB",
+        "About +31BB"
+      ],
+      "explanation": "You must call 69BB more and the pot at the decision point is 113.5BB; EV = 0.75 × 113.5 − 0.25 × 69 ≈ 85.1 − 17.3 ≈ +68BB, not counting your own call as profit."
+    },
+    "local-exploit-man-q6": {
+      "question": "Against a maniac, what does this lesson say about medium hands such as JJ/TT/AQ?",
+      "options": [
+        "Call and let him keep bluffing postflop",
+        "Fold them straight away",
+        "4-bet and then fold",
+        "Only play them in position"
+      ],
+      "explanation": "A maniac's betting range is far wider than these medium hands, so calling lets him keep firing with air postflop and donate chips to you."
+    },
+    "local-exploit-man-q7": {
+      "question": "What does this lesson recommend for draws against a maniac?",
+      "options": [
+        "You can call, since his big bets give you a good price",
+        "You must fold",
+        "You can only shove",
+        "You can only check-raise"
+      ],
+      "explanation": "A maniac bets big, which actually gives draws a better price; once you hit, his wide range keeps paying. Calling with draws is fine."
+    },
+    "local-exploit-man-q8": {
+      "question": "What is the most important non-technical preparation against a maniac?",
+      "options": [
+        "Emotional control: accept bad beats and do not tilt",
+        "Bring more buy-ins so you can call",
+        "Record every one of his hands",
+        "Ask for a table change immediately"
+      ],
+      "explanation": "A maniac will hit miracles with junk, but long term his chips flow to you. Tilting is the biggest leak when you play him."
+    },
+    "local-exploit-nit-q5": {
+      "question": "A nit is in the BB; you steal with 78s in the CO, then c-bet 2BB into 5.5BB and he folds 70% of the time. What is the EV?",
+      "options": [
+        "About +3.25BB",
+        "About +1.5BB",
+        "About −0.6BB",
+        "About +5.5BB"
+      ],
+      "explanation": "EV = 0.7 × 5.5 − 0.3 × 2 = 3.85 − 0.6 = +3.25BB, where the 5.5BB pot is the win and your own 2BB bet is not."
+    },
+    "local-exploit-nit-q6": {
+      "question": "What is a nit's preflop 3-bet range, roughly?",
+      "options": [
+        "AA/KK (occasionally QQ)",
+        "Any two cards",
+        "All pocket pairs",
+        "All suited aces"
+      ],
+      "explanation": "A nit 3-bets very rarely, essentially only AA/KK and occasionally QQ. Fold your medium hands as soon as he 3-bets."
+    },
+    "local-exploit-nit-q7": {
+      "question": "What is the risk of over-stealing against a nit?",
+      "options": [
+        "He occasionally 3-bets back, and then you must fold immediately",
+        "He suddenly becomes a maniac",
+        "Rake goes up",
+        "There is no risk"
+      ],
+      "explanation": "Nits rarely fight back, but when they do 3-bet their range is very strong. Steal as much as you like, but keep the discipline to fold."
+    },
+    "local-exploit-nit-q8": {
+      "question": "What is the best position and game plan against a nit in this lesson?",
+      "options": [
+        "Sit on his left and steal plus c-bet bluff frequently",
+        "Sit on his right and only play the nuts",
+        "Sit across from him and slow play",
+        "Avoid his table"
+      ],
+      "explanation": "Position plus a fold-happy opponent means steals and c-bet bluffs both profit. Nits are low-risk, high-reward opponents worth hunting."
+    },
+    "local-exploit-lag-q5": {
+      "question": "Facing a LAG's 3-bet, what trap does this lesson recommend with AA/KK?",
+      "options": [
+        "Call to trap and let him keep firing postflop",
+        "5-bet shove immediately",
+        "Fold and wait for a better spot",
+        "4-bet and then fold"
+      ],
+      "explanation": "A LAG keeps c-betting and double barreling. Calling the 3-bet with AA/KK and check-calling collects the whole wide bluffing range."
+    },
+    "local-exploit-lag-q6": {
+      "question": "You completely miss the flop against a LAG. What does this lesson recommend?",
+      "options": [
+        "Call one street to probe, then fold if he double barrels the turn",
+        "Fold to the flop bet immediately",
+        "Call all the way to the river",
+        "Shove the river as a bluff"
+      ],
+      "explanation": "A LAG c-bets often, so folding the flop outright is too exploitable. Call one street, then fold when he double barrels the turn."
+    },
+    "local-exploit-lag-q7": {
+      "question": "In which situation does a LAG play visibly worse?",
+      "options": [
+        "Out of position",
+        "Deep stacked",
+        "In position",
+        "Heads-up"
+      ],
+      "explanation": "A LAG profits from positional pressure. Put him out of position, or take the seat on his left so you have position, and his wide range becomes a liability."
+    },
+    "local-exploit-lag-q8": {
+      "question": "What equity does this lesson give QQ against a LAG's wide 4-bet range?",
+      "options": [
+        "About 70%",
+        "About 30%",
+        "About 50%",
+        "About 95%"
+      ],
+      "explanation": "A LAG's 4-bet range holds AQ+/JJ+/bluffs, against which QQ has about 70% equity, so you can either call to trap or 5-bet shove when deep."
+    },
+    "local-gto-vs-exploit-q5": {
+      "question": "Which statement about the EV structure of GTO versus exploitation is correct?",
+      "options": [
+        "GTO has a high floor and low ceiling; exploitation has a low floor and high ceiling",
+        "GTO has a high ceiling and low floor",
+        "They have identical floors and ceilings",
+        "Exploitation always beats GTO"
+      ],
+      "explanation": "GTO cannot be exploited, so the floor is high and the ceiling low; exploitation targets leaks, so the ceiling is high but the floor drops when you get countered. With little data, lean GTO."
+    },
+    "local-gto-vs-exploit-q6": {
+      "question": "What minimum sample does this lesson require before switching to exploitation?",
+      "options": [
+        "More than 100 hands",
+        "5 hands",
+        "20 hands",
+        "No sample needed"
+      ],
+      "explanation": "VPIP/PFR has some signal at about 20 hands, but fold-to-c-bet and 3-bet stats need 100+ hands to be stable, otherwise you get counter-exploited on noise."
+    },
+    "local-gto-vs-exploit-q7": {
+      "question": "In which spot should you stick to GTO first?",
+      "options": [
+        "Multiway pots",
+        "A known calling station",
+        "A live club",
+        "An opponent who folds to 75% of c-bets"
+      ],
+      "explanation": "Exploiting one player in a multiway pot is complex and multiway counterplay is risky, so GTO is safer; the other three are clearly exploitable spots."
+    },
+    "local-gto-vs-exploit-q8": {
+      "question": "With a 30 percentage point observed deviation and a 40% chance the opponent adjusts, what is the safe deviation?",
+      "options": [
+        "About 18 percentage points",
+        "About 30 percentage points",
+        "About 12 percentage points",
+        "About 40 percentage points"
+      ],
+      "explanation": "Safe deviation = observed deviation × (1 − adjustment probability) = 30% × (1 − 0.4) = 18 percentage points; the likelier he adjusts, the smaller your deviation."
+    },
+    "local-when-to-deviate-q5": {
+      "question": "An opponent folds to c-bets 68% of the time and you c-bet 2BB into 5.5BB. Following this lesson's example, what is the EV?",
+      "options": [
+        "About +3.10BB",
+        "About +5.5BB",
+        "About −0.64BB",
+        "About +1.5BB"
+      ],
+      "explanation": "EV = 0.68 × 5.5 − 0.32 × 2 = 3.74 − 0.64 = +3.10BB, where the win is the 5.5BB pot and not your own 2BB bet."
+    },
+    "local-when-to-deviate-q6": {
+      "question": "An opponent folds to 3-bets 75%+ of the time (baseline about 55%). Which way do you deviate?",
+      "options": [
+        "Add more 3-bet bluffs",
+        "3-bet less often",
+        "Only 3-bet for value",
+        "Stop 3-betting entirely"
+      ],
+      "explanation": "Over-folding means the fold equity of a 3-bet is underpriced, so add blocked hands such as A2s-A5s and K9s as 3-bet bluffs."
+    },
+    "local-when-to-deviate-q7": {
+      "question": "What sample size does this lesson require before deviating from GTO?",
+      "options": [
+        "At least 50 hands, ideally 100+",
+        "10 hands is enough",
+        "One hand tells you",
+        "No sample needed"
+      ],
+      "explanation": "Stats under 50 hands are unreliable. Fold-to-c-bet and 3-bet style stats need 100+ hands to stabilize, so do not deviate below that threshold."
+    },
+    "local-when-to-deviate-q8": {
+      "question": "After deviating, how often should you recheck the opponent's stats?",
+      "options": [
+        "Every 50-100 hands",
+        "Every single hand",
+        "Never after the session ends",
+        "Never"
+      ],
+      "explanation": "Opponents adjust and leaks disappear. Recheck every 50-100 hands to confirm the leak is still there; if it is fixed, return to GTO or re-aim your deviation."
+    },
+    "local-mental-tilt-q5": {
+      "question": "What is the best response to revenge tilt (wanting to punish one opponent)?",
+      "options": [
+        "Change tables so you stop tangling with him",
+        "Bet bigger to teach him a lesson",
+        "Taunt him in chat",
+        "Move up in stakes immediately"
+      ],
+      "explanation": "Revenge tilt is anchored to one specific opponent, and staying at his table keeps re-triggering it. Changing tables cuts it off directly."
+    },
+    "local-mental-tilt-q6": {
+      "question": "What are the emergency steps after a string of bad beats?",
+      "options": [
+        "Leave the table for 5-10 minutes, do ten 4-7-8 breaths, then judge whether you can still decide rationally",
+        "Keep playing to win it back",
+        "Shove once to change your luck",
+        "Move up in stakes"
+      ],
+      "explanation": "Inhale for 4 seconds, hold for 7, exhale for 8, ten times, which quickly lowers physiological arousal. Leaving, breathing and self-assessing are the standard three steps."
+    },
+    "local-mental-tilt-q7": {
+      "question": "Which of these is a physical tilt signal?",
+      "options": [
+        "Tunnel vision (narrowed field of view)",
+        "Opening K5o",
+        "Revenge bluffing",
+        "Thinking \"I have to win it back\""
+      ],
+      "explanation": "Tunnel vision is a physical signal; widening your opens and revenge bluffing are behavioral signals; \"I have to win it back\" is a psychological signal."
+    },
+    "local-mental-tilt-q8": {
+      "question": "What is the recommended fix for fatigue tilt?",
+      "options": [
+        "Take scheduled breaks and keep sessions under 2 hours",
+        "Drink coffee and keep playing",
+        "Move to a faster table",
+        "Increase your bet sizes"
+      ],
+      "explanation": "Fatigue tilt comes from declining decision quality, so only rest fixes it. Keep sessions under two hours and take scheduled breaks."
+    },
+    "local-mental-stop-loss-q5": {
+      "question": "At NL50 (100BB buy-in = $50) you use a 5 buy-in daily stop-loss. What dollar amount is that?",
+      "options": [
+        "$250",
+        "$150",
+        "$500",
+        "$50"
+      ],
+      "explanation": "5 × $50 = $250, compared with $150 for a 3 buy-in session stop and $500 for a 10 buy-in weekly stop."
+    },
+    "local-mental-stop-loss-q6": {
+      "question": "You are below your money stop but clearly tilting. What should you do?",
+      "options": [
+        "Stop immediately: the emotional stop comes before the money stop",
+        "Keep playing until you reach the money stop",
+        "Change tables and keep playing",
+        "Keep playing with smaller bets"
+      ],
+      "explanation": "The emotional stop takes priority: every hand played while tilting is negative EV, so waiting for the money stop only loses more."
+    },
+    "local-mental-stop-loss-q7": {
+      "question": "What is the correct rebuttal to \"I ran bad today, tomorrow will be better\"?",
+      "options": [
+        "Luck owes you nothing and may stay bad, so decide by long-term EV",
+        "Tomorrow you will definitely win it back",
+        "Running bad means you must move down",
+        "Running bad means your skill is lacking"
+      ],
+      "explanation": "Hands are independent and bad luck creates no compensation. Decide by long-term EV and stop by the rules, not by a forecast about luck."
+    },
+    "local-mental-stop-loss-q8": {
+      "question": "What makes a stop-loss rule actually get followed?",
+      "options": [
+        "External tools such as timers and money alerts plus a zero-exception policy",
+        "Your willpower on the day",
+        "Deciding the line on the spot each time",
+        "Only applying it when you are winning"
+      ],
+      "explanation": "A rule is only worth what its enforcement is worth. Replace in-the-moment judgment with external tools and hold the zero-exception line, otherwise the rule is decorative."
+    },
+    "local-mental-session-q5": {
+      "question": "Following this lesson's sample schedule with 3 sessions of 500 hands, how many hands is that per day?",
+      "options": [
+        "1500 hands",
+        "500 hands",
+        "1000 hands",
+        "3000 hands"
+      ],
+      "explanation": "3 × 500 = 1500 hands, about six hours. Beyond that you are usually paying in decision quality."
+    },
+    "local-mental-session-q6": {
+      "question": "On a 1-5 self-rating before a session, below what score should you skip playing?",
+      "options": [
+        "Below 3",
+        "Below 1",
+        "Below 5",
+        "No self-rating is needed"
+      ],
+      "explanation": "This lesson rates mood and energy from 1 to 5 and says do not play below 3: bad state lowers decision quality and turns long-term EV negative."
+    },
+    "local-mental-session-q7": {
+      "question": "Which of these marks a bad table?",
+      "options": [
+        "Average pot under 40BB with no obvious weak players",
+        "45% players per flop",
+        "90BB average pot",
+        "Two calling stations seated"
+      ],
+      "explanation": "A bad table has small average pots, all regulars, no weak players and no positional edge for you. Better not to play than to play a bad table."
+    },
+    "local-mental-session-q8": {
+      "question": "What bankroll floor does this lesson set?",
+      "options": [
+        "Keep 30-50 buy-ins and move down immediately below 20",
+        "Keep 5 buy-ins",
+        "Move up when you win",
+        "No bankroll management needed"
+      ],
+      "explanation": "30-50 buy-ins is what absorbs normal variance; under 20 means the stakes are too high, so move down at once and never play with living expenses."
     }
   },
   "lessonObjectives": {

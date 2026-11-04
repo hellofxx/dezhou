@@ -59,25 +59,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
             content: '反直觉点：Kelly 准则下最优下注比例远低于直觉。即使你有 60% 的胜率优势，Kelly 准则也只建议投入 20% 的资金。大多数玩家在实际中投入的比例远高于 Kelly 推荐的合理值，这是导致破产的主要原因之一。',
           },
         ],
-        quiz: [
-          {
-            id: 'l5-br-q1',
-            question: '打$1/$2现金局（买入$200），最低需要多少资金？',
-            options: ['$400', '$2,000', '$4,000-$6,000', '$100'],
-            correctIndex: 2,
-            explanation: '最低需要20个买入 = 20 × $200 = $4,000。推荐30个 = $6,000。',
-          },
-          {
-            id: 'l5-br-q2',
-            question: '什么时候应该降级？',
-            options: ['连输3手牌', '资金降至20个买入以下', '不想打了', '对手太强'],
-            correctIndex: 1,
-            explanation: '当你的资金降至当前级别20个买入以下时，应该果断降级以保护资金安全。',
-          },
-        
-          { id: 'l5-br-q3', question: '推荐的现金局资金管理是多少个买入？', options: ['10个', '20个', '30-50个', '100个'], correctIndex: 2, explanation: '推荐30-50个买入的资金管理，这能让你承受正常的波动。' },
-          { id: 'l5-br-q4', question: '升级的条件是？', options: ['想升级就升级', '在当前级别积累到下一级30个买入', '赢了10手牌', '对手太弱'], correctIndex: 1, explanation: '升级条件是在当前级别积累到下一级30个买入，确保有足够的安全边际。' },
-          { id: 'l5-br-q5', question: '为什么不能把生活费和扑克资金混在一起？', options: ['方便计算', '专款专用是资金管理第一原则', '没有原因', '法律规定'], correctIndex: 1, explanation: '专款专用是资金管理的第一原则，混合使用会导致在有压力时做出非理性决策。' },],
+        quiz: [],
         examples: [
           {
             id: 'l5-bankroll-ex1',
@@ -258,25 +240,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
             content: '反直觉点：正确率下降时最需要停止，而非继续。很多玩家在情绪波动时选择"再打一手翻本"，但这是最危险的错误——Tilt 状态下的决策质量显著下降，继续游戏只会扩大损失。',
           },
         ],
-        quiz: [
-          {
-            id: 'l5-tilt-q1',
-            question: '被bad beat后最好的做法是？',
-            options: ['立即加注报复', '继续打更多手牌赢回来', '停下来检查自己的情绪', '骂对手'],
-            correctIndex: 2,
-            explanation: '最好的做法是暂停，检查自己的情绪状态。如果感到愤怒或沮丧，应该停止当前的session。',
-          },
-          {
-            id: 'l5-tilt-q2',
-            question: '什么是“止损线”？',
-            options: ['停止打牌的时间', '设定的最大亏损额度', '下注的上限', '休息时间'],
-            correctIndex: 1,
-            explanation: '止损线是你提前设定的每次session的最大亏损额度（如2个买入），达到后立即停止，防止tilt造成更大损失。',
-          },
-        
-          { id: 'l5-tilt-q3', question: 'Tilt的类型不包括？', options: ['愤怒型', '恐惧型', '开心型', '报复型'], correctIndex: 2, explanation: 'Tilt类型包括愤怒型、恐惧型、报复型和绝望型，不包括"开心型"。' },
-          { id: 'l5-tilt-q4', question: '发现自己在做"不像自己"的行动时应该？', options: ['继续打', '立即停止', '加注更多', '换桌子'], correctIndex: 1, explanation: '发现自己在做不像自己的行动时，这是tilt的停止信号，应该立即停止。' },
-          { id: 'l5-tilt-q5', question: '每打多久应该休息5-10分钟？', options: ['30分钟', '1小时', '2小时', '3小时'], correctIndex: 1, explanation: '建议每打1小时休息5-10分钟，保持清醒的头脑和稳定的情绪。' },],
+        quiz: [],
         examples: [
           {
             id: 'l5-tilt-ex1',
@@ -440,25 +404,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
               '职业牌手的思维方式："这一手牌的结果不重要，重要的是我的决策是否是+EV的。如果我持续做出+EV决策，长期来看我一定会盈利。" 这种心态是区分职业和业余的根本。',
           },
         ],
-        quiz: [
-          {
-            id: 'l5-game-q1',
-            question: '好桌子的特征之一是？',
-            options: ['全是职业牌手', '底池很小', '有很多休闲玩家', '没人加注'],
-            correctIndex: 2,
-            explanation: '理想的桌子有很多休闲玩家（高VPIP），这让你的技术优势最大化。',
-          },
-          {
-            id: 'l5-game-q2',
-            question: '至少需要多少手牌的样本量才能准确评估你的水平？',
-            options: ['100手', '1,000手', '10,000手以上', '10手'],
-            correctIndex: 2,
-            explanation: '至少需要10,000+手牌，短期的结果受方差影响太大，无法准确评估技术水平。',
-          },
-        
-          { id: 'l5-game-q3', question: '你是桌上第几好的玩家最理想？', options: ['第1好', '第3好', '第6好', '无所谓'], correctIndex: 0, explanation: '理想情况是你是桌上最好的玩家，技术优势最大化。' },
-          { id: 'l5-game-q4', question: '短期（1周）的输赢能说明什么？', options: ['你的真实水平', '策略有问题', '受方差影响太大', '应该换策略'], correctIndex: 2, explanation: '短期结果受方差影响太大，需要10,000+手牌才能评估。' },
-          { id: 'l5-game-q5', question: '关注什么比关注结果更重要？', options: ['单手输赢', '决策质量', '对手的表情', '运气'], correctIndex: 1, explanation: '关注决策质量而非结果。错误决策可能偶尔赢钱，但长期必亏。' },],
+        quiz: [],
         examples: [
           {
             id: 'l5-game-ex1',
@@ -625,13 +571,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
             content: '反直觉点：赢钱的 session 可能是最差的学习机会。当你连续赢钱时，容易产生"我打得很好"的错觉，即使实际上是在靠运气赢钱。真正的学习发生在输钱的 session 中——那是你发现并修正错误的机会。',
           },
         ],
-        quiz: [
-          { id: 'l5-sr-q1', question: 'Session Review 的第一步是？', options: ['计算赢输', '标记关键手牌', '打开GTO求解器', '发朋友圈'], correctIndex: 1, explanation: '复盘首先要标记出需要分析的关键牌局，然后再深入分析。' },
-          { id: 'l5-sr-q2', question: '复盘时应该关注什么？', options: ['单手牌的输赢结果', '决策质量而非结果', '只看大底池', '对手的表情'], correctIndex: 1, explanation: '质量复盘关注的是决策过程是否正确，而非单次结果。' },
-        
-          { id: 'l5-sr-q3', question: '按 Session A/B/C 档框架，出现 C 档（疲劳状态）信号时应如何处理？', options: ['继续打完预定的局数', '立即结束本次 Session', '加大注码把输的赢回来', '开更多桌分散注意力'], correctIndex: 1, explanation: '本课的 Session A/B/C 档框架规定：C 档表现为注意力下降、直觉代替分析，出现信号即强制结束。继续打或加大注码都会在劣化的决策上放大亏损；开更多桌只会进一步稀释注意力，而预定局数属于事前计划，不能凌驾于当下的状态信号之上。' },
-          { id: 'l5-sr-q4', question: '每次Session应标记几手关键牌？', options: ['所有手牌', '3-5手', '1手', '不标记'], correctIndex: 1, explanation: '每次Session结束后标记3-5手"不确定"的牌。' },
-          { id: 'l5-sr-q5', question: '复盘的第5步是？', options: ['计算赢输', '标记手牌', '制定改进计划', '对比GTO'], correctIndex: 2, explanation: '复盘第5步是制定改进计划。' },],
+        quiz: [],
         practice: {
           id: 'l5-sr-practice',
           questions: [
@@ -663,13 +603,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           { type: 'key-point', content: '修复漏洞的优先级：先修频率最高的场景（如翻前范围），再修低频场景。一个翻前 Leak 每手都影响你，一个河牌 Leak 可能很少发生。' },
           { type: 'pro-tip', content: '每月做一次“数据体检”：导出你的各项统计，对比上月和目标值。进步就是漏洞不断缩小的过程。' },
         ],
-        quiz: [
-          { id: 'l5-dd-q1', question: 'VPIP/PFR 差距过大说明什么？', options: ['打得太紧', '跟注太多、加注太少', '打得很好', 'bluff太多'], correctIndex: 1, explanation: 'VPIP远大于PFR说明你被动跟注太多，应该要么加注要么弃牌。' },
-          { id: 'l5-dd-q2', question: '修复漏洞应优先关注哪类？', options: ['河牌场景', '翻前场景（频率最高）', '锦标赛场景', '全部同时修'], correctIndex: 1, explanation: '翻前决策每手牌都会发生，修复翻前漏洞的收益最大。' },
-        
-          { id: 'l5-dd-q3', question: 'C-Bet % < 50% 说明什么？', options: ['打得太松', '翻后不够激进', '打得很好', 'bluff太多'], correctIndex: 1, explanation: 'C-Bet低于50%说明翻后不够激进。' },
-          { id: 'l5-dd-q4', question: 'Showdown % > 35% 说明什么？', options: ['打得太紧', '跟注太多到河牌', 'bluff太多', '打得很好'], correctIndex: 1, explanation: 'Showdown%过高说明跟注太多到河牌。' },
-          { id: 'l5-dd-q5', question: '每月应该做什么来追踪进步？', options: ['换级别', '做数据体检', '换平台', '不需要追踪'], correctIndex: 1, explanation: '每月做数据体检，导出各项统计对比目标值。' },],
+        quiz: [],
         practice: {
           id: 'l5-dd-practice',
           questions: [
@@ -836,43 +770,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
             content: '警告：不要在学习时同时开多个工具。专注理解一个场景，比快速浏览100个场景更有效。',
           },
         ],
-        quiz: [
-          {
-            id: 'l5-tools-q1',
-            question: 'PioSOLVER / GTO+ 的主要用途是？',
-            options: ['追踪历史数据', '求解特定场景的GTO策略', '计算胜率', '管理资金'],
-            correctIndex: 1,
-            explanation: 'PioSOLVER/GTO+ 是求解器，用于分析特定场景的GTO策略。',
-          },
-          {
-            id: 'l5-tools-q2',
-            question: 'Equilab 的主要功能是？',
-            options: ['分析翻后策略', '追踪历史数据', '计算手牌对阵范围的胜率', '管理资金'],
-            correctIndex: 2,
-            explanation: 'Equilab 是免费的胜率计算器，用于分析手牌对阵范围的胜率。',
-          },
-          {
-            id: 'l5-tools-q3',
-            question: '使用分析工具的正确姿势是？',
-            options: ['完全依赖工具做决策', '先理解原理，再用工具验证', '只看结果不理解逻辑', '同时开多个工具快速浏览'],
-            correctIndex: 1,
-            explanation: '工具是辅助学习的，应该先理解原理，再用工具验证。',
-          },
-          {
-            id: 'l5-tools-q4',
-            question: 'Hand2Note / Holdem Resource Manager 的主要用途是？',
-            options: ['求解GTO策略', '计算胜率', '追踪和分析历史数据', '训练翻后技术'],
-            correctIndex: 2,
-            explanation: 'Hand2Note/Holdem Resource Manager 是数据追踪工具，用于分析历史数据。',
-          },
-          {
-            id: 'l5-tools-q5',
-            question: '关于工具使用的建议，以下哪项是错误的？',
-            options: ['从简单场景开始学习', '专注理解一个场景比快速浏览100个更有效', '同时开多个工具提高效率', '先理解原理再验证'],
-            correctIndex: 2,
-            explanation: '同时开多个工具会降低学习效率。应该专注理解一个场景，深入分析。',
-          },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l5-tools-ex1',
@@ -1068,43 +966,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
             content: '最好的牌手能够在线上和线下都保持盈利。建议两种环境都尝试，培养全面的技能。',
           },
         ],
-        quiz: [
-          {
-            id: 'l5-online-vs-live-q1',
-            question: '线上扑克每小时约多少手牌？',
-            options: ['25-35手', '60-80手', '100-120手', '150+手'],
-            correctIndex: 1,
-            explanation: '线上扑克节奏快，每小时约 60-80 手牌。',
-          },
-          {
-            id: 'l5-online-vs-live-q2',
-            question: 'HUD 的主要用途是？',
-            options: ['计算胜率', '快速识别对手类型和数据', '分析翻后策略', '管理资金'],
-            correctIndex: 1,
-            explanation: 'HUD 可以快速显示对手的 VPIP/PFR/3-bet% 等数据，帮助识别对手类型。',
-          },
-          {
-            id: 'l5-online-vs-live-q3',
-            question: '速度扑克（Zoom/Blitz）适合打什么策略？',
-            options: ['剥削策略', 'GTO 策略', 'Tell 阅读', '形象管理'],
-            correctIndex: 1,
-            explanation: '速度扑克每手牌换桌，无法针对特定对手调整，适合打 GTO 策略。',
-          },
-          {
-            id: 'l5-online-vs-live-q4',
-            question: '线下扑克的优势是？',
-            options: ['节奏快', '可以观察 Tell 和形象', '可以多桌', '每小时手牌多'],
-            correctIndex: 1,
-            explanation: '线下扑克节奏慢，有更多时间观察对手的 Tell 和建立形象。',
-          },
-          {
-            id: 'l5-online-vs-live-q5',
-            question: '反 HUD 策略的核心是？',
-            options: ['不使用 HUD', '平衡数据，让对手无法利用', '只打紧凶', '只打松凶'],
-            correctIndex: 1,
-            explanation: '反 HUD 策略的核心是平衡你的数据，不要让数据过于极端，让对手无法利用。',
-          },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l5-online-vs-live-ex1',

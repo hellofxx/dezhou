@@ -315,6 +315,156 @@
         "Change strategy"
       ],
       "explanation": "If the whole table is REGs (regular players), your edge is small — change tables."
+    },
+    "l7-deep-q6": {
+      "question": "Effective stacks are 240BB with a 20BB flop pot. What is the SPR?",
+      "options": [
+        "About 12",
+        "About 8",
+        "About 20",
+        "About 4.8"
+      ],
+      "explanation": "SPR = effective stack ÷ pot = 240 ÷ 20 = 12. Deep-stack play starts above SPR 10, so plan multiple streets and keep the pot controlled."
+    },
+    "l7-deep-q7": {
+      "question": "At 200BB deep you call 4BB from the BB to set mine, and you flop a set about 12% of the time. How much must you win on average to break even?",
+      "options": [
+        "About 29BB",
+        "About 12BB",
+        "About 4BB",
+        "About 50BB"
+      ],
+      "explanation": "Break-even win = (miss rate ÷ hit rate) × call size = (0.88 ÷ 0.12) × 4 ≈ 29.3BB. At 200BB deep the opponent has far more behind than that, which is what makes set mining profitable."
+    },
+    "l7-deep-q8": {
+      "question": "You play 200BB deep at NL200 ($1/$2). Following the 30-40 buy-in bankroll rule, how much do you need?",
+      "options": [
+        "About $12,000",
+        "About $4,000",
+        "About $2,000",
+        "About $30,000"
+      ],
+      "explanation": "One buy-in is 200 × $2 = $400, so 30 buy-ins = $12,000 (and 40 buy-ins = $16,000). Deep-stack variance is high; below that line you should move down."
+    },
+    "l7-multi-q6": {
+      "question": "In a 4-way pot (three opponents) where each opponent folds 30% of the time, what is the chance your c-bet takes it down?",
+      "options": [
+        "About 2.7%",
+        "About 30%",
+        "About 9%",
+        "About 27%"
+      ],
+      "explanation": "0.3 × 0.3 × 0.3 = 0.027, about 2.7%. Bluff success decays multiplicatively in multiway pots, so c-bets in 4-way pots must be value driven."
+    },
+    "l7-multi-q7": {
+      "question": "In a 3-way pot with 20BB in the middle, an opponent bets 10BB (half pot). What equity do you need to call?",
+      "options": [
+        "About 25%",
+        "About 50%",
+        "About 33%",
+        "About 20%"
+      ],
+      "explanation": "Required equity = b ÷ (P + 2b) = 10 ÷ (20 + 20) = 25%. That is only the price line; in a 3-way pot your real equity is diluted, and the better price often does not keep up with the drop in equity."
+    },
+    "l7-multi-q8": {
+      "question": "You hold a weak-kicker top pair in a 4-way limped pot and are unsure whether it is strong enough. What is correct?",
+      "options": [
+        "Check and control the pot",
+        "Bet 2/3 pot for value",
+        "Shove for pressure",
+        "Check-raise as a bluff"
+      ],
+      "explanation": "The multiway golden rule: when unsure, check. Mistakes in 4-way pots cost far more than heads-up, so keep the pot small with medium strength."
+    },
+    "l7-straddle-q6": {
+      "question": "NL100 with a 2BB UTG straddle: SB and BB fold and the straddler calls your 5BB open. How big is the flop pot?",
+      "options": [
+        "11.5BB",
+        "8.5BB",
+        "9.5BB",
+        "13.5BB"
+      ],
+      "explanation": "0.5 (SB) + 1 (BB) + 5 (your open) + 5 (the straddler matching your open) = 11.5BB."
+    },
+    "l7-straddle-q7": {
+      "question": "Continuing the previous hand: effective stacks are 50BB (100BB buy-in ÷ 2BB straddle) and the flop pot is 11.5BB. What is the SPR?",
+      "options": [
+        "About 4.3",
+        "About 8.7",
+        "About 2.2",
+        "About 11.5"
+      ],
+      "explanation": "SPR = effective stack ÷ pot = 50 ÷ 11.5 ≈ 4.3. Around SPR 4 a top pair can comfortably play for stacks, so no deep-stack street control is needed."
+    },
+    "l7-straddle-q8": {
+      "question": "In a Mississippi (UTG) straddle game, when does the straddler act after the flop?",
+      "options": [
+        "First after the flop (out of position)",
+        "Last after the flop (in position)",
+        "Same as the button",
+        "The dealer decides"
+      ],
+      "explanation": "A UTG straddle only grants the straddler the last preflop action; postflop order is unchanged. He sits in UTG, acts first after the flop, and is clearly out of position, so you can pressure him."
+    },
+    "l7-rake-q6": {
+      "question": "Rake is about 10 BB/100 at the micros versus about 5 BB/100 at mid stakes. Over 1000 hands, how many BB does the rake difference alone cost?",
+      "options": [
+        "50BB",
+        "5BB",
+        "500BB",
+        "15BB"
+      ],
+      "explanation": "1000 hands equals ten blocks of 100 hands; at 5BB difference per block that is 5 × 10 = 50BB, part of why the same play wins more as you move up."
+    },
+    "l7-rake-q7": {
+      "question": "In high-rake games, why do passive calls lose more than iso-raises or 3-bets?",
+      "options": [
+        "Thin calls already have near-zero EV, so rake turns them negative",
+        "Calling triggers extra rake",
+        "Calling makes the pot smaller",
+        "Calling makes opponents fold more"
+      ],
+      "explanation": "Rake is a percentage of the pot. A thin call is already close to break-even, so one rake bite makes it negative; a raise lifts EV through fold equity and initiative, which survives rake better."
+    },
+    "l7-rake-q8": {
+      "question": "Live cash games usually cap the rake. What does that imply strategically?",
+      "options": [
+        "Rake is a smaller share of big pots, so playing big pots is more worthwhile",
+        "Big pots are rake free",
+        "Small pots become more profitable",
+        "Rake is unrelated to pot size"
+      ],
+      "explanation": "With a cap, rake is already maxed out in small pots, so its share falls in big pots and big pots become more attractive; uncapped micro online games are the opposite, where small pots get eaten alive."
+    },
+    "l7-ts-q6": {
+      "question": "Table A: 22% players per flop, 30BB average pot. Table B: 45% players per flop, 90BB average pot. Which one does this lesson tell you to pick?",
+      "options": [
+        "Table B (more players per flop, bigger pots)",
+        "Table A (tighter opponents, easier steals)",
+        "They are equivalent",
+        "Play A first, then decide"
+      ],
+      "explanation": "A good table shows more than 30% players per flop and big average pots. Table B satisfies both, meaning more weak players and bigger pots to win."
+    },
+    "l7-ts-q7": {
+      "question": "A player runs VPIP 55% and PFR 4%. What does he mean for your table?",
+      "options": [
+        "A typical weak player (calling-station profile), a reason to stay",
+        "A strong regular, so change tables",
+        "A nit, easy to steal from",
+        "A maniac, so tighten up"
+      ],
+      "explanation": "High VPIP with very low PFR means lots of calling and little raising, the classic calling station. Stay and sit on his left to profit."
+    },
+    "l7-ts-q8": {
+      "question": "All five opponents are 20-24% VPIP regulars who 3-bet frequently. What does this lesson recommend?",
+      "options": [
+        "Change tables and wait for one with weak players",
+        "Raise your steal frequency",
+        "Widen your calling range",
+        "Lower your open size"
+      ],
+      "explanation": "Against an all-regular table your edge is smallest: win rate = skill edge × opponent leaks, and with no leaks there is no win rate. Better not to play than to play a bad table."
     }
   },
   "lessonExample": {

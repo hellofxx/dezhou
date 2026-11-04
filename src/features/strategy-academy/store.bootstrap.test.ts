@@ -4,8 +4,9 @@ import { createLocalStorageStub } from '@/shared/utils/localStorageStub';
 /**
  * strategy-academy 启动引导契约（依赖倒置 P2-2 / P3）：
  * - 向 achievementRegistry 注册成就数据源（id upsert，幂等）
- * - 向 academyDataSourceRegistry 注册课程数据源（下一课 / 元数据 / 快照 / 订阅）
- * - 启动时把能力评估同步为初始 ELO（仅 gamesPlayed === 0 时由 progress store 内部判定）
+ * - 向 academyDataSourceRegistry 注册课程数据源（下一课 / 元数据 / lessonAttempts 快照 / 订阅）
+ * - 启动时把 progress 的 onboarding.initialAbility 四维（emotionalControl=50）播种初始 ELO
+ *   （仅 gamesPlayed === 0 时由 progress store 内部判定）
  */
 
 describe('strategy-academy store.bootstrap', () => {
@@ -23,13 +24,13 @@ describe('strategy-academy store.bootstrap', () => {
   });
 
   async function bootstrap() {
-    await import('./store.bootstrap');
+    const bootstrapModule = await import('./store.bootstrap');
     const academy = await import('./store');
     const meta = await import('./utils/academyMeta');
     const achievements = await import('@/shared/stores/achievementRegistry');
     const academySource = await import('@/shared/stores/academyDataSourceRegistry');
     const progress = await import('@/features/progress/store');
-    return { ...academy, ...meta, ...achievements, ...academySource, ...progress };
+    return { ...bootstrapModule, ...academy, ...meta, ...achievements, ...academySource, ...progress };
   }
 
   it('注册成就数据源（id = strategy-academy，重复导入不重复累积）', async () => {
@@ -57,7 +58,13 @@ describe('strategy-academy store.bootstrap', () => {
     const source = mod
       .getAchievementSources()
       .find((candidate) => (candidate as unknown as { id?: string }).id === 'strategy-academy')!;
-    mod.useAcademyStore.getState().attemptCertification(1, 95);
+    for (const lesson of mod.getLevelSummariesByNumber(1).flatMap((entry) => entry.lessons)) {
+      mod.useAcademyStore.getState().completeLesson(lesson.id);
+    }
+    mod.useAcademyStore.getState().submitCertificationAttempt(1, {
+      score: 95,
+      totalQuestions: 20,
+    });
     expect(source.getCertifications()[1]?.certifiedAt).toBeDefined();
     expect(source.isLevelLessonsCompleted(99)).toBe(false);
   });
@@ -89,17 +96,35 @@ describe('strategy-academy store.bootstrap', () => {
     expect(dataSource.getLessonMeta('not-a-real-lesson')).toBeUndefined();
   });
 
-  it('课程数据源：进度快照为 store 稳定字段引用（禁止合成新对象）', async () => {
+  it('课程数据源：lessonAttempts 快照按源引用缓存，课程进度为 store 稳定字段引用', async () => {
     const mod = await bootstrap();
     const dataSource = mod.getAcademyDataSource()!;
     const progress = mod.useAcademyStore.getState().progress;
     expect(dataSource.getAcademyProgressSnapshot()).toBe(progress);
-    expect(dataSource.getFirstAttemptScoresSnapshot()).toBe(
-      mod.useAcademyStore.getState().firstAttemptScores,
-    );
-    expect(dataSource.getLastAttemptScoresSnapshot()).toBe(
-      mod.useAcademyStore.getState().lastAttemptScores,
-    );
+
+    // 空 attempts → 返回稳定空快照（同引用）
+    expect(dataSource.getLessonAttemptsSnapshot()).toBe(dataSource.getLessonAttemptsSnapshot());
+
+    mod.useAcademyStore.getState().recordLessonAttempt('l1-basics', {
+      score: 80,
+      correct: 4,
+      total: 5,
+    });
+    const snapshot = dataSource.getLessonAttemptsSnapshot();
+    expect(snapshot['l1-basics']).toEqual({ firstScore: 80, lastScore: 80, attempts: 1 });
+    // 未变更时重复读取返回同一引用（useSyncExternalStore 契约）
+    expect(dataSource.getLessonAttemptsSnapshot()).toBe(snapshot);
+
+    mod.useAcademyStore.getState().recordLessonAttempt('l1-basics', {
+      score: 60,
+      correct: 3,
+      total: 5,
+    });
+    expect(dataSource.getLessonAttemptsSnapshot()['l1-basics']).toEqual({
+      firstScore: 80,
+      lastScore: 60,
+      attempts: 2,
+    });
   });
 
   it('课程数据源：subscribe 在 academy 状态变化时通知，取消后不再通知', async () => {
@@ -116,34 +141,66 @@ describe('strategy-academy store.bootstrap', () => {
     expect(listener).toHaveBeenCalledTimes(1);
   });
 
-  it('启动宏任务触发 ELO 同步且不覆盖已有对局进度', async () => {
+  it('默认 onboarding 能力（50）时启动宏任务不写 ELO', async () => {
     const mod = await bootstrap();
     const before = mod.useProgressStore.getState().eloByVariant.standard;
     vi.runAllTimers();
     const after = mod.useProgressStore.getState().eloByVariant.standard;
-    // 默认能力评估为 50（非个性化）→ progress store 内部 hasNonDefaultAbility 短路，不写入
+    // 默认 onboarding.initialAbility 全为 50 → 播种守卫短路，不写入
     expect(after).toEqual(before);
     expect(after.gamesPlayed).toBe(0);
   });
 
-  it('能力评估非默认时启动同步初始 ELO（gamesPlayed 仍为 0）', async () => {
+  it('onboarding 定位结果非默认时播种初始 ELO（emotionalControl 固定 50）', async () => {
     const mod = await bootstrap();
     const before = mod.useProgressStore.getState().eloByVariant.standard;
 
-    // 经唯一写入入口 updateAbility 抬高能力评估（默认值 50 时进度侧短路不写入）
-    mod.useAcademyStore
-      .getState()
-      .updateAbility({ isCorrect: true, timeTaken: 3, difficulty: 'beginner' });
-    const ability = mod.useAcademyStore.getState().abilityAssessment;
-    expect(mod.hasNonDefaultAbility(ability)).toBe(true);
+    const initialAbility = {
+      rangeKnowledge: 80,
+      oddsCalculation: 70,
+      gtoUnderstanding: 60,
+      positionalPlay: 75,
+    };
+    mod.useProgressStore.setState({
+      onboarding: {
+        ...mod.useProgressStore.getState().onboarding,
+        initialAbility,
+      },
+    });
 
     vi.runAllTimers();
     const after = mod.useProgressStore.getState().eloByVariant.standard;
-    const expected = mod.mapAcademyAbilityToElo(ability);
+    const expected = mod.mapAcademyAbilityToElo({
+      ...initialAbility,
+      emotionalControl: 50,
+      lastUpdated: Date.now(),
+    });
     expect(after.variant).toBe('standard');
     expect(after.gamesPlayed).toBe(0);
     expect(after.math).toBe(expected.math);
+    expect(after.mental).toBe(expected.mental);
     expect(after.overall).toBe(expected.overall);
     expect(after).not.toEqual(before);
+  });
+
+  it('gamesPlayed > 0 时不再播种，避免覆盖已累积 ELO', async () => {
+    const mod = await bootstrap();
+    mod.useProgressStore.getState().updateElo('preflop', true, 0.5);
+    const before = mod.useProgressStore.getState().eloByVariant.standard;
+
+    mod.useProgressStore.setState({
+      onboarding: {
+        ...mod.useProgressStore.getState().onboarding,
+        initialAbility: {
+          rangeKnowledge: 90,
+          oddsCalculation: 90,
+          gtoUnderstanding: 90,
+          positionalPlay: 90,
+        },
+      },
+    });
+    vi.runAllTimers();
+
+    expect(mod.useProgressStore.getState().eloByVariant.standard).toEqual(before);
   });
 });

@@ -1,18 +1,8 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import {
-  AlertTriangle,
-  ArrowRight,
-  CheckCircle2,
-  CircleDashed,
-  ClipboardCheck,
-  TrendingUp,
-  Trophy,
-  type LucideIcon,
-} from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ClipboardCheck, TrendingUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { transitionStandard } from '@/shared/utils/motion';
-import { cn } from '@/shared/utils/cn';
+import { AcademyMasteryCard } from '@/shared/components/academy';
+import type { MasterySummary } from '@/shared/types/academy';
 import type {
   TheoryChapterAttempt,
   TheoryChapterSummary,
@@ -20,7 +10,8 @@ import type {
   TheoryLevelSummary,
 } from '../types';
 import { getCoreChaptersOfLevel, isSupplementalChapter } from '../utils/theoryMeta';
-import { summarizeMastery, type MasteryState } from '../utils/theoryMastery';
+import { resolveChapterTitle } from '../utils/titleKeys';
+import { summarizeMastery } from '../utils/theoryMastery';
 
 interface TheoryMasteryCardProps {
   /** 参与统计的章节目录；增补章（supplemental）在本卡内剔除——掌握度只计核心章 */
@@ -40,34 +31,16 @@ interface TheoryMasteryCardProps {
   checkpoints?: Record<string, TheoryCheckpointAttempt>;
 }
 
-const MASTERY_ROWS: Record<MasteryState, { icon: LucideIcon; tone: string }> = {
-  mastered: {
-    icon: Trophy,
-    tone: 'bg-[var(--poker-success)]/12 text-[var(--poker-success)]',
-  },
-  passing: {
-    icon: CheckCircle2,
-    tone: 'bg-[var(--brass-bright)]/12 text-[var(--brass-bright)]',
-  },
-  needsReview: {
-    icon: AlertTriangle,
-    tone: 'bg-[var(--poker-terra)]/15 text-[var(--poker-terra-bright)]',
-  },
-  untested: {
-    icon: CircleDashed,
-    tone: 'bg-[var(--walnut-raised)] text-[var(--ivory-dim)]',
-  },
-};
-
-const MASTERY_STATE_ORDER: MasteryState[] = ['mastered', 'passing', 'needsReview', 'untested'];
-
 /**
  * 掌握度卡：从既有 quizScores / chapterAttempts 派生的四项计数 + 复习/继续 CTA + 检查点入口。
  *
+ * 展示层改用两院共享 `AcademyMasteryCard`（四档计数 + 最弱项 CTA + footer 插槽），
+ * 本组件只做理论侧适配：统计范围按 core / 增补二分单源（`isSupplementalChapter`）收窄到核心章；
+ * 增补章读完只影响 6-max 补强进度，不参与核心掌握度；成绩口径仍由 theoryMastery 的
+ * `summarizeMastery` 给出（有 chapterAttempts 时取首次成绩，重考不改掌握度）；
+ * 检查点入口与练习最佳放共享卡 `footer` 插槽，路由仍是理论侧字符串。
+ *
  * 只读 props，不调用任何解锁门禁、不写 store（PRD §5.27.2：掌握度只展示，不改变解锁）。
- * 统计范围按 core / 增补二分单源（`isSupplementalChapter`）收窄到核心章：
- * 增补章读完只影响 6-max 补强进度，不参与核心掌握度。
- * 成绩口径：有 chapterAttempts 时取首次成绩（重考不改掌握度），仅展示练习最佳作为参考。
  */
 export function TheoryMasteryCard({
   chapters,
@@ -78,8 +51,11 @@ export function TheoryMasteryCard({
   checkpoints,
 }: TheoryMasteryCardProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const coreChapters = chapters.filter((chapter) => !isSupplementalChapter(chapter));
-  const summary = summarizeMastery(coreChapters, quizScores, chapterAttempts);
+  const theorySummary = summarizeMastery(coreChapters, quizScores, chapterAttempts);
+  // 共享卡口径为 `weakestId`，理论派生函数沿用 `weakestChapterId`（同一语义，仅改名）
+  const summary: MasterySummary = { ...theorySummary, weakestId: theorySummary.weakestChapterId };
   const testedCount = summary.total - summary.untested;
 
   // 练习口径最佳：只统计本卡范围内的章节（重考刷分不改变掌握度，但值得展示）
@@ -100,113 +76,93 @@ export function TheoryMasteryCard({
   });
 
   // 有已测章节 → 复习最低分章；全未测 → 继续学习（首个未测章，全部有分时退化为首章）
-  const weakestChapter = summary.weakestChapterId
-    ? coreChapters.find((chapter) => chapter.id === summary.weakestChapterId)
+  const weakestChapter = summary.weakestId
+    ? coreChapters.find((chapter) => chapter.id === summary.weakestId)
     : undefined;
   const nextChapter =
     weakestChapter ??
     coreChapters.find((chapter) => quizScores[chapter.id] === undefined) ??
     coreChapters[0];
 
-  return (
-    <motion.section
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ ...transitionStandard, delay: 0.13 }}
-      aria-label={t('theory.mastery.title')}
-    >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
-        {t('theory.mastery.title')}
-      </h2>
-      <div className="panel space-y-2.5">
-        <p className="text-xs text-[var(--ivory-muted)] leading-relaxed">
-          {t('theory.mastery.subtitle')}
-        </p>
+  const hasFooter = hasPractice || testedCount === 0 || checkpointLevels.length > 0;
 
-        <ul className="space-y-2">
-          {MASTERY_STATE_ORDER.map((state) => {
-            const row = MASTERY_ROWS[state];
-            const Icon = row.icon;
+  const footer = !hasFooter ? undefined : (
+    <div className="space-y-2">
+      {hasPractice && (
+        <div className="flex items-center gap-3">
+          <span
+            className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 bg-[var(--poker-info)]/12 text-[var(--poker-info)]"
+            aria-hidden="true"
+          >
+            <TrendingUp className="w-3.5 h-3.5" />
+          </span>
+          <span className="flex-1 text-xs text-[var(--ivory-muted)]">
+            {t('theory.quiz.bestScoreLabel')}
+            <span className="block text-[10px] text-[var(--ivory-dim)]">
+              {t('theory.quiz.practiceOnly')}
+            </span>
+          </span>
+          <span className="font-numeric text-sm text-[var(--ivory)]">{practiceBest}</span>
+        </div>
+      )}
+
+      {testedCount === 0 && (
+        <p className="text-xs text-[var(--ivory-dim)] leading-relaxed">{t('theory.mastery.empty')}</p>
+      )}
+
+      {checkpointLevels.length > 0 && (
+        <ul className="space-y-1">
+          {checkpointLevels.map((level) => {
+            const record = checkpoints?.[level.id];
             return (
-              <li key={state} data-mastery-state={state} className="flex items-center gap-3">
-                <span
-                  className={cn(
-                    'w-7 h-7 rounded-md flex items-center justify-center shrink-0',
-                    row.tone
-                  )}
-                  aria-hidden="true"
+              <li key={level.id}>
+                <Link
+                  to={`/theory/checkpoint/${level.id}`}
+                  className="inline-flex min-h-11 w-full items-center gap-1.5 text-xs text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded-md"
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                </span>
-                <span className="flex-1 text-xs text-[var(--ivory-muted)]">
-                  {t(`theory.mastery.${state}`)}
-                </span>
-                <span className="font-numeric text-sm text-[var(--ivory)]">{summary[state]}</span>
+                  <ClipboardCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  <span className="truncate">
+                    T{level.level} · {t('theory.level.checkpointEntry')}
+                  </span>
+                  {record && (
+                    <span className="ml-auto font-numeric text-[10px] text-[var(--ivory-muted)]">
+                      {t('theory.checkpoint.bestScore', { score: record.bestScore })}
+                    </span>
+                  )}
+                </Link>
               </li>
             );
           })}
         </ul>
+      )}
+    </div>
+  );
 
-        {hasPractice && (
-          <div className="flex items-center gap-3 pt-1.5 border-t border-[var(--walnut-border)]/60">
-            <span
-              className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 bg-[var(--poker-info)]/12 text-[var(--poker-info)]"
-              aria-hidden="true"
-            >
-              <TrendingUp className="w-3.5 h-3.5" />
-            </span>
-            <span className="flex-1 text-xs text-[var(--ivory-muted)]">
-              {t('theory.quiz.bestScoreLabel')}
-              <span className="block text-[10px] text-[var(--ivory-dim)]">
-                {t('theory.quiz.practiceOnly')}
-              </span>
-            </span>
-            <span className="font-numeric text-sm text-[var(--ivory)]">{practiceBest}</span>
-          </div>
-        )}
-
-        {testedCount === 0 && (
-          <p className="text-xs text-[var(--ivory-dim)] leading-relaxed pt-1 border-t border-[var(--walnut-border)]/60">
-            {t('theory.mastery.empty')}
-          </p>
-        )}
-
-        {nextChapter && (
-          <Link
-            to={`/theory/chapter/${nextChapter.id}`}
-            className="inline-flex min-h-11 items-center gap-1.5 pt-1 text-xs font-semibold text-[var(--brass-bright)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded-md"
-          >
-            {weakestChapter ? t('theory.mastery.reviewWeakest') : t('theory.mastery.continue')}
-            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-          </Link>
-        )}
-
-        {checkpointLevels.length > 0 && (
-          <ul className="space-y-1 pt-1.5 border-t border-[var(--walnut-border)]/60">
-            {checkpointLevels.map((level) => {
-              const record = checkpoints?.[level.id];
-              return (
-                <li key={level.id}>
-                  <Link
-                    to={`/theory/checkpoint/${level.id}`}
-                    className="inline-flex min-h-11 w-full items-center gap-1.5 text-xs text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded-md"
-                  >
-                    <ClipboardCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                    <span className="truncate">
-                      T{level.level} · {t('theory.level.checkpointEntry')}
-                    </span>
-                    {record && (
-                      <span className="ml-auto font-numeric text-[10px] text-[var(--ivory-muted)]">
-                        {t('theory.checkpoint.bestScore', { score: record.bestScore })}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
-    </motion.section>
+  return (
+    <AcademyMasteryCard
+      title={t('theory.mastery.title')}
+      subtitle={t('theory.mastery.subtitle')}
+      summary={summary}
+      labels={{
+        mastered: t('theory.mastery.mastered'),
+        passing: t('theory.mastery.passing'),
+        needsReview: t('theory.mastery.needsReview'),
+        untested: t('theory.mastery.untested'),
+        total: t('theory.mastery.total'),
+      }}
+      footer={footer}
+      weakest={
+        nextChapter
+          ? {
+              label: resolveChapterTitle(t, nextChapter),
+              route: `/theory/chapter/${nextChapter.id}`,
+              ctaLabel: weakestChapter
+                ? t('theory.mastery.reviewWeakest')
+                : t('theory.mastery.continue'),
+              onNavigate: navigate,
+            }
+          : undefined
+      }
+    />
   );
 }

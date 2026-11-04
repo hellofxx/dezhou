@@ -65,7 +65,6 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
   'shared/data/opponentProfiles.ts': { maxLines: 436, reason: 'Phase 2 拆分待执行（跨模块画像数据）' },
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel7.ts': { maxLines: 430, reason: '课程内容数据' },
   'features/strategy-academy/data/lessons/variants/heads-up/headsUpLevel5.ts': { maxLines: 429, reason: '课程内容数据' },
-  'features/strategy-academy/components/CourseView.tsx': { maxLines: 425, reason: 'Phase 2 拆分待执行' },
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel6.ts': { maxLines: 419, reason: '课程内容数据' },
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel5.ts': { maxLines: 415, reason: '课程内容数据' },
   'features/theory-academy/data/levels/variants/short-deck/shortDeckLevel5.ts': { maxLines: 404, reason: '课程内容数据' },
@@ -90,11 +89,20 @@ const QUIZ_BANK_ALLOWLIST: Record<string, OversizedEntry> = {
   'features/theory-academy/data/levels/variants/standard/quizBank/t7.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
   'features/theory-academy/data/levels/variants/standard/quizBank/t8.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
   'features/theory-academy/data/levels/variants/standard/quizBank/t9.ts': { maxLines: 427, reason: '章末题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level1.ts': { maxLines: 800, reason: '策略 L1 题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level2.ts': { maxLines: 900, reason: '策略 L2 题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level3.ts': { maxLines: 1200, reason: '策略 L3 题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level4.ts': { maxLines: 1400, reason: '策略 L4A/L4B 共用题库数据' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level5.ts': { maxLines: 900, reason: '策略 L5 题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level6.ts': { maxLines: 800, reason: '策略 L6 题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level7.ts': { maxLines: 2000, reason: '策略 L7 题库数据（含本土课拆出后的标准课）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/level8.ts': { maxLines: 600, reason: '策略 L8 题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/standard/quizBank/local.ts': { maxLines: 1800, reason: '策略本土课题库数据（16 课）' },
 };
 
-/** 题库路径的精确形态：恰好 9 个 Level 文件，不接受子目录或其他命名 */
+/** 题库路径的精确形态：理论 t1-t9 + 策略 level1-8/local，不接受子目录或其他命名 */
 const QUIZ_BANK_PATH_RE =
-  /^features\/theory-academy\/data\/levels\/variants\/standard\/quizBank\/t[1-9]\.ts$/;
+  /^features\/(?:theory|strategy)-academy\/data\/(?:levels|lessons)\/variants\/standard\/quizBank\/(?:t[1-9]|level[1-8]|local)\.ts$/;
 
 type FileInfo = {
   filePath: string;
@@ -228,13 +236,12 @@ describe('File line count hard constraint（逐文件棘轮）', () => {
       }
     }
 
-    // 反向覆盖：磁盘上的 9 个题库文件必须全部登记，防止新增 t10 之类的文件绕过豁免口径
+    // 反向覆盖：磁盘上的题库文件必须与 allowlist 精确一致，防止新增题库文件绕过豁免口径
     const scanned = allFiles
       .filter((f) => QUIZ_BANK_PATH_RE.test(f.relativePath))
       .map((f) => f.relativePath)
       .toSorted();
     expect(scanned).toEqual(Object.keys(QUIZ_BANK_ALLOWLIST).toSorted());
-    expect(scanned.length).toBe(9);
     expect(bad).toEqual([]);
   });
 });

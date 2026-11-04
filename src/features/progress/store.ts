@@ -28,9 +28,8 @@ import {
   applyEloChange,
   checkRankUp,
   getRankForScore,
-  abilityToElo,
-  computeOverallElo,
-  getDynamicKFactor,
+  hasNonDefaultAbility,
+  mapAcademyAbilityToElo,
 } from './utils/elo';
 import type { AbilityAssessment } from '@/shared/types/ability';
 // P2-4: 导师角色人格化
@@ -77,46 +76,7 @@ export const DEFAULT_STREAK_STATE: StreakState = {
   streakBrokenAt: null,
 };
 
-/**
- * P1-2.3: 将 strategy-academy 的 AbilityAssessment（0-100）映射为 ELO 初始值
- * 维度对应关系：
- *   preflop    ← rangeKnowledge, positionalPlay（翻前范围与位置）
- *   postflop   ← gtoUnderstanding, positionalPlay（翻后 GTO 决策）
- *   math       ← oddsCalculation（赔率/数学）
- *   handReading← gtoUnderstanding, rangeKnowledge（综合阅读）
- *   mental     ← emotionalControl（情绪）
- */
-export function mapAcademyAbilityToElo(aa: AbilityAssessment): EloRating {
-  const elo: EloRating = {
-    ...DEFAULT_ELO,
-    preflop: abilityToElo((aa.rangeKnowledge + aa.positionalPlay) / 2),
-    postflop: abilityToElo((aa.gtoUnderstanding + aa.positionalPlay) / 2),
-    math: abilityToElo(aa.oddsCalculation),
-    handReading: abilityToElo((aa.gtoUnderstanding + aa.rangeKnowledge) / 2),
-    mental: abilityToElo(aa.emotionalControl),
-    lastUpdated: Date.now(),
-  };
-  elo.overall = computeOverallElo(elo);
-  elo.kFactor = getDynamicKFactor(elo.gamesPlayed, elo.overall);
-  return elo;
-}
-
-/** 检测 abilityAssessment 是否包含非默认数据（用于判断是否需要映射） */
-export function hasNonDefaultAbility(aa: AbilityAssessment | undefined | null): aa is AbilityAssessment {
-  if (!aa) return false;
-  return (
-    typeof aa.rangeKnowledge === 'number' &&
-    typeof aa.oddsCalculation === 'number' &&
-    typeof aa.gtoUnderstanding === 'number' &&
-    typeof aa.positionalPlay === 'number' &&
-    typeof aa.emotionalControl === 'number' &&
-    (aa.rangeKnowledge !== 50 ||
-      aa.oddsCalculation !== 50 ||
-      aa.gtoUnderstanding !== 50 ||
-      aa.positionalPlay !== 50 ||
-      aa.emotionalControl !== 50)
-  );
-}
+export { hasNonDefaultAbility, mapAcademyAbilityToElo } from './utils/elo';
 
 /**
  * 持久化版本迁移表（表驱动，替代线性 if 链）。
@@ -149,8 +109,8 @@ const MIGRATIONS: Array<(state: Record<string, unknown>) => void> = [
     delete s.lastTrainingDate;
   },
   // v2 → v3：注入 ELO 默认值与 eloRankUp=null
-  // 注：strategy-academy 的 abilityAssessment → ELO 映射由 initProgressStore
-  // （store.bootstrap.ts）通过 setTimeout + 动态 import 自动完成（避免循环依赖）
+  // 注：onboarding.initialAbility → ELO 种子由 strategy-academy store.bootstrap.ts
+  // 通过 seedEloFromOnboardingAbility 在启动宏任务中播种（避免循环依赖）
   (s) => {
     if (!s.elo) {
       s.elo = { ...DEFAULT_ELO, lastUpdated: Date.now() };
@@ -398,8 +358,13 @@ interface ProgressStore {
   ) => void;
   /** 清空段位升级事件（关闭 Dialog 后调用）*/
   clearEloRankUp: () => void;
-  /** 从 strategy-academy 的 abilityAssessment 同步初始 ELO（仅当 gamesPlayed=0 时生效）*/
-  syncEloFromAcademyAbility: (aa: AbilityAssessment) => void;
+  /** 用 onboarding 定位能力（四维）播种 standard 初始 ELO（仅 gamesPlayed=0 时生效）*/
+  seedEloFromOnboardingAbility: (ability: {
+    rangeKnowledge: number;
+    oddsCalculation: number;
+    positionalPlay: number;
+    gtoUnderstanding: number;
+  }) => void;
     
   // P2-1: 游戏变体 ELO 分离（eloRating → eloByVariant）
   /** 当前选中的游戏变体 */
@@ -728,16 +693,22 @@ export const useProgressStore = create<ProgressStore>()(
 
       clearEloRankUp: () => set({ eloRankUp: null }),
 
-      syncEloFromAcademyAbility: (aa) => {
-        // 仅当 ELO 尚未被答题更新过时才同步（避免覆盖已累积的进度）
+      seedEloFromOnboardingAbility: (ability) => {
+        // 仅当 ELO 尚未被答题更新过时才播种（避免覆盖已累积的进度）
         if (get().eloByVariant.standard.gamesPlayed > 0) return;
-        if (!hasNonDefaultAbility(aa)) return;
-        const synced = mapAcademyAbilityToElo(aa);
-        // 同步初始 ELO 到 standard 变体（eloByVariant 单一事实源）
+        const assessment: AbilityAssessment = {
+          ...ability,
+          // emotionalControl 无 onboarding 对应问项，固定 50
+          emotionalControl: 50,
+          lastUpdated: Date.now(),
+        };
+        if (!hasNonDefaultAbility(assessment)) return;
+        const seeded = mapAcademyAbilityToElo(assessment);
+        // 播种到 standard 变体（eloByVariant 单一事实源）
         set({
           eloByVariant: {
             ...get().eloByVariant,
-            standard: { ...synced, variant: 'standard' as PokerVariant },
+            standard: { ...seeded, variant: 'standard' as PokerVariant },
           },
         });
       },

@@ -33,29 +33,7 @@ export const STRADDLE_LESSONS: Lesson[] = [
       { type: 'highlight', content: 'Straddle 局最常见错误：仍用无 Straddle 的尺度与范围打。底池预置从 1.5BB 变 3.5BB 后，小对子、同花连牌的隐含赔率变差应大幅减少，强牌应更激进地 3-bet/4-Bet。' },
       { type: 'pro-tip', content: '如果你是 Straddler（BTN 位置），可以混合策略：大部分时候 check 看免费翻牌，偶尔用强牌（KK/AA）check-raise 偷取加注者的筹码。' },
     ],
-    quiz: [
-      {
-        id: 'local-straddle-q1',
-        question: 'BTN Straddle 相比 UTG Straddle 的核心优势是？',
-        options: ['筹码更多', '翻前翻后都最后行动', '可以 bluff 更多', '没有区别'],
-        correctIndex: 1,
-        explanation: 'BTN Straddle 让 BTN 翻前最后行动（Straddle 权）+ 翻后最后行动（位置优势），是"双倍位置优势"。',
-      },
-      {
-        id: 'local-straddle-q2',
-        question: 'Straddle 局（初始底池 1.5→3.5BB）中，哪类牌价值降低最多？',
-        options: ['AA/KK', '小对子和同花连牌', 'AK', 'AQ'],
-        correctIndex: 1,
-        explanation: 'Straddle 使底池预置增大、SPR 下降，小对子（set mine）和同花连牌（大底池潜力）的隐含赔率变差，价值降低。',
-      },
-      {
-        id: 'local-straddle-q3',
-        question: 'Straddle 局中开牌加注尺度应如何调整？',
-        options: ['减小到 2BB', '保持 3BB 不变', '加大到 4-5BB', '总是 All-in'],
-        correctIndex: 2,
-        explanation: 'Straddle 局底池更大（已含 2BB Straddle），开牌加注应加大到 4-5BB，避免被多人跟注稀释强牌价值。',
-      },
-    ],
+    quiz: [],
   },
 
   // ===== local-ante =====
@@ -84,28 +62,6 @@ export const STRADDLE_LESSONS: Lesson[] = [
       { type: 'highlight', content: 'Ante 局最常见的错误：仍用无 Ante 的紧范围打。Ante 结构下你应该明显放宽，特别是偷盲和大盲防守。' },
       { type: 'pro-tip', content: 'Ante 越大，越应该激进。Big Ante（如 0.5BB+）的局，BTN 开池要在标准最宽档之上再明显放宽，因为底池赔率极佳。' },
     ],
-    quiz: [
-      {
-        id: 'local-ante-q1',
-        question: 'Ante 结构对底池赔率的影响是？',
-        options: ['跟注赔率变差', '跟注赔率变好', '没有影响', '只影响翻后'],
-        correctIndex: 1,
-        explanation: 'Ante 让初始底池更大，跟注同样的金额能赢更多，跟注赔率变好，应放宽跟注范围。',
-      },
-      {
-        id: 'local-ante-q2',
-        question: 'Ante 局中 BTN 偷盲范围应如何调整？',
-        options: ['应当收紧', '应当放宽', '保持不变', '完全不偷'],
-        correctIndex: 1,
-        explanation: 'Ante 让偷盲更赚钱（底池更大），BTN 偷盲范围应在标准最宽档之上进一步放宽。',
-      },
-      {
-        id: 'local-ante-q3',
-        question: '0.2BB Ante 的 6 人桌，BTN 加注 2.5BB 后 BB 跟注的所需胜率约为？',
-        options: ['约 27.3%（无 Ante 水平）', '约 22.4%（赔率更好）', '50%', '15%'],
-        correctIndex: 1,
-        explanation: '有 Ante 时决策点底池 5.2BB、跟 1.5BB，所需胜率 1.5/6.7 ≈ 22.4%，比无 Ante 的约 27.3% 明显更好，应放宽防守范围。',
-      },
-    ],
+    quiz: [],
   },
 ];

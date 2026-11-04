@@ -97,25 +97,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           '判断何时不应 C-Bet（牌面对对手范围更有利的湿润连接面），改用 Check',
         ],
         content: [...L3_CBET_U1_SECTIONS, ...L3_CBET_U2_SECTIONS],
-        quiz: [
-          {
-            id: 'l3-cbet-q1',
-            question: 'C-Bet 是什么？',
-            options: ['跟注', '翻前加注者翻后继续下注', 'All-in', 'Check'],
-            correctIndex: 1,
-            explanation: 'C-Bet 是翻前最后的加注者在翻牌后继续下注的行为。',
-          },
-          {
-            id: 'l3-cbet-q2',
-            question: '在干燥面（K-7-2 rainbow）应该 C-Bet 多大？',
-            options: ['100% pot', '33-50% pot', '200% pot', '不应该下注'],
-            correctIndex: 1,
-            explanation: '干燥面使用较小的 C-Bet（33-50% pot），因为对手很难有强牌来抵抗。',
-          },
-          { id: 'l3-cbet-q3', question: '在湿润面（J-T-9 两花）应该 C-Bet 多大？', options: ['25% pot', '33% pot', '66-75% pot', '不应该下注'], correctIndex: 2, explanation: '湿润面有很多听牌，需要用较大注（66-75% pot）让对手的听牌付出代价。' },
-          { id: 'l3-cbet-q4', question: '什么时候不应该 C-Bet？', options: ['干燥面', '有范围优势时', '牌面对对手范围更有利时', '有利位置时'], correctIndex: 2, explanation: '当牌面对对手范围更有利时（如湿润连接面），应该Check而不是C-Bet。' },
-          { id: 'l3-cbet-q5', question: 'C-Bet 的核心逻辑是什么？', options: ['偷底池', '翻前加注者有范围优势', '规则要求', '展示强牌'], correctIndex: 1, explanation: 'C-Bet的核心逻辑是翻前加注者通常有范围优势，因为大多数时候翻牌对双方都不会有太大帮助。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-cbet-ex1',
@@ -329,25 +311,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           '区分听牌的三种打法（被动跟注、半诈唬、全下），并识别组合听牌是极佳的半诈唬候选',
         ],
         content: [...L3_DRAWS_U1_SECTIONS, ...L3_DRAWS_U2_SECTIONS],
-        quiz: [
-          {
-            id: 'l3-draw-q1',
-            question: '同花听牌有多少个outs？',
-            options: ['4个', '6个', '9个', '12个'],
-            correctIndex: 2,
-            explanation: '同花听牌有9个outs（13张同花 - 已知的4张 = 9张未见的同花牌）。',
-          },
-          {
-            id: 'l3-draw-q2',
-            question: '初学者打同花听牌的推荐方式是？',
-            options: ['All-in', '大幅加注', '跟注看牌', '立即弃牌'],
-            correctIndex: 2,
-            explanation: '初学者推荐用被动打法（跟注），用最小代价看到下一张牌。进阶后可以学习半诈唬。',
-          },
-          { id: 'l3-draw-q3', question: '两头顺子听牌（OESD）有多少个outs？', options: ['4个', '6个', '8个', '12个'], correctIndex: 2, explanation: 'OESD两端都可以成顺，每端4张，共8个outs。' },
-          { id: 'l3-draw-q4', question: '用二四法则，9个outs从Flop到Turn约多少命中率？', options: ['9%', '18%', '35%', '45%'], correctIndex: 1, explanation: '二四法则：Flop到Turn用×2，9×2=18%，实际约19%。' },
-          { id: 'l3-draw-q5', question: '组合听牌（同花+OESD）大约有多少outs？', options: ['9个', '12个', '15个', '20个'], correctIndex: 2, explanation: '同花9outs + OESD 8outs，去重后约15个outs。这是最强的听牌类型。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-draws-ex1',
@@ -582,13 +546,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             content: '反直觉点：深筹码时（SPR > 10），小同花连牌的价值超过高对。AA 在深筹码中的翻后实现率下降，因为对手可以在后续街用更宽的范围施加压力，而 98s 这类牌有更好的翻后可玩性，可以形成多种强牌。',
           },
         ],
-        quiz: [
-          { id: 'l3-multi-q1', question: '多街思维的核心是什么？', options: ['只看当前街', '在 flop 就规划 turn/river 计划', '永远打三条街', '根据对手表情决策'], correctIndex: 1, explanation: '多街思维要求在 flop 决策时就规划 turn/river 计划，而不是走一步看一步。' },
-          { id: 'l3-multi-q2', question: 'Double Barrel 是指什么？', options: ['翻牌 Check + 转牌下注', '翻牌 C-Bet + 转牌继续下注', '翻牌 + 转牌 + 河牌都下注', '翻牌 All-in'], correctIndex: 1, explanation: 'Double Barrel = 翻牌 C-Bet + 转牌继续下注，是翻前加注者保持压力的标准打法。' },
-          { id: 'l3-multi-q3', question: 'Triple Barrel bluff 的最佳条件是？', options: ['对手是 Calling Station', '极化范围 + 有 Blocker', '牌面全是听牌', '对手从不弃牌'], correctIndex: 1, explanation: 'Triple Barrel bluff 需要极化范围 + Blocker，让对手面临艰难决策。' },
-          { id: 'l3-multi-q4', question: 'Delayed C-Bet 适用于什么情况？', options: ['翻牌适合C-Bet时', '翻牌不适合C-Bet时', '永远使用', '从不使用'], correctIndex: 1, explanation: 'Delayed C-Bet适用于翻牌不适合C-Bet的情况，如牌面对对手范围更有利时。' },
-          { id: 'l3-multi-q5', question: '转牌应该放弃Double Barrel的情况是？', options: ['转牌是空白牌', '转牌完成明显听牌', '对手弃牌率高', '你有顶对'], correctIndex: 1, explanation: '转牌完成明显听牌时应该放弃Barrel，因为对手的听牌很可能完成了。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-multi-ex1', title: 'Double Barrel：顶对转牌继续',
@@ -687,13 +645,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           { type: 'highlight', content: 'Check-Raise 大小：通常为 C-Bet 额的 2.5-3x。例如：C-Bet 4BB → Check-Raise 10-12BB。' },
           { type: 'pro-tip', content: '不要在干燥面频繁 Check-Raise bluff。干燥面（如 K-7-2 彩虹）对手 C-Bet 范围强，Check-Raise 弃牌率低。湿润面（如 J-T-9 两花）更适合。' },
         ],
-        quiz: [
-          { id: 'l3-cr-q1', question: 'Check-Raise 是指什么？', options: ['先下注再加注', '先 Check 再对对手下注 Raise', '连续两次 Check', 'All-in'], correctIndex: 1, explanation: 'Check-Raise = 先 Check，面对对手下注时 Raise，是翻后最有力的攻击武器。' },
-          { id: 'l3-cr-q2', question: 'BB vs C-Bet 的标准 Check-Raise 频率是？', options: ['2-5%', '10-15%', '25-30%', '40-50%'], correctIndex: 1, explanation: 'BB vs C-Bet Check-Raise 频率约 10-15%，范围要平衡（价值 + Bluff）。' },
-          { id: 'l3-cr-q3', question: '以下哪手牌最适合做 Check-Raise Bluff？', options: ['中对', '同花+顺子组合听牌', '底对', '空气牌'], correctIndex: 1, explanation: '同花+顺子组合听牌有约 15 个 outs（约 54% 胜率），是最佳 Check-Raise bluff 手牌。' },
-          { id: 'l3-cr-q4', question: 'Check-Raise 的典型大小是 C-Bet 额的多少倍？', options: ['1-1.5x', '2.5-3x', '4-5x', '6-7x'], correctIndex: 1, explanation: 'Check-Raise通常为C-Bet额的2.5-3倍，如C-Bet 4BB → Check-Raise 10-12BB。' },
-          { id: 'l3-cr-q5', question: '什么时候不应该在干燥面 Check-Raise bluff？', options: ['湿润面', '对手C-Bet范围强时', '对手弃牌率高时', '有组合听牌时'], correctIndex: 1, explanation: '干燥面对手C-Bet范围强（如K-7-2彩虹），Check-Raise弃牌率低，不适合bluff。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-cr-ex1', title: '价值 Check-Raise：Set 在湿润面',
@@ -791,13 +743,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           { type: 'highlight', content: 'Float vs Probe 区别：Float 是 Call C-Bet 后 Turn 下注；Probe 是对手翻牌 Check 后 Turn 下注。两者都利用位置 + 对手弱点。' },
           { type: 'pro-tip', content: '不要对 Calling Station Float/Probe。CS 不会弃牌，你只是在送钱。这些策略适用于 TAG/NIT 等会弃牌的对手。' },
         ],
-        quiz: [
-          { id: 'l3-fp-q1', question: 'Float 是指什么？', options: ['翻牌 Raise C-Bet', '翻牌 Call C-Bet，计划 Turn 偷底', '翻牌 All-in', '翻牌 Check-Raise'], correctIndex: 1, explanation: 'Float = 翻牌 Call C-Bet，计划 Turn 对手 Check 时下注偷底。' },
-          { id: 'l3-fp-q2', question: 'Probe Bet 适用于什么情况？', options: ['对手翻牌 C-Bet 后', '翻前加注者翻牌 Check 后，你 Turn 下注', '对手 All-in 后', '河牌摊牌时'], correctIndex: 1, explanation: 'Probe Bet = 翻前加注者翻牌 Check 后，你在 Turn 下注偷底。' },
-          { id: 'l3-fp-q3', question: '以下哪种对手最不适合 Float？', options: ['TAG', 'NIT', 'Calling Station', 'LAG'], correctIndex: 2, explanation: 'Calling Station 不会弃牌（Fold to C-Bet 仅 20%），Float 是纯亏损。' },
-          { id: 'l3-fp-q4', question: 'Float的手牌选择应该是什么？', options: ['纯空气牌', '后门听牌/高牌/弱对', '坚果牌', '中对以上'], correctIndex: 1, explanation: 'Float适合用后门听牌、高牌或弱对，纯空气牌不适合Float。' },
-          { id: 'l3-fp-q5', question: 'Probe Bet与Float的主要区别是？', options: ['没有区别', 'Probe是对手翻牌Check后Turn下注', 'Probe是翻牌Raise', 'Probe是河牌下注'], correctIndex: 1, explanation: 'Probe Bet是翻前加注者翻牌Check后，你在Turn下注。Float是Call C-Bet后Turn对手Check时下注。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-fp-ex1', title: 'Float：Call C-Bet 后 Turn 偷底',
@@ -909,13 +855,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             content: '反直觉点：下注越大，对手弃牌越多，但你的诈唬需要更高的成功率。因为大注意味着你冒了更多风险去赢取有限底池。满池下注时，你的诈唬需要至少 50% 的弃牌率才能盈亏平衡，而半池下注只需要 33%。',
           },
         ],
-        quiz: [
-          { id: 'l3-bs-q1', question: '干燥面（如 K-7-2 彩虹）应该使用什么下注尺度？', options: ['小注（25-33% pot）', '中注（50-66% pot）', '大注（75-100% pot）', 'Overbet（150% pot）'], correctIndex: 0, explanation: '干燥面范围优势明显，小注即可让弱牌弃牌，同时用强牌获取价值。' },
-          { id: 'l3-bs-q2', question: 'Overbet 最适合在什么时候使用？', options: ['翻牌干燥面', 'Turn 听牌面', 'River 有坚果优势时', '翻前 Open'], correctIndex: 2, explanation: 'Overbet 最适合 River 有坚果优势时（如同花成牌面），用极化范围给对手最大压力。' },
-          { id: 'l3-bs-q3', question: '下注尺度与范围的关系是？', options: ['小注=窄范围，大注=宽范围', '小注=宽范围，大注=窄范围', '没有关系', '永远用 50% pot'], correctIndex: 1, explanation: '小注对应宽范围（很多牌可下注），大注对应窄范围（只有强牌或纯 bluff）。' },
-          { id: 'l3-bs-q4', question: '中注（50-66% pot）适合什么情况？', options: ['极干燥面', '标准价值下注', '极湿润面', 'River坚果优势'], correctIndex: 1, explanation: '中注（50-66% pot）是标准价值下注尺度，适合顶对/超对等中等强牌。' },
-          { id: 'l3-bs-q5', question: '为什么不应该固定下注尺度？', options: ['规则不允许', '会被对手读取', '浪费筹码', '没有原因'], correctIndex: 1, explanation: '固定尺度会让对手容易读取你的牌力。多变的尺度让对手难以判断。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-bs-ex1', title: '小注：干燥面范围优势',
@@ -1020,13 +960,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           { type: 'heading', content: 'Bluff-to-Value Ratio（诈唬与价值比）' },
           { type: 'text', content: 'River 理论比例：每 1 个 value bet 配 1/(pot_odds+1) 个 bluff。\n\n例：下注 pot（对手需要 33% 胜率才能 call）→ bluff:value = 1:2\n下注 1/2 pot（对手需要 25% 胜率）→ bluff:value = 1:3\n\n实战中略低于理论比例（因为对手有 overcall 倾向，且低级别对手 fold 不够多）。\n\n简单记忆：River 下注 pot → 每 3 手下注中 1 手是 bluff。' },
         ],
-        quiz: [
-          { id: 'l3-bluff-q1', question: '下注 2/3 pot 时，对手需要至少多少弃牌率才能让诈唬盈亏平衡？', options: ['33%', '40%', '50%', '60%'], correctIndex: 1, explanation: '盈亏平衡公式：bet/(pot+bet) = (2/3)/(1+2/3) = 0.4 = 40%。对手弃牌率 > 40% 时诈唬+EV。' },
-          { id: 'l3-bluff-q2', question: '以下哪手牌是最佳的 Semi-Bluff 候选？', options: ['A-high（无听牌）', '同花听牌+两头顺（组合听牌）', '底对', '纯空气'], correctIndex: 1, explanation: '组合听牌（同花+顺子）有最多 outs（约 15 张），即使被 Call 也有很高概率反超，是最佳 Semi-Bluff 手牌。' },
-          { id: 'l3-bluff-q3', question: 'River 下注 pot 时，理论的 bluff-to-value ratio 是多少？', options: ['1:1', '1:2', '1:3', '2:1'], correctIndex: 1, explanation: '下注 pot 时对手需要 33% 胜率才能 call。理论比例为 bluff:value = 1:2（每 3 手下注中 1 手 bluff，2 手 value）。' },
-          { id: 'l3-bluff-q4', question: '哪条街的诈唬频率应该最高？', options: ['River', 'Turn', 'Flop', '所有街相同'], correctIndex: 2, explanation: 'Flop 对手范围最宽、击中率最低，诈唬成功率最高。随着街数推进，对手范围越来越强，诈唬频率应递减。' },
-          { id: 'l3-bluff-q5', question: 'Semi-Bluff的双重盈利方式是什么？', options: ['对手弃牌+成牌赢大底池', '偷底池+规则奖励', '弃牌权益+隐含赔率', '位置优势+范围优势'], correctIndex: 0, explanation: 'Semi-Bluff通过对手弃牌直接赢底池，或被Call后成牌赢大底池两种方式盈利。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-bluff-ex1', title: 'River 极化场景的 Bluff',
@@ -1125,13 +1059,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           { type: 'key-point', content: '高张干燥牌面（如 AK2r）有利于翻前加注者；低张湿润牌面（如 876ss）有利于跟注者。根据谁的范围优势更大来决定是否下注。' },
           { type: 'pro-tip', content: '在湿润牌面上，你的“没完成的强牌”可能在转牌就变成第二好牌（Second Best）。要么强势下注保护，要么准备好弃牌。' },
         ],
-        quiz: [
-          { id: 'l3-texture-q1', question: '以下哪个是“干燥牌面”？', options: ['9♠8♠7♣', 'K♠7♦2♣', 'J♠T♠9♠', 'Q♠J♠8♠'], correctIndex: 1, explanation: 'K♠7♦2♣ 无连接性、无同花、分散的高低张，是典型的干燥牌面。' },
-          { id: 'l3-texture-q2', question: '湿润牌面上应该怎么调整下注尺度？', options: ['更小（1/4 pot）', '更大（2/3-full pot）', '不下注', '全下'], correctIndex: 1, explanation: '湿润牌面上对手有很多听牌，需要下大注让他们付出代价继续看牌。' },
-          { id: 'l3-texture-q3', question: '高张干燥牌面有利于谁？', options: ['跟注者', '翻前加注者', '双方均等', '小盲注'], correctIndex: 1, explanation: '高张干燥牌面（如AK2）为翻前加注者的范围“命中”更多，因为加注者范围中大牌更多。' },
-          { id: 'l3-texture-q4', question: '牌面质地的三个维度是什么？', options: ['大小/花色/数字', '连接性/花色分布/高低张', '干湿/快慢/高低', '同花/顺子/三条'], correctIndex: 1, explanation: '牌面质地的三个维度是连接性、花色分布和高低张。' },
-          { id: 'l3-texture-q5', question: '低张湿润牌面（如876ss）有利于谁？', options: ['翻前加注者', '跟注者', '双方均等', '庄家'], correctIndex: 1, explanation: '低张湿润牌面有利于跟注者，因为这类牌面命中跟注者的范围更多。' },
-        ],
+        quiz: [],
         practice: {
           id: 'l3-texture-practice',
           questions: [
@@ -1216,13 +1144,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           { type: 'highlight', content: '如果你的过牌范围全是弱牌，对手可以无限攻击你的过牌。保留一些强牌在过牌范围中是防御的关键。' },
           { type: 'pro-tip', content: '在不利位置（OOP）时，你的过牌范围应该比有利位置（IP）时更宽，因为你得在不知道对手行动的情况下做决策。' },
         ],
-        quiz: [
-          { id: 'l3-check-range-q1', question: '过牌范围应该包含哪些牌？', options: ['只有弱牌', '只有强牌', '强牌+中等牌+弱牌的混合', '只有听牌'], correctIndex: 2, explanation: '平衡的过牌范围应包含各种牌力的混合，让对手无法轻松读取你的策略。' },
-          { id: 'l3-check-range-q2', question: '以下哪种情况不适合过牌？', options: ['没有范围优势的低张牌面', '多人底池', '有位置且牌面范围优势明显', '计划Check-Raise'], correctIndex: 2, explanation: '有位置且范围优势明显时，应该主动下注获取价值，而不是过牌给对手免费看牌。' },
-          { id: 'l3-check-range-q3', question: '不利位置（OOP）的过牌范围应该怎样？', options: ['比IP更窄', '比IP更宽', '与IP相同', '不应该过牌'], correctIndex: 1, explanation: 'OOP缺乏信息，需要更宽的过牌范围来平衡策略，避免被读穿。' },
-          { id: 'l3-check-range-q4', question: '过牌范围中强牌的用途是什么？', options: ['没有用途', '用于Check-Raise或慢打', '用于弃牌', '用于下注'], correctIndex: 1, explanation: '过牌范围中的强牌用于Check-Raise陷阱或慢打，让对手无法轻松读取你的策略。' },
-          { id: 'l3-check-range-q5', question: '什么时候应该主动下注而不是过牌？', options: ['没有范围优势时', '多人底池时', '有位置且范围优势明显时', '计划Check-Raise时'], correctIndex: 2, explanation: '有位置且范围优势明显时，应该主动下注获取价值，而不是过牌给对手免费看牌。' },
-        ],
+        quiz: [],
         practice: {
           id: 'l3-check-range-practice',
           questions: [
@@ -1580,43 +1502,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
             content: '关键公式：SPR = 有效筹码 ÷ 底池大小。SPR < 4 时，顶对级别的牌力可以舒适地全下。SPR > 6 时，需要更强的牌力才能打光。',
           },
         ],
-        quiz: [
-          {
-            id: 'l3-3bet-pf-q1',
-            question: '3-bet 底池的 SPR 通常在什么范围？',
-            options: ['1-2', '3-6', '10-15', '20+'],
-            correctIndex: 1,
-            explanation: '3-bet 底池由于翻前底池较大，SPR 通常在 3-6 之间，远低于单次加注底池。',
-          },
-          {
-            id: 'l3-3bet-pf-q2',
-            question: '在 3-bet 底池中，SPR 为 3 时顶对的正确打法通常是？',
-            options: ['Check-Fold', '控制底池只打一条街', '可以舒适地全下', '只能 Check-Call'],
-            correctIndex: 2,
-            explanation: 'SPR < 4 时，顶对级别的牌力已经可以舒适地全下，因为筹码相对底池已经不够深。',
-          },
-          {
-            id: 'l3-3bet-pf-q3',
-            question: 'AA 在 3-bet 底池面对 J-T-9 两花牌面应该？',
-            options: ['All-in 保护', 'C-Bet 75% pot', 'Check 控制底池', 'Fold'],
-            correctIndex: 2,
-            explanation: 'J-T-9 两花是过度牌面，对防守方范围极有利。AA 虽然超对但应该 Check 控制底池，避免被两对/顺子套住。',
-          },
-          {
-            id: 'l3-3bet-pf-q4',
-            question: '以下哪个牌面对 3-bet 者最有利？',
-            options: ['J♠T♠9♣', 'A♠7♣2♦', '8♥7♥6♣', 'Q♥T♥9♠'],
-            correctIndex: 1,
-            explanation: 'A-7-2 彩虹是干燥面，对 3-bet 者范围最有利（大量高牌 Ax），应该高频 C-Bet。',
-          },
-          {
-            id: 'l3-3bet-pf-q5',
-            question: '3-bet 底池中低 SPR 的主要影响是？',
-            options: ['翻后决策更简单', '需要更多筹码', 'bluff 更有威力', '位置不重要了'],
-            correctIndex: 0,
-            explanation: '低 SPR 意味着决策空间被压缩，很多情况下顶对就能打光，翻后决策相对更简单。',
-          },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l3-3bet-pf-ex1',

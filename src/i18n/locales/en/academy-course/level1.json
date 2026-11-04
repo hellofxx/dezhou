@@ -104,6 +104,56 @@
       ],
       "explanation": "Pro players care about long-term expected value (EV), not single-hand results."
     },
+    "l1-basics-q4": {
+      "question": "What is the total number of starting-hand combinations, C(52,2)?",
+      "options": [
+        "169",
+        "1326",
+        "2652",
+        "52"
+      ],
+      "explanation": "C(52,2) = 52×51÷2 = 1326. 169 is the count of equivalence classes, not actual combinations."
+    },
+    "l1-basics-q5": {
+      "question": "How many combinations does a pocket pair (e.g. AA) have?",
+      "options": [
+        "4",
+        "6",
+        "12",
+        "16"
+      ],
+      "explanation": "A pocket pair is C(4,2) = 6 combinations — any two of the four cards of that rank."
+    },
+    "l1-basics-q6": {
+      "question": "How many combinations does suited AKs have?",
+      "options": [
+        "4",
+        "6",
+        "12",
+        "16"
+      ],
+      "explanation": "AK has 4×4 = 16 combinations in total: 4 suited (one per suit) and 12 offsuit."
+    },
+    "l1-basics-q7": {
+      "question": "Which ranking is correct (strongest to weakest)?",
+      "options": [
+        "Flush > Full House > Four of a Kind",
+        "Four of a Kind > Full House > Flush",
+        "Straight > Flush > Full House",
+        "Full House > Four of a Kind > Straight Flush"
+      ],
+      "explanation": "Correct order: straight flush > four of a kind > full house > flush > straight. A full house beats a flush and four of a kind beats a full house."
+    },
+    "l1-basics-q8": {
+      "question": "Which community card is dealt on the turn?",
+      "options": [
+        "The 2nd",
+        "The 3rd",
+        "The 4th",
+        "The 5th"
+      ],
+      "explanation": "The flop deals the first 3 community cards; the turn is the 4th and the river is the 5th."
+    },
     "l1-pos-q1": {
       "question": "Which position is the best?",
       "options": [
@@ -133,6 +183,56 @@
         "Better luck"
       ],
       "explanation": "Late position's biggest advantage is information — you decide after seeing all previous actions."
+    },
+    "l1-pos-q4": {
+      "question": "In 6-max, who acts first after the flop?",
+      "options": [
+        "BTN",
+        "CO",
+        "SB",
+        "BB"
+      ],
+      "explanation": "After the flop the small blind acts first, the big blind second, and the button (BTN) acts last."
+    },
+    "l1-pos-q5": {
+      "question": "In 6-max, after UTG acts, how many players still have to act?",
+      "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "explanation": "In a 6-max game UTG acts first, then HJ, CO, BTN, SB and BB — 5 players still to act."
+    },
+    "l1-pos-q6": {
+      "question": "Which position segment do CO and BTN belong to?",
+      "options": [
+        "Early",
+        "Middle",
+        "Late",
+        "Blinds"
+      ],
+      "explanation": "Early is UTG, middle is HJ, late is CO and BTN, and the blinds are SB and BB."
+    },
+    "l1-pos-q7": {
+      "question": "Where does the BTN positional edge mainly show up?",
+      "options": [
+        "Acting first preflop",
+        "Acting last on every postflop street",
+        "Seeing opponents hole cards",
+        "Posting fewer blinds"
+      ],
+      "explanation": "BTN acts last preflop and also last on every postflop street — the edge is mainly postflop, where you decide after seeing all actions."
+    },
+    "l1-pos-q8": {
+      "question": "Per this lesson, roughly what equity-realization rate does UTG get when out of position postflop?",
+      "options": [
+        "About 50%",
+        "About 65%",
+        "About 80-90%",
+        "About 110%"
+      ],
+      "explanation": "UTG plays out of position postflop, so equity realization is only about 80-90%; BTN has position and realizes more."
     },
     "l1-hand-q1": {
       "question": "In 6-max, what's the ideal VPIP?",
@@ -164,6 +264,56 @@
       ],
       "explanation": "s = suited, meaning both cards are the same suit. AKs is a suited Ace and King."
     },
+    "l1-hand-q4": {
+      "question": "How many combinations does an offsuit hand (e.g. AKo) have?",
+      "options": [
+        "4",
+        "6",
+        "12",
+        "16"
+      ],
+      "explanation": "AK has 16 combinations total; subtracting the 4 suited ones leaves 16 − 4 = 12 offsuit combinations."
+    },
+    "l1-hand-q5": {
+      "question": "What is the probability of being dealt AA?",
+      "options": [
+        "About 0.45%",
+        "About 1.2%",
+        "About 5.9%",
+        "About 12%"
+      ],
+      "explanation": "6 ÷ 1326 ≈ 0.45%, roughly once every 221 hands."
+    },
+    "l1-hand-q6": {
+      "question": "Which hand belongs to the top tier (playable from any position)?",
+      "options": [
+        "JTs",
+        "AQs",
+        "AKs",
+        "T9s"
+      ],
+      "explanation": "The top tier is AA/KK/QQ/AKs — playable from any position. JTs is tier-3, AQs is tier-2 and T9s is tier-3."
+    },
+    "l1-hand-q7": {
+      "question": "How much more is a suited hand worth than its offsuit counterpart?",
+      "options": [
+        "About 0.5%",
+        "About 2-3%",
+        "About 10%",
+        "Almost no difference"
+      ],
+      "explanation": "Suited hands are worth about 2-3% more than offsuit ones, which is why AKs and AKo are classified separately."
+    },
+    "l1-hand-q8": {
+      "question": "Which hand is most dominated and should simply be folded?",
+      "options": [
+        "AKs",
+        "K3o",
+        "QJs",
+        "99"
+      ],
+      "explanation": "K3o has a very weak kicker and is offsuit, so hands like KQo or KJo dominate it — it is a trash hand."
+    },
     "l1-bankroll-q1": {
       "question": "How much bankroll is the recommended minimum for NL10 cash games?",
       "options": [
@@ -194,6 +344,56 @@
       ],
       "explanation": "Borrowing money to chase losses is the most dangerous practice — it leads to tilt and bigger losses."
     },
+    "l1-bankroll-q4": {
+      "question": "How many buy-ins does tournament bankroll management usually require?",
+      "options": [
+        "5-10",
+        "20-30",
+        "50-100",
+        "More than 200"
+      ],
+      "explanation": "Cash games call for 20-30 buy-ins; tournaments swing more, so 50-100 buy-ins are recommended."
+    },
+    "l1-bankroll-q5": {
+      "question": "For NL50 (a $50 buy-in), what bankroll do 30 buy-ins give?",
+      "options": [
+        "$500",
+        "$1,000",
+        "$1,500",
+        "$3,000"
+      ],
+      "explanation": "30 × $50 = $1,500; the 20-buy-in minimum is $1,000."
+    },
+    "l1-bankroll-q6": {
+      "question": "In the Kelly formula f* = (bp − q) / b, what does b stand for?",
+      "options": [
+        "Pot size",
+        "The odds (net payout)",
+        "Win rate",
+        "Number of buy-ins"
+      ],
+      "explanation": "b is the odds (net payout), p the win probability, q = 1 − p the loss probability, and f* the optimal fraction of bankroll."
+    },
+    "l1-bankroll-q7": {
+      "question": "With a 60% win rate and 1:1 net odds, what is the Kelly optimal fraction f*?",
+      "options": [
+        "10%",
+        "20%",
+        "40%",
+        "60%"
+      ],
+      "explanation": "f* = (1×0.6 − 0.4) ÷ 1 = 0.2 = 20%; practitioners often use half of it (Half Kelly ≈ 10%) to be safer."
+    },
+    "l1-bankroll-q8": {
+      "question": "How does Half Kelly differ from full Kelly?",
+      "options": [
+        "It halves the stake fraction, trading growth for safety",
+        "It doubles the stake fraction",
+        "It is identical to full Kelly",
+        "It only applies to tournaments"
+      ],
+      "explanation": "Half Kelly divides f* by 2, giving up some growth for smaller variance and drawdowns."
+    },
     "l1-leaks-q1": {
       "question": "What VPIP range do winning players typically have?",
       "options": [
@@ -223,6 +423,56 @@
         "2x pot"
       ],
       "explanation": "The standard flop bet is 1/3 to 2/3 of the pot, adjusted by board texture and range advantage."
+    },
+    "l1-leaks-q4": {
+      "question": "What is Leak #1 in this lesson?",
+      "options": [
+        "Ignoring position",
+        "Playing too many hands (VPIP too high)",
+        "Continuing to play while tilted",
+        "Never reviewing sessions"
+      ],
+      "explanation": "Leak #1 is playing too many hands: beginners enter 40-60% of pots while winning players play only 20-25%."
+    },
+    "l1-leaks-q5": {
+      "question": "Per this lesson, about how much win rate does fixing one leak add?",
+      "options": [
+        "About 0.1 BB/100",
+        "About 1-3 BB/100",
+        "About 10-20 BB/100",
+        "It cannot be quantified, so fixing leaks is pointless"
+      ],
+      "explanation": "Fixing one leak can add 1-3 BB/100; repairing the top five leaks is enough to turn a loser into a winner."
+    },
+    "l1-leaks-q6": {
+      "question": "What does this lesson say about passive calling?",
+      "options": [
+        "Calling is the strongest action",
+        "Most of the time you should choose between raising and folding instead of calling",
+        "Calling always beats folding",
+        "The more you call the better"
+      ],
+      "explanation": "Leak #3 is calling too much: most spots are a choice between raising and folding, and passive calling hands the initiative to the opponent."
+    },
+    "l1-leaks-q7": {
+      "question": "A +EV call loses 10 times in a row. What does that mean?",
+      "options": [
+        "The decision must be wrong",
+        "The EV math must be wrong",
+        "The decision can still be correct — single results are governed by variance",
+        "You should switch to always folding"
+      ],
+      "explanation": "EV only guarantees the long-run average; single outcomes are governed by variance. Decision quality and one-off results are different things."
+    },
+    "l1-leaks-q8": {
+      "question": "Why fix only one leak per week?",
+      "options": [
+        "Focusing on one leak beats fixing everything at once",
+        "Because leaks are unrelated to each other",
+        "Because it lets you play fewer hands",
+        "Because the rules require it"
+      ],
+      "explanation": "Picking one leak per week and focusing on it works far better than tackling everything at once; track progress with a calendar."
     }
   },
   "lessonExample": {

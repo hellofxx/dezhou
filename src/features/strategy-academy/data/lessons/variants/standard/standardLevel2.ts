@@ -30,7 +30,7 @@ const L2_3BET_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'formula',
-    content: '3-bet 范围组合计数：\n对手 3-bet 范围 = {AA, KK, QQ, AKs, A5s}\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\n总计 = 26 种组合\n\nBlocker 影响：当你持有 A♠ 时，\nAA 从 6 种减为 3 种，AKs 从 4 种减为 3 种\n3-bet 范围组合数从 26 降为 22',
+    content: '3-bet 范围组合计数：\n对手 3-bet 范围 = {AA, KK, QQ, AKs, A5s}\nAA = 6 种，KK = 6 种，QQ = 6 种，AKs = 4 种，A5s = 4 种\n总计 = 26 种组合\n\nBlocker 影响：当你持有 A♠ 时，\nAA 从 6 种减为 3 种，AKs 从 4 种减为 1 种，A5s 从 4 种减为 1 种\n3-bet 范围组合数从 26 降为 17',
   },
   {
     type: 'theory-reference',
@@ -93,25 +93,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             content: '反直觉点：加注越大对手弃牌越多，但你的成功率不一定更高。较大的加注虽然让对手跟注更贵，但也意味着你冒了更多风险去赢取有限的底池。2.5BB 是经过优化的平衡点。',
           },
         ],
-        quiz: [
-          {
-            id: 'l2-raise-q1',
-            question: '6人桌标准翻前加注大小是？',
-            options: ['1BB', '2.5BB', '5BB', '10BB'],
-            correctIndex: 1,
-            explanation: '标准翻前加注为2.5BB。这是现代线上扑克的主流大小。',
-          },
-          {
-            id: 'l2-raise-q2',
-            question: '为什么应该用统一大小加注？',
-            options: ['看起来更专业', '隐藏手牌强度', '节省筹码', '规则要求'],
-            correctIndex: 1,
-            explanation: '统一加注大小可以隐藏你的手牌强度，防止对手通过你的下注大小读出你的牌力。',
-          },
-          { id: 'l2-raise-q3', question: '加注大小对对手跟注率有什么影响？', options: ['加注越大跟注率越高', '加注越小跟注率越高', '没有影响', '加注越大跟注率越低'], correctIndex: 3, explanation: '加注越大，对手需要用更弱的牌跟注，跟注率越低。但底池也越大。' },
-          { id: 'l2-raise-q4', question: '在不同位置加注大小应该？', options: ['前位更大', '后位更大', '统一大小', '随机变化'], correctIndex: 2, explanation: '现代策略建议统一加注大小，不因位置变化。这隐藏了手牌强度。' },
-          { id: 'l2-raise-q5', question: '标准加注2.5BB的主要目的是？', options: ['看起来专业', '平衡风险和回报', '规则要求', '节省时间'], correctIndex: 1, explanation: '2.5BB平衡了风险和回报：足够大让弱牌弃牌，又不会冒太多风险。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l2-raise-ex1',
@@ -279,28 +261,10 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           '说明 3-bet 中"3"的计数口径：盲注为第 1 次下注、开牌加注为第 2 次、再加注为第 3 次',
           '列举 3-bet 的四个目的：价值、弃牌权益、主动权、隔离',
           '比较线性 3-bet 范围与极化 3-bet 范围，并给出新手阶段的使用先后顺序',
-          '计算 3-bet 范围的组合数并说明 Blocker 的影响：{AA,KK,QQ,AKs,A5s} 共 26 种，持 A♠ 时降为 22 种',
+          '计算 3-bet 范围的组合数并说明 Blocker 的影响：{AA,KK,QQ,AKs,A5s} 共 26 种，持 A♠ 时降为 17 种',
         ],
         content: [...L2_3BET_U1_SECTIONS, ...L2_3BET_U2_SECTIONS],
-        quiz: [
-          {
-            id: 'l2-3bet-q1',
-            question: '3-bet 中的"3"代表什么？',
-            options: ['3次加注', '第3次下注行为', '3个大盲注', '3个玩家'],
-            correctIndex: 1,
-            explanation: '3-bet 的"3"表示这是翻前的第3次下注行为：盲注(1)→开牌加注(2)→再加注(3)。',
-          },
-          {
-            id: 'l2-3bet-q2',
-            question: '初学者应该使用什么类型的3-bet范围？',
-            options: ['极化范围', '线性范围', '随机范围', '只用AA'],
-            correctIndex: 1,
-            explanation: '初学者应先用线性范围（只用强牌3-bet），熟练后再学习极化范围。',
-          },
-          { id: 'l2-3bet-q3', question: '3-bet的主要目的不包括？', options: ['获取价值', '迫使对手弃牌', '节省筹码', '获得主动权'], correctIndex: 2, explanation: '3-bet的目的是获取价值、弃牌权益、主动权和隔离。节省筹码不是3-bet的目的。' },
-          { id: 'l2-3bet-q4', question: '面对UTG open，哪个手牌最适合3-bet？', options: ['76s', 'KJs', 'AA', 'A5s'], correctIndex: 2, explanation: 'AA是最强的起手牌，面对任何open都应该3-bet获取价值。' },
-          { id: 'l2-3bet-q5', question: '3-bet大小通常是原始加注的多少倍？', options: ['1.5倍', '2倍', '3倍', '5倍'], correctIndex: 2, explanation: '标准3-bet大小是原始加注的3倍左右。例如面对2.5BB open，3-bet到7.5BB。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l2-3bet-ex1',
@@ -519,13 +483,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
             content: '反直觉点：4Bet Bluff 需要对手有相当高的弃牌率（约 57%）才能盈亏平衡。这意味着 4Bet Bluff 并不是一个可以频繁使用的策略，只在特定场合（对手弃牌过多时）才有效。',
           },
         ],
-        quiz: [
-          { id: 'l2-4bet-q1', question: '以下哪手牌最适合作为 4-Bet Bluff？', options: ['KQo', 'A5s', '99', 'JTs'], correctIndex: 1, explanation: 'A5s 有 A blocker（降低对手持 AA/AK 概率）+ 翻后可玩性（同花/顺子潜力），是经典 4-Bet Bluff 手牌。' },
-          { id: 'l2-4bet-q2', question: '标准 4-Bet 大小通常是 3-bet 额的多少倍？', options: ['1.5-2x', '2.2-2.5x', '3-3.5x', '4-5x'], correctIndex: 1, explanation: '标准 4-Bet 为 3-bet 额的 2.2-2.5 倍，如 3-bet 7.5BB → 4-Bet 16-19BB。' },
-          { id: 'l2-4bet-q3', question: '面对 TAG 的 4-Bet，你持有 JJ 应该如何？', options: ['永远 Fold', '5-Bet All-in', 'Call 看 flop', '根据情况 Call 或 Fold'], correctIndex: 3, explanation: 'JJ 面对 TAG 4-Bet 需判断：TAG 范围紧（AA/KK/AKs）→ Fold；若含 bluff → Call。没有绝对答案，需读对手。' },
-          { id: 'l2-4bet-q4', question: '面对紧玩家的4-Bet，应该弃掉哪手牌？', options: ['AA', 'KK', 'QQ', 'AKs'], correctIndex: 2, explanation: 'QQ面对紧玩家的4-Bet可以弃牌，因为紧玩家范围主要是AA/KK。但面对宽范围玩家应该Call。' },
-          { id: 'l2-4bet-q5', question: '4-Bet Bluff的主要优势是？', options: ['赢更多钱', '有A blocker降低对手强牌概率', '看起来更专业', '规则要求'], correctIndex: 1, explanation: '4-Bet Bluff手牌通常有A blocker，降低对手持有AA/AK的概率，增加弃牌权益。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l2-4bet-ex1', title: '价值 4-Bet：AKs 面对 3-bet',
@@ -624,13 +582,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { type: 'highlight', content: '面对 Squeeze 的防守：1) 4-Bet：AA/KK 2) Call：强牌但非顶级（QQ/AKs）3) Fold：弱 Call 范围（小对子/同花连牌面对大 Squeeze 弃牌）。' },
           { type: 'pro-tip', content: 'Squeeze 最佳时机：Open 者范围宽（CO/BTN）+ Call 者是弱玩家（不会 4-Bet bluff）。避免对紧 UTG Open 做 Squeeze bluff。' },
         ],
-        quiz: [
-          { id: 'l2-squeeze-q1', question: 'Squeeze Play 是指什么情况？', options: ['面对 Open 的 3-bet', '面对 1 Open + 1+ Call 的 3-bet', '面对 4-Bet 的 5-Bet', '翻后的 Check-Raise'], correctIndex: 1, explanation: 'Squeeze 特指面对 1 个 Open + 1 个或多个 Call 时的 3-bet，利用死钱和弃牌率获利。' },
-          { id: 'l2-squeeze-q2', question: 'Open 2.5BB + 1 Call 后，标准 Squeeze 大小是？', options: ['5-6BB', '7.5-8BB', '10-12BB', '15-18BB'], correctIndex: 2, explanation: 'Squeeze 通常为 Open 额的 4-5x，有 Caller 时适当增加。2.5BB Open → 10-12BB Squeeze。' },
-          { id: 'l2-squeeze-q3', question: '以下哪手牌最适合作为 Squeeze Bluff？', options: ['KJo', 'A4s', '88', 'QTs'], correctIndex: 1, explanation: 'A4s 有 A blocker + 翻后可玩性（同花/顺子潜力），是经典 Squeeze bluff 手牌。' },
-          { id: 'l2-squeeze-q4', question: 'Squeeze的最佳时机是？', options: ['UTG Open + Call', 'BTN Open + Call', 'CO Open + 2 Calls', 'SB Open + Call'], correctIndex: 1, explanation: 'BTN Open范围宽+Call者范围弱，Squeeze弃牌率最高。避免对紧UTG Open做Squeeze bluff。' },
-          { id: 'l2-squeeze-q5', question: '面对Squeeze时，哪手牌应该4-Bet？', options: ['QQ', 'AKs', 'AA', 'JJ'], correctIndex: 2, explanation: 'AA是绝对核心4-Bet牌，面对Squeeze应该4-Bet获取价值。不要慢打AA。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l2-squeeze-ex1', title: '价值 Squeeze：QQ 面对 Open + Call',
@@ -727,13 +679,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { type: 'highlight', content: 'Blind Defense Frequency：如果防守 < 40%，对手可任意偷盲获利。如果 > 60%，过度防守会被价值下注惩罚。根据对手 Open 范围调整。' },
           { type: 'pro-tip', content: '面对紧对手（NIT/UTG Open）防守要紧，面对松对手（LAG/BTN Open）防守要宽。对手 Open 范围越宽，你的防守范围也应越宽。' },
         ],
-        quiz: [
-          { id: 'l2-bb-q1', question: 'BB 面对 BTN Open 2.5BB，防守范围应处于哪一档？', options: ['最紧一档，只留强牌', '偏紧一档', '最宽一档，含大量中等牌力', '几乎不弃牌'], correctIndex: 2, explanation: 'BTN 是 6 人桌开池最宽的位置，BB 又已投入 1BB、补差额赔率极好，因此这是各位置中防守最宽的一档。' },
-          { id: 'l2-bb-q2', question: 'BB 面对 Open 2.5BB，Call 需要补多少？', options: ['0.5BB', '1BB', '1.5BB', '2.5BB'], correctIndex: 2, explanation: 'BB 已投入 1BB，面对 2.5BB Open 只需补 1.5BB 即可 Call，底池赔率极好。' },
-          { id: 'l2-bb-q3', question: 'BB 面对 UTG Open，防守范围应处于哪一档？', options: ['最紧一档，只用强牌', '偏宽一档', '最宽一档', '几乎不弃牌'], correctIndex: 0, explanation: 'UTG 只开最强的一小撮牌，BB 面对这种最强的开池范围应收得最紧，只用强牌防守。' },
-          { id: 'l2-bb-q4', question: 'BB防守时，哪手牌适合3-bet bluff？', options: ['98s', 'A4s', 'KJo', '76s'], correctIndex: 1, explanation: 'A4s有A blocker，降低对手持AA/AK概率，是经典3-bet bluff手牌。' },
-          { id: 'l2-bb-q5', question: '与其他开池位置相比，BB 面对 BTN Open 的防守范围应该？', options: ['与面对 UTG 一样紧', '比面对 CO 更紧', '各位置中最宽', '一律跟注不加注'], correctIndex: 2, explanation: 'BTN 开池最宽、BB 已投入 1BB 赔率好，所以面对 BTN 的防守在各位置中最宽。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l2-bb-ex1', title: 'BB 宽防守：K9s 面对 BTN Open',
@@ -832,13 +778,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { type: 'highlight', content: '盲注战争中位置劣势（SB翻后先行动）是关键因素。SB应该选择“能强势打的手牌”而不是“边缘手牌”。' },
           { type: 'pro-tip', content: '如果BB中的对手弃3-bet很多，可以稍微缩紧SB的Open范围，但保留足够的强牌做4-Bet Bluff。' },
         ],
-        quiz: [
-          { id: 'l2-blind-q1', question: 'SB vs BB 单挑时，SB 的标准 Open 范围应处于哪一档？', options: ['与前位开池一样紧', '只开强牌一档', '很宽一档（约三成半）', '几乎任意两张牌'], correctIndex: 2, explanation: 'SB 只需击败 BB 一个对手，因此开池属于很宽的一档（约三成半）；精确构成见范围训练模块与 GTO 策略表。' },
-          { id: 'l2-blind-q2', question: 'BB 面对 SB Open 的防御范围应该？', options: ['很紧，只防强牌', '与面对 BTN Open 一样紧', '放得很宽（3-bet + Call 合计）', '大部分牌直接弃掉'], correctIndex: 2, explanation: 'BB 已投入 1BB 且 SB 的范围偏弱，应把防御面放得很宽（3-bet + Call 合计）。' },
-          { id: 'l2-blind-q3', question: 'SB Open的标准尺度是多少？', options: ['2BB', '2.5-3BB', '4BB', '5BB'], correctIndex: 1, explanation: 'SB没有翻后位置优势，所以用较大的尺度（2.5-3BB）来降低BB的防御频率。' },
-          { id: 'l2-blind-q4', question: 'SB Open时应该采用什么策略？', options: ['Raise or Fold', 'Limp or Fold', 'Raise or Call', '随机策略'], correctIndex: 0, explanation: 'SB应该用raise-or-fold策略，避免limp。Limp让BB免费看牌，丧失主动权。' },
-          { id: 'l2-blind-q5', question: '盲注战争中SB位置劣势体现在？', options: ['翻前劣势', '翻后先行动', '筹码劣势', '没有劣势'], correctIndex: 1, explanation: 'SB翻后先行动（OOP），缺乏信息优势。这是盲注战争的核心挑战。' },
-        ],
+        quiz: [],
         practice: {
           id: 'l2-blind-practice',
           questions: [
@@ -919,13 +859,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           { type: 'highlight', content: '短筹码时最常见的错误是用100BB的思维打短筹码。例如，35BB时仍然用98s跟注3-bet是大错，因为集合的可实现性太低。' },
           { type: 'pro-tip', content: '在锦标赛中筹码会不断变化，熟练地在不同筹码深度之间切换策略是必备技能。' },
         ],
-        quiz: [
-          { id: 'l2-short-q1', question: '筹码 ≤20BB 时应采用什么策略？', options: ['小加注+跟注', 'Push/Fold', '仅打AA/KK', '和100BB一样'], correctIndex: 1, explanation: '20BB以下策略简化为Push或Fold，没有中间地带。' },
-          { id: 'l2-short-q2', question: '短筹码时哪种手牌类型价值下降最多？', options: ['口袋对子(AA/KK)', '同花连牌(67s/89s)', 'AK/AQ', '高对子(TT/JJ)'], correctIndex: 1, explanation: '筹码越浅，同花连牌的“可打性”优势无法发挥，原始胜率低的缺点更加明显。' },
-          { id: 'l2-short-q3', question: '30-50BB时Open尺度应调整为？', options: ['3BB', '2-2.2BB', '4BB', '全下'], correctIndex: 1, explanation: '筹码较浅时减小Open尺度到 2-2.2BB，降低风险同时保留翻后操作空间。' },
-          { id: 'l2-short-q4', question: '短筹码时哪手牌价值上升最多？', options: ['同花连牌', '小对子', '大对子(AA/KK)', '同花Ax'], correctIndex: 2, explanation: '筹码越浅，大对子的原始胜率优势越明显。同花连牌的可打性无法发挥。' },
-          { id: 'l2-short-q5', question: '20BB时BTN位应该用多宽范围Push？', options: ['10%', '20%', '30-40%', '60%'], correctIndex: 2, explanation: '20BB时BTN push范围约30-40%，包括所有大对、大牌、部分同花连牌。' },
-        ],
+        quiz: [],
         practice: {
           id: 'l2-short-practice',
           questions: [

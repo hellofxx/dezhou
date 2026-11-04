@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { Swords, Route, ChevronRight } from 'lucide-react';
+import { Route } from 'lucide-react';
+import { AcademyBridgeCard } from '@/shared/components/academy';
+import type { AcademyBridgeCta, AcademyBridgeItem } from '@/shared/types/academy';
 import type { PracticeRecommendation } from '../types';
 
 interface PracticeBridgeCardProps {
@@ -12,7 +13,10 @@ interface PracticeBridgeCardProps {
 
 /**
  * "去实践"推荐卡：理论→实践闭环出口，Level 粒度与章节粒度共用。
- * 仅通过路由字符串跳转 strategy-academy（不产生跨模块 import）；
+ *
+ * 展示层改用两院共享 `AcademyBridgeCard`（行为/文案/ARIA 不变），本组件只做理论侧适配：
+ * 文案取 `theory.bridge.*` 与 `academy.lessonTitle.*`，路由拼 `/academy/lesson/:id` 与
+ * `/academy/tracks?track=`（仅路由字符串，不产生跨模块 import）。
  * Level 粒度引用完整性由 strategy-academy curriculumIntegrity 测试守卫，
  * 标准章节粒度由 theory-academy data/theoryIntegrity 的子集断言守卫，
  * 变体章节粒度（l&lt;n&gt;hu|sd-* 与共享地基课）由 strategy-academy
@@ -22,45 +26,29 @@ export function PracticeBridgeCard({ recommendations, subtitleKey = 'theory.brid
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const items: AcademyBridgeItem[] = recommendations.lessons.map((lesson) => ({
+    id: lesson.id,
+    label: t(`academy.lessonTitle.${lesson.id}`, { defaultValue: lesson.title }),
+    route: `/academy/lesson/${lesson.id}`,
+  }));
+
+  // P1F-04：携带 ?track= 参数，LearningTracksView（P1E-01）消费后滚动高亮目标轨道
+  const cta: AcademyBridgeCta | undefined = recommendations.trackId
+    ? {
+        label: t('theory.bridge.enterTrack'),
+        route: `/academy/tracks?track=${recommendations.trackId}`,
+      }
+    : undefined;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rounded-lg border border-[var(--brass)]/30 bg-[var(--felt-deep)] p-5"
-    >
-      <div className="flex items-center gap-2 mb-1">
-        <Swords className="w-4 h-4 text-[var(--brass-bright)]" />
-        <h3 className="font-display text-[16px] text-[var(--ivory)]">{t('theory.bridge.applyPractice')}</h3>
-      </div>
-      <p className="text-xs text-[var(--ivory-muted)] mb-4">
-        {t(subtitleKey)}
-      </p>
-      <div className="space-y-2">
-        {recommendations.lessons.map((lesson) => (
-          <button
-            key={lesson.id}
-            onClick={() => navigate(`/academy/lesson/${lesson.id}`)}
-            aria-label={t('theory.bridge.gotoLesson', {
-              title: t(`academy.lessonTitle.${lesson.id}`, { defaultValue: lesson.title }),
-            })}
-            className="w-full flex min-h-11 items-center justify-between px-4 py-2.5 rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 transition-all text-sm text-[var(--ivory-dim)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
-          >
-            <span>{t(`academy.lessonTitle.${lesson.id}`, { defaultValue: lesson.title })}</span>
-            <ChevronRight className="w-4 h-4 text-[var(--ivory-muted)]" />
-          </button>
-        ))}
-        {recommendations.trackId && (
-          <button
-            // P1F-04：携带 ?track= 参数，LearningTracksView（P1E-01）消费后滚动高亮目标轨道
-            onClick={() => navigate(`/academy/tracks?track=${recommendations.trackId}`)}
-            aria-label={t('theory.bridge.gotoTrack')}
-            className="w-full flex min-h-11 items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
-          >
-            <Route className="w-4 h-4" />
-            {t('theory.bridge.enterTrack')}
-          </button>
-        )}
-      </div>
-    </motion.div>
+    <AcademyBridgeCard
+      title={t('theory.bridge.applyPractice')}
+      subtitle={t(subtitleKey)}
+      items={items}
+      cta={cta}
+      ctaIcon={<Route className="w-4 h-4" />}
+      itemAriaLabel={(item) => t('theory.bridge.gotoLesson', { title: item.label })}
+      onNavigate={navigate}
+    />
   );
 }

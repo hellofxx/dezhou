@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import i18n from '@/i18n/config';
 import type { TheoryPlacementResult } from '../types';
@@ -42,10 +42,18 @@ function reset(progress: Partial<typeof originalProgress> = {}) {
   });
 }
 
+function LocationProbe() {
+  const location = useLocation();
+  return <p data-testid="location">{location.pathname}</p>;
+}
+
 function mount() {
   return render(
     <MemoryRouter initialEntries={['/theory']}>
       <TheoryHome />
+      <Routes>
+        <Route path="*" element={<LocationProbe />} />
+      </Routes>
     </MemoryRouter>,
   );
 }
@@ -108,11 +116,12 @@ describe('TheoryHome 收藏书签条', () => {
     expect(screen.queryByText(i18n.t('theory.bookmarks.empty'))).toBeNull();
   });
 
-  it('有收藏时渲染书签条与章节链接', () => {
+  it('有收藏时渲染书签条与章节入口', () => {
     reset({ bookmarkedChapters: ['t1-combinatorics'] });
     mount();
-    const links = screen.getAllByRole('link', { name: /组合计数/ });
-    expect(links.some((link) => link.getAttribute('href') === '/theory/chapter/t1-combinatorics')).toBe(true);
+    // 书签条条目由共享面板渲染为 button + onNavigate（共享层不引 router），用路由探针断言跳转
+    fireEvent.click(screen.getByRole('button', { name: i18n.t('theory.chapterTitle.t1-combinatorics') }));
+    expect(screen.getByTestId('location').textContent).toBe('/theory/chapter/t1-combinatorics');
   });
 });
 

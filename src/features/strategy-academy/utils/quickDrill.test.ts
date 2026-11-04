@@ -131,14 +131,26 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
     expect(result.map((q) => q.id).sort()).toEqual(['l1-q1', 'l2-q1']);
   });
 
-  it('弱点领域过滤：rangeKnowledge 只匹配翻前', () => {
-    const result = getQuickDrillQuestions(lessons, ['rangeKnowledge'], 'beginner', 1);
-    expect(result.map((q) => q.id)).toEqual(['l1-q1']);
+  it('弱点维度按 lessonMeta 命中：未登记课时回退 postflop', () => {
+    // l1 / l2 未登记 lessonMeta → 维度回退 postflop，因此 ['postflop'] 视为全命中
+    const result = getQuickDrillQuestions(lessons, ['postflop'], 'beginner', 2);
+    expect(result.map((q) => q.id).sort()).toEqual(['l1-q1', 'l2-q1']);
   });
 
-  it('oddsCalculation 匹配翻牌/转牌', () => {
-    const result = getQuickDrillQuestions(lessons, ['oddsCalculation'], 'intermediate', 1);
-    expect(result.map((q) => q.id)).toEqual(['l2-q2']);
+  it('弱点维度不匹配时不进候选池（回填阶段仍会补齐题量）', () => {
+    // 所有课时维度均为 postflop，['math'] 首选池为空 → 走回填，仍返回请求题量
+    const result = getQuickDrillQuestions(lessons, ['math'], 'advanced', 3);
+    expect(result).toHaveLength(3);
+  });
+
+  it('维度来自 lessonMeta：已登记课时按其 eloDimension 命中', () => {
+    const mixed: Lesson[] = [
+      makeLesson('l1-basics', [makeQuestion('l1-basics-q1', { difficulty: 'beginner' })]),
+      makeLesson('l-unknown', [makeQuestion('l-unknown-q1', { difficulty: 'beginner' })]),
+    ];
+    // l1-basics → handReading（lessonMeta 已登记）；l-unknown → postflop 回退
+    const result = getQuickDrillQuestions(mixed, ['handReading'], 'beginner', 1);
+    expect(result.map((q) => q.id)).toEqual(['l1-basics-q1']);
   });
 
   it('排除课程前缀生效（候选不足回填阶段同样排除）', () => {
@@ -147,10 +159,9 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
   });
 
   it('候选不足时放宽条件补齐，但不超过 count', () => {
-    const result = getQuickDrillQuestions(lessons, ['rangeKnowledge'], 'advanced', 3);
+    const result = getQuickDrillQuestions(lessons, ['postflop'], 'advanced', 3);
     expect(result).toHaveLength(3);
-    // 首选只有 l1-q2（advanced + preflop? 否，flop 不匹配 rangeKnowledge），
-    // 因此必然包含回填题目，集合不应只含目标难度
+    // 首选只有 l1-q2（advanced），因此必然包含回填题目，集合不应只含目标难度
     expect(new Set(result.map((q) => q.id)).size).toBe(result.length);
   });
 

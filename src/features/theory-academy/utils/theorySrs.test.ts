@@ -153,15 +153,12 @@ describe('buildTheoryReviewItems（错题 → 复习项）', () => {
     expect(items[0]?.id).toBe('theory:t1-combinatorics-q1');
   });
 
-  it('重复题 id 会产出重复项 —— 幂等性由 progress.addReviewItem 的按 id upsert 保证', () => {
+  it('重复题 id 只产出一项（共享层按题 id 去重，队列幂等不再依赖 upsert 兜底）', () => {
     const items = buildTheoryReviewItems(chapter(quiz), [
       't1-combinatorics-q1',
       't1-combinatorics-q1',
     ]);
-    expect(items.map((i) => i.id)).toEqual([
-      'theory:t1-combinatorics-q1',
-      'theory:t1-combinatorics-q1',
-    ]);
+    expect(items.map((i) => i.id)).toEqual(['theory:t1-combinatorics-q1']);
   });
 });
 

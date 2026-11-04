@@ -26,14 +26,6 @@ describe('strategy-academy store persisted shape', () => {
 
     expect(buildPersistedShape(persisted)).toMatchInlineSnapshot(`
       {
-        "abilityAssessment": {
-          "emotionalControl": "number",
-          "gtoUnderstanding": "number",
-          "lastUpdated": "number",
-          "oddsCalculation": "number",
-          "positionalPlay": "number",
-          "rangeKnowledge": "number",
-        },
         "activeTrackId": "null",
         "activeVariant": "string",
         "adaptiveConfig": {
@@ -47,10 +39,13 @@ describe('strategy-academy store persisted shape', () => {
           "completed": "boolean",
           "currentStep": "number",
         },
+        "bookmarkedLessons": "array",
         "certifications": {},
+        "checkpoints": {},
         "dailyPlan": "null",
-        "firstAttemptScores": {},
-        "lastAttemptScores": {},
+        "lessonAttempts": {},
+        "lessonNotes": {},
+        "placement": "null",
         "practiceResults": "array",
         "progress": {
           "completedLessons": "array",

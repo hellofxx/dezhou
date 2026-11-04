@@ -12,7 +12,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import i18n from '@/i18n/config';
-import { TheoryCheckpoint } from './TheoryCheckpoint';
+import { CERTIFICATION_LEVEL_BY_THEORY_LEVEL, TheoryCheckpoint } from './TheoryCheckpoint';
 import { useTheoryStore } from '../store';
 import { useProgressStore } from '@/features/progress/store';
 import { loadTheoryLevelById } from '../data/levels/loaders';
@@ -198,6 +198,22 @@ describe('TheoryCheckpoint 提交口径', () => {
     expect(container.textContent).toContain(t('theory.checkpoint.noCertificate'));
   });
 
+  it('标准变体检查点完成后给出「用认证检验实战」入口（只拼路由，不读策略 store）', async () => {
+    await renderAndStart();
+    const questions = await expectedQuestions(1);
+    await answerAll(
+      questions,
+      questions.map(() => false),
+    );
+
+    const cta = container.querySelector('a[href^="/academy/certification/"]');
+    expect(cta, '缺少认证 CTA').toBeTruthy();
+    expect(cta!.getAttribute('href')).toBe(
+      `/academy/certification/${CERTIFICATION_LEVEL_BY_THEORY_LEVEL[1]}`,
+    );
+    expect(cta!.textContent).toContain(t('theory.checkpoint.certificationCta'));
+  });
+
   it('重考不更新 ELO，错题按来源章写入 SRS 队列', async () => {
     await renderAndStart();
     const first = await expectedQuestions(1);
@@ -221,5 +237,28 @@ describe('TheoryCheckpoint 提交口径', () => {
       .map((item) => `theory:${item.question.id}`);
     const queue = reviewItemIds();
     for (const id of wrongIds) expect(queue).toContain(id);
+  });
+});
+
+describe('检查点 → 认证 Level 映射', () => {
+  it('T1–T9 逐级映射到策略认证 Level（T1/T2→1，T3→2，T4/T5/T7→4，T6→3，T8→5，T9→6）', () => {
+    expect(CERTIFICATION_LEVEL_BY_THEORY_LEVEL).toEqual({
+      1: 1,
+      2: 1,
+      3: 2,
+      4: 4,
+      5: 4,
+      6: 3,
+      7: 4,
+      8: 5,
+      9: 6,
+    });
+  });
+
+  it('映射不含未定义的策略 Level（认证页按 parseInt 解析，1–6 才有题池）', () => {
+    for (const certificationLevel of Object.values(CERTIFICATION_LEVEL_BY_THEORY_LEVEL)) {
+      expect(certificationLevel).toBeGreaterThanOrEqual(1);
+      expect(certificationLevel).toBeLessThanOrEqual(6);
+    }
   });
 });

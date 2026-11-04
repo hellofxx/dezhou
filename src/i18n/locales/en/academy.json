@@ -101,6 +101,10 @@
     "completeLevelFirst": "Please complete all lessons in this Level first",
     "missingPrereqHint": "Please complete the following prerequisite lessons:"
   },
+  "theoryBridge": {
+    "title": "View the theory",
+    "subtitle": "The derivations behind this lesson live in these Theory Academy chapters"
+  },
   "lessonUnit": {
     "introTitle": "Lesson Roadmap",
     "introDuration": "Duration {{duration}}",
@@ -411,7 +415,9 @@
     "currentTrack": "Current Track",
     "goLearn": "Go Learn →",
     "lessonsCount": "{{completed}}/{{total}} lessons",
-    "recommendedByAbility": "Recommended based on your five-dimension ability scores",
+    "recommendedByAbility": "Recommended based on your five-dimension ELO",
+    "leakFixAllDone": "No unfinished lessons in the weakest dimension — keep training",
+    "startRecommendation": "Start Recommended Lessons",
     "selectTrack": "Select This Track",
     "deselectTrack": "Deselect",
     "continueLearning": "Continue Learning"
@@ -422,7 +428,10 @@
   },
   "levelCard": {
     "lessonsCompleted": "{{completed}}/{{total}} lessons completed",
-    "takeCertification": "Take Level {{level}} Certification Quiz"
+    "takeCertification": "Take Level {{level}} Certification Quiz",
+    "certExpired": "Certification expired · Renew Level {{level}}",
+    "certCooldown": "Certification cooldown — retry in {{time}}",
+    "certifiedUntil": "Certified until {{date}}"
   },
   "levelCertification": {
     "levelNotFound": "Level not found",
@@ -438,7 +447,21 @@
     "passedTitle": "Level {{level}} Certified!",
     "keepGoing": "Keep Going!",
     "passedHint": "Congrats! You've mastered this level's core knowledge",
-    "needAccuracy": "Need {{required}}% or higher to pass"
+    "needAccuracy": "Need {{required}}% or higher to pass",
+    "renew": "Renew",
+    "poolSize": "Level pool: {{pool}} questions",
+    "validUntil": "Valid until {{date}} ({{days}} days left)",
+    "expired": "Expired on {{date}} — renew now",
+    "cooldown": "Cooldown: try again in {{time}} (24h after a failed attempt)",
+    "rejectCooldown": "Result not recorded: cooldown, try again in {{time}}",
+    "rejectAlreadyCertified": "Result not recorded: your certification is still valid",
+    "rejectNotCompleted": "Result not recorded: complete all lessons in this level first",
+    "rejectWrongVariant": "Result not recorded: certification is only available in the standard variant",
+    "rejectInvalid": "Result not recorded: invalid submission",
+    "theoryAnchors": "Review the derivations in Theory Academy",
+    "theoryAnchorLink": "Theory chapter {{id}}",
+    "variantLocked": "Certification is only available in the standard variant (current: {{variant}})",
+    "notCompletedLocked": "Complete all lessons in this level to unlock certification ({{completed}}/{{total}})"
   },
   "mdf": {
     "tabDerivation": "MDF Derivation",
@@ -661,7 +684,47 @@
     "basics": "Poker Basics",
     "basicsDesc": "Rules, hand rankings & positions",
     "graph": "Concept Graph",
-    "graphDesc": "Visualize knowledge dependencies"
+    "graphDesc": "Visualize knowledge dependencies",
+    "search": "Search Lessons",
+    "searchDesc": "Find by title or subtitle",
+    "glossary": "Glossary",
+    "glossaryDesc": "Maintained by Theory Academy",
+    "placement": "Placement Test",
+    "placementDesc": "16 questions to find your starting point",
+    "bookmarks": "My Bookmarks",
+    "bookmarksDesc": "Saved lessons, ready to reread",
+    "bibliography": "Bibliography",
+    "bibliographyDesc": "Further reading by level"
+  },
+  "mastery": {
+    "title": "Mastery",
+    "subtitle": "Based on first-attempt lesson quiz scores",
+    "mastered": "Mastered",
+    "passing": "Passing",
+    "needsReview": "Needs review",
+    "untested": "Untested",
+    "total": "Total lessons",
+    "weakestCta": "Review weakest lesson"
+  },
+  "search": {
+    "title": "Search Strategy Lessons",
+    "subtitle": "Find lessons by title or subtitle",
+    "placeholder": "Search lessons…",
+    "lessons": "Lessons",
+    "emptyTitle": "No matches",
+    "emptyHint": "Try another keyword or return to the academy",
+    "backToAcademy": "Back to Strategy Academy",
+    "contentHits": "Matches in lesson content",
+    "loadingFullText": "Loading full-text index…",
+    "loadFailed": "Full-text search failed; showing title matches",
+    "retryFullText": "Retry full-text"
+  },
+  "eloDimension": {
+    "preflop": "Preflop",
+    "postflop": "Postflop",
+    "math": "Math",
+    "handReading": "Hand reading",
+    "mental": "Mental"
   },
   "dailyPlan": {
     "title": "Today's Plan",
@@ -695,5 +758,112 @@
     "gradeInaccuracy": "Minor Inaccuracy",
     "gradeWrong": "Wrong",
     "gradeBlunder": "Blunder"
+  },
+  "checkpointHome": {
+    "title": "Level Checkpoint",
+    "entry": "L{{level}} Checkpoint",
+    "desc": "12 mixed questions, scores only, no certificate",
+    "lockedDesc": "Unlocks once this level's lessons are done"
+  },
+  "bookmarks": {
+    "title": "Bookmarked Lessons",
+    "add": "Bookmark lesson",
+    "remove": "Remove bookmark",
+    "empty": "No bookmarks yet. Save the lessons you want to reread and come back anytime",
+    "pageTitle": "My Bookmarks",
+    "pageSubtitle": "Bookmarked lessons in the order you saved them — open one to reread, or remove it here",
+    "browseLessons": "Browse lessons"
+  },
+  "notes": {
+    "title": "Lesson Notes",
+    "placeholder": "Jot down key points, your own examples, or open questions",
+    "charCount": "{{count}} / {{max}} characters",
+    "save": "Save",
+    "clear": "Clear",
+    "empty": "No notes yet. Two lines while reading saves half the time later",
+    "saved": "Note saved",
+    "cleared": "Note cleared"
+  },
+  "report": {
+    "title": "Report a Content Issue",
+    "subtitle": "Typos, wrong numbers, unclear explanations — send them straight to us",
+    "placeholder": "Describe the section and what is wrong",
+    "includeContext": "Include lesson and section context",
+    "copy": "Copy report",
+    "mailto": "Send by email",
+    "success": "Report ready — paste it into any channel to submit",
+    "copied": "Copied",
+    "failure": "Copy failed — select the text and copy manually"
+  },
+  "contentMeta": {
+    "lastReviewed": "Last reviewed {{date}}",
+    "reportIssue": "Report issue"
+  },
+  "levelCheckpoint": {
+    "levelNotFound": "Level not found",
+    "backToAcademy": "Back to Strategy Academy",
+    "title": "Level {{level}} Checkpoint",
+    "subtitle": "12 mixed questions across this level's core lessons; results break down by source lesson.",
+    "lockedHint": "Finish every lesson in this level to start the checkpoint (currently {{completed}}/{{total}})",
+    "notReady": "The question pool for this level is unavailable. Please try again later",
+    "questionCount": "Questions: {{count}}",
+    "attempts": "Attempts: {{count}}",
+    "bestScore": "Best: {{score}}%",
+    "formativeNote": "Formative self-check: no certificate and no unlock of the next level",
+    "noCooldown": "Retake anytime; retakes do not count toward ELO",
+    "entry": "Start checkpoint",
+    "questionOf": "Question {{current}} / {{total}}",
+    "sourceLesson": "Source lesson: {{lessonId}}",
+    "finish": "See results",
+    "resultTitle": "Level {{level}} Checkpoint Results",
+    "score": "{{score}}%",
+    "firstAndBest": "First {{first}}% · Best {{best}}%",
+    "firstAttemptNote": "This attempt fed each question's ELO back to its source lesson",
+    "retakeNote": "Retakes do not affect ELO; only scores and the review queue update",
+    "dimensionBreakdown": "Performance by dimension",
+    "srsHint": "{{count}} wrong answers were added to your review queue, linked back to their source lessons",
+    "certificationDiff": "Unlike certification (pass mark, cooldown, expiry), a checkpoint is for self-review and retraining focus only. Retake it anytime.",
+    "retry": "Check again"
+  },
+  "bibliography": {
+    "backToAcademy": "Back to Strategy Academy",
+    "title": "Bibliography",
+    "subtitle": "Authoritative sources behind the strategy lessons, grouped by level; no text is reproduced here",
+    "count": "{{count}} books",
+    "theoryLink": "See the Theory Academy bibliography",
+    "empty": "No bibliography entries yet",
+    "theory-of-poker": {
+      "note": "The foundational text on pot odds, implied odds and bluffing."
+    },
+    "harrington-on-holdem": {
+      "note": "Classic MTT hand charts and M-value thinking behind L1 and L6."
+    },
+    "mathematics-of-poker": {
+      "note": "Game-theory and probability treatment of bet sizing."
+    },
+    "no-limit-holdem-advanced-players": {
+      "note": "Range construction and bet frequencies from preflop to river."
+    },
+    "applications-of-nlhe": {
+      "note": "Frequency- and EV-based look at multi-street betting, MDF and range advantage."
+    },
+    "modern-poker-theory": {
+      "note": "A systematic GTO reference for ranges and blockers in L4-L5."
+    },
+    "play-optimal-poker": {
+      "note": "Game-tree intuition for mixed strategies and unexploitability."
+    },
+    "grinders-manual": {
+      "note": "Six-max cash game curriculum for applying L4 concepts."
+    },
+    "how-to-read-hands": {
+      "note": "Hand reading from action, a companion to L3 and L7."
+    },
+    "mental-game-of-poker": {
+      "note": "Mental training for downswings and tilt, matching the L5 mindset lesson."
+    },
+    "exploitative-play-live-poker": {
+      "note": "Live low-stakes exploits for the L7-L8 adjustments."
+    }
   }
 }

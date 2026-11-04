@@ -1,8 +1,11 @@
-import { hashStringToSeed, shuffleBySeed } from '@/shared/utils/seededShuffle';
+import { drawByAttempt, getAttemptSeed } from '@/shared/utils/academyQuizDraw';
 import type { TheoryChapterAttempt } from '../types';
 
 /**
  * 章末小测抽题出口（题量与抽题确定性治理）。
+ *
+ * 抽题实现改用两院共享 `drawByAttempt`（策略课时抽 5 / 认证抽 20 同源），
+ * 本文件只保留理论侧口径：按 Level 的题量、作答序号与首次判定。
  *
  * 口径（PRD §5.27.6）：
  * - 每章按 Level 抽固定题量：T1–T3（基础段）5 题，T4–T9（中高级段）6 题；
@@ -41,7 +44,7 @@ export function isFirstChapterAttempt(
 
 /** 抽题种子（导出供测试断言同种子同结果，不参与渲染） */
 export function getQuizDrawSeed(chapterId: string, attemptNumber: number): number {
-  return hashStringToSeed(`${chapterId}#${attemptNumber}`);
+  return getAttemptSeed(chapterId, attemptNumber);
 }
 
 export interface QuizDrawOptions {
@@ -60,7 +63,7 @@ export function drawQuizQuestions<T extends { id: string }>(
   questions: readonly T[],
   { chapterId, attemptNumber, size }: QuizDrawOptions,
 ): T[] {
-  if (questions.length === 0) return [];
-  const shuffled = shuffleBySeed(questions, getQuizDrawSeed(chapterId, attemptNumber));
-  return shuffled.slice(0, Math.min(Math.max(size, 1), shuffled.length));
+  // 抽题种子与题量裁剪口径由共享 drawByAttempt 统一（`hash(chapterId#attemptNumber)` + seededShuffle），
+  // 本函数只保留理论侧的署名参数形态（章节粒度）。
+  return drawByAttempt(questions, { key: chapterId, attemptNumber, size });
 }

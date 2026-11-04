@@ -8,13 +8,16 @@ import { useTranslation } from 'react-i18next';
 import { useAcademyStore } from '../store';
 import { findLessonSummaryById } from '../utils/academyMeta';
 import { resolveLessonTitle } from '../utils/titleKeys';
+import type { EloDimension } from '@/shared/types/elo';
 
-const ABILITY_I18N_KEYS: Record<string, string> = {
-  rangeKnowledge: 'academy.ability.rangeKnowledge',
-  oddsCalculation: 'academy.ability.oddsCalculation',
-  gtoUnderstanding: 'academy.ability.gtoUnderstanding',
-  positionalPlay: 'academy.ability.positionalPlay',
-  emotionalControl: 'academy.ability.emotionalControl',
+// 焦点维度文案（ELO 五维）：key 由 dimension 动态拼装 `academy.eloDimension.<dimension>`，
+// 待 T4 在 academy.json 落盘；缺失时用语言中立的英文标签兜底（不伪造中文）。
+const ELO_DIMENSION_FALLBACK_LABEL: Record<EloDimension, string> = {
+  preflop: 'Preflop',
+  postflop: 'Postflop',
+  math: 'Odds Math',
+  handReading: 'Hand Reading',
+  mental: 'Mentality',
 };
 
 // 预计用时 token → i18n key（calculateEstimatedTime 已改输出 token；兼容旧持久化中文值）
@@ -42,8 +45,9 @@ export function DailyPlanCard() {
   if (!hasContent) return null;
 
   const newLessonInfo = newLesson ? findLessonSummaryById(newLesson) : null;
-  const abilityLabel =
-    focusArea && ABILITY_I18N_KEYS[focusArea] ? t(ABILITY_I18N_KEYS[focusArea]) : '';
+  const abilityLabel = focusArea
+    ? t(`academy.eloDimension.${focusArea}`, { defaultValue: ELO_DIMENSION_FALLBACK_LABEL[focusArea] })
+    : '';
   const timeText =
     estimatedTime && TIME_TOKEN_KEYS[estimatedTime]
       ? t('academy.dailyPlan.estimatedTime', { time: t(TIME_TOKEN_KEYS[estimatedTime]) })

@@ -129,6 +129,56 @@
       ],
       "explanation": "Separate funds is the first principle of bankroll management. Mixing leads to irrational decisions under pressure."
     },
+    "l5-br-q6": {
+      "question": "Under the Kelly criterion, what is the optimal bankroll fraction f* at a 55% win rate with 1:1 net odds?",
+      "options": [
+        "5%",
+        "10%",
+        "20%",
+        "45%"
+      ],
+      "explanation": "f* = (bp − q) / b = (1×0.55 − 0.45) / 1 = 0.10, i.e. 10%."
+    },
+    "l5-br-q7": {
+      "question": "Under the Kelly criterion, what is the optimal bankroll fraction f* at a 40% win rate with 2:1 net odds?",
+      "options": [
+        "10%",
+        "20%",
+        "30%",
+        "40%"
+      ],
+      "explanation": "f* = (bp − q) / b = (2×0.4 − 0.6) / 2 = 0.2 / 2 = 0.10, i.e. 10%. A win rate below 50% can still be worth betting because 2:1 odds compensate for it."
+    },
+    "l5-br-q8": {
+      "question": "For a $20 buy-in tournament, how much bankroll does this lesson's minimum requirement (50 buy-ins) demand?",
+      "options": [
+        "$200",
+        "$500",
+        "$1,000",
+        "$2,000"
+      ],
+      "explanation": "Tournament minimum 50 buy-ins = 50 × $20 = $1,000; this lesson recommends 50-100 buy-ins for tournaments."
+    },
+    "l5-br-q9": {
+      "question": "What is the main purpose of the Half Kelly (f = f*/2) sizing recommended in this lesson?",
+      "options": [
+        "Increase the profit of each bet",
+        "Further reduce the risk of ruin",
+        "Maximize bankroll growth",
+        "Make mental math easier"
+      ],
+      "explanation": "Half Kelly stakes only half of the Kelly fraction (20% becomes 10% at a 60% win rate with 1:1 odds), trading some growth for lower variance and a lower risk of ruin."
+    },
+    "l5-br-q10": {
+      "question": "Playing $2/$5 cash (100BB buy-in = $500), how much bankroll do 30 buy-ins require?",
+      "options": [
+        "$5,000",
+        "$10,000",
+        "$15,000",
+        "$30,000"
+      ],
+      "explanation": "30 buy-ins × $500 = $15,000. This lesson recommends 30-50 buy-ins for cash games, and 50+ buy-ins as the professional standard."
+    },
     "l5-tilt-q1": {
       "question": "After a bad beat, what is the best move?",
       "options": [
@@ -178,6 +228,56 @@
         "Every 3 hours"
       ],
       "explanation": "Take a 5-10 minute break every hour to keep a clear head and stable emotions."
+    },
+    "l5-tilt-q6": {
+      "question": "According to the warning signs in this lesson, an accuracy drop beyond which threshold means you should pause training?",
+      "options": [
+        "5%",
+        "10%",
+        "15%",
+        "30%"
+      ],
+      "explanation": "This lesson lists two stop signals: three wrong answers in a row and an accuracy drop of more than 15%. At that point decision quality is already falling and continuing only enlarges the loss."
+    },
+    "l5-tilt-q7": {
+      "question": "In Tendler's seven tilt profiles, which one is \"overconfidence after a winning streak\"?",
+      "options": [
+        "Entitlement tilt",
+        "Fear tilt",
+        "Boredom tilt",
+        "Self-destructive tilt"
+      ],
+      "explanation": "Entitlement tilt comes from overconfidence after winning; fear tilt comes from being afraid to lose, boredom tilt from attention decay in long sessions, and self-destructive tilt from subconsciously punishing yourself."
+    },
+    "l5-tilt-q8": {
+      "question": "Which Tendler tilt profile matches \"negative emotion accumulated over a long downswing\"?",
+      "options": [
+        "Anger tilt",
+        "Frustration tilt",
+        "Urgency tilt",
+        "Revenge tilt"
+      ],
+      "explanation": "Frustration tilt is negative emotion accumulated over a long downswing; anger tilt is triggered by a single bad beat, urgency tilt by time or money pressure, and revenge tilt targets one specific opponent."
+    },
+    "l5-tilt-q9": {
+      "question": "Which Tendler tilt profile matches \"attention decay caused by a long session\"?",
+      "options": [
+        "Entitlement tilt",
+        "Fear tilt",
+        "Boredom tilt",
+        "Frustration tilt"
+      ],
+      "explanation": "Boredom tilt comes from attention decay during long sessions, the same risk as \"keep playing while tired\" in this lesson; timed breaks and a stop-loss line control it."
+    },
+    "l5-tilt-q10": {
+      "question": "To win back your losses before the end of the month you open four more tables and cut the thinking time for every decision. Which tilt profile does this most resemble?",
+      "options": [
+        "Urgency tilt",
+        "Entitlement tilt",
+        "Boredom tilt",
+        "Fear tilt"
+      ],
+      "explanation": "Urgency tilt is rushed decision-making driven by time or money pressure; adding tables and compressing thinking time is its classic form. The fix is to drop back to one table and end the session at your stop-loss line."
     },
     "l5-game-q1": {
       "question": "One trait of a good table is?",
@@ -229,6 +329,56 @@
       ],
       "explanation": "Focus on decision quality, not results. Wrong decisions may occasionally win but always lose long-term."
     },
+    "l5-game-q6": {
+      "question": "What VPIP threshold does this lesson use to call a table \"full of recreational players\"?",
+      "options": [
+        "VPIP > 15%",
+        "VPIP > 30%",
+        "VPIP > 50%",
+        "VPIP > 70%"
+      ],
+      "explanation": "This lesson's standard: a good table has a high share of recreational players, i.e. VPIP > 30%. They enter too many pots, which is exactly where your edge shows up."
+    },
+    "l5-game-q7": {
+      "question": "Why is a high flop rate (many players seeing the flop) a sign of a good table?",
+      "options": [
+        "It means the opponents are tight",
+        "It means many players enter with weak hands, so your edge is easier to realize",
+        "It means the rake is lower",
+        "It means the blinds are larger"
+      ],
+      "explanation": "Many players seeing flops means opponents play wide ranges — the hallmark of weak players. Those pots contain more mistakes, so your technical edge converts into profit more easily."
+    },
+    "l5-game-q8": {
+      "question": "You sit down and find that the whole table consists of long-term winning professionals. What is the most reasonable move?",
+      "options": [
+        "Stay and outplay them to prove yourself",
+        "Move to a table with recreational players",
+        "Move up in stakes to regain your edge",
+        "Shove every hand to create variance"
+      ],
+      "explanation": "Game selection comes before technical play: a full table of professionals erases your edge, so switching to a weaker table is the +EV choice. Grinding it out just burns time and confidence."
+    },
+    "l5-game-q9": {
+      "question": "You lost 5 buy-ins this week, but your review shows every decision was correct. Per this lesson, what should you do?",
+      "options": [
+        "Tighten your starting range immediately",
+        "Move up in stakes to win it back",
+        "Keep executing the same +EV strategy",
+        "Switch to a different style until you are even"
+      ],
+      "explanation": "5 buy-ins (500BB) sits inside normal variance, and you need 10,000+ hands to judge your level. If the decisions are right, keep executing; changing strategy because of short-term results turns into long-term -EV."
+    },
+    "l5-game-q10": {
+      "question": "Which of the following is NOT a feature of a good table?",
+      "options": [
+        "Recreational players with VPIP > 30%",
+        "Large average pots",
+        "Players raising often and interacting a lot",
+        "A full table of tight-aggressive professionals"
+      ],
+      "explanation": "The four features of a good table are many recreational players (VPIP > 30%), large average pots, a high flop rate and lots of interaction; a full table of tight-aggressive professionals is exactly what you want to avoid."
+    },
     "l5-sr-q1": {
       "question": "What is the first step of Session Review?",
       "options": [
@@ -278,6 +428,56 @@
         "Compare with GTO"
       ],
       "explanation": "The 5th step is making an improvement plan."
+    },
+    "l5-sr-q6": {
+      "question": "Per this lesson's session management rules, how long should a single session last at most?",
+      "options": [
+        "30 minutes",
+        "45 minutes",
+        "60 minutes",
+        "120 minutes"
+      ],
+      "explanation": "This lesson's rules: no more than 60 minutes per session, a 5-minute break every 30 minutes, and an immediate stop at any C-grade signal."
+    },
+    "l5-sr-q7": {
+      "question": "Per the session management rules, how long should you rest after every 30 minutes of play?",
+      "options": [
+        "No break",
+        "5 minutes",
+        "15 minutes",
+        "30 minutes"
+      ],
+      "explanation": "This lesson prescribes a 5-minute break every 30 minutes, using short breaks to stay in the top two grades instead of sliding into C grade (attention decay, deciding on instinct)."
+    },
+    "l5-sr-q8": {
+      "question": "In the A/B/C session framework, what characterizes A grade?",
+      "options": [
+        "Attention decay and instinctive decisions",
+        "Some fatigue but basic decision quality is maintained",
+        "Focused, calm, every decision analyzed",
+        "Emotional swings and the urge to get even"
+      ],
+      "explanation": "A grade is the best state: focused, calm and analytical, suited to complex decisions; B grade maintains basic quality for routine play; C grade means stop immediately."
+    },
+    "l5-sr-q9": {
+      "question": "In the five-step review method, what is step 3?",
+      "options": [
+        "Tag the key hands",
+        "Analyze the decision points",
+        "Compare against GTO",
+        "Record what was learned"
+      ],
+      "explanation": "The five steps are: tag the key hands → analyze the decision points → compare against GTO → record what was learned → build an improvement plan. Step 3 checks the optimal line with a solver."
+    },
+    "l5-sr-q10": {
+      "question": "Why does this lesson call a winning session \"possibly the worst learning opportunity\"?",
+      "options": [
+        "Hand quality is higher when winning, so there is nothing to analyze",
+        "Winning hides bad decisions and makes you believe you played well",
+        "You are too excited after winning to review",
+        "Hand data from winning sessions cannot be imported into tools"
+      ],
+      "explanation": "Winning creates the illusion that you played well even when you were simply lucky; real learning happens in losing sessions, where mistakes surface and can be corrected."
     },
     "l5-dd-q1": {
       "question": "A big VPIP/PFR gap indicates?",
@@ -329,6 +529,56 @@
       ],
       "explanation": "Do a monthly data check-up — export stats and compare with targets."
     },
+    "l5-dd-q6": {
+      "question": "By how many percentage points must VPIP and PFR differ before this lesson calls it \"too much passive calling\"?",
+      "options": [
+        "3 percentage points",
+        "5 percentage points",
+        "8 percentage points",
+        "15 percentage points"
+      ],
+      "explanation": "This lesson's standard: a VPIP/PFR gap above 8 percentage points means too much calling and too little raising — more of those hands should be raised or folded preflop."
+    },
+    "l5-dd-q7": {
+      "question": "Your win rate varies noticeably by position. What is the most reasonable reading?",
+      "options": [
+        "It is pure luck and can be ignored",
+        "Some positions have strategic problems",
+        "Opponents are cheating against you",
+        "The sample is large enough to move up"
+      ],
+      "explanation": "Overall win rate hides positional differences; a wide spread by position usually points to leaks in the open-raise and defense strategy of certain seats, most often the blinds."
+    },
+    "l5-dd-q8": {
+      "question": "How often does this lesson recommend a data checkup?",
+      "options": [
+        "Every day",
+        "Every week",
+        "Every month",
+        "Every year"
+      ],
+      "explanation": "Export your stats monthly and compare them with last month and with the targets. Progress is the steady shrinking of leaks, and only a fixed rhythm makes the trend visible."
+    },
+    "l5-dd-q9": {
+      "question": "Your VPIP is 45% and your PFR is 25%. Per this lesson's standard, what does this show?",
+      "options": [
+        "A 20-point gap (>8): too much passive calling",
+        "A 20-point gap that sits in the healthy range",
+        "VPIP is too low, so you play too tight",
+        "The data is completely normal, no change needed"
+      ],
+      "explanation": "45 − 25 = 20 points, far above this lesson's 8-point threshold: a large share of the hands you enter are passive calls, and some of them should become raises or folds."
+    },
+    "l5-dd-q10": {
+      "question": "From a data perspective, what is the most accurate definition of progress?",
+      "options": [
+        "Winning more money over time",
+        "Leaks being found and closed one after another",
+        "A rising VPIP",
+        "Playing higher stakes"
+      ],
+      "explanation": "Short-term winnings are dominated by variance; progress as measured by data is the continuous discovery and repair of leaks, which is exactly what the monthly checkup is for."
+    },
     "l5-tools-q1": {
       "question": "What is the main use of PioSOLVER / GTO+?",
       "options": [
@@ -379,6 +629,56 @@
       ],
       "explanation": "Opening multiple tools at once lowers learning efficiency. Focus on one spot and analyze deeply."
     },
+    "l5-tools-q6": {
+      "question": "What does this lesson recommend for learning PioSOLVER / GTO+?",
+      "options": [
+        "Start with complex multiway scenarios",
+        "Start with simple scenarios such as heads-up flops and add complexity gradually",
+        "Only analyze single river decisions",
+        "Memorize the frequencies of every range first"
+      ],
+      "explanation": "The learning path for solvers moves from simple scenarios (e.g. a heads-up flop) to more complexity; starting with hard multiway spots only produces output you cannot interpret."
+    },
+    "l5-tools-q7": {
+      "question": "When using a tracker such as Hand2Note, what does this lesson advise?",
+      "options": [
+        "Analyze every single statistic",
+        "Focus on the key stats (VPIP/PFR/3-bet%) and avoid over-analysis",
+        "Only look at winnings and losses",
+        "Only open the tool after losing"
+      ],
+      "explanation": "This lesson advises focusing on key stats (VPIP/PFR/3-bet%) and avoiding over-analysis: too many metrics dilute your attention and hide the leaks that actually matter."
+    },
+    "l5-tools-q8": {
+      "question": "What is the point of repeatedly running equity calculations on common ranges in Equilab?",
+      "options": [
+        "To replace in-game decisions",
+        "To internalize the equities of common ranges and build intuition",
+        "To generate GTO strategy charts",
+        "To track opponents' historical data"
+      ],
+      "explanation": "Equilab is used for preflop range and equity work; repeating those numbers turns equity into intuition so you can judge strength in game without a lookup table."
+    },
+    "l5-tools-q9": {
+      "question": "After analyzing a hand, what happens if you only take the \"correct action\" without understanding the logic?",
+      "options": [
+        "Learning efficiency drops and the lesson fails to transfer to other spots",
+        "Nothing, as long as the conclusion matches",
+        "Your decision speed improves",
+        "You move up in stakes faster"
+      ],
+      "explanation": "The mistake shown in this lesson's example is exactly \"only looking at results, not the process\": memorizing the conclusion without the reason does not transfer once the parameters change, so learning efficiency drops."
+    },
+    "l5-tools-q10": {
+      "question": "How does this lesson position analysis tools overall?",
+      "options": [
+        "Tools can replace understanding the theory",
+        "Tools are powerful learning aids, but over-reliance blocks intuition",
+        "Tools are only for professionals",
+        "The more tools you run, the faster you learn"
+      ],
+      "explanation": "Tools help you verify intuition, find leaks, learn GTO and track progress; over-reliance blocks intuition, so the right approach is to understand the theory first and then verify it with tools."
+    },
     "l5-online-vs-live-q1": {
       "question": "How many hands per hour does online poker have?",
       "options": [
@@ -428,6 +728,56 @@
         "Only play loose-aggressive"
       ],
       "explanation": "Counter-HUD means balancing your data so it doesn't get extreme and can't be exploited."
+    },
+    "l5-online-vs-live-q6": {
+      "question": "Roughly how many hands per hour do you play live?",
+      "options": [
+        "25-35 hands",
+        "60-80 hands",
+        "100-120 hands",
+        "150+ hands"
+      ],
+      "explanation": "Live poker takes about 1-2 minutes per hand, i.e. roughly 25-35 hands per hour; online takes about 10-15 seconds per hand, i.e. roughly 60-80 hands per hour."
+    },
+    "l5-online-vs-live-q7": {
+      "question": "How does this lesson summarize the difference in profit sources between online and live?",
+      "options": [
+        "Online relies on quality and patience, live on speed and volume",
+        "Online relies on speed and volume, live on quality and patience",
+        "Both rely only on luck of the deal",
+        "Both rely only on reading tells"
+      ],
+      "explanation": "Online is fast and supports multi-tabling, so profit comes from volume and speed; live is slow, so profit comes from decision quality, tell reading and patience. The skills and mindset differ accordingly."
+    },
+    "l5-online-vs-live-q8": {
+      "question": "How many tables does this lesson suggest starting with when multi-tabling online?",
+      "options": [
+        "1 table",
+        "2-4 tables",
+        "8-12 tables",
+        "16 or more tables"
+      ],
+      "explanation": "Start with 2-4 tables and add gradually; multi-tabling lowers focus per table, suits standard spots and is the wrong environment for complex decisions."
+    },
+    "l5-online-vs-live-q9": {
+      "question": "According to the live tell examples in this lesson, shaking hands while betting usually means?",
+      "options": [
+        "A strong hand",
+        "A weak hand",
+        "Pure nervousness with no information",
+        "A fake-out to induce a call"
+      ],
+      "explanation": "The common tells listed in this lesson: shaking hands usually lean strong, hesitation usually leans weak; do not over-read them, and combine them with data and the opponent's image."
+    },
+    "l5-online-vs-live-q10": {
+      "question": "What is the most important rule of live image management?",
+      "options": [
+        "Keep changing styles so opponents can never read you",
+        "Stay consistent and never let opponents read a fixed pattern",
+        "Only play strong hands",
+        "Never show your cards"
+      ],
+      "explanation": "Image management builds a stable image and exploits it (e.g. bluff more when perceived as tight); consistency is the premise — contradictory behavior leaks information by itself."
     }
   },
   "lessonExample": {

@@ -1,7 +1,11 @@
+import { mergeQuizBank } from '@/shared/utils/academyQuizBank';
 import type { TheoryChapter, TheoryQuizQuestion } from '../../../../../types';
 
 /**
  * 题库注入器（无副作用纯函数，单独成文件）。
+ *
+ * 合并逻辑来自两院共享 `mergeQuizBank`（替换 quiz、按 id 去重、可选排序/校验），
+ * 本文件只保留理论侧口径：题 id 必须形如 `<chapterId>-q<n>`、结果按题号升序。
  *
  * 为什么与 index.ts 分离：loaders.ts（运行时路径）只需要注入函数；
  * 若从 index.ts 导入，会顺带把 9 个 Level 题库文件全部拉进主 chunk。
@@ -28,24 +32,19 @@ export function applyStandardQuizBank(
   chapters: TheoryChapter[],
   bank: Readonly<Record<string, TheoryQuizQuestion[]>>,
 ): TheoryChapter[] {
-  return chapters.map((chapter) => {
-    const questions = bank[chapter.id];
-    if (!questions || questions.length === 0) return chapter;
-
-    const seen = new Set<string>();
-    const numbered: { number: number; question: TheoryQuizQuestion }[] = [];
-    for (const question of questions) {
-      const number = questionNumber(chapter.id, question.id);
+  // 题号在 validate 阶段解析一次（共享层回调按章节逐题调用），排序回调按 id 取回，
+  // 从而在泛型比较器里保持「按 `<chapterId>-q<n>` 序号」的理论口径。
+  const numbers = new Map<string, number>();
+  return mergeQuizBank(chapters, bank, {
+    validate: (chapterId, question) => {
+      const number = questionNumber(chapterId, question.id);
       if (number === null) {
         throw new Error(
-          `[theory] 题库题 id 非法：${question.id}（章节 ${chapter.id} 要求 ${chapter.id}-q<n>）`,
+          `[theory] 题库题 id 非法：${question.id}（章节 ${chapterId} 要求 ${chapterId}-q<n>）`,
         );
       }
-      if (seen.has(question.id)) continue;
-      seen.add(question.id);
-      numbered.push({ number, question });
-    }
-    const quiz = numbered.toSorted((a, b) => a.number - b.number).map((entry) => entry.question);
-    return { ...chapter, quiz };
+      numbers.set(question.id, number);
+    },
+    sort: (a, b) => (numbers.get(a.id) ?? 0) - (numbers.get(b.id) ?? 0),
   });
 }

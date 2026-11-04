@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
-import { Link } from 'react-router-dom';
-import { BookOpen, FileSearch, Loader2, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { AcademySearchShell } from '@/shared/components/academy';
+import type { AcademySearchItem, AcademySearchSection } from '@/shared/types/academy';
 import type { TheoryChapterSummary, TheoryLevelInfo } from '../types';
 import {
   getChapterSummariesByVariant,
@@ -15,6 +15,11 @@ import {
   getTheoryBibliographyEntries,
   getTheoryGlossaryTerms,
 } from './theoryOptionalSources';
+
+/** 结果行跳转目标（理论侧路由字符串，共享壳不持有路由） */
+const CHAPTER_ROUTE_PREFIX = '/theory/chapter/';
+const GLOSSARY_ROUTE = '/theory/glossary';
+const BIBLIOGRAPHY_ROUTE = '/theory/bibliography';
 
 /** 全文命中（章节 id + 命中片段） */
 interface FullTextHit {
@@ -64,10 +69,13 @@ interface TheorySearchProps {
  * 2. 全文层：目录层无命中且关键词 ≥2 字时才按需加载标准变体全文（loadTheoryLevelsForVariant 内部缓存，
  *    同一会话只加载一次），避免首屏把全部正文 chunk 拉进来
  *
- * 只读：不写 store、不改任何解锁状态；结果一律以路由链接呈现。
+ * 展示层用两院共享 `AcademySearchShell`（输入框 / 分区 / 空态），本组件只做理论侧适配：
+ * 命中集合、分区标题与路由在这里算好传入，共享壳不持有路由也不加载数据。
+ * 只读：不写 store、不改任何解锁状态；结果一律以理论侧路由呈现。
  */
 export function TheorySearch({ onNavigate, className }: TheorySearchProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [fullText, setFullText] = useState<TheoryLevelInfo[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -130,163 +138,66 @@ export function TheorySearch({ onNavigate, className }: TheorySearchProps) {
     return buildFullTextHits(fullText, needle);
   }, [fullText, needle]);
 
-  const totalCount = chapterHits.length + glossaryHits.length + bibliographyHits.length + fullTextHits.length;
+  const chapterItems: AcademySearchItem[] = chapterHits.map((chapter) => ({
+    id: chapter.id,
+    title: resolveChapterTitle(t, chapter),
+    subtitle: resolveChapterSubtitle(t, chapter),
+    route: `${CHAPTER_ROUTE_PREFIX}${chapter.id}`,
+  }));
+
+  const glossaryItems: AcademySearchItem[] = glossaryHits.map((term) => ({
+    id: term.id,
+    title: resolveKey(t, term.termKey),
+    subtitle: resolveKey(t, term.definitionKey),
+    route: GLOSSARY_ROUTE,
+  }));
+
+  const bibliographyItems: AcademySearchItem[] = bibliographyHits.map((entry) => ({
+    id: entry.id,
+    title: resolveKey(t, entry.titleKey),
+    subtitle: typeof entry.year === 'number' ? String(entry.year) : undefined,
+    route: BIBLIOGRAPHY_ROUTE,
+  }));
+
+  const fullTextItems: AcademySearchItem[] = fullTextHits.map((hit) => {
+    const summary = findChapterSummaryById(hit.chapterId);
+    return {
+      id: hit.chapterId,
+      title: summary ? resolveChapterTitle(t, summary) : hit.chapterId,
+      subtitle: `…${hit.snippet}…`,
+      route: `${CHAPTER_ROUTE_PREFIX}${hit.chapterId}`,
+    };
+  });
+
+  const sections: AcademySearchSection[] = [
+    { id: 'chapters', title: t('theory.search.categories.chapters'), items: chapterItems },
+    { id: 'glossary', title: t('theory.search.categories.glossary'), items: glossaryItems },
+    {
+      id: 'bibliography',
+      title: t('theory.search.categories.bibliography'),
+      items: bibliographyItems,
+    },
+    { id: 'fullText', title: t('theory.search.categories.chapters'), items: fullTextItems },
+  ];
 
   return (
-    <section aria-label={t('theory.search.title')} className={className}>
-      <div className="relative">
-        <Search
-          className="w-4 h-4 text-[var(--ivory-muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-          aria-hidden="true"
-        />
-        <input
-          type="search"
-          autoFocus
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          aria-label={t('theory.search.placeholder')}
-          placeholder={t('theory.search.placeholder')}
-          className="w-full min-h-11 rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/40 pl-9 pr-3 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
-        />
-      </div>
-
-      {needle.length === 0 ? (
+    <div className={className}>
+      <AcademySearchShell
+        query={query}
+        onQueryChange={setQuery}
+        placeholder={t('theory.search.placeholder')}
+        sections={sections}
+        // 全文索引在途时先报「正在载入」，避免目录层无命中就提前下「没有匹配」结论
+        emptyTitle={loading ? t('theory.search.fullTextLoading') : t('theory.search.noResults')}
+        resultAriaLabel={(item) => `${t('theory.search.open')} · ${item.title}`}
+        onNavigate={(route) => {
+          onNavigate?.();
+          navigate(route);
+        }}
+      />
+      {needle.length === 0 && (
         <p className="mt-3 text-xs text-[var(--ivory-dim)]">{t('theory.search.placeholder')}</p>
-      ) : (
-        <div className="mt-3 space-y-4">
-          <p aria-live="polite" className="font-numeric text-[11px] text-[var(--ivory-muted)]">
-            {t('theory.search.results', { count: totalCount })}
-          </p>
-
-          {chapterHits.length > 0 && (
-            <ResultGroup title={t('theory.search.categories.chapters')} count={chapterHits.length}>
-              {chapterHits.map((chapter) => (
-                <ResultLink
-                  key={chapter.id}
-                  to={`/theory/chapter/${chapter.id}`}
-                  label={resolveChapterTitle(t, chapter)}
-                  hint={resolveChapterSubtitle(t, chapter)}
-                  openLabel={t('theory.search.open')}
-                  onNavigate={onNavigate}
-                />
-              ))}
-            </ResultGroup>
-          )}
-
-          {glossaryHits.length > 0 && (
-            <ResultGroup title={t('theory.search.categories.glossary')} count={glossaryHits.length}>
-              {glossaryHits.map((term) => (
-                <li key={term.id} className="text-xs text-[var(--ivory-dim)] leading-relaxed">
-                  <span className="text-[var(--ivory)]">{resolveKey(t, term.termKey)}</span>
-                  {' · '}
-                  {resolveKey(t, term.definitionKey)}
-                </li>
-              ))}
-            </ResultGroup>
-          )}
-
-          {bibliographyHits.length > 0 && (
-            <ResultGroup
-              title={t('theory.search.categories.bibliography')}
-              count={bibliographyHits.length}
-            >
-              {bibliographyHits.map((entry) => (
-                <li key={entry.id} className="text-xs text-[var(--ivory-dim)] leading-relaxed">
-                  {resolveKey(t, entry.titleKey)}
-                  {typeof entry.year === 'number' && (
-                    <span className="font-numeric text-[var(--ivory-muted)]"> · {entry.year}</span>
-                  )}
-                </li>
-              ))}
-            </ResultGroup>
-          )}
-
-          {loading && (
-            <p className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)]">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
-              {t('theory.search.fullTextLoading')}
-            </p>
-          )}
-
-          {fullTextHits.length > 0 && (
-            <ResultGroup title={t('theory.search.categories.chapters')} count={fullTextHits.length}>
-              {fullTextHits.map((hit) => {
-                const summary = findChapterSummaryById(hit.chapterId);
-                return (
-                  <ResultLink
-                    key={hit.chapterId}
-                    to={`/theory/chapter/${hit.chapterId}`}
-                    label={summary ? resolveChapterTitle(t, summary) : hit.chapterId}
-                    hint={`…${hit.snippet}…`}
-                    openLabel={t('theory.search.open')}
-                    onNavigate={onNavigate}
-                  />
-                );
-              })}
-            </ResultGroup>
-          )}
-
-          {totalCount === 0 && !loading && (
-            <p className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-dim)]">
-              <FileSearch className="w-3.5 h-3.5" aria-hidden="true" />
-              {t('theory.search.noResults')}
-            </p>
-          )}
-        </div>
       )}
-    </section>
-  );
-}
-
-/** 结果分组（标题 + 计数 + 列表） */
-function ResultGroup({
-  title,
-  count,
-  children,
-}: {
-  title: string;
-  count: number;
-  children: ReactNode;
-}) {
-  return (
-    <div>
-      <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--brass-text)] font-semibold mb-1">
-        {title}
-        <span className="ml-1.5 font-numeric text-[var(--ivory-muted)]">{count}</span>
-      </p>
-      <ul className="space-y-1">{children}</ul>
     </div>
-  );
-}
-
-/** 章节结果行（整行可点，跳转后回调关闭弹层） */
-function ResultLink({
-  to,
-  label,
-  hint,
-  openLabel,
-  onNavigate,
-}: {
-  to: string;
-  label: string;
-  hint: string;
-  openLabel: string;
-  onNavigate?: () => void;
-}) {
-  return (
-    <li>
-      <Link
-        to={to}
-        onClick={onNavigate}
-        aria-label={`${openLabel} · ${label}`}
-        className="flex min-h-11 items-start gap-2 rounded-md px-1.5 py-1.5 hover:bg-[var(--felt-raised)]/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
-      >
-        <BookOpen className="w-3.5 h-3.5 text-[var(--brass-bright)] shrink-0 mt-0.5" aria-hidden="true" />
-        <span className="min-w-0">
-          <span className="block text-xs text-[var(--ivory)] truncate">{label}</span>
-          <span className="block text-[11px] text-[var(--ivory-muted)] line-clamp-2">{hint}</span>
-        </span>
-      </Link>
-    </li>
   );
 }

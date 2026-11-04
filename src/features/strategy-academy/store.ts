@@ -1,48 +1,64 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AcademyProgress, BasicsProgress, PracticeResult, AbilityAssessment, AdaptiveConfig, QuestionDifficulty, DailyPlan, LevelCertification } from './types';
+import type {
+  AcademyProgress,
+  BasicsProgress,
+  PracticeResult,
+  AdaptiveConfig,
+  QuestionDifficulty,
+  DailyPlan,
+  LevelCertification,
+  LessonAttemptRecord,
+  CertificationAttemptPayload,
+  CertificationAttemptResult,
+  CertificationState,
+  PlacementState,
+  CheckpointRecord,
+  LessonNote,
+} from './types';
 import {
   findLevelSummaryById,
   getLevelNumbers,
   getLevelSummaries,
   getLevelSummariesByNumber,
-  getQuizCountForLevel,
   isLevelEntryUnlockedByCompleted,
 } from './utils/academyMeta';
+import {
+  REQUIRED_ACCURACY,
+  areAllCertificationsValid,
+  evaluateCertificationAttempt,
+  isCertificationValid,
+  resolveCertificationState,
+} from './utils/certification';
+import {
+  initialBasicsProgress,
+  initialProgress,
+} from './utils/initialState';
+import {
+  mergePlacement,
+  nextCheckpointRecord,
+  nextLessonAttemptRecord,
+  toggleBookmark,
+  upsertLessonNote,
+} from './utils/p2State';
+import {
+  areAllLessonsCompleted,
+  computeLessonProgress,
+  isTrackComplete,
+} from './utils/academyGates';
+import { migrateStrategyAcademyState } from './utils/persistMigrate';
+
+export { REQUIRED_ACCURACY };
+export { MAX_LESSON_NOTE_LENGTH } from './utils/p2State';
 import { LEARNING_TRACKS } from './data/learningTracks';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
-import { DEFAULT_ADAPTIVE_CONFIG, updateAbilityScore } from './utils/adaptiveDifficulty';
+import { useProgressStore } from '@/features/progress/store';
+import { DEFAULT_ADAPTIVE_CONFIG } from './utils/adaptiveDifficulty';
 import { generateDailyPlan, isDailyPlanFresh } from './utils/dailyPlan';
 import type { PokerVariant } from '@/shared/types/elo';
 import { DEFAULT_VARIANT } from '@/shared/types/elo';
 
-/** 级别认证通过基准正确率（%）：store 判定与 LevelCertification 组件展示/判定的单一事实源 */
-export const REQUIRED_ACCURACY = 70;
-/** 认证有效期（毫秒）：30 天，每次通过认证从当次通过时间起算 */
-const CERT_VALIDITY_MS = 30 * 24 * 60 * 60 * 1000;
-
-const initialProgress: AcademyProgress = {
-  completedLessons: [],
-  quizScores: {},
-  currentLesson: null,
-  startedAt: 0,
-  completedUnits: {},
-};
-
-const initialBasicsProgress: BasicsProgress = {
-  currentStep: 0,
-  completed: false,
-};
-
-const initialAbilityAssessment: AbilityAssessment = {
-  rangeKnowledge: 50,
-  oddsCalculation: 50,
-  gtoUnderstanding: 50,
-  positionalPlay: 50,
-  emotionalControl: 50,
-  lastUpdated: Date.now(),
-};
 
 interface RecentPracticeResult {
   isCorrect: boolean;
@@ -54,18 +70,23 @@ interface AcademyStore {
   progress: AcademyProgress;
   practiceResults: PracticeResult[];
   basicsProgress: BasicsProgress;
-  abilityAssessment: AbilityAssessment;
   adaptiveConfig: AdaptiveConfig;
   recentPracticeResults: RecentPracticeResult[];
   dailyPlan: DailyPlan | null;
   certifications: Record<number, LevelCertification>;
+  /** 课后尝试记录（首次成绩计掌握度/ELO，重考只更新 best/last） */
+  lessonAttempts: Record<string, LessonAttemptRecord>;
+  /** 策略定位测评（只放宽解锁，不写完成态） */
+  placement: PlacementState | null;
+  /** Level Checkpoint 形成性成绩（不发证、不解锁） */
+  checkpoints: Record<number, CheckpointRecord>;
+  /** 课时书签（纯阅读辅助） */
+  bookmarkedLessons: string[];
+  /** 课时笔记（纯文本，上限 MAX_LESSON_NOTE_LENGTH） */
+  lessonNotes: Record<string, LessonNote>;
   activeTrackId: string | null;
   /** P2 变体支持：当前选中的游戏变体上下文（默认 standard） */
   activeVariant: PokerVariant;
-  /** 课程首次得分（lessonId → 0-100） */
-  firstAttemptScores: Record<string, number>;
-  /** 课程最近得分（lessonId → 0-100） */
-  lastAttemptScores: Record<string, number>;
   startLesson: (lessonId: string) => void;
   /** 标记课程小节完成（lessonId → unitId），幂等：重复标记同一 unit 不重复计数（P4） */
   markUnitCompleted: (lessonId: string, unitId: string) => void;
@@ -82,13 +103,12 @@ interface AcademyStore {
   updateBasicsStep: (step: number) => void;
   completeBasics: () => void;
   resetBasics: () => void;
-  updateAbility: (result: RecentPracticeResult) => void;
+  /** 记录一次实战练习结果（仅供自适应难度窗口消费，cap 50） */
+  recordPracticeResult: (result: RecentPracticeResult) => void;
   setAdaptiveConfig: (config: Partial<AdaptiveConfig>) => void;
-  resetAbility: () => void;
   // 新增：每日训练计划（options.force 为用户显式刷新意图，绕过同日新鲜度守卫）
   refreshDailyPlan: (reviewQueue?: string[], options?: { force?: boolean }) => void;
   // 新增：级别认证
-  attemptCertification: (level: number, score: number) => void;
   isCertified: (level: number) => boolean;
   /** 某 level 数字的全部课程是否已完成（L4 含 4A/4B 两个节点；供成就系统判定） */
   isLevelLessonsCompleted: (level: number) => boolean;
@@ -100,8 +120,35 @@ interface AcademyStore {
   setActiveTrack: (trackId: string | null) => void;
   /** P2 变体支持：切换当前学习变体上下文 */
   switchVariant: (variant: PokerVariant) => void;
-  /** 记录课程尝试得分（首次写入 firstAttemptScores，始终更新 lastAttemptScores） */
-  recordAttemptScore: (lessonId: string, score: number) => void;
+  /** 记录一次课后尝试（含掌握度口径）；返回是否首次 */
+  recordLessonAttempt: (
+    lessonId: string,
+    payload: { score: number; correct: number; total: number },
+  ) => { isFirstAttempt: boolean };
+  getLessonAttempt: (lessonId: string) => LessonAttemptRecord | undefined;
+  /** 记录定位测评：creditLevels 取并集，不写 completedLessons */
+  recordPlacement: (input: {
+    recommendedLevelId: string;
+    creditLevels: string[];
+    correct: number;
+    total: number;
+  }) => void;
+  /** 记录 Checkpoint 成绩（仅持久化；ELO/SRS 由页面负责） */
+  recordCheckpointAttempt: (
+    level: number,
+    payload: { score: number; questionIds: string[] },
+  ) => { isFirstAttempt: boolean };
+  /** 课时书签 toggle（幂等） */
+  toggleLessonBookmark: (lessonId: string) => void;
+  /** 保存课时笔记；空文本即删除；超过上限截断 */
+  saveLessonNote: (lessonId: string, text: string) => void;
+  /** 认证状态（锁定/可考/冷却/有效/临期/过期） */
+  getCertificationState: (level: number) => CertificationState;
+  /** 认证提交（标准变体、完成门禁、冷却、有效期内不可重考） */
+  submitCertificationAttempt: (
+    level: number,
+    payload: CertificationAttemptPayload,
+  ) => CertificationAttemptResult;
   /** 获取课程进步数据（首次得分、最近得分、提升幅度） */
   getProgressForLesson: (lessonId: string) => { first: number; last: number; improvement: number } | null;
 }
@@ -112,15 +159,17 @@ export const useAcademyStore = create<AcademyStore>()(
       progress: initialProgress,
       practiceResults: [],
       basicsProgress: initialBasicsProgress,
-      abilityAssessment: initialAbilityAssessment,
       adaptiveConfig: DEFAULT_ADAPTIVE_CONFIG,
       recentPracticeResults: [],
       dailyPlan: null,
       certifications: {},
+      lessonAttempts: {},
+      placement: null,
+      checkpoints: {},
+      bookmarkedLessons: [],
+      lessonNotes: {},
       activeTrackId: null,
       activeVariant: DEFAULT_VARIANT,
-      firstAttemptScores: {},
-      lastAttemptScores: {},
 
       startLesson: (lessonId) =>
         set((state) => ({
@@ -202,31 +251,30 @@ export const useAcademyStore = create<AcademyStore>()(
       },
 
       // ACAD-08：重置进度时联动清理由进度派生的关联状态，避免 UI 残留旧数据。
-      // 包括：练习明细 / 认证记录 / 首末次得分 / 每日计划 / 学习轨道 / 能力评估与自适应配置。
+      // 包括：练习明细 / 认证记录 / 课后尝试 / 每日计划 / 学习轨道 / 自适应配置。
       resetProgress: () =>
         set({
           progress: { ...initialProgress },
           practiceResults: [],
           basicsProgress: { ...initialBasicsProgress },
-          abilityAssessment: { ...initialAbilityAssessment, lastUpdated: Date.now() },
           adaptiveConfig: DEFAULT_ADAPTIVE_CONFIG,
           recentPracticeResults: [],
           dailyPlan: null,
           certifications: {},
+          lessonAttempts: {},
+          placement: null,
+          checkpoints: {},
+          bookmarkedLessons: [],
+          lessonNotes: {},
           activeTrackId: null,
-          firstAttemptScores: {},
-          lastAttemptScores: {},
         }),
 
       isLevelUnlocked: (level) => {
-        if (isDebugUnlockActive()) return true; // 调试解锁：解除全部 Level 门禁
-        // ACAD-07：委托逐条目判定，且要求同 level 全部条目都满足才解锁，
-        // 消除旧「任一满足即 return true」的 || 旁路（L4A/L4B 同为 level:4 时 4B 被误放行）
+        if (isDebugUnlockActive()) return true;
         const entries = getLevelSummaries().filter(
           (entry) => entry.level === level && typeof entry.id === 'string',
         );
-        if (entries.length === 0) return false;
-        return entries.every((entry) => get().isLevelEntryUnlocked(entry.id!));
+        return entries.length > 0 && entries.every((entry) => get().isLevelEntryUnlocked(entry.id!));
       },
 
       // P0 修复（审计 1.1）：按 LevelInfo 条目判定解锁，消除 l4a/l4b 同为 level:4 时
@@ -239,25 +287,21 @@ export const useAcademyStore = create<AcademyStore>()(
           levelInfo,
           get().basicsProgress.completed,
           get().progress.completedLessons,
+          get().placement?.creditLevels ?? [],
         );
       },
 
-      getLevelProgress: (level) => {
-        // 合并同一 level 的所有条目（如 L4A + L4B）
-        const allLessons = getLevelSummariesByNumber(level).flatMap((entry) => entry.lessons);
-        if (allLessons.length === 0) return 0;
-        const { completedLessons } = get().progress;
-        const completed = allLessons.filter((lesson) => completedLessons.includes(lesson.id)).length;
-        return Math.round((completed / allLessons.length) * 100);
-      },
+      getLevelProgress: (level) =>
+        computeLessonProgress(
+          getLevelSummariesByNumber(level).flatMap((entry) => entry.lessons),
+          get().progress.completedLessons,
+        ),
 
-      getTotalProgress: () => {
-        const allLessons = getLevelSummaries().flatMap((entry) => entry.lessons);
-        if (allLessons.length === 0) return 0;
-        const { completedLessons } = get().progress;
-        const completed = allLessons.filter((lesson) => completedLessons.includes(lesson.id)).length;
-        return Math.round((completed / allLessons.length) * 100);
-      },
+      getTotalProgress: () =>
+        computeLessonProgress(
+          getLevelSummaries().flatMap((entry) => entry.lessons),
+          get().progress.completedLessons,
+        ),
 
       isCompleted: (lessonId) => get().progress.completedLessons.includes(lessonId),
 
@@ -298,36 +342,15 @@ export const useAcademyStore = create<AcademyStore>()(
       resetBasics: () =>
         set({ basicsProgress: { ...initialBasicsProgress } }),
 
-      updateAbility: (result) =>
-        set((state) => {
-          const { isCorrect, timeTaken, difficulty } = result;
-          const assessment = state.abilityAssessment;
-          // 根据难度更新不同维度的能力评分
-          const newAssessment: AbilityAssessment = {
-            rangeKnowledge: updateAbilityScore(assessment.rangeKnowledge, isCorrect, timeTaken, difficulty),
-            oddsCalculation: updateAbilityScore(assessment.oddsCalculation, isCorrect, timeTaken, difficulty),
-            gtoUnderstanding: updateAbilityScore(assessment.gtoUnderstanding, isCorrect, timeTaken, difficulty),
-            positionalPlay: updateAbilityScore(assessment.positionalPlay, isCorrect, timeTaken, difficulty),
-            emotionalControl: updateAbilityScore(assessment.emotionalControl, isCorrect, timeTaken, difficulty),
-            lastUpdated: Date.now(),
-          };
-          const newRecentResults = [...state.recentPracticeResults, result].slice(-50);
-          return {
-            abilityAssessment: newAssessment,
-            recentPracticeResults: newRecentResults,
-          };
-        }),
+      recordPracticeResult: (result) =>
+        set((state) => ({
+          recentPracticeResults: [...state.recentPracticeResults, result].slice(-50),
+        })),
 
       setAdaptiveConfig: (config) =>
         set((state) => ({
           adaptiveConfig: { ...state.adaptiveConfig, ...config },
         })),
-
-      resetAbility: () =>
-        set({
-          abilityAssessment: { ...initialAbilityAssessment, lastUpdated: Date.now() },
-          recentPracticeResults: [],
-        }),
 
       // ===== 每日训练计划 =====
       refreshDailyPlan: (reviewQueue = [], options) =>
@@ -344,170 +367,109 @@ export const useAcademyStore = create<AcademyStore>()(
           }
           const plan = generateDailyPlan(
             state.progress.completedLessons,
-            state.abilityAssessment,
+            useProgressStore.getState().eloByVariant.standard,
             reviewQueue
           );
           return { dailyPlan: plan };
         }),
 
-      // ===== 级别认证 =====
-      attemptCertification: (level, score) =>
-        set((state) => {
-          const existing = state.certifications[level];
+      isCertified: (level) => isCertificationValid(get().certifications[level]),
 
-          // 任务 A: 动态题量算法（摘要层 quizCount 单源）
-          const totalQuizQuestions = getQuizCountForLevel(level);
+      isLevelLessonsCompleted: (level) =>
+        areAllLessonsCompleted(
+          getLevelSummariesByNumber(level).flatMap((entry) => entry.lessons),
+          get().progress.completedLessons,
+        ),
 
-          // 难度系数：L1=1.0, L2=1.1, ..., L8=1.8
-          // ACAD-01 修复：数组补齐 8 个元素，L7/L8 不再回落 1.0
-          const difficultyMultiplier = [1.0, 1.1, 1.2, 1.4, 1.5, 1.6, 1.7, 1.8][level - 1] ?? 1.0;
-
-          // 最终题量：min(总题池 × 难度系数，25)
-          const questionCount = Math.min(Math.floor(totalQuizQuestions * difficultyMultiplier), 25);
-
-          // 通过标准为固定基准（REQUIRED_ACCURACY，与组件展示口径单一事实源）。
-          // 旧实现按考生分数动态抬升阈值（70%-71.4%）且组件展示 80%，双口径不一致已修复。
-          const requiredAccuracy = REQUIRED_ACCURACY;
-          const passed = score >= requiredAccuracy;
-
-          const cert: LevelCertification = {
-            level,
-            requiredAccuracy,
-            cooldownPeriod: 24, // 默认冷却 24 小时
-            lastAttemptAt: Date.now(),
-            questionCount,
-            timeLimit: 0,
-            attempts: (existing?.attempts ?? 0) + 1,
-            bestScore: Math.max(existing?.bestScore ?? 0, score),
-            certifiedAt: passed ? Date.now() : existing?.certifiedAt,
-            // 有效期 30 天，每次通过认证从当次通过时间起算（修复：旧实现基于历史
-            // validUntil 叠加 30 天，认证过期很久后重新通过会得到仍是过去时间的
-            // validUntil，即"刚通过立即失效"）；未通过时保留既有有效期字段。
-            validUntil: passed ? Date.now() + CERT_VALIDITY_MS : existing?.validUntil,
-          };
-          return {
-            certifications: { ...state.certifications, [level]: cert },
-          };
-        }),
-
-      isCertified: (level) => {
-        const cert = get().certifications[level];
-        if (!cert?.certifiedAt) return false;
-        
-        // 如果有有效期限且已过期，也需要重新认证
-        if (cert.validUntil && Date.now() > cert.validUntil) {
-          return false;
-        }
-        
-        return true;
-      },
-
-      isLevelLessonsCompleted: (level) => {
-        const completed = new Set(get().progress.completedLessons);
-        // 同 level 数字可能对应多个节点（如 L4 拆为 4A/4B），全部课程都须完成
-        const lessons = getLevelSummariesByNumber(level).flatMap((entry) => entry.lessons);
-        if (lessons.length === 0) return false;
-        return lessons.every((lesson) => completed.has(lesson.id));
-      },
-
-      areAllLevelsCertified: () => {
-        const certs = get().certifications;
-        const levelNumbers = getLevelNumbers();
-        // ACAD-02 修复：校验 validUntil 过期（过期认证视为未达成）
-        const now = Date.now();
-        return levelNumbers.every((lv) => {
-          const cert = certs[lv];
-          if (!cert?.certifiedAt) return false;
-          return cert.validUntil === undefined || cert.validUntil > now;
-        });
-      },
+      areAllLevelsCertified: () =>
+        areAllCertificationsValid(get().certifications, getLevelNumbers()),
 
       isTrackCompleted: (trackId) => {
-        const completed = new Set(get().progress.completedLessons);
-        const isDone = (ids: readonly string[]): boolean =>
-          ids.length > 0 && ids.every((id) => completed.has(id));
+        const completed = get().progress.completedLessons;
         if (trackId === 'any') {
-          // 任一非空轨道全部完成（排除 lessonIds 为空的动态轨道）
-          return LEARNING_TRACKS.some((t) => isDone(t.lessonIds));
+          return LEARNING_TRACKS.some((track) => isTrackComplete(track, completed));
         }
-        const track = LEARNING_TRACKS.find((t) => t.id === trackId);
-        return track ? isDone(track.lessonIds) : false;
+        const track = LEARNING_TRACKS.find((item) => item.id === trackId);
+        return track ? isTrackComplete(track, completed) : false;
       },
-
       // ===== 学习轨道 =====
       setActiveTrack: (trackId) => set({ activeTrackId: trackId }),
-
       // ===== P2 变体支持 =====
       switchVariant: (variant) => set({ activeVariant: variant }),
 
-      // ===== 进步回放得分记录 =====
-      recordAttemptScore: (lessonId, score) =>
-        set((state) => {
-          const firstScores = { ...state.firstAttemptScores };
-          if (!(lessonId in firstScores)) {
-            firstScores[lessonId] = score;
-          }
-          return {
-            firstAttemptScores: firstScores,
-            lastAttemptScores: { ...state.lastAttemptScores, [lessonId]: score },
-          };
+      recordLessonAttempt: (lessonId, payload) => {
+        const isFirstAttempt = get().lessonAttempts[lessonId] === undefined;
+        set((state) => ({
+          lessonAttempts: {
+            ...state.lessonAttempts,
+            [lessonId]: nextLessonAttemptRecord(state.lessonAttempts[lessonId], payload),
+          },
+        }));
+        return { isFirstAttempt };
+      },
+
+      getLessonAttempt: (lessonId) => get().lessonAttempts[lessonId],
+
+      recordPlacement: (input) =>
+        set({ placement: mergePlacement(get().placement, input) }),
+
+      recordCheckpointAttempt: (level, payload) => {
+        const { record, isFirstAttempt } = nextCheckpointRecord(
+          get().checkpoints[level],
+          payload,
+        );
+        set((state) => ({
+          checkpoints: { ...state.checkpoints, [level]: record },
+        }));
+        return { isFirstAttempt };
+      },
+
+      toggleLessonBookmark: (lessonId) =>
+        set((state) => ({
+          bookmarkedLessons: toggleBookmark(state.bookmarkedLessons, lessonId),
+        })),
+
+      saveLessonNote: (lessonId, text) =>
+        set((state) => ({
+          lessonNotes: upsertLessonNote(state.lessonNotes, lessonId, text),
+        })),
+
+      getCertificationState: (level) =>
+        resolveCertificationState({
+          activeVariant: get().activeVariant,
+          isLevelCompleted: get().isLevelLessonsCompleted(level),
+          cert: get().certifications[level],
         }),
 
+      submitCertificationAttempt: (level, payload) => {
+        const { result, nextCert } = evaluateCertificationAttempt({
+          level,
+          payload,
+          activeVariant: get().activeVariant,
+          isLevelCompleted: get().isLevelLessonsCompleted(level),
+          cert: get().certifications[level],
+        });
+        if (nextCert) {
+          set({ certifications: { ...get().certifications, [level]: nextCert } });
+        }
+        return result;
+      },
+
       getProgressForLesson: (lessonId) => {
-        const { firstAttemptScores, lastAttemptScores } = get();
-        const first = firstAttemptScores[lessonId];
-        const last = lastAttemptScores[lessonId];
-        if (first === undefined || last === undefined) return null;
-        return { first, last, improvement: last - first };
+        const attempt = get().lessonAttempts[lessonId];
+        if (!attempt) return null;
+        return {
+          first: attempt.firstScore,
+          last: attempt.lastScore,
+          improvement: attempt.lastScore - attempt.firstScore,
+        };
       },
     }),
     {
       name: 'strategy-academy-progress',
-      version: 5,
-      migrate: (persistedState: unknown, fromVersion: number) => {
-        const next = (persistedState ?? {}) as Partial<AcademyStore>;
-        // v0 → v1：注入进步回放得分记录默认值
-        if (fromVersion < 1) {
-          if (!next.firstAttemptScores) {
-            next.firstAttemptScores = {};
-          }
-          if (!next.lastAttemptScores) {
-            next.lastAttemptScores = {};
-          }
-        }
-        // v1 → v2：裁剪 practiceResults 至最近 200 条
-        if (fromVersion < 2) {
-          if (Array.isArray(next.practiceResults) && next.practiceResults.length > 200) {
-            next.practiceResults = next.practiceResults.slice(-200);
-          }
-        }
-        // v2 → v3：认证系统新增 cooldownPeriod/validUntil/lastAttemptAt
-        if (fromVersion < 3) {
-          const certs = (next.certifications as Record<number, LevelCertification>) ?? {};
-          for (const level in certs) {
-            const cert = certs[level];
-            if (!cert) continue;
-            cert.cooldownPeriod = cert.cooldownPeriod ?? 24;
-            cert.lastAttemptAt = cert.lastAttemptAt ?? Date.now();
-            // validUntil 保持可选，不设置默认值
-          }
-          next.certifications = certs;
-        }
-        // v3 → v4：新增小节完成记录 completedUnits（lessonId → 已完成 unit id 列表），
-        // 老数据补默认空映射；已有 completedUnits 保持原值不被覆盖
-        // 防御性合并：确保缺失 progress 字段时也能产出完整形状
-        if (fromVersion < 4) {
-          const progress = next.progress ?? ({} as AcademyProgress);
-          next.progress = { ...initialProgress, ...progress, completedUnits: progress.completedUnits ?? {} };
-        }
-        // v4 → v5：P2 变体支持，新增 activeVariant 字段（默认 standard）
-        if (fromVersion < 5) {
-          if (!next.activeVariant) {
-            next.activeVariant = DEFAULT_VARIANT;
-          }
-        }
-        return next as AcademyStore;
-      },
+      version: 8,
+      migrate: (persistedState: unknown, fromVersion: number) =>
+        migrateStrategyAcademyState(persistedState, fromVersion) as AcademyStore,
     }
   )
 );

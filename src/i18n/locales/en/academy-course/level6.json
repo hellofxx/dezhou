@@ -130,6 +130,56 @@
       ],
       "explanation": "The bubble has the highest ICM pressure, because 1-3 more eliminations enter the money."
     },
+    "l6-icm-q6": {
+      "question": "In a four-player SNG with stacks 40/30/20/10 (100 total), what is the approximate win probability of the 40-chip stack under this lesson's simplified method?",
+      "options": [
+        "10%",
+        "25%",
+        "40%",
+        "60%"
+      ],
+      "explanation": "In the simplified method the win probability is approximately the stack share: 40 ÷ 100 = 40%. That is step one of this lesson's example."
+    },
+    "l6-icm-q7": {
+      "question": "In a cash game, facing a half-pot bet you need 25% equity to call; if the Bubble Factor on the bubble is 1.5, what equity do you actually need?",
+      "options": [
+        "25%",
+        "33%",
+        "37.5%",
+        "50%"
+      ],
+      "explanation": "Required equity = 25% × 1.5 = 37.5%. The Bubble Factor scales the cash-game calling threshold by the ICM pressure."
+    },
+    "l6-icm-q8": {
+      "question": "A Bubble Factor of 1 means?",
+      "options": [
+        "ICM pressure is at its peak",
+        "No ICM pressure: identical to the cash-game threshold",
+        "You are the shortest stack",
+        "You must fold this hand"
+      ],
+      "explanation": "BF = equity needed to call ÷ equity needed in a cash game; BF = 1 means no ICM scaling, i.e. equivalent to a cash game. Bubble-period BF can reach 1.5-2.0."
+    },
+    "l6-icm-q9": {
+      "question": "Per the core ICM conclusion, the $EV of a short stack holding 10% of the chips is usually?",
+      "options": [
+        "Below its chip share",
+        "Above its chip share",
+        "Exactly equal to its chip share",
+        "Necessarily zero"
+      ],
+      "explanation": "Diminishing marginal chip value cuts both ways: big stacks hold $EV below their chip share, while short stacks hold $EV above it (survival value). This lesson's example gives about 15% $EV for a 10% stack."
+    },
+    "l6-icm-q10": {
+      "question": "A player in a four-player SNG finishes first 40% of the time, second 32% and third 20% (prizes 50/30/20 dollars). What is their $EV?",
+      "options": [
+        "$20.0",
+        "$28.0",
+        "$33.6",
+        "$40.0"
+      ],
+      "explanation": "$EV = 0.4×50 + 0.32×30 + 0.2×20 = 20 + 9.6 + 4 = $33.6, the result of step three in this lesson's ICM example."
+    },
     "l6-pushfold-q1": {
       "question": "When should you typically enter Push/Fold mode?",
       "options": [
@@ -179,6 +229,56 @@
         "80%+"
       ],
       "explanation": "SB can push about 50-55% at 10BB because only BB remains."
+    },
+    "l6-pushfold-q6": {
+      "question": "What is the approximate push range for the BTN at 15BB?",
+      "options": [
+        "25-30%",
+        "40-45%",
+        "50-55%",
+        "70% or more"
+      ],
+      "explanation": "This lesson's standard: the BTN push range narrows to about 25-30% at 15BB (it is 40-45% at 10BB) because 15BB keeps enough playability postflop."
+    },
+    "l6-pushfold-q7": {
+      "question": "Facing a 10BB push from the BTN, what is the approximate calling range for the BB?",
+      "options": [
+        "15-20%",
+        "30-35%",
+        "50-55%",
+        "70% or more"
+      ],
+      "explanation": "The BTN push range is very wide, so the BB can call with roughly 30-35%; facing a 10BB UTG push the range must tighten to 15-20%."
+    },
+    "l6-pushfold-q8": {
+      "question": "The SB shoves 10BB (blinds SB 0.5 / BB 1, no ante); the BB has already posted 1BB and must call 9BB more. What break-even equity does the BB need?",
+      "options": [
+        "33%",
+        "40%",
+        "45%",
+        "50%"
+      ],
+      "explanation": "After the SB shove the pot is 10 + 1 = 11BB; the BB calls 9BB more into a 20BB final pot ⇒ required equity = 9 ÷ 20 = 45%."
+    },
+    "l6-pushfold-q9": {
+      "question": "What does this lesson recommend once your stack drops below 8BB?",
+      "options": [
+        "Push only from early position",
+        "Look for a push from almost any position",
+        "Wait until 5BB to push",
+        "Only play AA/KK"
+      ],
+      "explanation": "This lesson's thresholds: consider push/fold below 15BB, you must use it below 10BB, and below 8BB you should look for a push from almost any position. Waiting only lets the blinds eat your stack."
+    },
+    "l6-pushfold-q10": {
+      "question": "What is the difference between push/fold in cash games and tournaments?",
+      "options": [
+        "ICM pressure lets tournament push ranges be wider",
+        "Cash-game push ranges are always wider",
+        "There is no difference",
+        "Tournaments may only min-raise"
+      ],
+      "explanation": "ICM pressure makes opponents call tighter in tournaments, so push ranges can be wider than Nash; cash games have no ICM, so min-raising usually preserves postflop playability."
     },
     "l6-bubble-q1": {
       "question": "What is the bubble?",
@@ -230,6 +330,56 @@
       ],
       "explanation": "After the bubble bursts everyone has min-cashed, so ICM pressure drops sharply."
     },
+    "l6-bubble-q6": {
+      "question": "With 100 entrants and 15 paid places, when is the bubble according to this lesson's example?",
+      "options": [
+        "15-16 players left",
+        "16-18 players left",
+        "20-25 players left",
+        "30-40 players left"
+      ],
+      "explanation": "This lesson's example: with 100 entrants and 15 paid places, the bubble is when 16-18 players remain, i.e. 1-3 eliminations away from the money."
+    },
+    "l6-bubble-q7": {
+      "question": "Whom should a big stack attack first on the bubble?",
+      "options": [
+        "Short stacks",
+        "Medium stacks",
+        "Other big stacks",
+        "A player who just doubled up"
+      ],
+      "explanation": "Medium stacks are most afraid of busting and losing the money they nearly have, so they fold most often against a big stack; short stacks have little left to lose and may gamble."
+    },
+    "l6-bubble-q8": {
+      "question": "Besides avoiding big stacks, what should a medium stack do on the bubble?",
+      "options": [
+        "Open and 3-bet wide against short stacks",
+        "Fold against everyone",
+        "Bluff short stacks relentlessly",
+        "Only act from the big blind"
+      ],
+      "explanation": "The medium stack's survival strategy is two-sided: tighten against big stacks and widen against short stacks — short stacks must call very tight, so their ICM fear can be exploited."
+    },
+    "l6-bubble-q9": {
+      "question": "Why should a short stack not wait until below 5BB to push?",
+      "options": [
+        "Hand quality is necessarily worse at 5BB",
+        "The stack is too shallow for fold equity, and the odds force opponents to call",
+        "You cannot shove at 5BB",
+        "The blinds increase at 5BB"
+      ],
+      "explanation": "A push earns money through fold equity; the shallower the stack, the better the pot odds for the caller and the lower the fold equity. This lesson recommends pushing at 10-15BB while fold equity still exists."
+    },
+    "l6-bubble-q10": {
+      "question": "After the bubble bursts (someone reaches the money), how should your play change?",
+      "options": [
+        "Keep the ultra-tight bubble ranges",
+        "Return to play closer to cash games while still respecting payout jumps",
+        "Immediately shove any two cards",
+        "Drop all exploitative adjustments"
+      ],
+      "explanation": "Once in the money everyone has at least min-cashed, so ICM pressure drops sharply and ranges widen, bringing play closer to cash games; the next payout jump still leaves some ICM effect."
+    },
     "l6-finaltable-q1": {
       "question": "Final-table pay jumps mean?",
       "options": [
@@ -280,6 +430,56 @@
       ],
       "explanation": "Min-raise gives opponents the worst odds and reduces your risk — the most common steal size."
     },
+    "l6-finaltable-q6": {
+      "question": "What is the approximate BB defending range in heads-up play?",
+      "options": [
+        "30-40%",
+        "50-55%",
+        "60-70%",
+        "90% or more"
+      ],
+      "explanation": "This lesson's standard: heads-up the SB (BTN) opens 70-80% and the BB defends 60-70%. Ranges are that wide because each blind is worth much more relative to the effective stack."
+    },
+    "l6-finaltable-q7": {
+      "question": "Which set of conditions best supports a steal attempt?",
+      "options": [
+        "Large blinds relative to the stack, a high fold-to-steal opponent, and you are in position at BTN/CO",
+        "Small blinds relative to the stack, a calling opponent, and you are UTG",
+        "You are the shortest stack and the opponent is a big stack",
+        "The opponent just took a bad beat"
+      ],
+      "explanation": "The three steal conditions: blinds large enough relative to stacks to be worth taking, a tight opponent (high fold to steal) and position (BTN/CO). Missing any one lowers the profit."
+    },
+    "l6-finaltable-q8": {
+      "question": "What is the hand-selection principle for a re-steal?",
+      "options": [
+        "Prefer Ax blockers and suited playability; avoid dominated hands such as KJ/QT",
+        "Only use AA/KK",
+        "Only use offsuit broadway",
+        "Any two cards will do"
+      ],
+      "explanation": "A re-steal needs both fold equity and playability when called: Ax blocks the opponent's Ax combos and suited hands play well postflop, while easily dominated hands such as KJ/QT should be avoided."
+    },
+    "l6-finaltable-q9": {
+      "question": "Above what opponent open frequency does this lesson consider a re-steal appropriate?",
+      "options": [
+        "20%",
+        "30%",
+        "40%",
+        "60%"
+      ],
+      "explanation": "One condition in this lesson is a high steal frequency (open > 40%), together with a 15-25BB stack and blocker hands such as Ax/Kx."
+    },
+    "l6-finaltable-q10": {
+      "question": "As a medium stack at the final table, what goal does this lesson recommend?",
+      "options": [
+        "Avoid big-stack clashes, pressure short stacks, survive and wait for a better spot",
+        "Immediately get all-in against the big stack to accumulate",
+        "Only play AA/KK until heads-up",
+        "Propose a deal"
+      ],
+      "explanation": "A medium stack aims to survive: avoid clashes with big stacks (busting costs far more than doubling gains) while pressuring short stacks to accumulate; only the big stack plays for first place."
+    },
     "l6-bounty-q1": {
       "question": "How much of an opponent's bounty do you get in PKO?",
       "options": [
@@ -329,6 +529,56 @@
         "Never folding"
       ],
       "explanation": "The most common mistake is completely ignoring bounty value (too tight) or over-chasing bounties (shoving garbage)."
+    },
+    "l6-bounty-q6": {
+      "question": "An opponent has a $20 bounty and holds 5,000 chips out of 50,000 in play; under this lesson's simplified method, what is the bounty $EV of eliminating them?",
+      "options": [
+        "$0.2",
+        "$2",
+        "$10",
+        "$20"
+      ],
+      "explanation": "Elimination probability ≈ chip share 5,000/50,000 = 10%, so the bounty contributes 0.1 × $20 = $2. That is the example in this lesson's formula block."
+    },
+    "l6-bounty-q7": {
+      "question": "When computing the \"bounty-adjusted effective odds\", what should be added to the numerator?",
+      "options": [
+        "The opponent's full bounty",
+        "Half of the opponent's bounty",
+        "Your own bounty",
+        "The total of all bounties at the table"
+      ],
+      "explanation": "Effective odds = (pot + opponent's bounty / 2) : call amount. In a PKO you only collect half of an opponent's bounty, so only half of it can count toward this hand's return."
+    },
+    "l6-bounty-q8": {
+      "question": "Why should your calling range tighten against an opponent carrying a big bounty?",
+      "options": [
+        "Big-bounty opponents usually have more chips, so elimination is unlikely and the bounty $EV is limited",
+        "Big-bounty opponents have better hands",
+        "A big bounty worsens your pot odds",
+        "Rules forbid chasing bounties"
+      ],
+      "explanation": "This lesson's counter-intuitive point: bounty $EV = bounty × elimination probability, and big-bounty players usually hold big stacks, so chasing them produces -EV calls."
+    },
+    "l6-bounty-q9": {
+      "question": "In a PKO, after you eliminate an opponent, the other half of their bounty goes?",
+      "options": [
+        "To the tournament operator",
+        "Onto your own head",
+        "Split evenly around the table",
+        "Back to the eliminated player"
+      ],
+      "explanation": "The progressive mechanism: the eliminator collects half the bounty and the other half is added to their own head — so the larger your bounty, the more opponents will attack you."
+    },
+    "l6-bounty-q10": {
+      "question": "How much does this lesson say a bounty widens your calling range?",
+      "options": [
+        "1-2%",
+        "5-10%",
+        "20-30%",
+        "50% or more"
+      ],
+      "explanation": "This lesson's standard: the bounty contribution lets calling ranges widen by roughly 5-10%, depending on bounty size and stack distribution — not unlimited bounty chasing."
     }
   },
   "lessonExample": {

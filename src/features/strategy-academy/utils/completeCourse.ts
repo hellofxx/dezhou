@@ -2,16 +2,20 @@
  * 课程/Drill 完成辅助函数
  *
  * 封装 handleDrillComplete / handleQuizComplete 的公共逻辑：
- * recordQuizScore → recordAttemptScore → completeLesson → trainingEvents.emit
- * → createReviewItem → addReviewItem → recordTrainingDay
+ * recordQuizScore → completeLesson → recordLessonAttempt
+ * → trainingEvents.emit → 题级/课时级 SRS → recordTrainingDay
  *
- * P2-01: 从 CourseView 提取，用于消除两个高度重复的完成回调。
+ * P0 学习闭环口径（TDD §5.8）：
+ * - 每次作答（含重考）都写 attempts 与训练日（Streak 口径不变），并照常 emit 训练事件；
+ * - 题级 SRS：本次答错的题逐条入队（`strategy:<questionId>`，回链所属课时）；
+ * - 课时级复习项只保留给「满分（无错题）」或 Drill 课，避免与题级重复占用人注意力。
  */
 import { useAcademyStore } from '../store';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { useProgressStore } from '@/features/progress/store';
 import { createReviewItem, toLocalDateString } from '@/shared/utils/spacedRepetition';
 import { lessonTitleKey } from './titleKeys';
+import { buildStrategyQuestionReviewItems } from './strategySrs';
 import type { Lesson } from '../types';
 import type { DrillResult } from '../components/drills/types';
 
@@ -22,32 +26,32 @@ export interface CompleteCourseParams {
   score: number;
   /** 完成模式 */
   mode: 'drill' | 'quiz';
-  /** 课程对象（可选；用于 quiz 题数统计与复习项创建） */
+  /** 课程对象（可选；用于 quiz 题库过滤与课时级复习项创建） */
   lesson?: Lesson;
   /** Drill 结果（仅 drill 模式需要） */
   drillResult?: DrillResult;
+  /** 本次答错的题 id（quiz 模式；缺省视为未上报，按满分口径保留课时级复习项） */
+  wrongQuestionIds?: string[];
+  /** 本次实际答题量与答对数（缺省按分数与题量推算） */
+  correctCount?: number;
+  totalQuestions?: number;
 }
 
 /**
- * 完成课程/Drill 的统一处理函数。
- *
- * 行为等价于原始 handleDrillComplete / handleQuizComplete 的公共部分：
- * - 记录分数到 academy store（recordQuizScore + recordAttemptScore）
- * - 标记课程完成（completeLesson）
- * - 发射训练事件（trainingEvents.emit，mode 区分 drill/quiz）
- * - 创建复习项（高分调整 interval 为 3 天）
- * - 记录训练日（recordTrainingDay，幂等）
- *
- * 注意：本函数不负责 setPhase / setQuizScore / setDrillResult 等 UI 状态更新，
- * 调用方需自行处理。
+ * 完成课程/Drill 的统一处理函数（不负责 setPhase / setQuizScore 等 UI 状态，调用方自理）。
  */
 export function completeCourse(params: CompleteCourseParams): void {
-  const { lessonId, score, mode, lesson, drillResult } = params;
+  const { lessonId, score, mode, lesson, drillResult, wrongQuestionIds } = params;
   const store = useAcademyStore.getState();
 
+  const totalQuestions = params.totalQuestions ?? (mode === 'drill' ? drillResult?.total ?? 0 : lesson?.quiz.length ?? 0);
+  const correctCount = params.correctCount
+    ?? (mode === 'drill' ? drillResult?.correct ?? 0 : Math.round((score / 100) * totalQuestions));
+
   store.recordQuizScore(lessonId, score);
-  store.recordAttemptScore(lessonId, score);
   store.completeLesson(lessonId);
+  // 尝试记录：首次写 firstScore/firstCorrect/firstTotal（掌握度口径），每次更新 best/last
+  store.recordLessonAttempt(lessonId, { score, correct: correctCount, total: totalQuestions });
 
   // 发射训练事件（mode 区分 drill/quiz，字段与原始回调完全一致）
   if (mode === 'drill' && drillResult) {
@@ -68,8 +72,7 @@ export function completeCourse(params: CompleteCourseParams): void {
       createdAt: Date.now(),
     });
   } else {
-    // quiz 模式
-    const qLen = lesson?.quiz.length ?? 0;
+    // quiz 模式：题量/对题数用实际抽题口径（抽 5 题时不再按全量题库计）
     trainingEvents.emit({
       id: `academy-${lessonId}-${Date.now()}`,
       module: 'strategy-academy',
@@ -77,9 +80,9 @@ export function completeCourse(params: CompleteCourseParams): void {
       result: {
         sessionId: `academy-${lessonId}`,
         module: 'strategy-academy',
-        totalQuestions: qLen,
-        correctAnswers: Math.round((score / 100) * qLen),
-        accuracy: score / 100,
+        totalQuestions,
+        correctAnswers: correctCount,
+        accuracy: totalQuestions > 0 ? correctCount / totalQuestions : score / 100,
         averageTime: 0,
         timestamp: Date.now(),
         details: [],
@@ -88,8 +91,18 @@ export function completeCourse(params: CompleteCourseParams): void {
     });
   }
 
-  // 创建/更新复习项（仅当 lesson 对象存在时）
-  if (lesson) {
+  const progressStore = useProgressStore.getState();
+  const wrongIds = wrongQuestionIds ?? [];
+
+  // 题级 SRS：本次答错的每一道题一条复习项（id = strategy:<questionId>）
+  if (lesson && wrongIds.length > 0) {
+    for (const item of buildStrategyQuestionReviewItems(lesson.id, lesson.quiz, wrongIds)) {
+      progressStore.addReviewItem(item);
+    }
+  }
+
+  // 课时级复习项：仅满分（无错题）或 Drill 课保留，避免与题级条目重复
+  if (lesson && (mode === 'drill' || wrongIds.length === 0)) {
     // label 存 i18n key（academy.lessonTitle.<id>）而非中文原文：复习队列渲染 t(item.label)，
     // 存原文会让英文界面回显中文（契约见 AGENTS.md / PRD §12.4.3「复习态必须存 key」）
     const reviewItem = createReviewItem(lesson.id, lessonTitleKey(lesson.id), 'strategy');
@@ -99,9 +112,9 @@ export function completeCourse(params: CompleteCourseParams): void {
       date.setDate(date.getDate() + 3);
       reviewItem.nextReviewDate = toLocalDateString(date);
     }
-    useProgressStore.getState().addReviewItem(reviewItem);
+    progressStore.addReviewItem(reviewItem);
   }
 
-  // 记录训练日（幂等，同日重复安全）
-  useProgressStore.getState().recordTrainingDay();
+  // 记录训练日（幂等，同日重复安全；重考同样计入——每次作答都是真实学习）
+  progressStore.recordTrainingDay();
 }

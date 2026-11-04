@@ -150,8 +150,7 @@ describe('理论卡 · 5 卡上限', () => {
       findNextLesson: () => ({ id: 'fixture-lesson', title: '基础课', level: 1 }),
       getLessonMeta: () => undefined,
       getAcademyProgressSnapshot: () => ({ completedLessons: [] }),
-      getFirstAttemptScoresSnapshot: () => ({}),
-      getLastAttemptScoresSnapshot: () => ({}),
+      getLessonAttemptsSnapshot: () => ({}),
       subscribe: () => () => {},
     };
     registerAcademyDataSource(academySource);

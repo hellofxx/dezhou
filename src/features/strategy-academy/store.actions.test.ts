@@ -6,7 +6,7 @@ import type { TrainingRecord } from '@/shared/types/training';
  * strategy-academy store 课程/练习 action 契约：
  * - 课程进度 action 的幂等与状态派生（start / complete / quiz / practice）
  * - recordPracticeScore 入库前剥离 answers 并发出训练事件（fire-and-forget）
- * - 基础入门 / 能力评估 / 自适应配置的推进与重置
+ * - 基础入门 / 自适应难度窗口 / 自适应配置的推进
  *
  * 认证 / 门禁 / 轨道 / 进步回放见 store.gates.test.ts。
  * 每例 resetModules + 空 localStorage，避免模块单例状态串扰。
@@ -167,20 +167,15 @@ describe('strategy-academy store actions', () => {
     });
   });
 
-  it('updateAbility 五个维度同步更新，recentPracticeResults 只保留最近 50 条', async () => {
+  it('recordPracticeResult 只维护自适应难度窗口，recentPracticeResults 只保留最近 50 条', async () => {
     const { useAcademyStore } = await load();
-    useAcademyStore.getState().updateAbility({
+    useAcademyStore.getState().recordPracticeResult({
       isCorrect: true,
       timeTaken: 5,
       difficulty: 'beginner',
     });
-    const assessment = useAcademyStore.getState().abilityAssessment;
-    expect(assessment.rangeKnowledge).toBe(55);
-    expect(assessment.oddsCalculation).toBe(55);
-    expect(assessment.gtoUnderstanding).toBe(55);
-    expect(assessment.positionalPlay).toBe(55);
-    expect(assessment.emotionalControl).toBe(55);
     expect(useAcademyStore.getState().recentPracticeResults).toHaveLength(1);
+    expect(useAcademyStore.getState()).not.toHaveProperty('abilityAssessment');
 
     const seeded = Array.from({ length: 50 }, () => ({
       isCorrect: false,
@@ -188,7 +183,7 @@ describe('strategy-academy store actions', () => {
       difficulty: 'beginner' as const,
     }));
     useAcademyStore.setState({ recentPracticeResults: seeded });
-    useAcademyStore.getState().updateAbility({
+    useAcademyStore.getState().recordPracticeResult({
       isCorrect: false,
       timeTaken: 5,
       difficulty: 'advanced',
@@ -198,17 +193,12 @@ describe('strategy-academy store actions', () => {
     expect(recent.at(-1)?.difficulty).toBe('advanced');
   });
 
-  it('setAdaptiveConfig 局部合并；resetAbility 清空能力与历史', async () => {
+  it('setAdaptiveConfig 局部合并，未传字段保持默认', async () => {
     const { useAcademyStore } = await load();
     useAcademyStore.getState().setAdaptiveConfig({ enabled: false, upgradeThreshold: 90 });
     const config = useAcademyStore.getState().adaptiveConfig;
     expect(config.enabled).toBe(false);
     expect(config.upgradeThreshold).toBe(90);
     expect(config.downgradeThreshold).toBe(60);
-
-    useAcademyStore.getState().updateAbility({ isCorrect: true, timeTaken: 5, difficulty: 'beginner' });
-    useAcademyStore.getState().resetAbility();
-    expect(useAcademyStore.getState().recentPracticeResults).toEqual([]);
-    expect(useAcademyStore.getState().abilityAssessment.rangeKnowledge).toBe(50);
   });
 });

@@ -52,10 +52,10 @@ function mountBridge(rec: PracticeRecommendation) {
   });
 }
 
-/** 目标路由用 /academy/lesson/:id 通配捕获，读 location.pathname 即为跳转证据 */
+/** 目标路由探针：pathname + search（轨道 CTA 带 ?track=，课时 CTA 只有 pathname） */
 function LocationProbe() {
   const location = useLocation();
-  return <div data-testid="path">{location.pathname}</div>;
+  return <div data-testid="path">{`${location.pathname}${location.search}`}</div>;
 }
 
 function lessonButtons(): HTMLButtonElement[] {
@@ -127,3 +127,43 @@ describe('PracticeBridgeCard 变体章节级桥接', () => {
     }
   });
 });
+
+/**
+ * 轨道 CTA（共享 AcademyBridgeCard 的 cta 槽位）：
+ * 共享壳单个 `label` 同时作可见文案与可访问名，故这里锁定"文案仍取 theory.bridge.enterTrack"，
+ * 并验证 `?track=` 参数与轨道 id 拼装没变。
+ */
+describe('PracticeBridgeCard 轨道 CTA（共享卡口径）', () => {
+  const rec: PracticeRecommendation = {
+    lessons: [{ id: 'l1-not-in-manifest', title: '占位课时' }],
+    trackId: 'track-theory-bridge',
+  };
+
+  it('CTA 文案取 theory.bridge.enterTrack，点击进入带 ?track= 的轨道', async () => {
+    await preloadI18n(['theory', 'academy'], 'zh');
+    mountBridge(rec);
+
+    const label = i18n.t('theory.bridge.enterTrack');
+    const cta = Array.from(container!.querySelectorAll('button')).find(
+      (button) => button.getAttribute('aria-label') === label,
+    );
+    expect(cta, '缺少轨道 CTA').toBeTruthy();
+    expect(cta!.textContent).toContain(label);
+
+    act(() => cta!.dispatchEvent(new MouseEvent('click', { bubbles: true })));
+    expect(path()).toBe('/academy/tracks?track=track-theory-bridge');
+  });
+
+  it('无 trackId 时不渲染轨道 CTA，只保留课时行', async () => {
+    await preloadI18n(['theory', 'academy'], 'zh');
+    mountBridge({ lessons: rec.lessons });
+
+    expect(
+      Array.from(container!.querySelectorAll('button')).some(
+        (button) => button.getAttribute('aria-label') === i18n.t('theory.bridge.enterTrack'),
+      ),
+    ).toBe(false);
+    expect(lessonButtons()).toHaveLength(1);
+  });
+});
+

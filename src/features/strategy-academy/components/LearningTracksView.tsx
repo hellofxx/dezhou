@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -7,14 +7,20 @@ import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { ArrowLeft, ArrowRight, Users, Clock, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
 import { LEARNING_TRACKS, isTrackPrerequisiteMet } from '../data/learningTracks';
 import {
+  resolveLessonTitle,
   resolveTrackName,
   resolveTrackDescription,
   resolveTrackAudience,
   resolveTrackDuration,
 } from '../utils/titleKeys';
-import { LEVEL_SUMMARIES as LEVELS } from '../utils/academyMeta';
+import {
+  LEVEL_SUMMARIES as LEVELS,
+  findLessonSummaryById,
+} from '../utils/academyMeta';
+import { resolveLeakFixLessonIds } from '../utils/leakFix';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
+import { useProgressStore } from '@/features/progress/store';
 import { ProgressBar } from './ProgressBar';
 
 export default function LearningTracksView() {
@@ -27,6 +33,12 @@ export default function LearningTracksView() {
   const { progress, activeTrackId, setActiveTrack } = useAcademyStore();
   // 调试解锁：解除全部轨道前置
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
+  // 弱点修补轨道：按最弱 ELO 维度动态推荐未完成课（只读）
+  const standardElo = useProgressStore((s) => s.eloByVariant.standard);
+  const leakFixLessonIds = useMemo(
+    () => resolveLeakFixLessonIds(standardElo, progress.completedLessons),
+    [standardElo, progress.completedLessons],
+  );
 
   // P1E-01: ?track= 存在时滚动到目标轨道
   useEffect(() => {
@@ -72,6 +84,12 @@ export default function LearningTracksView() {
             const totalInTrack = track.lessonIds.length;
             const progressPercent = totalInTrack > 0 ? Math.round((completedInTrack / totalInTrack) * 100) : 0;
             const isLeakFix = track.id === 'track-leak-fix';
+            const leakFixLessons = isLeakFix
+              ? leakFixLessonIds.flatMap((id) => {
+                  const lesson = findLessonSummaryById(id);
+                  return lesson ? [lesson] : [];
+                })
+              : [];
 
             // P1E-02: 前置条件检查改用课程完成口径（调试解锁时直接放行）
             const prereqMet = debugUnlock || isTrackPrerequisiteMet(track, progress.completedLessons);
@@ -100,6 +118,7 @@ export default function LearningTracksView() {
             const nextLesson = track.lessonIds.find(
               (id) => !progress.completedLessons.includes(id)
             );
+            const trackNextLesson = isLeakFix ? leakFixLessonIds[0] : nextLesson;
 
             // P1E-01: 高亮被 ?track= 参数引用的轨道
             const isHighlighted = highlightTrackId === track.id;
@@ -192,9 +211,33 @@ export default function LearningTracksView() {
                     )}
 
                     {isLeakFix && (
-                      <p className="text-xs text-[var(--ivory-muted)]">
-                        {t('academy.tracks.recommendedByAbility')}
-                      </p>
+                      <div className="space-y-2">
+                        <p className="text-xs text-[var(--ivory-muted)]">
+                          {t('academy.tracks.recommendedByAbility')}
+                        </p>
+                        {leakFixLessons.length > 0 ? (
+                          <ul className="space-y-1.5">
+                            {leakFixLessons.map((lesson) => (
+                              <li key={lesson.id}>
+                                <button
+                                  type="button"
+                                  onClick={() => navigate(`/academy/lesson/${lesson.id}`)}
+                                  className="flex w-full items-center justify-between gap-2 rounded-md border border-[var(--walnut-border)] bg-[var(--felt)] px-3 py-2 text-left text-xs text-[var(--ivory-dim)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40"
+                                >
+                                  <span className="min-w-0 truncate">
+                                    {resolveLessonTitle(t, lesson)}
+                                  </span>
+                                  <ArrowRight className="w-3 h-3 shrink-0" />
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-xs text-[var(--ivory-muted)]">
+                            {t('academy.tracks.leakFixAllDone')}
+                          </p>
+                        )}
+                      </div>
                     )}
 
                     {/* Actions — P1E-03: prereqMet=false 时禁用按钮 */}
@@ -213,9 +256,9 @@ export default function LearningTracksView() {
                         {!prereqMet && <Lock className="inline w-3 h-3 mr-1" />}
                         {isActive ? t('academy.tracks.deselectTrack') : t('academy.tracks.selectTrack')}
                       </button>
-                      {nextLesson && !isLeakFix && (
+                      {trackNextLesson && (
                         <button
-                          onClick={() => navigate(`/academy/lesson/${nextLesson}`)}
+                          onClick={() => navigate(`/academy/lesson/${trackNextLesson}`)}
                           disabled={!prereqMet}
                           className={`inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-md transition-colors ${
                             !prereqMet
@@ -223,7 +266,9 @@ export default function LearningTracksView() {
                               : 'bg-[var(--walnut-raised)] text-[var(--ivory)] hover:text-[var(--brass-bright)]'
                           }`}
                         >
-                          {t('academy.tracks.continueLearning')}
+                          {isLeakFix
+                            ? t('academy.tracks.startRecommendation')
+                            : t('academy.tracks.continueLearning')}
                           <ArrowRight className="w-3 h-3" />
                         </button>
                       )}

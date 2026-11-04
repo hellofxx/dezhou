@@ -163,6 +163,56 @@
       ],
       "explanation": "The core logic is that the preflop raiser usually has a range advantage, because most flops don't help either player much."
     },
+    "l3-cbet-q6": {
+      "question": "The pot is 6BB and you C-Bet 3BB (1/2 pot). Villain folds 50% of the time and you have 25% equity when called. What is the EV of this C-Bet?",
+      "options": [
+        "+3.0BB",
+        "+1.5BB",
+        "-0.75BB",
+        "0BB"
+      ],
+      "explanation": "Net win = new pot (6+3+3) - your 3BB bet = 9BB; EV = 0.5×6 + 0.5×(0.25×9 - 0.75×3) = 3.0 + 0 = +3.0BB."
+    },
+    "l3-cbet-q7": {
+      "question": "As the preflop raiser on a K-7-2 rainbow flop, which overall strategy is closest?",
+      "options": [
+        "High-frequency small bets (about 1/3 pot)",
+        "Low-frequency large bets",
+        "All-in 100% of the time",
+        "Check 100% of the time"
+      ],
+      "explanation": "A dry high-card board strongly favors the preflop raiser: a high-frequency small bet folds out weak hands while keeping value."
+    },
+    "l3-cbet-q8": {
+      "question": "Why does the preflop raiser hold a range advantage on most flops?",
+      "options": [
+        "Villain can never have connected",
+        "The raising range is stronger overall and concentrated in high cards and big pairs",
+        "Position is always better",
+        "The stack is always bigger"
+      ],
+      "explanation": "The range advantage comes from range composition: the raiser holds more high cards and big pairs, so it connects more often on most boards."
+    },
+    "l3-cbet-q9": {
+      "question": "What is the main purpose of a 2/3-pot C-Bet on a J-T-9 two-tone board?",
+      "options": [
+        "Make draws pay",
+        "Save chips",
+        "Induce folds from strong hands",
+        "Keep the pot small"
+      ],
+      "explanation": "Wet boards carry many draws, so a larger size raises the cost of continuing while protecting your made hands."
+    },
+    "l3-cbet-q10": {
+      "question": "You bluff 1/2 pot. What minimum fold rate does villain need for the bluff to break even?",
+      "options": [
+        "25%",
+        "33%",
+        "50%",
+        "67%"
+      ],
+      "explanation": "Alpha = b/(P+b) = 0.5/(1+0.5) ≈ 33.3%; above that fold rate the pure bluff is +EV."
+    },
     "l3-draw-q1": {
       "question": "How many outs does a flush draw have?",
       "options": [
@@ -212,6 +262,56 @@
         "20"
       ],
       "explanation": "9 flush outs + 8 OESD outs, deduplicated to about 15. This is the strongest draw type."
+    },
+    "l3-draw-q6": {
+      "question": "What is the actual hit rate of 9 outs from flop to river (two streets)?",
+      "options": [
+        "About 19%",
+        "About 31.5%",
+        "About 35%",
+        "About 45%"
+      ],
+      "explanation": "1 - (38/47)×(37/46) ≈ 34.97%, about 35%; the rule of 4 (9×4 = 36%) is close."
+    },
+    "l3-draw-q7": {
+      "question": "What is the hit rate of 9 outs from turn to river (one street)?",
+      "options": [
+        "About 10%",
+        "About 20%",
+        "About 35%",
+        "About 46%"
+      ],
+      "explanation": "One street is 9/46 ≈ 19.6%, about 20%; the single-street convention uses the ×2 form of the rule of 2 and 4."
+    },
+    "l3-draw-q8": {
+      "question": "The pot is 10BB and villain bets 5BB. You hold an open-ended straight draw (8 outs, about 31.5% over two streets). What should you do?",
+      "options": [
+        "Call: 31.5% beats the 25% break-even equity",
+        "Fold: 25% beats 31.5%",
+        "Shove for pressure",
+        "Raise to 20BB"
+      ],
+      "explanation": "Calling 5BB creates a 20BB pot, so break-even equity is 5/20 = 25%; 31.5% > 25%, so calling is +EV."
+    },
+    "l3-draw-q9": {
+      "question": "Above how many outs does the rule of 4 lose enough accuracy to warrant the correction formula?",
+      "options": [
+        "4 outs",
+        "8 outs",
+        "9 outs",
+        "13 outs"
+      ],
+      "explanation": "Up to 9 outs the ×4 estimate stays within one percentage point; at 13+ outs (12 outs: 48% estimated versus about 45% actual) the correction formula is advised."
+    },
+    "l3-draw-q10": {
+      "question": "What is the equity of a 15-out combo draw (flush plus open-ended straight) all-in on the flop against a single pair?",
+      "options": [
+        "About 35%",
+        "About 45%",
+        "About 54%",
+        "About 70%"
+      ],
+      "explanation": "1 - (32/47)×(31/46) ≈ 54%; a combo draw is already ahead of most one-pair hands on the flop."
     },
     "l3-multi-q1": {
       "question": "What is the core of multi-street thinking?",
@@ -263,6 +363,56 @@
       ],
       "explanation": "Give up barreling when the turn completes an obvious draw, because the opponent's draw likely got there."
     },
+    "l3-multi-q6": {
+      "question": "The pot is 6BB with 100BB effective. What is the SPR?",
+      "options": [
+        "About 3",
+        "About 8",
+        "About 17",
+        "About 50"
+      ],
+      "explanation": "SPR = effective stack ÷ pot = 100 ÷ 6 ≈ 16.7, about 17."
+    },
+    "l3-multi-q7": {
+      "question": "At an SPR below 4, what is the standard plan with top pair?",
+      "options": [
+        "Fold and leave the table",
+        "You can commit your stack",
+        "Call one street only",
+        "You must check"
+      ],
+      "explanation": "At low SPR the stack is small relative to the pot, so top pair is strong enough to play for stacks."
+    },
+    "l3-multi-q8": {
+      "question": "At an SPR near 6, roughly what fraction of the pot must you bet on each street to get all-in by the river?",
+      "options": [
+        "About 25% pot",
+        "About 60-70% pot",
+        "About 114% pot",
+        "About 200% pot"
+      ],
+      "explanation": "SPR 5-7 maps to about 60-70% pot per street; at SPR 17 it takes about 114% per street."
+    },
+    "l3-multi-q9": {
+      "question": "What is the name of the play where you check the flop and bet the turn?",
+      "options": [
+        "Double barrel",
+        "Delayed C-Bet",
+        "Probe bet",
+        "Donk bet"
+      ],
+      "explanation": "A delayed C-Bet bets the turn after checking the flop; a probe bet is a turn bet after the preflop raiser checked the flop."
+    },
+    "l3-multi-q10": {
+      "question": "The turn is a blank that does not change the board texture. As the preflop raiser you should usually?",
+      "options": [
+        "Keep betting to maintain pressure",
+        "Give up immediately",
+        "Shove",
+        "Check and then fold"
+      ],
+      "explanation": "A blank does not improve villain's range, so a second barrel keeps both value and fold equity."
+    },
     "l3-cr-q1": {
       "question": "What is a Check-Raise?",
       "options": [
@@ -312,6 +462,56 @@
         "When you have a combo draw"
       ],
       "explanation": "On dry boards the opponent's C-Bet range is strong (e.g. K-7-2 rainbow) — the Check-Raise fold rate is low, so bluffing doesn't work."
+    },
+    "l3-cr-q6": {
+      "question": "Villain C-Bets 6BB. What is a standard check-raise size?",
+      "options": [
+        "9BB",
+        "15-18BB",
+        "24BB",
+        "30BB"
+      ],
+      "explanation": "A check-raise is usually 2.5-3x the bet faced, so 6BB becomes 15-18BB."
+    },
+    "l3-cr-q7": {
+      "question": "You C-Bet top pair with a good kicker and BB check-raises. What is the standard response?",
+      "options": [
+        "Fold",
+        "Call",
+        "Shove immediately",
+        "Re-raise"
+      ],
+      "explanation": "Top pair with a good kicker is strong but not the nuts, so calling controls the pot; sets and combo draws can re-raise."
+    },
+    "l3-cr-q8": {
+      "question": "Which hands are the best candidates for a value check-raise?",
+      "options": [
+        "Bottom pair",
+        "Two pair or a set, especially on wet boards",
+        "Ace high",
+        "Pure air"
+      ],
+      "explanation": "Two pair and sets combine value with protection on wet boards, making them the core of value check-raises."
+    },
+    "l3-cr-q9": {
+      "question": "What should a balanced check-raise range contain?",
+      "options": [
+        "Only strong hands",
+        "Strong hands plus strong draws such as combo draws",
+        "Only bluffs",
+        "Completely random hands"
+      ],
+      "explanation": "A value part (sets, two pair, strong top pair) plus a bluff part (combo draws) leaves villain no profitable adjustment."
+    },
+    "l3-cr-q10": {
+      "question": "The pot is 5.5BB, villain C-Bets 4BB, you check-raise to 12BB and are called. What is the pot now?",
+      "options": [
+        "21.5BB",
+        "25.5BB",
+        "29.5BB",
+        "33.5BB"
+      ],
+      "explanation": "5.5 + villain's 4BB bet + your 12BB raise + villain's 8BB call = 29.5BB."
     },
     "l3-fp-q1": {
       "question": "What is a Float?",
@@ -363,6 +563,56 @@
       ],
       "explanation": "Probe Bet is betting the turn after the preflop raiser checks the flop. Float is betting the turn after calling a C-Bet when the opponent checks."
     },
+    "l3-fp-q6": {
+      "question": "What is the core precondition for a float to work?",
+      "options": [
+        "You have position and villain often gives up on the turn",
+        "You hold the nuts",
+        "You are out of position",
+        "Villain is a calling station"
+      ],
+      "explanation": "Floating relies on positional information plus turn fold equity; out of position or against players who never fold it loses money."
+    },
+    "l3-fp-q7": {
+      "question": "Villain checks the flop very often. What should you do more on the turn?",
+      "options": [
+        "Probe bet more often",
+        "Fold more",
+        "Check more",
+        "Shove more"
+      ],
+      "explanation": "Frequent flop checks mean a weak range, so a turn probe has high fold equity."
+    },
+    "l3-fp-q8": {
+      "question": "Which situation is the worst for floating?",
+      "options": [
+        "A heads-up pot in position",
+        "A multiway pot out of position",
+        "Villain gives up often on the turn",
+        "You hold a backdoor draw"
+      ],
+      "explanation": "In a multiway pot players act behind you and without position you have the least information later, so floats fail far more often."
+    },
+    "l3-fp-q9": {
+      "question": "What bet size is common when floating to steal on the turn?",
+      "options": [
+        "About 10% pot",
+        "About 2/3 pot",
+        "Full pot",
+        "Twice the pot"
+      ],
+      "explanation": "About 2/3 pot (60-75%) applies enough fold pressure without excessive risk."
+    },
+    "l3-fp-q10": {
+      "question": "Villain barrels the turn after your float and your hand has not improved. What should you do?",
+      "options": [
+        "Give up the hand",
+        "Float again to the river",
+        "Raise",
+        "Shove"
+      ],
+      "explanation": "A float assumes villain gives up; continued aggression signals a strong range, so without equity you should stop."
+    },
     "l3-bs-q1": {
       "question": "What bet size should you use on a dry board (e.g. K-7-2 rainbow)?",
       "options": [
@@ -412,6 +662,56 @@
         "No reason"
       ],
       "explanation": "A fixed size lets opponents easily read your hand strength. Varied sizing makes it hard to judge."
+    },
+    "l3-bs-q6": {
+      "question": "Facing a 1/3-pot bet, your MDF is about?",
+      "options": [
+        "25%",
+        "33%",
+        "67%",
+        "75%"
+      ],
+      "explanation": "MDF = P/(P+b) = 1/(1+1/3) = 75%."
+    },
+    "l3-bs-q7": {
+      "question": "You bluff 3/4 pot. What fold rate does villain need for the bluff to break even?",
+      "options": [
+        "33%",
+        "40%",
+        "43%",
+        "50%"
+      ],
+      "explanation": "Alpha = b/(P+b) = 0.75/1.75 ≈ 42.9%, about 43%."
+    },
+    "l3-bs-q8": {
+      "question": "Facing a 1/2-pot bet, what are MDF and Alpha respectively?",
+      "options": [
+        "33% and 67%",
+        "67% and 33%",
+        "50% and 50%",
+        "75% and 25%"
+      ],
+      "explanation": "MDF = 1/(1+0.5) ≈ 67% and Alpha = 0.5/1.5 ≈ 33%; the two are complementary."
+    },
+    "l3-bs-q9": {
+      "question": "An overbet normally means betting how much of the pot?",
+      "options": [
+        "25-33%",
+        "50-66%",
+        "75-100%",
+        "125-200%"
+      ],
+      "explanation": "An overbet exceeds the pot, commonly in the 125-200% range."
+    },
+    "l3-bs-q10": {
+      "question": "The pot is 20BB and you want to bet 2/3 pot. How much is that?",
+      "options": [
+        "6.7BB",
+        "10BB",
+        "13BB",
+        "20BB"
+      ],
+      "explanation": "20 × 2/3 ≈ 13.3BB, so about 13BB."
     },
     "l3-bluff-q1": {
       "question": "Betting 2/3 pot, what minimum fold rate does the opponent need for the bluff to break even?",
@@ -463,6 +763,56 @@
       ],
       "explanation": "A Semi-Bluff profits by the opponent folding (winning the pot directly) or by hitting when called (winning a big pot)."
     },
+    "l3-bluff-q6": {
+      "question": "The pot is 10BB, you bet 10BB as a pure bluff and villain folds 50% of the time. What is the EV?",
+      "options": [
+        "+5BB",
+        "0BB",
+        "-5BB",
+        "+10BB"
+      ],
+      "explanation": "Bluff EV = fold rate×pot - call rate×bet = 0.5×10 - 0.5×10 = 0BB, exactly break-even."
+    },
+    "l3-bluff-q7": {
+      "question": "You bluff the full pot. What fold rate do you need to break even?",
+      "options": [
+        "25%",
+        "33%",
+        "40%",
+        "50%"
+      ],
+      "explanation": "Break-even fold rate = b/(P+b) = 1/2 = 50%, the hardest threshold among standard sizes."
+    },
+    "l3-bluff-q8": {
+      "question": "Compared with a flop bluff, what extra condition does a river bluff need most?",
+      "options": [
+        "More reliable fold equity: enough foldable combos and a consistent story",
+        "A bigger bet size",
+        "More players in the pot",
+        "You must hold the nuts"
+      ],
+      "explanation": "The river has no future cards to bail you out, so only fold equity remains and villain must have enough foldable combos."
+    },
+    "l3-bluff-q9": {
+      "question": "If your value bets use 75% pot, your bluffs should use?",
+      "options": [
+        "25% pot",
+        "Also 75% pot",
+        "200% pot",
+        "Any size"
+      ],
+      "explanation": "Bluff sizing must match value sizing; a size mismatch leaks your hand strength."
+    },
+    "l3-bluff-q10": {
+      "question": "What is the key difference between a semi-bluff and a pure bluff?",
+      "options": [
+        "A semi-bluff still has equity when called",
+        "A semi-bluff is always +EV",
+        "A semi-bluff needs no fold equity",
+        "There is no difference"
+      ],
+      "explanation": "A semi-bluff earns from both fold equity and draw equity, so it can still win when called."
+    },
     "l3-texture-q1": {
       "question": "Which of these is a \"dry board\"?",
       "options": [
@@ -512,6 +862,56 @@
         "The dealer"
       ],
       "explanation": "Low-card wet boards favor the caller, because such boards hit the caller's range more."
+    },
+    "l3-texture-q6": {
+      "question": "Which board is the wettest?",
+      "options": [
+        "K♠7♦2♣",
+        "A♣8♦3♥",
+        "9♠8♠7♣",
+        "K♥K♦4♣"
+      ],
+      "explanation": "9♠8♠7♣ offers both straight connectivity and a flush draw, the classic wettest texture."
+    },
+    "l3-texture-q7": {
+      "question": "Compared with K♠7♦2♣, how many strong combos does the preflop caller have on 9♠8♠7♣?",
+      "options": [
+        "Far more on the wet board",
+        "The same on both",
+        "More on the dry board",
+        "Impossible to compare"
+      ],
+      "explanation": "A connected wet board hits the caller's two pair, straight and draw combos far more often, shifting the range advantage."
+    },
+    "l3-texture-q8": {
+      "question": "The flop was wet and the turn is a blank such as 2♦. As the preflop raiser you should usually?",
+      "options": [
+        "Keep betting to maintain pressure",
+        "Give up immediately",
+        "Definitely shove",
+        "Definitely check"
+      ],
+      "explanation": "A blank does not help the caller's draws or two pair, so the board dries out and betting remains good."
+    },
+    "l3-texture-q9": {
+      "question": "A paired board such as K-K-4 is closer to?",
+      "options": [
+        "Dry: few draws and a clear range advantage",
+        "Extremely wet",
+        "Unrelated to texture",
+        "Always favorable to the caller"
+      ],
+      "explanation": "Paired boards carry few draws, and the preflop raiser holds far more K combos than the caller, giving a clear range advantage."
+    },
+    "l3-texture-q10": {
+      "question": "On a three-flush board such as 7♥5♥2♥ with none of that suit in your hand, the strategy is closer to?",
+      "options": [
+        "High-frequency small bets",
+        "Lowering bet frequency and controlling the pot",
+        "Full-pot shoves",
+        "Bluffing without limit"
+      ],
+      "explanation": "Without the suit, villain's range holds many flushes, so the range advantage is theirs; lower the frequency and control the pot."
     },
     "l3-check-range-q1": {
       "question": "What should a checking range contain?",
@@ -563,6 +963,56 @@
       ],
       "explanation": "In position with a clear range advantage, bet for value rather than giving a free card."
     },
+    "l3-check-range-q6": {
+      "question": "About how much of a balanced checking range consists of strong hands?",
+      "options": [
+        "0%",
+        "About 15-20%",
+        "About 40-50%",
+        "About 80%"
+      ],
+      "explanation": "A balanced checking range is roughly strong hands 15-20%, medium hands 40-50% and weak hands 30-40%."
+    },
+    "l3-check-range-q7": {
+      "question": "In a multiway pot where you are not last to act, why do you tend to check?",
+      "options": [
+        "Players behind may raise, so checking keeps your options open",
+        "The rules require it",
+        "Checking wins the pot immediately",
+        "Checking gets a free card and always wins"
+      ],
+      "explanation": "With players still to act, checking avoids being trapped by a raise and preserves future decisions."
+    },
+    "l3-check-range-q8": {
+      "question": "What is the main purpose of checking a medium hand such as second pair?",
+      "options": [
+        "Pot control",
+        "Bluffing immediately",
+        "Inducing folds",
+        "Showing strength"
+      ],
+      "explanation": "Checking medium hands keeps the pot within a range you can handle and lets you keep observing on later streets."
+    },
+    "l3-check-range-q9": {
+      "question": "What happens if your checking range contains only weak hands?",
+      "options": [
+        "Villain can attack your checks for free",
+        "Nothing happens",
+        "You become harder to read",
+        "Villain folds more"
+      ],
+      "explanation": "Without strong hands in the checking range, villain can profitably bet every time you check, which is why strong hands stay in it."
+    },
+    "l3-check-range-q10": {
+      "question": "At some decision point EV(bet) = +2BB and EV(check) = +3BB. What should you do?",
+      "options": [
+        "Bet",
+        "Check",
+        "They are equal",
+        "Fold"
+      ],
+      "explanation": "Compare the EVs of the two options and pick the higher one: +3BB beats +2BB, so checking is better."
+    },
     "l3-3bet-pf-q1": {
       "question": "What SPR range do 3-bet pots usually have?",
       "options": [
@@ -612,6 +1062,56 @@
         "Position no longer matters"
       ],
       "explanation": "Low SPR compresses decision space — top pair can often get all-in, making postflop decisions relatively simpler."
+    },
+    "l3-3bet-pf-q6": {
+      "question": "In a 3-bet pot the pot is 18.5BB with 80BB effective. What is the SPR?",
+      "options": [
+        "About 1.5",
+        "About 4.3",
+        "About 9",
+        "About 17"
+      ],
+      "explanation": "SPR = 80 ÷ 18.5 ≈ 4.3."
+    },
+    "l3-3bet-pf-q7": {
+      "question": "Compared with a single-raised pot, how strong is top pair with a good kicker in a 3-bet pot?",
+      "options": [
+        "Stronger, since ranges are narrower and SPR is lower",
+        "The same",
+        "Weaker",
+        "Impossible to say"
+      ],
+      "explanation": "3-bet ranges are narrower and SPR is lower, so top pair with a good kicker sits above the commitment threshold."
+    },
+    "l3-3bet-pf-q8": {
+      "question": "Which board is the worst for the 3-bettor, that is, over-connected?",
+      "options": [
+        "A♠A♦5♣ rainbow",
+        "K♣8♥3♠ rainbow",
+        "T♠9♠8♣ two-tone",
+        "A♠7♣2♦ rainbow"
+      ],
+      "explanation": "T-9-8 two-tone is highly connected and hits the defender's range, so the 3-bettor should bet less often."
+    },
+    "l3-3bet-pf-q9": {
+      "question": "In a 3-bet pot with SPR near 4 you hold top pair with a good kicker and face a check-raise. The standard tendency is?",
+      "options": [
+        "Fold",
+        "Continue and prepare to play for stacks",
+        "Call one street then fold",
+        "Fold immediately"
+      ],
+      "explanation": "At low SPR top pair already reaches the stack-off threshold, so a single raise should not make you abandon it."
+    },
+    "l3-3bet-pf-q10": {
+      "question": "The pot is 20BB with 60BB effective. What is the SPR?",
+      "options": [
+        "1",
+        "3",
+        "6",
+        "12"
+      ],
+      "explanation": "SPR = 60 ÷ 20 = 3."
     }
   },
   "lessonExample": {

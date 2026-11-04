@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Lock, CheckCircle2, Award, PlayCircle, Clock, Flag } from 'lucide-react';
+import { ChevronDown, Lock, CheckCircle2, Award, PlayCircle, Clock, Flag, Hourglass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import type { LevelSummary } from '../types';
+import { useAcademyStore } from '../store';
 import { loadAcademyLessonsForLesson } from '../data/lessons/loaders';
 import { ProgressBar } from './ProgressBar';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
+import { resolveCertificationState } from '../utils/certification';
+import { formatRemainingTime } from '../utils/certificationStatus';
 import {
   resolveLevelTitle,
   resolveLevelDescription,
@@ -47,6 +50,9 @@ export function findActiveLevelId(
 export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId }: LevelLadderProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  // 认证入口/状态只在标准变体展示（变体认证本批 de-scope）
+  const activeVariant = useAcademyStore((s) => s.activeVariant);
+  const certifications = useAcademyStore((s) => s.certifications);
   const activeId = findActiveLevelId(levels, completedLessons, isUnlocked);
   const [expandedId, setExpandedId] = useState<string | null>(activeId);
   // 意图预取：悬停/聚焦当前等级或具体课程时，提前加载该课所属 Level 的完整数据
@@ -99,6 +105,12 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
           const isActive = id === activeId;
           const expanded = id === expandedId;
           const isStart = id === startLevelId;
+          // 阶梯口径的完成度 = 本条目的课时完成（首页传入 store 的 completedLessons）
+          const certState = resolveCertificationState({
+            activeVariant,
+            isLevelCompleted: allCompleted,
+            cert: certifications[level.level],
+          });
 
           return (
             <motion.div
@@ -256,7 +268,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
                       })}
                     </ul>
 
-                    {allCompleted && (
+                    {allCompleted && certState.status === 'available' && (
                       <button
                         type="button"
                         onClick={() => navigate(`/academy/certification/${level.level}`)}
@@ -266,6 +278,43 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
                         {t('academy.path.certification')}
                       </button>
                     )}
+
+                    {allCompleted && certState.status === 'expired' && (
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/academy/certification/${level.level}`)}
+                        className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--warning)] hover:underline"
+                      >
+                        <Award className="w-3.5 h-3.5" />
+                        {t('academy.levelCard.certExpired', {
+                          level: level.level,
+                          defaultValue: '认证已过期 · 续期 Level {{level}}',
+                        })}
+                      </button>
+                    )}
+
+                    {allCompleted && certState.status === 'cooldown' && (
+                      <span className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)]">
+                        <Hourglass className="w-3.5 h-3.5" />
+                        {t('academy.levelCard.certCooldown', {
+                          time: formatRemainingTime(
+                            (certState.nextAttemptAt ?? Date.now()) - Date.now()
+                          ),
+                          defaultValue: '认证冷却中，{{time}} 后可再考',
+                        })}
+                      </span>
+                    )}
+
+                    {allCompleted &&
+                      (certState.status === 'valid' || certState.status === 'expiring') && (
+                        <span className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--poker-success)]">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {t('academy.levelCard.certifiedUntil', {
+                            date: new Date(certState.validUntil ?? Date.now()).toLocaleDateString(),
+                            defaultValue: '认证有效至 {{date}}',
+                          })}
+                        </span>
+                      )}
                   </div>
                 )}
               </div>

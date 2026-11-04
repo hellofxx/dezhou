@@ -135,12 +135,13 @@ export const FEATURE_GROUPS = {
   '/academy/basics': ['academy'],
   '/academy/concept-graph': ['academy'],
   '/academy/tracks': ['academy'],
-  '/academy/certification/:level': ['academy'],
+  // 认证结果页展示理论锚点回链，需 theory.chapterTitle.*
+  '/academy/certification/:level': ['academy', 'theory'],
   // CourseView 渲染 DrillLessonRouter → 各 Drill 组件：Position/Outs/PotOdds/HandRanking 消费 drills，
-  // OpponentDrill 额外消费 gto.setup.opponentProfile.*
-  '/academy/lesson/:lessonId': ['academy', 'drills', 'gto'],
-  // AcademyHome 仅消费 academy + variant（VariantToggle），quickDrill/drills 不在此页渲染
-  '/academy': ['academy', 'variant'],
+  // OpponentDrill 额外消费 gto.setup.opponentProfile.*；CourseDoneView 的理论锚点需 theory.chapterTitle.*
+  '/academy/lesson/:lessonId': ['academy', 'drills', 'gto', 'theory'],
+  // AcademyHome 消费 academy + variant（VariantToggle）+ theory（TheoryBridgeCard 章节标题）
+  '/academy': ['academy', 'variant', 'theory'],
   // TheoryChapterView 渲染 PracticeBridgeCard 消费 academy（academy 属 core，启动已加载，此处列出以如实反映渲染树）
   '/theory/chapter/:chapterId': ['theory', 'academy'],
   // TheoryHome 的实践桥接渲染 academy.lessonTitle；academy 已移出 core，须在本组显式声明

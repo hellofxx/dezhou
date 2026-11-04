@@ -1,11 +1,8 @@
-import type { PokerVariant } from '@/shared/types/elo';
+import type { EloDimension, PokerVariant } from '@/shared/types/elo';
+import type { AcademyQuizQuestion } from '@/shared/types/academy';
 
 // 题目难度级别
 export type QuestionDifficulty = 'beginner' | 'intermediate' | 'advanced';
-
-// 用户能力评估（单一事实源在 shared/types/ability.ts，此处 re-export 兼容旧路径）
-import type { AbilityAssessment } from '@/shared/types/ability';
-export type { AbilityAssessment };
 
 // 难度自适应配置
 export interface AdaptiveConfig {
@@ -41,14 +38,8 @@ export interface LessonSection {
   data?: Record<string, unknown>;
 }
 
-// 课后测验题
-export interface QuizQuestion {
-  id: string;
-  question: string;
-  options: string[];
-  correctIndex: number;
-  explanation: string;
-}
+// 课后测验题（与理论学院共用同一结构契约）
+export type QuizQuestion = AcademyQuizQuestion;
 
 // ===== 对手形象系统类型 =====
 // 单一事实源在 shared/types/opponent.ts（gto-simulator 亦消费），此处 re-export 兼容旧路径
@@ -323,7 +314,7 @@ export interface DailyPlan {
   newLesson: string | null;       // 建议学习的新课程
   practiceSpots: string[];        // 基于弱点的定向练习课程ID
   estimatedTime: string;          // 预计用时
-  focusArea: keyof AbilityAssessment | null; // 今日重点维度
+  focusArea: EloDimension | null; // 今日重点维度（ELO 五维之一；P0 起不再用 abilityAssessment）
   generatedAt: number;            // 生成时间戳
 }
 
@@ -364,12 +355,32 @@ export interface LevelCertification {
   cooldownPeriod: number;         // 重试冷却（小时），默认 24h
   validUntil?: number;            // 有效期（毫秒时间戳）
   lastAttemptAt?: number;         // 上次尝试时间
-  questionCount: number;          // 综合测验题数
+  questionCount: number;          // 综合测验题数（实际抽到的题量）
   timeLimit: number;              // 限时（秒），0 为不限时
   certifiedAt?: number;           // 通过时间戳
   attempts: number;               // 尝试次数
   bestScore?: number;             // 最高得分
+  /** P0 认证整改：标准变体标识；变体认证本批 de-scope。 */
+  variant?: PokerVariant;
+  /** 实际抽题量（与 questionCount 同口径，冗余名保留给旧数据迁移）。 */
+  totalQuestions?: number;
+  /** 本次抽题池大小。 */
+  poolSize?: number;
+  /** 本次抽中题 id（审计/复盘用）。 */
+  questionIds?: string[];
 }
+
+export type {
+  LessonAttemptRecord,
+  LessonMeta,
+  CertificationAttemptPayload,
+  CertificationAttemptResult,
+  CertificationStatus,
+  CertificationState,
+  PlacementState,
+  CheckpointRecord,
+  LessonNote,
+} from './types-assessment';
 
 // 课程小节单元（微观闭环：概念 + 内嵌示例 + 可选预测暂停）
 export interface LessonUnit {

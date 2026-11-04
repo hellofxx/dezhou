@@ -1,6 +1,9 @@
 import { useSyncExternalStore } from 'react';
 import { getAcademyDataSource, onAcademyDataRegister } from '@/shared/stores/academyDataSourceRegistry';
-import type { AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
+import type {
+  AcademyLessonAttemptSnapshot,
+  AcademyProgressSnapshot,
+} from '@/shared/types/academyDataSource';
 
 /**
  * 学院课程数据源响应式订阅 hook（progress 依赖倒置）。
@@ -16,7 +19,7 @@ import type { AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
  */
 
 const EMPTY_PROGRESS: AcademyProgressSnapshot = { completedLessons: [] };
-const EMPTY_SCORES: Record<string, number> = {};
+const EMPTY_ATTEMPTS: Record<string, AcademyLessonAttemptSnapshot> = {};
 
 /** 模块级稳定 subscribe：桥接数据源 subscribe + late registration 自愈 */
 function subscribeAcademy(listener: () => void): () => void {
@@ -42,12 +45,8 @@ function getProgressSnapshot(): AcademyProgressSnapshot {
   return getAcademyDataSource()?.getAcademyProgressSnapshot() ?? EMPTY_PROGRESS;
 }
 
-function getFirstAttemptSnapshot(): Record<string, number> {
-  return getAcademyDataSource()?.getFirstAttemptScoresSnapshot() ?? EMPTY_SCORES;
-}
-
-function getLastAttemptSnapshot(): Record<string, number> {
-  return getAcademyDataSource()?.getLastAttemptScoresSnapshot() ?? EMPTY_SCORES;
+function getLessonAttemptsSnapshot(): Record<string, AcademyLessonAttemptSnapshot> {
+  return getAcademyDataSource()?.getLessonAttemptsSnapshot() ?? EMPTY_ATTEMPTS;
 }
 
 /** 订阅学院进度（completedLessons），Dashboard 每日训练计划用 */
@@ -55,12 +54,11 @@ export function useAcademyProgressSnapshot(): AcademyProgressSnapshot {
   return useSyncExternalStore(subscribeAcademy, getProgressSnapshot, getProgressSnapshot);
 }
 
-/** 订阅课程首次得分，ProgressReplay 进步回放用 */
-export function useAcademyFirstAttemptScores(): Record<string, number> {
-  return useSyncExternalStore(subscribeAcademy, getFirstAttemptSnapshot, getFirstAttemptSnapshot);
-}
-
-/** 订阅课程最近得分，ProgressReplay 进步回放用 */
-export function useAcademyLastAttemptScores(): Record<string, number> {
-  return useSyncExternalStore(subscribeAcademy, getLastAttemptSnapshot, getLastAttemptSnapshot);
+/** 订阅课程首末次成绩与尝试次数，ProgressReplay 进步回放用 */
+export function useAcademyLessonAttemptsSnapshot(): Record<string, AcademyLessonAttemptSnapshot> {
+  return useSyncExternalStore(
+    subscribeAcademy,
+    getLessonAttemptsSnapshot,
+    getLessonAttemptsSnapshot,
+  );
 }

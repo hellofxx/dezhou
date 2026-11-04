@@ -5,10 +5,7 @@ import { TrendingUp, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { transitionSlow } from '@/shared/utils/motion';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import {
-  useAcademyFirstAttemptScores,
-  useAcademyLastAttemptScores,
-} from '@/shared/hooks/useAcademyDataSource';
+import { useAcademyLessonAttemptsSnapshot } from '@/shared/hooks/useAcademyDataSource';
 
 interface ProgressEntry {
   lessonId: string;
@@ -20,18 +17,14 @@ interface ProgressEntry {
 
 export default function ProgressReplay() {
   const { t } = useTranslation();
-  const firstAttemptScores = useAcademyFirstAttemptScores();
-  const lastAttemptScores = useAcademyLastAttemptScores();
+  const attempts = useAcademyLessonAttemptsSnapshot();
 
   const topChanges = useMemo(() => {
     const source = getAcademyDataSource();
 
     const entries: ProgressEntry[] = [];
-    for (const lessonId of Object.keys(lastAttemptScores)) {
-      const first = firstAttemptScores[lessonId];
-      const last = lastAttemptScores[lessonId];
-      if (first === undefined || last === undefined) continue;
-      const improvement = last - first;
+    for (const [lessonId, attempt] of Object.entries(attempts)) {
+      const improvement = attempt.lastScore - attempt.firstScore;
       const meta = source?.getLessonMeta(lessonId);
       entries.push({
         lessonId,
@@ -40,15 +33,15 @@ export default function ProgressReplay() {
         lessonTitle: meta
           ? t(`academy.lessonTitle.${lessonId}`, { defaultValue: meta.title })
           : lessonId,
-        first,
-        last,
+        first: attempt.firstScore,
+        last: attempt.lastScore,
         improvement,
       });
     }
     // P2-C: 按绝对变化幅度降序排列，展示进步与退步，取前 5 门
     const sortedEntries = entries.toSorted((a, b) => Math.abs(b.improvement) - Math.abs(a.improvement));
     return sortedEntries.slice(0, 5);
-  }, [firstAttemptScores, lastAttemptScores, t]);
+  }, [attempts, t]);
 
   const hasData = topChanges.length > 0;
 

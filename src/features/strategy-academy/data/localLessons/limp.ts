@@ -32,29 +32,7 @@ export const LIMP_LESSONS: Lesson[] = [
       { type: 'highlight', content: 'Limp 局最致命的错误：把多人底池当单挑打。多人底池中顶对顶踢脚（TPTK）的价值大幅下降，必须收紧价值范围。' },
       { type: 'pro-tip', content: '在 Limp 局中，位置的价值更高。BTN 或 CO 可以用更宽的范围 Limp behind（跟着 Limp），因为翻后可以最后行动，剥削被动玩家更高效。' },
     ],
-    quiz: [
-      {
-        id: 'local-limp-intro-q1',
-        question: '国内低级别 Limp 局最常见的桌型特征是？',
-        options: ['翻前单挑多', '多人底池频率高', '玩家加注频繁', '筹码都很深'],
-        correctIndex: 1,
-        explanation: 'Limp 局翻前多人 Limp 入池，导致多人底池频率极高。这是国内低级别最常见的结构。',
-      },
-      {
-        id: 'local-limp-intro-q2',
-        question: 'Limp 局中顶对顶踢脚（TPTK）的价值如何？',
-        options: ['和单挑一样强', '大幅贬值', '完全没有价值', '比葫芦还强'],
-        correctIndex: 1,
-        explanation: '多人底池中顶对贬值严重——3-5 人底池中，有人持有两对+的概率显著上升。TPTK 不再是"绝对强牌"。',
-      },
-      {
-        id: 'local-limp-intro-q3',
-        question: 'Limp 局最主要的盈利来源是？',
-        options: ['频繁诈唬', '隔离加注 + 投机牌隐含赔率 + 翻后剥削', '只打 AA/KK', '靠运气赢大底池'],
-        correctIndex: 1,
-        explanation: 'Limp 局盈利来自三方面：用强牌隔离、用投机牌便宜看翻牌、翻后剥削被动玩家。频繁诈唬在跟注站众多的 Limp 局是亏损策略。',
-      },
-    ],
+    quiz: [],
   },
 
   // ===== local-limp-isolate =====
@@ -83,29 +61,7 @@ export const LIMP_LESSONS: Lesson[] = [
       { type: 'highlight', content: '隔离加注失败的情况：如果连续 3 次隔离都被多人跟注，说明桌风太松，应该收紧隔离范围、加大尺度，或转用 Limp behind 策略用投机牌便宜看翻牌。' },
       { type: 'pro-tip', content: '隔离加注后翻牌若miss（如 AK 翻牌 7♠8♦2♣），仍应高频 C-Bet。Limp 玩家翻后弃牌率高，单次 C-Bet 的 EV 远好于被动 check 暴露你的牌力范围。' },
     ],
-    quiz: [
-      {
-        id: 'local-limp-isolate-q1',
-        question: '面对两人 Limp，标准隔离加注尺度应为？',
-        options: ['2-3BB', '6-7BB', '15BB', '直接 All-in'],
-        correctIndex: 1,
-        explanation: '国内 Limp 局面对两人 Limp 应加注到 6-7BB。Limp 玩家跟注范围宽，小尺度无法隔离，大尺度又会吓跑强牌价值。',
-      },
-      {
-        id: 'local-limp-isolate-q2',
-        question: '以下哪类牌最适合隔离加注？',
-        options: ['K5o', 'TT 和 AQ+', '96o', '23o'],
-        correctIndex: 1,
-        explanation: 'TT+ 和 AQ+ 是强牌，适合隔离加注建立底池并压缩对手。K5o、96o、23o 都是垃圾牌，不应加注。',
-      },
-      {
-        id: 'local-limp-isolate-q3',
-        question: '隔离加注的核心目标不包括？',
-        options: ['减少对手人数', '建立底池获取价值', '获取翻后主动权', '诈唬所有人弃牌'],
-        correctIndex: 3,
-        explanation: '隔离加注不是诈唬，是用强牌建立底池并减少对手。Limp 玩家弃牌率低，指望全部弃牌是不现实的。',
-      },
-    ],
+    quiz: [],
   },
 
   // ===== local-limp-multiway =====
@@ -134,35 +90,6 @@ export const LIMP_LESSONS: Lesson[] = [
       { type: 'highlight', content: '多人 Limp 底池的黄金法则：当有人主动加注时，几乎可以确定他持有两对或更好的牌。国内 Limp 玩家极少诈唬，加注即代表强牌。' },
       { type: 'pro-tip', content: '在多人底池中，听牌的隐含赔率极佳。如果你在 BB 持有 5♠6♠，4 人 Limp 后你只需补 1BB 看 5BB 底池，击中同花后可赢 30-50BB，这种投入产出比远胜单挑场景。' },
     ],
-    quiz: [
-      {
-        id: 'local-limp-multiway-q1',
-        question: '5 人底池中顶对顶踢脚（TPTK）的价值？',
-        options: ['坚果牌，可打光', '贬值严重，只值一条街', '完全没用', '比两对还强'],
-        correctIndex: 1,
-        explanation: '5 人底池中 TPTK 胜率仅约 35%，贬值严重。应控制底池，最多在翻牌下一条街价值，转牌后转为控制。',
-      },
-      {
-        id: 'local-limp-multiway-q2',
-        question: '多人 Limp 底池中 C-Bet 频率应如何调整？',
-        options: ['提高到 80%', '降低到 30-40%', '保持 60% 不变', '总是 100% C-Bet'],
-        correctIndex: 1,
-        explanation: '多人底池 C-Bet 成功率骤降（5 人底池约 25%），应降低频率到 30-40%。只在持有强牌或干燥牌面时 C-Bet。',
-      },
-      {
-        id: 'local-limp-multiway-q3',
-        question: '多人底池中听牌的价值如何？',
-        options: ['贬值（容易被反加注）', '升值（隐含赔率好）', '不变', '完全没用'],
-        correctIndex: 1,
-        explanation: '多人底池听牌隐含赔率极佳——便宜看翻牌，击中后可赢多人筹码。同花连牌在多人底池是高 +EV 的投机牌。',
-      },
-      {
-        id: 'local-limp-multiway-q4',
-        question: '国内 Limp 玩家在多人底池主动加注通常代表？',
-        options: ['诈唬', '两对或更强', '顶对', '听牌'],
-        correctIndex: 1,
-        explanation: '国内 Limp 玩家极少诈唬，多人底池主动加注几乎总是两对+。遇到加注应立即弃掉顶对等中等牌力。',
-      },
-    ],
+    quiz: [],
   },
 ];

@@ -115,29 +115,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             content: '反直觉点：169 类与 1326 种是两套计数。169 是"等价类别数"（对子/同花/非同花的类型），1326 才是"可区分的实际组合数"。概率计算必须用 1326——类别数会骗你：同花 AK 和 AA 各占"1 类"，但组合权重分别是 4 和 6。',
           },
         ],
-        quiz: [
-          {
-            id: 'l1-basics-q1',
-            question: '以下哪种牌型最强？',
-            options: ['顺子', '同花', '葫芦', '四条'],
-            correctIndex: 3,
-            explanation: '四条（Four of a Kind）> 葫芦（Full House）> 同花（Flush）> 顺子（Straight）',
-          },
-          {
-            id: 'l1-basics-q2',
-            question: '德州扑克中，翻牌（Flop）发出几张公共牌？',
-            options: ['1张', '2张', '3张', '5张'],
-            correctIndex: 2,
-            explanation: '翻牌发出3张公共牌，转牌1张，河牌1张，共5张。',
-          },
-          {
-           id: 'l1-basics-q3',
-            question: '德州扑克的核心目标是什么？',
-            options: ['每手牌都赢', '拿到最大牌型', '长期做出+EV决策', 'bluff对手'],
-            correctIndex: 2,
-            explanation: '职业牌手关注的是长期期望值（EV），而不是单手牌的输赢。',
-          },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l1-basics-ex1',
@@ -276,29 +254,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           ...L1_POSITION_U2_SECTIONS,
           ...L1_POSITION_U3_SECTIONS,
         ],
-        quiz: [
-          {
-            id: 'l1-pos-q1',
-            question: '以下哪个位置最好？',
-            options: ['UTG', 'HJ', 'BTN', 'SB'],
-            correctIndex: 2,
-            explanation: 'BTN（按钮位）是最佳位置，你几乎总是最后行动，拥有最多信息。',
-          },
-          {
-            id: 'l1-pos-q2',
-            question: 'KJo 在 UTG 位置应该？',
-            options: ['加注开牌', '跟注', '弃牌', '全下'],
-            correctIndex: 2,
-            explanation: 'KJo 在 UTG 是边缘牌（已贴近 UTG 开池范围的上沿），现代策略中可以 open（但偏松）。更保守打法仍建议弃牌。',
-          },
-          {
-            id: 'l1-pos-q3',
-            question: '后位行动的最大优势是什么？',
-            options: ['筹码更多', '牌更好', '信息更多', '运气更好'],
-            correctIndex: 2,
-            explanation: '后位最大的优势是信息——你可以看到前面所有玩家的行动后再做决策。',
-          },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l1-position-ex1',
@@ -495,29 +451,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
             content: '反直觉点：AKs 只有 4 种组合，而 AA 有 6 种组合。虽然 AK 看起来"气势最足"，但它的组合数比重不如口袋对子。在范围分析中，对手 3-bet 范围里对子的组合权重往往远超 AK，这是很多初学者会忽略的定量偏差。',
           },
         ],
-        quiz: [
-          {
-            id: 'l1-hand-q1',
-            question: '6人桌中，理想的入局率大约是？',
-            options: ['10%', '20-25%', '40%', '60%'],
-            correctIndex: 1,
-            explanation: '6人桌中你应该只打约20-25%的手牌。打太多手牌是初学者最常见的错误。',
-          },
-          {
-            id: 'l1-hand-q2',
-            question: '以下哪手牌在 UTG 可以加注开牌？',
-            options: ['K8o', 'QJo', 'AJs', '76o'],
-            correctIndex: 2,
-            explanation: 'AJs（同花Ace+Jack）足够强，在UTG可以标准开牌。K8o和76o太弱，QJo在前位也不够强。',
-          },
-          {
-            id: 'l1-hand-q3',
-            question: '"s" 在 AKs 中代表什么？',
-            options: ['small（小）', 'suited（同花）', 'strong（强）', 'straight（顺子）'],
-            correctIndex: 1,
-            explanation: 's = suited（同花），表示两张牌花色相同。AKs 表示同花的 Ace 和 King。',
-          },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l1-hand-ex1',
@@ -666,11 +600,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           data: { theoryLevelId: 't8', theoryChapterId: 't8-bankroll-psych' },
         },
         ],
-        quiz: [
-          { id: 'l1-bankroll-q1', question: '打 NL10 现金桌，推荐至少有多少资金？', options: ['$50', '$100', '$200', '$500'], correctIndex: 2, explanation: '20个买入 × $10/买入 = $200 是最低要求，推荐 $300（30个买入）。' },
-          { id: 'l1-bankroll-q2', question: '什么时候应该降级？', options: ['连输3天', '心情不好时', '资金降到当前级别20个买入以下', '只要输了就降'], correctIndex: 2, explanation: '降级决策应基于客观的资金标准，而非情绪。资金不足时降级保护本金。' },
-          { id: 'l1-bankroll-q3', question: '以下哪个做法是错误的？', options: ['扑克资金与生活费分开', '设置止损线', '输了借钱翻本', '记录每次打牌结果'], correctIndex: 2, explanation: '借钱翻本是最危险的做法，会导致倾斜和更大的损失。' },
-        ],
+        quiz: [],
       },
       {
         id: 'l1-leaks',
@@ -710,11 +640,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           content: '反直觉点：经常输的决策仍然可能是正确的决策。EV 只保证长期平均盈利，单次结果受方差支配。一个 +EV 的跟注可能连续输 10 次，但第 11 次的 EV 仍然是正的。职业牌手关注的是决策质量，而非单次结果。',
         },
         ],
-        quiz: [
-          { id: 'l1-leaks-q1', question: '赢利玩家的 VPIP 通常在什么范围？', options: ['40-60%', '30-40%', '20-25%', '10-15%'], correctIndex: 2, explanation: '6-max 赢利玩家通常 VPIP 在 20-25% 之间，具体取决于位置和打法风格。' },
-          { id: 'l1-leaks-q2', question: '以下哪个不是常见的新手错误？', options: ['打太多手牌', '严格遵守范围表', '总是跟注不加注', '忽视位置'], correctIndex: 1, explanation: '严格遵守范围表是正确的做法，不是错误。' },
-          { id: 'l1-leaks-q3', question: '翻牌的标准下注尺度是？', options: ['1/4 pot', '1/3 到 2/3 pot', '满池', '2倍池'], correctIndex: 1, explanation: '翻牌标准下注为 1/3 到 2/3 底池，根据牌面质地和范围优势调整。' },
-        ],
+        quiz: [],
       },
       // ===== P0-3.7: 注册 4 个 Drill 类型 lesson =====
       // 注：order 字段沿用 6-9（已有 lesson 1-5 不变），实际播放顺序由 learningTracks 控制

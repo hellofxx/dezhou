@@ -2,13 +2,17 @@
  * 课程完成面板（done 阶段）
  *
  * P2-01: 从 CourseView 抽取，用于收敛 done 阶段 JSX（约 84 行）。
- * 包含：成绩展示 + 返回学院/下一课按钮 + 推荐下一步轨道卡列表。
+ * 包含：成绩展示 + 返回学院/下一课按钮 + 理论推导回链 + 推荐下一步轨道卡列表。
  */
 import { CheckCircle2, Home, ArrowRight, RotateCcw, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { resolveTrackName, resolveTrackDescription, resolveTrackDuration } from '../utils/titleKeys';
+import TheoryBridgeCard from './TheoryBridgeCard';
 import type { DrillResult } from './drills/types';
 import type { LearningTrack } from '../types';
+
+/** 调用方未接线路由时的占位回调：区块可见但点击不跳转（CourseView 应传入自己的 navigate） */
+const NOOP_NAVIGATE = () => {};
 
 export interface CourseDoneViewProps {
   isDrill: boolean;
@@ -18,6 +22,10 @@ export interface CourseDoneViewProps {
   relatedTracks: LearningTrack[];
   completedLessons: readonly string[];
   hasPractice?: boolean;
+  /** 本课理论锚点（事实源 `data/lessonMeta/*`）；为空或缺省时不渲染“查看理论推导”区块 */
+  theoryAnchors?: string[];
+  /** 理论章节跳转回调（CourseView 传入自己的 navigate）；缺省时区块可见但点击不跳转 */
+  onNavigateTheory?: (route: string) => void;
   onBack: () => void;
   onNext: () => void;
   onRestart: (target?: 'units' | 'practice') => void;
@@ -32,12 +40,15 @@ export default function CourseDoneView({
   relatedTracks,
   completedLessons,
   hasPractice = false,
+  theoryAnchors,
+  onNavigateTheory,
   onBack,
   onNext,
   onRestart,
   onNavigateToTrack,
 }: CourseDoneViewProps) {
   const { t } = useTranslation();
+  const anchors = theoryAnchors ?? [];
   return (
     <>
       <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-8 text-center">
@@ -114,6 +125,12 @@ export default function CourseDoneView({
           )}
         </div>
       </div>
+
+      {anchors.length > 0 && (
+        <div className="mt-8">
+          <TheoryBridgeCard anchors={anchors} onNavigate={onNavigateTheory ?? NOOP_NAVIGATE} />
+        </div>
+      )}
 
       {relatedTracks.length > 0 && (
         <div className="mt-8">

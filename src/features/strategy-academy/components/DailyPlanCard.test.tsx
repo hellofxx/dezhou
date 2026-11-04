@@ -81,13 +81,14 @@ describe('DailyPlanCard', () => {
         reviewLessons: ['l1-basics'],
         newLesson: 'l1-position',
         practiceSpots: ['drill-outs', 'drill-pot-odds'],
-        focusArea: 'rangeKnowledge',
+        focusArea: 'preflop',
       }),
     });
     const { container } = renderCard();
 
     expect(container.textContent).toContain('复习：德州扑克规则与牌型');
-    expect(container.textContent).toContain('今日重点 · 范围知识');
+    // 焦点维度为 ELO 五维（academy.eloDimension.<dim>；缺失时用英文兜底标签）
+    expect(container.textContent).toContain('今日重点 · 翻前');
     expect(container.textContent).toContain('约 5-10 分钟');
     expect(container.textContent).toContain('学习新课：位置的力量');
     expect(container.textContent).toContain('定向练习（2 组）');

@@ -101,6 +101,10 @@
     "completeLevelFirst": "请先完成该 Level 的所有课程",
     "missingPrereqHint": "请先完成以下前置课程："
   },
+  "theoryBridge": {
+    "title": "查看理论推导",
+    "subtitle": "本课的推导过程见理论学院对应章节"
+  },
   "lessonUnit": {
     "introTitle": "课程路线图",
     "introDuration": "预计时长 {{duration}}",
@@ -411,7 +415,9 @@
     "currentTrack": "当前轨道",
     "goLearn": "去学习 →",
     "lessonsCount": "{{completed}}/{{total}} 课时",
-    "recommendedByAbility": "根据你的五维能力评分动态推荐",
+    "recommendedByAbility": "根据你的五维 ELO 动态推荐",
+    "leakFixAllDone": "当前维度已无未完成课程，保持训练即可",
+    "startRecommendation": "开始推荐课程",
     "selectTrack": "选择此轨道",
     "deselectTrack": "取消选择",
     "continueLearning": "继续学习"
@@ -422,7 +428,10 @@
   },
   "levelCard": {
     "lessonsCompleted": "{{completed}}/{{total}} 课时完成",
-    "takeCertification": "参加 Level {{level}} 认证测验"
+    "takeCertification": "参加 Level {{level}} 认证测验",
+    "certExpired": "认证已过期 · 续期 Level {{level}}",
+    "certCooldown": "认证冷却中，{{time}} 后可再考",
+    "certifiedUntil": "认证有效至 {{date}}"
   },
   "levelCertification": {
     "levelNotFound": "级别未找到",
@@ -438,7 +447,21 @@
     "passedTitle": "Level {{level}} 认证通过！",
     "keepGoing": "再接再厉！",
     "passedHint": "恭喜！你已掌握本级别核心知识",
-    "needAccuracy": "需要 {{required}}% 以上才能通过"
+    "needAccuracy": "需要 {{required}}% 以上才能通过",
+    "renew": "续期",
+    "poolSize": "本级别题池：{{pool}} 题",
+    "validUntil": "认证有效期至 {{date}}（剩余 {{days}} 天）",
+    "expired": "认证已过期（原有效期至 {{date}}），可立即续期",
+    "cooldown": "冷却中：需等待 {{time}} 后才能再次参加（失败后 24 小时冷却）",
+    "rejectCooldown": "本次成绩未记录：冷却中，{{time}} 后可再次参加",
+    "rejectAlreadyCertified": "本次成绩未记录：当前认证仍在有效期内",
+    "rejectNotCompleted": "本次成绩未记录：本级别课程尚未全部完成",
+    "rejectWrongVariant": "本次成绩未记录：认证仅在标准变体提供",
+    "rejectInvalid": "本次成绩未记录：提交数据无效",
+    "theoryAnchors": "回到理论学院补强推导",
+    "theoryAnchorLink": "理论章节 {{id}}",
+    "variantLocked": "认证测验仅在标准变体提供（当前变体：{{variant}}）",
+    "notCompletedLocked": "需完成本级别全部课程才能参加认证（当前进度：{{completed}}/{{total}}）"
   },
   "mdf": {
     "tabDerivation": "MDF 推导过程",
@@ -661,7 +684,47 @@
     "basics": "基础入门",
     "basicsDesc": "规则、牌型与位置",
     "graph": "知识图谱",
-    "graphDesc": "可视化知识依赖"
+    "graphDesc": "可视化知识依赖",
+    "search": "搜索课程",
+    "searchDesc": "按标题或副标题查找",
+    "glossary": "术语表",
+    "glossaryDesc": "由理论学院维护",
+    "placement": "定位测评",
+    "placementDesc": "16 道题找到合适起点",
+    "bookmarks": "我的收藏",
+    "bookmarksDesc": "收藏的课时随时回看",
+    "bibliography": "参考书目",
+    "bibliographyDesc": "按 Level 的延伸书单"
+  },
+  "mastery": {
+    "title": "掌握度",
+    "subtitle": "按首次课后测验成绩统计",
+    "mastered": "已掌握",
+    "passing": "通过",
+    "needsReview": "待复习",
+    "untested": "未测",
+    "total": "总课时",
+    "weakestCta": "复习最弱一课"
+  },
+  "search": {
+    "title": "搜索策略课程",
+    "subtitle": "按标题或副标题查找课时",
+    "placeholder": "搜索课程…",
+    "lessons": "课时",
+    "emptyTitle": "没有匹配结果",
+    "emptyHint": "换个关键词，或返回学院继续浏览",
+    "backToAcademy": "返回策略学院",
+    "contentHits": "正文命中",
+    "loadingFullText": "正在加载全文索引…",
+    "loadFailed": "全文加载失败，先看标题结果",
+    "retryFullText": "重试加载全文"
+  },
+  "eloDimension": {
+    "preflop": "翻前",
+    "postflop": "翻后",
+    "math": "数学",
+    "handReading": "读牌",
+    "mental": "心态"
   },
   "dailyPlan": {
     "title": "今日计划",
@@ -695,5 +758,112 @@
     "gradeInaccuracy": "小幅偏差",
     "gradeWrong": "错误",
     "gradeBlunder": "重大错误"
+  },
+  "checkpointHome": {
+    "title": "级别检查点",
+    "entry": "L{{level}} 检查点",
+    "desc": "12 题混合自查，只看成绩不发证",
+    "lockedDesc": "完成本级全部课程后开放"
+  },
+  "bookmarks": {
+    "title": "收藏课时",
+    "add": "收藏本课",
+    "remove": "取消收藏",
+    "empty": "还没有收藏。把想反复读的课时存下来，随时回到这里",
+    "pageTitle": "我的收藏",
+    "pageSubtitle": "收藏的课时按收藏顺序排列，点开即可回到正文，也可以在这里取消收藏",
+    "browseLessons": "去挑几课"
+  },
+  "notes": {
+    "title": "课时笔记",
+    "placeholder": "记下要点、你自己的例子，或者还没想通的问题",
+    "charCount": "{{count}} / {{max}} 字",
+    "save": "保存",
+    "clear": "清空",
+    "empty": "还没有笔记。读到关键处随手记两句，回头复习能省一半时间",
+    "saved": "笔记已保存",
+    "cleared": "笔记已清空"
+  },
+  "report": {
+    "title": "报告内容问题",
+    "subtitle": "错字、数字不对、解析说不清，都可以直接报上来",
+    "placeholder": "说明问题所在段落与原因",
+    "includeContext": "附带课时与段落信息",
+    "copy": "复制报告",
+    "mailto": "用邮件发送",
+    "success": "报告已生成，粘贴到任意渠道即可提交",
+    "copied": "已复制",
+    "failure": "复制失败，请手动选中文本复制"
+  },
+  "contentMeta": {
+    "lastReviewed": "最近校对 {{date}}",
+    "reportIssue": "报告问题"
+  },
+  "levelCheckpoint": {
+    "levelNotFound": "级别未找到",
+    "backToAcademy": "返回策略学院",
+    "title": "Level {{level}} 检查点",
+    "subtitle": "12 题混合测评，覆盖本级别各核心课时；结果按来源课时给出各维度表现。",
+    "lockedHint": "需完成本级别全部课程才能开始检查点（当前进度：{{completed}}/{{total}}）",
+    "notReady": "本级别题库暂不可用，请稍后重试",
+    "questionCount": "题目数量：{{count}} 题",
+    "attempts": "历史尝试：{{count}} 次",
+    "bestScore": "历史最佳：{{score}}%",
+    "formativeNote": "形成性自查：不发证书、不解锁下一级",
+    "noCooldown": "可随时重考，重考不再计入 ELO",
+    "entry": "开始检查点",
+    "questionOf": "第 {{current}} / {{total}} 题",
+    "sourceLesson": "来源课时：{{lessonId}}",
+    "finish": "查看结果",
+    "resultTitle": "Level {{level}} 检查点结果",
+    "score": "{{score}}%",
+    "firstAndBest": "首次成绩 {{first}}% · 最佳成绩 {{best}}%",
+    "firstAttemptNote": "本次按来源课时逐题计入 ELO",
+    "retakeNote": "重考不计入 ELO，仅更新成绩与复习队列",
+    "dimensionBreakdown": "各维度表现",
+    "srsHint": "{{count}} 道错题已加入复习队列，复习入口回链到题目来源课时",
+    "certificationDiff": "与认证测验的区别：认证有通过率与冷却/有效期，本检查点只用于自查与调整训练重点，可随时重考。",
+    "retry": "再检查一次"
+  },
+  "bibliography": {
+    "backToAcademy": "返回策略学院",
+    "title": "参考书目",
+    "subtitle": "策略课时结论的权威出处，按 Level 聚合；站内不复制原文",
+    "count": "{{count}} 本",
+    "theoryLink": "查看理论学院书目",
+    "empty": "暂无书目条目",
+    "theory-of-poker": {
+      "note": "扑克理论的奠基之作：底池赔率、隐含赔率与诈唬的基本框架。"
+    },
+    "harrington-on-holdem": {
+      "note": "锦标赛翻前起手牌表与 M 值的经典来源，L1 与 L6 的锦标赛基调。"
+    },
+    "mathematics-of-poker": {
+      "note": "用博弈论与概率解释下注尺度的数学边界。"
+    },
+    "no-limit-holdem-advanced-players": {
+      "note": "翻前到河牌的范围构造与下注频率，L2-L4 的核心参考。"
+    },
+    "applications-of-nlhe": {
+      "note": "用频率与 EV 解释多街下注结构，MDF 与范围优势的延伸阅读。"
+    },
+    "modern-poker-theory": {
+      "note": "把 GTO 概念工程化的体系书，覆盖 L4-L5 的范围与阻断牌。"
+    },
+    "play-optimal-poker": {
+      "note": "用博弈树讲清混合策略与不可剥削的直觉来源。"
+    },
+    "grinders-manual": {
+      "note": "现金局六人桌的系统教程，适合把 L4 概念落到常规局面。"
+    },
+    "how-to-read-hands": {
+      "note": "从对手动作反推范围与心理，L3 与 L7 的读牌补充。"
+    },
+    "mental-game-of-poker": {
+      "note": "下风期与 Tilt 的心理训练方法，对应 L5 心态课。"
+    },
+    "exploitative-play-live-poker": {
+      "note": "现场低级别剥削思路，对应 L7-L8 的调整与偏离。"
+    }
   }
 }

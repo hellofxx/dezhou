@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter } from 'react-router-dom';
 import AcademyHome from './AcademyHome';
 import { useAcademyStore } from '../store';
-import { getTotalLessonCount } from '../utils/academyMeta';
+import { getLevelSummariesByVariant, getTotalLessonCount } from '../utils/academyMeta';
 
 /**
  * 学院首页组合冒烟：
@@ -98,5 +98,38 @@ describe('AcademyHome：有进度后恢复完整布局', () => {
     expect(screen.getByText('你在这里')).toBeTruthy();
     // 有进度态下不再渲染零状态起点标记
     expect(container.querySelector('[data-start="true"]')).toBeNull();
+  });
+});
+
+describe('AcademyHome：学习工具与检查点入口', () => {
+  it('工具格提供定位测评、我的收藏与参考书目入口', () => {
+    renderHome();
+
+    expect(screen.getByText('定位测评')).toBeTruthy();
+    expect(screen.getByText('我的收藏')).toBeTruthy();
+    expect(screen.getByText('参考书目')).toBeTruthy();
+  });
+
+  it('已完成 Level 优先成为检查点入口，并切换为可自查文案', () => {
+    useAcademyStore.getState().completeBasics();
+    const level1 = getLevelSummariesByVariant('standard')[0];
+    expect(level1).toBeTruthy();
+    for (const lesson of level1?.lessons ?? []) {
+      useAcademyStore.getState().completeLesson(lesson.id);
+    }
+    renderHome();
+
+    const entry = screen.getByRole('link', { name: /L1 检查点/ });
+    expect(entry.getAttribute('href')).toBe('/academy/checkpoint/1');
+    expect(screen.getByText('12 题混合自查，只看成绩不发证')).toBeTruthy();
+  });
+
+  it('侧栏检查点入口指向当前 Level，本级未完成时给出锁定提示', () => {
+    useAcademyStore.getState().completeBasics();
+    renderHome();
+
+    const entry = screen.getByRole('link', { name: /L1 检查点/ });
+    expect(entry.getAttribute('href')).toBe('/academy/checkpoint/1');
+    expect(screen.getByText('完成本级全部课程后开放')).toBeTruthy();
   });
 });

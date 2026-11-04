@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { loadTheoryContentForQuestionIds, preloadI18n } from '@/i18n/preload';
+import { loadAcademyCoursesForLesson } from '@/i18n/academyCourse';
 import type { I18nModuleKey } from '@/i18n/moduleRegistry';
 import type { ReviewItem, ReviewItemMetadata } from '@/shared/utils/spacedRepetition';
 
@@ -17,7 +18,8 @@ import type { ReviewItem, ReviewItemMetadata } from '@/shared/utils/spacedRepeti
  * 无需本地 loading 态即可从 key 字面量刷新为译文。
  *
  * 代价：仅在确有该来源的到期复习项时才拉取（theory 核心包约 24KB，另按 level 补内容包）。
- * 'strategy' 的 academy 属 CORE_MODULES（启动即加载），无需列出。
+ * 'strategy' 的 academy UI chrome 属 CORE_MODULES，但题级 SRS 的题干/解析在
+ * academy-course 懒加载文件里，故按 route 中的 lessonId 补加载对应内容包。
  */
 const SOURCE_I18N_MODULE: Partial<Record<NonNullable<ReviewItemMetadata['source']>, I18nModuleKey>> =
   {
@@ -41,6 +43,8 @@ export function collectReviewSourceModules(
 }
 
 const THEORY_QUIZ_KEY_RE = /^theory\.quiz\.(.+)\.(?:question|explanation|options\.\d+)$/;
+const STRATEGY_QUIZ_KEY_RE = /^academy\.lessonQuiz\.(.+)\.(?:question|explanation|options\.\d+)$/;
+const ACADEMY_LESSON_ROUTE_RE = /^\/academy\/lesson\/([^/?#]+)/;
 
 /** 从复习项 key 载荷中提取理论题 id（label / metadata.front|back） */
 export function collectTheoryQuestionIds(items: readonly ReviewItem[]): string[] {
@@ -55,22 +59,40 @@ export function collectTheoryQuestionIds(items: readonly ReviewItem[]): string[]
   return [...ids].toSorted();
 }
 
+/** 从策略题级复习项的 route 提取 lessonId（label/front/back 命中 academy.lessonQuiz 时才收集）。 */
+export function collectStrategyLessonIds(items: readonly ReviewItem[]): string[] {
+  const ids = new Set<string>();
+  for (const item of items) {
+    const values = [item.label, item.metadata?.front, item.metadata?.back];
+    if (!values.some((value) => typeof value === 'string' && STRATEGY_QUIZ_KEY_RE.test(value))) {
+      continue;
+    }
+    const match = ACADEMY_LESSON_ROUTE_RE.exec(item.metadata?.route ?? '');
+    if (match?.[1]) ids.add(match[1]);
+  }
+  return [...ids].toSorted();
+}
+
 /**
- * 按需补加载复习项来源模块的翻译包（theory 另按 level 加载课程内容包）。
+ * 按需补加载复习项来源模块的翻译包（theory/strategy 另按 level 加载课程内容包）。
  * @param items 当前正在渲染的复习项（队列或会话均可）
  */
 export function useEnsureReviewSourceI18n(items: readonly ReviewItem[]): void {
   // items 每次渲染都是新数组，故以序列化结果作依赖，避免每渲染周期重复触发加载
   const modules = collectReviewSourceModules(items).join(',');
   const theoryQuestions = collectTheoryQuestionIds(items).join(',');
-  const dependency = `${modules}|${theoryQuestions}`;
+  const strategyLessons = collectStrategyLessonIds(items).join(',');
+  const dependency = `${modules}|${theoryQuestions}|${strategyLessons}`;
 
   useEffect(() => {
-    if (dependency === '|') return;
+    if (dependency === '||') return;
     const tasks: Promise<unknown>[] = [];
     if (modules) tasks.push(preloadI18n(modules.split(',') as I18nModuleKey[]));
     if (theoryQuestions) tasks.push(loadTheoryContentForQuestionIds(theoryQuestions.split(',')));
-    // 加载失败不阻断渲染（i18next 回显 key 字面量）；两侧加载器均内置失败可重试
+    if (strategyLessons) {
+      tasks.push(...strategyLessons.split(',').map((lessonId) => loadAcademyCoursesForLesson(lessonId)));
+    }
+    // 加载失败不阻断渲染（i18next 回显 key 字面量）；各加载器均内置失败可重试
     void Promise.all(tasks).catch(() => undefined);
-  }, [dependency, modules, theoryQuestions]);
+  }, [dependency, modules, theoryQuestions, strategyLessons]);
 }

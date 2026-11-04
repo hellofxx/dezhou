@@ -1,4 +1,6 @@
 import type { Lesson } from '../../types';
+import { applyQuizBank } from '../../utils/applyQuizBank';
+import { LOCAL_QUIZ_BANK } from '../lessons/variants/standard/quizBank';
 import { LIMP_LESSONS } from './limp';
 import { STRADDLE_LESSONS } from './straddle';
 import { DEEP_STACK_LESSONS } from './deepStack';
@@ -18,15 +20,18 @@ import { MENTAL_LESSONS } from './mental';
  * 5. GTO 与剥削平衡（2 课）
  * 6. 情绪管理（3 课）
  */
-export const LOCAL_LESSONS: Lesson[] = [
-  ...LIMP_LESSONS,
-  ...STRADDLE_LESSONS,
-  ...DEEP_STACK_LESSONS,
-  ...EXPLOIT_LESSONS,
-  ...OPP_DRILL_LESSONS,
-  ...GTO_BALANCE_LESSONS,
-  ...MENTAL_LESSONS,
-];
+export const LOCAL_LESSONS: Lesson[] = applyQuizBank(
+  [
+    ...LIMP_LESSONS,
+    ...STRADDLE_LESSONS,
+    ...DEEP_STACK_LESSONS,
+    ...EXPLOIT_LESSONS,
+    ...OPP_DRILL_LESSONS,
+    ...GTO_BALANCE_LESSONS,
+    ...MENTAL_LESSONS,
+  ],
+  LOCAL_QUIZ_BANK,
+);
 
 /** 按 ID 查找本土课程 */
 export function getLocalLesson(id: string): Lesson | undefined {

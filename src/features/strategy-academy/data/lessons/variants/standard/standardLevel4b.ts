@@ -41,13 +41,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           content: '反直觉点：GTO 不是最优策略，而是不可被剥削的策略。面对一个疯狂送钱的对手，GTO 赚的比针对性剥削策略少。GTO 是保底，剥削是上限——理解这一张力是高级策略的核心。',
         },
         ],
-        quiz: [
-          { id: 'l4-gto-q1', question: 'GTO 策略的核心特点是什么？', options: ['赢最多钱', '不可被剥削', '总是加注', '只看手牌强度'], correctIndex: 1, explanation: 'GTO 的核心是不可被剥削——无论对手怎么调整，都无法从你身上获利。' },
-          { id: 'l4-gto-q2', question: '在低级别游戏中，应该主要使用什么策略？', options: ['纯GTO', '剥削策略为主', '随机策略', '只看底池大小'], correctIndex: 1, explanation: '低级别对手错误很多，剥削策略比GTO更赚钱。但要理解GTO作为基准。' },
-          { id: 'l4-gto-q3', question: 'GTO 矩阵中深绿色代表什么？', options: ['Fold', 'Call', '高频率Raise', 'All-in'], correctIndex: 2, explanation: '深绿色代表高频率（或100%）的Raise行动。' },
-        
-          { id: 'l4-gto-q4', question: 'GTO策略的核心假设是什么？', options: ['对手会犯错', '双方都完美游戏', '运气决定一切', '应该总是诈唬'], correctIndex: 1, explanation: 'GTO假设双方都完美游戏，任何偏离GTO的策略都会被对手利用。' },
-          { id: 'l4-gto-q5', question: 'GTO策略在低级别的主要优势是什么？', options: ['最大化赢钱', '不被剥削', '看起来专业', '规则要求'], correctIndex: 1, explanation: 'GTO策略确保你不会被对手剥削。在低级别，对手不会很好利用你的偏离，所以GTO是安全的基础。' },],
+        quiz: [],
         examples: [
           {
             id: 'l4-gto-ex1',
@@ -240,13 +234,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           content: '反直觉点：混合策略不是随意决策，而是精确计算的比例。同一手牌在同一个节点按 70% 加注、30% 跟注——这不是犹豫不决，而是让对手无法通过观察你的模式来获利。',
         },
         ],
-        quiz: [
-          { id: 'l4-gt-q1', question: '博弈树中的“节点”代表什么？', options: ['一张牌', '一个决策点', '一个率', '一个结果'], correctIndex: 1, explanation: '每个节点代表一个需要做决策的点，分支代表可能的行动选择。' },
-          { id: 'l4-gt-q2', question: '节点锁定的作用是？', options: ['计算GTO策略', '固定对手的策略偏差并找到最优应对', '锁定自己的策略', '决定下注尺度'], correctIndex: 1, explanation: '节点锁定假设对手偏离GTO，然后重新计算我们的最优剥削策略。' },
-          { id: 'l4-gt-q3', question: '“博弈树思维”在实战中意味着？', options: ['只看当前街', '每个决策前思考后续所有可能', '计算每个概率', '背诵解答'], correctIndex: 1, explanation: '博弈树思维的核心是在做每个决策时考虑后续的所有分支及其EV。' },
-        
-          { id: 'l4-gt-q4', question: 'Game Tree是什么？', options: ['一种扑克变体', '所有可能行动的树状图', '记分工具', '筹码管理'], correctIndex: 1, explanation: 'Game Tree是展示所有可能行动序列的树状图，用于分析策略。' },
-          { id: 'l4-gt-q5', question: '为什么不能完整解决扑克的Game Tree？', options: ['太简单', '计算量太大', '没有意义', '规则不允许'], correctIndex: 1, explanation: '扑克的Game Tree极其庞大（信息集约10^160），无法完整计算。' },],
+        quiz: [],
         practice: {
           id: 'l4-gt-practice',
           questions: [
@@ -294,13 +282,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           content: '反直觉点：很多人会混淆 MDF、所需胜率和 bluff 占比，因为它们公式形式上可能相似。正确理解是：MDF 回答面对下注我应该用多少频率继续（pot/(pot+bet)），所需胜率回答这手牌跟注是否保本（bet/(pot+2bet)），bluff 占比回答我的下注范围中应该带多少诈唬（同样是 bet/(pot+2bet) 但应用场景不同）。三者概念清晰，不要混为一谈！',
         },
         ],
-        quiz: [
-          { id: 'l4-freq-q1', question: '河牌下注 Full Pot 时，GTO的诈唬比例应该是多少？', options: ['10%', '25%', '33%', '50%'], correctIndex: 2, explanation: '当你下注 Full Pot 时，对手需要 33% 胜率跟注，因此你的诈唬应占 33%。' },
-          { id: 'l4-freq-q2', question: '策略“平衡”意味着什么？', options: ['每次都做相同的行动', '对手无论如何调整都无法剥削你', '不 bluff', '只打强牌'], correctIndex: 1, explanation: '平衡的策略让对手无法通过调整来获取额外利润。' },
-          { id: 'l4-freq-q3', question: '何时可以打破平衡？', options: ['任何时候', '面对明显偏离GTO的弱手时', '永远不能', '只在翻前'], correctIndex: 1, explanation: '对付明显有漏洞的弱手时，剥削调整比GTO更赚钱。' },
-        
-          { id: 'l4-freq-q4', question: '频率平衡的目的是什么？', options: ['赢更多', '让对手无法利用你的模式', '看起来专业', '节省时间'], correctIndex: 1, explanation: '频率平衡让你的策略不可被剥削，对手无法通过观察你的模式来获利。' },
-          { id: 'l4-freq-q5', question: '如果诈唬频率过低，对手会怎样？', options: ['弃牌更多', '跟注更多（因为你只有价值牌）', '加注更多', '没有影响'], correctIndex: 1, explanation: '如果你诈唬太少，对手会发现你下注时总是有强牌，从而用更宽的范围跟注。' },],
+        quiz: [],
         practice: {
           id: 'l4-freq-practice',
           questions: [
@@ -351,13 +333,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           content: '反直觉点：MDF 和所需胜率是两个不同的概念，不要混淆。MDF 回答"你应该用多少频率继续"，所需胜率回答"这手牌需要多少胜率才能跟注"。MDF 的公式是 pot/(pot+bet)，所需胜率的公式是 bet/(pot+2bet)——分母不同，用途不同。',
         },
         ],
-        quiz: [
-          { id: 'l4-mdf-q1', question: '面对 50% pot 的下注，MDF 约为多少？', options: ['50%', '67%', '75%', '33%'], correctIndex: 1, explanation: 'MDF = 1 - (0.5pot / (pot + 0.5pot)) = 1 - 0.33 = 67%。你需要用 top 67% 的范围继续。' },
-          { id: 'l4-mdf-q2', question: '什么时候应该比 MDF 更频繁地弃牌？', options: ['对手是 Maniac', '对手很少 bluff（如 NIT）', '你在有利位置', '底池很大'], correctIndex: 1, explanation: '面对很少 bluff 的对手（如 NIT），他的下注范围中 value 比例极高，你应该比 MDF 更频繁地弃牌。' },
-          { id: 'l4-mdf-q3', question: '底池 21BB，对手下注 13BB。你的 MDF 频率是多少？', options: ['62%', '38%', '50%'], correctIndex: 0, explanation: 'MDF(防御频率) = pot/(pot+bet) = 21/(21+13) = 21/34 ≈ 62%。这是你需要至少持有的范围比例来阻止对手的剥削。注意区分：13/34 ≈ 38% 是 Alpha（进攻方 bluff 的保本弃牌率），属进攻方口径；跟注所需胜率 = bet/(pot+2×bet) = 13/(21+26) ≈ 28%，是第三个数，别与 Alpha 混用。' },
-        
-          { id: 'l4-mdf-q4', question: 'MDF的全称是什么？', options: ['Maximum Defense Frequency', 'Minimum Defense Frequency', 'Medium Defense Factor', 'Main Defense Formula'], correctIndex: 1, explanation: 'MDF = Minimum Defense Frequency（最低防守频率），是你需要防守的最低比例。' },
-          { id: 'l4-mdf-q5', question: '对手下注pot时，MDF是多少？', options: ['33%', '50%', '67%', '75%'], correctIndex: 1, explanation: '对手下注pot时，MDF = pot/(pot+pot) = 50%。你需要至少防守50%才不被无限bluff剥削。' },],
+        quiz: [],
         examples: [
           {
             id: 'l4-mdf-ex1',
@@ -526,22 +502,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'example', content: 'BTN vs Nit on J C 7 D 3 S 2 D K H board, Pot 25BB\n\nScenario:\n- Nit opens UTG 2.5BB\n- BTN calls\n- Flop: J-7-3, Nit leads 8BB, BTN calls\n- Turn: 2, Nit bets 15BB\n- River: K, Nit shoves all-in 40BB into 50BB pot\n- BTN holds QQ, facing river shove\n\nKey Decision: Fold despite MDF suggesting continue\n\nAnalysis:\n- MDF for all-in: 50/(50+40) = 56% defense required\n- But NITS river range analysis:\n  - Value hands only: AA, KK, JJ, KJ (almost no bluffs)\n  - His AF < 1.0 means extremely rare bluffing\n  - QQ loses to most of his value range (AA/KK/JJ/KJ)\n\nWhy fold below MDF?\n- Against Nit, actual value:bluff ratio >> theoretical GTO\n- MDF assumes balanced ranges, but Nit is heavily value-heavy\n- EV(fold) = 0 vs EV(call) ≈ -35BB (loses to AA/KK/JJ/KJ)\n- Information about opponent overrides pure MDF calculation\n\nKeyLesson: 面对超紧玩家（Nit）的河牌大注时，即使 MDF 建议跟注也应该弃牌。Nit 几乎从不 bluff，你的第二对在他范围中完全落后。\nSource: NIT exploitation framework',
           },
         ],
-        quiz: [
-          {
-            id: 'l4-mdf-rc-q1',
-            question: 'M1 案例中，为什么可以用比 MDF 更宽的范围跟注？',
-            options: ['底池赔率好', '对手是 Maniac  bluff 频率很高', '我的牌很强', '位置有利'],
-            correctIndex: 1,
-            explanation: '面对 Maniac（AF 7.0+），对手的 bluff 频率远超 Alpha 阈值（65% > 33%），此时可以用更宽范围跟注来剥削。',
-          },
-          {
-            id: 'l4-mdf-rc-q2',
-            question: 'M2 案例中，为什么面对 Nit 应该弃牌尽管 MDF 建议跟注？',
-            options: ['NIT 几乎从不 bluff，价值范围极强', '弃牌损失更小', 'MDF 计算错误', '我的 QQ 太弱'],
-            correctIndex: 0,
-            explanation: 'NIT 的 river 下注几乎全是价值（AA/KK/JJ/KJ），他的 AF<1.0 意味着极低 bluff 频率，实际 value:bluff 比远高于理论值。',
-          },
-        ],
+        quiz: [],
         practice: { id: 'l4-mdf-real-practice', questions: [] },
         examples: [],
       },
@@ -573,13 +534,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'highlight', content: 'Overbet 是高级武器，不要在错误的场景使用。确保你真正有坚果优势，否则 overbet 只会让你损失更多。' },
           { type: 'pro-tip', content: '初学者常犯的错误：用中等牌力 overbet。记住，overbet 范围是极化的——只有坚果和 bluff，没有中间地带。' },
         ],
-        quiz: [
-          { id: 'l4-overbet-q1', question: 'Overbet 的核心前提条件是什么？', options: ['底池很大', '你有坚果优势', '对手是 Maniac', '你在有利位置'], correctIndex: 1, explanation: 'Overbet 的核心条件是坚果优势（Nuts Advantage）：你的范围包含对手不可能有的超强牌，这让你的 overbet 有可信度。' },
-          { id: 'l4-overbet-q2', question: 'Overbet 的范围应该是什么形状？', options: ['合并范围（强+中+弱）', '极化范围（只有坚果+bluff）', '只有强牌', '任意牌'], correctIndex: 1, explanation: 'Overbet 使用极化范围：只有最强的 value 牌和有 blocker 的 bluff，不包含中等牌力。中等牌力应该用正常大小下注或 check。' },
-          { id: 'l4-overbet-q3', question: '底池 10BB，对手 Overbet 到 25BB（下注 15BB）。你的 MDF 频率是多少？', options: ['40%', '28%', '60%'], correctIndex: 0, explanation: 'MDF = pot/(pot+bet) = 10/(10+15) = 10/25 = 40%。这是你需要的最小防御频率。注意区分：15/25 = 60% 是 Alpha（进攻方 bluff 的保本弃牌率），不是跟注口径；跟注所需胜率 = bet/(pot+2×bet) = 15/(10+30) = 37.5%。MDF、Alpha、跟注所需胜率三者分母与用途都不同，不要混淆！' },
-        
-          { id: 'l4-overbet-q4', question: 'Overbet被Call时通常意味着什么？', options: ['对手弱牌', '对手有强牌', '对手在bluff', '没有信息'], correctIndex: 1, explanation: 'Overbet被Call通常意味着对手有强牌（因为弱牌会弃牌）。' },
-          { id: 'l4-overbet-q5', question: '什么时候不应该使用Overbet？', options: ['River有坚果优势', '对手范围封顶', '对手是Calling Station', '干燥面翻牌'], correctIndex: 2, explanation: '面对Calling Station不应该Overbet，因为他们会用很宽的范围Call，你的bluff部分不+EV。' },],
+        quiz: [],
         examples: [
           {
             id: 'l4-overbet-ex1',
@@ -771,13 +726,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
             content: '反直觉点：极化范围下注大，合并范围下注小。如果用一个中等强度的牌下大注，你只会被更强的牌跟注——这是"价值下注的陷阱"：中等牌力应该过牌或小注，而不是假装自己有强牌。',
           },
         ],
-        quiz: [
-          { id: 'l4-rc-q1', question: '以下哪个场景最适合使用极化范围？', options: ['Flop 小注 C-Bet', '翻前 Open Raise', 'River Overbet', '跟注对手 open'], correctIndex: 2, explanation: 'River Overbet 是典型的极化范围场景：只有坚果级别的 value 和有 blocker 的 bluff，不包含中等牌力。' },
-          { id: 'l4-rc-q2', question: 'BTN 3-bet 范围中，以下哪手牌属于 bluff 部分？', options: ['AA', 'AKs', 'A5s', 'QQ'], correctIndex: 2, explanation: 'A5s 是经典的 3-bet bluff：有 A blocker + 同花潜力，但牌力不够强到直接 value 3-bet。AA/AKs/QQ 属于 value 部分。' },
-          { id: 'l4-rc-q3', question: '面对 Calling Station，你的下注范围应该？', options: ['更极化（更多 bluff）', '更合并（更多 value，少 bluff）', '完全不变', '只 bluff'], correctIndex: 1, explanation: 'Calling Station 很少弃牌，bluff 无效。应该用更合并的范围：增加 value 下注的频率和范围，减少 bluff。' },
-          { id: 'l4-rc-q4', question: '面对 100% pot 的下注，理想的 value:bluff 比例约为？', options: ['1:1', '2:1', '3:1', '4:1'], correctIndex: 1, explanation: '面对满池下注，MDF = 50%。为了让对手 indifferent，value:bluff 比例约为 2:1（67% value, 33% bluff）。' },
-        
-          { id: 'l4-rc-q5', question: '构建范围时应该考虑什么？', options: ['只看自己的牌', '牌面结构+对手倾向+位置', '随机选择', '只看底池大小'], correctIndex: 1, explanation: '构建范围需要综合考虑牌面结构、对手倾向和位置。' },],
+        quiz: [],
         examples: [
           {
             id: 'l4-rc-ex1',
@@ -940,11 +889,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'heading', content: '过度诈唬的识别与利用' },
           { type: 'text', content: '过度诈唬的信号：\n- 对手 C-Bet 频率 > 70%\n- Turn barrel 频率 > 50%\n- River 下注频率 > 40%\n- 对手在多人底池仍然频繁下注\n\n利用方式：\n- 扩大 bluff catching 范围，用更弱的牌 Call\n- 不要用中等牌力 Raise（让他继续 bluff）\n- 陷阱打法：用强牌 Call 而不是 Raise，让他继续 bluff River\n\n注意：过度诈唬的对手是低级别最常见的“送钱机器”。识别他们，然后用宽范围 Call 他们。' },
         ],
-        quiz: [
-          { id: 'l4-bc-q1', question: '对手 River 下注 1/2 pot，你跟注所需的最低胜率是多少才能 Call？', options: ['20%', '25%', '33%', '50%'], correctIndex: 1, explanation: '跟注所需胜率 = bet/(pot + 2×bet)。下注 1/2 pot 时，底池 1、跟注额 0.5，跟注后总池 1 + 0.5 + 0.5 = 2 → 0.5/2 = 25%。所以需要至少 25% 胜率才能 Call。注意 0.5/(1+0.5) ≈ 33% 是 Alpha（进攻方 bluff 的保本弃牌率），不是跟注方口径。' },
-          { id: 'l4-bc-q2', question: '持有 A♠ 在单色♠牌面，对手 River 全押，你应该？', options: ['更倾向 Fold（A♠ 阻断同花）', '更倾向 Call（阻断对手坚果同花 value）', '无所谓', '必须 Raise'], correctIndex: 1, explanation: 'A♠ 阻断了对手的坚果同花（Ax♠），这意味着对手的 value 范围减少，bluff 比例相对增加，所以更倾向 Call。' },
-          { id: 'l4-bc-q3', question: '面对 Nit 的 River 大注，你应该？', options: ['扩大 bluff catching 范围', '收紧 bluff catching 范围', '用任何对子 Call', '永远 Raise'], correctIndex: 1, explanation: 'Nit 的 bluff 频率极低，River 大注通常是强牌。应该收紧 bluff catching 范围，只用非常强的牌 Call。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l4-bc-ex1', title: 'Hero Call：阻断对手 Value 范围',

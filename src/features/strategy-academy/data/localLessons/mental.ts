@@ -34,36 +34,7 @@ export const MENTAL_LESSONS: Lesson[] = [
       { type: 'highlight', content: 'Tilt 最致命的认知错误：以为"我能控制自己"。Tilt 是潜意识接管决策，你感觉理性但实际已经失控。最好的应对是"预防"——设置硬性止损，到点必须离开。' },
       { type: 'pro-tip', content: '使用 Session 日志记录情绪状态：每次 session 后标记"今天情绪如何（1-5 分）"，并与盈亏关联。长期数据会让你发现"情绪差时亏损严重"，从而建立情绪管理意识。' },
     ],
-    quiz: [
-      {
-        id: 'local-mental-tilt-q1',
-        question: 'Tilt 的本质是？',
-        options: ['故意打差', '情绪系统劫持理性决策系统', '技术不足', '运气差'],
-        correctIndex: 1,
-        explanation: 'Tilt 是情绪压力下大脑自动选择次优策略，你感觉理性但实际已失控。这不是"故意"打差。',
-      },
-      {
-        id: 'local-mental-tilt-q2',
-        question: '以下哪项是 tilt 的行为信号？',
-        options: ['开牌范围明显放宽', '心跳加速', '呼吸变浅', '脸红'],
-        correctIndex: 0,
-        explanation: '行为信号包括开牌范围放宽、加注尺度变大、频繁 bluff 等。心跳加速、呼吸变浅、脸红是身体信号。',
-      },
-      {
-        id: 'local-mental-tilt-q3',
-        question: '连续 bad beat 后的正确应对是？',
-        options: ['继续打"把输的赢回来"', '离开桌子 5-10 分钟', '升级别打', '换桌继续'],
-        correctIndex: 1,
-        explanation: '连续 bad beat 后应立即离开桌子 5-10 分钟，深呼吸、走动、评估是否能保持理性。如否，停止 session。',
-      },
-      {
-        id: 'local-mental-tilt-q4',
-        question: 'Tilt 最致命的认知错误是？',
-        options: ['承认自己 tilt', '以为"我能控制自己"', '离开桌子', '记录情绪'],
-        correctIndex: 1,
-        explanation: 'Tilt 是潜意识接管，你感觉理性但实际已失控。以为"我能控制自己"是最致命错误，应设置硬性止损。',
-      },
-    ],
+    quiz: [],
   },
 
   // ===== local-mental-stop-loss =====
@@ -92,36 +63,7 @@ export const MENTAL_LESSONS: Lesson[] = [
       { type: 'highlight', content: '止损最致命的错误：在触发止损后"破例"继续打。一旦破例，止损规则就失去了意义，下次更难执行。坚持"零破例"原则。' },
       { type: 'pro-tip', content: '使用 APP 或定时器辅助止损：设置单 session 2 小时定时器，到点强制停止。使用资金管理表格记录每日盈亏，达到单周止损阈值时强制休息。' },
     ],
-    quiz: [
-      {
-        id: 'local-mental-stop-loss-q1',
-        question: '单 session 推荐止损额为？',
-        options: ['1 个 buy-in', '3 个 buy-in', '10 个 buy-in', '不限'],
-        correctIndex: 1,
-        explanation: '推荐单 session 止损 3 个 buy-in，单日 5 个 buy-in，单周 10 个 buy-in。这是平衡保护与盈利空间的规则。',
-      },
-      {
-        id: 'local-mental-stop-loss-q2',
-        question: '止损的本质是？',
-        options: ['承认失败', '用预设规则替代情绪决策', '保证盈利', '报复对手'],
-        correctIndex: 1,
-        explanation: '止损用预设规则替代情绪决策，情绪状态下永远觉得"再来一把就回本"，硬性止损能强制切断这个循环。',
-      },
-      {
-        id: 'local-mental-stop-loss-q3',
-        question: '触发止损后"再来一把就回本"的心理是？',
-        options: ['正确的坚持', '典型的 tilt 心理', '理性计算', 'GTO 策略'],
-        correctIndex: 1,
-        explanation: '"再来一把就回本"是典型的 tilt 心理——每把独立，亏损已发生，且你已 tilt 期望值为负。',
-      },
-      {
-        id: 'local-mental-stop-loss-q4',
-        question: '止损执行的最致命错误是？',
-        options: ['严格执行', '提前设置', '触发后"破例"继续打', '记录盈亏'],
-        correctIndex: 2,
-        explanation: '触发止损后"破例"继续打是最致命错误——一旦破例，止损规则失去意义，下次更难执行。坚持"零破例"原则。',
-      },
-    ],
+    quiz: [],
   },
 
   // ===== local-mental-session-management =====
@@ -152,35 +94,6 @@ export const MENTAL_LESSONS: Lesson[] = [
       { type: 'highlight', content: '长期盈利最致命的错误：追求"短期暴利"而非"长期稳定"。今天的 5 个 buy-in 亏损不重要，重要的是你今天做了多少正确决策。长期看，正确决策会带来稳定盈利。' },
       { type: 'pro-tip', content: '使用复盘工具（如 Hand History 记录、Tracker 软件）每周复盘 5-10 个关键牌局。重点关注"错误决策"而非"输掉的牌"——前者是改进机会，后者只是 variance。' },
     ],
-    quiz: [
-      {
-        id: 'local-mental-session-q1',
-        question: 'Session 管理的核心原则是？',
-        options: ['打得越多越好', '保护决策质量', '追求单次大赢', '通宵打牌'],
-        correctIndex: 1,
-        explanation: 'Session 管理的核心是保护决策质量。决策质量 × 手数 = 长期盈利，疲劳和情绪会显著降低决策质量。',
-      },
-      {
-        id: 'local-mental-session-q2',
-        question: '单 session 推荐最长不超过？',
-        options: ['1 小时', '2 小时', '4 小时', '8 小时'],
-        correctIndex: 1,
-        explanation: '单 session 推荐不超过 2 小时。通常 90-120 分钟后决策质量明显下降，应定时休息。',
-      },
-      {
-        id: 'local-mental-session-q3',
-        question: 'Session 盈利的 80% 来自？',
-        options: ['技术', '运气', '桌选', '资金'],
-        correctIndex: 2,
-        explanation: 'Session 盈利的 80% 来自桌选——选择有弱玩家的好桌子，比技术精进更重要。宁可不打，也不打坏桌子。',
-      },
-      {
-        id: 'local-mental-session-q4',
-        question: '长期盈利最致命的错误是？',
-        options: ['严格执行止损', '追求短期暴利而非长期稳定', '每周复盘', '保持 30+ buy-in'],
-        correctIndex: 1,
-        explanation: '追求"短期暴利"是最致命错误。今天的 5 个 buy-in 亏损不重要，重要的是做了多少正确决策。长期看正确决策会带来稳定盈利。',
-      },
-    ],
+    quiz: [],
   },
 ];

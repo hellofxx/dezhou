@@ -34,36 +34,7 @@ export const GTO_BALANCE_LESSONS: Lesson[] = [
       { type: 'highlight', content: 'GTO vs 剥削的核心权衡：GTO 下限高（不会输得太惨），上限低（赢不到太多）；剥削下限低（可能被反剥削），上限高（能赢到很多）。数据越少越偏向 GTO，数据越多越偏向剥削。' },
       { type: 'pro-tip', content: '实战做法：以 GTO 为默认基线保护自己，只在有足够样本支撑、方向明确的对手漏洞上偏离；偏离幅度按「可观测偏差 × (1 - 对手调整概率)」计算，对手越可能调整，偏离就越小。不存在放之四海皆准的固定 GTO/剥削配比——配比由样本量与对手类型决定。' },
     ],
-    quiz: [
-      {
-        id: 'local-gto-vs-exploit-q1',
-        question: 'GTO 策略的核心目标是？',
-        options: ['最大化 EV', '不被剥削', '每手都赢', '诈唬对手'],
-        correctIndex: 1,
-        explanation: 'GTO 的目标是"不被任何策略剥削"，是防御性最优。面对有弱点的对手，针对性剥削 EV 更高。',
-      },
-      {
-        id: 'local-gto-vs-exploit-q2',
-        question: '以下哪种场景应优先使用 GTO？',
-        options: ['对手是已知的跟注站', '对手未知或强 REG', '线上 NL10', '线下俱乐部'],
-        correctIndex: 1,
-        explanation: '对手未知（无数据支撑剥削）或强 REG（剥削空间小）时应使用 GTO 作为默认策略。',
-      },
-      {
-        id: 'local-gto-vs-exploit-q3',
-        question: '面对 Fold to C-Bet 70%+ 的对手，应如何调整？',
-        options: ['减少 C-Bet', '增加 C-Bet 频率（剥削他弃牌多）', '保持 GTO', '只 value bet'],
-        correctIndex: 1,
-        explanation: '对手 Fold to C-Bet 70%+，说明他弃牌过多，应增加 C-Bet 频率（含诈唬）来剥削他的过度弃牌。',
-      },
-      {
-        id: 'local-gto-vs-exploit-q4',
-        question: '关于 GTO 与剥削的偏离，下列做法正确的是？',
-        options: ['无论样本大小一律坚守 GTO', '只要感觉对手弱就大幅偏离', '以 GTO 为默认基线，仅在足够样本支撑且方向明确的漏洞上偏离', '一律改用纯剥削策略'],
-        correctIndex: 2,
-        explanation: '偏离的前提是样本足够且漏洞方向明确，幅度还要按「可观测偏差 × (1 - 对手调整概率)」随对手调整概率递减。纯 GTO 会主动放弃剥削收益；凭感觉大幅偏离等于用小样本下注，容易被反剥削；纯剥削则完全失去基线保护，遇到强对手必然亏损。所谓固定的 GTO/剥削配比并无依据。',
-      },
-    ],
+    quiz: [],
   },
 
   // ===== local-when-to-deviate =====
@@ -92,35 +63,6 @@ export const GTO_BALANCE_LESSONS: Lesson[] = [
       { type: 'highlight', content: '偏离 GTO 最致命的错误：基于"小样本"或"直觉"偏离。20 手的样本看到对手 Fold to C-Bet 80% 就疯狂诈唬，结果他的 Fold to C-Bet 其实只是均衡常见区间（约五成），你被反剥削。' },
       { type: 'pro-tip', content: '使用 HUD 时关注"样本大小"指标。VPIP/PFR 在 20 手后就比较可靠，但 Fold to C-Bet/3-bet 等需要 100+ 手才稳定。低于样本阈值的统计不要作为偏离依据。' },
     ],
-    quiz: [
-      {
-        id: 'local-when-to-deviate-q1',
-        question: '偏离 GTO 的判断标准不包括？',
-        options: ['数据充足（50+ 手）', '偏差显著（>20%）', '对手知名度', '单向偏差'],
-        correctIndex: 2,
-        explanation: '偏离 GTO 基于对手统计偏差，与对手知名度无关。判断标准是数据充足、偏差显著、单向偏差。',
-      },
-      {
-        id: 'local-when-to-deviate-q2',
-        question: '对手 Fold to C-Bet 65%+（均衡常见区间约五成），应如何偏离？',
-        options: ['减少 C-Bet', '增加 C-Bet 频率（含诈唬）', '保持 GTO', '只 value bet'],
-        correctIndex: 1,
-        explanation: '对手弃牌过多，应增加 C-Bet 频率（含诈唬）来剥削他的过度弃牌，可减小尺度到 1/3 pot。',
-      },
-      {
-        id: 'local-when-to-deviate-q3',
-        question: '对手 3-bet 15%+（均衡常见区间约 7-9%），应如何偏离？',
-        options: ['增加开牌范围', '收紧开牌范围，强牌 4-Bet 价值', '不调整', '只 All-in'],
-        correctIndex: 1,
-        explanation: '对手 3-bet 过多，应收紧开牌范围（减少被 3-bet 的牌），用强牌 4-Bet 价值让他宽范围付出代价。',
-      },
-      {
-        id: 'local-when-to-deviate-q4',
-        question: '偏离 GTO 的主要风险是？',
-        options: ['赢得太多', '强对手会反剥削', '没有风险', '被踢出桌子'],
-        correctIndex: 1,
-        explanation: '偏离 GTO 是不平衡的，强对手会察觉并反剥削。需定期检查对手是否调整，并相应回归或重新偏离。',
-      },
-    ],
+    quiz: [],
   },
 ];

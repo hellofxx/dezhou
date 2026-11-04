@@ -1,4 +1,6 @@
 import type { Lesson, PracticeQuestion, QuestionDifficulty } from '../types';
+import type { EloDimension } from '@/shared/types/elo';
+import { getLessonMeta } from '../data/lessonMeta';
 
 /**
  * 快速训练综合分数：accuracy * 100 + 时间奖励
@@ -12,33 +14,42 @@ export function computeQuickDrillScore(accuracy: number, averageTime: number): n
 /**
  * 从全局题库中按条件筛选快速训练题目
  * 用于"5分钟速训"功能
+ *
+ * P0 口径：弱点过滤按 ELO 维度（EloDimension）经课时 lessonMeta 映射到题目，
+ * 不再使用能力评估五维（自适应难度只消费 recordPracticeResult 维护的练习窗口）。
+ * 未登记 lessonMeta 的课时回退 postflop（T3 填充后全量覆盖）。
  */
 export function getQuickDrillQuestions(
   lessons: readonly Lesson[],
-  weakAreas: string[],
+  weakAreas: readonly EloDimension[],
   difficulty: QuestionDifficulty,
   count: number = 10,
   excludeLessons: string[] = []
 ): PracticeQuestion[] {
-  const allQuestions = collectAllPracticeQuestions(lessons);
   const candidates: PracticeQuestion[] = [];
 
-  // 1. 优先选择与弱点相关的题目
-  for (const q of allQuestions) {
-    if (excludeLessons.some((id) => q.id.startsWith(id))) continue;
+  // 1. 优先选择与弱点维度/难度匹配的题目（课时维度由 lessonMeta 决定）
+  for (const lesson of lessons) {
+    const lessonQuestions = lesson.practice?.questions ?? [];
+    if (lessonQuestions.length === 0) continue;
+    const dimension = getLessonMeta(lesson.id).eloDimension;
+    const lessonExcluded = excludeLessons.some((id) => lesson.id.startsWith(id));
 
-    const matchesDifficulty = !q.difficulty || q.difficulty === difficulty;
-    const matchesWeakArea = weakAreas.length === 0 ||
-      weakAreas.some((area) => isQuestionRelatedToArea(q, area));
+    for (const q of lessonQuestions) {
+      if (lessonExcluded || excludeLessons.some((id) => q.id.startsWith(id))) continue;
 
-    if (matchesDifficulty && matchesWeakArea) {
-      candidates.push(q);
+      const matchesDifficulty = !q.difficulty || q.difficulty === difficulty;
+      const matchesWeakArea = weakAreas.length === 0 || weakAreas.includes(dimension);
+
+      if (matchesDifficulty && matchesWeakArea) {
+        candidates.push(q);
+      }
     }
   }
 
   // 2. 如果候选不够，放宽条件
   if (candidates.length < count) {
-    for (const q of allQuestions) {
+    for (const q of collectAllPracticeQuestions(lessons)) {
       if (candidates.includes(q)) continue;
       if (excludeLessons.some((id) => q.id.startsWith(id))) continue;
       candidates.push(q);
@@ -94,26 +105,6 @@ export function getQuestionPoolStats(
   }
 
   return { total: allQuestions.length, byDifficulty, byStreet };
-}
-
-/** 判断题目是否与某能力维度相关 */
-function isQuestionRelatedToArea(q: PracticeQuestion, area: string): boolean {
-  const { scenario } = q;
-
-  switch (area) {
-    case 'rangeKnowledge':
-      return scenario.street === 'preflop';
-    case 'oddsCalculation':
-      return scenario.street === 'flop' || scenario.street === 'turn';
-    case 'gtoUnderstanding':
-      return !!scenario.board && scenario.board.length >= 3;
-    case 'positionalPlay':
-      return ['BTN', 'CO', 'SB'].includes(scenario.heroPosition);
-    case 'emotionalControl':
-      return !!scenario.gameContext?.icmPressure && scenario.gameContext.icmPressure !== 'low';
-    default:
-      return true;
-  }
 }
 
 /** Fisher-Yates 洗牌 */

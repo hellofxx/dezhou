@@ -2,14 +2,18 @@ import { describe, it, expect, afterEach } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import ProgressReplay from './ProgressReplay';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import type { AcademyDataSource, AcademyLessonMeta } from '@/shared/types/academyDataSource';
+import type {
+  AcademyDataSource,
+  AcademyLessonAttemptSnapshot,
+  AcademyLessonMeta,
+} from '@/shared/types/academyDataSource';
 
 /**
  * ProgressReplay 进步回放（jsdom）。
  *
- * 契约（依赖倒置后）：首/末次答题分数经 academyDataSourceRegistry 提供，
- * 按「绝对变化幅度」降序取前 5 门；课程标题走 academy.lessonTitle.<id>，
- * 数据源缺元数据时回退 lessonId；无数据展示空态。
+ * 契约（依赖倒置后）：首/末次答题分数经 academyDataSourceRegistry 的
+ * lessonAttempts 快照提供，按「绝对变化幅度」降序取前 5 门；
+ * 课程标题走 academy.lessonTitle.<id>，数据源缺元数据时回退 lessonId；无数据展示空态。
  */
 
 const META: Record<string, AcademyLessonMeta> = {
@@ -17,26 +21,29 @@ const META: Record<string, AcademyLessonMeta> = {
   'fake-lesson-b': { id: 'fake-lesson-b', title: '课程 B', level: 2 },
 };
 
-const EMPTY_SCORES: Record<string, number> = {};
+const EMPTY_ATTEMPTS: Record<string, AcademyLessonAttemptSnapshot> = {};
 const EMPTY_PROGRESS = { completedLessons: [] as const };
 
-function installSource(first: Record<string, number>, last: Record<string, number>) {
+function installSource(attempts: Record<string, AcademyLessonAttemptSnapshot>) {
   const source: AcademyDataSource = {
     findNextLesson: () => null,
     getLessonMeta: (lessonId) => META[lessonId],
     getAcademyProgressSnapshot: () => EMPTY_PROGRESS,
-    getFirstAttemptScoresSnapshot: () => first,
-    getLastAttemptScoresSnapshot: () => last,
+    getLessonAttemptsSnapshot: () => attempts,
     subscribe: () => () => {},
   };
   registerAcademyDataSource(source);
+}
+
+function attempt(firstScore: number, lastScore: number): AcademyLessonAttemptSnapshot {
+  return { firstScore, lastScore, attempts: 2 };
 }
 
 afterEach(cleanup);
 
 describe('ProgressReplay 进步回放', () => {
   it('无课程分数数据时展示空态', () => {
-    installSource(EMPTY_SCORES, EMPTY_SCORES);
+    installSource(EMPTY_ATTEMPTS);
 
     const { container } = render(<ProgressReplay />);
 
@@ -45,10 +52,10 @@ describe('ProgressReplay 进步回放', () => {
   });
 
   it('按绝对变化幅度降序展示课程首末得分与变化值', () => {
-    installSource(
-      { 'fake-lesson-a': 40, 'fake-lesson-b': 80 },
-      { 'fake-lesson-a': 70, 'fake-lesson-b': 60 },
-    );
+    installSource({
+      'fake-lesson-a': attempt(40, 70),
+      'fake-lesson-b': attempt(80, 60),
+    });
 
     const { container } = render(<ProgressReplay />);
     const text = container.textContent ?? '';
@@ -64,13 +71,11 @@ describe('ProgressReplay 进步回放', () => {
   });
 
   it('最多展示前 5 门课程', () => {
-    const first: Record<string, number> = {};
-    const last: Record<string, number> = {};
+    const attempts: Record<string, AcademyLessonAttemptSnapshot> = {};
     for (let i = 0; i < 7; i++) {
-      first[`fake-lesson-${i}`] = 50;
-      last[`fake-lesson-${i}`] = 50 + i * 5;
+      attempts[`fake-lesson-${i}`] = attempt(50, 50 + i * 5);
     }
-    installSource(first, last);
+    installSource(attempts);
 
     const { container } = render(<ProgressReplay />);
 
@@ -80,8 +85,8 @@ describe('ProgressReplay 进步回放', () => {
     expect(container.textContent).not.toContain('fake-lesson-1');
   });
 
-  it('缺少首次分数的课程不参与回放（不虚构进步幅度）', () => {
-    installSource({ 'fake-lesson-a': 40 }, { 'fake-lesson-a': 70, 'fake-lesson-b': 60 });
+  it('只有出现在 lessonAttempts 快照中的课程参与回放', () => {
+    installSource({ 'fake-lesson-a': attempt(40, 70) });
 
     const { container } = render(<ProgressReplay />);
     const text = container.textContent ?? '';
@@ -91,7 +96,7 @@ describe('ProgressReplay 进步回放', () => {
   });
 
   it('首末分数相同时变化值为 0（稳定）', () => {
-    installSource({ 'fake-lesson-a': 60 }, { 'fake-lesson-a': 60 });
+    installSource({ 'fake-lesson-a': attempt(60, 60) });
 
     const { container } = render(<ProgressReplay />);
 

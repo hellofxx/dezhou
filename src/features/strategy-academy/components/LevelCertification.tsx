@@ -1,66 +1,129 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Award, CheckCircle2, XCircle, ArrowRight, RotateCcw, Trophy, BookOpen } from 'lucide-react';
+import { ArrowRight, CheckCircle2, XCircle, Lock } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore, REQUIRED_ACCURACY } from '../store';
+import type { CertificationAttemptResult } from '../types';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForLevel } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForLevel } from '@/i18n/academyCourse';
 import { getLevelSummariesByNumber } from '../utils/academyMeta';
-// P1E-09: 题目集构建抽出为种子化纯函数（重试重置种子即重洗）
-import { buildCertificationExam } from '../utils/certificationExam';
+// 认证题池/抽题：题池 = 该 Level 全部已应用题目，按 cert-level-<n> + 会话种子抽 20 题
+import { buildCertificationExam, getCertificationPoolSize } from '../utils/certificationExam';
+import {
+  getLevelCompletion,
+  getLevelTheoryAnchors,
+} from '../utils/certificationStatus';
 import { resolveQuizQuestion } from '../utils/contentKeys';
+import { CertificationIntroView } from './CertificationIntroView';
+import { CertificationResultView } from './CertificationResultView';
+
+const BACK_TO_ACADEMY = 'academy.levelCertification.backToAcademy';
 
 export default function LevelCertification() {
   const { t } = useTranslation();
   const { level: levelParam } = useParams<{ level: string }>();
   const navigate = useNavigate();
-  const { certifications, attemptCertification, progress } = useAcademyStore();
   const level = parseInt(levelParam ?? '1', 10);
   const contentReady = useAcademyCourseI18n(deriveAcademyCourseFilesForLevel(level));
-  // 认证有效态判定复用 store 口径（含 validUntil 过期校验），与成就系统保持一致
-  // （组件旧实现只查 certifiedAt，认证过期后仍显示"已通过"）
-  const isCertified = useAcademyStore((s) => s.isCertified(level));
-  // 审计 1.2：合并同 level 的全部条目（如 Level 4 = 4A + 4B），题池与进度均按合并口径
+
+  // 门禁输入：变体 + 完成度 + 证书记录（任一变化都需重算认证状态）
+  const activeVariant = useAcademyStore((s) => s.activeVariant);
+  const completedLessons = useAcademyStore((s) => s.progress.completedLessons);
+  const certifications = useAcademyStore((s) => s.certifications);
+  const isLevelLessonsCompleted = useAcademyStore((s) => s.isLevelLessonsCompleted);
+  const getCertificationState = useAcademyStore((s) => s.getCertificationState);
+  const submitCertificationAttempt = useAcademyStore((s) => s.submitCertificationAttempt);
+
   const levelEntries = useMemo(() => getLevelSummariesByNumber(level), [level]);
   const loadedLessons = useAcademyLessonsForLevel(level);
   const mergedLessons = loadedLessons ?? [];
+  const certification = certifications[level];
 
+  const [now, setNow] = useState(() => Date.now());
   const [started, setStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-  const [finished, setFinished] = useState(false);
-  // 会话随机种子：每次进入考试题序/选项顺序不同，考试过程中保持稳定（防背位置应试）
-  // P1E-09: 重试时通过 setSessionSeed 重置种子 → 题目集/题序/选项全部重洗
+  const [outcome, setOutcome] = useState<{
+    score: number;
+    result: CertificationAttemptResult;
+  } | null>(null);
+  // 会话种子：每次进入/续期题序与选项不同；now 驱动冷却/有效期边界每秒重算
   const [sessionSeed, setSessionSeed] = useState(() => Math.floor(Math.random() * 2 ** 31));
 
-  const certification = certifications[level];
-  // ACAD-04 修复（补齐）：通过标准与 store 的 attemptCertification 判定共用
-  // REQUIRED_ACCURACY 单一事实源（旧实现组件基准 80% vs store 动态 70%-71.4% 双口径不一致）。
-  const requiredAccuracy = certification?.requiredAccuracy ?? REQUIRED_ACCURACY;
+  const certState = useMemo(
+    () => getCertificationState(level),
+    [getCertificationState, level, activeVariant, completedLessons, certifications, now],
+  );
+  const ticking =
+    certState.status === 'cooldown' ||
+    certState.status === 'valid' ||
+    certState.status === 'expiring';
 
-  // 从该级别全部条目的所有课程中收集测验题（种子化洗牌取最多 20 题 + 选项重排）
-  // 渲染层 key 覆盖：先解析各课 quiz 文案（key 缺失回退数据层中文），再进入种子化构建
+  useEffect(() => {
+    if (!ticking) return;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [ticking]);
+
+  // 渲染层 key 覆盖：先解析各课 quiz 文案，再进入种子化抽题（同种子输出稳定）
   const allQuestions = useMemo(
     () =>
       buildCertificationExam(
-        mergedLessons.map((l) => ({ ...l, quiz: l.quiz.map((q) => resolveQuizQuestion(t, q)) })),
+        mergedLessons.map((lesson) => ({
+          ...lesson,
+          quiz: lesson.quiz.map((question) => resolveQuizQuestion(t, question)),
+        })),
+        level,
         sessionSeed,
       ),
-    [mergedLessons, sessionSeed, t, contentReady]
+    [mergedLessons, level, sessionSeed, t, contentReady],
   );
 
   if (levelEntries.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4">
         <p className="text-[var(--ivory-muted)]">{t('academy.levelCertification.levelNotFound')}</p>
-        <button onClick={() => navigate('/academy')} className="text-sm text-[var(--brass-bright)] hover:underline">
-          {t('academy.levelCertification.backToAcademy')}
+        <button
+          onClick={() => navigate('/academy')}
+          className="text-sm text-[var(--brass-bright)] hover:underline"
+        >
+          {t(BACK_TO_ACADEMY)}
+        </button>
+      </div>
+    );
+  }
+
+  // URL 直达门禁：非标准变体 / 本级别课程未全部完成 → 只显示锁定原因，不渲染开始按钮
+  const levelCompletion = getLevelCompletion(level, completedLessons);
+  const variantLocked = activeVariant !== 'standard';
+  const lessonsLocked = !isLevelLessonsCompleted(level);
+  if (variantLocked || lessonsLocked) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-4 px-6 text-center">
+        <Lock className="w-8 h-8 text-[var(--ivory-muted)]" aria-hidden="true" />
+        <p className="text-sm text-[var(--ivory-dim)] max-w-md">
+          {variantLocked
+            ? t('academy.levelCertification.variantLocked', {
+                variant: activeVariant,
+                defaultValue: '认证测验仅在标准变体提供（当前变体：{{variant}}）',
+              })
+            : t('academy.levelCertification.notCompletedLocked', {
+                completed: levelCompletion.completed,
+                total: levelCompletion.total,
+                defaultValue: '需完成本级别全部课程才能参加认证（当前进度：{{completed}}/{{total}}）',
+              })}
+        </p>
+        <button
+          onClick={() => navigate('/academy')}
+          className="text-sm text-[var(--brass-bright)] hover:underline"
+        >
+          {t(BACK_TO_ACADEMY)}
         </button>
       </div>
     );
@@ -74,6 +137,7 @@ export default function LevelCertification() {
     );
   }
 
+  const requiredAccuracy = REQUIRED_ACCURACY;
   const question = allQuestions[currentIndex];
 
   const handleSelect = (index: number) => {
@@ -81,183 +145,95 @@ export default function LevelCertification() {
     setSelectedIndex(index);
     setShowExplanation(true);
     if (question && index === question.correctIndex) {
-      setCorrectCount((c) => c + 1);
+      setCorrectCount((count) => count + 1);
     }
+  };
+
+  const finishExam = () => {
+    const score = Math.round((correctCount / allQuestions.length) * 100);
+    const result = submitCertificationAttempt(level, {
+      score,
+      totalQuestions: allQuestions.length,
+      questionIds: allQuestions.map((item) => item.id),
+      poolSize: getCertificationPoolSize(level, mergedLessons),
+    });
+    setOutcome({ score, result });
   };
 
   const handleNext = () => {
     if (currentIndex < allQuestions.length - 1) {
-      setCurrentIndex((i) => i + 1);
+      setCurrentIndex((index) => index + 1);
       setSelectedIndex(null);
       setShowExplanation(false);
-    } else {
-      const score = Math.round((correctCount / allQuestions.length) * 100);
-      attemptCertification(level, score);
-      setFinished(true);
+      return;
     }
+    finishExam();
   };
 
-  const handleRetry = () => {
+  const handleRestart = () => {
     setStarted(false);
     setCurrentIndex(0);
     setSelectedIndex(null);
     setShowExplanation(false);
     setCorrectCount(0);
-    setFinished(false);
-    // P1E-09: 重置会话种子，使题目集/题序/选项顺序重新洗牌（防背题应试）
+    setOutcome(null);
     setSessionSeed(Math.floor(Math.random() * 2 ** 31));
   };
 
-  // 完成页面
-  if (finished) {
-    const score = Math.round((correctCount / allQuestions.length) * 100);
-    const passed = score >= requiredAccuracy;
-
+  if (outcome) {
     return (
-      <div className="py-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-8 text-center"
-        >
-          {passed ? (
-            <Trophy size={52} className="mx-auto mb-4 text-[var(--brass-bright)]" aria-hidden="true" />
-          ) : (
-            <BookOpen size={52} className="mx-auto mb-4 text-[var(--ivory-muted)]" aria-hidden="true" />
-          )}
-          <h2 className="font-display text-2xl text-[var(--ivory)] mb-2">
-            {passed ? t('academy.levelCertification.passedTitle', { level }) : t('academy.levelCertification.keepGoing')}
-          </h2>
-          <p className="text-[var(--ivory-dim)] mb-1">
-            {t('academy.quiz.answeredCount', { correct: correctCount, total: allQuestions.length })}
-          </p>
-          <p className="font-numeric text-4xl text-[var(--brass-bright)] mb-2">{t('academy.quiz.score', { score })}</p>
-          <p className="text-xs text-[var(--ivory-muted)] mb-6">
-            {passed
-              ? t('academy.levelCertification.passedHint')
-              : t('academy.levelCertification.needAccuracy', { required: requiredAccuracy })}
-          </p>
-          <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={() => navigate('/academy')}
-              className="px-5 py-2.5 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80"
-            >
-              {t('academy.levelCertification.backToAcademy')}
-            </button>
-            {!passed && (
-              <button
-                onClick={handleRetry}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
-              >
-                <RotateCcw className="w-4 h-4" />
-                {t('academy.levelCertification.retry')}
-              </button>
-            )}
-          </div>
-        </motion.div>
-      </div>
+      <CertificationResultView
+        level={level}
+        score={outcome.score}
+        correctCount={correctCount}
+        total={allQuestions.length}
+        requiredAccuracy={requiredAccuracy}
+        result={outcome.result}
+        anchors={getLevelTheoryAnchors(level, 3)}
+        canRetry={certState.status === 'available'}
+        now={now}
+        onRetry={handleRestart}
+        onBack={() => navigate('/academy')}
+        onOpenAnchor={(anchor) => navigate(`/theory/chapter/${anchor}`)}
+      />
     );
   }
 
-  // 开始前的介绍页面
   if (!started) {
-    const levelProgress = mergedLessons.filter((l) => progress.completedLessons.includes(l.id)).length;
-    const allCompleted = levelProgress === mergedLessons.length;
-
     return (
-      <div className="h-full overflow-auto">
-        <div className="py-6 space-y-6">
-          <motion.section
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-5 md:p-6"
-          >
-            <button
-              onClick={() => navigate('/academy')}
-              className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              {t('academy.conceptGraph.backToAcademy')}
-            </button>
-
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-14 h-14 rounded-lg bg-[var(--brass-bright)]/10 flex items-center justify-center">
-                <Award className="w-7 h-7 text-[var(--brass-bright)]" />
-              </div>
-              <div>
-                <h2 className="font-display text-2xl text-[var(--ivory)]">
-                  {t('academy.levelCertification.title', { level })}
-                </h2>
-                <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
-                  {levelEntries.map((e) => e.title).join(' · ')}
-                </p>
-              </div>
-            </div>
-
-            {/* Certification info */}
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
-                <span className="w-2 h-2 rounded-full bg-[var(--brass-bright)]" />
-                {t('academy.levelCertification.questionCount', { count: allQuestions.length })}
-              </div>
-              <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
-                <span className="w-2 h-2 rounded-full bg-[var(--brass-bright)]" />
-                {t('academy.levelCertification.passStandard', { required: requiredAccuracy })}
-              </div>
-              {certification && (
-                <div className="flex items-center gap-2 text-xs text-[var(--ivory-dim)]">
-                  <span className="w-2 h-2 rounded-full bg-[var(--info)]" />
-                  {t('academy.levelCertification.attemptHistory', {
-                    attempts: certification.attempts,
-                    best: certification.bestScore ?? 0,
-                  })}
-                </div>
-              )}
-              {isCertified && (
-                <div className="flex items-center gap-2 text-xs text-[var(--poker-success)]">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  {t('academy.levelCertification.passedOn', {
-                    date: new Date(certification!.certifiedAt!).toLocaleDateString(),
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Prerequisites check */}
-            {!allCompleted && (
-              <div className="rounded-lg bg-[var(--warning)]/10 border border-[var(--warning)]/30 p-3 mb-6 text-xs text-[var(--warning)]">
-                {t('academy.levelCertification.prereqHint', { progress: levelProgress, total: mergedLessons.length })}
-              </div>
-            )}
-
-            <button
-              onClick={() => setStarted(true)}
-              disabled={allQuestions.length === 0}
-              className="w-full py-3 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 disabled:opacity-50"
-            >
-              {isCertified ? t('academy.levelCertification.retry') : t('academy.levelCertification.start')}
-            </button>
-          </motion.section>
-        </div>
-      </div>
+      <CertificationIntroView
+        level={level}
+        levelTitles={levelEntries.map((entry) => entry.title).join(' · ')}
+        questionCount={allQuestions.length}
+        poolSize={getCertificationPoolSize(level, mergedLessons)}
+        requiredAccuracy={requiredAccuracy}
+        attempts={certification?.attempts}
+        bestScore={certification?.bestScore}
+        state={certState}
+        now={now}
+        onStart={() => setStarted(true)}
+        onBack={() => navigate('/academy')}
+      />
     );
   }
 
-  // 答题界面
   if (!question) return null;
   const isCorrect = selectedIndex === question.correctIndex;
 
   return (
     <div className="py-6">
       <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
-        {/* Progress */}
         <div className="flex items-center gap-1.5 mb-6">
-          {allQuestions.map((_, i) => (
+          {allQuestions.map((item, index) => (
             <div
-              key={i}
+              key={item.id}
               className={cn(
                 'h-1.5 flex-1 rounded-full transition-colors',
-                i < currentIndex ? 'bg-[var(--brass-bright)]' : i === currentIndex ? 'bg-[var(--brass)]' : 'bg-[var(--walnut-raised)]'
+                index < currentIndex
+                  ? 'bg-[var(--brass-bright)]'
+                  : index === currentIndex
+                    ? 'bg-[var(--brass)]'
+                    : 'bg-[var(--walnut-raised)]',
               )}
             />
           ))}
@@ -276,15 +252,21 @@ export default function LevelCertification() {
             const isCorrectOption = index === question.correctIndex;
             return (
               <button
-                key={index}
+                key={option}
                 onClick={() => handleSelect(index)}
                 disabled={showExplanation}
                 className={cn(
                   'w-full text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
-                  !showExplanation && 'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 text-[var(--ivory-dim)]',
-                  showExplanation && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
-                  showExplanation && isSelected && !isCorrectOption && 'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--danger-text)]',
-                  showExplanation && !isSelected && !isCorrectOption && 'opacity-40'
+                  !showExplanation &&
+                    'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 text-[var(--ivory-dim)]',
+                  showExplanation &&
+                    isCorrectOption &&
+                    'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
+                  showExplanation &&
+                    isSelected &&
+                    !isCorrectOption &&
+                    'border-[var(--poker-danger)]/50 bg-[var(--poker-danger-bg)] text-[var(--danger-text)]',
+                  showExplanation && !isSelected && !isCorrectOption && 'opacity-40',
                 )}
               >
                 <span className="flex items-center gap-3">
@@ -292,8 +274,12 @@ export default function LevelCertification() {
                     {String.fromCharCode(65 + index)}
                   </span>
                   {option}
-                  {showExplanation && isCorrectOption && <CheckCircle2 className="w-4 h-4 ml-auto shrink-0" />}
-                  {showExplanation && isSelected && !isCorrectOption && <XCircle className="w-4 h-4 ml-auto shrink-0" />}
+                  {showExplanation && isCorrectOption && (
+                    <CheckCircle2 className="w-4 h-4 ml-auto shrink-0" />
+                  )}
+                  {showExplanation && isSelected && !isCorrectOption && (
+                    <XCircle className="w-4 h-4 ml-auto shrink-0" />
+                  )}
                 </span>
               </button>
             );
@@ -306,10 +292,14 @@ export default function LevelCertification() {
             animate={{ opacity: 1, y: 0 }}
             className={cn(
               'mt-4 rounded-lg p-4 text-sm leading-relaxed',
-              isCorrect ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90' : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--danger-text)]/90'
+              isCorrect
+                ? 'bg-[var(--poker-success-bg)] border border-[var(--poker-success)]/30 text-[var(--poker-success)]/90'
+                : 'bg-[var(--poker-danger-bg)] border border-[var(--poker-danger)]/30 text-[var(--danger-text)]/90',
             )}
           >
-            <p className="font-semibold mb-1">{isCorrect ? t('academy.quiz.correctMark') : t('academy.quiz.wrongMark')}</p>
+            <p className="font-semibold mb-1">
+              {isCorrect ? t('academy.quiz.correctMark') : t('academy.quiz.wrongMark')}
+            </p>
             <p>{question.explanation}</p>
           </motion.div>
         )}
@@ -320,7 +310,9 @@ export default function LevelCertification() {
               onClick={handleNext}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
             >
-              {currentIndex < allQuestions.length - 1 ? t('academy.quiz.next') : t('academy.quiz.viewResult')}
+              {currentIndex < allQuestions.length - 1
+                ? t('academy.quiz.next')
+                : t('academy.quiz.viewResult')}
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

@@ -230,6 +230,56 @@
       ],
       "explanation": "BTN has a positional advantage and is the widest opening position at a 6-max table; UTG opens only the very strongest slice of hands — the gap in width is large."
     },
+    "l4-range-q6": {
+      "question": "Your range {AA 6 combos, KK 6 combos} versus villain's {AK}. What is the total equity? AA versus AK is about 93% and KK versus AK about 70%.",
+      "options": [
+        "About 70%",
+        "About 81%",
+        "About 93%",
+        "About 50%"
+      ],
+      "explanation": "Weighted: 0.5×93% + 0.5×70% ≈ 81%; range equity must be weighted by combo share instead of taking the best branch."
+    },
+    "l4-range-q7": {
+      "question": "The same opponent opens from UTG rather than BTN. Their range is?",
+      "options": [
+        "Narrower and stronger",
+        "Wider and weaker",
+        "Exactly the same",
+        "Impossible to compare"
+      ],
+      "explanation": "UTG opens only a very strong slice while BTN is the widest opening seat in 6-max, so the UTG range is narrower and stronger."
+    },
+    "l4-range-q8": {
+      "question": "After villain 4-bets, their range is usually reduced to?",
+      "options": [
+        "Weak hands and air",
+        "Premium value hands plus a few blocker bluffs",
+        "Medium pairs",
+        "Completely random hands"
+      ],
+      "explanation": "A 4-bet is a very strong signal and compresses the range to premium value plus a few blocker bluffs."
+    },
+    "l4-range-q9": {
+      "question": "Ignoring blockers, how many combos does AK have in total, suited plus offsuit?",
+      "options": [
+        "4 combos",
+        "6 combos",
+        "12 combos",
+        "16 combos"
+      ],
+      "explanation": "AK = 4×4 = 16 combos: 4 suited and 12 offsuit."
+    },
+    "l4-range-q10": {
+      "question": "Why does a wide range miss low boards more often?",
+      "options": [
+        "A wide range contains many offsuit small cards with low hit rates",
+        "A wide range is always junk",
+        "A wide range never makes pairs",
+        "Position decides it"
+      ],
+      "explanation": "Many offsuit small cards struggle to make pairs or strong draws on low boards, so the hit rate is naturally lower."
+    },
     "l4-ev-q1": {
       "question": "Pot is $100, opponent bets $50. What equity do you need to profitably call?",
       "options": [
@@ -280,6 +330,56 @@
       ],
       "explanation": "Fold equity = opponent fold probability × pot size."
     },
+    "l4-ev-q6": {
+      "question": "The pot is 100, villain bets 50, you must call 50 and your equity is 40%. What is the call EV?",
+      "options": [
+        "+10",
+        "+20",
+        "+30",
+        "+50"
+      ],
+      "explanation": "EV = 0.4×150 - 0.6×50 = 60 - 30 = +30; the amount won is the current pot plus villain's bet, excluding your call."
+    },
+    "l4-ev-q7": {
+      "question": "The pot is 80BB and villain bets 40BB. What break-even equity do you need to call?",
+      "options": [
+        "20%",
+        "25%",
+        "33%",
+        "40%"
+      ],
+      "explanation": "Break-even equity = call ÷ (pot + bet + call) = 40 ÷ 160 = 25%."
+    },
+    "l4-ev-q8": {
+      "question": "How should the 100BB already invested in the pot be treated?",
+      "options": [
+        "As dead money that should not affect comparing future branches",
+        "It must be counted as a cost of calling",
+        "It must be recovered to avoid a loss",
+        "It decides whether you fold"
+      ],
+      "explanation": "Chips already in the pot are dead money; call EV depends only on future branches."
+    },
+    "l4-ev-q9": {
+      "question": "When comparing whether to call, the EV baseline of folding is?",
+      "options": [
+        "Minus the call amount",
+        "0",
+        "Plus the pot",
+        "Minus the pot"
+      ],
+      "explanation": "Folding stops further investment, so its EV is recorded as 0 and used as the baseline."
+    },
+    "l4-ev-q10": {
+      "question": "In the bet EV formula, what multiplies the called branch?",
+      "options": [
+        "The fold rate",
+        "1 minus the fold rate",
+        "The pot size",
+        "Villain's equity"
+      ],
+      "explanation": "Bet EV = fold rate×pot + (1-fold rate)×(equity×net win - loss rate×bet)."
+    },
     "l4-ev-rc-q1": {
       "question": "In Case E1, with K♣Q♣ facing a TAG checking the river, Hero should?",
       "options": [
@@ -299,6 +399,86 @@
         "Raise"
       ],
       "explanation": "The value of a combo draw comes from both fold equity and showdown equity. EV(bet) ≈ +7.7BB vs EV(check) ≈ 5.4BB."
+    },
+    "l4-ev-rc-q3": {
+      "question": "In Case E1, how much higher is EV(bet) than EV(check back)?",
+      "options": [
+        "About +1BB",
+        "About +5BB",
+        "About +12BB",
+        "Betting is lower"
+      ],
+      "explanation": "When villain's river range is weak, value betting beats checking back by about 5BB."
+    },
+    "l4-ev-rc-q4": {
+      "question": "In Case E2 (pot 10BB, bet 6BB, fold rate 45%, 54% equity when called) the bet EV is about?",
+      "options": [
+        "+2.6BB",
+        "+5.4BB",
+        "+7.7BB",
+        "+9.5BB"
+      ],
+      "explanation": "0.45×10 + 0.55×(0.54×16 - 0.46×6) = 4.5 + 3.23 ≈ +7.7BB."
+    },
+    "l4-ev-rc-q5": {
+      "question": "In the previous question, what is the net win inside the called branch?",
+      "options": [
+        "10BB",
+        "16BB",
+        "22BB",
+        "6BB"
+      ],
+      "explanation": "Net win = new pot (10+6+6) - your 6BB bet = 16BB; your own bet is returned when called and is not profit."
+    },
+    "l4-ev-rc-q6": {
+      "question": "What is the precondition for value betting the river with your second-best hand?",
+      "options": [
+        "Villain's calling range holds many worse hands",
+        "Your hand must be the nuts",
+        "Villain never folds",
+        "The pot is small"
+      ],
+      "explanation": "Value betting requires being called by worse, so a second-best hand profits whenever villain's range is weak."
+    },
+    "l4-ev-rc-q7": {
+      "question": "Where does the fold equity of a combo-draw bet come from?",
+      "options": [
+        "Villain folding",
+        "Your own hand strength",
+        "Positional advantage",
+        "The pot size"
+      ],
+      "explanation": "Fold equity comes from the times villain gives up the pot and combines with draw equity as one of two profit sources."
+    },
+    "l4-ev-rc-q8": {
+      "question": "EV(bet) = +7.7BB and EV(check) = +5.4BB. What is the right choice?",
+      "options": [
+        "Check",
+        "Bet",
+        "They are equal",
+        "Fold"
+      ],
+      "explanation": "Compare the EVs and take the higher one: betting at +7.7BB beats checking at +5.4BB."
+    },
+    "l4-ev-rc-q9": {
+      "question": "A combo draw has not completed on the flop. Where does its equity come from?",
+      "options": [
+        "The chance of completing over the two remaining streets",
+        "It is already made",
+        "Villain folding",
+        "Position"
+      ],
+      "explanation": "Before completing, equity is the out-based probability over the remaining streets, so 15 outs is about 54% over two streets."
+    },
+    "l4-ev-rc-q10": {
+      "question": "In Case E2, how much EV does the fold branch contribute?",
+      "options": [
+        "4.5BB",
+        "6BB",
+        "10BB",
+        "16BB"
+      ],
+      "explanation": "Fold rate 45% × pot 10BB = 4.5BB."
     },
     "l4-opp-q1": {
       "question": "An opponent has VPIP 12%, PFR 10%. Most likely type?",
@@ -350,6 +530,56 @@
       ],
       "explanation": "The core trait of a Calling Station is calling too much (high VPIP) with an extremely low fold rate."
     },
+    "l4-opp-q6": {
+      "question": "An opponent plays VPIP 45%, PFR 35% and AF 6. Which type is most likely?",
+      "options": [
+        "TAG",
+        "LAG",
+        "Nit",
+        "Maniac"
+      ],
+      "explanation": "VPIP above 40%, PFR above 30% and AF above 5 are the classic maniac profile."
+    },
+    "l4-opp-q7": {
+      "question": "What is the most profitable adjustment against a nit?",
+      "options": [
+        "Steal their blinds very often",
+        "Bluff them frequently",
+        "Steal less",
+        "Play big pots against them"
+      ],
+      "explanation": "A nit plays only premium hands and folds a lot preflop, so relentless blind stealing is the most direct exploit."
+    },
+    "l4-opp-q8": {
+      "question": "What is the standard adjustment against a LAG's wide raises?",
+      "options": [
+        "Trap with strong hands and fold less to their C-Bets",
+        "Only continue with the nuts",
+        "Fold everything",
+        "Bluff more often"
+      ],
+      "explanation": "A LAG's range is wide and aggressive, so trapping with strong hands and folding less to C-Bets profits from that width."
+    },
+    "l4-opp-q9": {
+      "question": "How many hands of HUD data are needed before the stats become reliable?",
+      "options": [
+        "10 hands",
+        "20 hands",
+        "50-100 hands",
+        "1000 hands"
+      ],
+      "explanation": "Fewer than 20 hands is statistically meaningless; 50-100 hands and up is reasonably reliable."
+    },
+    "l4-opp-q10": {
+      "question": "Villain shoves 100BB into a 100BB pot on the river. What break-even equity does your call need?",
+      "options": [
+        "25%",
+        "33%",
+        "40%",
+        "50%"
+      ],
+      "explanation": "100 ÷ (100 + 100 + 100) = 33%, so calling is +EV whenever the bluff share exceeds 33%."
+    },
     "l4-blockers-q1": {
       "question": "You hold one A. How does the opponent's AA combo count change?",
       "options": [
@@ -379,6 +609,76 @@
         "No effect"
       ],
       "explanation": "If your hand blocks the opponent's value range (e.g. holding an A reduces AA/AK), the probability they have a strong hand drops, making the call more favorable."
+    },
+    "l4-blockers-q4": {
+      "question": "You hold A♠. How many AK combos does villain have, down from 16?",
+      "options": [
+        "3 combos",
+        "9 combos",
+        "12 combos",
+        "16 combos"
+      ],
+      "explanation": "AK = the remaining 3 aces × 4 kings = 12 combos, a reduction of about 25%."
+    },
+    "l4-blockers-q5": {
+      "question": "You hold A♠K♣. How many AK combos does villain have?",
+      "options": [
+        "6 combos",
+        "9 combos",
+        "12 combos",
+        "16 combos"
+      ],
+      "explanation": "3 aces × 3 kings = 9 combos, a reduction of about 44%."
+    },
+    "l4-blockers-q6": {
+      "question": "You hold K♠. How many AA combos does villain have?",
+      "options": [
+        "3 combos",
+        "6 combos, unchanged",
+        "1 combo",
+        "12 combos"
+      ],
+      "explanation": "A king does not block an ace: AA stays C(4,2) = 6 combos, and only holding an ace cuts it to 3."
+    },
+    "l4-blockers-q7": {
+      "question": "In a hero-call decision, holding a card that blocks villain's bluffing range means?",
+      "options": [
+        "Lean toward calling",
+        "Lean toward folding",
+        "No effect",
+        "You should raise immediately"
+      ],
+      "explanation": "Blocking bluff combos raises the value share of villain's range, weakening the case for calling."
+    },
+    "l4-blockers-q8": {
+      "question": "Villain's 3-bet range {AA, KK, AK} has 28 combos. How many remain when you hold AK?",
+      "options": [
+        "9 combos",
+        "15 combos",
+        "21 combos",
+        "28 combos"
+      ],
+      "explanation": "AA 6 to 3, KK 6 to 3 and AK 16 to 9, for 15 combos in total."
+    },
+    "l4-blockers-q9": {
+      "question": "On a monotone board, what is the main value of holding the ace of that suit?",
+      "options": [
+        "It blocks villain's nut flush, thinning their value and favoring a call",
+        "It blocks your own draw",
+        "There is no value",
+        "It makes villain more likely to call"
+      ],
+      "explanation": "The nut flush needs the ace of that suit, so holding it removes villain's nut combos and makes a bet look more like a bluff."
+    },
+    "l4-blockers-q10": {
+      "question": "How should the blocker effect be characterized?",
+      "options": [
+        "As a marginal edge that can be decisive in close decisions",
+        "It decides every decision outright",
+        "It only matters preflop",
+        "It is unrelated to combos"
+      ],
+      "explanation": "Blockers rarely flip a decision, but they can be the deciding factor at a close decision point."
     },
     "l4-gto-q1": {
       "question": "What is the core trait of GTO strategy?",
@@ -430,6 +730,56 @@
       ],
       "explanation": "GTO ensures you can't be exploited. At low stakes opponents won't exploit your deviations well, so GTO is a safe baseline."
     },
+    "l4-gto-q6": {
+      "question": "When you bet 1/2 pot on the river, what share of your betting range should be bluffs?",
+      "options": [
+        "20%",
+        "25%",
+        "33%",
+        "50%"
+      ],
+      "explanation": "f = b/(1+2b) = 0.5/2 = 25%, which corresponds to a value-to-bluff ratio of 3:1."
+    },
+    "l4-gto-q7": {
+      "question": "Which of the following is not one of the three core GTO concepts?",
+      "options": [
+        "Range balance",
+        "Mixed strategy",
+        "Minimum defense frequency",
+        "Results-oriented review"
+      ],
+      "explanation": "The three core concepts are range balance, mixed strategy and minimum defense frequency."
+    },
+    "l4-gto-q8": {
+      "question": "What does a mixed strategy mean in GTO?",
+      "options": [
+        "Playing the same hand at the same node with fixed proportions of different actions",
+        "Deciding by mood",
+        "Changing style every hand",
+        "Only playing strong hands"
+      ],
+      "explanation": "A mixed strategy splits actions by an exact ratio, such as 70% raise and 30% call, so that every response is indifferent."
+    },
+    "l4-gto-q9": {
+      "question": "Which statement about GTO and exploitative play is correct?",
+      "options": [
+        "GTO is the floor and exploitation raises the ceiling",
+        "GTO always earns the most",
+        "Exploitative play cannot be counter-exploited",
+        "The two cannot be combined"
+      ],
+      "explanation": "GTO guarantees you cannot be exploited while exploitation adds profit once weaknesses appear; the two are complementary."
+    },
+    "l4-gto-q10": {
+      "question": "When should GTO be your primary strategy?",
+      "options": [
+        "When the opponent is unknown or very strong",
+        "When the opponent is a clear donor",
+        "At low-stakes tables full of weak players",
+        "Only preflop"
+      ],
+      "explanation": "With insufficient data or against strong opponents exploitation is unreliable, so GTO is the safest baseline."
+    },
     "l4-gt-q1": {
       "question": "What does a \"node\" in a game tree represent?",
       "options": [
@@ -479,6 +829,56 @@
         "Rules forbid it"
       ],
       "explanation": "Poker's game tree is astronomically large (information sets ~10^160) and can't be fully computed."
+    },
+    "l4-gt-q6": {
+      "question": "At a node: villain folds 40% of the time, winning 6BB at once; villain calls 60% of the time, where the subtree EV is +3BB. What is the node EV?",
+      "options": [
+        "+2.4BB",
+        "+3.6BB",
+        "+4.2BB",
+        "+6.0BB"
+      ],
+      "explanation": "Node EV = 0.4×6 + 0.6×3 = 2.4 + 1.8 = +4.2BB."
+    },
+    "l4-gt-q7": {
+      "question": "Which question before betting best reflects game-tree thinking?",
+      "options": [
+        "What do I do if villain raises",
+        "How big is the pot now",
+        "How strong is my hand",
+        "What type of player is villain"
+      ],
+      "explanation": "Game-tree thinking requires planning the later branches, especially the response to a raise."
+    },
+    "l4-gt-q8": {
+      "question": "What determines the optimal decision at the current node?",
+      "options": [
+        "The accumulated EV of all later nodes",
+        "Only the current pot",
+        "Only the equity on this street",
+        "Only the opponent's profile"
+      ],
+      "explanation": "The value of the current node is the probability-weighted sum of branch values and their accumulated EV."
+    },
+    "l4-gt-q9": {
+      "question": "A node has three branches: fold 30% winning 8BB, call 50% with subtree +4BB, raise 20% with subtree -2BB. What is the node EV?",
+      "options": [
+        "+3.2BB",
+        "+4.0BB",
+        "+5.6BB",
+        "+8.0BB"
+      ],
+      "explanation": "0.3×8 + 0.5×4 + 0.2×(-2) = 2.4 + 2.0 - 0.4 = +4.0BB."
+    },
+    "l4-gt-q10": {
+      "question": "Villain never bluffs the river. After node locking, what should you do?",
+      "options": [
+        "Fold more bluff catchers",
+        "Call more often",
+        "Raise more often",
+        "Nothing changes"
+      ],
+      "explanation": "If villain's river bets are almost all value, bluff catchers have no purpose and should be folded more."
     },
     "l4-freq-q1": {
       "question": "Betting full pot on the river, what is GTO's bluff percentage?",
@@ -530,6 +930,56 @@
       ],
       "explanation": "If you bluff too little, the opponent notices your bets are always strong and calls with a wider range."
     },
+    "l4-freq-q6": {
+      "question": "When you bet 2/3 pot on the river, roughly what share of your betting range should be bluffs?",
+      "options": [
+        "20%",
+        "25%",
+        "28.6%",
+        "33%"
+      ],
+      "explanation": "Bluff share = b/(P+2b) = 0.667/2.333 ≈ 28.6%, a value-to-bluff ratio near 2.5:1."
+    },
+    "l4-freq-q7": {
+      "question": "When you bet 1/3 pot on the river, roughly what share of your betting range should be bluffs?",
+      "options": [
+        "10%",
+        "20%",
+        "25%",
+        "33%"
+      ],
+      "explanation": "Bluff share = 0.333/1.667 ≈ 20%, a value-to-bluff ratio of about 4:1."
+    },
+    "l4-freq-q8": {
+      "question": "What question does MDF answer?",
+      "options": [
+        "How often I must continue as the defender",
+        "How many bluffs my betting range should hold",
+        "The break-even equity for a single call",
+        "Villain's fold rate"
+      ],
+      "explanation": "MDF = P/(P+b) describes the defender's minimum continuing frequency, a different formula from bluff share and break-even calling equity."
+    },
+    "l4-freq-q9": {
+      "question": "You have been caught bluffing five times in a row. What does that most likely mean?",
+      "options": [
+        "Your bluff frequency is too high",
+        "You bluff too little",
+        "Your balance is perfect",
+        "The opponents are too strong to beat"
+      ],
+      "explanation": "Being caught repeatedly means the bluff share exceeds the opponents' calling threshold, so lower the frequency."
+    },
+    "l4-freq-q10": {
+      "question": "When you bet 1/2 pot on the river, what is the ideal value-to-bluff ratio?",
+      "options": [
+        "1:1",
+        "2:1",
+        "3:1",
+        "4:1"
+      ],
+      "explanation": "A 1/2-pot bet corresponds to a 25% bluff share, so value-to-bluff = 75:25 = 3:1."
+    },
     "l4-mdf-q1": {
       "question": "Facing a 50% pot bet, what is the MDF?",
       "options": [
@@ -579,6 +1029,56 @@
       ],
       "explanation": "Betting pot: MDF = pot/(pot+pot) = 50%. Defend at least 50% to avoid endless bluff exploitation."
     },
+    "l4-mdf-q6": {
+      "question": "Facing a 75% pot bet, MDF is about?",
+      "options": [
+        "43%",
+        "50%",
+        "57%",
+        "67%"
+      ],
+      "explanation": "MDF = 1/(1+0.75) ≈ 57%."
+    },
+    "l4-mdf-q7": {
+      "question": "Facing a 150% pot overbet, MDF is about?",
+      "options": [
+        "33%",
+        "40%",
+        "50%",
+        "60%"
+      ],
+      "explanation": "MDF = 1/(1+1.5) = 40%."
+    },
+    "l4-mdf-q8": {
+      "question": "Facing a 200% pot bet, MDF is about?",
+      "options": [
+        "25%",
+        "33%",
+        "40%",
+        "50%"
+      ],
+      "explanation": "MDF = 1/(1+2) ≈ 33%."
+    },
+    "l4-mdf-q9": {
+      "question": "As the bet size grows, the MDF you need?",
+      "options": [
+        "Gets lower",
+        "Gets higher",
+        "Stays the same",
+        "Rises and then falls"
+      ],
+      "explanation": "Bigger bets give you better pot odds, so the required defending frequency falls."
+    },
+    "l4-mdf-q10": {
+      "question": "What is the correct understanding of MDF?",
+      "options": [
+        "A safety net against over-folding rather than a strict rule",
+        "It must be followed to the decimal",
+        "It equals the break-even calling equity",
+        "It applies only preflop"
+      ],
+      "explanation": "MDF is a theoretical limit and safety net; in practice you adjust it to opponent tendencies."
+    },
     "l4-mdf-rc-q1": {
       "question": "In case M1, why can you call with a wider range than MDF?",
       "options": [
@@ -598,6 +1098,86 @@
         "My QQ is too weak"
       ],
       "explanation": "The NIT's river bets are almost all value (AA/KK/JJ/KJ); AF < 1.0 means an extremely low bluff frequency, so the actual value:bluff ratio far exceeds the theoretical."
+    },
+    "l4-mdf-rc-q3": {
+      "question": "In Case M1, what is the alpha threshold for a 50% pot bet?",
+      "options": [
+        "25%",
+        "33%",
+        "40%",
+        "50%"
+      ],
+      "explanation": "Alpha = b/(P+b) = 0.5/1.5 ≈ 33%."
+    },
+    "l4-mdf-rc-q4": {
+      "question": "In Case M1, what is the EV of calling with A-T? Villain bluffs 65%, you win 9BB when right and lose 3BB when wrong.",
+      "options": [
+        "+2.0BB",
+        "+3.5BB",
+        "+4.8BB",
+        "+6.5BB"
+      ],
+      "explanation": "0.65×9 - 0.35×3 = 5.85 - 1.05 = +4.8BB."
+    },
+    "l4-mdf-rc-q5": {
+      "question": "In Case M2, facing a 40BB shove into a 50BB pot, MDF is about?",
+      "options": [
+        "44%",
+        "50%",
+        "56%",
+        "64%"
+      ],
+      "explanation": "MDF = P/(P+b) = 50/90 ≈ 56%."
+    },
+    "l4-mdf-rc-q6": {
+      "question": "In Case M1, what justifies calling the maniac with A-T?",
+      "options": [
+        "A-T beats their entire bluffing range",
+        "A-T is the nuts",
+        "Position is better",
+        "The pot odds are insufficient"
+      ],
+      "explanation": "Villain bluffs 65% of the time, far above the 33% alpha threshold, so top pair beats all of their bluffs."
+    },
+    "l4-mdf-rc-q7": {
+      "question": "Why should you fold in practice when MDF suggests calling?",
+      "options": [
+        "MDF assumes roughly balanced value and bluffs, while the nit is heavily value-weighted",
+        "The MDF formula is wrong",
+        "MDF only applies on the flop",
+        "Villain has a deeper stack"
+      ],
+      "explanation": "MDF presupposes a balanced range; a nit's river bets are almost all value, so the real value-to-bluff ratio is far above the theoretical one."
+    },
+    "l4-mdf-rc-q8": {
+      "question": "What are the two directions for deviating from MDF based on opponent information?",
+      "options": [
+        "Defend wider against heavy bluffs and tighter against super-tight players",
+        "Always defend wider",
+        "Always defend tighter",
+        "Opponent type is irrelevant"
+      ],
+      "explanation": "If villain bluffs too much you widen your continuing range; if they never bluff you tighten. The direction follows their tendency."
+    },
+    "l4-mdf-rc-q9": {
+      "question": "In Case M2, which value combos does QQ lose to from the nit?",
+      "options": [
+        "AA, KK, JJ and KJ",
+        "Only AA",
+        "Only bluffs",
+        "Every flush"
+      ],
+      "explanation": "On J-7-3-2-K the nit's shoving range is concentrated in AA, KK, JJ and KJ, all of which beat QQ."
+    },
+    "l4-mdf-rc-q10": {
+      "question": "In Case M2, what is the break-even equity of calling 40BB into a 50BB pot?",
+      "options": [
+        "30.8%",
+        "40%",
+        "56%",
+        "44.4%"
+      ],
+      "explanation": "40 ÷ (50 + 40 + 40) = 40/130 ≈ 30.8%; 56% is MDF, not the calling threshold."
     },
     "l4-overbet-q1": {
       "question": "What is the core precondition of an overbet?",
@@ -647,6 +1227,56 @@
         "Dry flop board"
       ],
       "explanation": "Don't overbet a Calling Station — they call with a very wide range, making your bluff parts -EV."
+    },
+    "l4-overbet-q6": {
+      "question": "The pot is 10BB and villain overbets 15BB. What break-even equity does your call need?",
+      "options": [
+        "30%",
+        "37.5%",
+        "40%",
+        "60%"
+      ],
+      "explanation": "15 ÷ (10 + 15 + 15) = 37.5%; MDF is 10/25 = 40% and alpha is 60%."
+    },
+    "l4-overbet-q7": {
+      "question": "What value-to-bluff ratio is ideal for a 150% pot overbet?",
+      "options": [
+        "1:1",
+        "3:2",
+        "5:3",
+        "3:1"
+      ],
+      "explanation": "Against a 150% pot bet MDF is 40%, so bluffs make up 37.5% and value-to-bluff is about 5:3."
+    },
+    "l4-overbet-q8": {
+      "question": "Which of the following is not a typical overbet scenario?",
+      "options": [
+        "You have the nuts advantage on this board",
+        "A polarized river range",
+        "Villain's range is capped",
+        "The board is extremely wet and you have no nuts advantage"
+      ],
+      "explanation": "Without a nuts advantage an overbet only gets continued against by stronger ranges, a classic misuse."
+    },
+    "l4-overbet-q9": {
+      "question": "Medium-strength hands such as top pair with a weak kicker should, on the river?",
+      "options": [
+        "Overbet for pressure",
+        "Bet a normal size or check",
+        "Always shove",
+        "Always bluff"
+      ],
+      "explanation": "The overbet range is polarized: medium hands are neither nuts nor bluffs, so use a normal size or check."
+    },
+    "l4-overbet-q10": {
+      "question": "What is the defensive principle against an overbet?",
+      "options": [
+        "Continue with only a few hands that beat villain's bluffs",
+        "Continue with your whole range",
+        "Always fold",
+        "Always shove"
+      ],
+      "explanation": "Against an overbet you only need a few continuations, but they must beat villain's bluffing portion."
     },
     "l4-rc-q1": {
       "question": "Which spot best suits a polarized range?",
@@ -698,6 +1328,56 @@
       ],
       "explanation": "Building a range requires considering board structure, opponent tendencies, and position."
     },
+    "l4-rc-q6": {
+      "question": "What characterizes a merged, linear range?",
+      "options": [
+        "A continuum from strong to medium without pure air",
+        "Only the nuts and air",
+        "Only medium hands",
+        "Only bluffs"
+      ],
+      "explanation": "A merged range runs continuously from the top down and uses no pure air."
+    },
+    "l4-rc-q7": {
+      "question": "A small bet of 25-33% pot corresponds to which range shape?",
+      "options": [
+        "Merged, wide",
+        "Polarized",
+        "Indifferent to range shape",
+        "Only bluffs"
+      ],
+      "explanation": "A small size supports a wide range containing plenty of medium hands, which is a merged range."
+    },
+    "l4-rc-q8": {
+      "question": "A large river bet of 100% pot or more corresponds to which range shape?",
+      "options": [
+        "Polarized",
+        "Merged",
+        "Uniform",
+        "Only medium hands"
+      ],
+      "explanation": "Large sizes keep only the nuts and blocker bluffs, a polarized range."
+    },
+    "l4-rc-q9": {
+      "question": "Out of position, the range shape tends toward?",
+      "options": [
+        "More polarized",
+        "More merged",
+        "Unchanged",
+        "Only medium hands"
+      ],
+      "explanation": "Without positional information you need either stronger hands or pure bluffs, so the range polarizes."
+    },
+    "l4-rc-q10": {
+      "question": "Why do polarized ranges use larger bet sizes?",
+      "options": [
+        "Villain needs more equity to call, giving bluffs enough fold equity",
+        "To make calling easier for villain",
+        "To save chips",
+        "Because the rules require it"
+      ],
+      "explanation": "The larger the bet, the more equity villain needs to call, which is what lets bluffs in a polarized range profit."
+    },
     "l4-bc-q1": {
       "question": "Opponent bets 1/2 pot on the river. What is the minimum equity your call needs?",
       "options": [
@@ -727,6 +1407,76 @@
         "Always Raise"
       ],
       "explanation": "Nits bluff extremely rarely — a big river bet is usually value. Tighten your bluff-catching range and only call with very strong hands."
+    },
+    "l4-bc-q4": {
+      "question": "Villain bets 2/3 pot. What break-even equity does your call need?",
+      "options": [
+        "25%",
+        "28.6%",
+        "33%",
+        "40%"
+      ],
+      "explanation": "0.667 ÷ (1 + 1.333) ≈ 28.6%, using b/(P+2b)."
+    },
+    "l4-bc-q5": {
+      "question": "What does alpha, computed as b/(P+b), answer?",
+      "options": [
+        "The attacker's break-even fold rate for a pure bluff",
+        "The caller's break-even equity",
+        "The defender's minimum continuing frequency",
+        "The value share of a bet"
+      ],
+      "explanation": "Alpha is the attacker's metric: how often a bluff needs to fold villain out. It is not used for calling decisions."
+    },
+    "l4-bc-q6": {
+      "question": "A LAG barrels three streets with a bluff frequency around 50-60%. Against a pot-size bet requiring 33%, what should you do with 99?",
+      "options": [
+        "Call, since the bluff frequency exceeds the 33% threshold",
+        "Fold",
+        "Raise",
+        "Shove"
+      ],
+      "explanation": "99 is a classic bluff catcher and 50-60% far exceeds 33%, so calling is +EV."
+    },
+    "l4-bc-q7": {
+      "question": "When you hold a card that blocks villain's bluffing range, the case for calling?",
+      "options": [
+        "Gets weaker",
+        "Gets stronger",
+        "Is unaffected",
+        "Becomes a mandatory raise"
+      ],
+      "explanation": "Blocking bluff combos increases the value share of villain's range and weakens the case for calling."
+    },
+    "l4-bc-q8": {
+      "question": "Which of the following signals over-bluffing?",
+      "options": [
+        "A river bet frequency above 40%",
+        "A C-Bet frequency below 30%",
+        "Never raising",
+        "Always showing the nuts"
+      ],
+      "explanation": "A river betting frequency above 40%, or a C-Bet frequency above 70%, signals over-bluffing."
+    },
+    "l4-bc-q9": {
+      "question": "What is the right way to exploit an over-bluffing opponent?",
+      "options": [
+        "Widen your calling range and avoid raising medium hands",
+        "Call less",
+        "Only call with the nuts",
+        "Fold until they stop"
+      ],
+      "explanation": "Letting them keep bluffing is worth more, so widen the calling range and avoid raising medium hands."
+    },
+    "l4-bc-q10": {
+      "question": "Villain bets the full pot. What break-even equity does your call need?",
+      "options": [
+        "25%",
+        "33%",
+        "40%",
+        "50%"
+      ],
+      "explanation": "1 ÷ (1 + 1 + 1) ≈ 33%, your call divided by the pot after calling."
     }
   },
   "lessonExample": {

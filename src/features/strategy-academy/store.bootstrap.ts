@@ -6,6 +6,8 @@
  */
 import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
+import type { AcademyLessonAttemptSnapshot } from '@/shared/types/academyDataSource';
+import type { LessonAttemptRecord } from './types';
 import { useAcademyStore } from './store';
 import { useProgressStore } from '@/features/progress/store';
 import {
@@ -24,6 +26,28 @@ registerAchievementSource({
 
 // 学院课程数据源（P3 依赖倒置）：progress 的每日训练计划 / 进步回放经注册表查询，
 // 消除 progress → strategy-academy 的直接 import（每日训练计划的「下一课」逻辑回迁本模块）。
+let cachedAttemptsSource: Record<string, LessonAttemptRecord> | undefined;
+let cachedAttemptsSnapshot: Record<string, AcademyLessonAttemptSnapshot> = {};
+
+/** lessonAttempts → 进步回放快照；按源对象引用缓存，保证 useSyncExternalStore 快照稳定。 */
+function getLessonAttemptsSnapshot(): Record<string, AcademyLessonAttemptSnapshot> {
+  const attempts = useAcademyStore.getState().lessonAttempts;
+  if (attempts !== cachedAttemptsSource) {
+    cachedAttemptsSource = attempts;
+    cachedAttemptsSnapshot = Object.fromEntries(
+      Object.entries(attempts).map(([lessonId, record]) => [
+        lessonId,
+        {
+          firstScore: record.firstScore,
+          lastScore: record.lastScore,
+          attempts: record.attempts,
+        },
+      ]),
+    );
+  }
+  return cachedAttemptsSnapshot;
+}
+
 registerAcademyDataSource({
   findNextLesson: (completedLessons) => {
     for (const level of getLevelSummaries()) {
@@ -40,17 +64,19 @@ registerAcademyDataSource({
     return lesson ? { id: lesson.id, title: lesson.title, level: lesson.level } : undefined;
   },
   getAcademyProgressSnapshot: () => useAcademyStore.getState().progress,
-  getFirstAttemptScoresSnapshot: () => useAcademyStore.getState().firstAttemptScores,
-  getLastAttemptScoresSnapshot: () => useAcademyStore.getState().lastAttemptScores,
+  getLessonAttemptsSnapshot,
   subscribe: (listener) => useAcademyStore.subscribe(listener),
 });
 
-// P1-2.3: 启动时从本模块 abilityAssessment 同步初始 ELO。
-// 仅当 elo.gamesPlayed === 0 时生效（syncEloFromAcademyAbility 内部判定，
-// 避免覆盖已累积的答题进度）。延迟到宏任务执行，规避模块加载顺序问题。
+/**
+ * P0：初始 ELO 种子改由 progress 的 onboarding.initialAbility（新手定位问项）投射。
+ * emotionalControl 无 onboarding 对应问项，固定 50；仅 standard.gamesPlayed === 0 时写入。
+ * 延迟到宏任务执行，规避模块加载顺序问题。
+ */
 if (typeof window !== 'undefined') {
   setTimeout(() => {
-    const aa = useAcademyStore.getState().abilityAssessment;
-    useProgressStore.getState().syncEloFromAcademyAbility(aa);
+    useProgressStore
+      .getState()
+      .seedEloFromOnboardingAbility(useProgressStore.getState().onboarding.initialAbility);
   }, 0);
 }

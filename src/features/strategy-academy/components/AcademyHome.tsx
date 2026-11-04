@@ -1,6 +1,6 @@
-import type { CSSProperties } from 'react';
+import { useMemo, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Route, GraduationCap, Network, ChevronRight } from 'lucide-react';
+import { Zap, Route, GraduationCap, Network, Search, BookOpen, Bookmark, Library, Compass, ClipboardCheck, ChevronRight } from 'lucide-react';
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -14,10 +14,14 @@ import {
 import { AcademyResume } from './AcademyResume';
 import { LevelLadder, findActiveLevelId } from './LevelLadder';
 import { DailyPlanCard } from './DailyPlanCard';
+import { StrategyMasteryCard } from './StrategyMasteryCard';
+import { TheoryBridgeCard } from './TheoryBridgeCard';
+import { getLessonMeta } from '../data/lessonMeta';
 import { VariantToggle } from '@/shared/components/VariantToggle';
 
 export default function AcademyHome() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { progress, getTotalProgress, basicsProgress } = useAcademy();
   const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
   const isCertified = useAcademyStore((s) => s.isCertified);
@@ -36,10 +40,22 @@ export default function AcademyHome() {
 
   const activeLevelId = findActiveLevelId(ladderLevels, progress.completedLessons, isLevelEntryUnlocked);
   const activeLevel = ladderLevels.find((l) => (l.id ?? String(l.level)) === activeLevelId) ?? null;
+  const completedLevels = ladderLevels.filter((level) =>
+    level.lessons.every((lesson) => progress.completedLessons.includes(lesson.id))
+  );
+  // 检查点入口（仅标准变体）：优先最近完成的一级（随时可自查），否则指向当前学习中的一级（页面给锁定进度）
+  const checkpointLevel = activeVariant === 'standard'
+    ? completedLevels.at(-1) ?? activeLevel ?? null
+    : null;
+  const theoryAnchors = useMemo(() => {
+    if (activeVariant !== 'standard' || !activeLevel) return [];
+    const anchors = activeLevel.lessons.flatMap(
+      (lesson) => getLessonMeta(lesson.id).theoryAnchors,
+    );
+    return [...new Set(anchors)].slice(0, 3);
+  }, [activeVariant, activeLevel]);
 
-  const levelsDoneCount = ladderLevels.filter((level) =>
-    level.lessons.every((l) => progress.completedLessons.includes(l.id))
-  ).length;
+  const levelsDoneCount = completedLevels.length;
   const certifiedCount = ladderLevels.reduce(
     (n, level) => (isCertified(level.level) ? n + 1 : n),
     0
@@ -109,6 +125,13 @@ export default function AcademyHome() {
 
           <aside className="space-y-4 lg:sticky lg:top-2">
             <DailyPlanCard />
+            <StrategyMasteryCard />
+            <TheoryBridgeCard anchors={theoryAnchors} onNavigate={(route) => navigate(route)} />
+            {/* 检查点与认证同口径：只对标准变体开放（变体评测本批 de-scope） */}
+            <LevelCheckpointCard
+              level={checkpointLevel?.level ?? null}
+              levelDone={!!checkpointLevel && completedLevels.includes(checkpointLevel)}
+            />
             <ToolsGrid basicsCompleted={basicsProgress.completed} />
           </aside>
         </div>
@@ -188,6 +211,41 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
       to: '/academy/concept-graph',
       accent: 'var(--poker-info)',
     },
+    {
+      icon: <Search className="w-4 h-4" />,
+      title: t('academy.tools.search'),
+      desc: t('academy.tools.searchDesc'),
+      to: '/academy/search',
+      accent: 'var(--brass)',
+    },
+    {
+      icon: <BookOpen className="w-4 h-4" />,
+      title: t('academy.tools.glossary'),
+      desc: t('academy.tools.glossaryDesc'),
+      to: '/theory/glossary',
+      accent: 'var(--poker-info)',
+    },
+    {
+      icon: <Compass className="w-4 h-4" />,
+      title: t('academy.tools.placement'),
+      desc: t('academy.tools.placementDesc'),
+      to: '/academy/placement',
+      accent: 'var(--brass)',
+    },
+    {
+      icon: <Bookmark className="w-4 h-4" />,
+      title: t('academy.tools.bookmarks'),
+      desc: t('academy.tools.bookmarksDesc'),
+      to: '/academy/bookmarks',
+      accent: 'var(--brass-bright)',
+    },
+    {
+      icon: <Library className="w-4 h-4" />,
+      title: t('academy.tools.bibliography'),
+      desc: t('academy.tools.bibliographyDesc'),
+      to: '/academy/bibliography',
+      accent: 'var(--poker-info)',
+    },
   ];
 
   return (
@@ -227,3 +285,41 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
     </motion.section>
   );
 }
+
+
+/**
+ * 级别检查点入口（形成性自查）：仅展示与导航，不发证、不解锁、不写任何状态。
+ * 本级核心课未全部完成时保留入口但换成锁定提示（实际门禁在 LevelCheckpointPage）。
+ */
+function LevelCheckpointCard({ level, levelDone }: { level: number | null; levelDone: boolean }) {
+  const { t } = useTranslation();
+
+  if (level === null) return null;
+
+  return (
+    <section aria-label={t('academy.checkpointHome.title')}>
+      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+        {t('academy.checkpointHome.title')}
+      </h2>
+      <Link
+        to={`/academy/checkpoint/${level}`}
+        className="academy-tool-tile w-full"
+        style={{ '--tool-accent': 'var(--poker-info)' } as CSSProperties}
+      >
+        <span className="academy-tool-icon" aria-hidden="true">
+          <ClipboardCheck className="w-4 h-4" />
+        </span>
+        <span className="min-w-0">
+          <span className="block text-xs font-semibold text-[var(--ivory)] truncate">
+            {t('academy.checkpointHome.entry', { level })}
+          </span>
+          <span className="block text-[10px] text-[var(--ivory-muted)] truncate">
+            {levelDone ? t('academy.checkpointHome.desc') : t('academy.checkpointHome.lockedDesc')}
+          </span>
+        </span>
+        <ChevronRight className="w-3 h-3 text-[var(--ivory-muted)] shrink-0 ml-auto" />
+      </Link>
+    </section>
+  );
+}
+

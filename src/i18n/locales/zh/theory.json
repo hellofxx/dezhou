@@ -335,6 +335,7 @@
     "passing": "通过",
     "needsReview": "待复习",
     "untested": "未测",
+    "total": "合计",
     "reviewWeakest": "复习最弱一章",
     "continue": "继续学习",
     "empty": "还没有小测成绩，先读完一章并完成章末小测"
@@ -667,6 +668,7 @@
     "srsHint": "答错的题已加入间隔复习队列",
     "retry": "再检查一次",
     "noCertificate": "检查点是自查工具：不发证书，也不解锁下一级",
+    "certificationCta": "用认证检验实战",
     "notReady": "本级暂无检查点题库，先用章节小测自查",
     "dimension": {
       "preflop": "翻前",

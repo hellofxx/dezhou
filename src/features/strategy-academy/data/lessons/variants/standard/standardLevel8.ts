@@ -34,13 +34,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
             content: '反直觉点：剥削幅度越大，自己越容易被反剥削。当你大幅偏离 GTO 基线去剥削对手时，你自身的策略会出现明显漏洞，有经验的对手可以反过来利用你。这就是为什么剥削调整应该是"最小必要偏离"——在获取利润的同时保持转身空间。',
           },
         ],
-        quiz: [
-          { id: 'l8-pool-q1', question: '微额玩家池最常见的倾向是？', options: ['Bluff太多', '跟注太多/不够激进', '打得太紧', '加注太多'], correctIndex: 1, explanation: '微额玩家通常跟注太多、不够激进，针对他们应增加价值下注、减少 bluff。' },
-          { id: 'l8-pool-q2', question: '剥削的核心原则是？', options: ['总是 GTO', '向对手偏差的相反方向调整', '只诈唬', '只价值下注'], correctIndex: 1, explanation: '剥削的核心是找到对手偏离 GTO 的方向，然后向相反方向调整。' },
-        
-          { id: 'l8-pool-q3', question: '低额（NL25-NL50）玩家的典型弱点是？', options: ['打得太紧', '翻前合理但翻后弱', '全是职业选手', '没有弱点'], correctIndex: 1, explanation: '低额玩家翻前开始合理但翻后弱，应多C-Bet、多double barrel。' },
-          { id: 'l8-pool-q4', question: '面对跟注太多的玩家应该？', options: ['多bluff', '纯价值下注，减少bluff', '打GTO', '弃牌'], correctIndex: 1, explanation: '对手跟注太多就增加价值下注、减少bluff。' },
-          { id: 'l8-pool-q5', question: '面对弃牌太多的玩家应该？', options: ['纯价值下注', '增加bluff频率', '打GTO', '弃牌'], correctIndex: 1, explanation: '对手弃牌太多就增加bluff频率。' },],
+        quiz: [],
         practice: {
           id: 'l8-pool-practice',
           questions: [
@@ -72,13 +66,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
           { type: 'text', content: '如果 Pool 平均 Fold to C-Bet = 65%（远高于GTO的 45%）：\n→ 你应该 C-Bet 更频繁（甚至 100% 在干燥牌面）\n\n如果 Pool 平均 Fold to 3-bet = 70%：\n→ 你可以大幅增加 3-bet bluff 范围\n\n如果 Pool 平均 WTSD = 28%（较高）：\n→ 减少多街 bluff，增加价值下注' },
           { type: 'pro-tip', content: '用 Population 数据作为“默认假设”，然后随着对特定对手的了解加深，逐渐转向个体化剥削。' },
         ],
-        quiz: [
-          { id: 'l8-pop-q1', question: '如果 Pool 平均 Fold to C-Bet = 65%，你应该？', options: ['减少 C-Bet', '大幅增加 C-Bet 频率', '保持 GTO 频率', '只用强牌 C-Bet'], correctIndex: 1, explanation: 'Pool 弃牌率远高于 GTO，意味着你的 C-Bet bluff 很赚钱，应增加频率。' },
-          { id: 'l8-pop-q2', question: 'Population Analysis 的核心是？', options: ['分析单个对手', '分析整个玩家池的平均倾向', '只看自己的数据', '计算EV'], correctIndex: 1, explanation: 'Population Analysis 分析特定级别整个玩家群体的平均倾向。' },
-        
-          { id: 'l8-pop-q3', question: '如果Pool平均Fold to 3-bet = 70%，你应该？', options: ['减少3-bet', '大幅增加3-bet bluff', '保持GTO', '只value 3-bet'], correctIndex: 1, explanation: 'Pool弃牌率70%给3-bet，大幅增加bluff范围。' },
-          { id: 'l8-pop-q4', question: 'WTSD%高说明什么？', options: ['对手经常弃牌', '对手跟注到摊牌', '对手bluff多', '对手打得紧'], correctIndex: 1, explanation: 'WTSD%高说明对手跟注到摊牌，多街bluff效果差。' },
-          { id: 'l8-pop-q5', question: 'Population数据应该作为什么使用？', options: ['最终决策', '默认假设', '不需要', '唯一参考'], correctIndex: 1, explanation: 'Population数据作为"默认假设"，随了解加深转向个体化剥削。' },],
+        quiz: [],
         practice: {
           id: 'l8-pop-practice',
           questions: [
@@ -126,13 +114,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
             content: '反直觉点：GTO 基线 + 剥削偏离 = 最优混合策略。这不是在 GTO 和剥削之间二选一，而是"以 GTO 为基础，在发现对手弱点时做最小必要偏离"。偏离幅度不是越大越好，而是在"对手修正后仍不亏"的范围内操作。',
           },
         ],
-        quiz: [
-          { id: 'l8-exploit-q1', question: '何时应使用 GTO 而非剥削？', options: ['对手很弱时', '对手未知或很强时', '总是用 GTO', '总是剥削'], correctIndex: 1, explanation: '对手未知时用 GTO 保护自己；对手很强时剥削空间小，也应用 GTO。' },
-          { id: 'l8-exploit-q2', question: '面对 Calling Station 应该怎么打？', options: ['纯价值下注，不 bluff', '多 bluff', '打得更紧', 'GTO 不变'], correctIndex: 0, explanation: 'Calling Station 不弃牌，所以 bluff 无效。应该纯粹价值下注让他们用弱牌跟注。' },
-          { id: 'l8-exploit-q3', question: '剥削策略的主要风险是？', options: ['太多赢钱', '如果对手发现并调整，你反而会输', '没有风险', 'Rake太高'], correctIndex: 1, explanation: '剥削策略是不平衡的，如果对手识破并反剥削，你会亏损。' },
-        
-          { id: 'l8-exploit-q4', question: '面对Nit应该？', options: ['多bluff', '疯狂偷盲注，他加注时弃牌', '和他对打', '用GTO'], correctIndex: 1, explanation: 'Nit太紧，应该偷他盲注，他加注时立即弃牌（他有强牌）。' },
-          { id: 'l8-exploit-q5', question: '最好的策略组合是？', options: ['纯GTO', '纯剥削', 'GTO 为基线，按对手漏洞小幅偏离', '50/50'], correctIndex: 2, explanation: '以 GTO 为默认基线保护自己，只在样本足够且方向明确的漏洞上做小幅偏离；偏离幅度按「可观测偏差 × (1 - 对手调整概率)」递减。' },],
+        quiz: [],
         practice: {
           id: 'l8-exploit-practice',
           questions: [

@@ -55,25 +55,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             content: '反直觉点：范围分析不是猜牌，而是集合运算。你永远无法确定对手的具体手牌，但你可以通过每个动作不断缩小对手可能持有的牌型集合——到河牌时，一个逻辑一致的玩家的范围已经被压缩得非常具体。',
           },
         ],
-        quiz: [
-          {
-            id: 'l4-range-q1',
-            question: '范围思维的核心是什么？',
-            options: ['猜对手的具体牌', '思考对手可能持有的所有牌的集合', '只看自己的牌', '记住所有牌'],
-            correctIndex: 1,
-            explanation: '范围思维是思考对手可能持有的所有手牌的集合，而非猜测具体某手牌。',
-          },
-          {
-            id: 'l4-range-q2',
-            question: '对手翻后 Check-Raise 通常表示什么？',
-            options: ['弱牌', '中等牌力', '强牌或强听牌', '随机行为'],
-            correctIndex: 2,
-            explanation: 'Check-Raise 通常表示强牌（两对以上）或强听牌（组合听牌），因为这是一种展示力量的行动。',
-          },
-        
-          { id: 'l4-range-q3', question: '范围缩减是指什么？', options: ['对手弃牌', '随着每个行动对手可能的牌集合变小', '自己的牌变少', '底池变小'], correctIndex: 1, explanation: '范围缩减是随着每个行动，对手可能持有的牌集合逐渐变小。' },
-          { id: 'l4-range-q4', question: 'UTG open后翻牌A-9-4，UTG的范围包含什么？', options: ['只有小牌', '很多Ax强牌', '只有同花', '随机牌'], correctIndex: 1, explanation: 'UTG开牌范围本身就偏强，A-9-4面命中了很多Ax组合。' },
-          { id: 'l4-range-q5', question: 'BTN开牌范围比UTG更宽还是更窄？', options: ['更窄', '一样宽', '更宽', '不确定'], correctIndex: 2, explanation: 'BTN有位置优势，是 6 人桌开池最宽的位置；UTG 只开最强的一小撮牌，两者宽度差距很大。' },],
+        quiz: [],
         examples: [
           {
             id: 'l4-range-ex1',
@@ -278,25 +260,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             content: '反直觉点：沉没成本谬误——已经投入底池的筹码是死钱，不再属于你。"这手牌我已经投了 100，不跟就浪费"是错误推理。EV 只看未来分支：跟注 EV 与弃牌 EV（=0）的比较，与过去投入无关。',
           },
         ],
-        quiz: [
-          {
-            id: 'l4-ev-q1',
-            question: '底池$100，对手下注$50，你需要多少胜率才能盈利跟注？',
-            options: ['20%', '25%', '33%', '50%'],
-            correctIndex: 1,
-            explanation: '你需要至少25%的胜率（$50/$200 = 25%），这就是底池赔率。超过25%就是+EV。',
-          },
-          {
-            id: 'l4-ev-q2',
-            question: '一个+EV决策输了，说明什么？',
-            options: ['决策是错的', '运气不好，决策本身是正确的', '应该换策略', 'EV计算有误'],
-            correctIndex: 1,
-            explanation: '+EV只保证长期盈利，单次结果可能因方差（运气）而输。关注决策质量而非单次结果。',
-          },
-        
-          { id: 'l4-ev-q3', question: 'EV是什么的缩写？', options: ['Extra Value', 'Expected Value', 'Equal Value', 'Easy Victory'], correctIndex: 1, explanation: 'EV = Expected Value（期望值），表示一个决策在长期平均下的收益。' },
-          { id: 'l4-ev-q4', question: '+EV决策意味着什么？', options: ['一定赢', '长期平均盈利', '短期盈利', '没有风险'], correctIndex: 1, explanation: '+EV决策不保证每次赢，但长期平均来看是盈利的。' },
-          { id: 'l4-ev-q5', question: '弃牌权益（Fold Equity）是什么？', options: ['对手弃牌时你赢的底池', '你的牌力', '底池赔率', '隐含赔率'], correctIndex: 0, explanation: '弃牌权益 = 对手弃牌概率 × 底池大小。' },],
+        quiz: [],
         examples: [
           {
             id: 'l4-ev-ex1',
@@ -470,22 +434,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
           { type: 'heading', content: 'Case E2: Semi-bluff on Combined Draw' },
           { type: 'example', content: 'Hero T♥J♥ on flop 9♥8♣2♥ vs LAG, Pot 10BB\n\nKeyDecision: C-bet 6BB as semi-bluff\n\nReasoning:\n- Combined draws (~15 outs): flush + OESD\n- Fold equity: LAG folds ~45% to C-bets\n- Showdown equity if called: ~54% by river\n- EV(bet) ≈ +7.7BB vs EV(check) ≈ 5.4BB\n\nKeyLesson: 组合听牌的价值在于 fold equity + showdown equity 双重来源。不要因为牌没成就不敢下注。\nSource: RIO Video Clip #156' },
         ],
-        quiz: [
-          {
-            id: 'l4-ev-rc-q1',
-            question: 'Case E1 中，Hero K♣Q♣面对 TAG River 检查应该？',
-            options: ['Check back', 'Value bet', 'Fold', 'All-in'],
-            correctIndex: 1,
-            explanation: '第二好牌也要下注获取价值。TAG\'s river range is mostly weak Ax after calling two streets.',
-          },
-          {
-            id: 'l4-ev-rc-q2',
-            question: 'Case E2 中，Hero T♥J♥在 floop 有组合听牌应该？',
-            options: ['Check', 'C-bet semi-bluff', 'Fold', 'Raise'],
-            correctIndex: 1,
-            explanation: '组合听牌的价值在于 fold equity + showdown equity 双重来源。EV(bet) ≈ +7.7BB vs EV(check) ≈ 5.4BB。',
-          },
-        ],
+        quiz: [],
         practice: { id: 'l4-ev-real-practice', questions: [] },
         examples: [],
       },
@@ -531,13 +480,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             content: '反直觉点：数据越多的对手越容易被预测。NIT（紧弱型）玩家翻后加注几乎总是两对以上，而 LAG（松凶型）玩家的加注范围中诈唬比例高得多。不是所有对手都适用同样的读牌框架。',
           },
         ],
-        quiz: [
-          { id: 'l4-opp-q1', question: '一个对手 VPIP 12%, PFR 10%，他最可能是？', options: ['LAG', 'TAG', 'Nit', 'Maniac'], correctIndex: 2, explanation: 'VPIP < 15% 且 PFR 接近 VPIP 的玩家是 Nit（超紧）。他只打最顶级的牌。' },
-          { id: 'l4-opp-q2', question: '面对 Calling Station，以下哪个策略正确？', options: ['频繁bluff', '用强牌价值下注', '对他3-bet bluff', '弃牌等他加注'], correctIndex: 1, explanation: 'Calling Station 很少弃牌但也不加注。正确策略是用强牌下注获取价值，永远不要bluff他。' },
-          { id: 'l4-opp-q3', question: '什么时候应该主要使用GTO策略？', options: ['对手数据充足时', '对手未知/水平高时', '任何时候', '从不用'], correctIndex: 1, explanation: 'GTO 最适合对手未知（数据不足）或对手水平高（难以剥削）的场景。有足够数据时应结合剥削策略。' },
-          { id: 'l4-opp-q4', question: '面对 Maniac 的正确策略是？', options: ['经常bluff他', '用中等牌频繁加注', '耐心等待强牌让他送筹码', '每次都弃牌'], correctIndex: 2, explanation: 'Maniac 几乎不弃牌且大量bluff。正确策略是耐心等待强牌，让他自己把筹码送过来。不要对他bluff！' },
-        
-          { id: 'l4-opp-q5', question: 'Calling Station最明显的特征是什么？', options: ['频繁加注', '跟注太多，弃牌太少', '经常弃牌', '总是All-in'], correctIndex: 1, explanation: 'Calling Station的核心特征是跟注太多（VPIP高），弃牌率极低。' },],
+        quiz: [],
         examples: [
           {
             id: 'l4-opp-ex1',
@@ -741,11 +684,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
             content: '反直觉点：持有 K 不减少 AA 的组合数，只减少 AK 的组合数。很多初学者认为"我有一张 K，所以对手拿 AA 的概率降低了"——这是错误的。K 是 A 的 Blocker，只有 A 才能阻断 AA。',
           },
         ],
-        quiz: [
-          { id: 'l4-blockers-q1', question: '你持有一张 A，对手持有 AA 的组合数从多少减少到多少？', options: ['从 6 种减少到 3 种', '从 6 种减少到 1 种', '从 4 种减少到 2 种', '从 16 种减少到 12 种'], correctIndex: 0, explanation: 'AA 的组合数为 C(4,2)=6。你持有 1 张 A 后，剩余 3 张 A，组合数为 C(3,2)=3，减少了 50%。' },
-          { id: 'l4-blockers-q2', question: '为什么 A5s 比 76s 更适合作为 3-bet bluff？', options: ['A5s 牌力更强', 'A blocker 减少对手 AA/AK 的组合', 'A5s 翻后更好打', '76s 没有同花潜力'], correctIndex: 1, explanation: 'A5s 中的 A 阻断了对手最可能继续（call/4-bet）的强牌组合（AA、AK），使对手更可能弃牌，提高了 bluff 的成功率。' },
-          { id: 'l4-blockers-q3', question: '在 hero call 决策中，你持有阻断对手 value 范围的牌意味着？', options: ['应该立即弃牌', '对手更可能有强牌', '对手持有强牌的概率降低，更倾向 call', '没有任何影响'], correctIndex: 2, explanation: '如果你的手牌阻断了对手的 value 范围（如你持有 A 减少了对手 AA/AK 的可能），对手实际持有强牌的概率降低，使得 call 更有利。' },
-        ],
+        quiz: [],
         examples: [
           {
             id: 'l4-blockers-ex1',

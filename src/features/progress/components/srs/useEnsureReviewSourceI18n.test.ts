@@ -8,6 +8,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   collectReviewSourceModules,
+  collectStrategyLessonIds,
   collectTheoryQuestionIds,
 } from './useEnsureReviewSourceI18n';
 import { createReviewItem } from '@/shared/utils/spacedRepetition';
@@ -48,6 +49,35 @@ describe('collectReviewSourceModules', () => {
     const legacy: ReviewItem = createReviewItem('legacy-id', '老知识点', 'strategy');
     expect(collectReviewSourceModules([legacy, itemWithSource('theory')])).toEqual(['theory']);
     expect(collectReviewSourceModules([])).toEqual([]);
+  });
+});
+
+describe('collectStrategyLessonIds', () => {
+  it('从策略题级复习项的 route 提取 lessonId 并去重', () => {
+    const items = [
+      createReviewItem('strategy:l1-basics-q1', 'academy.lessonQuiz.l1-basics-q1.question', 'strategy', {
+        source: 'strategy',
+        route: '/academy/lesson/l1-basics',
+        front: 'academy.lessonQuiz.l1-basics-q1.question',
+        back: 'academy.lessonQuiz.l1-basics-q1.explanation',
+      }),
+      createReviewItem('strategy:l1-basics-q2', 'academy.lessonQuiz.l1-basics-q2.question', 'strategy', {
+        source: 'strategy',
+        route: '/academy/lesson/l1-basics',
+      }),
+    ];
+    expect(collectStrategyLessonIds(items)).toEqual(['l1-basics']);
+  });
+
+  it('无 route / 非策略题 key 不收集', () => {
+    const noRoute = createReviewItem('strategy:q1', 'academy.lessonQuiz.q1.question', 'strategy', {
+      source: 'strategy',
+    });
+    const theoryKey = createReviewItem('strategy:q2', 'theory.quiz.q2.question', 'strategy', {
+      source: 'strategy',
+      route: '/academy/lesson/l1-basics',
+    });
+    expect(collectStrategyLessonIds([noRoute, theoryKey])).toEqual([]);
   });
 });
 

@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
-import { ArrowLeft, Clock, HelpCircle, Zap } from 'lucide-react';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForLesson } from '../hooks/useAcademyLessons';
@@ -18,17 +17,15 @@ import {
 } from '../utils/academyMeta';
 import { LOCAL_TRACK } from '../data/localTrack';
 import { LEARNING_TRACKS } from '../data/learningTracks';
+import { getLessonMeta } from '../data/lessonMeta';
 import { LessonContent } from './LessonContent';
-import { LessonQuiz } from './LessonQuiz';
-import { ProgressBar } from './ProgressBar';
+import { LessonQuiz, type LessonQuizResult } from './LessonQuiz';
+import { CourseHeader } from './CourseHeader';
 import { CourseLockedView } from './CourseLockedView';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import CourseDoneView from './CourseDoneView';
-import {
-  resolveLevelTitle,
-  resolveLessonTitle,
-  resolveLessonSubtitle,
-} from '../utils/titleKeys';
+import { StrategyNotesPanel } from './StrategyNotesPanel';
+import { LessonReviewMeta } from './LessonReviewMeta';
 import type { DrillResult } from './drills/types';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import type { PracticeResult, LearningTrack } from '../types';
@@ -42,6 +39,8 @@ export default function CourseView() {
   const { t } = useTranslation();
   const { startLesson } = useAcademy();
   const recordPracticeScore = useAcademyStore((s) => s.recordPracticeScore);
+  // 首考/重考判定唯一输入（store.lessonAttempts）：attempts + 1 = 本次作答序号
+  const lessonAttemptRecord = useAcademyStore((s) => (lessonId ? s.lessonAttempts[lessonId] : undefined));
   const [phase, setPhase] = useState<Phase>('reading');
   const [quizScore, setQuizScore] = useState(0);
   const [drillResult, setDrillResult] = useState<DrillResult | null>(null);
@@ -61,9 +60,8 @@ export default function CourseView() {
   const progress = lessonId ? getLessonProgressSummary(lessonId) : { percent: 0, current: 0, total: 0 };
   const isDrill = lesson?.type === 'drill';
 
-  // P4 修复（4.1-P1-1）+ 审计 1.1/2.1：按 lesson 所属 LevelInfo 条目判门禁，防止通过 URL 绕过；
-  // 同时消除 l4a/l4b 同为 level:4 导致的 4B 解锁旁路。
-  // 注：local-mental-tilt-recognition 是 DownswingAlert 的目标课程，允许在未解锁时访问
+  // P4 修复（4.1-P1-1）+ 审计 1.1/2.1：按 lesson 所属 LevelInfo 条目判门禁，防止通过 URL 绕过，同时消除
+  // l4a/l4b 同为 level:4 导致的 4B 解锁旁路。注：local-mental-tilt-recognition 是 DownswingAlert 目标课，未解锁也可访问
   const isLevelUnlocked = useAcademyStore((s) => s.isLevelUnlocked);
   const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
   const completedLessons = useAcademyStore((s) => s.progress.completedLessons);
@@ -173,13 +171,12 @@ export default function CourseView() {
     navigate('/academy');
   }, [navigate]);
 
-  // P2-01: 薄封装 — 统一调用 completeCourse 辅助函数
+  // P2-01 + P0 学习闭环：课后测验结果（分数 / 实际题量 / 错题 id）经 completeCourse 落库
   const handleQuizComplete = useCallback(
-    (score: number) => {
-      setQuizScore(score);
-      if (lessonId) {
-        completeCourse({ lessonId, score, mode: 'quiz', lesson });
-      }
+    (result: LessonQuizResult) => {
+      setQuizScore(result.score);
+      if (lessonId) completeCourse({ lessonId, score: result.score, mode: 'quiz', lesson,
+        wrongQuestionIds: result.wrongQuestionIds, correctCount: result.correct, totalQuestions: result.total });
       setPhase('done');
     },
     [lessonId, lesson]
@@ -256,104 +253,16 @@ export default function CourseView() {
       {phase === 'reading' && (
         <div className="reading-progress-bar" style={{ width: `${readingProgress}%` }} />
       )}
-      {/* Header */}
-      <div className="mb-6">
-        <button
-          onClick={() => navigate('/academy')}
-          className="flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
-        </button>
-        {levelEntry ? (
-          <div className="flex items-center gap-3 mb-4">
-            <span className="course-level inline-flex items-center gap-1.5 rounded-full bg-[var(--walnut-raised)] px-3 py-1 text-xs font-medium text-[var(--brass-bright)]">
-              {levelEntry.icon} L{levelEntry.level} · {resolveLevelTitle(t, levelEntry)}
-            </span>
-            <span className="font-numeric text-xs text-[var(--ivory-muted)]">
-              {t('academy.courseView.lessonOf', {
-                defaultValue: '第 {{current}}/{{total}} 课',
-                current: levelEntry.lessons.findIndex((l) => l.id === lesson.id) + 1,
-                total: levelEntry.lessons.length,
-              })}
-            </span>
-            <div className="flex-1">
-              <ProgressBar
-                label={t('academy.courseView.lessonOf', {
-                  defaultValue: '第 {{current}}/{{total}} 课',
-                  current: levelEntry.lessons.findIndex((l) => l.id === lesson.id) + 1,
-                  total: levelEntry.lessons.length,
-                })}
-                value={
-                  levelEntry.lessons.length > 0
-                    ? Math.round(
-                        (levelEntry.lessons.filter(
-                          (l) => completedLessons.includes(l.id) && l.order < (lesson.order ?? 0)
-                        ).length /
-                          levelEntry.lessons.length) *
-                          100
-                      )
-                    : 0
-                }
-                size="sm"
-              />
-            </div>
-          </div>
-        ) : isLocalLesson ? (
-          <div className="flex items-center gap-3 mb-4">
-            <span className="course-level inline-flex items-center gap-1.5 rounded-full bg-[var(--walnut-raised)] px-3 py-1 text-xs font-medium text-[var(--brass-bright)] whitespace-nowrap">
-              {t('academy.courseView.localLessonBadge', { defaultValue: '本土课 · L7 扩展' })}
-            </span>
-            <span className="font-numeric text-xs text-[var(--ivory-muted)]">
-              {lesson.order
-                ? t('academy.courseView.lessonOrder', {
-                    defaultValue: '第 {{order}} 课',
-                    order: lesson.order,
-                  })
-                : ''}
-            </span>
-          </div>
-        ) : (
-          <ProgressBar
-            value={progress.percent}
-            size="sm"
-            className="mb-4"
-            label={t('academy.courseView.lessonOf', {
-              defaultValue: '第 {{current}}/{{total}} 课',
-              current: progress.current,
-              total: progress.total,
-            })}
-          />
-        )}
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h2 className="font-display text-[22px] text-[var(--ivory)] leading-tight">
-              {resolveLessonTitle(t, lesson)}
-            </h2>
-            <p className="text-sm text-[var(--ivory-muted)] mt-1">{resolveLessonSubtitle(t, lesson)}</p>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-[var(--ivory-muted)] shrink-0 pt-1">
-            <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" />
-              {lesson.duration}
-            </span>
-            {isDrill ? (
-              <span className="flex items-center gap-1 text-[var(--brass-bright)]">
-                <Zap className="w-3.5 h-3.5" />
-                Drill
-              </span>
-            ) : (
-              <span className="flex items-center gap-1">
-                <HelpCircle className="w-3.5 h-3.5" />
-                {t('academy.courseView.quizCount', {
-                  defaultValue: '{{count}} 题',
-                  count: lesson.quiz.length,
-                })}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
+      <CourseHeader
+        lesson={lesson}
+        levelEntry={levelEntry}
+        isLocalLesson={isLocalLesson}
+        isDrill={isDrill}
+        progress={progress}
+        completedLessons={completedLessons}
+        onBack={() => navigate('/academy')}
+        toolbarSlot={<LessonReviewMeta lessonId={lesson.id} />}
+      />
 
       {/* Content */}
       <motion.div
@@ -385,15 +294,20 @@ export default function CourseView() {
           </div>
         )}
 
+        {/* 阅读辅助：课时笔记（key 绑定课时 → 换课时草稿重置；不参与门禁与完成判定） */}
+        {phase === 'reading' && (
+          <div className="max-w-3xl mx-auto mt-4">
+            <StrategyNotesPanel key={lesson.id} lessonId={lesson.id} />
+          </div>
+        )}
+
         {phase === 'quiz' && (
           <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
             <h2 className="font-display text-[17px] text-[var(--ivory)] mb-5">
               {t('academy.courseView.quizTitle', { defaultValue: '课后测验' })}
             </h2>
-            <LessonQuiz
-              questions={lesson.quiz}
-              onComplete={handleQuizComplete}
-            />
+            <LessonQuiz lessonId={lesson.id} questions={lesson.quiz} level={lesson.level}
+              attemptNumber={(lessonAttemptRecord?.attempts ?? 0) + 1} isPractice={!!lessonAttemptRecord} onComplete={handleQuizComplete} />
           </div>
         )}
 
@@ -406,6 +320,7 @@ export default function CourseView() {
             relatedTracks={relatedTracks}
             completedLessons={completedLessons}
             hasPractice={!!lesson.practice}
+            theoryAnchors={getLessonMeta(lesson.id).theoryAnchors} onNavigateTheory={(route) => navigate(route)}
             onBack={() => navigate('/academy')}
             onNext={() => {
               setPhase('reading');

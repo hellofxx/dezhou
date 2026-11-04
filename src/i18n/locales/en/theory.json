@@ -335,6 +335,7 @@
     "passing": "Passing",
     "needsReview": "Needs review",
     "untested": "Untested",
+    "total": "Total",
     "reviewWeakest": "Review the weakest chapter",
     "continue": "Keep learning",
     "empty": "No quiz scores yet — read a chapter and finish its quiz"
@@ -667,6 +668,7 @@
     "srsHint": "Missed questions went into your spaced-repetition queue",
     "retry": "Retake the check",
     "noCertificate": "A checkpoint is a self-check: no certificate and no unlock",
+    "certificationCta": "Test it with the certification",
     "notReady": "No checkpoint bank for this level yet — use the chapter quizzes instead",
     "dimension": {
       "preflop": "Preflop",
