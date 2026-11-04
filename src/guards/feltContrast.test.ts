@@ -234,6 +234,20 @@ const SLIP_REANCHOR: Record<string, string> = {
 const LIGHT_TEXT_TOKENS = ['--clay-text', '--danger-text', '--sage-text', '--brass-text'];
 const LIGHT_PAPER_SURFACES = ['--paper', '--paper-raised'];
 
+/** light 房间：羊皮页面/面板上的正文、次级、说明、黄铜与语义文本必须 AA */
+const LIGHT_ROOM_TEXT_TOKENS = [
+  '--ivory',
+  '--ivory-dim',
+  '--ivory-muted',
+  '--clay-text',
+  '--danger-text',
+  '--sage-text',
+  '--brass-text',
+];
+const LIGHT_ROOM_SURFACES = ['--felt-deep', '--felt', '--felt-raised'];
+/** 浅木侧栏/抬升面：导航说明文字同样要 AA */
+const LIGHT_WOOD_SURFACES = ['--walnut', '--walnut-raised'];
+
 describe('felt 对比度：暗底房间色板（:root）', () => {
   it('解析自检：顶层块与 token 数量达到下限', () => {
     expect(BLOCKS.length, 'globals.css 顶层块数量偏低，解析器可能失效').toBeGreaterThanOrEqual(200);
@@ -296,5 +310,23 @@ describe('felt 对比度：light 主题（html[data-theme="light"]）', () => {
         expectContrast(resolveToken(LIGHT_TOKENS, text), background, label);
       });
     }
+  }
+
+  for (const surface of LIGHT_ROOM_SURFACES) {
+    const background = resolveToken(LIGHT_TOKENS, surface);
+    for (const text of LIGHT_ROOM_TEXT_TOKENS) {
+      it(`${text} 于 light ${surface} ≥ ${MIN_CONTRAST}:1`, () => {
+        const label = `${text} 于 light ${surface}`;
+        expectContrast(resolveToken(LIGHT_TOKENS, text), background, label);
+      });
+    }
+  }
+
+  for (const surface of LIGHT_WOOD_SURFACES) {
+    const background = resolveToken(LIGHT_TOKENS, surface);
+    it(`--ivory-muted 于 light ${surface} ≥ ${MIN_CONTRAST}:1`, () => {
+      const label = `--ivory-muted 于 light ${surface}`;
+      expectContrast(resolveToken(LIGHT_TOKENS, '--ivory-muted'), background, label);
+    });
   }
 });

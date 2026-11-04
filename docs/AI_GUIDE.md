@@ -95,7 +95,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 - **色彩**：四层架构（牌桌绿 `--felt-*` / 象牙白 `--ivory-*` / 黄铜金 `--brass-*` / 胡桃木 `--walnut-*`），通过 CSS 变量定义于 `src/styles/globals.css`（色彩 token 实现唯一权威）
 - **字体**：Fraunces（serif 标题）/ Inter Tight（sans 正文）/ JetBrains Mono（mono 数字）
-- **主题**：暗色为默认，禁止硬编码颜色值
+- **主题**：暗色为默认，另支持浅色「白天牌室」（light token / 补丁白名单见 DESIGN.md §2.8）；禁止硬编码颜色值
 - **响应式**：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
 - **可访问性**：遵循 WCAG 2.1 AA，交互元素必须有 `aria-label`，对比度 ≥4.5:1
 - **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/guards/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `DESIGN.md`（以其当前版本为准，不维护版本号副本）

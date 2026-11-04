@@ -1992,11 +1992,14 @@ interface TrainingModule {
 
 1. Google Fonts 字体引入
 2. `@import "tailwindcss"` — Tailwind v4 入口
-3. `:root` — 全局 CSS 变量定义
-4. `@theme inline` — Tailwind v4 主题 token 映射
-5. 全局基础样式（body / scrollbar / selection / focus 等）
+3. `:root` — 暗色默认的全局 CSS 变量定义
+4. `html[data-theme="light"]` — 浅色「白天牌室」原语覆盖（不写组件级 surface 补丁）
+5. `@theme inline` — Tailwind v4 主题 token 映射
+6. 全局基础样式（body / scrollbar / selection / focus 等）
 
 变量命名规范：`--{类别}-{修饰符}`
+
+**双主题语义层（v1.9.0）**：暗色为默认；light 主题只覆盖 `--felt-*` / `--walnut-*` / `--ivory-*` / `--brass-*` / `--poker-*` 原语，并新增 `--room-page` / `--room-surface` / `--room-surface-raised` / `--room-line` / `--room-ink*` / `--room-accent-text` / `--room-hairline`、`--hero-surface-gradient`、`--question-card-gradient`。组件读 semantic 层；绿呢牌桌、牌背、场景卡、HandReplayer 桌面与分享卡属物理物件，保持深色。黄铜 alpha 统一 `color-mix(in srgb, var(--brass) …)`，light 组件补丁 16 条白名单，由 `lightThemeSurfaceGuard.test.ts` 守卫。
 
 | 类别 | 变量 | 色值 | 用途 |
 |------|------|------|------|
@@ -2008,7 +2011,7 @@ interface TrainingModule {
 | | --walnut-border | #4a3825 | 边框色 |
 | Ivory（象牙白） | --ivory | #f3ebd9 | 主文字/牌面 |
 | | --ivory-dim | #cabf9f | 次要文字 |
-| | --ivory-muted | #8a8068 | 弱化文字 |
+| | --ivory-muted | #b0a68c（dark）/ #665b43（light） | 弱化文字 |
 | Brass（黄铜金） | --brass | #c9a25e | 唯一强调色 |
 | | --brass-bright | #e8c97e | 亮金（hover/active） |
 | | --brass-deep | #a07d3d | 暗金（pressed） |
@@ -2089,6 +2092,7 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 | 警告 | text-warning 或 var(--warning) |
 | 信息 | text-info 或 var(--info) |
 | 侧边栏背景 | .walnut-panel 或 var(--walnut) |
+| 浅色主题 | `data-theme="light"` 翻转原语；组件读 semantic token，禁止新增逐组件补丁 |
 
 设计约束：
 - Brass 作镶嵌：1px 发丝线、激活状态、焦点环与一级主 CTA 的金属渐变（§5.5），不做大面积表面填充（§1.5 材质契约）
@@ -2102,6 +2106,8 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 - 侧边栏使用 `.walnut-panel` 类实现木纹质感
 - `.brass-rail` 类提供面板顶部金色发丝线
 - `.felt-ambient` 类提供微妙的呢面环境光
+- 浅色主题：页面/面板/导航由 `--room-*` 与 `--hero-surface-gradient` 自动翻转；绿呢牌桌与牌背保持深色；light 组件补丁只保留 16 条白名单，新增补丁须先登记 DESIGN.md §2.8 与 `lightThemeSurfaceGuard`
+- 标题层级：壳层唯一 h1；内容区视觉标题保留 h2，允许与页名同义/同名，**不做文案去重**（DESIGN.md §5.7 / §10.6 例外，`pageHeadingGuard` 守卫 h1 集合）
 
 ### 14.6 动画规范
 
@@ -2126,10 +2132,15 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 3. **禁止纯黑/纯白 hex 字面量**：`#000`/`#fff` 系
 4. **SVG 例外**：渐变 stop 无法引用 CSS 变量时允许字面值，但必须注释标注对应 token（如 CardBack.tsx / public/cards/back.svg 的胡桃底 stop）
 
-守卫机制分两层，源码与样式实现各由一个测试把守（均随 `pnpm test` 强制执行，豁免白名单遵循「只删不加」，新增豁免须先在 DESIGN.md 登记设计依据）：
+守卫机制分多层，源码、样式实现与主题补丁分别由测试把守（均随 `pnpm test` 强制执行，豁免白名单遵循「只删不加」，新增豁免须先在 DESIGN.md 登记设计依据）：
 
 1. **源码层** `src/guards/designTokenGuard.test.ts`：`import.meta.glob('?raw')` 全量扫描 src 的 `.ts/.tsx`，断言霓虹调色板类、纯黑白类、纯黑白 hex 零匹配。
 2. **样式层** `src/guards/designTokenCssGuard.test.ts`：扫描 `src/styles/*.css` 的 `background` / `background-color` 声明，断言 `rgba(255,255,255,α)` 的 α ≤ 0.05（§5.21 仅授权 hover 中性底色 0.03–0.04）、`rgba(0,0,0,α)` 未达实底、无纯黑白 hex。规则只作用于面填充，故 §4.3 牌面内描金（box-shadow 白高光）与 `@media (prefers-contrast: high)` 里刻意提到 `#ffffff` 的 `--ivory` 自定义属性天然不在射程内。该测试经 `readFileSync` 读文件而非 `import.meta.glob('?raw')`——Vitest 默认 `css: false` 会把 CSS 导入 stub 成空模块。同文件附带 help 段的结构断言（44px 触摸目标、transition 引用动效 token）。
+3. **浅色主题层** `src/guards/lightThemeSurfaceGuard.test.ts`：light 组件级选择器 === 16 条 allowlist；黄铜字面 rgba 清零、黑色字面 rgba ≤ 41 条；`:root` / light 两侧必须定义 `--hero-surface-gradient` / `--question-card-gradient`。
+4. **对比度层** `src/guards/feltContrast.test.ts`：暗色房间、纸张、light 房间（`--felt-deep` / `--felt` / `--felt-raised` / 浅木侧栏）的文本 token ≥ 4.5:1。
+5. **Puzzle tier 层** `src/guards/actionTierPalette.guard.test.ts`：pre-answer 三档必须由 `--tier-*` 驱动且不得引用 success / danger / clay；aggressive 使用 terra；答后反馈才可用 success / danger。
+6. **Emoji 层** `src/guards/emojiWhitelist.guard.test.ts`：组件层 7 文件插画 allowlist；内容层 `features/**/data/**` / `shared/data/**` / `i18n/**` 只允许成就、策略/理论正文与 i18n 既有文案；排版箭头 `↔` 单独豁免。
+7. **标题层级层** `src/guards/pageHeadingGuard.test.ts`：全站 h1 allowlist；内容区视觉标题保留 h2、不做文案去重（v1.9.0 例外）。
 
 ---
 
@@ -2139,6 +2150,7 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 
 - 目标用户是德州扑克玩家，牌桌氛围能增强沉浸感和使用意愿
 - 深色主题减少长时间训练的视觉疲劳
+- 浅色「白天牌室」用于日间/强光环境：页面与面板转为羊皮纸/浅木，绿呢牌桌、牌背与场景卡保持深色物理物件，不是简单反相
 - 绿色背景与扑克牌形成自然对比，提升可读性
 
 ### 15.2 为什么使用 Fraunces 作为标题字体？

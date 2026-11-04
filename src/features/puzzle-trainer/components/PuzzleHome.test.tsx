@@ -86,6 +86,12 @@ describe('PuzzleHome 谜题首页', () => {
   const buttonByText = (needle: string): HTMLButtonElement | undefined =>
     [...container.querySelectorAll('button')].find((btn) => btn.textContent?.trim() === needle);
 
+  it('视觉标题保留 h2，且首页不渲染 h1（全站唯一 h1 归壳层）', () => {
+    render();
+    expect(container.querySelector('h2.puzzle-hero-title')).not.toBeNull();
+    expect(container.querySelector('h1')).toBeNull();
+  });
+
   it('渲染三大模式入口、Hero 与按类别分组的全部主题', () => {
     render();
     expect(text()).toContain('限时冲刺');

@@ -146,6 +146,10 @@ describe('Dashboard 新手收敛与训练场', () => {
     // 首访引导让位：排在快速训练之后，不再插在 Hero 与连续天数之间
     expect(quickDrill).toBeGreaterThan(streak);
     expect(banner).toBeGreaterThan(quickDrill);
+
+    // 内容区欢迎语保留 h2；页面组件不渲染 h1（全站唯一 h1 归壳层）
+    expect(container.querySelector('.felt-arena h2')).not.toBeNull();
+    expect(container.querySelector('h1')).toBeNull();
   });
 });
 

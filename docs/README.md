@@ -20,6 +20,7 @@
 ## Architecture
 
 - [`architecture/`](./architecture/) — 模块边界评审、依赖图（dot）与架构证据材料
+- [`architecture/ui-ux-phase2-plan.md`](./architecture/ui-ux-phase2-plan.md) — 第二阶段纯前端 UI/UX 修复计划与执行结果
 
 ## Ops
 

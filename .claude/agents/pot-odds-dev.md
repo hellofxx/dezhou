@@ -95,7 +95,7 @@ additionalPrompt: ""
 - 数值精度要求使用定点数或 decimal.js（避免浮点误差）
 - 答题后必须同步更新 ELO（math 维度）、SRS 复习项、情绪计数器三处
 - 修改 `shared/utils/pokerMath.ts` 核心公式时必须通过 platform-dev 协调（影响所有模块）
-- Recharts 图表必须支持暗色主题（无硬编码色值，使用 CSS 变量或主题 token）
+- Recharts 图表必须支持暗色与浅色双主题（无硬编码色值，使用 CSS 变量或主题 token）
 - 末题简单 + 补救机制（getEasyOddsQuestion，`rescueUsed` 仅一次）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节）**：测验选项禁止按题库数据原序直接渲染，必须经 `orderQuizOptions` 处理（数值选项升序、文字选项按 `hash(题目id)` 种子洗牌）；getEasyOddsQuestion 补救题同样处理；源题库数据不手改重排；新增题目必须被 quizOrder.test.ts 分布与内容平衡守卫覆盖
 
@@ -129,7 +129,7 @@ interface ReviewRequest {
 - [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `odds.*`）
 - [ ] 答题后已调用 ELO（math）+ SRS + Emotion + Streak 四处
 - [ ] session 完成时已 trainingEvents.emit（module: 'pot-odds'）
-- [ ] Recharts 图表渲染正确（暗色主题适配）
+- [ ] Recharts 图表渲染正确（暗/浅双主题适配）
 - [ ] 滑块与按钮快捷输入联动正确（PotSizeInput）
 - [ ] PotOddsQuizPage 接入五级反馈（非二态正确/错误）
 - [ ] 答错反馈携带 relatedLessonId，"去复习"链接可跳转

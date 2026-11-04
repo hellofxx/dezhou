@@ -1,8 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.8.0
+> 德州扑克训练平台 UI/UX 设计规范 v1.9.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.9.0 更新：新增浅色主题「白天牌室」token 架构（§2.8）、Hero 高度契约（§6.6）、Puzzle ActionTier 语义与防答案暗示（§5.5）、内容区 h2 保留例外（§5.7/§10.6）、Emoji 内容白名单扫描面（§7）
 > v1.8.0 更新：确立材质契约（§1.5 房间/画布/纸条/镶嵌）与纸张色板（§2.6）；新增发牌员纸条 `.dealer-slip`（§5.23）；修订按钮金属族（§5.5）、顶栏胡桃梁与壳层 h1/导航序号（§5.7）、进度条（§5.11）、移动触摸目标与 Z 轴（§6.3/§6.4）、SVG token 锚定（§12.1）、移动端反馈 Sheet 纸张化（§13.7.2）
 > v1.7.0 更新：新增 §13 教育学习设计规范 — 学习进度可视化、课程内容排版增强、反馈教育脚手架、模块教育目的视觉区分、渐进式信息披露、移动端教育体验、教育场景动效
 > v1.6.0 更新：内容宽度分级（§6.5）— 新增三档容器宽度（L1 默认收敛 1400 / L2 概览展宽 1680 / L3 阅读作答收敛），策略学院概览视图走 L2 展宽消除超宽屏 felt 留白（§9 页面模式 7）
@@ -183,6 +184,38 @@
 - 纸张作用域（`.dealer-slip`）内三者重锚为 `--paper-danger` / `--paper-success`，`--brass-text` 重锚为 `--paper-brass`，`--ivory-muted` 重锚为 `--paper-ink-muted`（§5.23、§2.6）。
 - `prefers-contrast: high` 下再提亮一档（dark）/ 加深一档（light），与 `--ivory-muted` 的高对比处理同步。
 
+### 2.8 浅色主题「白天牌室」（v1.9.0）
+
+浅色主题不是暗色的简单反相，而是「同一间牌室拉开窗帘」：页面与面板变为羊皮纸/浅木，绿呢牌桌、牌背、场景卡仍是深色物理物件，黄铜加深为可读的深黄铜。
+
+**架构（三层）**
+
+1. **Primitive**：`--felt-*` / `--walnut-*` / `--ivory-*` / `--brass-*` / `--poker-*`。`html[data-theme="light"]` 只覆盖这些原语。
+2. **Semantic**：组件只读 `--room-page` / `--room-surface` / `--room-surface-raised` / `--room-line` / `--room-ink*` / `--room-accent-text` / `--room-hairline` / `--hero-surface-gradient` / `--question-card-gradient`。
+3. **Component**：`.panel`、`.course-card`、`.theme-card`、`.puzzle-card`、`.opponent-card`、`.mentor-card`、各 Hero 使用 semantic gradient；light 主题不再逐个组件写 surface 补丁。
+
+**Light token 要点**
+
+| Token | Light 值 | 说明 |
+|---|---|---|
+| `--felt-deep` | `#e9e1cd` | 页面羊皮纸底 |
+| `--felt` / `--felt-raised` | `#f4eee0` / `#faf6ea` | 面板 / 抬升面 |
+| `--walnut` / `--walnut-raised` | `#efe8d6` / `#e4dac1` | 浅木侧栏 / 抬升 |
+| `--ivory` / `--ivory-dim` / `--ivory-muted` | `#2a2113` / `#4c4230` / `#665b43` | 深墨文字；muted 在 felt-deep 5.13:1、walnut-raised 4.80:1 |
+| `--brass-text` | `#7d5c22` | 黄铜文字深阶（felt 5.30:1） |
+| `--clay-text` / `--danger-text` / `--sage-text` | `#a8442f` / `#a63f30` / `#2f6b3a` | 语义文字深阶 |
+| `--hero-surface-gradient` | `felt → felt-raised` | Hero/panel 线性底；dark 为 `walnut → felt-deep` |
+| `--question-card-gradient` | `walnut → walnut-raised` | 题目卡专用 |
+
+**硬性规则**
+
+- light 主题块只允许 token 声明 + 物理物件白名单；新增组件级补丁必须先登记 `src/guards/README.md` 与本文档。
+- 物理物件保持深色：`.felt-arena` / `.mini-felt` / `.scenario-card` / 牌背 / HandReplayer 桌面 / 分享卡。
+- 黄铜发线、glow、alpha 背景统一用 `color-mix(in srgb, var(--brass) …)`；禁止新增黄铜字面 rgba。
+- 阴影使用 `--shadow-*` 或深棕 rgba；禁止新增纯黑冷投影。
+- 对比度：light 房间正文/次级/说明/黄铜/语义文本 ≥ 4.5:1；主文字 ≥ 7:1；说明文字在浅木侧栏 ≥ 4.5:1。
+- PWA `manifest.json` 的 `background_color` 保持品牌深绿（启动屏是品牌时刻）；浏览器 chrome 的 `theme-color` 由 `useThemeApplier` 随主题切换。
+
 ---
 
 ## 3. 字体系统
@@ -309,6 +342,18 @@
 
 **行动按钮色阶**：fold=陶土红 → call=深胡桃 → raise=黄铜 → all-in=深胡桃嵌黄铜，按风险递增排列。
 
+**Puzzle ActionTier（v1.9.0，防答案暗示）**：谜题选项按行动强度分三档，边框/背景/标签/gauge/图标统一读 `--tier-*`，不得各自取色。
+
+| 档位 | 语义 | 色族 | 说明 |
+|---|---|---|---|
+| `passive` | 弃守 / 过牌 | 石板靛 indigo | 低权重、保守 |
+| `standard` | 跟注 / 下注 / 加注 | 黄铜 brass | 中等权重 |
+| `aggressive` | 全下 | 陶土赭 terra | 高权重，与 danger 反馈保持可辨差异 |
+
+- 答题前**不得**出现 success / danger 语义色；正确/错误反馈只在答后覆盖 tier。
+- `DifficultyTier`（题目难度：beginner / intermediate / advanced）是另一套语义，不与 ActionTier 混用颜色。
+- light 主题通过 token 自动联动，不再为 action tile 写组件级补丁。
+
 **平权答题选项按钮（v1.3.2）**：range-trainer QuizCard 等「三选一」答题场景中，fold/call/raise 是三个**平权选项**（非一个主 CTA + 两个次要动作），须保证三者视觉权重相当且互相可区分——三色相并立、都明显浮于呢面背景之上：
 - fold：陶土红透底 `rgba(194,90,76,0.16)` + 陶土红字 `--poker-danger` + **陶土红边 0.55**（红调明确）
 - call：**胡桃木不透明实色** `--walnut-raised`（不可用半透明沉底，否则墨绿背景透上来会与 fold 糊成一团暗棕）+ 象牙字 `--ivory-dim`
@@ -337,6 +382,7 @@
 - **导航序号（v1.8.0）**：Dashboard 为 `00`，四个导航分组为 `01–04`（训练 / 研习 / 数据 / 设置）；序号是分组位置的固定标识，不随语言变化
 - **侧边栏折叠态（v1.8.0）**：折叠时隐藏文字，保留序号与图标；序号降级为图标上方 9px 黄铜小字
 - **壳层 h1 唯一，内容用 h2**：壳层顶栏 h1 是全站唯一的一级标题；内容区所有区块标题一律降级为 h2（视觉类名保持不变），禁止页面再渲染同级 h1。BlankLayout 训练页（赔率作答 / 范围学习 / 结算 / 欢迎引导）由壳层 `sr-only` h1 承担页名，内容区同样不得重复 h1
+  - **h2 保留例外（v1.9.0）**：内容区视觉标题保留 h2，允许与壳层 h1 同义/同名；**不做文案去重**。该例外由产品决策锁定，优先于 §10.6 的旧反模式条目，后续代理不得以「去重」为由删除内容标题
 - **桌沿铜钉 `.table-rail`**（v1.1 新增，v1.2 位置调整）：
   - 顶部 header 正下方，全宽，高度 14px
   - 中心胡桃分隔线 + 一颗 8px 黄铜铆钉（radial 渐变+glow）
@@ -570,6 +616,25 @@
 - 断点统一复用 §10.3：`xl(1280)` 展宽分栏、`lg(1024)` 平板回落、`md(768)` 移动、`480px` 小屏。
 - 规则作者：ui-ux-dev 复核；宽度档位归属 AppLayout（platform-dev 协调），分栏归属各模块子代理。
 
+### 6.6 Hero 高度契约（v1.9.0）
+
+Hero 是首屏叙事锚点，但不允许把首屏压成一张巨大的装饰画。压缩只动留白、装饰尺寸与次要信息布局；**不删 h2、不删文案、不做文案去重**。
+
+| Hero | 桌面目标高度 | 移动目标高度 | 签名元素（必须保留） |
+|---|---|---|---|
+| Dashboard `FeltArena` | ≤ 300px（实测 297） | ≤ 245px（实测 240） | 椭圆绿呢桌、卡堆/筹码、stats 三格 |
+| Puzzle `PuzzleHero` | ≤ 260px（实测 259） | ≤ 230px（实测 225） | 翻开的象牙谜题牌 |
+| Help `HelpHero` | ≤ 235px（实测 232） | ≤ 250px（实测 245） | House Rules 立牌（移动端压缩为 01/02/03 横排） |
+| Progress `RankPlaqueHero` | ≤ 185px（实测 184） | ≤ 130px（实测 121） | 象牙段位牌匾 + 四项指标（移动端左右分栏） |
+| Academy Resume | ≤ 145px（实测 144） | ≤ 165px（实测 162） | 进度环 + 三项统计 |
+| Theory Resume | ≤ 140px（实测 137） | ≤ 230px（实测 227） | 进度环 + 三项统计 |
+| Settings `settings-hero` | ≤ 120px（实测 101） | ≤ 140px（实测 101） | 分区台卡标题 |
+
+- 高度以 1440×900 / 1024×768 / 390×844 浏览器 `getBoundingClientRect()` 实测为准。
+- 优先压缩顺序：外层 padding → 装饰尺寸 → 卡片内 padding → 次要信息并排；最后才考虑移出 hero。
+- `DailyGoalCard` 默认放在 FeltArena 之后，不再占用椭圆桌内部高度。
+- 移动端所有可点元素仍须 ≥ 44×44px；中英文均不得破版。
+
 ---
 
 ## 7. 图标与插画
@@ -581,6 +646,8 @@
 - **品牌 Logo**：♠（Lucide `spade`）32px 黄铜色+品牌名
 - **Emoji 使用边界（交互与首屏一律 Lucide）**：所有交互控件、导航、按钮、徽章、空态、状态反馈与仪表盘/首页首屏的可视图标必须使用 Lucide（1.5px stroke，语义色跟随本节），禁止以 emoji 充当 UI 图标。共享出口：五级反馈用 `GRADE_DISPLAY_CONFIG[grade].iconId` + `GradeIcon`，对手画像用 `OpponentGlyph`，游戏变体用 `VariantGlyph`，ELO 段位用 `RankIcon`（段位徽章 UI 不再读 `Rank.icon`）
 - **Emoji 白名单（仅保留牌室化插画与正文）**：成就体系（`progress/data/achievements.ts` / `AchievementWall` / `AchievementBadges`）、分享卡（`shareCard`）、庆祝插画（`RankUpCelebration` / `StreakCelebration` / onboarding `CelebrationStep`）、课程与理论正文数据（`strategy-academy/data/lessons/**`、`learningTracks.ts`、`localLessons/**`、`basicsContent.ts`、`theory-academy/data/levels/**`）及 `src/i18n/locales/**` 中既有文案。白名单之外新增 emoji 视为反模式，由设计复核拦截
+  - **守卫扫描面（v1.9.0）**：组件层继续由 `emojiWhitelist.guard.test.ts` 的 7 文件插画 allowlist 守护；内容层新增 `features/**/data/**`、`shared/data/**`、`i18n/**` 扫描，只允许上述白名单路径。排版箭头 `↔` 属文本记号，单独豁免，不作为插画 emoji
+  - **反模式**：在按钮、导航、榜单、同步状态、空态里用 emoji 充当图标；把 emoji 写进 `shared/types` / `shared/data` 作为领域数据
 
 ---
 
@@ -714,7 +781,7 @@
 7. 中文格言用 `.motto-engraved`，禁用 `em`/`i`/`font-style:italic`
 8. 桌面端导航通过侧边栏注册（在 `.sidebar .nav-section` 加 `.nav-item[data-nav]`），不得新增顶部 Tab 或与侧边栏重复的导航层
 9. 双列布局同行面板必须等高（参考 §9.1 仪表盘等高规则）
-10. 页面标题由顶栏 H1 动态显示，内容区禁止重复放置 H2 大标题
+10. 页面标题由顶栏 H1 动态显示；内容区视觉标题保留 h2，允许与页名同义/同名，**不做文案去重**（v1.9.0 例外，见 §5.7 / §10.6）
 
 ### 10.2 新增组件时
 - 前缀 `poker-` 或 BEM 变体（如 `.chip.chip-frost`）
@@ -766,6 +833,7 @@
 - ❌ 同区域重复展示同一数据（如牌桌上 brass plaque 与 rank-badge 同时显示 ELO）
 - ❌ 多层重复导航（桌面端侧边栏+顶部 Tab/底栏并存）
 - ❌ 内容区 H2 与顶栏 H1 重复显示同一页名
+  - ✅ 例外（v1.9.0）：按产品决策保留内容区 h2 与同名/同义文案，**不做文案去重**；只要求全站唯一 h1
 - ❌ 双列布局不等高（同行面板必须底部对齐，用 flex-col + mt-auto 处理底部内容）
 - ❌ 非牌桌/非绿呢页面出现大面积 felt 绿（绿色专属牌桌/场景卡，普通面板用胡桃底）
 - ❌ 手机端保留桌面等高布局（`grid-auto-rows:1fr` + `h-full`）导致面板被强行拉长产生中部空白，必须改为 `height:auto`
@@ -890,7 +958,7 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **新组件**：`.scenario-card`（绿呢微观场景）、`.rec-item`（带优先级色条的推荐项）、`.module-card`（模块入口卡）、`.streak-rail`（底部打卡条）、`.live-dot`（呼吸点）、`.streak-dot`（紧凑打卡圆点）
 - **模块主题色体系**：6 大模块各赋主题色（黄铜/鼠尾草/霜钢/苔藓/黄铜/皮革赭），图标方块径向渐变
 - **等高布局规则**：`grid-auto-rows:1fr` + `h-full flex flex-col` + `mt-auto` 保证双列底部对齐
-- **内容区去重**：移除 5 个内容面板中与顶栏 H1 重复的 H2 大标题
+- **内容区去重**：移除 5 个内容面板中与顶栏 H1 重复的 H2 大标题（v1.9.0 起改为保留 h2，见 §5.7 / §10.6）
 - **反模式扩充**：新增多层导航禁令、标题重复禁令、双列不等高禁令、绿色滥用禁令
 
 ## 附录 C：v1.1 变更摘要
@@ -1539,3 +1607,16 @@ CSS 参考：
 - **新增 §13.8 教育场景动效扩展**：4 个新动效——正确率数字递增（600ms ease-out）、知识节点解锁（POP+brass 辉光 300ms）、段位晋升（庄码 D 360° 旋转+放大+辉光扩散）、课程完成（checkmark 描边动画 500ms）。所有动效沿用 §8 动效 token。
 - **版本号**：v1.6.0 → v1.7.0。
 - **兼容性**：所有新增组件沿用 §2 色彩 token、§3 字体、§4 间距/圆角/阴影、§8 动效 token，不引入新的基础设计 token，与牌室品牌主题无缝衔接。
+
+---
+
+## 附录 K：v1.9.0 变更摘要（白天牌室 / Hero / ActionTier）
+
+- **背景**：2026-11-03 UI/UX 全链路整改后，浅色主题仍是「token 翻转 + 37 处组件补丁」的混合态；首屏 Hero 偏高；Puzzle ActionTier 的 gauge/图标/标签/边框取自不同 token；内容 emoji 白名单未覆盖数据与 i18n 扫描面。
+- **浅色主题（§2.8）**：新增 `--room-*` semantic 层、`--hero-surface-gradient` / `--question-card-gradient`；light 主题块收敛为 token + 物理物件白名单；黄铜字面 rgba 全部改为 `color-mix(var(--brass))`；light `--ivory-muted` 调深到 `#665b43`，保证羊皮底/浅木侧栏 AA。
+- **Hero 高度（§6.6）**：新增六个 Hero 的桌面/移动高度预算；FeltArena 的 `DailyGoalCard` 移出椭圆桌；压缩 padding、装饰尺寸、牌匾/立牌宽度；保留 h2、CTA 与签名元素。
+- **Puzzle ActionTier（§5.5）**：三档统一为 `--tier-*` 单一来源；aggressive 从 clay 改为 terra，与答后 danger 反馈保持可辨差异；答前禁止 success/danger；`DifficultyTier` 与 `ActionTier` 明确分家。
+- **h2 例外（§5.7 / §10.6）**：内容区视觉标题保留 h2，允许与壳层 h1 同名/同义；不做文案去重。
+- **Emoji（§7）**：内容层扫描面扩展到 `features/**/data/**`、`shared/data/**`、`i18n/**`；仅允许成就 / 课程与理论正文 / i18n 既有文案；排版箭头 `↔` 单独豁免。
+- **守卫**：新增 `lightThemeSurfaceGuard.test.ts`（light 补丁白名单 + 黄铜/黑色字面棘轮）与 `actionTierPalette.guard.test.ts`（防答案暗示）；扩展 `feltContrast.test.ts`（light 房间对比度）与 `emojiWhitelist.guard.test.ts`（内容层）。
+- **兼容性**：暗色主题视觉不变；既有 16 个 light 组件选择器保留并登记，后续只减不增。

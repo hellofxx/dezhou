@@ -75,7 +75,7 @@ export default function FeltArena() {
         </button>
 
         {/* 中央：欢迎语 */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-center">
+        <div className="felt-arena-core relative z-10 flex flex-col items-center justify-center text-center">
           <div>
             <div className="section-eyebrow">
               {t('dashboard.feltArena.todaySession', { day: currentStreak || 1 })}
@@ -98,7 +98,7 @@ export default function FeltArena() {
 
           {/* 装饰：牌堆 + 筹码 */}
           <div className="felt-arena-decor">
-            <div className="relative" style={{ width: '88px', height: '66px' }}>
+            <div className="relative" style={{ width: '88px', height: '40px' }}>
               <div style={{ position: 'absolute', transform: 'rotate(-7deg)', left: 0, top: '3px' }}>
                 <CardBack size="sm" />
               </div>
@@ -148,14 +148,15 @@ export default function FeltArena() {
           </div>
         </div>
 
-        {/* §13.2.4：每日目标卡 — 放在 stats 区下方 */}
-        <div className="mt-3 px-4 w-full max-w-[400px] mx-auto">
-          <DailyGoalCard
-            completed={isToday ? emotion.dailyTotal : 0}
-            total={dailyGoal}
-            goalLabel={t('dashboard.dailyGoal.label')}
-          />
-        </div>
+      </div>
+
+      {/* §13.2.4：每日目标卡 — 移出 hero，压缩首屏高度；内容与语义不变 */}
+      <div className="felt-arena-goal mt-2 px-4 w-full max-w-[400px] mx-auto">
+        <DailyGoalCard
+          completed={isToday ? emotion.dailyTotal : 0}
+          total={dailyGoal}
+          goalLabel={t('dashboard.dailyGoal.label')}
+        />
       </div>
     </div>
   );

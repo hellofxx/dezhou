@@ -5,9 +5,10 @@
  * 强度层级由 gauge（3 dots）数量表达。映射 `parseOptionSortKey` 解析出的 category：
  *  - passive   (cat 0-1, Fold/Check)  → 石板靛 indigo（保守·弃守）
  *  - standard  (cat 2-5, Call/Bet/Raise) → 黄铜金 brass（标准行动）
- *  - aggressive(cat 6, 全下)         → 陶土红 clay（致命一击）
+ *  - aggressive(cat 6, 全下)         → 陶土赭 terra（致命一击）
  *
- * 三色与答题反馈色错开：正确=苔藓绿、错误=陶土红，避免答题前被颜色暗示答案。
+ * 三色与答题反馈色错开：正确=苔藓绿、错误=陶土红 danger，避免答题前被颜色暗示答案。
+ * tier 颜色统一由 globals.css 的 --tier-* 变量驱动，组件只写 data-tier，不复制色值。
  * PuzzleCard 不再自己维护 grid 按钮，改委托给 ActionBoard 统一管理。
  *
  * 可区分性增强（同档内区分具体动作）：tier 配色保持不变（有意设计，防颜色暗示答案），
@@ -53,23 +54,6 @@ function getActionTier(category: number): ActionTier {
   // PZL-04：未知 category（非 1-6）归入中性档，避免误标 aggressive
   return 'standard';
 }
-
-/** 每档固定一种 gauge 点色（与按钮主体色同源） */
-const TIER_DOT: Record<ActionTier, string> = {
-  passive: 'dot--frost',
-  standard: 'dot--brass',
-  aggressive: 'dot--clay',
-};
-
-/**
- * 动作图标色：与该档 gauge 点色同源（standard 档按钮本体不设 color，
- * 故显式给黄铜金，避免图标落在中性 ivory 上与其他两档割裂）。
- */
-const TIER_ICON_COLOR: Record<ActionTier, string> = {
-  passive: 'text-[var(--poker-indigo-bright)]',
-  standard: 'text-[var(--brass-bright)]',
-  aggressive: 'text-[var(--clay-text)]',
-};
 
 /** 动作图标键（同时作为 `data-action-icon` 供测试与样式定位） */
 type ActionIconKey = 'fold' | 'check' | 'call' | 'limp' | 'bet' | 'raise' | 'allin';
@@ -144,7 +128,6 @@ export default function ActionBoard({
             data-testid={`action-tile-${opt.id}`}
             className={cn(
               'action-tile',
-              `action-tile-${tier}`,
               showResult && opt.isCorrect && 'action-tile--correct',
               showResult && !opt.isCorrect && 'action-tile--wrong',
               showCorrect && !isSelected && 'action-tile--correct-reveal',
@@ -155,20 +138,13 @@ export default function ActionBoard({
             <span className="flex items-center gap-2">
               {ActionIcon ? (
                 <span className="inline-flex" data-action-icon={actionIcon?.key}>
-                  <ActionIcon
-                    className={cn('w-3.5 h-3.5 shrink-0', TIER_ICON_COLOR[tier])}
-                    aria-hidden
-                  />
+                  <ActionIcon className="action-tile-icon w-3.5 h-3.5 shrink-0" aria-hidden />
                 </span>
               ) : null}
               <span className="action-tile-gauge" aria-hidden>
-                <span className={cn('dot', 'dot--on', TIER_DOT[tier])} />
-                <span
-                  className={cn('dot', tier !== 'passive' && 'dot--on', TIER_DOT[tier])}
-                />
-                <span
-                  className={cn('dot', tier === 'aggressive' && 'dot--on', TIER_DOT[tier])}
-                />
+                <span className="dot dot--on" />
+                <span className={cn('dot', tier !== 'passive' && 'dot--on')} />
+                <span className={cn('dot', tier === 'aggressive' && 'dot--on')} />
               </span>
             </span>
 

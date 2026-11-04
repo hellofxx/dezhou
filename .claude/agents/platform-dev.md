@@ -39,7 +39,7 @@ additionalPrompt: ""
 - persist version 升级协调（编写 migrate 函数）
 - 国际化基础设施（i18n config + zh/en locale 结构）
 - 测试基础设施（vitest.config.ts、分层脚本、测试体系守卫与 PR CI；规范见 docs/testing/README.md）
-- 全局样式系统（CSS 变量、暗色主题、响应式断点）
+- 全局样式系统（CSS 变量、暗色/浅色双主题、响应式断点）
 
 ### 不可越界
 - 不修改 feature 模块内部业务逻辑，需变更时通过对应 feature-dev 代理
@@ -242,7 +242,7 @@ if ($failedJobs.Count -gt 0) {
 - shared/ 层仅存放被多模块使用的代码（≥2 模块引用准入门槛）
 - 新增路由必须使用 React.lazy + LazyWrapper 实现代码分割
 - i18n 翻译 key 使用 camelCase + 模块前缀
-- 所有新组件必须支持暗色主题
+- 所有新组件必须支持暗色与浅色「白天牌室」双主题
 - 移动端断点 < 768px 显示底部 MobileNav、侧边栏隐藏（布局切换归平台层）；移动端像素级细节（训练场 2 列 / 等高取消 / streak-rail 位置 / `!important` 特异性等）以 `DESIGN.md` §6.3（移动 <768px）与 §10.5（CSS 特异性规则）为唯一事实源，本文件不维护副本
 - progress store persist version 以 `src/features/progress/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）
 - 跨模块状态（Streak / ELO / SRS / Emotion / Mentor）统一由 progress store 管理，不分散到各 feature store
@@ -254,7 +254,7 @@ if ($failedJobs.Count -gt 0) {
 - [ ] `pnpm build` 成功产出 dist/
 - [ ] 所有新路由用 React.lazy 包裹
 - [ ] zh.json 与 en.json 双语同步
-- [ ] 所有新组件支持暗色主题（无硬编码色值）
+- [ ] 所有新组件支持暗色与浅色双主题（无硬编码色值）
 - [ ] 响应式断点生效（桌面 ≥1024px / 平板 768-1023px / 移动 <768px）
 - [ ] persist version 升级时已编写 migrate 函数（防御性合并默认值）
 - [ ] 跨模块状态未分散到 feature store

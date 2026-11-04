@@ -58,6 +58,23 @@ const ILLUSTRATION_ALLOWLIST = [
  */
 const TYPOGRAPHIC_GLYPHS = ['♠', '♥', '♦', '♣', 'ℹ', '⚠', '⏱'];
 
+/**
+ * 内容/文案层的排版记号豁免：↔ 是箭头字形（Extended_Pictographic），
+ * 不是插画 emoji；只用于正文与 i18n 文案，不进交互 UI。
+ */
+const CONTENT_TYPOGRAPHIC_GLYPHS = ['↔'];
+
+/** 内容白名单（DESIGN.md §7）：成就数据、策略/理论正文数据、i18n 既有文案 */
+const CONTENT_ALLOWED_PREFIXES = [
+  'features/progress/data/achievements.ts',
+  'features/strategy-academy/data/',
+  'features/theory-academy/data/',
+  'i18n/locales/',
+];
+
+/** 内容扫描面下限（棘轮）：实际约 180 个 .ts/.tsx/.json 文件 */
+const MIN_CONTENT_SCANNED_FILES = 100;
+
 interface ScannedFile {
   /** 相对 src/ 的 posix 路径 */
   relativePath: string;
@@ -123,6 +140,57 @@ for (const file of SCANNED_FILES) {
 
 const HIT_FILES = [...HITS.keys()].sort();
 
+/** 递归收集内容层文件（.ts/.tsx/.json，跳过测试） */
+function walkContent(dirPath: string, collected: string[] = []): string[] {
+  for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {
+    if (['node_modules', 'dist', '.git'].includes(entry.name)) continue;
+    const fullPath = path.join(dirPath, entry.name);
+    if (entry.isDirectory()) {
+      walkContent(fullPath, collected);
+    } else if (/\.(ts|tsx|json)$/.test(entry.name) && !/\.test\.tsx?$/.test(entry.name)) {
+      collected.push(fullPath);
+    }
+  }
+  return collected;
+}
+
+/** 内容层扫描面：features 下 data 目录 + shared/data + i18n */
+function scanContentTargets(): string[] {
+  const featureData = walkContent(path.join(SRC_DIR, 'features')).filter((file) =>
+    toPosix(file).includes('/data/'),
+  );
+  const sharedData = walkContent(path.join(SRC_DIR, 'shared', 'data'));
+  const i18n = walkContent(path.join(SRC_DIR, 'i18n'));
+  return [...new Set([...featureData, ...sharedData, ...i18n])].sort();
+}
+
+const CONTENT_SCANNED_FILES: ScannedFile[] = scanContentTargets().map((absolutePath) => ({
+  relativePath: toPosix(path.relative(SRC_DIR, absolutePath)),
+  content: fs.readFileSync(absolutePath, 'utf8'),
+}));
+
+/** 去掉排版类豁免后剩下的才是需要白名单覆盖的内容 emoji */
+function contentEmojiInLine(line: string): string[] {
+  const stripped = CONTENT_TYPOGRAPHIC_GLYPHS.reduce(
+    (acc, glyph) => acc.replaceAll(glyph, ''),
+    line,
+  );
+  return emojiInLine(stripped);
+}
+
+const CONTENT_HITS = new Map<string, EmojiHit[]>();
+for (const file of CONTENT_SCANNED_FILES) {
+  file.content.split(/\r?\n/).forEach((line, index) => {
+    const chars = contentEmojiInLine(line);
+    if (chars.length === 0) return;
+    const existing = CONTENT_HITS.get(file.relativePath) ?? [];
+    existing.push({ line: index + 1, chars });
+    CONTENT_HITS.set(file.relativePath, existing);
+  });
+}
+
+const CONTENT_HIT_FILES = [...CONTENT_HITS.keys()].sort();
+
 /** 登记字形的实际出现次数：为 0 说明条目已失效，必须删除 */
 function registeredGlyphUsage(): Map<string, number> {
   const usage = new Map<string, number>();
@@ -182,5 +250,36 @@ describe('UI emoji 白名单守卫', () => {
 
   it('含 emoji 的文件集合与插画白名单完全一致', () => {
     expect(HIT_FILES).toEqual(ILLUSTRATION_ALLOWLIST);
+  });
+
+  it('内容扫描自检：文件数量与排版豁免均有效', () => {
+    expect(
+      CONTENT_SCANNED_FILES.length,
+      '内容扫描面文件数偏低，目录解析可能失效',
+    ).toBeGreaterThanOrEqual(MIN_CONTENT_SCANNED_FILES);
+    expect(CONTENT_TYPOGRAPHIC_GLYPHS).toEqual(['↔']);
+    const arrowUsage = CONTENT_SCANNED_FILES.reduce(
+      (sum, file) => sum + file.content.split('↔').length - 1,
+      0,
+    );
+    expect(arrowUsage, '↔ 已不再出现在内容层，请删除豁免').toBeGreaterThan(0);
+  });
+
+  it('内容/文案白名单外不得出现 emoji（file:line → 字符）', () => {
+    const violations = CONTENT_HIT_FILES.filter(
+      (file) => !CONTENT_ALLOWED_PREFIXES.some((prefix) => file.startsWith(prefix)),
+    ).flatMap((file) =>
+      (CONTENT_HITS.get(file) ?? []).map(
+        (hit) => `${file}:${hit.line} → ${hit.chars.join(' ')}`,
+      ),
+    );
+    expect(
+      violations,
+      '内容 emoji 只允许出现在 DESIGN.md §7 白名单：成就数据 / 策略与理论正文 / i18n 既有文案',
+    ).toEqual([]);
+  });
+
+  it('puzzleBank 在剔除花色与排版记号后不得残留 emoji', () => {
+    expect(CONTENT_HITS.get('features/puzzle-trainer/data/puzzleBank.ts')).toBeUndefined();
   });
 });

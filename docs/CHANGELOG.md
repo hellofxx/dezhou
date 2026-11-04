@@ -9,6 +9,19 @@
 
 ## [Unreleased] - 2026-09-05
 
+### 2026-11-03 第二阶段纯前端 UI/UX 修复（白天牌室 / Hero / ActionTier）
+
+承接同日前一轮整改的「未纳入」项，本轮**不含后端**；排行榜保持本地现状，不引入认证、云数据库、排行榜 SDK 或接口层。
+
+- **浅色主题 token 化**：新增 `--room-*` semantic 层与 `--hero-surface-gradient` / `--question-card-gradient`；light 主题组件补丁从 37 处收敛到 16 处白名单；黄铜字面 rgba 清零（统一 `color-mix(var(--brass))`）；light `--ivory-muted` 调深到 `#665b43`，羊皮底 5.13:1、浅木侧栏 4.80:1；`feltContrast` 扩展 light 房间对比度，新增 `lightThemeSurfaceGuard`（补丁白名单 + 字面量棘轮）。
+- **Hero 高度压缩**：FeltArena 的 `DailyGoalCard` 移出椭圆桌；压缩 FeltArena / PuzzleHero / HelpHero / RankPlaqueHero / AcademyResume / TheoryResume / SettingsHero 的 padding 与装饰尺寸；保留 h2、CTA 与签名元素；新增 DESIGN.md §6.6 高度契约。
+- **Puzzle ActionTier 配色统一**：三档改为 `--tier-*` 单一来源；aggressive 从 clay 改为 terra，与答后 danger 反馈保持可辨差异；答前禁止 success/danger；新增 `actionTierPalette.guard.test.ts`；light 主题删除 7 条 action tile 专属补丁。
+- **Emoji 白名单**：按 DESIGN.md §7 扩展内容层扫描面到 `features/**/data/**`、`shared/data/**`、`i18n/**`；仅允许成就 / 策略与理论正文 / i18n 既有文案；排版箭头 `↔` 单独豁免。
+- **h2 决策**：内容区视觉标题保留 h2，允许与壳层 h1 同名/同义，不做文案去重；Dashboard / Puzzle / Help / Leaderboard 增加 h2 回归断言；DESIGN.md 登记例外。
+- **排行榜后端**：按「纯前端」约束整体移出本阶段；`Leaderboard` 保持 19 位虚构角色 + 演示说明 + 我的排名，不改数据、文案与测试契约。
+- **文档同步**：DESIGN.md v1.9.0（§2.8 / §5.5 / §5.7 / §6.6 / §7 / §10.1 / §10.6 / 附录 K）、TDD §14、AI_GUIDE UI/UX、guards README、architecture/docs 索引，以及 `ui-ux-dev` / `platform-dev` / `puzzle-trainer-dev` / `pot-odds-dev` 代理约束。
+- **验证**：`pnpm verify` 全绿（typecheck / lint / repo:check / agents:map:check / 352 文件 2538 用例；lint 仅 2 条既有 import-pattern warning，0 error）；`build` + `size:check` 通过；headless Chrome 1440×900 / 390×844 双主题实测 7 个 Hero，桌面/移动高度分别为 Dashboard 297/240、Puzzle 259/225、Help 232/245、Progress 184/121、Academy 144/162、Theory 137/227、Settings 101/101；无横向滚动。正常 PowerShell 7 终端（加载 profile，`pnpm` → `F:\dev\bin\pnpm.exe` 11.18.0）可直接执行 `pnpm verify`；不带 profile 的工具 shell 需显式加入 `F:\dev\bin` 或使用 `corepack pnpm`。
+
 ### 2026-11-03 UI/UX 全链路整改（P0→P2）
 
 以 1440×900 / 390×844 双视口实测 15+ 路由，按「止血 → 交互/响应式 → 视觉一致性 → 信息架构/产品内容」四阶段修复。

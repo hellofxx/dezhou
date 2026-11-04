@@ -41,6 +41,15 @@ describe('HelpHero 组件测试', () => {
   const ruleButtons = () =>
     Array.from(container.querySelectorAll<HTMLButtonElement>('.house-rules-item'));
 
+  it('视觉标题保留 h2，且组件内不渲染 h1（全站唯一 h1 归壳层）', () => {
+    renderHero();
+
+    const title = container.querySelector('h2.help-hero-title');
+    expect(title?.tagName).toBe('H2');
+    expect(title?.textContent?.trim().length).toBeGreaterThan(0);
+    expect(container.querySelector('h1')).toBeNull();
+  });
+
   it('渲染 01/02/03 三条编号规则与 zh 文案', () => {
     renderHero();
 

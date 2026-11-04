@@ -72,6 +72,14 @@ describe('Leaderboard 排行榜', () => {
     expect(text).not.toContain('Negreanu');
   });
 
+  it('视觉标题保留 h2，且页面不渲染 h1（内容区不做文案去重）', () => {
+    const { container } = render(<Leaderboard />);
+
+    const title = container.querySelector('h2');
+    expect(title?.textContent).toBe('排行榜');
+    expect(container.querySelector('h1')).toBeNull();
+  });
+
   it('「我的排名」摘要行展示当前口径下的名次与数值', () => {
     const { container } = render(<Leaderboard />);
     const text = container.textContent ?? '';

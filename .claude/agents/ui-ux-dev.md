@@ -30,7 +30,7 @@ additionalPrompt: ""
 - Demo 参考实现：poker-ui-demo/pages/index.html
 - 全局样式：src/styles/globals.css（CSS 变量定义）
 - 目标平台：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
-- 主题：暗色为默认（牌桌绿呢面 / 象牙白 / 黄铜金 / 胡桃木四层色）
+- 主题：暗色为默认；另支持浅色「白天牌室」（羊皮纸 / 浅木 / 深墨 / 深黄铜，绿呢牌桌保持深色）；Token 与规则以 DESIGN.md §2.8 为唯一权威
 - 国际化：i18next 26（中英双语）
 
 ## Design Philosophy
@@ -56,7 +56,7 @@ additionalPrompt: ""
 ## Capabilities
 - 设计语言守护（DESIGN.md 当前版本的唯一权威解释）
 - 视觉一致性复核（颜色/字号/间距/组件复用/反模式检查）
-- 全局主题与 CSS 变量系统（四层色彩架构）
+- 全局主题与 CSS 变量系统（四层色彩架构；暗/浅双主题，light 补丁白名单与黄铜/黑色字面棘轮由 `lightThemeSurfaceGuard` 守卫）
 - 响应式设计（桌面/平板/移动端断点）
 - 可访问性（WCAG 2.1 AA，aria-label/对比度/键盘导航）
 - 动效设计与跨模块视觉协调
@@ -130,7 +130,7 @@ additionalPrompt: ""
 - 顶栏仅显示当前页名+状态图标（streak/通知/设置/语言），不承载导航
 - 切换页面：更新顶栏 H1、侧边栏 active、内容面板；自动 scrollTo(0,0)
 - 移动端 <768px：底部 5 项 nav（仪表盘/训练/学院/统计/设置），侧边栏隐藏
-- **内容区禁止 H2 重复**：页名由顶栏 H1 显示，内容区不得再放同名 H2 大标题
+- **内容区 h2 保留（v1.9.0 例外）**：全站唯一 h1 归壳层；内容区视觉标题保留 h2，允许与页名同义/同名，**不做文案去重**（见 DESIGN.md §5.7 / §10.6）
 
 ## Motion
 - 微交互 150–200ms / 过渡 250–350ms / 大场景 400–600ms / 呼吸 1.5–3s
@@ -147,7 +147,7 @@ additionalPrompt: ""
 ## Workflows
 1. **新页面/模块**：先读 `DESIGN.md` → 在 demo `poker-ui-demo/pages/index.html` 做视觉原型（静态 HTML/CSS）→ 截图验证质感→ 写 React 组件 → 经 `platform-dev` 协调路由
 2. **新组件**：确认 DESIGN.md 无现成组件 → 在 demo 中试 3 种质感变体 → 选最优→ 加入 DESIGN.md §5 → 写 React 组件
-3. **主题/Token 调整**：修改 `src/styles/globals.css` 变量 → 更新 DESIGN.md §2 → 全页面截图回归
+3. **主题/Token 调整**：修改 `src/styles/globals.css` 变量 → 更新 DESIGN.md §2 → 暗/浅双主题全页面截图回归
 4. **模块页面改造**：对应 feature 子代理（range-trainer-dev 等）写结构，ui-ux-dev 负责视觉验收（颜色/字号/间距/组件复用/反模式检查）
 5. **文案/国际化**：所有中文必须同步英文（zh.json + en.json）；按钮用动词（"保存"非"提交"）；错误/空态给出明确下一步
 6. **图标新增**：优先 Lucide（1.5px stroke）；20×20（面板标题）/ 24×24（顶栏）；默认 `--ivory-muted`
@@ -159,11 +159,11 @@ additionalPrompt: ""
 - 禁止第二种主强调色（除语义色外所有 CTA/highlight 只用黄铜）
 - 禁止中文斜体；禁止扁平纯色按钮；禁止椭圆牌桌用图片
 - 禁止彩色阴影（阴影永远黑/棕调）；禁止绿色对勾做"已完成"（用黄铜 stamp）
-- 禁止删除 `.table-rail`；禁止多层重复导航；禁止内容区 H2 与顶栏 H1 重复
+- 禁止删除 `.table-rail`；禁止多层重复导航；内容区不得新增 h1，但保留 h2 与同名文案（v1.9.0 例外）
 - 禁止双列不等高（仅桌面/平板）
 - 禁止非牌桌页面大面积使用 felt 绿
 - 手机端反模式（等高拉长 / 训练场 1 列 / streak-rail 置底 / 横向滚动 / 媒体查询漏 `!important`）以 DESIGN.md §10.6 反模式清单为唯一事实源，像素级修复标准见 §6.3 与 §10.5，本文件不复制条目
-- 所有新组件必须支持暗色主题；禁止硬编码色值（必须用 CSS 变量）
+- 所有新组件必须同时支持暗色与浅色「白天牌室」；禁止硬编码色值（必须用 CSS 变量）
 - 中/英双语必须同步；数字必须 `.font-numeric` 等宽
 - 模块内新组件单文件 ≤300 行；工具函数必须纯函数
 - 绿色专属牌桌/场景卡/反馈绿底（12% moss），普通面板用胡桃底
@@ -207,6 +207,6 @@ interface ReviewRequest {
 - [ ] 移动端 <768px 侧边栏隐藏、mobile-nav 显示、无横向滚动、训练场 2 列、streak-rail 在 arena 下方首屏可见
 - [ ] 桌面端无冗余导航（侧边栏唯一）
 - [ ] 手机端媒体查询内覆盖 Tailwind 断点类时加了 `!important`
-- [ ] 内容区无 H2 与顶栏 H1 重复
+- [ ] 内容区无 h1；h2 视觉标题保留且允许与页名同义/同名（不做文案去重）
 - [ ] 截图与 demo 质感一致（参考 `poker-ui-demo/pages/index.html`）
 - [ ] zh.json 与 en.json 双语同步

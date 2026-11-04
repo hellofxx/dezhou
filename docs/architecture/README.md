@@ -3,7 +3,7 @@
 `system-modeler`（架构场景）+ `c4model` / `graphviz`（图源格式）产出，回答一个问题：
 **PokerLab 现在是什么架构，由哪些部分组成，边界与跨模块关系如何。**
 
-本目录含两类产物：**当前态模型**（1–6，回答"架构是什么"）与**架构评审**（7–9，回答"是否足够健康、该怎么改"）。图语法是否过期、模型与代码是否漂移属 `architecture-health`。
+本目录含三类产物：**当前态模型**（1–6，回答"架构是什么"）、**架构评审**（7–9，回答"是否足够健康、该怎么改"）与**计划/执行记录**（10，回答"这一轮改了什么、如何验证"）。图语法是否过期、模型与代码是否漂移属 `architecture-health`。
 
 ## 阅读顺序
 
@@ -18,6 +18,7 @@
 | 7 | [`architecture-review.md`](architecture-review.md) | 评审 | 证据化风险 R1–R11：严重度、置信度、影响路径，每条带验收标准 |
 | 8 | [`remediation-plan.md`](remediation-plan.md) | 评审 | 补救切片 S1–S13、波次顺序、归属代理、依赖关系与"不要做什么" |
 | 9 | [`risk-map.dot`](risk-map.dot) | 评审 | 三个风险簇如何沿路径传到学员不可再生的学习进度数据 |
+| 10 | [`ui-ux-phase2-plan.md`](ui-ux-phase2-plan.md) | 计划/执行 | 第二阶段纯前端 UI/UX 修复计划与执行结果（白天牌室 / Hero / ActionTier / Emoji / h2） |
 
 ## 查看图形
 

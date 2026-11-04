@@ -102,7 +102,7 @@ export function TheoryResume({
       onPointerEnter={prefetchLevel}
       onFocus={prefetchLevel}
     >
-      <div className="flex flex-col md:flex-row md:items-center gap-5">
+      <div className="flex flex-col md:flex-row md:items-center gap-4">
         {/* 左侧：eyebrow + 主 CTA */}
         <div className="flex-1 min-w-0">
           <p className="section-eyebrow mb-2">{eyebrowText}</p>
@@ -118,7 +118,7 @@ export function TheoryResume({
           <button
             type="button"
             onClick={goCta}
-            className="hover-bright mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border border-[var(--brass-dark)] shadow-[var(--shadow-brass-btn)] transition-all"
+            className="hover-bright mt-2 inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold bg-gradient-to-b from-[var(--brass-bright)] to-[var(--brass)] text-[var(--primary-foreground)] border border-[var(--brass-dark)] shadow-[var(--shadow-brass-btn)] transition-all"
           >
             <CtaIcon className="w-4 h-4" />
             {ctaLabel}
