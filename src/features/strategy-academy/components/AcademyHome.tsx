@@ -48,12 +48,12 @@ export default function AcademyHome() {
     ? completedLevels.at(-1) ?? activeLevel ?? null
     : null;
   const theoryAnchors = useMemo(() => {
-    if (activeVariant !== 'standard' || !activeLevel) return [];
+    if (!activeLevel) return [];
     const anchors = activeLevel.lessons.flatMap(
       (lesson) => getLessonMeta(lesson.id).theoryAnchors,
     );
     return [...new Set(anchors)].slice(0, 3);
-  }, [activeVariant, activeLevel]);
+  }, [activeLevel]);
 
   const levelsDoneCount = completedLevels.length;
   const certifiedCount = ladderLevels.reduce(

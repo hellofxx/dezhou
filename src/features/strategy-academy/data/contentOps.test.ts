@@ -6,9 +6,10 @@
  * - 未知课时（变体课 / 无效 id）返回 undefined，由 UI 隐藏。
  */
 import { describe, expect, it } from 'vitest';
-import { STANDARD_LEVEL_SUMMARIES } from './lessons/manifest';
+import { HEADS_UP_LEVEL_SUMMARIES, STANDARD_LEVEL_SUMMARIES } from './lessons/manifest';
 import {
   DEFAULT_LAST_REVIEWED,
+  HEADS_UP_LAST_REVIEWED,
   LESSON_CONTENT_META,
   getLessonContentMeta,
 } from './contentOps';
@@ -17,6 +18,13 @@ import { STRATEGY_BIBLIOGRAPHY } from './bibliography';
 const STANDARD_LESSON_IDS = STANDARD_LEVEL_SUMMARIES.flatMap((level) =>
   level.lessons.map((lesson) => lesson.id),
 );
+
+/** manifest 的变体 L4 在 l4a/l4b 下重复，按 id 去重 */
+const HEADS_UP_LESSON_IDS = [
+  ...new Set(
+    HEADS_UP_LEVEL_SUMMARIES.flatMap((level) => level.lessons.map((lesson) => lesson.id)),
+  ),
+];
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -39,28 +47,38 @@ describe('contentOps：覆盖率', () => {
     expect(missing).toEqual([]);
   });
 
-  it('条目集合与标准课时集合完全相等（无悬空 / 无重复来源）', () => {
+  it('每门单挑课时都有内容运营条目（12 门）', () => {
+    expect(HEADS_UP_LESSON_IDS).toHaveLength(12);
+    const missing = HEADS_UP_LESSON_IDS.filter(
+      (lessonId) => getLessonContentMeta(lessonId) === undefined,
+    );
+    expect(missing).toEqual([]);
+  });
+
+  it('条目集合与标准 + 单挑课时集合完全相等（无悬空 / 无重复来源）', () => {
     expect(Object.keys(LESSON_CONTENT_META).toSorted()).toEqual(
-      STANDARD_LESSON_IDS.toSorted(),
+      [...STANDARD_LESSON_IDS, ...HEADS_UP_LESSON_IDS].toSorted(),
     );
   });
 
-  it('短牌 / 单挑变体课与无效 id 不登记（UI 据此隐藏）', () => {
+  it('短牌变体课与无效 id 不登记（UI 据此隐藏）', () => {
     expect(getLessonContentMeta('l3sd-intro')).toBeUndefined();
-    expect(getLessonContentMeta('l3hu-bn-aggression')).toBeUndefined();
     expect(getLessonContentMeta('not-a-lesson')).toBeUndefined();
   });
 });
 
 describe('contentOps：日期', () => {
-  it('所有日期为合法 ISO 日期且取批量校对基准', () => {
+  it('所有日期为合法 ISO 日期且取所属内容轨的批量基准', () => {
+    const headsUpIds = new Set(HEADS_UP_LESSON_IDS);
     for (const [lessonId, meta] of Object.entries(LESSON_CONTENT_META)) {
       expect(isRealDate(meta.lastReviewed), `${lessonId} 日期非法：${meta.lastReviewed}`).toBe(
         true,
       );
-      expect(meta.lastReviewed, `${lessonId} 未取批量基准日期`).toBe(DEFAULT_LAST_REVIEWED);
+      const expected = headsUpIds.has(lessonId) ? HEADS_UP_LAST_REVIEWED : DEFAULT_LAST_REVIEWED;
+      expect(meta.lastReviewed, `${lessonId} 未取内容轨基准日期`).toBe(expected);
     }
     expect(isRealDate(DEFAULT_LAST_REVIEWED)).toBe(true);
+    expect(isRealDate(HEADS_UP_LAST_REVIEWED)).toBe(true);
   });
 });
 

@@ -150,6 +150,15 @@ export function getLoadedAcademyLessonsForLevel(level: number): Lesson[] | null 
   return levelCache.get(level) ?? null;
 }
 
+/**
+ * 全文搜索：标准走速训全量（含本土课），变体走该变体专属课时。
+ * 变体 L1/L2 是共享基础层，但搜索入口与首页变体阶梯一致，只索引变体专属课。
+ */
+export function loadAcademyLessonsForSearch(variant: PokerVariant): Promise<Lesson[]> {
+  if (variant === 'standard') return loadAcademyLessonsForQuickDrill();
+  return loadVariant(variant);
+}
+
 /** 速训：标准全级别题池 */
 export function loadAcademyLessonsForQuickDrill(): Promise<Lesson[]> {
   return Promise.all(Object.keys(standardLevelLoaders).map((level) => loadLevel(Number(level)))).then(

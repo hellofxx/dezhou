@@ -11,12 +11,12 @@ import {
 } from './searchIndex';
 
 vi.mock('../data/lessons/loaders', () => ({
-  loadAcademyLessonsForQuickDrill: vi.fn(),
+  loadAcademyLessonsForSearch: vi.fn(),
 }));
 
-import { loadAcademyLessonsForQuickDrill } from '../data/lessons/loaders';
+import { loadAcademyLessonsForSearch } from '../data/lessons/loaders';
 
-const loadMock = vi.mocked(loadAcademyLessonsForQuickDrill);
+const loadMock = vi.mocked(loadAcademyLessonsForSearch);
 
 function makeLesson(id: string, overrides: Partial<Lesson> = {}): Lesson {
   return {
@@ -219,5 +219,21 @@ describe('loadLessonSearchIndex 缓存', () => {
     const retried = await loadLessonSearchIndex();
     expect(loadMock).toHaveBeenCalledTimes(2);
     expect(retried).toHaveLength(2);
+  });
+
+  it('按变体分别缓存：标准与单挑互不复用', async () => {
+    const headsUpLesson = makeLesson('l3hu-bn-aggression');
+    loadMock.mockImplementation(async (variant) =>
+      variant === 'heads-up' ? [headsUpLesson] : lessons,
+    );
+
+    const standard = await loadLessonSearchIndex('standard');
+    const headsUp = await loadLessonSearchIndex('heads-up');
+
+    expect(loadMock).toHaveBeenCalledTimes(2);
+    expect(getCachedLessonSearchIndex('standard')).toBe(standard);
+    expect(getCachedLessonSearchIndex('heads-up')).toBe(headsUp);
+    expect(headsUp).not.toBe(standard);
+    expect(headsUp.some((entry) => entry.lessonId === 'l3hu-bn-aggression')).toBe(true);
   });
 });

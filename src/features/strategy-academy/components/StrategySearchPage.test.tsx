@@ -15,12 +15,12 @@ import StrategySearchPage from './StrategySearchPage';
  */
 
 vi.mock('../data/lessons/loaders', () => ({
-  loadAcademyLessonsForQuickDrill: vi.fn(),
+  loadAcademyLessonsForSearch: vi.fn(),
 }));
 
-import { loadAcademyLessonsForQuickDrill } from '../data/lessons/loaders';
+import { loadAcademyLessonsForSearch } from '../data/lessons/loaders';
 
-const loadMock = vi.mocked(loadAcademyLessonsForQuickDrill);
+const loadMock = vi.mocked(loadAcademyLessonsForSearch);
 
 function makeLesson(id: string, content: string, question = '此处是题库题目吗？'): Lesson {
   return {
@@ -143,6 +143,20 @@ describe('StrategySearchPage：结果', () => {
     typeQuery('RangeCalibrationToken');
     expect(await screen.findByText(/RangeCalibrationToken/)).toBeTruthy();
     expect(loadMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('单挑变体下按该变体索引检索正文', async () => {
+    useAcademyStore.getState().switchVariant('heads-up');
+    loadMock.mockResolvedValue([
+      makeLesson('l3hu-bn-aggression', 'HeadsUpFullTextToken 是单挑正文标记。'),
+    ]);
+    renderPage();
+
+    typeQuery('HeadsUpFullTextToken');
+
+    const hit = await screen.findByRole('button', { name: '按钮位激进度' });
+    expect(hit.textContent).toContain('HeadsUpFullTextToken');
+    expect(loadMock).toHaveBeenCalledWith('heads-up');
   });
 
   it('英文查询大小写不敏感', async () => {

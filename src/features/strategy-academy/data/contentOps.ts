@@ -23,6 +23,9 @@ export interface LessonContentMeta {
 /** 批量校对基准日期：2026-11 标准课时全量复核 */
 export const DEFAULT_LAST_REVIEWED = '2026-11-04';
 
+/** 单挑变体批量深对齐校对日期 */
+export const HEADS_UP_LAST_REVIEWED = '2026-11-05';
+
 /** 内容轨 → 校对日期（局部返修时只改本表对应项） */
 const LAST_REVIEWED_BY_GROUP: Readonly<Record<string, string>> = {
   l1: DEFAULT_LAST_REVIEWED,
@@ -35,6 +38,8 @@ const LAST_REVIEWED_BY_GROUP: Readonly<Record<string, string>> = {
   l8: DEFAULT_LAST_REVIEWED,
   // 本土低级别盈利路径（manifest 中归入 Level 7 条目，此处按内容轨独立维护）
   local: DEFAULT_LAST_REVIEWED,
+  // 单挑变体（L3-L8 共 12 课，2026-11 深对齐）
+  'heads-up': HEADS_UP_LAST_REVIEWED,
 };
 
 /** 各内容轨课时 id（标准变体全集 92 门，含 Drill 与本土课） */
@@ -149,6 +154,20 @@ const LESSON_IDS_BY_GROUP: Readonly<Record<string, readonly string[]>> = {
     'local-mental-stop-loss',
     'local-mental-session-management',
   ],
+  'heads-up': [
+    'l3hu-bn-aggression',
+    'l3hu-sb-continuation',
+    'l3hu-bb-defense',
+    'l4hu-bn-opening',
+    'l4hu-ev-adjustments',
+    'l4hu-gto-basics',
+    'l4hu-counter-strategies',
+    'l5hu-focus',
+    'l5hu-opponent-psychology',
+    'l6hu-tourney',
+    'l7hu-stakes',
+    'l8hu-exploitative',
+  ],
 };
 
 /** 课时 → 校对依据（bibliography id；只登记有明确出处的课时） */
@@ -176,12 +195,12 @@ function buildLessonContentMeta(): Record<string, LessonContentMeta> {
   return meta;
 }
 
-/** 课时 → 内容运营元数据（标准变体全集） */
+/** 课时 → 内容运营元数据（标准 + 单挑变体全集） */
 export const LESSON_CONTENT_META: Readonly<Record<string, LessonContentMeta>> =
   buildLessonContentMeta();
 
 /**
- * 查询课时的内容运营元数据；未知课时（含短牌 / 单挑变体、无效 id）返回 undefined，
+ * 查询课时的内容运营元数据；未知课时（含短牌变体、无效 id）返回 undefined，
  * 由调用方决定不渲染（避免凭空显示「最近校对」）。
  */
 export function getLessonContentMeta(lessonId: string): LessonContentMeta | undefined {

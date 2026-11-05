@@ -28,7 +28,8 @@ type FullTextStatus = 'idle' | 'loading' | 'error';
 /**
  * 策略学院搜索页（P5 升级版）：
  * - 标题/副标题即时结果来自 manifest，空查询与 1 字符查询不加载正文
- * - 查询 ≥ SEARCH_MIN_QUERY_LENGTH 时懒加载标准全量课时，异步补"正文/小测命中"分区
+ * - 查询 ≥ SEARCH_MIN_QUERY_LENGTH 时懒加载当前变体课时（标准全量 / 变体专属），
+ *   异步补"正文/小测命中"分区；切换变体后索引按变体重取
  * - 加载失败降级为标题结果 + 重试入口；查询变化时用请求序号丢弃过期结果
  */
 export default function StrategySearchPage() {
@@ -41,8 +42,7 @@ export default function StrategySearchPage() {
   const requestRef = useRef(0);
 
   const normalized = query.trim().toLowerCase();
-  const wantsFullText =
-    activeVariant === 'standard' && normalized.length >= SEARCH_MIN_QUERY_LENGTH;
+  const wantsFullText = normalized.length >= SEARCH_MIN_QUERY_LENGTH;
 
   useEffect(() => {
     const requestId = requestRef.current + 1;
@@ -51,13 +51,13 @@ export default function StrategySearchPage() {
       setLoadStatus('idle');
       return;
     }
-    if (getCachedLessonSearchIndex()) {
+    if (getCachedLessonSearchIndex(activeVariant)) {
       setLoadStatus('idle');
       return;
     }
     setLoadStatus('loading');
     let cancelled = false;
-    void loadLessonSearchIndex()
+    void loadLessonSearchIndex(activeVariant)
       .then(() => {
         if (!cancelled && requestRef.current === requestId) setLoadStatus('idle');
       })
@@ -67,9 +67,9 @@ export default function StrategySearchPage() {
     return () => {
       cancelled = true;
     };
-  }, [wantsFullText, normalized, retryToken]);
+  }, [wantsFullText, normalized, activeVariant, retryToken]);
 
-  const readyIndex = wantsFullText ? getCachedLessonSearchIndex() : null;
+  const readyIndex = wantsFullText ? getCachedLessonSearchIndex(activeVariant) : null;
   const fullTextHits = useMemo(
     () => (readyIndex ? searchLessonIndex(readyIndex, normalized) : []),
     [readyIndex, normalized],

@@ -1,13 +1,15 @@
+import type { PokerVariant } from '@/shared/types/elo';
 import type { Lesson } from '../types';
-import { loadAcademyLessonsForQuickDrill } from '../data/lessons/loaders';
+import { loadAcademyLessonsForSearch } from '../data/lessons/loaders';
 
 /**
  * 策略学院全文检索索引（P5）。
  *
  * 分层：首页/搜索页的标题、副标题即时结果来自 manifest（utils/academyMeta），不触碰正文；
- * 只有当查询串达到 SEARCH_MIN_QUERY_LENGTH 且用户确实在搜索时，才懒加载标准全量课时
- * （data/lessons/loaders 的 loadAcademyLessonsForQuickDrill），并把正文/objectives/小测
- * 题干与解析拍平成可搜索条目缓存复用。加载失败时清空 in-flight 记录，允许用户重试。
+ * 只有当查询串达到 SEARCH_MIN_QUERY_LENGTH 且用户确实在搜索时，才懒加载当前变体课时
+ * （standard = 速训全量；short-deck / heads-up = 该变体专属课），并把正文/objectives/小测
+ * 题干与解析拍平成可搜索条目缓存复用。索引按变体分别缓存；加载失败时清空 in-flight 记录，
+ * 允许用户重试。
  *
  * 文案事实源：索引基于数据层原文（中文）构建，英文环境经渲染层 key 覆盖显示；
  * 因此英文查询只命中数据层内含的英文术语（EV / GTO / c-bet 等），不做语种翻译检索。
@@ -119,36 +121,48 @@ export function searchLessonIndex(
   return hits;
 }
 
-let cachedIndex: LessonSearchEntry[] | null = null;
-let indexPromise: Promise<LessonSearchEntry[]> | null = null;
+const cachedIndexes = new Map<PokerVariant, LessonSearchEntry[]>();
+const indexPromises = new Map<PokerVariant, Promise<LessonSearchEntry[]>>();
 
 /** 已缓存的索引（组件渲染期同步读取，未加载返回 null） */
-export function getCachedLessonSearchIndex(): LessonSearchEntry[] | null {
-  return cachedIndex;
+export function getCachedLessonSearchIndex(
+  variant: PokerVariant = 'standard',
+): LessonSearchEntry[] | null {
+  return cachedIndexes.get(variant) ?? null;
 }
 
 /**
- * 懒加载并缓存全文索引：并发/连续查询共用同一个 in-flight Promise，
- * 成功后长期缓存；失败时清空 in-flight 记录，允许调用方重试。
+ * 懒加载并缓存全文索引：同一变体的并发/连续查询共用同一个 in-flight Promise，
+ * 成功后长期缓存；失败时清空该变体的 in-flight 记录，允许调用方重试。
  */
-export function loadLessonSearchIndex(): Promise<LessonSearchEntry[]> {
-  if (cachedIndex) return Promise.resolve(cachedIndex);
-  if (indexPromise) return indexPromise;
+export function loadLessonSearchIndex(
+  variant: PokerVariant = 'standard',
+): Promise<LessonSearchEntry[]> {
+  const cached = cachedIndexes.get(variant);
+  if (cached) return Promise.resolve(cached);
+  const inflight = indexPromises.get(variant);
+  if (inflight) return inflight;
 
-  const task = loadAcademyLessonsForQuickDrill()
+  const task = loadAcademyLessonsForSearch(variant)
     .then((lessons) => {
-      cachedIndex = buildLessonSearchIndex(lessons);
-      return cachedIndex;
+      const index = buildLessonSearchIndex(lessons);
+      cachedIndexes.set(variant, index);
+      return index;
     })
     .finally(() => {
-      if (indexPromise === task) indexPromise = null;
+      if (indexPromises.get(variant) === task) indexPromises.delete(variant);
     });
-  indexPromise = task;
+  indexPromises.set(variant, task);
   return task;
 }
 
-/** 清空缓存（测试用；运行时索引随会话常驻） */
-export function resetLessonSearchIndexCache(): void {
-  cachedIndex = null;
-  indexPromise = null;
+/** 清空缓存（测试用；不传变体时清空全部） */
+export function resetLessonSearchIndexCache(variant?: PokerVariant): void {
+  if (variant) {
+    cachedIndexes.delete(variant);
+    indexPromises.delete(variant);
+    return;
+  }
+  cachedIndexes.clear();
+  indexPromises.clear();
 }
