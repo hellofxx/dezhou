@@ -40,6 +40,8 @@ export interface TheoryRecommendationInput {
   completedChapters: readonly string[];
   /** 定位测评免修 Level（参与解锁判定，与 store 口径一致） */
   creditLevels?: readonly string[];
+  /** v5 宽限解锁 Level（新增核心章前已解锁的 Level） */
+  legacyUnlockedLevels?: readonly string[];
   /** 变体序列（缺省 standard；本模块 UI 只在标准变体下展示推荐） */
   variant?: PokerVariant;
 }
@@ -91,7 +93,14 @@ function firstUnreadCoreChapter(
     (item) => item.id === levelId,
   );
   if (!level) return undefined;
-  if (!isLevelUnlockedByCompleted(levelId, input.completedChapters, input.creditLevels ?? [])) {
+  if (
+    !isLevelUnlockedByCompleted(
+      levelId,
+      input.completedChapters,
+      input.creditLevels ?? [],
+      input.legacyUnlockedLevels ?? [],
+    )
+  ) {
     return undefined;
   }
   return getCoreChaptersOfLevel(level).find(

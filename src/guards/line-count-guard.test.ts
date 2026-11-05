@@ -73,10 +73,11 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
 /**
  * 章节题库数据文件豁免（窄口径）。
  *
- * theory-academy 的章末题库按 Level 单文件维护（quizBank/t1..t9.ts），本质是纯数据：
+ * theory-academy 的章末题库按 Level 单文件维护（standard `quizBank/t1..t9.ts`、
+ * heads-up `quizBank/t1hu..t9hu.ts`），本质是纯数据：
  * 每条记录是 6 行结构化字面量，拆分只能按题号切文件，反而破坏「按章节 id 注入」的契约。
- * 因此只对 `quizBank/t<1-9>.ts` 这 9 个精确路径登记逐文件上限（只减不增），
- * 并从通用 >400 行扫描中排除；禁止扩大到块数据、level 文件或任何目录级豁免。
+ * 因此只对上述精确路径登记逐文件上限（只减不增），并从通用 >400 行扫描中排除；
+ * 禁止扩大到块数据、level 文件或任何目录级豁免。
  * 专属断言见「QUIZ_BANK_ALLOWLIST 只允许题库路径且不得超过登记行数」。
  */
 const QUIZ_BANK_ALLOWLIST: Record<string, OversizedEntry> = {
@@ -89,6 +90,15 @@ const QUIZ_BANK_ALLOWLIST: Record<string, OversizedEntry> = {
   'features/theory-academy/data/levels/variants/standard/quizBank/t7.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
   'features/theory-academy/data/levels/variants/standard/quizBank/t8.ts': { maxLines: 239, reason: '章末题库数据（按 Level 拆分）' },
   'features/theory-academy/data/levels/variants/standard/quizBank/t9.ts': { maxLines: 427, reason: '章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t1hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t2hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t3hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t4hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t5hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t6hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t7hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t8hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
+  'features/theory-academy/data/levels/variants/heads-up/quizBank/t9hu.ts': { maxLines: 600, reason: '单挑章末题库数据（按 Level 拆分）' },
   'features/strategy-academy/data/lessons/variants/standard/quizBank/level1.ts': { maxLines: 800, reason: '策略 L1 题库数据（按 Level 拆分）' },
   'features/strategy-academy/data/lessons/variants/standard/quizBank/level2.ts': { maxLines: 900, reason: '策略 L2 题库数据（按 Level 拆分）' },
   'features/strategy-academy/data/lessons/variants/standard/quizBank/level3.ts': { maxLines: 1200, reason: '策略 L3 题库数据（按 Level 拆分）' },
@@ -100,9 +110,9 @@ const QUIZ_BANK_ALLOWLIST: Record<string, OversizedEntry> = {
   'features/strategy-academy/data/lessons/variants/standard/quizBank/local.ts': { maxLines: 1800, reason: '策略本土课题库数据（16 课）' },
 };
 
-/** 题库路径的精确形态：理论 t1-t9 + 策略 level1-8/local，不接受子目录或其他命名 */
+/** 题库路径的精确形态：理论 standard t1-t9 + heads-up t1hu-t9hu + 策略 level1-8/local，不接受子目录或其他命名 */
 const QUIZ_BANK_PATH_RE =
-  /^features\/(?:theory|strategy)-academy\/data\/(?:levels|lessons)\/variants\/standard\/quizBank\/(?:t[1-9]|level[1-8]|local)\.ts$/;
+  /^features\/(?:theory|strategy)-academy\/data\/(?:levels|lessons)\/variants\/(?:standard\/quizBank\/(?:t[1-9]|level[1-8]|local)|heads-up\/quizBank\/t[1-9]hu)\.ts$/;
 
 type FileInfo = {
   filePath: string;

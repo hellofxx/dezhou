@@ -74,7 +74,7 @@ src/
 | 状态 | zustand persist；禁止裸调 localStorage；每个 store 有 name + version；记录完成 action 幂等 | `docs/AI_GUIDE.md` §状态管理 |
 | i18n | zh/en 缺一不可；key 命名 `<module>.<context>.<field>`；课程内容双轨、复习状态存 key | `docs/AI_GUIDE.md` §国际化 |
 | UI/UX | 四层色彩 token；暗色默认；WCAG 2.1 AA；反霓虹；设计契约以 `DESIGN.md` 为准 | `DESIGN.md` + `docs/AI_GUIDE.md` §UI/UX |
-| 文件大小 | 单文件 ≤300 行；>400 行失败；逐文件 allowlist 只减不增；quizBank 纯数据文件走专用 `QUIZ_BANK_ALLOWLIST`；CSS ≤800 行 | `src/guards/line-count-guard.test.ts` |
+| 文件大小 | 单文件 ≤300 行；>400 行失败；逐文件 allowlist 只减不增；题库纯数据文件（理论标准 / 单挑 + 策略）超限时走专用 `QUIZ_BANK_ALLOWLIST`（逐文件上限；chapters / blocks 不豁免）；CSS ≤800 行 | `src/guards/line-count-guard.test.ts` |
 
 ## 路由、构建与离线
 
@@ -93,7 +93,7 @@ src/
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |
 | 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory |
-| 学院共享组件/纯函数 | `shared/components/academy/*`、`shared/utils/academy*` | 理论/策略各自薄包装消费；shared 禁止 import feature；两院行为/文案由包装层保持。P2 学习工具同源：`AcademyBookmarksPanel` / `AcademyNotesPanel`（课时书签 / 纯文本笔记）与 `ContentIssueReportDialog`（内容纠错，mailto / 剪贴板降级，无后端） |
+| 学院共享组件/纯函数 | `shared/components/academy/*`、`shared/utils/academy*` | 理论/策略各自薄包装消费；shared 禁止 import feature；两院行为/文案由包装层保持。P2 学习工具同源：`AcademyBookmarksPanel` / `AcademyNotesPanel`（课时书签 / 纯文本笔记）与 `ContentIssueReportDialog`（内容纠错，mailto / 剪贴板降级，无后端）。变体规则卡同源：`AcademyVariantRuleCard`（理论 `TheoryVariantRuleCard` / 策略 `StrategyVariantRuleCard` 各做薄包装），单挑规则事实以 `shared/constants/headsUpRules.ts` 为单源 |
 | 调试解锁 | `shared/stores/debugMode.ts` | 9 处门禁；两种短路接法；onboarding 不纳入 |
 
 > 完整契约（含各模块推导函数、阈值、9 处门禁清单与选项排序规则）见 `docs/AI_GUIDE.md` §跨模块复用契约。
@@ -185,6 +185,7 @@ src/
 | 阈值 / 评级源 | `range-trainer-dev` / `shared/types/decisionFeedback.ts` | 位置解锁以 constants.ts；GRADE_THRESHOLDS 以 decisionFeedback.ts；worker 拷贝须 parity |
 | 每日计划生成（双源已消歧） | `strategy-academy-dev` 持 `generateDailyPlan`（academy 内部）/ `progress-dev` 持 `generateCrossModuleDailyPlan`（跨模块日训） | 两者命名已区分，禁止混用 |
 | 理论数据源 registry | `platform-dev`（注册）+ `progress-dev`（消费） | 每日计划/下一章；theory bootstrap 注册，progress 只消费接口，不 import theory |
+| 变体规则卡（单挑） | `platform-dev` | shared 侧 `types/variantRules.ts` / `constants/headsUpRules.ts` / `utils/academyVariantRules.ts` / `components/academy/AcademyVariantRuleCard`；消费方 theory-academy / strategy-academy 各做薄包装（变体判定 + `variant.headsUpRules.*` 字面量 key 翻译）；shared 不读 store、不拼路由 |
 
 ### 边界与协作流程
 

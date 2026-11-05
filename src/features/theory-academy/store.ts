@@ -15,7 +15,13 @@ import {
   getLevelSummariesByVariant,
   isLevelUnlockedByCompleted,
 } from './utils/theoryMeta';
-import { EMPTY_ATTEMPT, MAX_CHAPTER_NOTE_LENGTH, initialProgress, seedChapterAttempts } from './store.defaults';
+import {
+  EMPTY_ATTEMPT,
+  MAX_CHAPTER_NOTE_LENGTH,
+  initialProgress,
+  seedChapterAttempts,
+  seedLegacyHeadsUpUnlockedLevels,
+} from './store.defaults';
 import type { PokerVariant } from '@/shared/types/elo';
 
 /** 章节笔记字符上限（单一事实源在 store.defaults，经 store 对外导出） */
@@ -36,7 +42,7 @@ interface TheoryStore {
     correctAnswers: number,
   ) => void;
   isChapterCompleted: (chapterId: string) => boolean;
-  /** 按 Level ID（'t1'-'t9'）判断解锁：T1 默认解锁，Tn 需前一 Level 核心章完成或被定位测评免修 */
+  /** Level 解锁：T1 恒解锁；Tn 需前一 Level 核心章完成、定位测评免修或 v5 宽限名单命中 */
   isTheoryLevelUnlocked: (levelId: string) => boolean;
   /** Level 进度（只统计核心章：增补章完成不计入分子分母） */
   getLevelProgress: (levelId: string) => number;
@@ -129,9 +135,15 @@ export const useTheoryStore = create<TheoryStore>()(
 
       isTheoryLevelUnlocked: (levelId) => {
         if (isDebugUnlockActive()) return true; // 调试解锁：解除全部理论 Level 门禁
-        // 解锁判定委托 utils 纯函数（单源）；定位测评免修 Level 经 creditLevels 透传
-        const { completedChapters, placement } = get().progress;
-        return isLevelUnlockedByCompleted(levelId, completedChapters, placement?.creditLevels);
+        // 解锁判定委托 utils 纯函数（单源）：定位测评免修经 creditLevels、
+        // v5 存量宽限经 legacyUnlockedLevels 透传
+        const { completedChapters, placement, legacyUnlockedLevels } = get().progress;
+        return isLevelUnlockedByCompleted(
+          levelId,
+          completedChapters,
+          placement?.creditLevels,
+          legacyUnlockedLevels,
+        );
       },
 
       getLevelProgress: (levelId) => {
@@ -233,7 +245,7 @@ export const useTheoryStore = create<TheoryStore>()(
     }),
     {
       name: 'theory-academy-progress',
-      version: 4,
+      version: 5,
       migrate: (persistedState: unknown, fromVersion: number) => {
         const next = (persistedState ?? {}) as Partial<TheoryStore>;
         // v0 → v1：防御性合并进度默认值（新 store 首版，兜底旧异常数据）
@@ -261,6 +273,18 @@ export const useTheoryStore = create<TheoryStore>()(
             checkpoints: previous.checkpoints ?? {},
             bookmarkedChapters: previous.bookmarkedChapters ?? [],
             chapterNotes: previous.chapterNotes ?? {},
+          };
+        }
+        // v4 → v5：单挑新增核心章后不重锁存量用户。只按历史快照写宽限名单（未定义才种子化，
+        // 已定义则原样保留），绝不写 completedChapters——新章仍需真正读完才计入完成度。
+        if (fromVersion < 5) {
+          const previous: Partial<TheoryProgress> = next.progress ?? {};
+          next.progress = {
+            ...initialProgress,
+            ...previous,
+            legacyUnlockedLevels:
+              previous.legacyUnlockedLevels ??
+              seedLegacyHeadsUpUnlockedLevels(previous.completedChapters ?? []),
           };
         }
         return next as TheoryStore;

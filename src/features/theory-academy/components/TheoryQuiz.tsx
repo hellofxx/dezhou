@@ -81,7 +81,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
 
   // 防御：空题库（理论章节无小测）时自动按完成处理，避免 onComplete 永不触发导致卡死在空白小测页。
   // 用 effect 触发（而非渲染期调用父 setState）；完成后父组件切至 done 会卸载本组件，不会循环。
-  // 正常由 theoryIntegrity 测试保证每章 3-5 题，此为防御性兜底。
+  // 正常由 theoryIntegrity 测试保证题量（standard / heads-up 8–12，short-deck 3–5），此为防御性兜底。
   // P1F-03：completedRef 一次性守卫（对齐 TrainingSession 防重入模式）——StrictMode 下 effect
   // 双跑不会重置 ref，onComplete 仅触发一次，避免 recordChapterAttempt 双调、训练事件双 emit。
   const isEmpty = orderedQuestions.length === 0;

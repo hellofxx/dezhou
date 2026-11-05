@@ -1,4 +1,7 @@
 import type { EloDimension, PokerVariant } from '@/shared/types/elo';
+import type { VariantRuleInfo } from '@/shared/types/variantRules';
+
+export type { VariantRuleInfo };
 
 // ===== 理论学院（Theory Academy）类型体系 =====
 // 与 strategy-academy 并列的独立理论学习模块：
@@ -174,31 +177,7 @@ export interface TheoryLevelInfo extends TheoryLevelSummary {
   chapters: TheoryChapter[];
 }
 
-/** 变体规则信息 */
-export interface VariantRuleInfo {
-  deckSize?: number;                 // 36/52
-  handRanking?: {
-    tripsBeatsStraight?: true;      // 短牌核心：三条 > 顺子
-    flushBeatsFullHouse?: true;     // 短牌核心：同花 > 葫芦
-    aceHighStraight?: string[];     // A-K-Q-J-T
-    aceLowStraight?: string[];      // 短牌：A-6-7-8-9（2-5 被移除，A 当低张）
-    pairBeatsAnyAceKing?: true;     // 短牌核心：口袋对 > AKo
-  };
-  positionDynamics?: {
-    sbAnte?: boolean;               // 单挑：SB 强制 Ante
-    sbFirstActionPreflop?: true;    // 单挑：翻前 SB（按钮位）先行动
-    bbFirstActionPostflop?: true;   // 单挑：翻后 BB 先行动（SB/按钮位最后行动）
-  };
-  blindStructure?: {
-    sbAmount: number;
-    bbAmount: number;
-  };
-  preFlopHandStrength?: {
-    pairBeatsAnyAceKing?: true;     // 短牌核心规则
-    suitedConnectorsStrength?: 'elevated';
-  };
-  [key: string]: unknown;
-}
+/** 变体规则信息（类型定义已迁至 shared，理论侧保留重导出以兼容既有 import） */
 
 /** 术语表条目：stable id + i18n key；aliases 为别名 key（搜索时逐 key 解析后匹配） */
 export interface TheoryGlossaryTerm {
@@ -295,6 +274,8 @@ export interface TheoryProgress {
   placement?: TheoryPlacementResult;
   /** v4：收藏章节 id 列表 */
   bookmarkedChapters?: string[];
+  /** v5：新增单挑核心章前的已解锁 Level 宽限名单（只放宽解锁，不写完成） */
+  legacyUnlockedLevels?: string[];
   /** v4：章节笔记（chapterId → 笔记；纯文本，上限见 store.MAX_CHAPTER_NOTE_LENGTH） */
   chapterNotes?: Record<string, TheoryChapterNote>;
 }

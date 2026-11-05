@@ -9,6 +9,7 @@ import { HandExampleComponent } from './HandExample';
 import { PracticeDrillComponent } from './PracticeDrill';
 import { SectionNav } from './SectionNav';
 import { LessonIntroCard } from './LessonIntroCard';
+import { StrategyVariantRuleCard } from './StrategyVariantRuleCard';
 import { deriveLessonUnits } from '../utils/lessonUnits';
 import { lessonContentKey, resolveUnitTitleKeyed } from '../utils/contentKeys';
 import { pickReviewTargetUnit } from '../utils/adaptiveDifficulty';
@@ -124,6 +125,9 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
     [lesson.id, units, handleNavigateUnit],
   );
 
+  // 单挑规则卡：变体判定在包装层（标准/短牌返回 null），仅在阅读态两条渲染路径插入
+  const variantRuleCard = <StrategyVariantRuleCard lesson={lesson} />;
+
   // 确定 CTA 文案
   const nextCtaLabel = isLastUnit
     ? hasPractice
@@ -168,6 +172,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
           lessonId={lesson.id}
         />
         <div className="mt-4 space-y-4 max-w-4xl mx-auto">
+          {/* 变体规则卡（单挑课时）：正文之前、课程路线图之前 */}
+          {variantRuleCard}
           <LessonIntroCard
             lessonId={lesson.id}
             units={units}
@@ -221,6 +227,8 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
         lessonId={lesson.id}
       />
       <div className="mt-4 space-y-4 max-w-4xl mx-auto">
+        {/* 变体规则卡（单挑课时）：正文之前、先行组织者卡之前 */}
+        {variantRuleCard}
         {/* 先行组织者卡 */}
         <LessonIntroCard
           lessonId={lesson.id}

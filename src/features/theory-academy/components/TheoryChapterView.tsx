@@ -21,6 +21,7 @@ import { TheorySectionRenderer } from './TheorySectionRenderer';
 import { TheoryQuiz } from './TheoryQuiz';
 import { TheoryCalcDrill } from './TheoryCalcDrill';
 import { PracticeBridgeCard } from './PracticeBridgeCard';
+import { TheoryVariantRuleCard } from './TheoryVariantRuleCard';
 import { NextChapterNav } from './NextChapterNav';
 import { TheoryNotesPanel } from './TheoryNotesPanel';
 import { ContentIssueReport } from './ContentIssueReport';
@@ -209,6 +210,8 @@ export default function TheoryChapterView() {
             {/* 正文容器与 strategy-academy CourseView 完全一致（居中 max-w-3xl walnut-panel），
                 两学院课程文字展示的居中与容器大小统一 */}
             <div className="space-y-6">
+              {/* 单挑规则卡：正文之前的规则先行（仅 heads-up 章节，标准 / 短牌由组件自判返回 null） */}
+              <TheoryVariantRuleCard chapter={chapter} />
               {chapter.content.map((section, index) => (
                 <TheorySectionRenderer
                   key={index}

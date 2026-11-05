@@ -10,7 +10,8 @@
       "Example 2 (calling station): The opponent almost never folds postflop (fold rate <25%) but opens moderately. Portrait: calling station. Exploitation: don't use pure bluffs (he doesn't fold); switch to value-bet thin value — top pair weak kicker can also bet for money because he calls with worse. Meanwhile reduce bluff frequency, converting bluffs to semi-bluffs or checks.",
       "Example 3 (nit): The opponent opens only 30% and folds too much to raises. Portrait: nit. Exploitation: raise steal and raise frequency (his fold rate is automatic profit); but beware his occasional strong-hand re-raise — when a nit enters a pot he's usually strong.",
       "Counterintuitive point: don't reclassify an opponent because he \"once\" showed the nuts. Heads-up is high-frequency; a single all-in win/loss is noise; only 50-100 hand frequency statistics form an exploitable signal. Concluding from a single-hand impression is exploitation's biggest enemy.",
-      "Build an opponent notebook: every 20 hands record the four frequencies (open rate / fold rate / 3-bet rate / showdown tendency). Among HU pros, \"note-taking while playing\" is the discipline that turns short-term impressions into long-term advantage."
+      "Build an opponent notebook: every 20 hands record the four frequencies (open rate / fold rate / 3-bet rate / showdown tendency). Among HU pros, \"note-taking while playing\" is the discipline that turns short-term impressions into long-term advantage.",
+      "The stat shapes of four heads-up opponent types and the matching adjustments: the same numbers in different combinations point to completely different exploits — read the shape first, then talk about magnitude."
     ],
     "t7hu-exploit": [
       "Exploitation Isn't Abandoning GTO — It's Calibrating It",
@@ -23,7 +24,34 @@
       "Example 2 (value vs the calling station): The opponent calls too loosely postflop (station). After locking this tendency, your value-bet sizes can increase and thin-value hands (top pair weak kicker) all enter the betting range — because the station calls with weak hands, your wide value range gets overpaid.",
       "Example 3 (when to return to baseline): After you raise steal frequency, the opponent starts 3-betting frequently in response — he's discovered your deviation. Now you must return to the GTO baseline (narrow the steal range, reduce pure bluffs), or your newly opened leaks get harvested in reverse. Exploitation is a dynamic game: deviate → get detected → return to baseline, looping.",
       "Counterintuitive point: the biggest risk of exploitation isn't \"exploiting too little\" but \"over-exploiting and becoming the leak yourself\". While harvesting the opponent's leaks, HU pros always keep one hand on the GTO baseline wheel — the moment the opponent adjusts, they snap back.",
-      "Exploitation execution in five steps: (1) HUD-collect enough samples to confirm the leak; (2) lock the node in a solver for the optimal response; (3) compare to baseline and mark the pushed-up frequencies and sizes; (4) execute live; (5) re-check the sample every 500 hands. A \"lock\" without data support is exploitation on paper."
+      "Exploitation execution in five steps: (1) HUD-collect enough samples to confirm the leak; (2) lock the node in a solver for the optimal response; (3) compare to baseline and mark the pushed-up frequencies and sizes; (4) execute live; (5) re-check the sample every 500 hands. A \"lock\" without data support is exploitation on paper.",
+      "Reading steal expectation off the fold rate (0.5 dead blind already sunk, raise to 2BB, the 1.5-to-1.5 model): EV = f x 1.5 - (1 - f) x 1.5. Every step up in the fold rate lifts the pure-steal expectation linearly, and 50% is break-even."
+    ],
+    "t7hu-stats": [
+      "Stats Are the Skeleton of a Profile",
+      "Stats do not tell you which two cards the opponent holds; they tell you which slice of ranges he puts money in with, and where he gives up. Heads-up is played almost every hand in wide blind-versus-blind ranges, so the baselines shift up: the opening side's range sits near or above half of hands, the defending side wider still. Read heads-up with full-ring baselines and everyone looks like a maniac.",
+      "Three definitions (same hand sample):\n\nVPIP = hands with voluntary money in / total hands\nPFR = preflop raises / total hands\nAF = (bets + raises) / calls\n\n150-hand sample: 35 VPIP hands, 28 preflop raises, 60 bets / 30 raises / 30 calls\nVPIP = 35 / 150 = 23.3%\nPFR = 28 / 150 = 18.7%\nAF = (60 + 30) / 30 = 3.0",
+      "Worked hand (the gap reads passivity): VPIP 23.3% and PFR 18.7% differ by 4.6 points, and that gap is the slice of hands he plays without raising. Rearrange the same numbers — VPIP 23.3%, PFR 23.0% — and the profile changes completely: the first is passive, the second a polarised tight-aggressive player.",
+      "FCB and WWSF: Two Conversion Rates on the Heads-Up Side",
+      "FCB is the fold rate against a continuation bet, which measures how easily one barrel takes the pot away; WWSF is the share of pots won after seeing a flop, which measures how well he converts postflop involvement into pots. In heads-up the two are more tightly linked than in full ring: with no multiway dilution, one player giving up is another collecting. Both typically sit in the forties to fifties (empirical range, not a precise promise).",
+      "Sample noise (binomial standard error and the 95% interval):\n\nSE = sqrt(p(1-p) / n), 95% half-width = 1.96 x SE\n\np = 0.45:\nn = 100 -> SE = 5.0 points, half-width = +/-9.8 points\nn = 300 -> SE = 2.9 points, half-width = +/-5.6 points\n\nTo pull the half-width down to 2.5 points (the minimum for telling 5-point differences apart):\nn >= 1.96^2 x 0.45 x 0.55 / 0.025^2 = 1521 hands",
+      "Worked hand (reading over-folding through the threshold): across 120 hands the opponent folded to a half-pot continuation bet 72 times, so FCB = 72 / 120 = 60.0%. The half-pot break-even fold rate is alpha = 4 / 12 = 33.3%, and 60.0% clears it by 26.7 points. Now add the noise: at p = 0.6 and n = 120 the half-width is about +/-8.8 points, so the lower bound is roughly 51% — still far above the threshold, which is what makes the adjustment evidence rather than a hunch.",
+      "Combinations beat single stats: wide opening plus a high fold rate to continuation bets means a wide, weakly defended range, so bet more often; narrow opening plus frequent re-raises means polarisation, so call less and fold more; three middling numbers mean there is nothing to harvest, so go back to baseline. A single stat only raises a hypothesis; the combination settles it.",
+      "Stats exist to eliminate hypotheses, not to confirm intuition: write down what you think he is, then see whether the numbers can overturn it. Keep the sample discipline too — a few dozen hands only fix the order of magnitude, hundreds are needed for percentage points, and every adjustment should answer 'how many hands does this conclusion need'.",
+      "Heads-up stat baselines and the sample they need: the baselines are empirical magnitudes, while the sample column is roughly how many hands it takes to read them — below that level a stat is a direction, not a conclusion."
+    ],
+    "t7hu-hand-reading": [
+      "Hand Reading Is Shaving the Range Layer by Layer",
+      "Hand reading is not guessing two cards; it is deleting an impossible slice of combos at each decision point. Four steps: set the baseline range from preflop action; cut once by who the flop belongs to; cut again by the sizing on the turn; close it out with blockers on the river. Every step has to name the slice it removed — if you cannot name it, the range is still as wide as before and no reading happened.",
+      "Blocker combinatorics:\n\nrank not on the board -> his pocket pair has C(4,2) = 6 combos\none of that rank on the board -> C(3,2) = 3 combos\none on the board plus one in your hand (two removed) -> C(2,2) = 1 combo\n\nRiver board KS 9S 4D 7C 2S, you hold AS KD:\nKK is down to 1 combo; 99 / 44 / 77 / 22 have 3 each (one of each rank on the board)\ntrips total 1 + 3 x 4 = 13 combos — value density shifts from trips-K to the small sets and two pair",
+      "Worked hand (blockers rewrite the call): on that river the opponent overbets 1.5x pot. The equilibrium bluff share at 1.5x is f = 1.5 / (1 + 2 x 1.5) = 37.5%, so value:bluff is about 5:3; if his value range holds 20 combos, equilibrium bluffs should be about 20 x 0.6 = 12. Your AS zeroes out his nut-flush combos, and KD cuts trips-K from 3 combos to 1 — the ace-high hand has no showdown value but is one of the best bluff-catchers available.",
+      "Worked hand (the narrowing ledger): about 600 combos open preflop; about 420 combos fire the KS 9S 4D flop; about 200 combos fire the 7C turn; about 60 combos are left to overbet the 2S river, of which 35 are value and 25 are bluffs.\n\nbluff share 25 / 60 = 41.7%, above the 1.5x equilibrium of 37.5%\n-> this opponent over-bluffs the river, so bluff-catching has positive margin",
+      "A Betting Line Is a Narrative",
+      "String the three streets together and they read as one sentence: small flop bet, turn check, big river bet reads as 'thin value on the flop, giving up the pressure on the turn, switching to a polarised size on the river' — not 'he was strong the whole way'. Half of hand reading is translating actions into a narrative.",
+      "Worked hand (checking the narrative against the sizing): 1/3 pot on the flop, check on the turn, 1.5x pot on the river. For that line to hang together the polarised river range has to be real: the equilibrium bluff share at 1.5x is 37.5%, so nearly four in ten of his river bets should be bluffs. A range that gave up the pressure on the turn and only then overbets the river usually cannot assemble that much value — when the narrative does not hold, bluff-catching has positive margin; and if you misread the turn check as a trap, the same line walks you into a wrong fold.",
+      "Counter-narrative first: when a line does not hang together — a turn check followed by a river overbet, for instance — suspect the narrative before you suspect your own reading. Inconsistency usually means you missed a node on one of the streets.",
+      "Four steps: set the baseline, cut by the board, cut by the sizing, close with blockers. And remember you are being read too — your own betting line has to fit your own range, or the opponent's counter-narrative lands first.",
+      "Range narrowing along one betting line (combo counts are a teaching setup): the value-to-bluff split on the river has to fit the sizing, otherwise the line is a counter-narrative."
     ]
   },
   "quiz": {
@@ -77,6 +105,36 @@
       ],
       "explanation": "A nit folds too much, so the fold rate on steals and raises is automatic profit. But note he's usually strong once in a pot — avoid being re-raised by his occasional strong hands."
     },
+    "t7hu-patterns-q6": {
+      "question": "The opponent folds to a half-pot continuation bet 72 times in 120 hands. What is the FCB and how does it compare with the half-pot threshold?",
+      "options": [
+        "60.0%, above the 33.3% threshold, so bet more often",
+        "45.0%, below the threshold",
+        "60.0%, below the threshold",
+        "50.0%, equal to the threshold"
+      ],
+      "explanation": "72 / 120 = 60.0%; the half-pot break-even fold rate is alpha = 4 / 12 = 33.3%, so 60.0% clears it by 26.7 points."
+    },
+    "t7hu-patterns-q7": {
+      "question": "The opponent opens wide but rarely re-raises. The combined read is:",
+      "options": [
+        "Wide and passive: bluff less, thin-value more",
+        "Narrow and aggressive: fold more",
+        "Wide and aggressive: play only the nuts",
+        "Nothing exploitable"
+      ],
+      "explanation": "A wide range with few re-raises means plenty of weak calling hands: bluffs get called, thin value gets paid."
+    },
+    "t7hu-patterns-q8": {
+      "question": "The opponent shows down the nuts in an all-in. The right response is:",
+      "options": [
+        "Keep the profile and wait for frequency evidence across 50-100 hands",
+        "Classify him as a nit immediately",
+        "Start bluffing him constantly",
+        "Give him more respect and stop betting"
+      ],
+      "explanation": "One hand is noise: profiles come from frequencies, not single showdowns, and changing one takes a sample rather than an impression."
+    },
     "t7hu-exploit-q1": {
       "question": "The discipline of \"minimum necessary deviation\" is:",
       "options": [
@@ -126,6 +184,196 @@
         "Ignore the opponent's reaction"
       ],
       "explanation": "The opponent detected your deviation, and your newly opened leaks will be harvested in reverse. You must return to baseline — exploitation is a \"deviate → get detected → return\" dynamic game."
+    },
+    "t7hu-exploit-q6": {
+      "question": "Steal-raising to 2BB (with the 0.5 dead small blind already sunk), the opponent folds 45%. The expectation is:",
+      "options": [
+        "-0.15BB",
+        "+0.15BB",
+        "+0.30BB",
+        "0.00BB"
+      ],
+      "explanation": "EV = 0.45 x 1.5 - 0.55 x 1.5 = 0.675 - 0.825 = -0.15BB; the break-even fold rate is 50%."
+    },
+    "t7hu-exploit-q7": {
+      "question": "What should cap the size of an exploitative adjustment?",
+      "options": [
+        "You are still not losing if the opponent corrects back to around the break-even line",
+        "The bigger the better",
+        "Until the opponent complains",
+        "Your own intuition"
+      ],
+      "explanation": "Every deviation opens a hole of your own: cap it at the point where you still do not lose once he corrects, because anything beyond that gets harvested in reverse."
+    },
+    "t7hu-exploit-q8": {
+      "question": "With a 70% fold rate, the expectation of a steal is:",
+      "options": [
+        "+0.60BB",
+        "+0.30BB",
+        "-0.60BB",
+        "+0.90BB"
+      ],
+      "explanation": "EV = 0.70 x 1.5 - 0.30 x 1.5 = 1.05 - 0.45 = +0.60BB, on the same 1.5-to-1.5 steal model."
+    },
+    "t7hu-stats-q1": {
+      "question": "VPIP is defined as:",
+      "options": [
+        "Hands with voluntary money in divided by total hands",
+        "Preflop raises divided by total hands",
+        "(bets + raises) divided by calls",
+        "Pots won divided by total hands"
+      ],
+      "explanation": "VPIP counts voluntary money only (calls and raises); the forced big blind is not included, and PFR is a subset of it."
+    },
+    "t7hu-stats-q2": {
+      "question": "35 VPIP hands out of 150. What is the VPIP?",
+      "options": [
+        "23.3%",
+        "35.0%",
+        "26.7%",
+        "18.7%"
+      ],
+      "explanation": "35 / 150 = 23.3%; with 28 preflop raises the PFR is 28 / 150 = 18.7%, a gap of 4.6 points."
+    },
+    "t7hu-stats-q3": {
+      "question": "60 bets, 30 raises and 30 calls. What is the aggression factor?",
+      "options": [
+        "3.0",
+        "2.0",
+        "1.0",
+        "4.0"
+      ],
+      "explanation": "AF = (60 + 30) / 30 = 3.0; with zero calls AF is undefined and you have to fall back to the raw counts."
+    },
+    "t7hu-stats-q4": {
+      "question": "Why can PFR never exceed VPIP?",
+      "options": [
+        "A preflop raise is a subset of putting voluntary money in",
+        "Statistical noise from small samples",
+        "The definitions are written wrong",
+        "They use different units"
+      ],
+      "explanation": "Every preflop raise is also money voluntarily in the pot, so PFR never exceeds VPIP; the gap is exactly the hands played without raising."
+    },
+    "t7hu-stats-q5": {
+      "question": "With n = 100 and p = 0.45, the 95% interval half-width is about:",
+      "options": [
+        "+/-9.8 points",
+        "+/-5.0 points",
+        "+/-4.5 points",
+        "+/-19.6 points"
+      ],
+      "explanation": "SE = sqrt(0.45 x 0.55 / 100) = 5.0 points, so the half-width is 1.96 x SE = 9.8 points."
+    },
+    "t7hu-stats-q6": {
+      "question": "To pull the half-width down to 2.5 points (p = 0.45), you need about:",
+      "options": [
+        "about 1521 hands",
+        "about 384 hands",
+        "about 100 hands",
+        "about 500 hands"
+      ],
+      "explanation": "n >= 1.96^2 x 0.45 x 0.55 / 0.025^2 = 1521; the half-width scales as 1/sqrt(n), so halving it takes four times the sample."
+    },
+    "t7hu-stats-q7": {
+      "question": "A high open rate plus a high fold rate to continuation bets reads as, and calls for:",
+      "options": [
+        "A wide, weakly defended range: bet and steal more often",
+        "Tight-weak: attack less",
+        "A calling station: value bet only",
+        "No leak: go back to baseline"
+      ],
+      "explanation": "Wide but willing to fold is the softest fold equity available; still keep a hand free for his occasional strong holding instead of escalating a steal into a war."
+    },
+    "t7hu-stats-q8": {
+      "question": "Which statement about reading heads-up stats is correct?",
+      "options": [
+        "A single stat only raises a hypothesis; a sample and a combination settle it",
+        "One stat is enough to pin the opponent's type",
+        "The smaller the sample the better",
+        "Stats tell you the opponent's exact hand"
+      ],
+      "explanation": "Stats describe the shape of a range, not two specific cards; hundreds of hands and two or three cross-checks are what support an adjustment."
+    },
+    "t7hu-hand-reading-q1": {
+      "question": "The correct order of the four reading steps is:",
+      "options": [
+        "Baseline preflop, cut by board, cut by sizing, close with blockers",
+        "Blockers first, then the board",
+        "Sizing first, then baseline",
+        "Only the river sizing"
+      ],
+      "explanation": "Ranges are shaved from wide to narrow street by street: the baseline is widest, board and sizing each cut once, and blockers close it."
+    },
+    "t7hu-hand-reading-q2": {
+      "question": "River board KS 9S 4D 7C 2S, you hold AS KD. How many combos of KK can the opponent hold?",
+      "options": [
+        "1 combo",
+        "3 combos",
+        "6 combos",
+        "2 combos"
+      ],
+      "explanation": "KS on the board and KD in your hand remove two kings, leaving two, so C(2,2) = 1; with one on the board it is C(3,2) = 3, and with none 6."
+    },
+    "t7hu-hand-reading-q3": {
+      "question": "One 9 is on the board and you hold none. How many combos of 99 can the opponent hold?",
+      "options": [
+        "3 combos",
+        "6 combos",
+        "1 combo",
+        "4 combos"
+      ],
+      "explanation": "C(3,2) = 3: one nine is on the board, so two are drawn from the remaining three."
+    },
+    "t7hu-hand-reading-q4": {
+      "question": "The equilibrium bluff share of a 1.5x pot bet is:",
+      "options": [
+        "37.5%",
+        "33.3%",
+        "40.0%",
+        "28.6%"
+      ],
+      "explanation": "f = b/(1+2b) = 1.5 / 4 = 37.5%, so value:bluff is about 5:3. 33.3% is full pot and 28.6% is 2/3 pot."
+    },
+    "t7hu-hand-reading-q5": {
+      "question": "The opponent's 1.5x river value range holds 20 combos. At equilibrium, how many bluffs should there be?",
+      "options": [
+        "about 12",
+        "about 8",
+        "about 20",
+        "about 15"
+      ],
+      "explanation": "Bluffs = value x f/(1-f) = 20 x (0.375 / 0.625) = 20 x 0.6 = 12."
+    },
+    "t7hu-hand-reading-q6": {
+      "question": "A line of small flop bet, turn check, big river bet usually reads as:",
+      "options": [
+        "Thin value on the flop, pressure abandoned on the turn, a polarised size on the river",
+        "Strong the whole way",
+        "Pure air",
+        "A probe on the flop and pot control on the river"
+      ],
+      "explanation": "The actions form a narrative: small thin value, no turn pressure, then a polarised river — not strength from start to finish."
+    },
+    "t7hu-hand-reading-q7": {
+      "question": "When a betting line does not hang together, the right priority is:",
+      "options": [
+        "Suspect the narrative first, your own reading second",
+        "Suspect a bluff first",
+        "Fold first and think later",
+        "Raise as a probe"
+      ],
+      "explanation": "Inconsistency usually means a missed node on one street; fix the narrative model before deciding to call or fold."
+    },
+    "t7hu-hand-reading-q8": {
+      "question": "Why must your own betting line stay consistent with your range?",
+      "options": [
+        "Otherwise the opponent's counter-narrative lands first and your line becomes free information",
+        "Because the rules require it",
+        "To earn the opponent's respect",
+        "To save thinking time"
+      ],
+      "explanation": "You are being read too: when your line contradicts your range the opponent can price against the contradiction, and both your bluffs and your value get handled cheaply."
     }
   },
   "chapterObjectives": {
@@ -138,6 +386,18 @@
       "Understand the correct framework for shifting from the GTO baseline to exploitation: minimum necessary deviation",
       "Master the specific adjustments (frequency, size, range) against different opponent types",
       "Learn to recognize \"when to return to GTO\" — the boundary where exploitation opens your own leaks"
+    ],
+    "t7hu-stats": [
+      "Write the definitions of VPIP, PFR and aggression, and explain why they must be read together",
+      "Use the standard error of a sample to decide whether a stat line supports an exploitative adjustment, and estimate the hands needed to resolve one bucket",
+      "List the structural differences between heads-up and full-ring baselines, and say which opponent type gets misread when they are mixed up",
+      "Profile opponents from stat combinations, and attach one executable adjustment to each profile"
+    ],
+    "t7hu-hand-reading": [
+      "Narrow the opponent's range street by street through baseline, board, sizing and blockers, naming the combos removed at each step",
+      "Correct an opponent's pocket-pair and flush combos with blocker combinatorics",
+      "Read a three-street betting line as a narrative, and suspect the narrative first when it does not hang together",
+      "Explain why your own betting line must stay consistent with your own range"
     ]
   }
 }

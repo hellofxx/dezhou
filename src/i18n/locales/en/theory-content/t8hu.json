@@ -10,7 +10,8 @@
       "Example 2 (process vs result): You shove AK vs 55 and 55 wins. Result: you lost. Process: AK vs 55 is about 43% equity; the shove's EV depends on pot odds — with proper odds it's +EV and you played right. HU pros review only process: \"was this decision EV-correct?\" Tilters review only results: \"I lost to junk again.\" The long-term difference between the two is astronomical.",
       "HU variance budget (Tendler's psychological framework):\n\nSingle all-in standard deviation σ = √(p(1−p)) × pot (Bernoulli approximation)\nN-hand cumulative variance = σ×√N; expectation = N×marginal edge×pot\n\nExample: p=60%, pot 100, edge 20:\nexpectation(50 hands) = 50×0.2×100 = 1000\nvariance(50 hands) = 49×√50 ≈ 346\n\nConclusion: even with positive expectation, \"winners experience long drawdowns\" in heads-up is normal — the mathematical root of psychological pressure and why you need a preset variance budget. (Concept from: The Mental Game of Poker, Jared Tendler Ch.4 variance tolerance and emotion)",
       "Counterintuitive point: the most dangerous tilt isn't \"impulse when losing\" but \"letting your guard down after winning\". After winning a few hands, players often relax, play marginal hands, and give the edge back. HU discipline must be consistent throughout, win or lose.",
-      "HU session-management triad: (1) preset a variance budget — pause and review after losing 40-50BB, a stop-and-restart not a chase; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results."
+      "HU session-management triad: (1) preset a variance budget — pause and review after losing 40-50BB, a stop-and-restart not a chase; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results.",
+      "Variance budget quick table (p=60%, pot 100, edge 20): expectation grows linearly with N while variance grows only with √N, so EV ÷ σ improves with more hands — the mathematical source of volume reducing the weight of short-term luck."
     ],
     "t8hu-reads": [
       "Reads: Turning Observation Into Information",
@@ -22,7 +23,34 @@
       "Example 2 (counter-reading): You hold AA and watch your rhythm when betting the flop. If you bet instantly because \"I have a strong hand\" and hesitate because \"I'm bluffing\", the opponent will quickly crack you. Counter-reading drill: set the same think time for all your bets, or deliberately break rhythm at key moments (hesitate with strong, be decisive with bluffs).",
       "Example 3 (narrative consistency): The opponent bets the flop, bets the turn, checks the river. Narrative: strength on flop/turn, giving up on the river. If he checks the river but the sizes are odd (big on the flop, small on the river), combined with his frequencies it may be \"thin value\" rather than \"giving up\". Reads must combine \"action sequences\" with \"frequency statistics\" — a single action doesn't count.",
       "Counterintuitive point: the enemy of reads isn't \"reading wrong\" but \"overconfidence\". HU pros admit \"this read is only 60% sure\" and bet accordingly, rather than \"I know what he has\". Converting reads into probabilities rather than certainties is the sustainable strategy.",
-      "Read discipline: (1) only conclude from statistically significant frequencies (50+ hand samples); (2) cross-verify action narrative with frequency; (3) admit read uncertainty and fold it into equity and pot-odds calculations. After these three, reads go from mysticism to math."
+      "Read discipline: (1) only conclude from statistically significant frequencies (50+ hand samples); (2) cross-verify action narrative with frequency; (3) admit read uncertainty and fold it into equity and pot-odds calculations. After these three, reads go from mysticism to math.",
+      "Standard error of a frequency observation (45% fold rate): a 20-hand sample has a 95% interval of about ±21.8 points, and even 400 hands narrows it only to about ±4.9. With too few hands, any \"he folds a lot\" judgement is still inside the interval."
+    ],
+    "t8hu-tilt-types": [
+      "Split Tilt Into Recognizable Types",
+      "Heads-up has the highest density of emotional triggers of any format: there are blinds in the pot on every hand, you can play 200+ hands per hour, no teammate shares the pressure, and the opponent watches your rhythm the entire time. In that environment \"do not tilt\" is not actionable advice, because Tilt is really a set of patterns with different triggers: bad-beat tilt reads normal variance as injustice, injustice tilt decides that this session is out to get you, revenge tilt locks onto one opponent and demands to win it back, desperation tilt wants to recover everything in a single hand, and complacency tilt relaxes discipline after a few wins. Different types call for completely different actions, so the first step is not suppressing emotion but labelling it correctly.",
+      "Only three things identify Tilt: whether the basis of a decision drifts from EV to emotion, whether an \"I must win it back right now\" time pressure appears, and whether hand width systematically departs from baseline. Hit any one of them and you enter the handling routine; do not analyse your mental state mid-hand, because the analysis itself consumes the attention you need to judge EV.",
+      "Example (width drift is measurable): in a 200-hand sample you voluntarily put money in on 120 hands, which is 120 ÷ 200 = 60% under the VPIP definition; after two bad-beat Tilt episodes you put money in on 170 of another 200 hands, or 170 ÷ 200 = 85%. Width is 25 percentage points wider, so many more marginal hands get played after the flop — those hands usually carry negative per-hand expectation, paid for by emotion but billed to the bankroll curve of the month.",
+      "Cost of Tilt per hour:\n\nnormal +5bb/100 → +0.05bb per hand\ntilted −20bb/100 → −0.20bb per hand\nper-hand gap = 0.05 − (−0.20) = 0.25bb\nper-hour cost = 0.25 × 200 hands = 50bb (half a buy-in)\n\nConclusion: Tilt is not a mood issue, it is a cash outflow of roughly 0.83bb per minute. Convert the cost into time and a stop rule becomes an action. (Concept source: The Mental Game of Poker, Jared Tendler, Ch.6 emotion and decision quality)",
+      "Example two (turn the budget into time): the variance budget is 30bb. At 50bb ÷ 60 minutes ≈ 0.83bb per minute, 30 ÷ 0.83 ≈ 36 minutes burns the budget. While tilted you therefore have about half an hour of tolerance, and it is half an hour in which doing nothing beats playing — the expectation of leaving the table equals the 30bb you keep.",
+      "Losing streaks are not the detonator; attribution is. A 60% all-in losing six times in a row has probability 0.4^6 ≈ 0.41%; if you play ten such all-ins an hour, a six-loss streak appears every month as background noise (order-of-magnitude estimate). Reading the streak as \"this game is unfair\" is what ignites emotion: with identical results the player who blames variance keeps playing the baseline, while the player who blames injustice starts adjusting ranges. The comparison that matters is not whether a streak happened but whether your ranges deformed afterwards.",
+      "Counter-intuitive: the most expensive type is complacency, because it has no pain signal. Bad-beat and desperation tilt make you want to stop; complacency makes you want to keep playing — after a few wins you start playing marginal hands and calling wider, the curve flattens and then collapses, and you are nowhere near as alert as you are when losing.",
+      "Handle by type: bad-beat tilt needs a physical break (stand up, breathe) with no strategy change; injustice tilt needs the attribution stopped and the decision written out as an EV sentence; revenge tilt needs a table lock — change tables or end the session; desperation tilt needs the stop-loss executed immediately with no win-it-back raises; complacency tilt needs the opening range boundaries restated once before continuing. All five share one iron rule: interventions are written off-table in advance, and at the table you only execute them.",
+      "Type before emotion: bad-beat, injustice, revenge, desperation and complacency have different triggers and different interventions\nCost converts: per-hand gap 0.25bb × 200 hands = 50bb per hour, so a 30bb budget lasts about 36 minutes\nComplacency has no pain signal — only pre-written discipline blocks it, not how you feel",
+      "Tilt cost in time (per-hand gap 0.25bb, 200 hands per hour): 15 minutes burns 12.5bb, two hours burns 100bb, one buy-in. Convert the cost into time and the stopping point becomes executable."
+    ],
+    "t8hu-session": [
+      "A Session Is a Sample With Boundaries",
+      "Cash heads-up has no natural rhythm: you play as long as you like, as deep as you like, you can rebuy the moment you lose and leave the moment you win. That freedom is exactly what makes psychological management hard — with no boundary there is no fact of \"today is over\", and emotion simply renews itself. Treating a session as a sample with a fixed length, a fixed budget and a fixed review routine is the precondition for managing it: three parameters are written down before the first hand — a time cap, a variance budget in bb, and a stop-down line in buy-ins.",
+      "Once the parameters are written, at the table you only execute them. Redefining a budget mid-session is emotion exercising a veto over discipline — and that is the most covert entry point for tilt: you did not play a wild hand, you just moved the stop line once.",
+      "Example (session variance scales with √N): the standard deviation is 90bb per 100 hands, so per-hand σ = 90 ÷ 10 = 9bb. A 200-hand session has σ = 9 × √200 ≈ 127bb, about 1.3 buy-ins of 100bb; 400 hands gives 9 × √400 = 180bb, about 1.8 buy-ins; 1200 hands gives 9 × √1200 ≈ 312bb, about 3.1 buy-ins. Six times the hands is only about 2.4 times the variance — but the absolute amount grows from 127bb to 312bb, and that is the number emotion registers.",
+      "Diffusion approximation of risk of ruin (the same expression used in bankroll management):\n\nROR = exp(−2μB / σ²)\nμ = 5bb/100 = 0.05bb per hand, σ = 90bb/100 = 9bb per hand, B = bankroll in bb\n\nB = 2000bb (20 buy-ins) → exp(−2.47) ≈ 8.5%\nB = 3000bb (30 buy-ins) → exp(−3.70) ≈ 2.5%\nB = 5000bb (50 buy-ins) → exp(−6.17) ≈ 0.2%\n\nConclusion: each thicker bankroll tier cuts ruin risk exponentially but with diminishing returns — going from 20 to 30 buy-ins removes about two thirds of the remaining risk, while 30 to 50 removes another order of magnitude.",
+      "Example two (the two faces of a stop-down line): with the same μ and σ, dropping from 20 buy-ins (2000bb) to 15 buy-ins (1500bb) lifts ruin risk from about 8.5% to exp(−1.85) ≈ 15.7%, nearly double. The counter-intuitive conclusion is that stepping down lowers unit variance but not relative risk; if you step down you must also shorten sessions or cut hands, otherwise you are simply playing smaller buy-ins more dangerously.",
+      "The psychology of moving up and down: when moving up, players treat money at the new stake as naturally theirs and refuse to step back; when moving down, they treat returning to the old stake as the goal and chase it. The correct framing is that stakes are only a conversion factor between variance and buy-ins, and the bankroll curve is the only progress bar. Separate the two and moving up becomes a purely mathematical decision — enough bankroll and low enough risk of ruin means move up, otherwise move down, with no ego involved.",
+      "Counter-intuitive: the longer a session runs, the lower your hourly win rate usually is (attention decays before luck turns), while variance grows only with √N. Extending a session therefore trades a certain attention cost for uncertain variance, a negative choice in the long run — so the time cap must be a hard constraint, not \"one more hour because I am running good\".",
+      "The three-piece kit: write a time cap before starting (90 minutes, for example); convert the variance budget into a hand budget — a 30bb budget at 0.25bb per hand is about 120 hands, which is a countable stopping point; stand up every 200 hands so that continuing becomes a decision you take again instead of the default state.",
+      "Write three parameters before the first hand: time cap, variance budget in bb, stop-down line in buy-ins; at the table you only execute\nSession variance scales with √N: 9bb per hand → about 127bb over 200 hands and about 312bb over 1200 hands\nRuin risk follows exp(−2μB/σ²): about 8.5% at 20 buy-ins, about 2.5% at 30, and about 15.7% if you step down to 15",
+      "Session length and variance (σ = 9bb per hand, 100bb per buy-in): variance scales with √hands, about 3.1 buy-ins at 1200 hands and about 4.0 at 2000. Doubling the length does not double the variance, but the growth in absolute amount clearly amplifies emotional pressure."
     ]
   },
   "quiz": {
@@ -125,6 +153,226 @@
         "Breaking rhythm deliberately"
       ],
       "explanation": "\"Fast with strong, slow with weak\" is the classic leak. Counter-reading keeps rhythm consistent or deliberately breaks it so the opponent can't crack your range strength."
+    },
+    "t8hu-pressure-q6": {
+      "question": "Variance budget in the Tendler framework: p=60%, pot 100, edge 20. Expectation and variance over 50 hands are about:",
+      "options": [
+        "expectation 1000, variance 346",
+        "expectation 500, variance 346",
+        "expectation 1000, variance 173",
+        "expectation 2000, variance 500"
+      ],
+      "explanation": "Expectation = 50 × 0.2 × 100 = 1000; single all-in σ = √(0.6×0.4) × 100 ≈ 49, so over 50 hands σ = 49 × √50 ≈ 346."
+    },
+    "t8hu-pressure-q7": {
+      "question": "0.45^8 is approximately:",
+      "options": [
+        "0.17%",
+        "1.7%",
+        "4.5%",
+        "17%"
+      ],
+      "explanation": "0.45^8 ≈ 0.0017, about 0.17%. At 200+ hands per hour such streaks are background noise."
+    },
+    "t8hu-pressure-q8": {
+      "question": "With expectation 1000 and variance 346, 1000 equals how many standard deviations:",
+      "options": [
+        "about 0.35",
+        "about 1.0",
+        "about 2.9",
+        "about 10"
+      ],
+      "explanation": "1000 ÷ 346 ≈ 2.9 standard deviations. A positive expectation can still draw down for a long time, which is exactly why a variance budget is set in advance."
+    },
+    "t8hu-reads-q6": {
+      "question": "An opponent folded 18 times in a 40-hand sample facing continuation bets. The standard error of that fold rate is about:",
+      "options": [
+        "about 2.5%",
+        "about 7.9%",
+        "about 12.5%",
+        "about 18%"
+      ],
+      "explanation": "p = 18 ÷ 40 = 45%, SE = √(0.45 × 0.55 ÷ 40) ≈ 7.9%; the 95% interval is about ±15.4 points, so this sample alone cannot support a conclusion."
+    },
+    "t8hu-reads-q7": {
+      "question": "The statistical reason for treating a 50+ hand sample as the threshold for drawing conclusions is:",
+      "options": [
+        "50 hands is the rule",
+        "small samples have huge standard errors, so an observed frequency gap may be pure noise",
+        "50 hands covers every hand class",
+        "opponents change their play after 50 hands"
+      ],
+      "explanation": "The smaller the sample the larger the standard error: at p=45% the SE is about 11.1% over 20 hands and about 5.0% over 100. A gap must exceed about two standard errors to be a real tendency."
+    },
+    "t8hu-reads-q8": {
+      "question": "You deliberately pause 8 seconds before a river shove to fake hesitation, but you always do it when holding the nuts. This is:",
+      "options": [
+        "an effective reverse read",
+        "a new leak: the pause has become a strong-hand tell",
+        "a meaningless action",
+        "advanced mixed strategy"
+      ],
+      "explanation": "Reverse reading requires that actions carry no range information. Using one action for one strength class turns the pause into a readable signal."
+    },
+    "t8hu-tilt-types-q1": {
+      "question": "The first purpose of separating Tilt types in heads-up is:",
+      "options": [
+        "to pick the type that represents your personality",
+        "to match the right intervention instead of vaguely telling yourself not to tilt",
+        "to judge whether the opponent is tilting",
+        "to track your own win rate"
+      ],
+      "explanation": "Type determines action: bad-beat tilt needs a physical break, revenge tilt needs a table lock, desperation tilt needs the stop-loss, complacency tilt needs the range boundaries restated."
+    },
+    "t8hu-tilt-types-q2": {
+      "question": "Among the five Tilt types, the one without a pain signal is:",
+      "options": [
+        "bad-beat",
+        "injustice",
+        "complacency",
+        "desperation"
+      ],
+      "explanation": "Complacency happens after winning: discipline relaxes and marginal hands appear, the curve flattens then collapses, and you are not as alert as when losing."
+    },
+    "t8hu-tilt-types-q3": {
+      "question": "Normal +0.05bb per hand, tilted −0.20bb per hand, 200 hands per hour. The expected cost of one tilted hour is:",
+      "options": [
+        "10bb",
+        "25bb",
+        "50bb",
+        "100bb"
+      ],
+      "explanation": "Per-hand gap 0.05 − (−0.20) = 0.25bb, times 200 hands gives 50bb, half a buy-in per hour."
+    },
+    "t8hu-tilt-types-q4": {
+      "question": "With a 30bb variance budget and Tilt burning about 50bb per hour, the budget is gone after about:",
+      "options": [
+        "about 12 minutes",
+        "about 36 minutes",
+        "about 72 minutes",
+        "about 120 minutes"
+      ],
+      "explanation": "50 ÷ 60 ≈ 0.83bb per minute, so 30 ÷ 0.83 ≈ 36 minutes. A stop rule must be expressed in time to be executable."
+    },
+    "t8hu-tilt-types-q5": {
+      "question": "Which item is NOT one of the three signals that identify Tilt:",
+      "options": [
+        "whether the basis of decisions drifts from EV to emotion",
+        "whether a must-win-it-back-now time pressure appears",
+        "whether hand width systematically departs from baseline",
+        "whether the opponent VPIP exceeds 40%"
+      ],
+      "explanation": "The first three are drift signals in your own decisions; the opponent VPIP is a read, not a Tilt state."
+    },
+    "t8hu-tilt-types-q6": {
+      "question": "Over 200 hands you voluntarily enter 120 normally and 170 when tilted. Under the VPIP definition the width increase is:",
+      "options": [
+        "15 percentage points",
+        "25 percentage points",
+        "35 percentage points",
+        "50 percentage points"
+      ],
+      "explanation": "120 ÷ 200 = 60% and 170 ÷ 200 = 85%, a 25-point gap. The extra width must be paid for after the flop with negative-expectation hands."
+    },
+    "t8hu-tilt-types-q7": {
+      "question": "The probability that a 60% all-in loses six times in a row (0.4^6) is about:",
+      "options": [
+        "about 0.41%",
+        "about 4.1%",
+        "about 0.041%",
+        "about 41%"
+      ],
+      "explanation": "0.4^6 ≈ 0.0041, about 0.41%. With a dozen such all-ins per hour a six-loss streak appears every month."
+    },
+    "t8hu-tilt-types-q8": {
+      "question": "Why is reading a losing streak as injustice more dangerous than the streak itself:",
+      "options": [
+        "streaks lower your win rate",
+        "attribution decides whether the same results trigger decision drift",
+        "streaks make the opponent read you better",
+        "an injustice attribution changes the deal probabilities"
+      ],
+      "explanation": "A streak is variance; reading variance as injustice triggers range deformation. What matters is whether ranges deformed after the streak."
+    },
+    "t8hu-session-q1": {
+      "question": "The three session parameters written down before starting are:",
+      "options": [
+        "a time cap, a variance budget in bb, a stop-down line in buy-ins",
+        "buy-in size, opponent list, seat number",
+        "win-rate target, rake percentage, table size",
+        "gear, water, break frequency"
+      ],
+      "explanation": "Each parameter maps to one executable action: when to stop, stop after how much loss, step down below how much. At the table you only execute."
+    },
+    "t8hu-session-q2": {
+      "question": "With a standard deviation of 90bb per 100 hands, the per-hand σ is:",
+      "options": [
+        "0.9bb",
+        "9bb",
+        "90bb",
+        "900bb"
+      ],
+      "explanation": "Per-hand σ = per-100 σ ÷ 10 = 9bb, because standard deviation scales with √n."
+    },
+    "t8hu-session-q3": {
+      "question": "With per-hand σ = 9bb, the variance of a 200-hand session is:",
+      "options": [
+        "about 41bb",
+        "about 90bb",
+        "about 127bb",
+        "about 1800bb"
+      ],
+      "explanation": "9 × √200 ≈ 9 × 14.1 ≈ 127bb, about 1.3 buy-ins of 100bb."
+    },
+    "t8hu-session-q4": {
+      "question": "With the same σ = 9bb, a 400-hand session has a variance of:",
+      "options": [
+        "about 127bb",
+        "about 180bb",
+        "about 254bb",
+        "about 360bb"
+      ],
+      "explanation": "9 × √400 = 9 × 20 = 180bb. Doubling the hands multiplies variance only by √2 ≈ 1.41."
+    },
+    "t8hu-session-q5": {
+      "question": "μ = 5bb/100, σ = 90bb/100, bankroll 2000bb. Risk of ruin exp(−2μB/σ²) is about:",
+      "options": [
+        "about 0.2%",
+        "about 2.5%",
+        "about 8.5%",
+        "about 25%"
+      ],
+      "explanation": "Exponent = −2 × 0.05 × 2000 ÷ 81 ≈ −2.47, so exp(−2.47) ≈ 8.5%."
+    },
+    "t8hu-session-q6": {
+      "question": "With the same μ and σ, dropping from 20 buy-ins (2000bb) to 15 (1500bb) makes the risk of ruin:",
+      "options": [
+        "fall",
+        "stay the same",
+        "rise from about 8.5% to about 15.7%",
+        "fall from about 15.7% to about 8.5%"
+      ],
+      "explanation": "The exponent becomes −2 × 0.05 × 1500 ÷ 81 ≈ −1.85, so exp(−1.85) ≈ 15.7%. Stepping down lowers unit variance but not relative risk."
+    },
+    "t8hu-session-q7": {
+      "question": "As a session gets longer, variance and the attention cost relate as follows:",
+      "options": [
+        "variance grows linearly with N and attention is unchanged",
+        "variance grows with √N while attention decays over time",
+        "both grow with √N",
+        "variance stops growing"
+      ],
+      "explanation": "Variance only grows with √N, while attention is a certain loss that decays monotonically, so extending a session is a negative choice."
+    },
+    "t8hu-session-q8": {
+      "question": "A 30bb variance budget at 0.25bb per hand corresponds to roughly how many hands:",
+      "options": [
+        "60 hands",
+        "120 hands",
+        "240 hands",
+        "300 hands"
+      ],
+      "explanation": "30 ÷ 0.25 = 120 hands. Converting the budget into hands makes the stopping point countable."
     }
   },
   "chapterObjectives": {
@@ -137,6 +385,18 @@
       "Understand the difference and limitations between live physical reads (tells) and online frequency reads",
       "Master counter-reading (balancing your actions to avoid leaking range)",
       "Learn to judge opponent intent with \"narrative consistency\", avoiding overfitting"
+    ],
+    "t8hu-tilt-types": [
+      "Break Tilt into five types by trigger and explain why each needs a different intervention",
+      "Use three observable signals to tell whether you have already left the EV baseline",
+      "Convert the hourly cost of Tilt and a variance budget into an executable stopping time",
+      "Point out which Tilt type has no pain signal and must be blocked by discipline rather than feeling"
+    ],
+    "t8hu-session": [
+      "List the three session parameters and why they must be written down before the first hand",
+      "Convert a per-100-hand standard deviation into session variance and read its non-linear relation to length",
+      "Compare ruin risk across bankroll sizes with the diffusion approximation and judge whether stepping down lowers risk",
+      "Explain the psychological bookkeeping error of moving up and down, and why stakes are only a conversion factor"
     ]
   }
 }

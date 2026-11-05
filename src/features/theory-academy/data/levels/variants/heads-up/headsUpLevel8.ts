@@ -1,6 +1,8 @@
 import type { TheoryLevelInfo } from '../../../../types';
 import type { PokerVariant } from '@/shared/types/elo';
 import { headsUpRules } from '../variantRules';
+import { HEADS_UP_CHAPTERS as TILT_TYPES_CHAPTERS } from './chapters/t8hu-tilt-types';
+import { HEADS_UP_CHAPTERS as SESSION_PSYCH_CHAPTERS } from './chapters/t8hu-session';
 
 const variant: PokerVariant = 'heads-up';
 
@@ -78,68 +80,7 @@ export const HEADS_UP_LEVEL_8: TheoryLevelInfo = {
             '单挑 session 管理三件套：(1) 预设波动预算——输 40-50BB 即暂停复盘，是止损重开而非翻本；(2) 每 100 手起身一次，切断连败的心理惯性；(3) 复盘只问 EV 不问结果。',
         },
       ],
-      quiz: [
-        {
-          id: 't8hu-pressure-q1',
-          question: '单挑中连续输掉多个 60% 胜率全下的原因主要是：',
-          options: [
-            '运气差到极点',
-            '高频对抗下的数学必然（0.4^N 的连败常出现）',
-            '打得不好',
-            '对手作弊',
-          ],
-          correctIndex: 1,
-          explanation: '0.45^8 ≈ 0.17% 的连败虽低，但单挑每小时 200+ 手、55%-60% 全下反复出现，连败是稳定出现的背景噪声。',
-        },
-        {
-          id: 't8hu-pressure-q2',
-          question: '"过程 vs 结果"分离的核心含义是：',
-          options: [
-            '赢钱才算打对',
-            '复盘只看决策 EV 是否正确，不因结果改变打法',
-            '输钱就要调整策略',
-            '过程不重要',
-          ],
-          correctIndex: 1,
-          explanation: 'AK 对 55 全下即使输也是 +EV 的正确决策。复盘看过程（EV）而非结果（输赢），才能保持长期质量。',
-        },
-        {
-          id: 't8hu-pressure-q3',
-          question: 'tilt 对策略最典型的破坏是：',
-          options: [
-            '让范围收紧',
-            '让开池更松、跟注更宽、追听更凶，全部偏离基线',
-            '让打法更保守',
-            '没有影响',
-          ],
-          correctIndex: 1,
-          explanation: 'tilt 扭曲范围：开池过松、跟注过宽、追听过凶，系统性偏离均衡基线。',
-        },
-        {
-          id: 't8hu-pressure-q4',
-          question: '单挑 session 中"预设波动预算"的作用是：',
-          options: [
-            '限制最多能输多少',
-            '到止损点暂停复盘，避免翻本式追加',
-            '确保每次都赢',
-            '计算期望值',
-          ],
-          correctIndex: 1,
-          explanation: '波动预算是止损纪律：输到预设点数暂停复盘，切断"翻本"冲动，而非继续追加陷入 tilt。',
-        },
-        {
-          id: 't8hu-pressure-q5',
-          question: '关于 tilt 的高发时点，正确的说法是：',
-          options: [
-            '只在连续输牌时',
-            '赢牌后的松懈同样危险',
-            '从不发生',
-            '只在锦标赛',
-          ],
-          correctIndex: 1,
-          explanation: '赢牌后玩家常放松警惕、玩边缘牌，把优势送回去。单挑纪律须全程一致，顺逆都不可松懈。',
-        },
-      ],
+      quiz: [],
       variant,
       variantRules: headsUpRules,
     },
@@ -200,71 +141,12 @@ export const HEADS_UP_LEVEL_8: TheoryLevelInfo = {
             '读取纪律：(1) 只用统计显著的频率（50+ 手样本）下结论；(2) 结合动作叙事与频率交叉验证；(3) 承认读取的不确定性，把它折入胜率与赔率计算。三件事做完，读取就从玄学变成数学。',
         },
       ],
-      quiz: [
-        {
-          id: 't8hu-reads-q1',
-          question: '最可靠的单挑读取方式是：',
-          options: [
-            '只看对手一次下注节奏',
-            '结合动作叙事与频率统计交叉验证',
-            '完全依赖物理 tell',
-            '凭直觉',
-          ],
-          correctIndex: 1,
-          explanation: '单一动作或节奏样本不足不可靠。把"动作序列是否自洽"与"跨 50+ 手的频率统计"结合才是可靠读取。',
-        },
-        {
-          id: 't8hu-reads-q2',
-          question: '"反读取（Balanced Play）"的核心是：',
-          options: [
-            '隐藏自己的强牌',
-            '让动作不泄露范围信息，保持节奏一致',
-            '永远最快下注',
-            '让对手猜不透牌力',
-          ],
-          correctIndex: 1,
-          explanation: '反读取要求动作不泄露范围：不要"强牌快、弱牌慢"，刻意保持节奏一致或打乱节奏，避免被对手破解。',
-        },
-        {
-          id: 't8hu-reads-q3',
-          question: '单挑读取的正确态度是把读取当作：',
-          options: [
-            '确定性的事实',
-            '一个概率（如"60% 把握"）并折入决策',
-            '永远正确的工具',
-            '可忽略的噪声',
-          ],
-          correctIndex: 1,
-          explanation: '读取有不确定性，高手把它转化为概率而非确定性，再折入胜率与赔率计算，才是可持续策略。',
-        },
-        {
-          id: 't8hu-reads-q4',
-          question: '对手翻牌转牌都下注、河牌过牌，最可能的解读是：',
-          options: [
-            '他一定在诈唬',
-            '结合频率与尺度，可能是薄价值或放弃',
-            '他一定有坚果',
-            '无法读取',
-          ],
-          correctIndex: 1,
-          explanation: '叙事"翻转有牌力、河牌放弃"，但要结合河牌尺度与频率统计——可能是薄价值而非纯放弃，需交叉验证。',
-        },
-        {
-          id: 't8hu-reads-q5',
-          question: '经典的下注泄露是：',
-          options: [
-            '强牌下注快、弱牌下注慢',
-            '所有下注节奏一致',
-            '用相同思考时间',
-            '打乱节奏',
-          ],
-          correctIndex: 0,
-          explanation: '"强牌快、弱牌慢"是经典泄露。反读取应保持节奏一致或刻意打乱，避免对手破解你的范围强度。',
-        },
-      ],
+      quiz: [],
       variant,
       variantRules: headsUpRules,
     },
+    ...TILT_TYPES_CHAPTERS,
+    ...SESSION_PSYCH_CHAPTERS,
   ],
 };
 

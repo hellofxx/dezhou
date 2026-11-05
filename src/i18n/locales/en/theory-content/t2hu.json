@@ -10,7 +10,8 @@
       "Example 2: SB holds J♠T♠ and limps to see the flop (odds 25%). Flop J♣7♦2♠, top pair. BB bets 1BB (pot 2BB). Required equity to call = 1 ÷ (2+1+1) = 25%. Your top pair is far above 25% (wide range, you may be ahead) → easy call. Compare the same spot in full ring: 5-way pot of 5BB, bet 2.5BB (half pot), required equity still 25% (formula is size-independent) — but your actual equity is diluted by multiple opponents, possibly falling from 60% to 40%, while HU vs one opponent stays 60%. That's the essence of \"odds dilution\": the pot's price is unchanged, but equity must be recalibrated by player count.",
       "Call odds comparison facing a raise (open to 3BB):\n\nHeads-up scenario (BB defense):\n• SB opens to 3BB (total 3), BB has posted 1, pot = 4BB\n• BB must call 2BB (3−1)\n• Required equity = 2 ÷ (4+2) = 33.3%\n\nFull-ring scenario (BTN calls UTG's 3BB open):\n• UTG opens 3BB; SB/CO fold; BTN faces a pot of 4.5BB (UTG's 3 + SB 0.5 + BB 1)\n• BTN must call 3BB\n• Required equity = 3 ÷ (4.5+3) = 40%\n\nConclusion: for the same open size, the BB's call is cheaper (33.3% < 40%). Reason: the SB's 0.5 dead money lowers the call cost, and in HU the opponent's range is wide (usually >60%) so your equity is higher. Facing a full-ring UTG range (about 15%) your equity is lower, the required equity is higher, and marginal hands fold directly. (Concept from: Heads-Up No-Limit Hold'em, Collin Moshman Ch.3 preflop odds calculation)",
       "Counterintuitive point: in heads-up, \"small cards\" aren't junk. 9-high can still win postflop in heads-up — because the opponent's calling range is extremely wide (30%-50% of starting hands), 9-high's showdown value far exceeds full ring. At the same 25% pot odds, 9-high may be ahead 40%+ of the time in heads-up vs only 15%-20% in full ring.",
-      "Quick anchors: half-pot bet needs 25% required equity, 1/3 pot 20%, 2/3 pot 28.6%, full pot 33.3%. Limp to see flop 25%, call a 3BB open 33.3%. Memorize these — faster than counting at the table."
+      "Quick anchors: half-pot bet needs 25% required equity, 1/3 pot 20%, 2/3 pot 28.6%, full pot 33.3%. Limp to see flop 25%, call a 3BB open 33.3%. Memorize these — faster than counting at the table.",
+      "Preflop SB open sizes against the equity the BB needs to call: the pot equals the open size plus the 1BB the BB already posted, and the call equals the open size minus 1BB. Larger sizes raise the BB threshold, which is the mathematical reason big opens narrow the calling range."
     ],
     "t2hu-ev": [
       "The EV Framework: Fold / Call / Raise Branches",
@@ -21,7 +22,8 @@
       "Example 2 (limp vs raise EV): SB holds Q♠J♠, 100BB deep. Option A (limp): BB raises 30% (you fold −0.3BB or call −0.1), BB checks 70% (postflop EV +0.5BB). EV(limp) = 0.7×0.5 − 0.3×0.2 = 0.35 − 0.06 = +0.29BB. Option B (raise to 2.5BB): BB folds 60% (+1.5BB), BB calls 30% (your capped wide range runs thin when called, −0.4BB), BB 3-bets 10% (−2.5BB fold, losing the entire raise). EV(raise) = 0.6×1.5 + 0.3×(−0.4) + 0.1×(−2.5) = 0.9 − 0.12 − 0.25 = +0.53BB. Conclusion: raise > limp (0.53 > 0.29), because of the steal EV from SB's dead money (60% fold wins 1.5BB directly) plus the range advantage of raising. (Concept from: Heads-Up No-Limit Hold'em, Collin Moshman Ch.3 preflop strategy)",
       "Quantifying positional value:\nResearch estimates heads-up positional advantage at about 0.5-1BB/hand. Reasoning:\n• SB acts last postflop every hand (information advantage); BB acts first every street (no position)\n• Positional value comes from: a) information (see the BB's action before deciding) b) pot control (cheap realization) c) free cards (BB checks and you check behind for a free card)\n\nQuantitative model: the positional gap shows up in per-hand expectation differences. E.g. the same 98s averages +0.75BB/hand in the SB and −0.25BB in the BB, a 1BB difference. Over 100 hands that's about 100BB, but given equity variance itself (±15bb/100), position contributes about 25%-50% of total profit. (Concept from: Heads-Up No-Limit Hold'em, Collin Moshman Ch.2 position and equity)",
       "Counterintuitive point: in heads-up, \"raise\" is often permanently superior to \"call\" even when calling is +EV. Because EV picks the maximum, not just the positive — 0.53BB (raise) > 0.29BB (limp). Remember: your job is to maximize EV, not to find a \"no-loss\" option.",
-      "Review template: for each key decision write three EV estimates: Fold EV = 0; Call EV = E×(P+B) − (1−E)×B; Raise EV = f×P + (1−f)×[...]. Even rough estimates — three lines beat one."
+      "Review template: for each key decision write three EV estimates: Fold EV = 0; Call EV = E×(P+B) − (1−E)×B; Raise EV = f×P + (1−f)×[...]. Even rough estimates — three lines beat one.",
+      "The three-branch EV routine: write folding, calling and raising each as a number, then compare magnitudes instead of signs. Folding has an EV of exactly zero and serves as the baseline for the other two branches."
     ],
     "t2hu-risk": [
       "Pricing the Risk of the Positional Disadvantage",
@@ -31,7 +33,8 @@
       "Example 2 (implied-odds shift): In heads-up the opponent's range is wide (60%+ starting hands), which affects implied odds counterintuitively. Full-ring set mining: you call the CO's 3BB open with 55, effective 150BB, SPR≈50. When you hit a set (12%), the opponent's 15% range more often has a strong hand to pay you. But in heads-up he opens 60% (almost anything); when you hit a set he may have air (won't pay) or only a weak pair (you extract 3-5BB). Research suggests raising the HU set-mining threshold to 20-25× the call (higher than full ring's 15-20×) because the wide range means low payment density. (Concept from: Heads-Up No-Limit Hold'em, Collin Moshman Ch.3 preflop strategy)",
       "SPR (Stack-to-Pot Ratio) and risk exposure:\nSPR = effective stack ÷ pot\n\nReading:\n• SPR < 4: low SPR, top pair rises in value. The flop basically commits all chips; the positional disadvantage matters less (small pot).\n• SPR 4-12: medium risk, weigh position vs hand strength. The OOP side tends toward check-call or small bets, avoiding being squeezed by raises.\n• SPR > 12: high risk, deep stacks amplify the positional disadvantage. The OOP side must play top pair tighter, and the positional-advantage player can exploit (e.g. float the turn).\n\nExample: 100BB deep, SB raises 2.5BB, BB calls. Pot 5BB, SPR = 97.5/5 ≈ 19.5. Flop K♥9♦3♣, BB (OOP) holds K♠Q♦. No position + high SPR → top pair is risky, easily crushed by better Kx (AK/QK). Correct strategy: small bet or check-back, avoid building a big pot.\nCompare short stacks: 15BB deep, same spot, SPR = 12.5/5 = 2.5. Then top pair gets it in directly; the positional disadvantage is neutralized by \"low SPR\" — you don't worry about later-street control. (Concept from: Harrington on Hold'em Vol.1 Ch.4 SPR theory)",
       "Counterintuitive point: in heads-up even the side holding the check-raise lever (the BB, who moves first postflop) often chooses check-call over check-raise. Raising risks 6BB extra and leaves you without position in a bigger pot when called; check-call lets the opponent keep bluffing or value betting while you retain the fold option. Position is the low-risk high-reward tool — without it, controlling the pot is cheaper than raising.",
-      "Decision flow: 1) call SPR: <4 get it in, 4-12 medium risk, >12 pot control; 2) call position: OOP uses the check-raise lever to compensate, IP uses check-behind and small bets for control; 3) assess hand strength: nut draws favor raise, medium hands favor call. These three steps become muscle memory."
+      "Decision flow: 1) call SPR: <4 get it in, 4-12 medium risk, >12 pot control; 2) call position: OOP uses the check-raise lever to compensate, IP uses check-behind and small bets for control; 3) assess hand strength: nut draws favor raise, medium hands favor call. These three steps become muscle memory.",
+      "Postflop risk allocation for the out-of-position player (BB): split the range by how many chips each hand can carry, then choose check-raise, check-call or check-fold. Positional disadvantage is offset by layering, not by raising every street."
     ]
   },
   "quiz": {
@@ -154,6 +157,126 @@
         "Folding all non-nut hands"
       ],
       "explanation": "High SPR amplifies the positional disadvantage: you risk deep-pot tough decisions (especially when raised). The OOP side should pot-control, avoiding committing too many chips with marginal hands."
+    },
+    "t2hu-odds-q5": {
+      "question": "The pot is 3BB, your opponent bets 1BB (one third pot). You need about what equity to call:",
+      "options": [
+        "20%",
+        "25%",
+        "28.6%",
+        "33.3%"
+      ],
+      "explanation": "Required equity = 1/(3+1+1) = 20%. 25% is the half-pot threshold and 28.6% is the two-thirds-pot threshold; smaller sizes offer better prices."
+    },
+    "t2hu-odds-q6": {
+      "question": "Preflop the SB opens to 2.5BB. The BB needs about what equity to call:",
+      "options": [
+        "25%",
+        "30%",
+        "33.3%",
+        "37.5%"
+      ],
+      "explanation": "The SB has 2.5 in, the BB has 1 in, so the pot is 3.5; the BB calls 1.5 more and needs 1.5/(3.5+1.5) = 30%. 33.3% corresponds to a 3BB open (2/6), so do not mix the two sizes."
+    },
+    "t2hu-odds-q7": {
+      "question": "The SB limps and the BB checks, pot 2BB. On the turn the BB bets 1BB. The SB needs about what equity to call:",
+      "options": [
+        "20%",
+        "25%",
+        "33.3%",
+        "40%"
+      ],
+      "explanation": "Required equity = 1/(2+1+1) = 25%, the same 25% threshold as any half-pot bet: required equity = call amount / pot after the call."
+    },
+    "t2hu-odds-q8": {
+      "question": "A half-pot bet requires the same equity heads-up as in a full ring game. What this shows is:",
+      "options": [
+        "Pot odds depend only on bet size and pot; the number of players changes your equity, not the price",
+        "Heads-up and full ring always produce the same equity",
+        "Multiway pots require dividing the pot odds formula by the number of players",
+        "Heads-up pots are smaller, so the price is always better"
+      ],
+      "explanation": "Half pot is always 1/(2+1+1)=25%. Player count only affects how often your cards win against the combined ranges, which is the equity side; the price side is independent of it."
+    },
+    "t2hu-ev-q5": {
+      "question": "The pot is 8BB and you bet 2BB as a pure bluff (you always lose at showdown). The break-even fold rate is about:",
+      "options": [
+        "20%",
+        "25%",
+        "33.3%",
+        "40%"
+      ],
+      "explanation": "f* = B/(P+B) = 2/(8+2) = 20%. 25% is the call threshold for a half-pot bet (the other side of the ledger), and 33.3% applies to a 6BB pot with a 3BB bet."
+    },
+    "t2hu-ev-q6": {
+      "question": "The pot is 6BB, your opponent bets 3BB, and you call with 40% equity. Your EV is about:",
+      "options": [
+        "+1.8BB",
+        "−1.8BB",
+        "+0.6BB",
+        "−0.6BB"
+      ],
+      "explanation": "EV(call) = 0.4×(6+3) − 0.6×3 = 3.6 − 1.8 = +1.8BB. The winning branch includes the opponent bet, so omitting it produces the wrong +0.6BB."
+    },
+    "t2hu-ev-q7": {
+      "question": "The SB min-raises to 2BB and the BB folds 50% of the time. Looking only at the steal component (calling branches valued at 0), the EV is about:",
+      "options": [
+        "−1.5BB",
+        "0BB",
+        "+0.75BB",
+        "+1.5BB"
+      ],
+      "explanation": "EV = 0.5×1.5 − 0.5×1.5 = 0. That 50% is exactly the break-even fold rate: below it the pure steal is negative, so the open must earn its value postflop."
+    },
+    "t2hu-ev-q8": {
+      "question": "EV(raise)=+0.53BB and EV(limp)=+0.29BB. The correct conclusion is:",
+      "options": [
+        "Both are positive, so either is fine",
+        "Choose raise: expected value maximisation compares numbers, not signs",
+        "Choose limp because the conservative option carries less risk",
+        "The difference is inside the noise, so the choice is irrelevant"
+      ],
+      "explanation": "EV decisions pick the maximum rather than the positive. 0.53 beats 0.29, and even though limping also profits, giving away 0.24BB is still a loss."
+    },
+    "t2hu-risk-q5": {
+      "question": "Heads-up at 100BB the SB opens to 3BB and the BB calls, pot 6BB. The BB SPR is about:",
+      "options": [
+        "About 4.9",
+        "About 12.5",
+        "About 16.2",
+        "About 33"
+      ],
+      "explanation": "SPR = remaining effective stack / pot = 97/6 ≈ 16.2, a deep-stack spot where the out-of-position player should control the pot. 4.9 is the 3-bet pot range, and 33 wrongly divides 100 by 3."
+    },
+    "t2hu-risk-q6": {
+      "question": "The pot is 6BB and the SB bets 4BB. You (BB) check-raise to 12BB and always lose at showdown. Against simply folding, the break-even fold rate is about:",
+      "options": [
+        "45%",
+        "50%",
+        "54.5%",
+        "60%"
+      ],
+      "explanation": "Folding out the opponent wins 10 (pot 6 plus the 4BB bet); being called costs 12: 10f = 12(1−f) → f = 12/22 ≈ 54.5%. The 36.4% figure uses check-call as the baseline instead, so the two must not be mixed."
+    },
+    "t2hu-risk-q7": {
+      "question": "Using a 20x call-size set-mining threshold, you call the SB 3BB open with 55. You need an effective stack of about:",
+      "options": [
+        "30BB",
+        "45BB",
+        "60BB",
+        "90BB"
+      ],
+      "explanation": "20×3BB = 60BB. 45BB corresponds to 15x, the old full-ring threshold; heads-up ranges are wider and payoffs when you hit are thinner, so the threshold rises."
+    },
+    "t2hu-risk-q8": {
+      "question": "SPR is about 16 and you hold top pair in the BB (out of position postflop). The most reasonable default is:",
+      "options": [
+        "Play top pair for all the chips across three streets",
+        "Control the pot with small bets and checks instead of building a big pot with a marginal top pair",
+        "Fold top pair and wait for the nuts",
+        "Shove unconditionally to protect top pair"
+      ],
+      "explanation": "High SPR magnifies positional disadvantage: a raise makes top pair hard to continue with, and calls rarely pay three streets. Pot control keeps risk inside a controlled band and saves the remaining stack for stronger hands and bluffs."
     }
   },
   "chapterObjectives": {
@@ -172,5 +295,45 @@
       "Master the check-raise as a compensation tool, comparing its risk/reward with check-call",
       "Assess how heads-up implied odds change: wide ranges lower payment density → reverse implied odds rise"
     ]
+  },
+  "block": {
+    "t2hu-ev": {
+      "9": {
+        "node": {
+          "start": "Which branches exist here?",
+          "fold": "Fold · EV = 0",
+          "call": "Call · E×(P+2B) − B",
+          "raise": "Raise · f×P + (1−f)× later EV",
+          "pick": "Take the largest number"
+        },
+        "edge": {
+          "fold": "Fold branch",
+          "call": "Call branch",
+          "raise": "Raise branch",
+          "done": "Compare the three numbers"
+        }
+      }
+    },
+    "t2hu-risk": {
+      "8": {
+        "node": {
+          "start": "BB acts first (out of position postflop)",
+          "strong": "Top of range: nuts and strong draws",
+          "medium": "Medium showdown value",
+          "air": "Hands without equity",
+          "xr": "Check-raise",
+          "cc": "Check-call",
+          "fold": "Check-fold"
+        },
+        "edge": {
+          "strong": "Hands that can play three streets",
+          "medium": "Hands that survive one street",
+          "air": "Hands that should not invest chips",
+          "xr": "Let the opponent bet, then build the pot",
+          "cc": "One call buys another card",
+          "fold": "Concede the pot"
+        }
+      }
+    }
   }
 }

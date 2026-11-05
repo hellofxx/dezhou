@@ -28,6 +28,7 @@ export function TheoryLearningPaths() {
   const { t } = useTranslation();
   const activeVariant = useTheoryStore((s) => s.progress.activeVariant);
   const completedChapters = useTheoryStore((s) => s.progress.completedChapters);
+  const legacyUnlockedLevels = useTheoryStore((s) => s.progress.legacyUnlockedLevels ?? []);
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
   // 路径成员全部来自标准变体的章节（含 6-max 增补章），其他变体切换为骨架内容，不展示
@@ -37,7 +38,7 @@ export function TheoryLearningPaths() {
   const isChapterUnlocked = (chapterId: string): boolean => {
     const level = findLevelSummaryByChapterId(chapterId);
     if (!level) return false;
-    return debugUnlock || isLevelUnlockedByCompleted(level.id, completedChapters);
+    return debugUnlock || isLevelUnlockedByCompleted(level.id, completedChapters, [], legacyUnlockedLevels);
   };
 
   const cards: PathCardState[] = THEORY_PATHS.map((path) => {

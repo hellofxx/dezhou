@@ -70,6 +70,7 @@ export default function TheoryHome() {
           elo: standardElo,
           completedChapters: progress.completedChapters,
           creditLevels: progress.placement?.creditLevels ?? [],
+          legacyUnlockedLevels: progress.legacyUnlockedLevels ?? [],
           variant: 'standard',
         })
       : null;
@@ -115,7 +116,7 @@ export default function TheoryHome() {
               </h2>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
                 {t(`variant.name.${activeVariant}`)}
-                {activeVariant !== 'standard' && (
+                {activeVariant === 'short-deck' && (
                   <span className="text-[var(--ivory-dim)]">
                     {' '}
                     · {totalChapters} {t('theory.chapters')} · {t('theory.variantSkeleton')}

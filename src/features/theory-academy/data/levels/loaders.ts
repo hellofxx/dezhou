@@ -12,24 +12,30 @@ import {
   SHORT_DECK_LEVEL_SUMMARIES,
   STANDARD_LEVEL_SUMMARIES,
 } from './manifest';
+import { composeVariantChapters } from './variants/composeVariantChapters';
 import { applyStandardChapterMeta } from './variants/standard/chapterMeta';
-import { applyStandardContentBlocks } from './variants/standard/blocks/applyContentBlocks';
-import { applyStandardQuizBank } from './variants/standard/quizBank/applyQuizBank';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS as HEADS_UP_PRACTICE } from './variants/heads-up/chapterPracticeMap';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS as SHORT_DECK_PRACTICE } from './variants/short-deck/chapterPracticeMap';
 import { CHAPTER_PRACTICE_RECOMMENDATIONS as STANDARD_PRACTICE } from './variants/standard/chapterPracticeMap';
 
 /**
- * 理论完整数据按 Level 懒加载。
- * 首页与 store 只读 manifest；章节页只加载当前 Level 的单文件 chunk，
- * 不再一次拉取整变体（standard 全量约 100KB+ gzip）。疑难清单等需要全变体的
- * 场景经 loadTheoryLevelsForVariant 逐 Level 组合，缓存语义为成功才入缓存、
- * 失败可重试、并发共享 in-flight。
+ * 理论完整数据按 Level 懒加载：首页与 store 只读 manifest，章节页只加载当前 Level
+ * 的单文件 chunk；疑难清单经 loadTheoryLevelsForVariant 逐 Level 组合。
+ * 缓存语义：成功才入缓存、失败可重试、并发共享 in-flight。
  *
- * standard 变体的增补章独立成 `chapters/t<level>-*.ts`（每文件单章），
- * 与所属 Level 的核心章并行加载后按 order 合并；章节级实践推荐与元数据
- * （supplemental / pathTags）在合并后统一附加，保证目录层与完整数据层口径一致。
+ * 四组 glob 按变体查表，最终都交给同一个 `composeVariantChapters`（顺序与静态聚合一致）：
+ * - Level 文件：standardLevelN / shortDeckLevelN / headsUpLevelN；
+ * - 额外章节：standard 增补章 `chapters/t<N>-*.ts`、heads-up 新章 `chapters/t<N>hu-*.ts`（short-deck 空表）；
+ * - 题库 / 富文本块：`quizBank/t<N>.ts` 与 `blocks/t<N>.ts`（heads-up 为 `t<N>hu.ts`）。
+ * `applyStandardChapterMeta` 仍只对 standard 生效（增补标记与主题标签是 6-max 现金主线专属）。
  */
+
+type LevelModule = Record<string, unknown>;
+type LevelLoader = () => Promise<LevelModule>;
+/** Level 编号 → 单文件 loader */
+type LoaderIndex = Map<number, LevelLoader>;
+/** Level 编号 → 该 Level 的多个单章 loader（按路径排序） */
+type GroupedLoaderIndex = Map<number, LevelLoader[]>;
 
 const SUMMARIES_BY_VARIANT: Record<PokerVariant, TheoryLevelSummary[]> = {
   standard: STANDARD_LEVEL_SUMMARIES,
@@ -52,14 +58,8 @@ const PRACTICE_BY_VARIANT: Record<
   'heads-up': HEADS_UP_PRACTICE,
 };
 
-type LevelModule = Record<string, unknown>;
-type LevelLoader = () => Promise<LevelModule>;
-
-function indexLevelLoaders(
-  modules: Record<string, LevelLoader>,
-  pattern: RegExp,
-): Map<number, LevelLoader> {
-  const result = new Map<number, LevelLoader>();
+function indexLevelLoaders(modules: Record<string, LevelLoader>, pattern: RegExp): LoaderIndex {
+  const result: LoaderIndex = new Map();
   for (const [file, loader] of Object.entries(modules)) {
     const match = pattern.exec(file);
     if (match?.[1]) result.set(Number(match[1]), loader);
@@ -67,16 +67,12 @@ function indexLevelLoaders(
   return result;
 }
 
-/**
- * 增补章按文件名分组到所属 Level。
- * 先按路径排序再入组：同 Level 多章的加载顺序不依赖 glob 的枚举顺序，
- * 合并后的最终顺序由调用方的 order 排序决定。
- */
-function indexSupplementalLoaders(
+/** 单章文件按路径排序后归组：同 Level 多章的加载顺序不依赖 glob 枚举顺序 */
+function indexGroupedLoaders(
   modules: Record<string, LevelLoader>,
   pattern: RegExp,
-): Map<number, LevelLoader[]> {
-  const result = new Map<number, LevelLoader[]>();
+): GroupedLoaderIndex {
+  const result: GroupedLoaderIndex = new Map();
   const entries = Object.entries(modules).toSorted((left, right) =>
     left[0].localeCompare(right[0]),
   );
@@ -91,8 +87,8 @@ function indexSupplementalLoaders(
   return result;
 }
 
-/** 每个 Level 单文件动态 import：Vite 为每个文件产出独立 chunk */
-const LEVEL_LOADERS: Record<PokerVariant, Map<number, LevelLoader>> = {
+/** 核心 Level 文件：每 Level 单文件、独立 chunk */
+const LEVEL_LOADERS: Record<PokerVariant, LoaderIndex> = {
   standard: indexLevelLoaders(
     import.meta.glob('./variants/standard/standardLevel*.ts') as Record<string, LevelLoader>,
     /standardLevel(\d)\.ts$/,
@@ -107,57 +103,55 @@ const LEVEL_LOADERS: Record<PokerVariant, Map<number, LevelLoader>> = {
   ),
 };
 
-/** standard 增补章：每文件单章，按 `/chapters/t<level>-*.ts` 归组 */
-const STANDARD_SUPPLEMENTAL_LOADERS: Map<number, LevelLoader[]> = indexSupplementalLoaders(
-  import.meta.glob('./variants/standard/chapters/t*-*.ts') as Record<string, LevelLoader>,
-  /chapters\/t(\d+)-[^/]+\.ts$/,
-);
+/** 额外章节（每文件单章）：standard 增补章 / heads-up 新章；short-deck 无 */
+const EXTRA_CHAPTER_LOADERS: Record<PokerVariant, GroupedLoaderIndex> = {
+  standard: indexGroupedLoaders(
+    import.meta.glob('./variants/standard/chapters/t*-*.ts') as Record<string, LevelLoader>,
+    /chapters\/t(\d+)-[^/]+\.ts$/,
+  ),
+  'short-deck': new Map(),
+  'heads-up': indexGroupedLoaders(
+    import.meta.glob('./variants/heads-up/chapters/t*hu-*.ts') as Record<string, LevelLoader>,
+    /chapters\/t(\d+)hu-[^/]+\.ts$/,
+  ),
+};
 
-/**
- * standard 章末小测题库：每 Level 单文件，与核心 Level 文件并行懒加载。
- * 题库不再内联在 level/chapter 文件里；运行时只取当前 Level 的 t<n>.ts，
- * 静态/测试路径（variants/standard/index.ts）才一次性合并 9 个文件。
- */
-const STANDARD_QUIZ_BANK_LOADERS: Map<number, LevelLoader> = indexLevelLoaders(
-  import.meta.glob('./variants/standard/quizBank/t*.ts') as Record<string, LevelLoader>,
-  /quizBank\/t(\d)\.ts$/,
-);
+/** 独立题库：每 Level 单文件（standard `t<N>.ts` / heads-up `t<N>hu.ts`） */
+const QUIZ_BANK_LOADERS: Record<PokerVariant, LoaderIndex> = {
+  standard: indexLevelLoaders(
+    import.meta.glob('./variants/standard/quizBank/t*.ts') as Record<string, LevelLoader>,
+    /quizBank\/t(\d)\.ts$/,
+  ),
+  'short-deck': new Map(),
+  'heads-up': indexLevelLoaders(
+    import.meta.glob('./variants/heads-up/quizBank/t*hu.ts') as Record<string, LevelLoader>,
+    /quizBank\/t(\d)hu\.ts$/,
+  ),
+};
 
-/** 从题库模块中取 `QUIZ_BANK` 导出（模块缺失或导出类型异常时返回空题库） */
-function quizBankOfModule(moduleExports: LevelModule | undefined): Record<string, TheoryQuizQuestion[]> {
-  const bank = moduleExports?.QUIZ_BANK;
-  return typeof bank === 'object' && bank !== null
-    ? (bank as Record<string, TheoryQuizQuestion[]>)
-    : {};
-}
+/** 富文本块：每 Level 单文件（口径同题库） */
+const CONTENT_BLOCK_LOADERS: Record<PokerVariant, LoaderIndex> = {
+  standard: indexLevelLoaders(
+    import.meta.glob('./variants/standard/blocks/t*.ts') as Record<string, LevelLoader>,
+    /blocks\/t(\d)\.ts$/,
+  ),
+  'short-deck': new Map(),
+  'heads-up': indexLevelLoaders(
+    import.meta.glob('./variants/heads-up/blocks/t*hu.ts') as Record<string, LevelLoader>,
+    /blocks\/t(\d)hu\.ts$/,
+  ),
+};
 
-/** standard 富文本块：每 Level 单文件，与核心 Level 文件并行懒加载 */
-const STANDARD_BLOCK_LOADERS: Map<number, LevelLoader> = indexLevelLoaders(
-  import.meta.glob('./variants/standard/blocks/t*.ts') as Record<string, LevelLoader>,
-  /blocks\/t(\d)\.ts$/,
-);
-
-/** 从块模块中取 `CONTENT_BLOCKS` 导出（缺失时返回空块表） */
-function contentBlocksOfModule(
+/** 取模块里的表格导出（`QUIZ_BANK` / `CONTENT_BLOCKS`；缺失或类型异常返回空表） */
+function tableOfModule<T>(
   moduleExports: LevelModule | undefined,
-): Record<string, TheorySection[]> {
-  const blocks = moduleExports?.CONTENT_BLOCKS;
-  return typeof blocks === 'object' && blocks !== null
-    ? (blocks as Record<string, TheorySection[]>)
-    : {};
+  exportName: string,
+): Record<string, T> {
+  const table = moduleExports?.[exportName];
+  return typeof table === 'object' && table !== null ? (table as Record<string, T>) : {};
 }
 
-function applyChapterPractice(
-  chapters: TheoryChapter[],
-  map: Readonly<Record<string, PracticeRecommendation>>,
-): TheoryChapter[] {
-  return chapters.map((chapter) => {
-    const recommendation = map[chapter.id];
-    return recommendation ? { ...chapter, practiceRecommendations: recommendation } : chapter;
-  });
-}
-
-/** standard 的 Level 文件导出章节数组，短牌/单挑导出完整 TheoryLevelInfo */
+/** standard 导出章节数组，短牌/单挑导出完整 TheoryLevelInfo */
 function chaptersFromModule(moduleValue: unknown): TheoryChapter[] | null {
   if (Array.isArray(moduleValue)) return moduleValue as TheoryChapter[];
   if (
@@ -171,7 +165,8 @@ function chaptersFromModule(moduleValue: unknown): TheoryChapter[] | null {
 }
 
 /** 取模块里的首个章节数组导出（核心 Level 文件与单章文件都只有一处章节导出） */
-function chaptersOfModule(moduleExports: LevelModule): TheoryChapter[] | null {
+function chaptersOfModule(moduleExports: LevelModule | undefined): TheoryChapter[] | null {
+  if (!moduleExports) return null;
   for (const value of Object.values(moduleExports)) {
     const chapters = chaptersFromModule(value);
     if (chapters) return chapters;
@@ -179,41 +174,34 @@ function chaptersOfModule(moduleExports: LevelModule): TheoryChapter[] | null {
   return null;
 }
 
-/** 合并 standard 的核心章与增补章，按 order 升序（核心章相对顺序不变） */
-async function mergeStandardSupplemental(
-  level: number,
-  core: TheoryChapter[],
-): Promise<TheoryChapter[]> {
-  const loaders = STANDARD_SUPPLEMENTAL_LOADERS.get(level) ?? [];
-  if (loaders.length === 0) return core;
-  const modules = await Promise.all(loaders.map((load) => load()));
-  const supplemental = modules.flatMap((moduleExports) => chaptersOfModule(moduleExports) ?? []);
-  return [...core, ...supplemental].toSorted((a, b) => a.order - b.order);
-}
-
 async function loadTheoryLevelUncached(levelId: string): Promise<TheoryLevelInfo | undefined> {
   const summary = SUMMARY_BY_ID.get(levelId);
   if (!summary) return undefined;
-  const loader = LEVEL_LOADERS[summary.variant].get(summary.level);
+  const variant = summary.variant;
+  const loader = LEVEL_LOADERS[variant].get(summary.level);
   if (!loader) return undefined;
-  const isStandard = summary.variant === 'standard';
-  const quizLoader = isStandard ? STANDARD_QUIZ_BANK_LOADERS.get(summary.level) : undefined;
-  const blockLoader = isStandard ? STANDARD_BLOCK_LOADERS.get(summary.level) : undefined;
-  const [coreModule, quizModule, blockModule] = await Promise.all([
+  const quizLoader = QUIZ_BANK_LOADERS[variant].get(summary.level);
+  const blockLoader = CONTENT_BLOCK_LOADERS[variant].get(summary.level);
+  const extraLoaders = EXTRA_CHAPTER_LOADERS[variant].get(summary.level) ?? [];
+  const modules = await Promise.all([
     loader(),
     quizLoader ? quizLoader() : Promise.resolve(undefined),
     blockLoader ? blockLoader() : Promise.resolve(undefined),
+    ...extraLoaders.map((load) => load()),
   ]);
+  const [coreModule, quizModule, blockModule] = modules;
   const coreChapters = chaptersOfModule(coreModule);
   if (!coreChapters) return undefined;
-  const chapters = isStandard
-    ? await mergeStandardSupplemental(summary.level, coreChapters)
-    : coreChapters;
-  const withPractice = applyChapterPractice(chapters, PRACTICE_BY_VARIANT[summary.variant]);
-  const withMeta = isStandard ? applyStandardChapterMeta(withPractice) : withPractice;
-  if (!isStandard) return { ...summary, chapters: withMeta };
-  const withBlocks = applyStandardContentBlocks(withMeta, contentBlocksOfModule(blockModule));
-  return { ...summary, chapters: applyStandardQuizBank(withBlocks, quizBankOfModule(quizModule)) };
+  const chapters = composeVariantChapters({
+    core: coreChapters,
+    extra: modules.slice(3).flatMap((moduleExports) => chaptersOfModule(moduleExports) ?? []),
+    practice: PRACTICE_BY_VARIANT[variant],
+    blocks: tableOfModule<TheorySection[]>(blockModule, 'CONTENT_BLOCKS'),
+    quizBank: tableOfModule<TheoryQuizQuestion[]>(quizModule, 'QUIZ_BANK'),
+    applyMeta: variant === 'standard' ? applyStandardChapterMeta : undefined,
+    strictQuizBank: variant === 'heads-up',
+  });
+  return { ...summary, chapters };
 }
 
 const cache = new Map<PokerVariant, TheoryLevelInfo[]>();

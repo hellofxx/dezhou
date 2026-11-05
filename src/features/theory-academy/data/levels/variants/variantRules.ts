@@ -1,8 +1,11 @@
 /**
  * 各游戏变体的特有规则（单一事实源）。
- * 三变体（standard / short-deck / heads-up）规则集中于此，供各 level 文件引用。
+ * standard / short-deck / heads-up 规则集中于此，供各 level 文件引用。
+ * heads-up 规则已提升到 shared（策略学院规则卡共用），本文件保留重导出。
  */
-import type { VariantRuleInfo } from '../../../types';
+import type { VariantRuleInfo } from '@/shared/types/variantRules';
+
+export { headsUpRules } from '@/shared/constants/headsUpRules';
 
 /**
  * Short Deck（短牌 / 6+ Hold'em）：36 张牌（6-A）、三条 > 顺子、同花 > 葫芦、
@@ -22,19 +25,3 @@ export const shortDeckRules: VariantRuleInfo = {
   },
 };
 
-/**
- * Heads-Up（单挑）：SB 即按钮位（button）、SB 翻前先行动；
- * 翻后 BB 先行动，SB（按钮位）最后行动并持有位置优势。
- */
-export const headsUpRules: VariantRuleInfo = {
-  deckSize: 52,
-  positionDynamics: {
-    sbAnte: true,
-    sbFirstActionPreflop: true,
-    bbFirstActionPostflop: true,
-  },
-  blindStructure: {
-    sbAmount: 0.5,
-    bbAmount: 1,
-  },
-};

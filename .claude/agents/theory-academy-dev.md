@@ -102,11 +102,11 @@ additionalPrompt: ""
 - src/features/progress/store.ts — 消费 updateElo / recordAnswer / recordTrainingDay（设计内中枢引用）
 
 ## Workflows
-1. 新增核心章节时：在对应 variants/standard/standardLevelN.ts（标准变体）或 variants/short-deck/shortDeckLevelN.ts / variants/heads-up/headsUpLevelN.ts（变体）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验（6-max 现金增补章走第 13 条，不进 Level 文件）
+1. 新增核心章节时：标准在 `variants/standard/standardLevelN.ts`、短牌在 `variants/short-deck/shortDeckLevelN.ts`、单挑存量章在 `variants/heads-up/headsUpLevelN.ts`、单挑新增章在独立单文件 `variants/heads-up/chapters/t<level>hu-<topic>.ts`（eager glob 自动吸收，`order` 追加到该级末尾）添加 TheoryChapter（id 前缀 `t<level>-`，声明 eloDimension）→ theoryIntegrity 测试自动校验（6-max 现金增补章走第 13 条，不进 Level 文件）
    - **每章必须声明 3–5 条 `objectives`**（类型可选、守卫必填，缺漏或条数越界即门禁红）。写法：以动词开头、单句、句末无句号、**不复述任何精确数值**——量化一致性只由 `content` 与 `quiz` 两处承担，目标里写数字会造出第三个需要同步维护的地方；每条必须能指回该章某个具体段落（下标 0 起、含 heading 段），禁止凭标题或常识编造
    - **正文禁用四类写法（已由卫生守卫强制）**：`**粗体**`（`TheorySectionRenderer` 按纯文本渲染，星号会显示给用户）、"本级第 N 章 / 本章第 3 章"式**编号交叉引用**（加章或调序即指错）、用《》包章节名（《》只用于教材书名，章节名一律 `『…』`）、正文出现裸章节 id。跨章引用一律写成「见 T5『MDF 与 Alpha』章」——守卫读 `ALL_VARIANT_THEORY_LEVELS` 覆盖三变体全部章节的正文/目标/小测文本，判定书名号是否误用以其内容命中某章 `title` 为准
    - **locale 只能追加**：正文段落 key 是下标型（`theory.content.<chapterId>.<sectionIndex>`，无稳定 id），在已有章节中间插段会让 zh/en 数组静默错位且 `contentAlignment.baseline.ts` 棘轮基线为空集（无自救余地）；补段一律追加到数据数组与 zh/en 两份 `theory-content/<levelId>.json` 的 content 数组**末尾**，且三者下标顺序必须一致
-   - **每章小测固定 3-5 题**：已有 5 题的章节不得再加题（`theoryIntegrity.test.ts` 断言上界）
+   - **每章小测题量按变体分支**（判据在 `theoryIntegrity.test.ts`）：标准与单挑每章 8–12 题，且题目只放独立题库（`quizBank/t<N>.ts` / `quizBank/t<N>hu.ts`），level / chapter 文件保留 `quiz: []` 占位；短牌仍为章节内联 3–5 题。抽题恒为 T1–T3 抽 5、T4–T9 抽 6
    - **量化口径不得自立第二套**：涉及 Alpha / MDF / 跟注所需权益 / Kelly / 显著性样本量 / 破产概率 / outs 权益 / 组合计数 / HUD 比率的正文数字，一律取 `utils/theoryFormulas.ts` 的函数口径，并在 `standardQuantAudit.test.ts`（变体为 `variantQuantAudit.test.ts`）登记复算块与文件头人工复核索引（`[正确]` / `[示意值]` 分类，PRD §6.7.1 诚实性）
    - **全下 / ICM 实例必须先定覆盖关系**：写"输了归零"之前要确认被跟的一方筹码 ≥ 跟注方，否则归零不成立、且期望式必须含输分支的持有值而非 0（曾有实例因漏算输分支而结论反转，且被复核索引登记为「正确」）。复核索引的下标以 **0 起、含 heading 段**计
 2. 新增 Level 时：新建 variants/<variant>/<variant>LevelN.ts → 在对应 variants/<variant>/index.ts 注册（含 practiceRecommendations）→ 更新 unlockRequirement 链
@@ -119,7 +119,7 @@ additionalPrompt: ""
    - Step 1 读取现有章节数据（variants/<variant>/<variant>LevelN.ts 对应章节）
    - Step 2 对照教材清单逐段审核，输出差距清单（缺失/不准确/需推导）
    - Step 3 增量修改，新增段落注释标记来源 `/* 概念源自: MSSA Ch.2 */`（或 content 内脚注式标注）
-   - Step 4 新增/修订小测题（3-5 题/章，记忆/理解/分析三类题型覆盖）
+   - Step 4 新增/修订小测题（按变体分支：标准 / 单挑改写同 Level 的独立题库文件，短牌改章节内联 quiz；记忆/理解/分析三类题型覆盖）
    - Step 5 立即运行 integrity + quizOrder 测试（确保结构合法）
    - Step 6 人工复核数学准确性（抽算每个公式数值）
    - Step 7 运行质量门禁，通过后进入下一章
@@ -130,12 +130,13 @@ additionalPrompt: ""
 9. 新增/修改章内计算演练时：题源在 `utils/theoryCalcDrills.ts`（`CHAPTER_DRILL_SLOTS` 决定哪章有哪些公式槽位），期望值必须调 `utils/theoryFormulas.ts` 现算，**禁止在题源里出现任何硬编码答案或第二套口径**；`drillId` 用 `${chapterId}#d${slot}` 形式，**不得**使用 `-qN` 后缀（SRS 与疑难清单按 `-q\d+$` 反解章节 id，撞名会误判）；演练组件不得接入 `recordAnswer` / `updateElo` / `addReviewItem` / `completeChapter` / `trainingEvents.emit`（PRD §5.27.10 的零持久决策，已被 `theoryCalcDrills.test.ts` 的源码守卫与 `TheoryCalcDrill.test.tsx` 的状态快照断言双向锁定）。纯数值填空无 `correctIndex`，不属选项排序治理面，无需接 `quizOrder.ts`。
    - **单位与标签**：`DrillUnit` 现有 `percent / hands / ratio / count` 四种，容差按单位分档且只在生成器内定义（percent 绝对 0.5、ratio 绝对 0.05、count 绝对 0、hands 相对 5%）。新增单位必须同批补 `theory.drill.unit.<unit>` 双语——该 key 由 `t(\`theory.drill.unit.${unit}\`)` 动态拼接，`staticKeyGuard` 覆盖不到，缺 key 会把判分行渲染成键面字；由 `theoryCalcDrills.test.ts` 的单位标签守卫兜住。新增公式族同理须保证模板里的每个 `{{占位符}}` 都出现在该 drill 的 `params` 键集内（同一测试断言）。
    - **不挂槽是判断不是疏漏**：某章若无可口算对象（如 Tilt / 心态章），或其唯一可算量需要多步带小数的分数运算（如三人 ICM 递归，越出"参数取自友好网格、答案可口算复核"纪律），就让它返回 null 并在 `theoryCalcDrills.ts` 文件头写明理由，不要为凑覆盖率搬别章公式。
-10. **两院共享组件（2026-11）**：本模块的 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 一律薄包装 `shared/components/academy/*` 与 `shared/utils/academy*`，不得复制实现；shared 层禁止 import feature。书签/笔记面板只接收 items / 受控草稿 / labels / callbacks（2000 字上限由调用方传入），纠错弹层只接收 reportText 与复制动作——共享层不读 store、不拼路由，也不因 P2 工具接入改变解锁与掌握度判定。行为/视觉/文案以现有测试为回归基线；新增共享能力须同时满足 ≥2 模块准入门槛并同步 AGENTS.md 契约表与 TDD §5.8 第 23 条。
+10. **两院共享组件（2026-11）**：本模块的 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheoryVariantRuleCard`（单挑规则卡）/ `TheorySearch*` / `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` / `theorySrs` / `applyStandardQuizBank`（别名）/ `applyTheoryQuizBank`（通用入口）/ `quizDraw` 一律薄包装 `shared/components/academy/*` 与 `shared/utils/academy*`，不得复制实现；shared 层禁止 import feature。书签/笔记面板只接收 items / 受控草稿 / labels / callbacks（2000 字上限由调用方传入），纠错弹层只接收 reportText 与复制动作——共享层不读 store、不拼路由，也不因 P2 工具接入改变解锁与掌握度判定。行为/视觉/文案以现有测试为回归基线；新增共享能力须同时满足 ≥2 模块准入门槛并同步 AGENTS.md 契约表与 TDD §5.8 第 23 条。
 11. **新增变体章节是 5 文件原子单元**（缺一即门禁红或静默失配）：① `variants/<变体>/<变体>LevelN.ts` 追加章节（`order` 取数组末尾的下一个连续值，变体守卫断言 order 为 1..n；`duration` 形如 `13 min`；`eloDimension` 取五维之一；3–5 条 `objectives`；至少一段 `takeaway`）② 同变体的 `chapterPracticeMap.ts` 登记章节级桥接（覆盖率守卫会拦住漏登记）③ zh locale：`chapterTitle` / `chapterSubtitle` 写 `theory.json`；`content.<id>` 数组 / `chapterObjectives.<id>` 数组 / `quiz.<qid>` 写 `theory-content/<levelId>.json`（levelId = 章节 id 的 `t<n>[sd|hu]` 前缀），**逐字镜像数据原文** ④ en locale 同结构译文（不得含汉字）⑤ `variantQuantAudit.test.ts` 追加复算 `it` 块 + 文件头人工复核索引（段号 **0 起、含 heading 段**）。跨章引用只按标题写 `『…』`，被引用的章节若属后续批次，须先把标题定下来再写，避免引用悬空（散文引用无机器守卫）。
+    - **单挑（heads-up）文件归属**（对齐后 37 核心章）：新增章 → `variants/heads-up/chapters/t<level>hu-<topic>.ts`（单元素数组导出 `HEADS_UP_CHAPTERS`）；题目 → `variants/heads-up/quizBank/t<level>hu.ts`（`Record<chapterId, TheoryQuizQuestion[]>`，每章 8–12 题）；富文本块 → `variants/heads-up/blocks/t2hu.ts`、`t4hu..t9hu.ts`（只追加到 content 尾部）。三张表由 `heads-up/index.ts` 与 `loaders.ts` 共用 `composeVariantChapters` 注入，题库注入开启 `strict`（题库键对应章文件缺失即抛错），故「新章文件 + 题库条目」必须同一提交。`chapters/` 目录只放数据文件、禁止测试文件（eager glob 会误匹配），本变体自测放变体根目录。`quizBank/t[1-9]hu.ts` 走 `QUIZ_BANK_ALLOWLIST` 逐文件豁免，`chapters/` 与 `blocks/` 不豁免
     - **变体量化口径**：与牌堆无关的量（Alpha / MDF / 跟注所需权益 / 保本弃牌率）在变体间逐字相同，直接调 `utils/theoryFormulas.ts`；随牌堆变的量必须重算——outs 权益一律走 `outsToEquity(outs, streets, SHORT_DECK_UNKNOWN_CARDS)`（短牌 31/30），组合数按每花色 9 张、9 个点数档位算。标准主线靠默认 `[47, 46]` 零改动，`theoryFormulas.test.ts` 有"默认值逐位等于旧口径"的回归锁，改默认参数会让它立刻红
     - **登记分类不止两态**：复核索引须把数值归为 `[正确]`（可独立复算）/ `[查表值]`（外部标准表，如正态分位，本模块不推导）/ `[示意值]`（经验量级，正文标"约/典型"）/ `[定性]`（机制陈述无数值）/ `[假设]`（教学结构设定，声明"数字随结构变、关系不变"）/ `[规则集说明]`（变体规则约定）；**由示意值导出的结论继承示意标签**（PRD §6.7.1「数值来源分类登记」）
 
-11. **单挑（heads-up）正文的规则性事实以 `variantRules.headsUpRules` 为唯一判据**：SB 即按钮位、翻前 SB 先行动 / BB 最后行动、翻后 BB 先行动 / SB 最后行动（⇒ SB=IP、BB=OOP）。改动或新增任何 HU 章节前，凡涉及"谁先行动 / 谁有位置 / 谁持有 BTN"的陈述都须与该单源一致，`src/guards/huPositionOrderGuard.test.ts` 会零容忍拦截（它扫 4 份 HU locale，zh 侧由 `contentAlignment` 逐字镜像锁定数据层）。两条已认可的豁免：小测 `options`（干扰项按设计是假命题）与子句自身点名满员桌/6-max 的对比句。位置归属对调时**数字保持不变**，只把归属与依赖归属的论证搬对；若某数值只在旧归属下成立（如曾把"权益实现率 >100%"记在 BB 名下），删除或改名该论断并在 `variantQuantAudit` 索引注明，**不得自创新数**。
+11. **单挑（heads-up）正文的规则性事实以 `shared/constants/headsUpRules.ts` 的 `headsUpRules` 为唯一判据**（本模块 `data/levels/variants/variantRules.ts` 只做重导出，短牌 `shortDeckRules` 仍留在理论侧）：SB 即按钮位、翻前 SB 先行动 / BB 最后行动、翻后 BB 先行动 / SB 最后行动（⇒ SB=IP、BB=OOP）。改动或新增任何 HU 章节前，凡涉及"谁先行动 / 谁有位置 / 谁持有 BTN"的陈述都须与该单源一致，`src/guards/huPositionOrderGuard.test.ts` 会零容忍拦截（它扫 4 份 HU locale，zh 侧由 `contentAlignment` 逐字镜像锁定数据层）。两条已认可的豁免：小测 `options`（干扰项按设计是假命题）与子句自身点名满员桌/6-max 的对比句。位置归属对调时**数字保持不变**，只把归属与依赖归属的论证搬对；若某数值只在旧归属下成立（如曾把"权益实现率 >100%"记在 BB 名下），删除或改名该论断并在 `variantQuantAudit` 索引注明，**不得自创新数**。
 12. **跨语言座位一致性**：en 是人工译文，方向守卫抓不到"座位所指漂移"（zh 改成 SB 而 en 仍写 BB 的 range/call）。改 HU 段落的座位归属时须同键逐条核对 en 侧对应句，不能只靠守卫归零。
 
 13. **新增/修改 6-max 现金增补章**（不参与 Level 解锁与核心进度）：
@@ -146,12 +147,15 @@ additionalPrompt: ""
     - 开池数值一律投影 `data/sixMaxBenchmarks.ts` 的双列基准（标准列 + 新手简化），禁止在正文自建第二套数字；标准列与 range-trainer 预设的一致性由 `src/guards/sixMaxBenchmarkGuard.test.ts` 逐位置锁定
     - 掌握度（`utils/theoryMastery.ts`）与学习路径（`data/theoryPaths.ts`）只读 `quizScores` / `completedChapters`，**禁止接入任何门禁判定**（遵守 PRD §5.27.2）
 
+14. **单挑变体规则卡（2026-11）**：章节页正文前的规则卡由 `components/TheoryVariantRuleCard` 薄包装 shared `AcademyVariantRuleCard` + `shared/utils/academyVariantRules` 的 `buildHeadsUpRuleRows` 承担，只在 `chapter.variant === "heads-up"` 时渲染；行标签 / 值一律 `variant.headsUpRules.*` 显式字面量 key（模板拼接会绕过 `staticKeyGuard` 与 `variantRuleCopyGuard`）。规则数据回退 `chapter.variantRules ?? shared headsUpRules`，方向文案只由 `positionDynamics` 布尔派生、数据没有的行不渲染；`types.ts` 的 `VariantRuleInfo` 已改为 shared 重导出（`VariantRuleContext` 只在策略课时 `variantContext` 侧消费），新增行类型须同批补 zh / en `variant.json`。
+
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 
 模块特有约束：
 - 独立 store，不写入 progress store 的 persist schema（仅调用其公开 action）
 - 6-max 增补层不新增持久化字段：`supplemental` / `pathTags` 是数据层标记，掌握度与学习路径由既有 `quizScores` / `completedChapters` 派生，`TheoryProgress` 形状不变，persist version 不递增、不写 migrate
+- theory persist 版本以 `src/features/theory-academy/store.ts` 为唯一事实源（本文件不维护数值副本）；v5 新增 `legacyUnlockedLevels`（单挑新增核心章的存量宽限名单）：migrate 用历史快照常量（对齐前 22 个单挑核心章 id，冻结、不回填）逐级推导，只放宽解锁、**绝不写 `completedChapters`**；`isLevelUnlockedByCompleted` 的第 4 个参数是唯一透传点，`findNextTheoryChapter` / `isTheoryLevelUnlocked` 必须同步传入
 - 首页/store/成就检查禁止静态 import `data/levels/variants/**`（会把全量正文带回首屏）；只允许 `utils/theoryMeta` + `data/levels/manifest`。完整数据只能经 `data/levels/loaders.ts` 动态加载：章节页/首页预取按 Level 单取，禁止回退为整变体加载；只有疑难清单可逐 Level 组合出全变体
 - 章节 ID 规范：前缀 `t<level>-`（如 `t1-combinatorics`），与 strategy-academy 的 `l<level>-` 隔离，确保全局唯一
 - 章末小测答题必须调用 `progress.updateElo`（按章节 eloDimension）与 `recordAnswer`，理论掌握度进入统一 ELO 体系
@@ -192,7 +196,7 @@ interface ReviewRequest {
 - [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
 - [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `theory.*` / `nav.theory` / `achievements.items.theory*` / 课程内容 `theory.content|quiz|objectives.*`）
 - [ ] theoryIntegrity.test.ts 全部通过（ID 唯一与前缀 / 小测合法性 / eloDimension / 实践推荐结构）
-- [ ] 每章扩充后立即运行 integrity 测试：ID 前缀 / quiz 3-5 题 / eloDimension / 段落非空；新扩充内容符合 7 类段落契约与公式推导要求
+- [ ] 每章扩充后立即运行 integrity 测试：ID 前缀 / quiz 题量按变体分支（标准与单挑 8–12 题、短牌 3–5 题）/ eloDimension / 段落非空；新扩充内容符合 7 类段落契约与公式推导要求
 - [ ] quizOrder.test.ts 全部通过（correctIndex 重映射 / 确定性 / 分布守卫 <50%）
 - [ ] store.persist-shape.test.ts 快照一致（变更持久化形状须 bump version + migrate）；升版时 store.migrate.test.ts 覆盖 vN-1→vN 链路
 - [ ] completeChapter 幂等（同一 chapterId 重复完成不重复计数）

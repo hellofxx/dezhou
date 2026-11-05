@@ -26,5 +26,23 @@
     "deckInfo": "36张牌（6-A），移除2-5",
     "flushBeatsFullHouse": "同花 > 葫芦",
     "tripsBeatsStraight": "三条 > 顺子"
+  },
+  "headsUpRules": {
+    "title": "单挑规则",
+    "subtitle": "牌数、盲注结构与各街行动顺序",
+    "playersLabel": "人数",
+    "deckSizeLabel": "牌数",
+    "preflopFirstLabel": "翻前先行动",
+    "preflopFirstValue": "SB（按钮位）",
+    "postflopFirstLabel": "翻后先行动",
+    "postflopFirstValue": "BB",
+    "blindsLabel": "盲注（SB / BB）",
+    "anteLabel": "Ante",
+    "anteYes": "有 Ante",
+    "anteNo": "无 Ante",
+    "contextTitle": "本课上下文",
+    "contextStackLabel": "筹码深度（BB）",
+    "contextAnteLabel": "Ante 结构",
+    "contextButtonLabel": "按钮位"
   }
 }

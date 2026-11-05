@@ -1,6 +1,10 @@
 import type { TheoryLevelInfo } from '../../../../types';
 import type { PokerVariant } from '@/shared/types/elo';
 import { headsUpRules } from '../variantRules';
+import { HEADS_UP_CHAPTERS as MOP_CHAPTERS } from './chapters/t9hu-mop';
+import { HEADS_UP_CHAPTERS as ICM_CHAPTERS } from './chapters/t9hu-icm';
+import { HEADS_UP_CHAPTERS as UNIFIED_CHAPTERS } from './chapters/t9hu-unified';
+import { HEADS_UP_CHAPTERS as CASH_VS_MTT_CHAPTERS } from './chapters/t9hu-cash-vs-mtt';
 
 const variant: PokerVariant = 'heads-up';
 
@@ -78,68 +82,7 @@ export const HEADS_UP_LEVEL_9: TheoryLevelInfo = {
             '构建个人体系的四步：学（T1-T8 理论）→ 练（求解器验证）→ 打（实战执行闭环）→ 复（逐手复盘+笔记）。四步循环，你的单挑水平随每个 session 稳定爬升。',
         },
       ],
-      quiz: [
-        {
-          id: 't9hu-mastery-q1',
-          question: '单挑决策闭环的正确顺序是：',
-          options: [
-            '下注→范围→数学→心理',
-            '范围→数学→下注→剥削→心理',
-            '心理→范围→下注→数学',
-            '只看结果',
-          ],
-          correctIndex: 1,
-          explanation: '闭环：范围（T4）→ 数学（T2）→ 下注（T6）→ 剥削（T7）→ 心理（T8），五问缺一不可。',
-        },
-        {
-          id: 't9hu-mastery-q2',
-          question: '深筹码（100BB）与短筹码（15BB）单挑的主要差异是：',
-          options: [
-            '没有差异',
-            '深筹码范围更宽、下注更极化、需规划多街；短筹码翻前全下更频繁、更直接',
-            '短筹码范围更宽',
-            '深筹码不需要下注',
-          ],
-          correctIndex: 1,
-          explanation: '筹码深度改变策略：深筹码 SPR 高需多街规划、下注极化；短筹码翻前全下更频繁、玩法更直接。',
-        },
-        {
-          id: 't9hu-mastery-q3',
-          question: '单挑复盘最应关注的是：',
-          options: [
-            '这手输了多少',
-            '决策过程（范围/EV/尺度/剥削/情绪）是否正确',
-            '赢了多少手',
-            '对手多强',
-          ],
-          correctIndex: 1,
-          explanation: '复盘只问过程（决策质量）不问结果（输赢），把每一手牌变成训练，才能持续改进。',
-        },
-        {
-          id: 't9hu-mastery-q4',
-          question: '短筹码（15BB）单挑持 KQs，最合理的玩法是：',
-          options: [
-            '复杂多街下注',
-            '直接全下或小加注引诱，缩短决策树',
-            '过牌看翻牌',
-            '弃牌',
-          ],
-          correctIndex: 1,
-          explanation: '短筹码不用多街规划，KQs 对宽范围胜率约 60%，直接全下或小加注引诱是标准打法。',
-        },
-        {
-          id: 't9hu-mastery-q5',
-          question: '"系统稳定"比"每手完美"更重要的原因是：',
-          options: [
-            '完美不可能',
-            '稳定的决策闭环+情绪纪律让长期期望稳定向上，追求完美反致过度思考与 tilt',
-            '系统稳定更省力',
-            '对手更喜欢',
-          ],
-          correctIndex: 1,
-          explanation: '偶尔失误不可避免，稳定的闭环与情绪纪律让长期期望曲线向上；追求"每手完美"反而引发过度思考与 tilt。',
-        },
-      ],
+      quiz: [],
       variant,
       variantRules: headsUpRules,
     },
@@ -200,70 +143,13 @@ export const HEADS_UP_LEVEL_9: TheoryLevelInfo = {
             '研究职业牌例的流程：(1) 记录一手牌的所有动作序列；(2) 用决策闭环逐层拆解（范围/数学/下注/剥削/心理）；(3) 对照自己的处理找差距；(4) 提炼一条可复用原则写入笔记。每研究 10 手，你的决策框架就完整一分。',
         },
       ],
-      quiz: [
-        {
-          id: 't9hu-pro-study-q1',
-          question: '顶级单挑选手与业余玩家的核心分水岭是：',
-          options: [
-            '运气',
-            '决策框架（系统性 vs 靠感觉）',
-            '天赋',
-            '筹码量',
-          ],
-          correctIndex: 1,
-          explanation: '职业与业余的差距是"决策框架"——职业靠系统（范围构建、频率平衡、纪律），业余靠感觉。',
-        },
-        {
-          id: 't9hu-pro-study-q2',
-          question: '职业选手面对弃牌过多的 BB，会如何微调翻前策略？',
-          options: [
-            '减少开池',
-            '提高开池频率至接近 100%、降低尺度（min-raise）最大化偷盲 EV',
-            '只玩坚果',
-            '增加跟注',
-          ],
-          correctIndex: 1,
-          explanation: '对手弃牌率统计支持"宽范围+小尺度"最大化偷盲 EV，是可计算决策而非感觉。',
-        },
-        {
-          id: 't9hu-pro-study-q3',
-          question: '翻牌 A♠8♦3♣（干燥高牌面），加注者的 C-Bet 频率应：',
-          options: [
-            '大幅下降',
-            '高频小额下注整个范围',
-            '完全过牌',
-            '只看自己牌',
-          ],
-          correctIndex: 1,
-          explanation: '加注者范围优势明显（含大量 Ax），跟注者难中 A，可高频小额 C-Bet 整个下注范围。',
-        },
-        {
-          id: 't9hu-pro-study-q4',
-          question: '顶级选手连输多个 60% 全下后仍按同一框架决策，体现的是：',
-          options: [
-            '固执',
-            '把波动视为不可控变量、只控制决策质量的情绪纪律',
-            '不在乎输赢',
-            '运气好',
-          ],
-          correctIndex: 1,
-          explanation: '顶级选手把波动当外部变量，只控制决策质量，这正是"过程 vs 结果"分离的极致体现。',
-        },
-        {
-          id: 't9hu-pro-study-q5',
-          question: '研究职业牌例最有价值的方式是：',
-          options: [
-            '照抄他们的动作',
-            '用决策闭环逐层拆解，提炼可复用原则',
-            '只关注他们赢了多少',
-            '模仿他们的运气',
-          ],
-          correctIndex: 1,
-          explanation: '逐层拆解（范围/数学/下注/剥削/心理）+ 对照差距 + 提炼原则，才能把职业框架转化为自己的系统。',
-        },
-      ],
+      quiz: [],
       variant,
       variantRules: headsUpRules,
     },
+    ...MOP_CHAPTERS,
+    ...ICM_CHAPTERS,
+    ...UNIFIED_CHAPTERS,
+    ...CASH_VS_MTT_CHAPTERS,
   ],
 };

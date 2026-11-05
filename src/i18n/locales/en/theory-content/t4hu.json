@@ -11,7 +11,8 @@
       "Example 2 (ranges move with the opponent): The same J♠8♠ — against a BB who 3-bets at a high 25%, after a 3-bet J8s usually only folds and the min-raise steal EV erodes, so consider narrowing the open; against a passive BB 3-betting only 8%, J8s's postflop flush/straight potential realizes fully and it's worth opening. Range width is never a fixed number but a direct response to the opponent's aggression frequency.",
       "Example 3 (the key to postflop realization): You (BB) call the SB's min-raise with 6♠5♠. Flop K♠8♦4♣, SB bets 1/3 pot; your 65s has only a gutshot (4 sevens) + backdoor flush, about 20% equity, below the 25% call line — standard fold. But on a 7♠6♦4♣ flop you have a pair with a straight draw, equity jumping to about 55%, warranting a call or even a check-raise. Wide ranges matter not as \"call anything\" but as \"giving you enough hands to win on the right boards\".",
       "Counterintuitive point: a wide range isn't loose play. HU pros enter with 80% but quickly give up about half postflop — they \"participate a lot, invest little\", extracting value via postflop position and board fit. The real error is \"wide range but reluctant to fold on every street\" — that's a calling station.",
-      "HU range quick reference: SB opens about 80% (top 15% strong + mid suited connectors/Ax + bottom junk mixed), BB defends about 60% (call pile ~35%-45% + 3-bet pile ~15%-25%). Every 50 hands check: is your fold rate being targeted by the opponent's steal profit? Is your 3-bet frequency too low, letting the SB open forever? Both answers decide the next round's width."
+      "HU range quick reference: SB opens about 80% (top 15% strong + mid suited connectors/Ax + bottom junk mixed), BB defends about 60% (call pile ~35%-45% + 3-bet pile ~15%-25%). Every 50 hands check: is your fold rate being targeted by the opponent's steal profit? Is your 3-bet frequency too low, letting the SB open forever? Both answers decide the next round's width.",
+      "Width against price: range width is not a style choice — every width maps to a price threshold. The SB participation rate and the BB defense rate are high because both nodes are priced cheaply enough to absorb plenty of marginal hands."
     ],
     "t4hu-polarization": [
       "Polarized vs Linear: Two Betting-Range Philosophies",
@@ -24,7 +25,8 @@
       "Example 2 (correct handling of middle hands): On the same board the SB holds K♦Q♦ (top pair weak kicker). KQ shouldn't be in the HU betting range: it can't beat AK/AA but loses to any bigger K kicker; betting and being raised leaves it torn. The correct play is checking for pot control and bluff-catching. The value of a polarized range is precisely \"sparing middle hands like KQ from awkward decisions\".",
       "Example 3 (draw converts to bluff): Flop 8♠6♣2♦, SB bets with 7♦5♦ (open-ended straight draw), BB calls. Turn A♠, 75s misses the straight. Now 75s converts from a \"draw\" to a \"pure bluff\": the A is a great bluff card (blocks the opponent's AA and compresses his top-pair range), so the SB double-barrels representing an A, and if BB folds the SB takes the pot directly. A draw converting to a bluff is the dynamic core of the HU polarized range.",
       "Counterintuitive point: middle hands (medium pairs, weak top pairs) aren't \"valueless\" but \"most valuable when checked\". Forcing them into the betting range hands the opponent a chance to raise and extract from you. Polarization isn't \"bet everything strong and weak\" but \"bet value + pressure with the extremes and check the middle\".",
-      "Building a betting range in three steps: (1) list nut value hands (overpairs, two pair, straights, etc.); (2) list bluff hands (strong draws first, converting to pure bluffs when they miss the turn); (3) put all middle hands into the checking range. Your betting range is then naturally polarized, with no deliberate balancing needed."
+      "Building a betting range in three steps: (1) list nut value hands (overpairs, two pair, straights, etc.); (2) list bluff hands (strong draws first, converting to pure bluffs when they miss the turn); (3) put all middle hands into the checking range. Your betting range is then naturally polarized, with no deliberate balancing needed.",
+      "Sizing against equilibrium ratios: the bluff share is b ÷ (1 + 2b) and the value:bluff ratio equals 1/b + 1; Alpha is the break-even fold rate for the same size. The bigger the bet, the higher the bluff share and the more the opponent has to fold."
     ],
     "t4hu-blocking": [
       "Blockers: Your Hole Cards Are Range Information",
@@ -37,7 +39,33 @@
       "Example 3 (preflop 3-bet selection): In heads-up you (BB) face an SB open and consider a 3-bet bluff. The difference between A♦5♦ and 7♦6♦: A5s blocks parts of AA and AK (fewer top-tier hands in his range, lower 4Bet probability) and can fold cleanly to a 4Bet; 76s blocks no strong hands and runs into QQ+ more often when 4Bet. So A5s is the better 3-bet-bluff card. Blockers turn \"bluff combos\" from a vague count into precise selection.",
       "Quantitative blocker effect (you hold A♦A♣ on a three-spade board):\n\nOpponent's nut-flush A♠X♠ combos:\nNo blocker: A♠ with any of the other 10 spades = 10 (13 − 3 spades on board = 10 remaining)\nYou hold A♦ (doesn't block spades): still 10\nYou hold A♠ (blocking): A♠ is in your hand, nut-flush combos = 0\n\nComparison: holding A♠ cuts the opponent's \"strongest calling hand\" from 10 combos to 0 — the mathematical source of bluff success. (Concept from: The Mathematics of Poker, Bill Chen / Jeremie Ankenman Ch.10 blockers and combo counting)",
       "Counterintuitive point: blockers are a marginal effect, not a master key. Holding A♠ raises bluff success but doesn't guarantee it; using it to overturn base range analysis is abuse. Blockers' value in heads-up is the \"marginal EV of edge spots\" — icing when the base range is right, and unable to save you when it's wrong.",
-      "Off-table drill: set up random three-suited boards and count the difference in \"opponent nut-flush combos\" with and without your A♠. Once fluent, you need only 10 seconds in play: does my hand block the opponent's value or his bluffs? Blocking value → bluff more; not blocking → call cautiously."
+      "Off-table drill: set up random three-suited boards and count the difference in \"opponent nut-flush combos\" with and without your A♠. Once fluent, you need only 10 seconds in play: does my hand block the opponent's value or his bluffs? Blocking value → bluff more; not blocking → call cautiously.",
+      "The combo ledger of blockers: every card in your hand forces the opponent combos to be recounted as C(n,2). The closer the block sits to the top of the opponent range, the more the bluff is worth; blocking his folding range only makes him call more."
+    ],
+    "t4hu-range-advantage": [
+      "Two Kinds of Advantage, Two Very Different Conclusions",
+      "The first postflop question is not \"how much do I bet\" but \"whose board is this\". Range advantage compares the total equity of the two whole ranges; nut advantage compares the number of combos in the strongest tier of each range. The two can sit on the same side or split apart — bet frequency is driven by the former, sizing and raise appetite by the latter.",
+      "Range advantage looks at the total, nut advantage looks at the top. Judging by only one of them misdirects the strategy: a total edge without a top edge gets punished by raises, while a top edge without a total edge burns chips with big sizings on the wrong boards.",
+      "High-Card Dry Boards: Both Advantages on One Side",
+      "On a board like A♠7♦2♣ the SB opening range contains AA, AK and AQ, while most of the BB AA, KK and AK already went into the 3-bet range, so his calling range is capped. The SB holds both the range and the nut advantage, and the BB can hardly raise — his two-pair and straight density is minimal here. The equilibrium answer is blunt: bet close to the whole range at a small size of about 1/3 pot. The MDF for 1/3 pot is 75% and the Alpha for 2/3 pot is 40%: the smaller the bet, the more the opponent has to defend.",
+      "Numbers: on the same A♠7♦2♣ board the set combos are C(3,2) = 3 each (one card of the rank sits on the board, three remain, pick any two). The SB opening range covers AA, 77 and 22 for 9 combos; most BB AA went into the 3-bet range, leaving 77 and 22 for 6 combos. Nine against six is what nut advantage looks like — not \"I have the nuts\" but \"my top tier is denser\".",
+      "Low Connected Boards: Nut Advantage Flips",
+      "Numbers: change the board to 8♠7♦6♣ and the three straight-making connectors are T9, 95 and 54, each 4×4 = 16 combos for 48 in total, with T9 making the highest straight. The BB calling range packs almost all of these connectors, while T9o and 54o appear only at partial frequency in an opening range of about 80% — so the BB owns more combos that can stand a big sizing, the nut advantage flips to him, and he is the one acting first postflop.",
+      "Counterintuitive point: having the range advantage does not mean you should bet at high frequency. When the total and the top split apart, the SB still holds the total edge (his high cards are stronger), but the top — and the check-raise lever with it — belongs to the BB, so high-frequency small bets get punished over and over. The right play is to cut frequency, polarize with bigger sizings, and keep both nuts and bluff-catchers in the checking range. Ownership precedes frequency, and frequency precedes sizing.",
+      "Take three decisions in order: first assign ownership (who owns the top, who owns the total), then set frequency (can I bet often), then set sizing (dare I bet big). Reversing any step hands the opponent a raise or a fold to exploit.",
+      "Board ownership at a glance: the top and the total can sit on opposite sides. Ownership sets the frequency and the top sets the sizing — finish both judgements separately, then combine them into one line."
+    ],
+    "t4hu-preflop-structure": [
+      "The Three Layers of Heads-Up Preflop",
+      "Preflop the SB acts first and the BB last, and there are only three layers of decisions: the SB folds, limps (completes 0.5) or min-raises to 2BB; the BB folds, calls or 3-bets facing a min-raise; and the SB folds, calls or 4-bets once 3-bet. Few layers, but every node has its own price, and most heads-up results are decided at these prices.",
+      "At 100BB deep with 0.5/1 blinds, the four node prices:\n\nBB facing a min-raise to 2BB: 1BB more, 4BB pot after the call → required equity 1 ÷ 4 = 25%\nBB 3-bets to 6BB: invests 5BB more to win 3BB (the SB 2BB plus his own posted 1BB) → Alpha = 5 ÷ (5+3) = 62.5%, so the SB minimum defense is 37.5%\nSB 4-bets to 15BB: invests 13BB more to win 8BB (the BB 6BB plus the SB 2BB already in) → Alpha = 13 ÷ 21 ≈ 61.9%, so the BB minimum defense is 38.1%\nBB calls the 4-bet: 9BB more, 30BB pot after the call → required equity 9 ÷ 30 = 30%",
+      "Remember three numbers: the BB needs 25% facing a min-raise, the SB must defend 37.5% facing a 3-bet, and the BB needs 30% facing a 4-bet. Compute the prices first — every range structure grows out of these three lines, with no hand chart to memorize.",
+      "Numbers: discounting with the 0.85 realization factor of the out-of-position side (an indicative convention), the real 4-bet threshold becomes 30% ÷ 0.85 ≈ 35.3%. A hand with 26% equity can call at the 3-bet node (it clears the 25% line) but needs close to 35% to continue at the 4-bet node — a full 10 percentage points apart.",
+      "Numbers: if the BB 3-bet covers about 18% of all starting combos (1326 × 0.18 ≈ 239), splitting out about 12% of value (roughly 159 combos) leaves only about 6% of bluffs (roughly 80 combos), a value:bluff ratio near 2:1. Every point added to the 3-bet frequency has to be matched in absolute bluff count: with 80 of those 239 combos holding air, any fold rate below the 62.5% break-even line turns them from an investment into a pure cost.",
+      "The lower the price, the wider the action. A 1BB call only buys a 4BB pot, so any hand with a quarter of equity against a wide range is worth entering; at the 4-bet node the same hand needs 30% to profit, and the BB is out of position there, so equity realization is discounted and the threshold sits higher. The same hand calling at one node and folding at the other is not inconsistent style but different prices. The structural trade-off works the same way: min-raising everything lets the range be pruned by repeated 3-bets, while adding a limping segment keeps the widest range for 0.5 and the last postflop action at the price of giving up the initiative.",
+      "Counterintuitive point: limping in heads-up is not weakness. It is the structural choice that minimizes the cost of being pruned by 3-bets; the real weakness is min-raising 100% of hands and then refusing to fold once 3-bet — that hands the money over directly.",
+      "Prices first: turn the four nodes into the 25% / 37.5% / 30% lines, then decide which hands belong to which layer. Preflop structure is not a memorization load but a corollary of three numbers; to see how these lines become frequencies in equilibrium, see the T5 chapter 『Heads-Up Preflop Equilibrium』.",
+      "The four preflop nodes as a price ledger: the invest and win columns are the increments from that node starting point. In the threshold column the 3-bet and 4-bet rows are Alpha (the fold rate the opponent needs), while the calling rows are required equity."
     ]
   },
   "quiz": {
@@ -91,6 +119,36 @@
       ],
       "explanation": "Wide-range pros bet for money on the right boards and fold fast on the wrong ones; stations are wide AND over-invest on every street. The key is whether you expand and contract with board and position."
     },
+    "t4hu-range-width-q6": {
+      "question": "In heads-up, folding the SB outright costs you:",
+      "options": [
+        "The 0.5BB of dead money you already posted",
+        "2BB",
+        "Your postflop position",
+        "Equity realization"
+      ],
+      "explanation": "The SB has already posted 0.5BB, and folding hands it straight to the opponent. In full ring a third player shares the pot; heads-up it is a plain transfer, which is why folding costs more here."
+    },
+    "t4hu-range-width-q7": {
+      "question": "The reason to open K♦6♦ from the SB in heads-up is:",
+      "options": [
+        "K6s holds about 46%-48% preflop equity against a BB defense range of about 60%",
+        "K6s is the nuts",
+        "K6s blocks the opponent AA",
+        "K6s always makes a straight"
+      ],
+      "explanation": "K6s holds about 46%-48% against a wide BB defense range, and with the positional advantage of acting last postflop it becomes a standard member of the opening range; judging it by full-ring standards would fold it wrongly."
+    },
+    "t4hu-range-width-q8": {
+      "question": "With 1326 starting combos in total, an SB opening range of about 80% is roughly how many combos?",
+      "options": [
+        "About 660",
+        "About 1060",
+        "About 800",
+        "About 1200"
+      ],
+      "explanation": "1326 × 0.8 ≈ 1060.8, so about 1060 combos. Width is a combo share, not a betting frequency and not a win rate."
+    },
     "t4hu-polarization-q1": {
       "question": "The meaning of a polarized range is:",
       "options": [
@@ -141,6 +199,36 @@
       ],
       "explanation": "Earlier streets have later streets to convert or abandon, so bluff share can be higher; on the river, the last street, bluffs must precisely match pot odds (1/3 for a full pot)."
     },
+    "t4hu-polarization-q6": {
+      "question": "The equilibrium value:bluff ratio of a half-pot river bet is about:",
+      "options": [
+        "1:1",
+        "2:1",
+        "3:1",
+        "4:1"
+      ],
+      "explanation": "At half pot the bluff share is f = 0.25, so value:bluff = 0.75:0.25 = 3:1. Compared with 2:1 at full pot, the smaller the bet the higher the value share."
+    },
+    "t4hu-polarization-q7": {
+      "question": "When converting the same missed draw into a pure bluff, which hands should you prefer?",
+      "options": [
+        "Hands whose blockers let the opponent read strength on this board",
+        "Medium pairs with the most showdown value",
+        "Any two cards at random frequency",
+        "The weakest hands available"
+      ],
+      "explanation": "A bluff earns from folds plus the recovery when called, so a hand that blocks the top of the opponent calling range (an ace-high, say) both raises the fold rate and reduces the chance of being called by strength."
+    },
+    "t4hu-polarization-q8": {
+      "question": "River pot 12BB, you bluff with a full-pot 12BB bet and the opponent folds 50% of the time. The EV of this bluff is:",
+      "options": [
+        "0BB",
+        "+6BB",
+        "−6BB",
+        "+12BB"
+      ],
+      "explanation": "EV = f×P − (1−f)×B = 0.5×12 − 0.5×12 = 0. Fifty percent is exactly the Alpha of a full-pot bet, the break-even point: more folds and the bluff profits, fewer and it loses."
+    },
     "t4hu-blocking-q1": {
       "question": "The mechanism of a blocker is:",
       "options": [
@@ -190,6 +278,196 @@
         "Blockers are only for calling decisions"
       ],
       "explanation": "Blockers adjust combo ratios rather than rewrite ranges. They're icing when the base range is right and can't save you when it's wrong — the line separating them from a \"master key\"."
+    },
+    "t4hu-blocking-q6": {
+      "question": "On K♠9♠4♦ (two spades on the board), how do the opponent two-spade combos change when you hold A♠5♦ instead of A♦5♦?",
+      "options": [
+        "From 55 down to 45, about 18% fewer",
+        "From 45 down to 0",
+        "From 78 down to 66",
+        "No change"
+      ],
+      "explanation": "Two spades are already on the board: without the A♠ eleven spades remain, giving the opponent C(11,2) = 55 spade combos; holding the A♠ uses one up, leaving ten and C(10,2) = 45. That is about 18% fewer — far gentler than the \"reduced to zero\" effect of holding the A♠ on a three-spade board."
+    },
+    "t4hu-blocking-q7": {
+      "question": "When you are about to bluff, which part of the opponent range do you most want to block?",
+      "options": [
+        "The weak hands he will fold",
+        "The top of his calling range",
+        "His bluffs",
+        "Duplicated board cards"
+      ],
+      "explanation": "A bluff needs folds: blocking the opponent strongest calling hands both raises the fold rate and cuts the loss when called; blocking his weak hands only makes him call more."
+    },
+    "t4hu-blocking-q8": {
+      "question": "When you hold one K, the opponent KK combos change from what to what?",
+      "options": [
+        "From 6 to 3",
+        "From 6 to 4",
+        "From 12 to 6",
+        "No change"
+      ],
+      "explanation": "KK has C(4,2) = 6 combos; with one K in your hand only three kings remain for the opponent, so C(3,2) = 3 — exactly halved."
+    },
+    "t4hu-range-advantage-q1": {
+      "question": "Range advantage means:",
+      "options": [
+        "The whole range carries more total equity than the opponent",
+        "The strongest tier holds more combos",
+        "Having postflop position",
+        "Being allowed to bet bigger"
+      ],
+      "explanation": "Range advantage compares the total equity of the two ranges; nut advantage compares the combo count of the strongest tier. The two can sit on the same side or on opposite sides."
+    },
+    "t4hu-range-advantage-q2": {
+      "question": "Nut advantage means:",
+      "options": [
+        "The whole range has more total equity",
+        "The strongest tier of the range holds more combos",
+        "Holding the nuts right now",
+        "Being able to shove the river"
+      ],
+      "explanation": "Nut advantage compares top-tier combos: whoever has more nuts and second nuts can apply a big sizing and carry the raised risk."
+    },
+    "t4hu-range-advantage-q3": {
+      "question": "On A♠7♦2♣, with sets in both ranges, the combo counts are:",
+      "options": [
+        "SB 9, BB 6",
+        "SB 6, BB 9",
+        "12 each",
+        "SB 3, BB 3"
+      ],
+      "explanation": "Sets are C(3,2) = 3: the SB opening range covers AA, 77 and 22 for 9 combos; most BB AA went into the 3-bet range, leaving 77 and 22 for 6. Nine against six is what nut advantage looks like."
+    },
+    "t4hu-range-advantage-q4": {
+      "question": "On a low connected board such as 8♠7♦6♣, nut advantage usually belongs to:",
+      "options": [
+        "SB, because he opened",
+        "BB, because his defending range has a higher connector density",
+        "Both sides equally",
+        "Whoever acts first"
+      ],
+      "explanation": "On low boards the nuts are made of straights and two pairs: the BB calling range is packed with suited connectors, offsuit connectors and low pairs, so T9, 95 and 54 are all available to him; the SB range is more high-card heavy, so his nut density is actually lower."
+    },
+    "t4hu-range-advantage-q5": {
+      "question": "Against a 1/3-pot bet, the defender minimum defense frequency (MDF) is:",
+      "options": [
+        "67%",
+        "75%",
+        "80%",
+        "50%"
+      ],
+      "explanation": "MDF = 1 ÷ (1 + b) with b = 1/3 → 1 ÷ (1 + 1/3) = 75%. The smaller the sizing, the more the defender has to defend."
+    },
+    "t4hu-range-advantage-q6": {
+      "question": "The Alpha (break-even fold rate) of a 2/3-pot bet is:",
+      "options": [
+        "33%",
+        "40%",
+        "60%",
+        "67%"
+      ],
+      "explanation": "Alpha = b ÷ (1 + b) = (2/3) ÷ (1 + 2/3) = 40%, with a complementary MDF of 60%."
+    },
+    "t4hu-range-advantage-q7": {
+      "question": "On a high dry board such as A♠7♦2♣ the SB equilibrium tendency is:",
+      "options": [
+        "High frequency and small sizing, close to the whole range",
+        "Low frequency and big sizing, nuts only",
+        "Check the whole range and wait for mistakes",
+        "Bet draws only"
+      ],
+      "explanation": "On such boards the SB holds both the range and the nut advantage while the BB has little raising threat, so the equilibrium pushes the whole range out at a small size of about 1/3 pot to collect an equity tax."
+    },
+    "t4hu-range-advantage-q8": {
+      "question": "When you have the range advantage but the nut advantage belongs to the opponent (low connected boards), the correct flop strategy is:",
+      "options": [
+        "Still bet the whole range small and often",
+        "Cut the betting frequency, enlarge and polarize the sizing, and keep more hands in the checking range",
+        "Fold every time you check",
+        "Bet only the strongest hands and drop all bluffs"
+      ],
+      "explanation": "With the top on the opponent side his raising threat is bigger and high-frequency small bets get countered; the equilibrium cuts frequency, polarizes with bigger sizings, and keeps both nuts and bluff-catchers in the checking range."
+    },
+    "t4hu-preflop-structure-q1": {
+      "question": "Facing an SB min-raise to 2BB, the required equity for the BB to call is:",
+      "options": [
+        "20%",
+        "25%",
+        "30%",
+        "33.3%"
+      ],
+      "explanation": "The BB puts in 1BB more and the pot after the call is 4BB, so required equity = 1 ÷ 4 = 25%."
+    },
+    "t4hu-preflop-structure-q2": {
+      "question": "When the BB 3-bets to 6BB (5BB more on top of the 1BB already posted), the break-even fold rate is:",
+      "options": [
+        "50%",
+        "57.1%",
+        "62.5%",
+        "66.7%"
+      ],
+      "explanation": "Alpha = risk ÷ (risk + reward) = 5 ÷ (5 + 3) = 62.5%: a pure BB bluff needs the SB to fold 62.5% of the time to break even."
+    },
+    "t4hu-preflop-structure-q3": {
+      "question": "Following the previous question, the SB minimum defense frequency against the 3-bet is:",
+      "options": [
+        "33.3%",
+        "37.5%",
+        "50%",
+        "62.5%"
+      ],
+      "explanation": "MDF = 1 − Alpha = 1 − 62.5% = 37.5%, so the SB continues with about 37.5% of the opening range."
+    },
+    "t4hu-preflop-structure-q4": {
+      "question": "After the SB 4-bets to 15BB, the BB required equity to call is:",
+      "options": [
+        "25%",
+        "30%",
+        "33.3%",
+        "37.5%"
+      ],
+      "explanation": "The BB puts in 9BB more (15 − 6) and the pot after the call is 15 + 15 = 30BB, so required equity = 9 ÷ 30 = 30%. That is higher than the 25% facing a 3-bet."
+    },
+    "t4hu-preflop-structure-q5": {
+      "question": "Why must the BB 3-bet range be polarized?",
+      "options": [
+        "Because every heads-up decision has only two answers",
+        "Because middle hands realize more equity by calling, and only the value end plus blocker bluffs can stand a 4-bet",
+        "Because polarization makes the whole range tighter",
+        "Because the solver outputs polarization by default"
+      ],
+      "explanation": "Once 3-bet and then 4-bet, middle hands are the hardest to play: they lose to the continuing range and cannot fold either. The value end and blocker bluffs form the two ends of the 3-bet, while middle hands call to realize equity."
+    },
+    "t4hu-preflop-structure-q6": {
+      "question": "What is the main reason a hand like A5s appears in a heads-up 4-bet range?",
+      "options": [
+        "A5s has more absolute strength than KQo",
+        "The ace blocks the opponent AA/AK and the hand still has straight and backdoor potential when called",
+        "A5s is more likely to flop trips",
+        "To fill up the suited combos"
+      ],
+      "explanation": "A 4-bet bluff wants hands that block the top of the opponent range and are not hopeless when called: the ace in A5s trims AA/AK, and straight and backdoor flush potential remain; a hand with only a blocker and no backup equity is half a tool."
+    },
+    "t4hu-preflop-structure-q7": {
+      "question": "What is the structural reason for the SB to limp (complete 0.5) instead of min-raising everything?",
+      "options": [
+        "Limping saves chips, so it is always better",
+        "The limp keeps the widest range for the smallest price, hides strong hands inside the same range, and dilutes the BB raise targeting",
+        "The limp guarantees postflop position",
+        "The limp is the only action that cannot be 3-bet"
+      ],
+      "explanation": "Min-raising everything lets the range be pruned by repeated 3-bets; the limp keeps the widest range for 0.5 and the last postflop action, so the BB raise cannot target only the weak part — the cost is giving up the initiative."
+    },
+    "t4hu-preflop-structure-q8": {
+      "question": "Heads-up 4-bet frequencies are higher than in full ring mainly because:",
+      "options": [
+        "Heads-up rake is lower",
+        "The SB opens extremely wide and the BB 3-bets often, so a 4-bet range is needed to protect the opening range",
+        "Heads-up deals better cards",
+        "Full-ring rules restrict 4-bets"
+      ],
+      "explanation": "A wide opening range will be 3-bet at high frequency, and without a 4-bet range the BB 3-bet prints money risk-free; the 4-bet exists to arm the opening range, not to show off strength."
     }
   },
   "chapterObjectives": {
@@ -207,6 +485,16 @@
       "Understand the blocker definition: cards you hold reduce specific opponent combos",
       "Master the triple value of blockers in wide HU ranges: bluff blocking, value unblocking, preflop 3-bet selection",
       "Learn to fine-tune bet/call decisions with blockers, gaining marginal EV in HU edge spots"
+    ],
+    "t4hu-range-advantage": [
+      "Distinguish range advantage (total equity) from nut advantage (top-tier combos) and explain why they can sit on opposite sides",
+      "Read a board texture and assign each advantage on high dry boards and low connected boards",
+      "Translate the assignment into flop bet frequency and sizing, avoiding high-frequency small bets into a raise lever"
+    ],
+    "t4hu-preflop-structure": [
+      "Turn the four preflop nodes into price lines and state the formula behind each",
+      "Explain why the cheap node takes a wider action while the expensive node must narrow",
+      "Assign a hand to limp, raise, call or fold using price and equity realization"
     ]
   }
 }

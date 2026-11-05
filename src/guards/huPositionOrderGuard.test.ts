@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
  * 防的缺陷：单挑翻前/翻后的「谁先行动 / 谁有位置」被写反。该错误曾同时存在于两学院
  * 正文（152 处），且**互有正反**——同一变体里既有正确段落也有错误段落，读者看到的是自相矛盾。
  *
- * 判据单源：`theory-academy/data/levels/variants/variantRules.ts` 的 headsUpRules——
+ * 判据单源：`shared/constants/headsUpRules.ts` 的 headsUpRules（理论 / 策略两院共用，theory 侧只保留重导出 shim）——
  * SB 即按钮位；翻前 SB 先行动、BB 最后行动；翻后 BB 先行动、SB 最后行动（SB=IP，BB=OOP）。
  *
  * 扫描面选取：4 份 HU locale（zh 侧由 contentAlignment 与数据层逐字镜像锁定，故覆盖数据层）
@@ -153,9 +153,9 @@ describe('heads-up 翻前/翻后位置方向守卫（PRD §6.7.1 呈现诚实性
     expect(found, `发现 ${found.length} 处位置归属倒置：\n    ${found.slice(0, 12).join('\n    ')}`).toEqual([]);
   });
 
-  it('variantRules 单源自身保持正确方向（SB=按钮、翻后 BB 先行动）', () => {
+  it('shared headsUpRules 单源自身保持正确方向（SB=按钮、翻后 BB 先行动）', () => {
     const src = readFileSync(
-      fileURLToPath(new URL('../features/theory-academy/data/levels/variants/variantRules.ts', import.meta.url)),
+      fileURLToPath(new URL('../shared/constants/headsUpRules.ts', import.meta.url)),
       'utf8',
     );
     // 只取 headsUpRules 区块（含其上方 JSDoc）：标准/短牌区描述的是满员桌位置，

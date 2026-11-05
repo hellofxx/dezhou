@@ -1255,7 +1255,7 @@ interface DailyRecommendation {
     - **新增变体章节必须同批登记桥接**：内层覆盖率断言会立刻拦住未登记的章节；`theoryVariantBridgeIntegrity` 的按来源分档断言（章节级 map 与 Level 级各 ≥ 下限）防止整张 map 失配
 
 16. **变体规则性事实的方向守卫**：`src/guards/huPositionOrderGuard.test.ts`（全局不变式目录 `src/guards/`，与 `designTokenGuard` 同级）。防的缺陷类型是**规则性事实写反**而非数值近似——单挑的「翻后谁先行动 / 谁持有位置」曾在两学院正文里同时存在正反两种陈述（实测 152 处含 locale），读者看到的是自相矛盾。实现要点：
-    - **判据单源**是 `variantRules.ts` 的 `headsUpRules`（SB 即按钮位、翻前 SB 先行动、翻后 BB 先行动）；守卫除扫正文外还断言该区块自身保留 `sbFirstActionPreflop: true` / `bbFirstActionPostflop: true` 与散文一致，防止单源自己被改反而让正文"对着错的参照修"
+    - **判据单源**是 `shared/constants/headsUpRules.ts` 的 `headsUpRules`（SB 即按钮位、翻前 SB 先行动、翻后 BB 先行动；理论 `variants/variantRules.ts` 只做重导出，短牌 `shortDeckRules` 仍留在理论侧）；守卫除扫正文外还断言该区块自身保留 `sbFirstActionPreflop: true` / `bbFirstActionPostflop: true` 与散文一致，防止单源自己被改反而让正文"对着错的参照修"
     - **子句级三元组判定**（盲注主语 + 街道 + 方向谓语）而非全文正则：跨子句匹配会把「翻前 SB 先行动、BB 最后行动」这类正确句误判；子句无街道标记时继承段落，段落同时含翻前与翻后标记则判为不可判（不产生假绿）。谓语正则覆盖中英双语
     - **两处刻意豁免**：小测 `options` 字段（干扰项按设计就是假命题，扫它会禁止出题）与**子句自身**点名满员桌/6-max 的对比句（满员桌 SB 确实翻后先行动且 OOP，跨子句不豁免）
     - **扫描面为 4 份 HU locale**（theory zh/en + academy-course/heads-up zh/en）而非数据源码：zh locale 与数据层由 `contentAlignment` 逐字镜像锁定，故覆盖数据层且能拿到结构化字段以做上述豁免；内置"扫描字符串数 > 700"自检，locale 路径解析失效时不得空洞通过（教训见 2026-09-25 守卫路径修复）
@@ -1312,8 +1312,18 @@ interface DailyRecommendation {
     - **每日计划**：progress `dailyTrainingPlan.ts` 新增 `theory-review`（到期理论 SRS → `/theory/review`）与 `theory-chapter`（registry 下一章）；通用 review 卡排除 theory 项，5 槽上限与 late registration 订阅由 `useTheoryPlanRevision` 处理
     - **路由**：新增 `/theory/placement`、`/theory/checkpoint/:levelId`、`/theory/glossary`、`/theory/search`、`/theory/bibliography`，均 lazy + LazyWrapper，复用 `/theory` i18n 分组
 
+23. **单挑变体全量对齐（2026-11）**：变体内容不再延期，标准与单挑共用同一条「章节组合 → 题库注入 → 富文本块追加」链路；短牌内容不在本批范围。
+    - **章节与文件布局**：单挑核心章 37 章（T4 / T5 各 5、T6 / T7 / T8 各 4、T9 6），新增章一律独立单文件 `data/levels/variants/heads-up/chapters/t<level>hu-<topic>.ts`（单元素数组导出 `HEADS_UP_CHAPTERS`），Level 文件只保留存量核心章；`chapters/` 目录只放数据文件（禁测试文件，否则 eager glob 误匹配），`id` 前缀 `t<level>hu-` 是 Level 归属的事实源
+    - **组合单源** `data/levels/variants/composeVariantChapters.ts`：顺序固定为「core + 额外章按 order 排序 → 附加 `chapterPracticeMap` 实践推荐 → 变体元数据打标（仅 standard）→ 追加富文本块 → 替换题库」。静态聚合 `heads-up/index.ts` 用 eager `import.meta.glob` 吸收 `chapters/t*hu-*.ts` / `quizBank/t*hu.ts` / `blocks/t*hu.ts`（内容轨新增文件无需改聚合清单，消除单写者冲突），运行时 `loaders.ts` 把原 standard 专属 glob 泛化为按 `PokerVariant` 查表（short-deck 为空映射，去掉了「非 standard 提前 return」分支），两路径共用同一函数。一致性由 `headsUpStaticRuntimeParity.test.ts` 深比较章节 id / order / content / quiz 兜底
+    - **独立题库与富文本块**：题库 `heads-up/quizBank/t1hu..t9hu.ts`（`Record<chapterId, TheoryQuizQuestion[]>`，每章 8–12 题，题 id `<chapterId>-q<n>` 全局唯一，旧题逐字迁移、题号与选项顺序不变）；块 `heads-up/blocks/t2hu.ts`、`t4hu..t9hu.ts`（table / decision-tree / range-matrix，只追加到 `content` 尾部以保住下标型 i18n key）。注入器泛化为 `variants/applyQuizBank.ts` 的 `applyTheoryQuizBank`（`strict: true` 时题库出现未知章节键即抛错，单挑启用）与 `variants/applyContentBlocks.ts` 的 `applyTheoryContentBlocks`；`standard/quizBank/applyQuizBank.ts` / `standard/blocks/applyContentBlocks.ts` 改为别名再导出，既有 import 与测试不动。合并与抽题仍复用 shared `mergeQuizBank` / `drawByAttempt`
+    - **行数豁免边界**：`QUIZ_BANK_ALLOWLIST` 逐个登记 `heads-up/quizBank/t[1-9]hu.ts`（逐文件 `maxLines`、只减不增），`QUIZ_BANK_PATH_RE` 三分支限定路径形态；`chapters/` 与 `blocks/` **不豁免**，仍受 ≤300 行目标 / >400 行硬失败约束
+    - **共享变体规则卡**：类型 `shared/types/variantRules.ts`、单挑规则单源 `shared/constants/headsUpRules.ts`、行构造纯函数 `shared/utils/academyVariantRules.ts`、展示组件 `shared/components/academy/AcademyVariantRuleCard`（纯 props、空 items 不渲染）；理论 `TheoryVariantRuleCard` 与策略 `StrategyVariantRuleCard` 只做变体判定 + 字面量 key 翻译，文案落 `locales/<lng>/variant.json` 的 `headsUpRules.*`。理论 `types.ts` 与 `variants/variantRules.ts` 改为 shared 重导出，短牌 `shortDeckRules` 仍留理论侧；`huPositionOrderGuard` / `variantRuleCopyGuard` 的单源路径同批改到 shared
+    - **存量宽限（persist v5）**：新增核心章会重锁存量用户，故 `TheoryProgress` 增 `legacyUnlockedLevels`；`isLevelUnlockedByCompleted` 增第 4 个参数，命中即解锁（只放宽门禁、不写 `completedChapters`），`findNextTheoryChapter` / `store.isTheoryLevelUnlocked` 透传。宽限名单由历史快照常量逐级推导，新用户为空（见下方迁移设计）
+    - 守卫面：`variants/theoryIntegrity.test.ts` 按变体分支题量（单挑 8–12 题 / 四选一，短牌保持原口径）、`heads-up/headsUpStaticRuntimeParity.test.ts`（静态聚合与 loader 深比较）、`heads-up/quizBank/quantAudit.t<n>hu.test.ts`（新增数字题逐题复算）、`variants/variantQuantAudit.test.ts`；strategy-academy `data/theoryVariantBridgeIntegrity.test.ts` 的章节引用下限随 37 章收紧，`data/discoveryData.test.ts` 覆盖单挑章节的 `contentOps.lastReviewed`
+
 **理论学院 persist 迁移设计**（演进版本号以 store.ts 配置为唯一事实源）：
 - **2026-11 v3→v4**：新增 `chapterAttempts` / `checkpoints` / `placement` / `bookmarkedChapters` / `chapterNotes`；迁移用 `quizScores` 种子化 `chapterAttempts`（attempts=1、firstScore=score、bestScore=score），其余补默认值；老用户 `completedChapters` / `quizScores` 零丢失，迁移后的已完成章不会被判为首次而重复 emit
+- **2026-11 v4→v5**：单挑新增核心章落地前已解锁的存量用户不重锁。新增 `legacyUnlockedLevels`（默认 `[]`），迁移用历史快照常量（对齐前的 22 个单挑核心章 id，冻结、不随数据演进回填）逐级判断：前一 Level 的旧核心章全部完成则把当前 Level id 加入名单；已定义则原样保留。**只写宽限名单、绝不写 `completedChapters`**（新章仍需真正读完才计入完成度），新用户为空；宽限只放宽门禁，不参与完成度 / 掌握度 / 下一章口径
 - `TheoryProgress` 已含 `flaggedQuestions: string[]` 与变体上下文（`activeVariant` / `variantMetadata`）字段，各版本 migrate 幂等合并默认值
 - 新增幂等 action `toggleFlagQuestion(questionId)` / `switchVariant(variant)`
 - 迁移版本演进历史见 `docs/CHANGELOG.md`
@@ -1338,7 +1348,7 @@ interface DailyRecommendation {
 - 索引：`variants/index.ts` 导出 `ALL_VARIANT_THEORY_LEVELS`（标准 + 短牌 + 单挑总索引）与 `getTheoryLevelsByVariant(variant)` 查询函数（TheoryHome 按 activeVariant 过滤 Level 列表）
 - ID 命名：Level `t{level}{suffix}`、章节 `t{level}{suffix}-{topic}`（短牌 suffix=sd、单挑 suffix=hu），与标准系列 `t{level}` 隔离；变体完整性守卫（`variants/theoryIntegrity.test.ts`，8 用例：ID 全局唯一/前缀格式/T1-T9 全覆盖/order 连续/eloDimension 合法/tier 归属）
 - 内容标准与标准系列同构：每章 content 覆盖全部 7 类段落、公式含推导、实战案例含具体牌面/位置/底池、教材引用采用「（概念源自：《教材名》作者 Ch.XX）」脚注式标注
-- 内容填充进度（2026-08-06）：单挑 T1-T3（t1hu 概率基础 / t2hu 赔率策略 / t3hu 位置与起手牌）已填充完整内容与章末小测，practiceRecommendations 对接单挑实践课程（l7hu-stakes / l4hu-ev-adjustments / l4hu-bn-opening / l3hu-bb-defense）；T4-T9 与短牌系列仍为骨架（content/quiz 空数组，守卫允许骨架阶段为空）
+- 内容填充进度（2026-08-06，2026-11-05 更新）：单挑 T1-T3（t1hu 概率基础 / t2hu 赔率策略 / t3hu 位置与起手牌）已填充完整内容与章末小测，practiceRecommendations 对接单挑实践课程（l7hu-stakes / l4hu-ev-adjustments / l4hu-bn-opening / l3hu-bb-defense）；单挑 T4-T9 存量章已扩到独立题库 8–12 题/章并配富文本块，15 个新章落地后共 37 章（见第 23 条）；短牌内容不在该批范围（扩章与变体认证为后续批次）
 - 变体实践推荐引用的课程 ID 不纳入标准系列 `CROSS_MODULE_LESSON_IDS` 白名单（该白名单仅对照标准 LEVELS 校验），悬空风险由变体课程自身存在性保证
 - **变体解锁门禁适配**：变体 Level 的解锁链在变体自己的 Level 序列内独立判定（序列内 idx=0 恒解锁，Tn 需前一 Level 全部核心章节完成；变体章节均为核心章，增补章仅存在于标准变体，见第 19 条），`isLevelUnlockedByCompleted` 通过 `ALL_VARIANT_THEORY_LEVELS` 查找 levelId 所属变体再取该变体序列，标准系列行为完全不变；章节查找（`findChapterById`/`findLevelByChapterId`/`getNextChapter`）均支持变体章节，`getNextChapter` 顺延在同一变体序列内（不跨变体）；进度计算（`getLevelProgress`/`getTotalProgress`）按当前 `activeVariant` 的序列自洽统计
 

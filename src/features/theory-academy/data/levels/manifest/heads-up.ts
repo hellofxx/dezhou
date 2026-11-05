@@ -65,6 +65,8 @@ export const HEADS_UP_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
       {"id":"t4hu-range-width","level":4,"order":1,"title":"范围宽度","subtitle":"单挑中更宽的开池范围","duration":"15 min","variant":"heads-up"},
       {"id":"t4hu-polarization","level":4,"order":2,"title":"两极化范围","subtitle":"价值手牌与纯诈唬的组合","duration":"12 min","variant":"heads-up"},
       {"id":"t4hu-blocking","level":4,"order":3,"title":"挡牌应用","subtitle":"利用已知信息缩小范围","duration":"10 min","variant":"heads-up"},
+      {"id":"t4hu-range-advantage","level":4,"order":4,"title":"范围优势与坚果优势","subtitle":"牌面结构决定谁的顶端更多、谁的总量更高","duration":"14 min","variant":"heads-up"},
+      {"id":"t4hu-preflop-structure","level":4,"order":5,"title":"翻前 3-bet 与 4-bet 结构","subtitle":"把翻前的每个节点算成一条价格线","duration":"15 min","variant":"heads-up"},
     ]
   },
   {
@@ -80,6 +82,9 @@ export const HEADS_UP_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "chapters": [
       {"id":"t5hu-gto-he","level":5,"order":1,"title":"GTO 核心思想","subtitle":"不可被剥削的单挑策略","duration":"18 min","variant":"heads-up"},
       {"id":"t5hu-frequency","level":5,"order":2,"title":"频率平衡","subtitle":"下注与 check 的最优混合","duration":"15 min","variant":"heads-up"},
+      {"id":"t5hu-node-locking","level":5,"order":3,"title":"节点锁定与最小偏离","subtitle":"从均衡基线出发，做有幅度上限的偏离","duration":"13 min","variant":"heads-up"},
+      {"id":"t5hu-preflop-equilibrium","level":5,"order":4,"title":"单挑翻前均衡","subtitle":"参与率、防守率与继续率背后的三条价格线","duration":"14 min","variant":"heads-up"},
+      {"id":"t5hu-postflop-equilibrium","level":5,"order":5,"title":"单挑翻后均衡结构","subtitle":"用 SPR 分配三条街的筹码预算","duration":"15 min","variant":"heads-up"},
     ]
   },
   {
@@ -95,6 +100,8 @@ export const HEADS_UP_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "chapters": [
       {"id":"t6hu-sizing-optimal","level":6,"order":1,"title":"最优下注尺度","subtitle":"小尺度与大额下注的选择","duration":"15 min","variant":"heads-up"},
       {"id":"t6hu-barrel","level":6,"order":2,"title":"多街下注规划","subtitle":"连续下注的协调性","duration":"12 min","variant":"heads-up"},
+      {"id":"t6hu-bet-purpose","level":6,"order":3,"title":"下注目的分类","subtitle":"价值、保护、拒绝权益与诈唬的边界","duration":"14 min","variant":"heads-up"},
+      {"id":"t6hu-equity-realization","level":6,"order":4,"title":"权益实现与牌面结构","subtitle":"胜率不等于到手收益","duration":"13 min","variant":"heads-up"},
     ]
   },
   {
@@ -110,6 +117,8 @@ export const HEADS_UP_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "chapters": [
       {"id":"t7hu-patterns","level":7,"order":1,"title":"对手模式识别","subtitle":"常见单挑玩家的行为特征","duration":"15 min","variant":"heads-up"},
       {"id":"t7hu-exploit","level":7,"order":2,"title":"针对性调整","subtitle":"从 GTO 到剥削的转换","duration":"12 min","variant":"heads-up"},
+      {"id":"t7hu-stats","level":7,"order":3,"title":"单挑对局指标","subtitle":"VPIP/PFR/3-bet/FCB/WWSF 的单挑基线","duration":"12 min","variant":"heads-up"},
+      {"id":"t7hu-hand-reading","level":7,"order":4,"title":"单挑读牌流程","subtitle":"逐街收窄范围与挡牌过滤","duration":"14 min","variant":"heads-up"},
     ]
   },
   {
@@ -125,6 +134,8 @@ export const HEADS_UP_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "chapters": [
       {"id":"t8hu-pressure","level":8,"order":1,"title":"压力管理","subtitle":"单挑的持续紧张感应对","duration":"12 min","variant":"heads-up"},
       {"id":"t8hu-reads","level":8,"order":2,"title":"心理读取","subtitle":"观察与反观察的技巧","duration":"10 min","variant":"heads-up"},
+      {"id":"t8hu-tilt-types","level":8,"order":3,"title":"Tilt 类型学","subtitle":"识别情绪触发与决策漂移","duration":"16 min","variant":"heads-up"},
+      {"id":"t8hu-session","level":8,"order":4,"title":"Session 与资金心理","subtitle":"时长、波动与升降级的心理账本","duration":"15 min","variant":"heads-up"},
     ]
   },
   {
@@ -140,6 +151,10 @@ export const HEADS_UP_LEVEL_SUMMARIES: TheoryLevelSummary[] = [
     "chapters": [
       {"id":"t9hu-mastery","level":9,"order":1,"title":"全面整合","subtitle":"构建个人单挑理论体系","duration":"20 min","variant":"heads-up"},
       {"id":"t9hu-pro-study","level":9,"order":2,"title":"职业选手研究","subtitle":"顶级 HU 玩家的决策逻辑","duration":"25 min","variant":"heads-up"},
+      {"id":"t9hu-mop","level":9,"order":3,"title":"MOP 要义","subtitle":"均衡、信息与对手模型的理论边界","duration":"18 min","variant":"heads-up"},
+      {"id":"t9hu-icm","level":9,"order":4,"title":"单挑 ICM 与锦标赛 HU","subtitle":"单挑 ICM 的边界：筹码线性与前注/盲注阈值","duration":"20 min","variant":"heads-up"},
+      {"id":"t9hu-unified","level":9,"order":5,"title":"GTO-剥削统一框架","subtitle":"基线、偏离与动态调整的闭环","duration":"17 min","variant":"heads-up"},
+      {"id":"t9hu-cash-vs-mtt","level":9,"order":6,"title":"现金单挑 vs 锦标赛单挑","subtitle":"同一手牌的两套效用函数","duration":"16 min","variant":"heads-up"},
     ]
   },
 ];

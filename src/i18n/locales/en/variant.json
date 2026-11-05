@@ -26,5 +26,23 @@
     "deckInfo": "36 cards (6-A), removing 2-5",
     "flushBeatsFullHouse": "Flush > Full House",
     "tripsBeatsStraight": "Trips > Straight"
+  },
+  "headsUpRules": {
+    "title": "Heads-Up Rules",
+    "subtitle": "Deck size, blind structure and the order of action on each street",
+    "playersLabel": "Players",
+    "deckSizeLabel": "Deck size",
+    "preflopFirstLabel": "First to act preflop",
+    "preflopFirstValue": "SB (button)",
+    "postflopFirstLabel": "First to act postflop",
+    "postflopFirstValue": "BB",
+    "blindsLabel": "Blinds (SB / BB)",
+    "anteLabel": "Ante",
+    "anteYes": "Ante in play",
+    "anteNo": "No ante",
+    "contextTitle": "This lesson's context",
+    "contextStackLabel": "Stack depth (BB)",
+    "contextAnteLabel": "Ante structure",
+    "contextButtonLabel": "Button position"
   }
 }

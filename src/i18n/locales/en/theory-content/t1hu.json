@@ -159,6 +159,126 @@
         "2-3 buy-ins"
       ],
       "explanation": "HU standard deviation is high and downswings more compressed; Moshman suggests 50+ buy-ins. 20-40 is the full-ring standard and can get blown through by HU variance; 10-15 and 2-3 are far beyond reasonable risk."
+    },
+    "t1hu-probability-q5": {
+      "question": "Heads-up you hold A♠K♦. The chance your opponent holds at least one A or one K is about:",
+      "options": [
+        "About 12%",
+        "About 22.8%",
+        "About 33%",
+        "About 45%"
+      ],
+      "explanation": "Only 3 aces and 3 kings remain among the 50 unknown cards; both opponent cards avoiding A and K is C(44,2)=946, and 946/1225≈77.2%, so at least one A or K is about 22.8%. 12% is a single-card figure, and 45% assumes six live cards must hit."
+    },
+    "t1hu-probability-q6": {
+      "question": "Heads-up there are 1326 starting combinations. Pocket pairs (13 ranks × 6 combos) are about:",
+      "options": [
+        "About 2.4%",
+        "About 5.9%",
+        "About 8.6%",
+        "About 12%"
+      ],
+      "explanation": "13×C(4,2)=78 combos, and 78/1326≈5.9%. The 8.6% figure belongs to short deck (54/630); in a 52-card deck each rank still has 6 pair combos."
+    },
+    "t1hu-probability-q7": {
+      "question": "You are the SB holding A♥A♦. The chance the flop contains at least one of the two remaining aces is about:",
+      "options": [
+        "About 4%",
+        "About 11.8%",
+        "About 18%",
+        "About 24%"
+      ],
+      "explanation": "Two aces remain among 50 unknown cards: 1 − C(48,3)/C(50,3) = 1 − 17296/19600 ≈ 11.8%. 24% counts all four aces, and 4% is a low single-street extrapolation."
+    },
+    "t1hu-probability-q8": {
+      "question": "Why is a possible ace in your opponent hands less threatening heads-up than in a full ring game?",
+      "options": [
+        "Because ranges are wide, so their ace is often paired with a weak kicker instead of dominating your strong hand",
+        "Because an ace is not a big card heads-up",
+        "Because a different dealing order makes aces appear less often",
+        "Because an opponent holding an ace never raises heads-up"
+      ],
+      "explanation": "Heads-up ranges often exceed 50% of hands, so aces appear regularly, but many of them carry weak kickers. In a full ring game an ace on the other side usually signals a stronger hand. The probability is unchanged; what changed is range density, and that is the source of the decision difference."
+    },
+    "t1hu-outs-q5": {
+      "question": "On the flop you already know both opponent hole cards (45 unknown cards). One single out hits on the turn about:",
+      "options": [
+        "About 1.7%",
+        "About 2.2%",
+        "About 2.9%",
+        "About 3.2%"
+      ],
+      "explanation": "1/45≈2.2% (45 unknown cards once both opponent cards are known). 3.2% is the short-deck figure (1/31), and 1.7% assumes a much larger unknown pool; neither fits a 52-card deck."
+    },
+    "t1hu-outs-q6": {
+      "question": "A 9-out flush draw (47 unknown cards on the flop) makes its hand by the river about:",
+      "options": [
+        "About 26%",
+        "About 35%",
+        "About 41%",
+        "About 54%"
+      ],
+      "explanation": "1 − (38/47)×(37/46) ≈ 35.0%. 26% is a rough doubling of the single-street figure, and 54% belongs to a 15-out combo draw."
+    },
+    "t1hu-outs-q7": {
+      "question": "An 8-out open-ended straight draw (47 unknown cards on the flop) hits by the river about:",
+      "options": [
+        "About 17%",
+        "About 26%",
+        "About 31.5%",
+        "About 45%"
+      ],
+      "explanation": "1 − (39/47)×(38/46) ≈ 31.5%. 17% is the single-street figure, 26% is the short-deck two-street value, and 45% is a clear overestimate."
+    },
+    "t1hu-outs-q8": {
+      "question": "The heads-up outs discount relaxes from roughly 7-8 tenths in a full ring game to about 9 tenths. The main reason is:",
+      "options": [
+        "With one opponent the chance that a third player holds a better draw is close to zero",
+        "The heads-up dealing order makes the turn easier to hit",
+        "Straights and flushes rank higher heads-up",
+        "Heads-up opponents never fold, so outs are worth more"
+      ],
+      "explanation": "The discount reflects how clean the outs are. In a multiway pot one of your outs can complete a bigger flush or straight for someone else; with a single opponent that conflict mostly disappears. Dealing order and hand ranking do not change with the number of players."
+    },
+    "t1hu-variance-q5": {
+      "question": "You go all-in 100 times with 60% equity, each hand worth ±100 chips. Your total expected profit is about:",
+      "options": [
+        "0 chips",
+        "1000 chips",
+        "2000 chips",
+        "4000 chips"
+      ],
+      "explanation": "100×(0.6−0.4)×100 = 2000 chips. 1000 is the 50-hand result, and 0 mistakes a positive expectation for a guaranteed break-even."
+    },
+    "t1hu-variance-q6": {
+      "question": "Same model (±100 chips per hand, 60% equity, single-hand standard deviation about 49). Over 100 hands the cumulative standard deviation is about:",
+      "options": [
+        "About 49",
+        "About 155",
+        "About 346",
+        "About 490"
+      ],
+      "explanation": "σ_total = 49×√100 = 490. 346 is the 50-hand cumulative value and 49 is the single-hand value; the √N law scales variance but never the per-hand basis."
+    },
+    "t1hu-variance-q7": {
+      "question": "You repeatedly go all-in with 55% equity. The chance of losing six in a row is about:",
+      "options": [
+        "About 0.17%",
+        "About 0.83%",
+        "About 1.8%",
+        "About 3%"
+      ],
+      "explanation": "0.45⁶ ≈ 0.83%. 0.17% is eight losses in a row and 1.8% is five, so the three numbers differ by roughly an order of magnitude and are often mixed up."
+    },
+    "t1hu-variance-q8": {
+      "question": "A heads-up session where you lose eight all-ins in a row is best read as:",
+      "options": [
+        "A mathematical normal: 55%-60% all-ins recur constantly, so a 0.45⁸ window can land in any session",
+        "Proof that your strategy has been solved by the opponent",
+        "Proof that the deal is systematically biased",
+        "A reason to increase bet sizes immediately to get even"
+      ],
+      "explanation": "0.45⁸≈0.17%, and with more than 200 hands per hour plus constant high-equity all-ins, such streaks are background noise. Review with a decision log rather than a win-loss log; increasing sizes to get even converts variance into real negative EV."
     }
   },
   "chapterObjectives": {

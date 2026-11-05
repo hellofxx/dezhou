@@ -160,6 +160,126 @@
         "Shove directly to protect top pair"
       ],
       "explanation": "OOP vs a float-happy player, big bets are extremely costly (you must fold to a raise), shoving is overkill, and 100% checking makes your range transparent and exploitable. Mixing checks with small lead bets: small bets make marginal hands pay to see cards, checks keep the x/r lever, and the frequency balance keeps IP from pinning down your top-pair strength — the combined application of OOP compensation tools."
+    },
+    "t3hu-sb-strategy-q5": {
+      "question": "The SB opens to 2.5BB. The break-even fold rate for the pure steal is about:",
+      "options": [
+        "50%",
+        "57.1%",
+        "62.5%",
+        "66.7%"
+      ],
+      "explanation": "The SB risks 2BB extra to win a 1.5BB pot: f = 2/(1.5+2) ≈ 57.1%. 50% is the min-raise threshold and 62.5% is the 3BB threshold; bigger sizes make automatic profit harder."
+    },
+    "t3hu-sb-strategy-q6": {
+      "question": "The BB 3-bets 15% of the time. What the SB loses when min-raising A5s and folding to the 3-bet is about:",
+      "options": [
+        "0.15BB",
+        "0.23BB",
+        "0.45BB",
+        "1.5BB"
+      ],
+      "explanation": "0.15×1.5 ≈ 0.23BB, since a 3-bet costs the extra 1.5BB invested. 0.45BB comes from using 30% as the 3-bet frequency, and 1.5BB assumes a 3-bet every time."
+    },
+    "t3hu-sb-strategy-q7": {
+      "question": "The SB min-raises to 2BB and the BB 3-bets to 7BB. The SB needs about what equity to call:",
+      "options": [
+        "28.6%",
+        "33.3%",
+        "35.7%",
+        "41.7%"
+      ],
+      "explanation": "The pot is 2+7 = 9 and the SB calls 5 more: 5/(9+5) ≈ 35.7%. The call size relative to the pot sets the threshold, so a larger 3-bet forces a tighter continuing range."
+    },
+    "t3hu-sb-strategy-q8": {
+      "question": "Why must the heads-up SB limp range include strong hands?",
+      "options": [
+        "To stop the BB from isolating every limp with impunity",
+        "Because limping always offers better odds than raising",
+        "Because strong hands win more postflop when limped",
+        "To trick the opponent into paying off your strong hands"
+      ],
+      "explanation": "With only weak hands in the limp range the BB can raise a very wide range and profit steadily; mixing in AA and KK raises the cost of isolating and turns limping into a balanced option. Range protection and odds are separate matters."
+    },
+    "t3hu-bb-defense-q5": {
+      "question": "The SB opens to 4BB. The BB needs about what equity to call:",
+      "options": [
+        "33.3%",
+        "37.5%",
+        "40%",
+        "42.9%"
+      ],
+      "explanation": "The pot is 4+1 = 5 and the BB calls 3 more: 3/(5+3) = 37.5%. 33.3% belongs to a 3BB open, and the threshold climbs with the size."
+    },
+    "t3hu-bb-defense-q6": {
+      "question": "The SB min-raises to 2BB. On the dead-money basis the BB minimum defence frequency (MDF) is about:",
+      "options": [
+        "37.5%",
+        "42.9%",
+        "50%",
+        "57.1%"
+      ],
+      "explanation": "The SB break-even fold rate is f* = 2/(1.5+2) ≈ 57.1%, so MDF = 1 − 57.1% ≈ 42.9%. The 57.1% belongs to the SB requirement, so do not invert the direction."
+    },
+    "t3hu-bb-defense-q7": {
+      "question": "After an SB limp the BB raises to 4BB. The SB folds to a raise 70% of the time, and when called the BB postflop edge is about +0.5BB. The raise EV is about:",
+      "options": [
+        "+0.70BB",
+        "+0.85BB",
+        "+1.20BB",
+        "+1.50BB"
+      ],
+      "explanation": "EV ≈ 0.7×1.5 + 0.3×0.5 = 1.05 + 0.15 = +1.20BB. The fold branch wins the 1.5BB of dead money and the called branch adds only the postflop edge, not the whole pot."
+    },
+    "t3hu-bb-defense-q8": {
+      "question": "Why is the heads-up BB 60%-70% defence not a calling station?",
+      "options": [
+        "Because it splits into a calling layer, a value 3-bet layer and a bluff 3-bet layer, each moving with SB tendencies",
+        "Because a BB that rarely folds always profits",
+        "Because calling stations only exist in full ring games",
+        "Because the BB always holds better cards than the SB"
+      ],
+      "explanation": "The width comes from structure rather than reluctance to fold. A calling station has neither a 3-bet layer nor an isolation raise, and those layers are what make 60% a graded choice."
+    },
+    "t3hu-position-reversal-q5": {
+      "question": "Using the street-by-street position value model (flop, turn, river at 0.05, 0.10 and 0.20BB), the turn accounts for about what share:",
+      "options": [
+        "About 24%",
+        "About 28.6%",
+        "About 33%",
+        "About 41%"
+      ],
+      "explanation": "0.10/0.35 ≈ 28.6%; the river takes 57%, the turn 28.6% and the flop 14.3%, summing to 100%. The split follows bet geometry alone and is independent of the board."
+    },
+    "t3hu-position-reversal-q6": {
+      "question": "The pot is 8BB and the SB bets about 2.7BB (one third pot). The BB needs about what equity to call:",
+      "options": [
+        "20%",
+        "25%",
+        "28.6%",
+        "33.3%"
+      ],
+      "explanation": "2.7/(8+2.7+2.7) ≈ 20.1%, matching the 20% one-third-pot threshold. 25% is half pot and 28.6% is two thirds pot."
+    },
+    "t3hu-position-reversal-q7": {
+      "question": "The BB checks, the SB checks behind, and no one bets the flop. What this choice really trades is:",
+      "options": [
+        "The SB gives up an immediate pot win for a free turn card and a small pot",
+        "The SB loses the button",
+        "The BB gains last action on every later street",
+        "The pot shrinks to zero"
+      ],
+      "explanation": "Checking behind swaps winning the pot now for a free card and a small pot, which is how the in-position player controls the pot and realises equity. Position does not change with the bet, and the BB still acts first postflop."
+    },
+    "t3hu-position-reversal-q8": {
+      "question": "The heads-up SB continuation-bets less often than a full ring BTN mainly because:",
+      "options": [
+        "BB defence ranges are very wide, so the SB wide range realises thin equity postflop while the opponent can check-raise at any time",
+        "The SB always holds worse cards heads-up",
+        "Heads-up rules restrict SB betting on the flop",
+        "Because the BB acts last on the flop"
+      ],
+      "explanation": "C-bet frequency follows range advantage and opponent defence width. Heads-up BB defends more than 60%, so the SB wide range carries thin equity in large pots, and the BB keeps a check-raise lever that makes betting every street expensive."
     }
   },
   "chapterObjectives": {

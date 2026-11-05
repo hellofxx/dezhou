@@ -9,6 +9,12 @@ export type {
   AcademyMasteryWeakest,
 } from './AcademyMasteryCard';
 
+export { AcademyVariantRuleCard } from './AcademyVariantRuleCard';
+export type {
+  AcademyVariantRuleCardProps,
+  AcademyVariantRuleItem,
+} from './AcademyVariantRuleCard';
+
 export { AcademySearchShell } from './AcademySearchShell';
 export type { AcademySearchShellProps } from './AcademySearchShell';
 

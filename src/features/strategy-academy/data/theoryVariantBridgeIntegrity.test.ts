@@ -91,9 +91,15 @@ describe('理论学院变体章节 → 策略学院变体课时 引用完整性'
   // 章节级桥接落地后，引用面来自两个不同形态的文件（Level 级 `{ id, title }` 与章节级 `lesson()`）。
   // 只断言总数会让"chapterPracticeMap 整体没被扫到"这类失配静默通过，故按来源分档断言。
   it('章节级 map 与 Level 级推荐两个来源都被扫到', () => {
-    for (const variantDir of ['heads-up', 'short-deck']) {
+    const minMapEntries: Record<'heads-up' | 'short-deck', number> = {
+      'heads-up': 37,
+      'short-deck': 27,
+    };
+    for (const variantDir of ['heads-up', 'short-deck'] as const) {
       const fromMap = refs.filter((r) => r.at.startsWith(`${variantDir}/chapterPracticeMap.ts`));
-      expect(fromMap.length, `${variantDir} 章节级 map 未产生引用`).toBeGreaterThanOrEqual(22);
+      expect(fromMap.length, `${variantDir} 章节级 map 未产生引用`).toBeGreaterThanOrEqual(
+        minMapEntries[variantDir],
+      );
       const fromLevels = refs.filter((r) => !r.at.startsWith(`${variantDir}/chapterPracticeMap.ts`));
       expect(fromLevels.length, `${variantDir} Level 级推荐未产生引用`).toBeGreaterThan(0);
     }

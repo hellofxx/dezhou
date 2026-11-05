@@ -1,6 +1,6 @@
 # 变更日志（CHANGELOG）
 
-> 状态：Historical · 最后复核：2026-11-04
+> 状态：Historical · 最后复核：2026-11-05
 > 本文件归档德州扑克训练平台的版本演进。
 > 历史月份存档位于 `docs/changelog/` 目录下（如 `docs/changelog/2026-07.md`）。
 > PRD.md 与 TDD.md 仅保留当前规格，执行历史统一汇集于此。
@@ -9,6 +9,18 @@
 ---
 
 ## [Unreleased] - 2026-11-04
+
+### 2026-11-05 理论学院单挑变体全量对齐（heads-up 37 核心章）
+
+- **章节与题库**：单挑 +15 章达到 37 核心章（T4 / T5 各 5、T6 / T7 / T8 各 4、T9 6），新增章落 `variants/heads-up/chapters/t<level>hu-*.ts`；全部章末题迁入独立题库 `variants/heads-up/quizBank/t1hu..t9hu.ts`（每章 8–12 题），旧题逐字迁移、题号与选项顺序不变；抽题仍为 T1–T3 抽 5、T4–T9 抽 6。
+- **组合单源**：新增 `variants/composeVariantChapters.ts`，静态聚合 `heads-up/index.ts`（eager glob 吸收新章 / 题库 / 块）与运行时 `loaders.ts`（glob 按变体查表）共用同一组合顺序，`headsUpStaticRuntimeParity.test.ts` 深比较两条路径；题库注入泛化为 `applyTheoryQuizBank`（单挑 `strict`，未知章节键 fail loud）、块注入为 `applyTheoryContentBlocks`，标准侧改为别名再导出以保持既有 import。
+- **富文本块**：`variants/heads-up/blocks/t2hu.ts`、`t4hu..t9hu.ts` 镜像标准覆盖（table / decision-tree / range-matrix），只追加到正文尾部，不改既有下标型 key。
+- **共享规则卡**：新增 `shared/types/variantRules.ts` / `shared/constants/headsUpRules.ts` / `shared/utils/academyVariantRules.ts` / `shared/components/academy/AcademyVariantRuleCard`；理论 `TheoryVariantRuleCard` 与策略 `StrategyVariantRuleCard` 各做薄包装，单挑规则卡在章节页与课时页正文前展示，方向值由 `positionDynamics` 派生。`huPositionOrderGuard` / `variantRuleCopyGuard` 的单源路径改到 shared。
+- **persist v5 宽限**：`TheoryProgress` 增 `legacyUnlockedLevels`，v4→v5 按历史快照（对齐前 22 个单挑核心章）把当时已解锁的 Level 写入宽限名单，只放宽解锁、不写 `completedChapters`，存量进度不倒退。
+- **行数豁免边界**：`QUIZ_BANK_ALLOWLIST` 逐个登记 `heads-up/quizBank/t[1-9]hu.ts`（逐文件上限、只减不增）；`chapters/` 与 `blocks/` 不豁免。
+- **内容运营**：单挑 37 章 `contentOps.lastReviewed` 随本批纳入；理论搜索覆盖单挑、成就 / 推荐卡、`theoryTitleKeys` / `contentAppendOnly` 守卫扩展不在本批，短牌内容不动，变体认证仍为后续批次。
+- **文档同步**：PRD §1.3.1 范围界定（标准与单挑已对齐）、TDD §5.8b 第 23 条与 persist 迁移条目、AI_GUIDE §文件大小 / §跨模块复用契约（变体规则卡）、AGENTS 共享组件与能力归属表、theory-academy-dev / strategy-academy-dev 代理文件、`src/guards/README.md` 行数守卫口径。
+- **验证**：文档侧 `pnpm docs:check` 通过；全量 `pnpm verify` / `pnpm build` / `pnpm size:check` 由集成阶段执行，结果以该批提交为准。
 
 ### 2026-11-04 策略学院学习工具与形成性评估（P2，非变体）
 

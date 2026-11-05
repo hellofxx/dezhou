@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { LEGACY_HEADS_UP_CORE_CHAPTERS } from '../store.defaults';
 import type { TheoryProgress } from '../types';
 import {
   findNextTheoryChapter,
@@ -104,5 +105,86 @@ describe('findNextTheoryChapter', () => {
     const next = findNextTheoryChapter(progressOf({ activeVariant: 'heads-up' }));
     expect(next?.id).toBe(headsUpFirst.id);
     expect(next?.variant).toBe('heads-up');
+  });
+});
+
+/**
+ * persist v5 宽限名单（legacyUnlockedLevels）：单挑新增核心章后，存量用户当时已解锁的 Level
+ * 不能因「前一 Level 核心章不全」被重锁。宽限只放宽门禁，不写完成、不改变推荐顺序。
+ */
+describe('isLevelUnlockedByCompleted × legacyUnlockedLevels', () => {
+  const headsUp = getLevelSummariesByVariant('heads-up');
+  const t1hu = headsUp[0]!;
+  const t2hu = headsUp[1]!;
+  const t3hu = headsUp[2]!;
+
+  it('宽限名单命中即解锁，未命中仍按前一 Level 核心章判定', () => {
+    expect(isLevelUnlockedByCompleted(t3hu.id, [], [], [])).toBe(false);
+    expect(isLevelUnlockedByCompleted(t3hu.id, [], [], [t3hu.id])).toBe(true);
+    // 宽限不外溢：名单里只有 t3hu 时，t2hu 仍保持锁定
+    expect(isLevelUnlockedByCompleted(t2hu.id, [], [], [t3hu.id])).toBe(false);
+  });
+
+  it('宽限不削弱既有两条路径（顺序完成 / 定位免修）', () => {
+    // 顺序完成：t2hu 的解锁看的是前一 Level（t1hu）核心章，与自身完成度无关
+    const t1huCoreIds = getCoreChaptersOfLevel(t1hu).map((chapter) => chapter.id);
+    expect(isLevelUnlockedByCompleted(t2hu.id, t1huCoreIds, [], [])).toBe(true);
+    expect(isLevelUnlockedByCompleted(t3hu.id, [], [t2hu.id], [])).toBe(true);
+    expect(isLevelUnlockedByCompleted(t1hu.id, [], [], [])).toBe(true);
+    // 未知 Level 即使进了名单也仍判锁定（门禁不被伪造 id 绕过）
+    expect(isLevelUnlockedByCompleted('t99hu', [], [], ['t99hu'])).toBe(false);
+  });
+});
+
+describe('findNextTheoryChapter × legacyUnlockedLevels', () => {
+  const headsUp = getLevelSummariesByVariant('heads-up');
+  const coreIdsOf = (...levels: typeof headsUp) =>
+    levels.flatMap((level) => getCoreChaptersOfLevel(level).map((chapter) => chapter.id));
+
+  it('宽限命中且前序 Level 已读完时，推荐该 Level 首个核心章', () => {
+    const completed = coreIdsOf(...headsUp.slice(0, 4)); // T1hu–T4hu 全完成
+    const next = findNextTheoryChapter(
+      progressOf({
+        activeVariant: 'heads-up',
+        completedChapters: completed,
+        legacyUnlockedLevels: [headsUp[4]!.id],
+      }),
+    );
+    expect(next?.id).toBe(getCoreChaptersOfLevel(headsUp[4]!)[0]!.id);
+  });
+
+  it('宽限不抢占顺序：更早 Level 的未完成章仍优先推荐', () => {
+    const completed = coreIdsOf(...headsUp.slice(0, 2)); // T1hu–T2hu 全完成
+    const withLegacy = findNextTheoryChapter(
+      progressOf({
+        activeVariant: 'heads-up',
+        completedChapters: completed,
+        legacyUnlockedLevels: ['t6hu'],
+      }),
+    );
+    const withoutLegacy = findNextTheoryChapter(
+      progressOf({ activeVariant: 'heads-up', completedChapters: completed }),
+    );
+    expect(withLegacy?.id).toBe(getCoreChaptersOfLevel(headsUp[2]!)[0]!.id);
+    expect(withLegacy?.id).toBe(withoutLegacy?.id);
+  });
+});
+
+describe('LEGACY_HEADS_UP_CORE_CHAPTERS（v5 历史快照）', () => {
+  it('快照固定为旧单挑 22 个核心章，且每个 id 仍存在于当前数据', () => {
+    const entries = Object.entries(LEGACY_HEADS_UP_CORE_CHAPTERS);
+    expect(entries.flatMap(([, chapterIds]) => chapterIds)).toHaveLength(22);
+    // 拼错一个 id 就会让对应 Level 的宽限静默失效，故逐个比对当前单挑目录
+    const headsUpIds = new Set(
+      getLevelSummariesByVariant('heads-up').flatMap((level) =>
+        level.chapters.map((chapter) => chapter.id),
+      ),
+    );
+    for (const [levelId, chapterIds] of entries) {
+      expect(chapterIds.length, levelId).toBeGreaterThan(0);
+      for (const chapterId of chapterIds) {
+        expect(headsUpIds.has(chapterId), `${levelId} → ${chapterId}`).toBe(true);
+      }
+    }
   });
 });

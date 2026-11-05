@@ -141,14 +141,18 @@ describe('variant theory integrity: 完整内容阶段校验（对齐标准系�
     expect(bad).toEqual([]);
   });
 
-  it('quiz：correctIndex 界内、选项 ≥2 且无重复、题干/解析非空、每章 3-5 题', () => {
+  it('quiz：correctIndex 界内、选项无重复、题干/解析非空；单挑 8-12 题/四选一，短牌 3-5 题/≥2 选项', () => {
     const bad: string[] = [];
     for (const chapter of allVariantChapters) {
-      if (chapter.quiz.length < 3 || chapter.quiz.length > 5) {
+      const isHeadsUp = chapter.variant === 'heads-up';
+      const min = isHeadsUp ? 8 : 3;
+      const max = isHeadsUp ? 12 : 5;
+      if (chapter.quiz.length < min || chapter.quiz.length > max) {
         bad.push(`${chapter.id}: 题数=${chapter.quiz.length}`);
       }
       for (const q of chapter.quiz) {
-        if (q.options.length < 2) bad.push(`${q.id}: 选项不足`);
+        if (isHeadsUp && q.options.length !== 4) bad.push(`${q.id}: 单挑必须四选一`);
+        if (!isHeadsUp && q.options.length < 2) bad.push(`${q.id}: 选项不足`);
         if (new Set(q.options).size !== q.options.length) bad.push(`${q.id}: 选项重复`);
         if (q.correctIndex < 0 || q.correctIndex >= q.options.length) bad.push(`${q.id}: correctIndex 越界`);
         if (!q.explanation.trim()) bad.push(`${q.id}: explanation 为空`);

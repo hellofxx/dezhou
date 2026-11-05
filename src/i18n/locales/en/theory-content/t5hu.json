@@ -11,7 +11,8 @@
       "Example 2 (minimum necessary deviation): You observe a HU opponent who calls big river bets only 25% (equilibrium ~50%). Based on this you can raise your river overbet-bluff frequency overall — but capped at \"I still don't lose if he corrects to 40%\". That's \"using GTO as the baseline and making directed, disciplined deviations from observable biases\", not blind escalation.",
       "Example 3 (HU GTO's aggressiveness): In solvers, the HU BB facing an SB open check-raises on many boards — pressuring with a polarized range of draws and strong hands. This stems from the check-raise lever that belongs to the side acting first postflop, plus his wide defense. If you only call against an aggressive BB and never raise, your defense frequency is high but harmless — the opponent can keep raising his C-Bet frequency to exploit you.",
       "Counterintuitive point: \"GTO is playing tight\" is the biggest misreading. HU GTO is full of high-frequency betting, overbet shoves, and thin value — it just keeps all of it at ratios the opponent can't counter. When studying solvers, don't memorize frequencies — ask three whys: why this sizing on this board? Why is this hand in the betting range? Why did the frequency change on the turn?",
-      "HU learning path: first use a solver to understand the equilibrium \"shape\" (why play this way), then use node locking to study \"harvest schemes for common opponent leaks\", finally validate live. The baseline gives you invincibility; deviations give you profit — exploitation without GTO is running naked, and GTO without deviation is self-shackling."
+      "HU learning path: first use a solver to understand the equilibrium \"shape\" (why play this way), then use node locking to study \"harvest schemes for common opponent leaks\", finally validate live. The baseline gives you invincibility; deviations give you profit — exploitation without GTO is running naked, and GTO without deviation is self-shackling.",
+      "Opponent type against best response: the baseline provides the guarantee and exploitation provides the gain. Each of the four observable tendencies translates into one concrete action direction, and every translation leaves room for the opponent to correct."
     ],
     "t5hu-frequency": [
       "Frequency: The Language of Equilibrium",
@@ -24,7 +25,47 @@
       "Example 2 (mixed execution): On the river you hold a bluff catcher facing a full-pot bet; in equilibrium the opponent bluffs 1/3 and your required equity is exactly 33% — call and fold have equal EV. Solvers may output \"call 50% / fold 50%\". Practical meaning: the single-decision cost of getting these wrong is about zero, so don't agonize; the real EV differences live in range construction on earlier streets.",
       "Example 3 (frequency exploitation in HU): You observe a HU opponent who folds to C-Bets 60% on the flop (equilibrium ~45%). This is a clear MDF leak — your flop C-Bet frequency and bluff density can be raised overall because he over-folds. But cap it at \"I still don't lose if he tightens to 50%\", keeping correction room. Frequency balance isn't only defense — it's also a microscope for identifying and harvesting opponent imbalance.",
       "Counterintuitive point: in heads-up, \"should I mix\" isn't a philosophical question but a mathematical one. Both sides of a mixed node have equal EV, so a single wrong choice costs ≈0; pure-strategy nodes (with a unique clearly-best action) contribute most of the EV. Investing effort in high-EV-difference decisions beats obsessing over the precise execution of a 50% mix.",
-      "Memorize the three frequency anchors: defend 67% vs half-pot, 50% vs full-pot, 33% vs 2× pot; bluff 25% on a half-pot bet, 33% on full-pot. In review, track your actual fold rate against big turn/river bets — most players fold far above equilibrium, which is why the opponent's big bets always seem to \"just happen\" to make you fold."
+      "Memorize the three frequency anchors: defend 67% vs half-pot, 50% vs full-pot, 33% vs 2× pot; bluff 25% on a half-pot bet, 33% on full-pot. In review, track your actual fold rate against big turn/river bets — most players fold far above equilibrium, which is why the opponent's big bets always seem to \"just happen\" to make you fold.",
+      "Three measures at the same size: MDF and Alpha are complementary and sum to exactly 100%; the required calling equity is always below Alpha, because the caller also wins the part the opponent has already put in."
+    ],
+    "t5hu-node-locking": [
+      "Node Locking: Writing the Opponent into the Model",
+      "A solver outputs the best response to a perfect opponent, and live opponents are not perfect. Node locking turns that gap into a calculation: fix the opponent action frequency at one node to its measured value, let the solver recompute the best response everywhere else, and what you get is no longer a universal equilibrium but an equilibrium against this opponent. Every deviation you make should trace back to a locked node.",
+      "What gets locked is a node frequency, not a single result. Being bluffed once does not make the opponent a bluffer; only a stable frequency at that node is evidence you can write into the model.",
+      "Pricing the deviation (pure bluff, pot P, bet B, opponent fold rate f):\n\nEV = f×P − (1−f)×B\nbreak-even fold rate f* = Alpha = B ÷ (P + B)\n\nWith P = 4BB and B ≈ 1.33BB (1/3 pot): f* = 25%\nf = 40% → EV = 0.4×4 − 0.6×1.33 ≈ +0.80BB\nf = 50% → EV = 0.5×4 − 0.5×1.33 ≈ +1.34BB\nf = 60% → EV = 0.6×4 − 0.4×1.33 ≈ +1.87BB",
+      "Hand example: the SB bets 1/3 pot on a high dry board, where the equilibrium asks the BB to defend 75%, which means a fold rate of only 25%. You observe this opponent continuing only 40% (folding 60%), so the same pure air bet is worth 0.6×4 − 0.4×1.33 ≈ +1.87BB; if he continues 60% (folding 40%), it is 0.4×4 − 0.6×1.33 ≈ +0.80BB. At the equilibrium baseline (25% folds) this hand is worth exactly 0 — everything above that is pure exploitation gain.",
+      "Setting the ceiling: assume the opponent will correct. If he tightens his fold rate from 60% to 40% your bluff still makes +0.80BB; it reaches zero only at 25%. The safety boundary of the deviation is therefore \"his fold rate stays above 25%\", not \"he currently folds 60%\". The ceiling is not a mood, it is the frequency that zeroes the EV.",
+      "Three Traps Before You Lock",
+      "The first is sample size: ten folds at one node are not enough to lock, and what you lock is noise. The second is node correlation: locking the opponent flop fold rate changes the range he brings to the turn, so your turn value and bluff density have to be recomputed as well. The third is the feedback loop: your deviation changes the opponent behaviour, so locked values go stale and need periodic re-checking instead of a one-time lock.",
+      "Counterintuitive point: locking \"the opponent rarely check-raises\" is often worth more than locking \"the opponent folds too much\". The BB acts first postflop, so the check-raise is his core lever; if he does not raise, your small bets cost nothing. Such nodes are both easy to observe and copyable across a whole betting strategy.",
+      "Baseline → observation → pricing → ceiling → re-check. Every deviation has a magnitude you can compute and a door you can walk back through; a \"targeting\" plan that skips these five steps is usually just a self-justification.",
+      "Deviation gain table (pot 4BB, 1/3-pot bet): the observed fold rate sets the EV of that bluff. Twenty-five percent is the break-even line and also the safety boundary — below it the same hand should stop betting."
+    ],
+    "t5hu-preflop-equilibrium": [
+      "Two Ranges, Priced Layer by Layer",
+      "The skeleton of the heads-up preflop equilibrium is two frequencies: an SB participation rate of about 80% (a raising segment of about 55%-65% plus a limping segment of about 15%-25%, the rest folding) and a BB defense rate of about 62% against a min-raise (about an 18% 3-bet plus a 44% call). These numbers are corollaries of the price lines, not style preferences — reading a participation rate as a raising rate overstates the opponent fold rate.",
+      "The hallmark of equilibrium is the indifferent boundary hand: at the boundary the EV of two adjacent actions is equal, so any mixture leaves the expectation unchanged. Equilibrium never says \"always play this hand this way\", only \"both sides of this hand pay the same\".",
+      "The three node prices (100BB deep, 0.5/1 blinds):\n\nSB limps to a 1.5BB pot, BB raises 1BB → Alpha = 1 ÷ (1+1.5) = 40%\nSB min-raises to 2BB, BB calls 1BB → required equity 1 ÷ 4 = 25%\nBB 3-bets to 6BB → Alpha = 5 ÷ 8 = 62.5%, so the SB defends 37.5% (about 8% 4-bet plus about 29.5% call)",
+      "Numbers: there are 1326 starting combos. A 62% BB defense is about 822 combos (1326 × 0.62 ≈ 822.1); split apart, the 3-bet is about 18%, roughly 239 combos (1326 × 0.18 ≈ 238.7), and the call about 44%, roughly 583 combos (1326 × 0.44 ≈ 583.4), and 239 + 583 lands exactly on 822. Frequencies and combo counts are two writings of the same thing.",
+      "Numbers: the SB must defend 37.5% against a 3-bet while the opening range itself is 80%, so 80% × 37.5% = 30% of all starting hands enter the continuing range. That multiplication is frequency composition: the continue rate against a 3-bet is not an independent number but the product of the opening rate and the defense rate.",
+      "How Limp and Min-Raise Divide the Work",
+      "The SB splits the range into a limping segment and a raising segment: the limp keeps the widest range for 0.5 and the last postflop action, with strong and weak hands sharing the same limping range so the BB raise cannot target only the weak part; the raising segment protects the limping segment and grows the pot when a strong hand is called. On the BB side the 3-bet is polarized — top value plus blocker bluffs, with middle hands calling to realize equity; once 3-bet, the SB uses 4-bets to protect the opening range and lets the remaining calls realize equity from position.",
+      "Counterintuitive point: \"tight\" in heads-up is tight in the frequency sense — a very high fold rate facing a 4-bet, not a narrow range. A player participating 80% will fold the large majority of that range at the 4-bet node; that is \"wide range with a high fold rate\", not \"narrow range\".",
+      "Three numbers carry heads-up preflop: participation 80%, defense against a min-raise 62%, continue against a 3-bet 37.5%. Split each number into action segments and allocate boundary hands by indifference, and preflop stops being a chart and becomes a price list.",
+      "Preflop frequency baselines: the continue figure in each row is built from the two columns after it, and whatever is left is the fold rate. The numbers move with the opponent and the stack depth; the composition does not."
+    ],
+    "t5hu-postflop-equilibrium": [
+      "The Chip Budget of Three Streets",
+      "The core of the postflop equilibrium is not \"how much do I bet\" but \"how much can each of the three streets carry\". The ceiling comes from SPR: the higher the SPR, the bigger the fraction each street needs to get all-in by the river; the lower the SPR, the more one raise can put the stacks in. Heads-up postflop position is fixed: the BB acts first and the SB acts last with the positional advantage, so the two players take different roles in equilibrium.",
+      "Sizing is back-solved from SPR and frequency is set by range advantage. The order cannot flip: first compute the sizing ceiling at this SPR, then decide how often to bet underneath that ceiling. Flip it and you jam in one step, handing the range advantage to the opponent nuts.",
+      "SPR = remaining stack ÷ current pot\nthree-street geometric sizing: x = ((1 + 2·SPR)^(1/3) − 1) ÷ 2\n\nSPR 4 → x = (9^(1/3) − 1) ÷ 2 ≈ 54% pot\nSPR 7.8 → x ≈ 78% pot\nSPR 24.5 → x ≈ 134% pot\n\n(two-street version: swap the cube root for a square root, (1 + 2·SPR)^(1/2))",
+      "Numbers: a single-raised pot of 4BB with 98BB behind each → SPR = 98 ÷ 4 = 24.5, and the three-street geometric sizing is (50^(1/3) − 1) ÷ 2 ≈ 134% pot. A 3-bet pot of 12BB with 94BB behind → SPR = 94 ÷ 12 ≈ 7.8, and the geometric sizing is (16.6^(1/3) − 1) ÷ 2 ≈ 78% pot. Same stack depth, and the two pots demand sizings a full step apart.",
+      "Numbers: in a 3-bet pot of 12BB with 94BB behind, betting half pot on all three streets grows the pot 12 → 24 → 48 → 96, which means each player puts in only 6 + 12 + 24 = 42BB and 52BB stays behind. To move the whole stack at this SPR each street needs about 78% pot — that is what geometric sizing is for: work out the fraction you need, then judge whether your range can support it.",
+      "The BB acts first postflop and pays for it in information, so the equilibrium trades checking frequency for a raise lever: lots of checks, with the nuts concentrated into the check-raising branch so the opponent small bets cannot collect the pot for free. The SB acts last, can bet at high frequency to control the pot, and answers a check-raise with the strong hands and bluff-catchers in range. Position ultimately shows up as equity realization: the same hand realizes more equity in position, so the BB continuing range needs a price to compensate.",
+      "Numbers: the defender minimum defense frequency against different sizes is 1 ÷ (1 + b): 1/4 pot → 80%, 1/3 pot → 75%, 1/2 pot → 67%, full pot → 50%, 2× pot → 33%. The table explains why small sizings bite: the smaller the bet, the more weak hands the opponent is forced to continue with.",
+      "Counterintuitive point: the BB check is not a surrender but the raise lever being saved for the nuts; the SB high-frequency small bet is not weakness either, but an equity tax collected on a range the opponent struggles to raise. Reading these two actions as \"giving up\" and \"attacking\" leads to over-folding or over-raising at exactly the wrong nodes.",
+      "Three steps: compute SPR to get the sizing ceiling, use range advantage to set the bet frequency, then split the raising duty by position. SPR is the budget, range is the tax rate, position is the executor.",
+      "SPR against geometric sizing: the three-street version solves with a cube root, the two-street version with a square root. The higher the SPR, the bigger the per-street fraction needed to get all-in; past SPR 10 the three-street sizing is at or beyond a full pot."
     ]
   },
   "quiz": {
@@ -78,6 +119,36 @@
       ],
       "explanation": "Memorizing frequencies is worse than understanding structure: why this size, why this hand enters the betting range, why the frequency changes on the turn. Understand the structure and the frequencies remember themselves."
     },
+    "t5hu-gto-he-q6": {
+      "question": "An SB min-raise steal to 2BB breaks even when the BB folds outright how often?",
+      "options": [
+        "33.3%",
+        "50%",
+        "62.5%",
+        "66.7%"
+      ],
+      "explanation": "Take the SB folding outright as the baseline: the min-raise invests 1.5BB more and wins the BB 1BB plus his own sunk 0.5. Setting f×1.5 − (1−f)×1.5 = 0 gives f = 50%; with the BB actually defending about 60%+, a pure steal has to make up the rest postflop."
+    },
+    "t5hu-gto-he-q7": {
+      "question": "Under what conditions should you exploit rather than hold the baseline?",
+      "options": [
+        "Exploit in every spot",
+        "When the opponent deviation is observable, the sample is large enough, and the size of the deviation is within what you can carry",
+        "When the opponent is completely unknown",
+        "Only in the late stages of a tournament"
+      ],
+      "explanation": "Exploitation requires \"visible and defensible\": the deviation must rest on an observable tendency with enough sample, and you must keep a safety margin for the opponent to correct. Against an unknown opponent the baseline is optimal."
+    },
+    "t5hu-gto-he-q8": {
+      "question": "The practical meaning of the minimax theorem in heads-up is:",
+      "options": [
+        "The equilibrium strategy earns the most",
+        "The equilibrium strategy guarantees at least the game value and no opponent can push it down unilaterally",
+        "The equilibrium strategy predicts the opponent exact hand",
+        "The equilibrium strategy only works preflop"
+      ],
+      "explanation": "The minimax theorem guarantees a floor: max-min = min-max = the game value. It does not promise the maximum win, only that no opponent response can push your expectation down."
+    },
     "t5hu-frequency-q1": {
       "question": "Facing a half-pot bet, MDF (Minimum Defense Frequency) is about:",
       "options": [
@@ -127,6 +198,276 @@
         "Avoid all mixed spots"
       ],
       "explanation": "Both sides of a mixed node have equal EV, so a single \"wrong choice\" costs ≈0; what actually separates results is pure-strategy nodes and range construction on earlier streets."
+    },
+    "t5hu-frequency-q6": {
+      "question": "Against a 1/3-pot bet the minimum defense frequency (MDF) is:",
+      "options": [
+        "60%",
+        "67%",
+        "75%",
+        "80%"
+      ],
+      "explanation": "MDF = 1 ÷ (1 + 1/3) = 75%: the smaller the bet, the more the defender must defend, because the bluff price gets cheaper."
+    },
+    "t5hu-frequency-q7": {
+      "question": "Against a 2× pot bet the Alpha (break-even fold rate) is:",
+      "options": [
+        "33.3%",
+        "50%",
+        "66.7%",
+        "75%"
+      ],
+      "explanation": "Alpha = b ÷ (1 + b) = 2 ÷ 3 ≈ 66.7%, with a complementary MDF of 33.3%. An overbet bluff needs only two thirds of folds — that is where its threat comes from."
+    },
+    "t5hu-frequency-q8": {
+      "question": "Pot 4BB, you bet about 1.33BB (1/3 pot) as a pure bluff and the opponent folds 50%. Your EV is about:",
+      "options": [
+        "−0.67BB",
+        "0BB",
+        "+1.34BB",
+        "+2.67BB"
+      ],
+      "explanation": "EV = 0.5×4 − 0.5×1.33 = 2 − 0.665 ≈ +1.34BB. The Alpha of a 1/3-pot bet is only 25%, so at 50% folds your bluff is far above break-even."
+    },
+    "t5hu-node-locking-q1": {
+      "question": "Node locking in a solver means:",
+      "options": [
+        "Fixing your own action at the live frequency",
+        "Fixing the opponent action frequency at one node to its measured value and recomputing the best response elsewhere",
+        "Locking the stack depth of both players",
+        "Locking only the river node and stopping the solve"
+      ],
+      "explanation": "Node locking edits the opponent branch of the tree: his actual frequency at that node is written in, the solver recomputes your best response, and the result is an equilibrium against this opponent."
+    },
+    "t5hu-node-locking-q2": {
+      "question": "The Alpha (break-even fold rate) of a 1/3-pot bet is:",
+      "options": [
+        "20%",
+        "25%",
+        "33.3%",
+        "40%"
+      ],
+      "explanation": "Alpha = b ÷ (1 + b) = (1/3) ÷ (1 + 1/3) = 25%, complementary to an MDF of 75%."
+    },
+    "t5hu-node-locking-q3": {
+      "question": "Pot 4BB, you bet 1.33BB (1/3 pot) as a pure bluff and the opponent folds 60%. Your EV is about:",
+      "options": [
+        "+0.60BB",
+        "+1.34BB",
+        "+1.87BB",
+        "+2.40BB"
+      ],
+      "explanation": "EV = 0.6×4 − 0.4×1.33 = 2.4 − 0.532 ≈ +1.87BB. At the equilibrium fold rate of 25% the same hand is worth exactly 0, so everything above that is exploitation gain."
+    },
+    "t5hu-node-locking-q4": {
+      "question": "The same node with the opponent correcting to a 40% fold rate gives your bluff an EV of about:",
+      "options": [
+        "+0.40BB",
+        "+0.80BB",
+        "+1.20BB",
+        "+1.60BB"
+      ],
+      "explanation": "EV = 0.4×4 − 0.6×1.33 = 1.6 − 0.798 ≈ +0.80BB, still positive — that is how the \"still profitable after the opponent corrects\" test works."
+    },
+    "t5hu-node-locking-q5": {
+      "question": "What sets the ceiling on a deviation?",
+      "options": [
+        "The risk you are willing to take",
+        "The frequency at which the EV turns from positive to negative once the opponent corrects to the other end of the range",
+        "The precision of the solver",
+        "The absolute hand strength of the opponent"
+      ],
+      "explanation": "The ceiling is computed, not felt: the fold rate that zeroes the EV is the boundary. As long as the opponent frequency sits beyond it, the deviation is worth running."
+    },
+    "t5hu-node-locking-q6": {
+      "question": "What threshold must be cleared before locking a node?",
+      "options": [
+        "Sample size — a small sample at one node cannot support a lock",
+        "The opponent screen name",
+        "Whether the board has flush possibilities",
+        "Your own stack size"
+      ],
+      "explanation": "Locking writes one observation into the model, and with too small a sample what gets locked is noise. Until the sample is there, keep the baseline rather than recompute the whole tree on a false premise."
+    },
+    "t5hu-node-locking-q7": {
+      "question": "Why does locking the opponent flop fold rate also change your own turn strategy?",
+      "options": [
+        "Because the locked value changes the range he brings to the turn, and the best response on later streets changes with it",
+        "Because locking degrades solver precision",
+        "Because locking only affects the flop street",
+        "Because the opponent can see that you locked"
+      ],
+      "explanation": "Nodes are chained: the flop fold rate determines the composition of the opponent turn range, and once the range changes, your turn value and bluff density must be recomputed."
+    },
+    "t5hu-node-locking-q8": {
+      "question": "Which of these opponent tendencies is usually the more valuable lock?",
+      "options": [
+        "The opponent folds slightly more than average to small bets",
+        "The opponent rarely check-raises, giving up a raise lever that should be his",
+        "The opponent occasionally slow-plays the nuts",
+        "The opponent uses small sizings"
+      ],
+      "explanation": "The BB acts first postflop, so the check-raise is that side core lever: if he does not raise, your small bets cost nothing. Such a node is both easy to observe and copyable across a whole betting strategy."
+    },
+    "t5hu-preflop-equilibrium-q1": {
+      "question": "Facing an SB min-raise, the required equity for the BB to call is:",
+      "options": [
+        "20%",
+        "25%",
+        "30%",
+        "37.5%"
+      ],
+      "explanation": "The BB puts in 1BB more and the pot after the call is 4BB, so required equity = 1 ÷ 4 = 25%."
+    },
+    "t5hu-preflop-equilibrium-q2": {
+      "question": "The correct composition of the SB participation rate of about 80% is:",
+      "options": [
+        "All of it is min-raising",
+        "About 55%-65% raising plus about 15%-25% limping, the rest folding",
+        "About 80% raising plus 20% limping",
+        "All of it is limping"
+      ],
+      "explanation": "Eighty percent is participation, not raising: the raising segment is about 55%-65% and the limping segment about 15%-25%, which together make up 80%. Treating participation as a raising rate overstates the opponent fold rate."
+    },
+    "t5hu-preflop-equilibrium-q3": {
+      "question": "The break-even fold rate (Alpha) of a BB 3-bet to 6BB is:",
+      "options": [
+        "37.5%",
+        "50%",
+        "62.5%",
+        "66.7%"
+      ],
+      "explanation": "The BB invests 5BB more to win 3BB (the SB 2BB plus his own posted 1BB), so Alpha = 5 ÷ (5 + 3) = 62.5% and the SB minimum defense frequency is 37.5%."
+    },
+    "t5hu-preflop-equilibrium-q4": {
+      "question": "If the BB defends 62%, roughly how many of the 1326 starting combos is that?",
+      "options": [
+        "About 700",
+        "About 822",
+        "About 900",
+        "About 1060"
+      ],
+      "explanation": "1326 × 0.62 ≈ 822 combos: about 18% 3-bet (roughly 239) plus about 44% call (roughly 583), and the two add up to 822."
+    },
+    "t5hu-preflop-equilibrium-q5": {
+      "question": "The indifferent boundary hand in equilibrium means:",
+      "options": [
+        "A hand of medium strength",
+        "A hand where two adjacent actions have equal EV, so any frequency split can be used",
+        "A hand that always checks",
+        "A hand the solver cannot solve"
+      ],
+      "explanation": "Adjacent actions at the boundary have equal EV, so no mixture changes your expectation — that is exactly where equilibrium allocates actions by frequency."
+    },
+    "t5hu-preflop-equilibrium-q6": {
+      "question": "Why does the limp exist in the heads-up preflop equilibrium?",
+      "options": [
+        "It keeps the widest range for the smallest price and the last postflop action, hiding strong hands inside the same range",
+        "It prevents the BB from raising",
+        "It keeps the pot small so hand strength no longer matters",
+        "Because the solver forbids min-raising everything"
+      ],
+      "explanation": "The limp keeps the widest range for 0.5 and the last postflop action, with strong and weak hands sharing the same limping range so the BB raise cannot target only the weak part; the cost is giving up the initiative."
+    },
+    "t5hu-preflop-equilibrium-q7": {
+      "question": "Against a wide SB open, the BB 3-bet range should be:",
+      "options": [
+        "Linear: every hand above medium strength in a continuous block",
+        "Polarized: top value plus blocker bluffs, with middle hands calling",
+        "Value only, with no bluffs",
+        "Any two cards at equal frequency"
+      ],
+      "explanation": "A wide opening range means the fold rate is high enough and the top is thin enough: a polarized 3-bet collects money with bluffs and is not overtaken with value, while middle hands realize more equity by calling."
+    },
+    "t5hu-preflop-equilibrium-q8": {
+      "question": "The precise meaning of \"tight\" in heads-up preflop is:",
+      "options": [
+        "Very few hand types are played",
+        "Tight in the frequency sense: a very high fold rate facing a 4-bet, not a narrow range",
+        "It only applies to tournaments",
+        "Only the BB needs to be tight"
+      ],
+      "explanation": "The heads-up participation rate reaches about 80%, but a large share of it folds to a 4-bet. \"Tight\" describes that fold frequency, not the width of the range."
+    },
+    "t5hu-postflop-equilibrium-q1": {
+      "question": "With a 4BB pot and 98BB behind each, the SPR is:",
+      "options": [
+        "About 4.9",
+        "About 12.3",
+        "About 24.5",
+        "About 49"
+      ],
+      "explanation": "SPR = remaining stack ÷ current pot = 98 ÷ 4 = 24.5. SPR sets how much of the stack the three streets can move."
+    },
+    "t5hu-postflop-equilibrium-q2": {
+      "question": "At SPR around 7.8, the geometric sizing needed to get all-in over three streets is about:",
+      "options": [
+        "43% pot",
+        "54% pot",
+        "78% pot",
+        "134% pot"
+      ],
+      "explanation": "x = ((1 + 2×SPR)^(1/3) − 1) ÷ 2 = ((1 + 15.6)^(1/3) − 1) ÷ 2 ≈ (2.554 − 1) ÷ 2 ≈ 0.777, so about 78% pot."
+    },
+    "t5hu-postflop-equilibrium-q3": {
+      "question": "Against a 1/4-pot bet, the defender MDF is:",
+      "options": [
+        "67%",
+        "75%",
+        "80%",
+        "87%"
+      ],
+      "explanation": "MDF = 1 ÷ (1 + 1/4) = 80%: a small sizing forces a large part of the range to continue, otherwise any two cards become a profitable bet."
+    },
+    "t5hu-postflop-equilibrium-q4": {
+      "question": "Against a full-pot bet, the defender MDF is:",
+      "options": [
+        "33%",
+        "50%",
+        "60%",
+        "67%"
+      ],
+      "explanation": "MDF = 1 ÷ (1 + 1) = 50%, complementary to the 50% Alpha of a full-pot bet: the defense only has to cover half the range."
+    },
+    "t5hu-postflop-equilibrium-q5": {
+      "question": "At an SPR of about 24.5 in a single-raised pot, the three-street geometric sizing is about 134% pot. This tells you that:",
+      "options": [
+        "You should overbet every street to get the stack in",
+        "Getting all-in over three streets at 100BB in a single-raised pot takes huge sizings, so 1/3-2/3 pot small sizings are the practical way to realize equity in layers",
+        "The higher the SPR, the smaller the sizing",
+        "Geometric sizing is independent of SPR"
+      ],
+      "explanation": "A single-raised pot has a wide range and low nut density, so a huge sizing only gets called by stronger hands; pushing the small-sizing frequency up and saving the nuts for the big sizing is the equilibrium shape at this SPR."
+    },
+    "t5hu-postflop-equilibrium-q6": {
+      "question": "The postflop equilibrium difference between OOP and IP is:",
+      "options": [
+        "The BB (acting first postflop) checks more often and carries the check-raise with a small share of strong hands, while the SB (acting last) can bet at high frequency",
+        "The SB checks more often",
+        "Both check at the same frequency",
+        "The BB should check 100%"
+      ],
+      "explanation": "The BB acts first postflop without the last-action information edge, so the equilibrium uses check-raises to cash the nut advantage; the SB acts last and can bet often to control the pot and compress the opponent equity realization."
+    },
+    "t5hu-postflop-equilibrium-q7": {
+      "question": "In the postflop equilibrium, the derivation order of sizing and frequency is:",
+      "options": [
+        "Set the frequency first, then the sizing",
+        "Sizing is back-solved from SPR and frequency is set by range advantage",
+        "Set the sizing first, then the range",
+        "The two are unrelated"
+      ],
+      "explanation": "SPR decides how much each street can put in, which is the sizing ceiling; range advantage decides how often you bet underneath that ceiling. Reverse the order and you jam in one step."
+    },
+    "t5hu-postflop-equilibrium-q8": {
+      "question": "The reasoning behind the SB high-frequency small sizing on most boards is:",
+      "options": [
+        "Small sizings scare strong hands away",
+        "Collecting an equity tax on a range the opponent struggles to raise, while saving the nuts for the large polarized sizing",
+        "A small sizing keeps the pot small, so the risk is lower",
+        "Because small sizings need no balancing"
+      ],
+      "explanation": "The small sizing lets the whole range bet so the opponent cannot answer with folds alone; the real nuts live in the large-sizing branch, and the two sizes together form the complete equilibrium."
     }
   },
   "chapterObjectives": {
@@ -139,6 +480,21 @@
       "Understand mixed strategies and the indifference principle: the condition for allocating actions by frequency",
       "Master MDF and Alpha critical-frequency calculations in HU defense/offense",
       "Learn to execute frequency balance across wide HU ranges, avoiding exploitable deterministic tendencies"
+    ],
+    "t5hu-node-locking": [
+      "Explain that node locking rewrites the opponent branch of the tree, not your own action",
+      "Compute the deviation gain at a node with the bluff pricing formula and find where it turns negative",
+      "Name the three risks to rule out before locking: small samples, node correlation, feedback loops"
+    ],
+    "t5hu-preflop-equilibrium": [
+      "Break down the SB participation rate and the BB defense rate into their action segments",
+      "Identify boundary hands by the indifference principle and explain why equilibrium mixes them",
+      "Explain how limp and min-raise divide the work, and how the 3-bet and 4-bet ranges are shaped"
+    ],
+    "t5hu-postflop-equilibrium": [
+      "Compute SPR from the remaining stack and the current pot and explain how it caps each street sizing",
+      "Plan three streets geometrically and judge what bet fraction it takes to get all-in",
+      "Distinguish the postflop duties of the BB and the SB: who check-raises, who bets at high frequency"
     ]
   }
 }

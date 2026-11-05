@@ -24,8 +24,8 @@ describe('theory-academy store persisted shape', () => {
     const state = useTheoryStore.getState();
     const persisted = partialize ? partialize(state) : state;
 
-    // v4：attempts / checkpoints / placement / bookmarks / notes 落地时的版本号
-    expect(version).toBe(4);
+    // v5：单挑存量宽限名单（legacyUnlockedLevels）落地时的版本号
+    expect(version).toBe(5);
 
     expect(buildPersistedShape(persisted)).toMatchInlineSnapshot(`
       {
@@ -38,6 +38,7 @@ describe('theory-academy store persisted shape', () => {
           "completedChapters": "array",
           "currentChapter": "null",
           "flaggedQuestions": "array",
+          "legacyUnlockedLevels": "array",
           "quizScores": {},
           "startedAt": "number",
           "variantMetadata": {

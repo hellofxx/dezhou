@@ -10,7 +10,8 @@
       "Example 2 (short stack): HU 15BB deep, SB holds K♠Q♠. Range — KQs has about 60% equity vs the BB's wide range; math — shove 15BB or min-raise then shove; KQs is clearly ahead of the calling range; betting — short stacks skip multi-street; shove directly or small-raise to induce; exploitation — if the BB over-folds, just push; psychology — accept variance. Short-stack strategy is more direct than deep — stack depth makes the same hand play completely differently.",
       "Example 3 (review methodology): After a HU session, review hand by hand with the \"decision loop\" — was my range judgment right? Was the EV right? Was the size right? Was the opponent-tendency read right? Did emotion influence me? Five questions turn every hand into training. Tendler emphasizes \"process vs result\": review only process (decision quality), never results (wins/losses).",
       "Counterintuitive point: the HU master's \"cleverness\" isn't perfect decisions but \"system stability\". Occasional decision errors are inevitable, but a stable decision loop plus strict emotional discipline keeps the long-term expectation curve climbing. Chasing \"every-hand perfection\" instead causes overthinking and tilt.",
-      "Building your personal system in four steps: learn (T1-T8 theory) → drill (solver verification) → play (execute the loop live) → review (hand-by-hand review + notes). Four-step loop, and your HU level climbs steadily with every session."
+      "Building your personal system in four steps: learn (T1-T8 theory) → drill (solver verification) → play (execute the loop live) → review (hand-by-hand review + notes). Four-step loop, and your HU level climbs steadily with every session.",
+      "Stack depth and SPR (min-raise to 2bb, pot 4bb after the call): SPR falls from 24.5 to 2.0, and the number of usable streets and the whole structure of play change with it — the same range, maths, sizing questions get rewritten answers by depth."
     ],
     "t9hu-pro-study": [
       "What Top Heads-Up Players Think",
@@ -22,7 +23,60 @@
       "Example 2 (postflop range allocation): On a dry high board A♠8♦3♣ a pro C-Bets the entire betting range at high frequency and small size — because the raiser's range advantage is clear (lots of Ax) and the caller rarely hits an A. On a wet 7♠6♥4♣ board he cuts C-Bet frequency sharply — because the caller's range contains more straights/draws. Range advantage decides betting frequency — a reusable methodology.",
       "Example 3 (emotional discipline): Top players still decide with the same framework after losing 10 consecutive 60% all-ins — because they treat \"variance\" as an uncontrollable external variable and control only \"decision quality\". This is T8's \"process vs result\" separation manifested at the professional level.",
       "Counterintuitive point: the value of studying pros isn't \"how great they are\" but \"how replicable their systems are\". An amateur drilling the pro framework for a month often improves faster than \"ten years of memorized feel\" — because systems are trainable and feel isn't replicable.",
-      "Pro hand-study process: (1) record all actions of a hand; (2) deconstruct layer by layer with the decision loop (range/math/betting/exploitation/psychology); (3) compare with your own handling to find gaps; (4) distill one reusable principle into your notes. Every 10 hands studied makes your decision framework more complete."
+      "Pro hand-study process: (1) record all actions of a hand; (2) deconstruct layer by layer with the decision loop (range/math/betting/exploitation/psychology); (3) compare with your own handling to find gaps; (4) distill one reusable principle into your notes. Every 10 hands studied makes your decision framework more complete.",
+      "Pure steal EV when the small blind risks 1.5bb to win 1.5bb of dead money: a 50% fold rate is the zero point, 60% gives +0.3bb and 75% gives +0.75bb. This table, not a feeling that a steal is due, is why professionals push opening frequencies close to 100%."
+    ],
+    "t9hu-mop": [
+      "Equilibrium, Information and Opponent Models",
+      "The Mathematics of Poker frames poker as a zero-sum game with incomplete information: you and the opponent share one rule set, and both strategies are fixed simultaneously without seeing each other's cards. Equilibrium is the only solution in that game that does not require guessing the opponent — no unilateral deviation can raise your expectation. Its value is not that it always wins, but that it is the lower bound keeping you unexploited when you do not know the opponent's tendencies; the moment you start guessing, you leave equilibrium and enter an interval with higher reward and higher fragility.",
+      "Three concepts must be kept apart: game value (the expectation per hand when both play equilibrium), worst-case guarantee (your EV when the opponent best-responds), and best response (the maximum EV available once you know the opponent's strategy). Equilibrium guarantees the first two at once while exploitation chases the third; no single hand can maximise both at the same frequency.",
+      "Example (zero-sum check): both players put in 50bb to build a 100bb pot and your equity is 60%. Your EV = 0.6 × 100 − 50 = +10bb and the opponent EV = 0.4 × 100 − 50 = −10bb, summing to zero. The check is practical: for any claim that what you win equals what the opponent loses, verify that the two sides sum to zero; if both come out positive the accounting is wrong, because the pot is conserved and chips cannot appear from nowhere.",
+      "Bet size and frequency pair up (pot before the bet P, bet size b):\n\nbluff break-even fold rate α = b ÷ (P + b)\ndefence floor MDF = P ÷ (P + b) = 1 − α\n\nhalf pot (P=10, b=5): α = 5 ÷ 15 = 33.3%, MDF = 66.7%\nfull pot (P=10, b=10): α = 50.0%, MDF = 50.0%\ntwice the pot (P=10, b=20): α = 66.7%, MDF = 33.3%\n\nConclusion: α and MDF are not two facts but two sides of one equation. The larger the size, the less fold equity a bluff needs and the lower the defence floor.",
+      "Example two (indifference point and mixing density): facing a half-pot bet, calling needs 5 ÷ (10 + 10) = 25% equity. The equilibrium player mixes value and bluffs by α so that calling becomes indifferent, and the bluff density inside the betting range is α ÷ (1 + α): at full pot 0.5 ÷ 1.5 = 1/3, a 2:1 value-to-bluff ratio. That 1/3 is not an empirical number but the direct solution of making the opponent indifferent between calling and folding.",
+      "Information and opponent models: equilibrium does not read hands, it only reads information sets — which cards you can see and which actions you can take. A heads-up information set is smaller than a multiway one (no third player behind), so equilibrium shows up as more continuous frequencies and more mixing rather than more polarised pure strategies. Once an opponent model enters you have left equilibrium: the more accurate the model, the more extra EV is available, but the larger the loss when the opponent counter-adjusts — the double edge of exploitation.",
+      "Counter-intuitive: equilibrium does not produce maximum profit. It only guarantees that you are not exploited while the opponent plays well; when the opponent deviates consistently, insisting on equilibrium means voluntarily giving up expectation you could have taken. That is also why the framework teaches equilibrium first and deviation second — the reverse order produces a hybrid that can neither defend nor exploit.",
+      "Three layers of use: treat equilibrium as the default baseline (the starting point of every frequency); treat the opponent model as a licence to deviate (only with sample support); treat game value as the review yardstick (judging whether a hand lost more than one unit of EV). Each layer does one job, and mixing them turns strategy into a feeling that a raise is due.",
+      "Equilibrium guarantees an unexploitable lower bound, not maximum profit; maximum profit belongs to the best response\nZero-sum check: both put in 50bb with 60% equity → +10bb and −10bb, the two sides summing to zero\nα = b ÷ (P + b) and MDF = 1 − α are two sides of one equation: half pot 33.3%/66.7%, full pot 50%/50%",
+      "Bet size and frequency pair up: α = b ÷ (P + b) and MDF = 1 − α. The larger the size, the more fold equity a bluff needs and the lower the defence floor — two sides of one equation."
+    ],
+    "t9hu-icm": [
+      "With Only Two Players Left, How Much Distortion Remains",
+      "ICM (the independent chip model) converts chips into prize expectation under the assumption that each player's chance of finishing in each place is proportional to their chip share. In a multiway bubble it clearly raises calling thresholds, because the marginal money value of chips lost exceeds that of chips won. But with only two players left and only two paid places the curve is strictly linear: money EV = second-place prize + chip share × (first prize − second prize). Linearity means chips and money move in the same order — there is no risk premium inside heads-up, and the real ICM peak sits at the moment three players become two.",
+      "Three measures must be kept apart: chip EV (in chips), money EV (by the payout table), and tournament survival (no rebuy). On a heads-up final table the first two are linearly proportional and same-ordered, so they change no decision boundary; what actually moves the all-in threshold is dead money (antes enlarge the starting pot) and rising blinds (effective stacks keep shrinking).",
+      "Example (linearity check): the payout is 100 for first and 60 for second, 160 in total. With 60/40 chips your money EV = 0.6 × 100 + 0.4 × 60 = 84 and the opponent's is 0.4 × 100 + 0.6 × 60 = 76, summing to 84 + 76 = 160, exactly the prize pool. Hold only 25% of the chips and your money EV = 0.25 × 100 + 0.75 × 60 = 70 — strictly on the same straight line, with no convexity at all.",
+      "All-in indifference point (proving both measures solve identically inside heads-up):\n\nyou hold 60 chips and the opponent 40; you shove 40 effective chips\nwin → you take first place 100% of the time; lose → you hold 20 against 80, so your first-place chance is 20%\nwith win probability p: p × 100 + (1 − p) × (0.2 × 100 + 0.8 × 60) = 84\n100p + 68(1 − p) = 84 → 32p = 16 → p = 50%\n\nchip EV solves the same way: 20 + 80p = 60 → p = 50%\n\nConclusion: both sides give 50%, because the payout table is linear in chips. The claim that ICM makes heads-up tighter does not hold here. (Concept source: The Mathematics of Poker, Bill Chen and Jerrod Ankenman, tournament chapter on prize-to-chip conversion)",
+      "Example two (dead money lowers the threshold): 20bb effective, blinds 1/1, both players ante 0.5bb, so the starting pot is 3bb. The small blind (the button) shoves 20bb and the big blind must call 19bb into a pot of 3 + 19 + 19 = 41bb, needing 19 ÷ 41 ≈ 46.3%. Remove the antes and the starting pot is only 2bb, the final pot 40bb, and the threshold becomes 19 ÷ 40 = 47.5%. Same hand, same depth, and the antes alone buy about 1.2 percentage points.",
+      "Heads-up tournaments differ from heads-up cash not through an ICM premium but through three structural facts: there is no rebuy (one all-in decides survival), the blinds rise (relative stacks keep shrinking), and the prize jump happens before heads-up begins (three players becoming two is where ICM lives). Importing the whole package of bubble caution into heads-up makes you fold hands with 48% equity when the threshold is already only 46% — that is not caution, that is leaked expectation.",
+      "Counter-intuitive: the peak of ICM pressure is not inside heads-up but on the hand that earns you the heads-up. Once heads-up starts, money EV and chips are same-ordered and you should decide on chip EV; carrying bubble caution onto the final table is the most common systematic error in tournament heads-up.",
+      "Three rules of execution: before three players become two, use money EV; after only two remain, use chip EV; always add the ante into the starting pot before computing a threshold; recompute effective stacks (in big blinds, not absolute chips) every time the blinds go up, because relative depth is the strategy variable.",
+      "With two players left and two paid places, money EV = second prize + share × (first − second), strictly linear in chips\nLinearity means no ICM risk premium inside heads-up: with 60/40 chips shoving 40 effective chips, both measures give a 50% indifference point\nDead money and depth move the threshold: 20bb with antes needs 19 ÷ 41 ≈ 46.3% versus 47.5% without; the ICM peak sits where three players become two",
+      "Money EV under a 100/60 payout (60 + share × 40): chip share and money EV form a strict straight line with no convexity. That is the proof that there is no ICM risk premium inside heads-up."
+    ],
+    "t9hu-unified": [
+      "Baseline Plus Deviation Is a Loop, Not Two Schools",
+      "In heads-up, playing GTO and playing exploitatively are not alternatives: the baseline keeps you unexploited when information is thin, and deviation takes extra expectation when information is rich. The unified framework chains them into a loop — equilibrium baseline, population-tendency observation, significance test on the sample, bounded deviation, and return to baseline after a counter-adjustment. The key is not any single step but the order: only against a baseline do you know how far you deviated, and only with a sample do you know whether you should.",
+      "A deviation needs all three gates: direction (which way), magnitude (how much, expressed as a frequency gap rather than a feeling), and evidence (whether the sample supports that direction). Miss any one and the adjustment degenerates into \"I feel like betting more\" — the most common way to lose money in heads-up.",
+      "Example (the concrete shape of a baseline): with a 10bb pot and a half-pot bet of 5bb, the defender's MDF is 10 ÷ 15 = 66.7% and the corresponding bluff break-even fold rate is α = 5 ÷ 15 = 33.3%. The two numbers are complements, two sides of one equation; their job is to act as a ruler — how far the opponent's actual fold rate sits from 33.3% is exactly how much you should deviate.",
+      "Significance test (is the observation strong enough):\n\nstandard error SE = √(p × (1 − p) ÷ n)\nobservation: 45 folds in 100 hands facing a continuation bet → p = 45%\nSE = √(0.45 × 0.55 ÷ 100) ≈ 5.0%, 95% interval about 45% ± 9.8%\n\nversus the baseline: equilibrium fold rate α = 33.3%, and the measured 45% is 11.7 points higher ≈ 2.3 standard errors → strong enough to deviate\nwith only 20 hands SE ≈ √(0.45 × 0.55 ÷ 20) ≈ 11.1%, and the same observation becomes completely undecidable",
+      "Example two (the expectation of a deviation): 10bb pot, you bet 5bb, and the opponent folds 55% (clearly above the 33.3% break-even). Pure bluff EV = 0.55 × 10 − 0.45 × 5 = 5.5 − 2.25 = +3.25bb. For comparison, with a fold rate of exactly 33.3% the EV is 0.333 × 10 − 0.667 × 5 ≈ 0 — same hand, same size, and the whole difference comes from the opponent's fold rate, not from betting harder.",
+      "Deviations need a ceiling and a rollback. Calibrate the frequency deviation against the lower bound of the sample (for example deviate in full only when the lower edge of the 95% interval still clears the baseline, otherwise deviate by half). Keep a separate deviation file per opponent with the magnitude written down, and recover the moment the opponent starts raising to punish you — at that point the best response is no longer to keep deviating but to return to baseline. A deviation without a rollback is not exploitation, it is overfitting.",
+      "Counter-intuitive: the return on exploitation does not come from being bolder but from reproducible evidence. The same 45% observation supports a deviation on 100 hands and is pure noise on 20; making large adjustments on noise injects variance and leaks into your own strategy.",
+      "Loop checklist: refresh the opponent file every 100 hands; deviate only on items that reach two standard errors; write the deviation magnitude into notes so it can be rolled back; return to baseline within 24 hours of a counter-adjustment instead of doubling down while being punished. All four done, exploitation becomes engineering rather than an emotional statement.",
+      "Five steps of the loop: baseline → observation → significance test → bounded deviation → return to baseline after a counter, and the order cannot be reversed\nHalf-pot baseline: MDF = 10 ÷ 15 = 66.7% and α = 33.3%; 45 folds in 100 hands gives SE ≈ 5.0%, and 11.7 points above baseline is ≈ 2.3 standard errors\nDeviation EV = f × P − (1 − f) × b: pot 10, bet 5, fold 55% → +3.25bb; fold exactly 33.3% → about 0",
+      "Sample size and standard error (p=45%): 20 hands give a 95% interval of about ±21.8 points and only 1600 hands narrow it to about ±2.4. Gaps that fail to reach two standard errors should not drive adjustments."
+    ],
+    "t9hu-cash-vs-mtt": [
+      "One Hand, Two Utility Functions",
+      "Heads-up cash and heads-up tournaments differ not in who is more aggressive but in the utility function and the reproducibility of chips: cash allows unlimited rebuys and chips are money (1bb is 1bb), so ruin is handled by bankroll management; tournament chips are not reproducible and their money value is set by the payout structure, so ruin is handled by a single decision. The optimal strategies derived under the two constraint sets therefore differ, and the gap is widest at deep stacks while the short-stack all-in zone converges.",
+      "Three conversions must be computable at any time: SPR (remaining chips ÷ current pot), the all-in threshold (amount to call ÷ pot after calling), and the break-even win rate (total spend ÷ amount won). A player who can produce these three numbers only needs to change parameters when crossing structures, not learn a new set of instincts.",
+      "Example (SPR comparison): after a min-raise to 2bb and a call the pot is 4bb and both players have 98bb behind. At 100bb cash depth: SPR = 98 ÷ 4 = 24.5, with room to plan three streets; at 20bb in a tournament: SPR = 18 ÷ 4 = 4.5; at 10bb: SPR = 8 ÷ 4 = 2.0. Below an SPR of 4 the three-street postflop structure basically disappears and the weight shifts back to preflop and one-shot decisions.",
+      "All-in calling threshold (blinds 1/1, both players ante 0.5bb):\n\n20bb: starting pot 3bb, call 19bb into a final pot of 41bb → 19 ÷ 41 ≈ 46.3%\n20bb without antes: starting pot 2bb, final pot 40bb → 19 ÷ 40 = 47.5%\n10bb: call 9bb into a final pot of 21bb → 9 ÷ 21 ≈ 42.9%\n10bb without antes: final pot 20bb → 9 ÷ 20 = 45.0%\n\nConclusion: the shallower the stack and the more dead money, the lower the required share. The short-stack all-in zone therefore looks almost only at equity and pot odds — structural differences are compressed away there.",
+      "Example two (break-even win rate including fees): a heads-up tournament with a 100 buy-in and a 10 fee pays the winner 200. Spending 110 to win 200 gives a break-even win rate of 110 ÷ 200 = 55%. Cash has no such line, but rake averages about 0.5 to 1bb per hand, which at 200 hands per hour is a cost of 100 to 200bb — also deducted from gross profit first. That is why breaking even in cash is more expensive than it looks.",
+      "Three practical differences: cash hands ruin to bankroll management (ruin risk decays exponentially with the number of buy-ins, per the framing in T8 Session and Stakes Psychology), tournaments hand ruin to a single decision with no rebuy; cash lets you leave at any time and change opponents, while tournaments must be played through their structure as rising blinds keep compressing effective stacks. The expectation of one hand is priced in bb under both structures, but what that bb is worth is completely different.",
+      "Counter-intuitive: short-stack tournament heads-up is more mathematical than cash — a high share of dead money, a short decision tree, and little room for psychology or structure judgement. What really needs psychology and structure judgement is deep-stack cash, where above an SPR of 20 the expectation of a hand is decided by multi-street planning rather than by a preflop chart.",
+      "Cross-structure checklist: going from cash to tournaments, convert stacks into big blinds first, recompute all-in thresholds, and delete the implicit assumption that you can rebuy after losing; going from tournaments to cash, delete the survival constraint entirely, restore every step to bb EV, and then deduct rake as a fixed negative-EV item.",
+      "The divide is the utility function and chip reproducibility, not aggression\nSPR = remaining chips ÷ pot: about 24.5 at 100bb, 4.5 at 20bb, 2.0 at 10bb; below 4 the multi-street postflop plan basically disappears\nAll-in thresholds: 46.3% at 20bb with antes (47.5% without), 42.9% at 10bb with antes (45.0% without); a tournament with a 10% fee needs a 55% break-even win rate",
+      "Break-even win rate including fees = (buy-in + fee) ÷ (2 × buy-in): a 10% fee means 55%, and only zero fee means 50%. This is the first number to compute before entering, ahead of any strategy adjustment."
     ]
   },
   "quiz": {
@@ -125,6 +179,386 @@
         "Imitating their luck"
       ],
       "explanation": "Layer-by-layer deconstruction (range/math/betting/exploitation/psychology) + comparing gaps + distilling principles converts the pro framework into your own system."
+    },
+    "t9hu-mastery-q6": {
+      "question": "Cash 100bb; the small blind min-raises to 2bb, the big blind calls, pot 4bb. The SPR is about:",
+      "options": [
+        "2.0",
+        "4.5",
+        "24.5",
+        "50.0"
+      ],
+      "explanation": "SPR = (100 − 2) ÷ 4 = 24.5. Above an SPR of 20 the expectation of a hand is decided by multi-street planning."
+    },
+    "t9hu-mastery-q7": {
+      "question": "At 15bb effective, KQs against a wide big-blind calling range has equity of about:",
+      "options": [
+        "about 45%",
+        "about 50%",
+        "about 60%",
+        "about 75%"
+      ],
+      "explanation": "KQs has about 60% against a wide calling range, so shoving or min-raising to induce is executable; only deep stacks use it for multi-street mixing."
+    },
+    "t9hu-mastery-q8": {
+      "question": "In the decision loop the maths question at 100bb deep mainly means:",
+      "options": [
+        "looking only at equity, not pot odds",
+        "the combination of EV and pot odds with SPR and multi-street planning",
+        "just pushing the chips in",
+        "reading only the opponent's mood"
+      ],
+      "explanation": "Deep-stack maths is not just single-hand equity: pot odds decide a street, SPR decides whether multiple streets can cash the edge."
+    },
+    "t9hu-pro-study-q6": {
+      "question": "The big blind folds 60% to small-blind opens; the small blind risks 1.5bb to win 1.5bb of dead money. Pure steal EV is:",
+      "options": [
+        "+0.3bb",
+        "+0.9bb",
+        "−0.3bb",
+        "+1.5bb"
+      ],
+      "explanation": "EV = 0.6 × 1.5 − 0.4 × 1.5 = 0.9 − 0.6 = +0.3bb. The higher the fold rate, the more a wide range with small sizing earns."
+    },
+    "t9hu-pro-study-q7": {
+      "question": "On a dry high-card board such as A♠8♦3♣, the raiser's case for high-frequency small continuation bets is:",
+      "options": [
+        "this particular hand must be strong",
+        "range advantage (many Ax in the betting range, few in the calling range), not the holding",
+        "the opponent will always fold",
+        "rake is lower on this board"
+      ],
+      "explanation": "Range advantage drives frequency: the raiser's range is Ax-dense while the caller rarely hits an ace, so the whole range can bet small and often, regardless of the actual holding."
+    },
+    "t9hu-pro-study-q8": {
+      "question": "On a wet board such as 7♠6♥4♣ the continuation-bet frequency should drop, mainly because:",
+      "options": [
+        "the caller's range contains more straights and draws, so the range advantage narrows",
+        "rake is higher on such boards",
+        "opponents fold more on wet boards",
+        "wet boards are harder to observe"
+      ],
+      "explanation": "On wet boards the caller's density of nutted hands and draws rises, range advantage weakens, and high-frequency betting gets punished by raises and strong draws."
+    },
+    "t9hu-mop-q1": {
+      "question": "The guarantee that an equilibrium (Nash) strategy provides is:",
+      "options": [
+        "winning in every case",
+        "no unilateral deviation can raise your expectation, so you are unexploitable",
+        "the maximum possible profit",
+        "the maximum payoff when the opponent errs"
+      ],
+      "explanation": "Equilibrium guarantees the unexploitable lower bound rather than maximum profit; maximum profit belongs to the best response."
+    },
+    "t9hu-mop-q2": {
+      "question": "Both players put in 50bb, pot 100bb, your equity is 60%. Your EV is:",
+      "options": [
+        "+10bb",
+        "+6bb",
+        "+60bb",
+        "0bb"
+      ],
+      "explanation": "0.6 × 100 − 50 = +10bb, and the opponent is 0.4 × 100 − 50 = −10bb; the two sides sum to zero."
+    },
+    "t9hu-mop-q3": {
+      "question": "For a half-pot bet, α (the bluff break-even fold rate) and MDF are:",
+      "options": [
+        "33.3% and 66.7%",
+        "50% and 50%",
+        "66.7% and 33.3%",
+        "25% and 75%"
+      ],
+      "explanation": "α = 5 ÷ (10 + 5) = 33.3% and MDF = 10 ÷ 15 = 66.7%; the two are complements."
+    },
+    "t9hu-mop-q4": {
+      "question": "Facing a half-pot bet (pot 10, bet 5), the minimum equity needed to call is:",
+      "options": [
+        "20%",
+        "25%",
+        "33.3%",
+        "50%"
+      ],
+      "explanation": "Call 5 to win a pot of 20 after calling: 5 ÷ 20 = 25%."
+    },
+    "t9hu-mop-q5": {
+      "question": "For a full-pot bet, the equilibrium bluff density (bluffs ÷ the whole betting range) is:",
+      "options": [
+        "1/4",
+        "1/3",
+        "1/2",
+        "2/3"
+      ],
+      "explanation": "Full pot gives α = 50%, and bluff density = α ÷ (1 + α) = 0.5 ÷ 1.5 = 1/3, a 2:1 value-to-bluff ratio."
+    },
+    "t9hu-mop-q6": {
+      "question": "The relation between equilibrium and the best response is:",
+      "options": [
+        "they are equivalent",
+        "equilibrium is a guaranteed lower bound, while the best response needs an opponent model",
+        "the best response is a subset of equilibrium",
+        "equilibrium always earns more"
+      ],
+      "explanation": "Equilibrium needs no opponent model and therefore carries a guarantee; the best response requires knowing the opponent, earns more, and is punished when the model is wrong."
+    },
+    "t9hu-mop-q7": {
+      "question": "A heads-up information set is smaller than a multiway one, so equilibrium play shows up as:",
+      "options": [
+        "more polarised and less mixed",
+        "more continuous frequencies and more mixing",
+        "fully deterministic",
+        "identical to multiway"
+      ],
+      "explanation": "One fewer unacted player means fewer branches, and the equilibrium solution shows continuous frequencies and more mixing rather than polarised pure strategies."
+    },
+    "t9hu-mop-q8": {
+      "question": "Which of the following is NOT something equilibrium provides:",
+      "options": [
+        "an EV lower bound against the opponent's best response",
+        "a baseline that does not need an opponent model",
+        "maximum exploitative profit against a consistently deviating opponent",
+        "a reference point for game value"
+      ],
+      "explanation": "Exploitative profit comes from the best response; equilibrium gives it up in exchange for not being punished."
+    },
+    "t9hu-icm-q1": {
+      "question": "With two players left and a 100/60 payout, chip share and money EV relate as:",
+      "options": [
+        "non-linear and convex",
+        "linear: 60 + share × 40",
+        "completely independent of chips",
+        "determined only by the blind level"
+      ],
+      "explanation": "With only two places, money EV = second prize + share × (first − second), which is strictly linear in chips."
+    },
+    "t9hu-icm-q2": {
+      "question": "With 60/40 chips and a 100/60 payout, your money EV is:",
+      "options": [
+        "60",
+        "76",
+        "84",
+        "100"
+      ],
+      "explanation": "0.6 × 100 + 0.4 × 60 = 84; the opponent is 0.4 × 100 + 0.6 × 60 = 76, and the two sum to the 160 prize pool."
+    },
+    "t9hu-icm-q3": {
+      "question": "You hold 60 chips, the opponent 40, and you shove 40 effective chips. The indifference win rate is:",
+      "options": [
+        "40%",
+        "46.3%",
+        "50%",
+        "60%"
+      ],
+      "explanation": "Solving 100p + 68(1 − p) = 84 gives p = 50%; chip EV also solves to 50%, because the linear structure makes the two measures identical."
+    },
+    "t9hu-icm-q4": {
+      "question": "20bb effective, blinds 1/1, both ante 0.5bb. After the small blind shoves, the big blind needs what equity to call 19bb:",
+      "options": [
+        "42.9%",
+        "45.0%",
+        "46.3%",
+        "47.5%"
+      ],
+      "explanation": "The starting pot is 3bb and the final pot is 3 + 19 + 19 = 41bb, so 19 ÷ 41 ≈ 46.3%."
+    },
+    "t9hu-icm-q5": {
+      "question": "Removing the antes from the same spot changes the big blind's required equity to:",
+      "options": [
+        "42.9%",
+        "45.0%",
+        "46.3%",
+        "47.5%"
+      ],
+      "explanation": "The starting pot drops to 2bb and the final pot to 40bb: 19 ÷ 40 = 47.5%. The antes buy about 1.2 points."
+    },
+    "t9hu-icm-q6": {
+      "question": "At 10bb effective with the same ante structure, the big blind needs what equity to call 9bb:",
+      "options": [
+        "40.0%",
+        "42.9%",
+        "45.0%",
+        "50.0%"
+      ],
+      "explanation": "Starting pot 3bb, final pot 3 + 9 + 9 = 21bb, so 9 ÷ 21 ≈ 42.9%. The shallower and the more dead money, the lower the threshold."
+    },
+    "t9hu-icm-q7": {
+      "question": "On a heads-up final table, ICM pressure actually peaks:",
+      "options": [
+        "inside heads-up",
+        "on the hand before heads-up begins (three players becoming two)",
+        "independently of player count",
+        "only in cash games"
+      ],
+      "explanation": "The prize jump from third to second is where ICM lives; once heads-up begins, money EV and chips are same-ordered and the pressure disappears."
+    },
+    "t9hu-icm-q8": {
+      "question": "Importing bubble-era caution wholesale into a heads-up final table leads to:",
+      "options": [
+        "an inflated threshold, so hands that should call get folded",
+        "a higher win rate",
+        "the opponent folding more",
+        "no effect"
+      ],
+      "explanation": "There is no risk premium inside heads-up; the threshold is set by dead money and depth (about 46.3%), so bubble-era caution folds hands that should call."
+    },
+    "t9hu-unified-q1": {
+      "question": "The five steps of the unified loop are:",
+      "options": [
+        "baseline → observation → significance test → bounded deviation → return to baseline after a counter",
+        "adjust fully as soon as a deviation is seen",
+        "always play the baseline and ignore the opponent",
+        "play only exploitatively and skip the baseline"
+      ],
+      "explanation": "The order cannot be reversed: the baseline tells you how far you deviated, the sample tells you whether to deviate, and the counter tells you when to stop."
+    },
+    "t9hu-unified-q2": {
+      "question": "With a 10bb pot and your half-pot bet of 5bb, the defender's MDF is:",
+      "options": [
+        "33.3%",
+        "50%",
+        "66.7%",
+        "75%"
+      ],
+      "explanation": "MDF = 10 ÷ 15 = 66.7%, and the corresponding α = 33.3%; the two are complements."
+    },
+    "t9hu-unified-q3": {
+      "question": "An opponent folds 45 times in a 100-hand sample. The standard error of that fold rate is about:",
+      "options": [
+        "about 2.5%",
+        "about 5.0%",
+        "about 9.8%",
+        "about 11.1%"
+      ],
+      "explanation": "SE = √(0.45 × 0.55 ÷ 100) ≈ 5.0%; the 95% interval is about 45% ± 9.8%."
+    },
+    "t9hu-unified-q4": {
+      "question": "With only 20 hands for the same observation, the standard error is about:",
+      "options": [
+        "about 5.0%",
+        "about 9.8%",
+        "about 11.1%",
+        "about 22.4%"
+      ],
+      "explanation": "SE = √(0.45 × 0.55 ÷ 20) ≈ 11.1%; at that magnitude the gap between 45% and the 33.3% baseline is undecidable."
+    },
+    "t9hu-unified-q5": {
+      "question": "Pot 10bb, you bet 5bb, and the opponent folds 55%. Pure bluff EV is:",
+      "options": [
+        "+0.5bb",
+        "+3.25bb",
+        "+5.5bb",
+        "−2.25bb"
+      ],
+      "explanation": "0.55 × 10 − 0.45 × 5 = 5.5 − 2.25 = +3.25bb."
+    },
+    "t9hu-unified-q6": {
+      "question": "When the opponent's fold rate equals α (33.3%), pure bluff EV is:",
+      "options": [
+        "about 0",
+        "+3.33bb",
+        "−3.33bb",
+        "+10bb"
+      ],
+      "explanation": "0.333 × 10 − 0.667 × 5 ≈ 0. That is the definition of α: the fold rate that makes a pure bluff break even."
+    },
+    "t9hu-unified-q7": {
+      "question": "An observation sits 11.7 points above the baseline with a standard error of about 5.0%. How should you judge it:",
+      "options": [
+        "the gap is under two standard errors, so the sample cannot support a conclusion",
+        "it is about 2.3 standard errors, strong enough to set a deviation",
+        "the sample is completely useless",
+        "you must deviate in full immediately"
+      ],
+      "explanation": "11.7 ÷ 5.0 ≈ 2.3 standard errors, above the two-standard-error gate; a deviation is allowed, though the magnitude should still respect the interval's lower bound."
+    },
+    "t9hu-unified-q8": {
+      "question": "Writing the deviation magnitude into rollback-able notes matters mainly because:",
+      "options": [
+        "it impresses opponents",
+        "you must be able to return to baseline the moment the opponent counter-adjusts",
+        "it raises your betting frequency",
+        "it reduces the number of hands"
+      ],
+      "explanation": "A deviation without a rollback is not exploitation but overfitting: once the opponent punishes it, the correct action is to return to baseline."
+    },
+    "t9hu-cash-vs-mtt-q1": {
+      "question": "Cash 100bb, pot 4bb after a min-raise. The SPR is about:",
+      "options": [
+        "4.5",
+        "12.5",
+        "24.5",
+        "50.0"
+      ],
+      "explanation": "SPR = (100 − 2) ÷ 4 = 24.5."
+    },
+    "t9hu-cash-vs-mtt-q2": {
+      "question": "Tournament 20bb with the same 4bb pot. The SPR is about:",
+      "options": [
+        "2.0",
+        "4.5",
+        "5.0",
+        "18.0"
+      ],
+      "explanation": "SPR = (20 − 2) ÷ 4 = 4.5; below an SPR of 4 multi-street planning basically disappears."
+    },
+    "t9hu-cash-vs-mtt-q3": {
+      "question": "At 10bb effective with a 4bb pot, the SPR is about:",
+      "options": [
+        "1.0",
+        "2.0",
+        "2.5",
+        "4.0"
+      ],
+      "explanation": "SPR = (10 − 2) ÷ 4 = 2.0, where a hand is essentially a preflop decision plus one all-in."
+    },
+    "t9hu-cash-vs-mtt-q4": {
+      "question": "20bb, blinds 1/1, both ante 0.5bb. The big blind needs what equity to call the 19bb shove:",
+      "options": [
+        "42.9%",
+        "45.0%",
+        "46.3%",
+        "47.5%"
+      ],
+      "explanation": "Starting pot 3bb, final pot 41bb, so 19 ÷ 41 ≈ 46.3%."
+    },
+    "t9hu-cash-vs-mtt-q5": {
+      "question": "A heads-up tournament with a 100 buy-in and a 10 fee pays the winner 200. The break-even win rate is:",
+      "options": [
+        "50%",
+        "52.4%",
+        "55%",
+        "60%"
+      ],
+      "explanation": "Spend 110 to win 200: 110 ÷ 200 = 55%. The fee comes out of gross profit first."
+    },
+    "t9hu-cash-vs-mtt-q6": {
+      "question": "The difference between heads-up cash and tournaments in the short-stack all-in zone is:",
+      "options": [
+        "tournaments depend more on psychology",
+        "the difference converges and play looks almost only at equity and pot odds",
+        "cash is more mathematical",
+        "tournaments have no dead money"
+      ],
+      "explanation": "With a high dead-money share and a short decision tree, the two structures compress into similar equity and pot-odds judgements."
+    },
+    "t9hu-cash-vs-mtt-q7": {
+      "question": "Below an SPR of 4 the most obvious change is:",
+      "options": [
+        "three-street postflop planning basically disappears and the weight shifts to preflop and one-shot decisions",
+        "you can slow-play more",
+        "positional value rises",
+        "rake falls"
+      ],
+      "explanation": "A low SPR means one street of betting can commit the stack, so multi-street polarised structure and positional value both compress."
+    },
+    "t9hu-cash-vs-mtt-q8": {
+      "question": "Moving from tournament play to cash, the first thing to delete is:",
+      "options": [
+        "positional thinking",
+        "pot odds calculation",
+        "the survival constraint (no rebuy)",
+        "the opponent model"
+      ],
+      "explanation": "Cash allows rebuys and hands ruin to bankroll management; a leftover survival constraint makes you over-fold in +EV spots."
     }
   },
   "chapterObjectives": {
@@ -137,6 +571,30 @@
       "Study professional HU players' decision frameworks and range-construction habits",
       "Understand the shared traits of top players: frequency balance, range consistency, emotional stability",
       "Learn to distill reusable methodologies from pros' public strategies and hand examples"
+    ],
+    "t9hu-mop": [
+      "Distinguish game value, worst-case guarantee and best response, and say which one equilibrium guarantees",
+      "Use the zero-sum check to tell whether an EV calculation has been mis-booked",
+      "Read bet size and the α / MDF pair as two sides of one equation",
+      "Point out why equilibrium stops being the maximum-profit strategy once the opponent deviates consistently"
+    ],
+    "t9hu-icm": [
+      "Explain why money EV is linear in chip share once only two players and two paid places remain",
+      "Recompute money EV under a given payout with the linearity check and say whether it changes any decision inside heads-up",
+      "Compute how antes and stack depth move the all-in calling threshold, and in which direction",
+      "Locate where ICM pressure actually peaks in a tournament structure instead of importing bubble conclusions into heads-up"
+    ],
+    "t9hu-unified": [
+      "State the five steps of the unified loop and the input and output of each step",
+      "Use standard error to decide whether an observation is strong enough to support a deviation",
+      "Compute the expectation of a deviation at a given fold rate and explain why it disappears once the opponent adjusts",
+      "Explain why deviations need a ceiling and a rollback, and what the right action is after a counter-adjustment"
+    ],
+    "t9hu-cash-vs-mtt": [
+      "State how the two structures differ in utility function and chip reproducibility",
+      "Convert any stack depth into SPR and read its effect on postflop planning room",
+      "Compute the all-in calling threshold for a given depth and ante structure, and the direction it moves as stacks get shallower",
+      "Compute the break-even win rate of a tournament including fees, and explain why rake and fees come out of gross profit first"
     ]
   }
 }

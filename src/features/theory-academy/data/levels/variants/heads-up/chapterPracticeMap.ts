@@ -62,4 +62,31 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   // T9 整合
   't9hu-mastery': { lessons: [lesson('l7hu-stakes', '单挑策略基础')] },
   't9hu-pro-study': { lessons: [lesson('l8hu-exploitative', '单挑剥削打法')] },
+
+  // T4 范围补强
+  't4hu-range-advantage': { lessons: [lesson('l4hu-gto-basics', '单挑 GTO 基础')] },
+  't4hu-preflop-structure': { lessons: [lesson('l3hu-bb-defense', 'BB 防守')] },
+
+  // T5 博弈论补强
+  't5hu-node-locking': { lessons: [lesson('l4hu-counter-strategies', '反制策略')] },
+  't5hu-preflop-equilibrium': { lessons: [lesson('l4hu-gto-basics', '单挑 GTO 基础')] },
+  't5hu-postflop-equilibrium': { lessons: [lesson('l3hu-sb-continuation', 'SB 持续下注')] },
+
+  // T6 下注工程补强
+  't6hu-bet-purpose': { lessons: [lesson('l3hu-sb-continuation', 'SB 持续下注')] },
+  't6hu-equity-realization': { lessons: [lesson('l3hu-sb-continuation', 'SB 持续下注')] },
+
+  // T7 对手分析补强
+  't7hu-stats': { lessons: [lesson('l4hu-counter-strategies', '反制策略')] },
+  't7hu-hand-reading': { lessons: [lesson('l5hu-opponent-psychology', '对手心理')] },
+
+  // T8 心理战补强
+  't8hu-tilt-types': { lessons: [lesson('l5hu-focus', '单挑专注力')] },
+  't8hu-session': { lessons: [lesson('l7hu-stakes', '单挑策略基础')] },
+
+  // T9 理论大师补强
+  't9hu-mop': { lessons: [lesson('l7hu-stakes', '单挑策略基础')] },
+  't9hu-icm': { lessons: [lesson('l6hu-tourney', '单挑锦标赛')] },
+  't9hu-unified': { lessons: [lesson('l8hu-exploitative', '单挑剥削打法')] },
+  't9hu-cash-vs-mtt': { lessons: [lesson('l6hu-tourney', '单挑锦标赛')] },
 };

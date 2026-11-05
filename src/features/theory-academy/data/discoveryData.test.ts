@@ -5,6 +5,7 @@ import { THEORY_GLOSSARY } from './glossary';
 import { THEORY_BIBLIOGRAPHY } from './bibliography';
 import { THEORY_CONTENT_OPS } from './contentOps';
 import { standardLevels } from './levels/variants/standard';
+import { headsUpLevels } from './levels/variants/heads-up';
 
 /**
  * 发现层数据守卫：术语表 / 参考书目 / 内容运营元数据。
@@ -13,7 +14,11 @@ import { standardLevels } from './levels/variants/standard';
  * 跨文件引用，拼写错误不会在运行时抛错，只会静默显示原始 key 或跳转失效。
  */
 const HAN_RE = /[一-鿿]/;
-const chapterIds = new Set(standardLevels.flatMap((level) => level.chapters.map((c) => c.id)));
+const chapterIds = new Set(
+  [...standardLevels, ...headsUpLevels].flatMap((level) =>
+    level.chapters.map((c) => c.id),
+  ),
+);
 const LOCALE_DIR = fileURLToPath(new URL('../../../i18n/locales/', import.meta.url));
 
 function flatten(node: unknown, prefix: string, out: Map<string, string>): void {
@@ -116,7 +121,7 @@ describe('discovery data: 参考书目', () => {
 });
 
 describe('discovery data: 内容运营元数据', () => {
-  it('覆盖全部标准变体章节，且日期为合法 ISO 8601（YYYY-MM-DD）', () => {
+  it('覆盖全部标准 + 单挑变体章节，且日期为合法 ISO 8601（YYYY-MM-DD）', () => {
     const reviewed = THEORY_CONTENT_OPS.lastReviewed;
     expect(Object.keys(reviewed).toSorted()).toEqual([...chapterIds].toSorted());
     const bad = Object.entries(reviewed)

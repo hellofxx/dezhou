@@ -1,7 +1,6 @@
 /**
  * 变体 Level 集合导出
- * Day 2-3: 游戏变体支持扩展 - 骨架文件索引
- * Day 5: 集成总索引与按变体查询函数
+ * 三变体（standard / short-deck / heads-up）与按变体查询函数。
  */
 import type { TheoryLevelInfo } from '../../../types';
 import type { PokerVariant } from '@/shared/types/elo';

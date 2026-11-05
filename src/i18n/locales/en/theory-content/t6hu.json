@@ -11,7 +11,8 @@
       "Example 2 (SPR-planned all-in): HU 100BB deep, preflop SB raises 2.5BB, BB calls, pot 5BB, SPR = 97.5/5 ≈ 19.5. Flop 9♠8♥4♣, SB holds 6♠5♠ (straight draw). At high SPR the SB bets big (about 2/3 pot, 3.3BB) to build the pot — paving the way for a turn/river all-in: pot 11.7BB → turn bet 7.8BB → pot 27.2BB → river shove the remaining 86BB, chips go in naturally. With a 1/3-pot flop bet the pot grows too slowly and the deep stack can't complete an all-in on the river.",
       "Example 3 (small-bet pot control): Same 9♠8♥4♣ board, the SB holds J♣T♣ (top pair + straight draw, but easily outdrawn). Medium strength doesn't seek to play for all the chips; the SB bets small at 1/3 pot to control pot size, avoiding getting raised by the BB's strong hands into a big pot. A small bet is both \"making weak hands pay\" and \"controlling risk exposure\".",
       "Counterintuitive point: in heads-up a small bet isn't \"weakness\" but \"precision\" — high-frequency 1/3-pot small bets on dry boards are GTO normal because they maximize the thin-value/steal ratio. The full-ring intuition \"bets must be big to threaten\" becomes wastefulness against wide HU ranges.",
-      "Sizing quick check: (1) call SPR — low SPR plays for stacks, high SPR needs multi-street planning; (2) read the board — dry high boards small bets at high frequency, wet low boards big bets for protection; (3) grade the hand — nuts overbet, top pair small, draws medium. Three steps and your sizing has structure, not feel."
+      "Sizing quick check: (1) call SPR — low SPR plays for stacks, high SPR needs multi-street planning; (2) read the board — dry high boards small bets at high frequency, wet low boards big bets for protection; (3) grade the hand — nuts overbet, top pair small, draws medium. Three steps and your sizing has structure, not feel.",
+      "Sizing quick reference: one set of formulas across five sizes. The bluff share f = b/(1+2b) and the thin-value break-even equity B/(P+2B) are the same number, while the break-even fold rate alpha = b/(1+b) climbs faster — so bigger sizes suit pure bluffs far better than thin value."
     ],
     "t6hu-barrel": [
       "Multi-Street Betting: One Decision, Three Streets to Reel In",
@@ -24,7 +25,34 @@
       "Example 2 (board change): Same SB with A♠A♣ bets the 9♠8♥4♣ flop, BB calls. Turn 7♦ — completes JT, T6, and 65 straights. AA's lead weakens: the BB's wide defense range contains plenty of straight combos. The SB should lower turn betting frequency (mixing checks) because continuing only gets called or raised by stronger hands. AA goes from \"three streets of value\" to \"two streets of value + one street of control\".",
       "Example 3 (semi-bluff closes on the turn): Flop 8♠6♣2♦, SB bets 1/3 pot with 7♦5♦ (open-ended straight), BB calls. Turn A♠ (blocker + board dries). 75s missed the straight. The turn continues with a half-pot bet representing an A — if BB folds, the SB closes on the turn with a \"near-nut draw\". This is the standard semi-bluff path: bet a draw on the flop, convert to a pure bluff on a favorable turn and take the pot.",
       "Counterintuitive point: the turn/river \"board change\" matters more than your hand strength. AA is three streets of value on a dry board and two on a wet board — not because AA got weaker, but because the combos in the opponent's range that beat it multiplied. Firing frequency must follow \"how the opponent's range is improved by new cards\", not your own hand.",
-      "Betting-line planning three questions: (1) whose draw does this board improve? (2) how many more streets can the pot sustain? (SPR and the all-in plan) (3) after a call, what's left in the opponent's range? After three questions, your triple barrel goes from \"habit\" to \"plan\"."
+      "Betting-line planning three questions: (1) whose draw does this board improve? (2) how many more streets can the pot sustain? (SPR and the all-in plan) (3) after a call, what's left in the opponent's range? After three questions, your triple barrel goes from \"habit\" to \"plan\".",
+      "Pot geometry of a triple barrel (starting pot 5BB, 2/3 pot each street): three betting decisions push the pot past six times its size, so the river bet is close to a full stack; switch to 1/3 pot and the pot only doubles, leaving a deep stack unplayable."
+    ],
+    "t6hu-bet-purpose": [
+      "Before You Bet, Give It a Purpose",
+      "Every heads-up postflop bet can be filed under a few purposes: value (worse hands call), protection (the opponent does not improve for free), denial (you take away the equity he would have realised at showdown), bluff (better hands fold), and realisation (you buy your draw or weak showdown hand a better path forward). Against wide-versus-wide heads-up ranges these five often hold at the same time, so 'I want to bet' is easily dressed up as a reason that sounds right.",
+      "A bet may serve several purposes, but it must have exactly one dominant purpose. The dominant purpose sets the sizing and the plan for later streets; a bet with no nameable dominant purpose usually just hands the initiative back to the opponent.",
+      "The Value and Thin-Value Boundary Is an Arithmetic Line",
+      "Thin-value break-even line (pot P, bet B):\n\nminimum equity when called w > B/(P+2B)\n\nThree sizes at a pot of 8BB:\n1/4 pot (2BB) -> w > 2 / 12 = 16.7%\nhalf pot (4BB) -> w > 4 / 16 = 25.0%\nfull pot (8BB) -> w > 8 / 24 = 33.3%\n\nThe bigger the size, the stronger the calling range, and the higher the break-even line — 'thin value wants small sizes' is not a style, it is this line. (Concept from: Mathematics of Poker, bet expectation decomposition)",
+      "Worked hand (one hand, two sizes): pot 8BB, you hold top pair, and you estimate 30% equity against the calling range.\n\nhalf pot 4BB: EV = 0.30 x (8 + 4) - 0.70 x 4 = 3.6 - 2.8 = +0.8BB\nfull pot 8BB: EV = 0.30 x (8 + 8) - 0.70 x 8 = 4.8 - 5.6 = -0.8BB\n\nThe same 30% turns +0.8 into -0.8: the half-pot threshold of 25.0% sits below 30%, the full-pot threshold of 33.3% above it.",
+      "Protection, denial and bluffing are priced by one formula (pot 8BB):\n\nalpha = B/(P+B): the fold rate that makes a bluff break even\nMDF = P/(P+B): the minimum defence that stops the opponent profiting with any two cards\n\n1/4 pot (2BB) -> alpha = 20.0%, MDF = 80.0%\nhalf pot (4BB) -> alpha = 33.3%, MDF = 66.7%\nfull pot (8BB) -> alpha = 50.0%, MDF = 50.0%\n\nProtection describes denial from the value side: you buy out his equity. Bluffing describes the same threshold from the cost side: he must fold enough for your bet to pay.",
+      "Worked hand (one half-pot, two fates): pot 8BB, half pot 4BB.\n\nopponent folds 45%: EV = 0.45 x 8 - 0.55 x 4 = 3.6 - 2.2 = +1.4BB\nopponent folds 30%: EV = 0.30 x 8 - 0.70 x 4 = 2.4 - 2.8 = -0.4BB\n\nThe threshold is 33.3%: 11.7 points above it you still profit, 3.3 points below it you lose.",
+      "Purposes rank: value first, then denial, then pure bluff. Read backwards and it becomes the case for checking — if a bet cannot be called by worse, cannot fold out better, and cannot buy enough of the opponent's equity, its only effect is to grow the pot; and once the pot grows, marginal hands have to keep paying on every street to stay in it.",
+      "Three-question naming test: can I be called by worse (value)? Can I fold out better (bluff)? Can I take away his share of equity (denial)? If all three answer 'no', the answer is check.",
+      "The dominant size and break-even line for each of the five purposes: the value and thin-value rows show the minimum equity when called, the denial and bluff rows show the fold rate required — for the same b, the equity threshold B/(P+2B) sits one b-share below the fold-rate threshold B/(P+B)."
+    ],
+    "t6hu-equity-realization": [
+      "Equity Is Not What You Collect",
+      "Equity is the chance you win the pot at showdown; realisation is the share you actually collect divided by that equity. Draws bet out of the pot, made hands that get outdrawn, and marginal showdown hands that never reach showdown all push the collected share below the paper number — equity describes showdown, realisation describes whether you get there.",
+      "Correcting the threshold for realisation (pot 8BB, opponent bets half pot 4BB):\n\nthreshold = B/(P+2B) = 4 / 16 = 25.0%\nrequired paper equity = threshold / realisation\n\nrealisation 0.85 -> 25.0 / 0.85 = 29.4%\nrealisation 0.80 -> 25.0 / 0.80 = 31.3%\n\nOnce realisation is discounted, the same threshold demands paper equity above 29% — that is where 'enough on paper, still a fold' comes from.",
+      "Worked hand (a flush draw on two timelines): pot 8BB, opponent bets half pot 4BB, you hold a 9-out flush draw.\n\none street (next card only): 9 / 47 = 19.1%, below the 25.0% threshold\ntwo streets (flop to river): 1 - (38/47) x (37/46) = 35.0%, above it\n\nThe conclusion is not 'call' but 'call only when both streets stay cheap': if the opponent keeps betting the turn, the two-street equity takes the realisation discount again.",
+      "Board Texture Sets the Size of the Discount",
+      "Dry high boards discount little: made hands are already strong, draws are scarce, and both sides sit close to their paper equity. Wet connected boards discount a lot: draws and two-pair combos are dense, so even a hand that leads now still gets outdrawn a large fraction of the time — that risk never shows up in 'I am ahead', only in realisation.",
+      "Worked hand (how often you get outdrawn): flop 9S 8H 4C, you hold AS KC against an 8-out open-ended straight draw.\n\nhis straight completes over two streets: 1 - (39/47) x (38/46) = 31.5%\n\nSo the hand you lead with on the flop still gets beaten before the river almost a third of the time.",
+      "Three steps of a defence decision (the order cannot be swapped):\n\nstep one: threshold = B/(P+2B), a function of sizing only\nstep two: estimate realisation from position, initiative and texture, 0.80-1.00\nstep three: compare paper equity: continue only if paper equity >= threshold / realisation\n\nExample: threshold 25.0%, realisation 0.85 -> 29.4% needed; 31% paper is enough, 22% is not.",
+      "Counterintuitive point: the side with higher realisation can continue with lower paper equity. In heads-up the side that acts last postflop (the button side) owns that premium, so its defence range can look wider than the paper numbers suggest; the side that acts first postflop must take the full discount, or it will be right on paper and wrong on money.",
+      "Defence is not decided by equity but by threshold times realisation: work out the sizing threshold first, estimate the discount from position and texture second, and only then look at your own equity. Get the order wrong and the conclusion flips.",
+      "Realisation discounts by board texture (empirical ranges): the wetter and more connected the board, the lower the leading side's realisation, because the opponent's draws and two-pair combos multiply. The discount is a quote rather than a guarantee — on the same board, the side with better position takes a smaller one."
     ]
   },
   "quiz": {
@@ -78,6 +106,36 @@
       ],
       "explanation": "f = 0.5/(1+1) = 0.25, value:bluff = 3:1. 33% is full pot, 20% is 1/3 pot, and 40% is 2× pot."
     },
+    "t6hu-sizing-optimal-q6": {
+      "question": "Pot 6BB, bet 2BB (1/3 pot). The minimum defence frequency that makes bluffing unprofitable is:",
+      "options": [
+        "75%",
+        "67%",
+        "50%",
+        "80%"
+      ],
+      "explanation": "MDF = P/(P+B) = 6 / 8 = 75%, which matches a break-even fold rate of alpha = 2 / 8 = 25%. Defence frequency and the bluff threshold are complements."
+    },
+    "t6hu-sizing-optimal-q7": {
+      "question": "Heads-up flops are usually bet small at about 1/3 pot mainly because:",
+      "options": [
+        "Small bets make the opponent fold more often",
+        "The pot is small and the range wide, so a small bet already realises thin value and steals pots",
+        "Big bets always get called",
+        "Small bets hide hand strength"
+      ],
+      "explanation": "Small pot, wide opponent, large range advantage: a small bet charges weak hands and keeps stealing efficient, while a big bet compresses his range into two poles."
+    },
+    "t6hu-sizing-optimal-q8": {
+      "question": "The equilibrium value:bluff ratio for a 2x pot bet (b=2) is:",
+      "options": [
+        "3:2",
+        "2:1",
+        "4:1",
+        "1:1"
+      ],
+      "explanation": "f = 2/(1+4) = 0.4, so value:bluff = 0.6:0.4 = 3:2. Bigger sizes carry more bluffs."
+    },
     "t6hu-barrel-q1": {
       "question": "On a dry high board (like K♠7♦2♣→5♥→9♣), the correct betting line for top pair is:",
       "options": [
@@ -127,6 +185,196 @@
         "Only bluff the river"
       ],
       "explanation": "A semi-bluff bets the flop with a draw; when the turn misses but the card is favorable (like an A blocker), it converts to a pure bluff so the opponent folds and you win the pot directly."
+    },
+    "t6hu-barrel-q6": {
+      "question": "Pot 8BB, half-pot bets on the turn and river, both called. The pot before the river bet is:",
+      "options": [
+        "16BB",
+        "24BB",
+        "32BB",
+        "12BB"
+      ],
+      "explanation": "After the 4BB turn bet is called the pot is 8 + 4 + 4 = 16BB; only after the 8BB river bet is called does it reach 32BB."
+    },
+    "t6hu-barrel-q7": {
+      "question": "A triple barrel only stands when:",
+      "options": [
+        "The board keeps missing the opponent's range and your betting range holds enough value",
+        "Your hand is always the nuts",
+        "The opponent is guaranteed to fold",
+        "The pot is large enough"
+      ],
+      "explanation": "Every street still has to keep the value-to-bluff ratio honest; when the board changes hands or the value section thins out, the third barrel turns into a donation."
+    },
+    "t6hu-barrel-q8": {
+      "question": "Overbetting 2/3 pot on the river, the equilibrium bluff share is about:",
+      "options": [
+        "28.6%",
+        "25%",
+        "33.3%",
+        "40%"
+      ],
+      "explanation": "f = (2/3) / (1 + 4/3) = 28.6%, so value:bluff is about 5:2. 25% is half pot and 33.3% is full pot."
+    },
+    "t6hu-bet-purpose-q1": {
+      "question": "Which of these is not a standalone purpose of betting?",
+      "options": [
+        "Value",
+        "Denial",
+        "Bluff",
+        "Confirming your seat at the table"
+      ],
+      "explanation": "The list is value, protection, denial, bluff and realisation; position is a structural condition, not a betting purpose."
+    },
+    "t6hu-bet-purpose-q2": {
+      "question": "Pot 8BB, bet 2BB (1/4 pot). The thin-value break-even equity when called is:",
+      "options": [
+        "16.7%",
+        "20.0%",
+        "25.0%",
+        "33.3%"
+      ],
+      "explanation": "w > B/(P+2B) = 2 / 12 = 16.7%; 20.0% is 1/3 pot, 25.0% half pot and 33.3% full pot."
+    },
+    "t6hu-bet-purpose-q3": {
+      "question": "With the same 30% equity when called, why does a half-pot bet profit while a full-pot bet loses?",
+      "options": [
+        "Because a full-pot bet bluffs more",
+        "Because the threshold rises from 25.0% to 33.3%, and 30% sits between them",
+        "Because the opponent folds less to full pot",
+        "Because full pot gets raised more often"
+      ],
+      "explanation": "The break-even line rises with size: half pot at 25.0% is below 30%, full pot at 33.3% is above it, so the same equity gives opposite answers."
+    },
+    "t6hu-bet-purpose-q4": {
+      "question": "Pot 8BB, a half-pot 4BB pure bluff, opponent folds 45%. The expectation is:",
+      "options": [
+        "+1.4BB",
+        "+0.4BB",
+        "-1.4BB",
+        "+2.4BB"
+      ],
+      "explanation": "EV = 0.45 x 8 - 0.55 x 4 = 3.6 - 2.2 = +1.4BB; the break-even fold rate is alpha = 4 / 12 = 33.3%."
+    },
+    "t6hu-bet-purpose-q5": {
+      "question": "Against wide heads-up ranges, how do protection and denial relate?",
+      "options": [
+        "Two fully independent purposes",
+        "Protection is the value-side phrasing of denial, and the underlying formula is the same",
+        "Protection only applies on the river",
+        "Denial only applies to draws"
+      ],
+      "explanation": "Both buy out the opponent's share of equity: protection describes it from the value side, denial from the equity side, and both are priced by alpha = B/(P+B)."
+    },
+    "t6hu-bet-purpose-q6": {
+      "question": "When is checking better than any bet?",
+      "options": [
+        "When no worse hand calls, no better hand folds, and the opponent's equity cannot be bought out",
+        "When you hold the nuts",
+        "When the pot is small",
+        "After the opponent checks"
+      ],
+      "explanation": "With none of the three purposes available a bet only grows the pot, and a bigger pot forces marginal hands to keep paying on every street."
+    },
+    "t6hu-bet-purpose-q7": {
+      "question": "The equilibrium value:bluff ratio for a full-pot bet is:",
+      "options": [
+        "2:1",
+        "3:1",
+        "4:1",
+        "1:1"
+      ],
+      "explanation": "f = 1/(1+2) = 1/3, so value:bluff = (2/3):(1/3) = 2:1. Half pot is 3:1 and 1/3 pot is 4:1."
+    },
+    "t6hu-bet-purpose-q8": {
+      "question": "When the three-question test (value, bluff, denial) answers no to all three, the right action is:",
+      "options": [
+        "Check",
+        "Bet 1/3 pot as a probe",
+        "Bet full pot for pressure",
+        "Raise"
+      ],
+      "explanation": "The naming test exists to translate 'I want to bet' into a purpose; with no purpose left, the bet just hands the initiative back."
+    },
+    "t6hu-equity-realization-q1": {
+      "question": "Equity realisation is defined as:",
+      "options": [
+        "The pot share you actually collect divided by paper equity",
+        "Paper equity divided by the pot size",
+        "Hands won divided by total hands",
+        "Your showdown equity divided by the opponent's"
+      ],
+      "explanation": "Realisation measures how much of the paper equity actually arrives: being bet out, getting outdrawn and never reaching showdown all push it below 1."
+    },
+    "t6hu-equity-realization-q2": {
+      "question": "Holding a 9-out flush draw, the two-street equity from flop to river is about:",
+      "options": [
+        "about 35.0%",
+        "about 19.1%",
+        "about 31.5%",
+        "about 17.4%"
+      ],
+      "explanation": "1 - (38/47) x (37/46) = 35.0%; 19.1% is the one-street 9/47, while 31.5% and 17.4% are the two-street and one-street figures for 8 outs."
+    },
+    "t6hu-equity-realization-q3": {
+      "question": "Half-pot threshold 25.0%, realisation 0.85. The minimum paper equity needed is about:",
+      "options": [
+        "about 29.4%",
+        "about 25.0%",
+        "about 21.3%",
+        "about 31.3%"
+      ],
+      "explanation": "Threshold / realisation = 25.0 / 0.85 = 29.4%; 31.3% corresponds to 0.80 realisation, and 21.3% is the error of multiplying by the discount instead of dividing."
+    },
+    "t6hu-equity-realization-q4": {
+      "question": "Which side's marginal equity is harder to realise in heads-up?",
+      "options": [
+        "SB, because it carries the opening risk",
+        "BB, because it acts first postflop without position",
+        "Both sides are identical",
+        "It depends only on the board"
+      ],
+      "explanation": "In heads-up the SB is the button and acts last postflop; the BB acts first postflop and must decide under an information disadvantage, so its marginal equity takes the bigger discount."
+    },
+    "t6hu-equity-realization-q5": {
+      "question": "Realisation is lower on wet connected boards than on dry high boards mainly because:",
+      "options": [
+        "The opponent's range holds more draws and two-pair combos, so made hands get outdrawn more often",
+        "The pot is bigger on wet boards",
+        "You cannot bet on wet boards",
+        "Equity is computed differently on wet boards"
+      ],
+      "explanation": "The discount comes from being outdrawn and never reaching showdown, and a wet board multiplies both, so the same paper equity collects a smaller share."
+    },
+    "t6hu-equity-realization-q6": {
+      "question": "Against an 8-out open-ended straight draw, the chance the straight completes from flop to river is about:",
+      "options": [
+        "about 31.5%",
+        "about 17.4%",
+        "about 35.0%",
+        "about 15.7%"
+      ],
+      "explanation": "1 - (39/47) x (38/46) = 31.5%; 17.4% is the turn-to-river one-street 8/46, and 35.0% is the two-street figure for 9 outs."
+    },
+    "t6hu-equity-realization-q7": {
+      "question": "Realisation above 100% happens when:",
+      "options": [
+        "You can see free cards after the opponent checks and reach showdown with a wider range",
+        "Your paper equity was computed wrong",
+        "The opponent always folds",
+        "The in-position side is always above 100%"
+      ],
+      "explanation": "Free cards and a wider path to showdown can lift the collected share above paper equity; position only raises realisation, it does not guarantee more than 100%."
+    },
+    "t6hu-equity-realization-q8": {
+      "question": "The correct order of a defence decision is:",
+      "options": [
+        "Threshold first, then realisation from position and board, then paper equity",
+        "Equity first, then pick the sizing",
+        "Opponent stats first, then the threshold",
+        "Realisation first, then threshold, then equity"
+      ],
+      "explanation": "The threshold depends only on sizing, realisation depends on position and texture, and paper equity is compared last; get the order wrong and the conclusion flips."
     }
   },
   "chapterObjectives": {
@@ -139,6 +387,18 @@
       "Understand HU multi-street barreling coordination: flop/turn/river size and frequency linkage",
       "Master triple-barrel conditions and board-change adjustments",
       "Learn to dynamically allocate per-street bet combos as the opponent's range narrows and the pot grows"
+    ],
+    "t6hu-bet-purpose": [
+      "Tell value, protection, denial and bluff apart, and explain why they so often hold at the same time against wide heads-up ranges",
+      "Use the thin-value break-even line to judge whether a bet gets called by worse, and the fold-rate threshold to judge whether a bluff pays",
+      "Assign a dominant purpose to each bet from hand tier and board texture, and switch to a check when none of the three holds",
+      "Spot the common misuse of treating protection as a standalone purpose, and restate it as equity denial"
+    ],
+    "t6hu-equity-realization": [
+      "Explain why paper equity and equity realisation are different quantities, and name the three causes of low realisation",
+      "Judge whether a marginal hand should defend or fold from the calling threshold and the realisation discount",
+      "Compare the realisation of the same hand on a dry high board and a wet connected board, and explain the difference",
+      "Describe, within the heads-up position structure, which realisation losses fall on the side that acts first postflop"
     ]
   }
 }
