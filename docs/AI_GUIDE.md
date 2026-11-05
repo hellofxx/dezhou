@@ -33,7 +33,7 @@
 
 既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。禁止恢复目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增文件不得登记 allowlist，只能拆分。
 
-**唯一例外：题库纯数据文件**。理论标准 `features/theory-academy/data/levels/variants/standard/quizBank/t*.ts` 与单挑 `features/theory-academy/data/levels/variants/heads-up/quizBank/t*.ts`（`t1hu..t9hu`）都是逐 Level 的纯数据文件，体积随题量增长；它们按需逐文件登记到 `QUIZ_BANK_ALLOWLIST`（精确路径、逐文件 `maxLines`、只减不增），登记后从通用硬失败扫描中排除。该例外仅限 quizBank 数据文件，不构成目录/类别级豁免，也不适用于逻辑或 UI 文件；新增题库文件必须登记且不能超过登记行数。
+**唯一例外：题库纯数据文件**。理论标准 `features/theory-academy/data/levels/variants/standard/quizBank/t*.ts`、理论单挑 `features/theory-academy/data/levels/variants/heads-up/quizBank/t*.ts`（`t1hu..t9hu`）与策略单挑 `features/strategy-academy/data/lessons/variants/heads-up/quizBank/l*.ts`（`l3hu..l8hu`）都是逐 Level 的纯数据文件，体积随题量增长；它们按需逐文件登记到 `QUIZ_BANK_ALLOWLIST`（精确路径、逐文件 `maxLines`、只减不增），登记后从通用硬失败扫描中排除。该例外仅限 quizBank 数据文件，不构成目录/类别级豁免，也不适用于逻辑或 UI 文件；新增题库文件必须登记且不能超过登记行数。
 
 CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫（平铺扫描 `src/styles/*.css`，Phase 2 拆分的分片文件同样平铺）；`globals.css` 为 Phase 2 拆分前的临时豁免，上限锁定在 `CSS_ALLOWLIST` 中的当前行数，同样只减不增。
 
@@ -152,6 +152,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 - 三段分工：类型 `shared/types/variantRules.ts`（`VariantRuleInfo` / `VariantRuleContext`）、单挑规则事实单源 `shared/constants/headsUpRules.ts`（`headsUpRules`）、行构造纯函数 `shared/utils/academyVariantRules.ts`（`buildHeadsUpRuleRows(rules, context?)` 只产出 key 与语言中立值）、展示组件 `shared/components/academy/AcademyVariantRuleCard`（纯 props，空 items 整卡不渲染）。
 - 两院只做薄包装：理论 `TheoryVariantRuleCard`（仅 `chapter.variant === "heads-up"` 渲染，挂章节正文前）与策略 `StrategyVariantRuleCard`（仅 `lesson.variant === "heads-up"` 渲染，`lesson.variantContext` 追加本课上下文行，挂课时正文前）。翻译一律 `variant.headsUpRules.*` 显式字面量 key，禁止模板拼接（会绕过 `staticKeyGuard` 与 `variantRuleCopyGuard`）。
+- 策略单挑 12 课已全部登记 `variantContext.anteStructure='sb_ante'`；新增/修改课时的上下文只在数据层声明，规则卡渲染与方向派生仍由 shared `buildHeadsUpRuleRows` 负责，正文不得复制规则行。
 - 方向值数据驱动：翻前 / 翻后谁先行动只由 `positionDynamics` 布尔派生，数据没有的行直接省略；规则文案不得在组件或数据里另写一套散文。`huPositionOrderGuard` / `variantRuleCopyGuard` 的判据单源同为 `shared/constants/headsUpRules.ts`；短牌 `shortDeckRules` 仅理论侧消费，仍留在 theory-academy。
 - 新增共享项须满足 shared ≥2 模块准入门槛，并同步 AGENTS.md 契约表与 TDD §5.8b。
 

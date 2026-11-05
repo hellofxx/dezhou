@@ -10,6 +10,17 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-05 策略学院单挑变体全量对齐（12 课 · 独立题库 · 元数据/搜索）
+
+- **课程结构**：12 门单挑课拆为 `data/lessons/variants/heads-up/lessons/<lessonId>.ts` 每课单文件；`headsUpLevel3..8.ts` 改为薄转发兼容层；L4 课时 order 修正为 1–4。
+- **题库与评估**：题库迁入 `heads-up/quizBank/l3hu..l8hu.ts`，每课 10 题（q1–q5 逐字保留、q6–q10 新增），复用 `applyQuizBank`（shared `mergeQuizBank`）注入，课时仍抽 5；各 Level 新增 `quantAudit.l*hu.test.ts` 复算审计。
+- **正文深对齐**：每课 3 个 HandExample、2 条 `theory-reference`、3 个手写 units、takeaway（量化课加 formula）与 p4（l7 保持 5）；`variantContext` 统一 `anteStructure='sb_ante'`。
+- **元数据与运营**：新增 `lessonMeta/headsUp.ts`（12 课 ELO 维度 + `t*hu-*` 锚点），标准/单挑分表守卫；`contentOps` 纳入单挑 12 课 `lastReviewed`；全文搜索按当前变体懒加载并缓存（标准全量 / 单挑 12 课），UI 复用 shared `AcademySearchShell`。
+- **i18n**：`academy-course/heads-up.json` 拆为 `heads-up-l3..l8.json`（zh/en），`deriveAcademyCourseFilesForLesson` 按 `l<n>hu-` 映射；`huPositionOrderGuard` 扫描六份新文案。
+- **守卫**：新增 `headsUpVariantParity.test.ts`（10 题 / 3 牌例 / ≥4 practice / ≥10 段 / ≥2 理论引用 / ≥2 units）；`curriculumIntegrity` 覆盖变体 quiz / practice / units；`quizShuffle` 纳入全部变体课时（857 题，分布 <50%）。短牌存量两处重复牌登记为后续修复。
+- **范围外 / 遗留**：短牌内容、变体认证、持久化 schema 不变；变体 L4 在 manifest 的 `l4a` / `l4b` 重复挂载为既有行为，另案修复。
+- **验证**：全量 `pnpm verify` 通过（439 文件 / 3318 用例；typecheck / lint / repo / docs / agents-map 均通过）；`pnpm build` 通过，单挑 chunk 188.62 KB（gzip 56.04 KB，懒载）；`pnpm size:check` 通过（首屏 727.83 KB / gzip ~218.35 KB）。组件行为由 jsdom 测试覆盖，视觉与响应式未实机复核。
+
 ### 2026-11-05 理论学院单挑变体全量对齐（heads-up 37 核心章）
 
 - **章节与题库**：单挑 +15 章达到 37 核心章（T4 / T5 各 5、T6 / T7 / T8 各 4、T9 6），新增章落 `variants/heads-up/chapters/t<level>hu-*.ts`；全部章末题迁入独立题库 `variants/heads-up/quizBank/t1hu..t9hu.ts`（每章 8–12 题），旧题逐字迁移、题号与选项顺序不变；抽题仍为 T1–T3 抽 5、T4–T9 抽 6。

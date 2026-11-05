@@ -93,7 +93,7 @@ src/
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |
 | 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory |
-| 学院共享组件/纯函数 | `shared/components/academy/*`、`shared/utils/academy*` | 理论/策略各自薄包装消费；shared 禁止 import feature；两院行为/文案由包装层保持。P2 学习工具同源：`AcademyBookmarksPanel` / `AcademyNotesPanel`（课时书签 / 纯文本笔记）与 `ContentIssueReportDialog`（内容纠错，mailto / 剪贴板降级，无后端）。变体规则卡同源：`AcademyVariantRuleCard`（理论 `TheoryVariantRuleCard` / 策略 `StrategyVariantRuleCard` 各做薄包装），单挑规则事实以 `shared/constants/headsUpRules.ts` 为单源 |
+| 学院共享组件/纯函数 | `shared/components/academy/*`、`shared/utils/academy*` | 理论/策略各自薄包装消费；shared 禁止 import feature；两院行为/文案由包装层保持。P2 学习工具同源：`AcademyBookmarksPanel` / `AcademyNotesPanel`（课时书签 / 纯文本笔记）与 `ContentIssueReportDialog`（内容纠错，mailto / 剪贴板降级，无后端）。变体规则卡同源：`AcademyVariantRuleCard`（理论 `TheoryVariantRuleCard` / 策略 `StrategyVariantRuleCard` 各做薄包装），单挑规则事实以 `shared/constants/headsUpRules.ts` 为单源。题库合并/抽题同源：`mergeQuizBank` / `drawByAttempt`，标准与单挑题库共用，禁止模块内另写合并/抽题逻辑 |
 | 调试解锁 | `shared/stores/debugMode.ts` | 9 处门禁；两种短路接法；onboarding 不纳入 |
 
 > 完整契约（含各模块推导函数、阈值、9 处门禁清单与选项排序规则）见 `docs/AI_GUIDE.md` §跨模块复用契约。
