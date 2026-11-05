@@ -2,7 +2,8 @@ import type { QuizQuestion } from '../../../../../types';
 
 /**
  * 单挑 L4 题库（lessonId → questions）。
- * q1–q5 由 headsUpLevel4.ts 逐字迁入（id / 选项顺序 / correctIndex / 解析未改动）。
+ * q1–q5 由 headsUpLevel4.ts 逐字迁入（id / 选项顺序 / correctIndex / 解析未改动）；
+ * q6–q10 为本批扩容新增（每题四选项、唯一正确答案，解析含推导或边界）。
  */
 export const LEVEL_4HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
   'l4hu-bn-opening': [
@@ -55,6 +56,51 @@ export const LEVEL_4HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
       ],
       correctIndex: 1,
       explanation: '高频 3-bet 侵蚀偷盲 EV，边缘牌被 3-bet 后只能弃牌。正确调整是收窄范围；完全停止是过度反应。',
+    },
+    {
+      id: 'l4hu-bn-opening-q6',
+      question: '把开池尺度从 min-raise 2BB 加大到 2.5BB，纯偷盲的保本弃牌率变为：',
+      options: ['约 57.1%', '仍为 50%', '约 62.5%', '约 40%'],
+      correctIndex: 0,
+      explanation: '尺度加大后 SB 再投 2BB，盈亏平衡 f = 2 ÷ (1.5 + 2) = 2 ÷ 3.5 ≈ 57.1%。50% 是 min-raise 的口径（1.5 ÷ 3）；62.5% 是 3BB 开池的门槛（2.5 ÷ 4）。',
+    },
+    {
+      id: 'l4hu-bn-opening-q7',
+      question: '开池到 3BB 的纯偷盲保本弃牌率是：',
+      options: ['62.5%', '50%', '57.1%', '75%'],
+      correctIndex: 0,
+      explanation: '3BB 开池意味着 SB 再投 2.5BB，保本 f = 2.5 ÷ (1.5 + 2.5) = 2.5 ÷ 4 = 62.5%。75% 是 MDF 口径（面对 1/3 池要守的防守线），与偷盲保本不是同一件事。',
+    },
+    {
+      id: 'l4hu-bn-opening-q8',
+      question: 'BB 面对 min-raise 的弃牌率只有 35%，纯偷盲的 EV 是：',
+      options: ['−0.45BB', '+0.15BB', '0BB', '−0.15BB'],
+      correctIndex: 0,
+      explanation: '以弃牌为基准：EV = f×1.5 − (1−f)×1.5 = 0.35×1.5 − 0.65×1.5 = 0.525 − 0.975 = −0.45BB。+0.15BB 是弃牌率 55% 的结果，0BB 对应 50% 的保本点。',
+    },
+    {
+      id: 'l4hu-bn-opening-q9',
+      question: '单挑按钮位仍用约 80%-100% 范围开池，最根本的原因是：',
+      options: [
+        '牌发得比对手好',
+        '只面对一个对手且翻后最后行动，边缘牌权益与位置红利一起放大',
+        '规则允许按钮位多开池',
+        '对手一定不会 3-bet',
+      ],
+      correctIndex: 1,
+      explanation: '范围宽度来自两件事：只面对一个对手（没有多人稀释）＋翻后由你最后行动（位置红利）。牌运与规则都不构成理由，对手会不会 3-bet 只影响频率高低，不影响宽度的来源。',
+    },
+    {
+      id: 'l4hu-bn-opening-q10',
+      question: '对手弃牌率恰好落在保本点时，正确的读法是：',
+      options: [
+        '开池必然亏钱',
+        '纯偷盲这一段期望为 0，开池的价值完全由翻后决定',
+        '应该把范围收窄到 10%',
+        '应该加大尺度把对手赶走',
+      ],
+      correctIndex: 1,
+      explanation: '保本点意味着偷盲这一段 EV = 0.5×1.5 − 0.5×1.5 = 0，此时开池的全部收益或损失都来自翻后权益与位置——所以范围可以宽，但翻后必须会收手。',
     },
   ],
   'l4hu-ev-adjustments': [
@@ -113,6 +159,51 @@ export const LEVEL_4HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
       correctIndex: 1,
       explanation: '位置价值是长期期望差异：SB 翻后最后行动、持有 IP，平均每手多赢 0.5-1BB，是统计期望而非单手保证。',
     },
+    {
+      id: 'l4hu-ev-adjustments-q6',
+      question: '翻牌底池 6BB，SB 下注 2BB（1/3 池），BB 跟注所需胜率约为：',
+      options: ['20%', '25%', '30%', '33.3%'],
+      correctIndex: 0,
+      explanation: '所需胜率 = 2 ÷ (6 + 2 + 2) = 2 ÷ 10 = 20%。25% 是半池（2 ÷ (4+2+2)）的口径、33.3% 是满池口径——把某个尺度记成通用数字正是本题的陷阱。',
+    },
+    {
+      id: 'l4hu-ev-adjustments-q7',
+      question: '底池 4BB，SB 下注 2BB（半池），BB 跟注所需胜率约为：',
+      options: ['25%', '20%', '33.3%', '40%'],
+      correctIndex: 0,
+      explanation: '2 ÷ (4 + 2 + 2) = 2 ÷ 8 = 25%：跟注 2BB 买到 8BB 的总底池，四分之一即可保本。40% 是满员桌面对紧范围的经验线，单挑面对宽范围并不需要这么高。',
+    },
+    {
+      id: 'l4hu-ev-adjustments-q8',
+      question: '半池下注（P=4、B=2），你估计自己胜率 30%，按 EV(call) = E×(P+B) − (1−E)×B 计算，跟注的 EV 是：',
+      options: ['+0.4BB', '−1.4BB', '+1.8BB', '+1.4BB'],
+      correctIndex: 0,
+      explanation: 'EV = 0.30×(4+2) − 0.70×2 = 1.8 − 1.4 = +0.4BB。+1.8BB 只算了赢下的部分、漏掉跟注成本；−1.4BB 则只算了成本。',
+    },
+    {
+      id: 'l4hu-ev-adjustments-q9',
+      question: '单挑听牌跟注比满员桌更常依赖隐含赔率，根本原因是：',
+      options: [
+        '单挑底池更大',
+        '对手范围宽、支付意愿高，中牌后还能再赢更多',
+        '听牌在单挑里成牌率更高',
+        '单挑不需要底池赔率',
+      ],
+      correctIndex: 1,
+      explanation: '成牌率与对手数量无关（同花听牌两街仍是约 35%），差别在于中牌后能从宽范围对手那里再赢到更多筹码——隐含赔率补足了单街权益的缺口。',
+    },
+    {
+      id: 'l4hu-ev-adjustments-q10',
+      question: '「SB 的位置价值约 0.5-1BB/手」的正确含义是：',
+      options: [
+        'SB 每手牌保证多赢 1BB',
+        '长期统计上 SB 因为翻后最后行动，每手期望比 BB 高 0.5-1BB',
+        '这是翻前的开池收益',
+        '该数值只在锦标赛成立',
+      ],
+      correctIndex: 1,
+      explanation: '位置价值是长期期望差，不是单手保证：它统计的是翻后最后行动把同样的牌打成更多筹码的平均效果，现金桌与锦标赛都成立。',
+    },
   ],
   'l4hu-gto-basics': [
     {
@@ -169,6 +260,51 @@ export const LEVEL_4HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
       ],
       correctIndex: 1,
       explanation: '单挑每手牌双方互换 SB/BB，位置反转（SB 翻前先开池、翻后最后行动；BB 相反），GTO 均衡同时包含两个方向的位置策略。',
+    },
+    {
+      id: 'l4hu-gto-basics-q6',
+      question: '半池下注时，对手的最小防御频率（MDF）是：',
+      options: ['66.7%', '75%', '50%', '33.3%'],
+      correctIndex: 0,
+      explanation: 'MDF = 1 ÷ (1 + b) = 1 ÷ 1.5 ≈ 66.7%。75% 是 1/3 池（1 ÷ (1 + 1/3)），50% 是满池的口径。',
+    },
+    {
+      id: 'l4hu-gto-basics-q7',
+      question: '半池下注的均衡诈唬占比是：',
+      options: ['25%', '33.3%', '20%', '40%'],
+      correctIndex: 0,
+      explanation: 'f = b ÷ (1 + 2b) = 0.5 ÷ 2 = 25%，即价值:诈唬 = 3:1。33.3% 是满池（1 ÷ 3），40% 是 2 倍池（2 ÷ 5）的口径。',
+    },
+    {
+      id: 'l4hu-gto-basics-q8',
+      question: '2 倍池（b = 2）全下时，MDF 与均衡诈唬占比分别是：',
+      options: ['33.3% 与 40%', '50% 与 33.3%', '40% 与 33.3%', '33.3% 与 33.3%'],
+      correctIndex: 0,
+      explanation: 'MDF = 1 ÷ (1 + 2) = 33.3%；诈唬占比 = 2 ÷ (1 + 4) = 40%。两个数字不相等：MDF 说的是对手要守多少，诈唬占比说的是你自己带多少空气。',
+    },
+    {
+      id: 'l4hu-gto-basics-q9',
+      question: '「单挑位置对称性」对学习者的实际要求是：',
+      options: [
+        '只练按钮位的开池就够',
+        '每手牌双方互换盲注，两个方向的位置策略都要练到均衡',
+        '位置在单挑里不重要',
+        '只练大盲位的防守就够',
+      ],
+      correctIndex: 1,
+      explanation: '单挑每手互换盲注，位置反转意味着你一半的手牌在 IP、一半在 OOP；只练一个方向，会让另一半手牌长期处在被剥削的状态。',
+    },
+    {
+      id: 'l4hu-gto-basics-q10',
+      question: '把 GTO 当成「防弹背心」的意思是：',
+      options: [
+        'GTO 承诺最高收益',
+        'GTO 保证不被剥削的下限，剥削对手才能提高上限',
+        'GTO 只在多人底池有效',
+        'GTO 等于打得紧',
+      ],
+      correctIndex: 1,
+      explanation: '均衡保证的是"无论对手怎么打你都不亏"的下限；利润上限要靠针对漏洞的剥削去拿，代价是打开自己的漏洞——两者是分工而非替代。',
     },
   ],
   'l4hu-counter-strategies': [
@@ -231,6 +367,51 @@ export const LEVEL_4HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
       ],
       correctIndex: 1,
       explanation: '节点锁定把"对手实际怎么打（偏离）"输入求解器，输出针对该偏差的最优反制，让反制从感觉变计算。',
+    },
+    {
+      id: 'l4hu-counter-strategies-q6',
+      question: 'BB 面对 min-raise 弃牌率恰好 50% 时，纯偷盲 EV 是：',
+      options: ['0BB', '+0.15BB', '−0.3BB', '+0.3BB'],
+      correctIndex: 0,
+      explanation: 'EV = 0.5×1.5 − 0.5×1.5 = 0BB，这正是保本点；+0.3BB 对应弃牌率 60%，−0.3BB 对应 40%。',
+    },
+    {
+      id: 'l4hu-counter-strategies-q7',
+      question: '对手弃牌率升到 80% 时，纯偷盲 EV 是：',
+      options: ['+0.9BB', '+0.6BB', '+0.3BB', '+1.2BB'],
+      correctIndex: 0,
+      explanation: 'EV = 0.8×1.5 − 0.2×1.5 = 1.2 − 0.3 = +0.9BB。+0.6BB 是弃牌率 70% 的结果（0.7×1.5 − 0.3×1.5）。',
+    },
+    {
+      id: 'l4hu-counter-strategies-q8',
+      question: '底池 4BB，你下注 1.33BB（1/3 池），对手弃牌率 55%，这一街的 EV 约为：',
+      options: ['+1.60BB', '+2.20BB', '+0.73BB', '+1.87BB'],
+      correctIndex: 0,
+      explanation: 'EV = 0.55×4 − 0.45×1.33 = 2.20 − 0.60 ≈ +1.60BB。+2.20BB 只算弃牌收益、漏掉被跟注的损失；+1.87BB 是弃牌率 60% 的结果。',
+    },
+    {
+      id: 'l4hu-counter-strategies-q9',
+      question: '节点锁定在反制流程里的位置是：',
+      options: [
+        '替代样本统计',
+        '把观测到的偏离固定成求解器输入，再解出针对它的最优应对',
+        '锁定自己的动作频率',
+        '用来提高抽水返还',
+      ],
+      correctIndex: 1,
+      explanation: '节点锁定改的是对手那一段决策树（它的弃牌率、跟注率被固定），求解器据此重解你的最优动作；它不能替代样本统计，也不改变你自己的频率限制。',
+    },
+    {
+      id: 'l4hu-counter-strategies-q10',
+      question: '「反制过头」最具体的代价是：',
+      options: [
+        '让对手立刻察觉',
+        '把自己的范围打出漏洞，对手修正后你从正期望掉到负期望',
+        '违反平台规则',
+        '降低抽水效率',
+      ],
+      correctIndex: 1,
+      explanation: '偏离幅度越大，你自己的可攻击面越宽。若对手把弃牌率从 60% 修正回 50%，你的高频诈唬就从盈利变成送筹码——所以幅度以"对手修正后仍不亏"为上限。',
     },
   ],
 };

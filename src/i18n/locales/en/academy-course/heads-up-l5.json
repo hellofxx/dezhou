@@ -9,7 +9,10 @@
       "Example: You've played HU for 2 hours straight; in the last 30 hands you've been \"auto-playing\" — not noticing the BB's fold rate vs your C-Bets dropped from 45% to 30%. That's a classic fatigue sign: your awareness of opponent deviations dulled and you still bet at the old frequency, getting harvested by the opponent's counter-adjustment. Correct move: pause immediately, recognize fatigue, rest, and restart with \"how is the opponent playing now\" rather than \"how do I usually play\".",
       "Example 2 (state-management flow): Set three rules before the HU session: (1) maximum 90 minutes; (2) stop at 50BB down; (3) stand up 2 minutes every 100 hands. Execute strictly on schedule even when the table is hot — because \"winners also give the edge back when tired\". Tendler emphasizes: discipline isn't limiting fun but protecting long-term EV.",
       "Counterintuitive point: the most dangerous thing in HU isn't \"impulse when losing\" but \"letting your guard down after winning\". After winning a few hands, players often relax, play marginal hands, and give the edge back. HU discipline must be consistent throughout, win or lose.",
-      "HU session-management triad: (1) preset a variance budget — pause and review after losing 40-50BB; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results."
+      "Theory support: the variance density and emotional triggers of heads-up play are covered in Theory Academy T8 \"Pressure Management\" — that chapter splits sustained tension into variance density, time pressure and self-talk, and gives an actionable cooling-down move for each; the triad in this lesson is the three that fit cash heads-up best.",
+      "Theory support: the types of emotional breakdown and the decision drift they cause are covered in Theory Academy T8 \"Tilt Typology\" — first name which breakdown is yours (revenge, ego, or the easy-to-miss fatigue type), then talk countermeasures; swap \"I tilted today\" for \"which type did I tilt as\" and discipline finally has a handle.",
+      "HU session-management triad: (1) preset a variance budget — pause and review after losing 40-50BB; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results.",
+      "Focus in three lines:\nAbout 200 hands per hour, so a 90-minute cap equals roughly 300 decisions — the quality of the last few dozen decides the real EV of the session\nFatigue shows up first as dulled awareness (for example the fold rate against your C-Bets falls from 45% to 30% and you never notice), not as \"one bad hand\"\nA 40-50BB variance budget plus standing up every 100 hands (about 30 minutes) writes stop-loss into the process instead of leaving it to willpower"
     ],
     "l5hu-opponent-psychology": [
       "Heads-Up: The Battlefield of Reading People",
@@ -20,7 +23,10 @@
       "Example: The HU opponent thinks 20 seconds before calling your turn bet. Frequency read: long think = a tough decision, possibly a marginal hand (station trait) or a draw. But with insufficient samples it could be acting. Correct approach is cross-verification: his tendency to call big bets, his river showdown choices — judge comprehensively rather than relying on one rhythm alone.",
       "Example 2 (counter-reading): You hold AA and watch your rhythm when betting the flop. If you bet instantly because \"I have a strong hand\" and hesitate because \"I'm bluffing\", the opponent will quickly crack you. Counter-reading drill: set the same think time for all bets, or deliberately break rhythm at key moments (hesitate with strong, be decisive with bluffs). You read the opponent, and the opponent reads you.",
       "Counterintuitive point: the enemy of reads isn't \"reading wrong\" but \"overconfidence\". HU pros admit \"this read is only 60% sure\" and bet accordingly, rather than \"I know what he has\". Converting reads into probabilities rather than certainties is the sustainable strategy.",
-      "Read discipline: (1) only conclude from statistically significant frequencies (50+ hand samples); (2) cross-verify bet rhythm with frequency; (3) admit read uncertainty and fold it into equity and pot-odds calculations. After these three, reads go from mysticism to math."
+      "Theory support: the full street-by-street narrowing flow with blocker filtering is covered in Theory Academy T7 \"Heads-Up Hand Reading\" — draw a starting range from the preflop action, narrow it street by street in a Bayesian way, then use blockers to delete impossible strong combos; this lesson compresses all of that into \"reading means estimating a range\".",
+      "Theory support: observation and counter-observation are covered in Theory Academy T8 \"Psychological Reads\" — that chapter puts \"I read him\" and \"he reads me\" on the same table, explaining why a one-sided read gets cancelled by the opponent counter-read, and why a consistent rhythm is the cheapest counter-reading solution.",
+      "Read discipline: (1) only conclude from statistically significant frequencies (50+ hand samples); (2) cross-verify bet rhythm with frequency; (3) admit read uncertainty and fold it into equity and pot-odds calculations. After these three, reads go from mysticism to math.",
+      "Reading in three lines:\nReading means estimating range plus emotion, writing observations as probabilities (\"about 45% bluff\") rather than verdicts (\"he is bluffing\")\nA single timing tell is unreliable: at about 200 hands per hour, a 50-hand sample takes only about 15 minutes — gather the sample before concluding\nCounter-reading costs the immediate edge that rhythm provides and buys long-term unreadability; both sides of the ledger have to be counted"
     ]
   },
   "lessonQuiz": {
@@ -123,6 +129,106 @@
         "Ignoring all reads"
       ],
       "explanation": "Reads carry uncertainty; pros convert them into probabilities (like \"60% sure\") and fold them into decisions — the sustainable strategy."
+    },
+    "l5hu-focus-q6": {
+      "question": "Heads-up runs about 200 hands per hour and the session cap is 90 minutes. At that density, roughly how many hand decisions do you make in 90 minutes?",
+      "options": [
+        "About 100 hands",
+        "About 200 hands",
+        "About 300 hands",
+        "About 600 hands"
+      ],
+      "explanation": "200 hands/hour × 1.5 hours = 300 hands. 200 treats 90 minutes as one hour; 600 comes from treating the cap as 3 hours, double the 60-90 minute window."
+    },
+    "l5hu-focus-q7": {
+      "question": "At about 200 hands per hour, \"stand up every 100 hands\" means a break roughly every:",
+      "options": [
+        "Every 15 minutes",
+        "Every 30 minutes",
+        "Every 60 minutes",
+        "Every 100 minutes"
+      ],
+      "explanation": "100 hands ÷ 200 hands/hour = 0.5 hours = 30 minutes. 60 minutes misreads the density as 100 hands/hour; 100 minutes reads hands as minutes."
+    },
+    "l5hu-focus-q8": {
+      "question": "Fatigue keeps you betting at the old frequency while the opponent fold rate has already fallen from 45% to 30%. Pot 4BB, you bet 1.33BB (1/3 pot). Using EV = f × P − (1 − f) × b, the change in this street's EV is about:",
+      "options": [
+        "About −0.80BB",
+        "About −0.27BB",
+        "About −1.07BB",
+        "About −1.33BB"
+      ],
+      "explanation": "Old frequency EV = 0.45 × 4 − 0.55 × 1.33 ≈ +1.07BB; at 30% it becomes 0.30 × 4 − 0.70 × 1.33 ≈ +0.27BB; the difference is ≈ −0.80BB. −0.27 is the new overall EV and −1.07 the old overall EV — neither is the delta."
+    },
+    "l5hu-focus-q9": {
+      "question": "Which of these is fatigue-driven decision degradation rather than a strategy choice?",
+      "options": [
+        "Betting 1/3 pot on a dry high-card board",
+        "Not noticing the opponent fold rate fell from 45% to 30% and betting at the old frequency",
+        "Giving up a thin value bet on the river",
+        "Keeping only strong hands in the 3-bet value range"
+      ],
+      "explanation": "The other three can all be sound strategy choices: you knew the information and decided accordingly. Only dulled awareness plus the old frequency is a state problem — the information changed and you did not update."
+    },
+    "l5hu-focus-q10": {
+      "question": "You are down 45BB at a 100BB buy-in heads-up table, right inside the 40-50BB variance budget. The disciplined response is:",
+      "options": [
+        "Top up to 100BB and raise bet sizes to win the 45BB back",
+        "Pause the session for review and end or reschedule per the preset rule",
+        "Raise the variance budget to 100BB and keep playing",
+        "Switch to another table and keep playing to avoid the same opponent"
+      ],
+      "explanation": "A variance budget is stop-loss discipline: entering the 40-50BB band means pausing to review and cutting the get-even impulse. Topping up, raising the budget or moving tables all demote the budget from a rule to a suggestion."
+    },
+    "l5hu-opponent-psychology-q6": {
+      "question": "Heads-up runs about 200 hands per hour. Under the rule of concluding only from samples of 50+ hands, gathering 50 hands takes about:",
+      "options": [
+        "About 15 minutes",
+        "About 30 minutes",
+        "About 50 minutes",
+        "About 2 hours"
+      ],
+      "explanation": "50 hands ÷ 200 hands/hour = 0.25 hours = 15 minutes. 50 minutes reads hands as minutes; 2 hours would already be about 400 hands, far past the bar."
+    },
+    "l5hu-opponent-psychology-q7": {
+      "question": "Pot 4BB, you bet 1.33BB (1/3 pot), and your read says the opponent folds about 50%. Using EV = f × P − (1 − f) × b, the expectation of this street is about:",
+      "options": [
+        "About +1.34BB",
+        "About +2.00BB",
+        "About +0.67BB",
+        "About −0.67BB"
+      ],
+      "explanation": "EV = 0.5 × 4 − 0.5 × 1.33 = 2 − 0.665 ≈ +1.34BB. +2.00 counts only the fold side; +0.67 subtracts the whole 1.33 and forgets to weight it by the call probability."
+    },
+    "l5hu-opponent-psychology-q8": {
+      "question": "The cost of counter-reading (using the same think time for every bet) is:",
+      "options": [
+        "Giving up part of the immediate rhythm edge in exchange for long-term unreadability",
+        "Making it easier for the opponent to judge your hand strength",
+        "Having to give up all bluffs",
+        "Having to think longer than the opponent"
+      ],
+      "explanation": "A consistent rhythm sacrifices immediate gains such as fast with strong and slow with weak, and buys the inability of the opponent to infer your range from timing. It neither bans bluffing nor changes the absolute think time."
+    },
+    "l5hu-opponent-psychology-q9": {
+      "question": "Pot 10BB, the opponent bets 5BB. Using the required-equity-to-call formula, the equity you need is:",
+      "options": [
+        "25%",
+        "33.3%",
+        "20%",
+        "50%"
+      ],
+      "explanation": "Calling 5BB into a 20BB total pot (10 + 5 + 5) needs 5 ÷ 20 = 25%. 33.3% is 5 ÷ 15 and forgets your own 5BB; 20% miscounts the total pot as 25BB."
+    },
+    "l5hu-opponent-psychology-q10": {
+      "question": "The opponent 3-bet 3 times in 12 hands (25%). Under reading discipline, the correct handling is:",
+      "options": [
+        "Declare him a high-frequency 3-bettor and tighten the whole opening range",
+        "Treat it as a hypothesis, keep playing the baseline, and adjust after 50-100 hands",
+        "Ignore all 3 of those 3-bets",
+        "Start 4-bet bluffing him right away"
+      ],
+      "explanation": "A 25% read over 12 hands has a very wide confidence interval and is not yet a frequency; treat it as a hypothesis, play the baseline, and keep logging to 50-100 hands. Tightening or counter-bluffing at once treats a hypothesis as a conclusion."
     }
   },
   "lessonExample": {
@@ -151,6 +257,57 @@
       "mistakeAction": "Judging the BB weak based on one slow think",
       "mistakeReasoning": "A single rhythm signal is unreliable; cross-verify with the 60-hand fold-rate statistics rather than relying on one reaction time alone.",
       "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l5hu-focus-ex2": {
+      "title": "Size Drift Under Fatigue",
+      "correctAction": "Bet",
+      "correctAmount": "1.3BB (1/3 pot)",
+      "reasoning": [
+        "AA is an overpair on K-9-4 rainbow: a 1/3-pot bet takes thin value and keeps the betting frequency high — the size does not need to grow because the hand is strong",
+        "Break-even fold rate at 1/3 pot = 1.33 ÷ (4 + 1.33) ≈ 25%: the opponent only has to fold the weakest quarter for the bet to profit",
+        "The classic fatigue error is scaling up to a 2x-pot overbet: 8BB needs 8 ÷ (4 + 8) ≈ 66.7% folds to break even, and a tired player is not even watching the fold rate"
+      ],
+      "mistakeAction": "Bet 8BB (2x-pot overbet)",
+      "mistakeReasoning": "An 8BB overbet needs about 66.7% folds just to break even. Sizing up usually comes from wanting to end the hand quickly rather than from what the board wants — the textbook form of sizing drift.",
+      "mistakeEvLoss": "-1.4 BB/100"
+    },
+    "l5hu-focus-ex3": {
+      "title": "The Fatigued Hero Call",
+      "correctAction": "Fold",
+      "reasoning": [
+        "The river is an 8BB bet into a 4BB pot: required equity to call = 8 ÷ (4 + 8 + 8) = 40%",
+        "AJ beats only pure bluffs: every Kx, two pair and straight beats it, and the value share of a 2x-pot bet is far above 60%",
+        "At minute 120 with fatigue signals already showing, wanting the chips back disguises itself as reading a bluff — that call is driven by emotion, not odds"
+      ],
+      "mistakeAction": "Call (hero call while fatigued)",
+      "mistakeReasoning": "The 40% line requires at least 40% of a 2x-pot river bet to be bluffs, which such a size rarely supports in heads-up. Fatigue does not change the number; it only makes a losing call look like a read.",
+      "mistakeEvLoss": "-2.2 BB/100"
+    },
+    "l5hu-opponent-psychology-ex2": {
+      "title": "River Bluff-Catch: Frequency Read Beats One Timing Tell",
+      "correctAction": "Call",
+      "correctAmount": "9BB",
+      "reasoning": [
+        "Pot 18BB and a 9BB river bet: required equity to call = 9 ÷ (18 + 9 + 9) = 25%",
+        "Across 120 hands with showdowns checked, about 45% of his river bets at this half-pot size were bluffs — 45% clears the 25% bar",
+        "EV(call) = 0.45 × 27 − 0.55 × 9 = +7.2BB; if the read is off and the bluff share is 20%, it flips to 0.20 × 27 − 0.80 × 9 = −1.8BB, so this call lives on frequencies, not feelings"
+      ],
+      "mistakeAction": "Fold (his timing was decisive, so it must be value)",
+      "mistakeReasoning": "A single timing tell is a weak signal: decisive can be value or a bluff decided long ago. Letting it override 120 hands of frequency data trades verifiable evidence for one impression.",
+      "mistakeEvLoss": "-1.5 BB/100"
+    },
+    "l5hu-opponent-psychology-ex3": {
+      "title": "A Frequency Read Drives the Turn Check-Raise",
+      "correctAction": "Check-Raise",
+      "correctAmount": "12BB",
+      "reasoning": [
+        "Across 80 hands, about 55% of his range folds to a check-raise at this size, and he has used a half-pot size on both streets — a wide betting tier that can be pressured",
+        "A check-raise to 12BB needs f ≥ 12 ÷ (12 + 12) = 50% to break even, and the read of 55% already clears it",
+        "15 outs (9 flush + 8 straight − 2 overlapping 8♣/K♣) give about 15 ÷ 46 ≈ 33% on one street, so being called still leaves a way out"
+      ],
+      "mistakeAction": "Check-Call (4BB)",
+      "mistakeReasoning": "Calling 4BB throws away the 55% fold rate: every fold would have handed over a 12BB pot, and a 15-out draw can afford the risk of being called.",
+      "mistakeEvLoss": "-1.2 BB/100"
     }
   },
   "lessonPractice": {
@@ -273,6 +430,46 @@
         }
       ],
       "tableDesc": "Heads-up cash game; the SB's bet rhythm is abnormal"
+    },
+    "l5hu-focus-p4": {
+      "option": [
+        {
+          "action": "Min-raise 2BB and end the session at the preset time",
+          "explanation": "T9s is a standard open on its own; the grading point here is state: 110 minutes is past the 60-90 minute cap, and mechanical sizing is a fatigue sign. Play the hand and end the session on schedule — that is discipline written into the process.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in 100BB to finish quickly while the feel is still there",
+          "explanation": "A 100BB shove gets called only by strong hands and turns T9s into a pure bluff; finishing quickly is a product of fatigue, not board evidence.",
+          "evImpact": "-3.0 BB/100"
+        },
+        {
+          "action": "Fold and save the chips for when you feel sharp again",
+          "explanation": "Folding throws away a standard open with positive EV, and waiting until you feel sharp is the favourite excuse of fatigue. End the session instead of sitting there waiting to wake up.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; 110 minutes in, the same sizing for the last 20 hands"
+    },
+    "l5hu-opponent-psychology-p4": {
+      "option": [
+        {
+          "action": "Call 5BB and treat the last showdown as an unverified hypothesis",
+          "explanation": "Required equity = 5 ÷ (13 + 5) ≈ 27.8%, and AQ top pair top kicker is far above that line. One showdown can only raise a hypothesis (he may check-raise bluff a lot); it takes 50-100 hands to make it a conclusion, so play the baseline until then.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in 94BB because he just check-raise bluffed with 7-5",
+          "explanation": "Extrapolating one observation into a frequency is the most common overconfidence in reading. A shove gets called only by value and folds out the bluffs — the whole stack bet on a single piece of evidence.",
+          "evImpact": "-3.5 BB/100"
+        },
+        {
+          "action": "Fold, top pair top kicker is always behind a check-raise",
+          "explanation": "On a dry Q-7-2 board AQ top pair top kicker is nowhere near a fold; folding to a check-raise donates every bluff to the opponent.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the previous showdown showed him check-raise bluffing with 7-5 on a similar board"
     }
   },
   "lessonObjectives": {
@@ -288,5 +485,17 @@
       "Apply anti-reading practice (actions that leak no range: consistent or deliberately shuffled timing) and judge the readable pattern of \"fast with strong, slow with weak\"",
       "Explain the sustainable attitude to reads (accepting uncertainty like \"60% confident\" and folding it into equity and odds math)"
     ]
+  },
+  "unitTitle": {
+    "l5hu-focus": {
+      "u1": "Decision Density and the Focus Baseline",
+      "u2": "State Management and Fatigue Control",
+      "u3": "Theory Support and Discipline in Practice"
+    },
+    "l5hu-opponent-psychology": {
+      "u1": "The Two Classes of Heads-Up Reads",
+      "u2": "Reading Beat Rhythm and Reaction Time",
+      "u3": "Theory Support and Reading Discipline"
+    }
   }
 }

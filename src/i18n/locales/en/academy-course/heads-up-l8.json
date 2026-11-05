@@ -10,7 +10,11 @@
       "Example 2 (range polarization): Against a station who calls too loose, polarize your betting range — bet value with the nuts, semi-bluff with strong draws, check middle hands. Because the station calls with weak hands, your wide value range gets overpaid. Meanwhile cut pure bluffs (he doesn't fold) and convert bluffs to semi-bluffs or checks.",
       "Example 3 (dynamic adjustment): After you raise steal frequency, the opponent starts 3-betting frequently — he's discovered your deviation. Now you must return to the GTO baseline (narrow the steal range, reduce pure bluffs), or your newly opened leaks get harvested in reverse. Exploitation is a dynamic game: deviate → get detected → return to baseline, looping.",
       "Counterintuitive point: the biggest risk of exploitation isn't \"exploiting too little\" but \"over-exploiting and becoming the leak yourself\". HU pros always keep one hand on the GTO baseline wheel while harvesting — the moment the opponent adjusts, they snap back.",
-      "Exploitation execution in five steps: (1) HUD-collect enough samples to confirm the leak; (2) lock the node in a solver for the optimal response; (3) compare to baseline and mark the pushed-up frequencies and sizes; (4) execute live; (5) re-check the sample every 500 hands. A \"lock\" without data support is exploitation on paper."
+      "Exploitation execution in five steps: (1) HUD-collect enough samples to confirm the leak; (2) lock the node in a solver for the optimal response; (3) compare to baseline and mark the pushed-up frequencies and sizes; (4) execute live; (5) re-check the sample every 500 hands. A \"lock\" without data support is exploitation on paper.",
+      "The marginal gain of exploitation must price EV and noise together (P = pot, b = bet size, f = fold rate, p = observed frequency, n = sample size):\nOne-street EV = f × P − (1 − f) × b\nFrequency standard error = √(p(1−p)/n)\n\nThe same 1/3-pot C-Bet (P = 4BB, b = 1.33BB):\nEquilibrium f = 45%: EV = 0.45×4 − 0.55×1.33 = 1.80 − 0.73 ≈ +1.07BB\nOpponent f = 62%: EV = 0.62×4 − 0.38×1.33 = 2.48 − 0.51 ≈ +1.97BB\nMarginal +0.90BB — that is where the deviation direction comes from.\n\nSignificance: with p = 0.62 the standard error is √(0.62×0.38/100) ≈ 4.9 percentage points over 100 hands and ≈ 10.9 percentage points over 20 hands.\nThe 17-point gap between 62% and 45% is about 3.5 standard errors over 100 hands (deviate) but only about 1.6 over 20 hands (hold still).\n\nHow to read it: the EV sign gives the direction, the standard error gives the magnitude cap — only when both clear the bar does the deviation go into your strategy.",
+      "Theory support: when to tighten or widen and when you must return to baseline is Theory Academy T7 \"Targeted Adjustments\" — that chapter turns \"observe the deviation → capped adjustment → roll back when countered\" into an executable order, and this lesson's five-step loop is its strategy-side application.",
+      "Theory support: the open rate, fold-to-C-Bet and 3-bet rate cited here, with their definitions and HU baselines, are Theory Academy T7 \"Heads-Up Match Metrics\" — that chapter gives each metric's definition and sample-size requirement, and underpins the rule that \"62% is a deviation while 35% is noise\".",
+      "HU exploitation in three lines:\nUse equilibrium as the baseline — aim the direction at the leak, cap the magnitude, and demand enough evidence\nFolds too much → bet and bluff more; calls too much → bluff less and widen the value range with thin value bets\nOnce the opponent's frequencies change, return to baseline — exploitation is a \"deviate, get detected, reset\" loop, not a one-time setting"
     ]
   },
   "lessonQuiz": {
@@ -63,6 +67,56 @@
         "Random guessing"
       ],
       "explanation": "Frequency reading relies on 50-100 hand statistics (open rate/fold rate/3-bet rate/showdown tendency); single-hand impressions are noise."
+    },
+    "l8hu-exploitative-q6": {
+      "question": "The pot is 4BB and you bet 1.33BB (1/3 pot) on the flop. The opponent folds to C-Bets 62% of the time (equilibrium about 45%). The exploitative EV of this street is about:",
+      "options": [
+        "+1.97BB",
+        "+2.48BB",
+        "+1.07BB",
+        "−0.51BB"
+      ],
+      "explanation": "EV = f×P − (1−f)×b = 0.62×4 − 0.38×1.33 = 2.48 − 0.51 ≈ +1.97BB. +2.48 counts only the fold gain and drops the 0.51 lost when called; +1.07 is the EV at the equilibrium 45% fold rate (0.45×4 − 0.55×1.33); −0.51 flips the signs of both branches."
+    },
+    "l8hu-exploitative-q7": {
+      "question": "In a 100-hand sample the opponent folds to C-Bets 62 times. The standard error of this frequency is about:",
+      "options": [
+        "About 4.9 percentage points",
+        "About 2.4 percentage points",
+        "About 17 percentage points",
+        "About 0.6 percentage points"
+      ],
+      "explanation": "Frequency standard error = √(p(1−p)/n) = √(0.62×0.38/100) = √0.002356 ≈ 0.0485, i.e. about 4.9 percentage points. Quadrupling the sample only halves it; 17 points is the gap between 62% and 45%, not the noise scale; 0.6 points treats the denominator as 10000."
+    },
+    "l8hu-exploitative-q8": {
+      "question": "With only a 20-hand sample you see the opponent fold 62% (baseline 45%). By significance testing the correct action is:",
+      "options": [
+        "Double the C-Bet frequency right away",
+        "Keep sampling and hold off on deviating",
+        "Cut the C-Bet frequency instead",
+        "Switch to maximum deviation immediately"
+      ],
+      "explanation": "Over 20 hands the standard error is √(0.62×0.38/20) ≈ 10.9 percentage points, so the 17-point gap is only about 1.6 standard errors — short of the 2-standard-error bar, and the observation may still be noise. The correct move is to gather more sample first; deviating hard on thin data turns you into the opponent's exploitation target."
+    },
+    "l8hu-exploitative-q9": {
+      "question": "A sound HU exploitative adjustment must have all of:",
+      "options": [
+        "Direction, a magnitude cap and sample evidence",
+        "Direction only",
+        "Sample size only",
+        "Magnitude only"
+      ],
+      "explanation": "All three gates are mandatory: direction (which way to deviate), magnitude (how far, measured as a frequency gap rather than a feeling) and evidence (whether the sample supports that direction). No direction is random play; no magnitude cap becomes a new leak once the opponent adjusts; no evidence is just \"I think he folds a lot\"."
+    },
+    "l8hu-exploitative-q10": {
+      "question": "At the same node, opponent A folds to C-Bets 62% while opponent B folds only 30%. Your betting-range adjustment should be:",
+      "options": [
+        "Raise bluff density against A; cut bluffs and widen the value range against B",
+        "Raise bluff density against both",
+        "Cut bluff density against both",
+        "Cut bluffs against A and raise them against B"
+      ],
+      "explanation": "The exploitation direction follows the direction of the deviation: A over-folds → the fold rate pays you, so raise bluff density and betting frequency; B over-calls → pure bluffs stop working, so cut bluffs, widen the value range and add thin value bets. The two directions are opposite — using one set of frequencies against both simply gives away the exploit."
     }
   },
   "lessonExample": {
@@ -78,6 +132,32 @@
       "mistakeAction": "Fold (\"98s isn't good enough\")",
       "mistakeReasoning": "Against an over-folding opponent, marginal hands profit through stealing; folding wastes the exploitation opportunity.",
       "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l8hu-exploitative-ex2": {
+      "title": "Polarizing against a station: top pair bets big, not small",
+      "correctAction": "Bet",
+      "correctAmount": "3BB (75% pot)",
+      "reasoning": [
+        "The opponent's WTSD is high and he folds to C-Bets only 30%: he habitually calls with weak pairs and draws, so a small bet buys no fold equity",
+        "KQ on Q-8-4 is top pair good kicker — the top of the value range against a station, so the sizing should grow, not shrink",
+        "75% pot charges his 8x, 4x and backdoor draws; the other pole of the range semi-bluffs strong draws, and pure bluffs shrink because he does not fold"
+      ],
+      "mistakeAction": "Bet 1.3BB (1/3 pot)",
+      "mistakeReasoning": "That imports the small-bet template onto a station: with only a 30% fold rate a 1/3-pot bet buys no folds and collects too little value across three streets.",
+      "mistakeEvLoss": "-0.8 BB/100"
+    },
+    "l8hu-exploitative-ex3": {
+      "title": "The opponent starts 3-betting back: reset to baseline instead of stealing harder",
+      "correctAction": "Fold",
+      "correctAmount": "",
+      "reasoning": [
+        "The BB's 3-bet rate climbs from the ~10% baseline to 20% — the classic \"I've been detected\" signal: frequency change is the signal, results are not",
+        "The fold rate slides to about 30%, below the 50% break-even line a min-raise needs (1.5 ÷ 3): EV = 0.3 × 1.5 − 0.7 × 1.5 = −0.6BB",
+        "Resetting means three things: narrow the opening range, move J9s-type marginal suited connectors out of the open, and cut pure bluffs until the 3-bet rate falls back to 10%-12% before deviating again"
+      ],
+      "mistakeAction": "Keep stealing harder (\"it's just variance\")",
+      "mistakeReasoning": "Running a fixed steal frequency against an opponent who has already countered turns your deviation into his free profit.",
+      "mistakeEvLoss": "-1.2 BB/100"
     }
   },
   "lessonPractice": {
@@ -140,6 +220,26 @@
         }
       ],
       "tableDesc": "Heads-up cash game; the SB folds to 3-bet 40% (deviation)"
+    },
+    "l8hu-exploitative-p4": {
+      "option": [
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "1/3 pot is the template against high-folding opponents; against a station folding only 30% it buys no folds and collects too little value across three streets.",
+          "evImpact": "-0.6 BB/100"
+        },
+        {
+          "action": "Bet 3BB (75% pot)",
+          "explanation": "Top pair good kicker must size up against a station: 75% pot charges his 9x, 4x and backdoor draws, with a wider value range and fewer pure bluffs.",
+          "evImpact": "+1.8 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "A station will not bet for you; checking gives up three streets of value and lets him see the turn for free.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the BB folds to C-Bets only 30% with a high showdown tendency"
     }
   },
   "lessonObjectives": {
@@ -149,5 +249,12 @@
       "Judge that against a calling station you should polarize your betting range (nuts for value plus strong-draw semi-bluffs, fewer pure bluffs)",
       "Apply the five-step exploitation loop (confirm the leak with a HUD -> node lock -> compare to baseline -> execute -> recheck every 500 hands) and judge that you should return to the GTO baseline when the opponent counters"
     ]
+  },
+  "unitTitle": {
+    "l8hu-exploitative": {
+      "u1": "Exploitation Is Calibrated GTO",
+      "u2": "Frequency Reading and Range Polarization",
+      "u3": "Magnitude Caps and Theory Support"
+    }
   }
 }

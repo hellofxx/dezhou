@@ -1,4 +1,72 @@
-import type { Lesson } from '../../../../../types';
+import type { Lesson, LessonSection } from '../../../../../types';
+
+// ===== l4hu-bn-opening 分段常量（引用相等契约：content 与手写 units.sections 共享同一批对象） =====
+const L4HU_BN_U1_SECTIONS: LessonSection[] = [
+  { type: 'heading', content: '接近 100% 的开池：单挑按钮位的进攻' },
+  {
+    type: 'text',
+    content:
+      '单挑按钮位（SB）翻前先开池、翻后才轮到最后行动，面对唯一的对手，开池频率可以接近 100%——只有极少数完全垃圾的牌（如 72o、83o）弃牌。这是因为：SB 补 0.5 即可看 1.5BB 底池（所需胜率 25%），任何牌对 BB 宽防守范围都接近或超过这条线；且翻后由你最后行动、持有位置，主动权能一路延伸到后两条街。高频开池不是"玩得松"，而是"用频率榨取每一个边缘 EV"。',
+  },
+  {
+    type: 'key-point',
+    content: '按钮位开池的核心是"尺度服务翻后"，不是"尺度服务偷盲"。单挑中用 min-raise（2BB）为主：偷盲门槛低（需 50% 弃牌率）、尺度小让翻后更容易控池，范围够宽才能覆盖各种牌面。',
+  },
+];
+
+const L4HU_BN_U2_SECTIONS: LessonSection[] = [
+  { type: 'heading', content: '开池尺度的数学：为什么 min-raise 是主武器' },
+  {
+    type: 'formula',
+    content:
+      'SB min-raise 到 2BB 的数学（SB 已投 0.5，再投 1.5BB；BB 已投 1，可弃或补 1）：\n\n纯偷盲模型（以 BB 直接弃牌为基准，0.5 死钱已沉没）：\nBB 弃牌 → SB 收下现有底池 1.5BB；BB 跟注 → SB 再输增量 1.5BB\nEV(raise) = f×1.5 − (1−f)×1.5（f = BB 弃牌率）\n盈亏平衡：f = 1.5/(1.5+1.5) = 50%\n\n即 BB 弃牌率超过 50% 时，SB 用任意两张牌 min-raise 自动盈利。\n尺度对比：min-raise 2BB → 50%；2.5BB（再投 2）→ 2/3.5 ≈ 57.1%；3BB（再投 2.5）→ 2.5/4 = 62.5%。\n\n弃牌率代入：f = 0.35（BB 防守 65%）→ 0.35×1.5 − 0.65×1.5 = −0.45BB；\nf = 0.55 → 0.55×1.5 − 0.45×1.5 = +0.15BB。\n\n结论：尺度越大，自动盈利门槛越高。单挑中开池价值在翻后，尺度越小越容易控池。',
+  },
+  {
+    type: 'text',
+    content:
+      '为什么单挑不用满员桌的"偷盲要加大尺度"？三点：(1) 单挑 BB 面对 min-raise 的真实弃牌率只有约 30%-40%，纯偷盲几乎不盈利，价值在翻后；(2) 大尺度在单挑是"自我惩罚"——BB 的跟注范围随尺度收窄，你花 3BB 只换来一个更强的跟注范围；(3) 频率与平衡——min-raise 让你能用约 80% 的手牌开池，范围够宽才能覆盖翻后各种牌面。',
+  },
+  {
+    type: 'example',
+    content:
+      '实例：单挑 100BB 深，你（SB）持 Q♦J♦。这是满员桌的紧位置边缘牌，但单挑中 QJs 面对 BB 宽防守范围胜率约 52%，min-raise 2BB 是标准开池。翻后你有同花/顺子听牌潜力 + 最后行动的位置红利，QJs 在单挑按钮位是绝对的开池牌。',
+  },
+  {
+    type: 'example',
+    content:
+      '实例二（弃牌率决定"要不要加大"）：你观察到 BB 面对 min-raise 弃牌率高达 55%。此时 min-raise 的纯偷盲 EV = 0.55×1.5 − 0.45×1.5 = +0.15BB，刚过 50% 保本线。但这不构成加大的理由：同样的弃牌率换到 2.5BB 尺度，保本线升到 2/3.5 ≈ 57.1%，55% 反而不够——偷盲由正转负。尺度由翻后控池决定，不由弃牌率决定。',
+  },
+];
+
+const L4HU_BN_U3_SECTIONS: LessonSection[] = [
+  {
+    type: 'highlight',
+    content:
+      '反直觉点：单挑按钮位"接近 100% 开池"不是贪心，是数学。但要注意——开池宽不等于每条街都投入，也不等于对每个对手都开到 100%。一旦对手的 3-bet 频率上升，被赶出开池范围的边缘牌会快速增多，频率必须回调。',
+  },
+  {
+    type: 'theory-reference',
+    content:
+      '理论支撑：单挑开池范围为什么能宽到 80%-100%，见理论学院 T4『范围宽度』——那一章把"只面对一个对手"与"位置反转"拆成可计算的权益账，本课的开池频率正是它的推论。',
+    data: { theoryLevelId: 't4hu', theoryChapterId: 't4hu-range-width' },
+  },
+  {
+    type: 'theory-reference',
+    content:
+      '理论支撑：min-raise、3-bet、4-bet 各占多少频率才无差别，见理论学院 T5『单挑翻前均衡』——那一章用无差别原则把参与率与防守率拆成价格线的推论，本课的 50% 保本弃牌率就是其中一条价格线。',
+    data: { theoryLevelId: 't5hu', theoryChapterId: 't5hu-preflop-equilibrium' },
+  },
+  {
+    type: 'pro-tip',
+    content:
+      '按钮位开池速查：默认 min-raise 2BB，用约 80%-100% 范围开池；顶端 15% 强牌 + 中段同花连张/Ax + 底部垃圾混合。每 50 手检查：BB 的 3-bet 是否正在把你赶出开池范围？BB 的弃牌率是否支持你开到 100%？',
+  },
+  {
+    type: 'takeaway',
+    content:
+      '按钮位开池三句总结：\nmin-raise 2BB 的保本弃牌率是 50%（1.5 ÷ 3），加大到 2.5BB 就要 57.1%，3BB 要 62.5%\nBB 的真实弃牌率约 30%-40%，纯偷盲常为负（f = 0.35 时 −0.45BB），利润来自翻后位置与范围宽度\n开池频率随弃牌率上调、随 3-bet 频率下调，尺度始终以翻后控池为准',
+  },
+];
 
 export const HEADS_UP_LESSON: Lesson = {
   id: 'l4hu-bn-opening',
@@ -14,48 +82,8 @@ export const HEADS_UP_LESSON: Lesson = {
     '判断 SB（按钮位）面对 BB 高频 3-bet 时应收窄开池范围（剔除被 3-bet 后只能弃牌的边缘牌）',
   ],
   variant: 'heads-up',
-  variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante' },
-  content: [
-    { type: 'heading', content: '接近 100% 的开池：单挑按钮位的进攻' },
-    {
-      type: 'text',
-      content:
-        '单挑按钮位（SB）翻前先开池、翻后才轮到最后行动，面对唯一的对手，开池频率可以接近 100%——只有极少数完全垃圾的牌（如 72o、83o）弃牌。这是因为：SB 补 0.5 即可看 1.5BB 底池（所需胜率 25%），任何牌对 BB 宽防守范围都接近或超过这条线；且翻后由你最后行动、持有位置，主动权能一路延伸到后两条街。高频开池不是"玩得松"，而是"用频率榨取每一个边缘 EV"。',
-    },
-    {
-      type: 'key-point',
-      content: '按钮位开池的核心是"尺度服务翻后"，不是"尺度服务偷盲"。单挑中用 min-raise（2BB）为主：偷盲门槛低（需 50% 弃牌率）、尺度小让翻后更容易控池，范围够宽才能覆盖各种牌面。',
-    },
-    { type: 'heading', content: '开池尺度的数学：为什么 min-raise 是主武器' },
-    {
-      type: 'formula',
-      content:
-        'SB min-raise 到 2BB 的数学（SB 已投 0.5，再投 1.5BB；BB 已投 1，可弃或补 1）：\n\n纯偷盲模型（以 SB 直接弃牌为基准，0.5 死钱已沉没）：\nBB 弃牌 → SB 收下现有底池 1.5BB；BB 跟注 → SB 再输增量 1.5BB\nEV(raise) = f×1.5 − (1−f)×1.5（f = BB 弃牌率）\n盈亏平衡：f = 1.5/(1.5+1.5) = 50%\n\n即 BB 弃牌率超过 50% 时，SB 用任意两张牌 min-raise 自动盈利。\n尺度对比：min-raise 2BB → 50%；2.5BB（再投 2）→ 2/3.5 ≈ 57.1%；3BB（再投 2.5）→ 2.5/4 = 62.5%。\n\n结论：尺度越大，自动盈利门槛越高。单挑中开池价值在翻后，尺度越小越容易控池。',
-    },
-    {
-      type: 'text',
-      content:
-        '为什么单挑不用满员桌的"偷盲要加大尺度"？三点：(1) 单挑 BB 面对 min-raise 的真实弃牌率只有约 30%-40%，纯偷盲几乎不盈利，价值在翻后；(2) 大尺度在单挑是"自我惩罚"——BB 的跟注范围随尺度收窄，你花 3BB 只换来一个更强的跟注范围；(3) 频率与平衡——min-raise 让你能用约 80% 的手牌开池，范围够宽才能覆盖翻后各种牌面。',
-    },
-    {
-      type: 'example',
-      content:
-        '实例：单挑 100BB 深，你（SB）持 Q♦J♦。这是满员桌的紧位置边缘牌，但单挑中 QJs 面对 BB 宽防守范围胜率约 52%，min-raise 2BB 是标准开池。翻后你有同花/顺子听牌潜力 + 最后行动的位置红利，QJs 在单挑按钮位是绝对的开池牌。',
-    },
-    {
-      type: 'example',
-      content:
-        '实例二（随对手调整尺度）：你观察到 BB 面对 min-raise 弃牌率高达 55%。此时 min-raise 的纯偷盲 EV = 0.55×1.5 − 0.45×1.5 = +0.15BB（微利，主要利润仍来自翻后），你可以提高开池频率至接近 100%，因为 BB 的弃牌率让偷盲利润上升。反过来，若 BB 3-bet 频繁，你应收窄范围、减少被 3-bet 后只能弃牌的边缘牌。',
-    },
-    {
-      type: 'highlight',
-      content: '反直觉点：单挑按钮位"接近 100% 开池"不是贪心，是数学。但要注意——开池宽不等于每条街都投入。翻后按牌面适配及时收手，才是"参与多、投入少"的成熟打法。',
-    },
-    {
-      type: 'pro-tip',
-      content: '按钮位开池速查：默认 min-raise 2BB，用约 80%-100% 范围开池；顶端 15% 强牌 + 中段同花连张/Ax + 底部垃圾混合。每 50 手检查：BB 的 3-bet 是否正在把你赶出开池范围？BB 的弃牌率是否支持你开到 100%？',
-    },
-  ],
+  variantContext: { dealerButtonPosition: 'HU_SB', anteStructure: 'sb_ante', stackDepth: 100 },
+  content: [...L4HU_BN_U1_SECTIONS, ...L4HU_BN_U2_SECTIONS, ...L4HU_BN_U3_SECTIONS],
   quiz: [],
   examples: [
     {
@@ -80,6 +108,56 @@ export const HEADS_UP_LESSON: Lesson = {
         action: 'Fold（"98s 太弱"）',
         reasoning: '用满员桌标准打单挑浪费按钮位开池优势。98s 在单挑中价值足够，应积极 min-raise。',
         evLoss: '-1.0 BB/100',
+      },
+    },
+    {
+      id: 'l4hu-bn-opening-ex2',
+      title: '对手弃牌 55%：仍用 min-raise，不加大尺度',
+      heroHand: ['Qh', '7h'],
+      heroPosition: 'SB',
+      previousActions: [],
+      street: 'preflop',
+      effectiveStack: 100,
+      potSize: 1.5,
+      correctDecision: {
+        action: 'Min-raise',
+        amount: '2BB',
+        reasoning: [
+          'BB 弃牌率 55%，纯偷盲 EV = 0.55×1.5 − 0.45×1.5 = +0.15BB，刚过 50% 保本线',
+          '同样的弃牌率换到 2.5BB 尺度就要 57.1% 才保本（2 ÷ 3.5），55% 反而不够',
+          'Q7s 翻后持位置，同花与顺子潜力都在，开池价值并不依赖偷盲本身',
+        ],
+      },
+      commonMistake: {
+        action: 'Raise to 2.5BB（"弃牌多就加大偷盲力度"）',
+        reasoning:
+          '弃牌率 55% 只够支撑 min-raise 的 50% 门槛，加大到 2.5BB 后保本线升到 57.1%，这段偷盲由正转负，多投的 0.5BB 还让翻后控池更难。',
+        evLoss: '-0.6 BB/100',
+      },
+    },
+    {
+      id: 'l4hu-bn-opening-ex3',
+      title: '弃牌只有 35%：纯偷盲为负仍可开池',
+      heroHand: ['Ad', '6d'],
+      heroPosition: 'SB',
+      previousActions: [],
+      street: 'preflop',
+      effectiveStack: 100,
+      potSize: 1.5,
+      correctDecision: {
+        action: 'Min-raise',
+        amount: '2BB',
+        reasoning: [
+          'BB 弃牌率 35%，纯偷盲 EV = 0.35×1.5 − 0.65×1.5 = −0.45BB',
+          '这 −0.45BB 是开池的上限成本而不是终值：翻后持位置、A 高加同花潜力，回补 0.45BB 就转正',
+          '按同一口径（弃牌记为 0，0.5BB 已沉没），开池只需翻后收益超过 0.45BB 就优于弃牌',
+        ],
+      },
+      commonMistake: {
+        action: 'Open-shove（"偷盲亏就一把推"）',
+        reasoning:
+          '35% 弃牌率下全下会把对手的跟注范围锁死在强牌上，用 100BB 去填补 0.45BB 的理论缺口，风险与收益完全不成比例。',
+        evLoss: '-2.5 BB/100',
       },
     },
   ],
@@ -143,6 +221,30 @@ export const HEADS_UP_LESSON: Lesson = {
         ],
         relatedLessonId: 'l4hu-bn-opening',
       },
+      {
+        id: 'l4hu-bn-opening-p4',
+        difficulty: 'advanced',
+        scenario: {
+          heroHand: ['Jh', 'Th'],
+          heroPosition: 'SB',
+          previousActions: [],
+          street: 'preflop',
+          potSize: 1.5,
+          effectiveStack: 100,
+          gameContext: { gameType: 'cash', tableDescription: 'HU 现金桌，BB 面对 min-raise 弃牌 57%' },
+        },
+        options: [
+          { action: 'Fold（"JTs 容易被支配"）', isCorrect: false, explanation: '弃牌率 57% 已过 50% 保本线，JTs 还有翻后可玩性，fold 同时丢掉偷盲与翻后两段收益。', evImpact: '-1.0 BB/100', evLoss: 1 },
+          { action: 'Min-raise', isCorrect: true, explanation: '0.57×1.5 − 0.43×1.5 = +0.21BB，偷盲本身已盈利；JTs 的翻后潜力让开池更宽，标准 min-raise。', evImpact: '+1.2 BB/100', evLoss: 0 },
+          { action: 'Raise to 3BB', isCorrect: false, explanation: '3BB 开池的保本弃牌率是 62.5%，57% 不够；加大尺度还会让对手的跟注范围更紧。', evImpact: '-0.3 BB/100', evLoss: 0.3 },
+        ],
+        relatedLessonId: 'l4hu-bn-opening',
+      },
     ],
   },
+  units: [
+    { id: 'u1', title: '开池频率与位置红利', sections: L4HU_BN_U1_SECTIONS, exampleId: 'l4hu-bn-opening-ex1' },
+    { id: 'u2', title: '尺度数学：min-raise 的价格', sections: L4HU_BN_U2_SECTIONS, exampleId: 'l4hu-bn-opening-ex2' },
+    { id: 'u3', title: '理论支撑与范围收放', sections: L4HU_BN_U3_SECTIONS, exampleId: 'l4hu-bn-opening-ex3' },
+  ],
 };

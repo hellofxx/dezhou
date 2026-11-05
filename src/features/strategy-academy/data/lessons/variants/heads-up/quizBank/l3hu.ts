@@ -2,7 +2,8 @@ import type { QuizQuestion } from '../../../../../types';
 
 /**
  * 单挑 L3 题库（lessonId → questions）。
- * q1–q5 由 headsUpLevel3.ts 逐字迁入（id / 选项顺序 / correctIndex / 解析未改动）。
+ * q1–q5 由 headsUpLevel3.ts 逐字迁入（id / 选项顺序 / correctIndex / 解析未改动）；
+ * q6–q10 为本批扩容新增（每题四选项、唯一正确答案，解析含推导或边界）。
  */
 export const LEVEL_3HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
   'l3hu-bn-aggression': [
@@ -60,6 +61,51 @@ export const LEVEL_3HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
       ],
       correctIndex: 0,
       explanation: '单挑只面对一个对手，任何对子、Ax、同花连牌对宽范围都有足够权益，加上翻后有位置，故可高频开池。',
+    },
+    {
+      id: 'l3hu-bn-aggression-q6',
+      question: '底池 4BB，你在干燥高牌面下注 1.33BB（1/3 池），这笔 C-Bet 的保本弃牌率约为：',
+      options: ['约 25%', '约 33%', '约 40%', '约 67%'],
+      correctIndex: 0,
+      explanation: '保本弃牌率 f = b ÷ (P + b) = 1.33 ÷ (4 + 1.33) ≈ 25%。约 33% 是把下注额错除底池（1.33 ÷ 4）得到的口径；2/3 池下注才需要约 40%。',
+    },
+    {
+      id: 'l3hu-bn-aggression-q7',
+      question: '底池 4BB，你下注 1.33BB，BB 弃牌率 60%，这一街 C-Bet 的 EV 约为：',
+      options: ['+1.87BB', '+2.40BB', '+1.07BB', '-0.53BB'],
+      correctIndex: 0,
+      explanation: 'EV = f × P − (1 − f) × b = 0.6 × 4 − 0.4 × 1.33 = 2.4 − 0.53 ≈ +1.87BB。+2.40 只算了弃牌收益、漏掉被跟注时的损失；+1.07 把 1.33 只减一次而没有乘 40%。',
+    },
+    {
+      id: 'l3hu-bn-aggression-q8',
+      question: '同一个 4BB 底池改成湿润面的 2/3 池下注（2.67BB），保本弃牌率会升到：',
+      options: ['约 25%', '约 40%', '约 50%', '约 67%'],
+      correctIndex: 1,
+      explanation: 'f = 2.67 ÷ (4 + 2.67) ≈ 40%，比 1/3 池的 25% 高 15 个百分点。同一手牌在湿润面需要更多弃牌率才能保本，这正是频率必须降下来的算术原因。',
+    },
+    {
+      id: 'l3hu-bn-aggression-q9',
+      question: '干燥高牌面维持 70%-80% 高频 C-Bet 的数学前提是：',
+      options: [
+        '对手弃牌率长期高于 25% 的保本线',
+        '对手从不弃牌',
+        '开池范围必须收窄到 20%',
+        '每条街都要下注到底',
+      ],
+      correctIndex: 0,
+      explanation: '1/3 池只要 25% 弃牌率就保本；BB 的弃牌率长期高于这条线，宽范围高频 C-Bet 就盈利。若对手几乎不弃牌，就要收窄范围、提高下注范围里的价值密度，而不是继续拼频率。',
+    },
+    {
+      id: 'l3hu-bn-aggression-q10',
+      question: '你在干燥面用小注 C-Bet，BB 过牌加注，你手里是 A 高、无对也无听牌。正确处理是：',
+      options: [
+        '用位置优势跟注看转牌',
+        '弃牌，别用零权益的牌硬撑底池',
+        '全下反诈唬',
+        '再加注回击',
+      ],
+      correctIndex: 1,
+      explanation: 'BB 的 x/r 把范围两极化为强牌与强听牌，A 高无对既没有成牌能力也没有听牌，位置优势换不回权益；继续投入只会让底池在对手的强范围里变大。',
     },
   ],
   'l3hu-sb-continuation': [
@@ -123,6 +169,56 @@ export const LEVEL_3HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
       correctIndex: 1,
       explanation: '湿润面超对领先但易被反超，用 2/3 池大注保护权益；同时范围里弱牌 check，构建平衡的下注/过牌结构。',
     },
+    {
+      id: 'l3hu-sb-continuation-q6',
+      question: '底池 4BB，SB 用 1/3 池小注 C-Bet，BB 的最小防守频率（MDF）是：',
+      options: ['75%', '60%', '50%', '25%'],
+      correctIndex: 0,
+      explanation: 'MDF = P ÷ (P + b) = 1 ÷ (1 + 1/3) = 75%：1/3 池下注时 BB 必须守住 75%，你才无法用任意两张牌自动盈利。反过来，你的保本弃牌率就是 25%。',
+    },
+    {
+      id: 'l3hu-sb-continuation-q7',
+      question: '用 2/3 池下注时，下注范围里可以合法带入的诈唬密度约为：',
+      options: ['约 20%', '约 28.6%', '约 40%', '约 50%'],
+      correctIndex: 1,
+      explanation: '诈唬密度 = b ÷ (1 + 2b) = 0.67 ÷ 2.33 ≈ 28.6%（1/3 池是 20%）。尺度越大，价值/诈唬配比里的诈唬占比越高，这也是湿润面用大注时要更挑牌的原因。',
+    },
+    {
+      id: 'l3hu-sb-continuation-q8',
+      question: '没有范围优势的中性面上，SB 的下注范围应如何构建？',
+      options: [
+        '强牌与好听牌下中小注薄价值，空气与弱对 check 收池',
+        '整个范围都下满池',
+        '只用坚果下注',
+        '永远 check',
+      ],
+      correctIndex: 0,
+      explanation: '中性面没有范围优势可以收割，正确做法是分层：强牌与好听牌下中小注拿薄价值，空气与弱对 check 收池，让下注范围与过牌范围都保持可防守。',
+    },
+    {
+      id: 'l3hu-sb-continuation-q9',
+      question: '为什么有位置的 check 不是示弱？',
+      options: [
+        'SB 最后行动，check 收池并消化 BB 透露的信息，也让高频 C-Bet 更难被 x/r 反打',
+        '因为 check 可以免费看牌',
+        '因为 BB 一定会下注',
+        '因为规则要求每条街都要 check 一次',
+      ],
+      correctIndex: 0,
+      explanation: '有位置的一方最后行动，check 是主动选择而不是被动：它保住底池、吸收了 BB 先行动透露的信息，并让对手无法用高频 x/r 惩罚你的高 C-Bet 频率。',
+    },
+    {
+      id: 'l3hu-sb-continuation-q10',
+      question: '对手的过牌加注频率从 10% 升到 30%，你的 C-Bet 策略应如何调整？',
+      options: [
+        '继续无脑高频，忽略对手倾向',
+        '降低 C-Bet 频率、收窄下注范围并更多 check，把 x/r 的成本算进决策',
+        '改成每手都全下',
+        '只在河牌下注',
+      ],
+      correctIndex: 1,
+      explanation: 'x/r 的保本弃牌率 f ≥ R ÷ (P + R)：对手 x/r 越多，你下注的隐含成本越高。应对是降频、提高下注范围的价值密度，并把更多中等牌放进过牌范围。',
+    },
   ],
   'l3hu-bb-defense': [
     {
@@ -179,6 +275,51 @@ export const LEVEL_3HU_QUIZ_BANK: Record<string, QuizQuestion[]> = {
       ],
       correctIndex: 1,
       explanation: 'BB 的 60% 是"有结构的选择"（含 3-bet 与 x/r 杠杆），跟注站是"舍不得弃牌"的被动。防守宽度 ≠ 防守被动。',
+    },
+    {
+      id: 'l3hu-bb-defense-q6',
+      question: 'SB 开池 4BB，BB 跟注所需胜率是：',
+      options: ['25%', '37.5%', '40%', '50%'],
+      correctIndex: 1,
+      explanation: '再跟 3BB 进入 8BB 总底池（开池 4 + 你已投 1 + 再跟 3），所需胜率 = 3 ÷ 8 = 37.5%。25% 对应 min-raise 口径，40% 对应开池 5BB。',
+    },
+    {
+      id: 'l3hu-bb-defense-q7',
+      question: '底池 4BB、SB C-Bet 1.3BB 后，BB 过牌加注到 4BB 的保本弃牌率约为：',
+      options: ['约 25%', '约 43%', '约 57%', '约 75%'],
+      correctIndex: 1,
+      explanation: 'f ≥ R ÷ (P + R) = 4 ÷ (5.3 + 4) ≈ 43%。这是纯诈唬口径；12 outs 的强听牌即使弃牌率不到 43%，仍能靠两街约 45% 的成牌权益撑住正 EV。',
+    },
+    {
+      id: 'l3hu-bb-defense-q8',
+      question: 'BB 把 3-bet 范围拆成价值叠与诈唬叠，划分依据是：',
+      options: ['成牌强度与阻断牌效应', '手牌花色是否好看', '跟注能省下筹码', '随机分配'],
+      correctIndex: 0,
+      explanation: '价值叠用能被更差牌跟注的强成牌，诈唬叠用能压低对手继续范围的阻断牌。花色是否好看、能否省筹码都不是分层依据。',
+    },
+    {
+      id: 'l3hu-bb-defense-q9',
+      question: 'SB 把开池尺度从 2BB 提到 5BB，BB 的防守范围应：',
+      options: [
+        '收窄，因为跟注所需胜率从 25% 升到 40%',
+        '扩大，因为底池更大',
+        '不变，规则不允许调整',
+        '改为每手全下',
+      ],
+      correctIndex: 0,
+      explanation: '开池 5BB 时再跟 4BB 进入 10BB 总底池，所需胜率 4 ÷ 10 = 40%（min-raise 只要 25%）。门槛升高，最差的一批边缘牌应弃掉，保留同花连张与高张 Ax。',
+    },
+    {
+      id: 'l3hu-bb-defense-q10',
+      question: 'BB 翻后先行动、权益实现率低于 100%，补偿手段是：',
+      options: [
+        '用 check-call 与控池补偿翻后先行动的位置劣势',
+        '用 donk 下注补偿',
+        '提高开池频率补偿',
+        '不需要补偿',
+      ],
+      correctIndex: 0,
+      explanation: '补偿手段是 check-call 与控池：用跟注保留对手的诈唬、避免在无位置时把底池造大，而不是靠 donk 或提高开池频率。',
     },
   ],
 };

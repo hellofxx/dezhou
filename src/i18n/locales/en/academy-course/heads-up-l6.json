@@ -8,8 +8,12 @@
       "The ICM at an HU SNG final table is simple: the winner takes all the prize, so ICM pressure is lower than full ring but still affects decisions — you avoid unnecessary variance when deep (protecting the lead) and use high aggression to double when behind. Blind attack/defense: shallow-stacked (like 15-20BB), the min-raise steal + shove becomes the main weapon because rising blinds make your steals auto-profit; while cash's complex postflop play fails at shallow stacks.",
       "Example: HU SNG final table, you have 18BB vs the opponent's 22BB, blinds 0.5/1. You (SB) hold A♠4♠. At this depth, A4s is in the standard push/shove range: about 50% equity vs the BB's ~60% calling range, the 18BB shove is +EV, and rising blinds lower the value of waiting. Deep-stacked (60BB+), A4s is still an open but with more postflop room. Stack depth directly changes how the same hand plays.",
       "Example 2 (the urgency of rising blinds): HU MTT final, blinds rise every 5 minutes and you drop from 30BB to 12BB. Now \"waiting for good cards\" is wrong — rising blinds spike your waiting cost. The correct strategy is raising shove frequency, using any hand with equity (pairs, Ax, strong suited connectors) to steal and double. The key to chip rhythm: act before the blinds devour you.",
+      "Heads-up shove chips EV and break-even fold rate (P = pot before the shove, S = shove size, f = opponent fold rate, E = your equity when called):\nEV(shove) = f × P + (1 − f) × [E × (P + S) − (1 − E) × S]\nExample: P = 1.5BB, S = 12BB, f = 50%, E = 45%\nCalled branch = 0.45 × 13.5 − 0.55 × 12 = 6.075 − 6.6 = −0.525BB\nEV = 0.5 × 1.5 + 0.5 × (−0.525) = 0.75 − 0.2625 ≈ +0.49BB\nBreak-even fold rate f ≥ 0.525 ÷ (1.5 + 0.525) ≈ 25.9%\nHow to read it: the faster the blinds rise (P grows relative to S) and the more the opponent folds, the better the shove — that is the math behind switching to shoves at shallow stacks, and also why 20-40BB still keeps the min-raise: a large S drags E down against the calling range.",
       "Counterintuitive point: the ICM logic of \"conservative when ahead, aggressive when behind\" in HU tournaments differs from cash's \"always max EV\". When deep and ahead, avoid big variance; when behind, double aggressively — because in a tournament only first place matters.",
-      "HU tournament chip-rhythm quick memory: (1) 40BB+ deep stacks maintain cash-style play; (2) 20-40BB medium stacks, min-raise + postflop; (3) under 15BB shallow stacks, shoves dominate. Re-evaluate your strategy after every blind rise — don't let the old rhythm hurt you."
+      "Theory support: the boundaries of heads-up ICM (chip-linear prize share, ante and blind thresholds) are covered in Theory Academy T9 \"Heads-Up ICM and Tournament HU\" — winner-takes-all makes the heads-up prize share roughly linear in chips, but approaching bubbles and blind structures bend that straight line, and the three stack-rhythm stages are the gear changes at those bends.",
+      "Theory support: the two utility functions of cash heads-up and tournament heads-up are covered in Theory Academy T9 \"Cash Heads-Up vs Tournament Heads-Up\" — the same hand can have opposite correct actions in the two formats, and the difference is not hand strength but the marginal value of a chip: cash chips can be re-bought, tournament chips cannot.",
+      "HU tournament chip-rhythm quick memory: (1) 40BB+ deep stacks maintain cash-style play; (2) 20-40BB medium stacks, min-raise + postflop; (3) under 15BB shallow stacks, shoves dominate. Re-evaluate your strategy after every blind rise — don't let the old rhythm hurt you.",
+      "Tournament heads-up in three lines:\nThree stack-rhythm stages: cash-style above 40BB, min-raise plus postflop at 20-40BB, shove-first below 15BB\nWaiting has a price: 1.5BB of blinds per orbit, so a 12BB stack that waits 4 orbits is left with 6BB (halved)\nWhether a shove stands depends only on the break-even fold rate: f ≥ |called branch| ÷ (P + |called branch|), here 0.525 ÷ 2.025 ≈ 25.9%"
     ]
   },
   "lessonQuiz": {
@@ -62,6 +66,56 @@
         "Only the nuts"
       ],
       "explanation": "The medium stage (20-40BB) balances steal and postflop — min-raise plus postflop is reasonable, differing from the shallow-stack shove-dominant approach."
+    },
+    "l6hu-tourney-q6": {
+      "question": "You shove 12BB from the SB with 1.5BB in the pot before the shove; the opponent folds 50% and you have 45% equity when called. Using EV(shove) = f × P + (1 − f) × [E × (P + S) − (1 − E) × S], the expectation is about:",
+      "options": [
+        "About +0.75BB",
+        "About +0.49BB",
+        "About +0.23BB",
+        "About −0.53BB"
+      ],
+      "explanation": "Called branch = 0.45 × 13.5 − 0.55 × 12 = 6.075 − 6.6 = −0.525BB; EV = 0.5 × 1.5 + 0.5 × (−0.525) = 0.75 − 0.2625 ≈ +0.49BB. +0.75 counts only the fold branch; +0.23 forgets to weight the called branch by its probability; −0.53 is the called branch alone."
+    },
+    "l6hu-tourney-q7": {
+      "question": "Same hand (12BB shove, 1.5BB pot before the shove, 45% equity when called): the break-even fold rate is about:",
+      "options": [
+        "About 25.9%",
+        "About 35%",
+        "About 50%",
+        "About 12.5%"
+      ],
+      "explanation": "Called branch = −0.525BB, so the break-even fold rate is 0.525 ÷ (1.5 + 0.525) ≈ 25.9%. About 35% divides by the 1.5 pot alone and drops the second denominator term; 50% is the fold rate given as input, not the threshold."
+    },
+    "l6hu-tourney-q8": {
+      "question": "Blinds rise every 10 minutes and one orbit costs 1.5BB in total (small blind 0.5 + big blind 1). You hold 12BB and wait for good cards another 4 orbits. How much goes to blinds and what is left?",
+      "options": [
+        "2BB paid, 10BB left",
+        "4BB paid, 8BB left",
+        "6BB paid, 6BB left",
+        "12BB paid, 0BB left"
+      ],
+      "explanation": "1.5BB per orbit × 4 orbits = 6BB, so 12BB − 6BB = 6BB — the stack is halved. 2BB and 4BB come from counting a single blind and from miscounting orbits; 12BB is 8 orbits worth of blinds."
+    },
+    "l6hu-tourney-q9": {
+      "question": "The boundary between the 20-40BB and the sub-15BB stack tiers is:",
+      "options": [
+        "20-40BB uses min-raise plus postflop, below 15BB shoves dominate",
+        "Both tiers should shove almost everything",
+        "Both tiers should stick to min-raises",
+        "The shallower you are, the more you should wait for good cards"
+      ],
+      "explanation": "Shove chips EV depends on P/S and on E when called: the larger S is, the tighter the calling range and the lower E, which pushes the break-even fold rate up — hence min-raise survives at 20-40BB and shoves take over below 15BB."
+    },
+    "l6hu-tourney-q10": {
+      "question": "A heads-up SNG final is winner-takes-all and you hold 60BB versus 20BB. Under the chip-linear ICM approximation your current prize share is about:",
+      "options": [
+        "About 50%",
+        "About 60%",
+        "About 75%",
+        "About 90%"
+      ],
+      "explanation": "With winner-takes-all, heads-up ICM is roughly linear in chips: 60 ÷ (60 + 20) = 75%. 50% is the split-it-evenly figure; 60% takes 60BB as a share and forgets to divide by the 80BB total."
     }
   },
   "lessonExample": {
@@ -77,6 +131,32 @@
       "mistakeAction": "Wait for good cards before acting",
       "mistakeReasoning": "At a shallow stack with rising blinds, waiting costs spike; A7o is a standard shove — waiting is an error.",
       "mistakeEvLoss": "-2.0 BB/100"
+    },
+    "l6hu-tourney-ex2": {
+      "title": "Medium Stack at 25BB: Where Shoving Stops Being Default",
+      "correctAction": "Min-raise",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "25BB still sits in the 20-40BB medium tier: min-raise plus postflop is the main line, and shoving only becomes the default below 15BB",
+        "Shoving 25BB directly: called branch = 0.45 × 26.5 − 0.55 × 25 = 11.925 − 13.75 = −1.825BB, so the break-even fold rate is 1.825 ÷ (1.5 + 1.825) ≈ 54.9%",
+        "A shove compresses the calling range to strong hands only, dropping E from about 58% versus a wide range to about 45% — that drop is what lifts the bar to 54.9%, while the min-raise keeps both the postflop and the steal income"
+      ],
+      "mistakeAction": "All-in (pushing the full 25BB)",
+      "mistakeReasoning": "A 25BB shove needs the opponent to fold more than half the time just to break even, which gambles the whole stack on a frequency he may never give; the min-raise keeps the realizable equity of KQs alive postflop.",
+      "mistakeEvLoss": "-1.3 BB/100"
+    },
+    "l6hu-tourney-ex3": {
+      "title": "The 8BB Push or Fold Line After the Blinds Rise",
+      "correctAction": "All-in",
+      "correctAmount": "8BB",
+      "reasoning": [
+        "8BB already sits in the shove-first-below-15BB tier: a min-raise leaves 6BB behind with about 4BB in the pot and no postflop room",
+        "When called, A5s has about 42% equity against the calling range: called branch = 0.42 × 9.5 − 0.58 × 8 = 3.99 − 4.64 = −0.65BB",
+        "Break-even fold rate = 0.65 ÷ (1.5 + 0.65) ≈ 30.2%; at this depth the opponent folds about 35%, so EV = 0.35 × 1.5 − 0.65 × 0.65 ≈ +0.10BB"
+      ],
+      "mistakeAction": "Fold (wait for a better hand)",
+      "mistakeReasoning": "One orbit costs 1.5BB in blinds, so 4 orbits burn 6BB — 75% of an 8BB stack. Rising blinds write the price of waiting straight onto the table.",
+      "mistakeEvLoss": "-1.5 BB/100"
     }
   },
   "lessonPractice": {
@@ -139,6 +219,26 @@
         }
       ],
       "tableDesc": "HU MTT final; deep stack 45BB vs a nit"
+    },
+    "l6hu-tourney-p4": {
+      "option": [
+        {
+          "action": "All-in 9BB",
+          "explanation": "9BB belongs to the shove tier: called branch = 0.44 × 10.5 − 0.56 × 9 = 4.62 − 5.04 = −0.42BB, break-even fold rate = 0.42 ÷ (1.5 + 0.42) ≈ 21.9%; the fold rate at this depth is about 45%, so EV = 0.45 × 1.5 − 0.55 × 0.42 ≈ +0.44BB — over the line.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Min-raise 2BB",
+          "explanation": "A min-raise at 9BB leaves 7BB behind with about 5BB in the pot: any postflop bet is close to commitment without ever threatening a shove, handing the decision to the bigger stack.",
+          "evImpact": "-1.2 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Blinds total 1.5BB per orbit, so 9BB lasts only 6 orbits; A9s has about 44% equity against any calling range, and folding swaps that 0.44 of equity for a better hand that does not exist.",
+          "evImpact": "-2.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up SNG final table; blinds about to rise, you 9BB versus 41BB"
     }
   },
   "lessonObjectives": {
@@ -147,5 +247,12 @@
       "Judge why shallow stacks replace complex postflop play with preflop shoving (rising blinds inflate waiting costs and shoves auto-profit)",
       "Explain the ICM character of a heads-up SNG final (winner takes all, lower pressure than full tables but still decisive) and judge the trade-off between conservative play when chip-leading and aggression when behind"
     ]
+  },
+  "unitTitle": {
+    "l6hu-tourney": {
+      "u1": "Stack Rhythm and Blind Pressure",
+      "u2": "ICM, Blind Battles and Shove Math",
+      "u3": "Theory Support and Changing Gears"
+    }
   }
 }

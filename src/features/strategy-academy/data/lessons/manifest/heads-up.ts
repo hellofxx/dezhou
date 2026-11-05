@@ -11,9 +11,9 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
     "icon": "🎯",
     "unlockRequirement": "完成 Level 2 所有课程",
     "lessons": [
-      {"id":"l3hu-bn-aggression","level":3,"order":1,"title":"按钮位激进度","subtitle":"单挑按钮位的频率优势与翻后持续施压","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l3hu-sb-continuation","level":3,"order":2,"title":"SB 持续下注","subtitle":"单挑 SB 翻后延续下注的尺度、频率与范围","duration":"7 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l3hu-bb-defense","level":3,"order":3,"title":"BB 防守","subtitle":"单挑大盲的宽范围防守、过牌加注与不利位置控制","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
+      {"id":"l3hu-bn-aggression","level":3,"order":1,"title":"按钮位激进度","subtitle":"单挑按钮位的频率优势与翻后持续施压","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l3hu-sb-continuation","level":3,"order":2,"title":"SB 持续下注","subtitle":"单挑 SB 翻后延续下注的尺度、频率与范围","duration":"7 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l3hu-bb-defense","level":3,"order":3,"title":"BB 防守","subtitle":"单挑大盲的宽范围防守、过牌加注与不利位置控制","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
     ]
   },
   {
@@ -24,10 +24,10 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
     "icon": "🧠",
     "unlockRequirement": "完成 Level 3 所有课程",
     "lessons": [
-      {"id":"l4hu-bn-opening","level":4,"order":1,"title":"按钮位开局加注","subtitle":"单挑按钮位接近 100% 的开局频率与尺度调整","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l4hu-ev-adjustments","level":4,"order":2,"title":"EV 调整","subtitle":"单挑两人底池的 EV 计算差异与决策简化","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l4hu-gto-basics","level":4,"order":1,"title":"单挑 GTO 基础","subtitle":"单挑均衡策略的结构差异、频率基准与位置对称性","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l4hu-counter-strategies","level":4,"order":2,"title":"反制策略","subtitle":"针对单挑对手常见偏离的 GTO 反制与再调整框架","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":5},
+      {"id":"l4hu-bn-opening","level":4,"order":1,"title":"按钮位开局加注","subtitle":"单挑按钮位接近 100% 的开局频率与尺度调整","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l4hu-ev-adjustments","level":4,"order":2,"title":"EV 调整","subtitle":"单挑两人底池的 EV 计算差异与决策简化","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l4hu-gto-basics","level":4,"order":3,"title":"单挑 GTO 基础","subtitle":"单挑均衡策略的结构差异、频率基准与位置对称性","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l4hu-counter-strategies","level":4,"order":4,"title":"反制策略","subtitle":"针对单挑对手常见偏离的 GTO 反制与再调整框架","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":10},
     ]
   },
   {
@@ -38,10 +38,10 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
     "icon": "🎲",
     "unlockRequirement": "完成 进阶思维·范围与EV 所有课程",
     "lessons": [
-      {"id":"l4hu-bn-opening","level":4,"order":1,"title":"按钮位开局加注","subtitle":"单挑按钮位接近 100% 的开局频率与尺度调整","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l4hu-ev-adjustments","level":4,"order":2,"title":"EV 调整","subtitle":"单挑两人底池的 EV 计算差异与决策简化","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l4hu-gto-basics","level":4,"order":1,"title":"单挑 GTO 基础","subtitle":"单挑均衡策略的结构差异、频率基准与位置对称性","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l4hu-counter-strategies","level":4,"order":2,"title":"反制策略","subtitle":"针对单挑对手常见偏离的 GTO 反制与再调整框架","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":5},
+      {"id":"l4hu-bn-opening","level":4,"order":1,"title":"按钮位开局加注","subtitle":"单挑按钮位接近 100% 的开局频率与尺度调整","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l4hu-ev-adjustments","level":4,"order":2,"title":"EV 调整","subtitle":"单挑两人底池的 EV 计算差异与决策简化","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l4hu-gto-basics","level":4,"order":3,"title":"单挑 GTO 基础","subtitle":"单挑均衡策略的结构差异、频率基准与位置对称性","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l4hu-counter-strategies","level":4,"order":4,"title":"反制策略","subtitle":"针对单挑对手常见偏离的 GTO 反制与再调整框架","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":10},
     ]
   },
   {
@@ -52,8 +52,8 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
     "icon": "🏆",
     "unlockRequirement": "完成 Level 4 所有课程",
     "lessons": [
-      {"id":"l5hu-focus","level":5,"order":1,"title":"单挑专注力","subtitle":"单挑高速决策节奏下的专注、状态管理与疲劳控制","duration":"7 min","variant":"heads-up","hasPractice":true,"quizCount":5},
-      {"id":"l5hu-opponent-psychology","level":5,"order":2,"title":"对手心理","subtitle":"单挑心理博弈：下注节奏、反应时间与行为模式解读","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
+      {"id":"l5hu-focus","level":5,"order":1,"title":"单挑专注力","subtitle":"单挑高速决策节奏下的专注、状态管理与疲劳控制","duration":"7 min","variant":"heads-up","hasPractice":true,"quizCount":10},
+      {"id":"l5hu-opponent-psychology","level":5,"order":2,"title":"对手心理","subtitle":"单挑心理博弈：下注节奏、反应时间与行为模式解读","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
     ]
   },
   {
@@ -64,7 +64,7 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
     "icon": "🎖️",
     "unlockRequirement": "完成 Level 5 所有课程",
     "lessons": [
-      {"id":"l6hu-tourney","level":6,"order":1,"title":"单挑锦标赛","subtitle":"单挑 SNG / MTT 决赛桌的筹码节奏、ICM 与盲注攻防","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
+      {"id":"l6hu-tourney","level":6,"order":1,"title":"单挑锦标赛","subtitle":"单挑 SNG / MTT 决赛桌的筹码节奏、ICM 与盲注攻防","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
     ]
   },
   {
@@ -76,7 +76,7 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
     "unlockRequirement": "完成 Level 3（翻后策略）和 Level 5（职业素养）所有课程",
     "prerequisiteLevelIds": ["l3","l5"],
     "lessons": [
-      {"id":"l7hu-stakes","level":7,"order":1,"title":"单挑策略基础","subtitle":"位置价值更大、范围更宽、决策更频繁","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":5},
+      {"id":"l7hu-stakes","level":7,"order":1,"title":"单挑策略基础","subtitle":"位置价值更大、范围更宽、决策更频繁","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
     ]
   },
   {
@@ -88,7 +88,7 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
     "unlockRequirement": "完成 Level 4B（GTO与博弈论）所有课程",
     "prerequisiteLevelIds": ["l4b"],
     "lessons": [
-      {"id":"l8hu-exploitative","level":8,"order":1,"title":"单挑剥削打法","subtitle":"单挑针对性剥削：频率读取、范围极化与动态调整","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":5},
+      {"id":"l8hu-exploitative","level":8,"order":1,"title":"单挑剥削打法","subtitle":"单挑针对性剥削：频率读取、范围极化与动态调整","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":10},
     ]
   },
 ];

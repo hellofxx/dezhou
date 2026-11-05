@@ -7,8 +7,12 @@
       "Postflop Pressure: C-Bet Frequency and Size",
       "Postflop you (SB) act last and hold position — the preflop initiative stacked on the postflop edge makes the C-Bet even more valuable. HU C-Bet frequency is far higher than full ring: because the opponent defends wide and hits rarely, your continuation bets steal pots at high frequency. On dry high boards use 1/3-pot small bets at high frequency (about 70%-80%); on wet connected boards use 2/3+ pot big bets to protect equity. The key — HU C-Bet value is \"making wide-range weak hands fold + thin value\", not \"representing strength\".",
       "Example: HU 100BB deep, you (SB) hold A♠5♠ and min-raise to 2BB, the BB calls, pot 4BB. Flop K♠7♦2♣. You are the preflop aggressor, and postflop the SB closes the action (IP). On this dry high board the BB's range rarely hits a K; you bet 1/3 pot about 1.3BB: A5's overcards + backdoor flush have enough equity to support continued pressure while making the BB's junk pay. If he folds you win 4BB directly; if he calls you have A-high as later improvement.",
+      "C-Bet fold-equity thresholds (pure-bluff framing, P = pot before the bet, b = bet size):\nBreak-even fold rate f = b ÷ (P + b)\nPot 4BB, 1/3-pot bet 1.33BB → f = 1.33 ÷ 5.33 ≈ 25%\nPot 4BB, 2/3-pot bet 2.67BB → f = 2.67 ÷ 6.67 ≈ 40%\n\nOne-street C-Bet EV (f = BB fold rate):\nEV = f × P − (1 − f) × b\nPot 4BB, bet 1.33BB, fold rate 60% → 0.6 × 4 − 0.4 × 1.33 = 2.4 − 0.53 ≈ +1.87BB\n\nTakeaway: at 1/3 pot you break even with only 25% folds, so 70%-80% high-frequency C-Bets on dry boards stay profitable;\nat 2/3 pot the bar rises to 40%, so wet boards must drop frequency and bet only hands with real equity.",
       "Counterintuitive point: \"constant pressure\" on the HU button doesn't mean \"bet every street\". Postflop the SB acts last, but on wet boards or when the turn changes hands, mix in checks to keep the pot small and watch for the BB striking back with an x/r — aggression is a frequency advantage, not mindless firing.",
-      "Button aggression quick memory: open about 80% preflop, C-Bet about 70%-80% (1/3 pot) on dry boards, lower frequency with big sizes on wet boards. Every 50 hands check: is your C-Bet frequency too low, letting the BB's weak hands see the turn cheaply? Is your open too tight, wasting your postflop position?"
+      "Theory support: the SB's opening range and postflop positional value are laid out in Theory Academy T3 \"SB Position Strategy\" — that chapter splits the ~80% open into a frequency ladder you can execute hand by hand, and this lesson's 70%-80% high-frequency C-Bet is its postflop extension.",
+      "Theory support: the preflop-to-postflop order flip is covered in Theory Academy T3 \"Position Reversal\" — the SB opens preflop yet closes the postflop streets, and once that order flips the cost of every decision flips with it.",
+      "Button aggression quick memory: open about 80% preflop, C-Bet about 70%-80% (1/3 pot) on dry boards, lower frequency with big sizes on wet boards. Every 50 hands check: is your C-Bet frequency too low, letting the BB's weak hands see the turn cheaply? Is your open too tight, wasting your postflop position?",
+      "Button aggression in three lines:\nOpen about 80% preflop — one opponent, and any pair, Ax, or suited connector has enough equity\nDry boards: 1/3 pot at 70%-80% frequency, where the break-even fold rate is only 25%\nWet boards or a turn that changes hands: drop frequency and price the BB's x/r before betting"
     ],
     "l3hu-sb-continuation": [
       "The SB's C-Bet: Continuation Pressure With Position",
@@ -18,19 +22,27 @@
       "The SB's postflop continuation choices have three tiers: (1) dry high boards (like K♠7♦2♣) — the SB's opening range holds plenty of Kx with a clear range advantage, so C-Bet 1/3-pot small bets at high frequency (about 70%-80%), making the BB's wide-range weak hands fold or pay thin value; (2) wet connected boards (like 9♠8♥6♣) — the BB's defense range holds many straights and draws, the nut advantage tilts toward the BB, so the SB lowers frequency (about 30%-40%) and mixes in checks; (3) neutral boards without range advantage — the SB bets small or medium with strong hands and good draws for thin value, and checks back air and weak pairs to keep the pot small, building a balanced range.",
       "Example: HU 100BB deep, you (SB) min-raise to 2BB, BB calls, pot 4BB. Flop Q♦8♣3♠ (dry). The BB checks first, and the decision comes to you acting last. Your opening range holds plenty of Qx and the BB's defense range rarely hits a Q — the range advantage is yours. Bet 1/3 pot about 1.3BB: QJ/QT thin value, A-high semi-bluffs, small pairs bet too — the whole range C-Bets at high frequency, and the BB's weak hands can only fold.",
       "Example 2 (wet-board frequency drop): Same pot, flop 9♠8♥6♣. The BB's defense range holds 87/65/97 and many straights/draws — nut advantage tilts to the BB. You hold K♠K♦ (overpair): still ahead but easily outdrawn, so bet 2/3 pot to protect equity, but A-high and small pairs should check for pot control — the SB's C-Bet frequency drops sharply on this board.",
+      "Bet sizing sets the pot odds the opponent must defend (MDF) and the bluff density you can carry (b = bet ÷ pot):\nMDF = P ÷ (P + b) = 1 ÷ (1 + b)\nBluff density = b ÷ (1 + 2b)\n\n1/3 pot: MDF = 1 ÷ (1 + 1/3) = 75%, bluff density = 0.33 ÷ 1.67 ≈ 20%\n1/2 pot: MDF = 1 ÷ (1 + 1/2) ≈ 66.7%, bluff density = 0.5 ÷ 2 = 25%\n2/3 pot: MDF = 1 ÷ (1 + 2/3) = 60%, bluff density = 0.67 ÷ 2.33 ≈ 28.6%\n\nHow to read it: the bigger the size, the less the opponent must defend (60% suffices), but the more bluffs you may legally carry;\na small 1/3-pot bet on a dry board demands the BB defend 75% — that is the math behind high-frequency small sizing.",
       "Counterintuitive point: a C-Bet with position isn't \"declaring the initiative\". You act last, so a check isn't weakness — it shrinks the pot on purpose and digests the information the BB reveals by moving first postflop. The real x/r lever sits in the OOP BB's hands; the SB's mixed checks make its own high-frequency C-Bet harder to strike back at — that is the mature HU SB play.",
-      "SB C-Bet three decision questions: (1) whose range does the board hit? (2) is my hand value, semi-bluff, or pure air? (3) can I respond when the BB moves first postflop and fights back? After the three questions, continuation betting with position turns from habit into structure."
+      "Theory support: bet sizing and the defense ratio it forces (MDF) are covered in Theory Academy T6 \"Optimal Bet Sizing\" — that chapter converts every size from 1/3 pot up to overbet into MDF and bluff density, and this lesson's high-frequency small bets are the 1/3-pot rung.",
+      "Theory support: the same equity cashes out into chips at different rates on different boards, covered in Theory Academy T6 \"Equity Realization and Board Texture\" — wet connected boards call for lower frequency precisely because board texture suppresses equity realization.",
+      "SB C-Bet three decision questions: (1) whose range does the board hit? (2) is my hand value, semi-bluff, or pure air? (3) can I respond when the BB moves first postflop and fights back? After the three questions, continuation betting with position turns from habit into structure.",
+      "SB continuation in three lines:\nFirst ask whose range the board hits, then pick the frequency and the size\nDry high boards: 1/3 pot at 70%-80% (the BB must defend 75%); wet connected boards drop to 30%-40%\nChecking with position isn't weakness — it prices the BB's x/r risk and then collects the pot on your terms"
     ],
     "l3hu-bb-defense": [
       "The BB: The Seat With the Most Preflop Information, Acting First Postflop",
       "In heads-up the SB opens first and the BB has the final say preflop, yet the BB faces the SB's attack every hand and defends at a frequency of 60%+. This \"60%+ defense\" isn't passive calling but structured defense: a call pile (small/medium pairs, suited connectors, weak Ax) + a 3-bet value pile (strong hands for value) + a 3-bet bluff pile (blockers). The math behind defending wide is the BB's preflop information plus the pot odds from the 1BB of dead money already in: versus an SB min-raise to 2BB you only need 1BB more. Stay clear-eyed that postflop the BB acts first — the over-100% equity-realization bonus belongs to the SB, who holds position; the BB compensates with check-calls and pot control.",
       "The BB's \"60%+ defense\" is structured defense: the BB has the final say preflop and already owns 1BB of dead money, so calling with marginal hands is far cheaper than full ring. Bringing full ring's \"the BB can only play tight\" into HU throws away that information and odds edge for free — and since postflop the BB acts first, the width must come with check-call and pot-control discipline.",
+      "BB calling price lines (SB opens; the pot after calling includes both sides' dead money):\nRequired equity = amount to call ÷ total pot after calling\nSB opens 2BB → 1 ÷ (2 + 1 + 1) = 1 ÷ 4 = 25%\nSB opens 4BB → 3 ÷ (4 + 1 + 3) = 3 ÷ 8 = 37.5%\nSB opens 5BB → 4 ÷ (5 + 1 + 4) = 4 ÷ 10 = 40%\nThe bigger the open, the more equity the BB needs, so the defense range narrows.\n\nBreak-even fold rate for an x/r semi-bluff (P = pot after the SB's C-Bet, R = the BB's raise size):\nf ≥ R ÷ (P + R)\nExample: pot 4BB, SB C-Bets 1.3BB → P = 5.3BB; the BB x/r's to 4BB → f ≥ 4 ÷ 9.3 ≈ 43%\n\nHow to read it: the more often the SB C-Bets and the less it folds, the closer the BB's x/r semi-bluff gets to printing automatically.",
       "Check-Raise (x/r): The BB's Key Lever",
       "Postflop the BB acts first; after checking it often faces the SB's C-Bet: call, check-raise, or fold. The check-raise (x/r) is the BB's key tool for building its range — strong hands + strong draws form a polarized x/r range that suppresses the SB's C-Bet frequency and protects the calling range from exploitation. The x/r math: when the SB's C-Bet frequency is too high and its fold rate too low, the BB's x/r semi-bluff profits automatically.",
       "Example: HU 100BB deep, the SB min-raises to 2BB, you (BB) call with 7♠6♠, pot 4BB. Flop 8♣5♦2♠. You check, and the SB c-bets 1.3BB (half pot). You have a double-gutshot (4 fours + 4 nines) + backdoor flush — a standard x/r semi-bluff hand. Raise to about 4BB: if the SB folds you win 5.3BB directly; if called you have 8+ outs of improvement. The x/r protects your draw and makes the SB's wide-range C-Bet pay.",
       "Example 2 (control from a disadvantage): same pot, you (BB) hold A♠K♠, flop K♦8♣3♥ (dry top pair). You check first and the SB c-bets 1.3BB. Top pair top kicker on a dry board leans toward calling rather than raising — calling keeps the SB's bluffs coming, and it holds the pot down while the BB acts first. An x/r would instead scare off the SB's weak hands and waste the thin value of top pair. The discipline for the side that acts first is \"realize strong hands via check-call; don't build big pots casually\".",
       "Counterintuitive point: wide BB defense isn't a calling station. A real station has no x/r and no 3-bet pile; the HU BB's 60% consists of calls, 3-bet value, 3-bet bluffs, and x/r — each moving with the SB's tendencies. Defense width and defense passivity are two different things.",
-      "BB defense three-step quick check: (1) call the pot odds — calling line 25% vs a 2BB SB open (SB 2 + your own 1 = pot 3, then call 1 more, 1÷(3+1)=25%); (2) split piles — strong made hands 3-bet value, blockers 3-bet bluff, medium hands call; (3) watch the SB — raise 3-bet vs an over-folder, raise isolate vs a big limper, raise x/r vs an over-frequent C-Better."
+      "Theory support: the BB's defense width and preflop price lines are covered in Theory Academy T3 \"BB Position Defense\" — that chapter splits calling, 3-bet value, and 3-bet bluffs into three tiers and gives each tier its odds threshold.",
+      "Theory support: the 3-bet and 4-bet size structure is covered in Theory Academy T4 \"Preflop 3-bet and 4-bet Structure\" — turning every preflop node into a price line is what lets the BB judge where to tighten and where to fight back.",
+      "BB defense three-step quick check: (1) call the pot odds — calling line 25% vs a 2BB SB open (SB 2 + your own 1 = pot 3, then call 1 more, 1÷(3+1)=25%); (2) split piles — strong made hands 3-bet value, blockers 3-bet bluff, medium hands call; (3) watch the SB — raise 3-bet vs an over-folder, raise isolate vs a big limper, raise x/r vs an over-frequent C-Better.",
+      "BB defense in three lines:\nThe 60%+ width comes from acting last preflop plus the 1BB of dead money — it is not passive calling\nCalling lines rise with the open size: min-raise needs only 1 ÷ (3 + 1) = 25%, a 4BB open pushes it to 3 ÷ 8 = 37.5%\nThe x/r is the postflop weapon: strong hands and strong draws polarize, with a break-even fold rate of about R ÷ (P + R)"
     ]
   },
   "lessonQuiz": {
@@ -84,6 +96,41 @@
       ],
       "explanation": "HU faces only one opponent; any pair, Ax, and suited connectors have enough equity against a wide range, plus the SB holds position postflop — hence high-frequency opens."
     },
+    "l3hu-bn-aggression-q6": {
+      "question": "The pot is 4BB and you bet 1.33BB (1/3 pot) on a dry high board. The break-even fold rate of this C-Bet is about:",
+      "options": ["About 25%", "About 33%", "About 40%", "About 67%"],
+      "explanation": "Break-even fold rate f = b ÷ (P + b) = 1.33 ÷ (4 + 1.33) ≈ 25%. The \"about 33%\" figure comes from dividing the bet by the pot (1.33 ÷ 4), which is the wrong denominator; a 2/3-pot bet is what needs about 40%."
+    },
+    "l3hu-bn-aggression-q7": {
+      "question": "The pot is 4BB, you bet 1.33BB, and the BB folds 60% of the time. The EV of this one-street C-Bet is about:",
+      "options": ["+1.87BB", "+2.40BB", "+1.07BB", "-0.53BB"],
+      "explanation": "EV = f × P − (1 − f) × b = 0.6 × 4 − 0.4 × 1.33 = 2.4 − 0.53 ≈ +1.87BB. +2.40 counts only the fold payoff and ignores the loss when called; +1.07 subtracts 1.33 once instead of multiplying it by 40%."
+    },
+    "l3hu-bn-aggression-q8": {
+      "question": "Same 4BB pot, but now a wet board and a 2/3-pot bet (2.67BB). The break-even fold rate rises to:",
+      "options": ["About 25%", "About 40%", "About 50%", "About 67%"],
+      "explanation": "f = 2.67 ÷ (4 + 2.67) ≈ 40%, 15 points above the 25% of a 1/3-pot bet. The same hand needs more folds on a wet board to break even — that is the arithmetic reason frequency has to come down."
+    },
+    "l3hu-bn-aggression-q9": {
+      "question": "The math precondition for keeping 70%-80% C-Bet frequency on dry high boards is:",
+      "options": [
+        "The opponent's fold rate stays above the 25% break-even line",
+        "The opponent never folds",
+        "The opening range must tighten to 20%",
+        "Every street must be bet to the river"
+      ],
+      "explanation": "At 1/3 pot a 25% fold rate already breaks even; while the BB's fold rate stays above that line, wide-range high-frequency C-Bets keep profiting. If the opponent almost never folds, tighten the range and raise the value density of your betting range instead of chasing frequency."
+    },
+    "l3hu-bn-aggression-q10": {
+      "question": "You make a small C-Bet on a dry board, the BB check-raises, and you hold ace-high with no pair and no draw. The right play is:",
+      "options": [
+        "Call with position and see the turn",
+        "Fold — don't prop up the pot with a zero-equity hand",
+        "Shove as a re-bluff",
+        "Re-raise back"
+      ],
+      "explanation": "The BB's x/r polarizes its range into strong hands and strong draws; ace-high with no pair has neither made-hand strength nor a draw, so position buys no equity. More chips only build a bigger pot inside the opponent's strong range."
+    },
     "l3hu-sb-continuation-q1": {
       "question": "The HU SB acts last postflop (IP); its C-Bet core characteristic is:",
       "options": [
@@ -134,6 +181,46 @@
       ],
       "explanation": "An overpair on a wet board is ahead but easily outdrawn — use 2/3-pot big bets to protect; simultaneously weak hands in the range check to build a balanced bet/check structure."
     },
+    "l3hu-sb-continuation-q6": {
+      "question": "The pot is 4BB and the SB C-Bets 1/3 pot. The BB's minimum defense frequency (MDF) is:",
+      "options": ["75%", "60%", "50%", "25%"],
+      "explanation": "MDF = P ÷ (P + b) = 1 ÷ (1 + 1/3) = 75%: against a 1/3-pot bet the BB must defend 75% so you cannot auto-profit with any two cards. Flipped around, your break-even fold rate is 25%."
+    },
+    "l3hu-sb-continuation-q7": {
+      "question": "With a 2/3-pot bet, the bluff density you can legally carry is about:",
+      "options": ["About 20%", "About 28.6%", "About 40%", "About 50%"],
+      "explanation": "Bluff density = b ÷ (1 + 2b) = 0.67 ÷ 2.33 ≈ 28.6% (20% at 1/3 pot). The bigger the size, the larger the bluff share of a balanced range — one more reason to pick hands carefully when sizing up on wet boards."
+    },
+    "l3hu-sb-continuation-q8": {
+      "question": "On a neutral board with no range advantage, how should the SB build its betting range?",
+      "options": [
+        "Strong hands and good draws bet small or medium for thin value; air and weak pairs check back",
+        "The whole range bets full pot",
+        "Only the nuts bet",
+        "Always check"
+      ],
+      "explanation": "A neutral board offers no range advantage to harvest, so the answer is layering: strong hands and good draws take thin value with small or medium bets, while air and weak pairs check back — keeping both the betting and the checking range defensible."
+    },
+    "l3hu-sb-continuation-q9": {
+      "question": "Why is a check with position not weakness?",
+      "options": [
+        "The SB acts last, so checking collects the pot, digests what the BB revealed, and makes a high-frequency C-Bet harder to x/r",
+        "Because checking lets you see cards for free",
+        "Because the BB will always bet",
+        "Because the rules require one check per street"
+      ],
+      "explanation": "The player with the last word chooses to check rather than being forced to: it keeps the pot small, absorbs the information the BB revealed by moving first, and denies the opponent a profitable high-frequency x/r against your C-Bet frequency."
+    },
+    "l3hu-sb-continuation-q10": {
+      "question": "The opponent's check-raise frequency rises from 10% to 30%. How should you adjust your C-Bet strategy?",
+      "options": [
+        "Keep firing at high frequency and ignore the opponent's tendencies",
+        "Lower C-Bet frequency, narrow the betting range, check more, and price the x/r cost into the decision",
+        "Shove every hand",
+        "Only bet the river"
+      ],
+      "explanation": "The break-even fold rate for an x/r is f ≥ R ÷ (P + R): the more the opponent check-raises, the higher the implicit cost of betting. The answer is to bet less often, raise the value density of the betting range, and move more medium hands into the checking range."
+    },
     "l3hu-bb-defense-q1": {
       "question": "The typical HU BB defense frequency vs an SB open is about:",
       "options": [
@@ -183,6 +270,46 @@
         "The BB's defense is more passive"
       ],
       "explanation": "The BB's 60% is a \"structured choice\" (including 3-bet and x/r levers), while a station is passive \"reluctant to fold\". Defense width ≠ defense passivity."
+    },
+    "l3hu-bb-defense-q6": {
+      "question": "The SB opens to 4BB. The BB's required equity to call is:",
+      "options": ["25%", "37.5%", "40%", "50%"],
+      "explanation": "Calling 3BB more into an 8BB total pot (the 4BB open + your own 1BB in + the 3BB call) needs 3 ÷ 8 = 37.5%. 25% is the min-raise line, and 40% corresponds to a 5BB open."
+    },
+    "l3hu-bb-defense-q7": {
+      "question": "Pot 4BB, the SB C-Bets 1.3BB, and the BB check-raises to 4BB. The break-even fold rate is about:",
+      "options": ["About 25%", "About 43%", "About 57%", "About 75%"],
+      "explanation": "f ≥ R ÷ (P + R) = 4 ÷ (5.3 + 4) ≈ 43%. That is the pure-bluff framing; a 12-out draw can run a lower fold rate because its two-street made-hand equity of about 45% keeps the play positive."
+    },
+    "l3hu-bb-defense-q8": {
+      "question": "The BB splits its 3-bet range into a value tier and a bluff tier. The split is based on:",
+      "options": [
+        "Made-hand strength and blocker effects",
+        "Whether the suits look nice",
+        "Calling saves chips",
+        "Random assignment"
+      ],
+      "explanation": "The value tier uses strong made hands that worse hands can call; the bluff tier uses blockers that shrink the opponent's continuing range. Suits looking nice or saving chips are not tier criteria."
+    },
+    "l3hu-bb-defense-q9": {
+      "question": "The SB raises its open size from 2BB to 5BB. The BB's defense range should:",
+      "options": [
+        "Tighten, because the required equity rises from 25% to 40%",
+        "Widen, because the pot is bigger",
+        "Stay the same — the rules don't allow adjusting",
+        "Shove every hand"
+      ],
+      "explanation": "Against a 5BB open you call 4BB into a 10BB total pot, needing 4 ÷ 10 = 40% (only 25% versus a min-raise). With a higher bar, the worst marginal hands get folded and suited connectors plus big Ax stay."
+    },
+    "l3hu-bb-defense-q10": {
+      "question": "The BB acts first postflop and realizes equity below 100%. The compensating tools are:",
+      "options": [
+        "Check-calls and pot control to offset acting first",
+        "Donk betting as compensation",
+        "A higher open frequency as compensation",
+        "No compensation needed"
+      ],
+      "explanation": "The compensation is check-calling and pot control: calling keeps the opponent's bluffs coming and avoids building a big pot with no position, rather than relying on donks or extra opens."
     }
   },
   "lessonExample": {
@@ -199,6 +326,31 @@
       "mistakeReasoning": "Playing HU with full-ring standards wastes the button's frequency and positional edge. Q7s is a standard open in HU.",
       "mistakeEvLoss": "-1.5 BB/100"
     },
+    "l3hu-bn-aggression-ex2": {
+      "title": "River Thin Value: A 1/3-Pot Bet Widens the Calling Range",
+      "correctAction": "Bet",
+      "correctAmount": "6BB (1/3 pot)",
+      "reasoning": [
+        "Q-8-5-2-3 is a very dry runout; QJ is top pair with a good kicker, and the BB's check-down range is mostly 8x, small pairs, and overcards",
+        "Pot 18BB, bet 6BB: after calling 6BB the BB sees a 24BB pot, so it needs only 6 ÷ 24 = 25% equity — 8x and 99-JJ thin calls all pay",
+        "Top pair on the river collects one round of thin value; the goal is not to get called by two pair or better"
+      ],
+      "mistakeAction": "Bet 18BB (full pot)",
+      "mistakeReasoning": "A full-pot bet leaves only two pair or better calling, so QJ goes from collecting thin value to being answered only by stronger hands — the sizing eats your own value.",
+      "mistakeEvLoss": "-1.2 BB/100"
+    },
+    "l3hu-bn-aggression-ex3": {
+      "title": "Blank Turn: Ace-High Doesn't Fire a Second Barrel",
+      "correctAction": "Check",
+      "reasoning": [
+        "On the K-9-4 flop you bet 2BB (1/2 pot) with ace-high; the BB's call narrows its range to Kx, 9x, small pairs, and draws",
+        "The 2♦ turn is blank: A6 still has only ace-high — no pair and no draw — so a second barrel cannot fold out better hands",
+        "Checking keeps the 8BB pot and sees the river for free, leaving the next bet for hands with a pair or a draw"
+      ],
+      "mistakeAction": "Bet 2.7BB (1/3 pot)",
+      "mistakeReasoning": "Firing again on a blank turn means paying 2.7BB for a fold rate that is almost impossible to reach — K-9-4-2 is one of the densest regions of the BB's calling range.",
+      "mistakeEvLoss": "-0.7 BB/100"
+    },
     "l3hu-sb-continuation-ex1": {
       "title": "SB High-Frequency C-Bet on a Dry Board",
       "correctAction": "Bet",
@@ -212,6 +364,31 @@
       "mistakeReasoning": "Top pair on a dry board is a standard C-Bet hand for the SB's range; checking lets the BB realize its weak range too cheaply and wastes the range advantage.",
       "mistakeEvLoss": "-1.0 BB/100"
     },
+    "l3hu-sb-continuation-ex2": {
+      "title": "Overpair on a Wet Connected Board: 2/3-Pot Equity Protection",
+      "correctAction": "Bet",
+      "correctAmount": "2.7BB (2/3 pot)",
+      "reasoning": [
+        "T-9-7 two-tone is a wet connected board: plenty of 8x, Jx, flush draws, and straight draws in the BB's defense range all come alive",
+        "AA is still an overpair, but every street can outdraw it: a 2/3-pot bet charges the 8 straight outs and the 9 flush outs",
+        "If called, a blank turn still lets you keep pressing; if raised, you hold the very top of your range with a clear continue standard"
+      ],
+      "mistakeAction": "Bet 1.3BB (1/3 pot)",
+      "mistakeReasoning": "Copying the dry-board 1/3-pot sizing on a wet board lets the BB buy the turn at the cheapest possible price and magnifies the chance your overpair is outdrawn.",
+      "mistakeEvLoss": "-0.6 BB/100"
+    },
+    "l3hu-sb-continuation-ex3": {
+      "title": "After the Check-Raise: Price It with Pot Odds",
+      "correctAction": "Fold",
+      "reasoning": [
+        "A wet connected board is already the BB's nut-advantage zone; after the check-raise its range polarizes further into straights, two pair, and strong draws",
+        "Pot odds: preflop pot 4 + the SB's 2.7 + the BB's 9 = 15.7BB, so the SB must call 6.3BB more; 6.3 ÷ (15.7 + 6.3) ≈ 28.6%",
+        "AK has only two overcards, 6 outs; getting there by the river is about 24% (1 − 41/47 × 40/46), below the 28.6% calling line — fold"
+      ],
+      "mistakeAction": "Call",
+      "mistakeReasoning": "Calling with about 24% equity against a 28.6% price keeps building a pot inside the opponent's nut-advantage range — a long-run loss.",
+      "mistakeEvLoss": "-0.9 BB/100"
+    },
     "l3hu-bb-defense-ex1": {
       "title": "BB Marginal Call vs the SB's Wide Open",
       "correctAction": "Call",
@@ -224,6 +401,32 @@
       "mistakeAction": "Fold (\"K7s is a bad hand\")",
       "mistakeReasoning": "Playing HU with full-ring standards throws away the BB's preflop information edge and pot odds. K7s versus the SB's wide range is a +EV call.",
       "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l3hu-bb-defense-ex2": {
+      "title": "BB Value 3-bet: AQ Is Not a Calling Hand",
+      "correctAction": "3-bet",
+      "correctAmount": "7BB",
+      "reasoning": [
+        "AQ has about 65% equity against the SB's ~80% opening range, which puts it in the BB's 3-bet value tier",
+        "3-bet to 7BB: the SB has 2BB in and the pot is 3BB; your 6BB more pushes the pot to 9BB while collecting the 2BB of dead money",
+        "If 4-bet, just fold at the opponent's frequency — the value comes from equity when called, not from fold equity"
+      ],
+      "mistakeAction": "Call (1BB only)",
+      "mistakeReasoning": "Calling lets the SB realize equity with position at the cheapest possible price, a long-run value leak; this hand belongs to the 3-bet value tier, not the calling tier.",
+      "mistakeEvLoss": "-1.2 BB/100"
+    },
+    "l3hu-bb-defense-ex3": {
+      "title": "Flop Check-Raise: A 12-Out Semi-Bluff",
+      "correctAction": "Check-Raise",
+      "correctAmount": "4BB",
+      "reasoning": [
+        "87 on J-9-4 two-tone: 9 flush outs plus 3 extra straight outs for the T (T♠ is already counted among the flush outs) gives 12 outs",
+        "x/r to 4BB risks 4BB to win 5.3BB, so the break-even fold rate is f ≥ 4 ÷ (5.3 + 4) ≈ 43%; with 12 outs the two-street equity of about 45% already covers it",
+        "When called, the turn still brings about 26% single-street equity (12 ÷ 46), so raising does not cut the draw off from its outs"
+      ],
+      "mistakeAction": "Check-Call (1.3BB)",
+      "mistakeReasoning": "Calling 1.3BB lets the SB's small bet realize value at the cheapest price and turns a 12-out draw passive; on this board it is a standard x/r hand.",
+      "mistakeEvLoss": "-1.1 BB/100"
     }
   },
   "lessonPractice": {
@@ -287,6 +490,26 @@
       ],
       "tableDesc": "Heads-up cash game"
     },
+    "l3hu-bn-aggression-p4": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "T9 on 8-7-2 with two hearts has 15 outs (8 straight + 9 flush − 2 overlap); this is a standard semi-bluff hand, and checking gives the equity away.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 2.7BB (2/3 pot)",
+          "explanation": "A wet connected board calls for a 2/3-pot big bet: a 15-out semi-bluff wants both fold equity and to charge the BB's draws, and the 2.67 ÷ 6.67 ≈ 40% break-even fold rate is covered by the draw's equity.",
+          "evImpact": "+1.6 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving the flop deep-stacked leaves only stronger made hands calling, turning a 15-out draw into a pure bluff.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; wet two-tone connected board"
+    },
     "l3hu-sb-continuation-p1": {
       "option": [
         {
@@ -347,6 +570,26 @@
       ],
       "tableDesc": "Heads-up cash game"
     },
+    "l3hu-sb-continuation-p4": {
+      "option": [
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "9-8-6 two-tone is the BB's nut-advantage zone; A4 has only ace-high plus a backdoor flush draw, so a 1/3-pot bet buys no folds.",
+          "evImpact": "-0.6 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Drop frequency on wet connected boards: this hand has no pair and no single-street straight draw, so check to keep the pot small, save the bets for hands with equity, and keep fold room against an x/r.",
+          "evImpact": "+0.4 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Shoving with ace-high and no made hand just donates chips — the BB's straight and flush draws all happily call.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; wet connected board"
+    },
     "l3hu-bb-defense-p1": {
       "option": [
         {
@@ -406,6 +649,26 @@
         }
       ],
       "tableDesc": "Heads-up cash game; 3-bet pot"
+    },
+    "l3hu-bb-defense-p4": {
+      "option": [
+        {
+          "action": "Call",
+          "explanation": "Flatting QQ lets the SB realize equity with position at the cheapest price — a long-run value leak; this hand belongs to the 3-bet value tier.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "3-bet to 7BB",
+          "explanation": "QQ is the value 3-bet tier: a pure bluff to 7BB needs 6 ÷ (3 + 6) ≈ 67% folds just to break even, and the SB folds only 35% — the value here comes from about 65% equity when called, not from folds.",
+          "evImpact": "+2.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A 100BB shove leaves only AA/KK calling, turning QQ into a bluff.",
+          "evImpact": "-3.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the SB folds only 35% to 3-bets"
     }
   },
   "lessonObjectives": {
@@ -424,5 +687,22 @@
       "Use the pot-odds formula to compute the BB's calling line vs an SB min-raise (1/(3+1) = 25%)",
       "Judge that strong draws should x/r semi-bluff vs a C-Bet and that top pair top kicker should call for pot control on dry boards, keeping the SB's bluffs alive"
     ]
+  },
+  "unitTitle": {
+    "l3hu-bn-aggression": {
+      "u1": "Positional Edge and Opening Frequency",
+      "u2": "C-Bet Frequency and Size",
+      "u3": "When to Stop and the Theory Behind It"
+    },
+    "l3hu-sb-continuation": {
+      "u1": "C-Bet Discipline With Position",
+      "u2": "Size and Range: When to Continue, When to Check",
+      "u3": "Theory Support and Getting Off the Hand"
+    },
+    "l3hu-bb-defense": {
+      "u1": "Preflop Defense: Width and Price Lines",
+      "u2": "Check-Raise: The Postflop Lever",
+      "u3": "Theory Support and Defensive Discipline"
+    }
   }
 }
