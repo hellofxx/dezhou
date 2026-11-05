@@ -19,12 +19,19 @@ import { describe, expect, it } from 'vitest';
  * 段落同时含翻前与翻后标记则不可判（返回 null，不产生假绿）。
  */
 
+/**
+ * 单挑策略文案已按 Level 拆分（heads-up-l3..l8）：逐份扫描，避免新增文件逃逸。
+ * 旧 heads-up.json 已置空，不再纳入扫描面。
+ */
+const HU_LEVELS = [3, 4, 5, 6, 7, 8] as const;
 const HU_KEYS = [
   { file: 'i18n/locales/zh/theory.json', huOnly: true },
   { file: 'i18n/locales/en/theory.json', huOnly: true },
-  { file: 'i18n/locales/zh/academy-course/heads-up.json', huOnly: false },
-  { file: 'i18n/locales/en/academy-course/heads-up.json', huOnly: false },
-] as const;
+  ...HU_LEVELS.flatMap((level) => [
+    { file: `i18n/locales/zh/academy-course/heads-up-l${level}.json`, huOnly: false },
+    { file: `i18n/locales/en/academy-course/heads-up-l${level}.json`, huOnly: false },
+  ]),
+];
 
 /** 干扰项容器：locale 里以 `.options` 结尾的层级（含 `options.0` 与数组式 `options`） */
 const IS_OPTION_FIELD = /(?:^|\.)options(?:\.\d+)?$/;

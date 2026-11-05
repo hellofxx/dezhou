@@ -50,7 +50,9 @@ export function deriveAcademyCourseFilesForLesson(lessonId: string): string[] {
   const extras = [...COURSE_EXTRA_FILES];
   if (lessonId.startsWith('local-')) return ['local-lessons', ...extras];
   if (/^l\d+sd-/.test(lessonId)) return ['short-deck', ...extras];
-  if (/^l\d+hu-/.test(lessonId)) return ['heads-up', ...extras];
+  // 单挑文案按 Level 拆分（heads-up-l3..l8），与每课单文件的 data 层对齐
+  const huMatch = /^l(\d)hu-/.exec(lessonId);
+  if (huMatch) return [`heads-up-l${huMatch[1]}`, ...extras];
   const levelMatch = /^l(\d)/.exec(lessonId);
   if (levelMatch) return [`level${levelMatch[1]}`, ...extras];
   if (lessonId.startsWith('drill-')) return ['level1', ...extras];

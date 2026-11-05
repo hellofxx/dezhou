@@ -28,7 +28,8 @@ describe('deriveAcademyCourseFilesForLesson', () => {
 
   it('变体 / 本土课 / Drill 课程映射到各自文件', () => {
     expect(deriveAcademyCourseFilesForLesson('l3sd-something')[0]).toBe('short-deck');
-    expect(deriveAcademyCourseFilesForLesson('l3hu-something')[0]).toBe('heads-up');
+    expect(deriveAcademyCourseFilesForLesson('l3hu-something')[0]).toBe('heads-up-l3');
+    expect(deriveAcademyCourseFilesForLesson('l8hu-something')[0]).toBe('heads-up-l8');
     expect(deriveAcademyCourseFilesForLesson('local-mental-tilt-recognition')[0]).toBe(
       'local-lessons',
     );

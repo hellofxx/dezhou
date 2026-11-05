@@ -1,0 +1,151 @@
+{
+  "lessonContent": {
+    "l6hu-tourney": [
+      "HU Tournaments: The Game of Chips and Blinds",
+      "HU tournaments (SNG final table / MTT heads-up) differ from ante-structure, fixed-depth cash games: blinds rise over time, chips are a finite resource, and ICM pressure dominates decisions. In HU tournaments, chip rhythm becomes the core — deep stacks (40BB+) can maintain cash-style postflop play, while shallow stacks (under 20BB) shift to preflop shove games.",
+      "The golden rule of HU tournaments: the shallower the stack and the higher the blind share, the more frequent preflop shoves. ICM and blind pressure make \"survival\" and \"aggression\" equally important goals.",
+      "ICM and Blind Attack/Defense",
+      "The ICM at an HU SNG final table is simple: the winner takes all the prize, so ICM pressure is lower than full ring but still affects decisions — you avoid unnecessary variance when deep (protecting the lead) and use high aggression to double when behind. Blind attack/defense: shallow-stacked (like 15-20BB), the min-raise steal + shove becomes the main weapon because rising blinds make your steals auto-profit; while cash's complex postflop play fails at shallow stacks.",
+      "Example: HU SNG final table, you have 18BB vs the opponent's 22BB, blinds 0.5/1. You (SB) hold A♠4♠. At this depth, A4s is in the standard push/shove range: about 50% equity vs the BB's ~60% calling range, the 18BB shove is +EV, and rising blinds lower the value of waiting. Deep-stacked (60BB+), A4s is still an open but with more postflop room. Stack depth directly changes how the same hand plays.",
+      "Example 2 (the urgency of rising blinds): HU MTT final, blinds rise every 5 minutes and you drop from 30BB to 12BB. Now \"waiting for good cards\" is wrong — rising blinds spike your waiting cost. The correct strategy is raising shove frequency, using any hand with equity (pairs, Ax, strong suited connectors) to steal and double. The key to chip rhythm: act before the blinds devour you.",
+      "Counterintuitive point: the ICM logic of \"conservative when ahead, aggressive when behind\" in HU tournaments differs from cash's \"always max EV\". When deep and ahead, avoid big variance; when behind, double aggressively — because in a tournament only first place matters.",
+      "HU tournament chip-rhythm quick memory: (1) 40BB+ deep stacks maintain cash-style play; (2) 20-40BB medium stacks, min-raise + postflop; (3) under 15BB shallow stacks, shoves dominate. Re-evaluate your strategy after every blind rise — don't let the old rhythm hurt you."
+    ]
+  },
+  "lessonQuiz": {
+    "l6hu-tourney-q1": {
+      "question": "The core difference between HU tournaments and cash is:",
+      "options": [
+        "No difference",
+        "Blinds rise, chips are finite, ICM pressure dominates",
+        "HU tournaments deal bigger cards",
+        "Cash has higher blinds"
+      ],
+      "explanation": "HU tournaments have rising blinds, finite chips, and ICM pressure, with strategy adjusting dynamically by stack depth."
+    },
+    "l6hu-tourney-q2": {
+      "question": "The correct strategy at HU tournament shallow stacks (under 15BB) is:",
+      "options": [
+        "Complex postflop play",
+        "Preflop shoves dominate, stealing with any hand with equity",
+        "Wait for good cards",
+        "Check everything"
+      ],
+      "explanation": "At shallow stacks preflop shoves become the main weapon because rising blinds make steals auto-profit and waiting costs spike."
+    },
+    "l6hu-tourney-q3": {
+      "question": "The ICM characteristic of an HU SNG final table is:",
+      "options": [
+        "Extremely high ICM pressure, near full ring",
+        "The winner takes all; ICM pressure is relatively low but still affects decisions",
+        "No ICM",
+        "ICM only exists on the bubble"
+      ],
+      "explanation": "The HU final-table winner takes all, so ICM pressure is relatively low vs full ring but still affects decisions — avoid variance when deep, double aggressively when behind."
+    },
+    "l6hu-tourney-q4": {
+      "question": "The effect of rising blinds on HU tournament strategy is:",
+      "options": [
+        "No effect",
+        "Waiting costs spike — raise action frequency rather than waiting for cards",
+        "Be more conservative",
+        "Only affects cash games"
+      ],
+      "explanation": "Rising blinds spike your waiting cost; the correct strategy is raising shove/steal frequency and acting before the blinds devour you."
+    },
+    "l6hu-tourney-q5": {
+      "question": "The strategy at the 20-40BB medium-stack stage of HU tournaments is:",
+      "options": [
+        "All shoves",
+        "Min-raise + postflop, balancing steal and postflop",
+        "Pure waiting",
+        "Only the nuts"
+      ],
+      "explanation": "The medium stage (20-40BB) balances steal and postflop — min-raise plus postflop is reasonable, differing from the shallow-stack shove-dominant approach."
+    }
+  },
+  "lessonExample": {
+    "l6hu-tourney-ex1": {
+      "title": "Shallow-Stack HU Tournament Shove",
+      "correctAction": "All-in",
+      "correctAmount": "15BB",
+      "reasoning": [
+        "At a shallow stack (15BB), A7o has about 55% equity vs the BB's wide range",
+        "Rising blinds make waiting costly — shove to steal and double",
+        "Under ICM, double aggressively when behind"
+      ],
+      "mistakeAction": "Wait for good cards before acting",
+      "mistakeReasoning": "At a shallow stack with rising blinds, waiting costs spike; A7o is a standard shove — waiting is an error.",
+      "mistakeEvLoss": "-2.0 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l6hu-tourney-p1": {
+      "option": [
+        {
+          "action": "All-in",
+          "explanation": "KQs is in the shallow-stack shove range, about 58% vs a wide range — steal and double.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "KQs at a shallow stack is a strong shove; folding is too tight.",
+          "evImpact": "-2.0 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "A shallow-stack limp lets the opponent isolate; the shove is better.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "HU SNG final table; short stack 15BB"
+    },
+    "l6hu-tourney-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "Blinds are about to rise and waiting costs are high; T8s has shove equity — folding is too tight.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Rising blinds create urgency; T8s suited connector has equity — shove to steal and double.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Min-raise",
+          "explanation": "At a shallow stack (12BB) the min-raise can't cover later shoves — push directly is better.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "HU SNG final table; short stack 12BB, blinds about to rise"
+    },
+    "l6hu-tourney-p3": {
+      "option": [
+        {
+          "action": "Min-raise",
+          "explanation": "Deep-stacked AK should min-raise; against a nit, min-raise + postflop maximizes value.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "AK all-in at 45BB wastes value; the min-raise is better.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "AK is a top-tier hand; folding is absurd.",
+          "evImpact": "-3.0 BB/100"
+        }
+      ],
+      "tableDesc": "HU MTT final; deep stack 45BB vs a nit"
+    }
+  },
+  "lessonObjectives": {
+    "l6hu-tourney": [
+      "Tell heads-up tournaments and cash games apart on three counts (rising blinds, limited chips, ICM pressure) and state the three stack-rhythm stages (40BB+ cash-style, 20-40BB min-raise plus postflop, shoving below 15BB)",
+      "Judge why shallow stacks replace complex postflop play with preflop shoving (rising blinds inflate waiting costs and shoves auto-profit)",
+      "Explain the ICM character of a heads-up SNG final (winner takes all, lower pressure than full tables but still decisive) and judge the trade-off between conservative play when chip-leading and aggression when behind"
+    ]
+  }
+}

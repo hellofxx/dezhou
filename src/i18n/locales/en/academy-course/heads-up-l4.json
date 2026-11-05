@@ -1,0 +1,577 @@
+{
+  "lessonContent": {
+    "l4hu-bn-opening": [
+      "Opening Near 100%: The HU Button's Offense",
+      "The HU button (SB) opens the action first preflop and acts last postflop; facing the only opponent, the opening frequency can approach 100% — only a few completely junk hands (like 72o, 83o) fold. Because: the SB tops up 0.5 to see a 1.5BB pot (25% required equity), and any hand versus the BB's wide defense range is near or above that line; and since postflop the SB acts last, holding position, the initiative carries all the way into the later streets. High-frequency opening isn't \"playing loose\" but \"using frequency to squeeze every marginal EV\".",
+      "The core of button opening is \"sizing serves postflop\", not \"sizing serves the steal\". In HU use min-raise (2BB) as the main weapon: the steal bar is low (needs 50% fold rate), the small size makes postflop pot control easier, and a wide enough range covers various boards.",
+      "Opening-Size Math: Why Min-Raise Is the Main Weapon",
+      "SB min-raise to 2BB math (SB already posted 0.5, investing 1.5BB more; BB posted 1, can fold or complete 1):\n\nPure steal model (baseline = SB folds directly, the 0.5 dead money already sunk):\nIf the BB folds → SB collects the existing 1.5BB pot; if the BB calls → SB loses another 1.5BB of increment\nEV(raise) = f×1.5 − (1−f)×1.5 (f = BB fold rate)\nBreak-even: f = 1.5/(1.5+1.5) = 50%\n\nSo if the BB folds more than 50%, the SB's min-raise with any two cards auto-profits.\nSize comparison: min-raise 2BB → 50%; 2.5BB (2 more) → 2/3.5 ≈ 57.1%; 3BB (2.5 more) → 2.5/4 = 62.5%.\n\nConclusion: the bigger the size, the higher the auto-profit bar. In HU the open's value is postflop, and the smaller the size the easier pot control.",
+      "Why doesn't HU use full ring's \"bigger size to steal\"? Three points: (1) the real HU BB fold rate versus a min-raise is only about 30%-40%, so pure stealing barely profits — the value is postflop; (2) big sizes are \"self-punishment\" in HU — the BB's calling range narrows with size, so spending 3BB only buys a stronger calling range; (3) frequency and balance — min-raise lets you open about 80% of hands, and only a wide enough range covers the many postflop boards.",
+      "Example: HU 100BB deep, you (SB) hold Q♦J♦. This is a marginal full-ring tight-position hand, but in HU QJs has about 52% equity versus the BB's wide defense range — min-raise 2BB is the standard open. Postflop you add flush/straight-draw potential to the bonus of having the final word, and QJs on the HU button is an absolute opening hand.",
+      "Example 2 (sizing adjusts to the opponent): You observe the BB folds to min-raises at 55%. The min-raise's pure-steal EV = 0.55×1.5 − 0.45×1.5 = +0.15BB (slightly positive, with most profit still coming postflop), and you can raise the open frequency toward 100% because the BB's fold rate lifts steal profit. Conversely, if the BB 3-bets frequently, narrow your range and reduce the marginal hands that only fold after a 3-bet.",
+      "Counterintuitive point: the HU button \"opening near 100%\" isn't greed but math. But note — opening wide doesn't mean investing every street. Postflop, adjust by board fit and let go in time — that's the mature \"participate a lot, invest little\" play.",
+      "Button opening quick check — default min-raise 2BB, opening about 80%-100%; top 15% strong hands + middle suited connectors/Ax + bottom garbage mix. Every 50 hands check two things: (1) are the opponent's 3-bets pushing you out of your opening? (2) is the BB's fold rate high enough to support opening to 100%?"
+    ],
+    "l4hu-ev-adjustments": [
+      "Heads-Up Pots: EV Calculation Simplified and Amplified",
+      "HU has only two-player pots, so EV calculation is simpler than full ring, but the numeric meaning is amplified. Simplified: no multiway splitting, no \"one of my outs gives another opponent a flush\" dilution — your equity is closer to \"equity vs a single range\". Amplified: dead money share is high (SB 0.5) and the opponent's range is wide, so the same EV differences are repeated at high frequency in HU, accumulating into bigger long-term returns. Understanding these two changes is the core of HU EV adjustments.",
+      "The core HU EV formula is unchanged, but the inputs are clearer: EV(call) = E×(P+B) − (1−E)×B. The difference is \"wider opponent range, higher dead-money share\", turning more marginal calls +EV.",
+      "Preflop Steal EV and Postflop Positional EV",
+      "Preflop steal EV (SB min-raise to 2BB, BB fold rate f, baseline = folding directly):\nEV(steal) = f×1.5 − (1−f)×1.5 (break-even f = 50%)\n\nPostflop positional EV anchor:\nHU positional value about 0.5-1BB/hand (the SB is IP postflop every hand)\n\nExample: BB facing an SB min-raise (SB has 2BB in, the BB already has 1BB in):\nGeneral formula: required equity = call ÷ (current pot + opponent's bet + your call)\nSubstitute: 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%\n(Current pot 1.5 = SB's 0.5 + the BB's own 1 — that 1BB is dead money yet still belongs in the denominator; opponent's bet 1.5 = SB's increment up to 2BB; your call 1 = the BB top-up. Equivalently the total pot after you call is 4BB, so 1÷4 = 25%)\nMarginal hands often have 40%+ vs the SB's ~80% opening range → call is +EV",
+      "The practical meaning of HU EV adjustments: against the SB's wide range, the BB's call bar drops sharply. Full ring's 40% call line versus a 15% UTG range drops to 25% in HU versus an 80% SB range (1BB more into a 4BB pot after the call), and against a range as wide as about 80%, marginal hands simply carry more real equity themselves. That's why the HU BB can defend 60%+ — not \"loose\" but \"the result of EV calculation\".",
+      "Example: HU blinds 0.5/1, preflop the SB min-raises 2BB, you (BB) hold K♠7♠. Calling 1BB makes the total pot SB 2 + the BB's own 1 + your call 1 = 4BB, so required equity = 1 ÷ 4 = 25%. K7s has about 48% equity vs the SB's ~80% opening range — a surplus of about 23 points. Postflop you check first and lean on check-calls: a K lets you bet thin value, flush/straight draws chase cheaply, and a complete miss can fold. The call is +EV — full-ring K7s versus UTG is a fold, but HU versus the SB's wide range it's a +EV call.",
+      "Example 2 (postflop EV decision): flop pot 4BB — the BB acts first, the SB (IP) bets 2BB (half pot). Required equity to call = 2/(4+2+2) = 25%. Your 76 on a 9♠8♦3♣ board has a double-gutshot + backdoor flush, about 8 outs at 17% single-street — not enough at 25% alone, but adding implied odds (win 2.5BB more when the straight hits) makes the call +EV. HU draw calls rely more on implied odds because the opponent's range is wide with high payment willingness.",
+      "Counterintuitive point: in HU \"small cards\" aren't junk. 9-high can still win postflop in HU — the opponent's calling range is extremely wide, so 9-high's showdown value far exceeds full ring. At the same 25% pot odds, 9-high may be ahead 40%+ of the time in HU vs only 15%-20% in full ring.",
+      "HU EV quick anchors: half-pot bet needs 25%, 1/3 pot 20%, full pot 33.3%; limp to see a flop 25%, call a 3BB open 33.3%. Memorize these — faster than counting at the table."
+    ],
+    "l4hu-gto-basics": [
+      "Heads-Up: The Purest Application of Equilibrium Strategy",
+      "HU poker (ignoring rake) is a pure two-player zero-sum game, where the Nash \"unexploitable\" guarantee strictly holds. This means HU has an equilibrium strategy (GTO): no matter how the opponent plays, your long-term expectation is never below the game value. Compared with full ring, HU GTO ranges are extremely wide (SB opens about 80%, BB defends 60%+), and equilibrium means very high betting frequency and bluff density — GTO isn't \"playing tight\" but \"keeping everything at ratios the opponent can't counter\".",
+      "HU GTO's positioning is a \"bulletproof vest\", not a \"weapon\": it guarantees you're not exploited but doesn't promise maximum profit. Against a leaky opponent, targeted exploitation earns more — at the cost of opening your own leaks. HU pros switch between \"wearing the vest\" and \"switching to the knife\".",
+      "Frequency Baselines: Value:Bluff Ratio and MDF",
+      "Equilibrium value:bluff ratio for a river full-pot bet (pot P, bet P):\nBluff share f = b/(1+2b) = 1/(1+2) = 1/3\nSo value:bluff = 2:1.\n\nHalf pot (b=0.5): f = 0.5/2 = 25%, value:bluff = 3:1.\n\nMDF (Minimum Defense Frequency) = 1/(1+b):\nhalf pot → 67%; full pot → 50%; 2× pot → 33%.\n\nThe HU BB defending 60%+ far exceeds the MDF floor (about 33%-38%) because its preflop final say and dead-money pot odds make calling itself +EV.",
+      "The frequency difference between HU GTO and full-ring GTO: in full ring most positions can only play tight with low equilibrium betting frequencies; HU has wide ranges, high betting frequencies, and high bluff density. Solvers output lots of aggressive bets and polarized ranges in HU. Understanding these baselines is the prerequisite for recognizing \"when the opponent deviates from equilibrium\".",
+      "Example: in an HU SB-vs-BB solve the solver says the SB opens about 80% and the BB defends about 60%+; postflop the OOP BB checks at high frequency while the IP SB bets at high frequency. These frequencies look \"loose\" but they are all part of equilibrium — any deviation by one side (e.g. the SB opening only 50%) lets the other exploit it by widening defense or raising steal frequency.",
+      "Example 2 (positional symmetry): in HU the two sides swap SB/BB every hand — position isn't fixed: the SB opens the action first preflop and the BB has the final say; postflop the BB acts first and the SB acts last. The GTO equilibrium includes positional strategies for both directions; positional symmetry means you must play both the SB and the BB, not carry full ring's \"fixed position\" thinking.",
+      "Counterintuitive point: \"GTO is playing tight\" is the biggest misreading. HU GTO is full of high-frequency betting, overbet shoves, and thin value — it just keeps all of it at ratios the opponent can't counter. When studying solvers, don't memorize frequencies — ask three whys: why this sizing on this board? Why is this hand in the betting range? Why did the frequency change on the turn?",
+      "HU GTO learning path: first use a solver to understand the equilibrium \"shape\" (why play this way), then use node locking to study \"harvest schemes for common opponent leaks\", finally validate live. The baseline gives you invincibility; deviations give you profit."
+    ],
+    "l4hu-counter-strategies": [
+      "Identifying Deviations: The Prerequisite of HU Counter-Strategies",
+      "The core of HU counter-strategy is: first identify the opponent's deviations from equilibrium, then calibrate with the GTO baseline the optimal response against that leak. The four common HU deviations: folds too much (super-high fold rate vs C-Bets), calls too loose (calling station), 3-bets too often, C-Bets too often. Identification relies on 50-100 hand frequency statistics, not single-hand impressions.",
+      "The right posture of countering: aim the direction at the opponent's leak (Maximally Exploitative), keep the magnitude minimal (Minimally Exploitative). Every deviation opens your own leaks, so keep the magnitude controlled and return to baseline when the opponent adjusts.",
+      "Targeted Counters for the Four Deviations",
+      "Raising steals against an over-folding opponent (SB min-raise to 2BB, BB fold rate f, baseline = folding directly, the 1.5/1.5 basis):\nEV(steal) = f×1.5 − (1−f)×1.5\n\nEquilibrium fold rate about 40% (f=0.4) → EV = 0.4×1.5 − 0.6×1.5 = −0.3BB (unprofitable, recovered postflop)\nAt 60% fold rate (f=0.6) → EV = 0.6×1.5 − 0.4×1.5 = +0.3BB (pure steal auto-profits)\nAt 70% (f=0.7) → EV = 0.7×1.5 − 0.3×1.5 = +0.6BB (profit grows)\n\nConclusion: the higher the opponent's fold rate, the more your steal frequency should rise, but capped at \"I still don't lose if he corrects to 50%\".",
+      "The counter directions for the four deviations: (1) folds too much → raise open/C-Bet frequency with more semi-bluffs; (2) calls too loose (station) → cut pure bluffs, switch to value-bet thin value (top pair weak kicker bets for money); (3) 3-bets too often → narrow the open range and add 4Bet value; (4) C-Bets too often → raise x/r frequency and float. Each advances in a \"identify → counter → re-check\" loop.",
+      "Example: You observe a HU opponent who folds to C-Bets at 60% (equilibrium ~45%). That's a clear over-folding leak. Counter: raise your flop C-Bet frequency and bluff density overall, even adding weak hands that originally checked to the betting range. But cap it at \"I still don't lose if he tightens to 50%\" — this is \"using GTO as the baseline and making directed, disciplined deviations from observable biases\".",
+      "Example 2 (countering a station): The opponent almost never folds postflop (fold rate <25%). Counter: no pure bluffs (he doesn't fold); switch to value-bet thin value — top pair weak kicker also bets for money because he calls with worse. Meanwhile convert bluffs to semi-bluffs or checks. A station is the easiest HU type to extract from, as long as you can resist bluffing.",
+      "Example 3 (node locking in practice): In a solver, lock \"this opponent folds to turn double-barrels 55%\" as a fixed frequency and re-solve your optimal response — the solver immediately pushes your turn bluff frequency higher. That's node locking turning countering from \"feel\" into \"calculation\".",
+      "Counterintuitive point: the biggest risk of countering isn't \"countering too little\" but \"over-countering and becoming the leak yourself\". HU pros always keep one hand on the GTO baseline wheel while harvesting — the moment the opponent adjusts, they snap back.",
+      "Counter execution in five steps: (1) HUD-collect enough samples to confirm the leak; (2) lock the node in a solver for the optimal response; (3) compare to baseline and mark the pushed-up frequencies and sizes; (4) execute live; (5) re-check the sample every 500 hands."
+    ]
+  },
+  "lessonQuiz": {
+    "l4hu-bn-opening-q1": {
+      "question": "The HU button (SB) opening frequency range is about:",
+      "options": [
+        "About 30%",
+        "About 50%",
+        "About 80%-100%",
+        "About 10%"
+      ],
+      "explanation": "The HU SB opens about 80%-100%, folding only a few completely junk hands — completing 0.5 sees a 1.5BB pot, and postflop the SB has the final word."
+    },
+    "l4hu-bn-opening-q2": {
+      "question": "Why does the HU button open mainly with min-raise (2BB)?",
+      "options": [
+        "The min-raise steal bar is low (50% fold rate) and postflop pot control is easier",
+        "The min-raise makes the opponent fold more easily",
+        "Bigger sizes steal better",
+        "The min-raise makes hands stronger"
+      ],
+      "explanation": "The min-raise's steal break-even is a 50% fold rate, the small size makes postflop pot control easier, and it supports a ~80% wide range. Big sizes are self-punishment in HU."
+    },
+    "l4hu-bn-opening-q3": {
+      "question": "The real HU BB fold rate vs min-raise is about:",
+      "options": [
+        "About 60%",
+        "About 30%-40%",
+        "About 80%",
+        "About 10%"
+      ],
+      "explanation": "The HU BB's real fold rate vs min-raise is only about 30%-40% (defending 60%-70%), meaning pure stealing barely profits — the open's value is postflop."
+    },
+    "l4hu-bn-opening-q4": {
+      "question": "The correct understanding of the HU button \"opening about 80%\" is:",
+      "options": [
+        "Take 80% of hands to showdown",
+        "Participate in about 80%, but many hands let go in time by postflop board fit",
+        "Only play the top 80% strong hands",
+        "Always raise after opening"
+      ],
+      "explanation": "Opening wide means \"participate a lot, invest little\" — letting go in time by postflop board fit is the mature play."
+    },
+    "l4hu-bn-opening-q5": {
+      "question": "Facing a frequent 3-bettor (the BB), how should the button adjust its opening?",
+      "options": [
+        "Keeping 80% unchanged",
+        "Narrowing the range, reducing marginal hands that only fold after a 3-bet",
+        "Opening to 100%",
+        "Stopping opening entirely"
+      ],
+      "explanation": "High 3-bet frequency erodes steal EV and marginal hands only fold after a 3-bet. Narrowing is correct; stopping entirely overreacts."
+    },
+    "l4hu-ev-adjustments-q1": {
+      "question": "The main difference between HU and full-ring EV calculation is:",
+      "options": [
+        "Completely different formulas",
+        "No multiway dilution, high dead-money share, wide opponent range — the EV numbers are amplified",
+        "HU has no EV",
+        "HU EV is smaller"
+      ],
+      "explanation": "The EV formula is unchanged, but HU two-player pots have no dilution, the SB's dead money share is high, and the opponent's range is wide — turning more marginal calls +EV and amplifying the meaning."
+    },
+    "l4hu-ev-adjustments-q2": {
+      "question": "SB min-raises to 2BB (the BB already has 1BB in); the BB still has to call 1BB. Required equity is about:",
+      "options": [
+        "33.3%",
+        "25%",
+        "40%",
+        "50%"
+      ],
+      "explanation": "Required equity = call ÷ (current pot + opponent's bet + your call) = 1 ÷ (1.5 + 1.5 + 1) = 1 ÷ 4 = 25%. The denominator must include the BB's own 1BB already in the pot (1/(2+1) ≈ 33.3% is exactly the value you get by omitting it). HU's dead-money share is high — cheaper than the full-ring BTN call at 40%."
+    },
+    "l4hu-ev-adjustments-q3": {
+      "question": "The root reason the HU BB defends 60%+ is:",
+      "options": [
+        "The BB has better cards",
+        "The call bar is low vs the SB's wide range, and the BB's preflop final say adds information",
+        "The BB must defend",
+        "Rules require it"
+      ],
+      "explanation": "Vs the SB's ~80% wide range the call bar drops to 25% (1BB more into a 4BB pot after the call); the BB has the final say preflop and its dead money makes the price cheap, so it can defend wide — the result of EV calculation, not looseness. The over-100% equity-realization bonus belongs to the position-holding SB, not the BB."
+    },
+    "l4hu-ev-adjustments-q4": {
+      "question": "HU draw calls (like double-gutshots) rely on implied odds because:",
+      "options": [
+        "HU pots are bigger",
+        "The opponent's range is wide with high payment willingness — winning more when the draw hits",
+        "Draw equity is higher",
+        "There are no implied odds"
+      ],
+      "explanation": "The HU opponent's range is wide with high payment willingness, so you win more when the draw hits (good implied odds), compensating for the single-street equity shortfall."
+    },
+    "l4hu-ev-adjustments-q5": {
+      "question": "HU positional value of about 0.5-1BB/hand means:",
+      "options": [
+        "The BB wins 1BB more every flop",
+        "Over the long run the SB earns 0.5-1BB more expected value per hand than the BB",
+        "Preflop positional value",
+        "Only true in tournaments"
+      ],
+      "explanation": "Positional value is a long-run expectation gap: the SB acts last postflop holding IP, averaging 0.5-1BB extra per hand — a statistical expectation, not a per-hand guarantee."
+    },
+    "l4hu-gto-basics-q1": {
+      "question": "The applicability of the Nash \"unexploitable\" guarantee in HU:",
+      "options": [
+        "Not applicable",
+        "Strictly holds (HU is a pure two-player zero-sum game)",
+        "Only preflop",
+        "Only in tournaments"
+      ],
+      "explanation": "HU (ignoring rake) is a pure two-player zero-sum game, where the Nash unexploitable guarantee strictly holds. Multiway pots weaken under coalition effects."
+    },
+    "l4hu-gto-basics-q2": {
+      "question": "The equilibrium value:bluff ratio for a river full-pot bet is about:",
+      "options": [
+        "1:1",
+        "2:1",
+        "3:1",
+        "4:1"
+      ],
+      "explanation": "Bluff share f = 1/(1+2) = 1/3, so 2/3 value and 1/3 bluffs, value:bluff = 2:1. Exactly equals the opponent's required call equity of 33%."
+    },
+    "l4hu-gto-basics-q3": {
+      "question": "The main difference between HU GTO and full-ring GTO is:",
+      "options": [
+        "HU GTO is tighter",
+        "HU ranges are extremely wide with high betting frequencies and bluff density",
+        "They're identical",
+        "HU has no GTO"
+      ],
+      "explanation": "HU ranges are wide (SB 80%, BB 60%+), so equilibrium comes with high betting frequencies and polarized ranges — not \"playing tight\"."
+    },
+    "l4hu-gto-basics-q4": {
+      "question": "Why does the HU BB defend 60%+, far above the MDF floor (about 33%-38%)?",
+      "options": [
+        "The BB has better cards every hand",
+        "The BB has the final say preflop, and its 1BB of dead money makes calling cheap",
+        "The BB must defend",
+        "The MDF formula doesn't apply preflop"
+      ],
+      "explanation": "MDF only guarantees \"stopping pure-bluff auto-profit\"; the BB's positive call EV comes from having the final say preflop plus its dead-money odds, so it can defend above the floor and still profit. The over-100% equity-realization bonus belongs to the position-holding SB."
+    },
+    "l4hu-gto-basics-q5": {
+      "question": "HU \"positional symmetry\" means:",
+      "options": [
+        "Both positions are fixed",
+        "Every hand the two sides swap SB/BB — you must play both the SB and the BB",
+        "Position has no effect",
+        "Only the SB has position"
+      ],
+      "explanation": "In HU the two sides swap SB/BB every hand — the order flips (the SB opens first preflop and acts last postflop; the BB is the reverse); the GTO equilibrium includes positional strategies in both directions."
+    },
+    "l4hu-counter-strategies-q1": {
+      "question": "The correct basis for identifying a HU opponent's deviation is:",
+      "options": [
+        "Single-hand impressions",
+        "50-100 hand frequency statistics",
+        "Opponent's appearance",
+        "Random guessing"
+      ],
+      "explanation": "HU countering relies on 50-100 hand frequency statistics (fold rate/3-bet rate, etc.); single-hand impressions are noise, insufficient evidence."
+    },
+    "l4hu-counter-strategies-q2": {
+      "question": "Against an over-folding opponent, the correct counter is:",
+      "options": [
+        "Attack less",
+        "Raise open/C-Bet frequency and add semi-bluffs",
+        "Only the nuts",
+        "Stop betting entirely"
+      ],
+      "explanation": "An over-folding opponent makes steal and C-Bet fold rates automatic profit — raise open/C-Bet frequency and semi-bluff density."
+    },
+    "l4hu-counter-strategies-q3": {
+      "question": "Against a calling station who calls too loose, the correct counter is:",
+      "options": [
+        "Add pure bluffs",
+        "Cut bluffs and switch to value-bet thin value",
+        "Stop betting entirely",
+        "Only the nuts"
+      ],
+      "explanation": "A station doesn't fold, so pure bluffs are useless; switch to value-bet thin value because he calls with worse hands."
+    },
+    "l4hu-counter-strategies-q4": {
+      "question": "The discipline of \"minimum necessary deviation\" is:",
+      "options": [
+        "Completely abandoning GTO",
+        "Aiming at the opponent's leak with minimal magnitude, ready to return to baseline anytime",
+        "Always countering harder",
+        "Completely copying GTO"
+      ],
+      "explanation": "Deviations open your own leaks, so keep the magnitude controlled; aim at the leak, keep it minimal, and return to baseline when the opponent adjusts."
+    },
+    "l4hu-counter-strategies-q5": {
+      "question": "The role of node locking in countering is:",
+      "options": [
+        "Locking your own strategy",
+        "Locking the opponent's deviation as a fixed frequency and re-solving your optimal response",
+        "Preventing the solver from crashing",
+        "Locking preflop ranges"
+      ],
+      "explanation": "Node locking feeds \"how the opponent actually plays (deviation)\" into the solver and outputs the optimal counter against that bias — turning countering from feel into calculation."
+    }
+  },
+  "lessonExample": {
+    "l4hu-bn-opening-ex1": {
+      "title": "Standard HU Button Min-Raise",
+      "correctAction": "Min-raise",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "98s is a standard open in HU (on the button), about 48% equity vs the BB's wide defense range",
+        "Min-raise steals plus postflop flush/straight potential",
+        "The SB acts last postflop with position, and the small size makes postflop pot control easy"
+      ],
+      "mistakeAction": "Fold (\"98s is too weak\")",
+      "mistakeReasoning": "Playing HU with full-ring standards wastes the button's opening advantage. 98s has enough value in HU — min-raise actively.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l4hu-ev-adjustments-ex1": {
+      "title": "BB Marginal EV Call vs the SB's Wide Open",
+      "correctAction": "Call",
+      "correctAmount": "1BB",
+      "reasoning": [
+        "Q6s has about 45% equity vs the SB's ~80% opening range",
+        "Calling 1BB into a 4BB total pot (SB 2 + BB 1 + the call 1) needs 1÷4 = 25% — a surplus of about 20 points",
+        "The BB has the final say preflop and the dead money brings odds, so even marginal hands defend profitably"
+      ],
+      "mistakeAction": "Fold (\"Q6s is too weak\")",
+      "mistakeReasoning": "In HU versus the SB's wide range, Q6s's +EV call is hidden by full-ring memory. The BB's preflop final say and pot odds make marginal hands defensible.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l4hu-gto-basics-ex1": {
+      "title": "HU BB Equilibrium Defense vs an SB Open",
+      "correctAction": "Call",
+      "correctAmount": "1BB",
+      "reasoning": [
+        "65s has about 42% equity vs the SB's ~80% opening range",
+        "Calling 1BB into a 4BB total pot (SB 2 + BB 1 + the call 1) needs 1÷4 = 25% — a surplus of about 17 points",
+        "The BB has the final say preflop and calls are cheap; suited connectors play well — a member of the equilibrium defense range"
+      ],
+      "mistakeAction": "Fold (\"65s is too weak\")",
+      "mistakeReasoning": "The HU BB should defend wide against the SB's wide range; 65s is a standard call. Full-ring standards throw away the preflop information and pot-odds edge.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l4hu-counter-strategies-ex1": {
+      "title": "Countering an Over-Folding Opponent",
+      "correctAction": "Min-raise",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "The BB folds to min-raises 65% (deviation from equilibrium 40%)",
+        "J8s is an openable hand against a high-fold-rate opponent; the min-raise steal EV rises",
+        "Countering over-folding: raise opening frequency"
+      ],
+      "mistakeAction": "Fold (\"J8s isn't good enough\")",
+      "mistakeReasoning": "Against an over-folding opponent, marginal hands profit through stealing; folding wastes the countering opportunity.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l4hu-bn-opening-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "K7s is a standard HU button open; folding is too tight.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Min-raise",
+          "explanation": "K7s has overcards + flush potential; the SB acts last postflop with position — min-raise open.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Limping is too passive; the HU SB should actively min-raise to seize initiative.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l4hu-bn-opening-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "A8o is openable against a high-fold-rate BB; folding is too tight.",
+          "evImpact": "-1.2 BB/100"
+        },
+        {
+          "action": "Min-raise",
+          "explanation": "A8o vs a 55% fold-rate BB — the min-raise steals plus A-high postflop value, a standard open.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "3-bet",
+          "explanation": "An initial open uses min-raise, not a 3-bet — the 3-bet is meaningless.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the BB folds to min-raise 55%"
+    },
+    "l4hu-bn-opening-p3": {
+      "option": [
+        {
+          "action": "Min-raise",
+          "explanation": "At a 20% BB 3-bet, Q5s only folds after a 3-bet and the open EV erodes.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Against high-frequency 3-bets, marginal suited hands like Q5s should fold — narrow the opening range.",
+          "evImpact": "+0 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "Limping lets the BB isolate easily, and Q5s struggles postflop against high-frequency 3-bets.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the BB 3-bets 20%"
+    },
+    "l4hu-ev-adjustments-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "J8s plays well vs the SB's wide range; folding is too tight.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "J8s, a suited connector, is cheap to call and plays well — the call EV is positive.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "3-bet",
+          "explanation": "J8s is speculative; a 3-bet is too aggressive, just call.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l4hu-ev-adjustments-p2": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "76 has a double-gutshot + backdoor flush; folding is too weak.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Calling 2BB needs 25%; double-gutshot 8 outs at 17% single-street plus implied odds turns the call +EV.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A draw all-in is overkill; call to exploit implied odds.",
+          "evImpact": "-1.2 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l4hu-ev-adjustments-p3": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A5 has a 9-out flush draw; you should bet actively rather than check.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet 2BB (half pot)",
+          "explanation": "Nut flush draw + A-high — half-pot semi-bluff charges the draws and builds the pot.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A draw all-in is overkill; half pot builds the advantage.",
+          "evImpact": "-1.2 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l4hu-gto-basics-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "T9s plays well vs the SB's wide range; folding is too tight.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "T9s, a suited connector, is cheap to call and plays well — a member of the equilibrium defense range.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "3-bet",
+          "explanation": "T9s is speculative; a 3-bet is too aggressive, just call.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l4hu-gto-basics-p2": {
+      "option": [
+        {
+          "action": "Bet 4BB (1/3 pot)",
+          "explanation": "AK top pair top kicker — lead a small thin-value bet in the 3-bet pot; the SB's weak hands can only call cheaply.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Top pair top kicker should bet for thin value; checking is too passive.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Top pair on a dry board all-in is overkill; a small bet suffices.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; 3-bet pot"
+    },
+    "l4hu-gto-basics-p3": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "QJ top pair — the BB checks first and calls, keeping the SB's bluffs and controlling the pot on a dry board.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "explanation": "Top pair x/r scares off the SB's bluffs, wasting thin value — call instead.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "QJ top pair is a strong hand; folding is too weak.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l4hu-counter-strategies-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "Q8s is openable against a 65% fold-rate BB; folding is too tight.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Min-raise",
+          "explanation": "The BB over-folds; Q8s's min-raise steal EV rises — a standard counter.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Limping is too passive; against an over-folder you should actively min-raise.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the BB folds to min-raise 65%"
+    },
+    "l4hu-counter-strategies-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "Against a 60% fold-rate BB, A-high should bet to counter; checking is too passive.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "The BB over-folds; A-high + backdoor flush — a 1/3-pot continuation pressures and counters.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A-high all-in is overkill; a small counter bet suffices.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the BB folds to C-Bet 60%"
+    },
+    "l4hu-counter-strategies-p3": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "76 has a double-gutshot and the SB's fold rate is high — counter with an x/r.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise semi-bluff",
+          "explanation": "The SB folds to x/r 55%; the double-gutshot semi-bluff x/r counters, backed by the fold rate.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "explanation": "The BB should check first and only x/r after the SB's C-Bet — a donk isn't standard.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the SB folds to x/r 55%"
+    }
+  },
+  "lessonObjectives": {
+    "l4hu-bn-opening": [
+      "Derive the break-even fold rate of a pure steal with an SB min-raise to 2BB (baseline = folding directly: f×1.5 = (1−f)×1.5 -> f = 50%) and state that bigger sizes raise the auto-profit threshold",
+      "Judge why heads-up opening relies on min-raising (low steal threshold, small sizes keep postflop pots controlled, supporting a wide 80%-100% range)",
+      "Explain that the BB's real fold rate vs a min-raise is only about 30%-40%, and judge that opening value mostly comes postflop when pure stealing is unprofitable",
+      "Judge that the SB (the button) should tighten its opening range facing frequent 3-bets from the BB (dropping marginal hands that can only fold after a 3-bet)"
+    ],
+    "l4hu-ev-adjustments": [
+      "Compute the BB's calling line vs an SB min-raise with required equity = call / (current pot + bet + call) (1/4 = 25%), stating that the denominator must include the BB's dead money already in the pot",
+      "Explain the three amplified factors of heads-up EV (no multiway dilution, high dead-money share, wide opponent range) and judge why more marginal calls become +EV",
+      "Judge why heads-up draw calls lean on implied odds (wide range, high paying willingness), and give the quick anchors of 25% half pot, 20% one-third pot and 33.3% full pot",
+      "Tell the statistical-expectation semantics of position value apart (the SB earns about 0.5-1BB more per hand in the long run, not a single-hand guarantee)"
+    ],
+    "l4hu-gto-basics": [
+      "Explain that heads-up (ignoring rake) is a pure two-player zero-sum game where the Nash equilibrium's \"unexploitable\" guarantee strictly holds",
+      "Compute the equilibrium bluff share of a full-pot river bet (b/(1+2b) = 1/3, value:bluff 2:1) and list the matching numbers for 25% at half pot and MDF = 1/(1+b)",
+      "Explain how heads-up GTO frequencies differ from full ring (wide ranges, high betting frequency, dense bluffs) and judge that \"GTO means playing tight\" is a misread",
+      "Judge the position symmetry of heads-up (SB/BB swap every hand) and state why you must play both SB and BB well"
+    ],
+    "l4hu-counter-strategies": [
+      "Identify the four classes of heads-up deviation (over-folding, over-calling, over-3-betting, over-C-betting) and explain that identification relies on frequency stats over 50-100 hands",
+      "Derive the steal-EV change against over-folding opponents (EV about +0.3BB at f=0.6 and +0.6BB at f=0.7) and judge that deviation is capped by \"still not losing if he corrects\"",
+      "Tell the counters to the four deviations apart (over-folding -> raise open/C-Bet frequency, over-calling -> thin value with fewer bluffs, over-3-betting -> tighten plus 4Bet value, over-C-betting -> raise x/r and floats)",
+      "Explain what node locking does (locking the opponent's deviation as fixed frequencies and re-solving your best response) and judge the risk of over-countering"
+    ]
+  }
+}

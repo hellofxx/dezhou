@@ -1,0 +1,194 @@
+{
+  "lessonContent": {
+    "l7hu-stakes": [
+      "What Makes HU Unique",
+      "Heads-Up is poker's purest form. Compared with 6-max or full ring, HU has these characteristics:\n\n1. Bigger positional value: the BTN has positional advantage every hand\n2. Much wider ranges: any pair is strong, any Ax is strong\n3. More frequent postflop decisions: more often only two players contest the pot\n4. More important exploitative adjustments: you can quickly identify and exploit opponent weaknesses",
+      "Core concept: positional value is huge in HU. The BTN has positional advantage every hand. Any pair is strong in HU, and any Ax is strong.",
+      "Preflop Range Adjustments",
+      "HU preflop ranges are much wider than 6-max:\n\nBTN/SB open range: about 80% (far above the widest 6-max BTN opening tier)\n- Any pair is strong\n- Any Ax is strong\n- Suited connectors and small pairs can all open\n\n3-bet range:\n- Wider (about 10-15%)\n- Includes strong hands + some bluffs\n- Balance matters more",
+      "Postflop Strategy Adjustments",
+      "The key HU postflop adjustments:\n\n1. More C-Bets: the BTN has range advantage and should C-Bet at high frequency\n2. Wider value bets: top pair weak kicker is also a strong hand\n3. More bluffs: the opponent's range is wider, easier to bluff off\n4. Positional use: with position you can value-bet and bluff more frequently",
+      "Adapting to Different HU Opponent Types",
+      "Quickly identify HU opponent types and adjust:\n\n1. Tight-passive: C-Bet frequently, bluff more\n2. Loose-passive: value-bet more, bluff less\n3. Loose-aggressive: balanced play, some traps\n4. Tight-aggressive: respect the opponent, avoid excessive conflict",
+      "The most important HU skill is quickly identifying the opponent type and adjusting. Build a basic portrait in the first 20 hands, then start exploiting.",
+      "Warning: don't play HU with 6-max standards. Many hands that are folds in 6-max are calls or raises in HU."
+    ]
+  },
+  "lessonQuiz": {
+    "l7hu-stakes-q1": {
+      "question": "The HU BTN/SB open range is about:",
+      "options": [
+        "20-30%",
+        "30-40%",
+        "50-70%",
+        "About 80%"
+      ],
+      "explanation": "The HU BTN/SB open range is about 80%, far wider than the widest 6-max BTN opening tier (about 35%)."
+    },
+    "l7hu-stakes-q2": {
+      "question": "Which hand type rises most in value in HU?",
+      "options": [
+        "72o",
+        "Any pair and Ax",
+        "Suited connectors",
+        "Small pairs"
+      ],
+      "explanation": "In HU any pair is strong and any Ax is strong — these hands rise sharply in value."
+    },
+    "l7hu-stakes-q3": {
+      "question": "Against a tight-passive opponent in HU you should:",
+      "options": [
+        "Bluff less",
+        "C-Bet frequently and bluff more",
+        "Only value bet",
+        "Respect the opponent"
+      ],
+      "explanation": "Against a tight-passive opponent C-Bet frequently and bluff more because their fold rate is high."
+    },
+    "l7hu-stakes-q4": {
+      "question": "How is positional value in HU?",
+      "options": [
+        "Unimportant",
+        "Slightly bigger than 6-max",
+        "Huge — the BTN has positional advantage every hand",
+        "Same as 6-max"
+      ],
+      "explanation": "HU positional value is huge — the BTN has positional advantage every hand."
+    },
+    "l7hu-stakes-q5": {
+      "question": "The correct play for top pair weak kicker in HU is:",
+      "options": [
+        "Check-Fold",
+        "Pot control",
+        "Wider value betting",
+        "All-in"
+      ],
+      "explanation": "HU ranges are wider, so top pair weak kicker is also a strong hand — value bet more widely."
+    }
+  },
+  "lessonExample": {
+    "l7hu-stakes-ex1": {
+      "title": "Wide HU BTN Open",
+      "correctAction": "Open raise",
+      "correctAmount": "",
+      "reasoning": [
+        "76s plays well in HU — open it",
+        "The BTN has positional advantage to use postflop",
+        "Suited connectors have excellent postflop potential",
+        "In HU this is far more valuable relative to 6-max"
+      ],
+      "mistakeAction": "Fold (\"it's just 76s\")",
+      "mistakeReasoning": "Playing HU with 6-max standards misses many profitable opportunities. 76s is a standard HU open.",
+      "mistakeEvLoss": "-1.5 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l7hu-stakes-p1": {
+      "option": [
+        {
+          "action": "Open raise",
+          "explanation": "87s plays well in HU and the BTN has positional advantage — open it.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "In HU you should open actively; limping is too passive.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "87s plays well in HU; folding is too tight.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l7hu-stakes-p2": {
+      "option": [
+        {
+          "action": "C-Bet 2BB (33% pot)",
+          "explanation": "A2 on A-8-3 is top pair; in HU a small C-Bet for value is correct.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "In HU top pair should bet for value; checking is too passive.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A2 top pair weak kicker all-in is overkill; a small value bet suffices.",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l7hu-stakes-p3": {
+      "option": [
+        {
+          "action": "C-Bet 4BB (75% pot)",
+          "explanation": "Against a tight-passive opponent C-Bet at high frequency; QJ has overcard equity — bet.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Against a tight-passive opponent you should bluff more; checking misses the opportunity.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "QJ high all-in is overkill; a medium bet suffices.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the opponent is tight-passive"
+    },
+    "l7hu-stakes-p4": {
+      "option": [
+        {
+          "action": "Check-Raise semi-bluff",
+          "explanation": "98 on T-7-2 has a two-way gutshot (6/J, 4 each) + a flush draw (10 outs); the check-raise semi-bluff is standard.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check-Fold",
+          "explanation": "98 has a gutshot draw; folding is too weak. Check-raise semi-bluff instead.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "explanation": "A donk isn't standard. Check to let the opponent act first, then check-raise.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l7hu-stakes-p5": {
+      "option": [
+        {
+          "action": "Bet 8BB (about 45% pot)",
+          "explanation": "KQ on K-8-3 is top pair good kicker; in a 3-bet pot the SPR is low — bet for value.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "KQ is a strong hand on a dry board; checking is too passive. Bet for value.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "At SPR 4.3, all-in is overkill. A medium bet lets the opponent call with a wider range.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; 3-bet pot"
+    }
+  },
+  "lessonObjectives": {
+    "l7hu-stakes": [
+      "List the core differences between heads-up and 6-max (far larger position value, every pair and Ax as a strong hand, more frequent postflop decisions, more important exploitative adjustments)",
+      "Judge the HU BTN opening range at about 50%-70%, and state that top pair weak kicker should value-bet much wider in HU",
+      "Tell the four HU opponent types and their counters apart (tight-passive: frequent C-Bets and bluffs; loose-passive: more value, fewer bluffs; loose-aggressive: balanced with traps; tight-aggressive: avoid excessive conflict)"
+    ]
+  }
+}

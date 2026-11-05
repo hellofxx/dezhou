@@ -1,0 +1,194 @@
+{
+  "lessonContent": {
+    "l7hu-stakes": [
+      "HU 的独特性",
+      "单挑（Heads-Up）是德州扑克中最纯粹的形式。与 6-max 或全桌相比，HU 有以下特点：\n\n1. 位置价值更大：BTN 每手牌都有位置优势\n2. 范围大幅拓宽：任何对子都是强牌，Ax 都是强牌\n3. 翻后决策更频繁：更多时候只有两人争夺底池\n4. 剥削调整更重要：可以快速识别并剥削对手弱点",
+      "核心概念：HU 中位置价值极大。BTN 每手牌都有位置优势。任何对子在 HU 中都是强牌，Ax 都是强牌。",
+      "翻前范围调整",
+      "HU 翻前范围比 6-max 大幅拓宽：\n\nBTN/SB open 范围：约 80%（远高于 6-max BTN 开池的最宽档）\n- 任何对子都是强牌\n- 任何 Ax 都是强牌\n- 同花连牌、小对子都可以 open\n\n3-bet 范围：\n- 更宽（约 10-15%）\n- 包括强牌 + 部分 bluff\n- 平衡性更重要",
+      "翻后策略调整",
+      "HU 翻后策略的关键调整：\n\n1. 更多 C-Bet：BTN 有范围优势，应该高频 C-Bet\n2. 更宽的价值下注：顶对弱踢脚也是强牌\n3. 更多 bluff：对手范围更宽，更容易被 bluff 走\n4. 位置利用：有位置时可以更频繁地价值下注和 bluff",
+      "适应不同 HU 对手类型",
+      "HU 中快速识别对手类型并调整：\n\n1. 紧弱型：频繁 C-Bet，多 bluff\n2. 松被动型：多价值下注，少 bluff\n3. 松凶型：平衡打法，适当陷阱\n4. 紧凶型：尊重对手，避免过度冲突",
+      "HU 中最重要的技能是快速识别对手类型并调整。前 20 手牌就要建立对手的基本画像，然后开始剥削。",
+      "警告：不要用 6-max 的标准打 HU。很多在 6-max 中是 fold 的牌，在 HU 中都是 call 或 raise。"
+    ]
+  },
+  "lessonQuiz": {
+    "l7hu-stakes-q1": {
+      "question": "HU 中 BTN/SB 的 open 范围约是多少？",
+      "options": [
+        "20-30%",
+        "30-40%",
+        "50-70%",
+        "约 80%"
+      ],
+      "explanation": "HU 中 BTN/SB open 范围约 80%，比 6-max BTN 开池的最宽档（约三成半）大幅拓宽。"
+    },
+    "l7hu-stakes-q2": {
+      "question": "HU 中以下哪类牌的价值提升最多？",
+      "options": [
+        "72o",
+        "任何对子和 Ax",
+        "同花连牌",
+        "小对子"
+      ],
+      "explanation": "HU 中任何对子都是强牌，Ax 都是强牌。这些牌的价值大幅提升。"
+    },
+    "l7hu-stakes-q3": {
+      "question": "HU 中面对紧弱型对手应该？",
+      "options": [
+        "减少 bluff",
+        "频繁 C-Bet，多 bluff",
+        "只打价值下注",
+        "尊重对手"
+      ],
+      "explanation": "面对紧弱型对手应该频繁 C-Bet 和 bluff，因为他们弃牌率高。"
+    },
+    "l7hu-stakes-q4": {
+      "question": "HU 中位置价值如何？",
+      "options": [
+        "不重要",
+        "比 6-max 略大",
+        "极大，BTN 每手牌都有位置优势",
+        "和 6-max 一样"
+      ],
+      "explanation": "HU 中位置价值极大，BTN 每手牌都有位置优势。"
+    },
+    "l7hu-stakes-q5": {
+      "question": "HU 中顶对弱踢脚的正确打法是？",
+      "options": [
+        "Check-Fold",
+        "控制底池",
+        "更宽的价值下注",
+        "All-in"
+      ],
+      "explanation": "HU 中范围更宽，顶对弱踢脚也是强牌，应该更宽地价值下注。"
+    }
+  },
+  "lessonExample": {
+    "l7hu-stakes-ex1": {
+      "title": "HU 中 BTN 的宽 open",
+      "correctAction": "Open raise",
+      "correctAmount": "",
+      "reasoning": [
+        "HU 中 76s 可玩性好，应该 open",
+        "BTN 有位置优势，翻后可以利用",
+        "同花连牌有很好的翻后潜力",
+        "在 HU 中这比 6-max 中的相对价值高得多"
+      ],
+      "mistakeAction": "Fold（\"只是 76s\"）",
+      "mistakeReasoning": "用 6-max 的标准打 HU 会错过很多盈利机会。76s 在 HU 中是标准 open。",
+      "mistakeEvLoss": "-1.5 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l7hu-stakes-p1": {
+      "option": [
+        {
+          "action": "Open raise",
+          "explanation": "HU 中 87s 可玩性好，BTN 有位置优势，应该 open。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Limp",
+          "explanation": "HU 中应该积极 open，limp 太被动。",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "87s 在 HU 中可玩性好，fold 太紧。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "HU 现金桌"
+    },
+    "l7hu-stakes-p2": {
+      "option": [
+        {
+          "action": "C-Bet 2BB（33% pot）",
+          "explanation": "A2 在 A-8-3 面是顶对，HU 中应该小注 C-Bet 获取价值。",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "HU 中顶对应该下注获取价值，check 太被动。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A2 顶对弱踢脚，All-in 过度。小注获取价值即可。",
+          "evImpact": "-1.0 BB/100"
+        }
+      ],
+      "tableDesc": "HU 现金桌"
+    },
+    "l7hu-stakes-p3": {
+      "option": [
+        {
+          "action": "C-Bet 4BB（75% pot）",
+          "explanation": "面对紧弱型对手应该高频 C-Bet，QJ 有高牌胜率，应该下注。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "面对紧弱型对手应该多 bluff，check 错失机会。",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "QJ 高牌 All-in 过度。中等下注即可。",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "HU 现金桌，对手是紧弱型"
+    },
+    "l7hu-stakes-p4": {
+      "option": [
+        {
+          "action": "Check-Raise 半诈唬",
+          "explanation": "98 在 T-7-2 面有双向卡顺（6/J 各 4 张）+ 同花听牌（10 outs），Check-Raise 半诈唬是标准打法。",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check-Fold",
+          "explanation": "98 有卡顺听牌，fold 太弱。应该 Check-Raise 半诈唬。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "explanation": "Donk Bet 不是标准打法。应该 Check 让对手先行动，然后 Check-Raise。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "HU 现金桌"
+    },
+    "l7hu-stakes-p5": {
+      "option": [
+        {
+          "action": "Bet 8BB（约45% pot）",
+          "explanation": "KQ 在 K-8-3 面是顶对好踢脚，3-bet 底池 SPR 低，应该下注获取价值。",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "KQ 在干燥面是强牌，check 太被动。应该下注获取价值。",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "SPR 4.3，All-in 过度。中等下注即可，让对手用更宽范围跟注。",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "HU 现金桌，3-bet 底池"
+    }
+  },
+  "lessonObjectives": {
+    "l7hu-stakes": [
+      "列举单挑与 6-max 的核心差异（位置价值极大、任何对子与 Ax 都是强牌、翻后决策更频繁、剥削调整更重要）",
+      "判断 HU BTN/SB 的 open 范围约 80%，并说出顶对弱踢脚在 HU 中应更宽地价值下注",
+      "区分四类 HU 对手的应对（紧弱型高频 C-Bet 多 bluff、松被动型多价值少 bluff、松凶型平衡+陷阱、紧凶型避免过度冲突）"
+    ]
+  }
+}

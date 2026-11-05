@@ -47,12 +47,10 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
   'features/strategy-academy/components/PracticeDrill.tsx': { maxLines: 1001, reason: 'Phase 2 拆分待执行' },
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel3.ts': { maxLines: 976, reason: '课程内容数据' },
   'features/strategy-academy/data/lessons/variants/standard/standardLevel7.ts': { maxLines: 928, reason: '课程内容数据' },
-  'features/strategy-academy/data/lessons/variants/heads-up/headsUpLevel4.ts': { maxLines: 852, reason: '课程内容数据' },
   'features/progress/components/settings/SettingsPage.tsx': { maxLines: 804, reason: '页面级组件' },
   'features/strategy-academy/data/lessons/variants/standard/standardLevel1.ts': { maxLines: 790, reason: '课程内容数据' },
   'features/theory-academy/data/levels/variants/standard/standardLevel9.ts': { maxLines: 415, reason: '课程内容数据' },
   'features/strategy-academy/components/ConceptGraph.tsx': { maxLines: 664, reason: 'Phase 2 拆分待执行' },
-  'features/strategy-academy/data/lessons/variants/heads-up/headsUpLevel3.ts': { maxLines: 630, reason: '课程内容数据' },
   'features/pot-odds/components/PotOddsQuizPage.tsx': { maxLines: 536, reason: '页面级组件' },
   'features/strategy-academy/store.ts': { maxLines: 520, reason: 'Phase 2 拆分待执行' },
   'features/progress/components/srs/ReviewSession.tsx': { maxLines: 516, reason: 'Phase 2 拆分待执行' },
@@ -64,7 +62,6 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel8.ts': { maxLines: 440, reason: '课程内容数据' },
   'shared/data/opponentProfiles.ts': { maxLines: 436, reason: 'Phase 2 拆分待执行（跨模块画像数据）' },
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel7.ts': { maxLines: 430, reason: '课程内容数据' },
-  'features/strategy-academy/data/lessons/variants/heads-up/headsUpLevel5.ts': { maxLines: 429, reason: '课程内容数据' },
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel6.ts': { maxLines: 419, reason: '课程内容数据' },
   'features/strategy-academy/data/lessons/variants/short-deck/shortDeckLevel5.ts': { maxLines: 415, reason: '课程内容数据' },
   'features/theory-academy/data/levels/variants/short-deck/shortDeckLevel5.ts': { maxLines: 404, reason: '课程内容数据' },
@@ -108,11 +105,17 @@ const QUIZ_BANK_ALLOWLIST: Record<string, OversizedEntry> = {
   'features/strategy-academy/data/lessons/variants/standard/quizBank/level7.ts': { maxLines: 2000, reason: '策略 L7 题库数据（含本土课拆出后的标准课）' },
   'features/strategy-academy/data/lessons/variants/standard/quizBank/level8.ts': { maxLines: 600, reason: '策略 L8 题库数据（按 Level 拆分）' },
   'features/strategy-academy/data/lessons/variants/standard/quizBank/local.ts': { maxLines: 1800, reason: '策略本土课题库数据（16 课）' },
+  'features/strategy-academy/data/lessons/variants/heads-up/quizBank/l3hu.ts': { maxLines: 600, reason: '单挑策略题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/heads-up/quizBank/l4hu.ts': { maxLines: 600, reason: '单挑策略题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/heads-up/quizBank/l5hu.ts': { maxLines: 600, reason: '单挑策略题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/heads-up/quizBank/l6hu.ts': { maxLines: 600, reason: '单挑策略题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/heads-up/quizBank/l7hu.ts': { maxLines: 600, reason: '单挑策略题库数据（按 Level 拆分）' },
+  'features/strategy-academy/data/lessons/variants/heads-up/quizBank/l8hu.ts': { maxLines: 600, reason: '单挑策略题库数据（按 Level 拆分）' },
 };
 
 /** 题库路径的精确形态：理论 standard t1-t9 + heads-up t1hu-t9hu + 策略 level1-8/local，不接受子目录或其他命名 */
 const QUIZ_BANK_PATH_RE =
-  /^features\/(?:theory|strategy)-academy\/data\/(?:levels|lessons)\/variants\/(?:standard\/quizBank\/(?:t[1-9]|level[1-8]|local)|heads-up\/quizBank\/t[1-9]hu)\.ts$/;
+  /^features\/(?:theory|strategy)-academy\/data\/(?:levels|lessons)\/variants\/(?:standard\/quizBank\/(?:t[1-9]|level[1-8]|local)|heads-up\/quizBank\/(?:t[1-9]hu|l[3-8]hu))\.ts$/;
 
 type FileInfo = {
   filePath: string;

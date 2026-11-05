@@ -1,0 +1,292 @@
+{
+  "lessonContent": {
+    "l5hu-focus": [
+      "Heads-Up: The Ultimate Test of Decision Density",
+      "HU is the highest-decision-density poker format: you're in a blind every hand, 200+ hands/hour, and nearly every hand sees a flop. This means your focus in HU is both a weapon and a weakness — one lapse can miss the opponent's tendencies, miscalculate odds, or lose emotional control during high-frequency downswings. HU pros treat focus as a trainable resource, not innate talent.",
+      "HU focus isn't \"staring at the screen\" but \"maintaining the same quality across high-frequency decisions\". Use session-length limits + state awareness + fatigue control so the last hand's decision quality matches the first.",
+      "State Management and Fatigue Control",
+      "HU state-management three principles: (1) session-length limit — HU focus is hard to sustain beyond 60-90 minutes; preset the time and stop on schedule, avoiding fatigue-induced decision deterioration; (2) variance budget — pause and review after losing 40-50BB, a stop-and-restart not a chase; (3) stand up every 100 hands — break losing-streak inertia and rest your eyes and mind. Fatigue signs include: starting to play marginal hands, losing bet-sizing control, repeating low-level mistakes, and ignoring the opponent's obvious tendencies.",
+      "Example: You've played HU for 2 hours straight; in the last 30 hands you've been \"auto-playing\" — not noticing the BB's fold rate vs your C-Bets dropped from 45% to 30%. That's a classic fatigue sign: your awareness of opponent deviations dulled and you still bet at the old frequency, getting harvested by the opponent's counter-adjustment. Correct move: pause immediately, recognize fatigue, rest, and restart with \"how is the opponent playing now\" rather than \"how do I usually play\".",
+      "Example 2 (state-management flow): Set three rules before the HU session: (1) maximum 90 minutes; (2) stop at 50BB down; (3) stand up 2 minutes every 100 hands. Execute strictly on schedule even when the table is hot — because \"winners also give the edge back when tired\". Tendler emphasizes: discipline isn't limiting fun but protecting long-term EV.",
+      "Counterintuitive point: the most dangerous thing in HU isn't \"impulse when losing\" but \"letting your guard down after winning\". After winning a few hands, players often relax, play marginal hands, and give the edge back. HU discipline must be consistent throughout, win or lose.",
+      "HU session-management triad: (1) preset a variance budget — pause and review after losing 40-50BB; (2) stand up every 100 hands to break losing-streak inertia; (3) review only EV, never results."
+    ],
+    "l5hu-opponent-psychology": [
+      "Heads-Up: The Battlefield of Reading People",
+      "HU faces one opponent, so reading people is amplified enormously — you don't juggle multiple table images, just this one player. Opponent psychology (Reading) splits into two types: behavior patterns (bet sizes, calling tendencies, tilt tendencies) and real-time signals (bet rhythm, reaction time). In HU the two combine to help you infer the opponent's range and emotional state.",
+      "Reading isn't guessing hands — it's estimating ranges + emotions. \"Calls too fast\" may mean a marginal or strong hand; \"thinks too long\" may mean a tough decision or acting. Convert observations into probabilities, not certainties.",
+      "Reading Bet Rhythm and Reaction Time",
+      "Bet rhythm and reaction time are important signals in HU (especially online). Common readings: betting too fast = possibly a strong hand (eager for value) or a weak hand (not wanting to overthink); thinking too long = a tough decision (marginal hand/draw) or acting; hesitant calls = marginal hands. But these signals are unreliable with insufficient samples — cross-verify with 50-100 hand frequency statistics; a single rhythm doesn't count.",
+      "Example: The HU opponent thinks 20 seconds before calling your turn bet. Frequency read: long think = a tough decision, possibly a marginal hand (station trait) or a draw. But with insufficient samples it could be acting. Correct approach is cross-verification: his tendency to call big bets, his river showdown choices — judge comprehensively rather than relying on one rhythm alone.",
+      "Example 2 (counter-reading): You hold AA and watch your rhythm when betting the flop. If you bet instantly because \"I have a strong hand\" and hesitate because \"I'm bluffing\", the opponent will quickly crack you. Counter-reading drill: set the same think time for all bets, or deliberately break rhythm at key moments (hesitate with strong, be decisive with bluffs). You read the opponent, and the opponent reads you.",
+      "Counterintuitive point: the enemy of reads isn't \"reading wrong\" but \"overconfidence\". HU pros admit \"this read is only 60% sure\" and bet accordingly, rather than \"I know what he has\". Converting reads into probabilities rather than certainties is the sustainable strategy.",
+      "Read discipline: (1) only conclude from statistically significant frequencies (50+ hand samples); (2) cross-verify bet rhythm with frequency; (3) admit read uncertainty and fold it into equity and pot-odds calculations. After these three, reads go from mysticism to math."
+    ]
+  },
+  "lessonQuiz": {
+    "l5hu-focus-q1": {
+      "question": "The core of HU focus is:",
+      "options": [
+        "Staring at the screen without distraction",
+        "Maintaining the same quality across high-frequency decisions, via session limits and fatigue control",
+        "Playing faster",
+        "Only watching big pots"
+      ],
+      "explanation": "HU focus is \"maintaining quality across high-frequency decisions\", achieved through state management like session-length limits, variance budgets, and periodic breaks."
+    },
+    "l5hu-focus-q2": {
+      "question": "The reasonable upper limit of an HU session length is about:",
+      "options": [
+        "30 minutes",
+        "60-90 minutes",
+        "3 hours",
+        "Unlimited"
+      ],
+      "explanation": "HU focus is hard to sustain beyond 60-90 minutes; overtime causes decision deterioration. Fatigue risk is extremely high beyond 3 hours."
+    },
+    "l5hu-focus-q3": {
+      "question": "Which is NOT a typical fatigue sign?",
+      "options": [
+        "Starting to play marginal hands",
+        "Losing bet-sizing control",
+        "Being more aware of opponent tendencies",
+        "Repeating low-level mistakes"
+      ],
+      "explanation": "Fatigue dulls awareness of opponent tendencies rather than sharpening it. Marginal hands, sizing control loss, and low-level mistakes are fatigue signs."
+    },
+    "l5hu-focus-q4": {
+      "question": "The role of the \"pause at 50BB\" variance budget is:",
+      "options": [
+        "Limiting the maximum you can lose",
+        "Pausing for review at the stop-loss point, avoiding chase-style re-buying",
+        "Guaranteeing every session wins",
+        "Computing expectation"
+      ],
+      "explanation": "A variance budget is stop-loss discipline: pause and review at the preset point, cutting the \"get even\" impulse and avoiding fatigue and tilt."
+    },
+    "l5hu-focus-q5": {
+      "question": "The correct statement about HU discipline is:",
+      "options": [
+        "You can relax after winning",
+        "You can extend time when the table is hot",
+        "Discipline must be consistent throughout, win or lose",
+        "Discipline is only needed when losing"
+      ],
+      "explanation": "Relaxation after winning and fatigue are equally dangerous. HU discipline must be consistent throughout — no relaxation in either direction — to protect long-term EV."
+    },
+    "l5hu-opponent-psychology-q1": {
+      "question": "The correct way to read people in HU is:",
+      "options": [
+        "Guessing the opponent's exact hand",
+        "Estimating ranges + emotions, converting observations into probabilities",
+        "Judging by feel",
+        "Only watching single hands"
+      ],
+      "explanation": "Reading is estimating ranges + emotions, converting observations into probabilities rather than certainties. Single-hand impressions are unreliable."
+    },
+    "l5hu-opponent-psychology-q2": {
+      "question": "The common reading of \"betting too fast\" in HU is:",
+      "options": [
+        "Definitely a strong hand",
+        "Possibly strong (eager for value) or weak (not wanting to overthink) — cross-verify",
+        "Definitely a weak hand",
+        "No information"
+      ],
+      "explanation": "Betting too fast may be strong (eager for value) or weak (not wanting to overthink); a single signal is unreliable and needs cross-verification with frequency statistics."
+    },
+    "l5hu-opponent-psychology-q3": {
+      "question": "The online HU opponent thinks 20 seconds before calling your turn bet. The most reliable handling is:",
+      "options": [
+        "Judge him marginal and raise immediately",
+        "Cross-verify with his tendency to call big bets and his showdown choices",
+        "Judge him acting",
+        "Ignore the signal"
+      ],
+      "explanation": "A long think may mean marginal/draw/acting; a single instance is unreliable. Cross-verify with frequency like his big-bet call tendency and river showdown choices."
+    },
+    "l5hu-opponent-psychology-q4": {
+      "question": "The core of \"counter-reading (Balanced Play)\" is:",
+      "options": [
+        "Hiding your strong hands",
+        "Making actions not leak range information, keeping rhythm consistent or breaking it",
+        "Always betting instantly",
+        "Making the opponent unable to guess hand strength"
+      ],
+      "explanation": "Counter-reading requires actions not to leak range: no \"fast with strong, slow with weak\" — keep rhythm consistent or deliberately break it."
+    },
+    "l5hu-opponent-psychology-q5": {
+      "question": "The correct attitude toward HU reads is:",
+      "options": [
+        "Treating reads as certain facts",
+        "Admitting uncertainty and folding it into equity and pot-odds calculations",
+        "Reads are always right",
+        "Ignoring all reads"
+      ],
+      "explanation": "Reads carry uncertainty; pros convert them into probabilities (like \"60% sure\") and fold them into decisions — the sustainable strategy."
+    }
+  },
+  "lessonExample": {
+    "l5hu-focus-ex1": {
+      "title": "Fatigue-Induced Decision Deterioration",
+      "correctAction": "Min-raise",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "JTs is a standard HU button open",
+        "In a normal state you should open actively",
+        "If tired and unaware of the BB's tendency change, pause rather than continue"
+      ],
+      "mistakeAction": "Auto-Fold or play marginal hands while fatigued",
+      "mistakeReasoning": "Fatigue causes decision deterioration — not noticing the BB's fold-rate change or losing sizing control. The correct move is pausing to rest, not continuing.",
+      "mistakeEvLoss": "-1.5 BB/100"
+    },
+    "l5hu-opponent-psychology-ex1": {
+      "title": "Reading With Rhythm and Frequency Combined",
+      "correctAction": "Bet",
+      "correctAmount": "1.3BB (1/3 pot)",
+      "reasoning": [
+        "KQ on a K-8-3 dry board is top pair",
+        "The BB's fold rate vs C-Bets is 50% (across 60 hands of stats)",
+        "After cross-verifying with the BB's calling tendencies, 1/3-pot thin value"
+      ],
+      "mistakeAction": "Judging the BB weak based on one slow think",
+      "mistakeReasoning": "A single rhythm signal is unreliable; cross-verify with the 60-hand fold-rate statistics rather than relying on one reaction time alone.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l5hu-focus-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "Q9s is a standard HU button open; folding is too tight.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Min-raise",
+          "explanation": "Q9s plays well vs the BB's wide range — a standard open.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Q9s all-in is overkill; the min-raise suffices.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l5hu-focus-p2": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "A5 has a 9-out flush draw; folding is too weak.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "explanation": "Nut flush draw + A-high — the x/r semi-bluff protects the draw and pressures.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A draw all-in is overkill; the x/r builds the advantage.",
+          "evImpact": "-1.2 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l5hu-focus-p3": {
+      "option": [
+        {
+          "action": "Bet 2BB (half pot)",
+          "explanation": "JJ overpair on a dry board should bet for value, maintaining decision quality even when tired.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "An overpair all-in is overkill; half-pot value suffices.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Fold",
+          "explanation": "JJ is a strong hand, and when tired you should pause rather than deteriorate the decision.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; 2 hours in, fatigued"
+    },
+    "l5hu-opponent-psychology-p1": {
+      "option": [
+        {
+          "action": "Bet 4BB (1/3 pot)",
+          "explanation": "AQ top pair top kicker — lead a small thin-value bet in the 3-bet pot.",
+          "evImpact": "+1.5 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Top pair top kicker should bet; checking is too passive.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Top pair on a dry board all-in is overkill; a small bet suffices.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l5hu-opponent-psychology-p2": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "JT top pair — combined with the SB's high x/r fold rate an x/r is possible, but calling for control is also reasonable.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "explanation": "Top pair x/r scares off weak hands; on a dry board call for control.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "JT top pair is a strong hand; folding is too weak.",
+          "evImpact": "-2.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the SB has a high fold-to-x/r rate"
+    },
+    "l5hu-opponent-psychology-p3": {
+      "option": [
+        {
+          "action": "Check-Call",
+          "explanation": "98 middle pair (88) — call for control, staying cautious given the SB's abnormal rhythm.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise",
+          "explanation": "Middle pair isn't strong enough to x/r; calling is more reasonable.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Fold",
+          "explanation": "Middle pair has improvement room; folding is too weak.",
+          "evImpact": "-1.2 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; the SB's bet rhythm is abnormal"
+    }
+  },
+  "lessonObjectives": {
+    "l5hu-focus": [
+      "Explain the definition of heads-up focus (keeping the same decision quality at high decision density) and list the four signs of fatigue (playing marginal hands, uncontrolled sizing, basic errors, dulled awareness of opponent tendencies)",
+      "Apply the three heads-up state-management rules as preset discipline (a 60-90 minute session cap, a 40-50BB variance budget, standing up every 100 hands)",
+      "Tell \"fatigue-driven degradation\" and \"strategy errors\" apart, judging that dulled awareness of BB tendencies calls for a pause rather than continuing at old frequencies",
+      "Judge that heads-up discipline must be consistent throughout (post-win slack is as dangerous as losing-streak impulses)"
+    ],
+    "l5hu-opponent-psychology": [
+      "Tell the two classes of heads-up reads apart (behavioral patterns and live signals) and explain that reading means estimating range plus emotion, not guessing a specific hand",
+      "Judge the ambiguous readings of \"betting fast\" and \"thinking long\", and explain that thin samples must be cross-checked with frequency stats over 50-100 hands",
+      "Apply anti-reading practice (actions that leak no range: consistent or deliberately shuffled timing) and judge the readable pattern of \"fast with strong, slow with weak\"",
+      "Explain the sustainable attitude to reads (accepting uncertainty like \"60% confident\" and folding it into equity and odds math)"
+    ]
+  }
+}

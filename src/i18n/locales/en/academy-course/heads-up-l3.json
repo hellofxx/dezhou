@@ -1,0 +1,428 @@
+{
+  "lessonContent": {
+    "l3hu-bn-aggression": [
+      "HU Button: The Positional Edge of Acting Last Postflop",
+      "In heads-up, the button (SB) opens the action first preflop and acts last postflop — a positional advantage you enjoy every single hand. With only one opponent, you can open with about 80% of hands — any pair, any Ax, and suited connectors all play. The key isn't \"stronger cards\" but \"higher frequency + postflop position\": you seize the initiative, keep the opponent responding passively, and his defense cost rises quickly with your aggression.",
+      "Button aggression isn't \"playing looser\" but \"seizing the initiative more actively\". Every hand the SB acts last postflop while the BB must decide first on every street — use this edge to apply constant pressure, not waste it waiting for good cards.",
+      "Postflop Pressure: C-Bet Frequency and Size",
+      "Postflop you (SB) act last and hold position — the preflop initiative stacked on the postflop edge makes the C-Bet even more valuable. HU C-Bet frequency is far higher than full ring: because the opponent defends wide and hits rarely, your continuation bets steal pots at high frequency. On dry high boards use 1/3-pot small bets at high frequency (about 70%-80%); on wet connected boards use 2/3+ pot big bets to protect equity. The key — HU C-Bet value is \"making wide-range weak hands fold + thin value\", not \"representing strength\".",
+      "Example: HU 100BB deep, you (SB) hold A♠5♠ and min-raise to 2BB, the BB calls, pot 4BB. Flop K♠7♦2♣. You are the preflop aggressor, and postflop the SB closes the action (IP). On this dry high board the BB's range rarely hits a K; you bet 1/3 pot about 1.3BB: A5's overcards + backdoor flush have enough equity to support continued pressure while making the BB's junk pay. If he folds you win 4BB directly; if he calls you have A-high as later improvement.",
+      "Counterintuitive point: \"constant pressure\" on the HU button doesn't mean \"bet every street\". Postflop the SB acts last, but on wet boards or when the turn changes hands, mix in checks to keep the pot small and watch for the BB striking back with an x/r — aggression is a frequency advantage, not mindless firing.",
+      "Button aggression quick memory: open about 80% preflop, C-Bet about 70%-80% (1/3 pot) on dry boards, lower frequency with big sizes on wet boards. Every 50 hands check: is your C-Bet frequency too low, letting the BB's weak hands see the turn cheaply? Is your open too tight, wasting your postflop position?"
+    ],
+    "l3hu-sb-continuation": [
+      "The SB's C-Bet: Continuation Pressure With Position",
+      "In heads-up the SB acts last postflop and holds position, meaning your C-Bet isn't \"representing strength\" but \"using the right range and size to make the wide-range BB fold or pay\". The BB must decide before you, so you hold the last choice: bet thin value into a check, keep the pot size under control, or get off cheap on dangerous boards. The SB's C-Bet frequency is set by board and range advantage — high frequency on dry high boards, lower on wet connected boards, mixing checks to control the pot.",
+      "The core C-Bet discipline with position: first judge \"whose range does this board hit\". Dry boards — big SB range advantage → high-frequency small bets; wet boards — BB nut advantage → lower frequency and pot control. Don't fire mindlessly just because \"I'm the aggressor\".",
+      "Size and Range: When to Continue, When to Check",
+      "The SB's postflop continuation choices have three tiers: (1) dry high boards (like K♠7♦2♣) — the SB's opening range holds plenty of Kx with a clear range advantage, so C-Bet 1/3-pot small bets at high frequency (about 70%-80%), making the BB's wide-range weak hands fold or pay thin value; (2) wet connected boards (like 9♠8♥6♣) — the BB's defense range holds many straights and draws, the nut advantage tilts toward the BB, so the SB lowers frequency (about 30%-40%) and mixes in checks; (3) neutral boards without range advantage — the SB bets small or medium with strong hands and good draws for thin value, and checks back air and weak pairs to keep the pot small, building a balanced range.",
+      "Example: HU 100BB deep, you (SB) min-raise to 2BB, BB calls, pot 4BB. Flop Q♦8♣3♠ (dry). The BB checks first, and the decision comes to you acting last. Your opening range holds plenty of Qx and the BB's defense range rarely hits a Q — the range advantage is yours. Bet 1/3 pot about 1.3BB: QJ/QT thin value, A-high semi-bluffs, small pairs bet too — the whole range C-Bets at high frequency, and the BB's weak hands can only fold.",
+      "Example 2 (wet-board frequency drop): Same pot, flop 9♠8♥6♣. The BB's defense range holds 87/65/97 and many straights/draws — nut advantage tilts to the BB. You hold K♠K♦ (overpair): still ahead but easily outdrawn, so bet 2/3 pot to protect equity, but A-high and small pairs should check for pot control — the SB's C-Bet frequency drops sharply on this board.",
+      "Counterintuitive point: a C-Bet with position isn't \"declaring the initiative\". You act last, so a check isn't weakness — it shrinks the pot on purpose and digests the information the BB reveals by moving first postflop. The real x/r lever sits in the OOP BB's hands; the SB's mixed checks make its own high-frequency C-Bet harder to strike back at — that is the mature HU SB play.",
+      "SB C-Bet three decision questions: (1) whose range does the board hit? (2) is my hand value, semi-bluff, or pure air? (3) can I respond when the BB moves first postflop and fights back? After the three questions, continuation betting with position turns from habit into structure."
+    ],
+    "l3hu-bb-defense": [
+      "The BB: The Seat With the Most Preflop Information, Acting First Postflop",
+      "In heads-up the SB opens first and the BB has the final say preflop, yet the BB faces the SB's attack every hand and defends at a frequency of 60%+. This \"60%+ defense\" isn't passive calling but structured defense: a call pile (small/medium pairs, suited connectors, weak Ax) + a 3-bet value pile (strong hands for value) + a 3-bet bluff pile (blockers). The math behind defending wide is the BB's preflop information plus the pot odds from the 1BB of dead money already in: versus an SB min-raise to 2BB you only need 1BB more. Stay clear-eyed that postflop the BB acts first — the over-100% equity-realization bonus belongs to the SB, who holds position; the BB compensates with check-calls and pot control.",
+      "The BB's \"60%+ defense\" is structured defense: the BB has the final say preflop and already owns 1BB of dead money, so calling with marginal hands is far cheaper than full ring. Bringing full ring's \"the BB can only play tight\" into HU throws away that information and odds edge for free — and since postflop the BB acts first, the width must come with check-call and pot-control discipline.",
+      "Check-Raise (x/r): The BB's Key Lever",
+      "Postflop the BB acts first; after checking it often faces the SB's C-Bet: call, check-raise, or fold. The check-raise (x/r) is the BB's key tool for building its range — strong hands + strong draws form a polarized x/r range that suppresses the SB's C-Bet frequency and protects the calling range from exploitation. The x/r math: when the SB's C-Bet frequency is too high and its fold rate too low, the BB's x/r semi-bluff profits automatically.",
+      "Example: HU 100BB deep, the SB min-raises to 2BB, you (BB) call with 7♠6♠, pot 4BB. Flop 8♣5♦2♠. You check, and the SB c-bets 1.3BB (half pot). You have a double-gutshot (4 fours + 4 nines) + backdoor flush — a standard x/r semi-bluff hand. Raise to about 4BB: if the SB folds you win 5.3BB directly; if called you have 8+ outs of improvement. The x/r protects your draw and makes the SB's wide-range C-Bet pay.",
+      "Example 2 (control from a disadvantage): same pot, you (BB) hold A♠K♠, flop K♦8♣3♥ (dry top pair). You check first and the SB c-bets 1.3BB. Top pair top kicker on a dry board leans toward calling rather than raising — calling keeps the SB's bluffs coming, and it holds the pot down while the BB acts first. An x/r would instead scare off the SB's weak hands and waste the thin value of top pair. The discipline for the side that acts first is \"realize strong hands via check-call; don't build big pots casually\".",
+      "Counterintuitive point: wide BB defense isn't a calling station. A real station has no x/r and no 3-bet pile; the HU BB's 60% consists of calls, 3-bet value, 3-bet bluffs, and x/r — each moving with the SB's tendencies. Defense width and defense passivity are two different things.",
+      "BB defense three-step quick check: (1) call the pot odds — calling line 25% vs a 2BB SB open (SB 2 + your own 1 = pot 3, then call 1 more, 1÷(3+1)=25%); (2) split piles — strong made hands 3-bet value, blockers 3-bet bluff, medium hands call; (3) watch the SB — raise 3-bet vs an over-folder, raise isolate vs a big limper, raise x/r vs an over-frequent C-Better."
+    ]
+  },
+  "lessonQuiz": {
+    "l3hu-bn-aggression-q1": {
+      "question": "The core frequency advantage of the HU button (SB) is:",
+      "options": [
+        "Acting last postflop (IP), one more piece of information on every street",
+        "Acting last preflop, one more piece of information every hand",
+        "Seeing the flop for free every hand",
+        "Always having better starting cards"
+      ],
+      "explanation": "The SB is the button: it opens the action first preflop, and only after the flop does it get the final word — that is the real core advantage. \"Acting last preflop\" is full-ring button thinking, and bringing it into HU is exactly the trap here. C is the SB completing the blind to see the flop, not a positional advantage."
+    },
+    "l3hu-bn-aggression-q2": {
+      "question": "The typical HU button (SB) opening frequency is about:",
+      "options": [
+        "About 30%",
+        "About 50%",
+        "About 80%",
+        "100%"
+      ],
+      "explanation": "The HU SB opens about 80%: only one opponent, any pair and Ax are strong hands, and the SB holds position postflop. 100% is close but not GTO (some junk still folds)."
+    },
+    "l3hu-bn-aggression-q3": {
+      "question": "On a dry high board (K♠7♦2♣), the HU button C-Bet tendency is:",
+      "options": [
+        "1/3-pot small bets at high frequency (about 70%-80%)",
+        "Overbet shove",
+        "Check everything",
+        "Only bet the nuts"
+      ],
+      "explanation": "The opponent rarely hits a dry high board; 1/3-pot small bets steal pots and bet thin value at high frequency — the standard play. Overbets/only-nuts waste the frequency advantage."
+    },
+    "l3hu-bn-aggression-q4": {
+      "question": "The correct meaning of \"constant pressure\" on the HU button is:",
+      "options": [
+        "Bet mindlessly every street",
+        "Seize initiative with high-frequency opens and C-Bets, but mix checks on wet boards to keep the pot small",
+        "Bet to the river forever",
+        "Only bluff, never value"
+      ],
+      "explanation": "Constant pressure is a frequency advantage, not mindless firing. On wet boards or when the turn changes hands, mix checks to keep the pot small and stay wary of the BB's check-raise counterattack."
+    },
+    "l3hu-bn-aggression-q5": {
+      "question": "The math basis for the HU button opening about 80% is:",
+      "options": [
+        "Any pair and Ax are strong against one opponent",
+        "Cards are dealt better",
+        "Rules allow more opens",
+        "Bigger pots"
+      ],
+      "explanation": "HU faces only one opponent; any pair, Ax, and suited connectors have enough equity against a wide range, plus the SB holds position postflop — hence high-frequency opens."
+    },
+    "l3hu-sb-continuation-q1": {
+      "question": "The HU SB acts last postflop (IP); its C-Bet core characteristic is:",
+      "options": [
+        "Mindlessly representing strength",
+        "Setting frequency by board range advantage and mixing checks to keep the pot small",
+        "Always checking",
+        "Big bets every street"
+      ],
+      "explanation": "The SB acts last postflop and holds IP: C-Bets are cheap and you command the pot size. The correct posture is setting frequency by board range advantage, mixing checks for pot control, and staying wary of the BB's x/r counterattack."
+    },
+    "l3hu-sb-continuation-q2": {
+      "question": "On a dry high board (K♠7♦2♣), the SB's (IP) C-Bet frequency tendency is:",
+      "options": [
+        "High frequency (about 70%-80%) with 1/3-pot small bets",
+        "Check everything",
+        "Low frequency, only the nuts",
+        "Overbet shove"
+      ],
+      "explanation": "The SB's opening range holds plenty of Kx on a dry board — clear range advantage; 1/3-pot small bets at high frequency make the BB's weak hands fold or bet thin value."
+    },
+    "l3hu-sb-continuation-q3": {
+      "question": "On a wet connected board (9♠8♥6♣), the SB's (IP) C-Bet frequency should:",
+      "options": [
+        "Stay high",
+        "Drop sharply (about 30%-40%) because the BB has nut advantage",
+        "Stop entirely",
+        "Only overbets"
+      ],
+      "explanation": "The BB's defense range holds many straights/draws on wet boards with the nut advantage tilted to the BB — the SB should lower frequency and mix checks for pot control."
+    },
+    "l3hu-sb-continuation-q4": {
+      "question": "In HU, what's the correct understanding of the BB checking first postflop?",
+      "options": [
+        "Weakness, meaning no hand",
+        "Keeping the x/r lever and handing the decision to the SB in position — a mature play",
+        "Always wrong",
+        "Only used on the river"
+      ],
+      "explanation": "The BB must act first postflop, so its check isn't weakness — it keeps the check-raise threat alive and kicks the decision to you, the player with the final word. The SB must price in that x/r risk; this is the mature HU BB posture."
+    },
+    "l3hu-sb-continuation-q5": {
+      "question": "The SB holding an overpair on a wet board (9♠8♥6♣) should:",
+      "options": [
+        "Only 1/3-pot small bets",
+        "2/3+ pot big bets to protect equity, while weak hands check for pot control",
+        "Fold directly",
+        "Mindlessly check"
+      ],
+      "explanation": "An overpair on a wet board is ahead but easily outdrawn — use 2/3-pot big bets to protect; simultaneously weak hands in the range check to build a balanced bet/check structure."
+    },
+    "l3hu-bb-defense-q1": {
+      "question": "The typical HU BB defense frequency vs an SB open is about:",
+      "options": [
+        "15%-25%",
+        "30%-40%",
+        "60%-70%",
+        "85%-95%"
+      ],
+      "explanation": "The HU BB defends about 60%-70% (calls about 35%-50% + 3-bets about 15%-25%). 15%-25% is a tight full-ring magnitude; 85%-95% is a passive calling station."
+    },
+    "l3hu-bb-defense-q2": {
+      "question": "The math basis for the HU BB defending 60%+ is:",
+      "options": [
+        "The BB has better cards every hand",
+        "The BB has the final say preflop, and its 1BB of dead money brings pot odds",
+        "The BB must stop the SB from stealing with any cards",
+        "Rules require it"
+      ],
+      "explanation": "The BB has the final say preflop, and the SB's 0.5 dead money makes calling cheap — so it can defend above the MDF floor and still profit. The over-100% equity-realization bonus belongs to the SB, who holds position; the BB compensates for acting first postflop with structure and odds."
+    },
+    "l3hu-bb-defense-q3": {
+      "question": "On a wet board (8♣5♦2♠), the BB holding a strong draw facing the SB's C-Bet should:",
+      "options": [
+        "Call passively",
+        "Check-raise (x/r) as a semi-bluff",
+        "Fold directly",
+        "Overbet shove"
+      ],
+      "explanation": "A strong draw (double-gutshot + backdoor flush) is a standard x/r semi-bluff: the SB folding wins it directly, and when called there's improvement room while suppressing the SB's C-Bet frequency."
+    },
+    "l3hu-bb-defense-q4": {
+      "question": "The BB holding top pair top kicker on a dry board facing an SB C-Bet should:",
+      "options": [
+        "Check-raise to scare off weak hands",
+        "Call, keeping the SB's bluffs; control the pot from your OOP seat",
+        "Fold directly",
+        "Shove"
+      ],
+      "explanation": "The BB acts first postflop, so top pair top kicker leans toward calling rather than x/r: calling keeps the SB's bluffs coming and controls the pot out of position; an x/r would instead scare off weak hands and waste thin value."
+    },
+    "l3hu-bb-defense-q5": {
+      "question": "The difference between the HU BB's \"60%+ defense\" and a \"calling station\" is:",
+      "options": [
+        "No difference",
+        "The BB's defense consists of calls, 3-bet value, 3-bet bluffs, and x/r with structure; a station has none of these levers",
+        "Stations defend wider",
+        "The BB's defense is more passive"
+      ],
+      "explanation": "The BB's 60% is a \"structured choice\" (including 3-bet and x/r levers), while a station is passive \"reluctant to fold\". Defense width ≠ defense passivity."
+    }
+  },
+  "lessonExample": {
+    "l3hu-bn-aggression-ex1": {
+      "title": "High-Frequency HU Button Open",
+      "correctAction": "Min-raise",
+      "correctAmount": "2BB",
+      "reasoning": [
+        "Q7s is a standard HU open; enough equity vs the BB's ~60% defense range",
+        "The SB opens the action first preflop, and the min-raise contests the 1BB blind at 1.5BB risk",
+        "Suited hands have good postflop potential for continued pressure deep-stacked"
+      ],
+      "mistakeAction": "Fold (\"Q7s isn't good enough\")",
+      "mistakeReasoning": "Playing HU with full-ring standards wastes the button's frequency and positional edge. Q7s is a standard open in HU.",
+      "mistakeEvLoss": "-1.5 BB/100"
+    },
+    "l3hu-sb-continuation-ex1": {
+      "title": "SB High-Frequency C-Bet on a Dry Board",
+      "correctAction": "Bet",
+      "correctAmount": "1.3BB (1/3 pot)",
+      "reasoning": [
+        "QJ on a Q-8-3 dry board is top pair; range advantage belongs to the SB",
+        "1/3-pot small bet for thin value + making the BB's wide-range weak hands fold",
+        "You act last postflop — preflop initiative and position together support continued pressure"
+      ],
+      "mistakeAction": "Check",
+      "mistakeReasoning": "Top pair on a dry board is a standard C-Bet hand for the SB's range; checking lets the BB realize its weak range too cheaply and wastes the range advantage.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    },
+    "l3hu-bb-defense-ex1": {
+      "title": "BB Marginal Call vs the SB's Wide Open",
+      "correctAction": "Call",
+      "correctAmount": "1BB",
+      "reasoning": [
+        "K7s has about 48% equity vs the SB's ~80% opening range",
+        "Calling 1BB into a 4BB total pot (SB 2 + the BB's own 1 + the call 1) needs 1÷4 = 25% — a surplus of about 23 points",
+        "The BB has the final say preflop and the odds are cheap, so marginal hands can defend profitably; postflop, check-calls do the compensation work"
+      ],
+      "mistakeAction": "Fold (\"K7s is a bad hand\")",
+      "mistakeReasoning": "Playing HU with full-ring standards throws away the BB's preflop information edge and pot odds. K7s versus the SB's wide range is a +EV call.",
+      "mistakeEvLoss": "-1.0 BB/100"
+    }
+  },
+  "lessonPractice": {
+    "l3hu-bn-aggression-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "J8s is a standard HU open; folding is too tight and wastes the button advantage.",
+          "evImpact": "-1.5 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "Limping is too passive; the HU SB should actively min-raise to seize initiative.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Min-raise",
+          "explanation": "J8s plays well in HU: the SB opens the action first preflop while the BB closes it, and postflop the order flips — min-raise open.",
+          "evImpact": "+1.0 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l3hu-bn-aggression-p2": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "A9 high has betting value on a dry board vs the BB's wide range; checking is too passive.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "On a dry K-high board, A-high has backdoor improvement — a 1/3-pot small bet pressures and steals.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A-high all-in is overkill; deep-stacked use small bets to pressure.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l3hu-bn-aggression-p3": {
+      "option": [
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "98 on J-7-2 has a gutshot (T) + backdoor flush — a 1/3-pot semi-bluff continues the pressure.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "Check-Fold",
+          "explanation": "98 has draw potential; folding is too weak. The HU button should actively semi-bluff.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A draw all-in is overkill; a 1/3-pot semi-bluff builds the advantage.",
+          "evImpact": "-1.2 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l3hu-sb-continuation-p1": {
+      "option": [
+        {
+          "action": "Check",
+          "explanation": "AJ high has betting value on a dry board; checking is too passive.",
+          "evImpact": "-0.8 BB/100"
+        },
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "On a dry Q-high board, AJ has overcards + backdoor improvement — a 1/3-pot continuation pressures.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "AJ-high all-in is overkill; deep-stacked use small bets.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l3hu-sb-continuation-p2": {
+      "option": [
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "The BB has nut advantage on a wet board; an overpair needs a big bet, not a small one.",
+          "evImpact": "-0.5 BB/100"
+        },
+        {
+          "action": "Bet 2.7BB (2/3 pot)",
+          "explanation": "An overpair on a wet connected board is ahead but easily outdrawn — a 2/3-pot big bet protects equity and charges the draws.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Check-Fold",
+          "explanation": "An overpair is still a strong hand on a wet board; folding is too weak.",
+          "evImpact": "-1.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; wet connected board"
+    },
+    "l3hu-sb-continuation-p3": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "76 on 9-5-4 has a gutshot (8) + backdoor flush; folding is too weak.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Bet 1.3BB (1/3 pot)",
+          "explanation": "76 has a straight draw — a 1/3-pot semi-bluff continues the pressure; wet boards suit equity protection.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "A draw all-in is overkill; a 1/3-pot semi-bluff builds the advantage.",
+          "evImpact": "-1.2 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l3hu-bb-defense-p1": {
+      "option": [
+        {
+          "action": "Fold",
+          "explanation": "J9s plays well versus the SB's wide range; folding is too tight and wastes the pot odds.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Call",
+          "explanation": "J9s, a suited connector — calling 1BB into a 4BB total pot (required equity 25%) leaves odds surplus enough to offset the postflop disadvantage. Standard defense.",
+          "evImpact": "+1.0 BB/100"
+        },
+        {
+          "action": "3-bet",
+          "explanation": "J9s is speculative; a 3-bet is too aggressive, just call.",
+          "evImpact": "-0.3 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l3hu-bb-defense-p2": {
+      "option": [
+        {
+          "action": "Check-Fold",
+          "explanation": "87 has a gutshot + backdoor flush; folding is too weak.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "Check-Raise semi-bluff",
+          "explanation": "87 has a gutshot draw — the x/r semi-bluff suppresses the SB's C-Bet and protects the draw.",
+          "evImpact": "+1.2 BB/100"
+        },
+        {
+          "action": "Donk Bet",
+          "explanation": "A donk isn't standard; the BB should check first and only x/r after the SB's C-Bet.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game"
+    },
+    "l3hu-bb-defense-p3": {
+      "option": [
+        {
+          "action": "Bet 4BB (1/3 pot)",
+          "explanation": "AK on a dry K-8-3 board is top pair top kicker — lead a small thin-value bet in the 3-bet pot; the SB's weak hands can only call cheaply or fold.",
+          "evImpact": "+2.0 BB/100"
+        },
+        {
+          "action": "Check",
+          "explanation": "Top pair top kicker should bet for thin value; checking is too passive.",
+          "evImpact": "-1.0 BB/100"
+        },
+        {
+          "action": "All-in",
+          "explanation": "Top pair on a dry board all-in is overkill; a small thin-value bet suffices.",
+          "evImpact": "-0.5 BB/100"
+        }
+      ],
+      "tableDesc": "Heads-up cash game; 3-bet pot"
+    }
+  },
+  "lessonObjectives": {
+    "l3hu-bn-aggression": [
+      "Explain the source of the HU SB's frequency edge (only one opponent; the SB acts last postflop holding position) and state how the ~80% open differs from full ring",
+      "Judge the C-Bet treatment difference between dry high boards (1/3-pot small bets, about 70%-80% frequency) and wet connected boards (lower frequency plus 2/3-pot big bets)",
+      "Tell \"constant pressure\" and \"mindless firing\" apart: judge when to mix checks on wet boards or when the turn changes hands, controlling the pot and staying safe from the BB's x/r counterattack"
+    ],
+    "l3hu-sb-continuation": [
+      "Explain the HU SB's postflop C-Bet discipline as the player with the final word (IP): using range and size to make the wide BB range fold or pay, not \"representing a strong hand\"",
+      "Judge the frequency difference between dry high boards (SB range advantage -> high-frequency small bets) and wet connected boards (BB nut advantage -> reduced frequency and pot control)",
+      "Judge the meaning of the BB's check (the OOP side keeps the x/r lever and hands the decision to IP) and tell it apart from weakness"
+    ],
+    "l3hu-bb-defense": [
+      "Explain the math behind the HU BB's 60%+ defense (the BB has the final say preflop; its 1BB of dead money brings pot odds) and tell it apart from a calling station",
+      "Use the pot-odds formula to compute the BB's calling line vs an SB min-raise (1/(3+1) = 25%)",
+      "Judge that strong draws should x/r semi-bluff vs a C-Bet and that top pair top kicker should call for pot control on dry boards, keeping the SB's bluffs alive"
+    ]
+  }
+}
