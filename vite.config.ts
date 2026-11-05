@@ -3,6 +3,16 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
+// pnpm 虚拟目录名会带 peer 名（Linux 上如 recharts@3.9.2_react-dom@19.2.7_...），
+// 用 id.includes('react-dom') 会把带 react-dom peer 的包整包并入首屏 chunk。
+// 只认最后一个 node_modules/ 后的真实包目录名。
+function isPackage(id: string, name: string): boolean {
+  const normalized = id.replace(/\\/g, '/')
+  const marker = '/node_modules/'
+  const index = normalized.lastIndexOf(marker)
+  return index !== -1 && normalized.startsWith(`${name}/`, index + marker.length)
+}
+
 export default defineConfig({
   // GitHub Pages 项目页部署在 /dezhou/ 子路径下，必须设置 base，否则资源 404
   base: '/dezhou/',
@@ -66,13 +76,11 @@ export default defineConfig({
           // 不要为 recharts 建手动 chunk：其依赖 clsx / use-sync-external-store 被 cn() 与
           // react-i18next 共享，手动 chunk 会把这两个共享依赖并入图表库，进而使整个
           // recharts 被首屏静态图引用。交由 Rolldown 自动拆分（图表库只出现在使用页的 chunk）。
-          if (id.includes('node_modules')) {
-            if (id.includes('framer-motion')) {
-              return 'vendor-framer';
-            }
-            if (id.includes('react-dom')) {
-              return 'vendor-react-dom';
-            }
+          if (isPackage(id, 'framer-motion')) {
+            return 'vendor-framer';
+          }
+          if (isPackage(id, 'react-dom')) {
+            return 'vendor-react-dom';
           }
         },
       },
