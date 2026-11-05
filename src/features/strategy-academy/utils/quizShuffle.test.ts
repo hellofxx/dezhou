@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { orderQuizQuestion, orderDrillOptions } from './quizShuffle';
 import { LEVELS } from '../data/levels';
 import { LOCAL_LESSONS } from '../data/localLessons';
+import { ALL_VARIANT_LESSONS } from '../data/lessons/variants';
 import type { DrillQuestion, Lesson, QuizQuestion } from '../types';
 
 // ===== 真实数据收集（levels + localLessons，按 lesson.id 去重防重复计数）=====
@@ -11,6 +12,8 @@ const ALL_LESSONS: Lesson[] = (() => {
     for (const lesson of level.lessons) map.set(lesson.id, lesson);
   }
   for (const lesson of LOCAL_LESSONS) map.set(lesson.id, lesson);
+  // 变体课时（短牌 / 单挑）同样受选项排序治理约束；按 id 去重避免标准共享层重复计数
+  for (const lesson of ALL_VARIANT_LESSONS) map.set(lesson.id, lesson);
   return [...map.values()];
 })();
 

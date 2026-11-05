@@ -78,6 +78,9 @@ import type { Lesson, QuizQuestion } from '../../../types';
  *        25%/50% 回归锁锚点字符串（1÷(3+1)=25%、所需胜率 = 1÷4 = 25%、约 80% 选项文本）保持命中。
  * [示意值] l6hu A4s≈50%/A7o≈55%/KQs≈58%（vs 全下范围示意）；l5hu 疲劳征兆、session 时长；
  *          l7hu SPR 4.3（80/18.5 翻前有效口径，自洽）
+ * [2026-11 深对齐] 12 课题库扩到 10 题、补 ex2/ex3、theory-reference 与 units；新增数值断言统一在
+ *          heads-up/quantAudit.l3hu..l8hu.test.ts 复算，本文件原有 25% / 50% / 80% 回归锁不动。
+ *          L4 order 修正为 1-4；L3 bn-p3 旧板面 J-6-2 → J-7-2（与正文 Jd7c2s 同步）。
  *
  * —— localLessons（7 文件） ——
  * [已修] local-exploit-maniac objectives/content：KK 5-Bet EV「0.75×200−0.25×100=+125」

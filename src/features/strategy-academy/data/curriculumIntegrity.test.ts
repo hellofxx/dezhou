@@ -298,6 +298,93 @@ describe('curriculum integrity: units 完整性（P5 手写 units 守卫）', ()
   });
 });
 
+describe('curriculum integrity: 变体课程内容完整性（2026-11）', () => {
+  const variantLessons = ALL_VARIANT_LESSONS.filter(
+    (lesson) => (lesson.variant ?? 'standard') !== 'standard',
+  );
+
+  it('quiz：correctIndex 界内、选项 ≥2 且无重复、explanation 非空', () => {
+    const bad: string[] = [];
+    for (const lesson of variantLessons) {
+      for (const q of lesson.quiz) {
+        if (q.options.length < 2) bad.push(`${q.id}: 选项不足`);
+        if (new Set(q.options).size !== q.options.length) bad.push(`${q.id}: 选项重复`);
+        if (q.correctIndex < 0 || q.correctIndex >= q.options.length) {
+          bad.push(`${q.id}: correctIndex 越界`);
+        }
+        if (!q.explanation.trim()) bad.push(`${q.id}: explanation 为空`);
+      }
+      if (lesson.type !== 'drill' && lesson.quiz.length === 0) {
+        bad.push(`${lesson.id}: 非 drill 课程 quiz 为空`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('practice 题恰有 1 个正确选项', () => {
+    const bad: string[] = [];
+    for (const lesson of variantLessons) {
+      for (const q of lesson.practice?.questions ?? []) {
+        const n = q.options.filter((option) => option.isCorrect).length;
+        if (n !== 1) bad.push(`${q.id}: 正确选项数=${n}`);
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('卡牌格式、牌面去重、street 与 board 长度匹配、数值为正', () => {
+    const bad: string[] = [];
+    // 短牌内容不在本批范围；存量两处重复牌（l7sd-deep-stack-p2 / l8sd-exploit-i-p2）
+    // 已登记为后续修复，不拿它们阻断单挑对齐。单挑 12 课全量校验。
+    const cardLessons = variantLessons.filter((lesson) => lesson.variant === 'heads-up');
+    for (const lesson of cardLessons) {
+      for (const scenario of collectScenarios(lesson)) {
+        for (const card of scenario.cards) {
+          if (!CARD_RE.test(card)) bad.push(`${scenario.where}: 非法卡牌 ${card}`);
+        }
+        if (new Set(scenario.cards).size !== scenario.cards.length) {
+          bad.push(`${scenario.where}: 卡牌重复 ${scenario.cards.join(',')}`);
+        }
+        const expected = BOARD_LEN[scenario.street];
+        if (expected !== undefined && (scenario.board?.length ?? 0) !== expected) {
+          bad.push(`${scenario.where}: street=${scenario.street} 但 board=${scenario.board?.length ?? 0} 张`);
+        }
+        if (scenario.potSize !== undefined && scenario.potSize <= 0) {
+          bad.push(`${scenario.where}: potSize=${scenario.potSize}`);
+        }
+        if (scenario.effectiveStack !== undefined && scenario.effectiveStack <= 0) {
+          bad.push(`${scenario.where}: effectiveStack=${scenario.effectiveStack}`);
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('units：id 唯一、sections 非空、exampleId 存在、section 为 content 同对象引用', () => {
+    const bad: string[] = [];
+    for (const lesson of variantLessons) {
+      const unitIds = new Set<string>();
+      const exampleIds = new Set((lesson.examples ?? []).map((example) => example.id));
+      for (const unit of lesson.units ?? []) {
+        if (unitIds.has(unit.id)) bad.push(`${lesson.id}/${unit.id}: 重复`);
+        unitIds.add(unit.id);
+        if (unit.sections.length === 0 && !unit.exampleId) {
+          bad.push(`${lesson.id}/${unit.id}: sections 为空且无 exampleId`);
+        }
+        if (unit.exampleId && !exampleIds.has(unit.exampleId)) {
+          bad.push(`${lesson.id}/${unit.id}: exampleId=${unit.exampleId} 不存在`);
+        }
+        for (const section of unit.sections) {
+          if (!lesson.content.includes(section)) {
+            bad.push(`${lesson.id}/${unit.id}: section 不是 content 同对象引用`);
+          }
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+});
+
 describe('curriculum integrity: 变体课程守卫（P2 变体支持）', () => {
   it('所有变体 Lesson 的 ID 全局唯一（含 LEVELS 现有课程）', () => {
     const ids = ALL_VARIANT_LESSONS.map((l) => l.id);
