@@ -1,0 +1,96 @@
+// ============================================================================
+// PokerLab · shared 运行时通道（当前态 / current-state）
+// 生成：system-modeler + graphviz（architecture-visualization 插件）
+// 证据基线：工作树 2026-11-06（HEAD d3419ad + 未提交改动）
+//
+// 本图回答一个问题：除了静态 import，模块还通过 shared/stores 的哪些
+// 运行时通道互相引用？方向是谁写、谁读。
+//
+// 三类通道：
+//   青色实线 = trainingEvents 事件总线（同步回调，订阅方异常隔离）
+//   紫色虚线 = 依赖倒置注册（feature 注册实现 → progress 读接口）
+//   橙色实线 = debugMode 全局开关（4 个模块读取）
+//
+// 证据：emit / register / subscribe / get 调用点均为直接 grep 实测（路径见边标签）。
+// 注意：运行时通道是行为证据；与静态 import 图（10/20）分开阅读。
+// ============================================================================
+digraph pokerlab_shared_runtime {
+  graph [rankdir=LR, compound=true, newrank=true, nodesep=0.3, ranksep=1.0, dpi=140,
+         fontname="Microsoft YaHei, Helvetica", labelloc=t,
+         label="PokerLab · shared 运行时通道（当前态，2026-11-06 实测）\n静态 import 之外的写读关系 ｜ 青=事件总线 ｜ 紫虚=依赖倒置注册 ｜ 橙=调试开关",
+         fontsize=14];
+  node  [fontname="Microsoft YaHei, Helvetica", fontsize=10, shape=box, style="rounded,filled",
+         fillcolor="#f7f4ee", color="#3f3a33", margin="0.14,0.09"];
+  edge  [fontname="Microsoft YaHei, Helvetica", fontsize=8, color="#3f3a33", arrowsize=0.55];
+
+  // ---------------------------------------------------------------- 写入侧
+  subgraph cluster_emitters {
+    label="feature 模块（写入 / 注册）"; fontsize=11; style="rounded";
+    color="#2f6f6a"; fillcolor="#e9f2f0";
+    range    [label="range-trainer\nRangeQuizPage.tsx:47 emit"];
+    odds     [label="pot-odds\nPotOddsQuizPage.tsx:218 emit"];
+    gto      [label="gto-simulator\nGTOSessionPage.tsx:158 emit"];
+    puzzle   [label="puzzle-trainer\nusePuzzleSession.ts:70 emit\nstore.bootstrap.ts:11 注册成就源"];
+    strategy [label="strategy-academy\nstore.ts:239,347 + completeCourse.ts:58,76 emit\nstore.bootstrap.ts:19 成就源 / :51 学院数据源"];
+    theory   [label="theory-academy\nstore.ts:116 emit\nstore.bootstrap.ts:16 成就源 / :67 理论数据源"];
+  }
+
+  // ---------------------------------------------------------------- shared 通道
+  bus       [label="trainingEvents\nshared/stores/trainingEvents.ts:12-28\n订阅回调数组 · 单个订阅方异常隔离",
+             fillcolor="#d9f2ee", color="#0f766e", penwidth=1.5];
+  regAch    [label="achievementRegistry\nshared/stores/achievementRegistry.ts\n按 id upsert · 读侧遍历 8 处",
+             fillcolor="#efe6fb", color="#7c3aed", penwidth=1.4];
+  regAcad   [label="academyDataSourceRegistry\nshared/stores/academyDataSourceRegistry.ts\nlate-registration 自愈订阅",
+             fillcolor="#efe6fb", color="#7c3aed", penwidth=1.4];
+  regTheory [label="theoryDataSourceRegistry\nshared/stores/theoryDataSourceRegistry.ts\n理论数据源查询接口",
+             fillcolor="#efe6fb", color="#7c3aed", penwidth=1.4];
+  debug     [label="debugMode\nshared/stores/debugMode.ts:32-50\npersist v1 · unlockAll",
+             fillcolor="#ffe9c6", color="#b45309", penwidth=1.4];
+
+  // ---------------------------------------------------------------- 读取侧
+  subgraph cluster_readers {
+    label="progress（读取侧 / 状态中枢）"; fontsize=11; style="rounded";
+    color="#a86a1f"; fillcolor="#fff4e0";
+    progress [label="progress store\nstore.bootstrap.ts:59 订阅总线\nstore.ts:1057-1126 读成就源\nstore.bootstrap / hooks 读学院源\ntheoryPlanRecommendations.ts:66 读理论源"];
+    settings [label="SettingsPage\n激活 / 关闭 debugMode\ncomponents/settings/SettingsPage.tsx:102-104"];
+  }
+
+  // ---------------------------------------------------------------- 事件总线（青）
+  edge [color="#0f766e"];
+  range    -> bus [label="emit"];
+  odds     -> bus [label="emit"];
+  gto      -> bus [label="emit"];
+  puzzle   -> bus [label="emit"];
+  strategy -> bus [label="emit"];
+  theory   -> bus [label="emit"];
+  bus      -> progress [label="subscribe\nprogress/store.bootstrap.ts:59", penwidth=1.8];
+
+  // ---------------------------------------------------------------- 注册表（紫虚）
+  edge [color="#7c3aed", style=dashed];
+  strategy -> regAch    [label="register :19"];
+  puzzle   -> regAch    [label="register :11"];
+  theory   -> regAch    [label="register :16"];
+  strategy -> regAcad   [label="register :51"];
+  theory   -> regTheory [label="register :67"];
+
+  edge [color="#31568f"];
+  regAch    -> progress [label="getAchievementSources\nstore.ts:1082 起"];
+  regAcad   -> progress [label="getAcademyDataSource\nuseAcademyDataSource / dailyTrainingPlan"];
+  regTheory -> progress [label="getTheoryDataSource\ntheoryPlanRecommendations.ts:66"];
+
+  // ---------------------------------------------------------------- 调试开关（橙）
+  edge [color="#b45309"];
+  settings -> debug    [label="activateWithCode / deactivate"];
+  debug    -> progress [label="isDebugUnlockActive\nSessionLimitGuard / SettingsPage"];
+  debug    -> range    [label="useDebugModeStore\nQuizConfig / RangeSelector"];
+  debug    -> strategy [label="useDebugModeStore\nConceptGraph / CourseView / Tracks / store.ts"];
+  debug    -> theory   [label="useDebugModeStore\nTheoryChapterView / TheoryLearningPaths / store.ts"];
+
+  // ---------------------------------------------------------------- 备注
+  exempt [shape=note, style="filled", fillcolor="#fffdf5", color="#8a8377",
+          label="豁免（代码注释明确）\nhand-history：hand-history/store.ts:7-10\nhelp-center：help-center/index.ts:4\n不 emit trainingEvents；不改变静态依赖图。"];
+  drift [shape=note, style="filled", fillcolor="#fffdf5", color="#a83232",
+         label="待核对的注释漂移\nacademyDataSourceRegistry.ts:2-3 称\nstrategy / puzzle / theory 三方注册；\n实测仅 strategy-academy 注册（:51）。\n以调用点为准，见 evidence §8.3。"];
+  bus -> exempt [style=invis];
+  regAcad -> drift [style=invis];
+}

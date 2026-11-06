@@ -1,0 +1,129 @@
+// ============================================================================
+// PokerLab · shared 层消费图（当前态 / current-state）
+// 生成：system-modeler + graphviz（architecture-visualization 插件）
+// 证据基线：工作树 2026-11-06（HEAD d3419ad + 未提交改动），扫描范围 src/**/*.ts(x)
+//
+// 本图回答一个问题：10 个 feature 模块与应用外壳，分别向 shared 的哪一层、
+// 以多大规模直接取用？
+//
+// 计数口径（与 src/test-utils/admissionGraph.ts 对齐）：
+//   - 边 = 「importer 文件 → 解析后的 shared 文件」去重 import 对，非 import 语句数；
+//   - 只统计直接 import，不含 shared 内部传递（传递消费者见 20-shared-internals.dot）；
+//   - 测试文件不计入生产边；shell（main/App/routes/layouts）按消费者计；
+//   - 数值为采集时点快照，代码为唯一事实源。
+//
+// 实测总量：650 条直接入边 = feature 634 + shell 16；
+//           contracts 208 ｜ logic 205 ｜ ui 206 ｜ runtime 31。
+// 实测 0 条 shared → feature import（eslint.config.js:63-75 硬约束）。
+// ============================================================================
+digraph pokerlab_shared_consumers {
+  graph [rankdir=TB, compound=true, newrank=true, nodesep=0.24, ranksep=0.9, dpi=140,
+         fontname="Microsoft YaHei, Helvetica", labelloc=t,
+         label="PokerLab · shared 层消费图（当前态，2026-11-06 实测）\n边=直接 import 文件对数 ｜ 线宽=规模 ｜ 数字=条数 ｜ 88 个 shared 生产文件 / 14 个子域",
+         fontsize=14];
+  node  [fontname="Microsoft YaHei, Helvetica", fontsize=10, shape=box, style="rounded,filled",
+         fillcolor="#f7f4ee", color="#3f3a33", margin="0.14,0.09"];
+  edge  [fontname="Microsoft YaHei, Helvetica", fontsize=8, color="#3f3a33", arrowsize=0.55];
+
+  // ---------------------------------------------------------------- 消费方：feature
+  subgraph cluster_training {
+    label="交互式训练模块"; fontsize=11; style="rounded"; color="#2f6f6a"; fillcolor="#e9f2f0";
+    range   [label="range-trainer\n60 条 · 25 个 shared 文件"];
+    odds    [label="pot-odds\n29 条 · 19 个 shared 文件"];
+    gto     [label="gto-simulator\n82 条 · 27 个 shared 文件"];
+    puzzle  [label="puzzle-trainer\n37 条 · 21 个 shared 文件"];
+  }
+
+  subgraph cluster_learning {
+    label="课程学习模块"; fontsize=11; style="rounded"; color="#6b4f8a"; fillcolor="#f0ebf5";
+    academy [label="strategy-academy\n145 条 · 41 个 shared 文件"];
+    theory  [label="theory-academy\n111 条 · 34 个 shared 文件"];
+  }
+
+  subgraph cluster_support {
+    label="支撑与内容模块"; fontsize=11; style="rounded"; color="#8a6a3f"; fillcolor="#f6efe4";
+    hh      [label="hand-history\n39 条 · 14 个 shared 文件"];
+    onboard [label="onboarding\n15 条 · 7 个 shared 文件"];
+    help    [label="help-center\n5 条 · 4 个 shared 文件"];
+  }
+
+  hub [label="progress（跨模块状态中枢）\n111 条 · 29 个 shared 文件", fillcolor="#ffe9c6", color="#a86a1f", penwidth=1.6];
+
+  shell [label="应用外壳 shell\nmain.tsx · App.tsx · app/routes.tsx · layouts/\n16 条 · 10 个 shared 文件",
+         fillcolor="#fff8e6", style="rounded,filled,dashed"];
+
+  // ---------------------------------------------------------------- 被消费方：shared 四层
+  subgraph cluster_shared {
+    label="src/shared · 准入门槛 ≥2 消费者（88 个生产文件）"; fontsize=11; style="rounded";
+    color="#31568f"; fillcolor="#e9eef7";
+
+    contracts [label="契约层 contracts\ntypes/ 15 · constants/ 4\n入边 208 ｜ 9 个模块 + shell",
+               fillcolor="#f0ebf5", color="#6b4f8a", penwidth=1.5];
+    logic     [label="纯逻辑层 logic\nutils/ 17 · hooks/ 2 · data/ 1\n入边 205 ｜ 10 个模块 + shell",
+               fillcolor="#e9f2f0", color="#2f6f6a", penwidth=1.5];
+    ui        [label="组件层 ui\ncomponents/* 44\n入边 206 ｜ 10 个模块 + shell",
+               fillcolor="#f6efe4", color="#8a6a3f", penwidth=1.5];
+    runtime   [label="运行时通道 runtime\nstores/ 5（事件总线 + 3 registry + debugMode）\n入边 31 ｜ 7 个模块",
+               fillcolor="#ffe9c6", color="#b45309", penwidth=1.5];
+  }
+
+  note [shape=note, style="filled", fillcolor="#fffdf5", color="#8a8377",
+        label="准入事实\n88 个生产文件中：39 个恰好 2 消费者（准入下限）\n2 个测试桩 0 生产消费者 ｜ 1 个 ui 组件仅 shell 消费\nadmission baseline 为空（只降不升）\n\n分层硬约束\nshared → feature：实测 0 条\n模块间 peer import：0 条；44 条跨模块边全部指向 progress"];
+
+  // ---------------------------------------------------------------- 直接 import 边
+  // 契约层（紫）
+  edge [color="#6b4f8a"];
+  gto     -> contracts [label="48", penwidth=3.0];
+  hh      -> contracts [label="28", penwidth=2.4];
+  onboard -> contracts [label="5",  penwidth=0.9];
+  range   -> contracts [label="31", penwidth=2.5];
+  odds    -> contracts [label="6",  penwidth=1.0];
+  puzzle  -> contracts [label="4",  penwidth=0.8];
+  academy -> contracts [label="26", penwidth=2.4];
+  theory  -> contracts [label="39", penwidth=2.8];
+  hub     -> contracts [label="18", penwidth=1.9];
+  shell   -> contracts [label="3",  penwidth=0.7];
+
+  // 纯逻辑层（青）
+  edge [color="#2f6f6a"];
+  gto     -> logic [label="20", penwidth=2.0];
+  hh      -> logic [label="5",  penwidth=0.9];
+  help    -> logic [label="2",  penwidth=0.7];
+  onboard -> logic [label="4",  penwidth=0.8];
+  range   -> logic [label="11", penwidth=1.6];
+  odds    -> logic [label="8",  penwidth=1.3];
+  puzzle  -> logic [label="13", penwidth=1.7];
+  academy -> logic [label="58", penwidth=3.4];
+  theory  -> logic [label="37", penwidth=2.7];
+  hub     -> logic [label="43", penwidth=2.9];
+  shell   -> logic [label="4",  penwidth=0.8];
+
+  // 组件层（棕）
+  edge [color="#8a6a3f"];
+  gto     -> ui [label="13", penwidth=1.7];
+  hh      -> ui [label="6",  penwidth=1.0];
+  help    -> ui [label="3",  penwidth=0.7];
+  onboard -> ui [label="6",  penwidth=1.0];
+  range   -> ui [label="15", penwidth=1.8];
+  odds    -> ui [label="14", penwidth=1.7];
+  puzzle  -> ui [label="18", penwidth=1.9];
+  academy -> ui [label="53", penwidth=3.2];
+  theory  -> ui [label="29", penwidth=2.5];
+  hub     -> ui [label="40", penwidth=2.8];
+  shell   -> ui [label="9",  penwidth=1.4];
+
+  // 运行时通道（橙）
+  edge [color="#b45309"];
+  gto     -> runtime [label="1",  penwidth=0.7];
+  range   -> runtime [label="3",  penwidth=0.7];
+  odds    -> runtime [label="1",  penwidth=0.7];
+  puzzle  -> runtime [label="2",  penwidth=0.7];
+  academy -> runtime [label="8",  penwidth=1.3];
+  theory  -> runtime [label="6",  penwidth=1.1];
+  hub     -> runtime [label="10", penwidth=1.5];
+
+  // ---------------------------------------------------------------- 布局控制
+  { rank=same; range; odds; gto; puzzle; academy; theory; hh; onboard; help; hub; shell; }
+  { rank=same; contracts; logic; ui; runtime; }
+  shell -> note [style=invis];
+}

@@ -1,0 +1,91 @@
+// ============================================================================
+// PokerLab · shared 内部依赖图（当前态 / current-state）
+// 生成：system-modeler + graphviz（architecture-visualization 插件）
+// 证据基线：工作树 2026-11-06（HEAD d3419ad + 未提交改动）
+//
+// 本图回答一个问题：shared 层内部如何分层，谁是底座、谁是装配体？
+//
+// 计数口径：shared 文件之间的直接 import 文件对数（去重）。
+//   - 内部边合计 104 条 = 跨子域 82 条 + 子域内自引 22 条；
+//   - 自引不画边，只在节点第三行标注数量（poker 4 / utils 4 / types 3 /
+//     feedback 2 / quiz 1 / academy 8）；
+//   - 外部入边 = feature + shell 的直接 import 边数（来自 10-shared-consumers.dot 同一底图）。
+//
+// 方向恒定：components/* → utils/types/constants；logic → types/constants；
+//           stores → types。无反向依赖，无 shared → feature。
+// ============================================================================
+digraph pokerlab_shared_internals {
+  graph [rankdir=TB, newrank=true, nodesep=0.3, ranksep=0.85, dpi=140,
+         fontname="Microsoft YaHei, Helvetica", labelloc=t,
+         label="PokerLab · shared 内部依赖图（当前态，2026-11-06 实测）\n边=shared 子域之间的直接 import 文件对数 ｜ 数字=条数 ｜ 节点备注=外部入边 / 文件数 / 自引",
+         fontsize=14];
+  node  [fontname="Microsoft YaHei, Helvetica", fontsize=10, shape=box, style="rounded,filled",
+         fillcolor="#f7f4ee", color="#3f3a33", margin="0.14,0.09"];
+  edge  [fontname="Microsoft YaHei, Helvetica", fontsize=8, color="#3f3a33", arrowsize=0.55];
+
+  // ---------------------------------------------------------------- 组件层（装配体）
+  ui          [label="components/ui · 8\nbutton · card · dialog · input\nprogress · select · toast · tooltip\n外部入边 71", fillcolor="#f6efe4", color="#8a6a3f"];
+  feedback    [label="components/feedback · 10\nDecisionAnalysis · GradeIcon\nResultHeader / Actions · Empty/LoadingState\n外部入边 45 ｜ 自引 2", fillcolor="#f6efe4", color="#8a6a3f"];
+  poker       [label="components/poker · 9\nCard · CardSVG · CardBack · Chip\nHandDisplay · PositionBadge ...\n外部入边 25 ｜ 自引 4", fillcolor="#f6efe4", color="#8a6a3f"];
+  academy     [label="components/academy · 9\n唯一 barrel：index.ts\n两院薄包装共用底座\n外部入边 17 ｜ 自引 8", fillcolor="#f6efe4", color="#8a6a3f"];
+  quiz        [label="components/quiz · 2\nQuizCard + quizCardModel\nonboarding / range 专用\n外部入边 2 ｜ 自引 1", fillcolor="#f6efe4", color="#8a6a3f"];
+  datadisplay [label="components/data-display · 4\nProgressBar · ProgressRing\nStatCard · StatPair\n外部入边 14", fillcolor="#f6efe4", color="#8a6a3f"];
+  layout      [label="components/layout · 1\nBackLink\n外部入边 29", fillcolor="#f6efe4", color="#8a6a3f"];
+  system      [label="components/system · 1\nErrorBoundary\n外部入边 3（仅 shell）", fillcolor="#f6efe4", color="#8a6a3f"];
+
+  // ---------------------------------------------------------------- 逻辑层 + 运行时
+  utils       [label="utils · 17\ncn · motion · spacedRepetition\nseededShuffle · optionOrder · toLocalDateKey\nhandClassifier · rangeParser · deck ...\n外部入边 195 ｜ 自引 4", fillcolor="#e9f2f0", color="#2f6f6a", penwidth=1.4];
+  hooks       [label="hooks · 2\nuseIsMobile · useRovingGridNav\n外部入边 6", fillcolor="#e9f2f0", color="#2f6f6a"];
+  data        [label="data · 1\nopponentProfiles\n外部入边 4", fillcolor="#e9f2f0", color="#2f6f6a"];
+  stores      [label="stores · 5\ntrainingEvents · debugMode\nachievementRegistry\nacademyDataSourceRegistry\ntheoryDataSourceRegistry\n外部入边 31", fillcolor="#ffe9c6", color="#b45309", penwidth=1.4];
+
+  // ---------------------------------------------------------------- 契约底座
+  types       [label="types · 15\npoker · action · position · common\nelo · training · decisionFeedback\nacademy · dataSource · variantRules\n外部入边 189 ｜ 自引 3", fillcolor="#f0ebf5", color="#6b4f8a", penwidth=1.4];
+  constants   [label="constants · 4\npoker · app\nmentorStyles · headsUpRules\n外部入边 19", fillcolor="#f0ebf5", color="#6b4f8a"];
+
+  // ---------------------------------------------------------------- 跨子域边（82）
+  // 组件 → 逻辑
+  edge [color="#2f6f6a"];
+  academy     -> utils [label="10", penwidth=1.5];
+  poker       -> utils [label="9",  penwidth=1.4];
+  ui          -> utils [label="7",  penwidth=1.3];
+  feedback    -> utils [label="5",  penwidth=1.1];
+  datadisplay -> utils [label="3",  penwidth=0.8];
+  layout      -> utils [label="1",  penwidth=0.6];
+  quiz        -> utils [label="1",  penwidth=0.6];
+
+  // 组件 → 契约
+  edge [color="#6b4f8a"];
+  poker       -> types     [label="7", penwidth=1.3];
+  quiz        -> types     [label="5", penwidth=1.1];
+  academy     -> types     [label="3", penwidth=0.8];
+  feedback    -> types     [label="1", penwidth=0.6];
+  poker       -> constants [label="2", penwidth=0.7];
+  quiz        -> constants [label="1", penwidth=0.6];
+
+  // 逻辑 → 契约
+  utils       -> types     [label="5", penwidth=1.1];
+  utils       -> constants [label="2", penwidth=0.7];
+  data        -> types     [label="1", penwidth=0.6];
+  stores      -> types     [label="4", penwidth=1.0];
+  constants   -> types     [label="4", penwidth=1.0, constraint=false];
+
+  // 组件内部协作（同层，constraint=false）
+  edge [color="#8a6a3f"];
+  quiz        -> feedback [label="3", penwidth=0.8, constraint=false];
+  quiz        -> poker    [label="2", penwidth=0.7, constraint=false];
+  quiz        -> hooks    [label="1", penwidth=0.6];
+  academy     -> ui       [label="1", penwidth=0.6, constraint=false];
+  datadisplay -> ui       [label="1", penwidth=0.6, constraint=false];
+  layout      -> ui       [label="1", penwidth=0.6, constraint=false];
+  feedback    -> ui       [label="2", penwidth=0.7, constraint=false];
+
+  // ---------------------------------------------------------------- 布局控制
+  { rank=same; ui; feedback; poker; academy; quiz; datadisplay; layout; system; }
+  { rank=same; utils; hooks; data; stores; }
+  { rank=same; types; constants; }
+
+  note [shape=note, style="filled", fillcolor="#fffdf5", color="#8a8377",
+        label="读图要点\n契约层是被依赖的底座；utils 是最大的纯函数枢纽；\ncomponents/* 只向下依赖，无循环回到逻辑层；\nstores 只依赖 types，是与 feature 的运行时边界。\n\n传递效应\nshared 内部组合会放大传递消费者数：\nbutton 直接 6 → 传递 11；types/training 直接 1 → 传递 7。\n准入守卫按传递闭包计数（admissionGraph.ts:226-279）。"];
+  system -> note [style=invis];
+}

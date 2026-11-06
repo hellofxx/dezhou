@@ -18,6 +18,10 @@
 | 5 | [`30-progress-hub.dot`](30-progress-hub.dot) | 细节 | progress 中枢的对外写接口面、五大子系统、注册表、落盘分路与读侧 |
 | 6 | [`00-evidence.md`](00-evidence.md) | 证据 | 每个节点 / 边的 `路径:行` 出处、置信度、假设、未知项与复核命令 |
 
+### 专项视图
+
+- [`shared-layer-2026-11-06/README.md`](shared-layer-2026-11-06/README.md) — **shared 层引用现状（2026-11-06 实测）**：88 个生产文件、650 条直接入边、0 条 `shared → feature`；含消费图、内部依赖图、运行时通道图与逐文件 fan-in 附录。父目录其余视图仍为 2026-08-30 基线，未随本次刷新。
+
 ## 决策记录
 
 - [`../adr/README.md`](../adr/README.md) — 架构决策记录（ADR）：纯前端本地优先、Feature-first 边界、progress 单中枢。

@@ -1,0 +1,2926 @@
+{
+  "diagrams": [
+    {
+      "meta": {
+        "title": "shared 层内部依赖（组件族与支撑域）",
+        "diagramType": "architecture",
+        "viewId": "shared-internal",
+        "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
+        "locale": "zh-CN",
+        "scope": "共享层内部依赖（域级）：14 个节点覆盖 src/shared 的 8 个组件族与 6 个支撑域；25 条跨域依赖边，域内自引用见 facts。",
+        "notes": [
+          "域级聚合：节点代表一个组件族或支撑域，不展开到单文件。",
+          "feedback / poker / quiz / types / utils 的域内自引用写入 facts，不画自环。",
+          "引用位点统计来自工作树 import 图，仅计生产代码，不含测试。",
+          "准入守卫通过：0 生产消费者仅 2 个测试桩豁免，ui/tooltip 单消费者按 ui 规则豁免。"
+        ]
+      },
+      "nodes": [
+        {
+          "id": "shared-ui",
+          "label": "components/ui",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "vendored shadcn 基础件",
+          "source": {
+            "file": "src/shared/components/ui/button.tsx",
+            "lineStart": 43,
+            "lineEnd": 43,
+            "symbol": "Button",
+            "kind": "source"
+          },
+          "facts": [
+            "button / card / dialog / input / progress / select / toast / tooltip 共 8 个文件",
+            "12 个消费方，71 个 import 位点",
+            "ui 族豁免 ≥2 消费者，但禁止 0 消费"
+          ]
+        },
+        {
+          "id": "shared-poker",
+          "label": "components/poker",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "牌面、筹码与变体可视化",
+          "source": {
+            "file": "src/shared/components/poker/Card.tsx",
+            "lineStart": 32,
+            "lineEnd": 32,
+            "symbol": "PokerCard",
+            "kind": "source"
+          },
+          "facts": [
+            "9 个牌面与变体组件",
+            "7 个消费方，25 个 import 位点",
+            "CardSVG / CardBack / VariantGlyph 存在域内组合"
+          ]
+        },
+        {
+          "id": "shared-quiz",
+          "label": "components/quiz",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "测验卡与答题模型",
+          "source": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 45,
+            "lineEnd": 45,
+            "symbol": "QuizCard",
+            "kind": "source"
+          },
+          "facts": [
+            "QuizCard + quizCardModel 共 2 个文件",
+            "onboarding 与 range-trainer 两个消费方",
+            "QuizCard 域内复用 quizCardModel"
+          ]
+        },
+        {
+          "id": "shared-feedback",
+          "label": "components/feedback",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "结果页、五级反馈与空/载状态",
+          "source": {
+            "file": "src/shared/components/feedback/DecisionAnalysis.tsx",
+            "lineStart": 33,
+            "lineEnd": 33,
+            "symbol": "DecisionAnalysis",
+            "kind": "source"
+          },
+          "facts": [
+            "10 个反馈与结果页组件",
+            "12 个消费方，45 个 import 位点",
+            "DecisionAnalysis 域内组合 GradeIcon 等组件"
+          ]
+        },
+        {
+          "id": "shared-academy",
+          "label": "components/academy",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "学院共享组件与内容块",
+          "source": {
+            "file": "src/shared/components/academy/AcademyBridgeCard.tsx",
+            "lineStart": 37,
+            "lineEnd": 37,
+            "symbol": "AcademyBridgeCard",
+            "kind": "source"
+          },
+          "facts": [
+            "7 个学院组件 + ContentBlocks + index.ts facade",
+            "strategy-academy 与 theory-academy 共 17 个 import 位点",
+            "唯一保留的目录级 barrel"
+          ]
+        },
+        {
+          "id": "shared-data-display",
+          "label": "components/data-display",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "进度与统计展示组件",
+          "source": {
+            "file": "src/shared/components/data-display/ProgressRing.tsx",
+            "lineStart": 38,
+            "lineEnd": 38,
+            "symbol": "ProgressRing",
+            "kind": "source"
+          },
+          "facts": [
+            "ProgressBar / ProgressRing / StatCard / StatPair 共 4 个",
+            "6 个消费方，14 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-system",
+          "label": "components/system",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "全局错误兜底",
+          "source": {
+            "file": "src/shared/components/system/ErrorBoundary.tsx",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "ErrorBoundary",
+            "kind": "source"
+          },
+          "facts": [
+            "ErrorBoundary 单文件",
+            "app / layouts / main 三个外壳消费"
+          ]
+        },
+        {
+          "id": "shared-layout",
+          "label": "components/layout",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "返回入口统一件",
+          "source": {
+            "file": "src/shared/components/layout/BackLink.tsx",
+            "lineStart": 124,
+            "lineEnd": 124,
+            "symbol": "BackLink",
+            "kind": "source"
+          },
+          "facts": [
+            "BackLink 单文件",
+            "8 个消费方，29 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-constants",
+          "label": "constants",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "全局常量与规则模板",
+          "source": {
+            "file": "src/shared/constants/app.ts",
+            "lineStart": 1,
+            "lineEnd": 1,
+            "symbol": "APP_VERSION",
+            "kind": "source"
+          },
+          "facts": [
+            "app / headsUpRules / mentorStyles / poker 共 4 个文件",
+            "9 个消费方，19 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-data",
+          "label": "data",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "对手画像与题库",
+          "source": {
+            "file": "src/shared/data/opponentProfiles.ts",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "OPPONENT_PROFILES",
+            "kind": "source"
+          },
+          "facts": [
+            "opponentProfiles 单文件",
+            "gto-simulator 与 strategy-academy 消费"
+          ]
+        },
+        {
+          "id": "shared-hooks",
+          "label": "hooks",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块 React Hook",
+          "source": {
+            "file": "src/shared/hooks/useIsMobile.ts",
+            "lineStart": 25,
+            "lineEnd": 25,
+            "symbol": "useIsMobile",
+            "kind": "source"
+          },
+          "facts": [
+            "useIsMobile / useRovingGridNav 共 2 个",
+            "6 个消费方，6 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-stores",
+          "label": "stores",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "事件总线、调试开关与注册表",
+          "source": {
+            "file": "src/shared/stores/trainingEvents.ts",
+            "lineStart": 12,
+            "lineEnd": 12,
+            "symbol": "trainingEvents",
+            "kind": "source"
+          },
+          "facts": [
+            "trainingEvents / debugMode / 3 个数据源注册表",
+            "7 个消费方，31 个 import 位点",
+            "debugMode 是 shared 唯一独立 persist store"
+          ]
+        },
+        {
+          "id": "shared-types",
+          "label": "types",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块领域类型",
+          "source": {
+            "file": "src/shared/types/poker.ts",
+            "lineStart": 46,
+            "lineEnd": 46,
+            "symbol": "HandNotation",
+            "kind": "source"
+          },
+          "facts": [
+            "15 个类型模块",
+            "9 个消费方，189 个 import 位点",
+            "类型文件之间存在组合引用"
+          ]
+        },
+        {
+          "id": "shared-utils",
+          "label": "utils",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "共享纯函数工具",
+          "source": {
+            "file": "src/shared/utils/cn.ts",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "cn",
+            "kind": "source"
+          },
+          "facts": [
+            "17 个纯函数工具文件",
+            "11 个消费方，195 个 import 位点",
+            "seededShuffle / spacedRepetition 等存在域内复用"
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "academy-ui",
+          "source": "shared-academy",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/academy/ContentIssueReportDialog.tsx",
+            "lineStart": 2,
+            "lineEnd": 9,
+            "symbol": "Dialog"
+          }
+        },
+        {
+          "id": "academy-types",
+          "source": "shared-academy",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/academy/AcademyBridgeCard.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "AcademyBridgeCta"
+          }
+        },
+        {
+          "id": "academy-utils",
+          "source": "shared-academy",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/academy/AcademyBookmarksPanel.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "display-ui",
+          "source": "shared-data-display",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/data-display/StatCard.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "Card"
+          }
+        },
+        {
+          "id": "display-utils",
+          "source": "shared-data-display",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/data-display/ProgressBar.tsx",
+            "lineStart": 1,
+            "lineEnd": 1,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "feedback-ui",
+          "source": "shared-feedback",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/feedback/EmptyState.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "Button"
+          }
+        },
+        {
+          "id": "feedback-types",
+          "source": "shared-feedback",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/feedback/GradeIcon.tsx",
+            "lineStart": 16,
+            "lineEnd": 20,
+            "symbol": "GRADE_DISPLAY_CONFIG"
+          }
+        },
+        {
+          "id": "feedback-utils",
+          "source": "shared-feedback",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/feedback/DecisionAnalysis.tsx",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "transitionStandard"
+          }
+        },
+        {
+          "id": "layout-ui",
+          "source": "shared-layout",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/layout/BackLink.tsx",
+            "lineStart": 19,
+            "lineEnd": 19,
+            "symbol": "Button"
+          }
+        },
+        {
+          "id": "layout-utils",
+          "source": "shared-layout",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用 cn",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/layout/BackLink.tsx",
+            "lineStart": 20,
+            "lineEnd": 20,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "poker-constants",
+          "source": "shared-poker",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取牌面常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/poker/Card.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "RANK_CARD_FACE_DISPLAY"
+          }
+        },
+        {
+          "id": "poker-types",
+          "source": "shared-poker",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖牌型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/poker/Card.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "Card"
+          }
+        },
+        {
+          "id": "poker-utils",
+          "source": "shared-poker",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用牌面工具",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/poker/Card.tsx",
+            "lineStart": 8,
+            "lineEnd": 8,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "quiz-feedback",
+          "source": "shared-quiz",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "组合反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 12,
+            "lineEnd": 12,
+            "symbol": "GradeIcon"
+          }
+        },
+        {
+          "id": "quiz-poker",
+          "source": "shared-quiz",
+          "target": "shared-poker",
+          "kind": "depends",
+          "label": "嵌入牌面",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 8,
+            "lineEnd": 8,
+            "symbol": "PositionBadge"
+          }
+        },
+        {
+          "id": "quiz-constants",
+          "source": "shared-quiz",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 13,
+            "lineEnd": 13,
+            "symbol": "renderMentorFeedback"
+          }
+        },
+        {
+          "id": "quiz-hooks",
+          "source": "shared-quiz",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "键盘导航",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 20,
+            "lineEnd": 20,
+            "symbol": "useIsMobile"
+          }
+        },
+        {
+          "id": "quiz-types",
+          "source": "shared-quiz",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "RangeAction"
+          }
+        },
+        {
+          "id": "quiz-utils",
+          "source": "shared-quiz",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "MOTION_DURATION"
+          }
+        },
+        {
+          "id": "ui-utils",
+          "source": "shared-ui",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用 cn",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/components/ui/button.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "constants-types",
+          "source": "shared-constants",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/constants/headsUpRules.ts",
+            "lineStart": 1,
+            "lineEnd": 1,
+            "symbol": "VariantRuleInfo"
+          }
+        },
+        {
+          "id": "data-types",
+          "source": "shared-data",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/data/opponentProfiles.ts",
+            "lineStart": 1,
+            "lineEnd": 1,
+            "symbol": "OpponentProfile"
+          }
+        },
+        {
+          "id": "stores-types",
+          "source": "shared-stores",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/stores/academyDataSourceRegistry.ts",
+            "lineStart": 10,
+            "lineEnd": 10,
+            "symbol": "AcademyDataSource"
+          }
+        },
+        {
+          "id": "utils-constants",
+          "source": "shared-utils",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/utils/deck.ts",
+            "lineStart": 2,
+            "lineEnd": 2,
+            "symbol": "SUITS"
+          }
+        },
+        {
+          "id": "utils-types",
+          "source": "shared-utils",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/shared/utils/academyMastery.ts",
+            "lineStart": 2,
+            "lineEnd": 2,
+            "symbol": "MasteryState"
+          }
+        }
+      ]
+    },
+    {
+      "meta": {
+        "title": "训练模块 → shared 组件族",
+        "diagramType": "architecture",
+        "viewId": "trainers-to-shared-components",
+        "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
+        "locale": "zh-CN",
+        "scope": "训练类 feature 模块对 shared 组件族的引用：gto-simulator / hand-history / onboarding / pot-odds / progress / puzzle-trainer / range-trainer，聚合边 25 条。",
+        "notes": [
+          "边按实际 import 聚合，统计口径为 import 位点，非去重文件数。",
+          "学院、帮助中心与外壳层引用见另一视图，二者合计覆盖全项目。",
+          "组件族引用次数见各消费方节点 facts。"
+        ]
+      },
+      "nodes": [
+        {
+          "id": "gto-simulator",
+          "label": "gto-simulator",
+          "kind": "component",
+          "module": "gto-simulator",
+          "subtitle": "GTO 场景模拟与策略对比",
+          "source": {
+            "file": "src/features/gto-simulator/index.ts",
+            "lineStart": 1,
+            "lineEnd": 12,
+            "symbol": "Scenario",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 13 处：反馈 6 / 牌面 6 / 基础件 1",
+            "支撑域导入 69 处：类型 44 / 工具 15 / 常量 4 / 画像 3 / Hook 2 / store 1"
+          ]
+        },
+        {
+          "id": "hand-history",
+          "label": "hand-history",
+          "kind": "component",
+          "module": "hand-history",
+          "subtitle": "牌局导入、回放与偏差标注",
+          "source": {
+            "file": "src/features/hand-history/index.ts",
+            "lineStart": 1,
+            "lineEnd": 9,
+            "symbol": "useHandHistoryStore",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 6 处：牌面 3 / 反馈 2 / 展示 1",
+            "支撑域导入 33 处：类型 28 / 工具 5"
+          ]
+        },
+        {
+          "id": "onboarding",
+          "label": "onboarding",
+          "kind": "component",
+          "module": "onboarding",
+          "subtitle": "新手引导与偏好采集",
+          "source": {
+            "file": "src/features/onboarding/index.ts",
+            "lineStart": 1,
+            "lineEnd": 8,
+            "symbol": "OnboardingFlow",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 6 处：基础件 5 / 测验 1",
+            "支撑域导入 9 处：类型 5 / 工具 4"
+          ]
+        },
+        {
+          "id": "pot-odds",
+          "label": "pot-odds",
+          "kind": "component",
+          "module": "pot-odds",
+          "subtitle": "底池赔率与 EV 训练",
+          "source": {
+            "file": "src/features/pot-odds/index.ts",
+            "lineStart": 1,
+            "lineEnd": 12,
+            "symbol": "OddsCalculator",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 14 处：基础件 8 / 反馈 5 / 返回 1",
+            "支撑域导入 15 处：工具 7 / 类型 6 / Hook 1 / store 1"
+          ]
+        },
+        {
+          "id": "progress",
+          "label": "progress",
+          "kind": "component",
+          "module": "progress",
+          "subtitle": "训练记录中枢与五大系统",
+          "source": {
+            "file": "src/features/progress/index.ts",
+            "lineStart": 1,
+            "lineEnd": 5,
+            "symbol": "useProgressStore",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 40 处：基础件 30 / 反馈 4 / 牌面 4 / 展示 1 / 返回 1",
+            "支撑域导入 71 处：工具 43 / 类型 16 / store 10 / 常量 2"
+          ]
+        },
+        {
+          "id": "puzzle-trainer",
+          "label": "puzzle-trainer",
+          "kind": "component",
+          "module": "puzzle-trainer",
+          "subtitle": "谜题训练与每日谜题",
+          "source": {
+            "file": "src/features/puzzle-trainer/index.ts",
+            "lineStart": 1,
+            "lineEnd": 11,
+            "symbol": "PuzzleCard",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 18 处：反馈 7 / 基础件 7 / 返回 3 / 展示 1",
+            "支撑域导入 19 处：工具 12 / 类型 4 / store 2 / Hook 1"
+          ]
+        },
+        {
+          "id": "range-trainer",
+          "label": "range-trainer",
+          "kind": "component",
+          "module": "range-trainer",
+          "subtitle": "翻前范围学习与测验",
+          "source": {
+            "file": "src/features/range-trainer/index.ts",
+            "lineStart": 1,
+            "lineEnd": 8,
+            "symbol": "RangeGrid",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 15 处：基础件 10 / 反馈 2 / 展示 1 / 返回 1 / 测验 1",
+            "支撑域导入 45 处：类型 27 / 工具 10 / 常量 4 / store 3 / Hook 1"
+          ]
+        },
+        {
+          "id": "shared-ui",
+          "label": "components/ui",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "vendored shadcn 基础件",
+          "source": {
+            "file": "src/shared/components/ui/button.tsx",
+            "lineStart": 43,
+            "lineEnd": 43,
+            "symbol": "Button",
+            "kind": "source"
+          },
+          "facts": [
+            "button / card / dialog / input / progress / select / toast / tooltip 共 8 个文件",
+            "12 个消费方，71 个 import 位点",
+            "ui 族豁免 ≥2 消费者，但禁止 0 消费"
+          ]
+        },
+        {
+          "id": "shared-poker",
+          "label": "components/poker",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "牌面、筹码与变体可视化",
+          "source": {
+            "file": "src/shared/components/poker/Card.tsx",
+            "lineStart": 32,
+            "lineEnd": 32,
+            "symbol": "PokerCard",
+            "kind": "source"
+          },
+          "facts": [
+            "9 个牌面与变体组件",
+            "7 个消费方，25 个 import 位点",
+            "CardSVG / CardBack / VariantGlyph 存在域内组合"
+          ]
+        },
+        {
+          "id": "shared-quiz",
+          "label": "components/quiz",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "测验卡与答题模型",
+          "source": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 45,
+            "lineEnd": 45,
+            "symbol": "QuizCard",
+            "kind": "source"
+          },
+          "facts": [
+            "QuizCard + quizCardModel 共 2 个文件",
+            "onboarding 与 range-trainer 两个消费方",
+            "QuizCard 域内复用 quizCardModel"
+          ]
+        },
+        {
+          "id": "shared-feedback",
+          "label": "components/feedback",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "结果页、五级反馈与空/载状态",
+          "source": {
+            "file": "src/shared/components/feedback/DecisionAnalysis.tsx",
+            "lineStart": 33,
+            "lineEnd": 33,
+            "symbol": "DecisionAnalysis",
+            "kind": "source"
+          },
+          "facts": [
+            "10 个反馈与结果页组件",
+            "12 个消费方，45 个 import 位点",
+            "DecisionAnalysis 域内组合 GradeIcon 等组件"
+          ]
+        },
+        {
+          "id": "shared-academy",
+          "label": "components/academy",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "学院共享组件与内容块",
+          "source": {
+            "file": "src/shared/components/academy/AcademyBridgeCard.tsx",
+            "lineStart": 37,
+            "lineEnd": 37,
+            "symbol": "AcademyBridgeCard",
+            "kind": "source"
+          },
+          "facts": [
+            "7 个学院组件 + ContentBlocks + index.ts facade",
+            "strategy-academy 与 theory-academy 共 17 个 import 位点",
+            "唯一保留的目录级 barrel"
+          ]
+        },
+        {
+          "id": "shared-data-display",
+          "label": "components/data-display",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "进度与统计展示组件",
+          "source": {
+            "file": "src/shared/components/data-display/ProgressRing.tsx",
+            "lineStart": 38,
+            "lineEnd": 38,
+            "symbol": "ProgressRing",
+            "kind": "source"
+          },
+          "facts": [
+            "ProgressBar / ProgressRing / StatCard / StatPair 共 4 个",
+            "6 个消费方，14 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-system",
+          "label": "components/system",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "全局错误兜底",
+          "source": {
+            "file": "src/shared/components/system/ErrorBoundary.tsx",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "ErrorBoundary",
+            "kind": "source"
+          },
+          "facts": [
+            "ErrorBoundary 单文件",
+            "app / layouts / main 三个外壳消费"
+          ]
+        },
+        {
+          "id": "shared-layout",
+          "label": "components/layout",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "返回入口统一件",
+          "source": {
+            "file": "src/shared/components/layout/BackLink.tsx",
+            "lineStart": 124,
+            "lineEnd": 124,
+            "symbol": "BackLink",
+            "kind": "source"
+          },
+          "facts": [
+            "BackLink 单文件",
+            "8 个消费方，29 个 import 位点"
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "v2-gto-simulator-poker",
+          "source": "gto-simulator",
+          "target": "shared-poker",
+          "kind": "depends",
+          "label": "引用牌面组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/DecisionTree.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "PositionBadge"
+          }
+        },
+        {
+          "id": "v2-gto-simulator-feedback",
+          "source": "gto-simulator",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/GTOFeedback.tsx",
+            "lineStart": 7,
+            "lineEnd": 7,
+            "symbol": "GradeIcon"
+          }
+        },
+        {
+          "id": "v2-gto-simulator-ui",
+          "source": "gto-simulator",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/GTOResultPage.tsx",
+            "lineStart": 10,
+            "lineEnd": 10,
+            "symbol": "Card"
+          }
+        },
+        {
+          "id": "v2-hand-history-poker",
+          "source": "hand-history",
+          "target": "shared-poker",
+          "kind": "depends",
+          "label": "引用牌面组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/hand-history/components/BoardDisplay.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "PokerCard"
+          }
+        },
+        {
+          "id": "v2-hand-history-feedback",
+          "source": "hand-history",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/hand-history/components/HandHistoryList.tsx",
+            "lineStart": 8,
+            "lineEnd": 8,
+            "symbol": "EmptyState"
+          }
+        },
+        {
+          "id": "v2-hand-history-data-display",
+          "source": "hand-history",
+          "target": "shared-data-display",
+          "kind": "depends",
+          "label": "引用展示组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/hand-history/components/HandStatsPanel.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "StatCard"
+          }
+        },
+        {
+          "id": "v2-onboarding-ui",
+          "source": "onboarding",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/onboarding/components/CelebrationStep.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "Button"
+          }
+        },
+        {
+          "id": "v2-onboarding-quiz",
+          "source": "onboarding",
+          "target": "shared-quiz",
+          "kind": "depends",
+          "label": "引用测验组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/onboarding/components/FirstDrillStep.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "QuizCard"
+          }
+        },
+        {
+          "id": "v2-pot-odds-ui",
+          "source": "pot-odds",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/pot-odds/components/DrawsReference.tsx",
+            "lineStart": 2,
+            "lineEnd": 2,
+            "symbol": "Card"
+          }
+        },
+        {
+          "id": "v2-pot-odds-feedback",
+          "source": "pot-odds",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/pot-odds/components/PotOddsPage.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "ComponentSkeleton"
+          }
+        },
+        {
+          "id": "v2-pot-odds-layout",
+          "source": "pot-odds",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/pot-odds/components/PotOddsQuizPage.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-progress-ui",
+          "source": "progress",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/achievement/AchievementBadges.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "Card"
+          }
+        },
+        {
+          "id": "v2-progress-feedback",
+          "source": "progress",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/dashboard/Dashboard.tsx",
+            "lineStart": 17,
+            "lineEnd": 17,
+            "symbol": "EmptyState"
+          }
+        },
+        {
+          "id": "v2-progress-layout",
+          "source": "progress",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/dashboard/ModuleStatsPage.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-progress-data-display",
+          "source": "progress",
+          "target": "shared-data-display",
+          "kind": "depends",
+          "label": "引用展示组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/dashboard/ModuleStatsPage.tsx",
+            "lineStart": 17,
+            "lineEnd": 17,
+            "symbol": "StatCard"
+          }
+        },
+        {
+          "id": "v2-progress-poker",
+          "source": "progress",
+          "target": "shared-poker",
+          "kind": "depends",
+          "label": "引用牌面组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/settings/GameVariantSelector.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "VariantGlyph"
+          }
+        },
+        {
+          "id": "v2-puzzle-trainer-layout",
+          "source": "puzzle-trainer",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/DailyPuzzle.tsx",
+            "lineStart": 17,
+            "lineEnd": 17,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-puzzle-trainer-ui",
+          "source": "puzzle-trainer",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/DailyPuzzle.tsx",
+            "lineStart": 20,
+            "lineEnd": 20,
+            "symbol": "Progress"
+          }
+        },
+        {
+          "id": "v2-puzzle-trainer-feedback",
+          "source": "puzzle-trainer",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/PuzzleCard.tsx",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "MobileFeedbackSheet"
+          }
+        },
+        {
+          "id": "v2-puzzle-trainer-data-display",
+          "source": "puzzle-trainer",
+          "target": "shared-data-display",
+          "kind": "depends",
+          "label": "引用展示组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/PuzzleResult.tsx",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "StatCard"
+          }
+        },
+        {
+          "id": "v2-range-trainer-quiz",
+          "source": "range-trainer",
+          "target": "shared-quiz",
+          "kind": "depends",
+          "label": "引用测验组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizCard.tsx",
+            "lineStart": 7,
+            "lineEnd": 7,
+            "symbol": "QuizCard"
+          }
+        },
+        {
+          "id": "v2-range-trainer-ui",
+          "source": "range-trainer",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizConfig.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "Card"
+          }
+        },
+        {
+          "id": "v2-range-trainer-layout",
+          "source": "range-trainer",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/RangeLearnPage.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-range-trainer-data-display",
+          "source": "range-trainer",
+          "target": "shared-data-display",
+          "kind": "depends",
+          "label": "引用展示组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/SessionResult.tsx",
+            "lineStart": 7,
+            "lineEnd": 7,
+            "symbol": "StatCard"
+          }
+        },
+        {
+          "id": "v2-range-trainer-feedback",
+          "source": "range-trainer",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/SessionResult.tsx",
+            "lineStart": 8,
+            "lineEnd": 8,
+            "symbol": "ResultActions"
+          }
+        }
+      ]
+    },
+    {
+      "meta": {
+        "title": "学院、帮助与外壳 → shared 组件族",
+        "diagramType": "architecture",
+        "viewId": "academies-to-shared-components",
+        "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
+        "locale": "zh-CN",
+        "scope": "学院、帮助与外壳层对 shared 组件族的引用：strategy-academy / theory-academy / help-center / app / layouts / main，聚合边 23 条。",
+        "notes": [
+          "边按实际 import 聚合，统计口径为 import 位点，非去重文件数。",
+          "训练模块引用见另一视图，二者合计覆盖全项目。",
+          "academy facade 的 import 位点计入 components/academy。"
+        ]
+      },
+      "nodes": [
+        {
+          "id": "help-center",
+          "label": "help-center",
+          "kind": "component",
+          "module": "help-center",
+          "subtitle": "教程、概念卡片与 FAQ",
+          "source": {
+            "file": "src/features/help-center/index.ts",
+            "lineStart": 7,
+            "lineEnd": 9,
+            "symbol": "HelpHome",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 3 处：反馈 1 / 返回 1 / 基础件 1",
+            "支撑域导入 2 处：工具 2"
+          ]
+        },
+        {
+          "id": "strategy-academy",
+          "label": "strategy-academy",
+          "kind": "component",
+          "module": "strategy-academy",
+          "subtitle": "策略课程、Drill 与认证",
+          "source": {
+            "file": "src/features/strategy-academy/index.ts",
+            "lineStart": 1,
+            "lineEnd": 12,
+            "symbol": "AcademyHome",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 53 处：返回 16 / 牌面 11 / 学院 9 / 反馈 8 / 展示 7 / 基础件 2",
+            "支撑域导入 92 处：工具 56 / 类型 24 / store 8 / 常量 2 / 画像 1 / Hook 1"
+          ]
+        },
+        {
+          "id": "theory-academy",
+          "label": "theory-academy",
+          "kind": "component",
+          "module": "theory-academy",
+          "subtitle": "理论课程与章末小测",
+          "source": {
+            "file": "src/features/theory-academy/index.ts",
+            "lineStart": 1,
+            "lineEnd": 6,
+            "symbol": "TheoryHome",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 29 处：学院 8 / 反馈 8 / 返回 5 / 基础件 4 / 展示 3 / 牌面 1",
+            "支撑域导入 82 处：工具 37 / 类型 35 / store 6 / 常量 4"
+          ]
+        },
+        {
+          "id": "shell-app",
+          "label": "app 外壳",
+          "kind": "component",
+          "module": "app",
+          "subtitle": "应用外壳与路由",
+          "source": {
+            "file": "src/app/routes.tsx",
+            "lineStart": 17,
+            "lineEnd": 32,
+            "symbol": "lazyPage",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 2 处：反馈 1 / 错误边界 1",
+            "无支撑域引用"
+          ]
+        },
+        {
+          "id": "shell-layouts",
+          "label": "layouts",
+          "kind": "component",
+          "module": "layouts",
+          "subtitle": "应用布局与移动导航",
+          "source": {
+            "file": "src/layouts/AppLayout.tsx",
+            "lineStart": 63,
+            "lineEnd": 63,
+            "symbol": "AppLayout",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 5 处：基础件 2 / 反馈 1 / 返回 1 / 错误边界 1",
+            "支撑域导入 6 处：工具 4 / 常量 2"
+          ]
+        },
+        {
+          "id": "shell-main",
+          "label": "main",
+          "kind": "component",
+          "module": "main",
+          "subtitle": "启动引导与根渲染",
+          "source": {
+            "file": "src/main.tsx",
+            "lineStart": 16,
+            "lineEnd": 16,
+            "symbol": "bootstrapAndRender",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 2 处：错误边界 1 / 基础件 1",
+            "支撑域导入 1 处：常量 1"
+          ]
+        },
+        {
+          "id": "shared-ui",
+          "label": "components/ui",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "vendored shadcn 基础件",
+          "source": {
+            "file": "src/shared/components/ui/button.tsx",
+            "lineStart": 43,
+            "lineEnd": 43,
+            "symbol": "Button",
+            "kind": "source"
+          },
+          "facts": [
+            "button / card / dialog / input / progress / select / toast / tooltip 共 8 个文件",
+            "12 个消费方，71 个 import 位点",
+            "ui 族豁免 ≥2 消费者，但禁止 0 消费"
+          ]
+        },
+        {
+          "id": "shared-poker",
+          "label": "components/poker",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "牌面、筹码与变体可视化",
+          "source": {
+            "file": "src/shared/components/poker/Card.tsx",
+            "lineStart": 32,
+            "lineEnd": 32,
+            "symbol": "PokerCard",
+            "kind": "source"
+          },
+          "facts": [
+            "9 个牌面与变体组件",
+            "7 个消费方，25 个 import 位点",
+            "CardSVG / CardBack / VariantGlyph 存在域内组合"
+          ]
+        },
+        {
+          "id": "shared-quiz",
+          "label": "components/quiz",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "测验卡与答题模型",
+          "source": {
+            "file": "src/shared/components/quiz/QuizCard.tsx",
+            "lineStart": 45,
+            "lineEnd": 45,
+            "symbol": "QuizCard",
+            "kind": "source"
+          },
+          "facts": [
+            "QuizCard + quizCardModel 共 2 个文件",
+            "onboarding 与 range-trainer 两个消费方",
+            "QuizCard 域内复用 quizCardModel"
+          ]
+        },
+        {
+          "id": "shared-feedback",
+          "label": "components/feedback",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "结果页、五级反馈与空/载状态",
+          "source": {
+            "file": "src/shared/components/feedback/DecisionAnalysis.tsx",
+            "lineStart": 33,
+            "lineEnd": 33,
+            "symbol": "DecisionAnalysis",
+            "kind": "source"
+          },
+          "facts": [
+            "10 个反馈与结果页组件",
+            "12 个消费方，45 个 import 位点",
+            "DecisionAnalysis 域内组合 GradeIcon 等组件"
+          ]
+        },
+        {
+          "id": "shared-academy",
+          "label": "components/academy",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "学院共享组件与内容块",
+          "source": {
+            "file": "src/shared/components/academy/AcademyBridgeCard.tsx",
+            "lineStart": 37,
+            "lineEnd": 37,
+            "symbol": "AcademyBridgeCard",
+            "kind": "source"
+          },
+          "facts": [
+            "7 个学院组件 + ContentBlocks + index.ts facade",
+            "strategy-academy 与 theory-academy 共 17 个 import 位点",
+            "唯一保留的目录级 barrel"
+          ]
+        },
+        {
+          "id": "shared-data-display",
+          "label": "components/data-display",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "进度与统计展示组件",
+          "source": {
+            "file": "src/shared/components/data-display/ProgressRing.tsx",
+            "lineStart": 38,
+            "lineEnd": 38,
+            "symbol": "ProgressRing",
+            "kind": "source"
+          },
+          "facts": [
+            "ProgressBar / ProgressRing / StatCard / StatPair 共 4 个",
+            "6 个消费方，14 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-system",
+          "label": "components/system",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "全局错误兜底",
+          "source": {
+            "file": "src/shared/components/system/ErrorBoundary.tsx",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "ErrorBoundary",
+            "kind": "source"
+          },
+          "facts": [
+            "ErrorBoundary 单文件",
+            "app / layouts / main 三个外壳消费"
+          ]
+        },
+        {
+          "id": "shared-layout",
+          "label": "components/layout",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "返回入口统一件",
+          "source": {
+            "file": "src/shared/components/layout/BackLink.tsx",
+            "lineStart": 124,
+            "lineEnd": 124,
+            "symbol": "BackLink",
+            "kind": "source"
+          },
+          "facts": [
+            "BackLink 单文件",
+            "8 个消费方，29 个 import 位点"
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "v2-app-feedback",
+          "source": "shell-app",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/app/routes.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "PageSkeleton"
+          }
+        },
+        {
+          "id": "v2-app-system",
+          "source": "shell-app",
+          "target": "shared-system",
+          "kind": "depends",
+          "label": "引用错误边界",
+          "evidence": "source",
+          "site": {
+            "file": "src/app/routes.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "ErrorBoundary"
+          }
+        },
+        {
+          "id": "v2-main-ui",
+          "source": "shell-main",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/App.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "Toaster"
+          }
+        },
+        {
+          "id": "v2-main-system",
+          "source": "shell-main",
+          "target": "shared-system",
+          "kind": "depends",
+          "label": "引用错误边界",
+          "evidence": "source",
+          "site": {
+            "file": "src/App.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "ErrorBoundary"
+          }
+        },
+        {
+          "id": "v2-help-center-layout",
+          "source": "help-center",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/help-center/components/HelpArticle.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-help-center-ui",
+          "source": "help-center",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/help-center/components/HelpArticle.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "Button"
+          }
+        },
+        {
+          "id": "v2-help-center-feedback",
+          "source": "help-center",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/help-center/components/HelpArticle.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "EmptyState"
+          }
+        },
+        {
+          "id": "v2-strategy-academy-poker",
+          "source": "strategy-academy",
+          "target": "shared-poker",
+          "kind": "depends",
+          "label": "引用牌面组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/AcademyHome.tsx",
+            "lineStart": 20,
+            "lineEnd": 20,
+            "symbol": "VariantToggle"
+          }
+        },
+        {
+          "id": "v2-strategy-academy-data-display",
+          "source": "strategy-academy",
+          "target": "shared-data-display",
+          "kind": "depends",
+          "label": "引用展示组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/AcademyResume.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "ProgressRing"
+          }
+        },
+        {
+          "id": "v2-strategy-academy-feedback",
+          "source": "strategy-academy",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/BasicsIntro.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "PageSkeleton"
+          }
+        },
+        {
+          "id": "v2-strategy-academy-layout",
+          "source": "strategy-academy",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/CertificationIntroView.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-strategy-academy-academy",
+          "source": "strategy-academy",
+          "target": "shared-academy",
+          "kind": "depends",
+          "label": "引用学院组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/content/ContentBlock.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "LabeledBlock"
+          }
+        },
+        {
+          "id": "v2-strategy-academy-ui",
+          "source": "strategy-academy",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/StrategyContentIssueReport.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "toast"
+          }
+        },
+        {
+          "id": "v2-theory-academy-academy",
+          "source": "theory-academy",
+          "target": "shared-academy",
+          "kind": "depends",
+          "label": "引用学院组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/ContentIssueReport.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "ContentIssueReportDialog"
+          }
+        },
+        {
+          "id": "v2-theory-academy-ui",
+          "source": "theory-academy",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/ContentIssueReport.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "toast"
+          }
+        },
+        {
+          "id": "v2-theory-academy-layout",
+          "source": "theory-academy",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/TheoryBibliographyPage.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-theory-academy-feedback",
+          "source": "theory-academy",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/TheoryBibliographyPage.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "ComponentSkeleton"
+          }
+        },
+        {
+          "id": "v2-theory-academy-data-display",
+          "source": "theory-academy",
+          "target": "shared-data-display",
+          "kind": "depends",
+          "label": "引用展示组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/TheoryChapterHeader.tsx",
+            "lineStart": 7,
+            "lineEnd": 7,
+            "symbol": "ProgressBar"
+          }
+        },
+        {
+          "id": "v2-theory-academy-poker",
+          "source": "theory-academy",
+          "target": "shared-poker",
+          "kind": "depends",
+          "label": "引用牌面组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/TheoryHome.tsx",
+            "lineStart": 16,
+            "lineEnd": 16,
+            "symbol": "VariantToggle"
+          }
+        },
+        {
+          "id": "v2-layouts-system",
+          "source": "shell-layouts",
+          "target": "shared-system",
+          "kind": "depends",
+          "label": "引用错误边界",
+          "evidence": "source",
+          "site": {
+            "file": "src/layouts/AppLayout.tsx",
+            "lineStart": 9,
+            "lineEnd": 9,
+            "symbol": "ErrorBoundary"
+          }
+        },
+        {
+          "id": "v2-layouts-ui",
+          "source": "shell-layouts",
+          "target": "shared-ui",
+          "kind": "depends",
+          "label": "引用基础件",
+          "evidence": "source",
+          "site": {
+            "file": "src/layouts/AppLayout.tsx",
+            "lineStart": 21,
+            "lineEnd": 21,
+            "symbol": "Tooltip"
+          }
+        },
+        {
+          "id": "v2-layouts-layout",
+          "source": "shell-layouts",
+          "target": "shared-layout",
+          "kind": "depends",
+          "label": "使用返回入口",
+          "evidence": "source",
+          "site": {
+            "file": "src/layouts/BlankLayout.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "BackLink"
+          }
+        },
+        {
+          "id": "v2-layouts-feedback",
+          "source": "shell-layouts",
+          "target": "shared-feedback",
+          "kind": "depends",
+          "label": "引用反馈组件",
+          "evidence": "source",
+          "site": {
+            "file": "src/layouts/MobileQuickNavSheet.tsx",
+            "lineStart": 15,
+            "lineEnd": 15,
+            "symbol": "MobileFeedbackSheet"
+          }
+        }
+      ]
+    },
+    {
+      "meta": {
+        "title": "训练模块 → shared 支撑域",
+        "diagramType": "architecture",
+        "viewId": "trainers-to-shared-support",
+        "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
+        "locale": "zh-CN",
+        "scope": "训练类 feature 模块对 shared 支撑域的引用：types / utils / constants / stores / data / hooks，聚合边 27 条。",
+        "notes": [
+          "边按实际 import 聚合，统计口径为 import 位点，非去重文件数。",
+          "学院、帮助中心与外壳层引用见另一视图，二者合计覆盖全项目。",
+          "支撑域引用次数见各消费方节点 facts。"
+        ]
+      },
+      "nodes": [
+        {
+          "id": "gto-simulator",
+          "label": "gto-simulator",
+          "kind": "component",
+          "module": "gto-simulator",
+          "subtitle": "GTO 场景模拟与策略对比",
+          "source": {
+            "file": "src/features/gto-simulator/index.ts",
+            "lineStart": 1,
+            "lineEnd": 12,
+            "symbol": "Scenario",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 13 处：反馈 6 / 牌面 6 / 基础件 1",
+            "支撑域导入 69 处：类型 44 / 工具 15 / 常量 4 / 画像 3 / Hook 2 / store 1"
+          ]
+        },
+        {
+          "id": "hand-history",
+          "label": "hand-history",
+          "kind": "component",
+          "module": "hand-history",
+          "subtitle": "牌局导入、回放与偏差标注",
+          "source": {
+            "file": "src/features/hand-history/index.ts",
+            "lineStart": 1,
+            "lineEnd": 9,
+            "symbol": "useHandHistoryStore",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 6 处：牌面 3 / 反馈 2 / 展示 1",
+            "支撑域导入 33 处：类型 28 / 工具 5"
+          ]
+        },
+        {
+          "id": "onboarding",
+          "label": "onboarding",
+          "kind": "component",
+          "module": "onboarding",
+          "subtitle": "新手引导与偏好采集",
+          "source": {
+            "file": "src/features/onboarding/index.ts",
+            "lineStart": 1,
+            "lineEnd": 8,
+            "symbol": "OnboardingFlow",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 6 处：基础件 5 / 测验 1",
+            "支撑域导入 9 处：类型 5 / 工具 4"
+          ]
+        },
+        {
+          "id": "pot-odds",
+          "label": "pot-odds",
+          "kind": "component",
+          "module": "pot-odds",
+          "subtitle": "底池赔率与 EV 训练",
+          "source": {
+            "file": "src/features/pot-odds/index.ts",
+            "lineStart": 1,
+            "lineEnd": 12,
+            "symbol": "OddsCalculator",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 14 处：基础件 8 / 反馈 5 / 返回 1",
+            "支撑域导入 15 处：工具 7 / 类型 6 / Hook 1 / store 1"
+          ]
+        },
+        {
+          "id": "progress",
+          "label": "progress",
+          "kind": "component",
+          "module": "progress",
+          "subtitle": "训练记录中枢与五大系统",
+          "source": {
+            "file": "src/features/progress/index.ts",
+            "lineStart": 1,
+            "lineEnd": 5,
+            "symbol": "useProgressStore",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 40 处：基础件 30 / 反馈 4 / 牌面 4 / 展示 1 / 返回 1",
+            "支撑域导入 71 处：工具 43 / 类型 16 / store 10 / 常量 2"
+          ]
+        },
+        {
+          "id": "puzzle-trainer",
+          "label": "puzzle-trainer",
+          "kind": "component",
+          "module": "puzzle-trainer",
+          "subtitle": "谜题训练与每日谜题",
+          "source": {
+            "file": "src/features/puzzle-trainer/index.ts",
+            "lineStart": 1,
+            "lineEnd": 11,
+            "symbol": "PuzzleCard",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 18 处：反馈 7 / 基础件 7 / 返回 3 / 展示 1",
+            "支撑域导入 19 处：工具 12 / 类型 4 / store 2 / Hook 1"
+          ]
+        },
+        {
+          "id": "range-trainer",
+          "label": "range-trainer",
+          "kind": "component",
+          "module": "range-trainer",
+          "subtitle": "翻前范围学习与测验",
+          "source": {
+            "file": "src/features/range-trainer/index.ts",
+            "lineStart": 1,
+            "lineEnd": 8,
+            "symbol": "RangeGrid",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 15 处：基础件 10 / 反馈 2 / 展示 1 / 返回 1 / 测验 1",
+            "支撑域导入 45 处：类型 27 / 工具 10 / 常量 4 / store 3 / Hook 1"
+          ]
+        },
+        {
+          "id": "shared-types",
+          "label": "types",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块领域类型",
+          "source": {
+            "file": "src/shared/types/poker.ts",
+            "lineStart": 46,
+            "lineEnd": 46,
+            "symbol": "HandNotation",
+            "kind": "source"
+          },
+          "facts": [
+            "15 个类型模块",
+            "9 个消费方，189 个 import 位点",
+            "类型文件之间存在组合引用"
+          ]
+        },
+        {
+          "id": "shared-utils",
+          "label": "utils",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "共享纯函数工具",
+          "source": {
+            "file": "src/shared/utils/cn.ts",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "cn",
+            "kind": "source"
+          },
+          "facts": [
+            "17 个纯函数工具文件",
+            "11 个消费方，195 个 import 位点",
+            "seededShuffle / spacedRepetition 等存在域内复用"
+          ]
+        },
+        {
+          "id": "shared-constants",
+          "label": "constants",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "全局常量与规则模板",
+          "source": {
+            "file": "src/shared/constants/app.ts",
+            "lineStart": 1,
+            "lineEnd": 1,
+            "symbol": "APP_VERSION",
+            "kind": "source"
+          },
+          "facts": [
+            "app / headsUpRules / mentorStyles / poker 共 4 个文件",
+            "9 个消费方，19 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-stores",
+          "label": "stores",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "事件总线、调试开关与注册表",
+          "source": {
+            "file": "src/shared/stores/trainingEvents.ts",
+            "lineStart": 12,
+            "lineEnd": 12,
+            "symbol": "trainingEvents",
+            "kind": "source"
+          },
+          "facts": [
+            "trainingEvents / debugMode / 3 个数据源注册表",
+            "7 个消费方，31 个 import 位点",
+            "debugMode 是 shared 唯一独立 persist store"
+          ]
+        },
+        {
+          "id": "shared-data",
+          "label": "data",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "对手画像与题库",
+          "source": {
+            "file": "src/shared/data/opponentProfiles.ts",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "OPPONENT_PROFILES",
+            "kind": "source"
+          },
+          "facts": [
+            "opponentProfiles 单文件",
+            "gto-simulator 与 strategy-academy 消费"
+          ]
+        },
+        {
+          "id": "shared-hooks",
+          "label": "hooks",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块 React Hook",
+          "source": {
+            "file": "src/shared/hooks/useIsMobile.ts",
+            "lineStart": 25,
+            "lineEnd": 25,
+            "symbol": "useIsMobile",
+            "kind": "source"
+          },
+          "facts": [
+            "useIsMobile / useRovingGridNav 共 2 个",
+            "6 个消费方，6 个 import 位点"
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "v3-gto-simulator-types",
+          "source": "gto-simulator",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/ActionSelector.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "ActionType"
+          }
+        },
+        {
+          "id": "v3-gto-simulator-utils",
+          "source": "gto-simulator",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/ActionSelector.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "v3-gto-simulator-constants",
+          "source": "gto-simulator",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/GTOFeedback.tsx",
+            "lineStart": 9,
+            "lineEnd": 9,
+            "symbol": "renderMentorFeedback"
+          }
+        },
+        {
+          "id": "v3-gto-simulator-stores",
+          "source": "gto-simulator",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/GTOSessionPage.tsx",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "trainingEvents"
+          }
+        },
+        {
+          "id": "v3-gto-simulator-data",
+          "source": "gto-simulator",
+          "target": "shared-data",
+          "kind": "depends",
+          "label": "读取对手画像",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/GTOFeedback.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "getOpponentProfile"
+          }
+        },
+        {
+          "id": "v3-gto-simulator-hooks",
+          "source": "gto-simulator",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "使用 Hook",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/gto-simulator/components/GTOSessionPage.tsx",
+            "lineStart": 24,
+            "lineEnd": 24,
+            "symbol": "useIsMobile"
+          }
+        },
+        {
+          "id": "v3-hand-history-types",
+          "source": "hand-history",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/hand-history/components/ActionLog.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "PlayerAction"
+          }
+        },
+        {
+          "id": "v3-hand-history-utils",
+          "source": "hand-history",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/hand-history/components/ActionLog.tsx",
+            "lineStart": 7,
+            "lineEnd": 7,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "v3-onboarding-types",
+          "source": "onboarding",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/onboarding/components/FirstDrillStep.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "RangeAction"
+          }
+        },
+        {
+          "id": "v3-onboarding-utils",
+          "source": "onboarding",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/onboarding/components/GoalSettingStep.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "v3-pot-odds-types",
+          "source": "pot-odds",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/pot-odds/components/OddsCalculator.tsx",
+            "lineStart": 10,
+            "lineEnd": 10,
+            "symbol": "GameVariant"
+          }
+        },
+        {
+          "id": "v3-pot-odds-utils",
+          "source": "pot-odds",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/pot-odds/components/OddsDisplay.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "transitionFast"
+          }
+        },
+        {
+          "id": "v3-pot-odds-stores",
+          "source": "pot-odds",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/pot-odds/components/PotOddsQuizPage.tsx",
+            "lineStart": 10,
+            "lineEnd": 10,
+            "symbol": "trainingEvents"
+          }
+        },
+        {
+          "id": "v3-pot-odds-hooks",
+          "source": "pot-odds",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "使用 Hook",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/pot-odds/components/PotOddsQuizPage.tsx",
+            "lineStart": 30,
+            "lineEnd": 30,
+            "symbol": "useIsMobile"
+          }
+        },
+        {
+          "id": "v3-progress-types",
+          "source": "progress",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/celebration/RankUpCelebration.tsx",
+            "lineStart": 13,
+            "lineEnd": 13,
+            "symbol": "RankUpEvent"
+          }
+        },
+        {
+          "id": "v3-progress-utils",
+          "source": "progress",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/achievement/AchievementBadges.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "MOTION_DURATION"
+          }
+        },
+        {
+          "id": "v3-progress-constants",
+          "source": "progress",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/settings/GameVariantSelector.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "GAME_VARIANT_CONFIGS"
+          }
+        },
+        {
+          "id": "v3-progress-stores",
+          "source": "progress",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/achievement/DailyChallenge.tsx",
+            "lineStart": 12,
+            "lineEnd": 12,
+            "symbol": "getAchievementSources"
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-types",
+          "source": "puzzle-trainer",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/PuzzleCardFeedback.tsx",
+            "lineStart": 19,
+            "lineEnd": 19,
+            "symbol": "GRADE_DISPLAY_CONFIG"
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-utils",
+          "source": "puzzle-trainer",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/ActionBoard.tsx",
+            "lineStart": 30,
+            "lineEnd": 30,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-stores",
+          "source": "puzzle-trainer",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/hooks/usePuzzleSession.ts",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "trainingEvents"
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-hooks",
+          "source": "puzzle-trainer",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "使用 Hook",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/PuzzleCard.tsx",
+            "lineStart": 15,
+            "lineEnd": 15,
+            "symbol": "useIsMobile"
+          }
+        },
+        {
+          "id": "v3-range-trainer-types",
+          "source": "range-trainer",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizConfig.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "Position"
+          }
+        },
+        {
+          "id": "v3-range-trainer-utils",
+          "source": "range-trainer",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizTimer.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "transitionFast"
+          }
+        },
+        {
+          "id": "v3-range-trainer-constants",
+          "source": "range-trainer",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/RangeTrainerHome.tsx",
+            "lineStart": 11,
+            "lineEnd": 11,
+            "symbol": "getPlayerCountOptions"
+          }
+        },
+        {
+          "id": "v3-range-trainer-stores",
+          "source": "range-trainer",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizConfig.tsx",
+            "lineStart": 15,
+            "lineEnd": 15,
+            "symbol": "useDebugModeStore"
+          }
+        },
+        {
+          "id": "v3-range-trainer-hooks",
+          "source": "range-trainer",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "使用 Hook",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/RangeGrid.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "useRovingGridNav"
+          }
+        }
+      ]
+    },
+    {
+      "meta": {
+        "title": "学院、帮助与外壳 → shared 支撑域",
+        "diagramType": "architecture",
+        "viewId": "academies-to-shared-support",
+        "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
+        "locale": "zh-CN",
+        "scope": "学院、帮助与外壳层对 shared 支撑域的引用：strategy-academy / theory-academy / help-center / layouts / main，聚合边 14 条；app 无支撑域引用。",
+        "notes": [
+          "边按实际 import 聚合，统计口径为 import 位点，非去重文件数。",
+          "app 外壳无支撑域引用，未列入本视图。",
+          "训练模块引用见另一视图，二者合计覆盖全项目。"
+        ]
+      },
+      "nodes": [
+        {
+          "id": "help-center",
+          "label": "help-center",
+          "kind": "component",
+          "module": "help-center",
+          "subtitle": "教程、概念卡片与 FAQ",
+          "source": {
+            "file": "src/features/help-center/index.ts",
+            "lineStart": 7,
+            "lineEnd": 9,
+            "symbol": "HelpHome",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 3 处：反馈 1 / 返回 1 / 基础件 1",
+            "支撑域导入 2 处：工具 2"
+          ]
+        },
+        {
+          "id": "strategy-academy",
+          "label": "strategy-academy",
+          "kind": "component",
+          "module": "strategy-academy",
+          "subtitle": "策略课程、Drill 与认证",
+          "source": {
+            "file": "src/features/strategy-academy/index.ts",
+            "lineStart": 1,
+            "lineEnd": 12,
+            "symbol": "AcademyHome",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 53 处：返回 16 / 牌面 11 / 学院 9 / 反馈 8 / 展示 7 / 基础件 2",
+            "支撑域导入 92 处：工具 56 / 类型 24 / store 8 / 常量 2 / 画像 1 / Hook 1"
+          ]
+        },
+        {
+          "id": "theory-academy",
+          "label": "theory-academy",
+          "kind": "component",
+          "module": "theory-academy",
+          "subtitle": "理论课程与章末小测",
+          "source": {
+            "file": "src/features/theory-academy/index.ts",
+            "lineStart": 1,
+            "lineEnd": 6,
+            "symbol": "TheoryHome",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 29 处：学院 8 / 反馈 8 / 返回 5 / 基础件 4 / 展示 3 / 牌面 1",
+            "支撑域导入 82 处：工具 37 / 类型 35 / store 6 / 常量 4"
+          ]
+        },
+        {
+          "id": "shell-layouts",
+          "label": "layouts",
+          "kind": "component",
+          "module": "layouts",
+          "subtitle": "应用布局与移动导航",
+          "source": {
+            "file": "src/layouts/AppLayout.tsx",
+            "lineStart": 63,
+            "lineEnd": 63,
+            "symbol": "AppLayout",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 5 处：基础件 2 / 反馈 1 / 返回 1 / 错误边界 1",
+            "支撑域导入 6 处：工具 4 / 常量 2"
+          ]
+        },
+        {
+          "id": "shell-main",
+          "label": "main",
+          "kind": "component",
+          "module": "main",
+          "subtitle": "启动引导与根渲染",
+          "source": {
+            "file": "src/main.tsx",
+            "lineStart": 16,
+            "lineEnd": 16,
+            "symbol": "bootstrapAndRender",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 2 处：错误边界 1 / 基础件 1",
+            "支撑域导入 1 处：常量 1"
+          ]
+        },
+        {
+          "id": "shared-types",
+          "label": "types",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块领域类型",
+          "source": {
+            "file": "src/shared/types/poker.ts",
+            "lineStart": 46,
+            "lineEnd": 46,
+            "symbol": "HandNotation",
+            "kind": "source"
+          },
+          "facts": [
+            "15 个类型模块",
+            "9 个消费方，189 个 import 位点",
+            "类型文件之间存在组合引用"
+          ]
+        },
+        {
+          "id": "shared-utils",
+          "label": "utils",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "共享纯函数工具",
+          "source": {
+            "file": "src/shared/utils/cn.ts",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "cn",
+            "kind": "source"
+          },
+          "facts": [
+            "17 个纯函数工具文件",
+            "11 个消费方，195 个 import 位点",
+            "seededShuffle / spacedRepetition 等存在域内复用"
+          ]
+        },
+        {
+          "id": "shared-constants",
+          "label": "constants",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "全局常量与规则模板",
+          "source": {
+            "file": "src/shared/constants/app.ts",
+            "lineStart": 1,
+            "lineEnd": 1,
+            "symbol": "APP_VERSION",
+            "kind": "source"
+          },
+          "facts": [
+            "app / headsUpRules / mentorStyles / poker 共 4 个文件",
+            "9 个消费方，19 个 import 位点"
+          ]
+        },
+        {
+          "id": "shared-stores",
+          "label": "stores",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "事件总线、调试开关与注册表",
+          "source": {
+            "file": "src/shared/stores/trainingEvents.ts",
+            "lineStart": 12,
+            "lineEnd": 12,
+            "symbol": "trainingEvents",
+            "kind": "source"
+          },
+          "facts": [
+            "trainingEvents / debugMode / 3 个数据源注册表",
+            "7 个消费方，31 个 import 位点",
+            "debugMode 是 shared 唯一独立 persist store"
+          ]
+        },
+        {
+          "id": "shared-data",
+          "label": "data",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "对手画像与题库",
+          "source": {
+            "file": "src/shared/data/opponentProfiles.ts",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "OPPONENT_PROFILES",
+            "kind": "source"
+          },
+          "facts": [
+            "opponentProfiles 单文件",
+            "gto-simulator 与 strategy-academy 消费"
+          ]
+        },
+        {
+          "id": "shared-hooks",
+          "label": "hooks",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块 React Hook",
+          "source": {
+            "file": "src/shared/hooks/useIsMobile.ts",
+            "lineStart": 25,
+            "lineEnd": 25,
+            "symbol": "useIsMobile",
+            "kind": "source"
+          },
+          "facts": [
+            "useIsMobile / useRovingGridNav 共 2 个",
+            "6 个消费方，6 个 import 位点"
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "v3-help-center-utils",
+          "source": "help-center",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/help-center/components/FaqAccordion.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "MOTION_DURATION"
+          }
+        },
+        {
+          "id": "v3-strategy-academy-types",
+          "source": "strategy-academy",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/DailyPlanCard.tsx",
+            "lineStart": 11,
+            "lineEnd": 11,
+            "symbol": "EloDimension"
+          }
+        },
+        {
+          "id": "v3-strategy-academy-utils",
+          "source": "strategy-academy",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/AcademyHome.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "transitionSlow"
+          }
+        },
+        {
+          "id": "v3-strategy-academy-constants",
+          "source": "strategy-academy",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/StrategyContentIssueReport.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "APP_VERSION"
+          }
+        },
+        {
+          "id": "v3-strategy-academy-stores",
+          "source": "strategy-academy",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/ConceptGraph.tsx",
+            "lineStart": 10,
+            "lineEnd": 10,
+            "symbol": "useDebugModeStore"
+          }
+        },
+        {
+          "id": "v3-strategy-academy-data",
+          "source": "strategy-academy",
+          "target": "shared-data",
+          "kind": "depends",
+          "label": "读取对手画像",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/data/opponentProfiles.ts",
+            "lineStart": 5,
+            "lineEnd": 10,
+            "symbol": "OPPONENT_PROFILES"
+          }
+        },
+        {
+          "id": "v3-strategy-academy-hooks",
+          "source": "strategy-academy",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "使用 Hook",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/strategy-academy/components/ConceptGraph.tsx",
+            "lineStart": 11,
+            "lineEnd": 11,
+            "symbol": "useRovingGridNav"
+          }
+        },
+        {
+          "id": "v3-theory-academy-types",
+          "source": "theory-academy",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/PracticeBridgeCard.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "AcademyBridgeCta"
+          }
+        },
+        {
+          "id": "v3-theory-academy-utils",
+          "source": "theory-academy",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/TheoryCalcDrill.tsx",
+            "lineStart": 6,
+            "lineEnd": 6,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "v3-theory-academy-constants",
+          "source": "theory-academy",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/ContentIssueReport.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "APP_VERSION"
+          }
+        },
+        {
+          "id": "v3-theory-academy-stores",
+          "source": "theory-academy",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/theory-academy/components/TheoryChapterView.tsx",
+            "lineStart": 9,
+            "lineEnd": 9,
+            "symbol": "useDebugModeStore"
+          }
+        },
+        {
+          "id": "v3-layouts-utils",
+          "source": "shell-layouts",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/layouts/AppLayout.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "cn"
+          }
+        },
+        {
+          "id": "v3-layouts-constants",
+          "source": "shell-layouts",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/layouts/AppLayout.tsx",
+            "lineStart": 7,
+            "lineEnd": 7,
+            "symbol": "APP_VERSION"
+          }
+        },
+        {
+          "id": "v3-main-constants",
+          "source": "shell-main",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/main.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "APP_VERSION"
+          }
+        }
+      ]
+    }
+  ]
+}

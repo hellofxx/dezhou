@@ -2,13 +2,14 @@
   "meta": {
     "title": "dezhou 代码图谱：模块依赖与共享层",
     "diagramType": "architecture",
-    "sourceRef": "working tree @ 3c71fd2（2026-11-05）",
+    "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
     "locale": "zh-CN",
     "scope": "系统级模块概览：10 个 feature 模块 + shared 共享底座 + app 启动/路由外壳，共 12 个节点；不展开模块内部组件与构建期 guards。",
     "notes": [
       "依赖边取自 eslint.config.js 的 ALLOWED_CROSS_IMPORTS 与真实 import；hand-history、help-center 不引用 progress。",
       "训练结果经 shared/stores/trainingEvents 上报，progress 在 store.bootstrap.ts 订阅并聚合。",
-      "CodeGraph 索引可用（.codegraph/）：本次完整重建经 codegraph_explore 交叉核对模块符号，全部节点与关系锚点由校验器对工作树复核。",
+      "刷新核验：codegraph status 确认索引可用，codegraph_explore 交叉核对 useProgressStore 消费方；锚点由校验器复核。",
+      "本次刷新仅重锚 strategy-academy → progress 与 help-center → shared 两个偏移锚点，模块拓扑、scope 与粒度未变。",
       "guards/ 与 i18n/ 属构建期或装载期机制，未展开为运行时节点。",
       "shared 被全部 10 个 feature 模块复用，是模块之间唯一的共享代码通道。"
     ]
@@ -887,8 +888,8 @@
       "evidence": "source",
       "site": {
         "file": "src/features/strategy-academy/store.ts",
-        "lineStart": 56,
-        "lineEnd": 56,
+        "lineStart": 57,
+        "lineEnd": 57,
         "symbol": "useProgressStore"
       },
       "route": {
@@ -1219,8 +1220,8 @@
       "evidence": "source",
       "site": {
         "file": "src/features/help-center/components/HelpArticle.tsx",
-        "lineStart": 4,
-        "lineEnd": 4,
+        "lineStart": 5,
+        "lineEnd": 5,
         "symbol": "Button"
       },
       "route": {
