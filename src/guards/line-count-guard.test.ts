@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
  *
  * docs/AI_GUIDE.md §编码规范「文件大小」：
  * - 课程内容数据文件：不做行数限制（正文 / 题库 / 章节块随内容量增长）
+ * - 共享组件（src/shared/components/**）：不做行数限制（跨模块装配体保持单文件内聚）
  * - 其余逻辑 / UI / 常量文件：≤ 300 行目标，300–400 灰区告警，> 400 硬失败
  *
  * 课程内容豁免只按精确路径形态匹配（策略 lessons/variants、localLessons、basicsContent；
@@ -17,7 +18,7 @@ import { fileURLToPath } from 'node:url';
  * 既有非课程超大文件按「单文件」登记在 LEGACY_OVERSIZED_FILES，登记值即当前实测行数（上限，只减不增）：
  * - 文件继续增长 → 失败（不得增长）
  * - 文件拆分回到 400 行以内 → 条目必须删除，否则失败（allowlist 只减不增）
- * 禁止再引入目录 / 类别级宽泛豁免；课程内容豁免是唯一类别级例外，且有精确路径正则兜底。
+ * 除课程内容与共享组件外，禁止再引入目录 / 类别级宽泛豁免。
  */
 
 /** 硬失败线，对齐 docs/AI_GUIDE.md「超过 400 行需拆分」 */
@@ -69,6 +70,22 @@ const COURSE_CONTENT_PATH_RE = new RegExp(
     '^features/theory-academy/data/levels/variants/.+/(?:chapters|quizBank|blocks)/.+\\.ts$',
   ].join('|'),
 );
+
+/**
+ * 共享组件不做行数限制（2026-11 起）。
+ *
+ * 跨模块装配体（QuizCard / ResultSummary / Academy* / Poker*）需要保持单文件内聚；
+ * 按行数拆分会把同一公开 API 切碎，反而增加跨模块 import 面。工具 / 类型 / 常量
+ * 不在 `components/` 下，仍受通用 300/400 行约束。
+ */
+const SHARED_COMPONENT_PATH_RE = /^shared\/components\/.+\.(?:ts|tsx)$/;
+
+function isLineCountExempt(relativePath: string): boolean {
+  return (
+    COURSE_CONTENT_PATH_RE.test(relativePath) ||
+    SHARED_COMPONENT_PATH_RE.test(relativePath)
+  );
+}
 
 
 type FileInfo = {
@@ -133,7 +150,7 @@ describe('File line count hard constraint（逐文件棘轮）', () => {
     const grayZone = allFiles
       .filter(
         (f) =>
-          !COURSE_CONTENT_PATH_RE.test(f.relativePath) &&
+          !isLineCountExempt(f.relativePath) &&
           f.lineCount > WARN_LINES &&
           f.lineCount <= MAX_LINES,
       )
@@ -150,12 +167,12 @@ describe('File line count hard constraint（逐文件棘轮）', () => {
       .filter(
         (f) =>
           f.lineCount > MAX_LINES &&
-          !COURSE_CONTENT_PATH_RE.test(f.relativePath) &&
+          !isLineCountExempt(f.relativePath) &&
           LEGACY_OVERSIZED_FILES[f.relativePath] === undefined,
       )
       .map(
         (f) =>
-          `${f.relativePath}: ${f.lineCount} lines（未登记，请拆分或登记 allowlist；课程内容文件不受此限制）`,
+          `${f.relativePath}: ${f.lineCount} lines（未登记，请拆分或登记 allowlist；课程内容 / 共享组件不受此限制）`,
       );
 
     // 直接断言数组，失败时 diff 即输出违规文件路径，无需二次排查
@@ -232,11 +249,46 @@ describe('File line count hard constraint（逐文件棘轮）', () => {
         .filter(
           (f) =>
             f.lineCount > MAX_LINES &&
-            !COURSE_CONTENT_PATH_RE.test(f.relativePath) &&
+            !isLineCountExempt(f.relativePath) &&
             LEGACY_OVERSIZED_FILES[f.relativePath] === undefined,
         )
         .map((f) => f.relativePath),
     );
     expect(oversizedCourseFiles.filter((p) => violations.has(p))).toEqual([]);
+  });
+
+  it('共享组件不做行数限制，且不误伤 shared 工具 / 类型 / 常量', () => {
+    const sharedComponents = allFiles.filter((f) =>
+      SHARED_COMPONENT_PATH_RE.test(f.relativePath),
+    );
+    expect(sharedComponents.length).toBeGreaterThan(20);
+    expect(
+      sharedComponents.some((f) => f.relativePath === 'shared/components/poker/Card.tsx'),
+    ).toBe(true);
+
+    const shouldNotMatch = [
+      'shared/utils/cn.ts',
+      'shared/types/poker.ts',
+      'shared/constants/poker.ts',
+      'shared/stores/trainingEvents.ts',
+    ];
+    expect(shouldNotMatch.filter((p) => SHARED_COMPONENT_PATH_RE.test(p))).toEqual([]);
+
+    const overlap = sharedComponents
+      .filter((f) => LEGACY_OVERSIZED_FILES[f.relativePath] !== undefined)
+      .map((f) => f.relativePath);
+    expect(overlap).toEqual([]);
+
+    const violations = new Set(
+      allFiles
+        .filter(
+          (f) =>
+            f.lineCount > MAX_LINES &&
+            !isLineCountExempt(f.relativePath) &&
+            LEGACY_OVERSIZED_FILES[f.relativePath] === undefined,
+        )
+        .map((f) => f.relativePath),
+    );
+    expect(sharedComponents.filter((f) => violations.has(f.relativePath))).toEqual([]);
   });
 });
