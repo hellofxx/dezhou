@@ -65,7 +65,7 @@ platform-dev 维护的全部跨模块系统接入点，feature 模块通过这�
 ### progress store（跨模块状态中枢）
 位于 `src/features/progress/store.ts`（persist version 以该文件的 persist 配置为唯一事实源），由 platform-dev 协调升级：
 - **Streak**：连续训练日记录、冻结卡奖励（`recordTrainingDay()` 幂等）
-- **ELO**：五维评分算法（见 `shared/utils/elo.ts`）
+- **ELO**：五维评分算法（见 `src/features/progress/utils/elo.ts`，跨模块状态中枢持有）
 - **SRS**：间隔重复学习调度
 - **Emotion**：训练情绪状态记录（Tilt 检测）
 - **Mentor**：导师风格切换与反馈模板渲染

@@ -51,18 +51,21 @@ src/
 ├─ app/routes.tsx        # lazyPage：页面 + i18n 并行加载
 ├─ layouts/              # AppLayout / BlankLayout / MobileNav
 ├─ features/             # 10 个自包含模块（components / hooks / utils / data / store.ts / types.ts / index.ts）
-├─ shared/               # ≥2 模块使用：components / constants / data / hooks / stores / types / utils
+├─ shared/               # ≥2 模块使用
+│                        #   components/{ui,poker,quiz,feedback,academy,data-display,system,layout}
+│                        #   constants / data / hooks / stores / types / utils
 ├─ i18n/ guards/ styles/ fonts/ test-utils/
 └─ main.tsx / App.tsx
 ```
 
 - 每个 feature 至少包含 `components/`、`store.ts`、`types.ts`、`index.ts`；`hooks/`、`utils/`、`data/` 按需。纯静态模块可豁免 `store.ts`，须在代理文件声明。
 - 模块清单以 `src/features/` 实际目录为准；新增模块见 [`docs/how-to/add-a-feature-module.md`](docs/how-to/add-a-feature-module.md)。
+- shared 各语义域的职责、关键文件与导入规则见 [`src/shared/AGENTS.md`](src/shared/AGENTS.md)。
 
 ### 关键约束
 
 - **模块间禁止直接引用**：只允许 `shared/`、`progress` 公开 API 或 `trainingEvents`；允许边以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（收紧只删不加）。
-- **shared/ 准入**：被 ≥2 个模块使用才可放入；单消费者代码留在模块内。
+- **shared/ 准入**：被 ≥2 个模块使用才可放入；单消费者代码留在模块内。由 `src/shared/admission-guard.test.ts`（import 图 + 传递闭包）硬校验，规则见 §质量门禁「shared 准入」。
 - **跨模块状态集中 progress**：Streak / ELO / SRS / Emotion / Mentor 五大系统与 QuickDrill 状态（`quickDrillBest` / `quickDrillStreak`）统一在 `src/features/progress/store.ts`，禁止分散。
 - **文件语义归属**：新文件直接放入语义归属模块；已分裂时以唯一消费方为归属方，并同步模块代理与 `platform-dev`。
 
@@ -89,7 +92,9 @@ src/
 | 五级反馈 | `shared/types/decisionFeedback.ts` | `calculateGrade` 唯一评级；EV 未标定不得渲染徽章 |
 | 反馈闭环 | progress + 各 trainer | 反馈携带 `relatedLessonId`；`shouldDownshiftDifficulty()` 唯一入口 |
 | 位置解锁 | `range-trainer/constants.ts` | `isPositionUnlocked`；阈值不在文档复制 |
-| 选项排序 | `shared/utils/seededShuffle.ts` | 经模块排序出口；重映射正确答案；每日谜题顺序稳定 |
+| 选项排序 | `shared/utils/optionOrder.ts`（策略编排）+ `shared/utils/seededShuffle.ts`（随机与数值判定底座） | 各模块只留薄包装出口，禁止另写排序 / 洗牌；重映射正确答案；每日谜题顺序稳定 |
+| 结果页装配 | `shared/components/feedback/ResultHeader.tsx` / `ResultActions.tsx` | 标题层级由 `headingLevel` 决定（整页 h1 / 嵌入 h2）+ 动作组唯一实现；材质外壳留在模块 |
+| 返回入口 | `shared/components/layout/BackLink.tsx` | `to` / `historyBack` 与文本·胶囊·按钮三变体；icon-only 必填 `aria-label`；触摸目标 ≥44px |
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |
 | 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory |
@@ -122,6 +127,7 @@ src/
 
 - **唯一出口**：`pnpm verify` = `typecheck && lint && repo:check && docs:check && agents:map:check && test`；任一失败即中止；构建 `pnpm build`，体积 `pnpm size:check`。
 - **typecheck / lint / test**：`tsc --noEmit`、`eslint src`（模块隔离 + 禁 any）、`vitest run` 必须 exit 0。
+- **shared 准入**：`src/shared/admission-guard.test.ts`（分析器 `src/test-utils/admissionGraph.ts`）按 import 图 + 传递闭包判定 —— 0 生产消费者直接失败；1 生产消费者失败，仅 baseline 条目可临时存在（baseline 当前为空，只降不升且双向校验）；`components/ui/**` 豁免 ≥2 但仍禁 0 消费；`utils/localStorageStub` / `utils/persistShape` 按测试消费者计数豁免。
 - **全局守卫**：i18n 双语对称、静态 key、颜色 token、CSS 颜色、行数棘轮、测试体系自检、文档检查；清单见 `src/guards/README.md`。
 - **测试后缀**：`.test.ts` = unit（Node）；`.test.tsx` = component（jsdom）；禁止 `.spec.ts(x)` 与 `__tests__/`。persist store 必须有 `store.persist-shape.test.ts`（version > 1 还须 `store.migrate.test.ts`）。
 - **仓库 / 地图 / 文档**：`repo:check`、`agents:map:check`、`docs:check` 已接入 verify、CI 与 pre-commit。
@@ -160,7 +166,7 @@ src/
 - 单文件 ≤300 行（课程内容数据与 `src/shared/components/**` 除外）；模块间禁止直接引用；跨模块状态集中 progress；shared 准入门槛 ≥2 模块。
 - i18n 双语同步；UI 四层色彩 token，禁硬编码 / 霓虹。
 - 每个 store 必须有 name + version；"记录完成" action 幂等。
-- 五级反馈 `calculateGrade(evLoss)` 唯一评级；调试解锁 9 处门禁；选项排序治理（seededShuffle）。
+- 五级反馈 `calculateGrade(evLoss)` 唯一评级；调试解锁 9 处门禁；选项排序治理（`shared/utils/optionOrder.ts` + `shared/utils/seededShuffle.ts`）。
 - React 渲染约定见 `docs/AI_GUIDE.md` §React 渲染约定。
 
 #### 基线 Quality Checklist

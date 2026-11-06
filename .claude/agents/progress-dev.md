@@ -36,7 +36,7 @@ additionalPrompt: ""
 - Dashboard 与统计图表的数据源、维度、聚合口径
 - progress store 的 persist version 升级与 migrate 函数编写
 - trainingEvents 订阅清单的注册与维护
-- 必要的 `shared/` 层文件维护（elo.ts / mentor.ts / mentorStyles.ts / trainingEvents.ts）
+- 必要的 `shared/` 层文件维护（types/elo.ts / types/mentor.ts / constants/mentorStyles.ts / stores/trainingEvents.ts；ELO 算法归本模块 `utils/elo.ts`）
 - 跨模块状态变更时的 persist 升级协调（通知受影响 feature 模块子代理）
 
 **不可越界**：
@@ -67,7 +67,7 @@ additionalPrompt: ""
   - `awardStreakFreeze(n)`（发放 n 张冻结卡）
   - `recordQuickDrillCompletion()`（快速训练打卡，幂等）
 - **ELO**：
-  - `updateElo(dimension, isCorrect, difficulty)`（更新五维中指定维度 ELO；内部调用 `shared/utils/elo.ts` 的 `checkRankUp` 纯函数自动检测段位升级并设置 `eloRankUp` 事件，触发 RankUpCelebration）
+  - `updateElo(dimension, isCorrect, difficulty)`（更新五维中指定维度 ELO；内部调用 `utils/elo.ts` 的 `checkRankUp` 纯函数自动检测段位升级并设置 `eloRankUp` 事件，触发 RankUpCelebration）
   - `eloRankUp`（state 事件，非 null 表示刚升级，Dashboard 监听弹 Dialog）/ `clearEloRankUp()`
   - `seedEloFromOnboardingAbility(ability)`（用 onboarding 四维定位能力播种 standard 初始 ELO；仅 `gamesPlayed === 0` 且能力非默认时生效，内部经 `mapAcademyAbilityToElo`；取代已移除的 `syncEloFromAcademyAbility`，调用方为 strategy-academy `store.bootstrap`）
 - **SRS**：
@@ -98,7 +98,7 @@ progress store 在初始化时调用 `trainingEvents.subscribe((record) => addRe
 
 ### shared/ 层依赖
 - `src/shared/types/elo.ts`（EloRating / Rank / RANKS / DEFAULT_ELO / RankUpEvent）
-- `src/shared/utils/elo.ts`（calculateEloChange / getDynamicKFactor / abilityToElo / checkRankUp）
+- （ELO 算法 `utils/elo.ts` 为本模块自有实现：calculateEloChange / getDynamicKFactor / abilityToElo / checkRankUp；shared 只提供 `types/elo.ts` 类型与常量）
 - `src/shared/types/mentor.ts`（MentorStyle / MentorProfile / DEFAULT_MENTOR）
 - `src/shared/constants/mentorStyles.ts`（MENTOR_FEEDBACK_TEMPLATES / renderMentorFeedback）
 - `src/shared/stores/trainingEvents.ts`（事件总线 emit / subscribe 接口）
@@ -114,7 +114,7 @@ progress store 在初始化时调用 `trainingEvents.subscribe((record) => addRe
 - src/features/progress/components/ — Dashboard / 统计图表 / Streak / 段位庆祝 / SRS 复习 / 情绪管理（TiltWarning / SessionLimitGuard / DownswingAlert / MoodTracker）/ 设置（SettingsPage 含「开发者选项」调试解锁入口）/ OnboardingGate 门禁等页面与组件
 
 shared/ 依赖（维护职责见 Authority）：
-- src/shared/types/elo.ts / src/shared/utils/elo.ts / src/shared/types/mentor.ts / src/shared/constants/mentorStyles.ts / src/shared/stores/trainingEvents.ts
+- src/shared/types/elo.ts / src/shared/types/mentor.ts / src/shared/constants/mentorStyles.ts / src/shared/stores/trainingEvents.ts（ELO 算法在本模块 `utils/elo.ts`）
 - src/shared/stores/debugMode.ts（调试解锁：SettingsPage「开发者选项」读写 unlockAll / activateWithCode / deactivate；`SessionLimitGuard.useSessionLimitReached` 在调试解锁激活时返回 false 旁路每日题量上限；存储层变更归 platform-dev）
 
 ## Workflows
@@ -124,7 +124,7 @@ shared/ 依赖（维护职责见 Authority）：
 4. 修改持久化策略时：调整 store.ts 的 persist 配置 + 升级 version + 编写 migrate 函数
 5. 添加新跨模块状态时：在 types.ts 定义类型 + store.ts 添加状态与 actions + 升级 persist version + 编写 migrate
 6. 修改 Streak 规则时：编辑 streakCalc.ts 的 updateStreak / checkNewMilestone 逻辑
-7. 修改 ELO 算法时：编辑 shared/utils/elo.ts 的 calculateEloChange / getDynamicKFactor
+7. 修改 ELO 算法时：编辑 `utils/elo.ts` 的 calculateEloChange / getDynamicKFactor
 8. 修改 SRS 比例时：编辑 dailyTrainingMix.ts 的 composeDailyMix 阈值
 9. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
 10. **策略学院评估接入（2026-11）**：策略课时首考/Drill 经 `updateElo(dimension, isCorrect, difficulty)` 写入 `eloByVariant`；重考不写 ELO。题级 SRS 使用 shared `buildQuestionReviewItems`，id 前缀 `strategy:`，metadata.route 回 `/academy/lesson/<id>`；`useEnsureReviewSourceI18n` 从 route 反解 lessonId 并按需加载 `academy-course`。策略自适应难度只读 `recentPracticeResults`（`abilityAssessment` 已随 v8 移除，不再作为用户可见能力源）；onboarding 初值改经 `seedEloFromOnboardingAbility(ability)` 在 `store.bootstrap` 种子化 ELO（仅 `gamesPlayed === 0`），与策略学院默认能力保持同源；进步回放经 `AcademyDataSource.getLessonAttemptsSnapshot()` 读 `lessonAttempts` 快照。

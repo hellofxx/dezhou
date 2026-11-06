@@ -36,7 +36,7 @@ additionalPrompt: ""
 
 **不可越界**（必须通过 platform-dev 协调）：
 - 修改 `src/shared/types/decisionFeedback.ts` 的评级阈值（`GRADE_THRESHOLDS`，数值以该文件定义为唯一事实源），因其影响所有训练模块
-- 修改 `src/shared/utils/pokerMath.ts` / `deck.ts` / `poker.ts` 等被 ≥2 模块使用的共享工具
+- 修改 `src/shared/utils/deck.ts` / `src/shared/constants/poker.ts` 等被 ≥2 模块使用的共享工具（`pokerMath` 已回迁 `pot-odds/utils/`，shared 不再提供）
 - 修改跨模块状态中枢 `src/features/progress/store.ts`（ELO / SRS / Emotion / Streak / Mentor 五大系统）
 - 触及全局样式 / 共享组件 / 布局 / 导航 / 主题色（需 ui-ux-dev 视觉一致性复核）
 
@@ -62,7 +62,6 @@ additionalPrompt: ""
   - 在 `GTOSessionPage.tsx` 完成时调用 `trainingEvents.emit({ module: 'gto-simulator', mode: 'scenario', result, createdAt })` 发布事件，progress store 自动订阅
 - **shared/ 层依赖**：
   - `shared/types/decisionFeedback.ts`（五级反馈类型 + `calculateGrade` 评级函数 + GRADE_THRESHOLDS）
-  - `shared/utils/pokerMath.ts`（扑克数学计算）
   - `shared/utils/deck.ts`（牌组操作）
   - `shared/utils/seededShuffle.ts`（`seededRandom` / `hashStringToSeed`：场景可复现的种子 RNG 基础设施，BUG-GTO-012 复用，禁止重复实现第二套 RNG）
   - `shared/types/poker.ts`（扑克基础类型）

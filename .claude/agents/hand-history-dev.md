@@ -52,7 +52,7 @@ additionalPrompt: ""
 ## Cross-Module Touchpoints
 - **progress store**：无直接调用（复盘无答题评分，不触发 ELO / SRS / Emotion 系统）
 - **trainingEvents**：合理豁免——hand-history 是复盘分析工具而非答题训练模块，无 quiz/practice 形式的训练结果，不适合 emit TrainingRecord；豁免依据见 `store.ts` 顶部说明与 `docs/CHANGELOG.md`，禁止为凑合规范而伪造 emit；豁免集中登记见 AGENTS.md §跨模块能力归属登记表
-- **shared/ 层依赖**：poker.ts / formatters.ts / handRanking.ts
+- **shared/ 层依赖**：`shared/types/`（poker / action / position / common / decisionFeedback）、`shared/utils/`（cn / formatters / motion）、`shared/components/`（poker: Card · HandDisplay · PositionBadge；feedback: EmptyState · LoadingState；data-display: StatCard）
 
 ## Key Files
 > 目录级描述，具体文件以目录实际内容为事实源（新增/删除文件无需同步本清单）。

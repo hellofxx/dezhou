@@ -63,8 +63,7 @@ additionalPrompt: ""
 - `shared/types/poker.ts`：`RangeAction` / `Hand` / `Position` 等类型。
 - `shared/types/decisionFeedback.ts`：`DecisionFeedback` / `buildDecisionFeedback` / `calculateGrade`（五级反馈类型与评级函数）。
 - `shared/types/elo.ts`：ELO 维度类型定义。
-- `shared/utils/elo.ts`：ELO 算法纯函数。
-- `shared/utils/pokerMath.ts`：扑克数学计算（如需）。
+- `shared/types/elo.ts`：ELO 类型与默认值；算法在 `progress/utils/elo.ts`（跨模块状态中枢持有），本模块只经 progress 公开 API 读取评分。
 - `shared/utils/deck.ts`：牌组工具（如需）。
 - `shared/constants/mentorStyles.ts`：导师风格模板 `MENTOR_FEEDBACK_TEMPLATES`。
 - `shared/stores/trainingEvents.ts`：事件总线实现。

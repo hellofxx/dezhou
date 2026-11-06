@@ -1,6 +1,6 @@
 # AI_GUIDE.md
 
-> 状态：Current · 最后复核：2026-11-04。根 `AGENTS.md` 为总入口与硬约束；本文件是编码 / 状态 / 国际化 / UI/UX 的详细规范，AI 处理相关任务时按需读取。
+> 状态：Current · 最后复核：2026-11-06。根 `AGENTS.md` 为总入口与硬约束；本文件是编码 / 状态 / 国际化 / UI/UX 的详细规范，AI 处理相关任务时按需读取。
 
 ---
 
@@ -161,8 +161,22 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ### 答题选项排序治理
 
 - 所有选择题选项必须经统一排序，禁止按题库原序渲染。分流：动作类按语义固定（消极→激进）；纯数值单调排列；文字陈述按 `hash(题目id)` 种子洗牌；认证考试用会话随机种子。
-- 共享工具 `shared/utils/seededShuffle.ts`；模块出口：puzzle-trainer `utils/optionOrder.ts`、strategy-academy `utils/quizShuffle.ts`、pot-odds / theory-academy `utils/quizOrder.ts`。
-- 源题库静态数据不手改重排；i18n-key 型题库须在 `t()` 解析后重排，顺序不得随语言变化；重排必须同步重映射正确答案；新增题库须经模块排序出口并补分布守卫。每日谜题同一天所有用户题目与顺序一致。
+- 共享策略单源 `shared/utils/optionOrder.ts`：`computeOptionOrder`（策略 → 原索引置换）/ `applyOptionOrder` / `remapCorrectIndex`，四类策略 `numeric`（`strict` / `digit` 判定 + `asc` / `seedParity` 方向）/ `shuffle`（种子可加盐）/ `action`（激进度词表 + `requireAllParsed`）/ `conditional`（先判定再选分支）；随机与数值判定底座仍为 `shared/utils/seededShuffle.ts`（`seededRandom` / `shuffleBySeed` / `hashStringToSeed` / `isNumericOptionSet` / `isDigitBearingOptionSet` / `sortByNumericValue`）。
+- 模块只保留薄包装（导出名与原实现一致，内部仅传策略描述）：puzzle-trainer `utils/optionOrder.ts`（`sortOptionsCanonically`）、strategy-academy `utils/quizShuffle.ts`（`orderQuizQuestion` / `orderDrillOptions` / `orderResolvedOptions`）与 `utils/practiceOptionOrder.ts`（`orderPracticeOptions`）、pot-odds `utils/quizOrder.ts`（`orderQuizOptions`）、theory-academy `utils/quizOrder.ts`（`orderTheoryQuizQuestion`）与 `utils/placement.ts`（`orderPlacementOptions`）、onboarding `utils/optionOrder.ts`（`orderPlacementOptions`）。禁止在模块内另写排序 / 洗牌实现。
+- 源题库静态数据不手改重排；i18n-key 型题库须在 `t()` 解析后重排，顺序不得随语言变化；重排必须同步重映射正确答案；新增题库须经模块薄包装出口并补分布守卫。每日谜题同一天所有用户题目与顺序一致。
+
+### 结果页装配
+
+- 单一事实源 `shared/components/feedback/ResultHeader.tsx`（`title` / `subtitle` / `tone` / `headingLevel` / `ring` 槽）与 `ResultActions.tsx`（`actions` 数组 / `layout` row·stack）。
+- 标题层级由 `headingLevel` 决定：整页结果用 h1（`pageHeadingGuard` 只把 ResultHeader 登记为 h1 持有者），嵌入页与块内结果用 h2。整页必须恰好一个 h1。
+- 材质外壳（`dealer-slip` / felt / `walnut-panel`）、统计卡行、错题与明细表、路由跳转与文案留在各模块；共享件只负责标题与动作组的语义结构。
+- 消费方：gto-simulator `ResultSummary`、range-trainer `SessionResult`、puzzle-trainer `PuzzleResult`；两院结果视图保留各自结构（材质与标题语义差异已登记，不强行统一）。
+
+### 返回入口
+
+- 单一事实源 `shared/components/layout/BackLink.tsx`：`to`（路由链接）/ `onClick` / `historyBack`（`navigate(-1)`）三选一；`variant` 为 `text` / `pill` / `button`；`size` 为 `sm` / `md`；`iconOnly` 见下。
+- icon-only 必须传 `aria-label`；触摸目标 ≥44px（`min-h-11`）；焦点环统一 `focus-visible:ring-2 ring-[var(--brass)]/60`。
+- 页脚内嵌链接等特殊上下文可保留本地样式，不强行统一；`BlankLayout` 的返回走 `historyBack`。
 
 ### 导师人格化
 

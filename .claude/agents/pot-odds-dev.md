@@ -38,7 +38,7 @@ additionalPrompt: ""
 - 末题简单 + 补救机制策略调整
 
 **不可越界**：
-- 不修改 `src/shared/utils/pokerMath.ts` 的核心计算公式（影响所有模块，必须通过 `platform-dev` 协调）
+- 不修改共享层的排序基础设施与跨模块共享工具（`shared/utils/seededShuffle.ts` / `shared/utils/optionOrder.ts` 等，须经 `platform-dev` 协调）；本模块 `utils/pokerMath.ts` 为核心计算单源（已从 shared 回迁），可自行维护
 - 不修改 `src/shared/types/decisionFeedback.ts` 的五级反馈阈值定义
 - 不修改 `src/features/progress/store.ts` 的 ELO / SRS / Emotion / Streak 状态结构（仅作为消费方调用其 actions）
 - 不直接引用其他 feature 模块（必须通过 `shared/` 层或 `trainingEvents` 事件总线）
@@ -66,7 +66,7 @@ additionalPrompt: ""
 - 已实现（v2.0）：PotOddsQuizPage 在 session 完成时 emit `{ module: 'pot-odds', ... }`，progress store 自动订阅更新统计
 
 ### shared/ 层依赖
-- `src/shared/utils/pokerMath.ts`：核心计算函数（potOdds / ev / equity 等）
+- 模块自有 `utils/pokerMath.ts`：核心计算函数（potOdds / ev / equity 等，已从 shared 回迁，不再经 shared 层）
 - `src/shared/types/decisionFeedback.ts`：五级反馈类型与 `calculateGrade` 评级函数
 - `src/shared/utils/formatters.ts`：`formatPercentage` / `formatBB` 等格式化输出
 - `src/shared/utils/seededShuffle.ts`：选项排序治理基础设施（shuffleBySeed / hashStringToSeed / isNumericOptionSet / sortByNumericValue，变更归 platform-dev）
@@ -81,7 +81,7 @@ additionalPrompt: ""
 
 ## Workflows
 1. 添加新的听牌类型时：编辑 constants.ts 的 COMMON_DRAWS
-2. 修改计算公式时：编辑 shared/utils/pokerMath.ts（影响所有模块，需通过 platform-dev 协调）
+2. 修改计算公式时：编辑 `utils/pokerMath.ts`（模块内单源，无跨模块影响），同步 `oddsMath.ts` 与 `pokerMath.test.ts`
 3. 调整图表样式时：修改 EquityChart.tsx 的 Recharts 配置
 4. 添加快捷按钮时：修改 PotSizeInput.tsx
 5. 答题后集成跨模块系统：调用 ELO/SRS/Emotion 记录器；session 完成时 trainingEvents.emit（module: 'pot-odds'）
@@ -94,7 +94,7 @@ additionalPrompt: ""
 模块特有约束：
 - 数值精度要求使用定点数或 decimal.js（避免浮点误差）
 - 答题后必须同步更新 ELO（math 维度）、SRS 复习项、情绪计数器三处
-- 修改 `shared/utils/pokerMath.ts` 核心公式时必须通过 platform-dev 协调（影响所有模块）
+- `utils/pokerMath.ts` 是核心计算单源（已从 shared 回迁）：改公式时同批更新 `oddsMath.ts` 与 `pokerMath.test.ts`，不得在组件内另写算式
 - Recharts 图表必须支持暗色与浅色双主题（无硬编码色值，使用 CSS 变量或主题 token）
 - 末题简单 + 补救机制（getEasyOddsQuestion，`rescueUsed` 仅一次）
 - **选项排序治理（答题选项排序治理，见 AGENTS.md 同名章节）**：测验选项禁止按题库数据原序直接渲染，必须经 `orderQuizOptions` 处理（数值选项升序、文字选项按 `hash(题目id)` 种子洗牌）；getEasyOddsQuestion 补救题同样处理；源题库数据不手改重排；新增题目必须被 quizOrder.test.ts 分布与内容平衡守卫覆盖

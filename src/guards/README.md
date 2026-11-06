@@ -4,7 +4,7 @@
 
 - 归属 feature 模块的数据完整性守卫（课程结构 / 题库 id / 选项排序分布等）留在各自模块内，不进本目录。
 - i18n 相关全局守卫（`localeParity` / `staticKeyGuard` / `contentAlignment` 等）与 i18n 资源同处 `src/i18n/`，便于就近读取 locale 结构。
-- 其他位置已存在的守卫（如 `src/shared/admission-guard.test.ts`）保持原位，不做迁移。该守卫基于 import 图 + 传递闭包执行 shared 准入：0 生产消费者失败（测试桩豁免），1 消费者须登记只降不升 baseline；`components/ui/**` 豁免 ≥2 但禁止 0 消费。
+- 其他位置已存在的守卫（如 `src/shared/admission-guard.test.ts`）保持原位，不做迁移。该守卫基于 import 图 + 传递闭包执行 shared 准入：0 生产消费者失败；1 生产消费者失败（仅只降不升 baseline 内条目可临时存在，当前 baseline 已清空）；`components/ui/**` 豁免 ≥2 但禁止 0 消费；`utils/localStorageStub` / `utils/persistShape` 按测试消费者计数豁免（不得被生产代码引用）；baseline 双向校验（条目对应文件消失、或已达标未删条目同样变红）。
 
 ## 守卫清单
 
@@ -14,7 +14,7 @@
 | `feltContrast.test.ts` | 暗底房间与纸条文本的 WCAG AA 对比度（token 层）：`--ivory-muted` / `--clay-text` / `--danger-text` / `--sage-text` / `--brass-text` 于 `--felt`、`--felt-raised` ≥ 4.5:1；`--clay-text` 于 `--clay` 15% 复合底、`--danger-text` 于 `--danger-bg` 复合底 ≥ 4.5:1；paper 四色于 `--paper` ≥ 4.5:1 且 `.dealer-slip` 把四个文本语义 token 重锚到对应 paper 深阶；light 主题四个文本 token 于 light `--paper` / `--paper-raised` ≥ 4.5:1 | `pnpm test src/guards/feltContrast.test.ts` |
 | `designTokenGuard.test.ts` | 全仓源码（`src/**/*.{ts,tsx}`）无 Tailwind 霓虹调色板类、无纯白/纯黑文字与实底类、无纯黑/纯白 hex 字面量（含任意值槽） | `pnpm test src/guards/designTokenGuard.test.ts` |
 | `designTokenCssGuard.test.ts` | `src/styles/*.css` 的 `background` 声明无超阈白透面填充、无纯黑实底；豁免项必须成对登记 DESIGN.md 依据；help 段 44px 触摸目标与 transition 引用动效 token | `pnpm test src/guards/designTokenCssGuard.test.ts` |
-| `pageHeadingGuard.test.ts` | 「一页一个 h1」：`src/layouts` / `src/features` / `src/shared` 非测试 `.ts(x)` 中含 `<h1` 的文件集合 === 8 个整页视图 allowlist；内嵌内容页必须用 h2，新增 h1 须显式登记 | `pnpm test src/guards/pageHeadingGuard.test.ts` |
+| `pageHeadingGuard.test.ts` | 「一页一个 h1」：`src/layouts` / `src/features` / `src/shared` 非测试 `.ts(x)` 中含 `<h1` 的文件集合 === 7 个整页视图 allowlist；内嵌内容页必须用 h2，新增 h1 须显式登记 | `pnpm test src/guards/pageHeadingGuard.test.ts` |
 | `actionTierPalette.guard.test.ts` | Puzzle ActionBoard 三档配色单一来源：pre-answer 的 passive / standard / aggressive 必须由 `--tier-*` 驱动且不得引用 success / danger / clay；aggressive 使用 terra；答后反馈才可用 success / danger；light 主题不得再写 action tile 组件补丁 | `pnpm test src/guards/actionTierPalette.guard.test.ts` |
 | `lightThemeSurfaceGuard.test.ts` | 浅色主题只改 token 与物理物件白名单：light 组件级选择器 === 16 条 allowlist；黄铜字面 rgba 清零；黑色字面 rgba ≤ 41 条；semantic room token 与 hero 渐变在 `:root` / light 两侧均有定义 | `pnpm test src/guards/lightThemeSurfaceGuard.test.ts` |
 | `emojiWhitelist.guard.test.ts` | 交互 UI 不用 emoji：`src/shared/components/**`、`src/features/**/components/**` 与 shared 类型 / 数据点名文件里命中 `\p{Extended_Pictographic}` 的文件集合 === 7 个庆祝 / 徽章插画 allowlist；花色与状态记号走 `TYPOGRAPHIC_GLYPHS` 豁免表。内容层扫描 `features/**/data/**`、`shared/data/**`、`i18n/**`，只允许成就数据 / 策略与理论正文 / i18n 既有文案，排版箭头 `↔` 单独豁免 | `pnpm test src/guards/emojiWhitelist.guard.test.ts` |
@@ -42,7 +42,7 @@
 | 守卫 | 扫描面 | 白名单 / 豁免表 | 失败修复方式 |
 |---|---|---|---|
 | `feltContrast.test.ts` | `src/styles/globals.css` 顶层块（`:root`、`html[data-theme="light"]`、`.dealer-slip`）；颜色值全部从 CSS 解析，守卫里不登记任何色值 | 无文件白名单；`TINTED_SURFACES` 登记语义色铺底的复合口径（`--clay` 15%、`--danger-bg` 自带透明度），`SLIP_REANCHOR` 登记纸条必须重锚的四个 token | 调深文本阶或调亮底色（globals.css token），禁止下调阈值；新增 `color-mix()` 值需先换成字面量否则解析报错（错误信息会指出 token 名与 `var()` 解析链） |
-| `pageHeadingGuard.test.ts` | `src/layouts` / `src/features` / `src/shared` 非测试 `.ts(x)`（含 `.ts`：标题可能以 HTML 字符串形式留在数据文件里）；扫描面 ≥ 300 文件 | `H1_ALLOWLIST`：8 个整页视图（AppLayout / BlankLayout / ErrorBoundary / ResultSummary / WelcomeStep / PotOddsQuizPage / RangeLearnPage / SessionResult），每条附登记理由 | 内嵌内容页把 `<h1>` 降为 `<h2>`；确属整页视图则在 allowlist 显式登记理由。文件删 h1 后必须删除对应条目 |
+| `pageHeadingGuard.test.ts` | `src/layouts` / `src/features` / `src/shared` 非测试 `.ts(x)`（含 `.ts`：标题可能以 HTML 字符串形式留在数据文件里）；扫描面 ≥ 300 文件 | `H1_ALLOWLIST`：7 条整页视图（AppLayout / BlankLayout / ErrorBoundary / ResultHeader（`headingLevel="h1"` 分支）/ WelcomeStep / PotOddsQuizPage / RangeLearnPage），每条附登记理由 | 内嵌内容页把 `<h1>` 降为 `<h2>`；确属整页视图则在 allowlist 显式登记理由。文件删 h1 后必须删除对应条目 |
 | `emojiWhitelist.guard.test.ts` | 组件层：`src/shared/components/**`、`src/features/**/components/**`（非测试）＋ `shared/types/{elo,mentor,opponent,decisionFeedback}.ts`、`shared/data/opponentProfiles.ts`；内容层：`features/**/data/**`、`shared/data/**`、`i18n/**`（.ts/.tsx/.json）；扫描面 ≥ 150 组件文件 / ≥ 100 内容文件；判定字符集 `\p{Extended_Pictographic}` | `ILLUSTRATION_ALLOWLIST`：7 个庆祝/徽章/段位插画文件；`CONTENT_ALLOWED_PREFIXES`：成就数据 / 策略与理论正文 / i18n 既有文案；`TYPOGRAPHIC_GLYPHS`：花色与状态记号（♠♥♦♣ / ℹ / ⚠ / ⏱）；`CONTENT_TYPOGRAPHIC_GLYPHS`：排版箭头 ↔ | 交互 UI 改用 Lucide 图标；插画类在 allowlist 与 DESIGN.md 登记。豁免表条目在扫描面中消失后必须删除（否则变红） |
 | `actionTierPalette.guard.test.ts` | `src/styles/globals.css` 的 action-tile 规则 + `ActionBoard.tsx`；扫描面自检 CSS 与源码有效 | 三档 `data-tier` 必须定义完整 `--tier-*`；pre-answer 不得引用 success / danger / clay；aggressive 使用 terra；答后反馈才可用 success / danger；light 不得再写 action tile 补丁 | 把色值收回 `--tier-*`；tier 色与反馈色分离；新增 tier 先登记 DESIGN.md §5.5 |
 | `lightThemeSurfaceGuard.test.ts` | `src/styles/globals.css` 的 `html[data-theme="light"]` 组件选择器与字面量 | `ALLOWED_LIGHT_SELECTORS` 16 条；黄铜字面 rgba 0；黑色字面 rgba ≤ 41 条；`:root`/light 双侧定义 `--hero-surface-gradient` / `--question-card-gradient` | 优先用 token/`color-mix` 消除补丁；新增 light 补丁须先登记 DESIGN.md §2.8 与本表 |

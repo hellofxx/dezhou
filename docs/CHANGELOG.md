@@ -10,6 +10,17 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-06 共享层结构收口（准入守卫 · 语义目录 · 装配复用）
+
+- **准入守卫重建**：新增 `src/test-utils/admissionGraph.ts`（import 图 + shared→shared 传递闭包 + 消费者计数 + 双向 baseline 校验），`src/shared/admission-guard.test.ts` 改为真校验：0 生产消费者直接失败、1 生产消费者失败（仅「只降不升」baseline 内可临时存在，收口后 baseline 已清空）、`components/ui/**` 豁免 ≥2 但仍禁 0 消费、`utils/localStorageStub` / `utils/persistShape` 按测试消费者计数豁免。旧实现只扫 `shared/utils` 且统计 `import` 方向相反，单消费者文件长期漏检。
+- **删除零消费者**：`business/FreezeChip`（progress 已有同字节文件）/ `MilestoneMarker` / `feedback/FeedbackGrade` / `feedback/GradeBadge` / `layout/LiveDot` / `ui/tabs`（同时移除 `@radix-ui/react-tabs` 依赖）与旧 `shared/utils/quizOrder.ts`；连带清理 `.milestone-marker` / `.live-dot` / `@keyframes live-pulse` 样式与 `common.ui.live` 文案。
+- **单消费回归模块**：`CasinoPlaque` / `DailyGoalCard` / `MottoEngraved` / `GameVariantSelector` / `RankIcon` / `Sparkline` / `moduleLabels` / `useModuleLabel` / `useAcademyDataSource` / `types/ability` → progress；`TableRail` → `src/layouts/`；`pokerMath` → `pot-odds/utils/`；`ResultSummary` → `gto-simulator/components/`；删除 `range-trainer` 的 `rangeParser` / `handClassifier` 纯 re-export shim 与 `shared/utils/index.ts` 半桶 barrel（统一深路径导入）。
+- **`business/` 拆解**：目录撤销，组件按语义域归位 `poker/`（VariantGlyph / VariantToggle / OpponentGlyph）、`quiz/`（QuizCard / quizCardModel，range-trainer 与 onboarding 专用）、`academy/`（ContentBlocks）、`data-display/`（ProgressBar / ProgressRing / StatCard）、`system/`（ErrorBoundary）、`feedback/`、`layout/`、`ui/`；`components/academy/index.ts` 是唯一 barrel facade。
+- **装配复用**：`ProgressRing`（`valueMax` / `variant` / `center` / `ariaLabel`）统一房间环与学院环、`StatCard` 收敛三份本地实现并新增 `StatPair`、`ResultHeader` / `ResultActions` 统一结果页标题层级（h1 整页 / h2 嵌入）与动作组、`BackLink` 统一约 25 处返回入口（text / pill / button 三变体，`historyBack` 走 `navigate(-1)`）；`pageHeadingGuard` 的 H1 allowlist 随之收敛到 `ResultHeader`。
+- **选项排序收口**：新增 `shared/utils/optionOrder.ts`（numeric / shuffle / action / conditional 四类策略 + `computeOptionOrder` / `applyOptionOrder` / `remapCorrectIndex`），pot-odds / theory-academy / onboarding / puzzle-trainer / strategy-academy 五方改为薄包装（导出名与行为不变）；迁移前先为五方各落固定样本黄金断言，`seededShuffle.ts` 底座保持不动。
+- **行数守卫**：`src/shared/components/**` 纳入豁免（跨模块装配体不按行数拆分）；`shared/utils` / `types` / `constants` / `stores` 仍守 ≤300 行目标、>400 行失败。
+- **文档同步**：重写 `src/shared/AGENTS.md`（目标目录全量、准入与导入规则、测试桩例外）、根 `AGENTS.md`（代码组织 shared 清单 / 跨模块复用契约新增 optionOrder · ResultHeader·Actions · BackLink / 质量门禁 shared 准入）、`docs/AI_GUIDE.md` §跨模块复用契约、`docs/TDD.md` shared 组件树与 §5.9 选项排序、`src/guards/README.md` 与相关子代理文件的旧 shared 路径。
+- **验证**：`pnpm docs:check` / `pnpm agents:map:check` 通过；组件行为由 jsdom 覆盖，视觉与响应式未实机复核（Batch 4–7 统一交 `ui-ux-dev` 复核）。
 ### 2026-11-06 后续修复：理论搜索跟随变体 + 短牌 L4 课时 order
 
 - **理论搜索**：`TheorySearch` 的目录层与全文层统一改用理论 store 的 `activeVariant`（`getChapterSummariesByVariant(activeVariant)` / `loadTheoryLevelsForVariant(activeVariant)`），单挑 37 章的标题、正文与小测均可检索；全文结果按变体打标，切换变体后旧变体结果不再命中。新增 jsdom 用例断言加载参数为当前变体。

@@ -71,8 +71,8 @@ additionalPrompt: ""
 - `shared/utils/seededShuffle.ts`：种子洗牌 / 数值排序（quizOrder 出口复用，变更归 platform-dev）
 - `shared/stores/debugMode.ts`：`isDebugUnlockActive()` 短路 Level 与章节门禁
 - `shared/types/elo.ts`：`EloDimension` 类型
-- `shared/components/business/ContentBlocks.tsx`：LabeledBlock / AsciiMonoText / FormulaBlock（课程内容块共享视觉组件，TheorySectionRenderer 消费；与 strategy-academy 视觉词汇统一，变更归 platform-dev）
-- `shared/components/business/ProgressBar.tsx`：学习进度条（TheoryChapterView header 的 level 进度 / strategy-academy CourseView 课程进度共用，变更归 platform-dev）
+- `shared/components/academy/ContentBlocks.tsx`：LabeledBlock / AsciiMonoText / FormulaBlock（课程内容块共享视觉组件，TheorySectionRenderer 消费；与 strategy-academy 视觉词汇统一，变更归 platform-dev）
+- `shared/components/data-display/ProgressBar.tsx`：学习进度条（TheoryChapterView header 的 level 进度 / strategy-academy CourseView 课程进度共用，变更归 platform-dev）
 - `shared/components/academy/`：`AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog`（理论侧 `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` 只做文案与数据适配；书签/笔记为纯阅读辅助，不参与解锁、掌握度与能力分；纠错走 mailto / 剪贴板，无后端；变更归 platform-dev）
 
 ### strategy-academy（仅数据协调，须经 platform-dev）

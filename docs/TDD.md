@@ -209,7 +209,7 @@ src/
 │   │   ├── components/            # TheoryHome / TheoryChapterView / TheoryQuiz / TheoryLadder / TheoryResume / PracticeBridgeCard 等
 │   │   ├── data/                  # levels/（index.ts 兼容层 + variants/ 三变体子目录 + theoryIntegrity.test.ts）
 │   │   ├── hooks/                 # useTheory
-│   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序出口）/ getLevelTargetChapter
+│   │   ├── utils/                 # theoryProgress（纯函数）/ quizOrder（选项排序薄包装，委托 shared/utils/optionOrder）/ getLevelTargetChapter
 │   │   ├── index.ts
 │   │   ├── store.ts               # persist（version 以 store.ts 配置为唯一事实源）
 │   │   └── types.ts
@@ -220,44 +220,47 @@ src/
 │   │   ├── index.ts
 │   │   └── types.ts
 │
-├── shared/                       # 共享层
-│   ├── components/               # 通用组件（分层组织）
-│   │   ├── ui/                   # shadcn/ui 基础组件（9个：button/card/dialog/input/progress/select/tabs/toast/tooltip）
-│   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge）
-│   │   ├── feedback/             # 反馈与状态组件（FeedbackGrade / ResultSummary / EmptyState / LoadingState）
-│   │   ├── layout/               # 布局组件（TableRail / LiveDot）
-│   │   └── business/             # 业务组件（CasinoPlaque / ErrorBoundary / FreezeChip / GameVariantSelector / MottoEngraved）
+├── shared/                       # 共享层（准入守卫 src/shared/admission-guard.test.ts：0 消费失败 / 1 消费须 baseline）
+│   ├── components/               # 通用组件（按语义域分层；本目录豁免行数限制）
+│   │   ├── ui/                   # vendored shadcn 基础件（button / card / dialog / input / progress / select / toast / tooltip）；豁免 ≥2 但仍禁 0 消费
+│   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge / VariantGlyph / VariantToggle / OpponentGlyph）
+│   │   ├── quiz/                 # QuizCard + quizCardModel（range-trainer / onboarding 专用）
+│   │   ├── feedback/             # 决策反馈与结果页（DecisionAnalysis / GradeIcon / MobileFeedbackSheet / RelatedLessonChip / TryAgainButton / EmptyState / LoadingState / ComparisonView / ResultHeader / ResultActions）
+│   │   ├── academy/              # 学院共享组件（AcademyBridgeCard / AcademyMasteryCard / AcademyVariantRuleCard / AcademySearchShell / AcademyBookmarksPanel / AcademyNotesPanel / ContentIssueReportDialog）+ ContentBlocks + index.ts（唯一 facade）
+│   │   ├── data-display/         # 数据展示（ProgressBar / ProgressRing / StatCard / StatPair）
+│   │   ├── system/               # ErrorBoundary（全局错误兜底整页视图）
+│   │   └── layout/               # BackLink（返回入口统一；TableRail 等应用外壳在 src/layouts/）
 │   ├── data/
 │   │   └── opponentProfiles.ts   # 跨模块对手画像数据（gto-simulator / strategy-academy 消费）
 │   ├── constants/
 │   │   ├── app.ts                # 应用常量
+│   │   ├── headsUpRules.ts       # 单挑翻前/翻后行动方向单源
 │   │   ├── mentorStyles.ts       # 导师文案模板（MENTOR_FEEDBACK_TEMPLATES / renderMentorFeedback）
 │   │   └── poker.ts              # 扑克常量（花色/牌面/总数）
 │   ├── stores/
 │   │   ├── debugMode.ts          # 调试解锁 store（persist name=poker-debug-mode）
-│   │   └── trainingEvents.ts     # 训练事件总线
-│   ├── types/
-│   │   ├── action.ts             # 动作类型
-│   │   ├── common.ts             # 通用类型
-│   │   ├── poker.ts              # 扑克领域类型
-│   │   ├── position.ts           # 位置类型
+│   │   ├── trainingEvents.ts     # 训练事件总线
+│   │   └── achievementRegistry.ts / academyDataSourceRegistry.ts / theoryDataSourceRegistry.ts
+│   ├── hooks/
+│   │   ├── useIsMobile.ts
+│   │   └── useRovingGridNav.ts
+│   ├── types/                    # 跨模块类型（无汇总 barrel，统一深路径导入）
+│   │   ├── action.ts / common.ts / poker.ts / position.ts
 │   │   ├── decisionFeedback.ts   # 五级反馈类型与辅助函数
-│   │   ├── elo.ts                # ELO 五维评分类型
-│   │   ├── mentor.ts             # 导师风格类型
-│   │   └── index.ts              # barrel 导出（decisionFeedback / elo / mentor）
-│   └── utils/
-│       ├── cn.ts                 # className 合并工具
-│       ├── deck.ts               # 牌组工具
-│       ├── elo.ts                # ELO 算法（calculateEloChange / getDynamicKFactor / abilityToElo / applyEloChange）
-│       ├── formatters.ts         # 格式化工具
-│       ├── handRanking.ts        # 牌型判定工具
-│       ├── index.ts              # barrel 导出
-│       ├── localStorageStub.ts   # Node 环境测试用 localStorage 桩
-│       ├── persistShape.ts       # persist 形状测试助手
-│       ├── pokerMath.ts          # 扑克数学计算
-│       ├── seededShuffle.ts      # 种子洗牌（Mulberry32 / FNV-1a / 数值选项判定）
-│       ├── shareCard.ts          # Streak 分享卡片生成（generateStreakShareCanvas）
-│       └── soundManager.ts       # 音效管理
+│   │   ├── elo.ts / mentor.ts / opponent.ts / quiz.ts / training.ts
+│   │   ├── academy.ts / academyDataSource.ts / achievementDataSource.ts
+│   │   ├── theoryDataSource.ts
+│   │   └── variantRules.ts
+│   └── utils/                    # 纯函数（无 index.ts barrel，统一深路径导入）
+│       ├── cn.ts / formatters.ts / toLocalDateKey.ts
+│       ├── deck.ts / handClassifier.ts / rangeParser.ts
+│       ├── seededShuffle.ts      # 种子洗牌与数值判定底座（Mulberry32 / FNV-1a / isNumericOptionSet / isDigitBearingOptionSet）
+│       ├── optionOrder.ts        # 选项排序策略唯一实现（numeric / shuffle / action / conditional）
+│       ├── academyQuizBank.ts / academyQuizDraw.ts / academySrs.ts / academyMastery.ts / academyVariantRules.ts
+│       ├── motion.ts             # MOTION_DURATION / MOTION_EASE / 预置 variants
+│       ├── spacedRepetition.ts   # SM-2 间隔重复调度
+│       ├── localStorageStub.ts   # 测试桩（按测试消费者计数豁免）
+│       └── persistShape.ts       # 测试桩（同上）
 │
 ├── i18n/                         # 国际化
 │   ├── config.ts                 # i18next 配置
@@ -1222,7 +1225,7 @@ interface DailyRecommendation {
 
 4. **ELO 集成**：`TheoryQuiz` **仅首次作答**调用 `progress.updateElo(chapter.eloDimension, isCorrect, getChapterDifficulty(level))` + `progress.recordAnswer(isCorrect)`（难度映射：T1≈0.2 递增至 T9≈0.8）；重考走练习态、跳过 ELO/recordAnswer。章节完成调 `progress.recordTrainingDay()`（首次与重考都记真实学习日）。
 
-5. **选项排序治理**：`utils/quizOrder.ts` 的 `orderTheoryQuizQuestion` 复用 `shared/utils/seededShuffle`（数值升序 / id 哈希种子洗牌 + correctIndex 重映射），接入 5.9 选项排序治理。
+5. **选项排序治理**：`utils/quizOrder.ts` 的 `orderTheoryQuizQuestion` 与 `utils/placement.ts` 的 `orderPlacementOptions` 为薄包装，策略（数值升序 / id 哈希种子洗牌 + correctIndex 重映射）由 `shared/utils/optionOrder.ts` 编排，接入 5.9 选项排序治理。
 
 6. **成就集成**：`achievements.ts` 新增 `theoryChapters` / `theoryLevel` 两个 condition type 与 4 项成就；progress store `checkCondition` 通过动态 import `getTheoryStore()`（复刻 `getAcademyStore` 缓存模式）读取进度。
 
@@ -1238,14 +1241,14 @@ interface DailyRecommendation {
     - **重测可入队**：SRS 记录写在 `completeChapter` 的 `alreadyCompleted` 早退之外（视图层），故首次答错与重测答错均可入队；`metadata.route` 指向所属章节页，`metadata.options` 刻意不传，使复习走自评模式而非多选
     - **本模块 persist version 未变更**：SRS 状态归 progress store 持有，理论侧只在视图层写入，不新增持久化字段
 
-11. **量化口径单源**（`utils/theoryFormulas.ts`，模块内自持）：`calculateAlpha` / `calculateMDF` / `requiredEquity` / `kellyFraction`（+ `halfKellyFraction`）/ `requiredHandsForEdge` / `riskOfRuin` / 多人三式（`multiwayAllFold` / `perDefenderRequiredDefense` / `multiwayBluffEv`）/ 演练回填四式（`outsToEquity` / `pairTierCombos` / `aggressionFactor` / `vpipPercent`）共 13 个纯函数，是正文公式段与 `standardQuantAudit.test.ts` 复算块的共同口径源（锚点断言见 `utils/theoryFormulas.test.ts`）。**不下沉 `shared/utils/pokerMath.ts`**：当前仅本模块消费，未达 shared 层 ≥2 模块准入门槛；若策略学院（`MDFVisualizer` 等）将来复用再上收。参数语义须与审计口径一致——`betSize` 指该街下注总额，跟注类门槛一律用「需补入额 ÷ 跟注后底池」，死钱（前注 / Straddle）一律计入 `potBeforeBet` 而不计入 `betSize`。**牌堆参数显式化**：`outsToEquity(outs, cardsToCome, unknownCards = [47, 46])` 的第三个参数承载未知牌数，标准主线三处调用点依赖默认值零改动，短牌传导出的常量 `SHORT_DECK_UNKNOWN_CARDS = [31, 30]`（= 36 − 2 手牌 − 3 公共牌，再减转牌）；`utils/theoryFormulas.test.ts` 用「outs 1-20 逐位等于旧硬编码式」锁死默认口径不被参数化改动，`variantQuantAudit.test.ts` 的短牌 outs 复算一律调函数而非重写分数，非法上界随牌堆下移（32 outs 在 31 张口径下即 NaN）。
+11. **量化口径单源**（`utils/theoryFormulas.ts`，模块内自持）：`calculateAlpha` / `calculateMDF` / `requiredEquity` / `kellyFraction`（+ `halfKellyFraction`）/ `requiredHandsForEdge` / `riskOfRuin` / 多人三式（`multiwayAllFold` / `perDefenderRequiredDefense` / `multiwayBluffEv`）/ 演练回填四式（`outsToEquity` / `pairTierCombos` / `aggressionFactor` / `vpipPercent`）共 13 个纯函数，是正文公式段与 `standardQuantAudit.test.ts` 复算块的共同口径源（锚点断言见 `utils/theoryFormulas.test.ts`）。**不下沉 shared**：shared 层不设通用扑克数学模块（`pokerMath` 归 `pot-odds/utils/pokerMath.ts`，仅赔率模块消费），本模块公式口径自持；若策略学院（`MDFVisualizer` 等）将来复用，先评估与 pot-odds 版合并再上收。参数语义须与审计口径一致——`betSize` 指该街下注总额，跟注类门槛一律用「需补入额 ÷ 跟注后底池」，死钱（前注 / Straddle）一律计入 `potBeforeBet` 而不计入 `betSize`。**牌堆参数显式化**：`outsToEquity(outs, cardsToCome, unknownCards = [47, 46])` 的第三个参数承载未知牌数，标准主线三处调用点依赖默认值零改动，短牌传导出的常量 `SHORT_DECK_UNKNOWN_CARDS = [31, 30]`（= 36 − 2 手牌 − 3 公共牌，再减转牌）；`utils/theoryFormulas.test.ts` 用「outs 1-20 逐位等于旧硬编码式」锁死默认口径不被参数化改动，`variantQuantAudit.test.ts` 的短牌 outs 复算一律调函数而非重写分数，非法上界随牌堆下移（32 outs 在 31 张口径下即 NaN）。
 12. **零基础先修引导**：`TheoryHome` 侧栏私有组件 `BasicsPrerequisiteCard`，仅在当前变体 `completedChapters` 为空时渲染，以 `<Link to="/academy/basics">` 对接策略学院入门向导。因 `ALLOWED_CROSS_IMPORTS` 禁止 theory→strategy 边，该卡片**不读取**对方 `basicsProgress` 完成态、不构成门禁、不新增本模块持久化字段（jsdom 冒烟见 `components/TheoryHome.basicsGuide.test.tsx`）。
 13. **章内即时计算演练**：题源 `utils/theoryCalcDrills.ts`（`CHAPTER_DRILL_SLOTS` 声明哪些章节有哪些公式槽位；`buildCalcDrill(chapterId, slotIndex, attempt)` 从离散参数网格出题、期望值一律调 `theoryFormulas` 现算、`gradeCalcDrill` 按单位容差判分），组件 `components/TheoryCalcDrill.tsx` 挂在 reading 阶段正文之后（读→算→测微闭环，不新增 phase 状态）。四条实现约束：
     - **seed 只由「章节 + 槽位 + 换题次数」决定**，不掺日期与用户——§5.26.4 的"同题同序"契约只约束每日谜题，掺日期会让回访时题面漂移
     - **零持久**（PRD §5.27.10 的产品决策落地）：组件不调 `recordAnswer` / `updateElo` / `completeChapter` / `addReviewItem` / `recordTrainingDay` / `trainingEvents.emit`，因为 `recordAnswer` 无幂等且直连全局连错计数（自适应难度唯一入口）与每日题量预算。双向守卫：组件测试断言五类持久状态快照在混合作答后逐字节不变，`theoryCalcDrills.test.ts` 用 `import.meta.glob('?raw')` 从源码层面禁用上述 token
     - **id 空间隔离**：`drillId` 形如 `${chapterId}#d${slot}`，刻意不用 `-qN` 后缀——`flaggedReviewModel` 与 SRS 按 `-q\d+$` 反解章节 id，撞名会把演练题误当小测题处理
-    - **不属选项排序治理面**：纯数值填空无 `correctIndex`，故不经 `quizOrder.ts` 出口（依据 AGENTS.md 选项排序治理与 PRD §5.26.2 的适用范围），此判断写在该组件与生成器文件头，防后来者误判为漏接
-    - 演练卡为**零持久、无 EV 标定**，反馈按 §5.9 登记豁免采二态呈现，不复用 `FeedbackGrade` / `GradeBadge`（二者 grade 必填且会渲染 EV 数值）
+    - **不属选项排序治理面**：纯数值填空无 `correctIndex`，故不经 `shared/utils/optionOrder.ts` 与模块薄包装出口（依据 AGENTS.md 选项排序治理与 PRD §5.26.2 的适用范围），此判断写在该组件与生成器文件头，防后来者误判为漏接
+    - 演练卡为**零持久、无 EV 标定**，反馈按 §5.9 登记豁免采二态呈现，不复用五级反馈徽章（`GradeIcon` / `DecisionAnalysis`，二者 grade 必填且会渲染 EV 数值）
     - **单位与动态 key**：`DrillUnit = percent / hands / ratio / count`，容差按单位分档且只在生成器内定义（percent 绝对 0.5 个百分点、ratio 绝对 0.05、count 绝对 0、hands 相对 5%）。模板 `theory.drill.template.<formula>`、提示 `theory.drill.hint.<formula>` 与单位 `theory.drill.unit.<unit>` 三族 key 都是 `t()` 动态拼接，`staticKeyGuard.test.ts` 对动态 key 是已知盲区——由 `theoryCalcDrills.test.ts` 补两条守卫：模板内 `{{占位符}}` 集合 ⊆ 该 drill 的 `params` 键集、每个在用单位的双语标签存在且非空（缺 key 会把判分行渲染成键面字）
     - **覆盖是部分章节**：`CHAPTER_DRILL_SLOTS` 只登记确有可口算对象的章节，未登记章节 `buildCalcDrill` 返回 null、演练区整体不渲染（组件测试断言该缺席分支）。刻意不挂槽的理由写在题源文件头（如锦标赛 ICM 递归需多步带小数的分数运算，越出"参数取自友好网格、答案可口算复核"纪律）
 14. **量化口径单源归属**：`utils/theoryFormulas.ts`（含多人 `multiwayAllFold` / `perDefenderRequiredDefense` / `multiwayBluffEv`）与 `utils/theoryCalcDrills.ts` 均留在模块内，**不下沉 shared**：当前仅 theory-academy 消费，未达 shared 层 ≥2 模块准入门槛；策略学院（`MDFVisualizer` 等）复用后再上收。
@@ -1358,29 +1361,33 @@ interface DailyRecommendation {
 
 > 本节汇总 Streak / ELO / SRS / Emotion / Mentor 五大跨模块系统，以及 v2.1 新增的反馈闭环 / 位置渐进解锁 / 自适应难度三大系统、选项排序治理系统的技术设计。这些系统横切多个 feature 模块，状态统一收敛在 `progress` store，通过 persist 持久化。
 
-**选项排序治理系统**（2026-07 新增，产品规格见 PRD 5.26）
+**选项排序治理系统**（2026-07 新增，2026-11 收口为共享策略；产品规格见 PRD 5.26）
 
 消除题库静态数据"正确答案位置固定"的可作弊模式，选项顺序处理全部在出口/渲染前由纯函数完成，源题库数据零重排。
 
-共享基础设施 `shared/utils/seededShuffle.ts`（判定规则以该文件实现为事实源）：
-- `seededRandom`（Mulberry32）/ `shuffleBySeed`（Fisher–Yates，不修改原数组）/ `hashStringToSeed`（FNV-1a，uint32）
-- `isNumericOptionSet(texts)` 与 `sortByNumericValue(items, getText)` — 纯数值选项集判定与升序排列
+共享基础设施（判定规则以文件实现为事实源，模块内禁止另写排序 / 洗牌）：
+- `shared/utils/optionOrder.ts` — 策略编排层：`computeOptionOrder(items, getText, strategy)` 产出「原索引置换数组」，`applyOptionOrder` 按置换重排，`remapCorrectIndex` 重映射正确答案。四类策略：`numeric`（`detect: strict | digit`，`direction: asc | seedParity`）/ `shuffle`（种子 number 直用或 string 经哈希，可加 `salt` 隔离种子空间）/ `action`（`vocab: puzzle | practice`，`requireAllParsed` 为真时用 `fallback`）/ `conditional`（`numericStrict` / `numericDigit` / `actionAll` 判定后选分支）。动作激进度词表（Fold → Check → Call → Limp → Bet → Raise → All-in/全下）与 `UNKNOWN_ACTION_CATEGORY = 99` 也在此单源。
+- `shared/utils/seededShuffle.ts` — 随机与数值判定底座：`seededRandom`（Mulberry32）/ `shuffleBySeed`（Fisher–Yates，不修改原数组）/ `hashStringToSeed`（FNV-1a，uint32）/ `isNumericOptionSet` / `isDigitBearingOptionSet` / `sortByNumericValue`。
 
 分流规则：动作类选项语义固定排序（消极→激进）；纯数值选项单调排列；文字陈述类按 `hash(题目id)` 种子洗牌（跨会话稳定）；认证考试用会话随机种子。
 
-各模块实现：
+各模块只保留薄包装（导出名与原实现一致，内部仅描述策略）：
 
-| 模块 | 实现 | 接入点 |
+| 模块 | 薄包装出口 | 策略 |
 |---|---|---|
-| puzzle-trainer | `utils/optionOrder.ts` | 题库出口 getter（`withCanonicalOptions`），barrel 不再导出原始 `PUZZLE_BANK` |
-| strategy-academy | `utils/quizShuffle.ts`（`orderQuizQuestion` / `orderDrillOptions` / `orderResolvedOptions`） | LessonQuiz（id 稳定种子）/ LevelCertification（会话随机）/ ChoiceDrillRenderer / OutsDrill 等 4 个 i18n-key Drill（`t()` 解析后 useMemo 重排） |
-| pot-odds | `utils/quizOrder.ts`（`orderQuizOptions`） | `data/quizQuestions.ts` 模块顶层 map + `getEasyOddsQuestion` |
+| puzzle-trainer | `utils/optionOrder.ts`（`sortOptionsCanonically`） | `action` + `puzzle` 词表，`requireAllParsed: false`（未知类别 99 排最后、稳定排序）；接入题库出口 getter（`withCanonicalOptions`），barrel 不再导出原始 `PUZZLE_BANK` |
+| strategy-academy | `utils/quizShuffle.ts`（`orderQuizQuestion` / `orderDrillOptions` / `orderResolvedOptions`） | 数值 `strict` 升序（显式 seed 覆盖，会话随机用于认证）/ `digit` + `seedParity`（salt `@v2`）；接入 LessonQuiz / LevelCertification / ChoiceDrillRenderer / OutsDrill 等 4 个 i18n-key Drill（`t()` 解析后 useMemo 重排） |
+| strategy-academy | `utils/practiceOptionOrder.ts`（`orderPracticeOptions`） | `conditional`：`actionAll`（practice 词表）→ 数值 `strict` 升序 → `shuffle`（salt `@practice-v1`） |
+| pot-odds | `utils/quizOrder.ts`（`orderQuizOptions`） | 无 `resolvedTexts` → 仅 `shuffle`；有 → 数值 `digit` 判定，否则 `shuffle`；接入 `data/quizQuestions.ts` 模块顶层 map + `getEasyOddsQuestion` |
+| theory-academy | `utils/quizOrder.ts`（`orderTheoryQuizQuestion`）/ `utils/placement.ts`（`orderPlacementOptions`） | `conditional`：数值 `strict` 升序 / `hash(id)` 洗牌 + correctIndex remap |
+| onboarding | `utils/optionOrder.ts`（`orderPlacementOptions`） | 同理论定位题（`originalIndex === correctIndex`），`isCorrect` 随对象移动 |
 
 设计要点：
 - i18n-key 型题库（outs / potOdds / handRanking / opponent Drill）须在 `t()` 解析后重排；数值判定在模块内放宽为"文本含数字"（`isDigitBearingOptionSet`）以兼容 zh/en 文案；洗牌种子只依赖题目 id，双语顺序天然一致
 - Drill 数值题源数据本已升序，"一律升序"无治理效果，采用"数值单调 + 升/降序方向由 `hash(id)` 奇偶决定"（决策记录于 CHANGELOG 2026-07-28）；课后测验的数值题仍一律升序
 - 重排同步重映射 `correctIndex`，判分与 ELO/SRS/训练事件链路以重排后对象为唯一事实源
 - 各模块测试内置分布守卫（正确答案索引占比上限断言），防未来题库扩充时偏差回归
+- 收口期先为五个消费模块各补黄金断言（固定样本的 `id → order + correctIndex` 摘要），迁移前后必须逐字节一致；`shared/utils/seededShuffle.ts` 的 `shuffleBySeed` / `hashStringToSeed` / `isNumericOptionSet` / `sortByNumericValue` 保持不动，仅新增策略编排层
 
 **反馈闭环系统**（v2.1 新增）
 
@@ -1458,7 +1465,7 @@ interface DailyRecommendation {
 - `RANKS` 六段位：新手 🌱 (0-500) / 入门 🎯 (500-800) / 进阶 ♠️ (800-1200) / 中级 ♥️ (1200-1600) / 高级 ♦️ (1600-2000) / 专家 ♣️ (2000-3000)
 - `DEFAULT_ELO`：起始 500 分 / kFactor 32 / gamesPlayed 0
 
-核心算法（`shared/utils/elo.ts`）：
+核心算法（`features/progress/utils/elo.ts`，跨模块状态中枢持有）：
 - `calculateEloChange(currentRating, isCorrect, difficulty, kFactor)` — 简化 ELO 公式：`E = 1/(1+10^((diff*800-rating+400)/400))`，`delta = K*(S-E)`
 - `getDynamicKFactor(gamesPlayed, overall)` — 动态 K 因子：新手 48 / 默认 32 / 高分 24
 - `abilityToElo(ability)` — 0-100 → 300-1500 映射（用于 strategy-academy 迁移）
