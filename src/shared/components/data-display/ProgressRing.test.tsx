@@ -9,7 +9,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { act, type ReactElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import ProgressRing from './ProgressRing';
+import { ProgressRing } from './ProgressRing';
 
 describe('ProgressRing', () => {
   let container: HTMLDivElement;

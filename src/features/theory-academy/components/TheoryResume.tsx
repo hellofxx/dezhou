@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, PlayCircle, Swords, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
-import ProgressRing from '@/shared/components/data-display/ProgressRing';
+import { ProgressRing } from '@/shared/components/data-display/ProgressRing';
 import { StatPair } from '@/shared/components/data-display/StatPair';
 import type { TheoryLevelSummary } from '../types';
 import { loadTheoryLevelById } from '../data/levels/loaders';

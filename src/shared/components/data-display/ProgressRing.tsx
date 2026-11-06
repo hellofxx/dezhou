@@ -35,7 +35,7 @@ const ROOM_STROKE: Record<RingStatus, string> = {
  * 用于概念节点 / 课程章节完成度指示（DESIGN.md §13.2.1）与两院首屏 hero 环。
  * room：三色状态；academy：轨道 --walnut-raised、填充 --brass-bright 常亮。
  */
-export default function ProgressRing({
+export function ProgressRing({
   value,
   valueMax = 1,
   size = 40,
