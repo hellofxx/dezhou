@@ -7,6 +7,7 @@ import type { DrillQuestion, Lesson } from '../../types';
  * ChoiceDrill 通用渲染器契约：
  * - 选项经 orderDrillOptions 重排（数值升序），选项对象自带 isCorrect 随对象移动
  * - 答对 / 答错反馈 + 正确项提示；逐题推进到结果页
+ * - 进度头 / 结果页走 feature-local 模板（DrillProgressHeader / DrillResultView）
  * - 结果页「完成」回调 onComplete({correct,total,timeTaken})；无题数据走空态
  */
 
@@ -24,6 +25,12 @@ function makeLesson(questions: DrillQuestion[]): Lesson {
     drillComponent: 'ChoiceDrill',
     drillData: { questions },
   };
+}
+
+/** 结果页统计卡数值（DrillResultView 的 data-testid + font-numeric 数值节点） */
+function statValue(testId: string): string {
+  const card = screen.getByTestId(testId);
+  return card.querySelector('.font-numeric')?.textContent ?? '';
 }
 
 const questions = [
@@ -88,6 +95,9 @@ describe('ChoiceDrillRenderer', () => {
 
     fireEvent.click(screen.getByText('下一题'));
     expect(screen.getByText('2 / 2')).toBeTruthy();
+    // 进度头当前正确率：模板插值后为「正确率 100%」（无裸占位符）
+    expect(screen.getByText('正确率 100%')).toBeTruthy();
+    expect(screen.queryByText(/\{\{/)).toBeNull();
 
     fireEvent.click(screen.getByText('小注'));
     expect(screen.getByText('错误')).toBeTruthy();
@@ -95,8 +105,11 @@ describe('ChoiceDrillRenderer', () => {
 
     // 最后一题按钮为「查看成绩」（academy.drill.viewScore）
     fireEvent.click(screen.getByText('查看成绩'));
-    expect(screen.getByText('50%')).toBeTruthy();
-    expect(screen.getByText('1/2')).toBeTruthy();
+    // 结果页标题为 h3（结果内嵌视图，不出 h1）
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('训练完成！');
+    expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
+    expect(statValue('drill-result-accuracy')).toBe('50%');
+    expect(statValue('drill-result-correct')).toBe('1/2');
 
     fireEvent.click(screen.getByText('完成'));
     expect(onComplete).toHaveBeenCalledTimes(1);

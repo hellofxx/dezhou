@@ -6,8 +6,8 @@ import { HAND_RANKING_QUESTIONS } from './handRankingQuestions';
 /**
  * HandRankingDrill 契约：
  * - 首题渲染牌面（两手牌）与题干，选项经 t() 解析后按 id 种子洗牌
- * - 答对 / 答错反馈与解析；逐题推进到结果页
- * - 退出回调 onExit；结果页「完成训练」回调 onComplete(total = 题库长度)
+ * - 答对 / 答错反馈与解析；进度头当前正确率按模板插值（{{correct}}/{{answered}}）
+ * - 逐题推进到结果页；退出回调 onExit；结果页「完成训练」回调 onComplete(total = 题库长度)
  */
 
 function optionButton(text: string): HTMLButtonElement {
@@ -17,6 +17,12 @@ function optionButton(text: string): HTMLButtonElement {
   );
   if (!button) throw new Error(`未找到选项按钮：${text}`);
   return button;
+}
+
+/** 结果页统计卡数值（DrillResultView 的 data-testid + font-numeric 数值节点） */
+function statValue(testId: string): string {
+  const card = screen.getByTestId(testId);
+  return card.querySelector('.font-numeric')?.textContent ?? '';
 }
 
 afterEach(() => cleanup());
@@ -38,6 +44,9 @@ describe('HandRankingDrill', () => {
 
     fireEvent.click(screen.getByText('下一题'));
     expect(screen.getByText('第 2 / 10 题')).toBeTruthy();
+    // 进度头当前正确率：1 题全对（历史缺陷是传 { rate } 渲染出裸占位符）
+    expect(screen.getByText('当前正确率 1/1')).toBeTruthy();
+    expect(screen.queryByText(/\{\{/)).toBeNull();
 
     fireEvent.click(screen.getByText('退出'));
     expect(onExit).toHaveBeenCalledTimes(1);
@@ -62,7 +71,10 @@ describe('HandRankingDrill', () => {
       fireEvent.click(screen.getByText(i === HAND_RANKING_QUESTIONS.length - 1 ? '查看结果' : '下一题'));
     }
 
-    expect(screen.getByText('完成训练')).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('训练完成！');
+    expect(statValue('drill-result-correct')).toMatch(
+      new RegExp(`/${HAND_RANKING_QUESTIONS.length}$`),
+    );
     fireEvent.click(screen.getByText('完成训练'));
     expect(onComplete).toHaveBeenCalledTimes(1);
     expect(onComplete.mock.calls[0]![0]).toMatchObject({

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trans, useTranslation } from 'react-i18next';
 import { t } from 'i18next';
-import { XCircle, ArrowRight, Trophy, Clock, Target, Zap, Keyboard } from 'lucide-react';
+import { XCircle, ArrowRight, Zap, Keyboard } from 'lucide-react';
 import type { PracticeDrill as PracticeDrillType, PracticeQuestion, PracticeOption, PracticeResult, PracticeAnswerDetail, QuestionDifficulty } from '../types';
 import { PokerCard } from '@/shared/components/poker/Card';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
@@ -30,6 +30,8 @@ import { resolvePracticeFeedbackView } from '../utils/practiceFeedbackView';
 import { evImpactToneClass } from '../utils/evImpactTone';
 // P2-03: 难度变化阶梯图（结果页展示）
 import { DifficultyStairChart, type DifficultyChange } from './DifficultyStairChart';
+import { DrillResultView } from './drills/DrillResultView';
+import { DrillProgressHeader } from './drills/DrillProgressHeader';
 
 export type DrillMode = 'normal' | 'pressure';
 
@@ -489,57 +491,37 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
     const accuracy = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
     const avgTime = times.length > 0 ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : '0';
 
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={transitionSlow}
-        className="text-center py-8"
-      >
-        <Trophy className="w-14 h-14 text-[var(--brass-bright)] mx-auto mb-4" />
-        <h3 className="font-display text-2xl text-[var(--ivory)] mb-6">
-          {isPressure ? t('academy.drill.pressureCompletedTitle') : t('academy.drill.completedTitle')}
-        </h3>
-
-        <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
-          <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
-            <p className="font-numeric text-3xl text-[var(--brass-bright)]">{accuracy}%</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.accuracy')}</p>
-          </div>
-          <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
-            <p className="font-numeric text-3xl text-[var(--ivory)]">{avgTime}s</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Clock className="w-3 h-3" /> {t('academy.drill.avgTime')}
-            </p>
-          </div>
-          <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
-            <p className="font-numeric text-3xl text-[var(--ivory)]">{correctCount}/{totalQuestions}</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Target className="w-3 h-3" /> {t('academy.drill.correctCount')}
-            </p>
-          </div>
+    // 压力模式附加统计（超时 / 最长连对 / 压力得分）：配色与计分口径与收编前一致
+    const pressureScore = Math.round(Math.max(0, accuracy - timeoutCount * 5 + maxStreak * 2));
+    const pressureStats = isPressure ? (
+      <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
+        <div data-testid="drill-result-timeouts" className="rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/30 p-3">
+          <p className="font-numeric text-2xl text-[var(--danger-text)]">{timeoutCount}</p>
+          <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.timeouts')}</p>
         </div>
+        <div data-testid="drill-result-streak" className="rounded-lg bg-[var(--success)]/10 border border-[var(--success)]/30 p-3">
+          <p className="font-numeric text-2xl text-[var(--success)]">{maxStreak}</p>
+          <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.longestStreak')}</p>
+        </div>
+        <div data-testid="drill-result-pressure-score" className="rounded-lg bg-[var(--brass-bright)]/10 border border-[var(--brass-bright)]/30 p-3">
+          <p className="font-numeric text-2xl text-[var(--brass-bright)]">{pressureScore}</p>
+          <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.pressureScore')}</p>
+        </div>
+      </div>
+    ) : undefined;
 
-        {/* 压力模式额外统计 */}
-        {isPressure && (
-          <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
-            <div className="rounded-lg bg-[var(--danger)]/10 border border-[var(--danger)]/30 p-3">
-              <p className="font-numeric text-2xl text-[var(--danger-text)]">{timeoutCount}</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.timeouts')}</p>
-            </div>
-            <div className="rounded-lg bg-[var(--success)]/10 border border-[var(--success)]/30 p-3">
-              <p className="font-numeric text-2xl text-[var(--success)]">{maxStreak}</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.longestStreak')}</p>
-            </div>
-            <div className="rounded-lg bg-[var(--brass-bright)]/10 border border-[var(--brass-bright)]/30 p-3">
-              <p className="font-numeric text-2xl text-[var(--brass-bright)]">
-                {Math.round(Math.max(0, accuracy - timeoutCount * 5 + maxStreak * 2))}
-              </p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.drill.pressureScore')}</p>
-            </div>
-          </div>
-        )}
-
+    return (
+      <DrillResultView
+        correct={correctCount}
+        total={totalQuestions}
+        timeText={`${avgTime}s`}
+        titleKey={isPressure ? 'academy.drill.pressureCompletedTitle' : 'academy.drill.completedTitle'}
+        accuracyLabelKey="academy.drill.accuracy"
+        timeLabelKey="academy.drill.avgTime"
+        correctLabelKey="academy.drill.correctCount"
+        extraStats={pressureStats}
+        animated
+      >
         {/* 难度变化曲线（P2-03：阶梯图，横轴题号 / 纵轴难度档，段终点按难度着色） */}
         {adaptive && !isPressure && difficultyChanges.length > 0 && (
           <DifficultyStairChart
@@ -560,7 +542,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
             </div>
           </div>
         )}
-      </motion.div>
+      </DrillResultView>
     );
   }
 
@@ -625,54 +607,49 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
       </AnimatePresence>
 
       {/* Progress bar */}
-      <div className="flex items-center gap-3">
-        <div className="flex-1 h-1.5 rounded-full bg-[var(--walnut-raised)] overflow-hidden">
-          <motion.div
-            className={cn('h-full rounded-full', isPressure ? 'bg-[var(--danger)]' : 'bg-[var(--brass-bright)]')}
-            initial={{ width: 0 }}
-            animate={{ width: `${((currentIndex) / totalQuestions) * 100}%` }}
-            transition={transitionStandard}
-          />
-        </div>
-        <span className="text-xs text-[var(--ivory-muted)] shrink-0">
-          {currentIndex + 1} / {totalQuestions}
-        </span>
-        {currentIndex > 0 && (
-          <span className="text-xs text-[var(--success)] shrink-0">
-            {t('academy.drill.liveAccuracy', {
-              accuracy: Math.round((correctCount / currentIndex) * 100),
-            })}
-          </span>
-        )}
-        {/* 难度指示器（P2-03：常驻 pill，难度变化时 scale 脉冲 + 黄铜 glow） */}
-        {(adaptive || isPressure) && (
-          <motion.span
-            key={questionDifficulty}
-            className={cn(
-              'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium shrink-0',
-              DIFFICULTY_COLORS[questionDifficulty],
-              DIFFICULTY_PILL_BG[questionDifficulty],
-              DIFFICULTY_PILL_BORDER[questionDifficulty],
+      <DrillProgressHeader
+        current={currentIndex + 1}
+        total={totalQuestions}
+        progressText={`${currentIndex + 1} / ${totalQuestions}`}
+        runningAccuracy={{
+          correct: correctCount,
+          answered: currentIndex,
+          textKey: 'academy.drill.liveAccuracy',
+        }}
+        valueTone={isPressure ? 'danger' : 'brass'}
+        extra={
+          <>
+            {/* 难度指示器（P2-03：常驻 pill，难度变化时 scale 脉冲 + 黄铜 glow） */}
+            {(adaptive || isPressure) && (
+              <motion.span
+                key={questionDifficulty}
+                className={cn(
+                  'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium shrink-0',
+                  DIFFICULTY_COLORS[questionDifficulty],
+                  DIFFICULTY_PILL_BG[questionDifficulty],
+                  DIFFICULTY_PILL_BORDER[questionDifficulty],
+                )}
+                // UI-06：brass glow 关键帧（--brass 色相 rgba(201,162,94)）——
+                // framer-motion 插值需数值 keyframes，CSS 变量无法用于动画插值，故锚定语义常量
+                initial={{ scale: 1, boxShadow: BRASS_GLOW_KEYFRAMES[0] }}
+                animate={{
+                  scale: [1, 1.15, 1],
+                  boxShadow: BRASS_GLOW_KEYFRAMES,
+                }}
+                transition={transitionSlow}
+              >
+                {t(`academy.difficulty.${questionDifficulty}`)}
+              </motion.span>
             )}
-            // UI-06：brass glow 关键帧（--brass 色相 rgba(201,162,94)）——
-            // framer-motion 插值需数值 keyframes，CSS 变量无法用于动画插值，故锚定语义常量
-            initial={{ scale: 1, boxShadow: BRASS_GLOW_KEYFRAMES[0] }}
-            animate={{
-              scale: [1, 1.15, 1],
-              boxShadow: BRASS_GLOW_KEYFRAMES,
-            }}
-            transition={transitionSlow}
-          >
-            {t(`academy.difficulty.${questionDifficulty}`)}
-          </motion.span>
-        )}
-        {/* 压力模式标记 */}
-        {isPressure && (
-          <span className="inline-flex items-center gap-1 text-xs text-[var(--danger-text)] font-bold shrink-0">
-            <Zap className="w-3 h-3" /> {t('academy.drill.pressure')}
-          </span>
-        )}
-      </div>
+            {/* 压力模式标记 */}
+            {isPressure && (
+              <span className="inline-flex items-center gap-1 text-xs text-[var(--danger-text)] font-bold shrink-0">
+                <Zap className="w-3 h-3" /> {t('academy.drill.pressure')}
+              </span>
+            )}
+          </>
+        }
+      />
 
       {/* 难度调整提示 */}
       <AnimatePresence>

@@ -13,6 +13,7 @@ import type { PracticeDrill, PracticeQuestion, PracticeResult } from '../types';
  * - 超时：系统代选仅用于展示、判分恒为错，结果不计对
  * - 自适应：每 5 题评估一次 —— 连对升级给出提示，连错降级并在建议复习时展示常驻提示条
  * - 答错且题目声明 relatedLessonId 时「去复习」跳转对应课程
+ * - 结果页 / 进度头走 feature-local 模板（DrillResultView / DrillProgressHeader）
  */
 
 const RELATED_LESSON_PROBE = 'related-lesson-probe';
@@ -70,10 +71,10 @@ function renderDrill(
   return onComplete;
 }
 
-/** 结果页统计卡取值：标签 <p> 所在的统计卡首个 <p> 即数值 */
-function statValue(label: string): string {
-  const labelEl = screen.getByText(label);
-  return labelEl.closest('div')?.querySelector('p')?.textContent ?? '';
+/** 结果页统计卡数值：data-testid 定位卡片，取 font-numeric 数值节点（不再依赖标签反查） */
+function statValue(testId: string): string {
+  const card = screen.getByTestId(testId);
+  return card.querySelector('.font-numeric')?.textContent ?? '';
 }
 
 /** 推进按钮：末题为「查看成绩」，其余为「下一题」（占位提示 toast 也含“下一题”字样，故按 button 角色定位） */
@@ -98,6 +99,8 @@ describe('PracticeDrill：压力模式', () => {
     expect(screen.getByText('1 / 20')).toBeTruthy();
     expect(screen.getByText('压力模式')).toBeTruthy();
     expect(screen.getByText('15')).toBeTruthy();
+    // 压力模式进度头走危险色（不进 DOM 断言色值，只验证进度语义存在）
+    expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('0');
 
     for (let i = 0; i < 20; i += 1) {
       fireEvent.click(screen.getByText('Call'));
@@ -105,12 +108,14 @@ describe('PracticeDrill：压力模式', () => {
     }
 
     expect(onComplete).toHaveBeenCalledTimes(1);
-    expect(screen.getByText('压力模式完成！')).toBeTruthy();
-    expect(statValue('答对')).toBe('20/20');
-    expect(statValue('超时')).toBe('0');
-    expect(statValue('最长连对')).toBe('20');
+    // 结果页标题为 h3（内嵌结果视图不出 h1）
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('压力模式完成！');
+    expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
+    expect(statValue('drill-result-correct')).toBe('20/20');
+    expect(statValue('drill-result-timeouts')).toBe('0');
+    expect(statValue('drill-result-streak')).toBe('20');
     // 压力得分 = 正确率 100 − 超时 0×5 + 最长连对 20×2
-    expect(statValue('压力得分')).toBe('140');
+    expect(statValue('drill-result-pressure-score')).toBe('140');
     // 压力模式固定 20 题 × 2 次交互，全量套件并发时需要更长预算
   }, 20000);
 });

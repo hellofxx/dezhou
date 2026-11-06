@@ -5,14 +5,15 @@
 
 import { useState, useRef, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BackLink } from '@/shared/components/layout/BackLink';
 import type { TFunction } from 'i18next';
-import { CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 import { PokerCard } from '@/shared/components/poker/Card';
 import { stringToCard } from '@/shared/utils/deck';
 import { cn } from '@/shared/utils/cn';
 import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { HAND_RANKING_QUESTIONS } from './handRankingQuestions';
+import { DrillResultView } from './DrillResultView';
+import { DrillProgressHeader } from './DrillProgressHeader';
 import type { DrillProps, DrillResult } from './types';
 
 const TOTAL = HAND_RANKING_QUESTIONS.length;
@@ -73,40 +74,19 @@ export default function HandRankingDrill({ onComplete, onExit }: DrillProps) {
 
   // ===== 完成结果页 =====
   if (finished) {
-    const accuracy = Math.round((correctCount / TOTAL) * 100);
     const seconds = ((Date.now() - overallStartRef.current) / 1000).toFixed(1);
     return (
-      <div className="text-center py-8">
-        <Trophy className="w-14 h-14 text-[var(--brass-bright)] mx-auto mb-4" />
-        <h3 className="font-display text-2xl text-[var(--ivory)] mb-6">
-          {t('drills.common.complete')}
-        </h3>
-        <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
-          <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
-            <p className="font-numeric text-3xl text-[var(--brass-bright)]">{accuracy}%</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('drills.common.accuracyLabel')}</p>
-          </div>
-          <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
-            <p className="font-numeric text-3xl text-[var(--ivory)]">{seconds}s</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Clock className="w-3 h-3" /> {t('drills.common.timeLabel')}
-            </p>
-          </div>
-          <div className="rounded-lg bg-[var(--walnut-raised)] p-4">
-            <p className="font-numeric text-3xl text-[var(--ivory)]">{correctCount}/{TOTAL}</p>
-            <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-              <Target className="w-3 h-3" /> {t('drills.common.correctLabel')}
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={handleFinish}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
-        >
-          {t('drills.common.finish')}
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
+      <DrillResultView
+        correct={correctCount}
+        total={TOTAL}
+        timeText={`${seconds}s`}
+        titleKey="drills.common.complete"
+        accuracyLabelKey="drills.common.accuracyLabel"
+        timeLabelKey="drills.common.timeLabel"
+        correctLabelKey="drills.common.correctLabel"
+        ctaLabelKey="drills.common.finish"
+        onFinish={handleFinish}
+      />
     );
   }
 
@@ -114,25 +94,13 @@ export default function HandRankingDrill({ onComplete, onExit }: DrillProps) {
   return (
     <div className="space-y-5">
       {/* Header: 进度 + 退出 */}
-      <div className="flex items-center gap-3">
-        <BackLink onClick={onExit} label={t('drills.common.exit')} className="shrink-0" />
-        <div className="flex-1 h-1.5 rounded-full bg-[var(--walnut-raised)] overflow-hidden">
-          <div
-            className="h-full rounded-full bg-[var(--brass-bright)] transition-all duration-300"
-            style={{ width: `${(currentIndex / TOTAL) * 100}%` }}
-          />
-        </div>
-        <span className="text-xs text-[var(--ivory-muted)] shrink-0">
-          {t('drills.common.progress', { current: currentIndex + 1, total: TOTAL })}
-        </span>
-        {currentIndex > 0 && (
-          <span className="text-xs text-[var(--success)] shrink-0">
-            {t('drills.common.runningAccuracy', {
-              rate: Math.round((correctCount / currentIndex) * 100),
-            })}
-          </span>
-        )}
-      </div>
+      <DrillProgressHeader
+        current={currentIndex + 1}
+        total={TOTAL}
+        onExit={onExit}
+        progressText={t('drills.common.progress', { current: currentIndex + 1, total: TOTAL })}
+        runningAccuracy={{ correct: correctCount, answered: currentIndex }}
+      />
 
       {/* Title */}
       <div className="text-center">

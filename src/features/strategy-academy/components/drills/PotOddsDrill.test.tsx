@@ -7,6 +7,7 @@ import { POT_ODDS_QUESTIONS } from './potOddsQuestions';
  * PotOddsDrill 契约：
  * - 首题展示底池 / 下注 / 跟注数值与图形化赔率条
  * - 答对 25% 判定正确；答错展示正确答案
+ * - 进度条走 shared ProgressBar（role=progressbar + aria-valuenow），不再用内联 width 断言
  * - 全部答完后结果页「完成训练」回调 onComplete(total = 6)
  */
 
@@ -17,6 +18,17 @@ function optionButton(text: string): HTMLButtonElement {
   );
   if (!button) throw new Error(`未找到选项按钮：${text}`);
   return button;
+}
+
+/** 结果页统计卡数值（DrillResultView 的 data-testid + font-numeric 数值节点） */
+function statValue(testId: string): string {
+  const card = screen.getByTestId(testId);
+  return card.querySelector('.font-numeric')?.textContent ?? '';
+}
+
+/** 进度条当前值（ProgressBar 钳制后写入 aria-valuenow） */
+function progressValue(): string | null {
+  return screen.getByRole('progressbar').getAttribute('aria-valuenow');
 }
 
 afterEach(() => cleanup());
@@ -30,8 +42,8 @@ describe('PotOddsDrill', () => {
     expect(screen.getByText('第 1 / 6 题')).toBeTruthy();
     expect(container.textContent).toContain('100 BB');
     expect(container.textContent).toContain('50 BB');
-    // 图形化赔率条
-    expect(container.querySelectorAll('div[style*="width"]').length).toBeGreaterThan(0);
+    // 进度条语义：首题尚未作答 → 0
+    expect(progressValue()).toBe('0');
 
     fireEvent.click(optionButton('25%'));
     expect(screen.getByText('回答正确！')).toBeTruthy();
@@ -39,6 +51,11 @@ describe('PotOddsDrill', () => {
 
     fireEvent.click(screen.getByText('下一题'));
     expect(screen.getByText('第 2 / 6 题')).toBeTruthy();
+    // 已作答 1 / 6 → 17%
+    expect(progressValue()).toBe('17');
+    // 进度头当前正确率：1 题全对（历史缺陷是传 { rate } 渲染出裸占位符）
+    expect(screen.getByText('当前正确率 1/1')).toBeTruthy();
+    expect(screen.queryByText(/\{\{/)).toBeNull();
 
     fireEvent.click(screen.getByText('退出'));
     expect(onExit).toHaveBeenCalledTimes(1);
@@ -63,6 +80,10 @@ describe('PotOddsDrill', () => {
       );
     }
 
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('训练完成！');
+    expect(statValue('drill-result-correct')).toMatch(
+      new RegExp(`/${POT_ODDS_QUESTIONS.length}$`),
+    );
     fireEvent.click(screen.getByText('完成训练'));
     expect(onComplete).toHaveBeenCalledTimes(1);
     expect(onComplete.mock.calls[0]![0]).toMatchObject({ total: POT_ODDS_QUESTIONS.length });

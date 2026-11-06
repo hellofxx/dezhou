@@ -10,7 +10,7 @@ import {
  * OpponentDrill 契约：
  * - 先展示统计面板，两阶段作答：类型判断 → 策略选择
  * - 两问全对才计为答对（scoreOpponentAnswer）；策略选项经 orderResolvedOptions 重排
- * - 退出回调 onExit；全部答完后结果页「完成训练」回调 onComplete(total = 8)
+ * - 退出回调 onExit；全部答完后结果页（DrillResultView + note 计分口径）「完成训练」回调 onComplete(total = 8)
  */
 
 function typeButton(profileId: string): HTMLButtonElement {
@@ -28,6 +28,12 @@ function strategyButton(text: string): HTMLButtonElement {
   );
   if (!button) throw new Error(`未找到策略按钮：${text}`);
   return button;
+}
+
+/** 结果页统计卡数值（DrillResultView 的 data-testid + font-numeric 数值节点） */
+function statValue(testId: string): string {
+  const card = screen.getByTestId(testId);
+  return card.querySelector('.font-numeric')?.textContent ?? '';
 }
 
 afterEach(() => cleanup());
@@ -75,7 +81,12 @@ describe('OpponentDrill', () => {
       );
     }
 
+    // note 槽承载「两问全对才计为答对」的口径说明
     expect(screen.getByText('两问全对才计为答对')).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 3 }).textContent).toBe('训练完成！');
+    expect(statValue('drill-result-correct')).toMatch(
+      new RegExp(`/${OPPONENT_DRILL_QUESTIONS.length}$`),
+    );
     fireEvent.click(screen.getByText('完成训练'));
     expect(onComplete).toHaveBeenCalledTimes(1);
     expect(onComplete.mock.calls[0]![0]).toMatchObject({

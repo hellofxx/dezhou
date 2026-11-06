@@ -7,7 +7,6 @@
 
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BackLink } from '@/shared/components/layout/BackLink';
 import { ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { OPPONENT_DRILL_QUESTIONS, getOpponentProfile } from '../../data/opponentProfiles';
@@ -17,6 +16,7 @@ import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { resolveOpponentDrillQuestion } from '../../utils/contentKeys';
 import { OpponentStatsPanel } from './OpponentStatsPanel';
 import { OpponentDrillResult } from './OpponentDrillResult';
+import { DrillProgressHeader } from './DrillProgressHeader';
 import type { DrillProps, DrillResult } from './types';
 
 const TOTAL = OPPONENT_DRILL_QUESTIONS.length;
@@ -101,18 +101,12 @@ export default function OpponentDrill({ onComplete, onExit }: DrillProps) {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <BackLink onClick={onExit} label={t('drills.common.exit')} className="shrink-0" />
-        <div className="flex-1 h-1.5 rounded-full bg-[var(--walnut-raised)] overflow-hidden">
-          <div
-            className="h-full rounded-full bg-[var(--brass-bright)] transition-all duration-300"
-            style={{ width: `${(currentIndex / TOTAL) * 100}%` }}
-          />
-        </div>
-        <span className="text-xs text-[var(--ivory-muted)] shrink-0">
-          {t('drills.common.progress', { current: currentIndex + 1, total: TOTAL })}
-        </span>
-      </div>
+      <DrillProgressHeader
+        current={currentIndex + 1}
+        total={TOTAL}
+        onExit={onExit}
+        progressText={t('drills.common.progress', { current: currentIndex + 1, total: TOTAL })}
+      />
 
       {/* Title */}
       <div className="text-center">
