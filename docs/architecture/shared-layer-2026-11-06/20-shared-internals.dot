@@ -1,7 +1,7 @@
 // ============================================================================
 // PokerLab · shared 内部依赖图（当前态 / current-state）
 // 生成：system-modeler + graphviz（architecture-visualization 插件）
-// 证据基线：工作树 2026-11-06（HEAD d3419ad + 未提交改动）
+// 证据基线：工作树 2026-11-06（采集后出现并发提交，src 引用计数复核不变）
 //
 // 本图回答一个问题：shared 层内部如何分层，谁是底座、谁是装配体？
 //
@@ -53,6 +53,7 @@ digraph pokerlab_shared_internals {
   datadisplay -> utils [label="3",  penwidth=0.8];
   layout      -> utils [label="1",  penwidth=0.6];
   quiz        -> utils [label="1",  penwidth=0.6];
+  quiz        -> hooks [label="1",  penwidth=0.6];
 
   // 组件 → 契约
   edge [color="#6b4f8a"];
@@ -74,7 +75,6 @@ digraph pokerlab_shared_internals {
   edge [color="#8a6a3f"];
   quiz        -> feedback [label="3", penwidth=0.8, constraint=false];
   quiz        -> poker    [label="2", penwidth=0.7, constraint=false];
-  quiz        -> hooks    [label="1", penwidth=0.6];
   academy     -> ui       [label="1", penwidth=0.6, constraint=false];
   datadisplay -> ui       [label="1", penwidth=0.6, constraint=false];
   layout      -> ui       [label="1", penwidth=0.6, constraint=false];
@@ -87,5 +87,5 @@ digraph pokerlab_shared_internals {
 
   note [shape=note, style="filled", fillcolor="#fffdf5", color="#8a8377",
         label="读图要点\n契约层是被依赖的底座；utils 是最大的纯函数枢纽；\ncomponents/* 只向下依赖，无循环回到逻辑层；\nstores 只依赖 types，是与 feature 的运行时边界。\n\n传递效应\nshared 内部组合会放大传递消费者数：\nbutton 直接 6 → 传递 11；types/training 直接 1 → 传递 7。\n准入守卫按传递闭包计数（admissionGraph.ts:226-279）。"];
-  system -> note [style=invis];
+  { rank=sink; note; }
 }

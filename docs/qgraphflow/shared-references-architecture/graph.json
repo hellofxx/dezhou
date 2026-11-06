@@ -33,7 +33,15 @@
             "button / card / dialog / input / progress / select / toast / tooltip 共 8 个文件",
             "12 个消费方，71 个 import 位点",
             "ui 族豁免 ≥2 消费者，但禁止 0 消费"
-          ]
+          ],
+          "position": {
+            "x": 1071,
+            "y": 1137.5
+          },
+          "size": {
+            "width": 296,
+            "height": 208
+          }
         },
         {
           "id": "shared-poker",
@@ -52,7 +60,15 @@
             "9 个牌面与变体组件",
             "7 个消费方，25 个 import 位点",
             "CardSVG / CardBack / VariantGlyph 存在域内组合"
-          ]
+          ],
+          "position": {
+            "x": 1063,
+            "y": 468
+          },
+          "size": {
+            "width": 336,
+            "height": 160
+          }
         },
         {
           "id": "shared-quiz",
@@ -71,7 +87,15 @@
             "QuizCard + quizCardModel 共 2 个文件",
             "onboarding 与 range-trainer 两个消费方",
             "QuizCard 域内复用 quizCardModel"
-          ]
+          ],
+          "position": {
+            "x": 69,
+            "y": 803.5
+          },
+          "size": {
+            "width": 322,
+            "height": 304
+          }
         },
         {
           "id": "shared-feedback",
@@ -90,7 +114,15 @@
             "10 个反馈与结果页组件",
             "12 个消费方，45 个 import 位点",
             "DecisionAnalysis 域内组合 GradeIcon 等组件"
-          ]
+          ],
+          "position": {
+            "x": 547,
+            "y": 803.5
+          },
+          "size": {
+            "width": 360,
+            "height": 160
+          }
         },
         {
           "id": "shared-academy",
@@ -109,7 +141,15 @@
             "7 个学院组件 + ContentBlocks + index.ts facade",
             "strategy-academy 与 theory-academy 共 17 个 import 位点",
             "唯一保留的目录级 barrel"
-          ]
+          ],
+          "position": {
+            "x": 547,
+            "y": 603.5
+          },
+          "size": {
+            "width": 360,
+            "height": 160
+          }
         },
         {
           "id": "shared-data-display",
@@ -127,7 +167,15 @@
           "facts": [
             "ProgressBar / ProgressRing / StatCard / StatPair 共 4 个",
             "6 个消费方，14 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 547,
+            "y": 1205.5
+          },
+          "size": {
+            "width": 360,
+            "height": 134
+          }
         },
         {
           "id": "shared-system",
@@ -145,7 +193,15 @@
           "facts": [
             "ErrorBoundary 单文件",
             "app / layouts / main 三个外壳消费"
-          ]
+          ],
+          "position": {
+            "x": 32,
+            "y": 655.5
+          },
+          "size": {
+            "width": 359,
+            "height": 108
+          }
         },
         {
           "id": "shared-layout",
@@ -163,7 +219,15 @@
           "facts": [
             "BackLink 单文件",
             "8 个消费方，29 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 558,
+            "y": 1388.5
+          },
+          "size": {
+            "width": 349,
+            "height": 112
+          }
         },
         {
           "id": "shared-constants",
@@ -181,7 +245,15 @@
           "facts": [
             "app / headsUpRules / mentorStyles / poker 共 4 个文件",
             "9 个消费方，19 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 2254.5,
+            "y": 111
+          },
+          "size": {
+            "width": 240,
+            "height": 160
+          }
         },
         {
           "id": "shared-data",
@@ -199,7 +271,15 @@
           "facts": [
             "opponentProfiles 单文件",
             "gto-simulator 与 strategy-academy 消费"
-          ]
+          ],
+          "position": {
+            "x": 2283,
+            "y": 311
+          },
+          "size": {
+            "width": 258,
+            "height": 108
+          }
         },
         {
           "id": "shared-hooks",
@@ -217,7 +297,15 @@
           "facts": [
             "useIsMobile / useRovingGridNav 共 2 个",
             "6 个消费方，6 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 547,
+            "y": 1003.5
+          },
+          "size": {
+            "width": 242,
+            "height": 108
+          }
         },
         {
           "id": "shared-stores",
@@ -236,7 +324,15 @@
             "trainingEvents / debugMode / 3 个数据源注册表",
             "7 个消费方，31 个 import 位点",
             "debugMode 是 shared 唯一独立 persist store"
-          ]
+          ],
+          "position": {
+            "x": 2239,
+            "y": 1549.5
+          },
+          "size": {
+            "width": 302,
+            "height": 108
+          }
         },
         {
           "id": "shared-types",
@@ -255,7 +351,15 @@
             "15 个类型模块",
             "9 个消费方，189 个 import 位点",
             "类型文件之间存在组合引用"
-          ]
+          ],
+          "position": {
+            "x": 2697,
+            "y": 32
+          },
+          "size": {
+            "width": 240,
+            "height": 400
+          }
         },
         {
           "id": "shared-utils",
@@ -274,7 +378,15 @@
             "17 个纯函数工具文件",
             "11 个消费方，195 个 import 位点",
             "seededShuffle / spacedRepetition 等存在域内复用"
-          ]
+          ],
+          "position": {
+            "x": 1843,
+            "y": 699.5
+          },
+          "size": {
+            "width": 240,
+            "height": 352
+          }
         }
       ],
       "edges": [
@@ -290,6 +402,30 @@
             "lineStart": 2,
             "lineEnd": 9,
             "symbol": "Dialog"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 887,
+                "y": 787.5
+              },
+              {
+                "x": 1115,
+                "y": 787.5
+              },
+              {
+                "x": 1115,
+                "y": 1125.5
+              },
+              {
+                "x": 1142.2,
+                "y": 1125.5
+              }
+            ],
+            "labelAt": {
+              "x": 1001,
+              "y": 787.5
+            }
           }
         },
         {
@@ -304,6 +440,26 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "AcademyBridgeCta"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 919,
+                "y": 647.5
+              },
+              {
+                "x": 2793,
+                "y": 647.5
+              },
+              {
+                "x": 2793,
+                "y": 444
+              }
+            ],
+            "labelAt": {
+              "x": 2793,
+              "y": 539.75
+            }
           }
         },
         {
@@ -318,6 +474,22 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 919,
+                "y": 743.5
+              },
+              {
+                "x": 1831,
+                "y": 743.5
+              }
+            ],
+            "labelAt": {
+              "x": 1191,
+              "y": 743.5
+            }
           }
         },
         {
@@ -332,6 +504,22 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "Card"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 919,
+                "y": 1284.5
+              },
+              {
+                "x": 1059,
+                "y": 1284.5
+              }
+            ],
+            "labelAt": {
+              "x": 989,
+              "y": 1284.5
+            }
           }
         },
         {
@@ -346,6 +534,26 @@
             "lineStart": 1,
             "lineEnd": 1,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 887,
+                "y": 1193.5
+              },
+              {
+                "x": 887,
+                "y": 1031.5
+              },
+              {
+                "x": 1831,
+                "y": 1031.5
+              }
+            ],
+            "labelAt": {
+              "x": 887,
+              "y": 1118.5
+            }
           }
         },
         {
@@ -360,6 +568,26 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "Button"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 919,
+                "y": 943.5
+              },
+              {
+                "x": 1091,
+                "y": 943.5
+              },
+              {
+                "x": 1091,
+                "y": 1125.5
+              }
+            ],
+            "labelAt": {
+              "x": 999,
+              "y": 943.5
+            }
           }
         },
         {
@@ -374,6 +602,26 @@
             "lineStart": 16,
             "lineEnd": 20,
             "symbol": "GRADE_DISPLAY_CONFIG"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1819,
+                "y": 823.5
+              },
+              {
+                "x": 1819,
+                "y": 468
+              },
+              {
+                "x": 2757,
+                "y": 468
+              }
+            ],
+            "labelAt": {
+              "x": 1179,
+              "y": 823.5
+            }
           }
         },
         {
@@ -388,6 +636,22 @@
             "lineStart": 14,
             "lineEnd": 14,
             "symbol": "transitionStandard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 919,
+                "y": 871.5
+              },
+              {
+                "x": 1831,
+                "y": 871.5
+              }
+            ],
+            "labelAt": {
+              "x": 1287.01,
+              "y": 871.5
+            }
           }
         },
         {
@@ -402,6 +666,26 @@
             "lineStart": 19,
             "lineEnd": 19,
             "symbol": "Button"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 887,
+                "y": 1376.5
+              },
+              {
+                "x": 1091,
+                "y": 1376.5
+              },
+              {
+                "x": 1091,
+                "y": 1357.5
+              }
+            ],
+            "labelAt": {
+              "x": 989,
+              "y": 1376.5
+            }
           }
         },
         {
@@ -416,6 +700,26 @@
             "lineStart": 20,
             "lineEnd": 20,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 919,
+                "y": 1408.5
+              },
+              {
+                "x": 1939,
+                "y": 1408.5
+              },
+              {
+                "x": 1939,
+                "y": 1063.5
+              }
+            ],
+            "labelAt": {
+              "x": 1239,
+              "y": 1408.5
+            }
           }
         },
         {
@@ -430,6 +734,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "RANK_CARD_FACE_DISPLAY"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1319.8,
+                "y": 456
+              },
+              {
+                "x": 1319.8,
+                "y": 227
+              },
+              {
+                "x": 2242.5,
+                "y": 227
+              }
+            ],
+            "labelAt": {
+              "x": 1795.15,
+              "y": 227
+            }
           }
         },
         {
@@ -444,6 +768,26 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "Card"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1379,
+                "y": 287
+              },
+              {
+                "x": 2685,
+                "y": 287
+              },
+              {
+                "x": 2685,
+                "y": 256
+              }
+            ],
+            "labelAt": {
+              "x": 1379,
+              "y": 377.5
+            }
           }
         },
         {
@@ -458,6 +802,26 @@
             "lineStart": 8,
             "lineEnd": 8,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1411,
+                "y": 608
+              },
+              {
+                "x": 1863,
+                "y": 608
+              },
+              {
+                "x": 1863,
+                "y": 687.5
+              }
+            ],
+            "labelAt": {
+              "x": 1631,
+              "y": 608
+            }
           }
         },
         {
@@ -472,6 +836,22 @@
             "lineStart": 12,
             "lineEnd": 12,
             "symbol": "GradeIcon"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 403,
+                "y": 883.5
+              },
+              {
+                "x": 535,
+                "y": 883.5
+              }
+            ],
+            "labelAt": {
+              "x": 469,
+              "y": 883.5
+            }
           }
         },
         {
@@ -486,6 +866,22 @@
             "lineStart": 8,
             "lineEnd": 8,
             "symbol": "PositionBadge"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 534,
+                "y": 823.5
+              },
+              {
+                "x": 534,
+                "y": 584
+              }
+            ],
+            "labelAt": {
+              "x": 462.5,
+              "y": 823.5
+            }
           }
         },
         {
@@ -500,6 +896,22 @@
             "lineStart": 13,
             "lineEnd": 13,
             "symbol": "renderMentorFeedback"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 8,
+                "y": 823.5
+              },
+              {
+                "x": 8,
+                "y": 251
+              }
+            ],
+            "labelAt": {
+              "x": 8,
+              "y": 537.25
+            }
           }
         },
         {
@@ -514,6 +926,22 @@
             "lineStart": 20,
             "lineEnd": 20,
             "symbol": "useIsMobile"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 403,
+                "y": 1057.5
+              },
+              {
+                "x": 535,
+                "y": 1057.5
+              }
+            ],
+            "labelAt": {
+              "x": 469,
+              "y": 1057.5
+            }
           }
         },
         {
@@ -528,6 +956,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "RangeAction"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 403,
+                "y": 823.5
+              },
+              {
+                "x": 403,
+                "y": 444
+              },
+              {
+                "x": 2717,
+                "y": 444
+              }
+            ],
+            "labelAt": {
+              "x": 1464,
+              "y": 444
+            }
           }
         },
         {
@@ -542,6 +990,26 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "MOTION_DURATION"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 403,
+                "y": 979.5
+              },
+              {
+                "x": 1831,
+                "y": 979.5
+              },
+              {
+                "x": 1831,
+                "y": 969.1
+              }
+            ],
+            "labelAt": {
+              "x": 1167.01,
+              "y": 979.5
+            }
           }
         },
         {
@@ -556,6 +1024,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1379,
+                "y": 1157.5
+              },
+              {
+                "x": 1903,
+                "y": 1157.5
+              },
+              {
+                "x": 1903,
+                "y": 1063.5
+              }
+            ],
+            "labelAt": {
+              "x": 1635,
+              "y": 1157.5
+            }
           }
         },
         {
@@ -570,6 +1058,22 @@
             "lineStart": 1,
             "lineEnd": 1,
             "symbol": "VariantRuleInfo"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 2506.5,
+                "y": 155
+              },
+              {
+                "x": 2685,
+                "y": 155
+              }
+            ],
+            "labelAt": {
+              "x": 2595.75,
+              "y": 155
+            }
           }
         },
         {
@@ -584,6 +1088,22 @@
             "lineStart": 1,
             "lineEnd": 1,
             "symbol": "OpponentProfile"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 2553,
+                "y": 365
+              },
+              {
+                "x": 2685,
+                "y": 365
+              }
+            ],
+            "labelAt": {
+              "x": 2619,
+              "y": 365
+            }
           }
         },
         {
@@ -598,6 +1118,26 @@
             "lineStart": 10,
             "lineEnd": 10,
             "symbol": "AcademyDataSource"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 2553,
+                "y": 1569.5
+              },
+              {
+                "x": 2841,
+                "y": 1569.5
+              },
+              {
+                "x": 2841,
+                "y": 444
+              }
+            ],
+            "labelAt": {
+              "x": 2697,
+              "y": 1569.5
+            }
           }
         },
         {
@@ -612,6 +1152,26 @@
             "lineStart": 2,
             "lineEnd": 2,
             "symbol": "SUITS"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 2063,
+                "y": 687.5
+              },
+              {
+                "x": 2242.5,
+                "y": 687.5
+              },
+              {
+                "x": 2242.5,
+                "y": 251
+              }
+            ],
+            "labelAt": {
+              "x": 2160.75,
+              "y": 687.5
+            }
           }
         },
         {
@@ -626,9 +1186,34 @@
             "lineStart": 2,
             "lineEnd": 2,
             "symbol": "MasteryState"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 2095,
+                "y": 719.5
+              },
+              {
+                "x": 2877,
+                "y": 719.5
+              },
+              {
+                "x": 2877,
+                "y": 444
+              }
+            ],
+            "labelAt": {
+              "x": 2624,
+              "y": 719.5
+            }
           }
         }
-      ]
+      ],
+      "layout": {
+        "direction": "right",
+        "version": "templates-v4-clearance-compact-elkjs-0.11.0",
+        "strategy": "layered-3"
+      }
     },
     {
       "meta": {
@@ -661,7 +1246,15 @@
           "facts": [
             "组件族导入 13 处：反馈 6 / 牌面 6 / 基础件 1",
             "支撑域导入 69 处：类型 44 / 工具 15 / 常量 4 / 画像 3 / Hook 2 / store 1"
-          ]
+          ],
+          "position": {
+            "x": 96,
+            "y": 828
+          },
+          "size": {
+            "width": 296,
+            "height": 160
+          }
         },
         {
           "id": "hand-history",
@@ -679,7 +1272,15 @@
           "facts": [
             "组件族导入 6 处：牌面 3 / 反馈 2 / 展示 1",
             "支撑域导入 33 处：类型 28 / 工具 5"
-          ]
+          ],
+          "position": {
+            "x": 109,
+            "y": 480
+          },
+          "size": {
+            "width": 283,
+            "height": 160
+          }
         },
         {
           "id": "onboarding",
@@ -697,7 +1298,15 @@
           "facts": [
             "组件族导入 6 处：基础件 5 / 测验 1",
             "支撑域导入 9 处：类型 5 / 工具 4"
-          ]
+          ],
+          "position": {
+            "x": 144,
+            "y": 2404
+          },
+          "size": {
+            "width": 248,
+            "height": 112
+          }
         },
         {
           "id": "pot-odds",
@@ -715,7 +1324,15 @@
           "facts": [
             "组件族导入 14 处：基础件 8 / 反馈 5 / 返回 1",
             "支撑域导入 15 处：工具 7 / 类型 6 / Hook 1 / store 1"
-          ]
+          ],
+          "position": {
+            "x": 150,
+            "y": 1833
+          },
+          "size": {
+            "width": 242,
+            "height": 160
+          }
         },
         {
           "id": "progress",
@@ -733,7 +1350,15 @@
           "facts": [
             "组件族导入 40 处：基础件 30 / 反馈 4 / 牌面 4 / 展示 1 / 返回 1",
             "支撑域导入 71 处：工具 43 / 类型 16 / store 10 / 常量 2"
-          ]
+          ],
+          "position": {
+            "x": 127,
+            "y": 1213
+          },
+          "size": {
+            "width": 265,
+            "height": 256
+          }
         },
         {
           "id": "puzzle-trainer",
@@ -751,7 +1376,15 @@
           "facts": [
             "组件族导入 18 处：反馈 7 / 基础件 7 / 返回 3 / 展示 1",
             "支撑域导入 19 处：工具 12 / 类型 4 / store 2 / Hook 1"
-          ]
+          ],
+          "position": {
+            "x": 93,
+            "y": 1547
+          },
+          "size": {
+            "width": 299,
+            "height": 208
+          }
         },
         {
           "id": "range-trainer",
@@ -769,7 +1402,15 @@
           "facts": [
             "组件族导入 15 处：基础件 10 / 反馈 2 / 展示 1 / 返回 1 / 测验 1",
             "支撑域导入 45 处：类型 27 / 工具 10 / 常量 4 / store 3 / Hook 1"
-          ]
+          ],
+          "position": {
+            "x": 105,
+            "y": 2071
+          },
+          "size": {
+            "width": 287,
+            "height": 256
+          }
         },
         {
           "id": "shared-ui",
@@ -788,7 +1429,15 @@
             "button / card / dialog / input / progress / select / toast / tooltip 共 8 个文件",
             "12 个消费方，71 个 import 位点",
             "ui 族豁免 ≥2 消费者，但禁止 0 消费"
-          ]
+          ],
+          "position": {
+            "x": 1604,
+            "y": 1072
+          },
+          "size": {
+            "width": 296,
+            "height": 304
+          }
         },
         {
           "id": "shared-poker",
@@ -807,7 +1456,15 @@
             "9 个牌面与变体组件",
             "7 个消费方，25 个 import 位点",
             "CardSVG / CardBack / VariantGlyph 存在域内组合"
-          ]
+          ],
+          "position": {
+            "x": 1604,
+            "y": 32
+          },
+          "size": {
+            "width": 336,
+            "height": 160
+          }
         },
         {
           "id": "shared-quiz",
@@ -826,7 +1483,15 @@
             "QuizCard + quizCardModel 共 2 个文件",
             "onboarding 与 range-trainer 两个消费方",
             "QuizCard 域内复用 quizCardModel"
-          ]
+          ],
+          "position": {
+            "x": 1604,
+            "y": 2198
+          },
+          "size": {
+            "width": 322,
+            "height": 112
+          }
         },
         {
           "id": "shared-feedback",
@@ -845,7 +1510,15 @@
             "10 个反馈与结果页组件",
             "12 个消费方，45 个 import 位点",
             "DecisionAnalysis 域内组合 GradeIcon 等组件"
-          ]
+          ],
+          "position": {
+            "x": 1604,
+            "y": 480
+          },
+          "size": {
+            "width": 360,
+            "height": 304
+          }
         },
         {
           "id": "shared-academy",
@@ -864,7 +1537,15 @@
             "7 个学院组件 + ContentBlocks + index.ts facade",
             "strategy-academy 与 theory-academy 共 17 个 import 位点",
             "唯一保留的目录级 barrel"
-          ]
+          ],
+          "position": {
+            "x": 32,
+            "y": 680
+          },
+          "size": {
+            "width": 360,
+            "height": 108
+          }
         },
         {
           "id": "shared-data-display",
@@ -882,7 +1563,15 @@
           "facts": [
             "ProgressBar / ProgressRing / StatCard / StatPair 共 4 个",
             "6 个消费方，14 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 1604,
+            "y": 232
+          },
+          "size": {
+            "width": 360,
+            "height": 208
+          }
         },
         {
           "id": "shared-system",
@@ -900,7 +1589,15 @@
           "facts": [
             "ErrorBoundary 单文件",
             "app / layouts / main 三个外壳消费"
-          ]
+          ],
+          "position": {
+            "x": 32.5,
+            "y": 332
+          },
+          "size": {
+            "width": 359,
+            "height": 108
+          }
         },
         {
           "id": "shared-layout",
@@ -918,7 +1615,15 @@
           "facts": [
             "BackLink 单文件",
             "8 个消费方，29 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 1604,
+            "y": 824
+          },
+          "size": {
+            "width": 349,
+            "height": 208
+          }
         }
       ],
       "edges": [
@@ -934,6 +1639,30 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "PositionBadge"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 908
+              },
+              {
+                "x": 668,
+                "y": 908
+              },
+              {
+                "x": 668,
+                "y": 64
+              },
+              {
+                "x": 1592,
+                "y": 64
+              }
+            ],
+            "labelAt": {
+              "x": 530,
+              "y": 908
+            }
           }
         },
         {
@@ -948,6 +1677,38 @@
             "lineStart": 7,
             "lineEnd": 7,
             "symbol": "GradeIcon"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 860
+              },
+              {
+                "x": 416,
+                "y": 860
+              },
+              {
+                "x": 416,
+                "y": 718
+              },
+              {
+                "x": 812,
+                "y": 718
+              },
+              {
+                "x": 812,
+                "y": 512
+              },
+              {
+                "x": 1592,
+                "y": 512
+              }
+            ],
+            "labelAt": {
+              "x": 1208,
+              "y": 512
+            }
           }
         },
         {
@@ -962,6 +1723,26 @@
             "lineStart": 10,
             "lineEnd": 10,
             "symbol": "Card"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 372,
+                "y": 1000
+              },
+              {
+                "x": 372,
+                "y": 1092
+              },
+              {
+                "x": 1592,
+                "y": 1092
+              }
+            ],
+            "labelAt": {
+              "x": 372,
+              "y": 1040
+            }
           }
         },
         {
@@ -976,6 +1757,38 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "PokerCard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 608
+              },
+              {
+                "x": 416,
+                "y": 608
+              },
+              {
+                "x": 416,
+                "y": 639
+              },
+              {
+                "x": 620,
+                "y": 639
+              },
+              {
+                "x": 620,
+                "y": 112
+              },
+              {
+                "x": 1592,
+                "y": 112
+              }
+            ],
+            "labelAt": {
+              "x": 518,
+              "y": 639
+            }
           }
         },
         {
@@ -990,6 +1803,22 @@
             "lineStart": 8,
             "lineEnd": 8,
             "symbol": "EmptyState"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 560
+              },
+              {
+                "x": 1592,
+                "y": 560
+              }
+            ],
+            "labelAt": {
+              "x": 1016.01,
+              "y": 560
+            }
           }
         },
         {
@@ -1004,6 +1833,30 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "StatCard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 512
+              },
+              {
+                "x": 416,
+                "y": 512
+              },
+              {
+                "x": 416,
+                "y": 264
+              },
+              {
+                "x": 1592,
+                "y": 264
+              }
+            ],
+            "labelAt": {
+              "x": 1010,
+              "y": 264
+            }
           }
         },
         {
@@ -1018,6 +1871,30 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "Button"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 2481.6
+              },
+              {
+                "x": 2270,
+                "y": 2481.6
+              },
+              {
+                "x": 2270,
+                "y": 1388
+              },
+              {
+                "x": 1828.8,
+                "y": 1388
+              }
+            ],
+            "labelAt": {
+              "x": 1331,
+              "y": 2481.6
+            }
           }
         },
         {
@@ -1032,6 +1909,26 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "QuizCard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 2424
+              },
+              {
+                "x": 1624,
+                "y": 2424
+              },
+              {
+                "x": 1624,
+                "y": 2322
+              }
+            ],
+            "labelAt": {
+              "x": 1008,
+              "y": 2424
+            }
           }
         },
         {
@@ -1046,6 +1943,26 @@
             "lineStart": 2,
             "lineEnd": 2,
             "symbol": "Card"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1949
+              },
+              {
+                "x": 1624,
+                "y": 1949
+              },
+              {
+                "x": 1624,
+                "y": 1388
+              }
+            ],
+            "labelAt": {
+              "x": 1008,
+              "y": 1949
+            }
           }
         },
         {
@@ -1060,6 +1977,30 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "ComponentSkeleton"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1853
+              },
+              {
+                "x": 1124,
+                "y": 1853
+              },
+              {
+                "x": 1124,
+                "y": 796
+              },
+              {
+                "x": 1844,
+                "y": 796
+              }
+            ],
+            "labelAt": {
+              "x": 758,
+              "y": 1853
+            }
           }
         },
         {
@@ -1074,6 +2015,30 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1913
+              },
+              {
+                "x": 1196,
+                "y": 1913
+              },
+              {
+                "x": 1196,
+                "y": 856
+              },
+              {
+                "x": 1592,
+                "y": 856
+              }
+            ],
+            "labelAt": {
+              "x": 794,
+              "y": 1913
+            }
           }
         },
         {
@@ -1088,6 +2053,38 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "Card"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1437
+              },
+              {
+                "x": 416,
+                "y": 1437
+              },
+              {
+                "x": 416,
+                "y": 1499
+              },
+              {
+                "x": 1292,
+                "y": 1499
+              },
+              {
+                "x": 1292,
+                "y": 1248
+              },
+              {
+                "x": 1592,
+                "y": 1248
+              }
+            ],
+            "labelAt": {
+              "x": 1448,
+              "y": 1248
+            }
           }
         },
         {
@@ -1102,6 +2099,38 @@
             "lineStart": 17,
             "lineEnd": 17,
             "symbol": "EmptyState"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1293
+              },
+              {
+                "x": 464,
+                "y": 1293
+              },
+              {
+                "x": 464,
+                "y": 1262
+              },
+              {
+                "x": 908,
+                "y": 1262
+              },
+              {
+                "x": 908,
+                "y": 656
+              },
+              {
+                "x": 1592,
+                "y": 656
+              }
+            ],
+            "labelAt": {
+              "x": 1256,
+              "y": 656
+            }
           }
         },
         {
@@ -1116,6 +2145,30 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1317
+              },
+              {
+                "x": 998,
+                "y": 1317
+              },
+              {
+                "x": 998,
+                "y": 928
+              },
+              {
+                "x": 1592,
+                "y": 928
+              }
+            ],
+            "labelAt": {
+              "x": 1301,
+              "y": 928
+            }
           }
         },
         {
@@ -1130,6 +2183,38 @@
             "lineStart": 17,
             "lineEnd": 17,
             "symbol": "StatCard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1245
+              },
+              {
+                "x": 416,
+                "y": 1245
+              },
+              {
+                "x": 416,
+                "y": 1183
+              },
+              {
+                "x": 764,
+                "y": 1183
+              },
+              {
+                "x": 764,
+                "y": 312
+              },
+              {
+                "x": 1592,
+                "y": 312
+              }
+            ],
+            "labelAt": {
+              "x": 590,
+              "y": 1183
+            }
           }
         },
         {
@@ -1144,6 +2229,38 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "VariantGlyph"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1389
+              },
+              {
+                "x": 464,
+                "y": 1389
+              },
+              {
+                "x": 464,
+                "y": 1420
+              },
+              {
+                "x": 716,
+                "y": 1420
+              },
+              {
+                "x": 716,
+                "y": 160
+              },
+              {
+                "x": 1592,
+                "y": 160
+              }
+            ],
+            "labelAt": {
+              "x": 590,
+              "y": 1420
+            }
           }
         },
         {
@@ -1158,6 +2275,38 @@
             "lineStart": 17,
             "lineEnd": 17,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1675
+              },
+              {
+                "x": 464,
+                "y": 1675
+              },
+              {
+                "x": 464,
+                "y": 1706
+              },
+              {
+                "x": 1244,
+                "y": 1706
+              },
+              {
+                "x": 1244,
+                "y": 952
+              },
+              {
+                "x": 1592,
+                "y": 952
+              }
+            ],
+            "labelAt": {
+              "x": 854,
+              "y": 1706
+            }
           }
         },
         {
@@ -1172,6 +2321,38 @@
             "lineStart": 20,
             "lineEnd": 20,
             "symbol": "Progress"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1723
+              },
+              {
+                "x": 416,
+                "y": 1723
+              },
+              {
+                "x": 416,
+                "y": 1785
+              },
+              {
+                "x": 1436,
+                "y": 1785
+              },
+              {
+                "x": 1436,
+                "y": 1296
+              },
+              {
+                "x": 1592,
+                "y": 1296
+              }
+            ],
+            "labelAt": {
+              "x": 903.99,
+              "y": 1785
+            }
           }
         },
         {
@@ -1186,6 +2367,30 @@
             "lineStart": 14,
             "lineEnd": 14,
             "symbol": "MobileFeedbackSheet"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1627
+              },
+              {
+                "x": 1052,
+                "y": 1627
+              },
+              {
+                "x": 1052,
+                "y": 704
+              },
+              {
+                "x": 1592,
+                "y": 704
+              }
+            ],
+            "labelAt": {
+              "x": 722,
+              "y": 1627
+            }
           }
         },
         {
@@ -1200,6 +2405,38 @@
             "lineStart": 14,
             "lineEnd": 14,
             "symbol": "StatCard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 1579
+              },
+              {
+                "x": 416,
+                "y": 1579
+              },
+              {
+                "x": 416,
+                "y": 1548
+              },
+              {
+                "x": 860,
+                "y": 1548
+              },
+              {
+                "x": 860,
+                "y": 360
+              },
+              {
+                "x": 1592,
+                "y": 360
+              }
+            ],
+            "labelAt": {
+              "x": 638,
+              "y": 1548
+            }
           }
         },
         {
@@ -1214,6 +2451,22 @@
             "lineStart": 7,
             "lineEnd": 7,
             "symbol": "QuizCard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 2254
+              },
+              {
+                "x": 1592,
+                "y": 2254
+              }
+            ],
+            "labelAt": {
+              "x": 998,
+              "y": 2254
+            }
           }
         },
         {
@@ -1228,6 +2481,26 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "Card"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 2091
+              },
+              {
+                "x": 1675.2,
+                "y": 2091
+              },
+              {
+                "x": 1675.2,
+                "y": 1388
+              }
+            ],
+            "labelAt": {
+              "x": 1033.6,
+              "y": 2091
+            }
           }
         },
         {
@@ -1242,6 +2515,30 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 2199
+              },
+              {
+                "x": 1340,
+                "y": 2199
+              },
+              {
+                "x": 1340,
+                "y": 1000
+              },
+              {
+                "x": 1592,
+                "y": 1000
+              }
+            ],
+            "labelAt": {
+              "x": 866,
+              "y": 2199
+            }
           }
         },
         {
@@ -1256,6 +2553,26 @@
             "lineStart": 7,
             "lineEnd": 7,
             "symbol": "StatCard"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 372,
+                "y": 2059
+              },
+              {
+                "x": 1976,
+                "y": 2059
+              },
+              {
+                "x": 1976,
+                "y": 420
+              }
+            ],
+            "labelAt": {
+              "x": 1174,
+              "y": 2059
+            }
           }
         },
         {
@@ -1270,9 +2587,38 @@
             "lineStart": 8,
             "lineEnd": 8,
             "symbol": "ResultActions"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 404,
+                "y": 2134.2
+              },
+              {
+                "x": 2128,
+                "y": 2134.2
+              },
+              {
+                "x": 2128,
+                "y": 796
+              },
+              {
+                "x": 1880,
+                "y": 796
+              }
+            ],
+            "labelAt": {
+              "x": 2128,
+              "y": 1510.1
+            }
           }
         }
-      ]
+      ],
+      "layout": {
+        "direction": "right",
+        "version": "templates-v4-clearance-compact-elkjs-0.11.0",
+        "strategy": "layered-3"
+      }
     },
     {
       "meta": {
@@ -1305,7 +2651,15 @@
           "facts": [
             "组件族导入 3 处：反馈 1 / 返回 1 / 基础件 1",
             "支撑域导入 2 处：工具 2"
-          ]
+          ],
+          "position": {
+            "x": 355.5,
+            "y": 32
+          },
+          "size": {
+            "width": 265,
+            "height": 108
+          }
         },
         {
           "id": "strategy-academy",
@@ -1323,7 +2677,15 @@
           "facts": [
             "组件族导入 53 处：返回 16 / 牌面 11 / 学院 9 / 反馈 8 / 展示 7 / 基础件 2",
             "支撑域导入 92 处：工具 56 / 类型 24 / store 8 / 常量 2 / 画像 1 / Hook 1"
-          ]
+          ],
+          "position": {
+            "x": 1681,
+            "y": 32
+          },
+          "size": {
+            "width": 335,
+            "height": 108
+          }
         },
         {
           "id": "theory-academy",
@@ -1341,7 +2703,15 @@
           "facts": [
             "组件族导入 29 处：学院 8 / 反馈 8 / 返回 5 / 基础件 4 / 展示 3 / 牌面 1",
             "支撑域导入 82 处：工具 37 / 类型 35 / store 6 / 常量 4"
-          ]
+          ],
+          "position": {
+            "x": 3106.5,
+            "y": 32
+          },
+          "size": {
+            "width": 310,
+            "height": 108
+          }
         },
         {
           "id": "shell-app",
@@ -1359,7 +2729,15 @@
           "facts": [
             "组件族导入 2 处：反馈 1 / 错误边界 1",
             "无支撑域引用"
-          ]
+          ],
+          "position": {
+            "x": 32,
+            "y": 32
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shell-layouts",
@@ -1377,7 +2755,15 @@
           "facts": [
             "组件族导入 5 处：基础件 2 / 反馈 1 / 返回 1 / 错误边界 1",
             "支撑域导入 6 处：工具 4 / 常量 2"
-          ]
+          ],
+          "position": {
+            "x": 776.5,
+            "y": 32
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shell-main",
@@ -1395,7 +2781,15 @@
           "facts": [
             "组件族导入 2 处：错误边界 1 / 基础件 1",
             "支撑域导入 1 处：常量 1"
-          ]
+          ],
+          "position": {
+            "x": 1336.5,
+            "y": 32
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shared-ui",
@@ -1414,7 +2808,15 @@
             "button / card / dialog / input / progress / select / toast / tooltip 共 8 个文件",
             "12 个消费方，71 个 import 位点",
             "ui 族豁免 ≥2 消费者，但禁止 0 消费"
-          ]
+          ],
+          "position": {
+            "x": 2601.5,
+            "y": 1082
+          },
+          "size": {
+            "width": 296,
+            "height": 108
+          }
         },
         {
           "id": "shared-poker",
@@ -1433,7 +2835,15 @@
             "9 个牌面与变体组件",
             "7 个消费方，25 个 import 位点",
             "CardSVG / CardBack / VariantGlyph 存在域内组合"
-          ]
+          ],
+          "position": {
+            "x": 3817.5,
+            "y": 1082
+          },
+          "size": {
+            "width": 336,
+            "height": 108
+          }
         },
         {
           "id": "shared-quiz",
@@ -1452,7 +2862,15 @@
             "QuizCard + quizCardModel 共 2 个文件",
             "onboarding 与 range-trainer 两个消费方",
             "QuizCard 域内复用 quizCardModel"
-          ]
+          ],
+          "position": {
+            "x": 3456.5,
+            "y": 32
+          },
+          "size": {
+            "width": 322,
+            "height": 108
+          }
         },
         {
           "id": "shared-feedback",
@@ -1471,7 +2889,15 @@
             "10 个反馈与结果页组件",
             "12 个消费方，45 个 import 位点",
             "DecisionAnalysis 域内组合 GradeIcon 等组件"
-          ]
+          ],
+          "position": {
+            "x": 1812.5,
+            "y": 1082
+          },
+          "size": {
+            "width": 360,
+            "height": 108
+          }
         },
         {
           "id": "shared-academy",
@@ -1490,7 +2916,15 @@
             "7 个学院组件 + ContentBlocks + index.ts facade",
             "strategy-academy 与 theory-academy 共 17 个 import 位点",
             "唯一保留的目录级 barrel"
-          ]
+          ],
+          "position": {
+            "x": 3337.5,
+            "y": 1082
+          },
+          "size": {
+            "width": 360,
+            "height": 108
+          }
         },
         {
           "id": "shared-data-display",
@@ -1508,7 +2942,15 @@
           "facts": [
             "ProgressBar / ProgressRing / StatCard / StatPair 共 4 个",
             "6 个消费方，14 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 2937.5,
+            "y": 1082
+          },
+          "size": {
+            "width": 360,
+            "height": 134
+          }
         },
         {
           "id": "shared-system",
@@ -1526,7 +2968,15 @@
           "facts": [
             "ErrorBoundary 单文件",
             "app / layouts / main 三个外壳消费"
-          ]
+          ],
+          "position": {
+            "x": 957,
+            "y": 1082
+          },
+          "size": {
+            "width": 359,
+            "height": 108
+          }
         },
         {
           "id": "shared-layout",
@@ -1544,7 +2994,15 @@
           "facts": [
             "BackLink 单文件",
             "8 个消费方，29 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 2212.5,
+            "y": 1082
+          },
+          "size": {
+            "width": 349,
+            "height": 108
+          }
         }
       ],
       "edges": [
@@ -1560,6 +3018,30 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "PageSkeleton"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 152,
+                "y": 152
+              },
+              {
+                "x": 152,
+                "y": 1374
+              },
+              {
+                "x": 1800.5,
+                "y": 1374
+              },
+              {
+                "x": 1800.5,
+                "y": 1160
+              }
+            ],
+            "labelAt": {
+              "x": 152,
+              "y": 757
+            }
           }
         },
         {
@@ -1574,6 +3056,26 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "ErrorBoundary"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 252,
+                "y": 152
+              },
+              {
+                "x": 252,
+                "y": 1102
+              },
+              {
+                "x": 945,
+                "y": 1102
+              }
+            ],
+            "labelAt": {
+              "x": 252,
+              "y": 621
+            }
           }
         },
         {
@@ -1588,6 +3090,38 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "Toaster"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1480.5,
+                "y": 152
+              },
+              {
+                "x": 1480.5,
+                "y": 164
+              },
+              {
+                "x": 1580.5,
+                "y": 164
+              },
+              {
+                "x": 1580.5,
+                "y": 674
+              },
+              {
+                "x": 2749.5,
+                "y": 674
+              },
+              {
+                "x": 2749.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 1580.5,
+              "y": 419
+            }
           }
         },
         {
@@ -1602,6 +3136,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "ErrorBoundary"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1356.5,
+                "y": 152
+              },
+              {
+                "x": 1356.5,
+                "y": 1102
+              },
+              {
+                "x": 1328,
+                "y": 1102
+              }
+            ],
+            "labelAt": {
+              "x": 1356.5,
+              "y": 621
+            }
           }
         },
         {
@@ -1616,6 +3170,30 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 600.5,
+                "y": 152
+              },
+              {
+                "x": 600.5,
+                "y": 1302
+              },
+              {
+                "x": 2200.5,
+                "y": 1302
+              },
+              {
+                "x": 2200.5,
+                "y": 1160
+              }
+            ],
+            "labelAt": {
+              "x": 1366.75,
+              "y": 1302
+            }
           }
         },
         {
@@ -1630,6 +3208,30 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "Button"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 512,
+                "y": 152
+              },
+              {
+                "x": 512,
+                "y": 1259
+              },
+              {
+                "x": 2589.5,
+                "y": 1259
+              },
+              {
+                "x": 2589.5,
+                "y": 1160
+              }
+            ],
+            "labelAt": {
+              "x": 512,
+              "y": 699.5
+            }
           }
         },
         {
@@ -1644,6 +3246,26 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "EmptyState"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 632.5,
+                "y": 120
+              },
+              {
+                "x": 632.5,
+                "y": 1070
+              },
+              {
+                "x": 1832.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 1416.51,
+              "y": 1070
+            }
           }
         },
         {
@@ -1658,6 +3280,38 @@
             "lineStart": 20,
             "lineEnd": 20,
             "symbol": "VariantToggle"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1920.5,
+                "y": 152
+              },
+              {
+                "x": 1920.5,
+                "y": 212
+              },
+              {
+                "x": 2567,
+                "y": 212
+              },
+              {
+                "x": 2567,
+                "y": 434
+              },
+              {
+                "x": 3961.5,
+                "y": 434
+              },
+              {
+                "x": 3961.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 2567,
+              "y": 323
+            }
           }
         },
         {
@@ -1672,6 +3326,26 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "ProgressRing"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 2028,
+                "y": 62
+              },
+              {
+                "x": 3093.5,
+                "y": 62
+              },
+              {
+                "x": 3093.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 2554.75,
+              "y": 62
+            }
           }
         },
         {
@@ -1686,6 +3360,30 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "PageSkeleton"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1824.5,
+                "y": 152
+              },
+              {
+                "x": 1824.5,
+                "y": 308
+              },
+              {
+                "x": 2040.5,
+                "y": 308
+              },
+              {
+                "x": 2040.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 1932.5,
+              "y": 308
+            }
           }
         },
         {
@@ -1700,6 +3398,30 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1872.5,
+                "y": 152
+              },
+              {
+                "x": 1872.5,
+                "y": 260
+              },
+              {
+                "x": 2411,
+                "y": 260
+              },
+              {
+                "x": 2411,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 2141.75,
+              "y": 260
+            }
           }
         },
         {
@@ -1714,6 +3436,30 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "LabeledBlock"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1760,
+                "y": 152
+              },
+              {
+                "x": 1760,
+                "y": 627
+              },
+              {
+                "x": 3325.5,
+                "y": 627
+              },
+              {
+                "x": 3325.5,
+                "y": 1102
+              }
+            ],
+            "labelAt": {
+              "x": 1760,
+              "y": 383.5
+            }
           }
         },
         {
@@ -1728,6 +3474,26 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "toast"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1996,
+                "y": 152
+              },
+              {
+                "x": 2773.5,
+                "y": 152
+              },
+              {
+                "x": 2773.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 2384.75,
+              "y": 152
+            }
           }
         },
         {
@@ -1742,6 +3508,26 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "ContentIssueReportDialog"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 3342.5,
+                "y": 284
+              },
+              {
+                "x": 3721.5,
+                "y": 284
+              },
+              {
+                "x": 3721.5,
+                "y": 1102
+              }
+            ],
+            "labelAt": {
+              "x": 3342.5,
+              "y": 212
+            }
           }
         },
         {
@@ -1756,6 +3542,30 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "toast"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 3094.5,
+                "y": 86
+              },
+              {
+                "x": 2986,
+                "y": 86
+              },
+              {
+                "x": 2986,
+                "y": 1070
+              },
+              {
+                "x": 2877.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 2986,
+              "y": 584.01
+            }
           }
         },
         {
@@ -1770,6 +3580,26 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 3094.5,
+                "y": 120
+              },
+              {
+                "x": 2479.7,
+                "y": 120
+              },
+              {
+                "x": 2479.7,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 2793.1,
+              "y": 120
+            }
           }
         },
         {
@@ -1784,6 +3614,38 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "ComponentSkeleton"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 3237.5,
+                "y": 152
+              },
+              {
+                "x": 3237.5,
+                "y": 308
+              },
+              {
+                "x": 3697.5,
+                "y": 308
+              },
+              {
+                "x": 3697.5,
+                "y": 530
+              },
+              {
+                "x": 2088.5,
+                "y": 530
+              },
+              {
+                "x": 2088.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 2893,
+              "y": 530
+            }
           }
         },
         {
@@ -1798,6 +3660,22 @@
             "lineStart": 7,
             "lineEnd": 7,
             "symbol": "ProgressBar"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 3180.5,
+                "y": 498
+              },
+              {
+                "x": 3357.5,
+                "y": 498
+              }
+            ],
+            "labelAt": {
+              "x": 3269,
+              "y": 498
+            }
           }
         },
         {
@@ -1812,6 +3690,26 @@
             "lineStart": 16,
             "lineEnd": 16,
             "symbol": "VariantToggle"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 3396.5,
+                "y": 152
+              },
+              {
+                "x": 3985.5,
+                "y": 152
+              },
+              {
+                "x": 3985.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 3856.51,
+              "y": 152
+            }
           }
         },
         {
@@ -1826,6 +3724,30 @@
             "lineStart": 9,
             "lineEnd": 9,
             "symbol": "ErrorBoundary"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 920.5,
+                "y": 152
+              },
+              {
+                "x": 920.5,
+                "y": 212
+              },
+              {
+                "x": 1136.5,
+                "y": 212
+              },
+              {
+                "x": 1136.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 1028.5,
+              "y": 212
+            }
           }
         },
         {
@@ -1840,6 +3762,38 @@
             "lineStart": 21,
             "lineEnd": 21,
             "symbol": "Tooltip"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 968.5,
+                "y": 152
+              },
+              {
+                "x": 968.5,
+                "y": 164
+              },
+              {
+                "x": 1284.5,
+                "y": 164
+              },
+              {
+                "x": 1284.5,
+                "y": 722
+              },
+              {
+                "x": 2701.5,
+                "y": 722
+              },
+              {
+                "x": 2701.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 1284.5,
+              "y": 443
+            }
           }
         },
         {
@@ -1854,6 +3808,38 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "BackLink"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 872.5,
+                "y": 152
+              },
+              {
+                "x": 872.5,
+                "y": 260
+              },
+              {
+                "x": 980.5,
+                "y": 260
+              },
+              {
+                "x": 980.5,
+                "y": 770
+              },
+              {
+                "x": 2363,
+                "y": 770
+              },
+              {
+                "x": 2363,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 980.5,
+              "y": 515
+            }
           }
         },
         {
@@ -1868,21 +3854,753 @@
             "lineStart": 15,
             "lineEnd": 15,
             "symbol": "MobileFeedbackSheet"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 824.5,
+                "y": 152
+              },
+              {
+                "x": 824.5,
+                "y": 866
+              },
+              {
+                "x": 1992.5,
+                "y": 866
+              },
+              {
+                "x": 1992.5,
+                "y": 1070
+              }
+            ],
+            "labelAt": {
+              "x": 824.5,
+              "y": 503
+            }
           }
         }
-      ]
+      ],
+      "layout": {
+        "direction": "down",
+        "version": "templates-v4-clearance-compact-elkjs-0.11.0",
+        "strategy": "layered-3"
+      }
     },
     {
       "meta": {
-        "title": "训练模块 → shared 支撑域",
+        "title": "训练核心模块 → shared 支撑域",
         "diagramType": "architecture",
-        "viewId": "trainers-to-shared-support",
+        "viewId": "trainers-core-to-shared-support",
         "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
         "locale": "zh-CN",
-        "scope": "训练类 feature 模块对 shared 支撑域的引用：types / utils / constants / stores / data / hooks，聚合边 27 条。",
+        "scope": "训练核心模块对 shared 支撑域的引用：progress / range-trainer / puzzle-trainer，聚合边 13 条。",
         "notes": [
           "边按实际 import 聚合，统计口径为 import 位点，非去重文件数。",
-          "学院、帮助中心与外壳层引用见另一视图，二者合计覆盖全项目。",
+          "其余训练模块见同组另一视图，二者合计覆盖全部训练模块。",
+          "支撑域引用次数见各消费方节点 facts。"
+        ]
+      },
+      "nodes": [
+        {
+          "id": "progress",
+          "label": "progress",
+          "kind": "component",
+          "module": "progress",
+          "subtitle": "训练记录中枢与五大系统",
+          "source": {
+            "file": "src/features/progress/index.ts",
+            "lineStart": 1,
+            "lineEnd": 5,
+            "symbol": "useProgressStore",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 40 处：基础件 30 / 反馈 4 / 牌面 4 / 展示 1 / 返回 1",
+            "支撑域导入 71 处：工具 43 / 类型 16 / store 10 / 常量 2"
+          ],
+          "position": {
+            "x": 66,
+            "y": 180
+          },
+          "size": {
+            "width": 265,
+            "height": 136
+          }
+        },
+        {
+          "id": "puzzle-trainer",
+          "label": "puzzle-trainer",
+          "kind": "component",
+          "module": "puzzle-trainer",
+          "subtitle": "谜题训练与每日谜题",
+          "source": {
+            "file": "src/features/puzzle-trainer/index.ts",
+            "lineStart": 1,
+            "lineEnd": 11,
+            "symbol": "PuzzleCard",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 18 处：反馈 7 / 基础件 7 / 返回 3 / 展示 1",
+            "支撑域导入 19 处：工具 12 / 类型 4 / store 2 / Hook 1"
+          ],
+          "position": {
+            "x": 32,
+            "y": 556
+          },
+          "size": {
+            "width": 299,
+            "height": 136
+          }
+        },
+        {
+          "id": "range-trainer",
+          "label": "range-trainer",
+          "kind": "component",
+          "module": "range-trainer",
+          "subtitle": "翻前范围学习与测验",
+          "source": {
+            "file": "src/features/range-trainer/index.ts",
+            "lineStart": 1,
+            "lineEnd": 8,
+            "symbol": "RangeGrid",
+            "kind": "source"
+          },
+          "facts": [
+            "组件族导入 15 处：基础件 10 / 反馈 2 / 展示 1 / 返回 1 / 测验 1",
+            "支撑域导入 45 处：类型 27 / 工具 10 / 常量 4 / store 3 / Hook 1"
+          ],
+          "position": {
+            "x": 44,
+            "y": 356
+          },
+          "size": {
+            "width": 287,
+            "height": 160
+          }
+        },
+        {
+          "id": "shared-types",
+          "label": "types",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块领域类型",
+          "source": {
+            "file": "src/shared/types/poker.ts",
+            "lineStart": 46,
+            "lineEnd": 46,
+            "symbol": "HandNotation",
+            "kind": "source"
+          },
+          "facts": [
+            "15 个类型模块",
+            "9 个消费方，189 个 import 位点",
+            "类型文件之间存在组合引用"
+          ],
+          "position": {
+            "x": 523,
+            "y": 380
+          },
+          "size": {
+            "width": 240,
+            "height": 112
+          }
+        },
+        {
+          "id": "shared-utils",
+          "label": "utils",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "共享纯函数工具",
+          "source": {
+            "file": "src/shared/utils/cn.ts",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "cn",
+            "kind": "source"
+          },
+          "facts": [
+            "17 个纯函数工具文件",
+            "11 个消费方，195 个 import 位点",
+            "seededShuffle / spacedRepetition 等存在域内复用"
+          ],
+          "position": {
+            "x": 523,
+            "y": 694
+          },
+          "size": {
+            "width": 240,
+            "height": 112
+          }
+        },
+        {
+          "id": "shared-constants",
+          "label": "constants",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "全局常量与规则模板",
+          "source": {
+            "file": "src/shared/constants/app.ts",
+            "lineStart": 1,
+            "lineEnd": 1,
+            "symbol": "APP_VERSION",
+            "kind": "source"
+          },
+          "facts": [
+            "app / headsUpRules / mentorStyles / poker 共 4 个文件",
+            "9 个消费方，19 个 import 位点"
+          ],
+          "position": {
+            "x": 523,
+            "y": 56
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
+        },
+        {
+          "id": "shared-stores",
+          "label": "stores",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "事件总线、调试开关与注册表",
+          "source": {
+            "file": "src/shared/stores/trainingEvents.ts",
+            "lineStart": 12,
+            "lineEnd": 12,
+            "symbol": "trainingEvents",
+            "kind": "source"
+          },
+          "facts": [
+            "trainingEvents / debugMode / 3 个数据源注册表",
+            "7 个消费方，31 个 import 位点",
+            "debugMode 是 shared 唯一独立 persist store"
+          ],
+          "position": {
+            "x": 523,
+            "y": 204
+          },
+          "size": {
+            "width": 302,
+            "height": 112
+          }
+        },
+        {
+          "id": "shared-data",
+          "label": "data",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "对手画像与题库",
+          "source": {
+            "file": "src/shared/data/opponentProfiles.ts",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "OPPONENT_PROFILES",
+            "kind": "source"
+          },
+          "facts": [
+            "opponentProfiles 单文件",
+            "gto-simulator 与 strategy-academy 消费"
+          ],
+          "position": {
+            "x": 52.5,
+            "y": 32
+          },
+          "size": {
+            "width": 258,
+            "height": 108
+          }
+        },
+        {
+          "id": "shared-hooks",
+          "label": "hooks",
+          "kind": "component",
+          "module": "shared",
+          "subtitle": "跨模块 React Hook",
+          "source": {
+            "file": "src/shared/hooks/useIsMobile.ts",
+            "lineStart": 25,
+            "lineEnd": 25,
+            "symbol": "useIsMobile",
+            "kind": "source"
+          },
+          "facts": [
+            "useIsMobile / useRovingGridNav 共 2 个",
+            "6 个消费方，6 个 import 位点"
+          ],
+          "position": {
+            "x": 523,
+            "y": 546
+          },
+          "size": {
+            "width": 242,
+            "height": 108
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "v3-progress-types",
+          "source": "progress",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/celebration/RankUpCelebration.tsx",
+            "lineStart": 13,
+            "lineEnd": 13,
+            "symbol": "RankUpEvent"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 343,
+                "y": 296
+              },
+              {
+                "x": 511,
+                "y": 296
+              },
+              {
+                "x": 511,
+                "y": 400
+              }
+            ],
+            "labelAt": {
+              "x": 421,
+              "y": 296
+            }
+          }
+        },
+        {
+          "id": "v3-progress-utils",
+          "source": "progress",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/achievement/AchievementBadges.tsx",
+            "lineStart": 5,
+            "lineEnd": 5,
+            "symbol": "MOTION_DURATION"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 311,
+                "y": 328
+              },
+              {
+                "x": 911,
+                "y": 328
+              },
+              {
+                "x": 911,
+                "y": 682
+              },
+              {
+                "x": 703,
+                "y": 682
+              }
+            ],
+            "labelAt": {
+              "x": 911,
+              "y": 505
+            }
+          }
+        },
+        {
+          "id": "v3-progress-constants",
+          "source": "progress",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/settings/GameVariantSelector.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "GAME_VARIANT_CONFIGS"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 343,
+                "y": 200
+              },
+              {
+                "x": 343,
+                "y": 144
+              },
+              {
+                "x": 511,
+                "y": 144
+              }
+            ],
+            "labelAt": {
+              "x": 433,
+              "y": 144
+            }
+          }
+        },
+        {
+          "id": "v3-progress-stores",
+          "source": "progress",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/progress/components/achievement/DailyChallenge.tsx",
+            "lineStart": 12,
+            "lineEnd": 12,
+            "symbol": "getAchievementSources"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 343,
+                "y": 236
+              },
+              {
+                "x": 511,
+                "y": 236
+              }
+            ],
+            "labelAt": {
+              "x": 427,
+              "y": 236
+            }
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-types",
+          "source": "puzzle-trainer",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/PuzzleCardFeedback.tsx",
+            "lineStart": 19,
+            "lineEnd": 19,
+            "symbol": "GRADE_DISPLAY_CONFIG"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 311,
+                "y": 830
+              },
+              {
+                "x": 787,
+                "y": 830
+              },
+              {
+                "x": 787,
+                "y": 472
+              }
+            ],
+            "labelAt": {
+              "x": 311,
+              "y": 761
+            }
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-utils",
+          "source": "puzzle-trainer",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/ActionBoard.tsx",
+            "lineStart": 30,
+            "lineEnd": 30,
+            "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 343,
+                "y": 672
+              },
+              {
+                "x": 543,
+                "y": 672
+              },
+              {
+                "x": 543,
+                "y": 682
+              }
+            ],
+            "labelAt": {
+              "x": 437,
+              "y": 672
+            }
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-stores",
+          "source": "puzzle-trainer",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/hooks/usePuzzleSession.ts",
+            "lineStart": 14,
+            "lineEnd": 14,
+            "symbol": "trainingEvents"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 259.2,
+                "y": 704
+              },
+              {
+                "x": 259.2,
+                "y": 873
+              },
+              {
+                "x": 837,
+                "y": 873
+              },
+              {
+                "x": 837,
+                "y": 296
+              }
+            ],
+            "labelAt": {
+              "x": 548.1,
+              "y": 873
+            }
+          }
+        },
+        {
+          "id": "v3-puzzle-trainer-hooks",
+          "source": "puzzle-trainer",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "使用 Hook",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/puzzle-trainer/components/PuzzleCard.tsx",
+            "lineStart": 15,
+            "lineEnd": 15,
+            "symbol": "useIsMobile"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 343,
+                "y": 600
+              },
+              {
+                "x": 511,
+                "y": 600
+              }
+            ],
+            "labelAt": {
+              "x": 427,
+              "y": 600
+            }
+          }
+        },
+        {
+          "id": "v3-range-trainer-types",
+          "source": "range-trainer",
+          "target": "shared-types",
+          "kind": "depends",
+          "label": "依赖类型",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizConfig.tsx",
+            "lineStart": 3,
+            "lineEnd": 3,
+            "symbol": "Position"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 343,
+                "y": 436
+              },
+              {
+                "x": 511,
+                "y": 436
+              }
+            ],
+            "labelAt": {
+              "x": 427,
+              "y": 436
+            }
+          }
+        },
+        {
+          "id": "v3-range-trainer-utils",
+          "source": "range-trainer",
+          "target": "shared-utils",
+          "kind": "depends",
+          "label": "复用纯函数",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizTimer.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "transitionFast"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 311,
+                "y": 542
+              },
+              {
+                "x": 367,
+                "y": 542
+              },
+              {
+                "x": 367,
+                "y": 750
+              }
+            ],
+            "labelAt": {
+              "x": 445,
+              "y": 750
+            }
+          }
+        },
+        {
+          "id": "v3-range-trainer-constants",
+          "source": "range-trainer",
+          "target": "shared-constants",
+          "kind": "depends",
+          "label": "读取常量",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/RangeTrainerHome.tsx",
+            "lineStart": 11,
+            "lineEnd": 11,
+            "symbol": "getPlayerCountOptions"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 113.4,
+                "y": 331
+              },
+              {
+                "x": 28.5,
+                "y": 331
+              },
+              {
+                "x": 28.5,
+                "y": 8
+              },
+              {
+                "x": 511,
+                "y": 8
+              },
+              {
+                "x": 511,
+                "y": 86
+              }
+            ],
+            "labelAt": {
+              "x": 372.51,
+              "y": 8
+            }
+          }
+        },
+        {
+          "id": "v3-range-trainer-stores",
+          "source": "range-trainer",
+          "target": "shared-stores",
+          "kind": "depends",
+          "label": "订阅事件",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/QuizConfig.tsx",
+            "lineStart": 15,
+            "lineEnd": 15,
+            "symbol": "useDebugModeStore"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 487,
+                "y": 376
+              },
+              {
+                "x": 487,
+                "y": 260
+              }
+            ],
+            "labelAt": {
+              "x": 409,
+              "y": 376
+            }
+          }
+        },
+        {
+          "id": "v3-range-trainer-hooks",
+          "source": "range-trainer",
+          "target": "shared-hooks",
+          "kind": "depends",
+          "label": "使用 Hook",
+          "evidence": "source",
+          "site": {
+            "file": "src/features/range-trainer/components/RangeGrid.tsx",
+            "lineStart": 4,
+            "lineEnd": 4,
+            "symbol": "useRovingGridNav"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 343,
+                "y": 496
+              },
+              {
+                "x": 511,
+                "y": 496
+              },
+              {
+                "x": 511,
+                "y": 566
+              }
+            ],
+            "labelAt": {
+              "x": 421,
+              "y": 496
+            }
+          }
+        }
+      ],
+      "layout": {
+        "direction": "right",
+        "version": "templates-v4-clearance-compact-elkjs-0.11.0",
+        "strategy": "layered-0"
+      }
+    },
+    {
+      "meta": {
+        "title": "GTO 与基础训练模块 → shared 支撑域",
+        "diagramType": "architecture",
+        "viewId": "trainers-gto-to-shared-support",
+        "sourceRef": "working tree @ 32b4bf8（2026-11-06）",
+        "locale": "zh-CN",
+        "scope": "GTO 与基础训练模块对 shared 支撑域的引用：gto-simulator / pot-odds / hand-history / onboarding，聚合边 14 条。",
+        "notes": [
+          "边按实际 import 聚合，统计口径为 import 位点，非去重文件数。",
+          "其余训练模块见同组另一视图，二者合计覆盖全部训练模块。",
           "支撑域引用次数见各消费方节点 facts。"
         ]
       },
@@ -1903,7 +4621,15 @@
           "facts": [
             "组件族导入 13 处：反馈 6 / 牌面 6 / 基础件 1",
             "支撑域导入 69 处：类型 44 / 工具 15 / 常量 4 / 画像 3 / Hook 2 / store 1"
-          ]
+          ],
+          "position": {
+            "x": 64,
+            "y": 32
+          },
+          "size": {
+            "width": 296,
+            "height": 108
+          }
         },
         {
           "id": "hand-history",
@@ -1921,7 +4647,15 @@
           "facts": [
             "组件族导入 6 处：牌面 3 / 反馈 2 / 展示 1",
             "支撑域导入 33 处：类型 28 / 工具 5"
-          ]
+          ],
+          "position": {
+            "x": 1212.5,
+            "y": 32
+          },
+          "size": {
+            "width": 283,
+            "height": 108
+          }
         },
         {
           "id": "onboarding",
@@ -1939,7 +4673,15 @@
           "facts": [
             "组件族导入 6 处：基础件 5 / 测验 1",
             "支撑域导入 9 处：类型 5 / 工具 4"
-          ]
+          ],
+          "position": {
+            "x": 1535.5,
+            "y": 32
+          },
+          "size": {
+            "width": 248,
+            "height": 108
+          }
         },
         {
           "id": "pot-odds",
@@ -1957,61 +4699,15 @@
           "facts": [
             "组件族导入 14 处：基础件 8 / 反馈 5 / 返回 1",
             "支撑域导入 15 处：工具 7 / 类型 6 / Hook 1 / store 1"
-          ]
-        },
-        {
-          "id": "progress",
-          "label": "progress",
-          "kind": "component",
-          "module": "progress",
-          "subtitle": "训练记录中枢与五大系统",
-          "source": {
-            "file": "src/features/progress/index.ts",
-            "lineStart": 1,
-            "lineEnd": 5,
-            "symbol": "useProgressStore",
-            "kind": "source"
+          ],
+          "position": {
+            "x": 658,
+            "y": 32
           },
-          "facts": [
-            "组件族导入 40 处：基础件 30 / 反馈 4 / 牌面 4 / 展示 1 / 返回 1",
-            "支撑域导入 71 处：工具 43 / 类型 16 / store 10 / 常量 2"
-          ]
-        },
-        {
-          "id": "puzzle-trainer",
-          "label": "puzzle-trainer",
-          "kind": "component",
-          "module": "puzzle-trainer",
-          "subtitle": "谜题训练与每日谜题",
-          "source": {
-            "file": "src/features/puzzle-trainer/index.ts",
-            "lineStart": 1,
-            "lineEnd": 11,
-            "symbol": "PuzzleCard",
-            "kind": "source"
-          },
-          "facts": [
-            "组件族导入 18 处：反馈 7 / 基础件 7 / 返回 3 / 展示 1",
-            "支撑域导入 19 处：工具 12 / 类型 4 / store 2 / Hook 1"
-          ]
-        },
-        {
-          "id": "range-trainer",
-          "label": "range-trainer",
-          "kind": "component",
-          "module": "range-trainer",
-          "subtitle": "翻前范围学习与测验",
-          "source": {
-            "file": "src/features/range-trainer/index.ts",
-            "lineStart": 1,
-            "lineEnd": 8,
-            "symbol": "RangeGrid",
-            "kind": "source"
-          },
-          "facts": [
-            "组件族导入 15 处：基础件 10 / 反馈 2 / 展示 1 / 返回 1 / 测验 1",
-            "支撑域导入 45 处：类型 27 / 工具 10 / 常量 4 / store 3 / Hook 1"
-          ]
+          "size": {
+            "width": 242,
+            "height": 108
+          }
         },
         {
           "id": "shared-types",
@@ -2030,7 +4726,15 @@
             "15 个类型模块",
             "9 个消费方，189 个 import 位点",
             "类型文件之间存在组合引用"
-          ]
+          ],
+          "position": {
+            "x": 1234,
+            "y": 428
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shared-utils",
@@ -2049,7 +4753,15 @@
             "17 个纯函数工具文件",
             "11 个消费方，195 个 import 位点",
             "seededShuffle / spacedRepetition 等存在域内复用"
-          ]
+          ],
+          "position": {
+            "x": 1514,
+            "y": 428
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shared-constants",
@@ -2067,7 +4779,15 @@
           "facts": [
             "app / headsUpRules / mentorStyles / poker 共 4 个文件",
             "9 个消费方，19 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 32,
+            "y": 428
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shared-stores",
@@ -2086,7 +4806,15 @@
             "trainingEvents / debugMode / 3 个数据源注册表",
             "7 个消费方，31 个 import 位点",
             "debugMode 是 shared 唯一独立 persist store"
-          ]
+          ],
+          "position": {
+            "x": 892,
+            "y": 428
+          },
+          "size": {
+            "width": 302,
+            "height": 108
+          }
         },
         {
           "id": "shared-data",
@@ -2104,7 +4832,15 @@
           "facts": [
             "opponentProfiles 单文件",
             "gto-simulator 与 strategy-academy 消费"
-          ]
+          ],
+          "position": {
+            "x": 312,
+            "y": 428
+          },
+          "size": {
+            "width": 258,
+            "height": 108
+          }
         },
         {
           "id": "shared-hooks",
@@ -2122,7 +4858,15 @@
           "facts": [
             "useIsMobile / useRovingGridNav 共 2 个",
             "6 个消费方，6 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 610,
+            "y": 428
+          },
+          "size": {
+            "width": 242,
+            "height": 108
+          }
         }
       ],
       "edges": [
@@ -2138,6 +4882,26 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "ActionType"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 8,
+                "y": 120
+              },
+              {
+                "x": 8,
+                "y": 572
+              },
+              {
+                "x": 1254,
+                "y": 572
+              }
+            ],
+            "labelAt": {
+              "x": 8,
+              "y": 346
+            }
           }
         },
         {
@@ -2152,6 +4916,34 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 340,
+                "y": 152
+              },
+              {
+                "x": 594,
+                "y": 152
+              },
+              {
+                "x": 594,
+                "y": 596
+              },
+              {
+                "x": 1502,
+                "y": 596
+              },
+              {
+                "x": 1502,
+                "y": 506
+              }
+            ],
+            "labelAt": {
+              "x": 1048,
+              "y": 596
+            }
           }
         },
         {
@@ -2166,6 +4958,22 @@
             "lineStart": 9,
             "lineEnd": 9,
             "symbol": "renderMentorFeedback"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 152,
+                "y": 152
+              },
+              {
+                "x": 152,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 152,
+              "y": 284
+            }
           }
         },
         {
@@ -2180,6 +4988,30 @@
             "lineStart": 14,
             "lineEnd": 14,
             "symbol": "trainingEvents"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 236,
+                "y": 404
+              },
+              {
+                "x": 296,
+                "y": 404
+              },
+              {
+                "x": 296,
+                "y": 548
+              },
+              {
+                "x": 912,
+                "y": 548
+              }
+            ],
+            "labelAt": {
+              "x": 236,
+              "y": 229.99
+            }
           }
         },
         {
@@ -2194,6 +5026,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "getOpponentProfile"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 288.8,
+                "y": 152
+              },
+              {
+                "x": 332,
+                "y": 152
+              },
+              {
+                "x": 332,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 332,
+              "y": 290
+            }
           }
         },
         {
@@ -2208,6 +5060,26 @@
             "lineStart": 24,
             "lineEnd": 24,
             "symbol": "useIsMobile"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 372,
+                "y": 120
+              },
+              {
+                "x": 630,
+                "y": 120
+              },
+              {
+                "x": 630,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 495,
+              "y": 120
+            }
           }
         },
         {
@@ -2222,6 +5094,22 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "PlayerAction"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1342,
+                "y": 152
+              },
+              {
+                "x": 1342,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 1342,
+              "y": 284
+            }
           }
         },
         {
@@ -2236,6 +5124,26 @@
             "lineStart": 7,
             "lineEnd": 7,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1475.5,
+                "y": 152
+              },
+              {
+                "x": 1534,
+                "y": 152
+              },
+              {
+                "x": 1534,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 1534,
+              "y": 290
+            }
           }
         },
         {
@@ -2250,6 +5158,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "RangeAction"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1597.1,
+                "y": 152
+              },
+              {
+                "x": 1597.1,
+                "y": 416
+              },
+              {
+                "x": 1454,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 1597.1,
+              "y": 229.99
+            }
           }
         },
         {
@@ -2264,6 +5192,22 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 1671.5,
+                "y": 152
+              },
+              {
+                "x": 1671.5,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 1671.5,
+              "y": 284
+            }
           }
         },
         {
@@ -2278,6 +5222,30 @@
             "lineStart": 10,
             "lineEnd": 10,
             "symbol": "GameVariant"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 912,
+                "y": 86
+              },
+              {
+                "x": 1083,
+                "y": 86
+              },
+              {
+                "x": 1083,
+                "y": 416
+              },
+              {
+                "x": 1254,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 991.5,
+              "y": 86
+            }
           }
         },
         {
@@ -2292,6 +5260,26 @@
             "lineStart": 3,
             "lineEnd": 3,
             "symbol": "transitionFast"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 880,
+                "y": 20
+              },
+              {
+                "x": 1807.5,
+                "y": 20
+              },
+              {
+                "x": 1807.5,
+                "y": 448
+              }
+            ],
+            "labelAt": {
+              "x": 1807.5,
+              "y": 234
+            }
           }
         },
         {
@@ -2306,6 +5294,22 @@
             "lineStart": 10,
             "lineEnd": 10,
             "symbol": "trainingEvents"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 912,
+                "y": 120
+              },
+              {
+                "x": 912,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 912,
+              "y": 274
+            }
           }
         },
         {
@@ -2320,191 +5324,30 @@
             "lineStart": 30,
             "lineEnd": 30,
             "symbol": "useIsMobile"
-          }
-        },
-        {
-          "id": "v3-progress-types",
-          "source": "progress",
-          "target": "shared-types",
-          "kind": "depends",
-          "label": "依赖类型",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/progress/components/celebration/RankUpCelebration.tsx",
-            "lineStart": 13,
-            "lineEnd": 13,
-            "symbol": "RankUpEvent"
-          }
-        },
-        {
-          "id": "v3-progress-utils",
-          "source": "progress",
-          "target": "shared-utils",
-          "kind": "depends",
-          "label": "复用纯函数",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/progress/components/achievement/AchievementBadges.tsx",
-            "lineStart": 5,
-            "lineEnd": 5,
-            "symbol": "MOTION_DURATION"
-          }
-        },
-        {
-          "id": "v3-progress-constants",
-          "source": "progress",
-          "target": "shared-constants",
-          "kind": "depends",
-          "label": "读取常量",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/progress/components/settings/GameVariantSelector.tsx",
-            "lineStart": 3,
-            "lineEnd": 3,
-            "symbol": "GAME_VARIANT_CONFIGS"
-          }
-        },
-        {
-          "id": "v3-progress-stores",
-          "source": "progress",
-          "target": "shared-stores",
-          "kind": "depends",
-          "label": "订阅事件",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/progress/components/achievement/DailyChallenge.tsx",
-            "lineStart": 12,
-            "lineEnd": 12,
-            "symbol": "getAchievementSources"
-          }
-        },
-        {
-          "id": "v3-puzzle-trainer-types",
-          "source": "puzzle-trainer",
-          "target": "shared-types",
-          "kind": "depends",
-          "label": "依赖类型",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/puzzle-trainer/components/PuzzleCardFeedback.tsx",
-            "lineStart": 19,
-            "lineEnd": 19,
-            "symbol": "GRADE_DISPLAY_CONFIG"
-          }
-        },
-        {
-          "id": "v3-puzzle-trainer-utils",
-          "source": "puzzle-trainer",
-          "target": "shared-utils",
-          "kind": "depends",
-          "label": "复用纯函数",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/puzzle-trainer/components/ActionBoard.tsx",
-            "lineStart": 30,
-            "lineEnd": 30,
-            "symbol": "cn"
-          }
-        },
-        {
-          "id": "v3-puzzle-trainer-stores",
-          "source": "puzzle-trainer",
-          "target": "shared-stores",
-          "kind": "depends",
-          "label": "订阅事件",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/puzzle-trainer/hooks/usePuzzleSession.ts",
-            "lineStart": 14,
-            "lineEnd": 14,
-            "symbol": "trainingEvents"
-          }
-        },
-        {
-          "id": "v3-puzzle-trainer-hooks",
-          "source": "puzzle-trainer",
-          "target": "shared-hooks",
-          "kind": "depends",
-          "label": "使用 Hook",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/puzzle-trainer/components/PuzzleCard.tsx",
-            "lineStart": 15,
-            "lineEnd": 15,
-            "symbol": "useIsMobile"
-          }
-        },
-        {
-          "id": "v3-range-trainer-types",
-          "source": "range-trainer",
-          "target": "shared-types",
-          "kind": "depends",
-          "label": "依赖类型",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/range-trainer/components/QuizConfig.tsx",
-            "lineStart": 3,
-            "lineEnd": 3,
-            "symbol": "Position"
-          }
-        },
-        {
-          "id": "v3-range-trainer-utils",
-          "source": "range-trainer",
-          "target": "shared-utils",
-          "kind": "depends",
-          "label": "复用纯函数",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/range-trainer/components/QuizTimer.tsx",
-            "lineStart": 4,
-            "lineEnd": 4,
-            "symbol": "transitionFast"
-          }
-        },
-        {
-          "id": "v3-range-trainer-constants",
-          "source": "range-trainer",
-          "target": "shared-constants",
-          "kind": "depends",
-          "label": "读取常量",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/range-trainer/components/RangeTrainerHome.tsx",
-            "lineStart": 11,
-            "lineEnd": 11,
-            "symbol": "getPlayerCountOptions"
-          }
-        },
-        {
-          "id": "v3-range-trainer-stores",
-          "source": "range-trainer",
-          "target": "shared-stores",
-          "kind": "depends",
-          "label": "订阅事件",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/range-trainer/components/QuizConfig.tsx",
-            "lineStart": 15,
-            "lineEnd": 15,
-            "symbol": "useDebugModeStore"
-          }
-        },
-        {
-          "id": "v3-range-trainer-hooks",
-          "source": "range-trainer",
-          "target": "shared-hooks",
-          "kind": "depends",
-          "label": "使用 Hook",
-          "evidence": "source",
-          "site": {
-            "file": "src/features/range-trainer/components/RangeGrid.tsx",
-            "lineStart": 4,
-            "lineEnd": 4,
-            "symbol": "useRovingGridNav"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 743,
+                "y": 152
+              },
+              {
+                "x": 743,
+                "y": 416
+              }
+            ],
+            "labelAt": {
+              "x": 743,
+              "y": 284
+            }
           }
         }
-      ]
+      ],
+      "layout": {
+        "direction": "down",
+        "version": "templates-v4-clearance-compact-elkjs-0.11.0",
+        "strategy": "layered-0"
+      }
     },
     {
       "meta": {
@@ -2537,7 +5380,15 @@
           "facts": [
             "组件族导入 3 处：反馈 1 / 返回 1 / 基础件 1",
             "支撑域导入 2 处：工具 2"
-          ]
+          ],
+          "position": {
+            "x": 102,
+            "y": 640
+          },
+          "size": {
+            "width": 265,
+            "height": 108
+          }
         },
         {
           "id": "strategy-academy",
@@ -2555,7 +5406,15 @@
           "facts": [
             "组件族导入 53 处：返回 16 / 牌面 11 / 学院 9 / 反馈 8 / 展示 7 / 基础件 2",
             "支撑域导入 92 处：工具 56 / 类型 24 / store 8 / 常量 2 / 画像 1 / Hook 1"
-          ]
+          ],
+          "position": {
+            "x": 32,
+            "y": 364
+          },
+          "size": {
+            "width": 335,
+            "height": 184
+          }
         },
         {
           "id": "theory-academy",
@@ -2573,7 +5432,15 @@
           "facts": [
             "组件族导入 29 处：学院 8 / 反馈 8 / 返回 5 / 基础件 4 / 展示 3 / 牌面 1",
             "支撑域导入 82 处：工具 37 / 类型 35 / store 6 / 常量 4"
-          ]
+          ],
+          "position": {
+            "x": 57,
+            "y": 848
+          },
+          "size": {
+            "width": 310,
+            "height": 136
+          }
         },
         {
           "id": "shell-layouts",
@@ -2591,7 +5458,15 @@
           "facts": [
             "组件族导入 5 处：基础件 2 / 反馈 1 / 返回 1 / 错误边界 1",
             "支撑域导入 6 处：工具 4 / 常量 2"
-          ]
+          ],
+          "position": {
+            "x": 127,
+            "y": 180
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shell-main",
@@ -2609,7 +5484,15 @@
           "facts": [
             "组件族导入 2 处：错误边界 1 / 基础件 1",
             "支撑域导入 1 处：常量 1"
-          ]
+          ],
+          "position": {
+            "x": 127,
+            "y": 32
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shared-types",
@@ -2628,7 +5511,15 @@
             "15 个类型模块",
             "9 个消费方，189 个 import 位点",
             "类型文件之间存在组合引用"
-          ]
+          ],
+          "position": {
+            "x": 523,
+            "y": 986
+          },
+          "size": {
+            "width": 240,
+            "height": 108
+          }
         },
         {
           "id": "shared-utils",
@@ -2647,7 +5538,15 @@
             "17 个纯函数工具文件",
             "11 个消费方，195 个 import 位点",
             "seededShuffle / spacedRepetition 等存在域内复用"
-          ]
+          ],
+          "position": {
+            "x": 523,
+            "y": 662
+          },
+          "size": {
+            "width": 240,
+            "height": 136
+          }
         },
         {
           "id": "shared-constants",
@@ -2665,7 +5564,15 @@
           "facts": [
             "app / headsUpRules / mentorStyles / poker 共 4 个文件",
             "9 个消费方，19 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 523,
+            "y": 190
+          },
+          "size": {
+            "width": 240,
+            "height": 136
+          }
         },
         {
           "id": "shared-stores",
@@ -2684,7 +5591,15 @@
             "trainingEvents / debugMode / 3 个数据源注册表",
             "7 个消费方，31 个 import 位点",
             "debugMode 是 shared 唯一独立 persist store"
-          ]
+          ],
+          "position": {
+            "x": 523,
+            "y": 838
+          },
+          "size": {
+            "width": 302,
+            "height": 108
+          }
         },
         {
           "id": "shared-data",
@@ -2702,7 +5617,15 @@
           "facts": [
             "opponentProfiles 单文件",
             "gto-simulator 与 strategy-academy 消费"
-          ]
+          ],
+          "position": {
+            "x": 523,
+            "y": 366
+          },
+          "size": {
+            "width": 258,
+            "height": 108
+          }
         },
         {
           "id": "shared-hooks",
@@ -2720,7 +5643,15 @@
           "facts": [
             "useIsMobile / useRovingGridNav 共 2 个",
             "6 个消费方，6 个 import 位点"
-          ]
+          ],
+          "position": {
+            "x": 523,
+            "y": 514
+          },
+          "size": {
+            "width": 242,
+            "height": 108
+          }
         }
       ],
       "edges": [
@@ -2736,6 +5667,22 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "MOTION_DURATION"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 694
+              },
+              {
+                "x": 523,
+                "y": 694
+              }
+            ],
+            "labelAt": {
+              "x": 451,
+              "y": 694
+            }
           }
         },
         {
@@ -2750,6 +5697,26 @@
             "lineStart": 11,
             "lineEnd": 11,
             "symbol": "EloDimension"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 111,
+                "y": 626
+              },
+              {
+                "x": 33,
+                "y": 626
+              },
+              {
+                "x": 33,
+                "y": 1006
+              }
+            ],
+            "labelAt": {
+              "x": 111,
+              "y": 587
+            }
           }
         },
         {
@@ -2764,6 +5731,26 @@
             "lineStart": 4,
             "lineEnd": 4,
             "symbol": "transitionSlow"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 528
+              },
+              {
+                "x": 379,
+                "y": 650
+              },
+              {
+                "x": 543,
+                "y": 650
+              }
+            ],
+            "labelAt": {
+              "x": 379,
+              "y": 589
+            }
           }
         },
         {
@@ -2778,6 +5765,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "APP_VERSION"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 288,
+                "y": 352
+              },
+              {
+                "x": 288,
+                "y": 306
+              },
+              {
+                "x": 511,
+                "y": 306
+              }
+            ],
+            "labelAt": {
+              "x": 429.01,
+              "y": 306
+            }
           }
         },
         {
@@ -2792,6 +5799,26 @@
             "lineStart": 10,
             "lineEnd": 10,
             "symbol": "useDebugModeStore"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 347,
+                "y": 352
+              },
+              {
+                "x": 837,
+                "y": 352
+              },
+              {
+                "x": 837,
+                "y": 858
+              }
+            ],
+            "labelAt": {
+              "x": 837,
+              "y": 605
+            }
           }
         },
         {
@@ -2806,6 +5833,22 @@
             "lineStart": 5,
             "lineEnd": 10,
             "symbol": "OPPONENT_PROFILES"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 420
+              },
+              {
+                "x": 511,
+                "y": 420
+              }
+            ],
+            "labelAt": {
+              "x": 445,
+              "y": 420
+            }
           }
         },
         {
@@ -2820,6 +5863,26 @@
             "lineStart": 11,
             "lineEnd": 11,
             "symbol": "useRovingGridNav"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 499.2
+              },
+              {
+                "x": 543,
+                "y": 499.2
+              },
+              {
+                "x": 543,
+                "y": 502
+              }
+            ],
+            "labelAt": {
+              "x": 451.99,
+              "y": 499.2
+            }
           }
         },
         {
@@ -2834,6 +5897,26 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "AcademyBridgeCta"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 964
+              },
+              {
+                "x": 543,
+                "y": 964
+              },
+              {
+                "x": 543,
+                "y": 974
+              }
+            ],
+            "labelAt": {
+              "x": 455,
+              "y": 964
+            }
           }
         },
         {
@@ -2848,6 +5931,26 @@
             "lineStart": 6,
             "lineEnd": 6,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 347,
+                "y": 836
+              },
+              {
+                "x": 347,
+                "y": 778
+              },
+              {
+                "x": 511,
+                "y": 778
+              }
+            ],
+            "labelAt": {
+              "x": 437.01,
+              "y": 778
+            }
           }
         },
         {
@@ -2862,6 +5965,38 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "APP_VERSION"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 391,
+                "y": 868
+              },
+              {
+                "x": 391,
+                "y": 814
+              },
+              {
+                "x": 913,
+                "y": 814
+              },
+              {
+                "x": 913,
+                "y": 572
+              },
+              {
+                "x": 861,
+                "y": 572
+              },
+              {
+                "x": 861,
+                "y": 306
+              }
+            ],
+            "labelAt": {
+              "x": 913,
+              "y": 693
+            }
           }
         },
         {
@@ -2876,6 +6011,22 @@
             "lineStart": 9,
             "lineEnd": 9,
             "symbol": "useDebugModeStore"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 892
+              },
+              {
+                "x": 523,
+                "y": 892
+              }
+            ],
+            "labelAt": {
+              "x": 451,
+              "y": 892
+            }
           }
         },
         {
@@ -2890,6 +6041,30 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "cn"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 347,
+                "y": 168
+              },
+              {
+                "x": 963,
+                "y": 168
+              },
+              {
+                "x": 963,
+                "y": 650
+              },
+              {
+                "x": 703,
+                "y": 650
+              }
+            ],
+            "labelAt": {
+              "x": 963,
+              "y": 409
+            }
           }
         },
         {
@@ -2904,6 +6079,22 @@
             "lineStart": 7,
             "lineEnd": 7,
             "symbol": "APP_VERSION"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 222
+              },
+              {
+                "x": 523,
+                "y": 222
+              }
+            ],
+            "labelAt": {
+              "x": 451,
+              "y": 222
+            }
           }
         },
         {
@@ -2918,9 +6109,34 @@
             "lineStart": 5,
             "lineEnd": 5,
             "symbol": "APP_VERSION"
+          },
+          "route": {
+            "via": [
+              {
+                "x": 379,
+                "y": 120
+              },
+              {
+                "x": 543,
+                "y": 120
+              },
+              {
+                "x": 543,
+                "y": 178
+              }
+            ],
+            "labelAt": {
+              "x": 461,
+              "y": 120
+            }
           }
         }
-      ]
+      ],
+      "layout": {
+        "direction": "right",
+        "version": "templates-v4-clearance-compact-elkjs-0.11.0",
+        "strategy": "layered-0"
+      }
     }
   ]
 }

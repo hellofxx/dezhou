@@ -1,7 +1,7 @@
 // ============================================================================
 // PokerLab · shared 层消费图（当前态 / current-state）
 // 生成：system-modeler + graphviz（architecture-visualization 插件）
-// 证据基线：工作树 2026-11-06（HEAD d3419ad + 未提交改动），扫描范围 src/**/*.ts(x)
+// 证据基线：工作树 2026-11-06（采集后出现并发提交，src 引用计数复核不变），扫描范围 src/**/*.ts(x)
 //
 // 本图回答一个问题：10 个 feature 模块与应用外壳，分别向 shared 的哪一层、
 // 以多大规模直接取用？
@@ -125,5 +125,5 @@ digraph pokerlab_shared_consumers {
   // ---------------------------------------------------------------- 布局控制
   { rank=same; range; odds; gto; puzzle; academy; theory; hh; onboard; help; hub; shell; }
   { rank=same; contracts; logic; ui; runtime; }
-  shell -> note [style=invis];
+  { rank=sink; note; }
 }

@@ -1,6 +1,6 @@
 # PokerLab 当前态架构模型 · shared 层引用现状
 
-> 状态：Snapshot · 证据基线 2026-11-06 · 工作树（HEAD `d3419ad` + 未提交改动）。
+> 状态：Snapshot · 证据基线 2026-11-06 · 工作树（采集后出现并发提交，src 引用计数复核不变）。
 > 回答的问题：**现在的代码里，10 个 feature 模块与应用外壳如何引用 `src/shared`，shared 内部又长成什么形状？**
 > 图源：[`10-shared-consumers.dot`](10-shared-consumers.dot) · [`20-shared-internals.dot`](20-shared-internals.dot) · [`30-shared-runtime-channels.dot`](30-shared-runtime-channels.dot) ｜ 证据：[`shared-layer.evidence.md`](shared-layer.evidence.md) ｜ 全表：[`shared-fanin-appendix.md`](shared-fanin-appendix.md)
 
@@ -21,7 +21,7 @@
 | 消费方 | 直接入边 | 唯一文件 | 画像 |
 |---|---:|---:|---|
 | strategy-academy | 145 | 41 | 最大消费者；逻辑 + UI 双重重仓 |
-| progress | 111 | 29 | 逻辑/UI 并重，且是唯一运行时通道读取方 |
+| progress | 111 | 29 | 逻辑/UI 并重，且是三个注册表的唯一读取方 |
 | theory-academy | 111 | 34 | 契约与逻辑均衡 |
 | gto-simulator | 82 | 27 | 契约型：一半入边是 `types/` |
 | range-trainer | 60 | 25 | 类型与 UI 并重 |
@@ -42,10 +42,10 @@
 ## 3. shared 的内部形状
 
 - **44 个组件文件 + 44 个非组件文件**，分 14 个子域。
-- **内部 104 条边**：跨子域 82 条 + 子域内自引 22 条；方向恒定——`components/* → utils/types/constants`、`logic → types/constants`、`stores → types`，没有反向环。
+- **内部 104 条边**：跨子域 82 条 + 子域内自引 22 条；方向恒定——`components/* → utils/types/constants`、`logic → types/constants`、`stores → types`，没有反向层级回边。
 - **底座**：`types/`（15 文件，189 入边）与 `utils/`（17 文件，195 入边）是真正的地基；`constants/` 只 4 文件但被 5 个模块 + shell 使用。
 - **最大的单文件枢纽**：`utils/cn.ts` 与 `utils/motion.ts` 各有 **10 个直接外部消费者**（9 个模块 + layouts）；`BackLink` 单文件覆盖 8 个消费者；`trainingEvents` 被 7 个消费者直接引用。
-- **准入贴地飞行**：88 个文件里 **39 个恰好 2 个传递消费者**，3 个达到 11 个；没有 0 消费者的生产文件。这说明 shared 被持续回迁/清理过，没有明显「预留将来用」的沉积。
+- **准入贴地飞行**：88 个文件里 **39 个恰好 2 个传递消费者**，3 个达到 11 个；除 2 个测试桩外没有 0 消费者文件，另有 1 个 ui 组件（tooltip）仅 shell 消费。这说明 shared 被持续回迁/清理过，没有明显「预留将来用」的沉积。
 
 ### 传递效应要分清
 
@@ -77,7 +77,7 @@
 
 - **本模型证明静态引用与可达性**，不证明运行时调用、bundle 归属或 tree-shaking 结果；体积结论需另跑 `pnpm build` + `pnpm size:check`。
 - **barrel 粒度**：`components/academy/index.ts` 是唯一目录级 barrel；8 个学院组件都以「整组」形式被两院引用，单组件实际使用率未在本模型展开。
-- **一处注释漂移**：`academyDataSourceRegistry.ts:2-3` 称 strategy / puzzle / theory 三方注册，实测仅 strategy-academy 调用 `registerAcademyDataSource`；puzzle / theory 注册的是成就源，theory 另有理论数据源。建议下次触碰时校正注释，当前不影响运行路径。
+- **一处注释漂移**：`academyDataSourceRegistry.ts:2-3` 称 strategy / puzzle / theory 三方注册，实测仅 strategy-academy 调用 `registerAcademyDataSource`；puzzle / theory 注册的是成就源，theory 另有理论数据源。以调用点为准，注释与实现是否应统一待确认，当前不影响运行路径。
 - **父快照未同步**：`docs/architecture/` 的 C4 与依赖图仍是 2026-08-30 基线（路由已从 33 增至 44，persist 版本已更新）；本专项视图不自动刷新父模型。
 - **维护触发**：新增/删除 shared 文件、改变模块消费者、修改 `ALLOWED_CROSS_IMPORTS`、改事件总线/注册表接线后，按 [`shared-layer.evidence.md`](shared-layer.evidence.md) §9 复核并重跑 `pnpm test src/shared/admission-guard.test.ts`。
 

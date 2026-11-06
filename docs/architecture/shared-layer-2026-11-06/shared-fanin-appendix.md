@@ -1,6 +1,6 @@
 # shared 文件级 fan-in 附录（88 个生产文件）
 
-> 状态：Snapshot · 证据基线 2026-11-06 · 工作树（HEAD d3419ad + 未提交改动）。
+> 状态：Snapshot · 证据基线 2026-11-06 · 工作树。
 > 由 `.archive/arch-model-2026-11-06/scan.mjs` 扫描 `src` 生成；口径与 `src/test-utils/admissionGraph.ts` 对齐。
 
 ## 读表说明

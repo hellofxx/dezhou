@@ -1,6 +1,6 @@
 # shared 层引用现状 · 证据索引
 
-> 状态：Snapshot · 证据基线 2026-11-06 · 工作树（HEAD `d3419ad` + 未提交改动：`RangeLearnPage.tsx`、`docs/qgraphflow/**`）。
+> 状态：Snapshot · 证据基线 2026-11-06 · 工作树（采集时存在并发写入；随后并发提交落库，src 引用计数复核不变）。
 > 配套图源：[`10-shared-consumers.dot`](10-shared-consumers.dot) · [`20-shared-internals.dot`](20-shared-internals.dot) · [`30-shared-runtime-channels.dot`](30-shared-runtime-channels.dot)
 > 配套表：[`shared-fanin-appendix.md`](shared-fanin-appendix.md)（88 个文件逐条）· 可读总结：[`shared-layer.summary.md`](shared-layer.summary.md)
 > 置信度：`high` = 代码/配置直接证据；`medium` = 多个间接信号一致；`low` = 命名或结构推断；`unknown` = 待查。
@@ -134,10 +134,10 @@
 
 | 组件 | 直接外部消费者 | 消费者 |
 |---|---:|---|
-| `button.tsx` | 6 direct / 11 trans | help-center, onboarding, pot-odds, progress, puzzle-trainer, range-trainer（+ shared 内部放大） |
+| `button.tsx` | 6 | help-center, onboarding, pot-odds, progress, puzzle-trainer, range-trainer（经 shared 内部组合后传递消费者 11） |
 | `card.tsx` | 5 | gto-simulator, pot-odds, progress, puzzle-trainer, range-trainer |
-| `dialog.tsx` | 3 | progress, theory-academy, shell:layouts |
-| `toast.tsx` | 2 | strategy-academy, theory-academy；shell:main 经 App |
+| `dialog.tsx` | 4 | progress, strategy-academy, theory-academy, shell:layouts |
+| `toast.tsx` | 3 | strategy-academy, theory-academy, shell:main（经 App） |
 | `input.tsx` | 2 | pot-odds, theory-academy |
 | `progress.tsx` | 2 | puzzle-trainer, range-trainer |
 | `select.tsx` | 2 | progress, range-trainer |
@@ -198,11 +198,11 @@
 |---|---|---|---|
 | 8.1 | 「import 图 ≠ 运行时调用图」 | — | 本模型只证明静态引用与可达性；不做 bundle / tree-shaking / 运行时 trace。需要体积结论时另跑 `pnpm build` + `pnpm size:check`。 |
 | 8.2 | barrel 粒度：`components/academy/index.ts` 使 8 个组件都以「整组」形式被两院引用 | high（结构）/ unknown（单组件实际使用） | 若要精确到组件级，需读两院包装层的具体导入；本模型只到 barrel 层。 |
-| 8.3 | `academyDataSourceRegistry.ts:2-3` 注释称 strategy / puzzle / theory 三方注册，实测仅 strategy-academy 调用 `registerAcademyDataSource` | high（调用点） | **注释漂移**：puzzle / theory 注册的是成就源；theory 另有理论数据源。建议下次触碰该文件时校正注释，不影响当前运行路径。 |
+| 8.3 | `academyDataSourceRegistry.ts:2-3` 注释称 strategy / puzzle / theory 三方注册，实测仅 strategy-academy 调用 `registerAcademyDataSource` | high（调用点） | **注释漂移**：puzzle / theory 注册的是成就源；theory 另有理论数据源。以调用点为准；注释与实现是否应统一，待维护者确认，不影响当前运行路径。 |
 | 8.4 | `components/ui/tooltip.tsx` 仅 `AppLayout` 一个消费者 | high | ui 豁免 ≥2 是 AGENTS.md 明示规则；是否需要保留由 UI 负责人确认。 |
 | 8.5 | 测试覆盖：88 个 shared 文件中 67 个至少有一个测试消费者；45 个 shared 测试文件 | high（结构） | 覆盖率高不代表行覆盖率；`pnpm test:coverage` 才能给数值。 |
 | 8.6 | 父目录 `docs/architecture/` 的 C4 / 依赖图仍是 2026-08-30 基线（例如路由 33 → 现 44、persist 版本更新） | high | 本专项视图不自动刷新父模型；跨模块边 / 路由 / 持久化变更后按父 README §基线与更新方式复核。 |
-| 8.7 | `shared → feature` 为 0 是静态事实 | high | eslint 硬约束 + 本次扫描双证；若未来出现绕过别名的动态路径，需在 lint 之外补守卫。 |
+| 8.7 | `shared → feature` 为 0 是静态事实 | high | eslint 硬约束 + 本次扫描双证；当前扫描覆盖 `@/` 与相对路径，其他解析路径是否绕过 lint 属未验证范围。 |
 
 ## 9. 复核命令
 
@@ -211,21 +211,26 @@
 pnpm test src/shared/admission-guard.test.ts
 
 # 2) shared → feature 应为空
-Select-String -Path src/shared/**/*.ts,src/shared/**/*.tsx -Pattern "@/features/" -SimpleMatch
+Get-ChildItem src/shared -Recurse -Include *.ts,*.tsx |
+  Select-String -Pattern '@/features/' -SimpleMatch
 
 # 3) 跨模块边（应与 eslint.config.js ALLOWED_CROSS_IMPORTS 逐条相等）
 Get-ChildItem src/features -Directory | ForEach-Object {
-  $m = $_.Name
-  Write-Output "== $m"
-  Select-String -Path "$($_.FullName)/**/*.ts","$($_.FullName)/**/*.tsx" -Pattern "from '@/features/" |
-    ForEach-Object { $_.Line.Trim() } | Sort-Object -Unique
+  $hits = Get-ChildItem $_.FullName -Recurse -Include *.ts,*.tsx |
+    Select-String -Pattern "from '@/features/"
+  if ($hits) {
+    Write-Output "== $($_.Name)"
+    $hits | ForEach-Object { $_.Line.Trim() } | Sort-Object -Unique
+  }
 }
 
 # 4) 运行时通道两侧
-Select-String -Path src/features/**/*.ts,src/features/**/*.tsx -Pattern "trainingEvents|registerAchievementSource|registerAcademyDataSource|registerTheoryDataSource|useDebugModeStore"
+Get-ChildItem src/features -Recurse -Include *.ts,*.tsx |
+  Select-String -Pattern 'trainingEvents|registerAchievementSource|registerAcademyDataSource|registerTheoryDataSource|useDebugModeStore'
 
 # 5) 渲染图源（本机未安装 graphviz；Qoder 可直接预览 .dot）
-dot -Tsvg docs/architecture/shared-layer-2026-11-06/10-shared-consumers.dot -o 10-shared-consumers.svg
+dot -Tsvg docs/architecture/shared-layer-2026-11-06/10-shared-consumers.dot `
+  -o docs/architecture/shared-layer-2026-11-06/10-shared-consumers.svg
 ```
 
 一次性扫描脚本未入库（`.archive/` 已忽略）：`node .archive/arch-model-2026-11-06/scan.mjs`；若目录被清理，按上述命令 + `admissionGraph.ts` 口径重建。
