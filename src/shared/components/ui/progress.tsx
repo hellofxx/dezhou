@@ -9,12 +9,14 @@ interface ProgressProps
   extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
   /** 无障碍标签：传入时写入 aria-label，数值语义由 Radix Root 提供 */
   label?: string
+  /** 填充条附加类名（尺寸 / 色调 / 动效覆盖由消费方决定） */
+  indicatorClassName?: string
 }
 
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   ProgressProps
->(({ className, value, label, ...props }, ref) => (
+>(({ className, value, label, indicatorClassName, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     // value 必须下传：Radix Root 只有在拿到 value 时才输出 aria-valuenow /
@@ -28,7 +30,10 @@ const Progress = React.forwardRef<
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-gradient-to-r from-[var(--brass)] to-[var(--brass-bright)] shadow-[0_0_6px_color-mix(in_srgb,var(--brass-bright)_30%,transparent)] transition-all"
+      className={cn(
+        "h-full w-full flex-1 bg-gradient-to-r from-[var(--brass)] to-[var(--brass-bright)] shadow-[0_0_6px_color-mix(in_srgb,var(--brass-bright)_30%,transparent)] transition-all",
+        indicatorClassName
+      )}
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>

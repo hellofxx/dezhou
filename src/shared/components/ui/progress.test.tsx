@@ -42,4 +42,13 @@ describe('Progress', () => {
     const bar = container.querySelector('[role="progressbar"]');
     expect(bar?.getAttribute('aria-label')).toBe('课程进度');
   });
+
+  it('forwards indicatorClassName to the indicator', () => {
+    act(() => {
+      root.render(<Progress value={50} indicatorClassName="duration-700" />);
+    });
+
+    const indicator = container.querySelector('[role="progressbar"] > div');
+    expect(indicator?.classList.contains('duration-700')).toBe(true);
+  });
 });

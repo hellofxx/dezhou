@@ -159,4 +159,47 @@ describe('StatCard 变体档', () => {
     expect(content?.children.length ?? 0).toBe(2);
     expect(content?.querySelector('[data-probe-icon]')).toBeNull();
   });
+
+  it('xl + solid：结果卡大数值、实底、p-4，并支持 className 合并', () => {
+    render(
+      <StatCard
+        label="正确率"
+        value="72%"
+        size="xl"
+        surface="solid"
+        className="custom-card"
+        contentClassName="custom-content"
+      />,
+    );
+    const { content, card } = cardOf('正确率');
+
+    expect(tokens(card)).toContain('bg-[var(--walnut-raised)]');
+    expect(tokens(card)).toContain('border-transparent');
+    expect(tokens(card)).toContain('rounded-lg');
+    expect(tokens(card)).toContain('shadow-none');
+    expect(tokens(card)).toContain('custom-card');
+
+    expect(tokens(content)).toContain('p-4');
+    expect(tokens(content)).toContain('custom-content');
+
+    const valueEl = screen.getByText('72%');
+    expect(tokens(valueEl)).toContain('text-3xl');
+    expect(tokens(valueEl)).toContain('font-bold');
+  });
+
+  it('label 支持 ReactNode（结果卡标签内嵌图标）', () => {
+    render(
+      <StatCard
+        label={
+          <span>
+            <span data-probe-label-icon>icon</span>用时
+          </span>
+        }
+        value="4.0s"
+      />,
+    );
+
+    expect(document.querySelector('[data-probe-label-icon]')).not.toBeNull();
+    expect(screen.getByText(/用时/)).toBeTruthy();
+  });
 });
