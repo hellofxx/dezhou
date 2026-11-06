@@ -9,7 +9,7 @@ import type { OddsCalculatorState, OddsResult } from '../types';
  *   例：pot=100, bet=50 → 50/200 = 25%
  *
  * 计算器 UI 将「底池大小」与「对手下注」分开输入，shared 的 calculatePotOdds(potSize, betSize)
- * 语义为「potSize 已含对手下注」（口径已在 shared/utils/pokerMath.ts JSDoc 明示，专批 A 2026-07-31）。
+ * 语义为「potSize 已含对手下注」（口径已在 pot-odds/utils/pokerMath.ts JSDoc 明示，专批 A 2026-07-31）。
  * 因此本层将对手下注并入底池参数后再调用 shared 纯函数（其边界防御已由 P1B-10 专批 A 落地）。
  *
  * P1B-01：basePotOdds = calculatePotOdds(pot + bet, bet) → bet/(pot+2bet)
