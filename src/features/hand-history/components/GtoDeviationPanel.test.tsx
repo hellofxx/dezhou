@@ -113,6 +113,13 @@ describe('GtoDeviationPanel', () => {
     // fallback 结果（无 worker 回传时默认 best / 0 EV）
     expect(screen.getByText(i18n.t('handHistory.deviation.decisions'))).not.toBeNull();
     expect(screen.getByText('4')).not.toBeNull();
+
+    // StatBox 保留本地实现：紧凑内联指标（text-sm 数值），不走 shared StatCard 的 sm(text-lg) 档
+    const box = screen.getByText(i18n.t('handHistory.deviation.decisions')).parentElement as HTMLElement;
+    const boxValue = box.firstElementChild as HTMLElement;
+    expect(boxValue.textContent).toBe('4');
+    expect(boxValue.className).toContain('text-sm');
+    expect(boxValue.className).toContain('font-numeric');
     expect(screen.getByText('100%')).not.toBeNull();
     // 平均 EV 损失与最差决策均为 0
     expect(screen.getAllByText('0BB')).toHaveLength(2);

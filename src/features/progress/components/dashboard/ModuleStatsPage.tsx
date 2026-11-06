@@ -13,6 +13,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { StatCard } from '@/shared/components/data-display/StatCard';
 import { ArrowLeft, Target, Clock, BarChart3 } from 'lucide-react';
 import { useProgressStore } from '../../store';
 import { aggregateByDay } from '../../utils/statsAggregator';
@@ -95,16 +96,28 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
             icon={<Target className="w-4 h-4 text-[var(--brass-text)]" />}
             label={t('progress.moduleStats.totalSessions')}
             value={`${stats.sessions}`}
+            accent="gold"
+            size="lg"
+            layout="inline"
+            surface="flat"
           />
           <StatCard
             icon={<BarChart3 className="w-4 h-4 text-[var(--info)]" />}
             label={t('progress.moduleStats.accuracy')}
             value={`${(stats.accuracy * 100).toFixed(1)}%`}
+            accent="gold"
+            size="lg"
+            layout="inline"
+            surface="flat"
           />
           <StatCard
             icon={<Clock className="w-4 h-4 text-[var(--info)]" />}
             label={t('progress.moduleStats.avgTime')}
             value={`${(stats.averageTime / 1000).toFixed(1)}s`}
+            accent="gold"
+            size="lg"
+            layout="inline"
+            surface="flat"
           />
         </div>
 
@@ -220,20 +233,6 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
         </div>
       </div>
     </div>
-  );
-}
-
-function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <Card className="bg-[var(--surface)] border-[var(--surface-raised)]">
-      <CardContent className="p-4 flex items-center gap-3">
-        <div className="shrink-0">{icon}</div>
-        <div>
-          <div className="text-xl font-bold font-mono text-[var(--brass-bright)]">{value}</div>
-          <div className="text-xs text-[var(--ivory-dim)]">{label}</div>
-        </div>
-      </CardContent>
-    </Card>
   );
 }
 

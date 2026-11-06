@@ -29,6 +29,8 @@ const GRADE_CONFIG: Record<string, { labelKey: string; color: string; icon: type
 
 const DEFAULT_GRADE = GRADE_CONFIG.best!;
 
+// 紧凑内联指标（不是统计卡）：text-sm 数值 + px-3/py-2 内边距塞进 4 列小格子，
+// 与 shared StatCard 的 sm(text-lg)/p-3 档位与布尔 accent 语义都不同，故保留本地实现。
 function StatBox({ label, value, accent = false }: { label: string; value: string | number; accent?: boolean }) {
   return (
     <div className="flex flex-col items-center px-3 py-2 rounded-lg bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)]">

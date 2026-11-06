@@ -176,7 +176,18 @@ describe('TheoryResume 统计与预取', () => {
       avgScore: 88,
     });
 
-    expect(screen.getByRole('img', { name: '40%' })).toBeTruthy();
+    const ring = screen.getByRole('img', { name: '40%' });
+    expect(ring.getAttribute('width')).toBe('76');
+    const circles = ring.querySelectorAll('circle');
+    expect(circles[0]?.getAttribute('stroke')).toBe('var(--walnut-raised)');
+    expect(circles[1]?.getAttribute('stroke')).toBe('var(--brass-bright)');
+
+    // 三项统计统一走 shared StatPair（dl + 每项 dt/dd）
+    const heroStats = container.querySelector('.theory-hero-stats');
+    expect(heroStats?.tagName.toLowerCase()).toBe('dl');
+    expect(heroStats?.querySelectorAll('dt')).toHaveLength(3);
+    expect(heroStats?.querySelectorAll('dd')).toHaveLength(3);
+
     expect(container.textContent).toContain('4/10');
     expect(container.textContent).toContain(i18n.t('theory.resume.levelsDoneLabel'));
     expect(container.textContent).toContain('88');

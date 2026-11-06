@@ -105,7 +105,20 @@ describe('AcademyResume：统计与进度环', () => {
     expect(screen.getByText('36 课时')).toBeTruthy();
     expect(screen.getByText('3 级认证')).toBeTruthy();
     expect(container.textContent).toContain('10/36');
-    expect(screen.getByRole('img', { name: '25%' })).toBeTruthy();
+
+    // 进度环走 shared ProgressRing（academy 变体：76px / 胡桃轨 / 黄铜填充）
+    const ring = screen.getByRole('img', { name: '25%' });
+    expect(ring.tagName.toLowerCase()).toBe('svg');
+    expect(ring.getAttribute('width')).toBe('76');
+    const circles = ring.querySelectorAll('circle');
+    expect(circles[0]?.getAttribute('stroke')).toBe('var(--walnut-raised)');
+    expect(circles[1]?.getAttribute('stroke')).toBe('var(--brass-bright)');
+
+    // 三项统计统一走 shared StatPair（dl + 每项 dt/dd）
+    const heroStats = container.querySelector('.academy-hero-stats');
+    expect(heroStats?.tagName.toLowerCase()).toBe('dl');
+    expect(heroStats?.querySelectorAll('dt')).toHaveLength(3);
+    expect(heroStats?.querySelectorAll('dd')).toHaveLength(3);
   });
 
   it('继续态无副标题（不回退到提示文案）', () => {

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { PlayCircle, Sparkles, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
+import ProgressRing from '@/shared/components/data-display/ProgressRing';
+import { StatPair } from '@/shared/components/data-display/StatPair';
 import type { LevelSummary } from '../types';
 import { loadAcademyLessonsForLesson } from '../data/lessons/loaders';
 import { resolveLessonTitle } from '../utils/titleKeys';
@@ -128,64 +130,38 @@ export function AcademyResume({
 
         {/* 右侧：进度环 + 三项统计 */}
         <div className="shrink-0 flex items-center gap-5 md:pl-4 md:border-l border-[var(--walnut-border)]/50">
-          <ProgressRing value={totalProgress} />
-          <dl className="academy-hero-stats">
-            <Stat value={levelsDoneCount} label={t('academy.resume.levelsDone', { count: levelsDoneCount })} />
-            <Stat value={`${completedCount}/${totalLessons}`} label={t('academy.resume.lessonsDone', { count: totalLessons })} />
-            <Stat value={certifiedCount} label={t('academy.resume.certified', { count: certifiedCount })} />
-          </dl>
+          <ProgressRing
+            value={totalProgress}
+            valueMax={100}
+            size={76}
+            variant="academy"
+            ariaLabel={`${totalProgress}%`}
+            center={
+              <div className="text-center">
+                <GraduationCap className="w-4 h-4 text-[var(--brass-bright)] mx-auto mb-0.5" />
+                <span className="font-numeric text-xs text-[var(--ivory)]">{totalProgress}%</span>
+              </div>
+            }
+          />
+          <StatPair
+            className="academy-hero-stats"
+            items={[
+              {
+                value: levelsDoneCount,
+                label: t('academy.resume.levelsDone', { count: levelsDoneCount }),
+              },
+              {
+                value: `${completedCount}/${totalLessons}`,
+                label: t('academy.resume.lessonsDone', { count: totalLessons }),
+              },
+              {
+                value: certifiedCount,
+                label: t('academy.resume.certified', { count: certifiedCount }),
+              },
+            ]}
+          />
         </div>
       </div>
     </motion.section>
-  );
-}
-
-function Stat({ value, label }: { value: number | string; label: string }) {
-  return (
-    <div className="flex items-baseline gap-2">
-      <dt className="text-[10px] text-[var(--ivory-muted)]">{label}</dt>
-      <dd className="font-numeric text-sm text-[var(--brass-bright)]">{value}</dd>
-    </div>
-  );
-}
-
-function ProgressRing({ value }: { value: number }) {
-  const radius = 32;
-  const strokeWidth = 6;
-  const size = (radius + strokeWidth) * 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - Math.min(100, Math.max(0, value)) / 100);
-
-  return (
-    <div className="relative shrink-0" style={{ width: size, height: size }} role="img" aria-label={`${value}%`}>
-      <svg width={size} height={size} className="-rotate-90">
-        <circle
-          cx={radius + strokeWidth}
-          cy={radius + strokeWidth}
-          r={radius}
-          fill="none"
-          stroke="var(--walnut-raised)"
-          strokeWidth={strokeWidth}
-        />
-        <circle
-          cx={radius + strokeWidth}
-          cy={radius + strokeWidth}
-          r={radius}
-          fill="none"
-          stroke="var(--brass-bright)"
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          className="transition-all duration-700"
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center">
-          <GraduationCap className="w-4 h-4 text-[var(--brass-bright)] mx-auto mb-0.5" />
-          <span className="font-numeric text-xs text-[var(--ivory)]">{value}%</span>
-        </div>
-      </div>
-    </div>
   );
 }

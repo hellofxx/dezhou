@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, PlayCircle, Swords, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
+import ProgressRing from '@/shared/components/data-display/ProgressRing';
+import { StatPair } from '@/shared/components/data-display/StatPair';
 import type { TheoryLevelSummary } from '../types';
 import { loadTheoryLevelById } from '../data/levels/loaders';
 import { resolveChapterTitle } from '../utils/titleKeys';
@@ -127,52 +129,34 @@ export function TheoryResume({
 
         {/* 右侧：进度环 + 三项统计 */}
         <div className="shrink-0 flex items-center gap-5 md:pl-4 md:border-l border-[var(--walnut-border)]/50">
-          <TheoryProgressRing value={totalProgress} />
-          <dl className="theory-hero-stats">
-            <Stat value={`${completedCount}/${totalChapters}`} label={t('theory.resume.chaptersDoneLabel')} />
-            <Stat value={levelsDoneCount} label={t('theory.resume.levelsDoneLabel')} />
-            <Stat value={avgScore} label={t('theory.resume.avgScoreLabel')} />
-          </dl>
+          <ProgressRing
+            value={totalProgress}
+            valueMax={100}
+            size={76}
+            variant="academy"
+            ariaLabel={`${totalProgress}%`}
+            center={
+              <div className="flex flex-col items-center">
+                <BookOpen className="w-3.5 h-3.5 text-[var(--brass-bright)]" />
+                <span className="font-numeric text-xs text-[var(--ivory)] mt-0.5">
+                  {totalProgress}%
+                </span>
+              </div>
+            }
+          />
+          <StatPair
+            className="theory-hero-stats"
+            items={[
+              {
+                value: `${completedCount}/${totalChapters}`,
+                label: t('theory.resume.chaptersDoneLabel'),
+              },
+              { value: levelsDoneCount, label: t('theory.resume.levelsDoneLabel') },
+              { value: avgScore, label: t('theory.resume.avgScoreLabel') },
+            ]}
+          />
         </div>
       </div>
     </motion.section>
-  );
-}
-
-function Stat({ value, label }: { value: number | string; label: string }) {
-  return (
-    <div className="flex items-baseline gap-2">
-      <dt className="text-[10px] text-[var(--ivory-muted)]">{label}</dt>
-      <dd className="font-numeric text-sm text-[var(--brass-bright)]">{value}</dd>
-    </div>
-  );
-}
-
-function TheoryProgressRing({ value }: { value: number }) {
-  const radius = 30;
-  const circumference = 2 * Math.PI * radius;
-
-  return (
-    <div className="relative w-[76px] h-[76px] shrink-0" role="img" aria-label={`${value}%`}>
-      <svg width="76" height="76" viewBox="0 0 76 76" className="-rotate-90">
-        <circle cx="38" cy="38" r={radius} fill="none" stroke="var(--walnut-raised)" strokeWidth="6" />
-        <circle
-          cx="38"
-          cy="38"
-          r={radius}
-          fill="none"
-          stroke="var(--brass-bright)"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={circumference - (value / 100) * circumference}
-          className="transition-all duration-700"
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center flex-col">
-        <BookOpen className="w-3.5 h-3.5 text-[var(--brass-bright)]" />
-        <span className="font-numeric text-xs text-[var(--ivory)] mt-0.5">{value}%</span>
-      </div>
-    </div>
   );
 }

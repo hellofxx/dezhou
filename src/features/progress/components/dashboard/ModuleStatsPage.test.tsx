@@ -129,6 +129,39 @@ describe('ModuleStatsPage 单模块统计', () => {
     expect(text).toContain('0.0%');
   });
 
+  it('三张统计卡走 shared StatCard（inline / lg / flat：数值在标签上、扁平边框）', () => {
+    const { container } = renderPage();
+
+    // 三张卡共用 inline 内容布局（p-4 + items-center + gap-3）
+    const inlineContents = [...container.querySelectorAll('div')].filter(
+      (el) =>
+        el.classList.contains('p-4') &&
+        el.classList.contains('items-center') &&
+        el.classList.contains('gap-3'),
+    );
+    expect(inlineContents).toHaveLength(3);
+
+    const labelEl = [...container.querySelectorAll('div')].find(
+      (el) => el.textContent === '总训练次数' && el.classList.contains('text-xs'),
+    );
+    expect(labelEl, '缺少统计卡标签').toBeTruthy();
+
+    const textBlock = labelEl!.parentElement as HTMLElement;
+    const card = textBlock.parentElement?.parentElement as HTMLElement;
+    const valueEl = textBlock.firstElementChild as HTMLElement;
+
+    // flat 表面：surface 色底 + surface-raised 边框（无黄铜描边）
+    expect(card.className).toContain('border-[var(--surface-raised)]');
+    expect(card.className).toContain('bg-[var(--surface)]');
+    // lg：数值加粗 text-xl，标签 text-xs（数值在标签之上）
+    expect(valueEl.className).toContain('font-numeric');
+    expect(valueEl.className).toContain('text-xl');
+    expect(valueEl.className).toContain('font-bold');
+    expect(valueEl.className).toContain('text-[var(--brass-bright)]');
+    expect(valueEl.className).not.toContain('font-mono');
+    expect(valueEl.textContent).toBe('0');
+  });
+
   it('返回按钮跳转 /progress', () => {
     const { getByLabelText } = renderPage();
     fireEvent.click(getByLabelText('返回'));

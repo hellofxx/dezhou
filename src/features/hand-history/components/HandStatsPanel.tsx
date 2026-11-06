@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { StatCard } from '@/shared/components/data-display/StatCard';
 import type { HeroStats } from '../utils/handStats';
 import { TrendingUp, AlertTriangle } from 'lucide-react';
 
@@ -18,19 +19,6 @@ const STANDARD_RANGES: Record<string, { vpip: [number, number]; pfr: [number, nu
   BB: { vpip: [40, 55], pfr: [10, 16] },
 };
 
-function StatCard({ label, value, suffix = '%' }: { label: string; value: number; suffix?: string }) {
-  return (
-    <div className="flex flex-col items-center p-3 rounded-xl bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)]">
-      <span className="text-lg font-bold font-numeric text-[var(--brass-bright)]">
-        {value}{suffix}
-      </span>
-      <span className="text-[10px] text-[var(--ivory-muted)] font-display tracking-wide mt-0.5">
-        {label}
-      </span>
-    </div>
-  );
-}
-
 function getPositionFeedback(position: string, vpip: number): { low: boolean; range: [number, number] } | null {
   const range = STANDARD_RANGES[position];
   if (!range) return null;
@@ -38,6 +26,15 @@ function getPositionFeedback(position: string, vpip: number): { low: boolean; ra
   if (vpip > range.vpip[1]) return { low: false, range: range.vpip };
   return null;
 }
+
+/** 七项指标共用呈现：紧凑数值卡 + 百分比后缀（原本地 StatCard 的默认 suffix='%'，值在标签上） */
+const HERO_STAT = {
+  accent: 'gold',
+  suffix: '%',
+  size: 'sm',
+  surface: 'raised',
+  valueFirst: true,
+} as const;
 
 export function HandStatsPanel({ stats }: HandStatsPanelProps) {
   const { t } = useTranslation();
@@ -68,17 +65,17 @@ export function HandStatsPanel({ stats }: HandStatsPanelProps) {
     <div className="space-y-6">
       {/* Core metrics */}
       <div className="grid grid-cols-4 gap-3">
-        <StatCard label="VPIP" value={stats.vpip} />
-        <StatCard label="PFR" value={stats.pfr} />
-        <StatCard label="3-bet%" value={stats.threeBetPercent} />
-        <StatCard label="AFq" value={stats.afq} />
+        <StatCard label="VPIP" value={stats.vpip} {...HERO_STAT} />
+        <StatCard label="PFR" value={stats.pfr} {...HERO_STAT} />
+        <StatCard label="3-bet%" value={stats.threeBetPercent} {...HERO_STAT} />
+        <StatCard label="AFq" value={stats.afq} {...HERO_STAT} />
       </div>
 
       {/* Secondary metrics */}
       <div className="grid grid-cols-3 gap-3">
-        <StatCard label="C-Bet%" value={stats.cbetFrequency} />
-        <StatCard label="WTSD" value={stats.wtsd} />
-        <StatCard label="W$SD" value={stats.wsd} />
+        <StatCard label="C-Bet%" value={stats.cbetFrequency} {...HERO_STAT} />
+        <StatCard label="WTSD" value={stats.wtsd} {...HERO_STAT} />
+        <StatCard label="W$SD" value={stats.wsd} {...HERO_STAT} />
       </div>
 
       {/* Position chart */}

@@ -70,6 +70,32 @@ describe('HandStatsPanel 核心指标', () => {
   });
 });
 
+describe('HandStatsPanel 指标卡', () => {
+  it('七项指标走 shared StatCard（sm / raised：胡桃底 + 无阴影 + 黄铜数值 + % 后缀）', () => {
+    const { container } = render(<HandStatsPanel stats={stats()} />);
+
+    const cards = [...container.querySelectorAll('div')].filter((el) =>
+      el.classList.contains('shadow-none'),
+    );
+    expect(cards).toHaveLength(7);
+
+    const first = cards[0]!;
+    expect(first.className).toContain('bg-[var(--walnut-raised)]/40');
+    expect(first.className).toContain('border-[var(--walnut-border)]');
+    expect(first.classList.contains('rounded-xl')).toBe(true);
+
+    const content = first.firstElementChild as HTMLElement;
+    // valueFirst：保留 hand-history 原「数值在上、标签在下」的视觉
+    const valueEl = content.children[0] as HTMLElement;
+    const labelEl = content.children[1] as HTMLElement;
+    expect(valueEl.textContent).toBe('28%');
+    expect(labelEl.textContent).toBe('VPIP');
+    expect(valueEl.className).toContain('font-numeric');
+    expect(valueEl.className).toContain('text-lg');
+    expect(valueEl.className).toContain('text-[var(--brass-bright)]');
+  });
+});
+
 describe('HandStatsPanel 位置建议', () => {
   it('VPIP 低于 / 高于标准区间时给出对应建议，区间内与无标准区间的位置不提示', () => {
     render(<HandStatsPanel stats={stats()} />);
