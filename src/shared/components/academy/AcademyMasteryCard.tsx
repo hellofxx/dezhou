@@ -9,6 +9,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { transitionStandard } from '@/shared/utils/motion';
 import type { MasteryState, MasterySummary } from '@/shared/types/academy';
 
@@ -90,9 +91,9 @@ export function AcademyMasteryCard({
       transition={transitionStandard}
       aria-label={ariaLabel ?? title}
     >
-      <h2 className="mb-2.5 px-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--brass-text)]">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {title}
-      </h2>
+      </SectionLabel>
 
       <div className="panel space-y-2.5">
         {subtitle ? (

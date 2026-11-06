@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { Bookmark, BookmarkCheck, BookmarkX, ChevronRight } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { transitionStandard } from '@/shared/utils/motion';
 
 /** 通用书签条目：章节 / 课时由各院适配器解析成可读标题与路由后传入。 */
@@ -60,10 +61,9 @@ export function AcademyBookmarksPanel({
       >
         <div className="flex items-center gap-2 mb-2">
           <BookmarkCheck className="w-3.5 h-3.5 text-[var(--brass-bright)]" aria-hidden="true" />
-          <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
+          <SectionLabel as="h2" count={count}>
             {labels.title}
-          </h2>
-          <span className="font-numeric text-[11px] text-[var(--ivory-muted)]">{count}</span>
+          </SectionLabel>
         </div>
         {count === 0 ? (
           <p className="text-[11px] text-[var(--ivory-dim)] leading-relaxed">{labels.empty}</p>
@@ -94,10 +94,9 @@ export function AcademyBookmarksPanel({
     <section aria-label={accessibleName} className="panel space-y-2">
       <div className="flex items-center gap-2">
         <BookmarkCheck className="w-4 h-4 text-[var(--brass-bright)] shrink-0" aria-hidden="true" />
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
+        <SectionLabel as="h2" count={count}>
           {labels.title}
-        </h2>
-        <span className="font-numeric text-[11px] text-[var(--ivory-muted)]">{count}</span>
+        </SectionLabel>
       </div>
 
       {count === 0 ? (

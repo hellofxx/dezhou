@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { NotebookPen, Save, Trash2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 
 export interface AcademyNotesLabels {
   title: string;
@@ -60,9 +61,7 @@ export function AcademyNotesPanel({
     <section aria-label={labels.title} className={cn('panel space-y-2.5', className)}>
       <div className="flex items-center gap-2">
         <NotebookPen className="w-4 h-4 text-[var(--brass-bright)] shrink-0" aria-hidden="true" />
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
-          {labels.title}
-        </h2>
+        <SectionLabel as="h2">{labels.title}</SectionLabel>
       </div>
 
       <textarea

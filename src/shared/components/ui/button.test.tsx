@@ -43,6 +43,21 @@ describe('Button', () => {
     expect(button.classList.contains('btn-brass')).toBe(false);
   });
 
+  it('variant="quiet" 使用透明底与安静字色，不套金属件', () => {
+    const button = render(<Button variant="quiet">跳过</Button>);
+    expect(button.classList.contains('bg-transparent')).toBe(true);
+    expect(button.classList.contains('text-[var(--ivory-dim)]')).toBe(true);
+    expect(button.classList.contains('btn-brass')).toBe(false);
+    expect(button.classList.contains('btn-metal')).toBe(false);
+  });
+
+  it('variant="link" 使用黄铜文本链接语义', () => {
+    const button = render(<Button variant="link">去复习</Button>);
+    expect(button.classList.contains('text-[var(--brass-text)]')).toBe(true);
+    expect(button.classList.contains('underline-offset-4')).toBe(true);
+    expect(button.classList.contains('btn-brass')).toBe(false);
+  });
+
   it('默认与 sm 尺寸都带移动端触摸目标 max-md:min-h-11', () => {
     expect(render(<Button>默认</Button>).classList.contains('max-md:min-h-11')).toBe(true);
     expect(render(<Button size="sm">小尺寸</Button>).classList.contains('max-md:min-h-11')).toBe(
