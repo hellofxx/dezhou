@@ -74,7 +74,7 @@ src/
 | 状态 | zustand persist；禁止裸调 localStorage；每个 store 有 name + version；记录完成 action 幂等 | `docs/AI_GUIDE.md` §状态管理 |
 | i18n | zh/en 缺一不可；key 命名 `<module>.<context>.<field>`；课程内容双轨、复习状态存 key | `docs/AI_GUIDE.md` §国际化 |
 | UI/UX | 四层色彩 token；暗色默认；WCAG 2.1 AA；反霓虹；设计契约以 `DESIGN.md` 为准 | `DESIGN.md` + `docs/AI_GUIDE.md` §UI/UX |
-| 文件大小 | 单文件 ≤300 行；>400 行失败；逐文件 allowlist 只减不增；题库纯数据文件（理论标准 / 单挑 + 策略）超限时走专用 `QUIZ_BANK_ALLOWLIST`（逐文件上限；chapters / blocks 不豁免）；CSS ≤800 行 | `src/guards/line-count-guard.test.ts` |
+| 文件大小 | **课程内容数据文件不做行数限制**（策略 lessons/variants、localLessons、basicsContent；理论 levels/variants 的 Level / chapters / quizBank / blocks / 章节推荐）；其余逻辑 / UI / 常量文件 ≤300 行、>400 行失败；非课程超大文件逐文件 allowlist 只减不增；CSS ≤800 行 | `src/guards/line-count-guard.test.ts` |
 
 ## 路由、构建与离线
 

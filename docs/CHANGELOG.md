@@ -18,8 +18,10 @@
 - **元数据与运营**：新增 `lessonMeta/headsUp.ts`（12 课 ELO 维度 + `t*hu-*` 锚点），标准/单挑分表守卫；`contentOps` 纳入单挑 12 课 `lastReviewed`；全文搜索按当前变体懒加载并缓存（标准全量 / 单挑 12 课），UI 复用 shared `AcademySearchShell`。
 - **i18n**：`academy-course/heads-up.json` 拆为 `heads-up-l3..l8.json`（zh/en），`deriveAcademyCourseFilesForLesson` 按 `l<n>hu-` 映射；`huPositionOrderGuard` 扫描六份新文案。
 - **守卫**：新增 `headsUpVariantParity.test.ts`（10 题 / 3 牌例 / ≥4 practice / ≥10 段 / ≥2 理论引用 / ≥2 units）；`curriculumIntegrity` 覆盖变体 quiz / practice / units；`quizShuffle` 纳入全部变体课时（857 题，分布 <50%）。短牌存量两处重复牌登记为后续修复。
-- **范围外 / 遗留**：短牌内容、变体认证、持久化 schema 不变；变体 L4 在 manifest 的 `l4a` / `l4b` 重复挂载为既有行为，另案修复。
-- **验证**：全量 `pnpm verify` 通过（439 文件 / 3318 用例；typecheck / lint / repo / docs / agents-map 均通过）；`pnpm build` 通过，单挑 chunk 188.62 KB（gzip 56.04 KB，懒载）；`pnpm size:check` 通过（首屏 727.83 KB / gzip ~218.35 KB）。组件行为由 jsdom 测试覆盖，视觉与响应式未实机复核。
+- **变体 L4 去重与门禁**：`generate-academy-manifest` 对变体按数字 level 去重，短牌 / 单挑 L4 合并为单一条目（id 保留 `l4b`，标题「进阶思维 · 范围、EV 与 GTO」，解锁「完成 Level 3」），不再把同一组课重复挂到 l4a / l4b；L8 的 `prerequisiteLevelIds: ['l4b']` 仍可解析。单挑 manifest 由 7 层/16 课收敛为 6 层/12 课。同时 `isLevelEntryUnlockedByCompleted` 接受当前变体 Level 序列，store 按 `activeVariant` 解析前置与上一级：单挑完成 L3 解锁 L4、完成 L4 解锁 L5，L8 仍只依赖 L4b；L1/L2 共享基础层回退标准序列。
+- **行数守卫**：课程内容数据文件（策略 lessons/variants、localLessons、basicsContent；理论 levels/variants 的 Level / chapters / quizBank / blocks / 章节推荐）不做行数限制；移除 `QUIZ_BANK_ALLOWLIST`，逻辑 / UI 文件仍 ≤300 目标、>400 失败，非课程超大文件逐文件 allowlist 保留。
+- **范围外 / 遗留**：短牌内容、变体认证、持久化 schema 不变。
+- **验证**：全量 `pnpm verify` 通过（439 文件 / 3321 用例；typecheck / lint / repo / docs / agents-map 均通过）；`pnpm build` 通过，单挑 chunk 188.62 KB（gzip 56.04 KB，懒载）；`pnpm size:check` 通过（首屏 727.83 KB / gzip ~218.35 KB）。组件行为由 jsdom 测试覆盖，视觉与响应式未实机复核。
 
 ### 2026-11-05 理论学院单挑变体全量对齐（heads-up 37 核心章）
 

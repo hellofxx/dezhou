@@ -37,8 +37,15 @@ export default function AcademyHome() {
 
   // ACAD-05：阶梯按当前变体渲染（manifest 已按变体分组；L1/L2 复用共享基础层）
   const ladderLevels = getLevelSummariesByVariant(activeVariant);
+  // 变体阶梯按自身 Level 序列判断前置（l3 → l4b → l5 ...），标准 L1/L2 仍回退标准序列
+  const isLadderEntryUnlocked = (levelId: string) =>
+    isLevelEntryUnlocked(levelId, activeVariant);
 
-  const activeLevelId = findActiveLevelId(ladderLevels, progress.completedLessons, isLevelEntryUnlocked);
+  const activeLevelId = findActiveLevelId(
+    ladderLevels,
+    progress.completedLessons,
+    isLadderEntryUnlocked,
+  );
   const activeLevel = ladderLevels.find((l) => (l.id ?? String(l.level)) === activeLevelId) ?? null;
   const completedLevels = ladderLevels.filter((level) =>
     level.lessons.every((lesson) => progress.completedLessons.includes(lesson.id))
@@ -118,7 +125,7 @@ export default function AcademyHome() {
             <LevelLadder
               levels={ladderLevels}
               completedLessons={progress.completedLessons}
-              isUnlocked={isLevelEntryUnlocked}
+              isUnlocked={isLadderEntryUnlocked}
               startLevelId={isZeroState ? ladderLevels[0]?.id : undefined}
             />
           </motion.div>

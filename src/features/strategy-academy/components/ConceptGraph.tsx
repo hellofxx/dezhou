@@ -12,7 +12,6 @@ import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';
 import type { RovingGridItemProps } from '@/shared/hooks/useRovingGridNav';
 import ProgressRing from '@/shared/components/business/ProgressRing';
 import { resolveLevelTitle, resolveLessonTitle, lessonTitleKey, levelTitleKey } from '../utils/titleKeys';
-
 interface GraphNode {
   id: string;
   label: string;
@@ -391,7 +390,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       if (completedLessons.includes(node.id)) return 'completed';
       if (localLessonIds.has(node.id)) {
         if (!isLocalLessonUnlocked(node.id)) return 'locked';
-      } else if (!isLevelEntryUnlocked(node.levelId)) {
+      } else if (!isLevelEntryUnlocked(node.levelId, 'standard')) {
         return 'locked';
       }
       // 当前进行中：该条目已解锁，该课程未完成，且前一课已完成（或为第一课）
@@ -458,7 +457,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       <div className="space-y-4">
         {LEVELS.map((levelInfo) => {
           const lessons = [...levelInfo.lessons].toSorted((a, b) => a.order - b.order);
-          const unlocked = isLevelEntryUnlocked(levelInfo.id ?? String(levelInfo.level));
+          const unlocked = isLevelEntryUnlocked(levelInfo.id ?? String(levelInfo.level), 'standard');
           return (
             <div key={levelInfo.id ?? levelInfo.level} className="rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)] p-3">
               <div className="flex items-center gap-2 mb-2">

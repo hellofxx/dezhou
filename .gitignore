@@ -17,6 +17,7 @@ dist-ssr
 .solomd/
 .uploads/
 .qoder/
+.codegraph/
 .workbuddy/
 .trae/
 .codebuddy/

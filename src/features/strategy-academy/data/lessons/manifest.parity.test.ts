@@ -49,6 +49,20 @@ function projectLevel(level: LevelSummary, lessons: Lesson[]): LevelSummary {
   };
 }
 
+/**
+ * 与 `scripts/generate-academy-manifest.mjs` 的 VARIANT_LEVEL_OVERRIDES 保持同步：
+ * 变体按数字 level 去重，L4 合并为一个条目（id 保留 l4b 以匹配标准 L8 前置）。
+ */
+const VARIANT_LEVEL_OVERRIDES: Record<number, Partial<LevelSummary>> = {
+  4: {
+    id: 'l4b',
+    title: '进阶思维 · 范围、EV 与 GTO',
+    description: '范围、EV 与 GTO 博弈的整合',
+    icon: '🧠',
+    unlockRequirement: '完成 Level 3 所有课程',
+  },
+};
+
 function expectedVariantLevels(variant: 'short-deck' | 'heads-up'): LevelSummary[] {
   const byLevel = new Map<number, Lesson[]>();
   for (const lesson of VARIANT_LESSON_INDEX[variant]) {
@@ -56,9 +70,20 @@ function expectedVariantLevels(variant: 'short-deck' | 'heads-up'): LevelSummary
     list.push(lesson);
     byLevel.set(lesson.level, list);
   }
-  return LEVELS.filter((level) => byLevel.has(level.level)).map((level) =>
-    projectLevel(level, byLevel.get(level.level) ?? []),
-  );
+  const baseByLevel = new Map<number, LevelSummary>();
+  for (const level of LEVELS) {
+    if (byLevel.has(level.level) && !baseByLevel.has(level.level)) {
+      baseByLevel.set(level.level, level);
+    }
+  }
+  return [...byLevel.entries()]
+    .toSorted(([a], [b]) => a - b)
+    .map(([levelNumber, lessons]) =>
+      projectLevel(
+        { ...baseByLevel.get(levelNumber)!, ...VARIANT_LEVEL_OVERRIDES[levelNumber] },
+        lessons,
+      ),
+    );
 }
 
 describe('academy manifest 与完整课程数据一致', () => {
@@ -71,6 +96,20 @@ describe('academy manifest 与完整课程数据一致', () => {
   it('short-deck / heads-up：按标准 Level 元数据分组后逐项一致', () => {
     expect(SHORT_DECK_LEVEL_SUMMARIES).toEqual(expectedVariantLevels('short-deck'));
     expect(HEADS_UP_LEVEL_SUMMARIES).toEqual(expectedVariantLevels('heads-up'));
+  });
+
+  it('变体 L4 只出现一次，且完整包含该变体全部 level:4 课程', () => {
+    for (const variant of ['short-deck', 'heads-up'] as const) {
+      const levels = variant === 'short-deck' ? SHORT_DECK_LEVEL_SUMMARIES : HEADS_UP_LEVEL_SUMMARIES;
+      const l4 = levels.filter((level) => level.level === 4);
+      expect(l4, `${variant} L4 条目数`).toHaveLength(1);
+      expect(l4[0]?.id).toBe('l4b');
+      expect(l4[0]?.lessons.map((lesson) => lesson.id)).toEqual(
+        VARIANT_LESSON_INDEX[variant]
+          .filter((lesson) => lesson.level === 4)
+          .map((lesson) => lesson.id),
+      );
+    }
   });
 
   it('变体课程摘要去重后与 VARIANT_LESSON_INDEX 的课程集合一致', () => {

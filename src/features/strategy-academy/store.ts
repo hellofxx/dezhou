@@ -21,6 +21,7 @@ import {
   getLevelNumbers,
   getLevelSummaries,
   getLevelSummariesByNumber,
+  getLevelSummariesByVariant,
   isLevelEntryUnlockedByCompleted,
 } from './utils/academyMeta';
 import {
@@ -95,8 +96,11 @@ interface AcademyStore {
   recordPracticeScore: (result: PracticeResult) => void;
   resetProgress: () => void;
   isLevelUnlocked: (level: number) => boolean;
-  /** 按 LevelInfo.id（如 'l4a'/'l4b'）判断单个 Level 条目是否解锁，区分同 level 数字的 4A/4B */
-  isLevelEntryUnlocked: (levelId: string) => boolean;
+  /**
+   * 按 LevelInfo.id（如 'l4a'/'l4b'）判断单个 Level 条目是否解锁，区分同 level 数字的 4A/4B。
+   * 传入 variant 时按该变体的 Level 序列解析前置；缺省沿用 activeVariant。
+   */
+  isLevelEntryUnlocked: (levelId: string, variant?: PokerVariant) => boolean;
   getLevelProgress: (level: number) => number;
   getTotalProgress: () => number;
   isCompleted: (lessonId: string) => boolean;
@@ -271,23 +275,42 @@ export const useAcademyStore = create<AcademyStore>()(
 
       isLevelUnlocked: (level) => {
         if (isDebugUnlockActive()) return true;
-        const entries = getLevelSummaries().filter(
+        const levels = getLevelSummaries();
+        const entries = levels.filter(
           (entry) => entry.level === level && typeof entry.id === 'string',
         );
-        return entries.length > 0 && entries.every((entry) => get().isLevelEntryUnlocked(entry.id!));
+        return (
+          entries.length > 0 &&
+          entries.every((entry) =>
+            isLevelEntryUnlockedByCompleted(
+              entry,
+              get().basicsProgress.completed,
+              get().progress.completedLessons,
+              get().placement?.creditLevels ?? [],
+              levels,
+            ),
+          )
+        );
       },
 
       // P0 修复（审计 1.1）：按 LevelInfo 条目判定解锁，消除 l4a/l4b 同为 level:4 时
-      // isLevelUnlocked(4) “任一条目满足即解锁”导致的 4B 门禁旁路
-      isLevelEntryUnlocked: (levelId) => {
+      // isLevelUnlocked(4) “任一条目满足即解锁”导致的 4B 门禁旁路。
+      // 变体门禁按当前 activeVariant 的 Level 序列解析前置与上一级，不误用标准课完成态。
+      isLevelEntryUnlocked: (levelId, variant) => {
         if (isDebugUnlockActive()) return true; // 调试解锁：解除全部 Level 条目门禁
-        const levelInfo = findLevelSummaryById(levelId);
+        const targetVariant = variant ?? get().activeVariant;
+        const variantLevels = getLevelSummariesByVariant(targetVariant);
+        const variantEntry = variantLevels.find(
+          (entry) => (entry.id ?? String(entry.level)) === levelId,
+        );
+        const levelInfo = variantEntry ?? findLevelSummaryById(levelId);
         if (!levelInfo) return false;
         return isLevelEntryUnlockedByCompleted(
           levelInfo,
           get().basicsProgress.completed,
           get().progress.completedLessons,
           get().placement?.creditLevels ?? [],
+          variantEntry ? variantLevels : getLevelSummaries(),
         );
       },
 

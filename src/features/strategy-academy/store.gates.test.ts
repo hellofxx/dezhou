@@ -63,6 +63,28 @@ describe('strategy-academy store gates', () => {
     expect(useAcademyStore.getState().isLevelEntryUnlocked('l2')).toBe(true);
   });
 
+  it('单挑变体门禁按自身 Level 序列：L3 → L4b → L5，L8 仍只依赖 L4b', async () => {
+    const { useAcademyStore, getVariantLessonSummaries } = await load();
+    useAcademyStore.getState().switchVariant('heads-up');
+
+    expect(useAcademyStore.getState().isLevelEntryUnlocked('l4b')).toBe(false);
+    for (const lesson of getVariantLessonSummaries('heads-up').filter(
+      (lesson) => lesson.level === 3,
+    )) {
+      useAcademyStore.getState().completeLesson(lesson.id);
+    }
+    expect(useAcademyStore.getState().isLevelEntryUnlocked('l4b')).toBe(true);
+    expect(useAcademyStore.getState().isLevelEntryUnlocked('l5')).toBe(false);
+
+    for (const lesson of getVariantLessonSummaries('heads-up').filter(
+      (lesson) => lesson.level === 4,
+    )) {
+      useAcademyStore.getState().completeLesson(lesson.id);
+    }
+    expect(useAcademyStore.getState().isLevelEntryUnlocked('l5')).toBe(true);
+    expect(useAcademyStore.getState().isLevelEntryUnlocked('l8')).toBe(true);
+  });
+
   it('未知 Level 条目返回 false（不误放行）', async () => {
     const { useAcademyStore } = await load();
     expect(useAcademyStore.getState().isLevelEntryUnlocked('l99')).toBe(false);

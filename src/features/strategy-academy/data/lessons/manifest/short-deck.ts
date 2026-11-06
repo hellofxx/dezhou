@@ -19,26 +19,11 @@ export const SHORT_DECK_LEVEL_SUMMARIES: LevelSummary[] = [
   },
   {
     "level": 4,
-    "id": "l4a",
-    "title": "进阶思维 · 范围与EV",
-    "description": "培养范围阅读、EV计算和对手分析的能力",
+    "id": "l4b",
+    "title": "进阶思维 · 范围、EV 与 GTO",
+    "description": "范围、EV 与 GTO 博弈的整合",
     "icon": "🧠",
     "unlockRequirement": "完成 Level 3 所有课程",
-    "lessons": [
-      {"id":"l4sd-preflop-ranges","level":4,"order":1,"title":"短牌翻前范围","subtitle":"36 张牌环境下的起手牌价值重排与开局范围构建","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
-      {"id":"l4sd-nuts-equity","level":4,"order":2,"title":"坚果与权益计算","subtitle":"短牌高权益环境下的坚果追逐、胜率修正与成牌概率","duration":"8 min","variant":"short-deck","hasPractice":true,"quizCount":5},
-      {"id":"l4sd-blocker-bluff","level":4,"order":3,"title":"阻断牌诈唬","subtitle":"短牌强牌密集环境下的阻断牌价值与诈唬选择","duration":"8 min","variant":"short-deck","hasPractice":true,"quizCount":5},
-      {"id":"l4sd-gto-fundamentals","level":4,"order":1,"title":"短牌 GTO 基础","subtitle":"短牌博弈树差异、频率基准与 GTO 策略的适用边界","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
-      {"id":"l4sd-solver-readout","level":4,"order":2,"title":"Solver 结果解读","subtitle":"阅读短牌 Solver 输出并提炼为可执行的实战策略","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
-    ]
-  },
-  {
-    "level": 4,
-    "id": "l4b",
-    "title": "进阶思维 · GTO与博弈论",
-    "description": "掌握GTO理论、博弈树和频率平衡的核心概念",
-    "icon": "🎲",
-    "unlockRequirement": "完成 进阶思维·范围与EV 所有课程",
     "lessons": [
       {"id":"l4sd-preflop-ranges","level":4,"order":1,"title":"短牌翻前范围","subtitle":"36 张牌环境下的起手牌价值重排与开局范围构建","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
       {"id":"l4sd-nuts-equity","level":4,"order":2,"title":"坚果与权益计算","subtitle":"短牌高权益环境下的坚果追逐、胜率修正与成牌概率","duration":"8 min","variant":"short-deck","hasPractice":true,"quizCount":5},

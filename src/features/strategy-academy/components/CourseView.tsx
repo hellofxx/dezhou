@@ -85,7 +85,7 @@ export default function CourseView() {
       : isLocalLesson
         ? localPrereqIds.every(isEntryCompleted)
         : levelEntry?.id
-          ? isLevelEntryUnlocked(levelEntry.id)
+          ? isLevelEntryUnlocked(levelEntry.id, lesson.variant ?? 'standard')
           : isLevelUnlocked(lesson.level);
 
   // P4 修复（4.1-P2-1）：检查细粒度 prerequisite（如果课程声明了 prerequisites 字段）

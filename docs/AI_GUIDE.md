@@ -31,9 +31,9 @@
 - 300–400 行：灰区，守卫以 `console.warn` 输出清单，不阻断 CI
 - > 400 行：硬失败，必须拆分为子组件 / 工具函数 / 数据文件
 
-既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。禁止恢复目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增文件不得登记 allowlist，只能拆分。
+**课程内容数据文件不做行数限制**（2026-11 起）：策略 `features/strategy-academy/data/lessons/variants/**`、`localLessons/**`、`basicsContent.ts`；理论 `features/theory-academy/data/levels/variants/**` 下的 Level 文件、`chapters/**`、`quizBank/**`、`blocks/**`、`chapterPracticeMap.ts` / `chapterMeta.ts`。课程正文与题库体量随内容增长，拆分只会切碎同一门课/同一章题库，因此按精确路径正则豁免，不进入 300/400 行判定与灰区告警。
 
-**唯一例外：题库纯数据文件**。理论标准 `features/theory-academy/data/levels/variants/standard/quizBank/t*.ts`、理论单挑 `features/theory-academy/data/levels/variants/heads-up/quizBank/t*.ts`（`t1hu..t9hu`）与策略单挑 `features/strategy-academy/data/lessons/variants/heads-up/quizBank/l*.ts`（`l3hu..l8hu`）都是逐 Level 的纯数据文件，体积随题量增长；它们按需逐文件登记到 `QUIZ_BANK_ALLOWLIST`（精确路径、逐文件 `maxLines`、只减不增），登记后从通用硬失败扫描中排除。该例外仅限 quizBank 数据文件，不构成目录/类别级豁免，也不适用于逻辑或 UI 文件；新增题库文件必须登记且不能超过登记行数。
+**非课程文件仍按三档执行**：既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。禁止恢复其他目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增非课程文件不得登记 allowlist，只能拆分。逻辑文件（`composeVariantChapters` / `loaders` / `index` 等）不享受课程内容豁免。
 
 CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫（平铺扫描 `src/styles/*.css`，Phase 2 拆分的分片文件同样平铺）；`globals.css` 为 Phase 2 拆分前的临时豁免，上限锁定在 `CSS_ALLOWLIST` 中的当前行数，同样只减不增。
 

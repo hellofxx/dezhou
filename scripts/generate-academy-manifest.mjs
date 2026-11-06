@@ -80,6 +80,23 @@ try {
   );
 
   const standard = courses.LEVELS.map((level) => projectLevel(level, level.lessons));
+  /**
+   * 变体 L4 合并展示：标准侧 L4 拆 l4a/l4b 两个条目，变体课只有一组 level:4 课程；
+   * 若按数字 level 直接匹配标准条目会把同一组课重复挂到 l4a 与 l4b。
+   * 这里按数字 level 去重，并为 L4 提供合并标题；id 保留 `l4b` 以维持
+   * 标准 L8 `prerequisiteLevelIds: ['l4b']` 的可解析性。
+   * 注意：`src/features/strategy-academy/data/lessons/manifest.parity.test.ts`
+   * 的 expectedVariantLevels 必须与本逻辑保持同步。
+   */
+  const VARIANT_LEVEL_OVERRIDES = {
+    4: {
+      id: 'l4b',
+      title: '进阶思维 · 范围、EV 与 GTO',
+      description: '范围、EV 与 GTO 博弈的整合',
+      icon: '🧠',
+      unlockRequirement: '完成 Level 3 所有课程',
+    },
+  };
   const variantLevels = (variant) => {
     const byLevel = new Map();
     for (const lesson of variantIndex.VARIANT_LESSON_INDEX[variant]) {
@@ -87,9 +104,19 @@ try {
       list.push(lesson);
       byLevel.set(lesson.level, list);
     }
-    return courses.LEVELS.filter((level) => byLevel.has(level.level)).map((level) =>
-      projectLevel(level, byLevel.get(level.level) ?? []),
-    );
+    const baseByLevel = new Map();
+    for (const level of courses.LEVELS) {
+      if (byLevel.has(level.level) && !baseByLevel.has(level.level)) {
+        baseByLevel.set(level.level, level);
+      }
+    }
+    return [...byLevel.entries()]
+      .toSorted(([a], [b]) => a - b)
+      .map(([levelNumber, lessons]) => {
+        const base = baseByLevel.get(levelNumber);
+        const override = VARIANT_LEVEL_OVERRIDES[levelNumber];
+        return projectLevel({ ...base, ...override }, lessons);
+      });
   };
 
   const files = [

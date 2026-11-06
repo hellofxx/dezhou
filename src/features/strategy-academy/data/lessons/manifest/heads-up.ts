@@ -18,25 +18,11 @@ export const HEADS_UP_LEVEL_SUMMARIES: LevelSummary[] = [
   },
   {
     "level": 4,
-    "id": "l4a",
-    "title": "进阶思维 · 范围与EV",
-    "description": "培养范围阅读、EV计算和对手分析的能力",
+    "id": "l4b",
+    "title": "进阶思维 · 范围、EV 与 GTO",
+    "description": "范围、EV 与 GTO 博弈的整合",
     "icon": "🧠",
     "unlockRequirement": "完成 Level 3 所有课程",
-    "lessons": [
-      {"id":"l4hu-bn-opening","level":4,"order":1,"title":"按钮位开局加注","subtitle":"单挑按钮位接近 100% 的开局频率与尺度调整","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
-      {"id":"l4hu-ev-adjustments","level":4,"order":2,"title":"EV 调整","subtitle":"单挑两人底池的 EV 计算差异与决策简化","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
-      {"id":"l4hu-gto-basics","level":4,"order":3,"title":"单挑 GTO 基础","subtitle":"单挑均衡策略的结构差异、频率基准与位置对称性","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":10},
-      {"id":"l4hu-counter-strategies","level":4,"order":4,"title":"反制策略","subtitle":"针对单挑对手常见偏离的 GTO 反制与再调整框架","duration":"9 min","variant":"heads-up","hasPractice":true,"quizCount":10},
-    ]
-  },
-  {
-    "level": 4,
-    "id": "l4b",
-    "title": "进阶思维 · GTO与博弈论",
-    "description": "掌握GTO理论、博弈树和频率平衡的核心概念",
-    "icon": "🎲",
-    "unlockRequirement": "完成 进阶思维·范围与EV 所有课程",
     "lessons": [
       {"id":"l4hu-bn-opening","level":4,"order":1,"title":"按钮位开局加注","subtitle":"单挑按钮位接近 100% 的开局频率与尺度调整","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
       {"id":"l4hu-ev-adjustments","level":4,"order":2,"title":"EV 调整","subtitle":"单挑两人底池的 EV 计算差异与决策简化","duration":"8 min","variant":"heads-up","hasPractice":true,"quizCount":10},
