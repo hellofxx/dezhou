@@ -50,6 +50,7 @@ export default function RangeLearnPage() {
               onClick={() => navigate('/range-trainer')}
               label={t('common.ui.back')}
               variant="button"
+              className="hidden md:inline-flex"
             />
             <div>
               <h1 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">
