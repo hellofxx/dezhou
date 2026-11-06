@@ -28,16 +28,8 @@ const TEST_STUBS = new Set([
   'src/shared/utils/persistShape.ts',
 ]);
 
-/** 0 生产消费者 baseline（Batch 1 起逐条删除；只降不升） */
-const ZERO_CONSUMER_BASELINE: Record<string, string> = {
-  'src/shared/components/business/FreezeChip.tsx': '与 progress 版本字节相同，Batch 1 删除',
-  'src/shared/components/business/MilestoneMarker.tsx': '无生产引用，Batch 1 删除',
-  'src/shared/components/feedback/FeedbackGrade.tsx': '仅测试引用，Batch 1 删除',
-  'src/shared/components/feedback/GradeBadge.tsx': '仅测试引用，Batch 1 删除',
-  'src/shared/components/layout/LiveDot.tsx': '无生产引用，Batch 1 删除',
-  'src/shared/components/ui/tabs.tsx': '仅测试引用，Batch 1 删除',
-  'src/shared/utils/quizOrder.ts': '仅测试引用，Batch 6 由 optionOrder 取代',
-};
+/** 0 生产消费者 baseline（Batch 1 已清空；只降不升，后续新增违规直接失败） */
+const ZERO_CONSUMER_BASELINE: Record<string, string> = {};
 
 /** 1 生产消费者 baseline（回迁 / 合并后逐条删除；只降不升） */
 const ONE_CONSUMER_BASELINE: Record<string, string> = {

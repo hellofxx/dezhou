@@ -13,7 +13,6 @@
   },
   "ui": {
     "active": "Active",
-    "live": "Live",
     "start": "Start",
     "pause": "Pause",
     "reset": "Reset",
