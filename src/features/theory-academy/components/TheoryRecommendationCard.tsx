@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { ArrowRight, Compass } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { TheoryChapterRecommendation } from '../data/theoryRecommendations';
 import { findChapterSummaryById } from '../utils/theoryMeta';
 import { resolveChapterSubtitle, resolveChapterTitle } from '../utils/titleKeys';
@@ -39,9 +41,9 @@ export function TheoryRecommendationCard({
       aria-label={t('theory.recommendation.title')}
       className={className}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('theory.recommendation.title')}
-      </h2>
+      </SectionLabel>
       <div className="panel space-y-2">
         <div className="flex items-start gap-2">
           <Compass className="w-4 h-4 text-[var(--brass-bright)] shrink-0 mt-0.5" aria-hidden="true" />
@@ -62,7 +64,8 @@ export function TheoryRecommendationCard({
           aria-label={`${t('theory.recommendation.cta')} · ${resolveChapterTitle(t, chapter)}`}
           className={cn(
             'inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)]',
-            'hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded',
+            'hover:underline rounded',
+            FOCUS_RING,
           )}
         >
           {t('theory.recommendation.cta')}

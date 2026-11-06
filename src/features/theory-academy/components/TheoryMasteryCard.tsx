@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ClipboardCheck, TrendingUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AcademyMasteryCard } from '@/shared/components/academy';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { MasterySummary } from '@/shared/types/academy';
 import type {
   TheoryChapterAttempt,
@@ -118,7 +119,7 @@ export function TheoryMasteryCard({
               <li key={level.id}>
                 <Link
                   to={`/theory/checkpoint/${level.id}`}
-                  className="inline-flex min-h-11 w-full items-center gap-1.5 text-xs text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded-md"
+                  className={`inline-flex min-h-11 w-full items-center gap-1.5 text-xs text-[var(--poker-info)] hover:underline rounded-md ${FOCUS_RING}`}
                 >
                   <ClipboardCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span className="truncate">

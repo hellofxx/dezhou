@@ -5,6 +5,8 @@ import { ChevronDown, Lock, CheckCircle2, ClipboardCheck, Swords, Award } from '
 import { transitionStandard } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { TheoryLevelSummary, TheoryTier } from '../types';
 import { loadTheoryLevelById } from '../data/levels/loaders';
 import {
@@ -109,9 +111,7 @@ export function TheoryLadder({
       onFocus={() => prefetchLevel(activeId ?? levels[0]?.id)}
     >
       <div className="px-1 mb-3">
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
-          {t('theory.ladder.title')}
-        </h2>
+        <SectionLabel as="h2">{t('theory.ladder.title')}</SectionLabel>
         <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('theory.ladder.subtitle')}</p>
       </div>
 
@@ -298,7 +298,7 @@ export function TheoryLadder({
                     {allCompleted && (
                       <Link
                         to={`/theory/checkpoint/${level.id}`}
-                        className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                        className={`mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline rounded ${FOCUS_RING}`}
                       >
                         <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
                         {t('theory.level.checkpointEntry')}

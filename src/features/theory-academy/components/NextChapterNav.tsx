@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Lock } from 'lucide-react';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { TheoryChapterSummary } from '../types';
 import { resolveChapterTitle } from '../utils/titleKeys';
 
@@ -32,7 +33,7 @@ export function NextChapterNav({ nextChapter, unlocked }: NextChapterNavProps) {
   return (
     <button
       onClick={() => navigate(`/theory/chapter/${nextChapter.id}`)}
-      className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+      className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity ${FOCUS_RING}`}
     >
       {t('theory.bridge.nextChapterLabel', { title: resolveChapterTitle(t, nextChapter) })}
       <ArrowRight className="w-4 h-4" />

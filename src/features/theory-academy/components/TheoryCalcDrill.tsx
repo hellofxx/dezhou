@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Calculator, RotateCw, ShieldCheck } from 'lucide-react';
 import { Input } from '@/shared/components/ui/input';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
 import {
@@ -133,14 +134,14 @@ export function TheoryCalcDrill({ chapterId }: { chapterId: string }) {
                   <button
                     type="button"
                     onClick={() => handleCheck(index, drill)}
-                    className="inline-flex min-h-11 items-center rounded-lg bg-[var(--brass-bright)] px-4 py-2 text-sm font-semibold text-[var(--felt-deep)] hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                    className={`inline-flex min-h-11 items-center rounded-lg bg-[var(--brass-bright)] px-4 py-2 text-sm font-semibold text-[var(--felt-deep)] hover:opacity-90 transition-opacity ${FOCUS_RING}`}
                   >
                     {t('theory.drill.submit')}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleReroll(index)}
-                    className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--walnut-border)] px-3 py-2 text-sm text-[var(--ivory-dim)] hover:border-[var(--brass)]/50 hover:text-[var(--ivory)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                    className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--walnut-border)] px-3 py-2 text-sm text-[var(--ivory-dim)] hover:border-[var(--brass)]/50 hover:text-[var(--ivory)] transition-colors ${FOCUS_RING}`}
                   >
                     <RotateCw className="w-3.5 h-3.5" />
                     {t('theory.drill.nextProblem')}

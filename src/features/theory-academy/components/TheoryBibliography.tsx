@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { BookMarked, ExternalLink } from 'lucide-react';
 import type { TFunction } from 'i18next';
 import { Link } from 'react-router-dom';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { TheoryBibliographyEntry } from '../types';
 import { findChapterSummaryById } from '../utils/theoryMeta';
 import { resolveChapterTitle } from '../utils/titleKeys';
@@ -27,9 +29,7 @@ export function TheoryBibliography({ entries }: TheoryBibliographyProps) {
   return (
     <section aria-label={t('theory.bibliography.title')} className="space-y-2">
       <div className="flex items-baseline gap-2">
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
-          {t('theory.bibliography.title')}
-        </h2>
+        <SectionLabel as="h2">{t('theory.bibliography.title')}</SectionLabel>
         <span className="font-numeric text-[11px] text-[var(--ivory-muted)]">
           {t('theory.bibliography.books', { count: entries.length })}
         </span>
@@ -85,7 +85,7 @@ export function TheoryBibliography({ entries }: TheoryBibliographyProps) {
                           <Link
                             key={chapter.id}
                             to={`/theory/chapter/${chapter.id}`}
-                            className="inline-flex items-center gap-1 text-[11px] text-[var(--brass-bright)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                            className={`inline-flex items-center gap-1 text-[11px] text-[var(--brass-bright)] hover:underline rounded ${FOCUS_RING}`}
                           >
                             {resolveChapterTitle(t, chapter)}
                             <ExternalLink className="w-2.5 h-2.5" aria-hidden="true" />

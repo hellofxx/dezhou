@@ -5,6 +5,7 @@ import { Bookmark, BookmarkCheck, CheckCircle2, Clock, Target } from 'lucide-rea
 import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
 import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { TheoryChapter, TheoryLevelInfo } from '../types';
 import { getChapterDifficulty } from '../utils/theoryMeta';
 import {
@@ -138,7 +139,7 @@ export function TheoryChapterHeader({
                 aria-label={bookmarked ? t('theory.bookmarks.remove') : t('theory.bookmarks.add')}
                 className={cn(
                   'inline-flex min-h-11 items-center gap-1.5 rounded px-1.5 transition-colors',
-                  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                  FOCUS_RING,
                   bookmarked
                     ? 'text-[var(--brass-bright)]'
                     : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]',

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Bookmark, BookmarkCheck, BookOpen, CheckCircle2, Clock, PlayCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { TheoryChapterSummary } from '../types';
 import { resolveChapterTitle } from '../utils/titleKeys';
 
@@ -99,7 +100,7 @@ export function TheoryChapterChip({
           aria-label={`${bookmarked ? t('theory.bookmarks.remove') : t('theory.bookmarks.add')} · ${title}`}
           className={cn(
             'inline-flex min-h-11 min-w-9 items-center justify-center rounded-md transition-colors',
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+            FOCUS_RING,
             bookmarked
               ? 'text-[var(--brass-bright)]'
               : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)]',

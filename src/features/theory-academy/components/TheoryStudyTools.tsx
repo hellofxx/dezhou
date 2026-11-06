@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useTheoryContentBundle } from '../hooks/useTheoryContentBundle';
 import { TheorySearch } from './TheorySearch';
 import { TheoryGlossary } from './TheoryGlossary';
@@ -53,7 +54,7 @@ export function TheoryStudyTools() {
             key={toolMode}
             type="button"
             onClick={() => setMode(toolMode)}
-            className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/50 px-3 text-xs text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/50 px-3 text-xs text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
             <Icon className="w-3.5 h-3.5 text-[var(--brass-bright)]" aria-hidden="true" />
             {label}

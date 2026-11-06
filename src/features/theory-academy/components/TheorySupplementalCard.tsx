@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, Lock, Sparkles } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useTranslation } from 'react-i18next';
 import type { TheoryLevelSummary } from '../types';
 import { getSupplementalChaptersOfLevel } from '../utils/theoryMeta';
@@ -49,9 +51,9 @@ export function TheorySupplementalCard({
       onPointerEnter={() => next && void loadTheoryLevelById(next.levelId)}
       onFocus={() => next && void loadTheoryLevelById(next.levelId)}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('theory.supplemental.title')}
-      </h2>
+      </SectionLabel>
       <div className="panel space-y-2.5">
         <div className="flex items-start gap-2.5">
           <span className="w-7 h-7 rounded-md bg-[var(--walnut-raised)] flex items-center justify-center text-[var(--brass-bright)] shrink-0">
@@ -82,7 +84,7 @@ export function TheorySupplementalCard({
         ) : next ? (
           <Link
             to={`/theory/chapter/${next.chapter.id}`}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:gap-2.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded-sm"
+            className={`inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:gap-2.5 transition-all rounded-sm ${FOCUS_RING}`}
           >
             {t('theory.supplemental.cta')}
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />

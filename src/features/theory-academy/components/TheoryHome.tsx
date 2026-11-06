@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, BookOpenCheck, ChevronRight, Flag, Flame, GraduationCap, Target } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useTranslation } from 'react-i18next';
 import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
@@ -111,9 +113,7 @@ export default function TheoryHome() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
             <div className="min-w-0">
-              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
-                {t('variant.selectVariant')}
-              </h2>
+              <SectionLabel as="h2">{t('variant.selectVariant')}</SectionLabel>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
                 {t(`variant.name.${activeVariant}`)}
                 {activeVariant === 'short-deck' && (
@@ -222,9 +222,9 @@ function ReadingStats({
       transition={{ ...transitionStandard, delay: 0.12 }}
       aria-label={t('theory.stats.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('theory.stats.title')}
-      </h2>
+      </SectionLabel>
       <div className="panel space-y-2.5">
         {stats.map((s) => (
           <div key={s.label} className="flex items-center gap-3">
@@ -238,7 +238,7 @@ function ReadingStats({
         <Link
           to="/theory/review"
           aria-label={t('theory.stats.flaggedEntryAria', { count: flaggedCount })}
-          className="group flex items-center gap-3 pt-2 mt-0.5 border-t border-[var(--walnut-border)]/60 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 hover:bg-[var(--felt-raised)]/40 transition-colors"
+          className={`group flex items-center gap-3 pt-2 mt-0.5 border-t border-[var(--walnut-border)]/60 rounded-md hover:bg-[var(--felt-raised)]/40 transition-colors ${FOCUS_RING}`}
         >
           <span className="w-7 h-7 rounded-md bg-[var(--poker-terra)]/15 flex items-center justify-center text-[var(--poker-terra-bright)] shrink-0">
             <Flag className={cn('w-3.5 h-3.5', flaggedCount === 0 && 'opacity-50')} />
@@ -268,9 +268,9 @@ function PracticeBridge() {
       transition={{ ...transitionStandard, delay: 0.14 }}
       aria-label={t('theory.bridge.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('theory.bridge.title')}
-      </h2>
+      </SectionLabel>
       <button
         type="button"
         onClick={() => navigate('/academy')}
@@ -300,12 +300,12 @@ function BasicsPrerequisiteCard() {
       transition={{ ...transitionStandard, delay: 0.1 }}
       aria-label={t('theory.basicsGuide.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('theory.basicsGuide.title')}
-      </h2>
+      </SectionLabel>
       <Link
         to="/academy/basics"
-        className="block rounded-lg border border-[var(--walnut-border)] bg-gradient-to-b from-[var(--walnut)] to-[var(--felt-deep)] p-3.5 hover:border-[var(--brass)]/50 transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+        className={`block rounded-lg border border-[var(--walnut-border)] bg-gradient-to-b from-[var(--walnut)] to-[var(--felt-deep)] p-3.5 hover:border-[var(--brass)]/50 transition-colors group ${FOCUS_RING}`}
       >
         <span className="flex items-start gap-2.5">
           <GraduationCap className="w-4 h-4 text-[var(--brass-bright)] shrink-0 mt-0.5" />

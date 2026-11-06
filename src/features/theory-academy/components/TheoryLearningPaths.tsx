@@ -4,6 +4,8 @@ import { ArrowRight, CheckCircle2, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import { findLevelSummaryByChapterId, isLevelUnlockedByCompleted } from '../utils/theoryMeta';
@@ -66,9 +68,7 @@ export function TheoryLearningPaths() {
       aria-label={t('theory.paths.title')}
     >
       <div className="px-1 mb-3">
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
-          {t('theory.paths.title')}
-        </h2>
+        <SectionLabel as="h2">{t('theory.paths.title')}</SectionLabel>
         <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('theory.paths.subtitle')}</p>
       </div>
 
@@ -113,7 +113,8 @@ export function TheoryLearningPaths() {
                   to={`/theory/chapter/${card.nextChapterId}`}
                   className={cn(
                     'inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline',
-                    'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded-md'
+                    'rounded-md',
+                    FOCUS_RING
                   )}
                 >
                   {card.done === 0 ? t('theory.paths.start') : t('theory.paths.continue')}
