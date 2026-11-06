@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ClipboardCheck, RotateCcw } from 'lucide-react';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { CheckpointDimensionStat } from '../utils/checkpoint';
 import { checkpointText } from '../utils/checkpointCopy';
 
@@ -116,14 +117,14 @@ export function CheckpointResultView({
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={onRetry}
-            className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 ${FOCUS_RING}`}
           >
             <RotateCcw className="w-4 h-4" aria-hidden="true" />
             {checkpointText(t, 'retry', '再检查一次')}
           </button>
           <button
             onClick={onBack}
-            className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
             {checkpointText(t, 'backToAcademy', '返回策略学院')}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />

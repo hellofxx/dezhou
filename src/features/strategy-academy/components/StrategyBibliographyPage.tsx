@@ -1,6 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { BookMarked, ExternalLink } from 'lucide-react';
 import { getLevelSummaries } from '../utils/academyMeta';
 import { resolveLevelTitle } from '../utils/titleKeys';
@@ -58,7 +60,7 @@ export default function StrategyBibliographyPage() {
             </p>
             <Link
               to="/theory/bibliography"
-              className="inline-flex min-h-11 items-center gap-1.5 rounded text-xs text-[var(--brass-text)] hover:text-[var(--brass-bright)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-1.5 rounded text-xs text-[var(--brass-text)] hover:text-[var(--brass-bright)] transition-colors ${FOCUS_RING}`}
             >
               {t('academy.bibliography.theoryLink')}
               <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -79,12 +81,9 @@ export default function StrategyBibliographyPage() {
                 <span className="font-numeric text-[11px] text-[var(--brass-text)]">
                   L{group.level}
                 </span>
-                <h3
-                  id={`bibliography-level-${group.level}`}
-                  className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold"
-                >
+                <SectionLabel as="h3" id={`bibliography-level-${group.level}`}>
                   {levelHeading(group.level)}
-                </h3>
+                </SectionLabel>
                 <span className="font-numeric text-[11px] text-[var(--ivory-muted)]">
                   {group.entries.length}
                 </span>

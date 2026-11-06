@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
 import { BookmarkPlus } from 'lucide-react';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useAcademyStore } from '../store';
 import { StrategyBookmarksPanel } from './StrategyBookmarksPanel';
 
@@ -43,7 +44,7 @@ export default function StrategyBookmarksPage() {
             <button
               type="button"
               onClick={() => navigate('/academy')}
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-[var(--walnut-border)] px-3 text-xs text-[var(--brass-bright)] transition-colors hover:bg-[var(--walnut-raised)]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-1.5 rounded-md border border-[var(--walnut-border)] px-3 text-xs text-[var(--brass-bright)] transition-colors hover:bg-[var(--walnut-raised)]/60 ${FOCUS_RING}`}
             >
               <BookmarkPlus className="w-3.5 h-3.5" aria-hidden="true" />
               {t('academy.bookmarks.browseLessons', { defaultValue: '去挑几课' })}

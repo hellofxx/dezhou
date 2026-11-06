@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ClipboardCheck, Lock } from 'lucide-react';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useProgressStore } from '@/features/progress/store';
 import { deriveAcademyCourseFilesForLevel } from '@/i18n/academyCourse';
 import { useAcademyStore } from '../store';
@@ -279,13 +280,13 @@ export default function LevelCheckpointPage() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={startRound}
-              className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 ${FOCUS_RING}`}
             >
               {checkpointText(t, 'entry', '开始检查点')}
             </button>
             <button
               onClick={backToAcademy}
-              className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
             >
               {checkpointText(t, 'backToAcademy', '返回策略学院')}
             </button>

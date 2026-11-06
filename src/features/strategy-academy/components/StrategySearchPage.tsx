@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
 import { RefreshCw, Search } from 'lucide-react';
 import { AcademySearchShell } from '@/shared/components/academy';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { AcademySearchItem, AcademySearchSection } from '@/shared/types/academy';
 import { useAcademyStore } from '../store';
 import {
@@ -177,7 +178,7 @@ export default function StrategySearchPage() {
                 type="button"
                 data-testid="academy-search-retry"
                 onClick={() => setRetryToken((token) => token + 1)}
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-[var(--walnut-border)] px-2.5 text-xs text-[var(--ivory-dim)] transition-colors hover:text-[var(--brass-bright)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                className={`inline-flex min-h-9 items-center gap-1.5 rounded-md border border-[var(--walnut-border)] px-2.5 text-xs text-[var(--ivory-dim)] transition-colors hover:text-[var(--brass-bright)] ${FOCUS_RING}`}
               >
                 <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
                 {t('academy.search.retryFullText')}

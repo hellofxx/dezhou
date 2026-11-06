@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Bookmark, BookmarkCheck } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useAcademyStore } from '../store';
 
 interface LessonBookmarkButtonProps {
@@ -31,7 +32,7 @@ export function LessonBookmarkButton({ lessonId, className }: LessonBookmarkButt
       title={label}
       className={cn(
         'inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-colors',
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+        FOCUS_RING,
         bookmarked
           ? 'text-[var(--brass-bright)]'
           : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]',

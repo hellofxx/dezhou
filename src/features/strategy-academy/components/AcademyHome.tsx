@@ -2,6 +2,7 @@ import { useMemo, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Route, GraduationCap, Network, Search, BookOpen, Bookmark, Library, Compass, ClipboardCheck, ChevronRight } from 'lucide-react';
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../hooks/useAcademy';
@@ -96,9 +97,9 @@ export default function AcademyHome() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
             <div className="min-w-0">
-              <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
+              <SectionLabel as="h2">
                 {t('variant.selectVariant')}
-              </h2>
+              </SectionLabel>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
                 {t(`variant.name.${activeVariant}`)}
                 {activeVariant !== 'standard' && (
@@ -262,9 +263,9 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
       transition={{ ...transitionStandard, delay: 0.12 }}
       aria-label={t('academy.tools.title')}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('academy.tools.title')}
-      </h2>
+      </SectionLabel>
       <div className="grid grid-cols-2 gap-2.5">
         {tools.map((tool) => (
           <button
@@ -305,9 +306,9 @@ function LevelCheckpointCard({ level, levelDone }: { level: number | null; level
 
   return (
     <section aria-label={t('academy.checkpointHome.title')}>
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('academy.checkpointHome.title')}
-      </h2>
+      </SectionLabel>
       <Link
         to={`/academy/checkpoint/${level}`}
         className="academy-tool-tile w-full"

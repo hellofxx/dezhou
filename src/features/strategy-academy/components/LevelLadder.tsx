@@ -8,6 +8,7 @@ import type { LevelSummary } from '../types';
 import { useAcademyStore } from '../store';
 import { loadAcademyLessonsForLesson } from '../data/lessons/loaders';
 import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import { resolveCertificationState } from '../utils/certification';
 import { formatRemainingTime } from '../utils/certificationStatus';
@@ -87,9 +88,9 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
     >
       <div className="flex items-end justify-between gap-4 px-1 mb-3">
         <div>
-          <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
+          <SectionLabel as="h2">
             {t('academy.path.title')}
-          </h2>
+          </SectionLabel>
           <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('academy.path.subtitle')}</p>
         </div>
       </div>

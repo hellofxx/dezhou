@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { CheckpointQuestion } from '../utils/checkpoint';
 import { checkpointText } from '../utils/checkpointCopy';
 
@@ -80,7 +81,8 @@ export function CheckpointQuizView({
                 onClick={() => onSelect(index)}
                 disabled={answered}
                 className={cn(
-                  'w-full min-h-11 text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                  'w-full min-h-11 text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
+                  FOCUS_RING,
                   !answered &&
                     'border-[var(--walnut-border)] bg-[var(--felt)] text-[var(--ivory-dim)] hover:border-[var(--brass)]/50',
                   answered &&
@@ -139,7 +141,7 @@ export function CheckpointQuizView({
           <div className="mt-5 flex justify-end">
             <button
               onClick={onNext}
-              className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 ${FOCUS_RING}`}
             >
               {isLast
                 ? checkpointText(t, 'finish', '查看结果')
