@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Clock, HelpCircle, Zap } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { Clock, HelpCircle, Zap } from 'lucide-react';
 import type { Lesson, LevelSummary } from '../types';
 import {
   resolveLevelTitle,
@@ -45,13 +46,12 @@ export function CourseHeader({
 
   return (
     <div className="mb-6">
-      <button
+      <BackLink
         onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
-      </button>
+        label={t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+        size="md"
+        className="mb-4"
+      />
       {levelEntry ? (
         <div className="flex items-center gap-3 mb-4">
           <span className="course-level inline-flex items-center gap-1.5 rounded-full bg-[var(--walnut-raised)] px-3 py-1 text-xs font-medium text-[var(--brass-bright)]">

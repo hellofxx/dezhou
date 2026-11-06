@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Keyboard } from 'lucide-react';
+import { Outlet } from 'react-router-dom';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { Keyboard } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { TRAINING_OVERLAY_EVENT } from '@/shared/constants/app';
 // 全局训练伴生 Dialog：Tilt 提醒与里程碑庆典（覆盖 BlankLayout 下的训练页，
@@ -23,7 +24,6 @@ const SHORTCUTS = [
 
 export default function BlankLayout() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [showShortcuts, setShowShortcuts] = useState(false);
 
   useDocumentTitle(t('common.a11y.trainingPage'));
@@ -55,14 +55,13 @@ export default function BlankLayout() {
   return (
     <div className="relative h-screen felt-texture overflow-hidden">
       {/* Back button - top left, semi-transparent with brass icon */}
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 z-10 flex items-center gap-2 min-h-11 min-w-11 px-3 py-2 rounded-[var(--radius)] text-sm text-[var(--ivory-muted)] hover:text-[var(--ivory)] bg-[var(--surface-overlay)] hover:bg-[var(--surface-raised)] transition-colors"
-        aria-label={t('common.ui.back')}
-      >
-        <ArrowLeft size={16} className="text-[var(--brass-text)]" />
-        <span>{t('common.ui.back')}</span>
-      </button>
+      <BackLink
+        historyBack
+        label={t('common.ui.back')}
+        variant="pill"
+        size="md"
+        className="absolute top-4 left-4 z-10 gap-2 px-3 py-2 rounded-[var(--radius)] bg-[var(--surface-overlay)] hover:bg-[var(--surface-raised)] [&>svg]:text-[var(--brass-text)]"
+      />
 
       {/* Keyboard hint button - top right */}
       <button

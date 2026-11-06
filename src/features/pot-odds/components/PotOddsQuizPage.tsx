@@ -1,10 +1,11 @@
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion, AnimatePresence } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
-import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, Trophy, Clock, Target, RotateCcw, Calculator, Spade } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target, RotateCcw, Calculator, Spade } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { TrainingResult, QuestionResult } from '@/shared/types/common';
@@ -309,12 +310,11 @@ export default function PotOddsQuizPage() {
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <button
+          <BackLink
             onClick={() => navigate('/pot-odds')}
-            className="inline-flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> {t('potOdds.quiz.back')}
-          </button>
+            label={t('potOdds.quiz.back')}
+            size="md"
+          />
           <h1 className="font-display text-xl text-[var(--ivory)]">{t('potOdds.quiz.title')}</h1>
           <span className="text-xs text-[var(--ivory-muted)]">
             {t(CATEGORY_LABELS[currentQuestion.category] ?? 'potOdds.quiz.categoryJudgment')}

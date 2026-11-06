@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, BookmarkPlus } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { BookmarkPlus } from 'lucide-react';
 import { useAcademyStore } from '../store';
 import { StrategyBookmarksPanel } from './StrategyBookmarksPanel';
 
@@ -21,14 +22,11 @@ export default function StrategyBookmarksPage() {
     <div className="h-full overflow-auto">
       <div className="py-6 space-y-5">
         <section className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-5 md:p-6">
-          <button
-            type="button"
+          <BackLink
             onClick={() => navigate('/academy')}
-            className="mb-4 inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] transition-colors hover:text-[var(--brass-bright)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
-            {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
-          </button>
+            label={t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+            className="mb-4"
+          />
           <h2 className="font-display text-2xl text-[var(--ivory)]">
             {t('academy.bookmarks.pageTitle', { defaultValue: '我的收藏' })}
           </h2>

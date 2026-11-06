@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Award, CheckCircle2, XCircle, Lock } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { Award, CheckCircle2, XCircle, Lock } from 'lucide-react';
 import type { CertificationState } from '../types';
 import { formatRemainingTime } from '../utils/certificationStatus';
 
@@ -53,13 +54,11 @@ export function CertificationIntroView({
           animate={{ opacity: 1, y: 0 }}
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-5 md:p-6"
         >
-          <button
+          <BackLink
             onClick={onBack}
-            className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            {t('academy.conceptGraph.backToAcademy')}
-          </button>
+            label={t('academy.conceptGraph.backToAcademy')}
+            className="mb-4"
+          />
 
           <div className="flex items-center gap-4 mb-6">
             <div className="w-14 h-14 rounded-lg bg-[var(--brass-bright)]/10 flex items-center justify-center">

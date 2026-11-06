@@ -2,7 +2,8 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, ArrowLeft, BookOpen } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import type { Lesson, PracticeResult } from '../types';
 import { ContentBlock } from './content';
 import { HandExampleComponent } from './HandExample';
@@ -139,13 +140,11 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
   if (view === 'practice' && hasPractice && lesson.practice) {
     return (
       <div className="space-y-4">
-        <button
+        <BackLink
           onClick={handleBackToSections}
-          className="inline-flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t('academy.lessonUnit.backToSections')}
-        </button>
+          label={t('academy.lessonUnit.backToSections')}
+          size="md"
+        />
         <PracticeDrillComponent
           drill={lesson.practice}
           lessonId={lesson.id}

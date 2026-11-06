@@ -14,9 +14,9 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, Hash, Users } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
+import { CheckCircle2, Hash, Users } from 'lucide-react';
 import { Progress } from '@/shared/components/ui/progress';
 import { PuzzleCard } from './PuzzleCard';
 import { PuzzleResult } from './PuzzleResult';
@@ -100,15 +100,11 @@ export default function DailyPuzzle() {
       <div className="daily-puzzle-shell space-y-4">
         {/* 顶部精简栏：退出 / 题号 / 同伴 / 完成态 */}
         <header className="daily-puzzle-topbar">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-[var(--ivory-dim)] hover:text-[var(--ivory)]"
+          <BackLink
             onClick={() => navigate('/puzzle')}
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            {t('puzzle.common.exit')}
-          </Button>
+            label={t('puzzle.common.exit')}
+            variant="button"
+          />
 
           <h2 className="daily-puzzle-title">
             {t('puzzle.daily.title')}

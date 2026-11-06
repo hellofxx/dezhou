@@ -1,11 +1,12 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionSlow } from '@/shared/utils/motion';
-import { ArrowLeft, Zap, Target, RotateCcw, Trophy, Clock, Award, CheckCircle2, Sparkles, Gift } from 'lucide-react';
+import { Zap, Target, RotateCcw, Trophy, Clock, Award, CheckCircle2, Sparkles, Gift } from 'lucide-react';
 import { useAcademyStore } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForQuickDrill } from '../hooks/useAcademyLessons';
@@ -223,13 +224,12 @@ export default function QuickDrill() {
 
     return (
       <div className="py-6">
-        <button
+        <BackLink
           onClick={() => navigate('/academy')}
-          className="flex items-center gap-1.5 text-sm text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t('quickDrill.back', { defaultValue: '返回学院' })}
-        </button>
+          label={t('quickDrill.back', { defaultValue: '返回学院' })}
+          size="md"
+          className="mb-4"
+        />
         <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
           <PracticeDrillComponent
             drill={drill}
@@ -372,15 +372,15 @@ export default function QuickDrill() {
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] relative brass-rail overflow-hidden"
         >
           <div className="p-5 md:p-6">
-            <button
+            <BackLink
               onClick={() => navigate(isQuickMode ? '/' : '/academy')}
-              className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              {isQuickMode
-                ? t('quickDrill.backHome', { defaultValue: '返回首页' })
-                : t('quickDrill.backAcademy', { defaultValue: '返回策略学院' })}
-            </button>
+              label={
+                isQuickMode
+                  ? t('quickDrill.backHome', { defaultValue: '返回首页' })
+                  : t('quickDrill.backAcademy', { defaultValue: '返回策略学院' })
+              }
+              className="mb-4"
+            />
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-lg bg-[var(--brass)]/10 flex items-center justify-center">
                 <Zap className="w-6 h-6 text-[var(--brass-text)]" />

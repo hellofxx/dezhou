@@ -1,5 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { ArrowLeft, FileQuestion } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
@@ -28,13 +29,7 @@ export default function HelpArticle() {
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
       {/* 返回链接 */}
-      <Link
-        to="/help"
-        className="inline-flex items-center gap-1.5 text-sm text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors min-h-[44px]"
-      >
-        <ArrowLeft size={16} />
-        {t('help.article.back')}
-      </Link>
+      <BackLink to="/help" label={t('help.article.back')} size="md" />
 
       {/* 标题 */}
       <h2 className="font-display text-xl text-[var(--ivory)] tracking-wide">

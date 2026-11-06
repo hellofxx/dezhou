@@ -4,7 +4,8 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { POSITION_QUESTIONS, SEAT_LAYOUT } from './positionQuestions';
 import type { SeatId } from './positionQuestions';
@@ -98,13 +99,7 @@ export default function PositionDrill({ onComplete, onExit }: DrillProps) {
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button
-          onClick={onExit}
-          className="inline-flex items-center gap-1 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors shrink-0"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          {t('drills.common.exit')}
-        </button>
+        <BackLink onClick={onExit} label={t('drills.common.exit')} className="shrink-0" />
         <div className="flex-1 h-1.5 rounded-full bg-[var(--walnut-raised)] overflow-hidden">
           <div
             className="h-full rounded-full bg-[var(--brass-bright)] transition-all duration-300"

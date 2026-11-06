@@ -1,10 +1,11 @@
 import { useMemo, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
-import { ArrowLeft, ArrowRight, Users, Clock, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
+import { ArrowRight, Users, Clock, CheckCircle2, AlertCircle, Lock } from 'lucide-react';
 import { LEARNING_TRACKS, isTrackPrerequisiteMet } from '../data/learningTracks';
 import {
   resolveLessonTitle,
@@ -60,13 +61,11 @@ export default function LearningTracksView() {
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] relative brass-rail overflow-hidden"
         >
           <div className="p-5 md:p-6">
-            <button
+            <BackLink
               onClick={() => navigate('/academy')}
-              className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              {t('academy.tracks.backToAcademy')}
-            </button>
+              label={t('academy.tracks.backToAcademy')}
+              className="mb-4"
+            />
             <h2 className="font-display text-2xl text-[var(--ivory)]">{t('academy.tracks.title')}</h2>
             <p className="text-sm text-[var(--ivory-dim)] mt-1">
               {t('academy.tracks.subtitle')}

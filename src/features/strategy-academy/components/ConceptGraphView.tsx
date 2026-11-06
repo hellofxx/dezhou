@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Brain, BookOpen, Lock, Link2 } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { Brain, BookOpen, Lock, Link2 } from 'lucide-react';
 import { ConceptGraph } from './ConceptGraph';
 import { useAcademyStore } from '../store';
 import { getTotalLessonCount } from '../utils/academyMeta';
@@ -34,13 +35,11 @@ export default function ConceptGraphView() {
           className="walnut-panel rounded-lg border border-[var(--walnut-border)] relative brass-rail overflow-hidden"
         >
           <div className="p-5 md:p-6">
-            <button
+            <BackLink
               onClick={() => navigate('/academy')}
-              className="inline-flex items-center gap-1.5 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors mb-4"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              {t('academy.conceptGraph.backToAcademy')}
-            </button>
+              label={t('academy.conceptGraph.backToAcademy')}
+              className="mb-4"
+            />
 
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-lg bg-[var(--brass-bright)]/10 flex items-center justify-center">

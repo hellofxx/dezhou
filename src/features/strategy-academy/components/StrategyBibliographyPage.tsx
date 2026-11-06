@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, BookMarked, ExternalLink } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { BookMarked, ExternalLink } from 'lucide-react';
 import { getLevelSummaries } from '../utils/academyMeta';
 import { resolveLevelTitle } from '../utils/titleKeys';
 import {
@@ -38,14 +39,11 @@ export default function StrategyBibliographyPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto w-full max-w-3xl py-6 space-y-5">
-        <button
-          type="button"
+        <BackLink
           onClick={() => navigate('/academy')}
-          className="inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />
-          {t('academy.bibliography.backToAcademy')}
-        </button>
+          label={t('academy.bibliography.backToAcademy')}
+          variant="pill"
+        />
 
         <section className="walnut-panel rounded-lg border border-[var(--walnut-border)] relative brass-rail overflow-hidden">
           <div className="p-5 md:p-6 space-y-2">

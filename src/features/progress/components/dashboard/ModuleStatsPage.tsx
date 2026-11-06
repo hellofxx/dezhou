@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion } from 'framer-motion';
 import { transitionStandard } from '@/shared/utils/motion';
 import {
@@ -14,7 +15,7 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { StatCard } from '@/shared/components/data-display/StatCard';
-import { ArrowLeft, Target, Clock, BarChart3 } from 'lucide-react';
+import { Target, Clock, BarChart3 } from 'lucide-react';
 import { useProgressStore } from '../../store';
 import { aggregateByDay } from '../../utils/statsAggregator';
 import { getWeakHands } from '../../utils/statsAggregator';
@@ -77,13 +78,11 @@ export default function ModuleStatsPage({ moduleName, displayName }: ModuleStats
           transition={transitionStandard}
           className="flex items-center gap-3"
         >
-          <button
+          <BackLink
             onClick={() => navigate('/progress')}
-            aria-label={t('common.ui.back')}
-            className="min-h-11 min-w-11 flex items-center justify-center rounded-lg hover:bg-[var(--surface-raised)] transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-[var(--ivory-muted)]" />
-          </button>
+            label={t('common.ui.back')}
+            iconOnly
+          />
           <div>
             <h2 className="text-2xl font-bold text-[var(--ivory)]">{displayName}</h2>
             <p className="text-sm text-[var(--ivory-dim)] mt-0.5">{t('progress.moduleStats.subtitle')}</p>

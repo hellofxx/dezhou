@@ -9,7 +9,7 @@
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { Button } from '@/shared/components/ui/button';
 import { Progress } from '@/shared/components/ui/progress';
 import { PuzzleCard } from './PuzzleCard';
@@ -106,15 +106,11 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
       <div className="py-4 space-y-3 max-w-3xl mx-auto">
         {/* 顶部栏 */}
         <div className="flex items-center justify-between gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-[var(--ivory-dim)] hover:text-[var(--ivory)]"
+          <BackLink
             onClick={() => navigate('/puzzle')}
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            {t('puzzle.common.exit')}
-          </Button>
+            label={t('puzzle.common.exit')}
+            variant="button"
+          />
           <h2 className="font-display text-base text-[var(--ivory)] tracking-wide flex items-center gap-2">
             <ThemeIcon className="w-4 h-4 shrink-0 text-[var(--brass-bright)]" aria-hidden />
             {themeLabel}

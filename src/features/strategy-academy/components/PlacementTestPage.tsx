@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Check, Compass, X } from 'lucide-react';
+import { Check, Compass, X } from 'lucide-react';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { transitionSlow } from '@/shared/utils/motion';
 import { useAcademyStore } from '../store';
@@ -115,14 +116,11 @@ export default function PlacementTestPage() {
     );
   }
   const backButton = (
-    <button
-      type="button"
+    <BackLink
       onClick={backToAcademy}
-      className="inline-flex items-center gap-1.5 min-h-11 text-sm text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors"
-    >
-      <ArrowLeft className="w-4 h-4" />
-      {t('academy.placement.page.back', { defaultValue: '返回学院' })}
-    </button>
+      label={t('academy.placement.page.back', { defaultValue: '返回学院' })}
+      size="md"
+    />
   );
 
   if (phase === 'result' && outcome) {

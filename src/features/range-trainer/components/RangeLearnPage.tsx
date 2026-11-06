@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card';
-import { Button } from '@/shared/components/ui/button';
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { RangeGrid } from './RangeGrid';
 import { RangeSelector } from './RangeSelector';
 import { RangeInfo } from './RangeInfo';
@@ -46,14 +46,11 @@ export default function RangeLearnPage() {
         {/* 顶部导航 */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
+            <BackLink
               onClick={() => navigate('/range-trainer')}
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              {t('common.ui.back')}
-            </Button>
+              label={t('common.ui.back')}
+              variant="button"
+            />
             <div>
               <h1 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">
                 <BookOpen className="w-6 h-6 text-[var(--brass-text)]" />

@@ -11,13 +11,13 @@
 import { useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION } from '@/shared/utils/motion';
 // PZL-06：复用共享 cn 工具，消除本地 cnInline 重复实现
 import { cn } from '@/shared/utils/cn';
-import { Clock, ArrowLeft } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
+import { Clock } from 'lucide-react';
 import { Progress } from '@/shared/components/ui/progress';
 import { PuzzleCard } from './PuzzleCard';
 import { PuzzleResult } from './PuzzleResult';
@@ -105,15 +105,11 @@ export default function PuzzleRush() {
       <div className="py-4 space-y-3 max-w-3xl mx-auto">
         {/* 顶部栏：返回 / 标题 / 倒计时 */}
         <div className="flex items-center justify-between gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-[var(--ivory-dim)] hover:text-[var(--ivory)]"
+          <BackLink
             onClick={() => navigate('/puzzle')}
-          >
-            <ArrowLeft className="w-4 h-4 mr-1" />
-            {t('puzzle.common.exit')}
-          </Button>
+            label={t('puzzle.common.exit')}
+            variant="button"
+          />
           <h2 className="font-display text-base text-[var(--ivory)] tracking-wide">
             {t('puzzle.rush.title', { minutes: durationMinutes })}
           </h2>
