@@ -334,10 +334,7 @@ describe('curriculum integrity: 变体课程内容完整性（2026-11）', () =>
 
   it('卡牌格式、牌面去重、street 与 board 长度匹配、数值为正', () => {
     const bad: string[] = [];
-    // 短牌内容不在本批范围；存量两处重复牌（l7sd-deep-stack-p2 / l8sd-exploit-i-p2）
-    // 已登记为后续修复，不拿它们阻断单挑对齐。单挑 12 课全量校验。
-    const cardLessons = variantLessons.filter((lesson) => lesson.variant === 'heads-up');
-    for (const lesson of cardLessons) {
+    for (const lesson of variantLessons) {
       for (const scenario of collectScenarios(lesson)) {
         for (const card of scenario.cards) {
           if (!CARD_RE.test(card)) bad.push(`${scenario.where}: 非法卡牌 ${card}`);

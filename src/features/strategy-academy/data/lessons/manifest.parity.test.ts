@@ -112,6 +112,29 @@ describe('academy manifest 与完整课程数据一致', () => {
     }
   });
 
+  it('变体每个 Level 的课时 order 严格递增且不重复（L4 合并后不得回到 1,2,3,1,2）', () => {
+    for (const variant of ['short-deck', 'heads-up'] as const) {
+      const ordersByLevel = new Map<number, number[]>();
+      for (const lesson of VARIANT_LESSON_INDEX[variant]) {
+        const orders = ordersByLevel.get(lesson.level) ?? [];
+        orders.push(lesson.order);
+        ordersByLevel.set(lesson.level, orders);
+      }
+      for (const [level, orders] of ordersByLevel) {
+        expect(
+          new Set(orders).size,
+          `${variant} L${level} order 重复：${orders.join(',')}`,
+        ).toBe(orders.length);
+        for (let i = 1; i < orders.length; i += 1) {
+          expect(
+            orders[i]!,
+            `${variant} L${level} order 非递增：${orders.join(',')}`,
+          ).toBeGreaterThan(orders[i - 1]!);
+        }
+      }
+    }
+  });
+
   it('变体课程摘要去重后与 VARIANT_LESSON_INDEX 的课程集合一致', () => {
     for (const variant of ['standard', 'short-deck', 'heads-up'] as const) {
       expect(getVariantLessonSummaries(variant).map((lesson) => lesson.id)).toEqual(

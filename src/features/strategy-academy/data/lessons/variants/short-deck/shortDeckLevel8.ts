@@ -173,13 +173,13 @@ export const SHORT_DECK_LEVEL_8_LESSONS: Lesson[] = [
           id: 'l8sd-exploit-i-p2',
           difficulty: 'intermediate',
           scenario: {
-            heroHand: ['Ah', 'Qh'],
+            heroHand: ['Ah', 'Qc'],
             heroPosition: 'BTN',
             previousActions: [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Qh', '7h', '6c'],
+            board: ['Qh', '7h', '6h'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 95,

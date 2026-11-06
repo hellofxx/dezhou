@@ -11,6 +11,7 @@ import {
 } from '../utils/theoryMeta';
 import { resolveChapterSubtitle, resolveChapterTitle } from '../utils/titleKeys';
 import { loadTheoryLevelsForVariant } from '../data/levels/loaders';
+import { useTheoryStore } from '../store';
 import {
   getTheoryBibliographyEntries,
   getTheoryGlossaryTerms,
@@ -66,8 +67,8 @@ interface TheorySearchProps {
  *
  * 分层检索：
  * 1. 目录层：章节标题 / 副标题（manifest 摘要，零额外加载）+ 术语表 + 参考书目（静态数据）
- * 2. 全文层：目录层无命中且关键词 ≥2 字时才按需加载标准变体全文（loadTheoryLevelsForVariant 内部缓存，
- *    同一会话只加载一次），避免首屏把全部正文 chunk 拉进来
+ * 2. 全文层：目录层无命中且关键词 ≥2 字时才按需加载当前变体全文（loadTheoryLevelsForVariant 内部缓存，
+ *    同一变体只加载一次），避免首屏把全部正文 chunk 拉进来
  *
  * 展示层用两院共享 `AcademySearchShell`（输入框 / 分区 / 空态），本组件只做理论侧适配：
  * 命中集合、分区标题与路由在这里算好传入，共享壳不持有路由也不加载数据。
@@ -76,15 +77,19 @@ interface TheorySearchProps {
 export function TheorySearch({ onNavigate, className }: TheorySearchProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const activeVariant = useTheoryStore((s) => s.progress.activeVariant);
   const [query, setQuery] = useState('');
-  const [fullText, setFullText] = useState<TheoryLevelInfo[] | null>(null);
+  const [fullText, setFullText] = useState<{
+    variant: typeof activeVariant;
+    levels: TheoryLevelInfo[];
+  } | null>(null);
   const [loading, setLoading] = useState(false);
-  // 全文索引只请求一次（ref 不进依赖数组，避免 effect 自触发 cleanup 取消在途请求）
-  const requestedRef = useRef(false);
+  // 全文索引按变体只请求一次（ref 不进依赖数组，避免 effect 自触发 cleanup 取消在途请求）
+  const requestedVariantRef = useRef<typeof activeVariant | null>(null);
 
   const needle = query.trim().toLowerCase();
 
-  const chapters = getChapterSummariesByVariant('standard');
+  const chapters = getChapterSummariesByVariant(activeVariant);
   const glossaryTerms = getTheoryGlossaryTerms();
   const bibliography = getTheoryBibliographyEntries();
 
@@ -122,21 +127,25 @@ export function TheorySearch({ onNavigate, className }: TheorySearchProps) {
   const catalogEmpty =
     chapterHits.length === 0 && glossaryHits.length === 0 && bibliographyHits.length === 0;
 
-  // 全文兜底加载：目录层无命中且关键词够长才触发（同一会话只发一次请求）
+  // 全文兜底加载：目录层无命中且关键词够长才触发（每个变体只发一次请求）
   useEffect(() => {
-    if (!needle || needle.length < 2 || !catalogEmpty || requestedRef.current) return;
-    requestedRef.current = true;
+    if (!needle || needle.length < 2 || !catalogEmpty) return;
+    if (requestedVariantRef.current === activeVariant) return;
+    const requestedVariant = activeVariant;
+    requestedVariantRef.current = requestedVariant;
     setLoading(true);
-    void loadTheoryLevelsForVariant('standard')
-      .then((levels) => setFullText(levels))
-      .catch(() => setFullText([]))
+    void loadTheoryLevelsForVariant(requestedVariant)
+      .then((levels) => setFullText({ variant: requestedVariant, levels }))
+      .catch(() => setFullText({ variant: requestedVariant, levels: [] }))
       .finally(() => setLoading(false));
-  }, [needle, catalogEmpty]);
+  }, [needle, catalogEmpty, activeVariant]);
 
   const fullTextHits = useMemo(() => {
-    if (!needle || needle.length < 2 || !fullText) return [] as FullTextHit[];
-    return buildFullTextHits(fullText, needle);
-  }, [fullText, needle]);
+    if (!needle || needle.length < 2 || !fullText || fullText.variant !== activeVariant) {
+      return [] as FullTextHit[];
+    }
+    return buildFullTextHits(fullText.levels, needle);
+  }, [fullText, needle, activeVariant]);
 
   const chapterItems: AcademySearchItem[] = chapterHits.map((chapter) => ({
     id: chapter.id,

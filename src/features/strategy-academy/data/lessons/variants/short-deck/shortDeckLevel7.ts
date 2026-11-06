@@ -173,13 +173,13 @@ export const SHORT_DECK_LEVEL_7_LESSONS: Lesson[] = [
           id: 'l7sd-deep-stack-p2',
           difficulty: 'intermediate',
           scenario: {
-            heroHand: ['Ah', 'Kh'],
+            heroHand: ['Ah', 'Kc'],
             heroPosition: 'BTN',
             previousActions: [
               { player: 'BTN', action: 'raise 2 ante' },
               { player: 'BB', action: 'call' },
             ],
-            board: ['Kh', '9h', '7c'],
+            board: ['Kh', '9h', '7h'],
             street: 'flop',
             potSize: 5,
             effectiveStack: 150,

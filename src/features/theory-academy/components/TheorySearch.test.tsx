@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import i18n from '@/i18n/config';
 import type { TheoryLevelInfo } from '../types';
+import { useTheoryStore } from '../store';
 import { TheorySearch } from './TheorySearch';
 
 /**
@@ -71,6 +72,9 @@ vi.mock('./theoryOptionalSources', () => ({
 afterEach(() => {
   cleanup();
   loadFullText.mockReset();
+  useTheoryStore.setState((state) => ({
+    progress: { ...state.progress, activeVariant: 'standard' },
+  }));
 });
 
 /** 跳转探针：读 location.pathname 即为点击结果的落地证据 */
@@ -142,6 +146,16 @@ describe('TheorySearch', () => {
     type('z');
     await Promise.resolve();
     expect(loadFullText).not.toHaveBeenCalled();
+  });
+
+  it('全文加载跟随当前变体（单挑），不再固定请求 standard', async () => {
+    useTheoryStore.setState((state) => ({
+      progress: { ...state.progress, activeVariant: 'heads-up' },
+    }));
+    loadFullText.mockResolvedValue([]);
+    mount();
+    type('独家令牌');
+    await waitFor(() => expect(loadFullText).toHaveBeenCalledWith('heads-up'));
   });
 
   it('共享壳口径：分区计数、术语/书目行指向各自聚合页、空查询不下「无结果」结论', async () => {

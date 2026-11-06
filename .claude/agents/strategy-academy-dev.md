@@ -140,7 +140,7 @@ additionalPrompt: ""
 
 20. **单挑课时规则卡（2026-11）**：`components/StrategyVariantRuleCard` 薄包装 shared `AcademyVariantRuleCard` + `shared/utils/academyVariantRules`（`buildHeadsUpRuleRows`），只在 `lesson.variant === "heads-up"` 渲染，挂在 `LessonContent` 正文前；12 门单挑课均已声明 `variantContext.anteStructure='sb_ante'`，`stackDepth` / `dealerButtonPosition` 按课声明，有值时追加「本课上下文」行。翻译一律 `variant.headsUpRules.*` 显式字面量 key（模板拼接会绕过 `staticKeyGuard` 与 `variantRuleCopyGuard`），shared 组件不读 store、不拼路由；标准 / 短牌课时不渲染该卡。
 
-21. **单挑全量对齐契约（2026-11）**：12 门单挑课每课 10 题、≥3 个 HandExample、≥4 个 practice（l7 保持 5）、≥10 段正文、≥2 条 `theory-reference`、≥2 个 units；由 `data/lessons/variants/heads-up/headsUpVariantParity.test.ts` 固化，L4 order 为 1-4。新增/修改单挑课时必须同批更新：`quizBank/lNhu.ts`、`academy-course/heads-up-lN.json`（zh 逐字镜像 / en 人工译文）、`lessonMeta/headsUp.ts`（ELO + `t*hu-*` 锚点）、`contentOps.ts` 的单挑组与 `quantAudit.lNhu.test.ts`。短牌内容不在该契约内；短牌存量两处重复牌已登记为后续修复。
+21. **单挑全量对齐契约（2026-11）**：12 门单挑课每课 10 题、≥3 个 HandExample、≥4 个 practice（l7 保持 5）、≥10 段正文、≥2 条 `theory-reference`、≥2 个 units；由 `data/lessons/variants/heads-up/headsUpVariantParity.test.ts` 固化，L4 order 为 1-4。新增/修改单挑课时必须同批更新：`quizBank/lNhu.ts`、`academy-course/heads-up-lN.json`（zh 逐字镜像 / en 人工译文）、`lessonMeta/headsUp.ts`（ELO + `t*hu-*` 锚点）、`contentOps.ts` 的单挑组与 `quantAudit.lNhu.test.ts`。短牌内容不在该契约内；短牌两处存量重复牌已在同批修复（`l7sd-deep-stack-p2` / `l8sd-exploit-i-p2`）。
 
 ## Constraints
 继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
@@ -153,7 +153,7 @@ additionalPrompt: ""
 - 等级解锁依赖前置等级所有课程完成（Level 7 需 Level 3 + Level 5 全完成 `prerequisiteLevelIds: ['l3', 'l5']`，Level 8 需 Level 4B 全完成 `prerequisiteLevelIds: ['l4b']`）
 - strategy-academy store persist version 以 `src/features/strategy-academy/store.ts` 的 persist 配置为唯一事实源（本文件不维护数值副本）；新增持久化字段时的升级与 migrate 规则见 `docs/AI_GUIDE.md` §状态管理（Persist Version 升级硬性规则）
 - **课程双层门禁**：`CourseView` 在挂载时必须检查两道门禁：Level 门禁（按 lesson 所属 `LevelInfo` 条目调用 `isLevelEntryUnlocked`，区分 l4a/l4b；本土课按 `LOCAL_TRACK.prerequisiteLevelIds` 单独判定）+ Prerequisite 门禁（`prerequisites?: string[]` 中所有课程 ID 必须已完成）；任一门禁不通过时显示锁定提示，不渲染课程内容（防止 URL 绕过）；调试解锁激活时（`shared/stores/debugMode.ts`）两道门禁均放行
-- **课程数据完整性守卫**：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；`data/lessons/manifest.parity.test.ts` 校验摘要与完整数据一致（数据改动后必须运行 `pnpm academy:manifest`）；`data/lessons/loaders.test.ts` 校验 Level/变体映射与速训全量。新增/改名课程后三者必须全绿
+- **课程数据完整性守卫**：`data/curriculumIntegrity.test.ts` 常驻校验 lesson/子对象 id 全局唯一、correctIndex 界内、唯一正确项、牌面合法、轨道/概念节点/跨模块引用无悬空、Drill 接线完整、native 课程 order 无重复；`data/lessons/manifest.parity.test.ts` 校验摘要与完整数据一致、**变体每个 Level 的课时 order 严格递增且不重复**（L4 合并后不得回到 1,2,3,1,2，数据改动后必须运行 `pnpm academy:manifest`）；`data/lessons/loaders.test.ts` 校验 Level/变体映射与速训全量。新增/改名课程后三者必须全绿
 - **加载分层硬约束**：首页/store/成就/轨道/图谱禁止静态 import `data/courses`、`data/lessons/variants` 或完整 `Lesson` 数据；只允许 `utils/academyMeta` + `data/lessons/manifest`。完整课程只能经 `data/lessons/loaders.ts` 动态加载（课程页/认证/速训），路由入口禁止整批 `loadAcademyCourses`（详见 TDD §5.8 第 12 条）
 - **变体课时改名/删除的第二处守卫**：`data/theoryVariantBridgeIntegrity.test.ts`（反向存在性）扫描理论学院变体数据源码里被引用的课时 id，对 `ALL_VARIANT_LESSONS` 与 `LEVELS` 两个全集分别断言（变体专属课必须存在且不在 `LEVELS`；三变体共享地基课必须存在于 `LEVELS`），并比对引用点自带的回退标题与 `academy.lessonTitle.*` 权威值。**改名或删除任何 `l<n>sd-*` / `l<n>hu-*` 课时、或修改 `academy.lessonTitle` 权威标题，必须同批更新理论侧 `data/levels/variants/{short-deck,heads-up}/chapterPracticeMap.ts`**，否则该守卫即红（变体课时进不了任何白名单，这是它唯一的兜底）
 - **mental-tilt-recognition 例外**：`mental-tilt-recognition` 课程无前置依赖，跳过 prerequisite 检查（情绪管理可随时访问）

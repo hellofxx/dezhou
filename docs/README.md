@@ -39,13 +39,14 @@
 
 ## 历史（只追溯，不作为事实源）
 
-- [`CHANGELOG.md`](./CHANGELOG.md) — 近月变更（倒序）
-- [`changelog/`](./changelog/) — 按月归档（2026-08 及更早）
+- [`CHANGELOG.md`](./CHANGELOG.md) — 当月变更（倒序；跨月后归档）
+- [`changelog/`](./changelog/) — 按月归档（截至 2026-10）
 - [`history/README.md`](./history/README.md) — 一次性评审、计划、诊断报告索引
 
 ## 维护规则
 
 - 新增文档先判断状态；Current 文档必须进入本索引，Historical 文档只进 `history/README.md`。
+- `CHANGELOG.md` 只保留当月变更；跨月时将上月条目整体移入 `changelog/YYYY-MM.md`，并同步更新本索引与 `CHANGELOG.md` 头部归档声明。
 - 一次性报告 / 计划完成后从 Current 目录移入 `history/`，并在 `history/README.md` 登记。
 - 代码事实（文件数、版本号、路由数）不在文档中硬编码；以代码 / 生成物为准。
 - 代理角色文件只写职责与边界增量，不复制 `AGENTS.md`、`docs/AI_GUIDE.md`、`DESIGN.md` 或知识库正文。

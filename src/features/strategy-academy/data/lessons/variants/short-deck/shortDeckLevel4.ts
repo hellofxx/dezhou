@@ -633,7 +633,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
   {
     id: 'l4sd-gto-fundamentals',
     level: 4,
-    order: 1,
+    order: 4,
     title: '短牌 GTO 基础',
     subtitle: '短牌博弈树差异、频率基准与 GTO 策略的适用边界',
     duration: '9 min',
@@ -842,7 +842,7 @@ export const SHORT_DECK_LEVEL_4_LESSONS: Lesson[] = [
   {
     id: 'l4sd-solver-readout',
     level: 4,
-    order: 2,
+    order: 5,
     title: 'Solver 结果解读',
     subtitle: '阅读短牌 Solver 输出并提炼为可执行的实战策略',
     duration: '9 min',

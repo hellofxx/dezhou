@@ -28,8 +28,8 @@ export const SHORT_DECK_LEVEL_SUMMARIES: LevelSummary[] = [
       {"id":"l4sd-preflop-ranges","level":4,"order":1,"title":"短牌翻前范围","subtitle":"36 张牌环境下的起手牌价值重排与开局范围构建","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
       {"id":"l4sd-nuts-equity","level":4,"order":2,"title":"坚果与权益计算","subtitle":"短牌高权益环境下的坚果追逐、胜率修正与成牌概率","duration":"8 min","variant":"short-deck","hasPractice":true,"quizCount":5},
       {"id":"l4sd-blocker-bluff","level":4,"order":3,"title":"阻断牌诈唬","subtitle":"短牌强牌密集环境下的阻断牌价值与诈唬选择","duration":"8 min","variant":"short-deck","hasPractice":true,"quizCount":5},
-      {"id":"l4sd-gto-fundamentals","level":4,"order":1,"title":"短牌 GTO 基础","subtitle":"短牌博弈树差异、频率基准与 GTO 策略的适用边界","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
-      {"id":"l4sd-solver-readout","level":4,"order":2,"title":"Solver 结果解读","subtitle":"阅读短牌 Solver 输出并提炼为可执行的实战策略","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
+      {"id":"l4sd-gto-fundamentals","level":4,"order":4,"title":"短牌 GTO 基础","subtitle":"短牌博弈树差异、频率基准与 GTO 策略的适用边界","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
+      {"id":"l4sd-solver-readout","level":4,"order":5,"title":"Solver 结果解读","subtitle":"阅读短牌 Solver 输出并提炼为可执行的实战策略","duration":"9 min","variant":"short-deck","hasPractice":true,"quizCount":5},
     ]
   },
   {
