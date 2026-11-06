@@ -12,8 +12,8 @@ import {
 } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 import { useProgressStore } from '../../store';
-import { useAcademyProgressSnapshot } from '@/shared/hooks/useAcademyDataSource';
-import { useModuleLabel } from '@/shared/hooks/useModuleLabel';
+import { useAcademyProgressSnapshot } from '../../hooks/useAcademyDataSource';
+import { useModuleLabel } from '../../hooks/useModuleLabel';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import DailyChallenge from '../achievement/DailyChallenge';
 import DailyTrainingPlan from '../training/DailyTrainingPlan';

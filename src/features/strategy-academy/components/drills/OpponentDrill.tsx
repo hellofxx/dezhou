@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { OPPONENT_DRILL_QUESTIONS, getOpponentProfile } from '../../data/opponentProfiles';
-import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
+import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
 import { scoreOpponentAnswer } from '../../utils/opponentScoring';
 import { orderResolvedOptions } from '../../utils/quizShuffle';
 import { resolveOpponentDrillQuestion } from '../../utils/contentKeys';

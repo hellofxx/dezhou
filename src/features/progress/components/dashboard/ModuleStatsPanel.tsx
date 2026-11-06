@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { useTranslation } from 'react-i18next';
-import { useModuleLabel } from '@/shared/hooks/useModuleLabel';
+import { useModuleLabel } from '../../hooks/useModuleLabel';
 import { staggerContainer, staggerItem } from '@/shared/utils/motion';
 import type { ModuleStats } from '../../types';
 

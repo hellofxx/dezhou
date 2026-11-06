@@ -9,7 +9,7 @@ import { useModuleLabel } from './useModuleLabel';
 import {
   MODULE_LABEL_KEYS,
   MODULE_LABELS_FALLBACK,
-} from '@/shared/constants/moduleLabels';
+} from '../data/moduleLabels';
 
 const FALLBACK_ONLY_ID = '__fallback-only-module__';
 

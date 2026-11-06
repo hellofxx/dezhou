@@ -3,7 +3,7 @@ import { render, cleanup, fireEvent } from '@testing-library/react';
 import MoodTracker from './MoodTracker';
 import { useProgressStore } from '../../store';
 import { DEFAULT_EMOTION_STATE, type EmotionState } from '../../types';
-import { toLocalDateKey } from '../../utils/toLocalDateKey';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 
 /**
  * MoodTracker 今日情绪（jsdom）。

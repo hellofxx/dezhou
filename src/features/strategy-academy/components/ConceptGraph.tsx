@@ -10,7 +10,7 @@ import { LOCAL_TRACK } from '../data/localTrack';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';
 import type { RovingGridItemProps } from '@/shared/hooks/useRovingGridNav';
-import ProgressRing from '@/shared/components/business/ProgressRing';
+import ProgressRing from '@/shared/components/data-display/ProgressRing';
 import { resolveLevelTitle, resolveLessonTitle, lessonTitleKey, levelTitleKey } from '../utils/titleKeys';
 interface GraphNode {
   id: string;

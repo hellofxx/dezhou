@@ -17,7 +17,7 @@ import { DailyPlanCard } from './DailyPlanCard';
 import { StrategyMasteryCard } from './StrategyMasteryCard';
 import { TheoryBridgeCard } from './TheoryBridgeCard';
 import { getLessonMeta } from '../data/lessonMeta';
-import { VariantToggle } from '@/shared/components/VariantToggle';
+import { VariantToggle } from '@/shared/components/poker/VariantToggle';
 
 export default function AcademyHome() {
   const { t } = useTranslation();

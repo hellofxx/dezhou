@@ -4,7 +4,7 @@ import { Position, getPositionsForPlayerCount } from '@/shared/types/position';
 import type { HandNotation } from '@/shared/types/poker';
 import { StrategyMatrix } from './StrategyMatrix';
 import { useGTOComparison } from '../hooks/useGTOComparison';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 
 interface SpotTrainerProps {
   onClose: () => void;

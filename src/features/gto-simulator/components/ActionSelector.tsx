@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActionType } from '@/shared/types/action';
 import type { Decision } from '@/shared/types/action';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { actionTerm, actionLabel } from '../utils/actionTerms';
 
 interface ActionSelectorProps {

@@ -1,7 +1,7 @@
 /**
  * 游戏变体图标（Lucide 单源）
  *
- * @module shared/components/business/VariantGlyph
+ * @module shared/components/poker/VariantGlyph
  * @description 变体切换 UI 的统一图标出口：标准=黑桃 / 短牌=闪电 / 单挑=交叉剑。
  * 变体名称由相邻文案承担，图标对读屏器隐藏。
  */

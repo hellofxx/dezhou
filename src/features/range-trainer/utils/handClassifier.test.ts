@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { classifyHand, getHandCategory, isHandInRange } from './handClassifier';
+import { classifyHand, getHandCategory, isHandInRange } from '@/shared/utils/handClassifier';
 import { Suit, Rank } from '@/shared/types/poker';
 
 const card = (rank: Rank, suit: Suit) => ({ rank, suit });

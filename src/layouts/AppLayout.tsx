@@ -6,7 +6,7 @@ import { cn } from '@/shared/utils/cn';
 import { PAGE_TRANSITION } from '@/shared/utils/motion';
 import { APP_VERSION } from '@/shared/constants/app';
 import { switchLanguage } from '@/i18n/preload';
-import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/components/system/ErrorBoundary';
 import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 // P2-5.3: 全局 Tilt 提示组件（监听连续答错数）
 import TiltWarning from '@/features/progress/components/gate/TiltWarning';
@@ -17,7 +17,7 @@ import HeaderQuickActions from './HeaderQuickActions';
 import { useThemeApplier } from './useThemeApplier';
 import { useDocumentTitle } from './useDocumentTitle';
 import { resolveNavSection, resolvePageTitle } from './navSections';
-import TableRail from '@/shared/components/layout/TableRail';
+import TableRail from './TableRail';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
 import { useProgressStore } from '@/features/progress/store';
 import {

@@ -5,7 +5,7 @@ import { TrendingUp, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { transitionSlow } from '@/shared/utils/motion';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import { useAcademyLessonAttemptsSnapshot } from '@/shared/hooks/useAcademyDataSource';
+import { useAcademyLessonAttemptsSnapshot } from '../../hooks/useAcademyDataSource';
 
 interface ProgressEntry {
   lessonId: string;

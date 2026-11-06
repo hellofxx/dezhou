@@ -17,7 +17,7 @@ import { CORE_MODULES, FEATURE_GROUPS, type I18nModuleKey } from './moduleRegist
 
 const ROOT = fileURLToPath(new URL('../..', import.meta.url));
 
-const QUIZ_CARD = 'src/shared/components/business/QuizCard.tsx';
+const QUIZ_CARD = 'src/shared/components/quiz/QuizCard.tsx';
 const GTO_FEEDBACK = 'src/features/gto-simulator/components/GTOFeedback.tsx';
 
 /** 路由组 → 在该路由渲染的反馈组件 */

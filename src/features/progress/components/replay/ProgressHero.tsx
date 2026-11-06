@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Target, Gauge, Flame, Timer } from 'lucide-react';
-import { RankIcon } from '@/shared/components/business/RankIcon';
+import { RankIcon } from '../stats/RankIcon';
 import { useProgressStore } from '../../store';
 import { getRankForScore } from '../../utils/elo';
 import type { StatsSummary } from '../../types';

@@ -11,7 +11,7 @@ import { Position } from '@/shared/types/position';
 import { stringToCard } from '@/shared/utils/deck';
 import { cn } from '@/shared/utils/cn';
 import { formatBB } from '@/shared/utils/formatters';
-import { Chip } from '@/shared/components/poker/Chip'; import { GradeIcon } from '@/shared/components/feedback/GradeIcon'; import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
+import { Chip } from '@/shared/components/poker/Chip'; import { GradeIcon } from '@/shared/components/feedback/GradeIcon'; import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION, MOTION_EASE, transitionStandard, transitionSlow } from '@/shared/utils/motion';
 import { soundManager } from '../utils/soundManager';

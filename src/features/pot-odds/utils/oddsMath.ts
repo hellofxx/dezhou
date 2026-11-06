@@ -1,4 +1,4 @@
-import { calculatePotOdds, calculateEV, estimateEquity, isProfitableCall } from '@/shared/utils/pokerMath';
+import { calculatePotOdds, calculateEV, estimateEquity, isProfitableCall } from './pokerMath';
 import type { OddsCalculatorState, OddsResult } from '../types';
 
 /**

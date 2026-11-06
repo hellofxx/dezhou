@@ -3,7 +3,7 @@ import type { HandNotation } from '@/shared/types/poker';
 import type { HandStrategy } from '../types';
 import { getHandFromGrid } from '@/shared/utils/rangeParser';
 import { GRID_RANKS } from '@/shared/constants/poker';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';
 import type { RovingGridItemProps } from '@/shared/hooks/useRovingGridNav';
 import { ActionType } from '@/shared/types/action';

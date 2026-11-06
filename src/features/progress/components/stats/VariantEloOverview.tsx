@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { useProgressStore } from '../../store';
 import { ALL_VARIANTS } from '@/shared/types/elo';
-import { VariantGlyph } from '@/shared/components/business/VariantGlyph';
-import { RankIcon } from '@/shared/components/business/RankIcon';
+import { VariantGlyph } from '@/shared/components/poker/VariantGlyph';
+import { RankIcon } from './RankIcon';
 import { getRankForScore } from '@/features/progress/utils/elo';
 
 /**

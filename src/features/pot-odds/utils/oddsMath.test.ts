@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { computeOddsResult } from './oddsMath';
-import { calculateEV } from '@/shared/utils/pokerMath';
+import { calculateEV } from './pokerMath';
 import { getEasyOddsQuestion } from '../hooks/useOddsCalculation';
 import { EASY_LAST_QUESTION_ID, RESCUE_QUESTION_ID } from '../constants';
 import type { OddsCalculatorState } from '../types';

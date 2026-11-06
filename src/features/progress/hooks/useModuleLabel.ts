@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { MODULE_LABEL_KEYS, MODULE_LABELS_FALLBACK } from '@/shared/constants/moduleLabels';
+import { MODULE_LABEL_KEYS, MODULE_LABELS_FALLBACK } from '../data/moduleLabels';
 
 /**
  * 将模块标识解析为本地化显示名。

@@ -1,6 +1,6 @@
 import type { HandNotation, HandCategory, GameVariant } from '@/shared/types/poker';
 import { TOTAL_COMBOS, SHORT_DECK_TOTAL_COMBOS } from '@/shared/constants/poker';
-import { getHandCategory } from './handClassifier';
+import { getHandCategory } from '@/shared/utils/handClassifier';
 
 /**
  * P1A-07 修复：范围占比必须按组合数（combos）加权计算，而非规范手牌数/169。

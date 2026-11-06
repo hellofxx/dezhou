@@ -46,7 +46,7 @@ import { getTodayString } from '../../utils/streakCalc';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { APP_VERSION } from '@/shared/constants/app';
 import type { TrainingRecord } from '../../types';
-import { GameVariantSelector } from '@/shared/components/business/GameVariantSelector';
+import { GameVariantSelector } from './GameVariantSelector';
 import { useTranslation } from 'react-i18next';
 import { switchLanguage } from '@/i18n/preload';
 import { MENTOR_PROFILES } from '@/shared/types/mentor';

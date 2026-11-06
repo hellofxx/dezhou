@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { LessonSection } from '../../types';
 import { AsciiMonoText } from './FormulaBlock';
 import { FormulaDisplay } from './FormulaDisplay';
-import { LabeledBlock } from '@/shared/components/business/ContentBlocks';
+import { LabeledBlock } from '@/shared/components/academy/ContentBlocks';
 import { TheoryReferenceBlock } from './TheoryReferenceBlock';
 import { DiagramBlock, HandExampleBlock } from './DiagramBlock';
 

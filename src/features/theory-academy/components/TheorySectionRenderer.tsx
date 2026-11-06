@@ -5,7 +5,7 @@ import type { TheoryRichBlockData, TheorySection } from '../types';
 import {
   LabeledBlock,
   AsciiMonoText,
-} from '@/shared/components/business/ContentBlocks';
+} from '@/shared/components/academy/ContentBlocks';
 import { TheoryRichBlock } from './TheoryRichBlock';
 
 interface TheorySectionRendererProps {

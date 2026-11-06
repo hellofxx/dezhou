@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Bookmark, BookmarkCheck, CheckCircle2, Clock, Target } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
-import { ProgressBar } from '@/shared/components/business/ProgressBar';
+import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
 import type { TheoryChapter, TheoryLevelInfo } from '../types';
 import { getChapterDifficulty } from '../utils/theoryMeta';
 import {

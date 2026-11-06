@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { progressPersistStorage, setPersistFailureHandler } from './utils/persistStorage';
-import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState, QuickDrillBestRecord } from './types';
+import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState, QuickDrillBestRecord, AbilityAssessment } from './types';
 import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
 // P2-01 阶段 A：records 持久化外迁 IndexedDB
@@ -15,7 +15,7 @@ import {
   getYesterdayString as getYesterdayStringFromStreak,
   daysBetween,
 } from './utils/streakCalc';
-import { toLocalDateKey } from './utils/toLocalDateKey';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 import { sanitizeReviewLabel } from './utils/sanitizeReviewLabel';
 import { migrateTheoryReviewItems } from './utils/migrateTheoryReviewKeys';
 import { migrateStrategyReviewItems } from './utils/migrateStrategyReviewKeys';
@@ -31,7 +31,6 @@ import {
   hasNonDefaultAbility,
   mapAcademyAbilityToElo,
 } from './utils/elo';
-import type { AbilityAssessment } from '@/shared/types/ability';
 // P2-4: 导师角色人格化
 import type { MentorStyle } from '@/shared/types/mentor';
 import { DEFAULT_MENTOR } from '@/shared/types/mentor';

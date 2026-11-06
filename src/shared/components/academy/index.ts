@@ -33,3 +33,6 @@ export type {
   ContentIssueReportDialogProps,
   ContentIssueReportDialogLabels,
 } from './ContentIssueReportDialog';
+
+// 课程内容块（LabeledBlock / AsciiMonoText / FormulaBlock）：理论 / 策略课程渲染链路共用
+export { AsciiMonoText, FormulaBlock, LabeledBlock } from './ContentBlocks';

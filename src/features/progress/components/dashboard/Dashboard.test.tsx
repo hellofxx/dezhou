@@ -7,7 +7,7 @@ import { DEFAULT_ELO } from '@/shared/types/elo';
 import { DEFAULT_EMOTION_STATE } from '../../types';
 import { ACHIEVEMENTS } from '../../data/achievements';
 import type { TrainingRecord } from '../../types';
-import { toLocalDateKey } from '../../utils/toLocalDateKey';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 
 /**
  * Dashboard 首页（jsdom）。

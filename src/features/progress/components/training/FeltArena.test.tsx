@@ -6,7 +6,7 @@ import { useProgressStore, DEFAULT_STREAK_STATE, DEFAULT_ONBOARDING } from '../.
 import { DEFAULT_ELO, type EloRating } from '@/shared/types/elo';
 import { DEFAULT_EMOTION_STATE } from '../../types';
 import type { TrainingRecord } from '../../types';
-import { toLocalDateKey } from '../../utils/toLocalDateKey';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 
 /**
  * FeltArena 牌桌 Hero（jsdom）。

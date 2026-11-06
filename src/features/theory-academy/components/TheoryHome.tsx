@@ -13,7 +13,7 @@ import {
 } from '../utils/theoryMeta';
 import { getTheoryChapterRecommendation } from '../data/theoryRecommendations';
 import type { PokerVariant } from '@/shared/types/elo';
-import { VariantToggle } from '@/shared/components/VariantToggle';
+import { VariantToggle } from '@/shared/components/poker/VariantToggle';
 import { TheoryResume } from './TheoryResume';
 import { TheoryLadder, findActiveTheoryLevelId } from './TheoryLadder';
 import { TheorySupplementalCard } from './TheorySupplementalCard';

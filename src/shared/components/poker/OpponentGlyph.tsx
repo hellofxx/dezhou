@@ -1,7 +1,7 @@
 /**
  * 对手画像图标（Lucide 单源）
  *
- * @module shared/components/business/OpponentGlyph
+ * @module shared/components/poker/OpponentGlyph
  * @description `OpponentProfile.iconId` 的唯一渲染出口：TAG=标签 / LAG=火焰 / Nit=冰霜 /
  * Maniac=闪电 / Calling Station=电话 / Unknown=问号。画像名始终以相邻文案呈现，图标对读屏器隐藏。
  */

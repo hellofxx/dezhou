@@ -3,7 +3,7 @@ import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import AppLayout from '@/layouts/AppLayout';
 import BlankLayout from '@/layouts/BlankLayout';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
-import { ErrorBoundary } from '@/shared/components/business/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/components/system/ErrorBoundary';
 import { preloadI18n, preloadFeature } from '@/i18n/preload';
 import { FEATURE_GROUPS } from '@/i18n/moduleRegistry';
 

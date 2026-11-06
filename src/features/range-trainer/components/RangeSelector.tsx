@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { Button } from '@/shared/components/ui/button';
 import {
   Select,

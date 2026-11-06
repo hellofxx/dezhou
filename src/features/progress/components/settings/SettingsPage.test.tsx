@@ -7,7 +7,7 @@ import { DEFAULT_EMOTION_STATE } from '../../types';
 import { useDebugModeStore, DEBUG_UNLOCK_CODE } from '@/shared/stores/debugMode';
 import { MENTOR_PROFILES } from '@/shared/types/mentor';
 import type { TrainingRecord } from '../../types';
-import { toLocalDateKey } from '../../utils/toLocalDateKey';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 
 /**
  * SettingsPage 设置页（jsdom 冒烟 + 关键分支）。

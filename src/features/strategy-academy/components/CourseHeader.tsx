@@ -8,7 +8,7 @@ import {
   resolveLessonTitle,
 } from '../utils/titleKeys';
 import { LessonBookmarkButton } from './LessonBookmarkButton';
-import { ProgressBar } from './ProgressBar';
+import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
 
 interface CourseHeaderProps {
   lesson: Lesson;

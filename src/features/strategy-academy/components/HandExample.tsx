@@ -12,7 +12,7 @@ import { stringToCard } from '@/shared/utils/deck';
 import { formatBB } from '@/shared/utils/formatters';
 import { resolveHandExample, resolveOpponent } from '../utils/contentKeys';
 import { PredictionPrompt } from './PredictionPrompt';
-import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
+import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
 
 interface HandExampleProps {
   example: HandExampleType;

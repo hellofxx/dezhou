@@ -39,7 +39,7 @@ const H1_ALLOWLIST: { file: string; reason: string }[] = [
     reason: '无侧边栏布局的 sr-only 页面标题（无可见导航时提供文档标题）',
   },
   {
-    file: 'shared/components/business/ErrorBoundary.tsx',
+    file: 'shared/components/system/ErrorBoundary.tsx',
     reason: '全局错误兜底整页视图（脱离布局渲染）',
   },
   { file: 'shared/components/feedback/ResultSummary.tsx', reason: '训练结果整页视图的主标题' },

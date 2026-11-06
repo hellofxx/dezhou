@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Calculator, RotateCw, ShieldCheck } from 'lucide-react';
 import { Input } from '@/shared/components/ui/input';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
 import {
   CHAPTER_DRILL_SLOTS,

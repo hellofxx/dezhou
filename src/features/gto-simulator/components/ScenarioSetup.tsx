@@ -4,9 +4,9 @@ import type { GameType, Difficulty } from '@/shared/types/common';
 import type { GameVariant } from '@/shared/types/poker';
 import { GAME_VARIANT_CONFIGS, getPlayerCountOptions } from '@/shared/constants/poker';
 import { useGTOSimulatorStore } from '../store';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { OPPONENT_PROFILES, getOpponentProfile } from '@/shared/data/opponentProfiles';
-import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
+import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
 
 // label/desc 存 i18n key（gto.setup.*），渲染时 t() 解析
 const GAME_TYPES: { value: GameType; label: string }[] = [

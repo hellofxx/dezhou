@@ -33,21 +33,8 @@ const ZERO_CONSUMER_BASELINE: Record<string, string> = {};
 
 /** 1 生产消费者 baseline（回迁 / 合并后逐条删除；只降不升） */
 const ONE_CONSUMER_BASELINE: Record<string, string> = {
-  'src/shared/components/business/CasinoPlaque.tsx': '仅 progress FeltArena，Batch 2 回迁',
-  'src/shared/components/business/DailyGoalCard.tsx': '仅 progress FeltArena，Batch 2 回迁',
-  'src/shared/components/business/GameVariantSelector.tsx': '仅 progress SettingsPage，Batch 2 回迁',
-  'src/shared/components/business/MottoEngraved.tsx': '仅 progress FeltArena，Batch 2 回迁',
-  'src/shared/components/business/ProgressRing.tsx': '仅 strategy ConceptGraph，Batch 4 扩展到 theory',
-  'src/shared/components/business/RankIcon.tsx': '仅 progress，Batch 2 回迁',
-  'src/shared/components/business/Sparkline.tsx': '仅 progress StreakRail，Batch 2 回迁',
+  'src/shared/components/data-display/ProgressRing.tsx': '仅 strategy ConceptGraph，Batch 4 扩展到 theory',
   'src/shared/components/feedback/ResultSummary.tsx': '仅 gto，Batch 5 回迁 gto',
-  'src/shared/components/layout/TableRail.tsx': '仅 layouts，Batch 2 回迁 src/layouts',
-  'src/shared/constants/moduleLabels.ts': '仅 progress（经 useModuleLabel），Batch 2 回迁',
-  'src/shared/hooks/useModuleLabel.ts': '仅 progress，Batch 2 回迁',
-  'src/shared/hooks/useAcademyDataSource.ts': '仅 progress，Batch 2 回迁',
-  'src/shared/types/ability.ts': '仅 progress，Batch 2 合并进 progress/types',
-  'src/shared/utils/academyMastery.ts': '仅 strategy；Batch 2 theory 接入后转正',
-  'src/shared/utils/pokerMath.ts': '仅 pot-odds，Batch 2 回迁',
 };
 
 function walk(dirPath: string, collected: string[] = []): string[] {

@@ -1,7 +1,7 @@
 // ELO 算法工具函数（P1-2.2）
 import type { EloRating, Rank } from '@/shared/types/elo';
 import { DEFAULT_ELO, RANKS } from '@/shared/types/elo';
-import type { AbilityAssessment } from '@/shared/types/ability';
+import type { AbilityAssessment } from '../types';
 
 /**
  * 简化 ELO 更新算法

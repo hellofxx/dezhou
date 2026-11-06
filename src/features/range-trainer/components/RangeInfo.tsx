@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { HandNotation, HandCategory, GameVariant } from '@/shared/types/poker';
-import { getHandCategory } from '../utils/handClassifier';
+import { getHandCategory } from '@/shared/utils/handClassifier';
 import { getRangeComboPercentage } from '../utils/rangeCombos';
 import { resolvePresetName } from '../utils/presetI18n';
 import type { RangePreset } from '../types';

@@ -177,7 +177,7 @@ export function generateCrossModuleDailyPlan(
   if (genericReviews.length > 0) {
     // P0C：清洗历史遗留的硬编码中文"决策"后缀（GTO 场景 name 曾为 "BTN Turn 决策"）。
     // 不依赖 persist migrate 时机，渲染端兜底保证英文界面不再出现中英混杂。
-    // 统一口径：shared/utils/sanitizeReviewLabel（与 migrate / onRehydrateStorage 共用）
+    // 统一口径：progress/utils/sanitizeReviewLabel（与 migrate / onRehydrateStorage 共用）
     const reviewLabels = genericReviews
       .slice(0, 3)
       .map((item) => sanitizeReviewLabel(item.label));

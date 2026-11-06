@@ -1,7 +1,7 @@
 /**
  * ELO 段位图标（Lucide 单源）
  *
- * @module shared/components/business/RankIcon
+ * @module progress/components/stats/RankIcon
  * @description 段位徽章的图标出口（仪表盘牌桌 / 进度铭牌 / 弱点分析 / 多变体概览）。
  * 段位名始终以相邻文案呈现，图标对读屏器隐藏。
  * 庆祝插画（RankUpCelebration）保留 `Rank.icon` 的牌室化 emoji，不走本组件。

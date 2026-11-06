@@ -13,7 +13,7 @@ import { GTOFeedback } from './GTOFeedback';
 import { DecisionTree } from './DecisionTree';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { TrainingRecord } from '@/features/progress/types';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { getOptimalAction } from '../utils/strategyCompare';
 // P2-5.4: Session 止损守卫
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';

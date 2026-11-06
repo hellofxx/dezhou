@@ -7,7 +7,7 @@ import { Lock, CheckCircle2, PlayCircle, ChevronRight, Award, Clock } from 'luci
 import { cn } from '@/shared/utils/cn';
 import type { LevelInfo } from '../types';
 import { useAcademyStore } from '../store';
-import { ProgressBar } from './ProgressBar';
+import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
 import { resolveCertificationState } from '../utils/certification';
 import { formatRemainingTime } from '../utils/certificationStatus';
 import {

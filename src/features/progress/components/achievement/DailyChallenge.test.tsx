@@ -4,7 +4,7 @@ import { MemoryRouter, useLocation } from 'react-router-dom';
 import DailyChallenge from './DailyChallenge';
 import { useProgressStore, DEFAULT_STREAK_STATE } from '../../store';
 import type { TrainingRecord } from '../../types';
-import { toLocalDateKey } from '../../utils/toLocalDateKey';
+import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
 
 /**
  * DailyChallenge 今日任务卡（jsdom）。

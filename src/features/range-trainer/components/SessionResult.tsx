@@ -5,7 +5,7 @@ import { MOTION_DURATION, MOTION_EASE, transitionSlow } from '@/shared/utils/mot
 import type { TrainingResult } from '@/shared/types/common';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { StatCard } from '@/shared/components/business/StatCard';
+import { StatCard } from '@/shared/components/data-display/StatCard';
 import { RotateCcw, Home, Trophy, Target, Clock, AlertTriangle } from 'lucide-react';
 
 interface SessionResultProps {

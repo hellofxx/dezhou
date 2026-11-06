@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
-import { useAcademyProgressSnapshot } from '@/shared/hooks/useAcademyDataSource';
+import { useAcademyProgressSnapshot } from '../../hooks/useAcademyDataSource';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import type { AcademyDataSource, AcademyLessonAttemptSnapshot, AcademyLessonMeta, AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
 import { act } from 'react';

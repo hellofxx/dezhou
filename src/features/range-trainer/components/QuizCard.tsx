@@ -4,8 +4,8 @@
  * 使本模块消费方（TrainingSession 等）无需改动。
  */
 import { useProgressStore } from '@/features/progress/store';
-import { QuizCard as SharedQuizCard } from '@/shared/components/business/QuizCard';
-import type { QuizCardProps } from '@/shared/components/business/QuizCard';
+import { QuizCard as SharedQuizCard } from '@/shared/components/quiz/QuizCard';
+import type { QuizCardProps } from '@/shared/components/quiz/QuizCard';
 
 export type { QuizCardProps };
 

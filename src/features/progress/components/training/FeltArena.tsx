@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import CasinoPlaque from '@/shared/components/business/CasinoPlaque';
-import MottoEngraved from '@/shared/components/business/MottoEngraved';
-import { RankIcon } from '@/shared/components/business/RankIcon';
-import DailyGoalCard from '@/shared/components/business/DailyGoalCard';
+import CasinoPlaque from './CasinoPlaque';
+import MottoEngraved from './MottoEngraved';
+import { RankIcon } from '../stats/RankIcon';
+import DailyGoalCard from './DailyGoalCard';
 import { CardBack } from '@/shared/components/poker/CardBack';
 import { Chip } from '@/shared/components/poker/Chip';
 import { getRankForScore } from '@/features/progress/utils/elo';

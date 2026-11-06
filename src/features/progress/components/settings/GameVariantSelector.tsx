@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { GAME_VARIANT_CONFIGS } from '@/shared/constants/poker';
 import type { GameVariant } from '@/shared/types/poker';
-import { VariantGlyph } from './VariantGlyph';
+import { VariantGlyph } from '@/shared/components/poker/VariantGlyph';
 
 // PLAT-02 修复：改为受控组件（props 注入 currentVariant/onChange），
 // 解除对 features/progress/store 的直接依赖（shared 不依赖 feature 的分层约束）。

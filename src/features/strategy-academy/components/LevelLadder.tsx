@@ -7,7 +7,7 @@ import { cn } from '@/shared/utils/cn';
 import type { LevelSummary } from '../types';
 import { useAcademyStore } from '../store';
 import { loadAcademyLessonsForLesson } from '../data/lessons/loaders';
-import { ProgressBar } from './ProgressBar';
+import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import { resolveCertificationState } from '../utils/certification';
 import { formatRemainingTime } from '../utils/certificationStatus';

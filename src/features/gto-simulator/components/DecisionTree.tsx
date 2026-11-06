@@ -4,7 +4,7 @@ import type { Board } from '@/shared/types/poker';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { ActionType } from '@/shared/types/action';
 import type { Position } from '@/shared/types/position';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { actionLabel } from '../utils/actionTerms';
 
 interface DecisionTreeProps {

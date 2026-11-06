@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import type { HandStrategy } from '../types';
 import type { HandNotation } from '@/shared/types/poker';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { getOpponentProfile } from '@/shared/data/opponentProfiles';
 import { GRADE_DISPLAY_CONFIG, type DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { GradeIcon } from '@/shared/components/feedback/GradeIcon';
-import { OpponentGlyph } from '@/shared/components/business/OpponentGlyph';
+import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';

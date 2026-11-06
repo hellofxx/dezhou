@@ -32,6 +32,19 @@ export interface ModuleStats {
   lastPlayed: number | null;
 }
 
+/**
+ * 用户能力评估（ELO 初始映射 mapAcademyAbilityToElo 的输入契约）。
+ * 单消费归位：原 shared/types/ability.ts 仅 progress 使用，已合并至此。
+ */
+export interface AbilityAssessment {
+  rangeKnowledge: number;     // 范围知识
+  oddsCalculation: number;    // 赔率计算
+  gtoUnderstanding: number;   // GTO理解
+  positionalPlay: number;     // 位置打法
+  emotionalControl: number;   // 情绪控制
+  lastUpdated: number;
+}
+
 // 用户设置
 export interface UserSettings {
   theme: 'dark' | 'light' | 'system';

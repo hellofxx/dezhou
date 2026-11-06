@@ -21,7 +21,7 @@ import { resolveLeakFixLessonIds } from '../utils/leakFix';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useProgressStore } from '@/features/progress/store';
-import { ProgressBar } from './ProgressBar';
+import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
 
 export default function LearningTracksView() {
   const { t } = useTranslation();

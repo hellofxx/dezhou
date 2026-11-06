@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import { MOTION_DURATION, transitionSlow } from '@/shared/utils/motion';
 import { Trophy, Clock, Target, RefreshCw, Home, TrendingUp } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import { StatCard } from '@/shared/components/business/StatCard';
+import { StatCard } from '@/shared/components/data-display/StatCard';
 import { WrongAnswerList, type WrongAnswerEntry } from './PuzzleResultParts';
 import type { PuzzleResult } from '../types';
 

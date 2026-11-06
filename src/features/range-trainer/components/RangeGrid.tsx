@@ -1,10 +1,10 @@
 import React from 'react';
 import type { HandNotation, GameVariant } from '@/shared/types/poker';
-import { cn } from '@/shared/utils';
+import { cn } from '@/shared/utils/cn';
 import { useRovingGridNav } from '@/shared/hooks/useRovingGridNav';
 import type { RovingGridItemProps } from '@/shared/hooks/useRovingGridNav';
-import { getHandFromGrid } from '../utils/rangeParser';
-import { getHandCategory } from '../utils/handClassifier';
+import { getHandFromGrid } from '@/shared/utils/rangeParser';
+import { getHandCategory } from '@/shared/utils/handClassifier';
 import { GRID_RANKS, SHORT_DECK_GRID_RANKS } from '../constants';
 
 interface RangeGridProps {

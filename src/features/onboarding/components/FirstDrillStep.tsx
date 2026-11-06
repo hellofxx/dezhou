@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/shared/components/ui/button';
-import { QuizCard } from '@/shared/components/business/QuizCard';
+import { QuizCard } from '@/shared/components/quiz/QuizCard';
 import type { RangeAction } from '@/shared/types/poker';
 import { useProgressStore } from '@/features/progress/store';
 import {

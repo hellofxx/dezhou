@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, R
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Button } from '@/shared/components/ui/button';
 import { usePotOddsStore } from '../store';
-import { calculateEV } from '@/shared/utils/pokerMath';
+import { calculateEV } from '@/features/pot-odds/utils/pokerMath';
 import { PotSizeInput } from './PotSizeInput';
 
 export function EVCalculator() {

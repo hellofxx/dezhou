@@ -7,7 +7,7 @@ import { ArrowRight, Target, Gamepad2 } from 'lucide-react';
 import { useProgress } from '../../hooks/useProgress';
 import { DIFFICULTY_THRESHOLDS } from '../../constants';
 import { transitionSlow } from '@/shared/utils/motion';
-import { useModuleLabel } from '@/shared/hooks/useModuleLabel';
+import { useModuleLabel } from '../../hooks/useModuleLabel';
 import { aggregateByDay } from '../../utils/statsAggregator';
 import { getTrainingCalendar } from '../../utils/streakCalc';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';

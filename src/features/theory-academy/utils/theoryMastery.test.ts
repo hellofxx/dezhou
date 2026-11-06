@@ -1,11 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { TheoryChapterAttempt, TheoryChapterSummary } from '../types';
-import {
-  MASTERY_THRESHOLDS,
-  getMasteryState,
-  resolveFirstScore,
-  summarizeMastery,
-} from './theoryMastery';
+import { ACADEMY_MASTERY_THRESHOLDS, getMasteryState } from '@/shared/utils/academyMastery';
+import { resolveFirstScore, summarizeMastery } from './theoryMastery';
 
 /**
  * 掌握度派生纯函数回归。
@@ -13,6 +9,9 @@ import {
  * "统计范围由入参决定" 这两件事必须锁死：一旦阈值或 tie-break 规则漂移，
  * 首页的「已掌握」数量与「复习最弱一章」指向的章节都会静默变化。
  * 另锁定首次成绩优先口径：重考刷高 bestScore 不得抬高掌握度。
+ *
+ * 阈值 / getMasteryState 的实现只有 `shared/utils/academyMastery` 一份
+ * （理论侧 theoryMastery 只做首次成绩解析 + 薄包装），故此处直接断言共享单源。
  */
 
 /** 测试用最小章节摘要（只用到 id 与目录顺序） */
@@ -43,9 +42,9 @@ function attempt(firstScore: number, bestScore = firstScore): TheoryChapterAttem
 
 const chapters = [chapter('a', 1), chapter('b', 2), chapter('c', 3), chapter('d', 4), chapter('e', 5)];
 
-describe('theoryMastery.getMasteryState', () => {
+describe('掌握度阈值与状态归类（shared 单源）', () => {
   it('阈值常量为 80 / 60（唯一事实源）', () => {
-    expect(MASTERY_THRESHOLDS).toEqual({ mastered: 80, passing: 60 });
+    expect(ACADEMY_MASTERY_THRESHOLDS).toEqual({ mastered: 80, passing: 60 });
   });
 
   it('已掌握边界：80 记为已掌握，79 落到通过', () => {
