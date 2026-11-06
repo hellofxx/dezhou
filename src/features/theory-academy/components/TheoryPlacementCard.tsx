@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Compass, Target } from 'lucide-react';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { transitionStandard } from '@/shared/utils/motion';
 import type { TheoryPlacementResult } from '../types';
 import { findLevelSummaryById } from '../utils/theoryMeta';
@@ -39,9 +41,9 @@ export function TheoryPlacementCard({ placement, className }: TheoryPlacementCar
       aria-label={t('theory.placement.title')}
       className={className}
     >
-      <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold mb-2.5 px-1">
+      <SectionLabel as="h2" className="mb-2.5 px-1">
         {t('theory.placement.title')}
-      </h2>
+      </SectionLabel>
       <div className="panel space-y-2">
         {placement ? (
           <>
@@ -89,7 +91,7 @@ export function TheoryPlacementCard({ placement, className }: TheoryPlacementCar
                 </p>
                 <Link
                   to="/academy/basics"
-                  className="mt-1 inline-flex min-h-11 items-center text-[11px] font-semibold text-[var(--brass-bright)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                  className={`mt-1 inline-flex min-h-11 items-center text-[11px] font-semibold text-[var(--brass-bright)] hover:underline rounded ${FOCUS_RING}`}
                 >
                   {t('theory.placement.basicsCta')}
                 </Link>
@@ -97,7 +99,7 @@ export function TheoryPlacementCard({ placement, className }: TheoryPlacementCar
             )}
             <Link
               to={PLACEMENT_ROUTE}
-              className="inline-flex min-h-11 items-center text-[11px] font-semibold text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+              className={`inline-flex min-h-11 items-center text-[11px] font-semibold text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:underline rounded ${FOCUS_RING}`}
             >
               {t('theory.placement.retake')}
             </Link>
@@ -112,7 +114,7 @@ export function TheoryPlacementCard({ placement, className }: TheoryPlacementCar
             </p>
             <Link
               to={PLACEMENT_ROUTE}
-              className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[var(--brass-fill)] px-3 py-2 text-xs font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[var(--brass-fill)] px-3 py-2 text-xs font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:opacity-90 ${FOCUS_RING}`}
             >
               {t('theory.placement.start')}
             </Link>

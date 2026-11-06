@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, CalendarClock, Flag, FlagOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { transitionStandard } from '@/shared/utils/motion';
 import { ComponentSkeleton, ListSkeleton } from '@/shared/components/feedback/LoadingState';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
@@ -59,7 +60,7 @@ export default function TheoryFlaggedReview() {
         <button
           onClick={() => navigate('/theory')}
           aria-label={t('theory.flagged.backAria')}
-          className="inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          className={`inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors ${FOCUS_RING}`}
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           {t('theory.title')}
@@ -139,7 +140,7 @@ function FlaggedRow({
         <Link
           to={entry.route}
           aria-label={t('theory.flagged.gotoChapterAria', { chapter: resolveChapterTitle(t, entry.chapter) })}
-          className="inline-flex min-h-11 items-center gap-1.5 px-3 rounded-lg border border-[var(--walnut-border)] text-xs font-semibold text-[var(--brass-bright)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          className={`inline-flex min-h-11 items-center gap-1.5 px-3 rounded-lg border border-[var(--walnut-border)] text-xs font-semibold text-[var(--brass-bright)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 transition-colors ${FOCUS_RING}`}
         >
           {t('theory.flagged.gotoChapter')}
           <ArrowRight className="w-3.5 h-3.5" />
@@ -151,7 +152,7 @@ function FlaggedRow({
             'inline-flex min-h-11 items-center gap-1.5 px-3 rounded-lg border text-xs',
             'border-[var(--walnut-border)]/50 text-[var(--ivory-muted)]',
             'hover:text-[var(--ivory)] hover:border-[var(--brass)]/40 transition-colors',
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+            FOCUS_RING,
           )}
         >
           <FlagOff className="w-3.5 h-3.5" />

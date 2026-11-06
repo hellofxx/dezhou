@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, CheckCircle2, Compass, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useTheoryStore } from '../store';
 import {
   PLACEMENT_BASICS_ROUTE,
@@ -148,7 +149,7 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
             </div>
             <Link
               to={PLACEMENT_BASICS_ROUTE}
-              className="inline-flex min-h-11 items-center gap-1.5 text-sm text-[var(--brass-text)] hover:text-[var(--brass-bright)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+              className={`inline-flex min-h-11 items-center gap-1.5 text-sm text-[var(--brass-text)] hover:text-[var(--brass-bright)] rounded ${FOCUS_RING}`}
             >
               {t('theory.placement.basicsCta')}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -160,14 +161,14 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={start}
-            className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
             {t('theory.placement.retake')}
           </button>
           {onExit && (
             <button
               onClick={onExit}
-              className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-sm text-[var(--ivory)] hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-sm text-[var(--ivory)] hover:opacity-90 transition-opacity ${FOCUS_RING}`}
             >
               {t('theory.chapterView.backToChapters')}
             </button>
@@ -230,7 +231,8 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
                 onClick={() => handleSelect(option.originalIndex)}
                 disabled={answered}
                 className={cn(
-                  'w-full min-h-11 text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                  'w-full min-h-11 text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
+                  FOCUS_RING,
                   !answered &&
                     'border-[var(--walnut-border)] bg-[var(--felt)] text-[var(--ivory-dim)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40',
                   showCorrect && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
@@ -261,7 +263,7 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
           <div className="flex justify-end">
             <button
               onClick={handleNext}
-              className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
             >
               {currentIndex >= PLACEMENT_QUESTION_COUNT - 1
                 ? t('theory.placement.finish')
@@ -293,7 +295,7 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
       <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={start}
-          className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
         >
           {t('theory.placement.start')}
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -301,7 +303,7 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
         {onExit && (
           <button
             onClick={onExit}
-            className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
             {t('theory.chapterView.backToChapters')}
           </button>

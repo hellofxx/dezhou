@@ -4,6 +4,8 @@ import type { TFunction } from 'i18next';
 import { Link } from 'react-router-dom';
 import { BookOpen, Search, Tags } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { TheoryChapterSummary, TheoryGlossaryTerm } from '../types';
 import { findChapterSummaryById, findLevelSummaryByChapterId } from '../utils/theoryMeta';
 import { resolveChapterTitle } from '../utils/titleKeys';
@@ -95,9 +97,7 @@ export function TheoryGlossary({
   return (
     <section aria-label={t('theory.glossary.title')} className={cn('space-y-3', className)}>
       <div>
-        <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-semibold">
-          {t('theory.glossary.title')}
-        </h2>
+        <SectionLabel as="h2">{t('theory.glossary.title')}</SectionLabel>
         <p className="text-[11px] text-[var(--ivory-dim)] mt-1 leading-relaxed">
           {t('theory.glossary.subtitle')}
         </p>
@@ -114,7 +114,7 @@ export function TheoryGlossary({
           onChange={(event) => setQuery(event.target.value)}
           aria-label={t('theory.glossary.searchPlaceholder')}
           placeholder={t('theory.glossary.searchPlaceholder')}
-          className="w-full min-h-11 rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/40 pl-9 pr-3 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          className={`w-full min-h-11 rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/40 pl-9 pr-3 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] ${FOCUS_RING}`}
         />
       </div>
 
@@ -129,7 +129,7 @@ export function TheoryGlossary({
               onClick={() => setCategory(key)}
               className={cn(
                 'inline-flex min-h-11 items-center gap-1 rounded-full border px-2.5 text-[11px] transition-colors',
-                'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                FOCUS_RING,
                 active
                   ? 'border-[var(--brass)]/60 bg-[var(--brass)]/15 text-[var(--brass-bright)]'
                   : 'border-[var(--walnut-border)] text-[var(--ivory-muted)] hover:text-[var(--ivory)]',
@@ -173,7 +173,7 @@ export function TheoryGlossary({
                         <Link
                           key={chapter.id}
                           to={`/theory/chapter/${chapter.id}`}
-                          className="inline-flex items-center gap-1 text-[11px] text-[var(--brass-bright)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                          className={`inline-flex items-center gap-1 text-[11px] text-[var(--brass-bright)] hover:underline rounded ${FOCUS_RING}`}
                         >
                           <BookOpen className="w-2.5 h-2.5" aria-hidden="true" />
                           {resolveChapterTitle(t, chapter)}

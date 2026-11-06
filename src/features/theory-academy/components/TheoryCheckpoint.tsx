@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, ClipboardCheck, Lock, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
@@ -242,7 +243,7 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
         {certificationLevel !== undefined && (
           <Link
             to={`/academy/certification/${certificationLevel}`}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2.5 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2.5 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:opacity-90 ${FOCUS_RING}`}
           >
             {t('theory.checkpoint.certificationCta')}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -251,14 +252,14 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={start}
-            className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
             {t('theory.checkpoint.retry')}
           </button>
           {onExit && (
             <button
               onClick={onExit}
-              className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-sm text-[var(--ivory)] hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-sm text-[var(--ivory)] hover:opacity-90 transition-opacity ${FOCUS_RING}`}
             >
               {t('theory.chapterView.backToChapters')}
             </button>
@@ -290,7 +291,8 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
                 onClick={() => handleSelect(index)}
                 disabled={answered}
                 className={cn(
-                  'w-full min-h-11 text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                  'w-full min-h-11 text-left px-4 py-3 rounded-lg border text-sm transition-all duration-200',
+                  FOCUS_RING,
                   !answered &&
                     'border-[var(--walnut-border)] bg-[var(--felt)] text-[var(--ivory-dim)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40',
                   answered && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
@@ -317,7 +319,7 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
           <div className="flex justify-end">
             <button
               onClick={handleNext}
-              className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
             >
               {currentIndex < questions.length - 1
                 ? t('theory.quiz.next')
@@ -345,7 +347,7 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
       <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={start}
-          className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
         >
           {t('theory.checkpoint.entry')}
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -353,7 +355,7 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
         {onExit && (
           <button
             onClick={onExit}
-            className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
             {t('theory.chapterView.backToChapters')}
           </button>

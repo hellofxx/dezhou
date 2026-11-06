@@ -4,6 +4,7 @@ import { CheckCircle2, XCircle, ArrowRight, Flag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { transitionFast } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useProgressStore } from '@/features/progress/store';
 import { useTheoryStore } from '../store';
 import { orderTheoryQuizQuestion } from '../utils/quizOrder';
@@ -193,7 +194,8 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
               onClick={() => toggleFlagQuestion(question.id)}
               aria-label={flaggedQuestions.includes(question.id) ? t('theory.flaggedQuestion') : t('theory.flagQuestion')}
               className={cn(
-                'p-2 min-h-11 min-w-11 rounded transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                'p-2 min-h-11 min-w-11 rounded transition-colors',
+                FOCUS_RING,
                 flaggedQuestions.includes(question.id)
                   ? 'text-[var(--poker-gold)] bg-[var(--poker-gold)]/15'
                   : 'text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
@@ -217,7 +219,8 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                   disabled={showExplanation}
                   aria-label={t('theory.quiz.optionAria', { letter: String.fromCharCode(65 + index), option })}
                   className={cn(
-                    'w-full text-left min-h-11 px-4 py-3 rounded-lg border text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                    'w-full text-left min-h-11 px-4 py-3 rounded-lg border text-sm transition-all duration-200',
+                    FOCUS_RING,
                     !showExplanation &&
                       'border-[var(--walnut-border)] bg-[var(--felt)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 text-[var(--ivory-dim)]',
                     showExplanation && isCorrectOption && 'border-[var(--poker-success)]/50 bg-[var(--poker-success-bg)] text-[var(--poker-success)]',
@@ -260,7 +263,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
             <div className="mt-5 flex justify-end">
               <button
                 onClick={handleNext}
-                className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity ${FOCUS_RING}`}
               >
                 {currentIndex < orderedQuestions.length - 1 ? t('theory.quiz.next') : t('theory.quiz.viewResult')}
                 <ArrowRight className="w-4 h-4" />

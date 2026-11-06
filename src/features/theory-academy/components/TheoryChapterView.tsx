@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Trophy, BookOpen, ClipboardCheck, Compass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useProgressStore } from '@/features/progress/store';
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
@@ -177,7 +178,7 @@ export default function TheoryChapterView() {
         <button
           onClick={() => navigate('/theory')}
           aria-label={t('theory.chapterView.backAria')}
-          className="inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          className={`inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors ${FOCUS_RING}`}
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           {t('theory.title')} · {level.icon} {resolveTheoryLevelTitle(t, level)}
@@ -236,7 +237,7 @@ export default function TheoryChapterView() {
               <div className="pt-4 mt-2 border-t border-[var(--walnut-border)]/50 flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                 <button
                   onClick={() => navigate('/theory')}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                  className={`inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors ${FOCUS_RING}`}
                 >
                   <ArrowLeft className="w-4 h-4" />
                   {t('theory.chapterView.backToChapters')}
@@ -244,7 +245,7 @@ export default function TheoryChapterView() {
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     onClick={() => setPhase('quiz')}
-                    className="inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                    className={`inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
                   >
                     {t('theory.chapterView.retryQuiz')}
                   </button>
@@ -255,7 +256,7 @@ export default function TheoryChapterView() {
               <div className="pt-4 mt-2 border-t border-[var(--walnut-border)]/50 flex justify-end">
                 <button
                   onClick={() => setPhase('quiz')}
-                  className="inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                  className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity ${FOCUS_RING}`}
                 >
                   {t('theory.chapterView.startQuiz')}
                   <ArrowRight className="w-4 h-4" />
@@ -273,7 +274,7 @@ export default function TheoryChapterView() {
               {levelCompleted && (
                 <Link
                   to={`/theory/checkpoint/${level.id}`}
-                  className="inline-flex min-h-11 items-center gap-1.5 text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                  className={`inline-flex min-h-11 items-center gap-1.5 text-[var(--poker-info)] hover:underline rounded ${FOCUS_RING}`}
                 >
                   <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
                   {t('theory.level.checkpointEntry')}
@@ -282,7 +283,7 @@ export default function TheoryChapterView() {
               {!hasPlacement && (
                 <Link
                   to="/theory/placement"
-                  className="inline-flex min-h-11 items-center gap-1.5 text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                  className={`inline-flex min-h-11 items-center gap-1.5 text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:underline rounded ${FOCUS_RING}`}
                 >
                   <Compass className="w-3.5 h-3.5" aria-hidden="true" />
                   {t('theory.placement.title')}
@@ -327,7 +328,7 @@ export default function TheoryChapterView() {
             <div className="panel flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
               <button
                 onClick={() => navigate('/theory')}
-                className="inline-flex min-h-11 items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                className={`inline-flex min-h-11 items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors ${FOCUS_RING}`}
               >
                 <ArrowLeft className="w-4 h-4" />
                 {t('theory.chapterView.backToChapters')}
@@ -338,7 +339,7 @@ export default function TheoryChapterView() {
                     setRetryCount((c) => c + 1);
                     setPhase('quiz');
                   }}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                  className={`inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
                 >
                   {t('theory.retryQuiz')}
                 </button>
@@ -350,7 +351,7 @@ export default function TheoryChapterView() {
               <div className="max-w-3xl mx-auto">
                 <Link
                   to={`/theory/checkpoint/${level.id}`}
-                  className="inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60 rounded"
+                  className={`inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline rounded ${FOCUS_RING}`}
                 >
                   <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
                   {t('theory.level.checkpointEntry')}
