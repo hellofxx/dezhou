@@ -10,24 +10,26 @@
  * - i18n-key 型题库：源题库静态数据不改，组件在 t() 解析后调用本出口
  */
 import type { PlacementQuestion } from '../types';
-import {
-  shuffleBySeed,
-  hashStringToSeed,
-  isNumericOptionSet,
-  sortByNumericValue,
-} from '@/shared/utils/seededShuffle';
+import { applyOptionOrder, computeOptionOrder } from '@/shared/utils/optionOrder';
+import type { OrderStrategy } from '@/shared/utils/optionOrder';
 
 type PlacementOption = PlacementQuestion['options'][number];
+
+/** 定级题排序策略：数值选项集升序，文字选项集按 hash(题 id) 种子洗牌 */
+function placementStrategy(id: string): OrderStrategy {
+  return {
+    kind: 'conditional',
+    if: 'numericStrict',
+    then: { kind: 'numeric', detect: 'strict', direction: 'asc' },
+    else: { kind: 'shuffle', seed: id },
+  };
+}
 
 /** 对定级题选项做重排（纯函数，返回新数组，不修改源数据） */
 export function orderPlacementOptions(
   q: PlacementQuestion,
   getText: (option: PlacementOption) => string,
 ): PlacementOption[] {
-  const texts = q.options.map((o) => getText(o));
-  const indices = q.options.map((_, i) => i);
-  const order = isNumericOptionSet(texts)
-    ? sortByNumericValue(indices, (i) => texts[i]!)
-    : shuffleBySeed(indices, hashStringToSeed(q.id));
-  return order.map((originalIndex) => q.options[originalIndex]!);
+  const order = computeOptionOrder(q.options, getText, placementStrategy(q.id));
+  return applyOptionOrder(q.options, order);
 }

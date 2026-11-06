@@ -23,46 +23,21 @@
  *
  * 分布守卫：practiceOptionOrder.test.ts 全量迭代题库断言
  * 重排后正确答案任一位置占比 ≤60% 且同题两次排序结果一致。
+ *
+ * 实现：策略委托 `shared/utils/optionOrder`（conditional actionAll →
+ * action requireAllParsed / numericStrict / shuffle+盐），本文件保留模块公开 API
+ * 与检测口径（practice 词表：all-in + 全下、donk / cbet / 4-bet / 5-bet）。
  */
 import type { PracticeOption, PracticeQuestion } from '../types';
 import {
-  shuffleBySeed,
-  hashStringToSeed,
-  isNumericOptionSet,
-  sortByNumericValue,
-} from '@/shared/utils/seededShuffle';
+  applyOptionOrder,
+  computeOptionOrder,
+  parseActionSortKey,
+  type OrderStrategy,
+} from '@/shared/utils/optionOrder';
 
 /** 洗牌盐值：隔离 practice 出口的种子空间（勿与其他出口盐值重复） */
 const PRACTICE_OPTION_SALT = '@practice-v1';
-
-/** 无法识别动作语义时的类别兜底值 */
-const UNKNOWN_CATEGORY = 99;
-
-/**
- * 动作类别前缀匹配表（大小写不敏感，按声明顺序尝试）：
- * 0=Fold 1=Check（含 Check-Raise 等 check 前缀变体，与 puzzle-trainer 同口径）
- * 2=Call 3=Limp 4=Bet/C-Bet/Donk 5=Raise/3-bet/4-Bet/5-Bet
- */
-const CATEGORY_PREFIXES: ReadonlyArray<readonly [prefix: string, category: number]> = [
-  ['fold', 0],
-  ['check', 1],
-  ['call', 2],
-  ['limp', 3],
-  ['donk', 4],
-  ['c-bet', 4],
-  ['cbet', 4],
-  ['bet', 4],
-  ['raise', 5],
-  ['3-bet', 5],
-  ['3bet', 5],
-  ['4-bet', 5],
-  ['4bet', 5],
-  ['5-bet', 5],
-  ['5bet', 5],
-];
-
-/** 提取文本中第一个数值（支持小数），无数值取 0（用于同类别内尺度升序） */
-const FIRST_NUMBER_PATTERN = /\d+(?:\.\d+)?/;
 
 /** 选项展示文本视图：action + amount（尺度可能只写在 amount 字段） */
 function optionText(option: PracticeOption): string {
@@ -70,17 +45,30 @@ function optionText(option: PracticeOption): string {
 }
 
 /**
- * 解析选项文本 → 动作类别。
+ * 解析选项文本 → 动作类别（practice 词表）。
  * 含 "all-in"/"全下" 一律归 6（覆盖 'Check-Raise All-in' / '3-bet all-in' 等复合体，
  * 与 puzzle-trainer 的"全下"归类口径一致）；否则按前缀表匹配；无法识别返回 99。
  */
 export function parsePracticeActionCategory(text: string): number {
-  const lower = text.trim().toLowerCase();
-  if (lower.includes('all-in') || lower.includes('全下')) return 6;
-  for (const [prefix, category] of CATEGORY_PREFIXES) {
-    if (lower.startsWith(prefix)) return category;
-  }
-  return UNKNOWN_CATEGORY;
+  return parseActionSortKey(text, 'practice').category;
+}
+
+/**
+ * practice 分流策略：
+ * 全部动作可识别 → canonical 排序；否则数值集升序；否则加盐洗牌。
+ */
+function practiceStrategy(id: string): OrderStrategy {
+  return {
+    kind: 'conditional',
+    if: 'actionAll',
+    then: { kind: 'action', vocab: 'practice', requireAllParsed: true },
+    else: {
+      kind: 'conditional',
+      if: 'numericStrict',
+      then: { kind: 'numeric', detect: 'strict', direction: 'asc' },
+      else: { kind: 'shuffle', seed: id, salt: PRACTICE_OPTION_SALT },
+    },
+  };
 }
 
 /**
@@ -92,36 +80,6 @@ export function parsePracticeActionCategory(text: string): number {
  */
 export function orderPracticeOptions(question: PracticeQuestion): PracticeQuestion {
   if (question.options.length <= 1) return question;
-
-  const texts = question.options.map(optionText);
-  const categories = texts.map(parsePracticeActionCategory);
-  const allActionLike = categories.every((c) => c !== UNKNOWN_CATEGORY);
-
-  let orderedOptions: PracticeOption[];
-  if (allActionLike) {
-    // 动作类：消极→激进固定排序，同类别按尺度升序，稳定排序保持原相对顺序
-    const keyed = question.options
-      .map((option, index) => {
-        const sizeMatch = FIRST_NUMBER_PATTERN.exec(texts[index]!);
-        return {
-          option,
-          category: categories[index]!,
-          size: sizeMatch ? Number.parseFloat(sizeMatch[0]) : 0,
-          index,
-        };
-      })
-      .toSorted((a, b) => a.category - b.category || a.size - b.size || a.index - b.index);
-    orderedOptions = keyed.map((entry) => entry.option);
-  } else if (isNumericOptionSet(texts)) {
-    // 数值类：单调升序
-    orderedOptions = sortByNumericValue(question.options, optionText);
-  } else {
-    // 文字陈述混合集：题目 id 加盐哈希做确定性种子洗牌
-    orderedOptions = shuffleBySeed(
-      question.options,
-      hashStringToSeed(question.id + PRACTICE_OPTION_SALT),
-    );
-  }
-
-  return { ...question, options: orderedOptions };
+  const order = computeOptionOrder(question.options, optionText, practiceStrategy(question.id));
+  return { ...question, options: applyOptionOrder(question.options, order) };
 }

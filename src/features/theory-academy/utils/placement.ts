@@ -6,12 +6,8 @@ import {
 } from '../data/placementQuestions';
 import { getLevelSummariesByVariant } from './theoryMeta';
 import { theoryLevelTitleKey } from './titleKeys';
-import {
-  hashStringToSeed,
-  isNumericOptionSet,
-  shuffleBySeed,
-  sortByNumericValue,
-} from '@/shared/utils/seededShuffle';
+import { computeOptionOrder } from '@/shared/utils/optionOrder';
+import type { OrderStrategy } from '@/shared/utils/optionOrder';
 
 /**
  * 理论定位测评判定（纯函数，零 store 依赖）。
@@ -116,6 +112,16 @@ export interface OrderedPlacementOption {
   originalIndex: number;
 }
 
+/** 选项排序策略：数值选项集升序，文字选项集按 hash(题 id) 种子洗牌 */
+function placementOptionStrategy(questionId: string): OrderStrategy {
+  return {
+    kind: 'conditional',
+    if: 'numericStrict',
+    then: { kind: 'numeric', detect: 'strict', direction: 'asc' },
+    else: { kind: 'shuffle', seed: questionId },
+  };
+}
+
 /**
  * 选项渲染顺序出口（答案位置偏差治理，规则与章末小测一致）：
  * 数值选项集按数值升序，文字选项集按 hash(题 id) 种子洗牌；
@@ -126,10 +132,7 @@ export function orderPlacementOptions(
   options: readonly string[],
   correctIndex: number,
 ): OrderedPlacementOption[] {
-  const indices = options.map((_, index) => index);
-  const order = isNumericOptionSet([...options])
-    ? sortByNumericValue(indices, (index) => options[index] ?? '')
-    : shuffleBySeed(indices, hashStringToSeed(questionId));
+  const order = computeOptionOrder(options, (text) => text, placementOptionStrategy(questionId));
   return order.map((originalIndex) => ({
     text: options[originalIndex] ?? '',
     isCorrect: originalIndex === correctIndex,

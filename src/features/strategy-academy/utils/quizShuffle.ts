@@ -14,16 +14,19 @@
  *    但不同题目的正确答案位置互不相同（消除全局位置偏差）。
  * 3. 传入显式 seed（如认证考试的会话随机种子）：
  *    每次进入考试选项顺序不同，考试过程中保持稳定（防背位置应试）。
+ *
+ * 实现：策略委托 `shared/utils/optionOrder`（conditional + numericStrict /
+ * numericDigit+seedParity / shuffle），本文件保留模块公开 API 与种子口径（@v2 盐）。
  */
 
 import type { QuizQuestion, DrillQuestion } from '../types';
 import {
-  shuffleBySeed,
-  hashStringToSeed,
-  isNumericOptionSet,
-  isDigitBearingOptionSet,
-  sortByNumericValue,
-} from '@/shared/utils/seededShuffle';
+  applyOptionOrder,
+  computeOptionOrder,
+  remapCorrectIndex,
+} from '@/shared/utils/optionOrder';
+import type { OrderStrategy } from '@/shared/utils/optionOrder';
+import { hashStringToSeed } from '@/shared/utils/seededShuffle';
 
 /**
  * 计算选项的新展示顺序（返回原索引的置换数组）。
@@ -32,11 +35,13 @@ import {
  * - 其他：按种子洗牌（seed 缺省时用题目 id 哈希，保证同题确定性）
  */
 function computeOrder(texts: string[], id: string, seed?: number): number[] {
-  const indices = texts.map((_, i) => i);
-  if (isNumericOptionSet(texts)) {
-    return sortByNumericValue(indices, (i) => texts[i]!);
-  }
-  return shuffleBySeed(indices, seed ?? hashStringToSeed(id));
+  const strategy: OrderStrategy = {
+    kind: 'conditional',
+    if: 'numericStrict',
+    then: { kind: 'numeric', detect: 'strict', direction: 'asc' },
+    else: { kind: 'shuffle', seed: seed ?? id },
+  };
+  return computeOptionOrder(texts, (text) => text, strategy);
 }
 
 /**
@@ -53,8 +58,8 @@ export function orderQuizQuestion(q: QuizQuestion, seed?: number): QuizQuestion 
   const order = computeOrder(q.options, q.id, seed);
   return {
     ...q,
-    options: order.map((originalIndex) => q.options[originalIndex]!),
-    correctIndex: order.indexOf(q.correctIndex),
+    options: applyOptionOrder(q.options, order),
+    correctIndex: remapCorrectIndex(order, q.correctIndex),
   };
 }
 
@@ -72,7 +77,7 @@ export function orderDrillOptions(q: DrillQuestion, seed?: number): DrillQuestio
   const order = computeOrder(texts, q.id, seed);
   return {
     ...q,
-    options: order.map((originalIndex) => q.options[originalIndex]!),
+    options: applyOptionOrder(q.options, order),
   };
 }
 
@@ -121,18 +126,16 @@ export function orderResolvedOptions<T>(
   getText: (option: T) => string,
   seed?: number,
 ): OrderedOptions<T> {
-  const texts = options.map(getText);
-  const indices = options.map((_, i) => i);
   const effectiveSeed = seed ?? hashStringToSeed(id + DRILL_OPTION_SALT);
-  let order: number[];
-  if (isDigitBearingOptionSet(texts)) {
-    const ascending = sortByNumericValue(indices, (i) => texts[i]!);
-    order = effectiveSeed % 2 === 0 ? ascending : [...ascending].reverse();
-  } else {
-    order = shuffleBySeed(indices, effectiveSeed);
-  }
+  const strategy: OrderStrategy = {
+    kind: 'conditional',
+    if: 'numericDigit',
+    then: { kind: 'numeric', detect: 'digit', direction: 'seedParity', seed: effectiveSeed },
+    else: { kind: 'shuffle', seed: effectiveSeed },
+  };
+  const order = computeOptionOrder(options, getText, strategy);
   return {
-    options: order.map((originalIndex) => options[originalIndex]!),
-    correctIndex: order.indexOf(correctIndex),
+    options: applyOptionOrder(options, order),
+    correctIndex: remapCorrectIndex(order, correctIndex),
   };
 }

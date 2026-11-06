@@ -80,9 +80,9 @@ const FILE_EXCEPTIONS: ReadonlyArray<{ file: string; pattern: RegExp; reason: st
     reason: 'actionType 数据值（下拉选项 value + 4 处预置范围 preset 的 actionType 字段）',
   },
   {
-    file: '/src/features/strategy-academy/utils/practiceOptionOrder.ts',
+    file: '/src/shared/utils/optionOrder.ts',
     pattern: /\['3bet', 5\]/,
-    reason: '动作排序表数据键（strategy-academy 选项文本未使用该形态）',
+    reason: '动作排序表数据键（共享策略词表，输入文本匹配用；puzzle / practice 双表）',
   },
   {
     file: '/src/features/puzzle-trainer/utils/optionOrder.ts',

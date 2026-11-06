@@ -1,5 +1,5 @@
 /**
- * 赔率测验选项排序工具（"答案位置偏差治理"方案，纯函数）。
+ * 赔率测验选项排序出口（"答案位置偏差治理"，纯函数）。
  *
  * 治理背景：原题库正确答案高度集中于 options[0]（14 题中 10 题），
  * 且渲染按数组原序，用户可通过"总选第一个"作弊。
@@ -15,15 +15,11 @@
  * 且恒含题号数字（q1/q12…），无论用前缀匹配还是宽松匹配都无法在 key 上正确判定。
  * 洗牌分支基于 id 种子，与解析与否无关。两类分支在 zh/en 下结果相同
  * （数值升序语言无关、洗牌种子为 id），顺序不随语言切换变化。
+ *
+ * 实现：策略委托 `shared/utils/optionOrder`（conditional + numericDigit / shuffle）。
  */
-import {
-  // 宽松判定（`/\d/` 含数字即可，兼容 'About 15 (combo draw)' 等英文文本），
-  // 使 zh/en 同走升序分支且顺序一致（见文件头 i18n 说明）。
-  isDigitBearingOptionSet,
-  shuffleBySeed,
-  hashStringToSeed,
-  sortByNumericValue,
-} from '@/shared/utils/seededShuffle';
+import { applyOptionOrder, computeOptionOrder } from '@/shared/utils/optionOrder';
+import type { OrderStrategy } from '@/shared/utils/optionOrder';
 import type { PotOddsQuizQuestion } from '../types';
 
 /**
@@ -44,15 +40,23 @@ export function orderQuizOptions(
   seedKey?: string,
   resolvedTexts?: string[],
 ): PotOddsQuizQuestion {
-  const seed = hashStringToSeed(seedKey ?? String(q.id));
   const texts =
     resolvedTexts && resolvedTexts.length === q.options.length ? resolvedTexts : null;
-  if (texts && isDigitBearingOptionSet(texts)) {
-    const options = sortByNumericValue(
-      q.options.map((o, i) => ({ option: o, text: texts[i] ?? o.text })),
-      (pair) => pair.text,
-    ).map((pair) => pair.option);
-    return { ...q, options };
-  }
-  return { ...q, options: shuffleBySeed(q.options, seed) };
+  // 选项与其展示文本成对送入策略：数值判定与数值排序用解析后文本，
+  // 洗牌分支与文本无关（只依赖数组长度与种子）。
+  const pairs = q.options.map((option, index) => ({
+    option,
+    text: texts?.[index] ?? option.text,
+  }));
+  const shuffle: OrderStrategy = { kind: 'shuffle', seed: seedKey ?? String(q.id) };
+  const strategy: OrderStrategy = texts
+    ? {
+        kind: 'conditional',
+        if: 'numericDigit',
+        then: { kind: 'numeric', detect: 'digit', direction: 'asc' },
+        else: shuffle,
+      }
+    : shuffle;
+  const order = computeOptionOrder(pairs, (pair) => pair.text, strategy);
+  return { ...q, options: applyOptionOrder(pairs, order).map((pair) => pair.option) };
 }
