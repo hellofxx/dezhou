@@ -121,6 +121,10 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - **反霓虹硬约束**：禁止 Tailwind 霓虹调色板类（`(bg|text|border|from|to|ring)-(red|green|blue|yellow|purple|...)-d{2,3}`）、纯白/纯黑文字类（`text-white`/`bg-white`/`text-black`）、纯黑白 hex（`#000`/`#fff`）；语义反馈用 `--poker-*` token（映射规则以 `docs/TDD.md` §14.7 为准），SVG 渐变 stop 字面值须注释标注对应 token。由 `src/guards/designTokenGuard.test.ts` 守卫（`pnpm test` 强制），豁免清单只删不加。设计契约权威源为 `DESIGN.md`（以其当前版本为准，不维护版本号副本）
 - **五级反馈样式**：`GRADE_DISPLAY_CONFIG` 的 color 字段引用 globals.css `.grade-best`~`.grade-blunder` 类（样式唯一事实源），禁止内联霓虹类
 - **设计契约权威源**：`DESIGN.md`（以其当前版本为准）；组件视觉、布局、动效与可访问性决策均以其为准。
+- **复用阶梯 / 第三份规则**：已有 primitive/variant → 组合件 → feature-local 模板 → shared 组件 → 内联；同一 UI 模式出现第 3 份拷贝时必须抽模板或 shared variant，禁止继续复制。
+- **共享交互基础件**：shared 组件组合 `ui/Button` / `Input` / `Textarea` / `Dialog` / `Progress`，禁止裸交互控件（特化 allowlist 见 `src/guards/sharedPrimitiveUsage.guard.test.ts`）；焦点环走 `ui/focusRing.ts` 的 `FOCUS_RING` / `FOCUS_RING_VISIBLE`；section 标题走 `layout/SectionLabel`。
+- **Button 变体**：`default` / `secondary` 金属族保持不变；`quiet` / `link` 为结构批次新增；`ghost` / `outline` / `destructive` 与金属渐变 CTA 的视觉统一在 V1，不在结构批次改变观感。
+- **重复字面量棘轮**：`src/guards/duplicateLiteralRatchet.guard.test.ts` 监控 focus ring / section label / 平铺主 CTA / stat box，只降不升；低于基线时同步下调常量。
 
 ## 跨模块复用契约
 
@@ -145,6 +149,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 - **正向（训练→课程）**：range-trainer / pot-odds / gto-simulator / puzzle-trainer 的答题反馈必须携带 `relatedLessonId`，wrong/blunder 显示「去复习」链接。推导入口：`inferRelatedLessonId(position, actionType)`、GTO 按 `scenario.street`、`inferPuzzleLessonId(theme)`。
 - **反向（数据→难度）**：`progress.shouldDownshiftDifficulty()`（无参）是自适应难度唯一入口，禁止模块自行判定；数据源为 `progress.emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护）。
+- **相关课程 chip 路由**：shared `RelatedLessonChip` 只回传 `lessonId`（`onOpen` / `onRelatedLessonOpen`），目标路由由各 feature 注入；禁止在 `src/shared` 硬编码 `/academy/lesson/`。
 
 ### 位置渐进解锁
 

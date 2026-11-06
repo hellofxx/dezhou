@@ -377,6 +377,8 @@
 - raise：黄铜渐变 `--brass-bright→--brass` + 深墨字
 - 反模式：直接套用「一亮 CTA + 两沉底次要」的 CTA 色阶（导致两个暗按钮低对比、区分度不足）
 
+**React 组件实现契约（2026-11 结构批次）**：`Button` 的 `default` / `secondary` 继续消费 `.btn-brass` / `.btn-metal`，新增 `quiet` / `link` 结构变体；shared 组件禁止手写按钮等价样式。金属族的尺寸/视觉收口（`.btn-*` 进入 `@layer components`、平铺主 CTA → 金属渐变、`ghost` / `outline` / `destructive` 语义统一）列入 V1 视觉批次，不在结构批次改变观感。
+
 ### 5.6 面板 `.panel`
 - 胡桃渐变 `#241a10→#1a1308`，边框 `1px solid #4a3825`，圆角 8px，padding 20px
 - 标题 `.panel-title`：Fraunces 15px 600，前带 15px Lucide 图标（brass 70%）

@@ -16,8 +16,8 @@
 ```text
 src/shared/
 ├─ components/
-│  ├─ ui/            # vendored shadcn 基础件（button / card / dialog / input /
-│  │                 # progress / select / toast / tooltip）；豁免 ≥2，禁 0 消费
+│  ├─ ui/            # vendored shadcn 基础件（button / card / dialog / input / textarea /
+│  │                 # progress / select / toast / tooltip）+ focusRing 单源；豁免 ≥2，禁 0 消费
 │  ├─ poker/         # Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge /
 │  │                 # VariantGlyph / VariantToggle / OpponentGlyph
 │  ├─ quiz/          # QuizCard + quizCardModel（range-trainer / onboarding 专用）
@@ -25,9 +25,9 @@ src/shared/
 │  │                 # RelatedLessonChip / TryAgainButton / EmptyState / LoadingState /
 │  │                 # ComparisonView / ResultHeader / ResultActions
 │  ├─ academy/       # 学院共享组件（见下）+ ContentBlocks + index.ts（唯一 facade）
-│  ├─ data-display/  # ProgressBar / ProgressRing / StatCard / StatPair
+│  ├─ data-display/  # ProgressBar（ui/progress 薄包装）/ ProgressRing / StatCard / StatPair
 │  ├─ system/        # ErrorBoundary（全局错误兜底整页视图）
-│  └─ layout/        # BackLink（返回入口统一；应用外壳级布局在 src/layouts/）
+│  └─ layout/        # BackLink（返回入口统一）/ SectionLabel（section/panel 标题统一）
 ├─ constants/        # app / headsUpRules / mentorStyles / poker
 ├─ data/             # opponentProfiles（对手画像，gto-simulator / strategy-academy 消费）
 ├─ hooks/            # useIsMobile / useRovingGridNav
@@ -42,10 +42,12 @@ src/shared/
 ### 关键文件
 
 - `components/academy/`（7 个共享组件 + 内容块）：`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `ContentBlocks`（`LabeledBlock` / `AsciiMonoText` / `FormulaBlock`）；`index.ts` 汇总全部公开导出
-- `components/data-display/`：`ProgressBar`（线性进度）、`ProgressRing`（环形进度，`valueMax` / `variant` / `center` / `ariaLabel`）、`StatCard`（统计卡，`size` / `layout` / `surface` / `accent`）、`StatPair`（`<dl>` 成对指标）
-- `components/feedback/`：`ResultHeader`（结果页标题，`headingLevel` 决定 h1/h2，可挂 `ring` 槽）、`ResultActions`（结果页动作组，`row` / `stack`）、`DecisionAnalysis`（五级反馈渲染）、`MobileFeedbackSheet`（移动端底部反馈 Sheet）、`RelatedLessonChip`（「去复习」链接）、`GradeIcon` / `ComparisonView` / `EmptyState` / `LoadingState` / `TryAgainButton`
+- `components/ui/`：`Button`（default/secondary 金属族 + quiet/link 结构变体）、`Input`、`Textarea`、`Progress`（Radix 单源）、`Dialog` / `Select` / `Toast` / `Tooltip`；`focusRing.ts` 导出 `FOCUS_RING` / `FOCUS_RING_VISIBLE` / `BUTTON_FOCUS_RING`
+- `components/data-display/`：`ProgressBar`（`ui/progress` 薄包装，值钳制 + `size` / `indicatorClassName`）、`ProgressRing`（环形进度，`valueMax` / `variant` / `center` / `ariaLabel`，具名导出）、`StatCard`（统计卡，`size`（含 `xl`）/ `layout` / `surface`（含 `solid`）/ `accent` / `className` / `contentClassName` / `label: ReactNode`）、`StatPair`（`<dl>` 成对指标）
+- `components/feedback/`：`ResultHeader`（结果页标题，`headingLevel` 决定 h1/h2，可挂 `ring` 槽）、`ResultActions`（结果页动作组，`row` / `stack`）、`DecisionAnalysis`（五级反馈渲染，相关课程路由由 `onRelatedLessonOpen` 注入）、`MobileFeedbackSheet`（移动端底部反馈 Sheet）、`RelatedLessonChip`（纯展示 chip，`onOpen(lessonId)`，shared 不拼路由）、`GradeIcon` / `ComparisonView` / `EmptyState` / `LoadingState` / `TryAgainButton`
 - `components/poker/`：牌面与变体可视化（`VariantToggle` 归此域，不再游离根目录）
 - `components/layout/BackLink`：返回入口统一件（`to` / `historyBack` / 文本·胶囊·按钮三变体，icon-only 必填 `aria-label`，触摸目标 ≥44px）
+- `components/layout/SectionLabel`：section / panel 标题统一件（`as` / `icon` / `count` / `id` / `className`，不产 h1）
 - `components/system/ErrorBoundary`：全站错误兜底，脱离布局渲染（`<h1>` 在 `pageHeadingGuard` allowlist 登记）
 - `utils/`：`cn` / `formatters` / `toLocalDateKey` / `handClassifier` / `rangeParser` / `deck` / `seededShuffle`（随机与数值判定底座）/ `optionOrder`（选项排序策略唯一实现）/ `academyMastery` / `academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyVariantRules` / `motion` / `spacedRepetition` / `localStorageStub` / `persistShape`
 - `stores/`：`trainingEvents`（训练事件总线）、`debugMode`（调试解锁，唯一独立 persist store）、`achievementRegistry` / `academyDataSourceRegistry` / `theoryDataSourceRegistry`（注册表）
@@ -58,6 +60,16 @@ src/shared/
 - **唯一 facade 例外**：`@/shared/components/academy` 保留 barrel —— 理论 / 策略两院按组消费，行为与文案由各自薄包装保持；新增学院组件必须同时补 `index.ts` 导出
 - 不新增其他目录级 barrel / `index.ts`（`utils/index.ts` 已删除，勿恢复）；`types` 也不做汇总 barrel
 - shared 内部引用用相对路径（同层工具间），跨层用 `@/shared/*` 别名
+
+## 组件基础件契约（2026-11 结构批次）
+
+- **Dogfooding**：`components/academy/**`、`data-display/**`、`layout/**`、`feedback/**` 的交互控件必须组合 `ui/Button` / `ui/Input` / `ui/Textarea` / `ui/Dialog` / `ui/Progress`；禁止手写 `<button>/<input>/<textarea>/<select>` 及等价样式。特化例外以 `src/guards/sharedPrimitiveUsage.guard.test.ts` 的逐文件 allowlist 为准（扑克可视化、QuizCard 动作按钮、BackLink、RelatedLessonChip、ErrorBoundary、内容纠错原生 checkbox）。
+- **焦点环单源**：业务组件使用 `FOCUS_RING`（多数派）或 `FOCUS_RING_VISIBLE`（BackLink 等既有语义），不得再复制 `focus-visible:ring-2 ...` 字面量；`BUTTON_FOCUS_RING` 仅由 Button 基类消费，视觉统一留给 V1。
+- **Button 变体**：`default` / `secondary` 保持金属族；新增 `quiet` / `link` 供 shared 组件使用；`ghost` / `outline` / `destructive` 的视觉收口在 V1，不得在结构批次改观感。
+- **SectionLabel**：section / panel 标题统一使用 `layout/SectionLabel`（`as` / `icon` / `count` / `id` / `className`）；10px eyebrow、tab、不同语义标题保留本地。
+- **ProgressBar / StatCard**：`ProgressBar` 只做 `ui/progress` 薄包装（钳制 + size/indicatorClassName），不得另写进度 ARIA；`StatCard` 的 `xl` / `solid` / `className` / `contentClassName` 用于结果卡，不得在 feature 内复制 stat box 视觉。
+- **动作按钮例外**：range QuizCard 的平权 Fold/Call/Raise、PracticeDrill 的 `.action-mini.act-*`、Puzzle ActionBoard 的 tier 三套语义保持特化，禁止合并为单一 ActionButton；新增第四套前先更新 `src/guards/actionTierPalette.guard.test.ts` 与本文。
+- **重复字面量棘轮**：`src/guards/duplicateLiteralRatchet.guard.test.ts` 监控 focus ring / section label / flat CTA / stat box；只降不升，低于基线时必须同步下调常量。
 
 ## 修改规则
 

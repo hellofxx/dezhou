@@ -222,14 +222,14 @@ src/
 │
 ├── shared/                       # 共享层（准入守卫 src/shared/admission-guard.test.ts：0 消费失败 / 1 消费须 baseline）
 │   ├── components/               # 通用组件（按语义域分层；本目录豁免行数限制）
-│   │   ├── ui/                   # vendored shadcn 基础件（button / card / dialog / input / progress / select / toast / tooltip）；豁免 ≥2 但仍禁 0 消费
+│   │   ├── ui/                   # vendored shadcn 基础件（button / card / dialog / input / textarea / progress / select / toast / tooltip）+ focusRing 单源；豁免 ≥2 但仍禁 0 消费
 │   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge / VariantGlyph / VariantToggle / OpponentGlyph）
 │   │   ├── quiz/                 # QuizCard + quizCardModel（range-trainer / onboarding 专用）
-│   │   ├── feedback/             # 决策反馈与结果页（DecisionAnalysis / GradeIcon / MobileFeedbackSheet / RelatedLessonChip / TryAgainButton / EmptyState / LoadingState / ComparisonView / ResultHeader / ResultActions）
+│   │   ├── feedback/             # 决策反馈与结果页（DecisionAnalysis / GradeIcon / MobileFeedbackSheet / RelatedLessonChip（onOpen 注入路由）/ TryAgainButton / EmptyState / LoadingState / ComparisonView / ResultHeader / ResultActions）
 │   │   ├── academy/              # 学院共享组件（AcademyBridgeCard / AcademyMasteryCard / AcademyVariantRuleCard / AcademySearchShell / AcademyBookmarksPanel / AcademyNotesPanel / ContentIssueReportDialog）+ ContentBlocks + index.ts（唯一 facade）
-│   │   ├── data-display/         # 数据展示（ProgressBar / ProgressRing / StatCard / StatPair）
+│   │   ├── data-display/         # 数据展示（ProgressBar 为 ui/progress 薄包装 / ProgressRing 具名导出 / StatCard 含 xl/solid / StatPair）
 │   │   ├── system/               # ErrorBoundary（全局错误兜底整页视图）
-│   │   └── layout/               # BackLink（返回入口统一；TableRail 等应用外壳在 src/layouts/）
+│   │   └── layout/               # BackLink（返回入口统一）/ SectionLabel（section/panel 标题统一；TableRail 等应用外壳在 src/layouts/）
 │   ├── data/
 │   │   └── opponentProfiles.ts   # 跨模块对手画像数据（gto-simulator / strategy-academy 消费）
 │   ├── constants/
