@@ -11,7 +11,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ComponentProps } from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { useProgressStore } from '@/features/progress/store';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 import { GTOFeedback } from './GTOFeedback';
@@ -33,8 +33,15 @@ function renderFeedback(props: Partial<ComponentProps<typeof GTOFeedback>>) {
   return render(
     <MemoryRouter>
       <GTOFeedback {...base} />
+      <LocationProbe />
     </MemoryRouter>,
   );
+}
+
+/** 路由探针：断言 chip 跳转目标（不经真实路由） */
+function LocationProbe() {
+  const location = useLocation();
+  return <div data-testid="location">{location.pathname}</div>;
 }
 
 function feedbackOf(partial: Partial<DecisionFeedback>): DecisionFeedback {
@@ -119,8 +126,10 @@ describe('GTOFeedback 五级显示（提供 feedback）', () => {
     expect(screen.getByText('call 2.5BB')).toBeTruthy();
     expect(screen.getByText('GTO 最优')).toBeTruthy();
     expect(screen.getByText('因为对手范围很强')).toBeTruthy();
-    // relatedLessonId → 相关课程 chip 可点击
-    expect(screen.getByRole('button', { name: '相关课程' })).toBeTruthy();
+    // relatedLessonId → 相关课程 chip 可点击，并由调用方注入的 navigate 跳转（shared 不拼路由）
+    const chip = screen.getByRole('button', { name: '相关课程' });
+    fireEvent.click(chip);
+    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l3-cbet');
   });
 
   it('wrong / blunder 且提供 onTryAgain 时渲染「再做一题」并回调', () => {

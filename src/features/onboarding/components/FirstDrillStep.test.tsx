@@ -7,6 +7,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
+import { MemoryRouter } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import FirstDrillStep from './FirstDrillStep';
 import { useProgressStore } from '@/features/progress/store';
@@ -71,7 +72,11 @@ describe('FirstDrillStep 首胜记训练日（P2A-02）', () => {
 
   it('全对完成微训练：recordTrainingDay 恰好一次，且在 completeOnboardingStep(3) 前', async () => {
     act(() => {
-      root.render(<FirstDrillStep />);
+      root.render(
+        <MemoryRouter>
+          <FirstDrillStep />
+        </MemoryRouter>,
+      );
     });
 
     // 题序：AA raise → 72o fold → KK raise → AA raise（末题）
@@ -96,7 +101,11 @@ describe('FirstDrillStep 首胜记训练日（P2A-02）', () => {
 
   it('末题答错走补救：显示 rescueHint，补救题作答后完成仍只记一次', async () => {
     act(() => {
-      root.render(<FirstDrillStep />);
+      root.render(
+        <MemoryRouter>
+          <FirstDrillStep />
+        </MemoryRouter>,
+      );
     });
 
     click(findButton(container, 'Raise')); // AA 对

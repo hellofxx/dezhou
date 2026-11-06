@@ -464,7 +464,6 @@ export default function PotOddsQuizPage() {
               <p className="text-sm text-[var(--ivory-dim)] leading-relaxed">
                 {t(selectedOption.isCorrect ? selectedOption.explanation : (correctOption?.explanation ?? selectedOption.explanation))}
               </p>
-
               {/* P1B-05：五级评级徽章 + 教育脚手架（§13.4）：
                   评级徽章统一走 GRADE_DISPLAY_CONFIG（答对/答错均展示）；
                   答错时展示可折叠 DecisionAnalysis（对比视图 + 差异原因 + 相关课程链接），
@@ -494,6 +493,7 @@ export default function PotOddsQuizPage() {
                           gtoAction={gtoActionText}
                           difference={t(decisionFeedback.explanation)}
                           relatedLessonId={decisionFeedback.relatedLessonId}
+                          onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
                           defaultOpen={isSevereGrade(decisionFeedback.grade)}
                         />
                       </div>

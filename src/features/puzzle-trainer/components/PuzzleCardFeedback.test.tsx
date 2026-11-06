@@ -1,8 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { PuzzleCardFeedback } from './PuzzleCardFeedback';
+
 import type { PuzzleAnswerRecord, PuzzleQuestion } from '../types';
+// 反馈面板新增 useNavigate（相关课程 chip 由调用方注入跳转）
+const { navigateSpy } = vi.hoisted(() => ({ navigateSpy: vi.fn() }));
+vi.mock('react-router-dom', () => ({ useNavigate: () => navigateSpy }));
 
 /**
  * PRD §6.7.1「EV 标定诚实性」呈现层守卫：
@@ -100,5 +104,29 @@ describe('PuzzleCardFeedback EV 呈现诚实性', () => {
     expect(text).toContain('EV 3.0 BB');
     expect(text).toContain('GTO 最优');
     expect(text).not.toContain('本题未提供 EV 标定');
+  });
+
+  it('相关课程 chip 经注入的 navigate 跳转到对应课时', () => {
+    act(() => {
+      root.render(
+        <PuzzleCardFeedback
+          question={buildQuestion('solver')}
+          record={{ ...wrongRecord, relatedLessonId: 'l3-cbet' }}
+          onNext={() => undefined}
+          isLastQuestion={false}
+        />
+      );
+    });
+
+    const chips = Array.from(container.querySelectorAll('button')).filter(
+      (b) => b.getAttribute('aria-label') === '相关课程',
+    );
+    expect(chips.length).toBeGreaterThan(0);
+
+    act(() => {
+      chips[0]!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+
+    expect(navigateSpy).toHaveBeenCalledWith('/academy/lesson/l3-cbet');
   });
 });

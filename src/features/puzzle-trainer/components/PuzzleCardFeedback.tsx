@@ -11,6 +11,7 @@ import { CircleCheck, CircleX } from 'lucide-react';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionFast } from '@/shared/utils/motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/shared/utils/cn';
 import { Button } from '@/shared/components/ui/button';
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
@@ -34,6 +35,7 @@ export function PuzzleCardFeedback({
   isLastQuestion: boolean;
 }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const config = GRADE_DISPLAY_CONFIG[record.grade];
   const calibrated = hasCalibratedEv(question);
   const selectedOption = question.options.find((o) => o.id === record.selectedOptionId);
@@ -109,6 +111,7 @@ export function PuzzleCardFeedback({
         gtoAction={correctOption?.text}
         difference={selectedOption?.explanation}
         relatedLessonId={record.relatedLessonId}
+        onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
         recommendedLabel={calibrated ? undefined : t('puzzle.card.recommendedAction')}
         defaultOpen={isErrorGrade}
       />
@@ -116,7 +119,7 @@ export function PuzzleCardFeedback({
       {/* 底部操作区：相关课程标签（答错时）+ 再做一题（错误级别）+ 下一题 */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
         {!record.isCorrect && record.relatedLessonId && (
-          <RelatedLessonChip lessonId={record.relatedLessonId} />
+          <RelatedLessonChip lessonId={record.relatedLessonId} onOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)} />
         )}
         <div className="flex items-center gap-2 ml-auto">
           {isErrorGrade && <TryAgainButton onTryAgain={onNext} />}

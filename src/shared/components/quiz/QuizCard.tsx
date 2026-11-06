@@ -40,6 +40,11 @@ export interface QuizCardProps {
   disabled?: boolean;
   /** 手动推进下一题（反馈卡 / 移动 Sheet 底部按钮由调用方驱动） */
   onNext?: () => void;
+  /**
+   * 相关课程点击回调（透传给决策分析区）。
+   * 共享层不拼 feature 路由：由调用方用自身 navigate 注入；未提供时不渲染相关课程 chip。
+   */
+  onRelatedLessonOpen?: (lessonId: string) => void;
 }
 
 export function QuizCard({
@@ -50,6 +55,7 @@ export function QuizCard({
   disabled,
   mentorStyle = DEFAULT_MENTOR,
   onNext,
+  onRelatedLessonOpen,
 }: QuizCardProps) {
   const { t } = useTranslation();
   const { suited } = getHandDisplayName(question.hand);
@@ -294,6 +300,7 @@ export function QuizCard({
                   gtoAction={gtoActionLabel}
                   difference={differenceText}
                   relatedLessonId={decisionFeedback.relatedLessonId}
+                  onRelatedLessonOpen={onRelatedLessonOpen}
                   defaultOpen
                 />
               )}

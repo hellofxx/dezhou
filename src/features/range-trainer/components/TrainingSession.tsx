@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import type { RangeAction } from '@/shared/types/poker';
 import type { TrainingResult } from '@/shared/types/common';
 import type { QuestionFeedback } from '../types';
@@ -31,6 +32,7 @@ export function TrainingSession({
   onExit,
 }: TrainingSessionProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const {
     quizState,
     getCurrentQuestion,
@@ -361,6 +363,7 @@ export function TrainingSession({
           decisionFeedback={showFeedback ? decisionFeedback : null}
           disabled={showFeedback || quizState.status !== 'running'}
           onNext={handleNext}
+          onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
         />
       </div>
 

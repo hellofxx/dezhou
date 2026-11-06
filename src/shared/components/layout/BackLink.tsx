@@ -17,6 +17,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
+import { FOCUS_RING_VISIBLE } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
 
 export interface BackLinkProps {
@@ -36,9 +37,6 @@ export interface BackLinkProps {
   iconOnly?: boolean;
   className?: string;
 }
-
-const FOCUS_RING =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60';
 
 const VARIANT_CLASSES = {
   text: 'inline-flex min-h-11 items-center gap-1.5 text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors',
@@ -86,7 +84,7 @@ function BackControl({
       : iconOnly
         ? ICON_ONLY_CLASSES
         : cn(VARIANT_CLASSES[variant], SIZE_CLASSES[variant][size]),
-    FOCUS_RING,
+    FOCUS_RING_VISIBLE,
     className,
   );
 

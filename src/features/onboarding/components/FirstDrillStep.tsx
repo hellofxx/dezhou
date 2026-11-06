@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/components/ui/button';
 import { QuizCard } from '@/shared/components/quiz/QuizCard';
 import type { RangeAction } from '@/shared/types/poker';
@@ -15,6 +16,7 @@ import {
 // 首次微训练：题目编排与补救状态机见 ../utils/drillFlow.ts（P2A-03/04/05 纯函数化）
 export default function FirstDrillStep() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
   const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
   const mentorStyle = useProgressStore((s) => s.mentorStyle);
@@ -67,6 +69,7 @@ export default function FirstDrillStep() {
           feedback={drill.feedback}
           disabled={!!drill.feedback}
           mentorStyle={mentorStyle}
+          onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
           {...timeProps}
         />
       </div>

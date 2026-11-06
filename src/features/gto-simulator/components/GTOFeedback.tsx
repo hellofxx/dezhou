@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import type { HandStrategy } from '../types';
 import type { HandNotation } from '@/shared/types/poker';
 import { cn } from '@/shared/utils/cn';
@@ -50,6 +51,7 @@ export function GTOFeedback({
   onTryAgain,
 }: GTOFeedbackProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const opponent = selectedOpponent ? getOpponentProfile(selectedOpponent) : null;
 
   const raiseTerm = actionTerm(ActionType.Raise);
@@ -245,6 +247,7 @@ export function GTOFeedback({
             gtoAction={feedback.correctAction || undefined}
             difference={(grade === 'wrong' || grade === 'blunder') ? feedback.explanation : undefined}
             relatedLessonId={feedback.relatedLessonId}
+            onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
             defaultOpen={grade === 'wrong' || grade === 'blunder'}
           />
           {(grade === 'wrong' || grade === 'blunder') && onTryAgain && (
