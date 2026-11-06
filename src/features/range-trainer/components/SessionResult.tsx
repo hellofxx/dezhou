@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION, MOTION_EASE, transitionSlow } from '@/shared/utils/motion';
 import type { TrainingResult } from '@/shared/types/common';
-import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { StatCard } from '@/shared/components/data-display/StatCard';
-import { RotateCcw, Home, Trophy, Target, Clock, AlertTriangle } from 'lucide-react';
+import { ResultActions } from '@/shared/components/feedback/ResultActions';
+import { ResultHeader, type ResultTone } from '@/shared/components/feedback/ResultHeader';
+import { RotateCcw, Home, Target, Clock, AlertTriangle } from 'lucide-react';
 
 interface SessionResultProps {
   result: TrainingResult;
@@ -14,12 +15,12 @@ interface SessionResultProps {
   onBackToHome: () => void;
 }
 
-/** 根据正确率返回颜色和评价 key — uses card-room palette (brass/sage/clay) */
-function getAccuracyInfo(accuracy: number): { color: string; labelKey: string } {
-  if (accuracy >= 0.9) return { color: 'text-[var(--brass-bright)]', labelKey: 'rangeTrainer.result.excellent' };
-  if (accuracy >= 0.7) return { color: 'text-[var(--sage-text)]', labelKey: 'rangeTrainer.result.good' };
-  if (accuracy >= 0.5) return { color: 'text-[var(--brass-text)]', labelKey: 'rangeTrainer.result.keepGoing' };
-  return { color: 'text-[var(--clay-text)]', labelKey: 'rangeTrainer.result.morePractice' };
+/** 根据正确率返回颜色、评价 key 与标题区语调 — uses card-room palette (brass/sage/clay) */
+function getAccuracyInfo(accuracy: number): { color: string; labelKey: string; tone: ResultTone } {
+  if (accuracy >= 0.9) return { color: 'text-[var(--brass-bright)]', labelKey: 'rangeTrainer.result.excellent', tone: 'success' };
+  if (accuracy >= 0.7) return { color: 'text-[var(--sage-text)]', labelKey: 'rangeTrainer.result.good', tone: 'neutral' };
+  if (accuracy >= 0.5) return { color: 'text-[var(--brass-text)]', labelKey: 'rangeTrainer.result.keepGoing', tone: 'warning' };
+  return { color: 'text-[var(--clay-text)]', labelKey: 'rangeTrainer.result.morePractice', tone: 'danger' };
 }
 
 /** 统计薄弱手牌（答错≥2次） */
@@ -52,7 +53,7 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 export function SessionResult({ result, onRetry, onBackToHome }: SessionResultProps) {
   const { t } = useTranslation();
   const accuracyPercent = Math.round(result.accuracy * 100);
-  const { color: accColor, labelKey: accLabelKey } = getAccuracyInfo(result.accuracy);
+  const { color: accColor, labelKey: accLabelKey, tone } = getAccuracyInfo(result.accuracy);
   const weakHands = getWeakHands(result);
   const avgTimeSec = (result.averageTime / 1000).toFixed(1);
   const wrongDetails = result.details.filter((d) => !d.isCorrect);
@@ -60,56 +61,55 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
   return (
     <div className="h-full overflow-auto">
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
-        {/* 顶部大标题 */}
+        {/* 顶部标题区（h1）+ 正确率大圆环 */}
         <motion.div
-          className="text-center space-y-2"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transitionSlow}
         >
-          <div className="flex items-center justify-center gap-2">
-            <Trophy className="w-6 h-6 text-[var(--brass-bright)]" />
-            <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{t('rangeTrainer.result.title')}</h1>
-          </div>
-          <p className="text-sm text-[var(--ivory-muted)]">{t(accLabelKey)}</p>
-        </motion.div>
-
-        {/* 正确率大圆环 */}
-        <motion.div
-          className="flex justify-center"
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: MOTION_DURATION.loop, delay: 0.2 }}
-        >
-          <div className="relative w-40 h-40">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-              <circle
-                cx="60" cy="60" r="52"
-                fill="none"
-                stroke="var(--walnut-border)"
-                strokeWidth="8"
-              />
-              <motion.circle
-                cx="60" cy="60" r="52"
-                fill="none"
-                stroke="var(--brass)"
-                strokeWidth="8"
-                strokeLinecap="round"
-                strokeDasharray={2 * Math.PI * 52}
-                initial={{ strokeDashoffset: 2 * Math.PI * 52 }}
-                animate={{
-                  strokeDashoffset: 2 * Math.PI * 52 * (1 - result.accuracy),
-                }}
-                transition={{ duration: MOTION_DURATION.loop, delay: 0.4, ease: MOTION_EASE.out }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className={`font-numeric text-4xl font-bold ${accColor}`}>
-                <AnimatedNumber value={accuracyPercent} suffix="%" />
-              </span>
-              <span className="text-xs text-[var(--ivory-muted)]">{t('rangeTrainer.result.accuracy')}</span>
-            </div>
-          </div>
+          <ResultHeader
+            headingLevel="h1"
+            title={t('rangeTrainer.result.title')}
+            subtitle={t(accLabelKey)}
+            tone={tone}
+            ring={
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: MOTION_DURATION.loop, delay: 0.2 }}
+              >
+                <div className="relative w-40 h-40">
+                  <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                    <circle
+                      cx="60" cy="60" r="52"
+                      fill="none"
+                      stroke="var(--walnut-border)"
+                      strokeWidth="8"
+                    />
+                    <motion.circle
+                      cx="60" cy="60" r="52"
+                      fill="none"
+                      stroke="var(--brass)"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 52}
+                      initial={{ strokeDashoffset: 2 * Math.PI * 52 }}
+                      animate={{
+                        strokeDashoffset: 2 * Math.PI * 52 * (1 - result.accuracy),
+                      }}
+                      transition={{ duration: MOTION_DURATION.loop, delay: 0.4, ease: MOTION_EASE.out }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className={`font-numeric text-4xl font-bold ${accColor}`}>
+                      <AnimatedNumber value={accuracyPercent} suffix="%" />
+                    </span>
+                    <span className="text-xs text-[var(--ivory-muted)]">{t('rangeTrainer.result.accuracy')}</span>
+                  </div>
+                </div>
+              </motion.div>
+            }
+          />
         </motion.div>
 
         {/* 统计卡片 */}
@@ -199,30 +199,31 @@ export function SessionResult({ result, onRetry, onBackToHome }: SessionResultPr
 
         {/* 操作按钮 */}
         <motion.div
-          className="flex justify-center gap-4 pt-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
         >
-          <Button
-            onClick={onRetry}
-            className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)] px-6"
-          >
-            <RotateCcw className="w-4 h-4 mr-2" />
-            {t('rangeTrainer.result.retry')}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={onBackToHome}
-            className="px-6 border-[var(--walnut-border)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/40"
-          >
-            <Home className="w-4 h-4 mr-2" />
-            {t('rangeTrainer.result.backHome')}
-          </Button>
+          <ResultActions
+            className="pt-4"
+            actions={[
+              {
+                label: t('rangeTrainer.result.retry'),
+                onClick: onRetry,
+                icon: <RotateCcw />,
+                variant: 'primary',
+                className: 'px-6',
+              },
+              {
+                label: t('rangeTrainer.result.backHome'),
+                onClick: onBackToHome,
+                icon: <Home />,
+                variant: 'outline',
+                className: 'px-6 border-[var(--walnut-border)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/40',
+              },
+            ]}
+          />
         </motion.div>
       </div>
     </div>
   );
 }
-
-

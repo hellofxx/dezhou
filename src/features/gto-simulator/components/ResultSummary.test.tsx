@@ -1,8 +1,9 @@
 /**
- * ResultSummary 契约（四训练模块共用结算页）：
+ * ResultSummary 契约（GTO 模拟器结算页；Batch 5 从 shared 回迁到唯一消费方）：
  * - 标题 / 按钮文案走 i18n，自定义字符串按 defaultValue 原样透传（非 key 用法）
  * - 正确率百分比四舍五入展示，副标题按四档语义文案分档（>=90/70/50 与以下）
  * - 统计卡逐项渲染 label + value；retry / back 触发调用方回调
+ * - 标题区共用 ResultHeader：整页结果用 h1，语调图形随正确率分档（成功 / 中性 / 警示 / 危险）
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
@@ -68,6 +69,17 @@ describe('ResultSummary', () => {
     expect(screen.getByText('20')).toBeTruthy();
     expect(screen.getByText('平均用时')).toBeTruthy();
     expect(screen.getByText('6.4s')).toBeTruthy();
+  });
+
+  it('标题区语调图形随正确率分档：≥90% 黄铜成功阶，<50% 危险文字阶', () => {
+    const { unmount } = renderSummary({ accuracy: 0.95 });
+    const successIcon = screen.getByRole('heading', { level: 1 }).parentElement?.querySelector('svg');
+    expect(successIcon?.getAttribute('class')).toContain('text-[var(--brass-bright)]');
+    unmount();
+
+    renderSummary({ accuracy: 0.3 });
+    const dangerIcon = screen.getByRole('heading', { level: 1 }).parentElement?.querySelector('svg');
+    expect(dangerIcon?.getAttribute('class')).toContain('text-[var(--danger-text)]');
   });
 
   it('retry / back 按钮触发调用方回调，自定义按钮文案生效', () => {

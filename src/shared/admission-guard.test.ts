@@ -31,10 +31,8 @@ const TEST_STUBS = new Set([
 /** 0 生产消费者 baseline（Batch 1 已清空；只降不升，后续新增违规直接失败） */
 const ZERO_CONSUMER_BASELINE: Record<string, string> = {};
 
-/** 1 生产消费者 baseline（Batch 4 已清 ProgressRing；ResultSummary 待 Batch 5 回迁） */
-const ONE_CONSUMER_BASELINE: Record<string, string> = {
-  'src/shared/components/feedback/ResultSummary.tsx': '仅 gto，Batch 5 回迁 gto',
-};
+/** 1 生产消费者 baseline（Batch 4/5 已清空；只降不升） */
+const ONE_CONSUMER_BASELINE: Record<string, string> = {};
 
 function walk(dirPath: string, collected: string[] = []): string[] {
   for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {

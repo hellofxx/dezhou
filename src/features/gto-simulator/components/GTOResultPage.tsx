@@ -6,7 +6,7 @@ import { useGTOSimulatorStore } from '../store';
 import { StrategyMatrix } from './StrategyMatrix';
 import { resolveSpotKey, getStrategiesForSpot } from '../utils/spotKey';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
-import { ResultSummary } from '@/shared/components/feedback/ResultSummary';
+import { ResultSummary } from './ResultSummary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { MOTION_DURATION } from '@/shared/utils/motion';
 

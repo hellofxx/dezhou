@@ -178,3 +178,15 @@ describe('GTOResultPage 结果摘要', () => {
     expect(container.querySelectorAll('[title]')).toHaveLength(0);
   });
 });
+
+describe('GTOResultPage 标题层级', () => {
+  it('整页恰好一个 h1（纸条标题区），矩阵小节降为 h2', () => {
+    useGTOSimulatorStore.setState({ lastResult: RESULT });
+    const { container } = renderResult();
+
+    expect(container.querySelectorAll('h1')).toHaveLength(1);
+    expect(container.querySelector('h1')?.textContent).toBe('训练完成！');
+    expect(container.querySelectorAll('h2')).toHaveLength(1);
+    expect(container.querySelector('h2')?.textContent).toContain('GTO 策略矩阵');
+  });
+});

@@ -74,7 +74,7 @@ const COURSE_CONTENT_PATH_RE = new RegExp(
 /**
  * 共享组件不做行数限制（2026-11 起）。
  *
- * 跨模块装配体（QuizCard / ResultSummary / Academy* / Poker*）需要保持单文件内聚；
+ * 跨模块装配体（QuizCard / ResultHeader / StatCard / Academy* / Poker*）需要保持单文件内聚；
  * 按行数拆分会把同一公开 API 切碎，反而增加跨模块 import 面。工具 / 类型 / 常量
  * 不在 `components/` 下，仍受通用 300/400 行约束。
  */

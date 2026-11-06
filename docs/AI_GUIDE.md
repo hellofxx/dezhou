@@ -33,7 +33,7 @@
 
 **课程内容数据文件不做行数限制**（2026-11 起）：策略 `features/strategy-academy/data/lessons/variants/**`、`localLessons/**`、`basicsContent.ts`；理论 `features/theory-academy/data/levels/variants/**` 下的 Level 文件、`chapters/**`、`quizBank/**`、`blocks/**`、`chapterPracticeMap.ts` / `chapterMeta.ts`。课程正文与题库体量随内容增长，拆分只会切碎同一门课/同一章题库，因此按精确路径正则豁免，不进入 300/400 行判定与灰区告警。
 
-**共享组件不做行数限制**（2026-11 起）：`shared/components/**` 是跨模块复用的装配体（QuizCard / ResultSummary / Academy* / Poker* 等），按行数拆分会把同一公开 API 切碎、增加跨模块 import 面，因此同样按精确路径正则豁免。`shared/utils` / `types` / `constants` / `stores` 不享受此豁免。
+**共享组件不做行数限制**（2026-11 起）：`shared/components/**` 是跨模块复用的装配体（QuizCard / ResultHeader / StatCard / Academy* / Poker* 等），按行数拆分会把同一公开 API 切碎、增加跨模块 import 面，因此同样按精确路径正则豁免。`shared/utils` / `types` / `constants` / `stores` 不享受此豁免。
 
 **非课程文件仍按三档执行**：既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。除课程内容与共享组件外，禁止恢复其他目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增非课程文件不得登记 allowlist，只能拆分。逻辑文件（`composeVariantChapters` / `loaders` / `index` 等）不享受课程内容豁免。
 

@@ -158,3 +158,45 @@ describe('PuzzleResult 结果页', () => {
     expect(handlers.onBackHome).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('PuzzleResult 标题层级（内嵌 h2）', () => {
+  let container: HTMLDivElement;
+  let root: Root;
+
+  beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  const renderResult = (result: PuzzleResultData, isNewRecord = false) => {
+    act(() => {
+      root.render(
+        <PuzzleResult
+          result={result}
+          isNewRecord={isNewRecord}
+          onRetry={vi.fn()}
+          onBackHome={vi.fn()}
+        />
+      );
+    });
+  };
+
+  it('标题为 h2，结果视图内不出现 h1', () => {
+    renderResult(makeResult());
+
+    expect(container.querySelector('h2')?.textContent).toBe('训练完成');
+    expect(container.querySelector('h1')).toBeNull();
+  });
+
+  it('冲刺模式标题文案切换，层级仍为 h2', () => {
+    renderResult(makeResult({ mode: 'rush' }));
+
+    expect(container.querySelector('h2')?.textContent).toBe('冲刺结束');
+  });
+});

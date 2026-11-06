@@ -42,7 +42,10 @@ const H1_ALLOWLIST: { file: string; reason: string }[] = [
     file: 'shared/components/system/ErrorBoundary.tsx',
     reason: '全局错误兜底整页视图（脱离布局渲染）',
   },
-  { file: 'shared/components/feedback/ResultSummary.tsx', reason: '训练结果整页视图的主标题' },
+  {
+    file: 'shared/components/feedback/ResultHeader.tsx',
+    reason: '共享结果页标题：按 headingLevel 渲染 h1（整页结果）或 h2（嵌入页结果）',
+  },
   { file: 'features/onboarding/components/WelcomeStep.tsx', reason: '新手引导首屏整页主标题' },
   {
     file: 'features/pot-odds/components/PotOddsQuizPage.tsx',
@@ -52,7 +55,6 @@ const H1_ALLOWLIST: { file: string; reason: string }[] = [
     file: 'features/range-trainer/components/RangeLearnPage.tsx',
     reason: '范围学习整页主标题',
   },
-  { file: 'features/range-trainer/components/SessionResult.tsx', reason: '范围训练结果整页主标题' },
 ];
 
 interface ScannedFile {

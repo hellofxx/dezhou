@@ -1,12 +1,20 @@
-import React from 'react';
+/**
+ * GTO 模拟器结算页摘要（唯一消费者：GTOResultPage）。
+ *
+ * 材质：发牌员纸条（DESIGN.md §1.5 / §5.23）—— 自身非 fixed，故自带 relative 供纸条发线定位。
+ * 滚动容器内移到纸张之内：外层若 overflow-auto，会裁掉 ::after 顶部黄铜钉（top: -5px）。
+ * 标题区 / 动作区复用 shared 的 ResultHeader / ResultActions；纸壳、统计块与 children 留在本组件。
+ */
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Trophy, RotateCcw, Home } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
+import { RotateCcw, Home } from 'lucide-react';
+import { ResultActions } from '@/shared/components/feedback/ResultActions';
+import { ResultHeader, type ResultTone } from '@/shared/components/feedback/ResultHeader';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 
 interface StatItem {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
 }
@@ -21,7 +29,7 @@ interface ResultSummaryProps {
   onBack: () => void;
   retryLabel?: string;
   backLabel?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 // 纸张表面只用 §2.6 深阶语义色（暗色房间的 --sage / --clay 在纸面上对比度不足）
@@ -40,12 +48,14 @@ function getAccuracyText(accuracy: number): string {
   return 'common.resultSummary.morePractice';
 }
 
-/**
- * Unified training result summary component.
- * Provides consistent layout across all training modules.
- * 材质：发牌员纸条（DESIGN.md §1.5 / §5.23）—— 自身非 fixed，故自带 relative 供纸条发线定位。
- * 滚动容器内移到纸张之内：外层若 overflow-auto，会裁掉 ::after 顶部黄铜钉（top: -5px）。
- */
+/** 正确率 → 标题区语调（≥90% 成功 / ≥70% 中性 / ≥50% 警示 / 以下危险） */
+function getAccuracyTone(accuracy: number): ResultTone {
+  if (accuracy >= 0.9) return 'success';
+  if (accuracy >= 0.7) return 'neutral';
+  if (accuracy >= 0.5) return 'warning';
+  return 'danger';
+}
+
 export function ResultSummary({
   title = 'common.resultSummary.defaultTitle',
   subtitle,
@@ -71,54 +81,52 @@ export function ResultSummary({
       <div className="h-full overflow-auto">
         {/* 全宽布局：外层 main（AppLayout）已提供内边距，不再限宽居中 */}
         <div className="py-8 space-y-6">
-          {/* Title */}
+          {/* 标题区 + 正确率环（ring 槽保留描边绘制动效） */}
           <motion.div
-            className="text-center space-y-2"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: MOTION_DURATION.slow }}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Trophy className="w-6 h-6 text-[var(--brass-bright)]" aria-hidden="true" />
-              <h1 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{resolvedTitle}</h1>
-            </div>
-            <p className="text-sm text-[var(--ivory-muted)]">{subtitle ?? accLabel}</p>
-          </motion.div>
-
-          {/* Accuracy ring */}
-          <motion.div
-            className="flex justify-center"
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: MOTION_DURATION.slow, delay: 0.2 }}
-          >
-            <div className="relative w-40 h-40">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
-                <circle cx="60" cy="60" r="52" fill="none" stroke="var(--walnut-border)" strokeWidth="8" />
-                <motion.circle
-                  cx="60" cy="60" r="52"
-                  fill="none"
-                  stroke="var(--brass)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={2 * Math.PI * 52}
-                  initial={{ strokeDashoffset: 2 * Math.PI * 52 }}
-                  animate={{ strokeDashoffset: 2 * Math.PI * 52 * (1 - accuracy) }}
-                  transition={{ duration: MOTION_DURATION.slow, delay: 0.4, ease: MOTION_EASE.out }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <motion.span
-                  className={`font-numeric text-4xl font-bold ${accColor}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: MOTION_DURATION.slow, ease: MOTION_EASE.out }}
+            <ResultHeader
+              title={resolvedTitle}
+              subtitle={subtitle ?? accLabel}
+              tone={getAccuracyTone(accuracy)}
+              ring={
+                <motion.div
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: MOTION_DURATION.slow, delay: 0.2 }}
                 >
-                  {accuracyPercent}%
-                </motion.span>
-                <span className="text-xs text-[var(--ivory-muted)]">{t('common.resultSummary.accuracy')}</span>
-              </div>
-            </div>
+                  <div className="relative w-40 h-40">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
+                      <circle cx="60" cy="60" r="52" fill="none" stroke="var(--walnut-border)" strokeWidth="8" />
+                      <motion.circle
+                        cx="60" cy="60" r="52"
+                        fill="none"
+                        stroke="var(--brass)"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray={2 * Math.PI * 52}
+                        initial={{ strokeDashoffset: 2 * Math.PI * 52 }}
+                        animate={{ strokeDashoffset: 2 * Math.PI * 52 * (1 - accuracy) }}
+                        transition={{ duration: MOTION_DURATION.slow, delay: 0.4, ease: MOTION_EASE.out }}
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <motion.span
+                        className={`font-numeric text-4xl font-bold ${accColor}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: MOTION_DURATION.slow, ease: MOTION_EASE.out }}
+                      >
+                        {accuracyPercent}%
+                      </motion.span>
+                      <span className="text-xs text-[var(--ivory-muted)]">{t('common.resultSummary.accuracy')}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              }
+            />
           </motion.div>
 
           {/* Stats cards —— 纸上抬升块用 --paper-raised（经 .dealer-slip 重锚的 --walnut-raised） */}
@@ -137,24 +145,22 @@ export function ResultSummary({
             ))}
           </motion.div>
 
-          {/* Extra content (weak spots, wrong answers, etc.) */}
+          {/* Extra content (worst spots, strategy matrix, etc.) */}
           {children}
 
           {/* Action buttons —— 按钮金属族（§5.5）：主 CTA .btn-brass / 次动作 .btn-metal */}
           <motion.div
-            className="flex justify-center gap-4 pt-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: MOTION_DURATION.fast, delay: MOTION_DURATION.standard }}
           >
-            <Button type="button" onClick={onRetry} className="px-6">
-              <RotateCcw aria-hidden="true" />
-              {resolvedRetryLabel}
-            </Button>
-            <Button type="button" variant="secondary" onClick={onBack} className="px-6">
-              <Home aria-hidden="true" />
-              {resolvedBackLabel}
-            </Button>
+            <ResultActions
+              className="pt-4"
+              actions={[
+                { label: resolvedRetryLabel, onClick: onRetry, icon: <RotateCcw />, variant: 'primary', className: 'px-6' },
+                { label: resolvedBackLabel, onClick: onBack, icon: <Home />, variant: 'secondary', className: 'px-6' },
+              ]}
+            />
           </motion.div>
         </div>
       </div>

@@ -3,6 +3,7 @@
  *
  * - "再试一次"会重置引擎
  * - "返回首页"会跳转到 /puzzle
+ * - 嵌入在每日谜题 / 冲刺 / 主题训练容器内，文档层级固定为 h2（整页 h1 归页面持有）
  */
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,8 +11,9 @@ import { motion } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION, transitionSlow } from '@/shared/utils/motion';
 import { Trophy, Clock, Target, RefreshCw, Home, TrendingUp } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
 import { StatCard } from '@/shared/components/data-display/StatCard';
+import { ResultActions } from '@/shared/components/feedback/ResultActions';
+import { ResultHeader } from '@/shared/components/feedback/ResultHeader';
 import { WrongAnswerList, type WrongAnswerEntry } from './PuzzleResultParts';
 import type { PuzzleResult } from '../types';
 
@@ -55,11 +57,12 @@ export function PuzzleResult({ result, isNewRecord, onRetry, onBackHome }: Puzzl
         transition={transitionSlow}
         className="py-6 space-y-4"
       >
-        {/* 标题 + 破纪录徽章 */}
+        {/* 标题（h2）+ 破纪录徽章 —— 徽章紧贴标题下方 8px，与拆分前一致 */}
         <div className="text-center space-y-2">
-          <h2 className="font-display text-2xl md:text-3xl text-[var(--ivory)] tracking-wide">
-            {isRush ? t('puzzle.result.rushTitle') : t('puzzle.result.title')}
-          </h2>
+          <ResultHeader
+            headingLevel="h2"
+            title={isRush ? t('puzzle.result.rushTitle') : t('puzzle.result.title')}
+          />
           {isNewRecord && (
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -111,24 +114,26 @@ export function PuzzleResult({ result, isNewRecord, onRetry, onBackHome }: Puzzl
         {/* 答错的题目列表（仅有错题时显示） */}
         {wrongAnswers.length > 0 && <WrongAnswerList entries={wrongAnswers} />}
 
-        {/* 操作按钮 */}
-        <div className="flex flex-col sm:flex-row gap-2 pt-2">
-          <Button
-            onClick={onRetry}
-            className="flex-1 bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:[background:var(--brass-fill-gradient-hover)]"
-          >
-            <RefreshCw className="w-4 h-4 mr-1" />
-            {t('puzzle.result.retry')}
-          </Button>
-          <Button
-            onClick={onBackHome}
-            variant="outline"
-            className="flex-1 border-[var(--walnut-border)] text-[var(--ivory)] hover:bg-[var(--surface-raised)]"
-          >
-            <Home className="w-4 h-4 mr-1" />
-            {t('puzzle.result.backHome')}
-          </Button>
-        </div>
+        {/* 操作按钮 —— 移动端整行堆叠 / ≥sm 并排等分 */}
+        <ResultActions
+          layout="stack"
+          className="pt-2"
+          actions={[
+            {
+              label: t('puzzle.result.retry'),
+              onClick: onRetry,
+              icon: <RefreshCw />,
+              variant: 'primary',
+            },
+            {
+              label: t('puzzle.result.backHome'),
+              onClick: onBackHome,
+              icon: <Home />,
+              variant: 'outline',
+              className: 'border-[var(--walnut-border)] text-[var(--ivory)] hover:bg-[var(--surface-raised)]',
+            },
+          ]}
+        />
       </motion.div>
     </div>
   );
