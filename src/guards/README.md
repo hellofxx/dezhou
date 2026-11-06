@@ -4,7 +4,7 @@
 
 - 归属 feature 模块的数据完整性守卫（课程结构 / 题库 id / 选项排序分布等）留在各自模块内，不进本目录。
 - i18n 相关全局守卫（`localeParity` / `staticKeyGuard` / `contentAlignment` 等）与 i18n 资源同处 `src/i18n/`，便于就近读取 locale 结构。
-- 其他位置已存在的守卫（如 `src/shared/admission-guard.test.ts`）保持原位，不做迁移。
+- 其他位置已存在的守卫（如 `src/shared/admission-guard.test.ts`）保持原位，不做迁移。该守卫基于 import 图 + 传递闭包执行 shared 准入：0 生产消费者失败（测试桩豁免），1 消费者须登记只降不升 baseline；`components/ui/**` 豁免 ≥2 但禁止 0 消费。
 
 ## 守卫清单
 

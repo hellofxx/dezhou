@@ -2,121 +2,168 @@ import { describe, expect, it } from 'vitest';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { analyzeAdmission, buildGraph, isTestPath } from '@/test-utils/admissionGraph';
 
 /**
- * Shared 层准入门槛棘轮守卫（T6-B3 step 3）。
- * 
- * AGENTS.md: "shared/层准入门槛：被≥2 个模块使用才可放入"。本测试扫描 `src/shared/**` 
- * 每个文件的消费模块数，断言 ≥2（豁免测试文件和 barrel export）。
- * 
- * 配一个「只降不升」的基线快照（复用 eslintCrossImports.test.ts 的快照模式），
- * 避免一次性整改全部，而是允许渐进式清理。
+ * shared 层准入门槛守卫（T6-B3 step 3 重写）。
+ *
+ * 规则（AGENTS.md）：shared 只放被 ≥2 个 feature 模块使用的代码。
+ * 旧实现只扫 `shared/utils`，且统计的是 shared 文件自身 import 了谁，不是谁 import 它；
+ * 未登记 baseline 的文件直接跳过，导致单消费者文件长期漏检。
+ *
+ * 新实现基于 `@/test-utils/admissionGraph` 的 import 图 + 传递闭包：
+ * - 0 生产消费者 → 失败（测试桩豁免）；
+ * - 1 生产消费者 → 失败（ui 基础件豁免 ≥2 要求，但仍禁止 0 消费）；
+ * - baseline 只降不升，且双向校验（文件消失 / 已达标未删条目都失败）。
  */
 
-type ConsumerCount = Map<string, number>;
+const SRC_DIR = fileURLToPath(new URL('../', import.meta.url));
+const ROOT = path.resolve(SRC_DIR, '..');
+const SHARED_PREFIX = 'src/shared/';
+const UI_PREFIX = 'src/shared/components/ui/';
 
-// 递归扫描目录所有源码文件
-function scanDirectory(dirPath: string): string[] {
-  let files: string[] = [];
-  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-  
-  for (const entry of entries) {
+/** 测试桩：docs 明确要求保留在 shared/utils，按测试消费者计数 */
+const TEST_STUBS = new Set([
+  'src/shared/utils/localStorageStub.ts',
+  'src/shared/utils/persistShape.ts',
+]);
+
+/** 0 生产消费者 baseline（Batch 1 起逐条删除；只降不升） */
+const ZERO_CONSUMER_BASELINE: Record<string, string> = {
+  'src/shared/components/business/FreezeChip.tsx': '与 progress 版本字节相同，Batch 1 删除',
+  'src/shared/components/business/MilestoneMarker.tsx': '无生产引用，Batch 1 删除',
+  'src/shared/components/feedback/FeedbackGrade.tsx': '仅测试引用，Batch 1 删除',
+  'src/shared/components/feedback/GradeBadge.tsx': '仅测试引用，Batch 1 删除',
+  'src/shared/components/layout/LiveDot.tsx': '无生产引用，Batch 1 删除',
+  'src/shared/components/ui/tabs.tsx': '仅测试引用，Batch 1 删除',
+  'src/shared/utils/quizOrder.ts': '仅测试引用，Batch 6 由 optionOrder 取代',
+};
+
+/** 1 生产消费者 baseline（回迁 / 合并后逐条删除；只降不升） */
+const ONE_CONSUMER_BASELINE: Record<string, string> = {
+  'src/shared/components/business/CasinoPlaque.tsx': '仅 progress FeltArena，Batch 2 回迁',
+  'src/shared/components/business/DailyGoalCard.tsx': '仅 progress FeltArena，Batch 2 回迁',
+  'src/shared/components/business/GameVariantSelector.tsx': '仅 progress SettingsPage，Batch 2 回迁',
+  'src/shared/components/business/MottoEngraved.tsx': '仅 progress FeltArena，Batch 2 回迁',
+  'src/shared/components/business/ProgressRing.tsx': '仅 strategy ConceptGraph，Batch 4 扩展到 theory',
+  'src/shared/components/business/RankIcon.tsx': '仅 progress，Batch 2 回迁',
+  'src/shared/components/business/Sparkline.tsx': '仅 progress StreakRail，Batch 2 回迁',
+  'src/shared/components/feedback/ResultSummary.tsx': '仅 gto，Batch 5 回迁 gto',
+  'src/shared/components/layout/TableRail.tsx': '仅 layouts，Batch 2 回迁 src/layouts',
+  'src/shared/constants/moduleLabels.ts': '仅 progress（经 useModuleLabel），Batch 2 回迁',
+  'src/shared/hooks/useModuleLabel.ts': '仅 progress，Batch 2 回迁',
+  'src/shared/hooks/useAcademyDataSource.ts': '仅 progress，Batch 2 回迁',
+  'src/shared/types/ability.ts': '仅 progress，Batch 2 合并进 progress/types',
+  'src/shared/utils/academyMastery.ts': '仅 strategy；Batch 2 theory 接入后转正',
+  'src/shared/utils/pokerMath.ts': '仅 pot-odds，Batch 2 回迁',
+};
+
+function walk(dirPath: string, collected: string[] = []): string[] {
+  for (const entry of fs.readdirSync(dirPath, { withFileTypes: true })) {
+    if (['node_modules', 'dist', '.git'].includes(entry.name)) continue;
     const fullPath = path.join(dirPath, entry.name);
     if (entry.isDirectory()) {
-      if (!['node_modules', 'dist', '.git'].includes(entry.name)) {
-        files = files.concat(scanDirectory(fullPath));
-      }
-    } else if (entry.isFile() && /\.(ts|tsx)$/i.test(entry.name)) {
-      files.push(fullPath);
+      walk(fullPath, collected);
+    } else if (/\.tsx?$/.test(entry.name) && !entry.name.endsWith('.d.ts')) {
+      collected.push(path.relative(ROOT, fullPath).split(path.sep).join('/'));
     }
   }
-  
-  return files;
+  return collected;
 }
 
-// 统计一个文件被哪些模块消费
-function countConsumers(filePath: string): ConsumerCount {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const consumers = new Set<string>();
-  
-  // 匹配 import './xxx' 或 '@/features/<module>/xxx'
-  const relativeImports = content.match(/from\s+['"]\.\/([a-z-]+)['"]/g) || [];
-  for (const _match of relativeImports) {
-    // 如果是 shared/utils/index.ts 导出其他 local file，不算跨模块消费
-    if (filePath.includes('index.ts') && filePath.includes('shared')) continue;
-    
-    // 提取模块名（相对路径 → 无法直接知道，但可以通过父目录推断）
-    const parentDir = path.dirname(filePath);
-    if (parentDir.includes('features')) {
-      const parts = parentDir.split(path.sep);
-      const featureIndex = parts.indexOf('features');
-      if (featureIndex >= 0 && featureIndex < parts.length - 1) {
-        const moduleName = parts[featureIndex + 1];
-        if (moduleName) {
-          consumers.add(moduleName);
-        }
-      }
-    }
-  }
-  
-  // 统计绝对导入：@/features/<module>/...
-  const absoluteImports = content.match(/from\s+['"]@\/features\/([a-z-]+)/g) || [];
-  for (const match of absoluteImports) {
-    // Extract module name using regex
-    const [, moduleName] = /@\/features\/([a-z-]+)/.exec(match) || [];
-    if (moduleName) {
-      consumers.add(moduleName);
-    }
-  }
-  
-  const result: ConsumerCount = new Map();
-  for (const consumer of consumers) {
-    result.set(consumer, 1);
-  }
-  
-  return result;
+function formatViolations(violations: string[]): string {
+  return [
+    '[shared admission] 共享层准入违规：',
+    ...violations.map((item) => `  - ${item}`),
+    '',
+    '规则：shared 只放 ≥2 个 feature 模块使用的代码；0 消费直接失败；1 消费须登记 baseline。',
+    '处理：删除死代码 / 回迁单消费代码 / 合并到已有 shared 单源；baseline 只降不升。',
+  ].join('\n');
 }
 
 describe('Shared 层准入门槛 ≥2 消费者', () => {
-  it('src/shared/*.ts (不含 index.ts barrel) 至少被≥2 个 feature 模块消费（只降不升基线）', async () => {
-    // fileURLToPath 而非 .pathname：后者在 Windows 产出 /F:/... 会被解析成 F:\F:\...
-    const sharedUtilsDir = fileURLToPath(new URL('./utils/', import.meta.url));
-    const testFiles = scanDirectory(sharedUtilsDir);
+  it('shared 源文件的消费者数满足准入规则（只降不升 baseline）', { timeout: 30000 }, () => {
+    expect(
+      Object.keys(ZERO_CONSUMER_BASELINE).filter((file) => file in ONE_CONSUMER_BASELINE),
+    ).toEqual([]);
+
+    const files = walk(SRC_DIR);
+    expect(files.length).toBeGreaterThan(300);
+
+    const graph = buildGraph(files, (file) => fs.readFileSync(path.join(ROOT, file), 'utf8'));
+    const admissions = analyzeAdmission(graph);
+    const sharedFiles = graph.files.filter(
+      (file) =>
+        file.startsWith(SHARED_PREFIX) &&
+        !isTestPath(file) &&
+        !/\/index\.tsx?$/.test(file),
+    );
+    expect(sharedFiles.length).toBeGreaterThan(80);
+
     const violations: string[] = [];
-    const baselineMap: Record<string, number> = {
-      // Baseline snapshot of current state (should only decrease over time)
-      'cn.ts': 9,           // hand-history, onboarding, pot-odds, progress, puzzle-trainer, range-trainer, strategy-academy, theory-academy, gto-simulator
-      'seededShuffle.ts': 6,
-      'spacedRepetition.ts': 6,
-      'motion.ts': 9,
-      'persistShape.ts': 4,
-      'localStorageStub.ts': 4,
-      'formatters.ts': 3,
-      'rangeParser.ts': 2,
-      'handClassifier.ts': 2,
-      'pokerMath.ts': 2,
-      'quizOrder.ts': 1,     // Currently shared only, should be moved or used by another module
-      'deck.ts': 2,          // gto-simulator, range-trainer
-      'elo.test.ts': 0,      // Test file, excluded
-    };
-    
-    for (const filePath of testFiles) {
-      const fileName = path.basename(filePath);
-      if (fileName === 'index.ts') continue; // Exclude barrel exports
-      
-      const consumerCounts = countConsumers(filePath);
-      const totalConsumers = consumerCounts.size;
-      
-      // Check against baseline
-      if (baselineMap[fileName] !== undefined) {
-        if (totalConsumers > baselineMap[fileName]) {
-          violations.push(`${fileName}: ${totalConsumers} consumers (baseline ${baselineMap[fileName]} - increase detected)`);
+    const seen = new Set<string>();
+
+    for (const file of sharedFiles) {
+      seen.add(file);
+      const admission = admissions.get(file) ?? { prodConsumers: [], testConsumers: [] };
+      const count = admission.prodConsumers.length;
+      const isUi = file.startsWith(UI_PREFIX);
+      const isTestStub = TEST_STUBS.has(file);
+      const zeroBaseline = file in ZERO_CONSUMER_BASELINE;
+      const oneBaseline = file in ONE_CONSUMER_BASELINE;
+
+      if (isTestStub) {
+        if (admission.testConsumers.length === 0) {
+          violations.push(`${file}: 测试桩没有任何测试消费者`);
         }
-        // Note: We allow decreases (improvement), just not increases without justification
+        if (count > 0) {
+          violations.push(`${file}: 测试桩不应被生产代码引用`);
+        }
+        continue;
+      }
+
+      if (isUi) {
+        if (count === 0 && !zeroBaseline) {
+          violations.push(`${file}: ui 基础件 0 生产消费者（删除或接入）`);
+        }
+        if (count >= 2 && (zeroBaseline || oneBaseline)) {
+          violations.push(`${file}: 已达到 ≥2 消费者，请删除 baseline 条目`);
+        }
+        continue;
+      }
+
+      if (count >= 2) {
+        if (zeroBaseline || oneBaseline) {
+          violations.push(`${file}: 已达到 ≥2 消费者，请删除 baseline 条目`);
+        }
+        continue;
+      }
+
+      if (count === 0) {
+        if (oneBaseline) {
+          violations.push(`${file}: 已降为 0 消费者，请把条目移到 ZERO baseline`);
+        } else if (!zeroBaseline) {
+          violations.push(`${file}: 0 生产消费者（删除或登记 baseline）`);
+        }
+      } else if (zeroBaseline) {
+        violations.push(`${file}: 已升为 1 消费者，请把条目移到 ONE baseline`);
+      } else if (!oneBaseline) {
+        violations.push(`${file}: 仅 1 个消费者 (${admission.prodConsumers[0]})`);
       }
     }
-    
-    expect(violations.length).toBe(0);
-    expect(violations.slice(0, 10)).toEqual([]);
-  }, 30000);
+
+    for (const file of [
+      ...Object.keys(ZERO_CONSUMER_BASELINE),
+      ...Object.keys(ONE_CONSUMER_BASELINE),
+    ]) {
+      if (!seen.has(file)) {
+        violations.push(`${file}: baseline 条目对应的 shared 文件不存在（请删除）`);
+      }
+      if (TEST_STUBS.has(file)) {
+        violations.push(`${file}: 测试桩不应登记 baseline`);
+      }
+    }
+
+    expect(violations, formatViolations(violations)).toEqual([]);
+  });
 });
