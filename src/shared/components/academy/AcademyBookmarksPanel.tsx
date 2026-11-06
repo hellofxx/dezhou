@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Bookmark, BookmarkCheck, BookmarkX, ChevronRight } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { Button } from '@/shared/components/ui/button';
 import { transitionStandard } from '@/shared/utils/motion';
 
 /** 通用书签条目：章节 / 课时由各院适配器解析成可读标题与路由后传入。 */
@@ -37,6 +38,7 @@ export interface AcademyBookmarksPanelProps {
  * 只消费调用方解析好的条目：不读 store、不查目录、不拼路由；
  * 书签是纯阅读书签，不参与解锁、不影响掌握度与能力分。
  * 渲染为 button + onNavigate（与 AcademySearchShell 一致，共享层不引 router）。
+ * 交互状态由 `Button` 接管（quiet 语义），icon-only 移除键保留 44px 触摸目标。
  */
 export function AcademyBookmarksPanel({
   items,
@@ -71,17 +73,18 @@ export function AcademyBookmarksPanel({
           <ul className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
             {items.map((item) => (
               <li key={item.id} className="shrink-0">
-                <button
+                <Button
                   type="button"
+                  variant="quiet"
                   onClick={() => onNavigate(item.route)}
-                  className="inline-flex min-h-11 max-w-[240px] items-center gap-1.5 rounded-full border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/60 px-3 text-xs text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                  className="inline-flex h-auto min-h-11 max-w-[240px] items-center justify-start gap-1.5 rounded-full border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/60 px-3 py-0 text-xs font-normal text-[var(--ivory)] [&_svg]:size-3 transition-colors hover:border-[var(--brass)]/50 hover:bg-[var(--walnut-raised)]/60"
                 >
                   <Bookmark
                     className="w-3 h-3 text-[var(--brass-bright)] shrink-0"
                     aria-hidden="true"
                   />
                   <span className="truncate">{item.title}</span>
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
@@ -105,10 +108,11 @@ export function AcademyBookmarksPanel({
         <ul className="space-y-1">
           {items.map((item) => (
             <li key={item.id} className="flex items-center gap-1">
-              <button
+              <Button
                 type="button"
+                variant="quiet"
                 onClick={() => onNavigate(item.route)}
-                className="flex min-h-11 flex-1 min-w-0 items-center gap-2 rounded-md px-1.5 text-left text-xs text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--felt-raised)]/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                className="flex h-auto min-h-11 flex-1 min-w-0 items-center justify-start gap-2 rounded-md px-1.5 py-0 text-left text-xs font-normal text-[var(--ivory-dim)] [&_svg]:size-3.5 hover:bg-[var(--felt-raised)]/40 hover:text-[var(--ivory)] transition-colors"
               >
                 <Bookmark
                   className="w-3.5 h-3.5 text-[var(--brass-bright)] shrink-0"
@@ -119,20 +123,20 @@ export function AcademyBookmarksPanel({
                   className="w-3.5 h-3.5 ml-auto shrink-0 text-[var(--ivory-dim)]"
                   aria-hidden="true"
                 />
-              </button>
+              </Button>
               {onRemove ? (
-                <button
+                <Button
                   type="button"
+                  variant="quiet"
                   onClick={() => onRemove(item.id)}
                   aria-label={`${labels.remove} · ${item.title}`}
                   className={cn(
-                    'inline-flex min-h-11 min-w-11 items-center justify-center rounded-md',
-                    'text-[var(--ivory-muted)] hover:text-[var(--poker-terra-bright)] transition-colors',
-                    'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+                    'inline-flex h-auto min-h-11 min-w-11 items-center justify-center rounded-md px-0 py-0',
+                    'text-[var(--ivory-muted)] hover:bg-transparent hover:text-[var(--poker-terra-bright)] transition-colors',
                   )}
                 >
                   <BookmarkX className="w-4 h-4" aria-hidden="true" />
-                </button>
+                </Button>
               ) : null}
             </li>
           ))}

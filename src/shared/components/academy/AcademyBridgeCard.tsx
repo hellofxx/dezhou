@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ChevronRight, Swords } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { Button } from '@/shared/components/ui/button';
 import { transitionStandard } from '@/shared/utils/motion';
 import type { AcademyBridgeCta, AcademyBridgeItem } from '@/shared/types/academy';
 
@@ -33,6 +34,9 @@ export interface AcademyBridgeCardProps {
  * 路由拼接与文案翻译留在各院薄包装。视觉基线为理论学院 PracticeBridgeCard：
  * felt-deep 底 + 黄铜 30% 描边，条目行 felt 底 + walnut 描边，CTA 走 --brass-fill。
  * 整卡只有一个高亮主按钮：条目行是等权目的地，CTA 才是主动作。
+ *
+ * 交互状态由 `Button` 接管（quiet 语义）；结构批次用 className 保留原尺寸与配色，
+ * CTA 的黄铜平铺底是临时覆盖，V1 统一为 `variant="default"` 金属件后删除。
  */
 export function AcademyBridgeCard({
   title,
@@ -70,29 +74,31 @@ export function AcademyBridgeCard({
       <ul className={cn(hasItems && 'space-y-2', hasItems && !subtitle && 'mt-4')}>
         {items.map((item) => (
           <li key={item.id}>
-            <button
+            <Button
               type="button"
+              variant="quiet"
               onClick={() => onNavigate(item.route)}
               aria-label={itemAriaLabel?.(item) ?? item.label}
-              className="flex w-full min-h-11 items-center justify-between gap-2 rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] px-4 py-2.5 text-left text-sm text-[var(--ivory-dim)] transition-all hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className="flex h-auto w-full min-h-11 items-center justify-between gap-2 rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] px-4 py-2.5 text-left text-sm font-normal text-[var(--ivory-dim)] transition-all hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40 hover:text-[var(--ivory-dim)]"
             >
               <span className="min-w-0 truncate">{item.label}</span>
               <ChevronRight
                 className="w-4 h-4 shrink-0 text-[var(--ivory-muted)]"
                 aria-hidden="true"
               />
-            </button>
+            </Button>
           </li>
         ))}
       </ul>
 
       {cta ? (
-        <button
+        <Button
           type="button"
+          variant="quiet"
           onClick={() => onNavigate(cta.route)}
           aria-label={cta.label}
           className={cn(
-            'flex w-full min-h-11 items-center gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2.5 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+            'flex h-auto w-full min-h-11 items-center justify-start gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2.5 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:bg-[var(--brass-fill)] hover:text-[var(--brass-fill-ink)] hover:opacity-90',
             hasItems || subtitle ? 'mt-2' : 'mt-4'
           )}
         >
@@ -100,7 +106,7 @@ export function AcademyBridgeCard({
             {ctaIcon ?? <ArrowRight className="w-4 h-4" />}
           </span>
           <span className="min-w-0 truncate">{cta.label}</span>
-        </button>
+        </Button>
       ) : null}
     </motion.section>
   );

@@ -75,10 +75,19 @@ describe('ContentIssueReportDialog（触发）', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
-  it('className 透传到触发按钮', () => {
-    mount({ className: 'text-xs' });
+  it('className 透传到触发按钮（覆盖 Button 基类而非撞车既有类）', () => {
+    mount({ className: 'mt-2' });
 
-    expect(screen.getByRole('button', { name: labels.trigger }).className).toContain('text-xs');
+    expect(screen.getByRole('button', { name: labels.trigger }).className).toContain('mt-2');
+  });
+
+  it('触发按钮仍是原生 button type=button，保留 44px 触摸目标', () => {
+    mount();
+
+    const trigger = screen.getByRole('button', { name: labels.trigger });
+    expect(trigger.tagName).toBe('BUTTON');
+    expect(trigger.getAttribute('type')).toBe('button');
+    expect(trigger.classList.contains('min-h-11')).toBe(true);
   });
 });
 

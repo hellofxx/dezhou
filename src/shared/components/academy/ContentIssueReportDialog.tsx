@@ -7,6 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog';
+import { Button } from '@/shared/components/ui/button';
+import { Textarea } from '@/shared/components/ui/textarea';
 import { cn } from '@/shared/utils/cn';
 
 export interface ContentIssueReportDialogLabels {
@@ -52,6 +54,9 @@ export interface ContentIssueReportDialogProps {
  *
  * 纯展示：不拼报告文本、不读版本号与语言、不写剪贴板；`reportText` 与 `onCopy` 均由调用方提供。
  * 无后端，报告以文本形式产出：剪贴板通道常驻，配置了邮箱时并列 mailto 通道。
+ * 触发 / 复制 / 邮件通道与备注字段分别走 `Button` / `Textarea`；
+ * 复制按钮的黄铜平铺底是临时覆盖，V1 统一为 `variant="default"` 金属件后删除。
+ * 「附带上下文」勾选框保留原生 input（单消费者，待第二个 checkbox 需求再抽 `ui/Checkbox`）。
  */
 export function ContentIssueReportDialog({
   open,
@@ -78,19 +83,20 @@ export function ContentIssueReportDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <button
+      <Button
         type="button"
+        variant="quiet"
         onClick={() => onOpenChange(true)}
         aria-label={labels.trigger}
         className={cn(
-          'inline-flex min-h-11 items-center gap-1.5 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60',
+          'inline-flex h-auto min-h-11 items-center justify-start gap-1.5 rounded py-0 text-xs font-normal text-[var(--ivory-muted)] [&_svg]:size-3.5 transition-colors hover:bg-transparent hover:text-[var(--ivory)]',
           variant === 'inline' ? 'px-2' : 'min-w-11 justify-center px-2',
           className,
         )}
       >
         <Flag className="w-3.5 h-3.5" aria-hidden="true" />
         {variant === 'inline' ? labels.reportIssue : null}
-      </button>
+      </Button>
       <DialogContent className="bg-[var(--surface)] border-[var(--walnut-border)] max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-[var(--ivory)]">{labels.title}</DialogTitle>
@@ -101,12 +107,12 @@ export function ContentIssueReportDialog({
 
         <label className="block space-y-1.5">
           <span className="sr-only">{labels.placeholder}</span>
-          <textarea
+          <Textarea
             value={note}
             onChange={(event) => onNoteChange(event.target.value)}
             placeholder={labels.placeholder}
             rows={4}
-            className="w-full rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] px-3 py-2 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className="w-full bg-[var(--felt)] border border-[var(--walnut-border)] rounded-lg px-3 py-2 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)]"
           />
         </label>
 
@@ -125,21 +131,25 @@ export function ContentIssueReportDialog({
         </pre>
 
         <DialogFooter className="gap-2 flex-wrap sm:gap-2">
-          <button
+          <Button
             type="button"
+            variant="quiet"
             onClick={handleCopy}
-            className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className="inline-flex h-auto min-h-11 items-center justify-start gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:bg-[var(--brass-fill)] hover:text-[var(--brass-fill-ink)] hover:opacity-90"
           >
             {labels.copy}
-          </button>
+          </Button>
           {mailtoHref ? (
-            <a
-              href={mailtoHref}
-              className="inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            <Button
+              asChild
+              variant="quiet"
+              className="inline-flex h-auto min-h-11 items-center justify-start gap-2 rounded-lg border border-[var(--walnut-border)] px-4 py-2 text-sm font-normal text-[var(--ivory-dim)] transition-colors hover:bg-transparent hover:text-[var(--ivory)] hover:border-[var(--brass)]/50"
             >
-              <Mail className="w-4 h-4" aria-hidden="true" />
-              {labels.mailto}
-            </a>
+              <a href={mailtoHref}>
+                <Mail className="w-4 h-4" aria-hidden="true" />
+                {labels.mailto}
+              </a>
+            </Button>
           ) : (
             <p className="text-[11px] text-[var(--ivory-muted)]">{labels.success}</p>
           )}

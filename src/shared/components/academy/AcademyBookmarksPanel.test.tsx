@@ -77,6 +77,21 @@ describe('AcademyBookmarksPanel（panel）', () => {
     expect(screen.getByText('0')).toBeTruthy();
   });
 
+  it('行按钮与移除按钮是原生 button（type=button），移除键保留 44px 触摸目标', () => {
+    mount();
+
+    const row = screen.getByRole('button', { name: '组合计数' });
+    expect(row.tagName).toBe('BUTTON');
+    expect(row.getAttribute('type')).toBe('button');
+    expect(row.classList.contains('min-h-11')).toBe(true);
+
+    const remove = screen.getByRole('button', { name: '移除 · 组合计数' });
+    expect(remove.tagName).toBe('BUTTON');
+    expect(remove.getAttribute('type')).toBe('button');
+    expect(remove.classList.contains('min-h-11')).toBe(true);
+    expect(remove.classList.contains('min-w-11')).toBe(true);
+  });
+
   it('section 可访问名缺省用 labels.title，可用 ariaLabel 覆盖', () => {
     mount();
     expect(screen.getByRole('region', { name: labels.title })).toBeTruthy();

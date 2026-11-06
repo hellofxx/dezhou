@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { Button } from '@/shared/components/ui/button';
 import { transitionStandard } from '@/shared/utils/motion';
 import type { MasteryState, MasterySummary } from '@/shared/types/academy';
 
@@ -72,6 +73,7 @@ const MASTERY_ROW_STYLE: Record<MasteryState, { icon: LucideIcon; tone: string }
  * 只读 props：不调用解锁门禁、不写 store（掌握度只展示，不改变解锁）。
  * 统计范围由调用方先收窄（例如理论剔除增补章），本卡不感知业务筛选。
  * 四档顺序固定，长标签与计数各占一端，计数一律 font-numeric。
+ * weakest CTA 走 `Button variant="link"`（文本链接语义），尺寸与配色由 className 保留。
  */
 export function AcademyMasteryCard({
   title,
@@ -130,15 +132,16 @@ export function AcademyMasteryCard({
         </div>
 
         {weakest ? (
-          <button
+          <Button
             type="button"
+            variant="link"
             onClick={() => weakest.onNavigate(weakest.route)}
             aria-label={`${weakest.ctaLabel} · ${weakest.label}`}
-            className="inline-flex min-h-11 items-center gap-1.5 rounded-md text-xs font-semibold text-[var(--brass-bright)] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className="inline-flex h-auto min-h-11 items-center gap-1.5 rounded-md px-0 py-0 text-xs font-semibold text-[var(--brass-bright)] [&_svg]:size-3.5 hover:underline"
           >
             <span className="min-w-0 truncate">{weakest.ctaLabel}</span>
             <ArrowRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-          </button>
+          </Button>
         ) : null}
 
         {footer ? (

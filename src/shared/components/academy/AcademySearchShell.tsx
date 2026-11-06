@@ -1,4 +1,6 @@
 import { BookOpen, FileSearch, Search } from 'lucide-react';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
 import type { AcademySearchItem, AcademySearchSection } from '@/shared/types/academy';
 
 export interface AcademySearchShellProps {
@@ -25,6 +27,7 @@ export interface AcademySearchShellProps {
  *
  * 纯展示：不加载数据、不做匹配、不读 store；命中集合与分区标题由各院适配器算好传入。
  * 空分区自动隐藏，所有分区皆空且用户已输入时展示空态，避免空查询下误报"无结果"。
+ * 输入框与结果行的交互状态由 `Input` / `Button` 接管；字段表面色与原尺寸由 className 覆盖。
  */
 export function AcademySearchShell({
   query,
@@ -48,14 +51,14 @@ export function AcademySearchShell({
           className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ivory-muted)]"
           aria-hidden="true"
         />
-        <input
+        <Input
           type="search"
           autoFocus
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
           aria-label={accessibleName}
           placeholder={placeholder}
-          className="w-full min-h-11 rounded-lg border border-[var(--walnut-border)] bg-[var(--walnut-raised)]/40 pl-9 pr-3 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+          className="h-11 min-h-11 rounded-lg border-[var(--walnut-border)] bg-[var(--walnut-raised)]/40 pl-9 pr-3 py-0 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)]"
         />
       </div>
 
@@ -70,11 +73,12 @@ export function AcademySearchShell({
           <ul className="space-y-1">
             {section.items.map((item) => (
               <li key={item.id}>
-                <button
+                <Button
                   type="button"
+                  variant="quiet"
                   onClick={() => onNavigate(item.route)}
                   aria-label={resultAriaLabel?.(item) ?? item.title}
-                  className="flex w-full min-h-11 items-start gap-2 rounded-md px-1.5 py-1.5 text-left transition-colors hover:bg-[var(--felt-raised)]/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+                  className="flex h-auto w-full min-h-11 items-start justify-start gap-2 rounded-md px-1.5 py-1.5 text-left font-normal whitespace-normal [&_svg]:size-3.5 hover:bg-[var(--felt-raised)]/40 transition-colors"
                 >
                   <BookOpen
                     className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--brass-bright)]"
@@ -88,7 +92,7 @@ export function AcademySearchShell({
                       </span>
                     ) : null}
                   </span>
-                </button>
+                </Button>
               </li>
             ))}
           </ul>

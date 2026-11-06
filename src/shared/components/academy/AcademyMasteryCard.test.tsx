@@ -78,6 +78,9 @@ describe('AcademyMasteryCard', () => {
 
     const cta = screen.getByRole('button', { name: '复习最弱一章 · 组合数学' });
     expect(cta.textContent).toContain('复习最弱一章');
+    // Button 基类声明 [&_svg]:size-4，此处必须显式压回原 14px 图标，避免结构批次视觉漂移
+    expect(cta.classList.contains('[&_svg]:size-3.5')).toBe(true);
+    expect(cta.classList.contains('[&_svg]:size-4')).toBe(false);
     fireEvent.click(cta);
     expect(onNavigate).toHaveBeenCalledWith('/theory/chapter/t1-combinatorics');
   });

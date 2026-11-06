@@ -2,6 +2,8 @@ import { useId } from 'react';
 import { NotebookPen, Save, Trash2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { Button } from '@/shared/components/ui/button';
+import { Textarea } from '@/shared/components/ui/textarea';
 
 export interface AcademyNotesLabels {
   title: string;
@@ -40,6 +42,8 @@ export interface AcademyNotesPanelProps {
  *
  * 纯受控展示：不读 store、不 toast、不做持久化；草稿状态与写入路径由调用方持有。
  * 不做任何门禁 / 掌握度联动（笔记是阅读辅助，不参与进度判定）。
+ * 字段与按钮交互状态由 `Textarea` / `Button` 接管；保存按钮的黄铜平铺底是临时覆盖，
+ * V1 统一为 `variant="default"` 金属件后删除。
  */
 export function AcademyNotesPanel({
   value,
@@ -64,14 +68,14 @@ export function AcademyNotesPanel({
         <SectionLabel as="h2">{labels.title}</SectionLabel>
       </div>
 
-      <textarea
+      <Textarea
         value={value}
         onChange={(event) => onChange(event.target.value.slice(0, maxLength))}
         maxLength={maxLength}
         rows={4}
         aria-describedby={countId}
         placeholder={labels.placeholder}
-        className="w-full min-h-24 bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] rounded-lg p-2.5 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] resize-y focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+        className="w-full min-h-24 bg-[var(--walnut-raised)]/40 border border-[var(--walnut-border)] rounded-lg p-2.5 text-sm text-[var(--ivory)] placeholder:text-[var(--ivory-muted)] resize-y"
       />
 
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -80,25 +84,27 @@ export function AcademyNotesPanel({
         </p>
         <div className="flex items-center gap-2">
           {hasStoredNote ? (
-            <button
+            <Button
               type="button"
+              variant="quiet"
               onClick={onClear}
               aria-label={labels.clear}
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+              className="inline-flex h-auto min-h-11 items-center justify-start gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-normal text-[var(--ivory-dim)] [&_svg]:size-3.5 hover:text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/60 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
               {labels.clear}
-            </button>
+            </Button>
           ) : null}
-          <button
+          <Button
             type="button"
+            variant="quiet"
             onClick={onSave}
             disabled={!canSave}
-            className="inline-flex min-h-11 items-center gap-1.5 rounded-md bg-[var(--brass-fill)] px-3 py-1.5 text-xs font-semibold text-[var(--brass-fill-ink)] transition-opacity disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brass)]/60"
+            className="inline-flex h-auto min-h-11 items-center justify-start gap-1.5 rounded-md bg-[var(--brass-fill)] px-3 py-1.5 text-xs font-semibold text-[var(--brass-fill-ink)] [&_svg]:size-3.5 transition-opacity hover:bg-[var(--brass-fill)] hover:text-[var(--brass-fill-ink)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Save className="w-3.5 h-3.5" aria-hidden="true" />
             {labels.save}
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -113,4 +113,24 @@ describe('AcademyNotesPanel', () => {
 
     expect(screen.getByRole('region', { name: labels.title }).className).toContain('mt-4');
   });
+
+  it('保存 / 清空是原生 button（type=button），保留 min-h-11 触摸目标', () => {
+    mount({ value: '旧笔记', hasStoredNote: true });
+
+    for (const name of [labels.save, labels.clear]) {
+      const button = screen.getByRole('button', { name });
+      expect(button.tagName).toBe('BUTTON');
+      expect(button.getAttribute('type')).toBe('button');
+      expect(button.classList.contains('min-h-11')).toBe(true);
+    }
+  });
+
+  it('字段走 ui/Textarea：保留 min-h-24 与 focusRing 单源焦点环', () => {
+    mount();
+
+    const field = textarea();
+    expect(field.classList.contains('min-h-24')).toBe(true);
+    expect(field.classList.contains('focus-visible:ring-[var(--brass)]/60')).toBe(true);
+    expect(field.classList.contains('focus:outline-none')).toBe(true);
+  });
 });
