@@ -58,14 +58,21 @@ const GROUPS: readonly LiteralGroup[] = [
   {
     name: 'flat-cta',
     pattern: /px-5 py-2\.5 rounded-lg bg-\[var\(--brass-fill\)\]/g,
-    baseline: 19,
-    reason: '平铺主 CTA 在 V1 收敛到 Button default 后应降为 0',
+    baseline: 0,
+    reason: '平铺主 CTA 已收敛到 Button default（V1）；新增即失败',
   },
   {
     name: 'stat-box',
     pattern: /rounded-lg bg-\[var\(--walnut-raised\)\] p-4/g,
     baseline: 1,
-    reason: '结果页 stat box 在 V1 收敛到 StatCard 后应降为 0',
+    singleSource: [
+      {
+        file: 'src/features/pot-odds/components/PotOddsResultView.tsx',
+        expected: 1,
+        reason: '成绩页性能评语块复用同 chrome，不是统计卡；统计卡必须用 StatCard',
+      },
+    ],
+    reason: 'stat box 必须用 StatCard；仅允许 pot-odds 性能评语块的 1 处同 chrome',
   },
 ];
 

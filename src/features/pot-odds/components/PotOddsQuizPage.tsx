@@ -2,10 +2,11 @@ import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
+import { Button } from '@/shared/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
-import { CheckCircle2, XCircle, ArrowRight, Trophy, Clock, Target, RotateCcw, Calculator, Spade } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, Spade } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { TrainingResult, QuestionResult } from '@/shared/types/common';
@@ -16,6 +17,7 @@ import { QUIZ_QUESTIONS } from '../data/quizQuestions';
 import { orderQuizOptions } from '../utils/quizOrder';
 // P1B-04：末题/补救题固定 id（SRS 去重依赖）
 import { EASY_LAST_QUESTION_ID, RESCUE_QUESTION_ID } from '../constants';
+import { PotOddsResultView } from './PotOddsResultView';
 // P2-5.4: Session 止损守卫
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
 // P4 修复（4.5-P0）：自适应难度降级 + 五级反馈
@@ -238,67 +240,15 @@ export default function PotOddsQuizPage() {
     const avgTime = times.length > 0 ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : '0';
 
     return (
-      <div className="min-h-screen bg-[var(--felt-deep)] flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={transitionSlow}
-          className="w-full max-w-md text-center"
-        >
-          <Trophy className="w-16 h-16 text-[var(--brass-bright)] mx-auto mb-4" />
-          <h2 className="font-display text-3xl text-[var(--ivory)] mb-2">{t('potOdds.quiz.doneTitle')}</h2>
-          <p className="text-[var(--ivory-muted)] mb-8">{t('potOdds.quiz.doneSubtitle')}</p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div className="rounded-xl bg-[var(--walnut-raised)] p-5">
-              <p className="font-numeric text-3xl text-[var(--brass-bright)]">{accuracy}%</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1">{t('potOdds.quiz.accuracy')}</p>
-            </div>
-            <div className="rounded-xl bg-[var(--walnut-raised)] p-5">
-              <p className="font-numeric text-3xl text-[var(--ivory)]">{avgTime}s</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-                <Clock className="w-3 h-3" /> {t('potOdds.quiz.avgTime')}
-              </p>
-            </div>
-            <div className="rounded-xl bg-[var(--walnut-raised)] p-5">
-              <p className="font-numeric text-3xl text-[var(--ivory)]">{correctCount}/{totalQuestions}</p>
-              <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-                <Target className="w-3 h-3" /> {t('potOdds.quiz.correctCount')}
-              </p>
-            </div>
-          </div>
-
-          {/* Performance message */}
-          <div className="rounded-lg bg-[var(--walnut-raised)] p-4 mb-8">
-            <p className="text-sm text-[var(--ivory-dim)]">
-              {accuracy >= 90 ? t('potOdds.quiz.gradeExcellent') :
-               accuracy >= 70 ? t('potOdds.quiz.gradeGood') :
-               accuracy >= 50 ? t('potOdds.quiz.gradeFair') :
-               t('potOdds.quiz.gradePoor')}
-            </p>
-            {lastQuestionCorrect && (
-              <p className="text-xs text-[var(--sage-text)] mt-2 font-display">
-                {t('potOdds.quiz.lastCorrect')}
-              </p>
-            )}
-          </div>
-
-          <div className="flex gap-3 justify-center">
-            <button
-              onClick={handleRestart}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
-            >
-              <RotateCcw className="w-4 h-4" /> {t('potOdds.quiz.restart')}
-            </button>
-            <button
-              onClick={() => navigate('/pot-odds')}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[var(--ivory-dim)]/30 text-[var(--ivory)] font-semibold text-sm hover:bg-[var(--walnut-raised)] transition-colors"
-            >
-              <Calculator className="w-4 h-4" /> {t('potOdds.quiz.backToCalc')}
-            </button>
-          </div>
-        </motion.div>
-      </div>
+      <PotOddsResultView
+        accuracy={accuracy}
+        avgTime={avgTime}
+        correctCount={correctCount}
+        totalQuestions={totalQuestions}
+        lastQuestionCorrect={lastQuestionCorrect}
+        onRestart={handleRestart}
+        onBack={() => navigate('/pot-odds')}
+      />
     );
   }
 
@@ -519,13 +469,10 @@ export default function PotOddsQuizPage() {
 
             {/* Next button */}
             <div className="flex justify-end">
-              <button
-                onClick={handleNext}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
-              >
+              <Button variant="default" onClick={handleNext}>
                 {currentIndex + 1 >= totalQuestions ? t('potOdds.quiz.viewResult') : t('potOdds.quiz.next')}
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           </motion.div>
         )}
