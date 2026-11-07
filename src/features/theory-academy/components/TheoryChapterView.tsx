@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Trophy, BookOpen, ClipboardCheck, Compass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
+import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useProgressStore } from '@/features/progress/store';
 import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
@@ -254,13 +255,10 @@ export default function TheoryChapterView() {
               </div>
             ) : (
               <div className="pt-4 mt-2 border-t border-[var(--walnut-border)]/50 flex justify-end">
-                <button
-                  onClick={() => setPhase('quiz')}
-                  className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity ${FOCUS_RING}`}
-                >
+                <Button variant="default" onClick={() => setPhase('quiz')} className="min-h-11">
                   {t('theory.chapterView.startQuiz')}
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </Button>
               </div>
             )}
           </motion.div>

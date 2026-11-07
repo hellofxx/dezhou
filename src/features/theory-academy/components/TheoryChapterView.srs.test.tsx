@@ -142,6 +142,10 @@ describe('TheoryChapterView 章末错题入 SRS 队列', () => {
     const drawnIds = displayedQuestions(1).map((q) => q.id);
     expect(drawnIds.length).toBe(5);
     const wrongIds = drawnIds.slice(0, 3);
+    // V1 主 CTA 收口：进入小测走 Button 金属件（btn-brass），不再是平铺黄铜底
+    const startCta = buttons(container).find((b) => (b.textContent ?? '').includes('进入章末小测'));
+    expect(startCta?.className).toContain('btn-brass');
+    expect(startCta?.className).not.toContain('bg-[var(--brass-fill)]');
     await clickByText(container, '进入章末小测');
     await runQuiz(container, wrongIds, 1);
 

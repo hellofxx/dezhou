@@ -81,12 +81,18 @@ function clickOption(container: HTMLElement, optionText: string) {
   });
 }
 
-/** 点击「查看结果」（最后一题作答后的提交按钮，zh 文案 theory.quiz.viewResult） */
-function clickViewResult(container: HTMLElement) {
+/** 「查看结果」CTA（最后一题作答后的提交按钮，zh 文案 theory.quiz.viewResult） */
+function viewResultButton(container: HTMLElement): HTMLButtonElement {
   const btn = Array.from(container.querySelectorAll('button')).find((b) =>
     b.textContent?.includes('查看结果'),
   );
   if (!btn) throw new Error('未找到「查看结果」按钮');
+  return btn;
+}
+
+/** 点击「查看结果」 */
+function clickViewResult(container: HTMLElement) {
+  const btn = viewResultButton(container);
   act(() => {
     btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
   });
@@ -312,5 +318,39 @@ describe('TheoryQuiz 抽题口径', () => {
 
     expect(container.textContent).toContain('本次抽取 6 题');
     expect(container.textContent).toContain('第 1 / 6 题');
+  });
+});
+
+describe('TheoryQuiz 主 CTA 收口（V1 金属件）', () => {
+  let container: HTMLDivElement;
+  let root: Root;
+
+  beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
+    seedChapterAttempts(null);
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+    seedChapterAttempts(null);
+  });
+
+  it('「查看结果」走 Button variant="default"（btn-brass + min-h-11），不再是平铺黄铜底', () => {
+    const q = SINGLE_QUESTION[0]!;
+    act(() => {
+      root.render(<TheoryQuiz chapter={makeChapter(SINGLE_QUESTION)} onComplete={() => {}} />);
+    });
+    clickOption(container, q.options[q.correctIndex]!);
+
+    const cta = viewResultButton(container);
+    expect(cta.tagName).toBe('BUTTON');
+    expect(cta.className).toContain('btn-brass');
+    expect(cta.className).toContain('min-h-11');
+    expect(cta.className).not.toContain('bg-[var(--brass-fill)]');
+    expect(cta.className).not.toContain('hover:opacity-90');
+    expect(cta.textContent).toContain('查看结果');
   });
 });

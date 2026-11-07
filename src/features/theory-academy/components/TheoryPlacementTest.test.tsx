@@ -142,3 +142,42 @@ describe('TheoryPlacementTest 结果落库', () => {
     expect(useTheoryStore.getState().progress.completedChapters).toEqual([]);
   });
 });
+
+describe('定位测评主 CTA 收口（V1 金属件）', () => {
+  let container: HTMLDivElement;
+  let root: Root;
+
+  beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
+    act(() => useTheoryStore.getState().resetProgress());
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+    act(() => useTheoryStore.getState().resetProgress());
+  });
+
+  it('「开始定位测评」与「下一题」走 Button variant="default"（btn-brass），不再是平铺黄铜底', () => {
+    act(() => {
+      root.render(render());
+    });
+
+    const start = findButton(container, t('theory.placement.start'));
+    expect(start.tagName).toBe('BUTTON');
+    expect(start.className).toContain('btn-brass');
+    expect(start.className).toContain('min-h-11');
+    expect(start.className).not.toContain('bg-[var(--brass-fill)]');
+
+    click(container, t('theory.placement.start'));
+    const question = THEORY_PLACEMENT_QUESTIONS[0]!;
+    const options = displayedOptions(question.id, question.correctIndex);
+    click(container, options.find((option) => option.isCorrect)!.text);
+
+    const next = findButton(container, t('theory.placement.next'));
+    expect(next.className).toContain('btn-brass');
+    expect(next.className).not.toContain('bg-[var(--brass-fill)]');
+  });
+});

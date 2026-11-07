@@ -73,6 +73,17 @@ async function waitForButton(container: HTMLElement, text: string, timeoutMs = 4
   );
 }
 
+/** 按精确文案定位按钮（CTA 视觉类断言用，不做点击） */
+function buttonByText(container: HTMLElement, text: string): HTMLButtonElement {
+  const button = buttons(container).find((candidate) => (candidate.textContent ?? '').trim() === text);
+  if (!button) {
+    throw new Error(
+      `未找到按钮「${text}」；现有：${JSON.stringify(buttons(container).map((b) => b.textContent))}`,
+    );
+  }
+  return button;
+}
+
 function seedCompleted(chapterIds: string[]) {
   const progress = useTheoryStore.getState().progress;
   act(() => {
@@ -260,5 +271,49 @@ describe('检查点 → 认证 Level 映射', () => {
       expect(certificationLevel).toBeGreaterThanOrEqual(1);
       expect(certificationLevel).toBeLessThanOrEqual(6);
     }
+  });
+});
+
+describe('检查点主 CTA 收口（V1 金属件）', () => {
+  let container: HTMLDivElement;
+  let root: Root;
+
+  beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
+    act(() => useTheoryStore.getState().resetProgress());
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+    act(() => useTheoryStore.getState().resetProgress());
+  });
+
+  it('入口与「下一题」走 Button variant="default"（btn-brass + min-h-11），不再是平铺黄铜底', async () => {
+    seedCompleted(coreChapterIds());
+    await act(async () => {
+      root.render(
+        <MemoryRouter>
+          <TheoryCheckpoint levelId={LEVEL_ID} />
+        </MemoryRouter>,
+      );
+    });
+    await waitForButton(container, t('theory.checkpoint.entry'));
+
+    const entry = buttonByText(container, t('theory.checkpoint.entry'));
+    expect(entry.tagName).toBe('BUTTON');
+    expect(entry.className).toContain('btn-brass');
+    expect(entry.className).toContain('min-h-11');
+    expect(entry.className).not.toContain('bg-[var(--brass-fill)]');
+
+    await clickByText(container, t('theory.checkpoint.entry'));
+    const first = (await expectedQuestions(1))[0]!.question;
+    await clickByText(container, first.options[first.correctIndex]!);
+
+    const next = buttonByText(container, t('theory.quiz.next'));
+    expect(next.className).toContain('btn-brass');
+    expect(next.className).not.toContain('bg-[var(--brass-fill)]');
   });
 });

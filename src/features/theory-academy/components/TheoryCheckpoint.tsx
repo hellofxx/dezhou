@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, ClipboardCheck, Lock, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useProgressStore } from '@/features/progress/store';
@@ -317,15 +318,12 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
         )}
         {answered && (
           <div className="flex justify-end">
-            <button
-              onClick={handleNext}
-              className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
-            >
+            <Button variant="default" onClick={handleNext} className="min-h-11">
               {currentIndex < questions.length - 1
                 ? t('theory.quiz.next')
                 : t('theory.checkpoint.finish')}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -345,13 +343,10 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
         </p>
       )}
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          onClick={start}
-          className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
-        >
+        <Button variant="default" onClick={start} className="min-h-11">
           {t('theory.checkpoint.entry')}
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
-        </button>
+        </Button>
         {onExit && (
           <button
             onClick={onExit}

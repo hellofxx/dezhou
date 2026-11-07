@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, CheckCircle2, Compass, XCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useTheoryStore } from '../store';
 import {
@@ -261,15 +262,12 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
 
         {answered && (
           <div className="flex justify-end">
-            <button
-              onClick={handleNext}
-              className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
-            >
+            <Button variant="default" onClick={handleNext} className="min-h-11">
               {currentIndex >= PLACEMENT_QUESTION_COUNT - 1
                 ? t('theory.placement.finish')
                 : t('theory.placement.next')}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </button>
+            </Button>
           </div>
         )}
       </div>
@@ -293,13 +291,10 @@ export function TheoryPlacementTest({ onExit, className }: TheoryPlacementTestPr
       )}
       <p className="text-xs text-[var(--ivory-muted)]">{t('theory.placement.disclaimer')}</p>
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          onClick={start}
-          className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
-        >
+        <Button variant="default" onClick={start} className="min-h-11">
           {t('theory.placement.start')}
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
-        </button>
+        </Button>
         {onExit && (
           <button
             onClick={onExit}

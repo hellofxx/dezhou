@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, Lock } from 'lucide-react';
-import { FOCUS_RING } from '@/shared/components/ui/focusRing';
+import { Button } from '@/shared/components/ui/button';
 import type { TheoryChapterSummary } from '../types';
 import { resolveChapterTitle } from '../utils/titleKeys';
 
@@ -15,6 +15,9 @@ interface NextChapterNavProps {
  * 「下一章」导航（P1F-02）：getNextChapter 跨 Level 顺延时，若目标章节所属
  * Level 未解锁，点击会被章节页门禁 Navigate 静默弹回 /theory——因此渲染前
  * 校验解锁态，未解锁时降级为不可点击的提示文案而非按钮。
+ *
+ * 主 CTA 走 `Button variant="default"`（金属件，交互状态与黄铜焦点环由 Button 接管）；
+ * `whitespace-normal` 覆盖 Button 基类的 nowrap：标题含章节名，窄屏必须允许换行。
  */
 export function NextChapterNav({ nextChapter, unlocked }: NextChapterNavProps) {
   const navigate = useNavigate();
@@ -31,12 +34,13 @@ export function NextChapterNav({ nextChapter, unlocked }: NextChapterNavProps) {
   }
 
   return (
-    <button
+    <Button
+      variant="default"
       onClick={() => navigate(`/theory/chapter/${nextChapter.id}`)}
-      className={`inline-flex min-h-11 items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity ${FOCUS_RING}`}
+      className="min-h-11 whitespace-normal"
     >
       {t('theory.bridge.nextChapterLabel', { title: resolveChapterTitle(t, nextChapter) })}
       <ArrowRight className="w-4 h-4" />
-    </button>
+    </Button>
   );
 }
