@@ -137,7 +137,8 @@ describe('BackLink 变体与无障碍基线', () => {
     renderWithRouter(<BackLink onClick={vi.fn()} label="退出" variant="button" />);
 
     const button = screen.getByRole('button', { name: '退出' });
-    expect(button.className).toContain('h-9');
+    expect(button.className).toContain('h-auto');
+    expect(button.className).toContain('px-3');
     expect(button.className).toContain('text-[var(--ivory-dim)]');
   });
 

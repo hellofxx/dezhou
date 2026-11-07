@@ -1067,7 +1067,10 @@ body::after {
    一级 .btn-brass：黄铜渐变 + --shadow-brass-btn + 1px 深黄铜边（每屏唯一主动作）
    二级 .btn-metal：深胡桃金属 + 黄铜字 + inset 高光（同组次动作 / 高风险动作）
    三级 .btn-quiet：透明底、无边，hover 仅中性提亮（取消 / 跳过 / 链接类）
-   :focus-visible 由全局黄铜 outline 统一接管，此处不另设。 */
+   :focus-visible 由全局黄铜 outline 统一接管，此处不另设。
+   V1：移入 @layer components，让 Button 的 size utilities 能覆盖这里的布局属性；
+   皮肤（渐变 / 边 / 阴影 / hover / active）仍由本层提供。 */
+@layer components {
 .btn-brass,
 .btn-metal,
 .btn-quiet {
@@ -1114,6 +1117,7 @@ body::after {
 .btn-quiet:hover { background: color-mix(in srgb, var(--ivory) 6%, transparent); color: var(--ivory); }
 .btn-quiet:active { background: color-mix(in srgb, var(--ivory) 10%, transparent); }
 .btn-quiet:disabled { opacity: 0.5; cursor: not-allowed; }
+}
 
 /* ---- Pill ---- */
 .pill {
