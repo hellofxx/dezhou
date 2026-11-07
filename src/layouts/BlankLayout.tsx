@@ -76,7 +76,7 @@ export default function BlankLayout() {
 
       {/* Content — 嵌入 OnboardingGate 门禁，覆盖全屏训练路由（P2A-01）；
           训练页名由壳层 h1 承担（视觉隐藏，供读屏器定位） */}
-      <main id="main-content" className="h-full">
+      <main id="main-content" className="h-full overflow-y-auto overflow-x-hidden">
         <h1 className="sr-only">{t('common.a11y.trainingPage')}</h1>
         <OnboardingGate>
           <Outlet />

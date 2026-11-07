@@ -405,11 +405,13 @@ body::after {
     );
 }
 
-/* Focus ring — brass, never the default blue */
+/* Focus ring — brass, never the default blue.
+   V1: 入 base 层，让组件的 focus:outline-none 能覆盖全局 outline，避免 outline + ring 双焦点环 */
+@layer base {
 *:focus-visible {
   outline: 2px solid var(--brass);
   outline-offset: 2px;
-  border-radius: 2px;
+}
 }
 
 /* Scrollbar — quiet, walnut-themed */
