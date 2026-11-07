@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, CheckCircle2, XCircle, Lock } from 'lucide-react';
+import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
 import { useAcademyStore, REQUIRED_ACCURACY } from '../store';
 import type { CertificationAttemptResult } from '../types';
@@ -306,15 +307,12 @@ export default function LevelCertification() {
 
         {showExplanation && (
           <div className="mt-5 flex justify-end">
-            <button
-              onClick={handleNext}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
-            >
+            <Button variant="default" onClick={handleNext}>
               {currentIndex < allQuestions.length - 1
                 ? t('academy.quiz.next')
                 : t('academy.quiz.viewResult')}
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         )}
       </div>

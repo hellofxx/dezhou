@@ -9,6 +9,7 @@ import { PokerCard } from '@/shared/components/poker/Card';
 import { PositionBadge } from '@/shared/components/poker/PositionBadge';
 import { Position } from '@/shared/types/position';
 import { stringToCard } from '@/shared/utils/deck';
+import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
 import { formatBB } from '@/shared/utils/formatters';
 import { Chip } from '@/shared/components/poker/Chip'; import { GradeIcon } from '@/shared/components/feedback/GradeIcon'; import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
@@ -957,14 +958,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
 
             {/* Next button */}
             <div className="flex justify-end mt-3">
-              <button
-                onClick={handleNext}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
-              >
+              <Button variant="default" onClick={handleNext}>
                 {currentIndex + 1 >= totalQuestions ? t('academy.drill.viewScore') : t('academy.drill.nextQuestion')}
                 <span className="text-xs opacity-60">{t('academy.drill.spaceHint')}</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           </motion.div>
         )}

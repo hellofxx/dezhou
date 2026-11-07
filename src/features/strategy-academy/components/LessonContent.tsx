@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
+import { Button } from '@/shared/components/ui/button';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import type { Lesson, PracticeResult } from '../types';
 import { ContentBlock } from './content';
@@ -203,13 +204,10 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
           {t('academy.lessonUnit.theoryOnly')}
         </div>
         <div className="mt-6 flex justify-end">
-          <button
-            onClick={onComplete}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
-          >
+          <Button variant="default" onClick={onComplete}>
             {t('academy.lessonUnit.completeLesson')}
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       </motion.div>
     );
@@ -283,13 +281,10 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
 
         {/* 顺序推进 CTA */}
         <div className="mt-6 flex justify-end">
-          <button
-            onClick={handleNext}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
-          >
+          <Button variant="default" onClick={handleNext}>
             {nextCtaLabel}
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

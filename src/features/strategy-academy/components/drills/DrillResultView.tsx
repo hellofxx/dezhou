@@ -2,7 +2,7 @@
 //
 // 收编 6 个 drill + PracticeDrill 结果页的公共骨架：
 //   Trophy → h3 标题（禁止 h1：结果页嵌在课程/训练视图内）→ 三张统计卡（正确率 / 用时 / 正确题数）
-//   → 附加插槽 → 平铺黄铜主 CTA。
+//   → 附加插槽 → 金属渐变主 CTA（`Button variant="default"`，DESIGN.md §5.5 每屏唯一主动作）。
 //
 // 差异全部用插槽表达，不做 `mode='pressure'` 之类的模式爆炸（计划 P6）：
 // - `note`：标题下的口径说明（OpponentDrill 的「两问全对才计为答对」）
@@ -12,7 +12,7 @@
 //
 // 视觉保持收编前原样：StatCard `size="xl" surface="solid"` 对应原「walnut-raised 实底 + text-3xl」卡；
 // 统计卡外层 div 只为测试提供 `data-testid`（StatCard 不透传 data-*，且不得为此改 shared）。
-// CTA 用 `Button variant="quiet"` + 临时平铺覆盖，V1 视觉批次再改为金属渐变 `default`。
+// CTA 用金属族 `Button variant="default"`（V1 视觉批次已收口，原平铺覆盖已删除）。
 //
 // 归属：单模块（strategy-academy drills）消费，按 P3/P12 留在 feature 内，不进 shared。
 
@@ -49,13 +49,6 @@ export interface DrillResultViewProps {
   /** PracticeDrill 的入场 motion 包裹；默认无 motion */
   animated?: boolean;
 }
-
-/**
- * 平铺黄铜主 CTA：quiet 变体 + 临时平铺覆盖（背景 / 字色 / hover 全部抵消 quiet 的 hover 语义）。
- * V1 视觉批次改为 `Button variant="default"` 后删除本常量。
- */
-const FLAT_CTA_CLASS =
-  'px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm transition-opacity hover:opacity-90 hover:bg-[var(--brass-fill)] hover:text-[var(--brass-fill-ink)]';
 
 export function DrillResultView({
   correct,
@@ -138,7 +131,7 @@ export function DrillResultView({
       {children}
 
       {ctaLabelKey && onFinish ? (
-        <Button variant="quiet" onClick={onFinish} className={FLAT_CTA_CLASS}>
+        <Button variant="default" onClick={onFinish}>
           {t(ctaLabelKey)}
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </Button>

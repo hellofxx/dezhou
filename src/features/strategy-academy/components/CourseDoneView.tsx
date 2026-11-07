@@ -6,6 +6,7 @@
  */
 import { CheckCircle2, Home, ArrowRight, RotateCcw, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/shared/components/ui/button';
 import { resolveTrackName, resolveTrackDescription, resolveTrackDuration } from '../utils/titleKeys';
 import TheoryBridgeCard from './TheoryBridgeCard';
 import type { DrillResult } from './drills/types';
@@ -110,10 +111,7 @@ export default function CourseDoneView({
             {t('academy.courseView.restartLesson', { defaultValue: '重学本课' })}
           </button>
           {nextLesson && (
-            <button
-              onClick={onNext}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity max-w-full"
-            >
+            <Button variant="default" onClick={onNext} className="max-w-full">
               <span className="truncate min-w-0 max-w-[10rem] sm:max-w-[14rem]">
                 {t('academy.courseView.nextLesson', {
                   defaultValue: '下一课：{{title}}',
@@ -121,7 +119,7 @@ export default function CourseDoneView({
                 })}
               </span>
               <ArrowRight className="w-4 h-4 shrink-0" />
-            </button>
+            </Button>
           )}
         </div>
       </div>

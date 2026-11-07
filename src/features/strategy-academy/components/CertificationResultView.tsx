@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, BookOpen, RotateCcw, Trophy } from 'lucide-react';
+import { Button } from '@/shared/components/ui/button';
 import type { CertificationAttemptResult } from '../types';
 import { formatRemainingTime } from '../utils/certificationStatus';
 
@@ -129,13 +130,10 @@ export function CertificationResultView({
             {t('academy.levelCertification.backToAcademy')}
           </button>
           {canRetry && (
-            <button
-              onClick={onRetry}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
-            >
+            <Button variant="default" onClick={onRetry}>
               <RotateCcw className="w-4 h-4" />
               {t('academy.levelCertification.retry')}
-            </button>
+            </Button>
           )}
         </div>
       </motion.div>

@@ -6,7 +6,8 @@ import { DrillResultView } from './DrillResultView';
  * DrillResultView 契约（strategy-academy drills 结果页 feature-local 模板）：
  * - 标题必须落在 h3（结果页嵌在课程 / 训练视图内，页面 h1 归整页视图），并渲染 Trophy
  * - 三张 `StatCard`（正确率 / 用时 / 正确题数）承载原统计卡，data-testid 供消费方测试定位
- * - `ctaLabelKey` + `onFinish` 同时提供才渲染主 CTA（PracticeDrill 结果页无主按钮）
+ * - `ctaLabelKey` + `onFinish` 同时提供才渲染主 CTA（PracticeDrill 结果页无主按钮），
+ *   主 CTA 走金属族 `Button variant="default"`（V1 收口，平铺黄铜覆盖已删除）
  * - `note` / `extraStats` / `children` 三个插槽按序渲染（差异不做 mode 分支）
  * - `animated` 只包一层入场 motion，不吞内容
  */
@@ -49,6 +50,13 @@ describe('DrillResultView：结果骨架', () => {
 
     fireEvent.click(screen.getByRole('button', { name: '完成训练' }));
     expect(onFinish).toHaveBeenCalledTimes(1);
+  });
+
+  it('主 CTA 走金属族 Button default（btn-brass），不再使用平铺黄铜覆盖', () => {
+    render(<DrillResultView {...baseProps} onFinish={() => {}} />);
+    const cta = screen.getByRole('button', { name: '完成训练' });
+    expect(cta.className).toContain('btn-brass');
+    expect(cta.className).not.toContain('bg-[var(--brass-fill)]');
   });
 
   it('total 为 0 时正确率归零，不产生 NaN', () => {
