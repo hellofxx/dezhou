@@ -35,8 +35,8 @@ export interface AcademyBridgeCardProps {
  * felt-deep 底 + 黄铜 30% 描边，条目行 felt 底 + walnut 描边，CTA 走 --brass-fill。
  * 整卡只有一个高亮主按钮：条目行是等权目的地，CTA 才是主动作。
  *
- * 交互状态由 `Button` 接管（quiet 语义）；结构批次用 className 保留原尺寸与配色，
- * CTA 的黄铜平铺底是临时覆盖，V1 统一为 `variant="default"` 金属件后删除。
+ * 交互状态由 `Button` 接管（行项 quiet 语义）；CTA 已统一为 `variant="default"`
+ * 金属件（V1），只保留布局类。
  */
 export function AcademyBridgeCard({
   title,
@@ -94,11 +94,11 @@ export function AcademyBridgeCard({
       {cta ? (
         <Button
           type="button"
-          variant="quiet"
+          variant="default"
           onClick={() => onNavigate(cta.route)}
           aria-label={cta.label}
           className={cn(
-            'flex h-auto w-full min-h-11 items-center justify-start gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2.5 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:bg-[var(--brass-fill)] hover:text-[var(--brass-fill-ink)] hover:opacity-90',
+            'flex h-auto w-full min-h-11 items-center justify-start gap-2 rounded-lg px-4 py-2.5 text-sm',
             hasItems || subtitle ? 'mt-2' : 'mt-4'
           )}
         >

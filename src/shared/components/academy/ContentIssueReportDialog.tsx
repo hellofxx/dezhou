@@ -133,9 +133,9 @@ export function ContentIssueReportDialog({
         <DialogFooter className="gap-2 flex-wrap sm:gap-2">
           <Button
             type="button"
-            variant="quiet"
+            variant="default"
             onClick={handleCopy}
-            className="inline-flex h-auto min-h-11 items-center justify-start gap-2 rounded-lg bg-[var(--brass-fill)] px-4 py-2 text-sm font-semibold text-[var(--brass-fill-ink)] transition-opacity hover:bg-[var(--brass-fill)] hover:text-[var(--brass-fill-ink)] hover:opacity-90"
+            className="inline-flex h-auto min-h-11 items-center justify-start gap-2 rounded-lg px-4 py-2 text-sm"
           >
             {labels.copy}
           </Button>

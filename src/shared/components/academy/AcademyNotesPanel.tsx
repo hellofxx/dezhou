@@ -42,8 +42,8 @@ export interface AcademyNotesPanelProps {
  *
  * 纯受控展示：不读 store、不 toast、不做持久化；草稿状态与写入路径由调用方持有。
  * 不做任何门禁 / 掌握度联动（笔记是阅读辅助，不参与进度判定）。
- * 字段与按钮交互状态由 `Textarea` / `Button` 接管；保存按钮的黄铜平铺底是临时覆盖，
- * V1 统一为 `variant="default"` 金属件后删除。
+ * 字段与按钮交互状态由 `Textarea` / `Button` 接管；保存按钮已统一为
+ * `variant="default"` 金属件（V1），只保留布局类。
  */
 export function AcademyNotesPanel({
   value,
@@ -97,10 +97,10 @@ export function AcademyNotesPanel({
           ) : null}
           <Button
             type="button"
-            variant="quiet"
+            variant="default"
             onClick={onSave}
             disabled={!canSave}
-            className="inline-flex h-auto min-h-11 items-center justify-start gap-1.5 rounded-md bg-[var(--brass-fill)] px-3 py-1.5 text-xs font-semibold text-[var(--brass-fill-ink)] [&_svg]:size-3.5 transition-opacity hover:bg-[var(--brass-fill)] hover:text-[var(--brass-fill-ink)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex h-auto min-h-11 items-center justify-start gap-1.5 rounded-md px-3 py-1.5 text-xs [&_svg]:size-3.5 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Save className="w-3.5 h-3.5" aria-hidden="true" />
             {labels.save}
