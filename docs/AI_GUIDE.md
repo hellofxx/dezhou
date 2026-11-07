@@ -123,7 +123,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - **设计契约权威源**：`DESIGN.md`（以其当前版本为准）；组件视觉、布局、动效与可访问性决策均以其为准。
 - **复用阶梯 / 第三份规则**：已有 primitive/variant → 组合件 → feature-local 模板 → shared 组件 → 内联；同一 UI 模式出现第 3 份拷贝时必须抽模板或 shared variant，禁止继续复制。
 - **共享交互基础件**：shared 组件组合 `ui/Button` / `Input` / `Textarea` / `Dialog` / `Progress`，禁止裸交互控件（特化 allowlist 见 `src/guards/sharedPrimitiveUsage.guard.test.ts`）；焦点环走 `ui/focusRing.ts` 的 `FOCUS_RING` / `FOCUS_RING_VISIBLE`；section 标题走 `layout/SectionLabel`。
-- **Button 变体**：`default` / `secondary` 金属族保持不变；`quiet` / `link` 为结构批次新增；`ghost` / `outline` / `destructive` 与金属渐变 CTA 的视觉统一在 V1，不在结构批次改变观感。
+- **Button 变体**：`default` / `secondary` 金属族；`quiet` / `link` 为结构变体。V1 已完成：`.btn-*` 入 `@layer components`、平铺主 CTA → 金属渐变、`ghost` / `outline` / `destructive` 统一收口；新增主 CTA 直接用 `Button variant="default"`，禁止再写平铺黄铜。
 - **重复字面量棘轮**：`src/guards/duplicateLiteralRatchet.guard.test.ts` 监控 focus ring / section label / 平铺主 CTA / stat box，只降不升；低于基线时同步下调常量。
 
 ## 跨模块复用契约

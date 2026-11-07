@@ -42,7 +42,7 @@ src/shared/
 ### 关键文件
 
 - `components/academy/`（7 个共享组件 + 内容块）：`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `ContentBlocks`（`LabeledBlock` / `AsciiMonoText` / `FormulaBlock`）；`index.ts` 汇总全部公开导出
-- `components/ui/`：`Button`（default/secondary 金属族 + quiet/link 结构变体）、`Input`、`Textarea`、`Progress`（Radix 单源）、`Dialog` / `Select` / `Toast` / `Tooltip`；`focusRing.ts` 导出 `FOCUS_RING` / `FOCUS_RING_VISIBLE` / `BUTTON_FOCUS_RING`
+- `components/ui/`：`Button`（default/secondary 金属族 + quiet/link 结构变体）、`Input`、`Textarea`、`Progress`（Radix 单源）、`Dialog` / `Select` / `Toast` / `Tooltip`；`focusRing.ts` 导出 `FOCUS_RING` / `FOCUS_RING_VISIBLE`
 - `components/data-display/`：`ProgressBar`（`ui/progress` 薄包装，值钳制 + `size` / `indicatorClassName`）、`ProgressRing`（环形进度，`valueMax` / `variant` / `center` / `ariaLabel`，具名导出）、`StatCard`（统计卡，`size`（含 `xl`）/ `layout` / `surface`（含 `solid`）/ `accent` / `className` / `contentClassName` / `label: ReactNode`）、`StatPair`（`<dl>` 成对指标）
 - `components/feedback/`：`ResultHeader`（结果页标题，`headingLevel` 决定 h1/h2，可挂 `ring` 槽）、`ResultActions`（结果页动作组，`row` / `stack`）、`DecisionAnalysis`（五级反馈渲染，相关课程路由由 `onRelatedLessonOpen` 注入）、`MobileFeedbackSheet`（移动端底部反馈 Sheet）、`RelatedLessonChip`（纯展示 chip，`onOpen(lessonId)`，shared 不拼路由）、`GradeIcon` / `ComparisonView` / `EmptyState` / `LoadingState` / `TryAgainButton`
 - `components/poker/`：牌面与变体可视化（`VariantToggle` 归此域，不再游离根目录）
@@ -61,11 +61,11 @@ src/shared/
 - 不新增其他目录级 barrel / `index.ts`（`utils/index.ts` 已删除，勿恢复）；`types` 也不做汇总 barrel
 - shared 内部引用用相对路径（同层工具间），跨层用 `@/shared/*` 别名
 
-## 组件基础件契约（2026-11 结构批次）
+## 组件基础件契约（2026-11）
 
 - **Dogfooding**：`components/academy/**`、`data-display/**`、`layout/**`、`feedback/**` 的交互控件必须组合 `ui/Button` / `ui/Input` / `ui/Textarea` / `ui/Dialog` / `ui/Progress`；禁止手写 `<button>/<input>/<textarea>/<select>` 及等价样式。特化例外以 `src/guards/sharedPrimitiveUsage.guard.test.ts` 的逐文件 allowlist 为准（扑克可视化、QuizCard 动作按钮、BackLink、RelatedLessonChip、ErrorBoundary、内容纠错原生 checkbox）。
-- **焦点环单源**：业务组件使用 `FOCUS_RING`（多数派）或 `FOCUS_RING_VISIBLE`（BackLink 等既有语义），不得再复制 `focus-visible:ring-2 ...` 字面量；`BUTTON_FOCUS_RING` 仅由 Button 基类消费，视觉统一留给 V1。
-- **Button 变体**：`default` / `secondary` 保持金属族；新增 `quiet` / `link` 供 shared 组件使用；`ghost` / `outline` / `destructive` 的视觉收口在 V1，不得在结构批次改观感。
+- **焦点环单源**：业务组件使用 `FOCUS_RING`（多数派）或 `FOCUS_RING_VISIBLE`（BackLink 等既有语义）；Button / Input / Select / Dialog 也统一使用 `FOCUS_RING`，不得再复制 `focus-visible:ring-2 ...` 字面量。
+- **Button 变体**：`default` / `secondary` 保持金属族；`quiet` / `link` 为结构变体；V1 已完成 `ghost` → `.btn-quiet`、`outline` 透明胡桃描边、`destructive` danger 底/字收口。金属族 CSS 已入 `@layer components`，size 由 Button cva 管理。
 - **SectionLabel**：section / panel 标题统一使用 `layout/SectionLabel`（`as` / `icon` / `count` / `id` / `className`）；10px eyebrow、tab、不同语义标题保留本地。
 - **ProgressBar / StatCard**：`ProgressBar` 只做 `ui/progress` 薄包装（钳制 + size/indicatorClassName），不得另写进度 ARIA；`StatCard` 的 `xl` / `solid` / `className` / `contentClassName` 用于结果卡，不得在 feature 内复制 stat box 视觉。
 - **动作按钮例外**：range QuizCard 的平权 Fold/Call/Raise、PracticeDrill 的 `.action-mini.act-*`、Puzzle ActionBoard 的 tier 三套语义保持特化，禁止合并为单一 ActionButton；新增第四套前先更新 `src/guards/actionTierPalette.guard.test.ts` 与本文。
