@@ -1,6 +1,6 @@
 # GitHub Pages 部署检查清单
 
-> 状态：Current · 最后复核：2026-11-04
+> 状态：Current · 最后复核：2026-11-07
 > 适用：GitHub Pages 项目页 `/dezhou/` 子路径。流水线定义以 `.github/workflows/deploy.yml` 与 `.github/workflows/ci.yml` 为准。
 
 ## 1. 触发与门禁
@@ -32,7 +32,8 @@ pnpm size:check
 - [ ] 深层路由刷新不 404（例如 `/dezhou/academy/lesson/<id>`）。
 - [ ] Network 面板无 JS / CSS / 字体 / 图标 404。
 - [ ] 中英文切换正常，无原始 i18n key。
-- [ ] Service Worker 更新后，硬刷新或清缓存可加载新版本。
+- [ ] Service Worker 更新生效方式：关闭该站点所有标签页后重新打开即加载新版本，无需硬刷新或清缓存（新 SW 等待旧标签页全部关闭后才激活）。
+- [ ] 离线未访问路由验证：首次打开完成预缓存后，DevTools Network 切 Offline，直接访问未访问过的路由（如 `/dezhou/help` 与一条课程深链）正常渲染。
 
 ## 4. 回滚
 

@@ -2,9 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
+import { swPrecachePlugin } from './scripts/sw-precache-plugin.ts'
 
 // pnpm 虚拟目录名会带 peer 名（Linux 上如 recharts@3.9.2_react-dom@19.2.7_...），
-// 用 id.includes('react-dom') 会把带 react-dom peer 的包整包并入首屏 chunk。
+// 用 id.includes('react-dom') 会把带 peer 名的包整包并入首屏 chunk。
 // 只认最后一个 node_modules/ 后的真实包目录名。
 function isPackage(id: string, name: string): boolean {
   const normalized = id.replace(/\\/g, '/')
@@ -16,7 +17,7 @@ function isPackage(id: string, name: string): boolean {
 export default defineConfig({
   // GitHub Pages 项目页部署在 /dezhou/ 子路径下，必须设置 base，否则资源 404
   base: '/dezhou/',
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), swPrecachePlugin()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

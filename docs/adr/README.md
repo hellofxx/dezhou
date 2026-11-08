@@ -1,6 +1,6 @@
 # 架构决策记录（ADR）
 
-> 状态：Current · 最后复核：2026-11-04
+> 状态：Current · 最后复核：2026-11-07
 > ADR 记录「为什么这样设计」，不替代 PRD / TDD。状态：Proposed / Accepted / Superseded / Deprecated。
 
 ## 索引
@@ -10,6 +10,7 @@
 | [ADR-0001](./0001-pure-frontend-local-first.md) | 纯前端、零后端、本地优先 | Accepted |
 | [ADR-0002](./0002-feature-first-module-boundaries.md) | Feature-first + 单向跨模块边界 | Accepted |
 | [ADR-0003](./0003-progress-single-hub.md) | progress store 单中枢，不拆分持久化写路径 | Accepted |
+| [ADR-0004](./0004-sw-precache-and-retention.md) | Service Worker 全量预缓存与「当前 + 上一版」保留策略 | Accepted |
 
 ## 什么时候写 ADR
 

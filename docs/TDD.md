@@ -1979,11 +1979,14 @@ pnpm build    # tsc -b && vite build
 
 ### 12.2 PWA Service Worker 缓存策略
 
-`public/sw.js` 实现离线缓存：
-- `manifest.json` 声明 PWA 元数据（名称、图标、主题色）
-- `display: standalone` 模式，安装后全屏运行
-- 缓存版本号通过 SW 注册 URL 查询参数 `v` 传入（`APP_VERSION` 常量，由 `main.tsx` 在注册时动态注入），`activate` 事件自动清理旧版本缓存
-- Service Worker 拦截请求，优先返回缓存资源
+`public/sw.js` 是模板，构建期由 `scripts/sw-precache-plugin.ts`（自研 Vite 插件，零新依赖）在 `generateBundle`（post 顺序，确保收齐 index.html / CSS）收集全部构建产物与 public 文件，注入全量预缓存清单与清单 hash 后 emitFile 产出 `dist/sw.js`（决策与已接受代价见 `docs/adr/0004-sw-precache-and-retention.md`）：
+- `manifest.json` 声明 PWA 元数据（名称、图标、主题色）；`display: standalone` 模式，安装后全屏运行
+- 全量预缓存：install 时 shell 三件套以 `cache:'reload'` 强制拉新，其余清单按 32 条/批串行 `addAll`，失败重试一次后抛出（不容忍 404）；首次打开后全部路由离线可用
+- 缓存名为 `poker-training-<版本号>-<清单hash>`：版本号经 SW 注册 URL 查询参数 `v` 传入（`APP_VERSION` 常量，由 `main.tsx` 在注册时动态注入）；清单 hash 为排序去重清单 JSON 的 sha256 前 8 位，同版本重部署也会更换缓存名
+- 更新与保留：新 SW 不跳过等待、不立即接管，旧标签页全部关闭后才激活；activate 经 `poker-training-meta` 缓存记录上一版，仅保留当前 + 上一版 + meta，删除其余 `poker-training-*` 缓存，杜绝部署后旧标签页懒加载 chunk 失败
+- fetch 三规则：导航 network-first（仅 `response.ok` 回写 shell 缓存，离线回退缓存首页）；`assets/` 哈希资产 cache-first（匹配 `ignoreVary`：模块请求带 Origin 头而预缓存请求没有，兼容服务器 `Vary: Origin`）；其余同源 GET network-first 不缓存
+- dev 直接服务模板：占位符降级为空清单 + `dev` hash，不污染生产缓存
+- 守卫：`src/guards/swPrecache.guard.test.ts`（模板不变式 / 注入确定性 / 插件钩子 / 接线与扫描面自检）
 
 ### 12.3 推荐部署平台
 

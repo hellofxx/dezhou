@@ -83,7 +83,7 @@ src/
 
 - 页面必须 `React.lazy()` + `<LazyWrapper>`；`lazyPage` 用 `Promise.all([loader(), preloadI18n(keys)])` 并行加载页面与 i18n。
 - 布局：`AppLayout`（主导航 + OnboardingGate）/ `BlankLayout`（无导航）；<768px 显示 `MobileNav`。
-- 分包规则以 `vite.config.ts` 的 `manualChunks` 为准；Service Worker 以 `public/sw.js` 为准；路由 `basename` 使用 `import.meta.env.BASE_URL`。
+- 分包规则以 `vite.config.ts` 的 `manualChunks` 为准；Service Worker 以 `public/sw.js` 模板 + 构建期注入的全量预缓存清单与 hash 为准（`scripts/sw-precache-plugin.ts`，决策记录见 `docs/adr/0004-sw-precache-and-retention.md`）；路由 `basename` 使用 `import.meta.env.BASE_URL`。
 
 ## 跨模块复用契约（摘要）
 

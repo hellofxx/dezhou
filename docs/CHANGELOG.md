@@ -1,6 +1,6 @@
 # 变更日志（CHANGELOG）
 
-> 状态：Historical · 最后复核：2026-11-06
+> 状态：Historical · 最后复核：2026-11-07
 > 本文件归档德州扑克训练平台的版本演进，仅保留当月变更（跨月后归档）。
 > 历史月份存档位于 `docs/changelog/` 目录下，文件名为 `YYYY-MM.md`。
 > PRD.md 与 TDD.md 仅保留当前规格，执行历史统一汇集于此。
@@ -9,6 +9,14 @@
 ---
 
 ## [Unreleased] - 2026-11-04
+
+### 2026-11-07 Service Worker 全量预缓存与部署竞态消除（P0-1）
+
+- **预缓存插件**：新增 `scripts/sw-precache-plugin.ts`（自研 Vite 插件，零新依赖）——`renderSwSource` 纯函数（去重排序 → sha256 前 8 位 → 替换两个占位符）+ `swPrecachePlugin`（`apply:build`，`generateBundle` post 钩子收集全部 bundle 资产与 public 文件，注入清单与 hash 后 emitFile 覆盖 `dist/sw.js`）；`vite.config.ts` 接线。
+- **SW 模板重写**：`public/sw.js` install 改 shell `cache:reload` + 清单 32/批 `addAll`（失败重试一次再抛出，不容忍 404）；去掉跳过等待与立即接管，activate 经 `poker-training-meta` 记录上一版、保留当前 + 上一版 + meta 并删除其余 `poker-training-*`；缓存名含清单 hash（`poker-training-<版本>-<hash>`，同版本重部署也换名）；导航仅 `response.ok` 回写 shell；资产匹配 `ignoreVary`（模块请求带 Origin 头而预缓存请求没有，兼容服务器 `Vary: Origin`，浏览器实测发现的离线 miss 修复）；fetch 三规则与 BASE 推导保留；dev 占位符降级空清单 + `dev` hash。
+- **守卫**：新增 `src/guards/swPrecache.guard.test.ts`（模板不变式 / renderSwSource 确定性与注入 / 假 bundle 插件钩子 / vite.config 接线 + 扫描面自检），登记 `src/guards/README.md`（testSystem 双向校验）。
+- **文档**：新增 ADR-0004（Accepted，记录约 7MB 安装期下载、新版生效延迟至标签页全关闭、旧标签页在线刷新后断网懒加载缺口三项已接受代价）并登记 adr 索引；同步 AGENTS §路由构建与离线、TDD §12.2、PRD 5.20.2 与 6.6、DEPLOY_CHECKLIST §3（生效方式 + 离线未访问路由验证项）。
+- **验证**：`pnpm verify` 全绿；`pnpm build` 产出 `dist/sw.js` 无占位符残留、含全量清单（数百条）与 8 位 hash；`pnpm size:check` 通过（根目录 sw.js 不计入首屏体积门禁）。浏览器离线与部署竞态实测由编排者执行。
 
 ### 2026-11-06 共享层结构收口（准入守卫 · 语义目录 · 装配复用）
 

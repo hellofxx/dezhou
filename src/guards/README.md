@@ -27,6 +27,7 @@
 | `sharedPrimitiveUsage.guard.test.ts` | shared 组件只使用 ui 基础件：除 allowlist 特化交互（扑克可视化、QuizCard 动作按钮、BackLink、RelatedLessonChip、ErrorBoundary、内容纠错原生 checkbox）外，无裸 `<button>/<input>/<textarea>/<select>`；扫描面 ≥30 文件自检，allowlist 条目失效即红 | `pnpm test src/guards/sharedPrimitiveUsage.guard.test.ts` |
 | `duplicateLiteralRatchet.guard.test.ts` | 重复样式字面量只降不升：focus ring 2（`ui/focusRing.ts` 单源）、section label 1（`layout/SectionLabel.tsx` 单源）、平铺主 CTA 0、结果卡 stat box 1（pot-odds 性能评语块同 chrome，非统计卡）；低于基线必须同步下调常量，禁止放宽 | `pnpm test src/guards/duplicateLiteralRatchet.guard.test.ts` |
 | `cssLineCountGuard.test.ts` | `src/styles/*.css` 平铺扫描：单文件 ≤800 行（`globals.css` 按 allowlist 当前行数锁定，Phase 2 拆分前临时豁免）；CSS 总行数自检防路径失效空跑 | `pnpm test src/guards/cssLineCountGuard.test.ts` |
+| `swPrecache.guard.test.ts` | SW 全量预缓存契约（ADR-0004）：`public/sw.js` 模板两占位符各一次、无「跳过等待 / 立即接管」调用（部署竞态回归锁）、meta 缓存在清理排除条件、fetch 三规则与导航 `response.ok`、资产匹配 `ignoreVary`（Vary: Origin 兼容）；`renderSwSource` 注入无残留 / hash = sha256 前 8 位 / 乱序重复输入稳定；插件 generateBundle(post) 排除 .map 与 sw.js、base 前缀、public 文件补入清单；vite.config 接线；扫描面自检（模板 ≥80 行 / 假 bundle ≥5 key / public ≥4 文件） | `pnpm test src/guards/swPrecache.guard.test.ts` |
 | `testSystem.guard.test.ts` | 测试体系自身不变式：无 focused / skipped / todo / expected-failure 标记；测试文件只用 `.test.ts(x)` 且不在 `__tests__/`；含 `describe`/`it` 声明的非测试文件（不会被收集）为零；每个 feature 至少一个测试；每个 persist store 有 `<store>.persist-shape.test.ts`（version > 1 还需 `<store>.migrate.test.ts`）；`src/guards` 文件与 README 双向一致；扫描面自检 | `pnpm test src/guards/testSystem.guard.test.ts` |
 
 ## 约定
