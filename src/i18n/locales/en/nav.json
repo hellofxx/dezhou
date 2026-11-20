@@ -24,6 +24,7 @@
   "appSubtitle": "Texas Hold'em Training Platform",
   "playerDefault": "Player",
   "toggleLanguage": "Toggle language",
+  "updatedAt": "Updated {{time}}",
   "expandSidebar": "Expand sidebar",
   "collapseSidebar": "Collapse sidebar",
   "sidebarNavAria": "Main navigation",

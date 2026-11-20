@@ -2,7 +2,20 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
+import { readFileSync } from 'node:fs'
 import { swPrecachePlugin } from './scripts/sw-precache-plugin.ts'
+import { resolveAppVersion } from './src/shared/constants/app'
+
+// 版本号 = package.json 语义版本 + 部署序号（GitHub Actions 每次部署 +1，不回写仓库）；
+// 本地构建无 GITHUB_RUN_NUMBER → 保持基础版本。更新时间取构建时刻，展示时本地化。
+const pkg = JSON.parse(
+  readFileSync(new URL('./package.json', import.meta.url), 'utf8')
+) as { version: string }
+const deploySequence = Number.parseInt(process.env.GITHUB_RUN_NUMBER ?? '', 10)
+const appBuildInfo = {
+  version: resolveAppVersion(pkg.version, Number.isNaN(deploySequence) ? 0 : deploySequence),
+  builtAt: new Date().toISOString(),
+}
 
 // pnpm 虚拟目录名会带 peer 名（Linux 上如 recharts@3.9.2_react-dom@19.2.7_...），
 // 用 id.includes('react-dom') 会把带 peer 名的包整包并入首屏 chunk。
@@ -17,6 +30,9 @@ function isPackage(id: string, name: string): boolean {
 export default defineConfig({
   // GitHub Pages 项目页部署在 /dezhou/ 子路径下，必须设置 base，否则资源 404
   base: '/dezhou/',
+  define: {
+    __APP_BUILD_INFO__: JSON.stringify(appBuildInfo),
+  },
   plugins: [react(), tailwindcss(), swPrecachePlugin()],
   resolve: {
     alias: {

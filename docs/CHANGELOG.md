@@ -10,6 +10,12 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-20 构建版本自动递增 · 侧边栏更新时间
+
+- **版本注入**：`vite.config.ts` 通过 `define` 注入 `__APP_BUILD_INFO__`——版本 = `package.json` 语义版本 + `GITHUB_RUN_NUMBER`（部署 workflow 每次运行 patch +1，不回写仓库；本地保持基础版本），同时记录构建时刻；`package.json` 版本对齐产品 `0.1.0`。
+- **展示**：`AppLayout` 侧边栏版本行显示 `vX.Y.Z · 更新于 <本地化时间>`（折叠态以 title 提示）；测试 / 未注入环境回退 `0.0.0-dev` 且隐藏时间。
+- **测试**：新增 `shared/constants/app.test.ts`（版本递增 / 非法输入 / 时间格式化 / 回退）与 AppLayout 版本行断言。
+
 ### 2026-11-20 学院阅读页双栏 · 学习导轨（理论章节 / 策略课时）
 
 - **共享骨架**：新增 `AcademyReadingPlane`（`shared/components/academy`）——主阅读列保持 768px 上限，xl 起右侧 264px sticky 学习导轨，`<xl` 回落居中单栏；补 `index.ts` 导出并在 AGENTS / AI_GUIDE / TDD / shared AGENTS / DESIGN §6.5 登记。

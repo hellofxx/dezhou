@@ -1987,6 +1987,8 @@ pnpm build    # tsc -b && vite build
 - `assets/` — JS chunks、CSS、字体
 - 所有资源路径为绝对路径，可部署到任意静态服务器
 
+**构建版本信息**：`vite.config.ts` 以 `define` 注入 `__APP_BUILD_INFO__`（`version` / `builtAt`）。`version` = `package.json` 语义版本 + 部署序号（GitHub Actions 的 `GITHUB_RUN_NUMBER`，每次部署 patch +1，不回写仓库；本地构建无该变量时保持基础版本）；`builtAt` 为构建时刻。`src/shared/constants/app.ts` 消费该信息导出 `APP_VERSION` / `APP_BUILD_TIME`，侧边栏版本行展示 `vX.Y.Z · 更新于 <本地化时间>`，SW 注册的 `?v=` 亦取同一版本。
+
 ### 12.2 PWA Service Worker 缓存策略
 
 `public/sw.js` 是模板，构建期由 `scripts/sw-precache-plugin.ts`（自研 Vite 插件，零新依赖）在 `generateBundle`（post 顺序，确保收齐 index.html / CSS）收集全部构建产物与 public 文件，注入全量预缓存清单与清单 hash 后 emitFile 产出 `dist/sw.js`（决策与已接受代价见 `docs/adr/0004-sw-precache-and-retention.md`）：

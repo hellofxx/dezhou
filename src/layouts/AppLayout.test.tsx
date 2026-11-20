@@ -56,6 +56,13 @@ describe('AppLayout', () => {
     expect(sidebarNav()).toBeTruthy();
   });
 
+  it('侧边栏版本行展示应用版本，测试环境不渲染更新时间', () => {
+    renderLayout();
+
+    expect(screen.getByText(/^v\d+\.\d+\.\d+/)).toBeTruthy();
+    expect(screen.queryByText(/更新于/)).toBeNull();
+  });
+
   it('仪表盘置顶 + 四个分组序号与标题', () => {
     renderLayout();
     const nav = sidebarNav();
