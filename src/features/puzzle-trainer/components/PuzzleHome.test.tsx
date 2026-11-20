@@ -3,7 +3,7 @@
  *
  * 契约：
  *  - Hero 三态 CTA（未完成 → 开始今日谜题 / 已完成 → 查看今日谜题 + 今日已完成 + 最佳正确率）；
- *  - 三大模式卡片跳转路径（Rush 默认 3 分钟、5 min 直达按钮不冒泡触发卡片跳转）；
+ *  - 三大模式卡片为语义链接（href 直达、键盘可达；Rush 子按钮独立于链接外，无交互嵌套）；
  *  - Best Record 展示（Rush 最高分 / Daily 正确率 / 主题最佳正确率与 dots）；
  *  - 主题列表按 4 大类分组渲染全部 10 个主题。
  */
@@ -133,31 +133,36 @@ describe('PuzzleHome 谜题首页', () => {
     expect(text()).not.toContain('最佳正确率');
   });
 
-  it('点击 Rush 卡片跳转 3 分钟默认时长', () => {
+  const linkIn = (needle: string): HTMLAnchorElement => {
+    const card = cardByText(needle);
+    const link = card.matches('a[href]')
+      ? (card as HTMLAnchorElement)
+      : card.querySelector<HTMLAnchorElement>('a[href]');
+    if (!link) throw new Error(`卡片缺少语义链接：${needle}`);
+    return link;
+  };
+
+  it('三大模式卡均为语义链接，Rush 卡直达 3 分钟默认时长', () => {
     render();
-    click(cardByText('限时冲刺'));
-    expect(navigateMock).toHaveBeenCalledWith('/puzzle/rush?duration=3');
+    expect(linkIn('限时冲刺').getAttribute('href')).toBe('/puzzle/rush?duration=3');
+    expect(linkIn('每日谜题').getAttribute('href')).toBe('/puzzle/daily');
+    expect(linkIn('Theme Drill').getAttribute('href')).toBe(`/puzzle/theme/${PUZZLE_THEMES[0]?.id}`);
+    // 每张模式卡都由 <a href> 承载跳转，不再是可点击 div
+    for (const card of container.querySelectorAll<HTMLElement>('.puzzle-card')) {
+      expect(card.tagName === 'A' || card.querySelector('a[href]') !== null).toBe(true);
+    }
   });
 
-  it('点击 5 min 按钮直达 5 分钟且不冒泡触发卡片跳转', () => {
+  it('5 min 子按钮独立于卡片链接（无交互嵌套），点击直达 5 分钟', () => {
     render();
+    expect(cardByText('限时冲刺').querySelector('a button')).toBeNull();
     click(buttonByText('5 min'));
     expect(navigateMock).toHaveBeenCalledTimes(1);
     expect(navigateMock).toHaveBeenCalledWith('/puzzle/rush?duration=5');
   });
 
-  it('点击每日谜题卡片进入 /puzzle/daily', () => {
+  it('主题卡片进入对应主题路由', () => {
     render();
-    click(cardByText('每日谜题'));
-    expect(navigateMock).toHaveBeenCalledWith('/puzzle/daily');
-  });
-
-  it('点击主题训练卡片进入首个主题，主题卡片进入对应主题路由', () => {
-    render();
-    click(cardByText('Theme Drill'));
-    expect(navigateMock).toHaveBeenCalledWith(`/puzzle/theme/${PUZZLE_THEMES[0]?.id}`);
-
-    navigateMock.mockClear();
     const firstThemeCard = container.querySelector<HTMLElement>('.theme-card');
     click(firstThemeCard);
     expect(navigateMock).toHaveBeenCalledWith(`/puzzle/theme/${PUZZLE_THEMES[0]?.id}`);
