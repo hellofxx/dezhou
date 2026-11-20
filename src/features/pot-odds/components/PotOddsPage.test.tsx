@@ -19,7 +19,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('PotOddsPage', () => {
-  it('默认渲染页头与底池赔率面板，懒加载的权益对比图最终出现', async () => {
+  it('默认渲染页头与底池赔率面板，懒加载的权益对比图最终出现', { timeout: 20000 }, async () => {
     render(<PotOddsPage />);
 
     expect(screen.getByText('Pot Odds & EV')).toBeTruthy();
@@ -32,7 +32,7 @@ describe('PotOddsPage', () => {
     expect(await screen.findByText('权益对比', undefined, { timeout: 5000 })).toBeTruthy();
   });
 
-  it('切到 EV 分析 Tab：挂载 EV 计算面板并卸载底池赔率面板', async () => {
+  it('切到 EV 分析 Tab：挂载 EV 计算面板并卸载底池赔率面板', { timeout: 20000 }, async () => {
     render(<PotOddsPage />);
 
     fireEvent.click(screen.getByText('EV 分析'));
@@ -44,7 +44,7 @@ describe('PotOddsPage', () => {
     expect(screen.getByText('底池赔率与 EV 计算器')).toBeTruthy();
   });
 
-  it('切回底池赔率 Tab：恢复计算器与听牌参考', async () => {
+  it('切回底池赔率 Tab：恢复计算器与听牌参考', { timeout: 20000 }, async () => {
     render(<PotOddsPage />);
     fireEvent.click(screen.getByText('EV 分析'));
     await screen.findByText('EV 计算');

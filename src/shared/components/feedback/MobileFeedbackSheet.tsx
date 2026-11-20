@@ -13,6 +13,7 @@ import { useRef, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
+import { DialogOverlay } from '@/shared/components/ui/dialog';
 
 interface MobileFeedbackSheetProps {
   open: boolean;
@@ -38,8 +39,8 @@ export function MobileFeedbackSheet({
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        {/* 遮罩：点击关闭由 Radix DismissableLayer（modal 外部指针/点击）接管 */}
-        <DialogPrimitive.Overlay className="dialog-overlay fixed inset-0 z-[100] bg-[var(--surface-overlay)]" />
+        {/* 遮罩单源在 ui/dialog；点击关闭由 Radix DismissableLayer（modal 外部指针/点击）接管 */}
+        <DialogOverlay />
         <DialogPrimitive.Content
           aria-describedby={undefined}
           className="dealer-slip dealer-slip--sheet fixed inset-x-0 bottom-0 z-[100] flex max-h-[70vh] flex-col pb-[env(safe-area-inset-bottom,0px)]"

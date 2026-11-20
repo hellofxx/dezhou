@@ -64,6 +64,7 @@ src/shared/
 ## 组件基础件契约（2026-11）
 
 - **Dogfooding**：`components/academy/**`、`data-display/**`、`layout/**`、`feedback/**` 的交互控件必须组合 `ui/Button` / `ui/Input` / `ui/Textarea` / `ui/Dialog` / `ui/Progress`；禁止手写 `<button>/<input>/<textarea>/<select>` 及等价样式。特化例外以 `src/guards/sharedPrimitiveUsage.guard.test.ts` 的逐文件 allowlist 为准（扑克可视化、QuizCard 动作按钮、BackLink、RelatedLessonChip、ErrorBoundary、内容纠错原生 checkbox）。
+- **浮层单源**：模态只用 `ui/Dialog`（或反馈 `MobileFeedbackSheet`），下拉只用 `ui/Select`，提示只用 `ui/Tooltip`；feature / layouts 禁止手写 `fixed inset-0` 遮罩。Dialog / Select / Tooltip 顶层统一 `z-[100]`，toast / 移动底栏维持 `z-50`（DESIGN.md §6.4，守卫 `overlayLayer.guard.test.ts`）。
 - **焦点环单源**：业务组件使用 `FOCUS_RING`（多数派）或 `FOCUS_RING_VISIBLE`（BackLink 等既有语义）；Button / Input / Select / Dialog 也统一使用 `FOCUS_RING`，不得再复制 `focus-visible:ring-2 ...` 字面量。
 - **Button 变体**：`default` / `secondary` 保持金属族；`quiet` / `link` 为结构变体；V1 已完成 `ghost` → `.btn-quiet`、`outline` 透明胡桃描边、`destructive` danger 底/字收口。金属族 CSS 已入 `@layer components`，size 由 Button cva 管理。
 - **SectionLabel**：section / panel 标题统一使用 `layout/SectionLabel`（`as` / `icon` / `count` / `id` / `className`）；10px eyebrow、tab、不同语义标题保留本地。

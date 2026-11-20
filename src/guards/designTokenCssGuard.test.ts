@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 /**
  * CSS 面填充守卫（DESIGN.md §1.2 三不原则 / §5.21 交互状态矩阵 / §4.2 阴影黑调）：
- * designTokenGuard.test.ts 只扫 src/**\/*.{ts,tsx}，globals.css 的样式实现完全在门禁外，
+ * designTokenGuard.test.ts 只扫 src/**\/*.{ts,tsx}，src/styles 分片的样式实现完全在门禁外，
  * 象牙卡面上的 rgba(255,255,255,0.7) 这类"白透底提亮"曾经无人看守（Design QA 2026-10 发现）。
  *
  * 三条规则**只作用于 background / background-color 声明**（面填充），因此：
@@ -156,9 +156,13 @@ function transitionDecl(body: string): string | undefined {
 describe('CSS 面填充守卫（防纯白/纯黑实底回流，DESIGN.md §1.2）', () => {
   it('扫描范围有效（应覆盖 styles 下全部 CSS）', () => {
     const files = Object.keys(CSS_FILES);
-    expect(files.length).toBeGreaterThanOrEqual(1);
+    const totalLines = Object.values(CSS_FILES).reduce(
+      (sum, css) => sum + css.split('\n').length,
+      0,
+    );
+    expect(files.length).toBeGreaterThanOrEqual(10);
     expect(files).toContain('globals.css');
-    expect(CSS_FILES['globals.css']!.split('\n').length).toBeGreaterThan(2000);
+    expect(totalLines).toBeGreaterThan(3000);
   });
 
   it('background 声明不得出现超过 §5.21 授权档的白透面填充', () => {

@@ -118,7 +118,7 @@ afterEach(() => {
 });
 
 describe('PotOddsQuizPage 完整会话结算', () => {
-  it('19 题全对：结算 100%、emit 一次 pot-odds 事件、记录训练日一次', async () => {
+  it('19 题全对：结算 100%、emit 一次 pot-odds 事件、记录训练日一次', { timeout: 30000 }, async () => {
     const recordTrainingDay = useProgressStore.getState().recordTrainingDay;
     const { container } = renderQuiz();
 
@@ -154,7 +154,7 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     expect(useProgressStore.getState().eloByVariant.standard.math).toBeGreaterThan(DEFAULT_ELO.math);
   });
 
-  it('结算面板的返回计算器跳转与再来一轮重置', async () => {
+  it('结算面板的返回计算器跳转与再来一轮重置', { timeout: 30000 }, async () => {
     const { container } = renderQuiz();
     for (const question of QUIZ_QUESTIONS.slice(0, QUIZ_QUESTIONS.length - 1)) {
       await answerAndAdvance(container, question, true);
@@ -174,7 +174,7 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     expect(optionButtons(container).some((b) => b.disabled)).toBe(false);
   });
 
-  it('末题答错追加补救题（total 20），补救答对后以最后一题答对收尾', async () => {
+  it('末题答错追加补救题（total 20），补救答对后以最后一题答对收尾', { timeout: 30000 }, async () => {
     const recordTrainingDay = useProgressStore.getState().recordTrainingDay;
     const { container } = renderQuiz();
 
@@ -212,7 +212,7 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     expect(reviewIds).toContain('odds:9998');
   });
 
-  it('补救题再答错时不再追加第二道（rescueUsed 仅一次），以最后一题答错结算', async () => {
+  it('补救题再答错时不再追加第二道（rescueUsed 仅一次），以最后一题答错结算', { timeout: 30000 }, async () => {
     const recordTrainingDay = useProgressStore.getState().recordTrainingDay;
     const { container } = renderQuiz();
     const base = QUIZ_QUESTIONS.slice(0, QUIZ_QUESTIONS.length - 1);

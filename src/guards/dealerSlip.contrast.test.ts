@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { readCssSources } from '../test-utils/cssSources';
 
 /**
  * 发牌员纸条（.dealer-slip）对比度守卫（WCAG 2.1 §1.4.6 / §1.4.3）
@@ -8,7 +8,8 @@ import { describe, expect, it } from 'vitest';
  * 纸条是独立于暗色房间色板的 paper 材质：Dialog / 移动端反馈 Sheet / ResultSummary /
  * 快捷键浮层都把文字与语义色重锚到 --paper-* 深阶。任何一次调色若把 ink 提亮或把
  * 黄铜/语义色取亮阶，都会让纸面文字跌破 AA，而 jsdom 里 axe 的 color-contrast
- * 因无布局计算恒为 inapplicable，因此必须在源头（globals.css token）上算对比度。
+ * 因无布局计算恒为 inapplicable，因此必须在源头（src/styles 分片的 token，按入口
+ * globals.css import 顺序拼接）上算对比度。
  *
  * 断言口径：
  * - --paper-ink 于 --paper ≥ 7:1（正文/标题）
@@ -17,8 +18,8 @@ import { describe, expect, it } from 'vitest';
  * - .dealer-slip 必须把 canonical 与 alias token 一并重锚到 paper 深阶
  */
 
-const CSS_PATH = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
-const CSS = readFileSync(CSS_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const CSS_ENTRY = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
+const CSS = readCssSources(CSS_ENTRY).css.replace(/\/\*[\s\S]*?\*\//g, '');
 
 interface CssBlock {
   selector: string;
@@ -86,7 +87,7 @@ const LIGHT_TOKENS = new Map([...DARK_TOKENS, ...mergeTokens('html[data-theme="l
 
 const DEALER_SLIP_TOKENS = (() => {
   const block = BLOCKS.find((entry) => entry.selector === '.dealer-slip');
-  expect(block?.body, 'globals.css 应存在顶层 .dealer-slip 块').toBeDefined();
+  expect(block?.body, 'CSS 应存在顶层 .dealer-slip 块').toBeDefined();
   return declarations(block?.body ?? '');
 })();
 

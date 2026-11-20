@@ -3,9 +3,9 @@
    Brand prefix: poker
    Palette: Felt green · Walnut rail · Ivory cards · Brass accent
 
-   §11.1 Single source of truth: src/styles/globals.css :root
-   This file mirrors globals.css values for the apply-html-head-contract
-   script and standalone demo pages. Do NOT diverge — update globals.css
+   §11.1 Single source of truth: src/styles/tokens.css :root（入口 globals.css 引入）
+   This file mirrors tokens.css values for the apply-html-head-contract
+   script and standalone demo pages. Do NOT diverge — update tokens.css
    first, then sync here.
    ========================================================================== */
 

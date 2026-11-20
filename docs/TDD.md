@@ -291,7 +291,13 @@ src/
 │   └── a11y.ts                   # 组件级 axe harness（jsdom）
 │
 ├── styles/
-│   └── globals.css               # 全局样式 + CSS 变量
+│   ├── globals.css               # 样式入口：@import tailwindcss + 顺序分片 import + @theme
+│   ├── tokens.css                # :root 暗色 token（色彩实现权威）
+│   ├── base.css                  # 基础层 / focus / reduced-motion
+│   ├── components-*.css          # 组件类分片（按级联顺序）
+│   ├── light-theme.css           # 浅色主题 token 与物理物件
+│   ├── responsive.css            # 全局移动端覆盖
+│   └── fonts.css                 # @font-face 自托管字体
 │
 ├── App.tsx                       # 根组件
 ├── main.tsx                      # 入口文件
@@ -310,7 +316,7 @@ src/
 | `styles/` | 全局样式、CSS 自定义属性 |
 | `guards/` | 全局不变式测试（跨模块 / 全仓范围）；新增全局守卫放此处，清单见 `src/guards/README.md` |
 | `test-utils/` | 测试专用工具（a11y harness 等），仅被测试文件引用，不进运行时 bundle |
-| `fonts/` | 自托管字体源（woff2），由 `styles/globals.css` 的 `@font-face` 引入 |
+| `fonts/` | 自托管字体源（woff2），由 `styles/fonts.css` 的 `@font-face` 引入（入口 `globals.css` 引入该分片） |
 
 ### 3.2 模块间依赖规则
 
@@ -322,7 +328,7 @@ src/
 
 ### 3.3 共享层材质与交互基础设施
 
-- **移动端反馈 Sheet**：`MobileFeedbackSheet` 由 Radix Dialog 承载（焦点陷阱 / Escape 关闭 / 关闭后焦点归还 / 背景滚动锁），内容面为 `.dealer-slip` 纸张（DESIGN.md §1.5 材质契约 / §5.23 / §13.7.2），入场 300ms、退场 200ms 由 `globals.css` 的 `[data-state]` keyframes 驱动（未启用 tailwindcss-animate，`animate-in` 系列类属空操作）。
+- **移动端反馈 Sheet**：`MobileFeedbackSheet` 由 Radix Dialog 承载（焦点陷阱 / Escape 关闭 / 关闭后焦点归还 / 背景滚动锁），内容面为 `.dealer-slip` 纸张（DESIGN.md §1.5 材质契约 / §5.23 / §13.7.2），入场 300ms、退场 200ms 由 `components-core.css` 的 `[data-state]` keyframes 驱动（未启用 tailwindcss-animate，`animate-in` 系列类属空操作）。
 - **网格键盘导航**：`shared/hooks/useRovingGridNav` 取代已删除的 `useGridKeyboardNav`——整张网格只有一个 Tab 停靠点（13×13 网格 169 → 1，三处消费方合计 3），方向键按 `columns` 跨行移动、Home / End 到首尾，Enter / Space 触发 `onSelect`；消费方为 RangeGrid / StrategyMatrix / ConceptGraph，兼容 SVG 项。
 - **纸张作用域**：`.dealer-slip` 在自身作用域内把 ink / brass / 语义 / 表面 token 重锚为 §2.6 的 paper 值（canonical 与 globals.css alias、Tailwind `@theme` 颜色别名一并覆盖），纸面内禁止沿用暗色房间的亮阶色；层级取 z-index 100（§6.4），与弹窗 / Modal / 下拉菜单同层。
 
@@ -2072,14 +2078,15 @@ interface TrainingModule {
 
 ### 14.1 CSS 变量架构
 
-项目采用 CSS Custom Properties 实现主题系统，所有颜色通过变量引用。全局样式定义在 `src/styles/globals.css`，结构为：
+项目采用 CSS Custom Properties 实现主题系统，所有颜色通过变量引用。`src/styles/globals.css` 是纯入口（只允许 `@import` + `@theme`），组件规则按级联顺序落在同目录分片：
 
-1. Google Fonts 字体引入
-2. `@import "tailwindcss"` — Tailwind v4 入口
-3. `:root` — 暗色默认的全局 CSS 变量定义
-4. `html[data-theme="light"]` — 浅色「白天牌室」原语覆盖（不写组件级 surface 补丁）
-5. `@theme inline` — Tailwind v4 主题 token 映射
-6. 全局基础样式（body / scrollbar / selection / focus 等）
+1. `@import "tailwindcss"` — Tailwind v4 入口（globals.css）
+2. `tokens.css` — 暗色默认的全局 CSS 变量定义（`:root`）
+3. `base.css` — 基础层（body / scrollbar / selection / focus / reduced-motion）
+4. `components-*.css` — 组件类分片（core / academy / settings / progress / help / education，顺序即级联顺序）
+5. `light-theme.css` — 浅色「白天牌室」原语覆盖（不写组件级 surface 补丁）
+6. `responsive.css` / `fonts.css` — 全局移动端覆盖与自托管字体
+7. `@theme inline` — Tailwind v4 主题 token 映射（保留在入口）
 
 变量命名规范：`--{类别}-{修饰符}`
 
@@ -2200,14 +2207,14 @@ Tailwind v4 还将 `--font-sans` / `--font-mono` 转为 `font-sans` / `font-mono
 - 缓动函数：ease（默认）
 - 翻牌动画：CSS 3D transform + perspective，300ms
 - **`prefers-reduced-motion` 三层接管**（单一 CSS 兜底不足以覆盖全部动效通道）：
-  1. CSS 层：`globals.css` 的 `@media (prefers-reduced-motion: reduce)` 把 `transition-duration` / `animation-duration` 压到 0.01ms，覆盖所有 CSS 驱动的动效
+  1. CSS 层：`base.css` 的 `@media (prefers-reduced-motion: reduce)` 把 `transition-duration` / `animation-duration` 压到 0.01ms，覆盖所有 CSS 驱动的动效（入口 `globals.css` 引入）
   2. React 层：`src/app/providers.tsx` 以 `<MotionConfig reducedMotion="user">` 包裹全树。该属性只把 **transform 类**（x/y/scale/rotate/layout）降级为瞬时跳变，**opacity 与 height 仍会过渡**
   3. 组件层：依赖上述两条覆盖不到的通道时须显式处理——`FaqAccordion` 的 `height: 0→auto` 展开用 framer-motion 的 `useReducedMotion()` 置零时长；`HelpHome` 的锚点 `scrollIntoView` 属 JS API（不受 CSS 兜底约束），按同一 hook 把 `behavior` 降为 `auto`
 - 动效参数单源：React 侧引用 `src/shared/utils/motion.ts` 的 `MOTION_DURATION` / `MOTION_EASE` / 预置 variants，CSS 侧引用 `var(--poker-duration-*)` / `var(--poker-ease-*)`，禁止内联字面量与裸时长
 
 ### 14.7 UI 颜色实现规范与守卫（v1.3.2）
 
-设计契约权威源为 `DESIGN.md`（以其当前版本为准，本文件不维护版本副本）；色彩 token 实现权威为 `src/styles/globals.css` 的 `:root`。二者之外的 `poker-ui-demo/colors_and_type.css` 为 demo 单页镜像，三者任一变更须同步。
+设计契约权威源为 `DESIGN.md`（以其当前版本为准，本文件不维护版本副本）；色彩 token 实现权威为 `src/styles/tokens.css` 的 `:root`（经入口 `globals.css` 引入）。二者之外的 `poker-ui-demo/colors_and_type.css` 为 demo 单页镜像，三者任一变更须同步。
 
 强制规范（DESIGN.md §1.2 三不原则 / §1.3 反 SaaS 饱和色禁令）：
 

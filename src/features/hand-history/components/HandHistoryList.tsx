@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useHandHistoryStore } from '../store';
 import { formatDate } from '../utils/handNotation';
@@ -7,6 +7,15 @@ import { calculateHeroStats } from '../utils/handStats';
 import { Trash2, Upload, Search, BarChart3, List, AlertCircle, ClipboardList } from 'lucide-react';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
+import { Button } from '@/shared/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/components/ui/dialog';
 
 const LazyHandStatsPanel = lazy(() =>
   import('./HandStatsPanel').then((mod) => ({ default: mod.HandStatsPanel })),
@@ -191,40 +200,46 @@ export default function HandHistoryList() {
               {filteredHands.map((hand) => (
                 <div
                   key={hand.id}
-                  className="hh-item group flex items-center justify-between"
-                  onClick={() => navigate(`/hand-history/${hand.id}`)}
+                  className="hh-item group relative flex items-center justify-between"
                 >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-numeric px-2 py-0.5 rounded bg-[var(--walnut-raised)]/60 text-[var(--ivory-muted)]">
-                        {hand.site}
-                      </span>
-                      <span className="text-sm font-display font-medium text-[var(--ivory)] truncate">
-                        {t('handHistory.list.handNumber', { number: hand.handNumber })}
-                      </span>
+                  {/* 行内含删除按钮，不能整体包链路（交互嵌套非法）：
+                      行主体 Link 用 after 覆盖整行点击区，删除按钮以 z-10 浮在其上。 */}
+                  <Link
+                    to={`/hand-history/${hand.id}`}
+                    className="flex min-w-0 flex-1 items-center justify-between after:absolute after:inset-0"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-numeric px-2 py-0.5 rounded bg-[var(--walnut-raised)]/60 text-[var(--ivory-muted)]">
+                          {hand.site}
+                        </span>
+                        <span className="text-sm font-display font-medium text-[var(--ivory)] truncate">
+                          {t('handHistory.list.handNumber', { number: hand.handNumber })}
+                        </span>
+                      </div>
+                      <div className="text-xs text-[var(--ivory-muted)] font-numeric">
+                        {hand.gameType} · ${hand.stakes.smallBlind}/${hand.stakes.bigBlind} · {hand.players.length} {t('handHistory.list.players')} · {formatDate(hand.timestamp, i18n.language)}
+                      </div>
                     </div>
-                    <div className="text-xs text-[var(--ivory-muted)] font-numeric">
-                      {hand.gameType} · ${hand.stakes.smallBlind}/${hand.stakes.bigBlind} · {hand.players.length} {t('handHistory.list.players')} · {formatDate(hand.timestamp, i18n.language)}
-                    </div>
-                  </div>
 
-                  <div className="flex items-center gap-3 ml-4">
-                    <div className="text-right">
-                      <div className="text-sm font-bold text-[var(--brass-bright)] font-numeric">${hand.pot.toFixed(2)}</div>
-                      {hand.winner && (
-                        <div className="text-[10px] text-[var(--ivory-muted)] truncate max-w-[160px]">
-                          {t('handHistory.list.wonBy', { name: hand.players[hand.winner.playerId]?.name ?? '?' })}
-                        </div>
-                      )}
+                    <div className="flex items-center gap-3 ml-4">
+                      <div className="text-right">
+                        <div className="text-sm font-bold text-[var(--brass-bright)] font-numeric">${hand.pot.toFixed(2)}</div>
+                        {hand.winner && (
+                          <div className="text-[10px] text-[var(--ivory-muted)] truncate max-w-[160px]">
+                            {t('handHistory.list.wonBy', { name: hand.players[hand.winner.playerId]?.name ?? '?' })}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); deleteHand(hand.id); }}
-                      aria-label={t('common.ui.delete')}
-                      className="min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)]/70 hover:text-[var(--clay-text)] hover:bg-[var(--clay)]/10 transition-all"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
+                  </Link>
+                  <button
+                    onClick={() => { deleteHand(hand.id); }}
+                    aria-label={t('common.ui.delete')}
+                    className="relative z-10 ml-3 min-h-11 min-w-11 flex items-center justify-center rounded-lg text-[var(--ivory-muted)]/70 hover:text-[var(--clay-text)] hover:bg-[var(--clay)]/10 transition-all"
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               ))}
             </div>
@@ -233,28 +248,31 @@ export default function HandHistoryList() {
       )}
 
       {/* Confirm clear dialog */}
-      {confirmClear && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--felt-deep)]/70" onClick={() => setConfirmClear(false)}>
-          <div className="bg-[var(--felt)] rounded-xl p-6 max-w-sm mx-4 border border-[var(--walnut-border)]" onClick={e => e.stopPropagation()}>
-            <h3 className="text-sm font-display font-semibold text-[var(--ivory)] mb-2">{t('handHistory.list.confirmClearTitle')}</h3>
-            <p className="text-xs text-[var(--ivory-muted)] mb-4">{t('handHistory.list.confirmClearDesc', { count: hands.length })}</p>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setConfirmClear(false)}
-                className="px-3 py-1.5 text-xs rounded-lg text-[var(--ivory-dim)] hover:bg-[var(--walnut-raised)]/60"
-              >
-                {t('handHistory.list.cancel')}
-              </button>
-              <button
-                onClick={() => { clearAll(); setConfirmClear(false); }}
-                className="px-3 py-1.5 text-xs rounded-lg bg-[var(--clay)]/15 text-[var(--clay-text)] border border-[var(--clay)]/40 hover:bg-[var(--clay)]/25 transition-colors"
-              >
-                {t('handHistory.list.deleteAll')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Dialog open={confirmClear} onOpenChange={setConfirmClear}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t('handHistory.list.confirmClearTitle')}</DialogTitle>
+            <DialogDescription>
+              {t('handHistory.list.confirmClearDesc', { count: hands.length })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" size="sm" onClick={() => setConfirmClear(false)}>
+              {t('handHistory.list.cancel')}
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                clearAll();
+                setConfirmClear(false);
+              }}
+            >
+              {t('handHistory.list.deleteAll')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

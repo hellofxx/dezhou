@@ -1,13 +1,13 @@
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { readCssSources } from '../test-utils/cssSources';
 
 /**
  * 暗底房间 / 发牌员纸条文本对比度守卫（WCAG 2.1 AA §1.4.3）
  *
  * jsdom 里 axe 的 color-contrast 因无布局计算恒为 inapplicable，文本对比度只能在源头
- * （globals.css 的 token 字面量）上算，否则一次「顺手取亮阶」的调色会让语义文本跌破
- * AA 而测试全绿。所有颜色都从 globals.css 解析，守卫里不登记任何色值。
+ * （src/styles 分片的 token 字面量，按入口 globals.css import 顺序拼接）上算，否则一次
+ * 「顺手取亮阶」的调色会让语义文本跌破 AA 而测试全绿。所有颜色都从 CSS 解析，守卫里不登记任何色值。
  *
  * 断言口径：
  * - 暗色房间：--ivory-muted / --clay-text / --danger-text / --sage-text / --brass-text
@@ -21,10 +21,10 @@ import { describe, expect, it } from 'vitest';
 
 const MIN_CONTRAST = 4.5;
 
-const CSS_PATH = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
+const CSS_ENTRY = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
 
-/** 去注释后再解析：注释里的 token 名与色值不参与断言 */
-const CSS = readFileSync(CSS_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+/** 按 globals.css 的 @import 顺序拼接全部分片；去注释后 token 名与色值才参与断言 */
+const CSS = readCssSources(CSS_ENTRY).css.replace(/\/\*[\s\S]*?\*\//g, '');
 
 interface CssBlock {
   selector: string;
@@ -80,7 +80,7 @@ const BLOCKS = topLevelBlocks(CSS);
 /** 合并同名顶层块；块缺失时直接报错（禁止静默空解析） */
 function blockDeclarations(selector: string): Map<string, string> {
   const matched = BLOCKS.filter((block) => block.selector === selector);
-  if (matched.length === 0) throw new Error(`globals.css 顶层块「${selector}」未找到，解析失败`);
+  if (matched.length === 0) throw new Error(`CSS 顶层块「${selector}」未找到，解析失败`);
   const merged = new Map<string, string>();
   for (const block of matched) {
     for (const [name, value] of declarations(block.body)) merged.set(name, value);

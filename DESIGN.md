@@ -4,6 +4,7 @@
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
 > v1.10.0 更新：阅读页学习导轨（§6.5）— 理论章节页 / 策略课时页在 xl 起采用「768px 阅读列 + 264px 学习导轨」双栏（`AcademyReadingPlane`），导轨承载本级目录与进度，<xl 回落居中单栏
+> v1.9.2 更新：浮层收口 — Select/Tooltip 统一 z-100（§6.4）、明确下拉/提示为房间面控件不属纸条（§1.5）、新增「禁止手写 fixed inset-0 模态」反模式与守卫（§10.6）
 > v1.9.0 更新：新增浅色主题「白天牌室」token 架构（§2.8）、Hero 高度契约（§6.6）、Puzzle ActionTier 语义与防答案暗示（§5.5）、内容区 h2 保留例外（§5.7/§10.6）、Emoji 内容白名单扫描面（§7）
 > v1.8.0 更新：确立材质契约（§1.5 房间/画布/纸条/镶嵌）与纸张色板（§2.6）；新增发牌员纸条 `.dealer-slip`（§5.23）；修订按钮金属族（§5.5）、顶栏胡桃梁与壳层 h1/导航序号（§5.7）、进度条（§5.11）、移动触摸目标与 Z 轴（§6.3/§6.4）、SVG token 锚定（§12.1）、移动端反馈 Sheet 纸张化（§13.7.2）
 > v1.7.0 更新：新增 §13 教育学习设计规范 — 学习进度可视化、课程内容排版增强、反馈教育脚手架、模块教育目的视觉区分、渐进式信息披露、移动端教育体验、教育场景动效
@@ -58,6 +59,7 @@
 > 核心句：**「牌室是深色的，但发牌员递给你的东西是纸。」**
 
 - 判定规则：任何「发牌员递给你」的一次性信息载体（对话、结果、提示、快捷键）用纸张材质；常驻导航与外壳用胡桃木；训练台面用绿呢。
+- **浮层材质边界（v1.9.2）**：下拉菜单（Select）与悬停提示（Tooltip）属于房间面控件（房间色 `--color-popover`），不属纸条；二者层级统一 z-100（§6.4）。
 - 纸张作用域内必须把 ink / brass / 语义 / 表面 token 重锚为 §2.6 的 paper 值（见 §5.23），禁止逐处写死字面色值。
 - 反模式：把纸张用于常驻导航或大面积页面底色；在纸上直接沿用暗色房间的亮阶语义色。
 
@@ -501,7 +503,7 @@
 
 ### 5.21 交互状态矩阵（v1.3.2）
 
-全局交互状态的统一规范（实现权威：`src/styles/globals.css`）：
+全局交互状态的统一规范（实现权威：`src/styles/components-core.css` 等分片，入口 `globals.css`）：
 
 | 状态 | 规范 | 实现 |
 |---|---|---|
@@ -618,7 +620,9 @@
 | 10 | 顶栏、侧栏用户区 |
 | 20 | 侧边栏 |
 | 50 | 移动端底栏、Toast（nav 与 toast 同层，浮层不得低于此层） |
-| 100 | 弹窗、Modal、`.dealer-slip` 纸条、下拉菜单 |
+| 100 | 弹窗、Modal、`.dealer-slip` 纸条、下拉菜单、Tooltip 提示层 |
+
+> 顶栏 / 侧边栏的 10 / 20 层在实现中由 DOM 顺序承担（无显式 `z-index`），层级以 `src/layouts` 实现为准。
 
 ### 6.5 内容宽度分级（v1.6.0 新增）
 
@@ -674,7 +678,7 @@ Hero 是首屏叙事锚点，但不允许把首屏压成一张巨大的装饰画
 
 ## 8. 动效
 
-> **单一事实源（v1.5.0）**：动效 token 与组件状态矩阵的唯一实现权威为 `src/shared/utils/motion.ts`（React / framer-motion）与 `src/styles/globals.css`（CSS keyframes / CSS 变量）。本文档为设计定义权威，二者任一变更须同步其余两处；新增动效禁止绕过共享规范自造参数。
+> **单一事实源（v1.5.0）**：动效 token 与组件状态矩阵的唯一实现权威为 `src/shared/utils/motion.ts`（React / framer-motion）与 `src/styles` 分片（CSS keyframes / CSS 变量，入口 `globals.css`）。本文档为设计定义权威，二者任一变更须同步其余两处；新增动效禁止绕过共享规范自造参数。
 
 ### 8.1 动效原则
 
@@ -689,7 +693,7 @@ Hero 是首屏叙事锚点，但不允许把首屏压成一张巨大的装饰画
 | `--poker-ease-in` | `cubic-bezier(0.4,0,1,1)` | 元素退场/移除（慢入快出） |
 | `--poker-ease-spring` | `cubic-bezier(0.34,1.56,0.64,1)` | 弹性回弹（筹码落/卡牌翻/徽章 pop） |
 
-> 对应实现：`motion.ts` 导出 `MOTION_EASE`，CSS 变量见 globals.css `--poker-ease-*`。
+> 对应实现：`motion.ts` 导出 `MOTION_EASE`，CSS 变量见 `src/styles/tokens.css` 的 `--poker-ease-*`。
 
 #### 8.1.2 时长（Duration）
 
@@ -719,11 +723,11 @@ Hero 是首屏叙事锚点，但不允许把首屏压成一张巨大的装饰画
 **规则**：
 - hover 触发不得使用位移导致布局抖动（用 `transform`，不用 `top/left`）
 - 入场/退场必须成对出现（framer-motion `AnimatePresence` 或等价），禁止只进不出
-- 循环动效必须尊重 `prefers-reduced-motion`（globals.css 已全局兜底）
+- 循环动效必须尊重 `prefers-reduced-motion`（`src/styles/base.css` 已全局兜底）
 
 ### 8.2 常用动画类型定义
 
-统一实现：`src/shared/utils/motion.ts` 导出预置 variants 常量（`FADE_IN` / `SLIDE_UP` / `SLIDE_DOWN` / `SLIDE_LEFT` / `SLIDE_RIGHT` / `SCALE_IN` / `ROTATE_*` / `POP` / `SHAKE`），组件直接引用，禁止内联 `initial/animate` 字面量。CSS 侧对应 keyframes 类（`animate-*`，见 globals.css）。
+统一实现：`src/shared/utils/motion.ts` 导出预置 variants 常量（`FADE_IN` / `SLIDE_UP` / `SLIDE_DOWN` / `SLIDE_LEFT` / `SLIDE_RIGHT` / `SCALE_IN` / `ROTATE_*` / `POP` / `SHAKE`），组件直接引用，禁止内联 `initial/animate` 字面量。CSS 侧对应 keyframes 类（`animate-*`，见 `src/styles` 分片）。
 
 | 类型 | 关键属性 | 时长 | 缓动 | 用途 |
 |---|---|---|---|---|
@@ -741,7 +745,7 @@ Hero 是首屏叙事锚点，但不允许把首屏压成一张巨大的装饰画
 
 ### 8.3 组件状态动画行为矩阵
 
-> 组件 → 状态 → 动效的权威映射。实现约定：交互动效统一 `MOTION_DURATION` + `MOTION_EASE`（`motion.ts`），循环/等待动效用 globals.css keyframes 类；组件新增动效须按此矩阵登记，禁止模块自造参数。
+> 组件 → 状态 → 动效的权威映射。实现约定：交互动效统一 `MOTION_DURATION` + `MOTION_EASE`（`motion.ts`），循环/等待动效用 `src/styles` 分片的 keyframes 类；组件新增动效须按此矩阵登记，禁止模块自造参数。
 
 | 组件 | hover | press | active/选中 | 入场（mount） | 退场（unmount） | 反馈/循环 |
 |---|---|---|---|---|---|---|
@@ -761,7 +765,7 @@ Hero 是首屏叙事锚点，但不允许把首屏压成一张巨大的装饰画
 ### 8.4 实现约定
 
 - **React 组件**：全部经 framer-motion `motion.*` 实现，参数引用 `src/shared/utils/motion.ts` 的 `MOTION_DURATION` / `MOTION_EASE` 与预置 variants；`AnimatePresence` 负责退场
-- **CSS keyframes**：循环/等待类（live-pulse、panel-glow、card-wait、streak glow）与通用 `animate-*` 类定义于 globals.css，动画参数用 `var(--poker-ease-*)` / `var(--poker-duration-*)`，不写裸数字
+- **CSS keyframes**：循环/等待类（live-pulse、panel-glow、card-wait、streak glow）与通用 `animate-*` 类定义于 `src/styles` 分片（入口 `globals.css` 按序引入），动画参数用 `var(--poker-ease-*)` / `var(--poker-duration-*)`，不写裸数字
 - **路由过渡**：`AppLayout` 使用统一的 page-transition variants（slide-left 入 / slide-right 出）
 - **键盘/无障碍**：hover 动效不得是唯一信息通道（focus-visible 必须等价可见）；`prefers-reduced-motion` 全局降级
 - **性能**：只用 `transform` / `opacity` 动画，避免 layout/paint 抖动；列表 stagger 步进 50–80ms，整页最大延迟 ≤600ms
@@ -845,6 +849,7 @@ Hero 是首屏叙事锚点，但不允许把首屏压成一张巨大的装饰画
 - ❌ 中文斜体（必须 `.motto-engraved`）
 - ❌ 扁平纯色按钮（必须渐变，哪怕极微；主 CTA 纯色平铺违反 §5.5 按钮金属族）
 - ❌ 把纸张材质用于常驻导航或大面积页面底色（材质契约见 §1.5）
+- ❌ 在 feature / layouts 层手写 `fixed inset-0` 遮罩充当模态（必须复用 shared `Dialog`：焦点陷阱 / Escape / 纸条材质由原语提供，守卫 `overlayLayer.guard.test.ts`）
 - ❌ 在纸条上沿用暗色房间的亮阶语义色（对比度不足，见 §2.6）
 - ❌ 重要操作做纯文字链接（必须按钮/pill）
 - ❌ 椭圆牌桌用图片（必须 CSS `border-radius`）
@@ -914,8 +919,8 @@ poker-ui-demo/
 
 正式产品为 React 应用（`src/`），与本 demo 单页并行存在，样式采用双轨制：
 
-- **Token 层**：`src/styles/globals.css` 的 `:root` 为色彩 token 唯一实现权威（附录 E 声明）；Tailwind v4 通过 `@theme inline` 将 token 映射为 shadcn 语义类
-- **组件类轨**：§5 组件样式（`.panel` / `.table-rail` / `.grade-*` / `.streak-rail` 等）已抽取至 globals.css，React 组件直接引用类名
+- **Token 层**：`src/styles/tokens.css` 的 `:root` 为色彩 token 唯一实现权威（附录 E 声明，经入口 `globals.css` 引入）；Tailwind v4 通过入口的 `@theme inline` 将 token 映射为 shadcn 语义类
+- **组件类轨**：§5 组件样式（`.panel` / `.table-rail` / `.grade-*` / `.streak-rail` 等）位于 `src/styles/components-*.css` 分片（入口按序 import），React 组件直接引用类名
 - **原子类轨**：布局与一次性样式用 Tailwind 任意值 token 类（如 `bg-[var(--poker-success-bg)]`、`text-[var(--brass-bright)]`），禁止绕开 token 写字面色值
 - **签名元素组件化对应**：`.table-rail` → `shared/components/TableRail.tsx`；`.motto-engraved` → `shared/components/MottoEngraved.tsx`；牌背（§5.1）→ `shared/components/CardBack.tsx`（胡桃底+45°条纹+2px 黄铜边+内描金，SVG 描边直接引用 `var(--brass)`）
 - **SVG 例外**：渐变 stop 无法引用 CSS 变量时允许字面值，但必须注释标注对应 token；独立 SVG 资产（`public/cards/back.svg`）同样以注释锚定 token
@@ -1016,7 +1021,7 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **三不原则引用更新**：§1.2 felt-deep/ivory 引用值同步更新。
 - **新增 token 登记**：§2.4 补 `--poker-leather #c08a5a`（hand-history 模块主题色，§5.18）。
 - **渐变/组件示例对齐**：§2.5 暗角 rgba 与胡桃面板渐变、§4.3 边框、§5.4 铭牌、§5.5 pill、§5.6 面板——所有硬编码示例色值同步对齐新色板。
-- **权威源声明**：`src/styles/globals.css` :root 为色彩 token 唯一实现权威；本规范 §2 为设计定义权威；`poker-ui-demo/colors_and_type.css` 为 demo 单页 token，须与 globals.css 保持一致。三者任一变更须同步其余两处。
+- **权威源声明**：`src/styles/tokens.css` 的 `:root` 为色彩 token 唯一实现权威（经入口 `globals.css` 引入）；本规范 §2 为设计定义权威；`poker-ui-demo/colors_and_type.css` 为 demo 单页 token，须与 `tokens.css` 保持一致。三者任一变更须同步其余两处。
 
 ---
 

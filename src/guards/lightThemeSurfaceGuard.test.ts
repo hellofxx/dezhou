@@ -1,6 +1,6 @@
-import * as fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { readCssSources } from '../test-utils/cssSources';
 
 /**
  * 浅色主题组件补丁守卫（DESIGN.md §2.8 白天牌室）。
@@ -10,11 +10,11 @@ import { describe, expect, it } from 'vitest';
  * 环境光与纸张边界），全部登记在 ALLOWED_LIGHT_SELECTORS；新增补丁必须先删一个或
  * 在设计文档登记理由。黄铜字面 rgba 已清零，黑色字面 rgba 按 41 条棘轮锁定。
  *
- * 扫描面：src/styles/globals.css。
+ * 扫描面：src/styles 全部分片（按 globals.css 的 @import 顺序拼接）。
  */
 
-const CSS_PATH = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
-const CSS = fs.readFileSync(CSS_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const CSS_ENTRY = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
+const CSS = readCssSources(CSS_ENTRY).css.replace(/\/\*[\s\S]*?\*\//g, '');
 
 /** 允许保留的 light 组件级选择器（不含裸 token 块 html[data-theme="light"] {） */
 const ALLOWED_LIGHT_SELECTORS = [

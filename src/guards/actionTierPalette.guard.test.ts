@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { readCssSources } from '../test-utils/cssSources';
 
 /**
  * Puzzle ActionBoard 三档配色守卫（DESIGN.md §5.5 / PRD 防答案暗示）。
@@ -13,15 +14,16 @@ import { describe, expect, it } from 'vitest';
  * - correct / wrong / correct-reveal 只在答后覆盖 tier，并分别使用 success / danger；
  * - light 主题不得再为 action tile 写组件级补丁。
  *
- * 扫描面：globals.css 的 action-tile 选择器 + ActionBoard.tsx 的 tier 渲染实现。
+ * 扫描面：src/styles 分片（按入口 globals.css import 顺序拼接）的 action-tile 选择器
+ * + ActionBoard.tsx 的 tier 渲染实现。
  */
 
-const CSS_PATH = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
+const CSS_ENTRY = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
 const ACTION_BOARD_PATH = fileURLToPath(
   new URL('../features/puzzle-trainer/components/ActionBoard.tsx', import.meta.url),
 );
 
-const CSS = fs.readFileSync(CSS_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const CSS = readCssSources(CSS_ENTRY).css.replace(/\/\*[\s\S]*?\*\//g, '');
 const ACTION_BOARD = fs.readFileSync(ACTION_BOARD_PATH, 'utf8');
 
 const TIERS = ['passive', 'standard', 'aggressive'] as const;

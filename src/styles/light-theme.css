@@ -1,0 +1,130 @@
+/* =========================================================
+   Light theme — warm parchment "daylight card room".
+   Flipped families: felt→parchment, walnut→light wood, ivory→deep ink.
+   Brass deepens for contrast; semantic colors darken to hold ≥4.5:1.
+   `--stable-*` anchors never flip (brass-fill text / ivory plaque).
+   ========================================================= */
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --felt-deep: #ebe5d7;       /* page background — parchment under lamplight */
+  --felt: #f5f0e4;            /* primary surface */
+  --felt-raised: #fcf8ee;     /* raised surface */
+  --felt-light: #ddd3bd;      /* borders & highlights */
+
+  --walnut: #f0ead9;          /* sidebar & rail panels — light walnut */
+  --walnut-raised: #e6dcc7;
+  --walnut-border: #cdc0a5;
+  --walnut-light: #b7a681;
+
+  --ivory: #2a2113;           /* primary text — deep walnut ink */
+  --ivory-dim: #4c4230;       /* secondary text */
+  --ivory-muted: #665b43;     /* captions, placeholders — felt-deep 5.13:1 / walnut-raised 4.80:1 */
+
+  --brass: #a1792d;           /* accent — deepened for light-bg contrast */
+  --brass-bright: #8a641f;
+  --brass-deep: #7d5c22;
+  --brass-dark: #6b4e1d;
+  --brass-muted: #94763a;
+  --brass-glow: color-mix(in srgb, var(--brass) 14%, transparent);
+
+  /* Low-saturation semantic variants — darkened for light backgrounds */
+  --poker-success: #2f6b3a;
+  --poker-success-bg: rgba(47,107,58,0.12);
+  --poker-danger: #a63f30;
+  --poker-danger-bg: rgba(166,63,48,0.12);
+  --poker-warning: #a1792d;
+  --poker-warning-bg: color-mix(in srgb, var(--brass) 14%, transparent);
+  --poker-info: #3f6b5c;
+  --poker-info-bg: rgba(63,107,92,0.12);
+  --poker-frost: #4d7889;
+  --poker-frost-deep: #3a5f6e;
+  --poker-frost-bg: rgba(77,120,137,0.12);
+  --poker-felt-center: #31704c;
+  --poker-felt-glow: color-mix(in srgb, var(--brass) 8%, transparent);
+  --poker-indigo: #3d4c6b;
+  --poker-indigo-bright: #2f3c57;
+  --poker-terra: #8a4c33;
+  --poker-terra-bright: #b06a46;
+  --poker-moss: #4d7042;
+  --poker-gold: #9a7626;
+  --poker-bronze: #a06a2e;
+  --poker-leather: #a9713f;
+
+  /* 文本专用阶 light 深阶（DESIGN.md §2.7）—— 羊皮底 / 抬升底 ≥ 5:1 */
+  --clay-text: #a8442f;       /* felt 5.14:1 / felt-raised 5.50:1 */
+  --danger-text: #a63f30;     /* felt 5.38:1 / felt-raised 5.76:1 */
+  --sage-text: #2f6b3a;       /* felt 5.53:1 / felt-raised 5.92:1 */
+  --brass-text: #7d5c22;      /* felt 5.30:1 / felt-raised 5.67:1（原 --brass 3.43:1） */
+
+  /* 纸张色板 light 差异 —— 仅调底/边/黄铜；ink 与四个语义色不翻转（§2.6） */
+  --progress-track: #d9cdb1;
+  --paper: #fbf6e8;
+  --paper-raised: #fffaf0;
+  --paper-edge: #cdbb95;
+  --paper-rule: rgba(90,70,35,0.18);
+  --paper-brass: #7d5c22;
+
+  /* Suits — clubs/spades flip to deep ink for light-bg visibility (§2.3) */
+  --suit-club: #2a2113;
+  --suit-spade: #2a2113;
+
+  --background: var(--felt-deep);
+  --surface: var(--felt);
+  --surface-raised: var(--felt-raised);
+  --surface-hover: var(--felt-raised);
+  --surface-overlay: rgba(233,225,205,0.88);
+  --hero-surface-gradient: linear-gradient(180deg, var(--felt) 0%, var(--felt-raised) 100%);
+  --hero-surface-gradient-raised: linear-gradient(180deg, var(--felt) 0%, var(--felt-raised) 100%);
+  --question-card-gradient: linear-gradient(180deg, var(--walnut) 0%, var(--walnut-raised) 100%);
+
+  /* Softer shadows — brown-tinted, reduced alpha on light parchment */
+  --shadow-sm: 0 1px 3px rgba(96,74,32,0.16);
+  --shadow: 0 4px 14px rgba(96,74,32,0.18);
+  --shadow-lg: 0 12px 40px rgba(96,74,32,0.26);
+  --shadow-brass: 0 4px 20px color-mix(in srgb, var(--brass) 22%, transparent);
+  --shadow-brass-btn: 0 3px 10px rgba(150, 113, 44, 0.22), inset 0 1px 0 rgba(255, 250, 236, 0.65);
+
+  /* 日间绿呢：保留瓶绿身份，去掉近黑收边（物理物件仍为深色） */
+  --grad-felt-1: #2f6a47; --grad-felt-2: #2a6041; --grad-felt-3: #25563a;
+  --grad-felt-4: #204c33; --grad-felt-5: #1b432c; --grad-felt-raised: #2a5b3e;
+  --grad-felt-deep-1: #1d4630; --grad-felt-deep-2: #173b28;
+
+  /* 白昼牌桌：暖棕投影替代纯黑；大面黄铜改柔和蜜金 + 墨色文字 */
+  --scene-vignette: rgba(18, 46, 32, 0.36); --scene-vignette-sm: rgba(18, 46, 32, 0.32); --scene-rail: #8a6f47; --scene-rail-edge: #b08d5c;
+  --scene-drop-sm: 0 8px 24px rgba(96, 74, 32, 0.2);
+  --scene-drop-md: 0 12px 32px rgba(96, 74, 32, 0.22); --scene-drop-lg: 0 22px 48px rgba(96, 74, 32, 0.16);
+  --brass-fill: #c9a25e; --brass-fill-ink: #241c10; --brass-fill-border: #96712c;
+  --brass-fill-gradient: linear-gradient(180deg, #e6d09b 0%, #d2b273 48%, #bb9553 100%);
+  --brass-fill-gradient-hover: linear-gradient(180deg, #efdcae 0%, #ddc084 52%, #c8a25f 100%);
+  --brass-fill-gradient-active: linear-gradient(180deg, #c9a86a 0%, #b8944f 55%, #a57f3c 100%);
+  --action-allin-bg: linear-gradient(135deg, #4a3520 0%, #352517 100%);
+  --action-allin-bg-hover: linear-gradient(135deg, #55402a 0%, #40301e 100%);
+  --position-selected-bg: var(--brass-fill); --position-selected-ink: var(--brass-fill-ink); --sage-fill: #4f7059;
+}
+
+/* Ambient light — replace dark vignette/lamp haze with a subtle warm wash */
+html[data-theme="light"] body::before {
+  background: radial-gradient(ellipse 75% 55% at 50% 25%, color-mix(in srgb, var(--brass) 5%, transparent) 0%, transparent 65%);
+}
+html[data-theme="light"] body::after {
+  background: radial-gradient(ellipse 65% 55% at 50% 30%, transparent 50%, rgba(120,95,45,0.07) 78%, rgba(120,95,45,0.13) 100%);
+}
+html[data-theme="light"] .felt-ambient {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, color-mix(in srgb, var(--brass) 5%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 60% at 50% 100%, rgba(120,95,45,0.07) 0%, transparent 60%);
+}
+
+/* The green poker tables (.felt-arena / .mini-felt / .scenario-card) keep
+   their dark felt — a green table in a bright room is realistic. */
+html[data-theme="light"] .module-card {
+  background: linear-gradient(135deg, var(--felt) 0%, var(--felt-raised) 100%);
+  border-color: color-mix(in srgb, var(--brass) 18%, transparent);
+}
+html[data-theme="light"] .rec-item {
+  background: rgba(240,233,214,0.7);
+}
+html[data-theme="light"] .streak-rail {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--brass) 8%, transparent) 0%, rgba(238,231,212,0.6) 40%, rgba(238,231,212,0.6) 60%, rgba(47,107,58,0.07) 100%);
+}

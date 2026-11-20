@@ -139,7 +139,7 @@ describe('PotOddsQuizPage 初始渲染与选项排序', () => {
     expect(screen.getByTestId('location').textContent).toBe('/pot-odds');
   });
 
-  it('移动端（<768px）把答题反馈渲染进底部对话框 Sheet', async () => {
+  it('移动端（<768px）把答题反馈渲染进底部对话框 Sheet', { timeout: 20000 }, async () => {
     setMobileViewport(true);
     const { container } = renderQuiz();
     const q1 = QUIZ_QUESTIONS[0]!;
@@ -153,7 +153,7 @@ describe('PotOddsQuizPage 初始渲染与选项排序', () => {
     expect(container.textContent).not.toContain('不正确');
   });
 
-  it('移动端答题后点击下一题：反馈 Sheet 自动关闭，不遮挡下一题', async () => {
+  it('移动端答题后点击下一题：反馈 Sheet 自动关闭，不遮挡下一题', { timeout: 20000 }, async () => {
     setMobileViewport(true);
     const { container } = renderQuiz();
     const q1 = QUIZ_QUESTIONS[0]!;

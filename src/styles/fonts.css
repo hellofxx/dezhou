@@ -1,0 +1,27 @@
+/* =========================================================
+   Self-hosted fonts (4.2-fonts) — woff2 自托管，font-display: swap
+   替代 index.html 的 Google Fonts <link>，中国区加载更稳定
+   ========================================================= */
+@font-face {
+  font-family: 'Fraunces';
+  src: url(../fonts/fraunces-latin-wght.woff2) format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Tight';
+  src: url(../fonts/inter-tight-latin-wght.woff2) format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url(../fonts/jetbrains-mono-latin-wght.woff2) format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}

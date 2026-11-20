@@ -7,7 +7,7 @@
  * - 每日谜题卡片显示今日完成状态
  * - 主题训练卡片显示主题列表（点击进入对应主题）
  */
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Zap, CalendarDays, Library, ChevronRight, Target, Trophy } from 'lucide-react';
@@ -32,6 +32,18 @@ export default function PuzzleHome() {
   const todayKey = getDailyKey(new Date());
   const isTodayCompleted = Boolean(dailyCompleted[todayKey]);
 
+  const firstTheme = PUZZLE_THEMES[0];
+  const themeDrillBody = (
+    <>
+      <span className="puzzle-mode-icon"><Library className="w-5 h-5" /></span>
+      <div className="puzzle-name">{t('puzzle.themeDrillTitle')}</div>
+      <div className="puzzle-desc flex-1">{t('puzzle.themeDrillDesc')}</div>
+      <div className="puzzle-meta">
+        <span>{PUZZLE_THEMES.length} {t('puzzle.home.themesUnit')}</span>
+      </div>
+    </>
+  );
+
   return (
     <div className="h-full overflow-auto">
       <div className="py-5 space-y-6">
@@ -50,10 +62,17 @@ export default function PuzzleHome() {
         >
           {/* Puzzle Rush */}
           <motion.div variants={staggerItem} className="h-full">
-            <div className="puzzle-card h-full flex flex-col" onClick={() => navigate('/puzzle/rush?duration=3')}>
-              <span className="puzzle-mode-icon"><Zap className="w-5 h-5" /></span>
-              <div className="puzzle-name">{t('puzzle.rushTitle')}</div>
-              <div className="puzzle-desc flex-1">{t('puzzle.rushDesc')}</div>
+            {/* 卡片内含 3/5 min 子按钮，整体不能包 <a>/<button>（交互嵌套非法）：
+                主体 Link 用 after 覆盖整卡点击区，子按钮以 z-10 浮在其上。 */}
+            <div className="puzzle-card h-full flex flex-col">
+              <Link
+                to="/puzzle/rush?duration=3"
+                className="flex flex-1 flex-col after:absolute after:inset-0"
+              >
+                <span className="puzzle-mode-icon"><Zap className="w-5 h-5" /></span>
+                <div className="puzzle-name">{t('puzzle.rushTitle')}</div>
+                <div className="puzzle-desc flex-1">{t('puzzle.rushDesc')}</div>
+              </Link>
               <div className="puzzle-meta">
                 {rushBest && (
                   <span>
@@ -61,16 +80,13 @@ export default function PuzzleHome() {
                     {t('puzzle.home.bestRecord', { score: rushBest.bestScore })}
                   </span>
                 )}
-                <span className="flex items-center gap-1">
+                <span className="relative z-10">
                   {([3, 5] as const).map((min) => (
                     <button
                       key={min}
                       type="button"
                       className="px-3 min-h-8 inline-flex items-center rounded-full border border-[var(--walnut-border)] text-[var(--brass-bright)] hover:border-[var(--brass-muted)] hover:bg-[var(--surface-raised)] transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/puzzle/rush?duration=${min}`);
-                      }}
+                      onClick={() => navigate(`/puzzle/rush?duration=${min}`)}
                     >
                       {min} min
                     </button>
@@ -82,10 +98,10 @@ export default function PuzzleHome() {
 
           {/* Daily Puzzle */}
           <motion.div variants={staggerItem} className="h-full">
-            <div
+            <Link
+              to="/puzzle/daily"
               className={`puzzle-card h-full flex flex-col ${isTodayCompleted ? '' : 'daily'}`}
               data-badge={t('puzzle.home.todayBadge')}
-              onClick={() => navigate('/puzzle/daily')}
             >
               <span className="puzzle-mode-icon"><CalendarDays className="w-5 h-5" /></span>
               <div className="puzzle-name">{t('puzzle.dailyTitle')}</div>
@@ -100,22 +116,18 @@ export default function PuzzleHome() {
                   </span>
                 )}
               </div>
-            </div>
+            </Link>
           </motion.div>
 
           {/* Theme Drill */}
           <motion.div variants={staggerItem} className="h-full">
-            <div className="puzzle-card h-full flex flex-col" onClick={() => {
-              const first = PUZZLE_THEMES[0];
-              if (first) navigate(`/puzzle/theme/${first.id}`);
-            }}>
-              <span className="puzzle-mode-icon"><Library className="w-5 h-5" /></span>
-              <div className="puzzle-name">{t('puzzle.themeDrillTitle')}</div>
-              <div className="puzzle-desc flex-1">{t('puzzle.themeDrillDesc')}</div>
-              <div className="puzzle-meta">
-                <span>{PUZZLE_THEMES.length} {t('puzzle.home.themesUnit')}</span>
-              </div>
-            </div>
+            {firstTheme ? (
+              <Link to={`/puzzle/theme/${firstTheme.id}`} className="puzzle-card h-full flex flex-col">
+                {themeDrillBody}
+              </Link>
+            ) : (
+              <div className="puzzle-card h-full flex flex-col">{themeDrillBody}</div>
+            )}
           </motion.div>
         </motion.div>
 

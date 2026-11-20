@@ -37,7 +37,7 @@
 
 **非课程文件仍按三档执行**：既有超大文件采用**逐文件 allowlist 棘轮**（`LEGACY_OVERSIZED_FILES`）：每个条目记录登记时的实测行数作为 `maxLines`，**只减不增**——文件继续增长即失败；拆分回到 400 行以内后必须删除条目（条目指向已合规文件同样变红）。除课程内容与共享组件外，禁止恢复其他目录 / 类别级宽泛豁免（`/data/`、`/utils/`、`store.ts`、页面组件名枚举等曾使全部超大文件绕过守卫）。新增非课程文件不得登记 allowlist，只能拆分。逻辑文件（`composeVariantChapters` / `loaders` / `index` 等）不享受课程内容豁免。
 
-CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫（平铺扫描 `src/styles/*.css`，Phase 2 拆分的分片文件同样平铺）；`globals.css` 为 Phase 2 拆分前的临时豁免，上限锁定在 `CSS_ALLOWLIST` 中的当前行数，同样只减不增。
+CSS 单文件上限 800 行，由 `src/guards/cssLineCountGuard.test.ts` 守卫（平铺扫描 `src/styles/*.css`）；`globals.css` 已收敛为纯入口（≤120 行，只允许 `@import` + `@theme`），组件规则按级联顺序落在同目录分片，入口 import 与分片文件双向一致（无孤儿分片 / 无悬空 import）。
 
 ### 函数设计
 
@@ -113,7 +113,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 ## UI/UX 设计系统
 
-- **色彩**：四层架构（牌桌绿 `--felt-*` / 象牙白 `--ivory-*` / 黄铜金 `--brass-*` / 胡桃木 `--walnut-*`），通过 CSS 变量定义于 `src/styles/globals.css`（色彩 token 实现唯一权威）
+- **色彩**：四层架构（牌桌绿 `--felt-*` / 象牙白 `--ivory-*` / 黄铜金 `--brass-*` / 胡桃木 `--walnut-*`），通过 CSS 变量定义于 `src/styles/tokens.css` 的 `:root`（色彩 token 实现唯一权威，经入口 `globals.css` 引入）
 - **字体**：Fraunces（serif 标题）/ Inter Tight（sans 正文）/ JetBrains Mono（mono 数字）
 - **主题**：暗色为默认，另支持浅色「白天牌室」（light token / 补丁白名单见 DESIGN.md §2.8）；禁止硬编码颜色值
 - **响应式**：桌面 ≥1024px / 平板 768-1023px / 移动 <768px
