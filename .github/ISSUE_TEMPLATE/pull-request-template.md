@@ -57,7 +57,7 @@
 
 ### UI/UX 规范（如涉及页面改造）
 
-- [ ] 使用 CSS 变量而非硬编码 hex（globals.css 唯一权威）
+- [ ] 使用 CSS 变量而非硬编码 hex（`src/styles` 分片唯一权威，入口 `globals.css`）
 - [ ] WCAG 2.1 AA 对比度达标（4.5:1 文本 / 3:1 大文本）
 - [ ] 触摸目标 ≥ 44×44px（移动端）
 - [ ] 反霓虹硬约束已通过（designTokenGuard.test.ts守卫）

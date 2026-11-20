@@ -10,7 +10,7 @@ import { readCssSources } from '../test-utils/cssSources';
  * 环境光与纸张边界），全部登记在 ALLOWED_LIGHT_SELECTORS；新增补丁必须先删一个或
  * 在设计文档登记理由。黄铜字面 rgba 已清零，黑色字面 rgba 按 41 条棘轮锁定。
  *
- * 扫描面：src/styles/globals.css。
+ * 扫描面：src/styles 全部分片（按 globals.css 的 @import 顺序拼接）。
  */
 
 const CSS_ENTRY = fileURLToPath(new URL('../styles/globals.css', import.meta.url));

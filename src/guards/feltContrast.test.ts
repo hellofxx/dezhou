@@ -6,8 +6,8 @@ import { readCssSources } from '../test-utils/cssSources';
  * 暗底房间 / 发牌员纸条文本对比度守卫（WCAG 2.1 AA §1.4.3）
  *
  * jsdom 里 axe 的 color-contrast 因无布局计算恒为 inapplicable，文本对比度只能在源头
- * （globals.css 的 token 字面量）上算，否则一次「顺手取亮阶」的调色会让语义文本跌破
- * AA 而测试全绿。所有颜色都从 globals.css 解析，守卫里不登记任何色值。
+ * （src/styles 分片的 token 字面量，按入口 globals.css import 顺序拼接）上算，否则一次
+ * 「顺手取亮阶」的调色会让语义文本跌破 AA 而测试全绿。所有颜色都从 CSS 解析，守卫里不登记任何色值。
  *
  * 断言口径：
  * - 暗色房间：--ivory-muted / --clay-text / --danger-text / --sage-text / --brass-text

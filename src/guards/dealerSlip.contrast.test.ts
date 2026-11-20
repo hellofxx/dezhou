@@ -8,7 +8,8 @@ import { readCssSources } from '../test-utils/cssSources';
  * 纸条是独立于暗色房间色板的 paper 材质：Dialog / 移动端反馈 Sheet / ResultSummary /
  * 快捷键浮层都把文字与语义色重锚到 --paper-* 深阶。任何一次调色若把 ink 提亮或把
  * 黄铜/语义色取亮阶，都会让纸面文字跌破 AA，而 jsdom 里 axe 的 color-contrast
- * 因无布局计算恒为 inapplicable，因此必须在源头（globals.css token）上算对比度。
+ * 因无布局计算恒为 inapplicable，因此必须在源头（src/styles 分片的 token，按入口
+ * globals.css import 顺序拼接）上算对比度。
  *
  * 断言口径：
  * - --paper-ink 于 --paper ≥ 7:1（正文/标题）
