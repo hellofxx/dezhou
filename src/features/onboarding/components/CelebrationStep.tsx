@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { Flame } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import { useProgressStore } from '@/features/progress/store';
+// 跨模块写入统一经 progress 公共入口（禁止深引 progress/store）
+import { progressCommands } from '@/features/progress/api';
 
 // 首胜庆祝动画 — 纯 CSS，不引入 framer-motion。
 // P2A-02：Day 1 Streak 的 recordTrainingDay 已移至 FirstDrillStep 完成动作
 // （首胜达成时刻记一次）；本页只做展示——跨日卡在庆祝页重新挂载不会重复记训练日。
 export default function CelebrationStep() {
   const { t } = useTranslation();
-  const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
+  const { completeOnboardingStep } = progressCommands;
 
   const handleContinue = () => completeOnboardingStep(4);
 

@@ -19,9 +19,12 @@ const { recordAnswerMock, recordTrainingDayMock, emitMock } = vi.hoisted(() => (
   emitMock: vi.fn(),
 }));
 
-vi.mock('@/features/progress/store', () => ({
-  useProgressStore: (selector: (s: unknown) => unknown) =>
-    selector({ recordAnswer: recordAnswerMock, recordTrainingDay: recordTrainingDayMock }),
+// 迁移后生产侧只经 @/features/progress/api 调用 progressCommands，mock 与调用面对齐
+vi.mock('@/features/progress/api', () => ({
+  progressCommands: {
+    recordAnswer: recordAnswerMock,
+    recordTrainingDay: recordTrainingDayMock,
+  },
 }));
 
 vi.mock('@/shared/stores/trainingEvents', () => ({

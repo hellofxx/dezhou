@@ -83,6 +83,11 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+/** 预缓存命中查询（ignoreVary：预缓存请求不带 Origin 头，服务器响应可能带 Vary: Origin）。 */
+async function matchPrecached(request) {
+  return caches.match(request, { ignoreVary: true });
+}
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
@@ -129,9 +134,13 @@ self.addEventListener('fetch', (event) => {
 
   // 自托管字体已迁移至 src/fonts/，由 Vite 打包为哈希资产，走上方 assets/ 规则（离线能力不变）
 
-  // Other same-origin GET: network-first, no caching (avoids stale modules after update)
+  // Other same-origin GET: network-first（不回写，避免旧模块滞留）。
+  // 网络失败时必须先回落到预缓存：public/ 下的图标、manifest.json、404.html 等不在
+  // /assets/ 下，否则会出现「install 阶段已预缓存、离线却返回 503」的契约破绽。
   event.respondWith(
-    fetch(event.request).catch(() => {
+    fetch(event.request).catch(async () => {
+      const precached = await matchPrecached(event.request);
+      if (precached) return precached;
       if (event.request.mode === 'navigate') {
         return caches.match(BASE + 'index.html').then((r) => r || new Response('Offline', { status: 503 }));
       }

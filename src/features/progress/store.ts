@@ -1,11 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { progressPersistStorage, setPersistFailureHandler } from './utils/persistStorage';
+import { progressPersistStorage, setPersistFailureHandler, setPersistSuccessHandler } from './utils/persistStorage';
+import {
+  clearPersistedRecords,
+  isPersistableRecord,
+  persistRecord,
+  removePersistedRecord,
+  retryPendingRecords as retryPendingRecordsTask,
+  type RecordPersistResult,
+} from './recordPersistence';
+import { reportPersistenceFailure, reportPersistenceSuccess, setLocalStorageRetryHandler } from './persistenceStatus';
 import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState, QuickDrillBestRecord, AbilityAssessment } from './types';
 import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
-// P2-01 阶段 A：records 持久化外迁 IndexedDB
-import { recordDatabase } from './utils/recordDatabase';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import {
   updateStreak,
@@ -296,6 +303,12 @@ interface ProgressStore {
 
   // Actions
   addRecord: (record: TrainingRecord) => void;
+  /** 可等待结果的入账（失败保留内存 + 进入待重试队列） */
+  submitRecord: (record: TrainingRecord) => Promise<RecordPersistResult>;
+  /** 重试待写记录（只重写 IDB，不重复 emit / 评分） */
+  retryPendingRecords: () => Promise<{ retried: number; saved: number; failed: number }>;
+  /** 触发一次 persist 快照重写 */
+  retryPersistWrite: () => boolean;
   deleteRecord: (id: string) => void;
   clearAllRecords: () => void;
 
@@ -451,8 +464,10 @@ interface ProgressStore {
    * @returns newFragments 合成后剩余碎片数；synthesized 是否触发了合成
    */
   earnFragment: () => { newFragments: number; synthesized: boolean };
-  // 持久化写失败标记（不持久化，仅运行时提示，见 persistStorage.ts）
+  // @deprecated 失败态已迁至 persistenceStatus（localStorage / records / cleanup 分源）；
+  // 本字段仅为兼容壳：不参与 persist，持久化层不再写入（PersistErrorNotice 待 UI 切片迁移）
   persistError: { reason: 'quota' | 'unavailable' | 'unknown'; at: number } | null;
+  // @deprecated 同上；仅为兼容既有测试保留
   setPersistError: (error: { reason: 'quota' | 'unavailable' | 'unknown'; at: number } | null) => void;
 }
 
@@ -462,44 +477,41 @@ export const useProgressStore = create<ProgressStore>()(
       records: [],
 
       addRecord: (record) => {
-        // P1A-04/P1F-03 兜底（专批 B）：纵深防御拒收空会话 —— totalQuestions <= 0
-        // 的训练结果不入账（不计 records，不写 IndexedDB，不参与统计/成就/Dashboard 聚合）。
-        // 模块侧已阻断空会话入口（range-trainer X 按钮 / theory 空题库守卫），
-        // 此处为中枢兜底，防止未来任意模块 emit 空会话污染数据
-        if (!record.result || record.result.totalQuestions <= 0) return;
-        set((state) => {
-          // 去重：相同 id 的记录不重复添加（防止事件总线重复 emit）
-          if (state.records.some((r) => r.id === record.id)) return state;
-          return { records: [...state.records, record] };
+        // P1A-04/P1F-03 纵深防御：空会话不入账、不写库、不参与统计
+        if (!isPersistableRecord(record)) return;
+        // 去重：内存已有同 id 则不再新增（也不再写库）
+        if (get().records.some((r) => r.id === record.id)) return;
+        set((state) => ({ records: [...state.records, record] }));
+        // 内存即时可查；落库由协调器负责（失败保留内存 + 进入待重试队列）
+        void persistRecord(record).catch((error: unknown) => {
+          console.warn('[progress] 训练记录持久化异常', error);
         });
-        // P2-01 阶段 A：records 持久化外迁 IndexedDB —— 内存仍保留全量 records 供
-        // 实时查询/统计，持久化由 side-effect 统一写入（put 按 id 幂等）并自动裁剪。
-        // IndexedDB 不可用时静默降级为会话内记录（跨会话持久化缺失，不影响功能）。
-        void (async () => {
-          try {
-            await recordDatabase.add([record]);
-            await recordDatabase.cleanup(1000); // 自动裁剪：仅保留最近 1000 条
-          } catch (err) {
-            console.warn('[progress] 训练记录写入 IndexedDB 失败', err);
-          }
-        })();
       },
 
+      submitRecord: async (record) => {
+        if (!isPersistableRecord(record)) return { ok: false, reason: 'invalid', retainedInMemory: false };
+        // 重复 ID：内存已有则不覆盖（同 ID 载荷不同同样返回 exists）
+        if (get().records.some((r) => r.id === record.id)) return { ok: true, status: 'exists' };
+        set((state) => ({ records: [...state.records, record] }));
+        return persistRecord(record);
+      },
+
+      retryPendingRecords: () => retryPendingRecordsTask(),
+
+      // 同引用 set：触发 persist 包装层写一次规范快照（无状态变更）
+      retryPersistWrite: () => { set((state) => state); return true; },
+
       deleteRecord: (id) => {
-        set((state) => ({
-          records: state.records.filter((r) => r.id !== id),
-        }));
-        // P2-01 阶段 A：同步删除 IndexedDB 记录，避免刷新后残留
-        void recordDatabase.delete(id).catch((err) => {
-          console.warn('[progress] 删除训练记录失败', err);
-        });
+        set((state) => ({ records: state.records.filter((r) => r.id !== id) }));
+        removePersistedRecord(id); // 取消在途 / 待写任务（防复活）+ 删库
       },
 
       clearAllRecords: () => {
+        const previous = get().records;
         set({ records: [] });
-        // P2-01 阶段 A：同步清空 IndexedDB
-        void recordDatabase.clear().catch((err) => {
-          console.warn('[progress] 清空训练记录失败', err);
+        clearPersistedRecords(() => {
+          // 清空失败不假装成功：恢复内存记录（库内仍在）并上报 records 来源失败
+          set((state) => mergeRecords(state.records, previous));
         });
       },
 
@@ -1140,10 +1152,19 @@ async function checkCondition(
   }
 }
 
-// ===== 持久化写失败可见化：订阅 safe storage 上报的错误 =====
+/** 清空失败回滚：把被清掉的内存记录合回当前内存（按 id 去重 + createdAt 升序）。 */
+function mergeRecords(current: TrainingRecord[], previous: TrainingRecord[]): { records: TrainingRecord[] } {
+  const ids = new Set(current.map((r) => r.id));
+  const restored = previous.filter((r) => !ids.has(r.id));
+  return { records: [...restored, ...current].toSorted((a, b) => a.createdAt - b.createdAt) };
+}
+
+// ===== 持久化失败可见化：按来源进入 persistenceStatus 运行态（不进 persist 快照） =====
 setPersistFailureHandler((failure) => {
-  useProgressStore.getState().setPersistError({ reason: failure.reason, at: failure.at });
+  reportPersistenceFailure('localStorage', { reason: failure.reason, operation: 'write' });
 });
+setPersistSuccessHandler(() => reportPersistenceSuccess('localStorage'));
+setLocalStorageRetryHandler(() => useProgressStore.getState().retryPersistWrite());
 
 
 // ===== 冻结卡碎片：概率获取辅助函数 =====

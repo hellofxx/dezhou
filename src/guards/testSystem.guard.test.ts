@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
  * - 每个 feature 模块至少有一个测试文件
  * - 每个 persist store（任意含 persist( 的非测试源码）有 <store>.persist-shape 测试；version > 1 还有 <store>.migrate 测试
  * - src/guards 下的文件与 README 清单双向一致
+ * - 根 e2e/ 的 Playwright 用例：非空发现、禁止 only/skip/fixme/预期失败、配置收集口径正确
  *
  * 扫描面自检是硬要求：路径解析失效时，数量下限断言必须先失败，禁止空洞通过。
  */
@@ -20,6 +21,10 @@ import { fileURLToPath } from 'node:url';
 const SRC_DIR = fileURLToPath(new URL('../', import.meta.url));
 const GUARDS_DIR = path.join(SRC_DIR, 'guards');
 const GUARDS_README = path.join(GUARDS_DIR, 'README.md');
+/** 仓库根（本文件位于 src/guards/，距根两层） */
+const REPO_ROOT = fileURLToPath(new URL('../../', import.meta.url));
+const E2E_DIR = path.join(REPO_ROOT, 'e2e');
+const PLAYWRIGHT_CONFIG = path.join(REPO_ROOT, 'playwright.config.ts');
 
 /** 最低测试文件数（棘轮下限，只增不减；防止 glob / 路径失效导致空洞通过） */
 const MIN_TEST_FILES = 150;
@@ -29,6 +34,9 @@ const MIN_GUARD_FILES = 5;
 
 /** 最低 README 登记数（同上） */
 const MIN_REGISTERED_GUARDS = 5;
+
+/** 最低 E2E 用例文件数（同上；当前为训练闭环 + 离线冒烟） */
+const MIN_E2E_TEST_FILES = 2;
 
 type SourceFile = {
   absolutePath: string;
@@ -70,8 +78,21 @@ const TEST_FILES = ALL_SRC_FILES
   .filter((file) => /\.test\.(ts|tsx)$/.test(file))
   .map(readSource);
 
+/** Playwright 用例文件（根 e2e/，后缀 .test.ts；与 Vitest 双项目互不交叉） */
+const E2E_TEST_FILES: SourceFile[] = fs.existsSync(E2E_DIR)
+  ? walk(E2E_DIR)
+      .filter((file) => file.endsWith('.test.ts'))
+      .map((file) => ({
+        absolutePath: file,
+        relativePath: toPosix(path.relative(REPO_ROOT, file)),
+        content: fs.readFileSync(file, 'utf8'),
+      }))
+  : [];
+
 // 动态拼接标记，避免守卫自身源码命中自己的扫描
 const FORBIDDEN_MARKERS = ['only', 'skip', 'todo', 'fails'].map((name) => `.${name}(`);
+/** Playwright 的静默失效标记：聚焦 / 跳过 / 待办 / 预期失败 */
+const E2E_FORBIDDEN_MARKERS = ['only', 'skip', 'fixme', 'fail'].map((name) => `.${name}(`);
 
 describe('测试体系守卫（test system invariants）', () => {
   it('扫描自检：测试文件数量达到下限', () => {
@@ -195,5 +216,60 @@ describe('测试体系守卫（test system invariants）', () => {
     ).map((file) => file.relativePath);
 
     expect(jsdomGuards).toEqual([]);
+  });
+});
+
+describe('E2E 体系守卫（Playwright）', () => {
+  it('扫描自检：根 e2e/ 与 playwright.config.ts 存在，用例文件数达到下限', () => {
+    expect(fs.existsSync(E2E_DIR), '缺少根 e2e/ 目录：Playwright 用例无处安放').toBe(true);
+    expect(fs.existsSync(PLAYWRIGHT_CONFIG), '缺少 playwright.config.ts').toBe(true);
+    expect(E2E_TEST_FILES.length).toBeGreaterThanOrEqual(MIN_E2E_TEST_FILES);
+  });
+
+  it('Playwright 配置只收集 e2e 下的 .test.ts，且禁止 only / 重试', () => {
+    const config = fs.readFileSync(PLAYWRIGHT_CONFIG, 'utf8');
+    const testDir = config.match(/testDir:\s*'([^']+)'/)?.[1];
+    const testMatch = config.match(/testMatch:\s*'([^']+)'/)?.[1];
+
+    expect(testDir, 'playwright.config.ts 必须用 testDir 限定收集目录').toBe('./e2e');
+    expect(testMatch, 'playwright.config.ts 必须用 testMatch 限定用例后缀').toBe('**/*.test.ts');
+    expect(config, 'forbidOnly 必须为 true（禁止 .only 静默缩小门禁）').toContain('forbidOnly: true');
+    expect(config, 'retries 必须为 0（禁止用重试变绿）').toContain('retries: 0');
+  });
+
+  it('Playwright 用例不得包含 only / skip / fixme / expected-failure 标记', () => {
+    const violations: string[] = [];
+
+    for (const file of E2E_TEST_FILES) {
+      for (const marker of E2E_FORBIDDEN_MARKERS) {
+        if (file.content.includes(marker)) {
+          violations.push(`${file.relativePath} → ${marker}`);
+        }
+      }
+    }
+
+    expect(violations).toEqual([]);
+  });
+
+  it('每个 Playwright 用例文件至少包含一个 test 声明（非空发现）', () => {
+    const emptyFiles = E2E_TEST_FILES
+      .filter((file) => !/\btest(?:\.\w+)?\s*\(/.test(file.content))
+      .map((file) => file.relativePath);
+
+    expect(emptyFiles, '以下 E2E 文件没有 test 声明，Playwright 不会执行任何用例').toEqual([]);
+  });
+
+  it('E2E 用例不绕过 UI 直写持久层（禁 localStorage / IndexedDB 注入）', () => {
+    const violations: string[] = [];
+
+    for (const file of E2E_TEST_FILES) {
+      for (const bypass of ['localStorage.setItem', 'indexedDB.open']) {
+        if (file.content.includes(bypass)) {
+          violations.push(`${file.relativePath} → ${bypass}`);
+        }
+      }
+    }
+
+    expect(violations, 'E2E 必须走真实 UI；绕过 store / 持久层会让门禁失去回归意义').toEqual([]);
   });
 });

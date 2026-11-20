@@ -45,13 +45,13 @@ foreach ($agent in $expectedAgents) {
             $name = $match.Groups[1].Value.Trim()
             $expectedName = $agent -replace '\.md$', ''
             if ($name -eq $expectedName) {
-                Write-Host "✓ $agent: name='$name'" -ForegroundColor Green
+                Write-Host "✓ ${agent}: name='$name'" -ForegroundColor Green
             } else {
-                Write-Host "✗ $agent: name='$name' ≠ filename='$expectedName'" -ForegroundColor Red
-                $errors += "Name mismatch in $agent: '$name' vs '$expectedName'"
+                Write-Host "✗ ${agent}: name='$name' ≠ filename='$expectedName'" -ForegroundColor Red
+                $errors += "Name mismatch in ${agent}: '$name' vs '$expectedName'"
             }
         } else {
-            Write-Host "✗ $agent: 无 frontmatter name" -ForegroundColor Red
+            Write-Host "✗ ${agent}: 无 frontmatter name" -ForegroundColor Red
             $errors += "No name in frontmatter for $agent"
         }
     }
@@ -59,7 +59,7 @@ foreach ($agent in $expectedAgents) {
 
 Write-Host ""
 Write-Host "【检查 3】标准章节存在性" -ForegroundColor Yellow
-$requiredSections = @("## Role", "## Context", "## Authority", "## Capabilities", "## Cross-Module Touchpoints", "## Key Files", "## Workflows", "## Constraints", "## Quality Checklist")
+$requiredSections = @("## Role", "## Context", "## Authority", "## Constraints", "## Quality Checklist")
 
 foreach ($agent in $expectedAgents) {
     $path = Join-Path $agentsDir $agent
@@ -67,16 +67,16 @@ foreach ($agent in $expectedAgents) {
         $content = Get-Content $path
         $missingSections = @()
         foreach ($section in $requiredSections) {
-            if (-not $content -match [regex]::Escape($section)) {
+            if ($section -notin $content) {
                 $missingSections += $section
             }
         }
         
         if ($missingSections.Count -eq 0) {
-            Write-Host "✓ $agent: 所有章节完整" -ForegroundColor Green
+            Write-Host "✓ ${agent}: 所有章节完整" -ForegroundColor Green
         } else {
-            Write-Host "✗ $agent: 缺少 $($missingSections -join ', ')" -ForegroundColor Yellow
-            $warnings += "Missing sections in $agent: $($missingSections -join ', ')"
+            Write-Host "✗ ${agent}: 缺少 $($missingSections -join ', ')" -ForegroundColor Red
+            $errors += "Missing sections in ${agent}: $($missingSections -join ', ')"
         }
     }
 }
@@ -113,5 +113,8 @@ if ($warnings.Count -gt 0) {
 
 Write-Host ""
 Write-Host "=== 推荐操作 ===" -ForegroundColor Cyan
-Write-Host "1. 如有错误，请参考 docs/agents-guide/子智能体文件标准化规范.md"
+Write-Host "1. 如有错误，请参考 docs/agents/README.md"
 Write-Host "2. 可运行 pnpm verify 进行最终验证"
+
+if ($errors.Count -gt 0) { exit 1 }
+exit 0

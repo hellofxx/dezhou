@@ -6,7 +6,7 @@ import { transitionFast } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { useTheoryStore } from '../store';
 import { orderTheoryQuizQuestion } from '../utils/quizOrder';
 import { resolveTheoryQuizQuestion } from '../utils/contentKeys';
@@ -51,8 +51,6 @@ interface TheoryQuizProps {
 export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
   const { t } = useTranslation();
   const chapterAttempts = useTheoryStore((s) => s.progress.chapterAttempts);
-  const updateElo = useProgressStore((s) => s.updateElo);
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
   const flaggedQuestions = useTheoryStore((s) => s.progress.flaggedQuestions);
   const toggleFlagQuestion = useTheoryStore((s) => s.toggleFlagQuestion);
 
@@ -109,8 +107,8 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
     else wrongQuestionIdsRef.current = [...wrongQuestionIdsRef.current, question.id];
     // 理论掌握度进入 ELO 与情绪系统（答题时同步调用，不走事件总线）；仅首次作答计入
     if (!isPractice) {
-      updateElo(chapter.eloDimension, correct, getChapterDifficulty(chapter.level));
-      recordAnswer(correct);
+      progressCommands.updateElo(chapter.eloDimension, correct, getChapterDifficulty(chapter.level));
+      progressCommands.recordAnswer(correct);
     }
   };
 

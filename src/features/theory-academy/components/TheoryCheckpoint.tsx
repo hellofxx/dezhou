@@ -7,7 +7,7 @@ import { cn } from '@/shared/utils/cn';
 import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { useTheoryStore } from '../store';
 import { useTheoryLevel } from '../hooks/useTheoryLevel';
 import { useTheoryContentI18n } from '../hooks/useTheoryContentI18n';
@@ -86,8 +86,6 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
   const completedChapters = useTheoryStore((s) => s.progress.completedChapters);
   const checkpoints = useTheoryStore((s) => s.progress.checkpoints);
   const recordCheckpointAttempt = useTheoryStore((s) => s.recordCheckpointAttempt);
-  const updateElo = useProgressStore((s) => s.updateElo);
-  const addReviewItem = useProgressStore((s) => s.addReviewItem);
 
   const unlocked = isCheckpointUnlocked(levelId, completedChapters);
   // 认证 CTA 只对标准变体出现（短牌/单挑本批无认证）；映射缺失时不渲染，避免拼出死链
@@ -153,14 +151,14 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
     // 首次检查点按题更新 ELO（维度取来源章），重考不再更新
     if (isFirstCheckpointAttempt(checkpoints, levelId)) {
       questions.forEach((item, index) => {
-        updateElo(item.eloDimension, flags[index] === true, getChapterDifficulty(level.level));
+        progressCommands.updateElo(item.eloDimension, flags[index] === true, getChapterDifficulty(level.level));
       });
     }
     // 错题按来源章入 SRS 队列（复习项路由回来源章）
     for (const group of groupWrongByChapter(questions, flags)) {
       const source = level.chapters.find((chapter) => chapter.id === group.chapterId);
       if (!source) continue;
-      for (const item of buildTheoryReviewItems(source, group.questionIds)) addReviewItem(item);
+      for (const item of buildTheoryReviewItems(source, group.questionIds)) progressCommands.addReviewItem(item);
     }
     setResult({
       score,

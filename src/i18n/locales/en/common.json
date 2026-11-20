@@ -62,6 +62,34 @@
     "toggle": "Show / Hide Shortcuts"
   },
   "shortcutsTitle": "Keyboard Shortcuts",
+  "persistence": {
+    "localStorage": {
+      "title": "Learning progress not saved",
+      "description": "Writing to browser storage failed. Recent progress and settings may not survive a reload."
+    },
+    "records": {
+      "title": "Training records visible this session only",
+      "description": "Training records were not written to the local database and may be lost on reload.",
+      "pending": "{{count}} waiting to be written"
+    },
+    "history": {
+      "title": "History failed to load",
+      "description": "Stored training history could not be loaded. Only records from this session are shown."
+    },
+    "cleanup": {
+      "title": "Maintenance cleanup failed",
+      "description": "Old records were not pruned, so the local database may hold extra data. Current training is unaffected."
+    },
+    "retry": "Retry",
+    "retrying": "Retrying…",
+    "retryFailed": "Retry did not succeed. Download the current data as a stopgap.",
+    "openSettings": "Open settings",
+    "dismiss": "Dismiss notice",
+    "download": {
+      "label": "Download current data",
+      "partialNote": "Excludes history and hands that may not be loaded — not a complete backup"
+    }
+  },
   "errorBoundary": {
     "title": "Rendering Error",
     "description": "An unexpected error occurred. Please try refreshing the page or clearing your browser cache.",

@@ -70,6 +70,34 @@ jobs:
       - name: Bundle Size Check
         run: pnpm run size:check
 
+      # ── E2E 门禁（L4）：在上传制品之前阻断，失败即不发布 ────────────────
+      # 只检查 e2e/ 与 playwright.config.ts（pnpm lint 仍只覆盖 src）
+      - name: E2E Typecheck
+        run: pnpm typecheck:e2e
+
+      - name: E2E Lint
+        run: pnpm exec eslint e2e playwright.config.ts
+
+      # --with-deps 安装 Chromium 及 Linux 系统依赖（runner 自带免密 sudo）
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      # dist 已由 Build 步骤产出；test:e2e 缺构建会直接报错
+      - name: E2E (Playwright)
+        run: pnpm test:e2e
+
+      # 失败证据：trace / screenshot / HTML 报告（retries=0，不存在重试掩盖）
+      - name: Upload E2E artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
       # SPA 路由回退：将 index.html 复制为 404.html，
       # 这样在 GitHub Pages 上刷新 /dezhou/xxx 深层路由不会 404
       - name: SPA fallback

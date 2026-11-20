@@ -4,7 +4,7 @@ import type { Position } from '@/shared/types/position';
 import type { TrainingResult, QuestionResult } from '@/shared/types/common';
 import type { QuizQuestion } from '../types';
 import { useRangeTrainerStore } from '../store';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState, progressCommands } from '@/features/progress/api';
 // P1-3.1: SRS 集成
 import {
   answerQuality,
@@ -102,14 +102,14 @@ export function useQuizEngine() {
   const resetQuiz = useRangeTrainerStore((s) => s.resetQuiz);
 
   // P1-2.4: ELO 能力分级 — range-trainer 维度=preflop
-  const updateElo = useProgressStore((s) => s.updateElo);
-  const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
+  const updateElo = progressCommands.updateElo;
+  const preflopElo = useProgressState((s) => s.eloByVariant[s.activeVariant].preflop);
 
   // P2-5.2: 情绪管理 — 记录答题用于连续答错检测与每日题量统计
-  const recordAnswerForEmotion = useProgressStore((s) => s.recordAnswer);
+  const recordAnswerForEmotion = progressCommands.recordAnswer;
   // P4 修复（4.5-P0）：自适应难度降级判断
-  const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
-  const consecutiveWrongCount = useProgressStore((s) => s.emotion.consecutiveWrongCount);
+  const shouldDownshiftDifficulty = progressCommands.shouldDownshiftDifficulty;
+  const consecutiveWrongCount = useProgressState((s) => s.emotion.consecutiveWrongCount);
 
   const getCurrentQuestion = useCallback((): QuizQuestion | null => {
     if (quizState.currentIndex >= quizState.questions.length) return null;
@@ -207,9 +207,9 @@ export function useQuizEngine() {
   // quality 评分复用共享 answerQuality：答对+快→5，答对→4，答错→1
   // （range-trainer 只有 fold/call/raise，"答错但接近"无判定依据，统一为 1）
   // 调用方在 handleAnswer 中答题后调用，与 recordEloForAnswer 并列
-  const addReviewItem = useProgressStore((s) => s.addReviewItem);
-  const updateReviewItem = useProgressStore((s) => s.updateReviewItem);
-  const reviewItems = useProgressStore((s) => s.reviewItems);
+  const addReviewItem = progressCommands.addReviewItem;
+  const updateReviewItem = progressCommands.updateReviewItem;
+  const reviewItems = useProgressState((s) => s.reviewItems);
 
   const recordSrsForAnswer = useCallback(
     (question: QuizQuestion, isCorrect: boolean, timeTakenMs: number) => {

@@ -10,7 +10,7 @@ import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
 import { renderMentorFeedback } from '@/shared/constants/mentorStyles';
 import { DecisionAnalysis } from '@/shared/components/feedback/DecisionAnalysis';
 import { TryAgainButton } from '@/shared/components/feedback/TryAgainButton';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState } from '@/features/progress/api';
 import { ActionType } from '@/shared/types/action';
 import { actionTerm } from '../utils/actionTerms';
 
@@ -76,7 +76,7 @@ export function GTOFeedback({
       : t('gto.feedback.suboptimal');
 
   // P2-4：优先使用 mentorStyle 渲染人格化文案；缺省时降级到 i18n
-  const mentorStyle = useProgressStore((s) => s.mentorStyle);
+  const mentorStyle = useProgressState((s) => s.mentorStyle);
   const mentorMessage = feedback && grade
     ? renderMentorFeedback(mentorStyle, grade, {
         evLoss: Number((feedback.evLoss ?? 0).toFixed(2)),

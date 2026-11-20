@@ -9,7 +9,7 @@ import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegi
 import type { AcademyLessonAttemptSnapshot } from '@/shared/types/academyDataSource';
 import type { LessonAttemptRecord } from './types';
 import { useAcademyStore } from './store';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import {
   findLessonSummaryById,
   getLevelSummaries,
@@ -75,8 +75,8 @@ registerAcademyDataSource({
  */
 if (typeof window !== 'undefined') {
   setTimeout(() => {
-    useProgressStore
-      .getState()
-      .seedEloFromOnboardingAbility(useProgressStore.getState().onboarding.initialAbility);
+    progressCommands.seedEloFromOnboardingAbility(
+      progressCommands.getOnboardingInitialAbility(),
+    );
   }, 0);
 }

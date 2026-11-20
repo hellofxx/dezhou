@@ -4,6 +4,7 @@ import { MemoryRouter, useLocation } from 'react-router-dom';
 import SettingsPage from './SettingsPage';
 import { useProgressStore, DEFAULT_STREAK_STATE, DEFAULT_ONBOARDING } from '../../store';
 import { DEFAULT_EMOTION_STATE } from '../../types';
+import { __resetPersistenceStatus } from '../../persistenceStatus';
 import { useDebugModeStore, DEBUG_UNLOCK_CODE } from '@/shared/stores/debugMode';
 import { MENTOR_PROFILES } from '@/shared/types/mentor';
 import type { TrainingRecord } from '../../types';
@@ -17,16 +18,35 @@ import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
  * - 教练风格按钮写入 store.mentorStyle，头像为 Lucide 图标（iconId 映射，尺寸与旧 emoji 一致）；
  * - 音效开关直接落到 settings.soundEnabled；
  * - 冻结卡按钮在「已训 / 已用 / 无卡」时禁用，可用时点击写入 streak 并给出成功反馈；
- * - 清除数据需二次确认，确认后 records 清空；
- * - 开发者选项默认折叠，错误调试码报错、正确调试码解锁并可关闭；
- * - 数据管理展示当前记录数，导入合法 JSON 后追加记录并提示条数。
+ * - 数据管理：导入按 submitRecord 实际结果分别统计新增 / 重复 / 无效 / 未保存；
+ *   牌局恢复失败不影响记录统计；导出在 hands 读取失败时仍下载部分备份并明确标注；
+ *   清除只针对训练记录，失败时按持久化上报回滚（不假装成功）；
+ * - 开发者选项默认折叠，错误调试码报错、正确调试码解锁并可关闭。
  */
 
 const DAY = 24 * 60 * 60 * 1000;
 const TODAY = toLocalDateKey(Date.now());
 const YESTERDAY = toLocalDateKey(Date.now() - DAY);
 
-function buildRecord(id: string): TrainingRecord {
+// 存储边界与牌局备份拆成替身：本文件只验证「按实际结果统计 / 反馈」，不依赖真实 IndexedDB
+const dbMock = vi.hoisted(() => ({
+  add: vi.fn(async (_records: unknown[]): Promise<void> => {}),
+  addIfAbsent: vi.fn(async (_record: unknown): Promise<'inserted' | 'exists'> => 'inserted'),
+  delete: vi.fn(async (_id: string): Promise<void> => {}),
+  clear: vi.fn(async (): Promise<void> => {}),
+  cleanup: vi.fn(async (_limit: number): Promise<number> => 0),
+  getAll: vi.fn(async (): Promise<unknown[]> => []),
+}));
+
+const handsMock = vi.hoisted(() => ({
+  loadAllHands: vi.fn(async (): Promise<Array<Record<string, unknown>>> => []),
+  saveAllHands: vi.fn(async (_hands: Array<Record<string, unknown>>): Promise<void> => {}),
+}));
+
+vi.mock('../../utils/recordDatabase', () => ({ recordDatabase: dbMock }));
+vi.mock('../../utils/handHistoryBackup', () => handsMock);
+
+function buildRecord(id: string, overrides: Partial<TrainingRecord> = {}): TrainingRecord {
   return {
     id,
     module: 'range-trainer',
@@ -42,6 +62,7 @@ function buildRecord(id: string): TrainingRecord {
       timestamp: Date.now(),
       details: [],
     },
+    ...overrides,
   };
 }
 
@@ -86,11 +107,60 @@ function openSection(container: HTMLElement, title: string): void {
   fireEvent.click(toggle);
 }
 
-beforeEach(() => seedStore());
+/** jsdom 未实现 createObjectURL / download 点击：替身并在测试内读回 blob 文本 */
+const downloadCalls = vi.hoisted(() => ({ blobs: [] as Blob[] }));
+
+function readBlobText(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(blob);
+  });
+}
+
+function importJson(container: HTMLElement, payload: unknown): void {
+  const input = container.querySelector<HTMLInputElement>('input[type="file"]');
+  expect(input).toBeTruthy();
+  const file = new File([JSON.stringify(payload)], 'backup.json', { type: 'application/json' });
+  fireEvent.change(input!, { target: { files: [file] } });
+}
+
+/** 数据管理分区内的动作按钮（导出 / 导入 / 清除，按渲染顺序） */
+function dataActionButton(container: HTMLElement, index: number): HTMLButtonElement {
+  const section = container.querySelector('#settings-data');
+  expect(section).toBeTruthy();
+  const buttons = Array.from(section!.querySelectorAll<HTMLButtonElement>('button'))
+    .filter((b) => b.type !== 'button' || b.getAttribute('aria-expanded') === null);
+  return buttons[index]!;
+}
+
+beforeEach(() => {
+  seedStore();
+  dbMock.addIfAbsent.mockReset();
+  dbMock.addIfAbsent.mockResolvedValue('inserted');
+  dbMock.clear.mockReset();
+  dbMock.clear.mockResolvedValue(undefined);
+  handsMock.loadAllHands.mockReset();
+  handsMock.loadAllHands.mockResolvedValue([]);
+  handsMock.saveAllHands.mockReset();
+  handsMock.saveAllHands.mockResolvedValue(undefined);
+  downloadCalls.blobs = [];
+  Object.defineProperty(globalThis.URL, 'createObjectURL', {
+    configurable: true,
+    value: (blob: Blob) => {
+      downloadCalls.blobs.push(blob);
+      return 'blob:mock';
+    },
+  });
+  Object.defineProperty(globalThis.URL, 'revokeObjectURL', { configurable: true, value: () => {} });
+  vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+});
 
 afterEach(() => {
   cleanup();
   seedStore();
+  __resetPersistenceStatus();
   vi.restoreAllMocks();
 });
 
@@ -216,53 +286,181 @@ describe('SettingsPage 冻结卡请假', () => {
   });
 });
 
-describe('SettingsPage 数据管理', () => {
-  it('展示当前训练记录数，清除数据需二次确认', () => {
+describe('SettingsPage 数据管理 · 清除训练记录', () => {
+  it('展示当前训练记录数，确认文案说明不清 ELO / SRS / 设置 / 学院 / 牌局', () => {
     seedStore({ records: [buildRecord('r1'), buildRecord('r2')] });
     const { container, getByText, baseElement, getAllByText } = renderPage();
     openSection(container, '数据管理');
 
     expect(container.textContent).toContain('当前共 2 条训练记录');
+    // 按钮语义收窄为「训练记录」，不再暗示清除全部数据
+    expect(container.textContent).toContain('清除训练记录');
 
-    fireEvent.click(getByText('清除所有数据'));
-    expect(baseElement.textContent).toContain('此操作将永久删除所有训练记录');
+    fireEvent.click(getByText('清除训练记录'));
 
-    // 标题与确认按钮同名，取按钮（最后出现的那个）
+    const dialogText = baseElement.textContent ?? '';
+    expect(dialogText).toContain('只删除训练记录');
+    expect(dialogText).toContain('ELO 段位');
+    expect(dialogText).toContain('复习队列');
+    expect(dialogText).toContain('个人设置');
+    expect(dialogText).toContain('学院进度');
+    expect(dialogText).toContain('牌局复盘数据都会保留');
+    expect(dialogText).toContain('不可撤销');
+
     const confirmButtons = getAllByText('确认清除');
     fireEvent.click(confirmButtons.at(-1)!);
 
     expect(useProgressStore.getState().records).toHaveLength(0);
   });
 
-  it('导入合法 JSON 后追加记录并提示导入条数', async () => {
-    const { container } = renderPage();
+  it('清库失败时按实际上报反馈（内存回滚，不假装成功）', async () => {
+    seedStore({ records: [buildRecord('r1'), buildRecord('r2')] });
+    dbMock.clear.mockRejectedValue(new DOMException('quota', 'QuotaExceededError'));
+    const { container, getByText, getAllByText, baseElement } = renderPage();
     openSection(container, '数据管理');
-    const input = container.querySelector<HTMLInputElement>('input[type="file"]');
-    expect(input).toBeTruthy();
 
-    const payload = { records: [buildRecord('imported-1')], settings: { soundEnabled: false } };
-    const file = new File([JSON.stringify(payload)], 'backup.json', { type: 'application/json' });
-    fireEvent.change(input!, { target: { files: [file] } });
+    fireEvent.click(getByText('清除训练记录'));
+    fireEvent.click(getAllByText('确认清除').at(-1)!);
 
     await waitFor(() => {
-      expect(container.textContent).toContain('成功导入 1 条记录');
+      expect(baseElement.textContent).toContain('清除失败：训练记录仍在本地');
     });
-    expect(useProgressStore.getState().records.map((r) => r.id)).toEqual(['imported-1']);
-    expect(useProgressStore.getState().settings.soundEnabled).toBe(false);
+    // 持久化切片回滚：记录仍在内存（库内仍在），不丢数据
+    expect(useProgressStore.getState().records).toHaveLength(2);
   });
+});
 
-  it('导入格式不正确的文件给出错误提示且不写入记录', async () => {
+describe('SettingsPage 数据管理 · 导入', () => {
+  it('按 submitRecord 实际结果区分新增 / 重复 / 无效 / 未保存', async () => {
+    seedStore({ records: [buildRecord('dup-1')] });
+    dbMock.addIfAbsent.mockImplementation(async (record: unknown) => {
+      const id = (record as { id: string }).id;
+      if (id === 'fail-1') throw new DOMException('quota', 'QuotaExceededError');
+      return 'inserted';
+    });
+
     const { container } = renderPage();
     openSection(container, '数据管理');
-    const input = container.querySelector<HTMLInputElement>('input[type="file"]');
 
-    const file = new File(['{"foo":1}'], 'bad.json', { type: 'application/json' });
-    fireEvent.change(input!, { target: { files: [file] } });
+    importJson(container, {
+      records: [
+        buildRecord('new-1'),
+        buildRecord('dup-1'),
+        // 无效：totalQuestions 越界（空会话不允许入库）
+        buildRecord('bad-1', {
+          result: {
+            sessionId: 'bad-1',
+            module: 'range-trainer',
+            totalQuestions: 0,
+            correctAnswers: 0,
+            accuracy: 0,
+            averageTime: 0,
+            timestamp: Date.now(),
+            details: [],
+          },
+        }),
+        buildRecord('fail-1'),
+      ],
+      settings: { soundEnabled: false, theme: 'light', defaultQuizTime: 9999, hacker: true },
+    });
+
+    await waitFor(() => {
+      expect(container.textContent).toContain('导入完成：新增 1 条，重复 1 条，无效 1 条，未保存 1 条');
+    });
+
+    const records = useProgressStore.getState().records;
+    expect(records.map((r) => r.id).toSorted()).toEqual(['dup-1', 'fail-1', 'new-1']);
+    // 白名单：非法 defaultQuizTime 与未知字段被丢弃，合法字段生效
+    const settings = useProgressStore.getState().settings;
+    expect(settings.soundEnabled).toBe(false);
+    expect(settings.theme).toBe('light');
+    expect(settings.defaultQuizTime).toBe(15);
+    expect(settings).not.toHaveProperty('hacker');
+  });
+
+  it('无可导入内容时提示格式不正确且不写入', async () => {
+    const { container } = renderPage();
+    openSection(container, '数据管理');
+
+    importJson(container, { foo: 1 });
 
     await waitFor(() => {
       expect(container.textContent).toContain('文件格式不正确');
     });
     expect(useProgressStore.getState().records).toHaveLength(0);
+  });
+
+  it('牌局复盘恢复失败不影响记录导入统计（独立报告）', async () => {
+    handsMock.saveAllHands.mockRejectedValue(new Error('IDB_WRITE_FAILED'));
+    const { container } = renderPage();
+    openSection(container, '数据管理');
+
+    importJson(container, {
+      records: [buildRecord('h-rec-1')],
+      hands: [{ id: 'hand-1', pot: 100 }],
+    });
+
+    await waitFor(() => {
+      expect(container.textContent).toContain('导入完成：新增 1 条，重复 0 条，无效 0 条，未保存 0 条');
+    });
+    expect(container.textContent).toContain('但牌局复盘数据恢复失败');
+    // 记录侧不受 hands 失败影响
+    expect(useProgressStore.getState().records.map((r) => r.id)).toEqual(['h-rec-1']);
+    expect(handsMock.saveAllHands).toHaveBeenCalledTimes(1);
+  });
+
+  it('牌局恢复成功时单独提示恢复条数', async () => {
+    const { container } = renderPage();
+    openSection(container, '数据管理');
+
+    importJson(container, {
+      records: [buildRecord('h-rec-2')],
+      hands: [{ id: 'hand-1' }, { id: 'hand-2' }],
+    });
+
+    await waitFor(() => {
+      expect(container.textContent).toContain('已恢复 2 条牌局复盘数据');
+    });
+  });
+});
+
+describe('SettingsPage 数据管理 · 导出', () => {
+  it('hands 读取失败仍导出 records+settings，并明确标注为部分导出', async () => {
+    seedStore({ records: [buildRecord('exp-1')] });
+    handsMock.loadAllHands.mockRejectedValue(new Error('IDB_BLOCKED'));
+
+    const { container } = renderPage();
+    openSection(container, '数据管理');
+
+    fireEvent.click(dataActionButton(container, 0));
+
+    await waitFor(() => {
+      expect(container.textContent).toContain('已导出部分备份');
+    });
+
+    expect(downloadCalls.blobs).toHaveLength(1);
+    const payload = JSON.parse(await readBlobText(downloadCalls.blobs[0]!)) as Record<string, unknown>;
+    expect(payload.partial).toBe(true);
+    // 不得用 hands: [] 冒充完整备份
+    expect(payload).not.toHaveProperty('hands');
+    expect((payload.records as TrainingRecord[]).map((r) => r.id)).toEqual(['exp-1']);
+    expect(payload.settings).toMatchObject({ soundEnabled: true });
+  });
+
+  it('hands 读取成功时导出完整备份（含 hands 分区）', async () => {
+    handsMock.loadAllHands.mockResolvedValue([{ id: 'hand-1' }]);
+    const { container } = renderPage();
+    openSection(container, '数据管理');
+
+    fireEvent.click(dataActionButton(container, 0));
+
+    await waitFor(() => {
+      expect(container.textContent).toContain('已导出 0 条训练记录与个人设置');
+    });
+
+    const payload = JSON.parse(await readBlobText(downloadCalls.blobs[0]!)) as Record<string, unknown>;
+    expect(payload.partial).toBe(false);
+    expect(payload.hands).toEqual([{ id: 'hand-1' }]);
   });
 });
 

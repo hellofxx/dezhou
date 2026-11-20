@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Check, X } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
-import { useProgressStore } from '@/features/progress/store';
+// 跨模块写入统一经 progress 公共入口（禁止深引 progress/store）
+import { progressCommands } from '@/features/progress/api';
 import { placementQuestions } from '../data/placementQuestions';
 import { orderPlacementOptions } from '../utils/optionOrder';
 import type { PlacementDimension } from '../types';
@@ -16,7 +17,7 @@ function scoreFromAccuracy(correct: number, total: number): number {
 
 export default function PlacementTestStep() {
   const { t } = useTranslation();
-  const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
+  const { completeOnboardingStep } = progressCommands;
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);

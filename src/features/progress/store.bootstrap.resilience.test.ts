@@ -1,20 +1,23 @@
+/**
+ * initProgressStore 的启动顺序 / 幂等 / 可重试 / 防复活分支（Node，recordDatabase 为替身）。
+ *
+ * 契约：
+ * - 先订阅后恢复：init 完成前 emit 的训练事件仍然入账；
+ * - 并发调用只订阅一次并共享同一 promise；
+ * - init 失败后闸门复位，可再次调用重试；
+ * - records 恢复（延迟 getAll）与 clear 交错时旧快照作废，不复活已清空数据；
+ * - IndexedDB 读取失败 → 告警并降级为内存模式，不抛出、不丢内存记录；
+ * - 成就检查走 300ms debounce，同一批多次 emit 只触发一次。
+ */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createLocalStorageStub } from '@/shared/utils/localStorageStub';
 import type { TrainingRecord } from './types';
 
-/**
- * initProgressStore 的合并 / 降级 / 订阅分支（Node，recordDatabase 为存储边界替身）。
- *
- * 契约：
- * - 内存 records 为空 → 直接采用 IndexedDB 记录；有遗留记录 → 先落库再合并（已有
- *   store.bootstrap.test.ts 用真实 fake-indexeddb 覆盖，本文件只锁定分支走向）；
- * - IndexedDB 读取失败 → 告警并降级为内存模式，不抛出、不丢内存记录；
- * - trainingEvents 订阅：emit 立即写入 records；成就检查走 300ms debounce，
- *   同一批多次 emit 只触发一次。
- */
-
 const dbMock = vi.hoisted(() => ({
   add: vi.fn(async (_records: unknown[]): Promise<void> => {}),
+  addIfAbsent: vi.fn(async (_record: unknown): Promise<'inserted' | 'exists'> => 'inserted'),
+  delete: vi.fn(async (_id: string): Promise<void> => {}),
+  clear: vi.fn(async (): Promise<void> => {}),
   getAll: vi.fn(async (): Promise<unknown[]> => []),
   cleanup: vi.fn(async (_limit: number): Promise<number> => 0),
 }));
@@ -40,25 +43,37 @@ function buildRecord(id: string, createdAt: number): TrainingRecord {
   };
 }
 
-/** 以给定的内存遗留记录启动引导，返回全新模块实例下的 store */
-async function bootstrapWithMemoryRecords(memoryRecords: TrainingRecord[]) {
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((res) => {
+    resolve = res;
+  });
+  return { promise, resolve };
+}
+
+const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+async function loadBootstrap() {
   const storageStub = createLocalStorageStub();
   vi.stubGlobal('localStorage', storageStub);
   vi.stubGlobal('window', { localStorage: storageStub });
 
-  const { useProgressStore } = await import('./store');
-  useProgressStore.setState({ records: memoryRecords });
-
-  const { initProgressStore } = await import('./store.bootstrap');
-  await initProgressStore();
-
-  return useProgressStore;
+  const storeModule = await import('./store');
+  const bootstrapModule = await import('./store.bootstrap');
+  return { store: storeModule.useProgressStore, initProgressStore: bootstrapModule.initProgressStore };
 }
 
 beforeEach(() => {
-  vi.resetModules(); // 重置模块级 bootstrapped 闸门，令每个用例可独立引导一次
+  vi.resetModules(); // 重置模块级引导闸门，令每个用例可独立引导一次
   dbMock.add.mockClear();
+  dbMock.addIfAbsent.mockReset();
+  dbMock.addIfAbsent.mockResolvedValue('inserted');
+  dbMock.delete.mockClear();
+  dbMock.delete.mockResolvedValue(undefined);
+  dbMock.clear.mockReset();
+  dbMock.clear.mockResolvedValue(undefined);
   dbMock.cleanup.mockClear();
+  dbMock.cleanup.mockResolvedValue(0);
   dbMock.getAll.mockReset();
   dbMock.getAll.mockResolvedValue([]);
 });
@@ -72,8 +87,9 @@ afterEach(() => {
 describe('initProgressStore 记录合并', () => {
   it('内存无记录时直接采用 IndexedDB 记录，且不重复落库', async () => {
     dbMock.getAll.mockResolvedValue([buildRecord('idb-1', 1000), buildRecord('idb-2', 2000)]);
+    const { store, initProgressStore } = await loadBootstrap();
 
-    const store = await bootstrapWithMemoryRecords([]);
+    await initProgressStore();
 
     expect(store.getState().records.map((r) => r.id)).toEqual(['idb-1', 'idb-2']);
     expect(dbMock.add).not.toHaveBeenCalled();
@@ -81,11 +97,111 @@ describe('initProgressStore 记录合并', () => {
 
   it('内存有遗留记录时先落库，再与库内记录按 id 去重合并', async () => {
     dbMock.getAll.mockResolvedValue([buildRecord('idb-1', 3000)]);
+    const { store, initProgressStore } = await loadBootstrap();
+    store.setState({ records: [buildRecord('legacy', 1000)] });
 
-    const store = await bootstrapWithMemoryRecords([buildRecord('legacy', 1000)]);
+    await initProgressStore();
 
     expect(dbMock.add).toHaveBeenCalledTimes(1);
     expect(store.getState().records.map((r) => r.id)).toEqual(['legacy', 'idb-1']);
+  });
+
+  it('恢复结束（成功或降级）后关闭加载屏障', async () => {
+    const coordinator = await import('./recordPersistence');
+    expect(coordinator.isRecordsLoading()).toBe(true);
+
+    const { initProgressStore } = await loadBootstrap();
+    await initProgressStore();
+
+    expect(coordinator.isRecordsLoading()).toBe(false);
+  });
+});
+
+describe('initProgressStore 启动顺序与幂等', () => {
+  it('init 完成前 emit 的训练事件仍然入账（先订阅后恢复）', async () => {
+    const gate = deferred<TrainingRecord[]>();
+    dbMock.getAll.mockReturnValue(gate.promise);
+    const { store, initProgressStore } = await loadBootstrap();
+    const { trainingEvents } = await import('@/shared/stores/trainingEvents');
+
+    const initializing = initProgressStore();
+    trainingEvents.emit(buildRecord('early', 1000));
+    expect(store.getState().records.map((r) => r.id)).toEqual(['early']);
+
+    gate.resolve([buildRecord('stored', 2000)]);
+    await initializing;
+
+    // 早期事件不被随后的恢复覆盖，并与其按 createdAt 升序合并
+    expect(store.getState().records.map((r) => r.id)).toEqual(['early', 'stored']);
+  });
+
+  it('并发调用共享同一 promise，且只订阅一次', async () => {
+    const gate = deferred<TrainingRecord[]>();
+    dbMock.getAll.mockReturnValue(gate.promise);
+    const { initProgressStore } = await loadBootstrap();
+    const { trainingEvents } = await import('@/shared/stores/trainingEvents');
+    const subscribe = vi.spyOn(trainingEvents, 'subscribe');
+
+    const first = initProgressStore();
+    const second = initProgressStore();
+    expect(second).toBe(first);
+
+    gate.resolve([]);
+    await Promise.all([first, second]);
+
+    expect(subscribe).toHaveBeenCalledTimes(1);
+  });
+
+  it('init 失败后闸门复位，可再次调用重试', async () => {
+    const { store, initProgressStore } = await loadBootstrap();
+    const { trainingEvents } = await import('@/shared/stores/trainingEvents');
+    const subscribe = vi
+      .spyOn(trainingEvents, 'subscribe')
+      .mockImplementationOnce(() => {
+        throw new Error('bus unavailable');
+      });
+
+    await expect(initProgressStore()).rejects.toThrow('bus unavailable');
+
+    await expect(initProgressStore()).resolves.toBeUndefined();
+    expect(subscribe).toHaveBeenCalledTimes(2);
+    expect(store.getState().records).toHaveLength(0);
+  });
+});
+
+describe('initProgressStore 与删除 / 清空的交错', () => {
+  it('延迟 getAll 期间发生清空：返回的旧快照作废，已清空数据不复活', async () => {
+    const gate = deferred<TrainingRecord[]>();
+    dbMock.getAll.mockReturnValue(gate.promise);
+    const { store, initProgressStore } = await loadBootstrap();
+
+    const initializing = initProgressStore();
+    await flush();
+
+    store.getState().clearAllRecords();
+    await flush();
+
+    gate.resolve([buildRecord('stale', 1000)]);
+    await initializing;
+
+    expect(store.getState().records).toHaveLength(0);
+  });
+
+  it('延迟 getAll 期间被删除的记录不再复活', async () => {
+    const gate = deferred<TrainingRecord[]>();
+    dbMock.getAll.mockReturnValue(gate.promise);
+    const { store, initProgressStore } = await loadBootstrap();
+
+    const initializing = initProgressStore();
+    await flush();
+
+    store.getState().deleteRecord('gone');
+    await flush();
+
+    gate.resolve([buildRecord('gone', 1000), buildRecord('kept', 2000)]);
+    await initializing;
+
+    expect(store.getState().records.map((r) => r.id)).toEqual(['kept']);
   });
 });
 
@@ -93,8 +209,10 @@ describe('initProgressStore IndexedDB 降级', () => {
   it('读取失败时告警并保留内存记录，不抛出', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     dbMock.getAll.mockRejectedValue(new Error('IndexedDB blocked'));
+    const { store, initProgressStore } = await loadBootstrap();
+    store.setState({ records: [buildRecord('mem-1', 500)] });
 
-    const store = await bootstrapWithMemoryRecords([buildRecord('mem-1', 500)]);
+    await expect(initProgressStore()).resolves.toBeUndefined();
 
     expect(store.getState().records.map((r) => r.id)).toEqual(['mem-1']);
     expect(warn).toHaveBeenCalled();
@@ -104,18 +222,20 @@ describe('initProgressStore IndexedDB 降级', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     dbMock.add.mockRejectedValueOnce(new Error('quota exceeded'));
     dbMock.getAll.mockResolvedValue([buildRecord('idb-1', 3000)]);
+    const { store, initProgressStore } = await loadBootstrap();
+    store.setState({ records: [buildRecord('legacy', 1000)] });
 
-    const store = await bootstrapWithMemoryRecords([buildRecord('legacy', 1000)]);
+    await initProgressStore();
 
     expect(warn).toHaveBeenCalled();
-    // 迁入失败不影响随后的加载与合并
     expect(store.getState().records.map((r) => r.id)).toEqual(['legacy', 'idb-1']);
   });
 });
 
 describe('initProgressStore 事件总线订阅', () => {
   it('emit 立即写入 records；300ms debounce 内多次 emit 只触发一次成就检查', async () => {
-    const store = await bootstrapWithMemoryRecords([]);
+    const { store, initProgressStore } = await loadBootstrap();
+    await initProgressStore();
     const checkAchievements = vi.fn(async (): Promise<void> => {});
     store.setState({ checkAchievements });
 

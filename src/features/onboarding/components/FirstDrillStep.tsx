@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/components/ui/button';
 import { QuizCard } from '@/shared/components/quiz/QuizCard';
 import type { RangeAction } from '@/shared/types/poker';
-import { useProgressStore } from '@/features/progress/store';
+// 跨模块读/写统一经 progress 公共入口（禁止深引 progress/store）
+import { useProgressState, progressCommands } from '@/features/progress/api';
 import {
   createDrillState,
   answerCurrentQuestion,
@@ -17,9 +18,8 @@ import {
 export default function FirstDrillStep() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
-  const mentorStyle = useProgressStore((s) => s.mentorStyle);
+  const { completeOnboardingStep, recordTrainingDay } = progressCommands;
+  const mentorStyle = useProgressState((s) => s.mentorStyle);
 
   const [drill, setDrill] = useState(createDrillState);
   // OB-05：防止「完成」按钮快速双击触发两次 completeOnboardingStep（加锁防抖）

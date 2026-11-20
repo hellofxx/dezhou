@@ -15,6 +15,8 @@
     "test:guards": "vitest run src/guards src/i18n src/shared/admission-guard.test.ts src/features/eslint-guard-dependency-graph.test.ts",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "typecheck:e2e": "node node_modules/typescript/bin/tsc -p tsconfig.e2e.json",
+    "test:e2e": "node e2e/require-build.mjs && playwright test",
     "size:check": "node scripts/check-bundle-size.mjs",
     "repo:check": "node scripts/check-repo-hygiene.mjs",
     "docs:check": "node scripts/check-doc-links.mjs",
@@ -23,7 +25,8 @@
     "agents:map": "node scripts/generate-agent-map.mjs",
     "agents:map:check": "node scripts/generate-agent-map.mjs --check",
     "verify": "pnpm typecheck && pnpm lint && pnpm repo:check && pnpm docs:check && pnpm agents:map:check && pnpm test",
-    "verify:parallel": "pwsh -NoProfile -File scripts/parallel-verify.ps1"
+    "verify:parallel": "pwsh -NoProfile -File scripts/parallel-verify.ps1",
+    "verify:e2e": "pnpm verify && pnpm build && pnpm size:check && pnpm test:e2e"
   },
   "keywords": [],
   "author": "",
@@ -57,6 +60,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^26.1.1",

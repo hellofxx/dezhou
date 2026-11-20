@@ -12,7 +12,7 @@
  */
 import { useAcademyStore } from '../store';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { createReviewItem, toLocalDateString } from '@/shared/utils/spacedRepetition';
 import { lessonTitleKey } from './titleKeys';
 import { buildStrategyQuestionReviewItems } from './strategySrs';
@@ -91,13 +91,12 @@ export function completeCourse(params: CompleteCourseParams): void {
     });
   }
 
-  const progressStore = useProgressStore.getState();
   const wrongIds = wrongQuestionIds ?? [];
 
   // 题级 SRS：本次答错的每一道题一条复习项（id = strategy:<questionId>）
   if (lesson && wrongIds.length > 0) {
     for (const item of buildStrategyQuestionReviewItems(lesson.id, lesson.quiz, wrongIds)) {
-      progressStore.addReviewItem(item);
+      progressCommands.addReviewItem(item);
     }
   }
 
@@ -112,9 +111,9 @@ export function completeCourse(params: CompleteCourseParams): void {
       date.setDate(date.getDate() + 3);
       reviewItem.nextReviewDate = toLocalDateString(date);
     }
-    progressStore.addReviewItem(reviewItem);
+    progressCommands.addReviewItem(reviewItem);
   }
 
   // 记录训练日（幂等，同日重复安全；重考同样计入——每次作答都是真实学习）
-  progressStore.recordTrainingDay();
+  progressCommands.recordTrainingDay();
 }

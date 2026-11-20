@@ -53,3 +53,9 @@ dist-ssr
 coverage/
 coverage-unit/
 coverage-component/
+
+# Playwright / E2E 产物（可重建，不入库）
+playwright-report/
+blob-report/
+test-results/
+.playwright/

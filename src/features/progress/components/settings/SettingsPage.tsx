@@ -45,7 +45,6 @@ import { useProgressStore } from '../../store';
 import { getTodayString } from '../../utils/streakCalc';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { APP_VERSION } from '@/shared/constants/app';
-import type { TrainingRecord } from '../../types';
 import { GameVariantSelector } from './GameVariantSelector';
 import { useTranslation } from 'react-i18next';
 import { switchLanguage } from '@/i18n/preload';
@@ -53,11 +52,8 @@ import { MENTOR_PROFILES } from '@/shared/types/mentor';
 import type { MentorStyle } from '@/shared/types/mentor';
 import { cn } from '@/shared/utils/cn';
 import { MOTION_DURATION, staggerContainer, staggerItem, transitionStandard } from '@/shared/utils/motion';
-import { loadAllHands, saveAllHands } from '../../utils/handHistoryBackup';
+import { useDataManagement } from './useDataManagement';
 import MentorIcon from './mentorIcons';
-
-/** 导出文件格式版本：v1 仅含 records+settings；v2 起新增 hands（IndexedDB 牌局复盘）分区。 */
-const EXPORT_DATA_VERSION = 2;
 
 export default function SettingsPage() {
   const { t } = useTranslation();
@@ -65,8 +61,6 @@ export default function SettingsPage() {
   const settings = useProgressStore((s) => s.settings);
   const updateSettings = useProgressStore((s) => s.updateSettings);
   const records = useProgressStore((s) => s.records);
-  const clearAllRecords = useProgressStore((s) => s.clearAllRecords);
-  const addRecord = useProgressStore((s) => s.addRecord);
   const mentorStyle = useProgressStore((s) => s.mentorStyle);
   const setMentorStyle = useProgressStore((s) => s.setMentorStyle);
   // P2-5.4: 每日题量上限（Session 止损）
@@ -111,97 +105,18 @@ export default function SettingsPage() {
     if (ok) setDebugCodeInput('');
   };
 
-  const [clearDialogOpen, setClearDialogOpen] = useState(false);
-  const [importStatus, setImportStatus] = useState<string | null>(null);
-  // XMOD-012：导出/导入涉及异步读取写入 IndexedDB 牌局数据，busy 期间禁用按钮防重复触发
-  const [dataBusy, setDataBusy] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleExport = async () => {
-    if (dataBusy) return;
-    setDataBusy(true);
-    try {
-      // IndexedDB 为异步读取：导出前先取全部牌局复盘数据，再拼接序列化
-      const hands = await loadAllHands();
-      const data = {
-        version: APP_VERSION,
-        dataVersion: EXPORT_DATA_VERSION,
-        exportedAt: new Date().toISOString(),
-        records,
-        settings,
-        hands,
-      };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `poker-training-${new Date().toISOString().slice(0, 10)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch {
-      setImportStatus(t('settings.exportFailed', { defaultValue: '导出失败：无法读取牌局复盘数据' }));
-      statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 3000));
-    } finally {
-      setDataBusy(false);
-    }
-  };
-
-  const handleImport = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setDataBusy(true);
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const data = JSON.parse(event.target?.result as string);
-        if (data.records && Array.isArray(data.records)) {
-          for (const record of data.records as TrainingRecord[]) {
-            addRecord(record);
-          }
-          if (data.settings) {
-            updateSettings(data.settings);
-          }
-          // 恢复牌局复盘数据（IndexedDB 异步）。旧导出无 hands 分区 → 兼容跳过，不报错。
-          let restoredHands = 0;
-          if (Array.isArray(data.hands) && data.hands.length > 0) {
-            try {
-              await saveAllHands(data.hands as Array<Record<string, unknown>>);
-              restoredHands = data.hands.length;
-            } catch {
-              setImportStatus(t('settings.importHandsFailed', { defaultValue: '训练记录已恢复，但牌局复盘数据恢复失败' }));
-              statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 3000));
-              setDataBusy(false);
-              e.target.value = '';
-              return;
-            }
-          }
-          // XMOD-012：牌局恢复成功时提示牌局数，避免用户误以为牌局未迁移
-          const base = t('settings.importSuccess', { defaultValue: '成功导入 {{count}} 条记录', count: data.records.length });
-          const handsNote = restoredHands > 0
-            ? t('settings.importRecoveredHands', { defaultValue: '，并已恢复 {{count}} 条牌局复盘数据', count: restoredHands })
-            : '';
-          setImportStatus(base + handsNote);
-          statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 4000));
-        } else {
-          setImportStatus(t('settings.importInvalid', { defaultValue: '文件格式不正确' }));
-          statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 3000));
-        }
-      } catch {
-        setImportStatus(t('settings.importFailed', { defaultValue: '导入失败：文件解析错误' }));
-        statusTimersRef.current.push(setTimeout(() => setImportStatus(null), 3000));
-      } finally {
-        setDataBusy(false);
-      }
-    };
-    reader.readAsText(file);
-    // reset input
-    e.target.value = '';
-  };
+  // 数据管理：导出 / 导入 / 清除训练记录（逻辑集中在 useDataManagement）
+  const {
+    messages: dataMessages,
+    busy: dataBusy,
+    fileInputRef,
+    requestImport,
+    handleFileChange,
+    exportData,
+    clearDialogOpen,
+    setClearDialogOpen,
+    confirmClear,
+  } = useDataManagement();
 
   return (
     <div className="h-full overflow-auto">
@@ -491,25 +406,38 @@ export default function SettingsPage() {
               title={t('settings.data', { defaultValue: '数据管理' })}
               hint={t('settings.dataHint', { defaultValue: '导出、导入或清除训练数据' })}
             >
-              <AnimatePresence>
-                {importStatus && (
-                  <motion.p
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: MOTION_DURATION.fast }}
-                    className="text-sm text-[var(--brass-text)] bg-[var(--brass-glow)] rounded-lg px-3 py-2"
-                  >
-                    {importStatus}
-                  </motion.p>
-                )}
-              </AnimatePresence>
+              {dataMessages.length > 0 && (
+                <div className="space-y-1">
+                  {dataMessages.map((message) => (
+                    <p
+                      key={message.id}
+                      role="status"
+                      className={cn(
+                        'text-sm rounded-lg px-3 py-2',
+                        message.kind === 'error'
+                          ? 'text-[var(--danger-text)] bg-[var(--danger-bg)]'
+                          : 'text-[var(--brass-text)] bg-[var(--brass-glow)]'
+                      )}
+                    >
+                      {message.text}
+                    </p>
+                  ))}
+                </div>
+              )}
               <div className="flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleExport} disabled={dataBusy} className="gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    void exportData();
+                  }}
+                  disabled={dataBusy}
+                  className="gap-1"
+                >
                   <Download className="w-4 h-4" />
                   {t('settings.exportData', { defaultValue: '导出数据' })}
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleImport} disabled={dataBusy} className="gap-1">
+                <Button variant="outline" size="sm" onClick={requestImport} disabled={dataBusy} className="gap-1">
                   <Upload className="w-4 h-4" />
                   {t('settings.importData', { defaultValue: '导入数据' })}
                 </Button>
@@ -520,7 +448,7 @@ export default function SettingsPage() {
                   className="gap-1 text-[var(--danger-text)] hover:text-[var(--danger-text)] hover:bg-[var(--danger-bg)] border-[var(--danger)]/30"
                 >
                   <Trash2 className="w-4 h-4" />
-                  {t('settings.clearAllData', { defaultValue: '清除所有数据' })}
+                  {t('settings.clearRecords', { defaultValue: '清除训练记录' })}
                 </Button>
               </div>
               <input
@@ -528,10 +456,16 @@ export default function SettingsPage() {
                 type="file"
                 accept=".json"
                 onChange={handleFileChange}
+                tabIndex={-1}
                 className="hidden"
               />
               <p className="text-xs text-[var(--ivory-dim)]">
                 {t('settings.recordCount', { defaultValue: '当前共 {{count}} 条训练记录', count: records.length })}
+              </p>
+              <p className="text-xs text-[var(--ivory-dim)]">
+                {t('settings.dataScopeNote', {
+                  defaultValue: '导出为完整备份（含牌局复盘数据）；导入逐条校验记录字段，重复记录自动跳过。',
+                })}
               </p>
             </SettingsSection>
           </motion.div>
@@ -621,29 +555,25 @@ export default function SettingsPage() {
           </motion.div>
         </motion.div>
 
-        {/* 确认清除对话框 */}
+        {/* 确认清除训练记录对话框（范围：仅训练记录，不动 ELO / SRS / 设置 / 学院 / 牌局） */}
         <Dialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
           <DialogContent className="bg-[var(--surface)] border-[var(--walnut-border)]">
             <DialogHeader>
               <DialogTitle className="text-[var(--ivory)]">
-                {t('settings.clearConfirmTitle', { defaultValue: '确认清除' })}
+                {t('settings.clearConfirmTitle', { defaultValue: '确认清除训练记录' })}
               </DialogTitle>
               <DialogDescription>
-                {t('settings.clearConfirmDesc', { defaultValue: '此操作将永久删除所有训练记录，且无法恢复。确定要继续吗？' })}
+                {t('settings.clearConfirmDesc', {
+                  defaultValue:
+                    '只删除训练记录（统计与历史列表中的数据）。ELO 段位、复习队列、个人设置、学院进度与牌局复盘数据都会保留。此操作不可撤销。',
+                })}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="gap-2">
               <Button variant="outline" onClick={() => setClearDialogOpen(false)}>
                 {t('settings.cancel', { defaultValue: '取消' })}
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  clearAllRecords();
-                  setClearDialogOpen(false);
-                }}
-                className="text-[var(--danger-text)] border-[var(--danger)]/30 hover:bg-[var(--danger-bg)]"
-              >
+              <Button variant="destructive" onClick={confirmClear}>
                 {t('settings.confirmClear', { defaultValue: '确认清除' })}
               </Button>
             </DialogFooter>

@@ -967,6 +967,16 @@ interface DailyRecommendation {
     - **调度零丢失**：`interval` / `easeFactor` / `repetitions` / `nextReviewDate` / `lastReviewedAt` / `category` / `metadata.route` 等其余字段原样保留
     - **跨模块镜像约束**：`eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 中 `progress: []`（且只删不加），故 id 前缀与 theory quiz key 生成函数只能在本文件内以镜像拷贝存在，一致性由 `migrateTheoryReviewKeys.test.ts` 的「key 镜像守卫」用例锁死（该用例经 `@/i18n/contentKeyEntries` 取 theory-academy 侧单源生成结果比对）；把「理论复习项 id 前缀 + quiz key 生成」上收 shared 层以消除拷贝属待 `platform-dev` 协调项
 
+11. **跨模块公共入口**（2026-11 新增）：
+    - `index.ts`：模块对外聚合（再导出 `api` / `api.types` + 复习项工具 + 每日训练推荐 + 成就数据 + QuickDrill 混合工具）；`api.ts` + `api.types.ts`：读写契约（`useProgressState(selector)` 只暴露 `ProgressReadModel` 白名单字段，`progressCommands` 只委托既有 action，业务规则仍由 progress 持有）；`ui.ts`：跨模块展示件（`SessionLimitGuard` / `OnboardingGate` / `TiltWarning` / `MilestoneCelebrationHost` / `ProgressPersistErrorNotice`）。
+    - 内部面明确边界：`store.ts` / `store.bootstrap.ts` / `components/**` / `utils/**` / `types.ts` / `data/**` 属模块内部，跨模块禁止深引；装配例外仅 `src/main.tsx` 的 `store.bootstrap`（启动引导）与 `src/app/routes.tsx` 的页面 lazy import（`components/**` 只允许出现在 lazyPage 的 `import()` 中）。
+    - 守卫 `src/guards/progressPublicApi.guard.test.ts`：复用 `@/test-utils/admissionGraph` 的去注释与路径解析（`@/` 别名 / 相对路径 / index barrel），失败信息给出 `file:line → 目标文件`；扫描面自检 + 合成用例自检判定逻辑，避免正则或路径失效后空洞通过。
+12. **保存语义与分源持久化状态**（2026-11 新增）：
+    - 内存优先：`addRecord` 先写内存再落库。`persistRecord` 永不 reject，返回 `RecordPersistResult`（`ok: true` 的 `inserted` / `exists`，或 `ok: false` 的 `invalid` / `cancelled` / `failed` + `retainedInMemory`）——**只有 `ok: true` 才算已保存**，其余呈现为「仅本次可见 / 待重试」，不得当作成功。
+    - 待重试队列：失败记录进入运行态 pending 队列；`retryPendingRecords()` 只重写 IndexedDB，不重新 emit 训练事件、不重新评分 / 计数；`deleteRecord` / `clearAllRecords` 先取消在途与待写任务（`cancelPendingRecord` / `cancelAllPendingRecords`）并补偿删除，避免旧任务把已删记录写回。
+    - 分源状态：`persistenceStatus.ts` 以 `localStorage` / `records` / `cleanup` 三源分治（运行态、不进 persist），用「代次」保证迟到的成功不会抹掉更新的失败；`ProgressPersistErrorNotice`（`ui` 入口）在 `AppLayout` 与 `BlankLayout` 各挂一次（两类布局互斥出现，不重复渲染），按源呈现「未保存 / 仅本次可见 / 历史加载失败 / 维护清理失败」，并提供重试、前往设置与「下载当前数据（明示不含尚未加载的历史，属部分备份）」。
+    - legacy 桥接保护：`store.bootstrap` 的 `migrateLegacyRecordsToDatabase()` 以 put 幂等迁移 v13 前遗留在 localStorage 的 records（persist `partialize` 已排除 records）；`loadRecordsFromDatabase()` 用 `epoch` 屏障 + `removedIds` 过滤，保证延迟加载不会复活期间被删除 / 清空的记录；localStorage 重试动作由 store 向 `persistenceStatus` 注册回调（`setLocalStorageRetryHandler`），避免反向 import 造成循环依赖。
+
 ### 5.6 Onboarding（新手引导）
 
 **模块职责**：引导新用户完成定位测试与首次微训练，设定训练目标，启动 Streak 计数。

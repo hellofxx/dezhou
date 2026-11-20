@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
-import { useProgressStore } from '@/features/progress/store';
+// 跨模块读取统一经 progress 公共入口（禁止深引 progress/store）
+import { useProgressState } from '@/features/progress/api';
 import WelcomeStep from './WelcomeStep';
 import PlacementTestStep from './PlacementTestStep';
 import FirstDrillStep from './FirstDrillStep';
@@ -21,7 +22,7 @@ const STEP_LABEL_KEYS = [
 export default function OnboardingFlow() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const currentStep = useProgressStore((s) => s.onboarding.currentStep);
+  const currentStep = useProgressState((s) => s.onboarding.currentStep);
   // 当前步骤的 i18n key（currentStep 在 0-4 范围内必然存在）
   const currentLabelKey = STEP_LABEL_KEYS[currentStep];
 

@@ -25,9 +25,9 @@ import { usePuzzleEngine } from '../hooks/usePuzzleEngine';
 // 会话接线（选中项 / recordAnswer / 完成提交 / emit）下沉至 usePuzzleSession
 import { usePuzzleSession } from '../hooks/usePuzzleSession';
 import { RUSH_DURATIONS } from '../data/rushQuestions';
-import { useProgressStore } from '@/features/progress/store';
-// P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import { progressCommands } from '@/features/progress/api';
+// P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径），经 progress 展示入口具名导入
+import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
 
 export default function PuzzleRush() {
   const { t } = useTranslation();
@@ -45,7 +45,7 @@ export default function PuzzleRush() {
     : RUSH_DURATIONS.threeMinutes;
 
   const engine = usePuzzleEngine({ mode: 'rush', duration: durationMs });
-  const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
+  const shouldDownshiftDifficulty = progressCommands.shouldDownshiftDifficulty;
   // P2-5.4: 每日题量上限（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
 

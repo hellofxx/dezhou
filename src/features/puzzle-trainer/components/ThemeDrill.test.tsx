@@ -23,21 +23,22 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'zh' } }),
 }));
 
-vi.mock('@/features/progress/store', () => ({
-  useProgressStore: (selector: (s: Record<string, unknown>) => unknown) =>
-    selector({
-      recordAnswer: () => undefined,
-      recordTrainingDay: () => undefined,
-      shouldDownshiftDifficulty: () => false,
-    }),
+// 生产侧经 @/features/progress/api 调用 progressCommands（调用面一致）
+vi.mock('@/features/progress/api', () => ({
+  progressCommands: {
+    recordAnswer: () => undefined,
+    recordTrainingDay: () => undefined,
+    shouldDownshiftDifficulty: () => false,
+  },
 }));
 
 vi.mock('@/shared/stores/trainingEvents', () => ({
   trainingEvents: { emit: () => undefined },
 }));
 
-vi.mock('@/features/progress/components/gate/SessionLimitGuard', () => ({
-  default: () => null,
+// 止损守卫改从 @/features/progress/ui 具名导入（无 default 导出）
+vi.mock('@/features/progress/sessionLimit', () => ({
+  SessionLimitGuard: () => null,
   useSessionLimitReached: () => false,
 }));
 

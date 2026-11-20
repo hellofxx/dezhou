@@ -19,9 +19,9 @@ import { usePuzzleEngine } from '../hooks/usePuzzleEngine';
 import { usePuzzleSession } from '../hooks/usePuzzleSession';
 import { PUZZLE_THEMES, getThemeMeta } from '../data/puzzleBank';
 import { getThemeIcon } from '../utils/themeIcons';
-import { useProgressStore } from '@/features/progress/store';
-// P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径）
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import { progressCommands } from '@/features/progress/api';
+// P2-5.4: Session 止损守卫（谜题三模式与其他训练模块同口径），经 progress 展示入口具名导入
+import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
 import type { PuzzleTheme } from '../types';
 
 export default function ThemeDrill() {
@@ -59,7 +59,7 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
     : t('puzzle.theme.unknownTheme');
 
   const engine = usePuzzleEngine({ mode: 'theme', theme });
-  const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
+  const shouldDownshiftDifficulty = progressCommands.shouldDownshiftDifficulty;
   // P2-5.4: 每日题量上限（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
 

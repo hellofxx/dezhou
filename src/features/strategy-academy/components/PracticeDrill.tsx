@@ -16,7 +16,7 @@ import { Chip } from '@/shared/components/poker/Chip'; import { GradeIcon } from
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION, MOTION_EASE, transitionStandard, transitionSlow } from '@/shared/utils/motion';
 import { soundManager } from '../utils/soundManager';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands, useProgressState } from '@/features/progress/api';
 import { useAcademyStore } from '../store';
 import { getCurrentDifficulty, selectQuestionsByDifficulty, shouldRecommendReview } from '../utils/adaptiveDifficulty';
 import { getLessonMeta } from '../data/lessonMeta';
@@ -216,11 +216,11 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { adaptiveConfig, recordPracticeResult, recentPracticeResults } = useAcademyStore();
-  const settings = useProgressStore((s) => s.settings);
+  const settings = useProgressState((s) => s.settings);
   // P2-5.2: 情绪管理 — 记录答题用于连续答错检测与每日题量统计
-  const recordAnswerForEmotion = useProgressStore((s) => s.recordAnswer);
+  const recordAnswerForEmotion = progressCommands.recordAnswer;
   // P0 学习闭环：实战每题写 ELO（维度取关联课程 lessonMeta，未关联/未登记回退 postflop）
-  const updateElo = useProgressStore((s) => s.updateElo);
+  const updateElo = progressCommands.updateElo;
 
   // 同步音效开关
   useEffect(() => {

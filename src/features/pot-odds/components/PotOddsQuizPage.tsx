@@ -18,10 +18,10 @@ import { orderQuizOptions } from '../utils/quizOrder';
 // P1B-04：末题/补救题固定 id（SRS 去重依赖）
 import { EASY_LAST_QUESTION_ID, RESCUE_QUESTION_ID } from '../constants';
 import { PotOddsResultView } from './PotOddsResultView';
-// P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
-// P4 修复（4.5-P0）：自适应难度降级 + 五级反馈
-import { useProgressStore } from '@/features/progress/store';
+// P2-5.4: Session 止损守卫（经 progress 展示入口，不深引 components/gate）
+import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
+// P4 修复（4.5-P0）：自适应难度降级 + 五级反馈 —— 命令经 progress 公共入口
+import { progressCommands } from '@/features/progress/api';
 import type { DecisionFeedback } from '@/shared/types/decisionFeedback';
 // P1B-05：评级展示统一走 GRADE_DISPLAY_CONFIG（icon + titleKey i18n + .grade-* 容器类）
 import { GRADE_DISPLAY_CONFIG } from '@/shared/types/decisionFeedback'; import { GradeIcon } from '@/shared/components/feedback/GradeIcon';
@@ -32,6 +32,11 @@ import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedback
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 // ─── Quiz Data ─────────────────────────────────────────────────────────────────────
+
+// 跨模块命令：progressCommands 为模块级稳定引用（内部委托 progress store 既有 action），
+// 解构后可直接放进 effect 依赖与渲染期调用，行为与原先订阅 store action 等价。
+// Streak 记账：训练完成时 recordTrainingDay() 计入每日连续训练（内部幂等并检查里程碑）。
+const { recordTrainingDay, shouldDownshiftDifficulty } = progressCommands;
 
 // 错误级别判定：wrong / blunder 为严重错误（默认展开决策分析、显示再看一题）
 const isSevereGrade = (grade: DecisionFeedback['grade']) => grade === 'wrong' || grade === 'blunder';
@@ -67,9 +72,6 @@ export default function PotOddsQuizPage() {
   const startTimeRef = useRef<number>(Date.now());
   const sessionIdRef = useRef<string>(`${Date.now()}-${Math.random().toString(36).slice(2, 9)}`);
 
-  // Streak 记账：训练完成时计入每日连续训练（recordTrainingDay 内部幂等并检查里程碑）
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
-
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
 
@@ -79,8 +81,6 @@ export default function PotOddsQuizPage() {
   const recordSrsForAnswer = useOddsSrsRecorder();
   // P2-5.2: pot-odds 情绪管理记录器
   const recordAnswerForEmotion = useOddsEmotionRecorder();
-  // P4 修复（4.5-P0）：自适应难度降级信号
-  const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
   // P4 修复（4.2-P1-1）：五级反馈状态
   const [decisionFeedback, setDecisionFeedback] = useState<DecisionFeedback | null>(null);
   // §13.7.2：移动端答题反馈底部 Sheet

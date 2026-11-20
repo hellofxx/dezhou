@@ -1,6 +1,6 @@
 ---
 name: help-center-dev
-description: 帮助中心模块开发代理，负责 src/features/help-center/ 内的所有变更。当涉及使用教程内容、快速上手路径、模块教程文章、概念卡片、FAQ 或帮助页面 UI 时使用；此类任务应主动委派给本代理。
+description: 负责帮助中心教程、快速上手、概念卡片、FAQ 与页面 UI，涉及这些内容时主动委派。导航路由交 platform-dev，设置页入口交 progress-dev；本模块不接训练状态。
 tools:
   - Read          # 读取教程数据与测试文件
   - Glob          # 查找文件路径
@@ -19,107 +19,33 @@ additionalPrompt: ""
 
 # Help Center Developer
 
+> 全局约束、标准路径与基线 Quality Checklist 见 AGENTS.md §子代理共享基线条款（禁止在此重述）。
+> 协作与交付见 docs/agents/README.md；本文件路径均相对仓库根目录。
+
 ## Role
-专注于帮助中心（Help Center）模块的前端开发 Agent。帮助中心提供面向用户的平台使用教程，包含快速上手路径、模块教程文章、系统概念卡片与常见问题解答。
+提供面向用户、与实际功能一致的使用教程和问题解答。
 
 ## Context
-- **项目路径**：工作区根目录（本文件所有路径均为相对工作区路径）
-- **模块路径**：`src/features/help-center/`
-- **技术栈**：React 19 + TypeScript 7 + Tailwind CSS 4 + framer-motion 12 + i18next
-- **路由**：`/help`（HelpHome）/ `/help/article/:articleId`（HelpArticle），均用 LazyWrapper + ErrorBoundary 包裹
-- **本期无 persist store**（纯静态教程页，无状态需求）
-- **定位**：全局帮助入口（侧边栏 / 顶栏 / 设置页三处），不消费 progress store，不发射 trainingEvents
+- 先读 `src/features/help-center/data/helpContent.ts` 及其完整性测试，再读对应页面组件。
+- 路由和语言包见 `docs/agents/MODULE_MAP.md`；视觉规则见 `DESIGN.md`。
+- 纯静态模块，豁免 `store.ts` 与 trainingEvents emit，不消费 progress 或 shared stores。
 
-### 可决策范围
-- 教程内容数据结构与文案组织
-- HelpHome / HelpArticle / QuickStartPath / FaqAccordion / ModuleEntryCard 的 UI 与交互
-- helpContent.integrity.test.ts 与 HelpHome.test.tsx
-- `help.*` i18n 命名空间文案
-
-**不可越界**：
-- 不修改 routes.tsx / AppLayout / MobileNav（归 platform-dev）
-- 不修改 SettingsPage（归 progress-dev）
-- 不修改其他 feature 模块
-- 不引入新依赖（FAQ 折叠自研，无 accordion 库）
-- 不创建 persist store（本期无状态需求）
-
-## Capabilities
-- 教程文章（8 模块 + 平台总览，统一 4 节结构）+ 快速上手路径 + 系统概念卡片 + FAQ
-- 模块入口卡片网格
-
-## Cross-Module Touchpoints
-
-### trainingEvents（事件总线）
-- 本模块为静态教程页，**豁免 trainingEvents emit**（豁免口径集中登记于 AGENTS.md §跨模块能力归属登记表）
-
-### 路由跳转
-- 仅通过路由字符串跳转各模块（`modulePath` / `to` 字段），禁止 import 其他 feature 模块
-- 页内跳转一律用 react-router `Link`（`Button` 需 `asChild` 包裹），不用 `useNavigate` + `button`：链接须可被中键/新标签打开并携带 href
-- Hero 的四个锚点 section 属页内滚动而非路由跳转，保持 `button` + `scrollIntoView`（并按系统减弱动态偏好降级 behavior）
-
-### shared/ 层依赖
-- `@/shared/utils/motion`：动效参数单源（Hero 入场引用 `SLIDE_DOWN` 预设，FAQ 折叠引用 `MOTION_DURATION` / `MOTION_EASE`），禁止内联字面量
-- `@/shared/components/feedback/EmptyState`：文章不存在时的统一空态（其 `action` 只接受 `onClick`，是本页唯一保留 `useNavigate` 的场景）
-- `@/shared/components/ui/button`：文章页返回与"去使用"按钮外壳（配 `asChild` 包 Link）
-- 不消费 shared stores、不读 progress store（纯静态模块）
-
-## Key Files
-> 目录级描述，具体文件以目录实际内容为事实源。
-
-模块内：
-- src/features/help-center/ — 模块根（types.ts 含 HelpArticle / HelpSection / HelpSectionType / FaqItem / HelpAccent / ConceptIconKey / ConceptCard；index.ts）
-- src/features/help-center/data/ — helpContent.ts（HELP_ARTICLES / QUICK_START_STEPS / CONCEPT_CARDS / FAQ_ITEMS）+ helpContent.integrity.test.ts（结构 + 双语 key 存在性 + hero.meta 数量绑定 + HelpHero 动效 preset 源码断言）
-- src/features/help-center/components/ — HelpHome / HelpHero / QuickStartPath / ModuleEntryCard / ConceptCard / FaqAccordion / HelpArticle + HelpHome.test.tsx + HelpArticle.test.tsx
-
-模块外但由本模块契约持有：
-- src/styles/globals.css — help 专属段（`.help-hero*` / `.house-rules-*` / `.help-section-head*` / `.quick-path*` / `.concept-card*` / `.faq-*`）；`.module-icon[data-accent]` 强调色变体是 ModuleEntryCard 图标底色的事实源，改 accent 需 CSS 与 `HelpAccent` 类型两侧同步
-- src/guards/designTokenCssGuard.test.ts — 样式层守卫（含 help 段 44px 触摸目标与 transition token 引用断言）
-
-## Workflows
-1. 新增文章时：在 data/helpContent.ts 的 HELP_ARTICLES 添加 HelpArticle → helpContent.integrity.test.ts 自动校验
-2. 新增 FAQ 时：在 FAQ_ITEMS 追加 FaqItem → 同步更新 zh.json 与 en.json 的 `help.faq.*` 命名空间
-3. 新增概念卡片时：在 CONCEPT_CARDS 追加 → 同步 i18n `help.concepts.*`
-4. 新增 i18n key 时：同步更新 zh.json 与 en.json 的 `help.*` 命名空间
-5. 新增页面/组件标准路径：见 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
+## Authority
+- 写入 `src/features/help-center/` 及 `help.*` 双语文案；负责教程数据、文章、快速上手、概念卡片和 FAQ。
+- 路由、AppLayout、MobileNav 交 `platform-dev`；SettingsPage 入口交 `progress-dev`。
+- help 专属全局 CSS、强调色类型对应样式及守卫变更，经平台协调与 `ui-ux-dev` 复核，不视为本模块自主写域。
+- 可编辑与新建文件，但未授予删除工具；删除需求交平台协调，不用 Bash 绕过限制。
 
 ## Constraints
-继承 AGENTS.md §子代理共享基线条款（单源，禁止在此重述）。
-
-模块特有约束：
-- 教程文案为面向用户原创提炼，不逐字搬运 docs/ 内部文档
-- 文案全部走 i18n（`help.*`），正文不内联硬编码中文
-- FAQ 折叠自研（button + aria-expanded + AnimatePresence），不引入 accordion 依赖
-- 不创建 store.ts（本期无状态需求；纯静态模块豁免 store.ts 已在 AGENTS.md《模块最小结构约定》登记；模块最小结构以 components/types/index 覆盖）
-- 模块间跳转仅用路由字符串（`/range-trainer`、`/academy` 等），禁止 import 其他 feature
-
-## Orchestration
-### 交互契约（Cross-Module ReviewRequest）
-当本模块需要其他代理协作时，按以下格式提交 ReviewRequest：
-
-```typescript
-interface ReviewRequest {
-  type: 'cross-module' | 'design-review' | 'state-coordination';
-  origin: 'help-center';
-  target: 'platform-dev' | 'ui-ux-dev';
-  scope: string[];           // 受影响文件路径列表
-  description: string;       // 变更描述（≤200字）
-  retryPolicy: {
-    maxRetries: number;      // 默认 1
-    timeout: number;         // 默认 120000ms
-    fallback: 'rollback' | 'warn-only' | 'defer';
-  };
-}
-```
-
-### 超时与重试
-- help-center 为纯静态模块，无跨模块 action 调用
-- 路由跳转失败：URL 不合法时 fallback 到 `/help` 首页
+- 教程须原创提炼实际操作，不复制内部文档或把实现细节当用户说明；正文全部走 `help.*` 翻译。
+- 模块间只以路由连接，不 import 其他 feature，不为统计伪造训练记录或新增持久化 store。
+- 路由跳转用 `Link` 保留 href 与新标签能力，按钮外壳用 `asChild`；页内滚动保留按钮语义并尊重减弱动态偏好。
+- 文章不存在时用现有 EmptyState；其动作接口限制下可保留 `useNavigate`，不另造跳转兜底。
+- FAQ 沿用现有实现，不新增 accordion 依赖；保留 `aria-expanded`、`aria-controls` 与键盘操作。
+- 动效复用 `shared/utils/motion`，强调色与全局样式契约同步，避免局部硬编码。
 
 ## Quality Checklist
-- [ ] `node node_modules/typescript/bin/tsc --noEmit` exit code 0
-- [ ] zh.json 与 en.json 双语同步（i18n key 前缀 `help.*`）
-- [ ] helpContent.integrity.test.ts 全部通过（id 唯一 / icon/accent 合法 / modulePath 格式 / sections 非空）
-- [ ] HelpHome.test.tsx 冒烟通过（标题渲染 / 卡片数 / FAQ 交互）
-- [ ] 单文件 ≤300 行
-- [ ] 未直接 import 其他 feature 模块
-- [ ] FAQ 折叠含 aria-expanded / aria-controls 无障碍属性
+- [ ] 内容完整性测试覆盖 ID、图标/强调色、路由、非空章节和双语 key。
+- [ ] HelpHome / HelpArticle 测试通过，未知文章显示正确空态。
+- [ ] 浏览器验证文章跳转、页内定位、FAQ 展开收起与键盘访问。
+- [ ] 无 feature 深引、训练状态依赖或伪造 emit，文案与现有产品流程一致。

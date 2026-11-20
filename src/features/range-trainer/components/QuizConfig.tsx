@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select';
 import { HelpCircle, Zap, Clock, Hash, Lock } from 'lucide-react';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState } from '@/features/progress/api';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { getPositionsForPlayerCount } from '@/shared/types/position';
 import { useRangeTrainerStore } from '../store';
@@ -90,7 +90,7 @@ export function QuizConfig({
   const { t } = useTranslation();
   const presets = useRangeTrainerStore((s) => s.presets);
   const playerCount = useRangeTrainerStore((s) => s.playerCount);
-  const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
+  const preflopElo = useProgressState((s) => s.eloByVariant[s.activeVariant].preflop);
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
 
   // 按当前人数契约 + 变体 presets 实际存在的组合过滤位置与动作类型

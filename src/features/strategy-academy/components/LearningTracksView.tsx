@@ -21,7 +21,7 @@ import {
 import { resolveLeakFixLessonIds } from '../utils/leakFix';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState } from '@/features/progress/api';
 import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
 
 export default function LearningTracksView() {
@@ -35,7 +35,7 @@ export default function LearningTracksView() {
   // 调试解锁：解除全部轨道前置
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
   // 弱点修补轨道：按最弱 ELO 维度动态推荐未完成课（只读）
-  const standardElo = useProgressStore((s) => s.eloByVariant.standard);
+  const standardElo = useProgressState((s) => s.eloByVariant.standard);
   const leakFixLessonIds = useMemo(
     () => resolveLeakFixLessonIds(standardElo, progress.completedLessons),
     [standardElo, progress.completedLessons],

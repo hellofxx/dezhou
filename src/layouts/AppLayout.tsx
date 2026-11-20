@@ -7,11 +7,14 @@ import { PAGE_TRANSITION } from '@/shared/utils/motion';
 import { APP_VERSION } from '@/shared/constants/app';
 import { switchLanguage } from '@/i18n/preload';
 import { ErrorBoundary } from '@/shared/components/system/ErrorBoundary';
-import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
 // P2-5.3: 全局 Tilt 提示组件（监听连续答错数）
-import TiltWarning from '@/features/progress/components/gate/TiltWarning';
-import MilestoneCelebrationHost from '@/features/progress/components/celebration/MilestoneCelebrationHost';
-import PersistErrorNotice from '@/features/progress/components/PersistErrorNotice';
+import {
+  OnboardingGate,
+  TiltWarning,
+  MilestoneCelebrationHost,
+  ProgressPersistErrorNotice,
+} from '@/features/progress/ui';
+import { useProgressState, progressCommands } from '@/features/progress/api';
 import MobileNav from './MobileNav';
 import HeaderQuickActions from './HeaderQuickActions';
 import { useThemeApplier } from './useThemeApplier';
@@ -19,7 +22,6 @@ import { useDocumentTitle } from './useDocumentTitle';
 import { resolveNavSection, resolvePageTitle } from './navSections';
 import TableRail from './TableRail';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
-import { useProgressStore } from '@/features/progress/store';
 import {
   ChevronLeft,
   Home,
@@ -65,7 +67,7 @@ export default function AppLayout() {
   const [switching, setSwitching] = useState(false);
   const location = useLocation();
   const { t, i18n } = useTranslation();
-  const currentStreak = useProgressStore((s) => s.streak.currentStreak);
+  const currentStreak = useProgressState((s) => s.streak.currentStreak);
 
   // 主题应用器：settings.theme（含 system）→ <html data-theme> / color-scheme
   useThemeApplier();
@@ -184,8 +186,8 @@ export default function AppLayout() {
     try {
       // 预加载目标语言资源后再切换，消除"先 fallback 后跳变"闪烁
       await switchLanguage(next);
-      // 语言偏好事实源：progress store settings.language，顶栏切换同步写入以便跨刷新恢复
-      useProgressStore.getState().updateSettings({ language: next });
+      // 语言偏好事实源：progress settings.language，顶栏切换同步写入以便跨刷新恢复
+      progressCommands.updateSettings({ language: next });
     } finally {
       setSwitching(false);
     }
@@ -200,7 +202,7 @@ export default function AppLayout() {
       >
         {t('common.a11y.skipToContent')}
       </a>
-      <PersistErrorNotice />
+      <ProgressPersistErrorNotice />
       {/* Sidebar — deep walnut card-room rail. Hidden on mobile. */}
       <aside
         className={cn(

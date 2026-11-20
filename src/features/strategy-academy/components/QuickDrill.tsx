@@ -11,7 +11,7 @@ import { useAcademyStore } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForQuickDrill } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForQuickDrill } from '@/i18n/academyCourse';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands, useProgressState } from '@/features/progress/api';
 import { computeQuickDrillScore, getQuickDrillQuestions } from '../utils/quickDrill';
 // P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
 import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
@@ -22,7 +22,7 @@ import { PracticeDrillComponent } from './PracticeDrill';
 import type { EloDimension } from '@/shared/types/elo';
 import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
 
 type QuickDrillMode = 'range' | 'odds' | 'mixed';
 
@@ -45,17 +45,17 @@ export default function QuickDrill() {
   const { recordPracticeScore } = useAcademyStore();
   // P0 口径：弱点维度与自适应难度改读 progress 标准变体 ELO（eloByVariant 单一事实源），
   // 不再读 strategy 能力评估 / onboarding.initialAbility
-  const standardElo = useProgressStore((s) => s.eloByVariant.standard);
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+  const standardElo = useProgressState((s) => s.eloByVariant.standard);
+  const recordTrainingDay = progressCommands.recordTrainingDay;
   // P1-4.2: SRS 复习队列
-  const reviewItems = useProgressStore((s) => s.reviewItems);
-  const getStatsSummary = useProgressStore((s) => s.getStatsSummary);
+  const reviewItems = useProgressState((s) => s.reviewItems);
+  const getStatsSummary = useProgressState((s) => s.getStatsSummary);
   // 记录总数（仅用于正确率 memo 的失效键，避免全量订阅 records）
-  const recordCount = useProgressStore((s) => s.records.length);
+  const recordCount = useProgressState((s) => s.records.length);
   // P1-4.3: 快速训练连续打卡
-  const recordQuickDrillCompletion = useProgressStore((s) => s.recordQuickDrillCompletion);
+  const recordQuickDrillCompletion = progressCommands.recordQuickDrillCompletion;
 // P1-4.1: Progress store 快速训练 Best Record
-  const submitQuickDrillResult = useProgressStore((s) => s.submitQuickDrillResult);
+  const submitQuickDrillResult = progressCommands.submitQuickDrillResult;
 
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
@@ -106,7 +106,7 @@ export default function QuickDrill() {
 
   // 快速模式优先使用自适应难度；普通模式使用用户选择难度
   // P4 修复（4.5-P1-3）：连续答错 ≥ 3 次时强制降级（不低于 beginner）
-  const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
+  const shouldDownshiftDifficulty = progressCommands.shouldDownshiftDifficulty;
   const effectiveDifficulty: QuestionDifficulty = (() => {
     const base = isQuickMode ? autoDifficulty : difficulty;
     if (shouldDownshiftDifficulty() && base !== 'beginner') {
@@ -175,9 +175,11 @@ export default function QuickDrill() {
 
       // P1E-05（专批 B）：review-* 复习题 SRS 回写闭环 — 按逐题作答明细推进
       // ReviewItem（SM-2：对+快→5 / 对→4 / 错→1）。普通模式不混复习题，天然无操作。
-      const progressState = useProgressStore.getState();
-      const writeBacks = computeReviewWriteBacks(progressState.reviewItems, result.answers ?? []);
-      writeBacks.forEach((item) => progressState.updateReviewItem(item));
+      const writeBacks = computeReviewWriteBacks(
+        progressCommands.getReviewItemsSnapshot(),
+        result.answers ?? [],
+      );
+      writeBacks.forEach((item) => progressCommands.updateReviewItem(item));
 
       if (isQuickMode) {
         // P1-4.1: 计算综合分数并提交到 puzzle store

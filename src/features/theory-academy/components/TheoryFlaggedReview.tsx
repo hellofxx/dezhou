@@ -9,7 +9,7 @@ import { transitionStandard } from '@/shared/utils/motion';
 import { ComponentSkeleton, ListSkeleton } from '@/shared/components/feedback/LoadingState';
 import { EmptyState } from '@/shared/components/feedback/EmptyState';
 import { toLocalDateString } from '@/shared/utils/spacedRepetition';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState } from '@/features/progress/api';
 import { useTheoryStore } from '../store';
 import { useTheoryContentI18n } from '../hooks/useTheoryContentI18n';
 import { useTheoryLevels } from '../hooks/useTheoryLevels';
@@ -36,7 +36,7 @@ export default function TheoryFlaggedReview() {
   const navigate = useNavigate();
   const flaggedQuestions = useTheoryStore((s) => s.progress.flaggedQuestions);
   const toggleFlagQuestion = useTheoryStore((s) => s.toggleFlagQuestion);
-  const reviewItems = useProgressStore((s) => s.reviewItems);
+  const reviewItems = useProgressState((s) => s.reviewItems);
   const flaggedChapterIds = useMemo(
     () => flaggedQuestions.map(chapterIdFromQuestionId),
     [flaggedQuestions],

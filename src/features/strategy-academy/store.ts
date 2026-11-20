@@ -54,7 +54,7 @@ export { MAX_LESSON_NOTE_LENGTH } from './utils/p2State';
 import { LEARNING_TRACKS } from './data/learningTracks';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { isDebugUnlockActive } from '@/shared/stores/debugMode';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { DEFAULT_ADAPTIVE_CONFIG } from './utils/adaptiveDifficulty';
 import { generateDailyPlan, isDailyPlanFresh } from './utils/dailyPlan';
 import type { PokerVariant } from '@/shared/types/elo';
@@ -390,7 +390,7 @@ export const useAcademyStore = create<AcademyStore>()(
           }
           const plan = generateDailyPlan(
             state.progress.completedLessons,
-            useProgressStore.getState().eloByVariant.standard,
+            progressCommands.getStandardEloRating(),
             reviewQueue
           );
           return { dailyPlan: plan };

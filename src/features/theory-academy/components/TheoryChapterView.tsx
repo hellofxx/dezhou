@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
-import { useProgressStore } from '@/features/progress/store';
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import { progressCommands } from '@/features/progress/api';
+import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useTheoryStore } from '../store';
 import { useTheoryContentI18n } from '../hooks/useTheoryContentI18n';
@@ -53,8 +53,6 @@ export default function TheoryChapterView() {
   const toggleBookmark = useTheoryStore((s) => s.toggleBookmark);
   const chapterAttempts = useTheoryStore((s) => s.progress.chapterAttempts);
   const hasPlacement = useTheoryStore((s) => s.progress.placement !== undefined);
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
-  const addReviewItem = useProgressStore((s) => s.addReviewItem);
   // Session 止损：小测消耗每日题量预算（recordAnswer），达上限时禁止进入小测
   const sessionLimitReached = useSessionLimitReached();
 
@@ -160,11 +158,11 @@ export default function TheoryChapterView() {
     wrongQuestionIds: string[],
   ) => {
     recordChapterAttempt(chapter.id, score, totalQuestions, correctAnswers);
-    recordTrainingDay();
+    progressCommands.recordTrainingDay();
     // 章末错题进 SRS 复习队列。刻意放在 recordChapterAttempt 的首次判定**之外**
     // （故记在视图层而非 store 内），重测答错同样入队；addReviewItem 按 item.id 整体 upsert，
     // 重复重测不堆积。此处不触碰 recordAnswer —— 每题作答已在 TheoryQuiz 内计数，禁止二次计数。
-    buildTheoryReviewItems(chapter, wrongQuestionIds).forEach((item) => addReviewItem(item));
+    buildTheoryReviewItems(chapter, wrongQuestionIds).forEach((item) => progressCommands.addReviewItem(item));
     setResult({ score, correct: correctAnswers, total: totalQuestions });
     setPhase('done');
   };

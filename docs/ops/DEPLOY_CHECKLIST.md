@@ -1,14 +1,14 @@
 # GitHub Pages 部署检查清单
 
-> 状态：Current · 最后复核：2026-11-07
+> 状态：Current · 最后复核：2026-11-12
 > 适用：GitHub Pages 项目页 `/dezhou/` 子路径。流水线定义以 `.github/workflows/deploy.yml` 与 `.github/workflows/ci.yml` 为准。
 
 ## 1. 触发与门禁
 
 | 场景 | 工作流 | 门禁序列 |
 |---|---|---|
-| push `main` | `deploy.yml` | install → typecheck → lint → repo:check → docs:check → agents:map:check → test → build → size:check → SPA fallback → upload → deploy |
-| PR / 非 `main` push | `ci.yml` | install → verify → build → size:check |
+| push `main` | `deploy.yml` | install → typecheck → lint → repo:check → docs:check → agents:map:check → test → build → size:check → **E2E（typecheck:e2e → E2E lint → playwright install --with-deps chromium → test:e2e）** → SPA fallback → upload → deploy |
+| PR / 非 `main` push | `ci.yml` | install → verify → build → size:check → **E2E（typecheck:e2e → E2E lint → playwright install --with-deps chromium → test:e2e）** |
 
 `pnpm verify` 的唯一定义以 `package.json` 为准（当前为 `typecheck && lint && repo:check && docs:check && agents:map:check && test`）。
 
@@ -19,7 +19,15 @@ pnpm install --frozen-lockfile
 pnpm verify
 pnpm build
 pnpm size:check
+# E2E 门禁（生产构建 + Chromium；首次需装浏览器）
+pnpm exec playwright install chromium
+pnpm typecheck:e2e
+pnpm exec eslint e2e playwright.config.ts
+pnpm test:e2e
 ```
+
+> 等价一条命令：`pnpm verify:e2e`（= verify → build → size:check → test:e2e）。
+> E2E 失败即视为**不可发布**：trace / screenshot 在 `test-results/`，HTML 报告在 `playwright-report/`；CI 失败时以 `playwright-artifacts` 上传。禁止用重试或放宽断言放行（`retries: 0`）。
 
 - `vite.config.ts` 的 `base` 必须为 `'/dezhou/'`；路由 `basename` 使用 `import.meta.env.BASE_URL`。
 - **不要提交 `dist/`**：它已在 `.gitignore` 中忽略；`404.html` 由 CI 在构建后执行 `cp dist/index.html dist/404.html` 生成。
@@ -34,6 +42,7 @@ pnpm size:check
 - [ ] 中英文切换正常，无原始 i18n key。
 - [ ] Service Worker 更新生效方式：关闭该站点所有标签页后重新打开即加载新版本，无需硬刷新或清缓存（新 SW 等待旧标签页全部关闭后才激活）。
 - [ ] 离线未访问路由验证：首次打开完成预缓存后，DevTools Network 切 Offline，直接访问未访问过的路由（如 `/dezhou/help` 与一条课程深链）正常渲染。
+      `e2e/offline.test.ts` 已自动覆盖 `/dezhou/help` 一条；课程深链与真实 Pages 环境（CDN / `Vary` / 缓存版本保留）仍需人工复核。
 
 ## 4. 回滚
 
@@ -47,4 +56,5 @@ pnpm size:check
 - **页面白屏**：检查 `base` 与资源路径、Network 404、Service Worker 缓存。
 - **深层路由 404**：确认 CI 生成了 `dist/404.html`，且 Pages Source 为 `GitHub Actions`。
 - **体积门禁失败**：查看 `pnpm size:check` 的 Top chunk 列表；不要在未分析的情况下抬高 `BUDGETS`。
+- **E2E 失败**：先看 `test-results/**/trace.zip`（`pnpm exec playwright show-trace <file>`）与 `playwright-report/`；本地复现用 `pnpm build; pnpm test:e2e`。缺 `dist/` 时 `test:e2e` 会直接报错（不是应用故障）。离线用例失败常见原因：SW 未完成预缓存、`base` 与路径前缀不一致、期望 console 错误未精确登记。
 - 历史诊断记录：[`../history/ops/github-actions-diagnosis-2026-09-24.md`](../history/ops/github-actions-diagnosis-2026-09-24.md)。

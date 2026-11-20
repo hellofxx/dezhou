@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Sparkles, GraduationCap, SkipForward, Spade } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import { useProgressStore } from '@/features/progress/store';
+// 跨模块写入统一经 progress 公共入口（禁止深引 progress/store）
+import { progressCommands } from '@/features/progress/api';
 
 export default function WelcomeStep() {
   const { t } = useTranslation();
-  const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
-  const skipOnboarding = useProgressStore((s) => s.skipOnboarding);
+  const { completeOnboardingStep, skipOnboarding } = progressCommands;
 
   // 新手 → 进入定位测试（步骤 1）
   const handleBeginner = () => completeOnboardingStep(1);

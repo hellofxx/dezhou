@@ -3,10 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { Clock, Target } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
-import { useProgressStore } from '@/features/progress/store';
-import type { OnboardingState } from '@/features/progress/types';
+// 跨模块写入统一经 progress 公共入口（禁止深引 progress/store 与 store 内部类型）
+import { progressCommands } from '@/features/progress/api';
 
-const GOAL_OPTIONS: Array<{ value: OnboardingState['dailyGoalMinutes']; minutes: number }> = [
+// dailyGoalMinutes 取值域（5 / 10 / 20）；progress 尚未公开导出 OnboardingState，
+// 故在此以字面量联合声明，避免深引 @/features/progress/types。
+type DailyGoalMinutes = 5 | 10 | 20;
+
+const GOAL_OPTIONS: ReadonlyArray<{ value: DailyGoalMinutes; minutes: number }> = [
   { value: 5, minutes: 5 },
   { value: 10, minutes: 10 },
   { value: 20, minutes: 20 },
@@ -14,8 +18,8 @@ const GOAL_OPTIONS: Array<{ value: OnboardingState['dailyGoalMinutes']; minutes:
 
 export default function GoalSettingStep() {
   const { t } = useTranslation();
-  const completeOnboardingStep = useProgressStore((s) => s.completeOnboardingStep);
-  const [selected, setSelected] = useState<OnboardingState['dailyGoalMinutes'] | null>(null);
+  const { completeOnboardingStep } = progressCommands;
+  const [selected, setSelected] = useState<DailyGoalMinutes | null>(null);
 
   const handleConfirm = () => {
     if (selected === null) return;

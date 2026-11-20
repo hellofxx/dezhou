@@ -4,6 +4,7 @@
  *    （答案位置偏差治理接入回归，防退化为题库原序直出）
  * ② 全对完成 5 题 → completeOnboardingStep(2, { placementTestScore, initialAbility })
  *    payload 正确（满分 100 / 各定级维度 70 / GTO 中性 50）
+ * 生产侧只依赖 progress 公共入口，故契约断言打在 progressCommands 上。
  * 不引入 testing-library，直接用 react-dom/client + act 渲染（对齐 FirstDrillStep 测试模式）。
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
@@ -13,11 +14,7 @@ import i18next from 'i18next';
 import PlacementTestStep from './PlacementTestStep';
 import { placementQuestions } from '../data/placementQuestions';
 import { orderPlacementOptions } from '../utils/optionOrder';
-import { useProgressStore } from '@/features/progress/store';
-
-const originalActions = {
-  completeOnboardingStep: useProgressStore.getState().completeOnboardingStep,
-};
+import { progressCommands } from '@/features/progress/api';
 
 function findButton(container: HTMLElement, text: string): HTMLButtonElement {
   const btn = Array.from(container.querySelectorAll('button')).find((b) =>
@@ -48,20 +45,22 @@ function optionButtons(container: HTMLElement): HTMLButtonElement[] {
 describe('PlacementTestStep 定级测试', () => {
   let container: HTMLDivElement;
   let root: Root;
-  const completeOnboardingStep = vi.fn();
+  const commands = { completeOnboardingStep: vi.fn() };
 
   beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
-    completeOnboardingStep.mockClear();
-    useProgressStore.setState({ completeOnboardingStep });
+    commands.completeOnboardingStep.mockClear();
+    vi.spyOn(progressCommands, 'completeOnboardingStep').mockImplementation(
+      commands.completeOnboardingStep,
+    );
   });
 
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
-    useProgressStore.setState({ ...originalActions });
+    vi.restoreAllMocks();
   });
 
   it('① 选项经排序出口渲染：渲染文本序列与 orderPlacementOptions 计算一致', () => {
@@ -88,8 +87,8 @@ describe('PlacementTestStep 定级测试', () => {
         findButton(container, q === lastQuestion ? '完成测试' : '下一题'),
       );
     }
-    expect(completeOnboardingStep).toHaveBeenCalledTimes(1);
-    expect(completeOnboardingStep).toHaveBeenCalledWith(2, {
+    expect(commands.completeOnboardingStep).toHaveBeenCalledTimes(1);
+    expect(commands.completeOnboardingStep).toHaveBeenCalledWith(2, {
       placementTestScore: 100,
       initialAbility: {
         rangeKnowledge: 70,

@@ -7,9 +7,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/compo
 import { TRAINING_OVERLAY_EVENT } from '@/shared/constants/app';
 // 全局训练伴生 Dialog：Tilt 提醒与里程碑庆典（覆盖 BlankLayout 下的训练页，
 // 与 AppLayout 同策略，修复"主训练页连错 3 题无 Tilt 弹窗"的覆盖缺口）
-import TiltWarning from '@/features/progress/components/gate/TiltWarning';
-import MilestoneCelebrationHost from '@/features/progress/components/celebration/MilestoneCelebrationHost';
-import OnboardingGate from '@/features/progress/components/gate/OnboardingGate';
+import {
+  OnboardingGate,
+  TiltWarning,
+  MilestoneCelebrationHost,
+  ProgressPersistErrorNotice,
+} from '@/features/progress/ui';
 import { useDocumentTitle } from './useDocumentTitle';
 
 // PLAT-09：存 i18n key（common.shortcuts.*），渲染时 t() 解析
@@ -88,6 +91,10 @@ export default function BlankLayout() {
 
       {/* 里程碑庆典全局 Host — 训练完成触发里程碑时就地展示 */}
       <MilestoneCelebrationHost />
+
+      {/* 持久化失败提示条（分源）：AppLayout 与 BlankLayout 不同时渲染，故每层各挂一次；
+          训练页同样需要「未保存 / 仅本次可见」的即时事实 */}
+      <ProgressPersistErrorNotice />
 
       {/* Shortcuts — 复用共享 Dialog（纸张材质/关闭按钮/焦点陷阱/Escape 由 primitives 提供） */}
       <Dialog open={showShortcuts} onOpenChange={setShortcutsOpen}>

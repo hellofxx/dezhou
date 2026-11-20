@@ -62,6 +62,34 @@
     "toggle": "显示/隐藏快捷键"
   },
   "shortcutsTitle": "键盘快捷键",
+  "persistence": {
+    "localStorage": {
+      "title": "学习状态未保存",
+      "description": "浏览器本地存储写入失败，最近的进度与设置可能无法在刷新后保留。"
+    },
+    "records": {
+      "title": "训练记录仅本次可见",
+      "description": "训练记录尚未写入本地数据库，刷新后可能丢失。",
+      "pending": "待写入 {{count}} 条"
+    },
+    "history": {
+      "title": "历史记录加载失败",
+      "description": "本地历史训练记录未能加载，当前只显示本次会话产生的记录。"
+    },
+    "cleanup": {
+      "title": "维护清理失败",
+      "description": "旧记录清理未完成，本地数据库可能累积多余数据，当前训练不受影响。"
+    },
+    "retry": "重试",
+    "retrying": "重试中…",
+    "retryFailed": "重试仍未成功，可先下载当前数据备份。",
+    "openSettings": "前往设置",
+    "dismiss": "关闭提示",
+    "download": {
+      "label": "下载当前数据",
+      "partialNote": "不含可能未加载的历史与牌局，不是完整备份"
+    }
+  },
   "errorBoundary": {
     "title": "页面渲染出错",
     "description": "应用遇到了未预期的错误。请尝试刷新页面，或清除浏览器缓存后重试。",

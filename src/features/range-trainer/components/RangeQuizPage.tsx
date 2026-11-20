@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Position } from '@/shared/types/position';
 import type { TrainingResult } from '@/shared/types/common';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { TrainingSession } from './TrainingSession';
 import { SessionResult } from './SessionResult';
 import { QuizConfig } from './QuizConfig';
 import { useRangeTrainerStore } from '../store';
 // P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
+import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
 
 type Phase = 'config' | 'training' | 'result';
 
@@ -28,7 +28,7 @@ export default function RangeQuizPage() {
   const [questionCount, setQuestionCount] = useState(20);
 
   // Streak 记账：训练完成时计入每日连续训练（recordTrainingDay 内部幂等并检查里程碑）
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
+  const recordTrainingDay = progressCommands.recordTrainingDay;
 
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练
   const sessionLimitReached = useSessionLimitReached();

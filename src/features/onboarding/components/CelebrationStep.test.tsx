@@ -4,32 +4,31 @@
  * 重新挂载（unmount → remount）也不会重复记训练日（旧实现挂载 effect 即记，
  * 幂等仅防同日，跨日重挂载会白嫖一天 streak）。
  * recordTrainingDay 的唯一触发点已移至 FirstDrillStep 完成动作（见其测试）。
+ * 生产侧经 progress 公共入口调用，故以 progressCommands 为断言面。
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { act, StrictMode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import CelebrationStep from './CelebrationStep';
-import { useProgressStore } from '@/features/progress/store';
-
-const originalRecordTrainingDay = useProgressStore.getState().recordTrainingDay;
+import { progressCommands } from '@/features/progress/api';
 
 describe('CelebrationStep 不记训练日（P2A-02）', () => {
   let container: HTMLDivElement;
   let root: Root;
-  const recordTrainingDay = vi.fn();
+  const commands = { recordTrainingDay: vi.fn() };
 
   beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
-    recordTrainingDay.mockClear();
-    useProgressStore.setState({ recordTrainingDay });
+    commands.recordTrainingDay.mockClear();
+    vi.spyOn(progressCommands, 'recordTrainingDay').mockImplementation(commands.recordTrainingDay);
   });
 
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
-    useProgressStore.setState({ recordTrainingDay: originalRecordTrainingDay });
+    vi.restoreAllMocks();
   });
 
   it('挂载 → 卸载 → 重挂载（模拟跨日重开），recordTrainingDay 始终 0 次', () => {
@@ -41,7 +40,7 @@ describe('CelebrationStep 不记训练日（P2A-02）', () => {
         </StrictMode>,
       );
     });
-    expect(recordTrainingDay).not.toHaveBeenCalled();
+    expect(commands.recordTrainingDay).not.toHaveBeenCalled();
 
     // 模拟跨日：用户停在庆祝页，次日刷新页面重新挂载
     act(() => root.unmount());
@@ -54,7 +53,7 @@ describe('CelebrationStep 不记训练日（P2A-02）', () => {
       );
     });
 
-    expect(recordTrainingDay).not.toHaveBeenCalled();
+    expect(commands.recordTrainingDay).not.toHaveBeenCalled();
     // 页面正常渲染（Day 1 Streak 徽章为纯展示）
     expect(container.textContent).toContain('Day 1 Streak');
   });

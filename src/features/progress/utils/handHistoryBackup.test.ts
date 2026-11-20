@@ -3,7 +3,7 @@
  *
  * Node unit 环境无原生 indexedDB，此处用极简 in-memory mock 覆盖 handHistoryBackup
  * 用到的能力（open + getAll + put），验证：读取回写、按 id 幂等去重、
- * open 被其他标签页阻塞时 reject 且可重试。
+ * open 被其他标签页阻塞时 reject 且可重试、事务 abort 时 reject（不永久 pending）。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { loadAllHands, saveAllHands } from './handHistoryBackup';
@@ -36,6 +36,7 @@ function createFakeIndexedDB(): IDBFactory {
         objectStore: () => store,
         oncomplete: null as null | (() => void),
         onerror: null as null | (() => void),
+        onabort: null as null | (() => void),
         error: null as unknown,
       };
       queueMicrotask(() => tx.oncomplete?.());
@@ -45,6 +46,7 @@ function createFakeIndexedDB(): IDBFactory {
 
   const openReq = {
     result: db,
+    onblocked: null as null | (() => void),
     onupgradeneeded: null as null | (() => void),
     onsuccess: null as null | (() => void),
     onerror: null as null | (() => void),
@@ -100,6 +102,16 @@ describe('handHistoryBackup', () => {
     const h1 = hands.find((h) => h.id === 'h1');
     expect(h1?.pot).toBe(999);
   });
+
+  it('空数组写入直接返回，不触碰数据库', async () => {
+    vi.resetModules();
+    const openSpy = vi.fn();
+    vi.stubGlobal('indexedDB', { open: openSpy } as unknown as IDBFactory);
+    const mod = await import('./handHistoryBackup');
+    await expect(mod.saveAllHands([])).resolves.toBeUndefined();
+    expect(openSpy).not.toHaveBeenCalled();
+    vi.resetModules();
+  });
 });
 
 /** 只触发 onblocked 的假 factory：模拟另一标签页持有旧版本连接。 */
@@ -129,6 +141,74 @@ describe('handHistoryBackup open blocked', () => {
     // 失败路径必须清掉缓存的 pending promise，否则重试会永远拿到同一个 pending
     vi.stubGlobal('indexedDB', createFakeIndexedDB());
     await expect(blocked.loadAllHands()).resolves.toEqual([]);
+    vi.resetModules();
+  });
+});
+
+/**
+ * 只触发事务 abort 的假 factory：请求永不 settle，模拟连接失效 / versionchange /
+ * 配额回收导致事务中止。未接住 onabort 时导出的 await 会永久挂起。
+ */
+function createAbortingIndexedDB(): IDBFactory {
+  const db = {
+    objectStoreNames: { contains: () => true },
+    createObjectStore: () => undefined,
+    close: () => undefined,
+    onclose: null as unknown,
+    onversionchange: null as unknown,
+    transaction: () => {
+      const store = {
+        getAll: () =>
+          ({ onsuccess: null as null | (() => void), onerror: null as null | (() => void), result: undefined }) as unknown as IDBRequest,
+        put: () =>
+          ({ onsuccess: null as null | (() => void), onerror: null as null | (() => void), result: undefined }) as unknown as IDBRequest,
+      };
+      const tx = {
+        objectStore: () => store,
+        oncomplete: null as null | (() => void),
+        onerror: null as null | (() => void),
+        onabort: null as null | (() => void),
+        error: new Error('transaction aborted'),
+      };
+      // 处理器在同步块内赋值完成后再触发 abort（与真实 IDB 事件异步到达一致）
+      queueMicrotask(() => {
+        queueMicrotask(() => tx.onabort?.());
+      });
+      return tx as unknown as IDBTransaction;
+    },
+  } as unknown as IDBDatabase;
+
+  const openReq = {
+    result: db,
+    onblocked: null as null | (() => void),
+    onupgradeneeded: null as null | (() => void),
+    onsuccess: null as null | (() => void),
+    onerror: null as null | (() => void),
+    error: null as unknown,
+  };
+  return {
+    open: () => {
+      queueMicrotask(() => openReq.onupgradeneeded?.());
+      queueMicrotask(() => openReq.onsuccess?.());
+      return openReq;
+    },
+  } as unknown as IDBFactory;
+}
+
+describe('handHistoryBackup 事务 abort', () => {
+  it('loadAllHands 事务 abort 时 reject（不永久 pending）', async () => {
+    vi.resetModules();
+    vi.stubGlobal('indexedDB', createAbortingIndexedDB());
+    const mod = await import('./handHistoryBackup');
+    await expect(mod.loadAllHands()).rejects.toThrow(/aborted/);
+    vi.resetModules();
+  });
+
+  it('saveAllHands 事务 abort 时 reject（不假装写入成功）', async () => {
+    vi.resetModules();
+    vi.stubGlobal('indexedDB', createAbortingIndexedDB());
+    const mod = await import('./handHistoryBackup');
+    await expect(mod.saveAllHands([{ id: 'h1' }])).rejects.toThrow(/aborted/);
     vi.resetModules();
   });
 });

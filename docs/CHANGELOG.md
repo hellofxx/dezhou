@@ -10,6 +10,16 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-12 浏览器门禁 · progress 公共入口收敛 · 持久化可靠性与数据管理语义
+
+- **E2E 门禁落地（Playwright）**：用例置于仓库根 `e2e/`（`training.test.ts` 训练闭环 / `offline.test.ts` 离线冒烟，夹具在 `e2e/fixtures/`），后缀 `.test.ts`，与 Vitest 双项目互不收集；`playwright.config.ts` 以 `testDir: './e2e'` + `testMatch: '**/*.test.ts'` 限定范围，`forbidOnly: true`、`retries: 0`（禁止聚焦与重试变绿），`webServer` 指向 `vite preview`（真实 dist 产物）。新增 `e2e/require-build.mjs` 前置校验缺构建并给出修复命令；`pnpm typecheck:e2e` / `pnpm test:e2e` / `pnpm verify:e2e`（= verify → build → size:check → test:e2e）构成浏览器发布门禁。`src/guards/testSystem.guard.test.ts` 同步校验用例文件数下限、禁 only/skip/fixme、配置收集口径与「用例不直写 localStorage / IndexedDB 绕过 UI」。
+- **progress 公共入口收敛**：跨模块只允许 `@/features/progress`（index）、`/api`、`/api.types`、`/ui` 四个入口；`store` / `store.bootstrap` / `components/*` / `utils/*` / `types` / `data/*` 明确为模块内部。装配例外仅 `src/main.tsx` 的 `store.bootstrap` 与 `src/app/routes.tsx` 的页面 lazy import（`components/*` 只允许出现在 lazyPage 的 `import()` 中）。新增守卫 `src/guards/progressPublicApi.guard.test.ts`（复用 `@/test-utils/admissionGraph` 的去注释与路径解析，失败信息给 `file:line → 目标文件`，扫描面与判定逻辑双向自检），并登记 `src/guards/README.md`。
+- **持久化可靠性与迁移保护**：训练记录「内存优先 + 提交结果可断言」——`persistRecord` 永不 reject，返回 `RecordPersistResult`（`inserted` / `exists` / `invalid` / `cancelled` / `failed` + `retainedInMemory`），只有 `ok: true` 才算已保存；失败记录进入运行态 pending 队列，`retryPendingRecords()` 只重写 IndexedDB（不重新 emit、不重新评分 / 计数）；`deleteRecord` / `clearAllRecords` 先取消在途与待写任务并补偿删除，避免删除 / 清空被旧任务复活。新增 `persistenceStatus`（`localStorage` / `records` / `cleanup` 三源分治，运行态不进 persist，代次机制防止迟到的成功抹掉更新的失败）。legacy 桥接保持幂等：v13 前遗留在 localStorage 的 records 由 `store.bootstrap` 以 put 迁入 IndexedDB，延迟加载用 `epoch` 屏障 + `removedIds` 过滤，清空后不会被旧快照回填。
+- **失败可见性**：`ProgressPersistErrorNotice` 经 `ui` 入口在 `AppLayout` 与 `BlankLayout` 各挂一次（两类布局互斥，不重复渲染），按来源区分「学习状态未保存 / 训练记录仅本次可见 / 历史记录加载失败 / 维护清理失败」，提供重试、前往设置与「下载当前数据」（明示为部分备份，不含尚未加载的历史与牌局）。
+- **数据管理语义澄清**：设置页导出为完整备份（含牌局复盘数据），导入逐条校验记录字段并对重复记录跳过，清除只清训练记录（不动 ELO / SRS / 设置 / 学院 / 牌局）。
+- **文档同步**：根 `AGENTS.md`（环境与命令补 E2E 命令、质量门禁新增「E2E」与「浏览器发布门禁」两条、跨模块契约表新增 progress 公共入口）、`src/features/progress/AGENTS.md`（公共入口 / 保存语义 / 分源持久化状态 / legacy 桥接保护四节）、`docs/TDD.md` §5.5（第 11–12 条）、`docs/AI_GUIDE.md` §跨模块复用契约（progress 公共入口与保存语义）、`docs/PRD.md` 用户可见语义、`src/guards/README.md` 守卫清单、`progress-dev` / `platform-dev` 与 7 个消费方子代理文件（各一行公共入口约束）。
+- **验证**：`pnpm test src/guards`、`pnpm docs:check`、`pnpm agents:map:check`、`pnpm typecheck`、`pnpm exec eslint src/layouts src/guards` 均通过；`pnpm build` 后 `pnpm test:e2e` 由发布门禁 `verify:e2e` 执行。
+
 ### 2026-11-07 Service Worker 全量预缓存与部署竞态消除（P0-1）
 
 - **预缓存插件**：新增 `scripts/sw-precache-plugin.ts`（自研 Vite 插件，零新依赖）——`renderSwSource` 纯函数（去重排序 → sha256 前 8 位 → 替换两个占位符）+ `swPrecachePlugin`（`apply:build`，`generateBundle` post 钩子收集全部 bundle 资产与 public 文件，注入清单与 hash 后 emitFile 覆盖 `dist/sw.js`）；`vite.config.ts` 接线。

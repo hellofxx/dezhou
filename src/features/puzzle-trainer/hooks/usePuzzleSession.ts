@@ -10,7 +10,8 @@
  * - 重试（onRetry 钩子 + engine.reset）
  */
 import { useEffect, useRef, useState } from 'react';
-import { useProgressStore } from '@/features/progress/store';
+// 跨模块公共入口：progressCommands 为模块级稳定引用（内部委托 progress store 既有 action）
+import { progressCommands } from '@/features/progress/api';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
 import { usePuzzleStore } from '../store';
 import { puzzleResultToTrainingRecord } from '../utils/trainingRecord';
@@ -32,8 +33,7 @@ export function usePuzzleSession(
   options: UsePuzzleSessionOptions = {}
 ) {
   const submitResult = usePuzzleStore((s) => s.submitResult);
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
+  const { recordTrainingDay, recordAnswer } = progressCommands;
 
   const [finalResult, setFinalResult] = useState<EnrichedPuzzleResult | null>(null);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);

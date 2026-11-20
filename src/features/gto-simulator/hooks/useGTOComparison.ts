@@ -11,7 +11,7 @@ import { resolveSpotKey as resolveSpotKeyUtil } from '../utils/spotKey';
 import { buildGtoReviewItemInput } from '../utils/gtoSrs';
 import type { Decision } from '@/shared/types/action';
 import preflopData from '../data/preflop-ranges.json';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState, progressCommands } from '@/features/progress/api';
 import type { Difficulty } from '@/shared/types/common';
 // P1-3.2: SRS 集成
 import {
@@ -174,8 +174,7 @@ const GTO_DIFFICULTY_MAP: Record<Difficulty, number> = {
 };
 
 export function useGtoEloRecorder() {
-  const updateElo = useProgressStore((s) => s.updateElo);
-  const postflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].postflop);
+  const postflopElo = useProgressState((s) => s.eloByVariant[s.activeVariant].postflop);
 
   return useCallback(
     (isCorrect: boolean, difficulty?: Difficulty | number) => {
@@ -187,9 +186,9 @@ export function useGtoEloRecorder() {
       } else {
         diff = Math.min(1, Math.max(0, postflopElo / 3000));
       }
-      updateElo('postflop', isCorrect, diff);
+      progressCommands.updateElo('postflop', isCorrect, diff);
     },
-    [updateElo, postflopElo]
+    [postflopElo]
   );
 }
 
@@ -207,9 +206,7 @@ export function useGtoEloRecorder() {
  * quality 评分：最优决策且用时<5秒→5，最优决策→4，非最优→1
  */
 export function useGtoSrsRecorder() {
-  const addReviewItem = useProgressStore((s) => s.addReviewItem);
-  const updateReviewItem = useProgressStore((s) => s.updateReviewItem);
-  const reviewItems = useProgressStore((s) => s.reviewItems);
+  const reviewItems = useProgressState((s) => s.reviewItems);
 
   return useCallback(
     (scenario: Scenario, isOptimal: boolean, timeTakenMs: number) => {
@@ -232,12 +229,12 @@ export function useGtoSrsRecorder() {
       );
 
       if (isNew) {
-        addReviewItem(updated);
+        progressCommands.addReviewItem(updated);
       } else {
-        updateReviewItem(updated);
+        progressCommands.updateReviewItem(updated);
       }
     },
-    [reviewItems, addReviewItem, updateReviewItem]
+    [reviewItems]
   );
 }
 
@@ -276,11 +273,7 @@ export function buildGtoFeedback(
  * 内部转发到 progressStore.recordAnswer，用于更新连续答错数 / 每日题量 / accuracyHistory。
  */
 export function useGtoEmotionRecorder() {
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
-  return useCallback(
-    (isCorrect: boolean) => {
-      recordAnswer(isCorrect);
-    },
-    [recordAnswer]
-  );
+  return useCallback((isCorrect: boolean) => {
+    progressCommands.recordAnswer(isCorrect);
+  }, []);
 }

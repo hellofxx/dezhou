@@ -4,13 +4,12 @@
  * ② 选 20 分钟后确认 → completeOnboardingStep(5, { dailyGoalMinutes, completedAt })
  *    step=5 即 onboarding 完成标记
  * ③ 切换选项后以最终选择为准（不残留首次点击值）
+ * 生产侧只依赖 progress 公共入口，故契约断言打在 progressCommands 上。
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import GoalSettingStep from './GoalSettingStep';
-import { useProgressStore } from '@/features/progress/store';
-
-const originalCompleteOnboardingStep = useProgressStore.getState().completeOnboardingStep;
+import { progressCommands } from '@/features/progress/api';
 
 function goalButton(minutes: number): HTMLButtonElement {
   return screen.getByRole('button', {
@@ -23,16 +22,18 @@ function confirmButton(): HTMLButtonElement {
 }
 
 describe('GoalSettingStep 目标设定', () => {
-  const completeOnboardingStep = vi.fn();
+  const commands = { completeOnboardingStep: vi.fn() };
 
   beforeEach(() => {
-    completeOnboardingStep.mockClear();
-    useProgressStore.setState({ completeOnboardingStep });
+    commands.completeOnboardingStep.mockClear();
+    vi.spyOn(progressCommands, 'completeOnboardingStep').mockImplementation(
+      commands.completeOnboardingStep,
+    );
   });
 
   afterEach(() => {
     cleanup();
-    useProgressStore.setState({ completeOnboardingStep: originalCompleteOnboardingStep });
+    vi.restoreAllMocks();
   });
 
   it('未选择时长：确认按钮禁用，点击不提交', () => {
@@ -41,7 +42,7 @@ describe('GoalSettingStep 目标设定', () => {
     expect(confirmButton().disabled).toBe(true);
     fireEvent.click(confirmButton());
 
-    expect(completeOnboardingStep).not.toHaveBeenCalled();
+    expect(commands.completeOnboardingStep).not.toHaveBeenCalled();
   });
 
   it('选择 20 分钟后确认 → completeOnboardingStep(5, 目标与完成时间)', () => {
@@ -51,8 +52,8 @@ describe('GoalSettingStep 目标设定', () => {
     expect(confirmButton().disabled).toBe(false);
     fireEvent.click(confirmButton());
 
-    expect(completeOnboardingStep).toHaveBeenCalledTimes(1);
-    const [step, data] = completeOnboardingStep.mock.calls[0]!;
+    expect(commands.completeOnboardingStep).toHaveBeenCalledTimes(1);
+    const [step, data] = commands.completeOnboardingStep.mock.calls[0]!;
     expect(step).toBe(5);
     expect(data).toMatchObject({ dailyGoalMinutes: 20 });
     expect(typeof data.completedAt).toBe('number');
@@ -65,8 +66,10 @@ describe('GoalSettingStep 目标设定', () => {
     fireEvent.click(goalButton(10));
     fireEvent.click(confirmButton());
 
-    expect(completeOnboardingStep).toHaveBeenCalledTimes(1);
-    expect(completeOnboardingStep.mock.calls[0]![1]).toMatchObject({ dailyGoalMinutes: 10 });
+    expect(commands.completeOnboardingStep).toHaveBeenCalledTimes(1);
+    expect(commands.completeOnboardingStep.mock.calls[0]![1]).toMatchObject({
+      dailyGoalMinutes: 10,
+    });
   });
 
   it('三个目标选项（5 / 10 / 20 分钟）均渲染', () => {

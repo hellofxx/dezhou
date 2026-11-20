@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState } from '@/features/progress/api';
 
 /** 与 index.html 预渲染脚本保持同源（settings.theme → data-theme / color-scheme / theme-color） */
 const THEME_COLOR_META: Record<'dark' | 'light', string> = {
@@ -8,12 +8,12 @@ const THEME_COLOR_META: Record<'dark' | 'light', string> = {
 };
 
 /**
- * 主题应用器：监听 progress store settings.theme（含 system），
+ * 主题应用器：监听 progress settings.theme（含 system），
  * 将解析结果写入 <html data-theme> 与 color-scheme，并同步 <meta theme-color>。
  * 仅在 AppLayout 挂载时运行（onboarding 的 BlankLayout 由 index.html 预渲染脚本兜底）。
  */
 export function useThemeApplier(): void {
-  const theme = useProgressStore((s) => s.settings.theme);
+  const theme = useProgressState((s) => s.settings.theme);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: light)');

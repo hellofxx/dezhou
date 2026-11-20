@@ -6,7 +6,7 @@ import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
 import { MOTION_DURATION, MOTION_EASE } from '@/shared/utils/motion';
 import { drawByAttempt } from '@/shared/utils/academyQuizDraw';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { orderQuizQuestion } from '../utils/quizShuffle';
 import { resolveQuizQuestion } from '../utils/contentKeys';
 import { getLessonEloDifficulty } from '../utils/eloDifficulty';
@@ -46,8 +46,8 @@ export function LessonQuiz({
   onComplete,
 }: LessonQuizProps) {
   const { t } = useTranslation();
-  const updateElo = useProgressStore((s) => s.updateElo);
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
+  const updateElo = progressCommands.updateElo;
+  const recordAnswer = progressCommands.recordAnswer;
   // 答案位置偏差治理：渲染前先 t() 解析（key 缺失回退数据层中文），再抽题（lessonId + attempt
   // 种子稳定、重考换题），最后重排选项（数值升序 / id 稳定种子洗牌）——
   // 选项种子只依赖题 id，zh/en 顺序一致，源数据不变

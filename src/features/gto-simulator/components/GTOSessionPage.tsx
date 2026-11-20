@@ -12,13 +12,13 @@ import { ActionSelector } from './ActionSelector';
 import { GTOFeedback } from './GTOFeedback';
 import { DecisionTree } from './DecisionTree';
 import { trainingEvents } from '@/shared/stores/trainingEvents';
-import type { TrainingRecord } from '@/features/progress/types';
+import type { TrainingRecord } from '@/shared/types/training';
 import { cn } from '@/shared/utils/cn';
 import { getOptimalAction } from '../utils/strategyCompare';
-// P2-5.4: Session 止损守卫
-import SessionLimitGuard, { useSessionLimitReached } from '@/features/progress/components/gate/SessionLimitGuard';
-// P4 修复（4.5-P1-2）：自适应难度降级提示
-import { useProgressStore } from '@/features/progress/store';
+// P2-5.4: Session 止损守卫（progress 展示入口 ui.ts）
+import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
+// progress 业务命令入口（P4 修复 4.5-P1-2：降级判定 / Streak 记账），禁止深引 store
+import { progressCommands } from '@/features/progress/api';
 // §13.7.2：移动端反馈底部 Sheet
 import { MobileFeedbackSheet } from '@/shared/components/feedback/MobileFeedbackSheet';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
@@ -64,14 +64,8 @@ export default function GTOSessionPage() {
   const scenario = getCurrentScenario();
   const progress = getProgress();
 
-  // Streak 记账：训练完成时计入每日连续训练（recordTrainingDay 内部幂等并检查里程碑）
-  const recordTrainingDay = useProgressStore((s) => s.recordTrainingDay);
-
   // P2-5.4: Session 止损 — 达到每日题量上限时禁止继续训练（早退在全部 hooks 之后，见下）
   const sessionLimitReached = useSessionLimitReached();
-
-  // P4 修复（4.5-P1-2）：连续答错降级提示
-  const shouldDownshiftDifficulty = useProgressStore((s) => s.shouldDownshiftDifficulty);
 
   const heroHand = scenario?.heroHand ?? null;
   const { handNotation } = useGTOComparison(heroHand, scenario?.position ?? null);
@@ -157,11 +151,12 @@ export default function GTOSessionPage() {
         };
         trainingEvents.emit(record);
         // 计入每日连续训练（与 puzzle / theory 模块同模式：完成时同步调用，不走事件总线）
-        recordTrainingDay();
+        // Streak 记账内部幂等并检查里程碑
+        progressCommands.recordTrainingDay();
         navigate(`/gto-simulator/result/${result.sessionId}`);
       }
     }
-  }, [continueNext, navigate, recordTrainingDay]);
+  }, [continueNext, navigate]);
 
   // 止损早退必须位于全部 hooks 之后：守卫状态在挂载期间翻转（答题中达上限/
   // 调试开关切换）时，hooks 数量变化会触发 "Rendered fewer hooks" 崩溃
@@ -218,8 +213,8 @@ export default function GTOSessionPage() {
         </div>
       </div>
 
-      {/* P4 修复（4.5-P1-2）：连续答错降级提示 */}
-      {shouldDownshiftDifficulty() && (
+      {/* P4 修复（4.5-P1-2）：连续答错降级提示（判定入口由 progress 持有，无参调用） */}
+      {progressCommands.shouldDownshiftDifficulty() && (
         <div className="px-3 py-2 rounded-lg bg-[var(--clay)]/15 border border-[var(--clay)]/30 text-xs text-[var(--clay-text)]">
           {t('gto.session.downshiftHint')}
         </div>

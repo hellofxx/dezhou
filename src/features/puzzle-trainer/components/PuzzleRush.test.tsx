@@ -18,9 +18,6 @@ const progressMock = vi.hoisted(() => ({
   recordAnswer: vi.fn(),
   recordTrainingDay: vi.fn(),
   shouldDownshift: false,
-  limit: 0,
-  answered: 0,
-  date: '',
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -28,18 +25,14 @@ vi.mock('react-router-dom', () => ({
   useSearchParams: () => [new URLSearchParams(`duration=${searchParamsMock.duration}`), vi.fn()],
 }));
 
-vi.mock('@/features/progress/store', () => ({
-  useProgressStore: (selector: (state: unknown) => unknown) =>
-    selector({
-      recordAnswer: progressMock.recordAnswer,
-      recordTrainingDay: progressMock.recordTrainingDay,
-      shouldDownshiftDifficulty: () => progressMock.shouldDownshift,
-      emotion: {
-        dailyQuestionLimit: progressMock.limit,
-        dailyQuestionsAnswered: progressMock.answered,
-        dailyQuestionsDate: progressMock.date,
-      },
-    }),
+// 生产侧经 @/features/progress/api 调用 progressCommands（调用面一致）；
+// SessionLimitGuard 仍读真实 progress store，题量上限用 store seeding（见下）
+vi.mock('@/features/progress/api', () => ({
+  progressCommands: {
+    recordAnswer: progressMock.recordAnswer,
+    recordTrainingDay: progressMock.recordTrainingDay,
+    shouldDownshiftDifficulty: () => progressMock.shouldDownshift,
+  },
 }));
 
 vi.mock('@/shared/stores/trainingEvents', () => ({
@@ -50,6 +43,8 @@ import PuzzleRush from './PuzzleRush';
 import { usePuzzleStore } from '../store';
 import { getRushQuestions } from '../data/rushQuestions';
 import { getTodayString } from '@/shared/utils/spacedRepetition';
+import { useProgressStore } from '@/features/progress/store';
+import { DEFAULT_EMOTION_STATE } from '@/features/progress/types';
 
 const FIXED_NOW = new Date(2026, 7, 22, 10, 0, 0, 0);
 const THREE_MINUTES = 180_000;
@@ -65,10 +60,9 @@ describe('PuzzleRush 限时冲刺', () => {
     vi.clearAllMocks();
     searchParamsMock.duration = '';
     progressMock.shouldDownshift = false;
-    progressMock.limit = 0;
-    progressMock.answered = 0;
-    progressMock.date = getTodayString();
     localStorage.clear();
+    // 守卫真实读 progress store：默认 emotion 复位，避免用例间串味
+    useProgressStore.setState({ emotion: { ...DEFAULT_EMOTION_STATE } });
     usePuzzleStore.getState().reset();
     container = document.createElement('div');
     document.body.appendChild(container);
@@ -207,8 +201,14 @@ describe('PuzzleRush 限时冲刺', () => {
   });
 
   it('达到每日题量上限时渲染 Session 守卫', () => {
-    progressMock.limit = 1;
-    progressMock.answered = 1;
+    useProgressStore.setState({
+      emotion: {
+        ...DEFAULT_EMOTION_STATE,
+        dailyQuestionLimit: 1,
+        dailyQuestionsAnswered: 1,
+        dailyQuestionsDate: getTodayString(),
+      },
+    });
     render();
     expect(text()).toContain('今日已达题量上限');
     expect(container.querySelector('.puzzle-question-scenario')).toBeNull();

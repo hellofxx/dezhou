@@ -192,6 +192,14 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - 实现 `src/shared/stores/trainingEvents.ts`；feature 完成训练后必须 `trainingEvents.emit(event)`，progress store 自动订阅更新统计。hand-history 为复盘分析工具而非交互式训练，合理豁免 emit（见其 store.ts 顶部说明与 CHANGELOG）。
 - 五大系统的「记录」action 在答题/反馈环节同步调用（不走事件总线）：Streak / ELO / SRS / Emotion 直接记录，Mentor 经 `renderMentorFeedback` 渲染。
 
+### progress 公共入口与保存语义
+
+- 公共入口三层（唯一跨模块面）：`features/progress/index.ts`（聚合：复习项工具 / 每日训练推荐 / 成就数据 / QuickDrill 混合）、`api.ts` + `api.types.ts`（`useProgressState` / `progressCommands` / `ProgressReadModel`）、`ui.ts`（`SessionLimitGuard` / `OnboardingGate` / `TiltWarning` / `MilestoneCelebrationHost` / `ProgressPersistErrorNotice`）。
+- 深引禁令：`@/features/progress/store`、`/store.bootstrap`、`/components/*`、`/utils/*`、`/types`、`/data/*` 一律禁止（改为在 `api.ts` / `ui.ts` 增补导出）；装配例外仅 `src/main.tsx` 的 `store.bootstrap` 与 `src/app/routes.tsx` 的页面 lazy import。守卫 `src/guards/progressPublicApi.guard.test.ts`（失败信息带 `file:line`）。
+- 保存语义：记录提交后才算「已保存」。`addRecord` 先写内存，落库结果由 `RecordPersistResult` 表达（`ok: true` = `inserted` / `exists`；`ok: false` = `invalid` / `cancelled` / `failed` + `retainedInMemory`）；`persistRecord` 永不 reject，调用方不得把「已入内存」当「已保存」。
+- 分源持久化状态：`persistenceStatus.ts`（`localStorage` / `records` / `cleanup`，运行态不进 persist，代次防迟到成功覆盖新失败）由 `ProgressPersistErrorNotice` 消费，两个壳层各挂一次；重试只重写存储，不重复 emit / 评分，删除与清空会取消在途写入防复活。
+- 迁移保护：legacy records 由 `store.bootstrap` 幂等迁入 IndexedDB，延迟加载用 `epoch` 屏障 + `removedIds` 过滤，清空不会被旧快照回填。
+
 ### 调试解锁
 
 - 实现 `src/shared/stores/debugMode.ts`（独立 persist store，不并入 progress）；激活码常量以该文件为唯一事实源。

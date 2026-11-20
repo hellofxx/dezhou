@@ -35,6 +35,7 @@ pnpm dev / build / preview
 pnpm typecheck / lint / test / test:unit / test:component / test:guards / test:watch / test:coverage
 pnpm verify / verify:parallel
 pnpm size:check / repo:check / docs:check
+pnpm typecheck:e2e / test:e2e / verify:e2e
 pnpm agents:map / agents:map:check
 ```
 
@@ -97,6 +98,7 @@ src/
 | 返回入口 | `shared/components/layout/BackLink.tsx` | `to` / `historyBack` 与文本·胶囊·按钮三变体；icon-only 必填 `aria-label`；触摸目标 ≥44px |
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |
+| progress 公共入口 | `features/progress/index.ts` + `api.ts` / `api.types.ts` / `ui.ts` | 跨模块只经公共入口：业务读写走 `api`（`useProgressState` / `progressCommands`）、展示走 `ui`；禁止深引 `store` / `components/*` / `utils/*` / `types` / `data/*`（守卫 `src/guards/progressPublicApi.guard.test.ts`）。装配例外仅 `src/main.tsx` 的 `store.bootstrap` 与 `src/app/routes.tsx` 的页面 lazy import |
 | 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory |
 | 学院共享组件/纯函数 | `shared/components/academy/*`、`shared/utils/academy*` | 理论/策略各自薄包装消费；shared 禁止 import feature；两院行为/文案由包装层保持。P2 学习工具同源：`AcademyBookmarksPanel` / `AcademyNotesPanel`（课时书签 / 纯文本笔记）与 `ContentIssueReportDialog`（内容纠错，mailto / 剪贴板降级，无后端）。变体规则卡同源：`AcademyVariantRuleCard`（理论 `TheoryVariantRuleCard` / 策略 `StrategyVariantRuleCard` 各做薄包装），单挑规则事实以 `shared/constants/headsUpRules.ts` 为单源。题库合并/抽题同源：`mergeQuizBank` / `drawByAttempt`，标准与单挑题库共用，禁止模块内另写合并/抽题逻辑 |
 | 共享交互基础件 | `shared/components/ui/{button,input,textarea,progress}.tsx` + `ui/focusRing.ts` + `layout/SectionLabel.tsx` | shared 组件必须 dogfood：禁止手写 `<button>/<input>/<textarea>/<select>`（特化 allowlist 见 `src/guards/sharedPrimitiveUsage.guard.test.ts`）；focus ring / section label 单源；Button default/secondary 保持金属族，quiet/link 为结构变体。V1 已完成：`.btn-*` 入 `@layer components`、ghost/outline/destructive 收口、平铺主 CTA 收敛到 Button default |
@@ -129,9 +131,11 @@ src/
 - **唯一出口**：`pnpm verify` = `typecheck && lint && repo:check && docs:check && agents:map:check && test`；任一失败即中止；构建 `pnpm build`，体积 `pnpm size:check`。
 - **typecheck / lint / test**：`tsc --noEmit`、`eslint src`（模块隔离 + 禁 any）、`vitest run` 必须 exit 0。
 - **shared 准入**：`src/shared/admission-guard.test.ts`（分析器 `src/test-utils/admissionGraph.ts`）按 import 图 + 传递闭包判定 —— 0 生产消费者直接失败；1 生产消费者失败，仅 baseline 条目可临时存在（baseline 当前为空，只降不升且双向校验）；`components/ui/**` 豁免 ≥2 但仍禁 0 消费；`utils/localStorageStub` / `utils/persistShape` 按测试消费者计数豁免。
-- **全局守卫**：i18n 双语对称、静态 key、颜色 token、CSS 颜色、行数棘轮、测试体系自检、文档检查；清单见 `src/guards/README.md`。
+- **全局守卫**：i18n 双语对称、静态 key、颜色 token、CSS 颜色、行数棘轮、测试体系自检、文档检查、progress 公共入口（禁深引）；清单见 `src/guards/README.md`。
 - **测试后缀**：`.test.ts` = unit（Node）；`.test.tsx` = component（jsdom）；禁止 `.spec.ts(x)` 与 `__tests__/`。persist store 必须有 `store.persist-shape.test.ts`（version > 1 还须 `store.migrate.test.ts`）。
 - **仓库 / 地图 / 文档**：`repo:check`、`agents:map:check`、`docs:check` 已接入 verify、CI 与 pre-commit。
+- **E2E（Playwright）**：`pnpm typecheck:e2e`（`tsconfig.e2e.json`）→ `pnpm test:e2e`（`node e2e/require-build.mjs` 校验产物后跑根 `e2e/**/*.test.ts`）；用例只走真实 UI，禁止 `.only` / `.skip` / `.fixme` 与重试变绿（`src/guards/testSystem.guard.test.ts` 双向校验）。
+- **浏览器发布门禁**：`pnpm verify:e2e` = `verify && build && size:check && test:e2e` —— 触及路由 / 布局 / 持久化 / 离线的变更必须在真实浏览器跑通该链后才可发布；仅 `pnpm verify` 不足以证明浏览器行为。
 - **Feature PR Checklist**：同步代理文件；行为变更补测试（缺陷附回归锁）；课程/题库变更同批过内容守卫；UI/路由改浏览器验证；新增守卫登记 README；新增跨模块边登记白名单；persist schema 变更 version + migrate；`pnpm verify` 全绿。
 
 ## 提交粒度

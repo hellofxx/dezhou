@@ -1,6 +1,6 @@
 # 测试体系规范（TESTING）
 
-> 状态：Current · 最后复核：2026-11-04
+> 状态：Current · 最后复核：2026-11-12
 > 地位：本文件是测试**分层、文件放置与命名、判定标准、执行矩阵、责任与评审**的唯一事实源。
 > 不重复维护的事实：运行命令以 `package.json` 为事实源；CI 步骤以 `.github/workflows/*.yml` 为事实源；全局守卫清单以 [`src/guards/README.md`](../../src/guards/README.md) 为事实源；测试文件清单以 `src/**/*.test.ts(x)` 实际文件为准。
 > 变更本规范时同步：`AGENTS.md` §质量门禁、`docs/TDD.md` §11、`docs/agents/README.md`。
@@ -34,7 +34,7 @@
 | L1 | 单元 | Node | 纯函数、store action、parser、迁移、排序、公式 | `pnpm test:unit` | 同上 |
 | L2 | 组件 | jsdom | 渲染、交互、键盘、a11y、双语真实文案 | `pnpm test:component` | 同上 |
 | L3 | 全局不变式 | Node（少数 jsdom） | 跨模块快照、i18n 对称、课程 / 题库完整性、设计 token、行数棘轮 | `pnpm test:guards` / `pnpm test` | 同上 |
-| L4 | 浏览器验收 | 真实浏览器 | 关键用户路径、视觉 / 响应式、跨页状态 | 手工（`pnpm dev` + 浏览器） | PR 评审证据（E2E 落地前） |
+| L4 | 浏览器验收（E2E） | 真实 Chromium + 生产构建（`vite preview`） | 关键用户路径、跨页状态、离线可用 | `pnpm test:e2e`（需先 `pnpm build`）/ `pnpm verify:e2e` | PR CI + main CI（deploy 上传制品前） |
 | R | 发布 | Node + Vite | 生产构建、首屏体积 | `pnpm build && pnpm size:check` | main CI / 发布 |
 
 ```mermaid
@@ -48,12 +48,39 @@ flowchart LR
   L2 --> V
   L3 --> V
   V --> B[pnpm build + size:check]
-  B --> L4[L4 浏览器验收 / E2E 规划中]
+  B --> L4[L4 浏览器验收 / Playwright E2E]
 ```
 
-E2E 尚未落地（见 §11），因此 L4 目前是**人工门禁**：UI / 路由 / 样式变更必须在真实浏览器走完黄金路径与至少一个边界场景，并在 PR 描述记录“已验证 / 未验证 + 原因”。
+L4 由 Playwright 自动门禁 + 人工验收共同承担：
+
+- **自动化部分**（`e2e/**/*.test.ts`，配置 `playwright.config.ts`）：跑**生产构建**（`vite preview`，base `/dezhou/`），当前覆盖「跳过引导 → 范围训练 10 题 → 结果页 → 进度页 → 刷新后记录仍在」的学习闭环，以及「预缓存完成后断网打开从未访问过的深层路由」的离线冒烟。`forbidOnly: true` + `retries: 0`，失败保留 trace / screenshot 作为证据。
+- **仍属人工的部分**（见 §11 已知缺口）：视觉细节与响应式断点、动效、真实滚动、性能感知、跨浏览器（非 Chromium）兼容、部署后的 Pages 环境验证。PR 描述仍需记录“已验证 / 未验证 + 原因”。
 
 > PR CI 的阻断力依赖仓库分支保护：需把 `CI` workflow 设为 required check；workflow 本身只负责执行与报告。
+
+### 2.1 L4 E2E 执行细则（Playwright）
+
+| 项 | 事实源 / 命令 |
+|---|---|
+| 用例位置 | 仓库根 `e2e/**/*.test.ts`（夹具在 `e2e/fixtures/`；Vitest 双项目只收集 `src/`，两者互不交叉） |
+| 配置 | `playwright.config.ts`：`testDir: './e2e'`、`testMatch: '**/*.test.ts'`、`forbidOnly: true`、`retries: 0`、`trace: 'retain-on-failure'`、`screenshot: 'only-on-failure'` |
+| 运行目标 | **生产构建**：`webServer` 起 `vite preview --port 4173`（`baseURL` `http://127.0.0.1:4173`，路径一律带 `/dezhou/` 前缀） |
+| 类型检查 | `pnpm typecheck:e2e`（独立 `tsconfig.e2e.json`，strict + `@/*` paths） |
+| 运行 | `pnpm test:e2e`（先校验 `dist/index.html` 存在，缺失即报错提示 `pnpm build`） |
+| 全链路 | `pnpm verify:e2e` = `verify` → `build` → `size:check` → `test:e2e` |
+| Lint | `pnpm exec eslint e2e playwright.config.ts`（`pnpm lint` 仍只覆盖 `src`） |
+| CI 位置 | `.github/workflows/ci.yml`（PR / 非 main push）与 `.github/workflows/deploy.yml`（push main，在上传 Pages 制品**之前**阻断） |
+| 失败证据 | trace / screenshot / HTML 报告落在 `test-results/` 与 `playwright-report/`（已 gitignore），CI 失败时以 `playwright-artifacts` 上传 |
+| 浏览器 | 本机 `pnpm exec playwright install chromium`；CI `pnpm exec playwright install --with-deps chromium` |
+| 本地兜底 | 本机网络无法下载 Playwright Chromium 时，可用 `PLAYWRIGHT_LOCAL_CHANNEL=chrome pnpm test:e2e` 借用系统 Chrome 做一次本地验证（环境变量驱动，CI 不设置，门禁事实源仍是 bundled Chromium） |
+
+约定：
+
+- 断言必须落在**真实可见契约**上（真实文案、真实题量、刷新后数据仍在），不得退化为「页面存在即通过」。
+- 禁止 `.only` / `.skip` / `.fixme` / `test.fail`，由 `src/guards/testSystem.guard.test.ts` 的 E2E 段零容忍。
+- 禁止通过 `localStorage` / IndexedDB 直写或调试开关绕过 UI（同一守卫校验），用例必须走真实引导、真实导航、真实答题。
+- 零噪声：console error / pageerror / 失败请求 / 4xx-5xx 一律失败；确属场景注入的期望错误必须**逐条精确登记**（`e2e/fixtures/browserErrors.ts`）。当前训练闭环与离线冒烟都要求零噪声（离线用例不登记任何期望错误）。
+- 失败不得靠 retry 变绿：修实现或修断言；连续失败需记录复现命令与 trace 位置。
 
 ## 3. 文件放置与命名
 
@@ -70,6 +97,8 @@ E2E 尚未落地（见 §11），因此 L4 目前是**人工门禁**：UI / 路�
 | `*.parity.test.ts` | unit | Node | 摘要 / 生成物与源数据一致 |
 | `*.guard.test.ts` | unit | Node | 全局或模块级不变式；全局放 `src/guards/` |
 
+> E2E（L4）例外：Playwright 用例放在仓库根 `e2e/`，同样使用 `*.test.ts` 后缀，但由 `playwright.config.ts` 收集，**不会**被 Vitest 双项目执行（`vitest.config.ts` 只 include `src/**`）。
+>
 > 既有测试保留原名（如 `curriculumIntegrity.test.ts` / `*optionOrder.test.ts`）；新增测试按上表后缀选择。既有守卫保留原名（`*Guard.test.ts` / 描述性命名）；新增守卫统一使用 `*.guard.test.ts`。无论文件名如何，新增守卫都必须登记 `src/guards/README.md`。
 >
 > 含 `describe(` / `it(` 声明的源码必须使用 `.test.ts(x)` 后缀；`testSystem.guard.test.ts` 会扫描并阻断不会被收集的“伪测试文件”。
@@ -156,6 +185,8 @@ E2E 尚未落地（见 §11），因此 L4 目前是**人工门禁**：UI / 路�
 | 覆盖率审计 | `pnpm test:coverage` | unit + component v8 报告 | 仅定位缺口，不阻断；结果记录于 CHANGELOG |
 | 提交前 | `pnpm lint` + `pnpm test:guards`（hook 负责 lint 与 agent map；建议手动加跑守卫层） | 快 | 不把 focused 测试 / 守卫清单漂移带进提交 |
 | 推送前 | `pnpm verify` | 全量 | 与 CI 同序列 |
+| E2E（本地） | `pnpm verify:e2e`（或 `pnpm build` + `pnpm test:e2e`） | 生产构建 + Chromium | 学习闭环 / 离线冒烟通过；失败先看 `test-results/` 的 trace |
+| E2E（CI） | `ci.yml` / `deploy.yml` 的 E2E 步骤 | `typecheck:e2e` + E2E lint + `playwright install --with-deps chromium` + `test:e2e` | PR 与发布前必过；deploy 失败即不上传制品 |
 | PR CI | `.github/workflows/ci.yml` | `pnpm verify` + `pnpm build` + `pnpm size:check` | 合并前必过（需在 GitHub 分支保护中设为 required check） |
 | main / 发布 | `.github/workflows/deploy.yml` | 同上门禁 + 部署 | 不通过不部署 |
 | 本地排障 | `pnpm verify:parallel` | 并行 + 分级重试 | 仅用于本地基础设施抖动；不得据此判定测试稳定 |
@@ -195,7 +226,7 @@ PR 自检（与 `AGENTS.md` Feature PR Checklist 同步）：
 3. 需要 store / persist / parser 吗？→ 是：L1（Node，stub 存储）；否：下一步。
 4. 需要渲染或交互吗？→ 是：L2（jsdom）；涉及键盘 / 语义结构时加 a11y。
 5. 契约跨模块或覆盖全仓吗？→ 是：L3（`src/guards/` 或模块级完整性守卫），并加扫描面自检。
-6. 只能在真实浏览器验证吗？→ 是：L4 手工验收 + 后续 E2E 候选项；在 PR 记录。
+6. 只能在真实浏览器验证吗？→ 关键路径写进 `e2e/`（L4 自动化）；视觉 / 动效 / 响应式等仍人工验收并在 PR 记录。
 7. 补回归锁：先让新测试在修复前失败，再修实现。
 
 ## 11. 现状与已知缺口
@@ -213,7 +244,7 @@ PR 自检（与 `AGENTS.md` Feature PR Checklist 同步）：
 
 已知缺口（按风险排序）：
 
-1. **无自动化 E2E**：关键用户路径（范围训练 / GTO / 手牌导入 / Dashboard）仍以组件级 + 手工验收为主；路由测试只覆盖注册结构与 `/help` 静态渲染。进入条件：连续两个版本出现同类跨页回归，或关键路径手工验证耗时超过维护成本；届时引入 Playwright，先覆盖 TDD §11.3 的四条流程。
+1. **E2E 覆盖面仍窄（已落地，范围待扩）**：`e2e/training.test.ts`（学习闭环）与 `e2e/offline.test.ts`（离线深层路由）已进 PR CI / main CI；GTO 会话、手牌导入、策略 / 理论学院课程深链尚未纳入。扩面原则：只加**真实闭环 + 可观察断言**（真实文案、真实题量、刷新后数据仍在），禁止退化成“页面存在即通过”。
 2. **入口 / 组合壳不做直接单测**：`src/main.tsx`（启动副作用、SW 注册）与 `src/App.tsx`（路由 + Providers + Toaster 组合）由 `routes.test.tsx` / `providers.test.tsx` 间接覆盖；如出现入口回归，再补 bootstrap 集成测试。
 3. **浏览器专属行为**：真实滚动、动画、响应式布局、IDB quota / blocked、Worker 运行时崩溃等只能在真实浏览器或专用 polyfill 下验证；jsdom 测试锁可观察契约，L4 手工验收补足。
 4. **不可达 / 防御分支**：如 `detectVariant`（无消费方）、穷尽联合类型的 `default`、不可触发的空态守卫等，不为覆盖率硬造非法数据；确认死代码时按仓库流程清理，并在 CHANGELOG 记录。

@@ -6,7 +6,7 @@ import { cn } from '@/shared/utils/cn';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { useTranslation } from 'react-i18next';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState } from '@/features/progress/api';
 import { useTheoryStore } from '../store';
 import {
   getCoreChaptersOfLevel,
@@ -36,7 +36,7 @@ export default function TheoryHome() {
   const switchVariant = useTheoryStore((s) => s.switchVariant);
   const toggleBookmark = useTheoryStore((s) => s.toggleBookmark);
   // 五维 ELO 只读快照：反向桥接（ELO → 推荐章节）的唯一输入（progress 为设计内中枢引用）
-  const standardElo = useProgressStore((s) => s.eloByVariant.standard);
+  const standardElo = useProgressState((s) => s.eloByVariant.standard);
 
   const levels = getLevelSummariesByVariant(activeVariant);
   const totalProgress = getTotalProgress();

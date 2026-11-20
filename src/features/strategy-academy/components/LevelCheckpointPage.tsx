@@ -5,7 +5,7 @@ import { ClipboardCheck, Lock } from 'lucide-react';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 import { deriveAcademyCourseFilesForLevel } from '@/i18n/academyCourse';
 import { useAcademyStore } from '../store';
 import { useAcademyLessonsForLevel } from '../hooks/useAcademyLessons';
@@ -64,9 +64,9 @@ export default function LevelCheckpointPage() {
   const checkpoints = useAcademyStore((s) => s.checkpoints);
   const isLevelLessonsCompleted = useAcademyStore((s) => s.isLevelLessonsCompleted);
   const recordCheckpointAttempt = useAcademyStore((s) => s.recordCheckpointAttempt);
-  const updateElo = useProgressStore((s) => s.updateElo);
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
-  const addReviewItem = useProgressStore((s) => s.addReviewItem);
+  const updateElo = progressCommands.updateElo;
+  const recordAnswer = progressCommands.recordAnswer;
+  const addReviewItem = progressCommands.addReviewItem;
 
   const loadedLessons = useAcademyLessonsForLevel(levelEntries.length === 0 ? 0 : level);
   const mergedLessons = loadedLessons ?? [];

@@ -2,6 +2,9 @@
  * FirstDrillStep 组件测试（jsdom，P2A-02 回归）：
  * 首次微训练完成动作（进入庆祝页之前）调用 recordTrainingDay 恰好一次。
  * 对照 CelebrationStep.test.tsx：庆祝页重挂载不再记训练日。
+ * 生产侧只依赖 progress 公共入口（progressCommands + useProgressState），
+ * 故契约断言打在 progressCommands 上，且顺序断言「recordTrainingDay 先于
+ * completeOnboardingStep(3)」保持不变。
  * 不引入 testing-library，直接用 react-dom/client + act 渲染（对齐 TheoryQuiz 测试模式）。
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
@@ -10,16 +13,11 @@ import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import FirstDrillStep from './FirstDrillStep';
-import { useProgressStore } from '@/features/progress/store';
+import { progressCommands } from '@/features/progress/api';
 
 // QuizCard 外层是 AnimatePresence mode="wait"，切题时旧卡需走完退场才渲染新卡；
 // jsdom 无真实动画帧，跳过动画 + 手动推 rAF 帧驱动退场/入场完成
 MotionGlobalConfig.skipAnimations = true;
-
-const originalActions = {
-  recordTrainingDay: useProgressStore.getState().recordTrainingDay,
-  completeOnboardingStep: useProgressStore.getState().completeOnboardingStep,
-};
 
 function findButton(container: HTMLElement, text: string): HTMLButtonElement {
   const btn = Array.from(container.querySelectorAll('button')).find((b) =>
@@ -52,22 +50,27 @@ async function pumpFrames(n = 5) {
 describe('FirstDrillStep 首胜记训练日（P2A-02）', () => {
   let container: HTMLDivElement;
   let root: Root;
-  const recordTrainingDay = vi.fn();
-  const completeOnboardingStep = vi.fn();
+  const commands = {
+    recordTrainingDay: vi.fn(),
+    completeOnboardingStep: vi.fn(),
+  };
 
   beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
-    recordTrainingDay.mockClear();
-    completeOnboardingStep.mockClear();
-    useProgressStore.setState({ recordTrainingDay, completeOnboardingStep });
+    commands.recordTrainingDay.mockClear();
+    commands.completeOnboardingStep.mockClear();
+    vi.spyOn(progressCommands, 'recordTrainingDay').mockImplementation(commands.recordTrainingDay);
+    vi.spyOn(progressCommands, 'completeOnboardingStep').mockImplementation(
+      commands.completeOnboardingStep,
+    );
   });
 
   afterEach(() => {
     act(() => root.unmount());
     container.remove();
-    useProgressStore.setState({ ...originalActions });
+    vi.restoreAllMocks();
   });
 
   it('全对完成微训练：recordTrainingDay 恰好一次，且在 completeOnboardingStep(3) 前', async () => {
@@ -87,15 +90,15 @@ describe('FirstDrillStep 首胜记训练日（P2A-02）', () => {
       await pumpFrames();
     }
     click(findButton(container, 'Raise')); // 末题答对
-    expect(recordTrainingDay).not.toHaveBeenCalled(); // 未点完成前不记
+    expect(commands.recordTrainingDay).not.toHaveBeenCalled(); // 未点完成前不记
     click(findButton(container, '完成训练'));
 
-    expect(recordTrainingDay).toHaveBeenCalledTimes(1);
-    expect(completeOnboardingStep).toHaveBeenCalledTimes(1);
-    expect(completeOnboardingStep).toHaveBeenCalledWith(3);
+    expect(commands.recordTrainingDay).toHaveBeenCalledTimes(1);
+    expect(commands.completeOnboardingStep).toHaveBeenCalledTimes(1);
+    expect(commands.completeOnboardingStep).toHaveBeenCalledWith(3);
     // 首胜记录发生在进入庆祝页之前
-    expect(recordTrainingDay.mock.invocationCallOrder[0]!).toBeLessThan(
-      completeOnboardingStep.mock.invocationCallOrder[0]!,
+    expect(commands.recordTrainingDay.mock.invocationCallOrder[0]!).toBeLessThan(
+      commands.completeOnboardingStep.mock.invocationCallOrder[0]!,
     );
   });
 
@@ -129,7 +132,7 @@ describe('FirstDrillStep 首胜记训练日（P2A-02）', () => {
     click(findButton(container, 'Raise')); // 补救题答对
     click(findButton(container, '完成训练'));
 
-    expect(recordTrainingDay).toHaveBeenCalledTimes(1);
-    expect(completeOnboardingStep).toHaveBeenCalledWith(3);
+    expect(commands.recordTrainingDay).toHaveBeenCalledTimes(1);
+    expect(commands.completeOnboardingStep).toHaveBeenCalledWith(3);
   });
 });

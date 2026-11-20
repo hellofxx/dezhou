@@ -74,6 +74,18 @@ describe('sw.js 模板不变式', () => {
     expect(TEMPLATE.includes('caches.match(event.request, { ignoreVary: true })')).toBe(true);
   });
 
+  it('兜底分支先查预缓存：public/ 下的图标 / manifest.json 等不在 /assets/ 下，不得离线 503', () => {
+    // 回归锁：install 已把 public 文件写入预缓存，fetch 的网络失败分支必须能读到它们
+    expect(TEMPLATE.includes('async function matchPrecached(request)')).toBe(true);
+    expect(TEMPLATE.includes('const precached = await matchPrecached(event.request);')).toBe(true);
+    // 兜底必须先于 503 返回（顺序契约：命中预缓存即返回）
+    const fallback = TEMPLATE.slice(TEMPLATE.lastIndexOf('Other same-origin GET'));
+    expect(fallback.indexOf('matchPrecached(event.request)')).toBeGreaterThan(-1);
+    expect(fallback.indexOf('matchPrecached(event.request)')).toBeLessThan(
+      fallback.indexOf("new Response('Offline', { status: 503 })"),
+    );
+  });
+
   it('扫描面自检：模板 ≥80 行（防路径失效空跑）', () => {
     expect(TEMPLATE.split('\n').length).toBeGreaterThanOrEqual(80);
   });

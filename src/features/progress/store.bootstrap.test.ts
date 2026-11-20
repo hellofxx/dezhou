@@ -71,5 +71,9 @@ describe('initProgressStore 引导链路', () => {
     // 3) 幂等：重复引导不会重复加载 / 打乱顺序
     await initProgressStore();
     expect(useProgressStore.getState().records.map((r) => r.id)).toEqual(['legacy', 'idb-only']);
+
+    // 4) 恢复结束后关闭加载屏障（init 可被后续 UI 感知完成）
+    const { isRecordsLoading } = await import('./recordPersistence');
+    expect(isRecordsLoading()).toBe(false);
   });
 });

@@ -3,7 +3,9 @@ import { usePotOddsStore } from '../store';
 // P1-B 修复（P1B-01/02/03）：口径计算抽为纯函数 utils/oddsMath.computeOddsResult（可直接单测）
 import { computeOddsResult } from '../utils/oddsMath';
 import type { OddsResult, PotOddsQuizQuestion } from '../types';
-import { useProgressStore } from '@/features/progress/store';
+// progress 跨模块公共入口（禁止深引 progress store）：读取走 useProgressState，
+// 写入走 progressCommands（仅委托既有 action，三同步时序与结算口径不变）
+import { progressCommands, useProgressState } from '@/features/progress/api';
 // P1-3.2: SRS 集成
 import {
   answerQuality,
@@ -66,8 +68,7 @@ export function useOddsCalculation(): OddsResult {
  * （高分用户对应高难度题目，简化映射：ELO 0-3000 → 难度 0-1）
  */
 export function useOddsEloRecorder() {
-  const updateElo = useProgressStore((s) => s.updateElo);
-  const mathElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].math);
+  const mathElo = useProgressState((s) => s.eloByVariant[s.activeVariant].math);
 
   return useCallback(
     (isCorrect: boolean, difficulty?: number) => {
@@ -75,9 +76,9 @@ export function useOddsEloRecorder() {
         typeof difficulty === 'number'
           ? Math.min(1, Math.max(0, difficulty))
           : Math.min(1, Math.max(0, mathElo / 3000));
-      updateElo('math', isCorrect, diff);
+      progressCommands.updateElo('math', isCorrect, diff);
     },
-    [updateElo, mathElo]
+    [mathElo]
   );
 }
 
@@ -92,9 +93,7 @@ export function useOddsEloRecorder() {
  * quality 评分：答对且用时<5秒→5，答对→4，答错→1
  */
 export function useOddsSrsRecorder() {
-  const addReviewItem = useProgressStore((s) => s.addReviewItem);
-  const updateReviewItem = useProgressStore((s) => s.updateReviewItem);
-  const reviewItems = useProgressStore((s) => s.reviewItems);
+  const reviewItems = useProgressState((s) => s.reviewItems);
 
   return useCallback(
     (question: PotOddsQuizQuestion, isCorrect: boolean, timeTakenMs: number) => {
@@ -110,12 +109,12 @@ export function useOddsSrsRecorder() {
       );
 
       if (isNew) {
-        addReviewItem(updated);
+        progressCommands.addReviewItem(updated);
       } else {
-        updateReviewItem(updated);
+        progressCommands.updateReviewItem(updated);
       }
     },
-    [reviewItems, addReviewItem, updateReviewItem]
+    [reviewItems]
   );
 }
 
@@ -148,14 +147,11 @@ export function buildOddsFeedback(
  * P2-5.2: pot-odds 情绪管理记录器
  *
  * 调用方（PotOddsQuizPage）在答题后调用返回的 recordAnswerForEmotion 函数。
- * 内部转发到 progressStore.recordAnswer，用于更新连续答错数 / 每日题量 / accuracyHistory。
+ * 内部经 progress 公共入口 progressCommands.recordAnswer 转发，
+ * 用于更新连续答错数 / 每日题量 / accuracyHistory。
  */
 export function useOddsEmotionRecorder() {
-  const recordAnswer = useProgressStore((s) => s.recordAnswer);
-  return useCallback(
-    (isCorrect: boolean) => {
-      recordAnswer(isCorrect);
-    },
-    [recordAnswer]
-  );
+  return useCallback((isCorrect: boolean) => {
+    progressCommands.recordAnswer(isCorrect);
+  }, []);
 }

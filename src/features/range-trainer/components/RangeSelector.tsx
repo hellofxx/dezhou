@@ -12,7 +12,7 @@ import { Lock } from 'lucide-react';
 import type { Position } from '@/shared/types/position';
 import type { RangePreset } from '../types';
 import { SIX_MAX_POSITIONS, ACTION_TYPES, POSITION_UNLOCK_THRESHOLDS, isPositionUnlocked } from '../constants';
-import { useProgressStore } from '@/features/progress/store';
+import { useProgressState } from '@/features/progress/api';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
 import { useRangeTrainerStore } from '../store';
 import { resolvePresetName } from '../utils/presetI18n';
@@ -38,7 +38,7 @@ export function RangeSelector({
 }: RangeSelectorProps) {
   const { t } = useTranslation();
   // P4 修复（4.4-P1-1）：基于 preflop ELO 的位置渐进解锁
-  const preflopElo = useProgressStore((s) => s.eloByVariant[s.activeVariant].preflop);
+  const preflopElo = useProgressState((s) => s.eloByVariant[s.activeVariant].preflop);
   // 调试解锁：解除全部位置门禁
   const debugUnlock = useDebugModeStore((s) => s.unlockAll);
   // XMOD-009：低人数桌（≤2-max）绕过位置解锁，使 isPositionUnlocked 短路
