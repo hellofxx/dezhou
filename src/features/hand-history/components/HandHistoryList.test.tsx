@@ -130,6 +130,9 @@ describe('HandHistoryList 列表与导航', () => {
     expect(screen.getByText('$6.00')).not.toBeNull();
     expect(screen.getByText(i18n.t('handHistory.list.wonBy', { name: 'Hero' }))).not.toBeNull();
 
+    // 行为语义链接，键盘可达
+    expect(document.querySelector('a[href="/hand-history/h1"]')).not.toBeNull();
+
     fireEvent.click(screen.getByText(i18n.t('handHistory.list.handNumber', { number: 'HN-h1' })));
     expect(currentPath()).toBe('/hand-history/h1');
   });
@@ -166,6 +169,9 @@ describe('HandHistoryList 列表与导航', () => {
     mount();
 
     fireEvent.click(screen.getByText(i18n.t('handHistory.list.clearAll')));
+    // Radix Dialog：role=dialog + 标题关联（模态由焦点陷阱与外部 aria-hidden 实现）
+    const dialog = screen.getByRole('dialog');
+    expect(dialog.getAttribute('aria-labelledby')).toBeTruthy();
     expect(screen.getByText(i18n.t('handHistory.list.confirmClearTitle'))).not.toBeNull();
 
     fireEvent.click(screen.getByText(i18n.t('handHistory.list.cancel')));
@@ -178,7 +184,7 @@ describe('HandHistoryList 列表与导航', () => {
     expect(screen.queryByText(i18n.t('handHistory.list.confirmClearTitle'))).toBeNull();
   });
 
-  it('站点筛选 / 排序下拉写入 filter，点击遮罩关闭确认弹窗，头部导入按钮跳转导入页', () => {
+  it('站点筛选 / 排序下拉写入 filter，Escape 关闭确认弹窗，头部导入按钮跳转导入页', async () => {
     seed([makeHand('h1'), makeHand('h2', { site: 'ggpoker', handNumber: 'GG-2' })]);
     mount();
 
@@ -192,11 +198,12 @@ describe('HandHistoryList 列表与导航', () => {
     fireEvent.change(sortSelect!, { target: { value: 'pot' } });
     expect(useHandHistoryStore.getState().filter.sortBy).toBe('pot');
 
-    // 点击遮罩关闭确认弹窗
+    // Escape 关闭确认弹窗（Dialog 原语焦点陷阱）
     fireEvent.click(screen.getByText(i18n.t('handHistory.list.clearAll')));
-    const overlay = document.querySelector('.fixed.inset-0') as HTMLElement;
-    fireEvent.click(overlay);
-    expect(screen.queryByText(i18n.t('handHistory.list.confirmClearTitle'))).toBeNull();
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
+    await waitFor(() => {
+      expect(screen.queryByText(i18n.t('handHistory.list.confirmClearTitle'))).toBeNull();
+    });
     expect(clearAll).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByText(i18n.t('handHistory.list.import')));
