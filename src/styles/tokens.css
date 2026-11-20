@@ -1,0 +1,244 @@
+/* =========================================================
+   Card-room palette
+   The subject is Texas Hold'em training. The visual world
+   is a private card room: bottle-green felt, walnut rails,
+   ivory cards, brass hairlines. Brass is the single accent —
+   used as a 1px hairline and the active state, never as a
+   fill on buttons or large surfaces.
+   ========================================================= */
+:root {
+  color-scheme: dark;
+  /* Felt — page background & primary surfaces */
+  --felt-deep: #0e1a14;       /* page background, like felt under low light */
+  --felt: #15301f;            /* primary surface — bottle green */
+  --felt-raised: #1d4029;     /* raised surface — hover */
+  --felt-light: #245035;      /* lighter felt — highlights */
+
+  /* Walnut — sidebar & rail panels */
+  --walnut: #241a10;
+  --walnut-raised: #3a2a18;
+  --walnut-border: #4a3825;
+  --walnut-light: #4d3a24;
+
+  /* Ivory — text & "card" surfaces */
+  --ivory: #f3ebd9;
+  --ivory-dim: #cabf9f;
+  --ivory-muted: #b0a68c;     /* 说明 / 占位 / 禁用 —— felt 5.89:1、felt-raised 4.78:1（§2.7） */
+
+  /* Brass — single accent */
+  --brass: #c9a25e;
+  --brass-bright: #e8c97e;    /* aligned with DESIGN.md §2.1 & component usage */
+  --brass-deep: #a07d3d;
+  --brass-dark: #8a6b30;
+  --brass-muted: #b09050;
+  --brass-glow: color-mix(in srgb, var(--brass-bright) 12%, transparent);  /* §2.1 brass glow token */
+
+  /* Brass 透明度阶 — Streak 热力图 / 模块图标 / 徽章描边；color-mix 随 var(--brass) 主题联动 */
+  --brass-cell-1: color-mix(in srgb, var(--brass) 15%, transparent);
+  --brass-cell-2: color-mix(in srgb, var(--brass) 25%, transparent);
+  --brass-cell-3: color-mix(in srgb, var(--brass) 45%, transparent);
+  --brass-cell-4: color-mix(in srgb, var(--brass) 70%, transparent);
+  --brass-cell-5: color-mix(in srgb, var(--brass) 92%, transparent);
+
+  /* Module theme color — hand-history leather (§5.18) */
+  --poker-leather: #c08a5a;
+
+  /* Semantic colors — aliased to low-saturation card-room variants (DESIGN.md §1.3) */
+  --success: var(--poker-success);           /* 苔藓绿 - 正确反馈、盈利 */
+  --success-bg: var(--poker-success-bg);     /* 成功背景（半透明） */
+  --danger: var(--poker-danger);             /* 陶土红 - 错误反馈、亏损 */
+  --danger-bg: var(--poker-danger-bg);       /* 危险背景（半透明） */
+  --warning: var(--poker-warning);           /* 黄铜 - 警告提示 */
+  --warning-bg: var(--poker-warning-bg);     /* 警告背景 */
+  --info: var(--poker-info);                 /* 鼠尾草灰绿 - 信息提示 */
+  --info-bg: var(--poker-info-bg);           /* 信息背景 */
+
+  /* Decorative functional colors */
+  --clay: #a83838;            /* deep danger accent */
+  --sage: #6b8e7a;            /* neutral data */
+
+  /* 文本专用阶（DESIGN.md §2.7）—— 只用于 color / text-[...]；
+     填充、描边、渐变停靠继续用上面的原值，禁止把下列 token 用作 bg / border / fill。
+     暗底房间色板的原语在 felt 上均不足 4.5:1（clay 2.23 / danger 3.30 / sage 3.92 / brass-deep 3.73），文字必须取提亮阶。 */
+  --clay-text: #e3907b;       /* felt 5.79:1 / felt-raised 4.70:1 / 陶土底 5.45:1 */
+  --danger-text: #e3907b;     /* felt 5.79:1 / danger-bg 底 5.23:1 */
+  --sage-text: #9fc0a9;       /* felt 7.18:1 / felt-raised 5.82:1 */
+  --brass-text: #c9a25e;      /* felt 5.98:1 / felt-raised 4.85:1（与 --brass 同值，暗色观感不变） */
+
+  /* === Low-saturation card-room semantic colors (canonical source — DESIGN.md §1.3/§2.2) === */
+  --poker-success: #7fb883;
+  --poker-success-bg: rgba(127,184,131,0.12);
+  --poker-danger: #c25a4c;
+  --poker-danger-bg: rgba(194,90,76,0.12);
+  --poker-warning: #c9a25e;
+  --poker-warning-bg: color-mix(in srgb, var(--brass) 14%, transparent);
+  --poker-info: #8ba59b;
+  --poker-info-bg: rgba(139,165,155,0.12);
+  --poker-frost: #a8c4cf;
+  --poker-frost-deep: #5e8796;
+  --poker-frost-bg: rgba(168,196,207,0.12);
+  --poker-felt-center: #1f5233;
+  --poker-felt-glow: rgba(224,189,117,0.07);
+  --poker-indigo: #4a5a7a;
+  --poker-indigo-bright: #8ea4c4;   /* 石板靛亮阶 — 暗底文字/标签用（§2.4） */
+  --poker-terra: #965a3e;
+  --poker-terra-bright: #c98a63;    /* 陶土赭亮阶 — 暗底文字/标签用（§2.4） */
+  --poker-moss: #6a8a5a;
+  --poker-gold: #d4a84b;            /* 金牌/成就徽章（§2.4） */
+  --poker-bronze: #cd7f32;          /* 铜牌徽章（§2.4） */
+
+  /* === Paper palette — 发牌员纸条表面与文字（DESIGN.md §2.6） ===
+     独立于暗色房间色板，仅在 .dealer-slip 作用域内经 token 重锚生效。 */
+  --progress-track: #2d2214;         /* 进度条轨道（§5.11） */
+  --paper: #f4ecda;                  /* 纸条底 */
+  --paper-raised: #faf4e6;           /* 纸条内抬升块（表头、代码块） */
+  --paper-edge: #d6c8a8;             /* 纸条 1px 边、内外分隔 */
+  --paper-ink: #241c10;              /* 纸条主文字 */
+  --paper-ink-dim: #4f452f;          /* 纸条次级文字 */
+  --paper-ink-muted: #6f6449;        /* 纸条说明 / 禁用 */
+  --paper-rule: rgba(90,70,35,0.22); /* 纸条内发线 / 分隔线 */
+  --paper-brass: #8a641f;            /* 纸条上的黄铜强调（深阶） */
+  --paper-success: #2f6b3a;          /* 纸条语义成功 */
+  --paper-danger: #a63f30;           /* 纸条语义危险 */
+  --paper-warning: #8a641f;          /* 纸条语义警告 */
+  --paper-info: #3f6b5c;             /* 纸条语义信息 */
+
+  /* Suits — for use on dark felt (clubs/spades are ivory for visibility) */
+  --suit-heart: #d04545;
+  --suit-diamond: #d04545;
+  --suit-club: #f3ebd9;
+  --suit-spade: #f3ebd9;
+
+  /* Gradient stops — UI-10: 渐变 stop 抽为 token，消除渐变内裸 hex（visual 不变） */
+  --grad-felt-1: #215d38;
+  --grad-felt-2: #1a4f2f;
+  --grad-felt-3: #133f24;
+  --grad-felt-4: #0c2b18;
+  --grad-felt-5: #081e10;
+  --grad-felt-raised: #163825;
+  --grad-felt-deep-1: #0c1f13;
+  --grad-felt-deep-2: #060d09;
+  --grad-plaque: #e8dcc0;
+  --grad-streak-today: #a8842e;
+  --grad-frost-light: #d4e4eb;
+  --grad-brass-light: #d4b068;
+  --grad-brass-light-2: #b8914a;
+  --grad-brass-light-3: #b48f44;
+  --grad-brass-hover-1: #f0d892;
+  --grad-brass-hover-2: #f5df9b;
+  --grad-brass-hover-3: #b08a45;
+  --grad-brass-bright-soft: #f0d48a;
+  --grad-walnut-dark-1: #4a3218;
+  --grad-walnut-dark-2: #2a1c0a;
+  --grad-walnut-hover-1: #5a3e20;
+  --grad-walnut-hover-2: #3a2810;
+  --grad-mentor-indigo-1: #6b7fa0;
+  --grad-mentor-indigo-2: #3d4d6b;
+  --grad-mentor-terra-1: #b88868;
+  --grad-mentor-terra-2: #7a4e32;
+  --grad-mentor-moss-1: #8ab08a;
+  --grad-mentor-moss-2: #537a52;
+
+  /* Token aliases — keep existing components working */
+  --background: var(--felt-deep);
+  --surface: var(--felt);
+  --surface-raised: var(--felt-raised);
+  --surface-hover: var(--felt-raised);
+  --surface-overlay: rgba(14, 26, 20, 0.85);
+  --primary: var(--brass);
+  --primary-hover: var(--brass-bright);
+  --primary-foreground: #1a1612;
+  --primary-fg: #1a1612;
+  --secondary: var(--info);
+  --text-primary: var(--ivory);
+  --text-secondary: var(--ivory-dim);
+  --text-muted: var(--ivory-muted);
+  --radius: 0.5rem;
+
+  /* Stable anchors — theme-independent values for surfaces & text that must
+     never flip with the light theme (text on brass fills / ivory plaque). */
+  --stable-ink: #2a2113;      /* deep brown ink on brass & ivory surfaces */
+  --stable-ivory: #f8f2e2;    /* ivory plaque surface (dark text on top) */
+
+  /* === Semantic room layer — 组件只读这一层；light 主题只改 primitive === */
+  --room-page: var(--felt-deep);
+  --room-surface: var(--felt);
+  --room-surface-raised: var(--felt-raised);
+  --room-line: var(--walnut-border);
+  --room-line-strong: var(--walnut-light);
+  --room-ink: var(--ivory);
+  --room-ink-dim: var(--ivory-dim);
+  --room-ink-muted: var(--ivory-muted);
+  --room-accent-text: var(--brass-text);
+  --room-hairline: color-mix(in srgb, var(--brass) 50%, transparent);
+  --hero-surface-gradient: linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+  --hero-surface-gradient-raised: linear-gradient(180deg, var(--felt) 0%, var(--felt-raised) 100%);
+  --question-card-gradient: linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+
+  /* === poker- prefixed aliases (DESIGN.md §2 — single source of truth) === */
+  --poker-felt-deep: var(--felt-deep);
+  --poker-felt: var(--felt);
+  --poker-felt-raised: var(--felt-raised);
+  --poker-felt-light: var(--felt-light);
+  --poker-walnut: var(--walnut);
+  --poker-walnut-raised: var(--walnut-raised);
+  --poker-walnut-border: var(--walnut-border);
+  --poker-walnut-light: var(--walnut-light);
+  --poker-ivory: var(--ivory);
+  --poker-ivory-dim: var(--ivory-dim);
+  --poker-ivory-muted: var(--ivory-muted);
+  --poker-brass: var(--brass);
+  --poker-brass-bright: var(--brass-bright);
+  --poker-brass-deep: var(--brass-deep);
+  --poker-brass-dark: var(--brass-dark);
+  --poker-brass-glow: var(--brass-glow);
+  --poker-brass-muted: var(--brass-muted);
+
+  /* Radius scale — §4.1 four-tier (poker- prefixed) */
+  --poker-radius-sm: 4px;
+  --poker-radius-md: 8px;
+  --poker-radius-lg: 12px;
+  --poker-radius-xl: 16px;
+
+  /* Shadows — aligned with DESIGN.md §4.2 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --shadow-brass: 0 4px 20px color-mix(in srgb, var(--brass) 15%, transparent);
+  /* UI-06：brass glow 系列——统一锚定 --brass 色相，消除 #d4af37 漂移 */
+  --shadow-brass-glow-sm: 0 0 8px color-mix(in srgb, var(--brass) 50%, transparent);
+  --shadow-brass-glow: 0 0 12px color-mix(in srgb, var(--brass) 15%, transparent);
+  --shadow-brass-glow-lg: 0 0 16px color-mix(in srgb, var(--brass) 45%, transparent);
+  --shadow-brass-glow-soft: 0 0 16px color-mix(in srgb, var(--brass) 15%, transparent);
+  --shadow-brass-glow-dot: 0 0 6px color-mix(in srgb, var(--brass) 60%, transparent);
+  --shadow-brass-btn: 0 3px 10px color-mix(in srgb, var(--brass) 25%, transparent), inset 0 1px 0 rgba(255, 240, 200, 0.55);
+  --shadow-clay-glow-sm: 0 0 8px rgba(168, 56, 56, 0.5);
+  --shadow-sage-glow-sm: 0 0 8px rgba(107, 142, 122, 0.5);
+
+  /* === Scene & fill tokens — dark 值 = 既有实现；light 只换这一层 === */
+  --scene-vignette: rgba(0, 0, 0, 0.55); --scene-vignette-sm: rgba(0, 0, 0, 0.5); --scene-rail: var(--walnut); --scene-rail-edge: var(--walnut-border);
+  --scene-drop-sm: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --scene-drop-md: 0 14px 40px rgba(0, 0, 0, 0.5); --scene-drop-lg: 0 30px 60px rgba(0, 0, 0, 0.35);
+  --brass-fill: var(--brass); --brass-fill-ink: var(--primary-foreground); --brass-fill-border: var(--brass-dark);
+  --brass-fill-gradient: linear-gradient(180deg, var(--grad-brass-bright-soft) 0%, var(--brass) 50%, var(--brass-deep) 100%);
+  --brass-fill-gradient-hover: linear-gradient(180deg, var(--grad-brass-hover-1) 0%, var(--grad-brass-light) 50%, var(--grad-brass-light-2) 100%);
+  --brass-fill-gradient-active: linear-gradient(180deg, var(--grad-brass-light-2) 0%, var(--brass-deep) 55%, var(--brass-dark) 100%);
+  --action-allin-bg: linear-gradient(90deg, color-mix(in srgb, var(--clay) 35%, transparent), color-mix(in srgb, var(--brass) 35%, transparent));
+  --action-allin-bg-hover: linear-gradient(90deg, color-mix(in srgb, var(--clay) 45%, transparent), color-mix(in srgb, var(--brass) 45%, transparent));
+  --position-selected-bg: var(--sage); --position-selected-ink: var(--ivory); --sage-fill: var(--sage);
+
+  /* Typography */
+  --font-display: 'Fraunces', 'Cormorant Garamond', 'Source Han Serif SC', 'Songti SC', serif;
+  --font-body: 'Inter Tight', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+
+  /* === Motion tokens — DESIGN.md §8 动效（与 src/shared/utils/motion.ts 对齐） === */
+  --poker-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);   /* §8.1.1 默认入场/状态过渡 */
+  --poker-ease-out: cubic-bezier(0, 0, 0.2, 1);           /* §8.1.1 元素出现（快起慢停） */
+  --poker-ease-in: cubic-bezier(0.4, 0, 1, 1);            /* §8.1.1 元素退场（慢入快出） */
+  --poker-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* §8.1.1 弹性回弹 */
+  --poker-duration-fast: 200ms;        /* §8.1.2 hover/press/选中态 */
+  --poker-duration-standard: 300ms;    /* §8.1.2 面板展开/路由切换/反馈浮层 */
+  --poker-duration-slow: 500ms;        /* §8.1.2 大场景（牌桌入场/发牌） */
+  --poker-duration-loop: 1800ms;       /* §8.1.2 循环呼吸/等待 */
+}

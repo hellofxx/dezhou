@@ -1,0 +1,267 @@
+/* =========================================================
+   Responsive — Mobile (<768px)
+   ========================================================= */
+@media (max-width: 767px) {
+  /* §6.3: Hide ELO badge on mobile to avoid overlapping title.
+     daily-progress-chip is now part of the bottom stat strip → keep visible. */
+  .elo-rank-badge { display: none !important; }
+
+  /* §10.5: Defensive grid — training grounds always 2 cols on mobile */
+  .grid.grid-cols-2.md\:grid-cols-3 { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Panels: reduce padding */
+  .panel { padding: 12px; border-radius: 8px; }
+  .panel-title { font-size: 13px; margin-bottom: 8px; gap: 6px; }
+  .panel-title i, .panel-title svg { width: 13px; height: 13px; }
+
+  /* Table rail */
+  .table-rail { height: 10px; }
+  .rail-stud { width: 7px; height: 7px; }
+
+  /* Felt arena mobile */
+  .felt-arena {
+    padding: 10px 8px 8px !important;
+    min-height: 116px !important;
+    margin-top: -12px !important;
+    border-radius: 50% / 28% !important;
+    gap: 2px !important;
+    box-shadow:
+      inset 0 0 40px rgba(0,0,0,0.55),
+      inset 0 0 0 5px #1a130a,
+      inset 0 0 0 6px #3a2c1c,
+      inset 0 0 0 7px color-mix(in srgb, var(--brass) 8%, transparent),
+      0 6px 18px rgba(0,0,0,0.5),
+      0 12px 26px rgba(0,0,0,0.35);
+  }
+  .felt-arena::before { inset: 4px 10px !important; border-radius: 50% / 26%; }
+  .felt-arena::after { inset: 8px 18px !important; border-radius: 50% / 24%; }
+
+  /* Felt arena stat strip: keep three metrics on one line for ≤390px */
+  .felt-arena-stats {
+    gap: 6px !important;
+    margin-top: 0 !important;
+    padding: 6px !important;
+  }
+  .felt-arena-stats .plaque-sm { min-width: 62px; padding: 5px 6px; }
+  .felt-arena-stats .plaque-sm .casino-plaque-value { font-size: 15px; }
+  .felt-arena-stats .plaque-sm .casino-plaque-label { font-size: 6.5px; letter-spacing: 0.1em; }
+  .felt-arena-stats .plaque-sm .casino-plaque-sub { font-size: 7.5px; }
+  .felt-arena-stats .daily-progress-chip { min-width: 70px; padding: 5px 8px; align-items: center; }
+  .felt-arena-stats .daily-progress-chip > div { text-align: center; }
+  .felt-arena-stats .progress-track { width: 44px !important; }
+
+  /* Motto */
+  .motto-engraved { gap: 5px; margin-top: 2px; }
+  .motto-line { flex-basis: 16px; max-width: 22px; }
+  .motto-text { font-size: 8px; letter-spacing: 0.08em; }
+
+  /* Hero compression: hide the ornamental suit row on phones */
+  .felt-suit-row { display: none !important; }
+  .felt-arena-decor { margin: 2px 0 0 !important; }
+
+  /* Section eyebrow */
+  .section-eyebrow { font-size: 8px; letter-spacing: 0.16em; margin-bottom: 4px; }
+
+  /* Streak rail: compact */
+  .streak-rail {
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 8px 10px;
+    overflow: visible;
+  }
+  .streak-rail-item { gap: 4px; flex-shrink: 0; }
+  .streak-rail-dots {
+    flex: 1 1 0;
+    gap: 2px;
+    padding: 0;
+    min-width: 0;
+  }
+  .streak-rail-dots .streak-dot {
+    padding: 3px 2px 2px;
+    gap: 1px;
+    border-radius: 4px;
+    min-width: 0;
+  }
+  .streak-rail-dots .streak-dot span { font-size: 8px !important; }
+  .streak-rail-dots .streak-dot em { font-size: 6px !important; }
+  .streak-rail-divider { height: 18px; margin: 0 2px; }
+  .freeze-chip { width: 22px !important; height: 22px !important; }
+
+  /* Module cards: compact */
+  .module-card { padding: 10px 12px; gap: 8px; border-radius: 8px; }
+  .module-icon { width: 28px; height: 28px; border-radius: 7px; }
+
+  /* Quick drill card: compact */
+  .quick-drill-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 14px;
+    gap: 6px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+  .quick-drill-left { gap: 10px; width: 100%; }
+  .quick-drill-icon { width: 32px; height: 32px; border-radius: 7px; }
+  .quick-drill-title { font-size: 15px; line-height: 1.2; }
+  .quick-drill-sub { font-size: 11px; margin-top: 1px; }
+  .quick-drill-right { width: 100%; flex-wrap: wrap; gap: 6px; }
+  .quick-drill-mode { padding: 6px 10px; font-size: 11px; min-height: 32px; display: inline-flex; align-items: center; }
+
+  /* Action buttons: 2x2 grid */
+  .action-btn-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px !important;
+  }
+  .action-mini {
+    padding: 11px 8px;
+    font-size: 11px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Scenario card */
+  .scenario-card { padding: 10px 12px; border-radius: 8px; }
+
+  /* Feedback grades */
+  .feedback-grade { padding: 8px 10px; gap: 6px; font-size: 11px; }
+  .feedback-grade .grade-emoji { font-size: 13px; }
+  .feedback-grade .grade-label { font-size: 11px; }
+  .feedback-grade .grade-ev { font-size: 10px; }
+  .feedback-grade .grade-desc { font-size: 10px; }
+
+  /* Pills */
+  .pill { padding: 5px 10px; font-size: 10px; min-height: 30px; }
+
+  /* Equity bar */
+  .equity-bar { height: 26px; }
+  .equity-segment { font-size: 10px; }
+
+  /* Rec items */
+  .rec-item { padding: 8px 10px; gap: 6px; border-radius: 6px; }
+  .rec-icon { width: 24px; height: 24px; border-radius: 6px; }
+  .rec-go { width: 22px; height: 22px; }
+
+  /* Path banner */
+  .path-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 14px;
+    gap: 6px;
+    border-radius: 8px;
+  }
+  .path-banner-title { font-size: 15px; }
+  .path-banner-sub { font-size: 11px; margin-top: 1px; }
+  .path-pills { flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .path-pill { padding: 4px 9px; font-size: 10px; min-height: 28px; display: inline-flex; align-items: center; }
+
+  /* Theme cards */
+  .theme-card { padding: 12px; }
+  .theme-name { font-size: 12px; }
+  .theme-meta { font-size: 9px; }
+
+  /* Puzzle cards */
+  .puzzle-card { padding: 14px; }
+  .puzzle-card .puzzle-name { font-size: 14px; }
+  .puzzle-card .puzzle-desc { font-size: 11px; }
+  .puzzle-card .puzzle-meta { font-size: 10px; gap: 8px; flex-wrap: wrap; }
+
+  /* Course cards */
+  .course-card { padding: 12px 14px; }
+  .course-title { font-size: 13px; }
+  .course-level { font-size: 8px; }
+  .course-lessons { font-size: 10px; }
+
+  /* Mentor cards */
+  .mentor-card { padding: 14px 10px; width: auto; min-height: auto; }
+  .mentor-avatar { width: 44px !important; height: 44px !important; }
+  .mentor-name { font-size: 12px; }
+  .mentor-tone { font-size: 8px; }
+
+  /* Concept nodes */
+  .concept-node { width: 52px; height: 52px; font-size: 9px; }
+  .concept-node .node-icon { font-size: 15px; margin-bottom: 1px; }
+
+  /* Opponent card */
+  .opponent-card { padding: 12px; }
+  .opponent-avatar { width: 36px !important; height: 36px !important; font-size: 12px !important; }
+  .opponent-type { font-size: 13px; }
+  .opponent-sub { font-size: 9px; }
+  .opponent-tip { font-size: 10px; }
+
+  /* Mini felt */
+  .mini-felt { min-height: 190px; }
+
+  /* Equal-height cancel on mobile */
+  .panel.h-full { height: auto !important; }
+}
+
+/* Light theme — flatter ambient on mobile (match reduced-gradients rule) */
+@media (max-width: 767px) {
+  html[data-theme="light"] body::before { background: color-mix(in srgb, var(--brass) 5%, transparent); }
+  html[data-theme="light"] body::after { background: rgba(120,95,45,0.1); }
+}
+
+/* =========================================================
+   Responsive — Small mobile (<480px)
+   ========================================================= */
+@media (max-width: 480px) {
+  .panel { padding: 12px; }
+  .panel-title { font-size: 12px; }
+
+  /* Arena even smaller */
+  .felt-arena {
+    padding: 2px 12px 8px;
+    min-height: 88px;
+    margin-top: -14px;
+    border-radius: 50% / 26%;
+  }
+  .felt-arena::before { inset: 4px 10px; }
+  .felt-arena::after { inset: 8px 18px; }
+  .motto-engraved { gap: 4px; margin-top: 1px; }
+  .motto-text { font-size: 7px; letter-spacing: 0.06em; }
+  .motto-line { flex-basis: 12px; max-width: 16px; }
+
+  /* Module cards: tighter */
+  .module-card { padding: 8px 10px; gap: 6px; }
+  .module-icon { width: 28px; height: 28px; border-radius: 6px; }
+
+  /* Quick drill */
+  .quick-drill-card { padding: 10px 12px; }
+  .quick-drill-title { font-size: 12px; }
+  .quick-drill-sub { font-size: 10px; }
+  .quick-drill-mode { padding: 5px 8px; font-size: 10px; }
+
+  /* Action buttons: tighter */
+  .action-mini { padding: 10px 6px; font-size: 10px; min-height: 42px; }
+
+  /* Streak rail dots smaller */
+  .streak-rail { padding: 6px 8px; gap: 4px; }
+  .streak-rail-item { gap: 3px; }
+  .streak-rail-dots { gap: 1px; }
+  .streak-rail-dots .streak-dot { padding: 2px 1px 1px; }
+  .streak-rail-dots .streak-dot span { font-size: 7px !important; }
+  .streak-rail-dots .streak-dot em { font-size: 5px !important; }
+  .streak-rail-divider { height: 14px; margin: 0 1px; }
+  .freeze-chip { width: 18px !important; height: 18px !important; }
+
+  /* Pills wrap */
+  .pill { padding: 4px 8px; font-size: 10px; }
+
+  /* Scenario card */
+  .scenario-card { padding: 10px 12px; }
+
+  /* Mini felt */
+  .mini-felt { min-height: 160px; }
+
+  /* Course cards */
+  .course-card { padding: 10px 12px; gap: 6px; }
+
+  /* Rec items */
+  .rec-item { padding: 7px; gap: 6px; }
+  .rec-icon { width: 22px; height: 22px; }
+}

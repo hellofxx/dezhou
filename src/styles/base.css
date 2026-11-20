@@ -1,0 +1,211 @@
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100dvh;
+  position: relative;
+  z-index: 2;
+}
+
+/* Touch interaction — remove 300ms double-tap zoom delay on coarse pointers,
+   and suppress the default iOS tap highlight (focus ring remains via focus-visible) */
+html {
+  touch-action: manipulation;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Global warm lamp haze - simulates overhead brass lamp */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse 75% 55% at 50% 25%, color-mix(in srgb, var(--brass-bright) 6%, transparent) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Global vignette - darkens edges like a dim card room */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse 65% 55% at 50% 30%, transparent 50%, rgba(6,13,9,0.35) 78%, rgba(6,13,9,0.55) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Display headings — Fraunces with optical sizing.
+   Used sparingly: app name, page welcome, hero numbers. */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'opsz' 96, 'SOFT' 50;
+  letter-spacing: -0.012em;
+  font-weight: 500;
+}
+
+/* Numeric data — JetBrains Mono with tabular figures.
+   Used for odds, EV, pot sizes, accuracy, time — anything
+   a player stares at and compares. */
+.font-numeric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* Brass rail — the signature hairline at the top of card-room panels.
+   Evokes the brass trim on a real card table. Used on the dashboard
+   hero and as the active-nav indicator. */
+.brass-rail {
+  position: relative;
+}
+.brass-rail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--brass-deep) 12%,
+    var(--brass-bright) 50%,
+    var(--brass-deep) 88%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Subtle felt ambient — a barely-visible warm glow at the top
+   and a darker pool at the bottom. Reads as "felt under low light",
+   not as a pattern. */
+.felt-ambient {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, color-mix(in srgb, var(--brass) 4.5%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 60% at 50% 100%, rgba(0, 0, 0, 0.28) 0%, transparent 60%);
+}
+
+/* Walnut panel — the sidebar/rail surface, with a faint vertical
+   grain via layered gradients. Restrained, not decorative. */
+.walnut-panel {
+  background-color: var(--walnut);
+  background-image:
+    linear-gradient(180deg, rgba(255, 220, 170, 0.025) 0%, transparent 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.04) 3px,
+      rgba(0, 0, 0, 0.04) 4px
+    );
+}
+
+/* Focus ring — brass, never the default blue.
+   V1: 入 base 层，让组件的 focus:outline-none 能覆盖全局 outline，避免 outline + ring 双焦点环 */
+@layer base {
+*:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+}
+
+/* Scrollbar — quiet, walnut-themed */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--felt-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--walnut-border);
+  border-radius: 4px;
+  border: 2px solid var(--felt-deep);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brass-deep);
+}
+
+/* Selection — brass tint */
+::selection {
+  background: color-mix(in srgb, var(--brass) 28%, transparent);
+  color: var(--ivory);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast — WCAG 1.4.6 / 1.4.11: boost text & border contrast,
+   force visible underlines on links, and give controls a solid border.
+   Only overrides token values; the default dark theme is untouched. */
+@media (prefers-contrast: high) {
+  :root {
+    --ivory: #ffffff;
+    --ivory-dim: #f2ead4;
+    --ivory-muted: #d8cfb4;
+    --clay-text: #f5bcae;
+    --danger-text: #f5bcae;
+    --sage-text: #c6e3cc;
+    --brass-text: #ffd87a;
+    --brass: #ffd87a;
+    --brass-bright: #ffe9a8;
+    --brass-deep: #c9a25e;
+    --brass-dark: #a07d3d;
+    --walnut-border: #c9a25e;
+  }
+  html[data-theme="light"] {
+    --ivory: #1b150a;
+    --ivory-dim: #37301f;
+    --ivory-muted: #4f462e;
+    --clay-text: #7d2f20;
+    --danger-text: #7d2f20;
+    --sage-text: #1f4a28;
+    --brass-text: #7a5a1d;
+    --brass: #7a5a1d;
+    --brass-bright: #5f450f;
+    --walnut-border: #8a6b30;
+  }
+  a {
+    text-decoration: underline !important;
+  }
+  button,
+  input,
+  select,
+  textarea,
+  [role="button"],
+  [tabindex]:not([tabindex="-1"]) {
+    border: 2px solid var(--brass-bright) !important;
+  }
+}
+
+/* Mobile performance: replace radial gradients with flat colors
+   to reduce GPU composite layers on low-end devices */
+@media (max-width: 767px) {
+  body::before {
+    background: color-mix(in srgb, var(--brass-bright) 4%, transparent);
+  }
+  body::after {
+    background: rgba(6, 13, 9, 0.3);
+  }
+}

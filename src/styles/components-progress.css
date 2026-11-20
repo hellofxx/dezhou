@@ -1,0 +1,179 @@
+/* =========================================================
+   Progress 统计页 — 战绩牌匾 Hero + 难度阶梯（2026-08-10）
+   签名元素：象牙段位牌匾（casino-plaque 语言放大版）
+   ========================================================= */
+
+/* ---- Rank Plaque Hero（战绩牌匾） ---- */
+.rank-plaque-hero {
+  position: relative;
+  border: 1px solid var(--walnut-border);
+  border-radius: var(--poker-radius-lg);
+  background:
+    radial-gradient(ellipse 80% 160% at 100% 0%, color-mix(in srgb, var(--brass) 6%, transparent), transparent 60%),
+    var(--hero-surface-gradient);
+  padding: 12px 18px 8px;
+  overflow: hidden;
+}
+.rank-plaque-hero::before {
+  content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass-deep) 15%, var(--brass-bright) 50%, var(--brass-deep) 85%, transparent);
+  opacity: 0.7;
+}
+.rp-eyebrow {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.22em; color: var(--brass-text); margin-bottom: 8px;
+}
+.rp-body { display: flex; align-items: center; gap: 20px; }
+.rp-plaque {
+  flex-shrink: 0;
+  min-width: 160px;
+  padding: 10px 14px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--stable-ivory) 0%, var(--grad-plaque) 100%);
+  border: 1px solid color-mix(in srgb, var(--brass) 55%, transparent);
+  border-radius: var(--poker-radius-md);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 0 0 3px rgba(255,255,255,0.45), inset 0 0 0 4px color-mix(in srgb, var(--brass) 28%, transparent);
+}
+.rp-plaque-icon { font-size: 26px; line-height: 1; display: block; margin-bottom: 4px; }
+.rp-plaque-name {
+  display: block;
+  font-family: var(--font-display); font-size: 18px; font-weight: 600;
+  color: var(--stable-ink); font-variation-settings: 'opsz' 144; line-height: 1.2;
+}
+.rp-plaque-score {
+  display: block;
+  font-family: var(--font-mono); font-size: 24px; font-weight: 700;
+  color: var(--stable-ink); line-height: 1.1; margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.rp-plaque-label {
+  display: block;
+  font-size: 8px; text-transform: uppercase; letter-spacing: 0.18em;
+  color: #6e6553; margin-top: 3px; font-weight: 600;
+}
+.rp-metrics { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; min-width: 0; }
+.rp-metric {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px;
+  border-radius: var(--poker-radius-md);
+  border: 1px solid var(--walnut-border);
+  background: rgba(0,0,0,0.18);
+  min-width: 0;
+}
+.rp-metric-icon {
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--walnut-raised);
+  color: var(--ivory-muted);
+  border: 1px solid var(--walnut-border);
+}
+.rp-metric.accent .rp-metric-icon {
+  background: color-mix(in srgb, var(--brass) 14%, transparent);
+  color: var(--brass-bright);
+  border-color: color-mix(in srgb, var(--brass) 30%, transparent);
+}
+.rp-metric-text { display: flex; flex-direction: column; min-width: 0; }
+.rp-metric-value {
+  font-family: var(--font-mono); font-size: 19px; font-weight: 700;
+  color: var(--ivory); line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rp-metric.accent .rp-metric-value { color: var(--brass-bright); }
+.rp-metric-label {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ivory-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rp-foot {
+  margin-top: 4px; padding-top: 4px;
+  border-top: 1px solid color-mix(in srgb, var(--brass) 18%, transparent);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  font-size: 11px; color: var(--ivory-muted);
+}
+.rp-rank-desc { color: var(--ivory-dim); }
+
+/* ---- Difficulty Ladder（难度阶梯） ---- */
+.difficulty-ladder {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 16px; border-radius: var(--poker-radius-md);
+  background: color-mix(in srgb, var(--walnut-raised) 55%, transparent); border: 1px solid var(--walnut-border);
+  flex-wrap: wrap;
+}
+.dl-label {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.16em; color: var(--brass-text); flex-shrink: 0;
+}
+.dl-track { flex: 1; display: flex; align-items: center; min-width: 200px; }
+.dl-step { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+.dl-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1px solid var(--walnut-border);
+  background: var(--walnut-raised);
+  transition: all 0.2s;
+}
+.dl-step.active .dl-dot {
+  background: var(--dl-active-bg, color-mix(in srgb, var(--brass) 28%, transparent));
+  box-shadow: 0 0 0 4px var(--dl-active-glow, color-mix(in srgb, var(--brass) 12%, transparent));
+}
+.dl-step.beginner.active .dl-dot { --dl-active-bg: rgba(107,142,122,0.28); --dl-active-glow: rgba(107,142,122,0.12); }
+.dl-step.intermediate.active .dl-dot { --dl-active-bg: color-mix(in srgb, var(--brass) 28%, transparent); --dl-active-glow: color-mix(in srgb, var(--brass) 12%, transparent); }
+.dl-step.advanced.active .dl-dot { --dl-active-bg: rgba(168,56,56,0.28); --dl-active-glow: rgba(168,56,56,0.12); }
+.dl-step-name { font-size: 10px; color: var(--ivory-muted); white-space: nowrap; }
+.dl-step.beginner.active .dl-step-name { color: var(--sage-text); }
+.dl-step.intermediate.active .dl-step-name { color: var(--brass-bright); }
+.dl-step.advanced.active .dl-step-name { color: var(--clay-text); }
+.dl-line { flex: 1; height: 1px; background: var(--walnut-border); min-width: 16px; }
+.dl-suggestion {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--ivory-dim); flex-shrink: 1; min-width: 0;
+}
+
+/* ---- Rank Plaque Hero responsive ---- */
+@media (max-width: 767px) {
+  .rank-plaque-hero { padding: 8px 10px 6px; }
+  .rp-eyebrow { margin-bottom: 3px; }
+  .rp-body { flex-direction: row; align-items: center; gap: 8px; }
+  .rp-plaque { flex: 0 0 104px; min-width: 0; padding: 6px 8px; }
+  .rp-plaque-icon { font-size: 18px; margin-bottom: 0; }
+  .rp-plaque-name { font-size: 13px; }
+  .rp-plaque-score { font-size: 20px; margin-top: 1px; }
+  .rp-plaque-label { font-size: 7px; }
+  .rp-metrics { flex: 1; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .rp-metric { padding: 5px; gap: 4px; }
+  .rp-metric-icon { width: 20px; height: 20px; }
+  .rp-metric-value { font-size: 14px; }
+  .rp-metric-label { font-size: 8px; }
+  .rp-foot { display: none; }
+}
+@media (max-width: 480px) {
+  .rp-metric-value { font-size: 14px; }
+  .rp-plaque-score { font-size: 20px; }
+}
+
+/* ---- FirstVisitBanner（progress dashboard 首次引导横幅） ---- */
+/* 深色默认：brass 引导光 + walnut→felt 递进；light 主题单独浅色适配 */
+.first-visit-banner {
+  border-left: 3px solid var(--brass);
+  background: linear-gradient(120deg,
+    color-mix(in srgb, var(--brass) 12%, transparent) 0%,
+    color-mix(in srgb, var(--walnut) 42%, transparent) 55%,
+    color-mix(in srgb, var(--felt-deep) 25%, transparent) 100%);
+}
+.first-visit-banner-icon {
+  background: radial-gradient(circle at 30% 30%,
+    color-mix(in srgb, var(--brass-bright) 35%, transparent),
+    color-mix(in srgb, var(--brass) 12%, transparent));
+  border: 1px solid color-mix(in srgb, var(--brass) 40%, transparent);
+}
+html[data-theme="light"] .first-visit-banner {
+  background: linear-gradient(120deg,
+    color-mix(in srgb, var(--brass) 12%, transparent) 0%,
+    color-mix(in srgb, var(--walnut-border) 40%, transparent) 55%,
+    color-mix(in srgb, var(--felt-light) 20%, transparent) 100%);
+}
+
+/* Light theme — 战绩牌匾指标块浅色化（parchment 房间） */
+html[data-theme="light"] .rp-metric {
+  background: rgba(240,233,214,0.7);
+}

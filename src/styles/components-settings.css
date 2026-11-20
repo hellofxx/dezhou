@@ -1,0 +1,390 @@
+/* =========================================================
+   Settings 设置页（2026-08-10）— 签名元素「分区台卡导航」
+   桌面双栏：左侧 sticky 竖向黄铜节点导航 + 右侧折叠分组；
+   Hero 顶部黄铜发线 + eyebrow + 自动保存铭牌。
+   ========================================================= */
+
+/* ---- Settings Hero ---- */
+.settings-hero {
+  position: relative;
+  border: 1px solid var(--walnut-border);
+  border-radius: var(--poker-radius-lg);
+  background:
+    radial-gradient(ellipse 70% 160% at 100% 0%, color-mix(in srgb, var(--brass) 6%, transparent), transparent 60%),
+    var(--hero-surface-gradient);
+  padding: 14px 18px 12px;
+  overflow: hidden;
+}
+.settings-hero::before {
+  content: ''; position: absolute; top: 0; left: 14px; right: 14px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass-deep) 15%, var(--brass-bright) 50%, var(--brass-deep) 85%, transparent);
+  opacity: 0.7;
+}
+.settings-hero-eyebrow {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.22em; color: var(--brass-text); margin-bottom: 6px;
+}
+.settings-hero-title {
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600; color: var(--ivory);
+  line-height: 1.25; letter-spacing: 0.01em;
+  font-variation-settings: 'opsz' 144;
+  display: flex; align-items: center; gap: 8px;
+}
+.settings-hero-title svg { color: var(--brass); }
+.settings-hero-sub {
+  font-size: 12px; color: var(--ivory-muted);
+  line-height: 1.6; margin-top: 4px;
+}
+.settings-hero-autosave {
+  align-items: center; gap: 6px;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ivory-muted); font-variant-numeric: tabular-nums;
+  padding: 5px 10px; border-radius: 999px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--walnut-border);
+  flex-shrink: 0;
+}
+
+/* ---- Concept Node (Knowledge Graph) ---- */
+.concept-node {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; position: relative;
+  font-size: 11px; font-weight: 600; text-align: center; line-height: 1.1;
+}
+.concept-node:hover { transform: scale(1.08); }
+.concept-node .node-icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
+.concept-node .node-label { font-size: 10px; color: inherit; }
+.concept-node.learned { background: var(--poker-success-bg); border: 2px solid var(--poker-success); color: var(--poker-success); }
+.concept-node.learning { background: color-mix(in srgb, var(--brass) 12%, transparent); border: 2px solid var(--brass); color: var(--brass-bright); box-shadow: 0 0 14px color-mix(in srgb, var(--brass) 30%, transparent); }
+.concept-node.locked { background: var(--felt-deep); border: 2px solid var(--walnut-raised); color: var(--ivory-muted); } /* token: #120d07 ≈ --felt-deep, #2d2214 ≈ --walnut-raised */
+
+/* ---- Opponent Card ---- */
+.opponent-card {
+  background: var(--hero-surface-gradient);
+  border: 1px solid var(--walnut-raised); border-radius: 10px; padding: 16px; /* token: #2d2214 ≈ --walnut-raised */
+}
+.opponent-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.opponent-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--brass), var(--brass-dark));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 13px; font-style: italic;
+  color: var(--stable-ink); flex-shrink: 0;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.3);
+}
+.opponent-type { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--ivory); font-variation-settings: 'opsz' 144; }
+.opponent-sub { font-size: 10px; color: var(--ivory-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.opponent-stat { margin-bottom: 8px; }
+.opponent-stat-label { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px; color: var(--ivory-dim); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; }
+.opponent-stat-label span:last-child { color: var(--brass); font-weight: 700; }
+.opponent-tip { font-size: 11px; color: var(--ivory-dim); line-height: 1.5; padding-top: 10px; border-top: 1px solid rgba(45,34,20,0.6); margin-top: 8px; }
+.opponent-tip b { color: var(--brass-bright); }
+
+/* ---- Mentor Card ---- */
+.mentor-card {
+  width: 110px; min-height: 130px;
+  background: var(--hero-surface-gradient);
+  border: 1px solid var(--walnut-raised); border-radius: 10px; /* token: #2d2214 ≈ --walnut-raised */
+  padding: 14px 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  cursor: pointer; transition: all 0.2s;
+  text-align: center;
+}
+.mentor-card:hover { border-color: var(--walnut-border); transform: translateY(-1px); }
+.mentor-card.active { border-color: var(--brass); box-shadow: 0 0 0 1px var(--brass), 0 0 16px color-mix(in srgb, var(--brass) 20%, transparent); }
+.mentor-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--ivory);
+  border: 2px solid rgba(243,235,217,0.08);
+}
+.mentor-avatar.av-math  { background: radial-gradient(circle at 35% 35%, var(--grad-mentor-indigo-1), var(--grad-mentor-indigo-2)); } /* UI-10 token 化 */
+.mentor-avatar.av-old   { background: radial-gradient(circle at 35% 35%, var(--grad-mentor-terra-1), var(--grad-mentor-terra-2)); } /* UI-10 token 化 */
+.mentor-avatar.av-buddy { background: radial-gradient(circle at 35% 35%, var(--grad-mentor-moss-1), var(--grad-mentor-moss-2)); } /* UI-10 token 化 */
+.mentor-name { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--ivory); font-variation-settings: 'opsz' 144; }
+.mentor-tone {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--ivory-muted); padding: 2px 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.04);
+}
+.mentor-card.active .mentor-tone { color: var(--brass); background: color-mix(in srgb, var(--brass) 8%, transparent); }
+
+/* ---- Mood Button ---- */
+.mood-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--walnut); border: 1px solid var(--walnut-raised); /* token: #1a130a ≈ --walnut, #2d2214 ≈ --walnut-raised */
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s;
+  color: var(--ivory-muted);
+}
+.mood-btn:hover { transform: translateY(-2px); border-color: var(--walnut-border); }
+.mood-btn.mood-good.active  { background: rgba(127,184,131,0.15); border-color: var(--poker-success); box-shadow: 0 0 12px rgba(127,184,131,0.22); color: var(--poker-success); }
+.mood-btn.mood-meh.active   { background: color-mix(in srgb, var(--brass) 15%, transparent); border-color: var(--brass); box-shadow: 0 0 12px color-mix(in srgb, var(--brass) 22%, transparent); color: var(--brass); }
+.mood-btn.mood-bad.active   { background: rgba(194,90,76,0.15); border-color: var(--poker-danger); box-shadow: 0 0 12px rgba(194,90,76,0.22); color: var(--danger-text); }
+
+/* ---- Tilt Warning ---- */
+.tilt-warning {
+  background: linear-gradient(90deg, rgba(194,90,76,0.08), rgba(194,90,76,0.04));
+  border-left: 3px solid var(--poker-danger);
+  border-radius: 6px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 12px;
+}
+.tilt-warning .tilt-icon { color: var(--poker-danger); flex-shrink: 0; }
+.tilt-warning .tilt-msg { flex: 1; font-size: 12px; color: var(--ivory-dim); }
+.tilt-warning .tilt-msg b { color: var(--clay-text); }
+.tilt-warning .tilt-actions { display: flex; gap: 6px; }
+.tilt-warning .btn-tilt-rest { background: var(--poker-success-bg); color: var(--poker-success); border: 1px solid rgba(127,184,131,0.25); border-radius: 5px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.tilt-warning .btn-tilt-cont { background: transparent; color: var(--ivory-muted); border: 1px solid var(--walnut-border); border-radius: 5px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
+
+/* ---- Downswing Alert ---- */
+.downswing-alert {
+  background: linear-gradient(90deg, rgba(139,165,155,0.08), rgba(139,165,155,0.03));
+  border-left: 3px solid var(--poker-info);
+  border-radius: 6px; padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 10px; font-size: 12px; color: var(--poker-info);
+}
+.downswing-alert i { width: 16px; height: 16px; color: var(--poker-info); flex-shrink: 0; }
+
+/* ---- Hand History Item ---- */
+.hh-item { padding: 12px 16px; border-radius: 6px; cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; }
+.hh-item:hover { background: rgba(255,255,255,0.02); }
+.hh-item.selected { background: color-mix(in srgb, var(--brass) 5%, transparent); border-left-color: var(--brass); }
+
+/* ---- Street Step (timeline) ---- */
+.street-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; position: relative; }
+.street-step::after { content: ''; position: absolute; top: 12px; left: 50%; right: -50%; height: 1px; background: var(--walnut-raised); } /* token: #2d2214 ≈ --walnut-raised */
+.street-step:last-child::after { display: none; }
+.street-dot { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; border: 1px solid var(--walnut-border); background: var(--walnut); color: var(--ivory-muted); z-index: 1; } /* token: #1a130a ≈ --walnut, #3a2c1c ≈ --walnut-border */
+.street-label { font-size: 10px; color: var(--ivory-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.street-step.active .street-dot { background: linear-gradient(145deg, var(--brass-bright), var(--brass)); color: var(--stable-ink); border-color: var(--brass-dark); box-shadow: 0 0 10px color-mix(in srgb, var(--brass) 30%, transparent); }
+.street-step.completed .street-dot { background: var(--walnut-raised); color: var(--ivory-dim); border-color: var(--walnut-border); } /* token: #2d2214 ≈ --walnut-raised */
+.street-step.active .street-label { color: var(--brass-bright); }
+
+/* ---- Drill Mini Pill ---- */
+.drill-mini-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 6px;
+  background: color-mix(in srgb, var(--brass) 4%, transparent); border: 1px solid var(--walnut-raised); /* token: #2d2214 ≈ --walnut-raised */
+  font-size: 12px; color: var(--ivory-dim); cursor: pointer; transition: all 0.15s;
+}
+.drill-mini-pill:hover { border-color: var(--brass-deep); color: var(--ivory); background: color-mix(in srgb, var(--brass) 8%, transparent); }
+.drill-mini-pill i { width: 14px; height: 14px; color: var(--brass); }
+
+/* =========================================================
+   Strategy Academy — Home redesign (2026-08-10)
+   签名元素「牌桌阶梯」+ 双栏信息架构；全部使用既有 token
+   ========================================================= */
+
+/* ---- Academy Hero (Continue Learning) ---- */
+.academy-hero {
+  padding: 10px 14px;
+  background:
+    radial-gradient(ellipse 60% 130% at 0% 0%, color-mix(in srgb, var(--brass) 8%, transparent), transparent 60%),
+    var(--hero-surface-gradient);
+}
+.academy-hero-stats {
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+/* ---- Theory Academy Hero（书卷纸感：与策略学院同家族、以 ivory 暖调区分） ---- */
+.theory-hero {
+  padding: 10px 14px;
+  background:
+    radial-gradient(ellipse 65% 140% at 100% 0%, rgba(236,226,199,0.07), transparent 55%),
+    var(--hero-surface-gradient);
+}
+.theory-hero-stats {
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+/* 小测分徽章：pass ≥80 绿 / mid 60-79 黄铜 / low <60 赭 */
+.quiz-score-badge {
+  display: inline-flex; align-items: center;
+  padding: 1px 5px; border-radius: 999px;
+  font-size: 9px; font-weight: 700; font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+.quiz-score-badge.pass {
+  color: var(--poker-success);
+  background: color-mix(in srgb, var(--poker-success) 14%, transparent);
+}
+.quiz-score-badge.mid {
+  color: var(--brass-bright);
+  background: color-mix(in srgb, var(--brass-bright) 14%, transparent);
+}
+.quiz-score-badge.low {
+  color: var(--poker-terra-bright);
+  background: color-mix(in srgb, var(--poker-terra) 22%, transparent);
+}
+
+/* ---- Level Ladder（课程阶梯） ---- */
+.level-ladder { position: relative; display: flex; flex-direction: column; }
+.level-row { position: relative; display: flex; gap: 12px; align-items: stretch; }
+
+/* 节点列：黄铜铆钉 + 发线脊柱 */
+.level-node {
+  position: relative; width: 36px; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+}
+.level-node::after {
+  content: ''; position: absolute; top: 100%; left: 50%;
+  width: 1px; height: 18px; transform: translateX(-50%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--brass) 25%, transparent), color-mix(in srgb, var(--brass) 4%, transparent));
+}
+.level-row:last-child .level-node::after { display: none; }
+
+.level-node-badge {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--walnut-border);
+  background: linear-gradient(180deg, var(--walnut-raised), var(--walnut));
+  color: var(--ivory-dim);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: all 0.2s;
+}
+.level-row.unlocked .level-node-badge {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--brass) 16%, transparent), color-mix(in srgb, var(--brass) 4%, transparent));
+  border-color: color-mix(in srgb, var(--brass) 35%, transparent);
+  color: var(--brass-bright);
+}
+.level-row.active .level-node-badge {
+  background: linear-gradient(180deg, var(--brass-bright), var(--brass) 55%, var(--brass-deep));
+  border-color: var(--brass-dark);
+  color: var(--stable-ink);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brass) 14%, transparent), 0 0 18px color-mix(in srgb, var(--brass) 35%, transparent);
+}
+.level-row.completed .level-node-badge {
+  background: linear-gradient(180deg, rgba(127,184,131,0.18), rgba(127,184,131,0.04));
+  border-color: rgba(127,184,131,0.4);
+  color: var(--poker-success);
+}
+.level-row.locked .level-node-badge {
+  background: var(--felt-deep);
+  border-color: var(--walnut-border);
+  color: var(--ivory-muted);
+}
+.level-you-here {
+  margin-top: 6px;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--brass-bright);
+  white-space: nowrap;
+}
+
+/* 行主体 */
+.level-row-head {
+  border: 1px solid var(--walnut-raised);
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+  padding: 12px 14px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.level-row.unlocked .level-row-head { cursor: pointer; }
+.level-row.unlocked .level-row-head:hover {
+  border-color: var(--walnut-border);
+  background: linear-gradient(180deg, rgba(58,42,24,0.9), var(--felt-deep));
+}
+.level-row.active .level-row-head {
+  border-color: color-mix(in srgb, var(--brass) 40%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 6%, transparent), 0 6px 22px rgba(0,0,0,0.25);
+}
+.level-row.locked .level-row-head { opacity: 0.72; }
+.level-kicker {
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--brass-text);
+}
+
+/* 展开的课程 chips */
+.lesson-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 8px;
+}
+.lesson-chip {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%;
+  padding: 8px 10px; border-radius: 7px;
+  border: 1px solid var(--walnut-border);
+  background: rgba(0,0,0,0.16);
+  color: var(--ivory-dim);
+  font-size: 11px; font-weight: 500; text-align: left;
+  cursor: pointer; transition: all 0.15s;
+}
+.lesson-chip:hover { border-color: var(--brass-deep); color: var(--ivory); background: color-mix(in srgb, var(--brass) 5%, transparent); }
+.lesson-chip.done { color: var(--ivory-muted); }
+.lesson-chip.done:hover { color: var(--poker-success); border-color: rgba(127,184,131,0.4); }
+.lesson-chip.current {
+  border-color: color-mix(in srgb, var(--brass) 45%, transparent);
+  background: color-mix(in srgb, var(--brass) 8%, transparent);
+  color: var(--brass-bright);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 10%, transparent);
+}
+
+/* ---- Study Tools（学习工具 2×2 入口格） ---- */
+.academy-tool-tile {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px; border-radius: 10px;
+  border: 1px solid var(--walnut-raised);
+  background: linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+  text-align: left; cursor: pointer;
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.academy-tool-tile::before {
+  content: ''; position: absolute; top: 0; left: 10px; right: 10px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--tool-accent, var(--brass)), transparent);
+  opacity: 0.45; transition: opacity 0.2s;
+}
+.academy-tool-tile:hover { border-color: var(--walnut-border); transform: translateY(-1px); }
+.academy-tool-tile:hover::before { opacity: 1; }
+.academy-tool-icon {
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--tool-accent, var(--brass)) 12%, transparent);
+  color: var(--tool-accent, var(--brass));
+}
+
+/* ---- Game Variant segmented control（变体分段控件） ---- */
+.variant-panel {
+  background: linear-gradient(180deg, var(--walnut) 0%, var(--felt-deep) 100%);
+}
+.variant-seg {
+  display: inline-flex; flex-wrap: wrap; gap: 3px;
+  padding: 3px; border-radius: 10px;
+  background: var(--felt-deep);
+  border: 1px solid var(--walnut-border);
+}
+.variant-seg-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 8px;
+  border: 1px solid transparent;
+  color: var(--ivory-muted); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.18s;
+}
+.variant-seg-btn:hover { color: var(--ivory); background: rgba(255,255,255,0.04); }
+.variant-seg-btn.active {
+  background: linear-gradient(180deg, var(--brass-bright), var(--brass) 55%, var(--brass-deep));
+  color: var(--primary-foreground);
+  border-color: var(--brass-dark);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--brass) 25%, transparent), inset 0 1px 0 rgba(255,240,200,0.4);
+}
+@media (max-width: 480px) {
+  .variant-seg-btn { flex: 1 1 0; justify-content: center; padding: 8px 8px; }
+}
+
+/* ---- Academy Home responsive ---- */
+@media (max-width: 767px) {
+  .academy-hero, .theory-hero { padding: 12px 14px; }
+  .academy-hero-stats, .theory-hero-stats { flex-direction: row; flex-wrap: wrap; gap: 4px 14px; }
+  .level-row { gap: 8px; }
+  .level-node { width: 32px; }
+  .level-node-badge { width: 32px; height: 32px; }
+  .level-row-head { padding: 10px 12px; }
+  .lesson-chip { padding: 10px 10px; min-height: 40px; }
+}
+@media (max-width: 480px) {
+  .lesson-chip-grid { grid-template-columns: 1fr; }
+  .academy-tool-tile { padding: 10px; }
+}

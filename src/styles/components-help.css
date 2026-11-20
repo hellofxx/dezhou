@@ -1,0 +1,528 @@
+/* =========================================================
+   ErrorBoundary 兜底页（E-B）— 统一 CSS 类替代内联 style + hex fallback
+   保留 var(--*, fallback) 结构：无 token 上下文时也能显示
+   ========================================================= */
+.error-boundary {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--felt-deep, #0e1a14); /* token: --felt-deep */
+  color: var(--ivory, #f3ebd9); /* token: --ivory */
+  font-family: var(--font-body, system-ui, sans-serif);
+  padding: 2rem;
+  text-align: center;
+}
+
+.error-boundary-card {
+  max-width: 480px;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: var(--walnut, #241a10); /* token: --walnut */
+  border: 1px solid var(--walnut-border, #4a3825); /* token: --walnut-border */
+}
+
+.error-boundary-card h1 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.error-boundary-card p {
+  font-size: 0.875rem;
+  color: var(--ivory-dim, #cabf9f); /* token: --ivory-dim */
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.error-boundary-card pre {
+  font-size: 0.75rem;
+  color: var(--ivory-muted, #b0a68c); /* token: --ivory-muted */
+  background-color: color-mix(in srgb, var(--felt-deep) 45%, transparent); /* token: --felt-deep */
+  padding: 0.75rem;
+  border-radius: 6px;
+  overflow: auto;
+  max-height: 120px;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.error-boundary-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* =========================================================
+   Help Center（2026-08-10）— 签名元素「House Rules 立牌」
+   Hero 同家族（academy-hero / theory-hero / rank-plaque-hero），
+   差异化：立体倾斜立牌 + 黄铜底座阴影 + 象牙卡面。
+   ========================================================= */
+
+.help-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 8px 14px 10px;
+  background:
+    radial-gradient(ellipse 70% 150% at 0% 0%, color-mix(in srgb, var(--brass) 8%, transparent), transparent 60%),
+    var(--hero-surface-gradient);
+}
+.help-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 22px;
+  align-items: center;
+}
+.help-hero-copy { min-width: 0; }
+.help-hero-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ivory);
+  line-height: 1.25;
+  margin: 6px 0 4px;
+  letter-spacing: 0.01em;
+  font-variation-settings: 'opsz' 144;
+}
+.help-hero-sub {
+  font-size: 13px;
+  color: var(--ivory-dim);
+  line-height: 1.6;
+  max-width: 460px;
+}
+.help-hero-actions {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 12px; flex-wrap: wrap;
+}
+.help-hero-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px;
+  border-radius: var(--poker-radius-md);
+  background: linear-gradient(180deg, var(--brass-bright) 0%, var(--brass) 100%);
+  color: var(--primary-foreground);
+  font-size: 13px; font-weight: 600;
+  border: 1px solid var(--brass-dark);
+  box-shadow: 0 3px 10px color-mix(in srgb, var(--brass) 25%, transparent), inset 0 1px 0 rgba(255,240,200,0.55);
+  transition: transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard),
+              filter var(--poker-duration-fast) var(--poker-ease-standard);
+  cursor: pointer;
+  min-height: 44px;
+}
+.help-hero-cta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--brass) 32%, transparent), inset 0 1px 0 rgba(255,240,200,0.55);
+}
+.help-hero-meta {
+  font-size: 11px; color: var(--ivory-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ---- House Rules 立牌（签名元素） ---- */
+.help-hero-plaque-wrap {
+  position: relative;
+  perspective: 900px;
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 6px;
+}
+.house-rules-card {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  padding: 6px 6px 4px;
+  background: linear-gradient(180deg, var(--stable-ivory) 0%, var(--grad-plaque) 100%);
+  border: 1px solid color-mix(in srgb, var(--brass) 60%, transparent);
+  border-radius: var(--poker-radius-md);
+  box-shadow:
+    0 12px 32px rgba(0,0,0,0.45),
+    inset 0 0 0 3px rgba(255,255,255,0.42),
+    inset 0 0 0 4px color-mix(in srgb, var(--brass) 30%, transparent);
+  color: var(--stable-ink);
+  transform: rotateY(-7deg) rotateX(2deg);
+  transform-origin: 50% 100%;
+  transition: transform var(--poker-duration-slow) var(--poker-ease-standard);
+}
+.help-hero-plaque-wrap:hover .house-rules-card,
+.help-hero-plaque-wrap:focus-within .house-rules-card {
+  transform: rotateY(-2deg) rotateX(1deg);
+}
+.house-rules-rail {
+  position: absolute;
+  top: 6px; left: 14px; right: 14px; height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--brass) 70%, transparent), transparent);
+}
+.house-rules-eyebrow {
+  font-family: var(--font-display);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brass-dark);
+  text-align: center;
+  margin-bottom: 2px;
+}
+.house-rules-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(160,125,61,0.5), transparent);
+  margin: 0 auto 4px;
+  width: 60%;
+}
+.house-rules-list {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 0; margin: 0;
+}
+.house-rules-list > li { list-style: none; }
+.house-rules-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(26,19,8,0.08);
+  border: 1px solid color-mix(in srgb, var(--brass) 20%, transparent);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--poker-duration-fast) var(--poker-ease-standard),
+              border-color var(--poker-duration-fast) var(--poker-ease-standard),
+              transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
+  color: var(--stable-ink);
+  min-height: 44px;
+}
+.house-rules-item:hover {
+  background: rgba(26,19,8,0.15);
+  border-color: rgba(160,125,61,0.5);
+  transform: translateX(2px);
+  box-shadow: 0 2px 6px rgba(160,125,61,0.18);
+}
+.house-rules-item:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+}
+.house-rules-num {
+  font-family: var(--font-display);
+  font-size: 12px; font-weight: 700;
+  color: var(--brass-deep);
+  min-width: 18px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.house-rules-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.house-rules-text-title {
+  font-size: 11px; font-weight: 600;
+  color: var(--stable-ink);
+}
+.house-rules-text-body {
+  font-size: 10px;
+  color: rgba(42,33,19,0.65);
+  line-height: 1.3;
+}
+.house-rules-foot {
+  text-align: center;
+  font-size: 8px; font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--brass-dark);
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(160,125,61,0.4);
+}
+.house-rules-stand {
+  width: 60%;
+  max-width: 200px;
+  height: 8px;
+  margin-top: -2px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(160,125,61,0.5) 0%, rgba(160,125,61,0.05) 60%, transparent 100%);
+  border-radius: 50%;
+  filter: blur(3px);
+}
+
+/* ---- Help Section Head（图标 + 标题 + 副标） ---- */
+.help-section-head {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.help-section-head-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--brass) 12%, transparent);
+  color: var(--brass-bright);
+  flex-shrink: 0;
+}
+.help-section-head-icon svg { width: 14px; height: 14px; }
+.help-section-head-title {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 600;
+  color: var(--ivory);
+  margin: 0;
+  font-variation-settings: 'opsz' 144;
+}
+.help-section-head-sub {
+  font-size: 11px; color: var(--ivory-muted);
+  letter-spacing: 0.04em;
+  margin-left: auto;
+  padding-left: 12px;
+}
+
+/* ---- Quick Start Path（节点轨迹） ---- */
+.quick-path {
+  display: flex; align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 0;
+}
+.quick-path-step {
+  display: flex; align-items: center;
+  flex: 1; min-width: 0;
+}
+.quick-path-node {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  flex: 0 0 auto;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  min-height: 44px;
+  text-decoration: none;
+}
+.quick-path-node-num {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--walnut);
+  border: 1.5px solid var(--brass-dark);
+  color: var(--brass-bright);
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: background var(--poker-duration-fast) var(--poker-ease-standard),
+              color var(--poker-duration-fast) var(--poker-ease-standard),
+              border-color var(--poker-duration-fast) var(--poker-ease-standard),
+              transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.quick-path-node:hover .quick-path-node-num,
+.quick-path-node:focus-visible .quick-path-node-num {
+  background: var(--brass);
+  color: var(--stable-ink);
+  border-color: var(--brass-bright);
+  transform: scale(1.06);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--brass) 32%, transparent);
+}
+.quick-path-node:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+.quick-path-node-label {
+  font-size: 11px; font-weight: 500;
+  color: var(--ivory-dim);
+  white-space: nowrap;
+  max-width: 96px;
+  text-align: center;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.quick-path-node:hover .quick-path-node-label {
+  color: var(--ivory);
+}
+.quick-path-trail {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--brass-deep), var(--brass-muted));
+  margin: 15px 6px 0;
+  border-radius: 1px;
+  position: relative;
+}
+.quick-path-trail::after {
+  content: '';
+  position: absolute;
+  top: 50%; right: -3px;
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--brass-bright);
+}
+
+/* ---- Concept Cards（系统概念卡片） ---- */
+.concept-card {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(38,28,16,0.75) 0%, rgba(28,20,12,0.85) 100%);
+  border: 1px solid color-mix(in srgb, var(--brass) 12%, transparent);
+  transition: border-color var(--poker-duration-fast) var(--poker-ease-standard),
+              transform var(--poker-duration-fast) var(--poker-ease-standard),
+              box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
+  position: relative;
+  overflow: hidden;
+  min-height: 110px;
+}
+.concept-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--brass) 40%, transparent), transparent);
+  opacity: 0.5;
+}
+.concept-card:hover {
+  border-color: color-mix(in srgb, var(--brass) 30%, transparent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.concept-card-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--brass) 12%, transparent);
+  color: var(--brass-bright);
+  border: 1px solid color-mix(in srgb, var(--brass) 18%, transparent);
+}
+.concept-card-title {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 600;
+  color: var(--ivory);
+  margin: 0;
+  font-variation-settings: 'opsz' 144;
+}
+.concept-card-body {
+  font-size: 12px; line-height: 1.6;
+  color: var(--ivory-muted);
+  margin: 0;
+}
+
+/* ---- FAQ Accordion（编号 + brass 描边） ---- */
+.faq-list {
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+.faq-item {
+  border-left: 2px solid var(--walnut-border);
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(180deg, rgba(38,28,16,0.7) 0%, rgba(28,20,12,0.85) 100%);
+  overflow: hidden;
+  transition: border-left-color var(--poker-duration-fast) var(--poker-ease-standard),
+              background var(--poker-duration-fast) var(--poker-ease-standard);
+}
+.faq-item:hover { border-left-color: var(--brass-dark); }
+.faq-item.open { border-left-color: var(--brass); background: linear-gradient(180deg, rgba(38,28,16,0.85) 0%, rgba(28,20,12,0.95) 100%); }
+.faq-item-button {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+}
+.faq-item-button:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: -2px;
+}
+.faq-item-num {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700;
+  color: var(--brass-text);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  min-width: 24px;
+  padding-left: 2px;
+}
+.faq-item.open .faq-item-num { color: var(--brass-bright); }
+.faq-item-question {
+  flex: 1; min-width: 0;
+  font-size: 13px; font-weight: 500;
+  color: var(--ivory);
+  line-height: 1.45;
+}
+.faq-item-chevron {
+  flex-shrink: 0;
+  color: var(--ivory-dim);
+  transition: transform var(--poker-duration-fast) var(--poker-ease-standard),
+              color var(--poker-duration-fast) var(--poker-ease-standard);
+}
+.faq-item-chevron.open {
+  transform: rotate(180deg);
+  color: var(--brass-bright);
+}
+.faq-item-panel-wrap { overflow: hidden; }
+.faq-item-panel {
+  padding: 0 14px 14px 50px;
+  font-size: 12px;
+  color: var(--ivory-muted);
+  line-height: 1.7;
+}
+
+/* ---- Help Light Theme ---- */
+html[data-theme="light"] .puzzle-card {
+  border-color: color-mix(in srgb, var(--brass) 18%, transparent);
+}
+html[data-theme="light"] .concept-card {
+  background: linear-gradient(135deg, rgba(240,233,214,0.7) 0%, rgba(228,218,194,0.85) 100%);
+  border-color: color-mix(in srgb, var(--brass) 18%, transparent);
+}
+html[data-theme="light"] .concept-card-body { color: rgba(40,32,18,0.72); }
+html[data-theme="light"] .faq-item {
+  background: linear-gradient(180deg, rgba(240,233,214,0.7) 0%, rgba(228,218,194,0.85) 100%);
+  border-left-color: color-mix(in srgb, var(--brass) 18%, transparent);
+}
+html[data-theme="light"] .faq-item:hover { border-left-color: color-mix(in srgb, var(--brass) 40%, transparent); }
+html[data-theme="light"] .faq-item.open { border-left-color: var(--brass-deep); }
+html[data-theme="light"] .faq-item-panel { color: rgba(40,32,18,0.7); }
+html[data-theme="light"] .quick-path-node-num { background: var(--stable-ivory); }
+
+/* ---- Help Responsive ---- */
+@media (max-width: 767px) {
+  .help-hero { padding: 8px 12px 10px; }
+  .help-hero-grid { grid-template-columns: 1fr; gap: 10px; }
+  .help-hero-title { font-size: 19px; }
+  .help-hero-sub { font-size: 12px; }
+  .help-hero-plaque-wrap { padding-top: 0; }
+  .house-rules-card { transform: none; max-width: 100%; margin: 0 auto; padding: 6px; }
+  .house-rules-eyebrow,
+  .house-rules-divider,
+  .house-rules-foot { display: none; }
+  .house-rules-list { flex-direction: row; gap: 6px; }
+  .house-rules-item { flex: 1; min-height: 44px; padding: 6px 4px; gap: 4px; justify-content: center; }
+  .house-rules-num { min-width: 0; font-size: 11px; }
+  .house-rules-text { align-items: center; text-align: center; }
+  .house-rules-text-title { font-size: 10px; }
+  .house-rules-text-body { display: none; }
+  .help-hero-plaque-wrap:hover .house-rules-card,
+  .help-hero-plaque-wrap:focus-within .house-rules-card { transform: none; }
+
+  .quick-path { flex-direction: column; align-items: stretch; gap: 0; }
+  .quick-path-step { flex-direction: column; align-items: stretch; gap: 4px; }
+  .quick-path-node {
+    flex-direction: row; gap: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--walnut-raised) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--brass) 12%, transparent);
+    min-height: 44px;
+  }
+  .quick-path-node-num { width: 26px; height: 26px; font-size: 11px; }
+  .quick-path-node-label {
+    max-width: none;
+    font-size: 12px;
+    text-align: left;
+    white-space: normal;
+  }
+  .quick-path-trail {
+    height: 18px; width: 2px;
+    background: linear-gradient(180deg, var(--brass-deep), var(--brass-muted));
+    margin: 0 auto;
+  }
+  .quick-path-trail::after {
+    top: auto; right: auto;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    border-top: 6px solid var(--brass-bright);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+  }
+  .help-section-head-sub { margin-left: 0; padding-left: 0; width: 100%; margin-top: 2px; }
+}
