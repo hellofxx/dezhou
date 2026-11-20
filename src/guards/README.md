@@ -30,6 +30,7 @@
 | `cssLineCountGuard.test.ts` | `src/styles/*.css` 平铺扫描：单文件 ≤800 行（`globals.css` 按 allowlist 当前行数锁定，Phase 2 拆分前临时豁免）；CSS 总行数自检防路径失效空跑 | `pnpm test src/guards/cssLineCountGuard.test.ts` |
 | `swPrecache.guard.test.ts` | SW 全量预缓存契约（ADR-0004）：`public/sw.js` 模板两占位符各一次、无「跳过等待 / 立即接管」调用（部署竞态回归锁）、meta 缓存在清理排除条件、fetch 三规则与导航 `response.ok`、资产匹配 `ignoreVary`（Vary: Origin 兼容）；`renderSwSource` 注入无残留 / hash = sha256 前 8 位 / 乱序重复输入稳定；插件 generateBundle(post) 排除 .map 与 sw.js、base 前缀、public 文件补入清单；vite.config 接线；扫描面自检（模板 ≥80 行 / 假 bundle ≥5 key / public ≥4 文件） | `pnpm test src/guards/swPrecache.guard.test.ts` |
 | `testSystem.guard.test.ts` | 测试体系自身不变式：无 focused / skipped / todo / expected-failure 标记；测试文件只用 `.test.ts(x)` 且不在 `__tests__/`；含 `describe`/`it` 声明的非测试文件（不会被收集）为零；每个 feature 至少一个测试；每个 persist store 有 `<store>.persist-shape.test.ts`（version > 1 还需 `<store>.migrate.test.ts`）；`src/guards` 文件与 README 双向一致；根 `e2e/` 的 Playwright 用例：文件数下限（非空发现）、禁 `.only` / `.skip` / `.fixme` / `.fail`、每个文件至少一个 `test(`、`playwright.config.ts` 收集口径（`testDir` / `testMatch` / `forbidOnly` / `retries: 0`）、用例不直写 localStorage / IndexedDB 绕过 UI；扫描面自检 | `pnpm test src/guards/testSystem.guard.test.ts` |
+| `overlayLayer.guard.test.ts` | 浮层契约：`src/{features,layouts,shared}` 非测试 `.tsx` 不得手写 `fixed inset-0` 裸遮罩（模态必须复用 shared Dialog 的焦点陷阱 / Escape / 纸条材质）；Dialog / Select / Tooltip 顶层统一 `z-[100]`，不得回落 `z-50`；allowlist 双向 + 失效检测 | `pnpm test src/guards/overlayLayer.guard.test.ts` |
 
 ## 约定
 
@@ -41,7 +42,7 @@
 
 ## 设计层 UI 守卫的 allowlist 规则
 
-`feltContrast.test.ts` / `pageHeadingGuard.test.ts` / `emojiWhitelist.guard.test.ts` / `actionTierPalette.guard.test.ts` / `lightThemeSurfaceGuard.test.ts` 均按「扫描面 + 白名单/棘轮」判定，统一口径如下（失败信息一律带 `file:line`，可直接定位）：
+`feltContrast.test.ts` / `pageHeadingGuard.test.ts` / `emojiWhitelist.guard.test.ts` / `actionTierPalette.guard.test.ts` / `lightThemeSurfaceGuard.test.ts` / `overlayLayer.guard.test.ts` 均按「扫描面 + 白名单/棘轮」判定，统一口径如下（失败信息一律带 `file:line`，可直接定位）：
 
 | 守卫 | 扫描面 | 白名单 / 豁免表 | 失败修复方式 |
 |---|---|---|---|
@@ -50,6 +51,7 @@
 | `emojiWhitelist.guard.test.ts` | 组件层：`src/shared/components/**`、`src/features/**/components/**`（非测试）＋ `shared/types/{elo,mentor,opponent,decisionFeedback}.ts`、`shared/data/opponentProfiles.ts`；内容层：`features/**/data/**`、`shared/data/**`、`i18n/**`（.ts/.tsx/.json）；扫描面 ≥ 150 组件文件 / ≥ 100 内容文件；判定字符集 `\p{Extended_Pictographic}` | `ILLUSTRATION_ALLOWLIST`：7 个庆祝/徽章/段位插画文件；`CONTENT_ALLOWED_PREFIXES`：成就数据 / 策略与理论正文 / i18n 既有文案；`TYPOGRAPHIC_GLYPHS`：花色与状态记号（♠♥♦♣ / ℹ / ⚠ / ⏱）；`CONTENT_TYPOGRAPHIC_GLYPHS`：排版箭头 ↔ | 交互 UI 改用 Lucide 图标；插画类在 allowlist 与 DESIGN.md 登记。豁免表条目在扫描面中消失后必须删除（否则变红） |
 | `actionTierPalette.guard.test.ts` | `src/styles/globals.css` 的 action-tile 规则 + `ActionBoard.tsx`；扫描面自检 CSS 与源码有效 | 三档 `data-tier` 必须定义完整 `--tier-*`；pre-answer 不得引用 success / danger / clay；aggressive 使用 terra；答后反馈才可用 success / danger；light 不得再写 action tile 补丁 | 把色值收回 `--tier-*`；tier 色与反馈色分离；新增 tier 先登记 DESIGN.md §5.5 |
 | `lightThemeSurfaceGuard.test.ts` | `src/styles/globals.css` 的 `html[data-theme="light"]` 组件选择器与字面量 | `ALLOWED_LIGHT_SELECTORS` 16 条；黄铜字面 rgba 0；黑色字面 rgba ≤ 41 条；`:root`/light 双侧定义 `--hero-surface-gradient` / `--question-card-gradient` | 优先用 token/`color-mix` 消除补丁；新增 light 补丁须先登记 DESIGN.md §2.8 与本表 |
+| `overlayLayer.guard.test.ts` | `src/{features,layouts,shared}` 非测试 `.tsx`；扫描面 ≥ 200 文件；另读 Dialog / Select / Tooltip 三个顶层层级单源文件 | `HANDWRITTEN_OVERLAY_ALLOWLIST`：2 条（`ui/dialog.tsx` 遮罩单源 / `BasicsIntro.tsx` 无交互 3s 完成态），每条附理由 | 模态改用 `@/shared/components/ui/dialog`；选择性遮罩先在设计文档登记理由再加 allowlist；文件移除遮罩后必须删条目；浮层层级回落 `z-50` 即红 |
 
 - 文件白名单与补丁白名单都**只减不加**，且带**失效检测**：allowlist 里的文件若已无 h1 / emoji，守卫同样变红，强制删除条目——避免清单腐化成「历史豁免堆积」。
 - 新增豁免的登记顺序：先在设计文档（DESIGN.md / PRD）写清依据，再改守卫白名单，最后在同一次提交里跑 `pnpm test src/guards`。
