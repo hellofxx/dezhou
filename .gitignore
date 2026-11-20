@@ -14,6 +14,7 @@ dist-ssr
 *.tsbuildinfo
 
 # AI 工具：会话产物（可重建，不入库）
+.qoder-credits/
 .solomd/
 .uploads/
 .qoder/
