@@ -10,6 +10,14 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-20 学院阅读页双栏 · 学习导轨（理论章节 / 策略课时）
+
+- **共享骨架**：新增 `AcademyReadingPlane`（`shared/components/academy`）——主阅读列保持 768px 上限，xl 起右侧 264px sticky 学习导轨，`<xl` 回落居中单栏；补 `index.ts` 导出并在 AGENTS / AI_GUIDE / TDD / shared AGENTS / DESIGN §6.5 登记。
+- **理论章节页**：新增 `TheoryChapterRail`（本级章节列表、完成勾选、增补章标记、进度条、返回目录）；`TheoryChapterView` 以双栏骨架包裹面包屑、页头与正文，消除宽屏两侧留白。
+- **策略课时页**：新增 `CourseStudyRail`（本 Level 课程列表、完成勾选、进度条、课时时长 / 题量）；`CourseView` 仅在常规课时阅读态启用双栏（Drill 保持宽交互台面，本土课无 Level 目录不启用）。
+- **测试**：新增两院导轨组件契约、两页接入回归（导轨 landmark + 同级路由链接）与共享骨架测试；既有 CourseView 断言改用 `getAllByText`，接纳「页头 + 导轨」同名标题。
+- **验证**：`pnpm verify` 全绿。
+
 ### 2026-11-12 浏览器门禁 · progress 公共入口收敛 · 持久化可靠性与数据管理语义
 
 - **E2E 门禁落地（Playwright）**：用例置于仓库根 `e2e/`（`training.test.ts` 训练闭环 / `offline.test.ts` 离线冒烟，夹具在 `e2e/fixtures/`），后缀 `.test.ts`，与 Vitest 双项目互不收集；`playwright.config.ts` 以 `testDir: './e2e'` + `testMatch: '**/*.test.ts'` 限定范围，`forbidOnly: true`、`retries: 0`（禁止聚焦与重试变绿），`webServer` 指向 `vite preview`（真实 dist 产物）。新增 `e2e/require-build.mjs` 前置校验缺构建并给出修复命令；`pnpm typecheck:e2e` / `pnpm test:e2e` / `pnpm verify:e2e`（= verify → build → size:check → test:e2e）构成浏览器发布门禁。`src/guards/testSystem.guard.test.ts` 同步校验用例文件数下限、禁 only/skip/fixme、配置收集口径与「用例不直写 localStorage / IndexedDB 绕过 UI」。

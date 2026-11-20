@@ -132,9 +132,10 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 ### 学院共享组件与纯函数
 
-- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyMastery` / `academyVariantRules`）。
+- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyMastery` / `academyVariantRules`）。
 - 理论学院与策略学院只允许薄包装消费：路由拼接、数据适配、i18n 文案留在 feature 内；shared 组件只接收 props/callbacks，禁止 import 任何 feature。
 - 理论侧 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 与策略侧对应实现均改为薄包装；行为/视觉/文案以原测试为回归基线。
+- **阅读页双栏骨架**：`AcademyReadingPlane` 只负责「主阅读列（上限 768px）+ xl 学习导轨」的布局与 sticky 行为，导轨内容与文案由理论 `TheoryChapterRail` / 策略 `CourseStudyRail` 注入；shared 不读 store、不拼路由。
 - **P2 学习工具同源**：`AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（内容纠错弹层）由 shared 提供，理论 `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` 与策略 `StrategyBookmarksPanel` / `StrategyNotesPanel` / `StrategyContentIssueReport` 只做文案与数据适配；shared 不读 store、不拼路由。
 - 新增共享项须满足 shared ≥2 模块准入门槛，并同步 AGENTS.md 本表与 TDD §5.8 第 23 条。
 
