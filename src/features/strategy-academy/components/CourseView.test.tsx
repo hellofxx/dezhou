@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import i18n from '@/i18n/config';
 import CourseView from './CourseView';
 import { useAcademyStore } from '../store';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
@@ -75,7 +76,8 @@ describe('CourseView：未知课程与门禁', () => {
     await waitFor(() =>
       expect(screen.queryByText('该课程尚未解锁')).toBeNull(),
     );
-    await waitFor(() => expect(screen.getByText('加注大小')).toBeTruthy());
+    // 标题同时出现在页头与学习导轨（本级课程列表），允许多处渲染
+    await waitFor(() => expect(screen.getAllByText('加注大小').length).toBeGreaterThan(0));
   });
 });
 
@@ -84,11 +86,29 @@ describe('CourseView：已解锁课程渲染', () => {
     useAcademyStore.getState().completeBasics();
     renderAt('l1-basics');
 
-    await waitFor(() => expect(screen.getByText('德州扑克规则与牌型')).toBeTruthy());
+    await waitFor(() =>
+      expect(screen.getAllByText('德州扑克规则与牌型').length).toBeGreaterThan(0),
+    );
     expect(screen.getByText('返回学院')).toBeTruthy();
     expect(screen.getByText('课程路线图')).toBeTruthy();
     // 进入课程时 startLesson 记录当前课程
     expect(useAcademyStore.getState().progress.currentLesson).toBe('l1-basics');
+  });
+
+  it('阅读态挂载本级课程学习导轨（xl 双栏）', async () => {
+    useAcademyStore.getState().completeBasics();
+    renderAt('l1-basics');
+
+    await waitFor(() =>
+      expect(screen.getAllByText('德州扑克规则与牌型').length).toBeGreaterThan(0),
+    );
+    const rail = screen.getByRole('complementary', {
+      name: i18n.t('academy.courseView.railTitle'),
+    });
+    const hrefs = within(rail)
+      .getAllByRole('link')
+      .map((link) => link.getAttribute('href'));
+    expect(hrefs).toContain('/academy/lesson/l1-basics');
   });
 
   it('mental-tilt 本土课无前置依赖，未完成基础入门也可访问', async () => {

@@ -99,7 +99,8 @@
     "completed": "Completed",
     "goComplete": "Go",
     "completeLevelFirst": "Please complete all lessons in this Level first",
-    "missingPrereqHint": "Please complete the following prerequisite lessons:"
+    "missingPrereqHint": "Please complete the following prerequisite lessons:",
+    "railTitle": "Lessons in this level"
   },
   "theoryBridge": {
     "title": "View the theory",

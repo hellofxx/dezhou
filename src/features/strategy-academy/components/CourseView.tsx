@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
+import { AcademyReadingPlane } from '@/shared/components/academy';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
 import { useAcademy } from '../hooks/useAcademy';
@@ -21,6 +22,7 @@ import { getLessonMeta } from '../data/lessonMeta';
 import { LessonContent } from './LessonContent';
 import { LessonQuiz, type LessonQuizResult } from './LessonQuiz';
 import { CourseHeader } from './CourseHeader';
+import { CourseStudyRail } from './CourseStudyRail';
 import { CourseLockedView } from './CourseLockedView';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import CourseDoneView from './CourseDoneView';
@@ -247,24 +249,23 @@ export default function CourseView() {
     return completed < total;
   });
 
-  return (
-    <div ref={readingRootRef} className="pb-16">
-      {/* §13.3.4 移动端阅读进度条（fixed top-0，桌面端 CSS 隐藏） */}
-      {phase === 'reading' && (
-        <div className="reading-progress-bar" style={{ width: `${readingProgress}%` }} />
-      )}
-      <CourseHeader
-        lesson={lesson}
-        levelEntry={levelEntry}
-        isLocalLesson={isLocalLesson}
-        isDrill={isDrill}
-        progress={progress}
-        completedLessons={completedLessons}
-        onBack={() => navigate('/academy')}
-        toolbarSlot={<LessonReviewMeta lessonId={lesson.id} />}
-      />
+  // 阅读页双栏：仅常规课时阅读态启用（Drill 需要更宽的交互台面；本土课无 Level 目录可挂）
+  const useReadingPlane = phase === 'reading' && !isDrill && !!levelEntry;
 
-      {/* Content */}
+  const pageHeader = (
+    <CourseHeader
+      lesson={lesson}
+      levelEntry={levelEntry}
+      isLocalLesson={isLocalLesson}
+      isDrill={isDrill}
+      progress={progress}
+      completedLessons={completedLessons}
+      onBack={() => navigate('/academy')}
+      toolbarSlot={<LessonReviewMeta lessonId={lesson.id} />}
+    />
+  );
+
+  const pageContent = (
       <motion.div
         key={phase}
         initial={{ opacity: 0, y: 12 }}
@@ -334,6 +335,34 @@ export default function CourseView() {
           />
         )}
       </motion.div>
+  );
+
+  return (
+    <div ref={readingRootRef} className="pb-16">
+      {/* §13.3.4 移动端阅读进度条（fixed top-0，桌面端 CSS 隐藏） */}
+      {phase === 'reading' && (
+        <div className="reading-progress-bar" style={{ width: `${readingProgress}%` }} />
+      )}
+      {useReadingPlane && levelEntry ? (
+        <AcademyReadingPlane
+          railLabel={t('academy.courseView.railTitle')}
+          rail={
+            <CourseStudyRail
+              lesson={lesson}
+              levelEntry={levelEntry}
+              completedLessons={completedLessons}
+            />
+          }
+        >
+          {pageHeader}
+          {pageContent}
+        </AcademyReadingPlane>
+      ) : (
+        <>
+          {pageHeader}
+          {pageContent}
+        </>
+      )}
     </div>
   );
 }

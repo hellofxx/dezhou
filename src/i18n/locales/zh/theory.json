@@ -495,7 +495,8 @@
     "startQuiz": "进入章末小测",
     "chapterDone": "本章完成",
     "answered": "答对 {{correct}}/{{total}} 题",
-    "score": "{{score}} 分"
+    "score": "{{score}} 分",
+    "railTitle": "本级章节目录"
   },
   "placement": {
     "title": "定位测评",

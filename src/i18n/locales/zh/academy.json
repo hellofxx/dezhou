@@ -99,7 +99,8 @@
     "completed": "已完成",
     "goComplete": "去完成",
     "completeLevelFirst": "请先完成该 Level 的所有课程",
-    "missingPrereqHint": "请先完成以下前置课程："
+    "missingPrereqHint": "请先完成以下前置课程：",
+    "railTitle": "本 Level 课程"
   },
   "theoryBridge": {
     "title": "查看理论推导",

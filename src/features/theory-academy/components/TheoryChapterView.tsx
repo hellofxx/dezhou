@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Trophy, BookOpen, ClipboardCheck, Compass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
+import { AcademyReadingPlane } from '@/shared/components/academy';
 import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { progressCommands } from '@/features/progress/api';
@@ -19,6 +20,7 @@ import {
   isLevelFullyCompleted,
 } from '../utils/theoryMeta';
 import { TheoryChapterHeader } from './TheoryChapterHeader';
+import { TheoryChapterRail } from './TheoryChapterRail';
 import { TheorySectionRenderer } from './TheorySectionRenderer';
 import { TheoryQuiz } from './TheoryQuiz';
 import { TheoryCalcDrill } from './TheoryCalcDrill';
@@ -171,8 +173,20 @@ export default function TheoryChapterView() {
     <div ref={scrollRef} className="h-full overflow-auto">
       {/* §13.3.4 移动端阅读进度条（fixed top，仅 <768px 显示） */}
       <div className="reading-progress-bar" style={{ width: `${readPct}%` }} />
-      {/* 全宽布局：外层 main 已提供 p-4 md:p-6 + G1 全局限宽；正文区单独 max-w-3xl（T-T1） */}
-      <div className="py-6 space-y-5">
+      {/* 阅读页双栏：主阅读列 768（<xl 居中单栏）+ xl 学习导轨（本级章节目录）；
+          外层 main 已提供 p-4 md:p-6 + G1 全局限宽 */}
+      <div className="py-6">
+        <AcademyReadingPlane
+          railLabel={t('theory.chapterView.railTitle')}
+          contentClassName="space-y-5"
+          rail={
+            <TheoryChapterRail
+              level={level}
+              currentChapterId={chapter.id}
+              completedChapters={completedChapters}
+            />
+          }
+        >
         {/* Breadcrumb */}
         <button
           onClick={() => navigate('/theory')}
@@ -358,6 +372,7 @@ export default function TheoryChapterView() {
         )}
           </>
         )}
+        </AcademyReadingPlane>
       </div>
     </div>
   );

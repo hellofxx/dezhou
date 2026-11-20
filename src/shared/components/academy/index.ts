@@ -36,3 +36,6 @@ export type {
 
 // 课程内容块（LabeledBlock / AsciiMonoText / FormulaBlock）：理论 / 策略课程渲染链路共用
 export { AsciiMonoText, FormulaBlock, LabeledBlock } from './ContentBlocks';
+
+// 阅读页双栏骨架：主阅读列 + 学习导轨（理论章节页 / 策略课时页共用）
+export { AcademyReadingPlane } from './AcademyReadingPlane';

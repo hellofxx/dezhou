@@ -495,7 +495,8 @@
     "startQuiz": "Start Chapter Quiz",
     "chapterDone": "Chapter Completed",
     "answered": "Correct {{correct}}/{{total}}",
-    "score": "{{score}} pts"
+    "score": "{{score}} pts",
+    "railTitle": "Chapters in this level"
   },
   "placement": {
     "title": "Placement Check",

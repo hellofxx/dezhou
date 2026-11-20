@@ -177,7 +177,8 @@ describe('CourseView：完成页推荐与跳转', () => {
     const nextTitle = findLessonSummaryById('l1-leaks')?.title;
     fireEvent.click(screen.getByText(new RegExp(`^下一课：${nextTitle ?? ''}`)));
 
-    await waitFor(() => expect(screen.getByText(nextTitle!)).toBeTruthy());
+    // 跳转后新课时标题同时出现在页头与学习导轨
+    await waitFor(() => expect(screen.getAllByText(nextTitle!).length).toBeGreaterThan(0));
     expect(screen.queryByText('课程完成！')).toBeNull();
   });
 
