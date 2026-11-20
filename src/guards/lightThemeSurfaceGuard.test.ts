@@ -1,6 +1,6 @@
-import * as fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { readCssSources } from '../test-utils/cssSources';
 
 /**
  * 浅色主题组件补丁守卫（DESIGN.md §2.8 白天牌室）。
@@ -13,8 +13,8 @@ import { describe, expect, it } from 'vitest';
  * 扫描面：src/styles/globals.css。
  */
 
-const CSS_PATH = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
-const CSS = fs.readFileSync(CSS_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const CSS_ENTRY = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
+const CSS = readCssSources(CSS_ENTRY).css.replace(/\/\*[\s\S]*?\*\//g, '');
 
 /** 允许保留的 light 组件级选择器（不含裸 token 块 html[data-theme="light"] {） */
 const ALLOWED_LIGHT_SELECTORS = [

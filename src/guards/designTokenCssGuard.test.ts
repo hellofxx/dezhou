@@ -156,9 +156,13 @@ function transitionDecl(body: string): string | undefined {
 describe('CSS 面填充守卫（防纯白/纯黑实底回流，DESIGN.md §1.2）', () => {
   it('扫描范围有效（应覆盖 styles 下全部 CSS）', () => {
     const files = Object.keys(CSS_FILES);
+    const totalLines = Object.values(CSS_FILES).reduce(
+      (sum, css) => sum + css.split('\n').length,
+      0,
+    );
     expect(files.length).toBeGreaterThanOrEqual(1);
     expect(files).toContain('globals.css');
-    expect(CSS_FILES['globals.css']!.split('\n').length).toBeGreaterThan(2000);
+    expect(totalLines).toBeGreaterThan(2000);
   });
 
   it('background 声明不得出现超过 §5.21 授权档的白透面填充', () => {

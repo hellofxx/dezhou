@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { readCssSources } from '../test-utils/cssSources';
 
 /**
  * 发牌员纸条（.dealer-slip）对比度守卫（WCAG 2.1 §1.4.6 / §1.4.3）
@@ -17,8 +17,8 @@ import { describe, expect, it } from 'vitest';
  * - .dealer-slip 必须把 canonical 与 alias token 一并重锚到 paper 深阶
  */
 
-const CSS_PATH = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
-const CSS = readFileSync(CSS_PATH, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const CSS_ENTRY = fileURLToPath(new URL('../styles/globals.css', import.meta.url));
+const CSS = readCssSources(CSS_ENTRY).css.replace(/\/\*[\s\S]*?\*\//g, '');
 
 interface CssBlock {
   selector: string;
@@ -86,7 +86,7 @@ const LIGHT_TOKENS = new Map([...DARK_TOKENS, ...mergeTokens('html[data-theme="l
 
 const DEALER_SLIP_TOKENS = (() => {
   const block = BLOCKS.find((entry) => entry.selector === '.dealer-slip');
-  expect(block?.body, 'globals.css 应存在顶层 .dealer-slip 块').toBeDefined();
+  expect(block?.body, 'CSS 应存在顶层 .dealer-slip 块').toBeDefined();
   return declarations(block?.body ?? '');
 })();
 
