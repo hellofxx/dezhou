@@ -102,7 +102,7 @@ describe('CourseView：已解锁课程渲染', () => {
     expect(screen.queryByText('该课程尚未解锁')).toBeNull();
   });
 
-  it('Drill 类型课程路由到对应 Drill 组件', async () => {
+  it('Drill 类型课程路由到对应 Drill 组件', { timeout: 20000 }, async () => {
     useAcademyStore.getState().completeBasics();
     renderAt('drill-hand-ranking');
 

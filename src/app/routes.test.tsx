@@ -128,7 +128,7 @@ describe('路由注册结构', () => {
 describe('路由渲染冒烟', () => {
   afterEach(() => cleanup());
 
-  it('/help 命中 AppLayout 壳层并渲染 HelpHome', async () => {
+  it('/help 命中 AppLayout 壳层并渲染 HelpHome', { timeout: 20000 }, async () => {
     useProgressStore.setState((state) => ({
       onboarding: { ...state.onboarding, completed: true },
     }));

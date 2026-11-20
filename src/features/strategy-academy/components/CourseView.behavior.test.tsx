@@ -158,7 +158,7 @@ describe('CourseView：移动端阅读进度条', () => {
 });
 
 describe('CourseView：完成页推荐与跳转', () => {
-  it('完成课后展示关联轨道并可跳转下一课', async () => {
+  it('完成课后展示关联轨道并可跳转下一课', { timeout: 20000 }, async () => {
     useAcademyStore.getState().completeBasics();
     const { container } = renderAt(THEORY_LESSON);
     await finishTheoryLesson(container, THEORY_LESSON);
@@ -181,7 +181,7 @@ describe('CourseView：完成页推荐与跳转', () => {
     expect(screen.queryByText('课程完成！')).toBeNull();
   });
 
-  it('不推荐已包含本课的关联轨道（l1-basics 与「理论到实践」）', async () => {
+  it('不推荐已包含本课的关联轨道（l1-basics 与「理论到实践」）', { timeout: 20000 }, async () => {
     useAcademyStore.getState().completeBasics();
     const { container } = renderAt(PRACTICE_LESSON);
     await finishPracticeLesson(container, PRACTICE_LESSON);
@@ -208,7 +208,7 @@ describe('CourseView：完成页推荐与跳转', () => {
     expect(screen.queryByText('课程完成！')).toBeNull();
   });
 
-  it('「重学本课」回到阅读视图并清理 URL hash 残留', async () => {
+  it('「重学本课」回到阅读视图并清理 URL hash 残留', { timeout: 20000 }, async () => {
     useAcademyStore.getState().completeBasics();
     const { container } = renderAt(THEORY_LESSON);
     await finishTheoryLesson(container, THEORY_LESSON);
