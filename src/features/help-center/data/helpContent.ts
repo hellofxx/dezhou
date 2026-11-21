@@ -22,7 +22,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     id: 'range-trainer',
-    modulePath: '/range-trainer',
+    modulePath: '/drill/range',
     titleKey: 'articles.range-trainer.title',
     introKey: 'articles.range-trainer.intro',
     icon: 'target',
@@ -31,12 +31,12 @@ export const HELP_ARTICLES: HelpArticle[] = [
       { type: 'paragraph', key: 'articles.range-trainer.s0' },
       { type: 'steps', key: 'articles.range-trainer.s1', stepKeys: ['articles.range-trainer.s1-steps.0', 'articles.range-trainer.s1-steps.1', 'articles.range-trainer.s1-steps.2', 'articles.range-trainer.s1-steps.3'] },
       { type: 'tip', key: 'articles.range-trainer.s2' },
-      { type: 'link', key: 'articles.range-trainer.s3', to: '/range-trainer' },
+      { type: 'link', key: 'articles.range-trainer.s3', to: '/drill/range' },
     ],
   },
   {
     id: 'pot-odds',
-    modulePath: '/pot-odds',
+    modulePath: '/drill/odds',
     titleKey: 'articles.pot-odds.title',
     introKey: 'articles.pot-odds.intro',
     icon: 'calculator',
@@ -45,7 +45,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       { type: 'paragraph', key: 'articles.pot-odds.s0' },
       { type: 'steps', key: 'articles.pot-odds.s1', stepKeys: ['articles.pot-odds.s1-steps.0', 'articles.pot-odds.s1-steps.1', 'articles.pot-odds.s1-steps.2'] },
       { type: 'tip', key: 'articles.pot-odds.s2' },
-      { type: 'link', key: 'articles.pot-odds.s3', to: '/pot-odds' },
+      { type: 'link', key: 'articles.pot-odds.s3', to: '/drill/odds' },
     ],
   },
   {
@@ -92,7 +92,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     id: 'puzzle',
-    modulePath: '/puzzle',
+    modulePath: '/drill/puzzle',
     titleKey: 'articles.puzzle.title',
     introKey: 'articles.puzzle.intro',
     icon: 'puzzle',
@@ -101,7 +101,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       { type: 'paragraph', key: 'articles.puzzle.s0' },
       { type: 'steps', key: 'articles.puzzle.s1', stepKeys: ['articles.puzzle.s1-steps.0', 'articles.puzzle.s1-steps.1', 'articles.puzzle.s1-steps.2', 'articles.puzzle.s1-steps.3'] },
       { type: 'tip', key: 'articles.puzzle.s2' },
-      { type: 'link', key: 'articles.puzzle.s3', to: '/puzzle' },
+      { type: 'link', key: 'articles.puzzle.s3', to: '/drill/puzzle' },
     ],
   },
   {
@@ -138,7 +138,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
 export const QUICK_START_STEPS: { key: string; to: string }[] = [
   { key: 'quickStart.steps.0', to: '/onboarding' },
   { key: 'quickStart.steps.1', to: '/academy' },
-  { key: 'quickStart.steps.2', to: '/academy/quick-drill' },
+  { key: 'quickStart.steps.2', to: '/quick' },
   { key: 'quickStart.steps.3', to: '/' },
   { key: 'quickStart.steps.4', to: '/progress' },
 ];

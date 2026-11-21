@@ -44,7 +44,9 @@ export default function HelpHero({ onRuleClick }: HelpHeroProps) {
       <div className="help-hero-grid">
         {/* 左：文案 + 主 CTA */}
         <div className="help-hero-copy">
-          <p className="section-eyebrow">{t('help.hero.eyebrow')}</p>
+          <p className="font-numeric text-[9px] uppercase tracking-[0.2em] text-[var(--brass-text)]">
+            {t('help.hero.eyebrow')}
+          </p>
           <h2 className="help-hero-title">{t('help.hero.title')}</h2>
           <p className="help-hero-sub">{t('help.hero.subtitle')}</p>
           <div className="help-hero-actions">
