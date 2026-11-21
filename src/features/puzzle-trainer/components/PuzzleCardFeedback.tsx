@@ -111,7 +111,7 @@ export function PuzzleCardFeedback({
         gtoAction={correctOption?.text}
         difference={selectedOption?.explanation}
         relatedLessonId={record.relatedLessonId}
-        onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
+        onRelatedLessonOpen={(lessonId) => navigate(`/lesson/${lessonId}`)}
         recommendedLabel={calibrated ? undefined : t('puzzle.card.recommendedAction')}
         defaultOpen={isErrorGrade}
       />
@@ -119,7 +119,7 @@ export function PuzzleCardFeedback({
       {/* 底部操作区：相关课程标签（答错时）+ 再做一题（错误级别）+ 下一题 */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
         {!record.isCorrect && record.relatedLessonId && (
-          <RelatedLessonChip lessonId={record.relatedLessonId} onOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)} />
+          <RelatedLessonChip lessonId={record.relatedLessonId} onOpen={(lessonId) => navigate(`/lesson/${lessonId}`)} />
         )}
         <div className="flex items-center gap-2 ml-auto">
           {isErrorGrade && <TryAgainButton onTryAgain={onNext} />}

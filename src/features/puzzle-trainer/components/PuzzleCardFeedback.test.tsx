@@ -127,6 +127,6 @@ describe('PuzzleCardFeedback EV 呈现诚实性', () => {
       chips[0]!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
 
-    expect(navigateSpy).toHaveBeenCalledWith('/academy/lesson/l3-cbet');
+    expect(navigateSpy).toHaveBeenCalledWith('/lesson/l3-cbet');
   });
 });
