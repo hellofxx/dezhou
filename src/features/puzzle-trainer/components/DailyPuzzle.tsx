@@ -77,7 +77,7 @@ export default function DailyPuzzle() {
         result={finalResult}
         isNewRecord={Boolean(finalResult._isNewRecord)}
         onRetry={handleRetry}
-        onBackHome={() => navigate('/puzzle')}
+        onBackHome={() => navigate('/drill/puzzle')}
       />
     );
   }
@@ -101,7 +101,7 @@ export default function DailyPuzzle() {
         {/* 顶部精简栏：退出 / 题号 / 同伴 / 完成态 */}
         <header className="daily-puzzle-topbar">
           <BackLink
-            onClick={() => navigate('/puzzle')}
+            onClick={() => navigate('/drill/puzzle')}
             label={t('puzzle.common.exit')}
             variant="button"
           />

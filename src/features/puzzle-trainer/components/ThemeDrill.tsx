@@ -39,7 +39,7 @@ export default function ThemeDrill() {
     return (
       <div className="h-full flex flex-col items-center justify-center gap-3 text-[var(--ivory-muted)]">
         <p>{t('puzzle.theme.unknownTheme')}</p>
-        <Button variant="outline" onClick={() => navigate('/puzzle')}>
+        <Button variant="outline" onClick={() => navigate('/drill/puzzle')}>
           {t('puzzle.common.backHome')}
         </Button>
       </div>
@@ -83,7 +83,7 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
         result={finalResult}
         isNewRecord={Boolean(finalResult._isNewRecord)}
         onRetry={handleRetry}
-        onBackHome={() => navigate('/puzzle')}
+        onBackHome={() => navigate('/drill/puzzle')}
       />
     );
   }
@@ -107,7 +107,7 @@ function ThemeDrillSession({ theme }: { theme: PuzzleTheme }) {
         {/* 顶部栏 */}
         <div className="flex items-center justify-between gap-3">
           <BackLink
-            onClick={() => navigate('/puzzle')}
+            onClick={() => navigate('/drill/puzzle')}
             label={t('puzzle.common.exit')}
             variant="button"
           />

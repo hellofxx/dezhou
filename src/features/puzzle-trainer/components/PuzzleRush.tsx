@@ -87,7 +87,7 @@ export default function PuzzleRush() {
         result={finalResult}
         isNewRecord={Boolean(finalResult._isNewRecord)}
         onRetry={handleRetry}
-        onBackHome={() => navigate('/puzzle')}
+        onBackHome={() => navigate('/drill/puzzle')}
       />
     );
   }
@@ -106,7 +106,7 @@ export default function PuzzleRush() {
         {/* 顶部栏：返回 / 标题 / 倒计时 */}
         <div className="flex items-center justify-between gap-3">
           <BackLink
-            onClick={() => navigate('/puzzle')}
+            onClick={() => navigate('/drill/puzzle')}
             label={t('puzzle.common.exit')}
             variant="button"
           />

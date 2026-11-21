@@ -220,6 +220,6 @@ describe('PuzzleRush 限时冲刺', () => {
       btn.textContent?.includes('退出')
     );
     click(exit);
-    expect(navigateMock).toHaveBeenCalledWith('/puzzle');
+    expect(navigateMock).toHaveBeenCalledWith('/drill/puzzle');
   });
 });

@@ -170,7 +170,7 @@ describe('DailyPuzzle 每日谜题', () => {
       btn.textContent?.includes('返回首页')
     );
     click(backHome);
-    expect(navigateMock).toHaveBeenCalledWith('/puzzle');
+    expect(navigateMock).toHaveBeenCalledWith('/drill/puzzle');
   });
 
   it('连续答错达阈值时显示降级提示', () => {
@@ -199,7 +199,7 @@ describe('DailyPuzzle 每日谜题', () => {
       btn.textContent?.includes('退出')
     );
     click(exit);
-    expect(navigateMock).toHaveBeenCalledWith('/puzzle');
+    expect(navigateMock).toHaveBeenCalledWith('/drill/puzzle');
     expect(getDailyKey(FIXED_NOW)).toBe(TODAY_KEY);
   });
 });

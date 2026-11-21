@@ -17,6 +17,7 @@ import { getThemeIcon } from '../utils/themeIcons';
 import { usePuzzleStore } from '../store';
 import PuzzleHero from './PuzzleHero';
 import { staggerContainer, staggerItem } from '@/shared/utils/motion';
+import { BackLink } from '@/shared/components/layout/BackLink';
 
 export default function PuzzleHome() {
   const { t } = useTranslation();
@@ -46,7 +47,8 @@ export default function PuzzleHome() {
 
   return (
     <div className="h-full overflow-auto">
-      <div className="py-5 space-y-6">
+      <div className="py-4 space-y-5">
+        <BackLink to="/drill" label={t('common.ui.back')} variant="text" />
         {/* Hero 签名元素 */}
         <PuzzleHero
           dailyCompleted={isTodayCompleted}
