@@ -109,7 +109,7 @@ describe('PracticeBridgeCard 变体章节级桥接', () => {
         );
         expect(buttons[i]!.textContent).toContain(authority);
         act(() => buttons[i]!.dispatchEvent(new MouseEvent('click', { bubbles: true })));
-        expect(path(), `${chapterId} → ${lesson.id} 跳转`).toBe(`/academy/lesson/${lesson.id}`);
+        expect(path(), `${chapterId} → ${lesson.id} 跳转`).toBe(`/lesson/${lesson.id}`);
       });
     }
   });

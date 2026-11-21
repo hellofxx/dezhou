@@ -266,7 +266,7 @@ describe('TheoryLadder 全完成后的实践推荐', () => {
     const cta = applyPracticeButtons(container);
     expect(cta).toHaveLength(1);
     fireEvent.click(cta[0]!);
-    expect(location()).toBe('/academy/lesson/l2-lesson');
+    expect(location()).toBe('/lesson/l2-lesson');
     cleanup();
 
     const third = renderLadder([lv3], ['lad-c5']);

@@ -150,7 +150,7 @@ export interface TheoryChapter extends TheoryChapterSummary {
 
 /** 理论→实践桥接推荐（引用 strategy-academy 课程/轨道 ID 字符串，不产生模块 import） */
 export interface PracticeRecommendation {
-  /** strategy-academy 课程（跳转 /academy/lesson/:id）；title 为展示用标题 */
+  /** strategy-academy 课程（跳转 /lesson/:id）；title 为展示用标题 */
   lessons: { id: string; title: string }[];
   /** 可选的学习轨道 ID（跳转 /academy/tracks） */
   trackId?: string;

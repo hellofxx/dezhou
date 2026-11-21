@@ -139,7 +139,7 @@ export function TheoryLadder({
           const practiceTarget = rec.trackId
             ? `/academy/tracks?track=${rec.trackId}`
             : rec.lessons[0]
-              ? `/academy/lesson/${rec.lessons[0].id}`
+              ? `/lesson/${rec.lessons[0].id}`
               : null;
 
           return (

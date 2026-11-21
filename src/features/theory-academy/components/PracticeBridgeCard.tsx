@@ -15,7 +15,7 @@ interface PracticeBridgeCardProps {
  * "去实践"推荐卡：理论→实践闭环出口，Level 粒度与章节粒度共用。
  *
  * 展示层改用两院共享 `AcademyBridgeCard`（行为/文案/ARIA 不变），本组件只做理论侧适配：
- * 文案取 `theory.bridge.*` 与 `academy.lessonTitle.*`，路由拼 `/academy/lesson/:id` 与
+ * 文案取 `theory.bridge.*` 与 `academy.lessonTitle.*`，路由拼 `/lesson/:id` 与
  * `/academy/tracks?track=`（仅路由字符串，不产生跨模块 import）。
  * Level 粒度引用完整性由 strategy-academy curriculumIntegrity 测试守卫，
  * 标准章节粒度由 theory-academy data/theoryIntegrity 的子集断言守卫，
@@ -29,7 +29,7 @@ export function PracticeBridgeCard({ recommendations, subtitleKey = 'theory.brid
   const items: AcademyBridgeItem[] = recommendations.lessons.map((lesson) => ({
     id: lesson.id,
     label: t(`academy.lessonTitle.${lesson.id}`, { defaultValue: lesson.title }),
-    route: `/academy/lesson/${lesson.id}`,
+    route: `/lesson/${lesson.id}`,
   }));
 
   // P1F-04：携带 ?track= 参数，LearningTracksView（P1E-01）消费后滚动高亮目标轨道

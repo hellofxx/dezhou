@@ -155,7 +155,7 @@ describe('TheoryResume 三态主 CTA', () => {
 
     // eyebrow 与主标题同文案，故两处命中
     expect(screen.getAllByText(i18n.t('theory.resume.allDone'))).toHaveLength(2);
-    expect(container.querySelector('.section-eyebrow')?.textContent).toBe(
+    expect(container.querySelector('[data-testid="resume-eyebrow"]')?.textContent).toBe(
       i18n.t('theory.resume.allDone'),
     );
     expect(screen.getByText(i18n.t('theory.resume.allDoneSub'))).toBeTruthy();

@@ -107,7 +107,9 @@ export function TheoryResume({
       <div className="flex flex-col md:flex-row md:items-center gap-4">
         {/* 左侧：eyebrow + 主 CTA */}
         <div className="flex-1 min-w-0">
-          <p className="section-eyebrow mb-2">{eyebrowText}</p>
+          <p data-testid="resume-eyebrow" className="mb-2 font-numeric text-[9px] uppercase tracking-[0.2em] text-[var(--brass-text)]">
+            {eyebrowText}
+          </p>
 
           <p className="font-display text-[17px] text-[var(--ivory)] leading-snug">
             {headlineText}
