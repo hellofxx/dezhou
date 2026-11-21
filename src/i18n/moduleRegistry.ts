@@ -131,7 +131,10 @@ export const FEATURE_GROUPS = {
   // ProgressPage 三分区：概览渲染成就入口（achievements）与 WeaknessAnalysis（elo）、
   // 今日任务与情绪（dailyChallenge / mood）；排行分区直接复用 Leaderboard（leaderboard）
   '/progress': ['progress', 'dashboard', 'common', 'achievements', 'elo', 'leaderboard', 'dailyChallenge', 'mood'],
-  '/academy/quick-drill': ['quickDrill', 'academy'],
+  // 训练二级站首页（枢纽 → 站 → 会话）
+  '/drill/range': ['rangeTrainer'],
+  '/drill/odds': ['potOdds'],
+  '/drill/puzzle': ['puzzle'],
   // 批次 3 冻结路由表：课程 / 训练场 / 速训三条主入口
   // LessonRoute 渲染 CourseView → DrillLessonRouter（drills / gto），完成页理论锚点需 theory
   '/lesson/:lessonId': ['academy', 'drills', 'gto', 'theory'],
@@ -145,6 +148,11 @@ export const FEATURE_GROUPS = {
   '/academy/basics': ['academy'],
   '/academy/concept-graph': ['academy'],
   '/academy/tracks': ['academy'],
+  '/academy/search': ['academy'],
+  '/academy/placement': ['academy'],
+  '/academy/checkpoint/:level': ['academy'],
+  '/academy/bookmarks': ['academy'],
+  '/academy/bibliography': ['academy'],
   // 认证结果页展示理论锚点回链，需 theory.chapterTitle.*
   '/academy/certification/:level': ['academy', 'theory'],
   // CourseView 渲染 DrillLessonRouter → 各 Drill 组件：Position/Outs/PotOdds/HandRanking 消费 drills，
@@ -156,6 +164,11 @@ export const FEATURE_GROUPS = {
   '/theory/chapter/:chapterId': ['theory', 'academy'],
   // TheoryHome 的实践桥接渲染 academy.lessonTitle；academy 已移出 core，须在本组显式声明
   '/theory': ['theory', 'academy', 'variant'],
+  '/theory/placement': ['theory'],
+  '/theory/checkpoint/:levelId': ['theory'],
+  '/theory/glossary': ['theory'],
+  '/theory/search': ['theory'],
+  '/theory/bibliography': ['theory'],
   // ThemeDrill/PuzzleRush/DailyPuzzle 渲染 PuzzleCard → PuzzleCardFeedback 消费 feedback
   '/puzzle/theme/:themeId': ['puzzle', 'feedback'],
   '/puzzle/rush': ['puzzle', 'feedback'],

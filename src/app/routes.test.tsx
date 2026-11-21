@@ -18,6 +18,9 @@ const APP_LAYOUT_PATHS = [
   'lesson/:lessonId',
   'lesson',
   'drill',
+  'drill/range',
+  'drill/odds',
+  'drill/puzzle',
   'quick',
   'progress',
   'progress/range',
@@ -28,6 +31,14 @@ const APP_LAYOUT_PATHS = [
   'help/article/:articleId',
   'academy',
   'academy/basics',
+  'academy/tracks',
+  'academy/concept-graph',
+  'academy/search',
+  'academy/placement',
+  'academy/checkpoint/:level',
+  'academy/certification/:level',
+  'academy/bookmarks',
+  'academy/bibliography',
   'gto-simulator',
   'gto-simulator/result/:sessionId',
   'hand-history',
@@ -35,13 +46,17 @@ const APP_LAYOUT_PATHS = [
   'theory',
   'theory/chapter/:chapterId',
   'theory/review',
+  'theory/placement',
+  'theory/checkpoint/:levelId',
+  'theory/glossary',
+  'theory/search',
+  'theory/bibliography',
   'puzzle/rush',
   'puzzle/daily',
   'puzzle/theme/:themeId',
   // 旧深链重定向（保留 query）
   'academy/lesson/:lessonId',
   'academy/quick-drill',
-  'academy/tracks',
   'range-trainer',
   'pot-odds',
   'puzzle',
@@ -92,9 +107,13 @@ describe('路由注册结构', () => {
     expect(violations).toEqual([]);
   });
 
-  it('退役路由不再注册（批次 3）', () => {
+  it('收编时撤掉的二级页面已全部恢复注册', () => {
     const paths = (appLayoutRoute?.children ?? []).map((route) => route.path);
-    for (const retired of [
+    for (const restored of [
+      'drill/range',
+      'drill/odds',
+      'drill/puzzle',
+      'academy/tracks',
       'academy/concept-graph',
       'academy/search',
       'academy/placement',
@@ -108,7 +127,7 @@ describe('路由注册结构', () => {
       'theory/search',
       'theory/bibliography',
     ]) {
-      expect(paths, `退役路由仍在注册：${retired}`).not.toContain(retired);
+      expect(paths, `恢复路由未注册：${restored}`).toContain(restored);
     }
   });
 
@@ -125,6 +144,8 @@ describe('路由注册结构', () => {
       'scenarioId',
       'lessonId',
       'chapterId',
+      'level',
+      'levelId',
       'themeId',
       'articleId',
     ]) {

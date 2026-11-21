@@ -45,7 +45,7 @@ interface NavItem {
 
 // 内容宽度分级 L2（DESIGN.md §6.5）：课程总览展宽，消除超宽屏 felt 留白；
 // 阅读/作答视图（/lesson/:lessonId、/quick 等）保持 L3 收敛，由模块内部自行限宽
-const WIDE_ROUTES = ['/academy'];
+const WIDE_ROUTES = ['/academy', '/academy/tracks', '/academy/concept-graph'];
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
