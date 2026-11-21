@@ -17,9 +17,9 @@ export default function WelcomeStep() {
   return (
     <div className="flex flex-col items-center justify-center min-h-full px-6 py-10 max-w-3xl mx-auto">
       <Spade size={44} strokeWidth={1.5} className="mb-4 text-[var(--brass-bright)]" aria-hidden="true" />
-      <h1 className="font-display text-3xl md:text-4xl text-[var(--ivory)] text-center mb-3">
+      <h2 className="font-display text-3xl md:text-4xl text-[var(--ivory)] text-center mb-3">
         {t('onboarding.welcome.valueProp')}
-      </h1>
+      </h2>
       <p className="font-display text-lg text-[var(--brass-bright)] text-center mb-2">
         {t('onboarding.welcome.title')}
       </p>

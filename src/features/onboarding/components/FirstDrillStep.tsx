@@ -69,7 +69,7 @@ export default function FirstDrillStep() {
           feedback={drill.feedback}
           disabled={!!drill.feedback}
           mentorStyle={mentorStyle}
-          onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
+          onRelatedLessonOpen={(lessonId) => navigate(`/lesson/${lessonId}`)}
           {...timeProps}
         />
       </div>
