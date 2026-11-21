@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { AcademyLearningStage } from '@/shared/types/academyDataSource';
-import { groupLearningStages, journeyGroupIndex } from './journeyGroups';
+import { groupLearningStages, journeyGroupIndex } from './academyJourneyGroups';
 
-function stage(id: string, level: number, lessonIds: string[]): AcademyLearningStage {
+function stage(
+  id: string,
+  level: number,
+  lessonIds: string[],
+  theoryChapterIds: string[] = [],
+): AcademyLearningStage {
   return {
     id,
     level,
@@ -12,6 +17,7 @@ function stage(id: string, level: number, lessonIds: string[]): AcademyLearningS
     unlockRequirement: '',
     prerequisiteStageIds: [],
     lessonIds,
+    theoryChapterIds,
   };
 }
 
@@ -55,5 +61,19 @@ describe('学习旅程四段分组', () => {
 
   it('Level 序号映射到固定四段', () => {
     expect([1, 2, 3, 4, 5, 8].map(journeyGroupIndex)).toEqual([0, 1, 1, 2, 3, 3]);
+  });
+
+  it('理论锚点随四段合并并按出现顺序去重', () => {
+    const groups = groupLearningStages([
+      stage('l1', 1, ['a'], ['t1-a', 't1-b']),
+      stage('l2', 2, ['b'], ['t2-a', 't1-b']),
+      stage('l5', 5, ['c'], ['t5-a']),
+    ]);
+
+    expect(groups.map((group) => group.theoryChapterIds)).toEqual([
+      ['t1-a', 't1-b'],
+      ['t2-a', 't1-b'],
+      ['t5-a'],
+    ]);
   });
 });

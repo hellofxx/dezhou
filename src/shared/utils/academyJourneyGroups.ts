@@ -38,6 +38,9 @@ export function groupLearningStages(
       unlockRequirement: first.unlockRequirement,
       prerequisiteStageIds: previousId === null ? [] : [previousId],
       lessonIds: members.flatMap((member) => member.lessonIds),
+      theoryChapterIds: [
+        ...new Set(members.flatMap((member) => member.theoryChapterIds)),
+      ],
     });
     previousId = id;
   });

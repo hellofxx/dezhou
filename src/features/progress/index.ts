@@ -7,6 +7,13 @@
 export { useProgressState, progressCommands } from './api';
 export type { ProgressCommands, ProgressReadModel, OnboardingAbility } from './api.types';
 
+// 学院只读快照（课程枢纽跨学院展示；仍经 shared registry 依赖倒置）
+export {
+  useAcademyLearningStages,
+  useAcademyProgressSnapshot,
+  useAcademyLessonAttemptsSnapshot,
+} from './hooks/useAcademyDataSource';
+
 export type {
   TrainingRecord,
   StatsSummary,

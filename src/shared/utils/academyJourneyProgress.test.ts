@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { AcademyLearningStage } from '@/shared/types/academyDataSource';
-import { computeStageStates, findNextLesson } from './journeyProgress';
+import { computeStageStates, findNextLesson } from './academyJourneyProgress';
 
 /**
  * 学习旅程图推导（unit）。
@@ -26,6 +26,7 @@ function stage(
     unlockRequirement: '',
     prerequisiteStageIds,
     lessonIds,
+    theoryChapterIds: [],
   };
 }
 

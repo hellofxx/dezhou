@@ -24,7 +24,7 @@ function lazyPage(loader: PageLoader, group: keyof typeof FEATURE_GROUPS) {
 // Lazy-loaded pages
 const JourneyHome = lazyPage(() => import('@/features/progress/components/path/JourneyHome'), '/');
 const LessonRoute = lazyPage(() => import('@/features/strategy-academy/components/LessonRoute'), '/lesson/:lessonId');
-const LessonEntry = lazyPage(() => import('@/features/strategy-academy/components/LessonEntry'), '/lesson');
+const CourseHub = lazyPage(() => import('@/features/strategy-academy/components/CourseHub'), '/lesson');
 const DrillHub = lazyPage(() => import('@/features/range-trainer/components/DrillHub'), '/drill');
 const RangeStation = lazyPage(() => import('@/features/range-trainer/components/RangeTrainerHome'), '/drill/range');
 const OddsStation = lazyPage(() => import('@/features/pot-odds/components/PotOddsPage'), '/drill/odds');
@@ -90,7 +90,7 @@ export const appRoutes: RouteObject[] = [
       { index: true, element: <LazyWrapper><ErrorBoundary><JourneyHome /></ErrorBoundary></LazyWrapper> },
       // 课程：/lesson/:lessonId（theory: 前缀转理论章节，其余走 CourseView）/ /lesson（解析下一课后重定向）
       { path: 'lesson/:lessonId', element: <LazyWrapper><ErrorBoundary><LessonRoute /></ErrorBoundary></LazyWrapper> },
-      { path: 'lesson', element: <LazyWrapper><LessonEntry /></LazyWrapper> },
+      { path: 'lesson', element: <LazyWrapper><ErrorBoundary><CourseHub /></ErrorBoundary></LazyWrapper> },
       // 训练场 / 速训
       { path: 'drill', element: <LazyWrapper><ErrorBoundary><DrillHub /></ErrorBoundary></LazyWrapper> },
       { path: 'drill/range', element: <LazyWrapper><ErrorBoundary><RangeStation /></ErrorBoundary></LazyWrapper> },

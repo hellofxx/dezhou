@@ -108,6 +108,54 @@
     "missingPrereqHint": "请先完成以下前置课程：",
     "railTitle": "本 Level 课程"
   },
+  "courseHub": {
+    "eyebrow": "我的课程 · 双泳道",
+    "pathTitle": "阶段路径",
+    "summary": "实战 {{done}}/{{total}} · 概念同步推进",
+    "ringAria": "课程完成度 {{pct}}%",
+    "basicsFirstTitle": "先完成基础入门",
+    "basicsFirstSub": "完成基础入门后，课程路径会自动解锁",
+    "lanes": {
+      "theory": "概念",
+      "practice": "实战",
+      "drillBadge": "练习",
+      "emptyTheory": "本段暂无概念课",
+      "emptyPractice": "本段暂无实战课",
+      "viewAll": "查看全部",
+      "collapse": "收起"
+    },
+    "theoryUnavailable": "概念关联待补充 · 可先走实战线",
+    "supplemental": {
+      "title": "补充阅读"
+    },
+    "next": {
+      "title": "下一步",
+      "cta": "继续学习",
+      "ctaBasics": "去基础入门",
+      "ctaDone": "查看学习轨道"
+    },
+    "status": {
+      "locked": "锁定",
+      "current": "进行中",
+      "done": "已完成"
+    },
+    "catalog": {
+      "title": "课程目录",
+      "allCourses": "全部策略课程",
+      "theory": "理论学院",
+      "tracks": "学习轨道"
+    },
+    "reason": {
+      "basics": "完成基础入门后解锁课程路径",
+      "reviewTheory": "今天有 {{count}} 道理论复习到期，先巩固再前进",
+      "reviewGeneric": "今天有 {{count}} 道复习到期，先巩固再前进",
+      "weakConcept": "{{stage}} 的「{{chapter}}」掌握偏弱，建议先补概念",
+      "nextConcept": "{{stage}} 的实战已完成，继续读「{{chapter}}」",
+      "nextPractice": "{{stage}} 的下一步是实战课",
+      "allDone": "全部阶段已完成，去学习轨道或查看成长",
+      "blocked": "暂无可用的课程数据"
+    }
+  },
   "theoryBridge": {
     "title": "查看理论推导",
     "subtitle": "本课的推导过程见理论学院对应章节"

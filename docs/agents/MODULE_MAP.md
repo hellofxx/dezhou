@@ -23,11 +23,11 @@
 | `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
 | `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
 | `pot-odds` | `pot-odds-dev` | `OddsStation` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
-| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 72 | — | 84 |
+| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 70 | — | 84 |
 | `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleStation` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
 | `range-trainer` | `range-trainer-dev` | `DrillHub` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 13 | `progress` | 19 |
-| `strategy-academy` | `strategy-academy-dev` | `LessonRoute` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 116 | `progress` | 116 |
-| `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v5）` | `academy`, `theory`, `variant` | 77 | `progress` | 65 |
+| `strategy-academy` | `strategy-academy-dev` | `LessonRoute` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 120 | `progress` | 121 |
+| `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v5）` | `academy`, `theory`, `variant` | 78 | `progress` | 65 |
 
 ## Lazy 路由表
 
@@ -38,7 +38,7 @@
 |---|---|---|---|
 | 1 | `JourneyHome` | `@/features/progress/components/path/JourneyHome` | `/` |
 | 2 | `LessonRoute` | `@/features/strategy-academy/components/LessonRoute` | `/lesson/:lessonId` |
-| 3 | `LessonEntry` | `@/features/strategy-academy/components/LessonEntry` | `/lesson` |
+| 3 | `CourseHub` | `@/features/strategy-academy/components/CourseHub` | `/lesson` |
 | 4 | `DrillHub` | `@/features/range-trainer/components/DrillHub` | `/drill` |
 | 5 | `RangeStation` | `@/features/range-trainer/components/RangeTrainerHome` | `/drill/range` |
 | 6 | `OddsStation` | `@/features/pot-odds/components/PotOddsPage` | `/drill/odds` |
@@ -167,7 +167,7 @@
 | `/drill/odds` | feature（随路由并行加载） | `potOdds` |
 | `/drill/puzzle` | feature（随路由并行加载） | `puzzle` |
 | `/lesson/:lessonId` | feature（随路由并行加载） | `academy`, `drills`, `gto`, `theory` |
-| `/lesson` | feature（随路由并行加载） | `academy` |
+| `/lesson` | feature（随路由并行加载） | `academy`, `theory` |
 | `/drill` | feature（随路由并行加载） | `rangeTrainer` |
 | `/quick` | feature（随路由并行加载） | `quickDrill`, `academy` |
 | `/academy/basics` | feature（随路由并行加载） | `academy` |

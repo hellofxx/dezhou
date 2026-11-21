@@ -22,8 +22,8 @@ import { Button } from '@/shared/components/ui/button';
 import { ProgressRing } from '@/shared/components/data-display/ProgressRing';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import { useAcademyLearningStages, useAcademyProgressSnapshot } from '../../hooks/useAcademyDataSource';
-import { computeStageStates, findNextLesson, type JourneyStageState } from './journeyProgress';
-import { groupLearningStages, journeyGroupIndex } from './journeyGroups';
+import { computeStageStates, findNextLesson, type JourneyStageState } from '@/shared/utils/academyJourneyProgress';
+import { groupLearningStages, journeyGroupIndex } from '@/shared/utils/academyJourneyGroups';
 
 /**
  * JourneyTrack — 学习旅程图（首页签名组件）。

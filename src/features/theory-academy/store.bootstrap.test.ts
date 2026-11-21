@@ -70,6 +70,28 @@ afterAll(() => {
   vi.unstubAllGlobals();
 });
 
+describe('store.bootstrap 理论学习快照', () => {
+  it('同一 progress 引用返回同一快照，答题后投影首次/最近成绩', () => {
+    const source = getTheoryDataSource();
+    expect(source?.getLearningSnapshot).toBeTypeOf('function');
+
+    const first = source!.getLearningSnapshot!();
+    expect(source!.getLearningSnapshot!()).toBe(first);
+
+    const chapterId = coreOf('t1')[0]!.id;
+    useTheoryStore.getState().recordChapterAttempt(chapterId, 80, 4, 5);
+    const second = source!.getLearningSnapshot!();
+
+    expect(second).not.toBe(first);
+    expect(second.completedChapters).toContain(chapterId);
+    expect(second.chapterAttempts[chapterId]).toEqual({
+      firstScore: 80,
+      lastScore: 80,
+      attempts: 1,
+    });
+  });
+});
+
 describe('store.bootstrap 成就数据源注册', () => {
   it('重复导入只注册一个 theory 数据源，且暴露 theory 专用读数', () => {
     const source = theorySource();

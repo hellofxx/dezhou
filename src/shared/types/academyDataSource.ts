@@ -39,6 +39,8 @@ export interface AcademyLearningStage {
   unlockRequirement: string;
   prerequisiteStageIds: readonly string[];
   lessonIds: readonly string[];
+  /** 该段课时理论锚点的去重并集（保序）；短牌等无映射时为 [] */
+  theoryChapterIds: readonly string[];
 }
 
 /** 当前变体的学习段快照（含顺序：按目录层 Level 序列排列） */

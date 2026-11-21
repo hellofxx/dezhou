@@ -10,7 +10,8 @@ import { sanitizeReviewLabel } from './sanitizeReviewLabel';
 import type { TrainingRecord } from '../types';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import type { AcademyLessonMeta } from '@/shared/types/academyDataSource';
-import { buildTheoryChapterRecommendation, buildTheoryReviewRecommendation, findNextTheoryChapter, isTheoryReviewItem } from './theoryPlanRecommendations';
+import { buildTheoryChapterRecommendation, buildTheoryReviewRecommendation, findNextTheoryChapter } from './theoryPlanRecommendations';
+import { isTheoryReviewItem } from '@/shared/utils/academySrs';
 
 /** 推荐项公共字段 */
 interface BaseRecommendation {

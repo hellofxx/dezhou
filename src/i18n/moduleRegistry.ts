@@ -138,8 +138,8 @@ export const FEATURE_GROUPS = {
   // 批次 3 冻结路由表：课程 / 训练场 / 速训三条主入口
   // LessonRoute 渲染 CourseView → DrillLessonRouter（drills / gto），完成页理论锚点需 theory
   '/lesson/:lessonId': ['academy', 'drills', 'gto', 'theory'],
-  // LessonEntry 只解析「下一课」后重定向，仅需课程标题
-  '/lesson': ['academy'],
+  // 课程枢纽：策略阶段卡 + 理论章 chip（theory.chapterTitle.*）
+  '/lesson': ['academy', 'theory'],
   // DrillHub 训练枢纽（range-trainer 持有）：四张训练台卡片 + 今日弱项文案
   '/drill': ['rangeTrainer'],
   // QuickDrill 复用策略学院组件（academy）+ 速训结算文案（quickDrill）

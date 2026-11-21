@@ -31,6 +31,11 @@ export function academyReviewItemId(idPrefix: string, questionId: string): strin
   return `${idPrefix}${questionId}`;
 }
 
+/** 理论 SRS 项判定：优先 metadata.source，兼容只有 category 的老数据。 */
+export function isTheoryReviewItem(item: ReviewItem): boolean {
+  return item.metadata?.source === 'theory' || item.category === 'theory';
+}
+
 export function buildQuestionReviewItems({
   source,
   category,

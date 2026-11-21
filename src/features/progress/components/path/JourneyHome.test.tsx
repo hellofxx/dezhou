@@ -32,6 +32,7 @@ const { mockStages, mockCompleted } = vi.hoisted(() => ({
       unlockRequirement: '',
       prerequisiteStageIds: [] as string[],
       lessonIds: ['l1-a', 'l1-b'],
+      theoryChapterIds: [] as string[],
     },
     {
       id: 's2',
@@ -42,6 +43,7 @@ const { mockStages, mockCompleted } = vi.hoisted(() => ({
       unlockRequirement: '',
       prerequisiteStageIds: ['s1'] as string[],
       lessonIds: ['l2-a'],
+      theoryChapterIds: [] as string[],
     },
   ],
   mockCompleted: [] as string[],

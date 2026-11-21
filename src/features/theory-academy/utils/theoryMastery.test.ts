@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { TheoryChapterAttempt, TheoryChapterSummary } from '../types';
 import { ACADEMY_MASTERY_THRESHOLDS, getMasteryState } from '@/shared/utils/academyMastery';
-import { resolveFirstScore, summarizeMastery } from './theoryMastery';
+import { resolveFirstScore } from '@/shared/utils/academyMastery';
+import { summarizeMastery } from './theoryMastery';
 
 /**
  * 掌握度派生纯函数回归。

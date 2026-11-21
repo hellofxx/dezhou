@@ -9,6 +9,20 @@ export interface MasteryThresholds {
   passing: number;
 }
 
+/**
+ * 掌握度分数口径（两院共用）：首次成绩优先，缺失时回退 quizScores 历史最高分。
+ * 0 是合法首次分，不回退（避免把「首次考砸」显示成未测）。
+ */
+export function resolveFirstScore<T extends { firstScore: number }>(
+  id: string,
+  quizScores: Readonly<Record<string, number>>,
+  attempts?: Readonly<Record<string, T>>,
+): number | undefined {
+  const attempt = attempts?.[id];
+  if (attempt) return attempt.firstScore;
+  return quizScores[id];
+}
+
 export function getMasteryState(
   score: number | undefined,
   thresholds: MasteryThresholds = ACADEMY_MASTERY_THRESHOLDS,

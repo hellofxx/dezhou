@@ -3,6 +3,7 @@ import type {
   AcademyLearningStagesSnapshot,
 } from '@/shared/types/academyDataSource';
 import type { LevelSummary } from '../types';
+import { getLessonMeta } from '../data/lessonMeta';
 
 /**
  * 学院学习段（Level）快照投影（纯函数，progress 只读消费）。
@@ -21,6 +22,11 @@ export function toLearningStage(level: LevelSummary): AcademyLearningStage {
     unlockRequirement: level.unlockRequirement,
     prerequisiteStageIds: level.prerequisiteLevelIds ?? [],
     lessonIds: level.lessons.map((lesson) => lesson.id),
+    theoryChapterIds: [
+      ...new Set(
+        level.lessons.flatMap((lesson) => getLessonMeta(lesson.id).theoryAnchors),
+      ),
+    ],
   };
 }
 

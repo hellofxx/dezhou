@@ -1,3 +1,5 @@
+import type { PokerVariant } from './elo';
+
 /**
  * 理论学院数据源接口（progress store 依赖倒置）。
  * theory-academy 在自身 store.bootstrap.ts 调用 registerTheoryDataSource 注册实现，
@@ -20,6 +22,28 @@ export interface TheoryChapterMeta {
   estimatedMinutes: number;
 }
 
+export interface TheoryChapterAttemptSnapshot {
+  firstScore: number;
+  lastScore: number;
+  attempts: number;
+}
+
+/** 理论学习快照：章级完成/成绩；chapterId 维度，跨变体共享。 */
+export interface TheoryLearningSnapshot {
+  readonly completedChapters: readonly string[];
+  readonly chapterAttempts: Readonly<Record<string, TheoryChapterAttemptSnapshot>>;
+  readonly quizScores: Readonly<Record<string, number>>;
+}
+
+/** 理论章节目录投影（静态数据，用于阶段/补充阅读归组）。 */
+export interface TheoryChapterIndexEntry {
+  chapterId: string;
+  /** t1–t9 */
+  levelId: string;
+  /** P2：该章声明的实践课 id（来自 chapterPracticeMap） */
+  practiceLessonIds?: readonly string[];
+}
+
 export interface TheoryDataSource {
   /** 找下一未完成核心章（跳过已免修 Level 与已完成章节） */
   findNextChapter(completedChapterIds: readonly string[]): TheoryChapterMeta | null;
@@ -27,4 +51,8 @@ export interface TheoryDataSource {
   getRecommendedChapter?(): TheoryChapterMeta | null;
   /** 订阅理论进度变化，返回取消订阅函数（可选） */
   subscribe?(listener: () => void): () => void;
+  /** 理论学习快照（可选；未实现时消费方降级为未知） */
+  getLearningSnapshot?(): TheoryLearningSnapshot;
+  /** 按变体返回章节目录（可选；静态数据，按变体缓存稳定引用） */
+  getChapterCatalog?(variant: PokerVariant): readonly TheoryChapterIndexEntry[];
 }

@@ -37,7 +37,7 @@ const SIDEBAR_ROUTES = [
   { item: '帮助中心', path: /\/dezhou\/help$/, heading: '帮助中心' },
 ] as const;
 
-test('侧栏 6 项文案与落点正确，主路由 h1 正确（/lesson 按先修进入课程或基础入门）', async ({ page }) => {
+test('侧栏 6 项文案与落点正确，主路由 h1 正确（/lesson 进入课程枢纽）', async ({ page }) => {
   const guard = guardBrowserErrors(page);
 
   await skipOnboarding(page);
@@ -53,12 +53,11 @@ test('侧栏 6 项文案与落点正确，主路由 h1 正确（/lesson 按先�
   await expect(page).toHaveURL(/\/dezhou\/$/);
   await expectPageHeading(page, '学习路径');
 
-  // 课程：新用户先走基础入门（L1 先修），已完成用户直达下一课；h1 唯一且非空
+  // 课程：进入课程枢纽；新用户看到基础入门 CTA，不自动跳走
   await navigateFromSidebar(page, '课程');
-  await expect(page).toHaveURL(/\/dezhou\/(academy\/basics|lesson\/[^/]+)$/);
-  const lessonHeading = page.getByRole('heading', { level: 1 });
-  await expect(lessonHeading).toHaveCount(1);
-  await expect(lessonHeading).toHaveText(/\S/);
+  await expect(page).toHaveURL(/\/dezhou\/lesson$/);
+  await expectPageHeading(page, '课程');
+  await expect(page.getByRole('main').getByRole('link', { name: '去基础入门' })).toBeVisible();
 
   // 其余主路由：侧栏点击 → 落点 + h1
   for (const route of SIDEBAR_ROUTES) {

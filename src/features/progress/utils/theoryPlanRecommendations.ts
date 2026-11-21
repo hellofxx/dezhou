@@ -10,7 +10,6 @@
  */
 import { getTheoryDataSource } from '@/shared/stores/theoryDataSourceRegistry';
 import type { TheoryChapterMeta } from '@/shared/types/theoryDataSource';
-import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import type { TheoryChapterRecommendation, TheoryReviewRecommendation } from './dailyTrainingPlan';
 
 /** 理论复习页路由（理论 SRS 项专用；通用复习卡跳学院页 /academy，理论题不得复用） */
@@ -21,15 +20,6 @@ const FALLBACK_CHAPTER_MINUTES = 10;
 /** 单条理论复习项估算时长（分钟）与整卡上限 */
 const MINUTES_PER_REVIEW_ITEM = 3;
 const MAX_REVIEW_MINUTES = 15;
-
-/**
- * 理论 SRS 项判定：`metadata.source === 'theory'` 为标准载荷
- * （见 theory-academy/utils/theorySrs.ts 语言中立契约）；
- * 老数据可能只有 category === 'theory'（createReviewItem 的 category 位），两者取并集。
- */
-export function isTheoryReviewItem(item: ReviewItem): boolean {
-  return item.metadata?.source === 'theory' || item.category === 'theory';
-}
 
 /**
  * 今日到期理论复习卡。

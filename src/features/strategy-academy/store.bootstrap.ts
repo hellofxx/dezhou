@@ -16,7 +16,6 @@ import { useAcademyStore } from './store';
 import { progressCommands } from '@/features/progress/api';
 import {
   findLessonSummaryById,
-  getLevelSummaries,
   getLevelSummariesByVariant,
 } from './utils/academyMeta';
 import { buildLearningStages } from './utils/learningStages';
@@ -69,7 +68,8 @@ function getLearningStagesSnapshot(): AcademyLearningStagesSnapshot {
 
 registerAcademyDataSource({
   findNextLesson: (completedLessons) => {
-    for (const level of getLevelSummaries()) {
+    const variant = useAcademyStore.getState().activeVariant;
+    for (const level of getLevelSummariesByVariant(variant)) {
       for (const lesson of level.lessons) {
         if (!completedLessons.includes(lesson.id)) {
           return { id: lesson.id, title: lesson.title, level: level.level };

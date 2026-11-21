@@ -108,6 +108,54 @@
     "missingPrereqHint": "Please complete the following prerequisite lessons:",
     "railTitle": "Lessons in this level"
   },
+  "courseHub": {
+    "eyebrow": "My Course · Two Lanes",
+    "pathTitle": "Stage Path",
+    "summary": "Practice {{done}}/{{total}} · concepts keep pace",
+    "ringAria": "Course completion {{pct}}%",
+    "basicsFirstTitle": "Start with Basics",
+    "basicsFirstSub": "Complete Basics to unlock the course path",
+    "lanes": {
+      "theory": "Concepts",
+      "practice": "Practice",
+      "drillBadge": "Drill",
+      "emptyTheory": "No concept chapters in this stage",
+      "emptyPractice": "No practice lessons in this stage",
+      "viewAll": "View all",
+      "collapse": "Collapse"
+    },
+    "theoryUnavailable": "Concept links pending · practice lane is available",
+    "supplemental": {
+      "title": "Supplemental reading"
+    },
+    "next": {
+      "title": "Next step",
+      "cta": "Continue",
+      "ctaBasics": "Go to Basics",
+      "ctaDone": "View learning tracks"
+    },
+    "status": {
+      "locked": "Locked",
+      "current": "In progress",
+      "done": "Done"
+    },
+    "catalog": {
+      "title": "Course catalog",
+      "allCourses": "All strategy courses",
+      "theory": "Theory Academy",
+      "tracks": "Learning tracks"
+    },
+    "reason": {
+      "basics": "Complete Basics to unlock the course path",
+      "reviewTheory": "{{count}} theory reviews are due — consolidate first",
+      "reviewGeneric": "{{count}} reviews are due — consolidate first",
+      "weakConcept": "{{chapter}} in {{stage}} is weak — revisit the concept",
+      "nextConcept": "{{stage}} practice is done — continue with {{chapter}}",
+      "nextPractice": "{{stage}} is ready for its next practice lesson",
+      "allDone": "All stages are complete — review tracks or progress",
+      "blocked": "No course data is available yet"
+    }
+  },
   "theoryBridge": {
     "title": "View the theory",
     "subtitle": "The derivations behind this lesson live in these Theory Academy chapters"

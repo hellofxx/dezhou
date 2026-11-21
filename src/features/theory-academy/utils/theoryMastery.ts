@@ -1,5 +1,5 @@
 import type { MasterySummary } from '@/shared/types/academy';
-import { summarizeMastery as summarizeAcademyMastery } from '@/shared/utils/academyMastery';
+import { resolveFirstScore, summarizeMastery as summarizeAcademyMastery } from '@/shared/utils/academyMastery';
 import type { TheoryChapterAttempt, TheoryChapterSummary } from '../types';
 
 /**
@@ -12,20 +12,6 @@ import type { TheoryChapterAttempt, TheoryChapterSummary } from '../types';
  * 收口（2026-11）：阈值与状态归类唯一实现位于 `shared/utils/academyMastery.ts`（两院共用），
  * 本文件只保留理论侧的首次成绩解析与薄包装，不再保存第二份阈值 / `getMasteryState` / 汇总循环。
  */
-
-/**
- * 掌握度分数口径（单源）：首次成绩优先，缺失时回退 quizScores 历史最高分。
- * 迁移种子化记录中的 firstScore 可能为 0，但 0 是合法分数，不回退（避免把「首次考砸」显示成未测）。
- */
-export function resolveFirstScore(
-  chapterId: string,
-  quizScores: Record<string, number>,
-  chapterAttempts?: Record<string, TheoryChapterAttempt>,
-): number | undefined {
-  const attempt = chapterAttempts?.[chapterId];
-  if (attempt) return attempt.firstScore;
-  return quizScores[chapterId];
-}
 
 /** 理论侧掌握度汇总：共享口径 + 章节 id 字段别名（保持 TheoryMasteryCard 既有签名） */
 export interface TheoryMasterySummary extends MasterySummary {

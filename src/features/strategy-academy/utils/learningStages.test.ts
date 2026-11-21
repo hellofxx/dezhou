@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildLearningStages, toLearningStage } from './learningStages';
+import { getLessonMeta } from '../data/lessonMeta';
 import type { LessonSummary, LevelSummary } from '../types';
 
 /**
@@ -67,6 +68,24 @@ describe('toLearningStage', () => {
     expect(stage.description).toBe('描述');
     expect(stage.icon).toBe('flag');
     expect(stage.unlockRequirement).toBe('解锁要求');
+  });
+
+  it('theoryChapterIds 由课时锚点去重生成', () => {
+    const lessonIds = ['l1-basics', 'drill-hand-ranking'];
+    const expected = [
+      ...new Set(lessonIds.flatMap((id) => getLessonMeta(id).theoryAnchors)),
+    ];
+    const stage = toLearningStage(
+      level({ level: 1, lessons: lessonIds.map((id, index) => lesson(id, index + 1)) }),
+    );
+
+    expect(stage.theoryChapterIds).toEqual(expected);
+    expect(new Set(stage.theoryChapterIds).size).toBe(stage.theoryChapterIds.length);
+  });
+
+  it('无 lessonMeta 的课时（短牌/未知 id）回退空数组', () => {
+    const stage = toLearningStage(level({ level: 1, lessons: [lesson('unknown-lesson', 1)] }));
+    expect(stage.theoryChapterIds).toEqual([]);
   });
 });
 

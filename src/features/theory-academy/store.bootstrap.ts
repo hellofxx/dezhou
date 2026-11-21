@@ -6,11 +6,16 @@
  */
 import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
 import { registerTheoryDataSource } from '@/shared/stores/theoryDataSourceRegistry';
-import type { TheoryChapterMeta } from '@/shared/types/theoryDataSource';
+import type {
+  TheoryChapterAttemptSnapshot,
+  TheoryChapterMeta,
+  TheoryLearningSnapshot,
+} from '@/shared/types/theoryDataSource';
 import { useTheoryStore } from './store';
 import type { TheoryChapterSummary, TheoryProgress } from './types';
 import { findLevelSummaryByChapterId, findNextTheoryChapter, isLevelFullyCompleted } from './utils/theoryMeta';
 import { chapterTitleKey } from './utils/titleKeys';
+import { getChapterCatalog } from './utils/chapterCatalog';
 
 // 成就检查数据源（仅 theory 专用可选方法；academy 类方法返回安全缺省值，T7/B4 idempotency）
 registerAchievementSource({
@@ -63,10 +68,44 @@ function findNextChapterMeta(completedChapterIds: readonly string[]): TheoryChap
   return next ? toChapterMeta(next) : null;
 }
 
-// 理论数据源（progress 每日训练计划 / 下一章 CTA 经注册表查询，progress 不 import theory）
+let cachedProgress: TheoryProgress | undefined;
+let cachedAttemptsSource: TheoryProgress['chapterAttempts'];
+let cachedAttemptsSnapshot: Readonly<Record<string, TheoryChapterAttemptSnapshot>> = {};
+let cachedLearningSnapshot: TheoryLearningSnapshot | undefined;
+
+/** 理论学习快照：稳定引用，chapterAttempts 按源对象缓存。 */
+function getLearningSnapshot(): TheoryLearningSnapshot {
+  const progress = useTheoryStore.getState().progress;
+  if (progress !== cachedProgress) {
+    if (progress.chapterAttempts !== cachedAttemptsSource) {
+      cachedAttemptsSource = progress.chapterAttempts;
+      cachedAttemptsSnapshot = Object.fromEntries(
+        Object.entries(progress.chapterAttempts ?? {}).map(([chapterId, attempt]) => [
+          chapterId,
+          {
+            firstScore: attempt.firstScore,
+            lastScore: attempt.lastScore,
+            attempts: attempt.attempts,
+          },
+        ]),
+      );
+    }
+    cachedProgress = progress;
+    cachedLearningSnapshot = {
+      completedChapters: progress.completedChapters,
+      chapterAttempts: cachedAttemptsSnapshot,
+      quizScores: progress.quizScores,
+    };
+  }
+  return cachedLearningSnapshot!;
+}
+
+// 理论数据源（progress 每日训练计划 / 下一章 CTA / 课程枢纽经注册表查询，progress 不 import theory）
 registerTheoryDataSource({
   findNextChapter: findNextChapterMeta,
   // v1 的「推荐章」即下一未完成章；ELO 五维反向桥接由理论模块 UI 自行读取 progress ELO 实现
   getRecommendedChapter: () => findNextChapterMeta(useTheoryStore.getState().progress.completedChapters),
   subscribe: (listener) => useTheoryStore.subscribe(listener),
+  getLearningSnapshot,
+  getChapterCatalog,
 });
