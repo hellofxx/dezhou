@@ -40,8 +40,7 @@ const STATIC_PREFIXES = [
  * 每项在对应 Wave 统一为 canonical 后删除；条目失效即守卫变红。
  */
 const REDIRECT_SOURCE_ALLOWLIST: Record<string, string> = {
-  '/academy/lesson': '旧课时深链；Wave 3 统一为 /lesson/:lessonId',
-  '/academy/quick-drill': '旧速训入口；学院/帮助入口待 Wave 3 统一为 /quick',
+  '/academy/lesson': '旧课时深链；Wave 4 统一为 /lesson/:lessonId',
 };
 
 interface RouteManifest {

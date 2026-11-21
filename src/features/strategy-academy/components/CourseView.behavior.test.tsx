@@ -51,6 +51,8 @@ function renderAt(lessonId: string, hash = '', container?: HTMLElement) {
     <MemoryRouter initialEntries={[`/academy/lesson/${lessonId}${hash}`]}>
       <Routes>
         <Route path={PATH} element={<CourseView />} />
+        {/* 完成页「下一课」走 canonical /lesson/:lessonId */}
+        <Route path="/lesson/:lessonId" element={<CourseView />} />
       </Routes>
     </MemoryRouter>,
     container ? { container } : undefined,
@@ -76,6 +78,8 @@ async function answerQuiz(container: HTMLElement, lessonId: string) {
   }
 
   expect(screen.getByText('课程完成！')).toBeTruthy();
+  // 结果纸条默认打开；关闭后回执面板（推荐轨道/重学/下一课）才可交互
+  fireEvent.click(screen.getByRole('button', { name: '关闭' }));
 }
 
 /** 理论课：阅读完成 → 课后测验 → 完成页 */

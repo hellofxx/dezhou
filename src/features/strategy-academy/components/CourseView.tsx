@@ -26,6 +26,7 @@ import { CourseStudyRail } from './CourseStudyRail';
 import { CourseLockedView } from './CourseLockedView';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import CourseDoneView from './CourseDoneView';
+import CourseDoneSlip from './CourseDoneSlip';
 import { StrategyNotesPanel } from './StrategyNotesPanel';
 import { LessonReviewMeta } from './LessonReviewMeta';
 import type { DrillResult } from './drills/types';
@@ -46,6 +47,7 @@ export default function CourseView() {
   const [phase, setPhase] = useState<Phase>('reading');
   const [quizScore, setQuizScore] = useState(0);
   const [drillResult, setDrillResult] = useState<DrillResult | null>(null);
+  const [doneSlipOpen, setDoneSlipOpen] = useState(false);
   // P3: 重开目标（restart('practice') 时让重挂载的 LessonContent 直达实战视图）
   const [restartTarget, setRestartTarget] = useState<'units' | 'practice'>('units');
   // §13.3.4/§13.7.1: 移动端阅读进度（0-100），scrollTop/(scrollHeight-clientHeight)
@@ -165,6 +167,7 @@ export default function CourseView() {
         completeCourse({ lessonId, score, mode: 'drill', lesson, drillResult: result });
       }
       setPhase('done');
+      setDoneSlipOpen(true);
     },
     [lessonId, lesson]
   );
@@ -180,6 +183,7 @@ export default function CourseView() {
       if (lessonId) completeCourse({ lessonId, score: result.score, mode: 'quiz', lesson,
         wrongQuestionIds: result.wrongQuestionIds, correctCount: result.correct, totalQuestions: result.total });
       setPhase('done');
+      setDoneSlipOpen(true);
     },
     [lessonId, lesson]
   );
@@ -189,6 +193,7 @@ export default function CourseView() {
     setPhase('reading');
     setQuizScore(0);
     setDrillResult(null);
+    setDoneSlipOpen(false);
     setRestartTarget(target);
     // 清理 hash 残留
     if (window.location.hash) {
@@ -313,26 +318,43 @@ export default function CourseView() {
         )}
 
         {phase === 'done' && (
-          <CourseDoneView
-            isDrill={isDrill}
-            quizScore={quizScore}
-            drillResult={drillResult}
-            nextLesson={nextLesson}
-            relatedTracks={relatedTracks}
-            completedLessons={completedLessons}
-            hasPractice={!!lesson.practice}
-            theoryAnchors={getLessonMeta(lesson.id).theoryAnchors} onNavigateTheory={(route) => navigate(route)}
-            onBack={() => navigate('/academy')}
-            onNext={() => {
-              setPhase('reading');
-              setQuizScore(0);
-              setDrillResult(null);
-              setRestartTarget('units');
-              navigate(`/academy/lesson/${nextLesson!.id}`);
-            }}
-            onRestart={handleRestart}
-            onNavigateToTrack={(trackId) => navigate(`/academy/tracks?track=${trackId}`)}
-          />
+          <>
+            <CourseDoneView
+              isDrill={isDrill}
+              quizScore={quizScore}
+              drillResult={drillResult}
+              nextLesson={nextLesson}
+              relatedTracks={relatedTracks}
+              completedLessons={completedLessons}
+              hasPractice={!!lesson.practice}
+              theoryAnchors={getLessonMeta(lesson.id).theoryAnchors} onNavigateTheory={(route) => navigate(route)}
+              onBack={() => navigate('/academy')}
+              onNext={() => {
+                setPhase('reading');
+                setQuizScore(0);
+                setDrillResult(null);
+                setDoneSlipOpen(false);
+                setRestartTarget('units');
+                navigate(`/lesson/${nextLesson!.id}`);
+              }}
+              onRestart={handleRestart}
+              onNavigateToTrack={(trackId) => navigate(`/academy/tracks?track=${trackId}`)}
+            />
+            <CourseDoneSlip
+              open={doneSlipOpen}
+              isDrill={isDrill}
+              quizScore={quizScore}
+              drillResult={drillResult}
+              nextLesson={nextLesson}
+              onNext={() => {
+                setDoneSlipOpen(false);
+                navigate(`/lesson/${nextLesson!.id}`);
+              }}
+              onBack={() => navigate('/academy')}
+              onRestart={() => handleRestart('units')}
+              onClose={() => setDoneSlipOpen(false)}
+            />
+          </>
         )}
       </motion.div>
   );

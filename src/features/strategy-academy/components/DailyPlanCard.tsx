@@ -116,7 +116,7 @@ export function DailyPlanCard() {
           <li>
             <button
               type="button"
-              onClick={() => navigate(`/academy/lesson/${newLesson}`)}
+              onClick={() => navigate(`/lesson/${newLesson}`)}
               className="w-full flex items-center gap-2 py-1.5 px-2 -mx-2 rounded-md text-left group hover:bg-[var(--walnut-raised)]/40 transition-colors"
             >
               <span className="w-6 h-6 rounded bg-[var(--poker-success)]/15 flex items-center justify-center shrink-0">
@@ -139,7 +139,7 @@ export function DailyPlanCard() {
           <li>
             <button
               type="button"
-              onClick={() => navigate('/academy/quick-drill')}
+              onClick={() => navigate('/quick')}
               className="w-full flex items-center gap-2 py-1.5 px-2 -mx-2 rounded-md text-left group hover:bg-[var(--walnut-raised)]/40 transition-colors"
             >
               <span className="w-6 h-6 rounded bg-[var(--poker-terra)]/20 flex items-center justify-center shrink-0">

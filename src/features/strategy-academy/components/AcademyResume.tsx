@@ -53,10 +53,10 @@ export function AcademyResume({
       return;
     }
     if (mode === 'continue' && nextLesson) {
-      navigate(`/academy/lesson/${nextLesson.id}`);
+      navigate(`/lesson/${nextLesson.id}`);
       return;
     }
-    navigate('/academy/quick-drill');
+    navigate('/quick');
   };
 
   const prefetchNextLesson = () => {

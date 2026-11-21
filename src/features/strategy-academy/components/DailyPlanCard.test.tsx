@@ -94,10 +94,10 @@ describe('DailyPlanCard', () => {
     expect(container.textContent).toContain('定向练习（2 组）');
 
     fireEvent.click(screen.getByText(/学习新课/));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-position');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-position');
 
     fireEvent.click(screen.getByText(/定向练习/));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/quick-drill');
+    expect(screen.getByTestId('location').textContent).toBe('/quick');
   });
 
   it('刷新按钮强制重新生成计划（同日守卫不吞手动刷新）', async () => {

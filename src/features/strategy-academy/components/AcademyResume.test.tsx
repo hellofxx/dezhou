@@ -85,7 +85,7 @@ describe('AcademyResume：三态主 CTA', () => {
     expect(screen.getByText('继续学习')).toBeTruthy();
 
     fireEvent.click(screen.getByText('继续学习'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/resume-lesson-b');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/resume-lesson-b');
   });
 
   it('allDone：无活跃等级时展示全部完成并引导速训', () => {
@@ -94,7 +94,7 @@ describe('AcademyResume：三态主 CTA', () => {
     expect(screen.getByText('5 分钟速训')).toBeTruthy();
 
     fireEvent.click(screen.getByText('5 分钟速训'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/quick-drill');
+    expect(screen.getByTestId('location').textContent).toBe('/quick');
   });
 });
 
