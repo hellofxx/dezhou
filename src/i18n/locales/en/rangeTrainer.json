@@ -126,5 +126,24 @@
   },
   "timer": {
     "paused": "Paused"
+  },
+  "drillHub": {
+    "title": "Training Grounds",
+    "subtitle": "Four tables — pick one and start training",
+    "start": "Start",
+    "range": "Range Trainer",
+    "rangeDesc": "Decide raise, call or fold for each opening hand by position",
+    "odds": "Pot Odds Sprint",
+    "oddsDesc": "Compute pot odds and your call threshold under the clock",
+    "gto": "GTO Simulator",
+    "gtoDesc": "Take near-balanced lines against standard opponent profiles",
+    "puzzle": "Poker Puzzles",
+    "puzzleDesc": "Chain timed puzzles to sharpen hand reading and speed",
+    "weakness": {
+      "title": "Today's Weak Spot",
+      "summary": "{{module}} at {{accuracy}} — your weakest area right now",
+      "empty": "Finish a few sessions and this card will point at what to drill next",
+      "cta": "View weakness analysis"
+    }
   }
 }

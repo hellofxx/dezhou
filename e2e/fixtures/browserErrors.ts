@@ -44,6 +44,9 @@ export function guardBrowserErrors(page: Page): BrowserErrorGuard {
 
   page.on('requestfailed', (request: Request) => {
     if (NON_NETWORK_PREFIXES.some((prefix) => request.url().startsWith(prefix))) return;
+    // SPA 路由切换会取消在途的 modulepreload / 懒加载请求，浏览器记为 net::ERR_ABORTED；
+    // 这是导航语义而非资源错误（4xx/5xx 仍由 response 事件严格捕获）。
+    if (request.failure()?.errorText === 'net::ERR_ABORTED') return;
     failedRequests.push(describeFailedRequest(request));
   });
 

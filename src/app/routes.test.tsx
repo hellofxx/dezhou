@@ -6,7 +6,7 @@ import { useProgressStore } from '@/features/progress/store';
 import { appRoutes, router } from './routes';
 
 /**
- * 路由组合冒烟：
+ * 路由组合冒烟（批次 3 冻结路由表）：
  * - 结构层锁定 AppLayout / BlankLayout 两个分支的路径清单、路径唯一性、动态参数与 LazyWrapper 包裹；
  * - 渲染层用 /help（纯静态页面）验证「壳层 + 新手门禁 + 懒加载页面」的接线。
  *
@@ -15,43 +15,36 @@ import { appRoutes, router } from './routes';
 
 const APP_LAYOUT_PATHS = [
   '(index)',
-  'range-trainer',
-  'pot-odds',
-  'gto-simulator',
-  'gto-simulator/result/:sessionId',
-  'hand-history',
-  'hand-history/import',
+  'lesson/:lessonId',
+  'lesson',
+  'drill',
+  'quick',
   'progress',
   'progress/range',
   'progress/gto',
   'leaderboard',
   'settings',
+  'help',
+  'help/article/:articleId',
   'academy',
   'academy/basics',
-  'academy/concept-graph',
-  'academy/tracks',
-  'academy/search',
-  'academy/placement',
-  'academy/checkpoint/:level',
-  'academy/bookmarks',
-  'academy/bibliography',
-  'academy/quick-drill',
-  'academy/certification/:level',
-  'academy/lesson/:lessonId',
+  'gto-simulator',
+  'gto-simulator/result/:sessionId',
+  'hand-history',
+  'hand-history/import',
   'theory',
   'theory/chapter/:chapterId',
   'theory/review',
-  'theory/placement',
-  'theory/checkpoint/:levelId',
-  'theory/glossary',
-  'theory/search',
-  'theory/bibliography',
-  'puzzle',
   'puzzle/rush',
   'puzzle/daily',
   'puzzle/theme/:themeId',
-  'help',
-  'help/article/:articleId',
+  // 旧深链重定向（保留 query）
+  'academy/lesson/:lessonId',
+  'academy/quick-drill',
+  'academy/tracks',
+  'range-trainer',
+  'pot-odds',
+  'puzzle',
 ];
 
 const BLANK_LAYOUT_PATHS = [
@@ -99,6 +92,26 @@ describe('路由注册结构', () => {
     expect(violations).toEqual([]);
   });
 
+  it('退役路由不再注册（批次 3）', () => {
+    const paths = (appLayoutRoute?.children ?? []).map((route) => route.path);
+    for (const retired of [
+      'academy/concept-graph',
+      'academy/search',
+      'academy/placement',
+      'academy/checkpoint/:level',
+      'academy/bookmarks',
+      'academy/bibliography',
+      'academy/certification/:level',
+      'theory/placement',
+      'theory/checkpoint/:levelId',
+      'theory/glossary',
+      'theory/search',
+      'theory/bibliography',
+    ]) {
+      expect(paths, `退役路由仍在注册：${retired}`).not.toContain(retired);
+    }
+  });
+
   it('路径无重复，动态参数路由齐全', () => {
     const paths = [...(appLayoutRoute?.children ?? []), ...(blankLayoutRoute?.children ?? [])]
       .map((route) => route.path)
@@ -111,7 +124,6 @@ describe('路由注册结构', () => {
       'handId',
       'scenarioId',
       'lessonId',
-      'level',
       'chapterId',
       'themeId',
       'articleId',

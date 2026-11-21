@@ -36,19 +36,11 @@ describe('MobileNav a11y (WCAG 2.1 AA smoke)', () => {
 
   const bottomItems = () =>
     Array.from(container.querySelectorAll('nav ul > li')).map((li) =>
-      li.querySelector('a, button')?.getAttribute('aria-label'),
+      li.querySelector('a')?.getAttribute('aria-label'),
     );
 
-  const trainingButton = () => container.querySelector('nav button');
-
-  const openSheet = async () => {
-    await act(async () => {
-      (trainingButton() as HTMLButtonElement | null)?.click();
-    });
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-  };
+  const itemLink = (label: string) =>
+    container.querySelector(`nav a[aria-label="${label}"]`) as HTMLAnchorElement | null;
 
   it('has no axe violations — each nav item exposes an accessible name', async () => {
     await act(async () => {
@@ -79,53 +71,39 @@ describe('MobileNav a11y (WCAG 2.1 AA smoke)', () => {
     });
   });
 
-  it('底栏为 6 项：首页 / 训练 / 学院 / 理论 / 题库 / 进度，设置已移出', () => {
+  it('底栏为 5 项：路径 / 课程 / 训练 / 速训 / 进度，设置与帮助不占底栏', () => {
     act(() => {
       renderHarness();
     });
 
-    expect(bottomItems()).toEqual([
-      '仪表盘',
-      '训练',
-      '策略学院',
-      '理论学院',
-      '扑克谜题',
-      '进度统计',
-    ]);
-    // 设置不再占底栏一格（由顶栏齿轮承接）
+    expect(bottomItems()).toEqual(['学习路径', '课程', '训练', '速训', '进度中心']);
+    // 设置走顶栏齿轮、帮助走顶栏图标 / 侧栏，均不再占底栏一格
     expect(container.querySelector('a[aria-label="设置"]')).toBeNull();
+    expect(container.querySelector('a[aria-label="帮助中心"]')).toBeNull();
+    // 训练入口是直链（不再是 Sheet 触发器）
+    expect(container.querySelector('nav button')).toBeNull();
   });
 
-  it('「训练」是 dialog 触发器，点击打开训练快捷 Sheet', async () => {
+  it('当前路径命中时对应底栏项高亮', async () => {
     await act(async () => {
-      renderHarness();
+      renderHarness('/drill');
     });
-
-    const button = trainingButton();
-    expect(button?.getAttribute('aria-haspopup')).toBe('dialog');
-    expect(button?.getAttribute('aria-label')).toBe('训练');
-    expect(button?.getAttribute('aria-expanded')).toBe('false');
-
-    await openSheet();
-
-    expect(button?.getAttribute('aria-expanded')).toBe('true');
-    const dialog = document.querySelector('[role="dialog"]');
-    expect(dialog).toBeTruthy();
-    expect(dialog?.textContent).toContain('训练入口');
-    expect(dialog?.textContent).toContain('手牌范围训练');
-  });
-
-  it('当前路径属于训练入口时「训练」按钮高亮', async () => {
-    await act(async () => {
-      renderHarness('/pot-odds/quiz');
-    });
-    expect(trainingButton()?.className).toContain('text-[var(--brass-bright)]');
+    expect(itemLink('训练')?.className).toContain('text-[var(--brass-bright)]');
+    expect(itemLink('速训')?.className).toContain('text-[var(--ivory-dim)]');
 
     act(() => root.unmount());
     root = createRoot(container);
     await act(async () => {
-      renderHarness('/help');
+      renderHarness('/quick?mode=odds');
     });
-    expect(trainingButton()?.className).toContain('text-[var(--ivory-dim)]');
+    expect(itemLink('速训')?.className).toContain('text-[var(--brass-bright)]');
+    expect(itemLink('训练')?.className).toContain('text-[var(--ivory-dim)]');
+  });
+
+  it('课程子路由（/lesson/:lessonId）保持「课程」高亮', async () => {
+    await act(async () => {
+      renderHarness('/lesson/l1-b');
+    });
+    expect(itemLink('课程')?.className).toContain('text-[var(--brass-bright)]');
   });
 });

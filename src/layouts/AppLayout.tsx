@@ -25,17 +25,11 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shar
 import {
   ChevronLeft,
   Home,
+  BookOpen,
   Target,
-  Calculator,
-  Bot,
-  ClipboardList,
+  Zap,
   BarChart3,
-  Settings,
-  Trophy,
   Globe,
-  GraduationCap,
-  Library,
-  Puzzle,
   Flame,
   Spade,
   HelpCircle,
@@ -45,22 +39,13 @@ interface NavItem {
   label: string;
   path: string;
   icon: React.ReactNode;
-  i18nKey: string;
-  /** 悬停提示（用于双学院定位区分等需要副文案的导航项） */
+  /** 悬停提示（折叠态 Tooltip 与 title 共用；分组关系由眉标承担） */
   hint?: string;
 }
 
-interface NavGroup {
-  /** 分组序号（01–04）：分组位置的固定标识，不随语言变化 */
-  index: string;
-  title: string;
-  i18nKey: string;
-  items: NavItem[];
-}
-
-// 内容宽度分级 L2（DESIGN.md §6.5）：策略学院概览/课程地图视图展宽，
-// 消除超宽屏 felt 留白；阅读/作答视图（/academy/lesson、/quick-drill 等）保持 L3 收敛，由模块内部自行限宽
-const LAB_OVERVIEW_WIDE_ROUTES = ['/academy', '/academy/tracks', '/academy/concept-graph'];
+// 内容宽度分级 L2（DESIGN.md §6.5）：课程总览展宽，消除超宽屏 felt 留白；
+// 阅读/作答视图（/lesson/:lessonId、/quick 等）保持 L3 收敛，由模块内部自行限宽
+const WIDE_ROUTES = ['/academy'];
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -72,57 +57,19 @@ export default function AppLayout() {
   // 主题应用器：settings.theme（含 system）→ <html data-theme> / color-scheme
   useThemeApplier();
 
-  // 导航层级精简：Dashboard 置顶去分组（原"概览"单项目分组冗余），
-  // 其余按 训练 / 研习 / 数据 / 设置 四组；图标统一 18px 线性风格（DESIGN.md §7）
-  const navGroups = useMemo<NavGroup[]>(() => [
-    {
-      index: '01',
-      title: t('nav.training'),
-      i18nKey: 'nav.training',
-      items: [
-        { label: t('nav.rangeTrainer'), path: '/range-trainer', icon: <Target size={18} />, i18nKey: 'nav.rangeTrainer' },
-        { label: t('nav.potOdds'), path: '/pot-odds', icon: <Calculator size={18} />, i18nKey: 'nav.potOdds' },
-        { label: t('nav.gtoSimulator'), path: '/gto-simulator', icon: <Bot size={18} />, i18nKey: 'nav.gtoSimulator' },
-        { label: t('nav.puzzle'), path: '/puzzle', icon: <Puzzle size={18} />, i18nKey: 'nav.puzzle' },
-      ],
-    },
-    {
-      index: '02',
-      title: t('nav.study'),
-      i18nKey: 'nav.study',
-      items: [
-        { label: t('nav.academy'), path: '/academy', icon: <GraduationCap size={18} />, i18nKey: 'nav.academy', hint: t('nav.academyHint') },
-        { label: t('nav.theory'), path: '/theory', icon: <Library size={18} />, i18nKey: 'nav.theory', hint: t('nav.theoryHint') },
-        { label: t('nav.handHistory'), path: '/hand-history', icon: <ClipboardList size={18} />, i18nKey: 'nav.handHistory' },
-      ],
-    },
-    {
-      index: '03',
-      title: t('nav.data'),
-      i18nKey: 'nav.data',
-      items: [
-        { label: t('nav.progress'), path: '/progress', icon: <BarChart3 size={18} />, i18nKey: 'nav.progress' },
-        { label: t('nav.leaderboard'), path: '/leaderboard', icon: <Trophy size={18} />, i18nKey: 'nav.leaderboard' },
-      ],
-    },
-    {
-      index: '04',
-      title: t('nav.settingsGroup'),
-      i18nKey: 'nav.settingsGroup',
-      items: [
-        { label: t('nav.settings'), path: '/settings', icon: <Settings size={18} />, i18nKey: 'nav.settings' },
-        { label: t('nav.help'), path: '/help', icon: <HelpCircle size={18} />, i18nKey: 'nav.help' },
-      ],
-    },
-  ], [t]);
-
-  // 置顶首页项（不归属任何分组，降低导航层级噪音）
-  const dashboardItem: NavItem = {
-    label: t('nav.dashboard'),
-    path: '/',
-    icon: <Home size={18} />,
-    i18nKey: 'nav.dashboard',
-  };
+  // 批次 3 冻结导航：学习路径 / 课程 / 训练 / 速训 / 进度中心 / 帮助（六项扁平，无二级分组）；
+  // 设置改由顶栏齿轮承接（HeaderQuickActions），不再占侧栏一格
+  const navItems = useMemo<NavItem[]>(
+    () => [
+      { label: t('nav.path'), path: '/', icon: <Home size={18} /> },
+      { label: t('nav.course'), path: '/lesson', icon: <BookOpen size={18} /> },
+      { label: t('nav.drill'), path: '/drill', icon: <Target size={18} /> },
+      { label: t('nav.quick'), path: '/quick', icon: <Zap size={18} /> },
+      { label: t('nav.progressCenter'), path: '/progress', icon: <BarChart3 size={18} /> },
+      { label: t('nav.help'), path: '/help', icon: <HelpCircle size={18} /> },
+    ],
+    [t],
+  );
 
   const currentPageTitle = resolvePageTitle(location.pathname, t);
   const section = resolveNavSection(location.pathname, t);
@@ -232,27 +179,10 @@ export default function AppLayout() {
           </button>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-4" aria-label={t('nav.sidebarNavAria')}>
+        {/* Navigation — 六项主入口，分组关系由顶栏眉标（01–04）承担 */}
+        <nav className="flex-1 overflow-y-auto py-3 px-2" aria-label={t('nav.sidebarNavAria')}>
           <TooltipProvider delayDuration={200}>
-            {/* 置顶首页 —— 无分组标签，保持导航层级扁平 */}
-            <ul className="space-y-0.5">{renderNavItem(dashboardItem)}</ul>
-            <div className={cn('hairline-brass mx-2', collapsed && 'opacity-40')} />
-            {navGroups.map((group) => (
-              <div key={group.i18nKey}>
-                {collapsed ? (
-                  <p aria-hidden="true" className="text-center font-numeric text-[9px] text-[var(--brass-text)] mb-2">
-                    {group.index}
-                  </p>
-                ) : (
-                  <p className="text-[9px] uppercase tracking-[0.2em] text-[var(--ivory-dim)] px-3 mb-2 font-medium">
-                    <span className="font-numeric text-[var(--brass-text)] mr-2">{group.index}</span>
-                    {group.title}
-                  </p>
-                )}
-                <ul className="space-y-0.5">{group.items.map(renderNavItem)}</ul>
-              </div>
-            ))}
+            <ul className="space-y-0.5">{navItems.map(renderNavItem)}</ul>
           </TooltipProvider>
         </nav>
 
@@ -294,7 +224,7 @@ export default function AppLayout() {
             <Globe size={14} className={cn('transition-transform', switching && 'animate-spin')} />
             <span className="font-numeric">{i18n.language === 'zh' ? 'EN' : '中'}</span>
           </button>
-          {/* 顶栏快捷入口：移动端设置齿轮 + 帮助，桌面端帮助（设置已从底部导航移出） */}
+          {/* 顶栏快捷入口：设置齿轮（全端）+ 帮助 */}
           <HeaderQuickActions />
         </header>
 
@@ -309,11 +239,11 @@ export default function AppLayout() {
           tabIndex={-1}
           className="flex-1 overflow-auto p-4 md:p-6 pb-20 md:pb-6 outline-none"
         >
-          {/* G1: 全局限宽——操作台/统计页随 main 收敛（L1 1400）；策略学院概览视图走 L2 展宽 1680（DESIGN.md §6.5）；阅读型页面正文由各模块 agent 单独 max-w-prose */}
+          {/* G1: 全局限宽——操作台/统计页随 main 收敛（L1 1400）；课程总览走 L2 展宽 1680（DESIGN.md §6.5）；阅读型页面正文由各模块 agent 单独 max-w-prose */}
           <div
             className={cn(
               'mx-auto w-full h-full',
-              LAB_OVERVIEW_WIDE_ROUTES.includes(location.pathname) ? 'max-w-[1680px]' : 'max-w-[1400px]'
+              WIDE_ROUTES.includes(location.pathname) ? 'max-w-[1680px]' : 'max-w-[1400px]'
             )}
           >
           <AnimatePresence mode="wait">

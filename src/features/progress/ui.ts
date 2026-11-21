@@ -8,3 +8,5 @@ export { default as OnboardingGate } from './components/gate/OnboardingGate';
 export { default as TiltWarning } from './components/gate/TiltWarning';
 export { default as MilestoneCelebrationHost } from './components/celebration/MilestoneCelebrationHost';
 export { default as ProgressPersistErrorNotice } from './components/PersistErrorNotice';
+// 壳层浮层：/settings 的设置纸条（body 内的设置面仍按需懒加载，外壳随布局进入首屏）
+export { default as SettingsSlip } from './components/settings/SettingsSlip';

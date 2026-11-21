@@ -1,6 +1,6 @@
 /**
- * navSections 契约（壳层眉标与页名的纯函数出口）：
- * - 路径 → 分组序号（01 训练 / 02 研习 / 03 数据 / 04 设置），未命中回退 00 + 应用名
+ * navSections 契约（壳层眉标与页名的纯函数出口，批次 3 冻结导航）：
+ * - 路径 → 分组序号（01 课程 / 02 训练·速训 / 03 进度 / 04 设置·帮助），未命中回退 00 + 应用名
  * - 前缀匹配必须按路径段边界（`/help` 命中，`/helpfoo` 不命中）
  * - 路径 → 页名：精确表优先，子路由回退到模块名（避免子页断档成应用名）
  */
@@ -13,10 +13,10 @@ const t = ((key: string) => key) as unknown as TFunction;
 
 describe('resolveNavSection', () => {
   it('四个分组前缀分别映射到 01/02/03/04 序号', () => {
-    expect(resolveNavSection('/range-trainer', t)).toEqual({ index: '01', label: 'nav.training' });
-    expect(resolveNavSection('/puzzle/daily', t)).toEqual({ index: '01', label: 'nav.training' });
-    expect(resolveNavSection('/academy', t)).toEqual({ index: '02', label: 'nav.study' });
-    expect(resolveNavSection('/hand-history/import', t)).toEqual({ index: '02', label: 'nav.study' });
+    expect(resolveNavSection('/lesson', t)).toEqual({ index: '01', label: 'nav.study' });
+    expect(resolveNavSection('/lesson/l1-b', t)).toEqual({ index: '01', label: 'nav.study' });
+    expect(resolveNavSection('/drill', t)).toEqual({ index: '02', label: 'nav.training' });
+    expect(resolveNavSection('/quick', t)).toEqual({ index: '02', label: 'nav.training' });
     expect(resolveNavSection('/progress/range', t)).toEqual({ index: '03', label: 'nav.data' });
     expect(resolveNavSection('/leaderboard', t)).toEqual({ index: '03', label: 'nav.data' });
     expect(resolveNavSection('/settings', t)).toEqual({ index: '04', label: 'nav.settingsGroup' });
@@ -36,17 +36,21 @@ describe('resolveNavSection', () => {
 
 describe('resolvePageTitle', () => {
   it('精确路径命中专属页名', () => {
-    expect(resolvePageTitle('/', t)).toBe('nav.dashboard');
-    expect(resolvePageTitle('/academy/basics', t)).toBe('nav.basics');
-    expect(resolvePageTitle('/theory/review', t)).toBe('nav.theoryReview');
+    expect(resolvePageTitle('/', t)).toBe('nav.path');
+    expect(resolvePageTitle('/lesson', t)).toBe('nav.course');
+    expect(resolvePageTitle('/drill', t)).toBe('nav.drillHub');
+    expect(resolvePageTitle('/quick', t)).toBe('nav.quick');
+    expect(resolvePageTitle('/progress', t)).toBe('nav.progressCenter');
     expect(resolvePageTitle('/help', t)).toBe('nav.help');
+    expect(resolvePageTitle('/settings', t)).toBe('nav.settings');
   });
 
   it('子路由回退到所属模块名（不断档成应用名）', () => {
+    expect(resolvePageTitle('/lesson/l1-b', t)).toBe('nav.course');
     expect(resolvePageTitle('/theory/chapter/l1', t)).toBe('nav.theory');
     expect(resolvePageTitle('/academy/lesson/local-x', t)).toBe('nav.academy');
     expect(resolvePageTitle('/help/article/a1', t)).toBe('nav.help');
-    expect(resolvePageTitle('/puzzle/theme/x', t)).toBe('nav.puzzle');
+    expect(resolvePageTitle('/puzzle/theme/x', t)).toBe('nav.drillHub');
   });
 
   it('未注册路径回退应用名', () => {

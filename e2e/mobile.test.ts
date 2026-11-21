@@ -1,37 +1,60 @@
 import { expect, test } from '@playwright/test';
 import { guardBrowserErrors } from './fixtures/browserErrors';
-import { skipOnboarding } from './fixtures/app';
+import {
+  MOBILE_NAV_ITEMS,
+  expectPageHeading,
+  mobileNav,
+  navigateFromMobileNav,
+  openFromTopBar,
+  sidebarNav,
+  skipOnboarding,
+} from './fixtures/app';
 
 /**
  * L4 移动视口（mobile-chromium）：底部导航是移动端唯一主导航（<768px 隐藏侧边栏）。
  *
- * 走真实移动 UI：
- * - 底栏「训练」按钮 → 训练入口 Sheet → 手牌范围训练（断言壳层 h1 真实标题）
- * - 顶栏帮助快捷入口（移动端可见、桌面端隐藏）→ 帮助中心（h1 + h2 真实标题）
+ * 冻结 IA：
+ * - 底栏 5 项 = 学习路径 / 课程 / 训练 / 速训 / 进度中心（设置与帮助不占底栏）
+ * - 「训练」直接进 `/drill`（不再弹训练入口 Sheet），h1 = 训练场
+ * - 「速训」进 `/quick`，h1 = 速训；「进度中心」进 `/progress`，h1 = 进度中心
+ * - 帮助中心只经顶栏按钮（移动端可见、桌面端隐藏）
  *
  * 桌面用例不受影响：chromium project 通过 testIgnore 排除本文件。
  */
-test('移动端底部导航可打开训练入口与帮助中心并渲染真实标题', async ({ page }) => {
+test('移动端底栏五入口直达对应页面，帮助经顶栏按钮', async ({ page }) => {
   const guard = guardBrowserErrors(page);
 
   await skipOnboarding(page);
 
-  // 移动端主导航可见，桌面侧边栏不可见
-  await expect(page.locator('nav[aria-label="移动端导航"]')).toBeVisible();
-  await expect(page.locator('aside')).toBeHidden();
+  // 移动端主导航可见，桌面侧栏不可见
+  await expect(mobileNav(page)).toBeVisible();
+  await expect(sidebarNav(page)).toBeHidden();
 
-  // 训练入口：底栏「训练」（aria-haspopup=dialog）→ Sheet → 手牌范围训练
-  await page.getByRole('button', { name: '训练', exact: true }).click();
-  const sheet = page.getByRole('dialog', { name: '训练入口' });
-  await expect(sheet).toBeVisible();
-  await sheet.getByRole('link', { name: '手牌范围训练' }).click();
-  await expect(page).toHaveURL(/\/dezhou\/range-trainer$/);
-  await expect(page.getByRole('heading', { level: 1, name: '手牌范围训练' })).toBeVisible();
+  // 底栏恰好 5 项，且文案与冻结 IA 一致
+  await expect(mobileNav(page).getByRole('link')).toHaveCount(MOBILE_NAV_ITEMS.length);
+  for (const item of MOBILE_NAV_ITEMS) {
+    await expect(mobileNav(page).getByRole('link', { name: item, exact: true })).toBeVisible();
+  }
 
-  // 帮助：移动端顶栏快捷入口（桌面端该按钮隐藏）
-  await page.getByRole('button', { name: '帮助中心' }).click();
+  // 训练：直达 /drill（不再弹 Sheet，点击后 URL 立刻变化）
+  await navigateFromMobileNav(page, '训练');
+  await expect(page).toHaveURL(/\/dezhou\/drill$/);
+  await expectPageHeading(page, '训练场');
+
+  // 速训：/quick
+  await navigateFromMobileNav(page, '速训');
+  await expect(page).toHaveURL(/\/dezhou\/quick$/);
+  await expectPageHeading(page, '速训');
+
+  // 进度中心：/progress
+  await navigateFromMobileNav(page, '进度中心');
+  await expect(page).toHaveURL(/\/dezhou\/progress$/);
+  await expectPageHeading(page, '进度中心');
+
+  // 帮助：顶栏按钮（底栏不再有入口）
+  await openFromTopBar(page, '帮助中心');
   await expect(page).toHaveURL(/\/dezhou\/help$/);
-  await expect(page.getByRole('heading', { level: 1, name: '帮助中心' })).toBeVisible();
+  await expectPageHeading(page, '帮助中心');
   await expect(page.getByRole('heading', { level: 2, name: '快速上手' })).toBeVisible();
 
   guard.assertClean();

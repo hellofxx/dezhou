@@ -6,8 +6,54 @@ export const APP_ROOT = '/dezhou/';
 /** 引导页路由 */
 export const ONBOARDING_URL = /\/dezhou\/onboarding$/;
 
-/** 首页路由（`/dezhou/`） */
+/** 学习路径首页（`/dezhou/`） */
 export const HOME_URL = /\/dezhou\/$/;
+
+/**
+ * 冻结 IA 的主路由出口（批次 3）。
+ *
+ * 会话 / 深链路由（`/range-trainer/quiz`、`/gto-simulator/session/:id` 等）不在此列出：
+ * 它们由各自用例按真实入口进入，避免在夹具里维护第二份路由清单。
+ */
+export const ROUTES = {
+  learningPath: '/',
+  lesson: '/lesson',
+  drill: '/drill',
+  quick: '/quick',
+  progress: '/progress',
+  help: '/help',
+  settings: '/settings',
+} as const;
+
+/** 冻结 IA：侧栏 6 项文案（设置走顶栏齿轮，不占侧栏一项） */
+export const SIDEBAR_ITEMS = ['学习路径', '课程', '训练', '速训', '进度中心', '帮助中心'] as const;
+
+/** 冻结 IA：移动底栏 5 项文案（训练直达 `/drill`，帮助走顶栏按钮） */
+export const MOBILE_NAV_ITEMS = ['学习路径', '课程', '训练', '速训', '进度中心'] as const;
+
+/**
+ * 桌面侧栏主导航（`<nav aria-label="主导航">`，<768px 隐藏）。
+ *
+ * 限定在 `role=navigation` 内，避免与移动底栏（`移动端导航`）同名项撞车。
+ */
+export function sidebarNav(page: Page) {
+  return page.getByRole('navigation', { name: '主导航' });
+}
+
+/** 移动端底栏（`<nav aria-label="移动端导航">`，≥768px 隐藏） */
+export function mobileNav(page: Page) {
+  return page.getByRole('navigation', { name: '移动端导航' });
+}
+
+/**
+ * 顶栏图标入口（设置齿轮 / 帮助中心）。
+ *
+ * AppLayout 顶栏是页面级 `<header>`（banner），桌面端帮助与移动端设置齿轮都挂在这里；
+ * 按 aria-label 点击，不依赖图标实现。
+ */
+export async function openFromTopBar(page: Page, actionName: string): Promise<void> {
+  await page.getByRole('banner').getByRole('button', { name: actionName, exact: true }).click();
+}
 
 /**
  * 通过真实 UI 跳过新手引导。
@@ -22,12 +68,19 @@ export async function skipOnboarding(page: Page): Promise<void> {
   await expect(page).toHaveURL(HOME_URL);
 }
 
-/**
- * 侧边栏导航（桌面视口）。导航项 aria-label 即模块名文案，避免依赖 DOM 层级。
- */
-export async function navigateFromSidebar(page: Page, moduleName: string): Promise<void> {
-  // 限定在侧边栏内：移动端底部导航（<768px 才显示）有同名链接，同名会触发 strict mode
-  await page.locator('aside').getByRole('link', { name: moduleName }).click();
+/** 侧栏导航（桌面视口）：按冻结 IA 文案点击，落点断言由调用方负责 */
+export async function navigateFromSidebar(page: Page, itemName: string): Promise<void> {
+  await sidebarNav(page).getByRole('link', { name: itemName, exact: true }).click();
+}
+
+/** 移动底栏导航（<768px）：按冻结 IA 文案点击 */
+export async function navigateFromMobileNav(page: Page, itemName: string): Promise<void> {
+  await mobileNav(page).getByRole('link', { name: itemName, exact: true }).click();
+}
+
+/** 断言整页 h1（外壳页名，全站唯一一级标题） */
+export async function expectPageHeading(page: Page, name: string | RegExp): Promise<void> {
+  await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
 }
 
 /**

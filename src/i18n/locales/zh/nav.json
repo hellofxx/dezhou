@@ -1,6 +1,12 @@
 {
   "overview": "概览",
   "dashboard": "仪表盘",
+  "path": "学习路径",
+  "course": "课程",
+  "drill": "训练",
+  "drillHub": "训练场",
+  "quick": "速训",
+  "progressCenter": "进度中心",
   "training": "训练",
   "quickNavTitle": "训练入口",
   "study": "研习",

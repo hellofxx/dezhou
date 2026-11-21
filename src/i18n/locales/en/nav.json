@@ -1,6 +1,12 @@
 {
   "overview": "Overview",
   "dashboard": "Dashboard",
+  "path": "Learning Path",
+  "course": "Courses",
+  "drill": "Training",
+  "drillHub": "Training Ground",
+  "quick": "Quick Drill",
+  "progressCenter": "Progress Center",
   "training": "Training",
   "quickNavTitle": "Training Shortcuts",
   "study": "Study",

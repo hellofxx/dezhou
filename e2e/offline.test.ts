@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { guardBrowserErrors } from './fixtures/browserErrors';
-import { APP_ROOT, navigateFromSidebar, skipOnboarding } from './fixtures/app';
+import {
+  APP_ROOT,
+  expectPageHeading,
+  navigateFromSidebar,
+  skipOnboarding,
+} from './fixtures/app';
 
 /**
  * L4 离线冒烟：首次加载完成全量预缓存后，断网打开从未访问过的深层路由。
@@ -49,10 +54,10 @@ test('首次加载完成预缓存后，离线仍可渲染从未访问过的深�
 
   guard.assertClean();
 
-  // 断网状态下客户端路由切换同样可用（同一份预缓存）
-  await navigateFromSidebar(page, '进度统计');
+  // 断网状态下客户端路由切换同样可用（同一份预缓存）；进度页按冻结 IA 文案为「进度中心」
+  await navigateFromSidebar(page, '进度中心');
   await expect(page).toHaveURL(/\/dezhou\/progress$/);
-  await expect(page.getByRole('heading', { level: 1, name: '进度统计' })).toBeVisible();
+  await expectPageHeading(page, '进度中心');
 
   guard.assertClean();
 });

@@ -278,3 +278,138 @@
     width: 100%;
   }
 }
+
+/* =========================================================
+   训练场枢纽（批次 3 · DrillHub）
+   四张训练台卡片：48px 图标方块 + 标题 + 一句说明 + 黄铜 CTA。
+   整卡即入口（单一焦点目标，触控 ≥44px），`?mode=` 命中的台子加一道黄铜顶边与描边。
+   颜色全部走 token / color-mix（禁字面 rgba）。
+   ========================================================= */
+.drill-hub-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 44px;
+  padding: 16px 18px;
+  border-radius: var(--poker-radius-md);
+  border: 1px solid color-mix(in srgb, var(--brass) 14%, transparent);
+  background: var(--hero-surface-gradient);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.drill-hub-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brass) 8%, transparent), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.drill-hub-card:hover {
+  border-color: color-mix(in srgb, var(--brass) 32%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--felt-deep) 70%, transparent);
+}
+
+.drill-hub-card:hover::before {
+  opacity: 1;
+}
+
+/* 高亮台（?mode=range|odds|gto|puzzle）：黄铜顶边 + 常亮微光，提示"就是这张" */
+.drill-hub-card[data-active] {
+  border-color: color-mix(in srgb, var(--brass-bright) 48%, transparent);
+}
+
+.drill-hub-card[data-active]::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brass-bright), transparent);
+}
+
+.drill-hub-card[data-active]::before {
+  opacity: 1;
+}
+
+.drill-hub-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.drill-hub-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--brass) 14%, transparent);
+  background: color-mix(in srgb, var(--ivory) 6%, transparent);
+  color: var(--ivory-dim);
+}
+
+.drill-hub-icon[data-accent='brass'] {
+  background: color-mix(in srgb, var(--brass-bright) 12%, transparent);
+  color: var(--brass-bright);
+}
+
+.drill-hub-icon[data-accent='info'] {
+  background: color-mix(in srgb, var(--poker-info) 12%, transparent);
+  color: var(--poker-info);
+}
+
+.drill-hub-icon[data-accent='frost'] {
+  background: color-mix(in srgb, var(--poker-frost) 12%, transparent);
+  color: var(--poker-frost);
+}
+
+.drill-hub-icon[data-accent='success'] {
+  background: color-mix(in srgb, var(--poker-success) 12%, transparent);
+  color: var(--poker-success);
+}
+
+.drill-hub-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ivory);
+  letter-spacing: 0.01em;
+}
+
+.drill-hub-desc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ivory-muted);
+}
+
+.drill-hub-cta {
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--brass-fill-ink);
+  background: linear-gradient(180deg, var(--brass-bright), var(--brass));
+  border: 1px solid var(--brass-fill-border);
+}
+
+/* 键盘可达：焦点环由组件侧 FOCUS_RING 提供，这里只保证卡片不被描边裁切 */
+.drill-hub-card:focus-visible {
+  outline: none;
+}

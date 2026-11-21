@@ -1,0 +1,105 @@
+import { expect, test } from '@playwright/test';
+import { guardBrowserErrors } from './fixtures/browserErrors';
+import {
+  APP_ROOT,
+  SIDEBAR_ITEMS,
+  expectPageHeading,
+  navigateFromSidebar,
+  sidebarNav,
+  skipOnboarding,
+} from './fixtures/app';
+
+/**
+ * 冻结 IA 导航门禁（桌面 1440×900）。
+ *
+ * 覆盖三件事：
+ * 1. 侧栏 6 项文案与落点、5 条主路由的 h1（`/lesson` 自动跳下一课）；
+ * 2. 旧训练入口 `/range-trainer` `/pot-odds` `/puzzle` → `/drill?mode=…` 的 3 条重定向；
+ * 3. 训练场 → 手牌范围训练 → 浏览器返回键回到训练场（SPA 历史栈语义）。
+ *
+ * 全部走真实 UI：不做 localStorage / store 直写，等待一律交给 expect 自动重试。
+ */
+test.use({ viewport: { width: 1440, height: 900 } });
+
+/** 旧训练入口 → 训练枢纽的重定向（`mode` 由 `/drill` 消费） */
+const LEGACY_REDIRECTS = [
+  { legacy: 'range-trainer', mode: 'range' },
+  { legacy: 'pot-odds', mode: 'odds' },
+  { legacy: 'puzzle', mode: 'puzzle' },
+] as const;
+
+/** 侧栏项 → 落点与 h1（「课程」走 `/lesson` 自动跳下一课，单独断言） */
+const SIDEBAR_ROUTES = [
+  { item: '学习路径', path: /\/dezhou\/$/, heading: '学习路径' },
+  { item: '训练', path: /\/dezhou\/drill$/, heading: '训练场' },
+  { item: '速训', path: /\/dezhou\/quick$/, heading: '速训' },
+  { item: '进度中心', path: /\/dezhou\/progress$/, heading: '进度中心' },
+  { item: '帮助中心', path: /\/dezhou\/help$/, heading: '帮助中心' },
+] as const;
+
+test('侧栏 6 项文案与落点正确，主路由 h1 正确（/lesson 按先修进入课程或基础入门）', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+
+  await skipOnboarding(page);
+
+  // 侧栏 6 项（设置走顶栏齿轮，不占侧栏一项）
+  await expect(sidebarNav(page)).toBeVisible();
+  await expect(sidebarNav(page).getByRole('link')).toHaveCount(SIDEBAR_ITEMS.length);
+  for (const item of SIDEBAR_ITEMS) {
+    await expect(sidebarNav(page).getByRole('link', { name: item, exact: true })).toBeVisible();
+  }
+
+  // 学习路径（`/`）
+  await expect(page).toHaveURL(/\/dezhou\/$/);
+  await expectPageHeading(page, '学习路径');
+
+  // 课程：新用户先走基础入门（L1 先修），已完成用户直达下一课；h1 唯一且非空
+  await navigateFromSidebar(page, '课程');
+  await expect(page).toHaveURL(/\/dezhou\/(academy\/basics|lesson\/[^/]+)$/);
+  const lessonHeading = page.getByRole('heading', { level: 1 });
+  await expect(lessonHeading).toHaveCount(1);
+  await expect(lessonHeading).toHaveText(/\S/);
+
+  // 其余主路由：侧栏点击 → 落点 + h1
+  for (const route of SIDEBAR_ROUTES) {
+    await navigateFromSidebar(page, route.item);
+    await expect(page).toHaveURL(route.path);
+    await expectPageHeading(page, route.heading);
+  }
+
+  guard.assertClean();
+});
+
+test('旧训练入口 3 条重定向到 /drill?mode=…，落点 h1 为训练场', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+
+  await skipOnboarding(page);
+
+  for (const { legacy, mode } of LEGACY_REDIRECTS) {
+    await page.goto(`${APP_ROOT}${legacy}`);
+    await expect(page).toHaveURL(new RegExp(`/dezhou/drill\\?mode=${mode}$`));
+    await expectPageHeading(page, '训练场');
+  }
+
+  guard.assertClean();
+});
+
+test('训练场点「手牌范围」进入 /range-trainer/quiz，浏览器返回键回到训练场', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+
+  await skipOnboarding(page);
+
+  await page.goto(`${APP_ROOT}drill`);
+  await expect(page).toHaveURL(/\/dezhou\/drill$/);
+  await expectPageHeading(page, '训练场');
+
+  // 卡片名以「范围训练」起头（副文案可选，不锁死完整名称）
+  await page.getByRole('main').getByRole('link', { name: /^范围训练/ }).click();
+  await expect(page).toHaveURL(/\/dezhou\/range-trainer\/quiz$/);
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/dezhou\/drill$/);
+  await expectPageHeading(page, '训练场');
+
+  guard.assertClean();
+});

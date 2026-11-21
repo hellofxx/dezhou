@@ -22,11 +22,11 @@
 | `hand-history` | `hand-history-dev` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
 | `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
 | `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
-| `pot-odds` | `pot-odds-dev` | `PotOddsPage` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
-| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `theory`, `variant` | 70 | — | 80 |
-| `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
-| `range-trainer` | `range-trainer-dev` | `RangeTrainerHome` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 12 | `progress` | 17 |
-| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 116 | `progress` | 112 |
+| `pot-odds` | `pot-odds-dev` | `PotOddsQuizPage` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
+| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 70 | — | 83 |
+| `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleRush` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
+| `range-trainer` | `range-trainer-dev` | `DrillHub` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 13 | `progress` | 19 |
+| `strategy-academy` | `strategy-academy-dev` | `LessonRoute` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 116 | `progress` | 114 |
 | `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v5）` | `academy`, `theory`, `variant` | 76 | `progress` | 64 |
 
 ## Lazy 路由表
@@ -37,92 +37,69 @@
 | # | 组件 | import 路径 | i18n 分组 key |
 |---|---|---|---|
 | 1 | `JourneyHome` | `@/features/progress/components/path/JourneyHome` | `/` |
-| 2 | `RangeTrainerHome` | `@/features/range-trainer/components/RangeTrainerHome` | `/range-trainer` |
-| 3 | `RangeLearnPage` | `@/features/range-trainer/components/RangeLearnPage` | `/range-trainer/learn` |
-| 4 | `RangeQuizPage` | `@/features/range-trainer/components/RangeQuizPage` | `/range-trainer/quiz` |
-| 5 | `PotOddsPage` | `@/features/pot-odds/components/PotOddsPage` | `/pot-odds` |
-| 6 | `PotOddsQuizPage` | `@/features/pot-odds/components/PotOddsQuizPage` | `/pot-odds/quiz` |
-| 7 | `GTOSimulatorHome` | `@/features/gto-simulator/components/GTOSimulatorHome` | `/gto-simulator` |
-| 8 | `GTOResultPage` | `@/features/gto-simulator/components/GTOResultPage` | `/gto-simulator/result/:sessionId` |
-| 9 | `GTOSessionPage` | `@/features/gto-simulator/components/GTOSessionPage` | `/gto-simulator/session/:scenarioId` |
-| 10 | `HandHistoryList` | `@/features/hand-history/components/HandHistoryList` | `/hand-history` |
-| 11 | `HandImportPage` | `@/features/hand-history/components/HandImportPage` | `/hand-history/import` |
-| 12 | `HandReplayPage` | `@/features/hand-history/components/HandReplayPage` | `/hand-history/:handId` |
-| 13 | `ProgressPage` | `@/features/progress/components/replay/ProgressPage` | `/progress` |
-| 14 | `SettingsPage` | `@/features/progress/components/settings/SettingsPage` | `/settings` |
-| 15 | `RangeStatsPage` | `@/features/progress/components/stats/RangeStatsPage` | `/progress/range` |
-| 16 | `GTOStatsPage` | `@/features/progress/components/stats/GTOStatsPage` | `/progress/gto` |
-| 17 | `LeaderboardPage` | `@/features/progress/components/achievement/Leaderboard` | `/leaderboard` |
-| 18 | `AcademyHome` | `@/features/strategy-academy/components/AcademyHome` | `/academy` |
-| 19 | `CourseView` | `@/features/strategy-academy/components/CourseView` | `/academy/lesson/:lessonId` |
-| 20 | `BasicsIntro` | `@/features/strategy-academy/components/BasicsIntro` | `/academy/basics` |
-| 21 | `ConceptGraphView` | `@/features/strategy-academy/components/ConceptGraphView` | `/academy/concept-graph` |
-| 22 | `LearningTracksView` | `@/features/strategy-academy/components/LearningTracksView` | `/academy/tracks` |
-| 23 | `StrategySearchPage` | `@/features/strategy-academy/components/StrategySearchPage` | `/academy` |
-| 24 | `PlacementTestPage` | `@/features/strategy-academy/components/PlacementTestPage` | `/academy` |
-| 25 | `LevelCheckpointPage` | `@/features/strategy-academy/components/LevelCheckpointPage` | `/academy` |
-| 26 | `StrategyBookmarksPage` | `@/features/strategy-academy/components/StrategyBookmarksPage` | `/academy` |
-| 27 | `StrategyBibliographyPage` | `@/features/strategy-academy/components/StrategyBibliographyPage` | `/academy` |
-| 28 | `QuickDrill` | `@/features/strategy-academy/components/QuickDrill` | `/academy/quick-drill` |
-| 29 | `LevelCertification` | `@/features/strategy-academy/components/LevelCertification` | `/academy/certification/:level` |
-| 30 | `OnboardingFlow` | `@/features/onboarding/components/OnboardingFlow` | `/onboarding` |
-| 31 | `PuzzleHome` | `@/features/puzzle-trainer/components/PuzzleHome` | `/puzzle` |
-| 32 | `PuzzleRush` | `@/features/puzzle-trainer/components/PuzzleRush` | `/puzzle/rush` |
-| 33 | `DailyPuzzle` | `@/features/puzzle-trainer/components/DailyPuzzle` | `/puzzle/daily` |
-| 34 | `ThemeDrill` | `@/features/puzzle-trainer/components/ThemeDrill` | `/puzzle/theme/:themeId` |
-| 35 | `TheoryHome` | `@/features/theory-academy/components/TheoryHome` | `/theory` |
-| 36 | `TheoryChapterView` | `@/features/theory-academy/components/TheoryChapterView` | `/theory/chapter/:chapterId` |
-| 37 | `TheoryFlaggedReview` | `@/features/theory-academy/components/TheoryFlaggedReview` | `/theory` |
-| 38 | `TheoryPlacementPage` | `@/features/theory-academy/components/TheoryPlacementPage` | `/theory` |
-| 39 | `TheoryCheckpointPage` | `@/features/theory-academy/components/TheoryCheckpointPage` | `/theory` |
-| 40 | `TheoryGlossaryPage` | `@/features/theory-academy/components/TheoryGlossaryPage` | `/theory` |
-| 41 | `TheorySearchPage` | `@/features/theory-academy/components/TheorySearchPage` | `/theory` |
-| 42 | `TheoryBibliographyPage` | `@/features/theory-academy/components/TheoryBibliographyPage` | `/theory` |
-| 43 | `HelpHome` | `@/features/help-center/components/HelpHome` | `/help` |
-| 44 | `HelpArticle` | `@/features/help-center/components/HelpArticle` | `/help/article/:articleId` |
+| 2 | `LessonRoute` | `@/features/strategy-academy/components/LessonRoute` | `/lesson/:lessonId` |
+| 3 | `LessonEntry` | `@/features/strategy-academy/components/LessonEntry` | `/lesson` |
+| 4 | `DrillHub` | `@/features/range-trainer/components/DrillHub` | `/drill` |
+| 5 | `QuickDrill` | `@/features/strategy-academy/components/QuickDrill` | `/quick` |
+| 6 | `ProgressPage` | `@/features/progress/components/replay/ProgressPage` | `/progress` |
+| 7 | `RangeStatsPage` | `@/features/progress/components/stats/RangeStatsPage` | `/progress/range` |
+| 8 | `GTOStatsPage` | `@/features/progress/components/stats/GTOStatsPage` | `/progress/gto` |
+| 9 | `LeaderboardPage` | `@/features/progress/components/achievement/Leaderboard` | `/leaderboard` |
+| 10 | `AcademyHome` | `@/features/strategy-academy/components/AcademyHome` | `/academy` |
+| 11 | `BasicsIntro` | `@/features/strategy-academy/components/BasicsIntro` | `/academy/basics` |
+| 12 | `GTOSimulatorHome` | `@/features/gto-simulator/components/GTOSimulatorHome` | `/gto-simulator` |
+| 13 | `GTOResultPage` | `@/features/gto-simulator/components/GTOResultPage` | `/gto-simulator/result/:sessionId` |
+| 14 | `GTOSessionPage` | `@/features/gto-simulator/components/GTOSessionPage` | `/gto-simulator/session/:scenarioId` |
+| 15 | `HandHistoryList` | `@/features/hand-history/components/HandHistoryList` | `/hand-history` |
+| 16 | `HandImportPage` | `@/features/hand-history/components/HandImportPage` | `/hand-history/import` |
+| 17 | `HandReplayPage` | `@/features/hand-history/components/HandReplayPage` | `/hand-history/:handId` |
+| 18 | `TheoryHome` | `@/features/theory-academy/components/TheoryHome` | `/theory` |
+| 19 | `TheoryChapterView` | `@/features/theory-academy/components/TheoryChapterView` | `/theory/chapter/:chapterId` |
+| 20 | `TheoryFlaggedReview` | `@/features/theory-academy/components/TheoryFlaggedReview` | `/theory` |
+| 21 | `PuzzleRush` | `@/features/puzzle-trainer/components/PuzzleRush` | `/puzzle/rush` |
+| 22 | `DailyPuzzle` | `@/features/puzzle-trainer/components/DailyPuzzle` | `/puzzle/daily` |
+| 23 | `ThemeDrill` | `@/features/puzzle-trainer/components/ThemeDrill` | `/puzzle/theme/:themeId` |
+| 24 | `HelpHome` | `@/features/help-center/components/HelpHome` | `/help` |
+| 25 | `HelpArticle` | `@/features/help-center/components/HelpArticle` | `/help/article/:articleId` |
+| 26 | `OnboardingFlow` | `@/features/onboarding/components/OnboardingFlow` | `/onboarding` |
+| 27 | `RangeLearnPage` | `@/features/range-trainer/components/RangeLearnPage` | `/range-trainer/learn` |
+| 28 | `RangeQuizPage` | `@/features/range-trainer/components/RangeQuizPage` | `/range-trainer/quiz` |
+| 29 | `PotOddsQuizPage` | `@/features/pot-odds/components/PotOddsQuizPage` | `/pot-odds/quiz` |
 
 ## 已声明的 URL 路径
 
-> 从 router 配置提取的 `path:` 字符串与 `index` 路由（源码顺序去重，含 AppLayout 与 BlankLayout 两个分支），共 44 条。
+> 从 router 配置提取的 `path:` 字符串与 `index` 路由（源码顺序去重，含 AppLayout 与 BlankLayout 两个分支），共 36 条。
 
 - `/`
-- `/range-trainer`
-- `/pot-odds`
-- `/gto-simulator`
-- `/gto-simulator/result/:sessionId`
-- `/hand-history`
-- `/hand-history/import`
+- `/lesson/:lessonId`
+- `/lesson`
+- `/drill`
+- `/quick`
 - `/progress`
 - `/progress/range`
 - `/progress/gto`
 - `/leaderboard`
 - `/settings`
+- `/help`
+- `/help/article/:articleId`
 - `/academy`
 - `/academy/basics`
-- `/academy/concept-graph`
-- `/academy/tracks`
-- `/academy/search`
-- `/academy/placement`
-- `/academy/checkpoint/:level`
-- `/academy/bookmarks`
-- `/academy/bibliography`
-- `/academy/quick-drill`
-- `/academy/certification/:level`
-- `/academy/lesson/:lessonId`
+- `/gto-simulator`
+- `/gto-simulator/result/:sessionId`
+- `/hand-history`
+- `/hand-history/import`
 - `/theory`
 - `/theory/chapter/:chapterId`
 - `/theory/review`
-- `/theory/placement`
-- `/theory/checkpoint/:levelId`
-- `/theory/glossary`
-- `/theory/search`
-- `/theory/bibliography`
-- `/puzzle`
 - `/puzzle/rush`
 - `/puzzle/daily`
 - `/puzzle/theme/:themeId`
-- `/help`
-- `/help/article/:articleId`
+- `/academy/lesson/:lessonId`
+- `/academy/quick-drill`
+- `/academy/tracks`
+- `/range-trainer`
+- `/pot-odds`
+- `/puzzle`
 - `/onboarding`
 - `/range-trainer/learn`
 - `/range-trainer/quiz`
@@ -154,8 +131,12 @@
 | `/hand-history` | feature（随路由并行加载） | `handHistory`, `common` |
 | `/progress/range` | feature（随路由并行加载） | `progress`, `common` |
 | `/progress/gto` | feature（随路由并行加载） | `progress`, `common` |
-| `/progress` | feature（随路由并行加载） | `progress`, `dashboard`, `common`, `achievements`, `elo` |
+| `/progress` | feature（随路由并行加载） | `progress`, `dashboard`, `common`, `achievements`, `elo`, `leaderboard`, `dailyChallenge`, `mood` |
 | `/academy/quick-drill` | feature（随路由并行加载） | `quickDrill`, `academy` |
+| `/lesson/:lessonId` | feature（随路由并行加载） | `academy`, `drills`, `gto`, `theory` |
+| `/lesson` | feature（随路由并行加载） | `academy` |
+| `/drill` | feature（随路由并行加载） | `rangeTrainer` |
+| `/quick` | feature（随路由并行加载） | `quickDrill`, `academy` |
 | `/academy/basics` | feature（随路由并行加载） | `academy` |
 | `/academy/concept-graph` | feature（随路由并行加载） | `academy` |
 | `/academy/tracks` | feature（随路由并行加载） | `academy` |
@@ -175,6 +156,6 @@
 ## 生成统计
 
 - 模块数：10（自检阈值 = 10）
-- lazy 声明数：44（自检阈值 >= 21）
+- lazy 声明数：29（自检阈值 >= 21）
 - agent 文件数：12（自检阈值 >= 10）
-- 已声明 URL 数：44
+- 已声明 URL 数：36

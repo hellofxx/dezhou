@@ -2,10 +2,12 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import AppLayout from '@/layouts/AppLayout';
 import BlankLayout from '@/layouts/BlankLayout';
+import SettingsRoute from '@/layouts/SettingsRoute';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { ErrorBoundary } from '@/shared/components/system/ErrorBoundary';
-import { preloadI18n, preloadFeature } from '@/i18n/preload';
+import { preloadI18n } from '@/i18n/preload';
 import { FEATURE_GROUPS } from '@/i18n/moduleRegistry';
+import { LegacyLessonRedirect, LegacyRedirect } from './legacyRedirects';
 
 type PageModule = { default: React.ComponentType<unknown> };
 type PageLoader = () => Promise<PageModule>;
@@ -19,64 +21,37 @@ function lazyPage(loader: PageLoader, group: keyof typeof FEATURE_GROUPS) {
   return lazy(() => Promise.all([loader(), preloadI18n(keys)]).then(([mod]) => mod));
 }
 
-/**
- * 特殊路由懒加载：支持 preloadFeature（用于 academy-course 动态注入）。
- * group 收窄为字面量类型：当前仅课程路由需要额外 preloadFeature 分流
- * （ academy-course 课程内容加载失败会 reject，路由层须有 ErrorBoundary 兜底防白屏）。
- */
-function lazyPageWithFeature(loader: PageLoader, group: '/academy/lesson/:lessonId') {
-  return lazy(() => Promise.all([
-    loader(),
-    preloadFeature(group)
-  ]).then(([mod]) => mod));
-}
-
 // Lazy-loaded pages
 const JourneyHome = lazyPage(() => import('@/features/progress/components/path/JourneyHome'), '/');
-const RangeTrainerHome = lazyPage(() => import('@/features/range-trainer/components/RangeTrainerHome'), '/range-trainer');
-const RangeLearnPage = lazyPage(() => import('@/features/range-trainer/components/RangeLearnPage'), '/range-trainer/learn');
-const RangeQuizPage = lazyPage(() => import('@/features/range-trainer/components/RangeQuizPage'), '/range-trainer/quiz');
-const PotOddsPage = lazyPage(() => import('@/features/pot-odds/components/PotOddsPage'), '/pot-odds');
-const PotOddsQuizPage = lazyPage(() => import('@/features/pot-odds/components/PotOddsQuizPage'), '/pot-odds/quiz');
+const LessonRoute = lazyPage(() => import('@/features/strategy-academy/components/LessonRoute'), '/lesson/:lessonId');
+const LessonEntry = lazyPage(() => import('@/features/strategy-academy/components/LessonEntry'), '/lesson');
+const DrillHub = lazyPage(() => import('@/features/range-trainer/components/DrillHub'), '/drill');
+const QuickDrill = lazyPage(() => import('@/features/strategy-academy/components/QuickDrill'), '/quick');
+const ProgressPage = lazyPage(() => import('@/features/progress/components/replay/ProgressPage'), '/progress');
+const RangeStatsPage = lazyPage(() => import('@/features/progress/components/stats/RangeStatsPage'), '/progress/range');
+const GTOStatsPage = lazyPage(() => import('@/features/progress/components/stats/GTOStatsPage'), '/progress/gto');
+const LeaderboardPage = lazyPage(() => import('@/features/progress/components/achievement/Leaderboard'), '/leaderboard');
+const AcademyHome = lazyPage(() => import('@/features/strategy-academy/components/AcademyHome'), '/academy');
+const BasicsIntro = lazyPage(() => import('@/features/strategy-academy/components/BasicsIntro'), '/academy/basics');
 const GTOSimulatorHome = lazyPage(() => import('@/features/gto-simulator/components/GTOSimulatorHome'), '/gto-simulator');
 const GTOResultPage = lazyPage(() => import('@/features/gto-simulator/components/GTOResultPage'), '/gto-simulator/result/:sessionId');
 const GTOSessionPage = lazyPage(() => import('@/features/gto-simulator/components/GTOSessionPage'), '/gto-simulator/session/:scenarioId');
 const HandHistoryList = lazyPage(() => import('@/features/hand-history/components/HandHistoryList'), '/hand-history');
 const HandImportPage = lazyPage(() => import('@/features/hand-history/components/HandImportPage'), '/hand-history/import');
 const HandReplayPage = lazyPage(() => import('@/features/hand-history/components/HandReplayPage'), '/hand-history/:handId');
-const ProgressPage = lazyPage(() => import('@/features/progress/components/replay/ProgressPage'), '/progress');
-const SettingsPage = lazyPage(() => import('@/features/progress/components/settings/SettingsPage'), '/settings');
-const RangeStatsPage = lazyPage(() => import('@/features/progress/components/stats/RangeStatsPage'), '/progress/range');
-const GTOStatsPage = lazyPage(() => import('@/features/progress/components/stats/GTOStatsPage'), '/progress/gto');
-const LeaderboardPage = lazyPage(() => import('@/features/progress/components/achievement/Leaderboard'), '/leaderboard');
-const AcademyHome = lazyPage(() => import('@/features/strategy-academy/components/AcademyHome'), '/academy');
-const CourseView = lazyPageWithFeature(() => import('@/features/strategy-academy/components/CourseView'), '/academy/lesson/:lessonId');
-const BasicsIntro = lazyPage(() => import('@/features/strategy-academy/components/BasicsIntro'), '/academy/basics');
-const ConceptGraphView = lazyPage(() => import('@/features/strategy-academy/components/ConceptGraphView'), '/academy/concept-graph');
-const LearningTracksView = lazyPage(() => import('@/features/strategy-academy/components/LearningTracksView'), '/academy/tracks');
-const StrategySearchPage = lazyPage(() => import('@/features/strategy-academy/components/StrategySearchPage'), '/academy');
-const PlacementTestPage = lazyPage(() => import('@/features/strategy-academy/components/PlacementTestPage'), '/academy');
-const LevelCheckpointPage = lazyPage(() => import('@/features/strategy-academy/components/LevelCheckpointPage'), '/academy');
-const StrategyBookmarksPage = lazyPage(() => import('@/features/strategy-academy/components/StrategyBookmarksPage'), '/academy');
-const StrategyBibliographyPage = lazyPage(() => import('@/features/strategy-academy/components/StrategyBibliographyPage'), '/academy');
-const QuickDrill = lazyPage(() => import('@/features/strategy-academy/components/QuickDrill'), '/academy/quick-drill');
-const LevelCertification = lazyPage(() => import('@/features/strategy-academy/components/LevelCertification'), '/academy/certification/:level');
-const OnboardingFlow = lazyPage(() => import('@/features/onboarding/components/OnboardingFlow'), '/onboarding');
-const PuzzleHome = lazyPage(() => import('@/features/puzzle-trainer/components/PuzzleHome'), '/puzzle');
-const PuzzleRush = lazyPage(() => import('@/features/puzzle-trainer/components/PuzzleRush'), '/puzzle/rush');
-const DailyPuzzle = lazyPage(() => import('@/features/puzzle-trainer/components/DailyPuzzle'), '/puzzle/daily');
-const ThemeDrill = lazyPage(() => import('@/features/puzzle-trainer/components/ThemeDrill'), '/puzzle/theme/:themeId');
 const TheoryHome = lazyPage(() => import('@/features/theory-academy/components/TheoryHome'), '/theory');
 const TheoryChapterView = lazyPage(() => import('@/features/theory-academy/components/TheoryChapterView'), '/theory/chapter/:chapterId');
 // 疑难标记复习清单：仅消费 theory.* 文案，故复用 '/theory' 分组（页面本体已在该分组内）
 const TheoryFlaggedReview = lazyPage(() => import('@/features/theory-academy/components/TheoryFlaggedReview'), '/theory');
-const TheoryPlacementPage = lazyPage(() => import('@/features/theory-academy/components/TheoryPlacementPage'), '/theory');
-const TheoryCheckpointPage = lazyPage(() => import('@/features/theory-academy/components/TheoryCheckpointPage'), '/theory');
-const TheoryGlossaryPage = lazyPage(() => import('@/features/theory-academy/components/TheoryGlossaryPage'), '/theory');
-const TheorySearchPage = lazyPage(() => import('@/features/theory-academy/components/TheorySearchPage'), '/theory');
-const TheoryBibliographyPage = lazyPage(() => import('@/features/theory-academy/components/TheoryBibliographyPage'), '/theory');
+const PuzzleRush = lazyPage(() => import('@/features/puzzle-trainer/components/PuzzleRush'), '/puzzle/rush');
+const DailyPuzzle = lazyPage(() => import('@/features/puzzle-trainer/components/DailyPuzzle'), '/puzzle/daily');
+const ThemeDrill = lazyPage(() => import('@/features/puzzle-trainer/components/ThemeDrill'), '/puzzle/theme/:themeId');
 const HelpHome = lazyPage(() => import('@/features/help-center/components/HelpHome'), '/help');
 const HelpArticle = lazyPage(() => import('@/features/help-center/components/HelpArticle'), '/help/article/:articleId');
+const OnboardingFlow = lazyPage(() => import('@/features/onboarding/components/OnboardingFlow'), '/onboarding');
+const RangeLearnPage = lazyPage(() => import('@/features/range-trainer/components/RangeLearnPage'), '/range-trainer/learn');
+const RangeQuizPage = lazyPage(() => import('@/features/range-trainer/components/RangeQuizPage'), '/range-trainer/quiz');
+const PotOddsQuizPage = lazyPage(() => import('@/features/pot-odds/components/PotOddsQuizPage'), '/pot-odds/quiz');
 
 function LazyWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -86,49 +61,54 @@ function LazyWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** 旧深链 → 冻结路由表：保留 query，replace 不留历史 */
+function redirect(to: string) {
+  return <LazyWrapper><LegacyRedirect to={to} /></LazyWrapper>;
+}
+
 export const appRoutes: RouteObject[] = [
   {
     path: '/',
     element: <AppLayout />,
     children: [
       { index: true, element: <LazyWrapper><ErrorBoundary><JourneyHome /></ErrorBoundary></LazyWrapper> },
-      { path: 'range-trainer', element: <LazyWrapper><RangeTrainerHome /></LazyWrapper> },
-      { path: 'pot-odds', element: <LazyWrapper><PotOddsPage /></LazyWrapper> },
-      { path: 'gto-simulator', element: <LazyWrapper><ErrorBoundary><GTOSimulatorHome /></ErrorBoundary></LazyWrapper> },
-      { path: 'gto-simulator/result/:sessionId', element: <LazyWrapper><GTOResultPage /></LazyWrapper> },
-      { path: 'hand-history', element: <LazyWrapper><HandHistoryList /></LazyWrapper> },
-      { path: 'hand-history/import', element: <LazyWrapper><HandImportPage /></LazyWrapper> },
+      // 课程：/lesson/:lessonId（theory: 前缀转理论章节，其余走 CourseView）/ /lesson（解析下一课后重定向）
+      { path: 'lesson/:lessonId', element: <LazyWrapper><ErrorBoundary><LessonRoute /></ErrorBoundary></LazyWrapper> },
+      { path: 'lesson', element: <LazyWrapper><LessonEntry /></LazyWrapper> },
+      // 训练场 / 速训
+      { path: 'drill', element: <LazyWrapper><ErrorBoundary><DrillHub /></ErrorBoundary></LazyWrapper> },
+      { path: 'quick', element: <LazyWrapper><QuickDrill /></LazyWrapper> },
+      // 进度中心
       { path: 'progress', element: <LazyWrapper><ProgressPage /></LazyWrapper> },
       { path: 'progress/range', element: <LazyWrapper><RangeStatsPage /></LazyWrapper> },
       { path: 'progress/gto', element: <LazyWrapper><GTOStatsPage /></LazyWrapper> },
       { path: 'leaderboard', element: <LazyWrapper><LeaderboardPage /></LazyWrapper> },
-      { path: 'settings', element: <LazyWrapper><SettingsPage /></LazyWrapper> },
+      // 设置纸条（浮层与路由同构，关闭即回首页）
+      { path: 'settings', element: <LazyWrapper><SettingsRoute /></LazyWrapper> },
+      // 帮助
+      { path: 'help', element: <LazyWrapper><ErrorBoundary><HelpHome /></ErrorBoundary></LazyWrapper> },
+      { path: 'help/article/:articleId', element: <LazyWrapper><ErrorBoundary><HelpArticle /></ErrorBoundary></LazyWrapper> },
+      // 次要保留（不进导航）：全部课程 / 理论 / 复盘 / 排行 / 细分统计 / 谜题子模式
       { path: 'academy', element: <LazyWrapper><ErrorBoundary><AcademyHome /></ErrorBoundary></LazyWrapper> },
+      // 基础入门：L1 课时的先修前置（完成后进入 l1-basics）
       { path: 'academy/basics', element: <LazyWrapper><BasicsIntro /></LazyWrapper> },
-      { path: 'academy/concept-graph', element: <LazyWrapper><ConceptGraphView /></LazyWrapper> },
-      { path: 'academy/tracks', element: <LazyWrapper><LearningTracksView /></LazyWrapper> },
-      { path: 'academy/search', element: <LazyWrapper><StrategySearchPage /></LazyWrapper> },
-      { path: 'academy/placement', element: <LazyWrapper><PlacementTestPage /></LazyWrapper> },
-      { path: 'academy/checkpoint/:level', element: <LazyWrapper><LevelCheckpointPage /></LazyWrapper> },
-      { path: 'academy/bookmarks', element: <LazyWrapper><StrategyBookmarksPage /></LazyWrapper> },
-      { path: 'academy/bibliography', element: <LazyWrapper><StrategyBibliographyPage /></LazyWrapper> },
-      { path: 'academy/quick-drill', element: <LazyWrapper><QuickDrill /></LazyWrapper> },
-      { path: 'academy/certification/:level', element: <LazyWrapper><LevelCertification /></LazyWrapper> },
-      { path: 'academy/lesson/:lessonId', element: <LazyWrapper><ErrorBoundary><CourseView /></ErrorBoundary></LazyWrapper> },
+      { path: 'gto-simulator', element: <LazyWrapper><ErrorBoundary><GTOSimulatorHome /></ErrorBoundary></LazyWrapper> },
+      { path: 'gto-simulator/result/:sessionId', element: <LazyWrapper><GTOResultPage /></LazyWrapper> },
+      { path: 'hand-history', element: <LazyWrapper><HandHistoryList /></LazyWrapper> },
+      { path: 'hand-history/import', element: <LazyWrapper><HandImportPage /></LazyWrapper> },
       { path: 'theory', element: <LazyWrapper><ErrorBoundary><TheoryHome /></ErrorBoundary></LazyWrapper> },
       { path: 'theory/chapter/:chapterId', element: <LazyWrapper><TheoryChapterView /></LazyWrapper> },
       { path: 'theory/review', element: <LazyWrapper><TheoryFlaggedReview /></LazyWrapper> },
-      { path: 'theory/placement', element: <LazyWrapper><TheoryPlacementPage /></LazyWrapper> },
-      { path: 'theory/checkpoint/:levelId', element: <LazyWrapper><TheoryCheckpointPage /></LazyWrapper> },
-      { path: 'theory/glossary', element: <LazyWrapper><TheoryGlossaryPage /></LazyWrapper> },
-      { path: 'theory/search', element: <LazyWrapper><TheorySearchPage /></LazyWrapper> },
-      { path: 'theory/bibliography', element: <LazyWrapper><TheoryBibliographyPage /></LazyWrapper> },
-      { path: 'puzzle', element: <LazyWrapper><PuzzleHome /></LazyWrapper> },
       { path: 'puzzle/rush', element: <LazyWrapper><PuzzleRush /></LazyWrapper> },
       { path: 'puzzle/daily', element: <LazyWrapper><DailyPuzzle /></LazyWrapper> },
       { path: 'puzzle/theme/:themeId', element: <LazyWrapper><ThemeDrill /></LazyWrapper> },
-      { path: 'help', element: <LazyWrapper><ErrorBoundary><HelpHome /></ErrorBoundary></LazyWrapper> },
-      { path: 'help/article/:articleId', element: <LazyWrapper><ErrorBoundary><HelpArticle /></ErrorBoundary></LazyWrapper> },
+      // 旧深链重定向（保留 query）
+      { path: 'academy/lesson/:lessonId', element: <LazyWrapper><LegacyLessonRedirect /></LazyWrapper> },
+      { path: 'academy/quick-drill', element: redirect('/quick') },
+      { path: 'academy/tracks', element: redirect('/') },
+      { path: 'range-trainer', element: redirect('/drill?mode=range') },
+      { path: 'pot-odds', element: redirect('/drill?mode=odds') },
+      { path: 'puzzle', element: redirect('/drill?mode=puzzle') },
     ],
   },
   {

@@ -190,5 +190,35 @@
     "title": "Progress Cannot Be Saved",
     "description": "Local storage is full. Progress may be lost. Go to Settings → Data Management to export a backup.",
     "action": "Go to Settings"
+  },
+  "tabs": {
+    "ariaLabel": "Progress views",
+    "overview": "Overview",
+    "replay": "Replay",
+    "leaderboard": "Leaderboard"
+  },
+  "recentTraining": {
+    "title": "Recent Training",
+    "sessions": "Sessions",
+    "questions": "Questions",
+    "accuracy": "Accuracy",
+    "justNow": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{n}}d ago",
+    "weeksAgo": "{{n}}w ago",
+    "monthsAgo": "{{n}}mo ago",
+    "yearsAgo": "{{n}}y ago",
+    "viewAllReplays": "Review all hands",
+    "empty": {
+      "title": "No training records",
+      "description": "Complete any training and your history will show up here."
+    },
+    "timeRange": {
+      "ariaLabel": "Time range",
+      "7d": "7D",
+      "30d": "30D",
+      "90d": "90D",
+      "all": "All"
+    }
   }
 }

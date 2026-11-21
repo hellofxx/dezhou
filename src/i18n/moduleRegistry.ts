@@ -128,9 +128,19 @@ export const FEATURE_GROUPS = {
   '/hand-history': ['handHistory', 'common'],
   '/progress/range': ['progress', 'common'],
   '/progress/gto': ['progress', 'common'],
-  // ProgressPage 渲染 AchievementBadges（achievements）与 WeaknessAnalysis（elo）
-  '/progress': ['progress', 'dashboard', 'common', 'achievements', 'elo'],
+  // ProgressPage 三分区：概览渲染成就入口（achievements）与 WeaknessAnalysis（elo）、
+  // 今日任务与情绪（dailyChallenge / mood）；排行分区直接复用 Leaderboard（leaderboard）
+  '/progress': ['progress', 'dashboard', 'common', 'achievements', 'elo', 'leaderboard', 'dailyChallenge', 'mood'],
   '/academy/quick-drill': ['quickDrill', 'academy'],
+  // 批次 3 冻结路由表：课程 / 训练场 / 速训三条主入口
+  // LessonRoute 渲染 CourseView → DrillLessonRouter（drills / gto），完成页理论锚点需 theory
+  '/lesson/:lessonId': ['academy', 'drills', 'gto', 'theory'],
+  // LessonEntry 只解析「下一课」后重定向，仅需课程标题
+  '/lesson': ['academy'],
+  // DrillHub 训练枢纽（range-trainer 持有）：四张训练台卡片 + 今日弱项文案
+  '/drill': ['rangeTrainer'],
+  // QuickDrill 复用策略学院组件（academy）+ 速训结算文案（quickDrill）
+  '/quick': ['quickDrill', 'academy'],
   // BasicsIntro 仅消费 academy（basicsIntro.*），不渲染 drill 组件
   '/academy/basics': ['academy'],
   '/academy/concept-graph': ['academy'],

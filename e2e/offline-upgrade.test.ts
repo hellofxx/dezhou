@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 import { guardBrowserErrors } from './fixtures/browserErrors';
-import { APP_ROOT } from './fixtures/app';
+import { APP_ROOT, navigateFromSidebar } from './fixtures/app';
 import { goToProgressPage, progressSessionCount, runRangeQuizSession } from './fixtures/rangeTraining';
 import { startStaticSite, type StaticSite } from './fixtures/staticSite';
 import {
@@ -151,7 +151,7 @@ test('切换部署构建后：旧页面仍从旧缓存取旧 chunk，关闭旧�
   expect(await readActiveCacheName(page)).toBe(buildA.cacheName);
 
   // 5. A 旧页面 SPA 导航到从未访问的帮助中心：chunk 只能来自 A 的旧预缓存
-  await page.locator('aside').getByRole('link', { name: HELP_TITLE }).click();
+  await navigateFromSidebar(page, HELP_TITLE);
   await expect(page).toHaveURL(/\/dezhou\/help$/);
   await expect(page.getByRole('heading', { level: 1, name: HELP_TITLE })).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: HELP_QUICKSTART })).toBeVisible();

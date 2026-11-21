@@ -1,10 +1,17 @@
 import { expect, type Page } from '@playwright/test';
-import { dismissGlobalDialog, navigateFromSidebar } from './app';
+import {
+  APP_ROOT,
+  dismissGlobalDialog,
+  expectPageHeading,
+  navigateFromSidebar,
+  sidebarNav,
+} from './app';
 
 /**
- * 手牌范围训练闭环（L4 共用流程）：侧边栏 → 测验模式 → 配置 → 逐题作答 → 结果页。
+ * 手牌范围训练闭环（L4 共用流程）：进入测验 → 配置 → 逐题作答 → 结果页 → 进度中心。
  *
  * 全程走真实 UI（不写 localStorage / 不碰 store）：
+ * - 入口 = 冻结 IA 保留的会话路由 `/range-trainer/quiz`（深链进真实页面，不是状态直写）
  * - 训练配置 = QuizConfig 的两个 Select（无限时 + 题量）
  * - 答题 = 键盘 1/2/3（fold/call/raise）+ Space 推进，不假设随机题目的对错
  * - 末题答错会追加一道「救援题」（range-trainer store 的 rescueUsed 机制），
@@ -52,10 +59,12 @@ export async function runRangeQuizSession(
   // 循环硬上限：配置题 + 救援题，留足余量防死循环（超限即失败）
   const maxIterations = questions * 3;
 
-  await navigateFromSidebar(page, '手牌范围训练');
-  await expect(page).toHaveURL(/\/dezhou\/range-trainer$/);
-  await page.getByRole('button', { name: '测验模式' }).click();
+  // 入口：冻结 IA 保留的会话路由，直达测验页（配置卡片先行渲染）。
+  // 用当前页 origin 而非 baseURL：离线升级用例的自定义端口站点与默认 webServer 不同源。
+  const currentOrigin = new URL(page.url()).origin;
+  await page.goto(`${currentOrigin}${APP_ROOT}range-trainer/quiz`);
   await expect(page).toHaveURL(/\/dezhou\/range-trainer\/quiz$/);
+  await expect(page.getByRole('button', { name: '开始训练' })).toBeVisible();
 
   // 配置：无限时（第 3 个 Select）+ 题量（第 4 个 Select）
   await selectConfigOption(page, 2, '无限时');
@@ -105,12 +114,18 @@ export async function runRangeQuizSession(
   return { answered, sessionTotal };
 }
 
-/** 结果页「返回首页」→ 侧边栏进入进度统计（记录此时已进入待落库状态） */
+/**
+ * 结果页「返回首页」退出会话 → 侧栏进入进度中心（记录此时已进入待落库状态）。
+ *
+ * 结果页渲染在无侧栏布局中，退出后先等主导航出现，再按冻结 IA 文案「进度中心」进入进度页；
+ * 具体落到哪个壳层首页由产品决定，这里只断言「回到了有主导航的壳层」。
+ */
 export async function goToProgressPage(page: Page): Promise<void> {
   await page.getByRole('button', { name: '返回首页' }).click();
-  await expect(page).toHaveURL(/\/dezhou\/range-trainer$/);
-  await navigateFromSidebar(page, '进度统计');
+  await expect(sidebarNav(page)).toBeVisible();
+  await navigateFromSidebar(page, '进度中心');
   await expect(page).toHaveURL(/\/dezhou\/progress$/);
+  await expectPageHeading(page, '进度中心');
 }
 
 /** 进度页「总训练次数」读数（records 走 IndexedDB，异步水合，刷新后仍需成立） */
