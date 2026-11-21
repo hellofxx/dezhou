@@ -4,6 +4,7 @@ import ProgressReplay from './ProgressReplay';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import type {
   AcademyDataSource,
+  AcademyLearningStagesSnapshot,
   AcademyLessonAttemptSnapshot,
   AcademyLessonMeta,
 } from '@/shared/types/academyDataSource';
@@ -23,6 +24,7 @@ const META: Record<string, AcademyLessonMeta> = {
 
 const EMPTY_ATTEMPTS: Record<string, AcademyLessonAttemptSnapshot> = {};
 const EMPTY_PROGRESS = { completedLessons: [] as const };
+const EMPTY_STAGES: AcademyLearningStagesSnapshot = { stages: [] };
 
 function installSource(attempts: Record<string, AcademyLessonAttemptSnapshot>) {
   const source: AcademyDataSource = {
@@ -30,6 +32,7 @@ function installSource(attempts: Record<string, AcademyLessonAttemptSnapshot>) {
     getLessonMeta: (lessonId) => META[lessonId],
     getAcademyProgressSnapshot: () => EMPTY_PROGRESS,
     getLessonAttemptsSnapshot: () => attempts,
+    getLearningStagesSnapshot: () => EMPTY_STAGES,
     subscribe: () => () => {},
   };
   registerAcademyDataSource(source);

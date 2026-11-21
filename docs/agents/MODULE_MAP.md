@@ -23,10 +23,10 @@
 | `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
 | `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
 | `pot-odds` | `pot-odds-dev` | `PotOddsPage` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
-| `progress` | `progress-dev` | `Dashboard` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `theory`, `variant` | 69 | — | 78 |
+| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mentor`, `mood`, `nav`, `progress`, `rankUp`, `review`, `sessionLimit`, `settings`, `spacedRepetition`, `streak`, `theory`, `variant` | 70 | — | 80 |
 | `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleHome` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
 | `range-trainer` | `range-trainer-dev` | `RangeTrainerHome` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 12 | `progress` | 17 |
-| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 115 | `progress` | 112 |
+| `strategy-academy` | `strategy-academy-dev` | `AcademyHome` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 116 | `progress` | 112 |
 | `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v5）` | `academy`, `theory`, `variant` | 76 | `progress` | 64 |
 
 ## Lazy 路由表
@@ -36,7 +36,7 @@
 
 | # | 组件 | import 路径 | i18n 分组 key |
 |---|---|---|---|
-| 1 | `Dashboard` | `@/features/progress/components/dashboard/Dashboard` | `/` |
+| 1 | `JourneyHome` | `@/features/progress/components/path/JourneyHome` | `/` |
 | 2 | `RangeTrainerHome` | `@/features/range-trainer/components/RangeTrainerHome` | `/range-trainer` |
 | 3 | `RangeLearnPage` | `@/features/range-trainer/components/RangeLearnPage` | `/range-trainer/learn` |
 | 4 | `RangeQuizPage` | `@/features/range-trainer/components/RangeQuizPage` | `/range-trainer/quiz` |

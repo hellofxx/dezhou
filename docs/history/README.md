@@ -21,6 +21,7 @@
 | [`design/agent-tools-guard.md`](./design/agent-tools-guard.md) | Agent Tools Guard 设计规格 | 2026-11-04 | 已由 `scripts/validate-agent-tools.ts` 实现 |
 | [`ops/github-actions-diagnosis-2026-09-24.md`](./ops/github-actions-diagnosis-2026-09-24.md) | GitHub Actions 部署失败诊断 | 2026-11-04 | 当前流程见 `docs/ops/DEPLOY_CHECKLIST.md` |
 | [`design/ui-migration-batch1-2026-11-21/README.md`](./design/ui-migration-batch1-2026-11-21/README.md) | 迁移批次 1 木纹壳层视觉对照 | 2026-11-21 | 一次性复核记录；设计事实源仍为 `DESIGN.md` |
+| [`design/ui-migration-batch2-2026-11-21/README.md`](./design/ui-migration-batch2-2026-11-21/README.md) | 迁移批次 2 学习路径首页视觉对照 | 2026-11-21 | 一次性复核记录；设计事实源仍为 `DESIGN.md` |
 
 ## 已删除的重复文档
 

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, cleanup } from '@testing-library/react';
 import { useAcademyProgressSnapshot } from '../../hooks/useAcademyDataSource';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import type { AcademyDataSource, AcademyLessonAttemptSnapshot, AcademyLessonMeta, AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
+import type { AcademyDataSource, AcademyLearningStagesSnapshot, AcademyLessonAttemptSnapshot, AcademyLessonMeta, AcademyProgressSnapshot } from '@/shared/types/academyDataSource';
 import { act } from 'react';
 
 /**
@@ -28,6 +28,7 @@ function TestComponent() {
  * 每次调用合成新对象会让 useSyncExternalStore 判定 store 恒变，触发无限重渲染。
  */
 const EMPTY_ATTEMPTS: Record<string, AcademyLessonAttemptSnapshot> = {};
+const EMPTY_STAGES: AcademyLearningStagesSnapshot = { stages: [] };
 const PROGRESS_LATE: AcademyProgressSnapshot = { completedLessons: ['l3-cbet-q1'] };
 const PROGRESS_READY: AcademyProgressSnapshot = { completedLessons: ['l4-gto-basics-1'] };
 
@@ -52,6 +53,7 @@ describe('Registry late registration self-healing', () => {
       }),
       getAcademyProgressSnapshot: () => PROGRESS_LATE,
       getLessonAttemptsSnapshot: () => EMPTY_ATTEMPTS,
+      getLearningStagesSnapshot: () => EMPTY_STAGES,
       findNextLesson: (): AcademyLessonMeta | null => null,
       getLessonMeta: (_lessonId: string): AcademyLessonMeta | undefined => undefined,
     };
@@ -92,6 +94,7 @@ describe('Registry late registration self-healing', () => {
       }),
       getAcademyProgressSnapshot: () => PROGRESS_READY,
       getLessonAttemptsSnapshot: () => EMPTY_ATTEMPTS,
+      getLearningStagesSnapshot: () => EMPTY_STAGES,
       findNextLesson: (): AcademyLessonMeta | null => null,
       getLessonMeta: (_lessonId: string): AcademyLessonMeta | undefined => undefined,
     };

@@ -59,6 +59,18 @@
     "mastered": "已掌握",
     "dueRate": "到期率"
   },
+  "path": {
+    "title": "学习旅程",
+    "eyebrow": "脚手架路径",
+    "locked": "未解锁",
+    "lessons": "{{done}}/{{total}} 课",
+    "nextTitle": "下一步 · {{stage}}",
+    "nextSub": "继续未完成的课时，完成后解锁后续阶段",
+    "continue": "继续学习",
+    "allCourses": "全部课程",
+    "startQuick": "开始速训",
+    "ringAria": "{{done}}/{{total}} 课时已完成"
+  },
   "trainingGrounds": {
     "title": "训练场",
     "subtitle": "六大核心模块",

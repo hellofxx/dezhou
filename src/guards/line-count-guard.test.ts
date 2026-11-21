@@ -49,7 +49,6 @@ const LEGACY_OVERSIZED_FILES: Record<string, OversizedEntry> = {
   'features/range-trainer/constants.ts': { maxLines: 516, reason: 'Phase 2 拆分待执行（常量数据表）' },
   'features/strategy-academy/components/QuickDrill.tsx': { maxLines: 513, reason: 'Phase 2 拆分待执行' },
   'features/hand-history/store.ts': { maxLines: 477, reason: 'Phase 2 拆分待执行' },
-  'features/progress/components/dashboard/Dashboard.tsx': { maxLines: 467, reason: '页面级组件' },
   'features/gto-simulator/utils/strategyCompare.ts': { maxLines: 452, reason: 'Phase 2 拆分待执行' },
   'shared/data/opponentProfiles.ts': { maxLines: 436, reason: 'Phase 2 拆分待执行（跨模块画像数据）' },
 };

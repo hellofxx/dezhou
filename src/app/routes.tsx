@@ -32,7 +32,7 @@ function lazyPageWithFeature(loader: PageLoader, group: '/academy/lesson/:lesson
 }
 
 // Lazy-loaded pages
-const Dashboard = lazyPage(() => import('@/features/progress/components/dashboard/Dashboard'), '/');
+const JourneyHome = lazyPage(() => import('@/features/progress/components/path/JourneyHome'), '/');
 const RangeTrainerHome = lazyPage(() => import('@/features/range-trainer/components/RangeTrainerHome'), '/range-trainer');
 const RangeLearnPage = lazyPage(() => import('@/features/range-trainer/components/RangeLearnPage'), '/range-trainer/learn');
 const RangeQuizPage = lazyPage(() => import('@/features/range-trainer/components/RangeQuizPage'), '/range-trainer/quiz');
@@ -91,7 +91,7 @@ export const appRoutes: RouteObject[] = [
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <LazyWrapper><ErrorBoundary><Dashboard /></ErrorBoundary></LazyWrapper> },
+      { index: true, element: <LazyWrapper><ErrorBoundary><JourneyHome /></ErrorBoundary></LazyWrapper> },
       { path: 'range-trainer', element: <LazyWrapper><RangeTrainerHome /></LazyWrapper> },
       { path: 'pot-odds', element: <LazyWrapper><PotOddsPage /></LazyWrapper> },
       { path: 'gto-simulator', element: <LazyWrapper><ErrorBoundary><GTOSimulatorHome /></ErrorBoundary></LazyWrapper> },

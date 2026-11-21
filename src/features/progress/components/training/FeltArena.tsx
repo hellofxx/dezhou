@@ -113,7 +113,7 @@ export default function FeltArena() {
             </div>
           </div>
 
-          <p className="text-[10px] text-[var(--ivory-muted)] relative z-10">
+          <p className="hidden sm:block text-[10px] text-[var(--ivory-muted)] relative z-10">
             {t('dashboard.feltArena.ready')}
           </p>
         </div>
@@ -151,7 +151,7 @@ export default function FeltArena() {
       </div>
 
       {/* §13.2.4：每日目标卡 — 移出 hero，压缩首屏高度；内容与语义不变 */}
-      <div className="felt-arena-goal mt-2 px-4 w-full max-w-[400px] mx-auto">
+      <div className="felt-arena-goal hidden md:block mt-2 px-4 w-full max-w-[560px] mx-auto">
         <DailyGoalCard
           completed={isToday ? emotion.dailyTotal : 0}
           total={dailyGoal}

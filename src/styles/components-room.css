@@ -3,7 +3,7 @@
    级联位置：tokens → base → components-core → 本分片（globals.css 按序 import）。
    木纹：src/app/woodTexture.ts 启动时把程序化瓦片写进 --wood-h / --wood-v；
    该模块不可用（无 2d context）时自动回退到 tokens.css 的纯轴向细纹。
-   旅程图（journey map）样式属批次 2，不在本分片内。
+   旅程图（journey map）样式属批次 2，见文件末尾「学习旅程图」段。
    ========================================================= */
 
 /* ---- Sidebar：竖向木纹（L 形木框的左腿） ---- */
@@ -18,4 +18,263 @@
   background-color: var(--walnut);
   background-image: var(--room-wood-h);
   background-size: var(--wood-size);
+}
+
+/* =========================================================
+   学习旅程图（批次 2 · JourneyTrack）
+   视觉对齐 prototype/assets/views.css 的 journey 段：单行黄铜导轨 +
+   48px 环形进度 + 铭牌 + 课时 chip + 下一步条。
+   颜色全部走 token / color-mix（禁字面 rgba，light 主题不加组件补丁）。
+   ========================================================= */
+.journey-panel {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ivory) 8%, transparent),
+    inset 0 -1px 0 rgba(10, 8, 4, 0.4),
+    0 10px 24px rgba(10, 8, 4, 0.35);
+}
+
+.journey-track {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  position: relative;
+}
+
+/* 导轨只在单行（≤4 阶段）时绘制；换行布局下横线会指向空位 */
+.journey-track.is-single-row::before {
+  content: '';
+  position: absolute;
+  top: 23px;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--room-hairline),
+    color-mix(in srgb, var(--brass) 22%, transparent)
+  );
+}
+
+.stage-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+.stage-ring {
+  border-radius: 50%;
+  background: var(--room-surface);
+  border: 1px solid var(--room-line);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 8px;
+}
+
+.stage-glyph {
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--room-ink-muted);
+}
+
+.stage-node.done .stage-glyph {
+  color: var(--success);
+}
+
+.stage-node.current .stage-ring {
+  border-color: color-mix(in srgb, var(--brass) 60%, transparent);
+  box-shadow: var(--shadow-brass-glow);
+}
+
+.stage-node.current .stage-glyph {
+  color: var(--brass-bright);
+}
+
+.stage-node.locked {
+  opacity: 0.55;
+}
+
+.stage-plaque {
+  width: 100%;
+  padding: 10px 10px 12px;
+  border-radius: var(--poker-radius-md);
+  border: 1px solid var(--room-line);
+  background: color-mix(in srgb, var(--room-surface) 55%, transparent);
+  transition:
+    border-color var(--poker-duration-fast) var(--poker-ease-standard),
+    box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
+}
+
+.stage-node.current .stage-plaque {
+  border-color: color-mix(in srgb, var(--brass) 45%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.stage-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--room-ink);
+}
+
+.stage-sub {
+  font-size: 10px;
+  color: var(--room-ink-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.stage-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--room-accent-text);
+  margin-top: 6px;
+}
+
+.stage-lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.lesson-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: color-mix(in srgb, var(--room-surface) 70%, transparent);
+  color: var(--room-ink-dim);
+  font-size: 11px;
+  font-weight: 500;
+  text-align: left;
+  transition:
+    border-color var(--poker-duration-fast) var(--poker-ease-standard),
+    background var(--poker-duration-fast) var(--poker-ease-standard);
+}
+
+.lesson-chip:hover {
+  border-color: color-mix(in srgb, var(--brass) 30%, transparent);
+}
+
+.lesson-chip .chip-state {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.lesson-chip.done {
+  color: var(--room-ink-muted);
+}
+
+.lesson-chip.done .chip-state {
+  color: var(--room-accent-text);
+}
+
+.lesson-chip.current {
+  color: var(--brass-bright);
+  border-color: color-mix(in srgb, var(--brass) 60%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brass) 18%, transparent),
+    color-mix(in srgb, var(--brass) 6%, transparent)
+  );
+}
+
+.lesson-chip.current .chip-state {
+  color: var(--brass-bright);
+}
+
+.lesson-chip.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.next-lesson {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--poker-radius-md);
+  border: 1px solid color-mix(in srgb, var(--brass) 30%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brass) 8%, transparent),
+    transparent 70%
+  );
+}
+
+.next-lesson .nl-icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--poker-radius-md);
+  color: var(--brass-bright);
+  background: color-mix(in srgb, var(--brass) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brass) 35%, transparent);
+}
+
+.nl-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--room-ink);
+}
+
+.nl-sub {
+  font-size: 11px;
+  color: var(--room-ink-muted);
+  margin-top: 2px;
+}
+
+/* 两列（平板）/ 单列（移动）自适应；换行后不画导轨 */
+@media (max-width: 1023px) {
+  .journey-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .journey-track.is-single-row::before {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .journey-track {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stage-node {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 12px;
+  }
+
+  .stage-ring {
+    margin-bottom: 0;
+  }
+
+  .stage-plaque {
+    flex: 1;
+  }
+
+  .next-lesson {
+    flex-wrap: wrap;
+  }
+
+  .next-lesson .nl-continue {
+    width: 100%;
+  }
 }

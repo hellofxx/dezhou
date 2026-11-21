@@ -100,7 +100,7 @@ export default function StreakRail() {
   const hasAccuracyData = sevenDayAccuracy.some((v) => v > 0);
 
   return (
-    <div className="streak-rail" style={{ marginTop: '-14px', marginBottom: '12px' }}>
+    <div className="streak-rail -mt-3.5 md:mt-0" style={{ marginBottom: '12px' }}>
       {/* Left: streak count */}
       <div className="streak-rail-item">
         <Flame style={{ width: '14px', height: '14px', color: 'var(--brass-bright)' }} />
@@ -147,7 +147,7 @@ export default function StreakRail() {
       <div className="streak-rail-divider" />
 
       {/* Today accuracy */}
-      <div className="streak-rail-item">
+      <div className="streak-rail-item streak-rail-acc">
         <span className="text-[10px] uppercase tracking-widest text-[var(--ivory-muted)] hidden sm:inline">
           {t('dashboard.streakRail.todayAccuracy')}
         </span>

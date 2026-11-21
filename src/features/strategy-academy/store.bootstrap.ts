@@ -6,14 +6,20 @@
  */
 import { registerAchievementSource } from '@/shared/stores/achievementRegistry';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import type { AcademyLessonAttemptSnapshot } from '@/shared/types/academyDataSource';
+import type { PokerVariant } from '@/shared/types/elo';
+import type {
+  AcademyLearningStagesSnapshot,
+  AcademyLessonAttemptSnapshot,
+} from '@/shared/types/academyDataSource';
 import type { LessonAttemptRecord } from './types';
 import { useAcademyStore } from './store';
 import { progressCommands } from '@/features/progress/api';
 import {
   findLessonSummaryById,
   getLevelSummaries,
+  getLevelSummariesByVariant,
 } from './utils/academyMeta';
+import { buildLearningStages } from './utils/learningStages';
 
 // 成就检查数据源：progress store 的 checkCondition 经注册表查询（T7/B4 idempotency）
 registerAchievementSource({
@@ -48,6 +54,19 @@ function getLessonAttemptsSnapshot(): Record<string, AcademyLessonAttemptSnapsho
   return cachedAttemptsSnapshot;
 }
 
+// 学习段（Level）快照：按 activeVariant 缓存，同变体复用同一对象（useSyncExternalStore 稳定引用）
+let cachedStagesVariant: PokerVariant | undefined;
+let cachedStagesSnapshot: AcademyLearningStagesSnapshot = { stages: [] };
+
+function getLearningStagesSnapshot(): AcademyLearningStagesSnapshot {
+  const variant = useAcademyStore.getState().activeVariant;
+  if (variant !== cachedStagesVariant) {
+    cachedStagesVariant = variant;
+    cachedStagesSnapshot = buildLearningStages(getLevelSummariesByVariant(variant));
+  }
+  return cachedStagesSnapshot;
+}
+
 registerAcademyDataSource({
   findNextLesson: (completedLessons) => {
     for (const level of getLevelSummaries()) {
@@ -65,6 +84,7 @@ registerAcademyDataSource({
   },
   getAcademyProgressSnapshot: () => useAcademyStore.getState().progress,
   getLessonAttemptsSnapshot,
+  getLearningStagesSnapshot,
   subscribe: (listener) => useAcademyStore.subscribe(listener),
 });
 

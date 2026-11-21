@@ -262,7 +262,7 @@
 .felt-arena-wrap { position: relative; width: 100%; }
 .felt-arena {
   position: relative; width: 100%; border-radius: 50% / 50%; padding: 14px 36px 12px;
-  margin-top: -12px; min-height: 190px; overflow: visible;
+  margin-top: -12px; min-height: 232px; overflow: visible;
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px;
   background:
     radial-gradient(ellipse 70% 60% at 50% 35%, color-mix(in srgb, var(--brass-bright) 10%, transparent), transparent 70%),
@@ -310,9 +310,9 @@
 .felt-arena-stats .daily-progress-chip {
   display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
   min-width: 104px; padding: 5px 10px; border-radius: 6px;
-  background: color-mix(in srgb, var(--brass) 10%, transparent);
+  background: var(--stable-ink);
   border: 1px solid color-mix(in srgb, var(--brass) 35%, transparent);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  box-shadow: 0 2px 8px rgba(10, 8, 4, 0.35);
 }
 .felt-arena-stats .casino-plaque {
   display: flex; flex-direction: column; justify-content: center; align-items: center;

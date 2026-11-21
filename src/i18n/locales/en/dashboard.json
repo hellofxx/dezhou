@@ -59,6 +59,18 @@
     "mastered": "Mastered",
     "dueRate": "Due Rate"
   },
+  "path": {
+    "title": "Learning Journey",
+    "eyebrow": "Scaffolded Path",
+    "locked": "Locked",
+    "lessons": "{{done}}/{{total}} lessons",
+    "nextTitle": "Next up · {{stage}}",
+    "nextSub": "Resume the next unfinished lesson to unlock what follows",
+    "continue": "Continue",
+    "allCourses": "All courses",
+    "startQuick": "Start drill",
+    "ringAria": "{{done}} of {{total}} lessons completed"
+  },
   "trainingGrounds": {
     "title": "Training Grounds",
     "subtitle": "Six Core Modules",

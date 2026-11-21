@@ -6,7 +6,7 @@ import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import { registerTheoryDataSource } from '@/shared/stores/theoryDataSourceRegistry';
 import type { TheoryChapterMeta, TheoryDataSource } from '@/shared/types/theoryDataSource';
 import { registerAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
-import type { AcademyDataSource } from '@/shared/types/academyDataSource';
+import type { AcademyDataSource, AcademyLearningStagesSnapshot } from '@/shared/types/academyDataSource';
 
 /**
  * 理论学院卡片（theory-review / theory-chapter）接入每日训练计划的守卫。
@@ -19,6 +19,9 @@ import type { AcademyDataSource } from '@/shared/types/academyDataSource';
  * - 注册表是模块级单例且有「注册前订阅 → 注册后补发」语义，故本文件按声明顺序推进：
  *   第一组断言冷启动（未注册）行为，之后的组才注册夹具。
  */
+
+/** 学习段快照夹具：契约要求稳定引用，故模块级常量复用 */
+const EMPTY_STAGES: AcademyLearningStagesSnapshot = { stages: [] };
 
 const CHAPTER: TheoryChapterMeta = {
   chapterId: 'fixture-chapter-a',
@@ -151,6 +154,7 @@ describe('理论卡 · 5 卡上限', () => {
       getLessonMeta: () => undefined,
       getAcademyProgressSnapshot: () => ({ completedLessons: [] }),
       getLessonAttemptsSnapshot: () => ({}),
+      getLearningStagesSnapshot: () => EMPTY_STAGES,
       subscribe: () => () => {},
     };
     registerAcademyDataSource(academySource);

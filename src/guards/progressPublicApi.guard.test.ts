@@ -222,12 +222,12 @@ describe('progress 公共入口守卫（禁深引 store / components / utils / t
     expect(
       collectViolations(
         LAZY_ROUTE_FILE,
-        "const Dashboard = lazyPage(() => import('@/features/progress/components/dashboard/Dashboard'), '/');",
+        "const JourneyHome = lazyPage(() => import('@/features/progress/components/path/JourneyHome'), '/');",
       ),
     ).toEqual([]);
     expect(
-      collectViolations(LAZY_ROUTE_FILE, "import Dashboard from '@/features/progress/components/dashboard/Dashboard';"),
-    ).toEqual([`${LAZY_ROUTE_FILE}:1 → src/features/progress/components/dashboard/Dashboard.tsx`]);
+      collectViolations(LAZY_ROUTE_FILE, "import JourneyHome from '@/features/progress/components/path/JourneyHome';"),
+    ).toEqual([`${LAZY_ROUTE_FILE}:1 → src/features/progress/components/path/JourneyHome.tsx`]);
   });
 
   it('除公共入口与登记例外外，生产代码不深引 progress 内部实现', () => {

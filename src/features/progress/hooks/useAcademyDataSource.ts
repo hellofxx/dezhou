@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { getAcademyDataSource, onAcademyDataRegister } from '@/shared/stores/academyDataSourceRegistry';
 import type {
+  AcademyLearningStagesSnapshot,
   AcademyLessonAttemptSnapshot,
   AcademyProgressSnapshot,
 } from '@/shared/types/academyDataSource';
@@ -20,6 +21,7 @@ import type {
 
 const EMPTY_PROGRESS: AcademyProgressSnapshot = { completedLessons: [] };
 const EMPTY_ATTEMPTS: Record<string, AcademyLessonAttemptSnapshot> = {};
+const EMPTY_STAGES: AcademyLearningStagesSnapshot = { stages: [] };
 
 /** 模块级稳定 subscribe：桥接数据源 subscribe + late registration 自愈 */
 function subscribeAcademy(listener: () => void): () => void {
@@ -49,6 +51,10 @@ function getLessonAttemptsSnapshot(): Record<string, AcademyLessonAttemptSnapsho
   return getAcademyDataSource()?.getLessonAttemptsSnapshot() ?? EMPTY_ATTEMPTS;
 }
 
+function getStagesSnapshot(): AcademyLearningStagesSnapshot {
+  return getAcademyDataSource()?.getLearningStagesSnapshot() ?? EMPTY_STAGES;
+}
+
 /** 订阅学院进度（completedLessons），Dashboard 每日训练计划用 */
 export function useAcademyProgressSnapshot(): AcademyProgressSnapshot {
   return useSyncExternalStore(subscribeAcademy, getProgressSnapshot, getProgressSnapshot);
@@ -61,4 +67,9 @@ export function useAcademyLessonAttemptsSnapshot(): Record<string, AcademyLesson
     getLessonAttemptsSnapshot,
     getLessonAttemptsSnapshot,
   );
+}
+
+/** 订阅当前变体的学习段（Level）快照，供 progress 展示学习段结构 */
+export function useAcademyLearningStages(): AcademyLearningStagesSnapshot {
+  return useSyncExternalStore(subscribeAcademy, getStagesSnapshot, getStagesSnapshot);
 }

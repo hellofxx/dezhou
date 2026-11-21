@@ -25,6 +25,27 @@ export interface AcademyLessonAttemptSnapshot {
   attempts: number;
 }
 
+/**
+ * 学院学习段（Level）只读快照条目。
+ * 由学院目录层（LevelSummary）投影而来，供 progress 展示学习段结构：
+ * id 兜底 `l<level>`，prerequisiteStageIds / lessonIds 展平为只读字符串数组。
+ */
+export interface AcademyLearningStage {
+  id: string;
+  level: number;
+  title: string;
+  description: string;
+  icon: string;
+  unlockRequirement: string;
+  prerequisiteStageIds: readonly string[];
+  lessonIds: readonly string[];
+}
+
+/** 当前变体的学习段快照（含顺序：按目录层 Level 序列排列） */
+export interface AcademyLearningStagesSnapshot {
+  stages: readonly AcademyLearningStage[];
+}
+
 export interface AcademyDataSource {
   /** 找下一未完成课程（按 LEVELS 顺序遍历标准课程） */
   findNextLesson(completedLessons: readonly string[]): AcademyLessonMeta | null;
@@ -40,6 +61,12 @@ export interface AcademyDataSource {
    * 同样必须返回稳定引用：实现方需按源对象引用缓存派生结果。
    */
   getLessonAttemptsSnapshot(): Record<string, AcademyLessonAttemptSnapshot>;
+  /**
+   * 当前变体的学习段（Level）快照。
+   * 同样必须返回稳定引用：实现方需按变体缓存派生结果，
+   * 同一变体内多次调用须返回同一对象（否则 useSyncExternalStore 无限重渲染）。
+   */
+  getLearningStagesSnapshot(): AcademyLearningStagesSnapshot;
   /** 订阅状态变化，返回取消订阅函数 */
   subscribe(listener: () => void): () => void;
 }

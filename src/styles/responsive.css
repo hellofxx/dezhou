@@ -42,6 +42,7 @@
     margin-top: 0 !important;
     padding: 6px !important;
   }
+  .felt-arena-stats > * { min-height: 56px; }
   .felt-arena-stats .plaque-sm { min-width: 62px; padding: 5px 6px; }
   .felt-arena-stats .plaque-sm .casino-plaque-value { font-size: 15px; }
   .felt-arena-stats .plaque-sm .casino-plaque-label { font-size: 6.5px; letter-spacing: 0.1em; }
@@ -57,7 +58,11 @@
 
   /* Hero compression: hide the ornamental suit row on phones */
   .felt-suit-row { display: none !important; }
-  .felt-arena-decor { margin: 2px 0 0 !important; }
+  .felt-arena-decor {
+    margin: 2px 0 0 !important;
+    transform: translateY(-14px) scale(0.8);
+    transform-origin: 50% 100%;
+  }
 
   /* Section eyebrow */
   .section-eyebrow { font-size: 8px; letter-spacing: 0.16em; margin-bottom: 4px; }
@@ -66,14 +71,16 @@
   .streak-rail {
     flex-wrap: nowrap;
     gap: 6px;
-    padding: 8px 10px;
+    padding: 8px 14px;
     overflow: visible;
   }
   .streak-rail-item { gap: 4px; flex-shrink: 0; }
   .streak-rail-dots {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     flex: 1 1 0;
     gap: 2px;
-    padding: 0;
+    padding: 0 6px;
     min-width: 0;
   }
   .streak-rail-dots .streak-dot {
@@ -105,7 +112,7 @@
   .quick-drill-title { font-size: 15px; line-height: 1.2; }
   .quick-drill-sub { font-size: 11px; margin-top: 1px; }
   .quick-drill-right { width: 100%; flex-wrap: wrap; gap: 6px; }
-  .quick-drill-mode { padding: 6px 10px; font-size: 11px; min-height: 32px; display: inline-flex; align-items: center; }
+  .quick-drill-mode { padding: 6px 10px; font-size: 11px; min-height: 44px; display: inline-flex; align-items: center; }
 
   /* Action buttons: 2x2 grid */
   .action-btn-row {
@@ -212,6 +219,7 @@
 @media (max-width: 480px) {
   .panel { padding: 12px; }
   .panel-title { font-size: 12px; }
+  .streak-rail-divider, .streak-rail-acc { display: none; }
 
   /* Arena even smaller */
   .felt-arena {
