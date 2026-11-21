@@ -290,6 +290,14 @@ export default function CourseView() {
 
         {phase === 'reading' && !isDrill && (
           <div>
+            <div className="xl:hidden max-w-3xl mx-auto mb-4">
+              <TheoryBridgeCard
+                anchors={getLessonMeta(lesson.id).theoryAnchors}
+                onNavigate={(route) => navigate(route)}
+                title={t('academy.courseHub.conceptRail.title')}
+                subtitle={t('academy.courseHub.conceptRail.subtitle')}
+              />
+            </div>
             <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6 max-w-3xl mx-auto">
               <LessonContent
                 lesson={lesson}
