@@ -247,7 +247,7 @@ export function GTOFeedback({
             gtoAction={feedback.correctAction || undefined}
             difference={(grade === 'wrong' || grade === 'blunder') ? feedback.explanation : undefined}
             relatedLessonId={feedback.relatedLessonId}
-            onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
+            onRelatedLessonOpen={(lessonId) => navigate(`/lesson/${lessonId}`)}
             defaultOpen={grade === 'wrong' || grade === 'blunder'}
           />
           {(grade === 'wrong' || grade === 'blunder') && onTryAgain && (

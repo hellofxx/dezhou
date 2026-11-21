@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { ScenarioSetup } from '../components/ScenarioSetup';
 import { SpotTrainer } from '../components/SpotTrainer';
 import { useScenarioEngine } from '../hooks/useScenarioEngine';
@@ -21,11 +22,11 @@ export default function GTOSimulatorHome() {
   };
 
   return (
-    <div className="py-6 space-y-6">
+    <div className="py-4 space-y-5">
+      <BackLink to="/drill" label={t('common.ui.back')} variant="text" />
       {/* 标题 */}
       <div className="space-y-1">
-        <p className="section-eyebrow">GTO Simulator</p>
-        <h2 className="font-display text-[28px] tracking-wide text-[var(--ivory)]">{t('gto.home.title')}</h2>
+        <h2 className="font-display text-[22px] tracking-wide text-[var(--ivory)]">{t('gto.home.title')}</h2>
         <p className="text-sm text-[var(--ivory-muted)]">
           {t('gto.home.subtitle')}
         </p>

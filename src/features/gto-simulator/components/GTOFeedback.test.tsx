@@ -129,7 +129,7 @@ describe('GTOFeedback 五级显示（提供 feedback）', () => {
     // relatedLessonId → 相关课程 chip 可点击，并由调用方注入的 navigate 跳转（shared 不拼路由）
     const chip = screen.getByRole('button', { name: '相关课程' });
     fireEvent.click(chip);
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l3-cbet');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l3-cbet');
   });
 
   it('wrong / blunder 且提供 onTryAgain 时渲染「再做一题」并回调', () => {
