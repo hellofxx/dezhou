@@ -235,7 +235,7 @@ describe('PotOddsQuizPage 答题反馈与三处同步', () => {
 
     // relatedLessonId='l1-basics' 经 RelatedLessonChip 跳转
     fireEvent.click(getButton(container, '相关课程'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-basics');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-basics');
   });
 
   it('连续答错达到 3 次时展示降级提示 banner', async () => {

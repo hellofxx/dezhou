@@ -443,7 +443,7 @@ export default function PotOddsQuizPage() {
                           gtoAction={gtoActionText}
                           difference={t(decisionFeedback.explanation)}
                           relatedLessonId={decisionFeedback.relatedLessonId}
-                          onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
+                          onRelatedLessonOpen={(lessonId) => navigate(`/lesson/${lessonId}`)}
                           defaultOpen={isSevereGrade(decisionFeedback.grade)}
                         />
                       </div>
