@@ -21,7 +21,7 @@
   /* Felt arena mobile */
   .felt-arena {
     padding: 10px 8px 8px !important;
-    min-height: 148px !important;
+    min-height: 172px !important;
     margin-top: -12px !important;
     border-radius: 50% / 40% !important;
     gap: 2px !important;
@@ -224,7 +224,7 @@
   /* Arena even smaller */
   .felt-arena {
     padding: 2px 12px 8px;
-    min-height: 150px;
+    min-height: 160px;
     margin-top: -14px;
     border-radius: 50% / 40%;
   }

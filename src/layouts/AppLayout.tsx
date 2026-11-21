@@ -92,7 +92,7 @@ export default function AppLayout() {
         className={cn(
           'flex items-center gap-2.5 px-2.5 h-8 rounded-[var(--radius-sm)] text-[13px] transition-all duration-150 relative',
           active
-            ? 'text-[var(--brass-bright)] bg-[var(--brass-glow)] font-medium'
+            ? 'nav-item-active text-[var(--brass-bright)] font-medium'
             : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/40'
         )}
       >
@@ -201,9 +201,11 @@ export default function AppLayout() {
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass-text)]">{section.index}</span>
             <span aria-hidden="true" className="hidden sm:block h-px w-6 bg-[var(--brass-deep)]/60" />
-            <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass-text)]">
-              {section.label}
-            </span>
+            {location.pathname !== '/' && section.label !== '' && (
+              <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass-text)]">
+                {section.label}
+              </span>
+            )}
             <h1 className="font-display text-[19px] md:text-[22px] text-[var(--ivory)] tracking-wide truncate">
               {currentPageTitle}
             </h1>

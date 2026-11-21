@@ -82,11 +82,12 @@ export default function JourneyHome() {
 
   return (
     <div className="home-room h-full overflow-auto">
-      <FeltArena />
+      <div className="home-hero-deck">
+        <FeltArena />
+        <StreakRail />
+      </div>
 
       <div className="px-0">
-        <StreakRail />
-
         <QuickDrillBanner />
 
         <JourneyTrack />

@@ -67,9 +67,9 @@
 
 .stage-ring {
   border-radius: 50%;
-  background: var(--room-surface);
-  border: 1px solid var(--room-line);
-  box-shadow: var(--shadow-sm);
+  background: var(--walnut);
+  border: 1px solid color-mix(in srgb, var(--walnut-border) 80%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 240, 200, 0.06), var(--shadow-sm);
   margin-bottom: 8px;
 }
 
@@ -95,15 +95,19 @@
 }
 
 .stage-node.locked {
-  opacity: 0.55;
+  opacity: 0.62;
 }
 
 .stage-plaque {
   width: 100%;
   padding: 10px 10px 12px;
   border-radius: var(--poker-radius-md);
-  border: 1px solid var(--room-line);
-  background: color-mix(in srgb, var(--room-surface) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--walnut-border) 80%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--walnut-raised) 88%, transparent),
+    color-mix(in srgb, var(--walnut) 92%, transparent)
+  );
   transition:
     border-color var(--poker-duration-fast) var(--poker-ease-standard),
     box-shadow var(--poker-duration-fast) var(--poker-ease-standard);
@@ -149,9 +153,9 @@
   width: 100%;
   padding: 5px 8px;
   border-radius: 6px;
-  border: 1px solid transparent;
-  background: color-mix(in srgb, var(--room-surface) 70%, transparent);
-  color: var(--room-ink-dim);
+  border: 1px solid color-mix(in srgb, var(--walnut-border) 55%, transparent);
+  background: color-mix(in srgb, var(--walnut-raised) 52%, transparent);
+  color: var(--ivory-dim);
   font-size: 11px;
   font-weight: 500;
   text-align: left;
@@ -208,8 +212,8 @@
   border: 1px solid color-mix(in srgb, var(--brass) 30%, transparent);
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--brass) 8%, transparent),
-    transparent 70%
+    color-mix(in srgb, var(--walnut-raised) 72%, transparent),
+    color-mix(in srgb, var(--walnut) 82%, transparent)
   );
 }
 
@@ -441,7 +445,9 @@
   gap: 2px;
   border-radius: 8px;
   border: 1px solid #b9a06a;
-  background: linear-gradient(180deg, #f8f2e2, #e9dfc6);
+  background-color: #efe5cd;
+  background-image: var(--paper-noise), linear-gradient(180deg, #f8f2e2, #e9dfc6);
+  background-size: 160px 160px, auto;
   color: #2a2113;
   box-shadow:
     0 10px 22px rgba(10, 8, 4, 0.45),
@@ -479,6 +485,13 @@
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--brass-text);
+}
+
+.journey-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ivory-muted);
 }
 
 .arena-title {
@@ -562,8 +575,8 @@ html[data-theme="dark"] .home-room .journey-panel {
 
 .streak-dot em {
   display: block;
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   font-size: 0;
   color: transparent;
@@ -576,8 +589,8 @@ html[data-theme="dark"] .home-room .journey-panel {
 }
 
 .streak-dot.today em {
-  width: 11px;
-  height: 11px;
+  width: 12px;
+  height: 12px;
   background: transparent;
   border: 2px solid var(--brass-bright);
   box-shadow: none;
@@ -588,7 +601,7 @@ html[data-theme="dark"] .home-room .journey-panel {
 @media (max-width: 767px) {
   .felt-arena-wrap { padding-inline: 0; }
   .arena-side-plaque { display: none; }
-  .arena-title { font-size: 21px; }
+  .arena-title { font-size: 18px; letter-spacing: 0.01em; }
   .home-brass-banner {
     flex-direction: column;
     align-items: stretch;
@@ -618,3 +631,37 @@ html[data-theme="dark"] .home-room .home-plan-row {
 }
 
 html[data-theme="dark"] .home-room .home-plan-row:last-child { border-bottom: 0; }
+
+/* 侧栏激活项：基准图的圆角暗金胶囊 */
+.nav-item-active {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brass) 14%, transparent),
+    color-mix(in srgb, var(--brass) 4%, transparent)
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 24%, transparent);
+}
+
+/* 桌面牌桌地台：牌桌 + 周条坐在胡桃木地板上（移动端保持绿呢） */
+@media (min-width: 768px) {
+  html[data-theme="dark"] .home-room .home-hero-deck {
+    margin-bottom: 10px;
+    padding: 16px 10px 10px;
+    border-radius: 14px;
+    background-color: var(--walnut);
+    background-image:
+      radial-gradient(ellipse 85% 75% at 50% 45%, rgba(20, 14, 8, 0.34), rgba(10, 8, 4, 0.74)),
+      var(--room-wood-h);
+    background-size: auto, var(--wood-size);
+    box-shadow: inset 0 0 70px rgba(10, 8, 4, 0.55);
+  }
+
+  .home-hero-deck .felt-arena-wrap {
+    padding-inline: clamp(0px, 4vw, 56px);
+  }
+
+  .home-hero-deck .streak-rail {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+}

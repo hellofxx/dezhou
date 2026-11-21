@@ -71,12 +71,15 @@ export default function JourneyTrack() {
           <Route className="w-4 h-4" aria-hidden="true" />
           {t('dashboard.path.title')}
         </h2>
-        <Link
-          to="/academy"
-          className="text-[10px] uppercase tracking-[0.18em] text-[var(--brass-text)] hover:text-[var(--brass-bright)] transition-colors"
-        >
-          {t('dashboard.path.allCourses')}
-        </Link>
+        <div className="flex items-center gap-3">
+          <span className="journey-eyebrow">{t('dashboard.path.eyebrow')}</span>
+          <Link
+            to="/academy"
+            className="text-[10px] uppercase tracking-[0.18em] text-[var(--brass-text)] hover:text-[var(--brass-bright)] transition-colors"
+          >
+            {t('dashboard.path.allCourses')}
+          </Link>
+        </div>
       </div>
 
       <div className={`journey-track ${states.length <= 4 ? 'is-single-row' : ''}`}>

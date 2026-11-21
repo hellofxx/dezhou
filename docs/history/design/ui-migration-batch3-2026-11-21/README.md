@@ -15,7 +15,14 @@
 - 首页面板（旅程/今日计划/间隔复习）统一胡桃木表面；周条改为小圆点 + 日期。
 - 训练场始终展示六模块网格（首访横幅与单一学习路径卡退出首页）。
 
-对照图：[`home-top-v2.jpg`](./home-top-v2.jpg)、[`home-mid-v2.jpg`](./home-mid-v2.jpg)、[`home-bottom-v2.jpg`](./home-bottom-v2.jpg)、[`mobile-home-v2.jpg`](./mobile-home-v2.jpg)。
+### 二次细节（v3/v4）
+
+- 旅程阶段卡 / 课时 chip / “下一步”条改胡桃木底，去掉绿色表面；锁定段透明度调到可读。
+- 侧栏激活项改为圆角暗金胶囊；首页顶栏只保留序号 + 页名。
+- 桌面端牌桌与周条打包进胡桃木地台（移动端保持绿呢）；移动端标题降到 18px、牌桌高度加到 172/160。
+- 周圆点放大到 10/12px；象牙铭牌叠纸纹。
+
+对照图：[`home-top-v2.jpg`](./home-top-v2.jpg)、[`home-mid-v2.jpg`](./home-mid-v2.jpg)、[`home-bottom-v2.jpg`](./home-bottom-v2.jpg)、[`mobile-home-v2.jpg`](./mobile-home-v2.jpg)、[`home-top-v4.jpg`](./home-top-v4.jpg)、[`mobile-home-v4.jpg`](./mobile-home-v4.jpg)。
 
 ## 视图
 
