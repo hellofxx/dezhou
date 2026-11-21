@@ -88,6 +88,22 @@ describe('strategy-academy store.bootstrap', () => {
     expect(dataSource!.findNextLesson(allSummaries.map((l) => l.id))).toBeNull();
   });
 
+  it('课程数据源：findNextLesson 跟随 activeVariant', async () => {
+    const mod = await bootstrap();
+    const dataSource = mod.getAcademyDataSource()!;
+
+    mod.useAcademyStore.getState().switchVariant('heads-up');
+    const headsUpLevels = mod.getLevelSummariesByVariant('heads-up');
+    const expected = headsUpLevels[0]?.lessons[0];
+
+    expect(expected).toBeDefined();
+    expect(dataSource.findNextLesson([])?.id).toBe(expected!.id);
+
+    mod.useAcademyStore.getState().switchVariant('standard');
+    const standardFirst = mod.getLevelSummariesByVariant('standard')[0]?.lessons[0];
+    expect(dataSource.findNextLesson([])?.id).toBe(standardFirst!.id);
+  });
+
   it('课程数据源：getLessonMeta 命中标准课程，未知 id 返回 undefined', async () => {
     const mod = await bootstrap();
     const dataSource = mod.getAcademyDataSource()!;
