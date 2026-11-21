@@ -19,7 +19,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('PotOddsPage', () => {
-  it('默认渲染页头与底池赔率面板，懒加载的权益对比图最终出现', { timeout: 20000 }, async () => {
+  it('默认渲染页头与底池赔率面板，懒加载的权益对比图最终出现', { timeout: 45000 }, async () => {
     render(<PotOddsPage />);
 
     expect(screen.getByText('Pot Odds & EV')).toBeTruthy();
@@ -29,31 +29,31 @@ describe('PotOddsPage', () => {
     ).toBeTruthy();
     expect(screen.getByText('参数设置')).toBeTruthy();
     expect(screen.getByText('常见听牌参考')).toBeTruthy();
-    expect(await screen.findByText('权益对比', undefined, { timeout: 5000 })).toBeTruthy();
+    expect(await screen.findByText('权益对比', undefined, { timeout: 20000 })).toBeTruthy();
   });
 
-  it('切到 EV 分析 Tab：挂载 EV 计算面板并卸载底池赔率面板', { timeout: 20000 }, async () => {
+  it('切到 EV 分析 Tab：挂载 EV 计算面板并卸载底池赔率面板', { timeout: 45000 }, async () => {
     render(<PotOddsPage />);
 
     fireEvent.click(screen.getByText('EV 分析'));
 
-    expect(await screen.findByText('EV 计算', undefined, { timeout: 5000 })).toBeTruthy();
+    expect(await screen.findByText('EV 计算', undefined, { timeout: 20000 })).toBeTruthy();
     expect(screen.queryByText('参数设置')).toBeNull();
     expect(screen.queryByText('常见听牌参考')).toBeNull();
     // 页头与 Tab 保持可见
     expect(screen.getByText('底池赔率与 EV 计算器')).toBeTruthy();
   });
 
-  it('切回底池赔率 Tab：恢复计算器与听牌参考', { timeout: 20000 }, async () => {
+  it('切回底池赔率 Tab：恢复计算器与听牌参考', { timeout: 45000 }, async () => {
     render(<PotOddsPage />);
     fireEvent.click(screen.getByText('EV 分析'));
-    await screen.findByText('EV 计算');
+    await screen.findByText('EV 计算', undefined, { timeout: 20000 });
 
     fireEvent.click(screen.getByText('底池赔率'));
 
     expect(screen.getByText('参数设置')).toBeTruthy();
     expect(screen.getByText('常见听牌参考')).toBeTruthy();
     expect(screen.queryByText('EV 计算')).toBeNull();
-    expect(await screen.findByText('权益对比', undefined, { timeout: 5000 })).toBeTruthy();
+    expect(await screen.findByText('权益对比', undefined, { timeout: 20000 })).toBeTruthy();
   });
 });

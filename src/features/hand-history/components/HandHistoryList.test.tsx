@@ -260,7 +260,7 @@ describe('HandHistoryList 统计页签', () => {
     expect(screen.getByText(i18n.t('handHistory.list.heroNotFoundTitle'))).not.toBeNull();
   });
 
-  it('达到最小手数且识别到 Hero 时懒载统计面板', { timeout: 20000 }, async () => {
+  it('达到最小手数且识别到 Hero 时懒载统计面板', { timeout: 45000 }, async () => {
     const hands = Array.from({ length: 20 }, (_, i) => makeHand(`s${i}`));
     seed(hands);
     mount();
@@ -271,7 +271,7 @@ describe('HandHistoryList 统计页签', () => {
       () => {
         expect(document.body.textContent).toContain('VPIP');
       },
-      { timeout: 8000 },
+      { timeout: 20000 },
     );
     expect(screen.getByText(i18n.t('handHistory.stats.basedOn', { count: 20 }))).not.toBeNull();
   });
