@@ -68,7 +68,7 @@ export default function RangeQuizPage() {
 
   const handleBackToHome = useCallback(() => {
     resetQuiz();
-    navigate('/range-trainer');
+    navigate('/drill/range');
   }, [navigate, resetQuiz]);
 
   // P1A-04：中途退出统一走此路径 —— 仅 resetQuiz 回配置页，不入账、不 emit、不计 streak

@@ -9,13 +9,13 @@ import type { TrainingRecord } from '@/features/progress/types';
  * DrillHub 训练枢纽（jsdom）。
  *
  * 契约：
- * - 四张训练台分别链接到冻结路由（/range-trainer/quiz、/pot-odds/quiz、/gto-simulator、/puzzle/rush）；
+ * - 四张训练台分别链接到二级站（/drill/range、/drill/odds、/gto-simulator、/drill/puzzle）；
  * - `?mode=` 命中对应卡（data-active + aria-current），未知值不高亮；
  * - 「今日弱项」按题量加权找最弱模块，题量不足时降级为空态文案；
  * - 弱项入口只链到 /progress?tab=overview（不嵌入跨模块组件）。
  */
 
-const DRILL_ROUTES = ['/range-trainer/quiz', '/pot-odds/quiz', '/gto-simulator', '/puzzle/rush'];
+const DRILL_ROUTES = ['/drill/range', '/drill/odds', '/gto-simulator', '/drill/puzzle'];
 
 function buildRecord(
   id: string,
@@ -74,7 +74,7 @@ describe('DrillHub 训练枢纽', () => {
     const active = Array.from(container.querySelectorAll('[data-active="true"]'));
 
     expect(active).toHaveLength(1);
-    expect(active[0]?.getAttribute('href')).toBe('/pot-odds/quiz');
+    expect(active[0]?.getAttribute('href')).toBe('/drill/odds');
     expect(active[0]?.getAttribute('aria-current')).toBe('true');
   });
 

@@ -47,7 +47,7 @@ export default function RangeLearnPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <BackLink
-              onClick={() => navigate('/range-trainer')}
+              onClick={() => navigate('/drill/range')}
               label={t('common.ui.back')}
               variant="button"
               className="hidden md:inline-flex"

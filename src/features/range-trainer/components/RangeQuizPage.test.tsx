@@ -228,7 +228,7 @@ describe('RangeQuizPage 完成与结算', () => {
 
     fireEvent.click(findButton(container, '返回首页'));
 
-    expect(screen.getByTestId('location').textContent).toBe('/range-trainer');
+    expect(screen.getByTestId('location').textContent).toBe('/drill/range');
     expect(rangeStore().quizState.status).toBe('idle');
     expect(rangeStore().quizState.questions).toHaveLength(0);
   });

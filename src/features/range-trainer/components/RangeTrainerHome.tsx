@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/shared/components/ui/button';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { BookOpen, HelpCircle } from 'lucide-react';
 import { RangeGrid } from './RangeGrid';
 import { RangeSelector } from './RangeSelector';
@@ -76,6 +77,7 @@ export default function RangeTrainerHome() {
   return (
     <div className="h-full overflow-auto">
       <div className="py-6 space-y-6">
+        <BackLink to="/drill" label={t('common.ui.back')} variant="text" />
         {/* 顶部标题栏 —— 窄屏纵向堆叠：标题独占一行，副标题不再被按钮组挤成多行 */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">

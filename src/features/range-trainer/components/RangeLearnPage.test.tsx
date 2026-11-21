@@ -161,6 +161,6 @@ describe('RangeLearnPage 网格悬停与返回', () => {
 
     fireEvent.click(findButtonExact(container, '返回'));
 
-    expect(screen.getByTestId('location').textContent).toBe('/range-trainer');
+    expect(screen.getByTestId('location').textContent).toBe('/drill/range');
   });
 });

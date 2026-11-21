@@ -139,6 +139,7 @@
     "gtoDesc": "面对标准对手画像，做出接近均衡的行动选择",
     "puzzle": "扑克谜题",
     "puzzleDesc": "限时连答谜题，训练牌型识别与决策速度",
+    "review": "牌局复盘",
     "weakness": {
       "title": "今日弱项",
       "summary": "{{module}} 正确率 {{accuracy}}，是当前最该补的一项",

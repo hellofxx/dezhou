@@ -139,6 +139,7 @@
     "gtoDesc": "Take near-balanced lines against standard opponent profiles",
     "puzzle": "Poker Puzzles",
     "puzzleDesc": "Chain timed puzzles to sharpen hand reading and speed",
+    "review": "Hand Replay",
     "weakness": {
       "title": "Today's Weak Spot",
       "summary": "{{module}} at {{accuracy}} — your weakest area right now",

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Calculator, Gamepad2, Puzzle, Target, TrendingDown } from 'lucide-react';
+import { ArrowRight, Calculator, ClipboardList, Gamepad2, Puzzle, Target, TrendingDown } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useProgressState } from '@/features/progress/api';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
@@ -30,7 +30,7 @@ interface DrillEntry {
 const DRILLS: DrillEntry[] = [
   {
     mode: 'range',
-    href: '/range-trainer/quiz',
+    href: '/drill/range',
     icon: Target,
     titleKey: 'rangeTrainer.drillHub.range',
     descKey: 'rangeTrainer.drillHub.rangeDesc',
@@ -38,7 +38,7 @@ const DRILLS: DrillEntry[] = [
   },
   {
     mode: 'odds',
-    href: '/pot-odds/quiz',
+    href: '/drill/odds',
     icon: Calculator,
     titleKey: 'rangeTrainer.drillHub.odds',
     descKey: 'rangeTrainer.drillHub.oddsDesc',
@@ -54,7 +54,7 @@ const DRILLS: DrillEntry[] = [
   },
   {
     mode: 'puzzle',
-    href: '/puzzle/rush',
+    href: '/drill/puzzle',
     icon: Puzzle,
     titleKey: 'rangeTrainer.drillHub.puzzle',
     descKey: 'rangeTrainer.drillHub.puzzleDesc',
@@ -175,6 +175,20 @@ export default function DrillHub() {
             </Link>
           </div>
         </section>
+
+        <div className="flex justify-end">
+          <Link
+            to="/hand-history"
+            className={cn(
+              'inline-flex min-h-11 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-[var(--ivory-muted)] transition-colors hover:text-[var(--brass-bright)]',
+              FOCUS_RING,
+            )}
+          >
+            <ClipboardList className="w-4 h-4" aria-hidden="true" />
+            {t('rangeTrainer.drillHub.review')}
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </div>
   );
