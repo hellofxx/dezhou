@@ -95,10 +95,11 @@ describe('PuzzleResult 结果页', () => {
     return handlers;
   };
 
-  const text = () => container.textContent ?? '';
+  // 结算纸条经 Dialog portal 渲染到 body
+  const text = () => document.body.textContent ?? '';
 
   const buttonByText = (needle: string): HTMLButtonElement | undefined =>
-    [...container.querySelectorAll('button')].find((btn) => btn.textContent?.includes(needle));
+    [...document.body.querySelectorAll('button')].find((btn) => btn.textContent?.includes(needle));
 
   it('Rush 结果展示分数卡与「分秒」用时格式', () => {
     render(makeResult({ mode: 'rush', score: 2400, duration: 72_000, correctCount: 10, totalQuestions: 10 }));
@@ -190,13 +191,13 @@ describe('PuzzleResult 标题层级（内嵌 h2）', () => {
   it('标题为 h2，结果视图内不出现 h1', () => {
     renderResult(makeResult());
 
-    expect(container.querySelector('h2')?.textContent).toBe('训练完成');
-    expect(container.querySelector('h1')).toBeNull();
+    expect(document.body.querySelector('h2')?.textContent).toBe('训练完成');
+    expect(document.body.querySelector('h1')).toBeNull();
   });
 
   it('冲刺模式标题文案切换，层级仍为 h2', () => {
     renderResult(makeResult({ mode: 'rush' }));
 
-    expect(container.querySelector('h2')?.textContent).toBe('冲刺结束');
+    expect(document.body.querySelector('h2')?.textContent).toBe('冲刺结束');
   });
 });
