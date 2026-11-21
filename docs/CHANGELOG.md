@@ -10,6 +10,15 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-21 IA 收编 · 原型即产品（5 视图 + 木纹壳层 + 学习旅程）
+
+- **壳层**：168px 程序化木纹侧栏（竖向导管）+ 56px 木梁顶栏（横向）+ 12px 桌沿；`src/app/woodNoise.ts` 纯函数生成无缝 value-noise fbm 瓦片，`woodTexture.ts` 启动注入 `--wood-h/--wood-v`（无 2D context 回退轴向细纹）；浅色牌室按 v1.9.0 规则使用浅木漆面。
+- **牌桌**：`.felt-arena` 改真椭圆（桌面 50%/50%、移动 50%/40%），顶部 Rim 光弧替代双细环；移动端统计条层级与遮挡修复。
+- **IA**：主路由收编为 `/`（学习路径）、`/lesson/:id`（课程）、`/drill`（训练枢纽）、`/quick`（速训）、`/progress`（进度中心）；设置以纸条浮层 `/settings` 打开。范围/赔率/谜题旧入口重定向到训练枢纽并保留 query；GTO 选择、会话、复盘、理论章节、帮助保留为次要深链。侧栏 6 项、移动底栏 5 项（删除训练 Sheet）。
+- **首页**：JourneyHome 取代 Dashboard；学习旅程经 `AcademyDataSource.getLearningStagesSnapshot()`（按 `activeVariant` 稳定快照）渲染先修 Level 阶段（桌面 3×3、移动单列），每段环形进度 + 单色线稿图标 + 课时 chip + 下一步 CTA；速训横幅增加主 CTA。
+- **进度中心**：三分区 tab（概览 / 回放 / 排行），吸收每日挑战、多变体 ELO、成就、进步回放、情绪与最近训练；回放提供全部手牌入口。
+- **测试/门禁**：新增 `e2e/ia-navigation.test.ts`（5 主路由 + 3 重定向 + 返回）；e2e 夹具与移动用例改新导航；升级夹具按 `package.json + GITHUB_RUN_NUMBER` 解析 `APP_VERSION`；两个重懒加载组件测试放宽等待。`pnpm verify` / `verify:e2e` 全绿。
+
 ### 2026-11-20 构建版本自动递增 · 侧边栏更新时间
 
 - **版本注入**：`vite.config.ts` 通过 `define` 注入 `__APP_BUILD_INFO__`——版本 = `package.json` 语义版本 + `GITHUB_RUN_NUMBER`（部署 workflow 每次运行 patch +1，不回写仓库；本地保持基础版本），同时记录构建时刻；`package.json` 版本对齐产品 `0.1.0`。
