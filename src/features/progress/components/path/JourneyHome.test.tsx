@@ -14,7 +14,7 @@ import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
  * 契约：
  * - 新手收敛：totalSessions < 5 → 首访横幅 + 单一学习路径卡，不展示训练场网格；
  * - ≥ 5 → 六模块网格，不再展示学习路径卡；
- * - 速训三个入口带 mode 参数跳转，今日已训展示完成标记；
+ * - 速训主 CTA 带 mixed 模式跳转，今日已训展示完成标记；
  * - 学习旅程图：阶段卡渲染完成度、锁定态与「下一步」链接（academy 数据源 mock）；
  * - eloRankUp 事件驱动段位庆祝弹窗。
  *
@@ -127,14 +127,14 @@ afterEach(() => {
 });
 
 describe('JourneyHome 新手收敛与训练场', () => {
-  it('零记录时展示首访横幅与学习路径卡，不展示训练场网格', () => {
+  it('零记录时仍展示六模块训练场，不再插入首访横幅或单一学习路径卡', () => {
     const { container } = renderHome();
     const text = container.textContent ?? '';
 
-    expect(text).toContain('欢迎来到德州扑克训练平台');
-    expect(text).toContain('你的学习路径');
-    expect(container.querySelectorAll('.module-card')).toHaveLength(0);
-    expect(text).not.toContain('六大核心模块');
+    expect(container.querySelectorAll('.module-card')).toHaveLength(6);
+    expect(text).toContain('六大核心模块');
+    expect(text).not.toContain('欢迎来到德州扑克训练平台');
+    expect(text).not.toContain('你的学习路径');
   });
 
   it('已完成 ≥5 次训练时展示六模块训练场网格，不再展示学习路径卡', () => {
@@ -150,7 +150,7 @@ describe('JourneyHome 新手收敛与训练场', () => {
     expect(text).not.toContain('欢迎来到德州扑克训练平台');
   });
 
-  it('三个快速训练入口带 mode 参数跳转，且今日已训展示完成标记', () => {
+  it('速训主 CTA 带 mixed 模式跳转，且今日已训展示完成标记', () => {
     seedStore(FIVE_OLD_RECORDS, {
       streak: { ...DEFAULT_STREAK_STATE, lastTrainingDate: toLocalDateKey(Date.now()) },
     });
@@ -158,27 +158,26 @@ describe('JourneyHome 新手收敛与训练场', () => {
     const { container, getByText } = renderHome();
     expect(container.textContent).toContain('✓ 今日已完成');
 
-    fireEvent.click(getByText('赔率'));
+    fireEvent.click(getByText('开始速训'));
     expect(container.querySelector('[data-probe]')?.textContent).toBe(
-      '/academy/quick-drill?mode=odds&quick=true',
+      '/quick?mode=mixed&quick=true',
     );
   });
 
-  it('首屏顺序：Hero → 连续天数 → 快速训练 → 学习旅程 → 首访引导', () => {
+  it('首屏顺序：Hero → 连续天数 → 快速训练 → 学习旅程 → 训练场', () => {
     const { container } = renderHome();
     const html = container.innerHTML;
     const hero = html.indexOf('felt-arena');
     const streak = html.indexOf('streak-rail');
     const quickDrill = html.indexOf('quick-drill-card');
     const journey = html.indexOf('journey-track');
-    const banner = html.indexOf('first-visit-banner');
+    const training = html.indexOf('module-card');
 
     expect(hero).toBeGreaterThan(-1);
     expect(streak).toBeGreaterThan(hero);
     expect(quickDrill).toBeGreaterThan(streak);
     expect(journey).toBeGreaterThan(quickDrill);
-    // 首访引导让位：排在核心学习位之后
-    expect(banner).toBeGreaterThan(journey);
+    expect(training).toBeGreaterThan(journey);
 
     // 内容区欢迎语保留 h2；页面组件不渲染 h1（全站唯一 h1 归壳层）
     expect(container.querySelector('.felt-arena h2')).not.toBeNull();
@@ -196,14 +195,14 @@ describe('JourneyHome 学习旅程图', () => {
 
     expect(text).toContain('学习旅程');
     expect(screen.getByRole('link', { name: '全部课程' }).getAttribute('href')).toBe('/academy');
-    expect(text).toContain('起步阶段');
-    expect(text).toContain('进阶阶段');
+    expect(text).toContain('入门 · 识局');
+    expect(text).toContain('基础 · 算赔');
     // 第一段 1/2 课已完成；第二段前置未完成 → 锁定
     expect(text).toContain('1/2 课');
     expect(text).toContain('未解锁');
     expect(container.querySelectorAll('.stage-node')).toHaveLength(2);
-    expect(container.querySelector('.stage-node.current .stage-name')?.textContent).toBe('起步阶段');
-    expect(container.querySelector('.stage-node.locked .stage-name')?.textContent).toBe('进阶阶段');
+    expect(container.querySelector('.stage-node.current .stage-name')?.textContent).toBe('入门 · 识局');
+    expect(container.querySelector('.stage-node.locked .stage-name')?.textContent).toBe('基础 · 算赔');
   });
 
   it('下一步条指向首个未完成课时，锁定时段内课程不可点', () => {
@@ -212,13 +211,13 @@ describe('JourneyHome 学习旅程图', () => {
 
     const { container } = renderHome();
     const nextLink = screen.getByRole('link', { name: '继续学习' });
-    expect(nextLink.getAttribute('href')).toBe('/academy/lesson/l1-b');
+    expect(nextLink.getAttribute('href')).toBe('/lesson/l1-b');
 
     // 已解锁阶段的 chip 是链接（未完成课时优先），锁定阶段的 chip 不是
     const unlockedChips = container.querySelectorAll('a.lesson-chip');
     expect(Array.from(unlockedChips).map((el) => el.getAttribute('href'))).toEqual([
-      '/academy/lesson/l1-b',
-      '/academy/lesson/l1-a',
+      '/lesson/l1-b',
+      '/lesson/l1-a',
     ]);
     expect(container.querySelectorAll('.lesson-chip.locked')).toHaveLength(1);
   });

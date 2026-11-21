@@ -19,7 +19,14 @@
     "accuracyLevel": "中级水平",
     "todayChallenge": "今日挑战",
     "ready": "今天的练习已为你准备好。",
-    "todayProgress": "今日"
+    "todayProgress": "今日",
+    "eyebrow": "PRIVATE CARD ROOM · 学习路径",
+    "pathTitle": "从入门到精通，一条清晰的牌桌之路",
+    "eloLabel": "ELO 能力分",
+    "streakLabel": "连续训练",
+    "dayUnit": "天",
+    "statusNote": "当前段位 {{rank}} · 距{{next}}还需 {{n}} ELO · 今日已答 {{answered}} 题",
+    "statusMax": "当前段位 {{rank}} · 今日已答 {{answered}} 题"
   },
   "streakRail": {
     "consecutiveDays": "连续天数",
@@ -43,7 +50,11 @@
     "completed": "✓ 今日已完成",
     "range": "范围",
     "odds": "赔率",
-    "mixed": "混合"
+    "mixed": "混合",
+    "bannerTitle": "每日速训 · 3 题混合 Drill",
+    "pillMinutes": "约 3 分钟",
+    "pillMix": "赔率 + 决策 + 谜题",
+    "pillStreak": "维持连击"
   },
   "training": {
     "todayQuestion": "今日训练 · 第 {{current}} 题 / 共 {{total}}",
@@ -60,7 +71,7 @@
     "dueRate": "到期率"
   },
   "path": {
-    "title": "学习旅程",
+    "title": "学习旅程 · 四段进阶",
     "eyebrow": "脚手架路径",
     "locked": "未解锁",
     "lessons": "{{done}}/{{total}} 课",
@@ -69,7 +80,15 @@
     "continue": "继续学习",
     "allCourses": "全部课程",
     "startQuick": "开始速训",
-    "ringAria": "{{done}}/{{total}} 课时已完成"
+    "ringAria": "{{done}}/{{total}} 课时已完成",
+    "stage1": "入门 · 识局",
+    "stage1Sub": "规则、牌型与位置",
+    "stage2": "基础 · 算赔",
+    "stage2Sub": "赔率、补牌与范围",
+    "stage3": "进阶 · 谋势",
+    "stage3Sub": "C-Bet、EV 与 GTO",
+    "stage4": "精通 · 无惑",
+    "stage4Sub": "认证与实战校准"
   },
   "trainingGrounds": {
     "title": "训练场",
@@ -82,7 +101,7 @@
     "reviewDesc": "导入牌谱，逐街深度分析"
   },
   "dataPlan": {
-    "title": "今日训练推荐",
+    "title": "今日计划",
     "count": "{{count}} 项",
     "allDone": "今天的训练目标已完成！",
     "freeTrain": "开始自由训练",

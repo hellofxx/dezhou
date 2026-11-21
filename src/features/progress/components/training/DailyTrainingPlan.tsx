@@ -22,7 +22,7 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
   const { t } = useTranslation();
 
   return (
-    <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
+    <Card className="home-panel-surface bg-[var(--felt)] border-[var(--walnut-border)]">
       <CardContent className="p-4">
         <div className="flex items-center gap-2 mb-4">
           <ClipboardList className="w-5 h-5 text-[var(--brass-bright)]" />
@@ -60,7 +60,7 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={transitionFast}
-                  className={`relative rounded-lg border border-[var(--walnut-border)]/60 border-l-[3px] ${getPriorityColor(rec.priority)} bg-[var(--walnut-raised)]/30 p-3`}
+                  className={`home-plan-row relative rounded-lg border border-[var(--walnut-border)]/60 border-l-[3px] ${getPriorityColor(rec.priority)} bg-[var(--walnut-raised)]/30 p-3`}
                 >
                   <div className="flex items-start gap-3">
                     {/* 类型图标 */}

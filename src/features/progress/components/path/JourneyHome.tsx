@@ -8,8 +8,7 @@ import DailyTrainingPlan from '../training/DailyTrainingPlan';
 import SpacedRepetitionPanel from '../srs/SpacedRepetitionPanel';
 import ReviewSession from '../srs/ReviewSession';
 import { useEnsureReviewSourceI18n } from '../srs/useEnsureReviewSourceI18n';
-import FirstVisitBanner from '../dashboard/FirstVisitBanner';
-import ModuleGrid, { NewbiePathCard } from '../dashboard/ModuleGrid';
+import ModuleGrid from '../dashboard/ModuleGrid';
 import { generateCrossModuleDailyPlan } from '../../utils/dailyTrainingPlan';
 import { useTheoryPlanRevision } from '../../hooks/useTheoryPlanRevision';
 import { getTodayReviewItems, getTodayString } from '@/shared/utils/spacedRepetition';
@@ -81,13 +80,8 @@ export default function JourneyHome() {
     theoryRevision,
   ]);
 
-  // §13.6.1 新手收敛：totalSessions < 5 时隐藏训练场网格，展示单一学习路径卡
-  const isNewbie = summary.totalSessions < 5;
-  // 只透传推荐对象，文案由 NewbiePathCard 经共享解析器出（与计划卡同一口径）
-  const pathRecommendation = recommendations[0] ?? null;
-
   return (
-    <div className="h-full overflow-auto">
+    <div className="home-room h-full overflow-auto">
       <FeltArena />
 
       <div className="px-0">
@@ -114,28 +108,21 @@ export default function JourneyHome() {
           </div>
         </div>
 
-        {/* 首访引导 — 仅零训练用户，排在核心学习位之后 */}
-        {summary.totalSessions === 0 && <FirstVisitBanner />}
-
         <DownswingAlert />
 
-        {/* 训练场 — §13.6.1 新手期替换为单一学习路径卡 */}
-        {isNewbie ? (
-          <NewbiePathCard recommendation={pathRecommendation} />
-        ) : (
-          <div className="mb-5">
-            <div className="flex items-center justify-between mb-3">
-              <div className="panel-title mb-0">
-                <Gamepad2 className="w-4 h-4" />
-                {t('dashboard.trainingGrounds.title')}
-              </div>
-              <span className="text-[10px] text-[var(--ivory-muted)]">
-                {t('dashboard.trainingGrounds.subtitle')}
-              </span>
+        {/* 训练场 — 对照基准图：始终展示六模块网格（学习路径由旅程面板承担） */}
+        <div className="mb-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="panel-title mb-0">
+              <Gamepad2 className="w-4 h-4" />
+              {t('dashboard.trainingGrounds.title')}
             </div>
-            <ModuleGrid />
+            <span className="text-[10px] text-[var(--ivory-muted)]">
+              {t('dashboard.trainingGrounds.subtitle')}
+            </span>
           </div>
-        )}
+          <ModuleGrid />
+        </div>
       </div>
 
       {/* Dialogs */}

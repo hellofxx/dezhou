@@ -23,6 +23,7 @@ import { ProgressRing } from '@/shared/components/data-display/ProgressRing';
 import { getAcademyDataSource } from '@/shared/stores/academyDataSourceRegistry';
 import { useAcademyLearningStages, useAcademyProgressSnapshot } from '../../hooks/useAcademyDataSource';
 import { computeStageStates, findNextLesson, type JourneyStageState } from './journeyProgress';
+import { groupLearningStages, journeyGroupIndex } from './journeyGroups';
 
 /**
  * JourneyTrack — 学习旅程图（首页签名组件）。
@@ -32,7 +33,7 @@ import { computeStageStates, findNextLesson, type JourneyStageState } from './jo
  *
  * 数据全部来自 academy 数据源注册表（progress 不得直接 import strategy-academy）：
  * 阶段快照经 hook 订阅，课时标题经 registry.getLessonMeta 读取（缺省回退 lessonId）。
- * 路由暂用 /academy/lesson/{lessonId}，批次 3 统一换到 /lesson/{id}。
+ * 课时链接统一走 /lesson/{id}（批次 3 冻结路由）。
  */
 const STAGE_GLYPHS = [Sprout, TrendingUp, Target, Brain, Trophy, Medal, Coins, Crosshair, Flame];
 
@@ -41,13 +42,14 @@ export default function JourneyTrack() {
   const { stages } = useAcademyLearningStages();
   const { completedLessons } = useAcademyProgressSnapshot();
 
+  const groupedStages = useMemo(() => groupLearningStages(stages), [stages]);
   const states = useMemo(
-    () => computeStageStates(stages, completedLessons),
-    [stages, completedLessons],
+    () => computeStageStates(groupedStages, completedLessons),
+    [groupedStages, completedLessons],
   );
   const next = useMemo(
-    () => findNextLesson(stages, completedLessons),
-    [stages, completedLessons],
+    () => findNextLesson(groupedStages, completedLessons),
+    [groupedStages, completedLessons],
   );
   const completedSet = useMemo(() => new Set(completedLessons), [completedLessons]);
 
@@ -56,6 +58,11 @@ export default function JourneyTrack() {
 
   const lessonLabel = (lessonId: string): string =>
     getAcademyDataSource()?.getLessonMeta(lessonId)?.title ?? lessonId;
+
+  const groupTitle = (level: number): string =>
+    t(`dashboard.path.stage${journeyGroupIndex(level) + 1}`);
+  const groupSub = (level: number): string =>
+    t(`dashboard.path.stage${journeyGroupIndex(level) + 1}Sub`);
 
   return (
     <section className="panel journey-panel mb-5" aria-labelledby="journey-track-title">
@@ -73,11 +80,13 @@ export default function JourneyTrack() {
       </div>
 
       <div className={`journey-track ${states.length <= 4 ? 'is-single-row' : ''}`}>
-        {states.map((state, index) => (
+        {states.map((state) => (
           <StageCard
             key={state.stage.id}
             state={state}
-            glyphIndex={index}
+            title={groupTitle(state.stage.level)}
+            subtitle={groupSub(state.stage.level)}
+            glyphIndex={journeyGroupIndex(state.stage.level)}
             completed={completedSet}
             nextLessonId={next?.lessonId ?? null}
             lessonLabel={lessonLabel}
@@ -92,12 +101,12 @@ export default function JourneyTrack() {
           </span>
           <div className="flex-1 min-w-0">
             <div className="nl-title">
-              {t('dashboard.path.nextTitle', { stage: next.stage.title })}
+              {t('dashboard.path.nextTitle', { stage: groupTitle(next.stage.level) })}
             </div>
             <div className="nl-sub">{t('dashboard.path.nextSub')}</div>
           </div>
           <Button asChild size="sm" className="nl-continue">
-            <Link to={`/academy/lesson/${next.lessonId}`}>
+            <Link to={`/lesson/${next.lessonId}`}>
               {t('dashboard.path.continue')}
             </Link>
           </Button>
@@ -110,12 +119,16 @@ export default function JourneyTrack() {
 /** 阶段卡：环形进度 + 铭牌；最多 3 个课时 chip（优先未完成） */
 function StageCard({
   state,
+  title,
+  subtitle,
   glyphIndex,
   completed,
   nextLessonId,
   lessonLabel,
 }: {
   state: JourneyStageState;
+  title: string;
+  subtitle: string;
   glyphIndex: number;
   completed: ReadonlySet<string>;
   nextLessonId: string | null;
@@ -126,10 +139,10 @@ function StageCard({
   const complete = unlocked && total > 0 && done === total;
   const Glyph = STAGE_GLYPHS[glyphIndex] ?? Sparkles;
 
-  // 优先未完成课时，保留阶段内原顺序
+  // 对照基准图：每段展示 2 个课时（优先未完成，保留阶段内顺序）
   const pending = stage.lessonIds.filter((id) => !completed.has(id));
   const finished = stage.lessonIds.filter((id) => completed.has(id));
-  const chips = [...pending, ...finished].slice(0, 3);
+  const chips = [...pending, ...finished].slice(0, 2);
 
   const nodeClass = [
     'stage-node',
@@ -154,8 +167,8 @@ function StageCard({
       />
 
       <div className="stage-plaque">
-        <div className="stage-name">{stage.title}</div>
-        <div className="stage-sub line-clamp-2">{stage.description}</div>
+        <div className="stage-name">{title}</div>
+        <div className="stage-sub line-clamp-2">{subtitle}</div>
         <div className="stage-meta">
           {unlocked ? t('dashboard.path.lessons', { done, total }) : t('dashboard.path.locked')}
         </div>
@@ -185,7 +198,7 @@ function StageCard({
             );
 
             return unlocked ? (
-              <Link key={lessonId} to={`/academy/lesson/${lessonId}`} className={chipClass} title={label}>
+              <Link key={lessonId} to={`/lesson/${lessonId}`} className={chipClass} title={label}>
                 {content}
               </Link>
             ) : (

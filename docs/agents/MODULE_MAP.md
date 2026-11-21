@@ -23,7 +23,7 @@
 | `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
 | `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
 | `pot-odds` | `pot-odds-dev` | `PotOddsQuizPage` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
-| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 70 | — | 83 |
+| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 71 | — | 83 |
 | `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleRush` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
 | `range-trainer` | `range-trainer-dev` | `DrillHub` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 13 | `progress` | 19 |
 | `strategy-academy` | `strategy-academy-dev` | `LessonRoute` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 116 | `progress` | 114 |

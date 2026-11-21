@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Target, Calculator, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { useProgressStore } from '../../store';
 import { getTodayString } from '@/shared/utils/spacedRepetition';
@@ -19,7 +19,7 @@ export default function QuickDrillBanner() {
 
   const startQuickDrill = useCallback(
     (mode: 'range' | 'odds' | 'mixed') => {
-      navigate(`/academy/quick-drill?mode=${mode}&quick=true`);
+      navigate(`/quick?mode=${mode}&quick=true`);
     },
     [navigate],
   );
@@ -27,29 +27,16 @@ export default function QuickDrillBanner() {
   const todayCompleted = streak.lastTrainingDate === getTodayString();
 
   return (
-    <div className="quick-drill-card">
+    <div className="quick-drill-card home-brass-banner">
       <div className="quick-drill-left">
-        <div className="quick-drill-icon">
-          <Zap className="w-5 h-5" />
-        </div>
-        <div>
-          <div className="quick-drill-title">{t('dashboard.quickDrill.title')}</div>
-          <div className="quick-drill-sub">{t('dashboard.quickDrill.subtitle')}</div>
+        <div className="quick-drill-title">{t('dashboard.quickDrill.bannerTitle')}</div>
+        <div className="quick-drill-pills">
+          <span>{t('dashboard.quickDrill.pillMinutes')}</span>
+          <span>{t('dashboard.quickDrill.pillMix')}</span>
+          <span>{t('dashboard.quickDrill.pillStreak')}</span>
         </div>
       </div>
       <div className="quick-drill-right">
-        <button type="button" onClick={() => startQuickDrill('range')} className="quick-drill-mode">
-          <Target className="w-3 h-3" />
-          {t('dashboard.quickDrill.range')}
-        </button>
-        <button type="button" onClick={() => startQuickDrill('odds')} className="quick-drill-mode">
-          <Calculator className="w-3 h-3" />
-          {t('dashboard.quickDrill.odds')}
-        </button>
-        <button type="button" onClick={() => startQuickDrill('mixed')} className="quick-drill-mode">
-          <Zap className="w-3 h-3" />
-          {t('dashboard.quickDrill.mixed')}
-        </button>
         <Button
           type="button"
           size="sm"

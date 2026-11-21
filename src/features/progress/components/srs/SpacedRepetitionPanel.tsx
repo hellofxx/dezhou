@@ -54,12 +54,12 @@ export default function SpacedRepetitionPanel({
   const allDone = remainingToday === 0;
 
   return (
-    <Card className="bg-[var(--felt)] border-[var(--walnut-border)] h-full">
+    <Card className="home-panel-surface bg-[var(--felt)] border-[var(--walnut-border)] h-full">
       <CardContent className="p-4 flex flex-col h-full">
         <div className="flex items-center gap-2 mb-3">
           <RefreshCw className="w-5 h-5 text-[var(--brass-bright)]" />
           <h2 className="font-display text-[17px] text-[var(--ivory)] tracking-wide">
-            {t('spacedRepetition.todayReview')}
+            {t('dashboard.training.srs')}
           </h2>
           {!allDone && (
             <span className="ml-1 px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--poker-terra)]/25 text-[var(--poker-terra-bright)]">

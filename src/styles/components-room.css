@@ -35,8 +35,8 @@
 
 .journey-track {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
   position: relative;
 }
 
@@ -413,3 +413,208 @@
 .drill-hub-card:focus-visible {
   outline: none;
 }
+
+/* =========================================================
+   Home · reference-aligned hero / banner / panels（v1.11.1）
+   ========================================================= */
+
+/* 牌桌两侧留出「牌室墙面」，象牙铭牌骑桌沿 */
+.felt-arena-wrap {
+  padding-inline: clamp(0px, 5vw, 64px);
+}
+
+.felt-arena-wrap .felt-arena {
+  min-height: 296px;
+  padding: 22px 118px 26px;
+}
+
+.arena-side-plaque {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 112px;
+  padding: 12px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border-radius: 8px;
+  border: 1px solid #b9a06a;
+  background: linear-gradient(180deg, #f8f2e2, #e9dfc6);
+  color: #2a2113;
+  box-shadow:
+    0 10px 22px rgba(10, 8, 4, 0.45),
+    inset 0 1px 0 rgba(255, 248, 230, 0.9),
+    inset 0 -1px 0 rgba(160, 140, 96, 0.55);
+}
+
+.arena-side-plaque.left { left: 5.5%; text-align: center; }
+.arena-side-plaque.right { right: 5.5%; text-align: center; }
+
+.arena-plaque-num {
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.arena-plaque-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6e6350;
+}
+
+.arena-plaque-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #4f452f;
+}
+
+.arena-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--brass-text);
+}
+
+.arena-title {
+  margin-top: 6px;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ivory);
+  text-shadow: 0 2px 12px rgba(10, 8, 4, 0.6);
+}
+
+.arena-note {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 10px;
+  color: var(--ivory-muted);
+  white-space: nowrap;
+}
+
+/* 黄铜速训横幅：压薄到基准的单行高度，模式 chip 变 pill */
+.home-brass-banner {
+  padding: 10px 16px;
+  gap: 12px;
+}
+
+.home-brass-banner .quick-drill-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-brass-banner .quick-drill-title { font-size: 15px; }
+
+.quick-drill-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.quick-drill-pills span {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(26, 19, 8, 0.22);
+  background: rgba(26, 19, 8, 0.06);
+  color: var(--stable-ink);
+}
+
+/* 首页面板：胡桃木底面（浅色牌室保持现有纸张/极简表面） */
+html[data-theme="dark"] .home-room .panel,
+html[data-theme="dark"] .home-room .journey-panel {
+  background-color: var(--walnut);
+  background-image:
+    linear-gradient(180deg, rgba(10, 8, 4, 0.58), rgba(10, 8, 4, 0.74)),
+    var(--room-wood-h);
+  background-size: var(--wood-size);
+  border-color: color-mix(in srgb, var(--brass) 16%, transparent);
+}
+
+/* 周打卡条：基准图为小圆点 + 日期，不用大块格 */
+.streak-rail-dots { gap: 8px; }
+
+.streak-dot {
+  flex-direction: column-reverse;
+  gap: 4px;
+  padding: 0 !important;
+  min-width: 16px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.streak-dot span {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ivory-muted);
+}
+
+.streak-dot em {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  font-size: 0;
+  color: transparent;
+  background: color-mix(in srgb, var(--ivory) 22%, transparent);
+}
+
+.streak-dot.done em {
+  background: var(--brass-bright);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--brass-bright) 55%, transparent);
+}
+
+.streak-dot.today em {
+  width: 11px;
+  height: 11px;
+  background: transparent;
+  border: 2px solid var(--brass-bright);
+  box-shadow: none;
+}
+
+.streak-dot.today span { color: var(--brass-bright); }
+
+@media (max-width: 767px) {
+  .felt-arena-wrap { padding-inline: 0; }
+  .arena-side-plaque { display: none; }
+  .arena-title { font-size: 21px; }
+  .home-brass-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .home-brass-banner .quick-drill-left { align-items: center; }
+  .home-brass-banner .quick-drill-right { justify-content: center; flex-wrap: wrap; }
+}
+
+/* 今日计划 / 间隔复习：与旅程同胡桃木表面，行改为细分隔线（对照基准图） */
+html[data-theme="dark"] .home-room .home-panel-surface {
+  background-color: var(--walnut);
+  background-image:
+    linear-gradient(180deg, rgba(10, 8, 4, 0.58), rgba(10, 8, 4, 0.74)),
+    var(--room-wood-h);
+  background-size: var(--wood-size);
+  border-color: color-mix(in srgb, var(--brass) 16%, transparent);
+}
+
+html[data-theme="dark"] .home-room .home-plan-row {
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--walnut-border) 55%, transparent);
+  border-radius: 0;
+  background: transparent;
+  padding: 9px 2px;
+}
+
+html[data-theme="dark"] .home-room .home-plan-row:last-child { border-bottom: 0; }

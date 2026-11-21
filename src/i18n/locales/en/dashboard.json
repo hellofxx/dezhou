@@ -19,7 +19,14 @@
     "accuracyLevel": "Intermediate",
     "todayChallenge": "Today's Challenge",
     "ready": "Today's practice is ready for you.",
-    "todayProgress": "Today"
+    "todayProgress": "Today",
+    "eyebrow": "PRIVATE CARD ROOM · Learning Path",
+    "pathTitle": "From first hand to mastery, one clear table path",
+    "eloLabel": "ELO Rating",
+    "streakLabel": "Training Streak",
+    "dayUnit": "days",
+    "statusNote": "{{rank}} · {{n}} ELO to {{next}} · {{answered}} answered today",
+    "statusMax": "{{rank}} · {{answered}} answered today"
   },
   "streakRail": {
     "consecutiveDays": "Day Streak",
@@ -43,7 +50,11 @@
     "completed": "✓ Completed Today",
     "range": "Range",
     "odds": "Odds",
-    "mixed": "Mixed"
+    "mixed": "Mixed",
+    "bannerTitle": "Daily Drill · 3 mixed spots",
+    "pillMinutes": "~3 min",
+    "pillMix": "Odds + Decisions + Puzzles",
+    "pillStreak": "Keep the streak"
   },
   "training": {
     "todayQuestion": "Today's Practice · Q{{current}} / {{total}}",
@@ -60,7 +71,7 @@
     "dueRate": "Due Rate"
   },
   "path": {
-    "title": "Learning Journey",
+    "title": "Learning Journey · Four Stages",
     "eyebrow": "Scaffolded Path",
     "locked": "Locked",
     "lessons": "{{done}}/{{total}} lessons",
@@ -69,7 +80,15 @@
     "continue": "Continue",
     "allCourses": "All courses",
     "startQuick": "Start drill",
-    "ringAria": "{{done}} of {{total}} lessons completed"
+    "ringAria": "{{done}} of {{total}} lessons completed",
+    "stage1": "Foundations · Read the Table",
+    "stage1Sub": "Rules, hands and position",
+    "stage2": "Core · Price It",
+    "stage2Sub": "Odds, outs and ranges",
+    "stage3": "Advance · Shape the Pot",
+    "stage3Sub": "C-bet, EV and GTO",
+    "stage4": "Mastery · No Doubt",
+    "stage4Sub": "Certification and real-table calibration"
   },
   "trainingGrounds": {
     "title": "Training Grounds",
@@ -82,7 +101,7 @@
     "reviewDesc": "Import hand histories for deep analysis"
   },
   "dataPlan": {
-    "title": "Today's Training Plan",
+    "title": "Today's Plan",
     "count": "{{count}} items",
     "allDone": "Today's training goal is complete!",
     "freeTrain": "Free training",
