@@ -363,7 +363,7 @@ export function TrainingSession({
           decisionFeedback={showFeedback ? decisionFeedback : null}
           disabled={showFeedback || quizState.status !== 'running'}
           onNext={handleNext}
-          onRelatedLessonOpen={(lessonId) => navigate(`/academy/lesson/${lessonId}`)}
+          onRelatedLessonOpen={(lessonId) => navigate(`/lesson/${lessonId}`)}
         />
       </div>
 
