@@ -62,7 +62,7 @@ export default function DownswingAlert() {
           </div>
           <div className="shrink-0">
             <Button
-              onClick={() => navigate('/academy/lesson/local-mental-tilt-recognition')}
+              onClick={() => navigate('/lesson/local-mental-tilt-recognition')}
               className="bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] hover:opacity-90 gap-1.5"
               size="sm"
             >

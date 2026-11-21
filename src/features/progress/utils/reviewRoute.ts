@@ -17,9 +17,9 @@ export function getReviewRoute(item: ReviewItem): string {
 
   switch (item.category) {
     case 'range':
-      return '/range-trainer';
+      return '/drill/range';
     case 'odds':
-      return '/pot-odds';
+      return '/drill/odds';
     case 'gto':
       return '/gto-simulator';
     // 理论复习项缺 route 时回退理论学院主页：禁止落到下方 default 拼出 /academy/lesson/theory:... 死链
@@ -27,6 +27,6 @@ export function getReviewRoute(item: ReviewItem): string {
       return '/theory';
     case 'strategy':
     default:
-      return `/academy/lesson/${item.id}`;
+      return `/lesson/${item.id}`;
   }
 }

@@ -88,8 +88,8 @@ export type DailyRecommendation =
 
 // 模块路由映射
 const MODULE_ROUTES: Record<string, string> = {
-  'range-trainer': '/range-trainer',
-  'pot-odds': '/pot-odds',
+  'range-trainer': '/drill/range',
+  'pot-odds': '/drill/odds',
   'gto-simulator': '/gto-simulator',
 };
 
@@ -225,7 +225,7 @@ export function generateCrossModuleDailyPlan(
       titleParams: { title: nextLesson.title },
       description: 'dashboard.dataPlan.descAcademyLesson',
       descParams: { level: nextLesson.level },
-      route: `/academy/lesson/${nextLesson.id}`,
+      route: `/lesson/${nextLesson.id}`,
       priority: recommendations.length === 0 ? 'high' : 'medium',
       estimatedTime: '15 min',
       reason: 'nextLesson',
@@ -263,7 +263,7 @@ export function generateCrossModuleDailyPlan(
         ? 'dashboard.dataPlan.descWeakAccuracy'
         : 'dashboard.dataPlan.descWeakNone',
       descParams: accuracy !== undefined ? { accuracy: Math.round(accuracy * 100) } : undefined,
-      route: MODULE_ROUTES[weakestModule] || '/range-trainer',
+      route: MODULE_ROUTES[weakestModule] || '/drill/range',
       priority: 'medium',
       estimatedTime: '10 min',
       reason: 'weakSpot',
@@ -273,8 +273,8 @@ export function generateCrossModuleDailyPlan(
 
   // 5. 多样性 — 确保推荐覆盖不同模块
   const availableModules = [
-    { module: 'range-trainer', type: 'range-quiz' as const, title: 'dashboard.dataPlan.titlePracticeRange', route: '/range-trainer', time: '10 min' },
-    { module: 'pot-odds', type: 'pot-odds-quiz' as const, title: 'dashboard.dataPlan.titlePracticeOdds', route: '/pot-odds', time: '10 min' },
+    { module: 'range-trainer', type: 'range-quiz' as const, title: 'dashboard.dataPlan.titlePracticeRange', route: '/drill/range', time: '10 min' },
+    { module: 'pot-odds', type: 'pot-odds-quiz' as const, title: 'dashboard.dataPlan.titlePracticeOdds', route: '/drill/odds', time: '10 min' },
   ];
 
   for (const item of availableModules) {

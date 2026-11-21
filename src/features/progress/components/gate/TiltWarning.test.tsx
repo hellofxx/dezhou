@@ -95,7 +95,7 @@ describe('TiltWarning 三个动作', () => {
     fireEvent.click(getByText('学习情绪管理'));
 
     expect(baseElement.querySelector('[data-probe]')?.textContent).toBe(
-      '/academy/lesson/local-mental-tilt-recognition',
+      '/lesson/local-mental-tilt-recognition',
     );
   });
 

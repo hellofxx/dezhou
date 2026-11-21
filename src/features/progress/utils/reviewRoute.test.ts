@@ -20,19 +20,19 @@ function item(overrides: Partial<ReviewItem> = {}): ReviewItem {
 
 describe('getReviewRoute（分类 → 路由映射）', () => {
   it('四个训练分类各自落到本模块主页', () => {
-    expect(getReviewRoute(item({ category: 'range' }))).toBe('/range-trainer');
-    expect(getReviewRoute(item({ category: 'odds' }))).toBe('/pot-odds');
+    expect(getReviewRoute(item({ category: 'range' }))).toBe('/drill/range');
+    expect(getReviewRoute(item({ category: 'odds' }))).toBe('/drill/odds');
     expect(getReviewRoute(item({ category: 'gto' }))).toBe('/gto-simulator');
   });
 
   it('strategy 用 item.id 拼课程页（既有行为不变）', () => {
     expect(getReviewRoute(item({ category: 'strategy', id: 'l3-cbet' }))).toBe(
-      '/academy/lesson/l3-cbet',
+      '/lesson/l3-cbet',
     );
   });
 
   it('未知分类回退策略学院课程页（default 分支保留）', () => {
-    expect(getReviewRoute(item({ category: 'mystery', id: 'x-1' }))).toBe('/academy/lesson/x-1');
+    expect(getReviewRoute(item({ category: 'mystery', id: 'x-1' }))).toBe('/lesson/x-1');
   });
 });
 
@@ -54,7 +54,7 @@ describe('getReviewRoute（metadata.route 优先）', () => {
 
   it('非绝对路径的脏 route 值不采信，回退分类映射（防御老/异常数据）', () => {
     expect(getReviewRoute(item({ category: 'range', metadata: { route: 'javascript:alert(1)' } }))).toBe(
-      '/range-trainer',
+      '/drill/range',
     );
   });
 });
@@ -64,7 +64,7 @@ describe('getReviewRoute（向后兼容老存量项）', () => {
     const legacy = item({ category: 'theory', id: 'theory:t1-combinatorics-q1', metadata: undefined });
     const route = getReviewRoute(legacy);
     expect(route).toBe('/theory');
-    expect(route).not.toContain('/academy/lesson');
+    expect(route).not.toContain('/lesson');
   });
 
   it('metadata 存在但无 route 时，理论项仍回退理论学院主页', () => {

@@ -39,7 +39,7 @@ export default function DailyTrainingPlan({ recommendations, onDismiss }: DailyT
             <PartyPopper className="w-10 h-10 text-[var(--brass-bright)] mx-auto mb-3" />
             <p className="text-[var(--ivory)] text-sm mb-2">{t('dashboard.dataPlan.allDone')}</p>
             <button
-              onClick={() => navigate('/range-trainer')}
+              onClick={() => navigate('/drill/range')}
               className="text-xs text-[var(--brass-bright)] hover:underline"
             >
               {t('dashboard.dataPlan.freeTrain')} →

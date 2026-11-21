@@ -31,7 +31,7 @@ interface ModuleEntry {
 const MODULES: ModuleEntry[] = [
   {
     id: 'range-trainer',
-    route: '/range-trainer',
+    route: '/drill/range',
     icon: Target,
     labelKey: 'nav.rangeTrainer',
     descKey: 'dashboard.trainingGrounds.rangeDesc',
@@ -40,7 +40,7 @@ const MODULES: ModuleEntry[] = [
   },
   {
     id: 'pot-odds',
-    route: '/pot-odds',
+    route: '/drill/odds',
     icon: Calculator,
     labelKey: 'nav.potOdds',
     descKey: 'dashboard.trainingGrounds.oddsDesc',
@@ -67,7 +67,7 @@ const MODULES: ModuleEntry[] = [
   },
   {
     id: 'puzzle-trainer',
-    route: '/puzzle',
+    route: '/drill/puzzle',
     icon: Puzzle,
     labelKey: 'nav.puzzle',
     descKey: 'dashboard.trainingGrounds.puzzleDesc',

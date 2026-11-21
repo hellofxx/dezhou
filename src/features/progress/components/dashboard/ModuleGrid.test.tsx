@@ -197,7 +197,7 @@ describe('TrainingGrounds 训练场模块网格', () => {
       potOdds!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
 
-    expect(container.querySelector('[data-probe]')?.textContent).toBe('/pot-odds');
+    expect(container.querySelector('[data-probe]')?.textContent).toBe('/drill/odds');
   });
 
   it('最近训练标记：今日已练 / N 天前，仅在对应模块卡上出现', () => {

@@ -106,9 +106,9 @@ export default function DailyChallenge() {
       : 'dailyChallenge.gtoChallenge';
 
   const targetPath = challenge.type === 'range'
-    ? '/range-trainer'
+    ? '/drill/range'
     : challenge.type === 'pot-odds'
-      ? '/pot-odds'
+      ? '/drill/odds'
       : '/gto-simulator';
 
   return (

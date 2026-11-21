@@ -52,7 +52,7 @@ export default function TiltWarning() {
   const handleContinue = () => {
     setOpen(false);
     // 跳转到情绪管理课程，提供具体可执行的学习路径
-    navigate('/academy/lesson/local-mental-tilt-recognition');
+    navigate('/lesson/local-mental-tilt-recognition');
   };
 
   // P4 修复（4.5-P2-1）：新增"硬继续"选项，仅关闭弹窗不跳转
