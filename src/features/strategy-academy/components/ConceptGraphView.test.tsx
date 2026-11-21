@@ -66,7 +66,7 @@ describe('ConceptGraphView', () => {
     const concept = CONCEPT_NODES[0]!;
     fireEvent.click(screen.getByText(concept.name));
     expect(screen.getByTestId('location').textContent).toBe(
-      `/academy/lesson/${concept.relatedLessons[0]}`,
+      `/lesson/${concept.relatedLessons[0]}`,
     );
   });
 

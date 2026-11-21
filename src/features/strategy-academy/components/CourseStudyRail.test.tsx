@@ -62,7 +62,7 @@ describe('CourseStudyRail', () => {
     const links = screen.getAllByRole('link', { name: /规则与牌型|位置基础|下注尺度/ });
     expect(links).toHaveLength(lessons.length);
     links.forEach((link) => {
-      expect(link.getAttribute('href')).toMatch(/^\/academy\/lesson\/l1-/);
+      expect(link.getAttribute('href')).toMatch(/^\/lesson\/l1-/);
     });
     expect(screen.getByRole('link', { name: /位置基础/ }).getAttribute('aria-current')).toBe('page');
     expect(screen.getByRole('link', { name: /下注尺度/ }).getAttribute('aria-current')).toBeNull();

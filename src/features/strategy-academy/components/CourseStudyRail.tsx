@@ -65,7 +65,7 @@ export function CourseStudyRail({ lesson, levelEntry, completedLessons }: Course
             return (
               <li key={item.id}>
                 <Link
-                  to={`/academy/lesson/${item.id}`}
+                  to={`/lesson/${item.id}`}
                   aria-current={isCurrent ? 'page' : undefined}
                   className={cn(
                     'flex items-center gap-2.5 rounded-md px-2 py-2 text-xs transition-colors',

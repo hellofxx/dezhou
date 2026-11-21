@@ -84,7 +84,7 @@ describe('LearningTracksView：轨道选择与进度', () => {
   it('前置未满足时「去学习」跳转首个缺失的前置课程', () => {
     renderAt();
     fireEvent.click(screen.getByText('去学习 →'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-basics');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-basics');
   });
 
   it('「继续学习」跳转轨道内下一门未完成课程', () => {
@@ -93,7 +93,7 @@ describe('LearningTracksView：轨道选择与进度', () => {
     expect(continueButtons.length).toBeGreaterThan(0);
     fireEvent.click(continueButtons[0]!);
     expect(screen.getByTestId('location').textContent).toBe(
-      `/academy/lesson/${LEARNING_TRACKS[0]!.lessonIds[0]}`,
+      `/lesson/${LEARNING_TRACKS[0]!.lessonIds[0]}`,
     );
   });
 

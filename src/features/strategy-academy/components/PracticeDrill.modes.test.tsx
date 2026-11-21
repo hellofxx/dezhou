@@ -50,10 +50,10 @@ function renderDrill(
 ) {
   const onComplete = vi.fn<(result: PracticeResult) => void>();
   render(
-    <MemoryRouter initialEntries={['/academy/lesson/fixture']}>
+    <MemoryRouter initialEntries={['/lesson/fixture']}>
       <Routes>
         <Route
-          path="/academy/lesson/fixture"
+          path="/lesson/fixture"
           element={
             <PracticeDrillComponent
               drill={drill}
@@ -64,7 +64,7 @@ function renderDrill(
             />
           }
         />
-        <Route path="/academy/lesson/:lessonId" element={<div>{RELATED_LESSON_PROBE}</div>} />
+        <Route path="/lesson/:lessonId" element={<div>{RELATED_LESSON_PROBE}</div>} />
       </Routes>
     </MemoryRouter>,
   );

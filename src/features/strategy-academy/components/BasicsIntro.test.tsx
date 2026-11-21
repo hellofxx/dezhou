@@ -20,7 +20,7 @@ function renderBasics() {
     <MemoryRouter initialEntries={['/academy/basics']}>
       <Routes>
         <Route path="/academy/basics" element={<BasicsIntro />} />
-        <Route path="/academy/lesson/l1-basics" element={<div>{FIRST_LESSON_PROBE}</div>} />
+        <Route path="/lesson/l1-basics" element={<div>{FIRST_LESSON_PROBE}</div>} />
       </Routes>
     </MemoryRouter>,
   );

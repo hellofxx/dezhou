@@ -130,7 +130,7 @@ describe('checkpoint SRS 与尝试序号', () => {
     const item = items[0]!;
     expect(item.id).toBe(`${checkpointReviewIdPrefix(1)}${wrong.question.id}`);
     expect(item.id.startsWith('checkpoint:l1:')).toBe(true);
-    expect(item.metadata?.route).toBe(`/academy/lesson/${wrong.lessonId}`);
+    expect(item.metadata?.route).toBe(`/lesson/${wrong.lessonId}`);
     expect(item.metadata?.source).toBe('strategy');
     // label / front / back 一律存 i18n key（禁止存译文）
     expect(item.label.startsWith('academy.lessonQuiz.')).toBe(true);

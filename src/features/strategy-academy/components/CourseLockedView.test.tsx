@@ -61,14 +61,14 @@ describe('CourseLockedView：Level 门禁', () => {
     expect(screen.getByText('去完成')).toBeTruthy();
 
     fireEvent.click(screen.getByText('去完成'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-basics');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-basics');
   });
 
   it('部分完成时进度与首个未完成课程同步', () => {
     const { container } = renderView({ completedLessons: ['l1-basics'] });
     expect(container.textContent).toContain('已完成 1/9 课时');
     fireEvent.click(screen.getByText('去完成'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-position');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-position');
   });
 
   it('前置 Level 全部完成时展示已完成状态，无跳转按钮', () => {
@@ -99,7 +99,7 @@ describe('CourseLockedView：Level 门禁', () => {
     expect(container.textContent).toContain('请先完成该 Level 的所有课程');
     expect(container.textContent).toContain('翻后策略');
     fireEvent.click(screen.getByText('去完成'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l3-cbet');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l3-cbet');
   });
 });
 
@@ -115,7 +115,7 @@ describe('CourseLockedView：课程级前置与返回', () => {
     expect(container.textContent).toContain('l1-position');
 
     fireEvent.click(screen.getByText('l1-position'));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-position');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-position');
   });
 
   it('返回学院按钮跳转 /academy', () => {

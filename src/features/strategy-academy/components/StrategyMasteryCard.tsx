@@ -40,7 +40,7 @@ export function StrategyMasteryCard() {
         weakest
           ? {
               label: resolveLessonTitle(t, weakest),
-              route: `/academy/lesson/${weakest.id}`,
+              route: `/lesson/${weakest.id}`,
               ctaLabel: t('academy.mastery.weakestCta'),
               onNavigate: (route) => navigate(route),
             }

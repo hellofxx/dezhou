@@ -26,7 +26,7 @@ function resolveLink(data: Record<string, unknown> | undefined): string | null {
   // data.target === 'theory' → 理论学院章节路径；其他/缺失 → 学院课程路径
   return data.target === 'theory'
     ? `/theory/chapter/${lessonId}`
-    : `/academy/lesson/${lessonId}`;
+    : `/lesson/${lessonId}`;
 }
 
 /** 理论支撑块：info 系边框 + ExternalLink 图标；data.theoryChapterId / data.lessonId 存在时标签可点击跳转 */

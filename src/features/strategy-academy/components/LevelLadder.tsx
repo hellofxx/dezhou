@@ -69,7 +69,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
 
   const openLevel = (level: LevelSummary) => {
     const target = level.lessons.find((l) => !completedLessons.includes(l.id)) ?? level.lessons[0];
-    if (target) navigate(`/academy/lesson/${target.id}`);
+    if (target) navigate(`/lesson/${target.id}`);
   };
 
   const handleHeadClick = (level: LevelSummary, expanded: boolean) => {
@@ -241,7 +241,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
                           <li key={lesson.id}>
                             <button
                               type="button"
-                              onClick={() => navigate(`/academy/lesson/${lesson.id}`)}
+                              onClick={() => navigate(`/lesson/${lesson.id}`)}
                               onPointerEnter={() => prefetchLesson(lesson.id)}
                               onFocus={() => prefetchLesson(lesson.id)}
                               aria-label={`${stateLabel} · ${resolveLessonTitle(t, lesson)}`}

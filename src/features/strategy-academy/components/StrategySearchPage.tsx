@@ -83,7 +83,7 @@ export default function StrategySearchPage() {
         const title = resolveLessonTitle(t, lesson);
         const subtitle = resolveLessonSubtitle(t, lesson);
         if (normalized && !`${title} ${subtitle}`.toLowerCase().includes(normalized)) return [];
-        return [{ id: lesson.id, title, subtitle, route: `/academy/lesson/${lesson.id}` }];
+        return [{ id: lesson.id, title, subtitle, route: `/lesson/${lesson.id}` }];
       }),
     [activeVariant, normalized, t],
   );
@@ -102,7 +102,7 @@ export default function StrategySearchPage() {
           id: `full-${hit.lessonId}`,
           title: summary ? resolveLessonTitle(t, summary) : hit.title,
           subtitle: levelTitle ? `${levelTitle} · ${hit.snippet}` : hit.snippet,
-          route: `/academy/lesson/${hit.lessonId}`,
+          route: `/lesson/${hit.lessonId}`,
         };
       });
   }, [fullTextHits, instantItems, t]);

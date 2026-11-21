@@ -91,7 +91,7 @@ describe('LevelCard', () => {
     expect(container.textContent).toContain('33%');
 
     fireEvent.click(container.querySelector('button')!);
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/card-b');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/card-b');
   });
 
   it('全部完成：展示认证入口并跳转认证页（不触发卡片跳转）', () => {

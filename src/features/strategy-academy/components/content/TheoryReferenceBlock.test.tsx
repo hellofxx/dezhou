@@ -51,7 +51,7 @@ describe('TheoryReferenceBlock 跳转链接', () => {
   });
 
   it('仅有 lessonId 时保持向后兼容：默认学院课程路径 / target=theory 时理论路径', () => {
-    expect(render({ lessonId: 'l3-cbet' })!.getAttribute('href')).toBe('/academy/lesson/l3-cbet');
+    expect(render({ lessonId: 'l3-cbet' })!.getAttribute('href')).toBe('/lesson/l3-cbet');
     expect(render({ lessonId: 't4-x', target: 'theory' })!.getAttribute('href')).toBe('/theory/chapter/t4-x');
   });
 

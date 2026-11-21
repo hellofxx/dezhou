@@ -37,11 +37,9 @@ const STATIC_PREFIXES = [
 
 /**
  * 迁移期旧重定向源 allowlist（只减不增）。
- * 每项在对应 Wave 统一为 canonical 后删除；条目失效即守卫变红。
+ * 全部入口已改用 canonical 路由，baseline 已清空；新增旧源引用会直接变红。
  */
-const REDIRECT_SOURCE_ALLOWLIST: Record<string, string> = {
-  '/academy/lesson': '旧课时深链；Wave 4 统一为 /lesson/:lessonId',
-};
+const REDIRECT_SOURCE_ALLOWLIST: Record<string, string> = {};
 
 interface RouteManifest {
   canonical: string[];

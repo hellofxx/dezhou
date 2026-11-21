@@ -51,7 +51,7 @@ export function LevelCard({ level, unlocked, completedLessons, index }: LevelCar
 
   const handleClick = () => {
     if (unlocked && targetLesson) {
-      navigate(`/academy/lesson/${targetLesson.id}`);
+      navigate(`/lesson/${targetLesson.id}`);
     }
   };
 

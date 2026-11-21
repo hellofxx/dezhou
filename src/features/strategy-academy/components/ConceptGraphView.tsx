@@ -21,7 +21,7 @@ export default function ConceptGraphView() {
   const remainingCount = totalLessons - completedCount;
 
   const handleNodeClick = (lessonId: string) => {
-    navigate(`/academy/lesson/${lessonId}`);
+    navigate(`/lesson/${lessonId}`);
   };
 
   return (

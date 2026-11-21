@@ -21,11 +21,11 @@ import { findLevelSummaryByLessonId, findLessonSummaryById } from '../utils/acad
  * - Drill 课程经 DrillLessonRouter 懒加载对应 Drill
  */
 
-const PATH = '/academy/lesson/:lessonId';
+const PATH = '/lesson/:lessonId';
 
 function renderAt(lessonId: string) {
   return render(
-    <MemoryRouter initialEntries={[`/academy/lesson/${lessonId}`]}>
+    <MemoryRouter initialEntries={[`/lesson/${lessonId}`]}>
       <Routes>
         <Route path={PATH} element={<CourseView />} />
       </Routes>
@@ -108,7 +108,7 @@ describe('CourseView：已解锁课程渲染', () => {
     const hrefs = within(rail)
       .getAllByRole('link')
       .map((link) => link.getAttribute('href'));
-    expect(hrefs).toContain('/academy/lesson/l1-basics');
+    expect(hrefs).toContain('/lesson/l1-basics');
   });
 
   it('mental-tilt 本土课无前置依赖，未完成基础入门也可访问', async () => {

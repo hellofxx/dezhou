@@ -122,7 +122,7 @@ describe('LevelLadder：展开与跳转', () => {
     expect(l1Head.getAttribute('aria-expanded')).toBe('true');
     // 已展开等级头再次点击 → 进入首个未完成课程
     fireEvent.click(l1Head);
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-a');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-a');
   });
 
   it('收起等级点击仅展开，不跳转', () => {
@@ -139,9 +139,9 @@ describe('LevelLadder：展开与跳转', () => {
     const doneChip = screen.getByRole('button', { name: /已完成 · l1-a 名称/ });
     const nextChip = screen.getByRole('button', { name: /下一课 · l1-b 名称/ });
     fireEvent.click(doneChip);
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-a');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-a');
     fireEvent.click(nextChip);
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-b');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-b');
   });
 
   it('未解锁等级禁用并展示解锁条件', () => {

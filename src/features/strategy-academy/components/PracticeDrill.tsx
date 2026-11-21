@@ -938,7 +938,7 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               {/* 去复习链接：答错（含超时计错）且存在关联课程时显示 */}
               {(!selectedOption.isCorrect || isTimedOut) && currentQuestion.relatedLessonId && (
                 <button
-                  onClick={() => navigate(`/academy/lesson/${currentQuestion.relatedLessonId}`)}
+                  onClick={() => navigate(`/lesson/${currentQuestion.relatedLessonId}`)}
                   className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--brass-bright)] underline underline-offset-2 hover:opacity-80 transition-opacity"
                 >
                   {t('academy.drill.reviewLink')}

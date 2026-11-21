@@ -115,7 +115,7 @@ describe('completeCourse：题级 SRS 与尝试记录（P0 学习闭环）', () 
     expect(item!.label).toBe('academy.lessonQuiz.q2.question');
     expect(item!.metadata?.front).toBe('academy.lessonQuiz.q2.question');
     expect(item!.metadata?.back).toBe('academy.lessonQuiz.q2.explanation');
-    expect(item!.metadata?.route).toBe(`/academy/lesson/${lesson.id}`);
+    expect(item!.metadata?.route).toBe(`/lesson/${lesson.id}`);
     expect(item!.category).toBe('strategy');
     // 有错题时不重复建课时级复习项（避免与题级条目重叠）
     expect(useProgressStore.getState().reviewItems.some((r) => r.id === lesson.id)).toBe(false);

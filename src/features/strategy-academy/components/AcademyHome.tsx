@@ -164,7 +164,9 @@ function ZeroStateCard() {
       className="panel brass-rail academy-hero"
       aria-label={t('academy.zeroState.title')}
     >
-      <p className="section-eyebrow mb-2">{t('academy.zeroState.eyebrow')}</p>
+      <p className="mb-2 font-numeric text-[9px] uppercase tracking-[0.2em] text-[var(--brass-text)]">
+        {t('academy.zeroState.eyebrow')}
+      </p>
 
       <p className="font-display text-[17px] text-[var(--ivory)] leading-snug">
         {t('academy.zeroState.title')}

@@ -2,7 +2,7 @@
  * Level Checkpoint 错题 → 题级 SRS 复习项（shared `buildQuestionReviewItems` 薄封装）。
  *
  * 与课后测验错题的差异（PRD §5.16.13）：
- * - 检查点题目混自本级多门课，复习项必须回链到**题目来源课**（`/academy/lesson/<sourceLessonId>`）；
+ * - 检查点题目混自本级多门课，复习项必须回链到**题目来源课**（`/lesson/<sourceLessonId>`）；
  * - 复习项 id 用 `checkpoint:l<level>:<questionId>` 命名空间，避免与课后测验的
  *   `strategy:<questionId>` 复习项按 id 整体 upsert 时互相吞并；
  * - label / front / back 一律存 i18n key（渲染层解析），不存任何语言的译文。
@@ -30,7 +30,7 @@ export function buildCheckpointReviewItems(
     buildQuestionReviewItems({
       source: 'strategy',
       category: 'strategy',
-      route: `/academy/lesson/${group.lessonId}`,
+      route: `/lesson/${group.lessonId}`,
       questions: questions
         .filter((item) => item.lessonId === group.lessonId)
         .map((item) => item.question),

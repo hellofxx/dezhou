@@ -15,7 +15,7 @@ interface StrategyBookmarksPanelProps {
  * 策略学院收藏课时面板（共享 AcademyBookmarksPanel 的薄包装）。
  *
  * 适配职责只有三件：lessonId → manifest 摘要（不触发正文加载，首屏零额外 chunk）、
- * 标题走课时 i18n key、路由 `/academy/lesson/:id` 交给 useNavigate。
+ * 标题走课时 i18n key、路由 `/lesson/:id` 交给 useNavigate。
  * 失效 id（已下线课时）在映射阶段丢弃，面板不感知业务目录。
  * 收藏本身是纯阅读书签：不参与解锁、不影响掌握度与能力分。
  */
@@ -31,7 +31,7 @@ export function StrategyBookmarksPanel({ variant = 'panel' }: StrategyBookmarksP
     .map((lesson) => ({
       id: lesson.id,
       title: resolveLessonTitle(t, lesson),
-      route: `/academy/lesson/${lesson.id}`,
+      route: `/lesson/${lesson.id}`,
     }));
 
   return (

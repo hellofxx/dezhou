@@ -174,7 +174,7 @@ export default function LearningTracksView() {
                         <button
                           onClick={() =>
                             firstMissingLessonId
-                              ? navigate(`/academy/lesson/${firstMissingLessonId}`)
+                              ? navigate(`/lesson/${firstMissingLessonId}`)
                               : navigate('/academy/basics')
                           }
                           className="ml-auto text-[var(--brass-bright)] underline underline-offset-2 whitespace-nowrap"
@@ -220,7 +220,7 @@ export default function LearningTracksView() {
                               <li key={lesson.id}>
                                 <button
                                   type="button"
-                                  onClick={() => navigate(`/academy/lesson/${lesson.id}`)}
+                                  onClick={() => navigate(`/lesson/${lesson.id}`)}
                                   className="flex w-full items-center justify-between gap-2 rounded-md border border-[var(--walnut-border)] bg-[var(--felt)] px-3 py-2 text-left text-xs text-[var(--ivory-dim)] hover:border-[var(--brass)]/50 hover:bg-[var(--felt-raised)]/40"
                                 >
                                   <span className="min-w-0 truncate">
@@ -257,7 +257,7 @@ export default function LearningTracksView() {
                       </button>
                       {trackNextLesson && (
                         <button
-                          onClick={() => navigate(`/academy/lesson/${trackNextLesson}`)}
+                          onClick={() => navigate(`/lesson/${trackNextLesson}`)}
                           disabled={!prereqMet}
                           className={`inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-md transition-colors ${
                             !prereqMet

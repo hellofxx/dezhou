@@ -9,7 +9,7 @@ import StrategyBookmarksPage from './StrategyBookmarksPage';
 /**
  * 收藏课时页契约（jsdom + 真实 store）：
  * - 页头：页标题 + 说明 + 「返回学院」→ /academy
- * - 有收藏：列出条目，点击跳 /academy/lesson/:id
+ * - 有收藏：列出条目，点击跳 /lesson/:id
  * - 无收藏：面板空态 + 「去挑几课」出口 → /academy
  * - 移除最后一条后立即回到空态
  */
@@ -77,7 +77,7 @@ describe('StrategyBookmarksPage', () => {
     expect(screen.queryByText(EMPTY)).toBeNull();
     expect(screen.queryByRole('button', { name: BROWSE })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: lessonTitle('l1-basics') }));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-basics');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-basics');
   });
 
   it('移除最后一条收藏后回到空态', () => {

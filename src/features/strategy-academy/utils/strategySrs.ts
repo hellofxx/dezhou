@@ -23,7 +23,7 @@ export function buildStrategyQuestionReviewItems(
   return buildQuestionReviewItems({
     source: 'strategy',
     category: 'strategy',
-    route: `/academy/lesson/${lessonId}`,
+    route: `/lesson/${lessonId}`,
     questions,
     wrongQuestionIds,
     idPrefix: STRATEGY_REVIEW_ID_PREFIX,

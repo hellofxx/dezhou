@@ -8,7 +8,7 @@ import { StrategyBookmarksPanel } from './StrategyBookmarksPanel';
 
 /**
  * 收藏课时面板契约（jsdom + 真实 store）：
- * - panel 变体：按 store 顺序渲染条目（标题走课时 i18n key）、点击跳 /academy/lesson/:id、移除按钮回写 store
+ * - panel 变体：按 store 顺序渲染条目（标题走课时 i18n key）、点击跳 /lesson/:id、移除按钮回写 store
  * - strip 变体：只读书签条（无移除按钮）
  * - 空态：展示 academy.bookmarks.empty
  * - 失效课时 id（不在 manifest）静默过滤，不产生断链
@@ -62,7 +62,7 @@ describe('StrategyBookmarksPanel（panel）', () => {
     expect(screen.getByRole('button', { name: lessonTitle('l1-bankroll') })).toBeTruthy();
 
     fireEvent.click(screen.getByRole('button', { name: lessonTitle('l1-bankroll') }));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-bankroll');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-bankroll');
   });
 
   it('移除按钮把课时从 store 摘掉', () => {
@@ -98,7 +98,7 @@ describe('StrategyBookmarksPanel（strip）', () => {
 
     expect(screen.getAllByRole('button')).toHaveLength(1);
     fireEvent.click(screen.getByRole('button', { name: lessonTitle('l1-basics') }));
-    expect(screen.getByTestId('location').textContent).toBe('/academy/lesson/l1-basics');
+    expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-basics');
   });
 
   it('空态与 panel 共用同一文案', () => {

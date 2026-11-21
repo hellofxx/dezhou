@@ -230,7 +230,7 @@ describe('LevelCheckpointPage 重考', () => {
     for (const item of expectedWrong) {
       const entry = added.find((candidate) => candidate.id === `checkpoint:l1:${item.question.id}`);
       expect(entry, `缺少复习项 ${item.question.id}`).toBeTruthy();
-      expect(entry!.metadata?.route).toBe(`/academy/lesson/${item.lessonId}`);
+      expect(entry!.metadata?.route).toBe(`/lesson/${item.lessonId}`);
     }
   });
 });

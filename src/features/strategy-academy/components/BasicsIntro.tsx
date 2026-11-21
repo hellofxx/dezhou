@@ -87,7 +87,7 @@ export default function BasicsIntro() {
   useEffect(() => {
     if (!showCompletion) return;
     if (countdown <= 0) {
-      navigate('/academy/lesson/l1-basics');
+      navigate('/lesson/l1-basics');
       return;
     }
     const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
@@ -115,7 +115,7 @@ export default function BasicsIntro() {
           <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--brass-text)] font-medium mb-1">
             Poker Basics
           </p>
-          <h2 className="font-display text-[24px] md:text-[28px] text-[var(--ivory)] mb-3">
+          <h2 className="font-display text-[22px] md:text-[24px] text-[var(--ivory)] mb-3">
             {t('academy.basicsIntro.title')}
           </h2>
           {/* Progress bar */}

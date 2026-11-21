@@ -109,7 +109,7 @@ export function CourseLockedView({
                         </span>
                       ) : firstIncomplete ? (
                         <button
-                          onClick={() => navigate(`/academy/lesson/${firstIncomplete.id}`)}
+                          onClick={() => navigate(`/lesson/${firstIncomplete.id}`)}
                           className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-xs hover:opacity-90 transition-opacity shrink-0"
                         >
                           {t('academy.courseView.goComplete', { defaultValue: '去完成' })}
@@ -140,7 +140,7 @@ export function CourseLockedView({
                             (l) => !completedLessons.includes(l.id)
                           );
                           if (firstIncomplete) {
-                            navigate(`/academy/lesson/${firstIncomplete.id}`);
+                            navigate(`/lesson/${firstIncomplete.id}`);
                           }
                         }
                       }}
@@ -165,7 +165,7 @@ export function CourseLockedView({
             {missingPrereqLessonIds.map((id) => (
               <button
                 key={id}
-                onClick={() => navigate(`/academy/lesson/${id}`)}
+                onClick={() => navigate(`/lesson/${id}`)}
                 className="flex items-center gap-2 rounded-lg bg-[var(--walnut-raised)] border border-[var(--walnut-border)] px-4 py-2.5 text-left w-full hover:border-[var(--brass-bright)]/50 transition-colors group"
               >
                 <span className="text-xs text-[var(--ivory)] group-hover:text-[var(--brass-bright)] transition-colors">
