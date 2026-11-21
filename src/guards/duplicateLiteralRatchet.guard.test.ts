@@ -64,15 +64,8 @@ const GROUPS: readonly LiteralGroup[] = [
   {
     name: 'stat-box',
     pattern: /rounded-lg bg-\[var\(--walnut-raised\)\] p-4/g,
-    baseline: 1,
-    singleSource: [
-      {
-        file: 'src/features/pot-odds/components/PotOddsResultView.tsx',
-        expected: 1,
-        reason: '成绩页性能评语块复用同 chrome，不是统计卡；统计卡必须用 StatCard',
-      },
-    ],
-    reason: 'stat box 必须用 StatCard；仅允许 pot-odds 性能评语块的 1 处同 chrome',
+    baseline: 0,
+    reason: 'stat box 必须用 StatCard；结果纸条统一走 ResultSlip',
   },
 ];
 
