@@ -28,12 +28,20 @@ export interface BuildInfo {
   precache: string[];
 }
 
-/** APP_VERSION 事实源：src/shared/constants/app.ts（构建期注册 SW 的 ?v= 同源） */
+/**
+ * APP_VERSION 事实源：与 vite.config.ts 同口径（package.json 语义版本 + 部署序号）。
+ * 构建期 version 经 `__APP_BUILD_INFO__` 注入，源码里已无字面量可解析。
+ */
 export function readAppVersion(): string {
-  const source = readFileSync(path.join(REPO_ROOT, 'src', 'shared', 'constants', 'app.ts'), 'utf8');
-  const match = /APP_VERSION\s*=\s*'([^']+)'/.exec(source);
-  if (!match?.[1]) throw new Error('无法从 src/shared/constants/app.ts 读取 APP_VERSION');
-  return match[1];
+  const pkg = JSON.parse(
+    readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8'),
+  ) as { version: string };
+  const sequence = Number.parseInt(process.env.GITHUB_RUN_NUMBER ?? '', 10);
+  if (!/^\d+\.\d+\.\d+$/.test(pkg.version) || Number.isNaN(sequence) || sequence <= 0) {
+    return pkg.version;
+  }
+  const [major = '0', minor = '0', patch = '0'] = pkg.version.split('.');
+  return `${major}.${minor}.${Number.parseInt(patch, 10) + Math.floor(sequence)}`;
 }
 
 export function variantDir(variant: BuildVariant): string {
