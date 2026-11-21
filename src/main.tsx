@@ -11,6 +11,7 @@ import App from './App'
 // 首屏只等待 persist hydration（localStorage 同步层）；records 与数据源就绪后经
 // store 订阅 / useAcademyDataSource 的 late-registration 自愈触发重渲染。
 import { initProgressStore, waitForProgressHydration } from '@/features/progress/store.bootstrap'
+import { installWoodTexture } from '@/app/woodTexture';
 
 // 兜底：hydration 回调若因存储异常不触发，3 秒后仍渲染应用，避免永久白屏。
 async function bootstrapAndRender() {
@@ -52,6 +53,9 @@ async function bootstrapAndRender() {
     );
   }
 }
+
+// 牌室木纹：把程序化无缝胡桃木瓦片写进 --wood-h / --wood-v（幂等；失败保留 CSS 渐变回退）
+installWoodTexture();
 
 // 启动 Bootstrap + 渲染（含 Service Worker 延迟注册）
 bootstrapAndRender();

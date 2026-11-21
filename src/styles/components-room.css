@@ -1,0 +1,21 @@
+/* =========================================================
+   Room shell — 牌室木纹壳层（批次 1：壳层表面 + 密度）
+   级联位置：tokens → base → components-core → 本分片（globals.css 按序 import）。
+   木纹：src/app/woodTexture.ts 启动时把程序化瓦片写进 --wood-h / --wood-v；
+   该模块不可用（无 2d context）时自动回退到 tokens.css 的纯轴向细纹。
+   旅程图（journey map）样式属批次 2，不在本分片内。
+   ========================================================= */
+
+/* ---- Sidebar：竖向木纹（L 形木框的左腿） ---- */
+.room-shell-sidebar {
+  background-color: var(--walnut);
+  background-image: var(--room-wood-v);
+  background-size: var(--wood-size);
+}
+
+/* ---- Topbar：横向木纹（L 形木框的顶梁） ---- */
+.room-shell-topbar {
+  background-color: var(--walnut);
+  background-image: var(--room-wood-h);
+  background-size: var(--wood-size);
+}

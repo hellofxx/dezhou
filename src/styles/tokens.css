@@ -160,6 +160,30 @@
   --stable-ink: #2a2113;      /* deep brown ink on brass & ivory surfaces */
   --stable-ivory: #f8f2e2;    /* ivory plaque surface (dark text on top) */
 
+  /* === Room shell layer — 牌室木纹壳层与密度（sidebar / topbar / rail） === */
+  --sidebar-w: 168px;
+  --sidebar-w-collapsed: 64px;
+  --topbar-h: 56px;
+  --rail-h: 12px;
+
+  /* 木纹回退：纯轴向细纹（src/app/woodTexture.ts 启动时以程序化瓦片覆盖 --wood-h / --wood-v）。
+     压暗层用 rgba(10, 8, 4, …)——深胡桃墨调，不是纯黑。 */
+  --wood-h: repeating-linear-gradient(0deg, rgba(10, 8, 4, 0.06) 0 2px, transparent 2px 7px);
+  --wood-v: repeating-linear-gradient(90deg, rgba(10, 8, 4, 0.06) 0 2px, transparent 2px 7px);
+  --wood-stack-h: var(--wood-h), linear-gradient(180deg, rgba(255, 240, 200, 0.07), transparent 30%, transparent 78%, rgba(10, 8, 4, 0.16));
+  --wood-stack-v: var(--wood-v), linear-gradient(180deg, rgba(255, 240, 200, 0.07), transparent 30%, transparent 78%, rgba(10, 8, 4, 0.16));
+  --wood-size: 512px 512px, auto, auto;
+  --room-wood-h: var(--wood-stack-h);
+  --room-wood-v: var(--wood-stack-v);
+  /* 桌沿横梁：暗色胡桃梁，两端收深（深阶由 --stable-ink 混色得到，不用纯黑） */
+  --room-rail-bg: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--walnut) 72%, var(--stable-ink)) 0%,
+    var(--walnut-raised) 18%,
+    var(--walnut-raised) 82%,
+    color-mix(in srgb, var(--walnut) 72%, var(--stable-ink)) 100%
+  );
+
   /* === Semantic room layer — 组件只读这一层；light 主题只改 primitive === */
   --room-page: var(--felt-deep);
   --room-surface: var(--felt);

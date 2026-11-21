@@ -101,6 +101,17 @@ html[data-theme="light"] {
   --action-allin-bg: linear-gradient(135deg, #4a3520 0%, #352517 100%);
   --action-allin-bg-hover: linear-gradient(135deg, #55402a 0%, #40301e 100%);
   --position-selected-bg: var(--brass-fill); --position-selected-ink: var(--brass-fill-ink); --sage-fill: #4f7059;
+
+  /* 牌室壳层：浅漆面替代深色木纹（不叠导管噪波），桌沿换成浅木横梁 */
+  --room-wood-h: linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 34%), var(--room-surface);
+  --room-wood-v: linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 34%), var(--room-surface);
+  --room-rail-bg: linear-gradient(
+    90deg,
+    var(--walnut-border) 0%,
+    var(--walnut-raised) 18%,
+    var(--walnut-raised) 82%,
+    var(--walnut-border) 100%
+  );
 }
 
 /* Ambient light — replace dark vignette/lamp haze with a subtle warm wash */

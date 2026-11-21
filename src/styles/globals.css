@@ -8,6 +8,7 @@
 @import './tokens.css';
 @import './base.css';
 @import './components-core.css';
+@import './components-room.css';
 @import './components-academy.css';
 @import './components-settings.css';
 @import './components-progress.css';

@@ -143,7 +143,7 @@ export default function AppLayout() {
         aria-label={item.label}
         title={collapsed ? undefined : item.hint}
         className={cn(
-          'flex items-center gap-3 px-3 h-9 rounded-[var(--radius-sm)] text-sm transition-all duration-150 relative',
+          'flex items-center gap-2.5 px-2.5 h-8 rounded-[var(--radius-sm)] text-[13px] transition-all duration-150 relative',
           active
             ? 'text-[var(--brass-bright)] bg-[var(--brass-glow)] font-medium'
             : 'text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:bg-[var(--walnut-light)]/40'
@@ -206,29 +206,24 @@ export default function AppLayout() {
       {/* Sidebar — deep walnut card-room rail. Hidden on mobile. */}
       <aside
         className={cn(
-          'hidden md:flex flex-col walnut-panel border-r border-[var(--walnut-border)] transition-all duration-300 shrink-0',
-          collapsed ? 'w-16' : 'w-60'
+          'hidden md:flex flex-col room-shell-sidebar border-r border-[var(--walnut-border)] transition-all duration-300 shrink-0',
+          collapsed ? 'w-[var(--sidebar-w-collapsed)]' : 'w-[var(--sidebar-w)]'
         )}
       >
         {/* Sidebar header — brass hairline below，高度与顶栏胡桃梁对齐 */}
-        <div className="flex items-center h-16 px-4 border-b border-[var(--walnut-border)] relative brass-rail">
-          <div className="flex items-center gap-2.5 flex-1 min-w-0">
-            <Spade size={28} className="text-[var(--brass-text)] shrink-0" />
+        <div className="flex items-center h-[var(--topbar-h)] px-3 border-b border-[var(--walnut-border)] relative brass-rail">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <Spade size={24} className="text-[var(--brass-text)] shrink-0" />
             {!collapsed && (
-              <div className="min-w-0">
-                <span className="font-display text-[15px] text-[var(--ivory)] truncate tracking-wide block leading-tight">
-                  PokerLab
-                </span>
-                <span className="text-[10px] text-[var(--ivory-muted)] truncate block">
-                  {t('nav.appSubtitle')}
-                </span>
-              </div>
+              <span className="font-display text-[14px] text-[var(--ivory)] truncate tracking-wide leading-tight">
+                PokerLab
+              </span>
             )}
           </div>
           <button
             onClick={() => setCollapsed(!collapsed)}
             className={cn(
-              'flex items-center justify-center h-11 w-11 rounded-[var(--radius-sm)] hover:bg-[var(--walnut-light)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors',
+              'flex items-center justify-center h-9 w-9 rounded-[var(--radius-sm)] hover:bg-[var(--walnut-light)] text-[var(--ivory-dim)] hover:text-[var(--brass-bright)] transition-colors',
               collapsed && 'mx-auto'
             )}
             aria-label={collapsed ? t('nav.expandSidebar') : t('nav.collapseSidebar')}
@@ -238,7 +233,7 @@ export default function AppLayout() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-6" aria-label={t('nav.sidebarNavAria')}>
+        <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-4" aria-label={t('nav.sidebarNavAria')}>
           <TooltipProvider delayDuration={200}>
             {/* 置顶首页 —— 无分组标签，保持导航层级扁平 */}
             <ul className="space-y-0.5">{renderNavItem(dashboardItem)}</ul>
@@ -272,7 +267,7 @@ export default function AppLayout() {
       {/* Main content area — bottle-green felt */}
       <div className="flex flex-col flex-1 overflow-hidden felt-ambient">
         {/* Top bar — 胡桃梁：与侧边栏构成包住绿呢画布的 L 形木框（DESIGN.md §5.7） */}
-        <header className="flex items-center h-12 md:h-16 px-4 md:px-6 border-b border-[var(--walnut-border)] walnut-panel shrink-0 relative brass-rail">
+        <header className="flex items-center room-shell-topbar h-12 md:h-[var(--topbar-h)] px-4 md:px-6 border-b border-[var(--walnut-border)] shrink-0 relative brass-rail">
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <span className="hidden sm:inline font-numeric text-[9px] uppercase tracking-[0.28em] text-[var(--brass-text)]">{section.index}</span>
             <span aria-hidden="true" className="hidden sm:block h-px w-6 bg-[var(--brass-deep)]/60" />
