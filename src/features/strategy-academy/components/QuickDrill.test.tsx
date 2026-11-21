@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import QuickDrill from './QuickDrill';
 import { useAcademyStore } from '../store';
@@ -78,10 +78,10 @@ afterAll(() => {
 });
 
 describe('QuickDrill：快速模式', () => {
-  it('展示 3 分钟快速训练与混合模式，完成 5 题后写入训练记录', async () => {
-    const { container } = renderAt('/academy/quick-drill?quick=true&mode=mixed');
+  it('默认展示 5 题混合速训，完成 5 题后写入训练记录', async () => {
+    const { container } = renderAt('/quick?mode=mixed');
 
-    expect(screen.getByText('3 分钟快速训练')).toBeTruthy();
+    expect(screen.getByText('5 题混合速训')).toBeTruthy();
     expect(container.textContent).toContain('保持牌感');
     expect(container.textContent).toContain('混合训练');
     expect(screen.getByText('自适应难度')).toBeTruthy();
@@ -102,10 +102,11 @@ describe('QuickDrill：快速模式', () => {
       fireEvent.click(next!);
     }
 
-    await waitFor(() => expect(screen.getByText('训练完成')).toBeTruthy());
-    expect(screen.getByText('再来一轮')).toBeTruthy();
-    expect(screen.getByText('已计入连续训练 ✓')).toBeTruthy();
-    expect(screen.getByText('返回首页')).toBeTruthy();
+    await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: '训练完成' })).toBeTruthy());
+    const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getByText('再来一轮')).toBeTruthy();
+    expect(within(dialog).getByText('已计入连续训练 ✓')).toBeTruthy();
+    expect(within(dialog).getByText('返回首页')).toBeTruthy();
 
     // 完成回调链路：练习记录 + 训练日 + quickDrillStreak
     const practiceResults = useAcademyStore.getState().practiceResults;
@@ -114,12 +115,12 @@ describe('QuickDrill：快速模式', () => {
     expect(useProgressStore.getState().streak.currentStreak).toBe(1);
     expect(useProgressStore.getState().quickDrillStreak).toBe(1);
 
-    fireEvent.click(screen.getByText('再来一轮'));
+    fireEvent.click(within(screen.getByRole('dialog')).getByText('再来一轮'));
     expect(screen.getByText('开始速训')).toBeTruthy();
   });
 
   it('普通模式展示 5 分钟速训、难度选择与 8 题', () => {
-    const { container } = renderAt('/academy/quick-drill');
+    const { container } = renderAt('/quick?quick=false');
 
     expect(screen.getByText('5 分钟速训')).toBeTruthy();
     expect(screen.getByText('选择难度')).toBeTruthy();
@@ -161,14 +162,14 @@ describe('QuickDrill：ELO 驱动的弱点与自适应难度（P0）', () => {
 
   it('默认 ELO（五维齐平）不显示弱点提示', () => {
     resetStandardElo();
-    const { container } = renderAt('/academy/quick-drill');
+    const { container } = renderAt('/quick?quick=false');
     expect(container.textContent).not.toContain('将优先从你的薄弱领域抽取题目');
   });
 
   it('存在低于五维均值的维度时显示弱点提示', () => {
     resetStandardElo();
     setStandardElo({ postflop: 300 });
-    const { container } = renderAt('/academy/quick-drill');
+    const { container } = renderAt('/quick?quick=false');
     expect(container.textContent).toContain('将优先从你的薄弱领域抽取题目');
   });
 

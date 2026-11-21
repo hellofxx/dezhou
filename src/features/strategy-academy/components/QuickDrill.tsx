@@ -1,12 +1,10 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
 import { motion } from 'framer-motion';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
-// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
-import { transitionSlow } from '@/shared/utils/motion';
-import { Zap, Target, RotateCcw, Trophy, Clock, Award, CheckCircle2, Sparkles, Gift } from 'lucide-react';
+import { Zap, Target, Sparkles } from 'lucide-react';
 import { useAcademyStore } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForQuickDrill } from '../hooks/useAcademyLessons';
@@ -19,6 +17,7 @@ import { getTodayReviewItems } from '@/shared/utils/spacedRepetition';
 // P1E-05（专批 B）：review-* 复习题作答后回写 SRS（推进 nextReviewDate）
 import { computeReviewWriteBacks } from '../utils/quickDrillSrs';
 import { PracticeDrillComponent } from './PracticeDrill';
+import QuickDrillResultSlip from './QuickDrillResultSlip';
 import type { EloDimension } from '@/shared/types/elo';
 import type { PracticeResult, PracticeDrill, QuestionDifficulty } from '../types';
 // P2-5.4: Session 止损守卫
@@ -35,7 +34,7 @@ export default function QuickDrill() {
   const [searchParams] = useSearchParams();
 
   // P0-5: 读取 URL query 参数支持快速模式
-  const isQuickMode = searchParams.get('quick') === 'true';
+  const isQuickMode = searchParams.get('quick') !== 'false';
   const modeParam = searchParams.get('mode');
   const mode: QuickDrillMode =
     modeParam === 'range' || modeParam === 'odds' || modeParam === 'mixed'
@@ -222,13 +221,12 @@ export default function QuickDrill() {
 
   if (isStarted && drill.questions.length > 0) {
     const earnedXp = finalResult ? computeXp(finalResult) : 0;
-    const isAllCorrect = finalResult !== null && finalResult.correctAnswers === finalResult.totalQuestions;
 
     return (
       <div className="py-6">
         <BackLink
-          onClick={() => navigate('/academy')}
-          label={t('quickDrill.back', { defaultValue: '返回学院' })}
+          onClick={() => navigate(isQuickMode ? '/' : '/academy')}
+          label={isQuickMode ? t('quickDrill.backHome', { defaultValue: '返回首页' }) : t('quickDrill.back', { defaultValue: '返回学院' })}
           size="md"
           className="mb-4"
         />
@@ -241,112 +239,19 @@ export default function QuickDrill() {
             // 禁用 PracticeDrill 内部的 adaptive 重选重排，避免复习题前置顺序被打乱
             adaptive={false}
           />
-          {isFinished && isQuickMode && finalResult && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={transitionSlow}
-              className="mt-6 rounded-lg border border-[var(--brass-bright)]/40 bg-gradient-to-br from-[var(--brass-dark)]/30 to-[var(--brass-bright)]/10 p-5"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <Trophy className="w-5 h-5 text-[var(--brass-bright)]" />
-                <span className="font-display text-lg text-[var(--ivory)]">
-                  {t('quickDrill.result.title', { defaultValue: '训练完成' })}
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-                <div className="rounded-md bg-[var(--walnut-raised)] p-3 text-center">
-                  <p className="font-numeric text-2xl text-[var(--brass-bright)]">
-                    {Math.round(finalResult.accuracy * 100)}%
-                  </p>
-                  <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-                    <Target className="w-3 h-3" />
-                    {t('quickDrill.result.accuracy', { defaultValue: '正确率' })}
-                  </p>
-                </div>
-                <div className="rounded-md bg-[var(--walnut-raised)] p-3 text-center">
-                  <p className="font-numeric text-2xl text-[var(--ivory)]">
-                    {finalResult.averageTime.toFixed(1)}s
-                  </p>
-                  <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {t('quickDrill.result.time', { defaultValue: '平均用时' })}
-                  </p>
-                </div>
-                <div className="rounded-md bg-[var(--walnut-raised)] p-3 text-center">
-                  <p className="font-numeric text-2xl text-[var(--brass-bright)]">+{earnedXp}</p>
-                  <p className="text-xs text-[var(--ivory-muted)] mt-1 flex items-center justify-center gap-1">
-                    <Award className="w-3 h-3" />
-                    {t('quickDrill.result.xp', { defaultValue: 'XP 获得' })}
-                  </p>
-                </div>
-              </div>
-              {isAllCorrect && (
-                <div className="mb-3 flex items-center gap-1.5 text-xs text-[var(--brass-bright)]">
-                  <Award className="w-3.5 h-3.5" />
-                  {t('quickDrill.result.allCorrectBonus', { defaultValue: '全对 +20 XP 奖励' })}
-                </div>
-              )}
-              {/* P1-4.2: 复习题提示 */}
-              {reviewCount > 0 && (
-                <div className="mb-3 flex items-center gap-1.5 text-xs text-[var(--info)]">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  {t('quickDrill.result.reviewIncluded', {
-                    defaultValue: '本次包含 {{count}} 道复习题',
-                    count: reviewCount,
-                  })}
-                </div>
-              )}
-              {/* P1-4.1: 新纪录提示 */}
-              {isNewRecord && (
-                <div className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)]">
-                  <Trophy className="w-3.5 h-3.5" />
-                  {t('quickDrill.newRecord', { defaultValue: '快速训练新纪录！' })}
-                </div>
-              )}
-              {/* P1-4.3: 连续打卡奖励冻结卡（P1E-10: 天数插值实际 quickDrillStreak，14/21 天触发不再硬编码"7 天"） */}
-              {freezeRewarded && (
-                <div className="mb-3 flex items-center gap-1.5 text-xs font-semibold text-[var(--success)]">
-                  <Gift className="w-3.5 h-3.5" />
-                  {t('quickDrill.freezeReward', {
-                    defaultValue: '连续 {{count}} 天快速训练奖励 1 张冻结卡！',
-                    count: currentQuickDrillStreak > 0 ? currentQuickDrillStreak : 7,
-                  })}
-                </div>
-              )}
-              {/* P1-4.3: 连续天数展示（非奖励轮次也显示） */}
-              {currentQuickDrillStreak > 0 && !freezeRewarded && (
-                <div className="mb-3 flex items-center gap-1.5 text-xs text-[var(--ivory-muted)]">
-                  <Zap className="w-3.5 h-3.5" />
-                  {t('quickDrill.streak.current', {
-                    defaultValue: '快速训练连续 {{count}} 天',
-                    count: currentQuickDrillStreak,
-                  })}
-                </div>
-              )}
-              <div className="flex items-center gap-1.5 text-xs text-[var(--success)]">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                {t('quickDrill.result.streakRecorded', { defaultValue: '已计入连续训练 ✓' })}
-              </div>
-            </motion.div>
-          )}
-          {isFinished && (
-            <div className="mt-6 flex items-center justify-center gap-3">
-              <button
-                onClick={handleRestart}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80"
-              >
-                <RotateCcw className="w-4 h-4" />
-                {t('quickDrill.again', { defaultValue: '再来一轮' })}
-              </button>
-              <button
-                onClick={() => navigate('/')}
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90"
-              >
-                {t('quickDrill.backHome', { defaultValue: '返回首页' })}
-              </button>
-            </div>
-          )}
+          {finalResult ? (
+            <QuickDrillResultSlip
+              open={isFinished}
+              result={finalResult}
+              earnedXp={earnedXp}
+              reviewCount={reviewCount}
+              isNewRecord={isNewRecord}
+              freezeRewarded={freezeRewarded}
+              quickDrillStreak={currentQuickDrillStreak}
+              onRetry={handleRestart}
+              onClose={() => navigate('/')}
+            />
+          ) : null}
         </div>
       </div>
     );
@@ -397,6 +302,8 @@ export default function QuickDrill() {
                   {isQuickMode
                     ? t('quickDrill.quickSubtitle', {
                         defaultValue: `每天 ${questionCount} 题，保持牌感 — ${modeLabel}`,
+                        count: questionCount,
+                        mode: modeLabel,
                       })
                     : t('quickDrill.subtitle', {
                         defaultValue: '从全局题库精选题目，针对弱点快速强化',
@@ -504,6 +411,14 @@ export default function QuickDrill() {
               ? t('quickDrill.start', { defaultValue: '开始速训' })
               : t('quickDrill.noQuestions', { defaultValue: '暂无可用题目' })}
           </button>
+          <Link
+            to={isQuickMode ? '/quick?quick=false' : '/quick'}
+            className="block text-center text-xs text-[var(--ivory-muted)] underline-offset-4 hover:text-[var(--brass-bright)] hover:underline"
+          >
+            {isQuickMode
+              ? t('quickDrill.fullPractice', { defaultValue: '完整练习（8 题）' })
+              : t('quickDrill.quickPractice', { defaultValue: '返回 5 题速训' })}
+          </Link>
         </motion.div>
       </div>
     </div>

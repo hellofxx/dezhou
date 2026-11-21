@@ -1,7 +1,7 @@
 {
   "title": "5 分钟速训",
   "subtitle": "从全局题库精选题目，针对弱点快速强化",
-  "quickTitle": "3 分钟快速训练",
+  "quickTitle": "5 题混合速训",
   "quickSubtitle": "每天 {{count}} 题，保持牌感 — {{mode}}",
   "back": "返回学院",
   "backAcademy": "返回策略学院",
@@ -14,6 +14,8 @@
   "questionCount": "本次速训：",
   "questions": "道题目",
   "start": "开始速训",
+  "fullPractice": "完整练习（8 题）",
+  "quickPractice": "返回 5 题速训",
   "noQuestions": "暂无可用题目",
   "difficulty": {
     "beginner": "基础",

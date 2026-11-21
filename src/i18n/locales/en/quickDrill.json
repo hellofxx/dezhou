@@ -1,7 +1,7 @@
 {
   "title": "5-Minute Drill",
   "subtitle": "Hand-picked questions from the global bank, targeting your weak spots",
-  "quickTitle": "3-Minute Quick Drill",
+  "quickTitle": "5-Question Quick Drill",
   "quickSubtitle": "{{count}} questions a day, keep your edge — {{mode}}",
   "back": "Back to Academy",
   "backAcademy": "Back to Academy",
@@ -14,6 +14,8 @@
   "questionCount": "This drill: ",
   "questions": "questions",
   "start": "Start Drill",
+  "fullPractice": "Full practice (8 questions)",
+  "quickPractice": "Back to 5-question drill",
   "noQuestions": "No questions available",
   "difficulty": {
     "beginner": "Beginner",
