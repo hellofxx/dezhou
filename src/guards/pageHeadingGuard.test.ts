@@ -48,12 +48,8 @@ const H1_ALLOWLIST: { file: string; reason: string }[] = [
   },
   { file: 'features/onboarding/components/WelcomeStep.tsx', reason: '新手引导首屏整页主标题' },
   {
-    file: 'features/pot-odds/components/PotOddsQuizPage.tsx',
-    reason: '赔率训练整页主标题',
-  },
-  {
     file: 'features/range-trainer/components/RangeLearnPage.tsx',
-    reason: '范围学习整页主标题',
+    reason: '范围学习整页主标题（视觉收口批次再降为 h2）',
   },
 ];
 

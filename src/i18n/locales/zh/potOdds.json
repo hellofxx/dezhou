@@ -98,6 +98,7 @@
     "gradePoor": "💡 建议先学习底池赔率和 Outs 计算的基础知识。",
     "lastCorrect": "✓ 最后一题答对，以成功收尾！",
     "restart": "再来一轮",
+    "start": "开始训练",
     "backToCalc": "返回计算器",
     "back": "返回",
     "title": "赔率速算训练",

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import PotOddsPage from './PotOddsPage';
 import { usePotOddsStore } from '../store';
 import { DEFAULT_EV_STATE, DEFAULT_ODDS_STATE } from '../constants';
@@ -18,11 +19,19 @@ beforeEach(() => {
 
 afterEach(cleanup);
 
+function renderPage() {
+  return render(
+    <MemoryRouter>
+      <PotOddsPage />
+    </MemoryRouter>,
+  );
+}
+
 describe('PotOddsPage', () => {
   it('默认渲染页头与底池赔率面板，懒加载的权益对比图最终出现', { timeout: 45000 }, async () => {
-    render(<PotOddsPage />);
+    renderPage();
 
-    expect(screen.getByText('Pot Odds & EV')).toBeTruthy();
+    expect(screen.getByText('开始训练')).toBeTruthy();
     expect(screen.getByText('底池赔率与 EV 计算器')).toBeTruthy();
     expect(
       screen.getByText('计算底池赔率、估算胜率、分析期望值，帮助你做出更好的跟注决策'),
@@ -33,7 +42,7 @@ describe('PotOddsPage', () => {
   });
 
   it('切到 EV 分析 Tab：挂载 EV 计算面板并卸载底池赔率面板', { timeout: 45000 }, async () => {
-    render(<PotOddsPage />);
+    renderPage();
 
     fireEvent.click(screen.getByText('EV 分析'));
 
@@ -45,7 +54,7 @@ describe('PotOddsPage', () => {
   });
 
   it('切回底池赔率 Tab：恢复计算器与听牌参考', { timeout: 45000 }, async () => {
-    render(<PotOddsPage />);
+    renderPage();
     fireEvent.click(screen.getByText('EV 分析'));
     await screen.findByText('EV 计算', undefined, { timeout: 20000 });
 

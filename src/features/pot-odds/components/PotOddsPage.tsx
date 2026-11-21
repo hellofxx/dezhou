@@ -1,6 +1,10 @@
 import { lazy, Suspense, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Play } from 'lucide-react';
 import { ComponentSkeleton } from '@/shared/components/feedback/LoadingState';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { Button } from '@/shared/components/ui/button';
 import { OddsCalculator } from './OddsCalculator';
 import { DrawsReference } from './DrawsReference';
 import { useOddsCalculation } from '../hooks/useOddsCalculation';
@@ -18,14 +22,22 @@ export default function PotOddsPage() {
   const [activeTab, setActiveTab] = useState<'odds' | 'ev'>('odds');
 
   return (
-    <div className="py-6 space-y-6">
+    <div className="py-4 space-y-5">
+      <BackLink to="/drill" label={t('common.ui.back')} variant="text" />
       {/* Page header */}
-      <div>
-        <p className="section-eyebrow">Pot Odds & EV</p>
-        <h2 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">{t('potOdds.page.title')}</h2>
-        <p className="text-sm text-[var(--ivory-muted)] mt-1">
-          {t('potOdds.page.subtitle')}
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="font-display text-[22px] text-[var(--ivory)] tracking-wide">{t('potOdds.page.title')}</h2>
+          <p className="text-sm text-[var(--ivory-muted)] mt-1">
+            {t('potOdds.page.subtitle')}
+          </p>
+        </div>
+        <Button asChild>
+          <Link to="/pot-odds/quiz">
+            <Play className="w-4 h-4" aria-hidden="true" />
+            {t('potOdds.quiz.start')}
+          </Link>
+        </Button>
       </div>
 
       {/* Tabs */}

@@ -136,7 +136,7 @@ describe('PotOddsQuizPage 初始渲染与选项排序', () => {
 
     fireEvent.click(getButton(container, '返回'));
 
-    expect(screen.getByTestId('location').textContent).toBe('/pot-odds');
+    expect(screen.getByTestId('location').textContent).toBe('/drill/odds');
   });
 
   it('移动端（<768px）把答题反馈渲染进底部对话框 Sheet', { timeout: 20000 }, async () => {

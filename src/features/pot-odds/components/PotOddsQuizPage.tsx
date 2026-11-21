@@ -247,7 +247,7 @@ export default function PotOddsQuizPage() {
         totalQuestions={totalQuestions}
         lastQuestionCorrect={lastQuestionCorrect}
         onRestart={handleRestart}
-        onBack={() => navigate('/pot-odds')}
+        onBack={() => navigate('/drill/odds')}
       />
     );
   }
@@ -261,11 +261,11 @@ export default function PotOddsQuizPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <BackLink
-            onClick={() => navigate('/pot-odds')}
+            onClick={() => navigate('/drill/odds')}
             label={t('potOdds.quiz.back')}
             size="md"
           />
-          <h1 className="font-display text-xl text-[var(--ivory)]">{t('potOdds.quiz.title')}</h1>
+          <h2 className="font-display text-xl text-[var(--ivory)]">{t('potOdds.quiz.title')}</h2>
           <span className="text-xs text-[var(--ivory-muted)]">
             {t(CATEGORY_LABELS[currentQuestion.category] ?? 'potOdds.quiz.categoryJudgment')}
           </span>

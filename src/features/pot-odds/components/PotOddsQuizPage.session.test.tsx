@@ -168,7 +168,7 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     await screen.findByRole('heading', { level: 2, name: '训练完成！' });
 
     fireEvent.click(getButton(container, '返回计算器'));
-    expect(screen.getByTestId('location').textContent).toBe('/pot-odds');
+    expect(screen.getByTestId('location').textContent).toBe('/drill/odds');
 
     fireEvent.click(getButton(container, '再来一轮'));
     await pumpFrames();
