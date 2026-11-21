@@ -1647,44 +1647,57 @@ persist(
 
 | 路径 | 组件 | 布局 |
 |------|------|------|
-| `/` | Dashboard | AppLayout |
-| `/onboarding` | OnboardingFlow | **BlankLayout** |
-| `/range-trainer` | RangeTrainerHome | AppLayout |
-| `/range-trainer/learn` | RangeLearnPage | **BlankLayout** |
-| `/range-trainer/quiz` | RangeQuizPage | **BlankLayout** |
-| `/pot-odds` | PotOddsPage | AppLayout |
-| `/pot-odds/quiz` | PotOddsQuizPage | **BlankLayout** |
-| `/gto-simulator` | GTOSimulatorHome | AppLayout |
-| `/gto-simulator/session/:scenarioId` | GTOSessionPage | **BlankLayout** |
+| `/` | JourneyHome | AppLayout |
+| `/lesson/:lessonId` | LessonRoute（`theory:` 前缀转理论章节，其余 CourseView） | AppLayout |
+| `/lesson` | LessonEntry（解析下一课后重定向） | AppLayout |
+| `/drill` | DrillHub | AppLayout |
+| `/drill/range` | RangeTrainerHome（范围站首页） | AppLayout |
+| `/drill/odds` | PotOddsPage（赔率站首页） | AppLayout |
+| `/drill/puzzle` | PuzzleHome（谜题站首页） | AppLayout |
+| `/quick` | QuickDrill（缺省 5 题；`?quick=false` = 8 题） | AppLayout |
+| `/progress` | ProgressPage（overview / replay / leaderboard） | AppLayout |
+| `/progress/range` | RangeStatsPage | AppLayout |
+| `/progress/gto` | GTOStatsPage | AppLayout |
+| `/leaderboard` | Leaderboard | AppLayout |
+| `/settings` | SettingsRoute → SettingsSlip | AppLayout |
+| `/help` | HelpHome | AppLayout |
+| `/help/article/:articleId` | HelpArticle | AppLayout |
+| `/academy` | AcademyHome | AppLayout |
+| `/academy/basics` | BasicsIntro | AppLayout |
+| `/academy/tracks` | LearningTracksView（消费 `?track=`） | AppLayout |
+| `/academy/concept-graph` | ConceptGraphView | AppLayout |
+| `/academy/search` | StrategySearchPage | AppLayout |
+| `/academy/placement` | PlacementTestPage | AppLayout |
+| `/academy/checkpoint/:level` | LevelCheckpointPage | AppLayout |
+| `/academy/certification/:level` | LevelCertification | AppLayout |
+| `/academy/bookmarks` | StrategyBookmarksPage | AppLayout |
+| `/academy/bibliography` | StrategyBibliographyPage | AppLayout |
+| `/gto-simulator` | GTOSimulatorHome（GTO 站首页） | AppLayout |
 | `/gto-simulator/result/:sessionId` | GTOResultPage | AppLayout |
 | `/hand-history` | HandHistoryList | AppLayout |
 | `/hand-history/import` | HandImportPage | AppLayout |
-| `/hand-history/:handId` | HandReplayPage | **BlankLayout** |
-| `/progress` | ProgressPage | AppLayout |
-| `/progress/range` | RangeStatsPage | AppLayout |
-| `/progress/gto` | GTOStatsPage | AppLayout |
-| `/puzzle` | PuzzleHome | AppLayout |
+| `/theory` | TheoryHome | AppLayout |
+| `/theory/chapter/:chapterId` | TheoryChapterView | AppLayout |
+| `/theory/review` | TheoryFlaggedReview | AppLayout |
+| `/theory/placement` | TheoryPlacementPage | AppLayout |
+| `/theory/checkpoint/:levelId` | TheoryCheckpointPage | AppLayout |
+| `/theory/glossary` | TheoryGlossaryPage | AppLayout |
+| `/theory/search` | TheorySearchPage | AppLayout |
+| `/theory/bibliography` | TheoryBibliographyPage | AppLayout |
 | `/puzzle/rush` | PuzzleRush | AppLayout |
 | `/puzzle/daily` | DailyPuzzle | AppLayout |
 | `/puzzle/theme/:themeId` | ThemeDrill | AppLayout |
-| `/academy` | AcademyHome | AppLayout |
-| `/academy/basics` | BasicsIntro | AppLayout |
-| `/academy/concept-graph` | ConceptGraphView | AppLayout |
-| `/academy/tracks` | LearningTracksView | AppLayout |
-| `/academy/search` | StrategySearchPage（标题即时 + 正文全文懒加载） | AppLayout |
-| `/academy/placement` | PlacementTestPage | AppLayout |
-| `/academy/checkpoint/:level` | LevelCheckpointPage | AppLayout |
-| `/academy/bookmarks` | StrategyBookmarksPage | AppLayout |
-| `/academy/bibliography` | StrategyBibliographyPage | AppLayout |
-| `/academy/quick-drill` | QuickDrill | AppLayout |
-| `/academy/certification/:level` | LevelCertification | AppLayout |
-| `/academy/lesson/:lessonId` | CourseView | AppLayout |
-| `/theory` | TheoryHome | AppLayout |
-| `/theory/chapter/:chapterId` | TheoryChapterView | AppLayout |
-| `/leaderboard` | LeaderboardPage | AppLayout |
-| `/settings` | SettingsPage | AppLayout |
-| `/help` | HelpHome | AppLayout |
-| `/help/article/:articleId` | HelpArticle | AppLayout |
+| `/academy/lesson/:lessonId` | LegacyLessonRedirect → `/lesson/:lessonId` | AppLayout |
+| `/academy/quick-drill` | LegacyRedirect → `/quick` | AppLayout |
+| `/range-trainer` | LegacyRedirect → `/drill/range` | AppLayout |
+| `/pot-odds` | LegacyRedirect → `/drill/odds` | AppLayout |
+| `/puzzle` | LegacyRedirect → `/drill/puzzle` | AppLayout |
+| `/onboarding` | OnboardingFlow | **BlankLayout** |
+| `/range-trainer/learn` | RangeLearnPage | **BlankLayout** |
+| `/range-trainer/quiz` | RangeQuizPage | **BlankLayout** |
+| `/pot-odds/quiz` | PotOddsQuizPage | **BlankLayout** |
+| `/gto-simulator/session/:scenarioId` | GTOSessionPage | **BlankLayout** |
+| `/hand-history/:handId` | HandReplayPage | **BlankLayout** |
 
 ### 7.3 React.lazy + Suspense 懒加载策略
 

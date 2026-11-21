@@ -1,8 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.11.1
+> 德州扑克训练平台 UI/UX 设计规范 v1.12.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.12.0 更新：训练二级站（/drill/range|odds|puzzle）与恢复的学院/理论深链；速训默认 5 题；结果统一为 ResultSlip 发牌员纸条（overlay / page）
 > v1.11.1 更新：首页按基准图重排 — 牌桌左右象牙铭牌（ELO / 连续训练）+ 状态注、细黄铜速训横幅、四段旅程横向轨道、胡桃木面板、周条小圆点
 > v1.11.0 更新：IA 收编为 5 视图（学习路径 / 课程 / 训练 / 速训 / 进度中心，§5.24）；168px 木纹侧栏 + 56px 木梁顶栏 + 12px 桌沿；程序化无缝胡桃木纹理（`--wood-h/--wood-v`）；真椭圆牌桌；学习旅程 3×3 阶段网格；侧栏 6 项 / 移动底栏 5 项
 > v1.10.0 更新：阅读页学习导轨（§6.5）— 理论章节页 / 策略课时页在 xl 起采用「768px 阅读列 + 264px 学习导轨」双栏（`AcademyReadingPlane`），导轨承载本级目录与进度，<xl 回落居中单栏
@@ -558,14 +559,17 @@
 - **无障碍 / 层级**：尊重 `prefers-reduced-motion: reduce`（去掉位移，仅保留透明度变化或直接切换）；`z-index: 100`（§6.4）
 - **反模式**：纸上复用暗色房间的亮阶语义色（对比度不足）；把纸片用于常驻导航或面板背景
 
-### 5.24 牌室壳层与学习旅程（v1.11.0）
+### 5.24 牌室壳层与学习旅程（v1.11.0 / v1.12.0）
 
-- **IA 五视图**：学习路径 `/`、课程 `/lesson/:id`、训练 `/drill`、速训 `/quick`、进度中心 `/progress`；设置以纸条浮层 `/settings` 打开。范围/赔率/谜题的旧入口重定向到训练枢纽（保留原 query）；GTO 选择页、会话页、复盘、理论章节、帮助作为次要深链保留（不进主导航）。
+- **IA 五视图**：学习路径 `/`、课程 `/lesson/:id`、训练 `/drill`、速训 `/quick`、进度中心 `/progress`；设置以纸条浮层 `/settings` 打开。
+- **训练二级站（v1.12.0）**：`/drill` 四张模式卡进入 `/drill/range`、`/drill/odds`、`/gto-simulator`、`/drill/puzzle`；站首页保留学习/工具/测验入口。旧 `/range-trainer`、`/pot-odds`、`/puzzle` 重定向到对应二级站并保留 query。
+- **恢复深链（v1.12.0）**：学院 `/academy/tracks|concept-graph|search|placement|checkpoint/:level|certification/:level|bookmarks|bibliography` 与理论 `/theory/placement|checkpoint/:levelId|glossary|search|bibliography` 全部恢复为 canonical 二级深链；旧 `/academy/lesson/:id`、`/academy/quick-drill` 仅保留重定向。
 - **壳层密度**：侧栏 168px / 折叠 64px，顶栏 56px（移动 48px），桌沿横梁 12px；导航行高 32px，字号 13px，分组间距 16px。侧栏 6 项（学习路径 / 课程 / 训练 / 速训 / 进度中心 / 帮助中心），设置走顶栏齿轮；移动底栏 5 项（去掉帮助与设置）。
 - **程序化木纹**：`src/app/woodNoise.ts` 生成逐轴周期回绕的整数频率 value-noise fbm（512²，LCG 种子固定），`woodTexture.ts` 启动时写入 `--wood-h/--wood-v`；侧栏用 `--room-wood-v`（竖向导管），顶栏用 `--room-wood-h`（横向）。无 2D context 时回退到 tokens 里的轴向细纹；浅色牌室按 §2.8 使用「浅木漆面」，不叠深色导管噪波。
 - **真椭圆牌桌**：`.felt-arena` 桌面 `border-radius: 50%/50%`、移动 `50%/40%`；顶部 Rim 光弧（`::after` 2px 边框 + 顶部亮阶）替代双细环；桌面端牌桌与周条坐在胡桃木地台上（`.home-hero-deck`，移动端保持绿呢）；左右象牙铭牌承载 ELO 与连续训练，状态注贴桌沿下缘。
 - **学习旅程**：阶段来自 `AcademyDataSource.getLearningStagesSnapshot()`（按 `activeVariant` 稳定引用），展示层按 Level 序号 1 / 2–3 / 4 / 5+ 归并为四段（入门·识局 / 基础·算赔 / 进阶·谋势 / 精通·无惑），先修按段串行；桌面横向四列轨道，≤767 纵列（环形在左、铭牌在右）；每段 48px 环形进度 + 单色线稿图标 + 2 个课时 chip，面板头「全部课程」进入 `/academy`。
-- **训练枢纽**：四张模式卡（范围 / 赔率 / GTO / 谜题）直达既有会话页；`?mode=` 高亮当前卡；底部弱项入口只经 progress 公共 API 读记录。
+- **训练枢纽**：四张模式卡（范围 / 赔率 / GTO / 谜题）进入二级站首页，站内再一键开练；`?mode=` 仍可高亮当前卡；底部弱项入口只经 progress 公共 API 读记录。
+- **结果纸条（v1.12.0）**：课程完成、范围/赔率/谜题/速训结算统一为 `shared/components/feedback/ResultSlip.tsx` 的 dealer-slip overlay；GTO 结果保留独立整页并使用 `page` 变体。标题固定 h2（壳层持有唯一 h1），关闭/焦点返回按 §5.23 纸张浮层规则执行。
 
 ---
 

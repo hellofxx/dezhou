@@ -10,6 +10,15 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-21 功能回补 · 二级训练站与结果纸条（v1.12.0）
+
+- **路由**：新增 `/drill/range|odds|puzzle` 二级站；恢复学院 8 个工具/认证页与理论 5 个工具页；旧 `/range-trainer`、`/pot-odds`、`/puzzle`、`/academy/tracks` 全部改指 canonical 并保留 query；新增静态链接完整性守卫（`src/guards/linkIntegrity.guard.test.ts`）。
+- **入口**：DrillHub 四卡进入二级站；范围/赔率/谜题站首页恢复学习、计算器、每日/主题入口；首页 ModuleGrid、每日计划、复习路由、每日挑战、帮助中心统一切到 canonical。
+- **速训**：`/quick` 缺省 5 题混合速训，`?quick=false` 保留 8 题完整练习；横幅文案同步 5 题。
+- **结果纸条**：新增 shared `ResultSlip`（overlay / page），课程完成、范围、赔率、谜题、速训结算统一 dealer-slip；GTO 结果使用 page 变体；`ResultHeader` 默认 h2，页面级 h1 收敛到壳层。
+- **视觉**：学院/理论/复盘/排行页头与材质收口；`/lesson/:id` 成为唯一课时 canonical。
+- **测试/门禁**：链接守卫、路由快照、e2e IA/训练夹具同步；`pnpm verify` 与 `pnpm verify:e2e` 为发布门禁。
+
 ### 2026-11-21 IA 收编 · 原型即产品（5 视图 + 木纹壳层 + 学习旅程）
 
 - **壳层**：168px 程序化木纹侧栏（竖向导管）+ 56px 木梁顶栏（横向）+ 12px 桌沿；`src/app/woodNoise.ts` 纯函数生成无缝 value-noise fbm 瓦片，`woodTexture.ts` 启动注入 `--wood-h/--wood-v`（无 2D context 回退轴向细纹）；浅色牌室按 v1.9.0 规则使用浅木漆面。
