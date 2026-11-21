@@ -27,7 +27,7 @@ import { CourseLockedView } from './CourseLockedView';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import CourseDoneView from './CourseDoneView';
 import CourseDoneSlip from './CourseDoneSlip';
-import { TheoryBridgeCard } from './TheoryBridgeCard';
+import CourseConceptRail from './CourseConceptRail';
 import { StrategyNotesPanel } from './StrategyNotesPanel';
 import { LessonReviewMeta } from './LessonReviewMeta';
 import type { DrillResult } from './drills/types';
@@ -291,12 +291,7 @@ export default function CourseView() {
         {phase === 'reading' && !isDrill && (
           <div>
             <div className="xl:hidden max-w-3xl mx-auto mb-4">
-              <TheoryBridgeCard
-                anchors={getLessonMeta(lesson.id).theoryAnchors}
-                onNavigate={(route) => navigate(route)}
-                title={t('academy.courseHub.conceptRail.title')}
-                subtitle={t('academy.courseHub.conceptRail.subtitle')}
-              />
+              <CourseConceptRail lessonId={lesson.id} onNavigate={(route) => navigate(route)} />
             </div>
             <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6 max-w-3xl mx-auto">
               <LessonContent
@@ -379,12 +374,7 @@ export default function CourseView() {
           railLabel={t('academy.courseView.railTitle')}
           rail={
             <div className="space-y-3">
-              <TheoryBridgeCard
-                anchors={getLessonMeta(lesson.id).theoryAnchors}
-                onNavigate={(route) => navigate(route)}
-                title={t('academy.courseHub.conceptRail.title')}
-                subtitle={t('academy.courseHub.conceptRail.subtitle')}
-              />
+              <CourseConceptRail lessonId={lesson.id} onNavigate={(route) => navigate(route)} />
               <CourseStudyRail
                 lesson={lesson}
                 levelEntry={levelEntry}
