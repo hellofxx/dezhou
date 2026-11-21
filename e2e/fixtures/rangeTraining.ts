@@ -71,7 +71,9 @@ export async function runRangeQuizSession(
   await selectConfigOption(page, 3, `${questions} 题`);
   await page.getByRole('button', { name: '开始训练' }).click();
 
-  const resultHeading = page.getByRole('heading', { level: 1, name: '训练完成！' });
+  const resultHeading = page
+    .getByRole('dialog')
+    .getByRole('heading', { level: 2, name: '训练完成！' });
   let answered = 0;
   let sessionTotal = 0;
 
@@ -121,7 +123,10 @@ export async function runRangeQuizSession(
  * 具体落到哪个壳层首页由产品决定，这里只断言「回到了有主导航的壳层」。
  */
 export async function goToProgressPage(page: Page): Promise<void> {
-  await page.getByRole('button', { name: '返回首页' }).click();
+  const dialog = page.getByRole('dialog');
+  if (await dialog.isVisible().catch(() => false)) {
+    await dialog.getByRole('button', { name: '返回首页' }).click();
+  }
   await expect(sidebarNav(page)).toBeVisible();
   await navigateFromSidebar(page, '进度中心');
   await expect(page).toHaveURL(/\/dezhou\/progress$/);

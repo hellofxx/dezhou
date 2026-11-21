@@ -14,18 +14,18 @@ import {
  *
  * 覆盖三件事：
  * 1. 侧栏 6 项文案与落点、5 条主路由的 h1（`/lesson` 自动跳下一课）；
- * 2. 旧训练入口 `/range-trainer` `/pot-odds` `/puzzle` → `/drill?mode=…` 的 3 条重定向；
+ * 2. 旧训练入口 `/range-trainer` `/pot-odds` `/puzzle` → 二级站 `/drill/range|odds|puzzle`；
  * 3. 训练场 → 手牌范围训练 → 浏览器返回键回到训练场（SPA 历史栈语义）。
  *
  * 全部走真实 UI：不做 localStorage / store 直写，等待一律交给 expect 自动重试。
  */
 test.use({ viewport: { width: 1440, height: 900 } });
 
-/** 旧训练入口 → 训练枢纽的重定向（`mode` 由 `/drill` 消费） */
+/** 旧训练入口 → 二级站首页 */
 const LEGACY_REDIRECTS = [
-  { legacy: 'range-trainer', mode: 'range' },
-  { legacy: 'pot-odds', mode: 'odds' },
-  { legacy: 'puzzle', mode: 'puzzle' },
+  { legacy: 'range-trainer', path: /\/dezhou\/drill\/range$/, heading: '范围训练' },
+  { legacy: 'pot-odds', path: /\/dezhou\/drill\/odds$/, heading: '赔率训练' },
+  { legacy: 'puzzle', path: /\/dezhou\/drill\/puzzle$/, heading: '谜题训练' },
 ] as const;
 
 /** 侧栏项 → 落点与 h1（「课程」走 `/lesson` 自动跳下一课，单独断言） */
@@ -70,21 +70,21 @@ test('侧栏 6 项文案与落点正确，主路由 h1 正确（/lesson 按先�
   guard.assertClean();
 });
 
-test('旧训练入口 3 条重定向到 /drill?mode=…，落点 h1 为训练场', async ({ page }) => {
+test('旧训练入口 3 条重定向到二级站，落点 h1 正确', async ({ page }) => {
   const guard = guardBrowserErrors(page);
 
   await skipOnboarding(page);
 
-  for (const { legacy, mode } of LEGACY_REDIRECTS) {
+  for (const { legacy, path, heading } of LEGACY_REDIRECTS) {
     await page.goto(`${APP_ROOT}${legacy}`);
-    await expect(page).toHaveURL(new RegExp(`/dezhou/drill\\?mode=${mode}$`));
-    await expectPageHeading(page, '训练场');
+    await expect(page).toHaveURL(path);
+    await expectPageHeading(page, heading);
   }
 
   guard.assertClean();
 });
 
-test('训练场点「手牌范围」进入 /range-trainer/quiz，浏览器返回键回到训练场', async ({ page }) => {
+test('训练场 → 范围站 → 测验，浏览器返回键逐级回退', async ({ page }) => {
   const guard = guardBrowserErrors(page);
 
   await skipOnboarding(page);
@@ -95,7 +95,16 @@ test('训练场点「手牌范围」进入 /range-trainer/quiz，浏览器返回
 
   // 卡片名以「范围训练」起头（副文案可选，不锁死完整名称）
   await page.getByRole('main').getByRole('link', { name: /^范围训练/ }).click();
+  await expect(page).toHaveURL(/\/dezhou\/drill\/range$/);
+  await expectPageHeading(page, '范围训练');
+
+  await page.getByRole('button', { name: '测验模式' }).click();
   await expect(page).toHaveURL(/\/dezhou\/range-trainer\/quiz$/);
+  await expectPageHeading(page, '训练');
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/dezhou\/drill\/range$/);
+  await expectPageHeading(page, '范围训练');
 
   await page.goBack();
   await expect(page).toHaveURL(/\/dezhou\/drill$/);

@@ -57,6 +57,10 @@ test('记录库写入失败时提示条出现且记录留在内存，恢复后�
   // 真实完成一次训练（配置仅支持 10/20/30/50 题，取最短的 10 题）
   await runRangeQuizSession(page, 10);
 
+  // 结算纸条是模态浮层，背景被 aria-hidden；先关闭再检查持久化提示条
+  await page.getByRole('dialog').getByRole('button', { name: '关闭' }).click();
+  await expect(page.getByRole('dialog')).toBeHidden();
+
   // 提示条：records 来源的写失败文案 + 待写入条数
   const notice = page.getByRole('alert').filter({ hasText: NOTICE_TITLE });
   await expect(notice).toBeVisible({ timeout: 20_000 });
