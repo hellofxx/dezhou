@@ -42,11 +42,15 @@ function resetProgress() {
 }
 
 function getButton(container: HTMLElement, text: string): HTMLButtonElement {
-  const button = Array.from(container.querySelectorAll('button')).find((b) =>
-    b.textContent?.includes(text),
-  );
-  if (!button) throw new Error(`未找到按钮：${text}`);
-  return button;
+  // 结算纸条经 Dialog portal 渲染到 body，故容器找不到时回退到整个文档
+  const roots = [container, document.body];
+  for (const root of roots) {
+    const button = Array.from(root.querySelectorAll('button')).find((b) =>
+      b.textContent?.includes(text),
+    );
+    if (button) return button;
+  }
+  throw new Error(`未找到按钮：${text}`);
 }
 
 function optionButtons(container: HTMLElement): HTMLButtonElement[] {
@@ -129,8 +133,8 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     await screen.findByText(i18n.t(EASY.scenario));
     await answerAndAdvance(container, EASY, true);
 
-    expect(await screen.findByText('训练完成！')).toBeTruthy();
-    const text = container.textContent ?? '';
+    expect(await screen.findByRole('heading', { level: 2, name: '训练完成！' })).toBeTruthy();
+    const text = document.body.textContent ?? '';
     expect(text).toContain('100%');
     expect(text).toContain('19/19');
     expect(text).toContain('✓ 最后一题答对，以成功收尾！');
@@ -161,7 +165,7 @@ describe('PotOddsQuizPage 完整会话结算', () => {
     }
     await screen.findByText(i18n.t(EASY.scenario));
     await answerAndAdvance(container, EASY, true);
-    await screen.findByText('训练完成！');
+    await screen.findByRole('heading', { level: 2, name: '训练完成！' });
 
     fireEvent.click(getButton(container, '返回计算器'));
     expect(screen.getByTestId('location').textContent).toBe('/pot-odds');
@@ -189,8 +193,8 @@ describe('PotOddsQuizPage 完整会话结算', () => {
 
     await answerAndAdvance(container, EASY, true);
 
-    expect(await screen.findByText('训练完成！')).toBeTruthy();
-    const text = container.textContent ?? '';
+    expect(await screen.findByRole('heading', { level: 2, name: '训练完成！' })).toBeTruthy();
+    const text = document.body.textContent ?? '';
     expect(text).toContain('95%');
     expect(text).toContain('19/20');
     expect(text).toContain('✓ 最后一题答对，以成功收尾！');
@@ -227,8 +231,8 @@ describe('PotOddsQuizPage 完整会话结算', () => {
 
     await answerAndAdvance(container, EASY, false); // 补救题也答错 → 直接结束，不再追加
 
-    expect(await screen.findByText('训练完成！')).toBeTruthy();
-    const text = container.textContent ?? '';
+    expect(await screen.findByRole('heading', { level: 2, name: '训练完成！' })).toBeTruthy();
+    const text = document.body.textContent ?? '';
     expect(text).toContain('70%');
     expect(text).toContain('14/20');
     expect(text).toContain('👍 不错！继续练习可以更加熟练。');

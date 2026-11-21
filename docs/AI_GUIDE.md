@@ -173,10 +173,10 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 ### 结果页装配
 
-- 单一事实源 `shared/components/feedback/ResultHeader.tsx`（`title` / `subtitle` / `tone` / `headingLevel` / `ring` 槽）与 `ResultActions.tsx`（`actions` 数组 / `layout` row·stack）。
-- 标题层级由 `headingLevel` 决定：整页结果用 h1（`pageHeadingGuard` 只把 ResultHeader 登记为 h1 持有者），嵌入页与块内结果用 h2。整页必须恰好一个 h1。
-- 材质外壳（`dealer-slip` / felt / `walnut-panel`）、统计卡行、错题与明细表、路由跳转与文案留在各模块；共享件只负责标题与动作组的语义结构。
-- 消费方：gto-simulator `ResultSummary`、range-trainer `SessionResult`、puzzle-trainer `PuzzleResult`；两院结果视图保留各自结构（材质与标题语义差异已登记，不强行统一）。
+- 单一事实源 `shared/components/feedback/ResultSlip.tsx`（overlay / page 两种纸条壳层：`title` / `subtitle` / `tone` / `ring` / `stamp` / `metrics` / `badges` / `mentorQuote` / `detail` / `actions`），内部复用 `ResultHeader.tsx`（标题区）与 `ResultActions.tsx`（动作组）。
+- 标题层级默认 h2（壳层 `AppLayout` / `BlankLayout` 持有唯一 h1）；仅无壳层特殊整页可显式传 h1。任意页面必须恰好一个 h1。
+- 材质外壳（`dealer-slip` / felt / `walnut-panel`）、统计卡行、错题与明细表、路由跳转与文案留在各模块；共享件负责纸张外壳、指标/徽章/导师语/详情槽与动作组的语义结构。
+- 消费方：gto-simulator `ResultSummary`（page 变体）、pot-odds `PotOddsResultView`（overlay）；range-trainer / puzzle-trainer / strategy-academy 的结算页按同一契约接入。两院认证/检查点结果视图保留各自结构（材质与标题语义差异已登记，不强行统一）。
 
 ### 返回入口
 

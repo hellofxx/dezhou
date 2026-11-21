@@ -5,7 +5,8 @@
  * felt、`walnut-panel` 等外壳仍由各结果页自己持有（DESIGN.md §1.5 材质契约）。
  *
  * 约定：
- * - `headingLevel` 决定文档层级：整页结果页用 h1，嵌入页 / 卡片内结果用 h2。
+ * - `headingLevel` 决定文档层级：默认 h2（壳层 h1 是全站唯一一级标题）；
+ *   仅在无壳层的特殊整页场景显式传 h1。
  *   （本文件同时含 h1 / h2 分支，故登记在 pageHeadingGuard 的 H1_ALLOWLIST：
  *   「共享结果页标题，按 headingLevel 渲染」）
  * - `tone` 只驱动前导图形与图形色（§2.7 文本专用色阶）；纸面作用域内由 `.dealer-slip` 重锚。
@@ -25,7 +26,7 @@ export interface ResultHeaderProps {
   subtitle?: string;
   /** 默认 neutral：不渲染前导图形 */
   tone?: ResultTone;
-  /** 默认 h1（整页结果视图）；嵌入页用 h2 */
+  /** 默认 h2（壳层已持有全站唯一 h1）；仅在无壳层场景显式传 h1 */
   headingLevel?: ResultHeadingLevel;
   /** 标题下方的环形指标槽（准确率环等），不传则不占位 */
   ring?: ReactNode;
@@ -58,7 +59,7 @@ export function ResultHeader({
   title,
   subtitle,
   tone = 'neutral',
-  headingLevel = 'h1',
+  headingLevel = 'h2',
   ring,
   className,
 }: ResultHeaderProps) {

@@ -23,7 +23,7 @@ src/shared/
 │  ├─ quiz/          # QuizCard + quizCardModel（range-trainer / onboarding 专用）
 │  ├─ feedback/      # DecisionAnalysis / GradeIcon / MobileFeedbackSheet /
 │  │                 # RelatedLessonChip / TryAgainButton / EmptyState / LoadingState /
-│  │                 # ComparisonView / ResultHeader / ResultActions
+│  │                 # ComparisonView / ResultSlip / ResultHeader / ResultActions
 │  ├─ academy/       # 学院共享组件（见下）+ ContentBlocks + index.ts（唯一 facade）
 │  ├─ data-display/  # ProgressBar（ui/progress 薄包装）/ ProgressRing / StatCard / StatPair
 │  ├─ system/        # ErrorBoundary（全局错误兜底整页视图）
@@ -44,7 +44,7 @@ src/shared/
 - `components/academy/`（8 个共享组件 + 内容块）：`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane` / `ContentBlocks`（`LabeledBlock` / `AsciiMonoText` / `FormulaBlock`）；`index.ts` 汇总全部公开导出
 - `components/ui/`：`Button`（default/secondary 金属族 + quiet/link 结构变体）、`Input`、`Textarea`、`Progress`（Radix 单源）、`Dialog` / `Select` / `Toast` / `Tooltip`；`focusRing.ts` 导出 `FOCUS_RING` / `FOCUS_RING_VISIBLE`
 - `components/data-display/`：`ProgressBar`（`ui/progress` 薄包装，值钳制 + `size` / `indicatorClassName`）、`ProgressRing`（环形进度，`valueMax` / `variant` / `center` / `ariaLabel`，具名导出）、`StatCard`（统计卡，`size`（含 `xl`）/ `layout` / `surface`（含 `solid`）/ `accent` / `className` / `contentClassName` / `label: ReactNode`）、`StatPair`（`<dl>` 成对指标）
-- `components/feedback/`：`ResultHeader`（结果页标题，`headingLevel` 决定 h1/h2，可挂 `ring` 槽）、`ResultActions`（结果页动作组，`row` / `stack`）、`DecisionAnalysis`（五级反馈渲染，相关课程路由由 `onRelatedLessonOpen` 注入）、`MobileFeedbackSheet`（移动端底部反馈 Sheet）、`RelatedLessonChip`（纯展示 chip，`onOpen(lessonId)`，shared 不拼路由）、`GradeIcon` / `ComparisonView` / `EmptyState` / `LoadingState` / `TryAgainButton`
+- `components/feedback/`：`ResultSlip`（结果纸条：overlay Dialog / page dealer-slip，统一钢印、指标、徽章、导师语、详情槽与动作组；标题固定 h2）、`ResultHeader`（结果页标题，默认 h2，可挂 `ring` 槽）、`ResultActions`（结果页动作组，`row` / `stack`）、`DecisionAnalysis`（五级反馈渲染，相关课程路由由 `onRelatedLessonOpen` 注入）、`MobileFeedbackSheet`（移动端底部反馈 Sheet）、`RelatedLessonChip`（纯展示 chip，`onOpen(lessonId)`，shared 不拼路由）、`GradeIcon` / `ComparisonView` / `EmptyState` / `LoadingState` / `TryAgainButton`
 - `components/poker/`：牌面与变体可视化（`VariantToggle` 归此域，不再游离根目录）
 - `components/layout/BackLink`：返回入口统一件（`to` / `historyBack` / 文本·胶囊·按钮三变体，icon-only 必填 `aria-label`，触摸目标 ≥44px）
 - `components/layout/SectionLabel`：section / panel 标题统一件（`as` / `icon` / `count` / `id` / `className`，不产 h1）

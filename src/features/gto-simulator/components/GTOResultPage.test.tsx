@@ -180,13 +180,13 @@ describe('GTOResultPage 结果摘要', () => {
 });
 
 describe('GTOResultPage 标题层级', () => {
-  it('整页恰好一个 h1（纸条标题区），矩阵小节降为 h2', () => {
+  it('结果纸条标题为 h2（壳层持有唯一 h1），矩阵小节同样为 h2', () => {
     useGTOSimulatorStore.setState({ lastResult: RESULT });
     const { container } = renderResult();
 
-    expect(container.querySelectorAll('h1')).toHaveLength(1);
-    expect(container.querySelector('h1')?.textContent).toBe('训练完成！');
-    expect(container.querySelectorAll('h2')).toHaveLength(1);
-    expect(container.querySelector('h2')?.textContent).toContain('GTO 策略矩阵');
+    expect(container.querySelectorAll('h1')).toHaveLength(0);
+    expect(container.querySelectorAll('h2')).toHaveLength(2);
+    expect(container.querySelector('h2')?.textContent).toBe('训练完成！');
+    expect(Array.from(container.querySelectorAll('h2')).some((h) => h.textContent?.includes('GTO 策略矩阵'))).toBe(true);
   });
 });

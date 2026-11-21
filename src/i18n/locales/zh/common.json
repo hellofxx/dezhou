@@ -46,6 +46,9 @@
     "label": "筹码",
     "ariaLabel": "筹码 {{amount}}"
   },
+  "resultSlip": {
+    "stamp": "已完成"
+  },
   "resultSummary": {
     "excellent": "优秀！",
     "good": "良好",

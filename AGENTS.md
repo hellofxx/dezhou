@@ -95,7 +95,7 @@ src/
 | 反馈闭环 | progress + 各 trainer | 反馈携带 `relatedLessonId`；`shouldDownshiftDifficulty()` 唯一入口 |
 | 位置解锁 | `range-trainer/constants.ts` | `isPositionUnlocked`；阈值不在文档复制 |
 | 选项排序 | `shared/utils/optionOrder.ts`（策略编排）+ `shared/utils/seededShuffle.ts`（随机与数值判定底座） | 各模块只留薄包装出口，禁止另写排序 / 洗牌；重映射正确答案；每日谜题顺序稳定 |
-| 结果页装配 | `shared/components/feedback/ResultHeader.tsx` / `ResultActions.tsx` | 标题层级由 `headingLevel` 决定（整页 h1 / 嵌入 h2）+ 动作组唯一实现；材质外壳留在模块 |
+| 结果页装配 | `shared/components/feedback/ResultSlip.tsx` / `ResultHeader.tsx` / `ResultActions.tsx` | 结果纸条统一壳层（overlay / page）+ 标题默认 h2（壳层持有唯一 h1）+ 动作组唯一实现；材质外壳留在模块 |
 | 返回入口 | `shared/components/layout/BackLink.tsx` | `to` / `historyBack` 与文本·胶囊·按钮三变体；icon-only 必填 `aria-label`；触摸目标 ≥44px |
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |

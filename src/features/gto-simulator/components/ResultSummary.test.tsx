@@ -3,7 +3,7 @@
  * - 标题 / 按钮文案走 i18n，自定义字符串按 defaultValue 原样透传（非 key 用法）
  * - 正确率百分比四舍五入展示，副标题按四档语义文案分档（>=90/70/50 与以下）
  * - 统计卡逐项渲染 label + value；retry / back 触发调用方回调
- * - 标题区共用 ResultHeader：整页结果用 h1，语调图形随正确率分档（成功 / 中性 / 警示 / 危险）
+ * - 标题区共用 ResultSlip / ResultHeader：结果纸条标题为 h2，语调图形随正确率分档
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
@@ -30,7 +30,7 @@ describe('ResultSummary', () => {
   it('默认标题取 i18n，正确率展示为四舍五入百分比', () => {
     renderSummary({ accuracy: 0.876 });
 
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('训练完成！');
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe('训练完成！');
     expect(screen.getByText('88%')).toBeTruthy();
     expect(screen.getByText('正确率')).toBeTruthy();
   });
@@ -53,7 +53,7 @@ describe('ResultSummary', () => {
   it('自定义 title / subtitle / accuracyLabel 覆盖默认文案', () => {
     renderSummary({ title: '本局复盘完成', subtitle: '自定义副标题', accuracyLabel: '命中率' });
 
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('本局复盘完成');
+    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe('本局复盘完成');
     expect(screen.getByText('自定义副标题')).toBeTruthy();
   });
 
@@ -73,12 +73,12 @@ describe('ResultSummary', () => {
 
   it('标题区语调图形随正确率分档：≥90% 黄铜成功阶，<50% 危险文字阶', () => {
     const { unmount } = renderSummary({ accuracy: 0.95 });
-    const successIcon = screen.getByRole('heading', { level: 1 }).parentElement?.querySelector('svg');
+    const successIcon = screen.getByRole('heading', { level: 2 }).parentElement?.querySelector('svg');
     expect(successIcon?.getAttribute('class')).toContain('text-[var(--brass-bright)]');
     unmount();
 
     renderSummary({ accuracy: 0.3 });
-    const dangerIcon = screen.getByRole('heading', { level: 1 }).parentElement?.querySelector('svg');
+    const dangerIcon = screen.getByRole('heading', { level: 2 }).parentElement?.querySelector('svg');
     expect(dangerIcon?.getAttribute('class')).toContain('text-[var(--danger-text)]');
   });
 

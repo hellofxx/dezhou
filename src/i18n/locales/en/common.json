@@ -46,6 +46,9 @@
     "label": "Chip",
     "ariaLabel": "Chip {{amount}}"
   },
+  "resultSlip": {
+    "stamp": "Completed"
+  },
   "resultSummary": {
     "excellent": "Excellent!",
     "good": "Good",

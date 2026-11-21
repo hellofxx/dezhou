@@ -547,7 +547,7 @@
 
 ### 5.23 发牌员纸条 `.dealer-slip`（v1.8.0）
 
-承载「发牌员递给你的一次性信息」：Dialog、移动端反馈 Sheet、ResultSummary、快捷键浮层。材质契约见 §1.5，色板见 §2.6。
+承载「发牌员递给你的一次性信息」：Dialog、移动端反馈 Sheet、ResultSlip（overlay / page）、快捷键浮层。材质契约见 §1.5，色板见 §2.6。
 
 - **表面**：`--paper` 底、`--paper-edge` 1px 边、4px 圆角（Sheet 变体顶部 8px，见 §13.7.2）；内部抬升块用 `--paper-raised`
 - **顶部内缩黄铜发线** `::before`：`height:1px`，居中 `width:calc(100% - 32px)`，`linear-gradient(90deg, transparent, var(--paper-brass), transparent)`

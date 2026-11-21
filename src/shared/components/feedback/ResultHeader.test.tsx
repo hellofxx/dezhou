@@ -1,6 +1,6 @@
 /**
  * ResultHeader 契约（共享结果页标题区）：
- * - `headingLevel` 决定文档层级：默认 h1（整页结果），嵌入页传 h2
+ * - `headingLevel` 决定文档层级：默认 h2（壳层 h1 唯一），无壳层整页可显式传 h1
  * - `subtitle` 可选，缺省不渲染副标题行
  * - `tone` 只驱动前导图形：neutral 不渲染，success / warning / danger 各一枚装饰图形（aria-hidden）
  * - `ring` 槽存在时渲染居中容器，缺省不占位
@@ -13,26 +13,26 @@ import { ResultHeader } from './ResultHeader';
 afterEach(() => cleanup());
 
 describe('ResultHeader 标题层级', () => {
-  it('默认渲染 h1 标题', () => {
+  it('默认渲染 h2 标题（壳层 h1 唯一）', () => {
     render(<ResultHeader title="训练完成" />);
-
-    const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading.textContent).toBe('训练完成');
-    expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
-  });
-
-  it('headingLevel="h2" 时降为 h2（内嵌页结果）', () => {
-    render(<ResultHeader title="训练完成" headingLevel="h2" />);
 
     const heading = screen.getByRole('heading', { level: 2 });
     expect(heading.textContent).toBe('训练完成');
     expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
   });
 
+  it('无壳层整页可显式传 h1', () => {
+    render(<ResultHeader title="训练完成" headingLevel="h1" />);
+
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading.textContent).toBe('训练完成');
+    expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
+  });
+
   it('标题使用显示字体与正文色 token', () => {
     render(<ResultHeader title="训练完成" />);
 
-    const heading = screen.getByRole('heading', { level: 1 });
+    const heading = screen.getByRole('heading', { level: 2 });
     expect(heading.className).toContain('font-display');
     expect(heading.className).toContain('text-[var(--ivory)]');
   });
