@@ -41,10 +41,7 @@ const STATIC_PREFIXES = [
  */
 const REDIRECT_SOURCE_ALLOWLIST: Record<string, string> = {
   '/academy/lesson': '旧课时深链；Wave 3 统一为 /lesson/:lessonId',
-  '/academy/quick-drill': '旧速训入口；Wave 2 统一为 /quick',
-  '/range-trainer': '旧模块根；Wave 1 统一为 /drill/range',
-  '/pot-odds': '旧模块根；Wave 1 统一为 /drill/odds',
-  '/puzzle': '旧模块根；Wave 1 统一为 /drill/puzzle',
+  '/academy/quick-drill': '旧速训入口；学院/帮助入口待 Wave 3 统一为 /quick',
 };
 
 interface RouteManifest {
