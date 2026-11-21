@@ -96,7 +96,7 @@ export default function Leaderboard() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h2 className="font-display text-[28px] text-[var(--ivory)] tracking-wide">
+          <h2 className="font-display text-[22px] text-[var(--ivory)] tracking-wide">
             {t('leaderboard.title')}
           </h2>
           <p className="mt-1 flex items-start gap-1.5 text-xs text-[var(--ivory-dim)]">
