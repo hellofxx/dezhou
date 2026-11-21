@@ -10,6 +10,15 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-21 课程枢纽 · 双泳道阶段路径（v1.13.0）
+
+- **课程入口**：`/lesson` 由「自动跳下一节策略课」改为课程枢纽 CourseHub；`/lesson/:id`、`theory:` 前缀与 `/academy/lesson/:id` 旧深链保持兼容。
+- **共享契约**：`AcademyLearningStage` 增加 `theoryChapterIds`；`TheoryDataSource` 增加 `getLearningSnapshot` / `getChapterCatalog`；`academyJourneyGroups` / `academyJourneyProgress` 上移 shared；`resolveFirstScore` / `isTheoryReviewItem` 上移 shared。
+- **课程展示**：四段双泳道（概念 / 实战）、下一步卡、补充阅读、短牌「概念关联待补充」降级；课程阅读页新增本课概念导轨；理论章完成页新增回课程枢纽入口。
+- **推荐**：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → 完成；弱项概念复用共享掌握度阈值。
+- **持久化**：不新增 store、不改 persist schema/version/migrate；两院 store 仍独立。
+- **门禁**：新增 hub/共享纯函数、组件、路由与 e2e 用例；`pnpm verify` 与 `pnpm verify:e2e` 为发布门禁。
+
 ### 2026-11-21 功能回补 · 二级训练站与结果纸条（v1.12.0）
 
 - **路由**：新增 `/drill/range|odds|puzzle` 二级站；恢复学院 8 个工具/认证页与理论 5 个工具页；旧 `/range-trainer`、`/pot-odds`、`/puzzle`、`/academy/tracks` 全部改指 canonical 并保留 query；新增静态链接完整性守卫（`src/guards/linkIntegrity.guard.test.ts`）。

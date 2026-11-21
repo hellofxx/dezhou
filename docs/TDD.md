@@ -1373,6 +1373,14 @@ interface DailyRecommendation {
 - 变体实践推荐引用的课程 ID 不纳入标准系列 `CROSS_MODULE_LESSON_IDS` 白名单（该白名单仅对照标准 LEVELS 校验），悬空风险由变体课程自身存在性保证
 - **变体解锁门禁适配**：变体 Level 的解锁链在变体自己的 Level 序列内独立判定（序列内 idx=0 恒解锁，Tn 需前一 Level 全部核心章节完成；变体章节均为核心章，增补章仅存在于标准变体，见第 19 条），`isLevelUnlockedByCompleted` 通过 `ALL_VARIANT_THEORY_LEVELS` 查找 levelId 所属变体再取该变体序列，标准系列行为完全不变；章节查找（`findChapterById`/`findLevelByChapterId`/`getNextChapter`）均支持变体章节，`getNextChapter` 顺延在同一变体序列内（不跨变体）；进度计算（`getLevelProgress`/`getTotalProgress`）按当前 `activeVariant` 的序列自洽统计
 
+### 5.8c 课程枢纽与双泳道（2026-11）
+
+- `/lesson` 由 `CourseHub` 渲染：定位条 + 下一步卡 + 四段双泳道 + 目录入口；`/lesson/:id`、`theory:` 前缀和 `/academy/lesson/:id` 旧深链保持兼容。
+- 阶段投影：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成；四段归并/状态/下一课纯函数位于 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`，由 progress 与 strategy 两个消费者复用。
+- 理论只读：`TheoryDataSource.getLearningSnapshot()` 与 `getChapterCatalog(variant)` 由 theory bootstrap 注册；未注册时消费方降级为未知，不阻塞实战/下一步。
+- nextAction：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → done；跳过推荐仅会话内轮换，不新增持久字段。
+- 不改两院 store/persist schema；短牌无 `theoryChapterIds` 时显示「概念关联待补充」。
+
 ### 5.9 跨模块系统设计
 
 > 本节汇总 Streak / ELO / SRS / Emotion / Mentor 五大跨模块系统，以及 v2.1 新增的反馈闭环 / 位置渐进解锁 / 自适应难度三大系统、选项排序治理系统的技术设计。这些系统横切多个 feature 模块，状态统一收敛在 `progress` store，通过 persist 持久化。
@@ -1649,7 +1657,7 @@ persist(
 |------|------|------|
 | `/` | JourneyHome | AppLayout |
 | `/lesson/:lessonId` | LessonRoute（`theory:` 前缀转理论章节，其余 CourseView） | AppLayout |
-| `/lesson` | LessonEntry（解析下一课后重定向） | AppLayout |
+| `/lesson` | CourseHub（课程枢纽：双泳道阶段路径 + 下一步） | AppLayout |
 | `/drill` | DrillHub | AppLayout |
 | `/drill/range` | RangeTrainerHome（范围站首页） | AppLayout |
 | `/drill/odds` | PotOddsPage（赔率站首页） | AppLayout |

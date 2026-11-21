@@ -35,6 +35,7 @@ additionalPrompt: ""
 - 写入 `src/features/strategy-academy/` 及本任务双语课程/UI 文案；负责课程、Drill、学习轨道、认证、定位、Checkpoint、搜索、书签与笔记。
 - 持有本院学习状态、内部每日计划与 QuickDrill 界面；速训最佳、连续训练、奖励、混合复习及五大系统由 `progress-dev` 持有。
 - 两院共享组件、题库合并/抽题和规则卡交 `platform-dev`，本院只做薄包装；共享对手画像不是本模块独占数据。
+- 课程枢纽 `/lesson`（CourseHub、阶段/概念/nextAction 纯函数与 hub 组件）归本模块；理论数据只经 shared `TheoryDataSource` 读取，不 import theory-academy。
 - 理论桥接变更通过平台交 `theory-academy-dev`；跨院只传路由/ID，不 import 对方内部文件。
 - 共同语言包先由主代理分配单写者；路由与壳层宽度交平台，视觉交 `ui-ux-dev` 复核。
 

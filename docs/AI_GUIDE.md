@@ -178,6 +178,14 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - 材质外壳（`dealer-slip` / felt / `walnut-panel`）、统计卡行、错题与明细表、路由跳转与文案留在各模块；共享件负责纸张外壳、指标/徽章/导师语/详情槽与动作组的语义结构。
 - 消费方：gto-simulator `ResultSummary`（page 变体）、pot-odds `PotOddsResultView`（overlay）；range-trainer / puzzle-trainer / strategy-academy 的结算页按同一契约接入。两院认证/检查点结果视图保留各自结构（材质与标题语义差异已登记，不强行统一）。
 
+### 课程枢纽与双泳道
+
+- `/lesson` 是课程枢纽（CourseHub），`/lesson/:id` 仍是课时深链；`theory:` 前缀与 `/academy/lesson/:id` 旧链保持兼容。
+- 阶段契约：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成（去重保序，短牌为 `[]`）；四段归并与阶段状态在 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`。
+- 理论只读契约：`TheoryDataSource.getLearningSnapshot()`（completedChapters / chapterAttempts / quizScores）与 `getChapterCatalog(variant)`（chapterId / levelId / practiceLessonIds），仍由 theory bootstrap 注册，经 shared registry 消费。
+- nextAction 顺序：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → 全部完成；阈值复用 `ACADEMY_MASTERY_THRESHOLDS`。
+- 不新增 store / registry、不改 persist；短牌无锚点时概念泳道显示「概念关联待补充」，实战泳道与下一步照常。
+
 ### 返回入口
 
 - 单一事实源 `shared/components/layout/BackLink.tsx`：`to`（路由链接）/ `onClick` / `historyBack`（`navigate(-1)`）三选一；`variant` 为 `text` / `pill` / `button`；`size` 为 `sm` / `md`；`iconOnly` 见下。

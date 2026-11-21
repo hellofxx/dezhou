@@ -19,7 +19,7 @@
 ## 公共入口（跨模块契约）
 
 - 对外只暴露三层，其它一律视为内部实现：
-  - `index.ts`：聚合入口（再导出 `api` / `api.types`，外加复习项工具、每日训练推荐、成就数据、QuickDrill 混合工具）
+  - `index.ts`：聚合入口（再导出 `api` / `api.types`，外加复习项工具、每日训练推荐、成就数据、QuickDrill 混合工具，以及课程枢纽使用的 `useAcademyLearningStages` / `useAcademyProgressSnapshot` / `useAcademyLessonAttemptsSnapshot` 只读 hook）
   - `api.ts` + `api.types.ts`：读写契约 —— `useProgressState(selector)` 只返回 `ProgressReadModel` 白名单字段，`progressCommands` 只委托既有 action（业务规则仍在本模块）
   - `ui.ts`：布局级展示件（`OnboardingGate` / `TiltWarning` / `MilestoneCelebrationHost` / `ProgressPersistErrorNotice`）
   - `sessionLimit.ts`：训练页止损守卫（`SessionLimitGuard` / `useSessionLimitReached` / `useSessionLimitStatus`），独立入口避免被布局 eager 依赖拉入首屏

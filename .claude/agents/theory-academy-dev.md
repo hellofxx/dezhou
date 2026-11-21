@@ -34,6 +34,7 @@ additionalPrompt: ""
 ## Authority
 - 写入 `src/features/theory-academy/` 及本任务双语正文/UI 文案；负责章节、题库、计算演练、学习进度、掌握度与阅读工具。
 - 独立管理本院 store；progress 经 registry 消费数据，不通过动态或静态 import 读取本院内部状态。
+- 课程枢纽所需的理论学习快照（`getLearningSnapshot`）与章节目录（`getChapterCatalog`）归本模块注册；枢纽 UI 归 strategy，跨院只经 shared registry。
 - 实践桥接只传路由/ID；策略课程或其镜像清单由 `strategy-academy-dev` 修改，经平台协调，禁止自行跨院编辑。
 - 两院组件、规则卡、题库合并/抽题与 SRS 基础能力由 `platform-dev` 持有，本院保持薄包装；五大系统交 `progress-dev`。
 - 共同语言包按主代理指定的单写者修改；页面视觉交 `ui-ux-dev` 复核。
