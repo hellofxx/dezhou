@@ -1,0 +1,117 @@
+{
+  "ranAt": "2026-11-20T17:18:10.876Z",
+  "engine": "playwright-core 1.65.0 / chromium-1254 headless shell",
+  "viewports": [
+    "1440x900",
+    "390x844"
+  ],
+  "steps": [
+    {
+      "name": "打开原型（桌面 1440×900）",
+      "status": "passed"
+    },
+    {
+      "name": "首次进入出现欢迎纸条",
+      "status": "passed"
+    },
+    {
+      "name": "选导师 + 落座开局",
+      "status": "passed"
+    },
+    {
+      "name": "首页：牌桌 / 打卡条 / 旅程图 / 训练场渲染",
+      "status": "passed"
+    },
+    {
+      "name": "进入当前课程 l2（位置就是权力）",
+      "status": "passed"
+    },
+    {
+      "name": "课后检验：答对 3 题触发掌握达标",
+      "status": "passed"
+    },
+    {
+      "name": "完成本课 → 钢印纸条 → l3 解锁",
+      "status": "passed"
+    },
+    {
+      "name": "返回首页：旅程进度已更新",
+      "status": "passed"
+    },
+    {
+      "name": "范围训练：5 题全对 → 五级反馈 → 结算",
+      "status": "passed"
+    },
+    {
+      "name": "错误答案路径：对比视图 + 相关课程",
+      "status": "passed"
+    },
+    {
+      "name": "进度中心：ELO / 五维 / 打卡 / 成就 / 情绪签到",
+      "status": "passed"
+    },
+    {
+      "name": "锁定课程说明纸条",
+      "status": "passed"
+    },
+    {
+      "name": "浅色主题「白天牌室」切换",
+      "status": "passed"
+    },
+    {
+      "name": "设置纸条：动效 / 演示解锁 / 重置",
+      "status": "passed"
+    },
+    {
+      "name": "移动端：欢迎纸条 → 首页无横向溢出",
+      "status": "passed"
+    },
+    {
+      "name": "移动端：课程页 + 阅读进度条",
+      "status": "passed"
+    },
+    {
+      "name": "移动端：训练答题触摸目标 + 反馈",
+      "status": "passed"
+    },
+    {
+      "name": "移动端：速训倒计时运行",
+      "status": "passed"
+    },
+    {
+      "name": "移动端：进度中心无溢出",
+      "status": "passed"
+    },
+    {
+      "name": "重复交互稳定性：再来一组不产生重复计时器",
+      "status": "passed"
+    }
+  ],
+  "passed": 20,
+  "failed": 0,
+  "jsExceptions": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "screenshots": [
+    "01-welcome-desktop.png",
+    "02-home-desktop.png",
+    "03-lesson-desktop.png",
+    "04-lesson-quiz-result.png",
+    "05-complete-slip.png",
+    "06-drill-feedback.png",
+    "07-drill-summary.png",
+    "08-progress-desktop.png",
+    "09-home-light.png",
+    "10-home-mobile.png",
+    "11-lesson-mobile.png",
+    "12-drill-mobile.png",
+    "13-quick-mobile.png",
+    "14-locked-slip.png",
+    "live-mobile-home.png",
+    "live-pc-home.png",
+    "ref-mobile-home.png",
+    "ref-pc-home.png"
+  ]
+}

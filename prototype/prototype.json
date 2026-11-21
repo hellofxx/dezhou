@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "title": "PokerLab · 牌室学院 — 初学者学习路径交互原型",
+  "entry": "index.html",
+  "files": [
+    "index.html",
+    "assets/theme.css",
+    "assets/components.css",
+    "assets/views.css",
+    "assets/data.js",
+    "assets/app.js",
+    "reference/pc-home-r01.jpg",
+    "reference/mobile-home-r01.png"
+  ],
+  "pages": [
+    { "id": "home", "name": "学习路径首页", "route": "#/home", "terminals": ["desktop", "mobile"], "adopted_image": "reference/pc-home-r01.jpg", "adopted_mobile_image": "reference/mobile-home-r01.png", "version": "r01", "variant_ids": { "desktop": "var_6dae4c19effb", "mobile": "var_19e89eff866f" } },
+    { "id": "lesson", "name": "课程学习", "route": "#/lesson/:id", "terminals": ["desktop", "mobile"], "adopted_image": null, "note": "图像阶段收口于基准页；本页视觉由基准契约延伸，内容以 requirements/课程数据为准" },
+    { "id": "drill", "name": "范围训练", "route": "#/drill", "terminals": ["desktop", "mobile"], "adopted_image": null, "note": "同上" },
+    { "id": "quick", "name": "每日速训", "route": "#/quick", "terminals": ["desktop", "mobile"], "adopted_image": null, "note": "同上" },
+    { "id": "progress", "name": "进度中心", "route": "#/progress", "terminals": ["desktop", "mobile"], "adopted_image": null, "note": "同上" }
+  ],
+  "transitions": [
+    { "from": "home", "to": "lesson", "trigger": "旅程课程芯片 / 下一步「继续学习」/ 今日计划课程条" },
+    { "from": "lesson", "to": "lesson", "trigger": "课后检验达标 → 完成纸条「下一课」" },
+    { "from": "lesson", "to": "home", "trigger": "返回学习路径" },
+    { "from": "home", "to": "drill", "trigger": "训练场范围训练 / SRS 开始复习 / 弱项补强" },
+    { "from": "home", "to": "quick", "trigger": "黄铜横幅「开始速训」" },
+    { "from": "drill", "to": "home", "trigger": "结算纸条「返回路径」/ 退出" },
+    { "from": "drill", "to": "lesson", "trigger": "反馈「相关课程」芯片" },
+    { "from": "quick", "to": "home", "trigger": "结算纸条「返回路径」/ 退出" },
+    { "from": "home", "to": "progress", "trigger": "侧栏/底栏「进度中心」/ 结算「查看成长」" },
+    { "from": "progress", "to": "drill", "trigger": "SRS 开始复习 / 针对弱项开始训练" },
+    { "from": "*", "to": "settings-slip", "trigger": "顶栏/侧栏「牌室设置」" },
+    { "from": "first-visit", "to": "welcome-slip", "trigger": "首次进入自动弹出（选导师 + 每日目标）" }
+  ],
+  "confirmation": {
+    "board": "../design-review/board.json",
+    "note": "用户 2026-11-21 原话：「认可，生成HTML 交互原型」",
+    "adopted_at": "2026-11-20T16:31Z"
+  }
+}

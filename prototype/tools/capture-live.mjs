@@ -1,0 +1,17 @@
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const pw = require('F:/code/dezhou/node_modules/.pnpm/playwright-core@1.65.0/node_modules/playwright-core');
+const URL = 'file:///' + process.cwd().replace(/\\/g, '/') + '/index.html';
+const b = await pw.chromium.launch({ headless: true });
+const p = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
+await p.goto(URL, { waitUntil: 'domcontentloaded' });
+await p.waitForSelector('.dealer-slip');
+await p.click('[data-action="welcome-done"]');
+await p.waitForSelector('.felt-arena');
+await p.waitForTimeout(4500);
+await p.screenshot({ path: 'verification/live-pc-home.png' });
+await p.setViewportSize({ width: 390, height: 844 });
+await p.waitForTimeout(1500);
+await p.screenshot({ path: 'verification/live-mobile-home.png' });
+await b.close();
+console.log('live captures done');

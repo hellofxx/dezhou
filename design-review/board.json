@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "title": "PokerLab · 牌室学院 — 双端基准效果图（整组已确认）",
+  "pages": [
+    {
+      "id": "pc-home",
+      "name": "学习路径首页",
+      "terminal": "desktop",
+      "baseline": true,
+      "versions": [
+        {
+          "version": "r01",
+          "path": "images/pc-home-r01-a8bb46905dfa.jpg",
+          "sha256": "a8bb46905dfa8d61f3b9ae8eacadd536614ed0cb14770e24e5a4be2feceee721",
+          "source": "shenhuo",
+          "variant_id": "var_6dae4c19effb",
+          "created_at": "2026-11-20T16:24:52+00:00"
+        }
+      ],
+      "current_version": "r01",
+      "adopted_version": "r01"
+    },
+    {
+      "id": "mobile-home",
+      "name": "学习路径首页",
+      "terminal": "mobile",
+      "baseline": true,
+      "versions": [
+        {
+          "version": "r01",
+          "path": "images/mobile-home-r01-2ad98864c0a3.png",
+          "sha256": "2ad98864c0a3d1a7c4446e53686673be7f32e0bea87b48800e73d2cfa3d7c604",
+          "source": "shenhuo",
+          "variant_id": "var_19e89eff866f",
+          "created_at": "2026-11-20T16:24:52+00:00"
+        }
+      ],
+      "current_version": "r01",
+      "adopted_version": "r01"
+    }
+  ],
+  "confirmation": {
+    "snapshot": "87b69d4bac0f79c391c29265463d0b0440febc68b56b6e6f7cb2477b4a8cf08a",
+    "note": "用户 2026-11-21 原话：「认可，生成HTML 交互原型」。确认对象为当前整组双端基准 r01（pc-home var_6dae4c19effb / mobile-home var_19e89eff866f）。其余 8 个计划页经用户本次决定改由 HTML 交互原型直接实现、不再另行生图，图像集收口为双端基准；收口前计划为 10 页，空计划页无版本历史，移除不丢失任何已生成记录。",
+    "at": "2026-11-20T16:31:04+00:00"
+  },
+  "approval_history": [],
+  "updated_at": "2026-11-20T16:31:04+00:00"
+}

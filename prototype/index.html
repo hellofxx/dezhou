@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-motion="on">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PokerLab · 牌室学院 — 从入门到精通的德州学习路径</title>
+  <meta name="description" content="初学者德州扑克学习原型：四段脚手架路径、掌握学习门禁、五级反馈、间隔复习与量化成长。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/components.css">
+  <link rel="stylesheet" href="assets/views.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c9a25e' d='M12 2C9 7 4 9.2 4 13.2a4.2 4.2 0 0 0 7.2 2.9V22h1.6v-5.9A4.2 4.2 0 0 0 20 13.2C20 9.2 15 7 12 2z'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="reading-progress" id="reading-bar"></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-spade">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9 7 4 9.2 4 13.2a4.2 4.2 0 0 0 7.2 2.9V22h1.6v-5.9A4.2 4.2 0 0 0 20 13.2C20 9.2 15 7 12 2z"/></svg>
+        </span>
+        <span>
+          <span class="brand-name" style="display:block">PokerLab</span>
+          <span class="brand-sub">牌室学院</span>
+        </span>
+      </div>
+      <div class="hairline" style="margin:0 18px"></div>
+      <nav id="nav-groups" aria-label="主导航"></nav>
+      <div class="sidebar-foot">
+        <div class="sidebar-user">
+          <span class="user-avatar">旅</span>
+          <span>
+            <span class="user-name" style="display:block">旅人 · 你</span>
+            <span class="user-rank">白银牌手</span>
+          </span>
+        </div>
+        <div class="sidebar-ver">prototype v0.1 · 本地模拟</div>
+      </div>
+    </aside>
+    <div class="main-wrap">
+      <header class="topbar">
+        <div class="topbar-title">
+          <span class="topbar-num" id="topbar-num">00</span>
+          <span class="topbar-sep"></span>
+          <h1 id="page-title">学习路径</h1>
+        </div>
+        <div class="topbar-right">
+          <span class="streak-badge" title="连续训练天数">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3 1.07-1.7 2.5-2.5 2.5-5 4.5 3 6.5 6.5 6.5 10a7 7 0 1 1-14 0c0-1.15.43-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+            <span class="font-numeric" id="streak-badge-num">4</span>
+          </span>
+          <button class="icon-btn" id="theme-btn" data-action="toggle-theme" aria-label="切换主题"></button>
+          <button class="icon-btn" data-action="open-settings" aria-label="牌室设置">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+          </button>
+        </div>
+      </header>
+      <div class="table-rail"><span class="rail-rivet"></span></div>
+      <main class="view" id="view"></main>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="移动导航"></nav>
+  <div id="slip-root"></div>
+  <div id="toast-root" aria-live="polite"></div>
+  <script src="assets/wood.js"></script>
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
