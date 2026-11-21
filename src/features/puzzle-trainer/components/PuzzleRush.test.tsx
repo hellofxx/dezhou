@@ -80,7 +80,7 @@ describe('PuzzleRush 限时冲刺', () => {
       root.render(<PuzzleRush />);
     });
 
-  const text = () => container.textContent ?? '';
+  const text = () => document.body.textContent ?? '';
 
   const click = (element: Element | null | undefined) => {
     if (!element) throw new Error('点击目标不存在');
@@ -105,7 +105,7 @@ describe('PuzzleRush 限时冲刺', () => {
   };
 
   const clickNext = () => {
-    const next = [...container.querySelectorAll('button')].find((btn) =>
+    const next = [...document.body.querySelectorAll('button')].find((btn) =>
       ['下一题', '查看结果'].includes(btn.textContent?.trim() ?? '')
     );
     click(next);
@@ -216,7 +216,7 @@ describe('PuzzleRush 限时冲刺', () => {
 
   it('退出按钮跳转 /puzzle', () => {
     render();
-    const exit = [...container.querySelectorAll('button')].find((btn) =>
+    const exit = [...document.body.querySelectorAll('button')].find((btn) =>
       btn.textContent?.includes('退出')
     );
     click(exit);
