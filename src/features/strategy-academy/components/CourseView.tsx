@@ -27,6 +27,7 @@ import { CourseLockedView } from './CourseLockedView';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import CourseDoneView from './CourseDoneView';
 import CourseDoneSlip from './CourseDoneSlip';
+import { TheoryBridgeCard } from './TheoryBridgeCard';
 import { StrategyNotesPanel } from './StrategyNotesPanel';
 import { LessonReviewMeta } from './LessonReviewMeta';
 import type { DrillResult } from './drills/types';
@@ -369,11 +370,19 @@ export default function CourseView() {
         <AcademyReadingPlane
           railLabel={t('academy.courseView.railTitle')}
           rail={
-            <CourseStudyRail
-              lesson={lesson}
-              levelEntry={levelEntry}
-              completedLessons={completedLessons}
-            />
+            <div className="space-y-3">
+              <TheoryBridgeCard
+                anchors={getLessonMeta(lesson.id).theoryAnchors}
+                onNavigate={(route) => navigate(route)}
+                title={t('academy.courseHub.conceptRail.title')}
+                subtitle={t('academy.courseHub.conceptRail.subtitle')}
+              />
+              <CourseStudyRail
+                lesson={lesson}
+                levelEntry={levelEntry}
+                completedLessons={completedLessons}
+              />
+            </div>
           }
         >
           {pageHeader}

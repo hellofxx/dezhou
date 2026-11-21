@@ -6,9 +6,10 @@ import type { HubNextAction } from '../../utils/hubNextAction';
 
 interface NextActionCardProps {
   action: HubNextAction;
+  secondaryRoute?: string;
 }
 
-export default function NextActionCard({ action }: NextActionCardProps) {
+export default function NextActionCard({ action, secondaryRoute }: NextActionCardProps) {
   const { t } = useTranslation();
   if (action.kind === 'blocked') return null;
 
@@ -44,12 +45,23 @@ export default function NextActionCard({ action }: NextActionCardProps) {
           </h2>
           <p className="m-0 text-sm leading-relaxed text-[var(--ivory-dim)]">{reason}</p>
         </div>
-        <Button asChild data-hub-action="next">
-          <Link to={action.route}>
-            {t(ctaKey)}
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          {secondaryRoute ? (
+            <Link
+              to={secondaryRoute}
+              data-hub-action="secondary"
+              className="inline-flex min-h-11 items-center rounded-md border border-[var(--walnut-border)] px-3 text-xs font-semibold text-[var(--ivory-dim)] transition-colors hover:border-[var(--brass)]/40 hover:text-[var(--ivory)]"
+            >
+              {t('academy.courseHub.next.practiceCta')}
+            </Link>
+          ) : null}
+          <Button asChild data-hub-action="next">
+            <Link to={action.route}>
+              {t(ctaKey)}
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

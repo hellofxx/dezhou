@@ -8,6 +8,7 @@ import {
 } from '@/features/progress';
 import { getTheoryDataSource } from '@/shared/stores/theoryDataSourceRegistry';
 import { isTheoryReviewItem } from '@/shared/utils/academySrs';
+import { summarizeMastery } from '@/shared/utils/academyMastery';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { useAcademyStore } from '../store';
@@ -20,6 +21,7 @@ import CourseHubHeader from './hub/CourseHubHeader';
 import NextActionCard from './hub/NextActionCard';
 import CourseStageCard from './hub/CourseStageCard';
 import CourseHubCatalog from './hub/CourseHubCatalog';
+import CourseMasteryDualCard, { type MasteryBlock } from './hub/CourseMasteryDualCard';
 
 /**
  * 课程枢纽（/lesson）：策略实战 + 理论概念双泳道。
@@ -31,6 +33,8 @@ export default function CourseHub() {
   const { completedLessons } = useAcademyProgressSnapshot();
   const basicsCompleted = useAcademyStore((s) => s.basicsProgress.completed);
   const activeVariant = useAcademyStore((s) => s.activeVariant);
+  const lessonAttempts = useAcademyStore((s) => s.lessonAttempts);
+  const academyProgress = useAcademyStore((s) => s.progress);
   const reviewItems = useProgressState((s) => s.reviewItems);
   const theorySnapshot = useTheoryLearningSnapshot();
   const theoryKnown = theorySnapshot !== undefined;
@@ -115,6 +119,45 @@ export default function CourseHub() {
     [hubStages],
   );
 
+  const strategyMastery = useMemo<MasteryBlock>(() => {
+    const ids = [...new Set(hubStages.flatMap((stage) => stage.lessonIds))].filter(
+      (id) => findLessonSummaryById(id)?.type !== 'drill',
+    );
+    const scores: Record<string, number | undefined> = {};
+    for (const id of ids) {
+      scores[id] = lessonAttempts[id]?.firstScore ?? academyProgress.quizScores[id];
+    }
+    const summary = summarizeMastery(ids.map((id) => ({ id })), scores);
+    const weakestId = summary.weakestId;
+    return {
+      summary,
+      weakestId,
+      weakestTitle: weakestId ? findLessonSummaryById(weakestId)?.title : undefined,
+    };
+  }, [hubStages, lessonAttempts, academyProgress]);
+
+  const theoryMastery = useMemo<MasteryBlock | undefined>(() => {
+    if (!theoryKnown) return undefined;
+    const ids = [...new Set(hubStages.flatMap((stage) => stage.theoryChapterIds))];
+    if (ids.length === 0) return undefined;
+    const summary = summarizeMastery(ids.map((id) => ({ id })), conceptScores);
+    const weakestId = summary.weakestId;
+    return {
+      summary,
+      weakestId,
+      weakestTitle: weakestId
+        ? t(`theory.chapterTitle.${weakestId}`, { defaultValue: weakestId })
+        : undefined,
+    };
+  }, [hubStages, conceptScores, theoryKnown, t]);
+
+  const conceptPracticeRoute = useMemo(() => {
+    if (nextAction.kind !== 'concept' || !nextAction.chapterId) return undefined;
+    const lessonId = catalog.find((entry) => entry.chapterId === nextAction.chapterId)
+      ?.practiceLessonIds?.[0];
+    return lessonId ? `/lesson/${lessonId}` : undefined;
+  }, [nextAction, catalog]);
+
   if (stages.length === 0) {
     return <div className="py-6"><PageSkeleton /></div>;
   }
@@ -128,7 +171,7 @@ export default function CourseHub() {
           theoryKnown={theoryKnown}
           basicsCompleted={basicsCompleted}
         />
-        <NextActionCard action={nextAction} />
+        <NextActionCard action={nextAction} secondaryRoute={conceptPracticeRoute} />
 
         <section aria-labelledby="course-hub-path-title">
           <SectionLabel as="h2" id="course-hub-path-title" className="mb-2">
@@ -149,6 +192,8 @@ export default function CourseHub() {
             ))}
           </div>
         </section>
+
+        <CourseMasteryDualCard strategy={strategyMastery} theory={theoryMastery} />
 
         <CourseHubCatalog />
       </div>

@@ -496,7 +496,8 @@
     "chapterDone": "本章完成",
     "answered": "答对 {{correct}}/{{total}} 题",
     "score": "{{score}} 分",
-    "railTitle": "本级章节目录"
+    "railTitle": "本级章节目录",
+    "backToCourseHub": "回到课程枢纽"
   },
   "placement": {
     "title": "定位测评",

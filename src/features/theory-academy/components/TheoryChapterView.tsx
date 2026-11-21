@@ -336,13 +336,21 @@ export default function TheoryChapterView() {
             {/* Level 全部完成时展示实践桥接推荐 */}
             {levelCompleted && <PracticeBridgeCard recommendations={level.practiceRecommendations} />}
             <div className="panel flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-              <button
-                onClick={() => navigate('/theory')}
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  to="/lesson"
+                  className={`inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--brass)]/40 px-4 py-2 text-sm font-semibold text-[var(--brass-text)] transition-colors hover:bg-[var(--brass-glow)] ${FOCUS_RING}`}
+                >
+                  {t('theory.chapterView.backToCourseHub')}
+                </Link>
+                <button
+                  onClick={() => navigate('/theory')}
                 className={`inline-flex min-h-11 items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors ${FOCUS_RING}`}
               >
                 <ArrowLeft className="w-4 h-4" />
-                {t('theory.chapterView.backToChapters')}
-              </button>
+                  {t('theory.chapterView.backToChapters')}
+                </button>
+              </div>
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => {

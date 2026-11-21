@@ -128,11 +128,21 @@
     "supplemental": {
       "title": "Supplemental reading"
     },
+    "conceptRail": {
+      "title": "This lesson's concepts",
+      "subtitle": "Read the related chapter before the lesson to understand the why"
+    },
     "next": {
       "title": "Next step",
       "cta": "Continue",
       "ctaBasics": "Go to Basics",
-      "ctaDone": "View learning tracks"
+      "ctaDone": "View learning tracks",
+      "practiceCta": "Practice first"
+    },
+    "mastery": {
+      "theoryTitle": "Concept mastery",
+      "practiceTitle": "Practice mastery",
+      "subtitle": "Based on first attempts; retakes do not change mastery"
     },
     "status": {
       "locked": "Locked",

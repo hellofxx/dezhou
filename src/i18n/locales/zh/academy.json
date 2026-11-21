@@ -128,11 +128,21 @@
     "supplemental": {
       "title": "补充阅读"
     },
+    "conceptRail": {
+      "title": "本课概念",
+      "subtitle": "读正文前先补这一章，理解决策背后的原理"
+    },
     "next": {
       "title": "下一步",
       "cta": "继续学习",
       "ctaBasics": "去基础入门",
-      "ctaDone": "查看学习轨道"
+      "ctaDone": "查看学习轨道",
+      "practiceCta": "先去实战"
+    },
+    "mastery": {
+      "theoryTitle": "概念掌握",
+      "practiceTitle": "实战掌握",
+      "subtitle": "按首次成绩统计，重考不改变掌握度"
     },
     "status": {
       "locked": "锁定",

@@ -496,7 +496,8 @@
     "chapterDone": "Chapter Completed",
     "answered": "Correct {{correct}}/{{total}}",
     "score": "{{score}} pts",
-    "railTitle": "Chapters in this level"
+    "railTitle": "Chapters in this level",
+    "backToCourseHub": "Back to course hub"
   },
   "placement": {
     "title": "Placement Check",
