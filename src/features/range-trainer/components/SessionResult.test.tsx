@@ -45,7 +45,8 @@ function renderResult(result: TrainingResult, onRetry = vi.fn(), onBackToHome = 
   const utils = render(
     <SessionResult result={result} onRetry={onRetry} onBackToHome={onBackToHome} />,
   );
-  return { ...utils, onRetry, onBackToHome };
+  // 结算纸条经 Dialog portal 渲染到 body
+  return { ...utils, container: document.body, onRetry, onBackToHome };
 }
 
 describe('SessionResult 正确率分档', () => {
@@ -157,21 +158,23 @@ describe('SessionResult 操作按钮', () => {
 });
 
 describe('SessionResult 标题层级与语调', () => {
-  it('结算页标题为页级 h1（与 GTO 结算页共用 ResultHeader）', () => {
+  it('结算纸条标题为 h2（壳层持有唯一 h1）', () => {
     renderResult(makeResult());
 
-    const heading = screen.getByRole('heading', { level: 1 });
+    const heading = screen.getByRole('heading', { level: 2 });
     expect(heading.textContent).toBe('训练完成！');
-    expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
+    expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
+    expect(screen.getByRole('dialog')).toBeTruthy();
   });
 
   it('语调图形随正确率分档：≥90% 渲染成功图形，70–89% 为中性（无图形）', () => {
     const { unmount } = renderResult(makeResult({ accuracy: 1 }));
-    const successIcon = screen.getByRole('heading', { level: 1 }).parentElement?.querySelector('svg');
+    const successIcon = screen.getByRole('heading', { level: 2 }).parentElement?.querySelector('svg');
     expect(successIcon?.getAttribute('class')).toContain('text-[var(--brass-bright)]');
     unmount();
 
-    const { container } = renderResult(makeResult({ accuracy: 0.75 }));
-    expect(container.querySelector('h1')?.parentElement?.querySelector('svg')).toBeNull();
+    renderResult(makeResult({ accuracy: 0.75 }));
+    const neutralIcon = screen.getByRole('heading', { level: 2 }).parentElement?.querySelector('svg');
+    expect(neutralIcon).toBeNull();
   });
 });

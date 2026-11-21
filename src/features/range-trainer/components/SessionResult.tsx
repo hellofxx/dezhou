@@ -1,13 +1,8 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-// UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
-import { MOTION_DURATION, MOTION_EASE, transitionSlow } from '@/shared/utils/motion';
 import type { TrainingResult } from '@/shared/types/common';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { StatCard } from '@/shared/components/data-display/StatCard';
-import { ResultActions } from '@/shared/components/feedback/ResultActions';
-import { ResultHeader, type ResultTone } from '@/shared/components/feedback/ResultHeader';
-import { RotateCcw, Home, Target, Clock, AlertTriangle } from 'lucide-react';
+import { ResultSlip } from '@/shared/components/feedback/ResultSlip';
+import type { ResultTone } from '@/shared/components/feedback/ResultHeader';
+import { AlertTriangle, Check, Clock, Home, RotateCcw, Target, X } from 'lucide-react';
 
 interface SessionResultProps {
   result: TrainingResult;
@@ -17,10 +12,10 @@ interface SessionResultProps {
 
 /** 根据正确率返回颜色、评价 key 与标题区语调 — uses card-room palette (brass/sage/clay) */
 function getAccuracyInfo(accuracy: number): { color: string; labelKey: string; tone: ResultTone } {
-  if (accuracy >= 0.9) return { color: 'text-[var(--brass-bright)]', labelKey: 'rangeTrainer.result.excellent', tone: 'success' };
-  if (accuracy >= 0.7) return { color: 'text-[var(--sage-text)]', labelKey: 'rangeTrainer.result.good', tone: 'neutral' };
-  if (accuracy >= 0.5) return { color: 'text-[var(--brass-text)]', labelKey: 'rangeTrainer.result.keepGoing', tone: 'warning' };
-  return { color: 'text-[var(--clay-text)]', labelKey: 'rangeTrainer.result.morePractice', tone: 'danger' };
+  if (accuracy >= 0.9) return { color: 'var(--paper-brass)', labelKey: 'rangeTrainer.result.excellent', tone: 'success' };
+  if (accuracy >= 0.7) return { color: 'var(--paper-success)', labelKey: 'rangeTrainer.result.good', tone: 'neutral' };
+  if (accuracy >= 0.5) return { color: 'var(--paper-warning)', labelKey: 'rangeTrainer.result.keepGoing', tone: 'warning' };
+  return { color: 'var(--paper-danger)', labelKey: 'rangeTrainer.result.morePractice', tone: 'danger' };
 }
 
 /** 统计薄弱手牌（答错≥2次） */
@@ -37,193 +32,120 @@ function getWeakHands(result: TrainingResult): { hand: string; wrongCount: numbe
     .toSorted((a, b) => b.wrongCount - a.wrongCount);
 }
 
-/** 数字递增动画 */
-function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
+function AccuracyRing({ percent, color }: { percent: number; color: string }) {
   return (
-    <motion.span
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: MOTION_DURATION.loop, ease: MOTION_EASE.out }}
-    >
-      {value}{suffix}
-    </motion.span>
+    <div className="relative h-40 w-40">
+      <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r="52" fill="none" stroke="var(--paper-edge)" strokeWidth="8" />
+        <circle
+          cx="60"
+          cy="60"
+          r="52"
+          fill="none"
+          stroke={color}
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeDasharray={2 * Math.PI * 52}
+          strokeDashoffset={2 * Math.PI * 52 * (1 - percent / 100)}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-numeric text-4xl font-bold" style={{ color }}>
+          {percent}%
+        </span>
+        <span className="text-xs text-[var(--ivory-muted)]" />
+      </div>
+    </div>
   );
 }
 
 export function SessionResult({ result, onRetry, onBackToHome }: SessionResultProps) {
   const { t } = useTranslation();
   const accuracyPercent = Math.round(result.accuracy * 100);
-  const { color: accColor, labelKey: accLabelKey, tone } = getAccuracyInfo(result.accuracy);
+  const { color, labelKey, tone } = getAccuracyInfo(result.accuracy);
   const weakHands = getWeakHands(result);
-  const avgTimeSec = (result.averageTime / 1000).toFixed(1);
   const wrongDetails = result.details.filter((d) => !d.isCorrect);
+  const avgTimeSec = (result.averageTime / 1000).toFixed(1);
 
   return (
-    <div className="h-full overflow-auto">
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
-        {/* 顶部标题区（h1）+ 正确率大圆环 */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={transitionSlow}
-        >
-          <ResultHeader
-            headingLevel="h1"
-            title={t('rangeTrainer.result.title')}
-            subtitle={t(accLabelKey)}
-            tone={tone}
-            ring={
-              <motion.div
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: MOTION_DURATION.loop, delay: 0.2 }}
-              >
-                <div className="relative w-40 h-40">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                    <circle
-                      cx="60" cy="60" r="52"
-                      fill="none"
-                      stroke="var(--walnut-border)"
-                      strokeWidth="8"
-                    />
-                    <motion.circle
-                      cx="60" cy="60" r="52"
-                      fill="none"
-                      stroke="var(--brass)"
-                      strokeWidth="8"
-                      strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 52}
-                      initial={{ strokeDashoffset: 2 * Math.PI * 52 }}
-                      animate={{
-                        strokeDashoffset: 2 * Math.PI * 52 * (1 - result.accuracy),
-                      }}
-                      transition={{ duration: MOTION_DURATION.loop, delay: 0.4, ease: MOTION_EASE.out }}
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className={`font-numeric text-4xl font-bold ${accColor}`}>
-                      <AnimatedNumber value={accuracyPercent} suffix="%" />
+    <ResultSlip
+      open
+      onClose={onBackToHome}
+      title={t('rangeTrainer.result.title')}
+      subtitle={t(labelKey)}
+      tone={tone}
+      ring={<AccuracyRing percent={accuracyPercent} color={color} />}
+      metrics={[
+        { label: t('rangeTrainer.result.total'), value: `${result.totalQuestions}`, icon: <Target className="w-4 h-4" /> },
+        { label: t('rangeTrainer.result.correct'), value: `${result.correctAnswers}`, icon: <Check className="w-4 h-4" />, accent: 'success' },
+        {
+          label: t('rangeTrainer.result.wrong'),
+          value: `${result.totalQuestions - result.correctAnswers}`,
+          icon: <X className="w-4 h-4" />,
+        },
+        { label: t('rangeTrainer.result.avgTime'), value: `${avgTimeSec}s`, icon: <Clock className="w-4 h-4" /> },
+      ]}
+      detail={
+        <div className="space-y-3">
+          {weakHands.length > 0 ? (
+            <section className="rounded-lg border border-[var(--paper-rule)] bg-[var(--paper-raised)] p-4">
+              <h3 className="m-0 mb-2 flex items-center gap-2 font-display text-[15px] text-[var(--ivory)]">
+                <AlertTriangle className="h-4 w-4 text-[var(--brass-text)]" aria-hidden="true" />
+                {t('rangeTrainer.result.weakHands')}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {weakHands.map(({ hand, wrongCount }) => (
+                  <span
+                    key={hand}
+                    className="rounded-md border border-[var(--danger)]/40 bg-[var(--danger-bg)] px-3 py-1.5 font-numeric text-sm font-medium text-[var(--danger-text)]"
+                  >
+                    {hand}
+                    <span className="ml-1 text-xs opacity-80">
+                      {t('rangeTrainer.result.wrongCount', { count: wrongCount })}
                     </span>
-                    <span className="text-xs text-[var(--ivory-muted)]">{t('rangeTrainer.result.accuracy')}</span>
-                  </div>
-                </div>
-              </motion.div>
-            }
-          />
-        </motion.div>
+                  </span>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
-        {/* 统计卡片 */}
-        <motion.div
-          className="grid grid-cols-4 gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...transitionSlow, delay: 0.6 }}
-        >
-          <StatCard icon={<Target className="w-4 h-4" />} label={t('rangeTrainer.result.total')} value={`${result.totalQuestions}`} />
-          <StatCard icon={<span className="text-[var(--sage-text)] text-sm font-bold">✓</span>} label={t('rangeTrainer.result.correct')} value={`${result.correctAnswers}`} />
-          <StatCard icon={<span className="text-[var(--clay-text)] text-sm font-bold">✗</span>} label={t('rangeTrainer.result.wrong')} value={`${result.totalQuestions - result.correctAnswers}`} />
-          <StatCard icon={<Clock className="w-4 h-4" />} label={t('rangeTrainer.result.avgTime')} value={`${avgTimeSec}s`} />
-        </motion.div>
-
-        {/* 薄弱手牌 */}
-        {weakHands.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
-              <CardHeader className="pb-2">
-                <CardTitle className="font-display text-[17px] text-[var(--ivory)] flex items-center gap-2 tracking-wide">
-                  <AlertTriangle className="w-4 h-4 text-[var(--brass-bright)]" />
-                  {t('rangeTrainer.result.weakHands')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {weakHands.map(({ hand, wrongCount }) => (
-                    <span
-                      key={hand}
-                      className="px-3 py-1.5 rounded-md bg-[var(--clay)]/12 border border-[var(--clay)]/40 text-[var(--clay-text)] text-sm font-medium font-numeric"
-                    >
-                      {hand}
-                      <span className="ml-1 text-xs opacity-80">{t('rangeTrainer.result.wrongCount', { count: wrongCount })}</span>
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-
-        {/* 错题列表 */}
-        {wrongDetails.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            <Card className="bg-[var(--felt)] border-[var(--walnut-border)]">
-              <CardHeader className="pb-2">
-                <CardTitle className="font-display text-[17px] text-[var(--ivory)] tracking-wide">{t('rangeTrainer.result.wrongDetails')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-[var(--ivory-muted)] border-b border-[var(--walnut-border)]">
-                        <th className="text-left py-2 px-2 font-medium">{t('rangeTrainer.result.hand')}</th>
-                        <th className="text-left py-2 px-2 font-medium">{t('rangeTrainer.result.yourChoice')}</th>
-                        <th className="text-left py-2 px-2 font-medium">{t('rangeTrainer.result.correctAnswer')}</th>
-                        <th className="text-right py-2 px-2 font-medium">{t('rangeTrainer.result.time')}</th>
+          {wrongDetails.length > 0 ? (
+            <section className="rounded-lg border border-[var(--paper-rule)] bg-[var(--paper-raised)] p-4">
+              <h3 className="m-0 mb-2 font-display text-[15px] text-[var(--ivory)]">
+                {t('rangeTrainer.result.wrongDetails')}
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[var(--paper-rule)] text-[var(--ivory-muted)]">
+                      <th className="px-2 py-2 text-left font-medium">{t('rangeTrainer.result.hand')}</th>
+                      <th className="px-2 py-2 text-left font-medium">{t('rangeTrainer.result.yourChoice')}</th>
+                      <th className="px-2 py-2 text-left font-medium">{t('rangeTrainer.result.correctAnswer')}</th>
+                      <th className="px-2 py-2 text-right font-medium">{t('rangeTrainer.result.time')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {wrongDetails.map((d, i) => (
+                      <tr key={i} className="border-b border-[var(--paper-rule)]/60 last:border-0">
+                        <td className="px-2 py-2 font-medium text-[var(--ivory)] font-numeric">{d.question}</td>
+                        <td className="px-2 py-2 font-numeric capitalize text-[var(--danger-text)]">{d.userAnswer}</td>
+                        <td className="px-2 py-2 font-numeric capitalize text-[var(--sage-text)]">{d.correctAnswer}</td>
+                        <td className="px-2 py-2 text-right font-numeric text-[var(--ivory-muted)]">
+                          {(d.timeTaken / 1000).toFixed(1)}s
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {wrongDetails.map((d, i) => (
-                        <tr key={i} className="border-b border-[var(--walnut-border)]/40 last:border-0">
-                          <td className="py-2 px-2 font-medium text-[var(--ivory)] font-numeric">{d.question}</td>
-                          <td className="py-2 px-2 text-[var(--clay-text)] capitalize font-numeric">{d.userAnswer}</td>
-                          <td className="py-2 px-2 text-[var(--sage-text)] capitalize font-numeric">{d.correctAnswer}</td>
-                          <td className="py-2 px-2 text-right text-[var(--ivory-muted)] font-numeric">
-                            {(d.timeTaken / 1000).toFixed(1)}s
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-
-        {/* 操作按钮 */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          <ResultActions
-            className="pt-4"
-            actions={[
-              {
-                label: t('rangeTrainer.result.retry'),
-                onClick: onRetry,
-                icon: <RotateCcw />,
-                variant: 'primary',
-                className: 'px-6',
-              },
-              {
-                label: t('rangeTrainer.result.backHome'),
-                onClick: onBackToHome,
-                icon: <Home />,
-                variant: 'outline',
-                className: 'px-6 border-[var(--walnut-border)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/40',
-              },
-            ]}
-          />
-        </motion.div>
-      </div>
-    </div>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
+        </div>
+      }
+      actions={[
+        { label: t('rangeTrainer.result.retry'), onClick: onRetry, variant: 'primary', icon: <RotateCcw className="w-4 h-4" /> },
+        { label: t('rangeTrainer.result.backHome'), onClick: onBackToHome, variant: 'outline', icon: <Home className="w-4 h-4" /> },
+      ]}
+    />
   );
 }

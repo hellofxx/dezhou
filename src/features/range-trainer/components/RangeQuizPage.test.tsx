@@ -65,25 +65,28 @@ function LocationProbe() {
 }
 
 function renderPage() {
-  return render(
+  const utils = render(
     <MemoryRouter initialEntries={['/range-trainer/quiz']}>
       <RangeQuizPage />
       <LocationProbe />
     </MemoryRouter>,
   );
+  // 结算纸条经 Dialog portal 渲染到 body
+  return { ...utils, container: document.body };
 }
 
 function findButton(container: HTMLElement, text: string): HTMLButtonElement {
-  const button = Array.from(container.querySelectorAll('button')).find((btn) =>
-    btn.textContent?.includes(text),
-  );
-  if (!button) {
-    const all = Array.from(container.querySelectorAll('button'))
-      .map((btn) => JSON.stringify(btn.textContent?.trim()))
-      .join(', ');
-    throw new Error(`未找到按钮：${text}；现有按钮：[${all}]`);
+  const roots = [container, document.body];
+  for (const root of roots) {
+    const button = Array.from(root.querySelectorAll('button')).find((btn) =>
+      btn.textContent?.includes(text),
+    );
+    if (button) return button;
   }
-  return button;
+  const all = Array.from(document.body.querySelectorAll('button'))
+    .map((btn) => JSON.stringify(btn.textContent?.trim()))
+    .join(', ');
+  throw new Error(`未找到按钮：${text}；现有按钮：[${all}]`);
 }
 
 /** 把当前会话裁剪为单题，避免 20 题长跑（仅替换 store 夹具数据） */
