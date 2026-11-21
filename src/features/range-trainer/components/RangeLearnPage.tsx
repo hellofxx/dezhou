@@ -53,10 +53,10 @@ export default function RangeLearnPage() {
               className="hidden md:inline-flex"
             />
             <div>
-              <h1 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-[var(--ivory)] flex items-center gap-2">
                 <BookOpen className="w-6 h-6 text-[var(--brass-text)]" />
                 {t('rangeTrainer.learn')}
-              </h1>
+              </h2>
               <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
                 {t('rangeTrainer.learnSubtitle')}
               </p>

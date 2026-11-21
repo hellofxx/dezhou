@@ -46,10 +46,6 @@ const H1_ALLOWLIST: { file: string; reason: string }[] = [
     file: 'shared/components/feedback/ResultHeader.tsx',
     reason: '共享结果页标题：按 headingLevel 渲染 h1（整页结果）或 h2（嵌入页结果）',
   },
-  {
-    file: 'features/range-trainer/components/RangeLearnPage.tsx',
-    reason: '范围学习整页主标题（视觉收口批次再降为 h2）',
-  },
 ];
 
 interface ScannedFile {
