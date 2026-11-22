@@ -226,7 +226,7 @@ src/
 │   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge / VariantGlyph / VariantToggle / OpponentGlyph）
 │   │   ├── quiz/                 # QuizCard + quizCardModel（range-trainer / onboarding 专用）
 │   │   ├── feedback/             # 决策反馈与结果页（DecisionAnalysis / GradeIcon / MobileFeedbackSheet / RelatedLessonChip（onOpen 注入路由）/ TryAgainButton / EmptyState / LoadingState / ComparisonView / ResultSlip / ResultHeader / ResultActions）
-│   │   ├── academy/              # 学院共享组件（AcademyBridgeCard / AcademyMasteryCard / AcademyVariantRuleCard / AcademySearchShell / AcademyBookmarksPanel / AcademyNotesPanel / ContentIssueReportDialog / AcademyReadingPlane）+ ContentBlocks + index.ts（唯一 facade）
+│   │   ├── academy/              # 学院共享组件（AcademyBridgeCard / AcademyMasteryCard / AcademyVariantRuleCard / AcademySearchShell / AcademyBookmarksPanel / AcademyNotesPanel / ContentIssueReportDialog / AcademyReadingPlane / FormulaDerivation / AcademyTakeawayCard / AcademyPeek / AcademyStickyCta）+ ContentBlocks + index.ts（唯一 facade）
 │   │   ├── data-display/         # 数据展示（ProgressBar 为 ui/progress 薄包装 / ProgressRing 具名导出 / StatCard 含 xl/solid / StatPair）
 │   │   ├── system/               # ErrorBoundary（全局错误兜底整页视图）
 │   │   └── layout/               # BackLink（返回入口统一）/ SectionLabel（section/panel 标题统一；TableRail 等应用外壳在 src/layouts/）
@@ -1208,6 +1208,13 @@ interface DailyRecommendation {
 30. **路由（P2）**：新增 `/academy/placement`（PlacementTestPage）、`/academy/checkpoint/:level`（LevelCheckpointPage）、`/academy/bookmarks`（StrategyBookmarksPage）、`/academy/bibliography`（StrategyBibliographyPage）；`/academy/search` 原地升级为全文搜索（组件 `StrategySearchPage`，按当前变体加载标准全量 / 单挑 12 课索引，UI 复用 shared `AcademySearchShell`）。全部经 `React.lazy` + `<LazyWrapper>` 注册，i18n 走 `/academy` 路由分组（`academy.*`）。
 
 31. **单挑策略全量对齐（2026-11）**：单挑 12 课从「每课 5 题内联 + 1 牌例」对齐到标准课深度，契约由 `data/lessons/variants/heads-up/headsUpVariantParity.test.ts` 固化——12 课 / L3–L8 全覆盖 / level 内 order 连续 / 每课 10 题（q1–q5 保留，SRS 不断链）/ ≥3 个 HandExample / ≥4 个 practice（l7 保持 5）/ ≥10 段正文 / ≥2 条 theory-reference / ≥2 个 units / `anteStructure='sb_ante'`。`quizShuffle` 分布守卫纳入全部变体课时；`curriculumIntegrity` 对变体 quiz / practice / units 做同一套断言，变体卡牌（含短牌）全量校验。数值由各 Level `quantAudit.l3hu..l8hu.test.ts` 复算。i18n 按 Level 拆为 `academy-course/heads-up-l3..l8.json`（zh 逐字镜像数据、en 人工译文），`deriveAcademyCourseFilesForLesson` 对 `l<n>hu-` 映射到对应文件；`huPositionOrderGuard` 扫描六份新 locale。单挑文案与题库不改变持久化 schema，认证仍 de-scope。变体阶梯门禁按 `activeVariant` 的 Level 序列解析：`isLevelEntryUnlockedByCompleted` 新增可选 `levels` 参数，store 优先在变体序列中查找条目并解析 `prerequisiteLevelIds` / 上一级；变体 L4 在 manifest 中合并为单一条目（id `l4b`），单挑按 L3→L4→L5 推进，L8 仍只依赖 L4b，L1/L2 共享基础层回退标准序列。
+
+32. **课程阅读页共享件（2026-11）**：`shared/components/academy/` 新增四件，消费者为 strategy-academy 与 theory-academy 两院阅读/测验链路，全经 shared、无新增跨模块边。
+    - **FormulaDerivation**（公式推导单源）：计算层 `formulaParse.ts` 纯函数 `parseFormulaContent`——尾部引文剥离（`（概念源自：…）`→ sourceNote 注脚）、空行切 group、行分类启发式（标题行 / `Step N:` 前缀强制开步 / 公式符号行且非长中文散文 / 散文），编号跨 group 连续 ①–⑳（超出回退 `n.`），`numbered = 总步数≥3 || 组数≥2`；非结构化模式与策略原 `FormulaDisplay` 逐 DOM 等价（单/双行简单公式零迁移）。VARIABLE_RE 变量高亮单源迁自策略侧（追加 `Outs` / `P(胜)` / `P(负)`，前导边界改负向后顾兼容 CJK），高亮 span 类名不变。消费：策略 `content/FormulaDisplay.tsx` 薄 shim、理论 `TheorySectionRenderer` formula case。
+    - **AcademyTakeawayCard**（章末要点卡）：DOM 与两院原 `LessonTakeawayBlock` 逐字一致（`.lesson-takeaway` + 标题 p + brass 圆点 ul/li），空 items 不渲染；`shared/utils/academyTakeaway.ts` 的 `assembleTakeawayItems(objectives, keyPointTexts)` 负责自动装配（objectives 在前 + key-point 按换行拆分在后，trim/折叠空白/去尾句号归一化去重，上限 6 条）。有显式 takeaway 的章节短路不双卡；objectives 必须走两院既有 i18n 解析单源。
+    - **AcademyPeek**（quiz 原文 peek 折叠壳）：ui/Button quiet + ChevronDown/Up，aria-expanded/aria-controls，展开区 `max-h-80 overflow-y-auto`；label 与 children 由 feature 薄件注入（只读正文 map），shared 不 import feature、不新增 shared i18n key。
+    - **AcademyStickyCta**（移动 sticky CTA）：包装 ui/Button 的**单 DOM 节点**响应式容器——移动 `fixed inset-x-4 bottom-[calc(3.5rem+env(safe-area-inset-bottom)+0.5rem)] z-40`（walnut 底 + 边框，z-40 低于 MobileNav z-50），`md:static` 还原内联右对齐；单节点避免移动/桌面双渲染。消费：策略 LessonContent、理论 TheoryChapterBody。
+    - 本批零课程内容数据改动、零 persist schema 变更（渐进披露为组件本地 state）；旧 shared `FormulaBlock` 在两院消费迁移完成后删除合并进单源。
 
 ### 5.8b Theory Academy（理论学院，2026-07 新增）
 

@@ -6,6 +6,7 @@
 > v1.12.0 更新：训练二级站（/drill/range|odds|puzzle）与恢复的学院/理论深链；速训默认 5 题；结果统一为 ResultSlip 发牌员纸条（overlay / page）
 > v1.11.1 更新：首页按基准图重排 — 牌桌左右象牙铭牌（ELO / 连续训练）+ 状态注、细黄铜速训横幅、四段旅程横向轨道、胡桃木面板、周条小圆点
 > v1.11.0 更新：IA 收编为 5 视图（学习路径 / 课程 / 训练 / 速训 / 进度中心，§5.24）；168px 木纹侧栏 + 56px 木梁顶栏 + 12px 桌沿；程序化无缝胡桃木纹理（`--wood-h/--wood-v`）；真椭圆牌桌；学习旅程 3×3 阶段网格；侧栏 6 项 / 移动底栏 5 项
+> v1.10.1 更新：功能性微文字下限契约 — §3.3 Caption/微文字改「11px 起」、Eyebrow 限定装饰性分组标签保留 9px；§13.3.3 追加「功能信息微文字 ≥11px / 范围矩阵单元格 11px+容器横向滚动」；§13.3.2 公式展示块追加结构化推导形态 `.formula-display--structured`（不改既有规格）
 > v1.10.0 更新：阅读页学习导轨（§6.5）— 理论章节页 / 策略课时页在 xl 起采用「768px 阅读列 + 264px 学习导轨」双栏（`AcademyReadingPlane`），导轨承载本级目录与进度，<xl 回落居中单栏
 > v1.9.2 更新：浮层收口 — Select/Tooltip 统一 z-100（§6.4）、明确下拉/提示为房间面控件不属纸条（§1.5）、新增「禁止手写 fixed inset-0 模态」反模式与守卫（§10.6）
 > v1.9.0 更新：新增浅色主题「白天牌室」token 架构（§2.8）、Hero 高度契约（§6.6）、Puzzle ActionTier 语义与防答案暗示（§5.5）、内容区 h2 保留例外（§5.7/§10.6）、Emoji 内容白名单扫描面（§7）
@@ -264,8 +265,8 @@
 | H2 / Panel Title | 15–16px | Fraunces | 600 | 1.3 | 面板标题 |
 | H3 / Section | 13–14px | Inter Tight | 600 | 1.4 | 小节标题、标签 |
 | Body | 12–13px | Inter Tight | 400/500 | 1.5 | 正文 |
-| Caption | 10–11px | Inter Tight | 400 | 1.4 | 注释、次要信息 |
-| Eyebrow | 9–10px | Inter Tight | 600 uppercase | 1.2 | tracking 0.18–0.2em，分组标签 |
+| Caption / 微文字 | 11px 起 | Inter Tight | 400 | 1.4 | 注释、次要信息；**功能性微文字下限 11px**（导航标签、选项字母、图例释义、数值、徽章计数、术语别名等承载功能信息的微文字，详见 §13.3.3） |
+| Eyebrow | 9–10px | Inter Tight | 600 uppercase | 1.2 | tracking 0.18–0.2em，**仅限装饰性分组标签**（aria-hidden 或非信息承载），保留 9px |
 | Numeric Big | 28–36px | Fraunces/JetBrains | 600/700 | 1 | 铭牌数值、关键数据 |
 | Lesson Reading / 课程阅读正文 | 14px | Inter Tight | 400/500 | 1.7 | 课程理论讲解正文（max-w-prose 65ch 阅读列） |
 | Lesson Heading / 课程内容标题 | 20px | Fraunces | 600 | 1.4 | 课程内容 heading 段 |
@@ -1280,6 +1281,8 @@ CSS 参考：
   margin-bottom: 4px;
 }
 ```
+
+**微文字下限契约（v1.10.1）**：节号 eyebrow 为装饰层，保留 9px；凡承载功能信息（导航标签、选项字母、图例释义、数值、徽章计数、术语别名）的微文字一律 ≥11px。范围矩阵单元格按数据本体对待：11px + 容器横向滚动（`overflow-x-auto`），sr-only 全量数据保无障碍。
 
 #### 13.3.4 `reading-progress-bar` 阅读进度条
 
