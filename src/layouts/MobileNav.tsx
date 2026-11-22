@@ -11,9 +11,9 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { Home, BookOpen, Target, Zap, BarChart3 } from 'lucide-react';
 
-/** 底栏项共用样式：图标 + 截断文字，44px 命中区 */
+/** 底栏项共用样式：图标 + 截断文字，44px 命中区；标签 11px（功能性微文字下限，DESIGN.md §3.3） */
 const ITEM_CLASS =
-  'flex flex-col items-center justify-center gap-0.5 px-2 py-1 min-h-[44px] min-w-[44px] text-[10px] transition-colors';
+  'flex flex-col items-center justify-center gap-0.5 px-2 py-1 min-h-[44px] min-w-[44px] text-[11px] transition-colors';
 
 interface MobileNavEntry {
   label: string;
