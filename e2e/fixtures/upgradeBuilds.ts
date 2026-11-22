@@ -29,19 +29,30 @@ export interface BuildInfo {
 }
 
 /**
- * APP_VERSION 事实源：与 vite.config.ts 同口径（package.json 语义版本 + 部署序号）。
- * 构建期 version 经 `__APP_BUILD_INFO__` 注入，源码里已无字面量可解析。
+ * APP_VERSION 事实源：与 vite.config.ts:13-16 同源 —— package.json version 经部署序号
+ * （CI GITHUB_RUN_NUMBER，本地 0）递增 patch 后由 `define` 注入 `__APP_BUILD_INFO__`。
+ *
+ * 旧实现从 app.ts 正则读取 `APP_VERSION = '<literal>'`；自 913dd76 起 APP_VERSION 改为
+ * `BUILD_INFO.version`（Vite define 派生），字面量消失，故改读 package.json 并镜像
+ * `resolveAppVersion` 规则。tsconfig.e2e 的 include 不含 src，故内联镜像避免跨配置类型依赖。
  */
 export function readAppVersion(): string {
-  const pkg = JSON.parse(
-    readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8'),
-  ) as { version: string };
+  const pkg = JSON.parse(readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8')) as { version?: string };
+  const base = pkg.version;
+  if (!base) throw new Error('无法从 package.json 读取 version');
   const sequence = Number.parseInt(process.env.GITHUB_RUN_NUMBER ?? '', 10);
-  if (!/^\d+\.\d+\.\d+$/.test(pkg.version) || Number.isNaN(sequence) || sequence <= 0) {
-    return pkg.version;
+  return applyDeploySequence(base, Number.isNaN(sequence) ? 0 : sequence);
+}
+
+/** 与 src/shared/constants/app.ts 的 resolveAppVersion 同规则：序号 > 0 时递增 patch。 */
+function applyDeploySequence(baseVersion: string, sequence: number): string {
+  if (!/^\d+\.\d+\.\d+$/.test(baseVersion)) return baseVersion;
+  const [major = '0', minor = '0', patch = '0'] = baseVersion.split('.');
+  const patchNumber = Number.parseInt(patch, 10);
+  if (!Number.isFinite(sequence) || sequence <= 0 || !Number.isFinite(patchNumber)) {
+    return baseVersion;
   }
-  const [major = '0', minor = '0', patch = '0'] = pkg.version.split('.');
-  return `${major}.${minor}.${Number.parseInt(patch, 10) + Math.floor(sequence)}`;
+  return `${major}.${minor}.${patchNumber + Math.floor(sequence)}`;
 }
 
 export function variantDir(variant: BuildVariant): string {
