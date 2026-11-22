@@ -47,7 +47,7 @@ export function SectionNav({ units, activeId, completedIds, onNavigate, lessonId
                   aria-label={t('academy.sectionNav.goTo', { n: i + 1, title: displayTitle })}
                 >
                   {isCompleted && <span className="mr-1">✓</span>}
-                  <span className="sm:hidden">{i + 1}. {displayTitle.length > 6 ? displayTitle.slice(0, 6) + '…' : displayTitle}</span>
+                  <span className="sm:hidden">{i + 1}. {displayTitle.length > 8 ? displayTitle.slice(0, 8) + '…' : displayTitle}</span>
                   <span className="hidden sm:inline">{i + 1}. {displayTitle}</span>
                 </button>
               </li>

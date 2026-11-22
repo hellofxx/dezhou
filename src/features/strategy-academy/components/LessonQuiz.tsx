@@ -35,6 +35,8 @@ interface LessonQuizProps {
   /** 练习态（非首次作答）：不写 ELO / 情绪计数，只收集错题 id 进 SRS */
   isPractice: boolean;
   onComplete: (result: LessonQuizResult) => void;
+  /** 答错回顾门：回到本课阅读态（由 CourseView 注入 handleRestart('units')） */
+  onReview?: () => void;
 }
 
 export function LessonQuiz({
@@ -44,6 +46,7 @@ export function LessonQuiz({
   attemptNumber,
   isPractice,
   onComplete,
+  onReview,
 }: LessonQuizProps) {
   const { t } = useTranslation();
   const updateElo = progressCommands.updateElo;
@@ -214,7 +217,7 @@ export function LessonQuiz({
                   )}
                 >
                   <span className="flex items-center gap-3">
-                    <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[10px] shrink-0 font-numeric">
+                    <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[11px] shrink-0 font-numeric">
                       {String.fromCharCode(65 + index)}
                     </span>
                     {option}
@@ -244,6 +247,13 @@ export function LessonQuiz({
             >
               <p className="font-semibold mb-1">{isCorrect ? t('academy.quiz.correctMark') : t('academy.quiz.wrongMark')}</p>
               <p>{question.explanation}</p>
+              {/* 反馈闭环：仅答错时提供回到本课阅读态的门（答对不出现） */}
+              {!isCorrect && onReview ? (
+                <Button variant="quiet" size="sm" onClick={onReview} className="mt-2">
+                  <BookOpen className="w-4 h-4" aria-hidden="true" />
+                  {t('academy.quiz.reviewLesson')}
+                </Button>
+              ) : null}
             </motion.div>
           )}
 

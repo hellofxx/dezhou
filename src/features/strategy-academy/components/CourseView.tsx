@@ -20,7 +20,8 @@ import { LOCAL_TRACK } from '../data/localTrack';
 import { LEARNING_TRACKS } from '../data/learningTracks';
 import { getLessonMeta } from '../data/lessonMeta';
 import { LessonContent } from './LessonContent';
-import { LessonQuiz, type LessonQuizResult } from './LessonQuiz';
+import type { LessonQuizResult } from './LessonQuiz';
+import { CourseQuizSection } from './CourseQuizSection';
 import { CourseHeader } from './CourseHeader';
 import { CourseStudyRail } from './CourseStudyRail';
 import { CourseLockedView } from './CourseLockedView';
@@ -312,13 +313,13 @@ export default function CourseView() {
         )}
 
         {phase === 'quiz' && (
-          <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6">
-            <h2 className="font-display text-[17px] text-[var(--ivory)] mb-5">
-              {t('academy.courseView.quizTitle', { defaultValue: '课后测验' })}
-            </h2>
-            <LessonQuiz lessonId={lesson.id} questions={lesson.quiz} level={lesson.level}
-              attemptNumber={(lessonAttemptRecord?.attempts ?? 0) + 1} isPractice={!!lessonAttemptRecord} onComplete={handleQuizComplete} />
-          </div>
+          <CourseQuizSection
+            lesson={lesson}
+            attemptNumber={(lessonAttemptRecord?.attempts ?? 0) + 1}
+            isPractice={!!lessonAttemptRecord}
+            onComplete={handleQuizComplete}
+            onReview={() => handleRestart('units')}
+          />
         )}
 
         {phase === 'done' && (

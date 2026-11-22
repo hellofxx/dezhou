@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2, Clock, HelpCircle } from 'lucide-react';
+import { BookMarked, CheckCircle2, Clock, HelpCircle } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
@@ -102,6 +102,19 @@ export function CourseStudyRail({ lesson, levelEntry, completedLessons }: Course
           {t('academy.courseView.quizCount', { count: lesson.quiz.length })}
         </span>
       </div>
+
+      {/* 词汇表桥：跨院路由先例 AcademyHome 工具区（/theory/glossary） */}
+      <Link
+        to="/theory/glossary"
+        className={cn(
+          'mt-3 flex items-center gap-2 rounded-md px-2 py-2 text-xs transition-colors',
+          'text-[var(--ivory-dim)] hover:bg-[var(--walnut-light)]/40 hover:text-[var(--ivory)]',
+          FOCUS_RING,
+        )}
+      >
+        <BookMarked className="h-3.5 w-3.5 shrink-0 text-[var(--brass-text)]" aria-hidden="true" />
+        {t('academy.courseView.glossaryEntry')}
+      </Link>
     </div>
   );
 }

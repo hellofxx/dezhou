@@ -4,16 +4,17 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { BackLink } from '@/shared/components/layout/BackLink';
 import { Button } from '@/shared/components/ui/button';
+import { AcademyStickyCta, AcademyTakeawayCard } from '@/shared/components/academy';
+import { assembleTakeawayItems } from '@/shared/utils/academyTakeaway';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import type { Lesson, PracticeResult } from '../types';
-import { ContentBlock } from './content';
-import { HandExampleComponent } from './HandExample';
 import { PracticeDrillComponent } from './PracticeDrill';
 import { SectionNav } from './SectionNav';
 import { LessonIntroCard } from './LessonIntroCard';
+import { LessonUnitSection } from './LessonUnitSection';
 import { StrategyVariantRuleCard } from './StrategyVariantRuleCard';
 import { deriveLessonUnits } from '../utils/lessonUnits';
-import { lessonContentKey, resolveUnitTitleKeyed } from '../utils/contentKeys';
+import { lessonContentKey, resolveLessonObjectives } from '../utils/contentKeys';
 import { pickReviewTargetUnit } from '../utils/adaptiveDifficulty';
 import { useAcademyStore } from '../store';
 
@@ -54,6 +55,12 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
   const [view, setView] = useState<ViewMode>(initialView ?? 'units');
   // P2: checkpoint 已答状态（unitId → 已答；纯本地，不计分不接外部系统）
   const [checkpointAnswered, setCheckpointAnswered] = useState<Record<string, boolean>>({});
+  // 渐进披露：手动展开的小节集合（纯本地 state，零 persist；仅标准分支消费）
+  const [expandedIds, setExpandedIds] = useState<ReadonlySet<string>>(() => new Set());
+
+  const revealUnit = useCallback((unitId: string) => {
+    setExpandedIds((prev) => (prev.has(unitId) ? prev : new Set(prev).add(unitId)));
+  }, []);
 
   // C1 fix: URL hash → activeUnitId sync（支持 #uX 直达且高亮对应胶囊）
   // 依赖 location.hash：SPA 内 hash 变更（React Router location 更新）同样触发同步，
@@ -63,20 +70,29 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
     const hash = location.hash.slice(1);
     if (hash && units.some((u) => u.id === hash)) {
       setActiveUnitId(hash);
+      // hash 直达目标小节须同时释放披露（折叠头虽恒在，正文需可见）
+      revealUnit(hash);
     }
-  }, [location.hash, units]);
+  }, [location.hash, units, revealUnit]);
 
   const currentUnitIndex = units.findIndex((u) => u.id === activeUnitId);
   const isLastUnit = currentUnitIndex === units.length - 1;
+  // 披露水位：当前小节与最后完成小节取大者；unit i 可见当 i ≤ revealedUpTo 或已手动展开
+  const lastCompletedIndex = completedUnitIds.reduce(
+    (max, id) => Math.max(max, units.findIndex((u) => u.id === id)),
+    -1,
+  );
+  const revealedUpTo = Math.max(currentUnitIndex, lastCompletedIndex);
 
   // 导航到指定小节
   const handleNavigateUnit = useCallback((unitId: string) => {
     setActiveUnitId(unitId);
+    revealUnit(unitId);
     const el = document.getElementById(unitId);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, []);
+  }, [revealUnit]);
 
   // 进入下一节
   const handleNext = useCallback(() => {
@@ -113,6 +129,10 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
     setView('units');
   }, []);
 
+  const handleCheckpointAnswered = useCallback((unitId: string, answered: boolean) => {
+    setCheckpointAnswered((prev) => ({ ...prev, [unitId]: answered }));
+  }, []);
+
   // P3: 降级建议复习回跳（BUG-ACA-007 修复）— 建议主题为课程 id（稳定标识、语言无关），
   // 经 pickReviewTargetUnit 按 id 比对映射到小节锚点，zh/en 行为一致；
   // 旧实现用中文主题串与 unit 标题双向包含匹配，en locale 永远失配、回退 units[0]
@@ -126,6 +146,25 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
     },
     [lesson.id, units, handleNavigateUnit],
   );
+
+  // 章末要点卡自动装配：有显式 takeaway 块时短路不双卡；
+  // objectives / key-point 均经 i18n 解析单源（en 不泄漏数据层中文）
+  const hasExplicitTakeaway = lesson.content.some((s) => s.type === 'takeaway');
+  const autoTakeawayItems = useMemo(() => {
+    if (hasExplicitTakeaway) return [];
+    const keyPointTexts = lesson.content.flatMap((s, idx) =>
+      s.type === 'key-point'
+        ? [t(lessonContentKey(lesson.id, idx), { defaultValue: s.content })]
+        : [],
+    );
+    return assembleTakeawayItems(
+      resolveLessonObjectives(t, lesson.id, lesson.objectives ?? []),
+      keyPointTexts,
+    );
+  }, [t, lesson, hasExplicitTakeaway]);
+  const takeawayCard = autoTakeawayItems.length > 0
+    ? <AcademyTakeawayCard items={autoTakeawayItems} />
+    : null;
 
   // 单挑规则卡：变体判定在包装层（标准/短牌返回 null），仅在阅读态两条渲染路径插入
   const variantRuleCard = <StrategyVariantRuleCard lesson={lesson} />;
@@ -156,13 +195,13 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
     );
   }
 
-  // 纯理论课空态
+  // 纯理论课空态（披露不覆盖：全量渲染，保「两节同可见」契约）
   if (isTheoryOnly) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="space-y-4"
+        className="space-y-4 pb-24 md:pb-0"
       >
         <SectionNav
           units={units}
@@ -181,41 +220,37 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
             objectives={lesson.objectives}
           />
           {units.map((unit, i) => (
-            <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
-              <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
-                <span className="section-number">§{lesson.level}.{i + 1}</span>
-                {resolveUnitTitleKeyed(t, lesson, unit)}
-              </h2>
-              {unit.sections.map((s, j) => {
-                const idx = lesson.content.indexOf(s);
-                return (
-                  <ContentBlock
-                    key={j}
-                    section={s}
-                    contentKey={idx >= 0 ? lessonContentKey(lesson.id, idx) : undefined}
-                  />
-                );
-              })}
-            </section>
+            <LessonUnitSection
+              key={unit.id}
+              unit={unit}
+              lesson={lesson}
+              index={i}
+              collapsible={false}
+              revealed
+              onExpand={revealUnit}
+              checkpointAnswered={!!checkpointAnswered[unit.id]}
+              onCheckpointAnswered={handleCheckpointAnswered}
+            />
           ))}
+          {takeawayCard}
         </div>
         <div className="mt-4 flex items-center gap-2 text-xs text-[var(--ivory-muted)]">
           <BookOpen className="w-3.5 h-3.5" />
           {t('academy.lessonUnit.theoryOnly')}
         </div>
-        <div className="mt-6 flex justify-end">
+        <AcademyStickyCta>
           <Button variant="default" onClick={onComplete}>
             {t('academy.lessonUnit.completeLesson')}
             <ArrowRight className="w-4 h-4" />
           </Button>
-        </div>
+        </AcademyStickyCta>
       </motion.div>
     );
   }
 
-  // 标准视图：小节导航 + 内容
+  // 标准视图：小节导航 + 内容（渐进披露：未来小节折叠，CTA 推进 / 导航 / hash 释放）
   return (
-    <div>
+    <div className="pb-24 md:pb-0">
       <SectionNav
         units={units}
         activeId={activeUnitId}
@@ -235,57 +270,29 @@ export function LessonContent({ lesson, onComplete, onPracticeComplete, initialV
         />
 
         {/* 小节序列 */}
-        {units.map((unit, i) => {
-          const example = unit.exampleId
-            ? lesson.examples?.find((ex) => ex.id === unit.exampleId)
-            : undefined;
+        {units.map((unit, i) => (
+          <LessonUnitSection
+            key={unit.id}
+            unit={unit}
+            lesson={lesson}
+            index={i}
+            collapsible
+            revealed={i <= revealedUpTo || expandedIds.has(unit.id)}
+            onExpand={revealUnit}
+            checkpointAnswered={!!checkpointAnswered[unit.id]}
+            onCheckpointAnswered={handleCheckpointAnswered}
+          />
+        ))}
 
-          return (
-            <section key={unit.id} id={unit.id} className="scroll-mt-24 space-y-4">
-              <h2 className="font-display text-[20px] text-[var(--ivory)] tracking-wide">
-                <span className="section-number">§{lesson.level}.{i + 1}</span>
-                {resolveUnitTitleKeyed(t, lesson, unit)}
-              </h2>
-              {unit.sections.length === 0 && !example && (
-                <p className="text-xs text-[var(--ivory-muted)]">
-                  {t('academy.lessonUnit.noContent')}
-                </p>
-              )}
-              {unit.sections.map((s, j) => {
-                const idx = lesson.content.indexOf(s);
-                return (
-                  <ContentBlock
-                    key={j}
-                    section={s}
-                    contentKey={idx >= 0 ? lessonContentKey(lesson.id, idx) : undefined}
-                  />
-                );
-              })}
-              {example &&
-                (unit.checkpoint ? (
-                  <HandExampleComponent
-                    example={example}
-                    index={i}
-                    interactive
-                    answered={!!checkpointAnswered[unit.id]}
-                    onAnswered={(v) =>
-                      setCheckpointAnswered((prev) => ({ ...prev, [unit.id]: v }))
-                    }
-                  />
-                ) : (
-                  <HandExampleComponent example={example} index={i} />
-                ))}
-            </section>
-          );
-        })}
+        {takeawayCard}
 
-        {/* 顺序推进 CTA */}
-        <div className="mt-6 flex justify-end">
+        {/* 顺序推进 CTA（移动端 sticky 底部，桌面内联右对齐） */}
+        <AcademyStickyCta>
           <Button variant="default" onClick={handleNext}>
             {nextCtaLabel}
             <ArrowRight className="w-4 h-4" />
           </Button>
-        </div>
+        </AcademyStickyCta>
       </div>
     </div>
   );

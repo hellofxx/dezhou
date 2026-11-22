@@ -147,7 +147,7 @@ export function HandExampleComponent({
                   key={i}
                   className="inline-flex items-center gap-1.5 rounded-full bg-black/30 px-2.5 py-1 text-[11px] md:text-xs text-[var(--ivory-dim)]"
                 >
-                  <PositionBadge position={act.player as Position} className="!text-[10px] !px-1.5 !py-0" />
+                  <PositionBadge position={act.player as Position} className="!text-[11px] !px-1.5 !py-0" />
                   <span className="font-mono">{act.action}</span>
                 </span>
               ))}

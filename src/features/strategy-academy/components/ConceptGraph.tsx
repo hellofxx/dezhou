@@ -505,7 +505,7 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       <div className="absolute top-2 right-2 z-10 flex gap-1.5">
         <button
           onClick={resetView}
-          className="px-2 py-1 text-[10px] rounded bg-[var(--walnut-raised)] border border-[var(--walnut-border)] text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] hover:border-[var(--brass)] transition-colors"
+          className="px-2 py-1 text-[11px] rounded bg-[var(--walnut-raised)] border border-[var(--walnut-border)] text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] hover:border-[var(--brass)] transition-colors"
         >
           {t('academy.conceptGraph.fitScreen')}
         </button>
@@ -634,27 +634,27 @@ export function ConceptGraph({ onNodeClick }: ConceptGraphProps) {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3 justify-center">
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-[var(--poker-success)]/20 border border-[var(--poker-success)]" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendCompleted')}</span>
+          <span className="text-[11px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendCompleted')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-[var(--surface-raised)] border border-[var(--brass)]" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendInProgress')}</span>
+          <span className="text-[11px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendInProgress')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-[var(--surface-raised)] border border-white/25" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendNotStarted')}</span>
+          <span className="text-[11px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendNotStarted')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm border border-dashed border-[var(--ivory-dim)]" />
-          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendLocked')}</span>
+          <span className="text-[11px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendLocked')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="var(--success)" strokeWidth="1.5" /></svg>
-          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendCompletedPath')}</span>
+          <span className="text-[11px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendCompletedPath')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <svg width="20" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="var(--walnut-light)" strokeWidth="1.5" strokeDasharray="4 2" /></svg>
-          <span className="text-[10px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendPrerequisite')}</span>
+          <span className="text-[11px] text-[var(--ivory-muted)]">{t('academy.conceptGraph.legendPrerequisite')}</span>
         </div>
       </div>
     </div>

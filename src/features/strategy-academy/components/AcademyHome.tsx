@@ -284,7 +284,7 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
               <span className="block text-xs font-semibold text-[var(--ivory)] truncate">
                 {tool.title}
               </span>
-              <span className="block text-[10px] text-[var(--ivory-muted)] truncate">
+              <span className="block text-[11px] text-[var(--ivory-muted)] truncate">
                 {tool.desc}
               </span>
             </span>
@@ -323,7 +323,7 @@ function LevelCheckpointCard({ level, levelDone }: { level: number | null; level
           <span className="block text-xs font-semibold text-[var(--ivory)] truncate">
             {t('academy.checkpointHome.entry', { level })}
           </span>
-          <span className="block text-[10px] text-[var(--ivory-muted)] truncate">
+          <span className="block text-[11px] text-[var(--ivory-muted)] truncate">
             {levelDone ? t('academy.checkpointHome.desc') : t('academy.checkpointHome.lockedDesc')}
           </span>
         </span>

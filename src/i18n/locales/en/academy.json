@@ -56,7 +56,9 @@
     "correctMark": "✓ Correct!",
     "wrongMark": "✗ Wrong",
     "next": "Next Question",
-    "viewResult": "View Results"
+    "viewResult": "View Results",
+    "reviewLesson": "Review this lesson",
+    "peek": "Show lesson text"
   },
   "pathBanner": {
     "title": "Local Low-Stakes Profit Path",
@@ -106,7 +108,8 @@
     "goComplete": "Go",
     "completeLevelFirst": "Please complete all lessons in this Level first",
     "missingPrereqHint": "Please complete the following prerequisite lessons:",
-    "railTitle": "Lessons in this level"
+    "railTitle": "Lessons in this level",
+    "glossaryEntry": "Glossary"
   },
   "courseHub": {
     "eyebrow": "My Course · Two Lanes",
@@ -181,7 +184,8 @@
     "backToSections": "Back to Sections",
     "comprehensiveExamples": "Comprehensive Examples",
     "theoryOnly": "This lesson contains theory only. Click 'Complete Lesson' when done.",
-    "noContent": "Loading section content"
+    "noContent": "Loading section content",
+    "expandSection": "Expand section"
   },
   "sectionNav": {
     "label": "Lesson section navigation",

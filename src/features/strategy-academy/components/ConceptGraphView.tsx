@@ -141,7 +141,7 @@ export default function ConceptGraphView() {
                   className={`text-left rounded-md border px-3 py-2.5 transition-all hover:-translate-y-0.5 hover:shadow-md ${colorClass}`}
                 >
                   <div className="text-xs font-semibold mb-0.5">{resolveConceptName(t, concept)}</div>
-                  <div className="text-[10px] opacity-70 leading-snug">{resolveConceptDescription(t, concept)}</div>
+                  <div className="text-[11px] opacity-70 leading-snug">{resolveConceptDescription(t, concept)}</div>
                   {concept.relatedModules.length > 0 && (
                     <div className="flex gap-1 mt-1.5 flex-wrap">
                       {concept.relatedModules.map((mod) => (

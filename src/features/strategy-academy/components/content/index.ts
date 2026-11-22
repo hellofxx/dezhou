@@ -1,4 +1,5 @@
 export { ContentBlock } from './ContentBlock';
-export { FormulaBlock, AsciiMonoText } from './FormulaBlock';
+export { AsciiMonoText } from './FormulaBlock';
+export { FormulaDisplay } from './FormulaDisplay';
 export { TheoryReferenceBlock } from './TheoryReferenceBlock';
 export { DiagramBlock, HandExampleBlock } from './DiagramBlock';

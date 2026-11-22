@@ -280,19 +280,19 @@ function PotVisualization({
     <div className="w-full max-w-sm">
       <div className="flex h-6 rounded-md overflow-hidden border border-[var(--walnut-border)]">
         <div
-          className="bg-[var(--success)]/60 flex items-center justify-center text-[10px] font-bold text-[var(--felt-deep)]"
+          className="bg-[var(--success)]/60 flex items-center justify-center text-[11px] font-bold text-[var(--felt-deep)]"
           style={{ width: `${potPercent}%` }}
         >
           {potPercent >= 20 ? `${t('drills.potOdds.potLabel')} ${potSize}` : ''}
         </div>
         <div
-          className="bg-[var(--info)]/60 flex items-center justify-center text-[10px] font-bold text-[var(--ivory)]"
+          className="bg-[var(--info)]/60 flex items-center justify-center text-[11px] font-bold text-[var(--ivory)]"
           style={{ width: `${callPercent}%` }}
         >
           {callPercent >= 20 ? `${t('drills.potOdds.callLabel')} ${callSize}` : ''}
         </div>
       </div>
-      <p className="text-[10px] text-[var(--ivory-muted)] text-center mt-1">
+      <p className="text-[11px] text-[var(--ivory-muted)] text-center mt-1">
         {t('drills.potOdds.ratioHint', { pot: potSize, call: callSize })}
       </p>
     </div>

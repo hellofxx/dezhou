@@ -71,7 +71,7 @@ export function DailyPlanCard() {
         </div>
         <div className="flex items-center gap-1.5">
           {timeText && (
-            <span className="inline-flex items-center gap-1 text-[10px] text-[var(--ivory-muted)] font-numeric">
+            <span className="inline-flex items-center gap-1 text-[11px] text-[var(--ivory-muted)] font-numeric">
               <Clock className="w-3 h-3" />
               {timeText}
             </span>
@@ -91,7 +91,7 @@ export function DailyPlanCard() {
       {/* Focus area badge */}
       {abilityLabel && (
         <div className="mb-2.5">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--brass-bright)]/10 text-[10px] text-[var(--brass-bright)]">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[var(--brass-bright)]/10 text-[11px] text-[var(--brass-bright)]">
             <Target className="w-3 h-3" />
             {t('academy.dailyPlan.focusLabel')} · {abilityLabel}
           </span>
@@ -126,7 +126,7 @@ export function DailyPlanCard() {
                 <span className="block text-xs text-[var(--ivory)] group-hover:text-[var(--brass-bright)] transition-colors truncate">
                   {t('academy.dailyPlan.newLesson')}：{resolveLessonTitle(t, newLessonInfo)}
                 </span>
-                <span className="block text-[10px] text-[var(--ivory-muted)]">
+                <span className="block text-[11px] text-[var(--ivory-muted)]">
                   {newLessonInfo.duration}
                 </span>
               </span>
@@ -149,7 +149,7 @@ export function DailyPlanCard() {
                 <span className="block text-xs text-[var(--ivory)] group-hover:text-[var(--brass-bright)] transition-colors truncate">
                   {t('academy.dailyPlan.practice')}（{t('academy.dailyPlan.practiceCount', { count: practiceSpots.length })}）
                 </span>
-                <span className="block text-[10px] text-[var(--ivory-muted)]">
+                <span className="block text-[11px] text-[var(--ivory-muted)]">
                   {t('academy.dailyPlan.practiceDesc')}
                 </span>
               </span>

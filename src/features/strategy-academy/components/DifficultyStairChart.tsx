@@ -121,7 +121,7 @@ export function DifficultyStairChart({
           {(['beginner', 'intermediate', 'advanced'] as const).map((d) => (
             <span
               key={d}
-              className="inline-flex items-center gap-1 text-[10px]"
+              className="inline-flex items-center gap-1 text-[11px]"
               style={{ color: DIFFICULTY_COLORS[d] }}
             >
               <span

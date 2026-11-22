@@ -28,7 +28,7 @@ export function OpponentStatsPanel({ question }: OpponentStatsPanelProps) {
     <div className="rounded-lg border border-[var(--walnut-border)] bg-[var(--felt)] p-4 space-y-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-[var(--ivory)] font-medium">{question.scenario}</p>
-        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--walnut-raised)] text-[var(--ivory-muted)] shrink-0">
+        <span className="text-[11px] px-1.5 py-0.5 rounded bg-[var(--walnut-raised)] text-[var(--ivory-muted)] shrink-0">
           {t('drills.opponent.sampleSize', { count: question.sampleSize })}
         </span>
       </div>
@@ -38,7 +38,7 @@ export function OpponentStatsPanel({ question }: OpponentStatsPanelProps) {
             <p className="font-numeric text-lg text-[var(--brass-bright)]">
               {formatStat(key, question.stats[key])}
             </p>
-            <p className="text-[10px] text-[var(--ivory-muted)] mt-0.5">{label}</p>
+            <p className="text-[11px] text-[var(--ivory-muted)] mt-0.5">{label}</p>
           </div>
         ))}
       </div>

@@ -97,7 +97,7 @@ export function CheckpointQuizView({
                 )}
               >
                 <span className="flex items-center gap-3">
-                  <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[10px] shrink-0 font-numeric">
+                  <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[11px] shrink-0 font-numeric">
                     {String.fromCharCode(65 + index)}
                   </span>
                   <span className="flex-1">{option}</span>

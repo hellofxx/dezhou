@@ -56,7 +56,9 @@
     "correctMark": "✓ 正确！",
     "wrongMark": "✗ 错误",
     "next": "下一题",
-    "viewResult": "查看结果"
+    "viewResult": "查看结果",
+    "reviewLesson": "回顾本课",
+    "peek": "查看原文"
   },
   "pathBanner": {
     "title": "本土低级别盈利路径",
@@ -106,7 +108,8 @@
     "goComplete": "去完成",
     "completeLevelFirst": "请先完成该 Level 的所有课程",
     "missingPrereqHint": "请先完成以下前置课程：",
-    "railTitle": "本 Level 课程"
+    "railTitle": "本 Level 课程",
+    "glossaryEntry": "术语表"
   },
   "courseHub": {
     "eyebrow": "我的课程 · 双泳道",
@@ -181,7 +184,8 @@
     "backToSections": "返回小节",
     "comprehensiveExamples": "综合示例",
     "theoryOnly": "本课仅有理论内容，阅读完成后点击「完成学习」",
-    "noContent": "本节内容加载中"
+    "noContent": "本节内容加载中",
+    "expandSection": "展开本节"
   },
   "sectionNav": {
     "label": "课程小节导航",

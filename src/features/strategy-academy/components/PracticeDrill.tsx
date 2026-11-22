@@ -13,6 +13,7 @@ import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/utils/cn';
 import { formatBB } from '@/shared/utils/formatters';
 import { Chip } from '@/shared/components/poker/Chip'; import { GradeIcon } from '@/shared/components/feedback/GradeIcon'; import { OpponentGlyph } from '@/shared/components/poker/OpponentGlyph';
+import { RelatedLessonChip } from '@/shared/components/feedback/RelatedLessonChip';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { MOTION_DURATION, MOTION_EASE, transitionStandard, transitionSlow } from '@/shared/utils/motion';
 import { soundManager } from '../utils/soundManager';
@@ -935,15 +936,16 @@ export function PracticeDrillComponent({ drill, lessonId, mode = 'normal', onCom
               </div>
               <p className="text-xs text-[var(--ivory-dim)] leading-relaxed">{selectedOption.explanation}</p>
 
-              {/* 去复习链接：答错（含超时计错）且存在关联课程时显示 */}
-              {(!selectedOption.isCorrect || isTimedOut) && currentQuestion.relatedLessonId && (
-                <button
-                  onClick={() => navigate(`/lesson/${currentQuestion.relatedLessonId}`)}
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--brass-bright)] underline underline-offset-2 hover:opacity-80 transition-opacity"
-                >
-                  {t('academy.drill.reviewLink')}
-                </button>
-              )}
+{/* 去复习链接：答错（含超时计错）且存在关联课程时显示（RelatedLessonChip 统一视觉） */}
+              {(!selectedOption.isCorrect || isTimedOut) && currentQuestion.relatedLessonId ? (
+                <div className="mt-2">
+                  <RelatedLessonChip
+                    lessonId={currentQuestion.relatedLessonId}
+                    onOpen={(id) => navigate(`/lesson/${id}`)}
+                    label={t('academy.drill.reviewLink')}
+                  />
+                </div>
+              ) : null}
 
               {/* Opponent Strategy Hint */}
               {scenario.opponent && (
