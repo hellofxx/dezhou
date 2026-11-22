@@ -34,8 +34,14 @@ export type {
   ContentIssueReportDialogLabels,
 } from './ContentIssueReportDialog';
 
-// 课程内容块（LabeledBlock / AsciiMonoText / FormulaBlock）：理论 / 策略课程渲染链路共用
-export { AsciiMonoText, FormulaBlock, LabeledBlock } from './ContentBlocks';
+// 课程内容块（LabeledBlock / AsciiMonoText）：理论 / 策略课程渲染链路共用
+export { AsciiMonoText, LabeledBlock } from './ContentBlocks';
 
 // 阅读页双栏骨架：主阅读列 + 学习导轨（理论章节页 / 策略课时页共用）
 export { AcademyReadingPlane } from './AcademyReadingPlane';
+
+// 课程阅读页四件（理论 / 策略两院共用）：公式推导单源 / 章末要点卡 / quiz 原文折叠壳 / 移动 sticky CTA
+export { FormulaDerivation, HighlightFormulaLine } from './FormulaDerivation';
+export { AcademyTakeawayCard } from './AcademyTakeawayCard';
+export { AcademyPeek } from './AcademyPeek';
+export { AcademyStickyCta } from './AcademyStickyCta';

@@ -1,6 +1,4 @@
 import type { LucideIcon } from 'lucide-react';
-import { Sigma } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
 /**
  * 课程内容块共享视觉组件（theory-academy / strategy-academy 共用）。
@@ -48,23 +46,5 @@ export function AsciiMonoText({ content }: { content: string }) {
         </span>
       ))}
     </p>
-  );
-}
-
-/** 公式推导块：felt-deep 底 + brass-deep 边框 + Sigma 图标 + 公式行 font-mono */
-export function FormulaBlock({ content }: { content: string }) {
-  const { t } = useTranslation();
-  return (
-    <div className="rounded-lg bg-[var(--felt-deep)] border border-[var(--brass-deep)]/40 p-4">
-      <div className="flex items-start gap-3">
-        <Sigma className="w-5 h-5 text-[var(--brass-bright)] shrink-0 mt-0.5" />
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold text-[var(--brass-bright)] mb-1.5">
-            {t('academy.content.formula')}
-          </p>
-          <AsciiMonoText content={content} />
-        </div>
-      </div>
-    </div>
   );
 }

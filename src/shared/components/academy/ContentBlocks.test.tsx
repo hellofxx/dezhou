@@ -2,13 +2,12 @@
  * ContentBlocks 契约（theory-academy / strategy-academy 课程内容块共用视觉件）：
  * - LabeledBlock：图标 + 标签 + 正文，保留换行（whitespace-pre-line）
  * - AsciiMonoText：仅含 ASCII 字母/数字的行使用等宽字体，中文行保持无衬线；换行不丢
- * - FormulaBlock：带"公式推导"标签，内部复用 AsciiMonoText
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { Sigma } from 'lucide-react';
-import { AsciiMonoText, FormulaBlock, LabeledBlock } from './ContentBlocks';
+import { AsciiMonoText, LabeledBlock } from './ContentBlocks';
 
 describe('ContentBlocks', () => {
   let container: HTMLDivElement;
@@ -77,12 +76,4 @@ describe('ContentBlocks', () => {
     });
   });
 
-  describe('FormulaBlock', () => {
-    it('渲染"公式推导"标签并复用等宽正文', () => {
-      render(<FormulaBlock content={'MDF = pot / (pot + bet)'} />);
-
-      expect(container.textContent).toContain('公式推导');
-      expect(container.querySelector('.font-mono')?.textContent).toBe('MDF = pot / (pot + bet)');
-    });
-  });
 });

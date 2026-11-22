@@ -132,11 +132,16 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 ### 学院共享组件与纯函数
 
-- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyMastery` / `academyVariantRules`）。
+- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane` / `FormulaDerivation` / `AcademyTakeawayCard` / `AcademyPeek` / `AcademyStickyCta`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyMastery` / `academyVariantRules` / `academyTakeaway`）。
 - 理论学院与策略学院只允许薄包装消费：路由拼接、数据适配、i18n 文案留在 feature 内；shared 组件只接收 props/callbacks，禁止 import 任何 feature。
 - 理论侧 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 与策略侧对应实现均改为薄包装；行为/视觉/文案以原测试为回归基线。
 - **阅读页双栏骨架**：`AcademyReadingPlane` 只负责「主阅读列（上限 768px）+ xl 学习导轨」的布局与 sticky 行为，导轨内容与文案由理论 `TheoryChapterRail` / 策略 `CourseStudyRail` 注入；shared 不读 store、不拼路由。
 - **P2 学习工具同源**：`AcademyBookmarksPanel`（strip / panel 两形态）/ `AcademyNotesPanel`（受控草稿 + 字数上限 + 显式保存）/ `ContentIssueReportDialog`（内容纠错弹层）由 shared 提供，理论 `TheoryBookmarksPanel` / `TheoryNotesPanel` / `ContentIssueReport` 与策略 `StrategyBookmarksPanel` / `StrategyNotesPanel` / `StrategyContentIssueReport` 只做文案与数据适配；shared 不读 store、不拼路由。
+- **课程阅读页四件同源（2026-11）**：消费者均为 strategy-academy + theory-academy。
+  - `FormulaDerivation`（计算层 `components/academy/formulaParse.ts` 纯函数）：公式推导单源——编号步骤 + 散文左对齐 + 公式居中 mono + 变量 brass 高亮；总步数 ≥3 或组数 ≥2 才编号，单/双行简单公式保持 legacy DOM（高亮 span 类名不变）；VARIABLE_RE 高亮单源在此，禁止模块内另写变量高亮。
+  - `AcademyTakeawayCard`：章末要点卡，DOM 与两院原 `LessonTakeawayBlock` 逐字一致（`.lesson-takeaway` + brass 圆点列表）；自动装配走 `utils/academyTakeaway.assembleTakeawayItems`（objectives 在前 + key-point 按换行拆分在后，归一化去重、上限 6 条），显式 takeaway 与自动装配共用此卡，不双卡。
+  - `AcademyPeek`：quiz 原文 peek 折叠壳（ui/Button quiet + aria-expanded/aria-controls，展开区限高滚动）；label 与 children 由 feature 注入，shared 不 import feature、不新增 shared i18n key。
+  - `AcademyStickyCta`：移动端 sticky 底部 CTA 的**单 DOM 节点**响应式容器（`fixed … z-40`，低于 MobileNav z-50；`md:static` 还原内联右对齐），Button 由消费者作 children 传入，避免移动/桌面双渲染。
 - 新增共享项须满足 shared ≥2 模块准入门槛，并同步 AGENTS.md 本表与 TDD §5.8 第 23 条。
 
 ### 五级反馈

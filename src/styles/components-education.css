@@ -20,6 +20,14 @@
   color: var(--poker-ivory-dim);
 }
 
+/* 结构化推导修饰类（FormulaDerivation 编号步骤形态）：覆盖基类的居中 + mono，
+   让标题/散文左对齐 sans 可跟读；公式行 .formula-line 与散文行 .formula-prose
+   的居中 mono / 左对齐 sans 由组件 Tailwind utility 承担，此处仅作容器级修正。 */
+.formula-display--structured {
+  text-align: left;
+  font-family: var(--font-sans);
+}
+
 /* ---- §13.3.3 课程标题编号 eyebrow ---- */
 .section-number {
   font-size: 9px;
