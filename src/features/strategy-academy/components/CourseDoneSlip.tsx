@@ -67,10 +67,10 @@ export default function CourseDoneSlip({
         nextLesson
           ? [
               { label: t('academy.courseView.nextLesson', { defaultValue: '下一课：{{title}}', title: nextLesson.title }), onClick: onNext, variant: 'primary', icon: <ArrowRight className="w-4 h-4" /> },
-              { label: t('academy.courseView.backToAcademy', { defaultValue: '返回学院' }), onClick: onBack, variant: 'outline', icon: <Home className="w-4 h-4" /> },
+              { label: t('academy.courseView.backToAcademy', { defaultValue: '返回课程' }), onClick: onBack, variant: 'outline', icon: <Home className="w-4 h-4" /> },
             ]
           : [
-              { label: t('academy.courseView.backToAcademy', { defaultValue: '返回学院' }), onClick: onBack, variant: 'primary', icon: <Home className="w-4 h-4" /> },
+              { label: t('academy.courseView.backToAcademy', { defaultValue: '返回课程' }), onClick: onBack, variant: 'primary', icon: <Home className="w-4 h-4" /> },
             ]
       }
     />

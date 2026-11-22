@@ -26,7 +26,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：玩家类型学与剥削调整的完整框架见理论学院 T7《剥削理论与动态调整》。HUD 指标组合解读见 T7《统计指标体系》与《玩家类型学》。GTO-剥削统一框架见 T9《GTO 与剥削的统一框架》。',
+            content: '理论支撑：玩家类型学与剥削调整的完整框架见概念手册 T7《剥削理论与动态调整》。HUD 指标组合解读见 T7《统计指标体系》与《玩家类型学》。GTO-剥削统一框架见 T9《GTO 与剥削的统一框架》。',
             data: { theoryLevelId: 't7', theoryChapterId: 't7-player-types' },
           },
           {
@@ -106,7 +106,7 @@ export const STANDARD_LEVEL_8_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：GTO-剥削统一框架的完整理论详见理论学院 T9《GTO 与剥削的统一框架》。包括"以 GTO 为基线、按可观测偏差做有方向有纪律的偏离"的执行方法论。',
+            content: '理论支撑：GTO-剥削统一框架的完整理论详见概念手册 T9《GTO 与剥削的统一框架》。包括"以 GTO 为基线、按可观测偏差做有方向有纪律的偏离"的执行方法论。',
             data: { theoryLevelId: 't9', theoryChapterId: 't9-unified' },
           },
           {

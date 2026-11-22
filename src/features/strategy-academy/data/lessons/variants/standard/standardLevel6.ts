@@ -73,7 +73,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：ICM 递归算法的完整推导与 Bubble Factor 的公式定义见理论学院 T9 第 2 章“ICM 理论”。包括多人 SNG 的 $EV 计算方法和锦标赛策略的数学基础。',
+            content: '理论支撑：ICM 递归算法的完整推导与 Bubble Factor 的公式定义见概念手册 T9 第 2 章“ICM 理论”。包括多人 SNG 的 $EV 计算方法和锦标赛策略的数学基础。',
             data: { theoryLevelId: 't9', theoryChapterId: 't9-icm' },
           },
           {
@@ -318,7 +318,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：Nash Push/Fold 均衡范围的完整推导见理论学院 T9 第 2 章“ICM 理论”。锦标赛中的 ICM 压力与 Push/Fold 决策密切相关。',
+            content: '理论支撑：Nash Push/Fold 均衡范围的完整推导见概念手册 T9 第 2 章“ICM 理论”。锦标赛中的 ICM 压力与 Push/Fold 决策密切相关。',
             data: { theoryLevelId: 't9', theoryChapterId: 't9-icm' },
           },
           {
@@ -982,7 +982,7 @@ export const STANDARD_LEVEL_6_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：多人底池的胜率稀释见理论学院 T9《多人底池理论》，赏金赛的 $EV 调整见 T9《ICM 理论》。赏金赛策略是 ICM 理论在特殊赛制下的扩展应用。',
+            content: '理论支撑：多人底池的胜率稀释见概念手册 T9《多人底池理论》，赏金赛的 $EV 调整见 T9《ICM 理论》。赏金赛策略是 ICM 理论在特殊赛制下的扩展应用。',
             data: { theoryLevelId: 't9', theoryChapterId: 't9-multiway' },
           },
           {

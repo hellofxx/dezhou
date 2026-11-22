@@ -8,7 +8,7 @@
       "Standard C-Bet size: 50-75% of the pot\nDry boards (e.g. K-7-2 rainbow): 33-50% pot\nWet boards (e.g. J-T-9 two-tone): 66-75% pot",
       "Don't C-Bet 100% of the time. The right approach is to C-Bet on favorable boards and Check on unfavorable ones. Cultivate \"selective aggression\".",
       "C-Bet EV formula (including fold equity and showdown equity):\nBet EV = opponent fold rate × current pot + (1-fold rate) × (equity × net win - loss rate × bet size)\nwhere net win = new pot − your bet size (your own bet is returned when called and is not counted as profit)\n\nExample: pot 6BB, C-Bet 4BB, fold rate 40%, equity 20%\nNet win = (6+4+4) − 4 = 10BB\nEV = 0.4×6 + 0.6×(0.2×10 - 0.8×4) = 2.4 + 0.6×(2.0-3.2) = 2.4 - 0.72 = +1.68BB",
-      "Theory reference: the theoretical analysis of C-Bet EV construction and betting purposes is in Theory Academy T5 Chapter 2 \"GTO vs Exploitative: Two Kinds of Optimal\" and T6 Chapter 1 \"Betting Purposes\". Under the GTO framework, C-Bet frequency and range selection are closely related.",
+      "Theory reference: the theoretical analysis of C-Bet EV construction and betting purposes is in Concept Handbook T5 Chapter 2 \"GTO vs Exploitative: Two Kinds of Optimal\" and T6 Chapter 1 \"Betting Purposes\". Under the GTO framework, C-Bet frequency and range selection are closely related.",
       "Counter-intuitive: a C-Bet doesn't need a strong hand. As long as you have enough fold equity (the opponent folds often enough), even if your hand completely missed the board, the C-Bet is still +EV. That's why GTO strategies can C-Bet at up to 60-70% frequency, including plenty of bluffs."
     ],
     "l3-draws": [
@@ -19,7 +19,7 @@
       "Always calculate pot odds! If your equity > pot odds, calling is +EV.",
       "Pros choose their draw line based on position and opponent tendencies. Semi-bluffing with draws from position is a very effective strategy.",
       "The 2/4 Rule and error analysis:\nOne card (turn): equity ≈ Outs × 2%\nTwo cards (all-in on flop): equity ≈ Outs × 4%\n\nError analysis (flop→river two-card scenario):\n4 Outs (gutshot): ×4 estimates 16% | exact 16.5% | error -0.5\n8 Outs (OESD): ×4 estimates 32% | exact 31.5% | error +0.5\n9 Outs (flush): ×4 estimates 36% | exact 35.0% | error +1.0\n12 Outs (combo draw): ×4 estimates 48% | exact 45.0% | error +3.0\n\nConclusion: for Outs ≤ 9, ×4 has error within 1 percentage point; for Outs ≥ 13, use the corrected formula.",
-      "Theory reference: the full derivation of Outs counting and the 2/4 Rule is in Theory Academy T1 Chapter 2 \"Outs and the 2/4 Rule\", including the error analysis table and corrected formula. The EV framework for calling with draws is in T2 Chapter 1.",
+      "Theory reference: the full derivation of Outs counting and the 2/4 Rule is in Concept Handbook T1 Chapter 2 \"Outs and the 2/4 Rule\", including the error analysis table and corrected formula. The EV framework for calling with draws is in T2 Chapter 1.",
       "Counter-intuitive: combo draws (flush + straight + overcards) have far more equity than intuition suggests. For example, J♥T♥ on a 9♥8♥3♣ board has 15 outs and about 54% equity — actually ahead of most one-pair hands. That's why combo draws are the best semi-bluff candidates."
     ],
     "l3-multistreet": [
@@ -31,7 +31,7 @@
       "Triple Barrel (river all-in bluff) conditions: 1) polarized range (strong hands or pure bluffs) 2) you have Blockers 3) the opponent is not a Calling Station.",
       "Delayed C-Bet: check the flop, bet the turn. Use when: 1) the flop isn't suited to a C-Bet 2) you want to see showdown cheaply 3) the opponent leads the turn frequently after checking the flop.",
       "SPR (Stack-to-Pot Ratio) formula:\nSPR = effective stack ÷ pot size\n\nSPR tiers and strategy lean:\nSPR < 4 (low): committed play — top pair can get all-in comfortably\nSPR 4-10 (medium): standard play, be careful\nSPR > 10 (high): deep stacks — speculative hands like suited connectors gain value\n\nGeometric sizing over three streets:\nFor a three-street all-in, the per-street ratio x satisfies (1+2x)^3 = 1+2·SPR: about 60-70% at SPR 5-7, about 114% at SPR 17 (the example below bets 60-70% and invests only about 40% of the effective stack, so it is not all-in)\nExample: pot 6BB, effective 100BB, SPR≈17\nFlop bet 4BB → pot 14BB\nTurn bet 10BB → pot 34BB\nRiver bet 25BB → pot 84BB, total bet 39BB ≈ 40% of effective stack",
-      "Theory reference: the full derivation of SPR and geometric sizing is in Theory Academy T6 Chapter 3 \"SPR and Three-Street Geometric Sizing\". Betting plans in multi-street play are closely tied to range construction.",
+      "Theory reference: the full derivation of SPR and geometric sizing is in Concept Handbook T6 Chapter 3 \"SPR and Three-Street Geometric Sizing\". Betting plans in multi-street play are closely tied to range construction.",
       "Counter-intuitive: at deep stacks (SPR > 10), small suited connectors are worth more than big pairs. AA's postflop realization drops at deep stacks because opponents can apply pressure with wider ranges on later streets, while hands like 98s have better postflop playability and can make many strong hands."
     ],
     "l3-checkraise": [
@@ -61,7 +61,7 @@
       "The Overbet is a core modern GTO concept. When you have the nut advantage on the river (e.g. flush-completing board), use an Overbet to put maximum pressure on the opponent and force medium-strength hands into tough decisions.",
       "Don't use a fixed bet size (e.g. always 50% pot). Adjust based on board structure, range advantage, and opponent type. Varied sizing makes it hard for opponents to read your hand strength.",
       "MDF (Minimum Defense Frequency) formula:\nMDF = pot ÷ (pot + bet)\nAlpha (opponent's bluff break-even point) formula:\nAlpha = bet ÷ (pot + bet)\n\nCommon values:\n1/3 pot bet → MDF=75%, Alpha=25%\n1/2 pot bet → MDF=67%, Alpha=33%\n2/3 pot bet → MDF=60%, Alpha=40%\nFull pot bet → MDF=50%, Alpha=50%\n\nNote: MDF is the defense frequency and Alpha is the minimum fold rate a bluff needs — they are complements (MDF + Alpha = 1).",
-      "Theory reference: the algebraic derivation of MDF and Alpha is in Theory Academy T5 Chapter 3 \"Minimum Defense Frequency (MDF) and Alpha\". The mathematical basis of bet sizing and geometric sizing is in T6 Chapter 2.",
+      "Theory reference: the algebraic derivation of MDF and Alpha is in Concept Handbook T5 Chapter 3 \"Minimum Defense Frequency (MDF) and Alpha\". The mathematical basis of bet sizing and geometric sizing is in T6 Chapter 2.",
       "Counter-intuitive: the bigger your bet, the more opponents fold — but your bluff needs a higher success rate. A big bet means you risk more to win a limited pot. With a full-pot bet your bluff needs at least 50% fold rate to break even, while a half-pot bet only needs 33%."
     ],
     "l3-bluffing": [

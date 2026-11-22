@@ -1,5 +1,5 @@
 /**
- * 策略学院目录摘要总索引（AUTO-GENERATED 文件见同目录 standard / short-deck / heads-up）。
+ * 课程目录摘要总索引（AUTO-GENERATED 文件见同目录 standard / short-deck / heads-up）。
  * 仅含 Level/课程目录元数据；正文、小测、示例与练习在 lessons/variants/* 完整数据中。
  */
 import type { LessonSummary, LevelSummary } from '../../../types';

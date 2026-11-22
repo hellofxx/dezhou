@@ -176,7 +176,7 @@ describe('TrainingGrounds 训练场模块网格', () => {
     renderGrid();
     const text = container.textContent ?? '';
 
-    for (const label of ['手牌范围训练', '赔率计算器', 'GTO 模拟器', '策略学院', '扑克谜题', '牌局复盘']) {
+    for (const label of ['手牌范围训练', '赔率计算器', 'GTO 模拟器', '课程', '扑克谜题', '牌局复盘']) {
       expect(text).toContain(label);
     }
     expect(text).toContain('各位置开牌范围记忆与测试');
@@ -198,6 +198,20 @@ describe('TrainingGrounds 训练场模块网格', () => {
     });
 
     expect(container.querySelector('[data-probe]')?.textContent).toBe('/drill/odds');
+  });
+
+  it('课程卡跳转课程枢纽 /lesson，不回旧 /academy 首页', () => {
+    renderGrid();
+
+    const course = Array.from(container.querySelectorAll('.module-card')).find((el) =>
+      el.textContent?.includes('课程'),
+    );
+    expect(course).toBeTruthy();
+    act(() => {
+      course!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-probe]')?.textContent).toBe('/lesson');
   });
 
   it('最近训练标记：今日已练 / N 天前，仅在对应模块卡上出现', () => {

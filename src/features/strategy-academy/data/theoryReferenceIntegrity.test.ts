@@ -2,16 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { getHeadsUpLessonMetaMap, getStandardLessonMetaMap } from './lessonMeta';
 
 /**
- * 策略学院 → 理论学院 引用完整性守卫（反向死链）。
+ * 课程 → 概念手册 引用完整性守卫（反向死链）。
  *
- * 课时正文中 `type: 'theory-reference'` 段落通过 `data.theoryChapterId` 指向理论学院章节。
+ * 课时正文中 `type: 'theory-reference'` 段落通过 `data.theoryChapterId` 指向概念手册章节。
  * 两模块互相 import 被 eslint 的 ALLOWED_CROSS_IMPORTS 禁止，故该引用只能以 ID 字符串存在、
  * 无法由类型系统约束 —— 目标是否存在必须由本守卫保证。
  *
  * T3 起本文件同时守卫第二个方向：`data/lessonMeta/*` 的 `theoryAnchors`（策略课→理论章桥接卡数据源）
  * 也必须全部指向真实章节。两处失效模式不同（正文段落漏改 / 元数据手写错 id），故共用同一份章节集合。
  *
- * 目标 ID 集合经 Vite 原生 `import.meta.glob(..., '?raw')` 读取理论学院数据源码后扫描得出，
+ * 目标 ID 集合经 Vite 原生 `import.meta.glob(..., '?raw')` 读取概念手册数据源码后扫描得出，
  * 不维护手工镜像清单，因此不会随章节增删而漂移；也不依赖 Node 类型（src 的 typecheck 为浏览器口径）。
  */
 
@@ -87,7 +87,7 @@ const HEADS_UP_CHAPTER_IDS = readTheoryChapterIds(
   /id: '(t\d+hu-[a-z0-9-]+)'/g,
 );
 
-describe('策略学院 theory-reference → 理论学院章节 引用完整性', () => {
+describe('课程 theory-reference → 概念手册章节 引用完整性', () => {
   const { refs, refBlockCount } = collectReferences();
 
   it('守卫确实扫描到两套理论章节与引用点（防正则失配导致空断言）', () => {
@@ -129,7 +129,7 @@ describe('策略学院 theory-reference → 理论学院章节 引用完整性',
   });
 });
 
-describe('lessonMeta.theoryAnchors → 理论学院章节 引用完整性', () => {
+describe('lessonMeta.theoryAnchors → 概念手册章节 引用完整性', () => {
   const standardAnchors = Object.entries(getStandardLessonMetaMap()).flatMap(([lessonId, meta]) =>
     meta.theoryAnchors.map((anchor) => ({ lessonId, anchor, isHeadsUp: false })),
   );

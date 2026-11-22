@@ -1,5 +1,5 @@
 /**
- * 理论学院课程数据完整性守卫测试（复刻 strategy-academy curriculumIntegrity 模式）。
+ * 概念手册课程数据完整性守卫测试（复刻 strategy-academy curriculumIntegrity 模式）。
  *
  * 机械校验固化为常驻门禁：ID 唯一性与前缀规范、判分数据合法性、
  * ELO 维度合法性、Level 结构完整性、实践推荐结构合法性。
@@ -15,7 +15,7 @@ const ELO_DIMENSIONS = new Set(['preflop', 'postflop', 'math', 'handReading', 'm
 const allChapters: TheoryChapter[] = THEORY_LEVELS.flatMap((level) => level.chapters);
 
 /**
- * Level 粒度实践推荐引用的策略学院课时 ID 白名单（跨模块引用登记面）。
+ * Level 粒度实践推荐引用的课程课时 ID 白名单（跨模块引用登记面）。
  * 与 strategy-academy curriculumIntegrity.test.ts 的 CROSS_MODULE_LESSON_IDS 互为镜像：
  * 本文件防"引用未登记"，那边防"登记的 id 不存在"。章节粒度推荐只能复用本白名单。
  * 扩容须三处同步：某个 Level 的 practiceRecommendations、本清单、对面清单——漏一处即红。
@@ -156,7 +156,7 @@ describe('theory integrity: 实践推荐结构合法性', () => {
       const rec = level.practiceRecommendations;
       if (rec.lessons.length === 0) bad.push(`${level.id}: lessons 为空`);
       for (const lesson of rec.lessons) {
-        // 课时 id 命名空间：标准分级课 l<level>-* 与本土课 local-*（后者已并入策略学院 LEVELS）
+        // 课时 id 命名空间：标准分级课 l<level>-* 与本土课 local-*（后者已并入课程 LEVELS）
         if (!/^l\d/.test(lesson.id) && !lesson.id.startsWith('local-')) {
           bad.push(`${level.id} → ${lesson.id}: 非 l<level>- / local- 前缀`);
         }

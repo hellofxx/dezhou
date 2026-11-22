@@ -47,13 +47,13 @@ const L4HU_EV_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：EV 的 fold / call / raise 三分支比较与位置价值量化，见理论学院 T2『期望值优化』——本课把那条框架搬进两人底池，用死钱占比与对手范围宽度重新标定输入。',
+      '理论支撑：EV 的 fold / call / raise 三分支比较与位置价值量化，见概念手册 T2『期望值优化』——本课把那条框架搬进两人底池，用死钱占比与对手范围宽度重新标定输入。',
     data: { theoryLevelId: 't2hu', theoryChapterId: 't2hu-ev' },
   },
   {
     type: 'theory-reference',
     content:
-      '理论支撑：翻后位置劣势方的风险定价与隐含赔率变化，见理论学院 T2『风险评估』——单挑听牌之所以更依赖隐含赔率，正是因为宽范围把单街权益压得很低。',
+      '理论支撑：翻后位置劣势方的风险定价与隐含赔率变化，见概念手册 T2『风险评估』——单挑听牌之所以更依赖隐含赔率，正是因为宽范围把单街权益压得很低。',
     data: { theoryLevelId: 't2hu', theoryChapterId: 't2hu-risk' },
   },
   {

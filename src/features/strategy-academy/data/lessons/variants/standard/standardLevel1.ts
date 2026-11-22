@@ -46,7 +46,7 @@ const L1_POSITION_U3_SECTIONS: LessonSection[] = [
   },
   {
     type: 'theory-reference',
-    content: '理论支撑：位置价值的量化分析见理论学院 T3《位置价值的来源》，权益如何随位置与牌面被兑现见 T6《牌面结构与权益实现》，Gap Concept 的现代修正见 T3《起手牌理论与 Gap Concept》，Sklansky 基本定理见 T3《Sklansky 基本定理与主动权》。',
+    content: '理论支撑：位置价值的量化分析见概念手册 T3《位置价值的来源》，权益如何随位置与牌面被兑现见 T6《牌面结构与权益实现》，Gap Concept 的现代修正见 T3《起手牌理论与 Gap Concept》，Sklansky 基本定理见 T3《Sklansky 基本定理与主动权》。',
     data: { theoryLevelId: 't3', theoryChapterId: 't3-position-value' },
   },
   {
@@ -107,7 +107,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：组合计数与起手牌概率的完整推导见理论学院 T1 第 1 章"组合计数与起手牌概率"。详细介绍了 C(n,k) 通式推导、1326 种组合来源、6/4/12 原子单位等核心内容。',
+            content: '理论支撑：组合计数与起手牌概率的完整推导见概念手册 T1 第 1 章"组合计数与起手牌概率"。详细介绍了 C(n,k) 通式推导、1326 种组合来源、6/4/12 原子单位等核心内容。',
             data: { theoryLevelId: 't1', theoryChapterId: 't1-combinatorics' },
           },
           {
@@ -443,7 +443,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：起手牌的概率计算与组合计数详见理论学院 T1 第 1 章。起手牌 EV 分层与位置选择的关系见 T3 第 1 章。',
+            content: '理论支撑：起手牌的概率计算与组合计数详见概念手册 T1 第 1 章。起手牌 EV 分层与位置选择的关系见 T3 第 1 章。',
             data: { theoryLevelId: 't1', theoryChapterId: 't1-combinatorics' },
           },
           {
@@ -596,7 +596,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
         },
         {
           type: 'theory-reference',
-          content: '理论支撑：资金管理的量化模型与 Kelly 准则在扑克中的应用详见理论学院 T8《资金管理心理学》。T8 全面覆盖了扑克心理学中的资金管理方法论。',
+          content: '理论支撑：资金管理的量化模型与 Kelly 准则在扑克中的应用详见概念手册 T8《资金管理心理学》。T8 全面覆盖了扑克心理学中的资金管理方法论。',
           data: { theoryLevelId: 't8', theoryChapterId: 't8-bankroll-psych' },
         },
         ],
@@ -632,7 +632,7 @@ export const STANDARD_LEVEL_1_LESSONS: Lesson[] = [
           { type: 'pro-tip', content: '每周选一个 Leak 集中修正，比同时修正所有问题有效得多。用打卡日历追踪你的修正进度。' },
         {
           type: 'theory-reference',
-          content: '理论支撑：常见 Leak 背后的数学本质是 EV 决策框架的缺失。期望值的完整定义与推导见理论学院 T2 第 1 章"期望值（EV）：所有决策的统一度量"。理解 EV 概念后，每个 Leak 都可以被量化为 -EV 行为的重复模式。',
+          content: '理论支撑：常见 Leak 背后的数学本质是 EV 决策框架的缺失。期望值的完整定义与推导见概念手册 T2 第 1 章"期望值（EV）：所有决策的统一度量"。理解 EV 概念后，每个 Leak 都可以被量化为 -EV 行为的重复模式。',
           data: { theoryLevelId: 't2', theoryChapterId: 't2-ev' },
         },
         {

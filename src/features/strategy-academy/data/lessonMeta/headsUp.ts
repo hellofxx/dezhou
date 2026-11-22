@@ -3,7 +3,7 @@ import type { LessonMeta } from '../../types';
 /**
  * Heads-Up（单挑）课时元数据（ELO 维度 + 理论锚点）。
  *
- * 锚点只指向理论学院单挑 37 章（`t<n>hu-*`），与标准课锚点分表维护；
+ * 锚点只指向概念手册单挑 37 章（`t<n>hu-*`），与标准课锚点分表维护；
  * 存在性与变体归属由 `lessonMeta.integrity.test.ts` 与 `theoryReferenceIntegrity.test.ts`
  * 分别断言。锚点选取与课时的 2 条内联 theory-reference 同源，保证「正文引用」与
  * 「完成页桥接」指向同一章。

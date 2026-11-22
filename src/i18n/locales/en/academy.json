@@ -1,5 +1,5 @@
 {
-  "title": "Strategy Academy",
+  "title": "Courses",
   "subtitle": "Systematically learn poker strategy from basics to professional thinking",
   "basics": "Poker Basics",
   "basicsDesc": "Game rules, hand rankings, positions, and terminology",
@@ -8,7 +8,7 @@
   "completed": "Completed",
   "clickToReview": "Click to review",
   "conceptGraph": {
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to Courses",
     "title": "Knowledge Graph",
     "subtitle": "Visualize course knowledge dependencies; click a node to jump to its course",
     "learned": "Learned",
@@ -75,7 +75,7 @@
   },
   "courseView": {
     "notFound": "Course not found",
-    "backToAcademy": "Back to Academy",
+    "backToAcademy": "Back to Courses",
     "lessonOf": "Lesson {{current}}/{{total}}",
     "localLessonBadge": "Local Lesson · L7 Extension",
     "lessonOrder": "Lesson {{order}}",
@@ -125,6 +125,10 @@
       "collapse": "Collapse"
     },
     "theoryUnavailable": "Concept links pending · practice lane is available",
+    "basics": {
+      "title": "Required Basics",
+      "hint": "Foundational chapters, always visible; read them before starting this stage's practice"
+    },
     "supplemental": {
       "title": "Supplemental reading"
     },
@@ -152,7 +156,7 @@
     "catalog": {
       "title": "Course catalog",
       "allCourses": "All strategy courses",
-      "theory": "Theory Academy",
+      "theory": "Concept Handbook",
       "tracks": "Learning tracks"
     },
     "reason": {
@@ -168,7 +172,7 @@
   },
   "theoryBridge": {
     "title": "View the theory",
-    "subtitle": "The derivations behind this lesson live in these Theory Academy chapters"
+    "subtitle": "The derivations behind this lesson live in these Concept Handbook chapters"
   },
   "lessonUnit": {
     "introTitle": "Lesson Roadmap",
@@ -408,7 +412,7 @@
     "track-tournament": "Master MTT/SNG strategy: ICM, Push/Fold and bubble play",
     "track-gto": "Dive deep into GTO: frequency control, node locking and range construction",
     "track-leak-fix": "Target your weakest areas based on your skill assessment. Courses are recommended dynamically",
-    "track-theory-bridge": "After completing the matching Theory Academy level, turn knowledge into table decisions in theory order",
+    "track-theory-bridge": "After completing the matching Concept Handbook level, turn knowledge into table decisions in theory order",
     "track-local-cn": "Practical strategy for common local games: limp pots, straddles, deep stacks and calling stations"
   },
   "trackAudience": {
@@ -417,7 +421,7 @@
     "track-tournament": "Players who want to play online or live tournaments",
     "track-gto": "Experienced players who want deeper theory",
     "track-leak-fix": "Experienced players facing a plateau",
-    "track-theory-bridge": "Players who finished Theory Academy and need to practice",
+    "track-theory-bridge": "Players who finished Concept Handbook and need to practice",
     "track-local-cn": "Players active in low-stakes local games"
   },
   "trackDuration": {
@@ -473,7 +477,7 @@
   },
   "tracks": {
     "prereqHint": "We recommend completing {{levels}} first",
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to Courses",
     "title": "Learning Tracks",
     "subtitle": "Pick a path that fits your goals and systematically sharpen a specific skill set",
     "mergedIntoLevel7": "Merged into Level 7 · Native Lessons",
@@ -500,7 +504,7 @@
   },
   "levelCertification": {
     "levelNotFound": "Level not found",
-    "backToAcademy": "Back to Academy",
+    "backToAcademy": "Back to Courses",
     "title": "Level {{level}} Certification Quiz",
     "questionCount": "{{count}} questions (drawn from all quizzes in this level)",
     "passStandard": "Pass mark: accuracy ≥ {{required}}%",
@@ -523,7 +527,7 @@
     "rejectNotCompleted": "Result not recorded: complete all lessons in this level first",
     "rejectWrongVariant": "Result not recorded: certification is only available in the standard variant",
     "rejectInvalid": "Result not recorded: invalid submission",
-    "theoryAnchors": "Review the derivations in Theory Academy",
+    "theoryAnchors": "Review the derivations in Concept Handbook",
     "theoryAnchorLink": "Theory chapter {{id}}",
     "variantLocked": "Certification is only available in the standard variant (current: {{variant}})",
     "notCompletedLocked": "Complete all lessons in this level to unlock certification ({{completed}}/{{total}})"
@@ -753,7 +757,7 @@
     "search": "Search Lessons",
     "searchDesc": "Find by title or subtitle",
     "glossary": "Glossary",
-    "glossaryDesc": "Maintained by Theory Academy",
+    "glossaryDesc": "Shared with the Concept Handbook",
     "placement": "Placement Test",
     "placementDesc": "16 questions to find your starting point",
     "bookmarks": "My Bookmarks",
@@ -777,8 +781,8 @@
     "placeholder": "Search lessons…",
     "lessons": "Lessons",
     "emptyTitle": "No matches",
-    "emptyHint": "Try another keyword or return to the academy",
-    "backToAcademy": "Back to Strategy Academy",
+    "emptyHint": "Try another keyword or return to the course",
+    "backToAcademy": "Back to Courses",
     "contentHits": "Matches in lesson content",
     "loadingFullText": "Loading full-text index…",
     "loadFailed": "Full-text search failed; showing title matches",
@@ -866,7 +870,7 @@
   },
   "levelCheckpoint": {
     "levelNotFound": "Level not found",
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to Courses",
     "title": "Level {{level}} Checkpoint",
     "subtitle": "12 mixed questions across this level's core lessons; results break down by source lesson.",
     "lockedHint": "Finish every lesson in this level to start the checkpoint (currently {{completed}}/{{total}})",
@@ -891,11 +895,11 @@
     "retry": "Check again"
   },
   "bibliography": {
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to Courses",
     "title": "Bibliography",
     "subtitle": "Authoritative sources behind the strategy lessons, grouped by level; no text is reproduced here",
     "count": "{{count}} books",
-    "theoryLink": "See the Theory Academy bibliography",
+    "theoryLink": "See the Concept Handbook bibliography",
     "empty": "No bibliography entries yet",
     "theory-of-poker": {
       "note": "The foundational text on pot odds, implied odds and bluffing."

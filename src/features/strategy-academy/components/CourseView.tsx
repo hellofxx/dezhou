@@ -214,7 +214,7 @@ export default function CourseView() {
           onClick={() => navigate('/academy')}
           className="text-sm text-[var(--brass-bright)] hover:underline"
         >
-          {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+          {t('academy.courseView.backToAcademy', { defaultValue: '返回课程' })}
         </button>
       </div>
     );

@@ -38,10 +38,12 @@ export interface TheoryLearningSnapshot {
 /** 理论章节目录投影（静态数据，用于阶段/补充阅读归组）。 */
 export interface TheoryChapterIndexEntry {
   chapterId: string;
-  /** t1–t9 */
+  /** t1–t9（变体带 sd / hu 后缀） */
   levelId: string;
   /** P2：该章声明的实践课 id（来自 chapterPracticeMap） */
   practiceLessonIds?: readonly string[];
+  /** 章节所属理论 Level 的难度层级；旧数据源缺省时消费方按非基础处理 */
+  tier?: 'basic' | 'intermediate' | 'advanced';
 }
 
 export interface TheoryDataSource {

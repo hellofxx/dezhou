@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 
 /**
- * 理论学院变体章节 → 策略学院变体课时 引用完整性守卫（与 theoryReferenceIntegrity 同方向）。
+ * 概念手册变体章节 → 课程变体课时 引用完整性守卫（与 theoryReferenceIntegrity 同方向）。
  *
  * 为什么需要单独一个守卫：变体课时（`l<n>hu-*` / `l<n>sd-*`）**不在** `LEVELS` 里，
- * 因此既不能进策略学院 `curriculumIntegrity` 的 `CROSS_MODULE_LESSON_IDS`
+ * 因此既不能进课程 `curriculumIntegrity` 的 `CROSS_MODULE_LESSON_IDS`
  * （那里的存在性断言以 `LEVELS` 为全集，加了必红），也不能进理论侧
  * `theoryIntegrity` 的 `EXPECTED_PRACTICE_LESSON_IDS`（它由标准变体 Level 派生）。
  * 于是 Level 级与章节级的变体桥接 id 长期处于"两不管"状态——本守卫补上这一段。
@@ -78,7 +78,7 @@ const zhTitles = JSON.parse(
   fs.readFileSync('src/i18n/locales/zh/academy.json', 'utf8'),
 ) as { lessonTitle?: Record<string, string> };
 
-describe('理论学院变体章节 → 策略学院变体课时 引用完整性', () => {
+describe('概念手册变体章节 → 课程变体课时 引用完整性', () => {
   const refs = collectRefs();
   const variantLessonIds = new Set(ALL_VARIANT_LESSONS.map((l) => l.id));
   const standardLevelLessonIds = new Set(LEVELS.flatMap((level) => level.lessons.map((l) => l.id)));
@@ -120,7 +120,7 @@ describe('理论学院变体章节 → 策略学院变体课时 引用完整性'
     expect([...new Set(leakedIntoLevelWhitelist)]).toEqual([]);
   });
 
-  // 章节级 map 里 T1 类章节会复用三变体共享地基课（策略学院变体课程从 L3 起，L1/L2 回退标准课）。
+  // 章节级 map 里 T1 类章节会复用三变体共享地基课（课程变体课程从 L3 起，L1/L2 回退标准课）。
   // 这类 id 不受上一条保护，也不属于任何变体白名单，故单独断言它们在 LEVELS 内可解析——
   // 否则"把标准课 id 打错一个字母"是本页唯一无人拦截的漂移路径。
   it('共享地基课引用（l<n>-*）在 LEVELS 内可解析', () => {
@@ -131,7 +131,7 @@ describe('理论学院变体章节 → 策略学院变体课时 引用完整性'
     expect([...new Set(unresolved)]).toEqual([]);
   });
 
-  it('引用自带的回退标题与策略学院权威 lessonTitle 一致（忽略尾部括号后缀）', () => {
+  it('引用自带的回退标题与课程权威 lessonTitle 一致（忽略尾部括号后缀）', () => {
     // 权威值可能带 ASCII 撇号与消歧后缀（如「短牌德州入门 (6+ Hold'em)」）。回退标题只在 i18n
     // 缺 key 时兜底显示，不值得为它在 TS 单引号串里塞转义撇号，故比对前剥掉尾部括号成分；
     // 真实改名（词根变了）仍会被抓，只是允许省略消歧后缀。

@@ -34,7 +34,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：SPR 与筹码深度的量化关系详见理论学院 T6 第 3 章"SPR 与三街几何尺度"。深筹码下的隐含赔率与反向隐含赔率分析见 T2 第 3-4 章。',
+            content: '理论支撑：SPR 与筹码深度的量化关系详见概念手册 T6 第 3 章"SPR 与三街几何尺度"。深筹码下的隐含赔率与反向隐含赔率分析见 T2 第 3-4 章。',
             data: { theoryLevelId: 't6', theoryChapterId: 't6-geometric' },
           },
           {
@@ -215,7 +215,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：多人底池的胜率分布与策略调整详见理论学院 T9《多人底池理论》。包括多人底池胜率表和"纳什均衡在多人底池中的适用边界"警告。',
+            content: '理论支撑：多人底池的胜率分布与策略调整详见概念手册 T9《多人底池理论》。包括多人底池胜率表和"纳什均衡在多人底池中的适用边界"警告。',
             data: { theoryLevelId: 't9', theoryChapterId: 't9-multiway' },
           },
           {
@@ -411,7 +411,7 @@ export const STANDARD_LEVEL_7_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：Straddle 结构下的位置价值变化与翻前范围调整的理论基础见理论学院 T3《位置价值的来源》。',
+            content: '理论支撑：Straddle 结构下的位置价值变化与翻前范围调整的理论基础见概念手册 T3《位置价值的来源》。',
             data: { theoryLevelId: 't3', theoryChapterId: 't3-position-value' },
           },
           {

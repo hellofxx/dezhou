@@ -1,5 +1,5 @@
 /**
- * 理论学院目录摘要总索引（AUTO-GENERATED 文件见同目录 *-deck/heads-up/standard）。
+ * 概念手册目录摘要总索引（AUTO-GENERATED 文件见同目录 *-deck/heads-up/standard）。
  * 仅含 Level/章节目录元数据；正文与小测在 variants/* 完整数据中，按章节路由懒加载。
  */
 import type { TheoryLevelSummary } from '../../../types';

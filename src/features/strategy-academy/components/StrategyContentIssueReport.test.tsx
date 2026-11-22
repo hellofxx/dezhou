@@ -31,7 +31,7 @@ const BASE_INPUT = {
 describe('buildStrategyIssueReport', () => {
   it('带上下文：含版本 / 语言 / 课时 / 段落 / 题目 / ISO 时间戳 / 说明', () => {
     const report = buildStrategyIssueReport(BASE_INPUT);
-    expect(report).toContain('[Strategy Academy content issue]');
+    expect(report).toContain('[Courses content issue]');
     expect(report).toContain(`App version: ${APP_VERSION}`);
     expect(report).toContain('Locale: zh');
     expect(report).toContain('Lesson: l3-draws');
@@ -81,7 +81,7 @@ describe('buildStrategyIssueMailto', () => {
     const subject = decodeURIComponent(
       url.slice(url.indexOf('subject=') + 'subject='.length, url.indexOf('&body=')),
     );
-    expect(subject).toBe('[Strategy Academy] content issue');
+    expect(subject).toBe('[Courses] content issue');
   });
 });
 

@@ -133,7 +133,7 @@
     "descPracticeAccuracy": "Current accuracy {{accuracy}}%",
     "descPracticeNone": "Keep your edge",
     "descTheoryReview": "{{count}} theory concepts due today",
-    "descTheoryChapter": "Next Theory Academy chapter · about {{minutes}} min",
+    "descTheoryChapter": "Next Concept Handbook chapter · about {{minutes}} min",
     "descTheoryChapterNoTime": "Read the next chapter to lock in the fundamentals",
     "descStreakChallenge": "{{streak}} days in a row! Challenge higher difficulty",
     "reasonReview": "Review",

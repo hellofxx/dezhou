@@ -53,7 +53,7 @@
   "aboutVersion": "Poker Training Platform v{{version}}",
   "helpCenter": "Help Center",
   "clearConfirmTitle": "Confirm clearing training records",
-  "clearConfirmDesc": "Only training records (the statistics and history lists) are deleted. ELO ranks, review queue, settings, academy progress and hand history data are kept. This cannot be undone.",
+  "clearConfirmDesc": "Only training records (the statistics and history lists) are deleted. ELO ranks, review queue, settings, course progress and hand history data are kept. This cannot be undone.",
   "clearFailed": "Clear failed: records are still stored locally (rolled back). Please retry later.",
   "cancel": "Cancel",
   "confirmClear": "Confirm Clear"

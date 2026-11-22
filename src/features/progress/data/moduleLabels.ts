@@ -21,7 +21,7 @@ export const MODULE_LABELS_FALLBACK: Record<string, string> = {
   'pot-odds': '赔率计算器',
   'gto-simulator': 'GTO 模拟器',
   'hand-history': '牌局复盘',
-  'strategy-academy': '策略学院',
-  'theory-academy': '理论学院',
+  'strategy-academy': '课程',
+  'theory-academy': '概念手册',
   'puzzle-trainer': '扑克谜题',
 };

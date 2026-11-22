@@ -123,7 +123,7 @@ export const LEARNING_TRACKS: LearningTrack[] = [
     color: '#c25a4c',
     relatedTrackIds: ['track-beginner'],
   },
-  // 理论学院（2026-07）：通用「理论→实践」入口轨道。
+  // 概念手册（2026-07）：通用「理论→实践」入口轨道。
   // P1F-05 定性（专批 A，2026-07-31）：theory-academy 各 Level 的 practiceRecommendations
   // 定向推荐均指向 track-beginner / track-gto / track-cash-game，不引用本轨道；
   // 本轨道不是各 Level 的定向推荐目标，而是经 /academy/tracks 泛浏览发现的通用衔接路径
@@ -131,9 +131,9 @@ export const LEARNING_TRACKS: LearningTrack[] = [
   {
     id: 'track-theory-bridge',
     name: '理论到实践',
-    description: '完成理论学院对应 Level 后，按理论支柱顺序将知识转化为实战决策能力',
+    description: '完成概念手册对应 Level 后，按理论支柱顺序将知识转化为实战决策能力',
     icon: '📖',
-    targetAudience: '在理论学院完成了系统学习、需要落地实践的玩家',
+    targetAudience: '在概念手册完成了系统学习、需要落地实践的玩家',
     estimatedDuration: '10-15 小时',
     lessonIds: [
       'l1-basics',            // T1 概率论 → 规则与牌型

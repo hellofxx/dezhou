@@ -26,6 +26,7 @@ export function getChapterCatalog(variant: PokerVariant): readonly TheoryChapter
     level.chapters.map((chapter) => ({
       chapterId: chapter.id,
       levelId: level.id,
+      tier: level.tier,
       practiceLessonIds: practiceMap[chapter.id]?.lessons.map((lesson) => lesson.id) ?? [],
     })),
   );

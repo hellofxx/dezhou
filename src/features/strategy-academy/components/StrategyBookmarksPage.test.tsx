@@ -19,7 +19,7 @@ const EMPTY = i18n.t('academy.bookmarks.empty', {
   defaultValue: '还没有收藏。把想反复读的课时存下来，随时回到这里',
 });
 const BROWSE = i18n.t('academy.bookmarks.browseLessons', { defaultValue: '去挑几课' });
-const BACK = i18n.t('academy.courseView.backToAcademy', { defaultValue: '返回学院' });
+const BACK = i18n.t('academy.courseView.backToAcademy', { defaultValue: '返回课程' });
 const REMOVE = i18n.t('academy.bookmarks.remove', { defaultValue: '取消收藏' });
 
 function lessonTitle(lessonId: string): string {

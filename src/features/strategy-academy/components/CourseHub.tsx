@@ -95,7 +95,11 @@ export default function CourseHub() {
 
   const chapterLabels = useMemo(() => {
     const ids = new Set(
-      hubStages.flatMap((stage) => [...stage.theoryChapterIds, ...stage.supplementalChapterIds]),
+      hubStages.flatMap((stage) => [
+        ...stage.theoryChapterIds,
+        ...stage.basicsChapterIds,
+        ...stage.supplementalChapterIds,
+      ]),
     );
     return Object.fromEntries(
       [...ids].map((id) => [id, t(`theory.chapterTitle.${id}`, { defaultValue: id })]),

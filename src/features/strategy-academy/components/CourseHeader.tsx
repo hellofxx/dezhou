@@ -48,7 +48,7 @@ export function CourseHeader({
     <div className="mb-6">
       <BackLink
         onClick={onBack}
-        label={t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+        label={t('academy.courseView.backToAcademy', { defaultValue: '返回课程' })}
         size="md"
         className="mb-4"
       />

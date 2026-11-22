@@ -41,9 +41,9 @@ const THEORY_PROGRESS = {
   quizScores: {},
 };
 const THEORY_CATALOG = [
-  { chapterId: 't1-combinatorics', levelId: 't1' },
-  { chapterId: 't1-variance', levelId: 't1' },
-  { chapterId: 't3-extra', levelId: 't3' },
+  { chapterId: 't1-combinatorics', levelId: 't1', tier: 'basic' as const },
+  { chapterId: 't1-variance', levelId: 't1', tier: 'basic' as const },
+  { chapterId: 't3-extra', levelId: 't3', tier: 'basic' as const },
 ];
 
 function registerSources(): void {

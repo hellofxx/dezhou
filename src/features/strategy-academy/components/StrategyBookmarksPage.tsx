@@ -25,7 +25,7 @@ export default function StrategyBookmarksPage() {
         <section className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-5 md:p-6">
           <BackLink
             onClick={() => navigate('/academy')}
-            label={t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+            label={t('academy.courseView.backToAcademy', { defaultValue: '返回课程' })}
             className="mb-4"
           />
           <h2 className="font-display text-2xl text-[var(--ivory)]">

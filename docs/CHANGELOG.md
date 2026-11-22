@@ -10,6 +10,15 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-22 课程语义收敛 · 基础必读与短牌锚点（v1.13.1）
+
+- **命名**：学习者可见文案统一为「课程 / 概念 / 实战 / 补充阅读 / 概念手册」；移除「策略学院 / 理论学院」在导航、返回、帮助、成就、设置与课程正文中的残留（`nav.academy` / `nav.theory` 文案更新，键名不变）。
+- **基础必读**：`TheoryChapterIndexEntry` 增加 `tier`；未锚定的 basic 层章节进入阶段卡常驻「基础必读」，不再折叠进「补充阅读」，其余未入边章仍折叠。标准变体 Sklansky 基本定理、单挑 T1/T2 基础章由此前置可见。
+- **短牌锚点**：新增 `lessonMeta/shortDeck.ts`（17 课），由理论侧 `short-deck/chapterPracticeMap` 反演；短牌课程枢纽从「概念关联待补充」恢复为双泳道，27 章中 26 章有课时锚点，T1 Outs 进入基础必读。
+- **守卫**：`lessonMeta.integrity.test.ts` 扩为三变体（覆盖 / 锚点存在性 / 去重 / 变体隔离 / ELO 维度）；章节实践推荐补 `l3sd-donk`。
+- **入口**：仪表盘「课程」模块卡改指 `/lesson` 课程枢纽（不再回旧 `/academy` 首页）；AI_GUIDE 增补「界面命名 ↔ 代码入口」对照表，明确目录 / 路由 / persist / 事件 id 不随文案改名。
+- **持久化**：不新增 store、不改 persist schema/version/migrate；两院 store 仍独立。
+
 ### 2026-11-21 课程枢纽 · 双泳道阶段路径（v1.13.0）
 
 - **课程入口**：`/lesson` 由「自动跳下一节策略课」改为课程枢纽 CourseHub；`/lesson/:id`、`theory:` 前缀与 `/academy/lesson/:id` 旧深链保持兼容。

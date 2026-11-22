@@ -100,7 +100,7 @@ src/
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |
 | progress 公共入口 | `features/progress/index.ts` + `api.ts` / `api.types.ts` / `ui.ts` | 跨模块只经公共入口：业务读写走 `api`（`useProgressState` / `progressCommands`）、展示走 `ui`、学院只读快照走 `useAcademyLearningStages` / `useAcademyProgressSnapshot`；禁止深引 `store` / `components/*` / `utils/*` / `types` / `data/*`（守卫 `src/guards/progressPublicApi.guard.test.ts`）。装配例外仅 `src/main.tsx` 的 `store.bootstrap` 与 `src/app/routes.tsx` 的页面 lazy import |
-| 课程阶段/双泳道 | `shared/types/academyDataSource.ts` + `shared/types/theoryDataSource.ts` + `shared/utils/academyJourneyGroups.ts` | `AcademyLearningStage.theoryChapterIds` 由 strategy 生成；理论只读 `getLearningSnapshot` / `getChapterCatalog` 经现有 registry；`/lesson` 课程枢纽只做投影，不新增 store/registry、不改 persist |
+| 课程阶段/双泳道 | `shared/types/academyDataSource.ts` + `shared/types/theoryDataSource.ts` + `shared/utils/academyJourneyGroups.ts` | `AcademyLearningStage.theoryChapterIds` 由 strategy 生成（标准 / 单挑 / 短牌三变体均登记课时锚点）；理论只读 `getLearningSnapshot` / `getChapterCatalog` 经现有 registry，目录条目带 `tier`：未锚定 basic 章进「基础必读」常驻、其余进折叠「补充阅读」；`/lesson` 课程枢纽只做投影，不新增 store/registry、不改 persist |
 | 掌握度/SRS 派生 | `shared/utils/academyMastery.ts` / `academySrs.ts` | 首次成绩 `resolveFirstScore` 与理论复习判定 `isTheoryReviewItem` 两院共用；禁止模块内另写第二套阈值/判定 |
 | 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory |
 | 学习段快照 | `shared/types/academyDataSource.ts` + strategy-academy `store.bootstrap.ts` | `getLearningStagesSnapshot()` 按 `activeVariant` 缓存稳定引用（Level 序列 / 先修 / lessonIds）；progress 只经 `useAcademyLearningStages` 消费，禁止 import 学院 |

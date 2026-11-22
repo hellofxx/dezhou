@@ -1,7 +1,7 @@
 import type { TheoryBibliographyEntry } from '../types';
 
 /**
- * 理论学院参考书目（唯一事实源）。
+ * 概念手册参考书目（唯一事实源）。
  *
  * 只登记正文实际引用过或直接支撑章节结论的著作；titleKey / authorKey / noteKey 经
  * `theory.bibliography.<id>.*` 解析（见 locales/<lng>/theory-content/glossary.json），

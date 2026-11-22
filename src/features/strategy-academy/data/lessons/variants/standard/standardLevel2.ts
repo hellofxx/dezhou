@@ -34,7 +34,7 @@ const L2_3BET_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'theory-reference',
-    content: '理论支撑：3-bet 的范围构建与组合计数详见理论学院 T4 第 2 章"组合数学与 Blockers"。Blocker 在翻前 3-bet/4Bet 场景中的定量应用有详细推导。',
+    content: '理论支撑：3-bet 的范围构建与组合计数详见概念手册 T4 第 2 章"组合数学与 Blockers"。Blocker 在翻前 3-bet/4Bet 场景中的定量应用有详细推导。',
     data: { theoryLevelId: 't4', theoryChapterId: 't4-combinatorics' },
   },
   {
@@ -85,7 +85,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：底池赔率的完整定义与推导见理论学院 T2 第 2 章"底池赔率：跟注的价格标签"。包括所需胜率公式的推导过程（从 EV=0 的盈亏平衡点展开）。',
+            content: '理论支撑：底池赔率的完整定义与推导见概念手册 T2 第 2 章"底池赔率：跟注的价格标签"。包括所需胜率公式的推导过程（从 EV=0 的盈亏平衡点展开）。',
             data: { theoryLevelId: 't2', theoryChapterId: 't2-pot-odds' },
           },
           {
@@ -475,7 +475,7 @@ export const STANDARD_LEVEL_2_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：4Bet 场景下的范围构建与博弈论原理详见理论学院 T4 第 1 章"范围思维：从单手牌到概率分布"。翻前范围的逐街过滤与面对 4Bet 的应对策略密切相关。',
+            content: '理论支撑：4Bet 场景下的范围构建与博弈论原理详见概念手册 T4 第 1 章"范围思维：从单手牌到概率分布"。翻前范围的逐街过滤与面对 4Bet 的应对策略密切相关。',
             data: { theoryLevelId: 't4', theoryChapterId: 't4-range-thinking' },
           },
           {

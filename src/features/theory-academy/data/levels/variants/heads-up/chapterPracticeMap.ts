@@ -5,8 +5,8 @@ import type { PracticeRecommendation } from '../../../../types';
  *
  * 与标准变体的两条差异：
  * 1. 目标课时以单挑专属课（`l<n>hu-*`）为主，入门章节复用变体无关的共享地基课
- *    （策略学院的 L1/L2 是三变体共用的通用地基，经 getLessonsByVariantAndLevel 自动回退）；
- * 2. **没有机器白名单可复用**——变体课时不在策略学院 `LEVELS` 内，
+ *    （课程的 L1/L2 是三变体共用的通用地基，经 getLessonsByVariantAndLevel 自动回退）；
+ * 2. **没有机器白名单可复用**——变体课时不在课程 `LEVELS` 内，
  *    既不能进 `CROSS_MODULE_LESSON_IDS` 也不能进 `EXPECTED_PRACTICE_LESSON_IDS`。
  *    引用完整性由 `strategy-academy/data/theoryVariantBridgeIntegrity.test.ts` 保证
  *    （反向扫描本表引用的 id，对 `ALL_VARIANT_LESSONS` 断言存在，并核对回退标题）。

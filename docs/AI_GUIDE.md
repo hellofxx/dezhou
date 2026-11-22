@@ -181,10 +181,21 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 ### 课程枢纽与双泳道
 
 - `/lesson` 是课程枢纽（CourseHub），`/lesson/:id` 仍是课时深链；`theory:` 前缀与 `/academy/lesson/:id` 旧链保持兼容。
-- 阶段契约：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成（去重保序，短牌为 `[]`）；四段归并与阶段状态在 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`。
-- 理论只读契约：`TheoryDataSource.getLearningSnapshot()`（completedChapters / chapterAttempts / quizScores）与 `getChapterCatalog(variant)`（chapterId / levelId / practiceLessonIds），仍由 theory bootstrap 注册，经 shared registry 消费。
-- nextAction 顺序：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → 全部完成；阈值复用 `ACADEMY_MASTERY_THRESHOLDS`。
-- 不新增 store / registry、不改 persist；短牌无锚点时概念泳道显示「概念关联待补充」，实战泳道与下一步照常。
+- 阶段契约：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成（去重保序；标准 / 单挑 / 短牌三变体均已登记锚点）；四段归并与阶段状态在 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`。
+- 理论只读契约：`TheoryDataSource.getLearningSnapshot()`（completedChapters / chapterAttempts / quizScores）与 `getChapterCatalog(variant)`（chapterId / levelId / tier / practiceLessonIds），仍由 theory bootstrap 注册，经 shared registry 消费。
+- 未锚定章分流：`getChapterCatalog` 的 `tier === 'basic'` 章节进入「基础必读」常驻展示（不可折叠），其余进入折叠「补充阅读」；两者均不计入顶部进度。变体课程从 L3 起时四段缺少第 1 段，首个学习段会承接更早理论段的基础章，避免 T1 基础章丢失。nextAction 顺序：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → 全部完成；阈值复用 `ACADEMY_MASTERY_THRESHOLDS`。
+- 不新增 store / registry、不改 persist；概念泳道无任何锚点时显示「概念关联待补充」，实战泳道与下一步照常（短牌已由 `chapterPracticeMap` 反演补齐锚点，仅作降级兜底）。
+
+**命名对照（学习者界面 ↔ 代码入口）**
+
+| 学习者界面 | 代码入口 | 稳定标识（不随界面文案改） |
+|---|---|---|
+| 课程（课程枢纽） | `features/strategy-academy` 的 `CourseHub`（`/lesson`） | 模块 id `strategy-academy`；persist `strategy-academy-progress` |
+| 实战 | strategy 课时（`/lesson/:id`） | lesson id；SRS 裸 lessonId 命名空间 |
+| 概念 / 概念手册 | `features/theory-academy`（`/theory/*`） | 模块 id `theory-academy`；persist `theory-academy-progress`；SRS `theory:` 前缀 |
+| 基础必读 / 补充阅读 | theory 目录经 `getChapterCatalog` 投影到阶段卡 | chapter id；catalog `tier` |
+
+> 目录名、路由、persist key、事件/统计 module id、i18n 命名空间是兼容契约：界面改名只动 locale 文案，不得连带改这些标识；确需重命名时按路由 redirect + persist 旧 key 水合 + id 别名一次性迁移。
 
 ### 返回入口
 

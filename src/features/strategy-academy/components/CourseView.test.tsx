@@ -67,7 +67,7 @@ describe('CourseView：未知课程与门禁', () => {
 
     renderAt('l2-raise-sizing');
     await waitFor(() => expect(screen.getByText('该课程尚未解锁')).toBeTruthy());
-    expect(screen.getByText('返回学院')).toBeTruthy();
+    expect(screen.getByText('返回课程')).toBeTruthy();
   });
 
   it('调试解锁激活时 Level 门禁放行', async () => {
@@ -89,7 +89,7 @@ describe('CourseView：已解锁课程渲染', () => {
     await waitFor(() =>
       expect(screen.getAllByText('德州扑克规则与牌型').length).toBeGreaterThan(0),
     );
-    expect(screen.getByText('返回学院')).toBeTruthy();
+    expect(screen.getByText('返回课程')).toBeTruthy();
     expect(screen.getByText('课程路线图')).toBeTruthy();
     // 进入课程时 startLesson 记录当前课程
     expect(useAcademyStore.getState().progress.currentLesson).toBe('l1-basics');

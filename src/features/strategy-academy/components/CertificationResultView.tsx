@@ -99,7 +99,7 @@ export function CertificationResultView({
           <div className="mx-auto mb-6 max-w-md text-left">
             <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--brass-text)] mb-2">
               {t('academy.levelCertification.theoryAnchors', {
-                defaultValue: '回到理论学院补强推导',
+                defaultValue: '回到概念手册补强推导',
               })}
             </p>
             <ul className="space-y-1.5">

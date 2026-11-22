@@ -1,5 +1,5 @@
 {
-  "title": "策略学院",
+  "title": "课程",
   "subtitle": "从零基础到职业思维，系统化学习德州扑克策略",
   "basics": "德扑基础入门",
   "basicsDesc": "游戏规则、牌型、位置、术语快速入门",
@@ -8,7 +8,7 @@
   "completed": "已完成",
   "clickToReview": "点击重新查看",
   "conceptGraph": {
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回课程",
     "title": "知识图谱",
     "subtitle": "可视化课程知识依赖关系，点击节点跳转到对应课程",
     "learned": "已学习",
@@ -75,7 +75,7 @@
   },
   "courseView": {
     "notFound": "课程未找到",
-    "backToAcademy": "返回学院",
+    "backToAcademy": "返回课程",
     "lessonOf": "第 {{current}}/{{total}} 课",
     "localLessonBadge": "本土课 · L7 扩展",
     "lessonOrder": "第 {{order}} 课",
@@ -125,6 +125,10 @@
       "collapse": "收起"
     },
     "theoryUnavailable": "概念关联待补充 · 可先走实战线",
+    "basics": {
+      "title": "基础必读",
+      "hint": "前置基础章节，常驻显示；建议在进入本段实战前先读"
+    },
     "supplemental": {
       "title": "补充阅读"
     },
@@ -152,7 +156,7 @@
     "catalog": {
       "title": "课程目录",
       "allCourses": "全部策略课程",
-      "theory": "理论学院",
+      "theory": "概念手册",
       "tracks": "学习轨道"
     },
     "reason": {
@@ -168,7 +172,7 @@
   },
   "theoryBridge": {
     "title": "查看理论推导",
-    "subtitle": "本课的推导过程见理论学院对应章节"
+    "subtitle": "本课的推导过程见概念手册对应章节"
   },
   "lessonUnit": {
     "introTitle": "课程路线图",
@@ -408,7 +412,7 @@
     "track-tournament": "掌握 MTT/SNG 的核心策略，学习 ICM、Push/Fold 和泡沫期打法",
     "track-gto": "深入理解博弈论最优策略，学习频率控制、节点锁定和范围构建",
     "track-leak-fix": "基于你的能力评估，针对性训练最薄弱的环节。完成评估后将动态推荐课程",
-    "track-theory-bridge": "完成理论学院对应 Level 后，按理论支柱顺序将知识转化为实战决策能力",
+    "track-theory-bridge": "完成概念手册对应 Level 后，按理论支柱顺序将知识转化为实战决策能力",
     "track-local-cn": "针对国内常见Limp局/Straddle/深筹/跟注站的实战策略"
   },
   "trackAudience": {
@@ -417,7 +421,7 @@
     "track-tournament": "想参加线上/线下锦标赛的玩家",
     "track-gto": "有基础但想提升理论深度的进阶玩家",
     "track-leak-fix": "有经验但遇到瓶颈的玩家",
-    "track-theory-bridge": "在理论学院完成了系统学习、需要落地实践的玩家",
+    "track-theory-bridge": "在概念手册完成了系统学习、需要落地实践的玩家",
     "track-local-cn": "活跃在国内低级别局的玩家"
   },
   "trackDuration": {
@@ -473,7 +477,7 @@
   },
   "tracks": {
     "prereqHint": "建议先完成 {{levels}} 的课程",
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回课程",
     "title": "学习轨道",
     "subtitle": "根据你的目标选择合适的学习路径，系统化提升特定方向的技能",
     "mergedIntoLevel7": "已并入 Level 7 · 本土课",
@@ -500,7 +504,7 @@
   },
   "levelCertification": {
     "levelNotFound": "级别未找到",
-    "backToAcademy": "返回学院",
+    "backToAcademy": "返回课程",
     "title": "Level {{level}} 认证测验",
     "questionCount": "题目数量：{{count}} 题（从本级别所有课程测验中抽取）",
     "passStandard": "通过标准：正确率 ≥ {{required}}%",
@@ -523,7 +527,7 @@
     "rejectNotCompleted": "本次成绩未记录：本级别课程尚未全部完成",
     "rejectWrongVariant": "本次成绩未记录：认证仅在标准变体提供",
     "rejectInvalid": "本次成绩未记录：提交数据无效",
-    "theoryAnchors": "回到理论学院补强推导",
+    "theoryAnchors": "回到概念手册补强推导",
     "theoryAnchorLink": "理论章节 {{id}}",
     "variantLocked": "认证测验仅在标准变体提供（当前变体：{{variant}}）",
     "notCompletedLocked": "需完成本级别全部课程才能参加认证（当前进度：{{completed}}/{{total}}）"
@@ -753,7 +757,7 @@
     "search": "搜索课程",
     "searchDesc": "按标题或副标题查找",
     "glossary": "术语表",
-    "glossaryDesc": "由理论学院维护",
+    "glossaryDesc": "与概念手册同源",
     "placement": "定位测评",
     "placementDesc": "16 道题找到合适起点",
     "bookmarks": "我的收藏",
@@ -777,8 +781,8 @@
     "placeholder": "搜索课程…",
     "lessons": "课时",
     "emptyTitle": "没有匹配结果",
-    "emptyHint": "换个关键词，或返回学院继续浏览",
-    "backToAcademy": "返回策略学院",
+    "emptyHint": "换个关键词，或返回课程继续浏览",
+    "backToAcademy": "返回课程",
     "contentHits": "正文命中",
     "loadingFullText": "正在加载全文索引…",
     "loadFailed": "全文加载失败，先看标题结果",
@@ -866,7 +870,7 @@
   },
   "levelCheckpoint": {
     "levelNotFound": "级别未找到",
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回课程",
     "title": "Level {{level}} 检查点",
     "subtitle": "12 题混合测评，覆盖本级别各核心课时；结果按来源课时给出各维度表现。",
     "lockedHint": "需完成本级别全部课程才能开始检查点（当前进度：{{completed}}/{{total}}）",
@@ -891,11 +895,11 @@
     "retry": "再检查一次"
   },
   "bibliography": {
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回课程",
     "title": "参考书目",
     "subtitle": "策略课时结论的权威出处，按 Level 聚合；站内不复制原文",
     "count": "{{count}} 本",
-    "theoryLink": "查看理论学院书目",
+    "theoryLink": "查看概念手册书目",
     "empty": "暂无书目条目",
     "theory-of-poker": {
       "note": "扑克理论的奠基之作：底池赔率、隐含赔率与诈唬的基本框架。"

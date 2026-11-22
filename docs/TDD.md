@@ -1377,9 +1377,9 @@ interface DailyRecommendation {
 
 - `/lesson` 由 `CourseHub` 渲染：定位条 + 下一步卡 + 四段双泳道 + 目录入口；`/lesson/:id`、`theory:` 前缀和 `/academy/lesson/:id` 旧深链保持兼容。
 - 阶段投影：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成；四段归并/状态/下一课纯函数位于 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`，由 progress 与 strategy 两个消费者复用。
-- 理论只读：`TheoryDataSource.getLearningSnapshot()` 与 `getChapterCatalog(variant)` 由 theory bootstrap 注册；未注册时消费方降级为未知，不阻塞实战/下一步。
+- 理论只读：`TheoryDataSource.getLearningSnapshot()` 与 `getChapterCatalog(variant)` 由 theory bootstrap 注册；目录条目带 `tier`，未锚定的 `basic` 章进入「基础必读」常驻区，其余进折叠「补充阅读」；变体从 L3 起时首个学习段承接更早理论段的基础章；未注册时消费方降级为未知，不阻塞实战/下一步。
 - nextAction：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → done；跳过推荐仅会话内轮换，不新增持久字段。
-- 不改两院 store/persist schema；短牌无 `theoryChapterIds` 时显示「概念关联待补充」。
+- 不改两院 store/persist schema；三变体课时锚点均登记（短牌 17 课由 `short-deck/chapterPracticeMap` 反演），无锚点仅作「概念关联待补充」降级兜底。
 
 ### 5.9 跨模块系统设计
 

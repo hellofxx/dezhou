@@ -21,6 +21,8 @@ export interface HubStage {
   subtitleKey: string;
   lessonIds: readonly string[];
   theoryChapterIds: readonly string[];
+  /** 未锚定的基础层章节：常驻展示，不进折叠的补充阅读 */
+  basicsChapterIds: readonly string[];
   supplementalChapterIds: readonly string[];
   doneLessons: number;
   totalLessons: number;
@@ -79,15 +81,22 @@ export function buildHubStages({
     const doneLessons = stage.lessonIds.filter((id) => completedLessonSet.has(id)).length;
     const totalChapters = stage.theoryChapterIds.length;
     const doneChapters = stage.theoryChapterIds.filter((id) => completedChapterSet.has(id)).length;
-    const supplementalChapterIds = theoryUnavailable
+    const stageIdx = index - 1;
+    // 变体课程从 L3 起时四段中没有第 1 段：首个学习段承接更早理论段的基础章，避免 T1 基础章丢失。
+    const extras = theoryUnavailable
       ? []
-      : catalog
-          .filter(
-            (entry) =>
-              !anchoredChapterIds.has(entry.chapterId) &&
-              theoryLevelIndex(entry.levelId) === index - 1,
-          )
-          .map((entry) => entry.chapterId);
+      : catalog.filter((entry) => {
+          if (anchoredChapterIds.has(entry.chapterId)) return false;
+          const chapterStage = theoryLevelIndex(entry.levelId);
+          if (chapterStage === stageIdx) return true;
+          return order === 0 && entry.tier === 'basic' && chapterStage !== null && chapterStage < stageIdx;
+        });
+    const basicsChapterIds = extras
+      .filter((entry) => entry.tier === 'basic')
+      .map((entry) => entry.chapterId);
+    const supplementalChapterIds = extras
+      .filter((entry) => entry.tier !== 'basic')
+      .map((entry) => entry.chapterId);
 
     return {
       id: stage.id,
@@ -97,6 +106,7 @@ export function buildHubStages({
       subtitleKey: STAGE_META[index - 1]?.subtitleKey ?? STAGE_META[0].subtitleKey,
       lessonIds: stage.lessonIds,
       theoryChapterIds: stage.theoryChapterIds,
+      basicsChapterIds,
       supplementalChapterIds,
       doneLessons,
       totalLessons,

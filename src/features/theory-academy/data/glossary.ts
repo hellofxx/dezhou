@@ -1,7 +1,7 @@
 import type { TheoryGlossaryTerm } from '../types';
 
 /**
- * 理论学院术语表（唯一事实源）。
+ * 概念手册术语表（唯一事实源）。
  *
  * 发现层（术语检索 / 相关章节跳转）只读本文件；文案经 i18n key 解析
  * （`theory.glossary.<id>.term` / `.definition` / `.alias<n>`，见 locales/<lng>/theory-content/glossary.json），

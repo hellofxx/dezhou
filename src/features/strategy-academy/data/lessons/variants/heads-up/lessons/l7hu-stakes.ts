@@ -29,7 +29,7 @@ const L7HU_STAKES_U2_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：把位置、范围与频率读成一张整体地图而不是四条孤立规则，见理论学院 T9『全面整合』——那一章把单挑的开池宽度、翻后频率与尺度归到同一套决策树，本课的四条 HU 差异正是它的入门层。',
+      '理论支撑：把位置、范围与频率读成一张整体地图而不是四条孤立规则，见概念手册 T9『全面整合』——那一章把单挑的开池宽度、翻后频率与尺度归到同一套决策树，本课的四条 HU 差异正是它的入门层。',
     data: { theoryLevelId: 't9hu', theoryChapterId: 't9hu-mastery' },
   },
 ];
@@ -52,7 +52,7 @@ const L7HU_STAKES_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：为什么既要守住基线、又要按对手类型偏离，见理论学院 T9『GTO-剥削统一框架』——基线负责信息不足时不被剥削，偏离负责信息充分时多拿期望，本课的四类对手画像就是它的执行入口。',
+      '理论支撑：为什么既要守住基线、又要按对手类型偏离，见概念手册 T9『GTO-剥削统一框架』——基线负责信息不足时不被剥削，偏离负责信息充分时多拿期望，本课的四类对手画像就是它的执行入口。',
     data: { theoryLevelId: 't9hu', theoryChapterId: 't9hu-unified' },
   },
   {

@@ -33,7 +33,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         },
         {
           type: 'theory-reference',
-          content: '理论支撑：纳什均衡的定义与极小极大定理的详细推导见理论学院 T5 第 1 章"零和博弈与纳什均衡"。GTO 结构的完整分析与价值:诈唬比推导见 T5 第 2 章。',
+          content: '理论支撑：纳什均衡的定义与极小极大定理的详细推导见概念手册 T5 第 1 章"零和博弈与纳什均衡"。GTO 结构的完整分析与价值:诈唬比推导见 T5 第 2 章。',
           data: { theoryLevelId: 't5', theoryChapterId: 't5-game-theory' },
         },
         {
@@ -226,7 +226,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         },
         {
           type: 'theory-reference',
-          content: '理论支撑：博弈树的概念与节点锁定实操详见理论学院 T5 第 4 章"混合策略与节点锁定"。混合策略的数学原理是让对手所有回应无差别。',
+          content: '理论支撑：博弈树的概念与节点锁定实操详见概念手册 T5 第 4 章"混合策略与节点锁定"。混合策略的数学原理是让对手所有回应无差别。',
           data: { theoryLevelId: 't5', theoryChapterId: 't5-mixed-strategy' },
         },
         {
@@ -274,7 +274,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         },
         {
           type: 'theory-reference',
-          content: '理论支撑：频率平衡的数学原理与价值:诈唬比的推导过程详见理论学院 T5 第 2 章"GTO 与剥削：两种最优"。大尺度=极化的数学根源见 T6 第 1 章。',
+          content: '理论支撑：频率平衡的数学原理与价值:诈唬比的推导过程详见概念手册 T5 第 2 章"GTO 与剥削：两种最优"。大尺度=极化的数学根源见 T6 第 1 章。',
           data: { theoryLevelId: 't5', theoryChapterId: 't5-gto-concept' },
         },
         {
@@ -325,7 +325,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
         },
         {
           type: 'theory-reference',
-          content: '理论支撑：MDF 与 Alpha 的代数推导、无差别原则的证明详见理论学院 T5 第 3 章"最小防御频率（MDF）与 Alpha"。MDF 与底池赔率的关系辨析见 T2 第 2 章。',
+          content: '理论支撑：MDF 与 Alpha 的代数推导、无差别原则的证明详见概念手册 T5 第 3 章"最小防御频率（MDF）与 Alpha"。MDF 与底池赔率的关系辨析见 T2 第 2 章。',
           data: { theoryLevelId: 't5', theoryChapterId: 't5-mdf-alpha' },
         },
         {
@@ -718,7 +718,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：范围构建方法论与极化/合并的数学依据见理论学院 T4 第 1 章"范围思维"和第 4 章"范围优势与坚果优势"。范围优势的判定框架与下注策略密切相关。',
+            content: '理论支撑：范围构建方法论与极化/合并的数学依据见概念手册 T4 第 1 章"范围思维"和第 4 章"范围优势与坚果优势"。范围优势的判定框架与下注策略密切相关。',
             data: { theoryLevelId: 't4', theoryChapterId: 't4-range-thinking' },
           },
           {
@@ -879,7 +879,7 @@ export const STANDARD_LEVEL_4B_LESSONS: Lesson[] = [
           { type: 'text', content: 'Bluff Catching 是指用仅能赢过对手 bluff 的牌来 Call。\n\n例：对手 River 全押，你有一对，判断他 bluff 足够多 → Call。\n\nBluff Catcher 的特征：\n- 赢不了对手的价值范围\n- 但能赢对手的 bluff 范围\n- 决策纯粹基于对手 bluff 频率 vs 你跟注所需的最低胜率' },
           { type: 'key-point', content: 'Bluff Catching 的核心逻辑：如果对手的 bluff 频率 > 你跟注所需的最低胜率（bet / (pot + 2×bet)，即跟注额 ÷ 跟注后的总底池），Call 就是+EV。' },
           { type: 'heading', content: 'Hero Call 决策框架' },
-          { type: 'text', content: '步骤 1：评估对手的 bluff 频率（基于形象/行动线）\n\n步骤 2：计算跟注所需的最低胜率 = 跟注额 ÷（底池 + 对手下注额 + 你自己的跟注额）= b / (pot + 2×bet)\n例：底池 1、对手下注 2/3 池 → 0.667 / (1 + 1.333) ≈ 28.6% 胜率\n\n别混用公式：b / (pot + bet) 算出来的是 Alpha——进攻方纯 bluff 的保本弃牌率（2/3 池尺度下 = 40%），它回答"我的 bluff 要对手弃牌多少才不亏"，不回答"我该不该跟注"。两者口径相反、分母不同，口径详见理论学院 T5 的 MDF 与 Alpha 章。\n\n步骤 3：比较对手 bluff 频率 vs 跟注所需的最低胜率\n如果对手 bluff 频率 50% > 需要的 28.6% → Call\n\n步骤 4：考虑 Blocker\n你是否阻断了对手的 value（含坚果）组合？→ 他的 value 部分变薄、bluff 占比升高 → 增加 Call 的理由\n你是否阻断了对手的 bluff 组合？→ 他的 bluff 部分变薄、value 占比升高 → 减少 Call 的理由' },
+          { type: 'text', content: '步骤 1：评估对手的 bluff 频率（基于形象/行动线）\n\n步骤 2：计算跟注所需的最低胜率 = 跟注额 ÷（底池 + 对手下注额 + 你自己的跟注额）= b / (pot + 2×bet)\n例：底池 1、对手下注 2/3 池 → 0.667 / (1 + 1.333) ≈ 28.6% 胜率\n\n别混用公式：b / (pot + bet) 算出来的是 Alpha——进攻方纯 bluff 的保本弃牌率（2/3 池尺度下 = 40%），它回答"我的 bluff 要对手弃牌多少才不亏"，不回答"我该不该跟注"。两者口径相反、分母不同，口径详见概念手册 T5 的 MDF 与 Alpha 章。\n\n步骤 3：比较对手 bluff 频率 vs 跟注所需的最低胜率\n如果对手 bluff 频率 50% > 需要的 28.6% → Call\n\n步骤 4：考虑 Blocker\n你是否阻断了对手的 value（含坚果）组合？→ 他的 value 部分变薄、bluff 占比升高 → 增加 Call 的理由\n你是否阻断了对手的 bluff 组合？→ 他的 bluff 部分变薄、value 占比升高 → 减少 Call 的理由' },
           { type: 'highlight', content: 'Hero Call 不是"猜"，而是数学计算。把对手的 bluff 频率和 pot odds 比较，超过阈值就 Call，不超过就 Fold。' },
           { type: 'heading', content: '对手形象对 Bluff Catching 的影响' },
           { type: 'text', content: '面对 Maniac/LAG：bluff catching 频率提高\n- 他们的 bluff 范围宽，你可以用更弱的牌 Call\n- 例：LAG River 下注 pot，你用顶对弱踢脚就可以 Call\n\n面对 Nit/TAG：bluff catching 频率降低\n- 他们的 bluff 频率低，需要更强的牌才能 Call\n- 例：Nit River 下注 pot，你需要两对+ 才能 Call\n\n面对 Unknown：使用 MDF（Minimum Defense Frequency）作为基准\n- MDF = 1 - bet/(pot+bet)\n- 例：对手下注 pot，MDF = 50%（你应该 Call 50% 的范围）' },

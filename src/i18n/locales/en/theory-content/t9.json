@@ -72,7 +72,7 @@
       "A Roadmap for Going Deeper",
       "Suggested reading order: The Theory of Poker (Sklansky, intellectual awakening) → The Mental Game of Poker (Tendler, psychological system) → Applications of No-Limit Hold'em (Janda, equilibrium application) → Modern Poker Theory (Acevedo, solver-era synthesis) → The Mathematics of Poker (Chen & Ankenman, mathematical foundation). Toolchain: solver + database + this platform's training modules — theory closes the loop into muscle memory here.",
       "The final warning is the same as the first principle: theory has value only when executed. Knowing MDF yet over-folding under pressure, understanding variance yet tilting after a Bad Beat — the gap between knowing and doing is the distance between you and your ceiling.",
-      "Graduation assignment: after finishing this level, go to the Strategy Academy and training modules to practice each theory at least once (range training → T3/T4, odds quizzes → T1/T2, GTO simulator → T5/T6). The Theory Academy gives you the map; the training ground lets you walk the path."
+      "Graduation assignment: after finishing this level, go to the course and training modules to practice each theory at least once (range training → T3/T4, odds quizzes → T1/T2, GTO simulator → T5/T6). The Concept Handbook gives you the map; the training ground lets you walk the path."
     ],
     "t9-cash-vs-mtt": [
       "Two Ledgers for the Same Hand",
@@ -347,7 +347,7 @@
         "How many books you've read",
         "Whether you win debates"
       ],
-      "explanation": "The knowing-doing gap is your skill ceiling. Theory must be converted through training into decision habits that survive pressure — exactly the closed loop between the Theory Academy and training modules."
+      "explanation": "The knowing-doing gap is your skill ceiling. Theory must be converted through training into decision habits that survive pressure — exactly the closed loop between the Concept Handbook and training modules."
     },
     "t9-unified-q5": {
       "question": "You collect 200 hands showing an opponent folds to C-Bets 65%, and start raising your bluff frequency against him. The basis of this deviation is:",

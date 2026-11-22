@@ -29,7 +29,7 @@ const BASE_INPUT = {
 describe('buildContentIssueReport', () => {
   it('带上下文：含版本 / 语言 / 章节 / 段落 / 题目 / ISO 时间戳 / 说明', () => {
     const report = buildContentIssueReport(BASE_INPUT);
-    expect(report).toContain('[Theory Academy content issue]');
+    expect(report).toContain('[Concept Handbook content issue]');
     expect(report).toContain(`App version: ${APP_VERSION}`);
     expect(report).toContain('Locale: zh');
     expect(report).toContain('Chapter: t1-combinatorics');
@@ -79,7 +79,7 @@ describe('buildContentIssueMailto', () => {
     const subject = decodeURIComponent(
       url.slice(url.indexOf('subject=') + 'subject='.length, url.indexOf('&body=')),
     );
-    expect(subject).toBe('[Theory Academy] content issue');
+    expect(subject).toBe('[Concept Handbook] content issue');
   });
 });
 

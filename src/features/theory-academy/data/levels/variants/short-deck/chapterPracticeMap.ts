@@ -47,7 +47,11 @@ export const CHAPTER_PRACTICE_RECOMMENDATIONS: Readonly<Record<string, PracticeR
   // T6 下注策略
   't6sd-sizing': { lessons: [lesson('l3sd-cbet', '短牌持续下注')] },
   't6sd-barrel': {
-    lessons: [lesson('l3sd-cbet', '短牌持续下注'), lesson('l3sd-check-raise', '短牌过牌加注')],
+    lessons: [
+      lesson('l3sd-cbet', '短牌持续下注'),
+      lesson('l3sd-donk', '短牌 Donk 下注'),
+      lesson('l3sd-check-raise', '短牌过牌加注'),
+    ],
   },
   't6sd-equity-realization': {
     lessons: [lesson('l4sd-nuts-equity', '坚果与权益计算'), lesson('l7sd-deep-stack', '短牌深筹码')],

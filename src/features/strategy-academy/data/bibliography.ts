@@ -1,11 +1,11 @@
 /**
- * 策略学院参考书目（唯一事实源）。
+ * 课程参考书目（唯一事实源）。
  *
  * 只登记直接支撑策略课时结论的公开教材：站内不复制原文，页面上只列出处与适用 Level，
  * 供读者自行延伸阅读。`title` / `author` 保留出版物原名（专有名词，不做逐语翻译）；
  * `noteKey` 经 `academy.bibliography.<id>.note` 解析（文案由 P8 汇总进 academy.json）。
  *
- * 与理论学院 `data/bibliography.ts` 相互独立：条目、注释文案都不共享、不复制。
+ * 与概念手册 `data/bibliography.ts` 相互独立：条目、注释文案都不共享、不复制。
  * `levels` 标注该著作主要对应的课程 Level（一本可跨多级），页面按 Level 聚合展示。
  */
 

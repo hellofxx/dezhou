@@ -92,7 +92,7 @@ export default function CourseDoneView({
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/80 transition-colors text-sm"
           >
             <Home className="w-4 h-4" />
-            {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+            {t('academy.courseView.backToAcademy', { defaultValue: '返回课程' })}
           </button>
           {hasPractice && (
             <button

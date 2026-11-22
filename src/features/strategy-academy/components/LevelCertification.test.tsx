@@ -219,7 +219,7 @@ describe('LevelCertification：实考与提交', () => {
     fireEvent.click(screen.getByText('开始认证'));
     answerAll(container);
 
-    expect(container.textContent).toContain('回到理论学院补强推导');
+    expect(container.textContent).toContain('回到概念手册补强推导');
     const anchors = screen.getAllByRole('button', { name: /理论章节/ });
     expect(anchors).toHaveLength(3);
     fireEvent.click(anchors[0]!);

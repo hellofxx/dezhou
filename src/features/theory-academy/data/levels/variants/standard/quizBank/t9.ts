@@ -262,7 +262,7 @@ export const QUIZ_BANK: Record<string, TheoryQuizQuestion[]> = {
       question: '理论学习的最终检验标准是：',
       options: ['能背出多少公式', '是否改变了实战中的决策并能稳定执行', '读过多少本书', '能否在讨论中获胜'],
       correctIndex: 1,
-      explanation: '知与行的裂缝就是水平的天花板。理论必须经由训练转化为压力下仍能执行的决策习惯——这正是理论学院与训练模块的闭环设计。',
+      explanation: '知与行的裂缝就是水平的天花板。理论必须经由训练转化为压力下仍能执行的决策习惯——这正是概念手册与训练模块的闭环设计。',
     },
     {
       id: 't9-unified-q5',

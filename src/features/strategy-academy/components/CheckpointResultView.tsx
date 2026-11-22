@@ -124,7 +124,7 @@ export function CheckpointResultView({
             onClick={onBack}
             className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
-            {checkpointText(t, 'backToAcademy', '返回策略学院')}
+            {checkpointText(t, 'backToAcademy', '返回课程')}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>

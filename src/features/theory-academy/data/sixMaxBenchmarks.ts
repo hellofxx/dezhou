@@ -5,7 +5,7 @@
  * （UTG 19 / HJ 22 / CO 32 / BTN 44 / SB 38），由 `src/guards/sixMaxBenchmarkGuard.test.ts`
  * 锁死；`beginner` 列是入门教学的简化值，只作教学起点，不替代标准列。
  *
- * 仅理论学院运行时消费（教材正文与增补章），未达 shared/ 的「≥2 模块使用」准入门槛。
+ * 仅概念手册运行时消费（教材正文与增补章），未达 shared/ 的「≥2 模块使用」准入门槛。
  */
 export const SIX_MAX_BENCHMARK_SCOPE = {
   seats: 6,

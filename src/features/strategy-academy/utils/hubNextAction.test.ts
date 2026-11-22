@@ -11,6 +11,7 @@ function stage(overrides: Partial<HubStage> = {}): HubStage {
     subtitleKey: 'dashboard.path.stage1Sub',
     lessonIds: ['l1-a'],
     theoryChapterIds: ['t1-a'],
+    basicsChapterIds: [],
     supplementalChapterIds: [],
     doneLessons: 0,
     totalLessons: 1,

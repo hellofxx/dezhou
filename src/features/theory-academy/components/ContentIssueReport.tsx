@@ -25,7 +25,7 @@ export interface ContentIssueReportInput {
  */
 export function buildContentIssueReport(input: ContentIssueReportInput): string {
   const lines = [
-    '[Theory Academy content issue]',
+    '[Concept Handbook content issue]',
     `App version: ${input.appVersion}`,
     `Locale: ${input.locale}`,
   ];
@@ -45,7 +45,7 @@ export function buildContentIssueMailto(
   report: string,
   subjectSuffix = '',
 ): string {
-  const subject = `[Theory Academy] content issue${subjectSuffix ? ` · ${subjectSuffix}` : ''}`;
+  const subject = `[Concept Handbook] content issue${subjectSuffix ? ` · ${subjectSuffix}` : ''}`;
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(report)}`;
 }
 

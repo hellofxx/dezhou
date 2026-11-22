@@ -52,13 +52,13 @@ const L4HU_CTR_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：把对手的偏离锁定为固定频率、再重解最优应对的方法，见理论学院 T5『节点锁定与最小偏离』——那一章还给了偏离幅度由正转负的判据，本课所有反制都以它为上限。',
+      '理论支撑：把对手的偏离锁定为固定频率、再重解最优应对的方法，见概念手册 T5『节点锁定与最小偏离』——那一章还给了偏离幅度由正转负的判据，本课所有反制都以它为上限。',
     data: { theoryLevelId: 't5hu', theoryChapterId: 't5hu-node-locking' },
   },
   {
     type: 'theory-reference',
     content:
-      '理论支撑：从 GTO 基线转向剥削的完整框架、以及"何时必须回基线"的边界，见理论学院 T7『针对性调整』——本课四类反制都只是那一章框架的具体化。',
+      '理论支撑：从 GTO 基线转向剥削的完整框架、以及"何时必须回基线"的边界，见概念手册 T7『针对性调整』——本课四类反制都只是那一章框架的具体化。',
     data: { theoryLevelId: 't7hu', theoryChapterId: 't7hu-exploit' },
   },
   {

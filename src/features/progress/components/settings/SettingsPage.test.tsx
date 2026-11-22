@@ -303,7 +303,7 @@ describe('SettingsPage 数据管理 · 清除训练记录', () => {
     expect(dialogText).toContain('ELO 段位');
     expect(dialogText).toContain('复习队列');
     expect(dialogText).toContain('个人设置');
-    expect(dialogText).toContain('学院进度');
+    expect(dialogText).toContain('课程进度');
     expect(dialogText).toContain('牌局复盘数据都会保留');
     expect(dialogText).toContain('不可撤销');
 

@@ -47,7 +47,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：范围思维的完整理论与"动作是过滤器"方法论见理论学院 T4 第 1 章"范围思维：从单手牌到概率分布"。范围 vs 范围的定量工具详见该章公式部分。',
+            content: '理论支撑：范围思维的完整理论与"动作是过滤器"方法论见概念手册 T4 第 1 章"范围思维：从单手牌到概率分布"。范围 vs 范围的定量工具详见该章公式部分。',
             data: { theoryLevelId: 't4', theoryChapterId: 't4-range-thinking' },
           },
           {
@@ -252,7 +252,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：EV 的完整定义、推导链与沉没成本陷阱详见理论学院 T2 第 1 章"期望值（EV）：所有决策的统一度量"。底池赔率与 EV 的关系详见 T2 第 2 章。',
+            content: '理论支撑：EV 的完整定义、推导链与沉没成本陷阱详见概念手册 T2 第 1 章"期望值（EV）：所有决策的统一度量"。底池赔率与 EV 的关系详见 T2 第 2 章。',
             data: { theoryLevelId: 't2', theoryChapterId: 't2-ev' },
           },
           {
@@ -386,7 +386,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
                 effectiveStack: 89.5,
               },
               options: [
-                { action: 'Fold', isCorrect: true, explanation: '弃牌。复算：题面底池 105（CO 全下 97 + 你已投入的 7.5 + 盲注，按题面取 105），你还需跟 89.5（= 97 - 7.5），故跟注保本所需胜率 = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0%（本仓口径：calculatePotOdds 的 potSize 须已含对手本次下注，见 pot-odds/utils/pokerMath）。你的 A♣K♣ 对 CO 的 4-Bet 全下范围 QQ+/AK，含阻断后共 21 组合（QQ 6 + KK 3 + AA 3 + AK 9，组合数推导见理论学院 T4），加权胜率 ≈ (6×46.3% + 3×34.5% + 3×12.1% + 9×52%) ÷ 21 ≈ 42%。42% < 46.0% ⇒ 跟注 -EV，正解是弃牌。另注意别把 Alpha（b ÷ (pot + bet)，进攻方纯诈唬的保本弃牌率）当成跟注线，两者口径相反（见 L4B 与 T5 的 MDF/Alpha 章）。', evImpact: '0 BB（不再投入；避开约 -7.8BB 的跟注负 EV）' },
+                { action: 'Fold', isCorrect: true, explanation: '弃牌。复算：题面底池 105（CO 全下 97 + 你已投入的 7.5 + 盲注，按题面取 105），你还需跟 89.5（= 97 - 7.5），故跟注保本所需胜率 = 89.5 ÷ (105 + 89.5) = 89.5 ÷ 194.5 ≈ 46.0%（本仓口径：calculatePotOdds 的 potSize 须已含对手本次下注，见 pot-odds/utils/pokerMath）。你的 A♣K♣ 对 CO 的 4-Bet 全下范围 QQ+/AK，含阻断后共 21 组合（QQ 6 + KK 3 + AA 3 + AK 9，组合数推导见概念手册 T4），加权胜率 ≈ (6×46.3% + 3×34.5% + 3×12.1% + 9×52%) ÷ 21 ≈ 42%。42% < 46.0% ⇒ 跟注 -EV，正解是弃牌。另注意别把 Alpha（b ÷ (pot + bet)，进攻方纯诈唬的保本弃牌率）当成跟注线，两者口径相反（见 L4B 与 T5 的 MDF/Alpha 章）。', evImpact: '0 BB（不再投入；避开约 -7.8BB 的跟注负 EV）' },
                 { action: 'Call', isCorrect: false, explanation: '跟注 -EV：约 42% 的实得胜率低于 46.0% 的保本线（89.5 ÷ 194.5）。典型错因是把「AKs 对 QQ 单口约 46.3%」当成对整个 4-Bet 全下范围的胜率——46.3% 只成立于 QQ 这一个分支，范围里还有 KK（约 34.5%）与 AA（约 12.1%）两个把平均值拉低的分支。46.3% 仅略高于 46.0% 的保本线，但范围加权后约 42%，整体仍是 -EV。按 42% 计：EV = 0.42 × 105 - 0.58 × 89.5 ≈ -7.8BB，远差于弃牌的 0。', evImpact: '-7.8BB（按 42% 胜率：0.42×105 - 0.58×89.5）' },
                 { action: 'Tank then Fold', isCorrect: false, explanation: '结论与 Fold 相同，但作为独立选项它是次选：矩阵上 EV 与直接弃牌一致（不再投入），额外付出的只是时序信息——长时间思考后再弃牌会泄露你手里有「差点就跟注」的强牌。它也不是本题的判定依据：对错只取决于 46.0% 保本线与约 42% 实得的比较，与思考时长无关。反直觉点在于：多数人凭「AKs 很强」直接下结论，而不是先算阈值再比大小——AKs 面对 QQ+/AK 本来就是落后的一方。', evImpact: '同弃牌 EV（额外代价是时序信息泄露）' },
               ],
@@ -472,7 +472,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：HUD 指标解读与玩家类型学的完整分析见理论学院 T7 第 1-2 章。读牌四步法见 T7 第 3 章"读牌流程"。剥削调整映射见 T7 第 4 章。',
+            content: '理论支撑：HUD 指标解读与玩家类型学的完整分析见概念手册 T7 第 1-2 章。读牌四步法见 T7 第 3 章"读牌流程"。剥削调整映射见 T7 第 4 章。',
             data: { theoryLevelId: 't7', theoryChapterId: 't7-hand-reading' },
           },
           {
@@ -676,7 +676,7 @@ export const STANDARD_LEVEL_4A_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：Blockers 的定量应用与组合数修正的完整推导见理论学院 T4 第 2 章"组合数学与 Blockers"。包括翻前 4Bet 场景和翻后河牌抓诈唬的具体算例。',
+            content: '理论支撑：Blockers 的定量应用与组合数修正的完整推导见概念手册 T4 第 2 章"组合数学与 Blockers"。包括翻前 4Bet 场景和翻后河牌抓诈唬的具体算例。',
             data: { theoryLevelId: 't4', theoryChapterId: 't4-combinatorics' },
           },
           {

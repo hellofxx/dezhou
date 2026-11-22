@@ -1,7 +1,7 @@
 /**
  * 各游戏变体的特有规则（单一事实源）。
  * standard / short-deck / heads-up 规则集中于此，供各 level 文件引用。
- * heads-up 规则已提升到 shared（策略学院规则卡共用），本文件保留重导出。
+ * heads-up 规则已提升到 shared（课程规则卡共用），本文件保留重导出。
  */
 import type { VariantRuleInfo } from '@/shared/types/variantRules';
 

@@ -100,7 +100,7 @@ describe('quantAudit L4HU：新增内容结构', () => {
       expect(refs.map((ref) => ref.data?.theoryChapterId)).toEqual(ANCHORS[lessonId]);
       for (const ref of refs) {
         expect(typeof ref.data?.theoryLevelId).toBe('string');
-        expect(ref.content).toContain('理论学院 T');
+        expect(ref.content).toContain('概念手册 T');
         expect(ref.content).not.toMatch(/t\dhu-/);
       }
       expect(lesson.content.filter((s) => s.type === 'takeaway').length, lessonId).toBe(1);

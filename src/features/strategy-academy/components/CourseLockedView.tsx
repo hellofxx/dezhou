@@ -183,7 +183,7 @@ export function CourseLockedView({
         className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity mt-2"
       >
         <Home className="w-4 h-4" />
-        {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+        {t('academy.courseView.backToAcademy', { defaultValue: '返回课程' })}
       </button>
     </div>
   );

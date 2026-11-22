@@ -30,8 +30,8 @@ import { HEADS_UP_LEVEL_8 } from './headsUpLevel8';
 import { HEADS_UP_LEVEL_9 } from './headsUpLevel9';
 
 /**
- * 章节级实践推荐引用的是策略学院变体课时 id 字符串，不产生模块 import；
- * 因变体课时不在策略学院 `LEVELS` 内、无法进任何白名单，存在性由
+ * 章节级实践推荐引用的是课程变体课时 id 字符串，不产生模块 import；
+ * 因变体课时不在课程 `LEVELS` 内、无法进任何白名单，存在性由
  * `strategy-academy/data/theoryVariantBridgeIntegrity.test.ts` 反向守卫。
  *
  * 目录为空（内容轨尚未落地）时三张表均为 `{}`，组合退化为「只给核心章附加实践推荐」，

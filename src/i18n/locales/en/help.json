@@ -30,7 +30,7 @@
     "subtitle": "Recommended onboarding sequence",
     "steps": {
       "0": "Placement Test",
-      "1": "Strategy Academy",
+      "1": "Courses",
       "2": "Quick Drill",
       "3": "Daily Challenge",
       "4": "Progress Data"
@@ -42,11 +42,11 @@
     "overview": {
       "title": "Platform Overview",
       "intro": "Understand the platform layout and learning path",
-      "s0": "This platform is a pure front-end poker training tool with 8 functional modules: Range Trainer, Pot Odds Calculator, GTO Simulator, Strategy Academy, Theory Academy, Puzzle Trainer, Hand History, and Progress Tracking. All data is stored locally in your browser — no registration required.",
+      "s0": "This platform is a pure front-end poker training tool with 8 functional modules: Range Trainer, Pot Odds Calculator, GTO Simulator, Courses, Concept Handbook, Puzzle Trainer, Hand History, and Progress Tracking. All data is stored locally in your browser — no registration required.",
       "s1": "Recommended learning path",
       "s1-steps": {
         "0": "Complete the placement test to get a personalized starting point",
-        "1": "Enter Strategy Academy and start with L1 basics",
+        "1": "Enter the course and start with L1 basics",
         "2": "Complete quick drills and daily puzzles every day to stay sharp",
         "3": "Check progress stats regularly to identify and work on weak areas"
       },
@@ -95,9 +95,9 @@
       "s3": "Start GTO training"
     },
     "academy": {
-      "title": "Strategy Academy",
+      "title": "Courses",
       "intro": "8-level structured courses with drill practice",
-      "s0": "Strategy Academy offers an 8-level curriculum from beginner to advanced. Each level includes video-style lessons, concept graphs, and drill exercises. Pass certification exams to unlock the next level.",
+      "s0": "The course offers an 8-level learning path from beginner to advanced. Each level includes lessons, a concept graph, and drill exercises; the course hub lays out each stage as concept and practice lanes. Pass certification exams to unlock the next level.",
       "s1": "How to use",
       "s1-steps": {
         "0": "Start from L1 and study each level's content in order",
@@ -106,20 +106,20 @@
         "3": "Use Quick Drill mode to randomly review previously learned material"
       },
       "s2": "Common mistake: Don't skip drills and go straight to exams. The instant feedback from drills helps you truly understand concepts rather than just memorize.",
-      "s3": "Enter Strategy Academy"
+      "s3": "Enter the course"
     },
     "theory": {
-      "title": "Theory Academy",
+      "title": "Concept Handbook",
       "intro": "9-level authoritative poker theory system",
-      "s0": "Theory Academy provides systematic poker theory learning, from probability basics to advanced game theory. Parallel to Strategy Academy, forming a 'theory → practice' loop.",
+      "s0": "The Concept Handbook provides systematic poker theory, from probability basics to advanced game theory. It is the full derivation source behind the course concept lane, forming a concept-to-practice loop.",
       "s1": "How to use",
       "s1-steps": {
         "0": "Start from T1 Probability and unlock 9 levels sequentially",
         "1": "Each chapter includes concept explanations + end-of-chapter quizzes with automatic progress tracking",
-        "2": "Follow 'Practice Bridge' cards to connect theory with Strategy Academy lessons"
+        "2": "Follow 'Practice Bridge' cards to connect theory with Courses lessons"
       },
       "s2": "Common mistake: Theory study can't replace practice. After completing each theory level, do exercises in the corresponding module (e.g., odds quizzes after learning odds theory).",
-      "s3": "Enter Theory Academy"
+      "s3": "Enter Concept Handbook"
     },
     "puzzle": {
       "title": "Poker Puzzles",

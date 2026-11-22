@@ -51,7 +51,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：Kelly 准则在扑克资金管理中的量化应用详见理论学院 T8《资金管理心理学》。T8 全面覆盖了扑克心理学中的资金管理方法论。',
+            content: '理论支撑：Kelly 准则在扑克资金管理中的量化应用详见概念手册 T8《资金管理心理学》。T8 全面覆盖了扑克心理学中的资金管理方法论。',
             data: { theoryLevelId: 't8', theoryChapterId: 't8-bankroll-psych' },
           },
           {
@@ -232,7 +232,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：Tendler 7 型 Tilt 档案的完整分析见理论学院 T8 第 1 章"Tilt 识别与分类"。包括各型 Tilt 的识别信号、触发场景与应对策略。',
+            content: '理论支撑：Tendler 7 型 Tilt 档案的完整分析见概念手册 T8 第 1 章"Tilt 识别与分类"。包括各型 Tilt 的识别信号、触发场景与应对策略。',
             data: { theoryLevelId: 't8', theoryChapterId: 't8-tilt' },
           },
           {
@@ -563,7 +563,7 @@ export const STANDARD_LEVEL_5_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：Session A/B/C 档管理方法详见理论学院 T8《Session 管理：把状态当作资源》。包括 Session 规划、止损纪律与长期盈利心态的量化框架。',
+            content: '理论支撑：Session A/B/C 档管理方法详见概念手册 T8《Session 管理：把状态当作资源》。包括 Session 规划、止损纪律与长期盈利心态的量化框架。',
             data: { theoryLevelId: 't8', theoryChapterId: 't8-session' },
           },
           {

@@ -24,7 +24,7 @@ describe('useModuleLabel', () => {
     const labelOf = result.current;
 
     expect(labelOf('range-trainer')).toBe('手牌范围训练');
-    expect(labelOf('strategy-academy')).toBe('策略学院');
+    expect(labelOf('strategy-academy')).toBe('课程');
     expect(labelOf('puzzle-trainer')).toBe('扑克谜题');
   });
 

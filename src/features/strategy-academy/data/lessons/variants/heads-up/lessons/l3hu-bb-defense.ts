@@ -46,13 +46,13 @@ const L3HU_BB_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：BB 的防守宽度与翻前价格线见理论学院 T3『BB 位置防守』——那一章把跟注、3-bet 价值、3-bet 诈唬拆成三层，并给每一层配上对应的赔率门槛。',
+      '理论支撑：BB 的防守宽度与翻前价格线见概念手册 T3『BB 位置防守』——那一章把跟注、3-bet 价值、3-bet 诈唬拆成三层，并给每一层配上对应的赔率门槛。',
     data: { theoryLevelId: 't3hu', theoryChapterId: 't3hu-bb-defense' },
   },
   {
     type: 'theory-reference',
     content:
-      '理论支撑：3-bet 与 4-bet 的尺度结构见理论学院 T4『翻前 3-bet 与 4-bet 结构』——把每个翻前节点算成一条价格线，BB 才能判断在哪一档收窄、在哪一档反打。',
+      '理论支撑：3-bet 与 4-bet 的尺度结构见概念手册 T4『翻前 3-bet 与 4-bet 结构』——把每个翻前节点算成一条价格线，BB 才能判断在哪一档收窄、在哪一档反打。',
     data: { theoryLevelId: 't4hu', theoryChapterId: 't4hu-preflop-structure' },
   },
   {

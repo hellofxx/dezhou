@@ -1,7 +1,7 @@
 import type { TheorySection } from '../../../../../types';
 
 // T4 范围理论：6-max 开池范围矩阵（与 range-trainer 预设同源，100% 频率示意）。
-// 未列出的手牌为弃牌；矩阵只表达范围形状，混合频率训练见策略学院/范围训练器。
+// 未列出的手牌为弃牌；矩阵只表达范围形状，混合频率训练见课程/范围训练器。
 export const CONTENT_BLOCKS: Record<string, TheorySection[]> = {
   't4-sixmax-ranges': [
   {

@@ -191,6 +191,25 @@ export default function CourseStageCard({
         />
       </div>
 
+      {stage.basicsChapterIds.length > 0 ? (
+        <div className="mt-3 border-t border-[var(--walnut-border)]/50 pt-2">
+          <h4 className="m-0 flex items-center gap-1 text-xs font-semibold text-[var(--ivory-muted)]">
+            {t('academy.courseHub.basics.title')}
+            <span className="font-numeric">({stage.basicsChapterIds.length})</span>
+          </h4>
+          <p className="mt-1 mb-0 text-[11px] leading-relaxed text-[var(--ivory-muted)]">
+            {t('academy.courseHub.basics.hint')}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {stage.basicsChapterIds.map((id) => (
+              <Link key={id} to={`/theory/chapter/${id}`} className={chipClass(false)}>
+                {chapterLabels[id] ?? id}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       {stage.supplementalChapterIds.length > 0 ? (
         <details className="mt-3 border-t border-[var(--walnut-border)]/50 pt-2">
           <summary className={cn('flex min-h-11 cursor-pointer items-center gap-1 text-xs text-[var(--ivory-muted)] hover:text-[var(--brass-bright)]', FOCUS_RING)}>

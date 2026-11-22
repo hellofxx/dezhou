@@ -103,7 +103,7 @@ describe('quantAudit L3HU：新增内容结构', () => {
       for (const ref of refs) {
         expect(typeof ref.data?.theoryChapterId).toBe('string');
         expect(typeof ref.data?.theoryLevelId).toBe('string');
-        expect(ref.content).toContain('理论学院 T');
+        expect(ref.content).toContain('概念手册 T');
         expect(ref.content).not.toMatch(/t\dhu-/);
       }
       expect(lesson.content.filter((s) => s.type === 'takeaway').length).toBe(1);

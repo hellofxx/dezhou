@@ -144,15 +144,15 @@
     },
     "theoryBasics": {
       "title": "数学地基",
-      "description": "完成理论学院基础段（T1-T3）全部章节"
+      "description": "完成概念手册基础段（T1-T3）全部章节"
     },
     "theoryIntermediate": {
       "title": "博弈思想家",
-      "description": "完成理论学院中级段（T4-T6）全部章节"
+      "description": "完成概念手册中级段（T4-T6）全部章节"
     },
     "theoryMaster": {
       "title": "理论宗师",
-      "description": "完成理论学院全部 9 个 Level"
+      "description": "完成概念手册全部 9 个 Level"
     }
   }
 }

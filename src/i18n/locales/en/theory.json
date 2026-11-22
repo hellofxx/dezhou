@@ -1,5 +1,5 @@
 {
-  "title": "Theory Academy",
+  "title": "Concept Handbook",
   "subtitle": "Study authoritative poker theory systematically and build a complete knowledge framework",
   "chapters": "chapters",
   "tierBasic": "Basic T1-T3",
@@ -22,7 +22,7 @@
     "freshHeadline": "Begin with probability fundamentals and build a complete framework",
     "freshSub": "Study poker theory systematically — every chapter ends with a quiz",
     "allDone": "Every theory chapter is complete",
-    "allDoneSub": "Head to the Strategy Academy and turn theory into table decisions",
+    "allDoneSub": "Head to the course and turn theory into table decisions",
     "chaptersDoneLabel": "Chapters read",
     "levelsDoneLabel": "Levels done",
     "avgScoreLabel": "Avg quiz score"
@@ -404,7 +404,7 @@
   "flagged": {
     "title": "Flagged Questions",
     "subtitle": "Every question you flagged during a chapter quiz lives here — go back to its chapter to reread the explanation.",
-    "backAria": "Back to Theory Academy",
+    "backAria": "Back to Concept Handbook",
     "listAria": "Flagged question list",
     "count": "{{count}} questions to review",
     "gotoChapter": "Go to chapter",
@@ -422,7 +422,7 @@
   },
   "basicsGuide": {
     "title": "Prerequisite: Absolute Basics",
-    "body": "Theory Academy opens with combinatorics. If you still want to confirm hand rankings, position names, betting actions and terminology, spend a few minutes on the Strategy Academy basics wizard first — it does not count toward theory progress, but it makes every chapter after T1 easier.",
+    "body": "Concept Handbook opens with combinatorics. If you still want to confirm hand rankings, position names, betting actions and terminology, spend a few minutes on the course basics wizard first — it does not count toward theory progress, but it makes every chapter after T1 easier.",
     "cta": "Do the basics wizard first"
   },
   "drill": {
@@ -477,7 +477,7 @@
     "title": "Theory → Practice",
     "subtitle": "Turn the theory you've read into decisions at the table",
     "chapterSubtitle": "The practice lessons that match this chapter — read it, then drill it",
-    "cta": "Go to Strategy Academy",
+    "cta": "Go to the course",
     "applyPractice": "Apply in practice",
     "gotoLesson": "Go to practice lesson: {{title}}",
     "gotoTrack": "Go to recommended learning track",
@@ -486,7 +486,7 @@
     "nextChapterLabel": "Next chapter: {{title}}"
   },
   "chapterView": {
-    "backAria": "Back to Theory Academy",
+    "backAria": "Back to Concept Handbook",
     "chapterOf": "Chapter {{current}}/{{total}}",
     "completed": "Completed",
     "bestScore": "Best {{score}} pts",

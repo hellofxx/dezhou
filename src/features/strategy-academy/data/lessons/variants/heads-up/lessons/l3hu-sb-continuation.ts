@@ -46,13 +46,13 @@ const L3HU_SB_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：下注尺度与对手必须防守的比例（MDF）见理论学院 T6『最优下注尺度』——那一章把 1/3 池到超池的每一档都换算成 MDF 与诈唬密度，本课的 70%-80% 高频小注正是其中的 1/3 池档。',
+      '理论支撑：下注尺度与对手必须防守的比例（MDF）见概念手册 T6『最优下注尺度』——那一章把 1/3 池到超池的每一档都换算成 MDF 与诈唬密度，本课的 70%-80% 高频小注正是其中的 1/3 池档。',
     data: { theoryLevelId: 't6hu', theoryChapterId: 't6hu-sizing-optimal' },
   },
   {
     type: 'theory-reference',
     content:
-      '理论支撑：同样的胜率在不同牌面上能兑现成筹码的比例并不相同，见理论学院 T6『权益实现与牌面结构』——湿润连接面之所以要降频，正是因为权益实现率被牌面结构压低了。',
+      '理论支撑：同样的胜率在不同牌面上能兑现成筹码的比例并不相同，见概念手册 T6『权益实现与牌面结构』——湿润连接面之所以要降频，正是因为权益实现率被牌面结构压低了。',
     data: { theoryLevelId: 't6hu', theoryChapterId: 't6hu-equity-realization' },
   },
   {

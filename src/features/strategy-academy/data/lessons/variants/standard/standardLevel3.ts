@@ -33,7 +33,7 @@ const L3_CBET_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'theory-reference',
-    content: '理论支撑：C-Bet 的 EV 构成与下注目的的理论分析见理论学院 T5 第 2 章"GTO 与剥削：两种最优"和 T6 第 1 章"下注目的"。GTO 框架下的 C-Bet 频率与范围选择密切相关。',
+    content: '理论支撑：C-Bet 的 EV 构成与下注目的的理论分析见概念手册 T5 第 2 章"GTO 与剥削：两种最优"和 T6 第 1 章"下注目的"。GTO 框架下的 C-Bet 频率与范围选择密切相关。',
     data: { theoryLevelId: 't5', theoryChapterId: 't5-gto-concept' },
   },
   {
@@ -73,7 +73,7 @@ const L3_DRAWS_U2_SECTIONS: LessonSection[] = [
   },
   {
     type: 'theory-reference',
-    content: '理论支撑：Outs 计数与 2/4 法则的完整推导详见理论学院 T1 第 2 章"Outs 与 2/4 法则"，包括误差分析表与修正公式。EV 框架下的听牌跟注决策见 T2 第 1 章。',
+    content: '理论支撑：Outs 计数与 2/4 法则的完整推导详见概念手册 T1 第 2 章"Outs 与 2/4 法则"，包括误差分析表与修正公式。EV 框架下的听牌跟注决策见 T2 第 1 章。',
     data: { theoryLevelId: 't1', theoryChapterId: 't1-outs' },
   },
   {
@@ -538,7 +538,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：SPR 与几何尺度下注的完整推导见理论学院 T6 第 3 章"SPR 与三街几何尺度"。多街玩法中的下注规划与范围构建密切相关。',
+            content: '理论支撑：SPR 与几何尺度下注的完整推导见概念手册 T6 第 3 章"SPR 与三街几何尺度"。多街玩法中的下注规划与范围构建密切相关。',
             data: { theoryLevelId: 't6', theoryChapterId: 't6-geometric' },
           },
           {
@@ -847,7 +847,7 @@ export const STANDARD_LEVEL_3_LESSONS: Lesson[] = [
           },
           {
             type: 'theory-reference',
-            content: '理论支撑：MDF 与 Alpha 的代数推导详见理论学院 T5 第 3 章"最小防御频率（MDF）与 Alpha"。下注尺度的数学依据与几何尺度推导见 T6 第 2 章。',
+            content: '理论支撑：MDF 与 Alpha 的代数推导详见概念手册 T5 第 3 章"最小防御频率（MDF）与 Alpha"。下注尺度的数学依据与几何尺度推导见 T6 第 2 章。',
             data: { theoryLevelId: 't5', theoryChapterId: 't5-mdf-alpha' },
           },
           {

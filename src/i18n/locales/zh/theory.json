@@ -1,5 +1,5 @@
 {
-  "title": "理论学院",
+  "title": "概念手册",
   "subtitle": "系统研习业界权威德扑理论，构建完整知识框架",
   "chapters": "章节",
   "tierBasic": "基础 T1-T3",
@@ -22,7 +22,7 @@
     "freshHeadline": "从概率论基础开始，建立完整理论框架",
     "freshSub": "系统研读德扑理论，每章附小测巩固",
     "allDone": "所有理论章节已读完",
-    "allDoneSub": "去策略学院，把理论变成牌桌上的决策",
+    "allDoneSub": "去课程，把理论变成牌桌上的决策",
     "chaptersDoneLabel": "已读章节",
     "levelsDoneLabel": "完成级别",
     "avgScoreLabel": "平均小测分"
@@ -404,7 +404,7 @@
   "flagged": {
     "title": "疑难题目复习清单",
     "subtitle": "你在章末小测里标记为疑难的题目都在这里，回到所属章节重读解析即可。",
-    "backAria": "返回理论学院",
+    "backAria": "返回概念手册",
     "listAria": "疑难题目列表",
     "count": "共 {{count}} 题待复习",
     "gotoChapter": "前往章节",
@@ -422,7 +422,7 @@
   },
   "basicsGuide": {
     "title": "先修：零基础入门",
-    "body": "理论学院从组合计数开场。若你还需要确认牌型大小、位置名称、下注动作与术语，先去策略学院的入门向导花几分钟过一遍——它不计入理论进度，但会让 T1 之后的每一章都更省力。",
+    "body": "概念手册从组合计数开场。若你还需要确认牌型大小、位置名称、下注动作与术语，先去课程的入门向导花几分钟过一遍——它不计入理论进度，但会让 T1 之后的每一章都更省力。",
     "cta": "先完成入门向导"
   },
   "drill": {
@@ -477,7 +477,7 @@
     "title": "理论 → 实践",
     "subtitle": "把读过的理论变成牌桌上的决策",
     "chapterSubtitle": "这一章对应的实战课时——读完就练，别等到整级结束",
-    "cta": "前往策略学院",
+    "cta": "前往课程",
     "applyPractice": "去实践应用",
     "gotoLesson": "前往实践课程：{{title}}",
     "gotoTrack": "前往推荐学习轨道",
@@ -486,7 +486,7 @@
     "nextChapterLabel": "下一章：{{title}}"
   },
   "chapterView": {
-    "backAria": "返回理论学院",
+    "backAria": "返回概念手册",
     "chapterOf": "第 {{current}}/{{total}} 章",
     "completed": "已完成",
     "bestScore": "最高 {{score}} 分",

@@ -1,12 +1,12 @@
 {
   "placement": {
     "page": {
-      "back": "Back to Academy",
+      "back": "Back to Courses",
       "title": "Placement Test",
       "subtitle": "16 concept questions to find your starting point",
       "start": "Start test",
       "retest": "Retake test",
-      "backAcademy": "Back to Strategy Academy",
+      "backAcademy": "Back to Courses",
       "progress": "Question {{current}} / {{total}}",
       "correct": "Correct",
       "incorrect": "Not quite",

@@ -47,13 +47,13 @@ const L4HU_GTO_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：不可剥削、博弈值，以及"GTO 不是最赚钱"的定位，见理论学院 T5『GTO 核心思想』——本课的频率基准就是那一章"均衡只保证下限"的落地版本。',
+      '理论支撑：不可剥削、博弈值，以及"GTO 不是最赚钱"的定位，见概念手册 T5『GTO 核心思想』——本课的频率基准就是那一章"均衡只保证下限"的落地版本。',
     data: { theoryLevelId: 't5hu', theoryChapterId: 't5hu-gto-he' },
   },
   {
     type: 'theory-reference',
     content:
-      '理论支撑：混合策略、无差别原则与 MDF / Alpha 的临界频率计算，见理论学院 T5『频率平衡』——价值:诈唬 2:1 与 MDF 50% 其实是同一个等式的两面。',
+      '理论支撑：混合策略、无差别原则与 MDF / Alpha 的临界频率计算，见概念手册 T5『频率平衡』——价值:诈唬 2:1 与 MDF 50% 其实是同一个等式的两面。',
     data: { theoryLevelId: 't5hu', theoryChapterId: 't5hu-frequency' },
   },
   {

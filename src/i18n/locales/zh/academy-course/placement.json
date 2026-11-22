@@ -1,12 +1,12 @@
 {
   "placement": {
     "page": {
-      "back": "返回学院",
+      "back": "返回课程",
       "title": "定位测评",
       "subtitle": "16 道概念题，帮你找到合适的起点",
       "start": "开始测评",
       "retest": "重新测评",
-      "backAcademy": "返回策略学院",
+      "backAcademy": "返回课程",
       "progress": "第 {{current}} / {{total}} 题",
       "correct": "答对了",
       "incorrect": "答错了",

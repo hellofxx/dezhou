@@ -47,13 +47,13 @@ const L4HU_BN_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：单挑开池范围为什么能宽到 80%-100%，见理论学院 T4『范围宽度』——那一章把"只面对一个对手"与"位置反转"拆成可计算的权益账，本课的开池频率正是它的推论。',
+      '理论支撑：单挑开池范围为什么能宽到 80%-100%，见概念手册 T4『范围宽度』——那一章把"只面对一个对手"与"位置反转"拆成可计算的权益账，本课的开池频率正是它的推论。',
     data: { theoryLevelId: 't4hu', theoryChapterId: 't4hu-range-width' },
   },
   {
     type: 'theory-reference',
     content:
-      '理论支撑：min-raise、3-bet、4-bet 各占多少频率才无差别，见理论学院 T5『单挑翻前均衡』——那一章用无差别原则把参与率与防守率拆成价格线的推论，本课的 50% 保本弃牌率就是其中一条价格线。',
+      '理论支撑：min-raise、3-bet、4-bet 各占多少频率才无差别，见概念手册 T5『单挑翻前均衡』——那一章用无差别原则把参与率与防守率拆成价格线的推论，本课的 50% 保本弃牌率就是其中一条价格线。',
     data: { theoryLevelId: 't5hu', theoryChapterId: 't5hu-preflop-equilibrium' },
   },
   {

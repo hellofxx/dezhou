@@ -170,7 +170,7 @@
       "Bigger raise → bigger pot → higher opponent fold rate → your range should be stronger\nSmaller raise → smaller pot → higher opponent call rate → you can use a wider range",
       "Pro players use a uniform raise size to hide information. If you raise $8 with strong hands and $5 with weak hands, opponents will quickly spot your pattern.",
       "Pot-odds formula derivation:\nRequired equity = call amount ÷ (current pot + opponent bet + call amount)\n\nExample: pot 100, opponent bets 50 → required equity = 50÷(100+50+50) = 25%\n\nRequired equity by common bet size:\n1/3 pot bet → 20%\n1/2 pot bet → 25%\n2/3 pot bet → 28.6%\nFull pot bet → 33.3%",
-      "Theory reference: the complete definition and derivation of pot odds is in Theory Academy T2 Chapter 2 \"Pot Odds: The Price Tag of a Call\", including the required-equity formula derivation from the EV=0 break-even point.",
+      "Theory reference: the complete definition and derivation of pot odds is in Concept Handbook T2 Chapter 2 \"Pot Odds: The Price Tag of a Call\", including the required-equity formula derivation from the EV=0 break-even point.",
       "Counter-intuitive: the bigger your raise, the more opponents fold — but your success rate isn't necessarily higher. A larger raise makes calling more expensive, but it also risks more to win a limited pot. 2.5BB is the optimized balance point."
     ],
     "l2-3bet-basics": [
@@ -181,7 +181,7 @@
       "Beginners should start with a \"linear 3-bet range\" (3-betting only strong hands), then add a \"polarized 3-bet range\" (strong hands + some weak hands as bluffs) once comfortable.",
       "3-bet frequency is a key indicator of aggression. Being too passive (rarely 3-betting) loses value; being too aggressive lets opponents exploit you.",
       "3-bet range combinatorics:\nOpponent 3-bet range = {AA, KK, QQ, AKs, A5s}\nAA = 6, KK = 6, QQ = 6, AKs = 4, A5s = 4\nTotal = 26 combinations\n\nBlocker effect: when you hold A♠,\nAA drops from 6 to 3, AKs from 4 to 1, A5s from 4 to 1\nThe 3-bet range drops from 26 to 17",
-      "Theory reference: 3-bet range construction and combinatorics are detailed in Theory Academy T4 Chapter 2 \"Combinatorics and Blockers\", with a full derivation of Blocker applications in preflop 3-bet/4Bet spots.",
+      "Theory reference: 3-bet range construction and combinatorics are detailed in Concept Handbook T4 Chapter 2 \"Combinatorics and Blockers\", with a full derivation of Blocker applications in preflop 3-bet/4Bet spots.",
       "Counter-intuitive: when you 3-bet holding A5s, AA drops from 6 to 3 combinations (blocked by your A), but the K count is completely unaffected. That means holding A5s halves the probability your opponent has AA — the mathematical basis for 3-bet bluffing with A5s."
     ],
     "l2-4bet-strategy": [
@@ -193,7 +193,7 @@
       "Decision framework facing a 4-Bet: 1) 5-Bet All-in: AA/KK (always shove) 2) Call: QQ/AKs (strong but not unbeatable) 3) Fold: fold medium hands against a tight 4-Bet range.",
       "Think ahead before 4-Betting: if opponent 5-Bet All-ins, what do I do? 4-Betting without a plan is the start of disaster. Use a linear 4-Bet range (strong hands only) at low stakes, add bluffs at higher stakes.",
       "4Bet break-even analysis:\nBreak-even fold rate for a 4Bet bluff = 4Bet increment ÷ (pot before the 4Bet + 4Bet increment)\nExample: blinds 1.5 + open 2.5 + your 3-bet 7.5 = pot of 11.5BB before the 4Bet; the opponent's opening 2.5 is already sunk, so raising to 18BB risks an increment of 18 − 2.5 = 15.5BB\nBreak-even fold rate = 15.5 ÷ (11.5 + 15.5) = 15.5/27 ≈ 57.4%\n\nMeaning: 57.4% is the fold rate your opponent needs for a 4Bet bluff to break even — fold more often than that and their bluff turns from zero EV into positive EV. So your own fold rate must stay below 57.4%, i.e. continue (3-bet or call) at least about 42.6% of the time.",
-      "Theory reference: range construction and game-theory principles in 4Bet spots are in Theory Academy T4 Chapter 1 \"Range Thinking: From Single Hands to Probability Distributions\". Preflop range filtering is closely tied to responses to a 4-Bet.",
+      "Theory reference: range construction and game-theory principles in 4Bet spots are in Concept Handbook T4 Chapter 1 \"Range Thinking: From Single Hands to Probability Distributions\". Preflop range filtering is closely tied to responses to a 4-Bet.",
       "Counter-intuitive: a 4Bet Bluff needs a fairly high opponent fold rate (about 57%) to break even. That means it's not a strategy you can use frequently — it only works in specific spots (when opponents fold too much)."
     ],
     "l2-squeeze": [

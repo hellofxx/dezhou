@@ -11,7 +11,7 @@
       "Remember: Flush beats Straight! Many beginners mix up this order.",
       "Pro players calculate probabilities on every hand. Building the habit of asking \"what's my equity here?\" is your first step toward playing professionally.",
       "Total starting-hand combinations: C(52,2) = 52×51÷2 = 1326\nPocket pairs (e.g. AA): C(4,2) = 6\nSuited hands (e.g. AKs): 4\nOffsuit hands (e.g. AKo): 12\n\nUnderstanding these basic combinatorics is the foundation of range analysis — the pot-odds math and Blocker effects you'll learn later all build on it.",
-      "Theory reference: the full derivation of combinatorics and starting-hand probability is in Theory Academy T1 Chapter 1 \"Combinatorics and Starting-Hand Probability\" — covering the C(n,k) formula, the origin of the 1326 combinations, and the 6/4/12 atomic units.",
+      "Theory reference: the full derivation of combinatorics and starting-hand probability is in Concept Handbook T1 Chapter 1 \"Combinatorics and Starting-Hand Probability\" — covering the C(n,k) formula, the origin of the 1326 combinations, and the 6/4/12 atomic units.",
       "Counter-intuitive: 169 classes and 1326 combinations are two different counts. 169 is the number of \"equivalent classes\" (pair/suited/offsuit types), while 1326 is the number of \"distinguishable actual combinations\". Probability math must use 1326 — classes deceive you: suited AK and AA each count as \"1 class\", but their combination weights are 4 and 6 respectively."
     ],
     "l1-position": [
@@ -25,7 +25,7 @@
       "How Position Advantage Shows Up",
       "1. Preflop: late position can steal blinds and open a wider range\n2. Postflop: late position controls pot size and makes more precise value bets\n3. Information edge: decide after seeing opponents' actions, reducing error rate\n\nThe exact composition and mixing frequencies of every position's range are defined by the Range Trainer module and the GTO strategy chart (the single source of truth for preflop).",
       "Relative opening width by position (6-max, 100bb, no ante): UTG opens only the very strongest slice of hands (beginner simplification ~15%, standard 19%), HJ is slightly wider (beginner 18%, standard 22%), CO widens noticeably (beginner nearly 30%, standard 32%), the BTN is the widest opening position at a 6-max table (beginner ~35%, standard 44%), and the SB is in the same tier as the BTN (beginner ~35%, standard 38%).\n\nEquity realization: the BTN has position postflop and realizes its equity better; UTG is out of position postflop, realizing only about 80-90%.\n\nRule: the later your position, the wider you may open and the better your postflop equity realization — but the width steps between adjacent positions are not uniform: they stay tight up front and only widen markedly at CO/BTN.",
-      "Theory reference: quantitative analysis of position value is in Theory Academy T3 “Where Position Value Comes From”, and how equity is realised across position and board texture in T6 “Board Texture and Equity Realization”; the modern revision of the Gap Concept is in T3 “Starting Hand Theory and the Gap Concept”; Sklansky's Fundamental Theorem is in T3 “Sklansky’s Fundamental Theorem and Initiative”.",
+      "Theory reference: quantitative analysis of position value is in Concept Handbook T3 “Where Position Value Comes From”, and how equity is realised across position and board texture in T6 “Board Texture and Equity Realization”; the modern revision of the Gap Concept is in T3 “Starting Hand Theory and the Gap Concept”; Sklansky's Fundamental Theorem is in T3 “Sklansky’s Fundamental Theorem and Initiative”.",
       "Counter-intuitive: BTN's positional advantage is mainly postflop, not preflop. Preflop BTN only acts last; but postflop BTN acts last on every street — meaning you can see all opponents' actions before deciding, which is a huge information advantage."
     ],
     "l1-hand-selection": [
@@ -39,7 +39,7 @@
       "1. High-card value: A/K/Q/J combinations are stronger\n2. Connectivity: connected cards (e.g. JTs) have straight potential\n3. Suitedness: suited cards have flush potential\n4. Domination: avoid easily dominated hands (e.g. K3o vs KQo)",
       "Pro players' starting ranges are far tighter than recreational players'. Better to play fewer good hands than to lose big chips in marginal spots. Discipline is one of the most important qualities of a professional player.",
       "Starting-hand combinatorics (atomic units):\nAny pocket pair (e.g. AA) = C(4,2) = 6 combinations\nAny suited hand (e.g. AKs) = 4 combinations\nAny offsuit hand (e.g. AKo) = 4×4-4 = 12 combinations\nAny two different ranks = 16 combinations\n\nProbability of any pocket pair = 78/1326 ≈ 5.9% (about once every 17 hands)\nProbability of AA = 6/1326 ≈ 0.45% (about once every 221 hands)",
-      "Theory reference: starting-hand probability and combinatorics are detailed in Theory Academy T1 Chapter 1. The relationship between starting-hand EV tiers and position is in T3 Chapter 1.",
+      "Theory reference: starting-hand probability and combinatorics are detailed in Concept Handbook T1 Chapter 1. The relationship between starting-hand EV tiers and position is in T3 Chapter 1.",
       "Counter-intuitive: AKs has only 4 combinations while AA has 6. Although AK looks the most \"imposing\", its combination weight is lower than a pocket pair's. In range analysis, pairs in an opponent's 3-bet range usually outweigh AK in combination weight — a quantitative bias many beginners overlook."
     ],
     "l1-bankroll": [
@@ -52,7 +52,7 @@
       "When your bankroll grows to the next stake's standard line, you can try moving up:\n• Move up: bankroll reaches 30 buy-ins of the higher stake\n• Move down: bankroll drops below 20 buy-ins of the current stake\n• Moving down isn't shameful — protecting your bankroll is what long-term winners do",
       "Completely separate your poker bankroll from living expenses. Never play with money you \"can't afford to lose\", because it seriously damages your decision quality.",
       "Kelly Criterion (optimal betting fraction in bankroll management):\nf* = (bp - q) / b\nwhere f* = optimal bankroll fraction, b = odds (net odds), p = win probability, q = loss probability = 1-p\n\nCash game requirement: 20-30 buy-ins (minimum-recommended)\nTournament requirement: 50-100 buy-ins (minimum-recommended)\n\nExample: NL10 table, each buy-in $10, recommended bankroll = 30 × $10 = $300",
-      "Theory reference: the quantitative model of bankroll management and the Kelly Criterion in poker are covered in Theory Academy T8 “Bankroll Management Psychology”, which fully covers poker psychology's bankroll management methodology."
+      "Theory reference: the quantitative model of bankroll management and the Kelly Criterion in poker are covered in Concept Handbook T8 “Bankroll Management Psychology”, which fully covers poker psychology's bankroll management methodology."
     ],
     "l1-leaks": [
       "Why Is Identifying Errors More Important Than Learning Techniques?",
@@ -69,7 +69,7 @@
       "#5 Not tracking pot size (can't calculate odds)\n#6 Continuing to play after tilting\n#7 Unbalanced bluffing frequency (either never bluffing or bluffing too much)\n#8 Ignoring opponent behavior patterns\n#9 Not reviewing hands\n#10 No stop-loss or time limits",
       "Each Leak you fix may raise your win rate by 1-3 BB/100. Fixing the first 5 Leaks can turn you from a loser into a winner.",
       "Focus on one Leak per week rather than fixing everything at once. Track your progress with a check-in calendar.",
-      "Theory reference: the mathematical essence behind common Leaks is a missing EV decision framework. The full definition and derivation of expected value is in Theory Academy T2 Chapter 1 \"Expected Value (EV): The Unified Measure of All Decisions\". Once you understand EV, every Leak can be quantified as a repeating pattern of -EV behavior.",
+      "Theory reference: the mathematical essence behind common Leaks is a missing EV decision framework. The full definition and derivation of expected value is in Concept Handbook T2 Chapter 1 \"Expected Value (EV): The Unified Measure of All Decisions\". Once you understand EV, every Leak can be quantified as a repeating pattern of -EV behavior.",
       "Counter-intuitive: a decision that often loses can still be correct. EV only guarantees long-run average profit; single results are governed by variance. A +EV call can lose 10 times in a row — the EV of the 11th call is still positive. Pro players focus on decision quality, not single outcomes."
     ]
   },

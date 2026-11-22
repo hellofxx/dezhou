@@ -26,7 +26,7 @@ export interface StrategyContentIssueInput {
  */
 export function buildStrategyIssueReport(input: StrategyContentIssueInput): string {
   const lines = [
-    '[Strategy Academy content issue]',
+    '[Courses content issue]',
     `App version: ${input.appVersion}`,
     `Locale: ${input.locale}`,
   ];
@@ -46,7 +46,7 @@ export function buildStrategyIssueMailto(
   report: string,
   subjectSuffix = '',
 ): string {
-  const subject = `[Strategy Academy] content issue${subjectSuffix ? ` · ${subjectSuffix}` : ''}`;
+  const subject = `[Courses] content issue${subjectSuffix ? ` · ${subjectSuffix}` : ''}`;
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(report)}`;
 }
 

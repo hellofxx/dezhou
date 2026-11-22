@@ -4,11 +4,11 @@ import type { PracticeRecommendation } from '../../../../types';
  * 标准变体全部章节的章节级实践推荐（理论→实践桥接的章节粒度层）。
  *
  * 之所以集中在此而非内联进 standardLevelN.ts：章节正文是只增不改的发布内容
- * （id 进 URL 与持久化），而桥接边会随策略学院课程树调整重排；集中一处便于整表复核，
+ * （id 进 URL 与持久化），而桥接边会随课程树调整重排；集中一处便于整表复核，
  * 也让 `id 白名单子集` 守卫只需读一个源。由 standard/index.ts 聚合时附加到章节对象。
  *
  * 课时 id 必须落在 data/theoryIntegrity.test.ts 的 EXPECTED_PRACTICE_LESSON_IDS 白名单内
- * （子集断言），且与策略学院权威标题一致（标题仅作 academy.lessonTitle 缺失时的回退）。
+ * （子集断言），且与课程权威标题一致（标题仅作 academy.lessonTitle 缺失时的回退）。
  */
 const lesson = (id: string, title: string) => ({ id, title });
 

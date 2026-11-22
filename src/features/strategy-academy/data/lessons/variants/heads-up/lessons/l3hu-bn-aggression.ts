@@ -41,13 +41,13 @@ const L3HU_BN_U3_SECTIONS: LessonSection[] = [
   {
     type: 'theory-reference',
     content:
-      '理论支撑：SB 的开池范围与翻后位置价值见理论学院 T3『SB 位置策略』——那一章把约 80% 的开池拆成可以逐手执行的频率分层，本课的 70%-80% 高频 C-Bet 正是它的翻后延伸。',
+      '理论支撑：SB 的开池范围与翻后位置价值见概念手册 T3『SB 位置策略』——那一章把约 80% 的开池拆成可以逐手执行的频率分层，本课的 70%-80% 高频 C-Bet 正是它的翻后延伸。',
     data: { theoryLevelId: 't3hu', theoryChapterId: 't3hu-sb-strategy' },
   },
   {
     type: 'theory-reference',
     content:
-      '理论支撑：翻前 SB 先开池、翻后才轮到最后行动，这个顺序反转见理论学院 T3『位置反转』——顺序一变，每条街的决策成本就整体换了方向，位置优势才真正落到筹码上。',
+      '理论支撑：翻前 SB 先开池、翻后才轮到最后行动，这个顺序反转见概念手册 T3『位置反转』——顺序一变，每条街的决策成本就整体换了方向，位置优势才真正落到筹码上。',
     data: { theoryLevelId: 't3hu', theoryChapterId: 't3hu-position-reversal' },
   },
   {

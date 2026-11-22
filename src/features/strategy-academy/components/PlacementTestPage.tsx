@@ -118,7 +118,7 @@ export default function PlacementTestPage() {
   const backButton = (
     <BackLink
       onClick={backToAcademy}
-      label={t('academy.placement.page.back', { defaultValue: '返回学院' })}
+      label={t('academy.placement.page.back', { defaultValue: '返回课程' })}
       size="md"
     />
   );

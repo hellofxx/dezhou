@@ -120,7 +120,7 @@ describe('CourseLockedView：课程级前置与返回', () => {
 
   it('返回学院按钮跳转 /academy', () => {
     renderView();
-    fireEvent.click(screen.getByText('返回学院'));
+    fireEvent.click(screen.getByText('返回课程'));
     expect(screen.getByTestId('location').textContent).toBe('/academy');
   });
 });

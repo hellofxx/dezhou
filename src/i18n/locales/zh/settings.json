@@ -53,7 +53,7 @@
   "aboutVersion": "德州扑克训练平台 v{{version}}",
   "helpCenter": "帮助中心",
   "clearConfirmTitle": "确认清除训练记录",
-  "clearConfirmDesc": "只删除训练记录（统计与历史列表中的数据）。ELO 段位、复习队列、个人设置、学院进度与牌局复盘数据都会保留。此操作不可撤销。",
+  "clearConfirmDesc": "只删除训练记录（统计与历史列表中的数据）。ELO 段位、复习队列、个人设置、课程进度与牌局复盘数据都会保留。此操作不可撤销。",
   "clearFailed": "清除失败：训练记录仍在本地（已回滚），请稍后重试。",
   "cancel": "取消",
   "confirmClear": "确认清除"

@@ -4,7 +4,7 @@ import { applyQuizBank } from '../../utils/applyQuizBank';
 import { inferVariantFromLessonId } from '../../utils/academyMeta';
 
 /**
- * 策略学院完整课程数据按 Level / 变体懒加载。
+ * 课程完整课程数据按 Level / 变体懒加载。
  * 首页/store 只读 manifest；课程页只需要当前课程所属 Level 的文件，
  * 认证只需要目标 Level；速训才加载标准全级别。
  */

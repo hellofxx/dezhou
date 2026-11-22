@@ -327,7 +327,7 @@ export const STANDARD_LEVEL_9_CHAPTERS: TheoryChapter[] = [
       },
       {
         type: 'pro-tip',
-        content: '毕业作业：完成本 Level 后，去策略学院与训练模块把每个理论至少实践一次（范围训练→T3/T4，赔率测验→T1/T2，GTO 模拟→T5/T6）。理论学院给你地图，训练场让你走完这段路。',
+        content: '毕业作业：完成本 Level 后，去课程与训练模块把每个理论至少实践一次（范围训练→T3/T4，赔率测验→T1/T2，GTO 模拟→T5/T6）。概念手册给你地图，训练场让你走完这段路。',
       },
     ],
     quiz: [],

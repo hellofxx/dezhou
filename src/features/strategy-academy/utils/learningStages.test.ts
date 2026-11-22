@@ -83,7 +83,7 @@ describe('toLearningStage', () => {
     expect(new Set(stage.theoryChapterIds).size).toBe(stage.theoryChapterIds.length);
   });
 
-  it('无 lessonMeta 的课时（短牌/未知 id）回退空数组', () => {
+  it('无 lessonMeta 的课时（未知 id）回退空数组', () => {
     const stage = toLearningStage(level({ level: 1, lessons: [lesson('unknown-lesson', 1)] }));
     expect(stage.theoryChapterIds).toEqual([]);
   });
