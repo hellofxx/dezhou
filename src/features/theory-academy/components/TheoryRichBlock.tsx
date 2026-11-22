@@ -21,7 +21,8 @@ import type {
  * - 单元格读屏文本（手牌 · 权重 · 动作）以 sr-only 文本提供，不用 td 上的 aria-label
  *   （ARIA in HTML 不允许 td 承载可访问名）
  * - 只读：不接交互回调、不写 store；不渲染 h1（页面标题由布局持有）
- * - 宽度：表格容器 overflow-x-auto、矩阵 table-fixed + 极小字号，375px 下页面不产生横向溢出
+ * - 宽度：表格与矩阵容器均 overflow-x-auto（窄屏内滚动）；矩阵 table-fixed +
+ *   单元格 11px / min-w-[26px]（D3：数据本体可读，375px 下容器微滚、页面不溢出）
  */
 
 interface TheoryRichBlockProps {
@@ -141,44 +142,49 @@ function TheoryRangeMatrixBlock({ data }: { data: TheoryRangeMatrixBlockData }) 
   return (
     <figure className="rounded-lg border border-[var(--walnut-border)] bg-[var(--felt-deep)]/60 p-3">
       <BlockHeading icon={Table2} label={t('theory.block.rangeMatrix')} />
-      <table className="w-full table-fixed border-collapse" aria-label={t('theory.block.rangeMatrix')}>
-        {data.captionKey && (
-          <caption className="caption-top text-left text-[11px] text-[var(--ivory-muted)] pb-1">
-            {t(data.captionKey, { defaultValue: data.captionKey })}
-          </caption>
-        )}
-        <tbody>
-          {GRID_RANKS.map((rowRank, row) => (
-            <tr key={rowRank}>
-              {GRID_RANKS.map((colRank, col) => {
-                const hand = getHandFromGrid(row, col);
-                const cell = cellsByHand.get(hand);
-                const weight = cell?.weight ?? 0;
-                const action = cell?.action ?? 'fold';
-                return (
-                  <td
-                    key={colRank}
-                    className={cn(
-                      'text-center align-middle font-mono text-[8px] leading-none py-[3px]',
-                      weight > 0 ? ACTION_CLASS[action] : 'text-[var(--ivory-dim)]/35',
-                    )}
-                    style={
-                      weight > 0
-                        ? { opacity: 0.45 + (Math.min(100, weight) / 100) * 0.55 }
-                        : undefined
-                    }
-                  >
-                    <span aria-hidden="true">{hand}</span>
-                    <span className="sr-only">
-                      {`${hand} · ${weight}% · ${actionLabel(t, action)}`}
-                    </span>
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* 单元格按数据本体 11px（D3）：13 列 ≈340px，窄屏容器内横向滚动，页面不溢出。
+          relative 使单元格内 sr-only 绝对定位标签的包含块落在本容器，被 overflow 裁剪，
+          避免 nowrap 内容宽度传播到文档 scrollable overflow（移动端幻影横向溢出）。 */}
+      <div className="relative overflow-x-auto scrollbar-thin">
+        <table className="w-full min-w-[338px] table-fixed border-collapse" aria-label={t('theory.block.rangeMatrix')}>
+          {data.captionKey && (
+            <caption className="caption-top text-left text-[11px] text-[var(--ivory-muted)] pb-1">
+              {t(data.captionKey, { defaultValue: data.captionKey })}
+            </caption>
+          )}
+          <tbody>
+            {GRID_RANKS.map((rowRank, row) => (
+              <tr key={rowRank}>
+                {GRID_RANKS.map((colRank, col) => {
+                  const hand = getHandFromGrid(row, col);
+                  const cell = cellsByHand.get(hand);
+                  const weight = cell?.weight ?? 0;
+                  const action = cell?.action ?? 'fold';
+                  return (
+                    <td
+                      key={colRank}
+                      className={cn(
+                        'text-center align-middle font-mono text-[11px] min-w-[26px] leading-none py-[3px]',
+                        weight > 0 ? ACTION_CLASS[action] : 'text-[var(--ivory-dim)]/35',
+                      )}
+                      style={
+                        weight > 0
+                          ? { opacity: 0.45 + (Math.min(100, weight) / 100) * 0.55 }
+                          : undefined
+                      }
+                    >
+                      <span aria-hidden="true">{hand}</span>
+                      <span className="sr-only">
+                        {`${hand} · ${weight}% · ${actionLabel(t, action)}`}
+                      </span>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {usedActions.length > 0 && (
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
           <span className="text-[10px] uppercase tracking-[0.16em] text-[var(--ivory-muted)]">
@@ -187,7 +193,7 @@ function TheoryRangeMatrixBlock({ data }: { data: TheoryRangeMatrixBlockData }) 
           {usedActions.map((action) => (
             <span
               key={action}
-              className="inline-flex items-center gap-1.5 text-[10px] text-[var(--ivory-dim)]"
+              className="inline-flex items-center gap-1.5 text-[11px] text-[var(--ivory-dim)]"
             >
               <span
                 aria-hidden="true"

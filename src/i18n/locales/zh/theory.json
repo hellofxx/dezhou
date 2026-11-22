@@ -432,6 +432,10 @@
     "answerLabel": "你的答案",
     "submit": "判定",
     "nextProblem": "换一题",
+    "solutionTitle": "分步解答",
+    "showSolution": "查看解答",
+    "solutionSubstitute": "代入数值",
+    "solutionAnswer": "答案",
     "correct": "正确",
     "incorrect": "不在容差内，按提示的公式再算一次",
     "invalidInput": "请输入数字",
@@ -497,7 +501,10 @@
     "answered": "答对 {{correct}}/{{total}} 题",
     "score": "{{score}} 分",
     "railTitle": "本级章节目录",
-    "backToCourseHub": "回到课程枢纽"
+    "backToCourseHub": "回到课程枢纽",
+    "glossaryEntry": "术语表",
+    "continueNext": "继续下一节",
+    "expandAll": "展开全部"
   },
   "placement": {
     "title": "定位测评",
@@ -820,6 +827,8 @@
     "incorrect": "✗ 错误",
     "next": "下一题",
     "viewResult": "查看结果",
+    "reviewChapter": "回顾本章",
+    "peek": "查看原文",
     "optionAria": "选项 {{letter}}: {{option}}",
     "attemptCount": "已测 {{count}} 次",
     "firstAttempt": "首次作答",

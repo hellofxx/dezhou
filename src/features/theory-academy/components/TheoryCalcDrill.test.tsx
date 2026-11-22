@@ -234,3 +234,104 @@ describe('TheoryCalcDrill', () => {
     expect(container.textContent).toBe('');
   });
 });
+
+/**
+ * 错后脚手架（Fix 3 / D6）：错 1 次出「查看解答」手动展开，错 2 次自动展开分步解答，
+ * 换题重置。全程零持久 —— 与上方既有零持久断言同口径，解答路径单独再锁一遍。
+ */
+describe('TheoryCalcDrill 错后分步解答（D6）', () => {
+  function solutionRegion(): Element | null {
+    return container.querySelector('[role="region"]');
+  }
+
+  async function wrongOnce() {
+    const drill = buildCalcDrill(DRILLED_CHAPTER, 0, 0)!;
+    await type(String(drill.expected + 9));
+    await click(buttonByText(i18n.t('theory.drill.submit')));
+    return drill;
+  }
+
+  it('错 1 次：出「查看解答」手动入口，不自动揭示', async () => {
+    await mount(DRILLED_CHAPTER);
+    await wrongOnce();
+    expect(buttonByText(i18n.t('theory.drill.showSolution'))).toBeDefined();
+    expect(solutionRegion()).toBeNull();
+  });
+
+  it('错 1 次后手动展开：三步解答含公式、代入串与现算答案', async () => {
+    await mount(DRILLED_CHAPTER);
+    const drill = await wrongOnce();
+    await click(buttonByText(i18n.t('theory.drill.showSolution')));
+    const region = solutionRegion();
+    expect(region).not.toBeNull();
+    expect(region!.getAttribute('aria-label')).toBe(i18n.t('theory.drill.solutionTitle'));
+    const text = region!.textContent ?? '';
+    expect(text).toContain(i18n.t('theory.drill.hint.alpha'));
+    expect(text).toContain(i18n.t('theory.drill.solutionSubstitute'));
+    expect(text).toContain(i18n.t('theory.drill.solutionAnswer'));
+    expect(text).toContain(`${drill.expected.toFixed(drill.precision)}%`);
+    expect(text).not.toContain('theory.drill.');
+  });
+
+  it('错 2 次：自动展开分步解答（无需手动点击）', async () => {
+    await mount(DRILLED_CHAPTER);
+    await wrongOnce();
+    expect(solutionRegion()).toBeNull();
+    await click(buttonByText(i18n.t('theory.drill.submit')));
+    expect(solutionRegion()).not.toBeNull();
+  });
+
+  it('换一题重置：failCount 与手动展开状态清零', async () => {
+    await mount(DRILLED_CHAPTER);
+    await wrongOnce();
+    await click(buttonByText(i18n.t('theory.drill.submit')));
+    expect(solutionRegion()).not.toBeNull();
+    await click(buttonByText(i18n.t('theory.drill.nextProblem')));
+    expect(solutionRegion()).toBeNull();
+    expect(buttonByText(i18n.t('theory.drill.showSolution'))).toBeUndefined();
+  });
+
+  it('零持久：错后解答全路径不动任何进度、能力分与复习队列', async () => {
+    const progressBefore = JSON.stringify(useTheoryStore.getState().progress);
+    const before = useProgressStore.getState();
+    const snapshot = JSON.stringify({
+      records: before.records,
+      eloByVariant: before.eloByVariant,
+      emotion: before.emotion,
+      reviewItems: before.reviewItems,
+      streak: before.streak,
+    });
+
+    await mount(DRILLED_CHAPTER);
+    await wrongOnce();
+    await click(buttonByText(i18n.t('theory.drill.showSolution')));
+    await click(buttonByText(i18n.t('theory.drill.submit')));
+    await click(buttonByText(i18n.t('theory.drill.nextProblem')));
+
+    expect(JSON.stringify(useTheoryStore.getState().progress)).toBe(progressBefore);
+    const after = useProgressStore.getState();
+    expect(
+      JSON.stringify({
+        records: after.records,
+        eloByVariant: after.eloByVariant,
+        emotion: after.emotion,
+        reviewItems: after.reviewItems,
+        streak: after.streak,
+      })
+    ).toBe(snapshot);
+  });
+
+  it('en 下分步解答无汉字：公式提示取译文、代入串语言中立', async () => {
+    await preloadI18n(['theory'], 'en');
+    await i18n.changeLanguage('en');
+    await mount(DRILLED_CHAPTER);
+    await wrongOnce();
+    await click(buttonByText(i18n.t('theory.drill.submit')));
+    const region = solutionRegion();
+    expect(region).not.toBeNull();
+    const text = region!.textContent ?? '';
+    expect(HAN.test(text), `en 解答含汉字: ${text.slice(0, 80)}`).toBe(false);
+    expect(text).toContain('Step-by-step solution');
+    expect(text).not.toContain('theory.drill.');
+  });
+});

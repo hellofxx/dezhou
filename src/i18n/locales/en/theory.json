@@ -432,6 +432,10 @@
     "answerLabel": "Your answer",
     "submit": "Check",
     "nextProblem": "New problem",
+    "solutionTitle": "Step-by-step solution",
+    "showSolution": "Show solution",
+    "solutionSubstitute": "Substitute values",
+    "solutionAnswer": "Answer",
     "correct": "Correct",
     "incorrect": "Outside the tolerance — run the formula in the hint once more",
     "invalidInput": "Please enter a number",
@@ -497,7 +501,10 @@
     "answered": "Correct {{correct}}/{{total}}",
     "score": "{{score}} pts",
     "railTitle": "Chapters in this level",
-    "backToCourseHub": "Back to course hub"
+    "backToCourseHub": "Back to course hub",
+    "glossaryEntry": "Glossary",
+    "continueNext": "Continue to next section",
+    "expandAll": "Expand all"
   },
   "placement": {
     "title": "Placement Check",
@@ -820,6 +827,8 @@
     "incorrect": "✗ Incorrect",
     "next": "Next",
     "viewResult": "View result",
+    "reviewChapter": "Review this chapter",
+    "peek": "Show chapter text",
     "optionAria": "Option {{letter}}: {{option}}",
     "attemptCount": "{{count}} attempts",
     "firstAttempt": "First attempt",

@@ -5,7 +5,9 @@ import type { TheoryRichBlockData, TheorySection } from '../types';
 import {
   LabeledBlock,
   AsciiMonoText,
-} from '@/shared/components/academy/ContentBlocks';
+  FormulaDerivation,
+  AcademyTakeawayCard,
+} from '@/shared/components/academy';
 import { TheoryRichBlock } from './TheoryRichBlock';
 
 interface TheorySectionRendererProps {
@@ -14,8 +16,10 @@ interface TheorySectionRendererProps {
   contentKey?: string;
   /** 章号（用于标题编号系统 §{章号}.{节号}） */
   chapterOrder?: number;
-  /** 节号索引（0-based，用于标题编号上方 eyebrow） */
+  /** 节号索引（0-based，原始 content 索引；直连调用方的兼容入口） */
   sectionIndex?: number;
+  /** heading 序数（1-based，groupTheorySections 单源）；优先于 sectionIndex 算 eyebrow */
+  sectionOrdinal?: number;
 }
 
 /**
@@ -45,15 +49,19 @@ export function TheorySectionRenderer({
   contentKey,
   chapterOrder,
   sectionIndex,
+  sectionOrdinal,
 }: TheorySectionRendererProps) {
   const { t } = useTranslation();
   const content = contentKey ? t(contentKey, { defaultValue: section.content }) : section.content;
-  // §13.3.3 课程标题编号系统：eyebrow 前缀 §{章号}.{节号}（缺章号时仅 §{节号}）
+  // §13.3.3 课程标题编号系统：eyebrow 前缀 §{章号}.{节号}（缺章号时仅 §{节号}）。
+  // sectionOrdinal（heading 序数）优先：分组披露后节号连续，不再随原始 index 跳号
+  const ordinal =
+    sectionOrdinal ?? (sectionIndex !== undefined ? sectionIndex + 1 : undefined);
   const sectionNumber =
-    chapterOrder !== undefined && sectionIndex !== undefined
-      ? `§${chapterOrder}.${sectionIndex + 1}`
-      : sectionIndex !== undefined
-        ? `§${sectionIndex + 1}`
+    chapterOrder !== undefined && ordinal !== undefined
+      ? `§${chapterOrder}.${ordinal}`
+      : ordinal !== undefined
+        ? `§${ordinal}`
         : undefined;
   switch (section.type) {
     case 'heading':
@@ -98,13 +106,10 @@ export function TheorySectionRenderer({
       );
 
     case 'formula':
-      return withRichBlock(
-        section.data,
-        <div className="formula-display whitespace-pre-line">{content}</div>,
-      );
+      return withRichBlock(section.data, <FormulaDerivation content={content} />);
 
     case 'takeaway':
-      return withRichBlock(section.data, <LessonTakeawayBlock content={content} />);
+      return withRichBlock(section.data, <AcademyTakeawayCard items={[content]} />);
 
     case 'example':
       return withRichBlock(
@@ -135,31 +140,4 @@ export function TheorySectionRenderer({
         </p>,
       );
   }
-}
-
-/**
- * 要点总结卡（§13.3.1）：walnut-raised 底 + brass-deep 顶边 + brass 左侧竖线，
- * 内容按换行拆分为带 brass 圆点的小项列表（与 strategy-academy ContentBlock 对齐）。
- */
-function LessonTakeawayBlock({ content }: { content: string }) {
-  const { t } = useTranslation();
-  const items = content.split('\n').map((s) => s.trim()).filter(Boolean);
-  return (
-    <div className="lesson-takeaway">
-      <p className="text-sm font-semibold text-[var(--ivory)] mb-2">
-        {t('academy.content.takeaway')}
-      </p>
-      <ul className="space-y-1.5">
-        {items.map((item, i) => (
-          <li
-            key={i}
-            className="text-sm text-[var(--ivory-dim)] leading-[1.7] flex items-start gap-2"
-          >
-            <span aria-hidden="true" className="mt-[9px] w-1.5 h-1.5 shrink-0 rounded-full bg-[var(--brass)]" />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
 }

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, ArrowRight, Flag } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, Flag, BookOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { transitionFast } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
@@ -32,6 +32,12 @@ interface TheoryQuizProps {
     totalQuestions: number,
     wrongQuestionIds: string[],
   ) => void;
+  /**
+   * 答错解析内的「回顾本章」入口（Fix 3 反馈闭环）：回到完整阅读态。
+   * 语义为弃本次作答进度（peek 补偿保进度对照）；重进时 attemptNumber 由 store 派生，
+   * 同题同序，SRS/ELO 已作答时写入不重复。未注入时不渲染按钮。
+   */
+  onReview?: () => void;
 }
 
 /**
@@ -48,7 +54,7 @@ interface TheoryQuizProps {
  * 章末小测为概念判断题、无 EV 语义，暂不接入五级判分体系
  * （沿用二元对错 + 解析），与 hand-history 不 emit 的豁免模式并列。
  */
-export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
+export function TheoryQuiz({ chapter, onComplete, onReview }: TheoryQuizProps) {
   const { t } = useTranslation();
   const chapterAttempts = useTheoryStore((s) => s.progress.chapterAttempts);
   const flaggedQuestions = useTheoryStore((s) => s.progress.flaggedQuestions);
@@ -229,7 +235,7 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
                   )}
                 >
                   <span className="flex items-center gap-3">
-                    <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[10px] shrink-0 font-numeric">
+                    <span className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[11px] shrink-0 font-numeric">
                       {String.fromCharCode(65 + index)}
                     </span>
                     {option}
@@ -255,6 +261,14 @@ export function TheoryQuiz({ chapter, onComplete }: TheoryQuizProps) {
             >
               <p className="font-semibold mb-1">{isCorrect ? t('theory.quiz.correct') : t('theory.quiz.incorrect')}</p>
               <p>{question.explanation}</p>
+              {!isCorrect && onReview ? (
+                <div className="mt-3">
+                  <Button variant="quiet" size="sm" onClick={onReview}>
+                    <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+                    {t('theory.quiz.reviewChapter')}
+                  </Button>
+                </div>
+              ) : null}
             </motion.div>
           )}
 

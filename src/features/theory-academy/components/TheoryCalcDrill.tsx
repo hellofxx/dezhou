@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Calculator, RotateCw, ShieldCheck } from 'lucide-react';
 import { Input } from '@/shared/components/ui/input';
+import { Button } from '@/shared/components/ui/button';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
 import { transitionStandard } from '@/shared/utils/motion';
@@ -12,6 +13,7 @@ import {
   gradeCalcDrill,
   type CalcDrill,
 } from '../utils/theoryCalcDrills';
+import { CalcDrillSolution } from './CalcDrillSolution';
 
 type Verdict = 'correct' | 'incorrect' | 'invalid';
 
@@ -19,9 +21,19 @@ interface SlotState {
   attempt: number;
   draft: string;
   verdict: Verdict | null;
+  /** 连续判错次数（纯本地，零持久）：错 1 次出「查看解答」，错 2 次自动展开分步解答（D6） */
+  failCount: number;
+  /** 错 1 次后的手动展开开关（换题重置） */
+  solutionOpen: boolean;
 }
 
-const initialSlotState = (): SlotState => ({ attempt: 0, draft: '', verdict: null });
+const initialSlotState = (): SlotState => ({
+  attempt: 0,
+  draft: '',
+  verdict: null,
+  failCount: 0,
+  solutionOpen: false,
+});
 
 function formatExpected(drill: CalcDrill): string {
   return drill.expected.toFixed(drill.precision);
@@ -57,11 +69,22 @@ export function TheoryCalcDrill({ chapterId }: { chapterId: string }) {
   };
 
   const handleCheck = (index: number, drill: CalcDrill) => {
-    patch(index, { verdict: gradeCalcDrill(drill, slots[index]?.draft ?? '') });
+    const verdict = gradeCalcDrill(drill, slots[index]?.draft ?? '');
+    const failCount = slots[index]?.failCount ?? 0;
+    patch(index, {
+      verdict,
+      failCount: verdict === 'incorrect' ? failCount + 1 : failCount,
+    });
   };
 
   const handleReroll = (index: number) => {
-    patch(index, { attempt: (slots[index]?.attempt ?? 0) + 1, draft: '', verdict: null });
+    patch(index, {
+      attempt: (slots[index]?.attempt ?? 0) + 1,
+      draft: '',
+      verdict: null,
+      failCount: 0,
+      solutionOpen: false,
+    });
   };
 
   const answeredCount = slots.filter((state) => state.verdict === 'correct' || state.verdict === 'incorrect').length;
@@ -165,6 +188,21 @@ export function TheoryCalcDrill({ chapterId }: { chapterId: string }) {
                 {state.verdict === 'incorrect' && t('theory.drill.incorrect')}
                 {state.verdict === 'invalid' && t('theory.drill.invalidInput')}
               </p>
+
+              {/* 错后脚手架（D6）：错 1 次手动「查看解答」，错 2 次自动展开分步解答；换题重置 */}
+              {state.failCount >= 2 || (state.failCount >= 1 && state.solutionOpen) ? (
+                <CalcDrillSolution drill={drill} />
+              ) : state.failCount === 1 ? (
+                <div>
+                  <Button
+                    variant="quiet"
+                    size="sm"
+                    onClick={() => patch(index, { solutionOpen: true })}
+                  >
+                    {t('theory.drill.showSolution')}
+                  </Button>
+                </div>
+              ) : null}
             </li>
           );
         })}

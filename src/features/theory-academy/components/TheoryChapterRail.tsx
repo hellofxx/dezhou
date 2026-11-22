@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, BookMarked, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { ProgressBar } from '@/shared/components/data-display/ProgressBar';
@@ -97,10 +97,21 @@ export function TheoryChapterRail({
         </ol>
       </nav>
 
+      {/* 词汇表桥（Fix 4）：阅读中遇到生词的第二入口 */}
+      <Link
+        to="/theory/glossary"
+        className={cn(
+          'mt-3 flex min-h-11 items-center gap-1.5 border-t border-[var(--walnut-border)]/60 px-2 pt-2 text-xs text-[var(--ivory-muted)] transition-colors hover:text-[var(--ivory)]',
+          FOCUS_RING,
+        )}
+      >
+        <BookMarked className="h-3.5 w-3.5" aria-hidden="true" />
+        {t('theory.chapterView.glossaryEntry')}
+      </Link>
       <Link
         to="/theory"
         className={cn(
-          'mt-3 flex min-h-11 items-center gap-1.5 border-t border-[var(--walnut-border)]/60 px-2 pt-2 text-xs text-[var(--ivory-muted)] transition-colors hover:text-[var(--ivory)]',
+          'mt-1 flex min-h-11 items-center gap-1.5 px-2 text-xs text-[var(--ivory-muted)] transition-colors hover:text-[var(--ivory)]',
           FOCUS_RING,
         )}
       >

@@ -5,7 +5,8 @@
  * 期望值一律经 `i18n.t` 取，不在测试里写死中文；② 标准 / 短牌章节即使带了规则数据也不渲染
  * （变体判定在包装层，共享卡不做分派）；③ 章节未挂 `variantRules` 时回退 shared `headsUpRules`；
  * ④ `variantRules` 为空对象不崩且不补默认方向行；⑤ DOM 不出现裸 `variant.headsUpRules` key；
- * ⑥ 章节页把本卡插在正文（`chapter.content.map`）之前、header 之外（源码级定位断言）。
+ * ⑥ 章节页把本卡插在正文（Body 的 `groups.map`）之前、header 之外（源码级定位断言，
+ *    抽件后跨 View / Body 两文件验证装配顺序）。
  *
  * 未覆盖：真实浏览器下的动效与窄屏排版（Q2 浏览器验证）。
  */
@@ -35,7 +36,7 @@ const LABEL_KEYS = [
 const HAN = /[㐀-鿿]/;
 
 /** 章节页源码（raw glob：component 项目跑在 jsdom，import.meta.url 非 file scheme） */
-const SOURCES = import.meta.glob<string>(['./TheoryChapterView.tsx'], {
+const SOURCES = import.meta.glob<string>(['./TheoryChapterView.tsx', './TheoryChapterBody.tsx'], {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -128,17 +129,23 @@ describe('TheoryVariantRuleCard', () => {
   });
 
   it('章节页把规则卡插在正文之前、header 之外', () => {
-    const source = SOURCES['./TheoryChapterView.tsx'];
-    expect(source, '未能读取 TheoryChapterView 源码').toBeTruthy();
+    const viewSource = SOURCES['./TheoryChapterView.tsx'];
+    const bodySource = SOURCES['./TheoryChapterBody.tsx'];
+    expect(viewSource, '未能读取 TheoryChapterView 源码').toBeTruthy();
+    expect(bodySource, '未能读取 TheoryChapterBody 源码').toBeTruthy();
 
-    const headerIdx = source!.indexOf('<TheoryChapterHeader');
-    const cardIdx = source!.indexOf('<TheoryVariantRuleCard');
-    const contentIdx = source!.indexOf('chapter.content.map');
+    // 抽件后装配分两层：View 里 header 先渲染，正文装配（TheoryChapterBody）在 header 之后
+    const headerIdx = viewSource!.indexOf('<TheoryChapterHeader');
+    const bodyIdx = viewSource!.indexOf('<TheoryChapterBody');
     expect(headerIdx).toBeGreaterThan(-1);
-    expect(cardIdx, '章节页必须渲染 TheoryVariantRuleCard').toBeGreaterThan(-1);
+    expect(bodyIdx).toBeGreaterThan(-1);
+    expect(bodyIdx).toBeGreaterThan(headerIdx);
+
+    // Body 里规则卡在分组正文（groups.map）之前，且不塞进 header
+    const cardIdx = bodySource!.indexOf('<TheoryVariantRuleCard');
+    const contentIdx = bodySource!.indexOf('groups.map');
+    expect(cardIdx, '章节正文必须渲染 TheoryVariantRuleCard').toBeGreaterThan(-1);
     expect(contentIdx).toBeGreaterThan(-1);
-    // header 先渲染，规则卡在 header 之后（不塞进 header），且在正文之前
-    expect(cardIdx).toBeGreaterThan(headerIdx);
     expect(cardIdx).toBeLessThan(contentIdx);
   });
 });

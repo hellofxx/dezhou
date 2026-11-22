@@ -157,7 +157,7 @@ export function TheoryGlossary({
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-[var(--ivory)] leading-snug">{item.name}</p>
                   {item.aliases.length > 0 && (
-                    <p className="text-[10px] text-[var(--ivory-muted)] mt-0.5 font-mono">
+                    <p className="text-[11px] text-[var(--ivory-muted)] mt-0.5 font-mono">
                       {item.aliases.join(' / ')}
                     </p>
                   )}

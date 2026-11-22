@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate, Navigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Trophy, BookOpen, ClipboardCheck, Compass } from 'lucide-react';
+import { ArrowLeft, ClipboardCheck, Compass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
-import { AcademyReadingPlane } from '@/shared/components/academy';
-import { Button } from '@/shared/components/ui/button';
+import { AcademyPeek, AcademyReadingPlane } from '@/shared/components/academy';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { progressCommands } from '@/features/progress/api';
 import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
@@ -21,25 +19,24 @@ import {
 } from '../utils/theoryMeta';
 import { TheoryChapterHeader } from './TheoryChapterHeader';
 import { TheoryChapterRail } from './TheoryChapterRail';
-import { TheorySectionRenderer } from './TheorySectionRenderer';
+import { TheoryChapterBody } from './TheoryChapterBody';
+import { TheoryChapterDone } from './TheoryChapterDone';
 import { TheoryQuiz } from './TheoryQuiz';
-import { TheoryCalcDrill } from './TheoryCalcDrill';
-import { PracticeBridgeCard } from './PracticeBridgeCard';
-import { TheoryVariantRuleCard } from './TheoryVariantRuleCard';
-import { NextChapterNav } from './NextChapterNav';
+import { TheoryQuizPeek } from './TheoryQuizPeek';
 import { TheoryNotesPanel } from './TheoryNotesPanel';
 import { ContentIssueReport } from './ContentIssueReport';
 import { getChapterLastReviewed } from './theoryOptionalSources';
 import { resolveTheoryLevelTitle } from '../utils/titleKeys';
-import { theoryContentKey } from '../utils/contentKeys';
 import { buildTheoryReviewItems } from '../utils/theorySrs';
 
 /**
  * 理论章节页：URL 直达门禁（所属 Level 未解锁则重定向回主页）+ 讲解 + 章末小测。
  * 小测完成 → recordChapterAttempt（首次才 emit 训练事件）+ recordTrainingDay
  * + 章末错题写入 SRS 复习队列（theory:<questionId>）。
- * 本批新增：收藏切换 / 最近校对日期 / 报告问题插槽（评估侧组件在后续批次接入）、
- * 章节笔记面板、首次作答 / 练习作答横幅、检查点与定位测评入口。
+ * 本视图只保留 phase 状态机与门禁接线；阅读正文（渐进披露 / 要点卡 / CalcDrill / CTA）
+ * 装配在 TheoryChapterBody，完成态装配在 TheoryChapterDone。
+ * quiz 阶段在小测之上提供原文 peek（AcademyPeek + TheoryQuizPeek），答错可经
+ * TheoryQuiz 的 onReview 回到阅读态（弃本次作答进度，peek 补偿保进度对照）。
  */
 export default function TheoryChapterView() {
   const { t } = useTranslation();
@@ -142,15 +139,6 @@ export default function TheoryChapterView() {
   const chapterCompleted = completedChapters.includes(chapter.id);
   const bestScore = quizScores[chapter.id];
   const attempt = chapterAttempts?.[chapter.id];
-  // 章节粒度桥接与 Level 粒度共存时的去重：章节推荐若已被 Level 推荐覆盖且本级已全部完成，
-  // 只保留更宽的 Level 卡，避免同一列表在同屏重复渲染两次
-  const chapterRecommendations = chapter.practiceRecommendations;
-  const chapterCoveredByLevel =
-    !!chapterRecommendations &&
-    levelCompleted &&
-    chapterRecommendations.lessons.every((lesson) =>
-      level.practiceRecommendations.lessons.some((item) => item.id === lesson.id)
-    );
   const lastReviewed = getChapterLastReviewed(chapter.id);
 
   const handleQuizComplete = (
@@ -215,73 +203,24 @@ export default function TheoryChapterView() {
           reportSlot={<ContentIssueReport chapterId={chapter.id} />}
         />
 
-        {phase === 'reading' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6 max-w-3xl mx-auto"
-          >
-            {/* 正文容器与 strategy-academy CourseView 完全一致（居中 max-w-3xl walnut-panel），
-                两学院课程文字展示的居中与容器大小统一 */}
-            <div className="space-y-6">
-              {/* 单挑规则卡：正文之前的规则先行（仅 heads-up 章节，标准 / 短牌由组件自判返回 null） */}
-              <TheoryVariantRuleCard chapter={chapter} />
-              {chapter.content.map((section, index) => (
-                <TheorySectionRenderer
-                  key={index}
-                  section={section}
-                  contentKey={theoryContentKey(chapter.id, index)}
-                  chapterOrder={chapter.order}
-                  sectionIndex={index}
-                />
-              ))}
-            </div>
-            {/* 读→算→测微闭环：正文之后、小测之前给当场计算；未登记演练槽的章节不渲染 */}
-            <TheoryCalcDrill key={chapter.id} chapterId={chapter.id} />
-            {/* 作答口径横幅：首次作答计入掌握度与能力分，重考只更新练习成绩 */}
-            <p className="mt-4 rounded-md border border-[var(--walnut-border)]/70 bg-[var(--felt-deep)]/50 px-3 py-2 text-[11px] leading-relaxed text-[var(--ivory-dim)]">
-              {attempt
-                ? `${t('theory.quiz.practiceAttempt')} · ${t('theory.quiz.retryPracticeHint')}`
-                : `${t('theory.quiz.firstAttempt')} · ${t('theory.quiz.firstAttemptHint')}`}
-            </p>
-            {chapterCompleted ? (
-              // 已完成章节：免重考复习导航（返回目录/下一章）+ 可选重考（幂等，取历史最高分）
-              // 三按钮(返回目录 / 重考小测 / 下一章)窄屏纵向堆叠，桌面端左/右双簇对齐
-              <div className="pt-4 mt-2 border-t border-[var(--walnut-border)]/50 flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-                <button
-                  onClick={() => navigate('/theory')}
-                  className={`inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors ${FOCUS_RING}`}
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  {t('theory.chapterView.backToChapters')}
-                </button>
-                <div className="flex flex-wrap items-center gap-3">
-                  <button
-                    onClick={() => setPhase('quiz')}
-                    className={`inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
-                  >
-                    {t('theory.chapterView.retryQuiz')}
-                  </button>
-                  <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
-                </div>
-              </div>
-            ) : (
-              <div className="pt-4 mt-2 border-t border-[var(--walnut-border)]/50 flex justify-end">
-                <Button variant="default" onClick={() => setPhase('quiz')} className="min-h-11">
-                  {t('theory.chapterView.startQuiz')}
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
-          </motion.div>
-        )}
+        {phase === 'reading' ? (
+          <TheoryChapterBody
+            chapter={chapter}
+            attempt={attempt}
+            chapterCompleted={chapterCompleted}
+            nextChapter={nextChapter}
+            nextChapterUnlocked={nextChapterUnlocked}
+            onStartQuiz={() => setPhase('quiz')}
+            onBackToChapters={() => navigate('/theory')}
+          />
+        ) : null}
 
         {/* 阅读辅助：章节笔记（key 绑定章节，切换时草稿重置） + 检查点/定位入口 */}
-        {phase === 'reading' && (
+        {phase === 'reading' ? (
           <div className="max-w-3xl mx-auto space-y-3">
             <TheoryNotesPanel key={chapter.id} chapterId={chapter.id} />
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-1 text-xs">
-              {levelCompleted && (
+              {levelCompleted ? (
                 <Link
                   to={`/theory/checkpoint/${level.id}`}
                   className={`inline-flex min-h-11 items-center gap-1.5 text-[var(--poker-info)] hover:underline rounded ${FOCUS_RING}`}
@@ -289,8 +228,8 @@ export default function TheoryChapterView() {
                   <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
                   {t('theory.level.checkpointEntry')}
                 </Link>
-              )}
-              {!hasPlacement && (
+              ) : null}
+              {!hasPlacement ? (
                 <Link
                   to="/theory/placement"
                   className={`inline-flex min-h-11 items-center gap-1.5 text-[var(--ivory-muted)] hover:text-[var(--ivory)] hover:underline rounded ${FOCUS_RING}`}
@@ -298,86 +237,41 @@ export default function TheoryChapterView() {
                   <Compass className="w-3.5 h-3.5" aria-hidden="true" />
                   {t('theory.placement.title')}
                 </Link>
-              )}
+              ) : null}
             </div>
           </div>
-        )}
+        ) : null}
 
-        {phase === 'quiz' && (
-          <div className="panel">
-            <TheoryQuiz key={retryCount} chapter={chapter} onComplete={handleQuizComplete} />
+        {phase === 'quiz' ? (
+          <div className="panel space-y-4">
+            {/* 原文 peek 在小测之上（常驻折叠壳）：答题时可对照概念，不离开作答态 */}
+            <AcademyPeek label={t('theory.quiz.peek')}>
+              <TheoryQuizPeek chapter={chapter} />
+            </AcademyPeek>
+            <TheoryQuiz
+              key={retryCount}
+              chapter={chapter}
+              onComplete={handleQuizComplete}
+              onReview={() => setPhase('reading')}
+            />
           </div>
-        )}
+        ) : null}
 
-        {phase === 'done' && (
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-            {/* 小测得分摘要 */}
-            {result && (
-              <div className="panel text-center py-6">
-                {result.score >= 70 ? (
-                  <Trophy size={36} className="mx-auto mb-3 text-[var(--brass-bright)]" aria-hidden="true" />
-                ) : (
-                  <BookOpen size={36} className="mx-auto mb-3 text-[var(--ivory-muted)]" aria-hidden="true" />
-                )}
-                <h2 className="font-display text-xl text-[var(--ivory)] mb-1">{t('theory.chapterView.chapterDone')}</h2>
-                <p className="text-sm text-[var(--ivory-dim)] mb-1">
-                  {t('theory.chapterView.answered', { correct: result.correct, total: result.total })}
-                </p>
-                <p className="font-numeric text-3xl text-[var(--brass-bright)]">{t('theory.chapterView.score', { score: result.score })}</p>
-              </div>
-            )}
-            {/* 章节粒度实践推荐（被 Level 推荐覆盖时不重复展示） */}
-            {chapterRecommendations && !chapterCoveredByLevel && (
-              <PracticeBridgeCard
-                recommendations={chapterRecommendations}
-                subtitleKey="theory.bridge.chapterSubtitle"
-              />
-            )}
-            {/* Level 全部完成时展示实践桥接推荐 */}
-            {levelCompleted && <PracticeBridgeCard recommendations={level.practiceRecommendations} />}
-            <div className="panel flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-              <div className="flex flex-wrap items-center gap-2">
-                <Link
-                  to="/lesson"
-                  className={`inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--brass)]/40 px-4 py-2 text-sm font-semibold text-[var(--brass-text)] transition-colors hover:bg-[var(--brass-glow)] ${FOCUS_RING}`}
-                >
-                  {t('theory.chapterView.backToCourseHub')}
-                </Link>
-                <button
-                  onClick={() => navigate('/theory')}
-                className={`inline-flex min-h-11 items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors ${FOCUS_RING}`}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                  {t('theory.chapterView.backToChapters')}
-                </button>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  onClick={() => {
-                    setRetryCount((c) => c + 1);
-                    setPhase('quiz');
-                  }}
-                  className={`inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-[var(--ivory-dim)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
-                >
-                  {t('theory.retryQuiz')}
-                </button>
-                <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
-              </div>
-            </div>
-            {/* 检查点入口：本级核心章读完后可自查（不解锁下一级、不发证） */}
-            {levelCompleted && (
-              <div className="max-w-3xl mx-auto">
-                <Link
-                  to={`/theory/checkpoint/${level.id}`}
-                  className={`inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline rounded ${FOCUS_RING}`}
-                >
-                  <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
-                  {t('theory.level.checkpointEntry')}
-                </Link>
-              </div>
-            )}
-          </motion.div>
-        )}
+{phase === 'done' ? (
+          <TheoryChapterDone
+            result={result}
+            chapter={chapter}
+            level={level}
+            levelCompleted={levelCompleted}
+            nextChapter={nextChapter}
+            nextChapterUnlocked={nextChapterUnlocked}
+            onRetry={() => {
+              setRetryCount((c) => c + 1);
+              setPhase('quiz');
+            }}
+            onBackToChapters={() => navigate('/theory')}
+          />
+        ) : null}
           </>
         )}
         </AcademyReadingPlane>
