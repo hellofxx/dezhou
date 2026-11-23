@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, useLocation } from 'react-router-dom';
+import i18n from '@/i18n/config';
 import AcademyHome from './AcademyHome';
 import { useAcademyStore } from '../store';
 import { getLevelSummariesByVariant, getTotalLessonCount } from '../utils/academyMeta';
@@ -107,6 +108,29 @@ describe('AcademyHome：有进度后的地图装配', () => {
     expect(screen.getByText('你在这里')).toBeTruthy();
     // 有进度态下不再渲染零状态起点标记
     expect(container.querySelector('[data-start="true"]')).toBeNull();
+  });
+});
+
+describe('AcademyHome：瘦身后地图主干', () => {
+  it('评估区带 #assessment 锚点（枢纽闭环步骤③的落地目标）', () => {
+    const { container } = renderHome();
+    const anchor = container.querySelector('#assessment');
+    expect(anchor).toBeTruthy();
+    expect(anchor!.querySelector('[aria-label="评估"]')).toBeTruthy();
+  });
+
+  it('学习工具默认折叠（原生 details），标题入口仍可达', () => {
+    const { container } = renderHome();
+    const details = container.querySelector('#academy-tools') as HTMLDetailsElement | null;
+    expect(details).toBeTruthy();
+    expect(details!.open).toBe(false);
+    expect(screen.getByText('学习工具')).toBeTruthy();
+  });
+
+  it('掌握度卡已上收课程枢纽，地图不再重复', () => {
+    useAcademyStore.getState().completeBasics();
+    renderHome();
+    expect(screen.queryByText(i18n.t('academy.mastery.title'))).toBeNull();
   });
 });
 

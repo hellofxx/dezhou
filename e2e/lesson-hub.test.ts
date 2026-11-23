@@ -57,6 +57,44 @@ test('枢纽 → 章节 → 返回课程目录：回到主线并回位阶段锚�
   guard.assertClean();
 });
 
+test('阶段卡闭环步骤③进入实战地图评估区，并可按 R3 返回主线', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+  await skipOnboarding(page);
+
+  await page.goto(`${APP_ROOT}lesson`);
+  await expectPageHeading(page, '课程');
+
+  const checkLink = page.locator('[data-hub-stage] a[href$="#assessment"]').first();
+  await expect(checkLink).toBeVisible();
+  await checkLink.click();
+
+  await expect(page).toHaveURL(/\/dezhou\/academy#assessment$/);
+  await expectPageHeading(page, '实战地图');
+  await expect(page.getByRole('main').getByRole('region', { name: '评估' })).toBeVisible();
+
+  await page.getByRole('main').getByRole('link', { name: '返回课程目录' }).click();
+  await expect(page).toHaveURL(/\/dezhou\/lesson$/);
+
+  guard.assertClean();
+});
+
+test('实战地图学习工具默认折叠，展开后工具入口可达', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+  await skipOnboarding(page);
+
+  await page.goto(`${APP_ROOT}academy`);
+  await expectPageHeading(page, '实战地图');
+
+  const summary = page.locator('#academy-tools > summary');
+  await expect(summary).toBeVisible();
+  await expect(page.getByText('5 分钟速训')).toBeHidden();
+
+  await summary.click();
+  await expect(page.getByText('5 分钟速训')).toBeVisible();
+
+  guard.assertClean();
+});
+
 test('基础入门页仍可从枢纽进入，旧课时深链不受影响', async ({ page }) => {
   const guard = guardBrowserErrors(page);
   await skipOnboarding(page);

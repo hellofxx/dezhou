@@ -4,7 +4,7 @@ import {
   getMasteryState,
   resolveFirstScore,
   type MasteryThresholds,
-} from '@/shared/utils/academyMastery';
+} from './academyMastery';
 
 export interface HubConceptCounts {
   total: number;

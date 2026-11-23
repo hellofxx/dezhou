@@ -1,11 +1,11 @@
-import { useMemo, type CSSProperties } from 'react';
+import { useEffect, useMemo, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Route, GraduationCap, Network, Search, BookOpen, Bookmark, Library, ChevronRight } from 'lucide-react';
+import { Zap, Route, GraduationCap, Network, Search, BookOpen, Bookmark, Library, ChevronDown, ChevronRight } from 'lucide-react';
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { BackLink } from '@/shared/components/layout/BackLink';
 import { academyMapFrom } from '@/shared/utils/courseBack';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyStore } from '../store';
@@ -15,7 +15,6 @@ import {
 } from '../utils/academyMeta';
 import { LevelLadder, findActiveLevelId } from './LevelLadder';
 import AcademyAssessmentCard from './AcademyAssessmentCard';
-import { StrategyMasteryCard } from './StrategyMasteryCard';
 import { TheoryBridgeCard } from './TheoryBridgeCard';
 import { getLessonMeta } from '../data/lessonMeta';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
@@ -24,11 +23,25 @@ import { cn } from '@/shared/utils/cn';
 export default function AcademyHome() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const { progress, getTotalProgress, basicsProgress } = useAcademy();
   const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
   const activeVariant = useAcademyStore((s) => s.activeVariant);
 
   const totalProgress = getTotalProgress();
+
+  // 闭环步骤③（枢纽阶段卡）跳入：仅当 hash 精确为评估区时滚动定位
+  useEffect(() => {
+    if (location.hash !== '#assessment') return;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timer = setTimeout(() => {
+      document.getElementById('assessment')?.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [location.hash]);
 
   // 零状态（渐进披露 §13.6）：无任何课程进度且未完成基础入门 → 首屏只走「从第一课开始」单一路径
   // 续学 Hero / 每日计划已由课程主线 /lesson 与首页 JourneyHome 承担，地图不再重复装配
@@ -123,13 +136,14 @@ export default function AcademyHome() {
           </motion.div>
 
           <aside className="space-y-4 lg:sticky lg:top-2">
-            <StrategyMasteryCard />
             <TheoryBridgeCard
               anchors={theoryAnchors}
               onNavigate={(route) => navigate(route, { state: academyMapFrom() })}
             />
-            {/* 评估区：检查点 / 认证 / 定位测评统一入口（检查点与认证只对标准变体开放） */}
-            <AcademyAssessmentCard level={checkpointLevel?.level ?? null} />
+            {/* 评估区：检查点 / 认证 / 定位测评统一入口（闭环步骤③锚点目标） */}
+            <div id="assessment" className="scroll-mt-2">
+              <AcademyAssessmentCard level={checkpointLevel?.level ?? null} />
+            </div>
             <ToolsGrid basicsCompleted={basicsProgress.completed} />
           </aside>
         </div>
@@ -248,33 +262,46 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
       transition={{ ...transitionStandard, delay: 0.12 }}
       aria-label={t('academy.tools.title')}
     >
-      <SectionLabel as="h2" className="mb-2.5 px-1">
-        {t('academy.tools.title')}
-      </SectionLabel>
-      <div className="grid grid-cols-2 gap-2.5">
-        {tools.map((tool) => (
-          <button
-            key={tool.title}
-            type="button"
-            onClick={() => navigate(tool.to)}
-            className="academy-tool-tile"
-            style={{ '--tool-accent': tool.accent } as CSSProperties}
-          >
-            <span className="academy-tool-icon" aria-hidden="true">
-              {tool.icon}
-            </span>
-            <span className="min-w-0">
-              <span className="block text-xs font-semibold text-[var(--ivory)] truncate">
-                {tool.title}
+      {/* 工具默认折叠：地图保持「阶梯 + 检索 + 评估」主干，工具按需展开 */}
+      <details id="academy-tools" className="group">
+        <summary
+          className={cn(
+            'mb-2.5 flex min-h-11 cursor-pointer list-none items-center gap-1 px-1',
+            '[&::-webkit-details-marker]:hidden',
+            FOCUS_RING,
+          )}
+        >
+          <ChevronDown
+            className="w-3.5 h-3.5 text-[var(--ivory-muted)] transition-transform group-open:rotate-180"
+            aria-hidden="true"
+          />
+          <SectionLabel as="h2">{t('academy.tools.title')}</SectionLabel>
+        </summary>
+        <div className="grid grid-cols-2 gap-2.5">
+          {tools.map((tool) => (
+            <button
+              key={tool.title}
+              type="button"
+              onClick={() => navigate(tool.to)}
+              className="academy-tool-tile"
+              style={{ '--tool-accent': tool.accent } as CSSProperties}
+            >
+              <span className="academy-tool-icon" aria-hidden="true">
+                {tool.icon}
               </span>
-              <span className="block text-[11px] text-[var(--ivory-muted)] truncate">
-                {tool.desc}
+              <span className="min-w-0">
+                <span className="block text-xs font-semibold text-[var(--ivory)] truncate">
+                  {tool.title}
+                </span>
+                <span className="block text-[11px] text-[var(--ivory-muted)] truncate">
+                  {tool.desc}
+                </span>
               </span>
-            </span>
-            <ChevronRight className="w-3 h-3 text-[var(--ivory-muted)] shrink-0 ml-auto" />
-          </button>
-        ))}
-      </div>
+              <ChevronRight className="w-3 h-3 text-[var(--ivory-muted)] shrink-0 ml-auto" />
+            </button>
+          ))}
+        </div>
+      </details>
     </motion.section>
   );
 }

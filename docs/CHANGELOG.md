@@ -10,6 +10,16 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-23 课程 IA 批次 4 · 学习闭环化与地图瘦身
+
+- **阶段卡闭环**：阶段卡按 `01 概念 / 02 实战 / 03 自查` 排序；步骤③仅标准变体，链 `/academy#assessment` 评估区锚点（`AcademyHome` hash 滚动，`reduced-motion` 降级 `auto`），不直链检查点页以保住「工具页回地图 → 地图根回主线」闭环。
+- **双泳道进度**：阶段头部以理论 / 实战两个迷你 `ProgressRing` 各自播报完成度（占位降级不伪造）；`complete` 与解锁语义不变（仍由实战完成态驱动）。
+- **课时级配对**：实战 chip 增加「前置概念：{chapter}」副标题（`lessonMeta.theoryAnchors[0]`，Drill / 无锚点降级不显示）。
+- **地图瘦身**：`/academy`、`/theory` 移除掌握度卡（单源回枢纽 `CourseMasteryDualCard`，含双泳道最弱项导航）；实战学习工具与理论阅读统计默认折叠（原生 `details`，理论统计 `flaggedQuestions > 0` 自动展开保 SRS 入口）。
+- **清理与回迁**：删除 0 消费者 `StrategyMasteryCard` / `TheoryMasteryCard` / `theoryMastery`（含测试）；`academyMastery` 因单消费由 `shared/utils/` 回迁 `strategy-academy/utils/`（准入守卫强制），`shared` 保留 `academySrs`；同步 AGENTS 契约表、`src/shared/AGENTS.md`、AI_GUIDE、TDD §5.8c、COURSE_IA §2/§9、DESIGN §5.25。
+- **测试**：新增 `CourseStageCard.test.tsx`、`TheoryHome.stats.test.tsx`；`CourseHub` / `AcademyHome` 增补闭环、双环、配对、折叠与锚点断言；e2e 增「步骤③ → 评估区 → 回主线」与「工具默认折叠」。
+- **持久化**：不新增 store、不改两院 persist schema / version / migrate。
+
 ### 2026-11-23 课程 IA 批次 3 · 地图去重与覆盖/评估
 
 - **地图去重**：`/academy`、`/theory` 移除与主线/首页重复的续学 Hero 与每日计划装配；续学归 `/lesson`，每日计划归首页。

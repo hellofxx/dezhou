@@ -1,5 +1,5 @@
-/** 两院共用的掌握度派生（展示层，不门禁）。 */
-import type { MasteryState, MasterySummary } from '../types/academy';
+/** 课程枢纽掌握度派生（展示层，不门禁）：策略掌握与理论掌握投影共用口径。 */
+import type { MasteryState, MasterySummary } from '@/shared/types/academy';
 
 /** 掌握度阈值（唯一事实源）：≥80 已掌握，60–79 通过，<60 待复习。 */
 export const ACADEMY_MASTERY_THRESHOLDS = { mastered: 80, passing: 60 } as const;

@@ -86,7 +86,6 @@ const BASELINE: Readonly<Record<string, number>> = {
   'src/features/theory-academy/components/TheoryChapterRail.tsx': 2,
   'src/features/theory-academy/components/TheoryGlossary.tsx': 1,
   'src/features/theory-academy/components/TheoryLadder.tsx': 6,
-  'src/features/theory-academy/components/TheoryMasteryCard.tsx': 1,
   'src/features/theory-academy/components/TheoryRecommendationCard.tsx': 1,
   'src/features/theory-academy/components/TheoryResume.tsx': 1,
   'src/features/theory-academy/components/TheoryRichBlock.tsx': 2,

@@ -134,10 +134,18 @@
       "drillBadge": "Drill",
       "emptyTheory": "No concept chapters in this stage",
       "emptyPractice": "No practice lessons in this stage",
+      "anchorPrefix": "Concept: {{title}}",
       "viewAll": "View all",
       "collapse": "Collapse"
     },
     "theoryUnavailable": "Concept links pending · practice lane is available",
+    "loop": {
+      "check": "Check & certify",
+      "checkHint": "Assessment",
+      "ringsLabel": "Dual-lane completion",
+      "ringAria": "{{lane}} {{done}}/{{total}}",
+      "ringUnknown": "{{lane}} not available"
+    },
     "supplemental": {
       "title": "Supplemental reading"
     },

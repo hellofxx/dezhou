@@ -26,7 +26,7 @@
 - **阶段**：策略侧 `learningStages.ts` 按 Level 序列与先修生成阶段快照；阶段的 `theoryChapterIds` 由课时声明的理论锚点投影而成（去重保序，短牌可为空）。归并、状态与「下一课」的纯函数在 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`，progress 与 strategy 共用同一份判定。
 - **课时 / 章节**：课时（含 Drill 型）与理论章节是两种执行载体；课时 id 与理论章节 id 分属不同命名空间，跨院只传 id / 路由字符串。枢纽只做投影：不新增 store / registry，不改 persist。
 - **概念锚点**：课时数据层声明锚点，理论章按锚点归入阶段；没有锚点的章节进入折叠「补充阅读」。短牌缺锚点时显示「概念关联待补充」，不伪造映射。
-- **掌握度 / SRS**：首次成绩判定 `resolveFirstScore` 与理论复习项判定 `isTheoryReviewItem` 是两院共用单源；掌握度阈值以 `shared/utils/academyMastery.ts`、题级复习以 `shared/utils/academySrs.ts` 为准，模块内不得另写第二套阈值或判定。
+- **掌握度 / SRS**：首次成绩判定 `resolveFirstScore` 与理论复习项判定 `isTheoryReviewItem` 是单一事实源；掌握度派生（`summarizeMastery` / 阈值）位于 `strategy-academy/utils/academyMastery.ts`（枢纽投影两院掌握，单消费回迁），题级复习以 `shared/utils/academySrs.ts` 为准，模块内不得另写第二套阈值或判定。
 
 ---
 
@@ -130,3 +130,13 @@ graph TD
 - **枢纽覆盖报告（只读）**：`CourseCoverageCard` 汇总理论章节与实战课时的双向映射（已关联实战章 / 补充阅读章 / 有理论锚点的课时），数据来自 `hubStages` 与 `lessonMeta.theoryAnchors`；只展示，不门禁、不写进度。
 - **地图评估区（只读聚合）**：`/academy` 的「评估」区集中检查点 / 认证 / 定位；`/theory` 的「评估」区集中定位 / 检查点（理论不发证书）。评估行为与门禁不变，仅收敛入口。
 - **去重**：两张地图不再重复主线/首页的续学 Hero 与每日计划；续学归 `/lesson`，每日计划归首页。
+
+## 9. 学习闭环化与地图瘦身（批次 4，2026-11-23）
+
+> 只改呈现层；§1 教育目的、§4 角色、§5 规则 R1–R10、§6 数据边界均不变。
+
+- **阶段卡闭环**：每段按 `01 概念 → 02 实战 → 03 自查` 呈现；步骤③仅标准变体显示，链接 `/academy#assessment`（评估区锚点）。不直链检查点页：工具页按 R2 回地图会打断「回主线」闭环，评估区聚合入口 + 地图根 R3 回主线使闭环闭合。非标准变体呈两步闭环。
+- **双泳道进度**：阶段头部并列理论 / 实战两个迷你进度环，理论未就绪或短牌无锚点时占位不伪造；阶段 `complete` 与解锁仍由实战完成态驱动（`computeStageStates` 不变）。
+- **课时级配对**：实战 chip 展示首个理论锚点章标题（`lessonMeta.theoryAnchors[0]`）；Drill / 无锚点降级不显示。
+- **地图瘦身**：掌握度单源为枢纽 `CourseMasteryDualCard`（含最弱项导航）；实战学习工具与理论阅读统计默认折叠（原生 `details`，理论统计 `flaggedQuestions > 0` 自动展开）；地图保留「阶梯 + 检索 + 评估」主干。
+- **单一事实源回迁**：`academyMastery`（掌握度派生）因单消费回迁 `strategy-academy/utils/`（准入守卫强制）；理论复习判定仍以 `shared/utils/academySrs.ts` 为准。

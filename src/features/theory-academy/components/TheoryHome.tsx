@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, BookOpenCheck, ChevronRight, Flag, Flame, GraduationCap, Target } from 'lucide-react';
+import { ArrowRight, BookOpenCheck, ChevronDown, ChevronRight, Flag, Flame, GraduationCap, Target } from 'lucide-react';
 import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
@@ -19,7 +19,6 @@ import { getTheoryChapterRecommendation } from '../data/theoryRecommendations';
 import type { PokerVariant } from '@/shared/types/elo';
 import { TheoryLadder } from './TheoryLadder';
 import { TheorySupplementalCard } from './TheorySupplementalCard';
-import { TheoryMasteryCard } from './TheoryMasteryCard';
 import { TheoryLearningPaths } from './TheoryLearningPaths';
 import { TheoryAssessmentCard } from './TheoryAssessmentCard';
 import { TheoryRecommendationCard } from './TheoryRecommendationCard';
@@ -159,11 +158,6 @@ export default function TheoryHome() {
               flaggedCount={progress.flaggedQuestions.length}
               activeVariant={activeVariant}
             />
-            <TheoryMasteryCard
-              chapters={coreChapters}
-              quizScores={progress.quizScores}
-              chapterAttempts={progress.chapterAttempts}
-            />
             {activeVariant === 'standard' && (
               <>
                 <TheoryRecommendationCard recommendation={recommendation} />
@@ -220,36 +214,49 @@ function ReadingStats({
       transition={{ ...transitionStandard, delay: 0.12 }}
       aria-label={t('theory.stats.title')}
     >
-      <SectionLabel as="h2" className="mb-2.5 px-1">
-        {t('theory.stats.title')}
-      </SectionLabel>
-      <div className="panel space-y-2.5">
-        {stats.map((s) => (
-          <div key={s.label} className="flex items-center gap-3">
-            <span className="w-7 h-7 rounded-md bg-[var(--walnut-raised)] flex items-center justify-center text-[var(--brass-bright)] shrink-0">
-              {s.icon}
-            </span>
-            <span className="flex-1 text-xs text-[var(--ivory-muted)]">{s.label}</span>
-            <span className="font-numeric text-sm text-[var(--ivory)]">{s.value}</span>
-          </div>
-        ))}
-        <Link
-          to="/theory/review"
-          aria-label={t('theory.stats.flaggedEntryAria', { count: flaggedCount })}
-          className={`group flex items-center gap-3 pt-2 mt-0.5 border-t border-[var(--walnut-border)]/60 rounded-md hover:bg-[var(--felt-raised)]/40 transition-colors ${FOCUS_RING}`}
+      {/* 统计默认折叠；有疑难标记时自动展开，保住 SRS 复习入口的可见性 */}
+      <details open={flaggedCount > 0} className="group">
+        <summary
+          className={cn(
+            'mb-2.5 flex min-h-11 cursor-pointer list-none items-center gap-1 px-1',
+            '[&::-webkit-details-marker]:hidden',
+            FOCUS_RING,
+          )}
         >
-          <span className="w-7 h-7 rounded-md bg-[var(--poker-terra)]/15 flex items-center justify-center text-[var(--poker-terra-bright)] shrink-0">
-            <Flag className={cn('w-3.5 h-3.5', flaggedCount === 0 && 'opacity-50')} />
-          </span>
-          <span className="flex-1 text-xs text-[var(--ivory-muted)] group-hover:text-[var(--ivory)] transition-colors">
-            {t('theory.stats.flaggedLabel')}
-          </span>
-          <span className="font-numeric text-sm text-[var(--ivory)]">
-            {flaggedCount > 0 ? flaggedCount : t('theory.stats.flaggedNone')}
-          </span>
-          <ChevronRight className="w-3.5 h-3.5 text-[var(--ivory-dim)] group-hover:text-[var(--brass-bright)] transition-colors shrink-0" />
-        </Link>
-      </div>
+          <ChevronDown
+            className="w-3.5 h-3.5 text-[var(--ivory-muted)] transition-transform group-open:rotate-180"
+            aria-hidden="true"
+          />
+          <SectionLabel as="h2">{t('theory.stats.title')}</SectionLabel>
+        </summary>
+        <div className="panel space-y-2.5">
+          {stats.map((s) => (
+            <div key={s.label} className="flex items-center gap-3">
+              <span className="w-7 h-7 rounded-md bg-[var(--walnut-raised)] flex items-center justify-center text-[var(--brass-bright)] shrink-0">
+                {s.icon}
+              </span>
+              <span className="flex-1 text-xs text-[var(--ivory-muted)]">{s.label}</span>
+              <span className="font-numeric text-sm text-[var(--ivory)]">{s.value}</span>
+            </div>
+          ))}
+          <Link
+            to="/theory/review"
+            aria-label={t('theory.stats.flaggedEntryAria', { count: flaggedCount })}
+            className={`group/flagged flex items-center gap-3 pt-2 mt-0.5 border-t border-[var(--walnut-border)]/60 rounded-md hover:bg-[var(--felt-raised)]/40 transition-colors ${FOCUS_RING}`}
+          >
+            <span className="w-7 h-7 rounded-md bg-[var(--poker-terra)]/15 flex items-center justify-center text-[var(--poker-terra-bright)] shrink-0">
+              <Flag className={cn('w-3.5 h-3.5', flaggedCount === 0 && 'opacity-50')} />
+            </span>
+            <span className="flex-1 text-xs text-[var(--ivory-muted)] group-hover/flagged:text-[var(--ivory)] transition-colors">
+              {t('theory.stats.flaggedLabel')}
+            </span>
+            <span className="font-numeric text-sm text-[var(--ivory)]">
+              {flaggedCount > 0 ? flaggedCount : t('theory.stats.flaggedNone')}
+            </span>
+            <ChevronRight className="w-3.5 h-3.5 text-[var(--ivory-dim)] group-hover/flagged:text-[var(--brass-bright)] transition-colors shrink-0" />
+          </Link>
+        </div>
+      </details>
     </motion.section>
   );
 }

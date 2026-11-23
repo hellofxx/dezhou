@@ -134,10 +134,18 @@
       "drillBadge": "练习",
       "emptyTheory": "本段暂无概念课",
       "emptyPractice": "本段暂无实战课",
+      "anchorPrefix": "前置概念：{{title}}",
       "viewAll": "查看全部",
       "collapse": "收起"
     },
     "theoryUnavailable": "概念关联待补充 · 可先走实战线",
+    "loop": {
+      "check": "自查与认证",
+      "checkHint": "评估区",
+      "ringsLabel": "双泳道完成度",
+      "ringAria": "{{lane}} {{done}}/{{total}}",
+      "ringUnknown": "{{lane}}暂无数据"
+    },
     "supplemental": {
       "title": "补充阅读"
     },

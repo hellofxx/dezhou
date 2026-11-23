@@ -9,7 +9,7 @@ import {
 } from '@/features/progress';
 import { getTheoryDataSource } from '@/shared/stores/theoryDataSourceRegistry';
 import { isTheoryReviewItem } from '@/shared/utils/academySrs';
-import { summarizeMastery } from '@/shared/utils/academyMastery';
+import { summarizeMastery } from '../utils/academyMastery';
 import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { VariantToggle } from './VariantToggle';
@@ -264,6 +264,7 @@ export default function CourseHub() {
                 completedChapterIds={completedChapterSet}
                 drillLessonIds={drillLessonIds}
                 nextLessonId={nextAction.kind === 'practice' ? nextAction.targetId : undefined}
+                showCheckStep={activeVariant === 'standard'}
               />
             ))}
           </div>

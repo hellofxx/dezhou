@@ -63,8 +63,10 @@ bootstrapAndRender();
 // Register Service Worker（延迟到 bootstrap 后，避免并行竞态）
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js?v=' + APP_VERSION).catch(() => {
-      // SW registration failed, app still works normally
+    const swUrl = import.meta.env.BASE_URL + 'sw.js?v=' + APP_VERSION;
+    navigator.serviceWorker.register(swUrl).catch((error: unknown) => {
+      // 注册失败时离线能力不可用，但应用仍可正常在线使用
+      console.error('[bootstrap] Service worker registration failed', swUrl, APP_VERSION, error);
     });
   });
 }

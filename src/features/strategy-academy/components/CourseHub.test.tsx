@@ -228,6 +228,33 @@ describe('CourseHub', () => {
     expect(theoryVariant).toBe('standard');
   });
 
+  it('标准变体阶段卡呈闭环步骤：01 概念 / 02 实战 / 03 自查，自查链接评估区锚点', () => {
+    const { container } = renderHub();
+
+    const stage1 = container.querySelector('#hub-stage-1');
+    expect(stage1).toBeTruthy();
+    expect(stage1!.textContent).toContain('01');
+    expect(stage1!.textContent).toContain('02');
+    expect(stage1!.textContent).toContain('03');
+    expect(stage1!.textContent).toContain('自查与认证');
+    const checkLink = stage1!.querySelector('a[href="/academy#assessment"]');
+    expect(checkLink).toBeTruthy();
+  });
+
+  it('阶段卡双环分别播报理论 / 实战完成度', () => {
+    renderHub();
+
+    expect(screen.getAllByRole('img', { name: '概念 0/1' }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('img', { name: '实战 0/1' }).length).toBeGreaterThan(0);
+  });
+
+  it('实战 chip 展示首个理论锚点的前置概念', () => {
+    const { container } = renderHub();
+
+    const stage1 = container.querySelector('#hub-stage-1');
+    expect(stage1!.textContent).toContain('前置概念');
+  });
+
   it('短牌没有理论锚点时显示概念待补充，实战仍在', () => {
     const original = STAGES.map((item) => item.theoryChapterIds);
     STAGES.forEach((item) => {
@@ -238,6 +265,8 @@ describe('CourseHub', () => {
 
     expect(screen.getAllByText(/概念关联待补充/).length).toBeGreaterThan(0);
     expect(container.querySelector('a[href="/lesson/l1-basics"]')).toBeTruthy();
+    // 非标准变体不呈自查步骤（检查点 / 认证只对标准开放）
+    expect(container.querySelector('a[href="/academy#assessment"]')).toBeNull();
     STAGES.forEach((item, index) => {
       item.theoryChapterIds = original[index] ?? [];
     });

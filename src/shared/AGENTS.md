@@ -49,10 +49,10 @@ src/shared/
 - `components/layout/BackLink`：返回入口统一件（`to` / `historyBack` / 文本·胶囊·按钮三变体，icon-only 必填 `aria-label`，触摸目标 ≥44px）
 - `components/layout/SectionLabel`：section / panel 标题统一件（`as` / `icon` / `count` / `id` / `className`，不产 h1）
 - `components/system/ErrorBoundary`：全站错误兜底，脱离布局渲染（`<h1>` 在 `pageHeadingGuard` allowlist 登记）
-- `utils/`：`cn` / `formatters` / `toLocalDateKey` / `handClassifier` / `rangeParser` / `deck` / `seededShuffle`（随机与数值判定底座）/ `optionOrder`（选项排序策略唯一实现）/ `academyMastery`（掌握度阈值 + `resolveFirstScore`）/ `academySrs`（两院题级 SRS + `isTheoryReviewItem`）/ `academyJourneyGroups` / `academyJourneyProgress`（四段旅程与下一课，progress + strategy 共用）/ `academyQuizBank` / `academyQuizDraw` / `academyTakeaway`（要点卡自动装配）/ `academyVariantRules` / `motion` / `spacedRepetition` / `localStorageStub` / `persistShape`
+- `utils/`：`cn` / `formatters` / `toLocalDateKey` / `handClassifier` / `rangeParser` / `deck` / `seededShuffle`（随机与数值判定底座）/ `optionOrder`（选项排序策略唯一实现）/ `academySrs`（两院题级 SRS + `isTheoryReviewItem`）/ `academyJourneyGroups` / `academyJourneyProgress`（四段旅程与下一课，progress + strategy 共用）/ `academyQuizBank` / `academyQuizDraw` / `academyTakeaway`（要点卡自动装配）/ `academyVariantRules` / `motion` / `spacedRepetition` / `localStorageStub` / `persistShape`
 - `stores/`：`trainingEvents`（训练事件总线）、`debugMode`（调试解锁，唯一独立 persist store）、`achievementRegistry` / `academyDataSourceRegistry` / `theoryDataSourceRegistry`（注册表）
 
-> 已迁出本层的常见误解项：`pokerMath` 在 `pot-odds/utils/`；`sanitizeReviewLabel` 在 `progress/utils/`；`ResultSummary` 在 `gto-simulator/components/`；`TableRail` 在 `src/layouts/`；`moduleLabels` / `useModuleLabel` / `useAcademyDataSource` / `ability` 在 `progress/`。本层不存在 `elo` / `handRanking` / `shareCard` / `soundManager` / `quizOrder` 工具与 `utils/index.ts` barrel。
+> 已迁出本层的常见误解项：`pokerMath` 在 `pot-odds/utils/`；`sanitizeReviewLabel` 在 `progress/utils/`；`academyMastery` 在 `strategy-academy/utils/`（单消费回迁）；`ResultSummary` 在 `gto-simulator/components/`；`TableRail` 在 `src/layouts/`；`moduleLabels` / `useModuleLabel` / `useAcademyDataSource` / `ability` 在 `progress/`。本层不存在 `elo` / `handRanking` / `shareCard` / `soundManager` / `quizOrder` 工具与 `utils/index.ts` barrel。
 
 ## 导入规则
 

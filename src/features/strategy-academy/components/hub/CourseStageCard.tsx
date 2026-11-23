@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { BookOpen, ChevronDown, Target } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronRight, ShieldCheck, Target } from 'lucide-react';
 import { ProgressRing } from '@/shared/components/data-display/ProgressRing';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
 import { hubFrom } from '@/shared/utils/courseBack';
+import { getLessonMeta } from '../../data/lessonMeta';
 import type { HubStage } from '../../utils/hubStages';
 
 interface CourseStageCardProps {
@@ -16,6 +17,8 @@ interface CourseStageCardProps {
   completedChapterIds: ReadonlySet<string>;
   drillLessonIds: ReadonlySet<string>;
   nextLessonId?: string;
+  /** 闭环步骤③（自查）仅标准变体显示，链接实战地图评估区锚点 */
+  showCheckStep?: boolean;
 }
 
 function orderUnread<T extends string>(ids: readonly T[], done: ReadonlySet<string>): T[] {
@@ -33,8 +36,67 @@ function chipClass(done: boolean, highlight = false): string {
   );
 }
 
+/** 双泳道迷你环：理论 / 实战各自播报；理论不可用或未就绪时占位，不伪造数据 */
+function StageRing({
+  lane,
+  done,
+  total,
+  known,
+  unavailable,
+  icon,
+}: {
+  lane: string;
+  done: number;
+  total: number;
+  known: boolean;
+  unavailable?: boolean;
+  icon: React.ReactNode;
+}) {
+  const { t } = useTranslation();
+
+  if (!known || unavailable) {
+    return (
+      <div className="flex flex-col items-center gap-0.5">
+        <ProgressRing
+          value={0}
+          size={40}
+          variant="academy"
+          status="idle"
+          ariaLabel={t('academy.courseHub.loop.ringUnknown', { lane })}
+        />
+        <span
+          className="inline-flex items-center gap-0.5 text-[11px] text-[var(--ivory-dim)]"
+          aria-hidden="true"
+        >
+          {icon}—
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <ProgressRing
+        value={total > 0 ? done / total : 0}
+        size={40}
+        variant="academy"
+        ariaLabel={t('academy.courseHub.loop.ringAria', { lane, done, total })}
+        center={
+          <span className="font-numeric text-[11px] text-[var(--ivory)]">
+            {done}/{total}
+          </span>
+        }
+      />
+      <span className="text-[var(--brass-text)]" aria-hidden="true">
+        {icon}
+      </span>
+    </div>
+  );
+}
+
 function Lane({
   title,
+  step,
   icon,
   ids,
   doneIds,
@@ -46,8 +108,10 @@ function Lane({
   nextId,
   drillIds,
   stageIndex,
+  subtitleFor,
 }: {
   title: string;
+  step: string;
   icon: React.ReactNode;
   ids: readonly string[];
   doneIds: ReadonlySet<string>;
@@ -59,6 +123,7 @@ function Lane({
   nextId?: string;
   drillIds?: ReadonlySet<string>;
   stageIndex: number;
+  subtitleFor?: (id: string) => string | undefined;
 }) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
@@ -70,7 +135,12 @@ function Lane({
   return (
     <div className="min-w-0">
       <h4 className="m-0 mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--ivory-muted)]">
-        <span className="text-[var(--brass-text)]" aria-hidden="true">{icon}</span>
+        <span className="font-numeric text-[var(--brass-text)]" aria-hidden="true">
+          {step}
+        </span>
+        <span className="text-[var(--brass-text)]" aria-hidden="true">
+          {icon}
+        </span>
         {title}
         <span className="font-numeric text-[var(--ivory-dim)]">
           {known ? `${doneIds.size}/${ids.length}` : '—'}
@@ -85,18 +155,29 @@ function Lane({
           <div className="flex flex-wrap gap-2">
             {visible.map((id) => {
               const done = doneIds.has(id);
+              const subtitle = subtitleFor?.(id);
               return (
                 <Link
                   key={id}
                   to={route(id)}
                   state={linkState}
-                  className={chipClass(done, id === nextId)}
+                  className={cn(
+                    chipClass(done, id === nextId),
+                    subtitle && 'flex-col items-start justify-center gap-0.5',
+                  )}
                   aria-current={id === nextId ? 'step' : undefined}
                 >
-                  <span className="truncate">{labels[id] ?? id}</span>
-                  {drillIds?.has(id) ? (
-                    <span className="rounded-sm border border-[var(--brass)]/40 px-1 text-[9px] uppercase tracking-wider text-[var(--brass-text)]">
-                      {t('academy.courseHub.lanes.drillBadge')}
+                  <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
+                    <span className="truncate">{labels[id] ?? id}</span>
+                    {drillIds?.has(id) ? (
+                      <span className="rounded-sm border border-[var(--brass)]/40 px-1 text-[9px] uppercase tracking-wider text-[var(--brass-text)]">
+                        {t('academy.courseHub.lanes.drillBadge')}
+                      </span>
+                    ) : null}
+                  </span>
+                  {subtitle ? (
+                    <span className="max-w-full truncate text-[11px] font-normal text-[var(--ivory-muted)]">
+                      {subtitle}
                     </span>
                   ) : null}
                 </Link>
@@ -131,10 +212,23 @@ export default function CourseStageCard({
   completedChapterIds,
   drillLessonIds,
   nextLessonId,
+  showCheckStep = false,
 }: CourseStageCardProps) {
   const { t } = useTranslation();
   const doneLessons = new Set(stage.lessonIds.filter((id) => completedLessonIds.has(id)));
   const doneChapters = new Set(stage.theoryChapterIds.filter((id) => completedChapterIds.has(id)));
+  // 课时级配对：实战 chip 展示首个理论锚点章标题（无锚点 / 未标注章降级不显示）
+  const anchorTitleFor = useCallback(
+    (lessonId: string): string | undefined => {
+      const anchorId = getLessonMeta(lessonId).theoryAnchors[0];
+      const anchorTitle = anchorId ? chapterLabels[anchorId] : undefined;
+      return anchorTitle
+        ? t('academy.courseHub.lanes.anchorPrefix', { title: anchorTitle })
+        : undefined;
+    },
+    [chapterLabels, t],
+  );
+
   return (
     <section
       id={`hub-stage-${stage.index}`}
@@ -162,18 +256,34 @@ export default function CourseStageCard({
                 ? t('academy.courseHub.status.current')
                 : t('academy.courseHub.status.locked')}
           </span>
-          <ProgressRing
-            value={stage.totalLessons === 0 ? 0 : stage.doneLessons / stage.totalLessons}
-            size={48}
-            variant="academy"
-            status={stage.unlocked ? undefined : 'idle'}
-          />
+          <div
+            className="flex items-center gap-2"
+            role="group"
+            aria-label={t('academy.courseHub.loop.ringsLabel')}
+          >
+            <StageRing
+              lane={t('academy.courseHub.lanes.theory')}
+              icon={<BookOpen className="h-3 w-3" />}
+              done={stage.doneChapters}
+              total={stage.totalChapters}
+              known={stage.theoryKnown}
+              unavailable={stage.theoryUnavailable}
+            />
+            <StageRing
+              lane={t('academy.courseHub.lanes.practice')}
+              icon={<Target className="h-3 w-3" />}
+              done={stage.doneLessons}
+              total={stage.totalLessons}
+              known
+            />
+          </div>
         </div>
       </div>
 
       <div className={cn('mt-4 grid gap-4', stage.unlocked ? 'md:grid-cols-2' : 'opacity-60')}>
         <Lane
           title={t('academy.courseHub.lanes.theory')}
+          step="01"
           icon={<BookOpen className="w-3.5 h-3.5" />}
           ids={stage.theoryChapterIds}
           doneIds={doneChapters}
@@ -186,6 +296,7 @@ export default function CourseStageCard({
         />
         <Lane
           title={t('academy.courseHub.lanes.practice')}
+          step="02"
           icon={<Target className="w-3.5 h-3.5" />}
           ids={stage.lessonIds}
           doneIds={doneLessons}
@@ -197,8 +308,29 @@ export default function CourseStageCard({
           nextId={nextLessonId}
           drillIds={drillLessonIds}
           stageIndex={stage.index}
+          subtitleFor={anchorTitleFor}
         />
       </div>
+
+      {showCheckStep ? (
+        <div className={cn('mt-3 border-t border-[var(--walnut-border)]/50 pt-2', !stage.unlocked && 'opacity-60')}>
+          <Link
+            to="/academy#assessment"
+            className={cn(
+              'inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 text-xs text-[var(--ivory-muted)] transition-colors hover:text-[var(--brass-bright)]',
+              FOCUS_RING,
+            )}
+          >
+            <span className="font-numeric text-[var(--brass-text)]" aria-hidden="true">
+              03
+            </span>
+            <ShieldCheck className="h-3.5 w-3.5 text-[var(--brass-text)]" aria-hidden="true" />
+            {t('academy.courseHub.loop.check')}
+            <span className="text-[var(--ivory-dim)]">· {t('academy.courseHub.loop.checkHint')}</span>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </Link>
+        </div>
+      ) : null}
 
       {stage.supplementalChapterIds.length > 0 ? (
         <details className="mt-3 border-t border-[var(--walnut-border)]/50 pt-2">

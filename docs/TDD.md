@@ -256,7 +256,7 @@ src/
 │       ├── deck.ts / handClassifier.ts / rangeParser.ts
 │       ├── seededShuffle.ts      # 种子洗牌与数值判定底座（Mulberry32 / FNV-1a / isNumericOptionSet / isDigitBearingOptionSet）
 │       ├── optionOrder.ts        # 选项排序策略唯一实现（numeric / shuffle / action / conditional）
-│       ├── academyQuizBank.ts / academyQuizDraw.ts / academySrs.ts / academyMastery.ts / academyVariantRules.ts
+│       ├── academyQuizBank.ts / academyQuizDraw.ts / academySrs.ts / academyVariantRules.ts
 │       ├── motion.ts             # MOTION_DURATION / MOTION_EASE / 预置 variants
 │       ├── spacedRepetition.ts   # SM-2 间隔重复调度
 │       ├── localStorageStub.ts   # 测试桩（按测试消费者计数豁免）
@@ -1391,6 +1391,7 @@ interface DailyRecommendation {
 - 锚点回位：`CourseHub` 在带 hash 时对 `#hub-stage-N` 调 `scrollIntoView`，`prefers-reduced-motion: reduce` 降级为 `auto`，短延迟等待阶段卡挂载；阶段卡以 `id=hub-stage-N` + `data-hub-stage` 暴露锚点，不引入新路由。
 - 地图角色：`/academy` 与 `/theory` 在壳层页名与目录入口中统一为「实战地图 / 理论地图」（`nav.academy` / `nav.theory`），地图根只提供返回课程主线，不承担下一步语义。
 - 覆盖报告与评估区（批次 3）：`CourseCoverageCard` 只读汇总理论↔实战映射（`hubStages` + `lessonMeta.theoryAnchors`，短牌降级「概念关联待补充」）；两张地图的「评估」区聚合检查点 / 认证 / 定位入口，不改变门禁与评估行为；地图不再重复续学 Hero / 每日计划。
+- 学习闭环化与地图瘦身（批次 4，2026-11）：阶段卡按 `01 概念 / 02 实战 / 03 自查` 排序，步骤③仅标准变体渲染，链接 `/academy#assessment`（`AcademyHome` 对 `#assessment` 做 hash 滚动，`prefers-reduced-motion` 降级为 `auto`；评估区 `id=assessment`）；阶段头部以理论 / 实战两个迷你 `ProgressRing` 各自播报完成度（理论未就绪 / 短牌无锚点占位，`complete` 与解锁语义不变）；实战 chip 副标题取 `lessonMeta.theoryAnchors[0]`，Drill / 无锚点降级不显示。地图瘦身：两张地图移除掌握度卡（单源为枢纽 `CourseMasteryDualCard`，含双泳道最弱项导航），实战工具与理论阅读统计收进原生 `details`（默认折叠；理论统计 `flaggedQuestions > 0` 时自动展开以保住 SRS 入口）。删除 0 消费者组件 `StrategyMasteryCard` / `TheoryMasteryCard` 与 `theoryMastery`；`academyMastery` 因单消费回迁 `strategy-academy/utils/`（准入守卫强制），shared 保留 `academySrs`。
 - 不改两院 store/persist schema；短牌无 `theoryChapterIds` 时显示「概念关联待补充」。
 
 ### 5.9 跨模块系统设计

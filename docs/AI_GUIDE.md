@@ -132,7 +132,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 
 ### 学院共享组件与纯函数
 
-- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane` / `FormulaDerivation` / `AcademyTakeawayCard` / `AcademyPeek` / `AcademyStickyCta`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyMastery` / `academyVariantRules` / `academyTakeaway`）。
+- 单一事实源：`src/shared/components/academy/`（`AcademyBridgeCard` / `AcademyMasteryCard` / `AcademyVariantRuleCard` / `AcademySearchShell` / `AcademyBookmarksPanel` / `AcademyNotesPanel` / `ContentIssueReportDialog` / `AcademyReadingPlane` / `FormulaDerivation` / `AcademyTakeawayCard` / `AcademyPeek` / `AcademyStickyCta`）与 `src/shared/utils/academy*`（`academyQuizBank` / `academyQuizDraw` / `academySrs` / `academyVariantRules` / `academyTakeaway`）；掌握度派生 `academyMastery` 单消费，位于 `strategy-academy/utils/`。
 - 理论学院与策略学院只允许薄包装消费：路由拼接、数据适配、i18n 文案留在 feature 内；shared 组件只接收 props/callbacks，禁止 import 任何 feature。
 - 理论侧 `PracticeBridgeCard` / `TheoryMasteryCard` / `TheorySearch*` / `theorySrs` / `applyStandardQuizBank` / `quizDraw` 与策略侧对应实现均改为薄包装；行为/视觉/文案以原测试为回归基线。
 - **阅读页双栏骨架**：`AcademyReadingPlane` 只负责「主阅读列（上限 768px）+ xl 学习导轨」的布局与 sticky 行为，导轨内容与文案由理论 `TheoryChapterRail` / 策略 `CourseStudyRail` 注入；shared 不读 store、不拼路由。
@@ -191,6 +191,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - 变体上下文契约：`TheoryDataSource` 提供可选 `getActiveVariant()` / `switchVariant(variant)`；课程枢纽（`CourseHub`）是变体 canonical 切换入口，地图与执行页只读当前变体，不得各自持久化第二份选择。切换经两院既有 action 落地，registry 机制与 persist 均不变；实现方未提供该可选方法时，消费方降级为只读展示（模块内不得另写变体切换旁路）。规则见 `docs/COURSE_IA.md` R5。
 - nextAction 顺序：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → 全部完成；阈值复用 `ACADEMY_MASTERY_THRESHOLDS`。
 - 不新增 store / registry、不改 persist；短牌无锚点时概念泳道显示「概念关联待补充」，实战泳道与下一步照常。
+- 学习闭环呈现（批次 4）：阶段卡步骤 `01 概念 / 02 实战 / 03 自查`，步骤③仅标准变体、链 `/academy#assessment`（不直链检查点页，保持 R2 → R3 闭环）；双迷你进度环只呈现（`complete` / 解锁仍由实战驱动）；实战 chip 副标题取 `lessonMeta.theoryAnchors[0]`。掌握度派生 `academyMastery` 为单消费，位于 `strategy-academy/utils/`；地图掌握度卡已移除，单源为枢纽 `CourseMasteryDualCard`。
 - 地图角色：`/academy` = 实战地图、`/theory` = 理论地图（`nav.academy` / `nav.theory` 单源），地图根只回课程主线；来源感知返回与锚点回位的实现细节见 §返回入口 与 `docs/COURSE_IA.md`。
 
 ### 返回入口

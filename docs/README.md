@@ -30,6 +30,12 @@
 | [`agents/README.md`](./agents/README.md) | 文件所有权指南（规则 / 交付 / 生成物索引） | 所有权或协作流程变更 |
 | [`knowledge-guide.md`](./knowledge-guide.md) | 知识库使用与回退 | 知识库策略变更 |
 
+## 活动计划（一次性，执行完成后移入 `history/`）
+
+| 文档 | 用途 | 归档时机 |
+|---|---|---|
+| [`plans/learning-loop-plan-2026-11.md`](./plans/learning-loop-plan-2026-11.md) | 方向 A 学习闭环化实施计划（阶段卡闭环 + 双地图瘦身） | 执行完成后 |
+
 ## 生成物（勿手改）
 
 - [`agents/MODULE_MAP.md`](./agents/MODULE_MAP.md) — `pnpm agents:map` 生成；`pnpm agents:map:check` 校验。
