@@ -10,6 +10,30 @@
 
 ## [Unreleased] - 2026-11-04
 
+### 2026-11-23 课程 IA 批次 3 · 地图去重与覆盖/评估
+
+- **地图去重**：`/academy`、`/theory` 移除与主线/首页重复的续学 Hero 与每日计划装配；续学归 `/lesson`，每日计划归首页。
+- **覆盖报告**：枢纽新增只读 `CourseCoverageCard`（理论↔实战映射计数，`hubStages` + `lessonMeta.theoryAnchors`；短牌降级「概念关联待补充」），不门禁。
+- **评估区聚合**：`/academy` 评估区集中检查点 / 认证 / 定位；`/theory` 评估区集中定位 / 检查点（理论不发证书）；行为与门禁不变。
+- **清理**：删除无生产消费者的 `AcademyResume` / `DailyPlanCard` / `TheoryPlacementCard` 及测试；`StatPair` 由覆盖卡复用保持 shared ≥2。
+
+### 2026-11-23 课程 IA 批次 2 · 变体统一契约（docs-first）
+
+- **契约**：`shared/types/theoryDataSource.ts` 的 `TheoryDataSource` 新增可选 `getActiveVariant(): PokerVariant` / `switchVariant(variant): void`；课程主线是变体（标准 / 短牌 / 单挑）的 canonical 切换命令发出方，地图与执行页只读当前变体。可选方法保持向后兼容，未实现时消费方降级为只读展示。
+- **边界**：registry 机制不变（theory bootstrap 注册、progress 只消费接口）；切换复用两院既有 action / 字段，不新增 store、不改两院 persist schema / version / migrate。
+- **文档**：PRD §5.16.15 修订为「只读投影 + 单一变体切换命令」；TDD §5.8c 增「变体上下文」段；AI_GUIDE §课程枢纽与双泳道登记变体命令；`docs/COURSE_IA.md` R5 标注批次 2 落地并在数据边界登记单一切换命令；根 AGENTS 契约表与归属表（新增「课程变体上下文」）同步。
+- **未包含**：theory bootstrap 实现与枢纽切换 UI 由批次 2 后续单元落地（本批仅契约与文档）。
+
+### 2026-11-23 课程 IA 批次 1 · 来源感知返回与地图角色
+
+- **返回契约**：新增 `shared/utils/courseBack.ts`（`COURSE_FROM_KEY` / `hubFrom` / `theoryMapFrom` / `academyMapFrom` / `resolveCourseBack`）；枢纽阶段卡前进链接携带 `courseFrom` state，课时与理论章节执行页按来源返回课程主线 `/lesson[#hub-stage-N]`、理论地图 `/theory` 或实战地图 `/academy`，深链 / 刷新 / 非法 state 兜底 `/lesson`。
+- **锚点回位**：`CourseHub` 按 `#hub-stage-N` 对阶段卡 `scrollIntoView`，`prefers-reduced-motion` 降级为 `auto`。
+- **地图角色**：`nav.academy` / `nav.theory` 改为「实战地图 / 理论地图」（zh/en 同步），两张地图根只提供「返回课程目录」→ 主线；地图下工具页返回所属地图。
+- **壳层**：`WIDE_ROUTES` 纳入 `/lesson` 与 `/theory`（主线与两张地图同宽，阅读页仍由模块内部限宽）；导航「课程」项激活态覆盖 01 组三前缀（桌面侧栏与移动底栏共用 `isCourseSectionPath`，仅作用于课程项）。
+- **文档**：新增 Current 文档 `docs/COURSE_IA.md`（教育目的 / 学习逻辑 / 评估分层 / IA / 规则 R1–R10 / 数据边界 / 返回旅程），同步 TDD §5.8c 与 §7.2、PRD §5.16.15 与 §5.27.8、AI_GUIDE §返回入口、根 AGENTS 契约表与归属表。
+- **测试**：`AppLayout` 展宽 / 课程激活 / 地图页名断言，`navSections` 01 组与地图页名，e2e 地图页名 + 地图根回主线、枢纽 → 课时 → 返回目录并回位、工具页回所属地图。
+- **持久化**：不新增 store、不改两院 persist schema / version / migrate。
+
 ### 2026-11-21 课程枢纽 · 双泳道阶段路径（v1.13.0）
 
 - **课程入口**：`/lesson` 由「自动跳下一节策略课」改为课程枢纽 CourseHub；`/lesson/:id`、`theory:` 前缀与 `/academy/lesson/:id` 旧深链保持兼容。

@@ -34,6 +34,7 @@ const renderLayout = (initialPath = '/help') =>
           <Route path="help" element={<p>帮助内容</p>} />
           <Route path="settings" element={<p>设置内容</p>} />
           <Route path="academy" element={<p>全部课程</p>} />
+          <Route path="theory" element={<p>理论地图内容</p>} />
         </Route>
       </Routes>
     </MemoryRouter>,
@@ -185,15 +186,50 @@ describe('AppLayout', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('帮助中心');
   });
 
-  it('内容区宽度分级：课程总览展宽，其余页面收敛（DESIGN §6.5）', () => {
-    renderLayout('/academy');
-    const wideWrapper = document.getElementById('main-content')?.firstElementChild as HTMLElement;
-    expect(wideWrapper.className).toContain('max-w-[1680px]');
+  it('内容区宽度分级：课程主线与两张地图展宽，其余页面收敛（DESIGN §6.5）', () => {
+    const wrapperFor = (path: string) => {
+      cleanup();
+      renderLayout(path);
+      return document.getElementById('main-content')?.firstElementChild as HTMLElement;
+    };
+
+    for (const path of ['/lesson', '/academy', '/theory']) {
+      expect(wrapperFor(path).className, `${path} 应走 L2 展宽`).toContain('max-w-[1680px]');
+    }
+
+    expect(wrapperFor('/help').className).toContain('max-w-[1400px]');
+  });
+
+  it('侧栏「课程」项激活态覆盖 01 组：主线 / 实战地图 / 理论地图（R10）', () => {
+    const courseLink = (path: string) => {
+      cleanup();
+      renderLayout(path);
+      return within(sidebarNav()).getByRole('link', { name: '课程' });
+    };
+
+    for (const path of ['/lesson', '/academy', '/theory']) {
+      expect(courseLink(path).className, `${path} 应点亮课程项`).toContain('nav-item-active');
+    }
+
+    // 仅作用于「课程」项：训练页点亮训练项，课程项回落
+    const drillCourseLink = courseLink('/drill');
+    expect(drillCourseLink.className).not.toContain('nav-item-active');
+    expect(within(sidebarNav()).getByRole('link', { name: '训练' }).className).toContain(
+      'nav-item-active',
+    );
+  });
+
+  it('课程区页名：主线为课程，/academy 为实战地图，/theory 为理论地图', () => {
+    renderLayout('/lesson');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('课程');
 
     cleanup();
-    renderLayout('/help');
-    const narrowWrapper = document.getElementById('main-content')?.firstElementChild as HTMLElement;
-    expect(narrowWrapper.className).toContain('max-w-[1400px]');
+    renderLayout('/academy');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('实战地图');
+
+    cleanup();
+    renderLayout('/theory');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('理论地图');
   });
 
   it('主导航从 h1 到内容的跳转目标存在（#main-content 可聚焦）', () => {

@@ -8,7 +8,7 @@
   "completed": "Completed",
   "clickToReview": "Click to review",
   "conceptGraph": {
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to practice map",
     "title": "Knowledge Graph",
     "subtitle": "Visualize course knowledge dependencies; click a node to jump to its course",
     "learned": "Learned",
@@ -77,7 +77,7 @@
   },
   "courseView": {
     "notFound": "Course not found",
-    "backToAcademy": "Back to Academy",
+    "backToAcademy": "Back to practice map",
     "lessonOf": "Lesson {{current}}/{{total}}",
     "localLessonBadge": "Local Lesson · L7 Extension",
     "lessonOrder": "Lesson {{order}}",
@@ -110,6 +110,16 @@
     "missingPrereqHint": "Please complete the following prerequisite lessons:",
     "railTitle": "Lessons in this level",
     "glossaryEntry": "Glossary"
+  },
+  "courseCoverage": {
+    "title": "Theory · Practice Coverage",
+    "mapped": "{{n}} chapters linked to practice",
+    "mappedLabel": "chapters linked to practice",
+    "supplemental": "{{n}} supplemental chapters",
+    "supplementalLabel": "supplemental chapters",
+    "practice": "{{anchored}}/{{total}} lessons have theory anchors",
+    "practiceLabel": "lessons with theory anchors",
+    "unavailable": "Concept links pending"
   },
   "courseHub": {
     "eyebrow": "My Course · Two Lanes",
@@ -477,7 +487,7 @@
   },
   "tracks": {
     "prereqHint": "We recommend completing {{levels}} first",
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to practice map",
     "title": "Learning Tracks",
     "subtitle": "Pick a path that fits your goals and systematically sharpen a specific skill set",
     "mergedIntoLevel7": "Merged into Level 7 · Native Lessons",
@@ -504,7 +514,7 @@
   },
   "levelCertification": {
     "levelNotFound": "Level not found",
-    "backToAcademy": "Back to Academy",
+    "backToAcademy": "Back to practice map",
     "title": "Level {{level}} Certification Quiz",
     "questionCount": "{{count}} questions (drawn from all quizzes in this level)",
     "passStandard": "Pass mark: accuracy ≥ {{required}}%",
@@ -782,7 +792,7 @@
     "lessons": "Lessons",
     "emptyTitle": "No matches",
     "emptyHint": "Try another keyword or return to the academy",
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to practice map",
     "contentHits": "Matches in lesson content",
     "loadingFullText": "Loading full-text index…",
     "loadFailed": "Full-text search failed; showing title matches",
@@ -870,7 +880,7 @@
   },
   "levelCheckpoint": {
     "levelNotFound": "Level not found",
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to practice map",
     "title": "Level {{level}} Checkpoint",
     "subtitle": "12 mixed questions across this level's core lessons; results break down by source lesson.",
     "lockedHint": "Finish every lesson in this level to start the checkpoint (currently {{completed}}/{{total}})",
@@ -895,7 +905,7 @@
     "retry": "Check again"
   },
   "bibliography": {
-    "backToAcademy": "Back to Strategy Academy",
+    "backToAcademy": "Back to practice map",
     "title": "Bibliography",
     "subtitle": "Authoritative sources behind the strategy lessons, grouped by level; no text is reproduced here",
     "count": "{{count}} books",

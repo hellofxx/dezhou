@@ -12,16 +12,23 @@ interface TheoryChapterRailProps {
   level: TheoryLevelInfo;
   currentChapterId: string;
   completedChapters: string[];
+  /** 来源感知返回目标（/lesson 或 /theory，由章节页解析后注入） */
+  backTo: string;
+  /** 来源感知返回文案（nav.* 已解析） */
+  backLabel: string;
 }
 
 /**
  * 章节页学习导轨（xl 起显示）：本级章节列表 + 完成进度 + 返回目录。
  * 只接收展示数据，不读 store；章节切换走真实路由。
+ * 底部「返回」目标与文案由父组件按进入来源注入，不在本组件硬编码 /theory。
  */
 export function TheoryChapterRail({
   level,
   currentChapterId,
   completedChapters,
+  backTo,
+  backLabel,
 }: TheoryChapterRailProps) {
   const { t } = useTranslation();
   const current = level.chapters.find((chapter) => chapter.id === currentChapterId);
@@ -109,14 +116,14 @@ export function TheoryChapterRail({
         {t('theory.chapterView.glossaryEntry')}
       </Link>
       <Link
-        to="/theory"
+        to={backTo}
         className={cn(
           'mt-1 flex min-h-11 items-center gap-1.5 px-2 text-xs text-[var(--ivory-muted)] transition-colors hover:text-[var(--ivory)]',
           FOCUS_RING,
         )}
       >
         <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-        {t('theory.chapterView.backToChapters')}
+        {backLabel}
       </Link>
     </div>
   );

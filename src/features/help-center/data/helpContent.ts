@@ -73,7 +73,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
       { type: 'paragraph', key: 'articles.academy.s0' },
       { type: 'steps', key: 'articles.academy.s1', stepKeys: ['articles.academy.s1-steps.0', 'articles.academy.s1-steps.1', 'articles.academy.s1-steps.2', 'articles.academy.s1-steps.3'] },
       { type: 'tip', key: 'articles.academy.s2' },
-      { type: 'link', key: 'articles.academy.s3', to: '/academy' },
+      { type: 'link', key: 'articles.academy.s3', to: '/lesson' },
     ],
   },
   {
@@ -137,7 +137,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
 /** 5 步快速上手路径 */
 export const QUICK_START_STEPS: { key: string; to: string }[] = [
   { key: 'quickStart.steps.0', to: '/onboarding' },
-  { key: 'quickStart.steps.1', to: '/academy' },
+  { key: 'quickStart.steps.1', to: '/lesson' },
   { key: 'quickStart.steps.2', to: '/quick' },
   { key: 'quickStart.steps.3', to: '/' },
   { key: 'quickStart.steps.4', to: '/progress' },

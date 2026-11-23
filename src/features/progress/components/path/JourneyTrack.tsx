@@ -74,7 +74,7 @@ export default function JourneyTrack() {
         <div className="flex items-center gap-3">
           <span className="journey-eyebrow">{t('dashboard.path.eyebrow')}</span>
           <Link
-            to="/academy"
+            to="/lesson"
             className="text-[10px] uppercase tracking-[0.18em] text-[var(--brass-text)] hover:text-[var(--brass-bright)] transition-colors"
           >
             {t('dashboard.path.allCourses')}

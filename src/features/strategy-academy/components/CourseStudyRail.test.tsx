@@ -3,7 +3,7 @@
  * - 本 Level 课程按数据顺序全量渲染为真实路由链接
  * - 当前课时带 aria-current="page"，其余不带
  * - 进度按本级已完成课时计算，课程元信息（时长 / 题量）可见
- * - 底部「返回学院」指向策略学院首页
+ * - 学习导轨不含返回入口（返回由页头来源感知提供）
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';

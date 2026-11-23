@@ -55,4 +55,8 @@ export interface TheoryDataSource {
   getLearningSnapshot?(): TheoryLearningSnapshot;
   /** 按变体返回章节目录（可选；静态数据，按变体缓存稳定引用） */
   getChapterCatalog?(variant: PokerVariant): readonly TheoryChapterIndexEntry[];
+  /** 当前理论变体（可选；枢纽 canonical 变体切换命令的读侧，未实现时消费方降级为未知） */
+  getActiveVariant?(): PokerVariant;
+  /** 切换理论变体（可选；枢纽 canonical 变体切换命令的写侧，未实现时消费方降级为只读展示） */
+  switchVariant?(variant: PokerVariant): void;
 }

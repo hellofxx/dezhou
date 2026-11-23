@@ -2,7 +2,7 @@
  * 课程完成面板（done 阶段）
  *
  * P2-01: 从 CourseView 抽取，用于收敛 done 阶段 JSX（约 84 行）。
- * 包含：成绩展示 + 返回学院/下一课按钮 + 理论推导回链 + 推荐下一步轨道卡列表。
+ * 包含：成绩展示 + 来源感知返回/下一课按钮 + 理论推导回链 + 推荐下一步轨道卡列表。
  */
 import { CheckCircle2, Home, ArrowRight, RotateCcw, Zap } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +28,8 @@ export interface CourseDoneViewProps {
   /** 理论章节跳转回调（CourseView 传入自己的 navigate）；缺省时区块可见但点击不跳转 */
   onNavigateTheory?: (route: string) => void;
   onBack: () => void;
+  /** 返回入口文案（来源感知，由 CourseView 经 resolveCourseBack 提供） */
+  backLabel: string;
   onNext: () => void;
   onRestart: (target?: 'units' | 'practice') => void;
   onNavigateToTrack: (trackId: string) => void;
@@ -44,6 +46,7 @@ export default function CourseDoneView({
   theoryAnchors,
   onNavigateTheory,
   onBack,
+  backLabel,
   onNext,
   onRestart,
   onNavigateToTrack,
@@ -92,7 +95,7 @@ export default function CourseDoneView({
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] hover:bg-[var(--walnut-raised)]/80 transition-colors text-sm"
           >
             <Home className="w-4 h-4" />
-            {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+            {backLabel}
           </button>
           {hasPractice && (
             <button

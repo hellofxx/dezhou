@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 import { guardBrowserErrors } from './fixtures/browserErrors';
 import {
   APP_ROOT,
+  BACK_TO_COURSE_HUB,
+  COURSE_GROUP,
   SIDEBAR_ITEMS,
   expectPageHeading,
   navigateFromSidebar,
@@ -78,6 +80,34 @@ test('旧训练入口 3 条重定向到二级站，落点 h1 正确', async ({ p
     await page.goto(`${APP_ROOT}${legacy}`);
     await expect(page).toHaveURL(path);
     await expectPageHeading(page, heading);
+  }
+
+  guard.assertClean();
+});
+
+test('课程 01 组：主线 / 实战地图 / 理论地图页名正确，地图根返回课程主线', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+
+  await skipOnboarding(page);
+
+  // 三条路径的壳层 h1 均为角色名：主线「课程」、/academy「实战地图」、/theory「理论地图」
+  for (const entry of COURSE_GROUP) {
+    await page.goto(`${APP_ROOT}${entry.path.replace(/^\//, '')}`);
+    await expect(page).toHaveURL(new RegExp(`/dezhou${entry.path}$`));
+    await expectPageHeading(page, entry.heading);
+  }
+
+  // 地图根只回主线：从枢纽目录进地图，再由「返回课程目录」回到 /lesson（不留在原地）
+  await page.goto(`${APP_ROOT}lesson`);
+  await expectPageHeading(page, '课程');
+
+  for (const mapName of ['实战地图', '理论地图']) {
+    await page.getByRole('main').getByRole('link', { name: mapName, exact: true }).click();
+    await expectPageHeading(page, mapName);
+
+    await page.getByRole('main').getByRole('link', { name: BACK_TO_COURSE_HUB }).click();
+    await expect(page).toHaveURL(/\/dezhou\/lesson$/);
+    await expectPageHeading(page, '课程');
   }
 
   guard.assertClean();

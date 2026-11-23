@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown, Lock, CheckCircle2, Award, PlayCircle, Clock, Flag, Hourglass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
+import { academyMapFrom } from '@/shared/utils/courseBack';
 import type { LevelSummary } from '../types';
 import { useAcademyStore } from '../store';
 import { loadAcademyLessonsForLesson } from '../data/lessons/loaders';
@@ -69,7 +70,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
 
   const openLevel = (level: LevelSummary) => {
     const target = level.lessons.find((l) => !completedLessons.includes(l.id)) ?? level.lessons[0];
-    if (target) navigate(`/lesson/${target.id}`);
+    if (target) navigate(`/lesson/${target.id}`, { state: academyMapFrom() });
   };
 
   const handleHeadClick = (level: LevelSummary, expanded: boolean) => {
@@ -241,7 +242,7 @@ export function LevelLadder({ levels, completedLessons, isUnlocked, startLevelId
                           <li key={lesson.id}>
                             <button
                               type="button"
-                              onClick={() => navigate(`/lesson/${lesson.id}`)}
+                              onClick={() => navigate(`/lesson/${lesson.id}`, { state: academyMapFrom() })}
                               onPointerEnter={() => prefetchLesson(lesson.id)}
                               onFocus={() => prefetchLesson(lesson.id)}
                               aria-label={`${stateLabel} · ${resolveLessonTitle(t, lesson)}`}

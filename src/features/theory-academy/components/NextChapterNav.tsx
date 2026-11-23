@@ -9,6 +9,8 @@ interface NextChapterNavProps {
   nextChapter: TheoryChapterSummary | undefined;
   /** 下一章所属 Level 是否已解锁（含调试解锁旁路，由父组件计算） */
   unlocked: boolean;
+  /** 透传当前 location.state：下一章页沿用同一返回来源（theory-map / hub 等） */
+  state?: unknown;
 }
 
 /**
@@ -19,7 +21,7 @@ interface NextChapterNavProps {
  * 主 CTA 走 `Button variant="default"`（金属件，交互状态与黄铜焦点环由 Button 接管）；
  * `whitespace-normal` 覆盖 Button 基类的 nowrap：标题含章节名，窄屏必须允许换行。
  */
-export function NextChapterNav({ nextChapter, unlocked }: NextChapterNavProps) {
+export function NextChapterNav({ nextChapter, unlocked, state }: NextChapterNavProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   if (!nextChapter) return null;
@@ -36,7 +38,7 @@ export function NextChapterNav({ nextChapter, unlocked }: NextChapterNavProps) {
   return (
     <Button
       variant="default"
-      onClick={() => navigate(`/theory/chapter/${nextChapter.id}`)}
+      onClick={() => navigate(`/theory/chapter/${nextChapter.id}`, { state })}
       className="min-h-11 whitespace-normal"
     >
       {t('theory.bridge.nextChapterLabel', { title: resolveChapterTitle(t, nextChapter) })}

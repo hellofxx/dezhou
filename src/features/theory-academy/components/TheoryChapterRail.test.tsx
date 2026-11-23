@@ -3,7 +3,7 @@
  * - 本级章节按数据顺序全量渲染为真实路由链接
  * - 当前章节带 aria-current="page"，其余不带
  * - 已完成章节以勾选图标替代序号（列表项仍可点击回访）
- * - 底部「返回目录」指向理论学院首页
+ * - 底部「返回」目标与文案由父组件注入（backTo / backLabel），不再硬编码 /theory
  */
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
@@ -50,13 +50,20 @@ const level: TheoryLevelInfo = {
   variant: 'standard',
 };
 
-function mount(currentChapterId: string, completedChapters: string[] = []) {
+function mount(
+  currentChapterId: string,
+  completedChapters: string[] = [],
+  backTo = '/theory',
+  backLabel = i18n.t('theory.chapterView.backToChapters'),
+) {
   return render(
     <MemoryRouter>
       <TheoryChapterRail
         level={level}
         currentChapterId={currentChapterId}
         completedChapters={completedChapters}
+        backTo={backTo}
+        backLabel={backLabel}
       />
     </MemoryRouter>,
   );
@@ -77,12 +84,18 @@ describe('TheoryChapterRail', () => {
     expect(screen.getByRole('link', { name: /方差与长期视角/ }).getAttribute('aria-current')).toBeNull();
   });
 
-  it('增补章带「可选」标记，返回目录指向学院首页', () => {
-    mount('t1-outs', ['t1-combinatorics']);
+  it('增补章带「可选」标记，返回入口按注入的 backTo / backLabel 渲染', () => {
+    mount('t1-outs', ['t1-combinatorics'], '/lesson', i18n.t('nav.backToCourseHub'));
 
     expect(screen.getByText(i18n.t('theory.ladder.chapterStates.optional'))).toBeTruthy();
-    const back = screen.getByRole('link', { name: i18n.t('theory.chapterView.backToChapters') });
-    expect(back.getAttribute('href')).toBe('/theory');
+    const back = screen.getByRole('link', { name: i18n.t('nav.backToCourseHub') });
+    expect(back.getAttribute('href')).toBe('/lesson');
+
+    cleanup();
+    // 从理论地图进入时返回 /theory，文案随来源切换
+    mount('t1-outs', ['t1-combinatorics'], '/theory', i18n.t('nav.backToTheoryMap'));
+    const backToMap = screen.getByRole('link', { name: i18n.t('nav.backToTheoryMap') });
+    expect(backToMap.getAttribute('href')).toBe('/theory');
   });
 
   it('进度条按本级完成章节计算并可被读屏定位', () => {

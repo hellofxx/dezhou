@@ -6,6 +6,8 @@ import { PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { AcademyReadingPlane } from '@/shared/components/academy';
 // UI-01: 动效单源 — 统一使用 motion.ts 预设，禁止内联 duration/ease 字面量
 import { transitionStandard } from '@/shared/utils/motion';
+// B1-1: 来源感知返回单源（无 state / 非法 state 兜底课程主线 /lesson）
+import { resolveCourseBack } from '@/shared/utils/courseBack';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForLesson } from '../hooks/useAcademyLessons';
@@ -28,6 +30,7 @@ import { CourseLockedView } from './CourseLockedView';
 import { DrillLessonRouter } from './drills/DrillLessonRouter';
 import CourseDoneView from './CourseDoneView';
 import CourseDoneSlip from './CourseDoneSlip';
+import CourseNotFound from './CourseNotFound';
 import CourseConceptRail from './CourseConceptRail';
 import { StrategyNotesPanel } from './StrategyNotesPanel';
 import { LessonReviewMeta } from './LessonReviewMeta';
@@ -41,6 +44,8 @@ export default function CourseView() {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  // 返回目标与文案随进入来源（hub / theory-map / academy-map）解析，缺省兜底课程目录
+  const back = resolveCourseBack(location.state);
   const { t } = useTranslation();
   const { startLesson } = useAcademy();
   const recordPracticeScore = useAcademyStore((s) => s.recordPracticeScore);
@@ -108,7 +113,8 @@ export default function CourseView() {
     if (!id) return;
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
     }
   }, []);
 
@@ -175,8 +181,8 @@ export default function CourseView() {
   );
 
   const handleDrillExit = useCallback(() => {
-    navigate('/academy');
-  }, [navigate]);
+    navigate(back.to);
+  }, [navigate, back.to]);
 
   // P2-01 + P0 学习闭环：课后测验结果（分数 / 实际题量 / 错题 id）经 completeCourse 落库
   const handleQuizComplete = useCallback(
@@ -206,19 +212,7 @@ export default function CourseView() {
   // 所有 hooks 之后再分派状态：异步加载中不能提前 return，否则 hook 数量在加载前后不一致
   if (loadedLessons === null) return <div className="py-6"><PageSkeleton /></div>;
   if (!lessonSummary || !lesson) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full gap-4">
-        <p className="text-[var(--ivory-muted)]">
-          {t('academy.courseView.notFound', { defaultValue: '课程未找到' })}
-        </p>
-        <button
-          onClick={() => navigate('/academy')}
-          className="text-sm text-[var(--brass-bright)] hover:underline"
-        >
-          {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
-        </button>
-      </div>
-    );
+    return <CourseNotFound message={t('academy.courseView.notFound', { defaultValue: '课程未找到' })} backLabel={t(back.labelKey)} onBack={() => navigate(back.to)} />;
   }
 
   // P4 修复（4.1-P1-1 + 4.1-P2-1）+ 审计 1.1：未解锁的课程显示锁定提示（按所属条目取前置）
@@ -235,6 +229,8 @@ export default function CourseView() {
         prereqLevelIds={prereqIds}
         missingPrereqLessonIds={missingPrereqs}
         completedLessons={completedLessons}
+        onBack={() => navigate(back.to)}
+        backLabel={t(back.labelKey)}
       />
     );
   }
@@ -267,7 +263,8 @@ export default function CourseView() {
       isDrill={isDrill}
       progress={progress}
       completedLessons={completedLessons}
-      onBack={() => navigate('/academy')}
+      onBack={() => navigate(back.to)}
+      backLabel={t(back.labelKey)}
       toolbarSlot={<LessonReviewMeta lessonId={lesson.id} />}
     />
   );
@@ -292,7 +289,7 @@ export default function CourseView() {
         {phase === 'reading' && !isDrill && (
           <div>
             <div className="xl:hidden max-w-3xl mx-auto mb-4">
-              <CourseConceptRail lessonId={lesson.id} onNavigate={(route) => navigate(route)} />
+              <CourseConceptRail lessonId={lesson.id} onNavigate={(route) => navigate(route, { state: location.state })} />
             </div>
             <div className="walnut-panel rounded-lg border border-[var(--walnut-border)] p-6 max-w-3xl mx-auto">
               <LessonContent
@@ -332,15 +329,16 @@ export default function CourseView() {
               relatedTracks={relatedTracks}
               completedLessons={completedLessons}
               hasPractice={!!lesson.practice}
-              theoryAnchors={getLessonMeta(lesson.id).theoryAnchors} onNavigateTheory={(route) => navigate(route)}
-              onBack={() => navigate('/academy')}
+              theoryAnchors={getLessonMeta(lesson.id).theoryAnchors} onNavigateTheory={(route) => navigate(route, { state: location.state })}
+              onBack={() => navigate(back.to)}
+              backLabel={t(back.labelKey)}
               onNext={() => {
                 setPhase('reading');
                 setQuizScore(0);
                 setDrillResult(null);
                 setDoneSlipOpen(false);
                 setRestartTarget('units');
-                navigate(`/lesson/${nextLesson!.id}`);
+                navigate(`/lesson/${nextLesson!.id}`, { state: location.state });
               }}
               onRestart={handleRestart}
               onNavigateToTrack={(trackId) => navigate(`/academy/tracks?track=${trackId}`)}
@@ -353,9 +351,10 @@ export default function CourseView() {
               nextLesson={nextLesson}
               onNext={() => {
                 setDoneSlipOpen(false);
-                navigate(`/lesson/${nextLesson!.id}`);
+                navigate(`/lesson/${nextLesson!.id}`, { state: location.state });
               }}
-              onBack={() => navigate('/academy')}
+              onBack={() => navigate(back.to)}
+              backLabel={t(back.labelKey)}
               onRestart={() => handleRestart('units')}
               onClose={() => setDoneSlipOpen(false)}
             />
@@ -375,7 +374,7 @@ export default function CourseView() {
           railLabel={t('academy.courseView.railTitle')}
           rail={
             <div className="space-y-3">
-              <CourseConceptRail lessonId={lesson.id} onNavigate={(route) => navigate(route)} />
+              <CourseConceptRail lessonId={lesson.id} onNavigate={(route) => navigate(route, { state: location.state })} />
               <CourseStudyRail
                 lesson={lesson}
                 levelEntry={levelEntry}

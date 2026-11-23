@@ -107,7 +107,7 @@ export const appRoutes: RouteObject[] = [
       // 帮助
       { path: 'help', element: <LazyWrapper><ErrorBoundary><HelpHome /></ErrorBoundary></LazyWrapper> },
       { path: 'help/article/:articleId', element: <LazyWrapper><ErrorBoundary><HelpArticle /></ErrorBoundary></LazyWrapper> },
-      // 次要保留（不进导航）：全部课程 / 理论 / 复盘 / 排行 / 细分统计 / 谜题子模式
+      // 次要保留（不进导航）：实战地图 / 理论地图 / 复盘 / 排行 / 细分统计 / 谜题子模式
       { path: 'academy', element: <LazyWrapper><ErrorBoundary><AcademyHome /></ErrorBoundary></LazyWrapper> },
       // 基础入门：L1 课时的先修前置（完成后进入 l1-basics）
       { path: 'academy/basics', element: <LazyWrapper><BasicsIntro /></LazyWrapper> },
@@ -124,6 +124,7 @@ export const appRoutes: RouteObject[] = [
       { path: 'gto-simulator/result/:sessionId', element: <LazyWrapper><GTOResultPage /></LazyWrapper> },
       { path: 'hand-history', element: <LazyWrapper><HandHistoryList /></LazyWrapper> },
       { path: 'hand-history/import', element: <LazyWrapper><HandImportPage /></LazyWrapper> },
+      // 理论地图：/theory 地图根（返回课程主线），章节页为执行页
       { path: 'theory', element: <LazyWrapper><ErrorBoundary><TheoryHome /></ErrorBoundary></LazyWrapper> },
       { path: 'theory/chapter/:chapterId', element: <LazyWrapper><TheoryChapterView /></LazyWrapper> },
       { path: 'theory/review', element: <LazyWrapper><TheoryFlaggedReview /></LazyWrapper> },

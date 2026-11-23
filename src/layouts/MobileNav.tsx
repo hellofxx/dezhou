@@ -6,10 +6,11 @@
  * 底栏项触摸目标 ≥44×44（DESIGN.md §5.7）。
  */
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { Home, BookOpen, Target, Zap, BarChart3 } from 'lucide-react';
+import { isCourseSectionPath } from './navSections';
 
 /** 底栏项共用样式：图标 + 截断文字，44px 命中区；标签 11px（功能性微文字下限，DESIGN.md §3.3） */
 const ITEM_CLASS =
@@ -23,6 +24,9 @@ interface MobileNavEntry {
 
 export default function MobileNav() {
   const { t } = useTranslation();
+  const location = useLocation();
+  // R10：与侧栏同源——「课程」格在 01 组（主线 + 两张地图）内均点亮
+  const courseActive = isCourseSectionPath(location.pathname);
 
   const entries: MobileNavEntry[] = [
     { label: t('nav.path'), path: '/', icon: <Home size={20} /> },
@@ -44,9 +48,10 @@ export default function MobileNav() {
               to={entry.path}
               end={entry.path === '/'}
               aria-label={entry.label}
-              className={({ isActive }) =>
-                cn(ITEM_CLASS, isActive ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory-dim)]')
-              }
+              className={({ isActive }) => {
+                const active = entry.path === '/lesson' ? courseActive : isActive;
+                return cn(ITEM_CLASS, active ? 'text-[var(--brass-bright)]' : 'text-[var(--ivory-dim)]');
+              }}
             >
               {entry.icon}
               <span className="truncate max-w-[48px]">{entry.label}</span>

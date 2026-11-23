@@ -21,6 +21,8 @@ interface CourseHeaderProps {
   progress: { percent: number; current: number; total: number };
   completedLessons: string[];
   onBack: () => void;
+  /** 返回入口文案（来源感知，由 CourseView 经 resolveCourseBack 提供） */
+  backLabel: string;
   /**
    * 阅读工具行插槽（内容校对日期 / 内容纠错入口等由内容运营侧提供，本组件不感知数据来源）。
    * 缺省时不渲染该行。
@@ -40,6 +42,7 @@ export function CourseHeader({
   progress,
   completedLessons,
   onBack,
+  backLabel,
   toolbarSlot,
 }: CourseHeaderProps) {
   const { t } = useTranslation();
@@ -48,7 +51,7 @@ export function CourseHeader({
     <div className="mb-6">
       <BackLink
         onClick={onBack}
-        label={t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+        label={backLabel}
         size="md"
         className="mb-4"
       />

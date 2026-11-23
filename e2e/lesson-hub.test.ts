@@ -1,6 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { guardBrowserErrors } from './fixtures/browserErrors';
-import { APP_ROOT, expectPageHeading, navigateFromSidebar, skipOnboarding } from './fixtures/app';
+import {
+  APP_ROOT,
+  BACK_TO_COURSE_HUB,
+  expectPageHeading,
+  navigateFromSidebar,
+  skipOnboarding,
+} from './fixtures/app';
 
 /**
  * 课程枢纽（v1.13）：/lesson 不再自动跳下一课。
@@ -19,7 +25,34 @@ test('课程侧栏进入枢纽，新用户看到基础入门 CTA 与阶段路径
 
   await expect(page.getByRole('main').getByRole('link', { name: '去基础入门' })).toBeVisible();
   await expect(page.getByRole('main').getByRole('heading', { level: 2, name: '阶段路径' })).toBeVisible();
-  await expect(page.getByRole('main').getByRole('link', { name: /全部策略课程/ })).toBeVisible();
+  await expect(page.getByRole('main').getByRole('link', { name: '实战地图' })).toBeVisible();
+  await expect(page.getByRole('main').getByRole('link', { name: '理论地图' })).toBeVisible();
+
+  guard.assertClean();
+});
+
+test('枢纽 → 章节 → 返回课程目录：回到主线并回位阶段锚点', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+  await skipOnboarding(page);
+
+  await page.goto(`${APP_ROOT}lesson`);
+  await expectPageHeading(page, '课程');
+
+  // 新用户点 L1 实战 chip 会先被基础入门接管；概念泳道 T1 默认解锁，
+  // 同样携带 stageIndex 来源，且面包屑返回是真实按钮。
+  const firstStage = page.locator('[data-hub-stage]').first();
+  const stageIndex = await firstStage.getAttribute('data-hub-stage');
+  expect(stageIndex).toBeTruthy();
+
+  const conceptChip = firstStage.locator('a[href*="/theory/chapter/"]').first();
+  await expect(conceptChip).toBeVisible();
+  await conceptChip.click();
+  await expect(page).toHaveURL(/\/dezhou\/theory\/chapter\/[^?#]+$/);
+
+  // 执行页返回：来源感知 → 课程主线 + #hub-stage-N 锚点回位
+  await page.getByRole('button', { name: BACK_TO_COURSE_HUB }).first().click();
+  await expect(page).toHaveURL(new RegExp(`/dezhou/lesson#hub-stage-${stageIndex}$`));
+  await expectPageHeading(page, '课程');
 
   guard.assertClean();
 });
@@ -32,6 +65,33 @@ test('基础入门页仍可从枢纽进入，旧课时深链不受影响', async
   await expectPageHeading(page, '课程');
   await page.getByRole('main').getByRole('link', { name: '去基础入门' }).click();
   await expect(page).toHaveURL(/\/dezhou\/academy\/basics$/);
+
+  guard.assertClean();
+});
+
+test('枢纽切换变体：两张地图只读同步且无本地切换控件', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+  await skipOnboarding(page);
+
+  await page.goto(`${APP_ROOT}lesson`);
+  await expectPageHeading(page, '课程');
+
+  // 主线是唯一 canonical 切换入口
+  await page.getByRole('main').getByRole('button', { name: '单挑' }).first().click();
+
+  // 理论地图：只读显示“单挑”，不再有分段切换控件
+  await page.goto(`${APP_ROOT}theory`);
+  await expectPageHeading(page, '理论地图');
+  await expect(page.getByRole('main').getByText('单挑').first()).toBeVisible();
+  await expect(page.getByRole('main').getByRole('link', { name: '在课程目录切换' })).toBeVisible();
+  await expect(page.getByRole('main').getByRole('group', { name: '选择游戏变体' })).toHaveCount(0);
+
+  // 实战地图：同样只读同步
+  await page.goto(`${APP_ROOT}academy`);
+  await expectPageHeading(page, '实战地图');
+  await expect(page.getByRole('main').getByText('单挑').first()).toBeVisible();
+  await expect(page.getByRole('main').getByRole('link', { name: '在课程目录切换' })).toBeVisible();
+  await expect(page.getByRole('main').getByRole('group', { name: '选择游戏变体' })).toHaveCount(0);
 
   guard.assertClean();
 });

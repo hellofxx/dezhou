@@ -32,6 +32,21 @@ export const SIDEBAR_ITEMS = ['学习路径', '课程', '训练', '速训', '进
 export const MOBILE_NAV_ITEMS = ['学习路径', '课程', '训练', '速训', '进度中心'] as const;
 
 /**
+ * 课程 01 组（主线枢纽 + 两张地图）的壳层页名。
+ *
+ * `/lesson` 是唯一课程主线（返回目标恒为它）；`/academy` 与 `/theory` 是地图，
+ * 地图根只做「返回课程目录」而不承担主线职责（见 docs/COURSE_IA.md R2 / R8）。
+ */
+export const COURSE_GROUP = [
+  { path: '/lesson', heading: '课程' },
+  { path: '/academy', heading: '实战地图' },
+  { path: '/theory', heading: '理论地图' },
+] as const;
+
+/** 地图根与执行页返回课程主线的文案（`nav.backToCourseHub`） */
+export const BACK_TO_COURSE_HUB = '返回课程目录';
+
+/**
  * 桌面侧栏主导航（`<nav aria-label="主导航">`，<768px 隐藏）。
  *
  * 限定在 `role=navigation` 内，避免与移动底栏（`移动端导航`）同名项撞车。

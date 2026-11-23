@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
+import { hubFrom } from '@/shared/utils/courseBack';
 import type { HubNextAction } from '../../utils/hubNextAction';
 
 interface NextActionCardProps {
@@ -20,6 +21,8 @@ export default function NextActionCard({ action, secondaryRoute }: NextActionCar
       ? t(`theory.chapterTitle.${action.chapterId}`, { defaultValue: action.chapterId })
       : '',
   });
+  // 返回来源随下一步所属阶段锚定（无 stageIndex 时只标记 hub 来源）
+  const linkState = hubFrom(action.stageIndex);
   const ctaKey =
     action.kind === 'basics'
       ? 'academy.courseHub.next.ctaBasics'
@@ -49,6 +52,7 @@ export default function NextActionCard({ action, secondaryRoute }: NextActionCar
           {secondaryRoute ? (
             <Link
               to={secondaryRoute}
+              state={linkState}
               data-hub-action="secondary"
               className="inline-flex min-h-11 items-center rounded-md border border-[var(--walnut-border)] px-3 text-xs font-semibold text-[var(--ivory-dim)] transition-colors hover:border-[var(--brass)]/40 hover:text-[var(--ivory)]"
             >
@@ -56,7 +60,7 @@ export default function NextActionCard({ action, secondaryRoute }: NextActionCar
             </Link>
           ) : null}
           <Button asChild data-hub-action="next">
-            <Link to={action.route}>
+            <Link to={action.route} state={linkState}>
               {t(ctaKey)}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>

@@ -6,10 +6,24 @@
  */
 import { describe, expect, it } from 'vitest';
 import type { TFunction } from 'i18next';
-import { resolveNavSection, resolvePageTitle } from './navSections';
+import { isCourseSectionPath, resolveNavSection, resolvePageTitle } from './navSections';
 
 /** 测试用 t：直接回传 key，便于断言「解析到了哪个 key」 */
 const t = ((key: string) => key) as unknown as TFunction;
+
+describe('isCourseSectionPath', () => {
+  it('课程 01 组三前缀命中（主线 + 实战地图 + 理论地图）', () => {
+    for (const path of ['/lesson', '/lesson/l1-b', '/academy', '/academy/tracks', '/theory', '/theory/chapter/t1']) {
+      expect(isCourseSectionPath(path), `${path} 应归属课程组`).toBe(true);
+    }
+  });
+
+  it('其他分组与同名开头路径不命中（只作用于「课程」项）', () => {
+    for (const path of ['/', '/drill', '/quick', '/progress', '/help', '/settings', '/lessons', '/academics']) {
+      expect(isCourseSectionPath(path), `${path} 不应归属课程组`).toBe(false);
+    }
+  });
+});
 
 describe('resolveNavSection', () => {
   it('四个分组前缀分别映射到 01/02/03/04 序号', () => {
@@ -21,7 +35,9 @@ describe('resolveNavSection', () => {
     expect(resolveNavSection('/range-trainer/quiz', t)).toEqual({ index: '02', label: 'nav.training' });
     expect(resolveNavSection('/pot-odds/quiz', t)).toEqual({ index: '02', label: 'nav.training' });
     expect(resolveNavSection('/gto-simulator/session/x', t)).toEqual({ index: '02', label: 'nav.training' });
+    expect(resolveNavSection('/academy', t)).toEqual({ index: '01', label: 'nav.study' });
     expect(resolveNavSection('/academy/tracks', t)).toEqual({ index: '01', label: 'nav.study' });
+    expect(resolveNavSection('/theory', t)).toEqual({ index: '01', label: 'nav.study' });
     expect(resolveNavSection('/theory/placement', t)).toEqual({ index: '01', label: 'nav.study' });
     expect(resolveNavSection('/progress/range', t)).toEqual({ index: '03', label: 'nav.data' });
     expect(resolveNavSection('/leaderboard', t)).toEqual({ index: '03', label: 'nav.data' });
@@ -53,6 +69,9 @@ describe('resolvePageTitle', () => {
     expect(resolvePageTitle('/progress', t)).toBe('nav.progressCenter');
     expect(resolvePageTitle('/help', t)).toBe('nav.help');
     expect(resolvePageTitle('/settings', t)).toBe('nav.settings');
+    // 地图根：nav.academy / nav.theory 已改为地图角色文案（实战地图 / 理论地图）
+    expect(resolvePageTitle('/academy', t)).toBe('nav.academy');
+    expect(resolvePageTitle('/theory', t)).toBe('nav.theory');
     expect(resolvePageTitle('/academy/tracks', t)).toBe('nav.academyTracks');
     expect(resolvePageTitle('/theory/glossary', t)).toBe('nav.theoryGlossary');
   });

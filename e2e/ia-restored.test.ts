@@ -21,6 +21,7 @@ const RESTORED_ROUTES: { path: string; heading: string }[] = [
   { path: 'academy/bookmarks', heading: '我的收藏' },
   { path: 'academy/bibliography', heading: '参考书目' },
   { path: 'theory/placement', heading: '理论定位' },
+  { path: 'theory/review', heading: '理论疑难复习' },
   { path: 'theory/glossary', heading: '理论术语' },
   { path: 'theory/search', heading: '理论搜索' },
   { path: 'theory/bibliography', heading: '理论书目' },
@@ -33,6 +34,24 @@ test('恢复的二级深链全部真实可达且页名正确', async ({ page }) 
   for (const route of RESTORED_ROUTES) {
     await page.goto(`${APP_ROOT}${route.path}`);
     await expectPageHeading(page, route.heading);
+  }
+
+  guard.assertClean();
+});
+
+test('学院/理论工具页保留回所属地图的返回入口（R2：工具页不落回课程主线）', async ({ page }) => {
+  const guard = guardBrowserErrors(page);
+  await skipOnboarding(page);
+
+  const TOOL_MAP_BACK = [
+    { path: 'academy/placement', backLabel: '返回实战地图' },
+    { path: 'theory/glossary', backLabel: '返回理论地图' },
+    { path: 'theory/review', backLabel: '返回理论地图' },
+  ] as const;
+
+  for (const route of TOOL_MAP_BACK) {
+    await page.goto(`${APP_ROOT}${route.path}`);
+    await expect(page.getByRole('main').getByText(route.backLabel).first()).toBeVisible();
   }
 
   guard.assertClean();

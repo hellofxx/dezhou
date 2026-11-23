@@ -260,7 +260,7 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
               onClick={onExit}
               className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-sm text-[var(--ivory)] hover:opacity-90 transition-opacity ${FOCUS_RING}`}
             >
-              {t('theory.chapterView.backToChapters')}
+              {t('nav.backToTheoryMap')}
             </button>
           )}
         </div>
@@ -350,7 +350,7 @@ export function TheoryCheckpoint({ levelId, onExit, className }: TheoryCheckpoin
             onClick={onExit}
             className={`inline-flex min-h-11 items-center gap-2 px-4 py-2 rounded-lg border border-[var(--walnut-border)] text-sm text-[var(--ivory-dim)] hover:text-[var(--ivory)] hover:border-[var(--brass)]/50 transition-colors ${FOCUS_RING}`}
           >
-            {t('theory.chapterView.backToChapters')}
+            {t('nav.backToTheoryMap')}
           </button>
         )}
       </div>

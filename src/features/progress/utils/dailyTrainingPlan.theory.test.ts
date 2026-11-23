@@ -119,7 +119,7 @@ describe('理论卡 · 数据源注册后', () => {
 
     const generic = findReview(plan);
     expect(generic?.titleParams).toEqual({ count: 2 });
-    expect(generic?.route).toBe('/academy');
+    expect(generic?.route).toBe('/lesson');
     expect(generic?.itemLabels).toEqual(['Lesson g1', 'Lesson g2']);
 
     const theory = findTheoryReview(plan);

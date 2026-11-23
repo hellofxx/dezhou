@@ -3,7 +3,7 @@
 This file provides guidance to Qoder (qoder.com) when working with code in this repository.
 
 > 项目级 AI 代理指导文件。本文件在会话开始时自动加载，约束所有 AI 代理在本仓库内的行为。
-> 子代理配置位于 `.claude/agents/`（物理源文件，入库；`.qoder/agents/` 为 Junction 链接指向该目录，Qoder 兼容读取），详细产品规格见 `docs/PRD.md`，技术设计见 `docs/TDD.md`，版本演进见 `docs/CHANGELOG.md`。深度知识库见 `.qoder/repowiki/`（本机自动生成、不入库；详见下文「知识库（repowiki）」章节）。
+> 执行层由全栈开发组插件代理承担（派单 / 会诊 / 实现下沉，见 §Agent 协作），项目内职责只以**文件所有权**表达；详细产品规格见 `docs/PRD.md`，技术设计见 `docs/TDD.md`，版本演进见 `docs/CHANGELOG.md`。深度知识库见 `.qoder/repowiki/`（本机自动生成、不入库；详见下文「知识库（repowiki）」章节）。
 
 ---
 
@@ -11,19 +11,19 @@ This file provides guidance to Qoder (qoder.com) when working with code in this 
 
 德州扑克训练平台（Poker Training Platform）——纯前端、零后端依赖的德州扑克系统性训练工具。通过交互式练习、即时反馈与数据可视化，帮助各层级扑克玩家提升决策能力。PWA 支持，离线可用，中英双语。
 
-## 任务导航（先读什么 / 找哪个代理）
+## 任务导航（先读什么 / 归谁所有）
 
-> 任务路由见本表；模块 owner / 入口 / store / i18n / 允许跨模块引用的机器事实见 [`docs/agents/MODULE_MAP.md`](docs/agents/MODULE_MAP.md)（由 `pnpm agents:map` 从代码生成，不要手改）。
+> 任务路由见本表；模块 owner / 入口 / store / i18n / 允许跨模块引用的机器事实见 [`docs/agents/MODULE_MAP.md`](docs/agents/MODULE_MAP.md)（由 `pnpm agents:map` 从代码生成，不要手改）。所有权规则见 §Agent 协作。
 
-| 任务 | 先读 | 负责代理 |
+| 任务 | 先读 | 文件所有权 / 模块 |
 |---|---|---|
-| UI / 视觉 / 响应式 | `DESIGN.md` + `src/guards/README.md` | `ui-ux-dev` |
-| 新模块 / 路由 / 跨模块协调 | 本文 §代码组织 + [`add-a-feature-module.md`](docs/how-to/add-a-feature-module.md) + `src/app/routes.tsx` | `platform-dev` |
-| store / persist / 五大系统 | `docs/AI_GUIDE.md` §状态管理 + `src/features/progress/AGENTS.md` | `progress-dev` |
-| i18n key / 双语同步 | `docs/AI_GUIDE.md` §国际化 + `src/i18n/moduleRegistry.ts` | 对应 feature dev |
-| 守卫 / 质量门禁 / 新增守卫 | `src/guards/README.md` + [`add-a-guard.md`](docs/how-to/add-a-guard.md) + 本文 §质量门禁 | `platform-dev` |
-| 测试 / 新增或修改测试 | [`docs/testing/README.md`](docs/testing/README.md) + [`add-or-update-tests.md`](docs/how-to/add-or-update-tests.md) | 对应 feature dev；基础设施 `platform-dev` |
-| 文档全貌与阅读顺序 | [`docs/README.md`](docs/README.md) | `platform-dev` |
+| UI / 视觉 / 响应式 | `DESIGN.md` + `src/guards/README.md` | `src/shared/components/**`、`src/layouts/**`、`src/styles/**` |
+| 新模块 / 路由 / 跨模块协调 | 本文 §代码组织 + [`add-a-feature-module.md`](docs/how-to/add-a-feature-module.md) + `src/app/routes.tsx` | `src/app/**`、`eslint.config.js`、`src/shared/**`、`docs/agents/MODULE_MAP.md` |
+| store / persist / 五大系统 | `docs/AI_GUIDE.md` §状态管理 + `src/features/progress/AGENTS.md` | `src/features/progress/**` |
+| i18n key / 双语同步 | `docs/AI_GUIDE.md` §国际化 + `src/i18n/moduleRegistry.ts` | `src/i18n/**` + 各模块 `locales/` |
+| 守卫 / 质量门禁 / 新增守卫 | `src/guards/README.md` + [`add-a-guard.md`](docs/how-to/add-a-guard.md) + 本文 §质量门禁 | `src/guards/**`、`scripts/**`、`vitest.config.ts` |
+| 测试 / 新增或修改测试 | [`docs/testing/README.md`](docs/testing/README.md) + [`add-or-update-tests.md`](docs/how-to/add-or-update-tests.md) | 被测模块 + `e2e/**`；基础设施 `vitest.config.ts` |
+| 文档全貌与阅读顺序 | [`docs/README.md`](docs/README.md) | `docs/**`、`README.md`、`AGENTS.md` |
 
 ## 环境与命令
 
@@ -59,7 +59,7 @@ src/
 └─ main.tsx / App.tsx
 ```
 
-- 每个 feature 至少包含 `components/`、`store.ts`、`types.ts`、`index.ts`；`hooks/`、`utils/`、`data/` 按需。纯静态模块可豁免 `store.ts`，须在代理文件声明。
+- 每个 feature 至少包含 `components/`、`store.ts`、`types.ts`、`index.ts`；`hooks/`、`utils/`、`data/` 按需。纯静态模块可豁免 `store.ts`，须在模块 `AGENTS.md` 或 `index.ts` 头注释声明。
 - 模块清单以 `src/features/` 实际目录为准；新增模块见 [`docs/how-to/add-a-feature-module.md`](docs/how-to/add-a-feature-module.md)。
 - shared 各语义域的职责、关键文件与导入规则见 [`src/shared/AGENTS.md`](src/shared/AGENTS.md)。
 
@@ -68,7 +68,7 @@ src/
 - **模块间禁止直接引用**：只允许 `shared/`、`progress` 公开 API 或 `trainingEvents`；允许边以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源（收紧只删不加）。
 - **shared/ 准入**：被 ≥2 个模块使用才可放入；单消费者代码留在模块内。由 `src/shared/admission-guard.test.ts`（import 图 + 传递闭包）硬校验，规则见 §质量门禁「shared 准入」。
 - **跨模块状态集中 progress**：Streak / ELO / SRS / Emotion / Mentor 五大系统与 QuickDrill 状态（`quickDrillBest` / `quickDrillStreak`）统一在 `src/features/progress/store.ts`，禁止分散。
-- **文件语义归属**：新文件直接放入语义归属模块；已分裂时以唯一消费方为归属方，并同步模块代理与 `platform-dev`。
+- **文件语义归属**：新文件直接放入语义归属模块；已分裂时以唯一消费方为归属方，并同步模块 `AGENTS.md` 与 §跨模块能力归属登记表。
 
 ## 工程约束（摘要）
 
@@ -96,13 +96,13 @@ src/
 | 位置解锁 | `range-trainer/constants.ts` | `isPositionUnlocked`；阈值不在文档复制 |
 | 选项排序 | `shared/utils/optionOrder.ts`（策略编排）+ `shared/utils/seededShuffle.ts`（随机与数值判定底座） | 各模块只留薄包装出口，禁止另写排序 / 洗牌；重映射正确答案；每日谜题顺序稳定 |
 | 结果页装配 | `shared/components/feedback/ResultSlip.tsx` / `ResultHeader.tsx` / `ResultActions.tsx` | 结果纸条统一壳层（overlay / page）+ 标题默认 h2（壳层持有唯一 h1）+ 动作组唯一实现；材质外壳留在模块 |
-| 返回入口 | `shared/components/layout/BackLink.tsx` | `to` / `historyBack` 与文本·胶囊·按钮三变体；icon-only 必填 `aria-label`；触摸目标 ≥44px |
+| 返回入口 | `shared/components/layout/BackLink.tsx` + `shared/utils/courseBack.ts` | BackLink：`to` / `historyBack` 与文本·胶囊·按钮三变体；icon-only 必填 `aria-label`；触摸目标 ≥44px。课程区**来源感知返回**：`hubFrom` / `theoryMapFrom` / `academyMapFrom` 携带 `courseFrom` state，`resolveCourseBack` 唯一解析返回目标（主线 `/lesson[#hub-stage-N]` / `/theory` / `/academy`，深链兜底 `/lesson`），模块内禁止另写来源判定（规则 R1–R10 见 `docs/COURSE_IA.md`） |
 | 导师人格化 | `shared/constants/mentorStyles.ts` | `renderMentorFeedback`；缺省降级 i18n |
 | 事件总线 | `shared/stores/trainingEvents.ts` | 训练后 emit；hand-history / help-center 豁免 |
 | progress 公共入口 | `features/progress/index.ts` + `api.ts` / `api.types.ts` / `ui.ts` | 跨模块只经公共入口：业务读写走 `api`（`useProgressState` / `progressCommands`）、展示走 `ui`、学院只读快照走 `useAcademyLearningStages` / `useAcademyProgressSnapshot`；禁止深引 `store` / `components/*` / `utils/*` / `types` / `data/*`（守卫 `src/guards/progressPublicApi.guard.test.ts`）。装配例外仅 `src/main.tsx` 的 `store.bootstrap` 与 `src/app/routes.tsx` 的页面 lazy import |
-| 课程阶段/双泳道 | `shared/types/academyDataSource.ts` + `shared/types/theoryDataSource.ts` + `shared/utils/academyJourneyGroups.ts` | `AcademyLearningStage.theoryChapterIds` 由 strategy 生成；理论只读 `getLearningSnapshot` / `getChapterCatalog` 经现有 registry；`/lesson` 课程枢纽只做投影，不新增 store/registry、不改 persist |
+| 课程阶段/双泳道 | `shared/types/academyDataSource.ts` + `shared/types/theoryDataSource.ts` + `shared/utils/academyJourneyGroups.ts` | `AcademyLearningStage.theoryChapterIds` 由 strategy 生成；理论只读 `getLearningSnapshot` / `getChapterCatalog` 经现有 registry；`/lesson` 课程枢纽只做投影 + 单一变体切换命令（`TheoryDataSource.getActiveVariant` / `switchVariant`），不新增 store/registry、不改 persist。地图角色：`/academy`=实战地图、`/theory`=理论地图（`nav.academy` / `nav.theory` 单源文案），地图根只回课程主线，规则见 `docs/COURSE_IA.md` |
 | 掌握度/SRS 派生 | `shared/utils/academyMastery.ts` / `academySrs.ts` | 首次成绩 `resolveFirstScore` 与理论复习判定 `isTheoryReviewItem` 两院共用；禁止模块内另写第二套阈值/判定 |
-| 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory |
+| 理论数据源 | `shared/stores/theoryDataSourceRegistry.ts` | theory bootstrap 注册；progress 每日计划消费；禁止 progress import theory。可选 `getActiveVariant` / `switchVariant` 承接课程变体上下文，未实现时消费方降级 |
 | 学习段快照 | `shared/types/academyDataSource.ts` + strategy-academy `store.bootstrap.ts` | `getLearningStagesSnapshot()` 按 `activeVariant` 缓存稳定引用（Level 序列 / 先修 / lessonIds）；progress 只经 `useAcademyLearningStages` 消费，禁止 import 学院 |
 | 学院共享组件/纯函数 | `shared/components/academy/*`、`shared/utils/academy*` | 理论/策略各自薄包装消费；shared 禁止 import feature；两院行为/文案由包装层保持。阅读页双栏骨架同源：`AcademyReadingPlane`（主阅读列 768 + xl 学习导轨，导轨内容/文案由两院注入）。P2 学习工具同源：`AcademyBookmarksPanel` / `AcademyNotesPanel`（课时书签 / 纯文本笔记）与 `ContentIssueReportDialog`（内容纠错，mailto / 剪贴板降级，无后端）。变体规则卡同源：`AcademyVariantRuleCard`（理论 `TheoryVariantRuleCard` / 策略 `StrategyVariantRuleCard` 各做薄包装），单挑规则事实以 `shared/constants/headsUpRules.ts` 为单源。题库合并/抽题同源：`mergeQuizBank` / `drawByAttempt`，标准与单挑题库共用，禁止模块内另写合并/抽题逻辑。课程阅读页同源（2026-11）：`FormulaDerivation`（+ `formulaParse` 纯函数，公式推导编号步骤单源，单/双行简单公式保持 legacy DOM）/ `AcademyTakeawayCard`（+ `utils/academyTakeaway`，章末要点卡显式与自动装配共用）/ `AcademyPeek`（quiz 原文 peek 折叠壳，label/children 由消费者注入）/ `AcademyStickyCta`（移动 sticky CTA 单节点响应式容器，包装 ui/Button）；消费者均为 strategy-academy + theory-academy |
 | 共享交互基础件 | `shared/components/ui/{button,input,textarea,progress}.tsx` + `ui/focusRing.ts` + `layout/SectionLabel.tsx` | shared 组件必须 dogfood：禁止手写 `<button>/<input>/<textarea>/<select>`（特化 allowlist 见 `src/guards/sharedPrimitiveUsage.guard.test.ts`）；focus ring / section label 单源；Button default/secondary 保持金属族，quiet/link 为结构变体。V1 已完成：`.btn-*` 入 `@layer components`、ghost/outline/destructive 收口、平铺主 CTA 收敛到 Button default |
@@ -128,7 +128,7 @@ src/
 
 - 位置与更新：`.qoder/repowiki/` 是 Qoder 自动生成的**本机知识缓存**，`.qoder/` 已忽略、**不入库**；`/knowledge` 更新，`/knowledge-plan` 配置预生成；开发时自动注入相关卡片。
 - **知识库不是事实源**：与代码或 Current 文档冲突时以代码为准；不可用时直接读 `src/features/<module>/`。
-- 子代理文件禁止复制知识库描述性内容；模块事实以 `MODULE_MAP.md` + 代码为准。详见 `docs/knowledge-guide.md`。
+- 模块 `AGENTS.md` 与文档禁止复制知识库描述性内容；模块事实以 `MODULE_MAP.md` + 代码为准。详见 `docs/knowledge-guide.md`。
 
 ## 质量门禁
 
@@ -140,7 +140,7 @@ src/
 - **仓库 / 地图 / 文档**：`repo:check`、`agents:map:check`、`docs:check` 已接入 verify、CI 与 pre-commit。
 - **E2E（Playwright）**：`pnpm typecheck:e2e`（`tsconfig.e2e.json`）→ `pnpm test:e2e`（`node e2e/require-build.mjs` 校验产物后跑根 `e2e/**/*.test.ts`）；用例只走真实 UI，禁止 `.only` / `.skip` / `.fixme` 与重试变绿（`src/guards/testSystem.guard.test.ts` 双向校验）。
 - **浏览器发布门禁**：`pnpm verify:e2e` = `verify && build && size:check && test:e2e` —— 触及路由 / 布局 / 持久化 / 离线的变更必须在真实浏览器跑通该链后才可发布；仅 `pnpm verify` 不足以证明浏览器行为。
-- **Feature PR Checklist**：同步代理文件；行为变更补测试（缺陷附回归锁）；课程/题库变更同批过内容守卫；UI/路由改浏览器验证；新增守卫登记 README；新增跨模块边登记白名单；persist schema 变更 version + migrate；`pnpm verify` 全绿。
+- **Feature PR Checklist**：同步所有权与插件技能（模块 `AGENTS.md` / `docs/agents/README.md`）；行为变更补测试（缺陷附回归锁）；课程/题库变更同批过内容守卫；UI/路由改浏览器验证；新增守卫登记 README；新增跨模块边登记白名单；persist schema 变更 version + migrate；`pnpm verify` 全绿。
 
 ## 提交粒度
 
@@ -148,65 +148,50 @@ src/
 - **提交信息**：`type(scope): description`，scope 为模块目录名（如 `feat(strategy-academy): ...`、`docs(agents): ...`）。
 - **范围**：仅约束新提交，不追溯历史；Surgical Changes 同样适用于提交范围。
 
-## Agent 协作
+## Agent 协作（全栈开发组插件代理 + 文件所有权）
 
-### 存放与模板
+> 项目不维护自带子代理文件。执行层由**全栈开发组插件代理**按技能派单：`fullstack-dev-group:delivery-team` 负责派单 / 会诊，`fullstack-dev-group:team-p8-full-stack` 承担编码与测试下沉，`fullstack-dev-group:design-diagrams` / `drawio` 出图，`fullstack-dev-group:qa-quality` / `test-case` 管质量与用例，`fullstack-dev-group:devops-pipeline` 管发布。项目内职责只以文件所有权表达，规则如下。
 
-- 子代理物理源文件位于 `.claude/agents/`（入库）；`.qoder/agents/` 为 Junction 指向该目录；重建用 `scripts/setup-agent-junctions.ps1`。
-- 新增 / 修改统一在 `.claude/agents/` 操作，禁止在 Junction 路径重建；新建 feature 代理用 [`docs/agents/TEMPLATE-dev.md`](docs/agents/TEMPLATE-dev.md)。
-- 代理命名、清单、工具权限与批量补测协作见 [`docs/agents/README.md`](docs/agents/README.md) 与 `docs/testing/README.md` §13。
+### 文件所有权（事实源）
 
-### 子代理共享基线条款（单点事实源）
+- **模块树即所有权**：`src/features/<module>/**` 归该模块；`src/shared/**` 为跨模块层；`src/app/`、`src/layouts/`、`src/i18n/`、`src/guards/`、`src/styles/`、`scripts/` 为平台层；`docs/**`、`README.md` 为文档层。机器事实（入口 / store / i18n / 允许跨模块引用）见 [`docs/agents/MODULE_MAP.md`](docs/agents/MODULE_MAP.md)。
+- **单一写者**：同一文件同一时间只允许一个执行者修改；跨模块变更先定接口契约与唯一写者，再并行。
+- **shared/ 准入**：被 ≥2 个模块使用才可放入；触碰 `src/shared/**` 须由平台视角复核，feature 侧不得自行扩大写域。
+- **禁止越界**：模块间禁止直接引用（只允许 `shared/`、`progress` 公开 API 或 `trainingEvents`）；允许边以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源。
+- **就近约束**：模块级红线写在 `src/features/<module>/AGENTS.md` 或 `src/shared/AGENTS.md`，不得与本文冲突。
 
-> 本段为所有 feature / 基础层 agent 文件**唯一共享基线**。各 agent 文件**禁止重述**以下内容，仅引用本段。变更全局规则只需改此处（同时遵循「子代理规范」禁止复制知识库描述性内容原则）。
-
-#### 新增页面/组件标准路径（Workflow 单源）
+### 新增页面/组件标准路径（Workflow 单源）
 
 1. 在 `src/features/<module>/components/` 创建 `PascalCase.tsx`（按模块最小结构约定）
 2. 若引入新文案，同时更新 `src/i18n/locales/zh/<module>.json` 与 `en/<module>.json`（双语缺一不可，key 命名 `<module>.<context>.<field>`）
 3. 若新增测试，按 `vitest.config.ts` 双项目选后缀（规则见 §质量门禁「测试后缀速查」，禁止在此重述）
 4. 运行 `pnpm verify` 确保门禁通过（唯一事实源为 `package.json` 的 `verify` script）
-5. 若新增路由页面，由 `platform-dev` 在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册
-6. 若涉及全局视觉 / 共享组件 / 布局 / 导航 / 主题色，由 `ui-ux-dev` 复核（质量清单以 `DESIGN.md` 为准）
-
-#### 全局约束（单源）
-
-- TS strict + noUncheckedIndexedAccess，禁 any；`@/*`；组件 PascalCase / Hook use / 工具 camelCase / 路由 kebab-case。
-- 单文件 ≤300 行（课程内容数据与 `src/shared/components/**` 除外）；模块间禁止直接引用；跨模块状态集中 progress；shared 准入门槛 ≥2 模块。
-- i18n 双语同步；UI 四层色彩 token，禁硬编码 / 霓虹。
-- 每个 store 必须有 name + version；"记录完成" action 幂等。
-- 五级反馈 `calculateGrade(evLoss)` 唯一评级；调试解锁 9 处门禁；选项排序治理（`shared/utils/optionOrder.ts` + `shared/utils/seededShuffle.ts`）。
-- React 渲染约定见 `docs/AI_GUIDE.md` §React 渲染约定。
-
-#### 基线 Quality Checklist
-
-- [ ] `pnpm typecheck` / `pnpm lint` / `pnpm test` 全量 exit 0（含 i18n 对称、designTokenGuard）
-- [ ] 新增 key 双语齐备；persist schema 变更 version 递增 + migrate
-- [ ] `pnpm verify` 通过
-
-各 feature agent 文件以一行引用取代上述明细：
-`> 全局约束、标准路径与基线 Quality Checklist 见 AGENTS.md §子代理共享基线条款（禁止在此重述）。`
+5. 若新增路由页面，在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册（平台层文件）
+6. 若涉及全局视觉 / 共享组件 / 布局 / 导航 / 主题色，由 `src/shared/components/**` 与 `src/layouts/**` 所有者复核（质量清单以 `DESIGN.md` 为准）
 
 ### 跨模块能力归属登记表
 
-> 单一事实源：所有"非本模块独属"的跨模块能力在此登记，避免各 agent 文件口头澄清"这不归我"。新增 / 变更跨模块能力时须同步更新本表。
+> 单一事实源：所有"非本模块独属"的跨模块能力在此登记，以持有文件表达归属；新增 / 变更跨模块能力时须同步更新本表。
 
-| 能力 | Owner agent | 消费方 / 说明 |
+| 能力 | 持有文件 / 模块 | 消费方 / 说明 |
 |---|---|---|
-| QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `progress-dev` | 状态与逻辑定义于 progress store（quickDrillBest / quickDrillStreak / awardStreakFreeze / recordQuickDrillCompletion / submitQuickDrillResult）与 progress/utils（composeDailyMix）；strategy-academy（QuickDrill 界面）与 puzzle-trainer 为消费方 |
-| 五大系统集成（Streak / ELO / SRS / Emotion / Mentor）统一提交入口 | `progress-dev` | 全部 trainer 经 progress store 公开 API 提交训练结果（契约见 progress-dev；禁止各模块自写集成） |
-| trainingEvents emit / 订阅 | `progress-dev`（总线实现）+ 各模块自 emit | hand-history、help-center 合理豁免 emit |
-| 调试解锁（9 处门禁） | `platform-dev` 协调 | 全局旁路，清单见 `docs/AI_GUIDE.md` §调试解锁 |
-| 阈值 / 评级源 | `range-trainer-dev` / `shared/types/decisionFeedback.ts` | 位置解锁以 constants.ts；GRADE_THRESHOLDS 以 decisionFeedback.ts；worker 拷贝须 parity |
-| 每日计划生成（双源已消歧） | `strategy-academy-dev` 持 `generateDailyPlan`（academy 内部）/ `progress-dev` 持 `generateCrossModuleDailyPlan`（跨模块日训） | 两者命名已区分，禁止混用 |
-| 理论数据源 registry | `platform-dev`（注册）+ `progress-dev`（消费） | 每日计划/下一章；theory bootstrap 注册，progress 只消费接口，不 import theory |
-| 变体规则卡（单挑） | `platform-dev` | shared 侧 `types/variantRules.ts` / `constants/headsUpRules.ts` / `utils/academyVariantRules.ts` / `components/academy/AcademyVariantRuleCard`；消费方 theory-academy / strategy-academy 各做薄包装（变体判定 + `variant.headsUpRules.*` 字面量 key 翻译）；shared 不读 store、不拼路由 |
+| QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `src/features/progress/store.ts` + `src/features/progress/utils/`（composeDailyMix） | 状态与逻辑定义于 progress store（quickDrillBest / quickDrillStreak / awardStreakFreeze / recordQuickDrillCompletion / submitQuickDrillResult）；strategy-academy（QuickDrill 界面）与 puzzle-trainer 为消费方 |
+| 五大系统集成（Streak / ELO / SRS / Emotion / Mentor）统一提交入口 | `src/features/progress/**`（经 `index.ts` / `api.ts` 公共入口） | 全部 trainer 经 progress 公开 API 提交训练结果（禁止各模块自写集成） |
+| trainingEvents emit / 订阅 | `src/shared/stores/trainingEvents.ts`（总线实现）+ 各模块自 emit | hand-history、help-center 合理豁免 emit |
+| 调试解锁（9 处门禁） | `src/shared/stores/debugMode.ts` | 全局旁路，清单见 `docs/AI_GUIDE.md` §调试解锁 |
+| 阈值 / 评级源 | `src/features/range-trainer/constants.ts` / `src/shared/types/decisionFeedback.ts` | 位置解锁以 constants.ts；GRADE_THRESHOLDS 以 decisionFeedback.ts；worker 拷贝须 parity |
+| 每日计划生成（双源已消歧） | `src/features/strategy-academy/**` 持 `generateDailyPlan`（academy 内部）/ `src/features/progress/**` 持 `generateCrossModuleDailyPlan`（跨模块日训） | 两者命名已区分，禁止混用 |
+| 理论数据源 registry | `src/shared/stores/theoryDataSourceRegistry.ts`（注册）+ `src/features/progress/**`（消费） | 每日计划/下一章；theory bootstrap 注册，progress 只消费接口，不 import theory |
+| 课程变体上下文 | `src/shared/types/theoryDataSource.ts`（契约 `getActiveVariant` / `switchVariant`）+ `src/features/strategy-academy/**`（CourseHub canonical 切换入口） | theory bootstrap 注册实现（读理论 `activeVariant`、经理论既有 action 切换）；枢纽为唯一切换命令发出方，地图与执行页只读当前变体；未实现可选方法时消费方降级为只读展示，不新增 store / 不改 persist |
+| 变体规则卡（单挑） | `src/shared/types/variantRules.ts` / `constants/headsUpRules.ts` / `utils/academyVariantRules.ts` / `components/academy/AcademyVariantRuleCard.tsx` | 消费方 theory-academy / strategy-academy 各做薄包装（变体判定 + `variant.headsUpRules.*` 字面量 key 翻译）；shared 不读 store、不拼路由 |
+| 课程区来源感知返回 | `src/shared/utils/courseBack.ts`（平台层持有）+ `src/layouts/navSections.ts` / `AppLayout.tsx` / `MobileNav.tsx`（课程激活 / 展宽） | 消费方 strategy-academy（CourseView / 阶段卡）与 theory-academy（TheoryChapterView / 章节导轨）；`courseFrom` state 与 `resolveCourseBack` 是唯一来源判定，模块内禁止另写返回推断；返回控件仍走 `shared/components/layout/BackLink` |
 
 ### 边界与协作流程
 
-- 子代理只能修改本模块文件；触碰 `shared/` 须遵循 Authority 声明，默认经 `platform-dev` 协调；跨模块变更必须经 `platform-dev` 评估。
-- 子代理文件的 `## Constraints` 不得与本 AGENTS.md 冲突。
-- 跨模块变更：评估影响 → 更新 TDD → 升级 persist version + migrate（如涉及）→ 通知模块代理 → `ui-ux-dev` 视觉复核（如涉及）→ 更新 CHANGELOG → `pnpm verify`。
+- **按技能派单**：架构、排期、评审与跨模块裁决走组长视角；编码 / 单测下沉 `team-p8-full-stack`；图、质量、用例、发布各走对应插件技能。技能只提供执行能力，不改变本仓库的文件所有权。
+- **越界处理**：需要修改所有权之外的文件时，先报告目标文件、原因与影响面，确认唯一写者后再改，不自行扩大写域。
+- **跨模块变更**：评估影响 → 更新 TDD → 升级 persist version + migrate（如涉及）→ 通知受影响模块所有者 → 视觉复核（如涉及）→ 更新 CHANGELOG → `pnpm verify`。
+- **交付口径**：返回「改动文件与结果 / 验证命令及退出码 / 未测与阻塞」三段简报；默认不 commit / push，破坏性动作按授权处理。
 
 ## 行为准则
 

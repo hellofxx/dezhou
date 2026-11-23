@@ -10,7 +10,7 @@ import { TheoryResume } from './TheoryResume';
  * 首屏「继续学习」三态契约（jsdom）。
  * - fresh（本变体一页未读）：引导开始第一课 → 首个等级首章
  * - continue（有活跃等级）：标题带下一章名称，CTA 直达首个未读章
- * - allDone（无活跃等级）：CTA 去策略学院
+ * - allDone（无活跃等级）：CTA 去实战地图并携带理论地图来源
  * - 进度环与三项统计取值来自 props；无活跃等级时不触发预取
  *
  * 未覆盖（jsdom 无法判定）：<768px 布局、悬停预取的实际网络收益。
@@ -73,7 +73,14 @@ const baseProps: Parameters<typeof TheoryResume>[0] = {
 
 function LocationProbe() {
   const location = useLocation();
-  return <div data-testid="location">{location.pathname}</div>;
+  const from =
+    (location.state as { courseFrom?: { source?: string } } | null)?.courseFrom?.source ?? '';
+  return (
+    <>
+      <div data-testid="location">{location.pathname}</div>
+      <div data-testid="location-source">{from}</div>
+    </>
+  );
 }
 
 function renderResume(overrides: Partial<Parameters<typeof TheoryResume>[0]> = {}) {
@@ -94,6 +101,10 @@ function clickCta() {
 
 function location(): string {
   return screen.getByTestId('location').textContent ?? '';
+}
+
+function locationSource(): string {
+  return screen.getByTestId('location-source').textContent ?? '';
 }
 
 beforeEach(() => {
@@ -150,7 +161,7 @@ describe('TheoryResume 三态主 CTA', () => {
     expect(location()).toBe('/theory/chapter/resume-c1');
   });
 
-  it('allDone：无活跃等级时展示完成文案并去策略学院', () => {
+  it('allDone：无活跃等级时展示完成文案并去实战地图（携带理论地图来源）', () => {
     const { container } = renderResume({ activeLevel: null, completedCount: 10, totalProgress: 100 });
 
     // eyebrow 与主标题同文案，故两处命中
@@ -163,6 +174,7 @@ describe('TheoryResume 三态主 CTA', () => {
 
     clickCta();
     expect(location()).toBe('/academy');
+    expect(locationSource()).toBe('theory-map');
   });
 });
 

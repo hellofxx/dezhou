@@ -39,6 +39,7 @@ describe('buildHubNextAction', () => {
     const action = buildHubNextAction({ ...BASE, stages: [stage()], basicsCompleted: false });
     expect(action.kind).toBe('basics');
     expect(action.route).toBe('/academy/basics');
+    expect(action.stageIndex).toBeUndefined();
   });
 
   it('理论 SRS > 通用 SRS > 弱项概念 > 实战', () => {
@@ -53,6 +54,10 @@ describe('buildHubNextAction', () => {
       buildHubNextAction({ ...BASE, stages, conceptScores: { 't1-a': 45 } }).route,
     ).toBe('/theory/chapter/t1-a');
     expect(buildHubNextAction({ ...BASE, stages }).route).toBe('/lesson/l1-a');
+    // 复习类动作不属于任何主线阶段，不写锚点
+    expect(
+      buildHubNextAction({ ...BASE, stages, dueReviewCounts: { theory: 2, generic: 1 } }).stageIndex,
+    ).toBeUndefined();
   });
 
   it('理论未就绪时跳过概念分支，直接实战', () => {
@@ -73,6 +78,7 @@ describe('buildHubNextAction', () => {
     });
     expect(action.kind).toBe('concept');
     expect(action.route).toBe('/theory/chapter/t1-a');
+    expect(action.stageIndex).toBe(1);
   });
 
   it('实战与概念都完成返回 done；空阶段返回 blocked', () => {
@@ -85,5 +91,31 @@ describe('buildHubNextAction', () => {
       }).kind,
     ).toBe('done');
     expect(buildHubNextAction({ ...BASE, stages: [] }).kind).toBe('blocked');
+  });
+
+  it('concept / practice 写入所属阶段 index；done / blocked 不写', () => {
+    const stage2 = stage({
+      id: 'journey-stage-2',
+      index: 2,
+      titleKey: 'dashboard.path.stage2',
+      subtitleKey: 'dashboard.path.stage2Sub',
+      lessonIds: ['l2-a'],
+      theoryChapterIds: ['t2-a'],
+    });
+
+    expect(
+      buildHubNextAction({ ...BASE, stages: [stage2], conceptScores: { 't2-a': 30 } }).stageIndex,
+    ).toBe(2);
+    expect(buildHubNextAction({ ...BASE, stages: [stage2] }).stageIndex).toBe(2);
+
+    expect(
+      buildHubNextAction({
+        ...BASE,
+        stages: [stage({ doneLessons: 1, doneChapters: 1, complete: true, current: false })],
+        completedLessons: ['l1-a'],
+        completedChapters: ['t1-a'],
+      }).stageIndex,
+    ).toBeUndefined();
+    expect(buildHubNextAction({ ...BASE, stages: [] }).stageIndex).toBeUndefined();
   });
 });

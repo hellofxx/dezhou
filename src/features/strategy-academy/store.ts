@@ -378,7 +378,7 @@ export const useAcademyStore = create<AcademyStore>()(
       // ===== 每日训练计划 =====
       refreshDailyPlan: (reviewQueue = [], options) =>
         set((state) => {
-          // 同日新鲜度守卫只约束自动/惰性生成入口（DailyPlanCard 挂载时的 refreshDailyPlan()）；
+          // 同日新鲜度守卫只约束自动/惰性生成入口（消费方挂载时的 refreshDailyPlan()）；
           // 用户显式点击刷新（options.force）属明确意图，绕过守卫强制重新生成 ——
           // BUG-ACA-006 修复：旧实现守卫一并拦截手动刷新按钮，当天点击完全无效
           if (

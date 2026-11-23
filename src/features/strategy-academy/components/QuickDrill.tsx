@@ -226,7 +226,7 @@ export default function QuickDrill() {
       <div className="py-6">
         <BackLink
           onClick={() => navigate(isQuickMode ? '/' : '/academy')}
-          label={isQuickMode ? t('quickDrill.backHome', { defaultValue: '返回首页' }) : t('quickDrill.back', { defaultValue: '返回学院' })}
+          label={isQuickMode ? t('quickDrill.backHome', { defaultValue: '返回首页' }) : t('quickDrill.back', { defaultValue: '返回实战地图' })}
           size="md"
           className="mb-4"
         />
@@ -284,7 +284,7 @@ export default function QuickDrill() {
               label={
                 isQuickMode
                   ? t('quickDrill.backHome', { defaultValue: '返回首页' })
-                  : t('quickDrill.backAcademy', { defaultValue: '返回策略学院' })
+                  : t('quickDrill.backAcademy', { defaultValue: '返回实战地图' })
               }
               className="mb-4"
             />

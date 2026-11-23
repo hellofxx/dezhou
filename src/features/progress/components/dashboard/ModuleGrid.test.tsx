@@ -176,7 +176,7 @@ describe('TrainingGrounds 训练场模块网格', () => {
     renderGrid();
     const text = container.textContent ?? '';
 
-    for (const label of ['手牌范围训练', '赔率计算器', 'GTO 模拟器', '策略学院', '扑克谜题', '牌局复盘']) {
+    for (const label of ['手牌范围训练', '赔率计算器', 'GTO 模拟器', '实战地图', '扑克谜题', '牌局复盘']) {
       expect(text).toContain(label);
     }
     expect(text).toContain('各位置开牌范围记忆与测试');

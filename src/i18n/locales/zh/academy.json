@@ -8,7 +8,7 @@
   "completed": "已完成",
   "clickToReview": "点击重新查看",
   "conceptGraph": {
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回实战地图",
     "title": "知识图谱",
     "subtitle": "可视化课程知识依赖关系，点击节点跳转到对应课程",
     "learned": "已学习",
@@ -77,7 +77,7 @@
   },
   "courseView": {
     "notFound": "课程未找到",
-    "backToAcademy": "返回学院",
+    "backToAcademy": "返回实战地图",
     "lessonOf": "第 {{current}}/{{total}} 课",
     "localLessonBadge": "本土课 · L7 扩展",
     "lessonOrder": "第 {{order}} 课",
@@ -110,6 +110,16 @@
     "missingPrereqHint": "请先完成以下前置课程：",
     "railTitle": "本 Level 课程",
     "glossaryEntry": "术语表"
+  },
+  "courseCoverage": {
+    "title": "理论 · 实战覆盖",
+    "mapped": "{{n}} 章已关联实战",
+    "mappedLabel": "章已关联实战",
+    "supplemental": "{{n}} 章补充阅读",
+    "supplementalLabel": "章补充阅读",
+    "practice": "{{anchored}}/{{total}} 课有理论锚点",
+    "practiceLabel": "课有理论锚点",
+    "unavailable": "概念关联待补充"
   },
   "courseHub": {
     "eyebrow": "我的课程 · 双泳道",
@@ -477,7 +487,7 @@
   },
   "tracks": {
     "prereqHint": "建议先完成 {{levels}} 的课程",
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回实战地图",
     "title": "学习轨道",
     "subtitle": "根据你的目标选择合适的学习路径，系统化提升特定方向的技能",
     "mergedIntoLevel7": "已并入 Level 7 · 本土课",
@@ -504,7 +514,7 @@
   },
   "levelCertification": {
     "levelNotFound": "级别未找到",
-    "backToAcademy": "返回学院",
+    "backToAcademy": "返回实战地图",
     "title": "Level {{level}} 认证测验",
     "questionCount": "题目数量：{{count}} 题（从本级别所有课程测验中抽取）",
     "passStandard": "通过标准：正确率 ≥ {{required}}%",
@@ -782,7 +792,7 @@
     "lessons": "课时",
     "emptyTitle": "没有匹配结果",
     "emptyHint": "换个关键词，或返回学院继续浏览",
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回实战地图",
     "contentHits": "正文命中",
     "loadingFullText": "正在加载全文索引…",
     "loadFailed": "全文加载失败，先看标题结果",
@@ -870,7 +880,7 @@
   },
   "levelCheckpoint": {
     "levelNotFound": "级别未找到",
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回实战地图",
     "title": "Level {{level}} 检查点",
     "subtitle": "12 题混合测评，覆盖本级别各核心课时；结果按来源课时给出各维度表现。",
     "lockedHint": "需完成本级别全部课程才能开始检查点（当前进度：{{completed}}/{{total}}）",
@@ -895,7 +905,7 @@
     "retry": "再检查一次"
   },
   "bibliography": {
-    "backToAcademy": "返回策略学院",
+    "backToAcademy": "返回实战地图",
     "title": "参考书目",
     "subtitle": "策略课时结论的权威出处，按 Level 聚合；站内不复制原文",
     "count": "{{count}} 本",

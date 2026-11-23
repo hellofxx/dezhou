@@ -14,8 +14,12 @@ interface TheoryChapterDoneProps {
   levelCompleted: boolean;
   nextChapter: TheoryChapterSummary | undefined;
   nextChapterUnlocked: boolean;
+  /** 当前 location.state：下一章页沿用同一返回来源 */
+  nextChapterState?: unknown;
   onRetry: () => void;
   onBackToChapters: () => void;
+  /** 来源感知返回文案（nav.* 已解析）；缺省沿用章节目录文案 */
+  backLabel?: string;
 }
 
 /**
@@ -29,8 +33,10 @@ export function TheoryChapterDone({
   levelCompleted,
   nextChapter,
   nextChapterUnlocked,
+  nextChapterState,
   onRetry,
   onBackToChapters,
+  backLabel,
 }: TheoryChapterDoneProps) {
   const { t } = useTranslation();
   // 章节粒度桥接与 Level 粒度共存时的去重：章节推荐若已被 Level 推荐覆盖且本级已全部完成，
@@ -71,18 +77,13 @@ export function TheoryChapterDone({
       {levelCompleted ? <PracticeBridgeCard recommendations={level.practiceRecommendations} /> : null}
       <div className="panel flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
-          <Link
-            to="/lesson"
-            className={`inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--brass)]/40 px-4 py-2 text-sm font-semibold text-[var(--brass-text)] transition-colors hover:bg-[var(--brass-glow)] ${FOCUS_RING}`}
-          >
-            {t('theory.chapterView.backToCourseHub')}
-          </Link>
+          {/* 单一来源感知返回（原「回到课程枢纽」直链与「返回目录」双返回已收敛） */}
           <button
             onClick={onBackToChapters}
             className={`inline-flex min-h-11 items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors ${FOCUS_RING}`}
           >
             <ArrowLeft className="w-4 h-4" />
-            {t('theory.chapterView.backToChapters')}
+            {backLabel ?? t('theory.chapterView.backToChapters')}
           </button>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -92,7 +93,11 @@ export function TheoryChapterDone({
           >
             {t('theory.retryQuiz')}
           </button>
-          <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
+          <NextChapterNav
+            nextChapter={nextChapter}
+            unlocked={nextChapterUnlocked}
+            state={nextChapterState}
+          />
         </div>
       </div>
       {/* 检查点入口：本级核心章读完后可自查（不解锁下一级、不发证） */}

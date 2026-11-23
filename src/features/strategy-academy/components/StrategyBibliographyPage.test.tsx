@@ -1,7 +1,7 @@
 /**
  * 策略参考书目页契约（jsdom）：
  * - 按 Level 只读聚合渲染（L1-L8 八组），每本书在其标注的每个 Level 各出现一次；
- * - 「返回学院」导航到 /academy，理论学院书目只做外链（/theory/bibliography）；
+ * - 「返回实战地图」导航到 /academy，理论学院书目只做外链（/theory/bibliography）；
  * - 页面不发请求、不读写 store（渲染前后 store 快照不变）。
  */
 import { afterEach, describe, expect, it } from 'vitest';
@@ -48,7 +48,7 @@ describe('StrategyBibliographyPage', () => {
     }
   });
 
-  it('「返回学院」导航到 /academy', () => {
+  it('「返回实战地图」导航到 /academy', () => {
     renderPage();
 
     fireEvent.click(screen.getByRole('button', { name: i18n.t('academy.bibliography.backToAcademy') }));

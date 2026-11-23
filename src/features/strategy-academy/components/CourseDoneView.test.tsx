@@ -17,6 +17,7 @@ describe('CourseDoneView 完成页按钮组', () => {
     nextLesson: undefined,
     relatedTracks: [] as LearningTrack[],
     completedLessons: [] as string[],
+    backLabel: '返回课程目录',
     onBack: () => {},
     onNext: () => {},
     onRestart: () => {},

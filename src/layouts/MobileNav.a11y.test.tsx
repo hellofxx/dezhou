@@ -100,10 +100,17 @@ describe('MobileNav a11y (WCAG 2.1 AA smoke)', () => {
     expect(itemLink('训练')?.className).toContain('text-[var(--ivory-dim)]');
   });
 
-  it('课程子路由（/lesson/:lessonId）保持「课程」高亮', async () => {
-    await act(async () => {
-      renderHarness('/lesson/l1-b');
-    });
-    expect(itemLink('课程')?.className).toContain('text-[var(--brass-bright)]');
+  it('课程 01 组（课时 / 实战地图 / 理论地图）均保持「课程」高亮', async () => {
+    for (const path of ['/lesson/l1-b', '/academy', '/academy/tracks', '/theory', '/theory/chapter/t1']) {
+      act(() => root.unmount());
+      root = createRoot(container);
+      await act(async () => {
+        renderHarness(path);
+      });
+      expect(itemLink('课程')?.className, `${path} 应点亮课程格`).toContain(
+        'text-[var(--brass-bright)]',
+      );
+      expect(itemLink('训练')?.className).toContain('text-[var(--ivory-dim)]');
+    }
   });
 });

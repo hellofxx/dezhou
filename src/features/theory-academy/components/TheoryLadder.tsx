@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
+import { theoryMapFrom } from '@/shared/utils/courseBack';
 import type { TheoryLevelSummary, TheoryTier } from '../types';
 import { loadTheoryLevelById } from '../data/levels/loaders';
 import {
@@ -87,7 +88,9 @@ export function TheoryLadder({
     if (levelId) void loadTheoryLevelById(levelId);
   };
 
-  const openChapter = (chapterId: string) => navigate(`/theory/chapter/${chapterId}`);
+  // 章节页返回目标随来源解析：从理论地图进入时返回 /theory（B1 来源感知返回）
+  const openChapter = (chapterId: string) =>
+    navigate(`/theory/chapter/${chapterId}`, { state: theoryMapFrom() });
 
   const handleHeadClick = (level: TheoryLevelSummary, expanded: boolean) => {
     if (expanded) {
@@ -298,6 +301,7 @@ export function TheoryLadder({
                     {allCompleted && (
                       <Link
                         to={`/theory/checkpoint/${level.id}`}
+                        state={theoryMapFrom()}
                         className={`mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-semibold text-[var(--poker-info)] hover:underline rounded ${FOCUS_RING}`}
                       >
                         <ClipboardCheck className="w-3.5 h-3.5" aria-hidden="true" />
@@ -313,7 +317,7 @@ export function TheoryLadder({
                     {allCompleted && practiceTarget && (
                       <button
                         type="button"
-                        onClick={() => navigate(practiceTarget)}
+                        onClick={() => navigate(practiceTarget, { state: theoryMapFrom() })}
                         className="mt-3 ml-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--brass-bright)] hover:underline"
                       >
                         <Swords className="w-3.5 h-3.5" />

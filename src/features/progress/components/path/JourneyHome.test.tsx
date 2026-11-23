@@ -196,7 +196,7 @@ describe('JourneyHome 学习旅程图', () => {
     const text = container.textContent ?? '';
 
     expect(text).toContain('学习旅程');
-    expect(screen.getByRole('link', { name: '全部课程' }).getAttribute('href')).toBe('/academy');
+    expect(screen.getByRole('link', { name: '全部课程' }).getAttribute('href')).toBe('/lesson');
     expect(text).toContain('入门 · 识局');
     expect(text).toContain('基础 · 算赔');
     // 第一段 1/2 课已完成；第二段前置未完成 → 锁定

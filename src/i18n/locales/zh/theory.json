@@ -404,7 +404,7 @@
   "flagged": {
     "title": "疑难题目复习清单",
     "subtitle": "你在章末小测里标记为疑难的题目都在这里，回到所属章节重读解析即可。",
-    "backAria": "返回理论学院",
+    "backAria": "返回理论地图",
     "listAria": "疑难题目列表",
     "count": "共 {{count}} 题待复习",
     "gotoChapter": "前往章节",

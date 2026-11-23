@@ -18,6 +18,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { transitionStandard } from '@/shared/utils/motion';
 import { useAcademyStore } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
@@ -106,6 +107,9 @@ export default function BasicsIntro() {
     <div className="h-full overflow-auto">
       {/* 阅读列宽：正文收窄到 768px（约 65ch），页头/步骤条同列以保持层次 */}
       <div className="py-6 flex flex-col min-h-full w-full max-w-3xl mx-auto">
+        {/* 基础入门属课程主线：返回课程枢纽，完成后进入首课 */}
+        <BackLink to="/lesson" label={t('nav.backToCourseHub')} className="mb-4" />
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}

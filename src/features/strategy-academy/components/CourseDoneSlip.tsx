@@ -11,6 +11,8 @@ interface CourseDoneSlipProps {
   nextLesson: { id: string; title: string } | undefined;
   onNext: () => void;
   onBack: () => void;
+  /** 返回入口文案（来源感知，由 CourseView 经 resolveCourseBack 提供） */
+  backLabel: string;
   onRestart: () => void;
   onClose: () => void;
 }
@@ -24,6 +26,7 @@ export default function CourseDoneSlip({
   nextLesson,
   onNext,
   onBack,
+  backLabel,
   onRestart,
   onClose,
 }: CourseDoneSlipProps) {
@@ -67,10 +70,10 @@ export default function CourseDoneSlip({
         nextLesson
           ? [
               { label: t('academy.courseView.nextLesson', { defaultValue: '下一课：{{title}}', title: nextLesson.title }), onClick: onNext, variant: 'primary', icon: <ArrowRight className="w-4 h-4" /> },
-              { label: t('academy.courseView.backToAcademy', { defaultValue: '返回学院' }), onClick: onBack, variant: 'outline', icon: <Home className="w-4 h-4" /> },
+              { label: backLabel, onClick: onBack, variant: 'outline', icon: <Home className="w-4 h-4" /> },
             ]
           : [
-              { label: t('academy.courseView.backToAcademy', { defaultValue: '返回学院' }), onClick: onBack, variant: 'primary', icon: <Home className="w-4 h-4" /> },
+              { label: backLabel, onClick: onBack, variant: 'primary', icon: <Home className="w-4 h-4" /> },
             ]
       }
     />

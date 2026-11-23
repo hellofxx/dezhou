@@ -12,6 +12,8 @@ export interface HubNextAction {
   stageTitleKey?: string;
   chapterId?: string;
   targetId?: string;
+  /** 所属主线阶段序号（1 起）；执行页返回枢纽时用于 #hub-stage-N 锚点回位。仅 concept / practice 有值。 */
+  stageIndex?: number;
 }
 
 export interface BuildHubNextActionInput {
@@ -91,6 +93,7 @@ export function buildHubNextAction({
             stageTitleKey: stage.titleKey,
             chapterId: nextConcept,
             targetId: nextConcept,
+            stageIndex: stage.index,
           };
         }
       }
@@ -114,6 +117,7 @@ export function buildHubNextAction({
         stageTitleKey: current.titleKey,
         chapterId: weakConcept,
         targetId: weakConcept,
+        stageIndex: current.index,
       };
     }
   }
@@ -128,6 +132,7 @@ export function buildHubNextAction({
       reasonKey: 'academy.courseHub.reason.nextPractice',
       stageTitleKey: current.titleKey,
       targetId: nextLesson,
+      stageIndex: current.index,
     };
   }
 
@@ -142,6 +147,7 @@ export function buildHubNextAction({
         stageTitleKey: current.titleKey,
         chapterId: nextConcept,
         targetId: nextConcept,
+        stageIndex: current.index,
       };
     }
   }

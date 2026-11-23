@@ -90,7 +90,14 @@ const lv3 = mkLevel(3, [c5], { lessons: [] });
 
 function LocationProbe() {
   const routerLocation = useLocation();
-  return <div data-testid="location">{`${routerLocation.pathname}${routerLocation.search}`}</div>;
+  const source = (routerLocation.state as { courseFrom?: { source?: string } } | null)?.courseFrom
+    ?.source;
+  return (
+    <>
+      <div data-testid="location">{`${routerLocation.pathname}${routerLocation.search}`}</div>
+      <div data-testid="location-state">{source ?? 'none'}</div>
+    </>
+  );
 }
 
 function renderLadder(
@@ -131,6 +138,10 @@ function applyPracticeButtons(container: HTMLElement): HTMLButtonElement[] {
 
 function location(): string {
   return screen.getByTestId('location').textContent ?? '';
+}
+
+function locationSource(): string {
+  return screen.getByTestId('location-state').textContent ?? '';
 }
 
 beforeEach(() => {
@@ -207,6 +218,8 @@ describe('TheoryLadder 锁定与解锁', () => {
 
     fireEvent.click(chips(container)[0]!);
     expect(location()).toBe('/theory/chapter/lad-c1');
+    // 地图内章节跳转携带来源 state，章节页据此返回 /theory
+    expect(locationSource()).toBe('theory-map');
   });
 });
 
@@ -254,6 +267,7 @@ describe('TheoryLadder 全完成后的实践推荐', () => {
 
     fireEvent.click(cta[0]!);
     expect(location()).toBe('/academy/tracks?track=track-theory-bridge');
+    expect(locationSource()).toBe('theory-map');
   });
 
   it('无轨道时指向首个推荐课时；无任何推荐则不渲染 CTA', () => {

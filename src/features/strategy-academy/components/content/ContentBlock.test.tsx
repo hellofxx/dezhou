@@ -135,7 +135,7 @@ describe('ContentBlock：按 section.type 分发', () => {
       </MemoryRouter>,
     );
     const headingText = heading.container.querySelector('h2')?.textContent;
-    expect(headingText).toBe('返回学院');
+    expect(headingText).toBe('返回实战地图');
     expect(headingText).not.toBe('数据层标题');
     heading.unmount();
 

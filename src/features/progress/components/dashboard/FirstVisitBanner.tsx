@@ -45,7 +45,7 @@ export default function FirstVisitBanner() {
           </button>
           <button
             type="button"
-            onClick={() => navigate('/academy')}
+            onClick={() => navigate('/lesson')}
             className="w-full sm:w-auto px-4 py-2.5 rounded-md border border-[var(--walnut-border)] text-[var(--ivory-muted)] text-sm hover:text-[var(--ivory)] hover:border-[var(--brass)]/40 transition-colors inline-flex items-center justify-center gap-1.5"
           >
             <Compass className="w-3.5 h-3.5" />

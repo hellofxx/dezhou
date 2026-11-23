@@ -12,6 +12,7 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import i18n from '@/i18n/config';
+import { theoryMapFrom } from '@/shared/utils/courseBack';
 import { NextChapterNav } from './NextChapterNav';
 import type { TheoryChapterSummary } from '../types';
 
@@ -30,13 +31,20 @@ const NEXT_CHAPTER: TheoryChapterSummary = {
 /** 路由探针：把当前 pathname 渲染成文本，供断言跳转结果 */
 function LocationProbe() {
   const location = useLocation();
-  return <span>{location.pathname}</span>;
+  const source = (location.state as { courseFrom?: { source?: string } } | null)?.courseFrom
+    ?.source;
+  return (
+    <>
+      <span>{location.pathname}</span>
+      <span data-testid="state-source">{source ?? 'none'}</span>
+    </>
+  );
 }
 
 let container: HTMLDivElement | undefined;
 let root: Root | undefined;
 
-function mount(unlocked: boolean) {
+function mount(unlocked: boolean, state?: unknown) {
   container = document.createElement('div');
   document.body.appendChild(container);
   root = createRoot(container);
@@ -48,7 +56,7 @@ function mount(unlocked: boolean) {
             path="*"
             element={
               <>
-                <NextChapterNav nextChapter={NEXT_CHAPTER} unlocked={unlocked} />
+                <NextChapterNav nextChapter={NEXT_CHAPTER} unlocked={unlocked} state={state} />
                 <LocationProbe />
               </>
             }
@@ -87,6 +95,16 @@ describe('NextChapterNav 主 CTA', () => {
       cta!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
     expect(el.textContent).toContain(`/theory/chapter/${NEXT_CHAPTER.id}`);
+  });
+
+  it('解锁态：透传 state 到下一章，来源感知返回得以延续', () => {
+    const el = mount(true, theoryMapFrom());
+    const cta = el.querySelector('button');
+    act(() => {
+      cta!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+    expect(el.textContent).toContain(`/theory/chapter/${NEXT_CHAPTER.id}`);
+    expect(el.querySelector('[data-testid="state-source"]')!.textContent).toBe('theory-map');
   });
 
   it('未解锁态：不渲染按钮，只显示解锁提示文案', () => {

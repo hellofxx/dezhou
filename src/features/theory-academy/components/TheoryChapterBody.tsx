@@ -21,8 +21,12 @@ interface TheoryChapterBodyProps {
   chapterCompleted: boolean;
   nextChapter: TheoryChapterSummary | undefined;
   nextChapterUnlocked: boolean;
+  /** 当前 location.state：下一章页沿用同一返回来源 */
+  nextChapterState?: unknown;
   onStartQuiz: () => void;
   onBackToChapters: () => void;
+  /** 来源感知返回文案（nav.* 已解析）；缺省沿用章节目录文案 */
+  backLabel?: string;
 }
 
 /**
@@ -41,8 +45,10 @@ export function TheoryChapterBody({
   chapterCompleted,
   nextChapter,
   nextChapterUnlocked,
+  nextChapterState,
   onStartQuiz,
   onBackToChapters,
+  backLabel,
 }: TheoryChapterBodyProps) {
   const { t } = useTranslation();
   const groups = useMemo(() => groupTheorySections(chapter.content), [chapter.content]);
@@ -147,7 +153,7 @@ export function TheoryChapterBody({
             className={`inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--walnut-raised)] text-[var(--ivory)] text-sm hover:bg-[var(--walnut-raised)]/80 transition-colors ${FOCUS_RING}`}
           >
             <ArrowLeft className="w-4 h-4" />
-            {t('theory.chapterView.backToChapters')}
+            {backLabel ?? t('theory.chapterView.backToChapters')}
           </button>
           <div className="flex flex-wrap items-center gap-3">
             <button
@@ -156,7 +162,11 @@ export function TheoryChapterBody({
             >
               {t('theory.chapterView.retryQuiz')}
             </button>
-            <NextChapterNav nextChapter={nextChapter} unlocked={nextChapterUnlocked} />
+            <NextChapterNav
+              nextChapter={nextChapter}
+              unlocked={nextChapterUnlocked}
+              state={nextChapterState}
+            />
           </div>
         </div>
       ) : (

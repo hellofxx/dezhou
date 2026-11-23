@@ -19,7 +19,7 @@ import SidebarFooter from './SidebarFooter';
 import HeaderQuickActions from './HeaderQuickActions';
 import { useThemeApplier } from './useThemeApplier';
 import { useDocumentTitle } from './useDocumentTitle';
-import { resolveNavSection, resolvePageTitle } from './navSections';
+import { isCourseSectionPath, resolveNavSection, resolvePageTitle } from './navSections';
 import TableRail from './TableRail';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/shared/components/ui/tooltip';
 import {
@@ -43,9 +43,15 @@ interface NavItem {
   hint?: string;
 }
 
-// 内容宽度分级 L2（DESIGN.md §6.5）：课程总览展宽，消除超宽屏 felt 留白；
-// 阅读/作答视图（/lesson/:lessonId、/quick 等）保持 L3 收敛，由模块内部自行限宽
-const WIDE_ROUTES = ['/academy', '/academy/tracks', '/academy/concept-graph'];
+// 内容宽度分级 L2（DESIGN.md §6.5）：课程主线 / 两张地图展宽，消除超宽屏 felt 留白；
+// 阅读/作答视图（/lesson/:lessonId、/theory/chapter/:id、/quick 等）保持 L3 收敛，由模块内部自行限宽
+const WIDE_ROUTES = ['/lesson', '/academy', '/theory', '/academy/tracks', '/academy/concept-graph'];
+
+/**
+ * R10 课程激活态覆盖 01 组：侧栏「课程」项指向主线 /lesson，但两张地图同属课程组，
+ * 进入 /academy、/theory 子路由时该项同样点亮（判定与移动底栏共用，仅作用于「课程」项）。
+ */
+const COURSE_ITEM_PATH = '/lesson';
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
@@ -80,8 +86,12 @@ export default function AppLayout() {
       ? location.pathname === '/'
       : location.pathname === path || location.pathname.startsWith(`${path}/`);
 
+  // R10：「课程」项在 01 组（主线 + 实战地图 + 理论地图）内均点亮
+  const isNavItemActive = (path: string) =>
+    path === COURSE_ITEM_PATH ? isCourseSectionPath(location.pathname) : isPathActive(path);
+
   const renderNavItem = (item: NavItem) => {
-    const active = isPathActive(item.path);
+    const active = isNavItemActive(item.path);
     // R1: 不用函数式 className/children —— TooltipTrigger asChild 的 Radix Slot 会把函数 className 字符串化，导致激活态失效
     const link = (
       <NavLink

@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate, Navigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Navigate, Link } from 'react-router-dom';
 import { ArrowLeft, ClipboardCheck, Compass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ComponentSkeleton, PageSkeleton } from '@/shared/components/feedback/LoadingState';
 import { AcademyPeek, AcademyReadingPlane } from '@/shared/components/academy';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
+import { resolveCourseBack } from '@/shared/utils/courseBack';
 import { progressCommands } from '@/features/progress/api';
 import { SessionLimitGuard, useSessionLimitReached } from '@/features/progress/sessionLimit';
 import { useDebugModeStore } from '@/shared/stores/debugMode';
@@ -42,6 +43,9 @@ export default function TheoryChapterView() {
   const { t } = useTranslation();
   const { chapterId } = useParams<{ chapterId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  // 返回目标与文案随进入来源（hub / theory-map / academy-map）解析，缺省兜底课程目录
+  const back = resolveCourseBack(location.state);
   const debugUnlocked = useDebugModeStore((s) => s.unlockAll);
   const isTheoryLevelUnlocked = useTheoryStore((s) => s.isTheoryLevelUnlocked);
   const startChapter = useTheoryStore((s) => s.startChapter);
@@ -172,17 +176,19 @@ export default function TheoryChapterView() {
               level={level}
               currentChapterId={chapter.id}
               completedChapters={completedChapters}
+              backTo={back.to}
+              backLabel={t(back.labelKey)}
             />
           }
         >
         {/* Breadcrumb */}
         <button
-          onClick={() => navigate('/theory')}
-          aria-label={t('theory.chapterView.backAria')}
+          onClick={() => navigate(back.to)}
+          aria-label={t(back.labelKey)}
           className={`inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors ${FOCUS_RING}`}
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          {t('theory.title')} · {level.icon} {resolveTheoryLevelTitle(t, level)}
+          {t(back.labelKey)} · {level.icon} {resolveTheoryLevelTitle(t, level)}
         </button>
 
         {isTransitioning || !contentReady ? (
@@ -210,8 +216,10 @@ export default function TheoryChapterView() {
             chapterCompleted={chapterCompleted}
             nextChapter={nextChapter}
             nextChapterUnlocked={nextChapterUnlocked}
+            nextChapterState={location.state}
             onStartQuiz={() => setPhase('quiz')}
-            onBackToChapters={() => navigate('/theory')}
+            onBackToChapters={() => navigate(back.to)}
+            backLabel={t(back.labelKey)}
           />
         ) : null}
 
@@ -265,11 +273,13 @@ export default function TheoryChapterView() {
             levelCompleted={levelCompleted}
             nextChapter={nextChapter}
             nextChapterUnlocked={nextChapterUnlocked}
+            nextChapterState={location.state}
             onRetry={() => {
               setRetryCount((c) => c + 1);
               setPhase('quiz');
             }}
-            onBackToChapters={() => navigate('/theory')}
+            onBackToChapters={() => navigate(back.to)}
+            backLabel={t(back.labelKey)}
           />
         ) : null}
           </>

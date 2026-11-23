@@ -11,7 +11,7 @@ const ELO_DIMENSIONS: readonly EloDimension[] = ['preflop', 'postflop', 'math', 
  *
  * P4 修复（4.3-P1-1）：明确职责区分
  * 本函数返回单一焦点计划（一个 focusArea + 一门新课程 + 复习 + 练习），
- * 用于 AcademyHome 的 DailyPlanCard。
+ * 用于学院内每日计划消费方（DailyPlan 类型）。
  *
  * 与 progress/utils/dailyTrainingPlan.ts 的 generateCrossModuleDailyPlan 区别：
  *   - 本函数：学院内焦点计划，DailyPlan 类型，推荐 1 门新课 + 复习 + 练习

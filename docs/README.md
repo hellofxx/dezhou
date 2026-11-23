@@ -21,12 +21,13 @@
 |---|---|---|
 | [`PRD.md`](./PRD.md) | 产品规格（What / Why） | 功能需求变更 |
 | [`TDD.md`](./TDD.md) | 技术设计（How） | 架构 / 数据模型 / 模块设计变更 |
+| [`COURSE_IA.md`](./COURSE_IA.md) | 课程区信息架构基线（主线 / 双泳道 / 地图角色 / 返回规则 R1–R10） | 课程区路由语义、返回契约或地图角色变更 |
 | [`AI_GUIDE.md`](./AI_GUIDE.md) | 编码 / 状态 / i18n / UI 详细规范 | 工程规范变更 |
 | [`testing/README.md`](./testing/README.md) | 测试体系（分层 / 命名 / 执行矩阵） | 测试流程变更 |
 | [`adr/README.md`](./adr/README.md) | 架构决策记录（ADR） | 难以回退的架构决策 |
 | [`how-to/README.md`](./how-to/README.md) | 贡献者操作指南（新增模块 / 守卫 / 测试） | 工作流变更 |
 | [`ops/DEPLOY_CHECKLIST.md`](./ops/DEPLOY_CHECKLIST.md) | GitHub Pages 部署与回滚 | 发布流程变更 |
-| [`agents/README.md`](./agents/README.md) | 代理文档索引（模板 / 生成物） | 代理体系变更 |
+| [`agents/README.md`](./agents/README.md) | 文件所有权指南（规则 / 交付 / 生成物索引） | 所有权或协作流程变更 |
 | [`knowledge-guide.md`](./knowledge-guide.md) | 知识库使用与回退 | 知识库策略变更 |
 
 ## 生成物（勿手改）
@@ -49,5 +50,5 @@
 - `CHANGELOG.md` 只保留当月变更；跨月时将上月条目整体移入 `changelog/YYYY-MM.md`，并同步更新本索引与 `CHANGELOG.md` 头部归档声明。
 - 一次性报告 / 计划完成后从 Current 目录移入 `history/`，并在 `history/README.md` 登记。
 - 代码事实（文件数、版本号、路由数）不在文档中硬编码；以代码 / 生成物为准。
-- 代理角色文件只写职责与边界增量，不复制 `AGENTS.md`、`docs/AI_GUIDE.md`、`DESIGN.md` 或知识库正文。
+- 文档只写职责与边界增量，不复制 `AGENTS.md`、`docs/AI_GUIDE.md`、`DESIGN.md` 或知识库正文。
 - 文档链接、索引覆盖与状态声明由 `pnpm docs:check` 校验（`pnpm verify` 已包含）。

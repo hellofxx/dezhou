@@ -58,7 +58,7 @@ const MODULES: ModuleEntry[] = [
   },
   {
     id: 'strategy-academy',
-    route: '/academy',
+    route: '/lesson',
     icon: GraduationCap,
     labelKey: 'nav.academy',
     descKey: 'dashboard.trainingGrounds.academyDesc',

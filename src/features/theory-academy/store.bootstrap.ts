@@ -108,4 +108,7 @@ registerTheoryDataSource({
   subscribe: (listener) => useTheoryStore.subscribe(listener),
   getLearningSnapshot,
   getChapterCatalog,
+  // 课程变体上下文：读侧直读理论进度，写侧复用理论 store 既有 action（枢纽 canonical 切换命令）
+  getActiveVariant: () => useTheoryStore.getState().progress.activeVariant,
+  switchVariant: (variant) => useTheoryStore.getState().switchVariant(variant),
 });

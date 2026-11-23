@@ -197,8 +197,8 @@ export function generateCrossModuleDailyPlan(
         : { items: reviewLabels.join('、') },
       // 逐条 label（多为 i18n key）：渲染端 t() 后再拼接，见 ReviewRecommendation.itemLabels
       itemLabels: reviewLabels,
-      // 通用复习卡只承载非理论项 → 学院复习页；理论项见下方 theory-review 卡（/theory/review）
-      route: '/academy',
+      // 通用复习卡只承载非理论项 → 课程主线；理论项见下方 theory-review 卡（/theory/review）
+      route: '/lesson',
       priority: 'high',
       estimatedTime: `${Math.min(genericReviews.length * 3, 15)} min`,
       reason: 'review',

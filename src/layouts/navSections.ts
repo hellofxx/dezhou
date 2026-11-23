@@ -21,6 +21,18 @@ const SECTION_PREFIXES: { index: string; labelKey: string; prefixes: string[] }[
   { index: '04', labelKey: 'nav.settingsGroup', prefixes: ['/settings', '/help'] },
 ];
 
+/**
+ * 课程 01 组（主线 + 实战地图 + 理论地图）：侧栏与移动底栏共用「课程」项激活判定（R10）。
+ * 只影响「课程」这一项，其余导航项仍按自身前缀判定。
+ */
+export const COURSE_SECTION_PREFIXES = ['/lesson', '/academy', '/theory'] as const;
+
+export function isCourseSectionPath(pathname: string): boolean {
+  return COURSE_SECTION_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
+
 /** 路径 → 导航分组眉标；未命中（含首页）回退 00 号分组 */
 export function resolveNavSection(pathname: string, t: TFunction): NavSection {
   const match = SECTION_PREFIXES.find((section) =>

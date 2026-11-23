@@ -1,8 +1,9 @@
 # PokerLab · 设计语言文档
 
-> 德州扑克训练平台 UI/UX 设计规范 v1.12.0
+> 德州扑克训练平台 UI/UX 设计规范 v1.14.0
 > 品牌主题：**Private Card Room（私人牌室）**
 > 核心隐喻：胡桃木扶手、绒布绿呢、象牙牌面、黄铜点缀 — 复刻高端私人牌局的真实触感
+> v1.14.0 更新：课程 IA 收口 — `/lesson` 为唯一课程主线，`/academy`/`/theory` 改为实战地图 / 理论地图（§5.25.1）；来源感知显式返回、`#hub-stage-N` 锚点回位、主线 canonical 变体入口；§13.7.5 返回与地图导航可访问性
 > v1.12.0 更新：训练二级站（/drill/range|odds|puzzle）与恢复的学院/理论深链；速训默认 5 题；结果统一为 ResultSlip 发牌员纸条（overlay / page）
 > v1.11.1 更新：首页按基准图重排 — 牌桌左右象牙铭牌（ELO / 连续训练）+ 状态注、细黄铜速训横幅、四段旅程横向轨道、胡桃木面板、周条小圆点
 > v1.11.0 更新：IA 收编为 5 视图（学习路径 / 课程 / 训练 / 速训 / 进度中心，§5.24）；168px 木纹侧栏 + 56px 木梁顶栏 + 12px 桌沿；程序化无缝胡桃木纹理（`--wood-h/--wood-v`）；真椭圆牌桌；学习旅程 3×3 阶段网格；侧栏 6 项 / 移动底栏 5 项
@@ -569,6 +570,44 @@
 - **课程阅读页**：`AcademyReadingPlane` 的 rail 内先放「本课概念」桥接卡，再放本 Level 学习轨；理论章完成页保留直接「去实战」卡，并新增「回到课程枢纽」。
 - **可访问性**：所有 CTA/chip ≥44px；阶段标题 h3、泳道 h4、页面唯一 h1 仍由壳层持有；折叠项使用原生 `summary` 语义。
 
+### 5.25.1 课程区地图角色与返回 / 锚点语义（v1.14.0）
+
+- **角色收敛**：`/lesson`（枢纽 + `/lesson/:id` 执行页）是课程 IA 的唯一主线；`/academy`、`/theory` 保留页面但降为「地图」——浏览、检索、工具与恢复入口，不再承担课程主线职责。
+- **地图角色文案**：`/academy` = **实战地图**，`/theory` = **理论地图**（英文 Practice map / Theory map）。枢纽目录入口、地图页标题、返回文案一律使用角色名；禁止再称「学院目录 / 策略学院目录 / 理论学院目录」。角色名与返回文案以 `nav.*` 为唯一事实源，组件不写散落字面量。
+- **地图根返回**：两地图页头部各一个 pill 返回「返回课程目录」→ `/lesson`（显式 `to`），与执行页返回并列，不互相替代。
+
+**返回入口规范**
+
+- **一律显式返回**：目标路由写死（`to`），不使用 `historyBack` / `navigate(-1)`；保证刷新、深链、PWA 冷启动后仍回到正确上级。特殊视图（如训练子视图）需要「退出当前流程」时才允许回调式退出。
+- **目标与文案随来源**（`resolveCourseBack` 单源，禁止各页自解析）：
+
+  | 进入来源 | 返回目标 | 文案 |
+  |---|---|---|
+  | 主线阶段（hub，带 stageIndex） | `/lesson#hub-stage-N` | 返回课程目录 |
+  | 理论地图（theory-map） | `/theory` | 返回理论地图 |
+  | 实战地图（academy-map） | `/academy` | 返回实战地图 |
+  | 深链 / 刷新 / 非法 state | `/lesson` | 返回课程目录 |
+
+- **单源组件**：统一 `shared/components/layout/BackLink`（`to` + `variant`：页头默认 `text`，地图根用 `pill`）。触摸目标 ≥44px（`min-h-11`）；icon-only 必填 `aria-label` 且与目标一致；焦点环用 `BackLink` 内置的 `FOCUS_RING_VISIBLE`，禁止另写 ring 字面量。
+- **同页四处一致**：执行页的页头 breadcrumb、xl 学习导轨底部、完成页动作组、ResultSlip 动作组必须渲染同一份解析结果（目标 + 文案），不得出现「导轨回地图、完成页回主线」的错位。
+- **工具页回所属地图**：书签 / 书目 / 搜索 / 定位 / 检查点等二级工具页返回各自地图根；只有用户从主线进入时才回主线。
+
+**锚点回位**
+
+- `/lesson#hub-stage-N` 由枢纽在挂载后主动回位：页面滚动容器是壳层 main 或模块内 `overflow-auto`，原生 hash 不保证滚动内层容器，必须 `document.getElementById('hub-stage-N')?.scrollIntoView({ block:'start' })`，延迟约 50ms 等阶段卡挂载。
+- `prefers-reduced-motion: reduce` 时 `behavior: 'auto'`（瞬移），否则 `smooth`；`scrollIntoView` 是 JS API，不受全局 CSS reduced-motion 兜底约束，必须显式判定。
+- 阶段卡必须携带稳定 `id="hub-stage-N"`；锚点只负责滚动，不改变当前阶段、`aria-current` 或任何 store 状态。
+
+**变体切换**
+
+- 主线 `/lesson` 顶部是唯一 canonical 变体入口（批次 2 落地，驱动两院 variant）；`/academy`、`/theory` 的变体为**只读展示**（当前值 + 去主线切换的提示），不得保留第二处可点击切换器。
+- 只读态沿用既有 variant panel 表面与排版，仅移除开关交互；不新增第三种变体胶囊样式。
+
+**侧栏「课程」激活（01 组）**
+
+- 侧栏「课程」项覆盖 `/lesson`、`/academy`、`/theory` 及其子路由；移动底栏同口径。激活态保持既有语义：`--brass-bright` 文字 + 左侧 3px 黄铜条 + 右侧庄码 D，不新增第二项导航。
+- 顶栏分组眉标 `01 / 研习` 与侧栏 active 必须同源判定，禁止出现「眉标 01 已亮、导航无 active」的错位。
+
 ### 5.24 牌室壳层与学习旅程（v1.11.0 / v1.12.0）
 
 - **IA 五视图**：学习路径 `/`、课程 `/lesson/:id`、训练 `/drill`、速训 `/quick`、进度中心 `/progress`；设置以纸条浮层 `/settings` 打开。
@@ -656,15 +695,15 @@
 | 档位 | 容器 | 适用视图 | 设计意图（教育向） |
 |---|---|---|---|
 | **L1 默认收敛 1400px** | `mx-auto w-full max-w-[1400px]` | 操作台/统计/独立交互页面（仪表盘、训练模块、设置、复盘等） | 扫读与操作的舒适带宽，随 main 居中收敛 |
-| **L2 概览展宽 1680px** | `mx-auto w-full max-w-[1680px]` | 策略学院**概览/课程地图**类视图（`/academy`、`/academy/tracks`、`/academy/concept-graph`） | 课程阶梯/学习轨道/知识图谱需横向展开以降低纵向滚动手数；展宽消除宽屏 felt 留白，内部须用自适应多栏承接 |
+| **L2 概览展宽 1680px** | `mx-auto w-full max-w-[1680px]` | 课程主线与两张地图（`/lesson`、`/theory`、`/academy`）及其概览类子视图（`/academy/tracks`、`/academy/concept-graph`） | 课程阶段路径 / 理论阶梯 / 学习轨道 / 知识图谱需横向展开以降低纵向滚动手数；展宽消除宽屏 felt 留白，内部须用自适应多栏承接。课时与章节阅读页（`/lesson/:id`、`/theory/chapter/:id`）仍走 L3 |
 | **L3 阅读/作答收敛** | 模块内部 `max-w-prose`（65ch）或 `max-w-3xl` | 课程正文（CourseView）、快速训练、认证考试、基础入门等连续阅读/专注作答 | 保持可读行长，避免单行过长降低阅读效率 |
 
 **切换规则**
-- **阅读页学习导轨**：两院阅读页（`/theory/chapter/:id`、`/academy/lesson/:id`）在 `xl` 起采用「主阅读列 768px 上限 + 右侧 264px 学习导轨」双栏（`AcademyReadingPlane`），导轨承载本级章节/课程目录与进度，承接宽屏留白；正文列宽不放大，`<xl` 回落居中单栏。
+- **阅读页学习导轨**：两院阅读页（`/theory/chapter/:id`、`/lesson/:id`）在 `xl` 起采用「主阅读列 768px 上限 + 右侧 264px 学习导轨」双栏（`AcademyReadingPlane`），导轨承载本级章节/课程目录与进度，承接宽屏留白；正文列宽不放大，`<xl` 回落居中单栏。
 - 宽度档位统一由 AppLayout 依据路由判定（单一集中点），禁止各模块自造全宽容器或负 `margin` hack 突破限宽。
 - 所有 L2 展宽视图内部必须**自适应分栏**承接多出的横向空间，不得让单个内容块或被 `1fr` 侧栏强制拉伸到超宽（反例：宽屏下 `lg:grid-cols-3` 的 `1fr` 侧栏被拉成 450px 空洞）。
 - 断点统一复用 §10.3：`xl(1280)` 展宽分栏、`lg(1024)` 平板回落、`md(768)` 移动、`480px` 小屏。
-- 规则作者：ui-ux-dev 复核；宽度档位归属 AppLayout（platform-dev 协调），分栏归属各模块子代理。
+- 规则作者：视觉所有者复核；宽度档位归属 AppLayout（`src/layouts/**`），分栏归属各模块（`src/features/<module>/**`）。
 
 ### 6.6 Hero 高度契约（v1.9.0）
 
@@ -1093,7 +1132,7 @@ border-radius: var(--poker-radius-md); /* 8px */
 - **背景**：实测 1920×1080 全屏下，侧边栏 240px + 主内容盒 `max-w-[1400px]` 居中，导致 `main` 宽 1680px 而内容盒仅 1400px，**左右各留白 140px**；同时 Home 的 `lg:grid-cols-3` 让侧栏（Daily Plan / Study Tools）以 `1fr` 膨胀到约 450px 巨宽空洞。两者叠加使策略学院在宽屏上"两侧大片留白 + 侧栏过度拉宽"，与「3 秒落座、克制的场域感」背道而驰。
 - **新增 §6.5 内容宽度分级**：统一由 AppLayout 依路由判定三档容器宽度——L1 默认收敛 1400（操作台/交互页）、L2 概览展宽 1680（策略学院概览视图）、L3 阅读作答收敛（模块内部 max-w-prose / max-w-3xl）。
 - **策略学院响应式布局（§9 页面模式 7）**：概览视图走 L2 展宽，内部自适应分栏承接横向空间——Home 改 `lg:grid-cols-[minmax(0,1fr)_340px]`（主列阶梯自适应、侧栏固定 340px）；Tracks 改 `xl:grid-cols-2`；ConceptGraph 概念卡 `xl:grid-cols-4`；阅读/作答视图维持在 L3 收敛，不随概览展宽。
-- **职责**：宽度档位归属 AppLayout（platform-dev），分栏归属各 feature 模块子代理（strategy-academy-dev），视觉一致性由 ui-ux-dev 复核。
+- **职责**：宽度档位归属 AppLayout（`src/layouts/**`），分栏归属各 feature 模块（`src/features/strategy-academy/**`），视觉一致性由共享层视觉所有者复核。
 
 ---
 
@@ -1585,6 +1624,27 @@ CSS 参考：
 - 按钮宽度 ≥ 44px（窄屏时最小宽度）
 - 2×2 grid 布局（§6.3，gap 6px）
 - 此规范与 §6.3 保持一致，教育场景无需额外调整
+```
+
+#### 13.7.5 课程区返回与地图导航可访问性（v1.14.0）
+
+```
+规格：
+- 触摸目标：返回入口 / 地图目录入口 / 阶段 chip / 展开-收起按钮 min-h-11（44px）；完成页的文字型
+  动作（返回目录 / 重学本课 / 重新实战）同样 ≥44px（只靠 py-2.5 撑到 ~40px 不合格）。
+- 焦点环：返回与地图入口统一 FOCUS_RING（BackLink 内为 FOCUS_RING_VISIBLE）；卡片型入口
+  （下一步次入口 / 理论→实战桥 / 先修卡）必须有焦点可见态，禁止复制 focus-visible:ring-2 字面量。
+- 可访问名称：icon-only 返回必填 aria-label 且与目标一致；带可见文案时 aria-label 不得改写目的地
+  （可见文案与可访问名称同义，满足 WCAG 2.5.3）。当前导航项用 aria-current=page（章节导轨）/
+  step（下一步课时），返回入口不带 aria-current。
+- 标题层级：壳层唯一 h1；地图头部 h2；阶段卡 h3、泳道 h4；完成面板 h2 不与 h1 同级。
+- 微文字：阶段状态（已完成/当前/锁定）、Drill 徽章、章节序号等承载功能信息的文字 ≥11px；
+  9–10px 仅限装饰性 eyebrow（§3.3 / §13.3.3）。
+- 动效：锚点 smooth 仅在非 reduce 时启用；切换章节 / 课时后阅读进度条不得残留。
+- 响应式：<768px 双泳道纵列、卡片纵排无横向溢出；返回与地图 pill 与标题同排时标题可换行，
+  返回入口不被截断。
+- 导航一致性：移动底栏「课程」与侧栏同口径覆盖 /lesson、/academy、/theory，禁止「眉标 01 已亮但
+  导航无 active」的小屏错位。
 ```
 
 ### 13.8 教育场景动效扩展

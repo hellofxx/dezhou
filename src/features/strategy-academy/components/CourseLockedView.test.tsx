@@ -118,9 +118,9 @@ describe('CourseLockedView：课程级前置与返回', () => {
     expect(screen.getByTestId('location').textContent).toBe('/lesson/l1-position');
   });
 
-  it('返回学院按钮跳转 /academy', () => {
+  it('返回实战地图按钮跳转 /academy', () => {
     renderView();
-    fireEvent.click(screen.getByText('返回学院'));
+    fireEvent.click(screen.getByText('返回实战地图'));
     expect(screen.getByTestId('location').textContent).toBe('/academy');
   });
 });

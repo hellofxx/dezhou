@@ -78,7 +78,7 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 2. 编写 `migrate(persistedState, fromVersion)` 函数
 3. migrate 必须防御性合并默认值（`{ ...DEFAULT_X, ...persisted.x }`），不触碰已有字段
 4. 老用户数据零丢失，首次加载自动迁移
-5. persist version 数值以 store 代码为唯一事实源，文档与子代理文件不维护数值副本（无需同步数值）
+5. persist version 数值以 store 代码为唯一事实源，文档不维护数值副本（无需同步数值）
 6. 在 `docs/CHANGELOG.md` 的"数据迁移"小节记录
 7. 删除废弃字段同样是迁移动作：先确认新事实源已就绪再删（如策略学院 v8 删除 `abilityAssessment` 与首末次得分镜像，尝试记录 / 进步回放改由 `lessonAttempts` + `AcademyDataSource.getLessonAttemptsSnapshot()` 承担、onboarding 种子化改走 `seedEloFromOnboardingAbility`），只删字段不动进度与认证
 
@@ -188,14 +188,18 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - `/lesson` 是课程枢纽（CourseHub），`/lesson/:id` 仍是课时深链；`theory:` 前缀与 `/academy/lesson/:id` 旧链保持兼容。
 - 阶段契约：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成（去重保序，短牌为 `[]`）；四段归并与阶段状态在 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`。
 - 理论只读契约：`TheoryDataSource.getLearningSnapshot()`（completedChapters / chapterAttempts / quizScores）与 `getChapterCatalog(variant)`（chapterId / levelId / practiceLessonIds），仍由 theory bootstrap 注册，经 shared registry 消费。
+- 变体上下文契约：`TheoryDataSource` 提供可选 `getActiveVariant()` / `switchVariant(variant)`；课程枢纽（`CourseHub`）是变体 canonical 切换入口，地图与执行页只读当前变体，不得各自持久化第二份选择。切换经两院既有 action 落地，registry 机制与 persist 均不变；实现方未提供该可选方法时，消费方降级为只读展示（模块内不得另写变体切换旁路）。规则见 `docs/COURSE_IA.md` R5。
 - nextAction 顺序：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → 全部完成；阈值复用 `ACADEMY_MASTERY_THRESHOLDS`。
 - 不新增 store / registry、不改 persist；短牌无锚点时概念泳道显示「概念关联待补充」，实战泳道与下一步照常。
+- 地图角色：`/academy` = 实战地图、`/theory` = 理论地图（`nav.academy` / `nav.theory` 单源），地图根只回课程主线；来源感知返回与锚点回位的实现细节见 §返回入口 与 `docs/COURSE_IA.md`。
 
 ### 返回入口
 
 - 单一事实源 `shared/components/layout/BackLink.tsx`：`to`（路由链接）/ `onClick` / `historyBack`（`navigate(-1)`）三选一；`variant` 为 `text` / `pill` / `button`；`size` 为 `sm` / `md`；`iconOnly` 见下。
 - icon-only 必须传 `aria-label`；触摸目标 ≥44px（`min-h-11`）；焦点环统一 `focus-visible:ring-2 ring-[var(--brass)]/60`。
 - 页脚内嵌链接等特殊上下文可保留本地样式，不强行统一；`BlankLayout` 的返回走 `historyBack`。
+- **来源感知（课程区）**：返回目标由进入来源决定，唯一解析器 `shared/utils/courseBack.ts` 的 `resolveCourseBack(state)`。前进侧只产出 state：`hubFrom(stageIndex?)`（主线，带阶段序号时回 `/lesson#hub-stage-N`）/ `theoryMapFrom()`（`/theory`）/ `academyMapFrom()`（`/academy`）；执行页、章节页与 Drill 退出都消费同一解析结果与 `labelKey`（core `nav.backToCourseHub` / `nav.backToTheoryMap` / `nav.backToAcademyMap`）。缺失 / 非法 state 与深链刷新兜底 `/lesson`，模块内禁止另写来源推断或 referrer 猜测。
+- 地图根（`/academy` / `/theory`）只提供「返回课程目录」→ 主线；地图下的工具页返回所属地图。导航「课程」项在 `/lesson`、`/academy`、`/theory` 三个前缀内均点亮（侧栏与移动底栏共用 `isCourseSectionPath`；规则 R1–R10 见 `docs/COURSE_IA.md`）。
 
 ### 导师人格化
 

@@ -147,7 +147,7 @@ export default function PlacementResultView({
           onClick={onBack}
           className="inline-flex items-center gap-2 min-h-11 px-5 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity"
         >
-          {t('academy.placement.page.backAcademy', { defaultValue: '返回策略学院' })}
+          {t('nav.backToAcademyMap')}
         </button>
       </div>
     </motion.div>

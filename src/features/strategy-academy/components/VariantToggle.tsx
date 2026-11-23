@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/shared/utils/cn';
 import { ALL_VARIANTS, DEFAULT_VARIANT } from '@/shared/types/elo';
-import { VariantGlyph } from './VariantGlyph';
+import { VariantGlyph } from '@/shared/components/poker/VariantGlyph';
 import type { PokerVariant } from '@/shared/types/elo';
 
 interface VariantToggleItemProps {

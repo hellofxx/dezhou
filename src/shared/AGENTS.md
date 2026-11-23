@@ -19,7 +19,7 @@ src/shared/
 │  ├─ ui/            # vendored shadcn 基础件（button / card / dialog / input / textarea /
 │  │                 # progress / select / toast / tooltip）+ focusRing 单源；豁免 ≥2，禁 0 消费
 │  ├─ poker/         # Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge /
-│  │                 # VariantGlyph / VariantToggle / OpponentGlyph
+│  │                 # VariantGlyph / OpponentGlyph
 │  ├─ quiz/          # QuizCard + quizCardModel（range-trainer / onboarding 专用）
 │  ├─ feedback/      # DecisionAnalysis / GradeIcon / MobileFeedbackSheet /
 │  │                 # RelatedLessonChip / TryAgainButton / EmptyState / LoadingState /
@@ -45,7 +45,7 @@ src/shared/
 - `components/ui/`：`Button`（default/secondary 金属族 + quiet/link 结构变体）、`Input`、`Textarea`、`Progress`（Radix 单源）、`Dialog` / `Select` / `Toast` / `Tooltip`；`focusRing.ts` 导出 `FOCUS_RING` / `FOCUS_RING_VISIBLE`
 - `components/data-display/`：`ProgressBar`（`ui/progress` 薄包装，值钳制 + `size` / `indicatorClassName`）、`ProgressRing`（环形进度，`valueMax` / `variant` / `center` / `ariaLabel`，具名导出）、`StatCard`（统计卡，`size`（含 `xl`）/ `layout` / `surface`（含 `solid`）/ `accent` / `className` / `contentClassName` / `label: ReactNode`）、`StatPair`（`<dl>` 成对指标）
 - `components/feedback/`：`ResultSlip`（结果纸条：overlay Dialog / page dealer-slip，统一钢印、指标、徽章、导师语、详情槽与动作组；标题固定 h2）、`ResultHeader`（结果页标题，默认 h2，可挂 `ring` 槽）、`ResultActions`（结果页动作组，`row` / `stack`）、`DecisionAnalysis`（五级反馈渲染，相关课程路由由 `onRelatedLessonOpen` 注入）、`MobileFeedbackSheet`（移动端底部反馈 Sheet）、`RelatedLessonChip`（纯展示 chip，`onOpen(lessonId)`，shared 不拼路由）、`GradeIcon` / `ComparisonView` / `EmptyState` / `LoadingState` / `TryAgainButton`
-- `components/poker/`：牌面与变体可视化（`VariantToggle` 归此域，不再游离根目录）
+- `components/poker/`：牌面与变体可视化（`VariantGlyph` / `OpponentGlyph` 等；`VariantToggle` 因单消费已回迁 `strategy-academy`）
 - `components/layout/BackLink`：返回入口统一件（`to` / `historyBack` / 文本·胶囊·按钮三变体，icon-only 必填 `aria-label`，触摸目标 ≥44px）
 - `components/layout/SectionLabel`：section / panel 标题统一件（`as` / `icon` / `count` / `id` / `className`，不产 h1）
 - `components/system/ErrorBoundary`：全站错误兜底，脱离布局渲染（`<h1>` 在 `pageHeadingGuard` allowlist 登记）

@@ -223,7 +223,7 @@ src/
 ├── shared/                       # 共享层（准入守卫 src/shared/admission-guard.test.ts：0 消费失败 / 1 消费须 baseline）
 │   ├── components/               # 通用组件（按语义域分层；本目录豁免行数限制）
 │   │   ├── ui/                   # vendored shadcn 基础件（button / card / dialog / input / textarea / progress / select / toast / tooltip）+ focusRing 单源；豁免 ≥2 但仍禁 0 消费
-│   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge / VariantGlyph / VariantToggle / OpponentGlyph）
+│   │   ├── poker/                # 扑克领域组件（Card / CardBack / CardSVG / Chip / HandDisplay / PositionBadge / VariantGlyph / OpponentGlyph）
 │   │   ├── quiz/                 # QuizCard + quizCardModel（range-trainer / onboarding 专用）
 │   │   ├── feedback/             # 决策反馈与结果页（DecisionAnalysis / GradeIcon / MobileFeedbackSheet / RelatedLessonChip（onOpen 注入路由）/ TryAgainButton / EmptyState / LoadingState / ComparisonView / ResultSlip / ResultHeader / ResultActions）
 │   │   ├── academy/              # 学院共享组件（AcademyBridgeCard / AcademyMasteryCard / AcademyVariantRuleCard / AcademySearchShell / AcademyBookmarksPanel / AcademyNotesPanel / ContentIssueReportDialog / AcademyReadingPlane / FormulaDerivation / AcademyTakeawayCard / AcademyPeek / AcademyStickyCta）+ ContentBlocks + index.ts（唯一 facade）
@@ -971,7 +971,7 @@ interface DailyRecommendation {
     - **无损反解**：按复习项 id 的 `theory:` 前缀反解出 questionId 并重建 key，不读题库数据、不猜测原文、不需要用户重考
     - **幂等与防御**：已是 key 的条目不再变更（未变更项连对象引用都保持原样）；非对象 / 缺字段的脏数据安全跳过；老存档完全没有 `reviewItems` 键时只回写数组，避免 hydration merge 覆盖默认 `[]`
     - **调度零丢失**：`interval` / `easeFactor` / `repetitions` / `nextReviewDate` / `lastReviewedAt` / `category` / `metadata.route` 等其余字段原样保留
-    - **跨模块镜像约束**：`eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 中 `progress: []`（且只删不加），故 id 前缀与 theory quiz key 生成函数只能在本文件内以镜像拷贝存在，一致性由 `migrateTheoryReviewKeys.test.ts` 的「key 镜像守卫」用例锁死（该用例经 `@/i18n/contentKeyEntries` 取 theory-academy 侧单源生成结果比对）；把「理论复习项 id 前缀 + quiz key 生成」上收 shared 层以消除拷贝属待 `platform-dev` 协调项
+    - **跨模块镜像约束**：`eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 中 `progress: []`（且只删不加），故 id 前缀与 theory quiz key 生成函数只能在本文件内以镜像拷贝存在，一致性由 `migrateTheoryReviewKeys.test.ts` 的「key 镜像守卫」用例锁死（该用例经 `@/i18n/contentKeyEntries` 取 theory-academy 侧单源生成结果比对）；把「理论复习项 id 前缀 + quiz key 生成」上收 shared 层以消除拷贝属待平台层评估项
 
 11. **跨模块公共入口**（2026-11 新增）：
     - `index.ts`：模块对外聚合（再导出 `api` / `api.types` + 复习项工具 + 每日训练推荐 + 成就数据 + QuickDrill 混合工具）；`api.ts` + `api.types.ts`：读写契约（`useProgressState(selector)` 只暴露 `ProgressReadModel` 白名单字段，`progressCommands` 只委托既有 action，业务规则仍由 progress 持有）；`ui.ts`：跨模块展示件（`SessionLimitGuard` / `OnboardingGate` / `TiltWarning` / `MilestoneCelebrationHost` / `ProgressPersistErrorNotice`）。
@@ -1385,7 +1385,12 @@ interface DailyRecommendation {
 - `/lesson` 由 `CourseHub` 渲染：定位条 + 下一步卡 + 四段双泳道 + 目录入口；`/lesson/:id`、`theory:` 前缀和 `/academy/lesson/:id` 旧深链保持兼容。
 - 阶段投影：`AcademyLearningStage.theoryChapterIds` 由 strategy `learningStages.ts` 从 `lessonMeta.theoryAnchors` 生成；四段归并/状态/下一课纯函数位于 `shared/utils/academyJourneyGroups.ts` / `academyJourneyProgress.ts`，由 progress 与 strategy 两个消费者复用。
 - 理论只读：`TheoryDataSource.getLearningSnapshot()` 与 `getChapterCatalog(variant)` 由 theory bootstrap 注册；未注册时消费方降级为未知，不阻塞实战/下一步。
+- 变体上下文（批次 2）：`TheoryDataSource` 增加可选 `getActiveVariant()` / `switchVariant(variant)`；枢纽顶部为变体 canonical 切换入口，调用切换命令后由两院各自既有 action 落地（标准 / 短牌 / 单挑），地图与执行页只读当前变体。registry 机制不变（仍由 theory bootstrap 注册，progress 只经接口消费）；未实现该可选方法的实现方下，消费方降级为只读展示（地图不提供切换、枢纽保留策略侧既有入口）。不新增 store / registry，不改两院 persist schema / version / migrate。
 - nextAction：基础入门 → 理论 SRS → 通用 SRS → 段内弱概念 → 段内下一实战 → 段内未读概念 → done；跳过推荐仅会话内轮换，不新增持久字段。
+- 来源感知返回（2026-11，IA 基线见 [`COURSE_IA.md`](./COURSE_IA.md)）：纯函数 `shared/utils/courseBack.ts` 持有 `COURSE_FROM_KEY`（`courseFrom`）、`hubFrom(stageIndex?)` / `theoryMapFrom()` / `academyMapFrom()` 与 `resolveCourseBack(state)`。枢纽前进链接（阶段卡概念 / 实战 chip）携带来源 state；执行页（`CourseView` / `TheoryChapterView` 及 Drill 退出）统一经 `resolveCourseBack` 取得 `{ to, labelKey }`：主线来源回 `/lesson`（带阶段序号时回 `/lesson#hub-stage-N`），理论 / 实战地图来源分别回 `/theory` / `/academy`，缺失、非法 state 与深链刷新兜底 `/lesson`。文案键复用 core `nav.backToCourseHub` / `nav.backToTheoryMap` / `nav.backToAcademyMap`，跨院只传 state 与 id 字符串。
+- 锚点回位：`CourseHub` 在带 hash 时对 `#hub-stage-N` 调 `scrollIntoView`，`prefers-reduced-motion: reduce` 降级为 `auto`，短延迟等待阶段卡挂载；阶段卡以 `id=hub-stage-N` + `data-hub-stage` 暴露锚点，不引入新路由。
+- 地图角色：`/academy` 与 `/theory` 在壳层页名与目录入口中统一为「实战地图 / 理论地图」（`nav.academy` / `nav.theory`），地图根只提供返回课程主线，不承担下一步语义。
+- 覆盖报告与评估区（批次 3）：`CourseCoverageCard` 只读汇总理论↔实战映射（`hubStages` + `lessonMeta.theoryAnchors`，短牌降级「概念关联待补充」）；两张地图的「评估」区聚合检查点 / 认证 / 定位入口，不改变门禁与评估行为；地图不再重复续学 Hero / 每日计划。
 - 不改两院 store/persist schema；短牌无 `theoryChapterIds` 时显示「概念关联待补充」。
 
 ### 5.9 跨模块系统设计
@@ -1457,7 +1462,7 @@ interface DailyRecommendation {
   - 未配置阈值的位置（如 MP/UTG1）默认解锁（返回 true）
   - 已配置阈值的位置：`preflopElo >= threshold` 时解锁
 - 调用方：`RangeSelector` 组件渲染时过滤锁定位置，悬停提示解锁所需 ELO
-- 阈值变更规则：调整阈值时必须同步更新 `docs/CHANGELOG.md`，并在 `range-trainer-dev.md` 子代理文件中记录
+- 阈值变更规则：调整阈值时必须同步更新 `docs/CHANGELOG.md` 与 `src/features/range-trainer/constants.ts` 的对应注释
 
 **调试解锁系统（开发者选项）**（2026-07 新增，产品规格见 PRD）
 
@@ -1677,7 +1682,7 @@ persist(
 | `/settings` | SettingsRoute → SettingsSlip | AppLayout |
 | `/help` | HelpHome | AppLayout |
 | `/help/article/:articleId` | HelpArticle | AppLayout |
-| `/academy` | AcademyHome | AppLayout |
+| `/academy` | AcademyHome（实战地图；地图根只回课程主线） | AppLayout |
 | `/academy/basics` | BasicsIntro | AppLayout |
 | `/academy/tracks` | LearningTracksView（消费 `?track=`） | AppLayout |
 | `/academy/concept-graph` | ConceptGraphView | AppLayout |
@@ -1691,7 +1696,7 @@ persist(
 | `/gto-simulator/result/:sessionId` | GTOResultPage | AppLayout |
 | `/hand-history` | HandHistoryList | AppLayout |
 | `/hand-history/import` | HandImportPage | AppLayout |
-| `/theory` | TheoryHome | AppLayout |
+| `/theory` | TheoryHome（理论地图；地图根只回课程主线） | AppLayout |
 | `/theory/chapter/:chapterId` | TheoryChapterView | AppLayout |
 | `/theory/review` | TheoryFlaggedReview | AppLayout |
 | `/theory/placement` | TheoryPlacementPage | AppLayout |

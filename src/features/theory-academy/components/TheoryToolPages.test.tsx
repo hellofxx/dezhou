@@ -1,5 +1,5 @@
 /**
- * 恢复的理论工具页路由壳烟测：页面可渲染、返回理论学院的入口存在。
+ * 恢复的理论工具页路由壳烟测：页面可渲染、返回理论地图的入口存在。
  * 具体内容组件由各自既有测试覆盖；本文件锁路由包装层与返回出口。
  */
 import { afterEach, describe, expect, it } from 'vitest';
@@ -23,7 +23,7 @@ const CASES = [
 ] as const;
 
 describe('Theory tool page wrappers', () => {
-  it.each(CASES)('$name 页面渲染并保留返回理论学院入口', ({ path, route, element }) => {
+  it.each(CASES)('$name 页面渲染并保留返回理论地图入口', ({ path, route, element }) => {
     render(
       <MemoryRouter initialEntries={[path]}>
         <Routes>
@@ -32,6 +32,6 @@ describe('Theory tool page wrappers', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getAllByText(i18n.t('theory.title')).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(i18n.t('nav.backToTheoryMap')).length).toBeGreaterThan(0);
   });
 });

@@ -8,7 +8,7 @@ import StrategyBookmarksPage from './StrategyBookmarksPage';
 
 /**
  * 收藏课时页契约（jsdom + 真实 store）：
- * - 页头：页标题 + 说明 + 「返回学院」→ /academy
+ * - 页头：页标题 + 说明 + 「返回实战地图」→ /academy
  * - 有收藏：列出条目，点击跳 /lesson/:id
  * - 无收藏：面板空态 + 「去挑几课」出口 → /academy
  * - 移除最后一条后立即回到空态
@@ -19,7 +19,7 @@ const EMPTY = i18n.t('academy.bookmarks.empty', {
   defaultValue: '还没有收藏。把想反复读的课时存下来，随时回到这里',
 });
 const BROWSE = i18n.t('academy.bookmarks.browseLessons', { defaultValue: '去挑几课' });
-const BACK = i18n.t('academy.courseView.backToAcademy', { defaultValue: '返回学院' });
+const BACK = i18n.t('academy.courseView.backToAcademy', { defaultValue: '返回实战地图' });
 const REMOVE = i18n.t('academy.bookmarks.remove', { defaultValue: '取消收藏' });
 
 function lessonTitle(lessonId: string): string {

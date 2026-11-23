@@ -40,6 +40,7 @@ async function mount(
     chapterCompleted?: boolean;
     onStartQuiz?: () => void;
     onBackToChapters?: () => void;
+    backLabel?: string;
   } = {},
 ) {
   await act(async () => {
@@ -53,6 +54,7 @@ async function mount(
           nextChapterUnlocked={false}
           onStartQuiz={overrides.onStartQuiz ?? (() => {})}
           onBackToChapters={overrides.onBackToChapters ?? (() => {})}
+          {...(overrides.backLabel === undefined ? {} : { backLabel: overrides.backLabel })}
         />
       </MemoryRouter>,
     );
@@ -199,5 +201,16 @@ describe('TheoryChapterBody CTA 与导航', () => {
     expect(backed).toBe(1);
     await click(buttonByText(i18n.t('theory.chapterView.retryQuiz')));
     expect(started).toBe(1);
+  });
+
+  it('返回按钮文案可由 backLabel 覆盖（来源感知），缺省仍为章节目录文案', async () => {
+    await mount(AUTO_CHAPTER, { chapterCompleted: true, backLabel: '返回课程目录' });
+    expect(buttonByText('返回课程目录')).toBeDefined();
+    expect(buttonByText(i18n.t('theory.chapterView.backToChapters'))).toBeUndefined();
+
+    await act(async () => root.unmount());
+    root = createRoot(container);
+    await mount(AUTO_CHAPTER, { chapterCompleted: true });
+    expect(buttonByText(i18n.t('theory.chapterView.backToChapters'))).toBeDefined();
   });
 });

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Lock, Home, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { LEVEL_SUMMARIES as LEVELS } from '../utils/academyMeta';
 import { resolveLevelTitle } from '../utils/titleKeys';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import type { Lesson, LessonSummary } from '../types';
 
 interface CourseLockedViewProps {
@@ -13,6 +14,10 @@ interface CourseLockedViewProps {
   /** 缺失的课程级前置 ID 列表 */
   missingPrereqLessonIds: string[];
   completedLessons: string[];
+  /** 返回出口（来源感知，由 CourseView 经 resolveCourseBack 提供）；缺省回实战地图 */
+  onBack?: () => void;
+  /** 返回文案（来源感知，由 CourseView 传入）；缺省用 academy.courseView.backToAcademy */
+  backLabel?: string;
 }
 
 export function CourseLockedView({
@@ -21,6 +26,8 @@ export function CourseLockedView({
   prereqLevelIds,
   missingPrereqLessonIds,
   completedLessons,
+  onBack,
+  backLabel,
 }: CourseLockedViewProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -179,11 +186,11 @@ export function CourseLockedView({
       </div>
 
       <button
-        onClick={() => navigate('/academy')}
-        className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity mt-2"
+        onClick={onBack ?? (() => navigate('/academy'))}
+        className={`inline-flex min-h-11 items-center gap-2 px-5 py-2 rounded-lg bg-[var(--brass-fill)] text-[var(--brass-fill-ink)] font-semibold text-sm hover:opacity-90 transition-opacity mt-2 ${FOCUS_RING}`}
       >
         <Home className="w-4 h-4" />
-        {t('academy.courseView.backToAcademy', { defaultValue: '返回学院' })}
+        {backLabel ?? t('academy.courseView.backToAcademy', { defaultValue: '返回实战地图' })}
       </button>
     </div>
   );

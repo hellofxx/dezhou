@@ -404,7 +404,7 @@
   "flagged": {
     "title": "Flagged Questions",
     "subtitle": "Every question you flagged during a chapter quiz lives here — go back to its chapter to reread the explanation.",
-    "backAria": "Back to Theory Academy",
+    "backAria": "Back to theory map",
     "listAria": "Flagged question list",
     "count": "{{count}} questions to review",
     "gotoChapter": "Go to chapter",

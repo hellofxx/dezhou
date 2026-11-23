@@ -5,6 +5,7 @@ import { BookOpen, ChevronDown, Target } from 'lucide-react';
 import { ProgressRing } from '@/shared/components/data-display/ProgressRing';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
+import { hubFrom } from '@/shared/utils/courseBack';
 import type { HubStage } from '../../utils/hubStages';
 
 interface CourseStageCardProps {
@@ -44,6 +45,7 @@ function Lane({
   known,
   nextId,
   drillIds,
+  stageIndex,
 }: {
   title: string;
   icon: React.ReactNode;
@@ -56,11 +58,14 @@ function Lane({
   known: boolean;
   nextId?: string;
   drillIds?: ReadonlySet<string>;
+  stageIndex: number;
 }) {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const ordered = orderUnread(ids, doneIds);
   const visible = expanded ? ordered : ordered.slice(0, 2);
+  // 阶段锚点回位：执行页返回枢纽时带 stageIndex（§来源感知返回）
+  const linkState = hubFrom(stageIndex);
 
   return (
     <div className="min-w-0">
@@ -84,6 +89,7 @@ function Lane({
                 <Link
                   key={id}
                   to={route(id)}
+                  state={linkState}
                   className={chipClass(done, id === nextId)}
                   aria-current={id === nextId ? 'step' : undefined}
                 >
@@ -131,6 +137,7 @@ export default function CourseStageCard({
   const doneChapters = new Set(stage.theoryChapterIds.filter((id) => completedChapterIds.has(id)));
   return (
     <section
+      id={`hub-stage-${stage.index}`}
       className="panel overflow-hidden"
       aria-labelledby={`hub-stage-${stage.index}-title`}
       data-hub-stage={stage.index}
@@ -175,6 +182,7 @@ export default function CourseStageCard({
           emptyText={stage.theoryUnavailable ? t('academy.courseHub.theoryUnavailable') : t('academy.courseHub.lanes.emptyTheory')}
           unavailable={stage.theoryUnavailable}
           known={stage.theoryKnown}
+          stageIndex={stage.index}
         />
         <Lane
           title={t('academy.courseHub.lanes.practice')}
@@ -188,6 +196,7 @@ export default function CourseStageCard({
           known
           nextId={nextLessonId}
           drillIds={drillLessonIds}
+          stageIndex={stage.index}
         />
       </div>
 
@@ -199,7 +208,12 @@ export default function CourseStageCard({
           </summary>
           <div className="mt-2 flex flex-wrap gap-2">
             {stage.supplementalChapterIds.map((id) => (
-              <Link key={id} to={`/theory/chapter/${id}`} className={chipClass(false)}>
+              <Link
+                key={id}
+                to={`/theory/chapter/${id}`}
+                state={hubFrom(stage.index)}
+                className={chipClass(false)}
+              >
                 {chapterLabels[id] ?? id}
               </Link>
             ))}

@@ -190,4 +190,24 @@ describe('store.bootstrap 理论数据源注册', () => {
     useTheoryStore.getState().recordChapterAttempt(coreOf('t1')[1]!.id, 80, 3, 2);
     expect(listener).not.toHaveBeenCalled();
   });
+
+  it('getActiveVariant 读理论进度变体，switchVariant 切换 store 并通知订阅者', () => {
+    const source = getTheoryDataSource();
+    expect(source?.getActiveVariant).toBeTypeOf('function');
+    expect(source?.switchVariant).toBeTypeOf('function');
+
+    expect(source!.getActiveVariant!()).toBe(useTheoryStore.getState().progress.activeVariant);
+    expect(source!.getActiveVariant!()).toBe('standard');
+
+    const listener = vi.fn();
+    const unsubscribe = source!.subscribe!(listener);
+
+    source!.switchVariant!('heads-up');
+
+    expect(useTheoryStore.getState().progress.activeVariant).toBe('heads-up');
+    expect(source!.getActiveVariant!()).toBe('heads-up');
+    expect(listener).toHaveBeenCalled();
+
+    unsubscribe();
+  });
 });

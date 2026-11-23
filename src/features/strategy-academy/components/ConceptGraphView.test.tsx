@@ -10,7 +10,7 @@ import { CONCEPT_NODES } from '../data/conceptNodes';
  * 图谱页组合契约：
  * - 统计三卡（已学习 / 未学习 / 总课程）随进度变化
  * - 跨模块概念卡按数据渲染并跳转 relatedLessons[0]
- * - 返回学院按钮
+ * - 返回实战地图按钮
  */
 
 function LocationProbe() {
@@ -70,9 +70,9 @@ describe('ConceptGraphView', () => {
     );
   });
 
-  it('返回学院按钮跳转 /academy', () => {
+  it('返回实战地图按钮跳转 /academy', () => {
     renderView();
-    fireEvent.click(screen.getByText('返回策略学院'));
+    fireEvent.click(screen.getByText('返回实战地图'));
     expect(screen.getByTestId('location').textContent).toBe('/academy');
   });
 });

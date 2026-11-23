@@ -63,7 +63,7 @@ export default function TheoryFlaggedReview() {
           className={`inline-flex min-h-11 items-center gap-1.5 px-2 rounded text-xs text-[var(--ivory-muted)] hover:text-[var(--ivory)] transition-colors ${FOCUS_RING}`}
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          {t('theory.title')}
+          {t('nav.backToTheoryMap')}
         </button>
 
         <motion.div

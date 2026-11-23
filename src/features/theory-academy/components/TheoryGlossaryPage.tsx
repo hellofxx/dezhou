@@ -13,7 +13,11 @@ export default function TheoryGlossaryPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="py-6 space-y-5">
-        <BackLink onClick={() => navigate('/theory')} label={t('theory.title')} variant="pill" />
+        <BackLink
+          onClick={() => navigate('/theory')}
+          label={t('nav.backToTheoryMap')}
+          variant="pill"
+        />
         {contentReady ? <TheoryGlossary terms={getTheoryGlossaryTerms()} /> : <ComponentSkeleton />}
       </div>
     </div>

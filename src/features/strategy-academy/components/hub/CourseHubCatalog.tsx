@@ -5,10 +5,11 @@ import { SectionLabel } from '@/shared/components/layout/SectionLabel';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
 
+// 三入口按“目的地角色”命名（实战地图 / 理论地图 / 学习轨道），复用 core nav 文案单源
 const ITEMS = [
-  { to: '/academy', key: 'academy.courseHub.catalog.allCourses', icon: GraduationCap },
-  { to: '/theory', key: 'academy.courseHub.catalog.theory', icon: BookOpen },
-  { to: '/academy/tracks', key: 'academy.courseHub.catalog.tracks', icon: Route },
+  { to: '/academy', key: 'nav.academy', icon: GraduationCap },
+  { to: '/theory', key: 'nav.theory', icon: BookOpen },
+  { to: '/academy/tracks', key: 'nav.academyTracks', icon: Route },
 ] as const;
 
 export default function CourseHubCatalog() {

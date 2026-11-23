@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, PlayCircle, Swords, GraduationCap } from 'lucide-react';
 import { transitionSlow } from '@/shared/utils/motion';
+import { theoryMapFrom } from '@/shared/utils/courseBack';
 import { useTranslation } from 'react-i18next';
 import { ProgressRing } from '@/shared/components/data-display/ProgressRing';
 import { StatPair } from '@/shared/components/data-display/StatPair';
@@ -50,7 +51,7 @@ export function TheoryResume({
       return;
     }
     if (mode === 'allDone') {
-      navigate('/academy');
+      navigate('/academy', { state: theoryMapFrom() });
       return;
     }
     // fresh：从首个等级第一课开始
