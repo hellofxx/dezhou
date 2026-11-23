@@ -3,19 +3,14 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import i18n from '@/i18n/config';
-import type {
-  TheoryChapterAttempt,
-  TheoryChapterSummary,
-  TheoryCheckpointAttempt,
-  TheoryLevelSummary,
-} from '../types';
+import type { TheoryChapterAttempt, TheoryChapterSummary } from '../types';
 import { TheoryMasteryCard } from './TheoryMasteryCard';
 
 /**
  * 掌握度卡首批成绩口径契约（jsdom）：
  * - 传入 chapterAttempts 时按**首次成绩**统计掌握度（重考刷分不改变分档）
  * - 练习最佳（bestScore 最大值）单独展示，标注为练习口径
- * - 已读完的 Level 出现检查点入口，并显示历史最佳分
+ * - 检查点入口不在此卡渲染（统一收敛到地图评估区，另行锁定）
  * 旧的 quizScores-only 行为由 TheoryMasteryCard.test.tsx 锁定，本文件只覆盖新增口径。
  */
 
@@ -50,21 +45,6 @@ function attempt(firstScore: number, bestScore: number): TheoryChapterAttempt {
   };
 }
 
-function level(chapters: TheoryChapterSummary[]): TheoryLevelSummary {
-  return {
-    id: 't1',
-    level: 1,
-    tier: 'basic',
-    title: 'T1 标题',
-    description: 'T1 描述',
-    icon: '🎲',
-    chapters,
-    unlockRequirement: '无',
-    practiceRecommendations: { lessons: [] },
-    variant: 'standard',
-  };
-}
-
 function countOf(container: HTMLElement, state: string): string {
   const row = container.querySelector(`[data-mastery-state="${state}"]`);
   return row?.textContent ?? '';
@@ -78,7 +58,6 @@ describe('TheoryMasteryCard 首次成绩与练习最佳', () => {
           chapters={[c1, c2, c3]}
           quizScores={{ [c1.id]: 95, [c2.id]: 70 }}
           chapterAttempts={{ [c1.id]: attempt(40, 95), [c2.id]: attempt(70, 70) }}
-          completedChapters={[c1.id, c2.id]}
         />
       </MemoryRouter>,
     );
@@ -101,40 +80,17 @@ describe('TheoryMasteryCard 首次成绩与练习最佳', () => {
   });
 });
 
-describe('TheoryMasteryCard 检查点入口', () => {
-  it('核心章读完后按 Level 渲染检查点入口与历史最佳', () => {
-    const checkpoints: Record<string, TheoryCheckpointAttempt> = {
-      t1: { attempts: 1, bestScore: 76, lastScore: 76, lastAt: 1, questionIds: [] },
-    };
-    render(
+describe('TheoryMasteryCard 检查点入口已收敛', () => {
+  it('掌握度卡不再渲染检查点链接（入口统一到地图评估区）', () => {
+    const { container } = render(
       <MemoryRouter initialEntries={['/theory']}>
         <TheoryMasteryCard
           chapters={[c1, c2]}
           quizScores={{ [c1.id]: 90, [c2.id]: 80 }}
-          completedChapters={[c1.id, c2.id]}
-          levels={[level([c1, c2])]}
-          checkpoints={checkpoints}
+          chapterAttempts={{ [c1.id]: attempt(90, 90), [c2.id]: attempt(80, 80) }}
         />
       </MemoryRouter>,
     );
-    const link = screen.getByRole('link', { name: new RegExp(i18n.t('theory.level.checkpointEntry')) });
-    expect(link.getAttribute('href')).toBe('/theory/checkpoint/t1');
-    expect(link.textContent).toContain(i18n.t('theory.checkpoint.bestScore', { score: 76 }));
-  });
-
-  it('未读完本级核心章时不渲染检查点入口', () => {
-    render(
-      <MemoryRouter initialEntries={['/theory']}>
-        <TheoryMasteryCard
-          chapters={[c1, c2]}
-          quizScores={{ [c1.id]: 90 }}
-          completedChapters={[c1.id]}
-          levels={[level([c1, c2])]}
-        />
-      </MemoryRouter>,
-    );
-    expect(
-      screen.queryByRole('link', { name: new RegExp(i18n.t('theory.level.checkpointEntry')) }),
-    ).toBeNull();
+    expect(container.querySelector('a[href^="/theory/checkpoint/"]')).toBeNull();
   });
 });

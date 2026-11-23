@@ -4,7 +4,9 @@ import { ArrowRight, BookOpenCheck, ChevronRight, Flag, Flame, GraduationCap, Ta
 import { transitionStandard } from '@/shared/utils/motion';
 import { cn } from '@/shared/utils/cn';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { BackLink } from '@/shared/components/layout/BackLink';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
+import { theoryMapFrom } from '@/shared/utils/courseBack';
 import { useTranslation } from 'react-i18next';
 import { useProgressState } from '@/features/progress/api';
 import { useTheoryStore } from '../store';
@@ -15,13 +17,11 @@ import {
 } from '../utils/theoryMeta';
 import { getTheoryChapterRecommendation } from '../data/theoryRecommendations';
 import type { PokerVariant } from '@/shared/types/elo';
-import { VariantToggle } from '@/shared/components/poker/VariantToggle';
-import { TheoryResume } from './TheoryResume';
-import { TheoryLadder, findActiveTheoryLevelId } from './TheoryLadder';
+import { TheoryLadder } from './TheoryLadder';
 import { TheorySupplementalCard } from './TheorySupplementalCard';
 import { TheoryMasteryCard } from './TheoryMasteryCard';
 import { TheoryLearningPaths } from './TheoryLearningPaths';
-import { TheoryPlacementCard } from './TheoryPlacementCard';
+import { TheoryAssessmentCard } from './TheoryAssessmentCard';
 import { TheoryRecommendationCard } from './TheoryRecommendationCard';
 import { TheoryBookmarksPanel } from './TheoryBookmarksPanel';
 import { TheoryStudyTools } from './TheoryStudyTools';
@@ -30,16 +30,13 @@ export default function TheoryHome() {
   const { t } = useTranslation();
   // THY-10：改用选择器订阅，避免整 store 订阅导致无关状态变化触发重渲染
   const progress = useTheoryStore((s) => s.progress);
-  const getTotalProgress = useTheoryStore((s) => s.getTotalProgress);
   const isTheoryLevelUnlocked = useTheoryStore((s) => s.isTheoryLevelUnlocked);
   const activeVariant = useTheoryStore((s) => s.progress.activeVariant);
-  const switchVariant = useTheoryStore((s) => s.switchVariant);
   const toggleBookmark = useTheoryStore((s) => s.toggleBookmark);
   // 五维 ELO 只读快照：反向桥接（ELO → 推荐章节）的唯一输入（progress 为设计内中枢引用）
   const standardElo = useProgressState((s) => s.eloByVariant.standard);
 
   const levels = getLevelSummariesByVariant(activeVariant);
-  const totalProgress = getTotalProgress();
   // 核心章计数：增补章（6-max 补强）不计入任何主统计，单独由补强卡呈现
   const totalChapters = getCoreChapterCount(activeVariant);
   const coreChapters = levels.flatMap((l) => getCoreChaptersOfLevel(l));
@@ -47,9 +44,6 @@ export default function TheoryHome() {
 
   // 当前变体序列内已读核心章（跨变体独立统计）
   const completedCount = progress.completedChapters.filter((id) => coreChapterIds.has(id)).length;
-
-  const activeLevelId = findActiveTheoryLevelId(levels, progress.completedChapters, isTheoryLevelUnlocked);
-  const activeLevel = levels.find((l) => l.id === activeLevelId) ?? null;
 
   const levelsDoneCount = levels.filter((l) => {
     const core = getCoreChaptersOfLevel(l);
@@ -63,6 +57,16 @@ export default function TheoryHome() {
     .map((c) => progress.chapterAttempts?.[c.id]?.firstScore ?? progress.quizScores[c.id])
     .filter((score): score is number => typeof score === 'number');
   const avgScore = scored.length > 0 ? Math.round(scored.reduce((a, b) => a + b, 0) / scored.length) : 0;
+
+  // 进行中的 Level：序列内第一个「已解锁且有未完成核心章」的 Level；全部读完时退化为首级
+  const activeLevel =
+    levels.find((level) => {
+      const core = getCoreChaptersOfLevel(level);
+      if (core.length === 0 || !isTheoryLevelUnlocked(level.id)) return false;
+      return core.some((chapter) => !progress.completedChapters.includes(chapter.id));
+    }) ??
+    levels[0] ??
+    null;
 
   const bookmarks = progress.bookmarkedChapters ?? [];
   // 反向桥接只服务标准变体（推荐池是 6-max 理论主线；变体各有独立进度口径）
@@ -80,18 +84,10 @@ export default function TheoryHome() {
   return (
     <div className="h-full overflow-auto">
       <div className="py-6 space-y-5">
-        {/* Zone A：继续学习 Hero */}
-        <TheoryResume
-          activeLevel={activeLevel}
-          completedChapters={progress.completedChapters}
-          totalProgress={totalProgress}
-          completedCount={completedCount}
-          totalChapters={totalChapters}
-          levelsDoneCount={levelsDoneCount}
-          avgScore={avgScore}
-        />
+        {/* 地图根返回：理论地图 → 课程枢纽 */}
+        <BackLink to="/lesson" label={t('nav.backToCourseHub')} variant="pill" />
 
-        {/* Zone A2：检索入口 + 收藏书签条（同为阅读辅助，不参与解锁） */}
+        {/* Zone A：检索入口 + 收藏书签条（同为阅读辅助，不参与解锁） */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,7 +100,7 @@ export default function TheoryHome() {
           )}
         </motion.div>
 
-        {/* Zone B：变体切换统一面板 */}
+        {/* Zone B：变体只读展示（切换唯一入口在课程主线 /lesson） */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -113,7 +109,7 @@ export default function TheoryHome() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
             <div className="min-w-0">
-              <SectionLabel as="h2">{t('variant.selectVariant')}</SectionLabel>
+              <SectionLabel as="h2">{t('variant.title')}</SectionLabel>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
                 {t(`variant.name.${activeVariant}`)}
                 {activeVariant === 'short-deck' && (
@@ -124,7 +120,12 @@ export default function TheoryHome() {
                 )}
               </p>
             </div>
-            <VariantToggle active={activeVariant} onSelect={switchVariant} />
+            <Link
+              to="/lesson"
+              className={`inline-flex min-h-11 shrink-0 items-center justify-center rounded-md border border-[var(--walnut-border)] px-3 text-xs font-semibold text-[var(--brass-bright)] transition-colors hover:border-[var(--brass)]/50 ${FOCUS_RING}`}
+            >
+              {t('variant.switchInCourseHub')}
+            </Link>
           </div>
         </motion.div>
 
@@ -162,14 +163,11 @@ export default function TheoryHome() {
               chapters={coreChapters}
               quizScores={progress.quizScores}
               chapterAttempts={progress.chapterAttempts}
-              completedChapters={progress.completedChapters}
-              levels={levels}
-              checkpoints={progress.checkpoints}
             />
             {activeVariant === 'standard' && (
               <>
                 <TheoryRecommendationCard recommendation={recommendation} />
-                <TheoryPlacementCard placement={progress.placement} />
+                <TheoryAssessmentCard levelId={activeLevel?.id ?? null} />
               </>
             )}
             {activeVariant === 'standard' && (
@@ -273,7 +271,7 @@ function PracticeBridge() {
       </SectionLabel>
       <button
         type="button"
-        onClick={() => navigate('/academy')}
+        onClick={() => navigate('/academy', { state: theoryMapFrom() })}
         className="w-full text-left rounded-lg border border-[var(--walnut-border)] bg-gradient-to-b from-[var(--walnut)] to-[var(--felt-deep)] p-3.5 hover:border-[var(--brass)]/50 transition-colors group"
       >
         <p className="text-xs text-[var(--ivory)] leading-relaxed">{t('theory.bridge.subtitle')}</p>

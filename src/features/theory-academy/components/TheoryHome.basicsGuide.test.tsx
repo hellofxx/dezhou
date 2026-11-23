@@ -65,6 +65,10 @@ describe('TheoryHome 先修引导卡', () => {
     expect(link!.textContent).toContain(i18n.t('theory.basicsGuide.cta'));
     const headings = Array.from(container.querySelectorAll('h2'));
     expect(headings.some((h) => (h.textContent ?? '').includes(i18n.t('theory.basicsGuide.title')))).toBe(true);
+    // 地图根返回与先修卡共存：顶部返回课程枢纽
+    const hubBack = container.querySelector('a[href="/lesson"]');
+    expect(hubBack, '地图根应提供返回课程枢纽入口').not.toBeNull();
+    expect(hubBack!.textContent).toContain(i18n.t('nav.backToCourseHub'));
   });
 
   it('已有章节进度后不再打扰', async () => {

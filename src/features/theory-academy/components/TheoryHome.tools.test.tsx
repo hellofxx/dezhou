@@ -1,16 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { MotionGlobalConfig } from 'framer-motion';
 import i18n from '@/i18n/config';
 import type { TheoryPlacementResult } from '../types';
 import { useTheoryStore } from '../store';
+import { getLevelSummariesByVariant } from '../utils/theoryMeta';
 import TheoryHome from './TheoryHome';
 
 /**
  * 首页学习工具区契约（jsdom）：
  * - 三个工具入口（搜索 / 术语表 / 书目）常驻
- * - 定位测评：未测时给开始入口（指向 /theory/placement），已测时给成绩与免修徽章
+ * - 评估区聚合：定位测评 + 检查点同处一个 section（地图不再重复测评成绩详情）
  * - 收藏书签条：无收藏不占位，有收藏时渲染书签条
  * - 反向桥接推荐卡：无 ELO 数据时指向 T1 首章（映射算法本身另有单测）
  *
@@ -44,7 +45,14 @@ function reset(progress: Partial<typeof originalProgress> = {}) {
 
 function LocationProbe() {
   const location = useLocation();
-  return <p data-testid="location">{location.pathname}</p>;
+  const source = (location.state as { courseFrom?: { source?: string } } | null)?.courseFrom
+    ?.source;
+  return (
+    <>
+      <p data-testid="location">{location.pathname}</p>
+      <p data-testid="location-state">{source ?? 'none'}</p>
+    </>
+  );
 }
 
 function mount() {
@@ -79,15 +87,52 @@ describe('TheoryHome 学习工具入口', () => {
 
 });
 
-describe('TheoryHome 定位测评卡', () => {
-  it('未测评时给开始入口', () => {
+describe('TheoryHome 地图根返回与桥接来源', () => {
+  it('顶部提供返回课程枢纽入口', () => {
     mount();
-    expect(screen.getByText(i18n.t('theory.placement.title'))).toBeTruthy();
-    const link = screen.getByRole('link', { name: i18n.t('theory.placement.start') });
-    expect(link.getAttribute('href')).toBe('/theory/placement');
+    const back = screen.getByRole('link', { name: i18n.t('nav.backToCourseHub') });
+    expect(back.getAttribute('href')).toBe('/lesson');
   });
 
-  it('已测评时展示成绩、推荐起点与免修徽章', () => {
+  it('实践桥接跳转策略学院时携带来源 state', () => {
+    mount();
+    fireEvent.click(
+      screen.getByRole('button', { name: new RegExp(i18n.t('theory.bridge.cta')) }),
+    );
+    expect(screen.getByTestId('location').textContent).toBe('/academy');
+    expect(screen.getByTestId('location-state').textContent).toBe('theory-map');
+  });
+});
+
+describe('TheoryHome 变体只读面板', () => {
+  it('展示当前变体，切换入口指向课程主线 /lesson 且不再提供本地分段控件', () => {
+    mount();
+    const activeVariant = useTheoryStore.getState().progress.activeVariant;
+    const heading = screen.getByRole('heading', { name: i18n.t('variant.title') });
+    expect(heading.closest('.variant-panel')).not.toBeNull();
+    expect(screen.getAllByText(i18n.t(`variant.name.${activeVariant}`)).length).toBeGreaterThan(0);
+    const links = screen.getAllByRole('link', { name: i18n.t('variant.switchInCourseHub') });
+    expect(links).toHaveLength(1);
+    expect(links[0]!.getAttribute('href')).toBe('/lesson');
+    expect(screen.queryByRole('group', { name: i18n.t('variant.selectVariant') })).toBeNull();
+  });
+});
+
+describe('TheoryHome 评估区聚合', () => {
+  it('定位测评与检查点入口同处评估区，各自指向目标路由', () => {
+    reset({ activeVariant: 'standard' });
+    mount();
+    const region = screen.getByRole('region', { name: i18n.t('nav.assessment') });
+    const placement = within(region).getByRole('link', { name: i18n.t('nav.theoryPlacement') });
+    expect(placement.getAttribute('href')).toBe('/theory/placement');
+    const checkpoint = within(region).getByRole('link', { name: i18n.t('nav.theoryCheckpoint') });
+    // 检查点入口指向当前进行中的 Level（空进度时为首级）
+    expect(checkpoint.getAttribute('href')).toBe(
+      `/theory/checkpoint/${getLevelSummariesByVariant('standard')[0]!.id}`,
+    );
+  });
+
+  it('已测评时地图不再重复成绩与免修详情（归定位测评页）', () => {
     const placement: TheoryPlacementResult = {
       score: 80,
       correct: 8,
@@ -96,17 +141,16 @@ describe('TheoryHome 定位测评卡', () => {
       creditLevels: ['t1', 't2'],
       completedAt: 1,
     };
-    reset({ placement });
+    reset({ activeVariant: 'standard', placement });
     mount();
     expect(
-      screen.getByText(
-        i18n.t('theory.placement.score', { correct: 8, total: 10, score: 80 }),
-      ),
-    ).toBeTruthy();
+      screen.queryByText(i18n.t('theory.placement.score', { correct: 8, total: 10, score: 80 })),
+    ).toBeNull();
+    expect(screen.queryByRole('link', { name: i18n.t('theory.placement.retake') })).toBeNull();
+    // 评估区入口仍在
     expect(
-      screen.getAllByText(new RegExp(i18n.t('theory.placement.creditedBadge'))).length,
-    ).toBeGreaterThan(0);
-    expect(screen.getByRole('link', { name: i18n.t('theory.placement.retake') })).toBeTruthy();
+      screen.getByRole('link', { name: i18n.t('nav.theoryPlacement') }),
+    ).toBeTruthy();
   });
 });
 

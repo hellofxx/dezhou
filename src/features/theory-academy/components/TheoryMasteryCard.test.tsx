@@ -164,7 +164,7 @@ describe('TheoryMasteryCard', () => {
     const button = cta();
     expect(button!.getAttribute('href')).toBeNull();
     expect(clickCta()).toBe('/theory/chapter/c2');
-    // 章节页链接只出现在检查点 footer（本用例无 levels，故不渲染）
-    expect(container.querySelector('a[href^="/theory/chapter/"]')).toBeNull();
+    // 检查点入口已收敛到地图评估区，本卡不再渲染 /theory/checkpoint 链接
+    expect(container.querySelector('a[href^="/theory/checkpoint/"]')).toBeNull();
   });
 });

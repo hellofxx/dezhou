@@ -1,39 +1,37 @@
 import { useMemo, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Route, GraduationCap, Network, Search, BookOpen, Bookmark, Library, Compass, ClipboardCheck, ChevronRight } from 'lucide-react';
+import { Zap, Route, GraduationCap, Network, Search, BookOpen, Bookmark, Library, ChevronRight } from 'lucide-react';
 import { transitionSlow, transitionStandard } from '@/shared/utils/motion';
 import { SectionLabel } from '@/shared/components/layout/SectionLabel';
+import { BackLink } from '@/shared/components/layout/BackLink';
+import { academyMapFrom } from '@/shared/utils/courseBack';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../hooks/useAcademy';
 import { useAcademyStore } from '../store';
 import {
   getLevelSummariesByVariant,
-  getTotalLessonCount,
   getVariantLessonSummaries,
 } from '../utils/academyMeta';
-import { AcademyResume } from './AcademyResume';
 import { LevelLadder, findActiveLevelId } from './LevelLadder';
-import { DailyPlanCard } from './DailyPlanCard';
+import AcademyAssessmentCard from './AcademyAssessmentCard';
 import { StrategyMasteryCard } from './StrategyMasteryCard';
 import { TheoryBridgeCard } from './TheoryBridgeCard';
 import { getLessonMeta } from '../data/lessonMeta';
-import { VariantToggle } from '@/shared/components/poker/VariantToggle';
+import { FOCUS_RING } from '@/shared/components/ui/focusRing';
+import { cn } from '@/shared/utils/cn';
 
 export default function AcademyHome() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { progress, getTotalProgress, basicsProgress } = useAcademy();
   const isLevelEntryUnlocked = useAcademyStore((s) => s.isLevelEntryUnlocked);
-  const isCertified = useAcademyStore((s) => s.isCertified);
   const activeVariant = useAcademyStore((s) => s.activeVariant);
-  const switchVariant = useAcademyStore((s) => s.switchVariant);
 
   const totalProgress = getTotalProgress();
-  const totalLessons = getTotalLessonCount();
-  const completedCount = progress.completedLessons.length;
 
   // 零状态（渐进披露 §13.6）：无任何课程进度且未完成基础入门 → 首屏只走「从第一课开始」单一路径
+  // 续学 Hero / 每日计划已由课程主线 /lesson 与首页 JourneyHome 承担，地图不再重复装配
   const isZeroState = totalProgress === 0 && !basicsProgress.completed;
 
   // ACAD-05：阶梯按当前变体渲染（manifest 已按变体分组；L1/L2 复用共享基础层）
@@ -63,32 +61,16 @@ export default function AcademyHome() {
     return [...new Set(anchors)].slice(0, 3);
   }, [activeLevel]);
 
-  const levelsDoneCount = completedLevels.length;
-  const certifiedCount = ladderLevels.reduce(
-    (n, level) => (isCertified(level.level) ? n + 1 : n),
-    0
-  );
-
   return (
     <div className="h-full overflow-auto">
       <div className="py-6 space-y-5">
-        {/* Zone A：零状态 → 单一入口路径卡；有进度 → 继续学习 Hero（含进度环与量化统计） */}
-        {isZeroState ? (
-          <ZeroStateCard />
-        ) : (
-          <AcademyResume
-            activeLevel={activeLevel}
-            completedLessons={progress.completedLessons}
-            totalProgress={totalProgress}
-            completedCount={completedCount}
-            totalLessons={totalLessons}
-            levelsDoneCount={levelsDoneCount}
-            certifiedCount={certifiedCount}
-            basicsCompleted={basicsProgress.completed}
-          />
-        )}
+        {/* 地图根返回：实战地图 → 课程枢纽（来源感知主线，非浏览器返回） */}
+        <BackLink to="/lesson" label={t('nav.backToCourseHub')} variant="pill" />
 
-        {/* 变体切换：统一面板，副标题随所选变体实时联动 */}
+        {/* Zone A：零状态 → 单一入口路径卡；有进度时续学入口统一收敛到课程主线 /lesson，地图不再重复 Hero */}
+        {isZeroState ? <ZeroStateCard /> : null}
+
+        {/* 变体只读面板：地图不带本地切换，唯一入口在课程主线 /lesson（CourseHub canonical VariantToggle） */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,7 +80,7 @@ export default function AcademyHome() {
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
             <div className="min-w-0">
               <SectionLabel as="h2">
-                {t('variant.selectVariant')}
+                {t('variant.title')}
               </SectionLabel>
               <p className="text-xs text-[var(--ivory-muted)] mt-1">
                 {t(`variant.name.${activeVariant}`)}
@@ -111,11 +93,20 @@ export default function AcademyHome() {
                 )}
               </p>
             </div>
-            <VariantToggle active={activeVariant} onSelect={switchVariant} />
+            <Link
+              to="/lesson"
+              className={cn(
+                'inline-flex min-h-11 shrink-0 items-center rounded-md border border-[var(--walnut-border)] px-3',
+                'text-xs font-semibold text-[var(--ivory-muted)] hover:text-[var(--brass-bright)] transition-colors',
+                FOCUS_RING,
+              )}
+            >
+              {t('variant.switchInCourseHub')}
+            </Link>
           </div>
         </motion.div>
 
-        {/* Zone B + C：课程阶梯（主列，自适应扩充）＋ 侧栏（今日计划/工具，固定带宽演出奏节奏） */}
+        {/* Zone B + C：课程阶梯（主列，自适应扩充）＋ 侧栏（掌握度/理论桥/检查点/工具，固定带宽演出奏节奏） */}
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -132,14 +123,13 @@ export default function AcademyHome() {
           </motion.div>
 
           <aside className="space-y-4 lg:sticky lg:top-2">
-            <DailyPlanCard />
             <StrategyMasteryCard />
-            <TheoryBridgeCard anchors={theoryAnchors} onNavigate={(route) => navigate(route)} />
-            {/* 检查点与认证同口径：只对标准变体开放（变体评测本批 de-scope） */}
-            <LevelCheckpointCard
-              level={checkpointLevel?.level ?? null}
-              levelDone={!!checkpointLevel && completedLevels.includes(checkpointLevel)}
+            <TheoryBridgeCard
+              anchors={theoryAnchors}
+              onNavigate={(route) => navigate(route, { state: academyMapFrom() })}
             />
+            {/* 评估区：检查点 / 认证 / 定位测评统一入口（检查点与认证只对标准变体开放） */}
+            <AcademyAssessmentCard level={checkpointLevel?.level ?? null} />
             <ToolsGrid basicsCompleted={basicsProgress.completed} />
           </aside>
         </div>
@@ -150,7 +140,7 @@ export default function AcademyHome() {
 
 /**
  * 零状态首屏：单一「从第一课开始」路径卡。
- * 复用 AcademyResume 的 hero 视觉（panel + brass-rail + academy-hero）与黄铜渐变 CTA，
+ * 复用 hero 视觉（panel + brass-rail + academy-hero）与黄铜渐变 CTA，
  * 但不渲染 0% 进度环 / 0 课时 / 0 级认证等零值指标，避免新用户首屏出现一片零值统计。
  */
 function ZeroStateCard() {
@@ -197,7 +187,7 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
       icon: <Zap className="w-4 h-4" />,
       title: t('academy.tools.quickDrill'),
       desc: t('academy.tools.quickDrillDesc'),
-      to: '/academy/quick-drill',
+      to: '/quick',
       accent: 'var(--brass)',
     },
     {
@@ -234,13 +224,6 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
       desc: t('academy.tools.glossaryDesc'),
       to: '/theory/glossary',
       accent: 'var(--poker-info)',
-    },
-    {
-      icon: <Compass className="w-4 h-4" />,
-      title: t('academy.tools.placement'),
-      desc: t('academy.tools.placementDesc'),
-      to: '/academy/placement',
-      accent: 'var(--brass)',
     },
     {
       icon: <Bookmark className="w-4 h-4" />,
@@ -293,43 +276,6 @@ function ToolsGrid({ basicsCompleted }: { basicsCompleted: boolean }) {
         ))}
       </div>
     </motion.section>
-  );
-}
-
-
-/**
- * 级别检查点入口（形成性自查）：仅展示与导航，不发证、不解锁、不写任何状态。
- * 本级核心课未全部完成时保留入口但换成锁定提示（实际门禁在 LevelCheckpointPage）。
- */
-function LevelCheckpointCard({ level, levelDone }: { level: number | null; levelDone: boolean }) {
-  const { t } = useTranslation();
-
-  if (level === null) return null;
-
-  return (
-    <section aria-label={t('academy.checkpointHome.title')}>
-      <SectionLabel as="h2" className="mb-2.5 px-1">
-        {t('academy.checkpointHome.title')}
-      </SectionLabel>
-      <Link
-        to={`/academy/checkpoint/${level}`}
-        className="academy-tool-tile w-full"
-        style={{ '--tool-accent': 'var(--poker-info)' } as CSSProperties}
-      >
-        <span className="academy-tool-icon" aria-hidden="true">
-          <ClipboardCheck className="w-4 h-4" />
-        </span>
-        <span className="min-w-0">
-          <span className="block text-xs font-semibold text-[var(--ivory)] truncate">
-            {t('academy.checkpointHome.entry', { level })}
-          </span>
-          <span className="block text-[11px] text-[var(--ivory-muted)] truncate">
-            {levelDone ? t('academy.checkpointHome.desc') : t('academy.checkpointHome.lockedDesc')}
-          </span>
-        </span>
-        <ChevronRight className="w-3 h-3 text-[var(--ivory-muted)] shrink-0 ml-auto" />
-      </Link>
-    </section>
   );
 }
 
