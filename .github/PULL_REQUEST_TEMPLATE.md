@@ -7,35 +7,30 @@
 
 ## ✅ PR Checklist 解读
 
-### Agent 协作规范章节
+### 文件所有权与跨模块协作章节
 
-这是本项目特有的要求，用于确保 AI 代理体系的文档同步：
+这是本项目特有的要求，用于确保写域清晰、模块边界不漂移：
 
 #### 场景 1：修改单个 feature 模块
 
 如果你只改了 `src/features/range-trainer/`的代码：
 
 ```markdown
-- [ ] 对应子智能体文件 `.claude/agents/range-trainer-dev.md`已同步更新
-  - Key Files 章节与实际目录结构一致
-  - Cross-Module Touchpoints 已刷新
-  - Workflows 补充新增操作流程
-- [ ] tools 字段合规（运行`node scripts/validate-agent-tools.ts`校验通过）
+- [ ] 写域限于 `src/features/range-trainer/**` 与该模块双语 locale
+- [ ] 模块 `AGENTS.md`（如有）与目录结构一致
 ```
 
 **操作步骤**：
-1. 打开 `.claude/agents/range-trainer-dev.md`
-2. 对比 `src/features/range-trainer/`的实际目录
-3. 如有新增文件，在 Key Files 补充（如 utils/new-feature.ts）
-4. 删除废弃文件引用（如有）
-5. 运行`node scripts/validate-agent-tools.ts`确认 tools 声明未变红
+1. 打开该模块 `AGENTS.md`（如有），对比 `src/features/range-trainer/` 的实际目录
+2. 如有新增文件，在模块说明中补充（如 `utils/new-feature.ts`）
+3. 删除废弃文件引用（如有）
 
 #### 场景 2：涉及跨模块依赖
 
 如果你改的模块需要引入其他 module 的功能：
 
 ```markdown
-- [ ] 已在 platform-dev 评估影响范围
+- [ ] 已在平台层文件所有者处评估影响范围
 - [ ] `eslint.config.js`的 `ALLOWED_CROSS_IMPORTS`已登记（如需）
 - [ ] progress store persist version 已递增并编写 migrate（如需）
 - [ ] AGENTS.md/TDD.md已同步更新架构说明（如需）
@@ -51,15 +46,16 @@
 如果项目要扩展新模块（如 `src/features/school-exam/`）：
 
 ```markdown
-- [ ] 同名代理文件在同一逻辑单元内创建（1:1 绑定）
+- [ ] 模块 `AGENTS.md` 或 `index.ts` 头注释已声明职责
 - [ ] `src/features/school-exam/` 结构符合最小约定
 - [ ] `docs/PRD.md`产品规格已更新（如为正式需求）
 - [ ] `docs/CHANGELOG.md`执行历史已登记
+- [ ] `pnpm agents:map` 已重新生成 `docs/agents/MODULE_MAP.md`
 ```
 
 **强制要求**：
-- feature 目录与 `.claude/agents/school-exam-dev.md` 必须**同时 commit**
-- 保持 `.claude/agents/*.md`文件名与 frontmatter name 完全一致
+- feature 目录与 `MODULE_MAP.md` 重生成登记必须**同时 commit**
+- 模块职责说明与模块目录一一对应，不留孤立条目
 
 ---
 
@@ -70,11 +66,11 @@
 启用 Hooks 后，提交时自动触发：
 
 ```powershell
-git add .claude/agents/*
+git add src/app/routes.tsx
 git commit
 # ↓
-🔍 Running agent tools validation...
-✅ Validation PASSED
+🔍 Running agent map check...
+✅ Agent map check passed.
 ```
 
 ### 手动完整验证
@@ -85,11 +81,8 @@ PR 合并前必做：
 # 1. 代码门禁
 pnpm verify
 
-# 2. Agent tools 校验（仅当 agents 变更时）
-node scripts/validate-agent-tools.ts
-
-# 3. 子智能体文档同步检查
-# 手动对照：src/features/<module>/ ←→ .claude/agents/<module>-dev.md
+# 2. 模块地图同步（路由 / 模块 / i18n 注册表变更时）
+pnpm agents:map
 ```
 
 ---
@@ -101,7 +94,7 @@ node scripts/validate-agent-tools.ts
 | 功能开发 | `feat(range-trainer): 添加 4-BB 位置解锁逻辑` |
 | Bug 修复 | `fix(gto-simulator): Web Worker fallback 异常` |
 | 文档更新 | `docs(AI_GUIDE): 补充 Zustand 行数豁免说明` |
-| Agent 维护 | `docs(agents): gtoWorker 实证归属修正` |
+| 所有权维护 | `docs(agents): 模块所有权与边界修正` |
 
 ---
 
@@ -117,4 +110,4 @@ node scripts/validate-agent-tools.ts
 
 - 此模板基于 `AGENTS.md` 《Feature PR Checklist》章节设计
 - 定期审查 PR Checklist 覆盖率，持续优化条目
-- 新成员首次开 PR 建议配对 Review（参考 AGENTs.md《Agent 协作》）
+- 新成员首次开 PR 建议配对 Review（参考 AGENTS.md《Agent 协作》）

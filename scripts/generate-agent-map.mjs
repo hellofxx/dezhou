@@ -7,7 +7,6 @@
  * - src/app/routes.tsx        lazyPage / lazyPageWithFeature 声明、router 的 path 字符串
  * - eslint.config.js          ALLOWED_CROSS_IMPORTS（跨模块允许边唯一事实源）
  * - src/i18n/moduleRegistry.ts CORE_MODULES / FEATURE_GROUPS
- * - .claude/agents/*-dev.md   模块 owner 代理是否存在
  *
  * 解析方式说明（为什么不是 AST）：仓库 typescript 为 7.x 原生编译器，其包仅导出
  * version 元数据，不提供 createSourceFile 等 JS 编译器 API（.pnpmfile.cjs 已因此为
@@ -27,7 +26,6 @@ const OUTPUT = 'docs/agents/MODULE_MAP.md';
 const HEADER = '<!-- 由 scripts/generate-agent-map.mjs 生成；pnpm agents:map 重新生成；不要手改 -->';
 const EXPECTED_MODULE_COUNT = 10;
 const MIN_LAZY_DECLARATIONS = 21;
-const MIN_AGENT_FILES = 10;
 
 /** 读源码并把注释替换为空格（保留换行），字符串字面量原样保留。 */
 function readSource(relPath) {
@@ -246,9 +244,6 @@ function buildData() {
   const allowedMap = new Map(parseStringArrayMap(eslintSrc, codeMask(eslintSrc), 'ALLOWED_CROSS_IMPORTS'));
   const coreModules = parseStringArray(registrySrc, codeMask(registrySrc), 'CORE_MODULES');
   const groupToModules = new Map(parseStringArrayMap(registrySrc, codeMask(registrySrc), 'FEATURE_GROUPS'));
-  const agentFiles = readdirSync(join(ROOT, '.claude/agents'))
-    .filter((name) => name.endsWith('-dev.md'))
-    .sort();
 
   const modules = listDirectories('src/features').map((name) => {
     const moduleDir = `src/features/${name}`;
@@ -259,7 +254,6 @@ function buildData() {
     const store = !hasStore ? '—' : storeVersion ? `store.ts（persist v${storeVersion}）` : 'store.ts（无 persist）';
     return {
       name,
-      owner: agentFiles.includes(`${name}-dev.md`) ? `${name}-dev` : '—',
       entry: ownDecls[0]?.component ?? '—',
       store,
       i18nModules,
@@ -269,7 +263,7 @@ function buildData() {
     };
   });
 
-  return { modules, lazyDeclarations, urlPaths, coreModules, groupToModules, agentCount: agentFiles.length };
+  return { modules, lazyDeclarations, urlPaths, coreModules, groupToModules };
 }
 
 const inlineCode = (value) => (value === '—' ? '—' : `\`${value}\``);
@@ -277,13 +271,13 @@ const inlineCodeList = (values) => (values.length === 0 ? '—' : values.map((v)
 
 function renderModuleTable(modules) {
   const lines = [
-    '| 模块 | 负责代理 | 入口组件 | store | i18n 模块 | 测试数 | 允许跨模块引用 | 组件数 |',
-    '|---|---|---|---|---|---|---|---|',
+    '| 模块 | 入口组件 | store | i18n 模块 | 测试数 | 允许跨模块引用 | 组件数 |',
+    '|---|---|---|---|---|---|---|',
   ];
   for (const m of modules) {
     const allowed = inlineCodeList(m.allowed === '—' ? [] : m.allowed.split(', '));
     lines.push(
-      `| ${inlineCode(m.name)} | ${inlineCode(m.owner)} | ${inlineCode(m.entry)} | ${inlineCode(m.store)} | ${inlineCodeList(m.i18nModules)} | ${m.tests} | ${allowed} | ${m.components} |`,
+      `| ${inlineCode(m.name)} | ${inlineCode(m.entry)} | ${inlineCode(m.store)} | ${inlineCodeList(m.i18nModules)} | ${m.tests} | ${allowed} | ${m.components} |`,
     );
   }
   return lines;
@@ -307,7 +301,7 @@ function renderI18nTable(coreModules, groupToModules) {
 }
 
 function buildDocument(data) {
-  const { modules, lazyDeclarations, urlPaths, coreModules, groupToModules, agentCount } = data;
+  const { modules, lazyDeclarations, urlPaths, coreModules, groupToModules } = data;
   return [
     HEADER,
     '',
@@ -318,7 +312,6 @@ function buildDocument(data) {
     '',
     '## 口径',
     '',
-    '- **负责代理**：`.claude/agents/<module>-dev.md` 是否存在（缺失记为 —）',
     '- **入口组件**：`src/app/routes.tsx` 中首个 import 该模块的 lazy 声明组件',
     '- **store**：模块 `store.ts` 是否存在及其 persist `version`（正则 `version:\\s*(\\d+)` 首个匹配）',
     '- **i18n 模块**：由该模块各 lazy 声明所用的 `FEATURE_GROUPS` 分组 key 反查并集（去重排序）',
@@ -353,7 +346,6 @@ function buildDocument(data) {
     '',
     `- 模块数：${modules.length}（自检阈值 = ${EXPECTED_MODULE_COUNT}）`,
     `- lazy 声明数：${lazyDeclarations.length}（自检阈值 >= ${MIN_LAZY_DECLARATIONS}）`,
-    `- agent 文件数：${agentCount}（自检阈值 >= ${MIN_AGENT_FILES}）`,
     `- 已声明 URL 数：${urlPaths.length}`,
     '',
   ].join('\n');
@@ -370,9 +362,6 @@ function selfCheck(data) {
   }
   if (data.lazyDeclarations.length < MIN_LAZY_DECLARATIONS) {
     fail(`lazy 声明数自检失败：期望 >= ${MIN_LAZY_DECLARATIONS}，实际 ${data.lazyDeclarations.length}（解析面可能失效）`);
-  }
-  if (data.agentCount < MIN_AGENT_FILES) {
-    fail(`agent 文件数自检失败：期望 >= ${MIN_AGENT_FILES}，实际 ${data.agentCount}`);
   }
   const missingEntry = data.modules.filter((m) => m.entry === '—').map((m) => m.name);
   if (missingEntry.length > 0) {
@@ -405,7 +394,7 @@ function main() {
   }
 
   writeFileSync(absOutput, content, 'utf8');
-  console.log(`[agents:map] 已生成 ${OUTPUT}（${data.modules.length} 模块 / ${data.lazyDeclarations.length} lazy 声明 / ${data.agentCount} agent 文件）`);
+  console.log(`[agents:map] 已生成 ${OUTPUT}（${data.modules.length} 模块 / ${data.lazyDeclarations.length} lazy 声明）`);
 }
 
 main();

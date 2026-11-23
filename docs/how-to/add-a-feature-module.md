@@ -11,14 +11,13 @@
 
 ## 步骤
 
-1. **建模块目录**：`src/features/<module>/` 至少包含 `components/`、`store.ts`、`types.ts`、`index.ts`；`hooks/`、`utils/`、`data/` 按需。纯静态模块可豁免 `store.ts`，但需在模块代理文件中声明。
+1. **建模块目录**：`src/features/<module>/` 至少包含 `components/`、`store.ts`、`types.ts`、`index.ts`；`hooks/`、`utils/`、`data/` 按需。纯静态模块可豁免 `store.ts`，但需在模块 `AGENTS.md` 或 `index.ts` 头注释声明。
 2. **实现模块**：只改本模块文件；跨模块引用必须走 `shared/`、`progress` 公开 API 或 `trainingEvents`，不得直接 import 其他 feature。新增 `shared/` 代码须满足 ≥2 模块消费。
 3. **接入 i18n**：在 `src/i18n/moduleRegistry.ts` 同步 `I18nModuleKey` / `ALL_MODULES` / `FEATURE_GROUPS`；新增 `src/i18n/locales/zh/<module>.json` 与 `en/<module>.json`，key 命名 `<module>.<context>.<field>`。仅首屏必需的模块才加入 `CORE_MODULES`。
-4. **接入路由**：由 `platform-dev` 在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册；`lazyPage` 会并行预加载该路由的 i18n 分组。
-5. **创建代理**：复制 `docs/agents/TEMPLATE-dev.md` 为 `.claude/agents/<module>-dev.md`，文件名 = frontmatter `name`；在同一提交内完成模块与代理的 1:1 绑定。
-6. **补测试**：按 `docs/how-to/add-or-update-tests.md` 选择 unit / component；持久化 store 必须有 `store.persist-shape.test.ts`（version > 1 还需 `store.migrate.test.ts`）。
-7. **更新机器地图**：运行 `pnpm agents:map`，提交生成的 `docs/agents/MODULE_MAP.md`。
-8. **文档与变更记录**：更新 `docs/agents/README.md` 的代理清单；在 `docs/CHANGELOG.md` 记录模块新增；如涉及架构决策，新增 ADR。
+4. **接入路由**：在 `src/app/routes.tsx` 用 `React.lazy()` + `<LazyWrapper>` 注册（平台层文件，需先确认唯一写者）；`lazyPage` 会并行预加载该路由的 i18n 分组。
+5. **补测试**：按 `docs/how-to/add-or-update-tests.md` 选择 unit / component；持久化 store 必须有 `store.persist-shape.test.ts`（version > 1 还需 `store.migrate.test.ts`）。
+6. **更新机器地图**：运行 `pnpm agents:map`，提交生成的 `docs/agents/MODULE_MAP.md`。
+7. **文档与变更记录**：在 `docs/CHANGELOG.md` 记录模块新增；如涉及架构决策，新增 ADR。
 
 ## 跨模块边（确有必要时）
 
@@ -36,6 +35,5 @@ pnpm verify
 - [ ] 模块最小结构齐全，未直接 import 其他 feature
 - [ ] zh / en i18n 双语齐备，`localeParity` 通过
 - [ ] 路由已 lazy 包裹，i18n 分组正确
-- [ ] `.claude/agents/<module>-dev.md` 已创建
 - [ ] `MODULE_MAP.md` 已重新生成
 - [ ] `pnpm verify` 全绿

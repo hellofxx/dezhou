@@ -70,7 +70,7 @@ git config core.hooksPath .git-hooks
 `pre-commit` 是**阻断式**门禁（fail-closed）：
 
 - 任意 `.ts / .tsx / .js / .jsx` 变更触发 ESLint；
-- `.claude/agents/*-dev.md` 变更触发代理工具校验；
+- 任意 `.md` 变更触发文档检查；
 - 路由 / 模块 / i18n 注册表变更触发 `agents:map:check`。
 
 详细说明见 [`.git-hooks/README.md`](./.git-hooks/README.md)。
@@ -104,12 +104,13 @@ git config core.hooksPath .git-hooks
 
 ## AI 代理协作
 
-项目采用 12 个自定义子智能体（2 个基础层 + 10 个 feature 层）：
+项目不维护自带子代理文件，执行层由全栈开发组插件代理按技能派单（派单与会诊、实现下沉、出图、质量、发布），项目内职责以**文件所有权**表达：
 
-- **基础层**：`platform-dev`（路由 / shared 层 / 跨模块协调）、`ui-ux-dev`（设计语言守护）
-- **Feature 层**：`range-trainer-dev`、`pot-odds-dev`、`gto-simulator-dev`、`hand-history-dev`、`progress-dev`、`onboarding-dev`、`puzzle-trainer-dev`、`strategy-academy-dev`、`theory-academy-dev`、`help-center-dev`
+- **模块层**：`src/features/<module>/**` 归各模块，机器事实见 [`docs/agents/MODULE_MAP.md`](./docs/agents/MODULE_MAP.md)
+- **共享层**：`src/shared/**` 需 ≥2 模块消费才可准入
+- **平台层**：`src/app/`、`src/layouts/`、`src/i18n/`、`src/guards/`、`scripts/`
 
-详见 [`AGENTS.md`](./AGENTS.md) §Agent 协作。
+详见 [`AGENTS.md`](./AGENTS.md) §Agent 协作 与 [`docs/agents/README.md`](./docs/agents/README.md)。
 
 ## 许可证
 

@@ -22,7 +22,7 @@
  *
  * NEEDS-DECISION: 建议把「理论复习项 id 前缀 + quiz key 生成函数」上收到 shared 层
  * （如 shared/utils/theoryContentKeys.ts），由 theory-academy 与 progress 共同引用，
- * 从而删除本文件的镜像拷贝。shared 层准入（≥2 模块使用）已满足，唯需 platform-dev 协调。
+ * 从而删除本文件的镜像拷贝。shared 层准入（≥2 模块使用）已满足，唯需平台层评估。
  */
 
 /** 镜像自 theory-academy/utils/theorySrs.ts 的 THEORY_REVIEW_ID_PREFIX */

@@ -13,7 +13,9 @@
 - `shared/` 只接收被 ≥2 个模块使用的代码；单模块代码留在模块内。
 - 跨模块只允许两种通道：引用 `progress` 的公开 API，或经 `trainingEvents` 事件总线；允许边清单以 `eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 为唯一事实源，收紧时只删不加。
 - 数据源采用注册表倒置（`academyDataSourceRegistry` / `achievementRegistry`），避免 progress 反向依赖学院模块。
-- 每个 feature 与 `.claude/agents/<module>-dev.md` 1:1 绑定；模块增删同步 `docs/agents/MODULE_MAP.md`。
+- 每个 feature 与模块 `AGENTS.md`（或 `index.ts` 头注释）1:1 绑定职责说明；模块增删同步 `docs/agents/MODULE_MAP.md`。
+
+> 注记（2026-11-23）：原「与 `.claude/agents/<module>-dev.md` 1:1 绑定」已废止——项目自带子代理退场，执行层改为全栈开发组插件代理 + 文件所有权；本 ADR 的模块边界结论不变。
 
 ## Consequences
 
@@ -24,7 +26,7 @@
 
 ## References
 
-- `AGENTS.md` — 代码组织、关键约束、Agent 协作
+- `AGENTS.md` — 代码组织、关键约束、Agent 协作（插件代理 + 文件所有权）
 - `eslint.config.js` — `ALLOWED_CROSS_IMPORTS`
 - `src/guards/eslintCrossImports.test.ts` / `src/features/eslint-guard-dependency-graph.test.ts`
 - `docs/agents/MODULE_MAP.md`

@@ -2,6 +2,7 @@
 
 > 状态：Snapshot · 证据基线 2026-08-30 @ `c966912`。代码已演进，依赖本模型前先按 `00-evidence.md` §5 复核。
 > 刷新触发：跨模块边 / 路由 / 持久化变更后，或每季度；最近复核 2026-11-04。
+> **待刷新（2026-11-23）**：课程 IA 批次 1 调整路由角色语义（`/lesson` 课程主线、`/academy` 实战地图、`/theory` 理论地图）并新增 `shared/utils/courseBack.ts`（含 `courseFrom` state 契约）；本目录视图未随本次变更重采集，引用前先按 `00-evidence.md` §5 复核。
 > 本目录只保留当前态模型；历史评审、补救计划与 UI/UX 执行记录已归档到 [`../history/architecture/`](../history/architecture/)。
 
 `system-modeler`（架构场景）+ `c4model` / `graphviz`（图源格式）产出，回答一个问题：

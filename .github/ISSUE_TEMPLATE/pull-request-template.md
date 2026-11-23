@@ -11,7 +11,7 @@
 - [ ] 🔥 Performance optimization (性能优化)
 - [ ] 📝 Documentation update (文档更新)
 - [ ] 🧪 Test update (测试更新)
-- [ ] 🤖 Agent/Docs maintenance (子智能体/文档维护)
+- [ ] 🤖 Ownership/Docs maintenance (所有权/文档维护)
 
 ## ✅ PR Checklist（必须全部勾选）
 
@@ -30,30 +30,27 @@
 - [ ] i18n key 同步 zh.json 与 en.json（新增键名）
 - [ ] 中文文案符合品牌调性（参考 DESIGN.md）
 
-### Agent 协作规范
+### 文件所有权与跨模块协作
 
 #### 如果修改了 feature 模块：
 
-- [ ] 对应子智能体文件 `.claude/agents/<module>-dev.md`已同步更新
-  - Key Files 章节与实际目录结构一致
-  - Cross-Module Touchpoints 已刷新
-  - Workflows 补充新增操作流程
-- [ ] tools 字段合规（运行`node scripts/validate-agent-tools.ts`校验通过）
+- [ ] 写域限于 `src/features/<module>/**` 与该模块双语 locale；模块 `AGENTS.md`（如有）与目录结构一致
 - [ ] 未越界修改其他 module 的业务逻辑
 
 #### 如果涉及跨模块变更：
 
-- [ ] 已在 platform-dev 评估影响范围
+- [ ] 已在平台层文件所有者处评估影响范围（`src/app/`、`src/shared/`、`eslint.config.js`）
 - [ ] `eslint.config.js`的 `ALLOWED_CROSS_IMPORTS`已登记（如需）
 - [ ] progress store persist version 已递增并编写 migrate（如需）
 - [ ] AGENTS.md/TDD.md已同步更新架构说明（如需）
 
 #### 如果添加新的 feature 模块：
 
-- [ ] 同名代理文件在同一逻辑单元内创建（1:1 绑定）
+- [ ] 模块 `AGENTS.md` 或 `index.ts` 头注释已声明职责
 - [ ] `src/features/<module>/` 结构符合最小约定
 - [ ] `docs/PRD.md`产品规格已更新（如为正式需求）
 - [ ] `docs/CHANGELOG.md`执行历史已登记
+- [ ] `pnpm agents:map` 已重新生成 `docs/agents/MODULE_MAP.md`
 
 ### UI/UX 规范（如涉及页面改造）
 
@@ -61,7 +58,7 @@
 - [ ] WCAG 2.1 AA 对比度达标（4.5:1 文本 / 3:1 大文本）
 - [ ] 触摸目标 ≥ 44×44px（移动端）
 - [ ] 反霓虹硬约束已通过（designTokenGuard.test.ts守卫）
-- [ ] ui-ux-dev已复核视觉一致性（重大 UI 变更时）
+- [ ] 共享层视觉所有者已复核视觉一致性（重大 UI 变更时）
 
 ### 国际化
 

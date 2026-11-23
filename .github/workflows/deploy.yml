@@ -54,7 +54,7 @@ jobs:
       - name: Docs Check
         run: pnpm docs:check
 
-      # 模块地图门禁：docs/agents/MODULE_MAP.md 必须与代码事实一致（模块 / 路由 / i18n 注册表 / agent 文件）
+      # 模块地图门禁：docs/agents/MODULE_MAP.md 必须与代码事实一致（模块 / 路由 / i18n 注册表）
       - name: Agent Map Check
         run: pnpm agents:map:check
 

@@ -7,7 +7,6 @@
 
 ## 口径
 
-- **负责代理**：`.claude/agents/<module>-dev.md` 是否存在（缺失记为 —）
 - **入口组件**：`src/app/routes.tsx` 中首个 import 该模块的 lazy 声明组件
 - **store**：模块 `store.ts` 是否存在及其 persist `version`（正则 `version:\s*(\d+)` 首个匹配）
 - **i18n 模块**：由该模块各 lazy 声明所用的 `FEATURE_GROUPS` 分组 key 反查并集（去重排序）
@@ -16,18 +15,18 @@
 
 ## 模块表
 
-| 模块 | 负责代理 | 入口组件 | store | i18n 模块 | 测试数 | 允许跨模块引用 | 组件数 |
-|---|---|---|---|---|---|---|---|
-| `gto-simulator` | `gto-simulator-dev` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 26 | `progress` | 21 |
-| `hand-history` | `hand-history-dev` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
-| `help-center` | `help-center-dev` | `HelpHome` | — | `help` | 4 | — | 10 |
-| `onboarding` | `onboarding-dev` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
-| `pot-odds` | `pot-odds-dev` | `OddsStation` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
-| `progress` | `progress-dev` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 70 | — | 84 |
-| `puzzle-trainer` | `puzzle-trainer-dev` | `PuzzleStation` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
-| `range-trainer` | `range-trainer-dev` | `DrillHub` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 13 | `progress` | 19 |
-| `strategy-academy` | `strategy-academy-dev` | `LessonRoute` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 123 | `progress` | 129 |
-| `theory-academy` | `theory-academy-dev` | `TheoryHome` | `store.ts（persist v5）` | `academy`, `theory`, `variant` | 82 | `progress` | 71 |
+| 模块 | 入口组件 | store | i18n 模块 | 测试数 | 允许跨模块引用 | 组件数 |
+|---|---|---|---|---|---|---|
+| `gto-simulator` | `GTOSimulatorHome` | `store.ts（无 persist）` | `feedback`, `gto` | 26 | `progress` | 21 |
+| `hand-history` | `HandHistoryList` | `store.ts（无 persist）` | `common`, `handHistory` | 28 | — | 23 |
+| `help-center` | `HelpHome` | — | `help` | 4 | — | 10 |
+| `onboarding` | `OnboardingFlow` | — | `onboarding`, `rangeTrainer` | 9 | `progress` | 12 |
+| `pot-odds` | `OddsStation` | `store.ts（无 persist）` | `potOdds` | 16 | `progress` | 18 |
+| `progress` | `JourneyHome` | `store.ts（persist v18）` | `achievements`, `common`, `dailyChallenge`, `dashboard`, `downswing`, `elo`, `leaderboard`, `mood`, `nav`, `progress`, `rankUp`, `review`, `spacedRepetition`, `theory` | 70 | — | 84 |
+| `puzzle-trainer` | `PuzzleStation` | `store.ts（persist v3）` | `feedback`, `puzzle` | 24 | `progress` | 18 |
+| `range-trainer` | `DrillHub` | `store.ts（无 persist）` | `common`, `feedback`, `rangeTrainer` | 13 | `progress` | 19 |
+| `strategy-academy` | `LessonRoute` | `store.ts（persist v8）` | `academy`, `drills`, `gto`, `quickDrill`, `theory`, `variant` | 124 | `progress` | 132 |
+| `theory-academy` | `TheoryHome` | `store.ts（persist v5）` | `academy`, `theory`, `variant` | 85 | `progress` | 74 |
 
 ## Lazy 路由表
 
@@ -200,5 +199,4 @@
 
 - 模块数：10（自检阈值 = 10）
 - lazy 声明数：45（自检阈值 >= 21）
-- agent 文件数：12（自检阈值 >= 10）
 - 已声明 URL 数：51

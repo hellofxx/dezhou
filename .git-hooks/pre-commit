@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# Agent Tools Validation + Quality Gate Pre-commit Hook
+# Quality Gate Pre-commit Hook
 # 
 # 1. ESLint verification (when source changes) - blocking
 # 2. Docs check (when Markdown changes) - blocking
-# 3. Agent tools validation (when .claude/agents/*-dev.md changes) - blocking, warnings allowed
-# 4. Agent map check (when .claude/agents/*.md / routes.tsx / moduleRegistry.ts change) - blocking
+# 3. Agent map check (when routes.tsx / moduleRegistry.ts change) - blocking
 #
-# 四条门禁均为 fail-closed：工具链缺失导致「无法执行」时一律 exit 1，
+# 三条门禁均为 fail-closed：工具链缺失导致「无法执行」时一律 exit 1，
 # 绝不把「没跑成」当作「跑过了」。
 #
 # Memory note (Git-Hook 跨平台兼容):
@@ -64,32 +63,9 @@ else
 fi
 
 echo ""
-echo "⚠️ Detecting changes to agent files..."
-
-if git diff --cached --name-only | grep -q '\.claude/agents/.*-dev\.md'; then
-  echo "🔍 Running agent tools validation..."
-  node scripts/validate-agent-tools.ts
-  RESULT=$?
-  
-  if [ $RESULT -eq 1 ]; then
-    echo "❌ Agent tools validation FAILED"
-    echo "Please fix errors before committing."
-    exit 1
-  elif [ $RESULT -eq 0 ]; then
-    echo "✅ Agent tools validation passed (warnings allowed)"
-  else
-    echo "❌ Agent tools validation errored (exit code $RESULT)"
-    echo "Treating unexpected exit code as failure to avoid fail-open."
-    exit 1
-  fi
-else
-  echo "✓ No agent file changes detected, skipping validation."
-fi
-
-echo ""
 echo "⚠️ Detecting changes to module map sources..."
 
-if git diff --cached --name-only | grep -qE '^\.claude/agents/.*\.md$|^src/app/routes\.tsx$|^src/i18n/moduleRegistry\.ts$'; then
+if git diff --cached --name-only | grep -qE '^src/app/routes\.tsx$|^src/i18n/moduleRegistry\.ts$'; then
   echo "🔍 Running agent map check..."
   cd "$(git rev-parse --show-toplevel)" || { echo "❌ 无法定位仓库根目录，中止提交。"; exit 1; }
   # 用 node 直调（不依赖 pnpm PATH）；门禁为 fail-closed：无法执行即失败

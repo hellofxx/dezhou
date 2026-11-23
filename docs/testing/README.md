@@ -200,13 +200,13 @@ L4 由 Playwright 自动门禁 + 人工验收共同承担：
 
 ## 9. 责任与评审
 
-| 范围 | Owner |
+| 范围 | 持有文件 / 模块 |
 |---|---|
-| 模块内单元 / 组件 / 数据完整性测试 | 对应 feature dev（见 [`docs/agents/MODULE_MAP.md`](../agents/MODULE_MAP.md)） |
-| `vitest.config.ts` / 分层脚本 / 测试体系守卫 / CI | `platform-dev` |
-| 全局设计 token / a11y 守卫 | `ui-ux-dev` |
-| progress store / persist 迁移 / 五大系统测试 | `progress-dev` |
-| 全局守卫清单与跨模块一致性 | 能力所属模块 + `platform-dev` 协调 |
+| 模块内单元 / 组件 / 数据完整性测试 | 对应 `src/features/<module>/**`（见 [`docs/agents/MODULE_MAP.md`](../agents/MODULE_MAP.md)） |
+| `vitest.config.ts` / 分层脚本 / 测试体系守卫 / CI | `vitest.config.ts`、`scripts/**`、`src/guards/**`、`.github/workflows/**` |
+| 全局设计 token / a11y 守卫 | `src/guards/**`、`src/styles/**`、`src/shared/components/**` |
+| progress store / persist 迁移 / 五大系统测试 | `src/features/progress/**` |
+| 全局守卫清单与跨模块一致性 | 能力所属模块 + 平台层文件 |
 
 PR 自检（与 `AGENTS.md` Feature PR Checklist 同步）：
 

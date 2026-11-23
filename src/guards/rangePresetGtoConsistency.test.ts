@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 /**
- * P1A-06 / P1A-08 跨模块一致性守卫（2026-07-31 跨模块专批 C，platform-dev 维护）。
+ * P1A-06 / P1A-08 跨模块一致性守卫（2026-07-31 跨模块专批 C，平台层维护）。
  *
  * 数据源定性（P1-C 结论）：
  * - gto-simulator `data/preflop-ranges.json`（6max_100bb_preflop，11 spot）是 open /

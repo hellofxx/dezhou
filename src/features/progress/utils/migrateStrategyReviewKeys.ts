@@ -22,7 +22,7 @@
  *
  * NEEDS-DECISION: 与理论侧同款问题——建议把「课时标题 key 生成函数」上收到 shared 层
  * （如 shared/utils/lessonContentKeys.ts），由 strategy-academy 与 progress 共同引用，
- * 从而删除本文件的镜像拷贝。shared 层准入（≥2 模块使用）已满足，唯需 platform-dev 协调。
+ * 从而删除本文件的镜像拷贝。shared 层准入（≥2 模块使用）已满足，唯需平台层评估。
  */
 
 /** 镜像自 strategy-academy/utils/titleKeys.ts 的 lessonTitleKey */

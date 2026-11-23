@@ -21,9 +21,9 @@
 - 开发时 Qoder 会自动检索相关模块知识并注入上下文；无需手工复制卡片内容到对话或文档。
 - 代码结构、路由、模块清单变更后，优先运行 `pnpm agents:map` 更新 `docs/agents/MODULE_MAP.md`；知识库更新是辅助，不是门禁。
 
-## 3. 子代理与文档约束
+## 3. 文档与所有权约束
 
-- `.claude/agents/*.md` **禁止复制知识库中的描述性内容**；只写职责、边界、工作流与引用路径。
+- 模块 `AGENTS.md` 与 Current 文档 **禁止复制知识库中的描述性内容**；只写职责、边界、工作流与引用路径。
 - 模块能力与实现细节以代码为准；模块 owner / 入口 / store / i18n / 允许边以 `docs/agents/MODULE_MAP.md`（生成物）为准。
 - 需要长期沉淀的决策写入 Current 文档（PRD / TDD / AI_GUIDE / DESIGN / AGENTS）；一次性分析不进入 Current。
 

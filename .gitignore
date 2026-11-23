@@ -34,7 +34,7 @@ dist-ssr
 # Claude 内置代理（安装时自动拷贝，非项目自有源码）
 .claude/agents/builtin/
 
-# 子代理物理源 .claude/agents/ 与 AGENTS.md 保留入库
+# 项目自带子代理已退场：执行层由全栈开发组插件代理 + 文件所有权承担（见 AGENTS.md §Agent 协作）
 
 # Editor directories and files
 .vscode/*

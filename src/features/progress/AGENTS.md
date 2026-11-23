@@ -5,7 +5,7 @@
 ## 职责
 
 - 集中管理跨模块状态五大系统：Streak / ELO / SRS / Emotion / Mentor
-- persist version 以 `store.ts` 的 persist 配置为唯一事实源（文档与子代理文件不维护数值副本）
+- persist version 以 `store.ts` 的 persist 配置为唯一事实源（文档不维护数值副本）
 - 订阅 `trainingEvents` 事件总线自动更新统计（训练模块 emit，本 store 订阅）
 
 ## 硬约束
