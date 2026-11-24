@@ -8,7 +8,9 @@ import { DEFAULT_EMOTION_STATE } from '@/features/progress/types';
 import { loadAcademyLessonsForQuickDrill } from '../data/lessons/loaders';
 import { getTodayString } from '@/shared/utils/spacedRepetition';
 import { DEFAULT_ELO } from '@/shared/types/elo';
+import { trainingEvents } from '@/shared/stores/trainingEvents';
 import type { EloRating } from '@/shared/types/elo';
+import type { TrainingRecord } from '@/shared/types/training';
 
 /** 设置标准变体 ELO（弱点维度 / 自适应难度的唯一输入） */
 function setStandardElo(overrides: Partial<EloRating>) {
@@ -35,6 +37,7 @@ function resetStandardElo() {
  * - quick=true：固定 5 题 / 自适应难度 / 展示 mode 与复习提示
  * - 普通模式：8 题 / 难度可手选
  * - 完成时 recordPracticeScore(quick-drill) + recordTrainingDay + quickDrillStreak
+ * - 训练事件使用独立 quick-drill 模式，课程弱项推荐需匹配当前难度
  * - 每日题量达上限时由 SessionLimitGuard 拦截
  */
 
@@ -62,6 +65,34 @@ function resetProgressStore() {
   });
 }
 
+function makeWeaknessRecord(lessonId: string): TrainingRecord {
+  const createdAt = Date.now();
+  return {
+    id: `puzzle-weakness-${lessonId}`,
+    module: 'puzzle-trainer',
+    mode: 'daily',
+    createdAt,
+    result: {
+      sessionId: `puzzle-weakness-${lessonId}`,
+      module: 'puzzle-trainer',
+      totalQuestions: 3,
+      correctAnswers: 0,
+      accuracy: 0,
+      averageTime: 1000,
+      timestamp: createdAt,
+      details: Array.from({ length: 3 }, (_, index) => ({
+        question: `puzzle-q-${index}`,
+        isCorrect: false,
+        timeTaken: 1000,
+        userAnswer: 'Fold',
+        correctAnswer: 'Call',
+        topic: 'puzzle-weakness',
+        relatedLessonId: lessonId,
+      })),
+    },
+  };
+}
+
 beforeAll(async () => {
   await loadAcademyLessonsForQuickDrill();
 });
@@ -78,28 +109,34 @@ afterAll(() => {
 });
 
 describe('QuickDrill：快速模式', () => {
-  it('默认展示 5 题混合速训，完成 5 题后写入训练记录', async () => {
+  it('默认展示 5 题速训与课程弱项 + SRS，完成 5 题后写入训练记录', async () => {
     const { container } = renderAt('/quick?mode=mixed');
 
-    expect(screen.getByText('5 题混合速训')).toBeTruthy();
-    expect(container.textContent).toContain('保持牌感');
-    expect(container.textContent).toContain('混合训练');
+    expect(screen.getByText('5 题速训')).toBeTruthy();
+    expect(container.textContent).toContain('课程弱项 + SRS');
+    expect(container.textContent).toContain('混合');
     expect(screen.getByText('自适应难度')).toBeTruthy();
     expect(screen.getByText('基础')).toBeTruthy();
     expect(container.textContent).toContain('道题目');
 
-    fireEvent.click(screen.getByText('开始速训'));
-    expect(screen.getByText('1 / 5')).toBeTruthy();
+    const received: TrainingRecord[] = [];
+    const unsubscribe = trainingEvents.subscribe((record) => received.push(record));
+    try {
+      fireEvent.click(screen.getByText('开始速训'));
+      expect(screen.getByText('1 / 5')).toBeTruthy();
 
-    let guard = 0;
-    while (guard < 5) {
-      guard += 1;
-      const options = optionButtons(container);
-      expect(options.length).toBeGreaterThan(0);
-      fireEvent.click(options[0]!);
-      const next = screen.queryByText('下一题') ?? screen.queryByText('查看成绩');
-      expect(next).not.toBeNull();
-      fireEvent.click(next!);
+      let guard = 0;
+      while (guard < 5) {
+        guard += 1;
+        const options = optionButtons(container);
+        expect(options.length).toBeGreaterThan(0);
+        fireEvent.click(options[0]!);
+        const next = screen.queryByText('下一题') ?? screen.queryByText('查看成绩');
+        expect(next).not.toBeNull();
+        fireEvent.click(next!);
+      }
+    } finally {
+      unsubscribe();
     }
 
     await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: '训练完成' })).toBeTruthy());
@@ -114,6 +151,7 @@ describe('QuickDrill：快速模式', () => {
     expect(practiceResults[0]!.lessonId).toBe('quick-drill');
     expect(useProgressStore.getState().streak.currentStreak).toBe(1);
     expect(useProgressStore.getState().quickDrillStreak).toBe(1);
+    expect(received.find((event) => event.module === 'strategy-academy')?.mode).toBe('quick-drill');
 
     fireEvent.click(within(screen.getByRole('dialog')).getByText('再来一轮'));
     expect(screen.getByText('开始速训')).toBeTruthy();
@@ -132,6 +170,24 @@ describe('QuickDrill：快速模式', () => {
 
     fireEvent.click(screen.getByText('开始速训'));
     expect(screen.getByText('1 / 8')).toBeTruthy();
+  });
+});
+
+describe('QuickDrill：训练弱项回流', () => {
+  it('展示当前难度有可用题目的扑克谜题弱项课程及原因', () => {
+    useProgressStore.setState({ records: [makeWeaknessRecord('l1-basics')] });
+
+    renderAt('/quick?mode=mixed');
+
+    expect(screen.getByText('优先复习你在扑克谜题中暴露的弱项：德州扑克规则与牌型')).toBeTruthy();
+  });
+
+  it('弱项课程没有匹配当前难度的题目时不展示推荐原因', () => {
+    useProgressStore.setState({ records: [makeWeaknessRecord('l4-gto-basics')] });
+
+    const { container } = renderAt('/quick?mode=mixed');
+
+    expect(container.textContent).not.toContain('优先复习你在扑克谜题中暴露的弱项');
   });
 });
 

@@ -45,6 +45,10 @@ export {
   getPriorityColor,
 } from './utils/dailyTrainingPlan';
 
+// 训练明细弱项回流
+export type { LearningWeaknessSnapshot, TopicWeakness } from './utils/learningWeakness';
+export { getLearningWeakness } from './utils/learningWeakness';
+
 // P1-3: 成就/徽章系统
 export { ACHIEVEMENTS, ACHIEVEMENTS_BY_CATEGORY, TIER_ORDER } from './data/achievements';
 export type {

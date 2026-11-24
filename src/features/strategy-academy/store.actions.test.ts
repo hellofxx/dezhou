@@ -126,6 +126,32 @@ describe('strategy-academy store actions', () => {
     });
   });
 
+  it('recordPracticeScore 可发出独立 quick-drill 事件且保持持久化形状', async () => {
+    const { useAcademyStore, trainingEvents } = await load();
+    const received: TrainingRecord[] = [];
+    const unsubscribe = trainingEvents.subscribe((record) => received.push(record));
+
+    useAcademyStore.getState().recordPracticeScore(
+      makePracticeResult({
+        lessonId: 'quick-drill',
+        answers: [{ questionId: 'q1', isCorrect: true, timeTaken: 1 }],
+      }) as never,
+      'quick-drill',
+    );
+    unsubscribe();
+
+    const stored = useAcademyStore.getState().practiceResults;
+    expect(stored).toHaveLength(1);
+    expect('answers' in stored[0]!).toBe(false);
+    expect(useAcademyStore.getState().progress.quizScores['practice-quick-drill']).toBe(75);
+    expect(received).toHaveLength(1);
+    expect(received[0]).toMatchObject({
+      module: 'strategy-academy',
+      mode: 'quick-drill',
+      result: { sessionId: 'academy-practice-quick-drill' },
+    });
+  });
+
   it('practiceResults 只保留最近 200 条', async () => {
     const { useAcademyStore } = await load();
     const seeded = Array.from({ length: 199 }, (_, i) =>

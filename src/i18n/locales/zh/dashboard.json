@@ -44,17 +44,15 @@
     "rest": "休",
     "today": "今天"
   },
-  "quickDrill": {
-    "title": "3 分钟快速训练",
-    "subtitle": "根据你的弱项智能推荐 · Range / Odds / Mixed",
-    "completed": "✓ 今日已完成",
-    "range": "范围",
-    "odds": "赔率",
-    "mixed": "混合",
-    "bannerTitle": "每日速训 · 5 题混合 Drill",
-    "pillMinutes": "约 3–5 分钟",
-    "pillMix": "赔率 + 决策 + 谜题",
-    "pillStreak": "维持连击"
+  "habit": {
+    "title": "今日习惯训练 · 二选一",
+    "quickOption": "5 题速训",
+    "puzzleOption": "8 题每日谜题",
+    "quickStart": "开始速训",
+    "quickAgain": "再做速训",
+    "puzzleStart": "开始每日谜题",
+    "puzzleView": "查看今日谜题",
+    "completed": "今日习惯已完成"
   },
   "training": {
     "todayQuestion": "今日训练 · 第 {{current}} 题 / 共 {{total}}",

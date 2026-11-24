@@ -7,6 +7,7 @@ import { DEFAULT_ELO } from '@/shared/types/elo';
 import { DEFAULT_EMOTION_STATE } from '../../types';
 import type { TrainingRecord } from '../../types';
 import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+import { getTodayString } from '@/shared/utils/spacedRepetition';
 
 /**
  * 学习路径首页（jsdom）。
@@ -14,7 +15,8 @@ import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
  * 契约：
  * - 新手收敛：totalSessions < 5 → 首访横幅 + 单一学习路径卡，不展示训练场网格；
  * - ≥ 5 → 六模块网格，不再展示学习路径卡；
- * - 速训主 CTA 带 mixed 模式跳转，今日已训展示完成标记；
+ * - 今日习惯完成只认 lastQuickDrillDate 或当日 puzzle-trainer daily 记录；
+ * - 速训 / 每日谜题两个 CTA 分别跳转 mixed 速训与每日谜题；
  * - 学习旅程图：阶段卡渲染完成度、锁定态与「下一步」链接（academy 数据源 mock）；
  * - eloRankUp 事件驱动段位庆祝弹窗。
  *
@@ -63,13 +65,14 @@ function buildRecord(
   createdAt: number,
   accuracy: number,
   module: TrainingRecord['module'] = 'range-trainer',
+  mode: TrainingRecord['mode'] = 'quiz',
 ): TrainingRecord {
   const total = 10;
   const correct = Math.round(accuracy * total);
   return {
     id,
     module,
-    mode: 'quiz',
+    mode,
     createdAt,
     result: {
       sessionId: id,
@@ -92,6 +95,7 @@ function LocationProbe() {
 function seedStore(records: TrainingRecord[], overrides: Record<string, unknown> = {}) {
   useProgressStore.setState({
     records,
+    lastQuickDrillDate: null,
     streak: { ...DEFAULT_STREAK_STATE },
     emotion: { ...DEFAULT_EMOTION_STATE },
     onboarding: { ...DEFAULT_ONBOARDING },
@@ -152,33 +156,90 @@ describe('JourneyHome 新手收敛与训练场', () => {
     expect(text).not.toContain('欢迎来到德州扑克训练平台');
   });
 
-  it('速训主 CTA 带 mixed 模式跳转，且今日已训展示完成标记', () => {
+  it('全站今日已训但未完成习惯任务时不显示习惯完成', () => {
     seedStore(FIVE_OLD_RECORDS, {
-      streak: { ...DEFAULT_STREAK_STATE, lastTrainingDate: toLocalDateKey(Date.now()) },
+      streak: { ...DEFAULT_STREAK_STATE, lastTrainingDate: getTodayString() },
+      lastQuickDrillDate: null,
     });
 
-    const { container, getByText } = renderHome();
-    expect(container.textContent).toContain('✓ 今日已完成');
+    const { container } = renderHome();
+    const bannerText = container.querySelector('.quick-drill-card')?.textContent ?? '';
 
-    fireEvent.click(getByText('开始速训'));
+    expect(bannerText).toContain('今日习惯训练 · 二选一');
+    expect(bannerText).not.toContain('今日习惯已完成');
+    expect(screen.getByRole('button', { name: '开始速训' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '开始每日谜题' })).not.toBeNull();
+  });
+
+  it('lastQuickDrillDate 为今天时显示习惯完成和速训重做入口', () => {
+    seedStore([], { lastQuickDrillDate: getTodayString() });
+
+    const { container } = renderHome();
+    const bannerText = container.querySelector('.quick-drill-card')?.textContent ?? '';
+
+    expect(bannerText).toContain('今日习惯已完成');
+    expect(screen.getByRole('button', { name: '再做速训' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '开始每日谜题' })).not.toBeNull();
+  });
+
+  it('当日 puzzle-trainer daily 记录也算习惯完成', () => {
+    seedStore([buildRecord('daily-today', Date.now(), 0.8, 'puzzle-trainer', 'daily')]);
+
+    const { container } = renderHome();
+    const bannerText = container.querySelector('.quick-drill-card')?.textContent ?? '';
+
+    expect(bannerText).toContain('今日习惯已完成');
+    expect(screen.getByRole('button', { name: '开始速训' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '查看今日谜题' })).not.toBeNull();
+  });
+
+  it('昨日 daily、今日 Rush 或其他模块 daily 记录不算习惯完成', () => {
+    seedStore([
+      buildRecord(
+        'daily-yesterday',
+        Date.now() - 24 * 60 * 60 * 1000,
+        0.8,
+        'puzzle-trainer',
+        'daily',
+      ),
+      buildRecord('rush-today', Date.now(), 0.8, 'puzzle-trainer', 'rush'),
+      buildRecord('range-daily-today', Date.now(), 0.8, 'range-trainer', 'daily'),
+    ]);
+
+    const { container } = renderHome();
+    const bannerText = container.querySelector('.quick-drill-card')?.textContent ?? '';
+
+    expect(bannerText).toContain('今日习惯训练 · 二选一');
+    expect(bannerText).not.toContain('今日习惯已完成');
+    expect(screen.getByRole('button', { name: '开始速训' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '开始每日谜题' })).not.toBeNull();
+  });
+
+  it('两个按钮分别跳转到 mixed 速训与每日谜题', () => {
+    const { container } = renderHome();
+
+    fireEvent.click(screen.getByRole('button', { name: '开始速训' }));
     expect(container.querySelector('[data-probe]')?.textContent).toBe(
       '/quick?mode=mixed&quick=true',
     );
+
+    fireEvent.click(screen.getByRole('button', { name: '开始每日谜题' }));
+    expect(container.querySelector('[data-probe]')?.textContent).toBe('/puzzle/daily');
   });
 
-  it('首屏顺序：Hero → 连续天数 → 快速训练 → 学习旅程 → 训练场', () => {
+  it('首屏顺序：Hero → 连续天数 → 今日习惯 → 学习旅程 → 训练场', () => {
     const { container } = renderHome();
     const html = container.innerHTML;
     const hero = html.indexOf('felt-arena');
     const streak = html.indexOf('streak-rail');
-    const quickDrill = html.indexOf('quick-drill-card');
+    const habit = html.indexOf('quick-drill-card');
     const journey = html.indexOf('journey-track');
     const training = html.indexOf('module-card');
 
     expect(hero).toBeGreaterThan(-1);
     expect(streak).toBeGreaterThan(hero);
-    expect(quickDrill).toBeGreaterThan(streak);
-    expect(journey).toBeGreaterThan(quickDrill);
+    expect(habit).toBeGreaterThan(streak);
+    expect(journey).toBeGreaterThan(habit);
     expect(training).toBeGreaterThan(journey);
 
     // 内容区欢迎语保留 h2；页面组件不渲染 h1（全站唯一 h1 归壳层）

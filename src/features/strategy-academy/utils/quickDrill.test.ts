@@ -10,7 +10,7 @@ import type { GameContext, Lesson, PracticeQuestion, QuestionDifficulty } from '
 /**
  * 快速训练纯逻辑契约：
  * - 综合分数 = accuracy*100 + 时间奖励（每快 1s 得 3 分，封顶 30）
- * - 题池筛选：难度 + 弱点领域优先，候选不足时放宽（排除课程仍生效）
+ * - 题池筛选：训练弱项课程 → ELO 弱点领域 → 其他课程题回填（排除课程仍生效）
  * - 空题池 / 全排除 / 计数超池等退化输入返回安全结果
  */
 
@@ -155,9 +155,79 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
     expect(result.map((q) => q.id)).toEqual(['l4-bluffcatching-q1']);
   });
 
+  it('按训练弱项课程、ELO 弱点、其他课程题三个层级依次选题', () => {
+    const tieredLessons: Lesson[] = [
+      makeLesson('l4-bluffcatching', [makeQuestion('fallback-q', { difficulty: 'advanced' })]),
+      makeLesson('l4-gto-basics', [makeQuestion('weak-q', { difficulty: 'beginner' })]),
+      makeLesson('l1-basics', [makeQuestion('focus-q', { difficulty: 'beginner' })]),
+    ];
+
+    const result = getQuickDrillQuestions(
+      tieredLessons,
+      ['math'],
+      'beginner',
+      3,
+      [],
+      ['l1-basics'],
+    );
+
+    expect(result.map((q) => q.id)).toEqual(['focus-q', 'weak-q', 'fallback-q']);
+  });
+
+  it('多个训练弱项课程按传入排名优先，不受课程顺序影响', () => {
+    const orderedLessons: Lesson[] = [
+      makeLesson('l3-draws', [makeQuestion('second-focus-q', { difficulty: 'beginner' })]),
+      makeLesson('l1-basics', [makeQuestion('first-focus-q', { difficulty: 'beginner' })]),
+    ];
+
+    const result = getQuickDrillQuestions(
+      orderedLessons,
+      [],
+      'beginner',
+      1,
+      [],
+      ['l1-basics', 'l3-draws'],
+    );
+
+    expect(result.map((question) => question.id)).toEqual(['first-focus-q']);
+  });
+
+  it('训练弱项课程难度不匹配时回退到 ELO 弱点题目', () => {
+    const mismatchLessons: Lesson[] = [
+      makeLesson('l4-gto-basics', [makeQuestion('focus-advanced', { difficulty: 'advanced' })]),
+      makeLesson('l1-basics', [makeQuestion('weak-beginner', { difficulty: 'beginner' })]),
+    ];
+
+    const result = getQuickDrillQuestions(
+      mismatchLessons,
+      ['math'],
+      'beginner',
+      1,
+      [],
+      ['l4-gto-basics'],
+    );
+
+    expect(result.map((q) => q.id)).toEqual(['weak-beginner']);
+  });
+
   it('排除课程前缀生效（候选不足回填阶段同样排除）', () => {
     const result = getQuickDrillQuestions(lessons, [], 'beginner', 4, ['l1']);
     expect(result.every((q) => !q.id.startsWith('l1'))).toBe(true);
+  });
+
+  it('被排除的训练弱项课程不会在回填阶段重新进入题池', () => {
+    const excludedFocus: Lesson[] = [
+      makeLesson('l1-basics', [makeQuestion('unprefixed-focus-q', { difficulty: 'beginner' })]),
+    ];
+
+    expect(getQuickDrillQuestions(
+      excludedFocus,
+      [],
+      'beginner',
+      5,
+      ['l1-basics'],
+      ['l1-basics'],
+    )).toEqual([]);
   });
 
   it('候选不足时放宽条件补齐，但不超过 count', () => {
@@ -170,6 +240,11 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
   it('count 大于题池时返回全部题目', () => {
     const result = getQuickDrillQuestions(lessons, [], 'beginner', 99);
     expect(result).toHaveLength(4);
+  });
+
+  it('count 小于等于 0 时返回空数组', () => {
+    expect(getQuickDrillQuestions(lessons, [], 'beginner', 0)).toEqual([]);
+    expect(getQuickDrillQuestions(lessons, [], 'beginner', -1)).toEqual([]);
   });
 
   it('空题池返回空数组', () => {

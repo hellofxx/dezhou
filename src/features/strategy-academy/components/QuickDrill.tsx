@@ -9,7 +9,7 @@ import { useAcademyStore } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForQuickDrill } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForQuickDrill } from '@/i18n/academyCourse';
-import { progressCommands, useProgressState } from '@/features/progress/api';
+import { getLearningWeakness, progressCommands, useProgressState } from '@/features/progress';
 import { computeQuickDrillScore, getQuickDrillQuestions } from '../utils/quickDrill';
 // P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
 import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
@@ -49,8 +49,10 @@ export default function QuickDrill() {
   // P1-4.2: SRS 复习队列
   const reviewItems = useProgressState((s) => s.reviewItems);
   const getStatsSummary = useProgressState((s) => s.getStatsSummary);
-  // 记录总数（仅用于正确率 memo 的失效键，避免全量订阅 records）
-  const recordCount = useProgressState((s) => s.records.length);
+  // 训练明细用于派生扑克谜题暴露的课程弱项；recordCount 作为正确率 memo 的失效键
+  const records = useProgressState((s) => s.records);
+  const recordCount = records.length;
+  const weakness = useMemo(() => getLearningWeakness(records), [records]);
   // P1-4.3: 快速训练连续打卡
   const recordQuickDrillCompletion = progressCommands.recordQuickDrillCompletion;
 // P1-4.1: Progress store 快速训练 Best Record
@@ -117,6 +119,20 @@ export default function QuickDrill() {
   // P0-5: 快速模式固定 5 题，普通模式 8 题
   const questionCount = isQuickMode ? 5 : 8;
 
+  // 仅推荐当前难度确有可用题目的弱项课程，避免展示无法执行的建议
+  const focusLesson = useMemo(() => {
+    if (lessons === null) return null;
+    for (const lessonId of weakness.lessonIds) {
+      const lesson = lessons.find((item) => item.id === lessonId);
+      if (lesson?.practice?.questions.some(
+        (question) => !question.difficulty || question.difficulty === effectiveDifficulty,
+      )) {
+        return lesson;
+      }
+    }
+    return null;
+  }, [lessons, weakness.lessonIds, effectiveDifficulty]);
+
   // P1-4.2: 今日待复习项（在 quick 模式下用于混合）
   const todayReviewItems = useMemo(() => getTodayReviewItems(reviewItems), [reviewItems]);
 
@@ -141,6 +157,8 @@ export default function QuickDrill() {
       modeWeakAreas,
       effectiveDifficulty,
       questionCount,
+      [],
+      weakness.lessonIds,
     );
 
     if (!isQuickMode || todayReviewItems.length === 0) {
@@ -149,7 +167,7 @@ export default function QuickDrill() {
 
     const mixed = composeQuickDrillQuestions(newQuestions, todayReviewItems, questionCount, userAccuracy);
     return { drillQuestions: mixed.questions, reviewCount: mixed.reviewCount };
-  }, [lessons, modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy]);
+  }, [lessons, modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy, weakness.lessonIds]);
 
   const drill: PracticeDrill = useMemo(() => ({
     id: `quick-drill-${Date.now()}`,
@@ -165,7 +183,7 @@ export default function QuickDrill() {
 
   const handleComplete = useCallback(
     (result: PracticeResult) => {
-      recordPracticeScore({ ...result, lessonId: 'quick-drill' });
+      recordPracticeScore({ ...result, lessonId: 'quick-drill' }, 'quick-drill');
       setFinalResult(result);
 
       // P1E-07（专批 B）：训练日 streak 口径统一 — 普通模式完成同样是实质训练，
@@ -259,7 +277,7 @@ export default function QuickDrill() {
 
   const modeLabel = isQuickMode
     ? t(`quickDrill.mode.${mode}`, {
-        defaultValue: mode === 'range' ? '范围练习' : mode === 'odds' ? '赔率速算' : '混合训练',
+        defaultValue: mode === 'range' ? '翻前' : mode === 'odds' ? '数学' : '混合',
       })
     : '';
 
@@ -295,18 +313,18 @@ export default function QuickDrill() {
               <div>
                 <h2 className="font-display text-2xl text-[var(--ivory)]">
                   {isQuickMode
-                    ? t('quickDrill.quickTitle', { defaultValue: '3 分钟快速训练' })
+                    ? t('quickDrill.quickTitle', { defaultValue: '5 题速训' })
                     : t('quickDrill.title', { defaultValue: '5 分钟速训' })}
                 </h2>
                 <p className="text-sm text-[var(--ivory-dim)] mt-0.5">
                   {isQuickMode
                     ? t('quickDrill.quickSubtitle', {
-                        defaultValue: `每天 ${questionCount} 题，保持牌感 — ${modeLabel}`,
+                        defaultValue: `每天 ${questionCount} 题，课程弱项 + SRS — ${modeLabel}`,
                         count: questionCount,
                         mode: modeLabel,
                       })
                     : t('quickDrill.subtitle', {
-                        defaultValue: '从全局题库精选题目，针对弱点快速强化',
+                        defaultValue: '从策略课程选题，针对课程弱项快速强化',
                       })}
                 </p>
               </div>
@@ -365,6 +383,21 @@ export default function QuickDrill() {
               <span>{t('quickDrill.weakAreasHint', { defaultValue: '将优先从你的薄弱领域抽取题目' })}</span>
             </div>
           )}
+
+          {/* 训练弱项回流：仅展示当前难度有可用题目的课程 */}
+          {focusLesson ? (
+            <div className="flex items-start gap-2 text-xs text-[var(--ivory-muted)]">
+              <Target className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--brass-text)]" />
+              <span>
+                {t('quickDrill.recommendation.focusLesson', {
+                  defaultValue: '优先复习你在扑克谜题中暴露的弱项：{{lessonTitle}}',
+                  lessonTitle: t(`academy.lessonTitle.${focusLesson.id}`, {
+                    defaultValue: focusLesson.title,
+                  }),
+                })}
+              </span>
+            </div>
+          ) : null}
 
           {/* P0-5: 快速模式下显示 mode 信息 */}
           {isQuickMode && (

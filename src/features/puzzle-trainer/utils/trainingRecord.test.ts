@@ -8,8 +8,24 @@ import type { PuzzleAnswerRecord, PuzzleResult } from '../types';
  */
 describe('puzzleResultToTrainingRecord', () => {
   const answers: PuzzleAnswerRecord[] = [
-    { questionId: 'q1', selectedOptionId: 'a', isCorrect: true, timeTaken: 3000, grade: 'best', evLoss: 0 },
-    { questionId: 'q2', selectedOptionId: 'x', isCorrect: false, timeTaken: 5000, grade: 'inaccuracy', evLoss: 1.2 },
+    {
+      questionId: 'q1',
+      selectedOptionId: 'a',
+      isCorrect: true,
+      timeTaken: 3000,
+      grade: 'best',
+      evLoss: 0,
+      relatedLessonId: 'lesson-preflop-rfi',
+    },
+    {
+      questionId: 'q2',
+      selectedOptionId: 'x',
+      isCorrect: false,
+      timeTaken: 5000,
+      grade: 'inaccuracy',
+      evLoss: 1.2,
+      relatedLessonId: 'lesson-cbet',
+    },
   ];
 
   const result: PuzzleResult = {
@@ -56,6 +72,18 @@ describe('puzzleResultToTrainingRecord', () => {
     expect(record.result.details[0]?.correctAnswer).toBe('a');
     expect(record.result.details[1]?.correctAnswer).toBe('y');
     expect(record.result.details[1]?.userAnswer).toBe('x');
+  });
+
+  it('emit 明细写入主题与关联课程，供 progress 派生弱项', () => {
+    const record = puzzleResultToTrainingRecord(result);
+    expect(record.result.details[0]).toMatchObject({
+      topic: 'preflop-rfi',
+      relatedLessonId: 'lesson-preflop-rfi',
+    });
+    expect(record.result.details[1]).toMatchObject({
+      topic: 'c-bet',
+      relatedLessonId: 'lesson-cbet',
+    });
   });
 
   it('聚合字段口径：totalQuestions / correctAnswers / accuracy / averageTime 同源', () => {

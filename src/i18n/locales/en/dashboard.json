@@ -44,17 +44,15 @@
     "rest": "Rest",
     "today": "Today"
   },
-  "quickDrill": {
-    "title": "3-Minute Quick Drill",
-    "subtitle": "Smart recommendations based on your weaknesses",
-    "completed": "✓ Completed Today",
-    "range": "Range",
-    "odds": "Odds",
-    "mixed": "Mixed",
-    "bannerTitle": "Daily Drill · 5 mixed spots",
-    "pillMinutes": "~3–5 min",
-    "pillMix": "Odds + Decisions + Puzzles",
-    "pillStreak": "Keep the streak"
+  "habit": {
+    "title": "Today's Habit Training · Choose One",
+    "quickOption": "5-question drill",
+    "puzzleOption": "8-question daily puzzle",
+    "quickStart": "Start quick drill",
+    "quickAgain": "Repeat quick drill",
+    "puzzleStart": "Start daily puzzle",
+    "puzzleView": "View today's puzzle",
+    "completed": "Today's habit complete"
   },
   "training": {
     "todayQuestion": "Today's Practice · Q{{current}} / {{total}}",

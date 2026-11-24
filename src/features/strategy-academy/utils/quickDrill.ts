@@ -12,53 +12,70 @@ export function computeQuickDrillScore(accuracy: number, averageTime: number): n
 }
 
 /**
- * 从全局题库中按条件筛选快速训练题目
- * 用于"5分钟速训"功能
+ * 从策略课程题库中按条件筛选快速训练题目。
  *
- * P0 口径：弱点过滤按 ELO 维度（EloDimension）经课时 lessonMeta 映射到题目，
- * 不再使用能力评估五维（自适应难度只消费 recordPracticeResult 维护的练习窗口）。
- * 未登记 lessonMeta 的课时回退 postflop（T3 填充后全量覆盖）。
+ * 选题优先级：训练弱项课程且难度匹配 → ELO 弱点维度且难度匹配 → 其他课程题回填。
+ * 每一层内随机排序；未登记 lessonMeta 的课时维度回退 postflop。
  */
 export function getQuickDrillQuestions(
   lessons: readonly Lesson[],
   weakAreas: readonly EloDimension[],
   difficulty: QuestionDifficulty,
   count: number = 10,
-  excludeLessons: string[] = []
+  excludeLessons: string[] = [],
+  focusLessonIds: readonly string[] = [],
 ): PracticeQuestion[] {
-  const candidates: PracticeQuestion[] = [];
+  if (count <= 0) return [];
 
-  // 1. 优先选择与弱点维度/难度匹配的题目（课时维度由 lessonMeta 决定）
+  const focusRank = new Map(focusLessonIds.map((lessonId, index) => [lessonId, index]));
+  const focused: Array<{ question: PracticeQuestion; rank: number }> = [];
+  const weak: PracticeQuestion[] = [];
+  const fallback: PracticeQuestion[] = [];
+
   for (const lesson of lessons) {
     const lessonQuestions = lesson.practice?.questions ?? [];
     if (lessonQuestions.length === 0) continue;
+
     const dimension = getLessonMeta(lesson.id).eloDimension;
     const lessonExcluded = excludeLessons.some((id) => lesson.id.startsWith(id));
+    const isFocusLesson = focusLessonIds.includes(lesson.id);
+    const matchesWeakArea = weakAreas.length === 0 || weakAreas.includes(dimension);
 
-    for (const q of lessonQuestions) {
-      if (lessonExcluded || excludeLessons.some((id) => q.id.startsWith(id))) continue;
+    for (const question of lessonQuestions) {
+      if (
+        lessonExcluded ||
+        excludeLessons.some((id) => question.id.startsWith(id))
+      ) {
+        continue;
+      }
 
-      const matchesDifficulty = !q.difficulty || q.difficulty === difficulty;
-      const matchesWeakArea = weakAreas.length === 0 || weakAreas.includes(dimension);
+      const matchesDifficulty = !question.difficulty || question.difficulty === difficulty;
 
-      if (matchesDifficulty && matchesWeakArea) {
-        candidates.push(q);
+      if (matchesDifficulty && isFocusLesson) {
+        focused.push({ question, rank: focusRank.get(lesson.id) ?? focusLessonIds.length });
+      } else if (matchesDifficulty && matchesWeakArea) {
+        weak.push(question);
+      } else {
+        fallback.push(question);
       }
     }
   }
 
-  // 2. 如果候选不够，放宽条件
-  if (candidates.length < count) {
-    for (const q of collectAllPracticeQuestions(lessons)) {
-      if (candidates.includes(q)) continue;
-      if (excludeLessons.some((id) => q.id.startsWith(id))) continue;
-      candidates.push(q);
-      if (candidates.length >= count * 2) break;
-    }
+  const focusedByRank = new Map<number, PracticeQuestion[]>();
+  for (const entry of focused) {
+    const questions = focusedByRank.get(entry.rank) ?? [];
+    questions.push(entry.question);
+    focusedByRank.set(entry.rank, questions);
   }
+  const focusedQuestions = [...focusedByRank.entries()]
+    .toSorted(([a], [b]) => a - b)
+    .flatMap(([, questions]) => shuffleArray(questions));
 
-  // 3. 随机抽取指定数量
-  return shuffleArray(candidates).slice(0, count);
+  return [
+    ...focusedQuestions,
+    ...shuffleArray(weak),
+    ...shuffleArray(fallback),
+  ].slice(0, count);
 }
 
 /**

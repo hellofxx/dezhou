@@ -28,6 +28,8 @@ export interface QuestionResult {
   timeTaken: number;   // 用时（毫秒）
   userAnswer: string;
   correctAnswer: string;
+  topic?: string;
+  relatedLessonId?: string;
 }
 
 // 游戏类型

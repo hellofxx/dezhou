@@ -29,6 +29,8 @@ export function puzzleResultToTrainingRecord(result: PuzzleResult) {
         timeTaken: a.timeTaken,
         userAnswer: a.selectedOptionId,
         correctAnswer: correctOption?.id ?? '',
+        topic: question?.theme,
+        ...(a.relatedLessonId ? { relatedLessonId: a.relatedLessonId } : {}),
       };
     }),
   };

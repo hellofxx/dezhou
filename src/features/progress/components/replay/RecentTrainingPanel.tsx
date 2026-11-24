@@ -97,7 +97,9 @@ export default function RecentTrainingPanel() {
                 <span className="w-7 h-7 rounded bg-[var(--walnut-light)]/50 flex items-center justify-center shrink-0">
                   <Target className="w-3.5 h-3.5 text-[var(--brass-bright)]" aria-hidden="true" />
                 </span>
-                <span className="text-xs text-[var(--ivory)] truncate">{moduleLabel(record.module)}</span>
+                <span className="text-xs text-[var(--ivory)] truncate">
+                  {moduleLabel(record.module === 'strategy-academy' && record.mode === 'quick-drill' ? 'quick-drill' : record.module)}
+                </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="text-[10px] text-[var(--ivory-muted)] font-numeric">

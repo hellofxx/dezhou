@@ -101,7 +101,9 @@ export function aggregateByModule(records: TrainingRecord[]): ModuleStats[] {
   const moduleMap = new Map<string, { sessions: number; correct: number; total: number; totalTime: number; lastPlayed: number }>();
 
   for (const record of records) {
-    const key = record.module;
+    const key = record.module === 'strategy-academy' && record.mode === 'quick-drill'
+      ? 'quick-drill'
+      : record.module;
     const existing = moduleMap.get(key) ?? { sessions: 0, correct: 0, total: 0, totalTime: 0, lastPlayed: 0 };
     existing.sessions++;
     existing.correct += record.result.correctAnswers;

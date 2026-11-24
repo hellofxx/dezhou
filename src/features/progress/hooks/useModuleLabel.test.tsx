@@ -26,6 +26,7 @@ describe('useModuleLabel', () => {
     expect(labelOf('range-trainer')).toBe('手牌范围训练');
     // 学院模块名沿用 core nav 单源文案：strategy-academy = 实战地图、theory-academy = 理论地图
     expect(labelOf('strategy-academy')).toBe('实战地图');
+    expect(labelOf('quick-drill')).toBe('速训');
     expect(labelOf('theory-academy')).toBe('理论地图');
     expect(labelOf('puzzle-trainer')).toBe('扑克谜题');
   });

@@ -1,8 +1,8 @@
 {
   "title": "5-Minute Drill",
-  "subtitle": "Hand-picked questions from the global bank, targeting your weak spots",
+  "subtitle": "Course questions targeted to your learning weaknesses",
   "quickTitle": "5-Question Quick Drill",
-  "quickSubtitle": "{{count}} questions a day, keep your edge — {{mode}}",
+  "quickSubtitle": "{{count}} questions a day: course weaknesses + SRS — {{mode}}",
   "back": "Back to practice map",
   "backAcademy": "Back to practice map",
   "backHome": "Back to Home",
@@ -10,6 +10,9 @@
   "selectDifficulty": "Select difficulty",
   "adaptiveDifficulty": "Adaptive difficulty",
   "weakAreasHint": "Questions will be prioritized from your weak areas",
+  "recommendation": {
+    "focusLesson": "Review the weakness revealed by your poker puzzles first: {{lessonTitle}}"
+  },
   "modeHint": "Current mode: {{mode}}. Completing today's drill will count toward your streak.",
   "questionCount": "This drill: ",
   "questions": "questions",
@@ -23,9 +26,9 @@
     "advanced": "Advanced"
   },
   "mode": {
-    "range": "Range Practice",
-    "odds": "Odds Calc",
-    "mixed": "Mixed Drill"
+    "range": "Preflop",
+    "odds": "Math",
+    "mixed": "Mixed"
   },
   "result": {
     "title": "Drill Complete",

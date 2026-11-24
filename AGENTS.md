@@ -176,6 +176,7 @@ src/
 | 能力 | 持有文件 / 模块 | 消费方 / 说明 |
 |---|---|---|
 | QuickDrill / composeDailyMix / quickDrillStreak / awardStreakFreeze | `src/features/progress/store.ts` + `src/features/progress/utils/`（composeDailyMix） | 状态与逻辑定义于 progress store（quickDrillBest / quickDrillStreak / awardStreakFreeze / recordQuickDrillCompletion / submitQuickDrillResult）；strategy-academy（QuickDrill 界面）与 puzzle-trainer 为消费方 |
+| 训练弱项回流 | `src/features/progress/utils/learningWeakness.ts`（经 progress 公共入口导出） | puzzle-trainer 在训练明细写 `topic` / `relatedLessonId`；progress 派生近 30 天弱项课程；strategy-academy QuickDrill 优先抽题。谜题不直接写 ELO / SRS |
 | 五大系统集成（Streak / ELO / SRS / Emotion / Mentor）统一提交入口 | `src/features/progress/**`（经 `index.ts` / `api.ts` 公共入口） | 全部 trainer 经 progress 公开 API 提交训练结果（禁止各模块自写集成） |
 | trainingEvents emit / 订阅 | `src/shared/stores/trainingEvents.ts`（总线实现）+ 各模块自 emit | hand-history、help-center 合理豁免 emit |
 | 调试解锁（9 处门禁） | `src/shared/stores/debugMode.ts` | 全局旁路，清单见 `docs/AI_GUIDE.md` §调试解锁 |

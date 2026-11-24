@@ -16,13 +16,13 @@ import RankUpCelebration from '../celebration/RankUpCelebration';
 import DownswingAlert from '../gate/DownswingAlert';
 import FeltArena from '../training/FeltArena';
 import StreakRail from '../streak/StreakRail';
-import QuickDrillBanner from './QuickDrillBanner';
+import DailyHabitBanner from './DailyHabitBanner';
 import JourneyTrack from './JourneyTrack';
 
 /**
  * JourneyHome — 学习路径首页（批次 2，替换旧仪表盘 Dashboard）。
  *
- * 首屏顺序：牌桌 Hero → 连续天数 → 速训横幅 → 学习旅程图 → 今日计划 + 间隔复习
+ * 首屏顺序：牌桌 Hero → 连续天数 → 今日习惯横幅 → 学习旅程图 → 今日计划 + 间隔复习
  * → 首访引导（仅零训练）→ 下风警示 → 训练场（新手期收敛为单一学习路径卡）。
  *
  * 本批把「回顾型」大盘（每日挑战 / 多变体 ELO / 成就墙 / 进步回放 / 情绪 / 最近训练）
@@ -88,7 +88,7 @@ export default function JourneyHome() {
       </div>
 
       <div className="px-0">
-        <QuickDrillBanner />
+        <DailyHabitBanner />
 
         <JourneyTrack />
 

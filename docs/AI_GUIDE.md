@@ -157,6 +157,14 @@ persist `version` 数值以各 store 代码中的 `persist` 配置为唯一事�
 - **反向（数据→难度）**：`progress.shouldDownshiftDifficulty()`（无参）是自适应难度唯一入口，禁止模块自行判定；数据源为 `progress.emotion.consecutiveWrongCount`（由 `recordAnswer(isCorrect)` 维护）。
 - **相关课程 chip 路由**：shared `RelatedLessonChip` 只回传 `lessonId`（`onOpen` / `onRelatedLessonOpen`），目标路由由各 feature 注入；禁止在 `src/shared` 硬编码 `/academy/lesson/`。
 
+### 训练弱项回流
+
+- 训练明细 `QuestionResult` 可选携带 `topic` / `relatedLessonId`；puzzle-trainer 写入主题与关联课程，其他模块无元数据时保持原行为。
+- 单一事实源：`progress/utils/learningWeakness.ts`，经 `features/progress/index.ts` 公共导出；跨模块禁止深引 progress 内部实现。
+- 派生口径：近 30 天、至少 3 次、正确率低于 70%，取前 3 个弱项；谜题成绩不直接更新 ELO，QuickDrill 只把关联课程作为优先选题信号。
+- 首页默认习惯任务在 5 题速训与 8 题每日谜题间二选一；完成态分别取 `lastQuickDrillDate` 与当日 `puzzle-trainer + daily` 训练记录，不复用全站 Streak 冒充速训完成。
+- QuickDrill 记录使用 `quick-drill` mode；进度统计按该 mode 独立分组，最近训练标签显示「速训」，课程练习仍归策略学院。
+
 ### 位置渐进解锁
 
 - 阈值常量 `POSITION_UNLOCK_THRESHOLDS` 在 `range-trainer/constants.ts`（文档不维护数值副本）；工具函数 `isPositionUnlocked(position, preflopElo)`；调用方 `RangeSelector` 渲染时过滤锁定位置；阈值变更记录到 `docs/CHANGELOG.md`。

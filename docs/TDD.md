@@ -499,6 +499,8 @@ export interface QuestionResult {
   timeTaken: number;     // 用时（毫秒）
   userAnswer: string;
   correctAnswer: string;
+  topic?: string;            // 可选主题标识，用于跨模块弱项派生
+  relatedLessonId?: string;  // 可选关联课程，供训练→课程推荐
 }
 
 // 训练记录（持久化）
@@ -974,7 +976,7 @@ interface DailyRecommendation {
     - **跨模块镜像约束**：`eslint.config.js` 的 `ALLOWED_CROSS_IMPORTS` 中 `progress: []`（且只删不加），故 id 前缀与 theory quiz key 生成函数只能在本文件内以镜像拷贝存在，一致性由 `migrateTheoryReviewKeys.test.ts` 的「key 镜像守卫」用例锁死（该用例经 `@/i18n/contentKeyEntries` 取 theory-academy 侧单源生成结果比对）；把「理论复习项 id 前缀 + quiz key 生成」上收 shared 层以消除拷贝属待平台层评估项
 
 11. **跨模块公共入口**（2026-11 新增）：
-    - `index.ts`：模块对外聚合（再导出 `api` / `api.types` + 复习项工具 + 每日训练推荐 + 成就数据 + QuickDrill 混合工具）；`api.ts` + `api.types.ts`：读写契约（`useProgressState(selector)` 只暴露 `ProgressReadModel` 白名单字段，`progressCommands` 只委托既有 action，业务规则仍由 progress 持有）；`ui.ts`：跨模块展示件（`SessionLimitGuard` / `OnboardingGate` / `TiltWarning` / `MilestoneCelebrationHost` / `ProgressPersistErrorNotice`）。
+    - `index.ts`：模块对外聚合（再导出 `api` / `api.types` + 复习项工具 + 每日训练推荐 + 训练弱项派生 + 成就数据 + QuickDrill 混合工具）；`api.ts` + `api.types.ts`：读写契约（`useProgressState(selector)` 只暴露 `ProgressReadModel` 白名单字段，`progressCommands` 只委托既有 action，业务规则仍由 progress 持有）；`ui.ts`：跨模块展示件（`SessionLimitGuard` / `OnboardingGate` / `TiltWarning` / `MilestoneCelebrationHost` / `ProgressPersistErrorNotice`）。
     - 内部面明确边界：`store.ts` / `store.bootstrap.ts` / `components/**` / `utils/**` / `types.ts` / `data/**` 属模块内部，跨模块禁止深引；装配例外仅 `src/main.tsx` 的 `store.bootstrap`（启动引导）与 `src/app/routes.tsx` 的页面 lazy import（`components/**` 只允许出现在 lazyPage 的 `import()` 中）。
     - 守卫 `src/guards/progressPublicApi.guard.test.ts`：复用 `@/test-utils/admissionGraph` 的去注释与路径解析（`@/` 别名 / 相对路径 / index barrel），失败信息给出 `file:line → 目标文件`；扫描面自检 + 合成用例自检判定逻辑，避免正则或路径失效后空洞通过。
 12. **保存语义与分源持久化状态**（2026-11 新增）：
@@ -1065,6 +1067,7 @@ interface DailyRecommendation {
 10. **trainingEvents.emit 合规**（v2.0 新增）：
    - `PuzzleRush` / `DailyPuzzle` / `ThemeDrill` 三种模式完成后均调用 `trainingEvents.emit(record)`，progress store 自动收集训练记录
    - emit 的 `record.module` 为 `'puzzle-trainer'`
+   - 每条 `result.details[]` 写入 `topic = question.theme` 与 `relatedLessonId = answer.relatedLessonId`，作为速训弱项回流的数据源；不直接更新 ELO / SRS
 
 11. **自适应难度接入**（v2.0 新增）：
     - 三种模式（Rush / Daily / ThemeDrill）均调用 `progress.shouldDownshiftDifficulty('puzzle-trainer')` 检查是否需要降级
@@ -1127,7 +1130,9 @@ interface DailyRecommendation {
 
 6. **能力评估（v8 收敛）**：用户可见能力画像以 `progress.eloByVariant` 为单一事实源；策略侧自适应难度只读 `recentPracticeResults`（由 `recordPracticeResult` 维护，cap 50）。`abilityAssessment` 随 v8 移除，不再有第二套能力值。
 
-7. **快速训练入口**：`QuickDrill` 组件接收 `quick=true` 参数进入快速模式（固定 5 题、自适应难度），完成时调用 `recordTrainingDay` 计入 Streak，XP 计算（每题 +10 / 全对 +20 奖励）。
+7. **快速训练入口**：`QuickDrill` 组件接收 `quick=true` 参数进入快速模式（固定 5 题、自适应难度），`?quick=false` 为 8 题完整练习。题源仅限策略学院课程练习题库与到期 SRS 复习项；模式语义为翻前 / 数学 / 混合。完成时调用 `recordTrainingDay` 计入 Streak，XP 计算（每题 +10 / 全对 +20 奖励），训练记录 mode 为 `quick-drill`（课程练习保持 `practice`）；进度统计与最近训练标签将速训独立展示，不与课程练习合并。
+
+7b. **谜题弱项回流**：`progress/utils/learningWeakness.ts` 从训练明细的 `topic` / `relatedLessonId` 派生近 30 天、至少 3 次、正确率低于 70% 的前 3 个弱项；按正确率升序、样本量降序、最近训练时间降序稳定排序。`QuickDrill` 经 progress 公共入口读取弱项课程 ID，并在难度匹配前提下优先抽取对应课程题；无弱项时回退 ELO 维度。谜题成绩只作为弱项信号，不直接折算 ELO。
 
 8. **课程双层门禁**（v2.1 新增）：
    - `CourseView` 在挂载时检查两道门禁：
@@ -1535,7 +1540,7 @@ UI 组件：`Dashboard` 段位徽章按钮、`WeaknessAnalysis` 五维雷达图�
 - **复习项载荷的语言契约**：`label` 与 `metadata.front|back|options[].text` 存的是 **i18n key**（语言中立，随 localStorage 长期存活），渲染层 `t()` 解析；禁止写入任何语言的原文（英文环境会直接回显中文）。产品口径见 PRD §12.4.3
 - **来源包按需补加载**（与上一条配对，只做其一比原状更糟）：复习队列 / 复习会话渲染于 Dashboard 与 progress 路由，而 `i18n/moduleRegistry.ts` 为控制首屏体积刻意不把 theory / rangeTrainer / potOdds / gto 归入这些分组，冷启动直达首页时 `t(key)` 原样回显 key 字面量。故 `features/progress/components/srs/useEnsureReviewSourceI18n.ts` 按当前复习项的 `metadata.source` 收集来源模块并调 `preloadI18n`（幂等，注入后经 `config.ts` 的 `bindI18nStore: 'added'` 自动重渲染，无需本地 loading 态；`strategy` 的 academy 属 CORE_MODULES 故不列出）。缓存语义遵循 §9.1 的「成功才入缓存、失败可重试、并发共享句柄」
 - **跳转路由解析**：`features/progress/utils/reviewRoute.ts` 的 `getReviewRoute(item)` 为纯函数（自 `SpacedRepetitionPanel` 内联 switch 提取以便单测）：`metadata.route` 以 `/` 开头时优先，其后按 `category` 映射；`theory` 缺 route 时回退 `/theory` 主页（禁止落到 default 拼出 `/academy/lesson/theory:...` 死链），default 落 `/academy/lesson/<id>`，任何分支不得抛错（存量复习项可能没有 `metadata.route`）
-- puzzle-trainer 不注册 SRS（2026-07-31 专批 C 定性，P1D-11）：题库短 id（如 `rfi-001`）仅为模块内部标识（全库唯一由 `data/puzzleBank.ids.test.ts` 守卫），不进入 SRS 键空间，无跨模块碰撞风险；若未来接入 SRS，在**注册处**拼接 `puzzle:{theme}:{questionId}` 作为 key，题库静态数据不改 id、存量 ReviewItem 零迁移
+- puzzle-trainer 不注册 SRS（2026-07-31 专批 C 定性，P1D-11）：题库短 id（如 `rfi-001`）仅为模块内部标识（全库唯一由 `data/puzzleBank.ids.test.ts` 守卫），不进入 SRS 键空间，无跨模块碰撞风险；若未来接入 SRS，在**注册处**拼接 `puzzle:{theme}:{questionId}` 作为 key，题库静态数据不改 id、存量 ReviewItem 零迁移。当前仅通过训练明细的 `topic` / `relatedLessonId` 向 progress 提供弱项信号，不写 SRS / ELO
 - QuickDrill 复习题回写闭环（专批 B，P1E-05）：快速训练混入的 `review-*` 复习题答完后，由 `strategy-academy/utils/quickDrillSrs.ts` 纯函数（`computeReviewWriteBacks`）按逐题作答明细（`PracticeResult.answers`，不入 persist）调用 `processReview` 推进 ReviewItem，再逐项 `updateReviewItem` 回写 progress store（quality 映射同下表；非 review-* 忽略，复习项已清理静默跳过）
 
 Quality 评分映射：答对 + 用时 < 5 秒 → 5；答对 → 4；答错 → 1（自评"记得" → 5；"不记得" → 1）。

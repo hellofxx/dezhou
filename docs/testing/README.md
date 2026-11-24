@@ -53,7 +53,7 @@ flowchart LR
 
 L4 由 Playwright 自动门禁 + 人工验收共同承担：
 
-- **自动化部分**（`e2e/**/*.test.ts`，配置 `playwright.config.ts`）：跑**生产构建**（`vite preview`，base `/dezhou/`），当前覆盖「跳过引导 → 范围训练 10 题 → 结果页 → 进度页 → 刷新后记录仍在」的学习闭环，以及「预缓存完成后断网打开从未访问过的深层路由」的离线冒烟。`forbidOnly: true` + `retries: 0`，失败保留 trace / screenshot 作为证据。
+- **自动化部分**（`e2e/**/*.test.ts`，配置 `playwright.config.ts`）：跑**生产构建**（`vite preview`，base `/dezhou/`），当前覆盖「跳过引导 → 范围训练 10 题 → 结果页 → 进度页 → 刷新后记录仍在」的学习闭环、「首页习惯任务二选一 → 完成每日谜题 → 返回首页显示完成态」的习惯闭环，以及「预缓存完成后断网打开从未访问过的深层路由」的离线冒烟。`forbidOnly: true` + `retries: 0`，失败保留 trace / screenshot 作为证据。
 - **仍属人工的部分**（见 §11 已知缺口）：视觉细节与响应式断点、动效、真实滚动、性能感知、跨浏览器（非 Chromium）兼容、部署后的 Pages 环境验证。PR 描述仍需记录“已验证 / 未验证 + 原因”。
 
 > PR CI 的阻断力依赖仓库分支保护：需把 `CI` workflow 设为 required check；workflow 本身只负责执行与报告。

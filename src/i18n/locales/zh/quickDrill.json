@@ -1,8 +1,8 @@
 {
   "title": "5 分钟速训",
-  "subtitle": "从全局题库精选题目，针对弱点快速强化",
-  "quickTitle": "5 题混合速训",
-  "quickSubtitle": "每天 {{count}} 题，保持牌感 — {{mode}}",
+  "subtitle": "从策略课程选题，针对课程弱项快速强化",
+  "quickTitle": "5 题速训",
+  "quickSubtitle": "每天 {{count}} 题，课程弱项 + SRS — {{mode}}",
   "back": "返回实战地图",
   "backAcademy": "返回实战地图",
   "backHome": "返回首页",
@@ -10,6 +10,9 @@
   "selectDifficulty": "选择难度",
   "adaptiveDifficulty": "自适应难度",
   "weakAreasHint": "将优先从你的薄弱领域抽取题目",
+  "recommendation": {
+    "focusLesson": "优先复习你在扑克谜题中暴露的弱项：{{lessonTitle}}"
+  },
   "modeHint": "当前模式：{{mode}}，已完成今日训练将自动计入连续天数",
   "questionCount": "本次速训：",
   "questions": "道题目",
@@ -23,9 +26,9 @@
     "advanced": "高级"
   },
   "mode": {
-    "range": "范围练习",
-    "odds": "赔率速算",
-    "mixed": "混合训练"
+    "range": "翻前",
+    "odds": "数学",
+    "mixed": "混合"
   },
   "result": {
     "title": "训练完成",

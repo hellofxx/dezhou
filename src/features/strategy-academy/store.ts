@@ -93,7 +93,7 @@ interface AcademyStore {
   markUnitCompleted: (lessonId: string, unitId: string) => void;
   completeLesson: (lessonId: string) => void;
   recordQuizScore: (lessonId: string, score: number) => void;
-  recordPracticeScore: (result: PracticeResult) => void;
+  recordPracticeScore: (result: PracticeResult, mode?: 'practice' | 'quick-drill') => void;
   resetProgress: () => void;
   isLevelUnlocked: (level: number) => boolean;
   /**
@@ -218,7 +218,7 @@ export const useAcademyStore = create<AcademyStore>()(
           },
         })),
 
-      recordPracticeScore: (result) => {
+      recordPracticeScore: (result, mode = 'practice') => {
         // P1E-05（专批 B）：逐题作答明细 answers 仅供完成回调侧消费（SRS 回写），
         // 入库前剥离，保持 practiceResults 持久化负载与历史形状不变
         const { answers: _answers, ...persistable } = result;
@@ -239,7 +239,7 @@ export const useAcademyStore = create<AcademyStore>()(
         trainingEvents.emit({
           id: `academy-practice-${result.lessonId}-${Date.now()}`,
           module: 'strategy-academy',
-          mode: 'practice',
+          mode,
           result: {
             sessionId: `academy-practice-${result.lessonId}`,
             module: 'strategy-academy',

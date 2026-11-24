@@ -31,11 +31,12 @@ function buildRecord(
   total: number,
   createdAt = Date.now(),
   module: TrainingRecord['module'] = 'range-trainer',
+  mode: TrainingRecord['mode'] = 'quiz',
 ): TrainingRecord {
   return {
     id,
     module,
-    mode: 'quiz',
+    mode,
     createdAt,
     result: {
       sessionId: id,
@@ -146,6 +147,19 @@ describe('ProgressPage 进度中心', () => {
     // 手牌复盘只做链接（跨模块不嵌入）
     const handLinks = Array.from(container.querySelectorAll('a[href="/hand-history"]'));
     expect(handLinks.length).toBeGreaterThan(0);
+  });
+
+  it('回放分区区分速训与课程练习标签', () => {
+    const now = Date.now();
+    seedStore([
+      buildRecord('course', 8, 10, now - 1000, 'strategy-academy', 'practice'),
+      buildRecord('quick', 9, 10, now, 'strategy-academy', 'quick-drill'),
+    ]);
+
+    const { getByText } = renderPage('/progress?tab=replay');
+
+    expect(getByText('速训')).toBeTruthy();
+    expect(getByText('实战地图')).toBeTruthy();
   });
 
   it('回放分区按时间范围筛选最近训练并给出区间汇总', () => {

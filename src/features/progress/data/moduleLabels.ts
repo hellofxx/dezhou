@@ -11,6 +11,7 @@ export const MODULE_LABEL_KEYS: Record<string, string> = {
   'gto-simulator': 'nav.gtoSimulator',
   'hand-history': 'nav.handHistory',
   'strategy-academy': 'nav.academy',
+  'quick-drill': 'nav.quick',
   'theory-academy': 'nav.theory',
   'puzzle-trainer': 'nav.puzzle',
 };
@@ -22,6 +23,7 @@ export const MODULE_LABELS_FALLBACK: Record<string, string> = {
   'gto-simulator': 'GTO 模拟器',
   'hand-history': '牌局复盘',
   'strategy-academy': '策略学院',
+  'quick-drill': '速训',
   'theory-academy': '理论学院',
   'puzzle-trainer': '扑克谜题',
 };

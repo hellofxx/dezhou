@@ -114,6 +114,18 @@ describe('aggregateByModule', () => {
     expect(range.lastPlayed).toBe(3000);
   });
 
+  it('QuickDrill 与课程练习分成两个统计项', () => {
+    const modules = aggregateByModule([
+      makeRecord({ id: 'course', module: 'strategy-academy', mode: 'practice', createdAt: 1000 }),
+      makeRecord({ id: 'quick', module: 'strategy-academy', mode: 'quick-drill', createdAt: 2000 }),
+    ]);
+
+    expect(modules.map((item) => item.module)).toEqual(['strategy-academy', 'quick-drill']);
+    expect(modules.find((item) => item.module === 'strategy-academy')?.sessions).toBe(1);
+    expect(modules.find((item) => item.module === 'quick-drill')?.sessions).toBe(1);
+    expect(modules.find((item) => item.module === 'quick-drill')?.lastPlayed).toBe(2000);
+  });
+
   it('空记录返回空数组', () => {
     expect(aggregateByModule([])).toEqual([]);
   });
