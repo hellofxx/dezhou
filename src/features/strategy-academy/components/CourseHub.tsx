@@ -207,7 +207,7 @@ export default function CourseHub() {
 
   // 阶段锚点回位：#hub-stage-N（执行页/理论页返回枢纽）；短延迟等待阶段卡挂载
   useEffect(() => {
-    if (!location.hash) return;
+    if (!location.hash || stages.length === 0) return;
     const id = location.hash.slice(1);
     if (!id) return;
     // scrollIntoView 是 JS API，不受 globals.css 的 reduced-motion 兜底约束
@@ -219,7 +219,7 @@ export default function CourseHub() {
       });
     }, 50);
     return () => clearTimeout(timer);
-  }, [location.hash]);
+  }, [location.hash, stages.length]);
 
   if (stages.length === 0) {
     return <div className="py-6"><PageSkeleton /></div>;

@@ -171,6 +171,33 @@ describe('CourseHub', () => {
     expect(scrollCalls[0]!.options).toMatchObject({ behavior: 'smooth', block: 'start' });
   });
 
+  it('阶段数据晚于挂载到达时仍会滚动到锚点（回归：冷启动深链）', async () => {
+    let stages: { stages: AcademyLearningStage[] } = { stages: [] };
+    registerAcademyDataSource({
+      findNextLesson: () => null,
+      getLessonMeta: (id) => ({ id, title: id, level: 1 }),
+      getAcademyProgressSnapshot: () => ACADEMY_PROGRESS,
+      getLessonAttemptsSnapshot: () => ACADEMY_ATTEMPTS,
+      getLearningStagesSnapshot: () => stages,
+      subscribe: () => () => {},
+    });
+
+    const view = renderHub('#hub-stage-4');
+    expect(view.container.querySelector('#hub-stage-4')).toBeNull();
+    expect(scrollCalls).toHaveLength(0);
+
+    stages = ACADEMY_STAGES;
+    view.rerender(
+      <MemoryRouter initialEntries={['/lesson#hub-stage-4']}>
+        <CourseHub />
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => expect(view.container.querySelector('#hub-stage-4')).toBeTruthy());
+    await waitFor(() => expect(scrollCalls.length).toBeGreaterThan(0));
+    expect(scrollCalls[0]!.el).toBe(view.container.querySelector('#hub-stage-4'));
+  });
+
   it('阶段泳道链接携带 hub 来源与阶段序号', () => {
     const { container } = renderHubWithProbe();
 
