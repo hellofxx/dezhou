@@ -189,6 +189,15 @@ describe('QuickDrill：训练弱项回流', () => {
 
     expect(container.textContent).not.toContain('优先复习你在扑克谜题中暴露的弱项');
   });
+
+  it('速训 range 模式下非翻前维度的弱项课程不参与聚焦（回归：模式维度约束）', () => {
+    // l1-basics 的 ELO 维度为 math，不应在 range（翻前）速训中顶到题首
+    useProgressStore.setState({ records: [makeWeaknessRecord('l1-basics')] });
+
+    const { container } = renderAt('/quick?mode=range');
+
+    expect(container.textContent).not.toContain('优先复习你在扑克谜题中暴露的弱项');
+  });
 });
 
 describe('QuickDrill：每日题量止损', () => {

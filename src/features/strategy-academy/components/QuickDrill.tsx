@@ -9,7 +9,8 @@ import { useAcademyStore } from '../store';
 import { useAcademyCourseI18n } from '../hooks/useAcademyCourseI18n';
 import { useAcademyLessonsForQuickDrill } from '../hooks/useAcademyLessons';
 import { deriveAcademyCourseFilesForQuickDrill } from '@/i18n/academyCourse';
-import { getLearningWeakness, progressCommands, useProgressState } from '@/features/progress';
+import { progressCommands, useProgressState } from '@/features/progress';
+import { getLessonMeta } from '../data/lessonMeta';
 import { computeQuickDrillScore, getQuickDrillQuestions } from '../utils/quickDrill';
 // P1-4.2: SRS 复习队列混合（P1E-04: 混合+回填抽出为纯函数 composeQuickDrillQuestions）
 import { composeQuickDrillQuestions } from '../utils/quickDrillMix';
@@ -27,6 +28,18 @@ type QuickDrillMode = 'range' | 'odds' | 'mixed';
 
 /** ELO 五维（弱点维度判定与 mode 映射的遍历源） */
 const ELO_DIMENSIONS: readonly EloDimension[] = ['preflop', 'postflop', 'math', 'handReading', 'mental'];
+
+const MODE_LABEL_DEFAULTS: Record<QuickDrillMode, string> = {
+  range: '翻前',
+  odds: '数学',
+  mixed: '混合',
+};
+
+const DIFFICULTY_LABEL_DEFAULTS: Record<QuestionDifficulty, string> = {
+  beginner: '基础',
+  intermediate: '进阶',
+  advanced: '高级',
+};
 
 export default function QuickDrill() {
   const navigate = useNavigate();
@@ -49,10 +62,13 @@ export default function QuickDrill() {
   // P1-4.2: SRS 复习队列
   const reviewItems = useProgressState((s) => s.reviewItems);
   const getStatsSummary = useProgressState((s) => s.getStatsSummary);
-  // 训练明细用于派生扑克谜题暴露的课程弱项；recordCount 作为正确率 memo 的失效键
-  const records = useProgressState((s) => s.records);
-  const recordCount = records.length;
-  const weakness = useMemo(() => getLearningWeakness(records), [records]);
+  // 仅订阅记录数：弱项快照由 store 派生，组件不持有全量 records（无上限数组）
+  const recordCount = useProgressState((s) => s.records.length);
+  const getLearningWeaknessSnapshot = useProgressState((s) => s.getLearningWeakness);
+  const weakness = useMemo(
+    () => getLearningWeaknessSnapshot(),
+    [getLearningWeaknessSnapshot, recordCount],
+  );
   // P1-4.3: 快速训练连续打卡
   const recordQuickDrillCompletion = progressCommands.recordQuickDrillCompletion;
 // P1-4.1: Progress store 快速训练 Best Record
@@ -119,10 +135,18 @@ export default function QuickDrill() {
   // P0-5: 快速模式固定 5 题，普通模式 8 题
   const questionCount = isQuickMode ? 5 : 8;
 
+  // 速训 range/odds 模式下弱项聚焦仍受模式维度约束，避免非该维度课程顶到题首
+  const focusLessonIds = useMemo(() => {
+    if (!isQuickMode || mode === 'mixed') return weakness.lessonIds;
+    return weakness.lessonIds.filter((lessonId) =>
+      modeWeakAreas.includes(getLessonMeta(lessonId).eloDimension),
+    );
+  }, [isQuickMode, mode, modeWeakAreas, weakness.lessonIds]);
+
   // 仅推荐当前难度确有可用题目的弱项课程，避免展示无法执行的建议
   const focusLesson = useMemo(() => {
     if (lessons === null) return null;
-    for (const lessonId of weakness.lessonIds) {
+    for (const lessonId of focusLessonIds) {
       const lesson = lessons.find((item) => item.id === lessonId);
       if (lesson?.practice?.questions.some(
         (question) => !question.difficulty || question.difficulty === effectiveDifficulty,
@@ -131,7 +155,7 @@ export default function QuickDrill() {
       }
     }
     return null;
-  }, [lessons, weakness.lessonIds, effectiveDifficulty]);
+  }, [lessons, focusLessonIds, effectiveDifficulty]);
 
   // P1-4.2: 今日待复习项（在 quick 模式下用于混合）
   const todayReviewItems = useMemo(() => getTodayReviewItems(reviewItems), [reviewItems]);
@@ -158,7 +182,7 @@ export default function QuickDrill() {
       effectiveDifficulty,
       questionCount,
       [],
-      weakness.lessonIds,
+      focusLessonIds,
     );
 
     if (!isQuickMode || todayReviewItems.length === 0) {
@@ -167,7 +191,7 @@ export default function QuickDrill() {
 
     const mixed = composeQuickDrillQuestions(newQuestions, todayReviewItems, questionCount, userAccuracy);
     return { drillQuestions: mixed.questions, reviewCount: mixed.reviewCount };
-  }, [lessons, modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy, weakness.lessonIds]);
+  }, [lessons, modeWeakAreas, effectiveDifficulty, questionCount, isQuickMode, todayReviewItems, userAccuracy, focusLessonIds]);
 
   const drill: PracticeDrill = useMemo(() => ({
     id: `quick-drill-${Date.now()}`,
@@ -276,16 +300,12 @@ export default function QuickDrill() {
   }
 
   const modeLabel = isQuickMode
-    ? t(`quickDrill.mode.${mode}`, {
-        defaultValue: mode === 'range' ? '翻前' : mode === 'odds' ? '数学' : '混合',
-      })
+    ? t(`quickDrill.mode.${mode}`, { defaultValue: MODE_LABEL_DEFAULTS[mode] })
     : '';
 
-  const difficultyLabel = effectiveDifficulty === 'beginner'
-    ? t('quickDrill.difficulty.beginner', { defaultValue: '基础' })
-    : effectiveDifficulty === 'intermediate'
-      ? t('quickDrill.difficulty.intermediate', { defaultValue: '进阶' })
-      : t('quickDrill.difficulty.advanced', { defaultValue: '高级' });
+  const difficultyLabel = t(`quickDrill.difficulty.${effectiveDifficulty}`, {
+    defaultValue: DIFFICULTY_LABEL_DEFAULTS[effectiveDifficulty],
+  });
 
   return (
     <div className="h-full overflow-auto">
@@ -365,11 +385,7 @@ export default function QuickDrill() {
                         : 'bg-[var(--walnut-raised)] text-[var(--ivory-muted)] hover:text-[var(--ivory)]'
                     }`}
                   >
-                    {d === 'beginner'
-                      ? t('quickDrill.difficulty.beginner', { defaultValue: '基础' })
-                      : d === 'intermediate'
-                        ? t('quickDrill.difficulty.intermediate', { defaultValue: '进阶' })
-                        : t('quickDrill.difficulty.advanced', { defaultValue: '高级' })}
+                    {t(`quickDrill.difficulty.${d}`, { defaultValue: DIFFICULTY_LABEL_DEFAULTS[d] })}
                   </button>
                 ))}
               </div>

@@ -37,15 +37,12 @@ export function getQuickDrillQuestions(
     if (lessonQuestions.length === 0) continue;
 
     const dimension = getLessonMeta(lesson.id).eloDimension;
-    const lessonExcluded = excludeLessons.some((id) => lesson.id.startsWith(id));
+    if (excludeLessons.some((id) => lesson.id.startsWith(id))) continue;
     const isFocusLesson = focusLessonIds.includes(lesson.id);
     const matchesWeakArea = weakAreas.length === 0 || weakAreas.includes(dimension);
 
     for (const question of lessonQuestions) {
-      if (
-        lessonExcluded ||
-        excludeLessons.some((id) => question.id.startsWith(id))
-      ) {
+      if (excludeLessons.some((id) => question.id.startsWith(id))) {
         continue;
       }
 
@@ -67,9 +64,11 @@ export function getQuickDrillQuestions(
     questions.push(entry.question);
     focusedByRank.set(entry.rank, questions);
   }
+  // 单节课最多占半套题，保证聚焦层内仍有课程广度
+  const perFocusLessonCap = Math.max(1, Math.ceil(count / 2));
   const focusedQuestions = [...focusedByRank.entries()]
     .toSorted(([a], [b]) => a - b)
-    .flatMap(([, questions]) => shuffleArray(questions));
+    .flatMap(([, questions]) => shuffleArray(questions).slice(0, perFocusLessonCap));
 
   return [
     ...focusedQuestions,

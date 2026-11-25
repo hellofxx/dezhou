@@ -192,6 +192,23 @@ describe('getQuickDrillQuestions：筛选与回填', () => {
     expect(result.map((question) => question.id)).toEqual(['first-focus-q']);
   });
 
+  it('聚焦课程单节最多占半套题，保证课程广度', () => {
+    const focusHeavy: Lesson[] = [
+      makeLesson('l1-basics', [
+        makeQuestion('l1-q1', { difficulty: 'beginner' }),
+        makeQuestion('l1-q2', { difficulty: 'beginner' }),
+        makeQuestion('l1-q3', { difficulty: 'beginner' }),
+        makeQuestion('l1-q4', { difficulty: 'beginner' }),
+      ]),
+      makeLesson('l4-bluffcatching', [makeQuestion('other-q', { difficulty: 'beginner' })]),
+    ];
+
+    const result = getQuickDrillQuestions(focusHeavy, [], 'beginner', 4, [], ['l1-basics']);
+
+    expect(result.filter((q) => q.id.startsWith('l1-')).length).toBeLessThanOrEqual(2);
+    expect(result).toHaveLength(3);
+  });
+
   it('训练弱项课程难度不匹配时回退到 ELO 弱点题目', () => {
     const mismatchLessons: Lesson[] = [
       makeLesson('l4-gto-basics', [makeQuestion('focus-advanced', { difficulty: 'advanced' })]),
