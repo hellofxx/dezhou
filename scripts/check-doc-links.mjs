@@ -22,7 +22,9 @@ function gitMarkdownFiles() {
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
   });
-  return out.split('\0').filter(Boolean);
+  // 路径式提交（git commit -- <paths>）会用临时索引：索引里可能仍登记着已从工作区移走的文件，
+  // 过滤掉缺失项，避免「部分暂存 + 重命名」时门禁以 ENOENT 误报失败。
+  return out.split('\0').filter((file) => file && existsSync(resolve(ROOT, file)));
 }
 
 function walkMarkdown(dir, acc = []) {
