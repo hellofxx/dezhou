@@ -13,6 +13,7 @@ import { reportPersistenceFailure, reportPersistenceSuccess, setLocalStorageRetr
 import type { TrainingRecord, StatsSummary, ModuleStats, UserSettings, OnboardingState, StreakState, StreakMilestones, EmotionState, QuickDrillBestRecord, AbilityAssessment } from './types';
 import { DEFAULT_EMOTION_STATE, MILESTONE_DAYS, MILESTONE_FREEZE_REWARDS } from './types';
 import { aggregateStats, aggregateByModule, getRecentRecords as getRecent } from './utils/statsAggregator';
+import { getLearningWeakness as deriveLearningWeakness, type LearningWeaknessSnapshot } from './utils/learningWeakness';
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import {
   updateStreak,
@@ -324,6 +325,8 @@ interface ProgressStore {
   getStatsSummary: () => StatsSummary;
   getRecentRecords: (count: number) => TrainingRecord[];
   getModuleStats: () => ModuleStats[];
+  /** 近 30 天训练明细派生的主题弱项（消费方无需持有全量 records） */
+  getLearningWeakness: () => LearningWeaknessSnapshot;
 
   // 间隔重复复习
   reviewItems: ReviewItem[];
@@ -537,6 +540,8 @@ export const useProgressStore = create<ProgressStore>()(
       getRecentRecords: (count) => getRecent(get().records, count),
 
       getModuleStats: () => aggregateByModule(get().records),
+
+      getLearningWeakness: () => deriveLearningWeakness(get().records),
 
       // 间隔重复复习
       reviewItems: [],

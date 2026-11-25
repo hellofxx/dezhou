@@ -8,6 +8,7 @@ import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
 import { useProgress } from '../../hooks/useProgress';
 import { useModuleLabel } from '../../hooks/useModuleLabel';
+import { resolveDisplayModuleKey } from '../../data/moduleLabels';
 import type { TrainingRecord } from '../../types';
 
 /**
@@ -98,7 +99,7 @@ export default function RecentTrainingPanel() {
                   <Target className="w-3.5 h-3.5 text-[var(--brass-bright)]" aria-hidden="true" />
                 </span>
                 <span className="text-xs text-[var(--ivory)] truncate">
-                  {moduleLabel(record.module === 'strategy-academy' && record.mode === 'quick-drill' ? 'quick-drill' : record.module)}
+                  {moduleLabel(resolveDisplayModuleKey(record))}
                 </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">

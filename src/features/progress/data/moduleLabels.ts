@@ -5,6 +5,17 @@
  * 任何需要在 UI 展示「模块名」的地方。返回的是 i18n key，调用方用 t() 解析，
  * 保证中英切换时一处事实源自动跟随。
  */
+import type { TrainingRecord } from '../types';
+
+/** 统计分组与展示共用的模块键：速训记录归入独立的 quick-drill 分组 */
+export function resolveDisplayModuleKey(
+  record: Pick<TrainingRecord, 'module' | 'mode'>,
+): string {
+  return record.module === 'strategy-academy' && record.mode === 'quick-drill'
+    ? 'quick-drill'
+    : record.module;
+}
+
 export const MODULE_LABEL_KEYS: Record<string, string> = {
   'range-trainer': 'nav.rangeTrainer',
   'pot-odds': 'nav.potOdds',

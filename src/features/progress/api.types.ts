@@ -10,6 +10,7 @@ import type {
 import type { ReviewItem } from '@/shared/utils/spacedRepetition';
 import type { MentorStyle } from '@/shared/types/mentor';
 import type { EloDimension, EloRating, PokerVariant, RankUpEvent } from '@/shared/types/elo';
+import type { LearningWeaknessSnapshot } from './utils/learningWeakness';
 
 /**
  * progress 对外只读模型。
@@ -32,6 +33,7 @@ export interface ProgressReadModel {
   readonly quickDrillBest: QuickDrillBestRecord | null;
   readonly records: TrainingRecord[];
   getStatsSummary(): StatsSummary;
+  getLearningWeakness(): LearningWeaknessSnapshot;
 }
 
 /** onboarding 四维定位能力（ELO 播种输入） */

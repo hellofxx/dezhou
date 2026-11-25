@@ -1,6 +1,7 @@
 import type { TrainingRecord, StatsSummary, DailyStats, ModuleStats } from '../types';
 import { calculateCurrentStreak, calculateLongestStreak } from './streakCalc';
 import { toLocalDateKey } from '@/shared/utils/toLocalDateKey';
+import { resolveDisplayModuleKey } from '../data/moduleLabels';
 
 /** 从训练记录聚合统计数据 */
 export function aggregateStats(records: TrainingRecord[]): StatsSummary {
@@ -101,9 +102,7 @@ export function aggregateByModule(records: TrainingRecord[]): ModuleStats[] {
   const moduleMap = new Map<string, { sessions: number; correct: number; total: number; totalTime: number; lastPlayed: number }>();
 
   for (const record of records) {
-    const key = record.module === 'strategy-academy' && record.mode === 'quick-drill'
-      ? 'quick-drill'
-      : record.module;
+    const key = resolveDisplayModuleKey(record);
     const existing = moduleMap.get(key) ?? { sessions: 0, correct: 0, total: 0, totalTime: 0, lastPlayed: 0 };
     existing.sessions++;
     existing.correct += record.result.correctAnswers;

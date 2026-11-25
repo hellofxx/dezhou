@@ -897,7 +897,7 @@ interface DailyRecommendation {
 |----|------|------|
 | components | Dashboard, ProgressPage, AccuracyChart, AchievementWall, SessionLimitGuard, OnboardingGate 等 29 个 | 仪表盘、图表、成就、门禁 |
 | hooks | useProgress | 数据查询 hook |
-| utils | statsAggregator.ts, streakCalc.ts | 统计聚合、连击计算 |
+| utils | statsAggregator.ts, streakCalc.ts, learningWeakness.ts | 统计聚合、连击计算、近 30 天主题弱项派生 |
 | store | store.ts | persist 持久化 + 事件订阅 |
 
 **关键算法**：
