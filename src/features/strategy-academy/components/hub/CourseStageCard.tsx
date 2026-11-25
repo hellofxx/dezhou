@@ -2,11 +2,11 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { BookOpen, ChevronDown, ChevronRight, ShieldCheck, Target } from 'lucide-react';
-import { ProgressRing } from '@/shared/components/data-display/ProgressRing';
 import { FOCUS_RING } from '@/shared/components/ui/focusRing';
 import { cn } from '@/shared/utils/cn';
 import { hubFrom } from '@/shared/utils/courseBack';
 import { getLessonMeta } from '../../data/lessonMeta';
+import StageRing from './StageRing';
 import type { HubStage } from '../../utils/hubStages';
 
 interface CourseStageCardProps {
@@ -33,64 +33,6 @@ function chipClass(done: boolean, highlight = false): string {
       ? 'border-[var(--walnut-border)] bg-[var(--walnut-raised)]/40 text-[var(--ivory-muted)]'
       : 'border-[var(--brass)]/40 bg-[var(--brass-glow)] text-[var(--ivory)] hover:border-[var(--brass)]',
     highlight && 'ring-1 ring-[var(--brass-bright)]/60',
-  );
-}
-
-/** 双泳道迷你环：理论 / 实战各自播报；理论不可用或未就绪时占位，不伪造数据 */
-function StageRing({
-  lane,
-  done,
-  total,
-  known,
-  unavailable,
-  icon,
-}: {
-  lane: string;
-  done: number;
-  total: number;
-  known: boolean;
-  unavailable?: boolean;
-  icon: React.ReactNode;
-}) {
-  const { t } = useTranslation();
-
-  if (!known || unavailable) {
-    return (
-      <div className="flex flex-col items-center gap-0.5">
-        <ProgressRing
-          value={0}
-          size={40}
-          variant="academy"
-          status="idle"
-          ariaLabel={t('academy.courseHub.loop.ringUnknown', { lane })}
-        />
-        <span
-          className="inline-flex items-center gap-0.5 text-[11px] text-[var(--ivory-dim)]"
-          aria-hidden="true"
-        >
-          {icon}—
-        </span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col items-center gap-0.5">
-      <ProgressRing
-        value={total > 0 ? done / total : 0}
-        size={40}
-        variant="academy"
-        ariaLabel={t('academy.courseHub.loop.ringAria', { lane, done, total })}
-        center={
-          <span className="font-numeric text-[11px] text-[var(--ivory)]">
-            {done}/{total}
-          </span>
-        }
-      />
-      <span className="text-[var(--brass-text)]" aria-hidden="true">
-        {icon}
-      </span>
-    </div>
   );
 }
 
